@@ -536,9 +536,14 @@ ItemEntry* itemEntry(const char* name, s32 itemId, s32 type, s32 collectFlag, s3
             }
         }
         if (entry) {
+#else
+        entry = wp->entries;
+        if (entry->flags & ITEM_FLAG_ACTIVE && entry->itemId == 0x79 && entry->flags & 0x400) {
+#endif
             itemDelete(entry->name);
         }
         else {
+#ifdef VERSION_G8ME01
             entry = NULL;
             for (e = base, i = 0; i < wp->count; i++, e++) {
                 if (e->flags & ITEM_FLAG_ACTIVE && e->itemId == 0x7C && e->flags & 0x400) {
@@ -547,22 +552,17 @@ ItemEntry* itemEntry(const char* name, s32 itemId, s32 type, s32 collectFlag, s3
                 }
             }
             if (entry) {
+#else
+            entry = wp->entries;
+            if (entry->flags & ITEM_FLAG_ACTIVE && entry->itemId == 0x7C && entry->flags & 0x400) {
+#endif
                 itemDelete(entry->name);
             }
             else {
+#ifdef VERSION_G8ME01
                 entry = itemFindDeletable(wp, 0x7B);
                 entry = NULL;
 #else
-        entry = wp->entries;
-        if (entry->flags & ITEM_FLAG_ACTIVE && entry->itemId == 0x79 && entry->flags & 0x400) {
-            itemDelete(entry->name);
-        }
-        else {
-            entry = wp->entries;
-            if (entry->flags & ITEM_FLAG_ACTIVE && entry->itemId == 0x7C && entry->flags & 0x400) {
-                itemDelete(entry->name);
-            }
-            else {
                 entry = wp->entries;
                 if (entry->flags & ITEM_FLAG_ACTIVE && entry->itemId == 0x7B && entry->flags & 0x400) {
                     itemDelete(entry->name);
@@ -803,14 +803,18 @@ ItemEntry* itemNearDistCheck(f32 x, f32 y, f32 z, f32 range) {
 #ifdef VERSION_G8ME01
 void evtMsgFmtStr(char* dst, const char* src);
 
+#endif
 void winNameDisp(WinMgrEntry* win) {
     ItemEntry* entry = win->param;
     const char* name;
     u16 width;
+#ifdef VERSION_G8ME01
     u16 lines;
+#endif
     char buffer[1024];
 
     name = msgSearch(itemDataTable[entry->itemId].name);
+#ifdef VERSION_G8ME01
     if ((u32)gp->language == 0) {
         if (entry->itemId >= 0xF0 && entry->itemId < 0x153) {
             sprintf(buffer, msgSearch("msg_window_badge_get"), name);
@@ -829,19 +833,7 @@ void winNameDisp(WinMgrEntry* win) {
         evtMsgFmtStr(buffer, name);
     }
     width = FontGetMessageWidthLine(buffer, &lines);
-    if (width + 20 > win->width) {
-        win->width = width + 20;
-        win->x = -win->width / 2;
-    }
-    win->height = win->description->height + lines * 24;
 #else
-void winNameDisp(WinMgrEntry* win) {
-    ItemEntry* entry = win->param;
-    const char* name;
-    u16 width;
-    char buffer[1024];
-
-    name = msgSearch(itemDataTable[entry->itemId].name);
     if (entry->itemId >= 0xF0 && entry->itemId < 0x153) {
         sprintf(buffer, msgSearch("msg_window_badge_get"), name);
     }
@@ -849,10 +841,13 @@ void winNameDisp(WinMgrEntry* win) {
         sprintf(buffer, msgSearch("msg_window_item_get"), name);
     }
     width = FontGetMessageWidth(buffer);
+#endif
     if (width + 20 > win->width) {
         win->width = width + 20;
         win->x = -win->width / 2;
     }
+#ifdef VERSION_G8ME01
+    win->height = win->description->height + lines * 24;
 #endif
     if (!winMgrAction(entry->winId[0])) {
         FontDrawStart();
@@ -868,9 +863,11 @@ void winNameDisp2(WinMgrEntry* win) {
     u16 width;
 #ifdef VERSION_G8ME01
     u16 lines;
+#endif
     char buffer[1024];
 
     name = msgSearch(itemDataTable[entry->itemId].name);
+#ifdef VERSION_G8ME01
     if ((u32)gp->language == 0) {
         sprintf(buffer, msgSearch("msg_window_item_release"), name);
     }
@@ -879,21 +876,16 @@ void winNameDisp2(WinMgrEntry* win) {
         evtMsgFmtStr(buffer, name);
     }
     width = FontGetMessageWidthLine(buffer, &lines);
-    if (width + 20 > win->width) {
-        win->width = width + 20;
-        win->x = -win->width / 2;
-    }
-    win->height = win->description->height + lines * 24;
 #else
-    char buffer[1024];
-
-    name = msgSearch(itemDataTable[entry->itemId].name);
     sprintf(buffer, msgSearch("msg_window_item_release"), name);
     width = FontGetMessageWidth(buffer);
+#endif
     if (width + 20 > win->width) {
         win->width = width + 20;
         win->x = -win->width / 2;
     }
+#ifdef VERSION_G8ME01
+    win->height = win->description->height + lines * 24;
 #endif
     if (!winMgrAction(entry->winId[0])) {
         FontDrawStart();

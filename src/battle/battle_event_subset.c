@@ -80,6 +80,9 @@ EVT_BEGIN(subsetevt_dead)
         CALL(btlevtcmd_DivePosition, LW(10), LW(2), LW(3), LW(4), 0, 0, 0, 0, -1)
 #ifdef VERSION_G8ME01
         ELSE
+#else
+    ELSE
+#endif
         CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), 40)
         CALL(btlevtcmd_GetHomePos, LW(10), LW(2), LW(3), LW(4))
         CALL(btlevtcmd_SetMoveSpeed, LW(10), FLOAT(4.0f))
@@ -95,7 +98,11 @@ EVT_BEGIN(subsetevt_dead)
         CALL(btlevtcmd_CheckDamageCode, LW(10), 2048, LW(1))
         IF_INT_NOT_EQUAL(LW(1), 0)
             CALL(btlevtcmd_RunDataEventChild, LW(10), 51)
+#ifdef VERSION_G8ME01
             ELSE
+#else
+        ELSE
+#endif
             CALL(btlevtcmd_RunDataEventChild, LW(10), 49)
         END_IF
         CASE_BETWEEN(224, 230)
@@ -105,7 +112,11 @@ EVT_BEGIN(subsetevt_dead)
             CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(0), 51)
             IF_INT_NOT_EQUAL(LW(0), 0)
                 CALL(btlevtcmd_RunDataEventChild, LW(10), 51)
+#ifdef VERSION_G8ME01
                 ELSE
+#else
+            ELSE
+#endif
                 CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), 27)
                 BEGIN_SIBLING_EVENT
                     CALL(btlevtcmd_AnimeWaitPlayComplete, LW(10), LW(11))
@@ -137,11 +148,19 @@ EVT_BEGIN(subsetevt_dead)
                 CALL(btlevtcmd_JumpPosition, -2, LW(0), LW(1), LW(2), 20, -1)
                 CALL(btlevtcmd_StartWaitEvent, -2)
             END_IF
+#ifdef VERSION_G8ME01
             ELSE
+#else
+        ELSE
+#endif
             CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(0), 49)
             IF_INT_NOT_EQUAL(LW(0), 0)
                 CALL(btlevtcmd_RunDataEventChild, LW(10), 49)
+#ifdef VERSION_G8ME01
                 ELSE
+#else
+            ELSE
+#endif
             END_IF
             CALL(btlevtcmd_KillUnit, LW(10), 1)
             CALL(btlevtcmd_GetBodyId, -2, LW(11))
@@ -175,7 +194,11 @@ EVT_BEGIN(subsetevt_dead)
             IF_INT_NOT_EQUAL(LW(0), 0)
                 CALL(btlevtcmd_ClearAllStatus, LW(10))
                 CALL(btlevtcmd_RunDataEventChild, LW(10), 51)
+#ifdef VERSION_G8ME01
                 ELSE
+#else
+            ELSE
+#endif
                 CALL(btlevtcmd_OnUnitFlag, LW(10), 134217728)
                 SET_VALUE(LW(0), 48)
                 LABEL(5)
@@ -223,167 +246,23 @@ EVT_BEGIN(subsetevt_dead)
                 CALL(btlevtcmd_GetPos, LW(10), LW(0), LW(1), LW(2))
                 CALL(btlevtcmd_JumpPosition, -2, LW(0), LW(1), LW(2), 20, -1)
                 CALL(btlevtcmd_OffUnitFlag, LW(10), 134217728)
+#ifdef VERSION_G8ME01
                 CALL(btlevtcmd_OffUnitFlag, LW(10), 1073741824)
                 CALL(btlevtcmd_StartWaitEvent, -2)
             END_IF
             ELSE
+#else
+                CALL(btlevtcmd_StartWaitEvent, -2)
+            END_IF
+        ELSE
+#endif
             CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(0), 49)
             IF_INT_NOT_EQUAL(LW(0), 0)
                 CALL(btlevtcmd_ClearAllStatus, LW(10))
                 CALL(btlevtcmd_RunDataEventChild, LW(10), 49)
+#ifdef VERSION_G8ME01
                 ELSE
 #else
-    ELSE
-        CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), 40)
-        CALL(btlevtcmd_GetHomePos, LW(10), LW(2), LW(3), LW(4))
-        CALL(btlevtcmd_SetMoveSpeed, LW(10), FLOAT(4.0f))
-        CALL(btlevtcmd_MovePosition, LW(10), LW(2), LW(3), LW(4), 0, -1, 0)
-    END_IF
-    CALL(btlevtcmd_ResetFaceDirection, LW(10))
-    LABEL(1)
-    CALL(btlevtcmd_OnOffStatus, LW(10), 27, 1, 1, 1)
-    CALL(btlevtcmd_GetUnitKind, LW(10), LW(0))
-    SWITCH(LW(0))
-        CASE_EQUAL(222)
-        CALL(btlevtcmd_ClearAllStatus, LW(10))
-        CALL(btlevtcmd_CheckDamageCode, LW(10), 2048, LW(1))
-        IF_INT_NOT_EQUAL(LW(1), 0)
-            CALL(btlevtcmd_RunDataEventChild, LW(10), 51)
-        ELSE
-            CALL(btlevtcmd_RunDataEventChild, LW(10), 49)
-        END_IF
-        CASE_BETWEEN(224, 230)
-        CALL(btlevtcmd_CheckDamageCode, LW(10), 2048, LW(1))
-        IF_INT_NOT_EQUAL(LW(1), 0)
-            CALL(btlevtcmd_ClearAllStatus, LW(10))
-            CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(0), 51)
-            IF_INT_NOT_EQUAL(LW(0), 0)
-                CALL(btlevtcmd_RunDataEventChild, LW(10), 51)
-            ELSE
-                CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), 27)
-                BEGIN_SIBLING_EVENT
-                    CALL(btlevtcmd_AnimeWaitPlayComplete, LW(10), LW(11))
-                    CALL(btlevtcmd_snd_se, LW(10), STRING("SFX_PARTY_BATTLE_DIE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
-                END_SIBLING_EVENT
-                WAIT_FRAMES(60)
-                CALL(btlevtcmd_ClearAllStatus, LW(10))
-                CALL(btlevtcmd_ConsumeItemReserve, LW(10), 151)
-                BEGIN_SIBLING_EVENT
-                    CALL(btlevtcmd_GetPos, LW(10), LW(0), LW(1), LW(2))
-                    ADD(LW(1), 40)
-                    CALL(btlevtcmd_DispItemIcon, LW(0), LW(1), LW(2), 151, 90)
-                END_SIBLING_EVENT
-                WAIT_FRAMES(90)
-                CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(0), 67)
-                IF_INT_NOT_EQUAL(LW(0), 0)
-                    CALL(btlevtcmd_RunDataEventChild, LW(10), 67)
-                END_IF
-                CALL(btlevtcmd_OnOffStatus, LW(10), 27, 0, 0, 0)
-                CALL(btlevtcmd_SetHp, LW(10), 0)
-                CALL(btlevtcmd_RecoverHp, LW(10), LW(11), 10)
-                CALL(btlevtcmd_GetPos, LW(10), LW(0), LW(1), LW(2))
-                ADD(LW(1), 30)
-                CALL(evt_eff, 0, STRING("recovery"), 0, LW(0), LW(1), LW(2), 10, 0, 0, 0, 0, 0, 0, 0)
-                WAIT_MS(2000)
-                CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), 42)
-                CALL(btlevtcmd_JumpSetting, LW(10), 0, FLOAT(0.0f), FLOAT(0.69921875f))
-                CALL(btlevtcmd_GetPos, LW(10), LW(0), LW(1), LW(2))
-                CALL(btlevtcmd_JumpPosition, -2, LW(0), LW(1), LW(2), 20, -1)
-                CALL(btlevtcmd_StartWaitEvent, -2)
-            END_IF
-        ELSE
-            CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(0), 49)
-            IF_INT_NOT_EQUAL(LW(0), 0)
-                CALL(btlevtcmd_RunDataEventChild, LW(10), 49)
-            ELSE
-            END_IF
-            CALL(btlevtcmd_KillUnit, LW(10), 1)
-            CALL(btlevtcmd_GetBodyId, -2, LW(11))
-            CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), 27)
-            BEGIN_SIBLING_EVENT
-                CALL(btlevtcmd_AnimeWaitPlayComplete, LW(10), LW(11))
-                CALL(btlevtcmd_snd_se, LW(10), STRING("SFX_PARTY_BATTLE_DIE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
-            END_SIBLING_EVENT
-            CALL(btlevtcmd_GetHomePos, LW(10), LW(0), LW(1), LW(2))
-            CALL(btlevtcmd_GetPartnerId, LW(10), LW(4))
-            CALL(btlevtcmd_GetHomePos, LW(4), LW(6), LW(7), LW(8))
-            IF_INT_LESS(LW(0), 0)
-                MULTIPLY(LW(0), -1)
-            END_IF
-            IF_INT_LESS(LW(6), 0)
-                MULTIPLY(LW(6), -1)
-            END_IF
-            IF_INT_LESS(LW(0), LW(6))
-                WAIT_MS(500)
-                CALL(_check_at_dm_event_wait, -3)
-                CALL(btlevtcmd_GetHp, -3, LW(0))
-                IF_INT_GREATER(LW(0), 0)
-                    CALL_CHILD(btldefaultevt_ChangePosition)
-                END_IF
-            END_IF
-        END_IF
-        CASE_DEFAULT
-        CALL(btlevtcmd_CheckDamageCode, LW(10), 2048, LW(1))
-        IF_INT_NOT_EQUAL(LW(1), 0)
-            CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(0), 51)
-            IF_INT_NOT_EQUAL(LW(0), 0)
-                CALL(btlevtcmd_ClearAllStatus, LW(10))
-                CALL(btlevtcmd_RunDataEventChild, LW(10), 51)
-            ELSE
-                CALL(btlevtcmd_OnUnitFlag, LW(10), 134217728)
-                SET_VALUE(LW(0), 48)
-                LABEL(5)
-                WAIT_FRAMES(1)
-                CALL(btlevtcmd_AddRotate, LW(10), 0, -15, 0)
-                SUBTRACT(LW(0), 1)
-                IF_INT_GREATER(LW(0), 0)
-                    GOTO(5)
-                END_IF
-                CALL(btlevtcmd_SetRotate, LW(10), 0, 0, 0)
-                CALL(btlevtcmd_SetRotateOffset, LW(10), 0, 0, 0)
-                SET_VALUE(LW(0), 30)
-                LABEL(6)
-                WAIT_FRAMES(1)
-                CALL(btlevtcmd_AddRotate, LW(10), 3, 0, 0)
-                SUBTRACT(LW(0), 1)
-                IF_INT_GREATER(LW(0), 0)
-                    GOTO(6)
-                END_IF
-                CALL(btlevtcmd_ClearAllStatus, LW(10))
-                CALL(btlevtcmd_ConsumeItemReserve, LW(10), 151)
-                BEGIN_SIBLING_EVENT
-                    CALL(btlevtcmd_GetPos, LW(10), LW(0), LW(1), LW(2))
-                    ADD(LW(1), 40)
-                    CALL(btlevtcmd_DispItemIcon, LW(0), LW(1), LW(2), 151, 120)
-                END_SIBLING_EVENT
-                WAIT_FRAMES(90)
-                SET_VALUE(LW(0), 30)
-                LABEL(7)
-                WAIT_FRAMES(1)
-                CALL(btlevtcmd_AddRotate, LW(10), -3, 0, 0)
-                SUBTRACT(LW(0), 1)
-                IF_INT_GREATER(LW(0), 0)
-                    GOTO(7)
-                END_IF
-                CALL(btlevtcmd_OnOffStatus, LW(10), 27, 0, 0, 0)
-                CALL(btlevtcmd_SetHp, LW(10), 0)
-                CALL(btlevtcmd_RecoverHp, LW(10), LW(11), 10)
-                CALL(btlevtcmd_GetPos, LW(10), LW(0), LW(1), LW(2))
-                ADD(LW(1), 30)
-                CALL(evt_eff, 0, STRING("recovery"), 0, LW(0), LW(1), LW(2), 10, 0, 0, 0, 0, 0, 0, 0)
-                WAIT_MS(2000)
-                CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), 42)
-                CALL(btlevtcmd_JumpSetting, LW(10), 0, FLOAT(0.0f), FLOAT(0.69921875f))
-                CALL(btlevtcmd_GetPos, LW(10), LW(0), LW(1), LW(2))
-                CALL(btlevtcmd_JumpPosition, -2, LW(0), LW(1), LW(2), 20, -1)
-                CALL(btlevtcmd_OffUnitFlag, LW(10), 134217728)
-                CALL(btlevtcmd_StartWaitEvent, -2)
-            END_IF
-        ELSE
-            CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(0), 49)
-            IF_INT_NOT_EQUAL(LW(0), 0)
-                CALL(btlevtcmd_ClearAllStatus, LW(10))
-                CALL(btlevtcmd_RunDataEventChild, LW(10), 49)
             ELSE
 #endif
                 CALL_CHILD(subsetevt_dead_core)

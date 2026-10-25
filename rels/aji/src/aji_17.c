@@ -1230,6 +1230,12 @@ EVT_BEGIN(peach_evt_dance)
     CALL(evt_npc_set_ry, STRING("ホログラム"), 180)
     CALL(evt_npc_pera_onoff, STRING("ホログラム2"), 0)
     CALL(evt_npc_set_ry, STRING("ホログラム2"), 180)
+#else
+    CALL(evt_npc_pera_onoff, STRING(("\203z\203\215\203O\203\211\203\200")), 0)
+    CALL(evt_npc_set_ry, STRING(("\203z\203\215\203O\203\211\203\200")), 180)
+    CALL(evt_npc_pera_onoff, STRING(("\203z\203\215\203O\203\211\203\2002")), 0)
+    CALL(evt_npc_set_ry, STRING(("\203z\203\215\203O\203\211\203\2002")), 180)
+#endif
     LABEL(100)
     SET_VALUE(LW(15), 0)
     SET_VALUE(LW(14), 0)
@@ -1238,6 +1244,7 @@ EVT_BEGIN(peach_evt_dance)
     SET_VALUE(LW(11), 0)
     CALL(dance_data_init)
     CALL(get_center, LW(2), LW(3))
+#ifdef VERSION_G8ME01
     CALL(evt_npc_set_position, STRING("ダミー"), LW(2), FLOAT(5.0f), LW(3))
     CALL(peach_set_pose, STRING("P_O_Z_1"))
     CALL(evt_npc_set_anim, STRING("ホログラム"), STRING("P_O_Z_1"))
@@ -1248,6 +1255,18 @@ EVT_BEGIN(peach_evt_dance)
     WAIT_MS(1000)
     CALL(evt_snd_bgmoff, 1024)
     CALL(evt_snd_bgmon, 1, STRING("BGM_EVT_PEACH_WALTZ1"))
+#else
+    CALL(evt_npc_set_position, STRING(("\203_\203~\201[")), LW(2), FLOAT(5.0f), LW(3))
+    CALL(peach_set_pose, STRING(("P_O_Z_1")))
+    CALL(evt_npc_set_anim, STRING(("\203z\203\215\203O\203\211\203\200")), STRING(("P_O_Z_1")))
+    CALL(evt_npc_set_anim, STRING(("\203z\203\215\203O\203\211\203\2002")), STRING(("P_O_Z_1R")))
+    WAIT_MS(350)
+    CALL(peach_set_pose, STRING(("P_O_S_1")))
+    CALL(horogram_set_pose, STRING(("P_O_S_2")))
+    WAIT_MS(1000)
+    CALL(evt_snd_bgmoff, 1024)
+    CALL(evt_snd_bgmon, 1, STRING(("BGM_EVT_PEACH_WALTZ1")))
+#endif
     CALL(bgm_start_wait)
     WAIT_MS(4000)
     SPAWN_EVENT_GET_ID(PTR(evt_sub_stopwatch), LW(13))
@@ -1330,12 +1349,18 @@ EVT_BEGIN(peach_evt_dance)
                     SPAWN_EVENT(PTR(peach_dance_action_reverse))
                 END_SWITCH
                 CASE_EQUAL(2)
+#ifdef VERSION_G8ME01
                 CALL(evt_npc_get_position, STRING("ホログラム"), LW(5), LW(6), LW(7))
                 CALL(evt_snd_sfxon_3d, STRING("SFX_PEACH_DANCE_NG1"), LW(5), 0, LW(7), 0)
+#else
+                CALL(evt_npc_get_position, STRING(("\203z\203\215\203O\203\211\203\200")), LW(5), LW(6), LW(7))
+                CALL(evt_snd_sfxon_3d, STRING(("SFX_PEACH_DANCE_NG1")), LW(5), 0, LW(7), 0)
+#endif
                 CALL_CHILD(PTR(dance_btn_batu))
                 SPAWN_EVENT(PTR(peach_dance_action_fail))
             END_SWITCH
         END_IF
+#ifdef VERSION_G8ME01
         BEGIN_INLINE_EVENT
             CALL(dance_flag_check, 4096, LW(5))
             IF_INT_NOT_EQUAL(LW(5), 0)
@@ -1344,6 +1369,9 @@ EVT_BEGIN(peach_evt_dance)
                 CALL(dance_flag_onoff, 4096, 0)
             END_IF
         END_INLINE_EVENT
+#else
+        CALL_CHILD(PTR(dance_btn_clear_all))
+#endif
         LOOP(0)
             CALL(evt_sub_get_stopwatch, LW(12), LW(4))
             IF_INT_GREATER_OR_EQUAL(LW(4), 1980)
@@ -1356,6 +1384,7 @@ EVT_BEGIN(peach_evt_dance)
     DELETE_EVENT(LW(13))
     CALL(evt_snd_bgmoff, 513)
     CALL(evt_snd_bgmon, 288, 0)
+#ifdef VERSION_G8ME01
     CALL(evt_snd_envon_f, 272, STRING("ENV_STG7_AJI4"), 2000)
     WAIT_MS(400)
     CALL(horogram_flag_onoff, 1, 4)
@@ -1365,15 +1394,34 @@ EVT_BEGIN(peach_evt_dance)
     SET_VALUE(LW(10), LW(15))
     CALL(evt_npc_get_position, STRING("ホログラム"), LW(2), LW(0), LW(3))
     CALL(evt_snd_sfxon_3d, STRING("SFX_PEACH_DANCE_APPEAR1"), LW(2), 0, LW(3), 0)
+#else
+    CALL(evt_snd_envon_f, 272, STRING(("ENV_STG7_AJI4")), 2000)
+    WAIT_MS(400)
+    CALL(horogram_flag_onoff, 1, 4)
+    CALL(peach_set_pose, STRING(("P_S_1")))
+    CALL(horogram_set_pose, STRING(("P_S_1")))
+    WAIT_MS(300)
+    SET_VALUE(LW(10), LW(15))
+    CALL(evt_npc_get_position, STRING(("\203z\203\215\203O\203\211\203\200")), LW(2), LW(0), LW(3))
+    CALL(evt_snd_sfxon_3d, STRING(("SFX_PEACH_DANCE_APPEAR1")), LW(2), 0, LW(3), 0)
+#endif
     CALL(evt_sub_intpl_msec_init, 11, 192, 0, 500)
     LABEL(0)
     CALL(evt_sub_intpl_msec_get_value)
+#ifdef VERSION_G8ME01
     CALL(evt_npc_set_color, STRING("ホログラム"), 255, 255, 255, LW(0))
+#else
+    CALL(evt_npc_set_color, STRING(("\203z\203\215\203O\203\211\203\200")), 255, 255, 255, LW(0))
+#endif
     WAIT_FRAMES(1)
     IF_INT_EQUAL(LW(1), 1)
         GOTO(0)
     END_IF
+#ifdef VERSION_G8ME01
     CALL(evt_npc_flag_onoff, 1, STRING("ホログラム"), 128)
+#else
+    CALL(evt_npc_flag_onoff, 1, STRING(("\203z\203\215\203O\203\211\203\200")), 128)
+#endif
     CALL_CHILD(PTR(peach_dance_light))
     SET_VALUE(LW(15), LW(10))
     CALL(evt_cam3d_evt_set, 0, 105, 243, 0, 55, -53, 1500, 11)
@@ -1383,6 +1431,7 @@ EVT_BEGIN(peach_evt_dance)
     CALL(evt_mario_set_dir, 90, 200, 0)
     WAIT_MS(500)
     IF_INT_LESS(LW(15), 10)
+#ifdef VERSION_G8ME01
         CALL(evt_map_replayanim, 0, STRING("moza"))
         CALL(evt_msg_print, 0, STRING("peach_aji_94"), 0, 0)
         CALL(evt_map_pauseanim, 0, STRING("moza"))
@@ -1395,161 +1444,7 @@ EVT_BEGIN(peach_evt_dance)
         CALL(compute_horogram_pos, 0, -80, LW(2), LW(3))
         CALL(evt_npc_set_position, STRING("ホログラム"), LW(2), 0, LW(3))
         CALL(evt_snd_sfxon_3d, STRING("SFX_PEACH_DANCE_APPEAR1"), LW(2), 0, LW(3), 0)
-        CALL(evt_sub_intpl_msec_init, 11, 0, 192, 500)
-        LABEL(1)
-        CALL(evt_sub_intpl_msec_get_value)
-        CALL(evt_npc_set_color, STRING("ホログラム"), 255, 255, 255, LW(0))
 #else
-    CALL(evt_npc_pera_onoff, STRING(("\203z\203\215\203O\203\211\203\200")), 0)
-    CALL(evt_npc_set_ry, STRING(("\203z\203\215\203O\203\211\203\200")), 180)
-    CALL(evt_npc_pera_onoff, STRING(("\203z\203\215\203O\203\211\203\2002")), 0)
-    CALL(evt_npc_set_ry, STRING(("\203z\203\215\203O\203\211\203\2002")), 180)
-    LABEL(100)
-    SET_VALUE(LW(15), 0)
-    SET_VALUE(LW(14), 0)
-    SET_VALUE(LW(13), 0)
-    SET_VALUE(LW(12), 0)
-    SET_VALUE(LW(11), 0)
-    CALL(dance_data_init)
-    CALL(get_center, LW(2), LW(3))
-    CALL(evt_npc_set_position, STRING(("\203_\203~\201[")), LW(2), FLOAT(5.0f), LW(3))
-    CALL(peach_set_pose, STRING(("P_O_Z_1")))
-    CALL(evt_npc_set_anim, STRING(("\203z\203\215\203O\203\211\203\200")), STRING(("P_O_Z_1")))
-    CALL(evt_npc_set_anim, STRING(("\203z\203\215\203O\203\211\203\2002")), STRING(("P_O_Z_1R")))
-    WAIT_MS(350)
-    CALL(peach_set_pose, STRING(("P_O_S_1")))
-    CALL(horogram_set_pose, STRING(("P_O_S_2")))
-    WAIT_MS(1000)
-    CALL(evt_snd_bgmoff, 1024)
-    CALL(evt_snd_bgmon, 1, STRING(("BGM_EVT_PEACH_WALTZ1")))
-    CALL(bgm_start_wait)
-    WAIT_MS(4000)
-    SPAWN_EVENT_GET_ID(PTR(evt_sub_stopwatch), LW(13))
-    SPAWN_EVENT(PTR(peach_dance_move))
-    LOOP(0)
-        CALL(evt_sub_get_stopwatch, LW(13), LW(4))
-        IF_INT_GREATER_OR_EQUAL(LW(4), 660)
-            BREAK_LOOP
-        END_IF
-        WAIT_FRAMES(1)
-    END_LOOP
-    SET_VALUE(LW(11), 2000)
-    LOOP(0)
-        CALL(evt_sub_get_stopwatch, LW(13), LW(4))
-        IF_INT_GREATER_OR_EQUAL(LW(4), 32000)
-            BREAK_LOOP
-        END_IF
-        SET_VALUE(LW(1), 0)
-        SPAWN_EVENT_GET_ID(PTR(evt_sub_stopwatch), LW(12))
-        SPAWN_EVENT(PTR(peach_dance_move))
-        LOOP(0)
-            CALL(evt_sub_get_stopwatch, LW(12), LW(4))
-            IF_INT_GREATER_OR_EQUAL(LW(4), 660)
-                BREAK_LOOP
-            END_IF
-            WAIT_FRAMES(1)
-        END_LOOP
-        CALL(evt_sub_random, 2, LW(0))
-        SWITCH(LW(0))
-            CASE_EQUAL(0)
-            SET_RAW_VALUE(LW(2), 1)
-            CASE_EQUAL(1)
-            SET_RAW_VALUE(LW(2), 0)
-            CASE_EQUAL(2)
-            SET_RAW_VALUE(LW(2), 2)
-        END_SWITCH
-        CALL_CHILD(PTR(dance_btn_disp))
-        SPAWN_EVENT(PTR(peach_dance_move))
-        SPAWN_EVENT_GET_ID(PTR(evt_sub_stopwatch), LW(14))
-        LOOP(0)
-            CALL(evt_sub_get_stopwatch, LW(14), LW(4))
-            IF_INT_GREATER_OR_EQUAL(LW(4), 660)
-                SET_VALUE(LW(3), 2)
-                BREAK_LOOP
-            END_IF
-            CALL(btn_check, LW(2), LW(3))
-            IF_INT_NOT_EQUAL(LW(3), 0)
-                BREAK_LOOP
-            END_IF
-            WAIT_FRAMES(1)
-        END_LOOP
-        DELETE_EVENT(LW(14))
-        LOOP(0)
-            CALL(evt_sub_get_stopwatch, LW(12), LW(4))
-            IF_INT_GREATER_OR_EQUAL(LW(4), 1320)
-                BREAK_LOOP
-            END_IF
-            WAIT_FRAMES(1)
-        END_LOOP
-        LOOP(0)
-            CALL(evt_sub_get_stopwatch, LW(13), LW(4))
-            IF_INT_GREATER_OR_EQUAL(LW(4), LW(11))
-                BREAK_LOOP
-            END_IF
-            WAIT_FRAMES(1)
-        END_LOOP
-        ADD(LW(11), 2000)
-        SPAWN_EVENT(PTR(peach_dance_move))
-        IF_INT_NOT_EQUAL(LW(3), 0)
-            SWITCH(LW(3))
-                CASE_EQUAL(1)
-                ADD(LW(15), 1)
-                CALL_CHILD(PTR(dance_btn_clear))
-                SWITCH(LW(2))
-                    CASE_EQUAL(1)
-                    SPAWN_EVENT(PTR(peach_dance_action_step))
-                    CASE_EQUAL(2)
-                    SPAWN_EVENT(PTR(peach_dance_action_turn))
-                    CASE_EQUAL(0)
-                    SPAWN_EVENT(PTR(peach_dance_action_reverse))
-                END_SWITCH
-                CASE_EQUAL(2)
-                CALL(evt_npc_get_position, STRING(("\203z\203\215\203O\203\211\203\200")), LW(5), LW(6), LW(7))
-                CALL(evt_snd_sfxon_3d, STRING(("SFX_PEACH_DANCE_NG1")), LW(5), 0, LW(7), 0)
-                CALL_CHILD(PTR(dance_btn_batu))
-                SPAWN_EVENT(PTR(peach_dance_action_fail))
-            END_SWITCH
-        END_IF
-        CALL_CHILD(PTR(dance_btn_clear_all))
-        LOOP(0)
-            CALL(evt_sub_get_stopwatch, LW(12), LW(4))
-            IF_INT_GREATER_OR_EQUAL(LW(4), 1980)
-                BREAK_LOOP
-            END_IF
-            WAIT_FRAMES(1)
-        END_LOOP
-        DELETE_EVENT(LW(12))
-    END_LOOP
-    DELETE_EVENT(LW(13))
-    CALL(evt_snd_bgmoff, 513)
-    CALL(evt_snd_bgmon, 288, 0)
-    CALL(evt_snd_envon_f, 272, STRING(("ENV_STG7_AJI4")), 2000)
-    WAIT_MS(400)
-    CALL(horogram_flag_onoff, 1, 4)
-    CALL(peach_set_pose, STRING(("P_S_1")))
-    CALL(horogram_set_pose, STRING(("P_S_1")))
-    WAIT_MS(300)
-    SET_VALUE(LW(10), LW(15))
-    CALL(evt_npc_get_position, STRING(("\203z\203\215\203O\203\211\203\200")), LW(2), LW(0), LW(3))
-    CALL(evt_snd_sfxon_3d, STRING(("SFX_PEACH_DANCE_APPEAR1")), LW(2), 0, LW(3), 0)
-    CALL(evt_sub_intpl_msec_init, 11, 192, 0, 500)
-    LABEL(0)
-    CALL(evt_sub_intpl_msec_get_value)
-    CALL(evt_npc_set_color, STRING(("\203z\203\215\203O\203\211\203\200")), 255, 255, 255, LW(0))
-    WAIT_FRAMES(1)
-    IF_INT_EQUAL(LW(1), 1)
-        GOTO(0)
-    END_IF
-    CALL(evt_npc_flag_onoff, 1, STRING(("\203z\203\215\203O\203\211\203\200")), 128)
-    CALL_CHILD(PTR(peach_dance_light))
-    SET_VALUE(LW(15), LW(10))
-    CALL(evt_cam3d_evt_set, 0, 105, 243, 0, 55, -53, 1500, 11)
-    CALL(dance_data_init)
-    CALL(compute_peach_pos, 0, -80, LW(0), LW(1))
-    CALL(evt_mario_mov_pos, LW(0), LW(1), 1500)
-    CALL(evt_mario_set_dir, 90, 200, 0)
-    WAIT_MS(500)
-    IF_INT_LESS(LW(15), 10)
         CALL(evt_map_replayanim, 0, STRING(("moza")))
         CALL(evt_msg_print, 0, STRING(("peach_aji_94")), 0, 0)
         CALL(evt_map_pauseanim, 0, STRING(("moza")))
@@ -1562,9 +1457,13 @@ EVT_BEGIN(peach_evt_dance)
         CALL(compute_horogram_pos, 0, -80, LW(2), LW(3))
         CALL(evt_npc_set_position, STRING(("\203z\203\215\203O\203\211\203\200")), LW(2), 0, LW(3))
         CALL(evt_snd_sfxon_3d, STRING(("SFX_PEACH_DANCE_APPEAR1")), LW(2), 0, LW(3), 0)
+#endif
         CALL(evt_sub_intpl_msec_init, 11, 0, 192, 500)
         LABEL(1)
         CALL(evt_sub_intpl_msec_get_value)
+#ifdef VERSION_G8ME01
+        CALL(evt_npc_set_color, STRING("ホログラム"), 255, 255, 255, LW(0))
+#else
         CALL(evt_npc_set_color, STRING(("\203z\203\215\203O\203\211\203\200")), 255, 255, 255, LW(0))
 #endif
         WAIT_FRAMES(1)
@@ -3028,18 +2927,33 @@ EVT_END()
 EVT_BEGIN(aji_17_init_evt)
 #ifdef VERSION_G8ME01
     SET_VALUE(LW(0), STRING("S_camera_1"))
+#else
+    SET_VALUE(LW(0), STRING(("S_camera_1")))
+#endif
     SET_VALUE(LW(1), -30)
     SET_VALUE(LW(2), 60)
     SPAWN_EVENT(PTR(evt_camera))
+#ifdef VERSION_G8ME01
     SET_VALUE(LW(0), STRING("S_camera_2"))
+#else
+    SET_VALUE(LW(0), STRING(("S_camera_2")))
+#endif
     SET_VALUE(LW(1), -60)
     SET_VALUE(LW(2), 30)
     SPAWN_EVENT(PTR(evt_camera))
+#ifdef VERSION_G8ME01
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_meil"), 1)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_kikai_0"), 1)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("polySurface1161_q00063"), 2)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("polySurface1168_q00065"), 2)
     CALL(evt_mapobj_scale, 0, STRING("ren2"), 5, 5, 1)
+#else
+    CALL(evt_mapobj_flag_onoff, 1, 1, STRING(("S_meil")), 1)
+    CALL(evt_mapobj_flag_onoff, 1, 1, STRING(("S_kikai_0")), 1)
+    CALL(evt_mapobj_flag_onoff, 1, 0, STRING(("polySurface1161_q00063")), 2)
+    CALL(evt_mapobj_flag_onoff, 1, 0, STRING(("polySurface1168_q00065")), 2)
+    CALL(evt_mapobj_scale, 0, STRING(("ren2")), 5, 5, 1)
+#endif
     IF_INT_EQUAL(GSW_STORY_PROGRESS, 58)
         SPAWN_EVENT(PTR(peach_evt_stg1))
     END_IF
@@ -3064,7 +2978,11 @@ EVT_BEGIN(aji_17_init_evt)
     END_IF
     IF_INT_EQUAL(GSW_STORY_PROGRESS, 340)
         CALL(evt_npc_setup, PTR(npcEnt))
+#ifdef VERSION_G8ME01
         CALL(evt_shuryolight_init, STRING("シュリョー"))
+#else
+        CALL(evt_shuryolight_init, STRING(("\203V\203\205\203\212\203\207\201[")))
+#endif
         CALL(evt_shuryolight_run_evt, PTR(shuryolight_pow_normal), PTR(shuryolight_head_normal), PTR(shuryolight_tue_normal))
         SPAWN_EVENT(PTR(peach_evt_stg6))
     END_IF
@@ -3074,17 +2992,27 @@ EVT_BEGIN(aji_17_init_evt)
             IF_INT_EQUAL(LW(15), 0)
                 CALL(evt_mario_set_party, 0, 1)
                 CALL(evt_party_run, 0)
+#ifdef VERSION_G8ME01
             END_IF
             CALL(evt_pouch_mario_recovery)
             CALL(evt_pouch_all_party_recovery)
             CALL(N_evt_sub_status_gauge_force_update)
+#else
+                CALL(evt_pouch_mario_recovery)
+                CALL(evt_pouch_all_party_recovery)
+            END_IF
+#endif
             SET_VALUE(GSWF(4186), 1)
             SPAWN_EVENT(PTR(evt_last))
             ELSE
             SPAWN_EVENT(PTR(evt_last2))
             SET_VALUE(LW(0), PTR(bero_entry_data))
             CALL(evt_bero_get_info)
+#ifdef VERSION_G8ME01
             CALL_CHILD(bero_case_entry)
+#else
+            CALL_CHILD(PTR(bero_case_entry))
+#endif
             RETURN
         END_IF
     END_IF
@@ -3096,12 +3024,17 @@ EVT_BEGIN(aji_17_init_evt)
         CASE_EQUAL(168)
         CASE_EQUAL(214)
         CASE_DEFAULT
+#ifdef VERSION_G8ME01
         CALL_CHILD(evt_bero_info_run)
+#else
+        CALL_CHILD(PTR(evt_bero_info_run))
+#endif
     END_SWITCH
     CALL(evt_mario_get_mode, LW(0))
     IF_INT_EQUAL(LW(0), 1)
         CALL(evt_mario_kill_party, 0)
         ELSE
+#ifdef VERSION_G8ME01
         CALL(evt_snd_bgmon, 512, STRING("BGM_STG7_DUN2"))
         CALL(evt_snd_envon, 272, STRING("ENV_STG7_AJI4"))
     END_IF
@@ -3116,80 +3049,6 @@ EVT_BEGIN(aji_17_init_evt)
         CALL(evt_map_pauseanim, 0, STRING("moza"))
         CALL(evt_run_case_evt, 9, 1, STRING("keyboard"), 0, PTR(tec_talk), 0)
 #else
-    SET_VALUE(LW(0), STRING(("S_camera_1")))
-    SET_VALUE(LW(1), -30)
-    SET_VALUE(LW(2), 60)
-    SPAWN_EVENT(PTR(evt_camera))
-    SET_VALUE(LW(0), STRING(("S_camera_2")))
-    SET_VALUE(LW(1), -60)
-    SET_VALUE(LW(2), 30)
-    SPAWN_EVENT(PTR(evt_camera))
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING(("S_meil")), 1)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING(("S_kikai_0")), 1)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING(("polySurface1161_q00063")), 2)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING(("polySurface1168_q00065")), 2)
-    CALL(evt_mapobj_scale, 0, STRING(("ren2")), 5, 5, 1)
-    IF_INT_EQUAL(GSW_STORY_PROGRESS, 58)
-        SPAWN_EVENT(PTR(peach_evt_stg1))
-    END_IF
-    IF_INT_EQUAL(GSW_STORY_PROGRESS, 113)
-        SPAWN_EVENT(PTR(peach_evt_stg2))
-    END_IF
-    IF_INT_EQUAL(GSW_STORY_PROGRESS, 165)
-        SPAWN_EVENT(PTR(peach_evt_stg3))
-    END_IF
-    IF_INT_EQUAL(GSW_STORY_PROGRESS, 168)
-        SPAWN_EVENT(PTR(peach_evt_stg3_1))
-        CALL(evt_mario_kill_party, 0)
-    END_IF
-    IF_INT_EQUAL(GSW_STORY_PROGRESS, 214)
-        SPAWN_EVENT(PTR(peach_evt_stg4))
-    END_IF
-    IF_INT_EQUAL(GSW_STORY_PROGRESS, 261)
-        SPAWN_EVENT(PTR(peach_evt_stg5))
-    END_IF
-    IF_INT_EQUAL(GSW_STORY_PROGRESS, 264)
-        SPAWN_EVENT(PTR(peach_evt_stg5_1))
-    END_IF
-    IF_INT_EQUAL(GSW_STORY_PROGRESS, 340)
-        CALL(evt_npc_setup, PTR(npcEnt))
-        CALL(evt_shuryolight_init, STRING(("\203V\203\205\203\212\203\207\201[")))
-        CALL(evt_shuryolight_run_evt, PTR(shuryolight_pow_normal), PTR(shuryolight_head_normal), PTR(shuryolight_tue_normal))
-        SPAWN_EVENT(PTR(peach_evt_stg6))
-    END_IF
-    IF_INT_EQUAL(GSW_STORY_PROGRESS, 375)
-        IF_INT_EQUAL(GSWF(4186), 0)
-            CALL(evt_mario_get_party, LW(15))
-            IF_INT_EQUAL(LW(15), 0)
-                CALL(evt_mario_set_party, 0, 1)
-                CALL(evt_party_run, 0)
-                CALL(evt_pouch_mario_recovery)
-                CALL(evt_pouch_all_party_recovery)
-            END_IF
-            SET_VALUE(GSWF(4186), 1)
-            SPAWN_EVENT(PTR(evt_last))
-            ELSE
-            SPAWN_EVENT(PTR(evt_last2))
-            SET_VALUE(LW(0), PTR(bero_entry_data))
-            CALL(evt_bero_get_info)
-            CALL_CHILD(PTR(bero_case_entry))
-            RETURN
-        END_IF
-    END_IF
-    SPAWN_EVENT(PTR(evt_emergency))
-    SET_VALUE(LW(0), PTR(bero_entry_data))
-    CALL(evt_bero_get_info)
-    SWITCH(GSW_STORY_PROGRESS)
-        CASE_EQUAL(58)
-        CASE_EQUAL(168)
-        CASE_EQUAL(214)
-        CASE_DEFAULT
-        CALL_CHILD(PTR(evt_bero_info_run))
-    END_SWITCH
-    CALL(evt_mario_get_mode, LW(0))
-    IF_INT_EQUAL(LW(0), 1)
-        CALL(evt_mario_kill_party, 0)
-        ELSE
         CALL(evt_snd_bgmon, 512, STRING(("BGM_STG7_DUN2")))
         CALL(evt_snd_envon, 272, STRING(("ENV_STG7_AJI4")))
     END_IF

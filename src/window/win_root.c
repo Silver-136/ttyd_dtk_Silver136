@@ -921,6 +921,7 @@ void winKirinukiGX(WindowWork* wp, s32 type, f32 x, f32 y, f32 w, f32 h) {
         // US: the tab under the frame is sized to the "remaining" label
         f32 nk = 0.5f * FontGetMessageWidth(msgSearch("msg_menu_badge_nokori")) + 60.0f;
 
+#endif
         winRootTexQuad(wp, 0xB, x, y, 8, 8);
         winRootTexQuad(wp, 0x9, x + 8, y, w - 8 - 8, 8);
         winRootTexQuad(wp, 0xD, x + w - 8, y, 8, 8);
@@ -928,6 +929,7 @@ void winKirinukiGX(WindowWork* wp, s32 type, f32 x, f32 y, f32 w, f32 h) {
         winRootTexQuad(wp, 0x8, x + 8, y - 8, w - 8, h - 8 - 8);
         winRootTexQuad(wp, 0xC, x, y - (h - 8), 8, 8);
         winRootTexQuad(wp, 0x8, x + 8, y - (h - 8), w - 8, 8);
+#ifdef VERSION_G8ME01
         winRootTexQuad(wp, 0xF, x + (w - nk), y - h, 16, 8);
         winRootTexQuad(wp, 0x8, x + (w - nk) + 16, y - h, nk - 16, 8);
         winRootTexQuad(wp, 0xA, x + (w - nk) + 8, y - h - 8, 8, 8);
@@ -936,13 +938,6 @@ void winKirinukiGX(WindowWork* wp, s32 type, f32 x, f32 y, f32 w, f32 h) {
         winRootTexQuad(wp, 0x8, x + (w - nk) + 16, y - h - 16, nk - 16 - 8, 8);
         winRootTexQuad(wp, 0xE, x + w - 8, y - h - 16, 8, 8);
 #else
-        winRootTexQuad(wp, 0xB, x, y, 8, 8);
-        winRootTexQuad(wp, 0x9, x + 8, y, w - 8 - 8, 8);
-        winRootTexQuad(wp, 0xD, x + w - 8, y, 8, 8);
-        winRootTexQuad(wp, 0xA, x, y - 8, 8, h - 8 - 8);
-        winRootTexQuad(wp, 0x8, x + 8, y - 8, w - 8, h - 8 - 8);
-        winRootTexQuad(wp, 0xC, x, y - (h - 8), 8, 8);
-        winRootTexQuad(wp, 0x8, x + 8, y - (h - 8), w - 8, 8);
         winRootTexQuad(wp, 0xF, x + (w - 90), y - h, 16, 8);
         winRootTexQuad(wp, 0x8, x + (w - 90) + 16, y - h, w74, 8);
         winRootTexQuad(wp, 0xA, x + (w - 90) + 8, y - h - 8, 8, 8);

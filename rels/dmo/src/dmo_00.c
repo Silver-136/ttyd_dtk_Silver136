@@ -995,12 +995,19 @@ EVT_BEGIN(dmo_00_init_evt)
     CALL(evt_npc_entry, STRING("peach"), STRING("c_peach"))
 #ifdef VERSION_G8ME01
     CALL(evt_npc_set_tribe, STRING("peach"), STRING("デモピーチ標準2"))
+#else
+    CALL(evt_npc_set_tribe, STRING("peach"), STRING(/*"デモピーチ標準2"*/"\x83\x66\x83\x82\x83\x73\x81\x5B\x83\x60\x95\x57\x8F\x80\x32"))
+#endif
     CALL(evt_npc_set_ry, STRING("peach"), 90)
     CALL(evt_npc_set_position, STRING("peach"), -2, 0, 550)
     CALL(evt_npc_status_onoff, 1, STRING("peach"), 2)
     CALL(evt_npc_flag_onoff, 1, STRING("peach"), 1074267648)
     CALL(evt_npc_entry, STRING("nazo"), STRING("c_nazo"))
+#ifdef VERSION_G8ME01
     CALL(evt_npc_set_tribe, STRING("nazo"), STRING("謎の人"))
+#else
+    CALL(evt_npc_set_tribe, STRING("nazo"), STRING(/*"謎の人"*/"\x93\xE4\x82\xCC\x90\x6C"))
+#endif
     CALL(evt_npc_set_ry, STRING("nazo"), 90)
     CALL(evt_npc_set_position, STRING("nazo"), -145, 0, 450)
     CALL(evt_npc_status_onoff, 1, STRING("nazo"), 2)
@@ -1013,6 +1020,7 @@ EVT_BEGIN(dmo_00_init_evt)
     CALL(evt_npc_pera_onoff, STRING("hako"), 0)
     CALL(evt_mobj_itembox, STRING("hako"), 340, 110, -20, 1, 0, 0, 0)
     CALL(evt_mobj_flag_onoff, 1, STRING("hako"), 16384)
+#ifdef VERSION_G8ME01
     CALL(evt_npc_entry, STRING("ロテン１"), STRING("c_roten"))
     CALL(evt_npc_set_tribe, STRING("ロテン１"), STRING("ロテン"))
     CALL(evt_npc_flag_onoff, 1, STRING("ロテン１"), 1074267648)
@@ -1028,53 +1036,7 @@ EVT_BEGIN(dmo_00_init_evt)
     CALL(evt_npc_flag_onoff, 1, STRING("チューさん１"), 1074267648)
     CALL(evt_npc_status_onoff, 1, STRING("チューさん１"), 2)
     CALL(evt_npc_change_interrupt, STRING("チューさん１"), 1, PTR(chusan_move))
-    CALL(evt_mario_cont_onoff, 0)
-    CALL(evt_party_cont_onoff, 0, 0)
-    CALL(evt_mario_set_pos, 0, -1000, 0)
-    CALL(evt_party_set_pos, 0, 0, -1000, 0)
-    CALL(evt_paper_entry, STRING("OFF_d_meku_right"))
-    CALL(evt_cam3d_evt_set, 0, 385, 1473, 0, 100, 0, 0, 11)
-    CALL(evt_cam_letter_box_onoff, 1, 1)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S"), 1)
-    CALL(evt_bg_disp_onoff, 0)
-    CALL(evt_npc_flag_onoff, 1, STRING("peach"), 128)
-    CALL(evt_npc_flag_onoff, 1, STRING("nazo"), 128)
-    CALL(evt_npc_flag_onoff, 1, STRING("hako"), 128)
-    CALL(evt_npc_flag_onoff, 1, STRING("ロテン１"), 128)
-    CALL(evt_npc_flag_onoff, 1, STRING("クリボー１"), 128)
-    CALL(evt_npc_flag_onoff, 1, STRING("チューさん１"), 128)
-    BEGIN_INLINE_EVENT_GET_ID(GW(0))
-        SET_TYPE(0)
-        CALL(demo_draw)
-    END_INLINE_EVENT
-    SPAWN_EVENT(PTR(demo_evt))
-    SPAWN_EVENT(PTR(koushukei_dai))
-    BEGIN_INLINE_EVENT
-        CALL(evt_sub_animgroup_async, STRING("OFF_d_maku_center"))
-    END_INLINE_EVENT
-    CALL(evt_fade_set_mapchange_type, 1, -1, -1, -1, 900)
-    RETURN
-EVT_END()
 #else
-    CALL(evt_npc_set_tribe, STRING("peach"), STRING(/*"デモピーチ標準2"*/"\x83\x66\x83\x82\x83\x73\x81\x5B\x83\x60\x95\x57\x8F\x80\x32"))
-    CALL(evt_npc_set_ry, STRING("peach"), 90)
-    CALL(evt_npc_set_position, STRING("peach"), -2, 0, 550)
-    CALL(evt_npc_status_onoff, 1, STRING("peach"), 2)
-    CALL(evt_npc_flag_onoff, 1, STRING("peach"), 1074267648)
-    CALL(evt_npc_entry, STRING("nazo"), STRING("c_nazo"))
-    CALL(evt_npc_set_tribe, STRING("nazo"), STRING(/*"謎の人"*/"\x93\xE4\x82\xCC\x90\x6C"))
-    CALL(evt_npc_set_ry, STRING("nazo"), 90)
-    CALL(evt_npc_set_position, STRING("nazo"), -145, 0, 450)
-    CALL(evt_npc_status_onoff, 1, STRING("nazo"), 2)
-    CALL(evt_npc_flag_onoff, 1, STRING("nazo"), 1074266112)
-    CALL(evt_npc_set_height, STRING("nazo"), 40)
-    CALL(evt_npc_entry, STRING("hako"), STRING("MOBJ_GoldenTreasureBox"))
-    CALL(evt_npc_set_anim, STRING("hako"), STRING("S_1"))
-    CALL(evt_npc_set_position, STRING("hako"), -125, 0, 450)
-    CALL(evt_npc_flag_onoff, 1, STRING("hako"), 1073741824)
-    CALL(evt_npc_pera_onoff, STRING("hako"), 0)
-    CALL(evt_mobj_itembox, STRING("hako"), 340, 110, -20, 1, 0, 0, 0)
-    CALL(evt_mobj_flag_onoff, 1, STRING("hako"), 16384)
     CALL(evt_npc_entry, STRING(/*"ロテン１"*/"\x83\x8D\x83\x65\x83\x93\x82\x50"), STRING("c_roten"))
     CALL(evt_npc_set_tribe, STRING(/*"ロテン１"*/"\x83\x8D\x83\x65\x83\x93\x82\x50"), STRING(/*"ロテン"*/"\x83\x8D\x83\x65\x83\x93"))
     CALL(evt_npc_flag_onoff, 1, STRING(/*"ロテン１"*/"\x83\x8D\x83\x65\x83\x93\x82\x50"), 1074267648)
@@ -1090,6 +1052,7 @@ EVT_END()
     CALL(evt_npc_flag_onoff, 1, STRING(/*"チューさん１"*/"\x83\x60\x83\x85\x81\x5B\x82\xB3\x82\xF1\x82\x50"), 1074267648)
     CALL(evt_npc_status_onoff, 1, STRING(/*"チューさん１"*/"\x83\x60\x83\x85\x81\x5B\x82\xB3\x82\xF1\x82\x50"), 2)
     CALL(evt_npc_change_interrupt, STRING(/*"チューさん１"*/"\x83\x60\x83\x85\x81\x5B\x82\xB3\x82\xF1\x82\x50"), 1, PTR(chusan_move))
+#endif
     CALL(evt_mario_cont_onoff, 0)
     CALL(evt_party_cont_onoff, 0, 0)
     CALL(evt_mario_set_pos, 0, -1000, 0)
@@ -1102,18 +1065,34 @@ EVT_END()
     CALL(evt_npc_flag_onoff, 1, STRING("peach"), 128)
     CALL(evt_npc_flag_onoff, 1, STRING("nazo"), 128)
     CALL(evt_npc_flag_onoff, 1, STRING("hako"), 128)
+#ifdef VERSION_G8ME01
+    CALL(evt_npc_flag_onoff, 1, STRING("ロテン１"), 128)
+    CALL(evt_npc_flag_onoff, 1, STRING("クリボー１"), 128)
+    CALL(evt_npc_flag_onoff, 1, STRING("チューさん１"), 128)
+#else
     CALL(evt_npc_flag_onoff, 1, STRING(/*"ロテン１"*/"\x83\x8D\x83\x65\x83\x93\x82\x50"), 128)
     CALL(evt_npc_flag_onoff, 1, STRING(/*"クリボー１"*/"\x83\x4E\x83\x8A\x83\x7B\x81\x5B\x82\x50"), 128)
     CALL(evt_npc_flag_onoff, 1, STRING(/*"チューさん１"*/"\x83\x60\x83\x85\x81\x5B\x82\xB3\x82\xF1\x82\x50"), 128)
+#endif
     BEGIN_INLINE_EVENT_GET_ID(GW(0))
         SET_TYPE(0)
         CALL(demo_draw)
     END_INLINE_EVENT
+#ifdef VERSION_G8ME01
+    SPAWN_EVENT(PTR(demo_evt))
+    SPAWN_EVENT(PTR(koushukei_dai))
+#else
     SPAWN_EVENT(demo_evt)
     SPAWN_EVENT(koushukei_dai)
+#endif
     BEGIN_INLINE_EVENT
         CALL(evt_sub_animgroup_async, STRING("OFF_d_maku_center"))
     END_INLINE_EVENT
+#ifdef VERSION_G8ME01
+    CALL(evt_fade_set_mapchange_type, 1, -1, -1, -1, 900)
+    RETURN
+EVT_END()
+#else
     RETURN
 EVT_END_PAD()
 #endif

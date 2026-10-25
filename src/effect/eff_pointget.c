@@ -131,15 +131,26 @@ void effPointGetDisp(CameraId cameraId, EffectEntry* effect) {
 #ifdef VERSION_G8ME01
     f32 w;
     f32 w1;
+#endif
     EffPointGetWork* work = effect->userdata;
     CameraEntry* camera = camGetPtr(cameraId);
     f32 scale = work->scale;
+#ifdef VERSION_G8ME01
     f32 pos;
     f32 total;
     f32 ox;
     f32 oy;
     f32 h;
     GXColor color;
+#else
+    f32 base;
+    f32 y1;
+    f32 width;
+    f32 wide;
+    f32 x0;
+    f32 ox;
+    f32 oy;
+#endif
     GXTexObj texObj;
     Mtx mtx;
     Mtx scaleMtx;
@@ -147,6 +158,7 @@ void effPointGetDisp(CameraId cameraId, EffectEntry* effect) {
     char buf[32];
     s32 i;
     s32 pass;
+#ifdef VERSION_G8ME01
     s32 j;
     // FAKE: the digit table is read with one flat index over the rows' three words
     // (language * 3 + slot) through row 0's tbl[], as the target computes it; the natural
@@ -180,6 +192,11 @@ void effPointGetDisp(CameraId cameraId, EffectEntry* effect) {
     if (total > 200.0f) {
         scale *= 200.0f / total;
     }
+#else
+
+    sprintf(buf, "%d", work->number);
+    width = 32.0f * (f32)strlen(buf);
+#endif
     PSMTXTrans(mtx, work->position.x, work->position.y, work->position.z);
     PSMTXScale(scaleMtx, scale, scale, scale);
     PSMTXConcat(mtx, scaleMtx, baseMtx);
@@ -199,6 +216,7 @@ void effPointGetDisp(CameraId cameraId, EffectEntry* effect) {
     GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
+#ifdef VERSION_G8ME01
     for (pass = 1; pass >= 0; pass--) {
         ox = (f32)(pass * 4);
         oy = (f32)(-pass * 4);
@@ -271,45 +289,6 @@ void effPointGetDisp(CameraId cameraId, EffectEntry* effect) {
             }
         }
 #else
-    EffPointGetWork* work = effect->userdata;
-    CameraEntry* camera = camGetPtr(cameraId);
-    f32 scale = work->scale;
-    f32 base;
-    f32 y1;
-    f32 width;
-    f32 wide;
-    f32 x0;
-    f32 ox;
-    f32 oy;
-    GXTexObj texObj;
-    Mtx mtx;
-    Mtx scaleMtx;
-    Mtx baseMtx;
-    char buf[32];
-    s32 i;
-    s32 pass;
-
-    sprintf(buf, "%d", work->number);
-    width = 32.0f * (f32)strlen(buf);
-    PSMTXTrans(mtx, work->position.x, work->position.y, work->position.z);
-    PSMTXScale(scaleMtx, scale, scale, scale);
-    PSMTXConcat(mtx, scaleMtx, baseMtx);
-    PSMTXConcat(camera->view, baseMtx, baseMtx);
-    GXSetNumChans(1);
-    GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_REG, GX_LIGHT_NULL, GX_DF_NONE, GX_AF_NONE);
-    GXSetNumTexGens(1);
-    GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX0, GX_FALSE, GX_PTIDENTITY);
-    GXSetNumTevStages(1);
-    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
-    GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-    GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-    GXSetTevOp(GX_TEVSTAGE0, GX_MODULATE);
-    GXSetCullMode(GX_CULL_NONE);
-    GXClearVtxDesc();
-    GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
-    GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
     base = -(362.0f + width);
     width = 48.0f;
     wide = 352.0f;

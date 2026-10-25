@@ -722,44 +722,81 @@ s8* texid_jp_tbl[] = {
 // US: one title texture set per language; -2 marks a word gap
 s8 prologue_us_tbl[] = {
     19, 20, 21, 22, 21, 23, 24, 25, -1,
+#else
+s8 prologue_us_tbl[] = {
+    17, 18, 19, 20, 19, 7, 21, 8, -1,
+#endif
 };
 
 s8 stage1_us_tbl[] = {
+#ifdef VERSION_G8ME01
     4, 5, 6, 7, 8, 9, 10, -2, 11, -1,
+#else
+    4, 5, 6, 7, 8, 9, -1,
+#endif
 };
 
 s8 stage2_us_tbl[] = {
+#ifdef VERSION_G8ME01
     4, 5, 6, 7, 8, 9, 10, -2, 12, -1,
+#else
+    4, 5, 6, 7, 8, 10, -1,
+#endif
 };
 
 s8 stage3_us_tbl[] = {
+#ifdef VERSION_G8ME01
     4, 5, 6, 7, 8, 9, 10, -2, 13, -1,
+#else
+    4, 5, 6, 7, 8, 11, -1,
+#endif
 };
 
 s8 stage4_us_tbl[] = {
+#ifdef VERSION_G8ME01
     4, 5, 6, 7, 8, 9, 10, -2, 14, -1,
+#else
+    4, 5, 6, 7, 8, 12, -1,
+#endif
 };
 
 s8 stage5_us_tbl[] = {
+#ifdef VERSION_G8ME01
     4, 5, 6, 7, 8, 9, 10, -2, 15, -1,
+#else
+    4, 5, 6, 7, 8, 13, -1,
+#endif
 };
 
 s8 stage6_us_tbl[] = {
+#ifdef VERSION_G8ME01
     4, 5, 6, 7, 8, 9, 10, -2, 16, -1,
+#else
+    4, 5, 6, 7, 8, 14, -1,
+#endif
 };
 
 s8 stage7_us_tbl[] = {
+#ifdef VERSION_G8ME01
     4, 5, 6, 7, 8, 9, 10, -2, 17, -1,
+#else
+    4, 5, 6, 7, 8, 15, -1,
+#endif
 };
 
 s8 stage8_us_tbl[] = {
+#ifdef VERSION_G8ME01
     4, 5, 6, 7, 8, 9, 10, -2, 18, -1,
+#else
+    4, 5, 6, 7, 8, 16, -1,
+#endif
 };
 
 s8* texid_us_tbl[] = {
     prologue_us_tbl, stage1_us_tbl, stage2_us_tbl, stage3_us_tbl, stage4_us_tbl, stage5_us_tbl, stage6_us_tbl, stage7_us_tbl, stage8_us_tbl,
 };
 
+#ifdef VERSION_G8ME01
 s8 prologue_lang3_tbl[] = {
     19, 20, 21, 22, 21, 23, -1,
 };
@@ -922,56 +959,16 @@ s8* texid_lang6_tbl[] = {
 
 s8** lang_tbl[] = {
     texid_jp_tbl, texid_us_tbl, texid_lang3_tbl, texid_lang4_tbl, texid_lang5_tbl, texid_lang6_tbl,
-};
-
-const char* lang_prefix[] = {
-    "jp", "us", "ge", "fr", "sp", "it", "du",
 #else
-s8 prologue_us_tbl[] = {
-    17, 18, 19, 20, 19, 7, 21, 8, -1,
-};
-
-s8 stage1_us_tbl[] = {
-    4, 5, 6, 7, 8, 9, -1,
-};
-
-s8 stage2_us_tbl[] = {
-    4, 5, 6, 7, 8, 10, -1,
-};
-
-s8 stage3_us_tbl[] = {
-    4, 5, 6, 7, 8, 11, -1,
-};
-
-s8 stage4_us_tbl[] = {
-    4, 5, 6, 7, 8, 12, -1,
-};
-
-s8 stage5_us_tbl[] = {
-    4, 5, 6, 7, 8, 13, -1,
-};
-
-s8 stage6_us_tbl[] = {
-    4, 5, 6, 7, 8, 14, -1,
-};
-
-s8 stage7_us_tbl[] = {
-    4, 5, 6, 7, 8, 15, -1,
-};
-
-s8 stage8_us_tbl[] = {
-    4, 5, 6, 7, 8, 16, -1,
-};
-
-s8* texid_us_tbl[] = {
-    prologue_us_tbl, stage1_us_tbl, stage2_us_tbl, stage3_us_tbl, stage4_us_tbl, stage5_us_tbl, stage6_us_tbl, stage7_us_tbl, stage8_us_tbl,
-};
-
 s8** lang_tbl[] = {
     texid_jp_tbl, texid_us_tbl,
+#endif
 };
 
 const char* lang_prefix[] = {
+#ifdef VERSION_G8ME01
+    "jp", "us", "ge", "fr", "sp", "it", "du",
+#else
     "jp", "us",
 #endif
 };

@@ -655,6 +655,14 @@ void N_DrawMenuMarioPinchMark(void) {
     Mtx s;
     GXTexObj texobj;
     Vec p;
+#else
+void DrawMenuPinchMark(void) {
+    Mtx m;
+    Mtx out;
+    GXTexObj texobj;
+    Vec p;
+    Vec q;
+#endif
     BattleWork* wp = _battleWorkPointer;
     CameraEntry* cam;
     BattleUnit* unit;
@@ -665,10 +673,47 @@ void N_DrawMenuMarioPinchMark(void) {
     u32 id;
 
     cam = camGetPtr(CAMERA_2D);
+#ifndef VERSION_G8ME01
+    btlDispGXInit2D();
+#endif
     unit = BattleGetMarioPtr(wp);
     if (unit->currentHp > 0 && unit->currentHp < unit->maxHp && unit->currentHp <= 5) {
         if (unit->currentHp == 1) {
+#ifdef VERSION_G8ME01
             id = peril_icon_tbl[gp->language];
+#else
+            id = (gp->language ? 0 : -1) + 9;
+            if (gp->retraceCount % 50 <= 24) {
+                r = 0xFF;
+                g = 0xE9;
+                b = 0x40;
+                a = 0xFF;
+            } else {
+                r = 0xE9;
+                g = 0x52;
+                b = 0x2F;
+                a = 0xFF;
+            }
+        } else {
+            id = gp->language == 0 ? 6 : 7;
+            r = 0xFF;
+            g = 0xE9;
+            b = 0x40;
+            a = 0xFF;
+        }
+        TEXGetGXTexObjFromPalette(*wp->menuTex->data, &texobj, id);
+        GXLoadTexObj(&texobj, GX_TEXMAP0);
+        btlGetScreenPoint(&unit->mPosition, &p);
+        PSMTXTrans(m, p.x - 20.0f, 60.0f + p.y, 0.0f);
+        PSMTXConcat(cam->view, m, out);
+        GXLoadPosMtxImm(out, 0);
+        btlDispGXQuads2D(-28.0f, 12.0f, 28.0f, -12.0f, r, g, b, a);
+    }
+    unit = BattleGetPartyPtr(wp);
+    if (unit && unit->currentHp > 0 && unit->currentHp < unit->maxHp && unit->currentHp <= 5) {
+        if (unit->currentHp == 1) {
+            id = (gp->language ? 0 : -1) + 9;
+#endif
             if (gp->retraceCount % 50 <= 24) {
                 r = 0xFF;
                 g = 0xE9;
@@ -685,10 +730,15 @@ void N_DrawMenuMarioPinchMark(void) {
             g = 0xE9;
             b = 0x40;
             a = 0xFF;
+#ifdef VERSION_G8ME01
             id = danger_icon_tbl[gp->language];
+#else
+            id = (gp->language ? 0 : -1) + 7;
+#endif
         }
         TEXGetGXTexObjFromPalette(*wp->menuTex->data, &texobj, id);
         GXLoadTexObj(&texobj, GX_TEXMAP0);
+#ifdef VERSION_G8ME01
         btlGetScreenPoint(&unit->mPosition, &p);
         if (unit->mPosition.x > -120.0f) {
             PSMTXTrans(m, p.x - 20.0f, 60.0f + p.y, 20.0f);
@@ -771,77 +821,6 @@ void DrawMenuPinchMark(void) {
         N_DrawMenuMarioPinchMark();
         N_DrawMenuPartyPinchMark();
 #else
-void DrawMenuPinchMark(void) {
-    Mtx m;
-    Mtx out;
-    GXTexObj texobj;
-    Vec p;
-    Vec q;
-    BattleWork* wp = _battleWorkPointer;
-    CameraEntry* cam;
-    BattleUnit* unit;
-    u8 r;
-    u8 g;
-    u8 b;
-    u8 a;
-    u32 id;
-
-    cam = camGetPtr(CAMERA_2D);
-    btlDispGXInit2D();
-    unit = BattleGetMarioPtr(wp);
-    if (unit->currentHp > 0 && unit->currentHp < unit->maxHp && unit->currentHp <= 5) {
-        if (unit->currentHp == 1) {
-            id = (gp->language ? 0 : -1) + 9;
-            if (gp->retraceCount % 50 <= 24) {
-                r = 0xFF;
-                g = 0xE9;
-                b = 0x40;
-                a = 0xFF;
-            } else {
-                r = 0xE9;
-                g = 0x52;
-                b = 0x2F;
-                a = 0xFF;
-            }
-        } else {
-            id = gp->language == 0 ? 6 : 7;
-            r = 0xFF;
-            g = 0xE9;
-            b = 0x40;
-            a = 0xFF;
-        }
-        TEXGetGXTexObjFromPalette(*wp->menuTex->data, &texobj, id);
-        GXLoadTexObj(&texobj, GX_TEXMAP0);
-        btlGetScreenPoint(&unit->mPosition, &p);
-        PSMTXTrans(m, p.x - 20.0f, 60.0f + p.y, 0.0f);
-        PSMTXConcat(cam->view, m, out);
-        GXLoadPosMtxImm(out, 0);
-        btlDispGXQuads2D(-28.0f, 12.0f, 28.0f, -12.0f, r, g, b, a);
-    }
-    unit = BattleGetPartyPtr(wp);
-    if (unit && unit->currentHp > 0 && unit->currentHp < unit->maxHp && unit->currentHp <= 5) {
-        if (unit->currentHp == 1) {
-            id = (gp->language ? 0 : -1) + 9;
-            if (gp->retraceCount % 50 <= 24) {
-                r = 0xFF;
-                g = 0xE9;
-                b = 0x40;
-                a = 0xFF;
-            } else {
-                r = 0xE9;
-                g = 0x52;
-                b = 0x2F;
-                a = 0xFF;
-            }
-        } else {
-            r = 0xFF;
-            g = 0xE9;
-            b = 0x40;
-            a = 0xFF;
-            id = (gp->language ? 0 : -1) + 7;
-        }
-        TEXGetGXTexObjFromPalette(*wp->menuTex->data, &texobj, id);
-        GXLoadTexObj(&texobj, GX_TEXMAP0);
         btlGetScreenPoint(&unit->mPosition, &q);
         PSMTXTrans(m, q.x - 20.0f, 60.0f + q.y, 0.0f);
         PSMTXConcat(cam->view, m, out);

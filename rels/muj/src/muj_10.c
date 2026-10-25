@@ -600,12 +600,16 @@ EVT_BEGIN(muj_10_init_evt)
         CALL(evt_snd_envon, 272, STRING("ENV_STG5_MUJ8"))
 #ifdef VERSION_G8ME01
         ELSE
+#else
+    ELSE
+#endif
         CALL(evt_snd_bgmon, 512, STRING("BGM_STG5_DOU1"))
         CALL(evt_snd_envon, 272, STRING("ENV_STG5_MUJ8"))
     END_IF
     CALL(evt_snd_set_rev_mode, 2)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
+#ifdef VERSION_G8ME01
     CALL_CHILD(PTR(evt_bero_info_run))
     CALL(evt_cam_road_reset)
     CALL(evt_npc_setup, PTR(npcEnt))
@@ -619,49 +623,7 @@ EVT_BEGIN(muj_10_init_evt)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, 258)
         CALL_CHILD(PTR(senin_event))
         SPAWN_EVENT(PTR(korutesu_appear_event))
-    END_IF
-    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 260)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_b"), 1)
-    END_IF
-    CALL(evt_map_playanim, STRING("mizu"), 1, 0)
-    CALL(evt_map_playanim, STRING("noname"), 1, 0)
-    IF_INT_LESS(GSW_STORY_PROGRESS, 260)
-        IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, 258)
-            CALL(evt_map_playanim, STRING("fune"), 1, 0)
-        END_IF
-        BEGIN_INLINE_EVENT
-            LOOP(0)
-                CALL(evt_mapobj_get_position, STRING("S_b"), LW(0), LW(1), LW(2))
-                CALL(evt_snd_sfxon_3d, STRING("SFX_STG5_SHIP_KOR_SHAKE1"), LW(0), LW(1), LW(2), 0)
-                WAIT_MS(2000)
-            END_LOOP
-        END_INLINE_EVENT
-    END_IF
-    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 260)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_hasi_rope01"), 1)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_hasi_rope02"), 1)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_hasi_m"), 1)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_10_sui02_01"), 1)
-        CALL(evt_hitobj_onoff, STRING("A_hasi_ita"), 1, 0)
-        ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_hasi_zan"), 1)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_10_sui02_02"), 1)
-    END_IF
-    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 257)
-        IF_INT_LESS(GSW_STORY_PROGRESS, 258)
-            SPAWN_EVENT(PTR(dai3_shurai_after))
-        END_IF
-    END_IF
-    CALL(evt_hit_damage_return_set, PTR(hitDmgRetPoints))
-    CALL_CHILD(PTR(evt_gazigazi_entry))
 #else
-    ELSE
-        CALL(evt_snd_bgmon, 512, STRING("BGM_STG5_DOU1"))
-        CALL(evt_snd_envon, 272, STRING("ENV_STG5_MUJ8"))
-    END_IF
-    CALL(evt_snd_set_rev_mode, 2)
-    SET_VALUE(LW(0), PTR(bero_entry_data))
-    CALL(evt_bero_get_info)
     CALL_CHILD(evt_bero_info_run)
     CALL(evt_cam_road_reset)
     CALL(evt_npc_setup, PTR(npcEnt))
@@ -674,6 +636,7 @@ EVT_BEGIN(muj_10_init_evt)
     END_IF
     IF_INT_EQUAL(GSW_STORY_PROGRESS, 258)
         SPAWN_EVENT(senin_event)
+#endif
     END_IF
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 260)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_b"), 1)
@@ -698,16 +661,27 @@ EVT_BEGIN(muj_10_init_evt)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_hasi_m"), 1)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_10_sui02_01"), 1)
         CALL(evt_hitobj_onoff, STRING("A_hasi_ita"), 1, 0)
+#ifdef VERSION_G8ME01
+        ELSE
+#else
     ELSE
+#endif
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_hasi_zan"), 1)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_10_sui02_02"), 1)
     END_IF
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 257)
         IF_INT_LESS(GSW_STORY_PROGRESS, 258)
+#ifdef VERSION_G8ME01
+            SPAWN_EVENT(PTR(dai3_shurai_after))
+#else
             SPAWN_EVENT(dai3_shurai_after)
+#endif
         END_IF
     END_IF
     CALL(evt_hit_damage_return_set, PTR(hitDmgRetPoints))
+#ifdef VERSION_G8ME01
+    CALL_CHILD(PTR(evt_gazigazi_entry))
+#else
     CALL_CHILD(evt_gazigazi_entry)
 #endif
     CALL(evt_hitobj_onoff, STRING("A_b_bero02"), 1, 0)

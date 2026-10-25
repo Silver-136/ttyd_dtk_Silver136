@@ -2445,112 +2445,6 @@ static EVT_BEGIN(minnnanokoe_evt)
     CALL(yami_view, -1500)
     CALL(evt_bg_set_color, 64, 64, 64, 255)
     CALL(starstone_entry, STRING("starstone"), 0, 50, 10)
-    SET_VALUE(GW(0), 50)
-    BEGIN_INLINE_EVENT
-        LOOP(0)
-            CALL(starstone_set_pos, STRING("starstone"), 0, GW(0), 10)
-            WAIT_FRAMES(1)
-        END_LOOP
-    END_INLINE_EVENT
-    BEGIN_INLINE_EVENT
-        SET_FLOAT_VALUE(LW(0), FLOAT(0.0f))
-        LOOP(0)
-            CALL(starstone_set_ry, STRING("starstone"), LW(0))
-            SUBTRACT_FLOAT(LW(0), FLOAT(3.0f))
-            IF_INT_LESS_OR_EQUAL(LW(0), FLOAT(0.0f))
-                ADD_FLOAT(LW(0), FLOAT(360.0f))
-            END_IF
-            WAIT_FRAMES(1)
-        END_LOOP
-    END_INLINE_EVENT
-    BEGIN_INLINE_EVENT
-        LOOP(0)
-            CALL(evt_sub_intpl_msec_init, 11, 5000, 5500, 500)
-            LABEL(1)
-            CALL(evt_sub_intpl_msec_get_value)
-            DIVIDE_FLOAT(LW(0), FLOAT(100.0f))
-            SET_FLOAT_VALUE(GW(0), LW(0))
-            WAIT_FRAMES(1)
-            IF_INT_EQUAL(LW(1), 1)
-                GOTO(1)
-            END_IF
-            CALL(evt_sub_intpl_msec_init, 11, 5500, 5000, 500)
-            LABEL(2)
-            CALL(evt_sub_intpl_msec_get_value)
-            DIVIDE_FLOAT(LW(0), FLOAT(100.0f))
-            SET_FLOAT_VALUE(GW(0), LW(0))
-            WAIT_FRAMES(1)
-            IF_INT_EQUAL(LW(1), 1)
-                GOTO(2)
-            END_IF
-        END_LOOP
-    END_INLINE_EVENT
-    CALL(evt_cam3d_evt_set, 400, 106, 331, 400, 45, -13, 0, 11)
-    CALL(evt_seq_wait, 2)
-    WAIT_MS(500)
-    WAIT_MS(1000)
-    BEGIN_INLINE_EVENT
-        CALL(evt_npc_move_position, STRING("ボムヘイD"), 450, 25, 0, 90, 0)
-    END_INLINE_EVENT
-    CALL(evt_npc_move_position, STRING("村長"), 400, 0, 0, 90, 0)
-    WAIT_FRAMES(1)
-    CALL(evt_msg_print, 0, STRING("stg8_las_148_65"), 0, STRING("村長"))
-    WAIT_MS(500)
-    CALL(evt_msg_print, 0, STRING("stg8_las_148_66"), 0, STRING("村長"))
-    CALL(evt_cam3d_evt_set, 0, 283, 1182, 0, 75, 0, 500, 11)
-    WAIT_MS(500)
-    CALL(evt_msg_print, 0, STRING("stg8_las_148_67"), 0, 0)
-    BEGIN_SIBLING_EVENT
-        LOOP(0)
-            CALL(bom1000_jump)
-            WAIT_MS(100)
-        END_LOOP
-    END_SIBLING_EVENT
-    SET_VALUE(GW(6), 0)
-    BEGIN_SIBLING_EVENT
-        SET_VALUE(LW(14), 0)
-        SET_VALUE(LW(15), 3)
-        LOOP(0)
-            CALL(bom1000_msg, LW(14), LW(15), LW(0), LW(2))
-            CALL(evt_sub_random, 2, LW(1))
-            ADD(LW(1), 1)
-            MULTIPLY(LW(1), 30)
-            CALL(evt_sub_random, 20, LW(3))
-            SUBTRACT(LW(3), 10)
-            ADD(LW(1), LW(3))
-            CALL(evt_msg_toge, 3, LW(0), LW(1), LW(2))
-            CALL(evt_sub_random, 2, LW(3))
-            SWITCH(LW(3))
-                CASE_EQUAL(0)
-                SET_VALUE(LW(3), STRING("stg8_las_148_68"))
-                CASE_EQUAL(1)
-                SET_VALUE(LW(3), STRING("stg8_las_148_69"))
-                CASE_EQUAL(2)
-                SET_VALUE(LW(3), STRING("stg8_las_148_70"))
-            END_SWITCH
-            BEGIN_INLINE_EVENT
-                CALL(evt_msg_pri, GW(6))
-                ADD(GW(6), 1)
-                IF_INT_EQUAL(GW(6), 10)
-                    SET_VALUE(GW(6), 0)
-                END_IF
-                CALL(evt_msg_print, 0, LW(3), 0, 0)
-            END_INLINE_EVENT
-            WAIT_MS(300)
-        END_LOOP
-    END_SIBLING_EVENT
-    WAIT_MS(3000)
-    CALL(evt_cam3d_evt_set, 400, 106, 331, 400, 45, -13, 1000, 11)
-    WAIT_MS(1000)
-    CALL(evt_npc_set_ry, STRING("村長"), 90)
-    WAIT_MS(300)
-    CALL(evt_npc_set_ry, STRING("ボムヘイD"), 90)
-    WAIT_FRAMES(1)
-    CALL(evt_npc_wait_pera, STRING("ボムヘイD"))
-    CALL(evt_msg_print, 0, STRING("stg8_las_148_71"), 0, STRING("村長"))
-    WAIT_MS(2000)
-    CALL(evt_fade_set_mapchange_type, 1, 10, 300, 9, 300)
-    CALL(evt_bero_mapchange, STRING("las_29"), STRING("minnnanokoe"))
 #else
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING(("S_yuka1")), 1)
     CALL(evt_mario_set_pos, 0, -1000, 0)
@@ -2581,17 +2475,26 @@ static EVT_BEGIN(minnnanokoe_evt)
     CALL(yami_view, -1500)
     CALL(evt_bg_set_color, 64, 64, 64, 255)
     CALL(starstone_entry, STRING(("starstone")), 0, 50, 10)
+#endif
     SET_VALUE(GW(0), 50)
     BEGIN_INLINE_EVENT
         LOOP(0)
+#ifdef VERSION_G8ME01
+            CALL(starstone_set_pos, STRING("starstone"), 0, GW(0), 10)
+#else
             CALL(starstone_set_pos, STRING(("starstone")), 0, GW(0), 10)
+#endif
             WAIT_FRAMES(1)
         END_LOOP
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
         SET_FLOAT_VALUE(LW(0), FLOAT(0.0f))
         LOOP(0)
+#ifdef VERSION_G8ME01
+            CALL(starstone_set_ry, STRING("starstone"), LW(0))
+#else
             CALL(starstone_set_ry, STRING(("starstone")), LW(0))
+#endif
             SUBTRACT_FLOAT(LW(0), FLOAT(3.0f))
             IF_INT_LESS_OR_EQUAL(LW(0), FLOAT(0.0f))
                 ADD_FLOAT(LW(0), FLOAT(360.0f))
@@ -2626,6 +2529,18 @@ static EVT_BEGIN(minnnanokoe_evt)
     WAIT_MS(500)
     WAIT_MS(1000)
     BEGIN_INLINE_EVENT
+#ifdef VERSION_G8ME01
+        CALL(evt_npc_move_position, STRING("ボムヘイD"), 450, 25, 0, 90, 0)
+    END_INLINE_EVENT
+    CALL(evt_npc_move_position, STRING("村長"), 400, 0, 0, 90, 0)
+    WAIT_FRAMES(1)
+    CALL(evt_msg_print, 0, STRING("stg8_las_148_65"), 0, STRING("村長"))
+    WAIT_MS(500)
+    CALL(evt_msg_print, 0, STRING("stg8_las_148_66"), 0, STRING("村長"))
+    CALL(evt_cam3d_evt_set, 0, 283, 1182, 0, 75, 0, 500, 11)
+    WAIT_MS(500)
+    CALL(evt_msg_print, 0, STRING("stg8_las_148_67"), 0, 0)
+#else
         CALL(evt_npc_move_position, STRING(("\203{\203\200\203w\203CD")), 450, 25, 0, 90, 0)
     END_INLINE_EVENT
     CALL(evt_npc_move_position, STRING(("\221\272\222\267")), 400, 0, 0, 90, 0)
@@ -2636,12 +2551,16 @@ static EVT_BEGIN(minnnanokoe_evt)
     CALL(evt_cam3d_evt_set, 0, 283, 1182, 0, 75, 0, 500, 11)
     WAIT_MS(500)
     CALL(evt_msg_print, 0, STRING(("stg8_las_148_67")), 0, 0)
+#endif
     BEGIN_SIBLING_EVENT
         LOOP(0)
             CALL(bom1000_jump)
             WAIT_MS(100)
         END_LOOP
     END_SIBLING_EVENT
+#ifdef VERSION_G8ME01
+    SET_VALUE(GW(6), 0)
+#endif
     BEGIN_SIBLING_EVENT
         SET_VALUE(LW(14), 0)
         SET_VALUE(LW(15), 3)
@@ -2657,6 +2576,20 @@ static EVT_BEGIN(minnnanokoe_evt)
             CALL(evt_sub_random, 2, LW(3))
             SWITCH(LW(3))
                 CASE_EQUAL(0)
+#ifdef VERSION_G8ME01
+                SET_VALUE(LW(3), STRING("stg8_las_148_68"))
+                CASE_EQUAL(1)
+                SET_VALUE(LW(3), STRING("stg8_las_148_69"))
+                CASE_EQUAL(2)
+                SET_VALUE(LW(3), STRING("stg8_las_148_70"))
+            END_SWITCH
+            BEGIN_INLINE_EVENT
+                CALL(evt_msg_pri, GW(6))
+                ADD(GW(6), 1)
+                IF_INT_EQUAL(GW(6), 10)
+                    SET_VALUE(GW(6), 0)
+                END_IF
+#else
                 SET_VALUE(LW(3), STRING(("stg8_las_148_68")))
                 CASE_EQUAL(1)
                 SET_VALUE(LW(3), STRING(("stg8_las_148_69")))
@@ -2664,6 +2597,7 @@ static EVT_BEGIN(minnnanokoe_evt)
                 SET_VALUE(LW(3), STRING(("stg8_las_148_70")))
             END_SWITCH
             BEGIN_INLINE_EVENT
+#endif
                 CALL(evt_msg_print, 0, LW(3), 0, 0)
             END_INLINE_EVENT
             WAIT_MS(300)
@@ -2672,6 +2606,17 @@ static EVT_BEGIN(minnnanokoe_evt)
     WAIT_MS(3000)
     CALL(evt_cam3d_evt_set, 400, 106, 331, 400, 45, -13, 1000, 11)
     WAIT_MS(1000)
+#ifdef VERSION_G8ME01
+    CALL(evt_npc_set_ry, STRING("村長"), 90)
+    WAIT_MS(300)
+    CALL(evt_npc_set_ry, STRING("ボムヘイD"), 90)
+    WAIT_FRAMES(1)
+    CALL(evt_npc_wait_pera, STRING("ボムヘイD"))
+    CALL(evt_msg_print, 0, STRING("stg8_las_148_71"), 0, STRING("村長"))
+    WAIT_MS(2000)
+    CALL(evt_fade_set_mapchange_type, 1, 10, 300, 9, 300)
+    CALL(evt_bero_mapchange, STRING("las_29"), STRING("minnnanokoe"))
+#else
     CALL(evt_npc_set_ry, STRING(("\221\272\222\267")), 90)
     WAIT_MS(300)
     CALL(evt_npc_set_ry, STRING(("\203{\203\200\203w\203CD")), 90)

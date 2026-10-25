@@ -315,11 +315,15 @@ EVT_BEGIN(evt_sub_starstone)
     IF_INT_EQUAL(LF(8), 0)
         CALL(evt_mario_set_pose, STRING("M_N_3"))
     END_IF
-#ifdef VERSION_G8ME01
+#ifndef VERSION_G8ME01
+    CALL(evt_fade_entry, 9, 300, 255, 255, 255)
+#endif
     CALL(evt_snd_bgmoff, 1024)
     CALL(evt_snd_bgmon, 1, STRING("BGM_FF_GET_STARSTONE1"))
     CALL(bgm_start_wait)
+#ifdef VERSION_G8ME01
     CALL(evt_fade_entry, 9, 300, 255, 255, 255)
+#endif
     IF_INT_EQUAL(LF(8), 1)
         CALL(evt_cam3d_evt_set_npc_rel, STRING("にせマリオ"), 0, 50, 397, 0, 70, 25, 2000, 11)
         ELSE
@@ -329,9 +333,15 @@ EVT_BEGIN(evt_sub_starstone)
     SET_VALUE(LW(7), LW(1))
     SET_FLOAT_VALUE(LW(8), FLOAT(35.0f))
     SET_FLOAT_VALUE(LW(9), LW(3))
+#ifdef VERSION_G8ME01
     CALL(evt_sub_intpl_msec_init, 4, 0, 3600, 2833)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
+#else
+    CALL(evt_sub_intpl_init, 4, 0, 3600, 170)
+    LOOP(171)
+        CALL(evt_sub_intpl_get_value)
+#endif
         IF_INT_EQUAL(LF(8), 1)
             CALL(evt_npc_get_position, STRING("にせマリオ"), LW(2), LW(3), LW(4))
             ELSE
@@ -344,6 +354,7 @@ EVT_BEGIN(evt_sub_starstone)
         ADD_FLOAT(LW(6), LW(4))
         CALL(evt_item_set_position, LW(7), LW(5), LW(9), LW(6))
         CALL(stone_ry, LW(7), LW(0))
+#ifdef VERSION_G8ME01
         SET_FLOAT_VALUE(LW(2), FLOAT(0.20507813f))
         SET_FLOAT_VALUE(LW(3), FLOAT(0.28222656f))
         CALL(evt_sub_scale_by_fps, LW(2), LW(3))
@@ -361,184 +372,12 @@ EVT_BEGIN(evt_sub_starstone)
     END_IF
     ADD(LW(3), 48)
     CALL(evt_item_set_position, LW(7), LW(2), LW(3), LW(4))
-    IF_INT_NOT_EQUAL(LF(8), 1)
-        CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
-        CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_HAPPY1"), LW(0), LW(1), LW(2), 0)
-    END_IF
-    IF_INT_EQUAL(LF(8), 1)
-        CALL(evt_npc_set_anim, STRING("にせマリオ"), STRING("EM_I_1"))
-        ELSE
-        CALL(evt_mario_set_pose, STRING("M_P_2"))
-    END_IF
-    CALL(evt_item_get_position, LW(7), LW(0), LW(1), LW(2))
-    ADD(LW(1), 16)
-    CALL(evt_eff64, STRING("sub_hikari"), STRING("radiation_n64"), 12, LW(0), LW(1), LW(2), FLOAT(1.0f), 0, 0, 0, 0, 0, 0, 0)
-    ADD(LW(2), -10)
-    CALL(evt_eff, STRING("sub_bg"), STRING("itemget"), 0, LW(0), LW(1), LW(2), 0, 0, 0, 0, 0, 0, 0, 0)
-    CALL(stone_bg, LW(7))
-    IF_INT_EQUAL(LF(1), 1)
-        CALL(evt_msg_print, 0, STRING("stg1_gon_33_18"), 0, 0)
-    END_IF
-    IF_INT_EQUAL(LF(2), 1)
-        CALL(evt_msg_print, 0, STRING("stg2_mri_e25_03"), 0, 0)
-    END_IF
-    IF_INT_EQUAL(LF(3), 1)
-        CALL(evt_msg_print, 0, STRING("stg3_tou_475"), 0, 0)
-    END_IF
-    IF_INT_EQUAL(LF(4), 1)
-        CALL(evt_msg_print, 0, STRING("stg4_jin_39"), 0, 0)
-    END_IF
-    IF_INT_EQUAL(LF(5), 1)
-        CALL(evt_msg_print, 0, STRING("stg5_dou_29_01"), 0, 0)
-    END_IF
-    IF_INT_EQUAL(LF(6), 1)
-        CALL(evt_msg_print, 0, STRING("stg6_pik_20"), 0, 0)
-    END_IF
-    IF_INT_EQUAL(LF(7), 1)
-        CALL(evt_msg_print, 0, STRING("stg7_aji_42_02"), 0, 0)
-    END_IF
-    IF_INT_EQUAL(LF(8), 1)
-        CALL(evt_msg_print, 0, STRING("stg4_jin_10_02"), 0, 0)
-    END_IF
-    LOOP(0)
-        CALL(get_stop, LW(0))
-        IF_INT_EQUAL(LW(0), 1)
-            BREAK_LOOP
-        END_IF
-        WAIT_FRAMES(1)
-    END_LOOP
-    CALL(evt_snd_bgmoff, 513)
-    CALL(evt_snd_bgmon, 288, 0)
-    CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_STAGE_CLEAR1"))
-    CALL(evt_snd_envoff, 512)
-    CALL(evt_eff_softdelete, STRING("sub_hikari"))
-    CALL(stone_bg_open, LW(7))
-    BEGIN_INLINE_EVENT
-        IF_INT_EQUAL(LF(1), 1)
-            SET_VALUE(LW(0), STRING("gon_11_S"))
-        END_IF
-        IF_INT_EQUAL(LF(2), 1)
-            SET_VALUE(LW(0), STRING("S"))
-        END_IF
-        IF_INT_EQUAL(LF(3), 1)
-            SET_VALUE(LW(0), STRING("S"))
-        END_IF
-        IF_INT_EQUAL(LF(4), 1)
-            SET_VALUE(LW(0), STRING("S_jin04"))
-        END_IF
-        IF_INT_EQUAL(LF(5), 1)
-            SET_VALUE(LW(0), STRING("S"))
-        END_IF
-        IF_INT_EQUAL(LF(6), 1)
-            SET_VALUE(LW(0), STRING("S"))
-        END_IF
-        IF_INT_EQUAL(LF(7), 1)
-            SET_VALUE(LW(0), STRING("S_aji_14"))
-        END_IF
-        IF_INT_EQUAL(LF(8), 1)
-            SET_VALUE(LW(0), STRING("S_jin04"))
-        END_IF
-        WAIT_FRAMES(10)
-        CALL(evt_mapobj_flag_onoff, 1, 1, LW(0), 1)
-    END_INLINE_EVENT
-    CALL(evt_fade_entry, 34, 0, 0, 0, 0)
-    CALL(evt_fade_end_wait)
-    WAIT_MS(1000)
-    CALL(evt_eff, STRING("sub_clear"), STRING("stageclear"), 10, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0)
-    CALL(stageclear_wait)
-    IF_INT_NOT_EQUAL(LF(8), 1)
-        CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
-        CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_HAPPY2"), LW(0), LW(1), LW(2), 0)
-    END_IF
-    WAIT_MS(2000)
-    CALL(evt_fade_entry, 30, 0, 0, 0, 0)
-    CALL(evt_fade_end_wait)
-    CALL(evt_item_delete, LW(7))
-    WAIT_MS(1000)
-    IF_INT_EQUAL(LF(1), 1)
-        CALL(evt_msg_print, 0, STRING("stg1_gon_34"), 0, 0)
-    END_IF
-    IF_INT_EQUAL(LF(2), 1)
-        CALL(evt_msg_print, 0, STRING("stg2_mri_e25_04"), 0, 0)
-    END_IF
-    IF_INT_EQUAL(LF(3), 1)
-        CALL(evt_msg_print, 0, STRING("stg3_tou_475_01"), 0, 0)
-    END_IF
-    IF_INT_EQUAL(LF(4), 1)
-        CALL(evt_msg_print, 0, STRING("stg4_jin_39_01"), 0, 0)
-    END_IF
-    IF_INT_EQUAL(LF(5), 1)
-        CALL(evt_msg_print, 0, STRING("stg5_dou_29_02"), 0, 0)
-    END_IF
-    IF_INT_EQUAL(LF(6), 1)
-        CALL(evt_msg_print, 0, STRING("stg6_pik_20_01"), 0, 0)
-    END_IF
-    IF_INT_EQUAL(LF(7), 1)
-        CALL(evt_msg_print, 0, STRING("stg7_aji_42_03"), 0, 0)
-    END_IF
-    IF_INT_EQUAL(LF(8), 1)
-        CALL(evt_msg_print, 0, STRING("stg4_jin_10_03"), 0, 0)
-    END_IF
-    WAIT_MS(1000)
-    IF_INT_EQUAL(LF(1), 1)
-        SET_VALUE(LW(0), 1)
-    END_IF
-    IF_INT_EQUAL(LF(2), 1)
-        SET_VALUE(LW(0), 4)
-    END_IF
-    IF_INT_EQUAL(LF(3), 1)
-        SET_VALUE(LW(0), 7)
-    END_IF
-    IF_INT_EQUAL(LF(4), 1)
-        SET_VALUE(LW(0), 10)
-    END_IF
-    IF_INT_EQUAL(LF(5), 1)
-        SET_VALUE(LW(0), 13)
-    END_IF
-    IF_INT_EQUAL(LF(6), 1)
-        SET_VALUE(LW(0), 16)
-    END_IF
-    IF_INT_EQUAL(LF(7), 1)
-        SET_VALUE(LW(0), 19)
-    END_IF
-    IF_INT_EQUAL(LF(8), 1)
-        SET_VALUE(LW(0), 22)
-    END_IF
-    SET_VALUE(LF(10), 0)
-    CALL_CHILD(PTR(evt_memcard_save_wrapper))
 #else
-    CALL(evt_fade_entry, 9, 300, 255, 255, 255)
-    CALL(evt_snd_bgmoff, 1024)
-    CALL(evt_snd_bgmon, 1, STRING("BGM_FF_GET_STARSTONE1"))
-    CALL(bgm_start_wait)
-    IF_INT_EQUAL(LF(8), 1)
-        CALL(evt_cam3d_evt_set_npc_rel, STRING("にせマリオ"), 0, 50, 397, 0, 70, 25, 2000, 11)
-        ELSE
-        CALL(evt_cam3d_evt_set_rel, 0, 50, 397, 0, 70, 25, 2000, 11)
-    END_IF
-    CALL(evt_snd_sfxon_3d, STRING("SFX_SE2_EVT_STARSTONE_GET1"), LW(5), LW(3), LW(6), 0)
-    SET_VALUE(LW(7), LW(1))
-    SET_FLOAT_VALUE(LW(8), FLOAT(35.0f))
-    SET_FLOAT_VALUE(LW(9), LW(3))
-    CALL(evt_sub_intpl_init, 4, 0, 3600, 170)
-    LOOP(171)
-        CALL(evt_sub_intpl_get_value)
-        IF_INT_EQUAL(LF(8), 1)
-            CALL(evt_npc_get_position, STRING("にせマリオ"), LW(2), LW(3), LW(4))
-            ELSE
-            CALL(evt_mario_get_pos, 0, LW(2), LW(3), LW(4))
-        END_IF
-        CALL(evt_sub_get_sincos, LW(0), LW(5), LW(6))
-        MULTIPLY_FLOAT(LW(5), LW(8))
-        MULTIPLY_FLOAT(LW(6), LW(8))
-        ADD_FLOAT(LW(5), LW(2))
-        ADD_FLOAT(LW(6), LW(4))
-        CALL(evt_item_set_position, LW(7), LW(5), LW(9), LW(6))
-        CALL(stone_ry, LW(7), LW(0))
         SUBTRACT_FLOAT(LW(8), FLOAT(0.20507813f))
         ADD_FLOAT(LW(9), FLOAT(0.28222656f))
         WAIT_FRAMES(1)
     END_LOOP
+#endif
     IF_INT_NOT_EQUAL(LF(8), 1)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_HAPPY1"), LW(0), LW(1), LW(2), 0)
@@ -683,6 +522,9 @@ EVT_BEGIN(evt_sub_starstone)
         SET_VALUE(LW(0), 22)
     END_IF
     SET_VALUE(LF(10), 0)
+#ifdef VERSION_G8ME01
+    CALL_CHILD(PTR(evt_memcard_save_wrapper))
+#else
     CALL_CHILD(PTR(evt_memcard_save))
 #endif
     CALL(evt_mario_init_camid)
@@ -1247,6 +1089,9 @@ EVT_END()
 
 #ifdef VERSION_G8ME01
 EVT_BEGIN(evt_sub_mail_event)
+#else
+EvtWord evt_sub_mail_event[] = {
+#endif
     CALL(evt_sub_get_system_flag, LW(0))
     IF_BITS_SET(LW(0), 4096)
         RETURN
@@ -1257,132 +1102,122 @@ EVT_BEGIN(evt_sub_mail_event)
     END_IF
     CALL(evt_sub_get_mapname, LW(0))
     IF_STR_EQUAL(LW(0), STRING("nok_01"))
+#ifdef VERSION_G8ME01
         CALL_CHILD(PTR(mail_evt_nok_01))
+#else
+        CALL_CHILD(mail_evt_nok_01)
+#endif
         RETURN
     END_IF
     IF_STR_EQUAL(LW(0), STRING("gor_03"))
+#ifdef VERSION_G8ME01
         CALL_CHILD(PTR(mail_evt_gor_03))
+#else
+        CALL_CHILD(mail_evt_gor_03)
+#endif
         RETURN
     END_IF
     IF_STR_EQUAL(LW(0), STRING("gor_02"))
+#ifdef VERSION_G8ME01
         SPAWN_EVENT(PTR(mail_evt_gor_02))
         CALL_CHILD(PTR(mail_evt_gor_02_2))
+#else
+        SPAWN_EVENT(mail_evt_gor_02)
+        CALL_CHILD(mail_evt_gor_02_2)
+#endif
         RETURN
     END_IF
     IF_STR_EQUAL(LW(0), STRING("gor_01"))
+#ifdef VERSION_G8ME01
         SPAWN_EVENT(PTR(mail_evt_gor_01_2))
         CALL_CHILD(PTR(mail_evt_gor_01))
+#else
+        SPAWN_EVENT(mail_evt_gor_01_2)
+        CALL_CHILD(mail_evt_gor_01)
+#endif
         RETURN
     END_IF
     IF_STR_EQUAL(LW(0), STRING("gor_04"))
+#ifdef VERSION_G8ME01
         CALL_CHILD(PTR(mail_evt_gor_04))
         RETURN
     END_IF
     IF_STR_EQUAL(LW(0), STRING("rsh_02_a"))
         CALL_CHILD(PTR(mail_evt_rsh_03_a))
-        RETURN
-    END_IF
-    IF_STR_EQUAL(LW(0), STRING("rsh_03_a"))
-        CALL_CHILD(PTR(mail_evt_rsh_03_a_2))
-        RETURN
-    END_IF
-    IF_STR_EQUAL(LW(0), STRING("hom_00"))
-        CALL_CHILD(PTR(mail_evt_hom_00))
-        RETURN
-    END_IF
-    IF_STR_EQUAL(LW(0), STRING("bom_01"))
-        CALL_CHILD(PTR(mail_evt_bom_01))
-        RETURN
-    END_IF
-    IF_STR_EQUAL(LW(0), STRING("tik_00"))
-        CALL_CHILD(PTR(mail_evt_tik_00))
-        RETURN
-    END_IF
-    IF_STR_EQUAL(LW(0), STRING("win_01"))
-        CALL_CHILD(PTR(mail_evt_win_01))
-        RETURN
-    END_IF
-    IF_STR_EQUAL(LW(0), STRING("tou_01"))
-        CALL_CHILD(PTR(mail_evt_tou_01))
-        RETURN
-    END_IF
-    IF_STR_EQUAL(LW(0), STRING("usu_01"))
-        CALL_CHILD(PTR(mail_evt_usu_01))
-        RETURN
-    END_IF
-    IF_STR_EQUAL(LW(0), STRING("pik_00"))
-        CALL_CHILD(PTR(mail_evt_pik_00))
-        RETURN
-    END_IF
-    RETURN
-EVT_END()
 #else
-EvtWord evt_sub_mail_event[] = {
-    CALL(evt_sub_get_system_flag, LW(0))
-    IF_BITS_SET(LW(0), 4096)
-        RETURN
-    END_IF
-    CALL(evt_mario_get_mode, LW(0))
-    IF_INT_NOT_EQUAL(LW(0), 0)
-        RETURN
-    END_IF
-    CALL(evt_sub_get_mapname, LW(0))
-    IF_STR_EQUAL(LW(0), STRING("nok_01"))
-        CALL_CHILD(mail_evt_nok_01)
-        RETURN
-    END_IF
-    IF_STR_EQUAL(LW(0), STRING("gor_03"))
-        CALL_CHILD(mail_evt_gor_03)
-        RETURN
-    END_IF
-    IF_STR_EQUAL(LW(0), STRING("gor_02"))
-        SPAWN_EVENT(mail_evt_gor_02)
-        CALL_CHILD(mail_evt_gor_02_2)
-        RETURN
-    END_IF
-    IF_STR_EQUAL(LW(0), STRING("gor_01"))
-        SPAWN_EVENT(mail_evt_gor_01_2)
-        CALL_CHILD(mail_evt_gor_01)
-        RETURN
-    END_IF
-    IF_STR_EQUAL(LW(0), STRING("gor_04"))
         CALL_CHILD(mail_evt_gor_04)
+#endif
         RETURN
     END_IF
     IF_STR_EQUAL(LW(0), STRING("rsh_03_a"))
+#ifdef VERSION_G8ME01
+        CALL_CHILD(PTR(mail_evt_rsh_03_a_2))
+#else
         CALL_CHILD(mail_evt_rsh_03_a_2)
         CALL_CHILD(mail_evt_rsh_03_a)
+#endif
         RETURN
     END_IF
     IF_STR_EQUAL(LW(0), STRING("hom_00"))
+#ifdef VERSION_G8ME01
+        CALL_CHILD(PTR(mail_evt_hom_00))
+#else
         CALL_CHILD(mail_evt_hom_00)
+#endif
         RETURN
     END_IF
     IF_STR_EQUAL(LW(0), STRING("bom_01"))
+#ifdef VERSION_G8ME01
+        CALL_CHILD(PTR(mail_evt_bom_01))
+#else
         CALL_CHILD(mail_evt_bom_01)
+#endif
         RETURN
     END_IF
     IF_STR_EQUAL(LW(0), STRING("tik_00"))
+#ifdef VERSION_G8ME01
+        CALL_CHILD(PTR(mail_evt_tik_00))
+#else
         CALL_CHILD(mail_evt_tik_00)
+#endif
         RETURN
     END_IF
     IF_STR_EQUAL(LW(0), STRING("win_01"))
+#ifdef VERSION_G8ME01
+        CALL_CHILD(PTR(mail_evt_win_01))
+#else
         CALL_CHILD(mail_evt_win_01)
+#endif
         RETURN
     END_IF
     IF_STR_EQUAL(LW(0), STRING("tou_01"))
+#ifdef VERSION_G8ME01
+        CALL_CHILD(PTR(mail_evt_tou_01))
+#else
         CALL_CHILD(mail_evt_tou_01)
+#endif
         RETURN
     END_IF
     IF_STR_EQUAL(LW(0), STRING("usu_01"))
+#ifdef VERSION_G8ME01
+        CALL_CHILD(PTR(mail_evt_usu_01))
+#else
         CALL_CHILD(mail_evt_usu_01)
+#endif
         RETURN
     END_IF
     IF_STR_EQUAL(LW(0), STRING("pik_00"))
+#ifdef VERSION_G8ME01
+        CALL_CHILD(PTR(mail_evt_pik_00))
+#else
         CALL_CHILD(mail_evt_pik_00)
+#endif
         RETURN
     END_IF
     RETURN
+#ifdef VERSION_G8ME01
+EVT_END()
+#else
 };
 #endif
 

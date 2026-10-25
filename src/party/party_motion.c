@@ -663,17 +663,24 @@ static inline void partyFlyHeadCheck(PartyEntry* party) {
     }
 }
 
+#endif
 void partyFlyAdjustY(PartyEntry* party) {
     MarioWork* mario = party->playerPtr;
     HitEntry* hit;
     s32 attr;
     f32 target;
     f32 rate;
+#ifndef VERSION_G8ME01
+    f32 diff;
+    f32 add;
+#endif
 
     if (party->flags & PARTY_FLAG_DISABLE_FLOORS) {
         return;
     }
+#ifdef VERSION_G8ME01
     partyFlyHeadCheck(party);
+#endif
     hit = partySearchGround(party, 10.0f, 0.0f);
     if (hit) {
         attr = hitGetAttr(hit);
@@ -688,6 +695,9 @@ void partyFlyAdjustY(PartyEntry* party) {
         }
     }
     if (partyChkMarioFollowY(party->playerPtr)) {
+#ifndef VERSION_G8ME01
+        rate = 0.05f;
+#endif
         if (hit) {
             if (mario->position.y > party->groundY) {
                 target = mario->position.y;
@@ -697,6 +707,7 @@ void partyFlyAdjustY(PartyEntry* party) {
                 rate = 0.1f;
             }
             if (party->position.y < party->groundY) {
+#ifdef VERSION_G8ME01
                 target = party->groundY;
                 rate = 0.2f;
             }
@@ -731,42 +742,6 @@ void partyFlyAdjustY(PartyEntry* party) {
             }
             partyFlyMoveY(party, t, rate);
 #else
-void partyFlyAdjustY(PartyEntry* party) {
-    MarioWork* mario = party->playerPtr;
-    HitEntry* hit;
-    s32 attr;
-    f32 target;
-    f32 rate;
-    f32 diff;
-    f32 add;
-
-    if (party->flags & PARTY_FLAG_DISABLE_FLOORS) {
-        return;
-    }
-    hit = partySearchGround(party, 10.0f, 0.0f);
-    if (hit) {
-        attr = hitGetAttr(hit);
-        if (attr & 0x800) {
-            partyChgRunMode(party, 0xD);
-            return;
-        }
-        if (attr & 0x100) {
-            party->flags |= PARTY_FLAG_IN_SHALLOW_WATER;
-        } else {
-            party->flags &= ~PARTY_FLAG_IN_SHALLOW_WATER;
-        }
-    }
-    if (partyChkMarioFollowY(party->playerPtr)) {
-        rate = 0.05f;
-        if (hit) {
-            if (mario->position.y > party->groundY) {
-                target = mario->position.y;
-                rate = 0.1f;
-            } else {
-                target = party->groundY;
-                rate = 0.1f;
-            }
-            if (party->position.y < party->groundY) {
                 target = 18.5f + party->groundY;
                 rate = 0.1f;
             }

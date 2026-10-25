@@ -5096,6 +5096,7 @@ static f32 ac_success_width_tbl[7][8] = {
     {30.0f, 5.0f, 5.0f, 5.0f, 6.0f, 6.0f, 7.0f, 7.0f},
 };
 
+#endif
 USER_FUNC(btlevtcmd_ACSuccessEffect) {
     EvtWord* args = event->args;
     s32 type;
@@ -5105,11 +5106,14 @@ USER_FUNC(btlevtcmd_ACSuccessEffect) {
     f32 h;
     const char* name;
     s32 eff;
+#ifdef VERSION_G8ME01
     s32 lang;
+#endif
     EffectEntry* entry;
 
     type = evtGetValue(event, args[0]);
     scale = 0.75f;
+#ifdef VERSION_G8ME01
     switch (gp->language) {
         case 1: lang = 1; break;
         case 2: lang = 2; break;
@@ -5120,10 +5124,12 @@ USER_FUNC(btlevtcmd_ACSuccessEffect) {
         case 0:
         default: lang = 0; break;
     }
+#endif
     pos.x = (f32)evtGetValue(event, args[1]);
     pos.y = (f32)evtGetValue(event, args[2]);
     pos.z = (f32)evtGetValue(event, args[3]);
     switch (type) {
+#ifdef VERSION_G8ME01
         case 0: scale *= 0.3f; name = "SFX_SYSTEM_NICE_25PERCENT1"; w = ac_success_width_tbl[lang][0] * ac_success_width_tbl[lang][1]; eff = 0; break;
         case 1: scale *= 0.6f; name = "SFX_SYSTEM_NICE_50PERCENT1"; w = ac_success_width_tbl[lang][0] * ac_success_width_tbl[lang][2]; eff = 0; break;
         case 2: scale *= 1.2f; name = "SFX_SYSTEM_NICE1"; w = ac_success_width_tbl[lang][0] * ac_success_width_tbl[lang][3]; eff = 0; break;
@@ -5131,33 +5137,7 @@ USER_FUNC(btlevtcmd_ACSuccessEffect) {
         case 4: scale *= 1.2f; name = "SFX_SYSTEM_GREAT1"; w = ac_success_width_tbl[lang][0] * ac_success_width_tbl[lang][5]; eff = 2; break;
         case 5: name = "SFX_SYSTEM_WONDERFUL1"; w = ac_success_width_tbl[lang][0] * ac_success_width_tbl[lang][6]; eff = 3; break;
         case 6: name = "SFX_SYSTEM_EXCELLENT1"; w = ac_success_width_tbl[lang][0] * ac_success_width_tbl[lang][7]; eff = 4; break;
-        default: return EVT_RETURN_DONE;
-    }
-    w *= scale;
-    h = w / 2.0f;
-    if (pos.x + h > 160.0f) {
-        pos.x = 160.0f - h;
-    }
-    if (pos.x - h < -180.0f) {
-        pos.x = -180.0f + h;
 #else
-USER_FUNC(btlevtcmd_ACSuccessEffect) {
-    EvtWord* args = event->args;
-    s32 type;
-    f32 scale;
-    f32 w;
-    Vec pos;
-    f32 h;
-    const char* name;
-    s32 eff;
-    EffectEntry* entry;
-
-    type = evtGetValue(event, args[0]);
-    scale = 0.75f;
-    pos.x = (f32)evtGetValue(event, args[1]);
-    pos.y = (f32)evtGetValue(event, args[2]);
-    pos.z = (f32)evtGetValue(event, args[3]);
-    switch (type) {
         case 0: scale *= 0.3f; name = "SFX_SYSTEM_NICE_25PERCENT1"; w = 90.0f; eff = 0; break;
         case 1: scale *= 0.6f; name = "SFX_SYSTEM_NICE_50PERCENT1"; w = 90.0f; eff = 0; break;
         case 2: scale *= 1.2f; name = "SFX_SYSTEM_NICE1"; w = 90.0f; eff = 0; break;
@@ -5165,12 +5145,17 @@ USER_FUNC(btlevtcmd_ACSuccessEffect) {
         case 4: scale *= 1.2f; name = "SFX_SYSTEM_GREAT1"; w = 120.0f; eff = 2; break;
         case 5: name = "SFX_SYSTEM_WONDERFUL1"; w = 150.0f; eff = 3; break;
         case 6: name = "SFX_SYSTEM_EXCELLENT1"; w = 180.0f; eff = 4; break;
+#endif
         default: return EVT_RETURN_DONE;
     }
     w *= scale;
     h = w / 2.0f;
     if (pos.x + h > 160.0f) {
         pos.x = 160.0f - h;
+#ifdef VERSION_G8ME01
+    }
+    if (pos.x - h < -180.0f) {
+        pos.x = -180.0f + h;
 #endif
     }
     if (pos.y < 80.0f) {

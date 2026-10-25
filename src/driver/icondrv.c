@@ -85,10 +85,14 @@ u16 icon_067_lang_tbl[6] = {0x67, 0x68, 0x69, 0x6A, 0x67, 0x6B};
 
 #ifdef VERSION_G8ME01
 static inline IconBinData* iconGetBinData(s32 iconId) {
+#else
+static inline IconBinData* iconGetBinData(u16 iconId) {
+#endif
     IconBinary* bin = icon_bin;
     if (!icon_tpl_ok || !icon_bin_ok) {
         return NULL;
     }
+#ifdef VERSION_G8ME01
     switch ((u16)iconId) {
         case 0x49:
             iconId = icon_049_lang_tbl[gp->language];
@@ -100,11 +104,6 @@ static inline IconBinData* iconGetBinData(s32 iconId) {
     return (IconBinData*)((u8*)bin + bin->offset[(u16)iconId]);
 }
 #else
-static inline IconBinData* iconGetBinData(u16 iconId) {
-    IconBinary* bin = icon_bin;
-    if (!icon_tpl_ok || !icon_bin_ok) {
-        return NULL;
-    }
     return (IconBinData*)((u8*)bin + bin->offset[iconId]);
 }
 #endif

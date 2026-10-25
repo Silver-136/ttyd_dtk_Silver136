@@ -3526,11 +3526,21 @@ EVT_BEGIN(muj_00_init_evt)
             CALL(evt_snd_bgmon, 512, STRING("BGM_STG5_MUJ1"))
         END_IF
         ELSE
+#else
+        ELSE
+            CALL(evt_snd_bgmon, 512, STRING("BGM_STG5_MUJ1"))
+        END_IF
+    ELSE
+#endif
         IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, 231)
             IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, 267)
                 IF_INT_EQUAL(GSW_STORY_PROGRESS, 260)
                     CALL(evt_snd_bgmon, 512, STRING("BGM_BOSS_STG5_KORTESS1"))
+#ifdef VERSION_G8ME01
                     ELSE
+#else
+                ELSE
+#endif
                     CALL(evt_snd_bgmon, 512, STRING("BGM_STG5_MUJ1"))
                 END_IF
             END_IF
@@ -3539,6 +3549,7 @@ EVT_BEGIN(muj_00_init_evt)
     CALL(evt_snd_envon, 272, STRING("ENV_STG5_MUJ2"))
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
+#ifdef VERSION_G8ME01
     CALL_CHILD(PTR(evt_bero_info_run))
     CALL(evt_npc_setup, PTR(npcEnt))
     CALL(evt_npc_set_tribe, STRING("モニー"), STRING("モニー（指輪）"))
@@ -3550,132 +3561,7 @@ EVT_BEGIN(muj_00_init_evt)
     CALL_CHILD(PTR(koburon_evt))
     CALL(evt_npc_entry, STRING("船ダミー"), STRING("c_suifu_b"))
     CALL(evt_npc_flag_onoff, 1, STRING("船ダミー"), 1073741984)
-    CALL(evt_eff64, STRING("sunlight"), STRING("sunlight_n64"), 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
-    CALL(evt_mobj_kururing_floor, STRING("kururin1"), 1375, 35, -430, STRING("S_ground"), 125, GSWF(5638))
-    CALL(evt_paper_entry, STRING("OFF_d_yabu"))
-    CALL(evt_paper_entry, STRING("OFF_d_kaiten"))
-    CALL(evt_map_playanim, STRING("S_mizu"), 1, 0)
-    CALL(evt_map_playanim, STRING("fune_c_01"), 1, 0)
-    CALL(evt_map_playanim, STRING("fune_c_02"), 1, 0)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_b"), 1)
-    CALL(evt_hitobj_onoff, STRING("A_b"), 1, 0)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_c"), 1)
-    CALL(evt_hitobj_onoff, STRING("A_c"), 1, 0)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_hasi"), 1)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_mizu_01"), 1)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_mizu_04"), 1)
-    CALL(evt_hitobj_onoff, STRING("A_hasi1"), 1, 0)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_iwa_before"), 1)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_iwa_after"), 1)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_iwa_s011"), 1)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ana_after"), 1)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ana_before"), 1)
-    IF_INT_LESS_OR_EQUAL(GSW_STORY_PROGRESS, 255)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ana_before"), 1)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_iwa_s011"), 1)
-        ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ana_after"), 1)
-        CALL(evt_hitobj_onoff, STRING("A_iwa_09"), 1, 0)
-    END_IF
-    IF_INT_LESS(GSW_STORY_PROGRESS, 260)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_iwa_before"), 1)
-        ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_iwa_after"), 1)
-    END_IF
-    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 257)
-        IF_INT_LESS(GSW_STORY_PROGRESS, 258)
-            SPAWN_EVENT_GET_ID(PTR(dai3_shurai_after), GW(8))
-        END_IF
-    END_IF
-    CALL(evt_hit_damage_return_set, PTR(hitDmgRetPoints))
-    CALL_CHILD(PTR(evt_gazigazi_entry))
-    SWITCH(GSW_STORY_PROGRESS)
-        CASE_EQUAL(231)
-        SPAWN_EVENT(PTR(mujinto_hyochaku))
-        CASE_EQUAL(256)
-        CALL_CHILD(PTR(nannpc_mode_setup))
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_c"), 1)
-        CALL(evt_hitobj_onoff, STRING("A_c"), 1, 1)
-        CALL(evt_hit_bind_mapobj, STRING("A_c"), STRING("S_c"))
-        SPAWN_EVENT(PTR(dai3_shurai))
-        SPAWN_EVENT(PTR(suifu_random_sub))
-        CASE_EQUAL(257)
-        CALL_CHILD(PTR(nannpc_mode_setup))
-        SPAWN_EVENT(PTR(suifu_random_sub))
-        CASE_EQUAL(259)
-        CALL_CHILD(PTR(nannpc_mode_setup))
-        CALL_CHILD(PTR(mario_main_init))
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_b"), 1)
-        CALL(evt_hitobj_onoff, STRING("A_b"), 1, 1)
-        CALL(evt_hit_bind_mapobj, STRING("A_b"), STRING("S_b"))
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_c"), 1)
-        CALL(evt_hitobj_onoff, STRING("A_c"), 1, 1)
-        CALL(evt_hit_bind_mapobj, STRING("A_c"), STRING("S_c"))
-        SPAWN_EVENT(PTR(kaizoku_vs_dai3))
-        CASE_EQUAL(260)
-        CALL_CHILD(PTR(nannpc_mode_setup))
-        CALL_CHILD(PTR(mario_main_init))
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_b"), 1)
-        CALL(evt_hitobj_onoff, STRING("A_b"), 1, 1)
-        CALL(evt_hit_bind_mapobj, STRING("A_b"), STRING("S_b"))
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_c"), 1)
-        CALL(evt_hitobj_onoff, STRING("A_c"), 1, 1)
-        CALL(evt_hit_bind_mapobj, STRING("A_c"), STRING("S_c"))
-        SET_VALUE(LW(0), 1)
-        SPAWN_EVENT(PTR(dai3_beat_back))
-        CASE_EQUAL(267)
-        CALL(evt_mario_get_party, LW(15))
-        IF_INT_EQUAL(LW(15), 0)
-            CALL(evt_mario_set_party, 0, 1)
-            CALL(evt_party_run, 0)
-        END_IF
-        CALL(evt_pouch_mario_recovery)
-        CALL(evt_pouch_all_party_recovery)
-        CALL(N_evt_sub_status_gauge_force_update)
-        CALL_CHILD(PTR(nannpc_mode_setup))
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_b"), 1)
-        CALL(evt_hitobj_onoff, STRING("A_b"), 1, 1)
-        CALL(evt_hit_bind_mapobj, STRING("A_b"), STRING("S_b"))
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_hasi"), 1)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_mizu_01"), 1)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_mizu_04"), 1)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_mizu_00"), 1)
-        CALL(evt_hitobj_onoff, STRING("A_hasi1"), 1, 1)
-        SPAWN_EVENT(PTR(leave_island))
-        CASE_GREATER_OR_EQUAL(268)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_b"), 1)
-        CALL(evt_hitobj_onoff, STRING("A_b"), 1, 1)
-        CALL(evt_hit_bind_mapobj, STRING("A_b"), STRING("S_b"))
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_hasi"), 1)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_mizu_01"), 1)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_mizu_04"), 1)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_mizu_00"), 1)
-        CALL(evt_hitobj_onoff, STRING("A_hasi1"), 1, 1)
-        CALL_CHILD(PTR(muj_gor_ship))
-        IF_INT_EQUAL(GSWF(3125), 1)
-            SET_VALUE(GSWF(3125), 0)
-            SET_VALUE(GSWF(39), 1)
-            SPAWN_EVENT(PTR(into_muj_ship))
-        END_IF
-        SPAWN_EVENT(PTR(mony_peton_boarding))
 #else
-        ELSE
-            CALL(evt_snd_bgmon, 512, STRING("BGM_STG5_MUJ1"))
-        END_IF
-    ELSE
-        IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, 231)
-            IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, 267)
-                IF_INT_EQUAL(GSW_STORY_PROGRESS, 260)
-                    CALL(evt_snd_bgmon, 512, STRING("BGM_BOSS_STG5_KORTESS1"))
-                ELSE
-                    CALL(evt_snd_bgmon, 512, STRING("BGM_STG5_MUJ1"))
-                END_IF
-            END_IF
-        END_IF
-    END_IF
-    CALL(evt_snd_envon, 272, STRING("ENV_STG5_MUJ2"))
-    SET_VALUE(LW(0), PTR(bero_entry_data))
-    CALL(evt_bero_get_info)
     CALL_CHILD(evt_bero_info_run)
     CALL(evt_npc_setup, PTR(npcEnt))
     CALL(evt_npc_set_tribe, STRING(/*"モニー"*/"\x83\x82\x83\x6A\x81\x5B"), STRING(/*"モニー（指輪）"*/"\x83\x82\x83\x6A\x81\x5B\x81\x69\x8E\x77\x97\xD6\x81\x6A"))
@@ -3687,6 +3573,7 @@ EVT_BEGIN(muj_00_init_evt)
     CALL_CHILD(koburon_evt)
     CALL(evt_npc_entry, STRING(/*"船ダミー"*/"\x91\x44\x83\x5F\x83\x7E\x81\x5B"), STRING("c_suifu_b"))
     CALL(evt_npc_flag_onoff, 1, STRING(/*"船ダミー"*/"\x91\x44\x83\x5F\x83\x7E\x81\x5B"), 1073741984)
+#endif
     CALL(evt_eff64, STRING("sunlight"), STRING("sunlight_n64"), 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
     CALL(evt_mobj_kururing_floor, STRING("kururin1"), 1375, 35, -430, STRING("S_ground"), 125, GSWF(5638))
     CALL(evt_paper_entry, STRING("OFF_d_yabu"))
@@ -3710,13 +3597,21 @@ EVT_BEGIN(muj_00_init_evt)
     IF_INT_LESS_OR_EQUAL(GSW_STORY_PROGRESS, 255)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ana_before"), 1)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_iwa_s011"), 1)
+#ifdef VERSION_G8ME01
+        ELSE
+#else
     ELSE
+#endif
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ana_after"), 1)
         CALL(evt_hitobj_onoff, STRING("A_iwa_09"), 1, 0)
     END_IF
     IF_INT_LESS(GSW_STORY_PROGRESS, 260)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_iwa_before"), 1)
+#ifdef VERSION_G8ME01
+        ELSE
+#else
     ELSE
+#endif
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_iwa_after"), 1)
     END_IF
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 257)
@@ -3725,15 +3620,34 @@ EVT_BEGIN(muj_00_init_evt)
         END_IF
     END_IF
     CALL(evt_hit_damage_return_set, PTR(hitDmgRetPoints))
+#ifdef VERSION_G8ME01
+    CALL_CHILD(PTR(evt_gazigazi_entry))
+    SWITCH(GSW_STORY_PROGRESS)
+        CASE_EQUAL(231)
+        SPAWN_EVENT(PTR(mujinto_hyochaku))
+        CASE_EQUAL(256)
+        CALL_CHILD(PTR(nannpc_mode_setup))
+#else
     CALL_CHILD(evt_gazigazi_entry)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(231)
         SPAWN_EVENT(mujinto_hyochaku)
         CASE_EQUAL(256)
         CALL_CHILD(nannpc_mode_setup)
+#endif
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_c"), 1)
         CALL(evt_hitobj_onoff, STRING("A_c"), 1, 1)
         CALL(evt_hit_bind_mapobj, STRING("A_c"), STRING("S_c"))
+#ifdef VERSION_G8ME01
+        SPAWN_EVENT(PTR(dai3_shurai))
+        SPAWN_EVENT(PTR(suifu_random_sub))
+        CASE_EQUAL(257)
+        CALL_CHILD(PTR(nannpc_mode_setup))
+        SPAWN_EVENT(PTR(suifu_random_sub))
+        CASE_EQUAL(259)
+        CALL_CHILD(PTR(nannpc_mode_setup))
+        CALL_CHILD(PTR(mario_main_init))
+#else
         SPAWN_EVENT(dai3_shurai)
         SPAWN_EVENT(suifu_random_sub)
         CASE_EQUAL(257)
@@ -3742,16 +3656,24 @@ EVT_BEGIN(muj_00_init_evt)
         CASE_EQUAL(259)
         CALL_CHILD(nannpc_mode_setup)
         CALL_CHILD(mario_main_init)
+#endif
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_b"), 1)
         CALL(evt_hitobj_onoff, STRING("A_b"), 1, 1)
         CALL(evt_hit_bind_mapobj, STRING("A_b"), STRING("S_b"))
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_c"), 1)
         CALL(evt_hitobj_onoff, STRING("A_c"), 1, 1)
         CALL(evt_hit_bind_mapobj, STRING("A_c"), STRING("S_c"))
+#ifdef VERSION_G8ME01
+        SPAWN_EVENT(PTR(kaizoku_vs_dai3))
+        CASE_EQUAL(260)
+        CALL_CHILD(PTR(nannpc_mode_setup))
+        CALL_CHILD(PTR(mario_main_init))
+#else
         SPAWN_EVENT(kaizoku_vs_dai3)
         CASE_EQUAL(260)
         CALL_CHILD(nannpc_mode_setup)
         CALL_CHILD(mario_main_init)
+#endif
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_b"), 1)
         CALL(evt_hitobj_onoff, STRING("A_b"), 1, 1)
         CALL(evt_hit_bind_mapobj, STRING("A_b"), STRING("S_b"))
@@ -3759,16 +3681,28 @@ EVT_BEGIN(muj_00_init_evt)
         CALL(evt_hitobj_onoff, STRING("A_c"), 1, 1)
         CALL(evt_hit_bind_mapobj, STRING("A_c"), STRING("S_c"))
         SET_VALUE(LW(0), 1)
+#ifdef VERSION_G8ME01
+        SPAWN_EVENT(PTR(dai3_beat_back))
+#else
         SPAWN_EVENT(dai3_beat_back)
+#endif
         CASE_EQUAL(267)
         CALL(evt_mario_get_party, LW(15))
         IF_INT_EQUAL(LW(15), 0)
             CALL(evt_mario_set_party, 0, 1)
             CALL(evt_party_run, 0)
+#ifdef VERSION_G8ME01
+        END_IF
+        CALL(evt_pouch_mario_recovery)
+        CALL(evt_pouch_all_party_recovery)
+        CALL(N_evt_sub_status_gauge_force_update)
+        CALL_CHILD(PTR(nannpc_mode_setup))
+#else
             CALL(evt_pouch_mario_recovery)
             CALL(evt_pouch_all_party_recovery)
         END_IF
         CALL_CHILD(nannpc_mode_setup)
+#endif
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_b"), 1)
         CALL(evt_hitobj_onoff, STRING("A_b"), 1, 1)
         CALL(evt_hit_bind_mapobj, STRING("A_b"), STRING("S_b"))
@@ -3777,7 +3711,11 @@ EVT_BEGIN(muj_00_init_evt)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_mizu_04"), 1)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_mizu_00"), 1)
         CALL(evt_hitobj_onoff, STRING("A_hasi1"), 1, 1)
+#ifdef VERSION_G8ME01
+        SPAWN_EVENT(PTR(leave_island))
+#else
         SPAWN_EVENT(leave_island)
+#endif
         CASE_GREATER_OR_EQUAL(268)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_b"), 1)
         CALL(evt_hitobj_onoff, STRING("A_b"), 1, 1)
@@ -3787,10 +3725,19 @@ EVT_BEGIN(muj_00_init_evt)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_mizu_04"), 1)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_mizu_00"), 1)
         CALL(evt_hitobj_onoff, STRING("A_hasi1"), 1, 1)
+#ifdef VERSION_G8ME01
+        CALL_CHILD(PTR(muj_gor_ship))
+#else
         CALL_CHILD(muj_gor_ship)
+#endif
         IF_INT_EQUAL(GSWF(3125), 1)
             SET_VALUE(GSWF(3125), 0)
             SET_VALUE(GSWF(39), 1)
+#ifdef VERSION_G8ME01
+            SPAWN_EVENT(PTR(into_muj_ship))
+        END_IF
+        SPAWN_EVENT(PTR(mony_peton_boarding))
+#else
             SPAWN_EVENT(into_muj_ship)
         END_IF
         SPAWN_EVENT(mony_peton_boarding)

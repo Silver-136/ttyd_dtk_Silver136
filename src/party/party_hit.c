@@ -382,21 +382,26 @@ HitEntry* partySearchWallFront(PartyEntry* party, Vec* pos, f32 dist, f32 ang) {
     HitEntry* best;
 #ifdef VERSION_G8ME01
     s32 count;
+#endif
     HitEntry* hit;
     s32 i;
 
     sincosf(&sn, &cs, ang);
+#ifdef VERSION_G8ME01
     count = 3;
+#endif
     arr[0] = 0.75f * partyGetHeight(party);
     arr[1] = 0.5f * partyGetHeight(party);
     if ((party->flags & (PARTY_FLAG_IS_JUMPING | PARTY_FLAG_IS_FALLING)) || yoshiGetStatus() == 2) {
         arr[2] = 1.0f;
     } else {
         arr[2] = 11.0f;
+#ifdef VERSION_G8ME01
         if (!strcmp(gp->currentMapName, "gor_02") && party->position.y >= 120.0f && party->position.x <= 350.0f) {
             arr[3] = 1.0f;
             count = 4;
         }
+#endif
     }
     rd = 0.5f * party->width;
     best = NULL;
@@ -410,7 +415,11 @@ HitEntry* partySearchWallFront(PartyEntry* party, Vec* pos, f32 dist, f32 ang) {
     dir1.z = cs;
     qdir = dir1;
     }
+#ifdef VERSION_G8ME01
     for (i = 0; i < count; i++) {
+#else
+    for (i = 0; i < 3; i++) {
+#endif
         d = maxD;
         qpos.y = pos->y + arr[i];
         hit = marioHitCheckVec(&qpos, &qdir, &outPos, &nrm, &d);
@@ -441,7 +450,9 @@ HitEntry* partySearchWallFront(PartyEntry* party, Vec* pos, f32 dist, f32 ang) {
         v.x += 0.5f * (mx - dot * nn.x);
         v.z += 0.5f * (mz - dot * nz);
     }
+#ifdef VERSION_G8ME01
     hit = NULL;
+#endif
     sincosf(&sn2, &cs2, ang + 45.0f);
     bestD = rd;
     qpos = *pos;
@@ -451,7 +462,11 @@ HitEntry* partySearchWallFront(PartyEntry* party, Vec* pos, f32 dist, f32 ang) {
     dir2.z = cs2;
     qdir = dir2;
     }
+#ifdef VERSION_G8ME01
     for (i = 0; i < count; i++) {
+#else
+    for (i = 0; i < 3; i++) {
+#endif
         bestD = rd;
         qpos.y = pos->y + arr[i];
         hit = marioHitCheckVec(&qpos, &qdir, NULL, NULL, &bestD);
@@ -460,82 +475,11 @@ HitEntry* partySearchWallFront(PartyEntry* party, Vec* pos, f32 dist, f32 ang) {
         }
     }
     if (hit) {
+#ifdef VERSION_G8ME01
         hit = NULL;
         sincosf(&sn2, &cs2, ang - 45.0f);
         for (i = 0; i < count; i++) {
 #else
-    HitEntry* hit;
-    s32 i;
-
-    sincosf(&sn, &cs, ang);
-    arr[0] = 0.75f * partyGetHeight(party);
-    arr[1] = 0.5f * partyGetHeight(party);
-    if ((party->flags & (PARTY_FLAG_IS_JUMPING | PARTY_FLAG_IS_FALLING)) || yoshiGetStatus() == 2) {
-        arr[2] = 1.0f;
-    } else {
-        arr[2] = 11.0f;
-    }
-    rd = 0.5f * party->width;
-    best = NULL;
-    maxD = rd + dist;
-    bestD = maxD;
-    do {
-    qpos = *pos;
-    {
-    Vec dir1 = {0.0f, 0.0f, 0.0f};
-    dir1.x = sn;
-    dir1.z = cs;
-    qdir = dir1;
-    }
-    for (i = 0; i < 3; i++) {
-        d = maxD;
-        qpos.y = pos->y + arr[i];
-        hit = marioHitCheckVec(&qpos, &qdir, &outPos, &nrm, &d);
-        if (hit) {
-            if (best) {
-                if (d < bestD) {
-                    best = hit;
-                    bestD = d;
-                    bestNrm = nrm;
-                }
-            } else {
-                best = hit;
-                bestD = d;
-                bestNrm = nrm;
-            }
-        }
-    }
-    if (best) {
-        Vec nn;
-        f32 dot;
-        f32 mx, mz;
-        f32 nz;
-        nn = bestNrm;
-        mx = sn * dist;
-        mz = cs * dist;
-        nz = nn.z;
-        dot = mx * nn.x + mz * nz;
-        v.x += 0.5f * (mx - dot * nn.x);
-        v.z += 0.5f * (mz - dot * nz);
-    }
-    sincosf(&sn2, &cs2, ang + 45.0f);
-    bestD = rd;
-    qpos = *pos;
-    {
-    Vec dir2 = {0.0f, 0.0f, 0.0f};
-    dir2.x = sn2;
-    dir2.z = cs2;
-    qdir = dir2;
-    }
-    for (i = 0; i < 3; i++) {
-        bestD = rd;
-        qpos.y = pos->y + arr[i];
-        hit = marioHitCheckVec(&qpos, &qdir, NULL, NULL, &bestD);
-        if (hit) {
-            break;
-        }
-    }
-    if (hit) {
         sincosf(&sn2, &cs2, ang - 45.0f);
         for (i = 0; i < 3; i++) {
 #endif
@@ -571,15 +515,20 @@ HitEntry* partySearchFrontWall(PartyEntry* party, Vec* pos, f32 dist, f32 ang) {
     f32 d, dy, hh;
 #ifdef VERSION_G8ME01
     f32 w, maxD;
+#endif
     HitEntry* hit;
     Vec p, nrm;
 
     sincosf(&sn, &cs, ang);
+#ifdef VERSION_G8ME01
     w = party->width;
     if (party->flags & PARTY_FLAG_PAPER_MODE) {
         w = 6.0f;
     }
     d = maxD = 0.5f * w + dist;
+#else
+    d = 0.5f * party->width + dist;
+#endif
     hh = 0.75f * partyGetHeight(party);
     p = party->position;
     p.y += hh;
@@ -599,32 +548,9 @@ HitEntry* partySearchFrontWall(PartyEntry* party, Vec* pos, f32 dist, f32 ang) {
         dy = 1.0f;
     }
     p = party->position;
+#ifdef VERSION_G8ME01
     d = maxD;
 #else
-    HitEntry* hit;
-    Vec p, nrm;
-
-    sincosf(&sn, &cs, ang);
-    d = 0.5f * party->width + dist;
-    hh = 0.75f * partyGetHeight(party);
-    p = party->position;
-    p.y += hh;
-    {
-    Vec dir = {0.0f, 0.0f, 0.0f};
-    Vec outPos = {0.0f, 0.0f, 0.0f};
-    dir.x = sn;
-    dir.z = cs;
-    hit = partyHitCheckInl(party, &p, &dir, &outPos, &nrm, &d);
-    if (hit) {
-        party->frontWallDist = d;
-        partyWallSlide(pos, nrm, dist, sn, cs);
-        return hit;
-    }
-    dy = 11.0f;
-    if (party->currentMemberId == PARTY_MEMBER_BOBBERY && (party->flags & PARTY_FLAG_IS_BEING_USED)) {
-        dy = 1.0f;
-    }
-    p = party->position;
     d = 0.5f * party->width + dist;
 #endif
     p.y += dy;

@@ -925,19 +925,28 @@ void winFontSet(Vec pos, Vec scale, GXColor color, const char* fmt, ...) {
 #ifdef VERSION_G8ME01
     char buf[0x1000];
     const char* msg = fmt;
+#else
+    char buf[0x400];
+#endif
     Mtx trans;
     Mtx scl;
     va_list args;
 
+#ifdef VERSION_G8ME01
     if (strstr(fmt, "%")) {
         va_start(args, fmt);
         vsprintf(buf, fmt, args);
         msg = buf;
     }
+#else
+    va_start(args, fmt);
+    vsprintf(buf, fmt, args);
+#endif
     PSMTXTrans(trans, pos.x, pos.y, pos.z);
     PSMTXScale(scl, scale.x, scale.y, scale.z);
     PSMTXConcat(trans, scl, trans);
     FontDrawColor(color);
+#ifdef VERSION_G8ME01
     FontDrawMessageMtx(trans, msg);
 }
 
@@ -958,17 +967,6 @@ void winFontSetWidth(Vec pos, Vec scale, GXColor color, f32 width, const char* f
     }
     winFontSet(pos, scale, color, msg);
 #else
-    char buf[0x400];
-    Mtx trans;
-    Mtx scl;
-    va_list args;
-
-    va_start(args, fmt);
-    vsprintf(buf, fmt, args);
-    PSMTXTrans(trans, pos.x, pos.y, pos.z);
-    PSMTXScale(scl, scale.x, scale.y, scale.z);
-    PSMTXConcat(trans, scl, trans);
-    FontDrawColor(color);
     FontDrawMessageMtx(trans, buf);
 #endif
 }
@@ -977,9 +975,13 @@ void winFontSetR(Vec pos, Vec scale, GXColor color, const char* fmt, ...) {
 #ifdef VERSION_G8ME01
     char buf[0x1000];
     const char* msg = fmt;
+#else
+    char buf[0x400];
+#endif
     Mtx trans;
     Mtx scl;
     va_list args;
+#ifdef VERSION_G8ME01
     s32 ref;
 
     if (strstr(fmt, "%")) {
@@ -993,22 +995,18 @@ void winFontSetR(Vec pos, Vec scale, GXColor color, const char* fmt, ...) {
         ref = FontGetMessageWidth("９９９");
     }
     { s32 w = ref - FontGetMessageWidth(msg); PSMTXTrans(trans, pos.x + scale.x * w, pos.y, pos.z); }
-    PSMTXScale(scl, scale.x, scale.y, scale.z);
-    PSMTXConcat(trans, scl, trans);
-    FontDrawColor(color);
-    FontDrawStringMtx(trans, msg);
 #else
-    char buf[0x400];
-    Mtx trans;
-    Mtx scl;
-    va_list args;
 
     va_start(args, fmt);
     do { vsprintf(buf, fmt, args); } while (0);
     { s32 w = FontGetMessageWidth("９９９") - FontGetMessageWidth(buf); PSMTXTrans(trans, pos.x + scale.x * w, pos.y, pos.z); }
+#endif
     PSMTXScale(scl, scale.x, scale.y, scale.z);
     PSMTXConcat(trans, scl, trans);
     FontDrawColor(color);
+#ifdef VERSION_G8ME01
+    FontDrawStringMtx(trans, msg);
+#else
     FontDrawStringMtx(trans, buf);
 #endif
 }
@@ -1017,20 +1015,29 @@ void winFontSetEdge(Vec pos, Vec scale, GXColor color, const char* fmt, ...) {
 #ifdef VERSION_G8ME01
     char buf[0x1000];
     const char* msg = fmt;
+#else
+    char buf[0x400];
+#endif
     Mtx trans;
     Mtx scl;
     va_list args;
 
+#ifdef VERSION_G8ME01
     if (strstr(fmt, "%")) {
         va_start(args, fmt);
         vsprintf(buf, fmt, args);
         msg = buf;
     }
+#else
+    va_start(args, fmt);
+    vsprintf(buf, fmt, args);
+#endif
     PSMTXTrans(trans, pos.x, pos.y, pos.z);
     PSMTXScale(scl, scale.x, scale.y, scale.z);
     PSMTXConcat(trans, scl, trans);
     FontDrawColor(color);
     FontDrawEdge();
+#ifdef VERSION_G8ME01
     FontDrawStringMtx(trans, msg);
     FontDrawEdgeOff();
 }
@@ -1052,18 +1059,6 @@ void winFontSetEdgeWidth(Vec pos, Vec scale, GXColor color, f32 width, const cha
     }
     winFontSetEdge(pos, scale, color, msg);
 #else
-    char buf[0x400];
-    Mtx trans;
-    Mtx scl;
-    va_list args;
-
-    va_start(args, fmt);
-    vsprintf(buf, fmt, args);
-    PSMTXTrans(trans, pos.x, pos.y, pos.z);
-    PSMTXScale(scl, scale.x, scale.y, scale.z);
-    PSMTXConcat(trans, scl, trans);
-    FontDrawColor(color);
-    FontDrawEdge();
     FontDrawStringMtx(trans, buf);
     FontDrawEdgeOff();
 #endif

@@ -1392,11 +1392,13 @@ s32 partyDokanInit(PartyEntry* party) {
     party->displayDirection = mario->displayDirection;
     party->moveDir = mario->moveDirection;
     party->position = mario->position;
+#endif
     party->flags2 |= 0x10;
     switch (mario->dokanType) {
     case 2:
     case 3:
         partyPaperOn(party, "p_dokan_y");
+#ifdef VERSION_G8ME01
         partyChgPaper(party, "PM_D_1A");
         partyChgPoseId(party, 0);
         party->spinSpeed = 30.0f;
@@ -1404,9 +1406,14 @@ s32 partyDokanInit(PartyEntry* party) {
         party->flags2 |= 8;
         party->flags2 |= 0x10;
         animPoseSetMaterialLightFlagOff(party->paperAnimGroup, 1);
+#else
+        party->spinSpeed = 30.0f;
+        party->motionStep = 0;
+#endif
         break;
     case 0:
         party->scale = (Vec){0.0f, 0.0f, 0.0f};
+#ifdef VERSION_G8ME01
         party->flags2 |= 8;
         party->flags2 |= 0x10;
         animPoseSetMaterialLightFlagOff(party->paperAnimGroup, 1);
@@ -1421,14 +1428,23 @@ s32 partyDokanInit(PartyEntry* party) {
         party->flags2 |= 8;
         party->flags2 |= 0x10;
         animPoseSetMaterialLightFlagOff(party->paperAnimGroup, 1);
+#else
+    case 1:
+        partyPaperOn(party, "p_dokan_y");
+        party->spinSpeed = 30.0f;
+        party->motionStep = 0;
+#endif
         break;
     case 5:
         partyPaperOn(party, "p_dokan_x");
+#ifdef VERSION_G8ME01
         partyChgPaper(party, "PM_D_1A");
         partyChgPoseId(party, 0);
+#endif
         party->spinSpeed = 26.0f;
         party->motionStep = 10;
         party->rotOfsY = 10.0f;
+#ifdef VERSION_G8ME01
         party->flags2 |= 8;
         party->flags2 |= 0x10;
         animPoseSetMaterialLightFlagOff(party->paperAnimGroup, 1);
@@ -1459,26 +1475,6 @@ s32 partyDokanInit(PartyEntry* party) {
         break;
     }
 #else
-    party->flags2 |= 0x10;
-    switch (mario->dokanType) {
-    case 2:
-    case 3:
-        partyPaperOn(party, "p_dokan_y");
-        party->spinSpeed = 30.0f;
-        party->motionStep = 0;
-        break;
-    case 0:
-        party->scale = (Vec){0.0f, 0.0f, 0.0f};
-    case 1:
-        partyPaperOn(party, "p_dokan_y");
-        party->spinSpeed = 30.0f;
-        party->motionStep = 0;
-        break;
-    case 5:
-        partyPaperOn(party, "p_dokan_x");
-        party->spinSpeed = 26.0f;
-        party->motionStep = 10;
-        party->rotOfsY = 10.0f;
         break;
     case 4:
         partyPaperOn(party, "p_dokan_x");
@@ -1515,18 +1511,29 @@ s32 partyDokanMain(PartyEntry* party) {
 #ifdef VERSION_G8ME01
     f32 s;
     f32 c;
+#endif
 
     switch (party->motionStep) {
     case 0:
         party->position = mario->position;
         party->displayDirection = revise360(party->displayDirection + party->spinSpeed);
+#ifndef VERSION_G8ME01
+        party->scale.x += 0.05f;
+        if (party->scale.x >= 1.0f) {
+            party->scale.x = 1.0f;
+        }
+        party->scale.y = party->scale.x;
+        party->scale.z = party->scale.x;
+#endif
         break;
     case 10:
         party->rot.x += party->spinSpeed;
+#ifdef VERSION_G8ME01
         party->position = mario->position;
         sincosf(&s, &c, mario->targetYaw);
         party->position.x = mario->position.x + -5.0f * s;
         party->position.z = mario->position.z + 5.0f * c;
+#endif
         break;
     case 100:
         switch (party->dirKind) {
@@ -1535,6 +1542,7 @@ s32 partyDokanMain(PartyEntry* party) {
             partyChgPaper(party, "PM_D_1B");
             party->moveFrames = 18;
             party->motionStep = 101;
+#ifdef VERSION_G8ME01
             party->flags2 |= 8;
             party->flags2 |= 0x10;
             animPoseSetMaterialLightFlagOff(party->paperAnimGroup, 1);
@@ -1543,42 +1551,10 @@ s32 partyDokanMain(PartyEntry* party) {
             party->rot.x = 0.0f;
             party->flags2 &= ~8;
             party->displayDirectionTarget = party->displayDirection;
-            partyChgPaper(party, "PM_D_1B");
-            party->moveFrames = 18;
-            party->motionStep = 101;
-            break;
-        }
-        break;
-    case 101:
-        switch (party->dirKind) {
-        case 0:
-        case 1:
-            party->position.z -= 0.2f;
 #else
-
-    switch (party->motionStep) {
-    case 0:
-        party->position = mario->position;
-        party->displayDirection = revise360(party->displayDirection + party->spinSpeed);
-        party->scale.x += 0.05f;
-        if (party->scale.x >= 1.0f) {
-            party->scale.x = 1.0f;
-        }
-        party->scale.y = party->scale.x;
-        party->scale.z = party->scale.x;
-        break;
-    case 10:
-        party->rot.x += party->spinSpeed;
-        break;
-    case 100:
-        switch (party->dirKind) {
-        case 0:
-        case 1:
-            partyChgPaper(party, "PM_D_1B");
-            party->moveFrames = 18;
-            party->motionStep = 101;
             break;
         case 4:
+#endif
             partyChgPaper(party, "PM_D_1B");
             party->moveFrames = 18;
             party->motionStep = 101;
@@ -1589,6 +1565,9 @@ s32 partyDokanMain(PartyEntry* party) {
         switch (party->dirKind) {
         case 0:
         case 1:
+#ifdef VERSION_G8ME01
+            party->position.z -= 0.2f;
+#else
             party->position.z += -0.2f;
 #endif
             break;

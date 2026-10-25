@@ -686,6 +686,7 @@ void pouchSortItem(s32 mode) {
         s32 i;
         const char* ida;
 
+#endif
         i = 0;
         for (n = 0; n < 200; n++) {
             if (pp[0]->badges[n] != 0) {
@@ -698,6 +699,7 @@ void pouchSortItem(s32 mode) {
             badges[n] = 0;
             equipped[n] = 0;
         }
+#ifdef VERSION_G8ME01
         for (m = 0; m < i - 1; m++) {
             for (j = m + 1; j < i; j++) {
                 BOOL swap;
@@ -709,40 +711,7 @@ void pouchSortItem(s32 mode) {
                 idb = msgSearch(b->name);
                 ca = a->bp_cost;
                 cb = b->bp_cost;
-                swap = FALSE;
-                if (mode == 4) {
-                    if (strcmp(ida, idb) > 0) swap = TRUE;
-                } else if (mode == 11) {
-                    if (strcmp(ida, idb) < 0) swap = TRUE;
-                } else if (mode == 5) {
-                    if (a->type_sort_order > b->type_sort_order) swap = TRUE;
-                } else if (mode == 12) {
-                    if (a->type_sort_order < b->type_sort_order) swap = TRUE;
-                } else if (mode == 6) {
-                    if (ca > cb) swap = TRUE;
-                    else if (ca == cb && a->type_sort_order > b->type_sort_order) swap = TRUE;
-                } else if (mode == 13) {
-                    if (ca < cb) swap = TRUE;
-                    else if (ca == cb && a->type_sort_order < b->type_sort_order) swap = TRUE;
-                }
-                if (swap) {
-                    t1 = badges[m];
-                    t2 = equipped[m];
-                    badges[m] = badges[j];
-                    equipped[m] = equipped[j];
 #else
-        i = 0;
-        for (n = 0; n < 200; n++) {
-            if (pp[0]->badges[n] != 0) {
-                badges[i] = pp[0]->badges[n];
-                i++;
-                equipped[i - 1] = pp[0]->equippedBadges[n];
-            }
-        }
-        for (n = i; n < 200; n++) {
-            badges[n] = 0;
-            equipped[n] = 0;
-        }
         for (n = 0; n < i - 1; n++) {
             for (j = n + 1; j < i; j++) {
                 ItemData* a = &itemDataTable[badges[n]];
@@ -751,6 +720,7 @@ void pouchSortItem(s32 mode) {
                 s32 cb = b->bp_cost;
                 const char* ida = a->id;
                 const char* idb = b->id;
+#endif
                 swap = FALSE;
                 if (mode == 4) {
                     if (strcmp(ida, idb) > 0) swap = TRUE;
@@ -768,6 +738,12 @@ void pouchSortItem(s32 mode) {
                     else if (ca == cb && a->type_sort_order < b->type_sort_order) swap = TRUE;
                 }
                 if (swap) {
+#ifdef VERSION_G8ME01
+                    t1 = badges[m];
+                    t2 = equipped[m];
+                    badges[m] = badges[j];
+                    equipped[m] = equipped[j];
+#else
                     t1 = badges[n];
                     t2 = equipped[n];
                     badges[n] = badges[j];

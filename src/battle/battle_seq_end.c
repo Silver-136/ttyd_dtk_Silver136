@@ -1064,6 +1064,7 @@ void _GetExpIcon_End(SeqEndWork* work) {
 USER_FUNC(N__display_select_one_to_upgrade_text);
 USER_FUNC(N__set_initial_upgrade_cursor_position);
 
+#endif
 EVT_BEGIN(_curtain_close_event)
     BEGIN_SIBLING_EVENT
         CALL(evt_batstage_set_stg_dark, 80, 30, 0)
@@ -1187,9 +1188,16 @@ EVT_BEGIN(_curtain_close_event)
     BEGIN_SIBLING_EVENT
         CALL(_lvup_spot_off, 30)
     END_SIBLING_EVENT
+#ifdef VERSION_G8ME01
     BEGIN_INLINE_EVENT_GET_ID(LW(10))
         CALL(evt_batstage_set_stg_dark, 0, 30, 0)
         CALL(evt_batstage_set_stg_dark_base, 0, 30, 0)
+#else
+    BEGIN_SIBLING_EVENT
+        CALL(evt_batstage_set_stg_dark, 0, 30, 0)
+        CALL(evt_batstage_set_stg_dark_base, 0, 30, 0)
+        CALL(btlevtcmd_BtlStageObjFlagOnOff, STRING("spotlight"), 1, 0)
+#endif
         CALL(_lvup_obj_set_color, 0, 100, 128, 128, 255)
         CALL(_lvup_obj_set_color, 1, 100, 128, 128, 255)
         CALL(_lvup_obj_set_color, 2, 100, 128, 128, 255)
@@ -1198,6 +1206,7 @@ EVT_BEGIN(_curtain_close_event)
         CALL(evt_fade_set_anim_ofs_pos, 0, 130)
         CALL(evt_fade_set_anim_virtual_pos, 0, 0, 80)
         CALL(evt_fade_end_wait)
+#ifdef VERSION_G8ME01
     END_INLINE_EVENT
     CALL(btlevtcmd_WaitEventEnd, LW(10))
     BEGIN_SIBLING_EVENT_GET_ID(LW(10))
@@ -1256,141 +1265,6 @@ EVT_BEGIN(_curtain_close_event)
     CALL(_lvup_select_obj_lvup_param_disp)
     CALL(_lvup_disp_flag_onoff, 1, 32)
 #else
-EVT_BEGIN(_curtain_close_event)
-    BEGIN_SIBLING_EVENT
-        CALL(evt_batstage_set_stg_dark, 80, 30, 0)
-        CALL(evt_batstage_set_stg_dark_base, 80, 30, 0)
-    END_SIBLING_EVENT
-    BEGIN_SIBLING_EVENT
-        CALL(evt_fade_entry, 24, 1000, 0, 0, 0)
-        CALL(evt_fade_set_anim_ofs_pos, 0, 130)
-        CALL(evt_fade_set_anim_virtual_pos, 0, 0, 80)
-        CALL(evt_fade_end_wait)
-    END_SIBLING_EVENT
-    CALL(btlevtcmd_check_battleflag, LW(0), 256)
-    IF_INT_NOT_EQUAL(LW(0), 0)
-        BEGIN_SIBLING_EVENT
-            CALL(btlevtcmd_AnimeChangePoseType, -3, 1, 42)
-            CALL(btlevtcmd_GetPos, -3, LW(0), LW(1), LW(2))
-            CALL(btlevtcmd_MovePosition, -3, -300, LW(1), LW(2), 120, -1, 0)
-        END_SIBLING_EVENT
-        CALL(btlevtcmd_GetUnitId, -4, LW(3))
-        IF_INT_NOT_EQUAL(LW(3), -1)
-            BEGIN_SIBLING_EVENT
-                CALL(btlevtcmd_GetBodyId, LW(3), LW(4))
-                CALL(btlevtcmd_AnimeChangePoseType, LW(3), LW(4), 42)
-                CALL(btlevtcmd_GetPos, LW(3), LW(0), LW(1), LW(2))
-                CALL(btlevtcmd_MovePosition, LW(3), -330, LW(1), LW(2), 120, -1, 0)
-            END_SIBLING_EVENT
-        END_IF
-    END_IF
-    BEGIN_SIBLING_EVENT
-        CALL(evt_sub_intpl_init_float, 0, 0, FLOAT(-40.0f), 29)
-        LOOP(30)
-            CALL(evt_sub_intpl_get_float, LW(0), EVT_NULLPTR)
-            CALL(_nozzle_set_offset, STRING("nozzle_l"), LW(0))
-            WAIT_FRAMES(1)
-        END_LOOP
-    END_SIBLING_EVENT
-    BEGIN_SIBLING_EVENT
-        CALL(evt_sub_intpl_init_float, 0, 0, FLOAT(-40.0f), 29)
-        LOOP(30)
-            CALL(evt_sub_intpl_get_float, LW(0), EVT_NULLPTR)
-            CALL(_nozzle_set_offset, STRING("nozzle_c"), LW(0))
-            WAIT_FRAMES(1)
-        END_LOOP
-    END_SIBLING_EVENT
-    BEGIN_SIBLING_EVENT
-        CALL(evt_sub_intpl_init_float, 0, 0, FLOAT(-40.0f), 29)
-        LOOP(30)
-            CALL(evt_sub_intpl_get_float, LW(0), EVT_NULLPTR)
-            CALL(_nozzle_set_offset, STRING("nozzle_r"), LW(0))
-            WAIT_FRAMES(1)
-        END_LOOP
-    END_SIBLING_EVENT
-    CALL(btlevtcmd_onoff_battleflag, 0, 256)
-    CALL(evt_btl_camera_set_mode, 0, 0)
-    CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
-    WAIT_MS(1500)
-    BEGIN_SIBLING_EVENT
-        LOOP(6)
-            CALL(evt_eff, STRING(""), STRING("confetti"), 13, 0, 300, 95, 180, 0, 0, 0, 0, 0, 0, 0)
-            WAIT_FRAMES(20)
-        END_LOOP
-    END_SIBLING_EVENT
-    SPAWN_EVENT_GET_ID(PTR(_confetti_control_event), LW(0))
-    CALL(_set_confetti_control_evtid, LW(0))
-    CALL(evt_eff, STRING(""), STRING("levelup"), 0, 0, 50, 100, 60, 0, 0, 0, 0, 0, 0, 0)
-    WAIT_FRAMES(48)
-    CALL(_lvup_ap_recover_full)
-    WAIT_MS(1000)
-    BEGIN_SIBLING_EVENT_GET_ID(LW(15))
-        WAIT_FRAMES(2)
-        CALL(_lvup_spot_on, 0)
-        CALL(_lvup_spot_move, 0)
-    END_SIBLING_EVENT
-    CALL(_disable_enemy_unit_disp)
-    BEGIN_SIBLING_EVENT
-        CALL(btlevtcmd_GetUnitId, -4, LW(3))
-        IF_INT_NOT_EQUAL(LW(3), -1)
-            CALL(btlevtcmd_SetPos, LW(3), -230, 0, 90)
-            CALL(btlevtcmd_ClearAllStatus, LW(3))
-            CALL(btlevtcmd_GetBodyId, LW(3), LW(4))
-            CALL(btlevtcmd_AnimeChangePoseType, LW(3), LW(4), 40)
-            SET_VALUE(LW(0), -155)
-            SET_VALUE(LW(1), 0)
-            SET_VALUE(LW(2), 90)
-            SET_VALUE(LW(6), 28)
-            CALL(btlevtcmd_GetUnitKind, LW(3), LW(5))
-            SWITCH(LW(5))
-                CASE_OR_EQUAL(224)
-                CASE_OR_EQUAL(225)
-                CALL(btlevtcmd_SetMoveSoundDataWork, LW(3), STRING("SFX_PARTY_BATTLE_SUBMOVE1L"), STRING("SFX_PARTY_BATTLE_SUBMOVE1R"), 6, 12, 16, 0, 0)
-                CALL(btlevtcmd_MovePosition, LW(3), LW(0), LW(1), LW(2), LW(6), -2, 1)
-                CASE_END
-                CASE_EQUAL(226)
-                CALL(btlevtcmd_SetMoveSoundDataWork, LW(3), STRING("SFX_PARTY_BATTLE_SUBMOVE1L"), STRING("SFX_PARTY_BATTLE_SUBMOVE1R"), 0, 6, 6, 0, 0)
-                CALL(btlevtcmd_MovePosition, LW(3), LW(0), LW(1), LW(2), LW(6), -2, 1)
-                CASE_EQUAL(227)
-                CALL(btlevtcmd_SetMoveSoundDataWork, LW(3), STRING("SFX_PARTY_BATTLE_SUBHANG1"), STRING("SFX_PARTY_BATTLE_SUBHANG1"), 6, 12, 16, 0, 0)
-                CALL(btlevtcmd_MovePosition, LW(3), LW(0), LW(1), LW(2), LW(6), -2, 1)
-                CASE_EQUAL(228)
-                CALL(btlevtcmd_SetMoveSoundDataWork, LW(3), STRING("SFX_PARTY_BATTLE_SUBHANG1"), STRING("SFX_PARTY_BATTLE_SUBHANG1"), 0, 15, 13, 0, 0)
-                CALL(btlevtcmd_MovePosition, LW(3), LW(0), LW(1), LW(2), LW(6), -2, 1)
-                CASE_EQUAL(229)
-                CALL(btlevtcmd_SetMoveSoundDataWork, LW(3), STRING("SFX_PARTY_BATTLE_SUBMOVE1L"), STRING("SFX_PARTY_BATTLE_SUBMOVE1R"), 0, 18, 18, 0, 0)
-                CALL(btlevtcmd_MovePosition, LW(3), LW(0), LW(1), LW(2), LW(6), -2, 1)
-                CASE_EQUAL(230)
-                CALL(btlevtcmd_SetMoveSoundDataWork, LW(3), STRING("SFX_PARTY_BATTLE_SUBMOVE1L"), STRING("SFX_PARTY_BATTLE_SUBMOVE1R"), 0, 15, 13, 0, 0)
-                CALL(btlevtcmd_MovePosition, LW(3), LW(0), LW(1), LW(2), LW(6), -2, 1)
-            END_SWITCH
-            CALL(btlevtcmd_AnimeChangePoseType, LW(3), LW(4), 43)
-        END_IF
-    END_SIBLING_EVENT
-    CALL(btlevtcmd_SetPos, -3, -200, 0, 90)
-    CALL(btlevtcmd_ClearAllStatus, -3)
-    CALL(btlevtcmd_AnimeChangePoseType, -3, 1, 40)
-    CALL(btlevtcmd_MovePosition, -3, 0, 0, 90, 75, -1, 0)
-    CALL(btlevtcmd_snd_se, -3, STRING("SFX_VOICE_MARIO_PAUSE2"), EVT_NULLPTR, 0, EVT_NULLPTR)
-    CALL(btlevtcmd_AnimeChangePose, -3, 1, STRING("M_V_2"))
-    CALL(evt_audience_sound_cheer, 180, 40)
-    WAIT_MS(1000)
-    CALL(_lvup_select_object_init)
-    BEGIN_SIBLING_EVENT
-        CALL(_lvup_spot_off, 30)
-    END_SIBLING_EVENT
-    BEGIN_SIBLING_EVENT
-        CALL(evt_batstage_set_stg_dark, 0, 30, 0)
-        CALL(evt_batstage_set_stg_dark_base, 0, 30, 0)
-        CALL(btlevtcmd_BtlStageObjFlagOnOff, STRING("spotlight"), 1, 0)
-        CALL(_lvup_obj_set_color, 0, 100, 128, 128, 255)
-        CALL(_lvup_obj_set_color, 1, 100, 128, 128, 255)
-        CALL(_lvup_obj_set_color, 2, 100, 128, 128, 255)
-        CALL(evt_batstage_set_aud_dark, 0, 60, 0)
-        CALL(evt_fade_entry, 25, 1000, 0, 0, 0)
-        CALL(evt_fade_set_anim_ofs_pos, 0, 130)
-        CALL(evt_fade_set_anim_virtual_pos, 0, 0, 80)
-        CALL(evt_fade_end_wait)
     END_SIBLING_EVENT
     WAIT_MS(1000)
     BEGIN_SIBLING_EVENT_GET_ID(LW(0))

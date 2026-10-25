@@ -322,38 +322,9 @@ static EVT_BEGIN(damage_event)
                     CASE_DEFAULT
                     CALL(btlevtcmd_AnimeChangePose, -2, 1, STRING("D_1"))
                 END_SWITCH
-                CALL(btlevtcmd_WaitAttackEnd)
-                WAIT_FRAMES(120)
-                CALL(check_exist_group, LW(0))
-                IF_INT_NOT_EQUAL(LW(0), -1)
-                    CALL(evt_snd_sfxon, STRING("SFX_BOSS_TEAM_3RD_ESCAPE1"), LW(13))
-                    CALL(zakogun_escape3)
-                    CALL(evt_snd_sfxoff, LW(13))
-                    CALL(btlevtcmd_KillUnit, LW(0), 0)
-                END_IF
-            END_IF
-        END_IF
-    END_IF
-    SET_VALUE(LW(10), -2)
-    SET_VALUE(LW(11), 1)
-    CALL_CHILD(PTR(btldefaultevt_Damage))
-    CALL(btlevtcmd_GetUnitWork, -2, 0, LW(0))
-    IF_INT_EQUAL(LW(0), 0)
-        CALL(btlevtcmd_GetHp, -2, LW(0))
-        IF_INT_LESS_OR_EQUAL(LW(0), 15)
-            CALL(btlevtcmd_WaitAttackEnd)
-            WAIT_FRAMES(90)
-            CALL(btlevtcmd_AnimeChangePose, -2, 1, STRING("S_1"))
-            CALL(check_exist_group, LW(0))
-            IF_INT_NOT_EQUAL(LW(0), -1)
-                CALL(btlevtcmd_GetUnitWork, LW(0), 1, LW(1))
-                IF_INT_NOT_EQUAL(LW(1), 0)
-                    WAIT_FRAMES(90)
-                    GOTO(10)
-                END_IF
-                ELSE
 #else
                 CALL(btlevtcmd_AnimeChangePose, -2, 1, STRING("D_1"))
+#endif
                 CALL(btlevtcmd_WaitAttackEnd)
                 WAIT_FRAMES(120)
                 CALL(check_exist_group, LW(0))
@@ -368,7 +339,11 @@ static EVT_BEGIN(damage_event)
     END_IF
     SET_VALUE(LW(10), -2)
     SET_VALUE(LW(11), 1)
+#ifdef VERSION_G8ME01
+    CALL_CHILD(PTR(btldefaultevt_Damage))
+#else
     CALL_CHILD(btldefaultevt_Damage)
+#endif
     CALL(btlevtcmd_GetUnitWork, -2, 0, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_GetHp, -2, LW(0))
@@ -383,6 +358,9 @@ static EVT_BEGIN(damage_event)
                     WAIT_FRAMES(90)
                     GOTO(10)
                 END_IF
+#ifdef VERSION_G8ME01
+                ELSE
+#else
             ELSE
 #endif
                 GOTO(10)
@@ -846,16 +824,9 @@ static EVT_BEGIN(normal_attack_event)
         CALL(btlevtcmd_GetFirstAttackTarget, LW(3), LW(4))
 #ifdef VERSION_G8ME01
         ELSE
-        CALL(btlevtcmd_GetEnemyBelong, -2, LW(0))
-        CALL(btlevtcmd_SamplingEnemy, -2, LW(0), LW(9))
-        CALL(btlevtcmd_ChoiceSamplingEnemy, LW(9), LW(3), LW(4))
-    END_IF
-    IF_INT_EQUAL(LW(3), -1)
-        CALL(btlevtcmd_CheckToken, -2, 16, LW(0))
-        IF_INT_NOT_EQUAL(LW(0), 0)
-            CALL_CHILD(PTR(subsetevt_confuse_flustered))
 #else
     ELSE
+#endif
         CALL(btlevtcmd_GetEnemyBelong, -2, LW(0))
         CALL(btlevtcmd_SamplingEnemy, -2, LW(0), LW(9))
         CALL(btlevtcmd_ChoiceSamplingEnemy, LW(9), LW(3), LW(4))
@@ -863,6 +834,9 @@ static EVT_BEGIN(normal_attack_event)
     IF_INT_EQUAL(LW(3), -1)
         CALL(btlevtcmd_CheckToken, -2, 16, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
+#ifdef VERSION_G8ME01
+            CALL_CHILD(PTR(subsetevt_confuse_flustered))
+#else
             CALL_CHILD(subsetevt_confuse_flustered)
 #endif
             RETURN

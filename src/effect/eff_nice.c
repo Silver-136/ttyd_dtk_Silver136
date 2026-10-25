@@ -237,23 +237,20 @@ void effNiceMain(EffectEntry* effect) {
                 { 1000.0f, 37.0f, 46.0f, 42.0f, 39.0f, 62.0f },
             };
             start = tbl[type][gp->language];
-            if (pose->localFrame > start) {
-                t = 1.0f - (pose->localFrame - start) / (len - start);
-                if (t < 0.0f) t = 0.0f;
-                animPoseSetMaterialFlagOn(wp->poseId, 0x40);
-                animPoseSetMaterialEvtColor(wp->poseId, (GXColor){0xFF, 0xFF, 0xFF, 255.0f * t});
-            }
-            }
 #else
         case 1: {
             len = data->loopInfo[2];
             start = ((u32)gp->language == 0) ? 32.0f : 34.0f;
+#endif
             if (pose->localFrame > start) {
                 t = 1.0f - (pose->localFrame - start) / (len - start);
                 if (t < 0.0f) t = 0.0f;
                 animPoseSetMaterialFlagOn(wp->poseId, 0x40);
                 animPoseSetMaterialEvtColor(wp->poseId, (GXColor){0xFF, 0xFF, 0xFF, 255.0f * t});
             }
+#ifdef VERSION_G8ME01
+            }
+#else
             break;
         }
         case 2: {
@@ -473,6 +470,11 @@ void effAcrobatDisp(CameraId cameraId, void* param) {
     size = 20.0f;
 #ifdef VERSION_G8ME01
     size = -size;
+#else
+    ten = 10.0f;
+    size = -size;
+    half = size; half *= 0.5f;
+#endif
     wp++;
     for (i = 1; i < effect->count; i++, wp++) {
         if (wp->state < 6) {
@@ -493,6 +495,7 @@ void effAcrobatDisp(CameraId cameraId, void* param) {
         PSMTXConcat(camera->view, scale, scale);
         GXLoadPosMtxImm(scale, 0);
         GXSetCurrentMtx(0);
+#ifdef VERSION_G8ME01
         id = acrobat_tbl[gp->language].tex[i - 1];
         if (id != -1) {
             effGetTexObj(id, &tex);
@@ -510,29 +513,6 @@ void effAcrobatDisp(CameraId cameraId, void* param) {
             GXTexCoord2f32(0.0f, 1.0f);
         }
 #else
-    ten = 10.0f;
-    size = -size;
-    half = size; half *= 0.5f;
-    wp++;
-    for (i = 1; i < effect->count; i++, wp++) {
-        if (wp->state < 6) {
-            ofsX = size / 2.0f;
-            ofsY = 0.0f;
-        } else {
-            ofsX = 0.0f;
-            ofsY = size / 2.0f;
-        }
-        PSMTXTrans(trans, wp->position.x, wp->position.y, wp->position.z);
-        PSMTXTrans(rot, ofsX, ofsY, 0.0f);
-        PSMTXScale(scale, wp->scaleX, wp->scaleY, wp->scaleZ);
-        PSMTXConcat(rot, scale, scale);
-        PSMTXTrans(rot, -ofsX, -ofsY, 0.0f);
-        PSMTXConcat(scale, rot, scale);
-        PSMTXConcat(trans, scale, scale);
-        PSMTXConcat(mtx, scale, scale);
-        PSMTXConcat(camera->view, scale, scale);
-        GXLoadPosMtxImm(scale, 0);
-        GXSetCurrentMtx(0);
         effGetTexObj(acrobat_tbl[gp->language][i - 1], &tex);
         GXLoadTexObj(&tex, GX_TEXMAP0);
         GXBegin(GX_QUADS, GX_VTXFMT0, 4);

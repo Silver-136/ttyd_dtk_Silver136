@@ -3708,6 +3708,9 @@ EVT_BEGIN(queen_hand_small_1000hand_attack)
     IF_INT_NOT_EQUAL(LW(0), 0)
 #ifdef VERSION_G8ME01
         CALL_CHILD(subsetevt_confuse_flustered)
+#else
+        CALL_CHILD(PTR(subsetevt_confuse_flustered))
+#endif
         RETURN
     END_IF
     CALL(btlevtcmd_AttackDeclare, -2, LW(3), LW(4))
@@ -3718,7 +3721,11 @@ EVT_BEGIN(queen_hand_small_1000hand_attack)
     CALL(evt_eff_softdelete, STRING("m_h_s2"))
     CALL(evt_eff_softdelete, STRING("m_h_s3"))
     CALL(evt_snd_sfxon, STRING("SFX_BOSS_QWEN_HANDS_MOVE1"), 0)
+#ifdef VERSION_G8ME01
     BEGIN_INLINE_EVENT_GET_ID(LW(15))
+#else
+    BEGIN_INLINE_EVENT
+#endif
         CALL(queen_hand_small_1000hand_1_evt)
     END_INLINE_EVENT
     WAIT_MS(400)
@@ -3780,83 +3787,10 @@ EVT_BEGIN(queen_hand_small_1000hand_attack)
     CALL(evt_eff, STRING("m_h_s1"), STRING("mist2"), 0, 100, 15, 0, 150, 0, -1, 0, 0, 0, 0, 0)
     CALL(evt_eff, STRING("m_h_s2"), STRING("mist2"), 0, 100, 15, 0, 150, 0, -1, 0, 0, 0, 0, 0)
     CALL(evt_eff, STRING("m_h_s3"), STRING("mist2"), 0, 100, 15, 0, 150, 0, -1, 0, 0, 0, 0, 0)
+#ifdef VERSION_G8ME01
     IF_INT_NOT_EQUAL(LW(15), 0)
         CALL(btlevtcmd_WaitEventEnd, LW(15))
     END_IF
-#else
-        CALL_CHILD(PTR(subsetevt_confuse_flustered))
-        RETURN
-    END_IF
-    CALL(btlevtcmd_AttackDeclare, -2, LW(3), LW(4))
-    CALL(btlevtcmd_WaitGuardMove)
-    CALL(btlevtcmd_PayWeaponCost, -2, PTR(&weapon_peach_black_1000hand_attack))
-    CALL(evt_btl_camera_shake_h, 0, 1, 1, 180, 0)
-    CALL(evt_eff_softdelete, STRING("m_h_s1"))
-    CALL(evt_eff_softdelete, STRING("m_h_s2"))
-    CALL(evt_eff_softdelete, STRING("m_h_s3"))
-    CALL(evt_snd_sfxon, STRING("SFX_BOSS_QWEN_HANDS_MOVE1"), 0)
-    BEGIN_INLINE_EVENT
-        CALL(queen_hand_small_1000hand_1_evt)
-    END_INLINE_EVENT
-    WAIT_MS(400)
-    CALL(btlevtcmd_PreCheckDamage, -2, LW(3), LW(4), PTR(&weapon_peach_dark_drag_attack), 256, LW(5))
-    SWITCH(LW(5))
-        CASE_OR_EQUAL(4)
-        GOTO(90)
-        CASE_END
-        CASE_EQUAL(3)
-        GOTO(90)
-        CASE_END
-        CASE_EQUAL(6)
-        GOTO(90)
-        CASE_EQUAL(2)
-        GOTO(90)
-        CASE_EQUAL(1)
-        GOTO(91)
-        CASE_END
-        CASE_DEFAULT
-        GOTO(98)
-        CASE_END
-    END_SWITCH
-    LABEL(90)
-    LOOP(4)
-        SWITCH(LW(5))
-            CASE_OR_EQUAL(4)
-            CASE_END
-            CASE_EQUAL(3)
-            CALL(btlevtcmd_StartAvoid, LW(3), 38)
-            CASE_END
-            CASE_EQUAL(6)
-            CALL(btlevtcmd_StartAvoid, LW(3), 39)
-            CASE_EQUAL(2)
-            CALL(btlevtcmd_StartAvoid, LW(3), 40)
-        END_SWITCH
-        WAIT_MS(500)
-    END_LOOP
-    WAIT_MS(1000)
-    GOTO(95)
-    LABEL(91)
-    CALL(btlevtcmd_WeaponAftereffect, PTR(&weapon_peach_black_1000hand_attack))
-    CALL(btlevtcmd_ResultACDefence, LW(3), PTR(&weapon_peach_black_1000hand_attack))
-    CALL(btlevtcmd_CheckDamage, -2, LW(3), LW(4), PTR(&weapon_peach_black_1000hand_attack), 0, LW(5))
-    WAIT_MS(500)
-    CALL(btlevtcmd_ResultACDefence, LW(3), PTR(&weapon_peach_black_1000hand_attack))
-    CALL(btlevtcmd_CheckDamage, -2, LW(3), LW(4), PTR(&weapon_peach_black_1000hand_attack), 0, LW(5))
-    WAIT_MS(500)
-    CALL(btlevtcmd_ResultACDefence, LW(3), PTR(&weapon_peach_black_1000hand_attack))
-    CALL(btlevtcmd_CheckDamage, -2, LW(3), LW(4), PTR(&weapon_peach_black_1000hand_attack), 0, LW(5))
-    WAIT_MS(500)
-    CALL(btlevtcmd_ResultACDefence, LW(3), PTR(&weapon_peach_black_1000hand_attack))
-    CALL(btlevtcmd_CheckDamage, -2, LW(3), LW(4), PTR(&weapon_peach_black_1000hand_attack), 256, LW(5))
-    WAIT_MS(500)
-    WAIT_MS(1000)
-    GOTO(98)
-    LABEL(95)
-    LABEL(98)
-    CALL(evt_btl_camera_set_mode, 0, 0)
-    CALL(evt_eff, STRING("m_h_s1"), STRING("mist2"), 0, 100, 15, 0, 150, 0, -1, 0, 0, 0, 0, 0)
-    CALL(evt_eff, STRING("m_h_s2"), STRING("mist2"), 0, 100, 15, 0, 150, 0, -1, 0, 0, 0, 0, 0)
-    CALL(evt_eff, STRING("m_h_s3"), STRING("mist2"), 0, 100, 15, 0, 150, 0, -1, 0, 0, 0, 0, 0)
 #endif
     CALL(evt_snd_sfxon, STRING("SFX_BOSS_QWEN_HAND_APPEAR1_2"), 0)
     CALL(queen_hand_small_1000hand_2_evt)

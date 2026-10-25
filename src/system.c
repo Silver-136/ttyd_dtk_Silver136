@@ -972,6 +972,7 @@ f32 systemStrippedPool2(s32 x) {
     return (f32)x;
 }
 
+#endif
 void systemStrippedPool1(const char** str, f32* f, f64* d, f32 x) {
     f[0] = 1.0f;
     str[0] = "LINEAR";
@@ -986,22 +987,9 @@ void systemStrippedPool1(const char** str, f32* f, f64* d, f32 x) {
     str[9] = "SIN_DECEL";
     f[1] = sqrtf(x);
     str[10] = "[%8s:% 4d] %s";
+#ifdef VERSION_G8ME01
 }
 #else
-void systemStrippedPool1(const char** str, f32* f, f64* d, f32 x) {
-    f[0] = 1.0f;
-    str[0] = "LINEAR";
-    str[1] = "DOUBLE_ACCEL";
-    str[2] = "TRIPLE_ACCEL";
-    str[3] = "DOUBLE_DECEL";
-    str[4] = "TRIPLE_DECEL";
-    str[5] = "GEMINI";
-    str[6] = "BURURUN";
-    str[7] = "BURURUN_DECEL";
-    str[8] = "SIN_ACCEL";
-    str[9] = "SIN_DECEL";
-    f[1] = sqrtf(x);
-    str[10] = "[%8s:% 4d] %s";
     d[0] = 1.5;
     d[1] = 2.5;
     d[2] = 1.7;

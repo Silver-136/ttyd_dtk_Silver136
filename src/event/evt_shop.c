@@ -133,6 +133,13 @@ static EVT_BEGIN(buy_evt)
         CALL(evt_msg_fmt_str, 1, LW(14), LW(14), LW(11))
         CALL(evt_msg_print, 1, LW(14), 0, LW(9))
     END_SWITCH
+#else
+    IF_INT_NOT_EQUAL(LW(0), 0)
+        CALL(evt_msg_print_insert, 0, LW(14), 0, LW(9), LW(13), LW(11))
+        ELSE
+        CALL(evt_msg_print_insert, 0, LW(14), 0, LW(9), LW(11), LW(13))
+    END_IF
+#endif
     CALL(get_msg, LW(10), 24, LW(14))
     CALL(evt_msg_select, 0, LW(14))
     IF_INT_EQUAL(LW(0), 1)
@@ -170,8 +177,12 @@ static EVT_BEGIN(buy_evt)
     WAIT_MS(200)
     CALL(evt_win_coin_off, LW(8))
     CALL(point_disp_onoff, 0)
+#ifdef VERSION_G8ME01
     CALL(get_msg, LW(10), 11, LW(14))
     CALL(evt_msg_print_add, 0, LW(14))
+#else
+    CALL(evt_msg_continue)
+#endif
     CALL(evt_sub_get_system_flag, LW(0))
     IF_BITS_CLEAR(LW(0), 4096)
         IF_INT_EQUAL(GSWF_ITEM_TUTORIAL_SEEN, 0)
@@ -189,6 +200,7 @@ static EVT_BEGIN(buy_evt)
         CALL(get_shop_point, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 300)
             CALL(get_msg, LW(10), 26, LW(14))
+#ifdef VERSION_G8ME01
             CALL(evt_sub_get_language, LW(0))
             SWITCH(LW(0))
                 CASE_EQUAL(0)
@@ -199,66 +211,6 @@ static EVT_BEGIN(buy_evt)
                 CASE_END
             END_SWITCH
 #else
-    IF_INT_NOT_EQUAL(LW(0), 0)
-        CALL(evt_msg_print_insert, 0, LW(14), 0, LW(9), LW(13), LW(11))
-        ELSE
-        CALL(evt_msg_print_insert, 0, LW(14), 0, LW(9), LW(11), LW(13))
-    END_IF
-    CALL(get_msg, LW(10), 24, LW(14))
-    CALL(evt_msg_select, 0, LW(14))
-    IF_INT_EQUAL(LW(0), 1)
-        CALL(get_msg, LW(10), 22, LW(14))
-        CALL(evt_msg_print_add, 0, LW(14))
-        CALL(evt_win_coin_off, LW(8))
-        CALL(point_disp_onoff, 0)
-        RETURN
-    END_IF
-    CALL(evt_pouch_get_coin, LW(0))
-    IF_INT_LESS(LW(0), LW(13))
-        CALL(get_msg, LW(10), 1, LW(14))
-        CALL(evt_msg_print_add, 0, LW(14))
-        CALL(evt_win_coin_off, LW(8))
-        CALL(point_disp_onoff, 0)
-        RETURN
-    END_IF
-    CALL(evt_pouch_add_item, LW(12), LW(0))
-    IF_INT_EQUAL(LW(0), -1)
-        CALL(get_msg, LW(10), 2, LW(14))
-        CALL(evt_msg_print_add, 0, LW(14))
-        CALL(evt_win_coin_off, LW(8))
-        CALL(point_disp_onoff, 0)
-        RETURN
-    END_IF
-    CALL(set_buy_item_id, LW(12))
-    CALL(evt_sub_load_progresstime, GSW(5), LW(0))
-    CALL(evt_sub_load_progresstime, GSW(14), LW(1))
-    CALL(evt_sub_load_progresstime, GSW(23), LW(2))
-    CALL(add_shop_point, 1, LW(0), LW(1), LW(2))
-    MULTIPLY(LW(13), -1)
-    CALL(evt_pouch_add_coin, LW(13))
-    CALL(evt_win_coin_wait, LW(8))
-    CALL(point_wait)
-    WAIT_MS(200)
-    CALL(evt_win_coin_off, LW(8))
-    CALL(point_disp_onoff, 0)
-    CALL(evt_msg_continue)
-    CALL(evt_sub_get_system_flag, LW(0))
-    IF_BITS_CLEAR(LW(0), 4096)
-        IF_INT_EQUAL(GSWF_ITEM_TUTORIAL_SEEN, 0)
-            SET_VALUE(GSWF_ITEM_TUTORIAL_SEEN, 1)
-            CALL(evt_msg_print, 0, STRING("item_first_hit"), 0, 0)
-        END_IF
-    END_IF
-    LOOP(0)
-        CALL(chk_shop_point, LW(0), LW(1), LW(2))
-        IF_INT_EQUAL(LW(0), -1)
-            GOTO(123)
-            RETURN
-        END_IF
-        SET_VALUE(LF(0), 0)
-        CALL(get_shop_point, LW(0))
-        IF_INT_NOT_EQUAL(LW(0), 300)
-            CALL(get_msg, LW(10), 26, LW(14))
             CALL(evt_msg_print_insert, 0, LW(14), 0, LW(9), LW(2))
 #endif
             ELSE
@@ -404,9 +356,13 @@ EVT_BEGIN(shopper_talk_evt)
                 CALL(evt_msg_fmt_str, 0, LW(14), LW(14), LW(2))
                 CALL(evt_msg_print, 1, LW(14), 0, 0)
             END_SWITCH
+#else
+            CALL(evt_msg_print_insert, 0, LW(14), 0, 0, LW(2))
+#endif
             ELSE
             SET_VALUE(LF(10), 0)
             CALL(evt_msg_print_add, 1, STRING("<scrl_auto><once_stop>"))
+#ifdef VERSION_G8ME01
             CALL(evt_sub_get_language, LW(0))
             SWITCH(LW(0))
                 CASE_EQUAL(0)
@@ -416,10 +372,6 @@ EVT_BEGIN(shopper_talk_evt)
                 CALL(evt_msg_print, 1, LW(14), 0, 0)
             END_SWITCH
 #else
-            CALL(evt_msg_print_insert, 0, LW(14), 0, 0, LW(2))
-            ELSE
-            SET_VALUE(LF(10), 0)
-            CALL(evt_msg_print_add, 1, STRING("<scrl_auto><once_stop>"))
             CALL(evt_msg_print_add_insert, 0, LW(14), LW(2))
 #endif
         END_IF
@@ -814,9 +766,11 @@ void title_disp(WinMgrEntry* entry) {
     msg = msgSearch("msg_shop_point_list4");
 #ifdef VERSION_G8ME01
     w = FontGetMessageWidth(msg);
+#endif
     FontDrawStart();
     FontDrawEdge();
     FontDrawColor(shop_title_color);
+#ifdef VERSION_G8ME01
     if (w > entry->width - 20) {
         PSMTXTrans(m, entry->x + 10, entry->y - 12, 0.0f);
         PSMTXScale(s, (entry->width - 20) / w, 1.0f, 1.0f);
@@ -827,9 +781,6 @@ void title_disp(WinMgrEntry* entry) {
     PSMTXConcat(m, s, m);
     FontDrawMessageMtx(m, msg);
 #else
-    FontDrawStart();
-    FontDrawEdge();
-    FontDrawColor(shop_title_color);
     FontDrawMessage(entry->x + (entry->width - FontGetMessageWidth(msg)) / 2, entry->y - 12, msg);
 #endif
     FontDrawEdgeOff();
@@ -842,6 +793,11 @@ void list_disp(WinMgrEntry* entry) {
     s32 i;
     ItemData* item;
     f32 w;
+#else
+    u32 mask;
+    s32 i;
+    ItemData* item;
+#endif
     char buf[256];
     Mtx m;
     Mtx s;
@@ -852,10 +808,13 @@ void list_disp(WinMgrEntry* entry) {
     pouch = pouchGetPtr();
     i = 0;
     msg = msgSearch("msg_shop_point_list5");
+#ifdef VERSION_G8ME01
     w = FontGetMessageWidth(msg);
+#endif
     FontDrawStart();
     FontDrawEdge();
     FontDrawColor(shop_list_head5_color);
+#ifdef VERSION_G8ME01
     if (w > 80.0f) {
         PSMTXTrans(m, 10.0f + (entry->x + 10), entry->y + 13, 0.0f);
         PSMTXScale(s, 80.0f / w, 1.0f, 1.0f);
@@ -868,9 +827,15 @@ void list_disp(WinMgrEntry* entry) {
     FontDrawEdgeOff();
     msg = msgSearch("msg_shop_point_list6");
     w = FontGetMessageWidth(msg);
+#else
+    FontDrawMessage(entry->x + 10 + (100 - FontGetMessageWidth(msg)) / 2, entry->y + 13, msg);
+    FontDrawEdgeOff();
+    msg = msgSearch("msg_shop_point_list6");
+#endif
     FontDrawStart();
     FontDrawEdge();
     FontDrawColor(shop_list_head6_color);
+#ifdef VERSION_G8ME01
     if (w > 80.0f) {
         PSMTXTrans(m, 10.0f + (entry->x + entry->width / 2 - 10), entry->y + 13, 0.0f);
         PSMTXScale(s, 80.0f / w, 1.0f, 1.0f);
@@ -880,12 +845,19 @@ void list_disp(WinMgrEntry* entry) {
     }
     PSMTXConcat(m, s, m);
     FontDrawMessageMtx(m, msg);
+#else
+    FontDrawMessage(entry->x + entry->width / 2 - 10 + (100 - FontGetMessageWidth(msg)) / 2, entry->y + 13, msg);
+#endif
     FontDrawEdgeOff();
     FontDrawStart();
     for (; shopPointList[i].pts != -1; i++) {
         item = &itemDataTable[shopPointList[i].item];
         FontDrawStart();
+#ifdef VERSION_G8ME01
         if (pouch->shopPointRewardFlags & (1 << i)) {
+#else
+        if (pouch->shopPointRewardFlags & (mask = 1 << i)) {
+#endif
             FontDrawColor(shop_list_pts_got_color);
         }
         else {
@@ -893,15 +865,21 @@ void list_disp(WinMgrEntry* entry) {
         }
         sprintf(buf, "%s", winZenkakuStr(shopPointList[i].pts));
         FontDrawMessage(entry->x + (entry->width / 2 - (s32)FontGetMessageWidth(buf)) - 90, entry->y - 20 - i * 26, buf);
+#ifdef VERSION_G8ME01
         msg = msgSearch("msg_shop_point_list5");
         w = 0.64f * FontGetMessageWidth(msg);
         FontDrawStart();
         if (pouch->shopPointRewardFlags & (1 << i)) {
+#else
+        FontDrawStart();
+        if (pouch->shopPointRewardFlags & mask) {
+#endif
             FontDrawColor(shop_list_unit_got_color);
         }
         else {
             FontDrawColor(shop_list_unit_color);
         }
+#ifdef VERSION_G8ME01
         if (w > 60.0f) {
             PSMTXTrans(m, entry->x + entry->width / 2 - 88, entry->y - 28 - i * 26, 0.0f);
             PSMTXScale(s, 0.64f * 60.0f / w, 0.64f, 0.64f);
@@ -914,11 +892,22 @@ void list_disp(WinMgrEntry* entry) {
         msg = msgSearch(item->name);
         FontDrawStart();
         if (pouch->shopPointRewardFlags & (1 << i)) {
+#else
+        sprintf(buf, "%s", msgSearch("msg_shop_point_list5"));
+        PSMTXTrans(m, entry->x + (entry->width / 2 - 0.6f * FontGetMessageWidth(buf)) - 40.0f, entry->y - 28 - i * 26, 0.0f);
+        PSMTXScale(s, 0.64f, 0.64f, 0.64f);
+        PSMTXConcat(m, s, m);
+        FontDrawMessageMtx(m, buf);
+        msg = msgSearch(item->name);
+        FontDrawStart();
+        if (pouch->shopPointRewardFlags & mask) {
+#endif
             FontDrawColor(shop_list_item_got_color);
         }
         else {
             FontDrawColor(shop_list_item_color);
         }
+#ifdef VERSION_G8ME01
         PSMTXTrans(m, entry->x + entry->width / 2 - 10, entry->y - 20 - i * 26, 0.0f);
         if (FontGetMessageWidth(msg) > entry->width / 2 - 10) {
             PSMTXScale(s, (f32)(entry->width / 2 - 10) / FontGetMessageWidth(msg), 1.0f, 1.0f);
@@ -928,62 +917,6 @@ void list_disp(WinMgrEntry* entry) {
         PSMTXConcat(m, s, m);
         FontDrawMessageMtx(m, msg);
 #else
-    u32 mask;
-    s32 i;
-    ItemData* item;
-    char buf[256];
-    Mtx m;
-    Mtx s;
-
-    if (entry->flags & 4) {
-        return;
-    }
-    pouch = pouchGetPtr();
-    i = 0;
-    msg = msgSearch("msg_shop_point_list5");
-    FontDrawStart();
-    FontDrawEdge();
-    FontDrawColor(shop_list_head5_color);
-    FontDrawMessage(entry->x + 10 + (100 - FontGetMessageWidth(msg)) / 2, entry->y + 13, msg);
-    FontDrawEdgeOff();
-    msg = msgSearch("msg_shop_point_list6");
-    FontDrawStart();
-    FontDrawEdge();
-    FontDrawColor(shop_list_head6_color);
-    FontDrawMessage(entry->x + entry->width / 2 - 10 + (100 - FontGetMessageWidth(msg)) / 2, entry->y + 13, msg);
-    FontDrawEdgeOff();
-    FontDrawStart();
-    for (; shopPointList[i].pts != -1; i++) {
-        item = &itemDataTable[shopPointList[i].item];
-        FontDrawStart();
-        if (pouch->shopPointRewardFlags & (mask = 1 << i)) {
-            FontDrawColor(shop_list_pts_got_color);
-        }
-        else {
-            FontDrawColor(shop_list_pts_color);
-        }
-        sprintf(buf, "%s", winZenkakuStr(shopPointList[i].pts));
-        FontDrawMessage(entry->x + (entry->width / 2 - (s32)FontGetMessageWidth(buf)) - 90, entry->y - 20 - i * 26, buf);
-        FontDrawStart();
-        if (pouch->shopPointRewardFlags & mask) {
-            FontDrawColor(shop_list_unit_got_color);
-        }
-        else {
-            FontDrawColor(shop_list_unit_color);
-        }
-        sprintf(buf, "%s", msgSearch("msg_shop_point_list5"));
-        PSMTXTrans(m, entry->x + (entry->width / 2 - 0.6f * FontGetMessageWidth(buf)) - 40.0f, entry->y - 28 - i * 26, 0.0f);
-        PSMTXScale(s, 0.64f, 0.64f, 0.64f);
-        PSMTXConcat(m, s, m);
-        FontDrawMessageMtx(m, buf);
-        msg = msgSearch(item->name);
-        FontDrawStart();
-        if (pouch->shopPointRewardFlags & mask) {
-            FontDrawColor(shop_list_item_got_color);
-        }
-        else {
-            FontDrawColor(shop_list_item_color);
-        }
         FontDrawMessage(entry->x + entry->width / 2 - 10, entry->y - 20 - i * 26, msg);
 #endif
     }

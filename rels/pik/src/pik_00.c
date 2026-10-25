@@ -1032,6 +1032,7 @@ EVT_END()
 static const Vec zoom_zero_a = {0.0f, 0.0f, 0.0f};
 static const Vec zoom_zero_b = {0.0f, 0.0f, 0.0f};
 
+#endif
 EVT_BEGIN(talk_papa_taihou_kyoka)
     IF_INT_EQUAL(GSWF(3881), 0)
         SET_VALUE(GSWF(3881), 1)
@@ -1147,123 +1148,8 @@ EVT_BEGIN(talk_papa_taihou_kyoka)
             END_LOOP
             WAIT_MS(500)
             CALL(evt_sub_status_gauge_force_close)
+#ifdef VERSION_G8ME01
             CALL(pik_00_statuswin_force_off)
-#else
-EVT_BEGIN(talk_papa_taihou_kyoka)
-    IF_INT_EQUAL(GSWF(3881), 0)
-        SET_VALUE(GSWF(3881), 1)
-        CALL(evt_msg_print, 0, STRING("stg7_pik_01"), 0, STRING("ナリキンパパ"))
-        CALL(evt_mario_set_pose, STRING("M_I_2"))
-        WAIT_MS(800)
-        CALL(evt_msg_print, 0, STRING("stg7_pik_02"), 0, STRING("ナリキンパパ"))
-        CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
-        CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_NOD1_6"), LW(0), LW(1), LW(2), 0)
-        CALL(evt_mario_set_pose, STRING("M_N_2"))
-        WAIT_MS(500)
-        CALL(evt_msg_print, 0, STRING("stg7_pik_03"), 0, STRING("ナリキンパパ"))
-        CALL(zoom, LW(0), LW(1), LW(2), LW(3), LW(4), LW(5))
-        CALL(evt_cam3d_evt_set, LW(0), LW(1), LW(2), LW(3), LW(4), LW(5), 500, 11)
-        WAIT_MS(500)
-        CALL(evt_msg_print, 0, STRING("stg7_pik_04"), 0, STRING("ナリキンパパ"))
-        ELSE
-        CALL(zoom, LW(0), LW(1), LW(2), LW(3), LW(4), LW(5))
-        CALL(evt_cam3d_evt_set, LW(0), LW(1), LW(2), LW(3), LW(4), LW(5), 500, 11)
-        WAIT_MS(500)
-        CALL(evt_msg_print, 0, STRING("stg7_pik_05"), 0, STRING("ナリキンパパ"))
-    END_IF
-    CALL(evt_msg_select, 0, STRING("stg7_pik_04_yn"))
-    DEBUG_PUT_REG(LW(0))
-    SWITCH(LW(0))
-        CASE_EQUAL(-1)
-        CALL(evt_msg_print_add, 0, STRING("stg7_pik_06"))
-        CASE_EQUAL(0)
-        CALL(evt_msg_print_add, 0, STRING("stg7_pik_08"))
-        CASE_EQUAL(1)
-        CALL(evt_pouch_get_coin, LW(0))
-        IF_INT_LESS(LW(0), 1)
-            CALL(evt_msg_print_add, 0, STRING("stg7_pik_07"))
-            ELSE
-            CALL(evt_msg_print_add, 0, STRING("stg7_pik_09"))
-        END_IF
-        CASE_EQUAL(2)
-        CALL(evt_pouch_get_coin, LW(0))
-        IF_INT_LESS(LW(0), 64)
-            CALL(evt_msg_print_add, 0, STRING("stg7_pik_07"))
-            ELSE
-            CALL(evt_msg_print_add, 0, STRING("stg7_pik_10"))
-        END_IF
-        CASE_EQUAL(3)
-        CALL(evt_pouch_get_coin, LW(0))
-        IF_INT_LESS(LW(0), 1)
-            CALL(evt_msg_print_add, 0, STRING("stg7_pik_07"))
-            ELSE
-            CALL(evt_msg_print_add, 0, STRING("stg7_pik_11"))
-            CALL(evt_msg_select, 0, STRING("stg7_pik_11_yn"))
-            IF_INT_EQUAL(LW(0), 1)
-                CALL(evt_msg_print_add, 0, STRING("stg7_pik_06"))
-                CALL(evt_cam3d_evt_off, 500, 11)
-                RETURN
-            END_IF
-            CALL(evt_msg_print_add, 0, STRING("stg7_pik_12"))
-            CALL(evt_msg_select, 0, STRING("stg7_pik_11_yn"))
-            IF_INT_EQUAL(LW(0), 1)
-                CALL(evt_msg_print_add, 0, STRING("stg7_pik_06"))
-                CALL(evt_cam3d_evt_off, 500, 11)
-                RETURN
-            END_IF
-            CALL(evt_msg_print_add, 0, STRING("stg7_pik_13"))
-            CALL(evt_msg_select, 0, STRING("stg7_pik_11_yn"))
-            IF_INT_EQUAL(LW(0), 1)
-                CALL(evt_msg_print_add, 0, STRING("stg7_pik_06"))
-                CALL(evt_cam3d_evt_off, 500, 11)
-                RETURN
-            END_IF
-            CALL(evt_msg_print_add, 0, STRING("stg7_pik_14"))
-            CALL(evt_msg_select, 0, STRING("stg7_pik_11_yn"))
-            IF_INT_EQUAL(LW(0), 1)
-                CALL(evt_msg_print_add, 0, STRING("stg7_pik_06"))
-                CALL(evt_cam3d_evt_off, 500, 11)
-                RETURN
-            END_IF
-            CALL(evt_msg_print_add, 0, STRING("stg7_pik_15"))
-            CALL(evt_msg_select, 0, STRING("stg7_pik_11_yn"))
-            IF_INT_EQUAL(LW(0), 1)
-                CALL(evt_msg_print_add, 0, STRING("stg7_pik_06"))
-                CALL(evt_cam3d_evt_off, 500, 11)
-                RETURN
-            END_IF
-            CALL(evt_msg_print_add, 0, STRING("stg7_pik_16"))
-            CALL(evt_pouch_get_coin, LW(10))
-            MULTIPLY(LW(10), -1)
-            CALL(evt_pouch_add_coin, LW(10))
-            CALL(evt_sub_status_gauge_force_open)
-            LOOP(0)
-                CALL(evt_sub_status_gauge_check_update, LW(0))
-                IF_INT_EQUAL(LW(0), 0)
-                    BREAK_LOOP
-                END_IF
-                WAIT_FRAMES(1)
-            END_LOOP
-            WAIT_MS(500)
-            CALL(evt_sub_status_gauge_force_close)
-            CALL(evt_msg_print, 0, STRING("stg7_pik_17"), 0, STRING("ナリキンパパ"))
-            CALL(evt_item_entry, STRING("a"), 82, 0, -1000, 0, 16, -1, 0)
-            CALL(evt_item_get_item, STRING("a"))
-            CALL(evt_item_get_item_end_wait, STRING("a"))
-            WAIT_MS(500)
-            CALL(evt_msg_print, 0, STRING("stg7_pik_18"), 0, STRING("ナリキンパパ"))
-            MULTIPLY(LW(10), -1)
-            CALL(evt_pouch_add_coin, LW(10))
-            CALL(evt_sub_status_gauge_force_open)
-            LOOP(0)
-                CALL(evt_sub_status_gauge_check_update, LW(0))
-                IF_INT_EQUAL(LW(0), 0)
-                    BREAK_LOOP
-                END_IF
-                WAIT_FRAMES(1)
-            END_LOOP
-            WAIT_MS(500)
-            CALL(evt_sub_status_gauge_force_close)
 #endif
             CALL(evt_msg_print, 0, STRING("stg7_pik_19"), 0, STRING("ナリキンパパ"))
             SET_VALUE(GSWF(3874), 1)

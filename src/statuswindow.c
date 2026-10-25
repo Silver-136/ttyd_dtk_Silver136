@@ -397,15 +397,23 @@ void statusWinDisp(CameraId camId, void* param) {
         MTXConcat(m2, s2, m2);
 #ifdef VERSION_G8ME01
         iconDispGxCol(m2, 0x10, ICON_212, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
+#else
+        iconDispGxCol(m2, 0x10, 0x212, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
+#endif
         if (swByteGet(0) >= 7 || partyChkJoin(PARTNER_GOOMBELLA)) {
             MTXTrans(m2, -250.0f, 16.0f + y2, 0.0f);
             MTXScale(s2, 0.75f, 0.75f, 0.75f);
             MTXConcat(m2, s2, m2);
+#ifdef VERSION_G8ME01
             iconDispGxCol(m2, 0x10, (u16)party_icon_tbl[gp->language], (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
+#else
+            iconDispGxCol(m2, 0x10, 0x213, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
+#endif
         }
         MTXTrans(m2, -190.0f, 50.0f + y2, 0.0f);
         MTXScale(s2, 0.75f, 0.75f, 0.75f);
         MTXConcat(m2, s2, m2);
+#ifdef VERSION_G8ME01
         iconDispGxCol(m2, 0x10, (u16)gear_icon_tbl[gp->language], (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
         if (swByteGet(0) >= 20 || pouchGetHaveBadgeCnt()) {
             f32 xoff[6] = { 0.0f, 10.0f, 3.0f, 8.0f, 8.0f, 0.0f };
@@ -413,32 +421,21 @@ void statusWinDisp(CameraId camId, void* param) {
             MTXScale(s2, 0.75f, 0.75f, 0.75f);
             MTXConcat(m2, s2, m2);
             iconDispGxCol(m2, 0x10, (u16)badge_icon_tbl[gp->language], (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
-        }
-        MTXTrans(m2, -190.0f, y2 - 25.0f, 0.0f);
-        MTXScale(s2, 0.75f, 0.75f, 0.75f);
-        MTXConcat(m2, s2, m2);
-        iconDispGxCol(m2, 0x10, (u16)journal_icon_tbl[gp->language], (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
 #else
-        iconDispGxCol(m2, 0x10, 0x212, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
-        if (swByteGet(0) >= 7 || partyChkJoin(PARTNER_GOOMBELLA)) {
-            MTXTrans(m2, -250.0f, 16.0f + y2, 0.0f);
-            MTXScale(s2, 0.75f, 0.75f, 0.75f);
-            MTXConcat(m2, s2, m2);
-            iconDispGxCol(m2, 0x10, 0x213, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
-        }
-        MTXTrans(m2, -190.0f, 50.0f + y2, 0.0f);
-        MTXScale(s2, 0.75f, 0.75f, 0.75f);
-        MTXConcat(m2, s2, m2);
         iconDispGxCol(m2, 0x10, 0x214, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
         if (swByteGet(0) >= 20 || pouchGetHaveBadgeCnt()) {
             MTXTrans(m2, -130.0f, 16.0f + y2, 0.0f);
             MTXScale(s2, 0.75f, 0.75f, 0.75f);
             MTXConcat(m2, s2, m2);
             iconDispGxCol(m2, 0x10, 0x215, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
+#endif
         }
         MTXTrans(m2, -190.0f, y2 - 25.0f, 0.0f);
         MTXScale(s2, 0.75f, 0.75f, 0.75f);
         MTXConcat(m2, s2, m2);
+#ifdef VERSION_G8ME01
+        iconDispGxCol(m2, 0x10, (u16)journal_icon_tbl[gp->language], (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
+#else
         iconDispGxCol(m2, 0x10, 0x216, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
 #endif
     }

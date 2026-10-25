@@ -886,16 +886,9 @@ EVT_BEGIN(maffiaboss_ticket_check)
     IF_INT_EQUAL(LW(5), 0)
 #ifdef VERSION_G8ME01
         CALL(evt_npc_flag_onoff, 1, STRING("マフィアボス"), 1073741856)
-        CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
-        CALL(evt_npc_get_position, STRING("マフィアボス"), LW(10), LW(11), LW(12))
-        CALL(evt_npc_move_position, STRING("マフィアボス"), LW(0), -68, 0, FLOAT(60.0f), 0)
-        WAIT_MS(500)
-        CALL_CHILD(PTR(maffiaboss_ticket_put))
-        CALL(evt_msg_print, 0, STRING("mac_2_118"), 0, STRING("マフィアボス"))
-        CALL(evt_npc_move_position, STRING("マフィアボス"), LW(10), LW(12), 0, FLOAT(60.0f), 0)
-        CALL(evt_npc_flag_onoff, 0, STRING("マフィアボス"), 1073741856)
 #else
         CALL(evt_npc_flag_onoff, 1, STRING("マフィアボス"), 1073741824)
+#endif
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         CALL(evt_npc_get_position, STRING("マフィアボス"), LW(10), LW(11), LW(12))
         CALL(evt_npc_move_position, STRING("マフィアボス"), LW(0), -68, 0, FLOAT(60.0f), 0)
@@ -903,6 +896,9 @@ EVT_BEGIN(maffiaboss_ticket_check)
         CALL_CHILD(PTR(maffiaboss_ticket_put))
         CALL(evt_msg_print, 0, STRING("mac_2_118"), 0, STRING("マフィアボス"))
         CALL(evt_npc_move_position, STRING("マフィアボス"), LW(10), LW(12), 0, FLOAT(60.0f), 0)
+#ifdef VERSION_G8ME01
+        CALL(evt_npc_flag_onoff, 0, STRING("マフィアボス"), 1073741856)
+#else
         CALL(evt_npc_flag_onoff, 0, STRING("マフィアボス"), 1073741824)
 #endif
         ELSE
@@ -1558,11 +1554,14 @@ EVT_BEGIN(maffiaboss_desk_talk)
     END_INLINE_EVENT
 #ifdef VERSION_G8ME01
     SET_VALUE(GF(10), 1)
+#endif
     BEGIN_INLINE_EVENT
         CALL(evt_mario_set_pose, STRING("M_I_2"))
         WAIT_MS(800)
         CALL(evt_mario_set_pose, STRING("M_S_1"))
+#ifdef VERSION_G8ME01
         SET_VALUE(GF(10), 0)
+#endif
     END_INLINE_EVENT
     CALL(evt_npc_flag_check, STRING("マフィアボス"), 16777216, LW(0))
     IF_INT_EQUAL(LW(0), 0)
@@ -1571,20 +1570,8 @@ EVT_BEGIN(maffiaboss_desk_talk)
         END_INLINE_EVENT
     END_IF
     CALL_CHILD(PTR(maffiaboss_talk_common))
+#ifdef VERSION_G8ME01
     WAIT_WHILE(GF(10))
-#else
-    BEGIN_INLINE_EVENT
-        CALL(evt_mario_set_pose, STRING("M_I_2"))
-        WAIT_MS(800)
-        CALL(evt_mario_set_pose, STRING("M_S_1"))
-    END_INLINE_EVENT
-    CALL(evt_npc_flag_check, STRING("マフィアボス"), 16777216, LW(0))
-    IF_INT_EQUAL(LW(0), 0)
-        BEGIN_INLINE_EVENT
-            CALL(evt_set_dir_to_target, STRING("マフィアボス"), STRING("mario"))
-        END_INLINE_EVENT
-    END_IF
-    CALL_CHILD(PTR(maffiaboss_talk_common))
 #endif
     CALL(evt_party_run, 0)
     CALL(evt_mario_key_onoff, 1)
@@ -2662,6 +2649,7 @@ EVT_BEGIN(slot_set)
     CALL(evt_mario_key_onoff, 0)
 #ifdef VERSION_G8ME01
     CALL(evt_party_stop, 0)
+#endif
     CALL(yuugijou_get_takeoutflag, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL(yuugijou_get_montemedal_keep, LW(0))
@@ -2672,10 +2660,12 @@ EVT_BEGIN(slot_set)
             CALL(yuugijou_montemedal_return)
         END_IF
     END_IF
+#ifdef VERSION_G8ME01
     BEGIN_SIBLING_EVENT
         CALL(evt_party_get_pos, 0, LW(0), LW(1), LW(2))
         CALL(evt_party_move_pos2, 0, -225, LW(2), FLOAT(60.0f))
     END_SIBLING_EVENT
+#endif
     SWITCH(LW(8))
         CASE_EQUAL(0)
         CALL(evt_cam3d_evt_set, FLOAT(-393.8994f), FLOAT(113.09961f), FLOAT(-235.0f), FLOAT(-197.0f), FLOAT(78.69922f), FLOAT(-235.0f), 600, 11)
@@ -2712,54 +2702,8 @@ EVT_BEGIN(slot_set)
     LABEL(0)
     CALL(evt_cam3d_evt_off, 600, 11)
     WAIT_MS(600)
+#ifdef VERSION_G8ME01
     CALL(evt_party_run, 0)
-#else
-    CALL(yuugijou_get_takeoutflag, LW(0))
-    IF_INT_EQUAL(LW(0), 0)
-        CALL(yuugijou_get_montemedal_keep, LW(0))
-        IF_INT_NOT_EQUAL(LW(0), 0)
-            SET_VALUE(LW(11), 2)
-            CALL_CHILD(PTR(exchange_return_sub))
-            ELSE
-            CALL(yuugijou_montemedal_return)
-        END_IF
-    END_IF
-    SWITCH(LW(8))
-        CASE_EQUAL(0)
-        CALL(evt_cam3d_evt_set, FLOAT(-393.8994f), FLOAT(113.09961f), FLOAT(-235.0f), FLOAT(-197.0f), FLOAT(78.69922f), FLOAT(-235.0f), 600, 11)
-        WAIT_MS(600)
-        CASE_EQUAL(1)
-        CALL(evt_cam3d_evt_set, FLOAT(-393.8994f), FLOAT(113.09961f), FLOAT(-160.0f), FLOAT(-197.0f), FLOAT(78.69922f), FLOAT(-160.0f), 600, 11)
-        WAIT_MS(600)
-    END_SWITCH
-    LOOP(0)
-        CALL(yuugijou_get_montemedal, LW(0))
-        IF_INT_EQUAL(LW(0), 0)
-            CALL(evt_msg_print, 0, STRING("slot_mess_01"), 0, 0)
-            GOTO(0)
-        END_IF
-        CALL(evt_msg_select, 0, STRING("slot_mess_00"))
-        IF_INT_EQUAL(LW(0), 1)
-            GOTO(0)
-        END_IF
-        CALL(yuugijou_add_montemedal, 0, -1)
-        CALL(goryuugijo_get_dataadr, 1, LW(0))
-        CALL(goryuugijo_set_slot_phase, LW(0), 1)
-        LOOP(0)
-            CALL(goryuugijo_get_slot_phase, LW(0), LW(1))
-            IF_INT_EQUAL(LW(1), 0)
-                WAIT_MS(300)
-                BREAK_LOOP
-            END_IF
-            IF_INT_EQUAL(LW(1), 8)
-                GOTO(0)
-            END_IF
-            WAIT_FRAMES(1)
-        END_LOOP
-    END_LOOP
-    LABEL(0)
-    CALL(evt_cam3d_evt_off, 600, 11)
-    WAIT_MS(600)
 #endif
     CALL(evt_mario_key_onoff, 1)
     RETURN
@@ -5256,6 +5200,9 @@ EVT_BEGIN(gor_03_init_evt)
     CALL(evt_bero_get_info)
 #ifdef VERSION_G8ME01
     CALL_CHILD(evt_bero_info_run)
+#else
+    CALL_CHILD(PTR(evt_bero_info_run))
+#endif
     CALL(evt_hitobj_attr_onoff, 1, 0, STRING("s_bero"), 4)
     CALL_CHILD(PTR(luigi_npcEnt))
     CALL(evt_npc_setup, PTR(npcEnt))
@@ -5271,23 +5218,40 @@ EVT_BEGIN(gor_03_init_evt)
     END_SWITCH
     CALL(evt_map_playanim, STRING("mizu"), 1, 0)
     SET_VALUE(LW(0), PTR(&door_data_01_0))
+#ifdef VERSION_G8ME01
     CALL_CHILD(evt_door_entry)
     IF_INT_EQUAL(GSWF(1230), 1)
         SET_VALUE(LW(0), PTR(&door_data_01_1))
         CALL_CHILD(evt_door_entry)
+#else
+    CALL_CHILD(PTR(evt_door_entry))
+    IF_INT_EQUAL(GSWF(1230), 1)
+        SET_VALUE(LW(0), PTR(&door_data_01_1))
+        CALL_CHILD(PTR(evt_door_entry))
+#endif
     END_IF
     SET_VALUE(LW(0), PTR(&door_data_02_0l))
     CALL_CHILD(PTR(monte_evt_door_entry))
     SET_VALUE(LW(0), PTR(&door_data_02_0r))
     CALL_CHILD(PTR(monte_evt_door_entry))
     SET_VALUE(LW(0), PTR(&door_data_02_1))
+#ifdef VERSION_G8ME01
     CALL_CHILD(evt_door_entry)
     SET_VALUE(LW(0), PTR(&door_data_03))
     CALL_CHILD(evt_door_entry)
+#else
+    CALL_CHILD(PTR(evt_door_entry))
+    SET_VALUE(LW(0), PTR(&door_data_03))
+    CALL_CHILD(PTR(evt_door_entry))
+#endif
     SET_VALUE(LW(0), PTR(&door_data_03_roll))
     CALL_CHILD(PTR(evt_door_03_entry))
     SET_VALUE(LW(0), PTR(&door_data_04))
+#ifdef VERSION_G8ME01
     CALL_CHILD(evt_door_entry)
+#else
+    CALL_CHILD(PTR(evt_door_entry))
+#endif
     SET_VALUE(LW(0), PTR(&door_data_04_roll))
     CALL_CHILD(PTR(evt_door_04_entry))
     SPAWN_EVENT(PTR(wall_bomb_init))
@@ -5343,6 +5307,7 @@ EVT_BEGIN(gor_03_init_evt)
     END_IF
     SPAWN_EVENT(PTR(tenin_fuwafuwa))
     SPAWN_EVENT(PTR(casino_fuwafuwa))
+#ifdef VERSION_G8ME01
     SPAWN_EVENT(evt_sub_mail_event)
     CALL(evt_run_case_evt, 9, 1, STRING("A_kuzi"), 0, PTR(kuzi_keiziban_entry), 0)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ie_02"), 2)
@@ -5393,94 +5358,6 @@ EVT_BEGIN(gor_03_init_evt)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("E_sro_light02"), 16384)
     END_SWITCH
 #else
-    CALL_CHILD(PTR(evt_bero_info_run))
-    CALL(evt_hitobj_attr_onoff, 1, 0, STRING("s_bero"), 4)
-    CALL_CHILD(PTR(luigi_npcEnt))
-    CALL(evt_npc_setup, PTR(npcEnt))
-    SWITCH(GSW_STORY_PROGRESS)
-        CASE_BETWEEN(278, 280)
-        CALL(evt_npc_set_tribe, STRING("モニー"), STRING("モニー（指輪）"))
-        CALL(evt_npc_set_tribe, STRING("ピートン"), STRING("ピートン（指輪）"))
-        CASE_GREATER_OR_EQUAL(281)
-        CALL(evt_npc_set_tribe, STRING("モニー"), STRING("モニー（指輪）"))
-        IF_INT_EQUAL(GSWF(5393), 1)
-            CALL(evt_npc_set_tribe, STRING("ピートン"), STRING("ピートン（指輪）"))
-        END_IF
-    END_SWITCH
-    CALL(evt_map_playanim, STRING("mizu"), 1, 0)
-    SET_VALUE(LW(0), PTR(&door_data_01_0))
-    CALL_CHILD(PTR(evt_door_entry))
-    IF_INT_EQUAL(GSWF(1230), 1)
-        SET_VALUE(LW(0), PTR(&door_data_01_1))
-        CALL_CHILD(PTR(evt_door_entry))
-    END_IF
-    SET_VALUE(LW(0), PTR(&door_data_02_0l))
-    CALL_CHILD(PTR(monte_evt_door_entry))
-    SET_VALUE(LW(0), PTR(&door_data_02_0r))
-    CALL_CHILD(PTR(monte_evt_door_entry))
-    SET_VALUE(LW(0), PTR(&door_data_02_1))
-    CALL_CHILD(PTR(evt_door_entry))
-    SET_VALUE(LW(0), PTR(&door_data_03))
-    CALL_CHILD(PTR(evt_door_entry))
-    SET_VALUE(LW(0), PTR(&door_data_03_roll))
-    CALL_CHILD(PTR(evt_door_03_entry))
-    SET_VALUE(LW(0), PTR(&door_data_04))
-    CALL_CHILD(PTR(evt_door_entry))
-    SET_VALUE(LW(0), PTR(&door_data_04_roll))
-    CALL_CHILD(PTR(evt_door_04_entry))
-    SPAWN_EVENT(PTR(wall_bomb_init))
-    CALL(evt_run_case_evt, 15, 1, STRING("A_ana_ana"), 0, PTR(wall_bomb), 0)
-    CALL(evt_shop_setup, PTR(obj_list), PTR(goods_list), PTR(&shopper_data), PTR(trade_list))
-    CALL(evt_item_entry, STRING("item_00"), 125, 550, 0, 180, 16, GSWF(5580), 0)
-    CALL(evt_item_entry, STRING("item_01"), 125, -585, 0, 220, 16, GSWF(5581), 0)
-    CALL(evt_item_entry, STRING("item_02"), 125, 220, 10, 225, 16, GSWF(5582), 0)
-    CALL(evt_mobj_kururing_floor, STRING("kururin1"), -200, 0, 125, STRING("S_ground_A"), 125, GSWF(5579))
-    CALL(evt_mobj_powerupblk, STRING("pblk1"), 250, 60, -510, 0, GSWF(5527), 90)
-    CALL(evt_mobj_powerupblk, STRING("pblk2"), -563, 0, -150, 0, GSWF(5528), 90)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_kou_kusas01"), 1)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_kou_kusas02"), 1)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_kou_kusas03"), 1)
-    SWITCH(GSW_STORY_PROGRESS)
-        CASE_LESS(56)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_kou_kusas01"), 1)
-        CASE_LESS(112)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_kou_kusas01"), 1)
-        CASE_LESS(164)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_kou_kusas01"), 1)
-        CASE_LESS(215)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_kou_kusas02"), 1)
-        CASE_LESS(261)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_kou_kusas02"), 1)
-        CASE_LESS(339)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_kou_kusas02"), 1)
-        CASE_LESS(373)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_kou_kusas03"), 1)
-        CASE_LESS(401)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_kou_kusas03"), 1)
-        CASE_DEFAULT
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_kou_kusas03"), 1)
-    END_SWITCH
-    SPAWN_EVENT_GET_ID(PTR(desk_talk_check), GW(15))
-    CALL_CHILD(PTR(debug_event_mode))
-    CALL(evt_goryuugijo_alloc, LW(0), 0)
-    CALL(goryuugijo_set_dataadr, 0, LW(0))
-    CALL(evt_goryuugijo_alloc, LW(0), 1)
-    CALL(goryuugijo_set_dataadr, 1, LW(0))
-    CALL(evt_run_case_evt, 9, 1, STRING("A_srot01"), 0, PTR(slot1_set), LW(1))
-    CALL(evt_goryuugijo_set_caseid, LW(0), 0, LW(1))
-    CALL(evt_run_case_evt, 9, 1, STRING("A_srot02"), 0, PTR(slot2_set), LW(1))
-    CALL(evt_goryuugijo_set_caseid, LW(0), 1, LW(1))
-    CALL(evt_run_case_evt, 9, 1, STRING("A_gb_a"), 0, PTR(ranking_set), 0)
-    CALL(evt_run_case_evt, 9, 1, STRING("A_mot_a"), 0, PTR(exchange_set), 0)
-    IF_INT_NOT_EQUAL(GSWF(1229), 0)
-        SET_VALUE(GSWF(1229), 0)
-        SPAWN_EVENT(PTR(yuureturn_rtn))
-    END_IF
-    IF_INT_EQUAL(GSW_STORY_PROGRESS, 172)
-        SPAWN_EVENT(PTR(peach_mail))
-    END_IF
-    SPAWN_EVENT(PTR(tenin_fuwafuwa))
-    SPAWN_EVENT(PTR(casino_fuwafuwa))
     SPAWN_EVENT(PTR(evt_sub_mail_event))
     CALL(evt_run_case_evt, 9, 1, STRING("A_kuzi"), 0, PTR(kuzi_keiziban_entry), 0)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ie_02"), 2)

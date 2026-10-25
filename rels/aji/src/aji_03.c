@@ -610,6 +610,7 @@ EVT_BEGIN(evt_ufo_sousaban)
     END_INLINE_EVENT
 #ifdef VERSION_G8ME01
     WAIT_FRAMES(1)
+#endif
     LOOP(0)
         CALL(evt_key_get_button, 0, LW(0))
         IF_BITS_SET(LW(0), 256)
@@ -617,7 +618,9 @@ EVT_BEGIN(evt_ufo_sousaban)
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
+#ifdef VERSION_G8ME01
     WAIT_FRAMES(1)
+#endif
     SET_VALUE(GF(10), 1)
     LOOP(0)
         CALL(evt_key_get_button, 0, LW(0))
@@ -627,7 +630,9 @@ EVT_BEGIN(evt_ufo_sousaban)
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
+#ifdef VERSION_G8ME01
     WAIT_FRAMES(1)
+#endif
     SET_VALUE(GF(10), 0)
     DELETE_EVENT(LW(10))
     BEGIN_INLINE_EVENT_GET_ID(LW(10))
@@ -635,7 +640,9 @@ EVT_BEGIN(evt_ufo_sousaban)
             CALL(evt_sousa_icon, 1, 200, 70)
         END_LOOP
     END_INLINE_EVENT
+#ifdef VERSION_G8ME01
     WAIT_FRAMES(1)
+#endif
     LOOP(0)
         CALL(evt_key_get_button, 0, LW(0))
         IF_BITS_SET(LW(0), 512)
@@ -643,7 +650,9 @@ EVT_BEGIN(evt_ufo_sousaban)
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
+#ifdef VERSION_G8ME01
     WAIT_FRAMES(1)
+#endif
     SET_VALUE(GF(11), 1)
     LOOP(0)
         CALL(evt_key_get_button, 0, LW(0))
@@ -653,47 +662,8 @@ EVT_BEGIN(evt_ufo_sousaban)
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
+#ifdef VERSION_G8ME01
     WAIT_FRAMES(1)
-#else
-    LOOP(0)
-        CALL(evt_key_get_button, 0, LW(0))
-        IF_BITS_SET(LW(0), 256)
-            BREAK_LOOP
-        END_IF
-        WAIT_FRAMES(1)
-    END_LOOP
-    SET_VALUE(GF(10), 1)
-    LOOP(0)
-        CALL(evt_key_get_button, 0, LW(0))
-        IF_BITS_SET(LW(0), 256)
-            ELSE
-            BREAK_LOOP
-        END_IF
-        WAIT_FRAMES(1)
-    END_LOOP
-    SET_VALUE(GF(10), 0)
-    DELETE_EVENT(LW(10))
-    BEGIN_INLINE_EVENT_GET_ID(LW(10))
-        LOOP(0)
-            CALL(evt_sousa_icon, 1, 200, 70)
-        END_LOOP
-    END_INLINE_EVENT
-    LOOP(0)
-        CALL(evt_key_get_button, 0, LW(0))
-        IF_BITS_SET(LW(0), 512)
-            BREAK_LOOP
-        END_IF
-        WAIT_FRAMES(1)
-    END_LOOP
-    SET_VALUE(GF(11), 1)
-    LOOP(0)
-        CALL(evt_key_get_button, 0, LW(0))
-        IF_BITS_SET(LW(0), 512)
-            ELSE
-            BREAK_LOOP
-        END_IF
-        WAIT_FRAMES(1)
-    END_LOOP
 #endif
     SET_VALUE(GF(11), 0)
     DELETE_EVENT(LW(10))

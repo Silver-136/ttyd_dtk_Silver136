@@ -2726,6 +2726,9 @@ s32 BattleAudience_NoUsedFCHaitiRandFull(void);
 s32 BattleAudience_NoUsedFCHaitiRandCenter(void);
 
 s32 BattleAudience_NoUsedFCHaitiRandFull(void) {
+#else
+s32 BattleAudience_NoUsedFCHaitiRand(void) {
+#endif
     BattleAudience* audience = BattleAudienceBaseGetPtr();
     s32 rank = pouchGetPtr()->rank;
     s32* haiti;
@@ -2761,6 +2764,7 @@ s32 BattleAudience_NoUsedFCHaitiRandFull(void) {
         }
     }
     return -1;
+#ifdef VERSION_G8ME01
 }
 
 s32 BattleAudience_NoUsedFCHaitiRandCenter(void) {
@@ -2813,43 +2817,6 @@ s32 BattleAudience_NoUsedFCHaitiRand(void) {
         }
     }
     return id;
-#else
-s32 BattleAudience_NoUsedFCHaitiRand(void) {
-    BattleAudience* audience = BattleAudienceBaseGetPtr();
-    s32 rank = pouchGetPtr()->rank;
-    s32* haiti;
-    s32 count = 0;
-    s32 total = 0;
-    s32 rowW[10] = { 10000, 1000, 100, 10, 5, 2, 1, 1, 1, 1 };
-    s32 colW[20] = { 1, 1, 2, 2, 4, 4, 8, 8, 16, 16, 16, 16, 8, 8, 4, 4, 2, 2, 1, 1 };
-    s32 list[200];
-    s32 cumul[200];
-    s32 i, j, k, id, w, r;
-
-    haiti = haiti_data[rank];
-    for (i = 0; i < 10; i++) {
-        for (j = 0, k = (20 - haiti[i]) / 2; j < haiti[i]; j++, k++) {
-            id = k + i * 20;
-            if (!(BattleAudienceGetPtr(id)->flags & 1) && !(BattleAudienceGetPtr(id)->flags & 0x100)) {
-                w = rowW[i] * colW[k] + 1;
-                list[count] = id;
-                if (count) {
-                    cumul[count] = w + cumul[count - 1];
-                } else {
-                    cumul[count] = w;
-                }
-                total += w;
-                count++;
-            }
-        }
-    }
-    r = (f32)total * (f32)rand() / 32767.0f;
-    for (i = 0; i < count; i++) {
-        if (r < cumul[i]) {
-            return list[i];
-        }
-    }
-    return -1;
 #endif
 }
 

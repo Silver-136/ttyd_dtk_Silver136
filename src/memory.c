@@ -129,26 +129,24 @@ static inline void mapallocInit(void) {
 
     size = (u8*)heapEnd[1] - (u8*)heapStart[1] - sizeof(MapAllocEntry);
     mapalloc_size = size;
+#else
+    MapAllocEntry* entry;
+    u32 size;
+
+    size = (u8*)heapEnd[1] - (u8*)heapStart[1] - sizeof(MapAllocEntry);
+#endif
     entry = OSAllocFromHeap(heapHandle[HEAP_MALLOC], size);
     if (entry) {
         memset(entry, 0, size);
         DCFlushRange(entry, size);
     }
+#ifdef VERSION_G8ME01
     total = mapalloc_size;
     mapalloc_base_ptr = entry;
     entry->next = NULL;
     entry->size = total - sizeof(MapAllocEntry);
     entry->inuse = 0;
 #else
-    MapAllocEntry* entry;
-    u32 size;
-
-    size = (u8*)heapEnd[1] - (u8*)heapStart[1] - sizeof(MapAllocEntry);
-    entry = OSAllocFromHeap(heapHandle[HEAP_MALLOC], size);
-    if (entry) {
-        memset(entry, 0, size);
-        DCFlushRange(entry, size);
-    }
     entry->next = NULL;
     entry->size = size - sizeof(MapAllocEntry);
     entry->inuse = 0;

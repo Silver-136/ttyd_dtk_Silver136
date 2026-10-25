@@ -896,18 +896,10 @@ void npcMain(void) {
                                     sd = 0.0f;
                                 }
                             }
-                            PSVECSubtract(&entry->prevPosition, &entry->position, &dv);
-                            dir = reviseAngle(entry->direction) < 180.0f ? 90.0f : 270.0f;
-                            trig = 1;
-                            { s32 ok_; NPC_CHKMARIO(ok_); if (!ok_) {
-                                trig = 0;
-                            } else {
-                                f32 a14;
-                                if (sd > 0.25f * entry->searchRange) {
-                                    if (sd > entry->searchRange) {
 #else
                             dist = dx * dx + dz * dz;
                             sqrtf(dist);
+#endif
                             PSVECSubtract(&entry->prevPosition, &entry->position, &dv);
                             dir = reviseAngle(entry->direction) < 180.0f ? 90.0f : 270.0f;
                             trig = 1;
@@ -915,6 +907,10 @@ void npcMain(void) {
                                 trig = 0;
                             } else {
                                 f32 a14;
+#ifdef VERSION_G8ME01
+                                if (sd > 0.25f * entry->searchRange) {
+                                    if (sd > entry->searchRange) {
+#else
                                 dist = sqrtf(dist);
                                 if (dist > 0.25f * entry->searchRange) {
                                     if (dist > entry->searchRange) {
@@ -1323,9 +1319,18 @@ void npcMoveG(NpcEntry* npc) {
             if ((npc->groundHit = hitCheckFilter(NULL, &hitX, &hitY, &hitZ, &dist, &hitNX, &hitNY, &hitNZ,
                                               npc->position.x, npc->position.y + hh, npc->position.z, 0.0f,
                                               -1.0f, 0.0f)) != NULL) {
+#else
+            if ((npc->groundHit = hitCheckFilter(NULL, &hitX, &hitY, &hitZ, &dist, &hitNX, &hitNY, &hitNZ,
+                                              npc->position.x, npc->position.y + hh, npc->position.z, 0.0f,
+                                              -1.0f, 0.0f)) == NULL) {
+                npc->jumpFlags |= 1;
+                npc->position.y += dy;
+            } else {
+#endif
                 npc->jumpFlags &= ~1;
                 npc->position.y = hitY;
                 npc->jumpTicks = 0;
+#ifdef VERSION_G8ME01
             } else if ((npc->groundHit = hitCheckFilter(NULL, &hitX, &hitY, &hitZ, &dist, &hitNX, &hitNY, &hitNZ,
                                               npc->position.x + 0.5f * npc->width, npc->position.y + hh,
                                               npc->position.z, 0.0f, -1.0f, 0.0f)) != NULL) {
@@ -1343,15 +1348,6 @@ void npcMoveG(NpcEntry* npc) {
                 npc->position.y += dy;
             }
 #else
-            if ((npc->groundHit = hitCheckFilter(NULL, &hitX, &hitY, &hitZ, &dist, &hitNX, &hitNY, &hitNZ,
-                                              npc->position.x, npc->position.y + hh, npc->position.z, 0.0f,
-                                              -1.0f, 0.0f)) == NULL) {
-                npc->jumpFlags |= 1;
-                npc->position.y += dy;
-            } else {
-                npc->jumpFlags &= ~1;
-                npc->position.y = hitY;
-                npc->jumpTicks = 0;
             }
 #endif
         }
@@ -1527,10 +1523,12 @@ void npcStrippedAnnouncePool(f32* f) {
 void _fbatFirstAttackAnnouceDisp(CameraId camId, void* param) {
 #ifdef VERSION_G8ME01
     s32 height;
+#endif
     FirstStrikeInfo* firstStrike = param;
     const char* message;
     f32 x;
     f32 y;
+#ifdef VERSION_G8ME01
     u16 lines;
     u16 width;
     f32 shakeX;
@@ -1541,9 +1539,16 @@ void _fbatFirstAttackAnnouceDisp(CameraId camId, void* param) {
     s8* p;
 
     // US: the announcement may span up to four lines
+#else
+    f32 width;
+    f32 shakeX;
+    f32 shakeY;
+
+#endif
     message = msgSearch(firstStrike->msg_tag);
     x = firstStrike->x;
     y = firstStrike->y;
+#ifdef VERSION_G8ME01
     width = FontGetMessageWidthLine(message, &lines);
     lines++;
     height = lines * 29 + 3;
@@ -1566,34 +1571,22 @@ void _fbatFirstAttackAnnouceDisp(CameraId camId, void* param) {
     }
     windowDispGX_Waku_col(0, firstStrike->color, mulf(0.1f, shakeX - 10.0f - width / 2),
                           mulf(shakeY, 0.1f), mulf(20 + width, 0.1f), mulf(height, 0.1f), 1.0f);
-    FontDrawStart();
-    FontDrawEdge();
-    FontDrawColor((GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
-    FontDrawScale(0.1f);
-    for (i = 0; i < lines; i++) {
-        FontDrawStringShake(mulf(0.1f, x - width / 2), mulf(0.1f, y + -29 * i - 3.0f), buf[i]);
-    }
 #else
-    FirstStrikeInfo* firstStrike = param;
-    const char* message;
-    f32 x;
-    f32 y;
-    f32 width;
-    f32 shakeX;
-    f32 shakeY;
-
-    message = msgSearch(firstStrike->msg_tag);
-    x = firstStrike->x;
-    y = firstStrike->y;
     width = FontGetMessageWidth(message);
     shakeX = x + (f32)(irand(10000) % 5);
     shakeY = y + (f32)(irand(10000) % 5);
     windowDispGX_Waku_col(0, firstStrike->color, mulf(0.1f, shakeX - 10.0f - width / 2.0f),
                           mulf(shakeY, 0.1f), mulf(20.0f + width, 0.1f), 3.2f, 1.0f);
+#endif
     FontDrawStart();
     FontDrawEdge();
     FontDrawColor((GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
     FontDrawScale(0.1f);
+#ifdef VERSION_G8ME01
+    for (i = 0; i < lines; i++) {
+        FontDrawStringShake(mulf(0.1f, x - width / 2), mulf(0.1f, y + -29 * i - 3.0f), buf[i]);
+    }
+#else
     FontDrawStringShake(mulf(0.1f, x - width / 2.0f), mulf(y - 3.0f, 0.1f), message);
 #endif
 }

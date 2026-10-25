@@ -686,15 +686,15 @@ USER_FUNC(evt_mario_normalize) {
         if (party) {
 #ifdef VERSION_G8ME01
             partySlitReset(party);
-        }
-        party = partyGetPtr(marioGetExtraPartyId());
-        if (party) {
-            partySlitReset(party);
 #else
             party->slitOn = 0;
+#endif
         }
         party = partyGetPtr(marioGetExtraPartyId());
         if (party) {
+#ifdef VERSION_G8ME01
+            partySlitReset(party);
+#else
             party->slitOn = 0;
 #endif
         }

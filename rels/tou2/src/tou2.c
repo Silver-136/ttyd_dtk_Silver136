@@ -447,18 +447,17 @@ static void disp_proc(CameraId cameraId, void* param) {
 #ifdef VERSION_G8ME01
         name = msgSearch(fighters[rank_wp->entries[i].id].name);
         nameW = FontGetMessageWidth(name);
+#endif
         x = 40.0f + x;
         PSMTXTrans(mtx, x, y, 0.0f);
         PSMTXConcat(mtx, scale, mtx);
+#ifdef VERSION_G8ME01
         if (nameW > 220.0f) {
             PSMTXScale(scale, 220.0f / nameW, 1.0f, 1.0f);
             PSMTXConcat(mtx, scale, mtx);
         }
         FontDrawMessageMtx(mtx, name);
 #else
-        x = 40.0f + x;
-        PSMTXTrans(mtx, x, y, 0.0f);
-        PSMTXConcat(mtx, scale, mtx);
         FontDrawMessageMtx(mtx, msgSearch(fighters[rank_wp->entries[i].id].name));
 #endif
         num++;

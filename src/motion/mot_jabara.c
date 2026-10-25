@@ -145,16 +145,15 @@ BOOL marioChkJabara(void) {
 #ifdef VERSION_G8ME01
     if ((mario->trigFlags & MARIO_TRIG_FLAG_START_JABARA_SPIN) && (u16)mario->currMotionId == MARIO_MOTION_STAY && !((u32)mario->dispFlags & 0x40000000) &&
         mario->controlStickSensitivity) {
-        marioChgPose("M_I_Y");
-        marioVoiceGlareOn();
-    }
 #else
     mario->wMotionTimer++;
     if (mario->controlStickSensitivity && mario->wMotionTimer > 10 && (u16)mario->currMotionId == MARIO_MOTION_STAY &&
         !((u32)mario->dispFlags & 0x40000000)) {
+#endif
         marioChgPose("M_I_Y");
         marioVoiceGlareOn();
     }
+#ifndef VERSION_G8ME01
     if (mario->wMotionTimer >= 0x32) {
         mario->wMotionTimer = 0x32;
         if ((u16)mario->currMotionId == MARIO_MOTION_STAY && !((u32)mario->dispFlags & 0x40000000)) {

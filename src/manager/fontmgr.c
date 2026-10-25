@@ -293,26 +293,34 @@ void FontDrawStringPitch(f32 x, f32 y, f32 pitch, const char* msg) {
 #ifdef VERSION_G8ME01
 // FAKE: auto_inline off keeps the wrappers from inlining FontDrawStringVecPitch (the US wrappers call it)
 #pragma auto_inline off
+#endif
 void FontDrawStringVecPitch(Vec pos, f32 pitch, const s8* msg) {
     CameraEntry* camera;
     Mtx trans, scale;
+#ifdef VERSION_G8ME01
     char cmd[128];
     char arg[128];
+#endif
     u8 width;
     u16 code;
     f32 x;
+#ifdef VERSION_G8ME01
     s8 c;
+#endif
 
     camera = camGetCurPtr();
     x = pos.x;
     PSMTXScale(scale, fontScale.x, fontScale.y, fontScale.z);
     while (*msg) {
+#ifdef VERSION_G8ME01
         code = 0xFFFF;
+#endif
         if (_ismbblead(*msg)) {
             code = JUTFont_CodeToGlyph(*(u16*)msg);
             msg += 2;
         }
         else {
+#ifdef VERSION_G8ME01
             switch (c = *msg) {
                 case '<':
                     msg = (const s8*)msgGetCommand((char*)(msg + 1), cmd, arg);
@@ -335,27 +343,7 @@ void FontDrawStringVecPitch(Vec pos, f32 pitch, const s8* msg) {
             else {
                 x += pitch * fontScale.x;
             }
-        }
-    }
-}
-#pragma auto_inline reset
 #else
-void FontDrawStringVecPitch(Vec pos, f32 pitch, const s8* msg) {
-    CameraEntry* camera;
-    Mtx trans, scale;
-    u8 width;
-    u16 code;
-    f32 x;
-
-    camera = camGetCurPtr();
-    x = pos.x;
-    PSMTXScale(scale, fontScale.x, fontScale.y, fontScale.z);
-    while (*msg) {
-        if (_ismbblead(*msg)) {
-            code = JUTFont_CodeToGlyph(*(u16*)msg);
-            msg += 2;
-        }
-        else {
             code = JUTFont_CodeToGlyph(FONT_CH(*msg++));
         }
         width = fontGetWidth(code)->width;
@@ -368,9 +356,12 @@ void FontDrawStringVecPitch(Vec pos, f32 pitch, const s8* msg) {
         }
         else {
             x += pitch * fontScale.x;
+#endif
         }
     }
 }
+#ifdef VERSION_G8ME01
+#pragma auto_inline reset
 #endif
 static inline void fontDrawPairXI(u16 code, s16 x, s16 y) {
     s16 iy = y;

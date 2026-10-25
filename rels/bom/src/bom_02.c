@@ -847,40 +847,6 @@ EVT_BEGIN(mario_jump)
     CALL(evt_mario_get_pos, 0, LW(10), LW(11), LW(12))
     CALL(evt_npc_flag_onoff, 1, STRING("ホワイト"), 32)
     CALL(evt_npc_get_position, STRING("ホワイト"), LW(0), LW(1), LW(2))
-    ADD(LW(1), 20)
-    CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_FLD_JUMP1"), LW(10), LW(11), LW(12), 0)
-    CALL(evt_mario_jump_pos, LW(0), LW(1), LW(2), 500, 2, -1000)
-    BEGIN_INLINE_EVENT
-        SUBTRACT(LW(0), 40)
-        SUBTRACT(LW(2), 40)
-        CALL(evt_eff, 0, STRING("nice"), 0, LW(0), LW(1), LW(2), 0, 0, 0, 0, 0, 0, 0, 0)
-    END_INLINE_EVENT
-    CALL(evt_eff, 0, STRING("small_star"), 3, LW(0), LW(1), LW(2), 0, -1, 0, 3, 0, 0, 0, 0)
-    CALL(evt_snd_sfxon_3d, STRING("SFX_STG7_WHITE_DAMAGED1"), LW(0), LW(1), LW(2), 0)
-    CALL(evt_snd_sfxon_3d, STRING("SFX_STG7_WHITE_NICE1"), LW(0), LW(1), LW(2), 0)
-    BEGIN_INLINE_EVENT
-        CALL(evt_cam_shake, 4, FLOAT(0.0f), FLOAT(0.009765625f), 100)
-    END_INLINE_EVENT
-    ADD(LW(2), -10)
-    CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_FLD_JUMP4"), LW(10), LW(11), LW(12), 0)
-    CALL(evt_mario_jump_pos, LW(0), LW(1), LW(2), 500, 2, -1000)
-    BEGIN_INLINE_EVENT
-        SUBTRACT(LW(0), 40)
-        SUBTRACT(LW(2), 40)
-        CALL(evt_eff, 0, STRING("nice"), 1, LW(0), LW(1), LW(2), 0, 0, 0, 0, 0, 0, 0, 0)
-    END_INLINE_EVENT
-    CALL(evt_eff, 0, STRING("small_star"), 3, LW(0), LW(1), LW(2), 0, -1, 0, 3, 0, 0, 0, 0)
-    CALL(evt_snd_sfxon_3d, STRING("SFX_STG7_WHITE_DAMAGED1"), LW(0), LW(1), LW(2), 0)
-    CALL(evt_snd_sfxon_3d, STRING("SFX_STG7_WHITE_GOOD1"), LW(0), LW(1), LW(2), 0)
-    BEGIN_INLINE_EVENT
-        CALL(evt_cam_shake, 4, FLOAT(0.0f), FLOAT(0.009765625f), 100)
-    END_INLINE_EVENT
-    CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_FLD_JUMP2"), LW(10), LW(11), LW(12), 0)
-    CALL(evt_mario_jump_pos, 335, 30, -130, 500, 2, -1000)
-    CALL(evt_npc_flag_onoff, 0, STRING("ホワイト"), 32)
-    CALL(evt_mario_cam_keep_off)
-    RETURN
-EVT_END()
 #else
 /* JP: the script continues in mario_jump_tail (separate symbol); its last CALL is split across the two */
 EvtWord mario_jump[] = {
@@ -888,12 +854,18 @@ EvtWord mario_jump[] = {
     CALL(evt_mario_get_pos, 0, LW(10), LW(11), LW(12))
     CALL(evt_npc_flag_onoff, 1, STRING(/*"ホワイト"*/"\x83\x7A\x83\x8F\x83\x43\x83\x67"), 32)
     CALL(evt_npc_get_position, STRING(/*"ホワイト"*/"\x83\x7A\x83\x8F\x83\x43\x83\x67"), LW(0), LW(1), LW(2))
+#endif
     ADD(LW(1), 20)
     CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_FLD_JUMP1"), LW(10), LW(11), LW(12), 0)
     CALL(evt_mario_jump_pos, LW(0), LW(1), LW(2), 500, 2, -1000)
     BEGIN_INLINE_EVENT
+#ifdef VERSION_G8ME01
+        SUBTRACT(LW(0), 40)
+        SUBTRACT(LW(2), 40)
+#else
         SUBTRACT(LW(0), 20)
         SUBTRACT(LW(2), 20)
+#endif
         CALL(evt_eff, 0, STRING("nice"), 0, LW(0), LW(1), LW(2), 0, 0, 0, 0, 0, 0, 0, 0)
     END_INLINE_EVENT
     CALL(evt_eff, 0, STRING("small_star"), 3, LW(0), LW(1), LW(2), 0, -1, 0, 3, 0, 0, 0, 0)
@@ -906,8 +878,13 @@ EvtWord mario_jump[] = {
     CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_FLD_JUMP4"), LW(10), LW(11), LW(12), 0)
     CALL(evt_mario_jump_pos, LW(0), LW(1), LW(2), 500, 2, -1000)
     BEGIN_INLINE_EVENT
+#ifdef VERSION_G8ME01
+        SUBTRACT(LW(0), 40)
+        SUBTRACT(LW(2), 40)
+#else
         SUBTRACT(LW(0), 20)
         SUBTRACT(LW(2), 20)
+#endif
         CALL(evt_eff, 0, STRING("nice"), 1, LW(0), LW(1), LW(2), 0, 0, 0, 0, 0, 0, 0, 0)
     END_INLINE_EVENT
     CALL(evt_eff, 0, STRING("small_star"), 3, LW(0), LW(1), LW(2), 0, -1, 0, 3, 0, 0, 0, 0)
@@ -918,6 +895,12 @@ EvtWord mario_jump[] = {
     END_INLINE_EVENT
     CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_FLD_JUMP2"), LW(10), LW(11), LW(12), 0)
     CALL(evt_mario_jump_pos, 335, 30, -130, 500, 2, -1000)
+#ifdef VERSION_G8ME01
+    CALL(evt_npc_flag_onoff, 0, STRING("ホワイト"), 32)
+    CALL(evt_mario_cam_keep_off)
+    RETURN
+EVT_END()
+#else
     EVT_CMD(4, OPCODE_USER_FUNC), (EvtWord)evt_npc_flag_onoff, 0,
 };
 #endif

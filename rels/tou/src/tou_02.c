@@ -2124,17 +2124,38 @@ EVT_BEGIN(tou_02_init_evt)
         CALL(evt_snd_bgmon, 512, STRING("BGM_STG3_TOU1"))
         CALL(evt_snd_bgmon, 160, 0)
         CALL(evt_snd_envon, 272, STRING("ENV_STG3_TOU2"))
+#else
+        CALL(evt_snd_bgmon, 512, STRING(("BGM_STG3_TOU2")))
+        CALL(evt_snd_envon, 272, STRING(("ENV_STG3_TOU2")))
+        CALL(evt_snd_bgmoff, 26624)
+        CASE_GREATER_OR_EQUAL(165)
+        CALL(evt_snd_bgmon, 512, STRING(("BGM_STG3_TOU2")))
+        CALL(evt_snd_envon, 272, STRING(("ENV_STG3_TOU2")))
+        CALL(evt_snd_bgmoff, 26624)
+        CASE_DEFAULT
+        CALL(evt_snd_bgmon, 512, STRING(("BGM_STG3_TOU1")))
+        CALL(evt_snd_bgmon, 160, 0)
+        CALL(evt_snd_envon, 272, STRING(("ENV_STG3_TOU2")))
+#endif
     END_SWITCH
     SET_VALUE(LW(0), PTR(bero_data))
     CALL(evt_bero_get_info)
     IF_INT_EQUAL(GSWF(2374), 1)
+#ifdef VERSION_G8ME01
         CALL_CHILD(bero_case_entry)
         SPAWN_EVENT(PTR(evt_tougi2))
         ELSE
         CALL_CHILD(evt_bero_info_run)
+#else
+        CALL_CHILD(PTR(bero_case_entry))
+        SPAWN_EVENT(PTR(evt_tougi2))
+        ELSE
+        CALL_CHILD(PTR(evt_bero_info_run))
+#endif
     END_IF
     CALL(evt_npc_setup, PTR(npcEnt))
     CALL_CHILD(PTR(init_kinopio_f))
+#ifdef VERSION_G8ME01
     CALL(evt_npc_change_interrupt, STRING("キノピオ女"), 6, PTR(talk_kinopio_f))
     CALL(evt_mobj_kururing_floor, STRING("kururin1"), -260, 0, -120, STRING("sita"), 125, GSWF(5623))
     IF_INT_LESS(GSW_STORY_PROGRESS, 129)
@@ -2142,19 +2163,39 @@ EVT_BEGIN(tou_02_init_evt)
         CALL_CHILD(bero_case_switch_off)
         SET_VALUE(LW(0), 4)
         CALL_CHILD(bero_case_switch_off)
+#else
+    CALL(evt_npc_change_interrupt, STRING(("\203L\203m\203s\203I\217\227")), 6, PTR(talk_kinopio_f))
+    CALL(evt_mobj_kururing_floor, STRING(("kururin1")), -260, 0, -120, STRING(("sita")), 125, GSWF(5623))
+    IF_INT_LESS(GSW_STORY_PROGRESS, 129)
+        SET_VALUE(LW(0), 3)
+        CALL_CHILD(PTR(bero_case_switch_off))
+        SET_VALUE(LW(0), 4)
+        CALL_CHILD(PTR(bero_case_switch_off))
+#endif
     END_IF
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 172)
         IF_INT_EQUAL(GSWF(2497), 0)
             SET_VALUE(LW(0), 3)
+#ifdef VERSION_G8ME01
             CALL_CHILD(bero_case_switch_off)
             SET_VALUE(LW(0), 4)
             CALL_CHILD(bero_case_switch_off)
+#else
+            CALL_CHILD(PTR(bero_case_switch_off))
+            SET_VALUE(LW(0), 4)
+            CALL_CHILD(PTR(bero_case_switch_off))
+#endif
         END_IF
     END_IF
     IF_INT_EQUAL(GSW_STORY_PROGRESS, 171)
         IF_INT_EQUAL(GSWF(2496), 0)
+#ifdef VERSION_G8ME01
             CALL(evt_npc_set_position, STRING("キノピオ女"), 0, -1000, 0)
             CALL(evt_npc_set_position, STRING("キノピオ４"), 0, -1000, 0)
+#else
+            CALL(evt_npc_set_position, STRING(("\203L\203m\203s\203I\217\227")), 0, -1000, 0)
+            CALL(evt_npc_set_position, STRING(("\203L\203m\203s\203I\202S")), 0, -1000, 0)
+#endif
         END_IF
     END_IF
     IF_INT_EQUAL(GSW_STORY_PROGRESS, 171)
@@ -2162,40 +2203,70 @@ EVT_BEGIN(tou_02_init_evt)
         IF_INT_EQUAL(LW(15), 0)
             CALL(evt_mario_set_party, 0, 1)
             CALL(evt_party_run, 0)
+#ifdef VERSION_G8ME01
         END_IF
         CALL(evt_pouch_mario_recovery)
         CALL(evt_pouch_all_party_recovery)
         CALL(N_evt_sub_status_gauge_force_update)
+#else
+            CALL(evt_pouch_mario_recovery)
+            CALL(evt_pouch_all_party_recovery)
+        END_IF
+#endif
         CALL(evt_pouch_remove_item, 65, LW(0))
         SPAWN_EVENT(PTR(evt_after_peach))
         SET_VALUE(GSWF(2402), 1)
         SET_VALUE(GSWF(2403), 1)
     END_IF
+#ifdef VERSION_G8ME01
     CALL(evt_map_playanim, STRING("anm_paneru"), 1, 0)
+#else
+    CALL(evt_map_playanim, STRING(("anm_paneru")), 1, 0)
+#endif
     BEGIN_INLINE_EVENT
         LOOP(0)
             LOOP(0)
+#ifdef VERSION_G8ME01
                 CALL(evt_map_checkanim, STRING("anm_paneru"), LW(0), LW(1))
                 IF_INT_LESS(LW(1), 5333)
                     CALL(evt_snd_sfxon_3d, STRING("SFX_STG3_AMB_OBJ_SCREEN2"), 178, 0, -98, 0)
+#else
+                CALL(evt_map_checkanim, STRING(("anm_paneru")), LW(0), LW(1))
+                IF_INT_LESS(LW(1), 5333)
+                    CALL(evt_snd_sfxon_3d, STRING(("SFX_STG3_AMB_OBJ_SCREEN2")), 178, 0, -98, 0)
+#endif
                     BREAK_LOOP
                 END_IF
                 WAIT_FRAMES(1)
             END_LOOP
             WAIT_FRAMES(10)
+#ifdef VERSION_G8ME01
             CALL(evt_snd_sfxon_3d, STRING("SFX_STG3_AMB_OBJ_SCREEN1"), 178, 0, -98, 0)
             LOOP(0)
                 CALL(evt_map_checkanim, STRING("anm_paneru"), LW(0), LW(1))
                 IF_INT_LESS(LW(1), 2000)
                     CALL(evt_snd_sfxon_3d, STRING("SFX_STG3_AMB_OBJ_SCREEN2"), 178, 0, -98, 0)
+#else
+            CALL(evt_snd_sfxon_3d, STRING(("SFX_STG3_AMB_OBJ_SCREEN1")), 178, 0, -98, 0)
+            LOOP(0)
+                CALL(evt_map_checkanim, STRING(("anm_paneru")), LW(0), LW(1))
+                IF_INT_LESS(LW(1), 2000)
+                    CALL(evt_snd_sfxon_3d, STRING(("SFX_STG3_AMB_OBJ_SCREEN2")), 178, 0, -98, 0)
+#endif
                     BREAK_LOOP
                 END_IF
                 WAIT_FRAMES(1)
             END_LOOP
             WAIT_FRAMES(5)
+#ifdef VERSION_G8ME01
             CALL(evt_snd_sfxon_3d, STRING("SFX_STG3_AMB_OBJ_SCREEN1"), 178, 0, -98, 0)
             LOOP(0)
                 CALL(evt_map_checkanim, STRING("anm_paneru"), LW(0), LW(1))
+#else
+            CALL(evt_snd_sfxon_3d, STRING(("SFX_STG3_AMB_OBJ_SCREEN1")), 178, 0, -98, 0)
+            LOOP(0)
+                CALL(evt_map_checkanim, STRING(("anm_paneru")), LW(0), LW(1))
+#endif
                 IF_INT_GREATER(LW(1), 6333)
                     BREAK_LOOP
                 END_IF
@@ -2204,6 +2275,7 @@ EVT_BEGIN(tou_02_init_evt)
         END_LOOP
     END_INLINE_EVENT
     CALL_CHILD(PTR(evt_momikucha))
+#ifdef VERSION_G8ME01
     CALL(evt_sub_get_language, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("p_p_1_e"), 16384)
@@ -2375,96 +2447,6 @@ EVT_BEGIN(tou_02_init_evt)
     END_IF
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("s_kaidan_7"), 2)
 #else
-        CALL(evt_snd_bgmon, 512, STRING(("BGM_STG3_TOU2")))
-        CALL(evt_snd_envon, 272, STRING(("ENV_STG3_TOU2")))
-        CALL(evt_snd_bgmoff, 26624)
-        CASE_GREATER_OR_EQUAL(165)
-        CALL(evt_snd_bgmon, 512, STRING(("BGM_STG3_TOU2")))
-        CALL(evt_snd_envon, 272, STRING(("ENV_STG3_TOU2")))
-        CALL(evt_snd_bgmoff, 26624)
-        CASE_DEFAULT
-        CALL(evt_snd_bgmon, 512, STRING(("BGM_STG3_TOU1")))
-        CALL(evt_snd_bgmon, 160, 0)
-        CALL(evt_snd_envon, 272, STRING(("ENV_STG3_TOU2")))
-    END_SWITCH
-    SET_VALUE(LW(0), PTR(bero_data))
-    CALL(evt_bero_get_info)
-    IF_INT_EQUAL(GSWF(2374), 1)
-        CALL_CHILD(PTR(bero_case_entry))
-        SPAWN_EVENT(PTR(evt_tougi2))
-        ELSE
-        CALL_CHILD(PTR(evt_bero_info_run))
-    END_IF
-    CALL(evt_npc_setup, PTR(npcEnt))
-    CALL_CHILD(PTR(init_kinopio_f))
-    CALL(evt_npc_change_interrupt, STRING(("\203L\203m\203s\203I\217\227")), 6, PTR(talk_kinopio_f))
-    CALL(evt_mobj_kururing_floor, STRING(("kururin1")), -260, 0, -120, STRING(("sita")), 125, GSWF(5623))
-    IF_INT_LESS(GSW_STORY_PROGRESS, 129)
-        SET_VALUE(LW(0), 3)
-        CALL_CHILD(PTR(bero_case_switch_off))
-        SET_VALUE(LW(0), 4)
-        CALL_CHILD(PTR(bero_case_switch_off))
-    END_IF
-    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 172)
-        IF_INT_EQUAL(GSWF(2497), 0)
-            SET_VALUE(LW(0), 3)
-            CALL_CHILD(PTR(bero_case_switch_off))
-            SET_VALUE(LW(0), 4)
-            CALL_CHILD(PTR(bero_case_switch_off))
-        END_IF
-    END_IF
-    IF_INT_EQUAL(GSW_STORY_PROGRESS, 171)
-        IF_INT_EQUAL(GSWF(2496), 0)
-            CALL(evt_npc_set_position, STRING(("\203L\203m\203s\203I\217\227")), 0, -1000, 0)
-            CALL(evt_npc_set_position, STRING(("\203L\203m\203s\203I\202S")), 0, -1000, 0)
-        END_IF
-    END_IF
-    IF_INT_EQUAL(GSW_STORY_PROGRESS, 171)
-        CALL(evt_mario_get_party, LW(15))
-        IF_INT_EQUAL(LW(15), 0)
-            CALL(evt_mario_set_party, 0, 1)
-            CALL(evt_party_run, 0)
-            CALL(evt_pouch_mario_recovery)
-            CALL(evt_pouch_all_party_recovery)
-        END_IF
-        CALL(evt_pouch_remove_item, 65, LW(0))
-        SPAWN_EVENT(PTR(evt_after_peach))
-        SET_VALUE(GSWF(2402), 1)
-        SET_VALUE(GSWF(2403), 1)
-    END_IF
-    CALL(evt_map_playanim, STRING(("anm_paneru")), 1, 0)
-    BEGIN_INLINE_EVENT
-        LOOP(0)
-            LOOP(0)
-                CALL(evt_map_checkanim, STRING(("anm_paneru")), LW(0), LW(1))
-                IF_INT_LESS(LW(1), 5333)
-                    CALL(evt_snd_sfxon_3d, STRING(("SFX_STG3_AMB_OBJ_SCREEN2")), 178, 0, -98, 0)
-                    BREAK_LOOP
-                END_IF
-                WAIT_FRAMES(1)
-            END_LOOP
-            WAIT_FRAMES(10)
-            CALL(evt_snd_sfxon_3d, STRING(("SFX_STG3_AMB_OBJ_SCREEN1")), 178, 0, -98, 0)
-            LOOP(0)
-                CALL(evt_map_checkanim, STRING(("anm_paneru")), LW(0), LW(1))
-                IF_INT_LESS(LW(1), 2000)
-                    CALL(evt_snd_sfxon_3d, STRING(("SFX_STG3_AMB_OBJ_SCREEN2")), 178, 0, -98, 0)
-                    BREAK_LOOP
-                END_IF
-                WAIT_FRAMES(1)
-            END_LOOP
-            WAIT_FRAMES(5)
-            CALL(evt_snd_sfxon_3d, STRING(("SFX_STG3_AMB_OBJ_SCREEN1")), 178, 0, -98, 0)
-            LOOP(0)
-                CALL(evt_map_checkanim, STRING(("anm_paneru")), LW(0), LW(1))
-                IF_INT_GREATER(LW(1), 6333)
-                    BREAK_LOOP
-                END_IF
-                WAIT_FRAMES(1)
-            END_LOOP
-        END_LOOP
-    END_INLINE_EVENT
-    CALL_CHILD(PTR(evt_momikucha))
     CALL(evt_tou_get_ranking, LW(0))
     SWITCH(LW(0))
         CASE_LESS(2)

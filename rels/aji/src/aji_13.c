@@ -591,34 +591,23 @@ EVT_BEGIN(move_up_down)
         END_IF
         IF_INT_NOT_EQUAL(LW(3), 0)
             IF_INT_NOT_EQUAL(GF(1), 0)
+#ifndef VERSION_G8ME01
+                MULTIPLY_FLOAT(LW(0), FLOAT(100.0f))
+#endif
+                GOTO(5)
+            END_IF
+        END_IF
+        WAIT_FRAMES(1)
+        IF_INT_EQUAL(LW(1), 1)
+            GOTO(0)
+        END_IF
+        LABEL(5)
+        IF_INT_NOT_EQUAL(LW(3), 0)
+            IF_INT_EQUAL(GF(1), 0)
+                SET_VALUE(LW(8), LW(4))
+                ELSE
 #ifdef VERSION_G8ME01
-                GOTO(5)
-            END_IF
-        END_IF
-        WAIT_FRAMES(1)
-        IF_INT_EQUAL(LW(1), 1)
-            GOTO(0)
-        END_IF
-        LABEL(5)
-        IF_INT_NOT_EQUAL(LW(3), 0)
-            IF_INT_EQUAL(GF(1), 0)
-                SET_VALUE(LW(8), LW(4))
-                ELSE
                 MULTIPLY_FLOAT(LW(0), FLOAT(100.0f))
-#else
-                MULTIPLY_FLOAT(LW(0), FLOAT(100.0f))
-                GOTO(5)
-            END_IF
-        END_IF
-        WAIT_FRAMES(1)
-        IF_INT_EQUAL(LW(1), 1)
-            GOTO(0)
-        END_IF
-        LABEL(5)
-        IF_INT_NOT_EQUAL(LW(3), 0)
-            IF_INT_EQUAL(GF(1), 0)
-                SET_VALUE(LW(8), LW(4))
-                ELSE
 #endif
                 SET_VALUE(LW(8), LW(0))
             END_IF

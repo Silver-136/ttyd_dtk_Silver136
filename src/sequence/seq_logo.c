@@ -43,7 +43,9 @@ static s32 logoAsyncFirst(void);
 
 void seq_logoInit(SequenceWork* work) {
     memset(wp, 0, sizeof(LogoWork));
-#ifndef VERSION_G8ME01
+#ifdef VERSION_G8ME01
+    wp->page = -1;
+#endif
     wp->texture = fileAllocf(4, "%s/mariost.tpl", getMarioStDvdRoot());
     if (!OSIsRestart() || OSGetResetCode() & OS_RESET_SHUTDOWN) {
         if (VIGetDTVStatus()) {
@@ -66,37 +68,15 @@ void seq_logoInit(SequenceWork* work) {
             wp->progressive = FALSE;
         }
     }
+#ifdef VERSION_G8ME01
+    if (!OSIsRestart() || OSGetResetCode() & OS_RESET_SHUTDOWN) {
+        VIConfigure(&sRMObjHReso);
+#else
     logoAsyncFirst();
     if (!OSIsRestart() || OSGetResetCode() & OS_RESET_SHUTDOWN) {
         VIConfigure(&sRMObjHReso);
         if (!wp && !wp && !wp) {
         }
-#else
-    wp->page = -1;
-    wp->texture = fileAllocf(4, "%s/mariost.tpl", getMarioStDvdRoot());
-    if (!OSIsRestart() || OSGetResetCode() & OS_RESET_SHUTDOWN) {
-        if (VIGetDTVStatus()) {
-            if (OSGetProgressiveMode() == 1) {
-                wp->progressive = TRUE;
-            }
-            else {
-                if (keyGetButton(0) & PAD_BUTTON_B) {
-                    wp->progressive = TRUE;
-                }
-                else {
-                    wp->progressive = FALSE;
-                }
-            }
-        }
-        else {
-            if (OSGetProgressiveMode() == 1) {
-                OSSetProgressiveMode(0);
-            }
-            wp->progressive = FALSE;
-        }
-    }
-    if (!OSIsRestart() || OSGetResetCode() & OS_RESET_SHUTDOWN) {
-        VIConfigure(&sRMObjHReso);
 #endif
         VIFlush();
         VIWaitForRetrace();
@@ -134,13 +114,16 @@ void seq_logoExit(SequenceWork* work) {
 }
 
 void seq_logoMain(SequenceWork* work) {
-#ifndef VERSION_G8ME01
+#ifdef VERSION_G8ME01
+    static OSTime time;
+#else
     static OSTime time; //time instance 1
     u32 size;
     u8* decode;
     FileEntry* first;
     s32 ret;
     int ok;
+#endif
 
     switch (work->state) {
         case 0:
@@ -150,150 +133,7 @@ void seq_logoMain(SequenceWork* work) {
             break;
 
         case 1:
-            if (fadeIsFinish() && !wp->progressive) {
-                work->state++;
-                time = gp->renderTime;
-                gp->flags |= 4;
-            }
-            break;
-        
-        case 2:
-            if (OSTicksToMilliseconds(gp->renderTime - time) > 1000) {
-                fadeEntry(FADE_OUT_BLACK, 500, (GXColor){0, 0, 0, 0xFF});
-                work->state++;
-            }
-            break;
-
-        case 3:
-            if (fadeIsFinish()) {
-                fadeEntry(FADE_IN_BLACK, 500, (GXColor){0, 0, 0, 0xFF});
-                work->state++;
-                wp->logoId = 1;
-            }
-            break;
-
-        case 4:
-            if (fadeIsFinish()) {
-                work->state++;
-                time = gp->renderTime;
-            }
-            break;
-
-        case 5:
-            if (OSTicksToMilliseconds(gp->renderTime - time) > 1000) {
-                fadeEntry(FADE_OUT_BLACK, 500, (GXColor){0, 0, 0, 0xFF});
-                work->state++;
-            }
-            break;
-
-        case 6:
-            if (fadeIsFinish()) {
-                fadeEntry(FADE_IN_BLACK, 500, (GXColor){0, 0, 0, 0xFF});
-                work->state++;
-                wp->logoId = 2;
-            }
-            break;
-
-        case 7:
-            if (fadeIsFinish()) {
-                work->state++;
-                time = gp->renderTime;
-            }
-            break;
-
-        case 8:
-            if (OSTicksToMilliseconds(gp->renderTime - time) > 1000) {
-                fadeEntry(FADE_OUT_BLACK, 500, (GXColor){0, 0, 0, 0xFF});
-                wp->skipStory = FALSE;
-                work->state++;
-            }
-            break;
-
-        case 9:
-            if (keyGetButtonTrg(0) & (PAD_BUTTON_START | PAD_BUTTON_A)) {
-                wp->skipStory = TRUE;
-            }
-            if ((u32)psndPushGroup() == 0U) {
-                DVDMgrSetupCallback(NULL);
-                if (fadeIsFinish()) {
-                    if (!(gp->flags & 8)) {
-                        VIConfigure(&GXNtsc480IntDfMarioSt);
-                        VIFlush();
-                    }
-                    else {
-                        VIConfigure(&GXNtsc480ProgMarioSt);
-                        VIFlush();
-                    }
-                    VISetBlack(TRUE);
-                    dispEntry(CAMERA_BACKGROUND, 0.0f, 0, dummy_draw, NULL);
-                    work->state++;
-                }
-            }
-            break;
-
-        case 10:
-            VISetBlack(FALSE);
-            VIWaitForRetrace();
-            ret = logoAsyncFirst();
-            if (ret == 0U) {
-                ok = 0;
-            }
-            else if (ret == -1) {
-                ok = 1;
-            }
-            else {
-                ok = 1;
-            }
-            if (!ok) {
-                break;
-            }
-            first = fileAllocf(0, "%s/b/first", getMarioStDvdRoot());
-            if (first) {
-                decode = *first->data;
-                size = *(u32*)decode;
-                size = ((size << 16) & 0xFF0000) | (size & 0xFF00) | ((size >> 16) & 0xFF);
-                LZ77Decode(*first->data, decode = __memAlloc(HEAP_DEFAULT, size));
-                arcEntry(0, decode, size);
-                fileFree(first);
-            }
-            if (!(gp->flags & 0x1000)) {
-                if (!wp->skipStory) { //play story demo
-                    seqSetSeq(SEQ_MAP_CHANGE, "dmo_00", NULL);
-                    return;
-                }
-                else { //continue to title screen
-                    fadeEntry(FADE_OUT_WHITE, 500, (GXColor){0, 0, 0, 0xFF});
-                    work->state++;
-                    return;
-                }
-            }
-            else {
-                seqSetSeq(SEQ_E3, NULL, NULL);
-                return;
-            }
-            break;
-
-        case 11:
-            if (fadeIsFinish()) {
-                seqSetSeq(SEQ_TITLE, NULL, NULL);
-            }
-            break;
-    }
-
-    if (work->state < 10) {
-        dispEntry(CAMERA_2D, 1.0f, 0, logoDisp, NULL);
-        dispEntry(CAMERA_2D, 0.0f, 0, progDisp, NULL);
-#else
-    static OSTime time;
-
-    switch (work->state) {
-        case 0:
-            fadeEntry(FADE_IN_BLACK, 500, (GXColor){0, 0, 0, 0xFF});
-            DVDMgrSetupCallback(psndPushGroup);
-            work->state++;
-            break;
-
-        case 1:
+#ifdef VERSION_G8ME01
             work->state++;
             break;
 
@@ -354,50 +194,92 @@ void seq_logoMain(SequenceWork* work) {
             break;
 
         case 10:
+#else
+            if (fadeIsFinish() && !wp->progressive) {
+                work->state++;
+                time = gp->renderTime;
+                gp->flags |= 4;
+            }
+            break;
+        
+        case 2:
+#endif
             if (OSTicksToMilliseconds(gp->renderTime - time) > 1000) {
                 fadeEntry(FADE_OUT_BLACK, 500, (GXColor){0, 0, 0, 0xFF});
                 work->state++;
             }
             break;
 
+#ifdef VERSION_G8ME01
         case 11:
+#else
+        case 3:
+#endif
             if (fadeIsFinish()) {
                 fadeEntry(FADE_IN_BLACK, 500, (GXColor){0, 0, 0, 0xFF});
                 work->state++;
+#ifdef VERSION_G8ME01
                 wp->page = 3;
+#else
+                wp->logoId = 1;
+#endif
             }
             break;
 
+#ifdef VERSION_G8ME01
         case 12:
+#else
+        case 4:
+#endif
             if (fadeIsFinish()) {
                 work->state++;
                 time = gp->renderTime;
             }
             break;
 
+#ifdef VERSION_G8ME01
         case 13:
+#else
+        case 5:
+#endif
             if (OSTicksToMilliseconds(gp->renderTime - time) > 1000) {
                 fadeEntry(FADE_OUT_BLACK, 500, (GXColor){0, 0, 0, 0xFF});
                 work->state++;
             }
             break;
 
+#ifdef VERSION_G8ME01
         case 14:
+#else
+        case 6:
+#endif
             if (fadeIsFinish()) {
                 fadeEntry(FADE_IN_BLACK, 500, (GXColor){0, 0, 0, 0xFF});
                 work->state++;
+#ifdef VERSION_G8ME01
                 wp->page = 4;
+#else
+                wp->logoId = 2;
+#endif
             }
             break;
 
+#ifdef VERSION_G8ME01
         case 15:
+#else
+        case 7:
+#endif
             if (fadeIsFinish()) {
                 work->state++;
                 time = gp->renderTime;
             }
             break;
 
+#ifdef VERSION_G8ME01
         case 16:
+#else
+        case 8:
+#endif
             if (OSTicksToMilliseconds(gp->renderTime - time) > 1000) {
                 fadeEntry(FADE_OUT_BLACK, 500, (GXColor){0, 0, 0, 0xFF});
                 wp->skipStory = FALSE;
@@ -405,7 +287,11 @@ void seq_logoMain(SequenceWork* work) {
             }
             break;
 
+#ifdef VERSION_G8ME01
         case 17:
+#else
+        case 9:
+#endif
             if (keyGetButtonTrg(0) & (PAD_BUTTON_START | PAD_BUTTON_A)) {
                 wp->skipStory = TRUE;
             }
@@ -427,15 +313,49 @@ void seq_logoMain(SequenceWork* work) {
             }
             break;
 
+#ifdef VERSION_G8ME01
         case 18:
             VISetBlack(FALSE);
             VIWaitForRetrace();
             if (!(gp->flags & 0x1000)) {
                 if (!wp->skipStory) {
+#else
+        case 10:
+            VISetBlack(FALSE);
+            VIWaitForRetrace();
+            ret = logoAsyncFirst();
+            if (ret == 0U) {
+                ok = 0;
+            }
+            else if (ret == -1) {
+                ok = 1;
+            }
+            else {
+                ok = 1;
+            }
+            if (!ok) {
+                break;
+            }
+            first = fileAllocf(0, "%s/b/first", getMarioStDvdRoot());
+            if (first) {
+                decode = *first->data;
+                size = *(u32*)decode;
+                size = ((size << 16) & 0xFF0000) | (size & 0xFF00) | ((size >> 16) & 0xFF);
+                LZ77Decode(*first->data, decode = __memAlloc(HEAP_DEFAULT, size));
+                arcEntry(0, decode, size);
+                fileFree(first);
+            }
+            if (!(gp->flags & 0x1000)) {
+                if (!wp->skipStory) { //play story demo
+#endif
                     seqSetSeq(SEQ_MAP_CHANGE, "dmo_00", NULL);
                     return;
                 }
+#ifdef VERSION_G8ME01
                 else {
+#else
+                else { //continue to title screen
+#endif
                     fadeEntry(FADE_OUT_WHITE, 500, (GXColor){0, 0, 0, 0xFF});
                     work->state++;
                     return;
@@ -447,18 +367,27 @@ void seq_logoMain(SequenceWork* work) {
             }
             break;
 
+#ifdef VERSION_G8ME01
         case 19:
+#else
+        case 11:
+#endif
             if (fadeIsFinish()) {
                 seqSetSeq(SEQ_TITLE, NULL, NULL);
             }
             break;
     }
 
+#ifdef VERSION_G8ME01
     if (work->state >= 2 && work->state < 4) {
         dispEntry(CAMERA_2D, 0.0f, 0, progDisp, NULL);
     }
     if (work->state >= 4 && work->state < 18) {
         dispEntry(CAMERA_2D, 1.0f, 0, logoDisp, work);
+#else
+    if (work->state < 10) {
+        dispEntry(CAMERA_2D, 1.0f, 0, logoDisp, NULL);
+        dispEntry(CAMERA_2D, 0.0f, 0, progDisp, NULL);
 #endif
     }
 }
@@ -496,103 +425,7 @@ void logoDisp(CameraId camId, void* param) {
         GXSetScissor(0, 0, 608, 448);
         GXSetViewport(0.0f, 0.0f, 608.0f, 448.0f, -1.0f, 1.0f);
 
-#ifndef VERSION_G8ME01
-        switch (wp->logoId) {
-            case 0:
-                TEXGetGXTexObjFromPalette(*wp->texture->data, &texObj, 0);
-                GXLoadTexObj(&texObj, GX_TEXMAP0);
-                GXSetNumChans(0);
-                GXSetTevColor(GX_TEVREG0, (GXColor){0, 0, 0, 0xFF});
-                if (gp->language == 0U) { //blue for JP
-                    GXSetTevColor(GX_TEVREG1, (GXColor){0, 0x46, 0xFF, 0xFF});
-                }
-                else { //red for US
-                    GXSetTevColor(GX_TEVREG1, (GXColor){0xDC, 0, 0, 0xFF});
-                }
-                GXSetNumTexGens(1);
-                GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, 0x3C);
-                GXSetNumTevStages(1);
-                GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
-                GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-                GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-                GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_C0, GX_CC_C1, GX_CC_TEXC, GX_CC_ZERO);
-                GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_TEXA, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO);
-                GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_CLEAR);
-                GXSetZCompLoc(GX_TRUE);
-                GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_AND, GX_ALWAYS, 0);
-                GXSetZMode(GX_FALSE, GX_LEQUAL, GX_FALSE);
-                MTXOrtho(ortho, -23.0f, 448.0f, 0.0f, 608.0f, -100.0f, 100.0f);
-                GXSetProjection(ortho, GX_ORTHOGRAPHIC);
-                MTXIdentity(position);
-                GXLoadPosMtxImm(position, 0);
-                GXSetCurrentMtx(0);
-                GXSetCullMode(GX_CULL_NONE);
-                GXClearVtxDesc();
-                GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
-                GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
-                GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
-                GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
-                GXBegin(GX_QUADS, GX_VTXFMT0, 4);
-
-                GXPosition3f32(117.0f, 154.0f, 0.0f);
-                GXTexCoord2f32(0.0f, 0.0f);
-
-                GXPosition3f32(493.0f, 154.0f, 0.0f);
-                GXTexCoord2f32(1.0f, 0.0f);
-
-                GXPosition3f32(493.0f, 258.0f, 0.0f);
-                GXTexCoord2f32(1.0f, 1.0f);
-
-                GXPosition3f32(117.0f, 258.0f, 0.0f);
-                GXTexCoord2f32(0.0f, 1.0f);
-                break;
-
-            case 1:
-                TEXGetGXTexObjFromPalette(*wp->texture->data, &texObj, 1);
-                GXLoadTexObj(&texObj, GX_TEXMAP0);
-                GXSetNumChans(0);
-                GXSetNumTexGens(1);
-                GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, 0x3C);
-                GXSetNumTevStages(1);
-                GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
-                GXSetTevOp(GX_TEVSTAGE0, GX_REPLACE);
-                GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_CLEAR);
-                GXSetZCompLoc(GX_TRUE);
-                GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_AND, GX_ALWAYS, 0);
-                GXSetZMode(GX_FALSE, GX_LEQUAL, GX_FALSE);
-                MTXOrtho(ortho, 0.0f, 448.0f, 0.0f, 608.0f, -100.0f, 100.0f);
-                GXSetProjection(ortho, GX_ORTHOGRAPHIC);
-                MTXIdentity(position);
-                GXLoadPosMtxImm(position, 0);
-                GXSetCurrentMtx(0);
-                GXSetCullMode(GX_CULL_NONE);
-                GXClearVtxDesc();
-                GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
-                GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
-                GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
-                GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
-                GXBegin(GX_QUADS, GX_VTXFMT0, 4);
-                width = (f32)GXGetTexObjWidth(&texObj);
-                height = (f32)GXGetTexObjHeight(&texObj);
-                x = (608.0f - width) / 2.0f;
-                y = (448.0f - height) / 2.0f - 20.0f;
-                height = y + height;
-
-                GXPosition3f32(x, y, 0.0f);
-                GXTexCoord2f32(0.0f, 0.0f);
-
-                GXPosition3f32(x + width, y, 0.0f);
-                GXTexCoord2f32(1.0f, 0.0f);
-
-                GXPosition3f32(x + width, height, 0.0f);
-                GXTexCoord2f32(1.0f, 1.0f);
-
-                GXPosition3f32(x, height, 0.0f);
-                GXTexCoord2f32(0.0f, 1.0f);
-                break;
-        
-            case 2:
-#else
+#ifdef VERSION_G8ME01
         switch (wp->page) {
             case -1:
                 break;
@@ -671,6 +504,10 @@ void logoDisp(CameraId camId, void* param) {
 
 
             case 2:
+#else
+        switch (wp->logoId) {
+            case 0:
+#endif
                 TEXGetGXTexObjFromPalette(*wp->texture->data, &texObj, 0);
                 GXLoadTexObj(&texObj, GX_TEXMAP0);
                 GXSetNumChans(0);
@@ -719,7 +556,11 @@ void logoDisp(CameraId camId, void* param) {
                 GXTexCoord2f32(0.0f, 1.0f);
                 break;
 
+#ifdef VERSION_G8ME01
             case 3:
+#else
+            case 1:
+#endif
                 TEXGetGXTexObjFromPalette(*wp->texture->data, &texObj, 1);
                 GXLoadTexObj(&texObj, GX_TEXMAP0);
                 GXSetNumChans(0);
@@ -763,7 +604,10 @@ void logoDisp(CameraId camId, void* param) {
                 GXTexCoord2f32(0.0f, 1.0f);
                 break;
         
+#ifdef VERSION_G8ME01
             case 4:
+#else
+            case 2:
 #endif
                 TEXGetGXTexObjFromPalette(*wp->texture->data, &texObj, 2);
                 GXLoadTexObj(&texObj, GX_TEXMAP0);
