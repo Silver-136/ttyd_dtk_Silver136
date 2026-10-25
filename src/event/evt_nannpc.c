@@ -572,7 +572,7 @@ USER_FUNC(evt_nannpc_move_position2) {
     }
     PSVECSubtract(&target, &npc->startPos, &diff);
     total = (s32)(1000.0f * PSVECMag(&diff) / speed);
-    elapsed = (u64)(s32)((u32)now - (u32)event->savedTime) / (OS_TIMER_CLOCK / 1000);
+    elapsed = OSTicksToMilliseconds((u64)OSDiffTick(now, event->savedTime));
     PSVECScale(&diff, &step, (f32)elapsed / (f32)total);
     if (elapsed < total) {
         PSVECAdd(&npc->startPos, &step, &npc->pos);
@@ -602,7 +602,7 @@ USER_FUNC(evt_nannpc_jump_position) {
         event->userdataf[1] = -4.0f * height;
         event->userdataf[2] = y - (f32)npc->ipos[1] - event->userdataf[1];
     }
-    el = ((u32)gp->renderTime - (u32)npc->startTime) / (OS_TIMER_CLOCK / 1000);
+    el = OSTicksToMilliseconds((u32)gp->renderTime - (u32)npc->startTime);
     uel = el;
     if (el < duration) {
         elapsed = uel;

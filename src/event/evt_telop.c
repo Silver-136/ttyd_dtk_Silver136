@@ -60,7 +60,7 @@ USER_FUNC(evt_telop_entry) {
         event->userdata[0]++;
         break;
     case 1:
-        ms = ((u32)event->lifetime - (u32)wp->time) / (OS_TIMER_CLOCK / 1000);
+        ms = OSTicksToMilliseconds((u32)event->lifetime - (u32)wp->time);
         if (ms < 1000) {
             wp->alpha = intplGetValue(11, -256.0f, 256.0f, ms, 1000);
         } else {
@@ -70,7 +70,7 @@ USER_FUNC(evt_telop_entry) {
         dispEntry(CAMERA_2D, 300.0f, 0, telop, NULL);
         break;
     case 2:
-        ms = ((u32)event->lifetime - (u32)wp->time) / (OS_TIMER_CLOCK / 1000);
+        ms = OSTicksToMilliseconds((u32)event->lifetime - (u32)wp->time);
         if (ms > 5000) {
             wp->time = event->lifetime;
             event->userdata[0]++;
@@ -78,7 +78,7 @@ USER_FUNC(evt_telop_entry) {
         dispEntry(CAMERA_2D, 300.0f, 0, telop, NULL);
         break;
     case 3:
-        ms = ((u32)event->lifetime - (u32)wp->time) / (OS_TIMER_CLOCK / 1000);
+        ms = OSTicksToMilliseconds((u32)event->lifetime - (u32)wp->time);
         if (ms < 1000) {
             wp->alpha = intplGetValue(11, 256.0f, -256.0f, ms, 1000);
         } else {

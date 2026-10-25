@@ -2521,7 +2521,7 @@ void puniModeAwayjump(PuniData* p) {
                 psndSFXOn_3D("SFX_STG2_PUNI_JUMP1", &p->pos);
             }
         case 1: {
-            u32 t = ((u32)gp->renderTime - p->startTimeLo) / (OS_TIMER_CLOCK / 1000);
+            u32 t = OSTicksToMilliseconds((u32)gp->renderTime - p->startTimeLo);
             if ((s32)t > 100 && p->modeVar1 == 0) {
                 p->modeVar1 = 1;
                 p->anim = 8;
@@ -3567,7 +3567,7 @@ void puniModeWater(PuniData* p) {
             }
             p->modeStep = 3;
         case 3: {
-            u32 t = ((u32)gp->renderTime - p->startTimeLo) / (OS_TIMER_CLOCK / 1000);
+            u32 t = OSTicksToMilliseconds((u32)gp->renderTime - p->startTimeLo);
             if ((s32)t < 300) {
                 f32 f = (f32)(s32)t / 300.0f;
                 p->pos.x = intplGetValue(0, p->moveStart.x, p->savedPos.x, t, 300);
@@ -3879,7 +3879,7 @@ void puniModeEnter(PuniData* p) {
             }
             p->modeStep = 1;
         case 1: {
-            u32 t = ((u32)gp->renderTime - p->startTimeLo) / (OS_TIMER_CLOCK / 1000);
+            u32 t = OSTicksToMilliseconds((u32)gp->renderTime - p->startTimeLo);
             if ((s32)t > p->timer) {
                 p->modeStep = 2;
             }
@@ -6125,7 +6125,7 @@ USER_FUNC(evt_puni_move_position) {
         p->moveEnd.y = p->pos.y;
         p->moveEnd.z = z;
     }
-    if ((s32)(t = (((u32)gp->renderTime - (u32)event->savedTime) / (OS_TIMER_CLOCK / 1000))) < frames) {
+    if ((s32)(t = OSTicksToMilliseconds((u32)gp->renderTime - (u32)event->savedTime)) < frames) {
         p->pos.x = intplGetValue(0, p->moveStart.x, p->moveEnd.x, t, frames);
         p->pos.z = intplGetValue(0, p->moveStart.z, p->moveEnd.z, t, frames);
         p->prevPos = p->pos;
@@ -6155,7 +6155,7 @@ USER_FUNC(evt_puni_move_position2) {
     }
     speed = sysFrame2SecFloat(speed);
     dist = PSVECDistance(&p->moveStart, &p->moveEnd);
-    t = (s32)(0.5f + sysMsec2FrameFloat((s32)(((u32)gp->renderTime - (u32)event->savedTime) / (OS_TIMER_CLOCK / 1000))));
+    t = (s32)(0.5f + sysMsec2FrameFloat((s32)OSTicksToMilliseconds((u32)gp->renderTime - (u32)event->savedTime)));
     PSVECSubtract(&p->moveEnd, &p->moveStart, &dir);
     PSVECNormalize(&dir, &dir);
     if (t < (s32)(dist / speed)) {
@@ -6186,7 +6186,7 @@ USER_FUNC(evt_puni_jump_position) {
         p->modeF1 = (y - p->moveStart.y) - p->modeF0;
         psndSFXOn_3D("SFX_STG2_PUNI_JUMP1", &p->pos);
     }
-    t = ((u32)gp->renderTime - (u32)p->startTime) / (OS_TIMER_CLOCK / 1000);
+    t = OSTicksToMilliseconds((u32)gp->renderTime - (u32)p->startTime);
     if (t < frames) {
         r = (f32)t / (f32)frames;
         r = (f32)t / (f32)frames;

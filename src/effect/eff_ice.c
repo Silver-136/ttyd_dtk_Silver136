@@ -939,7 +939,7 @@ static void effIceMain(EffectEntry* effect) {
         work->state = 1;
         {
             OSTime now = gp->inBattle ? gp->renderTime : gp->renderFieldTime;
-            work->anim->startTime = now / (OS_TIMER_CLOCK / 1000) - (u64)(1000.0f / gp->framerate) * work->frame;
+            work->anim->startTime = OSTicksToMilliseconds(now) - (u64)(1000.0f / gp->framerate) * work->frame;
         }
     }
 

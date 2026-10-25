@@ -113,12 +113,12 @@ void countDownMain(void) {
             break;
         }
         if ((wp->flags & 8) == 0 && marioStGetSystemLevel() == 0) {
-            wp->elapsed += (s32)((u32)gp->renderTime - (u32)wp->prevTime);
+            wp->elapsed += OSDiffTick(gp->renderTime, wp->prevTime);
         }
         wp->prevTime = gp->renderTime;
         {
             CountdownWork* work = wp;
-            if (work->elapsed / (OS_TIMER_CLOCK / 1000) >= work->limit) {
+            if (OSTicksToMilliseconds(work->elapsed) >= work->limit) {
                 work->flags |= 2;
             }
         }
@@ -139,7 +139,7 @@ static void countDownDisp(CameraId cameraId, void* param) {
     white3 = sWhite;
     white2 = sWhite;
     flags = work->flags;
-    remaining = work->limit - work->elapsed / (OS_TIMER_CLOCK / 1000);
+    remaining = work->limit - OSTicksToMilliseconds(work->elapsed);
     if ((flags & 4) == 0) {
         s32 sec, msec;
         s32 digits[3];

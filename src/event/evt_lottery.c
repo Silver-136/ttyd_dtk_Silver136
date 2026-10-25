@@ -95,7 +95,7 @@ USER_FUNC(evt_lottery) {
                 lot->todayNum = rand() % 10000;
             }
             else if (!(now < lot->buyTime)) {
-                day = (now - lot->buyTime) / OS_TIMER_CLOCK / 60 / 60 / 24;
+                day = OSTicksToSeconds(now - lot->buyTime) / 60 / 60 / 24;
                 v = lot->days[0];
                 if (day > v) {
                     while (day > v) {

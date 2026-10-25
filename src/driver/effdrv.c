@@ -487,7 +487,7 @@ void effDeleteMayaAnim(MayaAnim* anim) {
 
 void effPlayMayaAnim(MayaAnim* anim) {
     OSTime now = gp->inBattle ? gp->renderTime : gp->renderFieldTime;
-    anim->startTime = now / (OS_TIMER_CLOCK / 1000);
+    anim->startTime = OSTicksToMilliseconds(now);
     anim->time = 0.0f;
     anim->flags |= 1;
 }
@@ -496,7 +496,7 @@ void effCalcMayaAnim(MayaAnim* anim) {
     if ((anim->flags & 1) && !(anim->flags & 2)) {
         OSTime now = gp->inBattle ? gp->renderTime : gp->renderFieldTime;
         s32 i;
-        now = now / (OS_TIMER_CLOCK / 1000);
+        now = OSTicksToMilliseconds(now);
         anim->time = (f32)(u64)(now - anim->startTime) * gp->framerate / 1000.0f;
         if (anim->time >= anim->data->endTime) {
             anim->time = anim->data->endTime;

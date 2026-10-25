@@ -1310,7 +1310,7 @@ USER_FUNC(evt_sub_intpl_msec_init) {
 }
 
 USER_FUNC(evt_sub_intpl_msec_get_value) {
-    s32 ms = (u64)(s32)((s32)event->lifetime - (s32)event->savedTime) / (OS_TIMER_CLOCK / 1000);
+    s32 ms = OSTicksToMilliseconds((u64)OSDiffTick(event->lifetime, event->savedTime));
     if (ms < event->lwData[15]) {
         event->lwData[0] = intplGetValue(event->lwData[11], event->lwData[12], event->lwData[13], ms, event->lwData[15]);
         event->lwData[1] = 1;
@@ -1323,7 +1323,7 @@ USER_FUNC(evt_sub_intpl_msec_get_value) {
 
 USER_FUNC(evt_sub_intpl_msec_get_value_para) {
     EvtWord* args = event->args;
-    s32 ms = (u64)(s32)((s32)event->lifetime - (s32)event->savedTime) / (OS_TIMER_CLOCK / 1000);
+    s32 ms = OSTicksToMilliseconds((u64)OSDiffTick(event->lifetime, event->savedTime));
     if (ms < event->lwData[15]) {
         evtSetFloat(event, args[0], intplGetValue(event->lwData[11], event->lwData[12], event->lwData[13], ms, event->lwData[15]));
         evtSetValue(event, args[1], 1);
@@ -1367,7 +1367,7 @@ USER_FUNC(evt_sub_spline_get_value) {
     if (!w->manual) {
         t = intplGetValue(w->mode, 0.0f, 1.0f, w->cur, w->steps);
     } else {
-        el = (u64)(event->lifetime - w->start) / (OS_TIMER_CLOCK / 1000);
+        el = OSTicksToMilliseconds((u64)(event->lifetime - w->start));
         t = intplGetValue(w->mode, 0.0f, 1.0f, (s32)el, w->msec);
     }
     spline_getvalue(v, t, w->n, w->pts, w->ts, w->tbl);
@@ -1451,7 +1451,7 @@ USER_FUNC(evt_sub_random) {
 USER_FUNC(evt_sub_get_stopwatch) {
     EvtWord* args = event->args;
     s64* sw = (s64*)evtGetPtrID(evtGetValue(event, args[0]));
-    s32 ms = *sw / (OS_TIMER_CLOCK / 1000);
+    s32 ms = OSTicksToMilliseconds(*sw);
     if (ms > 600000) {
         ms = 600000;
     }
@@ -1609,7 +1609,7 @@ USER_FUNC(evt_sub_load_progresstime) {
     buf[5] = swByteGet(base + EVTDAT_GSW_BASE + 5);
     buf[6] = swByteGet(base + EVTDAT_GSW_BASE + 6);
     buf[7] = swByteGet(base + EVTDAT_GSW_BASE + 7);
-    ms = (gp->retraceLocalTime - *(s64*)buf) / (OS_TIMER_CLOCK / 1000);
+    ms = OSTicksToMilliseconds(gp->retraceLocalTime - *(s64*)buf);
     if (ms > 86400000) {
         ms = 86400000;
     }
@@ -1751,7 +1751,7 @@ USER_FUNC(evt_sub_get_coin) {
         event->userdata[0] = 1;
         return EVT_RETURN_BLOCK;
     case 1:
-        if ((s32)(((u32)gp->renderTime - (u32)event->savedTime) / (OS_TIMER_CLOCK / 1000)) > event->userdata[2]) {
+        if ((s32)OSTicksToMilliseconds((u32)gp->renderTime - (u32)event->savedTime) > event->userdata[2]) {
             iconFlagOff("iraiCoin", 2);
             work[1] = 1;
             event->userdata[2] = 500;
@@ -1760,7 +1760,7 @@ USER_FUNC(evt_sub_get_coin) {
         }
         return EVT_RETURN_BLOCK;
     case 2:
-        if ((s32)(((u32)gp->renderTime - (u32)event->savedTime) / (OS_TIMER_CLOCK / 1000)) > event->userdata[2]) {
+        if ((s32)OSTicksToMilliseconds((u32)gp->renderTime - (u32)event->savedTime) > event->userdata[2]) {
             event->userdata[0] = 10;
         }
         return EVT_RETURN_BLOCK;

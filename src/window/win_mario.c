@@ -725,7 +725,7 @@ void winMarioDisp(s32 camId, void* param, s32 idx) {
 #endif
     winFontSetR((Vec){numX, row3, 0.0f}, (Vec){0.9f, 0.9f, 0.9f}, black, "%s", winZenkakuStr(pouch->mShineSpriteCount));
 
-    tsecs = gp->retraceLocalTime / OS_TIMER_CLOCK;
+    tsecs = OSTicksToSeconds(gp->retraceLocalTime);
     if (tsecs > 359999) {
         hour = 99;
         min = 59;

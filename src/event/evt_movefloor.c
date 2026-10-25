@@ -359,7 +359,7 @@ USER_FUNC(evt_moving_floor_init) {
 USER_FUNC(evt_moving_floor_main) {
     EvtWord* args = event->args;
     MovingFloor* w = GETW();
-    s32 us = (((u32)event->lifetime - (u32)w->start) * 8) / (OS_TIMER_CLOCK / 125000);
+    s32 us = OSTicksToMicroseconds((u32)event->lifetime - (u32)w->start);
     f32 t = (f32)us;
     w->pos += w->speed * t / 1000.0f;
     w->cur += t / 1000.0f;
