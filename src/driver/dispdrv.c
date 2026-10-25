@@ -32,7 +32,7 @@ DispEntry** pSortWork;
 DispEntry* pDispWork;
 
 //local prototypes
-s32 _sort(const void** sortA, const void** sortB);
+static s32 _sort(const void** sortA, const void** sortB);
 
 void dispInit(void) {
     pDispWork = __memAlloc(HEAP_DEFAULT, sizeof(DispEntry) * DISP_MAX_ENTRIES);
@@ -71,7 +71,7 @@ void dispEntry(CameraId camId, f32 order, s32 renderMode, DispCallback callback,
     entry_n++;
 }
 
-s32 _sort(const void** sortA, const void** sortB) {
+static s32 _sort(const void** sortA, const void** sortB) {
     f32 orderB;
     f32 orderA;
 

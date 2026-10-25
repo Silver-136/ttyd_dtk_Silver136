@@ -136,7 +136,7 @@ BattleWeapon weapon_zubastar = {
 };
 s32 zubastar_get_kouten(f32 x1, f32 y1, f32 x2, f32 y2, f32 x3, f32 y3, f32 x4, f32 y4, f32* ox, f32* oy);
 
-s32 star_stone_appear(void) {
+static USER_FUNC(star_stone_appear) {
     ZubaStarWork* w = GetZubaStarPtr();
     w->stone_state = 1;
     return 2;
@@ -149,7 +149,7 @@ s32 wait_star_stone_up(void) {
 void zubaStarDispStar(CameraId cam, void* param);
 
 
-s32 main_star(void) {
+static USER_FUNC(main_star) {
     ZubaStarWork* w = GetZubaStarPtr();
     BattleUnit* mario = BattleGetMarioPtr(_battleWorkPointer);
     switch (w->stone_state) {

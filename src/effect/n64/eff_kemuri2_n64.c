@@ -27,7 +27,7 @@ static s8 anim_data_0[] = {0, 1, 2, 2, 3, 3, 4, 4, 5, 5, 5, 6, 6, 6, -1};
 static s8 anim_data_1[] = {0, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 6, 7, 7, 7, -1};
 static s8* anim_data_table[] = {anim_data_0, anim_data_1};
 
-void effKemuri2Main(EffectEntry* effect);
+static void effKemuri2Main(EffectEntry* effect);
 static void effKemuri2Disp(CameraId cameraId, EffectEntry* effect);
 
 EffectEntry* effKemuri2N64Entry(s32 type, f32 x, f32 y, f32 z, f32 dirX, f32 dirZ) {
@@ -55,7 +55,7 @@ EffectEntry* effKemuri2N64Entry(s32 type, f32 x, f32 y, f32 z, f32 dirX, f32 dir
     return effect;
 }
 
-void effKemuri2Main(EffectEntry* effect) {
+static void effKemuri2Main(EffectEntry* effect) {
     EffKemuri2N64Work* work = effect->userdata;
     Vec position;
     Vec tmp = {0.0f, 0.0f, 0.0f};

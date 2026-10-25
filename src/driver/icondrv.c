@@ -109,7 +109,7 @@ static inline IconBinData* iconGetBinData(u16 iconId) {
 #endif
 
 // local prototypes
-void _callback_tpl(s32 error, DVDFileInfo* info);
+static void _callback_tpl(s32 error, DVDFileInfo* info);
 void _callback_bin(s32 error, DVDFileInfo* info);
 void iconDisp(CameraId camId, void* param);
 void iconGX(Mtx mtx, IconEntry* entry);
@@ -142,7 +142,7 @@ inline IconEntry* iconGetEntry(const char* name) {
     return NULL;
 }
 
-void _callback_tpl(s32 error, DVDFileInfo* info) {
+static void _callback_tpl(s32 error, DVDFileInfo* info) {
     DVDEntry* entry = info->cb.userData;
     UnpackTexPalette(icon_tpl);
     DVDMgrClose(entry);

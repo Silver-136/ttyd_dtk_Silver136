@@ -43,8 +43,8 @@ static effN64Vtx size8x8_tex32x32_vtx[] = {
     {-4, 4, 0, 0, 1024, 255, 255, 255, 255},
 };
 
-void effBombMain(EffectEntry* effect);
-void effBombDisp(CameraId cameraId, EffectEntry* effect);
+static void effBombMain(EffectEntry* effect);
+static void effBombDisp(CameraId cameraId, EffectEntry* effect);
 
 void effBombN64SetCamId(EffectEntry* effect, s32 camId) {
     ((EffBombN64Work*)effect->userdata)->camId = camId;
@@ -99,7 +99,7 @@ EffectEntry* effBombN64Entry(s32 type, f32 x, f32 y, f32 z) {
     return effect;
 }
 
-void effBombMain(EffectEntry* effect) {
+static void effBombMain(EffectEntry* effect) {
     EffBombN64Work* work = effect->userdata;
     Vec position;
     Vec tmp = {0.0f, 0.0f, 0.0f};
@@ -155,7 +155,7 @@ void effBombMain(EffectEntry* effect) {
     dispEntry(camId, dispCalcZ(&position), 2, (DispCallback)effBombDisp, effect);
 }
 
-void effBombDisp(CameraId cameraId, EffectEntry* effect) {
+static void effBombDisp(CameraId cameraId, EffectEntry* effect) {
     CameraEntry* camera;
     EffBombN64Work* work;
 

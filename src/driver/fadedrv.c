@@ -36,7 +36,7 @@ void disp_maku(CameraId camId, void* param);
 void disp_tec(CameraId camId, void* param);
 void disp_dummy_black(CameraId camId, void* param);
 
-void _callback(s32 error, DVDFileInfo* info) {
+static void _callback(s32 error, DVDFileInfo* info) {
     DVDEntry* entry = info->cb.userData;
     UnpackTexPalette(wp->texture);
     DVDMgrClose(entry);
