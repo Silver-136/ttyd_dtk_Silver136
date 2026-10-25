@@ -458,7 +458,7 @@ static inline AnimationPoseFile* apeFreeFile(s32* id) {
             goto found;
         }
     }
-    q = (void*)0;
+    q = NULL;
     id[0] = -1;
 found:
     return q;
@@ -504,7 +504,7 @@ s32 animPoseEntry(const char *animName, s32 type) {
             goto label_1;
         }
     }
-    pose = (void*)0;
+    pose = NULL;
     poseId[0] = -1;
     label_1:
     pose->flags |= 1;
@@ -564,7 +564,7 @@ s32 animPoseEntry(const char *animName, s32 type) {
                     goto label_3;
                 }
             }
-            tex[0] = (void*)0;
+            tex[0] = NULL;
             pc[0] = -1;
             label_3:
             tex[0]->active = 1;
@@ -594,7 +594,7 @@ s32 animPoseEntry(const char *animName, s32 type) {
     pose->type = type;
     pose->paperId = -1;
     animPose_AllocBuffer(pose);
-    pose->gxCallback = (void*)0;
+    pose->gxCallback = NULL;
     pose->disableDraw = 0;
     pose->materialFlag = 0;
     pose->materialLightFlag = 0;
@@ -623,8 +623,8 @@ s32 animPoseEntry(const char *animName, s32 type) {
         pose->vivianType = 0;
         pose->vivianGroupNo = &_dummy;
     }
-    pose->dispCallback = (void*)0;
-    pose->dispUserDataCallback = (void*)0;
+    pose->dispCallback = NULL;
+    pose->dispUserDataCallback = NULL;
     return poseId[0];
 }
 
@@ -2456,10 +2456,10 @@ void animPoseDrawMtx(s32 poseId, Mtx matrix, s32 xluMode, f32 rotY, f32 scale) {
             struct smartEntry* t1 = pose->paperCapture1;
             wp->mpTexObjs[0] = (t0) ? &pose->paperTexObj[0] : NULL;
             wp->mpTexObjs[1] = (t1) ? &pose->paperTexObj[1] : NULL;
-            wp->mpCurTexObj = (void*)0;
+            wp->mpCurTexObj = NULL;
             wp->mpTexDatas[0] = t0;
             wp->mpTexDatas[1] = t1;
-            wp->mpCurTexData = (void*)0;
+            wp->mpCurTexData = NULL;
             wp->paperTexMode0 = 1;
             wp->paperTexMode1 = 1;
         }
@@ -2471,7 +2471,7 @@ void animPoseDrawMtx(s32 poseId, Mtx matrix, s32 xluMode, f32 rotY, f32 scale) {
             PSMTXScale(m1, pose->paperTexScaleX, pose->paperTexScaleY, 1.0f);
             PSMTXTrans(m2, *((f32*)(0x104 + ((u8*)pose))), pose->paperTexOfsY, 0.0f);
             PSMTXConcat(m1, m2, m1);
-            animSetPaperMtx(m1, (void*)0, (void*)0);
+            animSetPaperMtx(m1, NULL, NULL);
             PSMTXScale(m1, pose->paperScaleXZ, pose->paperScaleY, pose->paperScaleXZ);
             if (wp->inBattle) {
                 PSMTXTrans(m2, 0.0f, 2.0f * pose->paperOfsY, 0.0f);
@@ -2491,7 +2491,7 @@ void animPoseDrawMtx(s32 poseId, Mtx matrix, s32 xluMode, f32 rotY, f32 scale) {
             PSMTXConcat(m1, m2, m1);
             PSMTXTrans(m2, -0.5f, -1.0f, 0.0f);
             PSMTXConcat(m1, m2, m1);
-            animSetPaperMtx(m1, (void*)0, (void*)0);
+            animSetPaperMtx(m1, NULL, NULL);
         }
     } else {
         pd = *((AnimationPoseData**)wp->files[pose->fileId].handle->data);
@@ -2501,9 +2501,9 @@ void animPoseDrawMtx(s32 poseId, Mtx matrix, s32 xluMode, f32 rotY, f32 scale) {
     }
     if (pose->paperId != (-1)) {
         _animPoseDrawMtx(paper, matrix, xluMode, rotY, scale);
-        wp->paperMtxPtr[0] = (void*)0;
-        wp->paperMtxPtr[1] = (void*)0;
-        wp->paperMtxPtr[2] = (void*)0;
+        wp->paperMtxPtr[0] = NULL;
+        wp->paperMtxPtr[1] = NULL;
+        wp->paperMtxPtr[2] = NULL;
         if (paper->typeFlags & 2) {
             wp->mbUseFloatScratch = 0;
         }

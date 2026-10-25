@@ -462,7 +462,7 @@ s32 evt_eff64(EventEntry *event, BOOL isFirstCall) {
     float13 = evtGetFloat(event, *(pr++));
     float14 = evtGetFloat(event, *(pr++));
     raw3 = pf[1];
-    effect = (void*)0;
+    effect = NULL;
     switch (effGetSetN64(effSet)->id) {
         case 0:
             effect = effExpBomN64Entry(float2, float3, float4);

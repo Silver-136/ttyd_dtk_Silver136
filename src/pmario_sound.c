@@ -5570,17 +5570,17 @@ BOOL psndBGMOn_f_d(u32 flags, char *bgm_name, u32 fadetime, u32 fadeout, s32 r7)
     idx = fl & 0xF;
     id = i;
     fade = &psbgm[fl & 0xF].fade;
-    if ((evtGetValue((void*)0, 0 - (170 * 1000000)) >= 101) && ((evtGetValue((void*)0, 0 - (170 * 1000000)) < 102) || (evtGetValue((void*)0, 0 - (170 * 1000000)) >= 106))) {
+    if ((evtGetValue(NULL, 0 - (170 * 1000000)) >= 101) && ((evtGetValue(NULL, 0 - (170 * 1000000)) < 102) || (evtGetValue(NULL, 0 - (170 * 1000000)) >= 106))) {
         if (strcmp(gp->currentMapName, "mri_00") && (i == 0x4F)) {
             id = 0x50;
         }
     }
-    if ((evtGetValue((void*)0, 0 - (170 * 1000000)) >= 257) && (evtGetValue((void*)0, 0 - (170 * 1000000)) < 260)) {
+    if ((evtGetValue(NULL, 0 - (170 * 1000000)) >= 257) && (evtGetValue(NULL, 0 - (170 * 1000000)) < 260)) {
         if ((id == 0x5A) || (id == 0x5B)) {
             id = 0xA4;
         }
     }
-    if ((evtGetValue((void*)0, 0 - (170 * 1000000)) >= 109) && (evtGetValue((void*)0, 0 - (170 * 1000000)) < 111)) {
+    if ((evtGetValue(NULL, 0 - (170 * 1000000)) >= 109) && (evtGetValue(NULL, 0 - (170 * 1000000)) < 111)) {
         PaperSoundBGM *b0;
         if (id == 0x4F) {
             id = 0xA4;
@@ -5608,7 +5608,7 @@ BOOL psndBGMOn_f_d(u32 flags, char *bgm_name, u32 fadetime, u32 fadeout, s32 r7)
             psndBGMOff_f_d(0x400, 750, 1);
         }
     }
-    if ((evtGetValue((void*)0, 0 - (170 * 1000000)) >= 127) && (evtGetValue((void*)0, 0 - (170 * 1000000)) < 178)) {
+    if ((evtGetValue(NULL, 0 - (170 * 1000000)) >= 127) && (evtGetValue(NULL, 0 - (170 * 1000000)) < 178)) {
         PaperSoundBGM *b0;
         if (id == 0x8C) {
             return 0;
@@ -5624,7 +5624,7 @@ BOOL psndBGMOn_f_d(u32 flags, char *bgm_name, u32 fadetime, u32 fadeout, s32 r7)
             psndBGMOff_f_d(0x400, 750, 1);
         }
     }
-    if ((evtGetValue((void*)0, 0 - (170 * 1000000)) >= 164) && (id == 0x53)) {
+    if ((evtGetValue(NULL, 0 - (170 * 1000000)) >= 164) && (id == 0x53)) {
         id = 0x54;
     }
     if ((id == 0x90) || (id == 0x91)) {
@@ -6115,7 +6115,7 @@ s32 __psndSFXOn(const char *name, u8 vol, u8 pan, u16 pitch, Vec *pos, u32 r8, u
     s32 sid;
     s32 k;
     PaperSoundEffect *s;
-    PaperSoundEffect *sfx = (void*)0;
+    PaperSoundEffect *sfx = NULL;
     SoundEffectEntry *entry;
     s32 idx = 0;
     s32 delay;
@@ -6137,7 +6137,7 @@ s32 __psndSFXOn(const char *name, u8 vol, u8 pan, u16 pitch, Vec *pos, u32 r8, u
         }
         psnd.sfxCooldown = 6;
     }
-    if ((evtGetValue((void*)0, 0 - (170 * 1000000)) <= 2) && (sid == 0x365)) {
+    if ((evtGetValue(NULL, 0 - (170 * 1000000)) <= 2) && (sid == 0x365)) {
         return -1;
     }
     delay = 0;

@@ -734,7 +734,7 @@ static s32 evt_cloud_main(EventEntry *event, BOOL isFirstCall) {
             } else {
                 strcpy(wp->animName, "P_oof_cloud_1");
             }
-            if (!animGroupBaseAsync(wp->animName, inBattle, (void*)0)) {
+            if (!animGroupBaseAsync(wp->animName, inBattle, NULL)) {
                 break;
             }
             cloud_once_flag = 1;

@@ -232,10 +232,10 @@ s32 battleAcMain_ButtonDown(BattleWork *work) {
                 break;
 
             case 1005:
-                ac->maincb = (void*)0;
-                ac->dispcb = (void*)0;
-                ac->resultcb = (void*)0;
-                ac->deletecb = (void*)0;
+                ac->maincb = NULL;
+                ac->dispcb = NULL;
+                ac->resultcb = NULL;
+                ac->deletecb = NULL;
                 break;
 
         }

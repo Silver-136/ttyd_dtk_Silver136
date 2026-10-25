@@ -552,7 +552,7 @@ s32 bero_get_position_normal(EventEntry *event, BOOL isFirstCall) {
         }
         dist = 1000000.0f;
         hxPtr = &hx;
-        if (hitCheckFilter((void*)0, hxPtr, &hy, &hz, &dist, &nx, &ny, &nz, tmp.x, tmp.y, tmp.z, 0.0f, -1.0f, 0.0f)) {
+        if (hitCheckFilter(NULL, hxPtr, &hy, &hz, &dist, &nx, &ny, &nz, tmp.x, tmp.y, tmp.z, 0.0f, -1.0f, 0.0f)) {
             tmp.y = hy;
         }
         tmp2 = tmp;

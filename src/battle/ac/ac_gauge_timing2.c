@@ -233,10 +233,10 @@ s32 battleAcMain_GaugeTiming2(BattleWork *work) {
             break;
 
         case 1005:
-            work->actionCommands.maincb = (void*)0;
-            work->actionCommands.dispcb = (void*)0;
-            work->actionCommands.resultcb = (void*)0;
-            work->actionCommands.deletecb = (void*)0;
+            work->actionCommands.maincb = NULL;
+            work->actionCommands.dispcb = NULL;
+            work->actionCommands.resultcb = NULL;
+            work->actionCommands.deletecb = NULL;
             return 0;
 
     }

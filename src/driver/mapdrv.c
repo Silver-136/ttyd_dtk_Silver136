@@ -1068,23 +1068,23 @@ void bmapLoad(const char *map, const char *map2) {
             _mapFree(e->dispListBuf);
         }
         e->dispListSize = 0;
-        e->dispListBuf = (void*)0;
+        e->dispListBuf = NULL;
         // the tpl ARAM copy sits in the word after the entry (MAPENT_TPLARAM; a MapWork { count; entries@4 } layout was tried and changes codegen: the original addresses entries from wp itself)
-        entry->datAram = (void*)0;
-        MAPENT_TPLARAM(entry) = (void*)0;
-        entry->arcAram = (void*)0;
+        entry->datAram = NULL;
+        MAPENT_TPLARAM(entry) = NULL;
+        entry->arcAram = NULL;
         if (entry->dat) {
             if (!arcDataCheck(entry->dat)) {
                 entry->datAram = aramMgrToAram(entry->dat, entry->datSize);
                 MAPENT_TPLARAM(entry) = aramMgrToAram(entry->tpl, entry->tplSize);
                 _mapFree(entry->tpl);
                 _mapFree(entry->dat);
-                entry->tpl = (void*)0;
-                entry->dat = (void*)0;
+                entry->tpl = NULL;
+                entry->dat = NULL;
             } else {
                 entry->arcAram = aramMgrToAram(entry->arcData, entry->arcSize);
                 _mapFree(entry->arcData);
-                entry->arcData = (void*)0;
+                entry->arcData = NULL;
             }
         }
     }

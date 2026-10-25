@@ -1634,7 +1634,7 @@ void fbatEncountCheck(void) {
     s32 i;
     NpcEntry *talk;
     f32 best;
-    wp->talkTarget = (void*)0;
+    wp->talkTarget = NULL;
     if (marioStGetSystemLevel() != 0) {
         return;
     }
@@ -1775,7 +1775,7 @@ void fbatEncountCheck(void) {
     }
     best = 1000.0f;
     if (marioChkTalkable() && (!mario->keyOffCount)) {
-        talk = (void*)0;
+        talk = NULL;
         npc = wp->entries;
         for (i = 0; i < total; i++, npc++) {
             BOOL hit;
@@ -1855,7 +1855,7 @@ void fbatEncountCheck(void) {
                         f32 nz;
                         sincosf(&s, &c, angleABf(0.0f, 0.0f, dx, dz));
                         len = sqrtf((dx * dx) + (dz * dz));
-                        if (!hitCheckFilter((void*)0, &hx, &hy, &hz, &len, &nx, &ny, &nz, mario->position.x, mario->position.y + (0.75f * mario->wPlayerCollisionBox.y), mario->position.z, s, 0.0f, c)) {
+                        if (!hitCheckFilter(NULL, &hx, &hy, &hz, &len, &nx, &ny, &nz, mario->position.x, mario->position.y + (0.75f * mario->wPlayerCollisionBox.y), mario->position.z, s, 0.0f, c)) {
                             hit = 1;
                             if (dist < best) {
                                 best = dist;
