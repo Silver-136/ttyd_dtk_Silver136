@@ -798,7 +798,7 @@ void main_enemy_sub(BattleUnit* unit, s32* n) {
                         BtlUnit_SetAnimType(part, 0x27);
                     }
                     effSmallStarEntry(0, 2, xc, unit->mPosition.y, unit->mPosition.z, 0.0f, -1.0f, 0.0f);
-                    BtlUnit_snd_se(unit, unit->mKindParams->damageSfxName, -250000000, 0);
+                    BtlUnit_snd_se(unit, unit->mKindParams->damageSfxName, EVT_NULLPTR, 0);
                     if (unit->mAttributeFlags & 0x200000) {
                         continue;
                     }
@@ -1001,16 +1001,16 @@ EVT_BEGIN(marioAttackEvent_Deka)
     END_SIBLING_EVENT
     CALL_CHILD(sac_start_camera_evt)
     WAIT_MS(500)
-    CALL(btlevtcmd_snd_se, -2, STRING("SFX_BTL_SAC_START1"), -250000000, 0, -250000000)
+    CALL(btlevtcmd_snd_se, -2, STRING("SFX_BTL_SAC_START1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL_CHILD(sac_mario_item_on_evt)
     WAIT_MS(500)
-    CALL(btlevtcmd_snd_se, -2, STRING("SFX_BTL_SAC_START2"), -250000000, 0, LW(11))
+    CALL(btlevtcmd_snd_se, -2, STRING("SFX_BTL_SAC_START2"), EVT_NULLPTR, 0, LW(11))
     CALL(star_stone_appear)
     BEGIN_SIBLING_EVENT
         CALL_CHILD(sac_start_stardust)
     END_SIBLING_EVENT
     WAIT_FRAMES(100)
-    CALL(btlevtcmd_snd_se, -2, STRING("SFX_BTL_SAC_START3"), -250000000, 0, -250000000)
+    CALL(btlevtcmd_snd_se, -2, STRING("SFX_BTL_SAC_START3"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(evt_snd_sfxoff, LW(11))
     CALL(evt_btl_camera_set_mode, 0, 0)
     WAIT_FRAMES(40)

@@ -252,13 +252,13 @@ static EVT_BEGIN(attack_event)
         CALL(evt_sub_intpl_init, 0, 0, -60, 20)
         LOOP(20)
             CALL(evt_sub_intpl_get_value)
-            CALL(btlevtcmd_SetRotate, -2, LW(0), -250000000, -250000000)
+            CALL(btlevtcmd_SetRotate, -2, LW(0), EVT_NULLPTR, EVT_NULLPTR)
             WAIT_FRAMES(1)
         END_LOOP
         CALL(evt_sub_intpl_init, 2, 0, -135, 30)
         LOOP(30)
             CALL(evt_sub_intpl_get_value)
-            CALL(btlevtcmd_SetRotate, -2, -250000000, -250000000, LW(0))
+            CALL(btlevtcmd_SetRotate, -2, EVT_NULLPTR, EVT_NULLPTR, LW(0))
             WAIT_FRAMES(1)
         END_LOOP
     END_SIBLING_EVENT
@@ -270,11 +270,11 @@ static EVT_BEGIN(attack_event)
         CALL(evt_sub_intpl_init, 0, -135, 60, 10)
         LOOP(10)
             CALL(evt_sub_intpl_get_value)
-            CALL(btlevtcmd_SetRotate, -2, -250000000, -250000000, LW(0))
+            CALL(btlevtcmd_SetRotate, -2, EVT_NULLPTR, EVT_NULLPTR, LW(0))
             WAIT_FRAMES(1)
         END_LOOP
     END_SIBLING_EVENT
-    CALL(btlevtcmd_snd_se, -2, STRING("SFX_BOSS_KOR_SWORD_DANCE3"), -250000000, 0, -250000000)
+    CALL(btlevtcmd_snd_se, -2, STRING("SFX_BOSS_KOR_SWORD_DANCE3"), EVT_NULLPTR, 0, EVT_NULLPTR)
     WAIT_FRAMES(7)
     CALL(btlevtcmd_PreCheckDamage, -2, LW(3), LW(4), LW(12), 256, LW(5))
     SWITCH(LW(5))
@@ -309,7 +309,7 @@ static EVT_BEGIN(attack_event)
             CALL(evt_sub_intpl_get_value)
             LOOP(21)
                 CALL(evt_sub_intpl_get_value)
-                CALL(btlevtcmd_SetRotate, -2, LW(0), -250000000, -250000000)
+                CALL(btlevtcmd_SetRotate, -2, LW(0), EVT_NULLPTR, EVT_NULLPTR)
                 WAIT_FRAMES(1)
             END_LOOP
         END_SIBLING_EVENT
@@ -318,7 +318,7 @@ static EVT_BEGIN(attack_event)
             CALL(evt_sub_intpl_get_value)
             LOOP(21)
                 CALL(evt_sub_intpl_get_value)
-                CALL(btlevtcmd_SetRotate, -2, -250000000, -250000000, LW(0))
+                CALL(btlevtcmd_SetRotate, -2, EVT_NULLPTR, EVT_NULLPTR, LW(0))
                 WAIT_FRAMES(1)
             END_LOOP
         END_SIBLING_EVENT
@@ -328,7 +328,7 @@ static EVT_BEGIN(attack_event)
             CALL(evt_sub_intpl_get_value)
             LOOP(21)
                 CALL(evt_sub_intpl_get_value)
-                CALL(btlevtcmd_SetRotate, -2, -250000000, -250000000, LW(0))
+                CALL(btlevtcmd_SetRotate, -2, EVT_NULLPTR, EVT_NULLPTR, LW(0))
                 WAIT_FRAMES(1)
             END_LOOP
         END_SIBLING_EVENT
@@ -343,7 +343,7 @@ static EVT_BEGIN(attack_event)
         CALL(evt_sub_intpl_init, 11, -60, 0, 15)
         LOOP(15)
             CALL(evt_sub_intpl_get_value)
-            CALL(btlevtcmd_SetRotate, -2, LW(0), -250000000, -250000000)
+            CALL(btlevtcmd_SetRotate, -2, LW(0), EVT_NULLPTR, EVT_NULLPTR)
             WAIT_FRAMES(1)
         END_LOOP
     END_SIBLING_EVENT
@@ -351,7 +351,7 @@ static EVT_BEGIN(attack_event)
         CALL(evt_sub_intpl_init, 11, 60, 0, 15)
         LOOP(15)
             CALL(evt_sub_intpl_get_value)
-            CALL(btlevtcmd_SetRotate, -2, -250000000, -250000000, LW(0))
+            CALL(btlevtcmd_SetRotate, -2, EVT_NULLPTR, EVT_NULLPTR, LW(0))
             WAIT_FRAMES(1)
         END_LOOP
     END_SIBLING_EVENT

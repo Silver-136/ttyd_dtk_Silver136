@@ -733,9 +733,9 @@ void btlseqEnd(BattleWork* wp) {
         }
         if (ok) {
             if ((u32)fd->battleFlags & 0x20000000) {
-                BtlUnit_snd_se(mario, "SFX_VOICE_MARIO_PAUSE3", -250000000, 0);
+                BtlUnit_snd_se(mario, "SFX_VOICE_MARIO_PAUSE3", EVT_NULLPTR, 0);
             } else {
-                BtlUnit_snd_se(mario, "SFX_VOICE_MARIO_PAUSE1", -250000000, 0);
+                BtlUnit_snd_se(mario, "SFX_VOICE_MARIO_PAUSE1", EVT_NULLPTR, 0);
             }
         }
         BtlUnit_SetBodyAnim(BattleGetMarioPtr(wp), "M_V_2");
@@ -794,9 +794,9 @@ void btlseqEnd(BattleWork* wp) {
         }
         if (!ok) {
             if ((u32)fd->battleFlags & 0x20000000) {
-                BtlUnit_snd_se(mario, "SFX_VOICE_MARIO_RELIEF1", -250000000, 0);
+                BtlUnit_snd_se(mario, "SFX_VOICE_MARIO_RELIEF1", EVT_NULLPTR, 0);
             } else {
-                BtlUnit_snd_se(mario, "SFX_VOICE_MARIO_RELIEF2", -250000000, 0);
+                BtlUnit_snd_se(mario, "SFX_VOICE_MARIO_RELIEF2", EVT_NULLPTR, 0);
             }
         }
         BtlUnit_SetBodyAnim(BattleGetMarioPtr(wp), "M_V_1");
@@ -1128,7 +1128,7 @@ EVT_BEGIN(_curtain_close_event)
     BEGIN_SIBLING_EVENT
         CALL(evt_sub_intpl_init_float, 0, 0, FLOAT(-40.0f), 29)
         LOOP(30)
-            CALL(evt_sub_intpl_get_float, LW(0), -250000000)
+            CALL(evt_sub_intpl_get_float, LW(0), EVT_NULLPTR)
             CALL(_nozzle_set_offset, STRING("nozzle_l"), LW(0))
             WAIT_FRAMES(1)
         END_LOOP
@@ -1136,7 +1136,7 @@ EVT_BEGIN(_curtain_close_event)
     BEGIN_SIBLING_EVENT
         CALL(evt_sub_intpl_init_float, 0, 0, FLOAT(-40.0f), 29)
         LOOP(30)
-            CALL(evt_sub_intpl_get_float, LW(0), -250000000)
+            CALL(evt_sub_intpl_get_float, LW(0), EVT_NULLPTR)
             CALL(_nozzle_set_offset, STRING("nozzle_c"), LW(0))
             WAIT_FRAMES(1)
         END_LOOP
@@ -1144,7 +1144,7 @@ EVT_BEGIN(_curtain_close_event)
     BEGIN_SIBLING_EVENT
         CALL(evt_sub_intpl_init_float, 0, 0, FLOAT(-40.0f), 29)
         LOOP(30)
-            CALL(evt_sub_intpl_get_float, LW(0), -250000000)
+            CALL(evt_sub_intpl_get_float, LW(0), EVT_NULLPTR)
             CALL(_nozzle_set_offset, STRING("nozzle_r"), LW(0))
             WAIT_FRAMES(1)
         END_LOOP
@@ -1212,7 +1212,7 @@ EVT_BEGIN(_curtain_close_event)
     CALL(btlevtcmd_ClearAllStatus, -3)
     CALL(btlevtcmd_AnimeChangePoseType, -3, 1, 40)
     CALL(btlevtcmd_MovePosition, -3, 0, 0, 90, 75, -1, 0)
-    CALL(btlevtcmd_snd_se, -3, STRING("SFX_VOICE_MARIO_PAUSE2"), -250000000, 0, -250000000)
+    CALL(btlevtcmd_snd_se, -3, STRING("SFX_VOICE_MARIO_PAUSE2"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_AnimeChangePose, -3, 1, STRING("M_V_2"))
     CALL(evt_audience_sound_cheer, 180, 40)
     WAIT_MS(1000)
@@ -1322,7 +1322,7 @@ EVT_BEGIN(_curtain_close_event)
     BEGIN_SIBLING_EVENT
         CALL(evt_sub_intpl_init_float, 0, 0, FLOAT(-40.0f), 29)
         LOOP(30)
-            CALL(evt_sub_intpl_get_float, LW(0), -250000000)
+            CALL(evt_sub_intpl_get_float, LW(0), EVT_NULLPTR)
             CALL(_nozzle_set_offset, STRING("nozzle_l"), LW(0))
             WAIT_FRAMES(1)
         END_LOOP
@@ -1330,7 +1330,7 @@ EVT_BEGIN(_curtain_close_event)
     BEGIN_SIBLING_EVENT
         CALL(evt_sub_intpl_init_float, 0, 0, FLOAT(-40.0f), 29)
         LOOP(30)
-            CALL(evt_sub_intpl_get_float, LW(0), -250000000)
+            CALL(evt_sub_intpl_get_float, LW(0), EVT_NULLPTR)
             CALL(_nozzle_set_offset, STRING("nozzle_c"), LW(0))
             WAIT_FRAMES(1)
         END_LOOP
@@ -1338,7 +1338,7 @@ EVT_BEGIN(_curtain_close_event)
     BEGIN_SIBLING_EVENT
         CALL(evt_sub_intpl_init_float, 0, 0, FLOAT(-40.0f), 29)
         LOOP(30)
-            CALL(evt_sub_intpl_get_float, LW(0), -250000000)
+            CALL(evt_sub_intpl_get_float, LW(0), EVT_NULLPTR)
             CALL(_nozzle_set_offset, STRING("nozzle_r"), LW(0))
             WAIT_FRAMES(1)
         END_LOOP
@@ -1406,7 +1406,7 @@ EVT_BEGIN(_curtain_close_event)
     CALL(btlevtcmd_ClearAllStatus, -3)
     CALL(btlevtcmd_AnimeChangePoseType, -3, 1, 40)
     CALL(btlevtcmd_MovePosition, -3, 0, 0, 90, 75, -1, 0)
-    CALL(btlevtcmd_snd_se, -3, STRING("SFX_VOICE_MARIO_PAUSE2"), -250000000, 0, -250000000)
+    CALL(btlevtcmd_snd_se, -3, STRING("SFX_VOICE_MARIO_PAUSE2"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_AnimeChangePose, -3, 1, STRING("M_V_2"))
     CALL(evt_audience_sound_cheer, 180, 40)
     WAIT_MS(1000)
@@ -1470,7 +1470,7 @@ EVT_BEGIN(_jump_event)
     END_INLINE_EVENT
     CALL(btlevtcmd_SetFallAccel, -3, FLOAT(0.39941406f))
     CALL(btlevtcmd_JumpPosition, -3, LW(0), LW(1), LW(2), 30, -1)
-    CALL(btlevtcmd_snd_se, -3, STRING("SFX_VOICE_MARIO_PAUSE2"), -250000000, 0, -250000000)
+    CALL(btlevtcmd_snd_se, -3, STRING("SFX_VOICE_MARIO_PAUSE2"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_AnimeChangePose, -3, 1, STRING("M_V_2"))
     CALL(evt_audience_sound_cheer, 180, 40)
     RETURN
@@ -1500,7 +1500,7 @@ EVT_BEGIN(_move_to_flower_event)
     CALL(_lvup_obj_set_color, 1, 100, 128, 128, 255)
     CALL(_lvup_obj_set_color, 2, 100, 128, 128, 255)
     CALL(_lvup_disp_flag_onoff, 0, 32)
-    CALL(btlevtcmd_BtlStageObjGetRotate, STRING("spotlight"), -250000000, -250000000, LW(5))
+    CALL(btlevtcmd_BtlStageObjGetRotate, STRING("spotlight"), EVT_NULLPTR, EVT_NULLPTR, LW(5))
     CALL(evt_sub_intpl_init, 5, LW(5), 0, 10)
     LOOP(11)
         CALL(evt_sub_intpl_get_value)

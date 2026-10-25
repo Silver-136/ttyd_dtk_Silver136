@@ -48,16 +48,16 @@ s32 _get_attack_aud_no(EventEntry* event, BOOL isFirstCall) {
     f32 z;
 
     BattleAudience_GetItemOn2(&no, &x, &y, &z, NULL);
-    if (a0 != -250000000) {
+    if (a0 != EVT_NULLPTR) {
         evtSetValue(event, a0, no);
     }
-    if (a1 != -250000000) {
+    if (a1 != EVT_NULLPTR) {
         evtSetValue(event, a1, (s32)x);
     }
-    if (a2 != -250000000) {
+    if (a2 != EVT_NULLPTR) {
         evtSetValue(event, a2, (s32)y);
     }
-    if (a3 != -250000000) {
+    if (a3 != EVT_NULLPTR) {
         evtSetValue(event, a3, (s32)z);
     }
     return 2;
@@ -111,7 +111,7 @@ s32 _delete_present_item(EventEntry* event, BOOL isFirstCall) {
     s32 out = event->args[0];
     s32 item = BattleAudience_GetPresentItemNo();
 
-    if (out != -250000000) {
+    if (out != EVT_NULLPTR) {
         evtSetValue(event, out, item);
     }
     BattleAudience_SetPresentItemNo(0);
@@ -271,7 +271,7 @@ EVT_BEGIN(btlataudevtPresentItem_Get)
     CALL(btlevtcmd_GetBodyId, LW(3), LW(4))
     CALL(btlevtcmd_AnimeChangePoseType, LW(3), LW(4), 52)
     CALL(_get_item_announce)
-    CALL(_delete_present_item, -250000000)
+    CALL(_delete_present_item, EVT_NULLPTR)
     CALL(btlevtcmd_GetUnitId, -2, LW(0))
     IF_INT_NOT_EQUAL(LW(0), LW(3))
         CALL(btlevtcmd_StartWaitEvent, LW(3))

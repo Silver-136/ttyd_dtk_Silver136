@@ -1395,7 +1395,7 @@ EVT_BEGIN(muj_05_init_evt)
     ELSE
         CALL(evt_npc_setup, PTR(npcEnt_after))
     END_IF
-    CALL(evt_npc_sound_data_set, STRING(/*"マルコ"*/"\x83\x7D\x83\x8B\x83\x52"), STRING("SFX_STG5_MARCO_MOVE1L"), STRING("SFX_STG5_MARCO_MOVE1R"), -250000000, -250000000, -250000000)
+    CALL(evt_npc_sound_data_set, STRING(/*"マルコ"*/"\x83\x7D\x83\x8B\x83\x52"), STRING("SFX_STG5_MARCO_MOVE1L"), STRING("SFX_STG5_MARCO_MOVE1R"), EVT_NULLPTR, EVT_NULLPTR, EVT_NULLPTR)
     CALL(evt_map_playanim, STRING("S_mizu"), 1, 0)
     SPAWN_EVENT(hammer_event)
     SWITCH(GSW(0))

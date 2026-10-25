@@ -605,7 +605,7 @@ static EVT_BEGIN(phase_event)
                 CALL(btlevtcmd_AfterReactionEntry, -2, 52)
                 RETURN
             END_IF
-            CALL(btlevtcmd_snd_se, -2, STRING("SFX_ENM_HEAVYB_WAIT2"), -250000000, 0, -250000000)
+            CALL(btlevtcmd_snd_se, -2, STRING("SFX_ENM_HEAVYB_WAIT2"), EVT_NULLPTR, 0, EVT_NULLPTR)
             CALL(btlevtcmd_GetUnitWork, -2, 1, LW(0))
             SWITCH(LW(0))
                 CASE_EQUAL(3)
@@ -637,7 +637,7 @@ static EVT_BEGIN(phase_event)
 EVT_END()
 
 static EVT_BEGIN(attack_event)
-    CALL(btlevtcmd_snd_se, -2, STRING("SFX_ENM_HEAVYB_ATTACK1"), -250000000, 0, -250000000)
+    CALL(btlevtcmd_snd_se, -2, STRING("SFX_ENM_HEAVYB_ATTACK1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_GetUnitWork, -2, 0, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_GetUnitWork, -2, 1, LW(0))
@@ -652,9 +652,9 @@ static EVT_BEGIN(attack_event)
             CALL(btlevtcmd_AnimeChangePose, -2, 1, STRING("G_4"))
         END_SWITCH
         WAIT_FRAMES(40)
-        CALL(btlevtcmd_snd_se, -2, STRING("SFX_ENM_HEAVYB_WAIT1"), -250000000, 0, LW(0))
+        CALL(btlevtcmd_snd_se, -2, STRING("SFX_ENM_HEAVYB_WAIT1"), EVT_NULLPTR, 0, LW(0))
         CALL(btlevtcmd_SetUnitWork, -2, 2, LW(0))
-        CALL(btlevtcmd_snd_se, -2, STRING("SFX_ENM_HEAVYB_ATTACK2"), -250000000, 0, -250000000)
+        CALL(btlevtcmd_snd_se, -2, STRING("SFX_ENM_HEAVYB_ATTACK2"), EVT_NULLPTR, 0, EVT_NULLPTR)
         CALL(btlevtcmd_SetUnitWork, -2, 0, 1)
         CALL(btlevtcmd_OnUnitFlag, -2, 16)
     ELSE
@@ -727,7 +727,7 @@ static EVT_BEGIN(explosion_event)
 #ifdef VERSION_G8ME01
     CALL(evt_btl_camera_shake_h, 0, 10, 0, 60, 4)
 #endif
-    CALL(btlevtcmd_snd_se, -2, STRING("SFX_ENM_HEAVYB_ATTACK3"), -250000000, 0, -250000000)
+    CALL(btlevtcmd_snd_se, -2, STRING("SFX_ENM_HEAVYB_ATTACK3"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_GetPos, -2, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_GetHeight, -2, LW(5))
     DIVIDE(LW(5), 2)

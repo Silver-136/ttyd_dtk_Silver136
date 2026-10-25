@@ -462,7 +462,7 @@ EVT_BEGIN(lecture_zutsuki_attack_event)
     END_SWITCH
     ADD(LW(10), 1)
     BEGIN_SIBLING_EVENT
-        CALL(btlevtcmd_GetRotate, -2, -250000000, -250000000, LW(6))
+        CALL(btlevtcmd_GetRotate, -2, EVT_NULLPTR, EVT_NULLPTR, LW(6))
         IF_INT_LESS(LW(6), 0)
             MULTIPLY(LW(6), -1)
         END_IF
@@ -481,7 +481,7 @@ EVT_BEGIN(lecture_zutsuki_attack_event)
     END_SIBLING_EVENT
     CALL(btlevtcmd_SetFallAccel, -2, FLOAT(0.69921875f))
     CALL(btlevtcmd_GetPos, -2, LW(0), LW(1), LW(2))
-    CALL(btlevtcmd_GetHomePos, -2, -250000000, LW(1), -250000000)
+    CALL(btlevtcmd_GetHomePos, -2, EVT_NULLPTR, LW(1), EVT_NULLPTR)
     CALL(btlevtcmd_FaceDirectionSub, -2, LW(0), 60)
     CALL(btlevtcmd_JumpPosition, -2, LW(0), LW(1), LW(2), 30, -1)
     CALL(btlevtcmd_SetFallAccel, -2, FLOAT(0.5996094f))

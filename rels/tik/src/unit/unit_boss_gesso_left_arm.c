@@ -269,10 +269,10 @@ static EVT_BEGIN(attack_event)
     BEGIN_SIBLING_EVENT
         CALL(btlevtcmd_ftof, 16, LW(0))
         WAIT_FRAMES(LW(0))
-        CALL(btlevtcmd_snd_se, -2, STRING("SFX_BOSS_GESSO_ARM_MOVE1"), -250000000, 0, -250000000)
+        CALL(btlevtcmd_snd_se, -2, STRING("SFX_BOSS_GESSO_ARM_MOVE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
         CALL(btlevtcmd_ftof, 44, LW(0))
         WAIT_FRAMES(LW(0))
-        CALL(btlevtcmd_snd_se, -2, STRING("SFX_BOSS_GESSO_ATTACK2"), -250000000, 0, -250000000)
+        CALL(btlevtcmd_snd_se, -2, STRING("SFX_BOSS_GESSO_ATTACK2"), EVT_NULLPTR, 0, EVT_NULLPTR)
     END_SIBLING_EVENT
 #ifdef VERSION_G8ME01
     CALL(btlevtcmd_ftof, 67, LW(0))

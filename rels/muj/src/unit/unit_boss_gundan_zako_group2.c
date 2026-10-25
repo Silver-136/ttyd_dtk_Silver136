@@ -325,10 +325,10 @@ static EVT_BEGIN(dead_event)
     END_INLINE_EVENT
     CALL(zakogun_dead2)
     WAIT_FRAMES(50)
-    CALL(btlevtcmd_snd_se, -2, STRING("SFX_BTL_ENEMY_DIE1_1"), -250000000, 0, -250000000)
+    CALL(btlevtcmd_snd_se, -2, STRING("SFX_BTL_ENEMY_DIE1_1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     WAIT_FRAMES(48)
     BEGIN_SIBLING_EVENT
-        CALL(btlevtcmd_snd_se, -2, STRING("SFX_BTL_ENEMY_DIE1_2"), -250000000, 0, -250000000)
+        CALL(btlevtcmd_snd_se, -2, STRING("SFX_BTL_ENEMY_DIE1_2"), EVT_NULLPTR, 0, EVT_NULLPTR)
         LOOP(20)
             CALL(evt_sub_random, 500, LW(3))
             SUBTRACT(LW(3), 250)

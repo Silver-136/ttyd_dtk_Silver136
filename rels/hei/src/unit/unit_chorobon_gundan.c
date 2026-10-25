@@ -237,7 +237,7 @@ BattleWeapon weapon_chorobon_gundan_attack = {
 };
 
 EVT_BEGIN(chorogun_dead_reward)
-    CALL(btlevtcmd_snd_se, LW(10), STRING("SFX_BTL_ENEMY_DIE1_2"), -250000000, 0, -250000000)
+    CALL(btlevtcmd_snd_se, LW(10), STRING("SFX_BTL_ENEMY_DIE1_2"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_GetPos, LW(10), LW(0), LW(1), LW(2))
     ADD(LW(2), 10)
     CALL(btlevtcmd_GetCoin, LW(10), LW(0))

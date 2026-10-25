@@ -987,7 +987,7 @@ void puniswGetindex(s32 base, s32 idx, s32* val, Vec* pos) {
     s32 z;
 
     off = base + idx * 7;
-    b0 = _swByteGet(off + 150000000);
+    b0 = _swByteGet(off + EVTDAT_LSW_BASE);
     b1 = _swByteGet(off + 150000001);
     b2 = _swByteGet(off + 150000002);
     b3 = _swByteGet(off + 150000003);
@@ -1027,7 +1027,7 @@ void puniswSetindex(s32 base, s32 idx, s32* val, Vec* pos) {
     z = pos->z;
     xh = ((x & 0xFF00) >> 8) & 0xFFu;
     yh = (y & 0xFF00) >> 8;
-    _swByteSet(off + 150000000, *val);
+    _swByteSet(off + EVTDAT_LSW_BASE, *val);
     _swByteSet(off + 150000001, x & 0xFF);
     _swByteSet(off + 150000002, xh);
     _swByteSet(off + 150000003, y & 0xFF);
@@ -6212,7 +6212,7 @@ static inline void puniswGetindex_inl(s32 base, s32 idx, s32* val, Vec* pos) {
     s32 z;
 
     off = base + idx * 7;
-    b0 = _swByteGet(off + 150000000);
+    b0 = _swByteGet(off + EVTDAT_LSW_BASE);
     b1 = _swByteGet(off + 150000001);
     b2 = _swByteGet(off + 150000002);
     b3 = _swByteGet(off + 150000003);

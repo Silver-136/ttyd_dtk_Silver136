@@ -1814,7 +1814,7 @@ EVT_BEGIN(gor_04_koopa_evt)
     END_LOOP
     CALL(evt_npc_set_position, STRING(/*"飛行船係員"*/"\x94\xF2\x8D\x73\x91\x44\x8C\x57\x88\xF5"), LW(0), LW(1), LW(2))
     CALL(evt_cam3d_evt_set, 337, 134, 549, 337, 58, 116, 500, 11)
-    CALL(evt_npc_sound_data_set, STRING(/*"飛行船係員"*/"\x94\xF2\x8D\x73\x91\x44\x8C\x57\x88\xF5"), STRING("SFX_FLD_NPC_PUKUPUKUI_MOVE1"), STRING("SFX_FLD_NPC_PUKUPUKUI_MOVE1"), 12000, -250000000, -250000000)
+    CALL(evt_npc_sound_data_set, STRING(/*"飛行船係員"*/"\x94\xF2\x8D\x73\x91\x44\x8C\x57\x88\xF5"), STRING("SFX_FLD_NPC_PUKUPUKUI_MOVE1"), STRING("SFX_FLD_NPC_PUKUPUKUI_MOVE1"), 12000, EVT_NULLPTR, EVT_NULLPTR)
     CALL(evt_npc_get_position, STRING(/*"飛行船係員"*/"\x94\xF2\x8D\x73\x91\x44\x8C\x57\x88\xF5"), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_KUPPA_PUKU_ESCAPE1"), LW(0), LW(1), LW(2), 0)
     CALL(evt_npc_status_onoff, 1, STRING(/*"飛行船係員"*/"\x94\xF2\x8D\x73\x91\x44\x8C\x57\x88\xF5"), 2)

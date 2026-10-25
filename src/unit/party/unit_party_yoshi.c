@@ -773,7 +773,7 @@ EVT_BEGIN(partyYoshiAttack_NormalAttack)
     CALL(btlevtcmd_GetPos, -2, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_FaceDirectionAdd, -2, LW(0), 25)
     ADD(LW(1), 35)
-    CALL(btlevtcmd_snd_se, -2, STRING("SFX_PARTY_BATTLE_JUMP1"), -250000000, 0, -250000000)
+    CALL(btlevtcmd_snd_se, -2, STRING("SFX_PARTY_BATTLE_JUMP1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     BEGIN_SIBLING_EVENT_GET_ID(LW(15))
         CALL(btlevtcmd_CommandGetWeaponActionLv, LW(15))
         CALL(btlevtcmd_AcSetDifficulty, -2, LW(15))
@@ -977,7 +977,7 @@ EVT_BEGIN(partyYoshiAttack_NormalAttack)
     CALL(btlevtcmd_StopAC)
     CALL(btlevtcmd_SetFallAccel, -2, FLOAT(0.69921875f))
     CALL(btlevtcmd_GetPos, -2, LW(0), LW(1), LW(2))
-    CALL(btlevtcmd_GetHomePos, -2, -250000000, LW(1), -250000000)
+    CALL(btlevtcmd_GetHomePos, -2, EVT_NULLPTR, LW(1), EVT_NULLPTR)
     CALL(btlevtcmd_FaceDirectionSub, -2, LW(0), 60)
     CALL(btlevtcmd_JumpPosition, -2, LW(0), LW(1), LW(2), 30, -1)
     BEGIN_SIBLING_EVENT
@@ -1052,7 +1052,7 @@ EVT_BEGIN(partyYoshiAttack_Nomikomi)
         SET_VALUE(LW(0), 30)
         SET_VALUE(LW(1), 2)
     END_SWITCH
-    CALL(btlevtcmd_AcSetParamAll, 3, LW(0), LW(1), 0, 100, -250000000, -250000000, -250000000)
+    CALL(btlevtcmd_AcSetParamAll, 3, LW(0), LW(1), 0, 100, EVT_NULLPTR, EVT_NULLPTR, EVT_NULLPTR)
     CALL(btlevtcmd_AcSetFlag, 15)
     CALL(btlevtcmd_SetupAC, -2, 15, 1, 0)
     CALL(evt_btl_camera_set_mode, 0, 10)
@@ -1378,7 +1378,7 @@ EVT_BEGIN(partyYoshiAttack_EggAttack)
         CASE_DEFAULT
         SET_VALUE(LW(0), 60)
     END_SWITCH
-    CALL(btlevtcmd_AcSetParamAll, 0, LW(0), LW(1), 0, -250000000, -250000000, -250000000, -250000000)
+    CALL(btlevtcmd_AcSetParamAll, 0, LW(0), LW(1), 0, EVT_NULLPTR, EVT_NULLPTR, EVT_NULLPTR, EVT_NULLPTR)
     CALL(btlevtcmd_AcSetFlag, 0)
     CALL(btlevtcmd_AcSetOutputParam, 1, 0)
     CALL(btlevtcmd_SetupAC, -2, 20, 1, 60)
@@ -1730,7 +1730,7 @@ EVT_BEGIN(partyYoshiAttack_CallGuard)
         SET_VALUE(LW(1), 14)
         SET_VALUE(LW(2), 30)
     END_SWITCH
-    CALL(btlevtcmd_AcSetParamAll, 15, LW(0), 178, LW(1), LW(2), 20, 61, -250000000)
+    CALL(btlevtcmd_AcSetParamAll, 15, LW(0), 178, LW(1), LW(2), 20, 61, EVT_NULLPTR)
     CALL(btlevtcmd_AcSetGaugeParam, 60, 80, 100, 100)
     CALL(btlevtcmd_AcSetFlag, 64)
     CALL(btlevtcmd_SetupAC, -2, 6, 1, 0)
@@ -2172,7 +2172,7 @@ USER_FUNC(btl_yoshi_yoroyoro_jump_move) {
 }
 
 void _yoshi_slide_move_sound(BattleUnit* unit, PoseSoundTiming* s) {
-    BtlUnit_snd_se(unit, s->sfxName, -250000000, (s16)(unit->work[4] * unit->work[5] / 100)); // work[4] * work[5] / 100: slide sound volume
+    BtlUnit_snd_se(unit, s->sfxName, EVT_NULLPTR, (s16)(unit->work[4] * unit->work[5] / 100)); // work[4] * work[5] / 100: slide sound volume
 }
 
 USER_FUNC(_get_nomikomi_hit_position) {

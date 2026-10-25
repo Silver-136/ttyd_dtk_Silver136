@@ -804,10 +804,10 @@ USER_FUNC(btlevtcmd_GetHpGaugeOffset) {
     unit = BattleGetUnitPtr(wp, BattleTransID(event, btlId));
     x = unit->mHpGaugeOffset[0];
     y = unit->mHpGaugeOffset[1];
-    if (x != -250000000) {
+    if (x != EVT_NULLPTR) {
         evtSetValue(event, indexX, x);
     }
-    if (y != -250000000) {
+    if (y != EVT_NULLPTR) {
         evtSetValue(event, indexY, y);
     }
     return EVT_RETURN_DONE;
@@ -3106,7 +3106,7 @@ USER_FUNC(btlevtcmd_GetMoveFrame) {
     if (frame == 0) {
         frame = 1;
     }
-    if (index != -250000000) {
+    if (index != EVT_NULLPTR) {
         evtSetValue(event, index, frame);
     }
     return EVT_RETURN_DONE;
@@ -4296,7 +4296,7 @@ USER_FUNC(btlevtcmd_MarioJumpParam) {
     if (frames == 0 || n > frames) {
         frames = n;
     }
-    if (frames != -250000000) {
+    if (frames != EVT_NULLPTR) {
         evtSetValue(event, out, frames);
     }
     return EVT_RETURN_DONE;

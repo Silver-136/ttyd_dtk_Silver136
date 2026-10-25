@@ -278,7 +278,7 @@ EVT_BEGIN(gold_chorobon_rabbit_move)
     ELSE
         CALL(btlevtcmd_SetScale, -2, FLOAT(1.0f), FLOAT(1.0f), FLOAT(1.0f))
         CALL(btlevtcmd_JumpPosition, -2, LW(5), LW(6), LW(7), 0, 0)
-        CALL(btlevtcmd_snd_se, -2, STRING("SFX_BOSS_G_CHORO_ATTACK1"), -250000000, 0, -250000000)
+        CALL(btlevtcmd_snd_se, -2, STRING("SFX_BOSS_G_CHORO_ATTACK1"), EVT_NULLPTR, 0, EVT_NULLPTR)
         LOOP(2)
             CALL(btlevtcmd_AddScale, -2, FLOAT(0.15917969f), FLOAT(-0.23925781f), 0)
             WAIT_FRAMES(1)

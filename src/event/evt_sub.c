@@ -1816,10 +1816,10 @@ USER_FUNC(evt_sub_intpl_get_float) {
     f32 start = evtGetFloat(event, LW(12));
     f32 end = evtGetFloat(event, LW(13));
     f32 v = intplGetValue(event->lwData[11], event->lwData[14], event->lwData[15], start, end);
-    if (out != -250000000) {
+    if (out != EVT_NULLPTR) {
         evtSetFloat(event, out, v);
     }
-    if (done != -250000000) {
+    if (done != EVT_NULLPTR) {
         if (event->lwData[14] >= event->lwData[15]) {
             evtSetValue(event, done, 0);
         } else {
@@ -2117,17 +2117,17 @@ USER_FUNC(N_evt_sub_status_gauge_force_update) {
 #endif
 
 USER_FUNC(evt_sub_save_playtime) {
-    s32 base = event->args[0];
+    s32 base = event->args[0]; // a GSW(n) script value: base + EVTDAT_GSW_BASE is n
     u8 buf[8];
     *(s64*)buf = gp->retraceLocalTime;
-    swByteSet(base + 0xA21FE80, buf[0]);
-    swByteSet(base + 0xA21FE81, buf[1]);
-    swByteSet(base + 0xA21FE82, buf[2]);
-    swByteSet(base + 0xA21FE83, buf[3]);
-    swByteSet(base + 0xA21FE84, buf[4]);
-    swByteSet(base + 0xA21FE85, buf[5]);
-    swByteSet(base + 0xA21FE86, buf[6]);
-    swByteSet(base + 0xA21FE87, buf[7]);
+    swByteSet(base + EVTDAT_GSW_BASE + 0, buf[0]);
+    swByteSet(base + EVTDAT_GSW_BASE + 1, buf[1]);
+    swByteSet(base + EVTDAT_GSW_BASE + 2, buf[2]);
+    swByteSet(base + EVTDAT_GSW_BASE + 3, buf[3]);
+    swByteSet(base + EVTDAT_GSW_BASE + 4, buf[4]);
+    swByteSet(base + EVTDAT_GSW_BASE + 5, buf[5]);
+    swByteSet(base + EVTDAT_GSW_BASE + 6, buf[6]);
+    swByteSet(base + EVTDAT_GSW_BASE + 7, buf[7]);
     return EVT_RETURN_DONE;
 }
 
@@ -2136,14 +2136,14 @@ USER_FUNC(evt_sub_load_progresstime) {
     s32 base = args[0];
     u8 buf[8];
     s64 ms;
-    buf[0] = swByteGet(base + 0xA21FE80);
-    buf[1] = swByteGet(base + 0xA21FE81);
-    buf[2] = swByteGet(base + 0xA21FE82);
-    buf[3] = swByteGet(base + 0xA21FE83);
-    buf[4] = swByteGet(base + 0xA21FE84);
-    buf[5] = swByteGet(base + 0xA21FE85);
-    buf[6] = swByteGet(base + 0xA21FE86);
-    buf[7] = swByteGet(base + 0xA21FE87);
+    buf[0] = swByteGet(base + EVTDAT_GSW_BASE + 0);
+    buf[1] = swByteGet(base + EVTDAT_GSW_BASE + 1);
+    buf[2] = swByteGet(base + EVTDAT_GSW_BASE + 2);
+    buf[3] = swByteGet(base + EVTDAT_GSW_BASE + 3);
+    buf[4] = swByteGet(base + EVTDAT_GSW_BASE + 4);
+    buf[5] = swByteGet(base + EVTDAT_GSW_BASE + 5);
+    buf[6] = swByteGet(base + EVTDAT_GSW_BASE + 6);
+    buf[7] = swByteGet(base + EVTDAT_GSW_BASE + 7);
     ms = (gp->retraceLocalTime - *(s64*)buf) / (OS_TIMER_CLOCK / 1000);
     if (ms > 86400000) {
         ms = 86400000;

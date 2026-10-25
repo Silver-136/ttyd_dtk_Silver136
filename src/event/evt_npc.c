@@ -2718,19 +2718,19 @@ USER_FUNC(evt_npc_sound_data_set) {
     s32 landSfxArg = *args++;
     const char* landSfx = (const char*)evtGetValue(event, landSfxArg);
 
-    if (footstepSfxAArg != -250000000) {
+    if (footstepSfxAArg != EVT_NULLPTR) {
         npc->footstepSfxA = footstepSfxA;
     }
-    if (footstepSfxBArg != -250000000) {
+    if (footstepSfxBArg != EVT_NULLPTR) {
         npc->footstepSfxB = footstepSfxB;
     }
-    if (jumpSfxArg != -250000000) {
+    if (jumpSfxArg != EVT_NULLPTR) {
         npc->jumpSfx = jumpSfx;
     }
-    if (landSfxArg != -250000000) {
+    if (landSfxArg != EVT_NULLPTR) {
         npc->landSfx = landSfx;
     }
-    if (footstepStrideArg != -250000000) {
+    if (footstepStrideArg != EVT_NULLPTR) {
         npc->footstepStride = footstepStride;
     }
     npc->footstepToggle = TRUE;

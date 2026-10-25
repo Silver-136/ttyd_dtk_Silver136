@@ -585,27 +585,27 @@ void BtlUnit_GetPartsBaseRotate(BattleUnitPart* part, f32* x, f32* y, f32* z) {
 }
 
 void BtlUnit_SetRotateOffset(BattleUnit* unit, f32 x, f32 y, f32 z) {
-    f32 thefuckyone = -250000000.0f;
-    if (thefuckyone != x) {
+    f32 noValue = -250000000.0f;
+    if (noValue != x) {
         unit->mRotationOffset.x = x;
     }
-    if (thefuckyone != y) {
+    if (noValue != y) {
         unit->mRotationOffset.y = y;
     }
-    if (thefuckyone != z) {
+    if (noValue != z) {
         unit->mRotationOffset.z = z;
     }
 }
 
 void BtlUnit_SetPartsRotateOffset(BattleUnitPart* part, f32 x, f32 y, f32 z) {
-    f32 thefuckyone = -250000000.0f;
-    if (thefuckyone != x) {
+    f32 noValue = -250000000.0f;
+    if (noValue != x) {
         part->mRotationOffset.x = x;
     }
-    if (thefuckyone != y) {
+    if (noValue != y) {
         part->mRotationOffset.y = y;
     }
-    if (thefuckyone != z) {
+    if (noValue != z) {
         part->mRotationOffset.z = z;
     }
 }
@@ -617,14 +617,14 @@ void BtlUnit_AddPartsRotateOffset(BattleUnitPart* part, f32 x, f32 y, f32 z) {
 }
 
 void BtlUnit_SetBaseScale(BattleUnit* unit, f32 x, f32 y, f32 z) {
-    f32 thefuckyone = -250000000.0f;
-    if (thefuckyone != x) {
+    f32 noValue = -250000000.0f;
+    if (noValue != x) {
         unit->mBaseScale.x = x;
     }
-    if (thefuckyone != y) {
+    if (noValue != y) {
         unit->mBaseScale.y = y;
     }
-    if (thefuckyone != z) {
+    if (noValue != z) {
         unit->mBaseScale.z = z;
     }
 }
@@ -636,66 +636,66 @@ void BtlUnit_GetScale(BattleUnit* unit, f32* x, f32* y, f32* z) {
 }
 
 void BtlUnit_SetScale(BattleUnit* unit, f32 x, f32 y, f32 z) {
-    f32 thefuckyone = -250000000.0f;
-    if (thefuckyone != x) {
+    f32 noValue = -250000000.0f;
+    if (noValue != x) {
         unit->mScale.x = x;
     }
-    if (thefuckyone != y) {
+    if (noValue != y) {
         unit->mScale.y = y;
     }
-    if (thefuckyone != z) {
+    if (noValue != z) {
         unit->mScale.z = z;
     }
 }
 
 void BtlUnit_AddScale(BattleUnit* unit, f32 x, f32 y, f32 z) {
-    f32 thefuckyone = -250000000.0f;
-    if (thefuckyone != x) {
+    f32 noValue = -250000000.0f;
+    if (noValue != x) {
         unit->mScale.x += x;
     }
-    if (thefuckyone != y) {
+    if (noValue != y) {
         unit->mScale.y += y;
     }
-    if (thefuckyone != z) {
+    if (noValue != z) {
         unit->mScale.z += z;
     }
 }
 
 void BtlUnit_SetPartsBaseScale(BattleUnitPart* part, f32 x, f32 y, f32 z) {
-    f32 thefuckyone = -250000000.0f;
-    if (thefuckyone != x) {
+    f32 noValue = -250000000.0f;
+    if (noValue != x) {
         part->mBaseScale.x = x;
     }
-    if (thefuckyone != y) {
+    if (noValue != y) {
         part->mBaseScale.y = y;
     }
-    if (thefuckyone != z) {
+    if (noValue != z) {
         part->mBaseScale.z = z;
     }
 }
 
 void BtlUnit_SetPartsScale(BattleUnitPart* part, f32 x, f32 y, f32 z) {
-    f32 thefuckyone = -250000000.0f;
-    if (thefuckyone != x) {
+    f32 noValue = -250000000.0f;
+    if (noValue != x) {
         part->mScale.x = x;
     }
-    if (thefuckyone != y) {
+    if (noValue != y) {
         part->mScale.y = y;
     }
-    if (thefuckyone != z) {
+    if (noValue != z) {
         part->mScale.z = z;
     }
 }
 
 void BtlUnit_AddPartsScale(BattleUnitPart* part, f32 x, f32 y, f32 z) {
-    f32 thefuckyone = -250000000.0f;
-    if (thefuckyone != x) {
+    f32 noValue = -250000000.0f;
+    if (noValue != x) {
         part->mScale.x += x;
     }
-    if (thefuckyone != y) {
+    if (noValue != y) {
         part->mScale.y += y;
     }
-    if (thefuckyone != z) {
+    if (noValue != z) {
         part->mScale.z += z;
     }
 }
@@ -713,14 +713,14 @@ void BtlUnit_SetHeight(BattleUnit* unit, s16 height) {
 }
 
 void BtlUnit_SetOffsetPos(BattleUnit* unit, f32 x, f32 y, f32 z) {
-    f32 thefuckyone = -250000000.0f;
-    if (thefuckyone != x) {
+    f32 noValue = -250000000.0f;
+    if (noValue != x) {
         unit->mPositionOffset.x = x;
     }
-    if (thefuckyone != y) {
+    if (noValue != y) {
         unit->mPositionOffset.y = y;
     }
-    if (thefuckyone != z) {
+    if (noValue != z) {
         unit->mPositionOffset.z = z;
     }
 }
@@ -732,14 +732,14 @@ void BtlUnit_GetPartsOffsetPos(BattleUnitPart* part, f32* x, f32* y, f32* z) {
 }
 
 void BtlUnit_SetPartsOffsetPos(BattleUnitPart* part, f32 x, f32 y, f32 z) {
-    f32 thefuckyone = -250000000.0f;
-    if (thefuckyone != x) {
+    f32 noValue = -250000000.0f;
+    if (noValue != x) {
         part->mPositionOffset.x = x;
     }
-    if (thefuckyone != y) {
+    if (noValue != y) {
         part->mPositionOffset.y = y;
     }
-    if (thefuckyone != z) {
+    if (noValue != z) {
         part->mPositionOffset.z = z;
     }
 }
@@ -751,118 +751,118 @@ void BtlUnit_AddPartsOffsetPos(BattleUnitPart* part, f32 x, f32 y, f32 z) {
 }
 
 void BtlUnit_SetDispOffset(BattleUnit* unit, f32 x, f32 y, f32 z) {
-    f32 thefuckyone = -250000000.0f;
-    if (thefuckyone != x) {
+    f32 noValue = -250000000.0f;
+    if (noValue != x) {
         unit->mDisplayOffset.x = x;
     }
-    if (thefuckyone != y) {
+    if (noValue != y) {
         unit->mDisplayOffset.y = y;
     }
-    if (thefuckyone != z) {
+    if (noValue != z) {
         unit->mDisplayOffset.z = z;
     }
 }
 
 void BtlUnit_SetPartsDispOffset(BattleUnitPart* part, f32 x, f32 y, f32 z) {
-    f32 thefuckyone = -250000000.0f;
-    if (thefuckyone != x) {
+    f32 noValue = -250000000.0f;
+    if (noValue != x) {
         part->mDisplayOffset.x = x;
     }
-    if (thefuckyone != y) {
+    if (noValue != y) {
         part->mDisplayOffset.y = y;
     }
-    if (thefuckyone != z) {
+    if (noValue != z) {
         part->mDisplayOffset.z = z;
     }
 }
 
 void BtlUnit_AddPartsDispOffset(BattleUnitPart* part, f32 x, f32 y, f32 z) {
-    f32 thefuckyone = -250000000.0f;
-    if (thefuckyone != x) {
+    f32 noValue = -250000000.0f;
+    if (noValue != x) {
         part->mDisplayOffset.x += x;
     }
-    if (thefuckyone != y) {
+    if (noValue != y) {
         part->mDisplayOffset.y += y;
     }
-    if (thefuckyone != z) {
+    if (noValue != z) {
         part->mDisplayOffset.z += z;
     }
 }
 
 void BtlUnit_SetMoveStartPos(BattleUnit* unit, f32 x, f32 y, f32 z) {
-    f32 thefuckyone = -250000000.0f;
-    if (thefuckyone != x) {
+    f32 noValue = -250000000.0f;
+    if (noValue != x) {
         unit->mMoveStartPos.x = x;
     }
-    if (thefuckyone != y) {
+    if (noValue != y) {
         unit->mMoveStartPos.y = y;
     }
-    if (thefuckyone != z) {
+    if (noValue != z) {
         unit->mMoveStartPos.z = z;
     }
 }
 
 void BtlUnit_SetPartsMoveStartPos(BattleUnitPart* part, f32 x, f32 y, f32 z) {
-    f32 thefuckyone = -250000000.0f;
-    if (thefuckyone != x) {
+    f32 noValue = -250000000.0f;
+    if (noValue != x) {
         part->mMoveStartPos.x = x;
     }
-    if (thefuckyone != y) {
+    if (noValue != y) {
         part->mMoveStartPos.y = y;
     }
-    if (thefuckyone != z) {
+    if (noValue != z) {
         part->mMoveStartPos.z = z;
     }
 }
 
 void BtlUnit_SetMoveCurrentPos(BattleUnit* unit, f32 x, f32 y, f32 z) {
-    f32 thefuckyone = -250000000.0f;
-    if (thefuckyone != x) {
+    f32 noValue = -250000000.0f;
+    if (noValue != x) {
         unit->mMoveCurrentPos.x = x;
     }
-    if (thefuckyone != y) {
+    if (noValue != y) {
         unit->mMoveCurrentPos.y = y;
     }
-    if (thefuckyone != z) {
+    if (noValue != z) {
         unit->mMoveCurrentPos.z = z;
     }
 }
 
 void BtlUnit_SetPartsMoveCurrentPos(BattleUnitPart* part, f32 x, f32 y, f32 z) {
-    f32 thefuckyone = -250000000.0f;
-    if (thefuckyone != x) {
+    f32 noValue = -250000000.0f;
+    if (noValue != x) {
         part->mMoveCurrentPos.x = x;
     }
-    if (thefuckyone != y) {
+    if (noValue != y) {
         part->mMoveCurrentPos.y = y;
     }
-    if (thefuckyone != z) {
+    if (noValue != z) {
         part->mMoveCurrentPos.z = z;
     }
 }
 
 void BtlUnit_SetMoveTargetPos(BattleUnit* unit, f32 x, f32 y, f32 z) {
-    f32 thefuckyone = -250000000.0f;
-    if (thefuckyone != x) {
+    f32 noValue = -250000000.0f;
+    if (noValue != x) {
         unit->mMoveTargetPos.x = x;
     }
-    if (thefuckyone != y) {
+    if (noValue != y) {
         unit->mMoveTargetPos.y = y;
     }
-    if (thefuckyone != z) {
+    if (noValue != z) {
         unit->mMoveTargetPos.z = z;
     }
 }
 
 void BtlUnit_SetPartsMoveTargetPos(BattleUnitPart* part, f32 x, f32 y, f32 z) {
-    f32 thefuckyone = -250000000.0f;
-    if (thefuckyone != x) {
+    f32 noValue = -250000000.0f;
+    if (noValue != x) {
         part->mMoveTargetPos.x = x;
     }
-    if (thefuckyone != y) {
+    if (noValue != y) {
         part->mMoveTargetPos.y = y;
     }
-    if (thefuckyone != z) {
+    if (noValue != z) {
         part->mMoveTargetPos.z = z;
     }
 }
@@ -2077,7 +2077,7 @@ void BtlUnit_ControlPoseSoundMain(BattleUnitPart* part) {
                     id = entry->callback(part->mOwner, entry, state);
                 }
                 else {
-                    id = BtlUnit_snd_se(part->mOwner, entry->sfxName, -250000000, entry->pitch);
+                    id = BtlUnit_snd_se(part->mOwner, entry->sfxName, EVT_NULLPTR, entry->pitch);
                 }
                 psndSFX_vol(id, vol = 0x7F);
                 state->count++;
@@ -2093,7 +2093,7 @@ void BtlUnit_ControlPoseSoundMain(BattleUnitPart* part) {
                     entry->callback(part->mOwner, entry, state);
                 }
                 else {
-                    BtlUnit_snd_se(part->mOwner, entry->sfxName, -250000000, entry->pitch);
+                    BtlUnit_snd_se(part->mOwner, entry->sfxName, EVT_NULLPTR, entry->pitch);
                 }
                 state->count++;
             }
@@ -2128,7 +2128,7 @@ s32 BtlUnit_snd_se_pos(BattleUnit* unit, const char* sfxName, s32 volume, s16 pi
     p += irand(41) - 20;
     id = psndSFXOn_3D(sfxName, pos);
     psndSFX_pit(id, p);
-    psndSFX_vol(id, volume == -250000000 ? psndSFX_get_vol(id) : (u8)volume);
+    psndSFX_vol(id, volume == EVT_NULLPTR ? psndSFX_get_vol(id) : (u8)volume);
     return id;
 }
 

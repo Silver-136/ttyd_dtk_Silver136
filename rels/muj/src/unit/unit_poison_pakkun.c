@@ -267,7 +267,7 @@ static EVT_BEGIN(breath_event)
     CALL(btlevtcmd_AttackDeclareAll, -2)
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, -2, PTR(&weapon_poison_pakkun_breath_attack))
-    CALL(btlevtcmd_snd_se, -2, STRING("SFX_ENM_PAKKUN_MOVE1"), -250000000, 0, -250000000)
+    CALL(btlevtcmd_snd_se, -2, STRING("SFX_ENM_PAKKUN_MOVE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     BEGIN_SIBLING_EVENT
         CALL(shadow_scale_small, -2)
     END_SIBLING_EVENT
@@ -290,7 +290,7 @@ static EVT_BEGIN(breath_event)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
     CALL(evt_btl_camera_set_zoom, 0, 200)
     CALL(btlevtcmd_SetHitOffset, -2, 1, 0, 0, 0)
-    CALL(btlevtcmd_snd_se, -2, STRING("SFX_ENM_PAKKUN_MOVE2"), -250000000, 0, -250000000)
+    CALL(btlevtcmd_snd_se, -2, STRING("SFX_ENM_PAKKUN_MOVE2"), EVT_NULLPTR, 0, EVT_NULLPTR)
     BEGIN_SIBLING_EVENT
         CALL(shadow_scale_return, -2)
     END_SIBLING_EVENT
@@ -300,14 +300,14 @@ static EVT_BEGIN(breath_event)
     WAIT_MS(500)
     BEGIN_SIBLING_EVENT
         LOOP(3)
-            CALL(btlevtcmd_snd_se, -2, STRING("SFX_ENM_PAKKUN_MOUTH1"), -250000000, 0, -250000000)
+            CALL(btlevtcmd_snd_se, -2, STRING("SFX_ENM_PAKKUN_MOUTH1"), EVT_NULLPTR, 0, EVT_NULLPTR)
             WAIT_FRAMES(20)
         END_LOOP
     END_SIBLING_EVENT
     CALL(btlevtcmd_CheckAttribute, -2, 2, LW(15))
     CALL(btlevtcmd_AnimeChangePose, -2, 1, STRING("PKF_S_2"))
     WAIT_MS(1000)
-    CALL(btlevtcmd_snd_se, -2, STRING("SFX_ENM_PAKKUN_POISON1"), -250000000, 0, -250000000)
+    CALL(btlevtcmd_snd_se, -2, STRING("SFX_ENM_PAKKUN_POISON1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_AnimeChangePose, -2, 1, STRING("PKF_A_3A"))
     WAIT_MS(300)
     CALL(btlevtcmd_AnimeChangePose, -2, 1, STRING("PKF_A_3B"))
@@ -491,7 +491,7 @@ EVT_END()
 
 static EVT_BEGIN(ceil_fall_ready_event)
     CALL(btlevtcmd_SetEventCeilFall, -2, 0)
-    CALL(btlevtcmd_snd_se, -2, STRING("SFX_ENM_PAKKUN_MOVE1"), -250000000, 0, -250000000)
+    CALL(btlevtcmd_snd_se, -2, STRING("SFX_ENM_PAKKUN_MOVE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     BEGIN_SIBLING_EVENT
         CALL(shadow_scale_small, -2)
     END_SIBLING_EVENT
@@ -503,7 +503,7 @@ static EVT_BEGIN(ceil_fall_ready_event)
     CALL(btlevtcmd_SetPos, -2, LW(0), 0, LW(2))
     CALL(btlevtcmd_SetHomePos, -2, LW(0), 0, LW(2))
     WAIT_MS(500)
-    CALL(btlevtcmd_snd_se, -2, STRING("SFX_ENM_PAKKUN_MOVE2"), -250000000, 0, -250000000)
+    CALL(btlevtcmd_snd_se, -2, STRING("SFX_ENM_PAKKUN_MOVE2"), EVT_NULLPTR, 0, EVT_NULLPTR)
     BEGIN_SIBLING_EVENT
         CALL(shadow_scale_return, -2)
     END_SIBLING_EVENT
@@ -531,7 +531,7 @@ static EVT_BEGIN(return_event)
     ELSE
         SET_VALUE(LW(15), 0)
     END_IF
-    CALL(btlevtcmd_snd_se, -2, STRING("SFX_ENM_PAKKUN_MOVE1"), -250000000, 0, -250000000)
+    CALL(btlevtcmd_snd_se, -2, STRING("SFX_ENM_PAKKUN_MOVE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     BEGIN_SIBLING_EVENT
         CALL(shadow_scale_small, -2)
     END_SIBLING_EVENT
@@ -545,7 +545,7 @@ static EVT_BEGIN(return_event)
         CALL(btlevtcmd_SetPos, -2, LW(0), 0, LW(2))
         CALL(btlevtcmd_SetHomePos, -2, LW(0), 0, LW(2))
         WAIT_MS(500)
-        CALL(btlevtcmd_snd_se, -2, STRING("SFX_ENM_PAKKUN_MOVE2"), -250000000, 0, -250000000)
+        CALL(btlevtcmd_snd_se, -2, STRING("SFX_ENM_PAKKUN_MOVE2"), EVT_NULLPTR, 0, EVT_NULLPTR)
         BEGIN_SIBLING_EVENT
             CALL(shadow_scale_return, -2)
         END_SIBLING_EVENT
@@ -568,7 +568,7 @@ static EVT_BEGIN(return_event)
         CALL(btlevtcmd_SetPos, -2, LW(0), 130, LW(2))
         CALL(btlevtcmd_SetHomePos, -2, LW(0), 130, LW(2))
         WAIT_MS(500)
-        CALL(btlevtcmd_snd_se, -2, STRING("SFX_ENM_PAKKUN_MOVE2"), -250000000, 0, -250000000)
+        CALL(btlevtcmd_snd_se, -2, STRING("SFX_ENM_PAKKUN_MOVE2"), EVT_NULLPTR, 0, EVT_NULLPTR)
         BEGIN_SIBLING_EVENT
             CALL(shadow_scale_return, -2)
         END_SIBLING_EVENT
@@ -611,7 +611,7 @@ static EVT_BEGIN(normal_attack_event)
     CALL(btlevtcmd_AttackDeclare, -2, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, -2, LW(9))
-    CALL(btlevtcmd_snd_se, -2, STRING("SFX_ENM_PAKKUN_MOVE1"), -250000000, 0, -250000000)
+    CALL(btlevtcmd_snd_se, -2, STRING("SFX_ENM_PAKKUN_MOVE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     BEGIN_SIBLING_EVENT
         CALL(shadow_scale_small, -2)
     END_SIBLING_EVENT
@@ -635,7 +635,7 @@ static EVT_BEGIN(normal_attack_event)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
     CALL(evt_btl_camera_set_zoom, 0, 250)
     CALL(btlevtcmd_SetHitOffset, -2, 1, 0, 0, 0)
-    CALL(btlevtcmd_snd_se, -2, STRING("SFX_ENM_PAKKUN_MOVE2"), -250000000, 0, -250000000)
+    CALL(btlevtcmd_snd_se, -2, STRING("SFX_ENM_PAKKUN_MOVE2"), EVT_NULLPTR, 0, EVT_NULLPTR)
     BEGIN_SIBLING_EVENT
         CALL(shadow_scale_return, -2)
     END_SIBLING_EVENT
@@ -645,7 +645,7 @@ static EVT_BEGIN(normal_attack_event)
     WAIT_MS(150)
     CALL(btlevtcmd_AnimeChangePose, -2, 1, STRING("PKF_A_1A"))
     WAIT_MS(200)
-    CALL(btlevtcmd_snd_se, -2, STRING("SFX_ENM_PAKKUN_ATTACK1"), -250000000, 0, -250000000)
+    CALL(btlevtcmd_snd_se, -2, STRING("SFX_ENM_PAKKUN_ATTACK1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_AnimeChangePose, -2, 1, STRING("PKF_A_1B"))
     WAIT_MS(200)
     CALL(btlevtcmd_AnimeChangePose, -2, 1, STRING("PKF_A_1C"))

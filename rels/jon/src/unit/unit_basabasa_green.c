@@ -475,7 +475,7 @@ static EVT_BEGIN(attack_event)
         RETURN
     END_IF
     CALL(btlevtcmd_SetRotate, -2, 0, 0, -45)
-    CALL(btlevtcmd_snd_se, -2, STRING("SFX_ENM_BASA_SUCK1"), -250000000, 0, -250000000)
+    CALL(btlevtcmd_snd_se, -2, STRING("SFX_ENM_BASA_SUCK1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_AnimeChangePose, -2, 1, STRING("BSA_A_2"))
     LOOP(2)
         LOOP(10)

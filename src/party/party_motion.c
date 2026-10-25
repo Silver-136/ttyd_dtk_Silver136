@@ -188,7 +188,7 @@ USER_FUNC(evt_snd_sfxon_3d) {
     pos.y = evtGetFloat(event, args[2]);
     pos.z = evtGetFloat(event, args[3]);
     out = args[4];
-    if (!out || out == -250000000) {
+    if (!out || out == EVT_NULLPTR) {
         psndSFXOn_3D(name, &pos);
     } else {
         evtSetValue(event, out, psndSFXOn_3D(name, &pos));

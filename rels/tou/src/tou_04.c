@@ -2171,7 +2171,7 @@ EVT_BEGIN(evt_bred_nigeru)
     CALL(evt_snd_bgmoff_f, 512, 2000)
     CALL(evt_msg_print, 0, STRING("stg3_tou_297_27_00"), 0, STRING(/*"チャンピョン"*/"\x83\x60\x83\x83\x83\x93\x83\x73\x83\x87\x83\x93"))
     WAIT_MS(300)
-    CALL(evt_npc_sound_data_set, STRING(/*"チャンピョン"*/"\x83\x60\x83\x83\x83\x93\x83\x73\x83\x87\x83\x93"), -250000000, -250000000, 20000, -250000000, -250000000)
+    CALL(evt_npc_sound_data_set, STRING(/*"チャンピョン"*/"\x83\x60\x83\x83\x83\x93\x83\x73\x83\x87\x83\x93"), EVT_NULLPTR, EVT_NULLPTR, 20000, EVT_NULLPTR, EVT_NULLPTR)
     CALL(evt_npc_move_position, STRING(/*"チャンピョン"*/"\x83\x60\x83\x83\x83\x93\x83\x73\x83\x87\x83\x93"), -550, -500, 0, FLOAT(200.0f), 1)
     BEGIN_INLINE_EVENT
         CALL(evt_npc_move_position, STRING(/*"チャンピョン"*/"\x83\x60\x83\x83\x83\x93\x83\x73\x83\x87\x83\x93"), 0, -500, 0, FLOAT(200.0f), 1)

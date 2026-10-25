@@ -492,7 +492,7 @@ void main_weapon(s32 idx) {
                 break;
             }
         }
-        BtlUnit_snd_se(mario, "SFX_BTL_SAC_HEART_SHOOT2", -250000000, 0);
+        BtlUnit_snd_se(mario, "SFX_BTL_SAC_HEART_SHOOT2", EVT_NULLPTR, 0);
     case 2:
         wp->pos.x += wp->vel.x;
         wp->pos.y += wp->vel.y;
@@ -1212,10 +1212,10 @@ EVT_BEGIN(genki_evt_common)
     CALL_CHILD(sac_start_camera_evt)
     WAIT_MS(500)
     CALL(sac_enemy_slide_go)
-    CALL(btlevtcmd_snd_se, -2, STRING("SFX_BTL_SAC_START1"), -250000000, 0, -250000000)
+    CALL(btlevtcmd_snd_se, -2, STRING("SFX_BTL_SAC_START1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL_CHILD(sac_mario_item_on_evt)
     WAIT_MS(500)
-    CALL(btlevtcmd_snd_se, -2, STRING("SFX_BTL_SAC_START2"), -250000000, 0, LW(11))
+    CALL(btlevtcmd_snd_se, -2, STRING("SFX_BTL_SAC_START2"), EVT_NULLPTR, 0, LW(11))
     IF_INT_EQUAL(LW(15), 0)
         CALL(star_appear)
     ELSE
@@ -1225,7 +1225,7 @@ EVT_BEGIN(genki_evt_common)
         CALL_CHILD(sac_start_stardust)
     END_SIBLING_EVENT
     WAIT_FRAMES(100)
-    CALL(btlevtcmd_snd_se, -2, STRING("SFX_BTL_SAC_HEART_SHOOT1"), -250000000, 0, LW(10))
+    CALL(btlevtcmd_snd_se, -2, STRING("SFX_BTL_SAC_HEART_SHOOT1"), EVT_NULLPTR, 0, LW(10))
     CALL(evt_snd_sfxoff, LW(11))
     CALL(evt_btl_camera_set_mode, 0, 0)
     WAIT_FRAMES(40)
@@ -1308,10 +1308,10 @@ EVT_BEGIN(genki_evt_common)
     CALL_CHILD(sac_start_camera_evt)
     WAIT_MS(500)
     CALL(sac_enemy_slide_go)
-    CALL(btlevtcmd_snd_se, -2, STRING("SFX_BTL_SAC_START1"), -250000000, 0, -250000000)
+    CALL(btlevtcmd_snd_se, -2, STRING("SFX_BTL_SAC_START1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL_CHILD(sac_mario_item_on_evt)
     WAIT_MS(500)
-    CALL(btlevtcmd_snd_se, -2, STRING("SFX_BTL_SAC_START2"), -250000000, 0, LW(11))
+    CALL(btlevtcmd_snd_se, -2, STRING("SFX_BTL_SAC_START2"), EVT_NULLPTR, 0, LW(11))
     IF_INT_EQUAL(LW(15), 0)
         CALL(star_appear)
     ELSE
@@ -1321,7 +1321,7 @@ EVT_BEGIN(genki_evt_common)
         CALL_CHILD(sac_start_stardust)
     END_SIBLING_EVENT
     WAIT_FRAMES(100)
-    CALL(btlevtcmd_snd_se, -2, STRING("SFX_BTL_SAC_HEART_SHOOT1"), -250000000, 0, LW(10))
+    CALL(btlevtcmd_snd_se, -2, STRING("SFX_BTL_SAC_HEART_SHOOT1"), EVT_NULLPTR, 0, LW(10))
     CALL(evt_snd_sfxoff, LW(11))
     CALL(evt_btl_camera_set_mode, 0, 0)
     WAIT_FRAMES(40)
