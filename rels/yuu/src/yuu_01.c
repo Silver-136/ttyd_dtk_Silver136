@@ -46,7 +46,13 @@ static void* yuunpc_wp;
 static Monte* monte_p;
 #define MONTETABLE (montetable)
 static void monte_disp(CameraId camera, void* param);
-static inline BOOL monte_check_inl(Vec* a, Vec* b) { if (PSVECDistance(a, b) < 20.0f && __fabs(a->y - b->y) < 20.0) { return TRUE; } return FALSE; }
+static inline BOOL monte_check_inl(Vec* a, Vec* b) {
+    if (PSVECDistance(a, b) < 20.0f && __fabs(a->y - b->y) < 20.0) {
+        return TRUE;
+    }
+    return FALSE;
+}
+
 static inline f32 randRange(f32 d) { return irand(100.0f * d) / 100.0f; }
 
 USER_FUNC(eff_call_minigame);

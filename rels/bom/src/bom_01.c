@@ -71,8 +71,86 @@ smartEntry* lp;
 #define EXT_DATA ((ExtAnimDef*)ext_data)
 static void pose_change(s32 i, const char* name);
 static ExtTexInfo ext_data[31];
-static inline f32 chb_sin(f32 x) { f32 y; f32 x2; f32 r; f32 a = 0.00761f; f32 b = 0.16605f; f32 c = 1.0f; if (x <= 3.1415927f) { if (x <= 1.5707964f) { x2 = x * x; a = a * x2 - b; a = a * x2 + c; a = a * x; r = a; } else { y = 1.5707964f - (x - 1.5707964f); x2 = y * y; a = a * x2 - b; a = a * x2 + c; a = a * y; r = a; } } else if (x < 4.712389f) { y = x - 3.1415927f; x2 = y * y; a = a * x2 - b; a = a * x2 + c; a = a * y; a = -a; r = a; } else { y = 1.5707964f - (x - 4.712389f); x2 = y * y; a = a * x2 - b; a = a * x2 + c; a = a * y; a = -a; r = a; } return r; }
-static inline f32 chb_cos(f32 x) { f32 y; f32 x2; f32 r; f32 a = 0.03705f; f32 b = 0.4967f; f32 c = 1.0f; if (x <= 3.1415927f) { if (x <= 1.5707964f) { x2 = x * x; a = a * x2 - b; a = a * x2 + c; r = a; } else { y = 1.5707964f - (x - 1.5707964f); x2 = y * y; a = a * x2 - b; a = a * x2 + c; a = -a; r = a; } } else if (x < 4.712389f) { y = x - 3.1415927f; x2 = y * y; a = a * x2 - b; a = a * x2 + c; a = -a; r = a; } else { y = 1.5707964f - (x - 4.712389f); x2 = y * y; a = a * x2 - b; a = a * x2 + c; r = a; } return r; }
+static inline f32 chb_sin(f32 x) {
+    f32 y;
+    f32 x2;
+    f32 r;
+    f32 a = 0.00761f;
+    f32 b = 0.16605f;
+    f32 c = 1.0f;
+    if (x <= 3.1415927f) {
+        if (x <= 1.5707964f) {
+            x2 = x * x;
+            a = a * x2 - b;
+            a = a * x2 + c;
+            a = a * x;
+            r = a;
+        } else {
+            y = 1.5707964f - (x - 1.5707964f);
+            x2 = y * y;
+            a = a * x2 - b;
+            a = a * x2 + c;
+            a = a * y;
+            r = a;
+        }
+    } else if (x < 4.712389f) {
+        y = x - 3.1415927f;
+        x2 = y * y;
+        a = a * x2 - b;
+        a = a * x2 + c;
+        a = a * y;
+        a = -a;
+        r = a;
+    } else {
+        y = 1.5707964f - (x - 4.712389f);
+        x2 = y * y;
+        a = a * x2 - b;
+        a = a * x2 + c;
+        a = a * y;
+        a = -a;
+        r = a;
+    }
+    return r;
+}
+
+static inline f32 chb_cos(f32 x) {
+    f32 y;
+    f32 x2;
+    f32 r;
+    f32 a = 0.03705f;
+    f32 b = 0.4967f;
+    f32 c = 1.0f;
+    if (x <= 3.1415927f) {
+        if (x <= 1.5707964f) {
+            x2 = x * x;
+            a = a * x2 - b;
+            a = a * x2 + c;
+            r = a;
+        } else {
+            y = 1.5707964f - (x - 1.5707964f);
+            x2 = y * y;
+            a = a * x2 - b;
+            a = a * x2 + c;
+            a = -a;
+            r = a;
+        }
+    } else if (x < 4.712389f) {
+        y = x - 3.1415927f;
+        x2 = y * y;
+        a = a * x2 - b;
+        a = a * x2 + c;
+        a = -a;
+        r = a;
+    } else {
+        y = 1.5707964f - (x - 4.712389f);
+        x2 = y * y;
+        a = a * x2 - b;
+        a = a * x2 + c;
+        r = a;
+    }
+    return r;
+}
+
 static void pose_init(void);
 void jump(s32 i, s32 next, f32 x, f32 y, f32 z, f32 speed, f32 gravity);
 static void pose_main(void);

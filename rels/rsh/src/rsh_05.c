@@ -57,10 +57,144 @@ static f32 randf(f32 min, f32 max);
 static void moamoa_pose_init(void);
 static void moamoa_pose_main(void);
 static void moamoa_pose_change(Moamoa* moa, const char* model, const char* anim);
-static inline f32 moa_sin(f32 x) { f32 a = 0.00761f; f32 b = 0.16605f; f32 c = 1.0f; f32 y; f32 x2; if (x <= 3.1415927f) { if (x <= 1.5707964f) { x2 = x * x; a = a * x2 - b; a = a * x2 + c; a = a * x; } else { y = 1.5707964f - (x - 1.5707964f); x2 = y * y; a = a * x2 - b; a = a * x2 + c; a = a * y; } } else if (x < 4.712389f) { y = x - 3.1415927f; x2 = y * y; a = a * x2 - b; a = a * x2 + c; a = a * y; a = -a; } else { y = 1.5707964f - (x - 4.712389f); x2 = y * y; a = a * x2 - b; a = a * x2 + c; a = a * y; a = -a; } return a; }
-static inline f32 moa_cos(f32 x) { f32 a = 0.03705f; f32 b = 0.4967f; f32 c = 1.0f; f32 y; f32 x2; if (x <= 3.1415927f) { if (x <= 1.5707964f) { x2 = x * x; a = a * x2 - b; a = a * x2 + c; } else { y = 1.5707964f - (x - 1.5707964f); x2 = y * y; a = a * x2 - b; a = a * x2 + c; a = -a; } } else if (x < 4.712389f) { y = x - 3.1415927f; x2 = y * y; a = a * x2 - b; a = a * x2 + c; a = -a; } else { y = 1.5707964f - (x - 4.712389f); x2 = y * y; a = a * x2 - b; a = a * x2 + c; } return a; }
-static inline f32 moa_sinx(f32 x) { f32 a = 0.00761f; f32 b = 0.16605f; f32 c = 1.0f; f32 x2; if (x <= 3.1415927f) { if (x <= 1.5707964f) { x2 = x * x; a = a * x2 - b; a = a * x2 + c; a = a * x; } else { x = 1.5707964f - (x - 1.5707964f); x2 = x * x; a = a * x2 - b; a = a * x2 + c; a = a * x; } } else if (x < 4.712389f) { x = x - 3.1415927f; x2 = x * x; a = a * x2 - b; a = a * x2 + c; a = a * x; a = -a; } else { x = 1.5707964f - (x - 4.712389f); x2 = x * x; a = a * x2 - b; a = a * x2 + c; a = a * x; a = -a; } return a; }
-static inline f32 moa_cosx(f32 x) { f32 a = 0.03705f; f32 b = 0.4967f; f32 c = 1.0f; f32 x2; if (x <= 3.1415927f) { if (x <= 1.5707964f) { x2 = x * x; a = a * x2 - b; a = a * x2 + c; } else { x = 1.5707964f - (x - 1.5707964f); x2 = x * x; a = a * x2 - b; a = a * x2 + c; a = -a; } } else if (x < 4.712389f) { x = x - 3.1415927f; x2 = x * x; a = a * x2 - b; a = a * x2 + c; a = -a; } else { x = 1.5707964f - (x - 4.712389f); x2 = x * x; a = a * x2 - b; a = a * x2 + c; } return a; }
+static inline f32 moa_sin(f32 x) {
+    f32 a = 0.00761f;
+    f32 b = 0.16605f;
+    f32 c = 1.0f;
+    f32 y;
+    f32 x2;
+    if (x <= 3.1415927f) {
+        if (x <= 1.5707964f) {
+            x2 = x * x;
+            a = a * x2 - b;
+            a = a * x2 + c;
+            a = a * x;
+        } else {
+            y = 1.5707964f - (x - 1.5707964f);
+            x2 = y * y;
+            a = a * x2 - b;
+            a = a * x2 + c;
+            a = a * y;
+        }
+    } else if (x < 4.712389f) {
+        y = x - 3.1415927f;
+        x2 = y * y;
+        a = a * x2 - b;
+        a = a * x2 + c;
+        a = a * y;
+        a = -a;
+    } else {
+        y = 1.5707964f - (x - 4.712389f);
+        x2 = y * y;
+        a = a * x2 - b;
+        a = a * x2 + c;
+        a = a * y;
+        a = -a;
+    }
+    return a;
+}
+
+static inline f32 moa_cos(f32 x) {
+    f32 a = 0.03705f;
+    f32 b = 0.4967f;
+    f32 c = 1.0f;
+    f32 y;
+    f32 x2;
+    if (x <= 3.1415927f) {
+        if (x <= 1.5707964f) {
+            x2 = x * x;
+            a = a * x2 - b;
+            a = a * x2 + c;
+        } else {
+            y = 1.5707964f - (x - 1.5707964f);
+            x2 = y * y;
+            a = a * x2 - b;
+            a = a * x2 + c;
+            a = -a;
+        }
+    } else if (x < 4.712389f) {
+        y = x - 3.1415927f;
+        x2 = y * y;
+        a = a * x2 - b;
+        a = a * x2 + c;
+        a = -a;
+    } else {
+        y = 1.5707964f - (x - 4.712389f);
+        x2 = y * y;
+        a = a * x2 - b;
+        a = a * x2 + c;
+    }
+    return a;
+}
+
+static inline f32 moa_sinx(f32 x) {
+    f32 a = 0.00761f;
+    f32 b = 0.16605f;
+    f32 c = 1.0f;
+    f32 x2;
+    if (x <= 3.1415927f) {
+        if (x <= 1.5707964f) {
+            x2 = x * x;
+            a = a * x2 - b;
+            a = a * x2 + c;
+            a = a * x;
+        } else {
+            x = 1.5707964f - (x - 1.5707964f);
+            x2 = x * x;
+            a = a * x2 - b;
+            a = a * x2 + c;
+            a = a * x;
+        }
+    } else if (x < 4.712389f) {
+        x = x - 3.1415927f;
+        x2 = x * x;
+        a = a * x2 - b;
+        a = a * x2 + c;
+        a = a * x;
+        a = -a;
+    } else {
+        x = 1.5707964f - (x - 4.712389f);
+        x2 = x * x;
+        a = a * x2 - b;
+        a = a * x2 + c;
+        a = a * x;
+        a = -a;
+    }
+    return a;
+}
+
+static inline f32 moa_cosx(f32 x) {
+    f32 a = 0.03705f;
+    f32 b = 0.4967f;
+    f32 c = 1.0f;
+    f32 x2;
+    if (x <= 3.1415927f) {
+        if (x <= 1.5707964f) {
+            x2 = x * x;
+            a = a * x2 - b;
+            a = a * x2 + c;
+        } else {
+            x = 1.5707964f - (x - 1.5707964f);
+            x2 = x * x;
+            a = a * x2 - b;
+            a = a * x2 + c;
+            a = -a;
+        }
+    } else if (x < 4.712389f) {
+        x = x - 3.1415927f;
+        x2 = x * x;
+        a = a * x2 - b;
+        a = a * x2 + c;
+        a = -a;
+    } else {
+        x = 1.5707964f - (x - 4.712389f);
+        x2 = x * x;
+        a = a * x2 - b;
+        a = a * x2 + c;
+    }
+    return a;
+}
+
 static void ext_moamoa_main(void);
 static s32 moamoa_hit_check(ExtdrvPose* pose, Moamoa* moa);
 static void moamoa_jump(ExtdrvPose* pose, Moamoa* moa, s32 next, s32 checkGround, f32 x, f32 y, f32 z, f32 speed, f32 gravity);

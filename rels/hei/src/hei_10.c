@@ -33,8 +33,84 @@ typedef struct Chorobon { s16 flags; s16 state; s16 field_0x4; u8 field_0x6[2]; 
 typedef struct ChorobonWork { s32 field_0x0; s32 count; Chorobon* chb; } ChorobonWork;
 static ChorobonWork* wp;
 static f32 randf(f32 min, f32 max);
-static inline f32 chb_sin(f32 x) { f32 a = 0.00761f; f32 b = 0.16605f; f32 c = 1.0f; f32 y; f32 x2; if (x <= 3.1415927f) { if (x <= 1.5707964f) { x2 = x * x; a = a * x2 - b; a = a * x2 + c; a = a; a = a * x; } else { y = 1.5707964f - (x - 1.5707964f); x2 = y * y; a = a * x2 - b; a = a * x2 + c; a = a; a = a * y; } } else if (x < 4.712389f) { y = x - 3.1415927f; x2 = y * y; a = a * x2 - b; a = a * x2 + c; a = a; a = a * y; a = -a; } else { y = 1.5707964f - (x - 4.712389f); x2 = y * y; a = a * x2 - b; a = a * x2 + c; a = a; a = a * y; a = -a; } return a; }
-static inline f32 chb_cos(f32 x) { f32 a = 0.03705f; f32 b = 0.4967f; f32 c = 1.0f; f32 y; f32 x2; if (x <= 3.1415927f) { if (x <= 1.5707964f) { x2 = x * x; a = a * x2 - b; a = a * x2 + c; a = a; } else { y = 1.5707964f - (x - 1.5707964f); x2 = y * y; a = a * x2 - b; a = a * x2 + c; a = a; a = -a; } } else if (x < 4.712389f) { y = x - 3.1415927f; x2 = y * y; a = a * x2 - b; a = a * x2 + c; a = a; a = -a; } else { y = 1.5707964f - (x - 4.712389f); x2 = y * y; a = a * x2 - b; a = a * x2 + c; a = a; } return a; }
+static inline f32 chb_sin(f32 x) {
+    f32 a = 0.00761f;
+    f32 b = 0.16605f;
+    f32 c = 1.0f;
+    f32 y;
+    f32 x2;
+    if (x <= 3.1415927f) {
+        if (x <= 1.5707964f) {
+            x2 = x * x;
+            a = a * x2 - b;
+            a = a * x2 + c;
+            a = a;
+            a = a * x;
+        } else {
+            y = 1.5707964f - (x - 1.5707964f);
+            x2 = y * y;
+            a = a * x2 - b;
+            a = a * x2 + c;
+            a = a;
+            a = a * y;
+        }
+    } else if (x < 4.712389f) {
+        y = x - 3.1415927f;
+        x2 = y * y;
+        a = a * x2 - b;
+        a = a * x2 + c;
+        a = a;
+        a = a * y;
+        a = -a;
+    } else {
+        y = 1.5707964f - (x - 4.712389f);
+        x2 = y * y;
+        a = a * x2 - b;
+        a = a * x2 + c;
+        a = a;
+        a = a * y;
+        a = -a;
+    }
+    return a;
+}
+
+static inline f32 chb_cos(f32 x) {
+    f32 a = 0.03705f;
+    f32 b = 0.4967f;
+    f32 c = 1.0f;
+    f32 y;
+    f32 x2;
+    if (x <= 3.1415927f) {
+        if (x <= 1.5707964f) {
+            x2 = x * x;
+            a = a * x2 - b;
+            a = a * x2 + c;
+            a = a;
+        } else {
+            y = 1.5707964f - (x - 1.5707964f);
+            x2 = y * y;
+            a = a * x2 - b;
+            a = a * x2 + c;
+            a = a;
+            a = -a;
+        }
+    } else if (x < 4.712389f) {
+        y = x - 3.1415927f;
+        x2 = y * y;
+        a = a * x2 - b;
+        a = a * x2 + c;
+        a = a;
+        a = -a;
+    } else {
+        y = 1.5707964f - (x - 4.712389f);
+        x2 = y * y;
+        a = a * x2 - b;
+        a = a * x2 + c;
+        a = a;
+    }
+    return a;
+}
+
 void chb_jump(ExtdrvPose* pose, Chorobon* chb, s32 next, f32 x, f32 y, f32 z, f32 speed, f32 gravity);
 static void ext_disp(CameraId camera, void* param);
 
@@ -211,6 +287,7 @@ void chb_jump(ExtdrvPose* pose, Chorobon* chb, s32 next, f32 x, f32 y, f32 z, f3
     chb->state = 100;
     chb->next = next;
 }
+
 static inline void jump(ExtdrvPose* pose, Chorobon* chb, s32 next, f32 x, f32 y, f32 z, f32 rs, f32 smin, f32 smax, f32 rg, f32 gmin, f32 gmax) { chb_jump(pose, chb, next, x, y, z, rs * (smax - smin) + smin, rg * (gmax - gmin) + gmin); } static inline void escape(ExtdrvPose* pose, Chorobon* chb, s32 next, f32 x, f32 y, f32 z, f32 rs, f32 smin, f32 smax, f32 rg, f32 gmin, f32 gmax) { chb_jump(pose, chb, next, x, y, z, 2.0f * (rs * (smax - smin) + smin), rg * (gmax - gmin) + gmin); }
 #pragma push
 #pragma opt_lifetimes off
@@ -220,11 +297,13 @@ static inline void jump_r(ExtdrvPose* pose, Chorobon* chb, f32 x, f32 y, f32 z) 
     f32 rg = rand01();
     jump(pose, chb, chb->state, x, y, z, rs, 0.3f, 0.5f, rg, 0.5f, 0.8f);
 }
+
 static inline void escape_r(ExtdrvPose* pose, Chorobon* chb, f32 x, f32 y, f32 z) {
     f32 rs = rand() / 32767.0f;
     f32 rg = rand01();
     escape(pose, chb, chb->state, x, y, z, rs, 1.0f, 1.2f, rg, 0.8f, 0.8f);
 }
+
 static void ext_main(void) {
     MarioWork* mario = marioGetPtr();
     const char* sfx;

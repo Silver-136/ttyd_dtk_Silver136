@@ -63,10 +63,144 @@ static void moamoa_pose_change(Moamoa* moa, const char* model, const char* anim)
 extern const char* g_moamoa_chain_tbl[][2];
 static void ext_moamoa_main(void);
 #pragma inline_max_total_size(100000)
-static inline f32 moa_sin(f32 x) { f32 a = 0.00761f; f32 b = 0.16605f; f32 c = 1.0f; f32 y; f32 x2; if (x <= 3.1415927f) { if (x <= 1.5707964f) { x2 = x * x; a = a * x2 - b; a = a * x2 + c; a = a * x; } else { y = 1.5707964f - (x - 1.5707964f); x2 = y * y; a = a * x2 - b; a = a * x2 + c; a = a * y; } } else if (x < 4.712389f) { y = x - 3.1415927f; x2 = y * y; a = a * x2 - b; a = a * x2 + c; a = a * y; a = -a; } else { y = 1.5707964f - (x - 4.712389f); x2 = y * y; a = a * x2 - b; a = a * x2 + c; a = a * y; a = -a; } return a; }
-static inline f32 moa_cos(f32 x) { f32 a = 0.03705f; f32 b = 0.4967f; f32 c = 1.0f; f32 y; f32 x2; if (x <= 3.1415927f) { if (x <= 1.5707964f) { x2 = x * x; a = a * x2 - b; a = a * x2 + c; } else { y = 1.5707964f - (x - 1.5707964f); x2 = y * y; a = a * x2 - b; a = a * x2 + c; a = -a; } } else if (x < 4.712389f) { y = x - 3.1415927f; x2 = y * y; a = a * x2 - b; a = a * x2 + c; a = -a; } else { y = 1.5707964f - (x - 4.712389f); x2 = y * y; a = a * x2 - b; a = a * x2 + c; } return a; }
-static inline f32 moa_sinx(f32 x) { f32 a = 0.00761f; f32 b = 0.16605f; f32 c = 1.0f; f32 x2; if (x <= 3.1415927f) { if (x <= 1.5707964f) { x2 = x * x; a = a * x2 - b; a = a * x2 + c; a = a * x; } else { x = 1.5707964f - (x - 1.5707964f); x2 = x * x; a = a * x2 - b; a = a * x2 + c; a = a * x; } } else if (x < 4.712389f) { x = x - 3.1415927f; x2 = x * x; a = a * x2 - b; a = a * x2 + c; a = a * x; a = -a; } else { x = 1.5707964f - (x - 4.712389f); x2 = x * x; a = a * x2 - b; a = a * x2 + c; a = a * x; a = -a; } return a; }
-static inline f32 moa_cosx(f32 x) { f32 a = 0.03705f; f32 b = 0.4967f; f32 c = 1.0f; f32 x2; if (x <= 3.1415927f) { if (x <= 1.5707964f) { x2 = x * x; a = a * x2 - b; a = a * x2 + c; } else { x = 1.5707964f - (x - 1.5707964f); x2 = x * x; a = a * x2 - b; a = a * x2 + c; a = -a; } } else if (x < 4.712389f) { x = x - 3.1415927f; x2 = x * x; a = a * x2 - b; a = a * x2 + c; a = -a; } else { x = 1.5707964f - (x - 4.712389f); x2 = x * x; a = a * x2 - b; a = a * x2 + c; } return a; }
+static inline f32 moa_sin(f32 x) {
+    f32 a = 0.00761f;
+    f32 b = 0.16605f;
+    f32 c = 1.0f;
+    f32 y;
+    f32 x2;
+    if (x <= 3.1415927f) {
+        if (x <= 1.5707964f) {
+            x2 = x * x;
+            a = a * x2 - b;
+            a = a * x2 + c;
+            a = a * x;
+        } else {
+            y = 1.5707964f - (x - 1.5707964f);
+            x2 = y * y;
+            a = a * x2 - b;
+            a = a * x2 + c;
+            a = a * y;
+        }
+    } else if (x < 4.712389f) {
+        y = x - 3.1415927f;
+        x2 = y * y;
+        a = a * x2 - b;
+        a = a * x2 + c;
+        a = a * y;
+        a = -a;
+    } else {
+        y = 1.5707964f - (x - 4.712389f);
+        x2 = y * y;
+        a = a * x2 - b;
+        a = a * x2 + c;
+        a = a * y;
+        a = -a;
+    }
+    return a;
+}
+
+static inline f32 moa_cos(f32 x) {
+    f32 a = 0.03705f;
+    f32 b = 0.4967f;
+    f32 c = 1.0f;
+    f32 y;
+    f32 x2;
+    if (x <= 3.1415927f) {
+        if (x <= 1.5707964f) {
+            x2 = x * x;
+            a = a * x2 - b;
+            a = a * x2 + c;
+        } else {
+            y = 1.5707964f - (x - 1.5707964f);
+            x2 = y * y;
+            a = a * x2 - b;
+            a = a * x2 + c;
+            a = -a;
+        }
+    } else if (x < 4.712389f) {
+        y = x - 3.1415927f;
+        x2 = y * y;
+        a = a * x2 - b;
+        a = a * x2 + c;
+        a = -a;
+    } else {
+        y = 1.5707964f - (x - 4.712389f);
+        x2 = y * y;
+        a = a * x2 - b;
+        a = a * x2 + c;
+    }
+    return a;
+}
+
+static inline f32 moa_sinx(f32 x) {
+    f32 a = 0.00761f;
+    f32 b = 0.16605f;
+    f32 c = 1.0f;
+    f32 x2;
+    if (x <= 3.1415927f) {
+        if (x <= 1.5707964f) {
+            x2 = x * x;
+            a = a * x2 - b;
+            a = a * x2 + c;
+            a = a * x;
+        } else {
+            x = 1.5707964f - (x - 1.5707964f);
+            x2 = x * x;
+            a = a * x2 - b;
+            a = a * x2 + c;
+            a = a * x;
+        }
+    } else if (x < 4.712389f) {
+        x = x - 3.1415927f;
+        x2 = x * x;
+        a = a * x2 - b;
+        a = a * x2 + c;
+        a = a * x;
+        a = -a;
+    } else {
+        x = 1.5707964f - (x - 4.712389f);
+        x2 = x * x;
+        a = a * x2 - b;
+        a = a * x2 + c;
+        a = a * x;
+        a = -a;
+    }
+    return a;
+}
+
+static inline f32 moa_cosx(f32 x) {
+    f32 a = 0.03705f;
+    f32 b = 0.4967f;
+    f32 c = 1.0f;
+    f32 x2;
+    if (x <= 3.1415927f) {
+        if (x <= 1.5707964f) {
+            x2 = x * x;
+            a = a * x2 - b;
+            a = a * x2 + c;
+        } else {
+            x = 1.5707964f - (x - 1.5707964f);
+            x2 = x * x;
+            a = a * x2 - b;
+            a = a * x2 + c;
+            a = -a;
+        }
+    } else if (x < 4.712389f) {
+        x = x - 3.1415927f;
+        x2 = x * x;
+        a = a * x2 - b;
+        a = a * x2 + c;
+        a = -a;
+    } else {
+        x = 1.5707964f - (x - 4.712389f);
+        x2 = x * x;
+        a = a * x2 - b;
+        a = a * x2 + c;
+    }
+    return a;
+}
+
 static s32 moamoa_hit_check(ExtdrvPose* pose, Moamoa* moa);
 static void moamoa_jump(ExtdrvPose* pose, Moamoa* moa, s32 next, s32 checkGround, f32 x, f32 y, f32 z, f32 speed, f32 gravity);
 static void ext_disp(CameraId camera, void* param);
@@ -241,6 +375,7 @@ static void moamoa_pose_main(void) {
         pose->texId = def->start + (s32)((def->count - 1) * t);
     }
 }
+
 static void moamoa_pose_change(Moamoa* moa, const char* model, const char* anim) {
     static const char* group_tbl[][2] = {
         {"c_n_moa_a", "S_1"},
@@ -287,6 +422,7 @@ static void moamoa_pose_change(Moamoa* moa, const char* model, const char* anim)
         moa->startTime = gp->renderTime;
     }
 }
+
 static s32 evt_moamoa_flag_onoff(EventEntry* event, BOOL isFirstCall) {
     EvtWord* args = event->args;
     s32 on = evtGetValue(event, args[0]);
@@ -299,10 +435,12 @@ static s32 evt_moamoa_flag_onoff(EventEntry* event, BOOL isFirstCall) {
     }
     return EVT_RETURN_DONE;
 }
+
 static s32 evt_moamoa_exit(EventEntry* event, BOOL isFirstCall) {
     extReset();
     return EVT_RETURN_DONE;
 }
+
 static s32 evt_moamoa_ry_reset(EventEntry* event, BOOL isFirstCall) {
     s32 i;
     ExtdrvPose* pose = extGetPosePtr();
@@ -313,6 +451,7 @@ static s32 evt_moamoa_ry_reset(EventEntry* event, BOOL isFirstCall) {
     }
     return EVT_RETURN_DONE;
 }
+
 static s32 evt_moamoa_end_wait(EventEntry* event, BOOL isFirstCall) {
     s32 i;
     Moamoa* moa;
@@ -326,6 +465,7 @@ static s32 evt_moamoa_end_wait(EventEntry* event, BOOL isFirstCall) {
     }
     return EVT_RETURN_DONE;
 }
+
 static s32 evt_moamoa_fusion(EventEntry* event, BOOL isFirstCall) {
     s32 i;
     ExtdrvPose* pose;
@@ -361,6 +501,7 @@ static s32 evt_moamoa_fusion(EventEntry* event, BOOL isFirstCall) {
     }
     return EVT_RETURN_DONE;
 }
+
 static s32 evt_moamoa_kind_onoff(EventEntry* event, BOOL isFirstCall) {
     EvtWord* args = event->args;
     s32 on = evtGetValue(event, args[0]);
@@ -392,6 +533,7 @@ static s32 evt_moamoa_kind_onoff(EventEntry* event, BOOL isFirstCall) {
     }
     return EVT_RETURN_DONE;
 }
+
 static s32 evt_moamoa_blow(EventEntry* event, BOOL isFirstCall) {
     s32 i;
     Moamoa* moa;
@@ -405,6 +547,7 @@ static s32 evt_moamoa_blow(EventEntry* event, BOOL isFirstCall) {
     }
     return EVT_RETURN_DONE;
 }
+
 static s32 evt_moamoa_fusion_debug(EventEntry* event, BOOL isFirstCall) {
     s32 i;
     ExtdrvPose* pose = extGetPosePtr();
@@ -421,6 +564,7 @@ static s32 evt_moamoa_fusion_debug(EventEntry* event, BOOL isFirstCall) {
     }
     return EVT_RETURN_DONE;
 }
+
 static s32 evt_moamoa_target_off(EventEntry* event, BOOL isFirstCall) {
     s32 i = evtGetValue(event, event->args[0]);
 
@@ -433,6 +577,7 @@ static s32 evt_moamoa_target_off(EventEntry* event, BOOL isFirstCall) {
     }
     return EVT_RETURN_DONE;
 }
+
 static f32 randf(f32 min, f32 max) {
     f32 r = rand() / (32767.0f);
 
@@ -505,6 +650,7 @@ static void ext_disp(CameraId camera, void* param) {
         offscreenAddBoundingBox(offscreenNameToId("offscreen"), left, top, right, bottom);
     }
 }
+
 static void ext_shadow_disp(CameraId camera, void* param) {
     static Mtx mt = {
         {8.0f, 0.0f, 0.0f, 0.0f},

@@ -52,8 +52,76 @@ FanWork* fan_wp;
 static void pose_init(void);
 static void pose_change(Fan* fan, const char* name, const char* anim);
 static f32 randf(f32 min, f32 max);
-static inline f32 fan_sin(f32 x) { f32 a = 0.00761f; f32 b = 0.16605f; f32 c = 1.0f; f32 y; f32 x2; if (x <= 3.1415927f) { if (x <= 1.5707964f) { x2 = x * x; a = a * x2 - b; a = a * x2 + c; a = a * x; } else { y = 1.5707964f - (x - 1.5707964f); x2 = y * y; a = a * x2 - b; a = a * x2 + c; a = a * y; } } else if (x < 4.712389f) { y = x - 3.1415927f; x2 = y * y; a = a * x2 - b; a = a * x2 + c; a = a * y; a = -a; } else { y = 1.5707964f - (x - 4.712389f); x2 = y * y; a = a * x2 - b; a = a * x2 + c; a = a * y; a = -a; } return a; }
-static inline f32 fan_cos(f32 x) { f32 a = 0.03705f; f32 b = 0.4967f; f32 c = 1.0f; f32 y; f32 x2; if (x <= 3.1415927f) { if (x <= 1.5707964f) { x2 = x * x; a = a * x2 - b; a = a * x2 + c; } else { y = 1.5707964f - (x - 1.5707964f); x2 = y * y; a = a * x2 - b; a = a * x2 + c; a = -a; } } else if (x < 4.712389f) { y = x - 3.1415927f; x2 = y * y; a = a * x2 - b; a = a * x2 + c; a = -a; } else { y = 1.5707964f - (x - 4.712389f); x2 = y * y; a = a * x2 - b; a = a * x2 + c; } return a; }
+static inline f32 fan_sin(f32 x) {
+    f32 a = 0.00761f;
+    f32 b = 0.16605f;
+    f32 c = 1.0f;
+    f32 y;
+    f32 x2;
+    if (x <= 3.1415927f) {
+        if (x <= 1.5707964f) {
+            x2 = x * x;
+            a = a * x2 - b;
+            a = a * x2 + c;
+            a = a * x;
+        } else {
+            y = 1.5707964f - (x - 1.5707964f);
+            x2 = y * y;
+            a = a * x2 - b;
+            a = a * x2 + c;
+            a = a * y;
+        }
+    } else if (x < 4.712389f) {
+        y = x - 3.1415927f;
+        x2 = y * y;
+        a = a * x2 - b;
+        a = a * x2 + c;
+        a = a * y;
+        a = -a;
+    } else {
+        y = 1.5707964f - (x - 4.712389f);
+        x2 = y * y;
+        a = a * x2 - b;
+        a = a * x2 + c;
+        a = a * y;
+        a = -a;
+    }
+    return a;
+}
+
+static inline f32 fan_cos(f32 x) {
+    f32 a = 0.03705f;
+    f32 b = 0.4967f;
+    f32 c = 1.0f;
+    f32 y;
+    f32 x2;
+    if (x <= 3.1415927f) {
+        if (x <= 1.5707964f) {
+            x2 = x * x;
+            a = a * x2 - b;
+            a = a * x2 + c;
+        } else {
+            y = 1.5707964f - (x - 1.5707964f);
+            x2 = y * y;
+            a = a * x2 - b;
+            a = a * x2 + c;
+            a = -a;
+        }
+    } else if (x < 4.712389f) {
+        y = x - 3.1415927f;
+        x2 = y * y;
+        a = a * x2 - b;
+        a = a * x2 + c;
+        a = -a;
+    } else {
+        y = 1.5707964f - (x - 4.712389f);
+        x2 = y * y;
+        a = a * x2 - b;
+        a = a * x2 + c;
+    }
+    return a;
+}
+
 s32 check_hammer(Fan* fan);
 void psndSFX_vol(s32 id, u8 vol);
 static void pose_main(void);
@@ -1805,6 +1873,7 @@ void ext_fan_main(void) {
     psndSFX_pos(fan_wp->sfxId, &target);
     psndSFX_vol(fan_wp->sfxId, fan_wp->vol * fan_wp->count / fan_wp->num);
 }
+
 static __declspec(section ".rodata") Vec fan_zero = {0.0f, 0.0f, 0.0f};
 #pragma opt_propagation reset
 #pragma opt_lifetimes reset
