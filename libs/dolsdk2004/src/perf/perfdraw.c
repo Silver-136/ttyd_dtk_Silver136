@@ -310,7 +310,7 @@ __declspec(weak) f32 COORD(u32 a) {
 
 static void DrawKey(void) {
     u32 delta;
-    u32 foo[2];
+    u32 range[2];
     f32 bwscale;
     f32 lastY;
     f32 x1;
@@ -321,73 +321,73 @@ static void DrawKey(void) {
     x2 = 616.0f;
     lastY = 7.0f + DrawFrameH;
     bwscale = 1.0f;
-    foo[0] = 0;
-    foo[1] = MaxBusTransactions / 10;
+    range[0] = 0;
+    range[1] = MaxBusTransactions / 10;
 
-    delta = (foo[1] - foo[0]);
+    delta = (range[1] - range[0]);
     height = HEIGHT(delta, bwscale);
     if (height > 1.0f) {
         DRAW_RECT(x1, x2, lastY, lastY + height, DrawCPColor);
         lastY += height; 
     }
     
-    delta = (foo[1] - foo[0]);
+    delta = (range[1] - range[0]);
     height = HEIGHT(delta, bwscale);
     if (height > 1.0f) {
         DRAW_RECT(x1, x2, lastY, lastY + height, DrawTCColor);
         lastY += height;
     }
     
-    delta = (foo[1] - foo[0]);
+    delta = (range[1] - range[0]);
     height = HEIGHT(delta, bwscale);
     if (height > 1.0f) { 
         DRAW_RECT(x1, x2, lastY, lastY + height, DrawCPURDColor);
         lastY += height;
     }
     
-    delta = (foo[1] - foo[0]);
+    delta = (range[1] - range[0]);
     height = HEIGHT(delta, bwscale);
     if (height > 1.0f) { 
         DRAW_RECT(x1, x2, lastY, lastY + height, DrawCPUWRColor);
         lastY += height;
     }
     
-    delta = (foo[1] - foo[0]);
+    delta = (range[1] - range[0]);
     height = HEIGHT(delta, bwscale);
     if (height > 1.0f) { 
         DRAW_RECT(x1, x2, lastY, lastY + height, DrawDSPColor);
         lastY += height;
     }
     
-    delta = (foo[1] - foo[0]);
+    delta = (range[1] - range[0]);
     height = HEIGHT(delta, bwscale);
     if (height > 1.0f) { 
         DRAW_RECT(x1, x2, lastY, lastY + height, DrawIOColor);
         lastY += height;
     }
     
-    delta = (foo[1] - foo[0]);
+    delta = (range[1] - range[0]);
     height = HEIGHT(delta, bwscale);
     if (height > 1.0f) { 
         DRAW_RECT(x1, x2, lastY, lastY + height, DrawVIColor);
         lastY += height;
     }
     
-    delta = (foo[1] - foo[0]);
+    delta = (range[1] - range[0]);
     height = HEIGHT(delta, bwscale);
     if (height > 1.0f) { 
         DRAW_RECT(x1, x2, lastY, lastY + height, DrawPEColor);
         lastY += height;
     }
     
-    delta = (foo[1] - foo[0]);
+    delta = (range[1] - range[0]);
     height = HEIGHT(delta, bwscale);
     if (height > 1.0f) { 
         DRAW_RECT(x1, x2, lastY, lastY + height, DrawRFColor);
         lastY += height;
     }
     
-    delta = (foo[1] - foo[0]);
+    delta = (range[1] - range[0]);
     height = HEIGHT(delta, bwscale);
     if (height > 1.0f) { 
         DRAW_RECT(x1, x2, lastY, lastY + height, DrawFIColor);

@@ -53,7 +53,7 @@ static inline void __DEMOInitMem(void) {
 
     arenaLo = (void*)OSRoundUp32B((u32)DemoFrameBuffer2 + fbSize);
     OSSetArenaLo(arenaLo);
-    //newer SDKs have more stuff here
+    // (later SDK versions do more setup here)
 }
 
 static inline void __DEMOInitVI(void) {

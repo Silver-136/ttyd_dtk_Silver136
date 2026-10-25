@@ -1643,7 +1643,7 @@ void marioChgPaper(const char* name) {
 
     if (flags & 0x40000000 && !(flags & 2) && !(mp->flags & 0x80000000)) {
         animName = mp->paperAnimName;
-        if (!animName || strcmp(animName, name)) { //if different, do stuff
+        if (!animName || strcmp(animName, name)) { // only when the animation changes
             wp->paperAnimName = name;
             wp->poseTime = 0;
             wp->trigFlags |= 0x4000;

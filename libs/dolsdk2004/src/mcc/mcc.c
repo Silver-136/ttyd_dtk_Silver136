@@ -454,7 +454,7 @@ static int NotifyCompulsorily(MCC_CHANNEL chID, u32 notify, u32 timeout) {
     volatile u32 tickCur;
     volatile u32 tickSec;
 #ifndef DEBUG
-    int unused; // fake but blah
+    int unused; // FAKE: pads the stack frame to the original size
 #endif
 
     status = 0;
@@ -501,7 +501,7 @@ static int NotifyInitDone(void) {
 
 static int NotifyChannelEvent(MCC_CHANNEL chID, u32 notify) {
 #ifndef DEBUG
-    int unused[2]; // fake but blah
+    int unused[2]; // FAKE: pads the stack frame to the original size
 #endif
 
     if (LoadChannelInfo(gChannelInfo) == 0) {
@@ -540,7 +540,7 @@ static void MailboxCheck(void) {
     u32 value;
     BOOL bDoCall;
 #ifndef DEBUG
-    int unused[3]; // fake but blah
+    int unused[3]; // FAKE: pads the stack frame to the original size
 #endif
 
     mailbox = 0;
@@ -644,7 +644,7 @@ static int mccInitializeCheck(u8 timeout) {
     int dmyFlag;
     int i;
 #ifndef DEBUG
-    int unused[3]; // fake but blah
+    int unused[3]; // FAKE: pads the stack frame to the original size
 #endif
 
     dmyFlag = 0;
@@ -700,7 +700,7 @@ int MCCInit(MCC_EXI exiChannel, u8 timeout, MCC_CBSysEvent callbackSysEvent) {
     u32 status;
     int i;
 #ifndef DEBUG
-    int unused[3]; // fake but blah
+    int unused[3]; // FAKE: pads the stack frame to the original size
 #endif
 
     OSRegisterVersion(__MCCVersion);
@@ -797,7 +797,7 @@ int MCCEnumDevices(MCC_CBEnumDevices callbackEnumDevices) {
 
 u8 MCCGetFreeBlocks(MCC_MODE mode) {
 #ifndef DEBUG
-    int unused[3]; // fake but blah
+    int unused[3]; // FAKE: pads the stack frame to the original size
 #endif
 
     mccDebugPrint("MCCGetFreeBlocks\n");
@@ -825,7 +825,7 @@ u8 MCCGetLastError(void) {
 
 int MCCGetChannelInfo(MCC_CHANNEL chID, MCC_Info* info) {
 #ifndef DEBUG
-    int unused[3]; // fake but blah
+    int unused[3]; // FAKE: pads the stack frame to the original size
 #endif
 
     mccDebugPrint("MCCGetChannelInfo\n");
@@ -853,7 +853,7 @@ int MCCGetChannelInfo(MCC_CHANNEL chID, MCC_Info* info) {
 int MCCGetConnectionStatus(MCC_CHANNEL chID, MCC_CONNECT* connect) {
     MCC_Info info;
 #ifndef DEBUG
-    int unused[2]; // fake but blah
+    int unused[2]; // FAKE: pads the stack frame to the original size
 #endif
 
     mccDebugPrint("MCCGetConnectionStatus\n");
@@ -887,7 +887,7 @@ int MCCGetConnectionStatus(MCC_CHANNEL chID, MCC_CONNECT* connect) {
 int MCCNotify(MCC_CHANNEL chID, u32 notify) {
     MCC_CONNECT connect;
 #ifndef DEBUG
-    int unused[3]; // fake but blah
+    int unused[3]; // FAKE: pads the stack frame to the original size
 #endif
 
 
@@ -917,7 +917,7 @@ int MCCNotify(MCC_CHANNEL chID, u32 notify) {
 u32 MCCSetChannelEventMask(MCC_CHANNEL chID, u32 event) {
     u32 oldMask;
 #ifndef DEBUG
-    int unused[2]; // fake but blah
+    int unused[2]; // FAKE: pads the stack frame to the original size
 #endif
 
     oldMask = 0xFFFFFFFF;
@@ -947,7 +947,7 @@ int MCCOpen(MCC_CHANNEL chID, u8 blockSize, MCC_CBEvent callbackEvent) {
 #endif
     u8 freeBlocks;
 #ifndef DEBUG
-    int unused[6]; // fake but blah
+    int unused[6]; // FAKE: pads the stack frame to the original size
 #endif
 
     mccDebugPrint("MCCOpen\n");
@@ -1039,7 +1039,7 @@ exit:;
 int MCCClose(MCC_CHANNEL chID) {
     u8 connectSide;
 #ifndef DEBUG
-    int unused[4]; // fake but blah
+    int unused[4]; // FAKE: pads the stack frame to the original size
 #endif
 
     connectSide = 2;
@@ -1094,7 +1094,7 @@ exit:;
 
 int MCCLock(MCC_CHANNEL chID) {
 #ifndef DEBUG
-    int unused[7]; // fake but blah
+    int unused[7]; // FAKE: pads the stack frame to the original size
 #endif
 
     mccDebugPrint("MCCLock\n");
@@ -1147,7 +1147,7 @@ exit:;
 
 int MCCUnlock(MCC_CHANNEL chID) {
 #ifndef DEBUG
-    int unused[7]; // fake but blah
+    int unused[7]; // FAKE: pads the stack frame to the original size
 #endif
 
     mccDebugPrint("MCCUnlock\n");
@@ -1200,7 +1200,7 @@ exit:
 
 int MCCRead(MCC_CHANNEL chID, u32 offset, void* data, s32 size, MCC_SYNC_STATE async) {
 #ifndef DEBUG
-    int unused[11]; // fake but blah
+    int unused[11]; // FAKE: pads the stack frame to the original size
 #endif
 
     mccDebugPrint("MCCRead\n");
@@ -1286,7 +1286,7 @@ exit:;
 
 int MCCWrite(MCC_CHANNEL chID, u32 offset, void* data, s32 size, MCC_SYNC_STATE async) {
 #ifndef DEBUG
-    int unused[11]; // fake but blah
+    int unused[11]; // FAKE: pads the stack frame to the original size
 #endif
     mccDebugPrint("MCCWrite\n");
 
@@ -1380,7 +1380,7 @@ int MCCCheckAsyncDone() {
     u16 mode;
     u8 chID;
 #ifndef DEBUG
-    int unused[5]; // fake but blah
+    int unused[5]; // FAKE: pads the stack frame to the original size
 #endif
 
     if (!gMccInitialized) {

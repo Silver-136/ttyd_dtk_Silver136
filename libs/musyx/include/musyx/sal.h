@@ -12,7 +12,7 @@ typedef void (*SND_SOME_CALLBACK)();
 #define MIN(a, b) ((a) > (b) ? (b) : (a))
 #endif
 #define CLAMP(value, min, max) ((value) > (max) ? (max) : (value) < (min) ? (min) : (value))
-// TODO matching hack
+// CLAMP with the comparisons in the other order (min first), as some call sites test it
 #define CLAMP_INV(value, min, max) ((value) < (min) ? (min) : (value) > (max) ? (max) : (value))
 
 #ifdef __cplusplus
