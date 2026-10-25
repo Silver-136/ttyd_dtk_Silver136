@@ -47,11 +47,3 @@ void _prolog(void) {
     relSetBtlAddr("gon", btlsetup_gon_tbl, btl_gon_setup_no_tbl);
 }
 
-// FAKE: stand-in for the weak constant pair of MSL sqrtf (see docs/FAKES.md)
-#pragma push
-#pragma dollar_identifiers on
-static f64 _three$localstatic4$sqrtf = 3.0;
-
-static f64 _half$localstatic3$sqrtf = 0.5;
-#pragma pop
-

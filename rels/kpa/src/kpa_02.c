@@ -22,14 +22,6 @@ static EvtWord kpa_goal[38];
 static NpcSetupInfo npcEnt[1];
 EvtWord kpa_02_init_evt[36];
 
-// FAKE: stand-in for the weak constant pair of MSL sqrtf (see docs/FAKES.md)
-#pragma push
-#pragma dollar_identifiers on
-static f64 _three$localstatic4$sqrtf = 3.0;
-
-static f64 _half$localstatic3$sqrtf = 0.5;
-#pragma pop
-
 EvtWord kpa_act_stg1_mobj[] = {
     KPA_OBJ_BRICK_2(-1225.0f, 125.0f), KPA_OBJ_BRICK_2(-1100.0f, 125.0f), KPA_OBJ_OJAMA_BLK(-1050.0f, 125.0f),
     KPA_OBJ_BRICK_2(-1000.0f, 125.0f), KPA_OBJ_BRICK_2(-1000.0f, 275.0f), KPA_OBJ_BRICK_2(-950.0f, 125.0f),

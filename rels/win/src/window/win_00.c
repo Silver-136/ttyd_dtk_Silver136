@@ -116,14 +116,6 @@ EvtWord iri_28_enemy_dead[13];
 EvtWord iri_28_init[60];
 EvtWord win_00_init_evt[85];
 
-// FAKE: stand-in for the weak constant pair of MSL sqrtf (see docs/FAKES.md)
-#pragma push
-#pragma dollar_identifiers on
-static f64 _three$localstatic4$sqrtf = 3.0;
-
-static f64 _half$localstatic3$sqrtf = 0.5;
-#pragma pop
-
 static EVT_BEGIN(vivian_init)
     CALL(evt_npc_flag_onoff, 0, STRING("me"), 268435456)
     SWITCH(GSW(0))

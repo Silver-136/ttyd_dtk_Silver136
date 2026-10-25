@@ -172,14 +172,6 @@ USER_FUNC(evt_gor_inemuri_snd_off) {
     return EVT_RETURN_DONE;
 }
 
-// FAKE: stand-in for the weak constant pair of MSL sqrtf (see docs/FAKES.md)
-#pragma push
-#pragma dollar_identifiers on
-static f64 _three$localstatic4$sqrtf = 3.0;
-
-static f64 _half$localstatic3$sqrtf = 0.5;
-#pragma pop
-
 EVT_BEGIN(gor_villager_urouro)
     CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
     CALL(urouro_init_func, STRING("me"), LW(0), LW(2), FLOAT(100.0f), FLOAT(30.0f), 0)

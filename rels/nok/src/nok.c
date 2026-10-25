@@ -69,14 +69,6 @@ USER_FUNC(evt_nokonoko_urouro_check_func) {
     return EVT_RETURN_DONE;
 }
 
-// FAKE: stand-in for the weak constant pair of MSL sqrtf (see docs/FAKES.md)
-#pragma push
-#pragma dollar_identifiers on
-static f64 _three$localstatic4$sqrtf = 3.0;
-
-static f64 _half$localstatic3$sqrtf = 0.5;
-#pragma pop
-
 EVT_BEGIN(nokonoko_urouro_regl)
     CALL(evt_npc_get_position, STRING("me"), LW(6), LW(7), LW(8))
     CALL(evt_sub_random, 300, LW(0))

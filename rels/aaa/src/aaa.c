@@ -22,14 +22,6 @@ void _prolog(void) {
     relSetEvtAddr("aaa_00", aaa_00_init_evt);
 }
 
-// FAKE: stand-in for the weak constant pair of MSL sqrtf (see docs/FAKES.md)
-#pragma push
-#pragma dollar_identifiers on
-static f64 _three$localstatic4$sqrtf = 3.0;
-
-static f64 _half$localstatic3$sqrtf = 0.5;
-#pragma pop
-
 void _epilog(void) {
     voidfunctionptr* dtor;
 

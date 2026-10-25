@@ -316,14 +316,6 @@ EvtWord evt_kyaku_check[105];
 #endif
 EvtWord tou_03_init_evt[VERSION_PICK(370, 372)];
 
-// FAKE: stand-in for the weak constant pair of MSL sqrtf (see docs/FAKES.md)
-#pragma push
-#pragma dollar_identifiers on
-static f64 _three$localstatic4$sqrtf = 3.0;
-
-static f64 _half$localstatic3$sqrtf = 0.5;
-#pragma pop
-
 ExtTexInfo ext_kyaku_data[] = {
     {("c_kinopio"), ("KNP_S_1"), 0.0f},
     {("c_kinopio"), ("KNP_S_1"), 10.0f},

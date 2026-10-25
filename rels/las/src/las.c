@@ -118,14 +118,6 @@ USER_FUNC(mobj_set_ry) {
     return EVT_RETURN_DONE;
 }
 
-// FAKE: stand-in for the weak constant pair of MSL sqrtf (see docs/FAKES.md)
-#pragma push
-#pragma dollar_identifiers on
-static f64 _three$localstatic4$sqrtf = 3.0;
-
-static f64 _half$localstatic3$sqrtf = 0.5;
-#pragma pop
-
 EVT_BEGIN(box_syutugen)
     SET_VALUE(LW(2), LW(0))
     CALL(evt_mobj_get_position, LW(2), LW(3), LW(4), LW(5))

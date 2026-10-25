@@ -155,14 +155,6 @@ EvtWord evt_rsh_03_rnd_npc_entry[95];
 NpcSetupInfo rsh_04_rnd_npc_3_ent[2];
 EvtWord evt_rsh_04_rnd_npc_entry[185];
 
-// FAKE: stand-in for the weak constant pair of MSL sqrtf (see docs/FAKES.md)
-#pragma push
-#pragma dollar_identifiers on
-static f64 _three$localstatic4$sqrtf = 3.0;
-
-static f64 _half$localstatic3$sqrtf = 0.5;
-#pragma pop
-
 EVT_BEGIN(simi_check)
     SET_VALUE(LF(0), 0)
     CALL(evt_sub_get_mapname, LW(10))

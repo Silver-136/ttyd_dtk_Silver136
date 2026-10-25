@@ -71,9 +71,9 @@ static inline int __fpclassifyf(float x) {
 #define isnan(x) (fpclassify(x) == FP_NAN)
 #define isfinite(x) ((fpclassify(x) > FP_INFINITE))
 
-static inline float sqrtf(float x) {
-    const double _half = .5;
-    const double _three = 3.0;
+extern inline float sqrtf(float x) {
+    static const double _half = .5;
+    static const double _three = 3.0;
 
     if (x > 0.0f) {
         double guess = __frsqrte(x);

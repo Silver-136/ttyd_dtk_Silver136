@@ -48,10 +48,6 @@ typedef struct EffSstarN64Work {
     effN64Vtx vtx[10]; // 0x1d0
 } EffSstarN64Work;
 
-f32 unused_tbl[16] = {
-    -1.0f, 1.0f, -1.0f, 1.0f, 1.0f, -1.0f, 1.0f, -1.0f, -1.0f, 1.0f, -1.0f, 1.0f, 1.0f, -1.0f, 1.0f, -1.0f,
-};
-
 static effN64Vtx size64x64_tex64x64_vtx[] = {
     {-30, -30, 0, 0, 0, 0, 0, 0, 191},
     {30, -30, 0, 2048, 0, 0, 0, 0, 191},

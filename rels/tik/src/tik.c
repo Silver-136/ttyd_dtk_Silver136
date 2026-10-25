@@ -90,14 +90,6 @@ USER_FUNC(evt_tik_villager_urouro_check_func) {
     return EVT_RETURN_DONE;
 }
 
-// FAKE: stand-in for the weak constant pair of MSL sqrtf (see docs/FAKES.md)
-#pragma push
-#pragma dollar_identifiers on
-static f64 _three$localstatic4$sqrtf = 3.0;
-
-static f64 _half$localstatic3$sqrtf = 0.5;
-#pragma pop
-
 EVT_BEGIN(tik_villager_urouro)
     CALL(evt_npc_status_onoff, 1, STRING("me"), 2)
     CALL(evt_npc_get_position, STRING("me"), LW(6), LW(7), LW(8))

@@ -162,14 +162,6 @@ EvtWord mri_guide_goryu[63];
 EvtWord mri_puni_walk_se[20];
 EvtWord mri_puni_jump_se[15];
 
-// FAKE: stand-in for the weak constant pair of MSL sqrtf (see docs/FAKES.md)
-#pragma push
-#pragma dollar_identifiers on
-static f64 _three$localstatic4$sqrtf = 3.0;
-
-static f64 _half$localstatic3$sqrtf = 0.5;
-#pragma pop
-
 EVT_BEGIN(evt_mri_door_open_pure)
     IF_INT_EQUAL(LW(9), 0)
         SET_VALUE(LW(2), -5)

@@ -51,14 +51,6 @@ static EvtWord evt_door_msg[14];
 static NpcSetupInfo npcEnt[3];
 EvtWord aji_00_init_evt[91];
 
-// FAKE: stand-in for the weak constant pair of MSL sqrtf (see docs/FAKES.md)
-#pragma push
-#pragma dollar_identifiers on
-static f64 _three$localstatic4$sqrtf = 3.0;
-
-static f64 _half$localstatic3$sqrtf = 0.5;
-#pragma pop
-
 static EVT_BEGIN(w_door_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
     CALL(evt_mapobj_trans, 0, STRING("S_door1_1"), 0, 0, LW(0))
