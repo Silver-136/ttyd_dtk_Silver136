@@ -982,11 +982,9 @@ static void ext_moamoa_main(void) {
             // FAKE: integer cast hoists the literal as an @ temp (same values)
             psndSFXOn_3D(SFX_NAME_WORD("SFX_STG6_MOAMOA_VOICE1"), &sp2_);
         }
-    switch (moa->state)
-    {
+    switch (moa->state) {
       case 0:
-        if ((i % 133) < 100)
-      {
+        if ((i % 133) < 100) {
         f32 x;
         f32 z;
         f32 y;
@@ -1019,8 +1017,7 @@ static void ext_moamoa_main(void) {
         f32 r;
         d = distABf((*pose->mtx)[0][3], (*pose->mtx)[2][3], wp->target[i % 3].x, wp->target[i % 3].z);
         a = angleABf((*pose->mtx)[0][3], (*pose->mtx)[2][3], wp->target[i % 3].x, wp->target[i % 3].z);
-        if (d < VERSION_PICK(200.0f, 80.0f))
-        {
+        if (d < VERSION_PICK(200.0f, 80.0f)) {
           a = randf(0.0f, 360.0f);
         }
         r = (6.2831855f * a) / 360.0f;
@@ -1040,8 +1037,7 @@ static void ext_moamoa_main(void) {
         break;
 
       case 50:
-        if ((--moa->timer) < 0)
-      {
+        if ((--moa->timer) < 0) {
         moa->timer = 0;
         moa->state++;
       }
@@ -1055,8 +1051,7 @@ static void ext_moamoa_main(void) {
 
       case 52:
         s = (moa->timer < 200) ? (1.0f) : ((800 - moa->timer) / 600.0f);
-        if (s < 0.0f)
-      {
+        if (s < 0.0f) {
         s = 0.0f;
         moa->flags |= 0x200;
       }
@@ -1134,8 +1129,7 @@ static void ext_moamoa_main(void) {
         (*pose->mtx)[0][3] += moa->speed * polySinf(rad);
         (*pose->mtx)[2][3] = (*pose->mtx)[2][3] + (moa->speed * (-polyCosf(rad)));
       }
-        if ((--moa->jumpTimer) < 0)
-      {
+        if ((--moa->jumpTimer) < 0) {
         (*pose->mtx)[0][3] = moa->target.x;
         (*pose->mtx)[1][3] = moa->target.y;
         (*pose->mtx)[2][3] = moa->target.z;
@@ -1147,8 +1141,7 @@ static void ext_moamoa_main(void) {
         break;
 
       case 4:
-        if ((++moa->timer) > 4)
-      {
+        if ((++moa->timer) > 4) {
         moa->state = moa->next;
       }
         break;
@@ -1160,13 +1153,10 @@ static void ext_moamoa_main(void) {
       case 38:
       {
         f32 tz;
-        if (!(moa->flags & 1))
-        {
+        if (!(moa->flags & 1)) {
           tx = mario->position.x;
           tz = mario->position.z;
-        }
-        else
-        {
+        } else {
           tx = wp->target[i % 3].x;
           tz = wp->target[i % 3].z;
         }
@@ -1196,14 +1186,11 @@ static void ext_moamoa_main(void) {
         break;
 
       case 39:
-        if ((++moa->timer) < 30)
-      {
+        if ((++moa->timer) < 30) {
         (*pose->mtx)[0][0] *= 0.9f;
         (*pose->mtx)[1][1] *= 0.9f;
         (*pose->mtx)[2][2] *= 0.9f;
-      }
-      else
-      {
+      } else {
         moa->state = 49;
       }
         break;
@@ -1227,8 +1214,7 @@ static void ext_moamoa_main(void) {
         f32 r1 = rand() / 32767.0f;
         s = (r1 * (k = 0.3f - 0.2f)) + 0.2f;
       }
-        if (!sfx)
-      {
+        if (!sfx) {
         Vec pos = {0.0f, 0.0f, 0.0f};
         pos.x = (*pose->mtx)[0][3];
         pos.y = (*pose->mtx)[1][3];
@@ -1241,29 +1227,24 @@ static void ext_moamoa_main(void) {
         break;
 
       case 48:
-        if ((--moa->jumpTimer) > 0)
-      {
+        if ((--moa->jumpTimer) > 0) {
         moa->target.x += moa->vy;
         moa->target.y += moa->speed;
         moa->target.z += moa->gravity;
         (*pose->mtx)[0][3] += moa->target.x;
         (*pose->mtx)[1][3] += moa->target.y;
         (*pose->mtx)[2][3] += moa->target.z;
-      }
-      else
-      {
+      } else {
         moa->state = 49;
       }
         break;
 
       case 49:
-        if ((wp->flags & 0x1000) && (wp->flags & 0x2000))
-      {
+        if ((wp->flags & 0x1000) && (wp->flags & 0x2000)) {
         moa->state = 62;
         break;
       }
-        if (wp->hitCount < 500)
-      {
+        if (wp->hitCount < 500) {
         PSMTXIdentity(*pose->mtx);
         (*pose->mtx)[0][3] = wp->target[i % 3].x;
         (*pose->mtx)[1][3] = wp->target[i % 3].y;
@@ -1271,23 +1252,18 @@ static void ext_moamoa_main(void) {
         moa->flags = 0;
         moa->state = 0;
         moa->timer = 0;
-      }
-      else
-      {
+      } else {
         moa->state = 62;
       }
         break;
 
       case 25:
-        if (moa->timer < 30)
-      {
+        if (moa->timer < 30) {
         PSMTXRotRad(m1, 'y', 0.20943952f);
         PSMTXConcat(*pose->mtx, m1, *pose->mtx);
         pose->flags &= ~2;
         moa->timer++;
-      }
-      else
-      {
+      } else {
         pose->flags |= 2;
         moa->timer = rand() % 30;
         moa->state++;
@@ -1295,8 +1271,7 @@ static void ext_moamoa_main(void) {
         break;
 
       case 26:
-        if ((--moa->timer) < 0)
-      {
+        if ((--moa->timer) < 0) {
         moa->timer = 0;
         moa->state++;
       }
@@ -1366,8 +1341,7 @@ static void ext_moamoa_main(void) {
         break;
 
       case 64:
-        if ((--moa->timer) < 0)
-      {
+        if ((--moa->timer) < 0) {
         moa->state++;
       }
         break;
@@ -1382,8 +1356,7 @@ static void ext_moamoa_main(void) {
         PSMTXRotRad(m, 'y', 0.20943952f);
         PSMTXConcat(*pose->mtx, m, *pose->mtx);
         pose->flags &= ~2;
-        if ((*pose->mtx)[0][3] < (-1000.0f))
-      {
+        if ((*pose->mtx)[0][3] < (-1000.0f)) {
         moa->state = 62;
       }
         break;

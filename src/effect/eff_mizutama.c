@@ -73,8 +73,7 @@ EffectEntry* effMizutamaEntry(s32 type, f32 x, f32 y, f32 z, f32 angle) {
             work->velY = 2.0f * (f32)cos(rad);
             work->scale = (irand(20) + 80) / 100.0f;
             work->delay = i * 2;
-        }
-        else {
+        } else {
             // scattered along a line, splashing outwards
             z = radius;
             irand(360);

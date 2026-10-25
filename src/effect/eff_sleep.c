@@ -39,8 +39,7 @@ EffectEntry* effSleepEntry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32 scal
     data->alpha = 0;
     if (lifetime <= 0) {
         data->lifetime = 1000;
-    }
-    else {
+    } else {
         data->lifetime = lifetime;
     }
     data->age = 0;
@@ -84,8 +83,7 @@ void effSleepMain(EffectEntry* effect) {
     for (i = 1, data++; i < effect->count; i++, data++) {
         if (data->delay != 0) {
             data->delay--;
-        }
-        else {
+        } else {
             data->alpha += 8;
             if (data->alpha > 255) {
                 data->alpha = 255;

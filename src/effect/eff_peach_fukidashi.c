@@ -35,8 +35,7 @@ static inline void _setPosition(EffPeachFukidashiWork* work, f32 offset) {
     if (work->npc) {
         base = work->npc->position;
         height = work->npc->height;
-    }
-    else {
+    } else {
         MarioWork* mario = marioGetPtr();
         base = mario->position;
         height = mario->wPlayerCollisionBox.y;

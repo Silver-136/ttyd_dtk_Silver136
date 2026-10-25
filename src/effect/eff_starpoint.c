@@ -38,23 +38,20 @@ static inline f32 _cosf(f32 x) {
             x2 = x * x;
             a = a * x2 - b;
             a = a * x2 + c;
-        }
-        else {
+        } else {
             x = HALF_PI - (x - HALF_PI);
             x2 = x * x;
             a = a * x2 - b;
             a = a * x2 + c;
             a = -a;
         }
-    }
-    else if (x < 4.712389f) {
+    } else if (x < 4.712389f) {
         x = x - PI;
         x2 = x * x;
         a = a * x2 - b;
         a = a * x2 + c;
         a = -a;
-    }
-    else {
+    } else {
         x = HALF_PI - (x - 4.712389f);
         x2 = x * x;
         a = a * x2 - b;
@@ -116,8 +113,7 @@ void effStarPointMain(EffectEntry* effect) {
         if (work->delay) {
             work->delay--;
             work->alpha = 0;
-        }
-        else {
+        } else {
             work->velY -= work->gravity;
             work->position.x += work->velX;
             work->position.y += work->velY;
@@ -127,8 +123,7 @@ void effStarPointMain(EffectEntry* effect) {
                 if (work->alpha < 0) {
                     work->alpha = 0;
                 }
-            }
-            else {
+            } else {
                 work->alpha = 255;
             }
         }

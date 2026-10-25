@@ -16,8 +16,7 @@ USER_FUNC(evt_light_charalight_all_onoff) {
         for (i = 0; i < lightGetEntryNum(); i++) {
             lightNumberToPtr(i)->flags |= LIGHT_CHARA;
         }
-    }
-    else {
+    } else {
         for (i = 0; i < lightGetEntryNum(); i++) {
             lightNumberToPtr(i)->flags &= ~LIGHT_CHARA;
         }
@@ -36,8 +35,7 @@ USER_FUNC(evt_light_mario_lighting_onoff) {
         animPoseSetMaterialLightFlagOn(mario->paperAnimGroupId[0], 2);
         animPoseSetMaterialLightFlagOn(mario->paperAnimGroupId[1], 2);
         animPoseSetMaterialLightFlagOn(mario->paperAnimGroupId[2], 2);
-    }
-    else {
+    } else {
         animPoseSetMaterialLightFlagOff(mario->paperAnimGroupId[0], 2);
         animPoseSetMaterialLightFlagOff(mario->paperAnimGroupId[1], 2);
         animPoseSetMaterialLightFlagOff(mario->paperAnimGroupId[2], 2);
@@ -54,8 +52,7 @@ USER_FUNC(evt_light_party_lighting_onoff) {
     party = partyGetPtr(marioGetPartyId());
     if (on) {
         animPoseSetMaterialLightFlagOn(party->paperAnimGroup, 2);
-    }
-    else {
+    } else {
         animPoseSetMaterialLightFlagOff(party->paperAnimGroup, 2);
     }
     return EVT_RETURN_DONE;
@@ -71,8 +68,7 @@ USER_FUNC(evt_light_npc_lighting_onoff) {
     npc = npcNameToPtr((const char*)evtGetValue(event, args[1]));
     if (on) {
         animPoseSetMaterialLightFlagOn(npc->poseId, 2);
-    }
-    else {
+    } else {
         animPoseSetMaterialLightFlagOff(npc->poseId, 2);
     }
     return EVT_RETURN_DONE;

@@ -19,16 +19,13 @@ USER_FUNC(evt_hitobj_onoff) {
     if (isGroup == 0) {
         if (off != 0) {
             hitObjFlagOff(name, 1);
-        }
-        else {
+        } else {
             hitObjFlagOn(name, 1);
         }
-    }
-    else {
+    } else {
         if (off != 0) {
             hitGrpFlagOff(name, 1);
-        }
-        else {
+        } else {
             hitGrpFlagOn(name, 1);
         }
     }
@@ -104,16 +101,13 @@ USER_FUNC(L_evt_hitobj_flag_onoff) {
     if (isGroup == 0) {
         if (off == 0) {
             hitObjFlagOff(name, flag);
-        }
-        else {
+        } else {
             hitObjFlagOn(name, flag);
         }
-    }
-    else {
+    } else {
         if (off == 0) {
             hitGrpFlagOff(name, flag);
-        }
-        else {
+        } else {
             hitGrpFlagOn(name, flag);
         }
     }
@@ -130,16 +124,13 @@ USER_FUNC(evt_hitobj_attr_onoff) {
     if (isGroup == 0) {
         if (off == 0) {
             hitObjAttrOff(name, attr);
-        }
-        else {
+        } else {
             hitObjAttrOn(name, attr);
         }
-    }
-    else {
+    } else {
         if (off == 0) {
             hitGrpAttrOff(name, attr);
-        }
-        else {
+        } else {
             hitGrpAttrOn(name, attr);
         }
     }

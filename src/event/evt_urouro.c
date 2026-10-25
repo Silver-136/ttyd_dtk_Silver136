@@ -90,8 +90,7 @@ USER_FUNC(urouro_main_func) {
                     npc->moveDir = npc->direction;
                     work->flags &= ~0x2;
                 }
-            }
-            else if (work->flags & 0x1) {
+            } else if (work->flags & 0x1) {
                 work->flags &= ~0x3;
             }
         }
@@ -134,8 +133,7 @@ USER_FUNC(urouro_main_func) {
                     if (npc->footstepSfxA != 0) {
                         psndSFXOnEx_3D(SFX_NAME_WORD(sfxFlag | searchPSSFXList(npc->footstepSfxA)), &npc->position, 0xff, 0xff, 0, 8);
                     }
-                }
-                else {
+                } else {
                     if (npc->footstepSfxB != 0) {
                         psndSFXOnEx_3D(SFX_NAME_WORD(sfxFlag | searchPSSFXList(npc->footstepSfxB)), &npc->position, 0xff, 0xff, 0, 8);
                     }
@@ -164,8 +162,7 @@ USER_FUNC(urouro_main_func) {
             work->timer = work->turnTime / 2 + irand(work->turnTime / 2 + 1);
             if (work->count == 0) {
                 work->state = 0;
-            }
-            else {
+            } else {
                 work->count--;
                 npc->direction = reviseAngle(180.0f + npc->direction);
             }

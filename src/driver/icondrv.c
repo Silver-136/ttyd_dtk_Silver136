@@ -246,8 +246,7 @@ void iconMain(void) {
             if (!(entry->uflags & 2)) {
                 if (entry->uflags & 0x10) {
                     dispEntry(CAMERA_2D, 200.0f, 1, iconDisp, entry);
-                }
-                else if (entry->uflags & 0x100) {
+                } else if (entry->uflags & 0x100) {
                     shadowEntry(entry->position.x, entry->position.y, entry->position.z, 10.0f);
                     dispEntry(CAMERA_3D_EFFECTA, dispCalcZ(&entry->position), 1, iconDisp, entry);
                 } else if (entry->uflags & 0x200) {
@@ -389,8 +388,7 @@ void iconDisp(CameraId camId, void* param) {
     iconGX(mtx, entry);
 }
 
-void iconDispGxAlpha(Vec *position, s16 flags, u16 iconId, u8 alpha, f32 scale)
-{
+void iconDispGxAlpha(Vec *position, s16 flags, u16 iconId, u8 alpha, f32 scale) {
     IconEntry entry;
     Mtx transmtx;
     Mtx scalemtx;
@@ -401,8 +399,7 @@ void iconDispGxAlpha(Vec *position, s16 flags, u16 iconId, u8 alpha, f32 scale)
     IconEntry *ep;
     camera = camGetCurPtr();
     ep = &entry;
-    if ((!icon_tpl_ok) || (!icon_bin_ok))
-    {
+    if ((!icon_tpl_ok) || (!icon_bin_ok)) {
         return;
     }
     PSMTXTrans(transmtx, position->x, position->y, position->z);
@@ -421,21 +418,17 @@ void iconDispGxAlpha(Vec *position, s16 flags, u16 iconId, u8 alpha, f32 scale)
     entry.height = data->height;
     entry.tplId = data->frames[0].tplId;
     entry.frameDelay = data->frames[0].delay;
-    if (data->numIcons > 1)
-    {
+    if (data->numIcons > 1) {
         s32 i;
         s32 t;
         s32 total = 0;
-        for (i = 0; i < data->numIcons; i++)
-        {
+        for (i = 0; i < data->numIcons; i++) {
             total += data->frames[i].delay;
         }
 
         t = ((s32) gp->retraceCount) % total;
-        for (i = 0; i < data->numIcons; i++)
-        {
-            if (t < data->frames[i].delay)
-            {
+        for (i = 0; i < data->numIcons; i++) {
+            if (t < data->frames[i].delay) {
                 entry.tplId = data->frames[i].tplId;
                 break;
             }
@@ -451,8 +444,7 @@ void iconDispGx(Vec* position, s16 flags, u16 iconId, f32 scale) {
     iconDispGxAlpha(position, flags, iconId, 0xFF, scale);
 }
 
-void iconDispGx2(Mtx mtx, s16 flags, s16 iconId)
-{
+void iconDispGx2(Mtx mtx, s16 flags, s16 iconId) {
     IconEntry entry;
     Mtx m;
     CameraEntry *camera;
@@ -461,8 +453,7 @@ void iconDispGx2(Mtx mtx, s16 flags, s16 iconId)
     u16 id;
     camera = camGetCurPtr();
     ep = &entry;
-    if ((!icon_tpl_ok) || (!icon_bin_ok))
-    {
+    if ((!icon_tpl_ok) || (!icon_bin_ok)) {
         return;
     }
     entry.uflags = flags;
@@ -482,21 +473,17 @@ void iconDispGx2(Mtx mtx, s16 flags, s16 iconId)
     entry.height = data->height;
     entry.tplId = data->frames[0].tplId;
     entry.frameDelay = data->frames[0].delay;
-    if (data->numIcons > 1)
-    {
+    if (data->numIcons > 1) {
         s32 i;
         s32 t;
         s32 total = 0;
-        for (i = 0; i < data->numIcons; i++)
-        {
+        for (i = 0; i < data->numIcons; i++) {
             total += data->frames[i].delay;
         }
 
         t = ((s32) gp->retraceCount) % total;
-        for (i = 0; i < data->numIcons; i++)
-        {
-            if (t < data->frames[i].delay)
-            {
+        for (i = 0; i < data->numIcons; i++) {
+            if (t < data->frames[i].delay) {
                 entry.tplId = data->frames[i].tplId;
                 break;
             }

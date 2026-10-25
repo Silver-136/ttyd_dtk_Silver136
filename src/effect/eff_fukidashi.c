@@ -103,24 +103,20 @@ void calc_pos(EffFukidashiWork* work, s32 flag) {
     if (SPEAKER(work->npc) == FUKIDASHI_MARIO) {
         MarioWork* mario = marioGetPtr();
         SETPOS(mario)
-    }
-    else if (SPEAKER(work->npc) == FUKIDASHI_PARTY) {
+    } else if (SPEAKER(work->npc) == FUKIDASHI_PARTY) {
         PartyEntry* party = partyGetPtr(marioGetPartyId());
         if (party) {
             SETPOS(party)
         }
-    }
-    else if (SPEAKER(work->npc) == FUKIDASHI_EXTRA_PARTY) {
+    } else if (SPEAKER(work->npc) == FUKIDASHI_EXTRA_PARTY) {
         PartyEntry* party = partyGetPtr(marioGetExtraPartyId());
         if (party) {
             SETPOS(party)
         }
-    }
-    else if (work->npc) {
+    } else if (work->npc) {
         NpcEntry* npc = work->npc;
         SETPOS(npc)
-    }
-    else {
+    } else {
         work->position.x = rot[0][1] * (16.0f + work->size) + work->base.x;
         work->position.y = rot[1][1] * (16.0f + work->size) + work->base.y;
         work->position.z = rot[2][1] * (16.0f + work->size) + work->base.z;
@@ -167,24 +163,21 @@ EffectEntry* effFukidashiEntry(s32 type, s32 number, NpcEntry* npc, f32 x, f32 y
         x += mario->position.x;
         y += mario->position.y;
         z += mario->position.z;
-    }
-    else if (SPEAKER(work->npc) == FUKIDASHI_PARTY) {
+    } else if (SPEAKER(work->npc) == FUKIDASHI_PARTY) {
         PartyEntry* party = partyGetPtr(marioGetPartyId());
         if (party) {
             x += party->position.x;
             y += party->position.y;
             z += party->position.z;
         }
-    }
-    else if (SPEAKER(work->npc) == FUKIDASHI_EXTRA_PARTY) {
+    } else if (SPEAKER(work->npc) == FUKIDASHI_EXTRA_PARTY) {
         PartyEntry* party = partyGetPtr(marioGetExtraPartyId());
         if (party) {
             x += party->position.x;
             y += party->position.y;
             z += party->position.z;
         }
-    }
-    else if (work->npc) {
+    } else if (work->npc) {
         x = work->npc->position.x;
         y = work->npc->position.y;
         z = work->npc->position.z;
@@ -208,8 +201,7 @@ EffectEntry* effFukidashiEntry(s32 type, s32 number, NpcEntry* npc, f32 x, f32 y
                 break;
             }
         }
-    }
-    else if (npc && SPEAKER(npc) != FUKIDASHI_MARIO) {
+    } else if (npc && SPEAKER(npc) != FUKIDASHI_MARIO) {
         switch (type) {
             case 0: {
                 Vec pos = { 0.0f, 0.0f, 0.0f };
@@ -280,8 +272,7 @@ void effFukidashiMain(EffectEntry* effect) {
                 work->stage++;
                 break;
         }
-    }
-    else if (work->duration > 0) {
+    } else if (work->duration > 0) {
         if (work->timer < 10000) {
             work->timer--;
         }
@@ -295,8 +286,7 @@ void effFukidashiMain(EffectEntry* effect) {
     }
     if (work->type == 4) {
         dispEntry(work->camera, dispCalcZ(&position), 2, (DispCallback)effFukidashiDisp, effect);
-    }
-    else {
+    } else {
         dispEntry(work->camera, dispCalcZ(&position), 8, (DispCallback)effFukidashiDisp, effect);
     }
 }
@@ -357,8 +347,7 @@ void effFukidashiDisp(CameraId cameraId, EffectEntry* effect) {
         GXSetCurrentMtx(GX_PNMTX0);
         if (pass == 0) {
             GXSetCullMode(GX_CULL_BACK);
-        }
-        else {
+        } else {
             GXSetCullMode(GX_CULL_FRONT);
         }
         PSMTXIdentity(mA);
@@ -390,14 +379,12 @@ void effFukidashiDisp(CameraId cameraId, EffectEntry* effect) {
                 PSMTXConcat(mA, mG, mA);
                 GXLoadPosMtxImm(mA, GX_PNMTX0);
                 GXSetCurrentMtx(GX_PNMTX0);
-            }
-            else {
+            } else {
                 effGetTexObj(4, &texObj);
                 GXLoadTexObj(&texObj, GX_TEXMAP0);
                 if (pass == 0) {
                     GXSetChanMatColor(GX_COLOR0A0, (GXColor){ 0xFF, 0xFF, 0xFF, alpha });
-                }
-                else {
+                } else {
                     GXSetChanMatColor(GX_COLOR0A0, (GXColor){ 0xA0, 0xA0, 0xA0, alpha });
                 }
                 PSMTXTrans(mA, 0.0f, 0.0f, 0.0f);
@@ -451,21 +438,18 @@ void effFukidashiDisp(CameraId cameraId, EffectEntry* effect) {
                 GXLoadPosMtxImm(mH, GX_PNMTX0);
                 if (work->type == 0) {
                     QUAD(-4.0f, 8.0f, 4.0f, -8.0f, 1.0f, 1.0f)
-                }
-                else {
+                } else {
                     QUAD(-8.0f, 16.0f, 8.0f, -8.0f, 1.0f, 1.0f)
                 }
                 if (pass == 0) {
                     GXSetTevColor(GX_TEVREG0, (GXColor){ 0xFF, 0, 0, alphaB });
-                }
-                else {
+                } else {
                     GXSetTevColor(GX_TEVREG0, (GXColor){ 0xA0, 0, 0, alphaB });
                 }
                 GXLoadPosMtxImm(mF, GX_PNMTX0);
                 if (work->type == 0) {
                     QUAD(-4.0f, 8.0f, 4.0f, -8.0f, 1.0f, 1.0f)
-                }
-                else {
+                } else {
                     QUAD(-8.0f, 16.0f, 8.0f, -8.0f, 1.0f, 1.0f)
                 }
                 break;
@@ -529,8 +513,7 @@ void effFukidashiDisp(CameraId cameraId, EffectEntry* effect) {
                     PSMTXConcat(mH, mA, mH);
                     if (pass == 0) {
                         iconDispGxCol(mH, 0x400, ICON_18B, (GXColor){ 0xFF, 0xFF, 0xFF, alpha });
-                    }
-                    else {
+                    } else {
                         iconDispGxCol(mH, 0x800, ICON_18B, (GXColor){ 0xA0, 0xA0, 0xA0, alpha });
                     }
                     PSMTXTrans(mA, 10.0f, 22.0f, 0.0f);
@@ -539,8 +522,7 @@ void effFukidashiDisp(CameraId cameraId, EffectEntry* effect) {
                     GXSetZMode(GX_TRUE, GX_LEQUAL, GX_FALSE);
                     if (pass == 0) {
                         GXSetCullMode(GX_CULL_BACK);
-                    }
-                    else {
+                    } else {
                         GXSetCullMode(GX_CULL_FRONT);
                     }
                     FontDrawStringMtx(mH, text);
@@ -608,8 +590,7 @@ void effFukidashiDisp(CameraId cameraId, EffectEntry* effect) {
                     QUAD(-8.0f, 16.0f, 8.0f, -8.0f, 2.0f, 2.0f)
                     if (pass == 0) {
                         GXSetTevColor(GX_TEVREG0, (GXColor){ 0xFF, 0xCD, 0x28, alphaB });
-                    }
-                    else {
+                    } else {
                         GXSetTevColor(GX_TEVREG0, (GXColor){ 0x7F, 0x66, 0x14, alphaB });
                     }
                     PSMTXConcat(mF, mA, mH);

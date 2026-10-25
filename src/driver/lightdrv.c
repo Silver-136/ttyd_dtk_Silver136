@@ -236,8 +236,7 @@ s32 lightGetNearObj(const Vec* position, LightEntry** out, s32 count, LightEntry
             }
         }
         qqsort(tmp, n, 8, _sort);
-    }
-    else {
+    } else {
         entry = wp->entries;
         tp = tmp;
         n = 0;

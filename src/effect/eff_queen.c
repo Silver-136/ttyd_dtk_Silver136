@@ -36,8 +36,7 @@ EffectEntry* effQueenEntry(s32 type, s32 duration, f32 x, f32 y, f32 z, f32 size
     work->scale = 0.0f;
     if (duration <= 0) {
         work->timer = 1000;
-    }
-    else {
+    } else {
         work->timer = duration;
     }
     work->field_0x1C = 0;
@@ -80,8 +79,7 @@ void effQueenMain(EffectEntry* effect) {
     }
     if (work->timer < 100) {
         work->alpha -= 3;
-    }
-    else {
+    } else {
         work->alpha += 3;
     }
     if (work->alpha > (s32)(0.8f * work->maxAlpha)) {

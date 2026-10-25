@@ -122,8 +122,7 @@ void effExpBomMain(EffectEntry* effect) {
     }
     if (!disp) {
         effDelete(effect);
-    }
-    else {
+    } else {
         dispEntry(CAMERA_3D, dispCalcZ(&position), 2, effExpBomDisp, effect);
     }
 }
@@ -163,8 +162,7 @@ void effExpBomDisp(CameraId camId, void* param) {
         if (a >= b) {
             alpha = 255;
             tex = 6;
-        }
-        else {
+        } else {
             t = (f32)sin((6.2831855f * ((90.0f * ((7.0f * a) / b)) / 7.0f)) / 360.0f);
             t = 7.0f * t;
             alpha = (s32)(255.0f * t) % 256;

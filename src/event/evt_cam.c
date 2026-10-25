@@ -23,8 +23,7 @@ USER_FUNC(evt_cam_ctrl_onoff) {
 
     if (evtGetValue(event, args[1])) {
         camCtrlOn(id);
-    }
-    else {
+    } else {
         camCtrlOff(id);
     }
     return EVT_RETURN_DONE;
@@ -81,8 +80,7 @@ USER_FUNC(evt_cam_shake) {
     event->userdata[0] %= 4;
     if (event->userdata[0] < 2) {
         PSMTX44Trans(camGetPtr(camId)->projAdjust, x, y, 0.0f);
-    }
-    else {
+    } else {
         PSMTX44Trans(camGetPtr(camId)->projAdjust, -x, -y, 0.0f);
     }
     camGetPtr(camId)->flags |= 8;
@@ -114,8 +112,7 @@ USER_FUNC(evt_cam_shake) {
                 ((u32*)&event->wInterpRelatedTime)[0] = (now >> shift) & 0xFFFFFFFF;
                 ((u32*)&event->wInterpRelatedTime)[1] = now & 0xFFFFFFFF;
             }
-        }
-        else {
+        } else {
             padRumbleOff(0);
             if (offTime < OSTicksToMilliseconds(now - last)) {
                 event->userWork[3] = 1 - event->userWork[3];
@@ -371,8 +368,7 @@ USER_FUNC(evt_cam3d_road_shift_onoff) {
 
     if (on) {
         camera->flags &= ~0x20;
-    }
-    else {
+    } else {
         camera->flags |= 0x20;
     }
     return EVT_RETURN_DONE;
@@ -540,8 +536,7 @@ USER_FUNC(evt_cam_type_change) {
 
     if (type == 0) {
         camSetTypePersp(id);
-    }
-    else {
+    } else {
         camSetTypeOrtho(id);
     }
     return EVT_RETURN_DONE;
@@ -561,8 +556,7 @@ USER_FUNC(evt_cam_letter_box_onoff) {
         camera->letterBoxTop = 0;
         camera->letterBoxBottom = 0;
         camera->letterBoxCamId = CAMERA_2D;
-    }
-    else {
+    } else {
         camera->flags &= ~0x100;
         psndClearFlag(0x20);
     }
@@ -580,8 +574,7 @@ USER_FUNC(evt_cam_letter_box_disable) {
     if (disable) {
         camera->flags |= 0x200;
         psndSetFlag(0x40);
-    }
-    else {
+    } else {
         camera->flags &= ~0x200;
         psndClearFlag(0x40);
     }

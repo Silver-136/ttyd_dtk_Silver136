@@ -281,8 +281,7 @@ USER_FUNC(end_bakugame) {
     return 2;
 }
 
-s32 bakuGameDecideWeapon(EventEntry *event, BOOL isFirstCall)
-{
+s32 bakuGameDecideWeapon(EventEntry *event, BOOL isFirstCall) {
     EvtWord *args = event->args;
     s32 v;
     BakuWork *w;
@@ -297,24 +296,18 @@ s32 bakuGameDecideWeapon(EventEntry *event, BOOL isFirstCall)
     memcpy(w->weapon, &weapon, 0xC0);
 
     q[2] = 100;
-    if (v != (-1))
-    {
-        if (w->gauge >= 100.0f)
-        {
+    if (v != (-1)) {
+        if (w->gauge >= 100.0f) {
             q[2] = 127;
             // FAKE: same-value second def of q (q == &wp->sleepChance already). It keeps q a named multi-def
             // pointer (addi r28) with no in-block copy. That keeps the q addi at height 1, so lis issues before
             // `mr w,r3` and takes r4, as in the target.
             q = &w->weapon[0x80];
-        }
-        else
-        {
+        } else {
             q[2] = 100;
         }
         q[3] = v - 1;
-    }
-    else
-    {
+    } else {
         q[2] = 0;
         q[3] = 0;
     }

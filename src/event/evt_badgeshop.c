@@ -384,8 +384,7 @@ s16 badgeShop_set(u8* table, s16 id, s16 val) {
 
     if (table == bdsw->bottakuru_table || table == bdsw->bteresa_table) {
         bound = KEY_ITEM_MIN;
-    }
-    else {
+    } else {
         bound = BADGE_MIN;
     }
     if (id < bound || id >= BADGE_MAX) return 0;
@@ -411,8 +410,7 @@ s16 badgeShop_set(u8* table, s16 id, s16 val) {
     pos = index / 4;
     if (val < 0) {
         val = 0;
-    }
-    else if (val > 3) {
+    } else if (val > 3) {
         val = 3;
     }
     table[pos] = (u8)((u8)(mask & table[pos]) + (u8)(val << shift));
@@ -428,8 +426,7 @@ s32 badgeShop_get(u8* table, s16 id) {
 
     if (table == bdsw->bottakuru_table || table == bdsw->bteresa_table) {
         bound = KEY_ITEM_MIN;
-    }
-    else {
+    } else {
         bound = BADGE_MIN;
     }
     if (id < bound || id >= BADGE_MAX) return 0;
@@ -496,8 +493,7 @@ s32 badgeShop_add(u8* table, s16 id, s32 value) {
     data = (s16)((s16)curr + data);
     if (data < 0) {
         data = 0;
-    }
-    else if (data > 3) {
+    } else if (data > 3) {
         data = 3;
     }
     table[id / 4] = (u8)(table[id / 4] & ~mask) + (u8)((s16)data << shift);

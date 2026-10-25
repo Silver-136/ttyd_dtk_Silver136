@@ -195,8 +195,7 @@ USER_FUNC(evt_win_party_lankup_chk) {
         if (partyChkJoin(*p)) {
             if (!evtGetValue(event, GSWF(1186))) {
                 if (pouch->partyData[*p].techLevel < 1) { max = 0; } else { max = 1; }
-            }
-            else {
+            } else {
                 if (pouch->partyData[*p].techLevel < 2) { max = 0; } else { max = 2; }
             }
             if (max == 0) {
@@ -228,8 +227,7 @@ USER_FUNC(evt_win_party_lankdown_chk) {
             }
             if (!evtGetValue(event, GSWF(1186))) {
                 if (pouch->partyData[*p].techLevel < 1) { max = 0; } else { max = 1; }
-            }
-            else {
+            } else {
                 if (pouch->partyData[*p].techLevel < 2) { max = 0; } else { max = 2; }
             }
             if (max == 0) {
@@ -239,8 +237,7 @@ USER_FUNC(evt_win_party_lankdown_chk) {
     }
     if (num > 1 && canRank && hasRank) {
         evtSetValue(event, args[0], 1);
-    }
-    else {
+    } else {
         evtSetValue(event, args[0], 0);
     }
     return EVT_RETURN_DONE;
@@ -519,8 +516,7 @@ void winMgrHelpMain(WinMgrEntry* entry) {
                 if (entry->scroll < 0) {
                     entry->scroll = 0;
                 }
-            }
-            else if (keyGetDirTrg(0) & DEMO_SUBSTICK_DOWN) {
+            } else if (keyGetDirTrg(0) & DEMO_SUBSTICK_DOWN) {
                 if ((entry->lines + 1) / 2 - 1 > (entry->scroll + 1) / 2) {
                     entry->scroll += 2;
                 }
@@ -541,8 +537,7 @@ void winMgrHelpDraw(WinMgrEntry* entry) {
             sprintf(buf, entry->msg, lotteryGetPtr()->number);
             FontDrawStart();
             FontDrawMessage(-210, -144.0f + 28.0f * entry->scroll, buf);
-        }
-        else {
+        } else {
             FontDrawStart();
             FontDrawMessage(-210, -144.0f + 28.0f * entry->scroll, entry->msg);
         }
@@ -555,16 +550,14 @@ void winMgrHelpDraw(WinMgrEntry* entry) {
                     PSMTXConcat(mtx, scale, mtx);
                     iconDispGx2(mtx, 16, ICON_1B6);
                 }
-            }
-            else if (entry->scroll + 2 == entry->lines) {
+            } else if (entry->scroll + 2 == entry->lines) {
                 if ((gp->retraceCount & 31) < 20) {
                     PSMTXTrans(mtx, entry->x + entry->width - 12, entry->y - entry->height + 44, 0.0f);
                     PSMTXScale(scale, 0.6f, 0.6f, 0.6f);
                     PSMTXConcat(mtx, scale, mtx);
                     iconDispGx2(mtx, 16, ICON_1B5);
                 }
-            }
-            else if ((gp->retraceCount & 31) < 20) {
+            } else if ((gp->retraceCount & 31) < 20) {
                 PSMTXTrans(mtx, entry->x + entry->width - 12, entry->y - entry->height + 44, 0.0f);
                 PSMTXScale(scale, 0.6f, 0.6f, 0.6f);
                 PSMTXConcat(mtx, scale, mtx);
@@ -710,8 +703,7 @@ WinMgrSelect* winMgrSelectEntry(EvtWord type, s32 newItem, BOOL a3) {
                         if (pouch->partyData[party_id_table[i]].techLevel >= 1) {
                             sel->items[sel->numItems].flags |= 3;
                         }
-                    }
-                    else {
+                    } else {
                         if (pouch->partyData[party_id_table[i]].techLevel >= 2) {
                             sel->items[sel->numItems].flags |= 3;
                         }
@@ -751,16 +743,14 @@ WinMgrSelect* winMgrSelectEntry(EvtWord type, s32 newItem, BOOL a3) {
                         if (*mario_status_point_table[j] - mario_status_henka_table[j] <= 0) {
                             cnt++;
                         }
-                    }
-                    else if (*mario_status_point_table[j] + mario_status_henka_table[j] > mario_status_max_table[j]) {
+                    } else if (*mario_status_point_table[j] + mario_status_henka_table[j] > mario_status_max_table[j]) {
                         over = 1;
                     }
                 }
                 if (cnt == 2 || over) {
                     if (over) {
                         sel->items[i].flags |= 7;
-                    }
-                    else {
+                    } else {
                         sel->items[i].flags |= 3;
                     }
                 }
@@ -851,8 +841,7 @@ WinMgrSelect* winMgrSelectEntry(EvtWord type, s32 newItem, BOOL a3) {
         case 18:
             if (m == 17) {
                 tbl = jdt->readFlags.perfectRead;
-            }
-            else {
+            } else {
                 tbl = jdt->readFlags.luigiRead;
             }
             sel->numItems = jdt->count;
@@ -1065,8 +1054,7 @@ s32 winMgrSelectOther(WinMgrSelect* sel, EventEntry* evt) {
             evt->lwData[3] = strlen(name);
             if (johoya_get(jdt->readFlags.perfectRead, jdt->info[id].storyId)) {
                 evt->lwData[4] = 0;
-            }
-            else {
+            } else {
                 evt->lwData[4] = jdt->info[id].cost;
             }
             break;
@@ -1078,8 +1066,7 @@ s32 winMgrSelectOther(WinMgrSelect* sel, EventEntry* evt) {
             evt->lwData[3] = jdt->info[id].tagEndPos;
             if (johoya_get(jdt->readFlags.luigiRead, jdt->info[id].storyId)) {
                 evt->lwData[4] = 0;
-            }
-            else {
+            } else {
                 evt->lwData[4] = 1;
             }
             break;
@@ -1140,8 +1127,7 @@ void select_main(WinMgrEntry* entry) {
                 if (keyGetDirTrg(0) & DEMO_STICK_DOWN) {
                     sel->cursor = 0;
                     sel->scrollTop = 0;
-                }
-                else {
+                } else {
                     sel->cursor--;
                 }
             }
@@ -1151,8 +1137,7 @@ void select_main(WinMgrEntry* entry) {
                     if ((i = sel->numItems - 8) > 0) {
                         sel->scrollTop = i;
                     }
-                }
-                else {
+                } else {
                     sel->cursor++;
                 }
             }
@@ -1160,8 +1145,7 @@ void select_main(WinMgrEntry* entry) {
                 if (sel->cursor > 5 && sel->scrollTop < sel->numItems - 8) {
                     sel->scrollTop++;
                 }
-            }
-            else if (prev > sel->cursor) {
+            } else if (prev > sel->cursor) {
                 if (sel->cursor - sel->scrollTop < 3 && sel->scrollTop > 0) {
                     sel->scrollTop--;
                 }
@@ -1172,13 +1156,11 @@ void select_main(WinMgrEntry* entry) {
             if (keyGetButtonTrg(0) & PAD_BUTTON_A) {
                 if (sel->items[sel->cursor].flags & 2) {
                     psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_NOT_CHOICE1 | PSND_SFX_BYPASS_MUTE));
-                }
-                else {
+                } else {
                     psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1 | PSND_SFX_BYPASS_MUTE));
                     sel->state++;
                 }
-            }
-            else if (keyGetButtonTrg(0) & PAD_BUTTON_B) {
+            } else if (keyGetButtonTrg(0) & PAD_BUTTON_B) {
                 if (sel->flags & 0x100) {
                     psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_CANCEL1 | PSND_SFX_BYPASS_MUTE));
                     sel->flags |= 0x2000;
@@ -1874,14 +1856,12 @@ void select_disp3_party(WinMgrEntry* entry) {
     if (!(wp->mEntries[sel->descriptorId[2]].flags & 4)) {
         if (sel->items[sel->cursor].flags & 2) {
             help = "helperr";
-        }
-        else {
+        } else {
             help = "help";
         }
         if (sel->type == 6 || sel->type == 7) {
             lank = "lankup";
-        }
-        else {
+        } else {
             lank = "lankdown";
         }
         id = sel->items[sel->cursor].id;
@@ -1902,12 +1882,10 @@ void select_disp3_mario(WinMgrEntry* entry) {
         if (sel->items[sel->cursor].flags & 2) {
             if (sel->items[sel->cursor].flags & 4) {
                 help = "helperr2";
-            }
-            else {
+            } else {
                 help = "helperr";
             }
-        }
-        else {
+        } else {
             help = "help";
         }
         switch (sel->type) {

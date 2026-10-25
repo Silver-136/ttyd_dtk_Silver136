@@ -109,8 +109,7 @@ static inline BOOL itemGetPouch(ItemEntry* entry) {
     }
     if (entry->flags & ITEM_FLAG_COLLECT_GSWF) {
         swSet(entry->collectFlag);
-    }
-    else if (entry->flags & ITEM_FLAG_COLLECT_LSWF) {
+    } else if (entry->flags & ITEM_FLAG_COLLECT_LSWF) {
         _swSet(entry->collectFlag);
     }
     if ((u32)entry->evtCode != 0) {
@@ -196,8 +195,7 @@ BOOL itemGetCheck(ItemEntry* entry) {
             if (marioStGetSystemLevel() != 0) return FALSE;
             if (mario->flags & (MARIO_FLAG_CTRL_OFF | MARIO_FLAG_KEY_OFF)) return FALSE;
         }
-    }
-    else {
+    } else {
         if (marioStGetSystemLevel() != 0) return FALSE;
         if (mario->flags & (MARIO_FLAG_CTRL_OFF | MARIO_FLAG_KEY_OFF)) return FALSE;
     }
@@ -319,23 +317,19 @@ void itemMain(void) {
         if (mode != 2) {
             if (entry->timer == 0) {
                 entry->flags2 &= ~0x100;
-            }
-            else if (entry->flags2 & 0x4000) {
+            } else if (entry->flags2 & 0x4000) {
                 entry->flags2 &= ~0x100;
-            }
-            else {
+            } else {
                 entry->timer -= (f32)OSTicksToMicroseconds(gp->renderTime - entry->baseTime) / 1000.0f;
                 if (entry->timer <= 0) {
                     itemModeChange(entry, 9);
-                }
-                else if (entry->timer <= 3000) {
+                } else if (entry->timer <= 3000) {
                     if ((entry->timer >> 4) & 1) {
                         entry->flags2 ^= 0x100;
                     }
                 }
             }
-        }
-        else {
+        } else {
             entry->flags2 &= ~0x100;
         }
 
@@ -354,24 +348,21 @@ void itemMain(void) {
                 if (entry->flags2 & 0x100000) {
                     hit = NULL;
                     newY = y + dirY;
-                }
-                else {
+                } else {
                     f32 hitNZ, hitNY, hitNX, hitDist, hitZ, hitY, hitX;
                     f32 px = entry->position.x, py = entry->position.y + 20.0f, pz = entry->position.z;
                     { f64 d = __fabs(-1.0); hitDist = 20.0 + d; }
                     hit = hitCheckFilter(NULL, &hitX, &hitY, &hitZ, &hitDist, &hitNX, &hitNY, &hitNZ, px, py, pz, 0.0f, -1.0f, 0.0f);
                     if (hit) {
                         newY = hitY;
-                    }
-                    else {
+                    } else {
                         hit = NULL;
                         newY = y + dirY;
                     }
                 } }
                 if (!hit) {
                     itemModeChange(entry, 3);
-                }
-                else {
+                } else {
                     entry->position.y = newY;
                 }
                 break;
@@ -385,8 +376,7 @@ void itemMain(void) {
                     entry->position.x = px;
                     entry->position.y = py;
                     entry->position.z = pz;
-                }
-                else {
+                } else {
                     itemModeChange(entry, 3);
                     entry->flags2 &= ~0x1000;
                 }
@@ -403,8 +393,7 @@ void itemMain(void) {
                         ((EffStarStoneWork*)entry->effect->userdata)->position.x = entry->position.x;
                         ((EffStarStoneWork*)entry->effect->userdata)->position.y = 16.0f + entry->position.y;
                         ((EffStarStoneWork*)entry->effect->userdata)->position.z = entry->position.z;
-                    }
-                    else {
+                    } else {
                         ((EffStarStoneWork*)entry->effect->userdata)->position.x = entry->position.x;
                         ((EffStarStoneWork*)entry->effect->userdata)->position.y = -1000.0f;
                         ((EffStarStoneWork*)entry->effect->userdata)->position.z = entry->position.z;
@@ -415,8 +404,7 @@ void itemMain(void) {
                         iconSetPos(entry->name, entry->position.x, entry->position.y, entry->position.z);
                         iconSetScale(entry->name, entry->scale);
                         iconSetAlpha(entry->name, entry->alpha);
-                    }
-                    else {
+                    } else {
                         iconSetPos(entry->name, entry->position.x, -1000.0f, entry->position.z);
                     }
                     break;
@@ -484,8 +472,7 @@ ItemEntry* itemEntry(const char* name, s32 itemId, s32 type, s32 collectFlag, s3
             if (swGet(collectFlag)) {
                 return NULL;
             }
-        }
-        else if (collectFlag >= LSWF(0) && collectFlag <= EVTDAT_LSWF_MAX) {
+        } else if (collectFlag >= LSWF(0) && collectFlag <= EVTDAT_LSWF_MAX) {
             collectFlag += EVTDAT_LSWF_BASE;
             isLswf = TRUE;
             if (_swGet(collectFlag)) {
@@ -535,8 +522,7 @@ ItemEntry* itemEntry(const char* name, s32 itemId, s32 type, s32 collectFlag, s3
         if (entry->flags & ITEM_FLAG_ACTIVE && entry->itemId == 0x79 && entry->flags & 0x400) {
 #endif
             itemDelete(entry->name);
-        }
-        else {
+        } else {
 #ifdef VERSION_G8ME01
             entry = NULL;
             for (e = base, i = 0; i < wp->count; i++, e++) {
@@ -551,8 +537,7 @@ ItemEntry* itemEntry(const char* name, s32 itemId, s32 type, s32 collectFlag, s3
             if (entry->flags & ITEM_FLAG_ACTIVE && entry->itemId == 0x7C && entry->flags & 0x400) {
 #endif
                 itemDelete(entry->name);
-            }
-            else {
+            } else {
 #ifdef VERSION_G8ME01
                 entry = itemFindDeletable(wp, 0x7B);
                 entry = NULL;
@@ -560,8 +545,7 @@ ItemEntry* itemEntry(const char* name, s32 itemId, s32 type, s32 collectFlag, s3
                 entry = wp->entries;
                 if (entry->flags & ITEM_FLAG_ACTIVE && entry->itemId == 0x7B && entry->flags & 0x400) {
                     itemDelete(entry->name);
-                }
-                else {
+                } else {
                     entry = NULL;
                 }
 #endif
@@ -587,13 +571,11 @@ ItemEntry* itemEntry(const char* name, s32 itemId, s32 type, s32 collectFlag, s3
         if (isGswf) {
             entry->collectFlag = collectFlag;
             entry->flags |= ITEM_FLAG_COLLECT_GSWF;
-        }
-        else if (isLswf) {
+        } else if (isLswf) {
             entry->collectFlag = collectFlag;
             entry->flags |= ITEM_FLAG_COLLECT_LSWF;
         }
-    }
-    else {
+    } else {
         entry->collectFlag = -1;
     }
 
@@ -745,8 +727,7 @@ ItemEntry* itemHitCheck(f32 x, f32 y, f32 z, f32 range) {
         xzdist = sqrtf(dx * dx + dz * dz);
         dist = sqrtf(dx * dx + dy * dy + dz * dz);
         if (xzdist < range && marioItemGetOk() && marioGetJabaraState() != 1 &&
-            marioGetJabaraState() != 4 && marioGetJabaraState() != 5)
-        {
+            marioGetJabaraState() != 4 && marioGetJabaraState() != 5) {
             if (__fabs((y + mario->wPlayerCollisionBox.y * 0.5f) - entry->position.y) < mario->wPlayerCollisionBox.y * 0.5f + 10.0f) {
                 hit = NULL;
                 if (y < entry->position.y) {
@@ -819,16 +800,13 @@ void winNameDisp(WinMgrEntry* win) {
     if ((u32)gp->language == 0) {
         if (entry->itemId >= 0xF0 && entry->itemId < 0x153) {
             sprintf(buffer, msgSearch("msg_window_badge_get"), name);
-        }
-        else {
+        } else {
             sprintf(buffer, msgSearch("msg_window_item_get"), name);
         }
-    }
-    else {
+    } else {
         if (entry->itemId >= 0xF0 && entry->itemId < 0x153) {
             strcpy(buffer, msgSearch("msg_window_badge_get"));
-        }
-        else {
+        } else {
             strcpy(buffer, msgSearch("msg_window_item_get"));
         }
         evtMsgFmtStr(buffer, name);
@@ -837,8 +815,7 @@ void winNameDisp(WinMgrEntry* win) {
 #else
     if (entry->itemId >= 0xF0 && entry->itemId < 0x153) {
         sprintf(buffer, msgSearch("msg_window_badge_get"), name);
-    }
-    else {
+    } else {
         sprintf(buffer, msgSearch("msg_window_item_get"), name);
     }
     width = FontGetMessageWidth(buffer);
@@ -871,8 +848,7 @@ void winNameDisp2(WinMgrEntry* win) {
 #ifdef VERSION_G8ME01
     if ((u32)gp->language == 0) {
         sprintf(buffer, msgSearch("msg_window_item_release"), name);
-    }
-    else {
+    } else {
         strcpy(buffer, msgSearch("msg_window_item_release"));
         evtMsgFmtStr(buffer, name);
     }
@@ -945,8 +921,7 @@ void itemseq_GetItem(ItemEntry* entry) {
             entry->flags2 &= ~0x10000;
             if (entry->flags & 0x100) {
                 entry->flags2 |= 0x4000000;
-            }
-            else {
+            } else {
                 entry->flags2 &= ~0x4000000;
             }
             entry->flags &= ~0x100;
@@ -955,8 +930,7 @@ void itemseq_GetItem(ItemEntry* entry) {
                     entry->timer = 0;
                     itemGetSound(entry);
                     itemDelete(entry->name);
-                }
-                else {
+                } else {
                     itemModeChange(entry, 4);
                 }
                 break;
@@ -978,8 +952,7 @@ void itemseq_GetItem(ItemEntry* entry) {
             if (!(entry->flags & 0x1000) || entry->flags & 0x4000) {
                 if (!marioChkItemGetMotion()) {
                     if (mario->currMotionId == MARIO_MOTION_JUMP_SW || (u16)(mario->currMotionId - 6) <= 2 ||
-                        mario->currMotionId == MARIO_MOTION_GET_ITEM || mario->currMotionId == MARIO_MOTION_TALK)
-                    {
+                        mario->currMotionId == MARIO_MOTION_GET_ITEM || mario->currMotionId == MARIO_MOTION_TALK) {
                         entry->subState = 8;
                     }
                     break;
@@ -998,28 +971,22 @@ void itemseq_GetItem(ItemEntry* entry) {
             if (entry->itemId == 0x57) {
                 type = 4;
                 bgm = -1;
-            }
-            else if (entry->itemId == 0x7D) {
+            } else if (entry->itemId == 0x7D) {
                 type = 8;
                 bgm = 0;
-            }
-            else if (entry->itemId < 0xC) {
+            } else if (entry->itemId < 0xC) {
                 type = 3;
                 bgm = 3;
-            }
-            else if (entry->itemId < 0x72) {
+            } else if (entry->itemId < 0x72) {
                 type = 6;
                 bgm = 1;
-            }
-            else if (entry->itemId < 0x79) {
+            } else if (entry->itemId < 0x79) {
                 type = 0;
                 bgm = -1;
-            }
-            else if (entry->itemId < 0xEC) {
+            } else if (entry->itemId < 0xEC) {
                 type = 7;
                 bgm = -1;
-            }
-            else if (entry->itemId < 0x153) {
+            } else if (entry->itemId < 0x153) {
                 type = 5;
                 bgm = 2;
             }
@@ -1028,8 +995,7 @@ void itemseq_GetItem(ItemEntry* entry) {
                 ((ItemGetWork*)wp->effect->userdata)->camera = 5;
                 iconFlagOn(entry->name, 0x200);
                 marioSetCamId(CAMERA_3D_EFFECTB);
-            }
-            else {
+            } else {
                 ((ItemGetWork*)wp->effect->userdata)->camera = 5;
                 iconFlagOn(entry->name, 0x100);
                 if (type == 0 || type == 3) {
@@ -1170,8 +1136,7 @@ void itemseq_GetItem(ItemEntry* entry) {
                 s32 id = entry->itemId;
                 if (id >= 0xF0 && id < 0x153) {
                     wp->select = winMgrSelectEntry(2, id, 1);
-                }
-                else {
+                } else {
                     wp->select = winMgrSelectEntry(1, id, 1);
                 }
             }
@@ -1196,8 +1161,7 @@ void itemseq_GetItem(ItemEntry* entry) {
                 if (entry->flags2 & 0x4000000) {
                     entry->flags |= 0x100;
                 }
-            }
-            else {
+            } else {
                 pouchRemoveItem(select);
                 itemGetPouch(entry);
                 entry->flags2 &= ~1;
@@ -1250,11 +1214,9 @@ void itemseq_GetItem(ItemEntry* entry) {
             entry->flags &= ~0x10;
             if (entry->itemId >= 1 && entry->itemId < 0x79) {
                 entry->timer = 0;
-            }
-            else if (entry->itemId >= 0xF0 && entry->itemId < 0x153) {
+            } else if (entry->itemId >= 0xF0 && entry->itemId < 0x153) {
                 entry->timer = 0;
-            }
-            else {
+            } else {
                 entry->timer = 20000;
             }
             entry->flags2 |= 0x10000;
@@ -1274,8 +1236,7 @@ void itemseq_GetItem(ItemEntry* entry) {
                 entry->flags2 &= ~0x4000;
                 entry->flags2 &= ~0x1000;
                 entry->flags &= ~0x1000;
-            }
-            else {
+            } else {
                 entry->speed = 85.0f;
                 entry->velocityY = 120.0f;
                 entry->bounceFactor = 0.7f;
@@ -1344,8 +1305,7 @@ void itemseq_Bound(ItemEntry* entry) {
                                 entry->speed = irand(30) + 45;
                                 if (irand(100) < 50) {
                                     entry->direction = 90.0f + camera->viewYaw + irand(60) - 30.0f;
-                                }
-                                else {
+                                } else {
                                     entry->direction = camera->viewYaw - 90.0f + irand(60) - 30.0f;
                                 }
                                 break;
@@ -1353,8 +1313,7 @@ void itemseq_Bound(ItemEntry* entry) {
                                 entry->speed = 100.0f;
                                 if (irand(100) < 50) {
                                     entry->direction = 90.0f + camera->viewYaw + irand(30) - 15.0f;
-                                }
-                                else {
+                                } else {
                                     entry->direction = camera->viewYaw - 90.0f + irand(30) - 15.0f;
                                 }
                                 break;
@@ -1364,8 +1323,7 @@ void itemseq_Bound(ItemEntry* entry) {
                             entry->direction = irand(90);
                         }
 #endif
-                    }
-                    else {
+                    } else {
                         entry->direction = _move_dir;
                         _move_dir += 132;
                         if (_move_dir >= 360) {
@@ -1443,8 +1401,7 @@ void itemseq_Bound(ItemEntry* entry) {
 
                     if (dy <= 0.0f) {
                         r = NULL;
-                    }
-                    else {
+                    } else {
                         x = entry->position.x;
                         y = 20.0f + entry->position.y;
                         z = entry->position.z;
@@ -1452,8 +1409,7 @@ void itemseq_Bound(ItemEntry* entry) {
                         if (h = hitCheckFilter(NULL, &hitX, &hitY, &hitZ, &hitDist, &hitNX, &hitNY, &hitNZ, x, y, z, 0.0f, 1.0f, 0.0f)) {
                             entry->position.y = hitY - 20.0f - 4.0f;
                             r = h;
-                        }
-                        else {
+                        } else {
                             x = entry->position.x;
                             y = entry->position.y;
                             z = entry->position.z;
@@ -1461,8 +1417,7 @@ void itemseq_Bound(ItemEntry* entry) {
                             if (h = hitCheckFilter(NULL, &hitX, &hitY, &hitZ, &hitDist, &hitNX, &hitNY, &hitNZ, x, y, z, 0.0f, 1.0f, 0.0f)) {
                                 entry->position.y = hitY - 20.0f;
                                 r = h;
-                            }
-                            else {
+                            } else {
                                 r = NULL;
                             }
                         }
@@ -1483,11 +1438,9 @@ void itemseq_Bound(ItemEntry* entry) {
                 entry->flags2 &= ~0x4000;
                 if (entry->itemId >= 1 && entry->itemId < 0x79) {
                     entry->timer = 0;
-                }
-                else if (entry->itemId >= 0xF0 && entry->itemId < 0x153) {
+                } else if (entry->itemId >= 0xF0 && entry->itemId < 0x153) {
                     entry->timer = 0;
-                }
-                else {
+                } else {
                     entry->timer = 20000;
                 }
                 entry->flags2 |= 0x10000;
@@ -1503,8 +1456,7 @@ void itemseq_Bound(ItemEntry* entry) {
             else if (*(u32*)&entry->flags2 & 0x100000) {
                 hit = NULL;
                 entry->position.y += dy;
-            }
-            else {
+            } else {
                 // FAKE: itemHitCheckY written out here; the result goes through h so the caller's hit is set in each arm
                 // (coalesces into r26 like the target). hit* declared in reverse for ascending stack slots.
                 f32 hitNZ, hitNY, hitNX, hitDist, hitZ, hitY, hitX;
@@ -1515,8 +1467,7 @@ void itemseq_Bound(ItemEntry* entry) {
                 if (h) {
                     entry->position.y = hitY;
                     hit = h;
-                }
-                else {
+                } else {
                     hit = NULL;
                     entry->position.y += dy;
                 }
@@ -1533,8 +1484,7 @@ void itemseq_Bound(ItemEntry* entry) {
                     }
                     effSplashEntry(0, entry->position.x, entry->position.y, entry->position.z, 0.7f);
                     entry->flags |= 2;
-                }
-                else {
+                } else {
                     entry->bounceCount++;
                     if (!(hitGetAttr(hit) & 0x80000000) && entry->maxBounces != 0 && entry->bounceCount >= entry->maxBounces) {
                         itemModeChange(entry, 1);
@@ -1567,8 +1517,7 @@ void itemseq_Bound(ItemEntry* entry) {
                         default:
                             if (itemId >= 0xF0 && itemId < 0x153) {
                                 psndSFXOn_3D("SFX_BADGE_LEAPED1", &pos);
-                            }
-                            else {
+                            } else {
                                 psndSFXOn_3D("SFX_ITEM_LEAPED1", &pos);
                             }
                             break;
@@ -1577,21 +1526,17 @@ void itemseq_Bound(ItemEntry* entry) {
                     isFloor = FALSE;
                     if (entry->flags & 0x80 && entry->velocityY != 0.0f) {
                         bounce = TRUE;
-                    }
-                    else if (hitGetAttr(hit) & 0x80000000 && entry->velocityY != 0.0f) {
+                    } else if (hitGetAttr(hit) & 0x80000000 && entry->velocityY != 0.0f) {
                         mobj = mobjHitObjPtrToPtr(hit);
                         if (mario->characterId == CHARACTER_BOWSER) {
                             bounce = FALSE;
-                        }
-                        else if (mobj && strcmp(mobj->animName, "MOBJ_KururinFloor")) {
+                        } else if (mobj && strcmp(mobj->animName, "MOBJ_KururinFloor")) {
                             bounce = TRUE;
                             isFloor = TRUE;
-                        }
-                        else {
+                        } else {
                             goto no_bounce;
                         }
-                    }
-                    else {
+                    } else {
                     no_bounce:
                         bounce = FALSE;
                     }
@@ -1711,8 +1656,7 @@ itemHitCheckY(ItemEntry* entry, f32 z, f32 y, f32 x, f32 vy) {
     { f64 d = __fabs(vy); hitDist = 20.0 + d; } // FAKE: f64 local keeps 20.0 on the left of the fadd
     if (hit = hitCheckFilter(NULL, &hitX, &hitY, &hitZ, &hitDist, &hitNX, &hitNY, &hitNZ, x, y, z, 0.0f, -1.0f, 0.0f)) {
         entry->position.y = hitY;
-    }
-    else {
+    } else {
         hit = NULL;
         entry->position.y += vy;
     }
@@ -1760,8 +1704,7 @@ void itemNokoForceGet(ItemEntry* entry) {
         itemModeChange(entry, 2);
         entry->flags |= 0x5000;
         entry->flags2 &= ~0x10000;
-    }
-    else {
+    } else {
         entry->timer = 0;
         itemModeChange(entry, 1);
         entry->flags2 &= ~4;

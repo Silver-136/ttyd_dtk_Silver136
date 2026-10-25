@@ -688,8 +688,7 @@ static void _mapclsofs_all(CloudWork* wp) {
     }
 }
 
-static s32 evt_cloud_main(EventEntry *event, BOOL isFirstCall)
-{
+static s32 evt_cloud_main(EventEntry *event, BOOL isFirstCall) {
   HitEntry *hit0;
   HitEntry *hit1;
   HitEntry *hit2;
@@ -706,44 +705,36 @@ static s32 evt_cloud_main(EventEntry *event, BOOL isFirstCall)
   inBattle = gp->inBattle != 0;
   mario = marioGetPtr();
   ptmp = partyGetPtr(0);
-  if (isFirstCall)
-  {
+  if (isFirstCall) {
     return 0;
   }
-  if (ptmp == ((void *) 0))
-  {
+  if (ptmp == ((void *) 0)) {
     return 0;
   }
   hit0 = (HitEntry *) cloudGetHitBreathout(0);
   hit1 = (HitEntry *) cloudGetHitBreathout(1);
   hit2 = (HitEntry *) cloudGetHitBreathout(2);
   hit3 = (HitEntry *) cloudGetHitBreathout(3);
-  switch (wp->state)
-  {
+  switch (wp->state) {
     case 0:
       if (((s32) (cloud_once_flag & 0xFFFFFFFFFFFFFFFFu)) == 1) // FAKE: no-op 64-bit mask; needed for 100% (plain cloud_once_flag == 1 gives 97.9-98.1)
     {
       break;
     }
       hit = hitNameToPtr(wp->hitName);
-      if ((((hit0 == hit) || (hit1 == hit)) || (hit2 == hit)) || (hit3 == hit))
-    {
+      if ((((hit0 == hit) || (hit1 == hit)) || (hit2 == hit)) || (hit3 == hit)) {
       wp->state++;
     }
       wp->counter = 0;
       break;
 
     case 1:
-      if ((mario->displayDirectionTarget > 90.0f) && ((mario->displayDirectionTarget <= 270.0f) ^ 0))
-    {
+      if ((mario->displayDirectionTarget > 90.0f) && ((mario->displayDirectionTarget <= 270.0f) ^ 0)) {
       strcpy(wp->animName, "P_oof_cloud_2");
-    }
-    else
-    {
+    } else {
       strcpy(wp->animName, "P_oof_cloud_1");
     }
-      if (!animGroupBaseAsync(wp->animName, inBattle, (void *) 0))
-    {
+      if (!animGroupBaseAsync(wp->animName, inBattle, (void *) 0)) {
       break;
     }
       cloud_once_flag = 1;
@@ -767,8 +758,7 @@ static s32 evt_cloud_main(EventEntry *event, BOOL isFirstCall)
       break;
 
     case 222:
-      if (!_get_boundingbox(wp->hitName, &wp->x, &wp->y, &wp->w, &wp->h))
-    {
+      if (!_get_boundingbox(wp->hitName, &wp->x, &wp->y, &wp->w, &wp->h)) {
       break;
     }
       _img_alloc_capture(wp->imgName, 0, wp->offscreenName, 1, wp->x, wp->y, wp->w, wp->h);
@@ -793,35 +783,26 @@ static s32 evt_cloud_main(EventEntry *event, BOOL isFirstCall)
     case 4:
     {
       img = imgNameToPtr(wp->imgName, inBattle);
-      if ((wp->lastFrame == 0.0f) || ((wp->lastFrame + 1.0f) < img->loopTimes))
-      {
+      if ((wp->lastFrame == 0.0f) || ((wp->lastFrame + 1.0f) < img->loopTimes)) {
         psndSFXOn_3D("SFX_OFF_CLAUD_WIND2", &mario->position);
         wp->lastFrame = img->loopTimes;
       }
-      if (mario->currMotionId != MARIO_MOTION_CLOUD)
-      {
+      if (mario->currMotionId != MARIO_MOTION_CLOUD) {
         wp->state = 10;
         break;
       }
       hit = hitNameToPtr(wp->hitName);
-      if ((((hit0 != hit) && (hit1 != hit)) && (hit2 != hit)) && (hit3 != hit))
-      {
-        if (wp->timer == 0)
-        {
+      if ((((hit0 != hit) && (hit1 != hit)) && (hit2 != hit)) && (hit3 != hit)) {
+        if (wp->timer == 0) {
           wp->state = 10;
-        }
-        else
-        {
+        } else {
           wp->timer--;
           wp->counter += 2;
         }
-      }
-      else
-      {
+      } else {
         wp->timer = 30;
         wp->counter += 2;
-        if (wp->counter > wp->limit)
-        {
+        if (wp->counter > wp->limit) {
           wp->state = 20;
         }
       }
@@ -834,8 +815,7 @@ static s32 evt_cloud_main(EventEntry *event, BOOL isFirstCall)
 
     case 20:
       psndSFXOn_3D("SFX_OFF_CLAUD_WIND3", &mario->position);
-      if (wp->endEvt != ((void *) 0))
-    {
+      if (wp->endEvt != ((void *) 0)) {
       evtEntry(wp->endEvt, 0, 0);
     }
       img = imgNameToPtr(wp->imgName, inBattle);
@@ -846,8 +826,7 @@ static s32 evt_cloud_main(EventEntry *event, BOOL isFirstCall)
       break;
 
     case 21:
-      if (wp->timer != 0)
-    {
+      if (wp->timer != 0) {
       wp->timer--;
       break;
     }
@@ -867,8 +846,7 @@ static s32 evt_cloud_main(EventEntry *event, BOOL isFirstCall)
       imgRelease(img, inBattle);
       offscreenDelete(wp->offscreenName);
       cloud_once_flag = 0;
-      if (wp->state == 99)
-    {
+      if (wp->state == 99) {
       wp->state = 0;
       break;
     }

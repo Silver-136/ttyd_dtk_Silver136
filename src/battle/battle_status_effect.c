@@ -148,8 +148,7 @@ void BSE_Sleep(BattleUnit* unit) {
         wk[1] = x;
         wk[2] = y;
         wk[3] = z;
-    }
-    else {
+    } else {
         BSE_SleepDelete(unit);
     }
 }
@@ -184,8 +183,7 @@ void BSE_Biribiri(BattleUnit* unit) {
         wk[1] = x;
         wk[2] = y;
         wk[3] = 10.0f + z;
-    }
-    else {
+    } else {
         BSE_BiribiriDelete(unit);
     }
 }
@@ -224,8 +222,7 @@ void BSE_Fire(BattleUnit* unit) {
         wk[1] = x;
         wk[2] = y;
         wk[3] = z + 5.0f;
-    }
-    else {
+    } else {
         BSE_FireDelete(unit);
     }
 }
@@ -263,8 +260,7 @@ void BSE_Freeze(BattleUnit* unit) {
         wk[1] = x;
         wk[2] = 20.0f * sc + y;
         wk[3] = 10.0f + z;
-    }
-    else {
+    } else {
         BSE_FreezeDelete(unit);
     }
 }
@@ -298,8 +294,7 @@ void BSE_Kagegakure(BattleUnit* unit) {
         }
         BtlUnit_GetPartsWorldPos(BtlUnit_GetPartsPtr(unit, BtlUnit_GetBodyPartsId(unit)), &x, &y, &z);
         iconSetPos(unit->kageIcon->name, x, y, z + 5.0f);
-    }
-    else {
+    } else {
         BSE_KagegakureDelete(unit);
     }
 }
@@ -426,8 +421,7 @@ void BattleStatusChangeInfoSetAnnouce(BattleUnit* unit, s32 type, s32 strength, 
     tmp.changed = changed;
     if (type == e[i].type) {
         e[i] = tmp;
-    }
-    else {
+    } else {
         for (; i < 6; i++) {
             swap = e[i];
             e[i] = tmp;
@@ -503,11 +497,9 @@ void BattleStatusChangeMsgSetAnnouce(BattleUnit* unit, s32 index, s32 changed) {
     id = unit->currentKind;
     if (id == 0xDE) {
         msg->flags |= 1;
-    }
-    else if (id >= TYPE_PARTNER_MIN && id < TYPE_PARTNER_MAX && unit->mAlliance == ALLIANCE_PLAYER) {
+    } else if (id >= TYPE_PARTNER_MIN && id < TYPE_PARTNER_MAX && unit->mAlliance == ALLIANCE_PLAYER) {
         msg->flags |= 2;
-    }
-    else {
+    } else {
         msg->flags |= 4;
     }
 }
@@ -551,8 +543,7 @@ void BattleStatusChangeMsgAdjust(BattleWork* wp) {
         if (!msg->flags) {
             msg->unitId = -1;
             msg->type = -1;
-        }
-        else if (*(s64*)&base->maskHi & (s64)(1 << t)) {
+        } else if (*(s64*)&base->maskHi & (s64)(1 << t)) {
             msg->unitId = -1;
             msg->type = -1;
         }
@@ -579,15 +570,13 @@ BOOL BattleStatusChangeMsgMain(BattleWork* wp) {
             if (!msg->timer) {
                 msg->type = -1;
             }
-        }
-        else {
+        } else {
             sprintf(base->text, "");
             for (i = 0; i < 28; i++) {
                 if (msg->type == _st_chg_msg_data[i].type || _st_chg_msg_data[i].type == -1) {
                     if (msg->changed) {
                         sprintf(base->text, msgSearch(_st_chg_msg_data[i].msg1));
-                    }
-                    else {
+                    } else {
                         sprintf(base->text, msgSearch(_st_chg_msg_data[i].msg0));
                     }
                     break;

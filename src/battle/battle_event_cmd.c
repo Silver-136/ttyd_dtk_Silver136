@@ -50,8 +50,7 @@ USER_FUNC(btlevtcmd_check_battleflag) {
     u32 flags = *args++;
     if (wp->flags & flags) {
         evtSetValue(event, index, TRUE);
-    }
-    else {
+    } else {
         evtSetValue(event, index, FALSE);
     }
     return EVT_RETURN_DONE;
@@ -65,8 +64,7 @@ USER_FUNC(btlevtcmd_onoff_battleflag) {
     BattleWork* wp = _battleWorkPointer;
     if (val == TRUE) {
         wp->flags |= flags;
-    }
-    else {
+    } else {
         wp->flags &= ~flags;
     }
     return EVT_RETURN_DONE;
@@ -97,8 +95,7 @@ USER_FUNC(btlevtcmd_CheckPhase) {
     u32 seq = args[1];
     if (seq != BattleGetSeq(_battleWorkPointer, SEQ_PHASE)) {
         evtSetValue(event, index, FALSE);
-    }
-    else {
+    } else {
         evtSetValue(event, index, TRUE);
     }
     return EVT_RETURN_DONE;
@@ -242,8 +239,7 @@ USER_FUNC(btlevtcmd_KillUnit) {
     if (flags & 2) {
         unit->mAttributeFlags |= kInactive;
         return EVT_RETURN_DONE;
-    }
-    else {
+    } else {
         BtlUnit_SetStatus(unit, STATUS_INSTANT_KILL, 1, 1);
         if (!(flags & 1)) {
             unit->flags |= BATTLE_UNIT_FLAG_BROKEN;
@@ -410,8 +406,7 @@ USER_FUNC(btlevtcmd_SetPartsPos) {
     part = BattleGetUnitPartsPtr(id, partId);
     if (part->attributes & 0x10000000) {
         BtlUnit_SetPartsPos(part, x, y, z);
-    }
-    else {
+    } else {
         BtlUnit_GetPos(unit, &currX, &currY, &currZ);
         x -= currX;
         y -= currY;
@@ -439,8 +434,7 @@ USER_FUNC(btlevtcmd_AddPartsPos) {
     part = BattleGetUnitPartsPtr(id, partId);
     if (part->attributes & 0x10000000) {
         BtlUnit_AddPartsPos(part, x, y, z);
-    }
-    else {
+    } else {
         BtlUnit_AddPartsOffsetPos(part, x, y, z);
     }
     return EVT_RETURN_DONE;
@@ -1714,8 +1708,7 @@ USER_FUNC(btlevtcmd_RecoverHp) {
         unit->hpGauge.drainTimer = unit->hpGauge.drainLength;
         unit->hpGauge.visibleTimer = unit->hpGauge.visibleLength;
         unit->hpGauge.flags |= 1;
-    }
-    else {
+    } else {
         BtlUnit_RecoverHp(unit, hp);
     }
     return EVT_RETURN_DONE;
@@ -1922,8 +1915,7 @@ USER_FUNC(btlevtcmd_CheckDamageCode) {
     index = args[2];
     unit = BattleGetUnitPtr(_battleWorkPointer, id); if (unit->damageCode & mask) {
         evtSetValue(event, index, 1);
-    }
-    else {
+    } else {
         evtSetValue(event, index, 0);
     }
     return EVT_RETURN_DONE;
@@ -1944,8 +1936,7 @@ USER_FUNC(btlevtcmd_StartAvoid) {
         BtlUnit_GetPos(unit, &pos.x, &pos.y, &pos.z);
         if (pos.y < 85.0f) {
             pos.y += 50.0f;
-        }
-        else {
+        } else {
             pos.y += -50.0f;
         }
         pos.x -= 45.0f;
@@ -1985,8 +1976,7 @@ USER_FUNC(btlevtcmd_CheckDamagePattern) {
     dp = BattleGetUnitPtr(_battleWorkPointer, id)->damagePattern;
     if (dp == pattern) {
         evtSetValue(event, index, 1);
-    }
-    else {
+    } else {
         evtSetValue(event, index, 0);
     }
     return EVT_RETURN_DONE;
@@ -2109,8 +2099,7 @@ USER_FUNC(btlevtcmd_GetPartnerId) {
     partner = BattleGetPartnerPtr(wp, unit);
     if (partner) {
         evtSetValue(event, index, partner->unitId);
-    }
-    else {
+    } else {
         evtSetValue(event, index, -1);
     }
     return EVT_RETURN_DONE;
@@ -2135,8 +2124,7 @@ USER_FUNC(btlevtcmd_GetMarioId) {
     }
     if (i >= 64) {
         evtSetValue(event, index, -1);
-    }
-    else {
+    } else {
         evtSetValue(event, index, unit->unitId);
     }
     return EVT_RETURN_DONE;
@@ -2164,8 +2152,7 @@ USER_FUNC(btlevtcmd_GetPartyId) {
     }
     if (i >= 64) {
         evtSetValue(event, index, -1);
-    }
-    else {
+    } else {
         evtSetValue(event, index, unit->unitId);
     }
     return EVT_RETURN_DONE;
@@ -2201,8 +2188,7 @@ USER_FUNC(btlevtcmd_GetUnitId) {
     }
     if (unit) {
         evtSetValue(event, index, id);
-    }
-    else {
+    } else {
         evtSetValue(event, index, -1);
     }
     return EVT_RETURN_DONE;
@@ -2297,8 +2283,7 @@ USER_FUNC(btlevtcmd_CalculateFaceDirection) {
         if (thisPart) {
             if (thisPart->attributes & 0x10000000) {
                 BtlUnit_GetPartsPos(thisPart, &thisX, &thisY, &thisZ);
-            }
-            else {
+            } else {
                 BtlUnit_GetPartsOffsetPos(thisPart, &offsetX, &offsetY, &offsetZ);
                 thisX += offsetX;
             }
@@ -2308,8 +2293,7 @@ USER_FUNC(btlevtcmd_CalculateFaceDirection) {
         if (targetPart) {
             if (targetPart->attributes & 0x10000000) {
                 BtlUnit_GetPartsPos(targetPart, &targetX, &targetY, &targetZ);
-            }
-            else {
+            } else {
                 BtlUnit_GetPartsOffsetPos(targetPart, &offsetX, &offsetY, &offsetZ);
                 targetX += offsetX;
             }
@@ -2318,8 +2302,7 @@ USER_FUNC(btlevtcmd_CalculateFaceDirection) {
         calculate = targetX - thisX;
         if (calculate > 0.0f) {
             value = 1;
-        }
-        else if (calculate < 0.0f) {
+        } else if (calculate < 0.0f) {
             value = -1;
         }
     }
@@ -2329,8 +2312,7 @@ USER_FUNC(btlevtcmd_CalculateFaceDirection) {
         if (thisPart) {
             if (thisPart->attributes & 0x10000000) {
                 BtlUnit_GetPartsPos(thisPart, &localX, &localY, &localZ);
-            }
-            else {
+            } else {
                 BtlUnit_GetPartsOffsetPos(thisPart, &thisOffsetX, &thisOffsetY, &thisOffsetZ);
                 localX += thisOffsetX;
             }
@@ -2338,8 +2320,7 @@ USER_FUNC(btlevtcmd_CalculateFaceDirection) {
         calculate = (f32)targetId - localX;
         if (calculate > 0.0f) {
             value = 1;
-        }
-        else if (calculate < 0.0f) {
+        } else if (calculate < 0.0f) {
             value = -1;
         }
     }
@@ -2412,8 +2393,7 @@ USER_FUNC(btlevtcmd_CheckAttribute) {
     index = args[2];
     unit = BattleGetUnitPtr(_battleWorkPointer, id); if (unit->mAttributeFlags & mask) {
         evtSetValue(event, index, 1);
-    }
-    else {
+    } else {
         evtSetValue(event, index, 0);
     }
     return EVT_RETURN_DONE;
@@ -2460,8 +2440,7 @@ USER_FUNC(btlevtcmd_CheckPartsAttribute) {
     part = BtlUnit_GetPartsPtr(unit, partId);
     if (part->attributes & mask) {
         evtSetValue(event, index, 1);
-    }
-    else {
+    } else {
         evtSetValue(event, index, 0);
     }
     return EVT_RETURN_DONE;
@@ -2514,8 +2493,7 @@ USER_FUNC(btlevtcmd_CheckPartsCounterAttribute) {
     part = BtlUnit_GetPartsPtr(unit, partId);
     if (part->counterAttributes & mask) {
         evtSetValue(event, index, 1);
-    }
-    else {
+    } else {
         evtSetValue(event, index, 0);
     }
     return EVT_RETURN_DONE;
@@ -2622,8 +2600,7 @@ USER_FUNC(btlevtcmd_CheckToken) {
     { BattleUnitToken_Flags m = (BattleUnitToken_Flags)args[1];
     if (unit->mTokenFlags & m) {
         evtSetValue(event, index, 1);
-    }
-    else {
+    } else {
         evtSetValue(event, index, 0);
     }
     }
@@ -2653,8 +2630,7 @@ USER_FUNC(btlevtcmd_CheckCommandUnit) {
     index = args[1];
     if (kind == UNIT_MARIO || kind >= TYPE_PARTNER_MIN && kind < TYPE_PARTNER_MAX) {
         evtSetValue(event, index, 1);
-    }
-    else {
+    } else {
         evtSetValue(event, index, 0);
     }
     return EVT_RETURN_DONE;
@@ -2897,16 +2873,14 @@ USER_FUNC(btlevtcmd_JumpPosition) {
         unit->mMoveDistance = distABf(x, z, tx, tz);
         if (tx - x > 0.0f) {
             unit->moveDirection = 1;
-        }
-        else if (tx - x < 0.0f) {
+        } else if (tx - x < 0.0f) {
             unit->moveDirection = -1;
         }
         y = ty - y;
         if (unit->moveFrames == 0) {
             unit->moveFrames = unit->mMoveDistance / unit->mMoveSpeedXZ;
             unit->mMoveDistance = unit->mMoveDistance - unit->moveFrames * unit->mMoveSpeedXZ;
-        }
-        else {
+        } else {
             unit->mMoveSpeedXZ = unit->mMoveDistance / unit->moveFrames;
             unit->mMoveDistance = unit->mMoveDistance - unit->moveFrames * unit->mMoveSpeedXZ;
         }
@@ -2991,8 +2965,7 @@ USER_FUNC(btlevtcmd_FallPosition) {
         unit->mMoveDistance = distABf(x, z, tx, tz);
         if (tx - x > 0.0f) {
             unit->moveDirection = 1;
-        }
-        else if (tx - x < 0.0f) {
+        } else if (tx - x < 0.0f) {
             unit->moveDirection = -1;
         }
         y = ty - y;
@@ -3004,8 +2977,7 @@ USER_FUNC(btlevtcmd_FallPosition) {
             if (unit->moveFrames == 0) {
                 unit->moveFrames = 1;
             }
-        }
-        else {
+        } else {
             unit->mMoveSpeedXZ = unit->mMoveDistance / unit->moveFrames;
         }
         unit->mMoveSpeedY = 0.0f;
@@ -3050,8 +3022,7 @@ USER_FUNC(btlevtcmd_MovePosition) {
         unit->mMoveDistance = distABf(x, z, tx, tz);
         if (tx - x > 0.0f) {
             unit->moveDirection = 1;
-        }
-        else if (tx - x < 0.0f) {
+        } else if (tx - x < 0.0f) {
             unit->moveDirection = -1;
         }
         if (unit->moveFrames == 0) {
@@ -3060,8 +3031,7 @@ USER_FUNC(btlevtcmd_MovePosition) {
                 unit->moveFrames = 1;
             }
             unit->mMoveSpeedXZ = unit->mMoveSpeedXZ + (unit->mMoveDistance - unit->moveFrames * unit->mMoveSpeedXZ) / unit->moveFrames;
-        }
-        else {
+        } else {
             unit->mMoveSpeedXZ = unit->mMoveDistance / unit->moveFrames;
         }
         BtlUnit_LoadSeMode(mode, kind, &unit->moveSndTable, &unit->moveSnd);
@@ -3154,8 +3124,7 @@ USER_FUNC(btlevtcmd_DivePosition) {
         }
         if (unit->moveFrames == 0) {
             unit->moveFrames = unit->mMoveDistance / unit->mMoveSpeedXZ;
-        }
-        else {
+        } else {
             unit->mMoveSpeedXZ = unit->mMoveDistance / unit->moveFrames;
         }
         if (unit->moveFrames == 0) {
@@ -3165,8 +3134,7 @@ USER_FUNC(btlevtcmd_DivePosition) {
         unit->mMoveDirection = 0.0f;
         if (tx - x > 0.0f) {
             unit->moveDirection = 1;
-        }
-        else if (tx - x < 0.0f) {
+        } else if (tx - x < 0.0f) {
             unit->moveDirection = -1;
         }
         BtlUnit_LoadSeMode(3, kind, &unit->moveSndTable, &unit->moveSnd);
@@ -3207,22 +3175,18 @@ USER_FUNC(btlevtcmd_DivePosition) {
             h = h * (f32)height;
         }
         BtlUnit_SetPos(unit, unit->mMoveCurrentPos.x, unit->mMoveCurrentPos.y + h, unit->mMoveCurrentPos.z);
-    }
-    else {
+    } else {
         f32 dx = unit->mMoveTargetPos.x - unit->mMoveCurrentPos.x, dy = unit->mMoveTargetPos.y - unit->mMoveCurrentPos.y, dz = unit->mMoveTargetPos.z - unit->mMoveCurrentPos.z;
         s32 neg;
         f32 d = sqrtf(dx * dx + dy * dy + dz * dz);
         if (unit->mMoveTargetPos.x - unit->mMoveStartPos.x > 0.0f) {
             neg = 1;
-        }
-        else if (unit->mMoveTargetPos.x - unit->mMoveStartPos.x < 0.0f) {
+        } else if (unit->mMoveTargetPos.x - unit->mMoveStartPos.x < 0.0f) {
             neg = 0;
-        }
-        else {
+        } else {
             if (unit->mMoveTargetPos.y - unit->mMoveStartPos.y < 0.0f) {
                 neg = 0;
-            }
-            else {
+            } else {
                 neg = 1;
             }
         }
@@ -3235,8 +3199,7 @@ USER_FUNC(btlevtcmd_DivePosition) {
         h = sinfd(180.0f * (1.0f - d / unit->mMoveDistance));
         if (neg) {
             a = 360.0f * atan2f_safety(unit->mMoveTargetPos.x - unit->mMoveStartPos.x, unit->mMoveTargetPos.y - unit->mMoveStartPos.y) / 6.2831855f;
-        }
-        else {
+        } else {
             a = 180.0f + 360.0f * atan2f_safety(unit->mMoveTargetPos.x - unit->mMoveStartPos.x, unit->mMoveTargetPos.y - unit->mMoveStartPos.y) / 6.2831855f;
         }
         sx = h * sinfd(a);
@@ -3244,8 +3207,7 @@ USER_FUNC(btlevtcmd_DivePosition) {
         if (height == 0) {
             sx = 0.0f;
             sz = sx;
-        }
-        else {
+        } else {
             sx = sx * (f32)height;
             sz = sz * (f32)height;
         }
@@ -3286,8 +3248,7 @@ USER_FUNC(btlevtcmd_EllipseMovePosition) {
         }
         if (unit->moveFrames == 0) {
             unit->moveFrames = unit->mMoveDistance / unit->mMoveSpeedXZ;
-        }
-        else {
+        } else {
             unit->mMoveSpeedXZ = unit->mMoveDistance / unit->moveFrames;
         }
         if (unit->moveFrames == 0) {
@@ -3297,8 +3258,7 @@ USER_FUNC(btlevtcmd_EllipseMovePosition) {
         unit->mMoveDirection = 0.0f;
         if (tx - x > 0.0f) {
             unit->moveDirection = 1;
-        }
-        else if (tx - x < 0.0f) {
+        } else if (tx - x < 0.0f) {
             unit->moveDirection = -1;
         }
     }
@@ -4245,8 +4205,7 @@ USER_FUNC(btlevtcmd_MarioJumpPosition) {
         event->blocked = 1;
         if (type == 1) {
             event->blocked = 2;
-        }
-        else {
+        } else {
             BtlUnit_SetMoveTargetPos(unit, tx, ty, tz);
             BtlUnit_GetPos(unit, &x, &y, &z);
             BtlUnit_SetMoveCurrentPos(unit, x, y, z);
@@ -4254,16 +4213,14 @@ USER_FUNC(btlevtcmd_MarioJumpPosition) {
             unit->mMoveDistance = distABf(x, z, tx, tz);
             if (tx - x > 0.0f) {
                 unit->moveDirection = 1;
-            }
-            else if (tx - x < 0.0f) {
+            } else if (tx - x < 0.0f) {
                 unit->moveDirection = -1;
             }
             unit->moveFrames = frames;
             if (unit->moveFrames == 0) {
                 unit->moveFrames = unit->mMoveDistance / unit->mMoveSpeedXZ;
                 rem = unit->mMoveDistance - unit->moveFrames * unit->mMoveSpeedXZ;
-            }
-            else {
+            } else {
                 unit->mMoveSpeedXZ = unit->mMoveDistance / unit->moveFrames;
                 rem = unit->mMoveDistance - unit->moveFrames * unit->mMoveSpeedXZ;
             }
@@ -4291,8 +4248,7 @@ USER_FUNC(btlevtcmd_MarioJumpPosition) {
                 unit->mJumpBaseY = 0.0f;
                 sn = sin(6.28318531f * unit->mJumpAngle / 360.0f);
                 unit->mMoveSpeedY = unit->mMoveSpeedY + unit->mFallAccel * (0.53 * sn + 1.0);
-            }
-            else {
+            } else {
                 unit->mJumpAngle = 90.0f;
                 unit->mJumpAngleStep = (f32)(360 / unit->moveFrames);
                 t = unit->mMoveDistance - 20.0;
@@ -4335,8 +4291,7 @@ USER_FUNC(btlevtcmd_MarioJumpPosition) {
         if (type < 3) {
             sn = sin(6.28318531f * unit->mJumpAngle / 360.0f);
                 unit->mMoveSpeedY = unit->mMoveSpeedY + unit->mFallAccel * (0.53 * sn + 1.0);
-        }
-        else {
+        } else {
             sn = sin(6.28318531f * unit->mJumpAngle / 360.0f);
                 unit->mMoveSpeedY = unit->mMoveSpeedY + unit->mFallAccel * (0.8 * sn + 1.0);
         }
@@ -4430,13 +4385,11 @@ USER_FUNC(btlevtcmd_GetTakeoffPosition) {
         if (part == p2) {
             if (back) hx += wp->alliances[belong].attackDirection * -60;
             else hx += wp->alliances[belong].attackDirection * 60;
-        }
-        else {
+        } else {
             if (back) hx += wp->alliances[belong].attackDirection * -30;
             else hx += wp->alliances[belong].attackDirection * 30;
         }
-    }
-    else {
+    } else {
         hx += wp->alliances[belong].attackDirection * 60;
     }
     evtSetValue(event, ox, (s32)hx);
@@ -4500,16 +4453,14 @@ USER_FUNC(btlevtcmd_JumpPartsPosition) {
         part->moveDistance = distABf(x, z, tx, tz);
         if (tx - x > 0.0f) {
             part->moveDirection = 1;
-        }
-        else if (tx - x < 0.0f) {
+        } else if (tx - x < 0.0f) {
             part->moveDirection = -1;
         }
         y = ty - y;
         if (part->moveTotalFrames == 0) {
             part->moveTotalFrames = part->moveDistance / part->mMoveSpeedXZ;
             part->moveDistance = part->moveDistance - part->moveTotalFrames * part->mMoveSpeedXZ;
-        }
-        else {
+        } else {
             part->mMoveSpeedXZ = part->moveDistance / part->moveTotalFrames;
             part->moveDistance = part->moveDistance - part->moveTotalFrames * part->mMoveSpeedXZ;
         }
@@ -4622,8 +4573,7 @@ USER_FUNC(btlevtcmd_FallPartsPosition) {
         part->moveDistance = distABf(x, z, tx, tz);
         if (tx - x > 0.0f) {
             part->moveDirection = 1;
-        }
-        else if (tx - x < 0.0f) {
+        } else if (tx - x < 0.0f) {
             part->moveDirection = -1;
         }
         y = ty - y;
@@ -4635,8 +4585,7 @@ USER_FUNC(btlevtcmd_FallPartsPosition) {
             if (part->moveTotalFrames == 0) {
                 part->moveTotalFrames = 1;
             }
-        }
-        else {
+        } else {
             part->mMoveSpeedXZ = part->moveDistance / part->moveTotalFrames;
         }
         part->moveSpeedY = 0.0f;
@@ -4693,8 +4642,7 @@ USER_FUNC(btlevtcmd_DivePartsPosition) {
         }
         if (unit->moveTotalFrames == 0) {
             unit->moveTotalFrames = unit->moveDistance / unit->mMoveSpeedXZ;
-        }
-        else {
+        } else {
             unit->mMoveSpeedXZ = unit->moveDistance / unit->moveTotalFrames;
         }
         if (unit->moveTotalFrames == 0) {
@@ -4704,8 +4652,7 @@ USER_FUNC(btlevtcmd_DivePartsPosition) {
         unit->moveAngle = 0.0f;
         if (tx - x > 0.0f) {
             unit->moveDirection = 1;
-        }
-        else if (tx - x < 0.0f) {
+        } else if (tx - x < 0.0f) {
             unit->moveDirection = -1;
         }
         BtlUnit_LoadSeMode(3, kind, &unit->moveSndTable, &unit->moveSnd);
@@ -4746,18 +4693,15 @@ USER_FUNC(btlevtcmd_DivePartsPosition) {
             h = h * (f32)height;
         }
         BtlUnit_SetPartsPos(unit, unit->mMoveCurrentPos.x, unit->mMoveCurrentPos.y + h, unit->mMoveCurrentPos.z);
-    }
-    else {
+    } else {
         f32 dx = unit->mMoveTargetPos.x - unit->mMoveCurrentPos.x, dy = unit->mMoveTargetPos.y - unit->mMoveCurrentPos.y, dz = unit->mMoveTargetPos.z - unit->mMoveCurrentPos.z;
         s32 neg;
         f32 d = sqrtf(dx * dx + dy * dy + dz * dz);
         if (unit->mMoveTargetPos.x - unit->mMoveStartPos.x > 0.0f) {
             neg = 1;
-        }
-        else if (unit->mMoveTargetPos.x - unit->mMoveStartPos.x < 0.0f) {
+        } else if (unit->mMoveTargetPos.x - unit->mMoveStartPos.x < 0.0f) {
             neg = 0;
-        }
-        else {
+        } else {
             if (unit->mMoveTargetPos.y - unit->mMoveStartPos.y < 0.0f) neg = 0; else neg = 1;
         }
         if (d == 0.0f) {
@@ -4769,8 +4713,7 @@ USER_FUNC(btlevtcmd_DivePartsPosition) {
         h = sinfd(180.0f * (1.0f - d / unit->moveDistance));
         if (neg) {
             a = 360.0f * atan2f_safety(unit->mMoveTargetPos.x - unit->mMoveStartPos.x, unit->mMoveTargetPos.y - unit->mMoveStartPos.y) / 6.2831855f;
-        }
-        else {
+        } else {
             a = 180.0f + 360.0f * atan2f_safety(unit->mMoveTargetPos.x - unit->mMoveStartPos.x, unit->mMoveTargetPos.y - unit->mMoveStartPos.y) / 6.2831855f;
         }
         sx = h * sinfd(a);
@@ -4778,8 +4721,7 @@ USER_FUNC(btlevtcmd_DivePartsPosition) {
         if (height == 0) {
             sx = 0.0f;
             sz = sx;
-        }
-        else {
+        } else {
             sx = sx * (f32)height;
             sz = sz * (f32)height;
         }
@@ -5105,8 +5047,7 @@ USER_FUNC(btlevtcmd_ACSuccessEffect) {
     }
     if (pos.y < 80.0f) {
         entry = effNiceEntry(eff, pos.x - h, 50.0f + pos.y, pos.z);
-    }
-    else {
+    } else {
         entry = effNiceEntry(eff, pos.x - h, pos.y - 50.0f, pos.z);
     }
     ((NiceEffectWork*)entry->userdata)->overallScale = scale;
@@ -5122,8 +5063,7 @@ USER_FUNC(btlevtcmd_ac_timing_flag_onoff) {
     wp = _battleWorkPointer;
     if (on) {
         ((TimingAWork*)wp->actionCommands.work)->flags |= flags;
-    }
-    else {
+    } else {
         ((TimingAWork*)wp->actionCommands.work)->flags &= ~flags;
     }
     return EVT_RETURN_DONE;
@@ -5558,8 +5498,7 @@ USER_FUNC(btlevtcmd_AnimeFlagOnOff) {
     on = evtGetValue(event, args[3]);
     if (on) {
         part->animFlags |= flags;
-    }
-    else {
+    } else {
         part->animFlags &= ~flags;
     }
     return EVT_RETURN_DONE;
@@ -5600,8 +5539,7 @@ USER_FUNC(btlevtcmd_CheckStatus) {
     unit = BattleGetUnitPtr(_battleWorkPointer, id);
     if (BtlUnit_CheckStatus(unit, type)) {
         evtSetValue(event, index, TRUE);
-    }
-    else {
+    } else {
         evtSetValue(event, index, FALSE);
     }
     return EVT_RETURN_DONE;
@@ -5622,8 +5560,7 @@ USER_FUNC(btlevtcmd_OnOffStatus) {
     unit = BattleGetUnitPtr(_battleWorkPointer, id);
     if (onoff) {
         BtlUnit_SetStatus(unit, type, (s8)turns, (s8)strength);
-    }
-    else {
+    } else {
         BtlUnit_SetStatus(unit, type, 0, 0);
     }
     return EVT_RETURN_DONE;
@@ -5672,8 +5609,7 @@ USER_FUNC(btlevtcmd_CheckActStatus) {
     s32 index = args[1];
     if (BtlUnit_CanActStatus(BattleGetUnitPtr(_battleWorkPointer, BattleTransID(event, id)))) {
         evtSetValue(event, index, TRUE);
-    }
-    else {
+    } else {
         evtSetValue(event, index, FALSE);
     }
     return EVT_RETURN_DONE;
@@ -5685,8 +5621,7 @@ USER_FUNC(btlevtcmd_GetACPossibility) {
     s32 index = args[1];
     if (BtlUnit_GetACPossibility(BattleGetUnitPtr(_battleWorkPointer, BattleTransID(event, id)))) {
         evtSetValue(event, index, TRUE);
-    }
-    else {
+    } else {
         evtSetValue(event, index, FALSE);
     }
     return EVT_RETURN_DONE;
@@ -5705,8 +5640,7 @@ USER_FUNC(btlevtcmd_CheckUnitFlag) {
     unit = BattleGetUnitPtr(_battleWorkPointer, id);
     if (BtlUnit_CheckUnitFlag(unit, flags)) {
         evtSetValue(event, index, TRUE);
-    }
-    else {
+    } else {
         evtSetValue(event, index, FALSE);
     }
     return EVT_RETURN_DONE;
@@ -5758,8 +5692,7 @@ USER_FUNC(btlevtcmd_CheckWeaponPluralTarget) {
     out = args[1];
     if (((BattleWeapon*)weapon)->targetClassFlags & TARGET_CLASS_SINGLE) {
         evtSetValue(event, out, 0);
-    }
-    else {
+    } else {
         evtSetValue(event, out, 1);
     }
     return EVT_RETURN_DONE;
@@ -5818,8 +5751,7 @@ USER_FUNC(btlevtcmd_CommandGetWeaponAddress) {
     kind = (s32)unit->currentKind;
     if (kind == UNIT_MARIO || (kind >= TYPE_PARTNER_MIN && kind < TYPE_PARTNER_MAX)) {
         weapon = BattleGetSelectWeapon(wp);
-    }
-    else {
+    } else {
         weapon = itemDataTable[(s32)unit->heldItem].battle_params;
     }
     evtSetValue(event, index, (EvtWord)weapon);
@@ -5872,13 +5804,11 @@ USER_FUNC(btlevtcmd_WeaponAftereffect) {
     if (r < 0) {
         a2 = 1;
         a1 = 1;
-    }
-    else {
+    } else {
         r -= w->stageEffectRates[1];
         if (r < 0) {
             a1 = 1;
-        }
-        else {
+        } else {
             r -= w->stageEffectRates[2];
             if (r < 0) {
                 a2 = 1;
@@ -5902,8 +5832,7 @@ USER_FUNC(btlevtcmd_WeaponAftereffect) {
     if (wp->stageObjectWork.flags & 0x20) {
         if ((u32)wp->debug.flags & 1) {
             BattleStage_ObjectFallCheck();
-        }
-        else if (irand(100) < w->stageEffectRates[8]) {
+        } else if (irand(100) < w->stageEffectRates[8]) {
             BattleStage_ObjectFallCheck();
         }
     }
@@ -5938,8 +5867,7 @@ USER_FUNC(btlevtcmd_GetGuardKouraId) {
     koura = (s32*)BtlUnit_GetGuardKouraPtr(unit);
     if (koura) {
         evtSetValue(event, index, *koura);
-    }
-    else {
+    } else {
         evtSetValue(event, index, -1);
     }
     return EVT_RETURN_DONE;
@@ -6248,21 +6176,18 @@ void _MoveSoundControlCore(BattleUnit* unit, BecSndWork* work, BattleUnitPart* p
             }
             if (part) {
                 BtlUnit_GetPartsWorldPos(part, &cur.x, &cur.y, &cur.z);
-            }
-            else {
+            } else {
                 BtlUnit_GetPos(unit, &cur.x, &cur.y, &cur.z);
             }
             psndSFX_pos(work->sfxId, &cur);
-        }
-        else if (work->timer >= 0) {
+        } else if (work->timer >= 0) {
             work->timer--;
             if (work->timer < 0) {
                 work->count++;
                 if (work->count & 1) {
                     name = work->name0;
                     work->timer = work->period0;
-                }
-                else {
+                } else {
                     name = work->name1;
                     work->timer = work->period1;
                 }
@@ -6392,8 +6317,7 @@ USER_FUNC(btlevtcmd_PadCheckTrigger) {
     args = (EvtWord*)args[2];
     if (BattlePadMultiCheckTrigger(chan, mask)) {
         evtSetValue(event, (EvtWord)args, TRUE);
-    }
-    else {
+    } else {
         evtSetValue(event, (EvtWord)args, FALSE);
     }
     return EVT_RETURN_DONE;
@@ -6406,8 +6330,7 @@ USER_FUNC(btlevtcmd_PadCheckNow) {
     args = (EvtWord*)args[2];
     if (BattlePadMultiCheckNow(chan, mask)) {
         evtSetValue(event, (EvtWord)args, TRUE);
-    }
-    else {
+    } else {
         evtSetValue(event, (EvtWord)args, FALSE);
     }
     return EVT_RETURN_DONE;
@@ -6442,16 +6365,13 @@ USER_FUNC(btlevtcmd_SacBgsetMove) {
                     if (on) {
                         if (obj->mPosition.x >= 0.0f) {
                             val = intplGetValue(mode, 450.0f, 0.0f, event->userdata[0], 45);
-                        }
-                        else {
+                        } else {
                             val = -intplGetValue(mode, 450.0f, 0.0f, event->userdata[0], 45);
                         }
-                    }
-                    else {
+                    } else {
                         if (obj->mPosition.x >= 0.0f) {
                             val = intplGetValue(mode, 0.0f, 450.0f, event->userdata[0], 45);
-                        }
-                        else {
+                        } else {
                             val = -intplGetValue(mode, 0.0f, 450.0f, event->userdata[0], 45);
                         }
                     }
@@ -6460,8 +6380,7 @@ USER_FUNC(btlevtcmd_SacBgsetMove) {
                 case 2:
                     if (on) {
                         val = intplGetValue(mode, 260.0f, 0.0f, event->userdata[0], 45);
-                    }
-                    else {
+                    } else {
                         val = intplGetValue(mode, 0.0f, 260.0f, event->userdata[0], 45);
                     }
                     obj->positionOffset2.y = val;
@@ -6489,8 +6408,7 @@ USER_FUNC(btlevtcmd_BtlStageObjFlagOnOff) {
         if (obj->id > 0 && !strcmp(obj->data->name, name)) {
             if (onoff) {
                 obj->mFlags |= flags;
-            }
-            else {
+            } else {
                 obj->mFlags &= ~flags;
             }
         }

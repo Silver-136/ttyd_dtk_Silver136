@@ -513,11 +513,9 @@ void imgFreeCapture(ImageEntry* entry, s32 shadowId) {
         shadow->flags &= ~0x10;
         if (shadow->flags & 0x100) {
             shadow->flags = 0;
-        }
-        else if (!shadow->allocMode) {
+        } else if (!shadow->allocMode) {
             shadow->flags = 0;
-        }
-        else {
+        } else {
             shadow->flags = 0;
             smartFree(shadow->data);
         }

@@ -40,8 +40,7 @@ typedef struct GT2Work {
 
 static void actionCommandDisp(f32 x, f32 y);
 
-s32 battleAcMain_GaugeTiming2(BattleWork *work)
-{
+s32 battleAcMain_GaugeTiming2(BattleWork *work) {
   BOOL pressed;
   const char *sfxNg;
   BOOL allDone;
@@ -55,12 +54,10 @@ s32 battleAcMain_GaugeTiming2(BattleWork *work)
   s32 i;
   BOOL doAuto;
   const char *sfxOk;
-  if (work->actionCommands.mAcUnit->badgesEquipped.AutoCommand)
-  {
+  if (work->actionCommands.mAcUnit->badgesEquipped.AutoCommand) {
     autoCommand = 1;
   }
-  switch (work->actionCommands.mAcState)
-  {
+  switch (work->actionCommands.mAcState) {
     case 0:
       memset(disp, 0, 0x2C);
       disp->iconX = -300.0f;
@@ -77,8 +74,7 @@ s32 battleAcMain_GaugeTiming2(BattleWork *work)
       gw->cursor = 0.0f;
       work->actionCommands.outputParams[0] = 0;
       gw->width = work->actionCommands.params[2] * 60;
-      for (i = 0; i < work->actionCommands.params[2]; i++)
-    {
+      for (i = 0; i < work->actionCommands.params[2]; i++) {
       gw->targets[i] = (f32) ((100 / work->actionCommands.params[2]) * (i + 1));
       gw->targets[i] -= 4.0f;
       gw->state[i] = 0;
@@ -94,15 +90,11 @@ s32 battleAcMain_GaugeTiming2(BattleWork *work)
       break;
 
     case 100:
-      if ((work->actionCommands.setupFlags & 1) && (work->actionCommands.mAcUnit->mTokenFlags & kConfusedAction))
-    {
-      if (irand(100) >= 0)
-      {
+      if ((work->actionCommands.setupFlags & 1) && (work->actionCommands.mAcUnit->mTokenFlags & kConfusedAction)) {
+      if (irand(100) >= 0) {
         work->actionCommands.setupParam = 30;
         gw->miss = 0;
-      }
-      else
-      {
+      } else {
         gw->miss = 1;
         work->actionCommands.setupParam = 30;
       }
@@ -114,29 +106,22 @@ s32 battleAcMain_GaugeTiming2(BattleWork *work)
     case 1000:
       gw->frame++;
       pressed = 0;
-      if (BattlePadCheckTrigger(gw->button))
-    {
+      if (BattlePadCheckTrigger(gw->button)) {
       pressed = 1;
     }
       allDone = 1;
-      for (i = 0; i < work->actionCommands.params[2]; i++)
-    {
-      if (!gw->state[i])
-      {
+      for (i = 0; i < work->actionCommands.params[2]; i++) {
+      if (!gw->state[i]) {
         allDone = 0;
         break;
       }
     }
 
-      if ((gw->frame > gw->totalFrames) && allDone)
-    {
-      if (((s32) work->actionCommands.outputParams[0]) > 0)
-      {
+      if ((gw->frame > gw->totalFrames) && allDone) {
+      if (((s32) work->actionCommands.outputParams[0]) > 0) {
         work->actionCommands.result = 2;
         work->actionCommands.mResultCount++;
-      }
-      else
-      {
+      } else {
         work->actionCommands.result = 0;
       }
       work->actionCommands.mAcState = 1002;
@@ -146,10 +131,8 @@ s32 battleAcMain_GaugeTiming2(BattleWork *work)
       gw->cursor = (100.0f * ((f32) gw->frame2)) / ((f32) gw->totalFrames);
     {
       sfxNames[0] = "SFX_AC_COMMAND_NG1";
-      for (i3 = 0; i3 < work->actionCommands.params[2]; i3++)
-      {
-        if ((!gw->state[i3]) && (gw->cursor > (6.0f + gw->targets[i3])))
-        {
+      for (i3 = 0; i3 < work->actionCommands.params[2]; i3++) {
+        if ((!gw->state[i3]) && (gw->cursor > (6.0f + gw->targets[i3]))) {
           gw->state[i3] = -1;
           psndSFXOn(sfxNames[0]);
         }
@@ -159,13 +142,10 @@ s32 battleAcMain_GaugeTiming2(BattleWork *work)
       gw->hit = 0;
     {
       sfxNames[1] = "SFX_AC_PONE1";
-      for (i = 0; i < work->actionCommands.params[2]; i++)
-      {
-        if ((!gw->state[i]) && (__fabs(gw->cursor - gw->targets[i]) <= 6.0))
-        {
+      for (i = 0; i < work->actionCommands.params[2]; i++) {
+        if ((!gw->state[i]) && (__fabs(gw->cursor - gw->targets[i]) <= 6.0)) {
           gw->hit = 1;
-          if (gw->sfx[i] == (-1))
-          {
+          if (gw->sfx[i] == (-1)) {
             gw->sfx[i] = psndSFXOn(sfxNames[1]);
           }
         }
@@ -173,56 +153,42 @@ s32 battleAcMain_GaugeTiming2(BattleWork *work)
 
     }
       doAuto = 0;
-      if (autoCommand)
-    {
+      if (autoCommand) {
       BOOL hit2 = 0;
       s32 j;
-      for (j = 0; j < work->actionCommands.params[2]; j++)
-      {
-        if ((!gw->state[j]) && (__fabs(gw->cursor - gw->targets[j]) <= 6.0))
-        {
+      for (j = 0; j < work->actionCommands.params[2]; j++) {
+        if ((!gw->state[j]) && (__fabs(gw->cursor - gw->targets[j]) <= 6.0)) {
           hit2 = 1;
           break;
         }
       }
 
-      if (hit2)
-      {
+      if (hit2) {
         doAuto = 1;
       }
     }
-      if (pressed || doAuto)
-    {
+      if (pressed || doAuto) {
       sfxNg = "SFX_AC_COMMAND_NG1";
       sfxOk = "SFX_AC_COMMAND_OK1";
       found = 0;
-      for (i4 = 0; i4 < work->actionCommands.params[2]; i4++)
-      {
-        if ((!gw->state[i4]) && (!found))
-        {
+      for (i4 = 0; i4 < work->actionCommands.params[2]; i4++) {
+        if ((!gw->state[i4]) && (!found)) {
           f64 d = __fabs(gw->cursor - gw->targets[i4]);
-          if (d <= 6.0)
-          {
-            if ((!doAuto) && gw->flag[i4])
-            {
+          if (d <= 6.0) {
+            if ((!doAuto) && gw->flag[i4]) {
               gw->state[i4] = -1;
               psndSFXOn(sfxNg);
               found = 1;
-            }
-            else
-            {
+            } else {
               gw->state[i4] = 1;
               work->actionCommands.outputParams[0]++;
               psndSFXOn(sfxOk);
               found = 1;
             }
-          }
-          else
-            if (d < __fabs(gw->targets[1] - gw->targets[0]))
-          {
+          } else
+            if (d < __fabs(gw->targets[1] - gw->targets[0])) {
             gw->flag[i4] = 1;
-            if (i4 == (work->actionCommands.params[2] - 1))
-            {
+            if (i4 == (work->actionCommands.params[2] - 1)) {
               gw->state[i4] = -1;
               psndSFXOn(sfxNg);
               found = 1;
@@ -236,16 +202,12 @@ s32 battleAcMain_GaugeTiming2(BattleWork *work)
 
     case 1001:
       work->actionCommands.setupParam--;
-      if (work->actionCommands.setupParam < 0)
-    {
-      if (gw->miss)
-      {
+      if (work->actionCommands.setupParam < 0) {
+      if (gw->miss) {
         work->actionCommands.result = 2;
         work->actionCommands.mResultCount++;
         work->actionCommands.outputParams[0] = irand(work->actionCommands.params[2]) + 1;
-      }
-      else
-      {
+      } else {
         work->actionCommands.result = 0;
         work->actionCommands.outputParams[0] = 0;
       }
@@ -265,8 +227,7 @@ s32 battleAcMain_GaugeTiming2(BattleWork *work)
 
     case 1004:
       gw->endTimer--;
-      if (gw->endTimer <= 0)
-    {
+      if (gw->endTimer <= 0) {
       work->actionCommands.mAcState = 1005;
     }
       break;

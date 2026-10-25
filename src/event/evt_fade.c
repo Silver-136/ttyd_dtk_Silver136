@@ -119,8 +119,7 @@ USER_FUNC(evt_fade_set_mapchange_type) {
         if (outDuration != -1) {
             gp->mapFadeOutDuration = outDuration;
         }
-    }
-    else {
+    } else {
         if (inType != -1) {
             gp->areaFadeInType = inType;
         }
@@ -146,16 +145,13 @@ USER_FUNC(evt_fade_tec_onoff) {
     if (on) {
         if (soft) {
             fadeTecSoftOn();
-        }
-        else {
+        } else {
             fadeTecOn();
         }
-    }
-    else {
+    } else {
         if (soft) {
             fadeTecSoftOff();
-        }
-        else {
+        } else {
             fadeTecOff();
         }
     }
@@ -167,8 +163,7 @@ USER_FUNC(evt_fade_softfocus_onoff) {
 
     if (evtGetValue(event, args[0])) {
         fadeSoftFocusOn();
-    }
-    else {
+    } else {
         fadeSoftFocusOff();
     }
     return EVT_RETURN_DONE;

@@ -94,8 +94,7 @@ void effKemuri12Main(EffectEntry* effect) {
 }
 
 
-void effKemuri12Disp(CameraId cameraId, EffectEntry *effect)
-{
+void effKemuri12Disp(CameraId cameraId, EffectEntry *effect) {
     s32 type;
     CameraEntry *camera;
     s32 last;
@@ -155,22 +154,18 @@ void effKemuri12Disp(CameraId cameraId, EffectEntry *effect)
     PSMTXTrans(mtx, ofs, 0.0f, 0.0f);
     PSMTXConcat(scaleMtx, mtx, scaleMtx);
     GXLoadTexMtxImm(scaleMtx, GX_TEXMTX0, GX_MTX2x4);
-    if (last)
-    {
+    if (last) {
         PSMTXScale(scaleMtx, 0.00390625f, 0.03125f, 0.0f);
         PSMTXTrans(mtx, ofs + 32, 32.0f, 0.0f);
         PSMTXConcat(scaleMtx, mtx, scaleMtx);
         GXLoadTexMtxImm(scaleMtx, GX_TEXMTX1, GX_MTX2x4);
-    }
-    else
-    {
+    } else {
         PSMTXScale(scaleMtx, 0.00390625f, 0.03125f, 0.0f);
         PSMTXTrans(mtx, ofs + 32, 0.0f, 0.0f);
         PSMTXConcat(scaleMtx, mtx, scaleMtx);
         GXLoadTexMtxImm(scaleMtx, GX_TEXMTX1, GX_MTX2x4);
     }
-    switch (type)
-    {
+    switch (type) {
         case 0:
 
         case 2:
@@ -188,8 +183,7 @@ void effKemuri12Disp(CameraId cameraId, EffectEntry *effect)
 
     GXSetCullMode(GX_CULL_NONE);
     effSetVtxDescN64(vtx);
-    switch (type)
-    {
+    switch (type) {
         case 0:
 
         case 2:

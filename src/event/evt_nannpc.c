@@ -396,8 +396,7 @@ USER_FUNC(evt_nannpc_set_subfunc) {
     return 2;
 }
 
-s32 evt_nannpc_entry(EventEntry *event, BOOL isFirstCall)
-{
+s32 evt_nannpc_entry(EventEntry *event, BOOL isFirstCall) {
     NanNPC *p;
     ExtdrvPose *pose;
     char *str;
@@ -410,18 +409,15 @@ s32 evt_nannpc_entry(EventEntry *event, BOOL isFirstCall)
     pose = extGetPosePtr();
     name = (long long) evtGetValue(event, args[0]);
     w = nanNPCWork;
-    for (i = 0, off = 0; i < w->num; off += sizeof(NanNPC), i++)
-    {
+    for (i = 0, off = 0; i < w->num; off += sizeof(NanNPC), i++) {
         p = (NanNPC *) (((u8 *) w->npc) - (-off));
         str = (char *) name;
-        if (!(((EvtWord) str) & 0x80000000))
-        {
+        if (!(((EvtWord) str) & 0x80000000)) {
             sprintf(makestring, "%06x", name);
             str = makestring;
         }
         strcmp((char *) p->name, str);
-        if (!p->pose)
-        {
+        if (!p->pose) {
             strcpy((char *) p->name, str);
             p->pose = &pose[i];
             p->flags = 0;

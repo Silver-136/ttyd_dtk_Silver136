@@ -80,8 +80,7 @@ void effMajinaiMain(EffectEntry* effect) {
                 for (i = 0; i < 5; i++) {
                     animPoseSetMaterialFlagOn(mario->paperAnimGroupId[i], 0x800);
                 }
-            }
-            else {
+            } else {
                 unit = BattleGetMarioPtr(_battleWorkPointer);
                 animPoseSetMaterialFlagOn(BtlUnit_GetPartsPtr(unit, BtlUnit_GetBodyPartsId(unit))->poseId, 0x800);
             }
@@ -110,8 +109,7 @@ void effMajinaiMain(EffectEntry* effect) {
                 for (i = 0; i < 5; i++) {
                     animPoseSetMaterialFlagOff(mario->paperAnimGroupId[i], 0x800);
                 }
-            }
-            else {
+            } else {
                 unit = BattleGetMarioPtr(_battleWorkPointer);
                 animPoseSetMaterialFlagOff(BtlUnit_GetPartsPtr(unit, BtlUnit_GetBodyPartsId(unit))->poseId, 0x800);
             }

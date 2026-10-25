@@ -433,8 +433,7 @@ void makeDisplayList(BOOL group) {
                 obj->displayListSize[j] = GXEndDisplayList();
                 if (pass == 0) {
                     total += obj->displayListSize[j];
-                }
-                else {
+                } else {
                     obj->displayList[j] = dst;
                     dst += obj->displayListSize[j];
                     memcpy(obj->displayList[j], buf, obj->displayListSize[j]);
@@ -447,8 +446,7 @@ void makeDisplayList(BOOL group) {
             if (e->dispListSize) {
                 e->dispListBuf = _mapAllocTail(e->dispListSize);
                 dst = e->dispListBuf;
-            }
-            else {
+            } else {
                 wp->entries[group].dispListBuf = NULL;
                 break;
             }
@@ -506,8 +504,7 @@ void mapCheckAnimation(const char* animName, BOOL* valid, f32* remainingMs) {
             *valid = TRUE;
         }
         *remainingMs = 1000.0f * (anim->anim->length - anim->time) / gp->framerate;
-    }
-    else {
+    } else {
         *valid = TRUE;
     }
 }
@@ -555,20 +552,15 @@ void mapPlayAnimationLv(const char* name, s32 mode, s32 level) {
         }
         if (anim->flags & 0x100) {
             t = gp->systemLv0Time;
-        }
-        else if (anim->flags & 0x200) {
+        } else if (anim->flags & 0x200) {
             t = gp->systemLv1Time;
-        }
-        else if (anim->flags & 0x400) {
+        } else if (anim->flags & 0x400) {
             t = gp->systemLv2Time;
-        }
-        else if (anim->flags & 0x800) {
+        } else if (anim->flags & 0x800) {
             t = gp->systemLv3Time;
-        }
-        else if (gp->inBattle) {
+        } else if (gp->inBattle) {
             t = gp->renderTime;
-        }
-        else {
+        } else {
             t = gp->renderFieldTime;
         }
         anim->startTime = OSTicksToMilliseconds(t);
@@ -772,8 +764,7 @@ void _mapLoad(MapWork* wp, BOOL group, const char* map) {
     arcOpen(str1, &wp->entries[group].tpl, &wp->entries[group].tplSize);
     if (wp->entries[group].tpl) {
         UnpackTexPalette(wp->entries[group].tpl);
-    }
-    else {
+    } else {
         sprintf(str3, "%s/%s", ".", str1);
         dvd = DVDMgrOpen(str3, 2, 0);
         if (dvd) {
@@ -804,8 +795,7 @@ void _mapLoad(MapWork* wp, BOOL group, const char* map) {
         MapWork* w;
         if (strcmp(info->version, "ver1.02") == 0) {
             wp->entries[group].flags |= 0x8000;
-        }
-        else {
+        } else {
             wp->entries[group].flags &= 0x7FFF;
         }
         PSMTXScale(scale, 10.0f, 10.0f, 10.0f);
@@ -821,14 +811,11 @@ void _mapLoad(MapWork* wp, BOOL group, const char* map) {
                 PSVECScale(&light->position, &pos, 10.0f);
                 if (!strcmp(light->type, "ambientLight")) {
                     type = 0;
-                }
-                else if (!strcmp(light->type, "pointLight")) {
+                } else if (!strcmp(light->type, "pointLight")) {
                     type = 1;
-                }
-                else if (!strcmp(light->type, "directionalLight")) {
+                } else if (!strcmp(light->type, "directionalLight")) {
                     type = 2;
-                }
-                else if (!strcmp(light->type, "spotLight")) {
+                } else if (!strcmp(light->type, "spotLight")) {
                     type = 3;
                 }
                 if (light->magic == 0x12D60D8) {
@@ -849,8 +836,7 @@ void _mapLoad(MapWork* wp, BOOL group, const char* map) {
             if (wo->entries[group].fogEnable != 0) {
                 wp->entries[group].flags |= 1;
             }
-        }
-        else {
+        } else {
             wo->entries[group].fogEnable = 0;
             wp->entries[group].fogType = 0;
             wp->entries[group].fogStart = 0.0f;
@@ -1054,8 +1040,7 @@ void bmapUnLoad(void) {
             aramMgrToMram(MAPENT_TPLARAM(entry), entry->tpl);
             entry->datAram = NULL;
             MAPENT_TPLARAM(entry) = NULL;
-        }
-        else {
+        } else {
             entry->arcData = _mapAllocTail(entry->arcSize);
             aramMgrToMram(entry->arcAram, entry->arcData);
             entry->arcAram = NULL;
@@ -1069,8 +1054,7 @@ void bmapUnLoad(void) {
 }
 #pragma opt_common_subs reset
 
-void bmapLoad(const char *map, const char *map2)
-{
+void bmapLoad(const char *map, const char *map2) {
     MapWork *wp;
     MapEntry *entry;
     MapEntry *e;
@@ -1078,12 +1062,10 @@ void bmapLoad(const char *map, const char *map2)
     sysWaitDrawSync();
     activeGroup = 0;
     wp = mapGetWork();
-    for (i = 0; i < wp->entries[0].count; i++)
-    {
+    for (i = 0; i < wp->entries[0].count; i++) {
         e = &mapWork[activeGroup].entries[i];
         entry = &wp->entries[i];
-        if (e->dispListBuf)
-        {
+        if (e->dispListBuf) {
             _mapFree(e->dispListBuf);
         }
         e->dispListSize = 0;
@@ -1092,19 +1074,15 @@ void bmapLoad(const char *map, const char *map2)
         entry->datAram = (void *) 0;
         MAPENT_TPLARAM(entry) = (void *) 0;
         entry->arcAram = (void *) 0;
-        if (entry->dat)
-        {
-            if (!arcDataCheck(entry->dat))
-            {
+        if (entry->dat) {
+            if (!arcDataCheck(entry->dat)) {
                 entry->datAram = aramMgrToAram(entry->dat, entry->datSize);
                 MAPENT_TPLARAM(entry) = aramMgrToAram(entry->tpl, entry->tplSize);
                 _mapFree(entry->tpl);
                 _mapFree(entry->dat);
                 entry->tpl = (void *) 0;
                 entry->dat = (void *) 0;
-            }
-            else
-            {
+            } else {
                 entry->arcAram = aramMgrToAram(entry->arcData, entry->arcSize);
                 _mapFree(entry->arcData);
                 entry->arcData = (void *) 0;
@@ -1117,8 +1095,7 @@ void bmapLoad(const char *map, const char *map2)
     memset(wp, 0, sizeof(MapWork));
     _mapLoad(wp, 0, map);
     wp->entries[0].count = 1;
-    if (map2)
-    {
+    if (map2) {
         _mapLoad(wp, 1, map2);
         wp->entries[0].count = 2;
     }
@@ -1196,18 +1173,15 @@ void mapCalcAnimMatrix(Mtx out, Mtx in, MapAnim* anim, MapAnimJoint* joint) {
         k0 = &joint->keys[i - 1];
         if (anim->time <= k1->time) {
             cur = anim->time;
-        }
-        else if (i == joint->keyCount - 1) {
+        } else if (i == joint->keyCount - 1) {
             cur = k1->time;
-        }
-        else {
+        } else {
             continue;
         }
         for (c = 0; c < 9; c++) {
             if (k0->ch[c].step) {
                 v[c] = k0->ch[c].value;
-            }
-            else {
+            } else {
                 v[c] = mapHermiteCh(cur, k0->time, k1->time, &k0->ch[c], &k1->ch[c]);
             }
         }
@@ -1266,8 +1240,7 @@ void mapReCalcMatrix(MapObject* obj, Mtx mtx, BOOL force) {
     if (dirty) {
         if (obj->flags & 0x2000) {
             PSMTXConcat(mtx, obj->animMtx, obj->modelWorldMtx);
-        }
-        else {
+        } else {
             PSMTXConcat(mtx, obj->localMtx, obj->modelWorldMtx);
         }
         if (obj->flags & 0x200000) {
@@ -1280,8 +1253,7 @@ void mapReCalcMatrix(MapObject* obj, Mtx mtx, BOOL force) {
         if (obj->next) {
             mapReCalcMatrix(obj->next, mtx, force);
         }
-    }
-    else {
+    } else {
         if (obj->child) {
             mapReCalcMatrix(obj->child, obj->modelWorldMtx, force);
         }
@@ -1351,17 +1323,14 @@ static inline void mapMainMatKeys_(MapAnim* a_, MapAnimMatData* d, u8* obj) {
         MapAnimKey5* k1 = &d->keys[n];
         if (a_->time <= k1->time) {
             cur = a_->time;
-        }
-        else if (n == d->keyCount - 1) {
+        } else if (n == d->keyCount - 1) {
             cur = k1->time;
-        }
-        else { continue; }
+        } else { continue; }
 
         for (c = 0; c < 5; c++) {
             if (k0->ch[c].step) {
                 ((MapMaterial*)obj)->xforms[d->idx].ch[c] = k0->ch[c].value;
-            }
-            else {
+            } else {
                 ((MapMaterial*)obj)->xforms[d->idx].ch[c] = mapHermiteCh(cur, k0->time, k1->time, &k0->ch[c], &k1->ch[c]);
             }
         }
@@ -1380,16 +1349,13 @@ static inline void mapMainAlphaKeys_(MapAnim* a_, MapAnimAlphaData* d, u8* obj) 
         cur = a_->time;
         if (cur <= d->keys[n].time) {
             cur = a_->time;
-        }
-        else if (n == d->keyCount - 1) {
+        } else if (n == d->keyCount - 1) {
             cur = k1->time;
-        }
-        else { continue; }
+        } else { continue; }
 
         if (k0->ch[0].step) {
             ((MapMaterial*)obj)->blendColor.r = (u8)(255.0f - 255.0f * k0->ch[0].value);
-        }
-        else {
+        } else {
             ((MapMaterial*)obj)->blendColor.r = (u8)(255.0f - 255.0f * mapHermiteCh(cur, k0->time, k1->time, (MapAnimKeyCh*)&k0->ch[0], (MapAnimKeyCh*)&k1->ch[0]));
         }
 
@@ -1405,18 +1371,15 @@ static inline void mapMainLight_ll(MapAnim* anim, LightEntry* lp, MapAnimLightDa
                             MapAnimKey9* k1 = &d->keys[n];
                             if (anim->time <= k1->time) {
                                 cur = anim->time;
-                            }
-                            else if (n == d->keyCount - 1) {
+                            } else if (n == d->keyCount - 1) {
                                 cur = k1->time;
-                            }
-                            else {
+                            } else {
                                 continue;
                             }
                             for (c = 0; c < 9; c++) {
                                 if (k0->ch[c].step) {
                                     v[c] = k0->ch[c].value;
-                                }
-                                else {
+                                } else {
                                     v[c] = mapHermiteCh(cur, k0->time, k1->time, &k0->ch[c], &k1->ch[c]);
                                 }
                             }
@@ -1438,18 +1401,15 @@ static inline void mapMainLight_lc(MapAnim* anim, LightEntry* lp, MapAnimLightDa
                             MapAnimKey5* k1 = &d->keys[n];
                             if (anim->time <= k1->time) {
                                 cur = anim->time;
-                            }
-                            else if (n == d->keyCount - 1) {
+                            } else if (n == d->keyCount - 1) {
                                 cur = k1->time;
-                            }
-                            else {
+                            } else {
                                 continue;
                             }
                             for (c = 0; c < 5; c++) {
                                 if (k0->ch[c].step) {
                                     cv[c] = k0->ch[c].value;
-                                }
-                                else {
+                                } else {
                                     cv[c] = mapHermiteCh(cur, k0->time, k1->time, &k0->ch[c], &k1->ch[c]);
                                 }
                             }
@@ -1549,20 +1509,15 @@ void mapMain(void) {
             }
             if (anim->flags & 0x100) {
                 t = gp->systemLv0Time;
-            }
-            else if (anim->flags & 0x200) {
+            } else if (anim->flags & 0x200) {
                 t = gp->systemLv1Time;
-            }
-            else if (anim->flags & 0x400) {
+            } else if (anim->flags & 0x400) {
                 t = gp->systemLv2Time;
-            }
-            else if (anim->flags & 0x800) {
+            } else if (anim->flags & 0x800) {
                 t = gp->systemLv3Time;
-            }
-            else if (gp->inBattle) {
+            } else if (gp->inBattle) {
                 t = gp->renderTime;
-            }
-            else {
+            } else {
                 t = gp->renderFieldTime;
             }
             if (!(anim->flags & 0x10)) {
@@ -1570,14 +1525,12 @@ void mapMain(void) {
                 cur = gp->framerate * (f32)(u64)(ms - anim->startTime) / 1000.0f;
                 if (cur < anim->time) {
                     anim->time = anim->time - (anim->time - cur);
-                }
-                else {
+                } else {
                     anim->time = anim->time + anim->rate * (cur - anim->time);
                 }
                 anim->startTime = OSTicksToMilliseconds(t);
                 anim->startTime -= (u64)(1000.0f * anim->time / gp->framerate);
-            }
-            else if (anim->flags & 0x20) {
+            } else if (anim->flags & 0x20) {
                 anim->startTime = OSTicksToMilliseconds(t);
                 anim->startTime -= (u64)(1000.0f * anim->time / gp->framerate);
                 anim->flags &= ~0x20;
@@ -1592,8 +1545,7 @@ void mapMain(void) {
                     anim->time = t2;
                     anim->startTime = OSTicksToMilliseconds(t);
                     anim->startTime -= (u64)(1000.0f * anim->time / gp->framerate);
-                }
-                else {
+                } else {
                     anim->time = anim->anim->length;
                     anim->flags |= 2;
                 }
@@ -1670,14 +1622,12 @@ static inline BOOL mapObjIsTranslucent(u32 flags, GXColor objColor, GXColor matC
 
 static inline void callPackedLists(MapFileMesh* mesh) {
     int j;
-    for (j = 0; j < mesh->displayListCount; j++)
-    {
+    for (j = 0; j < mesh->displayListCount; j++) {
         GXCallDisplayList((void *) mesh->displayLists.packedLists[j].offset, mesh->displayLists.packedLists[j].size);
     }
 }
 
-void _mapDispMapObj(CameraId cam, MapObject *obj)
-{
+void _mapDispMapObj(CameraId cam, MapObject *obj) {
     CameraEntry *camera;
     CameraEntry *cur;
     MapFileJoint *joint;
@@ -1696,19 +1646,15 @@ void _mapDispMapObj(CameraId cam, MapObject *obj)
     void *material;
     camera = camGetPtr(cam);
     current_mp = obj;
-    if (!(obj->flags & 0x20))
-    {
+    if (!(obj->flags & 0x20)) {
         goto setup;
     }
-    if (obj->flags & 0x8000)
-    {
+    if (obj->flags & 0x8000) {
         n = 0;
-        for (joint = obj->joints; joint->prev; joint = joint->prev)
-        {
+        for (joint = obj->joints; joint->prev; joint = joint->prev) {
         }
 
-        for (; joint != obj->joints; joint = joint->next)
-        {
+        for (; joint != obj->joints; joint = joint->next) {
             n++;
         }
 
@@ -1720,15 +1666,12 @@ void _mapDispMapObj(CameraId cam, MapObject *obj)
         GXSetProjectionv(proj);
     }
     mode = obj->blendMode;
-    if (obj->joints->partCount > 0)
-    {
-        if (mapObjIsTranslucent(obj->flags, obj->color, obj->joints->parts[0].material->blendColor))
-        {
+    if (obj->joints->partCount > 0) {
+        if (mapObjIsTranslucent(obj->flags, obj->color, obj->joints->parts[0].material->blendColor)) {
             mode = 2;
         }
     }
-    switch (mode)
-    {
+    switch (mode) {
         case 0:
             GXSetBlendMode(GX_BM_NONE, GX_BL_ONE, GX_BL_ZERO, 7);
             GXSetZCompLoc((GXBool) 1);
@@ -1771,44 +1714,35 @@ void _mapDispMapObj(CameraId cam, MapObject *obj)
     }
 
     setup:
-    if (cam == 1)
-    {
+    if (cam == 1) {
         GXSetZCompLoc((GXBool) 0);
     }
 
     PSMTXConcat(camera->view, obj->modelWorldMtx, mtx);
     GXLoadPosMtxImm(mtx, 0);
-    if (!(obj->flags & 0x100))
-    {
+    if (!(obj->flags & 0x100)) {
         PSMTXInvXpose(mtx, nrm);
         GXLoadNrmMtxImm(nrm, 0);
     }
     GXSetCurrentMtx(0);
     GXGetCullMode(&cull);
-    if (cull != culling[obj->joints->drawMode->cullMode])
-    {
+    if (cull != culling[obj->joints->drawMode->cullMode]) {
         GXSetCullMode(culling[obj->joints->drawMode->cullMode]);
     }
     mapSetObjFog(obj);
-    if (obj->flags & 0x20)
-    {
-        if (obj->flags & 0x4000)
-        {
+    if (obj->flags & 0x20) {
+        if (obj->flags & 0x4000) {
             goto end;
         }
-        if ((obj->flags & 1) && (!(obj->flags & 0x80)))
-        {
+        if ((obj->flags & 1) && (!(obj->flags & 0x80))) {
             goto end;
         }
-        if ((obj->flags & 0x40) && (obj->color.a == 0))
-        {
+        if ((obj->flags & 0x40) && (obj->color.a == 0)) {
             goto end;
         }
     }
-    if (obj->flags & 0x100)
-    {
-        for (i = 0; i < obj->joints->partCount; i++)
-        {
+    if (obj->flags & 0x100) {
+        for (i = 0; i < obj->joints->partCount; i++) {
             mesh = obj->joints->parts[i].mesh;
             material = obj->joints->parts[i].material;
             mapSetTextureMatrix(material);
@@ -1819,11 +1753,8 @@ void _mapDispMapObj(CameraId cam, MapObject *obj)
 
         }
 
-    }
-    else
-    {
-        for (i = 0; i < obj->joints->partCount; i++)
-        {
+    } else {
+        for (i = 0; i < obj->joints->partCount; i++) {
             material = obj->joints->parts[i].material;
             mesh = obj->joints->parts[i].mesh;
             mapSetTextureMatrix(material);
@@ -1834,13 +1765,11 @@ void _mapDispMapObj(CameraId cam, MapObject *obj)
 
     }
     end:
-    if (obj->flags & 0x8000)
-    {
+    if (obj->flags & 0x8000) {
         GXSetProjection(camera->projection, camera->projType);
     }
 
-    if (obj->flags & 0x0F000000)
-    {
+    if (obj->flags & 0x0F000000) {
         GXSetTevDirect(GX_TEVSTAGE0);
         GXSetTevDirect(GX_TEVSTAGE1);
         GXSetTevDirect(GX_TEVSTAGE2);
@@ -2114,8 +2043,7 @@ s32 mapSetLight(MapObject* obj, LightEntry** lights) {
     if (dm->modeFlags & 8) {
         if (!dm->lightMask) {
             count = lightGetNearObj(&pos, lights, 8, 0);
-        }
-        else {
+        } else {
             for (i = 0; i < 32; i++) {
                 if ((obj->joints->drawMode)->lightMask & (1 << i)) {
                     light = lightNameToPtr(mapWork[activeGroup].entries[obj->groupIndex].lightTable->lights[i]->name);
@@ -2132,8 +2060,7 @@ s32 mapSetLight(MapObject* obj, LightEntry** lights) {
                 count += lightGetNearObj(&pos, &lights[count], 8 - count, 0);
             }
         }
-    }
-    else if (dm->lightMask) {
+    } else if (dm->lightMask) {
         for (i = 0; i < 32; i++) {
             if ((obj->joints->drawMode)->lightMask & (1 << i)) {
                 light = lightNameToPtr(mapWork[activeGroup].entries[obj->groupIndex].lightTable->lights[i]->name);
@@ -2146,8 +2073,7 @@ s32 mapSetLight(MapObject* obj, LightEntry** lights) {
                 }
             }
         }
-    }
-    else {
+    } else {
         count = 0;
     }
     return count;
@@ -2439,8 +2365,7 @@ void mapSetMaterialTev(s32 texCount, s32 drawMode, s32 flags, Mtx mtx) {
                 tevStage = GX_TEVSTAGE1;
                 break;
         }
-    }
-    else {
+    } else {
         GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR0A0);
         GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
         GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
@@ -2787,8 +2712,7 @@ void mapSetMaterialTev(s32 texCount, s32 drawMode, s32 flags, Mtx mtx) {
             g = current_mp->color.g;
             b = current_mp->color.b;
             a = current_mp->color.a;
-        }
-        else {
+        } else {
             r = 0xF0;
             g = 0xF0;
             b = 0x64;
@@ -2909,8 +2833,7 @@ void mapSetMaterialFog(void) {
     if (wp->entries[0].flags & 1) {
         GXSetFog((GXFogType)fog_type[wp->entries[0].fogType], wp->entries[0].fogStart, wp->entries[0].fogEnd,
                  camera->near, camera->far, wp->entries[0].fogColor);
-    }
-    else {
+    } else {
         GXSetFog(GX_FOG_NONE, 0.0f, 0.0f, 0.0f, 0.0f, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
     }
 }
@@ -2922,8 +2845,7 @@ static inline void mapSetObjFog(MapObject* obj) {
     if ((wp->entries[0].flags & 1) && !(obj->flags & 0x80000)) {
         GXSetFog((GXFogType)fog_type[wp->entries[0].fogType], wp->entries[0].fogStart, wp->entries[0].fogEnd,
                  camera->near, camera->far, wp->entries[0].fogColor);
-    }
-    else {
+    } else {
         GXSetFog(GX_FOG_NONE, 0.0f, 0.0f, 0.0f, 0.0f, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
     }
 }
@@ -2966,29 +2888,23 @@ void mapSetTextureMatrix(MapMaterial* mat) {
                     if (tx || ty) {
                         MTXConcat(mtx, transMtx, mtx);
                     }
-                }
-                else if (tx || ty) {
+                } else if (tx || ty) {
                     MTXConcat(rotMtx, transMtx, mtx);
-                }
-                else {
+                } else {
                     MTXCopy(rotMtx, mtx);
                 }
-            }
-            else if (sx || sy) {
+            } else if (sx || sy) {
                 if (tx || ty) {
                     MTXConcat(scaleMtx, transMtx, mtx);
-                }
-                else {
+                } else {
                     MTXCopy(scaleMtx, mtx);
                 }
-            }
-            else if (tx || ty) {
+            } else if (tx || ty) {
                 MTXCopy(transMtx, mtx);
             }
             GXLoadTexMtxImm(mtx, texmtx_tbl[i], GX_MTX2x4);
             GXSetTexCoordGen2((GXTexCoordID)j, GX_TG_MTX2x4, (GXTexGenSrc)(mat->samplerCount + 3 - k), texmtx_tbl[i], GX_FALSE, GX_PTIDENTITY);
-        }
-        else {
+        } else {
             GXSetTexCoordGen2((GXTexCoordID)j, GX_TG_MTX2x4, (GXTexGenSrc)(mat->samplerCount + 3 - k), GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
         }
     }
@@ -3033,8 +2949,7 @@ void mapSetMaterial(MapObject* obj, void* material) {
             GXInitLightAttn(&lightObj, lights[i]->attenAngle, 0.0f, 0.0f, lights[i]->attenDistCoef.x, lights[i]->attenDistCoef.y, lights[i]->attenDistCoef.z);
             GXLoadLightObjImm(&lightObj, lightid_tbl[i]);
             attnFn = GX_AF_SPOT;
-        }
-        else if (light->flags & LIGHT_SPOT) {
+        } else if (light->flags & LIGHT_SPOT) {
             MTXRotRad(rotX, 'x', MTXDegToRad(light->rotation.x));
             MTXRotRad(rotY, 'y', MTXDegToRad(lights[i]->rotation.y));
             MTXRotRad(rotZ, 'z', MTXDegToRad(lights[i]->rotation.z));
@@ -3048,8 +2963,7 @@ void mapSetMaterial(MapObject* obj, void* material) {
             GXInitLightColor(&lightObj, lights[i]->color);
             GXInitLightAttn(&lightObj, lights[i]->attenAngle, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f);
             GXLoadLightObjImm(&lightObj, lightid_tbl[i]);
-        }
-        else if (light->flags & LIGHT_DIRECTIONAL) {
+        } else if (light->flags & LIGHT_DIRECTIONAL) {
             MTXMultVec(camGetCurPtr()->view, &light->position, &pos);
             MTXRotRad(rotX, 'x', MTXDegToRad(lights[i]->rotation.x));
             MTXRotRad(rotY, 'y', MTXDegToRad(lights[i]->rotation.y));
@@ -3072,8 +2986,7 @@ void mapSetMaterial(MapObject* obj, void* material) {
     light = lightGetAmbient();
     if (light) {
         ambient = light->color;
-    }
-    else {
+    } else {
         ambient = ambColor;
     }
     GXSetNumChans(1);
@@ -3161,15 +3074,12 @@ void mapSetMaterialLight(s32 flags, Vec position) {
         if (count == 1) {
             if (paper) {
                 ambColor = paper_ambient;
-            }
-            else if (paperCraft) {
+            } else if (paperCraft) {
                 ambColor = paperCraft_ambient;
-            }
-            else {
+            } else {
                 ambColor = (GXColor){0x00, 0x00, 0x00, 0xFF};
             }
-        }
-        else {
+        } else {
             count = lightGetNearObj(&position, lights, 8, LIGHT_CHARA);
         }
     }
@@ -3185,14 +3095,12 @@ void mapSetMaterialLight(s32 flags, Vec position) {
             GXInitLightColor(&lightObj, lights[i]->color);
             if (lights[i]->flags & LIGHT_NO_DIST_ATTEN) {
                 GXInitLightAttn(&lightObj, lights[i]->attenAngle, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f);
-            }
-            else {
+            } else {
                 GXInitLightAttn(&lightObj, lights[i]->attenAngle, 0.0f, 0.0f, lights[i]->attenDistCoef.x, lights[i]->attenDistCoef.y, lights[i]->attenDistCoef.z);
                 attnFn = GX_AF_SPOT;
             }
             GXLoadLightObjImm(&lightObj, lightid_tbl[i]);
-        }
-        else if (light->flags & LIGHT_SPOT) {
+        } else if (light->flags & LIGHT_SPOT) {
             MTXRotRad(rotX, 'x', MTXDegToRad(light->rotation.x));
             MTXRotRad(rotY, 'y', MTXDegToRad(lights[i]->rotation.y));
             MTXRotRad(rotZ, 'z', MTXDegToRad(lights[i]->rotation.z));
@@ -3205,8 +3113,7 @@ void mapSetMaterialLight(s32 flags, Vec position) {
             GXInitLightPos(&lightObj, pos.x, pos.y, pos.z);
             GXInitLightColor(&lightObj, lights[i]->color);
             GXLoadLightObjImm(&lightObj, lightid_tbl[i]);
-        }
-        else if (light->flags & LIGHT_DIRECTIONAL) {
+        } else if (light->flags & LIGHT_DIRECTIONAL) {
             MTXMultVec(camGetCurPtr()->view, &light->position, &pos);
             MTXRotRad(rotX, 'x', MTXDegToRad(lights[i]->rotation.x));
             MTXRotRad(rotY, 'y', MTXDegToRad(lights[i]->rotation.y));
@@ -3233,8 +3140,7 @@ void mapSetMaterialLight(s32 flags, Vec position) {
     light = lightGetCharaAmbient();
     if (light) {
         ambient = light->color;
-    }
-    else {
+    } else {
         ambient = ambColor;
     }
     GXSetFog(GX_FOG_NONE, 0.0f, 0.0f, 0.0f, 0.0f, matColor);
@@ -3244,8 +3150,7 @@ void mapSetMaterialLight(s32 flags, Vec position) {
         GXSetChanMatColor(GX_COLOR0A0, matColor);
         GXSetChanCtrl(GX_COLOR0, count > 0, GX_SRC_REG, GX_SRC_REG, lightMask, GX_DF_CLAMP, (GXAttnFn)attnFn);
         GXSetChanCtrl(GX_ALPHA0, GX_FALSE, GX_SRC_REG, GX_SRC_REG, GX_LIGHT_NULL, GX_DF_CLAMP, GX_AF_NONE);
-    }
-    else {
+    } else {
         GXSetChanCtrl(GX_COLOR0, count > 0, GX_SRC_REG, GX_SRC_VTX, lightMask, GX_DF_CLAMP, (GXAttnFn)attnFn);
         GXSetChanCtrl(GX_ALPHA0, GX_FALSE, GX_SRC_REG, GX_SRC_VTX, GX_LIGHT_NULL, GX_DF_CLAMP, GX_AF_NONE);
     }
@@ -3313,8 +3218,7 @@ void mapSetPolygon(MapObject* obj, MapFileMesh* mesh) {
                 }
             }
         }
-    }
-    else {
+    } else {
         u32 mask = mesh->elementMask;
         GXClearVtxDesc();
         GXSetVtxDesc(GX_VA_POS, GX_INDEX16);
@@ -3548,8 +3452,7 @@ void _setOffScrnId(MapObject* obj, s32 id, BOOL doNext) {
     obj->offscreenId = id;
     if (id != -1) {
         obj->flags |= 0x80;
-    }
-    else {
+    } else {
         obj->flags &= ~0x80;
     }
     if (obj->child) {
@@ -3666,8 +3569,7 @@ void mapObjGetPosSub(MapObject* obj, Vec* sum, s32* count, BOOL doNext) {
 
     if (obj->child) {
         mapObjGetPosSub(obj->child, sum, count, TRUE);
-    }
-    else {
+    } else {
         MTXMultVec(obj->modelWorldMtx, &obj->center, &pos);
         VECAdd(sum, &pos, sum);
         (*count)++;
@@ -3735,8 +3637,7 @@ void mapGetBlend(GXColor* color) {
 
     if (wp->entries[0].flags & 2) {
         *color = wp->entries[0].blend;
-    }
-    else {
+    } else {
         *color = (GXColor){0xFF, 0xFF, 0xFF, 0xFF};
     }
 }
@@ -3746,8 +3647,7 @@ void mapGetBlend2(GXColor* color) {
 
     if (wp->entries[0].flags & 4) {
         *color = wp->entries[0].blend2;
-    }
-    else {
+    } else {
         *color = (GXColor){0xFF, 0xFF, 0xFF, 0xFF};
     }
 }
@@ -3879,8 +3779,7 @@ void spline_getvalue(Vec* out, f32 t, s32 n, Vec* pts, f32* ts, Vec* tbl) {
         mid = (lo + hi) / 2;
         if (ts[mid] < t) {
             lo = mid + 1;
-        }
-        else {
+        } else {
             hi = mid;
         }
     }

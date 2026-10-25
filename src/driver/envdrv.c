@@ -119,8 +119,7 @@ void envTexSetup(void) {
         env_tpl = __memAlloc(HEAP_DEFAULT, OSRoundUp32B(size));
         entry->info.cb.userData = entry;
         DVDMgrReadAsync(entry, env_tpl, size, 0, _callback);
-    }
-    else {
+    } else {
         UnpackTexPalette(tpl);
         tpl_ok = 1;
     }
@@ -249,24 +248,21 @@ env_sin(f32 x) {
             a = a * x2 - b;
             a = a * x2 + c;
             a = a * x;
-        }
-        else {
+        } else {
             y = 1.5707964f - (x - 1.5707964f);
             x2 = y * y;
             a = a * x2 - b;
             a = a * x2 + c;
             a = a * y;
         }
-    }
-    else if (x < 4.712389f) {
+    } else if (x < 4.712389f) {
         y = x - 3.1415927f;
         x2 = y * y;
         a = a * x2 - b;
         a = a * x2 + c;
         a = a * y;
         a = -a;
-    }
-    else {
+    } else {
         y = 1.5707964f - (x - 4.712389f);
         x2 = y * y;
         a = a * x2 - b;
@@ -290,23 +286,20 @@ env_cos(f32 x) {
             x2 = x * x;
             a = a * x2 - b;
             a = a * x2 + c;
-        }
-        else {
+        } else {
             y = 1.5707964f - (x - 1.5707964f);
             x2 = y * y;
             a = a * x2 - b;
             a = a * x2 + c;
             a = -a;
         }
-    }
-    else if (x < 4.712389f) {
+    } else if (x < 4.712389f) {
         y = x - 3.1415927f;
         x2 = y * y;
         a = a * x2 - b;
         a = a * x2 + c;
         a = -a;
-    }
-    else {
+    } else {
         y = 1.5707964f - (x - 4.712389f);
         x2 = y * y;
         a = a * x2 - b;
@@ -546,13 +539,11 @@ void envDisp_Blur(void) {
             }
             if (blur->flags & 1) {
                 alpha = 255.0f * (1.0f - t);
-            }
-            else {
+            } else {
                 alpha = 120.0f * (1.0f - t) + 128.0f;
             }
             GXSetTevKColor(GX_KCOLOR0, (GXColor){0xFF, 0xFF, 0xFF, alpha});
-        }
-        else {
+        } else {
             GXSetTevKColor(GX_KCOLOR0, (GXColor){0xFF, 0xFF, 0xFF, 0xA0});
         }
         GXLoadTexObj(&wp->envBlurObj, GX_TEXMAP0);
@@ -944,8 +935,7 @@ void envTevLoadTexMtxImm(s32 type, GXTexMtx id, GXTexMtx id2, GXTexMtxType mtxTy
             PSVECNormalize((Vec*)m5[2], (Vec*)m5[2]);
             if (dot == 1.0f) {
                 PSMTXIdentity(m6);
-            }
-            else {
+            } else {
                 PSVECCrossProduct(&h, &v2, &axis);
                 PSMTXRotAxisRad(m6, &axis, (f32)acos(PSVECDotProduct(&v2, &h)));
             }
@@ -1039,8 +1029,7 @@ envLoadTex(u32 id, s32 map) {
     envTevLoadTexMtxImm(t, (GXTexMtx)texmtx_tbl[map], GX_PTTEXMTX0, mtxType)
 
 void envAddTev(s32 type, MapTevCallbackInfo *info);
-void envAddTev(s32 type, MapTevCallbackInfo *info)
-{
+void envAddTev(s32 type, MapTevCallbackInfo *info) {
   s32 stage;
   int map;
   int coord;
@@ -1051,8 +1040,7 @@ void envAddTev(s32 type, MapTevCallbackInfo *info)
   map = info->texCoord; // MapTevCallbackInfo's texCoord/texMap fields are filled the other way round by mapdrv
   coord = info->texMap;
   indStage = info->indStage;
-  if (type == 0)
-  {
+  if (type == 0) {
     return;
   }
   PSMTXConcat(camGetCurPtr()->view, info->mtx, mtx);
@@ -1063,8 +1051,7 @@ void envAddTev(s32 type, MapTevCallbackInfo *info)
   GXSetTevColorOp((GXTevStageID) stage, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, (GXBool) 1, GX_TEVPREV);
   GXSetTevAlphaOp((GXTevStageID) stage, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, (GXBool) 1, GX_TEVPREV);
   GXSetTevSwapMode((GXTevStageID) stage, GX_TEV_SWAP0, GX_TEV_SWAP0);
-  switch (type)
-  {
+  switch (type) {
     case 0:
       break;
 

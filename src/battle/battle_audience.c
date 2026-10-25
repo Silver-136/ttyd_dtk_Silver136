@@ -373,8 +373,7 @@ void BattleAudience_Main(void) {
     BattleAudienceSoundMain();
     if (wp->flags & 0x80) {
         audience->flags |= 0x10000;
-    }
-    else {
+    } else {
         audience->flags &= ~0x10000;
     }
 }
@@ -574,8 +573,7 @@ BOOL BattleAudience_CheckReactionPerPhase(void) {
             }
             if (counter >= 1) {
                 audience->mCheckPhaseReactionState = 6;
-            }
-            else {
+            } else {
                 audience->mCheckPhaseReactionState = 7;
             }
             //no break
@@ -591,8 +589,7 @@ BOOL BattleAudience_CheckReactionPerPhase(void) {
             if (i == 200) { //didn't meet that condition
                 if (audience->mCheckPhaseReactionState == 6) {
                     audience->mCheckPhaseReactionState = 8;
-                }
-                else {
+                } else {
                     audience->mCheckPhaseReactionState = 13;
                 }
             }
@@ -612,8 +609,7 @@ BOOL BattleAudience_CheckReactionPerPhase(void) {
                 audience->event = evtEntry(&msg_puni_all_escape, 0, EVENT_START_IMMEDIATE);
                 audience->flags &= ~0x8000;
                 audience->mCheckPhaseReactionState = 11;
-            }
-            else {
+            } else {
                 audience->mCheckPhaseReactionState = 15;
             }
             break;
@@ -713,8 +709,7 @@ BOOL BattleAudience_CheckReactionPerPhase(void) {
             if (pe->phaseListCount >= 1) {
                 pe->phaseList[0] = pe->phaseList[irand(pe->phaseListCount)];
                 pe->phaseListCount = 1;
-            }
-            else {
+            } else {
                 pe->phaseListCount = 0;
             }
             audience->mCheckPhaseReactionState = 12;
@@ -884,8 +879,7 @@ BOOL BattleAudience_CheckReactionPerPhase(void) {
                         CLR
                         break;
                 }
-            }
-            else {
+            } else {
                 audience->mCheckPhaseReactionState = 15;
             }
             break;
@@ -2479,8 +2473,7 @@ void BattleAudience_GetItemOn(s32* memberId, f32* x, f32* y, f32* z, ItemType* i
                 if (itemType) {
                     if (member->itemId < 0) {
                         *itemType = ITEM_NULL;
-                    }
-                    else {
+                    } else {
                         *itemType = audience->items[member->itemId].mItemType;
                     }
                 }
@@ -2514,8 +2507,7 @@ void BattleAudience_GetItemOn2(s32* memberId, f32* x, f32* y, f32* z, ItemType* 
     if (itemType) {
         if (member->itemId < 0) {
             *itemType = ITEM_NULL;
-        }
-        else {
+        } else {
             *itemType = audience->items[member->itemId].mItemType;
         }
     }
@@ -2566,8 +2558,7 @@ void BattleAudience_ChangeStatus(s32 index, s32 status) {
             if (index >= 1) {
                 BattleAudience_ChangeStatus(index - 1, status);
             }
-        }
-        else {
+        } else {
             member->colorB = 0;
             member->colorG = 0;
             member->colorR = 0;
@@ -3501,21 +3492,17 @@ void BattleAudienceSoundCheerKind(s32 kind, s32 duration, s32 fade) {
         if (sound->duration <= sound5->duration) {
             BattleAudienceSoundStop(4);
             sound = AudSoundGetPtr(4);
-        }
-        else {
+        } else {
             BattleAudienceSoundStop(5);
             sound = AudSoundGetPtr(5);
         }
-    }
-    else if (sound->flags & 1) {
+    } else if (sound->flags & 1) {
         sound = AudSoundGetPtr(5);
         lowPitch = 1;
-    }
-    else if (sound5->flags & 1) {
+    } else if (sound5->flags & 1) {
         sound = AudSoundGetPtr(4);
         lowPitch = 1;
-    }
-    else {
+    } else {
         sound = AudSoundGetPtr(4);
     }
     if (kind == 1) {
@@ -3537,8 +3524,7 @@ void BattleAudienceSoundCheerKind(s32 kind, s32 duration, s32 fade) {
     if (lowPitch == 1) {
         sound->sfxId = BattleAudienceSound1(name, right, left);
         psndSFX_pit(sound->sfxId, 0x7F);
-    }
-    else {
+    } else {
         sound->sfxId = BattleAudienceSound1(name, right, left);
     }
     AUD_SOUND_START(sound, duration + fade, fade);
@@ -3568,8 +3554,7 @@ void BattleAudienceSoundWhistleKind(s32 kind) {
         BattleAudienceSoundGetInfo2(idx, &pos);
         if (pos.x <= 0.0f) {
             id = 6;
-        }
-        else {
+        } else {
             id = 7;
         }
         sound = AudSoundGetPtr(id);
@@ -3631,8 +3616,7 @@ void BattleAudienceSoundHandBeat(void) {
         sound->mForceFadeTimer = right;
         if (sum == 0) {
             right = 0;
-        }
-        else {
+        } else {
             right = 75.0f + sum * (26.0f + irand(26)) / 200.0f;
         }
         psndSFX_vol(sound->sfxId, right);
@@ -3650,8 +3634,7 @@ void BattleAudienceSoundItemThrow(s32 kind, s32 index) {
     BattleAudienceSoundGetInfo2(index, &pos);
     if (pos.x <= 0.0f) {
         id = 10;
-    }
-    else {
+    } else {
         id = 11;
     }
     sound = AudSoundGetPtr(id);
@@ -3690,8 +3673,7 @@ void BattleAudienceSoundSleep(s32 index) {
     BattleAudienceSoundGetInfo2(index, &pos);
     if (pos.x <= 0.0f) {
         id = 14;
-    }
-    else {
+    } else {
         id = 15;
     }
     sound = AudSoundGetPtr(id);
@@ -3734,8 +3716,7 @@ void BattleAudienceSoundShell(s32 index) {
     BattleAudienceSoundGetInfo2(index, &pos);
     if (pos.x <= 0.0f) {
         id = 18;
-    }
-    else {
+    } else {
         id = 19;
     }
     sound = AudSoundGetPtr(id);
@@ -3760,8 +3741,7 @@ void BattleAudienceSoundBombFire(s32 index) {
     BattleAudienceSoundGetInfo2(index, &pos);
     if (pos.x <= 0.0f) {
         id = 21;
-    }
-    else {
+    } else {
         id = 22;
     }
     sound = AudSoundGetPtr(id);
@@ -3830,14 +3810,12 @@ void BattleAudienceSoundGetInfo1(s32 right, s32 left, u8* vol, Vec* pos) {
 
     if (sum == 0) {
         *vol = 0;
-    }
-    else {
+    } else {
         *vol = 100.0f + 26.0f * sum / 200.0f;
     }
     if (left == 0 || sum == 0) {
         pos->x = 250.0f;
-    }
-    else {
+    } else {
         pos->x = (u8)(250.0f * (right - left) / sum);
     }
     pos->y = 0.0f;
@@ -3931,11 +3909,9 @@ void BattleAudienceNoiseMain(void) {
     }
     if (!(audience->flags & 0x2000)) {
         sound->mCurrentBaseSfxVolume = 0;
-    }
-    else if (num == 0) {
+    } else if (num == 0) {
         sound->mCurrentBaseSfxVolume = 0;
-    }
-    else {
+    } else {
         sound->mCurrentBaseSfxVolume = 63.0f + 63.0f * num / 200.0f;
     }
 }

@@ -173,8 +173,7 @@ void BattleStatusIconMain(BattleUnit* unit) {
         if (!(unit->mAttributeFlags & kCeiling)) {
             icon->mDistanceBetweenIcons = 25.6f;
             icon->mScreenSpaceOffset.y = 19.200001f;
-        }
-        else {
+        } else {
             icon->mDistanceBetweenIcons = 25.6f;
             icon->mScreenSpaceOffset.y = 0.0f;
         }

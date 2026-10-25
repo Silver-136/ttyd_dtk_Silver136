@@ -6,8 +6,7 @@
 USER_FUNC(evt_bg_disp_onoff) {
     if (evtGetValue(event, *event->args)) {
         bgDispOn();
-    }
-    else {
+    } else {
         bgDispOff();
     }
     return EVT_RETURN_DONE;
@@ -30,8 +29,7 @@ USER_FUNC(evt_bg_set_color) {
 USER_FUNC(evt_bg_auto_scroll_onoff) {
     if (evtGetValue(event, *event->args)) {
         bgAutoScrollOff();
-    }
-    else {
+    } else {
         bgAutoScrollOn();
     }
     return EVT_RETURN_DONE;

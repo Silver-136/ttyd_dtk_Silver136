@@ -442,8 +442,7 @@ EffectEntry* effUltraHammerEntry(BOOL mode, s32 counter, f32 x, f32 y, f32 z, f3
     data->scale = scale;
     if (counter <= 0) {
         data->counter = 1000;
-    }
-    else {
+    } else {
         data->counter = counter;
     }
     data->alpha = 0xFF;
@@ -507,8 +506,7 @@ inline Vec initializeVec(Vec* input) {
 }
 
 
-void effUltraHammerDisp(enum CameraId camId, void *param)
-{
+void effUltraHammerDisp(enum CameraId camId, void *param) {
     u32 fmtLoop[2]; // FAKE: register-promoted array (vtx fmt + loop counter); separate scalars differ
     CameraEntry *cam;
     EffUltraHammerData *data;
@@ -549,15 +547,12 @@ void effUltraHammerDisp(enum CameraId camId, void *param)
     GXSetCullMode(GX_CULL_NONE);
     GXSetTevColor(GX_TEVREG0, (GXColor){0xFF, 0xFF, 0xFF, data->alpha});
     data++;
-    for (i = 1; i < effect->count; i++, data++)
-    {
-        if (data->update == 0)
-        {
+    for (i = 1; i < effect->count; i++, data++) {
+        if (data->update == 0) {
             PSMTXTrans(mtx, data->position.x, data->position.y, data->position.z);
             PSMTXScale(scaleMtx, 0.6f * data->scale, 0.6f * data->scale, 0.6f * data->scale);
             PSMTXConcat(mtx, scaleMtx, mtx);
-            if (mode != 0)
-            {
+            if (mode != 0) {
                 PSMTXScale(scaleMtx, -1.0f, 1.0f, 1.0f);
                 PSMTXConcat(mtx, scaleMtx, mtx);
             }
@@ -581,8 +576,7 @@ void effUltraHammerDisp(enum CameraId camId, void *param)
             GXSetVtxDesc(GX_VA_TEX0, GX_INDEX8);
             GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_RGBA4, 13);
             GXSetArray(GX_VA_TEX0, &wakka_texcoord0_tbl, 4);
-            for (fmtLoop[1] = 0; fmtLoop[1] < 20; fmtLoop[1]++)
-            {
+            for (fmtLoop[1] = 0; fmtLoop[1] < 20; fmtLoop[1]++) {
                 GXCallDisplayList(wakka_dl_0_tbl[fmtLoop[1]], wakka_dl_0_size_tbl[fmtLoop[1]] << 5);
             }
 

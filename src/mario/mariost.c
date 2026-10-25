@@ -166,8 +166,7 @@ void marioStInit(void) {
     static u8 stack[0x1000];
     if (!OSIsRestart() || (OSGetResetCode() & OS_RESET_SHUTDOWN)) {
         DEMOInit(&GXNtsc480IntDfMarioSt);
-    }
-    else {
+    } else {
         switch (OSGetResetCode() & OS_RESET_HOTRESET) {
             case 0:
                 DEMOInit(&GXNtsc480IntDfMarioSt);
@@ -277,8 +276,7 @@ void marioStInit(void) {
     gp->soundMode = 0;
     if (OSGetSoundMode() == OS_SOUND_MODE_MONO) {
         SoundSetOutputMode(0);
-    }
-    else {
+    } else {
         SoundSetOutputMode(1);
     }
 }
@@ -337,8 +335,7 @@ void marioStMain(void) {
             if (OSTicksToSeconds(OSGetTime() - none_key) > 120 && (seqGetSeq() == 2 || seqGetSeq() == 4)) {
                 gp->flags |= 0x2000;
             }
-        }
-        else {
+        } else {
             none_key = OSGetTime();
         }
     }
@@ -434,14 +431,12 @@ void viPostCallback(u32 retraceCount) {
     gp->retraceCount = retraceCount;
     if (battleDisableHResetCheck()) {
         gp->resetButtonDown = FALSE;
-    }
-    else {
+    } else {
         if (!gp->resetButtonDown) {
             if (OSGetResetButtonState()) {
                 gp->resetButtonDown = TRUE;
             }
-        }
-        else {
+        } else {
             if (!OSGetResetButtonState()) {
                 gp->resetType = 1;
             }
@@ -451,8 +446,7 @@ void viPostCallback(u32 retraceCount) {
                 if ((keyGetButton(0) & reset) == reset) {
                     gp->resetType = 0;
                     goto exitcheck;
-                }
-                else {
+                } else {
                     gp->restartChecked = TRUE;
                 }
             }
@@ -464,8 +458,7 @@ void viPostCallback(u32 retraceCount) {
                 if (OSTicksToMilliseconds(OSGetTime() - gp->softResetTimeout) > 500) {
                     gp->resetType = 1;
                 }
-            }
-            else {
+            } else {
                 gp->softResetWait = FALSE;
             }
             if (DVDGetDriveStatus() == -1) {
@@ -553,8 +546,7 @@ void* gcDvdCheckThread(void* param) {
 #endif
         if (gp->dvdError) {
             SoundOpenCover();
-        }
-        else {
+        } else {
             SoundCloseCover();
         }
         if (gp->dvdError) {
@@ -609,8 +601,7 @@ diff = (s32)now - (s32)gp->rumbleStartTime[i];
                     }
                 }
                 off_trg[i] = FALSE;
-            }
-            else if (gp->rumbleStart[i]) {
+            } else if (gp->rumbleStart[i]) {
                 if (!off_trg[i]) {
                     off_trg[i] = TRUE;
                     off_time[i] = now;
@@ -623,8 +614,7 @@ diff = (s32)now - (s32)off_time[i];
                     }
                 }
             }
-        }
-        else {
+        } else {
 diff = (s32)now - (s32)gp->rumbleForcedOffTime[i];
             if (OSTicksToMilliseconds(diff) > 30000) {
                 gp->rumbleForcedOffLatch[i] = FALSE;
@@ -641,8 +631,7 @@ diff = (s32)now - (s32)gp->rumbleForcedOffTime[i];
         }
         if (array[i]) {
             gp->rumbleHardStop[i] = TRUE;
-        }
-        else {
+        } else {
             gp->rumbleHardStop[i] = FALSE;
         }
     }
@@ -674,12 +663,10 @@ void L_gcResetCheck(void) {
         if (gp->resetType != 2) {
             if (!(gp->flags & 4)) {
                 code = OS_RESET_SHUTDOWN;
-            }
-            else {
+            } else {
                 if (!(gp->flags & 8)) {
                     code = OS_RESET_RESTART;
-                }
-                else {
+                } else {
                     code = OS_RESET_HOTRESET;
                 }
             }
@@ -687,8 +674,7 @@ void L_gcResetCheck(void) {
             code |= gp->language << 2;
 #endif
             OSResetSystem(OS_RESET_RESTART, code, FALSE);
-        }
-        else {
+        } else {
             OSResetSystem(OS_RESET_HOTRESET, 0, TRUE);
         }
         while (1) {}

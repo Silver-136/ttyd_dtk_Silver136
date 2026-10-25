@@ -20,8 +20,7 @@ static inline s32 _caseEntry(s32 conditionId, BOOL flag, const char* hitObjName,
     ptr->priority = priority;
     if (lwData) {
         memcpy(ptr->lwData, lwData, sizeof(setup.lwData));
-    }
-    else {
+    } else {
         memset(ptr->lwData, 0, sizeof(setup.lwData));
     }
     return caseEntry(ptr);

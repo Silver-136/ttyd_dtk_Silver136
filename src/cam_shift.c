@@ -52,8 +52,7 @@ void camShiftMain(CameraEntry* camera, MarioWork* mario, f32* out) {
         stick = 0.0f;
         wp->target = stick;
         wp->active = 1.0f;
-    }
-    else {
+    } else {
         stick = (s8)mario->wStickDir1;
         if (stick > 0.0f) {
             stick = 25.0f;
@@ -72,8 +71,7 @@ void camShiftMain(CameraEntry* camera, MarioWork* mario, f32* out) {
         if (stick < 0.0f) {
             if (wp->stickAccum > 0.0f) {
                 wp->stickAccum = getV60FPS(stick, wp->prevTime, gp->renderTime);
-            }
-            else {
+            } else {
                 wp->stickAccum += getV60FPS(stick, wp->prevTime, gp->renderTime);
             }
             if (wp->stickAccum <= -wp->stickLimit) {
@@ -84,12 +82,10 @@ void camShiftMain(CameraEntry* camera, MarioWork* mario, f32* out) {
                 wp->target = -shiftRate;
                 wp->stickAccum = -wp->stickLimit;
             }
-        }
-        else {
+        } else {
             if (wp->stickAccum < 0.0f) {
                 wp->stickAccum = getV60FPS(stick, wp->prevTime, gp->renderTime);
-            }
-            else {
+            } else {
                 wp->stickAccum += getV60FPS(stick, wp->prevTime, gp->renderTime);
             }
             if (wp->stickAccum >= wp->stickLimit) {
@@ -123,8 +119,7 @@ void camShiftMain(CameraEntry* camera, MarioWork* mario, f32* out) {
         if (speed > wp->maxSpeed) {
             speed = wp->maxSpeed;
         }
-    }
-    else {
+    } else {
         if (diff > -0.0001f) {
             speed = diff;
         }
@@ -139,14 +134,12 @@ void camShiftMain(CameraEntry* camera, MarioWork* mario, f32* out) {
             if (wp->current < wp->target) {
                 wp->current = wp->target;
             }
-        }
-        else {
+        } else {
             if (wp->current > wp->target) {
                 wp->current = wp->target;
             }
         }
-    }
-    else {
+    } else {
         wp->rate = 0.0f;
     }
     *out = wp->current;

@@ -51,8 +51,7 @@ static s32 compare(const void** a, const void** b) {
     value2 = (u8)dvdq[*(u8*)b].priority;
     if (value1 > value2) {
         return 1;
-    }
-    else {
+    } else {
         return -(value1 < value2);
     }
 }

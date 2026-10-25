@@ -53,13 +53,11 @@ static inline BOOL chkBalloonStand(HitEntry* hit) {
         attr = hitGetAttr(hit);
         if (attr & 0x800000) {
             ret = FALSE;
-        }
-        else if (attr & 0x80000000) {
+        } else if (attr & 0x80000000) {
             if (mobjGetHint(mobjHitObjPtrToPtr(hit)) == 1) {
                 ret = TRUE;
             }
-        }
-        else {
+        } else {
             entry = caseCheckHitObj(hit);
             if (entry != NULL && (entry->flags & 4) && entry->conditionId == 9) {
                 ret = TRUE;
@@ -78,8 +76,7 @@ static inline BOOL chkBalloonJump(HitEntry* hit) {
             if (mobjGetHint(mobjHitObjPtrToPtr(hit)) == 1) {
                 ret = TRUE;
             }
-        }
-        else {
+        } else {
             entry = caseCheckHitObj(hit);
             if (entry != NULL) {
                 if (entry->flags & 4) {
@@ -87,8 +84,7 @@ static inline BOOL chkBalloonJump(HitEntry* hit) {
                         ret = TRUE;
                     }
                 }
-            }
-            else {
+            } else {
                 ret = FALSE;
             }
         }
@@ -108,14 +104,12 @@ static inline BOOL chkBalloonPush(HitEntry* hit) {
         attr = hitGetAttr(hit);
         if (attr & 0x800000) {
             ret = FALSE;
-        }
-        else {
+        } else {
             if (attr & 0x80000000) {
                 if (mobjGetHint(mobjHitObjPtrToPtr(hit)) == 1) {
                     ret = TRUE;
                 }
-            }
-            else {
+            } else {
                 entry = caseCheckHitObj(hit);
                 if (entry != NULL) {
                     if (entry->flags & 4) {
@@ -123,8 +117,7 @@ static inline BOOL chkBalloonPush(HitEntry* hit) {
                             ret = TRUE;
                         }
                     }
-                }
-                else {
+                } else {
                     ret = FALSE;
                 }
             }
@@ -143,8 +136,7 @@ static inline s32 chkItemBox(HitEntry* hit) {
     marioGetPtr();
     if (!(hitGetAttr(hit) & 0x80000000)) {
         ret = -1;
-    }
-    else {
+    } else {
         mobj = mobjHitObjPtrToPtr(hit);
         if (strcmp(mobj->animName, "MOBJ_TreasureBox") == 0 ||
             strcmp(mobj->animName, "MOBJ_BigTreasureBox") == 0) {
@@ -213,15 +205,13 @@ void marioBalloonMain(void) {
     if (show) {
         if (type == 1) {
             marioBalloonOnNpc(type, npc);
-        }
-        else {
+        } else {
             marioBalloonOn(type);
             if (npc != NULL) {
                 mario->balloonNpc = npc;
             }
         }
-    }
-    else {
+    } else {
         marioBalloonOff();
     }
 }
@@ -235,8 +225,7 @@ BOOL chkBalloon(HitEntry* hit) {
             if (mobjGetHint(mobjHitObjPtrToPtr(hit)) == 1) {
                 ret = TRUE;
             }
-        }
-        else {
+        } else {
             entry = caseCheckHitObj(hit);
             if (entry != NULL) {
                 if (entry->flags & 4) {
@@ -244,8 +233,7 @@ BOOL chkBalloon(HitEntry* hit) {
                         ret = TRUE;
                     }
                 }
-            }
-            else {
+            } else {
                 ret = FALSE;
             }
         }

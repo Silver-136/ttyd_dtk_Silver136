@@ -610,8 +610,7 @@ void effStarStoneDisp_1(CameraId cameraId, EffectEntry* effect) {
 }
 
 #define LOOP2S(i1, w, tbl, sz, n) for (i1 = 0; i1 < n##U; i1++) { if ((w->flags & 1) || i1 != 0) { GXCallDisplayList(tbl[i1], sz[i1] << 5); } }
-void effStarStoneDisp_2(CameraId cameraId, EffectEntry *effect)
-{
+void effStarStoneDisp_2(CameraId cameraId, EffectEntry *effect) {
     Mtx m;
     Mtx s;
     Mtx r;
@@ -664,10 +663,8 @@ void effStarStoneDisp_2(CameraId cameraId, EffectEntry *effect)
     GXSetVtxDesc(13, 2);
     GXSetVtxAttrFmt(0, 13, 1, 3, 14);
     GXSetArray(13, diamond_2_2_texcoord0_tbl, 4);
-    for (dlIdx[0] = 0; dlIdx[0] < 19U; dlIdx[0]++)
-    {
-        if ((w->flags & 1) || (dlIdx[0] != 0))
-        {
+    for (dlIdx[0] = 0; dlIdx[0] < 19U; dlIdx[0]++) {
+        if ((w->flags & 1) || (dlIdx[0] != 0)) {
             GXCallDisplayList(diamond_2_2_dl_0_tbl[dlIdx[0]], diamond_2_2_dl_0_size_tbl[dlIdx[0]] << 5);
         }
     }
@@ -696,10 +693,8 @@ void effStarStoneDisp_2(CameraId cameraId, EffectEntry *effect)
     GXSetVtxDesc(13, 2);
     GXSetVtxAttrFmt(0, 13, 1, 3, 14);
     GXSetArray(13, diamond_2_2_texcoord0_tbl, 4);
-    for (dlIdx[1] = 0; dlIdx[1] < 19U; dlIdx[1]++)
-    {
-        if ((w->flags & 1) || (dlIdx[1] != 0))
-        {
+    for (dlIdx[1] = 0; dlIdx[1] < 19U; dlIdx[1]++) {
+        if ((w->flags & 1) || (dlIdx[1] != 0)) {
             GXCallDisplayList(diamond_2_2_dl_1_tbl[dlIdx[1]], diamond_2_2_dl_1_size_tbl[dlIdx[1]] << 5);
         }
     }
@@ -721,13 +716,10 @@ void effStarStoneDisp_2(CameraId cameraId, EffectEntry *effect)
     GXSetTevColorIn(1, 15, 2, 0, 15);
     GXSetTevAlphaIn(1, 7, 1, 0, 7);
     GXSetTevColor(1, (GXColor){w->r, w->g, w->b, w->a});
-    if (type != 2)
-    {
+    if (type != 2) {
         effGetTexObj(0x29, &tex);
         GXLoadTexObj(&tex, 0);
-    }
-    else
-    {
+    } else {
         effGetTexObj(0x2e, &tex);
         GXLoadTexObj(&tex, 0);
     }
@@ -759,10 +751,8 @@ void effStarStoneDisp_2(CameraId cameraId, EffectEntry *effect)
     GXSetVtxDesc(13, 2);
     GXSetVtxAttrFmt(0, 13, 1, 3, 14);
     GXSetArray(13, diamond_2_2_texcoord0_tbl, 4);
-    for (dlIdx[2] = 0; dlIdx[2] < 19U; dlIdx[2]++)
-    {
-        if ((w->flags & 1) || (dlIdx[2] != 0))
-        {
+    for (dlIdx[2] = 0; dlIdx[2] < 19U; dlIdx[2]++) {
+        if ((w->flags & 1) || (dlIdx[2] != 0)) {
             GXCallDisplayList(diamond_2_2_dl_0_tbl[dlIdx[2]], diamond_2_2_dl_0_size_tbl[dlIdx[2]] << 5);
         }
     }
@@ -791,10 +781,8 @@ void effStarStoneDisp_2(CameraId cameraId, EffectEntry *effect)
     GXSetVtxDesc(13, 2);
     GXSetVtxAttrFmt(0, 13, 1, 3, 14);
     GXSetArray(13, diamond_2_2_texcoord0_tbl, 4);
-    for (dlIdx[3] = 0; dlIdx[3] < 19U; dlIdx[3]++)
-    {
-        if ((w->flags & 1) || (dlIdx[3] != 0))
-        {
+    for (dlIdx[3] = 0; dlIdx[3] < 19U; dlIdx[3]++) {
+        if ((w->flags & 1) || (dlIdx[3] != 0)) {
             GXCallDisplayList(diamond_2_2_dl_1_tbl[dlIdx[3]], diamond_2_2_dl_1_size_tbl[dlIdx[3]] << 5);
         }
     }

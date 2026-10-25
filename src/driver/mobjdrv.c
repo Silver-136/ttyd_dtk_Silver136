@@ -428,8 +428,7 @@ void mobjHitEntry(MapObjectEntry* entry, s32 type) {
         entry->translation.z = 0.0f;
         entry->scale2.z = 10.0f * (2.5f * entry->scale.z);
     }
-    switch (type)
- {
+    switch (type) {
         case 0:
             PSVECAdd(&entry->position, &entry->translation, &position);
             {

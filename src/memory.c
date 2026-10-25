@@ -249,8 +249,7 @@ void* (_mapAlloc)(MAPBASE_PARAM u32 size) {
         memset(usableData, 0, usableSize);
         DCFlushRange(usableData, usableSize);
         return usableData;
-    }
-    else {
+    } else {
         return NULL;
     }
 }
@@ -305,8 +304,7 @@ void* (_mapAllocTail)(MAPBASE_PARAM u32 size) {
         memset(tailEntry, 0, usableSize);
         DCFlushRange(tailEntry, usableSize);
         return tailEntry;
-    }
-    else {
+    } else {
         return NULL;
     }
 }
@@ -436,8 +434,7 @@ void smartFree(smartEntry* entry) {
         if (wp->allocHead) {
             wp->allocHead->prev = NULL;
         }
-    }
-    else {
+    } else {
         entry->prev->next = entry->next;
     }
     if (!entry->next) {
@@ -445,22 +442,19 @@ void smartFree(smartEntry* entry) {
         if (wp->allocTail) {
             wp->allocTail->next = NULL;
         }
-    }
-    else {
+    } else {
         entry->next->prev = entry->prev;
     }
     total = entry->size + entry->spaceAfter;
     if (entry->prev) {
         entry->prev->spaceAfter += total;
-    }
-    else {
+    } else {
         wp->bytesLeft += total;
     }
     if (!wp->head) {
         wp->head = entry;
         entry->prev = NULL;
-    }
-    else {
+    } else {
         wp->tail->next = entry;
         entry->prev = wp->tail;
     }
@@ -496,8 +490,7 @@ smartEntry* smartAlloc(u32 size, u8 type) {
         if (wp->head) {
             wp->head->prev = NULL;
         }
-    }
-    else {
+    } else {
         entry2->prev->next = entry2->next;
     }
 
@@ -506,8 +499,7 @@ smartEntry* smartAlloc(u32 size, u8 type) {
         if (wp->tail) {
             wp->tail->next = NULL;
         }
-    }
-    else {
+    } else {
         entry2->next->prev = entry2->prev;
     }
 
@@ -534,8 +526,7 @@ smartEntry* smartAlloc(u32 size, u8 type) {
             wp->allocTail = entry2;
         }
         return entry2;
-    }
-    else {
+    } else {
         for (entry1 = wp->allocHead; entry1; entry1 = entry1->next) {
             if (entry1->spaceAfter >= sz) {
                 entry2->address = (u8*)entry1->address + entry1->size;
@@ -545,8 +536,7 @@ smartEntry* smartAlloc(u32 size, u8 type) {
                 entry1->spaceAfter = 0;
                 if (entry1->next) {
                     entry1->next->prev = entry2;
-                }
-                else {
+                } else {
                     wp->allocTail = entry2;
                 }
                 entry1->next = entry2;
@@ -574,8 +564,7 @@ smartEntry* smartAlloc(u32 size, u8 type) {
                 entry1->spaceAfter = 0;
                 if (entry1->next) {
                     entry1->next->prev = entry2;
-                }
-                else {
+                } else {
                     wp->allocTail = entry2;
                 }
                 entry1->next = entry2;
@@ -596,8 +585,7 @@ void smartGarbage(void) {
     sysWaitDrawSync();
     if (wp->allocHead) {
         wp->bytesLeft = 0;
-    }
-    else {
+    } else {
         wp->bytesLeft = (u8*)heapEnd[SMART_HEAP] - (u8*)heapStart[SMART_HEAP] - 32;
     }
     prev = NULL;
@@ -609,8 +597,7 @@ void smartGarbage(void) {
                 if (entry->file->state == 3 && entry->file->entry && OSGetCurrentThread() != &dvdmgr_thread) {
                     if (prev) {
                         prev->spaceAfter = addr - ptr;
-                    }
-                    else {
+                    } else {
                         wp->bytesLeft = addr - ptr;
                     }
                     ptr = (u8*)entry->address + entry->size;
@@ -618,8 +605,7 @@ void smartGarbage(void) {
                     continue;
                 }
                 fileGarbageMoveMem(ptr, entry->file);
-            }
-            else {
+            } else {
                 memmove(ptr, addr, entry->size);
                 entry->address = ptr;
             }

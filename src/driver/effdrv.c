@@ -157,8 +157,7 @@ void effTexSetup(void) {
         wp->texture = __memAlloc(HEAP_DEFAULT, size);
         entry->info.cb.userData = entry;
         DVDMgrReadAsync(entry, wp->texture, size, 0, _callback_tpl);
-    }
-    else {
+    } else {
         UnpackTexPalette(wp->texture);
         wp->texLoaded = TRUE;
     }
@@ -172,17 +171,14 @@ void effGetTexObj(u32 id, GXTexObj* obj) {
         if (!wp->texLoaded) {
             static char dummy ATTRIBUTE_ALIGN(32) = '\0';
             GXInitTexObj(obj, &dummy, 1, 1, GX_TF_I4, GX_CLAMP, GX_CLAMP, GX_FALSE);
-        }
-        else {
+        } else {
             TEXGetGXTexObjFromPalette(wp->texture, obj, id);
         }
-    }
-    else {
+    } else {
         static char dummy ATTRIBUTE_ALIGN(32) = '\0';
         if (!wp->handle) {
             GXInitTexObj(obj, &dummy, 1, 1, GX_TF_I4, GX_CLAMP, GX_CLAMP, GX_FALSE);
-        }
-        else {
+        } else {
             TEXGetGXTexObjFromPalette(*wp->handle->data, obj, id - EFF_NTEX);
         }
     }
@@ -246,8 +242,7 @@ void effMain(void) {
             if ((s32)entry->inBattle != 1) {
                 continue;
             }
-        }
-        else if ((s32)entry->inBattle != 0) {
+        } else if ((s32)entry->inBattle != 0) {
             continue;
         }
         if (entry->flags & 1) {
@@ -282,8 +277,7 @@ void effSoftDelete(EffectEntry* effect) {
     if (effect && effect->flags) {
         if (effect->flags & 2) {
             effect->flags |= 4; // "deleted"
-        }
-        else {
+        } else {
             effDelete(effect); //inlined
         }
     }
@@ -301,8 +295,7 @@ EffectEntry* effNameToPtr(const char* name) {
     }
     if (i >= count) {
         return NULL;
-    }
-    else {
+    } else {
         return entry; //found a match
     }
 }
@@ -389,8 +382,7 @@ static inline void effMayaKeyInterp(MayaKey* prev, MayaKey* curr, f32 t, f32* bu
         qd0 = __OSs16tof32((s16*)(pb + 6));
         if (pa[9] != 0) {
             *out = qv0;
-        }
-        else {
+        } else {
             u = t - prev->time;
             dt = curr->time - prev->time;
             div = (!dt) ? ( 0.00000001f ) : ( dt) ;
@@ -439,11 +431,9 @@ void effCalcMayaAnimMatrix(MayaAnim* anim, MayaKeyList* list, f32* mtx, f32* alp
         effMayaSetGQR();
         if (anim->time <= curr->time) {
             t = anim->time;
-        }
-        else if (k != ( n - 1) ) {
+        } else if (k != ( n - 1) ) {
             continue;
-        }
-        else {
+        } else {
             t = curr->time;
         }
         effMayaKeyInterp(prev, curr, t, buf);

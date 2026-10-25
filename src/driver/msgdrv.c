@@ -217,8 +217,7 @@ void msgLoad(const char* filename, s32 index) {
     if (!entry->address) {
         entry->length = 0;
         entry->count = 0;
-    }
-    else {
+    } else {
         msgptr = entry->address;
         msgcount = 0;
         while (*(s8*)msgptr) {
@@ -233,8 +232,7 @@ void msgLoad(const char* filename, s32 index) {
     }
     if (!entry->count) {
         entry->lookup = NULL;
-    }
-    else {
+    } else {
         ofs = 0;
         entry->lookup = smartAlloc(entry->count * sizeof(MsgLookupEntry), 0);
         str = entry->address;
@@ -381,8 +379,7 @@ s32 msgMain(smartEntry* smart) {
                 data->flags |= 0x80;
                 data->flags &= ~4;
                 data->playTime = entry->time;
-            }
-            else {
+            } else {
                 data->flags &= ~0x80;
             }
             break;
@@ -415,8 +412,7 @@ s32 msgMain(smartEntry* smart) {
             }
             if (entry->value & 0x10) {
                 msgVoiceSE(smart);
-            }
-            else if (entry->value & 8) {
+            } else if (entry->value & 8) {
                 if (((MsgWinData*)smart->address)->window->type != 3) {
                     ((MsgWinData*)smart->address)->talkTimer = 15;
                 }
@@ -481,8 +477,7 @@ BOOL msgDisp(smartEntry* smart, u8 alpha, f32 x, f32 y) {
             case 0xFFF6:
                 if (c->value) {
                     FontDrawNoise();
-                }
-                else {
+                } else {
                     FontDrawNoiseOff();
                 }
                 break;
@@ -518,12 +513,10 @@ BOOL msgDisp(smartEntry* smart, u8 alpha, f32 x, f32 y) {
                             break;
                         }
                         hide = 1;
-                    }
-                    else if (data->scrollPos < py) {
+                    } else if (data->scrollPos < py) {
                         if (c->y + py > 0) {
                             hide = 1;
-                        }
-                        else {
+                        } else {
                             d = py - data->scrollPos;
                             if (d > 100) {
                                 d = 100;
@@ -534,19 +527,16 @@ BOOL msgDisp(smartEntry* smart, u8 alpha, f32 x, f32 y) {
                                     break;
                                 }
                                 hide = 1;
-                            }
-                            else {
+                            } else {
                                 col2 = FontGetDrawColor();
                                 col2.a = col2.a * a / 255;
                                 GXSetTevColor(GX_TEVREG0, col2);
                             }
                         }
-                    }
-                    else {
+                    } else {
                         if (c->y + data->pageY[page + 1] > 0) {
                             hide = 1;
-                        }
-                        else {
+                        } else {
                             d = data->scrollPos - py;
                             if (d > 100) {
                                 d = 100;
@@ -557,8 +547,7 @@ BOOL msgDisp(smartEntry* smart, u8 alpha, f32 x, f32 y) {
                                     break;
                                 }
                                 hide = 1;
-                            }
-                            else {
+                            } else {
                                 col2 = FontGetDrawColor();
                                 col2.a = col2.a * a / 255;
                                 GXSetTevColor(GX_TEVREG0, col2);
@@ -604,8 +593,7 @@ BOOL msgDisp(smartEntry* smart, u8 alpha, f32 x, f32 y) {
 #endif
                     FontDrawCode(sx, sy, c->glyph);
                     FontDrawColor_();
-                }
-                else if (c->value & 1) {
+                } else if (c->value & 1) {
                     w = (u16)(kanjiGetWidth(c->glyph) / 2);
 #ifdef VERSION_G8ME01
                     if (c->value & 2) {
@@ -629,8 +617,7 @@ BOOL msgDisp(smartEntry* smart, u8 alpha, f32 x, f32 y) {
                     PSMTXTransApply(m2, m2, hx, hy, 0.0f);
                     FontDrawCodeMtx(m2, c->glyph);
                     c->rot = 1.0f + 0.5f * (c->rot - 1.0f);
-                }
-                else if (c->value & 2) {
+                } else if (c->value & 2) {
 #ifdef VERSION_G8ME01
                     sx += irand(10000) % 3;
                     sy += irand(10000) % 3;
@@ -642,8 +629,7 @@ BOOL msgDisp(smartEntry* smart, u8 alpha, f32 x, f32 y) {
                     FontDrawScale(c->scale);
                     FontDrawCode(hy, hx, c->glyph);
 #endif
-                }
-                else if (c->value & 4) {
+                } else if (c->value & 4) {
 #ifdef VERSION_G8ME01
                     t = 0.01f * OSTicksToMilliseconds(gp->renderTime - data->openTime) - 0.02f * sx;
                     sx += 3.2f * (f32)cos(t);
@@ -657,8 +643,7 @@ BOOL msgDisp(smartEntry* smart, u8 alpha, f32 x, f32 y) {
                     FontDrawScale(c->scale);
                     FontDrawCode(sx + 3.2f * hx, sy - 3.2f * hy, c->glyph);
 #endif
-                }
-                else if (c->value & (0x100 << data->sel)) {
+                } else if (c->value & (0x100 << data->sel)) {
                     f32 hx2;
                     t = 0.01f * OSTicksToMilliseconds(gp->renderTime - data->openTime) - 0.02f * sx;
 #ifdef VERSION_G8ME01
@@ -686,8 +671,7 @@ BOOL msgDisp(smartEntry* smart, u8 alpha, f32 x, f32 y) {
                     FontDrawEdgeOff();
                     FontDrawRainbowColorOff();
                     FontDrawColorIDX(0);
-                }
-                else {
+                } else {
 #ifdef VERSION_G8ME01
                     MSG_DRAW_SCALE(c);
 #else
@@ -1423,8 +1407,7 @@ const char* msgSearch(const char* tag) {
                 }
                 if (result < 0) {
                     max = index - 1;
-                }
-                else {
+                } else {
                     j = index + 1;
                 }
             }
@@ -1458,8 +1441,7 @@ char* msgGetCommand(char* msg, char* cmd, char* arg) {
         case '>':
             if (!inArg) {
                 *c = 0;
-            }
-            else {
+            } else {
                 *a = 0;
             }
             return m + 1;
@@ -1467,16 +1449,14 @@ char* msgGetCommand(char* msg, char* cmd, char* arg) {
             if (!inArg) {
                 *c = 0;
                 inArg = TRUE;
-            }
-            else {
+            } else {
                 *a++ = *m;
             }
             break;
         default:
             if (!inArg) {
                 *c++ = *m;
-            }
-            else {
+            } else {
                 *a++ = *m;
             }
             break;
@@ -1645,8 +1625,7 @@ void msgWindow_ForceClose(const char* name) {
             data = window->userdata->address;
             if (data->flags & 8) {
                 BtlUnit_ChangeStayAnim(data->unitId);
-            }
-            else {
+            } else {
                 npcSetStayPose(data->speakerName);
             }
         }
@@ -1685,8 +1664,7 @@ void msgWindow_Main(WindowEntry* window) {
         if (!data->talkPoseSet) {
             if (data->flags & 8) {
                 BtlUnit_ChangeTalkAnim(data->unitId);
-            }
-            else {
+            } else {
                 npcSetTalkPose(data->speakerName);
             }
             data->talkPoseSet = 1;
@@ -1696,8 +1674,7 @@ void msgWindow_Main(WindowEntry* window) {
             MsgWinData* d2 = smart->address;
             if (d2->flags & 8) {
                 BtlUnit_ChangeStayAnim(d2->unitId);
-            }
-            else {
+            } else {
                 npcSetStayPose(d2->speakerName);
             }
             data->talkPoseSet = 0;
@@ -1749,8 +1726,7 @@ void msgWindow_Main(WindowEntry* window) {
             WIN_STATE(window) = 7;
             if (WIN_DATA(window)->flags & 8) {
                 BtlUnit_ChangeStayAnim(WIN_DATA(window)->unitId);
-            }
-            else {
+            } else {
                 npcSetStayPose(WIN_DATA(window)->speakerName);
             }
             break;
@@ -1759,8 +1735,7 @@ void msgWindow_Main(WindowEntry* window) {
             window->flags &= ~2;
             if (WIN_DATA(window)->flags & 8) {
                 BtlUnit_ChangeStayAnim(WIN_DATA(window)->unitId);
-            }
-            else {
+            } else {
                 npcSetStayPose(WIN_DATA(window)->speakerName);
             }
             break;
@@ -1820,8 +1795,7 @@ void msgWindow_Main(WindowEntry* window) {
                 if (data->page == data->pageCount - 1) {
                     WIN_STATE(window) = 3;
                     data->flags &= ~0x40;
-                }
-                else {
+                } else {
                     WIN_STATE(window) = 11;
                 }
             }
@@ -1889,8 +1863,7 @@ void msgWindow_Clear_Main(WindowEntry* window) {
                 window->timestamp = gp->renderTime;
                 if (WIN_DATA(window)->flags & 8) {
                     BtlUnit_ChangeStayAnim(WIN_DATA(window)->unitId);
-                }
-                else {
+                } else {
                     npcSetStayPose(WIN_DATA(window)->speakerName);
                 }
                 break;
@@ -1899,8 +1872,7 @@ void msgWindow_Clear_Main(WindowEntry* window) {
                 window->flags &= ~2;
                 if (WIN_DATA(window)->flags & 8) {
                     BtlUnit_ChangeStayAnim(WIN_DATA(window)->unitId);
-                }
-                else {
+                } else {
                     npcSetStayPose(WIN_DATA(window)->speakerName);
                 }
                 break;
@@ -2047,16 +2019,14 @@ void selectWindow_Main(WindowEntry* window) {
         prev = data->sel;
         if ((keyGetButtonTrg(0) & PAD_BUTTON_UP) || (keyGetDirTrg(0) & DEMO_STICK_UP)) {
             data->sel--;
-        }
-        else if ((keyGetButtonRep(0) & PAD_BUTTON_UP) || (keyGetDirRep(0) & DEMO_STICK_UP)) {
+        } else if ((keyGetButtonRep(0) & PAD_BUTTON_UP) || (keyGetDirRep(0) & DEMO_STICK_UP)) {
             if (data->sel) {
                 data->sel--;
             }
         }
         if ((keyGetButtonTrg(0) & PAD_BUTTON_DOWN) || (keyGetDirTrg(0) & DEMO_STICK_DOWN)) {
             data->sel++;
-        }
-        else if ((keyGetButtonRep(0) & PAD_BUTTON_DOWN) || (keyGetDirRep(0) & DEMO_STICK_DOWN)) {
+        } else if ((keyGetButtonRep(0) & PAD_BUTTON_DOWN) || (keyGetDirRep(0) & DEMO_STICK_DOWN)) {
             if (data->sel < data->numSel - 1) {
                 data->sel++;
             }
@@ -2085,8 +2055,7 @@ void selectWindow_Main(WindowEntry* window) {
                 psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_CANCEL1 | PSND_SFX_BYPASS_MUTE));
                 break;
             }
-        }
-        else if (keyGetButtonTrg(0) & PAD_BUTTON_A) {
+        } else if (keyGetButtonTrg(0) & PAD_BUTTON_A) {
             WIN_STATE(window) = 7;
             psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1 | PSND_SFX_BYPASS_MUTE));
         }

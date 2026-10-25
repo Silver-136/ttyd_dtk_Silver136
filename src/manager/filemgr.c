@@ -458,8 +458,7 @@ void fileGarbageMoveMem(void* data, FileEntry* file) {
         if (!file->entry) {
             fileGarbageDataAdrClear(file);
         }
-    }
-    else {
+    } else {
         fileGarbageDataAdrClear(file);
     }
     memmove(data, ((smartEntry*)file->data)->address, ((smartEntry*)file->data)->size);
@@ -467,12 +466,10 @@ void fileGarbageMoveMem(void* data, FileEntry* file) {
     if (file->state == 3) {
         if (file->entry) {
             file->entry->address = data;
-        }
-        else {
+        } else {
             fileGarbageDataAdrSet(*file->data, file->type);
         }
-    }
-    else {
+    } else {
         fileGarbageDataAdrSet(*file->data, file->type);
     }
 }
@@ -489,8 +486,7 @@ void _fileGarbage(BOOL a1) {
                 if (f->entry) {
                     if (OSGetCurrentThread() == &dvdmgr_thread) {
                         f->entry->status = 8;
-                    }
-                    else {
+                    } else {
                         while (f->entry) {
                             OSYieldThread();
                         }
@@ -499,8 +495,7 @@ void _fileGarbage(BOOL a1) {
                 f->state = 2;
             }
         }
-    }
-    else if (a1 == 1) {
+    } else if (a1 == 1) {
         for (f = afp->firstused; f; f = f->next) {
             if (f->state == 3) {
                 if (f->entry) {
@@ -510,8 +505,7 @@ void _fileGarbage(BOOL a1) {
                     while (f->entry) {
                         OSYieldThread();
                     }
-                }
-                else {
+                } else {
                     f->references--;
                     if ((s16)f->references <= -2) {
                         f->state = 2;
@@ -535,14 +529,12 @@ void _fileGarbage(BOOL a1) {
             }
             if (!afp->firstavailable) {
                 afp->firstavailable = f;
-            }
-            else {
+            } else {
                 afp->lastavailable->next = f;
             }
             f->next = NULL;
             afp->lastavailable = f;
-        }
-        else {
+        } else {
             if (!prev) {
                 first = f;
             }
@@ -583,8 +575,7 @@ FileEntry* _fileAlloc(const char* filename, s32 type, void (*callback)(FileEntry
             if (search->state == 3) {
                 search->state = 1;
                 search->references = 0;
-            }
-            else if (search->state == 2) {
+            } else if (search->state == 2) {
                 search->state = 1;
             }
             search->references++;
@@ -639,8 +630,7 @@ FileEntry* _fileAlloc(const char* filename, s32 type, void (*callback)(FileEntry
         newentry->next = NULL;
         strcpy(newentry->filename, filename);
         newentry->entry = NULL;
-    }
-    else {
+    } else {
         entry = DVDMgrOpen(filename, 2, 0);
         if (!entry) {
             return NULL;
@@ -674,8 +664,7 @@ FileEntry* _fileAlloc(const char* filename, s32 type, void (*callback)(FileEntry
     if (!afp->firstused) {
         afp->firstused = newentry;
         afp->lastused = newentry;
-    }
-    else {
+    } else {
         afp->lastused->next = newentry;
         afp->lastused = newentry;
     }
@@ -710,8 +699,7 @@ void dvdReadDoneCallBack(s32 error, DVDFileInfo* info) {
         f->state = 2;
         f->type = 11;
         DVDMgrClose(entry);
-    }
-    else {
+    } else {
         f->entry = NULL;
         fileGarbageDataAdrSet(*f->data, f->type);
         DVDMgrClose(entry);
@@ -804,14 +792,12 @@ s32 fileAsync(const char* filename, s32 type, FileCallback callback) {
         if (!afp->firstused) {
             afp->firstused = newentry;
             afp->lastused = newentry;
-        }
-        else {
+        } else {
             afp->lastused->next = newentry;
             afp->lastused = newentry;
         }
         return (s32)newentry;
-    }
-    else {
+    } else {
         entry = DVDMgrOpen(filename, 2, 0);
         if (!entry) {
             return -1;
@@ -842,8 +828,7 @@ s32 fileAsync(const char* filename, s32 type, FileCallback callback) {
         if (!afp->firstused) {
             afp->firstused = newentry;
             afp->lastused = newentry;
-        }
-        else {
+        } else {
             afp->lastused->next = newentry;
             afp->lastused = newentry;
         }

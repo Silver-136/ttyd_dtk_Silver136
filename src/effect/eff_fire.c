@@ -541,8 +541,7 @@ void effFireDisp2(CameraId cameraId, EffectEntry* effect) {
         if (type == 3 || type == 8) {
             u = 2.0f;
             v = 1.0f;
-        }
-        else {
+        } else {
             u = 2.0f;
             v = 2.0f;
         }
@@ -841,8 +840,7 @@ void effFireSmokeDisp(CameraId cameraId, EffectEntry* effect) {
     if (idx < 60) {
         sx = scale_dt[idx] / 128.0f;
         sy = scale_dt[idx + 1] / 128.0f;
-    }
-    else {
+    } else {
         sx = 1.5f;
         sy = 0.8f;
     }

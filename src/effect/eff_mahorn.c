@@ -46,8 +46,7 @@ EffectEntry* effMahornEntry(s32 type, s32 count, s32 duration, f32 x, f32 y, f32
     work->frame = 0;
     if (duration <= 0) {
         work->timer = 1000;
-    }
-    else {
+    } else {
         work->timer = duration;
     }
     work->position.x = x;
@@ -96,8 +95,7 @@ void effMahornMain(EffectEntry* effect) {
         work->frame++;
         if (i & 1) {
             scale = scale_dt[work->frame % 21] / 100.0f;
-        }
-        else {
+        } else {
             scale = scale_dt2[work->frame % 21] / 100.0f;
         }
         work->scale = scale;
@@ -154,16 +152,14 @@ void effMahornDisp(CameraId cameraId, EffectEntry* effect) {
         odd = i & 1;
         if (odd) {
             GXSetChanMatColor(GX_COLOR0A0, (GXColor){ 0xFD, 0xE8, 0x3C, work->alpha * alpha / 255 });
-        }
-        else {
+        } else {
             GXSetChanMatColor(GX_COLOR0A0, (GXColor){ 0xFF, 0xFC, 0xE7, work->alpha * alpha / 255 });
         }
         PSMTXTrans(mtx, work->position.x, work->position.y, work->position.z);
         if (odd) {
             PSMTXScale(scale, work->scale * work->scale2, work->scale * work->scale2,
                        work->scale * work->scale2);
-        }
-        else {
+        } else {
             PSMTXScale(scale, work->scale * work->scale2, -work->scale * work->scale2,
                        work->scale * work->scale2);
         }

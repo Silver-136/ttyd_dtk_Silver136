@@ -53,8 +53,7 @@ s32 BattleActionCommandResult(BattleWork* wp) {
     result = wp->actionCommands.resultcb;
     if (result) {
         return result(wp);
-    }
-    else {
+    } else {
         return wp->actionCommands.result & 2;
     }
 }
@@ -146,12 +145,10 @@ s32 BattleActionCommandCheckDefence(BattleUnit* unit, BattleWeapon* weapon) {
             AC_GUARD_TIMER(wp)--;
             done = 1;
             wp->actionCommands.mDefenseResult = 5;
-        }
-        else if (unit->badgesEquipped.AutoCommand) {
+        } else if (unit->badgesEquipped.AutoCommand) {
             done = 1;
             wp->actionCommands.mDefenseResult = 5;
-        }
-        else {
+        } else {
             for (i = 0; i < superguard; i++) {
                 if (BattleACPadCheckRecordTrigger(i, 0x200)) {
                     break;
@@ -179,8 +176,7 @@ s32 BattleActionCommandCheckDefence(BattleUnit* unit, BattleWeapon* weapon) {
         if (AC_GUARD_TIMER(wp) > 0) {
             AC_GUARD_TIMER(wp)--;
             wp->actionCommands.mDefenseResult = 4;
-        }
-        else {
+        } else {
             count = 0;
             for (i = 0; i < 15; i++) {
                 if (BattleACPadCheckRecordTrigger(i, 0x100)) {
@@ -192,8 +188,7 @@ s32 BattleActionCommandCheckDefence(BattleUnit* unit, BattleWeapon* weapon) {
             }
             if (count >= 2) {
                 wp->actionCommands.mDefenseResult = 1;
-            }
-            else {
+            } else {
                 for (i = 0; i < normal; i++) {
                     if (BattleACPadCheckRecordTrigger(i, 0x100)) {
                         break;
@@ -202,12 +197,10 @@ s32 BattleActionCommandCheckDefence(BattleUnit* unit, BattleWeapon* weapon) {
                 if (i >= normal) {
                     if (count > 0) {
                         wp->actionCommands.mDefenseResult = 1;
-                    }
-                    else {
+                    } else {
                         wp->actionCommands.mDefenseResult = 2;
                     }
-                }
-                else {
+                } else {
                     wp->actionCommands.mDefenseResult = 4;
                 }
             }
@@ -423,8 +416,7 @@ void BattleAcDrawGauge(s32 x, s32 y, s32 width, f32 ratio, s32 level, s32 a, s32
             color.g = color.g * mod[1] / 255;
             color.b = color.b * mod[2] / 255;
             color.a = color.a * mod[3] / 255;
-        }
-        else {
+        } else {
             color = (GXColor){0xFF, 0x00, 0x00, 0xFF};
         }
         if (ratio > 0.0f) {

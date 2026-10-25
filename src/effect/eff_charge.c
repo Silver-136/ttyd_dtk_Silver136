@@ -98,8 +98,7 @@ void effChargeDisp(CameraId cameraId, EffectEntry* effect) {
                 GXTexCoord2f32(1.0f, 1.0f);
                 GXPosition3f32(-8.0f, -24.0f, 0.0f);
                 GXTexCoord2f32(0.0f, 1.0f);
-            }
-            else {
+            } else {
                 GXBegin(GX_QUADS, GX_VTXFMT0, 4);
                 GXPosition3f32(-12.0f, -12.0f, 0.0f);
                 GXTexCoord2f32(0.0f, 0.0f);
@@ -138,8 +137,7 @@ void effChargeMain(EffectEntry* effect) {
     frame = work->frame;
     if (frame <= 20) {
         work->alpha = frame * 12;
-    }
-    else {
+    } else {
         work->alpha = 255;
     }
     if (frame & 1) {

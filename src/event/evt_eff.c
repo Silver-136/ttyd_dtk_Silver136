@@ -385,8 +385,7 @@ USER_FUNC(evt_eff) {
     return EVT_RETURN_DONE;
 }
 
-s32 evt_eff64(EventEntry *event, BOOL isFirstCall)
-{
+s32 evt_eff64(EventEntry *event, BOOL isFirstCall) {
   EvtWord *args;
   s32 *pi;
   s32 *pr;
@@ -464,8 +463,7 @@ s32 evt_eff64(EventEntry *event, BOOL isFirstCall)
   float14 = evtGetFloat(event, *(pr++));
   raw3 = pf[1];
   effect = (void *) 0;
-  switch (effGetSetN64(effSet)->id)
-  {
+  switch (effGetSetN64(effSet)->id) {
     case 0:
       effect = effExpBomN64Entry(float2, float3, float4);
       break;
@@ -877,10 +875,8 @@ s32 evt_eff64(EventEntry *event, BOOL isFirstCall)
 
   }
 
-  if (effect && effName)
-  {
-    if (strcmp(effName, ""))
-    {
+  if (effect && effName) {
+    if (strcmp(effName, "")) {
       effSetName(effect, effName);
     }
   }

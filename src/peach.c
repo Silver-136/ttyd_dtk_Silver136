@@ -113,50 +113,43 @@ void peachChgPose(const char* name) {
         else if (strcmp(name, "P_W_1") == 0) name = "W_1";
         else if (strcmp(name, "P_R_1") == 0) name = "R_1";
         else if (strcmp(name, "P_T_1") == 0) name = "T_1";
-    }
-    else if (mp->peachFlags & 0x10) {
+    } else if (mp->peachFlags & 0x10) {
         if (strcmp(name, "P_Z_1") == 0) name = "P_Z_2";
         else if (strcmp(name, "P_S_1") == 0) name = "P_S_2";
         else if (strcmp(name, "P_W_1") == 0) name = "P_W_2";
         else if (strcmp(name, "P_R_1") == 0) name = "P_R_2";
         else if (strcmp(name, "P_T_1") == 0) name = "P_T_2";
-    }
-    else if (mp->peachFlags & 0x20) {
+    } else if (mp->peachFlags & 0x20) {
         if (strcmp(name, "P_Z_1") == 0) name = "P_Z_3";
         else if (strcmp(name, "P_S_1") == 0) name = "P_S_3";
         else if (strcmp(name, "P_W_1") == 0) name = "P_W_3";
         else if (strcmp(name, "P_R_1") == 0) name = "P_R_3";
         else if (strcmp(name, "P_T_1") == 0) name = "P_T_3";
-    }
-    else if (mp->peachFlags & 0x80) {
+    } else if (mp->peachFlags & 0x80) {
         if (strcmp(name, "P_Z_1") == 0) name = "P_Z_4";
         else if (strcmp(name, "P_S_1") == 0) name = "P_S_4";
         else if (strcmp(name, "P_W_1") == 0) name = "P_W_4";
         else if (strcmp(name, "P_R_1") == 0) name = "P_R_4";
         else if (strcmp(name, "P_T_1") == 0) name = "P_T_4";
-    }
-    else if (mp->peachFlags & 0x40) {
+    } else if (mp->peachFlags & 0x40) {
         if (strcmp(name, "P_Z_1") == 0) name = "P_Z_5";
         else if (strcmp(name, "P_S_1") == 0) name = "P_S_5";
         else if (strcmp(name, "P_W_1") == 0) name = "P_W_5";
         else if (strcmp(name, "P_R_1") == 0) name = "P_R_5";
         else if (strcmp(name, "P_T_1") == 0) name = "P_T_5";
-    }
-    else if (mp->peachFlags & 0x100) {
+    } else if (mp->peachFlags & 0x100) {
         if (strcmp(name, "P_Z_1") == 0) name = "P_Z_6";
         else if (strcmp(name, "P_S_1") == 0) name = "P_S_6";
         else if (strcmp(name, "P_W_1") == 0) name = "P_W_6";
         else if (strcmp(name, "P_R_1") == 0) name = "P_R_6";
         else if (strcmp(name, "P_T_1") == 0) name = "P_T_6";
-    }
-    else if (mp->peachFlags & 0x200) {
+    } else if (mp->peachFlags & 0x200) {
         if (strcmp(name, "P_Z_1") == 0) name = "P_Z_7";
         else if (strcmp(name, "P_S_1") == 0) name = "P_S_7";
         else if (strcmp(name, "P_W_1") == 0) name = "P_W_7";
         else if (strcmp(name, "P_R_1") == 0) name = "P_R_7";
         else if (strcmp(name, "P_T_1") == 0) name = "P_T_13";
-    }
-    else if (mp->peachFlags & 0x400) {
+    } else if (mp->peachFlags & 0x400) {
         if (strcmp(name, "P_Z_1") == 0) name = "P_Z_8";
         else if (strcmp(name, "P_S_1") == 0) name = "P_S_8";
         else if (strcmp(name, "P_W_1") == 0) name = "P_W_8";

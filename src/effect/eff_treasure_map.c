@@ -89,8 +89,7 @@ void effTreasureMapDisp(CameraId cameraId, EffectEntry* effect) {
                 PSMTXConcat(mtx, rot, mtx);
                 animPoseSetMaterialFlagOn(work->poseId, 0x40);
                 animPoseSetMaterialEvtColor(work->poseId, (GXColor){ 0x2E, 0x1B, 0x08, work->alpha });
-            }
-            else {
+            } else {
                 PSMTXTrans(trans, work->position.x, work->position.y, work->position.z);
                 PSMTXScale(scale, s, s, s);
                 PSMTXRotRad(rot, 'y', MTXDegToRad(work->rotY));

@@ -679,8 +679,7 @@ void mot_ham2_post(void) {
     marioAdjustMoveDir();
 }
 
-HitEntry *hitEstimate(s32 *out)
-{
+HitEntry *hitEstimate(s32 *out) {
     MarioWork *mario;
     HitCheckQuery q;
     Vec pos;
@@ -698,12 +697,9 @@ HitEntry *hitEstimate(s32 *out)
     a = mario->displayDirection;
     {
         f32 off = (marioGetPtr()->dispFlags & 0x80000000) ? (-20.0f) : (0.0f);
-        if ((a >= 90.0f) && (a <= 270.0f))
-        {
+        if ((a >= 90.0f) && (a <= 270.0f)) {
             a = toMovedir2(180.0f, off);
-        }
-        else
-        {
+        } else {
             a = toMovedir2(0.0f, off);
         }
     }
@@ -721,8 +717,7 @@ HitEntry *hitEstimate(s32 *out)
         q.targetDir = dir1;
         q.targetDistance = 14.0f;
         hit = hitCheckVecFilter(&q, NULL);
-        if (hit && (!(hitGetAttr(hit) & 0x800005)))
-        {
+        if (hit && (!(hitGetAttr(hit) & 0x800005))) {
             *out = 7;
             return hit;
         }
@@ -740,8 +735,7 @@ HitEntry *hitEstimate(s32 *out)
         q.targetDir = dir2;
         q.targetDistance = 26.0f;
         hit = hitCheckVecFilter(&q, NULL);
-        if (hit && (!(hitGetAttr(hit) & 0x800005)))
-        {
+        if (hit && (!(hitGetAttr(hit) & 0x800005))) {
             *out = ((q.hitPos.y - mario->position.y) > 30.0f) ? (4) : (5);
             return hit;
         }
@@ -759,8 +753,7 @@ HitEntry *hitEstimate(s32 *out)
         q.targetDir = dir3;
         q.targetDistance = 30.0f;
         hit = hitCheckVecFilter(&q, NULL);
-        if (hit && (!(hitGetAttr(hit) & 0x800005)))
-        {
+        if (hit && (!(hitGetAttr(hit) & 0x800005))) {
             *out = 5;
             return hit;
         }
@@ -772,24 +765,17 @@ HitEntry *hitEstimate(s32 *out)
         dir4Copy = dir4; // FAKE: Vec copy through a temp; Vec dir4b = dir4 differs
         {
             Vec dir4b = dir4Copy;
-            for (i = 0; i < 2; i++)
-            {
+            for (i = 0; i < 2; i++) {
                 f32 m;
                 f32 d;
-                if (i == 0)
-                {
+                if (i == 0) {
                     d = 36.0f;
                     m = 20.0f;
-                }
-                else
-                {
+                } else {
                     d = 34.0f;
-                    if (mario->dispFlags & 0x80000000)
-                    {
+                    if (mario->dispFlags & 0x80000000) {
                         m = 37.0f;
-                    }
-                    else
-                    {
+                    } else {
                         m = d;
                     }
                 }
@@ -800,8 +786,7 @@ HitEntry *hitEstimate(s32 *out)
                 q.targetDir = dir4b;
                 q.targetDistance = d;
                 hit = hitCheckVecFilter(&q, NULL);
-                if (hit && (!(hitGetAttr(hit) & 0x800005)))
-                {
+                if (hit && (!(hitGetAttr(hit) & 0x800005))) {
                     *out = ((q.hitPos.y - mario->position.y) > 13.0f) ? (5) : (6);
                     return hit;
                 }

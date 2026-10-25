@@ -133,8 +133,7 @@ void effSheepMain(EffectEntry* effect) {
                         v.y = position.y + p->position.y;
                         v.z = position.z + p->position.z;
                         p->sfxId = psndSFXOn_3D(sfx1, &v);
-                    }
-                    else if (i == effect->count - 1) {
+                    } else if (i == effect->count - 1) {
                         Vec v = { 0.0f, 0.0f, 0.0f };
                         v.x = position.x + p->position.x;
                         v.y = position.y + p->position.y;
@@ -162,8 +161,7 @@ void effSheepMain(EffectEntry* effect) {
                             p->field_0x18 *= -1.0f;
                         }
                     }
-                }
-                else {
+                } else {
                     p->state++;
                 }
                 if ((gp->retraceCount + i) % 10 == 0) {
@@ -192,8 +190,7 @@ void effSheepMain(EffectEntry* effect) {
     }
     if (done >= effect->count - 1) {
         effDelete(effect);
-    }
-    else {
+    } else {
         dispEntry(CAMERA_3D, dispCalcZ(&position), 1, (DispCallback)effSheepDisp, effect);
     }
 }

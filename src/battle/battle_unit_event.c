@@ -13,8 +13,7 @@ BOOL BattleCheckEndUnitInitEvent(BattleWork* wp) {
             if (eventId) {
                 if (evtCheckID(eventId)) {
                     valid = FALSE;
-                }
-                else {
+                } else {
                     unit->initEventId = 0;
                 }
             }
@@ -92,8 +91,7 @@ s32 BattleRunPhaseEvent(BattleUnit* unit, BOOL isUnison) {
         if (code) {
             evt = evtEntry(code, 0xA, EVENT_START_IMMEDIATE);
         }
-    }
-    else {
+    } else {
         code = unit->phaseEventCode;
         if (code) {
             evt = evtEntry(code, 0xA, EVENT_START_IMMEDIATE);

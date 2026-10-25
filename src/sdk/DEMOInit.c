@@ -91,8 +91,7 @@ static inline void __DEMOInitRenderMode(GXRenderModeObj* mode) {
     if (mode != NULL) {
         rmodeobj = *mode; //inline copy
         rmode = &rmodeobj;
-    }
-    else {
+    } else {
         switch (VIGetTvFormat()) {
             case VI_NTSC:
                 rmode = &GXNtsc480IntDf;
@@ -197,8 +196,7 @@ void DEMOEnableGPHangWorkaround(u32 timeoutFrames) {
         FrameMissThreshold = timeoutFrames;
         VISetPreRetraceCallback(__NoHangRetraceCallback);
         DEMOSetGPHangMetric(GX_TRUE);
-    }
-    else {
+    } else {
         GPHangWorkaround = FALSE;
         FrameMissThreshold = 0;
         DEMOSetGPHangMetric(GX_FALSE);
@@ -222,8 +220,7 @@ static void __NoHangRetraceCallback(u32 count) {
             __DEMODiagnoseHang();
             strcpy(__GXErrorMessage, "---------WARNING : HANG AT HIGH WATERMARK----------\n");
         }
-    }
-    else {
+    } else {
         lastOvc = ovc;
         ovFrameCount = 0;
     }
@@ -273,20 +270,16 @@ static void __DEMODiagnoseHang(void) {
     if (!xfBotD && suRdyD) {
         sprintf(newmsg, "GP hang due to XF stall bug.\n");
         strcat(fullmsg, newmsg);
-    }
-    else if (!xfTopD && xfBotD && suRdyD) {
+    } else if (!xfTopD && xfBotD && suRdyD) {
         sprintf(newmsg, "GP hang due to unterminated primitive.\n");
         strcat(fullmsg, newmsg);
-    }
-    else if (!cmdIdle && xfTopD && xfBotD && suRdyD) {
+    } else if (!cmdIdle && xfTopD && xfBotD && suRdyD) {
         sprintf(newmsg, "GP hang due to illegal instruction.\n");
         strcat(fullmsg, newmsg);
-    }
-    else if (readIdle && cmdIdle && xfTopD && xfBotD && suRdyD && r0RdyD) {
+    } else if (readIdle && cmdIdle && xfTopD && xfBotD && suRdyD && r0RdyD) {
         sprintf(newmsg, "GP appears to be not hung (waiting for input).\n");
         strcat(fullmsg, newmsg);
-    }
-    else {
+    } else {
         sprintf(newmsg, "GP is in unknown state.\n");
         strcat(fullmsg, newmsg);
     }
@@ -307,8 +300,7 @@ static inline void DEMOSetGPHangMetric(GXBool enable) {
         GXParam1u16(0x0000);
         GXParam1u16(0x1006);
         GXParam1u32(0x00084400);
-    }
-    else {
+    } else {
         GXCmd1u8(GX_LOAD_BP_REG);
         GXParam1u32(0x24000000);
 

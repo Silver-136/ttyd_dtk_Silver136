@@ -445,8 +445,7 @@ void BattleStageObjectMain(void) {
             if (!(mapGetMapObj(obj->data->name)->flags & 1)) {
                 mapGrpFlagOn(obj->data->name, 1);
             }
-        }
-        else {
+        } else {
             if (mapGetMapObj(obj->data->name)->flags & 1) {
                 mapGrpFlagOff(obj->data->name, 1);
             }
@@ -2654,13 +2653,11 @@ USER_FUNC(_set_mobj_rotate_x) {
                         obj->mNumFramesToStartFalling--;
                         busy = TRUE;
                         _mobj_shake_main(obj);
-                    }
-                    else {
+                    } else {
                         if (obj->mNumFramesFalling == 0) {
                             if (layer == 0) {
                                 psndSFXOn_3D(fall1, &obj->mPosition);
-                            }
-                            else {
+                            } else {
                                 psndSFXOn_3D(fall3, &obj->mPosition);
                             }
                         }
@@ -2677,8 +2674,7 @@ USER_FUNC(_set_mobj_rotate_x) {
             if (event->userWork[1]) {
                 event->userWork[1]--;
                 busy = TRUE;
-            }
-            else {
+            } else {
                 if (event->userWork[3] == 0) {
                     fall2 = "SFX_BTL_STAGE_SET_FALL2";
                     psndSFXOn_3D(fall2, &(Vec){0.0f, 0.0f, -100.0f});
@@ -2871,8 +2867,7 @@ USER_FUNC(_set_mobj_shake_init) {
             obj->mShakePeriodLength = irand(10) + 60;
             if (irand(100) & 1) {
                 position = 0;
-            }
-            else {
+            } else {
                 position = obj->mShakePeriodLength / 2;
             }
             obj->mShakePeriodPosition = position;
@@ -2998,8 +2993,7 @@ USER_FUNC(_nozzle_turn) {
     if (event->userWork[2] < 30) {
         event->userWork[2]++;
         rotX = intpl_sub(2, 0.0f, -80.0f, event->userWork[2], 30);
-    }
-    else {
+    } else {
         rotX = -80.0f;
     }
     if (event->userWork[3] < 30) {
@@ -3202,8 +3196,7 @@ void BattleStage_NozzleWorkCheck(s32 type) {
             if (sw->nozzleWorkEvtId == 0) {
                 if (type) {
                     evt = evtEntry(_nozzle_work_event_1, 10, 0);
-                }
-                else {
+                } else {
                     evt = evtEntry(_nozzle_work_event_0, 10, 0);
                 }
                 sw->nozzleWorkEvtId = evt->eventId;
@@ -3310,20 +3303,17 @@ USER_FUNC(_nozzle_work_effect) {
                 if (sw->nozzleDir[0]) {
                     if (sfx) {
                         event->userWork[5] = psndSFXOn_3D(sfx, &obj->mPosition);
-                    }
-                    else {
+                    } else {
                         event->userWork[5] = -1;
                     }
                     rot = 90.0f + angle1;
                     rot = reviseAngle(rot);
                     z = 10.0f * sinfd(angle1) + obj->mPosition.z;
                     event->userWork[1] = (EvtWord)effNozleEntry(effType, obj->mPosition.x - 10.0f * cosfd(angle1), 12.0f + obj->mPosition.y, z, -80.0f, rot, 90);
-                }
-                else {
+                } else {
                     if (sfx) {
                         event->userWork[5] = psndSFXOn_3D(sfx, &obj->mPosition);
-                    }
-                    else {
+                    } else {
                         event->userWork[5] = -1;
                     }
                     event->userWork[1] = (EvtWord)effNozleEntry(effType, obj->mPosition.x, 20.0f + obj->mPosition.y, 8.0f + obj->mPosition.z, 0.0f, 0.0f, 90);
@@ -3336,19 +3326,16 @@ USER_FUNC(_nozzle_work_effect) {
                 if (sw->nozzleDir[1]) {
                     if (sfx) {
                         event->userWork[6] = psndSFXOn_3D(sfx, &obj->mPosition);
-                    }
-                    else {
+                    } else {
                         event->userWork[6] = -1;
                     }
                     rot = reviseAngle(90.0f + angle2);
                     z = 10.0f * sinfd(angle2) + obj->mPosition.z;
                     event->userWork[2] = (EvtWord)effNozleEntry(effType, obj->mPosition.x - 10.0f * cosfd(angle2), 12.0f + obj->mPosition.y, z, -80.0f, rot, 90);
-                }
-                else {
+                } else {
                     if (sfx) {
                         event->userWork[6] = psndSFXOn_3D(sfx, &obj->mPosition);
-                    }
-                    else {
+                    } else {
                         event->userWork[6] = -1;
                     }
                     event->userWork[2] = (EvtWord)effNozleEntry(effType, obj->mPosition.x, 20.0f + obj->mPosition.y, 8.0f + obj->mPosition.z, 0.0f, 0.0f, 90);
@@ -3361,19 +3348,16 @@ USER_FUNC(_nozzle_work_effect) {
                 if (sw->nozzleDir[2]) {
                     if (sfx) {
                         event->userWork[7] = psndSFXOn_3D(sfx, &obj->mPosition);
-                    }
-                    else {
+                    } else {
                         event->userWork[7] = -1;
                     }
                     z = reviseAngle(90.0f + angle3);
                     rot = 10.0f * sinfd(angle3) + obj->mPosition.z;
                     event->userWork[3] = (EvtWord)effNozleEntry(effType, obj->mPosition.x - 10.0f * cosfd(angle3), 12.0f + obj->mPosition.y, rot, -80.0f, z, 90);
-                }
-                else {
+                } else {
                     if (sfx) {
                         event->userWork[7] = psndSFXOn_3D(sfx, &obj->mPosition);
-                    }
-                    else {
+                    } else {
                         event->userWork[7] = -1;
                     }
                     event->userWork[3] = (EvtWord)effNozleEntry(effType, obj->mPosition.x, 20.0f + obj->mPosition.y, 8.0f + obj->mPosition.z, 0.0f, 0.0f, 90);
@@ -3677,8 +3661,7 @@ USER_FUNC(_mobj_destroy);
 USER_FUNC(_mobj_set_alpha);
 USER_FUNC(_set_mobj_rotate_x);
 
-s32 _object_fall_attack(EventEntry *event, BOOL isFirstCall)
-{
+s32 _object_fall_attack(EventEntry *event, BOOL isFirstCall) {
     BattleWork *wp = _battleWorkPointer;
     BattleStageFallObjectData *fd = wp->stageObjectWork.fallObjectData;
     const char *sfxNormal;
@@ -3716,53 +3699,41 @@ s32 _object_fall_attack(EventEntry *event, BOOL isFirstCall)
     Vec p;
     s32 unitId;
     s32 partId;
-    if (isFirstCall)
-    {
+    if (isFirstCall) {
         w = BattleAlloc(sizeof(FallObjectWork));
         event->userdatap[0] = w;
         event->userdata[1] = 0;
         memset(w, 0, sizeof(FallObjectWork));
         w->entries[0].index = -1;
-        for (i = 0; i < 3; i++)
-        {
+        for (i = 0; i < 3; i++) {
             w->prevTypes[i] = -1;
         }
 
-        if (BattleCheckConcluded(wp))
-        {
+        if (BattleCheckConcluded(wp)) {
             evtSetValue(event, outArg, event->userdata[1]);
             return 2;
         }
         w->count = 1;
-        for (i = 0; i < w->count; i++)
-        {
+        for (i = 0; i < w->count; i++) {
             e = &w->entries[i];
             e->index = i;
-            for (j = 0; j < 3; j++)
-            {
-                if (w->prevTypes[j] == (-1))
-                {
+            for (j = 0; j < 3; j++) {
+                if (w->prevTypes[j] == (-1)) {
                     break;
                 }
             }
 
-            if (j >= 3)
-            {
+            if (j >= 3) {
                 e->type = w->prevTypes[irand(3)];
-            }
-            else
-            {
+            } else {
                 sum = 0;
-                for (k = 0; k < 9; k++)
-                {
+                for (k = 0; k < 9; k++) {
                     sum += fd->rates[k];
                 }
 
                 r = irand(sum);
-                for (e->type = 0; e->type < 8; e->type++)
-                {
-                    if ((r -= fd->rates[e->type]) < 0)
-                    {
+                for (e->type = 0; e->type < 8; e->type++) {
+                    if ((r -= fd->rates[e->type]) < 0) {
                         break;
                     }
                 }
@@ -3770,25 +3741,19 @@ s32 _object_fall_attack(EventEntry *event, BOOL isFirstCall)
                 w->prevTypes[j] = e->type;
             }
             e->weapon = fd->weapons[e->type];
-            if (e->type == 6)
-            {
-                if (irand(100) < 50)
-                {
+            if (e->type == 6) {
+                if (irand(100) < 50) {
                     e->weapon.weapon.targetClassFlags |= 0x100;
                     e->weapon.weapon.targetClassFlags &= ~0x200;
-                }
-                else
-                {
+                } else {
                     e->weapon.weapon.targetClassFlags &= ~0x100;
                     e->weapon.weapon.targetClassFlags |= 0x200;
                 }
             }
             weapon = &e->weapon.weapon;
             e->kind = 0;
-            if (((pouchGetPtr()->mStarPowersObtained && (!(BattleAudienceBaseGetPtr()->flags & 0x4000))) && (e->type != 6)) && (e->type != 7))
-            {
-                if (((u32)wp->debug.flags & 2) || (irand(100) < 10))
-                {
+            if (((pouchGetPtr()->mStarPowersObtained && (!(BattleAudienceBaseGetPtr()->flags & 0x4000))) && (e->type != 6)) && (e->type != 7)) {
+                if (((u32)wp->debug.flags & 2) || (irand(100) < 10)) {
                     e->kind = 1;
                     e->partId = -1;
                     e->unitId = BattleAudience_HaitiRandForFallObject();
@@ -3796,11 +3761,9 @@ s32 _object_fall_attack(EventEntry *event, BOOL isFirstCall)
                     event->userdata[1] = 1;
                 }
             }
-            if (e->kind == 0)
-            {
+            if (e->kind == 0) {
                 BattleSamplingEnemy(&targets, weapon, BattleGetSystemPtr(wp)->unitId, 1, weapon->targetClassFlags, weapon->targetPropertyFlags, -wp->alliances[1].attackDirection);
-                if (targets.numTargets <= 0)
-                {
+                if (targets.numTargets <= 0) {
                     evtSetValue(event, outArg, event->userdata[1]);
                     return 2;
                 }
@@ -3809,11 +3772,9 @@ s32 _object_fall_attack(EventEntry *event, BOOL isFirstCall)
                 e->unitId = unitId;
                 e->partId = partId;
                 e->noAc = 1;
-                for (k = i; k >= 0; k--)
-                {
+                for (k = i; k >= 0; k--) {
                     o = &w->entries[k];
-                    if (((e != o) && (o->kind == 0)) && (e->unitId == o->unitId))
-                    {
+                    if (((e != o) && (o->kind == 0)) && (e->unitId == o->unitId)) {
                         o->noAc = 0;
                     }
                 }
@@ -3821,39 +3782,30 @@ s32 _object_fall_attack(EventEntry *event, BOOL isFirstCall)
             }
         }
 
-        if (!found)
-        {
+        if (!found) {
             evtSetValue(event, outArg, event->userdata[1]);
             return 2;
         }
-        for (i = 0; i < w->count; i++)
-        {
+        for (i = 0; i < w->count; i++) {
             e = &w->entries[i];
             weapon = &e->weapon.weapon;
-            if (e->kind == 0)
-            {
+            if (e->kind == 0) {
                 flags = 0;
-                if (e->noAc)
-                {
+                if (e->noAc) {
                     flags |= 0x100;
                 }
-                if (e->field_0x15)
-                {
+                if (e->field_0x15) {
                     flags |= 0x100000;
                 }
                 e->preCheck = BattlePreCheckDamage(BattleGetSystemPtr(wp), BattleGetUnitPtr(wp, e->unitId), BattleGetUnitPartsPtr(e->unitId, e->partId), weapon, flags);
-                if ((e->preCheck == 1) && (!e->noAc))
-                {
+                if ((e->preCheck == 1) && (!e->noAc)) {
                     delay = irand(0);
-                    for (k2 = 0; k2 < i; k2++)
-                    {
+                    for (k2 = 0; k2 < i; k2++) {
                         o2 = &w->entries[k2];
-                        if (e->unitId == o2->unitId)
-                        {
+                        if (e->unitId == o2->unitId) {
                             o2->delay = delay;
                             delay += irand(22) + 20;
-                            if (o2->noAc)
-                            {
+                            if (o2->noAc) {
                                 o2->field_0x15 = 1;
                             }
                         }
@@ -3869,29 +3821,23 @@ s32 _object_fall_attack(EventEntry *event, BOOL isFirstCall)
     sfxRest = "SFX_REST_CONDITION1";
     w = event->userdatap[0];
     done = 1;
-    for (i = 0; i < w->count; i++)
-    {
+    for (i = 0; i < w->count; i++) {
         e3 = &w->entries[i];
-        if (e3->index == (-1))
-        {
+        if (e3->index == (-1)) {
             continue;
         }
         acCount = 0;
         done = 0;
-        if (e3->kind == 0)
-        {
+        if (e3->kind == 0) {
             unit = BattleGetUnitPtr(wp, e3->unitId);
             part = BattleGetUnitPartsPtr(e3->unitId, e3->partId);
         }
-        if ((e3->effect == ((void *) 0)) || (e3->delay > 0))
-        {
+        if ((e3->effect == ((void *) 0)) || (e3->delay > 0)) {
             e3->delay--;
-            if (e3->delay > 0)
-            {
+            if (e3->delay > 0) {
                 continue;
             }
-            switch (e3->kind)
-            {
+            switch (e3->kind) {
                 case 0:
                     BtlUnit_GetHitPos(unit, part, &hit.x, &hit.y, &hit.z);
                     width = BtlUnit_GetWidth(unit);
@@ -3915,16 +3861,12 @@ s32 _object_fall_attack(EventEntry *event, BOOL isFirstCall)
 
             pos = hit;
             pos.y = BattleGetFloorHeight(wp, pos.x, pos.y, pos.z);
-            if (hit.x >= 0.0f)
-            {
+            if (hit.x >= 0.0f) {
                 dir = 90.0f;
-            }
-            else
-            {
+            } else {
                 dir = 270.0f;
             }
-            switch (e3->preCheck)
-            {
+            switch (e3->preCheck) {
                 case 2:
 
                 case 3:
@@ -3939,8 +3881,7 @@ s32 _object_fall_attack(EventEntry *event, BOOL isFirstCall)
 
             e3->sfxId = -1;
             e3->field_0x12 = 0;
-            switch (e3->type)
-            {
+            switch (e3->type) {
                 case 0:
                     e3->effect = effFallEntry(4, pos.x, pos.y, pos.z, width, hit.y - pos.y, dir, 1, 90);
                     break;
@@ -3970,12 +3911,9 @@ s32 _object_fall_attack(EventEntry *event, BOOL isFirstCall)
                     break;
 
                 case 6:
-                    if (BtlUnit_GetBelong(unit) == 0)
-                {
+                    if (BtlUnit_GetBelong(unit) == 0) {
                     e3->effect = effFallEntry(6, -300.0f, pos.y, 15.0f + pos.z, 0.0f, 0.0f, dir, 1, 180);
-                }
-                else
-                {
+                } else {
                     e3->effect = effFallEntry(6, 300.0f, pos.y, 15.0f + pos.z, 0.0f, 0.0f, dir, 1, 180);
                 }
                     break;
@@ -3986,21 +3924,16 @@ s32 _object_fall_attack(EventEntry *event, BOOL isFirstCall)
 
             }
 
-        }
-        else
-        {
-            if ((e3->effect != ((void *) 0)) && (!effFallCheckHit(e3->effect)))
-            {
+        } else {
+            if ((e3->effect != ((void *) 0)) && (!effFallCheckHit(e3->effect))) {
                 continue;
             }
             weapon3 = &e3->weapon.weapon;
-            if (e3->kind == 1)
-            {
+            if (e3->kind == 1) {
                 BattleAudience_Case_FallObject_Aud(e3->unitId, e3->type);
                 psndSFXOff(e3->sfxId);
                 BattleAudience_GetHomePosition(e3->unitId, &sfxPos.x, &sfxPos.y, &sfxPos.z);
-                switch (e3->type)
-                {
+                switch (e3->type) {
                     case 5:
                         break;
 
@@ -4016,21 +3949,16 @@ s32 _object_fall_attack(EventEntry *event, BOOL isFirstCall)
 
                 }
 
-            }
-            else
-            {
+            } else {
                 BattleAudience_Case_FallObject_Stage();
-                if (weapon3->targetClassFlags & TARGET_CLASS_SINGLE)
-                {
+                if (weapon3->targetClassFlags & TARGET_CLASS_SINGLE) {
                     BtlUnit_GetHitPos(unit, part, &sfxPos.x, &sfxPos.y, &sfxPos.z);
                     flags = 0;
-                    if (e3->noAc)
-                    {
+                    if (e3->noAc) {
                         flags |= 0x100;
                     }
                     psndSFXOff(e3->sfxId);
-                    switch (e3->preCheck)
-                    {
+                    switch (e3->preCheck) {
                         case 2:
 
                         case 3:
@@ -4038,8 +3966,7 @@ s32 _object_fall_attack(EventEntry *event, BOOL isFirstCall)
                         case 4:
 
                         case 6:
-                            switch (e3->type)
-                        {
+                            switch (e3->type) {
                             case 5:
                                 break;
 
@@ -4054,8 +3981,7 @@ s32 _object_fall_attack(EventEntry *event, BOOL isFirstCall)
                             break;
 
                         case 1:
-                            switch (e3->type)
-                        {
+                            switch (e3->type) {
                             case 0:
 
                             case 1:
@@ -4072,8 +3998,7 @@ s32 _object_fall_attack(EventEntry *event, BOOL isFirstCall)
 
                         }
 
-                            if (BtlUnit_GetACPossibility(unit))
-                        {
+                            if (BtlUnit_GetACPossibility(unit)) {
                             BattleActionCommandCheckDefence(unit, weapon3);
                         }
                             BattleCheckDamage(BattleGetSystemPtr(wp), unit, part, weapon3, flags);
@@ -4081,25 +4006,19 @@ s32 _object_fall_attack(EventEntry *event, BOOL isFirstCall)
 
                     }
 
-                }
-                else
-                {
+                } else {
                     psndSFXOff(e3->sfxId);
                     BattleSamplingEnemy(&targets2, weapon3, BattleGetSystemPtr(wp)->unitId, 1, weapon3->targetClassFlags, weapon3->targetPropertyFlags, -wp->alliances[1].attackDirection);
-                    if (targets2.numTargets > 0)
-                    {
-                        for (;;)
-                        {
+                    if (targets2.numTargets > 0) {
+                        for (;;) {
                             BattleWorkTarget *tg;
                             BattleUnit *unit2;
-                            if (targets2.currentTarget >= targets2.numTargets)
-                            {
+                            if (targets2.currentTarget >= targets2.numTargets) {
                                 break;
                             }
                             tg = &targets2.targets[targets2.targetIndices[targets2.currentTarget]];
                             unit2 = BattleGetUnitPtr(wp, tg->unitIdx);
-                            switch (BattlePreCheckDamage(BattleGetSystemPtr(wp), unit2, BattleGetUnitPartsPtr(tg->unitIdx, tg->partIdx), weapon3, 0x100))
-                            {
+                            switch (BattlePreCheckDamage(BattleGetSystemPtr(wp), unit2, BattleGetUnitPartsPtr(tg->unitIdx, tg->partIdx), weapon3, 0x100)) {
                                 case 2:
 
                                 case 4:
@@ -4109,12 +4028,9 @@ s32 _object_fall_attack(EventEntry *event, BOOL isFirstCall)
                                 {
                                     EffectEntry *eff;
                                     BtlUnit_GetPos(unit2, &p.x, &p.y, &p.z);
-                                    if (p.y < 85.0f)
-                                    {
+                                    if (p.y < 85.0f) {
                                         p.y += 50.0f;
-                                    }
-                                    else
-                                    {
+                                    } else {
                                         p.y += -50.0f;
                                     }
                                     p.x -= 45.0f;
@@ -4131,8 +4047,7 @@ s32 _object_fall_attack(EventEntry *event, BOOL isFirstCall)
                                     break;
 
                                 case 1:
-                                    if (BtlUnit_GetACPossibility(unit2) && (acCount <= 0))
-                                {
+                                    if (BtlUnit_GetACPossibility(unit2) && (acCount <= 0)) {
                                     BattleActionCommandCheckDefence(unit2, weapon3);
                                     acCount++;
                                 }
@@ -4152,8 +4067,7 @@ s32 _object_fall_attack(EventEntry *event, BOOL isFirstCall)
     w->entries[0].weapon.weapon.reserved_14 = w->entries[0].weapon.weapon.reserved_14; // FAKE: no-op self-assign (no code) raises w spill cost
     }
 
-    if (!done)
-    {
+    if (!done) {
         return 0;
     }
     BattleFree(event->userdatap[0]);

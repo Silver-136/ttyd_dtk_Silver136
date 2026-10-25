@@ -207,8 +207,7 @@ void BattleCheckAllPinchStatus(BattleWork* wp, BOOL noAudience) {
         if (unit) {
             if ((unit->mStatusFlags & 0x20000000) &&
                 !BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL) &&
-                !BtlUnit_GetBelong(unit))
-            {
+                !BtlUnit_GetBelong(unit)) {
                 if (unit->currentKind == UNIT_MARIO ||
                     unit->currentKind >= TYPE_PARTNER_MIN &&
                     unit->currentKind < TYPE_PARTNER_MAX) {
@@ -229,16 +228,14 @@ void BattleCheckAllPinchStatus(BattleWork* wp, BOOL noAudience) {
                 psndSFXOn("SFX_BTL_DANGER1");
             }
         }
-    }
-    else {
+    } else {
         v6 = FALSE;
         for (i = 0; i < 64; i++) {
             unit = BattleGetUnitPtr(wp, i);
             if (unit) {
                 if ((unit->mStatusFlags & 0x10000000) &&
                     !BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL) &&
-                    !BtlUnit_GetBelong(unit))
-                {
+                    !BtlUnit_GetBelong(unit)) {
                     if (unit->currentKind == UNIT_MARIO ||
                         unit->currentKind >= TYPE_PARTNER_MIN &&
                         unit->currentKind < TYPE_PARTNER_MAX) {
@@ -258,8 +255,7 @@ void BattleCheckAllPinchStatus(BattleWork* wp, BOOL noAudience) {
                     psndSFXOn("SFX_BTL_PINCH1");
                 }
             }
-        }
-        else {
+        } else {
             unit = BattleGetMarioPtr(wp);
             if (unit) {
                 unit->work[8] = 0;
@@ -298,8 +294,7 @@ void btlseqInit(BattleWork* wp) {
             if (animEffectAsync("p_b_st", 1) &&
                 animEffectAsync("p_jyabara", 1) &&
                 animEffectAsync("p_kaiten_h", 1) &&
-                effNiceAsync(1))
-            {
+                effNiceAsync(1)) {
                 BattleSetSeq(wp, SEQ_INIT, 0x1000004);
             }
             break;
@@ -376,8 +371,7 @@ void btlseqFirstAct(BattleWork* wp) {
                             evt = evtEntry((s32*)BtlUnit_GetData(unit, UNIT_DATA_RIDE_ENTRY_EVENT), 10, 0);
                             unit->entryEventId = evt->eventId;
                             evt->unitId = unit->unitId;
-                        }
-                        else {
+                        } else {
                             evt = evtEntry(unit->entryEventCode, 10, 0);
                             unit->entryEventId = evt->eventId;
                             evt->unitId = unit->unitId;
@@ -417,8 +411,7 @@ void btlseqFirstAct(BattleWork* wp) {
             }
             if (BtlUnit_GetBelong(a) == 0) {
                 BattleAudience_Case_FirstAttack_Good();
-            }
-            else {
+            } else {
                 BattleAudience_Case_FirstAttack_Bad();
             }
             evt = evtEntry(a->attackEventCode, 10, 0);
@@ -524,8 +517,7 @@ void btlseqFirstAct(BattleWork* wp) {
             if ((u32)wp->fbatInfo->setup->battleFlags & 0x10) {
                 BattleSetSeq(wp, SEQ_FIRST_ACT, 0x2000009);
                 BattleStage_WallCloseCheck();
-            }
-            else {
+            } else {
                 BattleSetSeq(wp, SEQ_FIRST_ACT, 0x200000A);
             }
             break;
@@ -560,8 +552,7 @@ void btlseqFirstAct(BattleWork* wp) {
                 BattleStatusChangeMsgAdjust(wp);
                 BattleSetSeq(wp, SEQ_FIRST_ACT, 0x200000B);
                 wp->luckTimer = 0;
-            }
-            else {
+            } else {
                 BattleSetSeq(wp, SEQ_FIRST_ACT, 0x200000C);
             }
             break;
@@ -574,8 +565,7 @@ void btlseqFirstAct(BattleWork* wp) {
             if (wp->luckEventId != 0) {
                 if (evtCheckID(wp->luckEventId)) {
                     found = 0;
-                }
-                else {
+                } else {
                     wp->luckEventId = 0;
                 }
             }
@@ -767,8 +757,7 @@ USER_FUNC(_set_effect_luck) {
     TURN_SKIP(wp); \
     break
 
-void btlseqTurn(BattleWork *wp)
-{
+void btlseqTurn(BattleWork *wp) {
   Vec pos;
   f32 hpX;
   f32 hpY;
@@ -797,8 +786,7 @@ void btlseqTurn(BattleWork *wp)
   int i;
   found = 0;
   sfx = 0;
-  switch (BattleGetSeq(wp, SEQ_TURN))
-  {
+  switch (BattleGetSeq(wp, SEQ_TURN)) {
     case 0x3000000:
       BattleIncSeq(wp, SEQ_TURN);
       break;
@@ -810,15 +798,13 @@ void btlseqTurn(BattleWork *wp)
       break;
 
     case 0x3000003:
-      if (wp->turnCount != 1)
-    {
+      if (wp->turnCount != 1) {
       BattleIncSeq(wp, SEQ_TURN);
       BattleIncSeq(wp, SEQ_TURN);
       btlseqTurn(wp);
       break;
     }
-      if (wp->fbatInfo->ruleType == 0)
-    {
+      if (wp->fbatInfo->ruleType == 0) {
       BattleIncSeq(wp, SEQ_TURN);
       BattleIncSeq(wp, SEQ_TURN);
       btlseqTurn(wp);
@@ -830,12 +816,10 @@ void btlseqTurn(BattleWork *wp)
       break;
 
     case 0x3000004:
-      if (wp->ruleDispTimer)
-    {
+      if (wp->ruleDispTimer) {
       wp->ruleDispTimer--;
     }
-      if ((wp->ruleDispTimer <= 0) || BattlePadCheckTrigger(PAD_BUTTON_A | PAD_BUTTON_B))
-    {
+      if ((wp->ruleDispTimer <= 0) || BattlePadCheckTrigger(PAD_BUTTON_A | PAD_BUTTON_B)) {
       BattleIncSeq(wp, SEQ_TURN);
       break;
     }
@@ -917,32 +901,25 @@ void btlseqTurn(BattleWork *wp)
     case 0x3000047:
 
     case 0x3000049:
-      if (!BattleWaitAllActiveEvtEnd(wp))
-    {
+      if (!BattleWaitAllActiveEvtEnd(wp)) {
       break;
     }
-      if (BattleCheckConcluded(wp))
-    {
+      if (BattleCheckConcluded(wp)) {
       BattleSetSeq(wp, SEQ_UNKNOWN, 3);
       BattleSetSeq(wp, SEQ_END, 0x7000000);
-    }
-    else
-    {
+    } else {
       BattleIncSeq(wp, SEQ_TURN);
     }
       break;
 
     case 0x3000012:
-      for (i = 0; i < 64; i++)
-    {
+      for (i = 0; i < 64; i++) {
       unit = BattleGetUnitPtr(wp, i);
       ret = BtlUnit_CheckRecoveryStatus(unit, STATUS_SLEEP);
       sfx |= ret;
-      if (ret)
-      {
+      if (ret) {
         evt = evtEntry(subsetevt_status_recovery, 10, 0);
-        if (evt)
-        {
+        if (evt) {
           unit->attackEventId = evt->eventId;
           evt->unitId = unit->unitId;
         }
@@ -950,13 +927,11 @@ void btlseqTurn(BattleWork *wp)
       }
     }
 
-      if (sfx)
-    {
+      if (sfx) {
       sfxName = "SFX_REST_CONDITION1";
       psndSFXOn(sfxName);
     }
-      if (!found)
-    {
+      if (!found) {
       BattleIncSeq(wp, SEQ_TURN);
       BattleIncSeq(wp, SEQ_TURN);
       btlseqTurn(wp);
@@ -966,16 +941,13 @@ void btlseqTurn(BattleWork *wp)
       break;
 
     case 0x3000014:
-      for (i = 0; i < 64; i++)
-    {
+      for (i = 0; i < 64; i++) {
       unit = BattleGetUnitPtr(wp, i);
       ret = BtlUnit_CheckRecoveryStatus(unit, STATUS_STOP);
       sfx |= ret;
-      if (ret)
-      {
+      if (ret) {
         evt = evtEntry(subsetevt_status_recovery, 10, 0);
-        if (evt)
-        {
+        if (evt) {
           unit->attackEventId = evt->eventId;
           evt->unitId = unit->unitId;
         }
@@ -983,12 +955,10 @@ void btlseqTurn(BattleWork *wp)
       }
     }
 
-      if (sfx)
-    {
+      if (sfx) {
       psndSFXOn("SFX_REST_CONDITION1");
     }
-      if (!found)
-    {
+      if (!found) {
       BattleIncSeq(wp, SEQ_TURN);
       BattleIncSeq(wp, SEQ_TURN);
       btlseqTurn(wp);
@@ -999,16 +969,13 @@ void btlseqTurn(BattleWork *wp)
       break;
 
     case 0x3000016:
-      for (i = 0; i < 64; i++)
-    {
+      for (i = 0; i < 64; i++) {
       unit = BattleGetUnitPtr(wp, i);
       ret = BtlUnit_CheckRecoveryStatus(unit, STATUS_DIZZY);
       sfx |= ret;
-      if (ret)
-      {
+      if (ret) {
         evt = evtEntry(subsetevt_status_recovery, 10, 0);
-        if (evt)
-        {
+        if (evt) {
           unit->attackEventId = evt->eventId;
           evt->unitId = unit->unitId;
         }
@@ -1016,12 +983,10 @@ void btlseqTurn(BattleWork *wp)
       }
     }
 
-      if (sfx)
-    {
+      if (sfx) {
       psndSFXOn("SFX_REST_CONDITION1");
     }
-      if (!found)
-    {
+      if (!found) {
       BattleIncSeq(wp, SEQ_TURN);
       BattleIncSeq(wp, SEQ_TURN);
       btlseqTurn(wp);
@@ -1032,16 +997,13 @@ void btlseqTurn(BattleWork *wp)
       break;
 
     case 0x3000018:
-      for (i = 0; i < 64; i++)
-    {
+      for (i = 0; i < 64; i++) {
       unit = BattleGetUnitPtr(wp, i);
       ret = BtlUnit_CheckRecoveryStatus(unit, STATUS_CONFUSE);
       sfx |= ret;
-      if (ret)
-      {
+      if (ret) {
         evt = evtEntry(subsetevt_status_recovery, 10, 0);
-        if (evt)
-        {
+        if (evt) {
           unit->attackEventId = evt->eventId;
           evt->unitId = unit->unitId;
         }
@@ -1049,12 +1011,10 @@ void btlseqTurn(BattleWork *wp)
       }
     }
 
-      if (sfx)
-    {
+      if (sfx) {
       psndSFXOn("SFX_REST_CONDITION1");
     }
-      if (!found)
-    {
+      if (!found) {
       BattleIncSeq(wp, SEQ_TURN);
       BattleIncSeq(wp, SEQ_TURN);
       btlseqTurn(wp);
@@ -1065,16 +1025,13 @@ void btlseqTurn(BattleWork *wp)
       break;
 
     case 0x300001A:
-      for (i = 0; i < 64; i++)
-    {
+      for (i = 0; i < 64; i++) {
       unit = BattleGetUnitPtr(wp, i);
       ret = BtlUnit_CheckRecoveryStatus(unit, STATUS_ELECTRIC);
       sfx |= ret;
-      if (ret)
-      {
+      if (ret) {
         evt = evtEntry(subsetevt_status_recovery, 10, 0);
-        if (evt)
-        {
+        if (evt) {
           unit->attackEventId = evt->eventId;
           evt->unitId = unit->unitId;
         }
@@ -1082,12 +1039,10 @@ void btlseqTurn(BattleWork *wp)
       }
     }
 
-      if (sfx)
-    {
+      if (sfx) {
       psndSFXOn("SFX_REST_CONDITION1");
     }
-      if (!found)
-    {
+      if (!found) {
       BattleIncSeq(wp, SEQ_TURN);
       BattleIncSeq(wp, SEQ_TURN);
       btlseqTurn(wp);
@@ -1098,16 +1053,13 @@ void btlseqTurn(BattleWork *wp)
       break;
 
     case 0x300001C:
-      for (i = 0; i < 64; i++)
-    {
+      for (i = 0; i < 64; i++) {
       unit = BattleGetUnitPtr(wp, i);
       ret = BtlUnit_CheckRecoveryStatus(unit, STATUS_DODGY);
       sfx |= ret;
-      if (ret)
-      {
+      if (ret) {
         evt = evtEntry(subsetevt_status_recovery, 10, 0);
-        if (evt)
-        {
+        if (evt) {
           unit->attackEventId = evt->eventId;
           evt->unitId = unit->unitId;
         }
@@ -1115,12 +1067,10 @@ void btlseqTurn(BattleWork *wp)
       }
     }
 
-      if (sfx)
-    {
+      if (sfx) {
       psndSFXOn("SFX_REST_CONDITION1");
     }
-      if (!found)
-    {
+      if (!found) {
       BattleIncSeq(wp, SEQ_TURN);
       BattleIncSeq(wp, SEQ_TURN);
       btlseqTurn(wp);
@@ -1131,16 +1081,13 @@ void btlseqTurn(BattleWork *wp)
       break;
 
     case 0x300001E:
-      for (i = 0; i < 64; i++)
-    {
+      for (i = 0; i < 64; i++) {
       unit = BattleGetUnitPtr(wp, i);
       ret = BtlUnit_CheckRecoveryStatus(unit, STATUS_BURN);
       sfx |= ret;
-      if (ret)
-      {
+      if (ret) {
         evt = evtEntry(subsetevt_status_recovery, 10, 0);
-        if (evt)
-        {
+        if (evt) {
           unit->attackEventId = evt->eventId;
           evt->unitId = unit->unitId;
         }
@@ -1148,13 +1095,11 @@ void btlseqTurn(BattleWork *wp)
       }
     }
 
-      if (sfx)
-    {
+      if (sfx) {
       psndSFXOn("SFX_REST_CONDITION1");
  dummy_label_899231: ;
     }
-      if (!found)
-    {
+      if (!found) {
       BattleIncSeq(wp, SEQ_TURN);
       BattleIncSeq(wp, SEQ_TURN);
       btlseqTurn(wp);
@@ -1168,13 +1113,10 @@ void btlseqTurn(BattleWork *wp)
     {
       BattleUnit *unit;
       sfxName = "SFX_CONDITION_BREAK_ICE1";
-      for (i = 0; i < 64; i++)
-      {
+      for (i = 0; i < 64; i++) {
         unit = BattleGetUnitPtr(wp, i);
-        if (BtlUnit_CheckRecoveryStatus(unit, STATUS_FREEZE))
-        {
-          if (!BtlUnit_CheckShadowGuard(unit))
-          {
+        if (BtlUnit_CheckRecoveryStatus(unit, STATUS_FREEZE)) {
+          if (!BtlUnit_CheckShadowGuard(unit)) {
             BattleDamageDirect(-5, unit, (void *) 0, 1, 0, 0x11A, 0, 1);
           }
           BtlUnit_GetPos(unit, &pos.x, &pos.y, &pos.z);
@@ -1185,8 +1127,7 @@ void btlseqTurn(BattleWork *wp)
         }
       }
 
-      if (!found)
-      {
+      if (!found) {
         BattleIncSeq(wp, SEQ_TURN);
         BattleIncSeq(wp, SEQ_TURN);
         btlseqTurn(wp);
@@ -1198,16 +1139,13 @@ void btlseqTurn(BattleWork *wp)
     }
 
     case 0x3000022:
-      for (i = 0; i < 64; i++)
-    {
+      for (i = 0; i < 64; i++) {
       unit = BattleGetUnitPtr(wp, i);
       ret = BtlUnit_CheckRecoveryStatus(unit, STATUS_HUGE);
       sfx |= ret;
-      if (ret)
-      {
+      if (ret) {
         evt = evtEntry(subsetevt_status_recovery, 10, 0);
-        if (evt)
-        {
+        if (evt) {
           unit->attackEventId = evt->eventId;
           evt->unitId = unit->unitId;
         }
@@ -1215,12 +1153,10 @@ void btlseqTurn(BattleWork *wp)
       }
     }
 
-      if (sfx)
-    {
+      if (sfx) {
       psndSFXOn("SFX_REST_CONDITION1");
     }
-      if (!found)
-    {
+      if (!found) {
       BattleIncSeq(wp, SEQ_TURN);
       BattleIncSeq(wp, SEQ_TURN);
       btlseqTurn(wp);
@@ -1231,16 +1167,13 @@ void btlseqTurn(BattleWork *wp)
       break;
 
     case 0x3000024:
-      for (i = 0; i < 64; i++)
-    {
+      for (i = 0; i < 64; i++) {
       unit = BattleGetUnitPtr(wp, i);
       ret = BtlUnit_CheckRecoveryStatus(unit, STATUS_TINY);
       sfx |= ret;
-      if (ret)
-      {
+      if (ret) {
         evt = evtEntry(subsetevt_status_recovery, 10, 0);
-        if (evt)
-        {
+        if (evt) {
           unit->attackEventId = evt->eventId;
           evt->unitId = unit->unitId;
         }
@@ -1248,12 +1181,10 @@ void btlseqTurn(BattleWork *wp)
       }
     }
 
-      if (sfx)
-    {
+      if (sfx) {
       psndSFXOn("SFX_REST_CONDITION1");
     }
-      if (!found)
-    {
+      if (!found) {
       BattleIncSeq(wp, SEQ_TURN);
       BattleIncSeq(wp, SEQ_TURN);
       btlseqTurn(wp);
@@ -1264,16 +1195,13 @@ void btlseqTurn(BattleWork *wp)
       break;
 
     case 0x3000026:
-      for (i = 0; i < 64; i++)
-    {
+      for (i = 0; i < 64; i++) {
       unit = BattleGetUnitPtr(wp, i);
       ret = BtlUnit_CheckRecoveryStatus(unit, STATUS_POISON);
       sfx |= ret;
-      if (ret)
-      {
+      if (ret) {
         evt = evtEntry(subsetevt_status_recovery, 10, 0);
-        if (evt)
-        {
+        if (evt) {
           unit->attackEventId = evt->eventId;
           evt->unitId = unit->unitId;
         }
@@ -1281,12 +1209,10 @@ void btlseqTurn(BattleWork *wp)
       }
     }
 
-      if (sfx)
-    {
+      if (sfx) {
       psndSFXOn("SFX_REST_CONDITION1");
     }
-      if (!found)
-    {
+      if (!found) {
       BattleIncSeq(wp, SEQ_TURN);
       BattleIncSeq(wp, SEQ_TURN);
       btlseqTurn(wp);
@@ -1297,16 +1223,13 @@ void btlseqTurn(BattleWork *wp)
       break;
 
     case 0x3000028:
-      for (i = 0; i < 64; i++)
-    {
+      for (i = 0; i < 64; i++) {
       unit = BattleGetUnitPtr(wp, i);
       ret = BtlUnit_CheckRecoveryStatus(unit, STATUS_ATTACK_UP);
       sfx |= ret;
-      if (ret)
-      {
+      if (ret) {
         evt = evtEntry(subsetevt_status_recovery, 10, 0);
-        if (evt)
-        {
+        if (evt) {
           unit->attackEventId = evt->eventId;
           evt->unitId = unit->unitId;
         }
@@ -1314,12 +1237,10 @@ void btlseqTurn(BattleWork *wp)
       }
     }
 
-      if (sfx)
-    {
+      if (sfx) {
       psndSFXOn("SFX_REST_CONDITION1");
     }
-      if (!found)
-    {
+      if (!found) {
       BattleIncSeq(wp, SEQ_TURN);
       BattleIncSeq(wp, SEQ_TURN);
       btlseqTurn(wp);
@@ -1330,16 +1251,13 @@ void btlseqTurn(BattleWork *wp)
       break;
 
     case 0x300002A:
-      for (i = 0; i < 64; i++)
-    {
+      for (i = 0; i < 64; i++) {
       unit = BattleGetUnitPtr(wp, i);
       ret = BtlUnit_CheckRecoveryStatus(unit, STATUS_ATTACK_DOWN);
       sfx |= ret;
-      if (ret)
-      {
+      if (ret) {
         evt = evtEntry(subsetevt_status_recovery, 10, 0);
-        if (evt)
-        {
+        if (evt) {
           unit->attackEventId = evt->eventId;
           evt->unitId = unit->unitId;
         }
@@ -1347,12 +1265,10 @@ void btlseqTurn(BattleWork *wp)
       }
     }
 
-      if (sfx)
-    {
+      if (sfx) {
       psndSFXOn("SFX_REST_CONDITION1");
     }
-      if (!found)
-    {
+      if (!found) {
       BattleIncSeq(wp, SEQ_TURN);
       BattleIncSeq(wp, SEQ_TURN);
       btlseqTurn(wp);
@@ -1363,16 +1279,13 @@ void btlseqTurn(BattleWork *wp)
       break;
 
     case 0x300002C:
-      for (i = 0; i < 64; i++)
-    {
+      for (i = 0; i < 64; i++) {
       unit = BattleGetUnitPtr(wp, i);
       ret = BtlUnit_CheckRecoveryStatus(unit, STATUS_DEFENSE_UP);
       sfx |= ret;
-      if (ret)
-      {
+      if (ret) {
         evt = evtEntry(subsetevt_status_recovery, 10, 0);
-        if (evt)
-        {
+        if (evt) {
           unit->attackEventId = evt->eventId;
           evt->unitId = unit->unitId;
         }
@@ -1380,12 +1293,10 @@ void btlseqTurn(BattleWork *wp)
       }
     }
 
-      if (sfx)
-    {
+      if (sfx) {
       psndSFXOn("SFX_REST_CONDITION1");
     }
-      if (!found)
-    {
+      if (!found) {
       BattleIncSeq(wp, SEQ_TURN);
       BattleIncSeq(wp, SEQ_TURN);
       btlseqTurn(wp);
@@ -1396,16 +1307,13 @@ void btlseqTurn(BattleWork *wp)
       break;
 
     case 0x300002E:
-      for (i = 0; i < 64; i++)
-    {
+      for (i = 0; i < 64; i++) {
       unit = BattleGetUnitPtr(wp, i);
       ret = BtlUnit_CheckRecoveryStatus(unit, STATUS_DEFENSE_DOWN);
       sfx |= ret;
-      if (ret)
-      {
+      if (ret) {
         evt = evtEntry(subsetevt_status_recovery, 10, 0);
-        if (evt)
-        {
+        if (evt) {
           unit->attackEventId = evt->eventId;
           evt->unitId = unit->unitId;
         }
@@ -1413,12 +1321,10 @@ void btlseqTurn(BattleWork *wp)
       }
     }
 
-      if (sfx)
-    {
+      if (sfx) {
       psndSFXOn("SFX_REST_CONDITION1");
     }
-      if (!found)
-    {
+      if (!found) {
       BattleIncSeq(wp, SEQ_TURN);
       BattleIncSeq(wp, SEQ_TURN);
       btlseqTurn(wp);
@@ -1429,16 +1335,13 @@ void btlseqTurn(BattleWork *wp)
       break;
 
     case 0x3000030:
-      for (i = 0; i < 64; i++)
-    {
+      for (i = 0; i < 64; i++) {
       unit = BattleGetUnitPtr(wp, i);
       ret = BtlUnit_CheckRecoveryStatus(unit, STATUS_ALLERGIC);
       sfx |= ret;
-      if (ret)
-      {
+      if (ret) {
         evt = evtEntry(subsetevt_status_recovery, 10, 0);
-        if (evt)
-        {
+        if (evt) {
           unit->attackEventId = evt->eventId;
           evt->unitId = unit->unitId;
         }
@@ -1446,12 +1349,10 @@ void btlseqTurn(BattleWork *wp)
       }
     }
 
-      if (sfx)
-    {
+      if (sfx) {
       psndSFXOn("SFX_REST_CONDITION1");
     }
-      if (!found)
-    {
+      if (!found) {
       BattleIncSeq(wp, SEQ_TURN);
       BattleIncSeq(wp, SEQ_TURN);
       btlseqTurn(wp);
@@ -1462,18 +1363,14 @@ void btlseqTurn(BattleWork *wp)
       break;
 
     case 0x3000032:
-      for (i = 0; i < 64; i++)
-    {
+      for (i = 0; i < 64; i++) {
       unit = BattleGetUnitPtr(wp, i);
-      if (unit)
-      {
+      if (unit) {
         ret = BtlUnit_CheckRecoveryStatus(unit, STATUS_HP_REGEN);
         sfx |= ret;
-        if (ret)
-        {
+        if (ret) {
           evt = evtEntry(subsetevt_status_recovery, 10, 0);
-          if (evt)
-          {
+          if (evt) {
             unit->attackEventId = evt->eventId;
             evt->unitId = unit->unitId;
           }
@@ -1482,12 +1379,10 @@ void btlseqTurn(BattleWork *wp)
       }
     }
 
-      if (sfx)
-    {
+      if (sfx) {
       psndSFXOn("SFX_REST_CONDITION1");
     }
-      if (!found)
-    {
+      if (!found) {
       BattleIncSeq(wp, SEQ_TURN);
       BattleIncSeq(wp, SEQ_TURN);
       btlseqTurn(wp);
@@ -1498,18 +1393,14 @@ void btlseqTurn(BattleWork *wp)
       break;
 
     case 0x3000034:
-      for (i = 0; i < 64; i++)
-    {
+      for (i = 0; i < 64; i++) {
       unit = BattleGetUnitPtr(wp, i);
-      if (unit)
-      {
+      if (unit) {
         ret = BtlUnit_CheckRecoveryStatus(unit, STATUS_FP_REGEN);
         sfx |= ret;
-        if (ret)
-        {
+        if (ret) {
           evt = evtEntry(subsetevt_status_recovery, 10, 0);
-          if (evt)
-          {
+          if (evt) {
             unit->attackEventId = evt->eventId;
             evt->unitId = unit->unitId;
           }
@@ -1518,12 +1409,10 @@ void btlseqTurn(BattleWork *wp)
       }
     }
 
-      if (sfx)
-    {
+      if (sfx) {
       psndSFXOn("SFX_REST_CONDITION1");
     }
-      if (!found)
-    {
+      if (!found) {
       BattleIncSeq(wp, SEQ_TURN);
       BattleIncSeq(wp, SEQ_TURN);
       btlseqTurn(wp);
@@ -1534,18 +1423,14 @@ void btlseqTurn(BattleWork *wp)
       break;
 
     case 0x3000036:
-      for (i = 0; i < 64; i++)
-    {
+      for (i = 0; i < 64; i++) {
       unit = BattleGetUnitPtr(wp, i);
-      if (unit)
-      {
+      if (unit) {
         ret = BtlUnit_CheckRecoveryStatus(unit, STATUS_INVISIBLE);
         sfx |= ret;
-        if (ret)
-        {
+        if (ret) {
           evt = evtEntry(subsetevt_status_recovery, 10, 0);
-          if (evt)
-          {
+          if (evt) {
             unit->attackEventId = evt->eventId;
             evt->unitId = unit->unitId;
           }
@@ -1554,12 +1439,10 @@ void btlseqTurn(BattleWork *wp)
       }
     }
 
-      if (sfx)
-    {
+      if (sfx) {
       psndSFXOn("SFX_REST_CONDITION1");
     }
-      if (!found)
-    {
+      if (!found) {
       BattleIncSeq(wp, SEQ_TURN);
       BattleIncSeq(wp, SEQ_TURN);
       btlseqTurn(wp);
@@ -1570,18 +1453,14 @@ void btlseqTurn(BattleWork *wp)
       break;
 
     case 0x3000038:
-      for (i = 0; i < 64; i++)
-    {
+      for (i = 0; i < 64; i++) {
       unit = BattleGetUnitPtr(wp, i);
-      if (unit)
-      {
+      if (unit) {
         ret = BtlUnit_CheckRecoveryStatus(unit, STATUS_FAST);
         sfx |= ret;
-        if (ret)
-        {
+        if (ret) {
           evt = evtEntry(subsetevt_status_recovery, 10, 0);
-          if (evt)
-          {
+          if (evt) {
             unit->attackEventId = evt->eventId;
             evt->unitId = unit->unitId;
           }
@@ -1590,12 +1469,10 @@ void btlseqTurn(BattleWork *wp)
       }
     }
 
-      if (sfx)
-    {
+      if (sfx) {
       psndSFXOn("SFX_REST_CONDITION1");
     }
-      if (!found)
-    {
+      if (!found) {
       BattleIncSeq(wp, SEQ_TURN);
       BattleIncSeq(wp, SEQ_TURN);
       btlseqTurn(wp);
@@ -1606,19 +1483,15 @@ void btlseqTurn(BattleWork *wp)
       break;
 
     case 0x300003A:
-      for (i = 0; i < 64; i++)
-    {
+      for (i = 0; i < 64; i++) {
       unit = BattleGetUnitPtr(wp, i);
-      if (unit)
-      {
+      if (unit) {
         ret = BtlUnit_CheckRecoveryStatus(unit, STATUS_SLOW);
         sfx |= ret;
-        if (ret)
-        {
+        if (ret) {
           BtlUnit_ResetMoveStatus(unit);
           evt = evtEntry(subsetevt_status_recovery, 10, 0);
-          if (evt)
-          {
+          if (evt) {
             unit->attackEventId = evt->eventId;
             evt->unitId = unit->unitId;
           }
@@ -1627,12 +1500,10 @@ void btlseqTurn(BattleWork *wp)
       }
     }
 
-      if (sfx)
-    {
+      if (sfx) {
       psndSFXOn("SFX_REST_CONDITION1");
     }
-      if (!found)
-    {
+      if (!found) {
       BattleIncSeq(wp, SEQ_TURN);
       BattleIncSeq(wp, SEQ_TURN);
       btlseqTurn(wp);
@@ -1643,18 +1514,14 @@ void btlseqTurn(BattleWork *wp)
       break;
 
     case 0x300003C:
-      for (i = 0; i < 64; i++)
-    {
+      for (i = 0; i < 64; i++) {
       unit = BattleGetUnitPtr(wp, i);
-      if (unit)
-      {
+      if (unit) {
         ret = BtlUnit_CheckRecoveryStatus(unit, STATUS_PAYBACK);
         sfx |= ret;
-        if (ret)
-        {
+        if (ret) {
           evt = evtEntry(subsetevt_status_recovery, 10, 0);
-          if (evt)
-          {
+          if (evt) {
             unit->attackEventId = evt->eventId;
             evt->unitId = unit->unitId;
           }
@@ -1663,12 +1530,10 @@ void btlseqTurn(BattleWork *wp)
       }
     }
 
-      if (sfx)
-    {
+      if (sfx) {
       psndSFXOn("SFX_REST_CONDITION1");
     }
-      if (!found)
-    {
+      if (!found) {
       BattleIncSeq(wp, SEQ_TURN);
       BattleIncSeq(wp, SEQ_TURN);
       btlseqTurn(wp);
@@ -1679,18 +1544,14 @@ void btlseqTurn(BattleWork *wp)
       break;
 
     case 0x300003E:
-      for (i = 0; i < 64; i++)
-    {
+      for (i = 0; i < 64; i++) {
       unit = BattleGetUnitPtr(wp, i);
-      if (unit)
-      {
+      if (unit) {
         ret = BtlUnit_CheckRecoveryStatus(unit, STATUS_HOLD_FAST);
         sfx |= ret;
-        if (ret)
-        {
+        if (ret) {
           evt = evtEntry(subsetevt_status_recovery, 10, 0);
-          if (evt)
-          {
+          if (evt) {
             unit->attackEventId = evt->eventId;
             evt->unitId = unit->unitId;
           }
@@ -1699,12 +1560,10 @@ void btlseqTurn(BattleWork *wp)
       }
     }
 
-      if (sfx)
-    {
+      if (sfx) {
       psndSFXOn("SFX_REST_CONDITION1");
     }
-      if (!found)
-    {
+      if (!found) {
       BattleIncSeq(wp, SEQ_TURN);
       BattleIncSeq(wp, SEQ_TURN);
       btlseqTurn(wp);
@@ -1715,22 +1574,18 @@ void btlseqTurn(BattleWork *wp)
       break;
 
     case 0x3000006:
-      for (i = 0; i < 64; i++)
-    {
+      for (i = 0; i < 64; i++) {
       unit = BattleGetUnitPtr(wp, i);
-      if ((unit && (!BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL))) && (unit->currentHp > 0))
-      {
+      if ((unit && (!BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL))) && (unit->currentHp > 0)) {
         BtlUnit_GetStatus(unit, STATUS_POISON, &turns, &strength);
-        if ((strength > 0) && (!BtlUnit_CheckShadowGuard(unit)))
-        {
+        if ((strength > 0) && (!BtlUnit_CheckShadowGuard(unit))) {
           found = 1;
           BattleDamageDirect(-5, unit, (void *) 0, strength, 0, 0x117, 0, 1);
         }
       }
     }
 
-      if (!found)
-    {
+      if (!found) {
       BattleIncSeq(wp, SEQ_TURN);
       BattleIncSeq(wp, SEQ_TURN);
       btlseqTurn(wp);
@@ -1741,22 +1596,18 @@ void btlseqTurn(BattleWork *wp)
       break;
 
     case 0x3000008:
-      for (i = 0; i < 64; i++)
-    {
+      for (i = 0; i < 64; i++) {
       unit = BattleGetUnitPtr(wp, i);
-      if ((unit && (!BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL))) && (unit->currentHp > 0))
-      {
+      if ((unit && (!BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL))) && (unit->currentHp > 0)) {
         BtlUnit_GetStatus(unit, STATUS_BURN, &turns, &strength);
-        if (strength > 0)
-        {
+        if (strength > 0) {
           found = 1;
           break;
         }
       }
     }
 
-      if (!found)
-    {
+      if (!found) {
       BattleIncSeq(wp, SEQ_TURN);
       BattleIncSeq(wp, SEQ_TURN);
       btlseqTurn(wp);
@@ -1768,18 +1619,14 @@ void btlseqTurn(BattleWork *wp)
       break;
 
     case 0x3000009:
-      switch (wp->turnSubSeq)
-    {
+      switch (wp->turnSubSeq) {
       case 0:
         wp->turnSubSeq++;
-        for (i = 0; i < 64; i++)
-      {
+        for (i = 0; i < 64; i++) {
         unit = BattleGetUnitPtr(wp, i);
-        if ((unit && (!BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL))) && (unit->currentHp > 0))
-        {
+        if ((unit && (!BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL))) && (unit->currentHp > 0)) {
           BtlUnit_GetStatus(unit, STATUS_BURN, &turns, &strength);
-          if (strength > 0)
-          {
+          if (strength > 0) {
             BSE_TurnFirstProcessEffectEntry(unit, 1);
           }
         }
@@ -1787,33 +1634,26 @@ void btlseqTurn(BattleWork *wp)
 
       case 1:
         done = 1;
-        for (i = 0; i < 64; i++)
-      {
+        for (i = 0; i < 64; i++) {
         unit = BattleGetUnitPtr(wp, i);
-        if (unit && BSE_TurnFirstProcessEffectMain(unit))
-        {
+        if (unit && BSE_TurnFirstProcessEffectMain(unit)) {
           done = 0;
         }
       }
 
-        if (done)
-      {
+        if (done) {
         wp->turnSubSeq++;
       }
         break;
 
       default:
-        if (!BattleWaitAllActiveEvtEnd(wp))
-      {
+        if (!BattleWaitAllActiveEvtEnd(wp)) {
         break;
       }
-        if (BattleCheckConcluded(wp))
-      {
+        if (BattleCheckConcluded(wp)) {
         BattleSetSeq(wp, SEQ_UNKNOWN, 3);
         BattleSetSeq(wp, SEQ_END, 0x7000000);
-      }
-      else
-      {
+      } else {
         BattleIncSeq(wp, SEQ_TURN);
       }
         break;
@@ -1823,33 +1663,26 @@ void btlseqTurn(BattleWork *wp)
       break;
 
     case 0x300000A:
-      for (i = 0; i < 64; i++)
-    {
+      for (i = 0; i < 64; i++) {
       unit = BattleGetUnitPtr(wp, i);
-      if ((unit && (!BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL))) && (unit->currentHp > 0))
-      {
+      if ((unit && (!BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL))) && (unit->currentHp > 0)) {
         BtlUnit_GetStatus(unit, STATUS_HP_REGEN, &turns, &strength);
-        if (strength > 0)
-        {
-          if (!(unit->mAttributeFlags & kUnitHpFixed))
-          {
+        if (strength > 0) {
+          if (!(unit->mAttributeFlags & kUnitHpFixed)) {
             unit->hpGauge.prevHp = unit->currentHp;
             BtlUnit_RecoverHp(unit, strength);
             unit->hpGauge.targetHp = unit->currentHp;
             unit->hpGauge.drainTimer = unit->hpGauge.drainLength;
             unit->hpGauge.visibleTimer = unit->hpGauge.visibleLength;
             unit->hpGauge.flags |= 1;
-          }
-          else
-          {
+          } else {
             BtlUnit_RecoverHp(unit, strength);
           }
           BtlUnit_GetPartsWorldPos(BtlUnit_GetPartsPtr(unit, BtlUnit_GetBodyPartsId(unit)), &hpX, &hpY, &hpZ);
           hpY += unit->mSizeMultiplier * (BtlUnit_GetHeight(unit) + 5);
           effRecoveryEntry(0, strength, hpX, hpY, hpZ);
           evt = evtEntry(subsetevt_regeneration, 10, 0);
-          if (evt)
-          {
+          if (evt) {
             unit->attackEventId = evt->eventId;
             evt->unitId = unit->unitId;
           }
@@ -1858,8 +1691,7 @@ void btlseqTurn(BattleWork *wp)
       }
     }
 
-      if (!found)
-    {
+      if (!found) {
       BattleIncSeq(wp, SEQ_TURN);
       BattleIncSeq(wp, SEQ_TURN);
       btlseqTurn(wp);
@@ -1870,21 +1702,17 @@ void btlseqTurn(BattleWork *wp)
       break;
 
     case 0x300000C:
-      for (i = 0; i < 64; i++)
-    {
+      for (i = 0; i < 64; i++) {
       unit = BattleGetUnitPtr(wp, i);
-      if ((unit && (!BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL))) && (unit->currentHp > 0))
-      {
+      if ((unit && (!BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL))) && (unit->currentHp > 0)) {
         BtlUnit_GetStatus(unit, STATUS_FP_REGEN, &turns, &strength);
-        if (strength > 0)
-        {
+        if (strength > 0) {
           BtlUnit_RecoverFp(unit, strength);
           BtlUnit_GetPartsWorldPos(BtlUnit_GetPartsPtr(unit, BtlUnit_GetBodyPartsId(unit)), &fpX, &fpY, &fpZ);
           fpY += unit->mSizeMultiplier * (BtlUnit_GetHeight(unit) + 5);
           effRecoveryEntry(1, strength, fpX, fpY, fpZ);
           evt = evtEntry(subsetevt_regeneration, 10, 0);
-          if (evt)
-          {
+          if (evt) {
             unit->attackEventId = evt->eventId;
             evt->unitId = unit->unitId;
           }
@@ -1893,8 +1721,7 @@ void btlseqTurn(BattleWork *wp)
       }
     }
 
-      if (!found)
-    {
+      if (!found) {
       BattleIncSeq(wp, SEQ_TURN);
       BattleIncSeq(wp, SEQ_TURN);
       btlseqTurn(wp);
@@ -1905,41 +1732,33 @@ void btlseqTurn(BattleWork *wp)
       break;
 
     case 0x300000E:
-      if (wp->turnCount <= 1)
-    {
+      if (wp->turnCount <= 1) {
       BattleIncSeq(wp, SEQ_TURN);
       BattleIncSeq(wp, SEQ_TURN);
       btlseqTurn(wp);
       break;
     }
-      for (i = 0; i < 64; i++)
-    {
+      for (i = 0; i < 64; i++) {
       unit = BattleGetUnitPtr(wp, i);
-      if ((unit && (!BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL))) && (unit->currentHp > 0))
-      {
+      if ((unit && (!BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL))) && (unit->currentHp > 0)) {
         n = 0;
-        for (count = unit->badgesEquipped.HappyHeart; count > 0; count--)
-        {
+        for (count = unit->badgesEquipped.HappyHeart; count > 0; count--) {
           rate = 33 - ((unit->currentHp / unit->maxHp) * 3);
-          if (irand(100) < rate)
-          {
+          if (irand(100) < rate) {
             n++;
           }
         }
 
-        if (n > 0)
-        {
+        if (n > 0) {
           unit->currentHp += n;
-          if (unit->currentHp > unit->maxHp)
-          {
+          if (unit->currentHp > unit->maxHp) {
             unit->currentHp = unit->maxHp;
           }
           BtlUnit_GetPartsWorldPos(BtlUnit_GetPartsPtr(unit, BtlUnit_GetBodyPartsId(unit)), &heartX, &heartY, &heartZ);
           heartY += unit->mSizeMultiplier * BtlUnit_GetHeight(unit);
           effRecoveryEntry(0, n, heartX, heartY, heartZ);
           evt = evtEntry(subsetevt_happy_heart, 10, 0);
-          if (evt)
-          {
+          if (evt) {
             unit->attackEventId = evt->eventId;
             evt->unitId = unit->unitId;
           }
@@ -1948,8 +1767,7 @@ void btlseqTurn(BattleWork *wp)
       }
     }
 
-      if (!found)
-    {
+      if (!found) {
       BattleIncSeq(wp, SEQ_TURN);
       BattleIncSeq(wp, SEQ_TURN);
       btlseqTurn(wp);
@@ -1959,37 +1777,30 @@ void btlseqTurn(BattleWork *wp)
       break;
 
     case 0x3000010:
-      if (wp->turnCount <= 1)
-    {
+      if (wp->turnCount <= 1) {
       BattleIncSeq(wp, SEQ_TURN);
       BattleIncSeq(wp, SEQ_TURN);
       btlseqTurn(wp);
       break;
     }
-      for (i = 0; i < 64; i++)
-    {
+      for (i = 0; i < 64; i++) {
       unit = BattleGetUnitPtr(wp, i);
-      if ((unit && (!BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL))) && (unit->currentHp > 0))
-      {
+      if ((unit && (!BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL))) && (unit->currentHp > 0)) {
         n = 0;
-        for (rate = unit->badgesEquipped.HappyFlower; rate > 0; rate--)
-        {
+        for (rate = unit->badgesEquipped.HappyFlower; rate > 0; rate--) {
           count = 33 - ((unit->currentFp / unit->maxFp) * 3);
-          if (irand(100) < count)
-          {
+          if (irand(100) < count) {
             n++;
           }
         }
 
-        if (n > 0)
-        {
+        if (n > 0) {
           BtlUnit_RecoverFp(unit, n);
           BtlUnit_GetPartsWorldPos(BtlUnit_GetPartsPtr(unit, BtlUnit_GetBodyPartsId(unit)), &flowerX, &flowerY, &flowerZ);
           flowerY += unit->mSizeMultiplier * BtlUnit_GetHeight(unit);
           effRecoveryEntry(1, n, flowerX, flowerY, flowerZ);
           evt = evtEntry(subsetevt_happy_flower, 10, 0);
-          if (evt)
-          {
+          if (evt) {
             unit->attackEventId = evt->eventId;
             evt->unitId = unit->unitId;
           }
@@ -1998,8 +1809,7 @@ void btlseqTurn(BattleWork *wp)
       }
     }
 
-      if (!found)
-    {
+      if (!found) {
       BattleIncSeq(wp, SEQ_TURN);
       BattleIncSeq(wp, SEQ_TURN);
       btlseqTurn(wp);
@@ -2010,8 +1820,7 @@ void btlseqTurn(BattleWork *wp)
       break;
 
     case 0x3000040:
-      if (wp->commandDisabled[0])
-    {
+      if (wp->commandDisabled[0]) {
       wp->commandDisabled[0]--;
     }
       BattleIncSeq(wp, SEQ_TURN);
@@ -2020,8 +1829,7 @@ void btlseqTurn(BattleWork *wp)
       break;
 
     case 0x3000042:
-      if (wp->commandDisabled[1])
-    {
+      if (wp->commandDisabled[1]) {
       wp->commandDisabled[1]--;
     }
       BattleIncSeq(wp, SEQ_TURN);
@@ -2030,8 +1838,7 @@ void btlseqTurn(BattleWork *wp)
       break;
 
     case 0x3000044:
-      if (wp->commandDisabled[2])
-    {
+      if (wp->commandDisabled[2]) {
       wp->commandDisabled[2]--;
     }
       BattleIncSeq(wp, SEQ_TURN);
@@ -2041,17 +1848,14 @@ void btlseqTurn(BattleWork *wp)
 
     case 0x3000046:
 #ifdef VERSION_G8ME01
-      for (i = 0; i < 64; i++)
-      {
+      for (i = 0; i < 64; i++) {
         unit = BattleGetUnitPtr(wp, i);
-        if (unit && !BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL) && unit->currentHp > 0 && unit->usCommandDisabled[0])
-        {
+        if (unit && !BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL) && unit->currentHp > 0 && unit->usCommandDisabled[0]) {
           unit->usCommandDisabled[0]--;
         }
       }
 #else
-      if (wp->commandDisabled[3])
-    {
+      if (wp->commandDisabled[3]) {
       wp->commandDisabled[3]--;
     }
 #endif
@@ -2062,17 +1866,14 @@ void btlseqTurn(BattleWork *wp)
 
     case 0x3000048:
 #ifdef VERSION_G8ME01
-      for (i = 0; i < 64; i++)
-      {
+      for (i = 0; i < 64; i++) {
         unit = BattleGetUnitPtr(wp, i);
-        if (unit && !BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL) && unit->currentHp > 0 && unit->usCommandDisabled[1])
-        {
+        if (unit && !BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL) && unit->currentHp > 0 && unit->usCommandDisabled[1]) {
           unit->usCommandDisabled[1]--;
         }
       }
 #else
-      if (wp->commandDisabled[4])
-    {
+      if (wp->commandDisabled[4]) {
       wp->commandDisabled[4]--;
     }
 #endif
@@ -2117,12 +1918,10 @@ void _rule_disp(CameraId cameraId, void* param) {
     if (evtGetValue(NULL, GSW_STORY_PROGRESS) < 0xAC) {
         if (evtGetValue(NULL, GSW_GLITZ_PIT_RANK) < 11) {
             sprintf(buf, msgSearch(_rule_msg_table_1bu[info->ruleType]), info->ruleParam);
-        }
-        else {
+        } else {
             sprintf(buf, msgSearch(_rule_msg_table_2bu[info->ruleType]), info->ruleParam);
         }
-    }
-    else {
+    } else {
         sprintf(buf, msgSearch(_rule_msg_table_after[info->ruleType]), info->ruleParam);
     }
     width = FontGetMessageWidthLine(buf, &lines);
@@ -2231,8 +2030,7 @@ void btlseqMove(BattleWork* wp) {
                     BattleRunPhaseEvent(unit, FALSE);
                     wp->phaseEvtTable[i].unitId = -1;
                     BattleIncSeq(wp, SEQ_MOVE);
-                }
-                else {
+                } else {
                     BattleSetSeq(wp, SEQ_MOVE, 0x500000A);
                     loop = TRUE;
                 }
@@ -2244,8 +2042,7 @@ void btlseqMove(BattleWork* wp) {
                 if (BattleCheckConcluded(wp)) {
                     BattleSetSeq(wp, SEQ_UNKNOWN, 3);
                     BattleSetSeq(wp, SEQ_END, 0x7000000);
-                }
-                else {
+                } else {
                     BattleSetSeq(wp, SEQ_MOVE, 0x5000006);
                     loop = TRUE;
                 }
@@ -2345,8 +2142,7 @@ void btlseqMove(BattleWork* wp) {
                     }
                     BattleAudience_PerPhase(BattleGetSeq(wp, SEQ_PHASE));
                     BattleIncSeq(wp, SEQ_MOVE);
-                }
-                else {
+                } else {
                     BattleSetSeq(wp, SEQ_MOVE, 0x5000008);
                 }
                 break;
@@ -2436,17 +2232,13 @@ void btlseqAct(BattleWork* wp) {
             }
             if (cantMove) {
                 BattleSetSeq(wp, SEQ_ACT, 0x6000003);
-            }
-            else if (unit->mAttributeFlags & kVeiled) {
+            } else if (unit->mAttributeFlags & kVeiled) {
                 BattleSetSeq(wp, SEQ_ACT, 0x6000004);
-            }
-            else if (unit->currentKind == UNIT_VIVIAN && (BattleGetMarioPtr(wp)->mAttributeFlags & 0x10)) {
+            } else if (unit->currentKind == UNIT_VIVIAN && (BattleGetMarioPtr(wp)->mAttributeFlags & 0x10)) {
                 BattleSetSeq(wp, SEQ_ACT, 0x6000004);
-            }
-            else if (unit->flippedTurns) {
+            } else if (unit->flippedTurns) {
                 BattleSetSeq(wp, SEQ_ACT, 0x6000005);
-            }
-            else {
+            } else {
                 BattleCommandInit(wp);
                 BattleSetSeq(wp, SEQ_ACT, 0x6000001);
             }
@@ -2492,27 +2284,22 @@ void btlseqAct(BattleWork* wp) {
             if ((wp->flags & 0x40000000) && !(unit->mAttributeFlags & 0x2000) &&
                 !(unit->attackEventFlags & 8) && !(unit->attackEventFlags & 0x10)) {
                 evt = evtEntry(btldefaultevt_CantMoveZeroGravity, 10, 0);
-            }
-            else if (unit->attackEventFlags & 0x10) {
+            } else if (unit->attackEventFlags & 0x10) {
                 if (unit->attackEventCode) {
                     evt = evtEntry(unit->attackEventCode, 10, 0);
                 }
-            }
-            else if (unit->attackEventFlags & 2) {
+            } else if (unit->attackEventFlags & 2) {
                 evt = evtEntry(unit->attackEventCode, 10, 0);
-            }
-            else if (!BtlUnit_CheckStatus(unit, STATUS_SLEEP) &&
+            } else if (!BtlUnit_CheckStatus(unit, STATUS_SLEEP) &&
                 !BtlUnit_CheckStatus(unit, STATUS_STOP) &&
                 !BtlUnit_CheckStatus(unit, STATUS_FREEZE) &&
                 (!BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL) || (unit->mAttributeFlags & kUndead))) {
                 if (BtlUnit_CheckStatus(unit, STATUS_ELECTRIC) && irand(100) < 0) {
                     evt = evtEntry(btldefaultevt_BiribiriMove, 10, 0);
-                }
-                else if (BtlUnit_CheckStatus(unit, STATUS_CONFUSE) && irand(100) < 50) {
+                } else if (BtlUnit_CheckStatus(unit, STATUS_CONFUSE) && irand(100) < 50) {
                     unit->mTokenFlags |= kConfusedAction;
                     evt = evtEntry(unit->confusionEventCode, 10, 0);
-                }
-                else {
+                } else {
                     evt = evtEntry(unit->attackEventCode, 10, 0);
                 }
             }
@@ -2578,8 +2365,7 @@ void btlseqAct(BattleWork* wp) {
                     if (decrement) {
                         if (BtlUnit_CheckStatusFlag(unit, 0x2000000)) {
                             BtlUnit_OffStatusFlag(unit, 0x2000000);
-                        }
-                        else {
+                        } else {
                             unit->movesRemaining--;
                         }
                         if (wp->flags & 0x2000) {
@@ -2589,8 +2375,7 @@ void btlseqAct(BattleWork* wp) {
                             unit->moveState = 10;
                             if (!(unit->mTokenFlags & kHasRallyWinkStatus)) {
                                 unit->activeTurns = 0;
-                            }
-                            else {
+                            } else {
                                 unit->mTokenFlags &= ~kHasRallyWinkStatus;
                             }
                             if (!BtlUnit_GetBelong(unit) && unit->attackPhase == 0x4000002 &&
@@ -2599,11 +2384,9 @@ void btlseqAct(BattleWork* wp) {
                             }
                         }
                     }
-                }
-                else if (unit->moveState == 3) {
+                } else if (unit->moveState == 3) {
                     unit->moveState = 0;
-                }
-                else if (unit->moveState == 4) {
+                } else if (unit->moveState == 4) {
                     unit->moveState = 0;
                 }
             }
@@ -2794,8 +2577,7 @@ void battleMakePhaseEvtTable(BattleWork* wp) {
             BtlUnit_GetHomePos(unit, &x, &y, &z);
             if (x >= 0.0f) {
                 table[count].priority = 1000.0f + x;
-            }
-            else {
+            } else {
                 table[count].priority = __fabs(x);
             }
             count++;
@@ -3006,32 +2788,26 @@ USER_FUNC(_set_haikei_entry_scale) {
         if (event->userdata[1] >= 40) {
             mapObjScale("A1", 1.0f, 1.0f, 1.0f);
             _mapobj_data_touch_scale(0);
-        }
-        else {
+        } else {
             busy = TRUE;
             if (event->userdata[1] < 15) {
                 mapObjScale("A1", 0.0f, 0.0f, 1.0f);
                 _mapobj_data_touch_scale(0);
-            }
-            else {
+            } else {
                 mapObjScale("A1", 1.0f, 1.0f, 1.0f);
                 _mapobj_data_touch_scale(0);
                 if (event->userdata[1] < 25) {
                     sy = intpl_sub(5, 0.0f, 110.0f, event->userdata[1] - 15, 10);
-                }
-                else if (event->userdata[1] < 35) {
+                } else if (event->userdata[1] < 35) {
                     sy = intpl_sub(11, 110.0f, 90.0f, event->userdata[1] - 25, 10);
-                }
-                else if (event->userdata[1] < 40) {
+                } else if (event->userdata[1] < 40) {
                     sy = intpl_sub(11, 90.0f, 100.0f, event->userdata[1] - 35, 5);
                 }
                 if (event->userdata[1] < 25) {
                     sx = intpl_sub(5, 100.0f, 90.0f, event->userdata[1] - 15, 10);
-                }
-                else if (event->userdata[1] < 35) {
+                } else if (event->userdata[1] < 35) {
                     sx = intpl_sub(11, 90.0f, 110.0f, event->userdata[1] - 25, 10);
-                }
-                else if (event->userdata[1] < 40) {
+                } else if (event->userdata[1] < 40) {
                     sx = intpl_sub(11, 110.0f, 100.0f, event->userdata[1] - 35, 5);
                 }
                 for (i = 0; i < 32; i++) {
@@ -3048,32 +2824,26 @@ USER_FUNC(_set_haikei_entry_scale) {
         if (event->userdata[1] >= 45) {
             mapObjScale("A2", 1.0f, 1.0f, 1.0f);
             _mapobj_data_touch_scale(1);
-        }
-        else {
+        } else {
             busy = TRUE;
             if (event->userdata[1] < 20) {
                 mapObjScale("A2", 0.0f, 0.0f, 1.0f);
                 _mapobj_data_touch_scale(1);
-            }
-            else {
+            } else {
                 mapObjScale("A2", 1.0f, 1.0f, 1.0f);
                 _mapobj_data_touch_scale(1);
                 if (event->userdata[1] < 30) {
                     sy = intpl_sub(5, 0.0f, 110.0f, event->userdata[1] - 20, 10);
-                }
-                else if (event->userdata[1] < 40) {
+                } else if (event->userdata[1] < 40) {
                     sy = intpl_sub(11, 110.0f, 90.0f, event->userdata[1] - 30, 10);
-                }
-                else if (event->userdata[1] < 45) {
+                } else if (event->userdata[1] < 45) {
                     sy = intpl_sub(11, 90.0f, 100.0f, event->userdata[1] - 40, 5);
                 }
                 if (event->userdata[1] < 30) {
                     sx = intpl_sub(5, 100.0f, 90.0f, event->userdata[1] - 20, 10);
-                }
-                else if (event->userdata[1] < 40) {
+                } else if (event->userdata[1] < 40) {
                     sx = intpl_sub(11, 90.0f, 110.0f, event->userdata[1] - 30, 10);
-                }
-                else if (event->userdata[1] < 45) {
+                } else if (event->userdata[1] < 45) {
                     sx = intpl_sub(11, 110.0f, 100.0f, event->userdata[1] - 40, 5);
                 }
                 for (i = 0; i < 32; i++) {

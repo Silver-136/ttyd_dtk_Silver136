@@ -26,8 +26,7 @@ USER_FUNC(evt_audience_flag_check) {
     fl = BattleAudienceGetPtr(id)->flags;
     if (fl & flags) {
         evtSetValue(event, args[2], TRUE);
-    }
-    else {
+    } else {
         evtSetValue(event, args[2], FALSE);
     }
     return EVT_RETURN_DONE;
@@ -140,8 +139,7 @@ USER_FUNC(evt_audience_move_position_frame) {
     compare = member->targetPosX - member->startPosX;
     if (compare > 0.0f) {
         member->angle = 180.0f;
-    }
-    else if (compare < 0.0f) {
+    } else if (compare < 0.0f) {
         member->angle = 0.0f;
     }
     x = intplGetValue(member->interpType, member->startPosX, member->targetPosX, member->interpFramesTotal - member->interpFramesLeft, member->interpFramesTotal);
@@ -183,22 +181,19 @@ USER_FUNC(evt_audience_move_position_speed) {
         frames = (s32)(delta / speed);
         if (amountX != 0.0f) {
             member->interpDelta.x = speed * (amountX / delta);
-        }
-        else {
+        } else {
             member->interpDelta.x = 0.0f;
         }
         
         if (amountY != 0.0f) {
             member->interpDelta.y = speed * (amountY / delta);
-        }
-        else {
+        } else {
             member->interpDelta.y = 0.0f;
         }
         
         if (amountZ != 0.0f) {
             member->interpDelta.z = speed * (amountZ / delta);
-        }
-        else {
+        } else {
             member->interpDelta.z = 0.0f;
         }
         member->interpFramesLeft = frames;
@@ -208,8 +203,7 @@ USER_FUNC(evt_audience_move_position_speed) {
     compare = member->interpDelta.x;
     if (compare > 0.0f) {
         member->angle = 180.0f;
-    }
-    else if (compare < 0.0f) {
+    } else if (compare < 0.0f) {
         member->angle = 0.0f;
     }
 

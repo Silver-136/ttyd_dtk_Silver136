@@ -341,8 +341,7 @@ void btlDispMain(void) {
                         if (a > 10.0) {
                             if (tpos.x > pos.x) {
                                 pos.x = pos.x + ((tpos.x - pos.x) - 10.0f);
-                            }
-                            else {
+                            } else {
                                 pos.x = pos.x - ((pos.x - tpos.x) - 10.0f);
                             }
                         } }
@@ -352,12 +351,10 @@ void btlDispMain(void) {
                         if (__fabs(pos.x - tpos.x) < 1.0) {
                             BtlUnit_SetPos(unit, tpos.x, h, tpos.z);
                             unit->work[2] = 1;
-                        }
-                        else if (tpos.x > pos.x) {
+                        } else if (tpos.x > pos.x) {
                             pos.x += 1.0f;
                             BtlUnit_SetPos(unit, pos.x, h, tpos.z);
-                        }
-                        else {
+                        } else {
                             pos.x -= 1.0f;
                             BtlUnit_SetPos(unit, pos.x, h, tpos.z);
                         }
@@ -376,8 +373,7 @@ next:
             if (unit->mMoveColorLv > loop) {
                 loop += 12;
                 if (loop > unit->mMoveColorLv) loop = unit->mMoveColorLv;
-            }
-            else {
+            } else {
                 loop -= 2;
                 if (loop < unit->mMoveColorLv) loop = unit->mMoveColorLv;
             }
@@ -407,17 +403,14 @@ next:
                 type = _GetStatusPoseType(unit);
                 if (unit->currentKind >= UNIT_GOOMBA && unit->currentKind < UNIT_UNUSED_TREE) {
                     poseName = searchPoseTbl(part->poseTable, type);
-                }
-                else {
+                } else {
                     if (type == 0x1C && !BtlUnit_CheckStatus(unit, STATUS_HOLD_FAST) && (unit->mStatusFlags & 0x20000000)) {
                         poseName = BtlUnit_GetPoseNameFromType(part, 0x39);
                         if (!poseName) poseName = searchPoseTbl(part->poseTable, 0x1C);
-                    }
-                    else if (type == 0x1C && !BtlUnit_CheckStatus(unit, STATUS_HOLD_FAST) && (unit->mStatusFlags & 0x10000000)) {
+                    } else if (type == 0x1C && !BtlUnit_CheckStatus(unit, STATUS_HOLD_FAST) && (unit->mStatusFlags & 0x10000000)) {
                         poseName = BtlUnit_GetPoseNameFromType(part, 0x38);
                         if (!poseName) poseName = searchPoseTbl(part->poseTable, 0x1C);
-                    }
-                    else {
+                    } else {
                         poseName = searchPoseTbl(part->poseTable, type);
                     }
                     if (BtlUnit_CheckStatusFlag(unit, 0x1000000) && BtlUnit_CanActStatus(unit)) {
@@ -426,15 +419,12 @@ next:
                 }
                 if (BtlUnit_CheckStatus(unit, STATUS_FAST)) {
                     btlDispAnimeSpeed(part, 2.0f);
-                }
-                else if (BtlUnit_CheckStatus(unit, STATUS_SLOW)) {
+                } else if (BtlUnit_CheckStatus(unit, STATUS_SLOW)) {
                     btlDispAnimeSpeed(part, 0.5f);
-                }
-                else {
+                } else {
                     btlDispAnimeSpeed(part, 1.0f);
                 }
-            }
-            else {
+            } else {
                 btlDispAnimeSpeed(part, 1.0f);
             }
             if (PART_ANIMFLAGS(part) & 1) {
@@ -442,15 +432,13 @@ next:
                 PART_ANIMFLAGS(part) &= ~1;
                 if (PART_ANIMFLAGS(part) &= ~0x200) {
                     animPoseSetAnim(part->poseId, poseName, TRUE);
-                }
-                else {
+                } else {
                     animPoseSetAnim(part->poseId, poseName, FALSE);
                 }
                 PART_POSESTATE(part) = 0;
                 if (PART_ANIMFLAGS(part) & 4) {
                     PART_POSETYPE(part) = 0;
-                }
-                else {
+                } else {
                     PART_POSETYPE(part) = 1;
                     if (BtlUnit_CheckStatus(unit, STATUS_INVISIBLE) || part->color.a != 0xFF) {
                         PART_POSETYPE(part) = 7;
@@ -475,8 +463,7 @@ next:
                 if (!(PART_ANIMFLAGS(part) & 4)) {
                     if (xlu && !(PART_ANIMFLAGS(part) & 0x40)) {
                         PART_ANIMFLAGS(part) |= 0x40;
-                    }
-                    else if (!xlu && (PART_ANIMFLAGS(part) & 0x40)) {
+                    } else if (!xlu && (PART_ANIMFLAGS(part) & 0x40)) {
                         PART_ANIMFLAGS(part) &= ~0x40;
                     }
                 }
@@ -501,8 +488,7 @@ next:
                         if (!(PART_ANIMFLAGS(part) & 0x100)) {
                             dispEntry(CAMERA_3D, dispCalcZ(&zpos), 2, (DispCallback)btlUnitPartsDisp, part);
                         }
-                    }
-                    else {
+                    } else {
                         if (!(PART_ANIMFLAGS(part) & 0x100)) {
                             dispEntry(CAMERA_3D, dispCalcZ(&zpos), 1, (DispCallback)btlUnitPartsDisp, part);
                         }
@@ -527,8 +513,7 @@ next:
                 spos.y = BattleGetFloorHeight(wp, spos.x, spos.y, spos.z); h = spos.y;
                 if (ppos.y <= h) {
                     scale = 1.0f;
-                }
-                else {
+                } else {
                     scale = (100.0f - (ppos.y - h)) / 100.0f;
                 }
                 if (scale > 1.0) scale = 1.0f;
@@ -551,12 +536,10 @@ next:
         if (unit->heldItem) {
             if ((unit->flags & BATTLE_UNIT_FLAG_STOLEN_ITEM) && !(unit->flags & BATTLE_UNIT_FLAG_HIDE_HELD_ITEM)) {
                 dispEntry(CAMERA_3D, 0.0f, 2, (DispCallback)btlUnitStolenItemDisp, unit);
-            }
-            else if ((!(unit->flags & BATTLE_UNIT_FLAG_ACTING) || (unit->flags & BATTLE_UNIT_FLAG_SHOW_ITEM_WHILE_ACTING)) && !(unit->flags & BATTLE_UNIT_FLAG_HIDE_HELD_ITEM)) {
+            } else if ((!(unit->flags & BATTLE_UNIT_FLAG_ACTING) || (unit->flags & BATTLE_UNIT_FLAG_SHOW_ITEM_WHILE_ACTING)) && !(unit->flags & BATTLE_UNIT_FLAG_HIDE_HELD_ITEM)) {
                 dispEntry(CAMERA_3D, 0.0f, 2, (DispCallback)btlUnitItemDisp, unit);
             }
-        }
-        else if (wp->flags & 0x20000) {
+        } else if (wp->flags & 0x20000) {
             dispEntry(CAMERA_3D, 0.0f, 2, (DispCallback)btlUnitItemDisp2, unit);
         }
     }
@@ -672,8 +655,7 @@ void btlUnitPartsDisp(CameraId camId, BattleUnitPart* param) {
         }
         if (part->attributes & 0x8000000) {
             PSMTXScale(pS2, part->mBaseScale.x * part->mScale.x, part->mBaseScale.y * part->mScale.y, zscale * (part->mBaseScale.z * part->mScale.z));
-        }
-        else {
+        } else {
             PSMTXScale(pS2, unit->mSizeMultiplier * (part->mBaseScale.x * part->mScale.x), unit->mSizeMultiplier * (part->mBaseScale.y * part->mScale.y), zscale * (part->mBaseScale.z * part->mScale.z));
         }
         PSMTXIdentity(pM);
@@ -687,17 +669,14 @@ void btlUnitPartsDisp(CameraId camId, BattleUnitPart* param) {
         PSMTXCopy(drawMtx, blurMtx);
         PSMTXTrans(mT5, 0.0f, 0.0f, -5.0f);
         PSMTXConcat(mT5, blurMtx, blurMtx);
-    }
-    else {
+    } else {
         if (unit->faceDirection >= 0) angle = 90.0f;
         dir = part->faceDirection;
         if (dir > 0.0f) {
             dir = 1.0f;
-        }
-        else if (dir < 0.0f) {
+        } else if (dir < 0.0f) {
             dir = -1.0f;
-        }
-        else {
+        } else {
             dir = wp->alliances[unit->mAlliance].attackDirection;
         }
         ex = part->mPositionOffset.x * dir + unit->mPosition.x;
@@ -835,8 +814,7 @@ void btlUnitPartsDisp(CameraId camId, BattleUnitPart* param) {
     }
     if (BtlUnit_CheckStatus(unit, STATUS_CHARGE)) {
         animPoseSetMaterialFlagOn(part->poseId, 0x800000);
-    }
-    else {
+    } else {
         animPoseSetMaterialFlagOff(part->poseId, 0x800000);
     }
     animPoseDrawMtx(part->poseId, drawMtx, 1, rotY, 2.0f);
@@ -885,8 +863,7 @@ void btlUnitItemDisp2(CameraId camId, BattleUnit* unit) {
 disp:
     if (wp->flags & 0x20000) {
         btlUnitItemDisp(camId, unit);
-    }
-    else {
+    } else {
         wp->flags |= 0x20000;
         btlUnitItemDisp(camId, unit);
         wp->flags &= ~0x20000;
@@ -907,8 +884,7 @@ void btlUnitPartsBlurControl(BattleUnitPart* part, s32 unused, Mtx orientation, 
 
     if (part->attributes & kMotionBlur) {
         _partsBlurControl(part, 1, orientation, color, rotation);
-    }
-    else {
+    } else {
         _partsBlurControl(part, 0, orientation, color, rotation);
     }
 }
@@ -967,13 +943,11 @@ void btlDispEntAnime(BattleUnit* unit) {
     for (part = unit->mParts; part; part = part->mNextPart) {
         if (!part->poseTable) {
             part->poseId = -1;
-        }
-        else {
+        } else {
             name = part->mKindPartParams->modelName;
             if (!name) {
                 part->poseId = -1;
-            }
-            else {
+            } else {
                 strcpy(PART_POSENAME(part), searchPoseTbl(part->poseTable, 0x1C));
                 part->poseId = animPoseEntry(name, 1);
             }
@@ -990,8 +964,7 @@ void btlDispChangeAnime(BattleUnitPart* part, const char* name, BOOL flag) {
     PART_ANIMFLAGS(part) &= ~0x10;
     if (flag) {
         PART_ANIMFLAGS(part) |= 8;
-    }
-    else {
+    } else {
         PART_ANIMFLAGS(part) &= ~8;
     }
 }
@@ -1016,19 +989,16 @@ void gravityOffsetControl(BattleUnitPart* part) {
 
     if (!(wp->flags & 0x40000000)) {
         active = FALSE;
-    }
-    else if (unit->mAttributeFlags & 0x1004) {
+    } else if (unit->mAttributeFlags & 0x1004) {
         active = FALSE;
     }
     if (active) {
         PART_GRAVITY(part)++;
-    }
-    else if (PART_GRAVITY(part)) {
+    } else if (PART_GRAVITY(part)) {
         PART_GRAVITY(part) %= 120;
         if (PART_GRAVITY(part) >= 60) {
             PART_GRAVITY(part)++;
-        }
-        else if (PART_GRAVITY(part)) {
+        } else if (PART_GRAVITY(part)) {
             PART_GRAVITY(part)--;
         }
     }
@@ -1044,22 +1014,18 @@ void floatOffsetControl(BattleUnitPart* part) {
 
     if (!(unit->flags & 0x100000)) {
         active = FALSE;
-    }
-    else if (!(unit->flags & 0x200000)) {
+    } else if (!(unit->flags & 0x200000)) {
         active = FALSE;
-    }
-    else if (BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL)) {
+    } else if (BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL)) {
         active = FALSE;
     }
     if (active) {
         PART_FLOAT(part)++;
-    }
-    else if (PART_FLOAT(part)) {
+    } else if (PART_FLOAT(part)) {
         PART_FLOAT(part) %= 90;
         if (PART_FLOAT(part) >= 45) {
             PART_FLOAT(part)++;
-        }
-        else if (PART_FLOAT(part)) {
+        } else if (PART_FLOAT(part)) {
             PART_FLOAT(part)--;
         }
     }

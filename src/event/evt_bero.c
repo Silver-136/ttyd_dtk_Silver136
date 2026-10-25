@@ -501,8 +501,7 @@ USER_FUNC(evt_bero_get_info_num) {
     return EVT_RETURN_DONE;
 }
 
-s32 bero_get_position_normal(EventEntry *event, BOOL isFirstCall)
-{
+s32 bero_get_position_normal(EventEntry *event, BOOL isFirstCall) {
     EvtWord *args = event->args;
     MarioWork *wp = marioGetPtr();
     s32 dir = evtGetValue(event, args[0]);
@@ -521,12 +520,10 @@ s32 bero_get_position_normal(EventEntry *event, BOOL isFirstCall)
     end.x = pos[0];
     end.y = pos[1];
     end.z = pos[2];
-    if (pos[0] == 100000)
-    {
+    if (pos[0] == 100000) {
         hitObjGetPos((const char *) name, &start);
     }
-    if (len != 0.0f)
-    {
+    if (len != 0.0f) {
         Vec tmp2;
         Vec tmp;
         f32 nz;
@@ -543,8 +540,7 @@ s32 bero_get_position_normal(EventEntry *event, BOOL isFirstCall)
         deg = 0.125f;
         deg = (angle * 360.0f) * deg;
         halfTurn = 180.0f;
-        if (dir == 1)
-        {
+        if (dir == 1) {
             deg += halfTurn;
         }
         rad = (6.2831855f * deg) / 360.0f;
@@ -556,8 +552,7 @@ s32 bero_get_position_normal(EventEntry *event, BOOL isFirstCall)
         }
         dist = 1000000.0f;
         hxPtr = &hx;
-        if (hitCheckFilter((void *) 0, hxPtr, &hy, &hz, &dist, &nx, &ny, &nz, tmp.x, tmp.y, tmp.z, 0.0f, -1.0f, 0.0f))
-        {
+        if (hitCheckFilter((void *) 0, hxPtr, &hy, &hz, &dist, &nx, &ny, &nz, tmp.x, tmp.y, tmp.z, 0.0f, -1.0f, 0.0f)) {
             tmp.y = hy;
         }
         tmp2 = tmp;
@@ -574,8 +569,7 @@ s32 bero_get_position_normal(EventEntry *event, BOOL isFirstCall)
     BeroEY = end.y;
     BeroEZ = end.z;
     N_marioSetBottomlessRespawnPosOnBeroEntry(end.x, end.y, respawnZ);
-    if (wp->currMotionId == MARIO_MOTION_SHIP)
-    {
+    if (wp->currMotionId == MARIO_MOTION_SHIP) {
         N_marioReloadMapOnBottomlessOn();
     }
     return 2;

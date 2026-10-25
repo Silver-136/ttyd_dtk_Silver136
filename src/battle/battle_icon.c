@@ -41,8 +41,7 @@ void BattleIconMain(void) {
                 iconSetScale(icon->base->name, icon->scale * icon->scaleMul);
                 if (icon->flags & 2) {
                     iconFlagOn(icon->base->name, 2);
-                }
-                else {
+                } else {
                     iconFlagOff(icon->base->name, 2);
                 }
             }
@@ -203,16 +202,14 @@ USER_FUNC(btlevtcmd_BtlIconJumpPosition) {
         icon->jumpDist = distABf(sx, sz, x, z);
         if (x - sx > 0.0f) {
             icon->jumpDir = 1;
-        }
-        else if (x - sx < 0.0f) {
+        } else if (x - sx < 0.0f) {
             icon->jumpDir = -1;
         }
         dy = y - sy;
         if (icon->jumpFrames == 0) {
             icon->jumpFrames = (s32)(icon->jumpDist / icon->jumpSpeed);
             icon->jumpDist -= icon->jumpFrames * icon->jumpSpeed;
-        }
-        else {
+        } else {
             icon->jumpSpeed = icon->jumpDist / icon->jumpFrames;
             icon->jumpDist -= icon->jumpFrames * icon->jumpSpeed;
         }

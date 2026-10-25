@@ -346,8 +346,7 @@ void effGonbabaBreathMain(EffectEntry* effect) {
     dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effGonbabaBreathDisp, effect);
 }
 
-void effGonbabaBreathDisp(CameraId cameraId, EffectEntry *effect)
-{
+void effGonbabaBreathDisp(CameraId cameraId, EffectEntry *effect) {
     EffGonbabaBreathWork *work = effect->userdata;
     Mtx trans;
     Mtx rot;
@@ -363,23 +362,17 @@ void effGonbabaBreathDisp(CameraId cameraId, EffectEntry *effect)
     cam = camGetPtr(cameraId);
     type = work->type;
     alpha = work->alpha;
-    if (type < 10)
-    {
+    if (type < 10) {
         PSMTXTrans(trans, work->position.x, work->position.y, work->position.z);
-    }
-    else
-    {
+    } else {
         f32 c = cos((6.2831855f * camGetPtr(CAMERA_3D)->viewYaw) / 360.0f);
         f32 s = sin((6.2831855f * camGetPtr(CAMERA_3D)->viewYaw) / 360.0f);
         PSMTXTrans(trans, work->position.x - (2.0f * s), work->position.y, work->position.z + (2.0f * c));
     }
     PSMTXRotRad(rot, 'y', (work->yaw - camGetPtr(cameraId)->viewYaw) * 0.01745329252f);
-    if ((work->yaw > 90.0f) && (work->yaw < 270.0f))
-    {
+    if ((work->yaw > 90.0f) && (work->yaw < 270.0f)) {
         PSMTXScale(scale, work->scale, work->scale, -work->scale);
-    }
-    else
-    {
+    } else {
         PSMTXScale(scale, work->scale, work->scale, work->scale);
     }
     PSMTXConcat(trans, rot, trans);
@@ -404,10 +397,8 @@ void effGonbabaBreathDisp(CameraId cameraId, EffectEntry *effect)
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
     work++;
-    for (i = 1; i < effect->count; i++, work++)
-    {
-        if (work->delay != 0)
-        {
+    for (i = 1; i < effect->count; i++, work++) {
+        if (work->delay != 0) {
             continue;
         }
         PSMTXTrans(trans, work->position.x, work->position.y, work->position.z);
@@ -416,8 +407,7 @@ void effGonbabaBreathDisp(CameraId cameraId, EffectEntry *effect)
         PSMTXConcat(mtx, trans, trans);
         GXLoadPosMtxImm(trans, GX_PNMTX0);
         GXSetCurrentMtx(GX_PNMTX0);
-        switch (work->type)
-        {
+        switch (work->type) {
             case 0:
 
             case 1:
@@ -433,8 +423,7 @@ void effGonbabaBreathDisp(CameraId cameraId, EffectEntry *effect)
             case 6:
 
             case 7:
-                for (j = 0; j < 3; j++)
-            {
+                for (j = 0; j < 3; j++) {
                 f32 w;
                 col_tbl[type % 10][j].a = (work->alpha * alpha) / 255;
                 GXSetChanMatColor(GX_COLOR0A0, col_tbl[type % 10][j]);

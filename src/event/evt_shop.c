@@ -733,8 +733,7 @@ void point_disp(WinMgrEntry* entry) {
         PSMTXScale(s, 1.1f, 1.1f, 1.1f);
         PSMTXConcat(m, s, m);
         iconDispGx2(m, 0x10, 0x1F1);
-    }
-    else {
+    } else {
         PSMTXScale(s, 0.8f, 1.1f, 1.1f);
         PSMTXConcat(m, s, m);
         iconDispGx2(m, 0x10, 0x20A);
@@ -859,8 +858,7 @@ void list_disp(WinMgrEntry* entry) {
         if (pouch->shopPointRewardFlags & (mask = 1 << i)) {
 #endif
             FontDrawColor(shop_list_pts_got_color);
-        }
-        else {
+        } else {
             FontDrawColor(shop_list_pts_color);
         }
         sprintf(buf, "%s", winZenkakuStr(shopPointList[i].pts));
@@ -875,8 +873,7 @@ void list_disp(WinMgrEntry* entry) {
         if (pouch->shopPointRewardFlags & mask) {
 #endif
             FontDrawColor(shop_list_unit_got_color);
-        }
-        else {
+        } else {
             FontDrawColor(shop_list_unit_color);
         }
 #ifdef VERSION_G8ME01
@@ -903,8 +900,7 @@ void list_disp(WinMgrEntry* entry) {
         if (pouch->shopPointRewardFlags & mask) {
 #endif
             FontDrawColor(shop_list_item_got_color);
-        }
-        else {
+        } else {
             FontDrawColor(shop_list_item_color);
         }
 #ifdef VERSION_G8ME01
@@ -1007,8 +1003,7 @@ USER_FUNC(point_disp_onoff) {
     wp->points = SHOP_PTS(pouch);
     if (on) {
         winMgrOpen(wp->win[2]);
-    }
-    else {
+    } else {
         winMgrClose(wp->win[2]);
     }
     return EVT_RETURN_DONE;
@@ -1031,8 +1026,7 @@ USER_FUNC(shop_flag_onoff) {
     ShopWork* wp = _wp;
     if (on) {
         wp->flags |= mask;
-    }
-    else {
+    } else {
         wp->flags &= ~mask;
     }
     return EVT_RETURN_DONE;
@@ -1091,8 +1085,7 @@ USER_FUNC(chk_shop_point) {
                 evtSetValue(event, args[0], 0);
                 evtSetValue(event, args[1], p->item);
                 evtSetValue(event, args[2], (EvtWord)msgSearch(itemDataTable[p->item].name));
-            }
-            else {
+            } else {
                 for (j = 0; shopPointList[j].pts != 300; j++) {
                 }
                 evtSetValue(event, args[0], 0);
@@ -1319,8 +1312,7 @@ USER_FUNC(evt_shop_main_func) {
                 wp->buyItem = 0;
             }
         }
-    }
-    else if (!evtCheckID(wp->buyEvt->eventId)) {
+    } else if (!evtCheckID(wp->buyEvt->eventId)) {
         wp->flags &= ~2;
         marioKeyOn();
         if (wp->buyItem == 0x33) {
@@ -1348,11 +1340,9 @@ USER_FUNC(evt_shop_main_func) {
             sprintf(buf, "shp%d", i);
             if (wp->itemFlags[i] & 1) {
                 iconFlagOn(buf, 2);
-            }
-            else if (mobj->flags & 1) {
+            } else if (mobj->flags & 1) {
                 iconFlagOn(buf, 2);
-            }
-            else {
+            } else {
                 iconFlagOff(buf, 2);
             }
         }

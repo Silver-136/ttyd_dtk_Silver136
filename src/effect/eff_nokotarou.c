@@ -28,8 +28,7 @@ EffectEntry* effNokotarouEntry(s32 type, s32 duration, f32 x, f32 y, f32 z, f32 
     work->alpha = 255;
     if (duration <= 0) {
         work->timer = 1000;
-    }
-    else {
+    } else {
         work->timer = duration;
     }
     work->poseId = -1;
@@ -76,8 +75,7 @@ void effNokotarouMain(EffectEntry* effect) {
     if (work->timer < 32) {
         work->alpha = work->timer * 8;
         work->scale += -work->scale / 32.0f;
-    }
-    else {
+    } else {
         work->scale += (1.0f - work->scale) / 32.0f;
     }
     dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effNokotarouDisp, effect);

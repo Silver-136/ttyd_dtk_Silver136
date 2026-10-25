@@ -51,17 +51,14 @@ void seq_logoInit(SequenceWork* work) {
         if (VIGetDTVStatus()) {
             if (OSGetProgressiveMode() == 1) {
                 wp->progressive = TRUE;
-            }
-            else {
+            } else {
                 if (keyGetButton(0) & PAD_BUTTON_B) {
                     wp->progressive = TRUE;
-                }
-                else {
+                } else {
                     wp->progressive = FALSE;
                 }
             }
-        }
-        else {
+        } else {
             if (OSGetProgressiveMode() == 1) {
                 OSSetProgressiveMode(0);
             }
@@ -80,8 +77,7 @@ void seq_logoInit(SequenceWork* work) {
 #endif
         VIFlush();
         VIWaitForRetrace();
-    }
-    else {
+    } else {
         switch (OSGetResetCode() & 1) {
             case OS_RESET_RESTART:
                 VIConfigure(&sRMObjHReso);
@@ -167,8 +163,7 @@ void seq_logoMain(SequenceWork* work) {
         case 6:
             if (keyGetButtonTrg(0)) {
                 work->state++;
-            }
-            else if (OSTicksToMilliseconds(gp->renderTime - time) > 59000) {
+            } else if (OSTicksToMilliseconds(gp->renderTime - time) > 59000) {
                 work->state++;
             }
             break;
@@ -301,8 +296,7 @@ void seq_logoMain(SequenceWork* work) {
                     if (!(gp->flags & 8)) {
                         VIConfigure(&GXNtsc480IntDfMarioSt);
                         VIFlush();
-                    }
-                    else {
+                    } else {
                         VIConfigure(&GXNtsc480ProgMarioSt);
                         VIFlush();
                     }
@@ -326,11 +320,9 @@ void seq_logoMain(SequenceWork* work) {
             ret = logoAsyncFirst();
             if (ret == 0U) {
                 ok = 0;
-            }
-            else if (ret == -1) {
+            } else if (ret == -1) {
                 ok = 1;
-            }
-            else {
+            } else {
                 ok = 1;
             }
             if (!ok) {
@@ -360,8 +352,7 @@ void seq_logoMain(SequenceWork* work) {
                     work->state++;
                     return;
                 }
-            }
-            else {
+            } else {
                 seqSetSeq(SEQ_E3, NULL, NULL);
                 return;
             }
@@ -412,8 +403,7 @@ void logoDisp(CameraId camId, void* param) {
         GXGetScissor(&sciLeft, &sciTop, &sciWidth, &sciHeight);
         if (OSGetProgressiveMode() != 1) {
             rmode = &sRMObjHReso;
-        }
-        else {
+        } else {
             rmode = &sRMObjHReso_prog;
         }
         GXSetPixelFmt(GX_PF_RGB8_Z24, GX_ZC_LINEAR);
@@ -514,8 +504,7 @@ void logoDisp(CameraId camId, void* param) {
                 GXSetTevColor(GX_TEVREG0, (GXColor){0, 0, 0, 0xFF});
                 if (gp->language == 0U) { //blue for JP
                     GXSetTevColor(GX_TEVREG1, (GXColor){0, 0x46, 0xFF, 0xFF});
-                }
-                else { //red for US
+                } else { //red for US
                     GXSetTevColor(GX_TEVREG1, (GXColor){0xDC, 0, 0, 0xFF});
                 }
                 GXSetNumTexGens(1);
@@ -710,19 +699,16 @@ void progDisp(CameraId camId, void* param) {
                     gp->substickX[0] ||
                     gp->substickY[0] ||
                     gp->triggerLeft[0] ||
-                    gp->triggerRight[0])
-                {
+                    gp->triggerRight[0]) {
                     wp->lastInputTime = OSGetTime();
-                }
-                else {
+                } else {
                     if (OSTicksToSeconds(OSGetTime() - wp->lastInputTime) > 10) {
                         button = 0x100;
                     }
                 }
                 if (button & (PAD_BUTTON_LEFT | PAD_BUTTON_RIGHT) || keyGetDirTrg(0) & (DEMO_STICK_LEFT | DEMO_STICK_RIGHT)) {
                     wp->toggle = 1 - wp->toggle;
-                }
-                else if (button & PAD_BUTTON_A) {
+                } else if (button & PAD_BUTTON_A) {
                     time = gp->renderTime;
                     wp->promptStep++;
                 }
@@ -784,8 +770,7 @@ void progDisp(CameraId camId, void* param) {
                     time = gp->renderTime;
                     wp->promptStep++;
                     gp->flags |= 8;
-                }
-                else {
+                } else {
                     OSSetProgressiveMode(0);
                     wp->progressive = 0;
                     gp->flags &= ~8;
@@ -827,19 +812,16 @@ void progDisp(CameraId camId, void* param) {
                     gp->substickX[0] ||
                     gp->substickY[0] ||
                     gp->triggerLeft[0] ||
-                    gp->triggerRight[0])
-                {
+                    gp->triggerRight[0]) {
                     wp->lastInput = OSGetTime();
-                }
-                else {
+                } else {
                     if (OSTicksToSeconds(OSGetTime() - wp->lastInput) > 10) {
                         button = 0x100;
                     }
                 }
                 if (button & (PAD_BUTTON_LEFT | PAD_BUTTON_RIGHT) || keyGetDirTrg(0) & (DEMO_STICK_LEFT | DEMO_STICK_RIGHT)) {
                     wp->toggle = 1 - wp->toggle;
-                }
-                else if (button & PAD_BUTTON_A) {
+                } else if (button & PAD_BUTTON_A) {
                     wp->progState++;
                 }
 
@@ -882,8 +864,7 @@ void progDisp(CameraId camId, void* param) {
                     time = gp->renderTime;
                     wp->progState++;
                     gp->flags |= 8;
-                }
-                else {
+                } else {
                     OSSetProgressiveMode(0);
                     time = gp->renderTime;
                     wp->progState += 2;

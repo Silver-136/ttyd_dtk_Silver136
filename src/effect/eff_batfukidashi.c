@@ -45,8 +45,7 @@ EffectEntry* effCoinFukidashiEntry(s32 type, s32 number, s32 duration, f32 x, f3
     work->number = number;
     if (duration <= 0) {
         work->timer = 1000;
-    }
-    else {
+    } else {
         work->timer = duration;
     }
     work->frame = 0;
@@ -70,8 +69,7 @@ void effCoinFukidashiMain(EffectEntry* effect) {
     }
     if (work->timer < 16) {
         work->alpha = work->timer * 16;
-    }
-    else {
+    } else {
         work->alpha += 16;
         if (work->alpha > 255) {
             work->alpha = 255;

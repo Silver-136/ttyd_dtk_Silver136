@@ -204,8 +204,7 @@ void cardMain(void) {
                 wp->op = 8;
                 wp->flags |= 0x200;
                 wp->flags &= ~2;
-            }
-            else if (!(wp->flags & 1)) {
+            } else if (!(wp->flags & 1)) {
                 switch (wp->opStep) {
                     case 0:
                         memcard_probe();
@@ -230,8 +229,7 @@ void cardMain(void) {
                         break;
                 }
                 wp->opStep++;
-            }
-            else if (CARDGetResultCode(wp->chan) != CARD_RESULT_BUSY && wp->result != CARDGetResultCode(wp->chan)) {
+            } else if (CARDGetResultCode(wp->chan) != CARD_RESULT_BUSY && wp->result != CARDGetResultCode(wp->chan)) {
                 wp->result = CARDGetResultCode(wp->chan);
                 wp->flags &= ~1;
             }
@@ -242,8 +240,7 @@ void cardMain(void) {
                 wp->op = 8;
                 wp->flags |= 0x200;
                 wp->flags &= ~2;
-            }
-            else if (!(wp->flags & 1)) {
+            } else if (!(wp->flags & 1)) {
                 switch (wp->opStep) {
                     case 0:
                         memcard_probe();
@@ -272,8 +269,7 @@ void cardMain(void) {
                         break;
                 }
                 wp->opStep++;
-            }
-            else if (CARDGetResultCode(wp->chan) != CARD_RESULT_BUSY && wp->result != CARDGetResultCode(wp->chan)) {
+            } else if (CARDGetResultCode(wp->chan) != CARD_RESULT_BUSY && wp->result != CARDGetResultCode(wp->chan)) {
                 wp->result = CARDGetResultCode(wp->chan);
                 wp->flags &= ~1;
             }
@@ -339,8 +335,7 @@ void cardCopy2Main(s32 slot) {
     gp->debugBattle = 0;
     if (backup3 != 0) {
         gp->flags |= 8;
-    }
-    else {
+    } else {
         gp->flags &= ~8;
     }
 #ifdef VERSION_G8ME01
@@ -456,12 +451,10 @@ static inline void memcard_probe(void) {
     if (result == CARD_RESULT_READY) {
         wp->result = CARD_RESULT_READY;
         wp->chan = 0;
-    }
-    else if (result == CARD_RESULT_WRONGDEVICE) {
+    } else if (result == CARD_RESULT_WRONGDEVICE) {
         wp->result = CARD_RESULT_WRONGDEVICE;
         wp->chan = 0;
-    }
-    else {
+    } else {
         wp->result = result;
         wp->chan = -1;
     }
@@ -472,8 +465,7 @@ void write_main(void) {
         wp->op = 8;
         wp->flags |= 0x200;
         wp->flags &= ~2;
-    }
-    else if (!(wp->flags & 1)) {
+    } else if (!(wp->flags & 1)) {
         switch (wp->opStep) {
             case 0:
                 memcard_probe();
@@ -550,8 +542,7 @@ void write_main(void) {
                 break;
         }
         wp->opStep++;
-    }
-    else if (CARDGetResultCode(wp->chan) != CARD_RESULT_BUSY && wp->result != CARDGetResultCode(wp->chan)) {
+    } else if (CARDGetResultCode(wp->chan) != CARD_RESULT_BUSY && wp->result != CARDGetResultCode(wp->chan)) {
         wp->result = CARDGetResultCode(wp->chan);
         wp->flags &= ~1;
     }
@@ -575,8 +566,7 @@ void write_header_main(void) {
         wp->op = 8;
         wp->flags |= 0x200;
         wp->flags &= ~2;
-    }
-    else if (!(wp->flags & 1)) {
+    } else if (!(wp->flags & 1)) {
         switch (wp->opStep) {
             case 0:
                 memcard_probe();
@@ -610,8 +600,7 @@ void write_header_main(void) {
                 break;
         }
         wp->opStep++;
-    }
-    else if (CARDGetResultCode(wp->chan) != CARD_RESULT_BUSY && wp->result != CARDGetResultCode(wp->chan)) {
+    } else if (CARDGetResultCode(wp->chan) != CARD_RESULT_BUSY && wp->result != CARDGetResultCode(wp->chan)) {
         wp->result = CARDGetResultCode(wp->chan);
         wp->flags &= ~1;
     }
@@ -624,8 +613,7 @@ void read_main(void) {
         wp->op = 8;
         wp->flags |= 0x200;
         wp->flags &= ~2;
-    }
-    else if (!(wp->flags & 1)) {
+    } else if (!(wp->flags & 1)) {
         switch (wp->opStep) {
             case 0:
                 memcard_probe();
@@ -665,8 +653,7 @@ void read_main(void) {
                 if (wp->validSave1 != 0 && wp->validSave2 != 0) {
                     if (!(wp->lastSaveTime1 <= wp->lastSaveTime2)) {
                         saveType = 0;
-                    }
-                    else {
+                    } else {
                         saveType = 1;
                     }
                 } else if (wp->validSave1 == 0 && wp->validSave2 != 0) {
@@ -699,8 +686,7 @@ void read_main(void) {
                 break;
         }
         wp->opStep++;
-    }
-    else if (CARDGetResultCode(wp->chan) != CARD_RESULT_BUSY && wp->result != CARDGetResultCode(wp->chan)) {
+    } else if (CARDGetResultCode(wp->chan) != CARD_RESULT_BUSY && wp->result != CARDGetResultCode(wp->chan)) {
         wp->result = CARDGetResultCode(wp->chan);
         wp->flags &= ~1;
     }
@@ -726,8 +712,7 @@ void read_all_main(void) {
         wp->flags |= 0x200;
         wp->flags &= ~2;
         return;
-    }
-    else if (!(wp->flags & 1)) {
+    } else if (!(wp->flags & 1)) {
         switch (wp->opStep) {
             case 0:
                 memcard_probe();
@@ -771,8 +756,7 @@ void read_all_main(void) {
                 if (wp->validSave1 != 0 && wp->validSave2 != 0) {
                     if (!(wp->lastSaveTime1 <= wp->lastSaveTime2)) {
                         saveType = 0;
-                    }
-                    else {
+                    } else {
                         saveType = 1;
                     }
                 } else if (wp->validSave1 == 0 && wp->validSave2 != 0) {
@@ -809,8 +793,7 @@ void read_all_main(void) {
                 break;
         }
         wp->opStep++;
-    }
-    else if (CARDGetResultCode(wp->chan) != CARD_RESULT_BUSY && wp->result != CARDGetResultCode(wp->chan)) {
+    } else if (CARDGetResultCode(wp->chan) != CARD_RESULT_BUSY && wp->result != CARDGetResultCode(wp->chan)) {
         wp->result = CARDGetResultCode(wp->chan);
         wp->flags &= ~1;
     }
@@ -833,8 +816,7 @@ void create_main(void) {
         wp->op = 8;
         wp->flags |= 0x200;
         wp->flags &= ~2;
-    }
-    else if (!(wp->flags & 1)) {
+    } else if (!(wp->flags & 1)) {
         switch (wp->opStep) {
             case 0:
                 memcard_probe();
@@ -892,8 +874,7 @@ void create_main(void) {
                 break;
         }
         wp->opStep++;
-    }
-    else if (CARDGetResultCode(wp->chan) != CARD_RESULT_BUSY && wp->result != CARDGetResultCode(wp->chan)) {
+    } else if (CARDGetResultCode(wp->chan) != CARD_RESULT_BUSY && wp->result != CARDGetResultCode(wp->chan)) {
         wp->result = CARDGetResultCode(wp->chan);
         wp->flags &= ~1;
     }
@@ -915,8 +896,7 @@ static inline void format_main(void) {
         wp->op = 8;
         wp->flags |= 0x200;
         wp->flags &= ~2;
-    }
-    else if (!(wp->flags & 1)) {
+    } else if (!(wp->flags & 1)) {
         switch (wp->opStep) {
             case 0:
                 memcard_probe();
@@ -942,8 +922,7 @@ static inline void format_main(void) {
             
         }
         wp->opStep++;
-    }
-    else if (CARDGetResultCode(wp->chan) != CARD_RESULT_BUSY && wp->result != CARDGetResultCode(wp->chan)) {
+    } else if (CARDGetResultCode(wp->chan) != CARD_RESULT_BUSY && wp->result != CARDGetResultCode(wp->chan)) {
         wp->result = CARDGetResultCode(wp->chan);
         wp->flags &= ~1;
     }
@@ -954,8 +933,7 @@ static inline void delete_main(void) {
         wp->op = 8;
         wp->flags |= 0x200;
         wp->flags &= ~2;
-    }
-    else if (!(wp->flags & 1)) {
+    } else if (!(wp->flags & 1)) {
         switch (wp->opStep) {
             case 0:
                 memcard_probe();
@@ -985,8 +963,7 @@ static inline void delete_main(void) {
             
         }
         wp->opStep++;
-    }
-    else if (CARDGetResultCode(wp->chan) != CARD_RESULT_BUSY && wp->result != CARDGetResultCode(wp->chan)) {
+    } else if (CARDGetResultCode(wp->chan) != CARD_RESULT_BUSY && wp->result != CARDGetResultCode(wp->chan)) {
         wp->result = CARDGetResultCode(wp->chan);
         wp->flags &= ~1;
     }
@@ -1118,8 +1095,7 @@ static inline void make_data(void) {
     for (i = 0; i < 4; i++) {
         if (i != -1) {
             save = &cardGetFilePtr()->saves[i];
-        }
-        else {
+        } else {
             save = wp->writeBuf;
         }
         memset(save, 0, sizeof(save->data));
@@ -1323,16 +1299,14 @@ void memcard_open(void) {
                     if ((stat.commentAddr == 0) && (stat.iconAddr == 0x40) && (stat.length == 0x22000)) {
                         wp->fileNo = fileNo;
                         break;
-                    }
-                    else {
+                    } else {
                         wp->fileNo = fileNo;
                         wp->result = CARD_RESULT_NOFILE;
                         wp->flags &= ~1;
                         return;
                     }
                 }
-            }
-            else {
+            } else {
                 if ((result == CARD_RESULT_FATAL_ERROR) || (result == CARD_RESULT_NOCARD)) {
                     wp->result = result;
                     wp->flags &= ~1;

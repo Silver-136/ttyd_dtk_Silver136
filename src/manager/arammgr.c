@@ -68,8 +68,7 @@ void aramMgrGarbage(void) {
                 prev->next = entry->next;
             }
             entry = entry->next;
-        }
-        else {
+        } else {
             if (prev == NULL) {
                 first = entry;
             }
@@ -147,8 +146,7 @@ ARAMEntry* aramMgrToAramAsync(void* src, u32 size) {
     if (wp->head == NULL) {
         wp->head = entry;
         wp->tail = entry;
-    }
-    else {
+    } else {
         wp->tail->next = entry;
         wp->tail = entry;
     }

@@ -1523,22 +1523,19 @@ USER_FUNC(_check_through_pos) {
     if (a > b) {
         max = a;
         min = b;
-    }
-    else {
+    } else {
         max = b;
         min = a;
     }
     if (pos >= min && pos <= max) {
         evtSetValue(event, out, TRUE);
-    }
-    else {
+    } else {
         evtSetValue(event, out, FALSE);
         if (unit->faceDirection >= 0) {
             if (pos > max) {
                 evtSetValue(event, out, TRUE);
             }
-        }
-        else if (pos < min) {
+        } else if (pos < min) {
             evtSetValue(event, out, TRUE);
         }
     }

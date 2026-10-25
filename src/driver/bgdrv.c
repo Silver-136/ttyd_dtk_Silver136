@@ -41,8 +41,7 @@ static inline void bgLoad(BackgroundWork* bgwork, const char* filename) {
     size = 0;
     if (!filename) {
         bgwork->flags &= ~BG_RENDERING;
-    }
-    else {
+    } else {
         bgwork->data = NULL;
         arcOpen(filename, &bgwork->data, &size);
         if (!bgwork->data) {
@@ -62,8 +61,7 @@ static inline void bgLoad(BackgroundWork* bgwork, const char* filename) {
             bgwork->flags &= ~BG_DO_MULTIPLY;
             bgwork->flags &= ~BG_NO_AUTOSCROLL;
             bgwork->color = (GXColor){0xFF, 0xFF, 0xFF, 0xFF};
-        }
-        else {
+        } else {
             bgwork->flags |= 2u;
             bgwork->multiply = (GXColor){0x00, 0xFF, 0x00, 0xFF};
             bgwork->flags |= 1u;
@@ -132,8 +130,7 @@ void bgMain(void) {
         if (!(bgwork->flags & BG_DO_MULTIPLY)) {
             TEXGetGXTexObjFromPalette(bgwork->data, &texobj, 0);
             width = gp->fbWidth / GXGetTexObjWidth(&texobj);
-        }
-        else {
+        } else {
             width = 0;
         }
         if (!(bgwork->flags & BG_NO_TRANSLATION)) {
@@ -179,16 +176,14 @@ void bgDisp(CameraId camId, void* param) {
             MTXScale(scale, 608.0f / (f32)GXGetTexObjWidth(&texobj), 480.0f / (f32)GXGetTexObjHeight(&texobj), 1.0f);
             if (bgwork->flags & BG_NO_AUTOSCROLL) {
                 MTXTrans(trans, bgwork->scrl_x, bgwork->scrl_y, 0.0f);
-            }
-            else {
+            } else {
                 MTXTrans(trans, bgwork->trans_x + bgwork->scrl_x, bgwork->trans_y + bgwork->scrl_y, 0.0f);
             }
             MTXConcat(trans, scale, trans);
             GXLoadTexMtxImm(trans, GX_TEXMTX0, GX_MTX2x4);
             GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX0);
             GXSetNumTexGens(1);
-        }
-        else {
+        } else {
             GXSetNumChans(1);
             GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_REG, GX_LIGHT_NULL, GX_DF_NONE, GX_AF_NONE);
             GXSetChanMatColor(GX_COLOR0A0, bgwork->multiply);

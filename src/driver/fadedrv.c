@@ -81,8 +81,7 @@ void fadeTexSetup(void) {
         wp->texture = __memAlloc(HEAP_DEFAULT, size);
         dvd->info.cb.userData = dvd;
         DVDMgrReadAsync(dvd, wp->texture, size, 0, _callback);
-    }
-    else {
+    } else {
         UnpackTexPalette(wp->texture);
         wp->loaded = TRUE;
     }
@@ -124,11 +123,9 @@ void fadeEntry(s32 type, s32 duration, GXColor color) {
     }
     if (type == 7) {
         type = 3;
-    }
-    else if (type == 8) {
+    } else if (type == 8) {
         type = 4;
-    }
-    else if (((u32)(type - 3) <= 2 || type == 6) && duration < 1000) {
+    } else if (((u32)(type - 3) <= 2 || type == 6) && duration < 1000) {
         duration = 1000;
     }
     switch (type) {
@@ -441,8 +438,7 @@ void fadeMain(void) {
                         if (FADE_DURATION(entry) != 0) {
                             if ((s32)entry->delayFrames != 0) {
                                 entry->delayFrames--;
-                            }
-                            else {
+                            } else {
                                 entry->elapsed += VERSION_PICK(16.666666f, 1000.0f / gp->framerate);
                             }
                             entry->progress = entry->elapsed / FADE_DURATION(entry);
@@ -453,8 +449,7 @@ void fadeMain(void) {
                                 entry->flags |= 2;
                                 entry->state++;
                             }
-                        }
-                        else {
+                        } else {
                             entry->progress = 0.0f;
                             entry->flags |= 2;
                             entry->state++;
@@ -474,8 +469,7 @@ void fadeMain(void) {
                                 entry->flags |= 2;
                                 entry->state++;
                             }
-                        }
-                        else {
+                        } else {
                             entry->progress = 1.0f;
                             entry->flags |= 2;
                             entry->state++;
@@ -747,8 +741,7 @@ void fadeMain(void) {
                                 if (entry->scaleTimer < FPS_FRAMES(180)) {
                                     entry->scale = intplGetValue(12, 3.0f, 1.0f, ++entry->scaleTimer, FPS_FRAMES(180));
                                 }
-                            }
-                            else {
+                            } else {
                                 if (entry->scaleTimer < FPS_FRAMES(90)) {
                                     entry->scale = intplGetValue(12, 1.5f, 1.0f, ++entry->scaleTimer, FPS_FRAMES(90));
                                 }
@@ -761,15 +754,13 @@ void fadeMain(void) {
                                         entry->flags |= 2;
                                         entry->state++;
                                     }
-                                }
-                                else {
+                                } else {
                                     if (entry->scaleTimer == FPS_FRAMES(90)) {
                                         entry->flags |= 2;
                                         entry->state++;
                                     }
                                 }
-                            }
-                            else {
+                            } else {
                                 entry->flags |= 2;
                                 entry->state++;
                                 psndSFXOff(entry->sfxId);
@@ -797,8 +788,7 @@ void fadeMain(void) {
                         animPoseMain(entry->poseId);
                         if (entry->scaleTimer < FPS_FRAMES(120)) {
                             entry->scale = intplGetValue(12, 1.0f, 3.0f, ++entry->scaleTimer, FPS_FRAMES(120));
-                        }
-                        else {
+                        } else {
                             entry->flags |= 2;
                             entry->state++;
                             animPoseRelease(entry->poseId);
@@ -911,8 +901,7 @@ void disp_texture(CameraId camId, void* param) {
                 PSMTXTrans(mtx2, -0.5f, -0.5f, 0.0f);
                 PSMTXConcat(mtx1, mtx3, mtx3);
                 PSMTXConcat(mtx3, mtx2, work->entries[0].texMtx);
-            }
-            else if (work->entries[0].type == 2) {
+            } else if (work->entries[0].type == 2) {
                 PSMTXTrans(work->entries[0].texMtx, 1.0f, 1.0f, 0.0f);
             }
             break;
@@ -935,8 +924,7 @@ void disp_texture(CameraId camId, void* param) {
                 PSMTXConcat(mtx1, mtx3, mtx3);
                 PSMTXConcat(mtx3, mtx4, mtx3);
                 PSMTXConcat(mtx3, mtx2, work->entries[0].texMtx);
-            }
-            else if (work->entries[0].type == 4 || work->entries[0].type == 6) {
+            } else if (work->entries[0].type == 4 || work->entries[0].type == 6) {
                 PSMTXTrans(work->entries[0].texMtx, 1.0f, 1.0f, 0.0f);
             }
             break;
@@ -1107,8 +1095,7 @@ void disp_maku(CameraId camId, void* param) {
         depth = depth - mag;
         animPoseSetGXFunc(entry->poseId, NULL, FALSE);
         GXSetZScaleOffset(z(), 0.0f);
-    }
-    else {
+    } else {
         scale = entry->scale;
         depth = 0.0f;
         zFill();
@@ -1153,8 +1140,7 @@ void disp_tec(CameraId camId, void* param) {
     if (wp->flags & 0x1000) {
         TEXGetGXTexObjFromPalette(wp->texture, &obj, 2);
         GXLoadTexObj(&obj, GX_TEXMAP0);
-    }
-    else {
+    } else {
         TEXGetGXTexObjFromPalette(wp->texture, &obj, 3);
         GXLoadTexObj(&obj, GX_TEXMAP0);
     }
@@ -1166,8 +1152,7 @@ void disp_tec(CameraId camId, void* param) {
     GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_A0, GX_CA_ZERO, GX_CA_TEXA, GX_CA_ZERO);
     if (wp->flags & 0x1000) {
         GXSetTevColor(GX_TEVREG0, (GXColor){0x19, 0x23, 0x2A, 0xFF});
-    }
-    else {
+    } else {
         GXSetTevColor(GX_TEVREG0, (GXColor){0xE6, 0xE6, 0xE6, 0xFF});
     }
     if (wp->flags & 0x30) {
@@ -1177,8 +1162,7 @@ void disp_tec(CameraId camId, void* param) {
                 wp->softness = 1.0f;
                 wp->flags &= ~0x10;
             }
-        }
-        else {
+        } else {
             wp->softness -= 0.04f;
             if (wp->softness < 0.0f) {
                 wp->softness = 0.0f;
@@ -1228,8 +1212,7 @@ void disp_dummy_black(CameraId camId, void* param) {
     GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_REG, GX_LIGHT_NULL, GX_DF_NONE, GX_AF_NONE);
     if (wp->flags & 0x8000) {
         GXSetChanMatColor(GX_COLOR0A0, (GXColor){0x00, 0x00, 0x00, 0xFF});
-    }
-    else {
+    } else {
         GXSetChanMatColor(GX_COLOR0A0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
     }
     GXSetNumTevStages(1);

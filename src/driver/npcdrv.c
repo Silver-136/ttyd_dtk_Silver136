@@ -1624,8 +1624,7 @@ static inline BOOL fbat_setHit(NpcEntry* npc) {
     return TRUE;
 }
 
-void fbatEncountCheck(void)
-{
+void fbatEncountCheck(void) {
     NpcWork *wp = (gp->inBattle) ? (&work.battle) : (&work.field);
     s32 total = wp->total;
     MarioWork *mario = marioGetPtr();
@@ -1636,38 +1635,30 @@ void fbatEncountCheck(void)
     NpcEntry *talk;
     f32 best;
     wp->talkTarget = (void *) 0;
-    if (marioStGetSystemLevel() != 0)
-    {
+    if (marioStGetSystemLevel() != 0) {
         return;
     }
-    if (!(wp->flags & 1))
-    {
-        if ((!npc->width) && (!npc->width))
-        {
+    if (!(wp->flags & 1)) {
+        if ((!npc->width) && (!npc->width)) {
         }
-        if (marioKeyOffChk() || marioCtrlOffChk())
-        {
+        if (marioKeyOffChk() || marioCtrlOffChk()) {
             return;
         }
     }
-    if (N_itemPickUpFromFieldCheck())
-    {
+    if (N_itemPickUpFromFieldCheck()) {
         return;
     }
     data = gp->fbatData;
     kind = (u32*)&data->hitKind;
     npc = fbatHitCheck(0x13f1, kind);
-    if (npc && (data->mode == 1))
-    {
+    if (npc && (data->mode == 1)) {
         AnimationPose *pose;
         f32 rel;
         f32 ang;
-        if (!fbat_setHit(npc))
-        {
+        if (!fbat_setHit(npc)) {
             return;
         }
-        switch (*kind)
-        {
+        switch (*kind) {
             case 0x10000:
 
             default:
@@ -1679,8 +1670,7 @@ void fbatEncountCheck(void)
 
             case 0x80000:
                 marioChgMotJump2();
-                if (dbg_battleskip != 1)
-            {
+                if (dbg_battleskip != 1) {
                 animPoseSetAnim(npc->poseId, npc->tribe->damageAnimation, 1);
             }
                 break;
@@ -1690,22 +1680,19 @@ void fbatEncountCheck(void)
             case 0x200000:
 
             case 0x400000:
-                if (dbg_battleskip != 1)
-            {
+                if (dbg_battleskip != 1) {
                 animPoseSetAnim(npc->poseId, npc->tribe->damageAnimation, 1);
             }
                 break;
 
             case 0x800000:
-                if (dbg_battleskip != 1)
-            {
+                if (dbg_battleskip != 1) {
                 animPoseSetAnim(npc->poseId, npc->tribe->damageAnimation, 1);
             }
                 break;
 
             case 0x1000000:
-                if (dbg_battleskip != 1)
-            {
+                if (dbg_battleskip != 1) {
                 animPoseSetAnim(npc->poseId, npc->tribe->damageAnimation, 1);
             }
                 break;
@@ -1718,27 +1705,21 @@ void fbatEncountCheck(void)
         rel = reviseAngle(-npc->direction);
         rel += -90.0f;
         ang = reviseAngle(fbat_camAngle() - rel);
-        if (((ang > 90.0f) && (ang <= 270.0f)) || ((ang < (-90.0f)) && (ang >= (-270.0f))))
-        {
+        if (((ang > 90.0f) && (ang <= 270.0f)) || ((ang < (-90.0f)) && (ang >= (-270.0f)))) {
             pose->peraTargetRotY = reviseAngle(180.0f + fbat_camAngle());
-        }
-        else
-        {
+        } else {
             pose->peraTargetRotY = fbat_camAngle();
         }
-        while ((pose->peraTargetRotY - pose->rotationY) > 180.0f)
-        {
+        while ((pose->peraTargetRotY - pose->rotationY) > 180.0f) {
             pose->rotationY += 360.0f;
         }
 
-        while ((pose->peraTargetRotY - pose->rotationY) < (-180.0f))
-        {
+        while ((pose->peraTargetRotY - pose->rotationY) < (-180.0f)) {
             pose->rotationY -= 360.0f;
         }
 
         pose->rotationY += 0.75f * (pose->peraTargetRotY - pose->rotationY);
-        switch (*kind)
-        {
+        switch (*kind) {
             case 0x20000:
 
             case 0x40000:
@@ -1763,8 +1744,7 @@ void fbatEncountCheck(void)
 
         }
 
-        switch (*kind)
-        {
+        switch (*kind) {
             case 0x20000:
 
             case 0x40000:
@@ -1780,8 +1760,7 @@ void fbatEncountCheck(void)
             case 0x800000:
 
             case 0x1000000:
-                if (npc)
-            {
+                if (npc) {
                 psndSFXOn_3D("SFX_BTL_FLD_ENEMY_DAMAGED1", &npc->position);
             }
                 break;
@@ -1795,20 +1774,16 @@ void fbatEncountCheck(void)
         return;
     }
     best = 1000.0f;
-    if (marioChkTalkable() && (!mario->keyOffCount))
-    {
+    if (marioChkTalkable() && (!mario->keyOffCount)) {
         talk = (void *) 0;
         npc = wp->entries;
-        for (i = 0; i < total; i++, npc++)
-        {
+        for (i = 0; i < total; i++, npc++) {
             BOOL hit;
-            if (((!(npc->flags & 2)) || (npc->flags & 8)) || (!npc->talkEvt))
-            {
+            if (((!(npc->flags & 2)) || (npc->flags & 8)) || (!npc->talkEvt)) {
                 continue;
             }
             hit = 0;
-            if ((!(npc->position.y > (mario->position.y + mario->wPlayerCollisionBox.y))) && (!(mario->position.y > (npc->position.y + npc->height))))
-            {
+            if ((!(npc->position.y > (mario->position.y + mario->wPlayerCollisionBox.y))) && (!(mario->position.y > (npc->position.y + npc->height)))) {
                 Vec pos;
                 f32 dist;
                 BOOL facing;
@@ -1821,20 +1796,17 @@ void fbatEncountCheck(void)
                 pos.z = mario->position.z;
                 pos.y = npc->position.y;
                 dist = PSVECDistance(&pos, &npc->position);
-                if ((dist <= ((0.5f * (mario->wPlayerCollisionBox.x + npc->width)) + 10.0f)) && (dist < best))
-                {
+                if ((dist <= ((0.5f * (mario->wPlayerCollisionBox.x + npc->width)) + 10.0f)) && (dist < best)) {
                     talk = npc;
                 }
                 facing = 0;
                 yaw = camGetPtr(CAMERA_3D)->viewYaw;
                 dir = reviseAngle(marioGetDispDir() - yaw);
-                for (j = 0; j < 3; j++)
-                {
+                for (j = 0; j < 3; j++) {
                     // FAKE: dead int-guarded re-definition inside the loop keeps dir a named web (COLOURING M; no code, no preheader split)
                     k = 0;
                     if (k != 0) dir = 0.0f;
-                    switch (j)
-                    {
+                    switch (j) {
                         case 0:
                             yaw = camGetPtr(CAMERA_3D)->viewYaw;
                             a = reviseAngle(angleABf(mario->position.x, mario->position.z, npc->position.x, npc->position.z) - yaw);
@@ -1852,30 +1824,24 @@ void fbatEncountCheck(void)
 
                     }
 
-                    if (a < 180.0f)
-                    {
-                        if (!(dir > 180.0f))
-                        {
+                    if (a < 180.0f) {
+                        if (!(dir > 180.0f)) {
                             facing = 1;
                             break;
                         }
-                    }
-                    else
-                        if (!(dir < 180.0f))
-                    {
+                    } else
+                        if (!(dir < 180.0f)) {
                         facing = 1;
                         break;
                     }
                 }
 
-                if (facing)
-                {
+                if (facing) {
                     pos.x = mario->position.x;
                     pos.z = mario->position.z;
                     pos.y = npc->position.y;
                     dist = PSVECDistance(&pos, &npc->position);
-                    if (!(dist > ((0.5f * (mario->wPlayerCollisionBox.x + npc->width)) + 10.0f)))
-                    {
+                    if (!(dist > ((0.5f * (mario->wPlayerCollisionBox.x + npc->width)) + 10.0f))) {
                         f32 dx = npc->position.x - mario->position.x;
                         f32 dz = npc->position.z - mario->position.z;
                         f32 s;
@@ -1889,11 +1855,9 @@ void fbatEncountCheck(void)
                         f32 nz;
                         sincosf(&s, &c, angleABf(0.0f, 0.0f, dx, dz));
                         len = sqrtf((dx * dx) + (dz * dz));
-                        if (!hitCheckFilter((void *) 0, &hx, &hy, &hz, &len, &nx, &ny, &nz, mario->position.x, mario->position.y + (0.75f * mario->wPlayerCollisionBox.y), mario->position.z, s, 0.0f, c))
-                        {
+                        if (!hitCheckFilter((void *) 0, &hx, &hy, &hz, &len, &nx, &ny, &nz, mario->position.x, mario->position.y + (0.75f * mario->wPlayerCollisionBox.y), mario->position.z, s, 0.0f, c)) {
                             hit = 1;
-                            if (dist < best)
-                            {
+                            if (dist < best) {
                                 best = dist;
                                 wp->talkTarget = npc;
                             }
@@ -1901,43 +1865,33 @@ void fbatEncountCheck(void)
                     }
                 }
             }
-            if (hit)
-            {
-                if (!(npc->jumpFlags & 0x20000000))
-                {
+            if (hit) {
+                if (!(npc->jumpFlags & 0x20000000)) {
                     MarioWork *m = marioGetPtr();
                     npc->jumpFlags |= 0x20000000;
                     npc->savedDirection = npc->direction;
                     evtStopID(npc->regularEvtId);
-                    if (!(npc->flags & 0x01000000))
-                    {
+                    if (!(npc->flags & 0x01000000)) {
                         npc->direction = reviseAngle(angleABf(npc->position.x, npc->position.z, m->position.x, m->position.z));
                     }
                 }
-            }
-            else
-                if (npc->jumpFlags & 0x20000000)
-            {
+            } else
+                if (npc->jumpFlags & 0x20000000) {
                 npc->jumpFlags &= ~0x20000000;
-                if (npc->flags & 0x400000)
-                {
+                if (npc->flags & 0x400000) {
                     npc->direction = npc->savedDirection;
                     evtStartID(npc->regularEvtId);
-                }
-                else
-                {
+                } else {
                     npc->interruptFlags |= 0x10000000;
                 }
             }
         }
 
         mario->touchNpc = talk;
-        if (wp->talkTarget && (keyGetButtonTrg(0) & PAD_BUTTON_A))
-        {
+        if (wp->talkTarget && (keyGetButtonTrg(0) & PAD_BUTTON_A)) {
             npc = wp->talkTarget;
             data = gp->fbatData;
-            if (data->mode != 1)
-            {
+            if (data->mode != 1) {
                 return;
             }
             data->mode = 2;
@@ -1948,23 +1902,19 @@ void fbatEncountCheck(void)
         }
     }
     data = gp->fbatData;
-    if (data->mode == 1)
-    {
+    if (data->mode == 1) {
         u32 *kind = (u32*)&data->hitKind;
         npc = fbatHitCheck(0x2361, kind);
-        if (npc && (data->mode == 1))
-        {
+        if (npc && (data->mode == 1)) {
             u32 k = *kind;
             FieldBattleData *d = gp->fbatData;
-            if (d->mode == 1)
-            {
+            if (d->mode == 1) {
                 d->mode = 3;
                 d->subState = 0;
                 d->npc = npc;
                 npc->fbatHitKind = k;
             }
-            switch (*kind)
-            {
+            switch (*kind) {
                 case 0x20000:
 
                 case 0x40000:

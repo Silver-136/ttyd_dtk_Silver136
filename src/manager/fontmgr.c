@@ -225,8 +225,7 @@ static inline void FontDrawStringVec(Vec pos, const s8* str) {
         if (_ismbblead(*msg)) {
             code = JUTFont_CodeToGlyph(*(u16*)msg);
             msg += 2;
-        }
-        else {
+        } else {
             code = JUTFont_CodeToGlyph(FONT_CH(*msg++));
         }
         width = fontGetWidth(code)->width;
@@ -265,8 +264,7 @@ static inline void fontDrawStringVecPitch(Vec pos, f32 pitch, const s8* str) {
         if (_ismbblead(*msg)) {
             code = JUTFont_CodeToGlyph(*(u16*)msg);
             msg += 2;
-        }
-        else {
+        } else {
             code = JUTFont_CodeToGlyph(FONT_CH(*msg++));
         }
         width = fontGetWidth(code)->width;
@@ -276,8 +274,7 @@ static inline void fontDrawStringVecPitch(Vec pos, f32 pitch, const s8* str) {
         fontDrawCodeEdge(code);
         if (pitch < 0.0f) {
             x += fontScale.x * (width + charspace[gp->language]);
-        }
-        else {
+        } else {
             x += pitch * fontScale.x;
         }
     }
@@ -319,8 +316,7 @@ void FontDrawStringVecPitch(Vec pos, f32 pitch, const s8* msg) {
         if (_ismbblead(*msg)) {
             code = JUTFont_CodeToGlyph(*(u16*)msg);
             msg += 2;
-        }
-        else {
+        } else {
 #ifdef VERSION_G8ME01
             switch (c = *msg) {
                 case '<':
@@ -340,8 +336,7 @@ void FontDrawStringVecPitch(Vec pos, f32 pitch, const s8* msg) {
             fontDrawCodeEdge(code);
             if (pitch < 0.0f) {
                 x += fontScale.x * (width + charspace[gp->language]);
-            }
-            else {
+            } else {
                 x += pitch * fontScale.x;
             }
 #else
@@ -354,8 +349,7 @@ void FontDrawStringVecPitch(Vec pos, f32 pitch, const s8* msg) {
         fontDrawCodeEdge(code);
         if (pitch < 0.0f) {
             x += fontScale.x * (width + charspace[gp->language]);
-        }
-        else {
+        } else {
             x += pitch * fontScale.x;
 #endif
         }
@@ -421,8 +415,7 @@ void FontDrawStringMtx(Mtx mtx, const char* msg) {
         if (_ismbblead(*(const s8*)msg)) {
             code = JUTFont_CodeToGlyph(*(u16*)msg);
             msg += 2;
-        }
-        else {
+        } else {
             switch (*(const s8*)msg) {
                 case '\n':
                     msg++;
@@ -477,8 +470,7 @@ void FontDrawStringCenterMtx(Mtx mtx, const s8* msg) {
         if (_ismbblead(*msg)) {
             code = JUTFont_CodeToGlyph(*(u16*)msg);
             msg += 2;
-        }
-        else {
+        } else {
             code = JUTFont_CodeToGlyph(FONT_CH(*msg++));
         }
         fontDrawCodeEdgeXY(code, x, 0.0f);
@@ -513,8 +505,7 @@ void FontDrawStringShake(f32 x, f32 y, const s8* msg) {
         if (_ismbblead(*msg)) {
             code = JUTFont_CodeToGlyph(*(u16*)msg);
             msg += 2;
-        }
-        else {
+        } else {
             code = JUTFont_CodeToGlyph(FONT_CH(*msg++));
         }
         sx = x + fontScale.x * (irand(10000) % 3);
@@ -561,8 +552,7 @@ void FontDrawMessage(s32 x, s32 y, const char* msg) {
         if (_ismbblead(*(const s8*)msg)) {
             code = JUTFont_CodeToGlyph(*(u16*)msg);
             msg += 2;
-        }
-        else {
+        } else {
             switch (*(const s8*)msg) {
                 case '\n':
                     cx = x;
@@ -573,23 +563,18 @@ void FontDrawMessage(s32 x, s32 y, const char* msg) {
                     msg = msgGetCommand((char*)(msg + 1), (char*)tag, (char*)value);
                     if (!strcmp((char*)tag, "red")) {
                         FontDrawColor((GXColor){0xE0, 0x00, 0x00, 0xFF});
-                    }
-                    else if (!strcmp((char*)tag, "/red")) {
+                    } else if (!strcmp((char*)tag, "/red")) {
                         FontDrawColor(fontColTbl[0]);
-                    }
-                    else if (!strcmp((char*)tag, "col")) {
+                    } else if (!strcmp((char*)tag, "col")) {
                         sscanf((char*)value, "%x", &color);
                         FontDrawColor(color);
-                    }
-                    else if (!strcmp((char*)tag, "/col")) {
+                    } else if (!strcmp((char*)tag, "/col")) {
                         FontDrawColor(fontColTbl[0]);
-                    }
-                    else if (!strcmp((char*)tag, "icon")) {
+                    } else if (!strcmp((char*)tag, "icon")) {
                         camGetCurPtr();
                         if (value[0] >= '0' && value[0] <= '9') {
                             sscanf((char*)value, "%d%f%d%d%d", &id, &scale, &d1, &d2, &d3);
-                        }
-                        else {
+                        } else {
                             sscanf((char*)value, "%s%f%d%d%d", name, &scale, &d1, &d2, &d3);
                             id = msgIconStr2ID(name);
                             if (id < 0) {
@@ -604,8 +589,7 @@ void FontDrawMessage(s32 x, s32 y, const char* msg) {
                         FontDrawStart_alpha(fontAlpha);
                         FontDrawColor(fontColor);
                         cx += w * scale + d3;
-                    }
-                    else if (tag[0] == 'R' || (tag[0] == '/' && tag[0] == (u32)'/r')) {
+                    } else if (tag[0] == 'R' || (tag[0] == '/' && tag[0] == (u32)'/r')) {
                         break;
                     }
                     if (*(const s8*)msg == '\n') {
@@ -650,8 +634,7 @@ void FontDrawMessageMtx(Mtx mtx, const char* msg) {
         if (_ismbblead(*(const s8*)msg)) {
             code = JUTFont_CodeToGlyph(*(u16*)msg);
             msg += 2;
-        }
-        else {
+        } else {
             switch (*(const s8*)msg) {
                 case '\n':
                     cx = x;
@@ -662,16 +645,13 @@ void FontDrawMessageMtx(Mtx mtx, const char* msg) {
                     msg = msgGetCommand((char*)(msg + 1), (char*)tag, (char*)value);
                     if (!strcmp((char*)tag, "red")) {
                         FontDrawColor((GXColor){0xE0, 0x00, 0x00, 0xFF});
-                    }
-                    else if (!strcmp((char*)tag, "/red")) {
+                    } else if (!strcmp((char*)tag, "/red")) {
                         FontDrawColor(fontColTbl[0]);
-                    }
-                    else if (!strcmp((char*)tag, "icon")) {
+                    } else if (!strcmp((char*)tag, "icon")) {
                         camGetCurPtr();
                         if (value[0] >= '0' && value[0] <= '9') {
                             sscanf((char*)value, "%d%f%d%d%d", &id, &scale, &d1, &d2, &d3);
-                        }
-                        else {
+                        } else {
                             sscanf((char*)value, "%s%f%d%d%d", name, &scale, &d1, &d2, &d3);
                             id = msgIconStr2ID(name);
                             if (id < 0) {
@@ -689,8 +669,7 @@ void FontDrawMessageMtx(Mtx mtx, const char* msg) {
                         FontDrawStart_alpha(fontAlpha);
                         FontDrawColor(fontColor);
                         cx += w * scale + d3;
-                    }
-                    else if (tag[0] == 'R' || (tag[0] == '/' && tag[0] == (u32)'/r')) {
+                    } else if (tag[0] == 'R' || (tag[0] == '/' && tag[0] == (u32)'/r')) {
                         break;
                     }
                     if (*(const s8*)msg == '\n') {
@@ -743,8 +722,7 @@ u16 FontGetMessageWidthLine(const char* msg, u16* lines) {
         if (_ismbblead(*(const s8*)msg)) {
             code = JUTFont_CodeToGlyph(*(u16*)msg);
             msg += 2;
-        }
-        else {
+        } else {
             switch (*(const s8*)msg) {
                 case '\n':
                     if (maxWidth < width) {
@@ -760,8 +738,7 @@ u16 FontGetMessageWidthLine(const char* msg, u16* lines) {
                         camGetCurPtr();
                         if (value[0] >= '0' && value[0] <= '9') {
                             sscanf((char*)value, "%d%f%d%d%d", &id, &scale, &d1, &d2, &d3);
-                        }
-                        else {
+                        } else {
                             sscanf((char*)value, "%s%f%d%d%d", name, &scale, &d1, &d2, &d3);
                             id = msgIconStr2ID(name);
                             if (id < 0) {
@@ -770,8 +747,7 @@ u16 FontGetMessageWidthLine(const char* msg, u16* lines) {
                         }
                         iconGetWidthHight(&w, &h, (u16)id);
                         width += w * scale + d3;
-                    }
-                    else if (tag[0] == 'R' || (tag[0] == '/' && tag[0] == (u32)'/r')) {
+                    } else if (tag[0] == 'R' || (tag[0] == '/' && tag[0] == (u32)'/r')) {
                         break;
                     }
                     if (*(const s8*)msg == '\n') {
@@ -937,15 +913,13 @@ u16 JUTFont_CodeToGlyph(u32 code) {
                         index = sjis[1];
                         if (sjis[1] >= 0x80) {
                             index -= 65;
-                        }
-                        else {
+                        } else {
                             index -= 64;
                         }
 
                         if (!map->count) {
                             glyph = (u16)((((lead - 136) * 188) + index) + 702);
-                        }
-                        else {
+                        } else {
                             glyph = (u16)(((lead - 136) * 188) + index - 94 + map->table[0]);
                         }
                     break;
@@ -966,8 +940,7 @@ u16 JUTFont_CodeToGlyph(u32 code) {
                             }
                             if ((u16)code < map->table[2 * index]) {
                                 max = index - 1;
-                            }
-                            else {
+                            } else {
                                 min = index + 1;
                             }
                         }
@@ -1015,8 +988,7 @@ void JUTFont_DrawStart(GXColor color) {
 #ifdef VERSION_G8ME01
     if ((u32)gp->language == 0) {
         PSMTXScale(mtx, 0.001953125f, 0.0009765625f, 1.0f);
-    }
-    else {
+    } else {
         PSMTXScale(mtx, 0.001953125f, 0.00390625f, 1.0f);
     }
 #else

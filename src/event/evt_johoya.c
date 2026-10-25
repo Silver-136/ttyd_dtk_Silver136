@@ -249,13 +249,11 @@ s32 johoya_data_make(const char* prefix, s32 type) {
                     tag[mbbpos++] = tagdata[0];
                     tag[mbbpos++] = tagdata[1];
                     tagdata += 2;
-                }
-                else { //just increment to new character
+                } else { //just increment to new character
                     mbbpos += 2;
                     tagdata += 2;
                 }
-            }
-            else {
+            } else {
                 switch(tagdata[0]) {
                     case '>': //done reading the tag
                         tagdone = TRUE;
@@ -266,8 +264,7 @@ s32 johoya_data_make(const char* prefix, s32 type) {
                         if (tagNum == 0) {
                             tag[mbbpos] = '\0'; //terminate string
                             initEndPos = tagdata;
-                        }
-                        else {
+                        } else {
                             tagEndPos = (s16)mbbpos;
                         }
                         mbbpos = 0;
@@ -277,8 +274,7 @@ s32 johoya_data_make(const char* prefix, s32 type) {
                     default: //continue reading the tag
                         if (tagNum == 0) {
                             tag[mbbpos++] = *tagdata++;
-                        }
-                        else {
+                        } else {
                             mbbpos++;
                             tagdata++;
                         }
@@ -339,8 +335,7 @@ s16 johoya_set(u8* table, s16 id, s16 val) {
     idx = id / 8;
     if (val < 0) {
         val = 0;
-    }
-    else if (val > 1) {
+    } else if (val > 1) {
         val = 1;
     }
     table[idx] = (u8)(mask & table[idx]) + (u8)(val << shift);

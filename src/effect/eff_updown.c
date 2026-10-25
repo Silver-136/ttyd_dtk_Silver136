@@ -77,8 +77,7 @@ void effUpdownMain(EffectEntry* effect) {
         if (work->frame < 15) {
             work->scaleX = scale_data[work->frame * 2] / 100.0f;
             work->scaleY = scale_data[work->frame * 2 + 1] / 100.0f;
-        }
-        else {
+        } else {
             f32 arg = (s32)(work->frame - 15);
             f32 sv;
             work->scaleX = 1.0f;
@@ -166,8 +165,7 @@ void effUpdownDisp(CameraId cameraId, EffectEntry* effect) {
     GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX0, GX_FALSE, GX_PTIDENTITY);
     if (number < 0) {
         PSMTXRotRad(m4, 'z', 3.1415927f);
-    }
-    else {
+    } else {
         PSMTXIdentity(m4);
     }
     GXLoadTexMtxImm(m4, GX_TEXMTX0, GX_MTX2x4);
@@ -193,8 +191,7 @@ void effUpdownDisp(CameraId cameraId, EffectEntry* effect) {
     GXSetCurrentMtx(GX_PNMTX0);
     if (type == 0 || type == 2) {
         polygon(1, alpha, -12.0f, 24.0f, 24.0f, 24.0f, 1.0f, 1.0f);
-    }
-    else {
+    } else {
         polygon(2, alpha, -12.0f, 24.0f, 24.0f, 24.0f, 1.0f, 1.0f);
     }
 
@@ -204,14 +201,12 @@ void effUpdownDisp(CameraId cameraId, EffectEntry* effect) {
     GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, 0x3C, GX_FALSE, GX_PTIDENTITY);
     if (number >= 0) {
         PSMTXTrans(m5, 5.0f, 0.0f, 1.0f);
-    }
-    else {
+    } else {
         PSMTXTrans(m5, 5.0f, 7.0f, 1.0f);
     }
     if (work->frame < 15) {
         PSMTXConcat(m1, m5, m2);
-    }
-    else {
+    } else {
         PSMTXConcat(m0, m5, m2);
     }
     PSMTXConcat(camera->view, m2, m2);
@@ -222,16 +217,14 @@ void effUpdownDisp(CameraId cameraId, EffectEntry* effect) {
         iconGetTexObj(&texObj, ICON_1ED);
         GXLoadTexObj(&texObj, GX_TEXMAP0);
         PSMTXTrans(m5, -5.0f, 0.0f, 1.0f);
-    }
-    else {
+    } else {
         iconGetTexObj(&texObj, ICON_1EE);
         GXLoadTexObj(&texObj, GX_TEXMAP0);
         PSMTXTrans(m5, -5.0f, 7.0f, 1.0f);
     }
     if (work->frame < 15) {
         PSMTXConcat(m1, m5, m2);
-    }
-    else {
+    } else {
         PSMTXConcat(m0, m5, m2);
     }
     PSMTXConcat(camera->view, m2, m2);

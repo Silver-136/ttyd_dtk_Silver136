@@ -96,8 +96,7 @@ void effIrekaeruMain(EffectEntry* effect) {
         if (work->alpha > 255) {
             work->alpha = 255;
         }
-    }
-    else {
+    } else {
         work->alpha -= 20;
         if (work->alpha < 0) {
             work->alpha = 0;

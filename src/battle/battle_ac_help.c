@@ -32,8 +32,7 @@ void BattleAcHelpMain(void) {
     if (_ac_help_disp) {
     }
 }
-void _ac_help_disp(CameraId cameraId, void *param)
-{
+void _ac_help_disp(CameraId cameraId, void *param) {
     u16 lines;
     const char *msgs[2]; // FAKE: register-promoted array; one msg pointer differs
     BattleWork *wp = _battleWorkPointer;
@@ -43,13 +42,11 @@ void _ac_help_disp(CameraId cameraId, void *param)
     f32 y;
     const char **help = &wp->acHelpMsg;
     alpha = 0xFF;
-    if (wp->acHelpDispType == 1)
-    {
+    if (wp->acHelpDispType == 1) {
         alpha = 0x80;
     }
     msgs[0] = msgSearch(*help);
-    if (!msgs[0])
-    {
+    if (!msgs[0]) {
         msgs[0] = (0, "めっせーじがみつかりません");
     }
     msgs[1] = msgs[0];

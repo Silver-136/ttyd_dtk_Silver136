@@ -148,8 +148,7 @@ f32 check_float(s32 val) {
         val += EVTDAT_FLOAT_BASE;
         ret = val;
         ret /= 1024.0f;
-    }
-    else {
+    } else {
         ret = val;
     }
 
@@ -658,12 +657,10 @@ s32 evt_case_equal(EventEntry* entry) { // 36
     if (0 >= state) {
         entry->nextCommand = evtSearchEndSwitch(entry);
         return EVT_RETURN_DONE;
-    }
-    else {
+    } else {
         if (targetValue != inputValue) {
             entry->nextCommand = evtSearchCase(entry);
-        }
-        else {
+        } else {
             // Tell the top level guard on all case statements that we've matched a specific case,
             // so the next one we encounter, act as a break; and jump to the end of the switch.
             entry->switchStates[depth] = 0;
@@ -688,12 +685,10 @@ s32 evt_case_not_equal(EventEntry* entry) { // 37
     if (0 >= state) {
         entry->nextCommand = evtSearchEndSwitch(entry);
         return EVT_RETURN_DONE;
-    }
-    else {
+    } else {
         if (targetValue == inputValue) {
             entry->nextCommand = evtSearchCase(entry);
-        }
-        else {
+        } else {
             entry->switchStates[depth] = 0;
         }
         return EVT_RETURN_DONE;
@@ -716,12 +711,10 @@ s32 evt_case_small(EventEntry* entry) { // 38
     if (0 >= state) {
         entry->nextCommand = evtSearchEndSwitch(entry);
         return EVT_RETURN_DONE;
-    }
-    else {
+    } else {
         if (targetValue <= inputValue) {
             entry->nextCommand = evtSearchCase(entry);
-        }
-        else {
+        } else {
             entry->switchStates[depth] = 0;
         }
         return EVT_RETURN_DONE;
@@ -744,12 +737,10 @@ s32 evt_case_small_equal(EventEntry* entry) { // 39
     if (0 >= state) {
         entry->nextCommand = evtSearchEndSwitch(entry);
         return EVT_RETURN_DONE;
-    }
-    else {
+    } else {
         if (targetValue < inputValue) {
             entry->nextCommand = evtSearchCase(entry);
-        }
-        else {
+        } else {
             entry->switchStates[depth] = 0;
         }
         return EVT_RETURN_DONE;
@@ -772,12 +763,10 @@ s32 evt_case_large(EventEntry* entry) { // 40
     if (0 >= state) {
         entry->nextCommand = evtSearchEndSwitch(entry);
         return EVT_RETURN_DONE;
-    }
-    else {
+    } else {
         if (targetValue >= inputValue) {
             entry->nextCommand = evtSearchCase(entry);
-        }
-        else {
+        } else {
             entry->switchStates[depth] = 0;
         }
         return EVT_RETURN_DONE;
@@ -800,12 +789,10 @@ s32 evt_case_large_equal(EventEntry* entry) { // 41
     if (0 >= state) {
         entry->nextCommand = evtSearchEndSwitch(entry);
         return EVT_RETURN_DONE;
-    }
-    else {
+    } else {
         if (targetValue > inputValue) {
             entry->nextCommand = evtSearchCase(entry);
-        }
-        else {
+        } else {
             entry->switchStates[depth] = 0;
         }
         return EVT_RETURN_DONE;
@@ -828,12 +815,10 @@ s32 evt_case_between(EventEntry* entry) { // 42
     if (0 >= state) {
         entry->nextCommand = evtSearchEndSwitch(entry);
         return EVT_RETURN_DONE;
-    }
-    else {
+    } else {
         if ((min <= inputValue) && (inputValue <= max)) {
             entry->switchStates[depth] = 0;
-        }
-        else {
+        } else {
             entry->nextCommand = evtSearchCase(entry);
         }
         return EVT_RETURN_DONE;
@@ -850,8 +835,7 @@ s32 evt_case_etc(EventEntry* entry) { // 43
         entry->nextCommand = evtSearchEndSwitch(entry);
         
         return EVT_RETURN_DONE;
-    }
-    else {
+    } else {
         entry->switchStates[depth] = 0;
         
         return EVT_RETURN_DONE;
@@ -872,12 +856,10 @@ s32 evt_case_flag(EventEntry* entry) { // 44
     if (0 >= state) {
         entry->nextCommand = evtSearchEndSwitch(entry);
         return EVT_RETURN_DONE;
-    }
-    else {
+    } else {
         if ((inputValue & targetMask) == 0) {
             entry->nextCommand = evtSearchCase(entry);
-        }
-        else {
+        } else {
             entry->switchStates[depth] = 0;
         }
         return EVT_RETURN_DONE;
@@ -898,12 +880,10 @@ s32 evt_case_or(EventEntry* entry) { // 45
     if (state == 0) {
         entry->nextCommand = evtSearchEndSwitch(entry);
         return EVT_RETURN_DONE;
-    }
-    else {
+    } else {
         if (targetValue == inputValue) {
             entry->switchStates[depth] = -1;
-        }
-        else if (state != -1) {
+        } else if (state != -1) {
             entry->nextCommand = evtSearchCase(entry);
         }
         return EVT_RETURN_DONE;
@@ -923,16 +903,13 @@ s32 evt_case_and(EventEntry* entry) { // 46
     if (entry->switchStates[depth] == 0) {
         entry->nextCommand = evtSearchEndSwitch(entry);
         return EVT_RETURN_DONE;
-    }
-    else if (entry->switchStates[depth] == -2) {
+    } else if (entry->switchStates[depth] == -2) {
         entry->nextCommand = evtSearchCase(entry);
         return EVT_RETURN_DONE;
-    }
-    else {
+    } else {
         if (targetValue == inputValue) {
             entry->switchStates[depth] = -1;
-        }
-        else {
+        } else {
             entry->switchStates[depth] = -2;
             entry->nextCommand = evtSearchCase(entry);
         }
@@ -952,13 +929,11 @@ s32 evt_case_end(EventEntry* entry) { // 47
     if (state == 0) {
         entry->nextCommand = evtSearchEndSwitch(entry);
         return EVT_RETURN_DONE;
-    }
-    else if (state == -1) {
+    } else if (state == -1) {
         entry->switchStates[depth] = 0;
         entry->nextCommand = evtSearchEndSwitch(entry);
         return EVT_RETURN_DONE;
-    }
-    else {
+    } else {
         entry->switchStates[depth] = 1;
         entry->nextCommand = evtSearchCase(entry);
         return EVT_RETURN_DONE;
@@ -1790,102 +1765,80 @@ s32 evt_debug_put_reg(EventEntry* entry) { // 115
 
     if (reg <= EVTDAT_ADDR_MAX) {
         sprintf(str, "ADDR     [%08X]", reg);
-    }
-    else if (reg <= -220000000) {
+    } else if (reg <= -220000000) {
         sprintf(str, "FLOAT    [%4.2f]", check_float(reg));
-    }
-    else if (reg <= -200000000) {
+    } else if (reg <= -200000000) {
         reg +=  210000000;
         mask = (1 << (reg % 32));
         data = entry->ufBase[reg / 32];
         sprintf(str, "UF(%3d)  [%d]", reg, mask & data);
-    }
-    else if (reg <= -180000000) {
+    } else if (reg <= -180000000) {
         reg += 190000000;
         val = entry->uwBase[reg];
         if (val <= EVTDAT_ADDR_MAX) {
             sprintf(str, "UW(%3d)  [%08X]", val, val);
-        }
-        else if (val <= -220000000) {
+        } else if (val <= -220000000) {
             sprintf(str, "UW(%3d)  [%4.2f]", reg, check_float(val));
-        }
-        else {
+        } else {
             sprintf(str, "UW(%3d)  [%d]", reg, val);
         }
-    }
-    else if (reg <= -160000000) {
+    } else if (reg <= -160000000) {
         reg += 170000000;
         val = swByteGet(reg);
         if (val <= EVTDAT_ADDR_MAX) {
             sprintf(str, "GSW(%3d) [%08X]", val); // two conversions, one argument: as in the original
-        }
-        else if (val <= -220000000) {
+        } else if (val <= -220000000) {
             sprintf(str, "GSW(%3d) [%4.2f]", reg, check_float(val));
-        }
-        else {
+        } else {
             sprintf(str, "GSW(%3d) [%d]", reg, val);
         }
-    }
-    else if (reg <= -140000000) {
+    } else if (reg <= -140000000) {
         reg += 150000000;
         val = _swByteGet(reg);
         if (val <= EVTDAT_ADDR_MAX) {
             sprintf(str, "LSW(%3d) [%08X]", val); // two conversions, one argument: as in the original
-        }
-        else if (val <= -220000000) {
+        } else if (val <= -220000000) {
             sprintf(str, "LSW(%3d)  [%4.2f]", reg, check_float(val));
-        }
-        else {
+        } else {
             sprintf(str, "LSW(%3d) [%d]", reg, val);
         }
-    }
-    else if (reg <= -120000000) {
+    } else if (reg <= -120000000) {
         reg += 130000000;
         sprintf(str, "GSWF(%3d)[%d]", reg, swGet(reg));
-    }
-    else if (reg <= -100000000) {
+    } else if (reg <= -100000000) {
         reg += 110000000;
         sprintf(str, "LSWF(%3d)[%d]", reg, _swGet(reg));
-    }
-    else if (reg <= -80000000) {
+    } else if (reg <= -80000000) {
         reg += 90000000;
         mask = 1 << (reg % 32);
         data = wp->gfData[reg / 32];
         sprintf(str, "GF(%3d)  [%d]", reg, data & mask);
-    }
-    else if (reg <= -60000000) {
+    } else if (reg <= -60000000) {
         reg += 70000000;
         mask = 1 << (reg % 32);
         data = entry->lfData[reg / 32];
         sprintf(str, "LF(%3d)  [%d]", reg, data & mask);
-    }
-    else if (reg <= -40000000) {
+    } else if (reg <= -40000000) {
         reg += 50000000;
         val = wp->gwData[reg];
         if (val <= EVTDAT_ADDR_MAX) {
             sprintf(str, "GW(%3d)  [%08X]", reg, val);
-        }
-        else if (val <= -220000000) {
+        } else if (val <= -220000000) {
             sprintf(str, "GW(%3d)  [%4.2f]", reg, check_float(val));
-        }
-        else {
+        } else {
             sprintf(str, "GW(%3d)  [%d]", reg, val);
         }
-    }
-    else if (reg <= -20000000) {
+    } else if (reg <= -20000000) {
         reg += 30000000;
         val = entry->lwData[reg];
         if (val <= EVTDAT_ADDR_MAX) {
             sprintf(str, "LW(%3d)  [%08X]", reg, val);
-        }
-        else if (val <= -220000000) {
+        } else if (val <= -220000000) {
             sprintf(str, "LW(%3d)  [%4.2f]", reg, check_float(val));
-        }
-        else {
+        } else {
             sprintf(str, "LW(%3d)  [%d]", reg, val);
         }
-    }
-    else {
+    } else {
         sprintf(str, "         [%d]", reg);
     }
 
@@ -2293,21 +2246,16 @@ s32 evtmgrCmd(EventEntry* entry) {
 
         if (status == EVT_RETURN_REPEAT) {
             continue;
-        }
-        else if (status == EVT_RETURN_FINISH) {
+        } else if (status == EVT_RETURN_FINISH) {
             return -1;
-        }
-        else if (status < 0) {
+        } else if (status < 0) {
             return 1;
-        }
-        else if (status == EVT_RETURN_BLOCK) {
+        } else if (status == EVT_RETURN_BLOCK) {
             break;
-        }
-        else if (status == EVT_RETURN_YIELD) {
+        } else if (status == EVT_RETURN_YIELD) {
             entry->opcode = OPCODE_NEXT;
             break;
-        }
-        else if (status == EVT_RETURN_DONE) {
+        } else if (status == EVT_RETURN_DONE) {
             entry->opcode = OPCODE_NEXT;
             continue;            
         }
@@ -2455,8 +2403,7 @@ EvtWord evtSetValue(EventEntry* entry, EvtWord index, EvtWord value) {
         shift = index % 32;
         if (value != 0) { //set bit
             entry->ufBase[index / 32] |= (1 << shift);
-        }
-        else { //clear bit
+        } else { //clear bit
             entry->ufBase[index / 32] &= ~(1 << shift);
         }
         return value;
@@ -2673,8 +2620,7 @@ EvtWord* evtSearchElse(EventEntry* entry) {
             case OPCODE_END_IF:
                 if (--depth >= 0) {
                     break;
-                }
-                else {
+                } else {
                     return cmd;
                 }
 
@@ -2704,8 +2650,7 @@ EvtWord* evtSearchElse(EventEntry* entry) {
              case OPCODE_ELSE:
                 if (depth == 0) {
                     return cmd;
-                }
-                else {
+                } else {
                     break;
                 }
        }
@@ -2729,8 +2674,7 @@ EvtWord* evtSearchEndIf(EventEntry* entry) {
             case OPCODE_END_IF:
                 if (--depth >= 0) {
                     break;
-                }
-                else {
+                } else {
                     return cmd;
                 }
 

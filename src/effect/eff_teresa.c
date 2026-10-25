@@ -65,8 +65,7 @@ void effTeresaMain(EffectEntry* effect) {
             // shrink, then puff into smoke
             if (work->scale > 0.1f) {
                 work->scale *= 0.8f;
-            }
-            else {
+            } else {
                 work->vanished = TRUE;
                 effKemuTestEntry(8, work->position.x, work->position.y, work->position.z, 1.0f);
                 {
@@ -80,8 +79,7 @@ void effTeresaMain(EffectEntry* effect) {
             }
             work->rotZ += 10.0f;
             work->alpha = 178.5f;
-        }
-        else {
+        } else {
             work->rotZ = 0.0f;
             work->scale += (20.0f - work->scale) / 30.0f;
             work->alpha *= 0.8f;
@@ -90,8 +88,7 @@ void effTeresaMain(EffectEntry* effect) {
                 return;
             }
         }
-    }
-    else {
+    } else {
         work->scale += (20.0f - work->scale) / 30.0f;
         work->alpha *= 0.98f;
         if (work->alpha < 3.0f) {
@@ -120,8 +117,7 @@ void effTeresaDisp(CameraId cameraId, EffectEntry* effect) {
     GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_REG, GX_LIGHT_NULL, GX_DF_NONE, GX_AF_NONE);
     if (type == 0) {
         GXSetChanMatColor(GX_COLOR0A0, (GXColor){ 0xFF, 0xFF, 0xFF, work->alpha });
-    }
-    else {
+    } else {
         GXSetChanMatColor(GX_COLOR0A0, (GXColor){ 0x00, 0x00, 0x00, work->alpha });
     }
     GXSetNumTexGens(1);

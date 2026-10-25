@@ -35,8 +35,7 @@ void swClear(s32 index) { //clear specific bit
 void swByteSet(s32 index, s32 value) {
     if (index == 0) {
         gp->mGSW0 = value;
-    }
-    else {
+    } else {
         gp->mGSW[index] = (u8)value;
     }
 }
@@ -44,8 +43,7 @@ void swByteSet(s32 index, s32 value) {
 s32 swByteGet(s32 index) {
     if (index == 0) {
         return gp->mGSW0;
-    }
-    else {
+    } else {
         return gp->mGSW[index];
     }
 }

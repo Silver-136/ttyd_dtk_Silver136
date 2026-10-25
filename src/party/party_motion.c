@@ -356,8 +356,7 @@ void party_motion_stay(PartyEntry* party) {
         lim = 70.0f;
     }
     if (!strcmp(gp->currentMapName, "aji_02") || !strcmp(gp->currentMapName, "aji_05") ||
-        !strcmp(gp->currentMapName, "aji_12"))
-    {
+        !strcmp(gp->currentMapName, "aji_12")) {
         if (!marioKeyOffChk()) {
             {
                 f32 sd;
@@ -440,8 +439,7 @@ void party_motion_stay(PartyEntry* party) {
                     }
                 } else if (other->currentMemberId == 3 && other->runMode == 3) {
                     if (mario->currMotionId != MARIO_MOTION_DAMAGE && mario->currMotionId != MARIO_MOTION_HIP && mario->currMotionId != MARIO_MOTION_HIP_2 &&
-                        distABf(party->position.x, party->position.z, mario->position.x, mario->position.z) >= lim)
-                    {
+                        distABf(party->position.x, party->position.z, mario->position.x, mario->position.z) >= lim) {
                         partyChgMot(party, 1);
                     }
                 } else if (!(other->flags & PARTY_FLAG_IS_BEING_USED) || other->currentMemberId == 4) {
@@ -481,8 +479,7 @@ void party_motion_stay(PartyEntry* party) {
     partyWalkChkGnd(party);
     party_force_reset_outofscreen(party);
     if (party->currentMemberId == 7 && !(party->flags2 & 0x8000) && !marioKeyOffChk() && marioChkDeepSleep() != 1 &&
-        chuchu_searchObject())
-    {
+        chuchu_searchObject()) {
         switch (party->useMotionId) {
         case 1:
             if (--party->moveFrames > 0) {
@@ -535,8 +532,7 @@ void party_motion_wait(PartyEntry* party) {
     } else {
         partyWalkChkGnd(party);
         if (party->currentMemberId == 7 && !(party->flags2 & 0x8000) && !marioKeyOffChk() &&
-            marioChkDeepSleep() != 1 && chuchu_searchObject())
-        {
+            marioChkDeepSleep() != 1 && chuchu_searchObject()) {
             switch (party->useMotionId) {
                 case 1:
                     if (--party->moveFrames <= 0) {
@@ -617,8 +613,7 @@ static inline BOOL partyChkMarioFollowY(MarioWork* mario) {
         return FALSE;
     }
     if (mario->currMotionId == MARIO_MOTION_DAMAGE || mario->currMotionId == MARIO_MOTION_DAMAGE_TOGE || mario->currMotionId == MARIO_MOTION_HIP ||
-        mario->currMotionId == MARIO_MOTION_HIP_2)
-    {
+        mario->currMotionId == MARIO_MOTION_HIP_2) {
         return FALSE;
     }
     return TRUE;
@@ -839,8 +834,7 @@ void party_motion_homing_walk(PartyEntry* party) {
         lim = VERSION_PICK(37.5f, 45.0f);
     }
     if (!strcmp(gp->currentMapName, "aji_02") || !strcmp(gp->currentMapName, "aji_05") ||
-        !strcmp(gp->currentMapName, "aji_12"))
-    {
+        !strcmp(gp->currentMapName, "aji_12")) {
         if (!marioKeyOffChk()) {
             lim = partyStayDist(party);
             party->trigFlags |= 0x20000;
@@ -1275,8 +1269,7 @@ void party_motion_homing_fly(PartyEntry* party) {
         lim = VERSION_PICK(32.0f, 45.0f);
     }
     if (!strcmp(gp->currentMapName, "aji_02") || !strcmp(gp->currentMapName, "aji_05") ||
-        !strcmp(gp->currentMapName, "aji_12"))
-    {
+        !strcmp(gp->currentMapName, "aji_12")) {
         if (!marioKeyOffChk()) {
             lim = partyStayDist(party);
             party->trigFlags |= 0x20000;
@@ -1528,8 +1521,7 @@ void party_motion_homing_fly(PartyEntry* party) {
                 } else {
                     party->noFloorFrames++;
                     if (partyGetTargetDistY(id, party->position.y) >= 1.0f &&
-                        __fabsf(mario->position.y - party->position.y) >= 10.0f)
-                    {
+                        __fabsf(mario->position.y - party->position.y) >= 10.0f) {
                         party->position.y = party->position.y + 0.1f * ((10.0f + mario->position.y) - party->position.y);
                         party->position.x = v.x;
                         party->position.z = v.z;
@@ -3139,8 +3131,7 @@ void party_force_reset_outofscreen(PartyEntry* party) {
     }
     marioGetScreenPos(party->position, &sx, &sy, &sz);
     if (distABf(mario->position.x, mario->position.z, party->position.x, party->position.z) < 20.0f &&
-        sy > 800.0f)
-    {
+        sy > 800.0f) {
         partyGetAppearPos3(party, &pos);
         party->position = pos;
         return;
@@ -3228,8 +3219,7 @@ void party_force_reset_outofscreen(PartyEntry* party) {
 static void partyGorFix(PartyEntry* party) {
     MarioWork* m3 = party->playerPtr;
     if (!strcmp(gp->currentMapName, "gor_01") && m3->hitobjStandOn && party->hitobjStandOn &&
-        !strcmp(hitGetName(m3->hitobjStandOn), "A_ie_03_yuka_f1_C") && !strcmp(hitGetName(party->hitobjStandOn), "A_ie_03_yuka_f2_C"))
-    {
+        !strcmp(hitGetName(m3->hitobjStandOn), "A_ie_03_yuka_f1_C") && !strcmp(hitGetName(party->hitobjStandOn), "A_ie_03_yuka_f2_C")) {
         Vec fix = {122.0f, 130.0f, -313.0f};
         party->position = fix;
     }

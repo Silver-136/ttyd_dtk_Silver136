@@ -1701,15 +1701,13 @@ s32 partyRideChk(PartyEntry* party) {
     return ret;
 }
 
-void partyRideMain(PartyEntry *party)
-{
+void partyRideMain(PartyEntry *party) {
   Vec pos;
   f32 shrink; // FAKE: one function-scope temp for (f32)(16 - timer), shared by cases 110 and 111 (see docs/FAKES.md)
   Vec s;
   f32 dy0;
   u8 *mario = (u8 *) party->playerPtr;
-  switch (party->motionStep)
-  {
+  switch (party->motionStep) {
     case 0:
       getRidePos(party, &pos);
       party->moveTarget = pos;
@@ -1734,20 +1732,17 @@ void partyRideMain(PartyEntry *party)
       movePos(&party->position.x, &party->position.z, party->moveSpeed, party->targetDir);
       party->displayDirection = revise360((party->displayDirection) + (party->spinSpeed));
       party->spinSpeed += 2.0f;
-      if ((party->spinSpeed) >= 30.0f)
-      {
+      if ((party->spinSpeed) >= 30.0f) {
         party->spinSpeed = 30.0f;
       }
       t = (f32) (party->moveFrames);
-      if (t > 10.0f)
-      {
+      if (t > 10.0f) {
         t = 10.0f;
       }
       party->scale.x = t / 10.0f;
       party->scale.y = party->scale.x;
       party->scale.z = party->scale.x;
-      if ((--(party->moveFrames)) < 0)
-      {
+      if ((--(party->moveFrames)) < 0) {
         party->motionStep = 2;
       }
       break;
@@ -1794,8 +1789,7 @@ void partyRideMain(PartyEntry *party)
     case 21:
       party->position.y = party->position.y + (party->velY);
       party->velY = (party->velY) + (party->work.common.accelY);
-      if ((--(party->moveFrames)) > 0)
-    {
+      if ((--(party->moveFrames)) > 0) {
       break;
     }
       party->motionStep = 22;
@@ -1831,12 +1825,9 @@ void partyRideMain(PartyEntry *party)
       party->position.x = x;
       party->position.y = y + (0.5f * (((MarioWork *) mario)->wPlayerCollisionBox.y));
       party->position.z = z;
-      if (party->motionStep == 100)
-      {
+      if (party->motionStep == 100) {
         partyGetAppearPos(party, &party->moveTarget);
-      }
-      else
-      {
+      } else {
         partyGetAppearPos2(party, &party->moveTarget);
       }
       party->displayDirectionTarget = ((MarioWork *) mario)->displayDirectionTarget;
@@ -1846,17 +1837,12 @@ void partyRideMain(PartyEntry *party)
       party->moveSpeed = (party->moveDistance) / ((f32) (party->moveFrames));
       h = 0.5f * ((f32) (party->moveFrames));
       dy = (party->moveTarget.y) - party->position.y;
-      if (__fabsf(dy) < 1.0f)
-      {
+      if (__fabsf(dy) < 1.0f) {
         dy = 10.0f;
-      }
-      else
-        if (dy >= 0.0f)
-      {
+      } else
+        if (dy >= 0.0f) {
         dy += 0.5f * (party->height);
-      }
-      else
-      {
+      } else {
         dy = 10.0f;
       }
       dy = (dy + dy) / ((h * h) - h);
@@ -1871,26 +1857,22 @@ void partyRideMain(PartyEntry *party)
 
     case 110:
       partyMoveNoHosei(party);
-      if ((party->velY) <= 0.0f)
-    {
+      if ((party->velY) <= 0.0f) {
       party->flags &= ~PARTY_FLAG_IS_JUMPING;
       party->accelY = -1.6f;
     }
-      if (party->position.y < (-2000.0f))
-    {
+      if (party->position.y < (-2000.0f)) {
       party->moveFrames = 0;
       party->motionStep = 111;
       break;
     }
-      if (party->hitobjStandOn == NULL)
-    {
+      if (party->hitobjStandOn == NULL) {
       // FAKE: no-op (PartyEntry*) cast on the shrink-timer reads/stores of moveFrames; the plain field access reschedules the int->float conversion
       shrink = (f32) (16 - ((((PartyEntry*)party)->moveFrames)));
       s = (Vec){0.0f, 0.0f, 0.0f};
       s.x = (s.y = (s.z = shrink / 16.0f));
       party->scale = s;
-      if ((--(party->moveFrames)) <= 0)
-      {
+      if ((--(party->moveFrames)) <= 0) {
         (((PartyEntry*)party)->moveFrames) = 0;
       }
       break;
@@ -1903,8 +1885,7 @@ void partyRideMain(PartyEntry *party)
       s = (Vec){0.0f, 0.0f, 0.0f};
       s.x = (s.y = (s.z = shrink / 16.0f));
       party->scale = s;
-      if ((--(party->moveFrames)) > 0)
-      {
+      if ((--(party->moveFrames)) > 0) {
         break;
       }
       (((PartyEntry*)party)->moveFrames) = 0;

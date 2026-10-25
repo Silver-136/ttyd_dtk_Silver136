@@ -104,8 +104,7 @@ static void effBombMain(EffectEntry* effect) {
                 work->scaleX = scale_dt[frame * 3 + 1] / 100.0f;
                 work->scaleY = scale_dt[frame * 3 + 2] / 100.0f;
             }
-        }
-        else if ((u32)frame < 54) {
+        } else if ((u32)frame < 54) {
             work->offset = scale_dt2[frame * 3];
             work->scaleX = scale_dt2[frame * 3 + 1] / 100.0f;
             work->scaleY = scale_dt2[frame * 3 + 2] / 100.0f;

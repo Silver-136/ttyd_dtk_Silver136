@@ -99,8 +99,7 @@ u8 cloudGetStatus() {
     if (party == NULL || (party->currentMemberId == PARTY_MEMBER_FLURRIE && (party->flags & PARTY_FLAG_IS_BEING_USED) == 0)) {
         status = 0;
         return status;
-    }
-    else if (party->useMotionId == 10 && party->useMotionId < 20) {
+    } else if (party->useMotionId == 10 && party->useMotionId < 20) {
         status = 1;
     }
 
@@ -117,11 +116,9 @@ f32 cloudGetBreathDir() {
 
     if ((party->flags & PARTY_FLAG_IS_BEING_USED) != 0 && (party->useMotionId < MARIO_MOTION_FALL)){
         breathDir = -1.0f;
-    }
-    else if (party->useStruct == NULL) {
+    } else if (party->useStruct == NULL) {
         breathDir = 0.0f;
-    }
-    else {
+    } else {
         PartyCloud* cloud = (PartyCloud*)party->useStruct;
         breathDir = toMovedir(cloud->breathDir);
     }
@@ -188,14 +185,11 @@ struct HitEntry* cloudGetHitBreathout(s32 param_1) {
     hitBreathout = NULL;
     if (param_1 == 0) {
         hitBreathout = ((PartyCloud*)party->useStruct)->hitFront;
-    }
-    else if (param_1 == 1) { 
+    } else if (param_1 == 1) {
         hitBreathout = ((PartyCloud*)party->useStruct)->hitDown;
-    }
-    else if (param_1 == 2) {
+    } else if (param_1 == 2) {
         hitBreathout = ((PartyCloud*)party->useStruct)->hitSweep[0];
-    }
-    else if (param_1 == 3) { 
+    } else if (param_1 == 3) {
         hitBreathout = ((PartyCloud*)party->useStruct)->hitSweep[1];
     }
     
@@ -214,8 +208,7 @@ f32 cloudGetBreathDist() {
 
     if ((party->currentMemberId != PARTY_MEMBER_FLURRIE || (party->flags & PARTY_FLAG_IS_BEING_USED) == 0) || party->useMotionId < MARIO_MOTION_FALL) {
         breathDist = 0.0f;
-    }
-    else {
+    } else {
         PartyCloud* cloud = (PartyCloud*)party->useStruct;
         breathDist = cloud->breathDist;
     }
@@ -662,8 +655,7 @@ void cloudGetAt(Vec* position) {
 
         if(camera->stateA == 0) {
             cloud_at = *position;
-        }
-        else {
+        } else {
             *position = cloud_at;
         }
     }

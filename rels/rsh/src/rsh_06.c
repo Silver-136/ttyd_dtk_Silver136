@@ -1164,8 +1164,7 @@ static void ext_moamoa_main(void) {
         f32 tz;
         f32 s;
         s = (m->timer < 200) ? (1.0f) : ((800 - m->timer) / 600.0f);
-        if (s < 0.0f)
-      {
+        if (s < 0.0f) {
         s = 0.0f;
         m->flags |= 0x200;
       }
@@ -1243,8 +1242,7 @@ static void ext_moamoa_main(void) {
         (*pose->mtx)[0][3] += m->speed * moa_sinx(rad);
         (*pose->mtx)[2][3] = (*pose->mtx)[2][3] + (m->speed * (-moa_cosx(rad)));
       }
-        if ((--m->jumpTimer) < 0)
-      {
+        if ((--m->jumpTimer) < 0) {
         (*pose->mtx)[0][3] = m->target.x;
         (*pose->mtx)[1][3] = m->target.y;
         (*pose->mtx)[2][3] = m->target.z;
@@ -1267,13 +1265,10 @@ static void ext_moamoa_main(void) {
       case 38:
       {
         f32 tz;
-        if (!(m->flags & 1))
-        {
+        if (!(m->flags & 1)) {
           tx = mario->position.x;
           tz = mario->position.z;
-        }
-        else
-        {
+        } else {
           tx = wp->target[i % 3].x;
           tz = wp->target[i % 3].z;
         }
@@ -1330,8 +1325,7 @@ static void ext_moamoa_main(void) {
         f32 r1 = rand() / 32767.0f;
         s = (r1 * mmI(0.3f - 0.2f)) + 0.2f;
       }
-        if (!sndFlag)
-      {
+        if (!sndFlag) {
         Vec pos = {0.0f, 0.0f, 0.0f};
         pos.x = (*pose->mtx)[0][3];
         pos.y = (*pose->mtx)[1][3];

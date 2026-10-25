@@ -966,8 +966,7 @@ USER_FUNC(evt_npc_homing_target) {
             mario = event->userdatap[1];
             dx = mario->position.x - npc->position.x;
             dz = mario->position.z - npc->position.z;
-        }
-        else {
+        } else {
             NpcEntry* other;
             event->userdata[0] = 1;
             event->userdatap[1] = evtNpcNameToPtr(event, targetName);
@@ -1003,8 +1002,7 @@ USER_FUNC(evt_npc_homing_target) {
             npc->jumpTargetPos.x = mario->position.x;
             npc->jumpTargetPos.y = mario->position.y;
             npc->jumpTargetPos.z = mario->position.z;
-        }
-        else {
+        } else {
             NpcEntry* other = event->userdatap[1];
             npc->jumpTargetPos.x = other->position.x;
             npc->jumpTargetPos.y = other->position.y;
@@ -1020,12 +1018,10 @@ USER_FUNC(evt_npc_homing_target) {
         delta = compAngle(npc->moveDir, angle);
         if (fabsf(delta) <= 60.0f * turnRate * npc->moveDt) {
             npc->moveDir = angle;
-        }
-        else {
+        } else {
             if (delta > 0.0f) {
                 npc->moveDir += 60.0f * turnRate * npc->moveDt;
-            }
-            else {
+            } else {
                 npc->moveDir -= 60.0f * turnRate * npc->moveDt;
             }
             npc->moveDir = reviseAngle(npc->moveDir);
@@ -1045,11 +1041,9 @@ USER_FUNC(evt_npc_homing_target) {
 
     if (npc->moveTime && npc->moveTime <= npc->moveElapsed) {
         finished = TRUE;
-    }
-    else if (stopDistance > 0.0f && dist < stopDistance) {
+    } else if (stopDistance > 0.0f && dist < stopDistance) {
         finished = TRUE;
-    }
-    else if ((moveFlags & 0x4) && npc->wallHit) {
+    } else if ((moveFlags & 0x4) && npc->wallHit) {
         finished = TRUE;
     }
     if (finished) {
@@ -1181,8 +1175,7 @@ USER_FUNC(evt_npc_set_ry_lr) {
     right = (angle + 90) % 360;
     if (side == 0) {
         npc->direction = left;
-    }
-    else {
+    } else {
         npc->direction = right;
     }
     return EVT_RETURN_DONE;
@@ -1468,8 +1461,7 @@ f32 _get_target_dir(EventEntry* event, NpcEntry* npc, const char* targetName) {
         target.x = mario->position.x;
         target.y = mario->position.y;
         target.z = mario->position.z;
-    }
-    else {
+    } else {
         NpcEntry* other = evtNpcNameToPtr(event, targetName);
         target.x = other->position.x;
         target.y = other->position.y;
@@ -1559,8 +1551,7 @@ USER_FUNC(evt_npc_get_loiter_dir) {
     range = max - min;
     if (range <= 0.0f) {
         dir = dir + min;
-    }
-    else {
+    } else {
         dir = dir + (min + rand() / range);
     }
     evtSetFloat(event, index, reviseAngle(dir));
@@ -1643,16 +1634,13 @@ USER_FUNC(evt_npc_facedirection_add) {
         MarioWork* mario = marioGetPtr();
         if (180.0f == mario->displayDirection) {
             sign = 1.0f;
-        }
-        else {
+        } else {
             sign = -1.0f;
         }
-    }
-    else {
+    } else {
         if (90.0f == npcTransRytoFaceDir(evtNpcNameToPtr(event, name))) {
             sign = 1.0f;
-        }
-        else {
+        } else {
             sign = -1.0f;
         }
     }
@@ -1780,8 +1768,7 @@ USER_FUNC(evt_npc_set_offscreen) {
     npc = evtNpcNameToPtr(event, name);
     if (offscreen == NULL) {
         npc->offscreenId = -1;
-    }
-    else {
+    } else {
         npc->offscreenId = offscreenNameToId(offscreen);
     }
     return EVT_RETURN_DONE;
@@ -1814,8 +1801,7 @@ USER_FUNC(evt_npc_blur_onoff) {
     name = evtNpcNameToPtr(event, name)->description;
     if (enable) {
         npcBlurOn(name);
-    }
-    else {
+    } else {
         npcBlurOff(name);
     }
     return EVT_RETURN_DONE;
@@ -1827,8 +1813,7 @@ USER_FUNC(evt_npc_check) {
 
     if (npcNameToPtr_NoAssert((const char*)evtGetValue(event, args[0])) == NULL) {
         evtSetValue(event, args[1], FALSE);
-    }
-    else {
+    } else {
         evtSetValue(event, args[1], TRUE);
     }
     return EVT_RETURN_DONE;

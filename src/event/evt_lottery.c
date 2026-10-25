@@ -41,8 +41,7 @@ USER_FUNC(evt_lottery) {
                 lot->flags &= ~4;
                 lot->flags &= ~8;
             }
-        }
-        else {
+        } else {
             lot->flags |= 4;
             lot->flags &= ~8;
         }
@@ -54,28 +53,24 @@ USER_FUNC(evt_lottery) {
             OSTicksToCalendarTime(now, &b2);
             if (b1.year == b2.year && b1.mon == b2.mon && b1.mday == b2.mday) {
                 lot->flags &= ~0x10;
-            }
-            else {
+            } else {
                 if (!(lot->flags & 8)) {
                     lot->flags |= 0x10;
                 }
                 lot->times[idx] = now;
             }
-        }
-        else {
+        } else {
             OSTicksToCalendarTime(lot->times[idx], &c1);
             OSTicksToCalendarTime(now, &c2);
             if (c1.year == c2.year && c1.mon == c2.mon && c1.mday == c2.mday) {
                 lot->flags &= ~0x10;
-            }
-            else {
+            } else {
                 lot->flags |= 0x10;
                 lot->times[idx] = now;
             }
             lot->flags |= 4;
         }
-    }
-    else {
+    } else {
         lot->times[idx] = 0;
     }
 
@@ -83,8 +78,7 @@ USER_FUNC(evt_lottery) {
         lot->flags |= 1;
         lot->lastTime = now;
         lot->todayNum = rand() % 10000;
-    }
-    else if (lot->lastTime < now) {
+    } else if (lot->lastTime < now) {
         OSTicksToCalendarTime(lot->lastTime, &d1);
         OSTicksToCalendarTime(now, &d2);
         if (d1.year != d2.year || d1.mon != d2.mon || d1.mday != d2.mday) {
@@ -93,8 +87,7 @@ USER_FUNC(evt_lottery) {
             }
             if (!(lot->flags & 2)) {
                 lot->todayNum = rand() % 10000;
-            }
-            else if (!(now < lot->buyTime)) {
+            } else if (!(now < lot->buyTime)) {
                 day = OSTicksToSeconds(now - lot->buyTime) / 60 / 60 / 24;
                 v = lot->days[0];
                 if (day > v) {
@@ -127,40 +120,34 @@ USER_FUNC(evt_lottery) {
                 if (day == lot->days[0]) {
                     lot->todayNum = lot->number;
                     lot->flags |= 0x1000;
-                }
-                else if (day == lot->days[1]) {
+                } else if (day == lot->days[1]) {
                     do {
                         lot->todayNum = lot->number % 1000 + rand() % 10 * 1000;
                     } while (lot->todayNum == lot->number);
                     lot->flags |= 0x2000;
-                }
-                else if (day == lot->days[2]) {
+                } else if (day == lot->days[2]) {
                     do {
                         lot->todayNum = lot->number % 100 + rand() % 100 * 100;
                     } while (lot->todayNum == lot->number || lot->todayNum % 1000 == lot->number % 1000);
                     lot->flags |= 0x4000;
-                }
-                else if (day == lot->days[3]) {
+                } else if (day == lot->days[3]) {
                     do {
                         lot->todayNum = lot->number % 10 + rand() % 1000 * 10;
                     } while (lot->todayNum == lot->number || lot->todayNum % 1000 == lot->number % 1000 ||
                         lot->todayNum % 100 == lot->number % 100);
                     lot->flags |= 0x8000;
-                }
-                else {
+                } else {
                     do {
                         lot->todayNum = rand() % 10000;
                     } while (lot->todayNum == lot->number || lot->number % 1000 == lot->todayNum % 1000 ||
                         lot->number % 100 == lot->todayNum % 100 || lot->number % 10 == lot->todayNum % 10);
                 }
-            }
-            else {
+            } else {
                 lot->flags |= 4;
                 lot->todayNum = -1;
             }
         }
-    }
-    else {
+    } else {
         lot->flags |= 4;
         lot->todayNum = -1;
         lot->lastTime = now;

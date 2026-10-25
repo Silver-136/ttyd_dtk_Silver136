@@ -167,8 +167,7 @@ void effKemuriMain(EffectEntry* effect) {
                 if ((u32)data->frame < 30) {
                     data->scaleX = touchdown_scale[data->frame][0] / 128.0f;
                     data->scaleY = touchdown_scale[data->frame][1] / 128.0f;
-                }
-                else {
+                } else {
                     data->scaleX = 1.5f;
                     data->scaleY = 0.8f;
                 }
@@ -183,8 +182,7 @@ void effKemuriMain(EffectEntry* effect) {
                 if ((u32)data->frame < 30) {
                     data->scaleX = heavy_scale[data->frame][0] / 128.0f;
                     data->scaleY = heavy_scale[data->frame][1] / 128.0f;
-                }
-                else {
+                } else {
                     data->scaleX = 2.0f;
                     data->scaleY = 1.2f;
                 }
@@ -299,8 +297,7 @@ void effKemuriDisp(CameraId camId, void* param) {
         for (j = 0; j < 2; j++) {
             if (j == 0) {
                 GXSetChanMatColor(GX_COLOR0A0, (GXColor){0x00, 0x00, 0x00, 0x60});
-            }
-            else {
+            } else {
                 GXSetChanMatColor(GX_COLOR0A0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
             }
             off = 1 - j;
@@ -391,8 +388,7 @@ static void effKemuri2Disp(CameraId camId, void* param) {
             GXLoadTexObj(&tex, GX_TEXMAP0);
             if (i == 0) {
                 GXSetTevColor(GX_TEVREG0, (GXColor){0x00, 0x00, 0x00, data->alpha});
-            }
-            else {
+            } else {
                 GXSetTevColor(GX_TEVREG0, (GXColor){0xFF, 0xFF, 0xFF, data->alpha});
             }
             GXBegin(GX_QUADS, GX_VTXFMT0, 4);
@@ -431,8 +427,7 @@ static void effKemuri2Disp(CameraId camId, void* param) {
             effGetTexObj(0xc, &tex);
             GXLoadTexObj(&tex, GX_TEXMAP0);
             GXSetTevColor(GX_TEVREG0, (GXColor){0x00, 0x00, 0x00, data->alpha});
-        }
-        else {
+        } else {
             effGetTexObj(0xb, &tex);
             GXLoadTexObj(&tex, GX_TEXMAP0);
             GXSetTevColor(GX_TEVREG0, (GXColor){0xFF, 0xFF, 0xFF, data->alpha});

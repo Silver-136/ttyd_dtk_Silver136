@@ -59,8 +59,7 @@ BOOL parsePush(const char* tag) {
                     state = 2;
                     break;
                 }
-            }
-            else {
+            } else {
                 if (state == 0 && depth == 0) {
                     parseCopyTag(buf, p, i, end);
                     if (strcmp(&buf[0], tag) == 0) {
@@ -131,8 +130,7 @@ BOOL parseGet1Next(s32 type, void* data) {
                     break;
                 }
             }
-        }
-        else if (p[i] != ' ' && p[i] != '\t' && p[i] != '\n' && p[i] != '\r') {
+        } else if (p[i] != ' ' && p[i] != '\t' && p[i] != '\n' && p[i] != '\r') {
             start = i;
             state = 1;
             for (i++; i < end; i++) {

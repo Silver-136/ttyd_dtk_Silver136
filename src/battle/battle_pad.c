@@ -108,14 +108,12 @@ void BtlPad_WorkUpdate(BattleWorkPad* pad, s32 chan) {
         pad->mButtonsHeldHistory[0] = 0;
         pad->mHoldRepeatState = 0;
         pad->mHoldRepeatFrameCounter = 0;
-    }
-    else if (pad->mButtonsHistory[0] != pad->mButtonsHistory[1]) {
+    } else if (pad->mButtonsHistory[0] != pad->mButtonsHistory[1]) {
         pad->mButtonsHeldHistory[0] |= pad->mButtonsHistory[0] & 0xFFFF0000;
         pad->mButtonsHeldHistory[0] &= pad->mButtonsPressedHistory[0] & 0xFFFF0000 | 0xFFFF;
         pad->mHoldRepeatState = 1;
         pad->mHoldRepeatFrameCounter = 0;
-    }
-    else {
+    } else {
         repeat = 8;
         pad->mHoldRepeatFrameCounter++;
         if (pad->mHoldRepeatFrameCounter >= (pad->mHoldRepeatState == 1 ? 16 : repeat)) {

@@ -81,14 +81,12 @@ void L_titleInit(SequenceWork* work) {
     wp2->debug = 0;
     if (seqGetPrevSeq() == SEQ_LOAD) {
         psndSFXAllOff();
-    }
-    else if (seqGetPrevSeq() != SEQ_LOGO) {
+    } else if (seqGetPrevSeq() != SEQ_LOGO) {
         if (seqGetPrevSeq() == SEQ_MAP_CHANGE) {
             psndBGMOff_f_d(512, 3000, 0);
             psndBGMOff_f_d(513, 3000, 0);
             psndSFXAllOff();
-        }
-        else if (seqGetPrevSeq() == SEQ_GAME_OVER) {
+        } else if (seqGetPrevSeq() == SEQ_GAME_OVER) {
             psndStopAllFadeOut();
         }
     }
@@ -96,16 +94,14 @@ void L_titleInit(SequenceWork* work) {
         if (seqGetPrevSeq() == SEQ_GAME_OVER) {
             if (OSGetSoundMode() == 0) {
                 SoundSetOutputMode(0);
-            }
-            else {
+            } else {
                 SoundSetOutputMode(1);
             }
             psndBGMOn(0x200, "BGM_DIGEST1");
             if ((u32)psbgm[0].streamId != 0xFFFFFFFFU) {
                 sound.streams[psbgm[0].streamId].flags |= 0x8000;
             }
-        }
-        else {
+        } else {
             psndBGMOn(0x200, "BGM_TITLE1");
             if ((u32)psbgm[0].streamId != 0xFFFFFFFFU) {
                 sound.streams[psbgm[0].streamId].flags |= 0x8000;
@@ -122,21 +118,18 @@ void titleMain(SequenceWork* work) {
         case 0:
             if (psndBGMStartCheck(0) != 0U
                 && animGroupBaseAsync("OFF_d_maku_left_right", 2, 0)
-                && animGroupBaseAsync("OFF_d_maku_center", 2, 0))
-            {
+                && animGroupBaseAsync("OFF_d_maku_center", 2, 0)) {
                 if (seqGetPrevSeq() == SEQ_LOAD) {
                     fadeEntry(0x40, 0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
                     fadeEntry(0x1F, 0, (GXColor){0x00, 0x00, 0x00, 0xFF});
                     wp2->topPosY = 120.0f;
                     wp2->bottomPosY = -170.0f;
                     wp2->timer = 0;
-                }
-                else if (seqGetPrevSeq() == SEQ_GAME_OVER) {
+                } else if (seqGetPrevSeq() == SEQ_GAME_OVER) {
                     fadeEntry(0x15, 0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
                     fadeEntry(0x1D, 0, (GXColor){0x00, 0x00, 0x00, 0xFF});
                     wp2->timer = 78;
-                }
-                else {
+                } else {
                     fadeEntry(0x15, 0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
                     fadeEntry(0x22, 0, (GXColor){0x00, 0x00, 0x00, 0xFF});
                     fadeSetNarrowFast();
@@ -156,8 +149,7 @@ void titleMain(SequenceWork* work) {
                 if (seqGetPrevSeq() != SEQ_LOAD) {
                     fadeEntry(0x14, 500, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
                     wp2->state++;
-                }
-                else {
+                } else {
                     wp2->topPosY = 120.0f;
                     wp2->bottomPosY = -170.0f;
 #ifdef VERSION_G8ME01
@@ -204,8 +196,7 @@ void titleMain(SequenceWork* work) {
             if (keyGetButtonTrg(0) & (PAD_BUTTON_A | PAD_BUTTON_START)) {
                 psndSFXOn(SFX_NAME_WORD(PSND_SFX_PRESS_START1));
                 wp2->state = 10;
-            }
-            else if (++wp2->idle > TFR * 20 - TFR) {
+            } else if (++wp2->idle > TFR * 20 - TFR) {
                 wp2->state = 20;
             }
 #ifdef VERSION_G8ME01
@@ -263,48 +254,42 @@ void titleMain(SequenceWork* work) {
             case 0:
                 if (keyGetButtonTrg(0) & ~0x400) {
                     wp2->debug = 0;
-                }
-                else if (keyGetButtonTrg(0) & PAD_BUTTON_X) {
+                } else if (keyGetButtonTrg(0) & PAD_BUTTON_X) {
                     wp2->debug++;
                 }
                 break;
             case 1:
                 if (keyGetButtonTrg(0) & ~0x200) {
                     wp2->debug = 0;
-                }
-                else if (keyGetButtonTrg(0) & PAD_BUTTON_B) {
+                } else if (keyGetButtonTrg(0) & PAD_BUTTON_B) {
                     wp2->debug++;
                 }
                 break;
             case 2:
                 if (keyGetButtonTrg(0) & ~0x20) {
                     wp2->debug = 0;
-                }
-                else if (keyGetButtonTrg(0) & PAD_TRIGGER_R) {
+                } else if (keyGetButtonTrg(0) & PAD_TRIGGER_R) {
                     wp2->debug++;
                 }
                 break;
             case 3:
                 if (keyGetButtonTrg(0) & ~0x200) {
                     wp2->debug = 0;
-                }
-                else if (keyGetButtonTrg(0) & PAD_BUTTON_B) {
+                } else if (keyGetButtonTrg(0) & PAD_BUTTON_B) {
                     wp2->debug++;
                 }
                 break;
             case 4:
                 if (keyGetButtonTrg(0) & ~0x800) {
                     wp2->debug = 0;
-                }
-                else if (keyGetButtonTrg(0) & PAD_BUTTON_Y) {
+                } else if (keyGetButtonTrg(0) & PAD_BUTTON_Y) {
                     wp2->debug++;
                 }
                 break;
             case 5:
                 if (keyGetButtonTrg(0) & ~0x40) {
                     wp2->debug = 0;
-                }
-                else if (keyGetButtonTrg(0) & PAD_TRIGGER_L) {
+                } else if (keyGetButtonTrg(0) & PAD_TRIGGER_L) {
                     wp2->debug = -1;
                 }
                 break;

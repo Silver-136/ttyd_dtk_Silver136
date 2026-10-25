@@ -534,24 +534,21 @@ void BtlUnit_AddPartsRotate(BattleUnitPart* part, f32 x, f32 y, f32 z) {
     part->mRotation.x += x;
     if (part->mRotation.x > 360.0f) {
         part->mRotation.x -= 360.0f;
-    }
-    else if (part->mRotation.x < 0.0f) {
+    } else if (part->mRotation.x < 0.0f) {
         part->mRotation.x += 360.0f;
     }
 
     part->mRotation.y += y;
     if (part->mRotation.y > 360.0f) {
         part->mRotation.y -= 360.0f;
-    }
-    else if (part->mRotation.y < 0.0f) {
+    } else if (part->mRotation.y < 0.0f) {
         part->mRotation.y += 360.0f;
     }
 
     part->mRotation.z += z;
     if (part->mRotation.z > 360.0f) {
         part->mRotation.z -= 360.0f;
-    }
-    else if (part->mRotation.z < 0.0f) {
+    } else if (part->mRotation.z < 0.0f) {
         part->mRotation.z += 360.0f;
     }
 }
@@ -1078,8 +1075,7 @@ BOOL BtlUnit_SetStatus(BattleUnit* unit, s8 type, s8 turns, s8 strength) {
                         unit->mSizeChangeStrength = 0;
                         return FALSE;
                     }
-                }
-                else if (unit->mSizeChangeStrength <= 0) {
+                } else if (unit->mSizeChangeStrength <= 0) {
                     unit->mSizeChangeTurns = 0;
                     unit->mSizeChangeStrength = 0;
                     return FALSE;
@@ -1121,21 +1117,18 @@ BOOL BtlUnit_SetStatus(BattleUnit* unit, s8 type, s8 turns, s8 strength) {
                 }
                 unit->mDefChangeTurns = turns;
                 unit->mDefChangeStrength = strength;
-            }
-            else if (strength == 0) {
+            } else if (strength == 0) {
                 if (type == STATUS_DEFENSE_DOWN) {
                     if (unit->mDefChangeStrength <= 0) {
                         unit->mDefChangeTurns = 0;
                         unit->mDefChangeStrength = 0;
                     }
-                }
-                else if (unit->mDefChangeStrength >= 0) {
+                } else if (unit->mDefChangeStrength >= 0) {
                     unit->mDefChangeTurns = 0;
                     unit->mDefChangeStrength = 0;
                 }
                 return FALSE;
-            }
-            else {
+            } else {
                 if (unit->mDefChangeStrength > 0) {
                     unit->mDefChangeTurns = 0;
                     unit->mDefChangeStrength = 0;
@@ -1158,8 +1151,7 @@ BOOL BtlUnit_SetStatus(BattleUnit* unit, s8 type, s8 turns, s8 strength) {
         case STATUS_ALLERGIC:
             if (turns > 0) {
                 unit->mAllergicTurns = turns;
-            }
-            else {
+            } else {
                 unit->mAllergicTurns = 0;
                 return FALSE;
             }
@@ -1173,8 +1165,7 @@ BOOL BtlUnit_SetStatus(BattleUnit* unit, s8 type, s8 turns, s8 strength) {
         case STATUS_PAYBACK:
             if (turns > 0) {
                 unit->mPaybackTurns = turns;
-            }
-            else {
+            } else {
                 unit->mPaybackTurns = 0;
                 return FALSE;
             }
@@ -1190,8 +1181,7 @@ BOOL BtlUnit_SetStatus(BattleUnit* unit, s8 type, s8 turns, s8 strength) {
                     return FALSE;
                 }
                 unit->mFastTurns = turns;
-            }
-            else {
+            } else {
                 unit->mFastTurns = turns;
             }
             _CheckMoveCount(unit);
@@ -1204,8 +1194,7 @@ BOOL BtlUnit_SetStatus(BattleUnit* unit, s8 type, s8 turns, s8 strength) {
                     return FALSE;
                 }
                 unit->mSlowTurns = turns;
-            }
-            else {
+            } else {
                 unit->mSlowTurns = turns;
             }
             _CheckMoveCount(unit);
@@ -1254,8 +1243,7 @@ BOOL BtlUnit_CheckRecoveryStatus(BattleUnit* unit, s8 type) {
         case STATUS_SLEEP:
             if (turns > 1) {
                 turns--;
-            }
-            else {
+            } else {
                 turns = 0;
             }
             unit->mSleepTurns = turns;
@@ -1278,14 +1266,12 @@ BOOL BtlUnit_CheckRecoveryStatus(BattleUnit* unit, s8 type) {
         case STATUS_HOLD_FAST:
             if (turns >= 0) {
                 turns--;
-            }
-            else {
+            } else {
                 turns++;
             }
             if (strength >= 0) {
                 strength--;
-            }
-            else {
+            } else {
                 strength++;
             }
             if (!turns) {
@@ -1300,11 +1286,9 @@ BOOL BtlUnit_CheckRecoveryStatus(BattleUnit* unit, s8 type) {
         case STATUS_TINY:
             if (turns > 0) {
                 turns--;
-            }
-            else if (turns < 0) {
+            } else if (turns < 0) {
                 turns++;
-            }
-            else {
+            } else {
                 return FALSE;
             }
             if (!turns) {
@@ -1320,11 +1304,9 @@ BOOL BtlUnit_CheckRecoveryStatus(BattleUnit* unit, s8 type) {
         case STATUS_ATTACK_DOWN:
             if (turns > 0) {
                 turns--;
-            }
-            else if (turns < 0) {
+            } else if (turns < 0) {
                 turns++;
-            }
-            else {
+            } else {
                 return FALSE;
             }
             if (!turns) {
@@ -1343,8 +1325,7 @@ BOOL BtlUnit_CheckRecoveryStatus(BattleUnit* unit, s8 type) {
         case STATUS_FP_REGEN:
             if (turns >= 0) {
                 turns--;
-            }
-            else {
+            } else {
                 turns++;
             }
             if (!turns) {
@@ -1409,14 +1390,11 @@ char* BtlUnit_GetPoseNameFromType(BattleUnitPart* part, s32 type) {
 
     if (type <= 0x1C) {
         alt = 0x1C;
-    }
-    else if (type < 0x28) {
+    } else if (type < 0x28) {
         alt = 0x27;
-    }
-    else if (type < 0x46) {
+    } else if (type < 0x46) {
         alt = 0x45;
-    }
-    else {
+    } else {
         return NULL;
     }
     while (pose) {
@@ -1437,8 +1415,7 @@ void BtlUnit_SetAnimType(BattleUnitPart* part, s32 type) {
 
     if (type >= 0x1D && type < 0x28) {
         btlDispChangeAnime(part, name, 1);
-    }
-    else {
+    } else {
         btlDispChangeAnime(part, name, 0);
     }
     switch (type) {
@@ -1574,8 +1551,7 @@ void BtlUnit_SetParamFromPouch(BattleUnit* unit) {
         unit->currentHp = pouch->currentHP;
         unit->currentFp = pouch->currentFP;
         BtlUnit_ReviseHpFp(unit);
-    }
-    else if (unit->currentKind >= TYPE_PARTNER_MIN && unit->currentKind < TYPE_PARTNER_MAX) {
+    } else if (unit->currentKind >= TYPE_PARTNER_MIN && unit->currentKind < TYPE_PARTNER_MAX) {
         unit->currentHp = *(s16*)((u8*)pouch->partyData + BattleTransPartyId(unit->currentKind) * sizeof(PouchPartyData) + offsetof(PouchPartyData, currentHP)); // FAKE: byte-offset load so the field offset folds into the index (mulli/addi/lhax), as in the target
         BtlUnit_ReviseHpFp(unit);
         info = &wp->partyInfo[unit->currentKind - TYPE_PARTNER_MIN];
@@ -1607,8 +1583,7 @@ void BtlUnit_ReviseHpFp(BattleUnit* unit) {
         if (unit->currentFp > unit->maxFp) {
             unit->currentFp = unit->maxFp;
         }
-    }
-    else if (unit->currentKind >= TYPE_PARTNER_MIN && unit->currentKind < TYPE_PARTNER_MAX) {
+    } else if (unit->currentKind >= TYPE_PARTNER_MIN && unit->currentKind < TYPE_PARTNER_MAX) {
         party = &pouch->partyData[BattleTransPartyId(unit->currentKind)];
         unit->baseMaxHp = party->baseMaxHP;
         unit->maxHp = party->baseMaxHP + unit->badgesEquipped.HpPlus * 5;
@@ -1616,8 +1591,7 @@ void BtlUnit_ReviseHpFp(BattleUnit* unit) {
         if (unit->currentHp > unit->maxHp) {
             unit->currentHp = unit->maxHp;
         }
-    }
-    else {
+    } else {
         unit->maxHp = unit->baseMaxHp + unit->badgesEquipped.HpPlus * 5;
         if (unit->currentHp > unit->maxHp) {
             unit->currentHp = unit->maxHp;
@@ -1637,8 +1611,7 @@ void BtlUnit_SetParamToPouch(BattleUnit* unit) {
     if (unit->currentKind == UNIT_MARIO) {
         pouch->currentHP = unit->currentHp;
         pouch->currentFP = unit->currentFp;
-    }
-    else if (unit->currentKind >= TYPE_PARTNER_MIN && unit->currentKind < TYPE_PARTNER_MAX) {
+    } else if (unit->currentKind >= TYPE_PARTNER_MIN && unit->currentKind < TYPE_PARTNER_MAX) {
         s32 id = BattleTransPartyId(unit->currentKind);
         *(s16*)((u8*)pouch + id * sizeof(PouchPartyData) + offsetof(PouchPartyData, currentHP)) = unit->currentHp; // FAKE: byte-offset store so the field offset folds into the index (mulli/addi/sthx), as in the target
         info = &wp->partyInfo[unit->currentKind - TYPE_PARTNER_MIN];
@@ -1660,8 +1633,7 @@ void BtlUnit_CheckPinchStatus(BattleUnit* unit, BOOL noAudience) {
                 BattleAudience_Case_MarioDanger();
             }
         }
-    }
-    else if (unit->mStatusFlags & 0x20000000) {
+    } else if (unit->mStatusFlags & 0x20000000) {
         unit->mStatusFlags &= ~0x20000000;
     }
     if (unit->currentHp <= unit->mKindParams->mDangerHP && unit->currentHp < unit->maxHp) {
@@ -1671,8 +1643,7 @@ void BtlUnit_CheckPinchStatus(BattleUnit* unit, BOOL noAudience) {
                 BattleAudience_Case_MarioPinch();
             }
         }
-    }
-    else if (unit->mStatusFlags & 0x10000000) {
+    } else if (unit->mStatusFlags & 0x10000000) {
         unit->mStatusFlags &= ~0x10000000;
     }
 }
@@ -1741,8 +1712,7 @@ void BtlUnit_SetFp(BattleUnit* unit, s32 value) {
     BattleWork* wp = _battleWorkPointer;
     if (kind >= TYPE_PARTNER_MIN && kind < TYPE_PARTNER_MAX) {
         BattleGetMarioPtr(wp)->currentFp = value;
-    }
-    else {
+    } else {
         unit->currentFp = value;
     }
 }
@@ -1762,8 +1732,7 @@ void BtlUnit_RecoverFp(BattleUnit* unit, s32 value) {
     if (kind >= TYPE_PARTNER_MIN && kind < TYPE_PARTNER_MAX) {
         max = BtlUnit_GetMaxFp(BattleGetMarioPtr(wp));
         fp = &BattleGetMarioPtr(wp)->currentFp;
-    }
-    else {
+    } else {
         max = BtlUnit_GetMaxFp(unit);
         fp = &unit->currentFp;
     }
@@ -1788,8 +1757,7 @@ void BtlUnit_SetMaxFp(BattleUnit* unit, s32 value) {
     BattleWork* wp = _battleWorkPointer;
     if (kind >= TYPE_PARTNER_MIN && kind < TYPE_PARTNER_MAX) {
         BattleGetMarioPtr(wp)->maxFp = value;
-    }
-    else {
+    } else {
         unit->maxFp = value;
     }
 }
@@ -1856,8 +1824,7 @@ void BtlUnit_PayWeaponCost(BattleUnit* unit, BattleWeapon* weapon) {
     if (unit->currentKind == UNIT_MARIO) {
         BtlActRec_AddPoint(&wp->actRecord.marioFpSpent, cost);
         BtlActRec_AddCount(&wp->actRecord.marioFpMoves);
-    }
-    else if (unit->currentKind >= TYPE_PARTNER_MIN && unit->currentKind < TYPE_PARTNER_MAX) {
+    } else if (unit->currentKind >= TYPE_PARTNER_MIN && unit->currentKind < TYPE_PARTNER_MAX) {
         BtlActRec_AddPoint(&wp->actRecord.partnerFpSpent, cost);
         BtlActRec_AddCount(&wp->actRecord.partnerFpMoves);
     }
@@ -1893,8 +1860,7 @@ void BtlUnit_ResetMoveStatus(BattleUnit* unit) {
     if (BtlUnit_CheckStatus(unit, STATUS_SLOW)) {
         if (unit->movesRemaining >= 2) {
             unit->movesRemaining /= 2;
-        }
-        else {
+        } else {
             n = 2;
             if (unit->maxMoveCount < 1) {
                 n *= 2;
@@ -1902,8 +1868,7 @@ void BtlUnit_ResetMoveStatus(BattleUnit* unit) {
             if (unit->activeTurns >= n) {
                 unit->movesRemaining = 1;
                 unit->moveState = 0;
-            }
-            else {
+            } else {
                 unit->movesRemaining = 0;
                 unit->moveState = 10;
             }
@@ -1996,8 +1961,7 @@ void BtlUnit_SetCommandAnimPose(BattleUnit* unit) {
     if (special) {
         BtlUnit_SetAnimType(part, 0x43);
         PART_FLAGS(part) |= 0x80;
-    }
-    else {
+    } else {
         btlDispPoseAnime(part);
     }
 }
@@ -2045,17 +2009,14 @@ void BtlUnit_ControlPoseSoundMain(BattleUnitPart* part) {
         if (BattleGetSeq(wp, SEQ_PHASE) == 0x4000002 || BattleGetSeq(wp, SEQ_PHASE) == 0x4000004) {
             state->flag = 1;
         }
-    }
-    else if (state->loopCount == (u32)pose->loopTime && state->time > time) {
+    } else if (state->loopCount == (u32)pose->loopTime && state->time > time) {
         state->time = time;
         state->prevTime = -1.0f;
-    }
-    else if (state->loopCount < (u32)pose->loopTime) {
+    } else if (state->loopCount < (u32)pose->loopTime) {
         state->time = time;
         state->prevTime = -1.0f;
         state->loopCount = (s32)pose->loopTime;
-    }
-    else {
+    } else {
         state->prevTime = state->time;
         state->time = time;
     }
@@ -2071,8 +2032,7 @@ void BtlUnit_ControlPoseSoundMain(BattleUnitPart* part) {
             if (entry->flags & 1) {
                 if (entry->callback) {
                     id = entry->callback(part->mOwner, entry, state);
-                }
-                else {
+                } else {
                     id = BtlUnit_snd_se(part->mOwner, entry->sfxName, EVT_NULLPTR, entry->pitch);
                 }
                 psndSFX_vol(id, vol = 0x7F);
@@ -2083,12 +2043,10 @@ void BtlUnit_ControlPoseSoundMain(BattleUnitPart* part) {
                     vol = dv * (k = 0.7);
                     psndSFX_vol(id, vol);
                 }
-            }
-            else {
+            } else {
                 if (entry->callback) {
                     entry->callback(part->mOwner, entry, state);
-                }
-                else {
+                } else {
                     BtlUnit_snd_se(part->mOwner, entry->sfxName, EVT_NULLPTR, entry->pitch);
                 }
                 state->count++;
@@ -2159,8 +2117,7 @@ void BtlUnit_HpGaugeMain(BattleUnit* unit) {
         if (gauge->drainTimer <= 0) {
             gauge->prevHp = gauge->targetHp;
             gauge->barRatio = gauge->trailRatio = (f32)unit->currentHp / (f32)unit->maxHp;
-        }
-        else {
+        } else {
             switch (gauge->mode) {
                 case 1:
                     gauge->barRatio = (f32)unit->currentHp / (f32)unit->maxHp;

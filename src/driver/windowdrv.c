@@ -84,8 +84,7 @@ void windowTexSetup(void) {
         winTpl = __memAlloc(HEAP_DEFAULT, size);
         entry->info.cb.userData = entry;
         DVDMgrReadAsync(entry, winTpl, size, 0, windowTexSetup_callback);
-    }
-    else {
+    } else {
         UnpackTexPalette(winTpl);
         wakuTexObj = __memAlloc(HEAP_DEFAULT, sizeof(GXTexObj) * winTpl->numDescriptors);
 
@@ -979,8 +978,7 @@ void _windowDispGX_Message(s32 type, s32 tailFlags, u8 alpha, BOOL dark, f32 x, 
     if (tailFlags & 1) {
         if (tailFlags & 4) {
             xx = (0.7f * height) + x;
-        }
-        else {
+        } else {
             xx = (0.38f * height) + x;
         }
         
@@ -988,8 +986,7 @@ void _windowDispGX_Message(s32 type, s32 tailFlags, u8 alpha, BOOL dark, f32 x, 
             y2 = -((0.175f * width) - y);
             y = ((0.225f * width) + y);
             if (y2 >= tailY) goto end;
-        }
-        else {
+        } else {
             y2 = -((0.8f * width) - y);
             y = -((1.2f * width) - y);
             if (y2 <= tailY) goto end;
@@ -999,8 +996,7 @@ void _windowDispGX_Message(s32 type, s32 tailFlags, u8 alpha, BOOL dark, f32 x, 
             if (r > tailX) {
                 r = tailX;
             }
-        }
-        else {
+        } else {
             if (r < tailX) {
                 r = tailX;
             }

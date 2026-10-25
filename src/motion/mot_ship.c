@@ -893,8 +893,7 @@ BOOL marioChkShipMoveMode(void) {
 #define SHIP_WORK marioGetPtr()->motShip
 #define SHIP_DISP marioGetPtr()->motShip
 
-void shipMove(void)
-{
+void shipMove(void) {
     MarioWork *m = marioGetPtr();
     f32 len;
     unsigned long long rateIdx;
@@ -911,145 +910,111 @@ void shipMove(void)
     spd = m->controlStickSensitivity;
     dx = 0.0f;
     dx = 0.0f;
-    if (marioGetPtr()->motShip->swirlTime != 0)
-    {
+    if (marioGetPtr()->motShip->swirlTime != 0) {
         marioGetPtr()->motShip->swirlTime--;
         movePos(&dx, &dz, marioGetPtr()->motShip->swirlX, marioGetPtr()->motShip->swirlY);
         marioGetPtr()->motShip->dispX += dx;
         marioGetPtr()->motShip->dispY += dz;
         max = shipData[4];
-        if (marioGetPtr()->motShip->dispX > max)
-        {
+        if (marioGetPtr()->motShip->dispX > max) {
             max = shipData[4];
             marioGetPtr()->motShip->dispX = max;
         }
-        if (marioGetPtr()->motShip->dispX < (-shipData[4]))
-        {
+        if (marioGetPtr()->motShip->dispX < (-shipData[4])) {
             marioGetPtr()->motShip->dispX = -shipData[4];
         }
         max = shipData[4];
-        if (marioGetPtr()->motShip->dispY > max)
-        {
+        if (marioGetPtr()->motShip->dispY > max) {
             max = shipData[4];
             marioGetPtr()->motShip->dispY = max;
         }
-        if (marioGetPtr()->motShip->dispY < (-shipData[4]))
-        {
+        if (marioGetPtr()->motShip->dispY < (-shipData[4])) {
             marioGetPtr()->motShip->dispY = -shipData[4];
         }
     }
     vx = marioGetPtr()->motShip->dispX;
     vz = marioGetPtr()->motShip->dispY;
     rateIdx = 3;
-    if (m->controlStickSensitivity)
-    {
+    if (m->controlStickSensitivity) {
         tx = spd * ((f32) sin((3.1415927f * (m->controlStickAngle)) / 180.0f));
         tz = spd * (-((f32) cos((3.1415927f * (m->controlStickAngle)) / 180.0f)));
-    }
-    else
-    {
+    } else {
         tx = vx;
         tz = vz;
     }
     max = shipData[4];
-    if (spd || (marioGetPtr()->motShip->swirlTime != 0))
-    {
-        if (tx > vx)
-        {
+    if (spd || (marioGetPtr()->motShip->swirlTime != 0)) {
+        if (tx > vx) {
             vx += ((1.0f + tx) - vx) * shipData[rateIdx];
-            if (vx >= max)
-            {
+            if (vx >= max) {
                 vx = max;
             }
-        }
-        else
-        {
+        } else {
             vx += ((tx - 1.0f) - vx) * shipData[rateIdx];
-            if (vx <= (-max))
-            {
+            if (vx <= (-max)) {
                 vx = -max;
             }
         }
-        if (tz > vz)
-        {
+        if (tz > vz) {
             vz += ((1.0f + tz) - vz) * shipData[rateIdx];
-            if (vz >= max)
-            {
+            if (vz >= max) {
                 vz = max;
             }
-        }
-        else
-        {
+        } else {
             vz += ((tz - 1.0f) - vz) * shipData[rateIdx];
-            if (vz <= (-max))
-            {
+            if (vz <= (-max)) {
                 vz = -max;
             }
         }
     }
-    if (!spd)
-    {
+    if (!spd) {
         fr = shipData[0];
-        if (m->hitobjWall != NULL)
-        {
+        if (m->hitobjWall != NULL) {
             fr = shipData[1];
         }
         fr = __fabsf(fr);
         vx += (-vx) * fr;
         vz += (-vz) * fr;
-        if (__fabsf(vx) < 0.01f)
-        {
+        if (__fabsf(vx) < 0.01f) {
             vx = 0.0f;
         }
-        if (__fabsf(vz) < 0.01f)
-        {
+        if (__fabsf(vz) < 0.01f) {
             vz = 0.0f;
         }
     }
     marioGetPtr()->motShip->dispX = vx;
     marioGetPtr()->motShip->dispY = vz;
     len = distABf(0.0f, 0.0f, vx, vz);
-    if (spd)
-    {
-        if (len >= shipData[4])
-        {
+    if (spd) {
+        if (len >= shipData[4]) {
             len = shipData[4];
         }
-    }
-    else
-        if (len < shipData[5])
-    {
+    } else
+        if (len < shipData[5]) {
         len = 0.0f;
         marioGetPtr()->motShip->dispX = 0.0f;
         marioGetPtr()->motShip->dispY = 0.0f;
     }
     m->baseSpeed = len;
-    if (len)
-    {
+    if (len) {
         m->directionView = angleABf(0.0f, 0.0f, marioGetPtr()->motShip->dispX, marioGetPtr()->motShip->dispY);
     }
-    if (len >= 1.0f)
-    {
+    if (len >= 1.0f) {
         MarioWork *mm = marioGetPtr();
-        if ((marioGetPtr()->motStruct != ((void *) 0)) && (((u32) (marioGetPtr()->motShip->sfxId)) == 0xFFFFFFFFU))
-        {
+        if ((marioGetPtr()->motStruct != ((void *) 0)) && (((u32) (marioGetPtr()->motShip->sfxId)) == 0xFFFFFFFFU)) {
             snd = psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_SHIP1), (&mm->position));
             marioGetPtr()->motShip->sfxId = snd;
         }
-    }
-    else
-        if (len <= 0.2f)
-    {
+    } else
+        if (len <= 0.2f) {
         marioGetPtr();
-        if ((marioGetPtr()->motStruct != ((void *) 0)) && (((u32) (marioGetPtr()->motShip->sfxId)) != 0xFFFFFFFFU))
-        {
+        if ((marioGetPtr()->motStruct != ((void *) 0)) && (((u32) (marioGetPtr()->motShip->sfxId)) != 0xFFFFFFFFU)) {
             psndSFXOff(marioGetPtr()->motShip->sfxId);
             snd = -1;
             marioGetPtr()->motShip->sfxId = snd;
         }
     }
-    if (((u32) (marioGetPtr()->motShip->sfxId)) != 0xFFFFFFFFU)
-    {
+    if (((u32) (marioGetPtr()->motShip->sfxId)) != 0xFFFFFFFFU) {
         psndSFX_pos(marioGetPtr()->motShip->sfxId, (&m->position));
     }
     m->moveDist = len;
