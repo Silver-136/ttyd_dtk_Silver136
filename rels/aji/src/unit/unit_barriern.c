@@ -209,9 +209,9 @@ static BattleWeapon weapon_wakka_attack = {
     2, // reserved_6F
     NULL, // acHelpMsg
 #ifdef VERSION_G8ME01
-    0xC7, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_PIERCE_DEFENSE | SPECIAL_FREEZE_CRUSH, // special
 #else
-    0x87, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH, // special
 #endif
     COUNTER_RESIST_ALL, // counterResistFlags
     0x2004, // targetWeightFlags
@@ -249,9 +249,9 @@ static BattleWeapon weapon_wawawa_attack = {
     2, // reserved_6F
     NULL, // acHelpMsg
 #ifdef VERSION_G8ME01
-    0xC7, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_PIERCE_DEFENSE | SPECIAL_FREEZE_CRUSH, // special
 #else
-    0x87, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH, // special
 #endif
     COUNTER_RESIST_ALL, // counterResistFlags
     0x80002000, // targetWeightFlags

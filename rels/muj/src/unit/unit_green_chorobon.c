@@ -136,7 +136,7 @@ static BattleWeapon weapon_chorobon_drain_attack = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x47, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_PIERCE_DEFENSE, // special
     0, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime

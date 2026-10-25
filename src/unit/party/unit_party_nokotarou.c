@@ -315,7 +315,7 @@ BattleWeapon partyWeapon_NokotarouFirstAttack = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x2008F, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_CANNOT_MISS | SPECIAL_FREEZE_CRUSH | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -357,7 +357,7 @@ BattleWeapon partyWeapon_NokotarouKouraAttack = {
     3, // acLevel
     2, // reserved_6F
     "msg_ac_hammer", // acHelpMsg
-    0x30087, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH | SPECIAL_CONFUSED_ACTION | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL & ~COUNTER_RESIST_PAYBACK, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -408,7 +408,7 @@ BattleWeapon partyWeapon_NokotarouSyubibinKoura = {
     3, // acLevel
     2, // reserved_6F
     "msg_ac_koura_shubibin", // acHelpMsg
-    0x20087, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL & ~COUNTER_RESIST_PAYBACK, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -454,7 +454,7 @@ BattleWeapon partyWeapon_NokotarouKouraGuard = {
     3, // acLevel
     2, // reserved_6F
     "msg_ac_koura_no_mamori", // acHelpMsg
-    0x20000, // special
+    SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -500,7 +500,7 @@ BattleWeapon partyWeapon_NokotarouTsuranukiKoura = {
     3, // acLevel
     2, // reserved_6F
     "msg_ac_tsuranuki_koura", // acHelpMsg
-    0x200C7, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_PIERCE_DEFENSE | SPECIAL_FREEZE_CRUSH | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL & ~COUNTER_RESIST_PAYBACK, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime

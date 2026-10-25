@@ -163,7 +163,7 @@ static BattleWeapon weapon_heavy_bomb_super_explosion = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x22087, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH | SPECIAL_FLIP_BOMB_FLIPPABLE | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     4, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -198,7 +198,7 @@ static BattleWeapon weapon_heavy_bomb_guard = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x20008, // special
+    SPECIAL_CANNOT_MISS | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     0, 0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
     0, 0, 0, 0, 0, 0, 0, 0, // poisonTime..dodgyTime
@@ -236,7 +236,7 @@ static BattleWeapon weapon_heavy_bomb_guard_2 = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x20008, // special
+    SPECIAL_CANNOT_MISS | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     0, 0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
     0, 0, 0, 0, 0, 0, 0, 0, // poisonTime..dodgyTime
@@ -273,7 +273,7 @@ static BattleWeapon weapon_heavy_bomb_guard_3 = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x20008, // special
+    SPECIAL_CANNOT_MISS | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     0, 0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
     0, 0, 0, 0, 0, 0, 0, 0, // poisonTime..dodgyTime

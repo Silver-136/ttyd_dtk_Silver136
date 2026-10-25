@@ -3,6 +3,7 @@
 #include "data/item_data.h"
 #include "system.h"
 #include "battle/battle_status_effect.h"
+#include "battle/battle_database_common.h"
 
 extern ItemData itemDataTable[];
 void BattleSamplingEnemy(BattleWorkWeaponTargets* targets, BattleWeapon* weapon, s32 unitId, s8 belong, u32 classFlags, u32 propFlags, s32 direction);
@@ -46,7 +47,7 @@ void* BattleEnemyUseItemCheck(BattleUnit* self) {
     if (weapon == NULL) {
         return NULL;
     }
-    if ((self->mTokenFlags & kConfusedAction) && !(weapon->special & 0x10000)) {
+    if ((self->mTokenFlags & kConfusedAction) && !(weapon->special & SPECIAL_CONFUSED_ACTION)) {
         return NULL;
     }
     switch (itemId) {

@@ -105,7 +105,7 @@ BattleWeapon weapon_gonbaba_fumituke_attack = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    7, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     0x2004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -146,7 +146,7 @@ BattleWeapon weapon_gonbaba_firebreath_attack = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x47, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_PIERCE_DEFENSE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     0, 0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
     0, 0, 0, 0, 0, 0, 0, 0, // poisonTime..dodgyTime
@@ -180,7 +180,7 @@ BattleWeapon weapon_gonbaba_kamituki_attack = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x20008, // special
+    SPECIAL_CANNOT_MISS | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     0, 0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
     0, 0, 0, 0, 0, 0, 0, 0, // poisonTime..dodgyTime

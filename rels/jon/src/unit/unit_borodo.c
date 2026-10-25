@@ -249,7 +249,7 @@ static BattleWeapon weapon_borodo_attack = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    7, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE, // special
     COUNTER_RESIST_TOP_SPIKY, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime

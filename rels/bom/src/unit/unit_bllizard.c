@@ -150,7 +150,7 @@ static BattleWeapon weapon_bllizard_attack = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x5087, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH | SPECIAL_FLIP_SHELLED | SPECIAL_GROUND_WINGED, // special
     COUNTER_RESIST_ICY, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -191,7 +191,7 @@ static BattleWeapon weapon_bllizard_bllizard_attack = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x47, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_PIERCE_DEFENSE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_RANDOM | TARGET_WEIGHT_FRONT, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime

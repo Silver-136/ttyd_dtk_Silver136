@@ -123,7 +123,7 @@ static BattleWeapon weapon_sinemon_attack = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x87, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH, // special
     COUNTER_RESIST_TOP_SPIKY | COUNTER_RESIST_PREEMPTIVE_SPIKY | COUNTER_RESIST_FRONT_SPIKY | COUNTER_RESIST_FIERY, // counterResistFlags
     0x2004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -158,7 +158,7 @@ static BattleWeapon weapon_sinemon_charge = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x108, // special
+    SPECIAL_CANNOT_MISS | SPECIAL_IGNORE_VULNERABILITY, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     0, 0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
     0, 0, 0, 0, 0, 0, 0, 0, // poisonTime..dodgyTime

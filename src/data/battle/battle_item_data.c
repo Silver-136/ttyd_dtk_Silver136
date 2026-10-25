@@ -419,7 +419,7 @@ BattleWeapon ItemWeaponData_CookingItem = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x30008, // special
+    SPECIAL_CANNOT_MISS | SPECIAL_CONFUSED_ACTION | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -455,7 +455,7 @@ BattleWeapon ItemWeaponData_Kinoko = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x30148, // special
+    SPECIAL_CANNOT_MISS | SPECIAL_PIERCE_DEFENSE | SPECIAL_IGNORE_VULNERABILITY | SPECIAL_CONFUSED_ACTION | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_IN_PERIL | TARGET_WEIGHT_LOW_HP_RATIO | TARGET_WEIGHT_OWN_SIDE, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -491,7 +491,7 @@ BattleWeapon ItemWeaponData_Kinkyuu_Kinoko = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x30148, // special
+    SPECIAL_CANNOT_MISS | SPECIAL_PIERCE_DEFENSE | SPECIAL_IGNORE_VULNERABILITY | SPECIAL_CONFUSED_ACTION | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_IN_PERIL | TARGET_WEIGHT_LOW_HP_RATIO | TARGET_WEIGHT_OWN_SIDE, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -527,7 +527,7 @@ BattleWeapon ItemWeaponData_Super_Kinoko = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x30148, // special
+    SPECIAL_CANNOT_MISS | SPECIAL_PIERCE_DEFENSE | SPECIAL_IGNORE_VULNERABILITY | SPECIAL_CONFUSED_ACTION | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_IN_PERIL | TARGET_WEIGHT_LOW_HP_RATIO | TARGET_WEIGHT_OWN_SIDE, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -563,7 +563,7 @@ BattleWeapon ItemWeaponData_Ultra_Kinoko = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x30148, // special
+    SPECIAL_CANNOT_MISS | SPECIAL_PIERCE_DEFENSE | SPECIAL_IGNORE_VULNERABILITY | SPECIAL_CONFUSED_ACTION | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_IN_PERIL | TARGET_WEIGHT_LOW_HP_RATIO | TARGET_WEIGHT_OWN_SIDE, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -599,7 +599,7 @@ BattleWeapon ItemWeaponData_Sinabita_Kinoko = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x30148, // special
+    SPECIAL_CANNOT_MISS | SPECIAL_PIERCE_DEFENSE | SPECIAL_IGNORE_VULNERABILITY | SPECIAL_CONFUSED_ACTION | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_IN_PERIL | TARGET_WEIGHT_LOW_HP_RATIO | TARGET_WEIGHT_OWN_SIDE, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -635,7 +635,7 @@ BattleWeapon ItemWeaponData_Honey_Syrup = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x30148, // special
+    SPECIAL_CANNOT_MISS | SPECIAL_PIERCE_DEFENSE | SPECIAL_IGNORE_VULNERABILITY | SPECIAL_CONFUSED_ACTION | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_RANDOM | TARGET_WEIGHT_PARTNER, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -671,7 +671,7 @@ BattleWeapon ItemWeaponData_Maple_Syrup = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x30148, // special
+    SPECIAL_CANNOT_MISS | SPECIAL_PIERCE_DEFENSE | SPECIAL_IGNORE_VULNERABILITY | SPECIAL_CONFUSED_ACTION | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_RANDOM | TARGET_WEIGHT_PARTNER, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -707,7 +707,7 @@ BattleWeapon ItemWeaponData_Royal_Jelly = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x30148, // special
+    SPECIAL_CANNOT_MISS | SPECIAL_PIERCE_DEFENSE | SPECIAL_IGNORE_VULNERABILITY | SPECIAL_CONFUSED_ACTION | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_RANDOM | TARGET_WEIGHT_PARTNER, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -743,7 +743,7 @@ BattleWeapon ItemWeaponData_Tankobu = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x30148, // special
+    SPECIAL_CANNOT_MISS | SPECIAL_PIERCE_DEFENSE | SPECIAL_IGNORE_VULNERABILITY | SPECIAL_CONFUSED_ACTION | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_RANDOM | TARGET_WEIGHT_PARTNER, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -889,7 +889,7 @@ BattleWeapon ItemWeaponData_Pow_Block = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x33040, // special
+    SPECIAL_PIERCE_DEFENSE | SPECIAL_FLIP_SHELLED | SPECIAL_FLIP_BOMB_FLIPPABLE | SPECIAL_CONFUSED_ACTION | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -999,7 +999,7 @@ BattleWeapon ItemWeaponData_Fire_Flower = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x30040, // special
+    SPECIAL_PIERCE_DEFENSE | SPECIAL_CONFUSED_ACTION | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -1127,7 +1127,7 @@ BattleWeapon ItemWeaponData_Kaminari_Dokkan = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x30040, // special
+    SPECIAL_PIERCE_DEFENSE | SPECIAL_CONFUSED_ACTION | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -1164,7 +1164,7 @@ BattleWeapon ItemWeaponData_Kaminari_Gorogoro = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x30040, // special
+    SPECIAL_PIERCE_DEFENSE | SPECIAL_CONFUSED_ACTION | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -1351,7 +1351,7 @@ BattleWeapon ItemWeaponData_Kirakira_Otoshi = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x30040, // special
+    SPECIAL_PIERCE_DEFENSE | SPECIAL_CONFUSED_ACTION | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -1477,7 +1477,7 @@ BattleWeapon ItemWeaponData_Koorino_Ibuki = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x30040, // special
+    SPECIAL_PIERCE_DEFENSE | SPECIAL_CONFUSED_ACTION | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -1607,7 +1607,7 @@ BattleWeapon ItemWeaponData_Yurayura_Jishin = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x30040, // special
+    SPECIAL_PIERCE_DEFENSE | SPECIAL_CONFUSED_ACTION | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -1717,7 +1717,7 @@ BattleWeapon ItemWeaponData_Teresano_Fuku = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x30108, // special
+    SPECIAL_CANNOT_MISS | SPECIAL_IGNORE_VULNERABILITY | SPECIAL_CONFUSED_ACTION | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -1773,7 +1773,7 @@ BattleWeapon ItemWeaponData_Biribiri_Kinoko = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x30108, // special
+    SPECIAL_CANNOT_MISS | SPECIAL_IGNORE_VULNERABILITY | SPECIAL_CONFUSED_ACTION | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -1830,7 +1830,7 @@ BattleWeapon ItemWeaponData_Teki_Yokeeru = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x30108, // special
+    SPECIAL_CANNOT_MISS | SPECIAL_IGNORE_VULNERABILITY | SPECIAL_CONFUSED_ACTION | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -1868,7 +1868,7 @@ BattleWeapon ItemWeaponData_Madowaseno_Kona = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x30000, // special
+    SPECIAL_CONFUSED_ACTION | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -1937,7 +1937,7 @@ BattleWeapon ItemWeaponData_Nemure_Yoikoyo = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x30000, // special
+    SPECIAL_CONFUSED_ACTION | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_RANDOM, // targetWeightFlags
     95, // sleepChance
@@ -2041,7 +2041,7 @@ BattleWeapon ItemWeaponData_Stop_Watch = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x30000, // special
+    SPECIAL_CONFUSED_ACTION | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, // sleepChance..sleepTime
@@ -2098,7 +2098,7 @@ BattleWeapon ItemWeaponData_Guruguru_Memawashi = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x30000, // special
+    SPECIAL_CONFUSED_ACTION | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, // sleepChance..stopTime
@@ -2136,7 +2136,7 @@ BattleWeapon ItemWeaponData_Dekadeka_Drink = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x30108, // special
+    SPECIAL_CANNOT_MISS | SPECIAL_IGNORE_VULNERABILITY | SPECIAL_CONFUSED_ACTION | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -2175,7 +2175,7 @@ BattleWeapon ItemWeaponData_Katikati_Koura = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x30108, // special
+    SPECIAL_CANNOT_MISS | SPECIAL_IGNORE_VULNERABILITY | SPECIAL_CONFUSED_ACTION | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -2298,7 +2298,7 @@ BattleWeapon ItemWeaponData_Suitooru = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x30140, // special
+    SPECIAL_PIERCE_DEFENSE | SPECIAL_IGNORE_VULNERABILITY | SPECIAL_CONFUSED_ACTION | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -2403,7 +2403,7 @@ BattleWeapon ItemWeaponData_Teki_Kyouka = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x30108, // special
+    SPECIAL_CANNOT_MISS | SPECIAL_IGNORE_VULNERABILITY | SPECIAL_CONFUSED_ACTION | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -2439,7 +2439,7 @@ BattleWeapon ItemWeaponData_Minimini_Kun = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x30000, // special
+    SPECIAL_CONFUSED_ACTION | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -2478,7 +2478,7 @@ BattleWeapon ItemWeaponData_Funyafunya_Kun = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x30000, // special
+    SPECIAL_CONFUSED_ACTION | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -2518,7 +2518,7 @@ BattleWeapon ItemWeaponData_Sukkiri_Drink = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x30108, // special
+    SPECIAL_CANNOT_MISS | SPECIAL_IGNORE_VULNERABILITY | SPECIAL_CONFUSED_ACTION | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_RANDOM, // targetWeightFlags
     100, // sleepChance
@@ -2589,7 +2589,7 @@ BattleWeapon ItemWeaponData_Jiwajiwa_Kinoko = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x30108, // special
+    SPECIAL_CANNOT_MISS | SPECIAL_IGNORE_VULNERABILITY | SPECIAL_CONFUSED_ACTION | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_IN_PERIL | TARGET_WEIGHT_LOW_HP_RATIO | TARGET_WEIGHT_OWN_SIDE, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -2646,7 +2646,7 @@ BattleWeapon ItemWeaponData_Jiwajiwa_Syrup = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x30108, // special
+    SPECIAL_CANNOT_MISS | SPECIAL_IGNORE_VULNERABILITY | SPECIAL_CONFUSED_ACTION | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -2734,7 +2734,7 @@ BattleWeapon ItemWeaponData_Irekaeeru = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x30108, // special
+    SPECIAL_CANNOT_MISS | SPECIAL_IGNORE_VULNERABILITY | SPECIAL_CONFUSED_ACTION | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -2813,7 +2813,7 @@ BattleWeapon ItemWeaponData_Attiike_Shisshi = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x30000, // special
+    SPECIAL_CONFUSED_ACTION | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -2940,7 +2940,7 @@ BattleWeapon ItemWeaponData_Naniga_Okorukana = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x30108, // special
+    SPECIAL_CANNOT_MISS | SPECIAL_IGNORE_VULNERABILITY | SPECIAL_CONFUSED_ACTION | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -2981,7 +2981,7 @@ BattleWeapon ItemWeaponData_Shikaeshino_Kona = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x30108, // special
+    SPECIAL_CANNOT_MISS | SPECIAL_IGNORE_VULNERABILITY | SPECIAL_CONFUSED_ACTION | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -3018,7 +3018,7 @@ BattleWeapon ItemWeaponData_Kameno_Noroi = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x30008, // special
+    SPECIAL_CANNOT_MISS | SPECIAL_CONFUSED_ACTION | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -3138,7 +3138,7 @@ BattleWeapon ItemWeaponData_SpaceFood = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x30108, // special
+    SPECIAL_CANNOT_MISS | SPECIAL_IGNORE_VULNERABILITY | SPECIAL_CONFUSED_ACTION | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -3176,7 +3176,7 @@ BattleWeapon ItemWeaponData_IceCandy = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x30108, // special
+    SPECIAL_CANNOT_MISS | SPECIAL_IGNORE_VULNERABILITY | SPECIAL_CONFUSED_ACTION | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -3215,7 +3215,7 @@ BattleWeapon ItemWeaponData_NancyFrappe = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x30108, // special
+    SPECIAL_CANNOT_MISS | SPECIAL_IGNORE_VULNERABILITY | SPECIAL_CONFUSED_ACTION | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -3254,7 +3254,7 @@ BattleWeapon ItemWeaponData_SnowRabbit = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x30108, // special
+    SPECIAL_CANNOT_MISS | SPECIAL_IGNORE_VULNERABILITY | SPECIAL_CONFUSED_ACTION | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -3293,7 +3293,7 @@ BattleWeapon ItemWeaponData_TeaKinoko = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x30108, // special
+    SPECIAL_CANNOT_MISS | SPECIAL_IGNORE_VULNERABILITY | SPECIAL_CONFUSED_ACTION | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -3335,7 +3335,7 @@ BattleWeapon ItemWeaponData_FirstLovePuddingBiribiri = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x30108, // special
+    SPECIAL_CANNOT_MISS | SPECIAL_IGNORE_VULNERABILITY | SPECIAL_CONFUSED_ACTION | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -3374,7 +3374,7 @@ BattleWeapon ItemWeaponData_FirstLovePuddingTrans = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x30108, // special
+    SPECIAL_CANNOT_MISS | SPECIAL_IGNORE_VULNERABILITY | SPECIAL_CONFUSED_ACTION | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -3412,7 +3412,7 @@ BattleWeapon ItemWeaponData_FirstLovePuddingSleep = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x30108, // special
+    SPECIAL_CANNOT_MISS | SPECIAL_IGNORE_VULNERABILITY | SPECIAL_CONFUSED_ACTION | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_RANDOM, // targetWeightFlags
     100, // sleepChance
@@ -3450,7 +3450,7 @@ BattleWeapon ItemWeaponData_StarryDinner = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x30108, // special
+    SPECIAL_CANNOT_MISS | SPECIAL_IGNORE_VULNERABILITY | SPECIAL_CONFUSED_ACTION | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -3489,7 +3489,7 @@ BattleWeapon ItemWeaponData_KararinaPasta = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x30108, // special
+    SPECIAL_CANNOT_MISS | SPECIAL_IGNORE_VULNERABILITY | SPECIAL_CONFUSED_ACTION | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -3526,7 +3526,7 @@ BattleWeapon ItemWeaponData_MeromeroCake = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x30108, // special
+    SPECIAL_CANNOT_MISS | SPECIAL_IGNORE_VULNERABILITY | SPECIAL_CONFUSED_ACTION | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -3566,7 +3566,7 @@ BattleWeapon ItemWeaponData_PeachTaltBiribiri = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x30108, // special
+    SPECIAL_CANNOT_MISS | SPECIAL_IGNORE_VULNERABILITY | SPECIAL_CONFUSED_ACTION | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -3605,7 +3605,7 @@ BattleWeapon ItemWeaponData_PeachTaltDodge = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x30108, // special
+    SPECIAL_CANNOT_MISS | SPECIAL_IGNORE_VULNERABILITY | SPECIAL_CONFUSED_ACTION | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -3643,7 +3643,7 @@ BattleWeapon ItemWeaponData_PeachTaltSleep = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x30108, // special
+    SPECIAL_CANNOT_MISS | SPECIAL_IGNORE_VULNERABILITY | SPECIAL_CONFUSED_ACTION | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_RANDOM, // targetWeightFlags
     100, // sleepChance
@@ -3681,7 +3681,7 @@ BattleWeapon ItemWeaponData_BiribiriCandy = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x30108, // special
+    SPECIAL_CANNOT_MISS | SPECIAL_IGNORE_VULNERABILITY | SPECIAL_CONFUSED_ACTION | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -3720,7 +3720,7 @@ BattleWeapon ItemWeaponData_HealthySalad = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x30108, // special
+    SPECIAL_CANNOT_MISS | SPECIAL_IGNORE_VULNERABILITY | SPECIAL_CONFUSED_ACTION | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_RANDOM, // targetWeightFlags
     100, // sleepChance
@@ -3773,7 +3773,7 @@ BattleWeapon ItemWeaponData_FreshJuice = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x30108, // special
+    SPECIAL_CANNOT_MISS | SPECIAL_IGNORE_VULNERABILITY | SPECIAL_CONFUSED_ACTION | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_RANDOM, // targetWeightFlags
     100, // sleepChance
@@ -3826,7 +3826,7 @@ BattleWeapon ItemWeaponData_RedKararing = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x30108, // special
+    SPECIAL_CANNOT_MISS | SPECIAL_IGNORE_VULNERABILITY | SPECIAL_CONFUSED_ACTION | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -3863,7 +3863,7 @@ BattleWeapon ItemWeaponData_FutarideForever = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x30108, // special
+    SPECIAL_CANNOT_MISS | SPECIAL_IGNORE_VULNERABILITY | SPECIAL_CONFUSED_ACTION | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -4026,7 +4026,7 @@ BattleWeapon ItemWeaponData_NancyDynamite = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x30040, // special
+    SPECIAL_PIERCE_DEFENSE | SPECIAL_CONFUSED_ACTION | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -4063,7 +4063,7 @@ BattleWeapon ItemWeaponData_CoconutsBomb = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x30040, // special
+    SPECIAL_PIERCE_DEFENSE | SPECIAL_CONFUSED_ACTION | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -4099,7 +4099,7 @@ BattleWeapon ItemWeaponData_KachikachiDish = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x30040, // special
+    SPECIAL_PIERCE_DEFENSE | SPECIAL_CONFUSED_ACTION | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -4136,7 +4136,7 @@ BattleWeapon ItemWeaponData_BomberEgg = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x30040, // special
+    SPECIAL_PIERCE_DEFENSE | SPECIAL_CONFUSED_ACTION | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -4200,7 +4200,7 @@ BattleWeapon ItemWeaponData_PoisonKinoko = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x30048, // special
+    SPECIAL_CANNOT_MISS | SPECIAL_PIERCE_DEFENSE | SPECIAL_CONFUSED_ACTION | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, // sleepChance..dizzyTime
@@ -4599,7 +4599,7 @@ BattleWeapon ItemWeaponData_LastDinner = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x30108, // special
+    SPECIAL_CANNOT_MISS | SPECIAL_IGNORE_VULNERABILITY | SPECIAL_CONFUSED_ACTION | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime

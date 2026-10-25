@@ -315,7 +315,7 @@ u32 BattleCheckPikkyoro(BattleWeapon* weapon, u32* flags) {
     if (flags) {
         result = *flags;
     }
-    if (weapon->special & 0x800) {
+    if (weapon->special & SPECIAL_ATTACK_FX) {
         f = (u32)wp->badgeEquippedFlags;
         if (f & 0x100) {
             table[0] = 1;
@@ -385,7 +385,7 @@ s32 BattleCalculateDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPa
     s32 defenseAttr;
     u8 element;
     s32 n;
-    u32 isJump;
+    u32 badgePower;
     s8 turns;
     s8 strength;
     s32 (*fn)(BattleUnit*, BattleWeapon*, BattleUnit*, BattleUnitPart*);
@@ -394,7 +394,7 @@ s32 BattleCalculateDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPa
         flags |= 0x1000;
     }
     element = weapon->element;
-    if (attacker && (weapon->special & 0x400) && BtlUnit_CheckStatus(attacker, STATUS_BURN)) {
+    if (attacker && (weapon->special & SPECIAL_IGNITABLE) && BtlUnit_CheckStatus(attacker, STATUS_BURN)) {
         element = ELEMENT_FIRE;
     }
     defaultResult = flags | 0x1E;
@@ -406,7 +406,7 @@ s32 BattleCalculateDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPa
     if (part->attributes & 0x20000000) {
         return 0;
     }
-    if (attacker && (weapon->special & 1) && attacker->badgesEquipped.AllOrNothing &&
+    if (attacker && (weapon->special & SPECIAL_BADGE_POWER) && attacker->badgesEquipped.AllOrNothing &&
         !((u32)wp->actionCommands.result & 2) && !(flags & 0x20000)) {
         return 0;
     }
@@ -414,10 +414,10 @@ s32 BattleCalculateDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPa
     if (fn) {
         damage = fn(attacker, weapon, target, part);
     }
-    if (wp->majinaiState == 1 && (weapon->special & 2)) {
+    if (wp->majinaiState == 1 && (weapon->special & SPECIAL_STATUS_POWER)) {
         damage += 3;
     }
-    if (weapon->special & 1) {
+    if (weapon->special & SPECIAL_BADGE_POWER) {
         damage += attacker->badgesEquipped.PowerPlus;
         damage += attacker->badgesEquipped.PUpDDown;
         if (attacker->badgesEquipped.AllOrNothing) {
@@ -438,7 +438,7 @@ s32 BattleCalculateDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPa
             damage += attacker->badgesEquipped.IcePower;
         }
     }
-    if (weapon->special & 4) {
+    if (weapon->special & SPECIAL_CHARGEABLE) {
         if (BtlUnit_CheckStatus(attacker, STATUS_CHARGE)) {
             BtlUnit_GetStatus(attacker, STATUS_CHARGE, &turns, &strength);
             if ((damage += strength) < 0) {
@@ -447,35 +447,35 @@ s32 BattleCalculateDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPa
         }
         attacker->mTokenFlags |= kChargeExpended;
     }
-    if ((weapon->special & 2) && BtlUnit_CheckStatus(attacker, STATUS_HUGE)) {
+    if ((weapon->special & SPECIAL_STATUS_POWER) && BtlUnit_CheckStatus(attacker, STATUS_HUGE)) {
         BtlUnit_GetStatus(attacker, STATUS_HUGE, &turns, &strength);
         if ((damage += strength) < 0) {
             damage = 0;
         }
     }
-    if ((weapon->special & 2) && BtlUnit_CheckStatus(attacker, STATUS_ATTACK_UP)) {
+    if ((weapon->special & SPECIAL_STATUS_POWER) && BtlUnit_CheckStatus(attacker, STATUS_ATTACK_UP)) {
         BtlUnit_GetStatus(attacker, STATUS_ATTACK_UP, &turns, &strength);
         if ((damage += strength) < 0) {
             damage = 0;
         }
     }
-    isJump = (weapon->special & 1) != 0;
-    if (isJump) {
+    badgePower = (weapon->special & SPECIAL_BADGE_POWER) != 0;
+    if (badgePower) {
         damage -= attacker->badgesEquipped.PDownDUp;
     }
-    if (isJump && attacker->badgesEquipped.HpDrain) {
+    if (badgePower && attacker->badgesEquipped.HpDrain) {
         damage -= attacker->badgesEquipped.HpDrain;
     }
-    if (isJump && attacker->badgesEquipped.FpDrain) {
+    if (badgePower && attacker->badgesEquipped.FpDrain) {
         damage -= attacker->badgesEquipped.FpDrain;
     }
-    if ((weapon->special & 2) && BtlUnit_CheckStatus(attacker, STATUS_TINY)) {
+    if ((weapon->special & SPECIAL_STATUS_POWER) && BtlUnit_CheckStatus(attacker, STATUS_TINY)) {
         BtlUnit_GetStatus(attacker, STATUS_TINY, &turns, &strength);
         if ((damage += strength) < 0) {
             damage = 0;
         }
     }
-    if ((weapon->special & 2) && BtlUnit_CheckStatus(attacker, STATUS_ATTACK_DOWN)) {
+    if ((weapon->special & SPECIAL_STATUS_POWER) && BtlUnit_CheckStatus(attacker, STATUS_ATTACK_DOWN)) {
         BtlUnit_GetStatus(attacker, STATUS_ATTACK_DOWN, &turns, &strength);
         if ((damage += strength) < 0) {
             damage = 0;
@@ -533,18 +533,18 @@ skip:
                 defense = 0;
             }
         }
-        if ((weapon->special & 0x40) && defense > 0) {
+        if ((weapon->special & SPECIAL_PIERCE_DEFENSE) && defense > 0) {
             defense = 0;
         }
     }
     damage = (defenseAttr == 3) ? damage : damage - defense;
     if ((damage += target->badgesEquipped.PUpDDown) > 0) {
-        if (weapon->special & 0x10) {
+        if (weapon->special & SPECIAL_DIMINISH_BY_HIT) {
             if ((damage -= target->hpDamageCount) <= 0) {
                 damage = 1;
             }
         }
-        if (weapon->special & 0x20) {
+        if (weapon->special & SPECIAL_DIMINISH_BY_TARGET) {
             if ((damage -= attacker->superguardedCount) <= 0) {
                 damage = 1;
             }
@@ -614,7 +614,7 @@ s32 BattleCalculateFpDamage(BattleUnit* attacker, BattleUnit* target, BattleUnit
     if (part->attributes & 0x20000000) {
         return 0;
     }
-    if (attacker && (weapon->special & 1) && attacker->badgesEquipped.AllOrNothing &&
+    if (attacker && (weapon->special & SPECIAL_BADGE_POWER) && attacker->badgesEquipped.AllOrNothing &&
         !((u32)wp->actionCommands.result & 2)) {
         return 0;
     }
@@ -1041,9 +1041,9 @@ s32 BattleSetStatusDamage(u32* result, BattleUnit* unit, BattleUnitPart* part, u
         return 0;
     }
     regist = _getRegistStatus(unit, type);
-    if (!(special & 0x100) || regist == 0) {
+    if (!(special & SPECIAL_IGNORE_VULNERABILITY) || regist == 0) {
         chance = chance * regist / 100;
-        if (!(special & 0x100) && regist > 0) {
+        if (!(special & SPECIAL_IGNORE_VULNERABILITY) && regist > 0) {
             chance += levelDiff;
         }
     }
@@ -1429,13 +1429,13 @@ s32 BattlePreCheckDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPar
     if (!target || !part) {
         return 1;
     }
-    if (weapon->special & 4) {
+    if (weapon->special & SPECIAL_CHARGEABLE) {
         attacker->mTokenFlags |= kChargeExpended;
     }
-    if ((part->attributes & 0x4000) && !(weapon->special & 0x40000)) {
+    if ((part->attributes & 0x4000) && !(weapon->special & SPECIAL_CONTACTS_CLONES)) {
         return 2;
     }
-    if (weapon->special & 8) {
+    if (weapon->special & SPECIAL_CANNOT_MISS) {
         return 1;
     }
     if (BtlUnit_CheckStatus(target, STATUS_INVISIBLE) || (target->mAttributeFlags & 8)) {
@@ -1545,7 +1545,7 @@ s32 BattleCheckDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPart* 
         target->currentTarget = part;
     }
     damage = 0;
-    if (!(weapon->special & 0x20000) && BtlUnit_GetACPossibility(target) && BattleActionCommandGetDefenceResult() == 5) {
+    if (!(weapon->special & SPECIAL_UNGUARDABLE) && BtlUnit_GetACPossibility(target) && BattleActionCommandGetDefenceResult() == 5) {
         BtlUnit_GetHitPos(target, part, &hit.x, &hit.y, &hit.z);
         eff = effNiceEntry(2, hit.x - 60.0f, 45.0f + hit.y, hit.z - 10.0f);
         ((NiceEffectWork*)eff->userdata)->overallScale = 0.75f;
@@ -1593,13 +1593,13 @@ s32 BattleCheckDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPart* 
             }
             if ((part->counterAttributes & kCounterExplosive) &&
                 (weapon->element == ELEMENT_EXPLOSION || weapon->element == ELEMENT_ELECTRIC || weapon->element == ELEMENT_FIRE ||
-                 ((weapon->special & 0x400) && BtlUnit_CheckStatus(attacker, STATUS_BURN)))) {
+                 ((weapon->special & SPECIAL_IGNITABLE) && BtlUnit_CheckStatus(attacker, STATUS_BURN)))) {
                 BattleRunHitEvent(target, 0x719);
                 ret = 18;
                 break;
             }
         }
-        if (!(weapon->special & 0x20000) && BtlUnit_GetACPossibility(target)) {
+        if (!(weapon->special & SPECIAL_UNGUARDABLE) && BtlUnit_GetACPossibility(target)) {
             if (BattleActionCommandGetDefenceResult() > 3) {
                 BtlUnit_GetHitPos(target, part, &hit2.x, &hit2.y, &hit2.z);
                 eff = effNiceEntry(0, hit2.x - 60.0f, 45.0f + hit2.y, hit2.z - 10.0f);
@@ -1611,15 +1611,15 @@ s32 BattleCheckDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPart* 
                 BattleAudience_Case_GuardBad();
             }
         }
-        if ((weapon->special & 0x1000) && (part->attributes & kIsShelled)) {
+        if ((weapon->special & SPECIAL_FLIP_SHELLED) && (part->attributes & kIsShelled)) {
             pierce = 1;
             flags |= 0x200000;
         }
-        if ((weapon->special & 0x2000) && (part->attributes & kIsBombFlippable)) {
+        if ((weapon->special & SPECIAL_FLIP_BOMB_FLIPPABLE) && (part->attributes & kIsBombFlippable)) {
             pierce = 1;
             flags |= 0x200000;
         }
-        if ((weapon->special & 0x4000) && (part->attributes & kIsWinged)) {
+        if ((weapon->special & SPECIAL_GROUND_WINGED) && (part->attributes & kIsWinged)) {
             pierce = 1;
             if (flags & 0x100) {
                 flags |= 0x400000;
@@ -1663,7 +1663,7 @@ s32 BattleCheckDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPart* 
             ret = 18;
             break;
         }
-        if (((u32)flags & 0x100) && (weapon->special & 0x80) && BtlUnit_CheckStatus(target, STATUS_FREEZE) && irand(100) < 0) {
+        if (((u32)flags & 0x100) && (weapon->special & SPECIAL_FREEZE_CRUSH) && BtlUnit_CheckStatus(target, STATUS_FREEZE) && irand(100) < 0) {
             code2 = 0x8717;
             _checkDamageCode_EmergencyRevival(target, (u32*)&code2);
             BattleRunHitEvent(target, code2);
@@ -1963,7 +1963,7 @@ s32 BattleCheckCounter(CounterWork* work, BattleUnit* attacker, BattleUnit* targ
     } else {
         if ((part->counterAttributes & kCounterExplosive) && !(weapon->counterResistFlags & COUNTER_RESIST_EXPLOSIVE)) {
             if (weapon->element == ELEMENT_EXPLOSION || weapon->element == ELEMENT_ELECTRIC || weapon->element == ELEMENT_FIRE ||
-                ((weapon->special & 0x400) && BtlUnit_CheckStatus(attacker, STATUS_BURN))) {
+                ((weapon->special & SPECIAL_IGNITABLE) && BtlUnit_CheckStatus(attacker, STATUS_BURN))) {
                 work->type = 0x31;
                 work->msg = 0x131;
                 work->count++;

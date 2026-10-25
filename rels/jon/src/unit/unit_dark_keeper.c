@@ -157,7 +157,7 @@ static BattleWeapon weapon_monban_attack = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x87, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH, // special
     COUNTER_RESIST_ALL & ~COUNTER_RESIST_PREEMPTIVE_SPIKY, // counterResistFlags
     0x2004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -193,7 +193,7 @@ static BattleWeapon weapon_monban_throw_attack = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x4087, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH | SPECIAL_GROUND_WINGED, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     0x80002000, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime

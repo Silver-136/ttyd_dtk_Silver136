@@ -109,7 +109,7 @@ BattleWeapon partyWeapon_ClaudaNormalAttack = {
     3, // acLevel
     2, // reserved_6F
     "msg_ac_body_press", // acHelpMsg
-    0x35087, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH | SPECIAL_FLIP_SHELLED | SPECIAL_GROUND_WINGED | SPECIAL_CONFUSED_ACTION | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_PREEMPTIVE_SPIKY | COUNTER_RESIST_FRONT_SPIKY, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -203,7 +203,7 @@ BattleWeapon partyWeapon_ClaudaPredationAttack = {
     3, // acLevel
     2, // reserved_6F
     "msg_ac_sexy_kiss", // acHelpMsg
-    0x200C7, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_PIERCE_DEFENSE | SPECIAL_FREEZE_CRUSH | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_TOP_SPIKY, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -245,7 +245,7 @@ BattleWeapon partyWeapon_ClaudaKumogakureAttack = {
     3, // acLevel
     2, // reserved_6F
     "msg_ac_kumogakure", // acHelpMsg
-    0x20008, // special
+    SPECIAL_CANNOT_MISS | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime

@@ -178,7 +178,7 @@ BattleWeapon weapon_vivian_kagenuke_attack1 = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x87, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH, // special
     COUNTER_RESIST_TOP_SPIKY, // counterResistFlags
     0x80002000, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -219,7 +219,7 @@ BattleWeapon weapon_vivian_flame_attack1 = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x20040, // special
+    SPECIAL_PIERCE_DEFENSE | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     0x80002000, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime

@@ -138,7 +138,7 @@ static BattleWeapon weapon_patakuri_attack = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x5087, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH | SPECIAL_FLIP_SHELLED | SPECIAL_GROUND_WINGED, // special
     0, // counterResistFlags
     0x80002000, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -173,7 +173,7 @@ BattleWeapon weapon_patakuri_charge = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x108, // special
+    SPECIAL_CANNOT_MISS | SPECIAL_IGNORE_VULNERABILITY, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     0, 0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
     0, 0, 0, 0, 0, 0, 0, 0, // poisonTime..dodgyTime
@@ -495,7 +495,7 @@ static BattleWeapon weapon_kuriboo_attack = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x5087, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH | SPECIAL_FLIP_SHELLED | SPECIAL_GROUND_WINGED, // special
     0, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -530,7 +530,7 @@ static BattleWeapon weapon_kuriboo_charge = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x108, // special
+    SPECIAL_CANNOT_MISS | SPECIAL_IGNORE_VULNERABILITY, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     0, 0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
     0, 0, 0, 0, 0, 0, 0, 0, // poisonTime..dodgyTime

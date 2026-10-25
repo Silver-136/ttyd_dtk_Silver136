@@ -293,7 +293,7 @@ BattleWeapon partyWeapon_SandersFirstAttack = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x26087, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH | SPECIAL_FLIP_BOMB_FLIPPABLE | SPECIAL_GROUND_WINGED | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL & ~COUNTER_RESIST_PREEMPTIVE_SPIKY, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -335,7 +335,7 @@ BattleWeapon partyWeapon_SandersNormalAttack = {
     3, // acLevel
     2, // reserved_6F
     "msg_ac_bakuhatsu", // acHelpMsg
-    0x36087, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH | SPECIAL_FLIP_BOMB_FLIPPABLE | SPECIAL_GROUND_WINGED | SPECIAL_CONFUSED_ACTION | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL & ~COUNTER_RESIST_PREEMPTIVE_SPIKY, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -377,7 +377,7 @@ BattleWeapon partyWeapon_SandersTimeBombSet = {
     3, // acLevel
     2, // reserved_6F
     "msg_ac_jigen_bakudan", // acHelpMsg
-    0x20000, // special
+    SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -419,7 +419,7 @@ BattleWeapon partyWeapon_SandersCounterSet = {
     3, // acLevel
     2, // reserved_6F
     "msg_ac_bom_counter", // acHelpMsg
-    0x20108, // special
+    SPECIAL_CANNOT_MISS | SPECIAL_IGNORE_VULNERABILITY | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     0, 0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
     0, 0, 0, 0, 0, 0, 0, 0, // poisonTime..dodgyTime
@@ -470,7 +470,7 @@ BattleWeapon partyWeapon_SandersSuperBombAttack = {
     3, // acLevel
     2, // reserved_6F
     "msg_ac_super_bakuhatsu", // acHelpMsg
-    0x26087, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH | SPECIAL_FLIP_BOMB_FLIPPABLE | SPECIAL_GROUND_WINGED | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime

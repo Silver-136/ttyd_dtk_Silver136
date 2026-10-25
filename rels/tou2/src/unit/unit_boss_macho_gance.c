@@ -226,7 +226,7 @@ BattleWeapon weapon_gance_macho_speed = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x87, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH, // special
     0, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -263,7 +263,7 @@ BattleWeapon weapon_gance_build_up = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x87, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH, // special
     0, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -301,7 +301,7 @@ BattleWeapon weapon_gance_body = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x87, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH, // special
     0, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -340,7 +340,7 @@ BattleWeapon weapon_gance_footwork = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x87, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH, // special
     0, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -378,7 +378,7 @@ BattleWeapon weapon_gance_attack = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x1087, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH | SPECIAL_FLIP_SHELLED, // special
     0, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -413,7 +413,7 @@ BattleWeapon weapon_gance_posing = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x88, // special
+    SPECIAL_CANNOT_MISS | SPECIAL_FREEZE_CRUSH, // special
     0, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -450,7 +450,7 @@ BattleWeapon weapon_gance_rariat_attack = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x1087, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH | SPECIAL_FLIP_SHELLED, // special
     0, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -487,7 +487,7 @@ BattleWeapon weapon_gance_body_attack = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x1087, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH | SPECIAL_FLIP_SHELLED, // special
     0, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime

@@ -472,7 +472,7 @@ BattleWeapon partyWeapon_VivianNormalAttack = {
     3, // acLevel
     2, // reserved_6F
     "msg_ac_kagenuke", // acHelpMsg
-    0x30007, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_CONFUSED_ACTION | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_TOP_SPIKY, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -524,7 +524,7 @@ BattleWeapon partyWeapon_VivianShadowGuard = {
     3, // acLevel
     2, // reserved_6F
     "msg_ac_kagegakure", // acHelpMsg
-    0x20008, // special
+    SPECIAL_CANNOT_MISS | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -567,7 +567,7 @@ BattleWeapon partyWeapon_VivianMagicalPowder = {
     3, // acLevel
     2, // reserved_6F
     "msg_ac_mahou_no_kona", // acHelpMsg
-    0x20047, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_PIERCE_DEFENSE | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     0x80002000, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -619,7 +619,7 @@ BattleWeapon partyWeapon_VivianCharmKissAttack = {
     3, // acLevel
     2, // reserved_6F
     "msg_ac_meromero_kiss", // acHelpMsg
-    0x20000, // special
+    SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime

@@ -214,7 +214,7 @@ BattleWeapon marioDefaultWeapon_Jump = {
     3, // acLevel
     2, // reserved_6F
     "msg_ac_jump", // acHelpMsg
-    0x35807, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_ATTACK_FX | SPECIAL_FLIP_SHELLED | SPECIAL_GROUND_WINGED | SPECIAL_CONFUSED_ACTION | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_PREEMPTIVE_SPIKY | COUNTER_RESIST_FRONT_SPIKY, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -260,7 +260,7 @@ BattleWeapon marioWeapon_KururinJump = {
     3, // acLevel
     2, // reserved_6F
     "msg_ac_k_jump", // acHelpMsg
-    0x25807, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_ATTACK_FX | SPECIAL_FLIP_SHELLED | SPECIAL_GROUND_WINGED | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_PREEMPTIVE_SPIKY | COUNTER_RESIST_FRONT_SPIKY, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -310,7 +310,7 @@ BattleWeapon marioWeapon_KururinJump2 = {
     3, // acLevel
     2, // reserved_6F
     "msg_ac_k_jump", // acHelpMsg
-    0x25807, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_ATTACK_FX | SPECIAL_FLIP_SHELLED | SPECIAL_GROUND_WINGED | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_PREEMPTIVE_SPIKY | COUNTER_RESIST_FRONT_SPIKY, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -364,7 +364,7 @@ BattleWeapon marioWeapon_JyabaraJump = {
     3, // acLevel
     2, // reserved_6F
     "msg_ac_j_jump", // acHelpMsg
-    0x25807, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_ATTACK_FX | SPECIAL_FLIP_SHELLED | SPECIAL_GROUND_WINGED | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_PREEMPTIVE_SPIKY | COUNTER_RESIST_FRONT_SPIKY, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -414,7 +414,7 @@ BattleWeapon marioWeapon_JyabaraJumpFailed = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x25807, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_ATTACK_FX | SPECIAL_FLIP_SHELLED | SPECIAL_GROUND_WINGED | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_PREEMPTIVE_SPIKY | COUNTER_RESIST_FRONT_SPIKY, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -450,7 +450,7 @@ BattleWeapon marioDefaultWeapon_FirstAttackKaitenHammer = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x20887, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH | SPECIAL_ATTACK_FX | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -486,7 +486,7 @@ BattleWeapon marioDefaultWeapon_FirstAttackUltraHammer = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x20887, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH | SPECIAL_ATTACK_FX | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -527,7 +527,7 @@ BattleWeapon marioDefaultWeapon_Hammer = {
     3, // acLevel
     2, // reserved_6F
     "msg_ac_hammer", // acHelpMsg
-    0x30887, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH | SPECIAL_ATTACK_FX | SPECIAL_CONFUSED_ACTION | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL & ~COUNTER_RESIST_PREEMPTIVE_SPIKY, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -574,7 +574,7 @@ BattleWeapon marioWeapon_KaitenHammer = {
     3, // acLevel
     2, // reserved_6F
     "msg_ac_kaiten_hammer", // acHelpMsg
-    0x20887, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH | SPECIAL_ATTACK_FX | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL & ~COUNTER_RESIST_PREEMPTIVE_SPIKY, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -609,7 +609,7 @@ BattleWeapon marioWeapon_KaitenHammerInvolved = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x20040, // special
+    SPECIAL_PIERCE_DEFENSE | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     0, 0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
     0, 0, 0, 0, 0, 0, 0, 0, // poisonTime..dodgyTime
@@ -655,7 +655,7 @@ BattleWeapon marioWeapon_UltraHammer = {
     3, // acLevel
     2, // reserved_6F
     "msg_ac_ultra_hammer", // acHelpMsg
-    0x20807, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_ATTACK_FX | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL & ~COUNTER_RESIST_PREEMPTIVE_SPIKY, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -690,7 +690,7 @@ BattleWeapon marioWeapon_UltraHammerInvolved = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x20040, // special
+    SPECIAL_PIERCE_DEFENSE | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     0, 0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
     0, 0, 0, 0, 0, 0, 0, 0, // poisonTime..dodgyTime
@@ -735,7 +735,7 @@ BattleWeapon marioWeapon_UltraHammerFinish = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x2088F, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_CANNOT_MISS | SPECIAL_FREEZE_CRUSH | SPECIAL_ATTACK_FX | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -772,7 +772,7 @@ BattleWeapon badgeWeapon_TugitugiJump = {
     3, // acLevel
     2, // reserved_6F
     "msg_ac_jump", // acHelpMsg
-    0x25807, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_ATTACK_FX | SPECIAL_FLIP_SHELLED | SPECIAL_GROUND_WINGED | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_PREEMPTIVE_SPIKY | COUNTER_RESIST_FRONT_SPIKY, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -813,7 +813,7 @@ BattleWeapon badgeWeapon_GatsunJump = {
     3, // acLevel
     2, // reserved_6F
     "msg_ac_jump", // acHelpMsg
-    0x25807, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_ATTACK_FX | SPECIAL_FLIP_SHELLED | SPECIAL_GROUND_WINGED | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_PREEMPTIVE_SPIKY | COUNTER_RESIST_FRONT_SPIKY, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -850,7 +850,7 @@ BattleWeapon badgeWeapon_DokanJump = {
     3, // acLevel
     2, // reserved_6F
     "msg_ac_jump", // acHelpMsg
-    0x25807, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_ATTACK_FX | SPECIAL_FLIP_SHELLED | SPECIAL_GROUND_WINGED | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_PREEMPTIVE_SPIKY | COUNTER_RESIST_FRONT_SPIKY, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -887,7 +887,7 @@ BattleWeapon badgeWeapon_RenzokuJump = {
     3, // acLevel
     2, // reserved_6F
     "msg_ac_jump", // acHelpMsg
-    0x25817, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_DIMINISH_BY_HIT | SPECIAL_ATTACK_FX | SPECIAL_FLIP_SHELLED | SPECIAL_GROUND_WINGED | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_PREEMPTIVE_SPIKY | COUNTER_RESIST_FRONT_SPIKY, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -932,7 +932,7 @@ BattleWeapon badgeWeapon_TatsumakiJump = {
     3, // acLevel
     2, // reserved_6F
     "msg_ac_tatsumaki_jump", // acHelpMsg
-    0x25807, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_ATTACK_FX | SPECIAL_FLIP_SHELLED | SPECIAL_GROUND_WINGED | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_PREEMPTIVE_SPIKY | COUNTER_RESIST_FRONT_SPIKY, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -962,7 +962,7 @@ BattleWeapon badgeWeapon_TatsumakiJumpInvolved = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x20040, // special
+    SPECIAL_PIERCE_DEFENSE | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     0, 0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
     0, 0, 0, 0, 0, 0, 0, 0, // poisonTime..dodgyTime
@@ -998,7 +998,7 @@ BattleWeapon badgeWeapon_MiniminiFumi = {
     3, // acLevel
     2, // reserved_6F
     "msg_ac_jump", // acHelpMsg
-    0x25807, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_ATTACK_FX | SPECIAL_FLIP_SHELLED | SPECIAL_GROUND_WINGED | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_PREEMPTIVE_SPIKY | COUNTER_RESIST_FRONT_SPIKY, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -1042,7 +1042,7 @@ BattleWeapon badgeWeapon_NemuraseFumi = {
     3, // acLevel
     2, // reserved_6F
     "msg_ac_jump", // acHelpMsg
-    0x25807, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_ATTACK_FX | SPECIAL_FLIP_SHELLED | SPECIAL_GROUND_WINGED | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_PREEMPTIVE_SPIKY | COUNTER_RESIST_FRONT_SPIKY, // counterResistFlags
     0x80002004, // targetWeightFlags
     100, // sleepChance
@@ -1085,7 +1085,7 @@ BattleWeapon badgeWeapon_FunyafunyaJump = {
     3, // acLevel
     2, // reserved_6F
     "msg_ac_jump", // acHelpMsg
-    0x25807, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_ATTACK_FX | SPECIAL_FLIP_SHELLED | SPECIAL_GROUND_WINGED | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_PREEMPTIVE_SPIKY | COUNTER_RESIST_FRONT_SPIKY, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -1130,7 +1130,7 @@ BattleWeapon badgeWeapon_GatsunHammer = {
     3, // acLevel
     2, // reserved_6F
     "msg_ac_hammer", // acHelpMsg
-    0x20887, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH | SPECIAL_ATTACK_FX | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL & ~COUNTER_RESIST_PREEMPTIVE_SPIKY, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -1167,7 +1167,7 @@ BattleWeapon badgeWeapon_DokanHammer = {
     3, // acLevel
     2, // reserved_6F
     "msg_ac_hammer", // acHelpMsg
-    0x20887, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH | SPECIAL_ATTACK_FX | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL & ~COUNTER_RESIST_PREEMPTIVE_SPIKY, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -1208,7 +1208,7 @@ BattleWeapon badgeWeapon_JishinHammer = {
     3, // acLevel
     2, // reserved_6F
     "msg_ac_hammer", // acHelpMsg
-    0x238C7, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_PIERCE_DEFENSE | SPECIAL_FREEZE_CRUSH | SPECIAL_ATTACK_FX | SPECIAL_FLIP_SHELLED | SPECIAL_FLIP_BOMB_FLIPPABLE | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -1245,7 +1245,7 @@ BattleWeapon badgeWeapon_UltraJishinHammer = {
     3, // acLevel
     2, // reserved_6F
     "msg_ac_ultra_jishin_hammer", // acHelpMsg
-    0x238C7, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_PIERCE_DEFENSE | SPECIAL_FREEZE_CRUSH | SPECIAL_ATTACK_FX | SPECIAL_FLIP_SHELLED | SPECIAL_FLIP_BOMB_FLIPPABLE | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -1282,7 +1282,7 @@ BattleWeapon badgeWeapon_HammerNageru = {
     3, // acLevel
     2, // reserved_6F
     "msg_ac_hammer_nageru", // acHelpMsg
-    0x20887, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH | SPECIAL_ATTACK_FX | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -1319,7 +1319,7 @@ BattleWeapon badgeWeapon_TsuranukiNaguri = {
     3, // acLevel
     2, // reserved_6F
     "msg_ac_hammer", // acHelpMsg
-    0x208C7, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_PIERCE_DEFENSE | SPECIAL_FREEZE_CRUSH | SPECIAL_ATTACK_FX | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL & ~COUNTER_RESIST_PREEMPTIVE_SPIKY, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -1360,7 +1360,7 @@ BattleWeapon badgeWeapon_ConfuseHammer = {
     3, // acLevel
     2, // reserved_6F
     "msg_ac_hammer", // acHelpMsg
-    0x20887, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH | SPECIAL_ATTACK_FX | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL & ~COUNTER_RESIST_PREEMPTIVE_SPIKY, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -1409,7 +1409,7 @@ BattleWeapon badgeWeapon_FireNaguri = {
     3, // acLevel
     2, // reserved_6F
     "msg_ac_fire_naguri", // acHelpMsg
-    0x20867, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_DIMINISH_BY_TARGET | SPECIAL_PIERCE_DEFENSE | SPECIAL_ATTACK_FX | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -1457,7 +1457,7 @@ BattleWeapon badgeWeapon_FireNaguriFailed = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x20007, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -1501,7 +1501,7 @@ BattleWeapon badgeWeapon_IceNaguri = {
     3, // acLevel
     2, // reserved_6F
     "msg_ac_hammer", // acHelpMsg
-    0x20807, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_ATTACK_FX | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL & ~COUNTER_RESIST_PREEMPTIVE_SPIKY, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -1550,7 +1550,7 @@ BattleWeapon badgeWeapon_Charge = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x20108, // special
+    SPECIAL_CANNOT_MISS | SPECIAL_IGNORE_VULNERABILITY | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -1593,7 +1593,7 @@ BattleWeapon badgeWeapon_ChargeP = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x20108, // special
+    SPECIAL_CANNOT_MISS | SPECIAL_IGNORE_VULNERABILITY | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -1636,7 +1636,7 @@ BattleWeapon badgeWeapon_SuperCharge = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x20108, // special
+    SPECIAL_CANNOT_MISS | SPECIAL_IGNORE_VULNERABILITY | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -1679,7 +1679,7 @@ BattleWeapon badgeWeapon_SuperChargeP = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x20108, // special
+    SPECIAL_CANNOT_MISS | SPECIAL_IGNORE_VULNERABILITY | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -1712,7 +1712,7 @@ BattleWeapon badgeWeapon_2KaiItem = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x20108, // special
+    SPECIAL_CANNOT_MISS | SPECIAL_IGNORE_VULNERABILITY | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -1744,7 +1744,7 @@ BattleWeapon badgeWeapon_3KaiItem = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x20108, // special
+    SPECIAL_CANNOT_MISS | SPECIAL_IGNORE_VULNERABILITY | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -1775,7 +1775,7 @@ BattleWeapon badgeWeapon_DefenceCommand = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x20008, // special
+    SPECIAL_CANNOT_MISS | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -1810,7 +1810,7 @@ BattleWeapon badgeWeapon_DefenceCommandP = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x20008, // special
+    SPECIAL_CANNOT_MISS | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -1857,7 +1857,7 @@ BattleWeapon marioWeapon_BakuGame = {
     3, // acLevel
     2, // reserved_6F
     "msg_sac_3", // acHelpMsg
-    0x20088, // special
+    SPECIAL_CANNOT_MISS | SPECIAL_FREEZE_CRUSH | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     0, 0, 0, // targetWeightFlags..sleepTime
     100, // stopChance
@@ -1902,7 +1902,7 @@ BattleWeapon marioWeapon_Scissor = {
     3, // acLevel
     2, // reserved_6F
     "msg_sac_5", // acHelpMsg
-    0x200C8, // special
+    SPECIAL_CANNOT_MISS | SPECIAL_PIERCE_DEFENSE | SPECIAL_FREEZE_CRUSH | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     0, 0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
     0, 0, 0, 0, 0, 0, 0, 0, // poisonTime..dodgyTime
@@ -1944,7 +1944,7 @@ BattleWeapon marioWeapon_ZubaStar = {
     3, // acLevel
     2, // reserved_6F
     "msg_sac_8", // acHelpMsg
-    0x200C8, // special
+    SPECIAL_CANNOT_MISS | SPECIAL_PIERCE_DEFENSE | SPECIAL_FREEZE_CRUSH | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     0, 0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
     0, 0, 0, 0, 0, 0, 0, 0, // poisonTime..dodgyTime
@@ -1986,7 +1986,7 @@ BattleWeapon marioWeapon_Genki0 = {
     3, // acLevel
     2, // reserved_6F
     "msg_sac_1", // acHelpMsg
-    0x20008, // special
+    SPECIAL_CANNOT_MISS | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     0, 0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
     0, 0, 0, 0, 0, 0, 0, 0, // poisonTime..dodgyTime
@@ -2028,7 +2028,7 @@ BattleWeapon marioWeapon_Genki1 = {
     3, // acLevel
     2, // reserved_6F
     "msg_sac_6", // acHelpMsg
-    0x20008, // special
+    SPECIAL_CANNOT_MISS | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     0, 0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
     0, 0, 0, 0, 0, 0, 0, 0, // poisonTime..dodgyTime
@@ -2070,7 +2070,7 @@ BattleWeapon marioWeapon_Deka = {
     3, // acLevel
     2, // reserved_6F
     "msg_sac_2", // acHelpMsg
-    0x200C8, // special
+    SPECIAL_CANNOT_MISS | SPECIAL_PIERCE_DEFENSE | SPECIAL_FREEZE_CRUSH | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     0, 0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
     0, 0, 0, 0, 0, 0, 0, 0, // poisonTime..dodgyTime
@@ -2112,7 +2112,7 @@ BattleWeapon marioWeapon_Muki = {
     3, // acLevel
     2, // reserved_6F
     "msg_sac_4", // acHelpMsg
-    0x20008, // special
+    SPECIAL_CANNOT_MISS | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     0, 0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
     0, 0, 0, 0, 0, 0, 0, 0, // poisonTime..dodgyTime
@@ -2154,7 +2154,7 @@ BattleWeapon marioWeapon_Suki = {
     3, // acLevel
     2, // reserved_6F
     "msg_sac_7", // acHelpMsg
-    0x20008, // special
+    SPECIAL_CANNOT_MISS | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     0, 0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
     0, 0, 0, 0, 0, 0, 0, 0, // poisonTime..dodgyTime

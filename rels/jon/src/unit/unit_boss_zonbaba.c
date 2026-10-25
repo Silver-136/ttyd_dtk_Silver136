@@ -190,7 +190,7 @@ BattleWeapon weapon_zonbaba_fumituke_attack = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    7, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     0x2004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -230,7 +230,7 @@ BattleWeapon weapon_zonbaba_kamituki_attack = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x20007, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     0, 0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
     0, 0, 0, 0, 0, 0, 0, 0, // poisonTime..dodgyTime
@@ -269,7 +269,7 @@ BattleWeapon weapon_zonbaba_cold_attack = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x47, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_PIERCE_DEFENSE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     0, 0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
     0, 0, 0, 0, 0, 0, 0, 0, // poisonTime..dodgyTime
@@ -311,7 +311,7 @@ BattleWeapon weapon_zonbaba_confuze_attack = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x47, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_PIERCE_DEFENSE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     0, 0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
     0, 0, // poisonTime..poisonStrength
@@ -353,7 +353,7 @@ BattleWeapon weapon_zonbaba_sleep_attack = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x47, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_PIERCE_DEFENSE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     0, // targetWeightFlags
     30, // sleepChance
@@ -395,7 +395,7 @@ BattleWeapon weapon_zonbaba_minimini_attack = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x47, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_PIERCE_DEFENSE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     0, 0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
     0, 0, 0, 0, 0, 0, 0, 0, // poisonTime..dodgyTime
@@ -432,7 +432,7 @@ BattleWeapon weapon_zonbaba_recover = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    7, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     0, 0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
     0, 0, 0, 0, 0, 0, 0, 0, // poisonTime..dodgyTime

@@ -202,7 +202,7 @@ static BattleWeapon weapon_koopa_hip_attack = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x1087, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH | SPECIAL_FLIP_SHELLED, // special
     COUNTER_RESIST_PREEMPTIVE_SPIKY | COUNTER_RESIST_FRONT_SPIKY, // counterResistFlags
     TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -238,7 +238,7 @@ static BattleWeapon weapon_koopa_bite_attack = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x87, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH, // special
     COUNTER_RESIST_TOP_SPIKY, // counterResistFlags
     4, // targetWeightFlags
     0, 0, 0, 0, 0, 0, // sleepChance..dizzyTime
@@ -277,7 +277,7 @@ static BattleWeapon weapon_koopa_critical_bite_attack = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x87, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH, // special
     COUNTER_RESIST_TOP_SPIKY, // counterResistFlags
     4, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -318,7 +318,7 @@ static BattleWeapon weapon_koopa_fire_attack = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x47, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_PIERCE_DEFENSE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     0, 0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
     0, 0, 0, 0, 0, 0, 0, 0, // poisonTime..dodgyTime

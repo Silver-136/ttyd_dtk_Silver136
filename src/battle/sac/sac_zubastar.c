@@ -122,7 +122,7 @@ BattleWeapon weapon_zubastar = {
     3, // acLevel
     2, // reserved_6F
     "msg_sac_8", // acHelpMsg
-    0x200C8, // special
+    SPECIAL_CANNOT_MISS | SPECIAL_PIERCE_DEFENSE | SPECIAL_FREEZE_CRUSH | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     0, 0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
     0, 0, 0, 0, 0, 0, 0, 0, // poisonTime..dodgyTime

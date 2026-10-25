@@ -1318,7 +1318,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 3, // acLevel
                 2, // reserved_6F
                 NULL, // acHelpMsg
-                0x100, // special
+                SPECIAL_IGNORE_VULNERABILITY, // special
                 COUNTER_RESIST_ALL, // counterResistFlags
                 0x80000000, 100, 0, 100, 0, 100, 0, 100, // targetWeightFlags..poisonChance
                 0, 0, 100, 0, 100, 0, 0, 0, // poisonTime..dodgyTime
@@ -1633,7 +1633,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 3, // acLevel
                 2, // reserved_6F
                 NULL, // acHelpMsg
-                0x100, // special
+                SPECIAL_IGNORE_VULNERABILITY, // special
                 COUNTER_RESIST_ALL, // counterResistFlags
                 0x80000000, 100, 0, 100, 0, 100, 0, 100, // targetWeightFlags..poisonChance
                 0, 0, 100, 0, 100, 0, 0, 0, // poisonTime..dodgyTime
@@ -1948,7 +1948,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 3, // acLevel
                 2, // reserved_6F
                 NULL, // acHelpMsg
-                0x100, // special
+                SPECIAL_IGNORE_VULNERABILITY, // special
                 COUNTER_RESIST_ALL, // counterResistFlags
                 0x80000000, 100, 0, 100, 0, 100, 0, 100, // targetWeightFlags..poisonChance
                 0, 0, 100, 0, 100, 0, 0, 0, // poisonTime..dodgyTime
@@ -2263,7 +2263,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 3, // acLevel
                 2, // reserved_6F
                 NULL, // acHelpMsg
-                0x100, // special
+                SPECIAL_IGNORE_VULNERABILITY, // special
                 COUNTER_RESIST_ALL, // counterResistFlags
                 0x80000000, 100, 0, 100, 0, 100, 0, 100, // targetWeightFlags..poisonChance
                 0, 0, 100, 0, 100, 0, 0, 0, // poisonTime..dodgyTime

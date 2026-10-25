@@ -51,7 +51,27 @@ typedef enum BattleWeaponCounterResist_Flags {
     COUNTER_RESIST_ALL = 0x7FF,
 } BattleWeaponCounterResist_Flags;
 
-typedef enum BattleWeaponSpecialFlags { SPECIAL_UNGUARDABLE = 0x20000 } BattleWeaponSpecialFlags;
+// BattleWeapon.special (bits checked in battle_damage.c; 0x200 and 0x8000 are set in some tables, their use is
+// not clear)
+typedef enum BattleWeaponSpecialFlags {
+    SPECIAL_BADGE_POWER = 0x1, // badges add to or subtract from the power (BattlePreCheckDamage)
+    SPECIAL_STATUS_POWER = 0x2, // Huge/Tiny, Attack Up/Down and Merlee's boost change the power
+    SPECIAL_CHARGEABLE = 0x4, // uses up a Charge
+    SPECIAL_CANNOT_MISS = 0x8,
+    SPECIAL_DIMINISH_BY_HIT = 0x10, // power minus the hits the target took this attack (min 1)
+    SPECIAL_DIMINISH_BY_TARGET = 0x20, // power minus the attacker's targets so far (min 1)
+    SPECIAL_PIERCE_DEFENSE = 0x40,
+    SPECIAL_FREEZE_CRUSH = 0x80, // meant to break frozen targets; its rand(100) < 0 test never passes
+    SPECIAL_IGNORE_VULNERABILITY = 0x100, // status chance ignores the target's resistance (unless it is 0)
+    SPECIAL_IGNITABLE = 0x400, // fire element when the attacker is burning
+    SPECIAL_ATTACK_FX = 0x800, // plays the Attack FX badge sounds
+    SPECIAL_FLIP_SHELLED = 0x1000,
+    SPECIAL_FLIP_BOMB_FLIPPABLE = 0x2000,
+    SPECIAL_GROUND_WINGED = 0x4000,
+    SPECIAL_CONFUSED_ACTION = 0x10000, // can be picked as a confused unit's action
+    SPECIAL_UNGUARDABLE = 0x20000,
+    SPECIAL_CONTACTS_CLONES = 0x40000, // hits clone parts (PartsAttribute 0x4000) instead of passing through
+} BattleWeaponSpecialFlags;
 
 // BattleWeapon.element (weapon tables: Ice Storm and blizzards 2, bombs and dynamite 3, thunder items 4)
 typedef enum BattleWeaponElement {

@@ -34,6 +34,7 @@
 #include "battle/battle_attack_audience.h"
 #include "battle/battle_message.h"
 #include "eff/eff_recovery.h"
+#include "battle/battle_database_common.h"
 
 
 void BattleMenuDisp_ActSelect_Init(BattleWork* wp, BattleCursor* cursor, BattleCommandAct* acts, s32 a);
@@ -2682,7 +2683,7 @@ void* BattleSetConfuseAct(BattleWork* wp, BattleUnit* unit) {
         cnt = 0;
         for (i = 0; i < cursor->count; i++) {
             weapon = cmd->weapon[i].weapon;
-            if (cmd->weapon[i].enabled && ((u32)weapon->special & 0x10000) &&
+            if (cmd->weapon[i].enabled && ((u32)weapon->special & SPECIAL_CONFUSED_ACTION) &&
                 !(weapon->targetClassFlags & TARGET_CLASS_MULTIPLE) && (weapon->targetClassFlags & TARGET_CLASS_SINGLE)) {
                 list[cnt++] = i;
             }
@@ -2699,7 +2700,7 @@ void* BattleSetConfuseAct(BattleWork* wp, BattleUnit* unit) {
         }
         _btlcmd_SelectWeaponDecide(wp, cmd->actType, cursor->absPos);
         weapon = cmd->weapon[cursor->absPos].weapon;
-        if (!((u32)weapon->special & 0x10000)) {
+        if (!((u32)weapon->special & SPECIAL_CONFUSED_ACTION)) {
             return subsetevt_confuse_flustered;
         }
         if ((weapon->targetClassFlags & TARGET_CLASS_MULTIPLE) || !(weapon->targetClassFlags & TARGET_CLASS_SINGLE)) {

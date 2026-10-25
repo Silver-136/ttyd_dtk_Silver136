@@ -105,7 +105,7 @@ const BattleWeapon N_weapon_lucky_start = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x20108, // special
+    SPECIAL_CANNOT_MISS | SPECIAL_IGNORE_VULNERABILITY | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime

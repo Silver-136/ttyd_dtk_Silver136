@@ -180,7 +180,7 @@ BattleWeapon weapon_kanbu3_attack = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x1087, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH | SPECIAL_FLIP_SHELLED, // special
     0, // counterResistFlags
     4, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -215,7 +215,7 @@ BattleWeapon weapon_kanbu3_charge = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x108, // special
+    SPECIAL_CANNOT_MISS | SPECIAL_IGNORE_VULNERABILITY, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     0, 0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
     0, 0, 0, 0, 0, 0, 0, 0, // poisonTime..dodgyTime

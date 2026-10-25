@@ -180,7 +180,7 @@ static BattleWeapon weapon = {
     3, // acLevel
     2, // reserved_6F
     "msg_sac_3", // acHelpMsg
-    0x20088, // special
+    SPECIAL_CANNOT_MISS | SPECIAL_FREEZE_CRUSH | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     0, 0, 0, // targetWeightFlags..sleepTime
     100, // stopChance

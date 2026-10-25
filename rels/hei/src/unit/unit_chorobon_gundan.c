@@ -198,7 +198,7 @@ BattleWeapon weapon_chorobon_gundan_attack = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    7, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_RANDOM | TARGET_WEIGHT_FRONT, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime

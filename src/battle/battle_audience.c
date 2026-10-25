@@ -155,7 +155,7 @@ BattleWeapon weapon_data_akikan = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x48, // special
+    SPECIAL_CANNOT_MISS | SPECIAL_PIERCE_DEFENSE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     0, 0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
     0, 0, 0, 0, 0, 0, 0, 0, // poisonTime..dodgyTime
@@ -187,7 +187,7 @@ BattleWeapon weapon_data_brick = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x48, // special
+    SPECIAL_CANNOT_MISS | SPECIAL_PIERCE_DEFENSE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     0, 0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
     0, 0, 0, 0, 0, 0, 0, 0, // poisonTime..dodgyTime
@@ -219,7 +219,7 @@ BattleWeapon weapon_data_bone = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x48, // special
+    SPECIAL_CANNOT_MISS | SPECIAL_PIERCE_DEFENSE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     0, 0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
     0, 0, 0, 0, 0, 0, 0, 0, // poisonTime..dodgyTime
@@ -251,7 +251,7 @@ BattleWeapon weapon_data_hammer = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x48, // special
+    SPECIAL_CANNOT_MISS | SPECIAL_PIERCE_DEFENSE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     0, 0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
     0, 0, 0, 0, 0, 0, 0, 0, // poisonTime..dodgyTime

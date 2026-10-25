@@ -262,7 +262,7 @@ BattleWeapon weapon_gundan_zako_group1_attack = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x1087, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH | SPECIAL_FLIP_SHELLED, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     4, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime

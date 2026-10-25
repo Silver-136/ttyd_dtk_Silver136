@@ -263,7 +263,7 @@ BattleWeapon partyWeapon_ChuchurinaNormalAttackLeft = {
     3, // acLevel
     2, // reserved_6F
     "msg_ac_binta", // acHelpMsg
-    0x34047, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_PIERCE_DEFENSE | SPECIAL_GROUND_WINGED | SPECIAL_CONFUSED_ACTION | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_TOP_SPIKY | COUNTER_RESIST_PAYBACK, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -309,7 +309,7 @@ BattleWeapon partyWeapon_ChuchurinaNormalAttackRight = {
     3, // acLevel
     2, // reserved_6F
     "msg_ac_binta", // acHelpMsg
-    0x34047, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_PIERCE_DEFENSE | SPECIAL_GROUND_WINGED | SPECIAL_CONFUSED_ACTION | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_TOP_SPIKY | COUNTER_RESIST_PAYBACK, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -355,7 +355,7 @@ BattleWeapon partyWeapon_ChuchurinaNormalAttackLeftLast = {
     3, // acLevel
     2, // reserved_6F
     "msg_ac_binta", // acHelpMsg
-    0x34047, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_PIERCE_DEFENSE | SPECIAL_GROUND_WINGED | SPECIAL_CONFUSED_ACTION | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_TOP_SPIKY, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -401,7 +401,7 @@ BattleWeapon partyWeapon_ChuchurinaNormalAttackRightLast = {
     3, // acLevel
     2, // reserved_6F
     "msg_ac_binta", // acHelpMsg
-    0x34047, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_PIERCE_DEFENSE | SPECIAL_GROUND_WINGED | SPECIAL_CONFUSED_ACTION | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_TOP_SPIKY, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -451,7 +451,7 @@ BattleWeapon partyWeapon_ChuchurinaMadowaseAttack = {
     3, // acLevel
     2, // reserved_6F
     "msg_ac_madowaseru", // acHelpMsg
-    0x20000, // special
+    SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, // sleepChance..stopTime
@@ -496,7 +496,7 @@ BattleWeapon partyWeapon_ChuchurinaItemSteal = {
     3, // acLevel
     2, // reserved_6F
     "msg_ac_heart_catch", // acHelpMsg
-    0x20000, // special
+    SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_TOP_SPIKY | COUNTER_RESIST_PAYBACK, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -538,7 +538,7 @@ BattleWeapon partyWeapon_ChuchurinaKiss = {
     3, // acLevel
     2, // reserved_6F
     "msg_ac_chuchurina_kiss", // acHelpMsg
-    0x20008, // special
+    SPECIAL_CANNOT_MISS | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     0x80003500, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime

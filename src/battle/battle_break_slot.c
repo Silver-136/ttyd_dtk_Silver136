@@ -121,7 +121,7 @@ BattleWeapon weapon_doku_kinoko = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x20048, // special
+    SPECIAL_CANNOT_MISS | SPECIAL_PIERCE_DEFENSE | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     0, 0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
     0, 0, 0, 0, 0, 0, 0, 0, // poisonTime..dodgyTime
@@ -150,7 +150,7 @@ BattleWeapon weapon_doku_kinoko_fp = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x20048, // special
+    SPECIAL_CANNOT_MISS | SPECIAL_PIERCE_DEFENSE | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     0, 0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
     0, 0, 0, 0, 0, 0, 0, 0, // poisonTime..dodgyTime

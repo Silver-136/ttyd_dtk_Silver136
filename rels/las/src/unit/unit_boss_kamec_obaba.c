@@ -86,7 +86,7 @@ BattleWeapon weapon_kamec_obaba_attack_magic = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    0x47, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_PIERCE_DEFENSE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -121,7 +121,7 @@ BattleWeapon weapon_kamec_obaba_dekadeka_magic = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    8, // special
+    SPECIAL_CANNOT_MISS, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -159,7 +159,7 @@ BattleWeapon weapon_kamec_obaba_biribiri_magic = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    8, // special
+    SPECIAL_CANNOT_MISS, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -197,7 +197,7 @@ BattleWeapon weapon_kamec_obaba_katikati_magic = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    8, // special
+    SPECIAL_CANNOT_MISS, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -236,7 +236,7 @@ BattleWeapon weapon_kamec_obaba_trans_magic = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    8, // special
+    SPECIAL_CANNOT_MISS, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -273,7 +273,7 @@ BattleWeapon weapon_kamec_obaba_recover_magic = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    8, // special
+    SPECIAL_CANNOT_MISS, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_IN_PERIL | TARGET_WEIGHT_LOW_HP | TARGET_WEIGHT_LOW_HP_RATIO, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
