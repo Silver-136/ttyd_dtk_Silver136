@@ -3625,7 +3625,7 @@ typedef struct FallObjectEntry {
     s16 delay; //0x10
     s16 field_0x12; //0x12
     u8 noAc; //0x14
-    u8 field_0x15; //0x15
+    u8 forceHit; //0x15, set on earlier entries for the same unit once a hit is scheduled; damage then skips the evasion rolls
     u8 field_0x16[0x1C - 0x16]; //0x16
     s32 preCheck; //0x1C
     s32 sfxId; //0x20
@@ -3794,7 +3794,7 @@ s32 _object_fall_attack(EventEntry *event, BOOL isFirstCall) {
                 if (e->noAc) {
                     flags |= 0x100;
                 }
-                if (e->field_0x15) {
+                if (e->forceHit) {
                     flags |= 0x100000;
                 }
                 e->preCheck = BattlePreCheckDamage(BattleGetSystemPtr(wp), BattleGetUnitPtr(wp, e->unitId), BattleGetUnitPartsPtr(e->unitId, e->partId), weapon, flags);
@@ -3806,7 +3806,7 @@ s32 _object_fall_attack(EventEntry *event, BOOL isFirstCall) {
                             o2->delay = delay;
                             delay += irand(22) + 20;
                             if (o2->noAc) {
-                                o2->field_0x15 = 1;
+                                o2->forceHit = 1;
                             }
                         }
                     }

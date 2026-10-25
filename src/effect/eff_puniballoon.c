@@ -47,7 +47,7 @@ EffectEntry* effPuniBalloonEntry(s32 type, f32 x, f32 y, f32 z, f32 scale) {
     work->life = type == 0 ? 1000 : 30;
     work->frame = 0;
     work->scale = 0.0f;
-    work->field_0x1C = scale;
+    work->baseScale = scale;
     for (i = 1, p = work + 1; i < effect->count; i++, p++) {
         p->position.x = 0.0f;
         p->position.y = 0.0f;
@@ -126,7 +126,7 @@ static void balloon_0(CameraId cameraId, EffectEntry* effect) {
     scale = work->scale;
     sv = (f32)sin((f32)work->frame / 10.0f);
     scale += 0.1f * sv;
-    scale *= work->field_0x1C;
+    scale *= work->baseScale;
     PSMTXTrans(mT, work->position.x, work->position.y, work->position.z);
     PSMTXRotRad(mR, 'y', 0.017453292f * -camGetPtr(cameraId)->viewYaw);
     PSMTXConcat(mT, mR, mX);

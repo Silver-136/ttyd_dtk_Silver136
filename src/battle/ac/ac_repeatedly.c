@@ -39,7 +39,7 @@ typedef struct RepeatWork {
     u16 count;        // 0x20
     u16 timer;        // 0x22
     s16 power;        // 0x24
-    s16 field_0x26;   // 0x26
+    s16 graceStart;   // 0x26, initial grace, never read
     s16 grace;        // 0x28
     u8 iconParam;     // 0x2A
     s8 done;          // 0x2B
@@ -99,7 +99,7 @@ static void _init_param(BattleWork* work) {
             r->btn0 = r->btn1 = r->btn2 = 0x100;
             break;
     }
-    r->field_0x26 = r->grace = work->actionCommands.params[1];
+    r->graceStart = r->grace = work->actionCommands.params[1];
     r->pos = work->actionCommands.params[2];
     r->vel = work->actionCommands.params[3] / 10.0f;
     if (r->vel) {

@@ -8,7 +8,7 @@ typedef struct PuniBalloonWork {
     s32 type;     // 0x0
     Vec position; // 0x4
     Vec velocity; // 0x10
-    f32 field_0x1C;
+    f32 baseScale;
     f32 scale;    // 0x20
     f32 rotation; // 0x24
     s32 life;     // 0x28

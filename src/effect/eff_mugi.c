@@ -18,13 +18,13 @@
 
 typedef struct effMugiKemuriData {
     s32 flag; //0x0
-    s32 field_0x4; //0x4
+    s32 type; //0x4
     Vec pos; //0x8
     Vec rot; //0x14
     Vec scale; //0x20
     f32 speed; //0x2C
-    f32 field_0x30; //0x30
-    f32 field_0x34; //0x34
+    f32 hSpeedScale; //0x30, horizontal step per frame = direction * vertical speed * this
+    f32 rising; //0x34, 1.0 until the vertical speed turns negative
     f32 field_0x38; //0x38
     f32 vy; //0x3C
     f32 ay; //0x40
@@ -61,8 +61,8 @@ EffectEntry* effMugiKemuriEntry(f32 x, f32 y, f32 z, f32 angle) {
     effect->flags |= 2;
     for (i = 0; i < 5; i++, data++) {
         data->flag = 1;
-        data->field_0x30 = 0.29999998f;
-        data->field_0x34 = 0.0f;
+        data->hSpeedScale = 0.29999998f;
+        data->rising = 0.0f;
         data->field_0x38 = 0.0f;
         data->pos.x = x;
         data->pos.y = y;
@@ -109,7 +109,7 @@ EffectEntry* effMugiKemuri2Entry(s32 type, f32 x, f32 y, f32 z, f32 angle, f32 d
     effect->flags |= 2;
     for (i = 0; i < 5; i++, data++) {
         data->flag = 1;
-        data->field_0x4 = type;
+        data->type = type;
         data->field_0x38 = 0.0f;
         data->pos.x = x;
         data->pos.y = y;
@@ -118,8 +118,8 @@ EffectEntry* effMugiKemuri2Entry(s32 type, f32 x, f32 y, f32 z, f32 angle, f32 d
         data->scale.y = 0.7f;
         data->scale.z = 0.7f;
         data->alpha = 0xFF;
-        data->field_0x34 = 1.0f;
-        data->field_0x30 = 5.4f;
+        data->rising = 1.0f;
+        data->hSpeedScale = 5.4f;
         data->speed = dir ? -10 : 10;
         data->vy = 0.5f;
         data->ay = -0.07f;
@@ -267,7 +267,7 @@ void effMugiKemuri2Main(EffectEntry* effect) {
             } else {
                 alive = 1;
                 mario = marioGetPtr();
-                if (data->field_0x4 == 0 && data->field_0x34 && mario->currMotionId == MARIO_MOTION_STAY) {
+                if (data->type == 0 && data->rising && mario->currMotionId == MARIO_MOTION_STAY) {
                     data->timer++;
                     continue;
                 }
@@ -275,11 +275,11 @@ void effMugiKemuri2Main(EffectEntry* effect) {
                 data->ay += data->jy;
                 data->vy += data->ay;
                 data->rot.z += data->vy * data->speed;
-                data->pos.x -= data->dirX * (data->vy * data->field_0x30);
-                data->pos.z -= data->dirZ * (data->vy * data->field_0x30);
+                data->pos.x -= data->dirX * (data->vy * data->hSpeedScale);
+                data->pos.z -= data->dirZ * (data->vy * data->hSpeedScale);
                 data->alpha -= 12;
                 if (data->vy < 0.0f) {
-                    data->field_0x34 = 0.0f;
+                    data->rising = 0.0f;
                 }
             }
         }

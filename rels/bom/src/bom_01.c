@@ -89,7 +89,7 @@ typedef struct Bom {
     u8 next;
     u8 pad_2[2];
     Vec target;
-    f32 field_0x10;
+    f32 speed;
     f32 gravity;
     s16 timer;
     u8 pad_1a[2];
@@ -869,12 +869,12 @@ void jump(s32 i, s32 next, f32 x, f32 y, f32 z, f32 speed, f32 gravity) {
     f32 dist;
 
     wp->bom[i].target = (Vec){x, y, z};
-    wp->bom[i].field_0x10 = speed;
+    wp->bom[i].speed = speed;
     wp->bom[i].gravity = gravity;
     dy = y - (*pose->mtx)[1][3];
     dist = distABf((*pose->mtx)[0][3], (*pose->mtx)[2][3], x, z);
     angleABf((*pose->mtx)[0][3], (*pose->mtx)[2][3], x, z);
-    wp->bom[i].timer = dist / wp->bom[i].field_0x10;
+    wp->bom[i].timer = dist / wp->bom[i].speed;
     wp->bom[i].vy = dy / wp->bom[i].timer + wp->bom[i].gravity * wp->bom[i].timer / 2;
     wp->bom[i].next = next;
     wp->bom[i].state = 100;
@@ -963,8 +963,8 @@ static void ext_main(void) {
                 (*pose->mtx)[1][3] += wp->bom[i].vy;
                 wp->bom[i].vy -= wp->bom[i].gravity;
                 rad = ( 3.1415927f * angleABf((*pose->mtx)[0][3], (*pose->mtx)[2][3], wp->bom[i].target.x, wp->bom[i].target.z) ) / 180.0f;
-                (*pose->mtx)[0][3] += wp->bom[i].field_0x10 * chb_sin(rad);
-                (*pose->mtx)[2][3] += wp->bom[i].field_0x10 * ( -chb_cos(rad)) ;
+                (*pose->mtx)[0][3] += wp->bom[i].speed * chb_sin(rad);
+                (*pose->mtx)[2][3] += wp->bom[i].speed * ( -chb_cos(rad)) ;
                 if ( (--wp->bom[i].timer ) < 0) {
                     (*pose->mtx)[0][3] = wp->bom[i].target.x;
                     (*pose->mtx)[1][3] = wp->bom[i].target.y;
@@ -2381,7 +2381,7 @@ void jump_minnnanokoe(s32 i, f32 h) {
     ExtdrvPose* pose = extGetPosePtr() + i;
 
     wp->bom[i].target = (Vec){(*pose->mtx)[0][3], (*pose->mtx)[1][3], (*pose->mtx)[2][3]};
-    wp->bom[i].field_0x10 = 0.0f;
+    wp->bom[i].speed = 0.0f;
     wp->bom[i].gravity = 0.1f;
     wp->bom[i].timer = 20;
     wp->bom[i].vy = wp->bom[i].gravity * wp->bom[i].timer / 2 + h / wp->bom[i].timer;

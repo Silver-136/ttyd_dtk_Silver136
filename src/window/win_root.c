@@ -394,7 +394,7 @@ s32 winRootMain(WindowWork* w) {
             winItemExit(w);
             winBadgeExit(w);
             winLogExit(w);
-            if (w->party.field_0x19C && w->party.cursor != w->party.field_0x1FC) {
+            if (w->party.confirmed && w->party.cursor != w->party.startCursor) {
                 return -2;
             }
             if (w->item.useItem) {

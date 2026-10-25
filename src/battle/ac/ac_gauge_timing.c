@@ -17,8 +17,8 @@ static void actionCommandDisp(f32 x, f32 y);
 
 typedef struct GaugeAC {
     struct BattleUnit* unit; // 0x0
-    s32 field_0x4;           // 0x4
-    s32 field_0x8;           // 0x8
+    s32 setupFlags;           // 0x4
+    s32 setupParam;           // 0x8, used here as the auto-play countdown
     s32 state;               // 0xC
     void* maincb;            // 0x10
     void* resultcb;          // 0x14
@@ -123,13 +123,13 @@ s32 battleAcMain_GaugeTiming(BattleWork* work) {
         case 99:
             break;
         case 100:
-            if ((GAC(work)->field_0x4 & 1) && ((u32)work->actionCommands.mAcUnit->mTokenFlags & 0x10)) {
+            if ((GAC(work)->setupFlags & 1) && ((u32)work->actionCommands.mAcUnit->mTokenFlags & 0x10)) {
                 if (irand(100) >= 0) {
-                    GAC(work)->field_0x8 = 30;
+                    GAC(work)->setupParam = 30;
                     cw->passed = 0;
                 } else {
                     cw->passed = 1;
-                    GAC(work)->field_0x8 = 30;
+                    GAC(work)->setupParam = 30;
                 }
                 work->actionCommands.mAcState = 1002;
                 break;
@@ -276,8 +276,8 @@ s32 battleAcMain_GaugeTiming(BattleWork* work) {
             }
             break;
         case 1002:
-            GAC(work)->field_0x8--;
-            if (GAC(work)->field_0x8 < 0) {
+            GAC(work)->setupParam--;
+            if (GAC(work)->setupParam < 0) {
                 if (cw->passed) {
                     work->actionCommands.result = 2;
                     work->actionCommands.mResultCount++;

@@ -189,7 +189,7 @@ void winPartyInit(WindowWork* wp) {
         }
     }
 
-    wp->party.field_0x1FC = wp->party.cursor;
+    wp->party.startCursor = wp->party.cursor;
     wp->party.angle = wp->party.angleTarget = 360.0f / wp->party.count * wp->party.cursor;
     wp->party.mode = 0;
     wp->party.wazaCount = pouchGetPartyAttackLv(winPartyDt[wp->party.dtIdx].partyId) + 2;
@@ -248,7 +248,7 @@ s32 winPartyMain(WindowWork* wp) {
     switch (wp->party.mode) {
         case 0:
             if (wp->buttonTrg & PAD_BUTTON_A) {
-                wp->party.field_0x19C = 1;
+                wp->party.confirmed = 1;
                 return -2;
             }
             if (wp->buttonTrg & PAD_BUTTON_X) {
@@ -257,10 +257,10 @@ s32 winPartyMain(WindowWork* wp) {
                 psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1 | PSND_SFX_BYPASS_MUTE));
             } else if (wp->buttonTrg & PAD_BUTTON_B) {
                 psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_CANCEL1 | PSND_SFX_BYPASS_MUTE));
-                wp->party.field_0x19C = 0;
+                wp->party.confirmed = 0;
                 return -1;
             } else if (wp->buttonTrg & PAD_BUTTON_START) {
-                wp->party.field_0x19C = 0;
+                wp->party.confirmed = 0;
                 return -2;
             } else if (wp->dirRep & DEMO_STICK_LEFT) {
                 prev = wp->party.cursor;
@@ -323,7 +323,7 @@ s32 winPartyMain(WindowWork* wp) {
                 wp->party.mode = 0;
                 psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_CANCEL1 | PSND_SFX_BYPASS_MUTE));
             } else if (wp->buttonTrg & PAD_BUTTON_START) {
-                wp->party.field_0x19C = 0;
+                wp->party.confirmed = 0;
                 return -2;
             }
             wp->helpTgtX = -10.0f;

@@ -111,7 +111,7 @@ static USER_FUNC(eff_scanning) {
     BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, id);
     EffectEntry* eff = effScanningEntry(0, x, y, z);
 
-    ((effScanningData*)eff->userdata)->field_0x10 = unit->mSizeMultiplier;
+    ((effScanningData*)eff->userdata)->scale = unit->mSizeMultiplier;
     return EVT_RETURN_DONE;
 }
 

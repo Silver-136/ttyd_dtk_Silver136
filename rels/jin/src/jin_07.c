@@ -36,7 +36,7 @@ typedef struct Teresa {
     f32 t;
     f32 field_0x1C;
     f32 field_0x20;
-    f32 field_0x24;
+    f32 startTangentX; // start tangent (x) of the Hermite path
     s32 wait;
     u8 state;
 } Teresa;
@@ -251,7 +251,7 @@ static void senteresa_ext_init(void) {
         pTeresa[i].t = 0.0f;
         pTeresa[i].wait = 1.7f * (i + 1);
         pTeresa[i].state = 0;
-        pTeresa[i].field_0x24 = randf(0.0f, 350.0f);
+        pTeresa[i].startTangentX = randf(0.0f, 350.0f);
     }
     g_nNumOutBox[0] = 0;
     g_nNumEndProc[0] = 0;
@@ -278,7 +278,7 @@ void computePosHermite(ExtdrvPose* pose, Teresa* ter) {
     h10 = t * u * u;
     h11 = (t * t) * (t - 1.0f);
     h01 = (3.0f - t2) * (t * t);
-    m0.x = ter->field_0x24;
+    m0.x = ter->startTangentX;
     m0.y = 3.4f * ter->dst.y;
     (*pose->mtx)[0][3] = ter->pos.x * h00 + m0.x * h10 + m1.x * h11 + ter->dst.x * h01;
     (*pose->mtx)[1][3] = ter->pos.y * h00 + m0.y * h10 + m1.y * h11 + ter->dst.y * h01;

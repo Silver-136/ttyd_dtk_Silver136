@@ -22,13 +22,13 @@ EffectEntry* effScanningEntry(s32 int2, f32 float3, f32 float4, f32 float5) {
     entry->callback = effScanningMain;
     entry->flags |= 2;
 
-    data->field_0x0 = int2;
+    data->type = int2;
     data->position.x = float3;
     data->position.y = float4;
     data->position.z = float5;
-    data->field_0x10 = 1.0f;
+    data->scale = 1.0f;
     data->animId = -1;
-    data->field_0x18 = 0;
+    data->state = 0;
     data->field_0x1C = 0;
     data->field_0x20 = 255;
 
@@ -51,14 +51,14 @@ void effScanningMain(EffectEntry* effect) {
         effDelete(effect);
         return;
     }
-    switch (data->field_0x18) {
+    switch (data->state) {
         case 0:
             if (!animGroupBaseAsync("EFF_Scan", inBattle, NULL)) {
                 return;
             }
             data->animId = animPoseEntry("EFF_Scan", (u32)inBattle);
             animPoseSetAnim(data->animId, "Z_1", TRUE);
-            data->field_0x18++;
+            data->state++;
             break;
         case 1:
             if (animPoseGetLoopTimes(data->animId) > 1.0f) {
@@ -79,7 +79,7 @@ void effScanningDisp(CameraId camId, void* param) {
 
     if (data->animId != -1) {
         PSMTXTrans(mtx, data->position.x, data->position.y, data->position.z);
-        PSMTXScale(scale, data->field_0x10, data->field_0x10, data->field_0x10);
+        PSMTXScale(scale, data->scale, data->scale, data->scale);
         PSMTXRotRad(rot, 'y', MTXDegToRad(-camGetPtr(camId)->viewYaw));
         PSMTXConcat(mtx, rot, mtx);
         PSMTXConcat(mtx, scale, mtx);

@@ -60,7 +60,7 @@ typedef struct UnitWinWork {
     f32 cursorY;           // 0x40
     f32 scroll;            // 0x44
     u8 pad48[4];           // 0x48
-    s32 field_0x4C;        // 0x4C
+    s32 skipEntry;        // 0x4C, never written (0 after the memset); both lists skip the entry equal to it
     s32 mode;              // 0x50
     u16 flags2;            // 0x54
     u8 pad56[2];           // 0x56
@@ -995,7 +995,7 @@ void evt_unitwin_disp_func(CameraId cameraId, void* param) {
                     if (!partyChkJoin(party_id_table[i])) {
                         continue;
                     }
-                    if (wp->field_0x4C == party_id_table[i]) {
+                    if (wp->skipEntry == party_id_table[i]) {
                         continue;
                     }
                     if (pouch->partyData[party_id_table[i]].techLevel > 0) {
@@ -1260,7 +1260,7 @@ void evt_unitwin_disp_func(CameraId cameraId, void* param) {
             for (i = 0; i < 3; i++) {
                 char buf[32];
                 char help[16];
-                if (i == wp->field_0x4C) {
+                if (i == wp->skipEntry) {
                     continue;
                 }
                 if (*mario_status_point_table[i] - mario_status_henka_table[i] > 0) {
