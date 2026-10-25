@@ -1406,7 +1406,7 @@ void itemseq_Bound(ItemEntry* entry) {
                         y = 20.0f + entry->position.y;
                         z = entry->position.z;
                         { f64 d = __fabs(dy); hitDist = 20.0 + d; }
-                        if (h = hitCheckFilter(NULL, &hitX, &hitY, &hitZ, &hitDist, &hitNX, &hitNY, &hitNZ, x, y, z, 0.0f, 1.0f, 0.0f)) {
+                        if ((h = hitCheckFilter(NULL, &hitX, &hitY, &hitZ, &hitDist, &hitNX, &hitNY, &hitNZ, x, y, z, 0.0f, 1.0f, 0.0f)) != NULL) {
                             entry->position.y = hitY - 20.0f - 4.0f;
                             r = h;
                         } else {
@@ -1414,7 +1414,7 @@ void itemseq_Bound(ItemEntry* entry) {
                             y = entry->position.y;
                             z = entry->position.z;
                             { f64 d = __fabs(dy); hitDist = 20.0 + d; }
-                            if (h = hitCheckFilter(NULL, &hitX, &hitY, &hitZ, &hitDist, &hitNX, &hitNY, &hitNZ, x, y, z, 0.0f, 1.0f, 0.0f)) {
+                            if ((h = hitCheckFilter(NULL, &hitX, &hitY, &hitZ, &hitDist, &hitNX, &hitNY, &hitNZ, x, y, z, 0.0f, 1.0f, 0.0f)) != NULL) {
                                 entry->position.y = hitY - 20.0f;
                                 r = h;
                             } else {
@@ -1654,7 +1654,7 @@ itemHitCheckY(ItemEntry* entry, f32 z, f32 y, f32 x, f32 vy) {
     f32 hitX, hitY, hitZ, hitDist, hitNX, hitNY, hitNZ;
 
     { f64 d = __fabs(vy); hitDist = 20.0 + d; } // FAKE: f64 local keeps 20.0 on the left of the fadd
-    if (hit = hitCheckFilter(NULL, &hitX, &hitY, &hitZ, &hitDist, &hitNX, &hitNY, &hitNZ, x, y, z, 0.0f, -1.0f, 0.0f)) {
+    if ((hit = hitCheckFilter(NULL, &hitX, &hitY, &hitZ, &hitDist, &hitNX, &hitNY, &hitNZ, x, y, z, 0.0f, -1.0f, 0.0f)) != NULL) {
         entry->position.y = hitY;
     } else {
         hit = NULL;
@@ -1676,7 +1676,7 @@ itemHitCheckUp(ItemEntry* entry, f32 vy) {
     y = 20.0f + entry->position.y;
     z = entry->position.z;
     { f64 d = __fabs(vy); hitDist = 20.0 + d; } // FAKE: f64 local keeps 20.0 on the left of the fadd
-    if (hit = hitCheckFilter(NULL, &hitX, &hitY, &hitZ, &hitDist, &hitNX, &hitNY, &hitNZ, x, y, z, 0.0f, 1.0f, 0.0f)) {
+    if ((hit = hitCheckFilter(NULL, &hitX, &hitY, &hitZ, &hitDist, &hitNX, &hitNY, &hitNZ, x, y, z, 0.0f, 1.0f, 0.0f)) != NULL) {
         entry->position.y = hitY - 20.0f - 4.0f;
         return hit;
     }
@@ -1684,7 +1684,7 @@ itemHitCheckUp(ItemEntry* entry, f32 vy) {
     y = entry->position.y;
     z = entry->position.z;
     { f64 d = __fabs(vy); hitDist = 20.0 + d; } // FAKE: f64 local keeps 20.0 on the left of the fadd
-    if (hit = hitCheckFilter(NULL, &hitX, &hitY, &hitZ, &hitDist, &hitNX, &hitNY, &hitNZ, x, y, z, 0.0f, 1.0f, 0.0f)) {
+    if ((hit = hitCheckFilter(NULL, &hitX, &hitY, &hitZ, &hitDist, &hitNX, &hitNY, &hitNZ, x, y, z, 0.0f, 1.0f, 0.0f)) != NULL) {
         entry->position.y = hitY - 20.0f;
         return hit;
     }
