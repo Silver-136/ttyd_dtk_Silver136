@@ -1092,7 +1092,7 @@ USER_FUNC(kpa_lock_hit_scale) {
     mobj->scale2.x *= 2.0f;
     mobj->scale2.y *= 2.0f;
     mobjCalcMtx2(mobj);
-    mobj->flags &= ~4;
+    mobj->flags &= ~MOBJ_FLAG_UPDATE_MTX;
     return EVT_RETURN_DONE;
 }
 

@@ -2956,7 +2956,7 @@ USER_FUNC(box_r) {
     MapObjectEntry* mobj = mobjNameToPtr("pera_box");
 
     mobj->rotation.y = 135.0f;
-    mobj->flags |= 4;
+    mobj->flags |= MOBJ_FLAG_UPDATE_MTX;
     return EVT_RETURN_DONE;
 }
 
@@ -2969,7 +2969,7 @@ USER_FUNC(mobj_ry) {
     MapObjectEntry* mobj = mobjNameToPtr("mobj_box00");
 
     mobj->rotation.y = 135.0f;
-    mobj->flags |= 4;
+    mobj->flags |= MOBJ_FLAG_UPDATE_MTX;
     return EVT_RETURN_DONE;
 }
 

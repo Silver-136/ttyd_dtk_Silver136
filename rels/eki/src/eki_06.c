@@ -224,7 +224,7 @@ void sw_reset(void) {
     MapObjectEntry* mobj;
 
     mobj = mobjNameToPtr("MOBJ_eki_06_su1");
-    mobj->flags &= ~2;
+    mobj->flags &= ~MOBJ_FLAG_NO_SHADOW;
     switch (sw_cnt(mobj)) {
         case 2:
             animPoseSetAnim(mobj->poseId, "ANIM_5", 1);
@@ -233,7 +233,7 @@ void sw_reset(void) {
     }
 
     mobj = mobjNameToPtr("MOBJ_eki_06_su2");
-    mobj->flags &= ~2;
+    mobj->flags &= ~MOBJ_FLAG_NO_SHADOW;
     switch (sw_cnt(mobj)) {
         case 11:
             animPoseSetAnim(mobj->poseId, "ANIM_7", 1);
@@ -242,7 +242,7 @@ void sw_reset(void) {
     }
 
     mobj = mobjNameToPtr("MOBJ_eki_06_su3");
-    mobj->flags &= ~2;
+    mobj->flags &= ~MOBJ_FLAG_NO_SHADOW;
     switch (sw_cnt(mobj)) {
         case 4:
             animPoseSetAnim(mobj->poseId, "ANIM_7", 1);
@@ -256,14 +256,14 @@ s32 sw_main(MapObjectEntry* mobj) {
         case 2:
             break;
         case 0:
-            if (!(mobj->flags & 8)) {
+            if (!(mobj->flags & MOBJ_FLAG_HIT)) {
                 break;
             }
             if (lock != 0) {
                 break;
             }
             lock = 1;
-            if (mobj->hitFlag == 0x200000) {
+            if (mobj->hitFlag == MOBJ_FLAG_HIT_STAND) {
                 marioChgMot(MARIO_MOTION_JUMP_SW);
             }
             psndSFXOn_3D("SFX_STG6_OBJ_SWITCH_ON1", &mobj->position);
@@ -328,7 +328,7 @@ s32 sw_main(MapObjectEntry* mobj) {
                     animPoseSetAnim(mobj->poseId, "ANIM_1", 1);
                 }
             }
-            mobj->flags &= ~8;
+            mobj->flags &= ~MOBJ_FLAG_HIT;
             mobj->state = 0;
             lock = 0;
             break;
@@ -352,14 +352,14 @@ USER_FUNC(sw_entry) {
     }
     mobjEntry(name, name);
     mobj = mobjNameToPtr(name);
-    mobj->flags |= 6;
+    mobj->flags |= (MOBJ_FLAG_NO_SHADOW | MOBJ_FLAG_UPDATE_MTX);
     pos = (Vec){0.0f, 0.0f, 0.0f};
     pos.x = x;
     pos.y = y;
     pos.z = z;
     mobj->position = pos;
     mobj->mainFunc = sw_main;
-    mobj->flags |= 0xA10000;
+    mobj->flags |= (MOBJ_FLAG_HIT_HAMMER | MOBJ_FLAG_HIT_STAND | MOBJ_FLAG_HIT_PARTY);
     mobj->state = 0;
     mobjCalcMtx(mobj);
     animPoseSetAnim(mobj->poseId, "ANIM_1", 1);

@@ -310,7 +310,7 @@ inline MapObjectWork* mobjGetWork(void) {
 void mobjDispXLU(CameraId camId, void* param) {
     MapObjectEntry* entry = param; // cast to correct type
 
-    if (entry->flags & 0x400) {
+    if (entry->flags & MOBJ_FLAG_PAPER_TEX) {
         animSetPaperTexMtx(entry->paperTexMtx, NULL, NULL);
         animSetPaperTexObj(&entry->paperTexObj, NULL, NULL, entry->paperTexData, NULL, NULL, 1, 1);
     }
@@ -320,7 +320,7 @@ void mobjDispXLU(CameraId camId, void* param) {
                  10.0f * entry->scale.x, 2);
     animPoseDraw(entry->poseId, entry->position.x, entry->position.y, entry->position.z, entry->rotation.y,
                  10.0f * entry->scale.x, 3);
-    if (entry->flags & 0x400) {
+    if (entry->flags & MOBJ_FLAG_PAPER_TEX) {
         animSetPaperTexMtx(NULL, NULL, NULL);
         animSetPaperTexObj(NULL, NULL, NULL, NULL, NULL, NULL, 1, 1);
     }
@@ -330,7 +330,7 @@ void mobjDisp(CameraId camId, void* param) {
     MapObjectEntry* entry = param; // cast to correct type
     DispEntry* disp;
 
-    if (entry->flags & 0x400) {
+    if (entry->flags & MOBJ_FLAG_PAPER_TEX) {
         animSetPaperTexMtx(entry->paperTexMtx, NULL, NULL);
         animSetPaperTexObj(&entry->paperTexObj, NULL, NULL, entry->paperTexData, NULL, NULL, 1, 1);
     }
@@ -350,7 +350,7 @@ void mobjDisp(CameraId camId, void* param) {
                          10.0f * entry->scale.x, 3);
             break;
     }
-    if (entry->flags & 0x400) {
+    if (entry->flags & MOBJ_FLAG_PAPER_TEX) {
         animSetPaperTexMtx(NULL, NULL, NULL);
         animSetPaperTexObj(NULL, NULL, NULL, NULL, NULL, NULL, 1, 1);
     }
@@ -362,7 +362,7 @@ void mobjDisp_OffscreenXLU(CameraId camId, void* param) {
 
     sysWaitDrawSync();
     GXClearBoundingBox();
-    if (entry->flags & 0x400) {
+    if (entry->flags & MOBJ_FLAG_PAPER_TEX) {
         animSetPaperTexMtx(entry->paperTexMtx, NULL, NULL);
         animSetPaperTexObj(&entry->paperTexObj, NULL, NULL, entry->paperTexData, NULL, NULL, 1, 1);
     }
@@ -372,7 +372,7 @@ void mobjDisp_OffscreenXLU(CameraId camId, void* param) {
                  10.0f * entry->scale.x, 2);
     animPoseDraw(entry->poseId, entry->position.x, entry->position.y, entry->position.z, entry->rotation.y,
                  10.0f * entry->scale.x, 3);
-    if (entry->flags & 0x400) {
+    if (entry->flags & MOBJ_FLAG_PAPER_TEX) {
         animSetPaperTexMtx(NULL, NULL, NULL);
         animSetPaperTexObj(NULL, NULL, NULL, NULL, NULL, NULL, 1, 1);
     }
@@ -509,18 +509,18 @@ s32 mobjEntry(const char* name, const char* animPoseName) {
 
     entryCount = wp->count;
     for (idx = 0, entry = wp->entries; idx < entryCount; idx++, entry++) {
-        if ((entry->flags & 1) && (strcmp(entry->name, name) == 0))
+        if ((entry->flags & MOBJ_FLAG_ACTIVE) && (strcmp(entry->name, name) == 0))
             break;
     }
     // SPM uses this to assert the name isn't duplicate, here it's just pointless
 
     for (idx = 0, entry = wp->entries; idx < entryCount; idx++, entry++) {
-        if ((entry->flags & 1) == 0)
+        if ((entry->flags & MOBJ_FLAG_ACTIVE) == 0)
             break;
     }
 
     memset(entry, 0, sizeof(*entry));
-    entry->flags |= 1;
+    entry->flags |= MOBJ_FLAG_ACTIVE;
     strcpy(entry->name, name);
 
     entry->position = (Vec){ 0.0f, 0.0f, 0.0f };
@@ -549,7 +549,7 @@ void mobjDelete(const char* name) {
     entryCount = wp->count;
     entry = wp->entries;
     for (i = 0; i < entryCount; i++, entry++) {
-        if ((entry->flags & 1) && strcmp(entry->name, name) == 0) {
+        if ((entry->flags & MOBJ_FLAG_ACTIVE) && strcmp(entry->name, name) == 0) {
             for (i = 0; i < 2; i++) {
                 if ((entry->hitObj[i].name) != NULL) {
                     if (!gp->inBattle) {
@@ -558,7 +558,7 @@ void mobjDelete(const char* name) {
                     hitDelete(entry->hitObj[i].name);
                 }
             }
-            entry->flags &= ~1;
+            entry->flags &= ~MOBJ_FLAG_ACTIVE;
             break;
         }
     }
@@ -573,7 +573,7 @@ void mobjSetPosition(const char* name, f32 x, f32 y, f32 z) {
     entryCount = wp->count;
     entry = wp->entries;
     for (i = 0; i < entryCount; i++, entry++) {
-        if ((entry->flags & 1) && strcmp(entry->name, name) == 0) {
+        if ((entry->flags & MOBJ_FLAG_ACTIVE) && strcmp(entry->name, name) == 0) {
             break;
         }
     }
@@ -664,25 +664,25 @@ void mobjMain(void) {
     }
 
     for (i = 0; i < count; i++, entry++) {
-        if (!(entry->flags & 1)) {
+        if (!(entry->flags & MOBJ_FLAG_ACTIVE)) {
             continue;
         }
 #ifdef VERSION_G8ME01
-        if (gp->inBattle == 0 && (gp->inBattle != 0 || ((u32)fbat > 1 && fbat != 8)) && !(entry->flags & 0x400)) {
+        if (gp->inBattle == 0 && (gp->inBattle != 0 || ((u32)fbat > 1 && fbat != 8)) && !(entry->flags & MOBJ_FLAG_PAPER_TEX)) {
 #else
         if (gp->inBattle == 0 && (gp->inBattle != 0 || ((u32)fbat > 1 && fbat != 8))) {
 #endif
             goto afterHit;
         }
-        if (entry->flags & 4) {
+        if (entry->flags & MOBJ_FLAG_UPDATE_MTX) {
             if (mobjCheckItemboxOpen(entry) == 2) {
                 mobjCalcMtx2(entry);
             } else {
                 mobjCalcMtx(entry);
             }
-            entry->flags &= ~4;
+            entry->flags &= ~MOBJ_FLAG_UPDATE_MTX;
         }
-        if (entry->flags & 0x40) {
+        if (entry->flags & MOBJ_FLAG_GRAVITY) {
             if (entry->velocity.y >= 0.0f) {
                 entry->position.y += entry->velocity.y;
                 entry->velocity.y -= entry->gravity;
@@ -702,120 +702,120 @@ void mobjMain(void) {
             }
             mobjCalcMtx(entry);
         }
-        if (!(entry->flags & 8)) {
+        if (!(entry->flags & MOBJ_FLAG_HIT)) {
             hit = 0;
             hitPtr = entry->hitObj[0].hitObject;
             if ((s32)(u8)mario->characterId != CHARACTER_BOWSER) {
-                if ((entry->flags & 0x10000) && mario->hitobjHammer == hitPtr) {
+                if ((entry->flags & MOBJ_FLAG_HIT_HAMMER) && mario->hitobjHammer == hitPtr) {
                     if (marioGetPtr()->position.y <= 5.0f + entry->position.y) {
-                        entry->hitFlag = 0x10000;
+                        entry->hitFlag = MOBJ_FLAG_HIT_HAMMER;
                         hit = 1;
                         goto hitDone;
                     }
                 }
-                if ((entry->flags & 0x400000) && hitJump == hitPtr) {
-                    entry->hitFlag = 0x400000;
+                if ((entry->flags & MOBJ_FLAG_HIT_HEAD) && hitJump == hitPtr) {
+                    entry->hitFlag = MOBJ_FLAG_HIT_HEAD;
                     hit = 1;
                     goto hitDone;
                 }
-                if ((entry->flags & 0x200000) && mario->hitobjStandOn == hitPtr) {
-                    entry->hitFlag = 0x200000;
+                if ((entry->flags & MOBJ_FLAG_HIT_STAND) && mario->hitobjStandOn == hitPtr) {
+                    entry->hitFlag = MOBJ_FLAG_HIT_STAND;
                     hit = 1;
                     goto hitDone;
                 }
-                if ((entry->flags & 0x1000000) && mario->hitobjStandOn == hitPtr && marioChkHipBump()) {
-                    entry->hitFlag = 0x1000000;
+                if ((entry->flags & MOBJ_FLAG_HIT_SPIN_JUMP) && mario->hitobjStandOn == hitPtr && marioChkHipBump()) {
+                    entry->hitFlag = MOBJ_FLAG_HIT_SPIN_JUMP;
                     hit = 1;
                     goto hitDone;
                 }
-                if (marioFrontActionValidChk() && (entry->flags & 0x40000) && mario->hitobjFront == hitPtr &&
+                if (marioFrontActionValidChk() && (entry->flags & MOBJ_FLAG_HIT_A_BUTTON) && mario->hitobjFront == hitPtr &&
                     (mario->buttonTrg & PAD_BUTTON_A) && !partyFlag) {
-                    entry->hitFlag = 0x40000;
+                    entry->hitFlag = MOBJ_FLAG_HIT_A_BUTTON;
                     hit = 1;
                     goto hitDone;
                 }
-                if ((entry->flags & 0x800000) && party != NULL) {
+                if ((entry->flags & MOBJ_FLAG_HIT_PARTY) && party != NULL) {
                     if (party->hitobjAction == hitPtr) {
-                        entry->hitFlag = 0x800000;
+                        entry->hitFlag = MOBJ_FLAG_HIT_PARTY;
                         hit = 1;
                         goto hitDone;
                     } else if (party->hitobjAction != NULL && (s32)(u8)party->currentMemberId == PARTY_MEMBER_BOBBERY) {
                         if (PSVECDistance(&party->position, &entry->position) <
                             entry->hitObj[0].hitObject->radius + party->width) {
-                            entry->hitFlag = 0x800000;
+                            entry->hitFlag = MOBJ_FLAG_HIT_PARTY;
                             hit = 1;
                             goto hitDone;
                         }
                     }
                 }
-                if ((entry->flags & 0x2000000) && party != NULL && (s32)(u8)party->currentMemberId == PARTY_MEMBER_BOBBERY) {
+                if ((entry->flags & MOBJ_FLAG_HIT_BOBBERY) && party != NULL && (s32)(u8)party->currentMemberId == PARTY_MEMBER_BOBBERY) {
                     if (party->hitobjAction == hitPtr) {
-                        entry->hitFlag = 0x2000000;
+                        entry->hitFlag = MOBJ_FLAG_HIT_BOBBERY;
                         hit = 1;
                         goto hitDone;
                     } else if (party->hitobjAction != NULL) {
                         if (PSVECDistance(&party->position, &entry->position) <
                             entry->hitObj[0].hitObject->radius + party->width) {
-                            entry->hitFlag = 0x800000;
+                            entry->hitFlag = MOBJ_FLAG_HIT_PARTY;
                             hit = 1;
                             goto hitDone;
                         }
                     }
                 }
             } else {
-                if (entry->flags & 0x4000000) {
+                if (entry->flags & MOBJ_FLAG_HIT_KOOPA_HEAD) {
                     for (k = 0; k < 10; k++) {
                         if (kpaGetHitobjHead(k) == hitPtr) {
-                            entry->hitFlag = 0x4000000;
+                            entry->hitFlag = MOBJ_FLAG_HIT_KOOPA_HEAD;
                             hit = 1;
                             break;
                         }
                     }
                 }
-                if (entry->flags & 0x10000000) {
+                if (entry->flags & MOBJ_FLAG_HIT_KOOPA_HIP) {
                     for (k = 0; k < 10 && hit == 0; k++) {
                         if (kpaGetHitobjRide(k) == hitPtr && kpaHipAttackCheck()) {
-                            entry->hitFlag = 0x10000000;
+                            entry->hitFlag = MOBJ_FLAG_HIT_KOOPA_HIP;
                             hit = 1;
                             break;
                         }
                     }
                 }
-                if ((entry->flags & 0x8000000) && kpaGetHitobj() == hitPtr && kpaGetLevel() == 3) {
-                    entry->hitFlag = 0x8000000;
+                if ((entry->flags & MOBJ_FLAG_HIT_KOOPA_BODY_LV3) && kpaGetHitobj() == hitPtr && kpaGetLevel() == 3) {
+                    entry->hitFlag = MOBJ_FLAG_HIT_KOOPA_BODY_LV3;
                     hit = 1;
                     goto hitDone;
                 }
-                if ((entry->flags & 0x20000000) && kpaGetHitFlame() == hitPtr) {
-                    entry->hitFlag = 0x20000000;
+                if ((entry->flags & MOBJ_FLAG_HIT_KOOPA_FLAME) && kpaGetHitFlame() == hitPtr) {
+                    entry->hitFlag = MOBJ_FLAG_HIT_KOOPA_FLAME;
                     hit = 1;
                     goto hitDone;
                 }
-                if ((entry->flags & 0x80000) && mario->hitobjFront == hitPtr) {
-                    entry->hitFlag = 0x80000;
+                if ((entry->flags & MOBJ_FLAG_HIT_KOOPA_FRONT) && mario->hitobjFront == hitPtr) {
+                    entry->hitFlag = MOBJ_FLAG_HIT_KOOPA_FRONT;
                     hit = 1;
                     goto hitDone;
                 }
-                if ((entry->flags & 0x200000) && mario->hitobjStandOn == hitPtr) {
-                    entry->hitFlag = 0x200000;
+                if ((entry->flags & MOBJ_FLAG_HIT_STAND) && mario->hitobjStandOn == hitPtr) {
+                    entry->hitFlag = MOBJ_FLAG_HIT_STAND;
                     hit = 1;
                 }
             }
         hitDone:
             if (hit != 0) {
-                entry->flags |= 8;
+                entry->flags |= MOBJ_FLAG_HIT;
             }
         }
-        if (entry->flags & 0x100) {
-            entry->flags &= ~8;
+        if (entry->flags & MOBJ_FLAG_HIT_EVERY_FRAME) {
+            entry->flags &= ~MOBJ_FLAG_HIT;
         }
         if (marioStGetSystemLevel() != 0) {
-            entry->flags &= ~8;
+            entry->flags &= ~MOBJ_FLAG_HIT;
         }
         {
             MarioMotion motion = marioGetPtr()->currMotionId;
             if (motion == 0x1f || motion == 0x20) {
-                entry->flags &= ~8;
+                entry->flags &= ~MOBJ_FLAG_HIT;
             }
         }
         if (entry->mainFunc != NULL) {
@@ -824,10 +824,10 @@ void mobjMain(void) {
             }
         }
     afterHit:
-        if (!(entry->flags & 1)) {
+        if (!(entry->flags & MOBJ_FLAG_ACTIVE)) {
             continue;
         }
-        if (!koopaRunFlag && !(entry->flags & 0x802)) {
+        if (!koopaRunFlag && !(entry->flags & (MOBJ_FLAG_NO_SHADOW | MOBJ_FLAG_HIDDEN))) {
             MapWork* mw = mapGetWork();
             s32 shadowId;
             mapGetBlend(&blend1);
@@ -838,7 +838,7 @@ void mobjMain(void) {
             } else {
                 shadowId = shadowEntry(entry->position.x, entry->position.y, entry->position.z,
                                        10.0f * entry->scale.x * entry->scale2.x / 25.0f);
-                if (entry->flags & 0x400000) {
+                if (entry->flags & MOBJ_FLAG_HIT_HEAD) {
                     shadowSetType(shadowId, 1);
                     shadowSetSize(shadowId, 10.0f * entry->scale.x * entry->scale2.x / 20.0f);
                 }
@@ -846,17 +846,17 @@ void mobjMain(void) {
         }
         animPoseMain(entry->poseId);
         evt = animPoseGetMaterialEvtColor(entry->poseId);
-        if (entry->flags & 0x4000) {
+        if (entry->flags & MOBJ_FLAG_NO_DISP) {
             continue;
         }
-        if (!(entry->flags & 0x80)) {
+        if (!(entry->flags & MOBJ_FLAG_NO_CULL)) {
             PSMTXMultVec(camGetPtr(CAMERA_3D)->view, &entry->position, &camPos);
             PSMTX44MultVec(camGetPtr(CAMERA_3D)->projection, &camPos, &camPos);
             if (__fabs(camPos.x) > 1.5 || __fabs(camPos.y) > 1.5 || __fabs(camPos.z) > 1.0) {
                 continue;
             }
         }
-        if ((entry->flags & 0x2000) && ((gp->retraceCount >> 3) & 1)) {
+        if ((entry->flags & MOBJ_FLAG_BLINK) && ((gp->retraceCount >> 3) & 1)) {
             continue;
         }
         if (entry->offscreenId == -1) {
@@ -889,7 +889,7 @@ MapObjectEntry* mobjNameToPtr(const char* name) {
     entryCount = wp->count;
     entry = wp->entries;
     for (i = 0; i < entryCount; i++, entry++) {
-        if ((entry->flags & 1) && strcmp(entry->name, name) == 0) {
+        if ((entry->flags & MOBJ_FLAG_ACTIVE) && strcmp(entry->name, name) == 0) {
             break;
         }
     }
@@ -906,7 +906,7 @@ MapObjectEntry* mobjNameToPtrNoAssert(const char* name) {
     entryCount = wp->count;
     entry = wp->entries;
     for (i = 0; i < entryCount; i++, entry++) {
-        if ((entry->flags & 1) && strcmp(entry->name, name) == 0) {
+        if ((entry->flags & MOBJ_FLAG_ACTIVE) && strcmp(entry->name, name) == 0) {
             break;
         }
     }
@@ -1018,7 +1018,7 @@ BOOL mobjCheckExec(void) {
     MapObjectEntry* entry;
 
     for (i = 0, entry = wp->entries; i < wp->count; entry++, i++) {
-        if (entry->flags & (1 << 9))
+        if (entry->flags & (MOBJ_FLAG_ACTIVE << 9))
             return TRUE;
     }
     return FALSE;
@@ -1076,7 +1076,7 @@ MapObjectEntry* mobjNearDistCheck2(f32 x, f32 y, f32 z, f32 minMagnitude, char**
     pos = _pos;
 
     for (i = 0; i < entryCount; i++, entry++) {
-        if ((entry->flags & 1) == 0)
+        if ((entry->flags & MOBJ_FLAG_ACTIVE) == 0)
             continue;
 
         animName = names;

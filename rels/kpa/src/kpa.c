@@ -704,7 +704,7 @@ USER_FUNC(kpa_pole_hitoff) {
     MapObjectEntry* mobj = mobjNameToPtrNoAssert("pole");
 
     if (mobj != NULL) {
-        mobj->flags |= 0x100;
+        mobj->flags |= MOBJ_FLAG_HIT_EVERY_FRAME;
     }
     return EVT_RETURN_DONE;
 }

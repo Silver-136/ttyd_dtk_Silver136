@@ -13,8 +13,39 @@ typedef struct MapObjectHitEntry {
     u8 jointData[0x88 - 0x14]; // 0x14, 0x1C: MapFileJoint copied from the cube/head/front joint templates (jointData + 8)
 } MapObjectHitEntry;
 
+// MapObjectEntry.flags, named from mobjMain and the evt_mobj setters. The MOBJ_FLAG_HIT_* bits arm one hit source
+// each; mobjMain stores the bit that fired in MapObjectEntry.hitFlag and sets MOBJ_FLAG_HIT. 0x20 (set by the lock
+// and item box setups, never tested) is not named.
+typedef enum MapObjectFlags {
+    MOBJ_FLAG_ACTIVE = (1 << 0),               // 0x1, slot in use (mobjEntry; cleared on delete)
+    MOBJ_FLAG_NO_SHADOW = (1 << 1),            // 0x2, no shadow (set once a falling/floating object rests)
+    MOBJ_FLAG_UPDATE_MTX = (1 << 2),           // 0x4, matrix recalculated on the next update, then cleared
+    MOBJ_FLAG_HIT = (1 << 3),                  // 0x8, a hit fired; no new hit checks until cleared
+    MOBJ_FLAG_HITEVT_OFF = (1 << 4),           // 0x10, evt_mobj_hitevt_onoff(name, 0)
+    MOBJ_FLAG_GRAVITY = (1 << 6),              // 0x40, falls and bounces off the floor
+    MOBJ_FLAG_NO_CULL = (1 << 7),              // 0x80, drawn without the view frustum check
+    MOBJ_FLAG_HIT_EVERY_FRAME = (1 << 8),      // 0x100, MOBJ_FLAG_HIT is cleared again every frame
+    MOBJ_FLAG_PAPER_TEX = (1 << 10),           // 0x400, drawn with its paper texture (mobjDisp*)
+    MOBJ_FLAG_HIDDEN = (1 << 11),              // 0x800, hidden block (no shadow) until it is hit
+    MOBJ_FLAG_EXEC_CANCEL = (1 << 12),         // 0x1000, evt_mobj_exec_cancel
+    MOBJ_FLAG_BLINK = (1 << 13),               // 0x2000, drawn every other 8 frames
+    MOBJ_FLAG_NO_DISP = (1 << 14),             // 0x4000, not drawn
+    MOBJ_FLAG_HIT_HAMMER = (1 << 16),          // 0x10000, Mario's hammer
+    MOBJ_FLAG_HIT_A_BUTTON = (1 << 18),        // 0x40000, A pressed in front of it
+    MOBJ_FLAG_HIT_KOOPA_FRONT = (1 << 19),     // 0x80000, Bowser touches it from the front
+    MOBJ_FLAG_HIT_STAND = (1 << 21),           // 0x200000, Mario or Bowser stands on it
+    MOBJ_FLAG_HIT_HEAD = (1 << 22),            // 0x400000, Mario's head from below
+    MOBJ_FLAG_HIT_PARTY = (1 << 23),           // 0x800000, the partner's action
+    MOBJ_FLAG_HIT_SPIN_JUMP = (1 << 24),       // 0x1000000, Mario's hip bump while standing on it
+    MOBJ_FLAG_HIT_BOBBERY = (1 << 25),         // 0x2000000, Bobbery's action
+    MOBJ_FLAG_HIT_KOOPA_HEAD = (1 << 26),      // 0x4000000, Bowser's head
+    MOBJ_FLAG_HIT_KOOPA_BODY_LV3 = (1 << 27),  // 0x8000000, Bowser's body at power level 3
+    MOBJ_FLAG_HIT_KOOPA_HIP = (1 << 28),       // 0x10000000, Bowser's hip attack while riding it
+    MOBJ_FLAG_HIT_KOOPA_FLAME = (1 << 29),     // 0x20000000, Bowser's flame
+} MapObjectFlags;
+
 typedef struct MapObjectEntry {
-    s32 flags;                               // 0x0
+    s32 flags;                               // 0x0, MapObjectFlags
     u8 camId;                                // 0x4
     char name[16];                           // 0x5
     char animName[16];                       // 0x15
@@ -46,7 +77,7 @@ typedef struct MapObjectEntry {
     EvtWord event;                           // 0x1D4
     EvtWord extraEvent;                      // 0x1D8, second event script run via mobjRunEvent
     s32 state;                               // 0x1DC
-    s32 hitFlag;                             // 0x1E0
+    s32 hitFlag;                             // 0x1E0, the MOBJ_FLAG_HIT_* bit that fired
     s32 flagVar;                             // 0x1E4
     GXTexObj paperTexObj;                    // 0x1E8
     struct smartEntry* paperTexData;         // 0x208, texture data for paperTexObj
