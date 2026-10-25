@@ -32,7 +32,6 @@ HitEntry* hitActiveListTop; // head of the active hit list (descriptive name, se
 inline BOOL tempfunc(HitCheckQuery* query, HitVector* vector);
 inline BOOL tempfunc2(HitCheckQuery* query, HitVector* vector);
 inline BOOL tempfunc3(HitCheckQuery* query, HitVector* vector);
-s32 hitGetEntNum(HitEntry* hitObject);
 
 void hitInit(void) {
     ; // stubbed in retail
@@ -1292,35 +1291,11 @@ void hitBindUpdate(const char* name) {
         hitReCalcMatrix(hit, mtx);
     }
 }
-/*
-s32 hitGetEntNum(HitEntry* hit) {
-    s32 numVectors;
-    s32 i, j;
 
-    numVectors = 0;
-    for (i = 0; i < hit->joint->partCount; i++) {
-        MapFileMesh* mesh = hit->joint->parts[i].mesh;
-        if (mesh == NULL) {
-            continue;
-        }
-
-        if (!mesh->isPackedDisplay) {
-            DisplayList* dls = (DisplayList*)mesh->displayLists;
-            for (j = 0; j < mesh->displayListCount; j++) {
-                numVectors += *(u16*)((u8*)dls[j].offset + 1) - 2;
-            }
-        } else {
-            PackedDisplayList* dls = (PackedDisplayList*)mesh->displayLists;
-            for (j = 0; j < mesh->displayListCount; j++) {
-                numVectors += *(u16*)((u8*)dls[j].offset + 1) - 2;
-            }
-        }
-    }
-
-    return numVectors;
-}
-*/
-
+// FAKE: stand-in for code the linker stripped from the original object; its 0.0f and 0.1f are the first
+// literals in the target .sdata2 pool (codegen runs bottom-up, so it must sit last in the file). The JP demo map
+// lists three stripped hitdrv functions, hitNumberToPtr (0x4C bytes), hitGetEntNum (0x38) and bounding_box
+// (0x528); no build contains their code, so the original cannot be restored.
 void hitStrippedPool(f32* f) {
     f[0] = 0.0f;
     f[1] = 0.1f;

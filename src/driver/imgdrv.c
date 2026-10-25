@@ -46,16 +46,14 @@ static void zFill(void) {
     Mtx mtx;
 
     camera = camGetCurPtr();
-    { extern double tan(double); f32 t = (6.2831855f * camera->fovY) / 360.0f; y0 = (camera->near + camera->far) / 2.0f; y0 = y0 * (f32)tan(0.5f * t); }
+    {
+        f32 t = (6.2831855f * camera->fovY) / 360.0f;
+        y0 = (camera->near + camera->far) / 2.0f;
+        y0 = y0 * (f32)tan(0.5f * t);
+    }
     x1 = (y0 * camera->aspect);
     y1 = -y0;
     x0 = -x1;
-    /*x0 = (camera->mNearZ + camera->mFarZ) * 0.5f;
-    x1 = tan(((6.2831855f * camera->mFovY) / 360.0f) * 0.5f);
-    y0 = (x0 * x1);
-    x1 = (y0 * camera->mAspect);
-    y1 = -y0;
-    x0 = -x1;*/
     GXInitTexObj(&obj, depth_image, 4, 4, GX_TF_Z8, GX_REPEAT, GX_REPEAT, GX_FALSE);
     GXLoadTexObj(&obj, GX_TEXMAP0);
     GXSetNumTexGens(1);
