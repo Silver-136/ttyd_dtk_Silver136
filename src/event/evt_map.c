@@ -462,7 +462,7 @@ USER_FUNC(evt_map_entry_airport_harbor) {
     switch (type) {
     case 0:
         if (!animGroupBaseAsync("p_hikohki", 0, NULL)) return EVT_RETURN_BLOCK;
-        if ((s32)pouchCheckItem(4) == 1) {
+        if ((s32)pouchCheckItem(ITEM_PLANE_CURSE) == 1) {
             lw[0] = (EvtWord)name;
             lw[1] = (EvtWord)hit;
             evtRunCaseEntry(0, 0, hit, 0, evt_ride_airport, lw);
@@ -473,7 +473,7 @@ USER_FUNC(evt_map_entry_airport_harbor) {
         break;
     case 1:
         if (!animGroupBaseAsync("p_hune", 0, NULL)) return EVT_RETURN_BLOCK;
-        if ((s32)pouchCheckItem(5) == 1) {
+        if ((s32)pouchCheckItem(ITEM_BOAT_CURSE) == 1) {
             lw[0] = (EvtWord)name;
             lw[1] = (EvtWord)hit;
             evtRunCaseEntry(0, 0, hit, 0, evt_ride_airport, lw);

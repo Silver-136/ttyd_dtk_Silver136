@@ -1,6 +1,7 @@
 #include "eff/eff_nice.h"
 #include "eff/n64/eff_vapor_n64.h"
 #include "version.h"
+#include "mario/mario_pouch.h"
 #pragma optimize_for_size on
 #pragma dont_inline on
 #include "battle/battle_damage.h"
@@ -33,7 +34,6 @@ typedef struct CounterWork {
 
 BOOL BtlUnit_CanGuardStatus(BattleUnit* unit);
 void btlDispPoseAnime(BattleUnitPart* part);
-s32 pouchCheckItem(u32 itemId);
 
 void _getSickStatusParam(BattleUnit* unit, BattleWeapon* weapon, u32 type, s8* outTime, s8* outStrength);
 s32 pouchEquipCheckBadge(s32 badgeId);
@@ -1528,14 +1528,14 @@ s32 BattlePreCheckDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPar
 s32 _checkDamageCode_EmergencyRevival(BattleUnit* unit, u32* flags) {
     s32 kind = unit->currentKind;
     if (kind == 0xDE) {
-        if ((s32)pouchCheckItem(0x97) > 0) {
+        if ((s32)pouchCheckItem(ITEM_LIFE_SHROOM) > 0) {
             *flags |= 0x800;
             return 1;
         }
         return 0;
     }
     if (kind >= 0xE0 && kind < 0xE7) {
-        if ((s32)pouchCheckItem(0x97) > 0) {
+        if ((s32)pouchCheckItem(ITEM_LIFE_SHROOM) > 0) {
             *flags |= 0x800;
             return 1;
         }

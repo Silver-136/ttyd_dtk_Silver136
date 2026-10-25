@@ -2522,7 +2522,7 @@ s32 mobj_badgeblk(MapObjectEntry* mobj) {
                 psndSFXOn_3D((const char*)0x1bc, &mobj->position);
             } else {
                 pouchAddCoin(1);
-                itemEntry(mobj->position.x, mobj->position.y, mobj->position.z, NULL, 0x79, 0xf, -1, NULL);
+                itemEntry(mobj->position.x, mobj->position.y, mobj->position.z, NULL, ITEM_COIN, 0xf, -1, NULL);
                 evtSetValue(NULL, mobj->flagVar, 1);
                 psndSFXOn_3D((const char*)0x5b, &mobj->position);
             }
@@ -2630,7 +2630,7 @@ s32 mobj_powerupblk(MapObjectEntry* mobj) {
         gp->systemLevelFlags |= 3;
         psndSFXOn_3D((const char*)0x201c0, &mobj->position);
         animPoseSetAnim(mobj->poseId, "A_1", 1);
-        itemEntry(mobj->position.x, mobj->position.y, mobj->position.z, "pwrblk1", 0x57, 0xf, -1, NULL);
+        itemEntry(mobj->position.x, mobj->position.y, mobj->position.z, "pwrblk1", ITEM_SHINE_SPRITE, 0xf, -1, NULL);
         mobj->state++;
         break;
     case 1:
@@ -2647,7 +2647,7 @@ s32 mobj_powerupblk(MapObjectEntry* mobj) {
             mobj->typeData[1]--;
             break;
         }
-        itemForceGet(itemEntry(mobj->position.x, 40.0f + mobj->position.y, mobj->position.z, "pwrblk2", 0x57, 0x11, -1, NULL));
+        itemForceGet(itemEntry(mobj->position.x, 40.0f + mobj->position.y, mobj->position.z, "pwrblk2", ITEM_SHINE_SPRITE, 0x11, -1, NULL));
         evtSetValue(NULL, mobj->flagVar, 1);
         marioKeyOn();
         if (!strcmp(gp->currentMapName, "dou_02")) {
@@ -2788,7 +2788,7 @@ s32 mobj_10countblk(MapObjectEntry* mobj) {
                 mobjRunEvent(mobj, (s32*)mobj->event);
             } else {
                 pouchAddCoin(1);
-                itemEntry(mobj->position.x, mobj->position.y, mobj->position.z, NULL, 0x79, 0xf, -1, NULL);
+                itemEntry(mobj->position.x, mobj->position.y, mobj->position.z, NULL, ITEM_COIN, 0xf, -1, NULL);
                 mobj->timer = 200;
             }
             mobj->state++;
@@ -2808,7 +2808,7 @@ s32 mobj_10countblk(MapObjectEntry* mobj) {
         if (mobj->flags & 8) {
             psndSFXOn_3D((const char*)0x1bf, &mobj->position);
             pouchAddCoin(1);
-            itemEntry(mobj->position.x, mobj->position.y, mobj->position.z, NULL, 0x79, 0xf, -1, NULL);
+            itemEntry(mobj->position.x, mobj->position.y, mobj->position.z, NULL, ITEM_COIN, 0xf, -1, NULL);
             mobj->flags &= ~8;
             animPoseSetAnim(mobj->poseId, "A_1", 1);
         }
@@ -3194,7 +3194,7 @@ s32 mobj_kururing_floor(MapObjectEntry* mobj) {
             mobj->state = 1;
             item = itemNameToPtr(mobj->name);
             if (item == NULL || !(((ItemEntry*)item)->flags & 1)) {
-                if (itemEntry(mobj->position.x, 30.0f + mobj->position.y, mobj->position.z, mobj->name, 0x7d, 4, mobj->flagVar, NULL)) {
+                if (itemEntry(mobj->position.x, 30.0f + mobj->position.y, mobj->position.z, mobj->name, ITEM_STAR_PIECE, 4, mobj->flagVar, NULL)) {
                     item = itemNameToPtr(mobj->name);
                     itemFlagOn(item, 0x10);
                     ((ItemEntry*)item)->bounceFactor = 0.6f;
@@ -3392,7 +3392,7 @@ s32 mobj_koopa_ojama_blk_evt(MapObjectEntry* mobj) {
     case 10:
         psndSFXOn_3D((const char*)0x1c4, &mobj->position);
         effMObjBrokenEntry(5, mobj->position.x, 25.0f + mobj->position.y, 25.0f + mobj->position.z);
-        item = itemEntry(mobj->position.x, 25.0f + mobj->position.y, mobj->position.z, mobj->name, 0x59, 4, -1, kpa_powerup_evt);
+        item = itemEntry(mobj->position.x, 25.0f + mobj->position.y, mobj->position.z, mobj->name, ITEM_BOWSER_BROS_MEAT, 4, -1, kpa_powerup_evt);
         if (item) {
             itemStatusOn(item, 0x10);
             itemFlagOn(item, 0x14);
@@ -3668,7 +3668,7 @@ s32 mobj_koopa_badgeblk(MapObjectEntry* mobj) {
             psndSFXOn_3D((const char*)0x836, &mobj->position);
         } else {
             kpaAddCoin(1);
-            itemEntry(mobj->position.x, mobj->position.y, mobj->position.z, NULL, 0x79, 0xf, -1, NULL);
+            itemEntry(mobj->position.x, mobj->position.y, mobj->position.z, NULL, ITEM_COIN, 0xf, -1, NULL);
             evtSetValue(NULL, mobj->flagVar, 1);
             psndSFXOn_3D((const char*)0x5b, &mobj->position);
         }

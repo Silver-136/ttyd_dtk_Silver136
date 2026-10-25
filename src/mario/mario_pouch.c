@@ -322,7 +322,7 @@ BOOL pouchGetItem(ItemType type)
   if ((type >= 0x79) && (type < 0xEC))
   {
     itemLists[0] = mpp->heldItems;
-    size = (pouchCheckItem(1)) ? (20) : (10);
+    size = (pouchCheckItem(ITEM_STRANGE_SACK)) ? (20) : (10);
     ok = 1;
   }
   else

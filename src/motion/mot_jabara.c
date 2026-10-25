@@ -106,7 +106,7 @@ BOOL marioPriCheckJabara(void) {
 		mario->wMotionTimer = 0;
 		return FALSE;
 	}
-	return pouchCheckItem(8) != 0;
+	return pouchCheckItem(ITEM_ULTRA_BOOTS) != 0;
 }
 
 static inline BOOL priChk(void) {
@@ -117,7 +117,7 @@ static inline BOOL priChk(void) {
 		mario->wMotionTimer = 0;
 		ret = FALSE;
 	} else {
-		if ((s32)pouchCheckItem(8) == 0) {
+		if ((s32)pouchCheckItem(ITEM_ULTRA_BOOTS) == 0) {
 			ret = FALSE;
 		} else {
 			ret = TRUE;

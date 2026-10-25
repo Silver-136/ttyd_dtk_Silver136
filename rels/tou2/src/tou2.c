@@ -1073,7 +1073,7 @@ USER_FUNC(tou2_rankingReset) {
     s32 i;
 
     rankingExit();
-    pouchRemoveItem(0x41);
+    pouchRemoveItem(ITEM_CHAMPS_BELT);
     for (i = 0; i < 20; i++) {
         swClear(i + 2465);
     }

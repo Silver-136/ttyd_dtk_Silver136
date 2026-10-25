@@ -1,5 +1,6 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "mario/mario_pouch.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "mario/mario.h"
@@ -678,7 +679,7 @@ USER_FUNC(coin_entry) {
     s32 y = evtGetValue(event, args[1]);
     s32 z = evtGetValue(event, args[2]);
     s32 w = evtGetValue(event, args[3]);
-    ItemEntry* item = itemEntry(NULL, 121, 3, -1, NULL, x, y, z);
+    ItemEntry* item = itemEntry(NULL, ITEM_COIN, 3, -1, NULL, x, y, z);
 
     itemStatusOn(item, 0x10);
     item->bounceFactor = 0.8f;

@@ -809,8 +809,8 @@ void marioInit(void) {
 	marioResetCamShift();
 	marioResetCamShiftRate();
 	marioResetCamFollowRate();
-	if (!pouchCheckItem(9)) {
-		pouchGetItem(9);
+	if (!pouchCheckItem(ITEM_HAMMER)) {
+		pouchGetItem(ITEM_HAMMER);
 	}
 	partyInit();
 }
@@ -938,8 +938,8 @@ void marioReInit(void) {
 	marioResetCamShift();
 	marioResetCamShiftRate();
 	marioResetCamFollowRate();
-	if (!pouchCheckItem(9)) {
-		pouchGetItem(9);
+	if (!pouchCheckItem(ITEM_HAMMER)) {
+		pouchGetItem(ITEM_HAMMER);
 	}
 	wp->returnPos = (Vec){0.0f, -10000.0f, 0.0f};
 }

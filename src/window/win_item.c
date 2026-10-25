@@ -170,8 +170,8 @@ void winItemInit(WindowWork* w) {
     w->item.bookY = w->item.bookTgtY = -240.0f;
     w->item.mailX = w->item.mailTgtX = 320.0f;
     w->item.mailY = w->item.mailTgtY = -240.0f;
-    if (!pouchCheckItem(0x36)) {
-        pouchGetItem(0x36);
+    if (!pouchCheckItem(ITEM_MAILBOX_SP)) {
+        pouchGetItem(ITEM_MAILBOX_SP);
     }
     w->item.mailNum = pouchReceiveMailCount();
     w->item.mailSel = 0;

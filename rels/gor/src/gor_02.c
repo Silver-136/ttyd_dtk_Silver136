@@ -3949,7 +3949,7 @@ USER_FUNC(set_talk_memory_ry) {
 }
 
 USER_FUNC(iri_13_make_item_tbl) {
-    s32 count = pouchCheckItem(0x6B);
+    s32 count = pouchCheckItem(ITEM_BATTLE_TRUNKS);
 
     if (count > 0) {
         iri_13_item_tbl = _mapAlloc((count + 1) * sizeof(s32));
@@ -3959,7 +3959,7 @@ USER_FUNC(iri_13_make_item_tbl) {
 
 USER_FUNC(iri_13_update_item_tbl) {
     EvtWord* args = event->args;
-    s32 count = pouchCheckItem(0x6B);
+    s32 count = pouchCheckItem(ITEM_BATTLE_TRUNKS);
     s32 i;
 
     if (count > 0) {

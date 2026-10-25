@@ -66,13 +66,13 @@ EvtWord aji_18_init_evt[299];
 static USER_FUNC(make_list) {
     s32 n = 0;
 
-    if ((s32)pouchCheckItem(0x1D) > 0) {
+    if ((s32)pouchCheckItem(ITEM_CARD_KEY_0x1D) > 0) {
         key_list[n++] = 0x1D;
     }
-    if ((s32)pouchCheckItem(0x1E) > 0) {
+    if ((s32)pouchCheckItem(ITEM_CARD_KEY_0x1E) > 0) {
         key_list[n++] = 0x1E;
     }
-    if ((s32)pouchCheckItem(0x1F) > 0) {
+    if ((s32)pouchCheckItem(ITEM_CARD_KEY_0x1F) > 0) {
         key_list[n++] = 0x1F;
     }
     key_list[n] = -1;

@@ -197,7 +197,7 @@ void itemCoinDrop(Vec* position) {
 
 	if (pouchGetCoin() > 0) {
 		pouchAddCoin(-1);
-		entry = itemEntry(NULL, 0x79, 8, -1, 0, position->x, position->y, position->z);
+		entry = itemEntry(NULL, ITEM_COIN, 8, -1, 0, position->x, position->y, position->z);
 		if (entry) {
 			entry->flags2 |= 0x40;
 		}

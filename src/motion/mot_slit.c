@@ -7,12 +7,12 @@
 #include "system.h"
 #include <string.h>
 #include <dolphin/pad.h>
+#include "mario/mario_pouch.h"
 
 #ifdef VERSION_G8ME01
 void U_allPartySlitOffReq(void);
 #endif
 
-s32 pouchCheckItem(s32 itemId);
 BOOL marioChkKey(void);
 s32 marioKeyOffChk(void);
 BOOL marioBgmodeChk(void);
@@ -63,7 +63,7 @@ BOOL marioSlitAbilityChk(void) {
 	if (mario->flags & 0x800000) {
 		return FALSE;
 	}
-	if (!pouchCheckItem(2)) {
+	if (!pouchCheckItem(ITEM_PAPER_CURSE)) {
 		return FALSE;
 	}
 	if (mario->flags & 0x80000000) {

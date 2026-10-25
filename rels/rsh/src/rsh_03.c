@@ -201,14 +201,14 @@ USER_FUNC(iri_22_make_item_tbl) {
         iri_22_item_tbl[i] = -1;
     }
     n = 0;
-    if (!(bought & 1) && (s32)pouchCheckItem(0xA9) != 0) {
+    if (!(bought & 1) && (s32)pouchCheckItem(ITEM_GOLDEN_LEAF) != 0) {
         iri_22_item_tbl[0] = 0xA9;
         n = 1;
     }
-    if (!(bought & 2) && (s32)pouchCheckItem(0xA8) != 0) {
+    if (!(bought & 2) && (s32)pouchCheckItem(ITEM_MYSTIC_EGG) != 0) {
         iri_22_item_tbl[n++] = 0xA8;
     }
-    if (!(bought & 4) && (s32)pouchCheckItem(0xAA) != 0) {
+    if (!(bought & 4) && (s32)pouchCheckItem(ITEM_KEEL_MANGO) != 0) {
         iri_22_item_tbl[n++] = 0xAA;
     }
     evtSetValue(event, args[0], (EvtWord)iri_22_item_tbl);

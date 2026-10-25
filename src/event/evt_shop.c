@@ -1367,22 +1367,22 @@ USER_FUNC(evt_shop_setup) {
 		iconSetPos(buf, pos.x, pos.y + 6.0f, pos.z);
 		iconFlagOn(buf, 0x40);
 		wp->itemFlags[i] = 0;
-		if (wp->items[i].id == 0x33 && pouchCheckItem(0x33)) {
+		if (wp->items[i].id == 0x33 && pouchCheckItem(ITEM_CONTACT_LENS)) {
 			wp->itemFlags[i] |= 1;
 		}
-		if (wp->items[i].id == 0x37 && pouchCheckItem(0x37)) {
+		if (wp->items[i].id == 0x37 && pouchCheckItem(ITEM_SUPER_LUIGI1)) {
 			wp->itemFlags[i] |= 1;
 		}
-		if (wp->items[i].id == 0x38 && pouchCheckItem(0x38)) {
+		if (wp->items[i].id == 0x38 && pouchCheckItem(ITEM_SUPER_LUIGI2)) {
 			wp->itemFlags[i] |= 1;
 		}
-		if (wp->items[i].id == 0x39 && pouchCheckItem(0x39)) {
+		if (wp->items[i].id == 0x39 && pouchCheckItem(ITEM_SUPER_LUIGI3)) {
 			wp->itemFlags[i] |= 1;
 		}
-		if (wp->items[i].id == 0x3A && pouchCheckItem(0x3A)) {
+		if (wp->items[i].id == 0x3A && pouchCheckItem(ITEM_SUPER_LUIGI4)) {
 			wp->itemFlags[i] |= 1;
 		}
-		if (wp->items[i].id == 0x3B && pouchCheckItem(0x3B)) {
+		if (wp->items[i].id == 0x3B && pouchCheckItem(ITEM_SUPER_LUIGI5)) {
 			wp->itemFlags[i] |= 1;
 		}
 	}
