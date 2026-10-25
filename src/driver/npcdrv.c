@@ -105,10 +105,10 @@ void npcReleaseFieldNpc(void) {
                 if (entry->poseId >= 0) {
                     pose = animPoseGetAnimPosePtr(entry->poseId);
                     field->mFlags = pose->flags;
-                    field->wCurrentRenderRotationMinus90Y = pose->peraRotY;
-                    field->wRotationY = pose->rotationY;
-                    field->wScaleZ_flip = pose->scaleZFlip;
-                    field->wInitToZero4 = pose->peraTargetRotY;
+                    field->peraRotY = pose->peraRotY;
+                    field->rotationY = pose->rotationY;
+                    field->scaleZFlip = pose->scaleZFlip;
+                    field->peraTargetRotY = pose->peraTargetRotY;
                     strcpy(field->mModelName, animPoseGetAnimBaseDataPtr(entry->poseId)->fileName);
                     strcpy(field->mAnimName, animPoseGetCurrentAnim(entry->poseId)->name);
                     animPoseRelease(entry->poseId);
@@ -137,10 +137,10 @@ void npcRecoveryFieldNpc(void) {
                 animPoseSetAnim(entry->poseId, field->mAnimName, TRUE);
                 pose = animPoseGetAnimPosePtr(entry->poseId);
                 pose->flags = field->mFlags;
-                pose->peraRotY = field->wCurrentRenderRotationMinus90Y;
-                pose->rotationY = field->wRotationY;
-                pose->scaleZFlip = field->wScaleZ_flip;
-                pose->peraTargetRotY = field->wInitToZero4;
+                pose->peraRotY = field->peraRotY;
+                pose->rotationY = field->rotationY;
+                pose->scaleZFlip = field->scaleZFlip;
+                pose->peraTargetRotY = field->peraTargetRotY;
 
                 if (pose->flags & 0x40) {
                     pose->flags &= ~0x40;

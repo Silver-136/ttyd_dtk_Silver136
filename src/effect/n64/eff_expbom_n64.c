@@ -51,7 +51,7 @@ void effExpBomDisp(CameraId camId, void* param);
 EffectEntry* effExpBomN64Entry(f32 x, f32 y, f32 z) {
     EffectEntry* effect;
     f32 sv, cv;
-    f32 v29, v28; //TODO: rename
+    f32 rad, spd;
     f32* direction;
     f32* speed;
     effExpBomData* data;
@@ -77,12 +77,12 @@ EffectEntry* effExpBomN64Entry(f32 x, f32 y, f32 z) {
         data->offsetX = 0.0f;
         data->offsetY = 0.0f;
 
-        v28 = 2.0f * *speed;
-        v29 = ((6.2831855f * (90.0f + *direction)) / 360.0f);
-        sv = sin(v29);
-        cv = cos(v29);
-        data->velX = v28 * sv;
-        data->velY = -v28 * cv;
+        spd = 2.0f * *speed;
+        rad = ((6.2831855f * (90.0f + *direction)) / 360.0f);
+        sv = sin(rad);
+        cv = cos(rad);
+        data->velX = spd * sv;
+        data->velY = -spd * cv;
     }
     return effect;
 }

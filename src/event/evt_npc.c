@@ -2244,7 +2244,7 @@ USER_FUNC(evt_npc_majo_disp_on) {
     f32 prevX = evtGetFloat(event, *args++);
     f32 prevY = evtGetFloat(event, *args++);
     f32 prevZ = evtGetFloat(event, *args++);
-    BOOL toggle = evtGetValue(event, *args++); // TODO: better name
+    BOOL toggle = evtGetValue(event, *args++);
     s32 group = gp->inBattle != 0;
     NpcEntry* npc = evtNpcNameToPtr(event, npcName);
 

@@ -214,10 +214,10 @@ typedef struct NpcFieldEntry {
     char mModelName[64];                // 0x0
     char mAnimName[64];                 // 0x40
     u32 mFlags;                         // 0x80
-    f32 wCurrentRenderRotationMinus90Y; // 0x84
-    f32 wRotationY;                     // 0x88
-    f32 wScaleZ_flip;                   // 0x8C
-    f32 wInitToZero4;                   // 0x90
+    f32 peraRotY;                       // 0x84, AnimPose fields saved by npcReleaseFieldNpc
+    f32 rotationY;                      // 0x88
+    f32 scaleZFlip;                     // 0x8C
+    f32 peraTargetRotY;                 // 0x90
 } NpcFieldEntry;
 
 typedef struct NpcWork {

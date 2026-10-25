@@ -1519,7 +1519,7 @@ USER_FUNC(btlevtcmd_SetHp) {
     EvtWord* args = event->args;
     BattleWork* wp = _battleWorkPointer;
     BattleUnit* unit;
-    f32 value; //TODO: rename
+    f32 ratio;
     s32 btlId, id;
 
     btlId = evtGetValue(event, args[0]);
@@ -1531,9 +1531,9 @@ USER_FUNC(btlevtcmd_SetHp) {
     unit->currentHp = (s16)evtGetValue(event, args[1]);
     unit->hpGauge.prevHp = unit->currentHp;
     unit->hpGauge.targetHp = unit->currentHp;
-    value = (f32)unit->currentHp / (f32)unit->maxHp;
-    unit->hpGauge.trailRatio = value;
-    unit->hpGauge.barRatio = value;
+    ratio = (f32)unit->currentHp / (f32)unit->maxHp;
+    unit->hpGauge.trailRatio = ratio;
+    unit->hpGauge.barRatio = ratio;
     return EVT_RETURN_DONE;
 }
 
