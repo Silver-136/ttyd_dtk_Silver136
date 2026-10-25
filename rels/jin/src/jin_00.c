@@ -40,7 +40,7 @@
 #include "data_tables.h"
 #include "mario/mario_pouch.h"
 
-typedef struct Teresa { Vec vel; f32 angle; Vec ofs; f32 field_0x1C; f32 field_0x20; Vec from; Vec to; s32 wait; u8 alpha; u8 seq; } Teresa;
+typedef struct Teresa { Vec vel; f32 angle; Vec ofs; f32 bobPhase; f32 turnSpeed; Vec from; Vec to; s32 wait; u8 alpha; u8 seq; } Teresa;
 static Teresa* pTeresa;
 Vec g_vecRotCenter;
 s32 g_bMove;
@@ -233,7 +233,7 @@ static void senteresa_ext_init(void) {
         pTeresa[i].wait = (i % 100 + 1) * 3;
         pTeresa[i].alpha = 0;
         pTeresa[i].seq = 0;
-        pTeresa[i].field_0x20 = randf(0.0f, 0.1f);
+        pTeresa[i].turnSpeed = randf(0.0f, 0.1f);
         pTeresa[i].ofs.x = randf(-300.0f, 300.0f);
         pTeresa[i].ofs.y = 0.0f;
         pTeresa[i].ofs.z = randf(-235.0f, 235.0f);
@@ -1273,10 +1273,10 @@ static void senteresa_ext_main(void) {
                 (*pose->mtx)[0][3] = g_vecRotCenter.x + v.x;
                 (*pose->mtx)[2][3] = g_vecRotCenter.z + v.z;
                 v.y = (*pose->mtx)[1][3];
-                (*pose->mtx)[1][3] = 0.4f * sinf(1.2f * pTeresa[i].field_0x1C) + v.y;
-                pTeresa[i].field_0x1C += 0.08f;
-                if (pTeresa[i].field_0x1C > 3.1415927f) {
-                    pTeresa[i].field_0x1C -= 3.1415927f;
+                (*pose->mtx)[1][3] = 0.4f * sinf(1.2f * pTeresa[i].bobPhase) + v.y;
+                pTeresa[i].bobPhase += 0.08f;
+                if (pTeresa[i].bobPhase > 3.1415927f) {
+                    pTeresa[i].bobPhase -= 3.1415927f;
                 }
                 angle = computeAngle(pose, mp);
                 pTeresa[i].alpha += 3;
@@ -1313,10 +1313,10 @@ static void senteresa_ext_main(void) {
                 (*pose->mtx)[0][3] = g_vecRotCenter.x + v.x;
                 (*pose->mtx)[2][3] = g_vecRotCenter.z + v.z;
                 v.y = (*pose->mtx)[1][3];
-                (*pose->mtx)[1][3] = 0.4f * sinf(1.2f * pTeresa[i].field_0x1C) + v.y;
-                pTeresa[i].field_0x1C += 0.08f;
-                if (pTeresa[i].field_0x1C > 3.1415927f) {
-                    pTeresa[i].field_0x1C -= 3.1415927f;
+                (*pose->mtx)[1][3] = 0.4f * sinf(1.2f * pTeresa[i].bobPhase) + v.y;
+                pTeresa[i].bobPhase += 0.08f;
+                if (pTeresa[i].bobPhase > 3.1415927f) {
+                    pTeresa[i].bobPhase -= 3.1415927f;
                 }
                 angle = computeAngle(pose, mp);
                 computeAlpha(&pTeresa[i], mp, angle);
@@ -1336,8 +1336,8 @@ static void senteresa_ext_main(void) {
                 (*pose->mtx)[0][3] = g_vecRotCenter.x + v.x;
                 (*pose->mtx)[2][3] = g_vecRotCenter.z + v.z;
                 v.y = (*pose->mtx)[1][3];
-                (*pose->mtx)[1][3] = 0.4f * sinf(1.2f * pTeresa[i].field_0x1C) + v.y;
-                pTeresa[i].field_0x1C += 0.08f;
+                (*pose->mtx)[1][3] = 0.4f * sinf(1.2f * pTeresa[i].bobPhase) + v.y;
+                pTeresa[i].bobPhase += 0.08f;
                 pTeresa[i].wait--;
                 if (pTeresa[i].wait == 0) {
                     pose->flags &= ~2;
@@ -1352,15 +1352,15 @@ static void senteresa_ext_main(void) {
                 (*pose->mtx)[0][3] = g_vecRotCenter.x + v.x;
                 (*pose->mtx)[1][3] = v.y;
                 (*pose->mtx)[2][3] = g_vecRotCenter.z + v.z;
-                pTeresa[i].field_0x1C += 0.08f;
-                if (pTeresa[i].field_0x1C > 3.1415927f) {
-                    pTeresa[i].field_0x1C -= 3.1415927f;
+                pTeresa[i].bobPhase += 0.08f;
+                if (pTeresa[i].bobPhase > 3.1415927f) {
+                    pTeresa[i].bobPhase -= 3.1415927f;
                 }
-                pTeresa[i].field_0x20 += 0.01f;
-                if (pTeresa[i].field_0x20 > 1.2f) {
-                    pTeresa[i].field_0x20 = 1.2f;
+                pTeresa[i].turnSpeed += 0.01f;
+                if (pTeresa[i].turnSpeed > 1.2f) {
+                    pTeresa[i].turnSpeed = 1.2f;
                 }
-                pTeresa[i].angle += pTeresa[i].field_0x20;
+                pTeresa[i].angle += pTeresa[i].turnSpeed;
                 if (pTeresa[i].angle > 360.0f) {
                     pTeresa[i].angle -= 360.0f;
                 }
@@ -1377,7 +1377,7 @@ static void senteresa_ext_main(void) {
                 if (!party && g_nNumHuttobasu[0] < 20) {
                     pTeresa[i].wait--;
                     if (pTeresa[i].wait == 0) {
-                        pTeresa[i].field_0x1C = 0.0f;
+                        pTeresa[i].bobPhase = 0.0f;
                         pTeresa[i].seq++;
                     }
                 }
@@ -1392,11 +1392,11 @@ static void senteresa_ext_main(void) {
                 PSVECScale(&d, &d, 1.8f);
                 PSVECAdd(&v, &d, &v);
                 (*pose->mtx)[0][3] = v.x;
-                (*pose->mtx)[1][3] = 0.4f * sinf(1.2f * pTeresa[i].field_0x1C) + v.y;
+                (*pose->mtx)[1][3] = 0.4f * sinf(1.2f * pTeresa[i].bobPhase) + v.y;
                 (*pose->mtx)[2][3] = v.z;
-                pTeresa[i].field_0x1C += 0.08f;
-                if (pTeresa[i].field_0x1C > 3.1415927f) {
-                    pTeresa[i].field_0x1C -= 3.1415927f;
+                pTeresa[i].bobPhase += 0.08f;
+                if (pTeresa[i].bobPhase > 3.1415927f) {
+                    pTeresa[i].bobPhase -= 3.1415927f;
                 }
                 if (!party) {
                     PSVECSubtract(&v, &mp->position, &v);
@@ -1456,11 +1456,11 @@ static void senteresa_ext_main(void) {
                 computePos(&pTeresa[i], &v);
                 v.y = (*pose->mtx)[1][3];
                 (*pose->mtx)[0][3] = g_vecRotCenter.x + v.x;
-                (*pose->mtx)[1][3] = 0.4f * sinf(1.2f * pTeresa[i].field_0x1C) + v.y;
+                (*pose->mtx)[1][3] = 0.4f * sinf(1.2f * pTeresa[i].bobPhase) + v.y;
                 (*pose->mtx)[2][3] = g_vecRotCenter.z + v.z;
-                pTeresa[i].field_0x1C += 0.08f;
-                if (pTeresa[i].field_0x1C > 3.1415927f) {
-                    pTeresa[i].field_0x1C -= 3.1415927f;
+                pTeresa[i].bobPhase += 0.08f;
+                if (pTeresa[i].bobPhase > 3.1415927f) {
+                    pTeresa[i].bobPhase -= 3.1415927f;
                 }
                 pTeresa[i].angle += 1.2f;
                 if (pTeresa[i].angle > 360.0f) {
@@ -1491,11 +1491,11 @@ static void senteresa_ext_main(void) {
                 computePos(&pTeresa[i], &v);
                 v.y = (*pose->mtx)[1][3];
                 (*pose->mtx)[0][3] = g_vecRotCenter.x + v.x;
-                (*pose->mtx)[1][3] = 0.4f * sinf(1.2f * pTeresa[i].field_0x1C) + v.y;
+                (*pose->mtx)[1][3] = 0.4f * sinf(1.2f * pTeresa[i].bobPhase) + v.y;
                 (*pose->mtx)[2][3] = g_vecRotCenter.z + v.z;
-                pTeresa[i].field_0x1C += 0.08f;
-                if (pTeresa[i].field_0x1C > 3.1415927f) {
-                    pTeresa[i].field_0x1C -= 3.1415927f;
+                pTeresa[i].bobPhase += 0.08f;
+                if (pTeresa[i].bobPhase > 3.1415927f) {
+                    pTeresa[i].bobPhase -= 3.1415927f;
                 }
                 pTeresa[i].angle += 1.2f;
                 if (pTeresa[i].angle > 360.0f) {
@@ -1510,7 +1510,7 @@ static void senteresa_ext_main(void) {
                     pTeresa[i].from.x = (*pose->mtx)[0][3];
                     pTeresa[i].from.y = (*pose->mtx)[1][3];
                     pTeresa[i].from.z = (*pose->mtx)[2][3];
-                    pTeresa[i].field_0x1C = 0.0f;
+                    pTeresa[i].bobPhase = 0.0f;
                     pTeresa[i].seq++;
                 }
                 break;
@@ -1518,7 +1518,7 @@ static void senteresa_ext_main(void) {
                 f32 t;
 
                 pose->texId = (gp->retraceCount + i * i) % 10 + 16;
-                t = pTeresa[i].field_0x1C;
+                t = pTeresa[i].bobPhase;
                 if (t >= 1.0f) {
                     pTeresa[i].seq = 22;
                     {
@@ -1534,9 +1534,9 @@ static void senteresa_ext_main(void) {
                     v.y = (1.0f - t) * pTeresa[i].from.y + t * pTeresa[i].to.y;
                     v.z = (1.0f - t) * pTeresa[i].from.z + t * pTeresa[i].to.z;
                     (*pose->mtx)[0][3] = v.x;
-                    (*pose->mtx)[1][3] = 20.0f * (f32)sin(6.28f * pTeresa[i].field_0x1C) + v.y;
+                    (*pose->mtx)[1][3] = 20.0f * (f32)sin(6.28f * pTeresa[i].bobPhase) + v.y;
                     (*pose->mtx)[2][3] = v.z;
-                    pTeresa[i].field_0x1C += 0.01f;
+                    pTeresa[i].bobPhase += 0.01f;
                 }
                 break;
             }
@@ -1679,7 +1679,7 @@ USER_FUNC(senteresa_syugo) {
         pTeresa[i].to.x = r * cosf(a) + npc->position.x;
         pTeresa[i].to.y = r * sinf(a) + npc->position.y;
         pTeresa[i].to.z = npc->position.z;
-        pTeresa[i].field_0x1C = 0.0f;
+        pTeresa[i].bobPhase = 0.0f;
         pTeresa[i].wait = (i & 15) + rand() % 10 * 30 + 1;
         pTeresa[i].alpha = 255;
         pTeresa[i].seq = 20;

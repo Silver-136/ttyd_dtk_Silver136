@@ -23,8 +23,10 @@
 #include "data_tables.h"
 #include <math.h>
 
-typedef struct YuuNpcPose { char name[16]; char anim[8]; u16 field_0x18; f32 frames; f32 jump; s32 start; s32 count; u16 flags; f32 field_0x30; } YuuNpcPose;
-typedef struct YuuNpc { u16 id; u16 flags; s16 state; f32 field_0x8; Vec goal; Vec dest; Vec pos; Vec dir; f32 speed; f32 vy; f32 field_0x44; f32 zofs; s32 field_0x4c; s32 field_0x50; s16 poseId; s16 poses[4]; u8 field_0x5e[2]; NpcEntry* npc; f32 animSpeed; u64 time; } YuuNpc;
+typedef struct YuuNpcPose { char name[16]; char anim[8]; u16 field_0x18; f32 frames; f32 jump; s32 start; s32 count; u16 flags; f32 walkAnimSpeed; } YuuNpcPose;
+// motion: 0 stand, 1 walk, 2 run (YUU_STOP/WALK/RUN), 3 fall, 4 jump (YUU_JUMP); turnTimer counts the 30-frame turn
+// that starts from turnBaseDir; errper (set by errper_set_rtn) is the random spread of the goal position
+typedef struct YuuNpc { u16 id; u16 flags; s16 state; f32 errper; Vec goal; Vec dest; Vec pos; Vec dir; f32 speed; f32 vy; f32 turnBaseDir; f32 zofs; s32 motion; s32 turnTimer; s16 poseId; s16 poses[4]; u8 field_0x5e[2]; NpcEntry* npc; f32 animSpeed; u64 time; } YuuNpc;
 typedef struct YuuNpcWork { u16 flags; s32 numNpc; s32 slot[3]; YuuNpc* npcs; s32 basePoseNum; s32 numPoses; s32 chusanPose; s16 hit[6 * 72]; s16 hitY[72]; YuuNpcPose pose[32]; } YuuNpcWork;
 static YuuNpcWork* yuunpc_wp;
 typedef struct YuuNpcData { const char* name; const char* anim; f32 frames; } YuuNpcData;
@@ -310,7 +312,7 @@ void yuunpc_pose_init(YuuNpcData* data) {
         yuunpc_wp->pose[yuunpc_wp->numPoses].frames += 1.0f;
         yuunpc_wp->pose[yuunpc_wp->numPoses].field_0x18 = 1;
         yuunpc_wp->pose[yuunpc_wp->numPoses].jump = 0.0f;
-        yuunpc_wp->pose[yuunpc_wp->numPoses].field_0x30 = 2.0f;
+        yuunpc_wp->pose[yuunpc_wp->numPoses].walkAnimSpeed = 2.0f;
         data++;
     } while (data->name != NULL);
     data++;
@@ -325,7 +327,7 @@ void yuunpc_pose_init(YuuNpcData* data) {
         data++;
         yuunpc_wp->pose[yuunpc_wp->numPoses].field_0x18 = 1;
         yuunpc_wp->pose[yuunpc_wp->numPoses].jump = 0.0f;
-        yuunpc_wp->pose[yuunpc_wp->numPoses].field_0x30 = 1.0f;
+        yuunpc_wp->pose[yuunpc_wp->numPoses].walkAnimSpeed = 1.0f;
         yuunpc_wp->pose[yuunpc_wp->numPoses].flags |= 1;
         yuunpc_wp->numPoses++;
     }
@@ -967,19 +969,19 @@ void errper_set_rtn(YuuNpc* npc) {
         case 0:
         case 2:
         case 4:
-            npc->field_0x8 = -0.25f + 2.0f * (0.25f * (rand() / 32767.0f));
+            npc->errper = -0.25f + 2.0f * (0.25f * (rand() / 32767.0f));
             break;
         case 1:
         case 3:
         case 5:
-            npc->field_0x8 = -0.25f + 2.0f * (0.25f * (rand() / 32767.0f));
+            npc->errper = -0.25f + 2.0f * (0.25f * (rand() / 32767.0f));
             break;
         case -1:
         case 6:
-            npc->field_0x8 = -0.25f + 2.0f * (0.25f * (rand() / 32767.0f));
+            npc->errper = -0.25f + 2.0f * (0.25f * (rand() / 32767.0f));
             break;
         default:
-            npc->field_0x8 = -0.1f + 2.0f * (0.1f * (rand() / 32767.0f));
+            npc->errper = -0.1f + 2.0f * (0.1f * (rand() / 32767.0f));
             break;
     }
 }
@@ -1242,7 +1244,7 @@ void ext_yuunpc_minigame4_init_sub(void) {
                     }
                     break;
             }
-            npc->field_0x4c = 0;
+            npc->motion = 0;
             pose_change_inl(npc, npc->poses[0], 1.0f, rand() / 32767.0f);
             npc->flags |= 0x20;
             errper_set_rtn(npc);
@@ -1282,14 +1284,14 @@ static inline f32 yuunpc_rnd10(YuuNpc* npc) /* */ {
 
 #define YUU_STOP(npc)                                                              \
     do {                                                                           \
-        (npc)->field_0x4c = 0;                                                     \
+        (npc)->motion = 0;                                                     \
         yuunpc_pose_change((npc), (npc)->poses[0], 1.0f, rand() / 32767.0f);       \
         (npc)->speed = 0.0f;                                                       \
     } while (0)
 
 #define YUU_JUMP(npc)                                                                                                    \
     do {                                                                                                                 \
-        (npc)->field_0x4c = 4;                                                                                           \
+        (npc)->motion = 4;                                                                                           \
         yuunpc_pose_change((npc), (npc)->poses[3], 0.0f, yuunpc_wp->pose[(npc)->poses[3]].jump / yuunpc_wp->pose[(npc)->poses[3]].frames); \
         (npc)->vy = 6.5f;                                                                                                \
         (npc)->dir.x = 1.0f;                                                                                             \
@@ -1302,7 +1304,7 @@ static inline f32 yuunpc_rnd10(YuuNpc* npc) /* */ {
 
 #define YUU_RUN(npc)                                                               \
     do {                                                                           \
-        (npc)->field_0x4c = 2;                                                     \
+        (npc)->motion = 2;                                                     \
         yuunpc_pose_change((npc), (npc)->poses[2], 1.0f, rand() / 32767.0f);       \
         if ((npc)->flags & 0x18) {                                                 \
             (npc)->speed = 1.0f;                                                   \
@@ -1313,8 +1315,8 @@ static inline f32 yuunpc_rnd10(YuuNpc* npc) /* */ {
 
 #define YUU_WALK(npc)                                                                                         \
     do {                                                                                                      \
-        (npc)->field_0x4c = 1;                                                                                \
-        yuunpc_pose_change((npc), (npc)->poses[1], yuunpc_wp->pose[(npc)->poses[1]].field_0x30, rand() / 32767.0f); \
+        (npc)->motion = 1;                                                                                \
+        yuunpc_pose_change((npc), (npc)->poses[1], yuunpc_wp->pose[(npc)->poses[1]].walkAnimSpeed, rand() / 32767.0f); \
         if ((npc)->flags & 0x18) {                                                                            \
             (npc)->speed = 0.5f;                                                                              \
         } else {                                                                                              \
@@ -1402,15 +1404,15 @@ void yuunpc_pose_minigame4_main(void) {
             case 0:
                 break;
             case 8:
-                if (npc->field_0x50 == 0) {
+                if (npc->turnTimer == 0) {
                     npc->flags |= 0x18;
                 }
                 break;
             case 0x10:
-                if (npc->field_0x50 == 0) {
+                if (npc->turnTimer == 0) {
                     npc->flags &= ~0x18;
-                    npc->field_0x44 = 0.0f;
-                    npc->field_0x4c = 0;
+                    npc->turnBaseDir = 0.0f;
+                    npc->motion = 0;
                     yuunpc_pose_change(npc, npc->poses[0], 1.0f, rand() / 32767.0f);
                     npc->speed = 0.0f;
                 }
@@ -1418,12 +1420,12 @@ void yuunpc_pose_minigame4_main(void) {
             case 0x18:
                 break;
             }
-            switch (npc->field_0x4c) {
+            switch (npc->motion) {
             case 0:
             case 1:
             case 2:
                 if (!(npc->flags & 0x20)) {
-                    npc->field_0x4c = 3;
+                    npc->motion = 3;
                     yuunpc_pose_change(npc, npc->poses[3], 0.0f, yuunpc_wp->pose[npc->poses[3]].jump / yuunpc_wp->pose[npc->poses[3]].frames);
                     npc->vy = 0.0f;
                 }
@@ -1431,13 +1433,13 @@ void yuunpc_pose_minigame4_main(void) {
             case 3:
             case 4:
                 if (npc->flags & 0x20) {
-                    npc->field_0x4c = 0;
+                    npc->motion = 0;
                     yuunpc_pose_change(npc, npc->poses[0], 1.0f, rand() / 32767.0f);
                     npc->speed = 0.0f;
                 }
                 break;
             }
-            if (npc->field_0x4c != 3 && npc->field_0x4c != 4) {
+            if (npc->motion != 3 && npc->motion != 4) {
                 px = npc->pos.x;
                 kind = 1;
                 h = yuunpc_hitY_get(px);
@@ -1544,7 +1546,7 @@ void yuunpc_pose_minigame4_main(void) {
                 PSVECSubtract(&npc->dest, &npc->pos, &npc->dir);
                 npc->dir.y = 0.0f;
                 PSVECNormalize(&npc->dir, &npc->dir);
-                w = 150.0f * npc->field_0x8;
+                w = 150.0f * npc->errper;
                 mode = mg->state;
                 switch (mode) {
                 default:
@@ -1697,9 +1699,9 @@ void yuunpc_pose_minigame4_main(void) {
                     }
                     if (!(yuunpc_wp->flags & 1) && npc->goal.x > npc->pos.x && n <= 0) {
                         npc->flags |= 8;
-                        npc->field_0x50 = 30;
-                        npc->field_0x44 = ext->dir;
-                        npc->field_0x4c = 0;
+                        npc->turnTimer = 30;
+                        npc->turnBaseDir = ext->dir;
+                        npc->motion = 0;
                         yuunpc_pose_change(npc, npc->poses[0], 1.0f, rand() / 32767.0f);
                         npc->speed = 0.0f;
                         errper_set_rtn(npc);
@@ -1717,7 +1719,7 @@ void yuunpc_pose_minigame4_main(void) {
                     }
                     if (npc->goal.x == npc->pos.x || mg->state == 0 || ((mg->state == 4 || mg->state == 8) && cnt + n >= mg->timer)) {
                         npc->flags &= ~8;
-                        npc->field_0x50 = 30;
+                        npc->turnTimer = 30;
                         errper_set_rtn(npc);
                     }
                     break;
@@ -1727,8 +1729,8 @@ void yuunpc_pose_minigame4_main(void) {
             case 0:
                 break;
             case 8:
-                npc->field_0x50--;
-                ext->dir = npc->field_0x44 + -450.0f * (1.0f - npc->field_0x50 / 30.0f);
+                npc->turnTimer--;
+                ext->dir = npc->turnBaseDir + -450.0f * (1.0f - npc->turnTimer / 30.0f);
                 ext->dir = (3600.0f + ext->dir) - (s32)((3600.0f + ext->dir) / 360.0f) * 360;
                 break;
             case 0x18:
@@ -1738,12 +1740,12 @@ void yuunpc_pose_minigame4_main(void) {
                 } else {
                     n = (t & 0x1f) - 15;
                 }
-                ext->dir = -450.0f + npc->field_0x44 + 2.0f * n;
+                ext->dir = -450.0f + npc->turnBaseDir + 2.0f * n;
                 ext->dir = (3600.0f + ext->dir) - (s32)((3600.0f + ext->dir) / 360.0f) * 360;
                 break;
             case 0x10:
-                npc->field_0x50--;
-                ext->dir = -180.0f + (-450.0f + npc->field_0x44) + -450.0f * (1.0f - npc->field_0x50 / 30.0f);
+                npc->turnTimer--;
+                ext->dir = -180.0f + (-450.0f + npc->turnBaseDir) + -450.0f * (1.0f - npc->turnTimer / 30.0f);
                 ext->dir = (3600.0f + ext->dir) - (s32)((3600.0f + ext->dir) / 360.0f) * 360;
                 break;
             }
@@ -1795,7 +1797,7 @@ void yuunpc_pose_minigame4_main(void) {
             }
             do {
                 kind = 0;
-                switch (npc->field_0x4c) {
+                switch (npc->motion) {
                 case 0:
                     if (goalincheck(npc) == -1) {
                         break;
@@ -1951,7 +1953,7 @@ void yuunpc_pose_minigame4_main(void) {
                     break;
                 }
             } while (kind);
-            switch (npc->field_0x4c) {
+            switch (npc->motion) {
             case 0:
             case 1:
             case 2:

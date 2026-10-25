@@ -61,11 +61,11 @@ typedef struct UnitWinWork {
     f32 scroll;            // 0x44
     u8 pad48[4];           // 0x48
     s32 field_0x4C;        // 0x4C
-    s32 field_0x50;        // 0x50
+    s32 mode;              // 0x50
     u16 flags2;            // 0x54
     u8 pad56[2];           // 0x56
     s32 count;             // 0x58
-    s32 field_0x5C;        // 0x5C
+    s32 coinTick;          // 0x5C
     s32 winId[3];          // 0x60
     u8 pad6C[0xE0 - 0x6C]; // 0x6C
     s32 selected;          // 0xE0
@@ -193,7 +193,7 @@ USER_FUNC(evt_unitwin_alloc) {
     s32 arg = evtGetValue(event, event->args[0]);
     UnitWinWork* wp = _mapAlloc(sizeof(UnitWinWork));
     memset(wp, 0, sizeof(UnitWinWork));
-    wp->field_0x50 = 0;
+    wp->mode = 0;
     _wp = wp;
     if (arg) {
         wp->flags |= 0x80;
@@ -281,7 +281,7 @@ USER_FUNC(unitwincoin_disp_onoff) {
     pouchGetPtr();
     wp = _wp;
     wp->coin = pouchGetCoin();
-    wp->field_0x5C = 0;
+    wp->coinTick = 0;
     if (on) {
         wp->flags |= 0x1000;
     } else {
@@ -571,12 +571,12 @@ void evt_unitwin_disp_func(CameraId cameraId, void* param) {
             if (!delta) {
                 delta = coin > wp->coin ? 1 : -1;
             }
-            if (wp->field_0x5C & 1) {
+            if (wp->coinTick & 1) {
                 wp->coin += delta;
                 statusWinForceUpdateCoin();
             }
-            wp->field_0x5C++;
-            wp->field_0x5C %= 1200;
+            wp->coinTick++;
+            wp->coinTick %= 1200;
             if (!unitwin_coin_se_wait) {
                 psndSFXOn("SFX_COUNT_COIN1");
                 unitwin_coin_se_wait = 7;
@@ -624,7 +624,7 @@ void evt_unitwin_disp_func(CameraId cameraId, void* param) {
         }
     }
 
-    switch (mode = wp->field_0x50) {
+    switch (mode = wp->mode) {
         case 0:
         case 1:
             break;
@@ -727,7 +727,7 @@ void evt_unitwin_disp_func(CameraId cameraId, void* param) {
             FontDrawColor((GXColor){0xFF, 0xFF, 0xFF, 0xFF});
             FontDrawString(titleX + 51, 111.0f, title);
             FontDrawEdgeOff();
-            if (wp->field_0x50 != 3) {
+            if (wp->mode != 3) {
                 Mtx mtx;
                 Mtx scale;
                 s32 icon;
@@ -735,9 +735,9 @@ void evt_unitwin_disp_func(CameraId cameraId, void* param) {
                 PSMTXScale(scale, 0.6f, 0.6f, 0.6f);
                 PSMTXConcat(mtx, scale, mtx);
                 iconDispGxCol(mtx, 0x10, ICON_211, (GXColor){0xF0, 0xF0, 0xF0, 0xFF});
-                if (wp->field_0x50 == 13) {
+                if (wp->mode == 13) {
                     icon = ICON_18D;
-                } else if (wp->field_0x50 == 16) {
+                } else if (wp->mode == 16) {
                     icon = ICON_13F;
                 } else {
                     icon = ICON_18B;
@@ -754,7 +754,7 @@ void evt_unitwin_disp_func(CameraId cameraId, void* param) {
                 s32 id;
                 ItemData* item;
                 flag = 0;
-                switch (wp->field_0x50) {
+                switch (wp->mode) {
                     case 2:
                     case 3:
                         id = pouchHaveItem(i);
@@ -798,7 +798,7 @@ void evt_unitwin_disp_func(CameraId cameraId, void* param) {
                 item = &itemDataTable[id];
                 if (id) {
                     s32 ty;
-                    if (wp->field_0x50 == 13 && item->star_piece_price > pouchGetStarPiece()) {
+                    if (wp->mode == 13 && item->star_piece_price > pouchGetStarPiece()) {
                         color = (GXColor){0xA0, 0xA0, 0xA0, 0xFF};
                         flag = 0x20;
                     }
@@ -809,11 +809,11 @@ void evt_unitwin_disp_func(CameraId cameraId, void* param) {
                     FontDrawScale(0.8f);
                     FontDrawColor(color);
                     FontDrawString(36.0f, wp->scroll + (80 - row * 24) - 2.0f, item->id);
-                    if (wp->field_0x50 != 3) {
+                    if (wp->mode != 3) {
                         char buf[32];
                         f32 sc;
                         s32 xoff;
-                        switch (wp->field_0x50) {
+                        switch (wp->mode) {
                             case 14:
                                 sprintf(buf, "%2d", item->buy_price * 12 / 10);
                                 sc = 1.0f;
@@ -891,7 +891,7 @@ void evt_unitwin_disp_func(CameraId cameraId, void* param) {
             FontDrawColor((GXColor){0xFF, 0xFF, 0xFF, 0xFF});
             FontDrawString(71.0f, 111.0f, title);
             FontDrawEdgeOff();
-            if (wp->field_0x50 == 17) {
+            if (wp->mode == 17) {
                 Mtx mtx;
                 Mtx scale;
                 PSMTXTrans(mtx, 244.0f, 82.0f, 0.0f);
@@ -923,7 +923,7 @@ void evt_unitwin_disp_func(CameraId cameraId, void* param) {
                 FontDrawScale(0.8f);
                 FontDrawString(1.0f, wp->scroll + (80 - i * 24), info->initEndPos);
                 info->initEndPos[info->tagEndPos] = c;
-                if (wp->field_0x50 == 17) {
+                if (wp->mode == 17) {
                     FontDrawStart();
                     FontDrawColor(color);
                     FontDrawString(221.0f, wp->scroll + (80 - i * 24), buf);
@@ -966,7 +966,7 @@ void evt_unitwin_disp_func(CameraId cameraId, void* param) {
                 char buf[32];
                 char help[16];
                 char dir[16];
-                if (wp->field_0x50 == 5 || wp->field_0x50 == 6) {
+                if (wp->mode == 5 || wp->mode == 6) {
                     if (!partyChkJoin(party_id_table[i])) {
                         continue;
                     }
@@ -1023,7 +1023,7 @@ void evt_unitwin_disp_func(CameraId cameraId, void* param) {
                     } else {
                         sprintf(help, "helperr");
                     }
-                    if (wp->field_0x50 == 5 || wp->field_0x50 == 6) {
+                    if (wp->mode == 5 || wp->mode == 6) {
                         sprintf(dir, "lankup");
                     } else {
                         sprintf(dir, "lankdown");
@@ -1307,7 +1307,7 @@ void evt_unitwin_disp_func(CameraId cameraId, void* param) {
         }
     }
 
-    if (wp->field_0x50 != 0 && wp->field_0x50 != 1) {
+    if (wp->mode != 0 && wp->mode != 1) {
         char text[136];
         char* line1;
         char* line2 = NULL;
@@ -1316,7 +1316,7 @@ void evt_unitwin_disp_func(CameraId cameraId, void* param) {
         s32 lines;
         s32 w2;
 
-        switch (wp->field_0x50) {
+        switch (wp->mode) {
             case 0:
             case 1:
                 break;

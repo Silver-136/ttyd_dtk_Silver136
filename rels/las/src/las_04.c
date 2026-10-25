@@ -33,8 +33,8 @@
 #include <math.h>
 
 typedef struct FirebarBall { s32 pose; Vec pos; } FirebarBall;
-typedef struct FirebarSetup { u8 type; u8 count; u8 field_0x2[2]; Vec pos; f32 spacing; f32 field_0x14; f32 speed; void* callback; f32 field_0x20; f32 radius; } FirebarSetup;
-typedef struct FirebarWork { u8 type; u8 count; u16 flags; Vec pos; f32 prevAngle; f32 angle; f32 speed; f32 spacing; f32 field_0x20; f32 scale; f32 field_0x28; f32 radius; void (*callback)(struct FirebarWork* wp, s32 type); s32 hitCount; s32 sfxId; s32 state; f32 shadowAngle; FirebarBall* balls; FirebarSetup* setup; } FirebarWork;
+typedef struct FirebarSetup { u8 type; u8 count; u8 field_0x2[2]; Vec pos; f32 spacing; f32 field_0x14; f32 speed; void* callback; f32 param; f32 radius; } FirebarSetup; // param: type 0 start angle, type 1 end x
+typedef struct FirebarWork { u8 type; u8 count; u16 flags; Vec pos; f32 prevAngle; f32 angle; f32 speed; f32 spacing; f32 field_0x20; f32 scale; f32 endX; f32 radius; void (*callback)(struct FirebarWork* wp, s32 type); s32 hitCount; s32 sfxId; s32 state; f32 shadowAngle; FirebarBall* balls; FirebarSetup* setup; } FirebarWork;
 ItemEntry* itemEntry(const char* name, s32 itemId, s32 mode, s32 flag, void* script, f32 x, f32 y, f32 z);
 void shadowSetVolumeDecay(f32 a, f32 b, f32 c);
 void firebar_disp(CameraId camera, void* param);
@@ -169,7 +169,7 @@ FirebarSetup firebardesc[] = {
         25.0f, // field_0x14
         0.04f, // speed
         firebar_cb, // callback
-        0.0f, 0.0f, // field_0x20..radius
+        0.0f, 0.0f, // param, radius
     },
     {
         0, // type
@@ -180,7 +180,7 @@ FirebarSetup firebardesc[] = {
         25.0f, // field_0x14
         -0.04f, // speed
         firebar_cb, // callback
-        0.0f, 0.0f, // field_0x20..radius
+        0.0f, 0.0f, // param, radius
     },
     {
         0, // type
@@ -191,7 +191,7 @@ FirebarSetup firebardesc[] = {
         25.0f, // field_0x14
         0.04f, // speed
         firebar_cb, // callback
-        0.0f, 0.0f, // field_0x20..radius
+        0.0f, 0.0f, // param, radius
     },
     {
         0, // type
@@ -202,7 +202,7 @@ FirebarSetup firebardesc[] = {
         25.0f, // field_0x14
         0.03f, // speed
         firebar_cb, // callback
-        0.0f, // field_0x20
+        0.0f, // param
         30.0f, // radius
     },
     {
@@ -214,7 +214,7 @@ FirebarSetup firebardesc[] = {
         25.0f, // field_0x14
         0.03f, // speed
         firebar_cb, // callback
-        3.1415927f, // field_0x20
+        3.1415927f, // param
         30.0f, // radius
     },
     {
@@ -226,7 +226,7 @@ FirebarSetup firebardesc[] = {
         25.0f, // field_0x14
         1.5f, // speed
         firebar_cb, // callback
-        225.0f, // field_0x20
+        225.0f, // param
         0.0f, // radius
     },
     {
@@ -238,7 +238,7 @@ FirebarSetup firebardesc[] = {
         25.0f, // field_0x14
         1.5f, // speed
         firebar_cb, // callback
-        225.0f, // field_0x20
+        225.0f, // param
         0.0f, // radius
     },
 };
@@ -464,7 +464,7 @@ void _firebar_trans(FirebarWork* wp) {
             }
             break;
         case 1:
-            if (__fabsf(wp->pos.x - wp->field_0x28) < 20.0f * __fabsf(wp->speed)) {
+            if (__fabsf(wp->pos.x - wp->endX) < 20.0f * __fabsf(wp->speed)) {
                 wp->state++;
             }
             break;
@@ -542,17 +542,17 @@ USER_FUNC(firebar_entry) {
         wp->angle = 0.0f;
         wp->hitCount = 0;
         wp->setup = setup;
-        wp->field_0x28 = setup->field_0x20;
+        wp->endX = setup->param;
         wp->radius = setup->radius;
         wp->sfxId = 0;
         wp->state = 0;
         wp->shadowAngle = 0.0f;
         switch (wp->type) {
             case 0:
-                wp->angle = setup->field_0x20;
+                wp->angle = setup->param;
                 break;
             case 1:
-                if (setup->pos.x < setup->field_0x20) {
+                if (setup->pos.x < setup->param) {
                     wp->speed = __fabsf(setup->speed);
                 } else {
                     wp->speed = -1.0f * __fabsf(setup->speed);
