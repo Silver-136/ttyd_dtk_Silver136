@@ -6,6 +6,7 @@
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
 #include "evt/evt_item.h"
+#include "driver/mapdrv.h"
 
 #include "driver/npcdrv.h"
 #include "driver/animdrv.h"
@@ -189,7 +190,7 @@ EVT_BEGIN(gra_02_init_evt)
         CALL(evt_cloud_init)
         CALL(evt_cloud_ent, 0, STRING("S_wara"), STRING("polySurface981_q023"), PTR(gra02_straw_blow_evt))
         ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_wara"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_wara"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("polySurface981_q023"), 0, 0)
     END_IF
     BEGIN_INLINE_EVENT

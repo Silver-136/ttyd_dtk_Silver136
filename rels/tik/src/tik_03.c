@@ -15,6 +15,7 @@
 #include "evt/evt_snd.h"
 #include "evt/evt_item.h"
 #include "driver/npcdrv.h"
+#include "driver/mapdrv.h"
 
 
 EvtWord bero_05_custom_in[30];
@@ -388,8 +389,8 @@ EVT_BEGIN(puni_switch)
     CALL(evt_snd_bgmon, 1, STRING("BGM_FF_ENV_SUCCESS1"))
     SET_VALUE(GSWF(1334), 1)
     CALL(evt_map_playanim, STRING("anm_para"), 0, 0)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("kabe_1"), 1)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("kabe_2"), 1)
+    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("kabe_1"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("kabe_2"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_hitobj_onoff, STRING("a_para_d"), 1, 0)
     CALL(evt_hitobj_onoff, STRING("a_para_d1"), 1, 0)
     CALL_CHILD(PTR(anm_para_snd))
@@ -399,7 +400,7 @@ EVT_BEGIN(puni_switch)
     SET_VALUE(GSW_STORY_PROGRESS, 68)
     CALL(evt_mario_key_onoff, 1)
     WAIT_MS(1500)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("para"), 1)
+    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("para"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_snd_bgmoff, 513)
     CALL(evt_snd_bgmon, 288, 0)
     RETURN
@@ -439,15 +440,15 @@ EVT_END()
 EVT_BEGIN(tik03_switch_evt)
     IF_INT_EQUAL(GSWF(1334), 0)
         CALL(evt_map_playanim, STRING("anm_para"), 0, 0)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("kabe_1"), 1)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("kabe_2"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("kabe_1"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("kabe_2"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_para_d"), 1, 0)
         SET_VALUE(GSWF(1334), 1)
         CALL_CHILD(PTR(anm_para_snd))
         WAIT_MS(800)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("para"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("para"), MAP_OBJ_FLAG_HIDDEN)
         ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("para"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("para"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_map_playanim, STRING("anm_rapa"), 0, 0)
         SET_VALUE(GSWF(1334), 0)
         CALL_CHILD(PTR(anm_rapa_snd))
@@ -470,13 +471,13 @@ EVT_BEGIN(tik_03_init_evt)
         SPAWN_EVENT(PTR(puni_soguu_3))
     END_IF
     IF_INT_LESS_OR_EQUAL(GSW_STORY_PROGRESS, 67)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("kabe_2"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("kabe_2"), MAP_OBJ_FLAG_HIDDEN)
         ELSE
         IF_INT_EQUAL(GSWF(1334), 0)
-            CALL(evt_mapobj_flag_onoff, 1, 1, STRING("kabe_1"), 1)
+            CALL(evt_mapobj_flag_onoff, 1, 1, STRING("kabe_1"), MAP_OBJ_FLAG_HIDDEN)
             ELSE
-            CALL(evt_mapobj_flag_onoff, 1, 1, STRING("kabe_1"), 1)
-            CALL(evt_mapobj_flag_onoff, 1, 1, STRING("para"), 1)
+            CALL(evt_mapobj_flag_onoff, 1, 1, STRING("kabe_1"), MAP_OBJ_FLAG_HIDDEN)
+            CALL(evt_mapobj_flag_onoff, 1, 1, STRING("para"), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_hitobj_onoff, STRING("a_para_d"), 1, 0)
             CALL(evt_hitobj_onoff, STRING("a_para_d1"), 1, 0)
         END_IF

@@ -10,6 +10,7 @@
 #include "evt/evt_snd.h"
 #include "evt/evt_mobj.h"
 #include "evt/evt_pouch.h"
+#include "driver/mapdrv.h"
 
 USER_FUNC(evt_cloud_ent);
 USER_FUNC(evt_cloud_init);
@@ -148,8 +149,8 @@ static EVT_BEGIN(evt_origami)
         WAIT_MS(333)
         CALL(evt_snd_sfxon_3d, STRING("SFX_STG6_PERA_KAI_DOWN2"), LW(0), LW(1), LW(2), 0)
     END_INLINE_EVENT
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("dann"), 1)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("n_origami"), 1)
+    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("dann"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("n_origami"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_hitobj_onoff, STRING("a_oritatami"), 1, 1)
     CALL(evt_map_playanim, STRING("anm_kaidan"), 0, 0)
     CALL(evt_map_checkanim, STRING("anm_kaidan"), LW(0), LW(1))
@@ -222,13 +223,13 @@ EVT_BEGIN(eki_01_init_evt)
     CALL(evt_snd_envon, 272, STRING("ENV_STG6_EKI2_2"))
     IF_INT_LESS(GSW_STORY_PROGRESS, 313)
         CALL(evt_mobj_switch_blue, 0, STRING("origami_sw"), 90, 10, -60, PTR(evt_origami), GSWF(3727))
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("dann"), 1)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("n_origami"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("dann"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("n_origami"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_oritatami"), 1, 0)
         ELSE
         CALL(evt_map_playanim, STRING("anm_kaidan"), 2, 0)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("dann"), 1)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("n_origami"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("dann"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("n_origami"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_oritatami"), 1, 1)
     END_IF
     IF_INT_LESS(GSW_STORY_PROGRESS, 315)
@@ -240,37 +241,37 @@ EVT_BEGIN(eki_01_init_evt)
     IF_INT_EQUAL(GSWF(3748), 0)
         CALL(evt_cloud_ent, 0, STRING("kami_1"), STRING("a_kami_1"), PTR(evt_kami_1))
         ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("kami_1"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("kami_1"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_kami_1"), 1, 0)
     END_IF
     IF_INT_EQUAL(GSWF(3749), 0)
         CALL(evt_cloud_ent, 0, STRING("kami_2"), STRING("a_kami_2"), PTR(evt_kami_2))
         ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("kami_2"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("kami_2"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_kami_2"), 1, 0)
     END_IF
     IF_INT_EQUAL(GSWF(3750), 0)
         CALL(evt_cloud_ent, 0, STRING("kami_3"), STRING("a_kami_3"), PTR(evt_kami_3))
         ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("kami_3"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("kami_3"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_kami_3"), 1, 0)
     END_IF
     IF_INT_EQUAL(GSWF(3751), 0)
         CALL(evt_cloud_ent, 0, STRING("kami_4"), STRING("a_kami_4"), PTR(evt_kami_4))
         ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("kami_4"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("kami_4"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_kami_4"), 1, 0)
     END_IF
     IF_INT_EQUAL(GSWF(3752), 0)
         CALL(evt_cloud_ent, 0, STRING("kami_5"), STRING("a_kami_5"), PTR(evt_kami_5))
         ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("kami_5"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("kami_5"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_kami_5"), 1, 0)
     END_IF
     IF_INT_EQUAL(GSWF(3753), 0)
         CALL(evt_cloud_ent, 0, STRING("kami_6"), STRING("a_kami_6"), PTR(evt_kami_6))
         ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("kami_6"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("kami_6"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_kami_6"), 1, 0)
     END_IF
     RETURN

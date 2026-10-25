@@ -16,6 +16,7 @@
 #include "evt/evt_snd.h"
 #include "evt/evt_item.h"
 #include "driver/npcdrv.h"
+#include "driver/mapdrv.h"
 
 #include "party.h"
 #include "evt/evt_bero.h"
@@ -251,7 +252,7 @@ EVT_BEGIN(bridge_evt_02)
         END_SWITCH
         CALL(evt_img_set_paper_anim, STRING("capture_img"), STRING("A_1"))
         CALL(evt_img_wait_animend, STRING("capture_img"))
-        CALL(evt_mapobj_flag_onoff, 1, 0, LW(11), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 0, LW(11), MAP_OBJ_FLAG_HIDDEN)
         IF_INT_GREATER_OR_EQUAL(GW(0), 25)
             CALL(evt_img_free_capture, STRING("capture_img"), 0)
             CALL(evt_img_free_capture, STRING("capture_img"), 1)
@@ -884,7 +885,7 @@ EVT_BEGIN(hei_01_init_evt)
     END_IF
     CALL(evt_map_playanim, STRING("anm_mizu"), 1, 0)
     IF_INT_LESS(GSW_STORY_PROGRESS, 25)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("hasi"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("hasi"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_hasi"), 1, 0)
         SET_VALUE(GW(0), 0)
         CALL(evt_mobj_switch_blue, 2, STRING("bg_switch"), -8, 40, -450, PTR(bridge_evt), 0)
@@ -898,7 +899,7 @@ EVT_BEGIN(hei_01_init_evt)
     END_IF
     CALL(evt_snd_bgmon, 512, STRING("BGM_STG1_HEI1"))
     CALL(evt_snd_envon, 272, STRING("ENV_STG1_HEI2"))
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("USIROKUSA"), 2)
+    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("USIROKUSA"), MAP_OBJ_FLAG_CLIP)
     IF_INT_LESS(GSW_STORY_PROGRESS, 25)
         IF_INT_EQUAL(GSWF(1805), 0)
             SPAWN_EVENT(PTR(christine_hei_01))

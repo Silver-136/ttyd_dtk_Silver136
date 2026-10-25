@@ -13,6 +13,7 @@
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
 #include "evt/evt_sub.h"
+#include "driver/mapdrv.h"
 
 #include "party.h"
 #include "mario/mario.h"
@@ -382,7 +383,7 @@ EVT_BEGIN(peach_evt_fuku_g)
     CALL(evt_msg_print, 0, STRING("peach_aji_134"), 0, STRING("mario"))
     CALL(evt_msg_print, 0, STRING("peach_aji_135"), 0, 0)
     SET_VALUE(GSWF(4203), 1)
-    CALL(evt_mapobj_flag_onoff, 0, 1, STRING("R_fuku_g"), 1)
+    CALL(evt_mapobj_flag_onoff, 0, 1, STRING("R_fuku_g"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_hitobj_onoff, STRING("A_R_fuku_g"), 1, 0)
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_exit_case_evt)
@@ -532,11 +533,11 @@ EVT_BEGIN(peach_evt_kou1_in)
     IF_INT_EQUAL(LW(15), 0)
         IF_INT_EQUAL(GSWF(4203), 1)
             IF_INT_EQUAL(GSWF(4204), 0)
-                CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_fuku1_g"), 1)
-                CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_fuku1_p"), 1)
+                CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_fuku1_g"), MAP_OBJ_FLAG_HIDDEN)
+                CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_fuku1_p"), MAP_OBJ_FLAG_HIDDEN)
                 ELSE
-                CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_fuku1_g"), 1)
-                CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_fuku1_p"), 1)
+                CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_fuku1_g"), MAP_OBJ_FLAG_HIDDEN)
+                CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_fuku1_p"), MAP_OBJ_FLAG_HIDDEN)
             END_IF
         END_IF
     END_IF
@@ -579,11 +580,11 @@ EVT_BEGIN(peach_evt_kou2_in)
     IF_INT_EQUAL(LW(15), 0)
         IF_INT_EQUAL(GSWF(4203), 1)
             IF_INT_EQUAL(GSWF(4204), 0)
-                CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_fuku2_g"), 1)
-                CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_fuku2_p"), 1)
+                CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_fuku2_g"), MAP_OBJ_FLAG_HIDDEN)
+                CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_fuku2_p"), MAP_OBJ_FLAG_HIDDEN)
                 ELSE
-                CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_fuku2_g"), 1)
-                CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_fuku2_p"), 1)
+                CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_fuku2_g"), MAP_OBJ_FLAG_HIDDEN)
+                CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_fuku2_p"), MAP_OBJ_FLAG_HIDDEN)
             END_IF
         END_IF
     END_IF
@@ -661,35 +662,35 @@ EVT_END()
 static EVT_BEGIN(peach_evt_stg3)
     CALL(evt_mario_key_onoff, 0)
     IF_INT_LESS(GSW_STORY_PROGRESS, 167)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_fuku1"), 1)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_fuku2"), 1)
-        CALL(evt_mapobj_flag_onoff, 0, 0, STRING("R_fuku_g"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_fuku1"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_fuku2"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, 0, 0, STRING("R_fuku_g"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_R_fuku_g"), 1, 1)
         CALL(evt_run_case_evt, 9, 1, STRING("A_R_fuku_g"), 0, PTR(peach_evt_fuku_g), 0)
         ELSE
         IF_INT_EQUAL(GSWF(4204), 0)
             IF_INT_EQUAL(GSWF(4205), 0)
-                CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_fuku2_g"), 1)
-                CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_fuku2_p"), 1)
-                CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_fuku1"), 1)
+                CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_fuku2_g"), MAP_OBJ_FLAG_HIDDEN)
+                CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_fuku2_p"), MAP_OBJ_FLAG_HIDDEN)
+                CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_fuku1"), MAP_OBJ_FLAG_HIDDEN)
                 ELSE
-                CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_fuku1_g"), 1)
-                CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_fuku1_p"), 1)
-                CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_fuku2"), 1)
+                CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_fuku1_g"), MAP_OBJ_FLAG_HIDDEN)
+                CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_fuku1_p"), MAP_OBJ_FLAG_HIDDEN)
+                CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_fuku2"), MAP_OBJ_FLAG_HIDDEN)
             END_IF
             ELSE
             CALL(evt_peach_transform_gundan_on)
             IF_INT_EQUAL(GSWF(4205), 0)
-                CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_fuku2_g"), 1)
-                CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_fuku2_p"), 1)
-                CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_fuku1"), 1)
+                CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_fuku2_g"), MAP_OBJ_FLAG_HIDDEN)
+                CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_fuku2_p"), MAP_OBJ_FLAG_HIDDEN)
+                CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_fuku1"), MAP_OBJ_FLAG_HIDDEN)
                 ELSE
-                CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_fuku1_g"), 1)
-                CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_fuku1_p"), 1)
-                CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_fuku2"), 1)
+                CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_fuku1_g"), MAP_OBJ_FLAG_HIDDEN)
+                CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_fuku1_p"), MAP_OBJ_FLAG_HIDDEN)
+                CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_fuku2"), MAP_OBJ_FLAG_HIDDEN)
             END_IF
         END_IF
-        CALL(evt_mapobj_flag_onoff, 0, 1, STRING("R_fuku_g"), 1)
+        CALL(evt_mapobj_flag_onoff, 0, 1, STRING("R_fuku_g"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     CALL(evt_run_case_evt, 9, 1, STRING("A_kou1_ka_omo"), 0, PTR(peach_evt_kou1_in), 0)
     CALL(evt_run_case_evt, 9, 1, STRING("A_kou1_ka_ura"), 0, PTR(peach_evt_kou1_out), 0)
@@ -748,9 +749,9 @@ EVT_BEGIN(aji_09_init_evt)
     CALL(evt_bero_get_info)
     CALL_CHILD(PTR(evt_bero_info_run))
     CALL(evt_hitobj_onoff, STRING("A_R_fuku_g"), 1, 0)
-    CALL(evt_mapobj_flag_onoff, 0, 1, STRING("R_fuku_g"), 1)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_fuku1"), 1)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_fuku2"), 1)
+    CALL(evt_mapobj_flag_onoff, 0, 1, STRING("R_fuku_g"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_fuku1"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_fuku2"), MAP_OBJ_FLAG_HIDDEN)
     SET_VALUE(LF(0), 0)
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 166)
         IF_INT_LESS_OR_EQUAL(GSW_STORY_PROGRESS, 168)
@@ -768,8 +769,8 @@ EVT_BEGIN(aji_09_init_evt)
         SET_VALUE(GF(1), 0)
         CALL(evt_run_case_evt, 9, 1, STRING("A_kou2_ka_omo"), 0, PTR(evt_kou2), 0)
         CALL(evt_run_case_evt, 9, 1, STRING("A_kou2_ka_ura"), 0, PTR(evt_kou2), 0)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_fuku1_p"), 1)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_fuku2_g"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_fuku1_p"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_fuku2_g"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     CALL_CHILD(PTR(evt_rokka_init))
     CALL(evt_bero_get_entername, LW(0))
@@ -800,7 +801,7 @@ EVT_BEGIN(aji_09_init_evt)
         CALL(evt_snd_bgmon, 512, STRING("BGM_STG7_DUN2"))
         CALL(evt_snd_envon, 272, STRING("ENV_STG7_AJI2"))
         ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_memo"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_memo"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_PEACH1"))
         CALL(evt_snd_envoff, 512)
     END_IF

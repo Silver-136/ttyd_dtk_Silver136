@@ -16,6 +16,7 @@
 #include "evt/evt_seq.h"
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
+#include "driver/mapdrv.h"
 
 #include "pmario_sound.h"
 #include "mario/mario_pouch.h"
@@ -495,7 +496,7 @@ EVT_END()
 static EVT_BEGIN(evt_dakuto)
     CALL(evt_cam_shake, 4, FLOAT(0.049804688f), FLOAT(0.0f), 500)
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG3_DUCT_KOUSHI_HIT1"), 135, 80, -95, 0)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("kankikuti"), 1)
+    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("kankikuti"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_hitobj_onoff, STRING("win_kabe"), 1, 0)
     IF_INT_LESS(GSW_STORY_PROGRESS, 159)
         SET_VALUE(GSW_STORY_PROGRESS, 159)
@@ -686,11 +687,11 @@ EVT_BEGIN(tou_07_init_evt)
     END_IF
     CALL(evt_tou_get_ranking, LW(0))
     IF_INT_EQUAL(LW(0), 0)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("e_1"), 1)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("e_2"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("e_1"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("e_2"), MAP_OBJ_FLAG_HIDDEN)
         ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("e_1"), 1)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("e_2"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("e_1"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("e_2"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(159)
@@ -709,7 +710,7 @@ EVT_BEGIN(tou_07_init_evt)
         CALL(evt_run_case_evt, 13, 1, STRING("win_kabe"), 0, PTR(evt_dakuto2), 0)
         CALL(evt_run_case_evt, 9, 1, STRING("win_kabe"), 0, PTR(evt_dakuto2), 0)
         ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("kankikuti"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("kankikuti"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("win_kabe"), 1, 0)
     END_IF
     CALL(evt_run_case_evt, 9, 1, STRING("M_make"), 0, PTR(evt_tou_match_make_default), 0)

@@ -8,6 +8,7 @@
 #include "evt/evt_party.h"
 #include "evt/evt_seq.h"
 #include "party/party_motion.h"
+#include "driver/mapdrv.h"
 
 
 EvtWord hom_11_init_evt[140];
@@ -26,12 +27,12 @@ EVT_BEGIN(hom_11_init_evt)
         CALL_CHILD(PTR(hom_10_evt_resha_start3))
         SET_VALUE(LW(0), 500)
         SET_VALUE(LW(1), -500)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("renketu"), 1)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("renketu_1"), 1)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("renketu_2"), 1)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("renketu_3"), 1)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("renketu_4"), 1)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("renketu_5"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("renketu"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("renketu_1"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("renketu_2"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("renketu_3"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("renketu_4"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("renketu_5"), MAP_OBJ_FLAG_HIDDEN)
         ELSE
         CALL_CHILD(PTR(hom_10_evt_resha_left))
         CALL_CHILD(PTR(hom_10_evt_resha_start4))

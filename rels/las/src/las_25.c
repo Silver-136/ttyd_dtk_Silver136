@@ -12,6 +12,7 @@
 #include "evt/evt_item.h"
 #include "evt/evt_pouch.h"
 #include "driver/mobjdrv.h"
+#include "driver/mapdrv.h"
 
 USER_FUNC(evt_win_item_select);
 
@@ -214,12 +215,12 @@ EVT_BEGIN(las_25_init_evt)
         CALL(evt_npc_check_delete, STRING("ファントム２"))
     END_IF
     IF_INT_LESS(GSW_STORY_PROGRESS, 390)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_under"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_under"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_under"), 1, 0)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("hikou"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("hikou"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_hi"), 1, 0)
         ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_yuka"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_yuka"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_be"), 1, 0)
         CALL(evt_map_entry_airport_harbor, 0, STRING("hikou"), STRING("a_hi"))
         SET_VALUE(LW(0), STRING("w_bero"))

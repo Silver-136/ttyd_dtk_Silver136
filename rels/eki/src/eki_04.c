@@ -7,6 +7,7 @@
 #include "party/party_motion.h"
 #include "evt/evt_item.h"
 #include "evt/evt_mobj.h"
+#include "driver/mapdrv.h"
 
 
 static EvtWord e_close[12];
@@ -98,8 +99,8 @@ EVT_BEGIN(eki_04_init_evt)
     CALL(evt_mobj_jumpstand_red, 0, STRING("mobj_jump"), 360, -900, 70, PTR(evt_jump), 0)
     CALL(evt_item_entry, STRING("item01"), 152, -250, -815, 70, 16, GSWF(3744), 0)
     CALL(evt_item_entry, STRING("item02"), 262, -250, 230, 40, 16, GSWF(3747), 0)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("futi_"), 2)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("hasira"), 2)
+    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("futi_"), MAP_OBJ_FLAG_CLIP)
+    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("hasira"), MAP_OBJ_FLAG_CLIP)
     IF_INT_LESS(GSW_STORY_PROGRESS, 316)
         SET_VALUE(GSW_STORY_PROGRESS, 316)
     END_IF

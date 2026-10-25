@@ -16,6 +16,7 @@
 #include "evt/evt_snd.h"
 #include "evt/evt_sub.h"
 #include "driver/npcdrv.h"
+#include "driver/mapdrv.h"
 
 #include "driver/dispdrv.h"
 #include "stdlib.h"
@@ -609,14 +610,14 @@ EVT_BEGIN(clouda_nakama)
     SET_VALUE(GW(1), 0)
     BEGIN_INLINE_EVENT
         WAIT_MS(500)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S"), 2048)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("hika_"), 2048)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S"), MAP_OBJ_FLAG_NO_MAP_BLEND)
+        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("hika_"), MAP_OBJ_FLAG_NO_MAP_BLEND)
         CALL(evt_map_blend_set_flag, 1, STRING("mario"), 2048)
         CALL(evt_map_blend_set_flag, 1, STRING("party"), 2048)
         CALL(evt_map_blend_set_flag, 1, STRING("extparty"), 2048)
         CALL(evt_map_blend_set_flag, 1, STRING("クラウダ"), 2048)
         CALL(evt_map_set_blend, 0, 255, 255, 255, 0)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("hika_"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("hika_"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_map_playanim, STRING("kirakira"), 1, 0)
         CALL(evt_sub_intpl_msec_init, 0, 0, 255, 1000)
         LOOP(0)
@@ -708,7 +709,7 @@ EVT_BEGIN(clouda_nakama)
     END_INLINE_EVENT
     WAIT_MS(1000)
     SET_VALUE(GW(0), 1)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("hika_"), 1)
+    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("hika_"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_map_pauseanim, 0, STRING("kirakira"))
     CALL(evt_mapobj_trans, 1, STRING("S_mirre"), 0, 100, 0)
     DELETE_EVENT(GW(10))
@@ -956,8 +957,8 @@ EVT_END()
 
 EVT_BEGIN(mirror_ball_event)
     CALL(evt_map_set_tevcallback, 1, PTR(mirror_ball))
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_mirre"), 16777216)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_mirre"), 256)
+    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_mirre"), MAP_OBJ_TEV_CALLBACK(1))
+    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_mirre"), MAP_OBJ_FLAG_DISPLAY_LIST)
     RETURN
 EVT_END()
 
@@ -1343,7 +1344,7 @@ EVT_BEGIN(win_04_init_evt)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, 76)
         SPAWN_EVENT(PTR(cloud_toujou))
     END_IF
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("hika_"), 1)
+    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("hika_"), MAP_OBJ_FLAG_HIDDEN)
     RETURN
 EVT_END()
 

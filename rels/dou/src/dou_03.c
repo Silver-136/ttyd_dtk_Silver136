@@ -17,6 +17,7 @@
 #include "evt/evt_sub.h"
 #include "dou.h"
 #include "evt/evt_pouch.h"
+#include "driver/mapdrv.h"
 
 USER_FUNC(evt_win_item_select);
 
@@ -161,7 +162,7 @@ static BeroEntry bero_entry_data[] = {
 
 EVT_BEGIN(watergate_handle_init)
     IF_INT_LESS(GSW_STORY_PROGRESS, 248)
-        CALL(evt_mapobj_flag_onoff, 0, 1, STRING("S_reba"), 1)
+        CALL(evt_mapobj_flag_onoff, 0, 1, STRING("S_reba"), MAP_OBJ_FLAG_HIDDEN)
         SET_VALUE(LW(0), STRING("s_bero"))
         CALL_CHILD(PTR(bero_case_switch_off))
         CALL(evt_hitobj_attr_onoff, 1, 0, STRING("s_bero"), 128)
@@ -216,7 +217,7 @@ EVT_BEGIN(nagare_taru)
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_taru"), 1)
+    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_taru"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_hitobj_onoff, STRING("A_taru"), 1, 0)
     RETURN
 EVT_END()
@@ -243,7 +244,7 @@ EVT_BEGIN(nagare_bin)
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_bin"), 1)
+    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_bin"), MAP_OBJ_FLAG_HIDDEN)
     RETURN
 EVT_END()
 
@@ -262,7 +263,7 @@ EVT_BEGIN(watergate_handle)
             RETURN
         END_IF
         CALL(evt_mario_key_onoff, 0)
-        CALL(evt_mapobj_flag_onoff, 0, 0, STRING("S_reba"), 1)
+        CALL(evt_mapobj_flag_onoff, 0, 0, STRING("S_reba"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_reba"), 1, 1)
         CALL(evt_pouch_remove_item, 72, LW(0))
         CALL(evt_snd_sfxon, STRING("SFX_STG5_FLOODGATE_SHAKE1"), LW(10))
@@ -446,9 +447,9 @@ EVT_BEGIN(dou_03_init_evt)
         SPAWN_EVENT_GET_ID(PTR(dou_puka_event_main1), LW(10))
         SET_VALUE(GW(11), LW(10))
         ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_taru"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_taru"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_taru"), 1, 0)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_bin"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_bin"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     SET_VALUE(LW(0), STRING("s03_fune"))
     SET_VALUE(LW(1), 0)

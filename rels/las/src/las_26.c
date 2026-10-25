@@ -19,6 +19,7 @@
 #include "evt/evt_sub.h"
 #include "evt/evt_item.h"
 #include "driver/mobjdrv.h"
+#include "driver/mapdrv.h"
 
 #include "driver/npcdrv.h"
 #include "evt/evt_bero.h"
@@ -150,7 +151,7 @@ EVT_BEGIN(bonbaba_evt)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
         WAIT_MS(1500)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_kesu"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_kesu"), MAP_OBJ_FLAG_HIDDEN)
     END_INLINE_EVENT
     CALL(evt_cam3d_evt_set, -900, 31, 490, -205, 175, 20, 5000, 11)
     WAIT_MS(8000)
@@ -160,7 +161,7 @@ EVT_BEGIN(bonbaba_evt)
     CALL(evt_msg_toge, 2, LW(0), LW(1), LW(2))
     CALL(evt_msg_print, 0, STRING("stg8_las_45"), 0, STRING("ボンババ"))
     CALL(evt_party_stop, 0)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_kesu"), 1)
+    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_kesu"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_cam3d_evt_set, -435, 109, 353, -435, 45, -13, 0, 11)
     WAIT_FRAMES(1)
     CALL(evt_msg_print_party, STRING("stg8_las_46"))
@@ -171,7 +172,7 @@ EVT_BEGIN(bonbaba_evt)
     ADD(LW(1), 100)
     CALL(evt_msg_toge, 2, LW(0), LW(1), LW(2))
     CALL(evt_msg_print, 0, STRING("stg8_las_47"), 0, STRING("ボンババ"))
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_archi1"), 1)
+    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_archi1"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_cam3d_evt_set, 77, 455, 380, -147, 293, 183, 0, 11)
     WAIT_FRAMES(1)
     CALL(evt_npc_get_position, STRING("ボンババ"), LW(0), LW(1), LW(2))
@@ -185,7 +186,7 @@ EVT_BEGIN(bonbaba_evt)
     CALL(evt_npc_set_battle_info, STRING("ボンババ"), 14)
     CALL(evt_npc_battle_start, STRING("ボンババ"))
     CALL(evt_npc_wait_battle_end)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_archi1"), 1)
+    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_archi1"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_cam3d_evt_set, 0, 25, 845, 0, 100, 150, 0, 11)
     WAIT_FRAMES(1)
     CALL(evt_npc_set_position, STRING("ボンババ"), 0, 70, -100)
@@ -399,15 +400,15 @@ EVT_BEGIN(bomb_wall)
     IF_INT_EQUAL(LF(0), 0)
         CALL(evt_img_alloc_capture, STRING("img"), 0, STRING("ofs"), 1, LW(0), LW(1), LW(2), LW(3))
         WAIT_FRAMES(1)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ana_before"), 1)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ana_after"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ana_before"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ana_after"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_img_clear_virtual_point, STRING("img"))
         CALL(evt_img_onoff, STRING("img"), 1)
         CALL(evt_img_set_paper_anim, STRING("img"), STRING("A_1"))
         CALL(evt_img_wait_animend, STRING("img"))
         ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ana_before"), 1)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ana_after"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ana_before"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ana_after"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     CALL(evt_img_onoff, STRING("img"), 0)
     CALL(evt_img_release, STRING("img"))
@@ -442,18 +443,18 @@ EVT_BEGIN(las_26_init_evt)
     CALL(evt_bero_get_info)
     CALL(evt_npc_setup, PTR(npcEnt))
     IF_INT_EQUAL(GSWF(4360), 0)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ana_after"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ana_after"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_ana_after"), 1, 0)
         CALL(evt_run_case_evt, 15, 1, STRING("A_ana_before1"), 0, PTR(bomb_wall), 0)
         ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ana_before"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ana_before"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_ana_before1"), 1, 0)
     END_IF
     IF_INT_LESS(GSW_STORY_PROGRESS, 400)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_yukaato"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_yukaato"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_yukaato"), 1, 0)
         ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_yukamae"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_yukamae"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_yukamae"), 1, 0)
     END_IF
     IF_INT_EQUAL(GSW_STORY_PROGRESS, 387)

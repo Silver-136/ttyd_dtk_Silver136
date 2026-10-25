@@ -19,6 +19,7 @@
 #include "evt/evt_snd.h"
 #include "party/party_motion.h"
 #include "driver/npcdrv.h"
+#include "driver/mapdrv.h"
 
 USER_FUNC(evt_npc_set_damage_anim);
 USER_FUNC(evt_npc_set_run_anim);
@@ -265,7 +266,7 @@ EVT_BEGIN(gorotuki_sanninngumi)
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S"), 2)
+    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S"), MAP_OBJ_FLAG_CLIP)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_msg_print, 0, STRING("mac_0_086"), 0, STRING("クリボー１"))
     CALL(evt_party_stop, 0)
@@ -438,12 +439,12 @@ EVT_BEGIN(wall_bomb00)
         CALL(evt_img_alloc_capture, STRING("capture_img"), 0, STRING("offscreen"), 1, LW(10), LW(11), LW(12), LW(13))
         CALL(evt_img_clear_virtual_point, STRING("capture_img"))
         CALL(evt_img_set_paper_anim, STRING("capture_img"), STRING("A_1"))
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("bom_kabe_1"), 1)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("bom_kabe_2"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("bom_kabe_1"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("bom_kabe_2"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_img_wait_animend, STRING("capture_img"))
         ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("bom_kabe_1"), 1)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("bom_kabe_2"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("bom_kabe_1"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("bom_kabe_2"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     CALL(evt_mapobj_clear_offscreen, 1, STRING("bom_kabe_1"))
     CALL(evt_img_free_capture, STRING("capture_img"), 0)
@@ -479,12 +480,12 @@ EVT_BEGIN(wall_bomb01)
         CALL(evt_img_alloc_capture, STRING("capture_img"), 0, STRING("offscreen"), 1, LW(10), LW(11), LW(12), LW(13))
         CALL(evt_img_clear_virtual_point, STRING("capture_img"))
         CALL(evt_img_set_paper_anim, STRING("capture_img"), STRING("A_1"))
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("bom_kabe_3"), 1)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("bom_kabe_4"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("bom_kabe_3"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("bom_kabe_4"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_img_wait_animend, STRING("capture_img"))
         ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("bom_kabe_3"), 1)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("bom_kabe_4"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("bom_kabe_3"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("bom_kabe_4"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     CALL(evt_mapobj_clear_offscreen, 1, STRING("bom_kabe_3"))
     CALL(evt_img_free_capture, STRING("capture_img"), 0)
@@ -528,21 +529,21 @@ EVT_BEGIN(tik_01_init_evt)
     END_IF
     CALL(evt_paper_entry, STRING("OFF_d_bom_ver2"))
     IF_INT_EQUAL(GSWF(1331), 0)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("bom_kabe_2"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("bom_kabe_2"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_dom_kabe_2"), 1, 0)
         CALL(evt_run_case_evt, 15, 1, STRING("a_dom_kabe_1"), 0, PTR(wall_bomb00), 0)
         ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("bom_kabe_1"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("bom_kabe_1"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_dom_kabe_1"), 1, 0)
     END_IF
     IF_INT_EQUAL(GSWF(1332), 0)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("bom_kabe_4"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("bom_kabe_4"), MAP_OBJ_FLAG_HIDDEN)
         SET_VALUE(LW(0), STRING("e_bero_2"))
         CALL_CHILD(PTR(bero_case_switch_off))
         CALL(evt_hitobj_attr_onoff, 1, 0, STRING("e_bero_2"), 4)
         CALL(evt_run_case_evt, 15, 1, STRING("e_bero_2"), 0, PTR(wall_bomb01), 0)
         ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("bom_kabe_3"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("bom_kabe_3"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     CALL(evt_mobj_itembox, STRING("mobj_box00"), 540, 125, -100, 0, 0, PTR(mobj_box00), GSWF(1355))
     CALL(evt_mobj_kururing_floor, STRING("kururin1"), -100, 0, 50, STRING("jimen"), 125, GSWF(5589))

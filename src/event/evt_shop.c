@@ -1339,7 +1339,7 @@ USER_FUNC(evt_shop_main_func) {
             sprintf(buf, "shp%d", i);
             if (wp->itemFlags[i] & 1) {
                 iconFlagOn(buf, 2);
-            } else if (mobj->flags & 1) {
+            } else if (mobj->flags & MAP_OBJ_FLAG_HIDDEN) {
                 iconFlagOn(buf, 2);
             } else {
                 iconFlagOff(buf, 2);

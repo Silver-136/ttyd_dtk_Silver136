@@ -14,6 +14,7 @@
 #include "evt/evt_snd.h"
 #include "evt/evt_cam.h"
 #include "evt/evt_item.h"
+#include "driver/mapdrv.h"
 
 
 static EvtWord w_door_close[12];
@@ -92,9 +93,9 @@ static EVT_BEGIN(bomb_wall_evt)
     IF_INT_EQUAL(LF(0), 0)
         CALL(evt_img_alloc_capture, STRING("img"), 0, STRING("ofs"), 1, LW(0), LW(1), LW(2), LW(3))
         WAIT_FRAMES(1)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ana_ana"), 1)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ana_before"), 1)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ana_after"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ana_ana"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ana_before"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ana_after"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_img_clear_virtual_point, STRING("img"))
         CALL(evt_img_onoff, STRING("img"), 1)
         CALL(evt_img_set_paper_anim, STRING("img"), STRING("A_1"))
@@ -105,9 +106,9 @@ static EVT_BEGIN(bomb_wall_evt)
         CALL(evt_snd_bgmon, 288, 0)
         CALL(evt_img_wait_animend, STRING("img"))
         ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ana_ana"), 1)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ana_before"), 1)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ana_after"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ana_ana"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ana_before"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ana_after"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_snd_bgmoff, 1024)
         CALL(evt_snd_bgmon, 1, STRING("BGM_FF_ENV_SUCCESS1"))
         WAIT_MS(2000)
@@ -143,12 +144,12 @@ EVT_BEGIN(las_16_init_evt)
     CALL(evt_bero_get_info)
     CALL_CHILD(PTR(evt_bero_info_run))
     IF_INT_EQUAL(GSWF(4348), 0)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ana_after"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ana_after"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_ana_after"), 1, 0)
         CALL(evt_run_case_evt, 15, 1, STRING("A_ana_ana"), 0, PTR(bomb_wall_evt), 0)
         ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ana_ana"), 1)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ana_before"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ana_ana"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ana_before"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_ana_ana"), 1, 0)
         CALL(evt_hitobj_onoff, STRING("A_ana_before"), 1, 0)
     END_IF

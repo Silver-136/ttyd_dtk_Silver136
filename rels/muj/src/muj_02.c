@@ -13,6 +13,7 @@
 #include "evt/evt_mobj.h"
 #include "evt/evt_pouch.h"
 #include "driver/npcdrv.h"
+#include "driver/mapdrv.h"
 
 #include "driver/dispdrv.h"
 #include "driver/camdrv.h"
@@ -482,7 +483,7 @@ static HitDamageReturn hitDmgRetPoints[] = {
 
 static EVT_BEGIN(evt_switch_init)
     IF_INT_EQUAL(GSWF(1349), 0)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_dakan"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_dakan"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_dokan"), 1, 0)
     END_IF
     RETURN
@@ -583,7 +584,7 @@ EVT_BEGIN(muj_02_init_evt)
     CALL_CHILD(PTR(evt_sub_tree_access_entry))
     SET_VALUE(LW(0), PTR(kusa_tbl))
     CALL_CHILD(PTR(evt_sub_kusa_access_entry))
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S"), 2)
+    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S"), MAP_OBJ_FLAG_CLIP)
     RETURN
 EVT_END()
 

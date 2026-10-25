@@ -10,6 +10,7 @@
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
 #include "evt/evt_mobj.h"
+#include "driver/mapdrv.h"
 
 USER_FUNC(evt_cloud_ent);
 USER_FUNC(evt_cloud_init);
@@ -148,7 +149,7 @@ EVT_BEGIN(mri_19_init_evt)
         CALL(evt_cloud_ent, 0, STRING("S_f2_isk"), STRING("A_f2_isk"), PTR(cloud_wind_event))
         CALL(evt_hitobj_attr_onoff, 1, 0, STRING("a_hi"), 16)
         ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_f2_isk"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_f2_isk"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_f2_isk"), 1, 0)
         CALL(evt_map_entry_airport_harbor, 0, STRING("hikou"), STRING("a_hi"))
         CALL(evt_map_entry_airport_harbor, 0, STRING("hikou1"), STRING("a_hi1"))

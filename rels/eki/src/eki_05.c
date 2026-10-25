@@ -10,6 +10,7 @@
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
 #include "evt/evt_lecture.h"
+#include "driver/mapdrv.h"
 
 #ifdef VERSION_G8ME01
 #endif
@@ -188,7 +189,7 @@ EVT_BEGIN(eki_05_init_evt)
         END_LOOP
     END_INLINE_EVENT
 #ifdef VERSION_G8ME01
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S"), 2)
+    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S"), MAP_OBJ_FLAG_CLIP)
 #endif
     RETURN
 EVT_END()

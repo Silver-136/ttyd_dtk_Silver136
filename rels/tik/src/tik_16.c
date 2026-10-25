@@ -11,6 +11,7 @@
 #include "party/party_motion.h"
 #include "evt/evt_sub.h"
 #include "driver/mobjdrv.h"
+#include "driver/mapdrv.h"
 
 
 static BeroEntry bero_entry_data[7];
@@ -142,7 +143,7 @@ static EVT_BEGIN(evt_switch_00_init)
     IF_INT_EQUAL(GSWF(1345), 1)
         CALL(evt_mapobj_trans, 1, STRING("S_dakan_1"), 0, 30, 0)
         CALL(evt_hit_bind_update, STRING("a_dokan_1"))
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("dokan_1_k"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("dokan_1_k"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     RETURN
 EVT_END()
@@ -168,7 +169,7 @@ static EVT_BEGIN(evt_switch_00)
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("dokan_1_k"), 1)
+    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("dokan_1_k"), MAP_OBJ_FLAG_HIDDEN)
     SET_VALUE(LW(0), STRING("dokan_1"))
     CALL_CHILD(PTR(bero_case_switch_on))
     RETURN
@@ -179,7 +180,7 @@ static EVT_BEGIN(evt_switch_01_init)
     IF_INT_EQUAL(GSWF(1346), 1)
         CALL(evt_mapobj_trans, 1, STRING("S_dakan_2"), 0, 30, 0)
         CALL(evt_hit_bind_update, STRING("a_dokan_2"))
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("dokan_2_k"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("dokan_2_k"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     RETURN
 EVT_END()
@@ -205,7 +206,7 @@ static EVT_BEGIN(evt_switch_01)
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("dokan_2_k"), 1)
+    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("dokan_2_k"), MAP_OBJ_FLAG_HIDDEN)
     SET_VALUE(LW(0), STRING("dokan_2"))
     CALL_CHILD(PTR(bero_case_switch_on))
     RETURN

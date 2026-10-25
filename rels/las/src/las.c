@@ -7,6 +7,7 @@
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
 #include "evt/evt_sub.h"
+#include "driver/mapdrv.h"
 
 #include "data/mapdata.h"
 #include "driver/mobjdrv.h"
@@ -162,7 +163,7 @@ EVT_BEGIN(move_dai)
     SET_VALUE(LW(8), LW(1))
     SET_VALUE(LW(9), LW(2))
     CALL(evt_mapobj_trans, 1, LW(7), 0, 0, -100)
-    CALL(evt_mapobj_flag_onoff, 1, 0, LW(7), 1)
+    CALL(evt_mapobj_flag_onoff, 1, 0, LW(7), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_hitobj_onoff, LW(8), 0, 1)
     CALL(evt_mapobj_get_position, LW(7), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG8_FLOOR_MOVE1"), LW(0), LW(1), LW(2), LW(6))
@@ -189,7 +190,7 @@ EVT_BEGIN(move_dai)
         GOTO(1)
     END_IF
     CALL(evt_snd_sfxoff, LW(6))
-    CALL(evt_mapobj_flag_onoff, 1, 1, LW(7), 1)
+    CALL(evt_mapobj_flag_onoff, 1, 1, LW(7), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_hitobj_onoff, LW(8), 0, 0)
     RETURN
 EVT_END()

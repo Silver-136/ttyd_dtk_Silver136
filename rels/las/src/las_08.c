@@ -305,7 +305,7 @@ EVT_BEGIN(taimatu_evt)
     SET_INT_READ_ADDR(PTR(&taimatu_data))
     LOOP(8)
         READ_INT2(LW(0), LW(1))
-        CALL(evt_mapobj_flag_onoff, 0, 1, LW(0), 1)
+        CALL(evt_mapobj_flag_onoff, 0, 1, LW(0), MAP_OBJ_FLAG_HIDDEN)
     END_LOOP
     SPAWN_EVENT(PTR(hikari_anim))
     RETURN
@@ -373,11 +373,11 @@ USER_FUNC(hi_onoff) {
     Vec pos;
 
     if (on) {
-        obj->flags &= ~1;
+        obj->flags &= ~MAP_OBJ_FLAG_HIDDEN;
         hitObjGetPos((const char*)taimatu_data[index * 2 + 1], &pos);
         effSetName(effTorchEntry(0, pos.x, pos.y, pos.z, 0.7f), (const char*)taimatu_data[index * 2 + 1]);
     } else {
-        obj->flags |= 1;
+        obj->flags |= MAP_OBJ_FLAG_HIDDEN;
         effSoftDelete(effNameToPtr((const char*)taimatu_data[index * 2 + 1]));
     }
     return EVT_RETURN_DONE;

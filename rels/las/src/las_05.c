@@ -15,6 +15,7 @@
 #include "evt/evt_mobj.h"
 #include "evt/evt_pouch.h"
 #include "mot/mot_hammer.h"
+#include "driver/mapdrv.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "system.h"
@@ -1579,7 +1580,7 @@ static EVT_BEGIN(shan_init)
         SET_VALUE(LW(1), 1)
         LOOP(LW(2))
             CALL(make_name, LW(0), LW(1), LW(3))
-            CALL(evt_mapobj_flag_onoff, 1, 1, LW(3), 1)
+            CALL(evt_mapobj_flag_onoff, 1, 1, LW(3), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_mapobj_get_position, LW(3), LW(4), LW(5), LW(6))
             SUBTRACT_FLOAT(LW(5), FLOAT(7.0f))
             CALL(evt_eff, 0, STRING("fire"), 3, LW(4), LW(5), LW(6), FLOAT(0.7998047f), 1000, 0, 0, 0, 0, 0, 0)

@@ -16,6 +16,7 @@
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
 #include "evt/evt_item.h"
+#include "driver/mapdrv.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "dolphin/mtx.h"
@@ -1140,8 +1141,8 @@ static EVT_BEGIN(sekai_yami_evt)
     END_LOOP
     WAIT_MS(2000)
     CALL(evt_map_set_tevcallback, 1, PTR(envSetYami))
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S"), 16777216)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S"), 256)
+    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S"), MAP_OBJ_TEV_CALLBACK(1))
+    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S"), MAP_OBJ_FLAG_DISPLAY_LIST)
     CALL(anim_tevcallback, STRING("ノコノコG"), 1)
     CALL(anim_tevcallback, STRING("ノコノコH"), 1)
     CALL(anim_tevcallback, STRING("ノコノコI"), 1)
@@ -1203,8 +1204,8 @@ static EVT_BEGIN(minnnanokoe_evt)
     CALL(evt_npc_set_position, STRING("ノコノコK"), 0, -1000, 0)
     CALL(evt_npc_set_position, STRING("門番ノコノコ"), 0, -1000, 0)
     CALL(evt_map_set_tevcallback, 1, PTR(envSetYami))
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S"), 16777216)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S"), 256)
+    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S"), MAP_OBJ_TEV_CALLBACK(1))
+    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S"), MAP_OBJ_FLAG_DISPLAY_LIST)
     CALL(anim_tevcallback, STRING("村長"), 1)
     CALL(anim_tevcallback, STRING("ノコタロウ父"), 1)
     CALL(anim_tevcallback, STRING("ノコリン"), 1)
@@ -1212,7 +1213,7 @@ static EVT_BEGIN(minnnanokoe_evt)
     CALL(evt_bg_set_color, 64, 64, 64, 255)
     CALL(evt_cam3d_evt_set, 562, 320, 474, 0, 100, -50, 0, 11)
     CALL(starstone_entry, STRING("starstone"), 0, 450, -50, 1)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_hasi"), 2)
+    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_hasi"), MAP_OBJ_FLAG_CLIP)
     CALL(evt_seq_wait, 2)
     WAIT_MS(500)
     SET_VALUE(GW(0), 450)
@@ -1297,7 +1298,7 @@ EVT_END()
 
 static EVT_BEGIN(evt_switch_init)
     IF_INT_EQUAL(GSWF(1346), 0)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_dakan"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_dakan"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_dokan"), 1, 0)
     END_IF
     RETURN

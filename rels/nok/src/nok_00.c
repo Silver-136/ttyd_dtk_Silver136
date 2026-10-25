@@ -18,6 +18,7 @@
 #include "evt/evt_telop.h"
 #include "evt/evt_item.h"
 #include "evt/evt_pouch.h"
+#include "driver/mapdrv.h"
 
 #include "driver/npcdrv.h"
 #include "driver/animdrv.h"
@@ -977,7 +978,7 @@ EVT_BEGIN(nok_00_koopa_evt)
     CALL(evt_npc_move_position, STRING("ノコノコA"), 316, -154, 500, 0, 0)
     CALL(evt_npc_move_position, STRING("ノコノコA"), 280, -199, 500, 0, 0)
     CALL(evt_npc_set_ry, STRING("ノコノコA"), 90)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ie_in_kabe"), 1)
+    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ie_in_kabe"), MAP_OBJ_FLAG_HIDDEN)
     BEGIN_INLINE_EVENT
         WAIT_MS(100)
         CALL(evt_mapobj_get_position, STRING("S_ie_doa"), LW(0), LW(1), LW(2))

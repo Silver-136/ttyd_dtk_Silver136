@@ -8,6 +8,7 @@
 #include "evt/evt_snd.h"
 #include "party/party_motion.h"
 #include "evt/evt_telop.h"
+#include "driver/mapdrv.h"
 
 #include "mario/mario.h"
 #include "mario/mario_party.h"
@@ -134,7 +135,7 @@ EVT_BEGIN(aji_19_init_evt)
     IF_INT_LESS(GSW_STORY_PROGRESS, 360)
         SPAWN_EVENT(PTR(evt_hajimete))
     END_IF
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("kanaami2"), 2)
+    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("kanaami2"), MAP_OBJ_FLAG_CLIP)
     RETURN
 EVT_END()
 

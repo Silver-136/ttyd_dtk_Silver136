@@ -14,6 +14,7 @@
 #include "party/party_motion.h"
 #include "evt/evt_sub.h"
 #include "evt/evt_mobj.h"
+#include "driver/mapdrv.h"
 
 
 static BeroEntry bero_entry_data[5];
@@ -409,11 +410,11 @@ static EVT_BEGIN(bombwall_bomb)
         CALL(evt_img_alloc_capture, STRING("capture_img"), 0, STRING("offscreen"), 1, LW(10), LW(11), LW(12), LW(13))
         CALL(evt_img_clear_virtual_point, STRING("capture_img"))
         CALL(evt_img_set_paper_anim, STRING("capture_img"), STRING("A_1"))
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ki"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ki"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_ki1"), 1, 0)
         CALL(evt_img_wait_animend, STRING("capture_img"))
         ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ki"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ki"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_ki1"), 1, 0)
     END_IF
     CALL(evt_mapobj_clear_offscreen, 1, STRING("S_ki"))
@@ -433,7 +434,7 @@ static EVT_BEGIN(bombwall_init)
         CALL(evt_paper_entry, STRING("OFF_d_bom_ver2"))
         CALL(evt_run_case_evt, 15, 1, STRING("A_ki1"), 0, PTR(bombwall_bomb), 0)
         ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ki"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ki"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_ki1"), 1, 0)
     END_IF
     RETURN
@@ -450,9 +451,9 @@ EVT_BEGIN(dou_09_init_evt)
     CALL(evt_map_playanim, STRING("nami"), 1, 0)
     CALL(evt_map_playanim, STRING("moku"), 1, 0)
     IF_INT_LESS(GSW_STORY_PROGRESS, 248)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("mon_b"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("mon_b"), MAP_OBJ_FLAG_HIDDEN)
         ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("mon_a"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("mon_a"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     CALL(evt_hit_damage_return_set, PTR(hitDmgRetPoints))
     CALL_CHILD(PTR(evt_gazigazi_entry))

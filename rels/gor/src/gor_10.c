@@ -13,6 +13,7 @@
 #include "evt/evt_cam.h"
 #include "poly_trig.h"
 #include "rels/gor/include/gor.h"
+#include "driver/mapdrv.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "driver/camdrv.h"
@@ -334,9 +335,9 @@ EVT_BEGIN(mezame_init_evt)
     CALL(evt_party_stop, 0)
     CALL(evt_mario_dispflag_onoff, 1, 1)
     CALL(evt_party_dispflg_onoff, 0, 1, 1)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("marukongou"), 1)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("densha"), 1)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("pukupuku"), 1)
+    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("marukongou"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("densha"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("pukupuku"), MAP_OBJ_FLAG_HIDDEN)
     SET_FLOAT_VALUE(GW(0), FLOAT(50.0f))
     BEGIN_INLINE_EVENT
         CALL(depth)

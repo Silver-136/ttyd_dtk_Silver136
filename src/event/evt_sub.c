@@ -41,6 +41,7 @@
 #include "evt/evt_pouch.h"
 #include "mario/mario_cam.h"
 #include "poly_trig.h"
+#include "driver/mapdrv.h"
 
 s32 effStageClearEndChk();
 
@@ -450,7 +451,7 @@ EVT_BEGIN(evt_sub_starstone)
             SET_VALUE(LW(0), STRING("S_jin04"))
         END_IF
         WAIT_FRAMES(10)
-        CALL(evt_mapobj_flag_onoff, 1, 1, LW(0), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, LW(0), MAP_OBJ_FLAG_HIDDEN)
     END_INLINE_EVENT
     CALL(evt_fade_entry, 34, 0, 0, 0, 0)
     CALL(evt_fade_end_wait)
@@ -585,7 +586,7 @@ EVT_BEGIN(evt_sub_starstone)
         WAIT_MS(2000)
         CALL(evt_eff_delete, STRING("sub_bg"))
         CALL(evt_eff_delete, STRING("sub_clear"))
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_jin04"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_jin04"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_fade_reset, 1)
         CALL(evt_npc_set_camid, STRING("にせマリオ"), 4)
         CALL(evt_mario_set_pose, STRING("M_D_2"))

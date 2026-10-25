@@ -23,6 +23,7 @@
 #include "evt/evt_pouch.h"
 #include "poly_trig.h"
 #include "eff/eff_kemutest.h"
+#include "driver/mapdrv.h"
 
 #include "memory.h"
 #include "string.h"
@@ -1606,7 +1607,7 @@ static EVT_BEGIN(evt_taihou)
     LOOP(36)
         ADD(LW(0), 1)
         CALL(make_name, LW(0), LW(1))
-        CALL(evt_mapobj_flag_onoff, 1, 0, LW(1), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 0, LW(1), MAP_OBJ_FLAG_HIDDEN)
         WAIT_MS(100)
     END_LOOP
     BEGIN_INLINE_EVENT
@@ -2527,7 +2528,7 @@ static EVT_BEGIN(minnnanokoe_evt)
     CALL(evt_mario_cont_onoff, 0)
     CALL(evt_party_cont_onoff, 0, 0)
 #ifdef VERSION_G8ME01
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_yuka1"), 1)
+    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_yuka1"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mario_set_pos, 0, -1000, 0)
     CALL(evt_party_set_pos, 0, 0, -1000, 0)
     CALL(evt_npc_set_position, STRING("村長"), 520, 0, 0)
@@ -2545,8 +2546,8 @@ static EVT_BEGIN(minnnanokoe_evt)
     CALL(evt_npc_set_position, STRING("ホワイト"), 0, 0, -230)
     CALL(evt_npc_set_ry, STRING("ホワイト"), 270)
     CALL(evt_map_set_tevcallback, 1, PTR(envSetYami))
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_bom01"), 16777216)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_bom01"), 256)
+    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_bom01"), MAP_OBJ_TEV_CALLBACK(1))
+    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_bom01"), MAP_OBJ_FLAG_DISPLAY_LIST)
     CALL(anim_tevcallback, STRING("村長"), 1)
     CALL(anim_tevcallback, STRING("ニトロ"), 1)
     CALL(anim_tevcallback, STRING("ペントリット"), 1)

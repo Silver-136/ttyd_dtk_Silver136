@@ -112,8 +112,8 @@ EVT_BEGIN(dou_00_init_evt)
     CALL(evt_mobj_save_blk, STRING("mobj_save"), 30, 85, -75, 0, 0)
     CALL(evt_item_entry, STRING("item_01"), 137, -245, 0, 85, 16, GSWF(2990), 0)
     CALL(evt_map_set_tevcallback, 1, PTR(water_tev))
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("s00_suimen"), 16777216)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("s00_suimen"), 256)
+    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("s00_suimen"), MAP_OBJ_TEV_CALLBACK(1))
+    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("s00_suimen"), MAP_OBJ_FLAG_DISPLAY_LIST)
     RETURN
 EVT_END()
 

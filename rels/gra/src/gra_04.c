@@ -12,6 +12,7 @@
 #include "evt/evt_snd.h"
 #include "mot/mot_roll.h"
 #include "evt/evt_mobj.h"
+#include "driver/mapdrv.h"
 
 USER_FUNC(evt_cloud_ent);
 USER_FUNC(evt_cloud_init);
@@ -237,7 +238,7 @@ EVT_BEGIN(gra_04_init_evt)
         CALL(evt_cloud_set_cap_size, 256, 256)
         CALL(evt_hitobj_onoff, STRING("w_bero_1"), 0, 0)
         ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_futa"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_futa"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_futa"), 0, 0)
     END_IF
     CALL(evt_mobj_badgeblk, STRING("m"), 250, 60, -20, 249, 0, GSWF(2086), 1)

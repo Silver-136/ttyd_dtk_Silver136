@@ -16,6 +16,7 @@
 #include "evt/evt_sub.h"
 #include "evt/evt_item.h"
 #include "evt/evt_pouch.h"
+#include "driver/mapdrv.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "dolphin/mtx.h"
@@ -1435,8 +1436,8 @@ static EVT_BEGIN(sekai_yami_evt)
     CALL(evt_npc_status_onoff, 1, STRING("ボムヘイF"), 2)
     CALL(evt_npc_status_onoff, 1, STRING("ボムヘイG"), 2)
     CALL(evt_map_set_tevcallback, 1, PTR(envSetYami))
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_bom02"), 16777216)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_bom02"), 256)
+    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_bom02"), MAP_OBJ_TEV_CALLBACK(1))
+    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_bom02"), MAP_OBJ_FLAG_DISPLAY_LIST)
     CALL(anim_tevcallback, STRING("村長"), 1)
     CALL(anim_tevcallback, STRING("ボムヘイE"), 1)
     CALL(anim_tevcallback, STRING("ボムヘイF"), 1)
@@ -1574,8 +1575,8 @@ static EVT_BEGIN(minnnanokoe_evt)
     CALL(evt_npc_set_ry, STRING("ボムヘイE"), 90)
     CALL(evt_npc_status_onoff, 1, STRING("ボムヘイE"), 2)
     CALL(evt_map_set_tevcallback, 1, PTR(envSetYami))
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_bom02"), 16777216)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_bom02"), 256)
+    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_bom02"), MAP_OBJ_TEV_CALLBACK(1))
+    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_bom02"), MAP_OBJ_FLAG_DISPLAY_LIST)
     CALL(anim_tevcallback, STRING("村長"), 1)
     CALL(anim_tevcallback, STRING("ボムヘイE"), 1)
     CALL(anim_tevcallback_mobj, STRING("mobj_save"), 1)
@@ -1703,9 +1704,9 @@ EVT_BEGIN(bom_02_init_evt)
             CALL(evt_item_entry, STRING("iri_30"), 201, 50, 0, 35, 16, GSWF(3890), 0)
         END_IF
     END_IF
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ie1_naka"), 2)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ie2_naka"), 2)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ie3_naka"), 2)
+    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ie1_naka"), MAP_OBJ_FLAG_CLIP)
+    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ie2_naka"), MAP_OBJ_FLAG_CLIP)
+    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ie3_naka"), MAP_OBJ_FLAG_CLIP)
     RETURN
 EVT_END()
 

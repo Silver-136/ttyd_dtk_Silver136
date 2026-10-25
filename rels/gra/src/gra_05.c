@@ -13,6 +13,7 @@
 #include "evt/evt_snd.h"
 #include "evt/evt_sub.h"
 #include "evt/evt_mobj.h"
+#include "driver/mapdrv.h"
 
 USER_FUNC(camera_curve_off);
 USER_FUNC(camera_curve_on);
@@ -348,7 +349,7 @@ EVT_BEGIN(evt_gra_05iwa_move_init)
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 192)
         CALL(evt_mapobj_trans, 0, STRING("S_iwa"), FLOAT(120.0f), 0, 0)
         CALL(evt_hit_bind_update, STRING("A_iwa"))
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_futa"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_futa"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_futa"), 0, 0)
     END_IF
     RETURN
@@ -437,7 +438,7 @@ EVT_BEGIN(gra_05_init_evt)
         CALL(evt_mapobj_trans, 1, STRING("S_futa"), 0, FLOAT(0.099609375f), 0)
         CALL(evt_hit_bind_update, STRING("A_futa"))
         ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_futa"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_futa"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_futa"), 0, 0)
     END_IF
     IF_INT_LESS(GSW_STORY_PROGRESS, 191)

@@ -4,6 +4,7 @@
 #include "evt/evt_item.h"
 #include "evt/evt_map.h"
 #include "evt/evt_mario.h"
+#include "driver/mapdrv.h"
 
 #include "stdio.h"
 #include "evt/evt_bero.h"
@@ -100,7 +101,7 @@ static EVT_BEGIN(rousoku_init)
     SET_VALUE(LW(0), 1)
     LOOP(12)
         CALL(make_name, LW(0), LW(1))
-        CALL(evt_mapobj_flag_onoff, 1, 1, LW(1), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, LW(1), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_get_position, LW(1), LW(2), LW(3), LW(4))
         SUBTRACT_FLOAT(LW(3), FLOAT(7.0f))
         CALL(evt_eff, 0, STRING("fire"), 3, LW(2), LW(3), LW(4), FLOAT(0.5f), 1000, 0, 0, 0, 0, 0, 0)

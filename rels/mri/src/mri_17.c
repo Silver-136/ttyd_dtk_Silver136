@@ -17,6 +17,7 @@
 #include "evt/evt_item.h"
 #include "evt/evt_mobj.h"
 #include "driver/npcdrv.h"
+#include "driver/mapdrv.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "driver/imgdrv.h"
@@ -312,7 +313,7 @@ EVT_BEGIN(wana_offscreen)
     CALL(evt_img_release, STRING("capture_img"))
     CALL(evt_mapobj_clear_offscreen, 1, STRING("S_hako"))
     CALL(evt_offscreen_delete, STRING("offscreen"))
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_hako"), 1)
+    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_hako"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_hitobj_onoff, STRING("A_hako"), 1, 1)
     CALL(evt_img_entry, STRING("capture_img"))
     CALL(evt_img_set_paper, STRING("capture_img"), STRING("OFF_d_saku"))
@@ -332,7 +333,7 @@ EVT_BEGIN(wana_offscreen)
         CALL(evt_snd_sfxon_3d, STRING("SFX_OFF2_DOKAN_APPEAR2"), LW(0), LW(1), LW(2), 0)
     END_INLINE_EVENT
     CALL(evt_img_set_paper_anim, STRING("capture_img"), STRING("A_2"))
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_dokan1"), 1)
+    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_dokan1"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_img_onoff, STRING("capture_img"), 1)
     CALL(evt_img_wait_animend, STRING("capture_img"))
     CALL(evt_img_free_capture, STRING("capture_img"), 0)
@@ -340,7 +341,7 @@ EVT_BEGIN(wana_offscreen)
     CALL(evt_img_release, STRING("capture_img"))
     CALL(evt_mapobj_clear_offscreen, 1, STRING("S_dokan1"))
     CALL(evt_offscreen_delete, STRING("offscreen"))
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_dokan1"), 1)
+    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_dokan1"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_hitobj_onoff, STRING("A_dokan1"), 1, 1)
     RETURN
 EVT_END()
@@ -588,7 +589,7 @@ EVT_BEGIN(trap_check)
 EVT_END()
 
 static EVT_BEGIN(punipuni_ball00_init)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_sui_hikari"), 1)
+    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_sui_hikari"), MAP_OBJ_FLAG_HIDDEN)
     CALL_CHILD(PTR(mri_punipuni_setup))
     IF_INT_EQUAL(GSWF(2870), 1)
         CALL(evt_item_set_position, LW(10), 50, 30, -58)
@@ -748,9 +749,9 @@ EVT_BEGIN(mri_17_init_evt)
     CALL(evt_item_entry, STRING("item_01"), 125, 168, -310, -44, 16, GSWF(5617), 0)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS_OR_EQUAL(101)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_hako"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_hako"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_hako"), 1, 0)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_dokan1"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_dokan1"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_dokan1"), 1, 0)
         CALL(evt_paper_entry, STRING("OFF_d_batan"))
         CALL(evt_paper_entry, STRING("OFF_d_saku"))
@@ -761,7 +762,7 @@ EVT_BEGIN(mri_17_init_evt)
         SPAWN_EVENT(PTR(trap_restore))
         CASE_GREATER_OR_EQUAL(106)
     END_SWITCH
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_hako_saku_mae"), 2)
+    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_hako_saku_mae"), MAP_OBJ_FLAG_CLIP)
     RETURN
 EVT_END()
 

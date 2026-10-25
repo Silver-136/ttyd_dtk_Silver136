@@ -11,6 +11,7 @@
 #include "evt/evt_party.h"
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
+#include "driver/mapdrv.h"
 
 
 static BeroEntry bero_data[3];
@@ -54,7 +55,7 @@ static BeroEntry bero_data[] = {
 static EVT_BEGIN(evt_dakuto)
     CALL(evt_cam_shake, 4, FLOAT(0.049804688f), FLOAT(0.0f), 500)
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG3_DUCT_KOUSHI_HIT1"), 188, 0, 0, 0)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("s_deguti"), 1)
+    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("s_deguti"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_hitobj_onoff, STRING("deguti"), 1, 0)
     SET_VALUE(LW(0), 1)
     CALL_CHILD(PTR(bero_case_switch_on))
@@ -167,7 +168,7 @@ EVT_BEGIN(tou_13_init_evt)
         CALL_CHILD(PTR(bero_case_switch_off))
         ELSE
         CALL(evt_hitobj_onoff, STRING("deguti"), 1, 0)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("s_deguti"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("s_deguti"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     IF_INT_LESS(GSW_STORY_PROGRESS, 161)
         SPAWN_EVENT(PTR(evt_nusumi))

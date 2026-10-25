@@ -12,6 +12,7 @@
 #include "evt/evt_snd.h"
 #include "evt/evt_sub.h"
 #include "evt/evt_telop.h"
+#include "driver/mapdrv.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "driver/camdrv.h"
@@ -191,10 +192,10 @@ EVT_BEGIN(win_06_init_evt)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
     CALL_CHILD(PTR(evt_bero_info_run))
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_tree_mki"), 2)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_kusa"), 2)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("group22"), 2)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_oku_01H081"), 2)
+    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_tree_mki"), MAP_OBJ_FLAG_CLIP)
+    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_kusa"), MAP_OBJ_FLAG_CLIP)
+    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("group22"), MAP_OBJ_FLAG_CLIP)
+    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_oku_01H081"), MAP_OBJ_FLAG_CLIP)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, 70)
         CALL_CHILD(PTR(welcome_wonderforest_init))
         SPAWN_EVENT(PTR(welcome_wonderforest))

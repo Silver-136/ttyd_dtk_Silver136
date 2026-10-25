@@ -9,6 +9,7 @@
 #include "evt/evt_seq.h"
 #include "evt/evt_sub.h"
 #include "driver/npcdrv.h"
+#include "driver/mapdrv.h"
 
 #include "driver/effdrv.h"
 #include "manager/evtmgr_cmd.h"
@@ -640,7 +641,7 @@ EVT_BEGIN(muj_10_init_evt)
 #endif
     END_IF
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 260)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_b"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_b"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     CALL(evt_map_playanim, STRING("mizu"), 1, 0)
     CALL(evt_map_playanim, STRING("noname"), 1, 0)
@@ -657,18 +658,18 @@ EVT_BEGIN(muj_10_init_evt)
         END_INLINE_EVENT
     END_IF
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 260)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_hasi_rope01"), 1)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_hasi_rope02"), 1)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_hasi_m"), 1)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_10_sui02_01"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_hasi_rope01"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_hasi_rope02"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_hasi_m"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_10_sui02_01"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_hasi_ita"), 1, 0)
 #ifdef VERSION_G8ME01
         ELSE
 #else
     ELSE
 #endif
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_hasi_zan"), 1)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_10_sui02_02"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_hasi_zan"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_10_sui02_02"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 257)
         IF_INT_LESS(GSW_STORY_PROGRESS, 258)

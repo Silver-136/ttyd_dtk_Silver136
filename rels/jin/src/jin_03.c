@@ -7,6 +7,7 @@
 #include "evt/evt_mobj.h"
 #include "evt/evt_snd.h"
 #include "party/party_motion.h"
+#include "driver/mapdrv.h"
 
 USER_FUNC(evt_kagemario_init);
 
@@ -181,19 +182,19 @@ static BeroEntry bero_entry_data[] = {
 };
 
 EVT_BEGIN(jin_03_kaidan_temae_kesu)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("kaidan01"), 1)
+    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("kaidan01"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_hitobj_onoff, STRING("a_kaidan01"), 1, 0)
     RETURN
 EVT_END()
 
 EVT_BEGIN(jin_03_kaidan_naka_kesu)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("kaidan02"), 1)
+    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("kaidan02"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_hitobj_onoff, STRING("a_kaidan02"), 1, 0)
     RETURN
 EVT_END()
 
 EVT_BEGIN(jin_03_kaidan_oku_kesu)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("kaidan03"), 1)
+    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("kaidan03"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_hitobj_onoff, STRING("a_kaidan03"), 1, 0)
     RETURN
 EVT_END()

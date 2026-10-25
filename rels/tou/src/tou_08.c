@@ -15,6 +15,7 @@
 #include "evt/evt_hit.h"
 #include "evt/evt_item.h"
 #include "evt/evt_pouch.h"
+#include "driver/mapdrv.h"
 
 #include "driver/effdrv.h"
 #include "driver/npcdrv.h"
@@ -1085,7 +1086,7 @@ static EVT_BEGIN(epilogue_evt)
     CALL(evt_snd_bgm_scope, 0, 1)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_dispflag_onoff, 1, 1)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("cake_tukue"), 1)
+    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("cake_tukue"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_npc_flag_onoff, 1, STRING("チビヨッシー"), NPC_FLAG_INSTANT_TURN)
     CALL(evt_cam3d_evt_set, 0, 100, 337, 0, 45, -9, 0, 11)
     CALL(evt_seq_wait, 2)
@@ -1170,7 +1171,7 @@ EVT_BEGIN(tou_08_init_evt)
     CALL_CHILD(PTR(evt_bero_info_run))
     CALL(evt_item_entry, STRING("item_01"), 131, -240, 0, -90, 16, GSWF(2524), 0)
     CALL_CHILD(PTR(evt_tou_locker_init))
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("fuku_M"), 1)
+    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("fuku_M"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_npc_setup, PTR(npcEnt))
     CALL_CHILD(PTR(init_hammerbros))
     CALL(evt_npc_change_interrupt, STRING("ハンマーブロス"), 6, PTR(talk_hammerbros))
@@ -1178,7 +1179,7 @@ EVT_BEGIN(tou_08_init_evt)
     CALL(evt_npc_change_interrupt, STRING("トゲメット"), 6, PTR(talk_togemet))
     CALL(evt_run_case_evt, 9, 1, STRING("M_make"), 0, PTR(evt_tou_match_make_default), 0)
     CALL_CHILD(PTR(evt_tou_monitor_init))
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("isu"), 2)
+    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("isu"), MAP_OBJ_FLAG_CLIP)
     CALL(evt_run_case_evt, 9, 1, STRING("t_door_2"), 0, PTR(evt_toile_door), 0)
     CALL(evt_run_case_evt, 9, 1, STRING("t_door_3"), 0, PTR(evt_toile_door2), 0)
     CALL(evt_hitobj_name_callback, STRING("a_b_H"), PTR(bed_entry))

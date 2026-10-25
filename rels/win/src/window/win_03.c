@@ -9,6 +9,7 @@
 #include "evt/evt_seq.h"
 #include "evt/evt_snd.h"
 #include "evt/evt_item.h"
+#include "driver/mapdrv.h"
 
 #include "driver/camdrv.h"
 #include "mario/mariost.h"
@@ -315,8 +316,8 @@ EVT_BEGIN(win_03_init_evt)
     CALL(evt_mobj_recovery_blk, STRING("mobj_recover"), 7, 425, 60, 75, 0, 0)
     CALL(evt_item_entry, STRING("i"), 135, 475, 0, -60, 16, GSWF(2679), 0)
     CALL(evt_item_entry, STRING("item_00"), 125, -150, 0, -30, 16, GSWF(5610), 0)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ana"), 1)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_siro_asu"), 1)
+    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ana"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_siro_asu"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_hitobj_onoff, STRING("A_siro_asu"), 1, 0)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, 79)
         SPAWN_EVENT(lookat_house)

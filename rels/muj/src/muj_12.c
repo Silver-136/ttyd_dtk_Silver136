@@ -14,6 +14,7 @@
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
 #include "driver/npcdrv.h"
+#include "driver/mapdrv.h"
 
 #include "driver/itemdrv.h"
 #include "mario/mariost.h"
@@ -355,7 +356,7 @@ static EVT_BEGIN(starstone_fuwafuwa)
 EVT_END()
 
 static EVT_BEGIN(korutesu_event)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S"), 2)
+    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S"), MAP_OBJ_FLAG_CLIP)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_npc_set_position, STRING("コルテス"), 46, 35, 25)
     CALL(evt_npc_flag_onoff, 1, STRING("コルテス"), NPC_FLAG_NO_HIT | NPC_FLAG_TALK_POSE | NPC_FLAG_NO_VIEW_CORRECTION | NPC_FLAG_NO_WALL_COLLISION)
@@ -528,7 +529,7 @@ EVT_BEGIN(korutesu_event_after)
     CALL(evt_npc_pera_onoff, STRING("コルテス"), 0)
     CALL(evt_cam3d_evt_set, -20, 125, 505, -20, 80, 7, 0, 11)
     CALL(evt_seq_wait, 2)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_kabe_r"), 1)
+    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_kabe_r"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_fade_end_wait)
     CALL(evt_sub_intpl_msec_init, 11, 0, 70, 800)
     LOOP(0)

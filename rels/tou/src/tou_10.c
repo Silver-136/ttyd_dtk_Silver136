@@ -20,6 +20,7 @@
 #include "evt/evt_pouch.h"
 #include "driver/mobjdrv.h"
 #include "driver/npcdrv.h"
+#include "driver/mapdrv.h"
 
 #include "mario/mario.h"
 #include "mario/mario_pouch.h"
@@ -1694,11 +1695,11 @@ EVT_BEGIN(tou_10_init_evt)
     CALL(evt_bero_get_info)
     CALL_CHILD(PTR(evt_bero_info_run))
     CALL_CHILD(PTR(evt_tou_locker_init))
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("fuku_M"), 1)
+    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("fuku_M"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_npc_setup, PTR(npcEnt))
     CALL_CHILD(PTR(init_octo))
     CALL(evt_npc_change_interrupt, STRING("オクトール"), 6, PTR(talk_octo))
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("isu"), 2)
+    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("isu"), MAP_OBJ_FLAG_CLIP)
     IF_INT_LESS(GSW_STORY_PROGRESS, 133)
         CALL(evt_run_case_evt, 9, 1, STRING("M_make"), 0, PTR(evt_match_make), 0)
         ELSE

@@ -15,6 +15,7 @@
 #include "evt/evt_seq.h"
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
+#include "driver/mapdrv.h"
 
 USER_FUNC(evt_pouch_open_mail);
 USER_FUNC(evt_pouch_receive_mail);
@@ -265,7 +266,7 @@ static EVT_BEGIN(peach_mail)
 EVT_END()
 
 static EVT_BEGIN(evt_block)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("s_hikari"), 1)
+    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("s_hikari"), MAP_OBJ_FLAG_HIDDEN)
     RETURN
 EVT_END()
 
@@ -291,7 +292,7 @@ EVT_BEGIN(tik_07_init_evt)
     CALL(evt_mobj_save_blk, STRING("mobj_save"), 475, 60, 125, 0, 0)
     CALL(evt_mobj_lv_blk, STRING("mobj_blk01"), -300, 100, -50, PTR(evt_block), GSWF(1340), STRING("MOBJ_Lv2BigBlock"))
     IF_INT_EQUAL(GSWF(1340), 0)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("s_hikari"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("s_hikari"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     CALL(evt_mobj_itembox, STRING("mobj_box00"), -550, 0, 100, 0, 0, PTR(mobj_box00), GSWF(1359))
     CALL(evt_mobj_powerupblk, STRING("pblk2"), -180, 160, 0, 0, GSWF(5533), 0)

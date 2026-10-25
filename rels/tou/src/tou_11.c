@@ -17,6 +17,7 @@
 #include "evt/evt_snd.h"
 #include "evt/evt_sub.h"
 #include "driver/npcdrv.h"
+#include "driver/mapdrv.h"
 
 USER_FUNC(evt_cloud_ent);
 USER_FUNC(evt_cloud_init);
@@ -281,10 +282,10 @@ EVT_BEGIN(tou_11_init_evt)
         CALL(evt_cloud_init)
         CALL(evt_cloud_ent, 0, STRING("pos_1"), STRING("a_pos_1"), PTR(evt_postar))
         ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("pos_1"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("pos_1"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_pos_1"), 1, 0)
     END_IF
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("kuro_1"), 1)
+    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("kuro_1"), MAP_OBJ_FLAG_HIDDEN)
     SET_VALUE(LW(0), 0)
     CALL_CHILD(PTR(bero_case_switch_off))
     CALL(evt_run_case_evt, 9, 1, STRING("n_bero"), 0, PTR(evt_tojikome_msg), 0)

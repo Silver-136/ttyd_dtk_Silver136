@@ -407,7 +407,7 @@ USER_FUNC(evt_mri_get16bitdata) {
 }
 
 EVT_BEGIN(mri_hikari_color)
-    CALL(evt_mapobj_flag_onoff, 0, 0, LW(0), 256)
+    CALL(evt_mapobj_flag_onoff, 0, 0, LW(0), MAP_OBJ_FLAG_DISPLAY_LIST)
     GET_INT_INDEXED(LW(1), LW(11))
     LOOP(0)
         GET_INT_INDEXED(LW(1), LW(10))

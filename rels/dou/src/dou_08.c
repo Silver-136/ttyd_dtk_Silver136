@@ -9,6 +9,7 @@
 #include "party/party_motion.h"
 #include "evt/evt_sub.h"
 #include "dou.h"
+#include "driver/mapdrv.h"
 
 
 static BeroEntry bero_entry_data[3];
@@ -135,8 +136,8 @@ EVT_BEGIN(dou_08_init_evt)
     SET_VALUE(LW(0), STRING("s08_taru"))
     SET_VALUE(LW(1), 0)
     SPAWN_EVENT_GET_ID(PTR(dou_puka_event_main1), LW(10))
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ana_before"), 1)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ana_hibi"), 1)
+    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ana_before"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ana_hibi"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_map_entry_airport_harbor, 1, STRING("S_Ship_Change_01"), STRING("Ship_Change_01"))
     CALL(evt_map_entry_airport_harbor, 1, STRING("S_Ship_Change_02"), STRING("Ship_Change_02"))
     RETURN

@@ -11,6 +11,7 @@
 #include "evt/evt_cam.h"
 #include "evt/evt_hit.h"
 #include "evt/evt_item.h"
+#include "driver/mapdrv.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "mario/mario.h"
@@ -167,13 +168,13 @@ EVT_BEGIN(tensou_ride)
 EVT_END()
 
 EVT_BEGIN(tensou_switch)
-    CALL(evt_mapobj_flag_onoff, 0, 1, STRING("sui__1"), 1)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("sui__2"), 1)
+    CALL(evt_mapobj_flag_onoff, 0, 1, STRING("sui__1"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("sui__2"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_get_position, STRING("sui__1"), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG7_SWITCH_WARP1"), LW(0), LW(1), LW(2), 0)
     CALL(evt_map_playanim, STRING("anm_saisho"), 0, 0)
     WAIT_FRAMES(1)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("hikari"), 1)
+    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("hikari"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_map_checkanim, STRING("anm_saisho"), LW(0), LW(1))
     WAIT_MS(LW(1))
     CALL(evt_map_playanim, STRING("anm_wa-p"), 1, 0)
@@ -184,7 +185,7 @@ EVT_END()
 
 EVT_BEGIN(evt_tensou2)
     CALL(evt_map_playanim, STRING("anm_wa-p"), 1, 0)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("wa_pu"), 1)
+    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("wa_pu"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_hit_get_position, STRING("A_tensou"), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG7_WARP_LIGHT1"), LW(0), LW(1), LW(2), LW(9))
     BEGIN_INLINE_EVENT
@@ -242,7 +243,7 @@ EVT_BEGIN(evt_tensou2)
             BREAK_LOOP
         END_IF
     END_LOOP
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("wa_pu"), 1)
+    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("wa_pu"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_color, 1, STRING("wa_pu"), 255, 255, 255, 255)
     CALL(evt_mario_cont_onoff, 1)
     CALL(evt_party_cont_onoff, 0, 1)
@@ -254,8 +255,8 @@ EVT_BEGIN(evt_tensou2)
 EVT_END()
 
 EVT_BEGIN(tensou_init)
-    CALL(evt_mapobj_flag_onoff, 0, 0, STRING("sui__1"), 1)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("sui__2"), 1)
+    CALL(evt_mapobj_flag_onoff, 0, 0, STRING("sui__1"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("sui__2"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_run_case_evt, 9, 1, STRING("A__sui"), 0, PTR(tensou_switch), 0)
     IF_INT_EQUAL(GSWF(1326), 0)
         RETURN

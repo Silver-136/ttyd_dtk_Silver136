@@ -18,6 +18,7 @@
 #include "party/party_motion.h"
 #include "evt/evt_item.h"
 #include "driver/npcdrv.h"
+#include "driver/mapdrv.h"
 
 USER_FUNC(evt_cloud_ent);
 USER_FUNC(evt_cloud_init);
@@ -656,10 +657,10 @@ EVT_BEGIN(mri_06_init_evt)
         CALL(evt_cloud_init)
         CALL(evt_cloud_ent, 0, STRING("S_nisekabe"), STRING("A_nisekabe"), PTR(cloud_wind_event))
         ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_nisekabe"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_nisekabe"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_nisekabe"), 1, 0)
     END_IF
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_oku_ha"), 2)
+    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_oku_ha"), MAP_OBJ_FLAG_CLIP)
     CALL(evt_hitobj_onoff, STRING("A_futa"), 1, 0)
     RETURN
 EVT_END()

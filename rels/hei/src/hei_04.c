@@ -8,6 +8,7 @@
 #include "evt/evt_snd.h"
 #include "party/party_motion.h"
 #include "evt/evt_item.h"
+#include "driver/mapdrv.h"
 
 
 static BeroEntry bero_entry_data[3];
@@ -112,7 +113,7 @@ EVT_BEGIN(hei_04_init_evt)
     CALL_CHILD(PTR(evt_sub_tree_access_entry))
     SET_VALUE(LW(0), PTR(kusa_data))
     CALL_CHILD(PTR(evt_sub_kusa_access_entry))
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("group1"), 2)
+    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("group1"), MAP_OBJ_FLAG_CLIP)
     RETURN
 EVT_END()
 

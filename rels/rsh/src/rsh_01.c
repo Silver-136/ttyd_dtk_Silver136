@@ -18,6 +18,7 @@
 #include "evt/evt_item.h"
 #include "evt/evt_pouch.h"
 #include "driver/npcdrv.h"
+#include "driver/mapdrv.h"
 
 USER_FUNC(evt_win_item_select);
 
@@ -513,8 +514,8 @@ NpcSetupInfo npc_data_2[] = {
 
 static EVT_BEGIN(evt_daiji_kami)
     CALL(evt_mario_key_onoff, 0)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("yuka_3_kami"), 1)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("yuka_3"), 1)
+    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("yuka_3_kami"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("yuka_3"), MAP_OBJ_FLAG_HIDDEN)
     SET_VALUE(GSW_STORY_PROGRESS, 305)
     CALL(evt_item_entry, STRING("daiji"), 80, 0, 0, 0, 17, -1, 0)
     CALL(evt_item_get_item, STRING("daiji"))
@@ -674,12 +675,12 @@ EVT_BEGIN(rsh_01_a_init_evt)
     CALL(evt_npc_setup, PTR(npc_data))
     CALL_CHILD(PTR(rsh_01_init_evt))
     IF_INT_EQUAL(GSW_STORY_PROGRESS, 304)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("yuka_3_kami"), 1)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("yuka_3"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("yuka_3_kami"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("yuka_3"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_run_case_evt, 5, 1, STRING("a_kami"), 0, PTR(evt_daiji_kami), 0)
         ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("yuka_3_kami"), 1)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("yuka_3"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("yuka_3_kami"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("yuka_3"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     CALL_CHILD(PTR(evt_rsh_moamoa_on_window))
     CALL(evt_sub_get_system_flag, LW(0))

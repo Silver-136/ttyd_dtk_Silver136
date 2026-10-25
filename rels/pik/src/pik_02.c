@@ -17,6 +17,7 @@
 #include "evt/evt_snd.h"
 #include "evt/evt_mobj.h"
 #include "poly_trig.h"
+#include "driver/mapdrv.h"
 
 #include "driver/effdrv.h"
 #include "mario/mario.h"
@@ -1099,7 +1100,7 @@ EVT_BEGIN(pik_02_init_evt)
         CALL(evt_run_case_evt, 9, 1, STRING("a_kaiga"), 0, PTR(evt_kaiga), GW(10))
     END_IF
     CALL(evt_run_case_evt, 9, 1, STRING("dai_a"), 0, PTR(evt_daiza), 0)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("door_1"), 2)
+    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("door_1"), MAP_OBJ_FLAG_CLIP)
     IF_INT_LESS(GSW_STORY_PROGRESS, 336)
         SPAWN_EVENT(PTR(evt_garnet))
     END_IF
@@ -1122,9 +1123,9 @@ EVT_BEGIN(pik_02_init_evt)
     END_IF
     CALL(evt_map_entry_airport_harbor, 0, STRING("hikou"), STRING("a_hi1"))
 #ifdef VERSION_G8ME01
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("s_jav"), 2)
+    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("s_jav"), MAP_OBJ_FLAG_CLIP)
 #endif
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("saku_2"), 2)
+    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("saku_2"), MAP_OBJ_FLAG_CLIP)
     CALL(evt_cam_letter_box_disable, 0)
     RETURN
 EVT_END()

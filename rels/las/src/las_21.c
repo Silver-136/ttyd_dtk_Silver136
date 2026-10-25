@@ -10,6 +10,7 @@
 #include "party/party_motion.h"
 #include "evt/evt_sub.h"
 #include "evt/evt_party.h"
+#include "driver/mapdrv.h"
 
 #include "party.h"
 #include "manager/evtmgr_cmd.h"
@@ -404,11 +405,11 @@ EVT_BEGIN(las_21_init_evt)
     CALL(evt_bero_get_info)
     CALL_CHILD(PTR(evt_bero_info_run))
     IF_INT_LESS(GSW_STORY_PROGRESS, 390)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_under"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_under"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_under"), 1, 0)
         CALL(evt_npc_check_delete, STRING("ワンワン２"))
         ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_yuka"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_yuka"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_be"), 1, 0)
         SET_VALUE(LW(0), STRING("w_bero"))
         CALL_CHILD(PTR(bero_case_switch_off))

@@ -15,6 +15,7 @@
 #include "evt/evt_snd.h"
 #include "evt/evt_sub.h"
 #include "driver/npcdrv.h"
+#include "driver/mapdrv.h"
 
 #include "mario/mario.h"
 #include "party.h"
@@ -253,7 +254,7 @@ EVT_BEGIN(moo_04_init_evt)
             SET_VALUE(GSW_STORY_PROGRESS, 377)
             CALL(evt_fade_entry, 17, 2000, 255, 255, 255)
             CALL(evt_fade_end_wait)
-            CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S"), 1)
+            CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S"), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_bg_disp_onoff, 0)
             CALL(evt_eff_delete, STRING("hikari"))
             CALL(evt_fade_entry, 16, 2000, 255, 255, 255)

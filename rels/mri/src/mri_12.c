@@ -14,6 +14,7 @@
 #include "party/party_motion.h"
 #include "evt/evt_item.h"
 #include "evt/evt_mobj.h"
+#include "driver/mapdrv.h"
 
 
 static BeroEntry bero_entry_data[6];
@@ -116,7 +117,7 @@ static EVT_BEGIN(punipuni_ball00_init)
         CALL(evt_item_set_position, LW(10), 5, 30, -95)
         CALL(evt_target_flag_onoff, LW(11), 0, 3)
         ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_sui_hikari"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_sui_hikari"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     CALL(evt_target_set_position, LW(11), 5, 0, -65)
     RETURN
@@ -131,11 +132,11 @@ static EVT_BEGIN(punipuni_ball00)
         END_IF
         SET_VALUE(GSWF(2859), 1)
         CALL(evt_item_set_position, LW(10), 5, 30, -95)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_sui_hikari"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_sui_hikari"), MAP_OBJ_FLAG_HIDDEN)
         CALL_CHILD(PTR(mri_punipuni_itemset))
         ELSE
         SET_VALUE(GSWF(2859), 0)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_sui_hikari"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_sui_hikari"), MAP_OBJ_FLAG_HIDDEN)
         CALL_CHILD(PTR(mri_punipuni_itemremove))
     END_IF
     LABEL(100)

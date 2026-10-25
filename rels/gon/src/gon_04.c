@@ -20,6 +20,7 @@
 #include "evt/evt_item.h"
 #include "evt/evt_pouch.h"
 #include "driver/npcdrv.h"
+#include "driver/mapdrv.h"
 typedef struct KemuriPos { s32 x; s32 z; } KemuriPos;
 
 USER_FUNC(evt_mario_get_name_hitobj_head);
@@ -682,7 +683,7 @@ EVT_BEGIN(evt_kaidan_pera_anime)
         CALL(evt_img_set_paper_anim, STRING("img"), STRING("A_2"))
         CALL(evt_img_alloc_capture, STRING("img"), 0, STRING("offscreen"), 0, 0, 0, 608, 480)
         CALL(evt_img_alloc_capture, STRING("img"), 1, STRING("offscreen"), 0, 0, 0, 608, 480)
-        CALL(evt_mapobj_flag_onoff, 0, 1, STRING("neta_01"), 1)
+        CALL(evt_mapobj_flag_onoff, 0, 1, STRING("neta_01"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_neta_01"), 0, 0)
         CALL(evt_snd_sfxon, STRING("SFX_STG1_PERA_STEP1"), 0)
         ELSE
@@ -690,7 +691,7 @@ EVT_BEGIN(evt_kaidan_pera_anime)
         CALL(evt_img_set_paper_anim, STRING("img"), STRING("A_1"))
         CALL(evt_img_alloc_capture, STRING("img"), 0, STRING("offscreen"), 0, 0, 0, 608, 480)
         CALL(evt_img_alloc_capture, STRING("img"), 1, STRING("offscreen"), 0, 0, 0, 608, 480)
-        CALL(evt_mapobj_flag_onoff, 0, 1, STRING("neta_02"), 1)
+        CALL(evt_mapobj_flag_onoff, 0, 1, STRING("neta_02"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_neta_02"), 0, 0)
         CALL(evt_snd_sfxon, STRING("SFX_STG1_PERA_STEP2"), 0)
     END_IF
@@ -700,11 +701,11 @@ EVT_BEGIN(evt_kaidan_pera_anime)
         CALL(evt_cam_shake, 4, FLOAT(0.015625f), FLOAT(0.0f), 250)
     END_INLINE_EVENT
     IF_INT_EQUAL(LW(0), 0)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("neta_02"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("neta_02"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_neta_02"), 0, 1)
         SET_INT_READ_ADDR(PTR(kemuri_pos1))
         ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("neta_01"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("neta_01"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_neta_01"), 0, 1)
         SET_INT_READ_ADDR(PTR(kemuri_pos2))
     END_IF
@@ -726,10 +727,10 @@ EVT_END()
 
 EVT_BEGIN(evt_kaidan_pera_init)
     IF_INT_EQUAL(GSWF(1482), 0)
-        CALL(evt_mapobj_flag_onoff, 0, 1, STRING("neta_02"), 1)
+        CALL(evt_mapobj_flag_onoff, 0, 1, STRING("neta_02"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_neta_02"), 0, 0)
         ELSE
-        CALL(evt_mapobj_flag_onoff, 0, 1, STRING("neta_01"), 1)
+        CALL(evt_mapobj_flag_onoff, 0, 1, STRING("neta_01"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_neta_01"), 0, 0)
     END_IF
     RETURN
@@ -852,10 +853,10 @@ EVT_BEGIN(evt_hashi_pera)
     WAIT_MS(500)
     CALL(evt_img_set_paper_anim, STRING("capture_img"), STRING("A_1"))
     IF_INT_EQUAL(LW(0), 0)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("tuuro_02"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("tuuro_02"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_tuuro_02"), 0, 1)
         ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("tuuro_01"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("tuuro_01"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_tuuro_01"), 0, 1)
     END_IF
     CALL(evt_snd_sfxon, STRING("SFX_STG1_PERA2"), 0)
@@ -901,12 +902,12 @@ EVT_END()
 
 EVT_BEGIN(evt_hashi)
     IF_INT_LESS(GSW_STORY_PROGRESS, 48)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("tuuro_02"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("tuuro_02"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_tuuro_02"), 0, 0)
         CALL(evt_mobj_switch_blue, 0, STRING("mobj_hashi0"), 400, 900, -100, PTR(evt_hashi_pera0), GSWF(1483))
     END_IF
     IF_INT_LESS(GSW_STORY_PROGRESS, 49)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("tuuro_01"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("tuuro_01"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_tuuro_01"), 0, 0)
         CALL(evt_mobj_switch_blue, 0, STRING("mobj_hashi1"), -80, 900, -100, PTR(evt_hashi_pera1), GSWF(1484))
     END_IF
@@ -987,9 +988,9 @@ EVT_BEGIN(gon_04_init_evt)
     CALL(evt_npc_change_fbat_mode, 1)
     CALL(evt_mobj_switch_red, 0, STRING("mobj1"), 250, 150, -120, PTR(evt_kaidan_pera), 0)
     SPAWN_EVENT(PTR(evt_kaidan_pera_init))
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("fuyu_box01"), 1)
+    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("fuyu_box01"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_hitobj_onoff, STRING("a_fuyu_box01"), 1, 0)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("fuyu_box02"), 1)
+    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("fuyu_box02"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_hitobj_onoff, STRING("a_fuyu_box02"), 1, 0)
     CALL(evt_mobj_float_blk, STRING("mobj_fltbl01"), FLOAT(582.5f), 150, FLOAT(-137.5f), 1, 0, 0, LSWF(6))
     CALL(evt_mobj_float_blk, STRING("mobj_fltbl02"), 395, 150, -125, 2, 1, 0, LSWF(7))

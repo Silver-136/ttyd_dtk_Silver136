@@ -14,6 +14,7 @@
 #include "party/party_motion.h"
 #include "evt/evt_sub.h"
 #include "evt/evt_pouch.h"
+#include "driver/mapdrv.h"
 
 USER_FUNC(evt_mario_get_name_hitobj_ride);
 USER_FUNC(evt_win_item_select);
@@ -394,14 +395,14 @@ EVT_BEGIN(las_22_init_evt)
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 395)
         SPAWN_EVENT(PTR(kaitendai_evt))
     END_IF
-    CALL(evt_mapobj_flag_onoff, 0, 0, STRING("S_hgm_01a"), 2)
-    CALL(evt_mapobj_flag_onoff, 0, 0, STRING("S_hgm_05a"), 2)
-    CALL(evt_mapobj_flag_onoff, 0, 0, STRING("S_hgm_08a"), 2)
-    CALL(evt_mapobj_flag_onoff, 0, 0, STRING("S_hgm_19a"), 2)
+    CALL(evt_mapobj_flag_onoff, 0, 0, STRING("S_hgm_01a"), MAP_OBJ_FLAG_CLIP)
+    CALL(evt_mapobj_flag_onoff, 0, 0, STRING("S_hgm_05a"), MAP_OBJ_FLAG_CLIP)
+    CALL(evt_mapobj_flag_onoff, 0, 0, STRING("S_hgm_08a"), MAP_OBJ_FLAG_CLIP)
+    CALL(evt_mapobj_flag_onoff, 0, 0, STRING("S_hgm_19a"), MAP_OBJ_FLAG_CLIP)
     SPAWN_EVENT(PTR(haguruma_evt))
     CALL(evt_map_playanim, STRING("kusari"), 1, 0)
     CALL(evt_hit_bind_mapobj, STRING("A_move_dai"), STRING("S_move_dai"))
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_move_dai"), 1)
+    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_move_dai"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_hitobj_onoff, STRING("A_move_dai"), 0, 0)
     CALL(evt_mobj_switch_red, 0, STRING("dai_switch"), 100, -409, -10, PTR(dai_evt), 0)
     CALL(evt_mobj_itembox, STRING("mobj_box00"), -660, -500, 100, 0, 0, PTR(mobj_box00), GSWF(4377))

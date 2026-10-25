@@ -11,6 +11,7 @@
 #include "evt/evt_sub.h"
 #include "evt/evt_item.h"
 #include "driver/npcdrv.h"
+#include "driver/mapdrv.h"
 
 USER_FUNC(evt_mario_get_name_hitobj_head);
 
@@ -367,7 +368,7 @@ EVT_BEGIN(gon_09_init_evt)
     CALL(evt_mobj_float_blk, STRING("blk_0"), 325, -50, 75, 2, 1, 0, LSWF(1))
     CALL_CHILD(PTR(init_0))
     CALL(evt_mobj_switch_float_blk, STRING("sw_0"), 588, -50, 138, STRING("blk_0"), 2, PTR(main_0), LSWF(1))
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("fuyu_boxS"), 1)
+    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("fuyu_boxS"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_map_playanim, STRING("hokori"), 1, 0)
     CALL(evt_map_entry_airport_harbor, 0, STRING("hikou"), STRING("a_hi"))
     RETURN

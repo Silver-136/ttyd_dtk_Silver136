@@ -14,6 +14,7 @@
 #include "mario/mariost.h"
 #include "manager/evtmgr_cmd.h"
 #include "driver/mobjdrv.h"
+#include "driver/mapdrv.h"
 
 USER_FUNC(evt_cloud_ent);
 USER_FUNC(evt_cloud_init);
@@ -290,9 +291,9 @@ EVT_BEGIN(las_24_init_evt)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
     CALL_CHILD(PTR(evt_bero_info_run))
-    CALL(evt_mapobj_flag_onoff, 0, 0, STRING("S_hgm_05a"), 2)
-    CALL(evt_mapobj_flag_onoff, 0, 0, STRING("S_hgm_19a"), 2)
-    CALL(evt_mapobj_flag_onoff, 0, 0, STRING("S_hgm_24a"), 2)
+    CALL(evt_mapobj_flag_onoff, 0, 0, STRING("S_hgm_05a"), MAP_OBJ_FLAG_CLIP)
+    CALL(evt_mapobj_flag_onoff, 0, 0, STRING("S_hgm_19a"), MAP_OBJ_FLAG_CLIP)
+    CALL(evt_mapobj_flag_onoff, 0, 0, STRING("S_hgm_24a"), MAP_OBJ_FLAG_CLIP)
     SPAWN_EVENT(PTR(haguruma_evt))
     CALL(evt_map_playanim, STRING("kusari"), 1, 0)
     IF_INT_LESS(GSW_STORY_PROGRESS, 396)
@@ -300,11 +301,11 @@ EVT_BEGIN(las_24_init_evt)
             CALL(evt_cloud_init)
             CALL(evt_cloud_ent, 0, STRING("S_hako"), STRING("A_hako"), PTR(cloud_blk_evt))
             ELSE
-            CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_hako"), 1)
+            CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_hako"), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_hitobj_onoff, STRING("A_hako"), 1, 0)
         END_IF
         ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_hako"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_hako"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_hako"), 1, 0)
     END_IF
     CALL(evt_mobj_lv_blk, STRING("blk"), -495, 100, 0, 0, GSWF(4357), STRING("MOBJ_Lv2BigBigBlock"))
@@ -318,7 +319,7 @@ EVT_BEGIN(las_24_init_evt)
     CALL(evt_mobj_breaking_floor, STRING("brkflr"), -500, 100, 0, 0, PTR(break_floor_evt), GSWF(4358))
     CALL(evt_mobj_jumpstand_red, 0, STRING("jump"), -500, -200, 0, PTR(jump_evt), 0)
     CALL(evt_hit_bind_mapobj, STRING("A_move_dai"), STRING("S_move_dai"))
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_move_dai"), 1)
+    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_move_dai"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_hitobj_onoff, STRING("A_move_dai"), 0, 0)
     CALL(evt_mobj_floatswitch_red, 0, STRING("dai_switch"), -150, -440, 75, PTR(dai_evt), 0)
     CALL(evt_mobj_badgeblk, STRING("mobj_hatena_gat"), -625, -200, -100, 121, 0, GSWF(4390), 0)

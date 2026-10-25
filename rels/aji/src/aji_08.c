@@ -8,6 +8,7 @@
 #include "evt/evt_sub.h"
 #include "evt/evt_cam.h"
 #include "evt/evt_item.h"
+#include "driver/mapdrv.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "driver/camdrv.h"
@@ -138,21 +139,21 @@ static BeroEntry bero_entry_data[] = {
 };
 
 EVT_BEGIN(heya_tenura_onoff)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_heya"), 1)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_tenura"), 1)
+    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_heya"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_tenura"), MAP_OBJ_FLAG_HIDDEN)
     SET_VALUE(LW(0), 0)
     LOOP(0)
         CALL(camAtY, LW(1))
         IF_INT_GREATER_OR_EQUAL(LW(1), 180)
             IF_INT_EQUAL(LW(0), 0)
-                CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_heya"), 1)
-                CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_tenura"), 1)
+                CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_heya"), MAP_OBJ_FLAG_HIDDEN)
+                CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_tenura"), MAP_OBJ_FLAG_HIDDEN)
                 SET_VALUE(LW(0), 1)
             END_IF
             ELSE
             IF_INT_EQUAL(LW(0), 1)
-                CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_heya"), 1)
-                CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_tenura"), 1)
+                CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_heya"), MAP_OBJ_FLAG_HIDDEN)
+                CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_tenura"), MAP_OBJ_FLAG_HIDDEN)
                 SET_VALUE(LW(0), 0)
             END_IF
         END_IF

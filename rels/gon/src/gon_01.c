@@ -15,6 +15,7 @@
 #include "evt/evt_sub.h"
 #include "evt/evt_telop.h"
 #include "evt/evt_item.h"
+#include "driver/mapdrv.h"
 
 USER_FUNC(evt_mario_dispflag_onoff);
 
@@ -386,9 +387,9 @@ EVT_BEGIN(gon_01_init_evt)
     CALL(evt_map_playanim, STRING("m_mizu01"), 1, 0)
     CALL(evt_map_entry_airport_harbor, 0, STRING("hikou"), STRING("a_hi"))
     CALL(evt_map_entry_airport_harbor, 0, STRING("hikou1"), STRING("a_hi1"))
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_hasj"), 2)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("kabe_l"), 2)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("kabe_r"), 2)
+    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_hasj"), MAP_OBJ_FLAG_CLIP)
+    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("kabe_l"), MAP_OBJ_FLAG_CLIP)
+    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("kabe_r"), MAP_OBJ_FLAG_CLIP)
     IF_INT_LESS(GSW_STORY_PROGRESS, 37)
         SET_VALUE(GSW_STORY_PROGRESS, 37)
     END_IF

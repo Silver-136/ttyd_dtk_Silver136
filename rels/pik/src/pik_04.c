@@ -26,6 +26,7 @@
 #include "evt/evt_item.h"
 #include "evt/evt_pouch.h"
 #include "driver/npcdrv.h"
+#include "driver/mapdrv.h"
 
 USER_FUNC(evt_mario_dispflag_onoff);
 USER_FUNC(evt_pouch_add_coin);
@@ -233,7 +234,7 @@ const char* hotel_npc[] = {
 };
 
 static EVT_BEGIN(door_2_open)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("ERE"), 1)
+    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("ERE"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_snd_bgmoff, 18432)
     CALL(evt_snd_envoff, 18432)
     CALL(evt_snd_env_lpf, 0, 800)
@@ -284,9 +285,9 @@ EVT_BEGIN(imgstart)
     CALL(evt_mapobj_set_offscreen, 1, STRING("hotel_naka"), STRING("offscreen"))
     CALL(evt_mapobj_set_offscreen, 1, STRING("door_h"), STRING("offscreen"))
     CALL(evt_mapobj_clear_offscreen, 1, STRING("ERE"))
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("hotel_naka"), 1)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("door_h"), 1)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("ERE"), 1)
+    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("hotel_naka"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("door_h"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("ERE"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_npc_set_offscreen, STRING("店員女"), STRING("offscreen"))
     CALL(evt_npc_set_offscreen, STRING("キザ野郎"), STRING("offscreen"))
     CALL(evt_npc_flag_onoff, 1, STRING("店員女"), NPC_FLAG_NO_DRAW)
@@ -315,9 +316,9 @@ EVT_BEGIN(imgend)
     CALL(evt_mapobj_set_offscreen, 1, STRING("hotel_naka"), STRING("offscreen"))
     CALL(evt_mapobj_set_offscreen, 1, STRING("door_h"), STRING("offscreen"))
     CALL(evt_mapobj_clear_offscreen, 1, STRING("ERE"))
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("hotel_naka"), 1)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("door_h"), 1)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("ERE"), 1)
+    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("hotel_naka"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("door_h"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("ERE"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_npc_set_offscreen, STRING("店員女"), STRING("offscreen"))
     CALL(evt_npc_set_offscreen, STRING("キザ野郎"), STRING("offscreen"))
     CALL(evt_npc_flag_onoff, 1, STRING("店員女"), NPC_FLAG_NO_DRAW)
@@ -337,8 +338,8 @@ EVT_BEGIN(imgend)
     CALL(evt_img_onoff, STRING("capture_img"), 0)
     CALL(evt_mapobj_clear_offscreen, 1, STRING("hotel_naka"))
     CALL(evt_mapobj_clear_offscreen, 1, STRING("door_h"))
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("hotel_naka"), 1)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("door_h"), 1)
+    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("hotel_naka"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("door_h"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_npc_set_offscreen, STRING("店員女"), 0)
     CALL(evt_npc_set_offscreen, STRING("キザ野郎"), 0)
     CALL(evt_npc_flag_onoff, 0, STRING("店員女"), NPC_FLAG_NO_DRAW)
@@ -348,7 +349,7 @@ EVT_END()
 
 EVT_BEGIN(evt_up)
     CALL(evt_mario_key_onoff, 0)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("ERE"), 1)
+    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("ERE"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG6_PIK_ELEVATOR_DOOR1"), LW(0), LW(1), LW(2), LW(9))
     CALL(evt_sub_intpl_msec_init, 11, 0, 40, 1000)
@@ -992,8 +993,8 @@ EVT_BEGIN(pik_04_init_evt)
         CALL_CHILD(PTR(epilogue_npc_entry))
         SPAWN_EVENT(PTR(epilogue_evt))
     END_IF
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("s_bero"), 2)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("group92"), 2)
+    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("s_bero"), MAP_OBJ_FLAG_CLIP)
+    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("group92"), MAP_OBJ_FLAG_CLIP)
     RETURN
 EVT_END()
 

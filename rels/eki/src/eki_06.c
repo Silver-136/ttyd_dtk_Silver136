@@ -9,6 +9,7 @@
 #include "evt/evt_npc.h"
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
+#include "driver/mapdrv.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "driver/mobjdrv.h"
@@ -155,8 +156,8 @@ EVT_BEGIN(evt_sw_complete)
     CALL(evt_mobj_delete, STRING("MOBJ_eki_06_su3"))
     CALL(evt_cam3d_evt_set, -80, 202, 448, -80, 107, -92, 500, 11)
     WAIT_MS(500)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("origami"), 1)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("n_origami"), 1)
+    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("origami"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("n_origami"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_hitobj_onoff, STRING("a_ori"), 1, 1)
     BEGIN_INLINE_EVENT
         CALL(evt_mapobj_get_position, STRING("origami"), LW(0), LW(1), LW(2))
@@ -182,11 +183,11 @@ EVT_BEGIN(evt_sw_complete)
         END_LOOP
     END_INLINE_EVENT
     WAIT_FRAMES(100)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("oku_1"), 1)
+    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("oku_1"), MAP_OBJ_FLAG_HIDDEN)
     WAIT_FRAMES(32)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("oku_2"), 1)
+    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("oku_2"), MAP_OBJ_FLAG_HIDDEN)
     WAIT_FRAMES(34)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("oku_3"), 1)
+    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("oku_3"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_map_checkanim, STRING("anm_kaidan167"), LW(0), LW(1))
     WAIT_MS(LW(1))
     CALL(evt_snd_bgmon, 512, STRING("BGM_FF_ENV_SUCCESS1"))
@@ -385,14 +386,14 @@ EVT_BEGIN(eki_06_init_evt)
         CALL(sw_entry, STRING("MOBJ_eki_06_su3"), -240, 0, 40)
         CALL(sw_entry, STRING("MOBJ_eki_06_su2"), -140, 0, 40)
         CALL(sw_entry, STRING("MOBJ_eki_06_su1"), -40, 0, 40)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("origami"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("origami"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_ori"), 1, 0)
         CASE_DEFAULT
         CALL(evt_map_playanim, STRING("anm_kaidan167"), 2, 0)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("n_origami"), 1)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("oku_1"), 1)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("oku_2"), 1)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("oku_3"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("n_origami"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("oku_1"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("oku_2"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("oku_3"), MAP_OBJ_FLAG_HIDDEN)
     END_SWITCH
     IF_INT_LESS(GSW_STORY_PROGRESS, 317)
         ELSE

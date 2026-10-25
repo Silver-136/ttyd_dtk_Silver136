@@ -7,6 +7,7 @@
 #include "battle/battle_stage_object.h"
 #include "driver/npcdrv.h"
 #include "evt/evt_map.h"
+#include "driver/mapdrv.h"
 
 USER_FUNC(tou_gamen_screen_tev_init);
 extern s32 tou_gamen_screen_tev[];
@@ -1555,8 +1556,8 @@ EVT_BEGIN(bgset_tou_screen_evt)
     CALL(tou_gamen_screen_tev_init)
     WAIT_FRAMES(1)
     CALL(evt_map_set_tevcallback, 8, PTR(tou_gamen_screen_tev))
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("gamen"), 134217728)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("gamen"), 256)
+    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("gamen"), MAP_OBJ_TEV_CALLBACK(8))
+    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("gamen"), MAP_OBJ_FLAG_DISPLAY_LIST)
     RETURN
 EVT_END()
 

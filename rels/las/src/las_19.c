@@ -12,6 +12,7 @@
 #include "evt/evt_seq.h"
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
+#include "driver/mapdrv.h"
 
 USER_FUNC(evt_cloud_ent);
 USER_FUNC(evt_cloud_init);
@@ -195,10 +196,10 @@ EVT_BEGIN(change_map_evt)
     CALL(evt_mario_set_pos, 0, -1000, 0)
     CALL(evt_party_set_pos, 0, 0, -1000, 0)
     CALL(evt_cam3d_evt_set, 575, 143, 531, 575, 67, -13, 0, 11)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_yuka"), 1)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_under"), 1)
+    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_yuka"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_under"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_hitobj_onoff, STRING("A_under"), 1, 1)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_kai_26"), 1)
+    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_kai_26"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_trans, 1, STRING("S_kai_02"), 0, 30, 0)
     CALL(evt_mapobj_trans, 1, STRING("S_kai_03"), 0, 60, 0)
     CALL(evt_mapobj_trans, 1, STRING("S_kai_04"), 0, 90, 0)
@@ -237,7 +238,7 @@ EVT_BEGIN(change_map_evt)
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_yuka"), 1)
+    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_yuka"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_cam3d_evt_set, -5, -547, 531, -5, -623, -13, 9200, 0)
     WAIT_MS(300)
     SET_VALUE(GF(0), 0)
@@ -319,7 +320,7 @@ EVT_BEGIN(las_19_init_evt)
         CALL(evt_cloud_init)
         CALL(evt_cloud_ent, 0, STRING("S_futa"), STRING("A_futa"), PTR(cloud_evt))
         ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_futa"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_futa"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_futa"), 0, 0)
     END_IF
     CALL(evt_bero_get_entername, LW(0))
@@ -330,18 +331,18 @@ EVT_BEGIN(las_19_init_evt)
         CALL_CHILD(PTR(evt_bero_info_run))
     END_IF
     IF_INT_LESS(GSW_STORY_PROGRESS, 390)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_under"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_under"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_under"), 1, 0)
         CALL(evt_npc_check_delete, STRING("マホーン２"))
         CALL(evt_npc_check_delete, STRING("マホーン３"))
         ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_yuka"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_yuka"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_be"), 1, 0)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_kai_20"), 1)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_kai_21"), 1)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_kai_22"), 1)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_kai_23"), 1)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_kai_24"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_kai_20"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_kai_21"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_kai_22"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_kai_23"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_kai_24"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_npc_check_delete, STRING("マホーン１"))
         SPAWN_EVENT(PTR(hikari_evt))
     END_IF

@@ -21,6 +21,7 @@
 #include "evt/evt_item.h"
 #include "evt/evt_pouch.h"
 #include "driver/mobjdrv.h"
+#include "driver/mapdrv.h"
 
 #include "driver/npcdrv.h"
 #include "manager/evtmgr.h"
@@ -209,7 +210,7 @@ EVT_BEGIN(jon_init_evt)
             CALL(evt_hit_bind_mapobj, STRING("a_dokan_1"), STRING("dokan_1_s"))
             CALL(evt_mapobj_trans, 1, STRING("dokan_1_s"), 0, 30, 0)
             CALL(evt_hit_bind_update, STRING("a_dokan_1"))
-            CALL(evt_mapobj_flag_onoff, 1, 1, STRING("dokan_1_k"), 1)
+            CALL(evt_mapobj_flag_onoff, 1, 1, STRING("dokan_1_k"), MAP_OBJ_FLAG_HIDDEN)
         END_IF
         CALL(evt_npc_check, STRING("移動屋"), LW(0))
         IF_INT_EQUAL(LW(0), 1)
@@ -225,7 +226,7 @@ EVT_BEGIN(jon_init_evt)
             CALL(evt_hit_bind_mapobj, STRING("a_dokan_1"), STRING("dokan_1_s"))
             CALL(evt_mapobj_trans, 1, STRING("dokan_1_s"), 0, 30, 0)
             CALL(evt_hit_bind_update, STRING("a_dokan_1"))
-            CALL(evt_mapobj_flag_onoff, 1, 1, STRING("dokan_1_k"), 1)
+            CALL(evt_mapobj_flag_onoff, 1, 1, STRING("dokan_1_k"), MAP_OBJ_FLAG_HIDDEN)
         END_IF
         CALL(evt_npc_check, STRING("移動屋"), LW(0))
         IF_INT_EQUAL(LW(0), 1)
@@ -242,8 +243,8 @@ EVT_BEGIN(jon_init_evt)
             IF_INT_EQUAL(GSWF(5404), 0)
 #ifdef VERSION_G8ME01
                 IF_INT_NOT_EQUAL(GSW(1420), 30)
-                    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("after"), 1)
-                    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("s_rakugaki"), 1)
+                    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("after"), MAP_OBJ_FLAG_HIDDEN)
+                    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("s_rakugaki"), MAP_OBJ_FLAG_HIDDEN)
                     ELSE
 #endif
                 SET_VALUE(LF(0), 0)
@@ -253,7 +254,7 @@ EVT_BEGIN(jon_init_evt)
                     END_IF
                 END_IF
                 IF_INT_EQUAL(LF(0), 0)
-                    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("after"), 1)
+                    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("after"), MAP_OBJ_FLAG_HIDDEN)
                     CALL(evt_run_case_evt, 9, 1, STRING("a_rakugaki"), 0, PTR(evt_iri_30_touch_rakugaki), LW(0))
 #ifndef VERSION_G8ME01
                     IF_INT_EQUAL(GSW(1420), 30)
@@ -266,19 +267,19 @@ EVT_BEGIN(jon_init_evt)
                     END_IF
 #endif
                     ELSE
-                    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("before"), 1)
-                    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("s_rakugaki"), 1)
+                    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("before"), MAP_OBJ_FLAG_HIDDEN)
+                    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("s_rakugaki"), MAP_OBJ_FLAG_HIDDEN)
 #ifdef VERSION_G8ME01
                     END_IF
 #endif
                 END_IF
                 ELSE
-                CALL(evt_mapobj_flag_onoff, 1, 1, STRING("before"), 1)
-                CALL(evt_mapobj_flag_onoff, 1, 1, STRING("s_rakugaki"), 1)
+                CALL(evt_mapobj_flag_onoff, 1, 1, STRING("before"), MAP_OBJ_FLAG_HIDDEN)
+                CALL(evt_mapobj_flag_onoff, 1, 1, STRING("s_rakugaki"), MAP_OBJ_FLAG_HIDDEN)
             END_IF
             ELSE
-            CALL(evt_mapobj_flag_onoff, 1, 1, STRING("after"), 1)
-            CALL(evt_mapobj_flag_onoff, 1, 1, STRING("s_rakugaki"), 1)
+            CALL(evt_mapobj_flag_onoff, 1, 1, STRING("after"), MAP_OBJ_FLAG_HIDDEN)
+            CALL(evt_mapobj_flag_onoff, 1, 1, STRING("s_rakugaki"), MAP_OBJ_FLAG_HIDDEN)
         END_IF
     END_IF
     IF_INT_NOT_EQUAL(GSW_PIT_FLOOR, 99)
@@ -1655,7 +1656,7 @@ EVT_BEGIN(dokan_open)
     IF_INT_EQUAL(LW(1), 1)
         GOTO(0)
     END_IF
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("dokan_1_k"), 1)
+    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("dokan_1_k"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mario_key_onoff, 1)
     RETURN
 EVT_END()
@@ -1678,7 +1679,7 @@ EVT_BEGIN(dokan_open2)
     IF_INT_EQUAL(LW(1), 1)
         GOTO(0)
     END_IF
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("dokan_1_k"), 1)
+    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("dokan_1_k"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mario_key_onoff, 1)
     RETURN
 EVT_END()
@@ -2544,17 +2545,17 @@ EVT_BEGIN(evt_iri_30_bomb_rakugaki)
     IF_INT_EQUAL(LF(0), 0)
         CALL(evt_img_alloc_capture, STRING("img"), 0, STRING("ofs"), 1, LW(0), LW(1), LW(2), LW(3))
         WAIT_FRAMES(1)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("s_rakugaki"), 1)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("before"), 1)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("after"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("s_rakugaki"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("before"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("after"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_img_clear_virtual_point, STRING("img"))
         CALL(evt_img_onoff, STRING("img"), 1)
         CALL(evt_img_set_paper_anim, STRING("img"), STRING("A_1"))
         CALL(evt_img_wait_animend, STRING("img"))
         ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("s_rakugaki"), 1)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("before"), 1)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("after"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("s_rakugaki"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("before"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("after"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     CALL(evt_img_release, STRING("img"))
     CALL(evt_mapobj_clear_offscreen, 1, STRING("s_rakugaki"))
@@ -2653,7 +2654,7 @@ EVT_BEGIN(zonbaba_first_event)
     CALL(evt_mario_normalize)
     CALL(evt_npc_set_position, STRING("敵"), 175, 0, 0)
     CALL(evt_npc_set_anim, STRING("敵"), STRING("GNB_S_1"))
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("oFF_jon_06"), 1)
+    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("oFF_jon_06"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_seq_wait, 2)
     WAIT_MS(3500)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -2797,7 +2798,7 @@ EVT_BEGIN(zonbaba_first_event)
     CALL(evt_eff_fukidashi, 0, STRING(""), 0, 0, 0, 0, 0, 0, 0, 0, 60)
     CALL(evt_eff_fukidashi, 3, STRING(""), 0, 0, 0, 0, 0, 0, 0, 0, 60)
     WAIT_MS(1000)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("oFF_jon_06"), 1)
+    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("oFF_jon_06"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_npc_flag_onoff, 1, STRING("敵"), NPC_FLAG_NO_HIT)
     CALL(evt_npc_flag_onoff, 0, STRING("敵"), NPC_FLAG_ENEMY)
     SET_VALUE(GSWF(5085), 1)

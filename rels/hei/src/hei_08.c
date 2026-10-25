@@ -6,6 +6,7 @@
 #include "evt/evt_snd.h"
 #include "party/party_motion.h"
 #include "evt/evt_item.h"
+#include "driver/mapdrv.h"
 
 #include "driver/npcdrv.h"
 #include "evt/evt_bero.h"
@@ -115,8 +116,8 @@ EVT_BEGIN(hei_08_init_evt)
     END_IF
     CALL(evt_map_playanim, STRING("mizu"), 1, 0)
     CALL(evt_map_set_tevcallback, 1, PTR(hei_test_water_tev))
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("mizu_1"), 16777216)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("mizu_1"), 256)
+    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("mizu_1"), MAP_OBJ_TEV_CALLBACK(1))
+    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("mizu_1"), MAP_OBJ_FLAG_DISPLAY_LIST)
     RETURN
 EVT_END()
 

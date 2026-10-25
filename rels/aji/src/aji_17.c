@@ -16,6 +16,7 @@
 #include "evt/evt_seq.h"
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
+#include "driver/mapdrv.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "driver/npcdrv.h"
@@ -2964,10 +2965,10 @@ EVT_BEGIN(aji_17_init_evt)
     SET_VALUE(LW(2), 30)
     SPAWN_EVENT(PTR(evt_camera))
 #ifdef VERSION_G8ME01
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_meil"), 1)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_kikai_0"), 1)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("polySurface1161_q00063"), 2)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("polySurface1168_q00065"), 2)
+    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_meil"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_kikai_0"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("polySurface1161_q00063"), MAP_OBJ_FLAG_CLIP)
+    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("polySurface1168_q00065"), MAP_OBJ_FLAG_CLIP)
     CALL(evt_mapobj_scale, 0, STRING("ren2"), 5, 5, 1)
 #else
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING(("S_meil")), 1)
@@ -3061,8 +3062,8 @@ EVT_BEGIN(aji_17_init_evt)
         CALL(evt_snd_envon, 272, STRING("ENV_STG7_AJI4"))
     END_IF
     IF_INT_GREATER(GSW_STORY_PROGRESS, 402)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_kurai"), 1)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_kikai"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_kurai"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_kikai"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_map_playanim, STRING("kika_1"), 1, 0)
         CALL(evt_map_playanim, STRING("kika_2"), 1, 0)
         CALL(evt_map_playanim, STRING("kika_3"), 1, 0)

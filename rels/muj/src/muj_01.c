@@ -16,6 +16,7 @@
 #include "evt/evt_sub.h"
 #include "evt/evt_pouch.h"
 #include "muj.h"
+#include "driver/mapdrv.h"
 
 #include "driver/effdrv.h"
 #include "manager/evtmgr_cmd.h"
@@ -1064,7 +1065,7 @@ EVT_BEGIN(muj_00_door_open)
     CALL(evt_door_param, LW(0), 2, LW(1), LW(2))
     IF_INT_NOT_EQUAL(LW(1), 0)
         CALL(evt_door_save_mapflag, LW(1))
-        CALL(evt_mapobj_flag_onoff, 1, 0, LW(1), 2)
+        CALL(evt_mapobj_flag_onoff, 1, 0, LW(1), MAP_OBJ_FLAG_CLIP)
     END_IF
     BEGIN_INLINE_EVENT
         CALL(evt_door_param, LW(0), 10, LW(1), LW(2), LW(3))
@@ -1074,18 +1075,18 @@ EVT_BEGIN(muj_00_door_open)
     END_INLINE_EVENT
     CALL(evt_door_param, LW(0), 2, LW(1), LW(2))
     IF_INT_NOT_EQUAL(LW(1), 0)
-        CALL(evt_mapobj_flag_onoff, 1, 1, LW(1), 2048)
+        CALL(evt_mapobj_flag_onoff, 1, 1, LW(1), MAP_OBJ_FLAG_NO_MAP_BLEND)
     END_IF
     CALL(evt_door_param, LW(0), 1, LW(1), LW(2), LW(3))
     IF_INT_NOT_EQUAL(LW(1), 0)
-        CALL(evt_mapobj_flag_onoff, 1, 1, LW(1), 2048)
-        CALL(evt_mapobj_flag_onoff, 1, 1, LW(1), 4096)
+        CALL(evt_mapobj_flag_onoff, 1, 1, LW(1), MAP_OBJ_FLAG_NO_MAP_BLEND)
+        CALL(evt_mapobj_flag_onoff, 1, 1, LW(1), MAP_OBJ_FLAG_NO_MAP_BLEND2)
     END_IF
     CALL(evt_door_param, LW(0), 3, LW(1), LW(2))
     IF_INT_NOT_EQUAL(LW(1), 0)
-        CALL(evt_mapobj_flag_onoff, 1, 0, LW(1), 1)
-        CALL(evt_mapobj_flag_onoff, 1, 1, LW(1), 2048)
-        CALL(evt_mapobj_flag_onoff, 1, 1, LW(1), 4096)
+        CALL(evt_mapobj_flag_onoff, 1, 0, LW(1), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, 1, 1, LW(1), MAP_OBJ_FLAG_NO_MAP_BLEND)
+        CALL(evt_mapobj_flag_onoff, 1, 1, LW(1), MAP_OBJ_FLAG_NO_MAP_BLEND2)
     END_IF
     IF_INT_NOT_EQUAL(LW(2), 0)
         CALL(evt_hitobj_onoff, LW(2), 1, 1)
@@ -1140,9 +1141,9 @@ static const char* mise_npc[] = {
 };
 
 EVT_BEGIN(mise_data_open)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_mise_kan"), 4096)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_mise_hasi04"), 4096)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_mise_hasi05"), 4096)
+    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_mise_kan"), MAP_OBJ_FLAG_NO_MAP_BLEND2)
+    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_mise_hasi04"), MAP_OBJ_FLAG_NO_MAP_BLEND2)
+    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_mise_hasi05"), MAP_OBJ_FLAG_NO_MAP_BLEND2)
     SPAWN_EVENT(PTR(custom_door_dark2))
     CALL(evt_snd_bgmoff, 18432)
     CALL(evt_snd_envoff, 18432)
@@ -1153,9 +1154,9 @@ EVT_END()
 EVT_BEGIN(mise_data_close)
     BEGIN_INLINE_EVENT
         CALL_CHILD(PTR(custom_door_light2))
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_mise_kan"), 4096)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_mise_hasi04"), 4096)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_mise_hasi05"), 4096)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_mise_kan"), MAP_OBJ_FLAG_NO_MAP_BLEND2)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_mise_hasi04"), MAP_OBJ_FLAG_NO_MAP_BLEND2)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_mise_hasi05"), MAP_OBJ_FLAG_NO_MAP_BLEND2)
     END_INLINE_EVENT
     CALL(evt_snd_bgmon, 160, 0)
     CALL(evt_snd_envon, 160, 0)
@@ -1185,7 +1186,7 @@ static const char* yado_npc[] = {
 
 EVT_BEGIN(mise_open_event)
     SPAWN_EVENT(PTR(door_dark))
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_yado"), 2048)
+    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_yado"), MAP_OBJ_FLAG_NO_MAP_BLEND)
     SPAWN_EVENT(PTR(custom_door_dark2))
     CALL(evt_snd_bgmoff, 18432)
     CALL(evt_snd_envoff, 18432)
@@ -1196,7 +1197,7 @@ EVT_END()
 EVT_BEGIN(mise_close_event)
     SPAWN_EVENT(PTR(door_light))
     SPAWN_EVENT(PTR(custom_door_light2))
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_yado"), 2048)
+    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_yado"), MAP_OBJ_FLAG_NO_MAP_BLEND)
     WAIT_MS(1000)
     CALL(evt_snd_bgmon, 160, 0)
     CALL(evt_snd_envon, 160, 0)
@@ -1781,8 +1782,8 @@ static EVT_BEGIN(sekai_yami_evt)
     CALL(evt_npc_status_onoff, 1, STRING("オドオド水夫"), 2)
     CALL(evt_npc_status_onoff, 1, STRING("店員"), 2)
     CALL(evt_map_set_tevcallback, 1, PTR(envSetYami))
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S"), 16777216)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S"), 256)
+    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S"), MAP_OBJ_TEV_CALLBACK(1))
+    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S"), MAP_OBJ_FLAG_DISPLAY_LIST)
     CALL(anim_tevcallback, STRING("ガラの悪い水夫"), 1)
     CALL(anim_tevcallback, STRING("水夫D"), 1)
     CALL(anim_tevcallback, STRING("オドオド水夫"), 1)
@@ -1878,8 +1879,8 @@ static EVT_BEGIN(minnnanokoe_evt)
     CALL(evt_npc_set_ry, STRING("ボロ水夫B"), 270)
     CALL(evt_npc_set_position, STRING("店員"), 0, -1000, 0)
     CALL(evt_map_set_tevcallback, 1, PTR(envSetYami))
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S"), 16777216)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S"), 256)
+    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S"), MAP_OBJ_TEV_CALLBACK(1))
+    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S"), MAP_OBJ_FLAG_DISPLAY_LIST)
     CALL(anim_tevcallback, STRING("ガラの悪い水夫"), 1)
     CALL(anim_tevcallback, STRING("水夫D"), 1)
     CALL(anim_tevcallback, STRING("ボロ水夫A"), 1)
@@ -2124,7 +2125,7 @@ EVT_BEGIN(muj_01_init_evt)
     IF_INT_EQUAL(LF(0), 0)
         CALL(evt_eff64, STRING("sunlight"), STRING("sunlight_n64"), 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
     END_IF
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_mise"), 2)
+    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_mise"), MAP_OBJ_FLAG_CLIP)
     RETURN
 EVT_END()
 

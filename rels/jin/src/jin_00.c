@@ -14,6 +14,7 @@
 #include "evt/evt_sub.h"
 #include "evt/evt_pouch.h"
 #include "mot/mot_hammer.h"
+#include "driver/mapdrv.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "driver/npcdrv.h"
@@ -2193,7 +2194,7 @@ EVT_BEGIN(jin_00_init_evt)
         CALL(evt_cam_road_reset)
     END_IF
     CALL(evt_hitobj_attr_onoff, 0, 0, STRING("a_futa"), 4)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("hahen"), 2)
+    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("hahen"), MAP_OBJ_FLAG_CLIP)
     RETURN
 EVT_END()
 

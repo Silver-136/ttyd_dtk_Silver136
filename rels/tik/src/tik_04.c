@@ -18,6 +18,7 @@
 #include "party/party_motion.h"
 #include "driver/mobjdrv.h"
 #include "driver/npcdrv.h"
+#include "driver/mapdrv.h"
 
 USER_FUNC(evt_cloud_ent);
 USER_FUNC(evt_cloud_init);
@@ -255,8 +256,8 @@ EVT_BEGIN(kaidan_pera)
     END_INLINE_EVENT
     CALL(evt_img_clear_virtual_point, STRING("capture_img"))
     CALL(evt_img_set_paper_anim, STRING("capture_img"), STRING("A_1"))
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("s_dai_nise"), 1)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("dai_6"), 1)
+    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("s_dai_nise"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("dai_6"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_img_wait_animend, STRING("capture_img"))
     CALL(evt_mapobj_clear_offscreen, 1, STRING("s_dai_nise"))
     CALL(evt_mapobj_clear_offscreen, 1, STRING("win_1"))
@@ -317,20 +318,20 @@ EVT_BEGIN(tik_04_init_evt)
         CALL(evt_cloud_init)
         CALL(evt_cloud_ent, 0, STRING("win_1"), STRING("a_win_1"), PTR(tik04_wall_blow_evt))
         ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("win_1"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("win_1"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_win_1"), 1, 0)
     END_IF
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("s_dai_nise"), 1)
+    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("s_dai_nise"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_hitobj_onoff, STRING("a_dai_nise"), 1, 0)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("dai_toreru"), 1)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("dai_6"), 1)
+    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("dai_toreru"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("dai_6"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_hitobj_onoff, STRING("a_dai_6"), 1, 0)
     IF_INT_EQUAL(GSWF(1335), 0)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("s_dai_nise"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("s_dai_nise"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_dai_nise"), 1, 1)
         CALL(evt_mobj_switch_blue, 0, STRING("mobj_switch00"), 275, 0, 100, PTR(tik_04_switch_evt), GSWF(1335))
         ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("dai_6"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("dai_6"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_dai_6"), 1, 1)
     END_IF
     CALL(evt_item_entry, STRING("blackkey"), 33, 175, 125, -100, 16, GSWF(1337), 0)

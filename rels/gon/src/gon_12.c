@@ -11,6 +11,7 @@
 #include "evt/evt_seq.h"
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
+#include "driver/mapdrv.h"
 
 #include "driver/npcdrv.h"
 #include "evt/evt_npc.h"
@@ -117,7 +118,7 @@ static EVT_BEGIN(chuchurina_sogu)
     CALL(N_evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
     CALL(evt_party_stop, 0)
     SET_VALUE(GSW_STORY_PROGRESS, 50)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("s_heya"), 2)
+    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("s_heya"), MAP_OBJ_FLAG_CLIP)
     CALL(evt_npc_flag_onoff, 1, STRING("チュチュリーナ"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_npc_flag_onoff, 0, STRING("チュチュリーナ"), NPC_FLAG_AUTO_MOVE_ANIM)
     WAIT_MS(750)

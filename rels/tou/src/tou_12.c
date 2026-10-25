@@ -14,6 +14,7 @@
 #include "evt/evt_item.h"
 #include "driver/mobjdrv.h"
 #include "driver/npcdrv.h"
+#include "driver/mapdrv.h"
 
 
 static EvtWord w_door_open[12];
@@ -285,7 +286,7 @@ EVT_BEGIN(tou_12_init_evt)
         CALL(evt_mobj_flag_onoff, 0, STRING("aa"), MOBJ_FLAG_GRAVITY)
     END_IF
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 164)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("gor_hae"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("gor_hae"), MAP_OBJ_FLAG_HIDDEN)
         ELSE
         CALL(evt_map_playanim, STRING("anm_hae"), 1, 0)
         BEGIN_INLINE_EVENT

@@ -12,6 +12,7 @@
 #include "evt/evt_seq.h"
 #include "evt/evt_snd.h"
 #include "party/party_motion.h"
+#include "driver/mapdrv.h"
 
 USER_FUNC(evt_cloud_ent);
 USER_FUNC(evt_cloud_init);
@@ -147,7 +148,7 @@ EVT_BEGIN(jin_06_init_evt)
         CALL(evt_cloud_init)
         CALL(evt_cloud_ent, 0, STRING("mekure"), STRING("a_mekure"), PTR(jin_06_wall_open_evt))
         ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("mekure"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("mekure"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_mekure"), 0, 0)
     END_IF
     IF_INT_LESS(GSW_STORY_PROGRESS, 195)

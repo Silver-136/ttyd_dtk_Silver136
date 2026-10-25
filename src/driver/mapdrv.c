@@ -250,7 +250,7 @@ MapObject* _mapEnt(MapFileJoint* joint, MapObject* parent, Mtx mtx, s32 index) {
     PSMTXConcat(trans, scale, obj->localMtx);
     PSMTXConcat(mtx, obj->localMtx, obj->modelWorldMtx);
     PSMTXIdentity(obj->transformMtx);
-    obj->flags |= 0x200;
+    obj->flags |= MAP_OBJ_FLAG_MTX_DIRTY;
     obj->cameraId = 4;
     obj->offscreenId = -1;
     obj->parent = parent;
@@ -258,7 +258,7 @@ MapObject* _mapEnt(MapFileJoint* joint, MapObject* parent, Mtx mtx, s32 index) {
     obj->child = NULL;
     if (joint->drawMode) {
         if (joint->drawMode->modeFlags & 1) {
-            obj->flags |= 8;
+            obj->flags |= MAP_OBJ_FLAG_BACKGROUND;
         }
         switch (joint->drawMode->blendType) {
             case 0: {
@@ -284,21 +284,21 @@ MapObject* _mapEnt(MapFileJoint* joint, MapObject* parent, Mtx mtx, s32 index) {
             }
             case 1: {
                     u8 m = 0;
-                    if (obj->flags & 8) m = 3;
+                    if (obj->flags & MAP_OBJ_FLAG_BACKGROUND) m = 3;
                     obj->blendMode = m;
                 }
                 break;
             case 2:
-                obj->blendMode = (obj->flags & 8) ? 4 : 1;
+                obj->blendMode = (obj->flags & MAP_OBJ_FLAG_BACKGROUND) ? 4 : 1;
                 break;
             case 3:
-                obj->blendMode = (obj->flags & 8) ? 5 : 2;
+                obj->blendMode = (obj->flags & MAP_OBJ_FLAG_BACKGROUND) ? 5 : 2;
                 break;
         }
         if (joint->drawMode->modeFlags & 2) {
-            obj->flags |= 0x10;
+            obj->flags |= MAP_OBJ_FLAG_GROUP;
             if (joint->drawMode->modeFlags & 0x10) {
-                obj->flags |= 0x8000;
+                obj->flags |= MAP_OBJ_FLAG_DEPTH_OFFSET;
             }
             switch (joint->drawMode->blendType) {
                 case 0: obj->blendMode = 2; break;
@@ -308,18 +308,18 @@ MapObject* _mapEnt(MapFileJoint* joint, MapObject* parent, Mtx mtx, s32 index) {
                 default: obj->blendMode = 2; break;
             }
         }
-        if (obj->flags & 0x10) {
-            if (parent && (parent->flags & 0x10 || parent->flags & 0x20)) {
-                obj->flags &= ~0x10;
+        if (obj->flags & MAP_OBJ_FLAG_GROUP) {
+            if (parent && (parent->flags & MAP_OBJ_FLAG_GROUP || parent->flags & MAP_OBJ_FLAG_GROUP_MEMBER)) {
+                obj->flags &= ~MAP_OBJ_FLAG_GROUP;
             }
-        } else if (parent && (parent->flags & 0x10 || parent->flags & 0x20)) {
-            obj->flags |= 0x20;
-            if (parent->flags & 0x8000) {
-                obj->flags |= 0x8000;
+        } else if (parent && (parent->flags & MAP_OBJ_FLAG_GROUP || parent->flags & MAP_OBJ_FLAG_GROUP_MEMBER)) {
+            obj->flags |= MAP_OBJ_FLAG_GROUP_MEMBER;
+            if (parent->flags & MAP_OBJ_FLAG_DEPTH_OFFSET) {
+                obj->flags |= MAP_OBJ_FLAG_DEPTH_OFFSET;
             }
         }
         if (joint->drawMode->modeFlags & 4) {
-            obj->flags |= 4;
+            obj->flags |= MAP_OBJ_FLAG_CHAR_SHADOW;
         }
     } else {
         OSPanic("mapdrv.c", 0x2e5, "\x83\x57\x83\x87\x83\x43\x83\x93\x83\x67\x82\xcc\x83\x66\x81\x5b\x83\x5e\x82\xcc\x8e\x77\x92\xe8\x82\xc9\x82\xa8\x82\xa9\x82\xb5\x82\xc8\x82\xe0\x82\xcc\x82\xaa\x82\xa0\x82\xe9\n");
@@ -334,7 +334,7 @@ MapObject* _mapEnt(MapFileJoint* joint, MapObject* parent, Mtx mtx, s32 index) {
         PSMTXMultVec(obj->modelWorldMtx, &obj->center, &a);
         PSMTXMultVec(obj->modelWorldMtx, &joint->bboxMax, &b);
         if (PSVECSquareDistance(&a, &b) < 20000.0f) {
-            obj->flags |= 2;
+            obj->flags |= MAP_OBJ_FLAG_CLIP;
         }
     }
     return obj;
@@ -407,7 +407,7 @@ void makeDisplayList(BOOL group) {
             if (dm->lightMask) {
                 continue;
             }
-            if (shadowGetCharShadowProjection() && (obj->flags & 4)) {
+            if (shadowGetCharShadowProjection() && (obj->flags & MAP_OBJ_FLAG_CHAR_SHADOW)) {
                 continue;
             }
             if (!(e->flags & 0x8000)) {
@@ -865,13 +865,13 @@ void _mapLoad(MapWork* wp, BOOL group, const char* map) {
             if (dm->lightMask) {
                 continue;
             }
-            if (shadowGetCharShadowProjection() && (o->flags & 4)) {
+            if (shadowGetCharShadowProjection() && (o->flags & MAP_OBJ_FLAG_CHAR_SHADOW)) {
                 continue;
             }
             if (!(w3->entries[group].flags & 0x8000)) {
                 continue;
             }
-            o->flags |= 0x100;
+            o->flags |= MAP_OBJ_FLAG_DISPLAY_LIST;
         }
     }
     disableMapDraw = FALSE;
@@ -1214,22 +1214,22 @@ void mapCalcAnimMatrix(Mtx out, Mtx in, MapAnim* anim, MapAnimJoint* joint) {
 void mapReCalcMatrix(MapObject* obj, Mtx mtx, BOOL force) {
     BOOL dirty = FALSE;
 
-    if (obj->flags & 0x200) {
+    if (obj->flags & MAP_OBJ_FLAG_MTX_DIRTY) {
         dirty = TRUE;
     }
     if (force) {
         dirty = TRUE;
     }
     if (dirty) {
-        if (obj->flags & 0x2000) {
+        if (obj->flags & MAP_OBJ_FLAG_ANIM_MTX) {
             PSMTXConcat(mtx, obj->animMtx, obj->modelWorldMtx);
         } else {
             PSMTXConcat(mtx, obj->localMtx, obj->modelWorldMtx);
         }
-        if (obj->flags & 0x200000) {
+        if (obj->flags & MAP_OBJ_FLAG_TRANSFORM) {
             PSMTXConcat(obj->modelWorldMtx, obj->transformMtx, obj->modelWorldMtx);
         }
-        obj->flags &= ~0x200;
+        obj->flags &= ~MAP_OBJ_FLAG_MTX_DIRTY;
         if (obj->child) {
             mapReCalcMatrix(obj->child, obj->modelWorldMtx, TRUE);
         }
@@ -1535,8 +1535,8 @@ void mapMain(void) {
                     if (o) {
                         mapCalcAnimMatrix(o->animMtx, o->localMtx, anim, (MapAnimJoint*)jl->items[k]);
                         changed = TRUE;
-                        o->flags |= 0x2000;
-                        o->flags |= 0x200;
+                        o->flags |= MAP_OBJ_FLAG_ANIM_MTX;
+                        o->flags |= MAP_OBJ_FLAG_MTX_DIRTY;
                     }
                 }
             }
@@ -1622,10 +1622,10 @@ void _mapDispMapObj(CameraId cam, MapObject *obj) {
     void *material;
     camera = camGetPtr(cam);
     current_mp = obj;
-    if (!(obj->flags & 0x20)) {
+    if (!(obj->flags & MAP_OBJ_FLAG_GROUP_MEMBER)) {
         goto setup;
     }
-    if (obj->flags & 0x8000) {
+    if (obj->flags & MAP_OBJ_FLAG_DEPTH_OFFSET) {
         n = 0;
         for (joint = obj->joints; joint->prev; joint = joint->prev) {
         }
@@ -1696,7 +1696,7 @@ void _mapDispMapObj(CameraId cam, MapObject *obj) {
 
     PSMTXConcat(camera->view, obj->modelWorldMtx, mtx);
     GXLoadPosMtxImm(mtx, 0);
-    if (!(obj->flags & 0x100)) {
+    if (!(obj->flags & MAP_OBJ_FLAG_DISPLAY_LIST)) {
         PSMTXInvXpose(mtx, nrm);
         GXLoadNrmMtxImm(nrm, 0);
     }
@@ -1706,18 +1706,18 @@ void _mapDispMapObj(CameraId cam, MapObject *obj) {
         GXSetCullMode(culling[obj->joints->drawMode->cullMode]);
     }
     mapSetObjFog(obj);
-    if (obj->flags & 0x20) {
-        if (obj->flags & 0x4000) {
+    if (obj->flags & MAP_OBJ_FLAG_GROUP_MEMBER) {
+        if (obj->flags & MAP_OBJ_FLAG_DISABLED) {
             goto end;
         }
-        if ((obj->flags & 1) && (!(obj->flags & 0x80))) {
+        if ((obj->flags & MAP_OBJ_FLAG_HIDDEN) && (!(obj->flags & MAP_OBJ_FLAG_OFFSCREEN))) {
             goto end;
         }
-        if ((obj->flags & 0x40) && (obj->color.a == 0)) {
+        if ((obj->flags & MAP_OBJ_FLAG_COLOR) && (obj->color.a == 0)) {
             goto end;
         }
     }
-    if (obj->flags & 0x100) {
+    if (obj->flags & MAP_OBJ_FLAG_DISPLAY_LIST) {
         for (i = 0; i < obj->joints->partCount; i++) {
             mesh = obj->joints->parts[i].mesh;
             material = obj->joints->parts[i].material;
@@ -1741,11 +1741,11 @@ void _mapDispMapObj(CameraId cam, MapObject *obj) {
 
     }
     end:
-    if (obj->flags & 0x8000) {
+    if (obj->flags & MAP_OBJ_FLAG_DEPTH_OFFSET) {
         GXSetProjection(camera->projection, camera->projType);
     }
 
-    if (obj->flags & 0x0F000000) {
+    if (obj->flags & MAP_OBJ_TEV_CALLBACK_MASK) {
         GXSetTevDirect(GX_TEVSTAGE0);
         GXSetTevDirect(GX_TEVSTAGE1);
         GXSetTevDirect(GX_TEVSTAGE2);
@@ -1760,7 +1760,7 @@ void _mapDispMapGrp(CameraId cam, MapObject* obj) {
     if (obj->child) {
         _mapDispMapGrp(cam, obj->child);
     }
-    if ((obj->flags & 0x20) && obj->next) {
+    if ((obj->flags & MAP_OBJ_FLAG_GROUP_MEMBER) && obj->next) {
         _mapDispMapGrp(cam, obj->next);
     }
 }
@@ -1844,7 +1844,7 @@ void _mapDispMapGrp_NoMaterial(CameraId cam, MapObject* obj) {
     if (obj->child) {
         _mapDispMapGrp_NoMaterial(cam, obj->child);
     }
-    if ((obj->flags & 0x20) && obj->next) {
+    if ((obj->flags & MAP_OBJ_FLAG_GROUP_MEMBER) && obj->next) {
         _mapDispMapGrp_NoMaterial(cam, obj->next);
     }
 }
@@ -1907,21 +1907,21 @@ void mapDisp(void) {
         }
         obj = entry->objects;
         for (j = 0; j < entry->numJoints; j++, obj++) {
-            if (obj->flags & 0x4000) continue;
-            if ((obj->flags & 1) && !(obj->flags & 0x80)) continue;
-            if ((obj->flags & 0x40) && obj->color.a == 0) continue;
-            if (obj->flags & 0x20000000) {
+            if (obj->flags & MAP_OBJ_FLAG_DISABLED) continue;
+            if ((obj->flags & MAP_OBJ_FLAG_HIDDEN) && !(obj->flags & MAP_OBJ_FLAG_OFFSCREEN)) continue;
+            if ((obj->flags & MAP_OBJ_FLAG_COLOR) && obj->color.a == 0) continue;
+            if (obj->flags & MAP_OBJ_FLAG_SCREEN_RECT) {
                 obj->screenRect[2] = 0;
                 obj->screenRect[3] = 0;
                 obj->screenRect[0] = 0;
                 obj->screenRect[1] = 0;
             }
-            if (obj->flags & 0x20) continue;
-            if (!(obj->flags & 0x10) && obj->joints->partCount < 1) continue;
-            if (!(obj->flags & 0x800) && (entry->flags & 2) && entry->blend.a == 0) continue;
-            if (!(obj->flags & 0x1000) && (entry->flags & 4) && entry->blend2.a == 0) continue;
+            if (obj->flags & MAP_OBJ_FLAG_GROUP_MEMBER) continue;
+            if (!(obj->flags & MAP_OBJ_FLAG_GROUP) && obj->joints->partCount < 1) continue;
+            if (!(obj->flags & MAP_OBJ_FLAG_NO_MAP_BLEND) && (entry->flags & 2) && entry->blend.a == 0) continue;
+            if (!(obj->flags & MAP_OBJ_FLAG_NO_MAP_BLEND2) && (entry->flags & 4) && entry->blend2.a == 0) continue;
             PSMTXConcat(camera->view, obj->modelWorldMtx, mtx);
-            if ((obj->flags & 2) && !mapClipOffFlag) {
+            if ((obj->flags & MAP_OBJ_FLAG_CLIP) && !mapClipOffFlag) {
                 joint = obj->joints;
                 clipped = FALSE;
                 v.x = joint->bboxMax.x;
@@ -1993,14 +1993,14 @@ void mapDisp(void) {
                     mode = 2;
                 }
             }
-            if (obj->flags & 0x20000000) {
-                dispEntry(CAMERA_OFFSCREEN2, 5000.0f, 3, !(obj->flags & 0x10) ? mapDispMapObj_bbox : mapDispMapGrp_bbox, obj);
+            if (obj->flags & MAP_OBJ_FLAG_SCREEN_RECT) {
+                dispEntry(CAMERA_OFFSCREEN2, 5000.0f, 3, !(obj->flags & MAP_OBJ_FLAG_GROUP) ? mapDispMapObj_bbox : mapDispMapGrp_bbox, obj);
             }
-            if (obj->flags & 0x80) {
-                dispEntry(CAMERA_OFFSCREEN2, z, mode, !(obj->flags & 0x10) ? mapDispMapObj_off : mapDispMapGrp_off, obj);
+            if (obj->flags & MAP_OBJ_FLAG_OFFSCREEN) {
+                dispEntry(CAMERA_OFFSCREEN2, z, mode, !(obj->flags & MAP_OBJ_FLAG_GROUP) ? mapDispMapObj_off : mapDispMapGrp_off, obj);
             }
-            if (!(obj->flags & 1)) {
-                dispEntry(obj->cameraId, z, mode, !(obj->flags & 0x10) ? mapDispMapObj : mapDispMapGrp, obj);
+            if (!(obj->flags & MAP_OBJ_FLAG_HIDDEN)) {
+                dispEntry(obj->cameraId, z, mode, !(obj->flags & MAP_OBJ_FLAG_GROUP) ? mapDispMapObj : mapDispMapGrp, obj);
             }
         }
     }
@@ -2818,7 +2818,7 @@ static inline void mapSetObjFog(MapObject* obj) {
     CameraEntry* camera = camGetCurPtr();
     MapWork* wp = mapGetWork();
 
-    if ((wp->entries[0].flags & 1) && !(obj->flags & 0x80000)) {
+    if ((wp->entries[0].flags & 1) && !(obj->flags & MAP_OBJ_FLAG_NO_FOG)) {
         GXSetFog((GXFogType)fog_type[wp->entries[0].fogType], wp->entries[0].fogStart, wp->entries[0].fogEnd,
                  camera->near, camera->far, wp->entries[0].fogColor);
     } else {
@@ -3424,9 +3424,9 @@ void mapGrpFlagOff(const char* name, u32 flags) {
 void _setOffScrnId(MapObject* obj, s32 id, BOOL doNext) {
     obj->offscreenId = id;
     if (id != -1) {
-        obj->flags |= 0x80;
+        obj->flags |= MAP_OBJ_FLAG_OFFSCREEN;
     } else {
-        obj->flags &= ~0x80;
+        obj->flags &= ~MAP_OBJ_FLAG_OFFSCREEN;
     }
     if (obj->child) {
         _setOffScrnId(obj->child, id, TRUE);
@@ -3463,7 +3463,7 @@ void mapObjSetOffScreen(const char* name, const char* offscreen) {
 done:
 
     obj->offscreenId = offscreenNameToId(offscreen);
-    obj->flags |= 0x80;
+    obj->flags |= MAP_OBJ_FLAG_OFFSCREEN;
 }
 
 void mapGrpSetOffScreen(const char* name, const char* offscreen) {
@@ -3477,7 +3477,7 @@ void mapObjClearOffScreen(const char* name) {
     MapObject* obj = mapGetMapObj(name);
 
     obj->offscreenId = -1;
-    obj->flags &= ~0x80;
+    obj->flags &= ~MAP_OBJ_FLAG_OFFSCREEN;
 }
 
 void mapGrpClearOffScreen(const char* name) {
@@ -3491,7 +3491,7 @@ void mapObjRotate(const char* name, f32 x, f32 y, f32 z) {
     Mtx rotX, rotY, rotZ;
 
     if (obj) {
-        if (!(obj->flags & 0x200)) {
+        if (!(obj->flags & MAP_OBJ_FLAG_MTX_DIRTY)) {
             MTXIdentity(obj->transformMtx);
         }
         MTXRotRad(rotX, 'x', MTXDegToRad(x));
@@ -3502,8 +3502,8 @@ void mapObjRotate(const char* name, f32 x, f32 y, f32 z) {
             MTXConcat(obj->transformMtx, rotY, obj->transformMtx);
             MTXConcat(obj->transformMtx, rotX, obj->transformMtx);
         }
-        obj->flags |= 0x200000;
-        obj->flags |= 0x200;
+        obj->flags |= MAP_OBJ_FLAG_TRANSFORM;
+        obj->flags |= MAP_OBJ_FLAG_MTX_DIRTY;
     }
 }
 
@@ -3512,13 +3512,13 @@ void mapObjTranslate(const char* name, f32 x, f32 y, f32 z) {
     Mtx trans;
 
     if (obj) {
-        if (!(obj->flags & 0x200)) {
+        if (!(obj->flags & MAP_OBJ_FLAG_MTX_DIRTY)) {
             MTXIdentity(obj->transformMtx);
         }
         MTXTrans(trans, x / 10.0f, y / 10.0f, z / 10.0f);
         MTXConcat(obj->transformMtx, trans, obj->transformMtx);
-        obj->flags |= 0x200000;
-        obj->flags |= 0x200;
+        obj->flags |= MAP_OBJ_FLAG_TRANSFORM;
+        obj->flags |= MAP_OBJ_FLAG_MTX_DIRTY;
     }
 }
 
@@ -3527,13 +3527,13 @@ void mapObjScale(const char* name, f32 x, f32 y, f32 z) {
     Mtx scale;
 
     if (obj) {
-        if (!(obj->flags & 0x200)) {
+        if (!(obj->flags & MAP_OBJ_FLAG_MTX_DIRTY)) {
             MTXIdentity(obj->transformMtx);
         }
         MTXScale(scale, x, y, z);
         MTXConcat(obj->transformMtx, scale, obj->transformMtx);
-        obj->flags |= 0x200000;
-        obj->flags |= 0x200;
+        obj->flags |= MAP_OBJ_FLAG_TRANSFORM;
+        obj->flags |= MAP_OBJ_FLAG_MTX_DIRTY;
     }
 }
 
@@ -3638,14 +3638,14 @@ void mapObjSetColor(const char* name, GXColor* color) {
 
     if (obj) {
         obj->color = *color;
-        obj->flags |= 0x40;
+        obj->flags |= MAP_OBJ_FLAG_COLOR;
     }
 }
 
 void setColor(MapObject* obj, GXColor color, BOOL doNext) {
     if (obj) {
         obj->color = color;
-        obj->flags |= 0x40;
+        obj->flags |= MAP_OBJ_FLAG_COLOR;
         if (obj->child) {
             setColor(obj->child, color, TRUE);
         }

@@ -8,6 +8,7 @@
 #include "evt/evt_map.h"
 #include "evt/evt_snd.h"
 #include "party/party_motion.h"
+#include "driver/mapdrv.h"
 
 
 static EvtWord w_door_close[22];
@@ -205,16 +206,16 @@ EVT_BEGIN(las_23_init_evt)
     CALL(evt_bero_get_info)
     CALL_CHILD(PTR(evt_bero_info_run))
     IF_INT_LESS(GSW_STORY_PROGRESS, 390)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_under"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_under"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_under"), 1, 0)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_paipu"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_paipu"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("jav_01"), 1, 0)
         CALL(evt_hitobj_onoff, STRING("jav_02"), 1, 0)
 #ifdef VERSION_G8ME01
         CALL(evt_hitobj_onoff, STRING("jav_03"), 1, 0)
 #endif
         ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_yuka"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_yuka"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_be"), 1, 0)
         SET_VALUE(LW(0), STRING("w_bero"))
         CALL_CHILD(PTR(bero_case_switch_off))

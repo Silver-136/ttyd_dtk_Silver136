@@ -7,6 +7,7 @@
 #include "battle/battle_stage_object.h"
 #include "driver/npcdrv.h"
 #include "evt/evt_map.h"
+#include "driver/mapdrv.h"
 
 extern BattleUnitKind unit_barriern;
 
@@ -1176,7 +1177,7 @@ NpcTerritoryInfo btl_mri_setup_no_tbl[] = {
 };
 
 EVT_BEGIN(stg_02_1_init_evt)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ueki"), 1)
+    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ueki"), MAP_OBJ_FLAG_HIDDEN)
     RETURN
 EVT_END()
 

@@ -22,6 +22,7 @@
 #include "evt/evt_snd.h"
 #include "evt/evt_party.h"
 #include "driver/npcdrv.h"
+#include "driver/mapdrv.h"
 
 #ifdef VERSION_G8ME01
 #endif
@@ -153,7 +154,7 @@ EVT_BEGIN(wall_roll_sub)
     END_INLINE_EVENT
     CALL(evt_img_set_paper_anim, LW(2), STRING("A_1"))
     WAIT_FRAMES(1)
-    CALL(evt_mapobj_flag_onoff, 1, 1, LW(1), 1)
+    CALL(evt_mapobj_flag_onoff, 1, 1, LW(1), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_img_wait_animend, LW(2))
     CALL(evt_img_free_capture, LW(2), 0)
     CALL(evt_img_free_capture, LW(2), 1)
@@ -480,7 +481,7 @@ EVT_BEGIN(mri_09_init_evt)
         CALL(evt_paper_entry, STRING("OFF_d_roll_left"))
         CALL(evt_paper_entry, STRING("OFF_d_roll_right"))
         CASE_GREATER_OR_EQUAL(104)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_isk_01A"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_isk_01A"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_isk_01A"), 1, 0)
         CALL(evt_hitobj_onoff, STRING("A_f2_rak03"), 1, 1)
         CALL(evt_hitobj_onoff, STRING("A_f2_rak04"), 1, 0)

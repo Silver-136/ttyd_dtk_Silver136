@@ -502,7 +502,7 @@ USER_FUNC(moving_floor_set_se) {
             return EVT_RETURN_DONE;
         }
         flags = 0;
-        if ((psndGetFlag() & 0x100) && !(obj->flags & 0x1800)) {
+        if ((psndGetFlag() & 0x100) && !(obj->flags & (MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2))) {
             flags = 0x10000;
         }
         w->seId = psndSFXOn_3D(SFX_NAME_WORD(flags | PSND_SFX_STG1_TIK_FLOOR_MOVE1), &pos);

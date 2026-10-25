@@ -18,6 +18,7 @@
 #include "evt/evt_snd.h"
 #include "evt/evt_sub.h"
 #include "driver/npcdrv.h"
+#include "driver/mapdrv.h"
 
 #include "driver/effdrv.h"
 #include "manager/evtmgr_cmd.h"
@@ -382,13 +383,13 @@ EVT_BEGIN(bomb_wanwan)
     IF_INT_EQUAL(LF(0), 0)
         CALL(evt_img_alloc_capture, STRING("img"), 0, STRING("ofs"), 1, LW(0), LW(1), LW(2), LW(3))
         WAIT_FRAMES(1)
-        CALL(evt_mapobj_flag_onoff, 1, 1, LW(14), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, LW(14), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_img_clear_virtual_point, STRING("img"))
         CALL(evt_img_onoff, STRING("img"), 1)
         CALL(evt_img_set_paper_anim, STRING("img"), STRING("A_1"))
         CALL(evt_img_wait_animend, STRING("img"))
         ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 1, LW(14), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, LW(14), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     CALL(evt_img_onoff, STRING("img"), 0)
     CALL(evt_img_release, STRING("img"))
@@ -899,13 +900,13 @@ EVT_BEGIN(las_09_init_evt)
     IF_INT_EQUAL(GSWF(4326), 0)
         CALL(evt_run_case_evt, 15, 1, STRING("A_wan1"), 0, PTR(bomb_wanwan1_evt), 0)
         ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("wan3"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("wan3"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_wan1"), 0, 0)
     END_IF
     IF_INT_EQUAL(GSWF(4327), 0)
         CALL(evt_run_case_evt, 15, 1, STRING("A_wan2"), 0, PTR(bomb_wanwan2_evt), 0)
         ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("wan1"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("wan1"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_wan2"), 0, 0)
     END_IF
     CALL(evt_mobj_switch_blue, 2, STRING("switch1"), -540, 10, -1300, PTR(switch_1_evt), GSWF(4328))
@@ -925,7 +926,7 @@ EVT_BEGIN(las_09_init_evt)
         ELSE
         CALL(evt_hitobj_attr_onoff, 0, 0, STRING("Ship_Change1"), 32768)
     END_IF
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_den"), 2)
+    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_den"), MAP_OBJ_FLAG_CLIP)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, 390)
         CALL_CHILD(PTR(majyorin_evt_npc_entry))
         CALL(evt_bero_get_entername, LW(0))

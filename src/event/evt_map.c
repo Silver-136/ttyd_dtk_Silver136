@@ -457,7 +457,7 @@ USER_FUNC(N_evt_mapdisp_onoff) {
 }
 
 EVT_BEGIN(evt_ride_airport)
-    CALL(evt_mapobj_flag_onoff, 1, 0, LW(0), 256)
+    CALL(evt_mapobj_flag_onoff, 1, 0, LW(0), MAP_OBJ_FLAG_DISPLAY_LIST)
     LABEL(0)
     CALL(evt_map_get_flush_color, LW(0), LW(10), LW(11), LW(12), LW(13))
     ADD(LW(13), 2)

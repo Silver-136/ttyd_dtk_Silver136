@@ -285,9 +285,9 @@ EVT_BEGIN(eki_03_init_evt)
 #endif
     CALL(evt_mobj_brick, STRING("blk02"), 250, 385, -100, 129, 11, 0, GSWF(3754))
     CALL(evt_map_set_tevcallback, 2, PTR(sun_tev))
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("sun"), 33554432)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("sun"), 256)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("sun"), 268435456)
+    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("sun"), MAP_OBJ_TEV_CALLBACK(2))
+    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("sun"), MAP_OBJ_FLAG_DISPLAY_LIST)
+    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("sun"), MAP_OBJ_FLAG_NO_COLOR_STAGE)
     BEGIN_INLINE_EVENT
         CALL(test_glare)
     END_INLINE_EVENT
@@ -295,68 +295,68 @@ EVT_BEGIN(eki_03_init_evt)
     IF_INT_EQUAL(GSWF(3729), 0)
         CALL(evt_cloud_ent, 0, STRING("kami_0"), STRING("a_kami_1"), PTR(evt_poster_1))
         ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("kami_0"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("kami_0"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_kami_1"), 1, 0)
     END_IF
     IF_INT_EQUAL(GSWF(3730), 0)
         CALL(evt_cloud_ent, 0, STRING("kami_17"), STRING("a_kami_2"), PTR(evt_poster_2))
         ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("kami_17"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("kami_17"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_kami_2"), 1, 0)
     END_IF
     IF_INT_EQUAL(GSWF(3731), 0)
         CALL(evt_cloud_ent, 0, STRING("kami_16"), STRING("a_kami_3"), PTR(evt_poster_3))
         ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("kami_16"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("kami_16"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_kami_3"), 1, 0)
     END_IF
     IF_INT_EQUAL(GSWF(3732), 0)
         CALL(evt_cloud_ent, 0, STRING("kami_4"), STRING("a_kami_4"), PTR(evt_poster_4))
         ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("kami_4"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("kami_4"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_kami_4"), 1, 0)
     END_IF
     IF_INT_EQUAL(GSWF(3733), 0)
         CALL(evt_cloud_ent, 0, STRING("kami_5"), STRING("a_kami_12"), PTR(evt_poster_5))
         ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("kami_5"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("kami_5"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_kami_12"), 1, 0)
     END_IF
     IF_INT_EQUAL(GSWF(3734), 0)
         CALL(evt_cloud_ent, 0, STRING("kami_6"), STRING("a_kami_11"), PTR(evt_poster_6))
         ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("kami_6"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("kami_6"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_kami_11"), 1, 0)
     END_IF
     IF_INT_EQUAL(GSWF(3735), 0)
         CALL(evt_cloud_ent, 0, STRING("kami_7"), STRING("a_kami_11"), PTR(evt_poster_7))
         ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("kami_7"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("kami_7"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_kami_11"), 1, 0)
     END_IF
     IF_INT_EQUAL(GSWF(3736), 0)
         CALL(evt_cloud_ent, 0, STRING("kami_8"), STRING("a_kami_12"), PTR(evt_poster_8))
         ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("kami_8"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("kami_8"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_kami_12"), 1, 0)
     END_IF
     IF_INT_EQUAL(GSWF(3737), 0)
         CALL(evt_cloud_ent, 0, STRING("kami_9"), STRING("a_kami_12"), PTR(evt_poster_9))
         ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("kami_9"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("kami_9"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_kami_12"), 1, 0)
     END_IF
     IF_INT_EQUAL(GSWF(3738), 0)
         CALL(evt_cloud_ent, 0, STRING("kami_10"), STRING("a_kami_10"), PTR(evt_poster_10))
         ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("kami_10"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("kami_10"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_kami_10"), 1, 0)
         CALL(evt_hitobj_onoff, STRING("a_kami_13"), 1, 0)
     END_IF
     IF_INT_EQUAL(GSWF(3739), 0)
         CALL(evt_cloud_ent, 0, STRING("kami_11"), STRING("a_kami_10"), PTR(evt_poster_11))
         ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("kami_11"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("kami_11"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_kami_10"), 1, 0)
         CALL(evt_hitobj_onoff, STRING("a_kami_14"), 1, 0)
         CALL(evt_hitobj_onoff, STRING("a_kami_15"), 1, 0)
@@ -366,7 +366,7 @@ EVT_BEGIN(eki_03_init_evt)
     IF_INT_EQUAL(GSWF(3740), 0)
         CALL(evt_cloud_ent, 0, STRING("kami_12"), STRING("a_kami_10"), PTR(evt_poster_12))
         ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("kami_12"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("kami_12"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_kami_10"), 1, 0)
         CALL(evt_hitobj_onoff, STRING("a_kami_8"), 1, 0)
         CALL(evt_hitobj_onoff, STRING("a_kami_9"), 1, 0)
@@ -375,19 +375,19 @@ EVT_BEGIN(eki_03_init_evt)
     IF_INT_EQUAL(GSWF(3741), 0)
         CALL(evt_cloud_ent, 0, STRING("kami_13"), STRING("a_kami_10"), PTR(evt_poster_13))
         ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("kami_13"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("kami_13"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_kami_10"), 1, 0)
     END_IF
     IF_INT_EQUAL(GSWF(3742), 0)
         CALL(evt_cloud_ent, 0, STRING("kami_14"), STRING("a_kami_11"), PTR(evt_poster_14))
         ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("kami_14"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("kami_14"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_kami_11"), 1, 0)
     END_IF
     IF_INT_EQUAL(GSWF(3743), 0)
         CALL(evt_cloud_ent, 0, STRING("kami_15"), STRING("a_kami_11"), PTR(evt_poster_15))
         ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("kami_15"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("kami_15"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_kami_11"), 1, 0)
     END_IF
     CALL(evt_hitobj_onoff, STRING("a_kabe"), 1, 0)
@@ -455,7 +455,7 @@ static USER_FUNC(test_glare) {
 
     marioGetPtr();
     if (isFirstCall) {
-        sun->flags |= 0x20000000;
+        sun->flags |= MAP_OBJ_FLAG_SCREEN_RECT;
         return EVT_RETURN_BLOCK;
     }
     rect = sun->screenRect;

@@ -18,6 +18,7 @@
 #include "evt/evt_sub.h"
 #include "evt/evt_telop.h"
 #include "evt/evt_item.h"
+#include "driver/mapdrv.h"
 
 #include "party.h"
 #include "mario/mario.h"
@@ -305,7 +306,7 @@ static EVT_BEGIN(rock_main)
     IF_INT_GREATER(LW(2), 0)
         IF_INT_GREATER(LW(3), 0)
 #else
-    CALL(evt_mapobj_flag_onoff, 0, 1, LW(10), 1)
+    CALL(evt_mapobj_flag_onoff, 0, 1, LW(10), MAP_OBJ_FLAG_HIDDEN)
 #endif
     CALL(evt_img_entry, STRING("img"))
     CALL(evt_img_set_paper, STRING("img"), STRING("OFF_d_bom_ver2"))
@@ -318,7 +319,7 @@ static EVT_BEGIN(rock_main)
     CALL(evt_img_set_shadow, STRING("img"), 2)
     CALL(evt_img_set_paper_anim, STRING("img"), STRING("A_1"))
 #ifdef VERSION_G8ME01
-            CALL(evt_mapobj_flag_onoff, 0, 1, LW(10), 1)
+            CALL(evt_mapobj_flag_onoff, 0, 1, LW(10), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_hitobj_onoff, LW(11), 1, 0)
 #endif
     CALL(evt_img_wait_animend, STRING("img"))
@@ -326,7 +327,7 @@ static EVT_BEGIN(rock_main)
 #ifdef VERSION_G8ME01
         END_IF
     END_IF
-    CALL(evt_mapobj_flag_onoff, 0, 1, LW(10), 1)
+    CALL(evt_mapobj_flag_onoff, 0, 1, LW(10), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_hitobj_onoff, LW(11), 1, 0)
 #endif
     CALL(evt_offscreen_delete, STRING("offscreen"))
@@ -398,13 +399,13 @@ EVT_BEGIN(moo_00_init_evt)
     IF_INT_EQUAL(GSWF(4025), 0)
         CALL(evt_run_case_evt, 15, 1, STRING("A_iwa_01"), 0, PTR(rock_evt0), 0)
         ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_iwa_01"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_iwa_01"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_iwa_01"), 1, 0)
     END_IF
     IF_INT_EQUAL(GSWF(4026), 0)
         CALL(evt_run_case_evt, 15, 1, STRING("A_iwa_08"), 0, PTR(rock_evt1), 0)
         ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_iwa_08"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_iwa_08"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_iwa_08"), 1, 0)
     END_IF
     CALL(evt_item_entry, STRING("item_01"), 140, -250, 0, -445, 16, GSWF(4035), 0)

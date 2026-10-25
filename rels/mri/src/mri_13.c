@@ -14,6 +14,7 @@
 #include "party/party_motion.h"
 #include "evt/evt_item.h"
 #include "driver/npcdrv.h"
+#include "driver/mapdrv.h"
 
 #include "driver/hitdrv.h"
 #include "dolphin/mtx.h"
@@ -128,7 +129,7 @@ static EVT_BEGIN(punipuni_ball00_init)
         END_IF
         CALL(evt_target_flag_onoff, LW(11), 0, 3)
         ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_sui_hikari"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_sui_hikari"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     IF_INT_LESS(GSW_STORY_PROGRESS, 107)
         CALL(evt_target_set_position, LW(11), -55, 0, 50)
@@ -151,13 +152,13 @@ static EVT_BEGIN(punipuni_ball00)
             ELSE
             CALL(evt_item_set_position, LW(10), -55, -279, 0)
         END_IF
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_sui_hikari"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_sui_hikari"), MAP_OBJ_FLAG_HIDDEN)
         SET_VALUE(GF(0), 1)
         CALL_CHILD(PTR(mri_punipuni_itemset))
         SET_VALUE(GF(0), 0)
         ELSE
         SET_VALUE(GSWF(2861), 0)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_sui_hikari"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_sui_hikari"), MAP_OBJ_FLAG_HIDDEN)
         CALL_CHILD(PTR(mri_punipuni_itemremove))
     END_IF
     LABEL(100)
@@ -174,13 +175,13 @@ static EVT_BEGIN(yuka_init)
     CALL(evt_mapobj_trans, 1, STRING("S_sui_l"), 0, -309, 0)
     CALL(evt_mapobj_trans, 1, STRING("S_sui_hikari"), 0, -309, 0)
     CALL(evt_hitobj_onoff, STRING("A_sui_l1"), 1, 0)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_sui_kage"), 1)
+    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_sui_kage"), MAP_OBJ_FLAG_HIDDEN)
     RETURN
 EVT_END()
 
 EVT_BEGIN(yuka_slot)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_isk_02_c"), 1)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_isk_03_c"), 1)
+    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_isk_02_c"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_isk_03_c"), MAP_OBJ_FLAG_HIDDEN)
     SET_VALUE(LW(13), GW(0))
     LOOP(0)
         SET_VALUE(LW(2), GW(0))
@@ -200,9 +201,9 @@ EVT_BEGIN(yuka_slot)
         CALL(evt_mapobj_rotate, 1, STRING("S_isk_03"), LW(11), 0, 0)
         CALL(evt_mapobj_rotate, 1, STRING("S_isk_04"), LW(12), 0, 0)
         IF_INT_GREATER_OR_EQUAL(GW(0), 10)
-            CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_isk_03_c"), 1)
+            CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_isk_03_c"), MAP_OBJ_FLAG_HIDDEN)
             ELSE
-            CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_isk_03_c"), 1)
+            CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_isk_03_c"), MAP_OBJ_FLAG_HIDDEN)
         END_IF
         IF_INT_NOT_EQUAL(GW(0), LW(13))
             CALL(evt_snd_sfxon_3d, STRING("SFX_STG2_SWITCH_COUNTER1"), -150, 0, -20, 0)
@@ -393,7 +394,7 @@ EVT_BEGIN(yuka_event)
             END_IF
             WAIT_FRAMES(1)
         END_LOOP
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_sui_kage"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_sui_kage"), MAP_OBJ_FLAG_HIDDEN)
     END_INLINE_EVENT
     CALL(evt_sub_intpl_msec_init, 0, 0, -30950, 10000)
     LOOP(0)

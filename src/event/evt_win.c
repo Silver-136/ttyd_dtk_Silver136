@@ -397,7 +397,7 @@ USER_FUNC(evt_unitwin_select_func) {
             sprintf(name, "uwn%d", i);
             if (wp->itemFlags[i] & 1) {
                 iconFlagOn(name, 2);
-            } else if (obj->flags & 1) {
+            } else if (obj->flags & MAP_OBJ_FLAG_HIDDEN) {
                 iconFlagOn(name, 2);
             } else {
                 iconFlagOff(name, 2);

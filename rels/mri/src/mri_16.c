@@ -11,6 +11,7 @@
 #include "evt/evt_snd.h"
 #include "evt/evt_sub.h"
 #include "driver/mobjdrv.h"
+#include "driver/mapdrv.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "evt/evt_bero.h"
@@ -226,8 +227,8 @@ EVT_BEGIN(water_shikake)
         END_IF
     END_LOOP
     CALL(evt_hitobj_onoff, STRING("A_f1_rak_l03"), 1, 1)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_mizu_before"), 1)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_mizu_now"), 1)
+    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_mizu_before"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_mizu_now"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_snd_sfxon, STRING("SFX_STG2_QUAKE1"), GW(0))
     CALL(evt_snd_sfxon, STRING("SFX_STG2_WATER_FLOW1"), GW(1))
     SPAWN_EVENT_GET_ID(PTR(cam_shake), LW(10))
@@ -254,8 +255,8 @@ EVT_BEGIN(water_shikake)
         CALL(evt_snd_bgmoff, 513)
         CALL(evt_snd_bgmon, 288, 0)
     END_INLINE_EVENT
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_mizu_now"), 1)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_mizu_after"), 1)
+    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_mizu_now"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_mizu_after"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_hitobj_onoff, STRING("A_mizu_after"), 1, 1)
     CALL(evt_hitobj_onoff, STRING("A_f2_kaidan"), 1, 1)
     CALL(evt_hitobj_onoff, STRING("A_mizu_after"), 1, 1)
@@ -391,8 +392,8 @@ EVT_BEGIN(mri_16_init_evt)
     CALL(evt_mobj_rideswitch_lightblue, STRING("mobj01"), 125, 80, -120, PTR(bar_shikake), PTR(bar_shikake_up), GSWF(2868))
     SPAWN_EVENT(PTR(switch_up_down))
     IF_INT_EQUAL(GSWF(2867), 0)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_mizu_now"), 1)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_mizu_after"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_mizu_now"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_mizu_after"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_f2_kaidan"), 1, 0)
         CALL(evt_hitobj_onoff, STRING("A_mizu_after"), 1, 0)
         CALL(evt_hitobj_onoff, STRING("A_f1_rak_l03"), 1, 0)
@@ -406,8 +407,8 @@ EVT_BEGIN(mri_16_init_evt)
         CALL(evt_hitobj_onoff, STRING("A_f1_rak_mkusa05"), 1, 0)
         CALL(evt_hitobj_onoff, STRING("A_mkusa_06"), 1, 0)
         ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_mizu_now"), 1)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_mizu_before"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_mizu_now"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_mizu_before"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_f1_kaidan"), 1, 0)
         CALL(evt_hitobj_onoff, STRING("A_mizu_before"), 1, 0)
         CALL(evt_hitobj_onoff, STRING("A_f2_rak_l03"), 1, 0)

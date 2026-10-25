@@ -16,6 +16,7 @@
 #include "evt/evt_seq.h"
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
+#include "driver/mapdrv.h"
 
 #include "driver/fadedrv.h"
 #include "mario/mariost.h"
@@ -667,8 +668,8 @@ EVT_BEGIN(bomb_check)
 EVT_END()
 
 static EVT_BEGIN(yuka_move)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_isk_02_c"), 1)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_isk_03_c"), 1)
+    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_isk_02_c"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_isk_03_c"), MAP_OBJ_FLAG_HIDDEN)
     LOOP(0)
         SET_VALUE(LW(2), GW(0))
         DIVIDE(LW(2), 100)
@@ -687,9 +688,9 @@ static EVT_BEGIN(yuka_move)
         CALL(evt_mapobj_rotate, 1, STRING("S_isk_03"), LW(11), 0, 0)
         CALL(evt_mapobj_rotate, 1, STRING("S_isk_04"), LW(12), 0, 0)
         IF_INT_GREATER_OR_EQUAL(GW(0), 10)
-            CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_isk_03_c"), 1)
+            CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_isk_03_c"), MAP_OBJ_FLAG_HIDDEN)
             ELSE
-            CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_isk_03_c"), 1)
+            CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_isk_03_c"), MAP_OBJ_FLAG_HIDDEN)
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
@@ -758,7 +759,7 @@ static EVT_BEGIN(punipuni_ball00_init)
         CALL(evt_item_set_position, LW(10), 0, 30, -100)
         CALL(evt_target_flag_onoff, LW(11), 0, 3)
         ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_sui_hikari"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_sui_hikari"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     CALL(evt_target_set_position, LW(11), 0, 0, 0)
     SET_VALUE(GF(15), 0)
@@ -774,13 +775,13 @@ static EVT_BEGIN(punipuni_ball00)
         END_IF
         SET_VALUE(GSWF(2863), 1)
         CALL(evt_item_set_position, LW(10), 0, 30, -100)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_sui_hikari"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_sui_hikari"), MAP_OBJ_FLAG_HIDDEN)
         SET_VALUE(GF(15), 1)
         CALL_CHILD(PTR(mri_punipuni_itemset))
         SET_VALUE(GF(15), 0)
         ELSE
         SET_VALUE(GSWF(2863), 0)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_sui_hikari"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_sui_hikari"), MAP_OBJ_FLAG_HIDDEN)
         CALL_CHILD(PTR(mri_punipuni_itemremove))
     END_IF
     LABEL(100)

@@ -19,6 +19,7 @@
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
 #include "driver/npcdrv.h"
+#include "driver/mapdrv.h"
 
 USER_FUNC(urouro_init_func);
 USER_FUNC(urouro_main_func);
@@ -306,8 +307,8 @@ static EVT_BEGIN(puni_win_offscreen)
     SET_VALUE(GW(1), 0)
     CALL(evt_snd_sfxoff, GW(0))
     CALL(evt_snd_sfxon_3d, STRING("SFX_OFF2_TORIDE_BREAK2"), -400, 0, 0, 0)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_hati"), 1)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_patolight1"), 1)
+    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_hati"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_patolight1"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_hitobj_onoff, STRING("A_hati"), 1, 0)
     CALL(evt_img_set_paper_anim, STRING("capture_img"), STRING("A_1"))
     CALL(evt_img_onoff, STRING("capture_img"), 1)
@@ -617,9 +618,9 @@ EVT_BEGIN(mri_11_init_evt)
         CALL(evt_hitobj_onoff, STRING("A_gra_l"), 1, 0)
     END_IF
     IF_INT_EQUAL(GSWF(2857), 1)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_hati"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_hati"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_hati"), 1, 0)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_patolight1"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_patolight1"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     CALL(evt_hitobj_onoff, STRING("A_sunomae"), 1, 0)
     RETURN

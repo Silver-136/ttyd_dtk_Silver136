@@ -11,6 +11,7 @@
 #include "evt/evt_paper.h"
 #include "evt/evt_snd.h"
 #include "party/party_motion.h"
+#include "driver/mapdrv.h"
 
 #ifdef VERSION_G8ME01
 #endif
@@ -72,7 +73,7 @@ static EVT_BEGIN(rock_main)
     END_INLINE_EVENT
     CALL(evt_offscreen_entry, STRING("offscreen"))
     CALL(evt_mapobj_set_offscreen, 0, LW(10), STRING("offscreen"))
-    CALL(evt_mapobj_flag_onoff, 0, 1, LW(10), 1)
+    CALL(evt_mapobj_flag_onoff, 0, 1, LW(10), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_img_entry, STRING("img"))
     CALL(evt_img_set_paper, STRING("img"), STRING("OFF_d_bom_ver2"))
     CALL(evt_img_alloc_capture, STRING("img"), 0, STRING("offscreen"), 0, 0, 0, 0, 0)
@@ -118,7 +119,7 @@ EVT_BEGIN(moo_05_init_evt)
     IF_INT_EQUAL(GSWF(4031), 0)
         CALL(evt_run_case_evt, 15, 1, STRING("A_iwa_07"), 0, PTR(rock_evt0), 0)
         ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_iwa_07"), 1)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_iwa_07"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_iwa_07"), 1, 0)
     END_IF
     RETURN

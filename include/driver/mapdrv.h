@@ -170,8 +170,38 @@ typedef struct MapHeader {
     void* rawFile;          // 0x40, the map.dat buffer the header was read from (SPM MapFileContext.rawFile)
 } MapHeader;
 
+// MapObject.flags, named from mapdrv (draw passes, _mapEnt, the mapObj* setters) and envdrv. Bits 24-27 are not
+// flags but the index of the TEV callback (MAP_OBJ_TEV_CALLBACK). 0x10000/0x20000/0x40000/0x800000/0x80000000 (only
+// set on animation poses, which share the material flag layout) and 0x40000000 are not named.
+typedef enum MapObjFlags {
+    MAP_OBJ_FLAG_HIDDEN = (1 << 0),          // 0x1, not drawn by its own camera (offscreen pass still draws it)
+    MAP_OBJ_FLAG_CLIP = (1 << 1),            // 0x2, view frustum cull (small bounding boxes, _mapEnt)
+    MAP_OBJ_FLAG_CHAR_SHADOW = (1 << 2),     // 0x4, receives character shadows (draw mode flag)
+    MAP_OBJ_FLAG_BACKGROUND = (1 << 3),      // 0x8, drawn first; draw modes 3/4 without Z test/write
+    MAP_OBJ_FLAG_GROUP = (1 << 4),           // 0x10, group node (draw mode flag)
+    MAP_OBJ_FLAG_GROUP_MEMBER = (1 << 5),    // 0x20, belongs to a group
+    MAP_OBJ_FLAG_COLOR = (1 << 6),           // 0x40, mapObjSetColor
+    MAP_OBJ_FLAG_OFFSCREEN = (1 << 7),       // 0x80, mapObjSetOffScreen
+    MAP_OBJ_FLAG_DISPLAY_LIST = (1 << 8),    // 0x100, material baked into a display list
+    MAP_OBJ_FLAG_MTX_DIRTY = (1 << 9),       // 0x200, matrix recalculated on the next update
+    MAP_OBJ_FLAG_PROJ_TEX = (1 << 10),       // 0x400, projected texture
+    MAP_OBJ_FLAG_NO_MAP_BLEND = (1 << 11),   // 0x800, ignores mapSetBlend
+    MAP_OBJ_FLAG_NO_MAP_BLEND2 = (1 << 12),  // 0x1000, ignores mapSetBlend2
+    MAP_OBJ_FLAG_ANIM_MTX = (1 << 13),       // 0x2000, joint animation matrix
+    MAP_OBJ_FLAG_DISABLED = (1 << 14),       // 0x4000, skipped by every draw pass
+    MAP_OBJ_FLAG_DEPTH_OFFSET = (1 << 15),   // 0x8000, projection depth bias by its place among its siblings
+    MAP_OBJ_FLAG_NO_FOG = (1 << 19),         // 0x80000
+    MAP_OBJ_FLAG_FLUSH = (1 << 20),          // 0x100000, mapObjFlushOn
+    MAP_OBJ_FLAG_TRANSFORM = (1 << 21),      // 0x200000, mapObjRotate/Translate/Scale applied
+    MAP_OBJ_FLAG_KURURING = (1 << 22),       // 0x400000, drawn by test_kururing_mapdisp
+    MAP_OBJ_FLAG_NO_COLOR_STAGE = (1 << 28), // 0x10000000, no final colour-multiply TEV stage
+    MAP_OBJ_FLAG_SCREEN_RECT = (1 << 29),    // 0x20000000, mapDispMapObj_bbox screen rectangle
+} MapObjFlags;
+#define MAP_OBJ_TEV_CALLBACK_MASK 0x0F000000
+#define MAP_OBJ_TEV_CALLBACK(n) ((n) << 24)
+
 typedef struct MapObject {
-    u32 flags;                             // 0x0
+    u32 flags;                             // 0x0, MapObjFlags
     u8 blendMode;                          // 0x4
     u8 cameraId;                           // 0x5, dispEntry camera (4 by default; set by evt_lect_* / tik_00)
     u8 pad_06[0x8 - 0x6];                  // 0x6, never accessed

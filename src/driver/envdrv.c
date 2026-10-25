@@ -1224,11 +1224,11 @@ void envSetWater(MapTevCallbackInfo* info) {
     map = info->texMap;
     coord = info->texCoord;
     ind = info->indStage;
-    if (obj->flags & 0x20) {
+    if (obj->flags & MAP_OBJ_FLAG_GROUP_MEMBER) {
         while ((obj = envWaterParent(obj)) != NULL) {
-            if (obj->flags & 0x10) {
-                if (!(obj->flags & 0x20000000)) {
-                    obj->flags |= 0x20000000;
+            if (obj->flags & MAP_OBJ_FLAG_GROUP) {
+                if (!(obj->flags & MAP_OBJ_FLAG_SCREEN_RECT)) {
+                    obj->flags |= MAP_OBJ_FLAG_SCREEN_RECT;
                     return;
                 }
                 x0 = obj->screenRect[0];
@@ -1239,8 +1239,8 @@ void envSetWater(MapTevCallbackInfo* info) {
             }
         }
     } else {
-        if (!(obj->flags & 0x20000000)) {
-            obj->flags |= 0x20000000;
+        if (!(obj->flags & MAP_OBJ_FLAG_SCREEN_RECT)) {
+            obj->flags |= MAP_OBJ_FLAG_SCREEN_RECT;
             return;
         }
         x0 = obj->screenRect[0];

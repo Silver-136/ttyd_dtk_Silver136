@@ -11,6 +11,7 @@
 #include "party/party_motion.h"
 #include "evt/evt_item.h"
 #include "evt/evt_mobj.h"
+#include "driver/mapdrv.h"
 
 
 static BeroEntry bero_entry_data[5];
@@ -115,7 +116,7 @@ EVT_END()
 
 EVT_BEGIN(evt_hikou_nobiru)
     CALL(evt_mario_key_onoff, 0)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_tree_ha04"), 1)
+    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_tree_ha04"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_cam3d_evt_set, -307, 220, 533, -307, 124, -7, 500, 11)
     WAIT_MS(1000)
     CALL(evt_snd_sfxon, STRING("SFX_STG2_SWITCH_QUAKE1"), LW(10))
@@ -168,7 +169,7 @@ EVT_BEGIN(evt_hikou_nobiru)
     WAIT_MS(1000)
     CALL(evt_cam3d_evt_off, 500, 11)
     WAIT_MS(500)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_tree_ha04"), 1)
+    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_tree_ha04"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mario_key_onoff, 1)
     RETURN
 EVT_END()
@@ -196,7 +197,7 @@ EVT_BEGIN(win_02_init_evt)
         SPAWN_EVENT(PTR(evt_hikou_nobiru_init))
     END_IF
     CALL(evt_mobj_switch_blue, 0, STRING("mobj_hashi0"), -415, 50, -125, PTR(evt_hikou_nobiru), GSWF(2678))
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_hikou"), 2)
+    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_hikou"), MAP_OBJ_FLAG_CLIP)
     RETURN
 EVT_END()
 

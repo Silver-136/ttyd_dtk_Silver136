@@ -12,6 +12,7 @@
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
 #include "evt/evt_sub.h"
+#include "driver/mapdrv.h"
 
 #include "driver/npcdrv.h"
 #include "eff/eff_stardust.h"
@@ -312,7 +313,7 @@ EVT_BEGIN(powerdownya_mario_level_rtn)
     CALL(bgm_start_wait)
     CALL(evt_eff64, STRING("aaax"), STRING("lensflare_n64"), 0, -9, 49, 0, FLOAT(1.0f), -1, 0, 0, 0, 0, 0, 0)
     WAIT_MS(500)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("down_pira"), 1)
+    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("down_pira"), MAP_OBJ_FLAG_HIDDEN)
     WAIT_FRAMES(5)
     CALL(evt_msg_print, 0, STRING("powerdown_12"), 0, STRING("me"))
     BEGIN_INLINE_EVENT
@@ -377,7 +378,7 @@ EVT_BEGIN(powerdownya_mario_level_rtn)
     END_INLINE_EVENT
     WAIT_MS(7000)
     CALL(evt_eff_softdelete, STRING("aaax"))
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("down_pira"), 1)
+    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("down_pira"), MAP_OBJ_FLAG_HIDDEN)
     WAIT_MS(500)
     CALL(evt_eff64, STRING("dddx"), STRING("release_n64"), 65283, -9, 49, 0, FLOAT(1.0f), 200, 0, 0, 0, 0, 0, 0)
     WAIT_MS(1500)
@@ -524,7 +525,7 @@ EVT_BEGIN(powerdownya_party_lank_rtn)
     CALL(bgm_start_wait)
     CALL(evt_eff64, STRING("aaax"), STRING("lensflare_n64"), 0, -9, 49, 0, FLOAT(1.0f), -1, 0, 0, 0, 0, 0, 0)
     WAIT_MS(500)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("down_pira"), 1)
+    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("down_pira"), MAP_OBJ_FLAG_HIDDEN)
     SPAWN_EVENT_GET_ID(PTR(powerdownya_face_left), GW(1))
     CALL(evt_msg_print, 0, STRING("powerdown_12"), 0, STRING("me"))
     BEGIN_INLINE_EVENT
@@ -648,7 +649,7 @@ EVT_BEGIN(powerdownya_party_lank_rtn)
     END_INLINE_EVENT
     WAIT_MS(7000)
     CALL(evt_eff_softdelete, STRING("aaax"))
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("down_pira"), 1)
+    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("down_pira"), MAP_OBJ_FLAG_HIDDEN)
     WAIT_MS(500)
     CALL(evt_eff64, STRING("dddx"), STRING("release_n64"), 65283, -9, 49, 0, FLOAT(1.0f), 200, 0, 0, 0, 0, 0, 0)
     WAIT_MS(1500)

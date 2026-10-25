@@ -3,6 +3,7 @@
 #include "libc_decls.h"
 #include "battle/battle_event_cmd.h"
 #include "evt/evt_map.h"
+#include "driver/mapdrv.h"
 
 #include "battle/battle_unit.h"
 #include "driver/animdrv.h"
@@ -243,7 +244,7 @@ static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event))
     CALL(btlevtcmd_SetEventDamage, UNIT_ID_SELF, PTR(damage_event))
     CALL(btlevtcmd_SetEventConfusion, UNIT_ID_SELF, PTR(btldefaultevt_Confuse))
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_yuka"), 4194304)
+    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_yuka"), MAP_OBJ_FLAG_KURURING)
     CALL(replace_evt)
     CALL(btlevtcmd_StartWaitEvent, -2)
     RETURN
