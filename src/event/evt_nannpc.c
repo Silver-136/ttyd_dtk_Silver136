@@ -416,7 +416,6 @@ s32 evt_nannpc_entry(EventEntry *event, BOOL isFirstCall)
         str = (char *) name;
         if (!(((EvtWord) str) & 0x80000000))
         {
-  do { } while (0);
             sprintf(makestring, "%06x", name);
             str = makestring;
         }

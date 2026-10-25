@@ -585,7 +585,6 @@ void getHitBreatheout2(PartyEntry* party, f32 angle) {
         if (kind == 2) {
             height = 40.0f;
         }
-        do { } while (0);
     }
     if (cl->breathDist >= cl->breathDistMax) {
         cl->breathDist = cl->breathDistMax;

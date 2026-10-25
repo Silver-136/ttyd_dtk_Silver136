@@ -1815,7 +1815,6 @@ void marioCheckWall_roll(f32 dx, f32 dz) {
         if (marioChkBeroInl(hit)) {
             if (dx) {
                 w->hitobjPush = hit;
-                do { } while (0);
                 w->hitobjWall = hit;
             }
             movePos(&w->position.x, &w->position.z, dx, dz);
