@@ -259,14 +259,14 @@ static void actionCommandDisp(f32 x, f32 y) {
     f32 baseY;
     s32 i;
 
-    camGetPtr(8);
+    camGetPtr(CAMERA_2D);
     {
         Vec pos = {0.0f, 0.0f, 0.0f};
         pos.x = px = -200.0f + x;
         pos.y = 25.0f + y;
         iconDispGx(&pos, 0x10, ICON_08C, 1.0f);
     }
-    cam = camGetPtr(8);
+    cam = camGetPtr(CAMERA_2D);
     btlDispGXInit2DRasta();
     GXLoadPosMtxImm(cam->view, 0);
     baseX = px - 88.0f;

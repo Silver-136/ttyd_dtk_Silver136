@@ -1135,7 +1135,7 @@ USER_FUNC(hit_group_chk) {
 }
 
 USER_FUNC(bg_cam_chk) {
-    CameraEntry* camera = camGetPtr(4);
+    CameraEntry* camera = camGetPtr(CAMERA_3D);
 
     if (marioBgmodeChk() && (camera->flags & 0x10) && marioGetPtr()->airTimer == 0) {
         camFollowYOn();

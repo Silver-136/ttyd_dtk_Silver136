@@ -229,7 +229,7 @@ void titleMain(SequenceWork* work) {
             break;
         case 20:
             fadeEntry(0x21, 0, (GXColor){0x00, 0x00, 0x00, 0xFF});
-            fadeEntry(10, 1000, (GXColor){0x00, 0x00, 0x00, 0xFF});
+            fadeEntry(FADE_OUT_BLACK, 1000, (GXColor){0x00, 0x00, 0x00, 0xFF});
             psndBGMOff_f_d(0x200, 1000, 0);
             wp2->counter = 0;
             wp2->state++;

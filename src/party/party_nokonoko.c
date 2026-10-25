@@ -271,7 +271,7 @@ void nokonoko_use(PartyEntry* party) {
 
     switch (party->useMotionId) {
     case 0:
-        if (mario->currMotionId == 0x20 || mario->currMotionId == 0x1f) {
+        if (mario->currMotionId == MARIO_MOTION_DAMAGE_TOGE || mario->currMotionId == MARIO_MOTION_DAMAGE) {
             party->useMotionId = 70;
             break;
         }
@@ -300,7 +300,7 @@ void nokonoko_use(PartyEntry* party) {
         mario->baseSpeed = EXT_LIT(float_0_8041b51c, 0.0f);
         break;
     case 1:
-        if (mario->currMotionId == 0x20 || mario->currMotionId == 0x1f) {
+        if (mario->currMotionId == MARIO_MOTION_DAMAGE_TOGE || mario->currMotionId == MARIO_MOTION_DAMAGE) {
             party->useMotionId = 70;
             break;
         }
@@ -318,14 +318,14 @@ void nokonoko_use(PartyEntry* party) {
         party->useMotionId = 2;
         partyChgPose(party, "PNK_A_1");
     case 2:
-        if (mario->currMotionId == 0x20 || mario->currMotionId == 0x1f) {
+        if (mario->currMotionId == MARIO_MOTION_DAMAGE_TOGE || mario->currMotionId == MARIO_MOTION_DAMAGE) {
             party->useMotionId = 70;
             break;
         }
         if (mario->hitobjStandOn == NULL) {
             break;
         }
-        marioChgMot(3);
+        marioChgMot(MARIO_MOTION_JUMP);
         mario->flags |= MARIO_FLAG_STOP_AIR_MOVEMENT;
         mario->baseSpeed = EXT_LIT(float_0_8041b51c, 0.0f);
         party->useMotionId = 10;
@@ -410,7 +410,7 @@ void nokonoko_use(PartyEntry* party) {
         }
         NOKO_ITEM(party, party->useMotionId = 50; psndSFXOn_3D((const char*)0x92c, &party->position); noko_star(party, 1); noko_se_off(); break;)
         if (!(party->flags & 0x80000000)) {
-            if (mario->currMotionId == 0x19 || mario->currMotionId == 0x14 || mario->currMotionId == 0x18 || mario->currMotionId == 0x16 || (u16)(mario->currMotionId - 0x1f) <= 1 ||
+            if (mario->currMotionId == MARIO_MOTION_SHIP || mario->currMotionId == MARIO_MOTION_JABARA || mario->currMotionId == MARIO_MOTION_PLANE || mario->currMotionId == MARIO_MOTION_ROLL || (u16)(mario->currMotionId - 0x1f) <= 1 ||
                 (mario->flags & MARIO_FLAG_FORCED_MOVEMENT) || !marioChkKey()) {
                 nokonoko_finish(party);
                 noko_se_off();

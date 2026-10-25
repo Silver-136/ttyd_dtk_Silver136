@@ -298,7 +298,7 @@ void marioSetForceMove(f32 dir, s32 time, f32 speed) {
     mp->directionView = dir;
     mp->forceMoveTimer = time;
     mp->baseSpeed = speed;
-    if (mp->currMotionId == 0x19 || (mp->currMotionId == 0x15 || mp->currMotionId == 0x16) || mp->currMotionId == 0x1A) {
+    if (mp->currMotionId == MARIO_MOTION_SHIP || (mp->currMotionId == MARIO_MOTION_SLIT || mp->currMotionId == MARIO_MOTION_ROLL) || mp->currMotionId == MARIO_MOTION_YOSHI) {
         return;
     } else {
 #ifdef VERSION_G8ME01

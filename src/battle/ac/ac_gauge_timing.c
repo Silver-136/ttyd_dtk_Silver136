@@ -377,7 +377,7 @@ static void actionCommandDisp(f32 x, f32 y) {
     u16 pressed2;
     u16 unpressed2;
 
-    camGetPtr(8);
+    camGetPtr(CAMERA_2D);
     g = (GaugeAC*)ac;
     cw = (GaugeWork*)ac->work;
     ratio = cw->gauge / 100.0f;
@@ -413,7 +413,7 @@ static void actionCommandDisp(f32 x, f32 y) {
     default: {
         BattleAcDrawGauge((s32)x, (s32)y, 0xB2, 0.0f, 100, 100, 100, 100, 0);
         if (cw->timer <= 0) {
-            CameraEntry* cam = camGetPtr(8);
+            CameraEntry* cam = camGetPtr(CAMERA_2D);
             rx = (-200.0f + x - 88.0f) + 173.0f * cw->gauge / 100.0f;
             ry = 49.0f + y;
             btlDispGXInit2DRasta();

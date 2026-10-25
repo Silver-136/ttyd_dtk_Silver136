@@ -289,7 +289,7 @@ static void actionCommandDisp(f32 x, f32 y, s32 unused) {
     char n5[8] = "_AcSkl5";
 
     ac = SKL_P(_battleWorkPointer);
-    camGetPtr(8);
+    camGetPtr(CAMERA_2D);
     count = ac->params[0];
     idx = ((SklWork*)ac->work)->idx - 1;
     switch (ac->mAcState) {

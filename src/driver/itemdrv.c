@@ -144,7 +144,7 @@ static inline void itemGetEnd(ItemEntry* entry) {
     }
     marioKeyOn();
     marioChgStayMotion();
-    camGetPtr(8)->flags &= ~0x200;
+    camGetPtr(CAMERA_2D)->flags &= ~0x200;
 }
 
 void itemGetSound(ItemEntry* entry);
@@ -215,10 +215,10 @@ BOOL itemGetCheck(ItemEntry* entry) {
     }
     if (gp->mapEventId) return FALSE;
     if (seqGetSeq() != 2) return FALSE;
-    if (mario->currMotionId == 0x19) return FALSE;
-    if (mario->currMotionId == 0x18) return FALSE;
+    if (mario->currMotionId == MARIO_MOTION_SHIP) return FALSE;
+    if (mario->currMotionId == MARIO_MOTION_PLANE) return FALSE;
     if (vivianGetStatus()) return FALSE;
-    if (mario->currMotionId == 0x1F || mario->currMotionId == 0x20) return FALSE;
+    if (mario->currMotionId == MARIO_MOTION_DAMAGE || mario->currMotionId == MARIO_MOTION_DAMAGE_TOGE) return FALSE;
     if (nokonoko_holdItem()) return FALSE;
     {
         ItemWork* wp = itemGetWork();
@@ -259,10 +259,10 @@ BOOL itemGetNokoCheck(ItemEntry* entry) {
     if (entry->flags2 & 0x2000000) return FALSE;
     if (gp->mapEventId) return FALSE;
     if (seqGetSeq() != 2) return FALSE;
-    if (mario->currMotionId == 0x19) return FALSE;
+    if (mario->currMotionId == MARIO_MOTION_SHIP) return FALSE;
     if (vivianGetStatus()) return FALSE;
-    if (mario->currMotionId == 0x1F || mario->currMotionId == 0x20) return FALSE;
-    if ((u16)(mario->currMotionId - 5) <= 3 || mario->currMotionId == 0xF || mario->currMotionId == 0xE) return FALSE;
+    if (mario->currMotionId == MARIO_MOTION_DAMAGE || mario->currMotionId == MARIO_MOTION_DAMAGE_TOGE) return FALSE;
+    if ((u16)(mario->currMotionId - 5) <= 3 || mario->currMotionId == MARIO_MOTION_GET_ITEM || mario->currMotionId == MARIO_MOTION_TALK) return FALSE;
     {
         ItemWork* wp = itemGetWork();
         ItemEntry* item;
@@ -1002,7 +1002,7 @@ void itemseq_GetItem(ItemEntry* entry) {
             }
             entry->subState = 1;
             entry->timer = 0;
-            camGetPtr(8)->flags |= 0x200;
+            camGetPtr(CAMERA_2D)->flags |= 0x200;
             marioKeyOff();
             marioStSystemLevel(2);
             psndSetFlag(0x80);
@@ -1016,8 +1016,8 @@ void itemseq_GetItem(ItemEntry* entry) {
         case 1:
             if (!(entry->flags & 0x1000) || entry->flags & 0x4000) {
                 if (!marioChkItemGetMotion()) {
-                    if (mario->currMotionId == 5 || (u16)(mario->currMotionId - 6) <= 2 ||
-                        mario->currMotionId == 0xF || mario->currMotionId == 0xE)
+                    if (mario->currMotionId == MARIO_MOTION_JUMP_SW || (u16)(mario->currMotionId - 6) <= 2 ||
+                        mario->currMotionId == MARIO_MOTION_GET_ITEM || mario->currMotionId == MARIO_MOTION_TALK)
                     {
                         entry->subState = 8;
                     }
@@ -1354,7 +1354,7 @@ void itemseq_Bound(ItemEntry* entry) {
     s32 itemId;
 
     mario = marioGetPtr();
-    camera = camGetPtr(4);
+    camera = camGetPtr(CAMERA_3D);
     switch (entry->subState) {
         case 0:
             entry->subState = 1;

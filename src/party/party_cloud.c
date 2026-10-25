@@ -315,7 +315,7 @@ void cloud_use(PartyEntry* party) {
     u8* m;
 
     N__cloud_use(party);
-    if (mario->currMotionId == 0x1B || mario->currMotionId <= 1 || mario->currMotionId == 2) {
+    if (mario->currMotionId == MARIO_MOTION_CLOUD || mario->currMotionId <= 1 || mario->currMotionId == MARIO_MOTION_DASH) {
         return;
     }
     party->flags &= ~0x100;
@@ -335,7 +335,7 @@ void cloud_use(PartyEntry* party) {
         __memFree(HEAP_DEFAULT, party->useStruct);
         party->useStruct = NULL;
     }
-    if (mario->currMotionId == 0x1F || mario->currMotionId == 0x20) {
+    if (mario->currMotionId == MARIO_MOTION_DAMAGE || mario->currMotionId == MARIO_MOTION_DAMAGE_TOGE) {
         partyChgRunMode(party, 13);
     } else {
         partyChgPose(party, partyChgPoseId(party, 1));
@@ -406,7 +406,7 @@ void N__cloud_use(PartyEntry* party) {
             KUMO(party)->g2 = 0x1B;
             KUMO(party)->b2 = 0xF5;
         }
-        marioChgMot(0x1B);
+        marioChgMot(MARIO_MOTION_CLOUD);
         marioChgPose("M_A_2A");
         partyChgPose(party, "PWD_A_5");
         party->moveFrames = 16;
@@ -431,7 +431,7 @@ void N__cloud_use(PartyEntry* party) {
         }
         partyChgPose(party, "PWD_A_6");
 #ifdef VERSION_G8ME01
-        if (mario->currMotionId == 0x1B)
+        if (mario->currMotionId == MARIO_MOTION_CLOUD)
 #endif
         marioChgPose("M_A_2B");
         party->useMotionId = 12;
@@ -529,13 +529,13 @@ void N__cloud_use(PartyEntry* party) {
         cloudCalcPos(party);
         party->position = party->moveTarget;
         party->flags2 &= ~0x10;
-        if (mario->currMotionId == 0x1B) {
+        if (mario->currMotionId == MARIO_MOTION_CLOUD) {
             mario->dispFlags &= ~0x100;
             mario->dispFlags &= ~4;
             marioAdjustMoveDir();
             party->trigFlags |= 0x40000;
             mario->dispFlags &= ~0x100;
-            marioChgMot(0);
+            marioChgMot(MARIO_MOTION_STAY);
         }
         party->flags2 |= 0x10;
         partyChgRunMode(party, 2);
@@ -573,7 +573,7 @@ void cloud_exit(PartyEntry* party) {
     mario->dispFlags &= ~0x100;
     mario->dispFlags &= ~4;
     marioAdjustMoveDir();
-    marioChgMot(0);
+    marioChgMot(MARIO_MOTION_STAY);
     mario->camShiftRate.x = 0.01f;
     mario->camShiftTargetX = 0.0f;
 }

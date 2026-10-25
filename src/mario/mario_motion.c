@@ -8,6 +8,7 @@
 #include "driver/npcdrv.h"
 #include "driver/mobjdrv.h"
 #include <dolphin/pad.h>
+#include "driver/camdrv.h"
 
 
 typedef struct MarioJumpData {
@@ -855,7 +856,7 @@ void mot_talk(void) {
         if (npc == NULL) {
             marioAdjustMoveDir();
         } else {
-            camYaw = camGetPtr(4)->viewYaw;
+            camYaw = camGetPtr(CAMERA_3D)->viewYaw;
             angle = revise360(270.0f - (s32)(10.0f * (angleABf(mario->position.x, mario->position.z,
                 ((NpcEntry*)npc)->position.x, ((NpcEntry*)npc)->position.z) - camYaw) + 0.5f) / 10.0f);
             if (angle >= 90.0f && angle <= 270.0f) {

@@ -70,7 +70,7 @@ void marioCamMain(void) {
     CameraEntry* camera;
     MarioWork* mario2;
 
-    if (mario->currMotionId != 0x1D) {
+    if (mario->currMotionId != MARIO_MOTION_DOKAN) {
         marioUpdateCam();
     }
     marioCamZoomUpLevelMain();
@@ -113,7 +113,7 @@ void marioUpdateCam(void) {
             mario->camTarget.x = mario->position.x + sin * mario->camShiftX;
             mario->camTarget.z = mario->position.z + cos * mario->camShiftX;
             mario->camTarget.y = mario->camShiftY + (mario->position.y + mario->dispOfs.y);
-            if (mario->currMotionId == 0x19) {
+            if (mario->currMotionId == MARIO_MOTION_SHIP) {
                 mario->camTarget.y += 10.0f;
             }
             mario->camZoomWeight = mario->camShiftZ;

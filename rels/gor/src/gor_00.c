@@ -4573,7 +4573,7 @@ static USER_FUNC(cam_kaiten_init) {
 }
 
 static USER_FUNC(cam_kaiten_set_direct) {
-    CameraEntry* camera = camGetPtr(4);
+    CameraEntry* camera = camGetPtr(CAMERA_3D);
     f32 s = sin(6.2831855f * ckpw->angle / 360.0f);
     f32 c = cos(6.2831855f * ckpw->angle / 360.0f);
 

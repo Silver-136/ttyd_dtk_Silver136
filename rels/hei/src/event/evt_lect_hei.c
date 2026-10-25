@@ -431,7 +431,7 @@ static USER_FUNC(effitemget_open_ptr) {
 
 static USER_FUNC(effitemget_busaiku) {
     s32 up = evtGetValue(event, event->args[0]);
-    CameraEntry* camera = camGetPtr(4);
+    CameraEntry* camera = camGetPtr(CAMERA_3D);
     Vec ofs;
 
     if (up) {
@@ -708,7 +708,7 @@ static USER_FUNC(lect_itemget_kesan) {
     EvtWord* args = event->args;
     PartyEntry* party = partyGetPtr(args[0] == 0 ? partyCtrlNo : 1);
     f32 dist = evtGetFloat(event, args[1]);
-    CameraEntry* cam = camGetPtr(4);
+    CameraEntry* cam = camGetPtr(CAMERA_3D);
     Vec pos;
     Vec dir;
 

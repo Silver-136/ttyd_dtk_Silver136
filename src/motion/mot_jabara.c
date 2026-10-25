@@ -77,7 +77,7 @@ EVT_END()
 s32 marioGetJabaraState(void) {
     s32 state = 7;
     MarioWork* mario = marioGetPtr();
-    if ((u16)mario->currMotionId != 0x14) {
+    if ((u16)mario->currMotionId != MARIO_MOTION_JABARA) {
         state = 0;
     } else {
         s32 id = (s32)mario->currSubMotionId;
@@ -133,7 +133,7 @@ BOOL marioChkJabara(void) {
     }
     if (!(mario->buttonHold & PAD_BUTTON_A)) {
         if (!(mario->buttonHold & PAD_BUTTON_B)) {
-            if (strcmp(mario->animName, "M_I_Y") == 0 && (u16)mario->currMotionId == 0) {
+            if (strcmp(mario->animName, "M_I_Y") == 0 && (u16)mario->currMotionId == MARIO_MOTION_STAY) {
                 marioChgPose("M_S_1");
                 marioVoiceGlareOff();
             }
@@ -142,21 +142,21 @@ BOOL marioChkJabara(void) {
         return FALSE;
     }
 #ifdef VERSION_G8ME01
-    if ((mario->trigFlags & MARIO_TRIG_FLAG_START_JABARA_SPIN) && (u16)mario->currMotionId == 0 && !((u32)mario->dispFlags & 0x40000000) &&
+    if ((mario->trigFlags & MARIO_TRIG_FLAG_START_JABARA_SPIN) && (u16)mario->currMotionId == MARIO_MOTION_STAY && !((u32)mario->dispFlags & 0x40000000) &&
         mario->controlStickSensitivity) {
         marioChgPose("M_I_Y");
         marioVoiceGlareOn();
     }
 #else
     mario->wMotionTimer++;
-    if (mario->controlStickSensitivity && mario->wMotionTimer > 10 && (u16)mario->currMotionId == 0 &&
+    if (mario->controlStickSensitivity && mario->wMotionTimer > 10 && (u16)mario->currMotionId == MARIO_MOTION_STAY &&
         !((u32)mario->dispFlags & 0x40000000)) {
         marioChgPose("M_I_Y");
         marioVoiceGlareOn();
     }
     if (mario->wMotionTimer >= 0x32) {
         mario->wMotionTimer = 0x32;
-        if ((u16)mario->currMotionId == 0 && !((u32)mario->dispFlags & 0x40000000)) {
+        if ((u16)mario->currMotionId == MARIO_MOTION_STAY && !((u32)mario->dispFlags & 0x40000000)) {
             marioChgPose("M_I_Y");
             marioVoiceGlareOn();
         }
@@ -198,7 +198,7 @@ static inline void jabaraLand(f32 y_, void* h_) {
             marioGetPtr()->motStruct = NULL; \
         } \
     }
-#define MOTSUB_ marioChgMotSub(0, 0);
+#define MOTSUB_ marioChgMotSub(MARIO_MOTION_STAY, 0);
 #define JAB_LAND(HIT, Y) \
     marioPaperOff(); \
     jabaraLand((Y), (HIT)); \
@@ -267,12 +267,12 @@ void mot_jabara(void) {
         marioChgPaper("PM_J_1B");
         mario->lastGroundPos = mario->position;
         marioChkGnd();
-        if (mario->currMotionId != 0x14) {
+        if (mario->currMotionId != MARIO_MOTION_JABARA) {
             mario->currSubMotionId = 0x64;
         }
         break;
     case 10:
-        if (mario->currMotionId != 0x14) {
+        if (mario->currMotionId != MARIO_MOTION_JABARA) {
             mario->currSubMotionId = 0x64;
             break;
         }
@@ -314,7 +314,7 @@ void mot_jabara(void) {
             jabaraSetSpd(0.3f, 0.005f, 1.6f);
         }
         marioChkGnd();
-        if (mario->currMotionId != 0x14) {
+        if (mario->currMotionId != MARIO_MOTION_JABARA) {
             mario->currSubMotionId = 0x64;
             return;
         }
@@ -702,7 +702,7 @@ void mot_jabara(void) {
         mario->position.y += mario->jumpVelocityY;
         marioMakeJumpPara();
         if (mario->jumpVelocityY <= 0.0f) {
-            marioChgMot(10);
+            marioChgMot(MARIO_MOTION_FALL);
             marioSetFallPara();
         }
         break;
@@ -715,7 +715,7 @@ void mot_jabara(void) {
 #pragma opt_common_subs reset
 BOOL jabaraNoHitChk(void) {
     MarioWork* mario = marioGetPtr();
-    if ((u16)mario->currMotionId != 0x14) {
+    if ((u16)mario->currMotionId != MARIO_MOTION_JABARA) {
         return FALSE;
     }
     if ((s32)mario->currSubMotionId >= 0x28 && (s32)mario->currSubMotionId < 0x32) {

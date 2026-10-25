@@ -242,7 +242,7 @@ static inline void marioRollCan(void);
 
 void marioRollFixOn(void) {
     MarioWork* mario = marioGetPtr();
-    if (mario->currMotionId == 0x16) {
+    if (mario->currMotionId == MARIO_MOTION_ROLL) {
         mario->mot.roll.flags |= 0x200;
     }
 }
@@ -260,7 +260,7 @@ s32 marioRollCancelDisable(void) {
 
 s32 marioRollKeyDisable(void) {
     MarioWork* mario = marioGetPtr();
-    if (mario->currMotionId != 0x16) {
+    if (mario->currMotionId != MARIO_MOTION_ROLL) {
         return 1;
     }
     {
@@ -298,7 +298,7 @@ s32 getRollEvtFlag(void) {
 
 void marioResetRollSpd(void) {
     MarioWork* mario = marioGetPtr();
-    if (mario->currMotionId == 0x16) {
+    if (mario->currMotionId == MARIO_MOTION_ROLL) {
         if (marioGetPtr()->motStruct) {
             f32 a = 0.0f;
             f32 b;
@@ -410,7 +410,7 @@ void mot_roll_post(void) {
 
 void marioRollForceCancel(void) {
     MarioWork* mario = marioGetPtr();
-    if (mario->currMotionId == 0x16) {
+    if (mario->currMotionId == MARIO_MOTION_ROLL) {
         MarioWork* m = marioGetPtr();
 #ifdef VERSION_G8ME01
         if (marioGetPtr()->motStruct && (u32)RW()->sfxId != (u32)-1) {
@@ -457,7 +457,7 @@ void marioRollForceCancel(void) {
             marioGetPtr()->motStruct = (void*)mario;
         }
         allPartyRideOff();
-        marioChgMotSub(0, 0);
+        marioChgMotSub(MARIO_MOTION_STAY, 0);
     }
 }
 
@@ -744,7 +744,7 @@ void mot_roll(void) {
         }
         break;
     case 0x16:
-        marioChgMotSub(0, 0);
+        marioChgMotSub(MARIO_MOTION_STAY, 0);
         break;
     }
     if (mario->currSubMotionId < 0x1e) {

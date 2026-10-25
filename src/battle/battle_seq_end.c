@@ -349,7 +349,7 @@ void btlseqEnd(BattleWork* wp) {
         btl_camera_set_moveSpeedLv(0, 2);
         btl_camera_set_mode(0, 0x13);
         btl_camera_set_posoffset(0, 0.0f, 0.0f, 0.0f);
-        fadeEntry(10, 200, (GXColor){0, 0, 0, 255});
+        fadeEntry(FADE_OUT_BLACK, 200, (GXColor){0, 0, 0, 255});
         psndBGMOff(0x201);
         SS(0x7000002);
         break;
@@ -829,7 +829,7 @@ void btlseqEnd(BattleWork* wp) {
         break;
     }
     case 0x700001D: {
-        fadeEntry(10, 200, (GXColor){0, 0, 0, 255});
+        fadeEntry(FADE_OUT_BLACK, 200, (GXColor){0, 0, 0, 255});
         SS(0x700001E);
         psndBGMOff(0x201);
     }

@@ -12,6 +12,7 @@
 #include "sdk/texPalette.h"
 #include "libc_decls.h"
 #include <math.h>
+#include "driver/camdrv.h"
 #define EXT_LIT(sym, val) (val)
 
 //.data
@@ -1325,7 +1326,7 @@ void envSetWater(MapTevCallbackInfo* info) {
     DCFlushRange(buf2, 0x2000);
     GXInitTexObj(&obj2, buf2, 64, 64, GX_TF_IA8, GX_REPEAT, GX_REPEAT, GX_FALSE);
     GXInitTexObjLOD(&obj2, GX_LINEAR, GX_LINEAR, EXT_LIT(float_0_8041e53c, 0.0f), EXT_LIT(float_0_8041e53c, 0.0f), EXT_LIT(float_0_8041e53c, 0.0f), GX_FALSE, GX_FALSE, GX_ANISO_1);
-    t = tan(EXT_LIT(float_6p2832_8041e558, 6.2831855f) * (camGetPtr(4)->fovY / EXT_LIT(float_2_8041e590, 2.0f)) / EXT_LIT(float_360_8041e55c, 360.0f));
+    t = tan(EXT_LIT(float_6p2832_8041e558, 6.2831855f) * (camGetPtr(CAMERA_3D)->fovY / EXT_LIT(float_2_8041e590, 2.0f)) / EXT_LIT(float_360_8041e55c, 360.0f));
     C_MTXLightFrustum(mtx, gp->efbHeight / 2 - y1, gp->efbHeight / 2 - y0, x0 - gp->fbWidth / 2, x1 - gp->fbWidth / 2,
                       gp->efbHeight / 2.0f / t, 0.5f, 0.5f, 0.5f, 0.5f);
     PSMTXConcat(mtx, camGetCurPtr()->view, mtx);

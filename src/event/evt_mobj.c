@@ -1179,7 +1179,7 @@ s32 mobj_lv_blk_evt(MapObjectEntry* mobj) {
         if (mobj->flags & 8) {
             if (!strcmp(mobj->animName, "MOBJ_Lv1Block") || !strcmp(mobj->animName, "MOBJ_Lv1BigBlock")) {
             } else if (!strcmp(mobj->animName, "MOBJ_Lv1BigBigBlock")) {
-                if (pouchGetHammerLv() < 2 || (u16)mario->currMotionId != 0x13) {
+                if (pouchGetHammerLv() < 2 || (u16)mario->currMotionId != MARIO_MOTION_HAMMER_2) {
                     mobj->flags &= ~8;
                     break;
                 }
@@ -1189,7 +1189,7 @@ s32 mobj_lv_blk_evt(MapObjectEntry* mobj) {
                     break;
                 }
             } else if (!strcmp(mobj->animName, "MOBJ_Lv2BigBigBlock")) {
-                if (pouchGetHammerLv() < 3 || (u16)mario->currMotionId != 0x13) {
+                if (pouchGetHammerLv() < 3 || (u16)mario->currMotionId != MARIO_MOTION_HAMMER_2) {
                     mobj->flags &= ~8;
                     break;
                 }

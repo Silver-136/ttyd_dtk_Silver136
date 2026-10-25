@@ -371,7 +371,7 @@ static USER_FUNC(evt_cloud_main) {
                 psndSFXOn_3D("SFX_OFF_CLAUD_WIND2", &mario->position);
                 wp->lastFrame = img->loopTimes;
             }
-            if (mario->currMotionId != 27) {
+            if (mario->currMotionId != MARIO_MOTION_CLOUD) {
                 wp->state = 10;
                 break;
             }

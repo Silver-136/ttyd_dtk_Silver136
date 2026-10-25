@@ -572,7 +572,7 @@ void yuunpc_pose_minigame1_main(void) {
     s32 i;
     ExtdrvPose* ext;
     f32 right;
-    f32 camX = camGetPtr(4)->cameraAt.x;
+    f32 camX = camGetPtr(CAMERA_3D)->cameraAt.x;
     YuuNpc* npc;
     f32 x, y, z;
 
@@ -681,7 +681,7 @@ void yuunpc_pose_minigame2_main(void) {
     s32 i;
     ExtdrvPose* ext;
     f32 right;
-    f32 camX = camGetPtr(4)->cameraAt.x;
+    f32 camX = camGetPtr(CAMERA_3D)->cameraAt.x;
     YuuNpc* npc;
     f32 x, y, z;
 
@@ -798,7 +798,7 @@ void yuunpc_pose_minigame3_main(void) {
     s32 i;
     ExtdrvPose* ext;
     f32 right;
-    f32 camX = camGetPtr(4)->cameraAt.x;
+    f32 camX = camGetPtr(CAMERA_3D)->cameraAt.x;
     YuuNpc* npc;
     f32 x, y, z;
 
@@ -1337,7 +1337,7 @@ void yuunpc_pose_minigame4_main(void) {
     s32 i;
     ExtdrvPose* ext;
     f32 right;
-    f32 camX = camGetPtr(4)->cameraAt.x;
+    f32 camX = camGetPtr(CAMERA_3D)->cameraAt.x;
     f32 y, z, x;
     YuuNpc* npc;
     s32 c28;

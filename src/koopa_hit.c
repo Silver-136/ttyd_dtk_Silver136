@@ -55,7 +55,7 @@ s32 kpaEnemyFireHitChk(f32 x, f32 y, f32 z, f32 h, f32 w) {
     f32 s;
     s32 i;
     efp = getKoopaFireEfp();
-    camGetPtr(4);
+    camGetPtr(CAMERA_3D);
     {
         Vec zero0 = {0.0f, 0.0f, 0.0f};
         a = zero0;
@@ -70,7 +70,7 @@ s32 kpaEnemyFireHitChk(f32 x, f32 y, f32 z, f32 h, f32 w) {
     e = (EffGonbabaBreathWork*)efp->userdata;
     s = e->scale;
     PSMTXTrans(m1, e->position.x, e->position.y, e->position.z);
-    PSMTXRotRad(m2, 'y', 0.017453292f * (e->yaw - camGetPtr(4)->viewYaw));
+    PSMTXRotRad(m2, 'y', 0.017453292f * (e->yaw - camGetPtr(CAMERA_3D)->viewYaw));
     if (e->yaw > 90.0f && e->yaw < 270.0f) {
         PSMTXScale(m3, e->scale, e->scale, -e->scale);
     } else {
@@ -118,7 +118,7 @@ s32 kpaEnemyHitChk(f32 x, f32 y, f32 z, f32 h, f32 w) {
     if (dy <= dh && dx <= dw) {
         if ((m->flags & MARIO_FLAG_IS_FALLING) && m->position.y > y) {
             if (kpaGetLevel() == 0 && kpaGetStageType() != 1 && m->mutekiTimer == 0 && z < 50.0f) {
-                marioChgMot(4);
+                marioChgMot(MARIO_MOTION_JUMP_NPC);
             }
             return 1;
         }
@@ -315,7 +315,7 @@ HitEntry* kpaSearchHead(f32 hgt, f32* outA, f32* outB) {
     } else {
         switch (kpaGetLevel()) {
         case 0:
-            if (m->currMotionId == 0x25) {
+            if (m->currMotionId == MARIO_MOTION_KPA_SWIM) {
                 off = 10.0f;
             } else {
                 off = hgt;

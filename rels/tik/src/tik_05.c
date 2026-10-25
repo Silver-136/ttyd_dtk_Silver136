@@ -727,7 +727,7 @@ static USER_FUNC(cam_kaiten_init) {
 }
 
 static USER_FUNC(cam_kaiten_set_direct) {
-    CameraEntry* camera = camGetPtr(4);
+    CameraEntry* camera = camGetPtr(CAMERA_3D);
     f32 s = sin(6.2831855f * ckpw->angle / 360.0f);
     f32 c = cos(6.2831855f * ckpw->angle / 360.0f);
 
@@ -1190,7 +1190,7 @@ static USER_FUNC(evtflash) {
     switch (event->userdata[2]) {
         case 0: {
             GXColor color = {0xFF, 0xFF, 0xFF, 0xFF};
-            fadeEntry(10, in, color);
+            fadeEntry(FADE_OUT_BLACK, in, color);
             event->userdata[2]++;
         }
         case 1:
@@ -1212,7 +1212,7 @@ static USER_FUNC(evtflash) {
             return EVT_RETURN_BLOCK;
         case 3: {
             GXColor color = {0xFF, 0xFF, 0xFF, 0xFF};
-            fadeEntry(9, out, color);
+            fadeEntry(FADE_IN_BLACK, out, color);
             event->userdata[2]++;
         }
         case 4:

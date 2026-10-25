@@ -369,13 +369,13 @@ void mot_jump(void) {
         mario->multiTimer = 2;
         mario->currSubMotionId = 0;
         marioPreJump();
-        if (mario->currMotionId == 8) {
+        if (mario->currMotionId == MARIO_MOTION_JUMP_3) {
             camFollowYOn();
         } else {
             camFollowYOff();
         }
         chgPoseB(mario);
-        if (mario->currMotionId != 8) {
+        if (mario->currMotionId != MARIO_MOTION_JUMP_3) {
             jumpSfx(mario);
         }
         psndSFXOn_3D((char*)0x14D, &mario->position);
@@ -408,11 +408,11 @@ void mot_jumpSmall(void) {
         mario->multiTimer = 2;
         mario->currSubMotionId = 0;
         marioPreJump();
-        if (mario->currMotionId != 8) {
+        if (mario->currMotionId != MARIO_MOTION_JUMP_3) {
             camFollowYOff();
         }
         chgPoseB(mario);
-        if (mario->currMotionId != 8) {
+        if (mario->currMotionId != MARIO_MOTION_JUMP_3) {
             jumpSfx(mario);
         }
         psndSFXOn_3D((char*)0x14D, &mario->position);
@@ -482,7 +482,7 @@ void mot_fall(void) {
         }
         marioResetCamFollowRate();
         mario->currSubMotionId = 0;
-        if (mario->currMotionId != 11) {
+        if (mario->currMotionId != MARIO_MOTION_FALL_2) {
             if (mario->characterId == 2) {
                 kpaChgPose("KPA_J_1B", "KPA2_J_1B");
             } else if (!(mario->flags & MARIO_FLAG_IS_CARRYING_BOBBERY) && mario->characterId == 0) {
@@ -556,16 +556,16 @@ void mot_land(void) {
     }
     switch ((s32)mario->currSubMotionId) {
     case 0:
-        marioChgMot(0);
+        marioChgMot(MARIO_MOTION_STAY);
         break;
     case 1:
         if (--mario->multiTimer <= 0) {
-            marioChgMot(0);
+            marioChgMot(MARIO_MOTION_STAY);
         }
         break;
     case 10:
         if (--mario->multiTimer <= 0) {
-            marioChgMot(0);
+            marioChgMot(MARIO_MOTION_STAY);
         }
         break;
     }

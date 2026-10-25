@@ -136,13 +136,13 @@ USER_FUNC(demo_init) {
 }
 
 void demo_exit(void) {
-    CameraEntry* cam = camGetPtr(8);
+    CameraEntry* cam = camGetPtr(CAMERA_2D);
 
     if (wp->tpl != NULL) {
         fileFree(wp->tpl);
     }
     psndClearFlag(4);
-    cam = camGetPtr(4);
+    cam = camGetPtr(CAMERA_3D);
     cam->viewport[0] = 0.0f;
     cam->viewport[1] = 0.0f;
     cam->viewport[2] = 608.0f;
@@ -168,7 +168,7 @@ void demo_cap(void) {
 }
 
 void demo_desk(CameraId cameraId, void* param) {
-    CameraEntry* cam = camGetPtr(8);
+    CameraEntry* cam = camGetPtr(CAMERA_2D);
     GXTexObj obj;
     Mtx mtx;
     Mtx scale;
@@ -219,7 +219,7 @@ void demo_desk(CameraId cameraId, void* param) {
 }
 
 void demo_img(CameraId cameraId, void* param) {
-    CameraEntry* cam = camGetPtr(8);
+    CameraEntry* cam = camGetPtr(CAMERA_2D);
     CameraEntry* cam2;
     Mtx mtx;
     Mtx scale;
@@ -272,12 +272,12 @@ void demo_img(CameraId cameraId, void* param) {
         GXProject(w / 2, h / 2 + 35.0f, 0.0f, mtx, proj, vp, &p1.x, &p1.y, &p1.z);
         GXProject(w / 2, -h / 2 + 35.0f, 0.0f, mtx, proj, vp, &p2.x, &p2.y, &p2.z);
         GXProject(-w / 2, -h / 2 + 35.0f, 0.0f, mtx, proj, vp, &p3.x, &p3.y, &p3.z);
-        cam2 = camGetPtr(4);
+        cam2 = camGetPtr(CAMERA_3D);
         cam2->viewport[0] = p0.x;
         cam2->viewport[1] = p0.y;
         cam2->viewport[2] = p2.x - p0.x;
         cam2->viewport[3] = p2.y - p0.y;
-        cam2 = camGetPtr(6);
+        cam2 = camGetPtr(CAMERA_3D_IMAGE);
         cam2->viewport[0] = 0.0f;
         cam2->viewport[1] = 0.0f;
         cam2->viewport[2] = 608.0f;
@@ -296,7 +296,7 @@ void demo_img(CameraId cameraId, void* param) {
 }
 
 void demo_book(CameraId cameraId, void* param) {
-    CameraEntry* cam = camGetPtr(8);
+    CameraEntry* cam = camGetPtr(CAMERA_2D);
     GXTexObj obj;
     Mtx mtx;
     Mtx scale;

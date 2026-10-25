@@ -89,7 +89,7 @@ USER_FUNC(mario_shabon_init) {
 
     mario->hitobjStandOn = NULL;
     mario->airTimer = 1;
-    marioChgMot(8);
+    marioChgMot(MARIO_MOTION_JUMP_3);
     return EVT_RETURN_DONE;
 }
 

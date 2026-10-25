@@ -671,8 +671,8 @@ static s32 moamoa_hit_check(ExtdrvPose* pose, Moamoa* moa) {
     if (distABf((*pose->mtx)[0][3], (*pose->mtx)[2][3], mario->position.x, mario->position.z) < (20.0f + mario->wPlayerCollisionBox.x) / 2.0f
         && mario->position.y > 10.0f + (*pose->mtx)[1][3] && (mario->flags & MARIO_FLAG_IS_FALLING) && !(mario->flags & MARIO_FLAG_IS_JUMPING)
         && wp->bounceCount < 2) {
-        if (mario->currMotionId != 0x16 && mario->currMotionId != 0x1a) {
-            marioChgMot(5);
+        if (mario->currMotionId != MARIO_MOTION_ROLL && mario->currMotionId != MARIO_MOTION_YOSHI) {
+            marioChgMot(MARIO_MOTION_JUMP_SW);
         }
         wp->bounceCount++;
         return 1;
@@ -680,14 +680,14 @@ static s32 moamoa_hit_check(ExtdrvPose* pose, Moamoa* moa) {
     if (!(mario->flags & (MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING))) {
         wp->bounceCount = 0;
     }
-    if (mario->currMotionId == 0x12 && wp->field_0x40 > 10) {
+    if (mario->currMotionId == MARIO_MOTION_HAMMER && wp->field_0x40 > 10) {
         rad = 6.2831855f * reviseAngle(camGetPtr(CAMERA_3D)->viewYaw + (mario->displayDirection - 90.0f)) / 360.0f;
         dist = 35.0f * moa_sinx(rad) + mario->position.x;
         if (distABf((*pose->mtx)[0][3], (*pose->mtx)[2][3], dist, mario->position.z - 35.0f * moa_cosx(rad)) < 35.0f) {
             return 2;
         }
     }
-    if (mario->currMotionId == 0x13 && (s32)mario->currSubMotionId == 0x14) {
+    if (mario->currMotionId == MARIO_MOTION_HAMMER_2 && (s32)mario->currSubMotionId == 0x14) {
         f32 (*mtx)[4] = *pose->mtx;
         a = (Vec){mtx[0][3], mtx[1][3], mtx[2][3]};
         if (PSVECDistance(&mario->position, &a) < 65.0f) {
@@ -782,12 +782,12 @@ static void ext_moamoa_main(void) {
     party = partyGetPtr(0);
     camGetPtr(CAMERA_3D);
     hit = 0;
-    if (mario->currMotionId == 0x12) {
+    if (mario->currMotionId == MARIO_MOTION_HAMMER) {
         wp->field_0x40++;
     } else {
         wp->field_0x40 = 0;
     }
-    if (mario->currMotionId == 0) {
+    if (mario->currMotionId == MARIO_MOTION_STAY) {
         wp->idleFrames++;
         if (wp->idleFrames > 1000) {
             wp->idleFrames = 1000;

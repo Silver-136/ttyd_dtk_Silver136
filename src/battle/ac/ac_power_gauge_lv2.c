@@ -242,7 +242,7 @@ static void actionCommandDisp(f32 x, f32 y) {
     s32 icon;
     f32 px;
     f32 py;
-    camGetPtr(8);
+    camGetPtr(CAMERA_2D);
     px = -200.0f + x;
     py = 25.0f + y;
     {

@@ -873,7 +873,7 @@ static void disp_2D(CameraId cam, void* param) {
         ratio = w->cursor / w->gaugeLen;
         if (ratio >= 0.0f && ratio <= 1.0f) {
             btlDispGXInit2DRasta();
-            GXLoadPosMtxImm(camGetPtr(8)->view, 0);
+            GXLoadPosMtxImm(camGetPtr(CAMERA_2D)->view, 0);
             btlDispGXQuads2DRasta(left, 8.0f + w->gaugePos.y, ratio * (right - left) + left, w->gaugePos.y - 8.0f, 0xFF, 0, 0, w->alpha);
         }
     }

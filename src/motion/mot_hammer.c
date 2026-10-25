@@ -313,7 +313,7 @@ void mot_hammer(void) {
     }
     if (++mario->multiTimer > 20) {
         mario->flags &= ~MARIO_FLAG_STOP_AIR_MOVEMENT;
-        marioChgMot(0);
+        marioChgMot(MARIO_MOTION_STAY);
     }
 }
 
@@ -327,7 +327,7 @@ s32 marioChkHammer2(void) {
     }
     if (!(mario->buttonHold & PAD_BUTTON_B)) {
         if (!(mario->buttonHold & PAD_BUTTON_A)) {
-            if (strcmp(mario->animName, "M_I_Y") == 0 && mario->currMotionId == 0) {
+            if (strcmp(mario->animName, "M_I_Y") == 0 && mario->currMotionId == MARIO_MOTION_STAY) {
                 marioChgPose("M_S_1");
                 marioVoiceGlareOff();
             }
@@ -344,13 +344,13 @@ s32 marioChkHammer2(void) {
 #else
     mario->wMotionTimer++;
 #endif
-    if (mario->controlStickSensitivity && mario->wMotionTimer > 10 && mario->currMotionId == 0 && !(mario->dispFlags & 0x40000000)) {
+    if (mario->controlStickSensitivity && mario->wMotionTimer > 10 && mario->currMotionId == MARIO_MOTION_STAY && !(mario->dispFlags & 0x40000000)) {
         marioChgPose("M_I_Y");
         marioVoiceGlareOn();
     }
     if (mario->wMotionTimer >= 50) {
         mario->wMotionTimer = 50;
-        if (mario->currMotionId == 0 && !(mario->dispFlags & 0x40000000)) {
+        if (mario->currMotionId == MARIO_MOTION_STAY && !(mario->dispFlags & 0x40000000)) {
             marioChgPose("M_I_Y");
             marioVoiceGlareOn();
         }
@@ -631,7 +631,7 @@ void mot_hammer2(void) {
         mario->dispFlags &= ~0x4;
         mario->flags &= ~MARIO_FLAG_STOP_AIR_MOVEMENT;
         marioAdjustMoveDir();
-        marioChgMotSub(0, 0);
+        marioChgMotSub(MARIO_MOTION_STAY, 0);
         break;
     }
 }
@@ -639,7 +639,7 @@ void mot_hammer2(void) {
 
 f32 marioGetAngleKaitenHammer(void) {
     MarioWork* mario = marioGetPtr();
-    if (mario->currMotionId != 0x13) {
+    if (mario->currMotionId != MARIO_MOTION_HAMMER_2) {
         return -1.0f;
     }
     if ((s32)mario->currSubMotionId != 0x14) {

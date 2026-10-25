@@ -2245,7 +2245,7 @@ USER_FUNC(evt_sub_get_coin) {
     MarioWork* mario = marioGetPtr();
     Vec a = mario->position;
     Vec b = a;
-    f32 rad = reviseAngle((100.0f * camGetPtr(4)->viewYaw + 5.0f) / 100.0f);
+    f32 rad = reviseAngle((100.0f * camGetPtr(CAMERA_3D)->viewYaw + 5.0f) / 100.0f);
     f32 s;
     f32 c;
     s32 state;
@@ -2346,7 +2346,7 @@ USER_FUNC(stone_bg) {
     EffectEntry* eff;
     u8* item;
     name = (char*)evtGetValue(event, event->args[0]);
-    cam = camGetPtr(8);
+    cam = camGetPtr(CAMERA_2D);
     cam->letterBoxCamId = 5;
     eff = effNameToPtr("sub_bg");
     ((ItemGetWork*)eff->userdata)->camera = 5;

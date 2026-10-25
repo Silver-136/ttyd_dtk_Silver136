@@ -286,7 +286,7 @@ USER_FUNC(evt_party_set_dir_npc) {
         }
         x = npc->position.x;
         z = npc->position.z;
-        camYaw = camGetPtr(4)->viewYaw;
+        camYaw = camGetPtr(CAMERA_3D)->viewYaw;
         a = revise360(angleABf(p->position.x, p->position.z, x, z) - camYaw);
         p->displayDirectionTarget = (a < 180.0f) ? 180.0f : 0.0f;
         p->targetDir = a;
@@ -303,7 +303,7 @@ USER_FUNC(evt_party_set_dir_pos) {
     }
     x = evtGetValue(event, args[1]);
     z = evtGetValue(event, args[2]);
-    camYaw = camGetPtr(4)->viewYaw;
+    camYaw = camGetPtr(CAMERA_3D)->viewYaw;
     a = revise360(angleABf(p->position.x, p->position.z, x, z) - camYaw);
     p->displayDirectionTarget = (a < 180.0f) ? 180.0f : 0.0f;
     p->targetDir = a;

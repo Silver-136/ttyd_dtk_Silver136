@@ -320,7 +320,7 @@ void mot_ship(void) {
         marioGetPtr()->motShip->bobSpeed = 4.25f;
         m->currSubMotionId = 0;
         if (!(m->trigFlags & MARIO_TRIG_FLAG_SHIP_PLANE_EVT_ON)) {
-            camGetPtr(8)->flags |= 0x200;
+            camGetPtr(CAMERA_2D)->flags |= 0x200;
         }
     }
     switch (m->currSubMotionId) {
@@ -559,14 +559,14 @@ void mot_ship(void) {
             marioGetPtr()->motShip->bobSpeed = 4.25f;
             m->currSubMotionId = 50;
             if (!(m->trigFlags & MARIO_TRIG_FLAG_SHIP_PLANE_EVT_ON)) {
-                camGetPtr(8)->flags &= ~0x200;
+                camGetPtr(CAMERA_2D)->flags &= ~0x200;
             }
         }
         break;
     }
     case 30:
         if (!(m->trigFlags & MARIO_TRIG_FLAG_SHIP_PLANE_EVT_ON)) {
-            camGetPtr(8)->flags |= 0x200;
+            camGetPtr(CAMERA_2D)->flags |= 0x200;
         }
         m->currSubMotionId = 31;
         /* fallthrough */
@@ -779,7 +779,7 @@ void mot_ship(void) {
         m->baseSpeed = f30;
         m->flags &= ~(MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING | MARIO_FLAG_IS_STEPPING | MARIO_FLAG_HAS_INPUT_JUMP);
         m->dispOfs.y = f30;
-        marioChgMot(10);
+        marioChgMot(MARIO_MOTION_FALL);
         marioSetFallPara();
         allPartyRideOff();
         N_marioSetBottomlessRespawnPosOnBeroEntry(m->position.x, m->position.y, m->position.z);
@@ -789,7 +789,7 @@ void mot_ship(void) {
             marioGetPtr()->motStruct = NULL;
         }
         if (!(m->trigFlags & MARIO_TRIG_FLAG_SHIP_PLANE_EVT_ON)) {
-            camGetPtr(8)->flags &= ~0x200;
+            camGetPtr(CAMERA_2D)->flags &= ~0x200;
         }
         break;
     case 50:

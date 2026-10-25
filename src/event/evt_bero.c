@@ -650,7 +650,7 @@ s32 bero_get_position_normal(EventEntry *event, BOOL isFirstCall)
   BeroEY = end.y;
   BeroEZ = end.z;
   N_marioSetBottomlessRespawnPosOnBeroEntry(end.x, end.y, respawnZ);
-  if (wp->currMotionId == 0x19)
+  if (wp->currMotionId == MARIO_MOTION_SHIP)
   {
     N_marioReloadMapOnBottomlessOn();
   }
@@ -1225,7 +1225,7 @@ USER_FUNC(evt_bero_overwrite) {
 
 USER_FUNC(evt_bero_cam3d_change) {
     EvtWord* args = event->args;
-    CameraEntry* cam = camGetPtr(4);
+    CameraEntry* cam = camGetPtr(CAMERA_3D);
     s32 time = evtGetValue(event, args[0]);
     s32 curve = evtGetValue(event, args[1]);
     cam->presetPos = cam->cameraPos;
@@ -1271,7 +1271,7 @@ USER_FUNC(evt_bero_1stcheck) {
 
 USER_FUNC(evt_camera_change_event_from_road) {
     MarioWork* mario = marioGetPtr();
-    CameraEntry* cam = camGetPtr(4);
+    CameraEntry* cam = camGetPtr(CAMERA_3D);
     f32 bank;
     CameraParams out;
     camShiftMain(cam, mario, &bank);

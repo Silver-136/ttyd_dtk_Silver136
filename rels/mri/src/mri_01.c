@@ -244,7 +244,7 @@ static USER_FUNC(evtflash) {
     }
     switch (event->userdata[2]) {
         case 0:
-            fadeEntry(10, 20, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
+            fadeEntry(FADE_OUT_BLACK, 20, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
             event->userdata[2]++;
         case 1:
             if (fadeIsFinish() != TRUE) {
@@ -264,7 +264,7 @@ static USER_FUNC(evtflash) {
             event->userdata[2]++;
             return EVT_RETURN_BLOCK;
         case 3:
-            fadeEntry(9, 80, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
+            fadeEntry(FADE_IN_BLACK, 80, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
             event->userdata[2]++;
         case 4:
             if (fadeIsFinish() != TRUE) {

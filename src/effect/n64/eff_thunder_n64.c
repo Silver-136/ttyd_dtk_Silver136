@@ -809,7 +809,7 @@ void effThunderDisp(CameraId cameraId, EffectEntry* effect) {
         case 1:
         case 2:
         PSMTXTrans(mtx, work->position.x, work->position.y, work->position.z);
-        PSMTXRotRad(rot, 'y', 0.017453292f * -camGetPtr(4)->viewYaw);
+        PSMTXRotRad(rot, 'y', 0.017453292f * -camGetPtr(CAMERA_3D)->viewYaw);
         PSMTXConcat(mtx, rot, view);
         PSMTXTrans(mtx, 0.0f, 0.0f, 1.0f);
         PSMTXConcat(view, mtx, view);
@@ -820,7 +820,7 @@ void effThunderDisp(CameraId cameraId, EffectEntry* effect) {
             break;
         default:
         PSMTXTrans(mtx, work->position.x, work->position.y, work->position.z);
-        PSMTXRotRad(rot, 'y', 0.017453292f * -camGetPtr(4)->viewYaw);
+        PSMTXRotRad(rot, 'y', 0.017453292f * -camGetPtr(CAMERA_3D)->viewYaw);
         PSMTXConcat(mtx, rot, view);
         PSMTXTrans(mtx, 0.0f, 0.0f, 1.0f);
         PSMTXConcat(view, mtx, view);

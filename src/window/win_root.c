@@ -1025,7 +1025,7 @@ void winNameGX(WindowWork* wp, s32 type, f32 x, f32 y, f32 w, f32 h) {
     GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
-    GXLoadPosMtxImm(camGetPtr(8)->view, 0);
+    GXLoadPosMtxImm(camGetPtr(CAMERA_2D)->view, 0);
     GXSetCurrentMtx(0);
 
     if (type == 0) {
@@ -1206,7 +1206,7 @@ void winHalfBookGX(TEXPalette* tpl, s32 a, f32 x, f32 y) {
             GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_AND, GX_ALWAYS, 0);
             GXSetZMode(GX_FALSE, GX_ALWAYS, GX_FALSE);
             MTXTrans(m, 8.0f, -8.0f, 0.0f);
-            MTXConcat(camGetPtr(8)->view, m, m);
+            MTXConcat(camGetPtr(CAMERA_2D)->view, m, m);
             GXLoadPosMtxImm(m, 0);
             GXSetCurrentMtx(0);
         } else {
@@ -1215,7 +1215,7 @@ void winHalfBookGX(TEXPalette* tpl, s32 a, f32 x, f32 y) {
             GXSetZCompLoc(GX_FALSE);
             GXSetAlphaCompare(GX_GEQUAL, 0x80, GX_AOP_OR, GX_NEVER, 0);
             GXSetZMode(GX_FALSE, GX_ALWAYS, GX_FALSE);
-            GXLoadPosMtxImm(camGetPtr(8)->view, 0);
+            GXLoadPosMtxImm(camGetPtr(CAMERA_2D)->view, 0);
             GXSetCurrentMtx(0);
         }
         winHalfBookQuad(tpl, 0x33, x + 8.0f, y - 8.0f, 320.0f, 248.0f);
@@ -1517,7 +1517,7 @@ void winWazaGX(WindowWork* wp, s32 a, f32 x, f32 y, f32 w, f32 h) {
     GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
-    GXLoadPosMtxImm(camGetPtr(8)->view, 0);
+    GXLoadPosMtxImm(camGetPtr(CAMERA_2D)->view, 0);
     GXSetCurrentMtx(0);
 
     w1 = 0.75f * w;

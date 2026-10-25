@@ -230,7 +230,7 @@ void marioYoshiForceCancel(void) {
             __memFree(HEAP_DEFAULT, party->useStruct);
             party->useStruct = NULL;
         }
-        if (mario->currMotionId == 0x20) {
+        if (mario->currMotionId == MARIO_MOTION_DAMAGE_TOGE) {
             partyChgRunMode(party, 0xd);
             extra = partyGetPtr(marioGetExtraPartyId());
             if (extra) {
@@ -263,7 +263,7 @@ void yoshi_bye(PartyEntry* party) {
 void yoshi_exit(PartyEntry* party) {
     party->playerPtr->flags &= ~0x10000000;
     marioYoshiForceCancel();
-    marioChgMot(0);
+    marioChgMot(MARIO_MOTION_STAY);
 }
 
 void yoshi_jumpStand(void) {
@@ -282,7 +282,7 @@ void yoshi_damageToge(PartyEntry* party) {
     PartyEntry* extra;
 
     L_sweatEntry(party, NULL);
-    marioChgMot(0x20);
+    marioChgMot(MARIO_MOTION_DAMAGE_TOGE);
     party->useMotionId = 10;
     partyChgPose(party, "PYS_S_2");
     marioChgPose("M_Y_2");
@@ -472,7 +472,7 @@ void yoshi_use(PartyEntry* party) {
             psndSFXOn_3D(0x93F, &party->position);
             party->flags &= ~0x2000000;
         case 11:
-            marioChgMot(0x1A);
+            marioChgMot(MARIO_MOTION_YOSHI);
             partyChgPose(party, "PYS_H_1");
             marioChgPose("M_Y_1");
             party->moveSpeed = 0.0f;
@@ -936,7 +936,7 @@ void yoshi_use(PartyEntry* party) {
             party->useStruct = NULL;
         }
         marioSetFallPara();
-        marioChgMot(0x1F);
+        marioChgMot(MARIO_MOTION_DAMAGE);
         partyChgRunMode(party, 0xd);
         extra = partyGetPtr(marioGetExtraPartyId());
         if (extra) {
@@ -944,7 +944,7 @@ void yoshi_use(PartyEntry* party) {
         }
         return;
     }
-    if (party->useMotionId >= 10 && party->useMotionId <= 13 && mario->currMotionId != 0x1A) {
+    if (party->useMotionId >= 10 && party->useMotionId <= 13 && mario->currMotionId != MARIO_MOTION_YOSHI) {
         party->flags &= ~0x100;
         if (party->useStruct) {
             __memFree(HEAP_DEFAULT, party->useStruct);
@@ -1120,7 +1120,7 @@ void searchGround(PartyEntry* party) {
             mario->jumpAccelerationY = party->work.common.accelY;
             mario->jumpJerkY = party->work.yoshi.gravityAccel;
             mario->jumpSnapY = party->accelY;
-            marioChgMot(0x1F);
+            marioChgMot(MARIO_MOTION_DAMAGE);
             return;
         }
         if (attr & 0xC00) {

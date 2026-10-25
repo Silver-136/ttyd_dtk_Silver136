@@ -52,7 +52,7 @@ static void actionCommandDisp(f32 x, f32 y) {
     BattleWork* work = _battleWorkPointer;
     BattleActions* ac = &work->actionCommands;
     s32* frame = (s32*)&ac->disp;
-    camGetPtr(8);
+    camGetPtr(CAMERA_2D);
     if (TA_WORK(ac)->flags & 1) {
         Vec pos = {0.0f, 0.0f, 0.0f};
         pos.x = -200.0f + x;

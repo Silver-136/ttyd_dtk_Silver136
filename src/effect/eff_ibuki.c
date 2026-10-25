@@ -144,7 +144,7 @@ void effIbukiMain(EffectEntry* effect) {
         spawn.x = work->position.x + irand(300);
         spawn.y = 30.0f + (work->position.y + irand(100));
         spawn.z = work->position.z;
-        PSMTXRotRad(rot, 'y', MTXDegToRad(-camGetPtr(4)->viewYaw));
+        PSMTXRotRad(rot, 'y', MTXDegToRad(-camGetPtr(CAMERA_3D)->viewYaw));
         PSMTXMultVec(rot, &spawn, &spawn);
         effVaporN64Entry(2, 30, spawn.x, spawn.y, spawn.z, 1.0f + irand(10) / 10.0f);
     }

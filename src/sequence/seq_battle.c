@@ -200,22 +200,22 @@ void seq_battleMain(BattleSeqWork* work) {
                 }
             }
             marioGetPtr();
-            camGetPtr(4);
+            camGetPtr(CAMERA_3D);
             pos.x = 0.0f;
             pos.y = 0.0f;
             pos.z = 400.0f;
             if (_battleWorkPointer->flags & 0x100) {
                 pos.z += 200.0f;
             }
-            psndSetPosDirListener(&pos, camGetPtr(4)->viewYaw);
+            psndSetPosDirListener(&pos, camGetPtr(CAMERA_3D)->viewYaw);
             break;
         }
         case 6:
             if (++work->counter > 30) {
                 if ((gp->flags & 0x1000) && (gp->flags & 0x2000)) {
-                    seqSetSeq(5, (const char*)1, NULL);
+                    seqSetSeq(SEQ_GAME_OVER, (const char*)1, NULL);
                 } else {
-                    seqSetSeq(2, (const char*)1, NULL);
+                    seqSetSeq(SEQ_GAME, (const char*)1, NULL);
                 }
             }
             break;
@@ -228,7 +228,7 @@ void seq_battleMain(BattleSeqWork* work) {
         case 11:
             if (fadeIsFinish()) {
                 gp->debugBattle = 0;
-                seqSetSeq(5, (const char*)1, NULL);
+                seqSetSeq(SEQ_GAME_OVER, (const char*)1, NULL);
             }
             break;
     }
@@ -333,7 +333,7 @@ void battle_exit(void) {
     iconReInit();
     extReset();
     bmapUnLoad();
-    if (camGetPtr(4)->flags & 4) {
+    if (camGetPtr(CAMERA_3D)->flags & 4) {
         camSetMode(4, 1);
     } else {
         camSetMode(4, 3);

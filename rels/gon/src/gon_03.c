@@ -810,7 +810,7 @@ static void senkaron_ext_main(void) {
     mario = marioGetPtr();
     scale = mario->wPlayerCollisionBox.x / 2;
     marioPushedFlag = 0;
-    if (mario->currMotionId == 0x12) {
+    if (mario->currMotionId == MARIO_MOTION_HAMMER) {
         if (++marioHammerFrame == 15) {
             marioHammerFrame = 0;
         }
@@ -874,7 +874,7 @@ static void senkaron_ext_main(void) {
                 if (senkaronMesPushingFlag == 1) {
                     break;
                 }
-                if (mario->currMotionId == 0x12 && marioHammerFrame == 10 &&
+                if (mario->currMotionId == MARIO_MOTION_HAMMER && marioHammerFrame == 10 &&
                     (*pose->mtx)[2][3] > mario->position.z - 80.0f && (*pose->mtx)[2][3] < 80.0f + mario->position.z) {
                     if (mario->directionView > 0.0f && mario->directionView < 180.0f) {
                         if ((*pose->mtx)[0][3] > mario->position.x && (*pose->mtx)[0][3] < mario->position.x + range) {

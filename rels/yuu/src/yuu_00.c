@@ -1235,7 +1235,7 @@ static USER_FUNC(re_fall_rtn) {
 }
 
 USER_FUNC(evt_change_plane) {
-    marioChgMot(0x18);
+    marioChgMot(MARIO_MOTION_PLANE);
     return EVT_RETURN_DONE;
 }
 

@@ -220,7 +220,7 @@ HitEntry* partySearchGround(PartyEntry* party, f32 range, f32 depth) {
     }
     party->groundSlope = 0.0f;
     range = __fabsf(range); range += 0.1f;
-    if (marioGetPtr()->currMotionId == 0x1A) {
+    if (marioGetPtr()->currMotionId == MARIO_MOTION_YOSHI) {
         d = 5.0f;
     } else {
         d = 0.75f * partyGetHeight(party);

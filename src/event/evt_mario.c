@@ -227,7 +227,7 @@ USER_FUNC(evt_mario_paper_pose_dokan) {
 
     if (isFirstCall) {
         event->userdata[1] = 0;
-        if (mp->currMotionId == 0x1d) {
+        if (mp->currMotionId == MARIO_MOTION_DOKAN) {
             marioPaperOff();
             mp->scale = (Vec){1.0f, 1.0f, 1.0f};
             mp->rot = (Vec){0.0f, 0.0f, 0.0f};
@@ -380,7 +380,7 @@ USER_FUNC(evt_mario_paper_pose_dokan) {
     }
     if (ret == 2) {
         mp->dokanType = type;
-        marioChgMot(0x1d);
+        marioChgMot(MARIO_MOTION_DOKAN);
     }
     return ret;
 }
@@ -396,11 +396,11 @@ const char* a_mario_group[] = {
 
 USER_FUNC(evt_mario_dokan_end) {
     MarioWork* mp = marioGetPtr();
-    if (isFirstCall && mp->currMotionId == 0x1d) {
+    if (isFirstCall && mp->currMotionId == MARIO_MOTION_DOKAN) {
         mp->currSubMotionId = 100;
         return EVT_RETURN_BLOCK;
     }
-    if (mp->currMotionId == 0x1d) {
+    if (mp->currMotionId == MARIO_MOTION_DOKAN) {
         return EVT_RETURN_BLOCK;
     }
     return EVT_RETURN_DONE;
@@ -650,7 +650,7 @@ USER_FUNC(evt_mario_set_dir_npc) {
     if (!npc) {
         return EVT_RETURN_DONE;
     }
-    camAngle = camGetPtr(4)->viewYaw;
+    camAngle = camGetPtr(CAMERA_3D)->viewYaw;
     angle = revise360(angleABf(mp->position.x, mp->position.z, npc->position.x, npc->position.z) - camAngle);
     mp->displayDirectionTarget = angle < 180.0f ? 180.0f : 0.0f;
     mp->moveDirection = toMovedirSimple(mp->displayDirectionTarget);
@@ -663,7 +663,7 @@ USER_FUNC(evt_mario_set_dir_pos) {
     MarioWork* mp = marioGetPtr();
     f32 x = evtGetValue(event, args[0]);
     f32 z = evtGetValue(event, args[1]);
-    f32 camAngle = camGetPtr(4)->viewYaw;
+    f32 camAngle = camGetPtr(CAMERA_3D)->viewYaw;
     f32 angle = revise360(angleABf(mp->position.x, mp->position.z, x, z) - camAngle);
     mp->displayDirectionTarget = angle < 180.0f ? 180.0f : 0.0f;
     mp->directionView = angle;
@@ -681,13 +681,13 @@ USER_FUNC(evt_mario_set_normal_pose) {
     BOOL notFound;
     MarioWork* mp = marioGetPtr();
     const char* name;
-    if (mp->currMotionId == 0x18 || mp->currMotionId == 0x19 || mp->currMotionId == 0x16 ||
-        mp->currMotionId == 0x15) {
+    if (mp->currMotionId == MARIO_MOTION_PLANE || mp->currMotionId == MARIO_MOTION_SHIP || mp->currMotionId == MARIO_MOTION_ROLL ||
+        mp->currMotionId == MARIO_MOTION_SLIT) {
         return EVT_RETURN_DONE;
     }
-    if (mp->currMotionId == 1) {
+    if (mp->currMotionId == MARIO_MOTION_WALK) {
         name = "M_W_1";
-    } else if (mp->currMotionId == 2) {
+    } else if (mp->currMotionId == MARIO_MOTION_DASH) {
         name = "M_R_1";
     } else {
         name = "M_S_1";
@@ -701,8 +701,8 @@ USER_FUNC(evt_mario_set_pose) {
     const char* name;
     EvtWord* args = event->args;
     MarioWork* mp = marioGetPtr();
-    if (mp->currMotionId == 0x18 || mp->currMotionId == 0x19 || mp->currMotionId == 0x16 ||
-        mp->currMotionId == 0x15) {
+    if (mp->currMotionId == MARIO_MOTION_PLANE || mp->currMotionId == MARIO_MOTION_SHIP || mp->currMotionId == MARIO_MOTION_ROLL ||
+        mp->currMotionId == MARIO_MOTION_SLIT) {
         return EVT_RETURN_DONE;
     }
     name = (const char*)evtGetValue(event, args[0]);
@@ -748,9 +748,9 @@ USER_FUNC(evt_mario_normalize) {
             partyCtrlOn();
         }
         event->userdata[0] = 0;
-        if (mp->currMotionId != 0x1a && mp->currMotionId != 0x16 && mp->currMotionId != 0x1c &&
+        if (mp->currMotionId != MARIO_MOTION_YOSHI && mp->currMotionId != MARIO_MOTION_ROLL && mp->currMotionId != MARIO_MOTION_VIVIAN &&
             !(mp->dispFlags & 0x1000000)) {
-            marioChgMot(0);
+            marioChgMot(MARIO_MOTION_STAY);
             if (partyRideChk(partyGetPtr(marioGetPartyId())) || partyRideChk(partyGetPtr(marioGetExtraPartyId()))) {
                 event->userdata[0] = 2;
             } else {
@@ -767,24 +767,24 @@ USER_FUNC(evt_mario_normalize) {
     switch (event->userdata[0]) {
         case 0:
             ret = 0;
-            if (mp->currMotionId == 0x16) {
+            if (mp->currMotionId == MARIO_MOTION_ROLL) {
                 marioRollCancel();
                 event->userdata[0] = 1;
-            } else if (mp->currMotionId == 0x15) {
+            } else if (mp->currMotionId == MARIO_MOTION_SLIT) {
                 if (mp->flags & MARIO_FLAG_PAPER_MODE) {
                     motSlitCancel2();
                     event->userdata[0] = 1;
                 }
-            } else if (mp->currMotionId == 0x1a) {
+            } else if (mp->currMotionId == MARIO_MOTION_YOSHI) {
                 if (yoshiGetStatus() != 2 && marioGetoffYoshi()) {
                     event->userdata[0] = 3;
                 }
-            } else if (mp->currMotionId == 0x1c) {
+            } else if (mp->currMotionId == MARIO_MOTION_VIVIAN) {
                 if (vivianGetStatus() != 0 && vivianGetStatus() == 2) {
                     vivianUnhold(partyGetPtr(marioGetPartyId()));
                     event->userdata[0] = 5;
                 }
-            } else if (mp->currMotionId == 0) {
+            } else if (mp->currMotionId == MARIO_MOTION_STAY) {
                 if (!(mp->dispFlags & 0x1000000)) {
                     ret = 2;
                 }
@@ -792,11 +792,11 @@ USER_FUNC(evt_mario_normalize) {
             break;
         case 1:
             ret = 0;
-            if (mp->currMotionId == 0x16) {
+            if (mp->currMotionId == MARIO_MOTION_ROLL) {
                 if (mp->rollFlags == 0) {
                     event->userdata[0] = 2;
                 }
-            } else if (mp->currMotionId == 0x15) {
+            } else if (mp->currMotionId == MARIO_MOTION_SLIT) {
                 if (marioGetMotSlitCancel3()) {
                     ret = 0;
                 } else {
@@ -816,7 +816,7 @@ USER_FUNC(evt_mario_normalize) {
             }
             break;
         case 3:
-            if (mp->currMotionId != 0x1a) {
+            if (mp->currMotionId != MARIO_MOTION_YOSHI) {
                 event->userdata[0] = 4;
             } else if (yoshiGetStatus() == 0) {
                 event->userdata[0] = 4;
@@ -829,7 +829,7 @@ USER_FUNC(evt_mario_normalize) {
             }
             break;
         case 5:
-            if (mp->currMotionId != 0x1c) {
+            if (mp->currMotionId != MARIO_MOTION_VIVIAN) {
                 event->userdata[0] = 6;
             } else if (vivianGetStatus() == 0) {
                 event->userdata[0] = 6;
@@ -881,7 +881,7 @@ USER_FUNC(evt_mario_chk_hipbump) {
     MarioWork* mp = marioGetPtr();
     val = 0;
     id = args[0];
-    if (!(mp->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) && marioGetPtr()->currMotionId == 0x11) {
+    if (!(mp->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) && marioGetPtr()->currMotionId == MARIO_MOTION_HIP_2) {
         val = 1;
     }
     evtSetValue(event, id, val);
@@ -1051,7 +1051,7 @@ USER_FUNC(evt_mario_party_door_move) {
             }
             event->userdata[1] = sysMsec2Frame(400);
             event->userdata[0] = 6;
-            cam = camGetPtr(4)->viewYaw;
+            cam = camGetPtr(CAMERA_3D)->viewYaw;
             party = partyGetPtr(marioGetPartyId());
             if (party) {
                 partyMoveBehindMario3(party, 0,
@@ -1076,7 +1076,7 @@ USER_FUNC(evt_mario_party_door_move) {
             if (--event->userdata[1] > 0) {
                 break;
             }
-            cam = camGetPtr(4)->viewYaw;
+            cam = camGetPtr(CAMERA_3D)->viewYaw;
             party = partyGetPtr(marioGetPartyId());
             if (party) {
                 partyMoveBehindMario3(party, 0,
@@ -1297,7 +1297,7 @@ USER_FUNC(evt_mario_jump_pos) {
                 mp->jumpSnapY = 0.0f;
             }
             if (!(mp->flags & MARIO_FLAG_TUBE_MODE)) {
-                marioChgMot(8);
+                marioChgMot(MARIO_MOTION_JUMP_3);
             } else {
                 rollEvtJumpSetup();
                 mp->displayDirection = mp->directionView;
@@ -1348,7 +1348,7 @@ USER_FUNC(evt_mario_jump_pos) {
             mp->baseSpeed = 0.0f;
             camFollowYOn();
             if (!(mp->flags & MARIO_FLAG_TUBE_MODE)) {
-                marioChgMot(0);
+                marioChgMot(MARIO_MOTION_STAY);
             } else {
                 marioResetRollSpd();
                 clrRollEvtFlag();
@@ -1407,7 +1407,7 @@ USER_FUNC(evt_mario_jump_jumpstand) {
             if (marioChkSts(0x10)) {
                 effKemuriEntry(0, mp->position.x, mp->position.y, mp->position.z, 0.0f);
             }
-            marioChgMot(8);
+            marioChgMot(MARIO_MOTION_JUMP_3);
             if (event->userdata[3] & 1) {
                 msec = 550;
             }
@@ -1540,7 +1540,7 @@ USER_FUNC(evt_mario_jump_jumpstand) {
         mp->jumpSnapY = 0.0f;
         mp->baseSpeed = 0.0f;
         mp->baseSpeed = 0.0f;
-        marioChgMot(0);
+        marioChgMot(MARIO_MOTION_STAY);
         mp->dispFlags &= ~4;
         marioAdjustMoveDir();
         camFollowYOn();
@@ -1607,7 +1607,7 @@ USER_FUNC(evt_koopa_hip_attack) {
             mp->jumpAccelerationY = -g;
             mp->jumpJerkY = 0.0f;
             mp->jumpSnapY = 0.0f;
-            marioChgMot(8);
+            marioChgMot(MARIO_MOTION_JUMP_3);
             event->userdata[2] = frames;
             event->userdata[0] = 1;
         }
@@ -1642,7 +1642,7 @@ USER_FUNC(evt_koopa_hip_attack) {
                 break;
             }
             camFollowYOn();
-            marioChgMot(0);
+            marioChgMot(MARIO_MOTION_STAY);
             return EVT_RETURN_YIELD;
     }
     return EVT_RETURN_BLOCK;
@@ -1655,7 +1655,7 @@ USER_FUNC(evt_koopa_fire) {
         event->userdata[0] = 0;
         event->userdata[2] = (f32)sysMsec2Frame(evtGetValue(event, args[0]));
         kpaAttackStart();
-        marioChgMot(0);
+        marioChgMot(MARIO_MOTION_STAY);
     }
     switch (event->userdata[0]) {
         case 0:
@@ -1705,7 +1705,7 @@ USER_FUNC(evt_mario_get_state) {
         return EVT_RETURN_DONE;
     }
     v = 1;
-    if (mp->currMotionId == 0) {
+    if (mp->currMotionId == MARIO_MOTION_STAY) {
         v = 0;
     }
     evtSetValue(event, id, v);
@@ -2116,12 +2116,12 @@ USER_FUNC(evt_mario_paper_plane) {
         if (!mode) {
             mario_plane_cancel();
         } else {
-            marioChgMot(0x18);
+            marioChgMot(MARIO_MOTION_PLANE);
             mp->trigFlags |= MARIO_TRIG_FLAG_SHIP_PLANE_EVT_ON;
         }
     }
     if (!mode) {
-        if (mp->currMotionId == 0 && mp->hitobjStandOn) {
+        if (mp->currMotionId == MARIO_MOTION_STAY && mp->hitobjStandOn) {
             mp->trigFlags &= ~MARIO_TRIG_FLAG_SHIP_PLANE_EVT_ON;
             return EVT_RETURN_DONE;
         }

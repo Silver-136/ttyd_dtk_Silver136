@@ -1,5 +1,6 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "mario/mario.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "driver/mobjdrv.h"
@@ -280,7 +281,7 @@ s32 sw_main(MapObjectEntry* mobj) {
             }
             lock = 1;
             if (mobj->hitFlag == 0x200000) {
-                marioChgMot(5);
+                marioChgMot(MARIO_MOTION_JUMP_SW);
             }
             psndSFXOn_3D("SFX_STG6_OBJ_SWITCH_ON1", &mobj->position);
             sw_cntup(mobj);

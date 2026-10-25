@@ -769,13 +769,13 @@ static void senkaron_ext_main(void) {
     sk = skwp->sk;
     scale = mario->wPlayerCollisionBox.x / 2.0f;
     skwp->marioPushed = 0;
-    if (mario->currMotionId == 0x12) {
+    if (mario->currMotionId == MARIO_MOTION_HAMMER) {
         skwp->hammerFrame++;
         skwp->hammerFrame %= 15;
     } else {
         skwp->hammerFrame = 0;
     }
-    if (mario->currMotionId == 0x12 && skwp->hammerFrame == 10) {
+    if (mario->currMotionId == MARIO_MOTION_HAMMER && skwp->hammerFrame == 10) {
         if (0.0f == mario->displayDirectionTarget) {
             hammerDir = 1;
         } else if (180.0f == mario->displayDirectionTarget) {

@@ -25,6 +25,7 @@
 #include "database.h"
 #include "driver/mobjdrv.h"
 #include "cam_road.h"
+#include "driver/seqdrv.h"
 
 //.sbss
 char _next_area[0x20];
@@ -128,7 +129,7 @@ void seq_mapChangeMain(SequenceWork* work) {
             if (gp->areaFadeInType != 10) {
                 fadeEntry(gp->areaFadeInType, gp->areaFadeInDuration, (GXColor){0, 0, 0, 0xFF});
             }
-            fadeEntry(0x11, 2000, (GXColor){0, 0, 0, 0xFF});
+            fadeEntry(FADE_OUT_WHITE, 2000, (GXColor){0, 0, 0, 0xFF});
         } else if (!newarea) {
             fadeEntry(gp->mapFadeInType, gp->mapFadeInDuration, (GXColor){0, 0, 0, 0xFF});
         } else {
@@ -172,7 +173,7 @@ void seq_mapChangeMain(SequenceWork* work) {
             strcpy(gp->currentAreaName + 0x10, gp->currentMapName);
             strcpy(gp->currentAreaName, "");
             strcpy(gp->currentMapName, "");
-            seqSetSeq(1, 0, 0);
+            seqSetSeq(SEQ_TITLE, 0, 0);
         } else {
             area_name = getAreaName();
             fres = fileAsyncf(0, 0, mc_rel_fmt, getMarioStDvdRoot(), area_name);
@@ -246,9 +247,9 @@ void seq_mapChangeMain(SequenceWork* work) {
         work->state++;
         break;
     case 6:
-        if (!(camGetPtr(8)->flags & 0x200) && !(bero_get_BeroEXEC() & 1) &&
+        if (!(camGetPtr(CAMERA_2D)->flags & 0x200) && !(bero_get_BeroEXEC() & 1) &&
             (!marioChkKey() || !marioChkCtrl())) {
-            camGetPtr(8)->flags |= 0x500;
+            camGetPtr(CAMERA_2D)->flags |= 0x500;
         }
         if (npcWaitAllInitEvtEnd()) {
             npcExecAllReglEvt();
@@ -292,13 +293,13 @@ void seq_mapChangeMain(SequenceWork* work) {
                 evt_cam_road_reset(0, 0);
                 if (party) {
                     party->position = gp->savePlayerPos;
-                    party->position.x += 30.0f * (f32)cos(camGetPtr(4)->viewYaw);
-                    party->position.z += 30.0f * (f32)sin(camGetPtr(4)->viewYaw);
+                    party->position.x += 30.0f * (f32)cos(camGetPtr(CAMERA_3D)->viewYaw);
+                    party->position.z += 30.0f * (f32)sin(camGetPtr(CAMERA_3D)->viewYaw);
                 }
                 if (extraParty) {
                     extraParty->position = gp->savePlayerPos;
-                    extraParty->position.x += -30.0f * (f32)cos(camGetPtr(4)->viewYaw);
-                    extraParty->position.z += 30.0f * (f32)sin(camGetPtr(4)->viewYaw);
+                    extraParty->position.x += -30.0f * (f32)cos(camGetPtr(CAMERA_3D)->viewYaw);
+                    extraParty->position.z += 30.0f * (f32)sin(camGetPtr(CAMERA_3D)->viewYaw);
                 }
                 if (!strcmp(gp->currentMapName, "dou_05") || !strcmp(gp->currentMapName, "gor_01") ||
                     !strcmp(gp->currentMapName, "muj_10") || !strcmp(gp->currentMapName, "tik_07")) {
@@ -325,7 +326,7 @@ void seq_mapChangeMain(SequenceWork* work) {
             marioStSystemLevel(0);
         }
         marioEntry();
-        seqSetSeq(2, 0, 0);
+        seqSetSeq(SEQ_GAME, 0, 0);
         break;
     }
     }
@@ -463,7 +464,7 @@ void _load(const char* prevMapName, const char* newMapName, const char* beroName
         }
     }
     mw = marioGetPtr();
-    cam = camGetPtr(4);
+    cam = camGetPtr(CAMERA_3D);
     cam->marioPos.x = mw->position.x;
     cam->marioPos.y = 0.01f + mw->position.y;
     cam->marioPos.z = mw->position.z;

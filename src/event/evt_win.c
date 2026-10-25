@@ -131,8 +131,8 @@ void unitwin_name_disp(WinMgrEntry* entry) {
             Vec pos;
             mapObjGetPos(wp->entries[i].mapObj, &pos);
             pos.y += 30.0f;
-            PSMTXMultVec(camGetPtr(4)->view, &pos, &pos);
-            PSMTX44MultVec(camGetPtr(4)->projection, &pos, &pos);
+            PSMTXMultVec(camGetPtr(CAMERA_3D)->view, &pos, &pos);
+            PSMTX44MultVec(camGetPtr(CAMERA_3D)->projection, &pos, &pos);
             pos.x *= gp->fbWidth / 2.0f;
             pos.y *= gp->efbHeight / 2.0f;
             sprintf(buf, "%d", itemDataTable[wp->goods[i]].discount_price);
@@ -527,7 +527,7 @@ void evt_unitwin_disp_func(CameraId cameraId, void* param) {
                 u8 price;
 
                 mapObjGetPos(wp->entries[i].mapObj, &pos);
-                cam = camGetPtr(4);
+                cam = camGetPtr(CAMERA_3D);
                 GXSetProjection(cam->projection, cam->projType);
                 GXGetProjectionv(proj);
                 GXGetViewportv(vp);

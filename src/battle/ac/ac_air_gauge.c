@@ -282,7 +282,7 @@ static void actionCommandDisp(f32 x, f32 y) {
     f32 ratio;
     f32 cur;
 
-    camGetPtr(8);
+    camGetPtr(CAMERA_2D);
     pw = (AirPw*)ac->work;
     ratio = pw->gauge / 100.0f;
     if (disp->gaugeRatio <= ratio) {

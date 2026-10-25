@@ -273,7 +273,7 @@ void marioStInit(void) {
     nameEntInit();
     winMgrInit();
     seqInit_MARIOSTORY();
-    seqSetSeq(0, NULL, NULL);
+    seqSetSeq(SEQ_LOGO, NULL, NULL);
     gp->soundMode = 0;
     if (OSGetSoundMode() == OS_SOUND_MODE_MONO) {
         SoundSetOutputMode(0);

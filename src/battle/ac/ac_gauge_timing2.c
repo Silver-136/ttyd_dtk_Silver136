@@ -337,9 +337,9 @@ static void actionCommandDisp(f32 x, f32 y) {
     Vec pos;
     Vec d0; Vec d1;
 
-    camGetPtr(8);
+    camGetPtr(CAMERA_2D);
     gw = (GT2Work*)ac->work;
-    cam = camGetPtr(8);
+    cam = camGetPtr(CAMERA_2D);
     v = gw->width - 16;
     x0 = (-288.0f) + x;
     y0 = 49.0f + y;
@@ -368,7 +368,7 @@ static void actionCommandDisp(f32 x, f32 y) {
     }
     disp->gaugeRatio = ratio;
 
-    cam = camGetPtr(8);
+    cam = camGetPtr(CAMERA_2D);
     y2 = y0 - 16.0f;
     x1 = x0 + (((f32)gw->width) * gw->cursor) / 100.0f;
     if (x1 >= x0) {

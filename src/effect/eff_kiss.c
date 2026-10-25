@@ -273,7 +273,7 @@ void effKissDisp(CameraId cameraId, EffectEntry* effect) {
     type = work->type;
     PSMTXTrans(mT, work->position.x, work->position.y, work->position.z);
     PSMTXScale(mS, work->scaleX, work->scaleY, work->scaleY);
-    PSMTXRotRad(mR, 'y', 0.017453292f * -camGetPtr(4)->viewYaw);
+    PSMTXRotRad(mR, 'y', 0.017453292f * -camGetPtr(CAMERA_3D)->viewYaw);
     PSMTXConcat(mT, mR, mT);
     PSMTXConcat(mT, mS, mBase);
     GX_SETUP();
@@ -445,7 +445,7 @@ void effKissDisp2(CameraId cameraId, EffectEntry* effect) {
     alpha = work->alpha;
     PSMTXTrans(mT, work->position.x, work->position.y, work->position.z);
     PSMTXScale(mS, work->scaleX, work->scaleY, work->scaleY);
-    PSMTXRotRad(mR, 'y', 0.017453292f * -camGetPtr(4)->viewYaw);
+    PSMTXRotRad(mR, 'y', 0.017453292f * -camGetPtr(CAMERA_3D)->viewYaw);
     PSMTXConcat(mT, mR, mT);
     PSMTXConcat(mT, mS, mBase);
     GX_SETUP();

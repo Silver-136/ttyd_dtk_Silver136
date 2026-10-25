@@ -624,7 +624,7 @@ void npcMoveG(NpcEntry* npc);
 BOOL npcCheckHitMarioSide(NpcEntry* npc);
 HitEntry* npcHitCheckSide(NpcEntry* npc, f32* outX, f32* outZ, f32* angle, f32 dx, f32 dz);
 s32 vivianGetStatus(void);
-#define NPC_CHKMARIO(ok) do {     m = marioGetPtr();     if (m->flags & (MARIO_FLAG_BG_MODE | MARIO_FLAG_IS_8_BIT)) { ok = 0; break; }     if (m->flags & (MARIO_FLAG_CTRL_OFF | MARIO_FLAG_KEY_OFF)) { ok = 0; break; }     if (gp->mapEventId != 0) { ok = 0; break; }     if (seqGetSeq() != 2) { ok = 0; break; }     if (m->currMotionId == 0x19) { ok = 0; break; }     if (vivianGetStatus() != 0 && vivianGetStatus() != 1) { ok = 0; } else { ok = 1; } } while (0)
+#define NPC_CHKMARIO(ok) do {     m = marioGetPtr();     if (m->flags & (MARIO_FLAG_BG_MODE | MARIO_FLAG_IS_8_BIT)) { ok = 0; break; }     if (m->flags & (MARIO_FLAG_CTRL_OFF | MARIO_FLAG_KEY_OFF)) { ok = 0; break; }     if (gp->mapEventId != 0) { ok = 0; break; }     if (seqGetSeq() != 2) { ok = 0; break; }     if (m->currMotionId == MARIO_MOTION_SHIP) { ok = 0; break; }     if (vivianGetStatus() != 0 && vivianGetStatus() != 1) { ok = 0; } else { ok = 1; } } while (0)
 void shadowSetCollision(s32 shadow, s32 val);
 s32 shadowEntry(f32 x, f32 y, f32 z, f32 size);
 void animPoseVivianMain(s32 poseId, Vec* pos);
@@ -2154,7 +2154,7 @@ void fbatBattleMode(void) {
                     gp->fbatData->firstStrike.enabled = TRUE;
                 }
                 marioFBattlePrepare();
-                seqSetSeq(4, NULL, NULL);
+                seqSetSeq(SEQ_BATTLE, NULL, NULL);
                 if ((u32)data->hitKind == 0x10000000) {
                     marioChgDamagePose();
                 }
@@ -2474,7 +2474,7 @@ void* fbatHitCheck(u32 flags, void* a1) {
                         if (marioGetJabaraState() == 6) {
                             res.kind = 0x20000;
                             if (!soft) fbatSetAttackAnnounce(0x20000);
-                        } else if (mario->currMotionId == 0x10) {
+                        } else if (mario->currMotionId == MARIO_MOTION_HIP) {
                             res.kind = 0x40000;
                             if (!soft) fbatSetAttackAnnounce(0x40000);
                         } else {
@@ -2503,7 +2503,7 @@ void* fbatHitCheck(u32 flags, void* a1) {
                 f32 c2, s2, c1, s1;
                 f32 x, y, z;
                 f32 r, angle;
-                if (mario->currMotionId != 0x12) break;
+                if (mario->currMotionId != MARIO_MOTION_HAMMER) break;
                 r = 1.5f * mario->wPlayerCollisionBox.x;
                 angle = reviseAngle(mario->displayDirection - 90.0f + (*(f32*)&((CameraEntry*)camGetPtr(CAMERA_3D))->viewYaw));
                 m = marioGetPtr();
@@ -2560,7 +2560,7 @@ void* fbatHitCheck(u32 flags, void* a1) {
                 f32 angle, r;
                 MarioWork* m;
                 f32 c, s, x, y, z;
-                if (mario->currMotionId != 0x13) break;
+                if (mario->currMotionId != MARIO_MOTION_HAMMER_2) break;
                 angle = marioGetAngleKaitenHammer();
                 if (angle < 0.0f) break;
                 r = 1.5f * mario->wPlayerCollisionBox.x;

@@ -1166,7 +1166,7 @@ static inline void partyHello_inl(PartyEntry* party) {
     if (party->trigFlags & 8) {
         party->trigFlags &= ~8;
         mario = party->playerPtr;
-        if (mario->currMotionId == 0x16 || mario->currMotionId == 0x18 || mario->currMotionId == 0x19) {
+        if (mario->currMotionId == MARIO_MOTION_ROLL || mario->currMotionId == MARIO_MOTION_PLANE || mario->currMotionId == MARIO_MOTION_SHIP) {
             party->motionStep = 30;
         } else if (party->runMode == 4 || party->runMode == 5) {
             party->flags2 |= 0x10;
@@ -1340,7 +1340,7 @@ s32 partyGoodbyeInit(PartyEntry* party) {
         }
     }
     mario = party->playerPtr;
-    if (mario->currMotionId == 0x16 || mario->currMotionId == 0x18 || mario->currMotionId == 0x19) {
+    if (mario->currMotionId == MARIO_MOTION_ROLL || mario->currMotionId == MARIO_MOTION_PLANE || mario->currMotionId == MARIO_MOTION_SHIP) {
         party->motionStep = 20;
     }
     return 0;
@@ -1870,7 +1870,7 @@ void getRidePos(PartyEntry* party, Vec* pos) {
     f32 s;
     f32 c;
 
-    if (mario->currMotionId == 0x1A) {
+    if (mario->currMotionId == MARIO_MOTION_YOSHI) {
         angle = 3.1415927f * toMovedir(mario->displayDirectionTarget) / 180.0f;
         if (yoshiGetStatus() != 2) {
             pos->x = mario->position.x - 10.0f * (f32)sin(angle);
@@ -1894,11 +1894,11 @@ void getRidePos(PartyEntry* party, Vec* pos) {
                 pos->y = 16.0f + ride->position.y;
             }
         }
-    } else if (mario->currMotionId == 0x18) {
+    } else if (mario->currMotionId == MARIO_MOTION_PLANE) {
         pos->x = mario->position.x;
         pos->z = mario->position.z;
         pos->y = 40.0f + mario->position.y;
-    } else if (mario->currMotionId == 0x19) {
+    } else if (mario->currMotionId == MARIO_MOTION_SHIP) {
         sincosf(&s, &c, toMovedirSimple(N_marioShipGetDir() ? 0.0f : 180.0f));
         pos->x = mario->position.x + 22.0f * s;
         pos->z = mario->position.z + 22.0f * c;
@@ -2315,7 +2315,7 @@ s32 partyRideYoshiMain(PartyEntry* party) {
         party->position = pos;
         party->displayDirectionTarget = mario->displayDirectionTarget;
         party->moveDir = toMovedir(party->displayDirectionTarget);
-        if ((u16)mario->currMotionId != 0x1A) {
+        if ((u16)mario->currMotionId != MARIO_MOTION_YOSHI) {
             partyGetAppearPos(party, &pos2);
             party->position.x = pos2.x;
             party->position.z = pos2.z;
@@ -2392,11 +2392,11 @@ void party_damage_return(PartyEntry* party) {
             party->position.y += 1.0f;
         }
 #endif
-        if (mario->currMotionId == 0x1F) {
+        if (mario->currMotionId == MARIO_MOTION_DAMAGE) {
             if (!marioWaitDamageReturnFall()) {
                 break;
             }
-        } else if (mario->currMotionId == 0x20) {
+        } else if (mario->currMotionId == MARIO_MOTION_DAMAGE_TOGE) {
             if (!marioWaitDamageTogeReturnFall()) {
                 break;
             }

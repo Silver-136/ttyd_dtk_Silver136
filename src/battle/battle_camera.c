@@ -54,7 +54,7 @@ void battleCameraInit(void) {
 }
 
 void battleCameraMain(void) {
-  CameraEntry* cam = camGetPtr(4);
+  CameraEntry* cam = camGetPtr(CAMERA_3D);
   BattleWork* wp = _battleWorkPointer;
   BattleAudience* aud = BattleAudienceBaseGetPtr();
   f32 zoomZ = 0.0f;
@@ -549,7 +549,7 @@ void battleCameraMain(void) {
 
 void battleCameraMoveTo(s32 mode, s32 clamp, f32 x, f32 y, f32 z, f32 atX, f32 atY, f32 atZ,
                         f32* dX, f32* dY, f32* dZ, f32* dAtX, f32* dAtY, f32* dAtZ) {
-  CameraEntry* cam = camGetPtr(4);
+  CameraEntry* cam = camGetPtr(CAMERA_3D);
   BattleWork* wp = _battleWorkPointer;
   BattleUnit* mario = BattleGetMarioPtr(wp);
   f32 half;
@@ -931,7 +931,7 @@ USER_FUNC(evt_btl_camera_set_zoomSpeedLv) {
 void btl_camera_set_moveto(s32 pri, f32 x, f32 y, f32 z, f32 atX, f32 atY, f32 atZ, s32 frames,
                            s32 type) {
   BattleWork* wp = _battleWorkPointer;
-  CameraEntry* cam = camGetPtr(4);
+  CameraEntry* cam = camGetPtr(CAMERA_3D);
   if (pri >= wp->cameraWork.priLimit) {
     wp->cameraWork.moveToStartPos.x = cam->cameraPos.x;
     wp->cameraWork.moveToStartPos.y = cam->cameraPos.y;

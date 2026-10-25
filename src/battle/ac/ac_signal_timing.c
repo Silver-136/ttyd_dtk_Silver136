@@ -467,7 +467,7 @@ static void actionCommandDisp(f32 x, f32 y) {
     Mtx mTrans;
     Mtx mScale;
 
-    camGetPtr(8);
+    camGetPtr(CAMERA_2D);
     w = (SignalTimingWork*)ac->work;
     count = ST_COUNT(work);
     next = w->next;

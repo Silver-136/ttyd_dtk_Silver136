@@ -922,7 +922,7 @@ USER_FUNC(cam_r) {
     Vec v;
     f32 s;
 
-    cam = camGetPtr(4);
+    cam = camGetPtr(CAMERA_3D);
     cam->rollAngle += 3.0f;
     s = (f32)sin((f32)(u32)gp->retraceCount / 10.0f);
     PSVECSubtract(&cam->cameraAt, &cam->cameraPos, &v);

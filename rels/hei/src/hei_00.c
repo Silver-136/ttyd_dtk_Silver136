@@ -276,7 +276,7 @@ static USER_FUNC(proj_mtx) {
 }
 
 USER_FUNC(shake) {
-    CameraEntry* camera = camGetPtr(4);
+    CameraEntry* camera = camGetPtr(CAMERA_3D);
 
     if (isFirstCall) {
         event->userdata[0] = 0;
@@ -296,7 +296,7 @@ USER_FUNC(shake) {
 }
 
 USER_FUNC(shake_reset) {
-    CameraEntry* camera = camGetPtr(4);
+    CameraEntry* camera = camGetPtr(CAMERA_3D);
 
     camera->viewOffset.z = 0.0f;
     return EVT_RETURN_DONE;
@@ -370,7 +370,7 @@ EVT_END()
 USER_FUNC(cam_test) {
     MarioWork* mario = marioGetPtr();
     PartyEntry* party = partyGetPtr(marioGetPartyId());
-    CameraEntry* camera = camGetPtr(4);
+    CameraEntry* camera = camGetPtr(CAMERA_3D);
     f32 cx = (mario->position.x + party->position.x) / 2;
     f32 cz = (mario->position.z + party->position.z) / 2;
     CameraParams road;
@@ -391,7 +391,7 @@ USER_FUNC(cam_test) {
 USER_FUNC(cam_test2) {
     MarioWork* mario = marioGetPtr();
     PartyEntry* party = partyGetPtr(marioGetPartyId());
-    CameraEntry* camera = camGetPtr(4);
+    CameraEntry* camera = camGetPtr(CAMERA_3D);
     f32 cx = (mario->position.x + party->position.x) / 2;
     f32 cz = (mario->position.z + party->position.z) / 2;
     CameraParams road;

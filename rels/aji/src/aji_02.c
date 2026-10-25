@@ -331,7 +331,7 @@ static USER_FUNC(thunder_main) {
         event->userdata[0] = 0;
     }
     if (event->userdata[0] == 0) {
-        if (mario->currMotionId == 0x20) {
+        if (mario->currMotionId == MARIO_MOTION_DAMAGE_TOGE) {
             EffectEntry* eff;
 
             event->userdata[0] = 1;
@@ -344,7 +344,7 @@ static USER_FUNC(thunder_main) {
             ((EffAkariChargeN64Work*)eff->userdata)->elem[0].g2 = 0;
             ((EffAkariChargeN64Work*)eff->userdata)->elem[0].b2 = 0;
         }
-    } else if (mario->currMotionId != 0x20) {
+    } else if (mario->currMotionId != MARIO_MOTION_DAMAGE_TOGE) {
         event->userdata[0] = 0;
     }
     return EVT_RETURN_BLOCK;

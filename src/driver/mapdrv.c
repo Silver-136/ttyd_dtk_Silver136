@@ -2022,7 +2022,7 @@ void dispEntry(CameraId camera, f32 order, s32 renderMode, void* callback, void*
 
 void mapDisp(void) {
     MapWork* wp = &mapWork[activeGroup];
-    CameraEntry* camera = camGetPtr(4);
+    CameraEntry* camera = camGetPtr(CAMERA_3D);
     MapEntry* entry;
     MapObject* obj;
     int j, i;

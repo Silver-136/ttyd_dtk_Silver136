@@ -786,7 +786,7 @@ static void disp_2D(CameraId cam, void* param) {
         x = x - 32.0f - 8.0f;
         frac = w->f18 - (f32)(s32)w->f18;
         btlDispGXInit2DRasta();
-        GXLoadPosMtxImm(camGetPtr(8)->view, 0);
+        GXLoadPosMtxImm(camGetPtr(CAMERA_2D)->view, 0);
         d = w->f14 - w->f18;
         if (d != 0.0f) {
             r = 0xFF; g = 0xB4; b = 0xB4; a = 0xFF;
@@ -834,7 +834,7 @@ static void disp_2D(CameraId cam, void* param) {
         x = x - 32.0f - 8.0f;
         frac = w->f20 - (f32)(s32)w->f20;
         btlDispGXInit2DRasta();
-        GXLoadPosMtxImm(camGetPtr(8)->view, 0);
+        GXLoadPosMtxImm(camGetPtr(CAMERA_2D)->view, 0);
         if (d != 0.0f) {
             r = 0xB4; g = 0xB4; b = 0xFF; a = 0xFF;
         } else {

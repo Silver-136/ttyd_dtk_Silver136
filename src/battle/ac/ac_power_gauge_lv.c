@@ -180,7 +180,7 @@ static void actionCommandDisp(f32 x, f32 y) {
     BattleACDispParams* disp = &ac->disp;
     PowerGaugeWork* tw;
     f32 ratio;
-    camGetPtr(8);
+    camGetPtr(CAMERA_2D);
     tw = PG_WORK(ac);
     {
         Vec pos = {0.0f, 0.0f, 0.0f};

@@ -347,7 +347,7 @@ static void actionCommandDisp(f32 x, f32 y) {
     s32 arr[4];
     s32 i, count, flags, phase;
     f32 target;
-    camGetPtr(8);
+    camGetPtr(CAMERA_2D);
     {
     s32 numIcons;
     s32 pressedA, idleA, pressedB, idleB;

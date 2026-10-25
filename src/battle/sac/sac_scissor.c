@@ -1183,7 +1183,7 @@ void scissor_disp_region(CameraId camera, void* param) {
     GXSetNumChans(1);
     GXSetNumTexGens(1);
     C_MTXLightOrtho(mtx, -240.0f, 240.0f, -304.0f, 304.0f, 0.5f, 0.5f, 0.5f, 0.5f);
-    PSMTXConcat(mtx, camGetPtr(8)->view, mtx);
+    PSMTXConcat(mtx, camGetPtr(CAMERA_2D)->view, mtx);
     GXLoadTexMtxImm(mtx, 0x1E, 0);
     GXSetTexCoordGen2(0, 0, 0, 0x1E, 0, 0x7D);
     GXSetNumTevStages(1);
@@ -1193,7 +1193,7 @@ void scissor_disp_region(CameraId camera, void* param) {
     GXSetTevColorIn(0, 0xF, 0xF, 0xF, 8);
     GXSetTevAlphaIn(0, 7, 7, 7, 6);
     GXSetTevKAlphaSel(0, 0);
-    GXLoadPosMtxImm(camGetPtr(8)->view, 0);
+    GXLoadPosMtxImm(camGetPtr(CAMERA_2D)->view, 0);
     t = w->tris;
     GXBegin(0x90, 0, w->unk_14 * 3);
     for (i = 0; i < w->unk_14; i++, t++) {

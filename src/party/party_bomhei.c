@@ -185,9 +185,9 @@ void bomhei_use_post(PartyEntry* party) {
     }
     if (player->flags & (MARIO_FLAG_ACTIVE << 13)) {
         player->flags &= ~(MARIO_FLAG_ACTIVE << 13);
-        if (player->currMotionId == 1) {
+        if (player->currMotionId == MARIO_MOTION_WALK) {
             name = "M_W_1";
-        } else if (player->currMotionId == 2) {
+        } else if (player->currMotionId == MARIO_MOTION_DASH) {
             name = "M_R_1";
         } else if (player->flags & (MARIO_FLAG_ACTIVE << 16)) {
             name = "M_J_1B";
@@ -230,7 +230,7 @@ void bomhei_use(PartyEntry* party) {
             }
         }
         if (party->work.bomhei.state != 0x66) {
-            if (mario->currMotionId == 0x1F || mario->currMotionId == 0x20) {
+            if (mario->currMotionId == MARIO_MOTION_DAMAGE || mario->currMotionId == MARIO_MOTION_DAMAGE_TOGE) {
                 party->work.bomhei.state = 0x66;
                 return;
             }
@@ -711,18 +711,18 @@ void mario_controll(PartyEntry* party) {
         }
         break;
     case 40:
-        marioChgMot(0);
+        marioChgMot(MARIO_MOTION_STAY);
         party->work.bomhei.state = 41;
         party->work.bomhei.timer = 40;
         break;
     case 41:
         if (--party->work.bomhei.timer <= 0) {
-            marioChgMot(0);
+            marioChgMot(MARIO_MOTION_STAY);
             party->work.bomhei.state = 100;
         }
         break;
     case 30:
-        marioChgMot(0);
+        marioChgMot(MARIO_MOTION_STAY);
         party->work.bomhei.state = 31;
         break;
     case 31:
@@ -740,7 +740,7 @@ void mario_controll(PartyEntry* party) {
     case 36:
         animPoseSetLocalTime(player->paperAnimGroupId[marioAnimeId()], party->work.bomhei.timer);
         if (--party->work.bomhei.timer < 0) {
-            marioChgMot(0);
+            marioChgMot(MARIO_MOTION_STAY);
             party->work.bomhei.state = 100;
         }
         break;

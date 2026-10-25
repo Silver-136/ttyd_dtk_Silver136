@@ -276,7 +276,7 @@ static void actionCommandDisp(f32 x, f32 y) {
     TimingWideWork* tw;
     u16 a;
     u16 b;
-    camGetPtr(8);
+    camGetPtr(CAMERA_2D);
     tw = TW_WORK(ac);
     switch (tw->button) {
         case 0x100: b = ICON_065; a = ICON_064; break;

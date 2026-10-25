@@ -104,7 +104,7 @@ void caseMain(void) {
     btn = mario->buttonTrg;
     if ((u32)marioStGetSystemLevel() == 0 && !winCheck() && gp->inBattle == 0 &&
         !N_fbatPreventMarioEventChk() && marioCaseEventValidChk()) {
-        if (mario->currMotionId != 0 && mario->currMotionId != 1 && mario->currMotionId != 2 &&
+        if (mario->currMotionId != MARIO_MOTION_STAY && mario->currMotionId != MARIO_MOTION_WALK && mario->currMotionId != MARIO_MOTION_DASH &&
             yoshiGetStatus() != 1) {
             btn = 0;
         }
@@ -182,7 +182,7 @@ void caseMain(void) {
                 if (h1fc != NULL && !strcmp(hitGetName(h1fc), entry->hitObjName)) SET_HIT(entry);
                 break;
             case 14:
-                if (h1fc != NULL && mario->currMotionId == 0x13 &&
+                if (h1fc != NULL && mario->currMotionId == MARIO_MOTION_HAMMER_2 &&
                     !strcmp(hitGetName(h1fc), entry->hitObjName)) {
                     SET_HIT(entry);
                 }

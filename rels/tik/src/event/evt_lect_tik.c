@@ -379,7 +379,7 @@ static USER_FUNC(effitemget_open_ptr) {
 
 static USER_FUNC(effitemget_busaiku) {
     s32 up = evtGetValue(event, event->args[0]);
-    CameraEntry* camera = camGetPtr(4);
+    CameraEntry* camera = camGetPtr(CAMERA_3D);
     Vec ofs;
 
     if (up) {
@@ -445,7 +445,7 @@ static USER_FUNC(evtflash) {
     }
     switch (event->userdata[2]) {
         case 0:
-            fadeEntry(10, 40, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
+            fadeEntry(FADE_OUT_BLACK, 40, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
             event->userdata[2]++;
         case 1:
             if (fadeIsFinish() != TRUE) {
@@ -465,7 +465,7 @@ static USER_FUNC(evtflash) {
             event->userdata[2]++;
             return EVT_RETURN_BLOCK;
         case 3:
-            fadeEntry(9, 40, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
+            fadeEntry(FADE_IN_BLACK, 40, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
             event->userdata[2]++;
         case 4:
             if (fadeIsFinish() != TRUE) {

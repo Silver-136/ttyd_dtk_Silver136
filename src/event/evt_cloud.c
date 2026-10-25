@@ -119,8 +119,8 @@ static USER_FUNC(evt_cloud_main) {
 
             if (wp->w != 0 && wp->h != 0) {
                 mapObjGetPos(wp->groupName, &pos);
-                PSMTXMultVec(camGetPtr(4)->view, &pos, &pos);
-                PSMTX44MultVec(camGetPtr(4)->projection, &pos, &pos);
+                PSMTXMultVec(camGetPtr(CAMERA_3D)->view, &pos, &pos);
+                PSMTX44MultVec(camGetPtr(CAMERA_3D)->projection, &pos, &pos);
                 pos.x = (1.0f + pos.x) * (f32)gp->fbWidth / 2.0f;
                 pos.y = (1.0f - pos.y) * (f32)gp->efbHeight / 2.0f;
                 uw = wp->w;
@@ -183,7 +183,7 @@ static USER_FUNC(evt_cloud_main) {
                 psndSFXOn_3D("SFX_OFF_CLAUD_WIND2", &mario->position);
                 wp->lastFrame = img->loopTimes;
             }
-            if (mario->currMotionId != 27) {
+            if (mario->currMotionId != MARIO_MOTION_CLOUD) {
                 wp->state = 10;
                 break;
             }

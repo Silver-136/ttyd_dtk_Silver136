@@ -446,8 +446,8 @@ void effGonbabaBreathDisp(CameraId cameraId, EffectEntry *effect)
   }
   else
   {
-    f32 c = cos((6.2831855f * camGetPtr(4)->viewYaw) / 360.0f);
-    f32 s = sin((6.2831855f * camGetPtr(4)->viewYaw) / 360.0f);
+    f32 c = cos((6.2831855f * camGetPtr(CAMERA_3D)->viewYaw) / 360.0f);
+    f32 s = sin((6.2831855f * camGetPtr(CAMERA_3D)->viewYaw) / 360.0f);
     PSMTXTrans(trans, work->position.x - (2.0f * s), work->position.y, work->position.z + (2.0f * c));
   }
   PSMTXRotRad(rot, 'y', (work->yaw - camGetPtr(cameraId)->viewYaw) * 0.01745329252f);

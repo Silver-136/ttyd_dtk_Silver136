@@ -2783,7 +2783,7 @@ static USER_FUNC(yami_view) {
     f32 s;
     f32 c;
     f32 dist = evtGetValue(event, event->args[0]);
-    CameraEntry* camera = camGetPtr(4);
+    CameraEntry* camera = camGetPtr(CAMERA_3D);
     f32 angle = 6.2831855f * (90.0f + camera->viewYaw) / 360.0f;
     f32 x;
     f32 z;
@@ -3213,7 +3213,7 @@ USER_FUNC(yami_oowareru_check) {
     f32 limit = evtGetFloat(event, args[0]);
     f32 x = evtGetFloat(event, args[1]);
     f32 z = evtGetFloat(event, args[2]);
-    CameraEntry* camera = camGetPtr(4);
+    CameraEntry* camera = camGetPtr(CAMERA_3D);
     f32 s;
     f32 c;
     f32 angle = 6.2831855f * (90.0f + camera->viewYaw) / 360.0f;

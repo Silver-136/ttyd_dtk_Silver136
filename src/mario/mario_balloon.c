@@ -208,7 +208,7 @@ void marioBalloonMain(void) {
     }
 
     if (mario->airTimer != 0 || (mario->flags & MARIO_FLAG_PAPER_MODE) || (mario->dispFlags & 0x01000000) ||
-        (mario->currMotionId != 0 && (u16)(mario->currMotionId - 1) > 1)) {
+        (mario->currMotionId != MARIO_MOTION_STAY && (u16)(mario->currMotionId - 1) > 1)) {
         show = FALSE;
     }
 

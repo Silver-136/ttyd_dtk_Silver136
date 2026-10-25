@@ -90,7 +90,7 @@ static inline void planeReset(void) {
 
 static inline BOOL planeCancel(void) {
     MarioWork* m = marioGetPtr();
-    if ((u16)m->currMotionId != 0x18) {
+    if ((u16)m->currMotionId != MARIO_MOTION_PLANE) {
         return FALSE;
     }
     if ((s32)m->currSubMotionId >= 12 && (s32)m->currSubMotionId < 20) {
@@ -104,7 +104,7 @@ static inline BOOL planeCancel(void) {
 s32 marioPlaneGetFlyingDir(void) {
     MarioWork* mp = marioGetPtr();
     s32 ret;
-    if ((u16)mp->currMotionId != 0x18) {
+    if ((u16)mp->currMotionId != MARIO_MOTION_PLANE) {
         return 0;
     }
     ret = -1;
@@ -116,7 +116,7 @@ s32 marioPlaneGetFlyingDir(void) {
 
 s32 marioGetPlaneStatus(void) {
     MarioWork* mp = marioGetPtr();
-    if ((u16)mp->currMotionId != 0x18) {
+    if ((u16)mp->currMotionId != MARIO_MOTION_PLANE) {
         return 0;
     }
     if ((s32)mp->currSubMotionId >= 12 && (s32)mp->currSubMotionId < 20) {
@@ -127,7 +127,7 @@ s32 marioGetPlaneStatus(void) {
 
 BOOL mario_plane_cancel(void) {
     MarioWork* mp = marioGetPtr();
-    if ((u16)mp->currMotionId != 0x18) {
+    if ((u16)mp->currMotionId != MARIO_MOTION_PLANE) {
         return FALSE;
     }
     if ((s32)mp->currSubMotionId >= 12 && (s32)mp->currSubMotionId < 20) {
@@ -327,9 +327,9 @@ void mot_plane(void) {
         planeReset();
         allPartyRideOff2();
         if ((s32)mp->currSubMotionId == 20) {
-            marioChgMot(3);
+            marioChgMot(MARIO_MOTION_JUMP);
         } else if ((s32)mp->currSubMotionId == 30) {
-            marioChgMot(0);
+            marioChgMot(MARIO_MOTION_STAY);
         }
     }
     switch (mp->currSubMotionId) {
@@ -451,7 +451,7 @@ void mot_plane(void) {
             }
             mp->camShiftTargetX = 0.0f;
             mp->camShiftTargetY = 0.0f;
-            marioChgMot(0);
+            marioChgMot(MARIO_MOTION_STAY);
         }
 #ifdef VERSION_G8ME01
         marioChkWallAround(&mp->position, 0, 0.0f, 0.0f, mp->wPlayerCollisionBox.z, mp->wPlayerCollisionBox.y);
@@ -487,7 +487,7 @@ void mot_plane(void) {
         allPartyRideOff2();
         marioSetFallPara();
         camFollowYOn();
-        marioChgMot(0x1f);
+        marioChgMot(MARIO_MOTION_DAMAGE);
     }
     marioUpdateCamCollision(mp->position);
     mp->moveDist = mp->baseSpeed;

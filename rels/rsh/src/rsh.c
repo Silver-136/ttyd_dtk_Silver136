@@ -1497,7 +1497,7 @@ void rsh_window_tev(MapTevCallbackInfo* info) {
     GXTexModeSync();
     GXInitTexObj(&tex, buf, halfWidth, halfHeight, GX_TF_RGB5A3, GX_CLAMP, GX_CLAMP, GX_FALSE);
     GXInitTexObjLOD(&tex, GX_NEAR, GX_NEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
-    t = tan(6.2831855f * (camGetPtr(4)->fovY / 2.0f) / 360.0f);
+    t = tan(6.2831855f * (camGetPtr(CAMERA_3D)->fovY / 2.0f) / 360.0f);
     C_MTXLightFrustum(mtx, gp->efbHeight / 2 - y1, gp->efbHeight / 2 - y0, x0 - gp->fbWidth / 2,
                       x1 - gp->fbWidth / 2, gp->efbHeight / 2.0f / t, 0.5f, 0.5f, 0.4f, 0.6f);
     PSMTXConcat(mtx, camGetCurPtr()->view, mtx);

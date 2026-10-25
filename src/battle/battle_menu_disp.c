@@ -202,7 +202,7 @@ void DrawMainIconHukidasi(BattleSubMenu* menu, BattleCommandAct* act, Mtx m, f32
     f32 rad;
     f32 ofs;
 
-    cam = camGetPtr(8);
+    cam = camGetPtr(CAMERA_2D);
     btlDispGXInit2D();
     tev = (GXColor){0xE1, 0xE1, 0xE1, 0xFF};
     GXSetTevColor(GX_TEVREG0, tev);
@@ -293,7 +293,7 @@ void DrawMainIconCircle(BattleSubMenu* menu, BattleCommandAct* act, Mtx m, Vec v
     s32 i;
     s32 j;
 
-    cam = camGetPtr(8);
+    cam = camGetPtr(CAMERA_2D);
     c = 0xC0 - (s32)(1.5f * v.z);
     btlDispGXInit2D();
     tev = (GXColor){0xE1, 0xE1, 0xE1, 0xFF};
@@ -400,7 +400,7 @@ void DrawSubIconSub(BattleSubMenu* menu, s32 i, Mtx m, s32 enabled, s32 icon, co
     s32 j;
     s32 n;
 
-    cam = camGetPtr(8);
+    cam = camGetPtr(CAMERA_2D);
     frac = menu->scrollPos - (( s32)menu->scrollPos) ;
     alpha = 0xFF;
     if (i == 0) {
@@ -598,7 +598,7 @@ void DrawMenuPartyChangeButton(void) {
 
     wp = _battleWorkPointer;
     menu = WP_SUBMENU(wp);
-    camGetPtr(8);
+    camGetPtr(CAMERA_2D);
     mario = BattleGetMarioPtr(wp);
     party = BattleGetPartyPtr(wp);
     if (!party) {
@@ -668,7 +668,7 @@ void N_DrawMenuMarioPinchMark(void) {
     u8 a;
     u32 id;
 
-    cam = camGetPtr(8);
+    cam = camGetPtr(CAMERA_2D);
     unit = BattleGetMarioPtr(wp);
     if (unit->currentHp > 0 && unit->currentHp < unit->maxHp && unit->currentHp <= 5) {
         if (unit->currentHp == 1) {
@@ -724,7 +724,7 @@ void N_DrawMenuPartyPinchMark(void) {
     u8 a;
     u32 id;
 
-    cam = camGetPtr(8);
+    cam = camGetPtr(CAMERA_2D);
     unit = BattleGetPartyPtr(wp);
     if (unit && unit->currentHp > 0 && unit->currentHp < unit->maxHp && unit->currentHp <= 5) {
         if (unit->currentHp == 1) {
@@ -792,7 +792,7 @@ void DrawMenuPinchMark(void) {
     u8 a;
     u32 id;
 
-    cam = camGetPtr(8);
+    cam = camGetPtr(CAMERA_2D);
     btlDispGXInit2D();
     unit = BattleGetMarioPtr(wp);
     if (unit->currentHp > 0 && unit->currentHp < unit->maxHp && unit->currentHp <= 5) {

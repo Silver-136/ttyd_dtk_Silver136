@@ -282,7 +282,7 @@ static void actionCommandDisp(f32 x, f32 y) {
     f32 ratio;
     u32 flags;
 
-    camGetPtr(8);
+    camGetPtr(CAMERA_2D);
     pw = PG_WORK(ac);
     ratio = pw->gauge / 100.0f;
     if (ratio > 1.0f) {

@@ -42,7 +42,7 @@ static inline BOOL marioChkBeroSub(s32 attr) {
     BOOL r = TRUE;
     if (attr & 0x80) {
         r = FALSE;
-        if (marioGetPtr()->currMotionId == 0x19) {
+        if (marioGetPtr()->currMotionId == MARIO_MOTION_SHIP) {
             r = TRUE;
         }
     }
@@ -58,24 +58,24 @@ static inline BOOL marioChkBeroInl(HitEntry* hit) {
     if (!(attr & 0x80)) {
         return (attr & 0x800000) ? 1 : 0;
     }
-    return w->currMotionId == 0x19;
+    return w->currMotionId == MARIO_MOTION_SHIP;
 }
 
 static inline BOOL marioChkBeroSub2(s32 attr) {
     if (!(attr & 0x80)) {
         return TRUE;
     }
-    return marioGetPtr()->currMotionId == 0x19;
+    return marioGetPtr()->currMotionId == MARIO_MOTION_SHIP;
 }
 
 static inline BOOL marioChkBeroSub3(s32 attr) {
-    return (attr & 0x80) ? (marioGetPtr()->currMotionId == 0x19) : TRUE;
+    return (attr & 0x80) ? (marioGetPtr()->currMotionId == MARIO_MOTION_SHIP) : TRUE;
 }
 
 static inline BOOL marioChkBeroSub4(s32 attr) {
     BOOL r = TRUE;
     if (attr & 0x80) {
-        r = marioGetPtr()->currMotionId == 0x19;
+        r = marioGetPtr()->currMotionId == MARIO_MOTION_SHIP;
     }
     return r;
 }
@@ -85,12 +85,12 @@ static inline BOOL marioChkBeroSub5(HitEntry* hit) {
     if (!(attr & 0x80)) {
         return TRUE;
     }
-    return marioGetPtr()->currMotionId == 0x19;
+    return marioGetPtr()->currMotionId == MARIO_MOTION_SHIP;
 }
 
 static inline BOOL marioChkBeroSub6(s32 attr) {
     if (attr & 0x80) {
-        return marioGetPtr()->currMotionId == 0x19;
+        return marioGetPtr()->currMotionId == MARIO_MOTION_SHIP;
     } else {
         return TRUE;
     }
@@ -219,7 +219,7 @@ static inline HitEntry* marioHitCheckVecInl(Vec* pos, Vec* dir, Vec* outPos, Vec
     query.targetPos = *pos;
     query.targetDir = *dir;
     query.targetDistance = *dist;
-    if (marioGetPtr()->currMotionId == 0x1c) {
+    if (marioGetPtr()->currMotionId == MARIO_MOTION_VIVIAN) {
         hit = hitCheckVecFilter(&query, chkfilterVecVivian);
     } else if (marioGetPtr()->flags & MARIO_FLAG_TUBE_MODE) {
         hit = hitCheckVecFilter(&query, chkfilterVecRoll);
@@ -342,7 +342,7 @@ HitEntry* marioHitCheck2(Vec* pos, Vec* dir, Vec* outPos, Vec* outNrm, f32* dist
     HitEntry* hit;
     MarioWork* w = marioGetPtr();
     f32 d = *dist;
-    if (w->currMotionId != 0x14) {
+    if (w->currMotionId != MARIO_MOTION_JABARA) {
         if (!(w->flags & MARIO_FLAG_IS_FALLING)) {
             hit = marioHitCheckAttr2Inl(pos, dir, outPos, outNrm, &d);
         } else {
@@ -374,7 +374,7 @@ BOOL marioChkBero(HitEntry* hit) {
     if (!(attr & 0x80)) {
         return (attr & 0x800000) ? 1 : 0;
     }
-    return w->currMotionId == 0x19;
+    return w->currMotionId == MARIO_MOTION_SHIP;
 }
 
 #pragma inline_max_size(1000)
@@ -499,19 +499,19 @@ void marioChkGnd(void) {
         y = w->position.y;
         if (w->characterId == 2) {
             if (w->airTimer == 0) {
-                marioChgMot(10);
+                marioChgMot(MARIO_MOTION_FALL);
                 marioSetFallPara();
                 return;
             }
         } else {
             if (w->airTimer == 0) {
-                marioChgMot(10);
+                marioChgMot(MARIO_MOTION_FALL);
                 marioSetFallPara();
                 return;
             }
         }
     }
-    if (w->currMotionId == 0x19) {
+    if (w->currMotionId == MARIO_MOTION_SHIP) {
         if (marioChkShipMoveMode()) {
             if (!w->hitobjStandOn) {
                 marioShipChgFall();
@@ -521,18 +521,18 @@ void marioChkGnd(void) {
         }
         return;
     }
-    if (w->currMotionId != 0x1f && w->hitobjStandOn && (hitGetAttr(w->hitobjStandOn) & 0x200)) {
+    if (w->currMotionId != MARIO_MOTION_DAMAGE && w->hitobjStandOn && (hitGetAttr(w->hitobjStandOn) & 0x200)) {
         if (w->jumpVelocityY >= 0.0f) {
             marioSetFallPara();
         }
         set_damage_root_ypos(w->position.y);
-        marioChgMot(0x1f);
+        marioChgMot(MARIO_MOTION_DAMAGE);
         return;
     }
     if (w->hitobjStandOn && (hitGetAttr(w->hitobjStandOn) & 0x800)) {
         if (vivianGetStatus() != 2 && vivianGetStatus() != 1 && vivianGetStatus() != 3) {
             set_damage_root_ypos(w->position.y);
-            marioChgMot(0x20);
+            marioChgMot(MARIO_MOTION_DAMAGE_TOGE);
         }
         return;
     }
@@ -544,9 +544,9 @@ void marioChkGnd(void) {
                 w->stepUpY = sy;
                 if (w->baseSpeed) {
                     if (!((u32)w->dispFlags & 0x1000000)) {
-                        marioChgMot(0xc);
+                        marioChgMot(MARIO_MOTION_UPSTAIRS);
                     } else {
-                        marioChgMotSub(0xc, 0);
+                        marioChgMotSub(MARIO_MOTION_UPSTAIRS, 0);
                     }
                     return;
                 }
@@ -580,11 +580,11 @@ void marioChkGnd(void) {
             return;
         }
         if (b < 0.0f) {
-            marioChgMot(10);
+            marioChgMot(MARIO_MOTION_FALL);
             marioSetFallPara();
         }
         if (b > 0.0f) {
-            marioChgMot(11);
+            marioChgMot(MARIO_MOTION_FALL_2);
             marioSetFallPara();
         }
     } else {
@@ -624,16 +624,16 @@ void marioChkGnd2(void) {
                         s32 sx = (s8)w->wStickDir1;
                         s32 sy = (s8)w->wStickDir2;
                         if (sx * sx + sy * sy > 0xbd1) {
-                            marioChgMot(2);
+                            marioChgMot(MARIO_MOTION_DASH);
                         } else {
-                            marioChgMot(1);
+                            marioChgMot(MARIO_MOTION_WALK);
                         }
                     } else {
-                        marioChgMot(0);
+                        marioChgMot(MARIO_MOTION_STAY);
                     }
                     quake_kpaLandOn();
                 } else {
-                    marioChgMot(0);
+                    marioChgMot(MARIO_MOTION_STAY);
                 }
                 if (w->characterId != 2) {
                     if (!marioBgmodeChk()) {
@@ -679,7 +679,7 @@ HitEntry* marioSearchGround(f32* y, f32* b, f32* c, f32 spd, f32 h) {
     yl = 5.0f + __fabsf(h);
     *b = -1.0f;
 #ifdef VERSION_G8ME01
-    if (w->currMotionId != 0x13) {
+    if (w->currMotionId != MARIO_MOTION_HAMMER_2) {
         if (w->baseSpeed) {
             a = revise360(w->directionView - w->targetYaw);
         } else {
@@ -744,7 +744,7 @@ HitEntry* marioSearchGround(f32* y, f32* b, f32* c, f32 spd, f32 h) {
         if (hit) {
             if ((u32)w->dispFlags & 0x1000000) {
                 lim = 75.0f;
-            } else if (w->currMotionId == 0x10) {
+            } else if (w->currMotionId == MARIO_MOTION_HIP) {
                 lim = 75.0f;
             } else {
                 lim = 50.0f;
@@ -918,23 +918,23 @@ void marioChkToge(void) {
     }
     if (w->hitobjFront != NULL) {
         attr = hitGetAttr(w->hitobjFront);
-        if (w->currMotionId != 0x20 && (attr & 0x800) && w->frontWallDist < 0.5f * w->wPlayerCollisionBox.x) {
+        if (w->currMotionId != MARIO_MOTION_DAMAGE_TOGE && (attr & 0x800) && w->frontWallDist < 0.5f * w->wPlayerCollisionBox.x) {
             set_damage_root_ypos(w->position.y);
-            marioChgMot(0x20);
+            marioChgMot(MARIO_MOTION_DAMAGE_TOGE);
         }
     }
     if (w->hitobjWall != NULL) {
         attr = hitGetAttr(w->hitobjWall);
-        if (w->currMotionId != 0x20 && (attr & 0x800)) {
+        if (w->currMotionId != MARIO_MOTION_DAMAGE_TOGE && (attr & 0x800)) {
             set_damage_root_ypos(w->position.y);
-            marioChgMot(0x20);
+            marioChgMot(MARIO_MOTION_DAMAGE_TOGE);
         }
     }
     if (w->hitobjHead != NULL) {
         attr = hitGetAttr(w->hitobjHead);
-        if (w->currMotionId != 0x20 && (attr & 0x800)) {
+        if (w->currMotionId != MARIO_MOTION_DAMAGE_TOGE && (attr & 0x800)) {
             set_damage_root_ypos(w->position.y);
-            marioChgMot(0x20);
+            marioChgMot(MARIO_MOTION_DAMAGE_TOGE);
         }
     }
 }
@@ -977,7 +977,7 @@ static inline HitEntry* landonHitCheck(LandonRay* ray, Vec* outPos, Vec* outNrm,
     query.targetPos = ray->pos;
     query.targetDir = ray->dir;
     query.targetDistance = *dist;
-    if (marioGetPtr()->currMotionId == 0x1c) {
+    if (marioGetPtr()->currMotionId == MARIO_MOTION_VIVIAN) {
         hit = hitCheckVecFilter(&query, chkfilterVecVivian);
     } else if (marioGetPtr()->flags & MARIO_FLAG_TUBE_MODE) {
         hit = hitCheckVecFilter(&query, chkfilterVecRoll);
@@ -1254,7 +1254,7 @@ static inline BOOL marioChkHeadBlock(HitEntry* hit) {
 static inline f32 marioGetHeightInl(void) {
     MarioWork* m = marioGetPtr();
     f32 ph = m->wPlayerCollisionBox.y;
-    if (m->currMotionId == 0x1a) {
+    if (m->currMotionId == MARIO_MOTION_YOSHI) {
         PartyEntry* p = partyGetPtr(marioGetPartyId());
         if (p) {
             ph = partyGetHeight(p);
@@ -1276,10 +1276,10 @@ f32 marioChkOverhead(void) {
     s32 hj;
     f32 h;
     MarioWork* w = marioGetPtr();
-    if (w->currMotionId == 8) {
+    if (w->currMotionId == MARIO_MOTION_JUMP_3) {
         return w->position.y;
     }
-    if (w->currMotionId == 0x14) {
+    if (w->currMotionId == MARIO_MOTION_JABARA) {
         pos = w->position;
         h = w->wPlayerCollisionBox.y;
         if (!jabaraNoHitChk()) {
@@ -1319,10 +1319,10 @@ f32 marioChkOverhead(void) {
         pos.y = (s32)(10.0f * (pos.y - marioGetHeightInl()) + 0.5f) / 10.0f - 1.0f;
         if (!(w->flags & MARIO_FLAG_IS_FALLING) && pos.y < w->lastGroundPos.y) {
             pos.y = w->lastGroundPos.y;
-            if (!(w->flags & MARIO_FLAG_TUBE_MODE) && w->currMotionId != 0x19 && w->currMotionId != 0x18 &&
-                w->currMotionId != 0x1c && w->characterId != 2 && !marioChkSlitEnd()) {
+            if (!(w->flags & MARIO_FLAG_TUBE_MODE) && w->currMotionId != MARIO_MOTION_SHIP && w->currMotionId != MARIO_MOTION_PLANE &&
+                w->currMotionId != MARIO_MOTION_VIVIAN && w->characterId != 2 && !marioChkSlitEnd()) {
                 if (w->baseSpeed == 0.0f) {
-                    if (w->currMotionId != 0) {
+                    if (w->currMotionId != MARIO_MOTION_STAY) {
                         marioChgStayMotion();
                     }
                 } else {
@@ -1340,12 +1340,12 @@ f32 marioChkOverhead(void) {
                 }
             }
         }
-        if (w->currMotionId == 3 || w->currMotionId == 6) {
+        if (w->currMotionId == MARIO_MOTION_JUMP || w->currMotionId == MARIO_MOTION_JUMP_STAND) {
             psndSFXOn_3D((const char*)0x156, &w->position);
             marioClearJumpPara();
             w->flags &= ~(MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING | MARIO_FLAG_IS_STEPPING | MARIO_FLAG_HAS_INPUT_JUMP);
             if (w->characterId != 2) {
-                marioChgMot(10);
+                marioChgMot(MARIO_MOTION_FALL);
                 marioSetFallPara();
             }
             w->position.y = pos.y;
@@ -1376,7 +1376,7 @@ f32 marioChkOverheadJabara(s32* sideOut, f32* distOut) {
     *distOut = -1.0f;
     pos = w->position;
     h = w->wPlayerCollisionBox.y;
-    if (w->currMotionId == 8) {
+    if (w->currMotionId == MARIO_MOTION_JUMP_3) {
         return pos.y;
     }
     if (!jabaraNoHitChk()) {
@@ -1391,8 +1391,8 @@ f32 marioChkOverheadJabara(s32* sideOut, f32* distOut) {
     if (w->hitobjHead) {
         w->flags |= MARIO_FLAG_IS_TOUCHING_CEILING;
         pos.y = pos.y - w->wPlayerCollisionBox.y - 0.1f;
-        if (w->currMotionId == 3) {
-            marioChgMot(0);
+        if (w->currMotionId == MARIO_MOTION_JUMP) {
+            marioChgMot(MARIO_MOTION_STAY);
         }
     } else if (h > 0.0f) {
         *distOut = h;
@@ -1683,7 +1683,7 @@ void marioCheckWall(f32 dx, f32 dz) {
                 s32 lim = strncmp(hitGetName(hit), "dokan", 5) != 0 ? 20 : 10;
                 if (++w->wallPushTimer >= lim) {
                     w->wallPushTimer = lim;
-                    if (!(hitGetAttr(hit) & 0x80) ? TRUE : marioGetPtr()->currMotionId == 0x19) {
+                    if (!(hitGetAttr(hit) & 0x80) ? TRUE : marioGetPtr()->currMotionId == MARIO_MOTION_SHIP) {
                         w->hitobjPush = hit;
                     }
                 }
@@ -1691,7 +1691,7 @@ void marioCheckWall(f32 dx, f32 dz) {
 #else
             if (++w->wallPushTimer >= 20) {
                 w->wallPushTimer = 20;
-                if (!(hitGetAttr(hit) & 0x80) ? TRUE : marioGetPtr()->currMotionId == 0x19) {
+                if (!(hitGetAttr(hit) & 0x80) ? TRUE : marioGetPtr()->currMotionId == MARIO_MOTION_SHIP) {
                     w->hitobjPush = hit;
                 }
             }
@@ -1720,7 +1720,7 @@ void marioSearchFrontWall_staying(f32 dz) {
     }
     pos = w->position;
     hit = searchFrontWall(&pos, &h, r, w->directionView - w->targetYaw, w->wPlayerCollisionBox.z);
-    if (w->currMotionId != 0x13) {
+    if (w->currMotionId != MARIO_MOTION_HAMMER_2) {
         w->hitobjFront = hit;
     } else {
         w->hitobjFront = NULL;
@@ -1729,7 +1729,7 @@ void marioSearchFrontWall_staying(f32 dz) {
         f32 a = toMovedir(w->displayDirection);
         pos = w->position;
         hit = searchFrontWall(&pos, &h, r, a, w->wPlayerCollisionBox.z);
-        if (w->currMotionId != 0x13) {
+        if (w->currMotionId != MARIO_MOTION_HAMMER_2) {
             w->hitobjFront = hit;
         } else {
             w->hitobjFront = NULL;
@@ -1826,7 +1826,7 @@ void marioCheckWall_roll(f32 dx, f32 dz) {
             w->hitobjWall = hit;
             if (++w->wallPushTimer >= 20) {
                 w->wallPushTimer = 20;
-                if (!(hitGetAttr(hit) & 0x80) ? 1 : marioGetPtr()->currMotionId == 0x19) {
+                if (!(hitGetAttr(hit) & 0x80) ? 1 : marioGetPtr()->currMotionId == MARIO_MOTION_SHIP) {
                     w->hitobjPush = hit;
                 }
             }
@@ -1855,7 +1855,7 @@ static inline HitEntry* marioChkFrontInl(const Vec* pos, f32 s, f32 c, Vec* outP
         query.targetDir = dir;
     }
     query.targetDistance = *dist;
-    if (marioGetPtr()->currMotionId == 0x1c) {
+    if (marioGetPtr()->currMotionId == MARIO_MOTION_VIVIAN) {
         hit = hitCheckVecFilter(&query, chkfilterVecVivian);
     } else if (marioGetPtr()->flags & MARIO_FLAG_TUBE_MODE) {
         hit = hitCheckVecFilter(&query, chkfilterVecRoll);
@@ -1978,7 +1978,7 @@ HitEntry* searchFrontWall(Vec* pos, f32* h, f32 dx, f32 dz, f32 w) {
             heights[0] = 0.75f * mp->wPlayerCollisionBox.y;
             heights[1] = 11.0f;
         }
-    } else if (mp->currMotionId == 0x1a) {
+    } else if (mp->currMotionId == MARIO_MOTION_YOSHI) {
         heights[0] = 0.75f * marioGetHeightInl();
         heights[1] = 11.0f;
     } else if (!(mp->flags & MARIO_FLAG_TUBE_MODE)) {
@@ -2075,7 +2075,7 @@ HitEntry* dou10_yoko_yari(f32* out) {
     HitEntry* hit;
     f32 step;
     MarioWork* w = marioGetPtr();
-    if (w->currMotionId == 0x16) {
+    if (w->currMotionId == MARIO_MOTION_ROLL) {
         return NULL;
     }
     toMovedir(w->displayDirection);
@@ -2394,7 +2394,7 @@ BOOL marioChkWallAround(Vec* pos, s32 mode, f32 unused, f32 dir, f32 w, f32 h) {
     lim = 0.125f * w;
     if (mode == 0) {
         MarioWork* m = marioGetPtr();
-        if (m->currMotionId == 10 || m->currMotionId == 11) {
+        if (m->currMotionId == MARIO_MOTION_FALL || m->currMotionId == MARIO_MOTION_FALL_2) {
             lim = 0.25f * w;
         }
     }
@@ -2567,7 +2567,7 @@ void marioCheckWallShip(f32 dx, f32 dz) {
                 BOOL r;
                 w->wallPushTimer = 20;
                 attr = hitGetAttr(hit);
-                r = !(attr & 0x80) ? TRUE : marioGetPtr()->currMotionId == 0x19;
+                r = !(attr & 0x80) ? TRUE : marioGetPtr()->currMotionId == MARIO_MOTION_SHIP;
                 if (r) w->hitobjPush = hit;
             }
         }

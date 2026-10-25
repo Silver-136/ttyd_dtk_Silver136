@@ -267,7 +267,7 @@ void effMugiKemuri2Main(EffectEntry* effect) {
             } else {
                 alive = 1;
                 mario = marioGetPtr();
-                if (data->field_0x4 == 0 && data->field_0x34 && mario->currMotionId == 0) {
+                if (data->field_0x4 == 0 && data->field_0x34 && mario->currMotionId == MARIO_MOTION_STAY) {
                     data->timer++;
                     continue;
                 }

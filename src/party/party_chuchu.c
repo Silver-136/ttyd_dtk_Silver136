@@ -446,7 +446,7 @@ void chuchu_use(PartyEntry* party) {
         cp->flags &= ~0x100;
         partyChgRunMode(party, 2);
         cp->field_3B = 0;
-        marioChgMot(0);
+        marioChgMot(MARIO_MOTION_STAY);
         marioStSystemLevel(0);
         break;
     }

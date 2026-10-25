@@ -78,7 +78,7 @@ void mot_vivian_post(void) {
     PartyEntry* party = (PartyEntry*)partyGetPtr(marioGetPartyId());
     MarioWork* mario = marioGetPtr();
 
-    if (mario->currMotionId == 0x20 || mario->currMotionId == 0x1F) {
+    if (mario->currMotionId == MARIO_MOTION_DAMAGE_TOGE || mario->currMotionId == MARIO_MOTION_DAMAGE) {
         mario->dispFlags &= ~0x1000;
         marioPaperOff();
         {
@@ -304,7 +304,7 @@ void vivian_use(PartyEntry* party) {
 
     switch (party->useMotionId) {
     case 0:
-        marioChgMot(0x1C);
+        marioChgMot(MARIO_MOTION_VIVIAN);
         party->work.vivian.followOfs = -13.0f;
         vivianFollow(party);
         party->targetDir = angleABf(party->position.x, party->position.z, party->moveTarget.x, party->moveTarget.z);

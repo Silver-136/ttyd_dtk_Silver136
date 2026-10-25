@@ -629,7 +629,7 @@ void BattleAudienceCtrlProcessKinopioEnter(s32 index) {
     f32 dz;
     BattleAudienceBaseGetPtr();
     m = BattleAudienceGetPtr(index);
-    camGetPtr(8);
+    camGetPtr(CAMERA_2D);
     BattleAudience_SetAnim(index, 7, FALSE);
     if (m->type == 11) {
         switch (m->step) {
@@ -981,7 +981,7 @@ void BattleAudienceCtrlProcessKinopioIntrude(s32 index) {
         }
         break;
     case 15:
-        m->mRotation.y = camGetPtr(4)->viewYaw;
+        m->mRotation.y = camGetPtr(CAMERA_3D)->viewYaw;
         if (__fabs(m->position.x) >= 450.0) {
             m->step = 16;
             m->counter = 35;

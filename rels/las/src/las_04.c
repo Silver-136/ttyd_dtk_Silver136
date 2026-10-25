@@ -604,7 +604,7 @@ USER_FUNC(firebar_entry) {
         return EVT_RETURN_DONE;
     }
     mario = marioGetPtr();
-    if (mario->currMotionId == 0x20 || mario->currMotionId == 0x1F || mario->mutekiTimer > 0) {
+    if (mario->currMotionId == MARIO_MOTION_DAMAGE_TOGE || mario->currMotionId == MARIO_MOTION_DAMAGE || mario->mutekiTimer > 0) {
         wp->flags |= 4;
     } else {
         wp->flags &= ~4;
@@ -704,7 +704,7 @@ void firebar_cb(FirebarWork* wp, s32 type) {
             break;
         case 2:
             set_damage_root_ypos(mario->position.y);
-            marioChgMot(0x20);
+            marioChgMot(MARIO_MOTION_DAMAGE_TOGE);
             break;
     }
 }

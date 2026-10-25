@@ -67,7 +67,7 @@ s32 marioUseParty(void) {
         wp->trigFlags &= ~MARIO_TRIG_FLAG_USE_PARTNER;
         return 0;
     }
-    if (wp->currMotionId != 0 && wp->currMotionId != 1 && wp->currMotionId != 2) {
+    if (wp->currMotionId != MARIO_MOTION_STAY && wp->currMotionId != MARIO_MOTION_WALK && wp->currMotionId != MARIO_MOTION_DASH) {
         wp->trigFlags &= ~MARIO_TRIG_FLAG_USE_PARTNER;
         return 0;
     }

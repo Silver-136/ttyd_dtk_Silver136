@@ -685,7 +685,7 @@ void partyChgWalkPose(PartyEntry* party, f32 spd) {
 void partySetDispDirToMario(PartyEntry* party) {
     f32 dir = angleABf(party->position.x, party->position.z,
                        party->playerPtr->position.x, party->playerPtr->position.z);
-    f32 a = revise360(camGetPtr(4)->viewYaw + 270.0f - dir);
+    f32 a = revise360(camGetPtr(CAMERA_3D)->viewYaw + 270.0f - dir);
     BOOL b = FALSE;
     if (a >= 90.0f && a <= 270.0f) {
         b = TRUE;
@@ -1576,7 +1576,7 @@ BOOL partyGetAppearPos(PartyEntry* party, Vec* out) {
 
     mario = party->playerPtr;
     dist = 30.0f + party->width;
-    if (mario->currMotionId == 0x18) {
+    if (mario->currMotionId == MARIO_MOTION_PLANE) {
         if (marioPlaneGetFlyingDir() == 1) {
             back = 0.0f;
             dir = 180.0f;
@@ -1598,7 +1598,7 @@ BOOL partyGetAppearPos(PartyEntry* party, Vec* out) {
             query.targetPos = (Vec){out->x, 37.0f + out->y, out->z};
             query.targetDir = (Vec){s, 0.0f, c};
             hit = hitCheckVecFilter(&query, NULL);
-            if (mario->currMotionId == 0x18) {
+            if (mario->currMotionId == MARIO_MOTION_PLANE) {
                 return TRUE;
             }
             if (!hit) {
@@ -1618,7 +1618,7 @@ BOOL partyGetAppearPos(PartyEntry* party, Vec* out) {
             query.targetPos = (Vec){out->x, 37.0f + out->y, out->z};
             query.targetDir = (Vec){s, 0.0f, c};
             hit = hitCheckVecFilter(&query, NULL);
-            if (mario->currMotionId == 0x18) {
+            if (mario->currMotionId == MARIO_MOTION_PLANE) {
                 return TRUE;
             }
             if (!hit) {

@@ -108,7 +108,7 @@ void effKemuri6Main(EffectEntry* effect) {
             work->scaleX = 0.1f * s + work->baseX;
         }
         work->scaleY = 0.1f * (f32)cos((6.2831855f * work->angle) / 360.0f) + work->baseY;
-        if (work->type == 0 && work->timer > 4 && work->timer <= 5 && marioGetPtr()->currMotionId == 0) {
+        if (work->type == 0 && work->timer > 4 && work->timer <= 5 && marioGetPtr()->currMotionId == MARIO_MOTION_STAY) {
             work->timer++;
             return;
         }

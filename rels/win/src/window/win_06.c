@@ -271,7 +271,7 @@ static USER_FUNC(cam_kaiten_get_para) {
 }
 
 static USER_FUNC(cam_kaiten_set_direct) {
-    CameraEntry* camera = camGetPtr(4);
+    CameraEntry* camera = camGetPtr(CAMERA_3D);
     f32 s = sin(6.2831855f * ckpw->angle / 360.0f);
     f32 c = cos(6.2831855f * ckpw->angle / 360.0f);
 
@@ -343,13 +343,13 @@ static USER_FUNC(cam_kaiten_init) {
 USER_FUNC(camps25) {
     f32 fovY = 25.0f;
 
-    camGetPtr(4)->fovY = fovY;
+    camGetPtr(CAMERA_3D)->fovY = fovY;
     return EVT_RETURN_DONE;
 }
 
 USER_FUNC(camps30) {
     f32 fovY = 30.0f;
 
-    camGetPtr(4)->fovY = fovY;
+    camGetPtr(CAMERA_3D)->fovY = fovY;
     return EVT_RETURN_DONE;
 }

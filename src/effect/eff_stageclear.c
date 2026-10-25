@@ -276,7 +276,7 @@ void effStageClearDisp(CameraId cameraId, EffectEntry* effect) {
     }
     GXGetProjectionv(proj);
     GXGetViewportv(vp);
-    cam = camGetPtr(8);
+    cam = camGetPtr(CAMERA_2D);
     GXSetProjection(cam->projection, cam->projType);
     GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_CLEAR);
     GXSetZCompLoc(GX_TRUE);

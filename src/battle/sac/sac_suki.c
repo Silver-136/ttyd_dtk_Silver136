@@ -677,7 +677,7 @@ static USER_FUNC(star_stone_attack) {
     w->starTimer = 0;
     w->from = w->starPos[i];
     w->spos = w->from;
-    cam = (u8*)camGetPtr(4);
+    cam = (u8*)camGetPtr(CAMERA_3D);
     w->to = *(Vec*)(cam + 0xC);
     w->to.y += 20.0f;
     w->to.z += 10.0f;

@@ -8,6 +8,7 @@
 #include <string.h>
 #include <dolphin/pad.h>
 #include "mario/mario_pouch.h"
+#include "driver/camdrv.h"
 
 #ifdef VERSION_G8ME01
 void U_allPartySlitOffReq(void);
@@ -360,14 +361,14 @@ void mot_slit_post(void) {
     u16 id;
     if (m->slitState >= 10) {
         id = m->currMotionId;
-        if (id == 0x15 || (u16)(id - 0xb) <= 1 || m->currMotionId <= 7 || m->currMotionId == 8) {
+        if (id == 0x15 || (u16)(id - 0xb) <= 1 || m->currMotionId <= 7 || m->currMotionId == MARIO_MOTION_JUMP_3) {
             return;
         }
     }
 #else
     MarioWork* m = marioGetPtr();
     u16 id = m->currMotionId;
-    if (id == 0x15 || (u16)(id - 0xb) <= 1 || m->currMotionId <= 7 || m->currMotionId == 8) {
+    if (id == 0x15 || (u16)(id - 0xb) <= 1 || m->currMotionId <= 7 || m->currMotionId == MARIO_MOTION_JUMP_3) {
         return;
     }
 #endif
@@ -388,7 +389,7 @@ void mot_slit_post(void) {
             marioAdjustMoveDir();
             allPartyForceSlitOff();
         }
-    } else if (m->currMotionId != 10) {
+    } else if (m->currMotionId != MARIO_MOTION_FALL) {
         m->flags &= ~MARIO_FLAG_PAPER_MODE;
         m->wPlayerCollisionBox.x = 20.0f;
         if (m->directionView >= 180.0f) {
@@ -407,7 +408,7 @@ void mot_slit_post(void) {
         m->dispFlags &= ~4;
         marioAdjustMoveDir();
 #ifdef VERSION_G8ME01
-        if (m->currMotionId != 0x16) {
+        if (m->currMotionId != MARIO_MOTION_ROLL) {
             allPartyForceSlitOff();
         } else {
             U_allPartySlitOffReq();
@@ -784,7 +785,7 @@ void mot_slit(void) {
     }
     if (m->flags & MARIO_FLAG_PAPER_MODE) {
         if (m->hitobjPush != NULL) {
-            if (m->hitobjStandOn != NULL && m->currMotionId == 0x15) {
+            if (m->hitobjStandOn != NULL && m->currMotionId == MARIO_MOTION_SLIT) {
                 if (hitGetAttr(m->hitobjPush) & 0x2000) {
                     HitCheckQuery q;
                     HitCheckQuery* qp;
@@ -832,7 +833,7 @@ void mot_slit(void) {
             if (!(st >= 0x5a && st <= 0x5e) && m->hitobjStandOn != NULL && (hitGetAttr(m->hitobjStandOn) & 0x2000)) {
                 m->mot.slit.counter += 3;
                 marioChgPaper("PM_S_1H");
-                if (m->mot.slit.counter >= 0xf && m->currMotionId == 0x15) {
+                if (m->mot.slit.counter >= 0xf && m->currMotionId == MARIO_MOTION_SLIT) {
                     m->slitState = 0x5a;
                 }
             } else {
@@ -845,7 +846,7 @@ void mot_slit(void) {
     }
     switch (m->slitState) {
     case 0x50:
-        camGetPtr(8)->flags |= 0x200;
+        camGetPtr(CAMERA_2D)->flags |= 0x200;
         CAMFIX(m)
         m->flags |= MARIO_FLAG_CHG_MOT_DISABLED;
         if (0.0f == m->mot.slit.pushDir) {
@@ -865,7 +866,7 @@ void mot_slit(void) {
         }
         break;
     case 0x52:
-        camGetPtr(8)->flags &= ~0x200;
+        camGetPtr(CAMERA_2D)->flags &= ~0x200;
         m->flags &= ~MARIO_FLAG_WALLS_DISABLED;
         m->slitState = 0x14;
         m->flags &= ~MARIO_FLAG_CHG_MOT_DISABLED;
@@ -873,7 +874,7 @@ void mot_slit(void) {
     }
     switch (m->slitState) {
     case 0x5a:
-        camGetPtr(8)->flags |= 0x200;
+        camGetPtr(CAMERA_2D)->flags |= 0x200;
         CAMFIX(m)
         m->flags |= MARIO_FLAG_CHG_MOT_DISABLED;
         marioChgPaper("PM_S_1H");
@@ -908,7 +909,7 @@ void mot_slit(void) {
         m->flags &= ~(MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING | MARIO_FLAG_IS_STEPPING | MARIO_FLAG_HAS_INPUT_JUMP);
         m->slitState = 0x5e;
     case 0x5e:
-        camGetPtr(8)->flags &= ~0x200;
+        camGetPtr(CAMERA_2D)->flags &= ~0x200;
         m->slitState = 0x14;
         break;
     }
@@ -984,7 +985,7 @@ void mot_slit(void) {
         allPartySlitOff();
 #endif
         CAMFIX(m)
-        marioChgMotSub(0, 0);
+        marioChgMotSub(MARIO_MOTION_STAY, 0);
         break;
     case 0x6e:
         m->flags &= ~MARIO_FLAG_PARTY_WALK_DISABLED;
@@ -1025,7 +1026,7 @@ void mot_slit(void) {
         marioAdjustMoveDir();
         allPartySlitOff();
         CAMFIX(m)
-        marioChgMot(0);
+        marioChgMot(MARIO_MOTION_STAY);
         break;
     case 0x78:
         m->slitTimer2 = 0;
@@ -1065,7 +1066,7 @@ void mot_slit(void) {
         marioAdjustMoveDir();
         allPartySlitOff();
         CAMFIX(m)
-        marioChgMot(0);
+        marioChgMot(MARIO_MOTION_STAY);
         break;
     }
 }

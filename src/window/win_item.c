@@ -553,7 +553,7 @@ s32 winItemMain(WindowWork* w) {
             mp = marioGetPtr();
             ok = 0;
             psndSFXOn(SFX_NAME_WORD(0x20012));
-            if (mp->currMotionId == 0x19 || mp->currMotionId == 0x18) {
+            if (mp->currMotionId == MARIO_MOTION_SHIP || mp->currMotionId == MARIO_MOTION_PLANE) {
                 ok = 1;
             }
             if (marioRollCancelDisable() || U_marioSlitContinueChk()) {

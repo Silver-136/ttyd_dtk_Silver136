@@ -54,7 +54,7 @@ EffectEntry* effMistEntry(s32 type, s32 life, f32 x, f32 y, f32 z, f32 yaw) {
     }
     work->timer = 0;
     work->alpha = 255.0f;
-    work->yaw = yaw - camGetPtr(4)->viewYaw;
+    work->yaw = yaw - camGetPtr(CAMERA_3D)->viewYaw;
     for (i = 1, p = work + 1; i < effect->count; i++, p++) {
         p->position.x = irand(50) - 25;
         p->position.y = irand(50) - 25;
@@ -66,7 +66,7 @@ EffectEntry* effMistEntry(s32 type, s32 life, f32 x, f32 y, f32 z, f32 yaw) {
         p->alpha = 0.0f;
         p->life = irand(30) + 30;
         p->timer = 0;
-        p->yaw = yaw - camGetPtr(4)->viewYaw;
+        p->yaw = yaw - camGetPtr(CAMERA_3D)->viewYaw;
         switch (type) {
             case 0:
                 p->r = 255;

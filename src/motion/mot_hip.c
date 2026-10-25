@@ -182,7 +182,7 @@ void mot_hip(void) {
         case 1:
             return;
         case 2:
-            marioChgMotSub(0, 0);
+            marioChgMotSub(MARIO_MOTION_STAY, 0);
             MHPOST();
             return;
         }
@@ -201,7 +201,7 @@ void mot_hip(void) {
         case 1:
             return;
         case 2:
-            marioChgMotSub(0, 0);
+            marioChgMotSub(MARIO_MOTION_STAY, 0);
             MHPOST();
             return;
         }
@@ -222,7 +222,7 @@ void mot_hip(void) {
         case 1:
             return;
         case 2:
-            marioChgMotSub(0, 0);
+            marioChgMotSub(MARIO_MOTION_STAY, 0);
             MHPOST();
             return;
         }
@@ -297,7 +297,7 @@ void mot_hip(void) {
             }
             mario->dispFlags &= ~4;
             mario->flags &= ~MARIO_FLAG_STOP_AIR_MOVEMENT;
-            marioChgMotSub(0, 0);
+            marioChgMotSub(MARIO_MOTION_STAY, 0);
             MHPOST();
         }
         break;

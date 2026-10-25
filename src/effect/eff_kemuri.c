@@ -116,7 +116,7 @@ EffectEntry* effKemuri2Entry(f32 x, f32 y, f32 z, f32 dx, f32 dz) {
     memset(data, 0, sizeof(effKemuri2Data));
     entry->callback = effKemuri2Main;
     angle = 360.0f * angleABf(0.0f, 0.0f, vx = 1000.0f * dx, vz = 1000.0f * dz) / 6.2831855f;
-    rot = camGetPtr(4)->viewYaw;
+    rot = camGetPtr(CAMERA_3D)->viewYaw;
     rv = 360.0f * angleABf(0.0f, 0.0f, vx, vz) / 6.2831855f;
     data->angle = reviseAngle(rv + rot);
     ia = (s32)angle;

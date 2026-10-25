@@ -741,8 +741,8 @@ static s32 moamoa_hit_check(ExtdrvPose* pose, Moamoa* moa) {
     if (distABf((*pose->mtx)[0][3], (*pose->mtx)[2][3], mario->position.x, mario->position.z) < (20.0f + mario->wPlayerCollisionBox.x) / 2
         && mario->position.y > 10.0f + (*pose->mtx)[1][3] && (mario->flags & MARIO_FLAG_IS_FALLING) && !(mario->flags & MARIO_FLAG_IS_JUMPING)
         && wp->bounceCount < 2) {
-        if (mario->currMotionId != 0x16 && mario->currMotionId != 0x1a) {
-            marioChgMot(5);
+        if (mario->currMotionId != MARIO_MOTION_ROLL && mario->currMotionId != MARIO_MOTION_YOSHI) {
+            marioChgMot(MARIO_MOTION_JUMP_SW);
         }
         wp->bounceCount++;
         return 1;
@@ -750,7 +750,7 @@ static s32 moamoa_hit_check(ExtdrvPose* pose, Moamoa* moa) {
     if (!(mario->flags & (MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING))) {
         wp->bounceCount = 0;
     }
-    if (mario->currMotionId == 0x12 && wp->field_0x40 > 10) {
+    if (mario->currMotionId == MARIO_MOTION_HAMMER && wp->field_0x40 > 10) {
         cam = camGetPtr(CAMERA_3D);
         {
             f32 yaw = cam->viewYaw;
@@ -762,7 +762,7 @@ static s32 moamoa_hit_check(ExtdrvPose* pose, Moamoa* moa) {
             return 2;
         }
     }
-    if (mario->currMotionId == 0x13 && (s32)mario->currSubMotionId == 0x14) {
+    if (mario->currMotionId == MARIO_MOTION_HAMMER_2 && (s32)mario->currSubMotionId == 0x14) {
         { f32 (*m)[4] = *pose->mtx; a = (Vec){m[0][3], m[1][3], m[2][3]}; }
         if (PSVECDistance(&mario->position, &a) < 65.0f) {
             return 2;
@@ -854,12 +854,12 @@ static void ext_moamoa_main(void) {
     f32 t;
     f32 r;
 
-    if (mario->currMotionId == 0x12) {
+    if (mario->currMotionId == MARIO_MOTION_HAMMER) {
         wp->field_0x40++;
     } else {
         wp->field_0x40 = 0;
     }
-    if (mario->currMotionId == 0) {
+    if (mario->currMotionId == MARIO_MOTION_STAY) {
         wp->idleFrames++;
         if (wp->idleFrames > 1000) {
             wp->idleFrames = 1000;
@@ -924,8 +924,8 @@ static void ext_moamoa_main(void) {
             }
         }
         if ((wp->flags & 1) && ( !(m->flags & 0x155)) ) {
-            if ((( (mario->currMotionId == 0 ) || (( (u16)(mario->currMotionId - 1) ) <= 1 )) || (( (u16)(mario->currMotionId - 0x15) ) <= 1 )) ||
-                ( mario->currMotionId == 0x1a) ) {
+            if ((( (mario->currMotionId == MARIO_MOTION_STAY ) || (( (u16)(mario->currMotionId - 1) ) <= 1 )) || (( (u16)(mario->currMotionId - 0x15) ) <= 1 )) ||
+                ( mario->currMotionId == MARIO_MOTION_YOSHI) ) {
                 if ((( (mario->position.y > 200.0f ) && ( wp->dist > 30.0f )) && ( wp->dist < 100.0f )) && (i & 1)) {
                     if (m->flags & 2) {
                         m->next = 2;

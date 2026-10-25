@@ -407,7 +407,7 @@ static USER_FUNC(effitemget_open_ptr) {
 
 static USER_FUNC(effitemget_busaiku) {
     s32 up = evtGetValue(event, event->args[0]);
-    CameraEntry* camera = camGetPtr(4);
+    CameraEntry* camera = camGetPtr(CAMERA_3D);
     Vec ofs;
 
     if (up) {

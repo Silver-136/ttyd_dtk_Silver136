@@ -191,7 +191,7 @@ USER_FUNC(tou_10_mario_keyoff_check) {
 
 #ifdef VERSION_G8ME01
 s32 tou_10_mario_talk_end_wait(void) {
-    return marioGetPtr()->currMotionId != 14 ? 2 : 0;
+    return marioGetPtr()->currMotionId != MARIO_MOTION_TALK ? 2 : 0;
 }
 #endif
 USER_FUNC(tou_10_mario_free_wait) {
@@ -201,7 +201,7 @@ USER_FUNC(tou_10_mario_free_wait) {
         event->userdata[0] = 0;
     }
     if (!marioKeyOffChk() && !marioCtrlOffChk() &&
-        (mario->currMotionId == 0 || mario->currMotionId == 1 || mario->currMotionId == 2)) {
+        (mario->currMotionId == MARIO_MOTION_STAY || mario->currMotionId == MARIO_MOTION_WALK || mario->currMotionId == MARIO_MOTION_DASH)) {
         event->userdata[0]++;
         if (event->userdata[0] > 240) {
             event->userdata[0] = 240;

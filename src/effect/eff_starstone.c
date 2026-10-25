@@ -494,8 +494,8 @@ void effStarStoneMain(EffectEntry* effect) {
     w->timer %= 60;
     if (!(w->flags & 2)) {
         if (w->timer % 10 == 0 && w->state == 0) {
-            s = (f32)sin(6.2831855f * camGetPtr(4)->viewYaw / 360.0f);
-            co = (f32)cos(6.2831855f * camGetPtr(4)->viewYaw / 360.0f);
+            s = (f32)sin(6.2831855f * camGetPtr(CAMERA_3D)->viewYaw / 360.0f);
+            co = (f32)cos(6.2831855f * camGetPtr(CAMERA_3D)->viewYaw / 360.0f);
             ox = 10.0f * s;
             oy = 10.0f * w->scale;
             oz = 10.0f * -co;

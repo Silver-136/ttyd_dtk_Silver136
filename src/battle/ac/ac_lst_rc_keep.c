@@ -260,7 +260,7 @@ void battleAcDelete_LstRcKeep(BattleWork* work) {
 static void actionCommandDisp(f32 x, f32 y, s32 n) {
     s32 off;
     s32 i;
-    camGetPtr(8);
+    camGetPtr(CAMERA_2D);
     if (n < 3) {
         Vec pos = {0.0f, 0.0f, 0.0f};
         pos.x = -168.0f + x;

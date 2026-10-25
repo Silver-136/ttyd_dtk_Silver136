@@ -308,19 +308,19 @@ void seq_gameOverMain(SequenceWork* work) {
             strcpy(gp->currentAreaName + 0x10, gp->currentMapName);
             statusWinForceOff();
             statusWinDispOff();
-            camera = camGetPtr(4);
+            camera = camGetPtr(CAMERA_3D);
             camera->viewport[0] = 0.0f;
             camera->viewport[1] = 0.0f;
             camera->viewport[2] = gp->fbWidth;
             camera->viewport[3] = gp->efbHeight;
-            camera = camGetPtr(8);
+            camera = camGetPtr(CAMERA_2D);
             camera->viewport[0] = 0.0f;
             camera->viewport[1] = 0.0f;
             camera->viewport[2] = gp->fbWidth;
             camera->viewport[3] = gp->efbHeight;
-            camGetPtr(8)->flags &= ~0x100;
-            camGetPtr(8)->flags |= 0x400;
-            camGetPtr(8)->flags |= 0x200;
+            camGetPtr(CAMERA_2D)->flags &= ~0x100;
+            camGetPtr(CAMERA_2D)->flags |= 0x400;
+            camGetPtr(CAMERA_2D)->flags |= 0x200;
             fadeTecOff();
             fadeSoftFocusOff();
             npcClearDeadInfo();
@@ -333,7 +333,7 @@ void seq_gameOverMain(SequenceWork* work) {
                 break;
             }
             mapLoad("sys_00");
-            camera = camGetPtr(4);
+            camera = camGetPtr(CAMERA_3D);
             mario = marioGetPtr();
             {
                 camera->marioPos.x = 0.0f;
@@ -360,7 +360,7 @@ void seq_gameOverMain(SequenceWork* work) {
                 break;
             } else {
                 GXColor color = {0, 0, 0, 255};
-                fadeEntry(9, 1000, color);
+                fadeEntry(FADE_IN_BLACK, 1000, color);
             }
             marioReset();
             marioEntry();
@@ -394,11 +394,11 @@ void seq_gameOverMain(SequenceWork* work) {
             strcpy(gp->currentMapName, "");
             strcpy(gp->currentAreaName, "");
             statusWinDispOn();
-            camGetPtr(8)->flags &= ~0x200;
+            camGetPtr(CAMERA_2D)->flags &= ~0x200;
             if (gp->flags & 0x1000) {
-                seqSetSeq(7, NULL, NULL);
+                seqSetSeq(SEQ_E3, NULL, NULL);
             } else {
-                seqSetSeq(1, NULL, NULL);
+                seqSetSeq(SEQ_TITLE, NULL, NULL);
             }
             break;
     }

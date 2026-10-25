@@ -37,10 +37,10 @@ void mario_kemuri_80130474(void) {
 
     if ((u32)marioStGetSystemLevel() == 0) {
       if (!(mario->flags & MARIO_FLAG_TUBE_MODE)) {
-        if (mario->currMotionId == 0x1D) {
+        if (mario->currMotionId == MARIO_MOTION_DOKAN) {
             s = s;
         } else {
-        if (mario->currMotionId != 3) {
+        if (mario->currMotionId != MARIO_MOTION_JUMP) {
             if (mario->hitobjStandOn != NULL) {
                 attr = hitGetAttr(mario->hitobjStandOn);
             }
@@ -57,7 +57,7 @@ void mario_kemuri_80130474(void) {
             }
             else if (attr & 0x100000) {
                 mario = marioGetPtr();
-                if (mario->currMotionId != 2 && mario->currMotionId != 1) {
+                if (mario->currMotionId != MARIO_MOTION_DASH && mario->currMotionId != MARIO_MOTION_WALK) {
                     ct = 8;
                 }
                 else if (ct++ > 8) {
@@ -128,7 +128,7 @@ void mario_kemuri_landon(void) {
     if (strcmp(gp->currentMapName, "mri_05") == 0) {
         type = 10;
     }
-    if (mario->currMotionId == 3 && mario->airTimer == 1 && cnt2 == 10) {
+    if (mario->currMotionId == MARIO_MOTION_JUMP && mario->airTimer == 1 && cnt2 == 10) {
         effWaterDamageN64Entry(type + 5, 30, mario->position.x, mario->position.y, mario->position.z, 1.0f);
         cnt2 = 0;
         effRippleEntry(0, mario->position.x, 11.0f + mario->position.y, mario->position.z);
@@ -137,16 +137,16 @@ void mario_kemuri_landon(void) {
     if (cnt2 > 10) {
         cnt2 = 10;
     }
-    if (mario->currMotionId == 2 || mario->currMotionId == 1 || !mario->currMotionId || mario->currMotionId == 0xD) {
-        if (mario->currMotionId == 0xD) {
+    if (mario->currMotionId == MARIO_MOTION_DASH || mario->currMotionId == MARIO_MOTION_WALK || !mario->currMotionId || mario->currMotionId == MARIO_MOTION_LAND) {
+        if (mario->currMotionId == MARIO_MOTION_LAND) {
             cnt = 0;
         }
         if (--cnt < 0) {
             cnt = rand() % 20 + 30;
             effRippleEntry(0, mario->position.x, 11.0f + mario->position.y, mario->position.z);
         }
-        if (mario->currMotionId == 1 || mario->currMotionId == 2 || mario->currMotionId == 0xD) {
-            if (gp->retraceCount % 20 == 0 || mario->currMotionId == 0xD) {
+        if (mario->currMotionId == MARIO_MOTION_WALK || mario->currMotionId == MARIO_MOTION_DASH || mario->currMotionId == MARIO_MOTION_LAND) {
+            if (gp->retraceCount % 20 == 0 || mario->currMotionId == MARIO_MOTION_LAND) {
                 effWaterDamageN64Entry(type + 7, 30, mario->position.x, 11.0f + mario->position.y, mario->position.z, 1.0f);
             }
         }
@@ -161,16 +161,16 @@ void kemuri_mugi(void) {
     MarioWork* mario = marioGetPtr();
 
     if (strncmp(gp->currentMapName, "mri", 3) == 0) {
-        if (mario->currMotionId == 0 && gp->retraceCount % 30 == 0) {
+        if (mario->currMotionId == MARIO_MOTION_STAY && gp->retraceCount % 30 == 0) {
             effWaterDamageN64Entry(16, 30, mario->position.x, 11.0f + mario->position.y, mario->position.z, 0.8f);
         }
-        if (mario->currMotionId == 1 || mario->currMotionId == 2 || mario->currMotionId == 0xD) {
-            if (gp->retraceCount % 20 == 0 || mario->currMotionId == 0xD) {
+        if (mario->currMotionId == MARIO_MOTION_WALK || mario->currMotionId == MARIO_MOTION_DASH || mario->currMotionId == MARIO_MOTION_LAND) {
+            if (gp->retraceCount % 20 == 0 || mario->currMotionId == MARIO_MOTION_LAND) {
                 effWaterDamageN64Entry(17, 30, mario->position.x, 11.0f + mario->position.y, mario->position.z, 0.8f);
             }
         }
     }
-    else if (mario->currMotionId == 3 && mario->airTimer == 1 && ct2 == 10) {
+    else if (mario->currMotionId == MARIO_MOTION_JUMP && mario->airTimer == 1 && ct2 == 10) {
         effMugiKemuriEntry(mario->position.x, 14.0f + mario->position.y, mario->position.z, dir);
         dir = reviseAngle(35.0f + dir);
         ct2 = 0;
@@ -180,7 +180,7 @@ void kemuri_mugi(void) {
         if (ct2 > 10) {
             ct2 = 10;
         }
-        if (mario->currMotionId != 2 && mario->currMotionId != 1) {
+        if (mario->currMotionId != MARIO_MOTION_DASH && mario->currMotionId != MARIO_MOTION_WALK) {
             ct = 2;
         }
         else if (ct++ > 2) {
@@ -226,7 +226,7 @@ void kemuri(void) {
             }
         }
     }
-    else if (mario->currMotionId != 2) {
+    else if (mario->currMotionId != MARIO_MOTION_DASH) {
         ct = 7;
     }
     else if (mario->characterId != 2) {

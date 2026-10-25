@@ -11,6 +11,7 @@
 #include <string.h>
 #include "koopa_hit.h"
 #include <dolphin/pad.h>
+#include "driver/camdrv.h"
 
 void kpaSetSpec(void);
 void kpa2DMain(void);
@@ -308,7 +309,7 @@ void kpa2DMain(void) {
             }
         }
     }
-    if (mp->currMotionId == 8) {
+    if (mp->currMotionId == MARIO_MOTION_JUMP_3) {
         mp->basePos = mp->position;
         mp->floorMove.x = 0.0f;
         mp->floorMove.y = 0.0f;
@@ -359,7 +360,7 @@ void kpa2DMain(void) {
     } else if (mp->flags & MARIO_FLAG_IS_FALLING) {
         kpaFall();
         marioChkOverhead();
-        if (mp->currMotionId != 0x10 && mp->currMotionId != 0x11 && mp->airTimer > 5) {
+        if (mp->currMotionId != MARIO_MOTION_HIP && mp->currMotionId != MARIO_MOTION_HIP_2 && mp->airTimer > 5) {
             marioChkGnd2();
         }
     } else {
@@ -389,7 +390,7 @@ void kpa3DMain(void) {
     if (mp->kpaNoHitTimer) {
         mp->kpaNoHitTimer--;
     }
-    if (mp->currMotionId == 0x18 || mp->currMotionId == 0x1F || mp->currMotionId == 0x20) {
+    if (mp->currMotionId == MARIO_MOTION_PLANE || mp->currMotionId == MARIO_MOTION_DAMAGE || mp->currMotionId == MARIO_MOTION_DAMAGE_TOGE) {
         marioPreDisp();
         marioBottomless();
         mp->frameCounter++;
@@ -414,7 +415,7 @@ void kpa3DMain(void) {
             }
         }
     }
-    if (mp->currMotionId == 8) {
+    if (mp->currMotionId == MARIO_MOTION_JUMP_3) {
         mp->basePos = mp->position;
         mp->floorMove.x = 0.0f;
         mp->floorMove.y = 0.0f;
@@ -432,7 +433,7 @@ void kpa3DMain(void) {
         marioMove();
         marioChkOverhead();
         if (mp->airTimer > 100) {
-            marioChgMot(10);
+            marioChgMot(MARIO_MOTION_FALL);
             marioSetFallPara();
         }
     } else if (mp->flags & MARIO_FLAG_IS_JUMPING) {
@@ -446,7 +447,7 @@ void kpa3DMain(void) {
         kpaFall();
         kpaSearchFrontUnder();
         marioChkOverhead();
-        if (mp->currMotionId != 0x10 && mp->currMotionId != 0x11 && mp->airTimer > 5) {
+        if (mp->currMotionId != MARIO_MOTION_HIP && mp->currMotionId != MARIO_MOTION_HIP_2 && mp->airTimer > 5) {
             marioChkGnd2();
         }
     } else {
@@ -568,7 +569,7 @@ void kpaFall(void) {
         }
     } else {
         void* h;
-        if (mp->currMotionId == 0x10 || mp->currMotionId == 0x11) {
+        if (mp->currMotionId == MARIO_MOTION_HIP || mp->currMotionId == MARIO_MOTION_HIP_2) {
             return;
         }
         {
@@ -582,7 +583,7 @@ void kpaFall(void) {
                 mp->baseSpeed = bs;
             }
         }
-        if (mp->currMotionId != 4) {
+        if (mp->currMotionId != MARIO_MOTION_JUMP_NPC) {
             if (mp->buttonHold & PAD_BUTTON_A) {
                 mp->jumpSnapY = -0.001f;
             } else {
@@ -641,7 +642,7 @@ s32 kpaFireAttackCheck(void) {
 void kpaAttackStart(void) {
     MarioWork* mp = marioGetPtr();
     if (KPW(mp)->attackState == 0) {
-        marioChgMot(0);
+        marioChgMot(MARIO_MOTION_STAY);
         KPW(mp)->attackState = 1;
     }
 }
@@ -863,11 +864,11 @@ void kpaFireMain(void) {
         lv = kpaGetLevel();
         if (lv != 0) {
             fe = fireefp;
-            camGetPtr(4);
+            camGetPtr(CAMERA_3D);
             w = (EffGonbabaBreathWork*)fe->userdata;
             f29 = w->scale;
             PSMTXTrans(m80, w->position.x, w->position.y, w->position.z);
-            PSMTXRotRad(m50, 'y', 0.017453292f * (w->yaw - camGetPtr(4)->viewYaw));
+            PSMTXRotRad(m50, 'y', 0.017453292f * (w->yaw - camGetPtr(CAMERA_3D)->viewYaw));
             if (w->yaw > 90.0f && w->yaw < 270.0f) {
                 PSMTXScale(mb0, w->scale, w->scale, -w->scale);
             } else {
@@ -918,7 +919,7 @@ s32 kpaHipAttackCheck(void) {
     if (mp->characterId != 2) {
         return 0;
     }
-    if (mp->currMotionId == 0x11) {
+    if (mp->currMotionId == MARIO_MOTION_HIP_2) {
         r = 1;
     }
     return r;

@@ -871,7 +871,7 @@ static USER_FUNC(evtflash) {
     }
     switch (event->userdata[2]) {
         case 0:
-            fadeEntry(10, 20, evtflash_col1);
+            fadeEntry(FADE_OUT_BLACK, 20, evtflash_col1);
             event->userdata[2]++;
         case 1:
             if (fadeIsFinish() != TRUE) {
@@ -891,7 +891,7 @@ static USER_FUNC(evtflash) {
             event->userdata[2]++;
             return EVT_RETURN_BLOCK;
         case 3:
-            fadeEntry(9, 80, evtflash_col2);
+            fadeEntry(FADE_IN_BLACK, 80, evtflash_col2);
             event->userdata[2]++;
         case 4:
             if (fadeIsFinish() != TRUE) {

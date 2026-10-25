@@ -391,7 +391,7 @@ void party_motion_stay(PartyEntry* party) {
         party->yoshiPsndSFXId = -1;
         partyForceSetSpd(party, 0.0f);
     }
-    if (mario->currMotionId != 0xE && (party->flags & 0x80000)) {
+    if (mario->currMotionId != MARIO_MOTION_TALK && (party->flags & 0x80000)) {
         party->flags &= ~0x80000;
     }
     lim = party->homingDist;
@@ -451,7 +451,7 @@ void party_motion_stay(PartyEntry* party) {
     party_slit(party);
     party_roll(party);
     partyChgStayPose(party);
-    if (mario->currMotionId == 0xE && !(party->flags & 0x80000)) {
+    if (mario->currMotionId == MARIO_MOTION_TALK && !(party->flags & 0x80000)) {
         partyMoveBehindMario(party, 0);
         return;
     }
@@ -485,7 +485,7 @@ void party_motion_stay(PartyEntry* party) {
                         partyClearFootmark2();
                     }
                 } else if (other->currentMemberId == 3 && other->runMode == 3) {
-                    if (mario->currMotionId != 0x1F && mario->currMotionId != 0x10 && mario->currMotionId != 0x11 &&
+                    if (mario->currMotionId != MARIO_MOTION_DAMAGE && mario->currMotionId != MARIO_MOTION_HIP && mario->currMotionId != MARIO_MOTION_HIP_2 &&
                         distABf(party->position.x, party->position.z, mario->position.x, mario->position.z) >= lim)
                     {
                         partyChgMot(party, 1);
@@ -574,7 +574,7 @@ void party_motion_wait(PartyEntry* party) {
     if (distABf(party->position.x, party->position.z, mario->position.x, mario->position.z) > 31.0f) {
         partyChgRunMode(party, 2);
     }
-    if (mario->currMotionId == 0xE && !(party->flags & 0x80000)) {
+    if (mario->currMotionId == MARIO_MOTION_TALK && !(party->flags & 0x80000)) {
         partyMoveBehindMario(party, 0);
     } else if (party->moveKind == 1) {
         partyFlyAdjustY(party);
@@ -662,8 +662,8 @@ static inline BOOL partyChkMarioFollowY(MarioWork* mario) {
     if (mario->airTimer != 0 && mario->baseSpeed == 0.0f) {
         return FALSE;
     }
-    if (mario->currMotionId == 0x1F || mario->currMotionId == 0x20 || mario->currMotionId == 0x10 ||
-        mario->currMotionId == 0x11)
+    if (mario->currMotionId == MARIO_MOTION_DAMAGE || mario->currMotionId == MARIO_MOTION_DAMAGE_TOGE || mario->currMotionId == MARIO_MOTION_HIP ||
+        mario->currMotionId == MARIO_MOTION_HIP_2)
     {
         return FALSE;
     }
@@ -948,7 +948,7 @@ void party_motion_homing_walk(PartyEntry* party) {
     if (!party_roll(party)) {
         return;
     }
-    if (mario->currMotionId == 0xE && !(party->flags & 0x80000)) {
+    if (mario->currMotionId == MARIO_MOTION_TALK && !(party->flags & 0x80000)) {
         partyMoveBehindMario(party, 0);
         return;
     }
@@ -1381,7 +1381,7 @@ void party_motion_homing_fly(PartyEntry* party) {
     if (!party_roll(party)) {
         return;
     }
-    if (mario->currMotionId == 0xE && !(party->flags & 0x80000)) {
+    if (mario->currMotionId == MARIO_MOTION_TALK && !(party->flags & 0x80000)) {
         partyMoveBehindMario(party, 0);
         return;
     }
@@ -2513,7 +2513,7 @@ s32 party_motion_fall(PartyEntry* party) {
 #endif
         if (party->position.y < -2000.0f) {
             party->position.y = -2001.0f;
-            if (mario->currMotionId == 0x1F || mario->currMotionId == 0x20) {
+            if (mario->currMotionId == MARIO_MOTION_DAMAGE || mario->currMotionId == MARIO_MOTION_DAMAGE_TOGE) {
                 return 2;
             }
             party->flags &= ~0x70;
@@ -2621,7 +2621,7 @@ void party_motion_damage(PartyEntry* party) {
             }
             break;
         case 10:
-            if (mario->currMotionId == 0x1F || mario->currMotionId == 0x20) {
+            if (mario->currMotionId == MARIO_MOTION_DAMAGE || mario->currMotionId == MARIO_MOTION_DAMAGE_TOGE) {
                 break;
             }
             if (--party->moveFrames <= 0) {

@@ -1386,7 +1386,7 @@ void bakuGameDisp2D(CameraId cam, void* param) {
 #pragma dont_inline reset
 void bakuGameDisp3D(CameraId cam, void* param) {
     BakuWork* w = GetBakuGamePtr();
-    CameraEntry* camera = camGetPtr(4);
+    CameraEntry* camera = camGetPtr(CAMERA_3D);
     Mtx scl;
     Mtx trans;
     Mtx mtx;

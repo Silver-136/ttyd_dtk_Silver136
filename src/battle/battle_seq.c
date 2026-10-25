@@ -29,6 +29,7 @@
 #include "unit/party/unit_party_sanders.h"
 #include "manager/evtmgr_cmd.h"
 #include "driver/fadedrv.h"
+#include "mario/mario.h"
 
 
 #define STAGE_WORK(wp) (&(wp)->stageObjectWork)
@@ -386,7 +387,7 @@ void btlseqFirstAct(BattleWork* wp) {
                         if ((((NpcBattleInfo*)info)->battleFlags & 0x100000) && (unit->currentKind == 0xDE || (unit->currentKind >= 0xE0 && unit->currentKind < 0xE7))) {
                             continue;
                         }
-                        if (marioGetPtr()->currMotionId == 0x1A && unit->currentKind == 0xDE) {
+                        if (marioGetPtr()->currMotionId == MARIO_MOTION_YOSHI && unit->currentKind == 0xDE) {
                             evt = evtEntry((s32*)BtlUnit_GetData(unit, 0x41), 10, 0);
                             unit->entryEventId = evt->eventId;
                             evt->unitId = unit->unitId;

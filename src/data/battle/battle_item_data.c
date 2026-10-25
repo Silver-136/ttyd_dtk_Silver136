@@ -4338,10 +4338,10 @@ USER_FUNC(_cam_rot) {
         event->userdata[1] = event->userdata[0];
     }
     rot = ((f32 (*)(f32, f32, s32, s32, s32))intplGetValue)(720.0f, 0.0f, 4, event->userdata[0], event->userdata[1]);
-    camGetPtr(4)->rollAngle = rot;
+    camGetPtr(CAMERA_3D)->rollAngle = rot;
     event->userdata[0]--;
     if (event->userdata[0] <= 0) {
-        camGetPtr(4)->rollAngle = 0.0f;
+        camGetPtr(CAMERA_3D)->rollAngle = 0.0f;
         return EVT_RETURN_YIELD;
     }
     return EVT_RETURN_BLOCK;

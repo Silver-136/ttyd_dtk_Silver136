@@ -215,7 +215,7 @@ void peachPreInit(void) {}
 
 s32 peachMain(void) {
     MarioWork* mp = marioGetPtr();
-    if (mp->currMotionId == 8) {
+    if (mp->currMotionId == MARIO_MOTION_JUMP_3) {
         mp->basePos = mp->position;
         mp->floorMove.x = 0.0f;
         mp->floorMove.y = 0.0f;
@@ -233,7 +233,7 @@ s32 peachMain(void) {
         marioMove();
         marioChkOverhead();
         if (mp->airTimer > 100) {
-            marioChgMot(10);
+            marioChgMot(MARIO_MOTION_FALL);
             marioSetFallPara();
         }
     } else if (mp->flags & MARIO_FLAG_IS_JUMPING) {
@@ -245,7 +245,7 @@ s32 peachMain(void) {
         marioMove();
         marioFall();
         marioChkOverhead();
-        if (mp->currMotionId != 16 && mp->currMotionId != 17 && mp->airTimer > 5) marioChkGnd2();
+        if (mp->currMotionId != MARIO_MOTION_HIP && mp->currMotionId != MARIO_MOTION_HIP_2 && mp->airTimer > 5) marioChkGnd2();
     } else {
         marioMove();
         marioChkOverhead();
@@ -288,7 +288,7 @@ void peach_stay(void) {
         }
     }
     if (mp->controlStickSensitivity > 0.0f) {
-        marioChgMot(1);
+        marioChgMot(MARIO_MOTION_WALK);
     }
     if (!(mp->flags & MARIO_FLAG_KEY_OFF)) {
     switch (mp->dispFlags & 0x40000000) { case 0:
@@ -353,12 +353,12 @@ void peach_walk(void) {
         mp->baseSpeed = marioGetWalkSpd();
     }
     if ((s8)mp->wStickDir1 * (s8)mp->wStickDir1 + (s8)mp->wStickDir2 * (s8)mp->wStickDir2 > 3025) {
-        marioChgMot(2);
+        marioChgMot(MARIO_MOTION_DASH);
     } else {
         mp->directionView = mp->controlStickAngle;
         peachStepSe(40, 20);
         if (!mp->controlStickSensitivity) {
-            marioChgMot(0);
+            marioChgMot(MARIO_MOTION_STAY);
         }
     }
 }
@@ -381,12 +381,12 @@ void peach_dash(void) {
     if (mp->flags & MARIO_FLAG_FORCED_MOVEMENT) {
         peachStepSe(20, 10);
     } else if ((s8)mp->wStickDir1 * (s8)mp->wStickDir1 + (s8)mp->wStickDir2 * (s8)mp->wStickDir2 <= 3025) {
-        marioChgMot(1);
+        marioChgMot(MARIO_MOTION_WALK);
     } else {
         mp->directionView = mp->controlStickAngle;
         peachStepSe(20, 10);
         if (!mp->controlStickSensitivity) {
-            marioChgMot(0);
+            marioChgMot(MARIO_MOTION_STAY);
         }
     }
 }

@@ -208,15 +208,15 @@ void marioSetCharMode(s32 mode) {
         marioSetFamicomMode(1);
     }
     if (!(wp->flags & MARIO_FLAG_BG_MODE)) {
-        if (wp->currMotionId == 0x18) {
+        if (wp->currMotionId == MARIO_MOTION_PLANE) {
             marioForcePlaneAnime();
             return;
         }
-        else if (wp->currMotionId == 0x19) {
+        else if (wp->currMotionId == MARIO_MOTION_SHIP) {
             marioForceShipAnime();
             return;
         }
-        else if (wp->currMotionId == 0x16) {
+        else if (wp->currMotionId == MARIO_MOTION_ROLL) {
             marioForceRollAnime();
             return;
         }
@@ -224,17 +224,17 @@ void marioSetCharMode(s32 mode) {
             marioForceSlitAnime();
             return;
         }
-        else if (wp->currMotionId == 0x1c) {
+        else if (wp->currMotionId == MARIO_MOTION_VIVIAN) {
             N_marioForceVivianAnime();
             return;
         }
-        else if (wp->currMotionId == 0x1a) {
+        else if (wp->currMotionId == MARIO_MOTION_YOSHI) {
             marioChgPose("M_Y_2");
             marioChgPose("M_Y_1");
             return;
         }
     }
-    if (wp->currMotionId != 0x18 && wp->currMotionId != 0x19 && wp->currMotionId != 0x14) {
+    if (wp->currMotionId != MARIO_MOTION_PLANE && wp->currMotionId != MARIO_MOTION_SHIP && wp->currMotionId != MARIO_MOTION_JABARA) {
         marioSetSpec();
     }
 }
@@ -245,7 +245,7 @@ void marioSetFamicomMode(s32 mode) {
     if (mode == 1) {
         if (!(wp->flags & MARIO_FLAG_IS_8_BIT)) {
             wp->flags |= MARIO_FLAG_IS_8_BIT;
-            marioChgMot(0);
+            marioChgMot(MARIO_MOTION_STAY);
             if (wp->paperAnimGroupId[0] >= 0) {
                 animPoseRelease(wp->paperAnimGroupId[0]);
             }
@@ -1020,14 +1020,14 @@ void marioMain(void) {
         marioColorChk();
         p = mp;
         if (pouchEquipCheckBadge(0x143)) {
-            if (p->currMotionId == 0) {
+            if (p->currMotionId == MARIO_MOTION_STAY) {
                 p->trigFlags |= MARIO_TRIG_FLAG_CHG_ANIM;
             }
-            else if (p->currMotionId == 1) {
+            else if (p->currMotionId == MARIO_MOTION_WALK) {
                 p->trigFlags |= MARIO_TRIG_FLAG_CHG_ANIM;
             }
-            else if (p->currMotionId == 2) {
-                marioChgMot(1);
+            else if (p->currMotionId == MARIO_MOTION_DASH) {
+                marioChgMot(MARIO_MOTION_WALK);
                 p->trigFlags |= MARIO_TRIG_FLAG_CHG_ANIM;
             }
         }
@@ -1061,7 +1061,7 @@ void marioMain(void) {
             wp->dispFlags &= ~0x100000;
         }
     }
-    if (wp->currMotionId == 0x1d) {
+    if (wp->currMotionId == MARIO_MOTION_DOKAN) {
         marioMotion();
         mp->hitobjStandOn = marioSearchGround(&a, &b, &c, 0.0f, 0.0f);
         marioPreDisp();
@@ -1096,7 +1096,7 @@ void marioMain(void) {
             peachMain();
             return;
         }
-        if (wp->currMotionId == 0x18 || wp->currMotionId == 0x1f || wp->currMotionId == 0x20 || wp->currMotionId == 0x21) {
+        if (wp->currMotionId == MARIO_MOTION_PLANE || wp->currMotionId == MARIO_MOTION_DAMAGE || wp->currMotionId == MARIO_MOTION_DAMAGE_TOGE || wp->currMotionId == MARIO_MOTION_BOTTOMLESS) {
             marioSearchUnder();
             marioPreDisp();
             marioBottomless();
@@ -1110,7 +1110,7 @@ void marioMain(void) {
             marioMainEnd(mp);
             return;
         }
-        if (wp->currMotionId == 0x1c) {
+        if (wp->currMotionId == MARIO_MOTION_VIVIAN) {
             marioChkGnd();
             marioChkToge();
             marioPreDisp();
@@ -1121,7 +1121,7 @@ void marioMain(void) {
             marioMainEnd(mp);
             return;
         }
-        if (wp->currMotionId == 0x14) {
+        if (wp->currMotionId == MARIO_MOTION_JABARA) {
             marioMove();
             marioChkToge();
             marioPreDisp();
@@ -1132,7 +1132,7 @@ void marioMain(void) {
             marioMainEnd(mp);
             return;
         }
-        if (wp->currMotionId == 0x1a) {
+        if (wp->currMotionId == MARIO_MOTION_YOSHI) {
             marioChkToge();
             marioBottomless();
             marioPreDisp();
@@ -1143,7 +1143,7 @@ void marioMain(void) {
             marioMainEnd(mp);
             return;
         }
-        if (wp->currMotionId == 0x8) {
+        if (wp->currMotionId == MARIO_MOTION_JUMP_3) {
             marioBottomless();
             marioPreDisp();
             marioBalloonMain();
@@ -1172,7 +1172,7 @@ void marioMain(void) {
             }
         }
         else if (flags & 0x20000) {
-            if (wp->currMotionId != 0x19) {
+            if (wp->currMotionId != MARIO_MOTION_SHIP) {
                 marioMove();
                 if (wp->currMotionId == MARIO_MOTION_HIP) {
                     y = marioChkOverhead();
@@ -1319,7 +1319,7 @@ void marioMove(void) {
                 camFollowYOn();
             }
         }
-        if (wp->currMotionId == 1 || wp->currMotionId == 2) {
+        if (wp->currMotionId == MARIO_MOTION_WALK || wp->currMotionId == MARIO_MOTION_DASH) {
             if (0.0f != prev.x - wp->position.x) {
                 if (PSVECDistance(&prev, &wp->position) <= 1.0f) {
                     marioChgPose("M_W_1");

@@ -69,10 +69,10 @@ static inline s32 kpa_stay_chk(void) {
         return 0;
     }
     if (kpaGetBodyStatus() == 2) {
-        marioChgMot(0x25);
+        marioChgMot(MARIO_MOTION_KPA_SWIM);
         return 1;
     }
-    marioChgMot(3);
+    marioChgMot(MARIO_MOTION_JUMP);
     return 1;
 }
 
@@ -108,7 +108,7 @@ static inline void kpa_swim_splash(void) {
 
 BOOL kpaHipAttackOk(void) {
     MarioWork* m = marioGetPtr();
-    if (m->currMotionId == 0x10) {
+    if (m->currMotionId == MARIO_MOTION_HIP) {
         return FALSE;
     }
     return ((KPW(m)->flags >> 4) & 1) ^ 1;
@@ -207,10 +207,10 @@ void kpa_stay(void) {
                 if (kpaGetStageViewType() == 0) {
                     m->baseSpeed = spd;
                     if (m->baseSpeed > 0.0f) {
-                        marioChgMot(1);
+                        marioChgMot(MARIO_MOTION_WALK);
                     }
                 } else if (m->controlStickSensitivity > 0.0f) {
-                    marioChgMot(1);
+                    marioChgMot(MARIO_MOTION_WALK);
                 }
             }
         }
@@ -237,7 +237,7 @@ void kpa_walk(void) {
     if (!kpa_stay_chk()) {
         if (m->buttonTrg & PAD_BUTTON_B) {
             kpaAttackStart();
-            marioChgMot(0);
+            marioChgMot(MARIO_MOTION_STAY);
             return;
         }
         if (kpaGetBodyStatus() == 2) {
@@ -277,12 +277,12 @@ void kpa_walk(void) {
     }
     if (kpaGetStageViewType() == 0) {
         if (!m->baseSpeed && !(m->flags & MARIO_FLAG_FORCED_MOVEMENT)) {
-            marioChgMot(0);
+            marioChgMot(MARIO_MOTION_STAY);
             return;
         }
     } else {
         if (!m->controlStickSensitivity && !(m->flags & MARIO_FLAG_FORCED_MOVEMENT)) {
-            marioChgMot(0);
+            marioChgMot(MARIO_MOTION_STAY);
             return;
         }
     }
@@ -292,7 +292,7 @@ void kpa_walk(void) {
             m->directionView = m->controlStickAngle;
         }
         if (m->wStickDir1 * m->wStickDir1 + m->wStickDir2 * m->wStickDir2 > 3025) {
-            marioChgMot(2);
+            marioChgMot(MARIO_MOTION_DASH);
         }
     }
     }
@@ -311,7 +311,7 @@ void kpa_dash(void) {
     if (!kpa_stay_chk()) {
         if (m->buttonTrg & PAD_BUTTON_B) {
             kpaAttackStart();
-            marioChgMot(0);
+            marioChgMot(MARIO_MOTION_STAY);
             return;
         }
         if (kpaGetBodyStatus() == 2) {
@@ -344,12 +344,12 @@ void kpa_dash(void) {
     }
     if (kpaGetStageViewType() == 0) {
         if (!m->baseSpeed && !(m->flags & MARIO_FLAG_FORCED_MOVEMENT)) {
-            marioChgMot(0);
+            marioChgMot(MARIO_MOTION_STAY);
             return;
         }
     } else {
         if (!m->controlStickSensitivity && !(m->flags & MARIO_FLAG_FORCED_MOVEMENT)) {
-            marioChgMot(0);
+            marioChgMot(MARIO_MOTION_STAY);
             return;
         }
     }
@@ -359,7 +359,7 @@ void kpa_dash(void) {
             m->directionView = m->controlStickAngle;
         }
         if (m->wStickDir1 * m->wStickDir1 + m->wStickDir2 * m->wStickDir2 <= 3025) {
-            marioChgMot(1);
+            marioChgMot(MARIO_MOTION_WALK);
         }
     }
     }
@@ -374,7 +374,7 @@ void kpa_jump(void) {
         m->multiTimer = 2;
         m->currSubMotionId = 0;
         marioPreJump();
-        if (m->currMotionId != 8) {
+        if (m->currMotionId != MARIO_MOTION_JUMP_3) {
             camFollowYOff();
         }
         kpaChgPose("KPA_J_1A", "KPA2_J_1A");
@@ -389,7 +389,7 @@ void kpa_jump(void) {
         m->mot.kpa.animFrame = 0;
     }
     m->airTimer++;
-    if (m->currMotionId != 8) {
+    if (m->currMotionId != MARIO_MOTION_JUMP_3) {
         prevVy = m->jumpVelocityY;
         marioMakeJumpPara();
         if (m->jumpVelocityY > 0.0f && m->airTimer >= 4 && !(m->buttonHold & PAD_BUTTON_A)) {
@@ -402,7 +402,7 @@ void kpa_jump(void) {
             marioSetPeakYpos();
             kpaSetFallPara();
             marioMakeJumpPara();
-            marioChgMot(10);
+            marioChgMot(MARIO_MOTION_FALL);
         }
         m->position.y += m->jumpVelocityY;
     }
@@ -415,7 +415,7 @@ void kpa_fall_80213C38(void) {
         m->flags &= ~MARIO_FLAG_IS_JUMPING;
         m->flags |= MARIO_FLAG_IS_FALLING;
         m->currSubMotionId = 0;
-        if (m->currMotionId != 0xB) {
+        if (m->currMotionId != MARIO_MOTION_FALL_2) {
             if ((s32)(u8)m->characterId == 2) {
                 if (!kpaFireAttackCheck()) {
                     kpaChgPose("KPA_J_1B", "KPA2_J_1B");
@@ -449,7 +449,7 @@ void kpa_fall_80213C38(void) {
     }
     if (kpaGetBodyStatus() == 2) {
         m = marioGetPtr();
-        if (m->currMotionId != 0x25) {
+        if (m->currMotionId != MARIO_MOTION_KPA_SWIM) {
             marioChgMot2(0x25);
         }
         kpaClearHitobjRide();
@@ -525,7 +525,7 @@ void kpa_hip(void) {
                 kpa_hip_launch(m);
             } else {
                 m->flags &= ~MARIO_FLAG_STOP_AIR_MOVEMENT;
-                marioChgMotSub(0, 0);
+                marioChgMotSub(MARIO_MOTION_STAY, 0);
             }
         }
         break;
@@ -537,7 +537,7 @@ BOOL kpaPowUp(void) {
     if (kpaGetLevel() < 3) {
         KPW(m)->level++;
         kpaCancelAttackMode();
-        marioChgMot(0x26);
+        marioChgMot(MARIO_MOTION_KPA_POW_UP);
         return TRUE;
     }
     kpaMSetMutekiTimer();
@@ -551,7 +551,7 @@ BOOL kpaPowDown(void) {
     if (kpaGetLevel() > 0) {
         KPW(m)->level--;
         m->kpaNoHitTimer = sysMsec2Frame(3000);
-        marioChgMot(0x27);
+        marioChgMot(MARIO_MOTION_KPA_POW_DOWN);
         return TRUE;
     }
     KPW(m)->flags |= 0x10000000;
@@ -599,7 +599,7 @@ void kpa_powup(void) {
         base = kpaGetBaseScale(lv - 1);
         step = (kpaGetBaseScale(lv) - base) / 5.0f;
     } else {
-        marioChgMot(0);
+        marioChgMot(MARIO_MOTION_STAY);
         return;
     }
     switch ((s32)m->currSubMotionId) {
@@ -627,7 +627,7 @@ void kpa_powup(void) {
             marioResetCamShiftRate();
             m2->camShiftTargetX = 20.0f * (f32)(-KPW(m2)->level);
             m->flags &= ~MARIO_FLAG_CHG_MOT_DISABLED;
-            marioChgMot(0);
+            marioChgMot(MARIO_MOTION_STAY);
             m->mutekiTimer = 0;
         }
     }
@@ -658,7 +658,7 @@ void kpa_powdown(void) {
         base = kpaGetBaseScale(lv + 1);
         step = (base - kpaGetBaseScale(lv)) / 5.0f;
     } else {
-        marioChgMot(0);
+        marioChgMot(MARIO_MOTION_STAY);
         return;
     }
     switch ((s32)m->currSubMotionId) {
@@ -683,7 +683,7 @@ void kpa_powdown(void) {
             marioResetCamShiftRate();
             m2->camShiftTargetX = 20.0f * (f32)(-KPW(m2)->level);
             m->flags &= ~MARIO_FLAG_CHG_MOT_DISABLED;
-            marioChgMot(0);
+            marioChgMot(MARIO_MOTION_STAY);
         }
     }
 }
@@ -853,7 +853,7 @@ void kpa_swim(void) {
             m->flags &= ~(MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING | MARIO_FLAG_IS_STEPPING | MARIO_FLAG_HAS_INPUT_JUMP);
             kpaSetFallPara();
             marioMakeJumpPara();
-            marioChgMot(10);
+            marioChgMot(MARIO_MOTION_FALL);
             return;
         }
         break;

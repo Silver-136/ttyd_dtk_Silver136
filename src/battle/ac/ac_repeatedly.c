@@ -350,7 +350,7 @@ static void actionCommandDisp(f32 x, f32 y) {
     BattleActions* acw = &_battleWorkPointer->actionCommands;
     r = (RepeatWork*)acw->work;
     d = (RepeatDisp*)acw->dispData;
-    camGetPtr(8);
+    camGetPtr(CAMERA_2D);
     if (acw->params[0] != 16) {
         switch (r->btn0) {
             case 0x100:

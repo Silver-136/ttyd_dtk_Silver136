@@ -1638,7 +1638,7 @@ void ext_fan_main(void) {
     Vec dir;
     Vec target = {0.0f, 0.0f, 0.0f};
 
-    if (mario->currMotionId == 0x12) {
+    if (mario->currMotionId == MARIO_MOTION_HAMMER) {
         fan_wp->hammerTimer++;
     } else {
         fan_wp->hammerTimer = 0;
@@ -2024,7 +2024,7 @@ s32 check_hammer(Fan* fan) {
     if (fan->flags & 1) {
         return 0;
     }
-    if (mario->currMotionId == 0x12 && fan_wp->hammerTimer > 10) {
+    if (mario->currMotionId == MARIO_MOTION_HAMMER && fan_wp->hammerTimer > 10) {
         rot = 6.2831855f * reviseAngle(mario->displayDirection - 90.0f + camGetPtr(CAMERA_3D)->viewYaw) / 360.0f;
 
         x = mario->position.x + 35.0f * fan_sin(rot);
@@ -2033,7 +2033,7 @@ s32 check_hammer(Fan* fan) {
             return 1;
         }
     }
-    if (mario->currMotionId == 0x13 && (s32)mario->currSubMotionId == 0x14 && PSVECDistance(&mario->position, &fan->pos) < 65.0f) {
+    if (mario->currMotionId == MARIO_MOTION_HAMMER_2 && (s32)mario->currSubMotionId == 0x14 && PSVECDistance(&mario->position, &fan->pos) < 65.0f) {
         return 1;
     }
     party = partyGetPtr(0);
