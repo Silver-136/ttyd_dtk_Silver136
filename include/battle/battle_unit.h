@@ -34,14 +34,14 @@ typedef enum PartsAttribute_Flags {          // 32-bit size
     kIsWinged = (1 << 11),                   // 0x800
     kIsShelled = (1 << 12),                  // 0x1000
     kIsBombFlippable = (1 << 13),            // 0x2000
-    kUnknown_0x4000 = (1 << 14),             // 0x4000
+    kClone = (1 << 14),                      // 0x4000, attacks pass through unless SPECIAL_CONTACTS_CLONES
     kNotTargetable = (1 << 16),              // 0x10000
     kUnknown_0x40000 = (1 << 18),            // 0x40000
     kUntattleable = (1 << 19),               // 0x80000
     kJumplikeCannotTarget = (1 << 20),       // 0x100000
     kHammerlikeCannotTarget = (1 << 21),     // 0x200000
     kShellTosslikeCannotTarget = (1 << 22),  // 0x400000
-    kUnknown_0x800000 = (1 << 23),           // 0x800000
+    kNoHpLoss = (1 << 23),                   // 0x800000, damage is counted but HP does not go down
     kImmuneToDamageAndStatus = (1 << 29),   // 0x20000000, no HP/FP damage and no status (battle_damage.c)
     kImmuneToNegativeStatus = (1 << 30),    // 0x40000000, sleep, stop, poison, ... and instant kill blocked
     kImmuneToStatus = (1 << 31)             // 0x80000000, no status at all
@@ -57,7 +57,8 @@ typedef enum BattleUnitAttribute_Flags { // 32-bit size
     kUnknownUnit_0x1000 = (1 << 12),     // 0x1000
     kUnknownUnit_0x2000 = (1 << 13),     // 0x2000
     kInactive = (1 << 17),               // 0x20000
-    kUnknownUnit_0x2000000 = (1 << 25)   // 0x2000000
+    kUnknownUnit_0x2000000 = (1 << 25),  // 0x2000000
+    kUnitHpFixed = (1 << 30)             // 0x40000000, HP neither falls from damage nor rises from HP Regen (lecture mode)
 } BattleUnitAttribute_Flags;
 
 typedef enum PartsCounterAttribute_Flags {   // 32-bit size

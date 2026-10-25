@@ -202,7 +202,7 @@ void BattleDamageDirect(s32 unitId, BattleUnit* target, BattleUnitPart* part, s3
     target->fpDamageTaken = fpDamage;
     target->fpLost = fpDamage;
     target->totalFpDamageTaken += target->fpDamageTaken;
-    if (!(target->mAttributeFlags & 0x40000000) && !(part->attributes & 0x800000)) {
+    if (!(target->mAttributeFlags & kUnitHpFixed) && !(part->attributes & kNoHpLoss)) {
         target->hpGauge.prevHp = target->currentHp;
         target->currentHp -= target->hpDamageTaken;
         if (target->currentHp > target->maxHp) {
@@ -1432,7 +1432,7 @@ s32 BattlePreCheckDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPar
     if (weapon->special & SPECIAL_CHARGEABLE) {
         attacker->mTokenFlags |= kChargeExpended;
     }
-    if ((part->attributes & 0x4000) && !(weapon->special & SPECIAL_CONTACTS_CLONES)) {
+    if ((part->attributes & kClone) && !(weapon->special & SPECIAL_CONTACTS_CLONES)) {
         return 2;
     }
     if (weapon->special & SPECIAL_CANNOT_MISS) {

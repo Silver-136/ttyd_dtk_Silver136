@@ -1831,7 +1831,7 @@ void btlseqTurn(BattleWork *wp)
         BtlUnit_GetStatus(unit, STATUS_HP_REGEN, &turns, &strength);
         if (strength > 0)
         {
-          if (!(unit->mAttributeFlags & 0x40000000))
+          if (!(unit->mAttributeFlags & kUnitHpFixed))
           {
             unit->hpGauge.prevHp = unit->currentHp;
             BtlUnit_RecoverHp(unit, strength);

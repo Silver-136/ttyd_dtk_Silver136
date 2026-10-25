@@ -510,7 +510,7 @@ USER_FUNC(_set_lecture_mode) {
     s32 id = BattleTransID(event, -3);
     BattleUnit* unit = BattleGetUnitPtr(wp, id);
 
-    unit->mAttributeFlags |= 0x40000000;
+    unit->mAttributeFlags |= kUnitHpFixed;
     wp->lectureMode = 1;
     return EVT_RETURN_DONE;
 }

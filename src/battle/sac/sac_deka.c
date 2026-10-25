@@ -766,7 +766,7 @@ void main_enemy_sub(BattleUnit* unit, s32* n) {
                     if (part->attributes & kImmuneToDamageAndStatus) {
                         continue;
                     }
-                    if (part->attributes & 0x4000) {
+                    if (part->attributes & kClone) {
                         continue;
                     }
                     if (!(unit->mAttributeFlags & kInactive) && !BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL)) {
