@@ -24,7 +24,7 @@
 #include "party/party_motion.h"
 #include "evt/evt_sub.h"
 
-extern ItemEntry* itemEntry(const char* name, s32 itemId, s32 type, s32 collectFlag, s32 evtCode, f32 x, f32 y, f32 z);
+ItemEntry* itemEntry(const char* name, s32 itemId, u16 type, s32 collectFlag, EvtWord* evtCode, f32 x, f32 y, f32 z);
 
 extern USER_FUNC(evt_mario_dispflag_onoff);
 extern USER_FUNC(evt_mario_flag_onoff);
@@ -219,7 +219,7 @@ USER_FUNC(breakfast) {
     if (item == NULL || !(item->flags & ITEM_FLAG_ACTIVE)) {
         KinopioWork* w = *wp;
         if (w->breakfastItem != 0) {
-            itemEntry("breakfast", w->breakfastItem, 0x10, -1, 0, w->breakfastPos.x, w->breakfastPos.y,
+            itemEntry("breakfast", w->breakfastItem, 0x10, -1, NULL, w->breakfastPos.x, w->breakfastPos.y,
                       w->breakfastPos.z);
         }
     }

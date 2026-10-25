@@ -32,7 +32,7 @@ typedef struct ItemEntry {
     s32 collectFlag; //0x8, saved flag set when the item is collected (-1: none)
     char name[0x10]; //0xC
     EffectEntry* effect; //0x1C
-    EvtWord evtCode; //0x20, event script run on pickup (evtEntry)
+    EvtWord* evtCode; //0x20, event script run on pickup (evtEntry)
     u16 mode; //0x24, ItemEntryMode
     u16 subState; //0x26, per-sequence state
     s32 winId[3]; //0x28

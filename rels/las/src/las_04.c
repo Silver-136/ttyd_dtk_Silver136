@@ -66,7 +66,7 @@ typedef struct FirebarWork {
     FirebarBall* balls;
     FirebarSetup* setup;
 } FirebarWork;
-ItemEntry* itemEntry(const char* name, s32 itemId, s32 mode, s32 flag, void* script, f32 x, f32 y, f32 z);
+ItemEntry* itemEntry(const char* name, s32 itemId, u16 type, s32 collectFlag, EvtWord* evtCode, f32 x, f32 y, f32 z);
 void shadowSetVolumeDecay(f32 a, f32 b, f32 c);
 void firebar_disp(CameraId camera, void* param);
 void _firebar_rot(FirebarWork* wp);

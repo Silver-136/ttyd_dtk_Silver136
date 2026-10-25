@@ -156,7 +156,10 @@ static inline BOOL isAnimA13(const s8* a) {
     return FALSE;
 }
 
-extern void* itemEntry(f32 x, f32 y, f32 z, const char* name, s32 id, s32 mode, s32 collect, void* script);
+// FAKE: itemEntry declared with the position first: the retail calls load x/y/z before the other arguments
+// (same registers by the EABI); calls in the definition's order and an inline wrapper both load them last
+extern ItemEntry* itemEntry(f32 x, f32 y, f32 z, const char* name, s32 itemId, u16 type, s32 collectFlag,
+                            EvtWord* evtCode);
 
 extern void npcKoopaModeMobjBoundDeadCheck(void* hit);
 

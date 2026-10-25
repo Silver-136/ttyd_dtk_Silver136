@@ -75,7 +75,7 @@ HitEntry* itemHitCheckUp(ItemEntry* entry, f32 vy);
 
 HitEntry* itemHitCheckSide(ItemEntry* entry, f32* outX, f32 dx, f32* outZ, f32 dz, s32* angle);
 void itemseq_GetItem(ItemEntry* entry);
-ItemEntry* itemEntry(const char* name, s32 itemId, s32 type, s32 collectFlag, s32 evtCode, f32 x, f32 y, f32 z);
+ItemEntry* itemEntry(const char* name, s32 itemId, u16 type, s32 collectFlag, EvtWord* evtCode, f32 x, f32 y, f32 z);
 
 //.bss
 static ItemWork work[2];
@@ -112,8 +112,8 @@ static inline BOOL itemGetPouch(ItemEntry* entry) {
     } else if (entry->flags & ITEM_FLAG_COLLECT_LSWF) {
         _swSet(entry->collectFlag);
     }
-    if ((u32)entry->evtCode != 0) {
-        evt = evtEntry((EvtWord*)entry->evtCode, 0, EVENT_START_IMMEDIATE);
+    if (entry->evtCode != NULL) {
+        evt = evtEntry(entry->evtCode, 0, EVENT_START_IMMEDIATE);
         evt->lwData[0] = FLOAT(entry->position.x);
         evt->lwData[1] = FLOAT(entry->position.y);
         evt->lwData[2] = FLOAT(entry->position.z);
@@ -178,7 +178,7 @@ void itemCoinDrop(Vec* position) {
 
     if (pouchGetCoin() > 0) {
         pouchAddCoin(-1);
-        entry = itemEntry(NULL, ITEM_COIN, 8, -1, 0, position->x, position->y, position->z);
+        entry = itemEntry(NULL, ITEM_COIN, 8, -1, NULL, position->x, position->y, position->z);
         if (entry) {
             entry->flags2 |= 0x40;
         }
@@ -450,7 +450,7 @@ static inline ItemEntry* itemFindDeletable(ItemWork* wp, s32 itemId) {
 }
 #endif
 
-ItemEntry* itemEntry(const char* name, s32 itemId, s32 type, s32 collectFlag, s32 evtCode, f32 x, f32 y, f32 z) {
+ItemEntry* itemEntry(const char* name, s32 itemId, u16 type, s32 collectFlag, EvtWord* evtCode, f32 x, f32 y, f32 z) {
     ItemWork* wp = itemGetWork();
     int i;
     ItemEntry* entry;
@@ -1166,7 +1166,7 @@ void itemseq_GetItem(ItemEntry* entry) {
                 itemGetPouch(entry);
                 entry->flags2 &= ~1;
                 entry->itemId = select;
-                entry->evtCode = 0;
+                entry->evtCode = NULL;
                 entry->collectFlag = 0;
                 entry->flags &= ~(ITEM_FLAG_COLLECT_GSWF | ITEM_FLAG_COLLECT_LSWF);
                 iconChange(entry->name, itemDataTable[entry->itemId].icon_id);
@@ -1763,7 +1763,6 @@ ItemEntry* itemNearDistCheck(f32 x, f32 y, f32 z, f32 range);
 ItemEntry* itemHitCheck(f32 x, f32 y, f32 z, f32 range);
 ItemEntry* itemNameToPtr(char* name);
 void itemDelete(const char* name);
-ItemEntry* itemEntry(const char* name, s32 itemId, s32 type, s32 collectFlag, s32 evtCode, f32 x, f32 y, f32 z);
 void itemModeChange(ItemEntry* entry, s32 mode);
 void itemMain(void);
 BOOL N_itemPickUpFromFieldCheck(void);

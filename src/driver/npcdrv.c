@@ -46,7 +46,7 @@
 f32 cloudGetBreathPower(Vec pos, f32 width);
 
 void FontDrawStringShake(f32 x, f32 y, const char* message);
-ItemEntry* itemEntry(const char* name, s32 itemId, s32 type, s32 collectFlag, s32 evtCode, f32 x, f32 y, f32 z);
+ItemEntry* itemEntry(const char* name, s32 itemId, u16 type, s32 collectFlag, EvtWord* evtCode, f32 x, f32 y, f32 z);
 
 #define NPC_RAD2DEG(r) ((r) * 57.29579f)
 USER_FUNC(evt_mario_get_pos);
@@ -1999,13 +1999,13 @@ static inline void fbatRecoverItems(NpcEntry* npc) {
     do {
         if (b->recoveredItems[i]) {
 #ifdef VERSION_G8ME01
-            ItemEntry* item = itemEntry(NULL, b->recoveredItems[i], 11, -1, 0, npc->position.x, npc->position.y,
+            ItemEntry* item = itemEntry(NULL, b->recoveredItems[i], 11, -1, NULL, npc->position.x, npc->position.y,
                                           npc->position.z);
             if (item) {
                 itemFlagOn(item, 0x100);
             }
 #else
-            itemFlagOn(itemEntry(NULL, b->recoveredItems[i], 11, -1, 0, npc->position.x, npc->position.y,
+            itemFlagOn(itemEntry(NULL, b->recoveredItems[i], 11, -1, NULL, npc->position.x, npc->position.y,
                                  npc->position.z),
                        0x100);
 #endif
@@ -3105,13 +3105,13 @@ void npcGetBackItemEntry(NpcEntry* npc) {
     for (i = 0; i < 8; i++) {
         if (info->recoveredItems[i]) {
 #ifdef VERSION_G8ME01
-            ItemEntry* item = itemEntry(NULL, info->recoveredItems[i], 11, -1, 0, npc->position.x,
+            ItemEntry* item = itemEntry(NULL, info->recoveredItems[i], 11, -1, NULL, npc->position.x,
                                           npc->position.y, npc->position.z);
             if (item) {
                 itemFlagOn(item, 0x100);
             }
 #else
-            itemFlagOn(itemEntry(NULL, info->recoveredItems[i], 11, -1, 0, npc->position.x,
+            itemFlagOn(itemEntry(NULL, info->recoveredItems[i], 11, -1, NULL, npc->position.x,
                                  npc->position.y, npc->position.z),
                        0x100);
 #endif

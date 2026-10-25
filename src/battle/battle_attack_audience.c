@@ -24,7 +24,7 @@
 #include "libc_decls.h"
 
 extern ItemData itemDataTable[];
-extern void* itemEntry(const char* name, s32 itemId, s32 type, s32 collectFlag, s32 evtCode, f32 x, f32 y, f32 z);
+ItemEntry* itemEntry(const char* name, s32 itemId, u16 type, s32 collectFlag, EvtWord* evtCode, f32 x, f32 y, f32 z);
 extern void psndSFX_pit(s32 id, s32 pitch);
 
 USER_FUNC(_damage);
@@ -182,7 +182,7 @@ s32 _get_item_announce(EventEntry* event, BOOL isFirstCall) {
 
         BtlUnit_GetPos(unit, &x, &y, &z);
         y = y + (unit->mSizeMultiplier * (f32)BtlUnit_GetHeight(unit) + 8.0f);
-        event->userdatap[1] = itemEntry(NULL, item, 0x11, -1, 0, x, y, z);
+        event->userdatap[1] = itemEntry(NULL, item, 0x11, -1, NULL, x, y, z);
         event->userdata[2] = 90;
     } else {
         if (event->userdata[2] > 0) {

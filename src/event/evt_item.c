@@ -7,7 +7,7 @@
 #include <dolphin/os.h>
 #include "poly_trig.h"
 
-ItemEntry* itemEntry(const char* name, s32 itemId, u16 type, s32 evtId, s32 a5, f32 x, f32 y, f32 z);
+ItemEntry* itemEntry(const char* name, s32 itemId, u16 type, s32 collectFlag, EvtWord* evtCode, f32 x, f32 y, f32 z);
 
 
 
@@ -22,7 +22,7 @@ USER_FUNC(evt_item_entry) {
     s32 z = evtGetValue(event, args[4]);
     s32 type = evtGetValue(event, args[5]);
     s32 collectFlag = args[6];
-    s32 evtCode = evtGetValue(event, args[7]);
+    EvtWord* evtCode = (EvtWord*)evtGetValue(event, args[7]);
     itemEntry(name, itemId, type, collectFlag, evtCode, x, y, z);
     return EVT_RETURN_DONE;
 }
