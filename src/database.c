@@ -11,6 +11,7 @@
 #include "libc_decls.h"
 #include "manager/evtmgr_cmd.h"
 #include "driver/animdrv.h"
+#include "mario/mariost.h"
 
 //.sbss
 void* ptr; //but why
@@ -47,9 +48,6 @@ typedef struct MapAttrEntry {
 } MapAttrEntry;
 
 extern MapAttrEntry _map_attr_data[];
-
-
-#include "mario/mariost.h"
 
 BOOL setupDataCheck(void) {
     char tribeName[64];

@@ -11,7 +11,7 @@
 #include <string.h>
 #include "driver/icondrv.h"
 #include "driver/camdrv.h"
-
+#include "driver/effdrv.h"
 
 #define ST_CHG_MSG(i) ((StChgMsg*)_battleWorkPointer->announce.stChg.msg + (i)) /* cast keeps the 0x18D88 displacement folded into each access */
 
@@ -53,7 +53,6 @@ StChgMsgData _st_chg_msg_data[] = {
     { 24, "\202\266\202\355\202\266\202\355\202e\202o", "msg_st_chg_reg_fp", "msg_st_chg_reg_fp" },
     { -1, "", "", "" },
 };
-
 
 //.sdata
 //Status Type Priority Data
@@ -118,7 +117,6 @@ void BattleStatusEffectDelete(BattleUnit* unit) {
     BSE_KagegakureDelete(unit);
 }
 
-#include "driver/effdrv.h"
 EffectEntry* effSparkEntry(s32, s32, f32, f32, f32, f32);
 EffectEntry* effSleepEntry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32 scale, f32 rotation);
 #define EFF_SLEEP(u) ((u)->sleepEff)
@@ -279,7 +277,6 @@ void BSE_FreezeDelete(BattleUnit* unit) {
 }
 
 #pragma optimize_for_size reset
-
 
 void BSE_Kagegakure(BattleUnit* unit) {
     char name[0x10];
@@ -611,8 +608,6 @@ BOOL BattleStatusChangeMsgMain(BattleWork* wp) {
     }
     return ret;
 }
-
-
 
 typedef void (*WakuColByRefFunc)(u16, GXColor*, f32, f32, f32, f32, f32);
 

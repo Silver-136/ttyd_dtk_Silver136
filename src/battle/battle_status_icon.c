@@ -2,6 +2,8 @@
 #include "battle/battle_status_icon.h"
 #include "battle/battle.h"
 #include <string.h>
+#include "driver/icondrv.h"
+#include "system.h"
 #ifdef VERSION_G8ME01
 #include "mario/mariost.h"
 #endif
@@ -147,8 +149,6 @@ IconDispTableEntry _disp_table_3[0x17] = {
 #endif
 };
 
-
-
 //local prototypes
 void BattleStatusIconDisp(CameraId camId, void* param);
 
@@ -222,9 +222,7 @@ void BattleStatusIconDelete(BattleUnit* unit) {
 
 void btlDispTexPlane(u32 id, GXColor color, f32 tX, f32 tY, f32 tZ, f32 sX, f32 sY, s32 extra);
 void btlDispTexPlane2(Mtx mtx, u32 id, GXColor color, s32 extra);
-#include "driver/icondrv.h"
 extern void btlGetScreenPoint(Vec* in, Vec* out);
-
 
 void BattleStatusIconDisp(CameraId camId, void* param) {
     BattleWorkStatusIcon* icon = &((BattleUnit*)param)->mStatusIconWork;
@@ -280,11 +278,6 @@ void BattleStatusIconDisp(CameraId camId, void* param) {
         }
     }
 }
-
-
-#include "system.h"
-
-
 
 BOOL _bsi_default_turn(BattleUnit* unit, IconDispTableEntry* disp, BattleWorkStatusIconEntry* entry) {
     s32 type = disp->id;
@@ -397,7 +390,6 @@ BOOL _bsi_biribiri(BattleUnit* unit, IconDispTableEntry* disp, BattleWorkStatusI
     entry->trans = (Vec){0.0f,0.0f,0.0f};
     return TRUE;
 }
-
 
 BOOL _bsi_regeneration(BattleUnit* unit, IconDispTableEntry* disp, BattleWorkStatusIconEntry* entry) {
     s32 type = disp->id;

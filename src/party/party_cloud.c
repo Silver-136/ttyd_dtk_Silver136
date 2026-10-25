@@ -19,7 +19,6 @@ double fabs(double x);
 
 Vec cloud_at;
 
-
 #ifdef VERSION_G8ME01
 #define MW_US 4 // US MarioWork has 4 more bytes before these raw offsets
 #else
@@ -31,10 +30,10 @@ Vec cloud_at;
 #include "memory.h"
 #include "pmario_sound.h"
 #include "mario/mario_motion.h"
+#include "eff/n64/eff_kumokumo_n64.h"
 void N__cloud_use(PartyEntry* party);
 void getHitBreatheout2(PartyEntry* party, f32 angle);
 void partyChgPose(PartyEntry* party, const char* pose);
-
 
 #define CW(p) ((PartyCloud*)(p)->useStruct)
 #define KUMO(p) ((EffKumokumoN64Particle*)(p)->work.cloud.breathEffect->userdata)
@@ -57,9 +56,6 @@ static inline void cloudSweep(PartyEntry* party, f32 sign, s32 i) {
         }
     }
 }
-#include "eff/n64/eff_kumokumo_n64.h"
-
-
 
 #define cloudCalcPos(party) { MarioWork* m_ = (party)->playerPtr; f32 dir_; (party)->moveTarget = m_->position; dir_ = m_->displayDirectionTarget; dir_ = toMovedir(dir_ + ((dir_ < 90.0f || dir_ >= 270.0f) ? -90.0f : 90.0f)); movePos(&(party)->moveTarget.x, &(party)->moveTarget.z, 3.3f, dir_); (party)->moveTarget.y += 10.0f; }
 

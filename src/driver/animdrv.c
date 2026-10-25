@@ -19,6 +19,8 @@
 #include "driver/camdrv.h"
 #include "manager/filemgr.h"
 #include "libc_decls.h"
+#include "sdk/texPalette.h"
+#include "sdk/DEMOInit.h"
 
 #define TESTHEAP_SIZE (u32)(1.5 * 1024 * 1024)
 #define PI 3.14159265358979323846264338327950288419716939937510f
@@ -1567,8 +1569,6 @@ void pushGXModelMtx_JointNode__(AnimPoseNode* node, f32 sx, f32 sy, f32 sz) {
     PSMTXConcat(g_modeling_mtx_stack[g_modeling_mtx_lv - 1], p, g_modeling_mtx_stack[g_modeling_mtx_lv]);
 }
 
-#include "sdk/texPalette.h"
-
 void animSetMaterial_Texture(s32 texCount_, s32 *texIdRemap_, AnimPoseTexEntry *pTexEntries_, AnimTexMtx *animEntries, s32 texBindsCapacity, AnimTexBind *texBinds, AnimationTextureFile *texFile)
 {
   s32 texCount;
@@ -2188,7 +2188,6 @@ void renderProc(s32 shapeId, s32 unused) {
 
 // dispProc
 
-
 void dispProc(s32 parentId, s32 groupId, s32 xluStage, s32 nextKeyframe, f32 blend) {
     AnimPoseGroup* group;
     AnimPoseGroup* parent;
@@ -2443,7 +2442,6 @@ void _animPoseDrawMtx(AnimationPose* pose, Mtx matrix, s32 xluMode, f32 rotY, f3
     GXInvalidateVtxCache();
     dispProc(-1, data->groupCount - 1, keyframeIdx, nextKeyframeIdx, keyframeBlend);
 }
-
 
 inline void animSetPaperMtx(Mtx m0, Mtx* m1, Mtx* m2) {
     if (m0 == NULL) {
@@ -2710,7 +2708,6 @@ void animPaperPoseDisp(CameraId camId, void* param) {
     }
 }
 
-#include "sdk/DEMOInit.h"
 void animPaperPoseDispSub(s32 unused, AnimationPose* arg) {
     AnimationPose* pose;
     AnimData* d;
@@ -2859,7 +2856,6 @@ void animPaperPoseDispSub(s32 unused, AnimationPose* arg) {
     pose->paperCapture1 = 0;
 }
 
-#include "sdk/DEMOInit.h"
 // target .bss/.sbss pad (uninitialised objects are emitted in reverse order, so this sits last)
 
 inline s32 animPoseSearchName(const char* name, s32 type) {

@@ -39,10 +39,10 @@
 #include "koopa_hit.h"
 #include "mario/mario_hit.h"
 #include "poly_trig.h"
+#include "eff/eff_small_star.h"
 
 f32 cloudGetBreathPower(Vec pos, f32 width);
 void kpaPowDown(void);
-
 
 void FontDrawStringShake(f32 x, f32 y, const char* message);
 ItemEntry* itemEntry(const char* name, s32 itemId, s32 type, s32 collectFlag, s32 evtCode, f32 x, f32 y, f32 z);
@@ -207,7 +207,6 @@ void mtx_setup(NpcEntry* entry, Mtx mtx, s32 history) {
                       entry->positionHistory[history].z);
     }
 }
-
 
 static inline void npcLuigiPoseFlip(NpcEntry* entry) {
     if (entry->flags & 0x800000) {
@@ -1590,8 +1589,6 @@ void _fbatFirstAttackAnnouceDisp(CameraId camId, void* param) {
 #endif
 }
 
-
-
 void partyKeyOn(void);
 void partyKeyOff(void);
 void marioChgTalkMotion(void);
@@ -1599,7 +1596,6 @@ void marioChgStayMotion(void);
 BOOL marioChkTalkable(void);
 void* fbatHitCheck(u32 flags, void* result);
 
-#include "eff/eff_small_star.h"
 s32 _majinai_effect(EventEntry* event, BOOL isFirstCall);
 s32 _check(EventEntry* event, BOOL isFirstCall);
 s32 marioStGetSystemLevel(void);
@@ -3363,7 +3359,6 @@ BOOL N_fbatPreventMarioEventChk(void) {
     }
     return FALSE;
 }
-
 
 // forward declarations: these functions are defined further down
 BOOL N_fbatPreventMarioEventChk(void);

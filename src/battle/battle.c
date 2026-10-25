@@ -17,6 +17,7 @@
 #include "unit/unit_system.h"
 #include "driver/animdrv.h"
 #include "statuswindow.h"
+#include "battle/battle_stage.h"
 
 typedef enum EquipFlags {
     EQUIP_RESET = 1 << 0,   // 0x1, clear/reset equipped badges
@@ -433,7 +434,6 @@ BOOL BattlePartyAnimeLoad(s32 partyId) {
     return animEffectAsync(setup->mUnitKindParams->mParts->modelName, 1);
 }
 
-
 BattleUnit* BattleChangeParty(BattleWork* wp) {
     s32 kind = wp->commandMenu.partyKind;
     BattleUnit* party = BattleGetPartyPtr(wp);
@@ -508,7 +508,6 @@ s32 BattleTransPartyId(BattleUnitType kind) {
         return PARTNER_NONE;
     }
 }
-
 
 BattleUnitType BattleTransPartyIdToUnitKind(s32 partyId) {
     switch (partyId) {
@@ -876,7 +875,6 @@ void BattleAfterReactionRelease(s32 a, s32 b) {
     }
 }
 
-
 BOOL BattleAfterReactionMain(void) {
     s32 id;
     BattleWork* wp = _battleWorkPointer;
@@ -907,7 +905,6 @@ BOOL BattleAfterReactionMain(void) {
     }
     return FALSE;
 }
-
 
 BOOL battleDisableHResetCheck(void) {
     BattleWork* wp = _battleWorkPointer;
@@ -955,8 +952,6 @@ u8 BattleMajinaiCheck(void) {
     }
     return pouch->mMerleeNextCurseType;
 }
-
-#include "battle/battle_stage.h"
 
 void BattleMajinaiDone(void) {
     PouchData* pouch = pouchGetPtr();

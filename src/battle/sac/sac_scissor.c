@@ -25,6 +25,9 @@
 #include "dolphin/os.h"
 #include "libc_decls.h"
 #include "battle/sac/sac_scissor.h"
+#include "battle/battle_audience.h"
+#include "evt/evt_cmd.h"
+#include "battle/battle_database_common.h"
 
 double sqrt(double);
 double fabs(double);
@@ -95,8 +98,6 @@ void star_disp2D_sub(s32 idx, s32 alpha);
 s32 scissor_damage_sub2(Vec pt);
 void scissor_damage_sub(BattleUnit* unit, s32* out);
 s32 scissor_intersection(f32 x1, f32 y1, f32 x2, f32 y2, f32 x3, f32 y3, f32 x4, f32 y4, f32* ox, f32* oy);
-
-
 
 static s32 star_stone_appear();
 s32 wait_star_standby();
@@ -188,7 +189,6 @@ BattleWeapon weapon_scissor_finish = {
     NULL, // mAttackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
-
 
 #pragma dont_inline on
 ScissorWork* GetScissorPtr(void) {
@@ -735,7 +735,6 @@ s32 star_control(EventEntry* evt, BOOL first) {
     return 0;
 }
 
-
 #pragma dont_inline on
 void star_disp2D(CameraId camera, void* param) {
     ScissorWork* w = GetScissorPtr();
@@ -932,9 +931,6 @@ s32 scissor_control(EventEntry* evt, BOOL first) {
 }
 
 void btlGetScreenPoint(Vec* in, Vec* out);
-#include "battle/battle_audience.h"
-#include "evt/evt_cmd.h"
-#include "battle/battle_database_common.h"
 
 s32 scissor_damage(EventEntry* evt, BOOL first) {
     BattleWork* wp;
@@ -1147,7 +1143,6 @@ s32 scissor_offscreen(void) {
     dispEntry(CAMERA_OFFSCREEN2, 0.0f, 1, scissor_disp_region, NULL);
     return 2;
 }
-
 
 void scissor_disp_region(CameraId camera, void* param) {
     ScissorWork* w = GetScissorPtr();

@@ -15,8 +15,8 @@
 #include "driver/envdrv.h"
 #include "libc_decls.h"
 #include "driver/hitdrv.h"
-static inline f32 sinf(f32 x) { return sin(x); }
 #include <string.h>
+static inline f32 sinf(f32 x) { return sin(x); }
 
 void mapBuildTexture(MapObject* obj, TEXPalette* texture, void* table);
 int __cvt_dbl_usll();
@@ -911,7 +911,6 @@ void _mapLoad(MapWork* wp, BOOL group, const char* map) {
     disableMapDraw = FALSE;
 }
 
-
 void mapUnLoad(void) {
     MapEntry* entry2;
     MapEntry* entry;
@@ -997,7 +996,6 @@ void bmapUnLoad(void) {
     int i;
     MapWork* wp;
 
-
     sysWaitDrawSync();
     i = 0;
     wp = &mapWork[1];
@@ -1050,7 +1048,6 @@ void bmapUnLoad(void) {
     activeGroup = 0;
     for (i = 0, entry = wp->entries; i < wp->entries[0].count; entry++, i++) {
 
-
         // the tpl ARAM copy sits in the word after the entry (MAPENT_TPLARAM; a MapWork { count; entries@4 } layout was tried and changes codegen: the original addresses entries from wp itself)
         if (entry->datAram) {
             entry->dat = _mapAllocTail(entry->datSize);
@@ -1073,7 +1070,6 @@ void bmapUnLoad(void) {
     }
 }
 #pragma opt_common_subs reset
-
 
 void bmapLoad(const char *map, const char *map2)
 {
@@ -1406,7 +1402,6 @@ static inline void mapMainLight_ll(MapAnim* anim, LightEntry* lp, MapAnimLightDa
     int n, c;
     f32 cur;
 
-
                         for (n = 1; n < d->keyCount; n++) {
                             MapAnimKey9* k0 = &d->keys[n - 1];
                             MapAnimKey9* k1 = &d->keys[n];
@@ -1439,7 +1434,6 @@ static inline void mapMainLight_ll(MapAnim* anim, LightEntry* lp, MapAnimLightDa
 static inline void mapMainLight_lc(MapAnim* anim, LightEntry* lp, MapAnimLightData2* d, f32* cv) {
     int n, c;
     f32 cur;
-
 
                         for (n = 1; n < d->keyCount; n++) {
                             MapAnimKey5* k0 = &d->keys[n - 1];
@@ -2920,7 +2914,6 @@ static inline void mapSetObjFog(MapObject* obj) {
     }
 }
 
-
 void mapSetTextureMatrix(MapMaterial* mat) {
     s32 j;
     s32 k;
@@ -3243,7 +3236,6 @@ void mapSetMaterialLight(s32 flags, Vec position) {
         GXSetChanCtrl(GX_ALPHA0, GX_FALSE, GX_SRC_REG, GX_SRC_VTX, GX_LIGHT_NULL, GX_DF_CLAMP, GX_AF_NONE);
     }
 }
-
 
 const GXVtxAttrFmtList attr_fmt[12] = {
     {GX_VA_POS, GX_POS_XYZ, GX_F32, 0},
@@ -3978,5 +3970,4 @@ static void mapStrippedPool(const char** str, f32* val) {
 
 #pragma explicit_zero_data on
 #pragma explicit_zero_data reset
-
 

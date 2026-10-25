@@ -24,7 +24,7 @@
 #include "sfx_name_word.h"
 #include "driver/npcdrv.h"
 #include "mario/mario_hit.h"
-
+#include "mario/mariost.h"
 
 s32 partyMoveMain(PartyEntry* party, s32 hosei);
 f32 partyUpdMoveSpd(PartyEntry* party, f32 spd);
@@ -633,7 +633,6 @@ void partyPlaySfxFootstep(PartyEntry* party, s32 arg) {
         }
     }
 }
-
 
 void partyChgStayPose(PartyEntry* party) {
     if (party->runMode != 0) {
@@ -1488,48 +1487,6 @@ static void flyMain(PartyEntry* party) {
     }
 }
 
-#include "mario/mariost.h"
-
-#include "mario/mariost.h"
-
-#include "mario/mariost.h"
-
-#include "mario/mariost.h"
-
-#include "mario/mariost.h"
-
-#include "mario/mariost.h"
-
-#include "mario/mariost.h"
-
-#include "mario/mariost.h"
-
-#include "mario/mariost.h"
-
-#include "mario/mariost.h"
-
-#include "mario/mariost.h"
-
-#include "mario/mariost.h"
-
-#include "mario/mariost.h"
-
-#include "mario/mariost.h"
-
-#include "mario/mariost.h"
-
-#include "mario/mariost.h"
-
-#include "mario/mariost.h"
-
-#include "mario/mariost.h"
-
-#include "mario/mariost.h"
-
-#include "mario/mariost.h"
-
-#include "mario/mariost.h"
-
 extern f32 partyNrmToAngle(Vec* n);
 extern s32 marioPlaneGetFlyingDir(void);
 
@@ -1952,8 +1909,6 @@ BOOL partyGetAppearPos4(PartyEntry* party, Vec* out) {
         }
     }
     n = (party->trigFlags & 0x200000) ? 13 : 11;
-
-
 
     for (i = 0; i <= n; i++) {
         if (i == 0) {

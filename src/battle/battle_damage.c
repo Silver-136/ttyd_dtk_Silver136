@@ -23,6 +23,7 @@
 #include "battle/battle_mario.h"
 #include "system.h"
 #include "pmario_sound.h"
+#include "eff/n64/eff_stamp_n64.h"
 
 void btlDispPoseAnime(BattleUnitPart* part);
 
@@ -37,7 +38,6 @@ s32 _checkDamageCode_EmergencyRevival(BattleUnit* unit, u32* flags);
 void __declare(s32 unitIdx, s32 partIdx, s32* outUnit, s32* outPart);
 
 EffectEntry* effFukidashiEntry(s32 a, s32 b, s32 c, s32 d, f32 x, f32 y, f32 z, f32 scale, f32 e);
-
 
 void BattleDamageDirect(s32 unitId, BattleUnit* target, BattleUnitPart* part, s32 damage, s32 fpDamage, u32 result, u32 pattern, s32 flag) {
     BattleWork* wp = _battleWorkPointer;
@@ -919,7 +919,6 @@ u8 _getRegistStatus(BattleUnit* unit, s32 type) {
     return 100;
 }
 
-#include "eff/n64/eff_stamp_n64.h"
 EffectEntry* effUpdownEntry(s32 type, s32 strength, s32 time, f32 x, f32 y, f32 z);
 void BattleStatusChangeInfoSetAnnouce(BattleUnit* unit, s32 type, s32 value, s32 flag);
 void BattleStatusChangeMsgSetAnnouce(BattleUnit* unit, s32 type, s32 flag);

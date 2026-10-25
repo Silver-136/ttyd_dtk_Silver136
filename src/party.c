@@ -24,6 +24,9 @@
 #include "mot/mot_ship.h"
 #include "driver/hitdrv.h"
 #include "party/party_hit.h"
+#include "mario/mario_sbr.h"
+#include "driver/camdrv.h"
+#include "driver/dispdrv.h"
 
 PartyEntry* partyPtrTbl[2];
 PartyData* party_dp;
@@ -597,7 +600,6 @@ void vivianUnhold(PartyEntry* party);
 void L_partyVivianTailStart(PartyEntry* party);
 void getRidePos(PartyEntry* party, Vec* pos);
 void driveParty(PartyEntry* party);
-#include "mario/mario_sbr.h"
 s32 partyHelloMain(PartyEntry* party);
 static inline void partyShadowOn(PartyEntry* party) {
     if (party) {
@@ -608,7 +610,6 @@ static inline void partyShadowOn(PartyEntry* party) {
 void partyInit(void) {
     memset(partyPtrTbl, 0, sizeof(partyPtrTbl));
 }
-
 
 static inline void partyReInitClear(PartyEntry* party) {
     s32 poseId;
@@ -800,7 +801,6 @@ void N_partyForceChgRunMode(PartyEntry* party, s32 mode, s32 sub) {
 }
 #pragma dont_inline reset
 
-/* @@MID1@@ */
 void partyRestoreRunMode(PartyEntry* party) {
     if (party->runMode == party->prevRunMode) {
         return;
@@ -870,7 +870,6 @@ void partyMain(void) {
     }
 }
 
-/* @@DRIVE@@ */
 void party_kemuri(PartyEntry* party);
 void vivianShadow(PartyEntry* party);
 void partyPreDisp(PartyEntry* party);
@@ -1061,7 +1060,6 @@ void partyHello(PartyEntry* party) {
     partyHello_inl(party);
 }
 
-/* @@HELLO@@ */
 void partyGetAppearPos(PartyEntry* party, Vec* pos);
 
 s32 partyHelloMain(PartyEntry* party) {
@@ -1194,7 +1192,6 @@ s32 partyGoodbyeInit(PartyEntry* party) {
     return 0;
 }
 
-/* @@DOKAN@@ */
 s32 partyGoodbyeMain(PartyEntry* party) {
     MarioWork* mario = marioGetPtr();
     f32 tx, ty, tz, px, py, pz;
@@ -1269,7 +1266,6 @@ s32 partyGoodbyeMain(PartyEntry* party) {
 }
 
 void L_partyVivianTailStop(PartyEntry* party);
-
 
 static inline void partyChgRunM(PartyEntry* party) {
     party->scale = (Vec){1.0f, 1.0f, 1.0f};
@@ -1393,7 +1389,6 @@ s32 partyDokanInit(PartyEntry* party) {
     L_partyVivianTailStop(party);
     return 0;
 }
-
 
 s32 partyDokanMain(PartyEntry* party) {
     MarioWork* mario = party->playerPtr;
@@ -1519,7 +1514,6 @@ s32 partyDokanMain(PartyEntry* party) {
     return 0;
 }
 
-
 void partyDokanEnd(s32 id, s32 dir) {
     PartyEntry* party = partyGetPtr(id);
     if (party && party->runMode == 10) {
@@ -1535,8 +1529,6 @@ void partyDokanEnd(s32 id, s32 dir) {
         L_partyVivianTailStart(party);
     }
 }
-
-/* @@MID2@@ */
 
 void allPartyRidePlane(void) {
     PartyEntry* party = partyGetPtr(marioGetPartyId());
@@ -1708,9 +1700,6 @@ s32 partyRideChk(PartyEntry* party) {
     }
     return ret;
 }
-
-/* @@MID3@@ */
-
 
 void partyRideMain(PartyEntry *party)
 {
@@ -1971,7 +1960,6 @@ void party_ride_yoshi_force_move(void) {
     }
 }
 
-
 s32 partyRideYoshiMain(PartyEntry* party) {
     Vec pos;
     Vec pos2;
@@ -2031,7 +2019,6 @@ s32 partyRideYoshiMain(PartyEntry* party) {
     }
     return 0;
 }
-
 
 void party_damage_return(PartyEntry* party) {
     MarioWork* mario = party->playerPtr;
@@ -2155,9 +2142,6 @@ void partySetCamId(PartyEntry* party, s32 cameraId) {
     party->camId = cameraId;
 }
 
-/* @@DISP@@ */
-#include "driver/camdrv.h"
-#include "driver/dispdrv.h"
 BOOL N_vivianDisplayTailCheck(PartyEntry* party);
 void animPoseVivianMain(s32 poseId, Vec* pos);
 void partyDisp(CameraId cam, void* param);

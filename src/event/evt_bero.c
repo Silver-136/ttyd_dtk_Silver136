@@ -25,6 +25,7 @@
 #include "evt/evt_snd.h"
 #include "evt/evt_sub.h"
 #include "evt/evt_hit.h"
+#include "system.h"
 
 //.bss
 
@@ -649,7 +650,6 @@ USER_FUNC(bero_get_position_pipe_pure) {
     return EVT_RETURN_DONE;
 }
 
-
 USER_FUNC(bero_get_position_pipe2) {
     EvtWord* args = event->args;
     s32 id = evtGetValue(event, args[0]);
@@ -1064,8 +1064,6 @@ USER_FUNC(evt_bero_disppos_load) {
     marioGetPtr()->dispOfs.z = BeroOZ;
     return EVT_RETURN_DONE;
 }
-
-#include "system.h"
 
 USER_FUNC(evt_bero_move_mario_speed) {
     EvtWord* args = event->args;

@@ -38,6 +38,11 @@
 #include "evt/evt_msg.h"
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
+#include "driver/imgdrv.h"
+#include "driver/offscreendrv.h"
+#include "driver/camdrv.h"
+#include "system.h"
+#include "driver/npcdrv.h"
 s32 mobj_koopa_pole_evt(MapObjectEntry* mobj);
 void kpa_disp_pole_score(CameraId camId, void* param);
 static USER_FUNC(kpa_get_level);
@@ -130,21 +135,11 @@ static inline MapObjectEntry* MOBJ_PTR2(EventEntry* event, const char* name) {
     return !strcmp(name, "me") ? event->thisMapObj : mobjNameToPtr(name);
 }
 
-
-
-
-
-
-
-
-
 static EVT_BEGIN(evt_shake)
     CALL(evt_cam_shake, 4, 4064967296, 4064967306, 200)
     RETURN
 EVT_END()
 const char* _switch_anim[] = {"A_1", "A_2", "A_3", "A_4", "A_5", "S_1"};
-
-
 
 // FAKE: the hit pointer is tested as a signed word (cmpwi); a pointer or BOOL test compiles to cmplwi
 static inline EvtWord blkHitCheck(MapObjectEntry* m) {
@@ -165,7 +160,6 @@ extern void* itemEntry(f32 x, f32 y, f32 z, const char* name, s32 id, s32 mode, 
 extern void npcKoopaModeMobjBoundDeadCheck(void* hit);
 extern void effMObjBrokenEntry(s32 type, f32 x, f32 y, f32 z);
 
-
 s32 kpa_powerup(EventEntry* event, BOOL isFirstCall);
 s32 fire_func(EventEntry* event, BOOL isFirstCall);
 EVT_BEGIN(kpa_powerup_evt)
@@ -177,12 +171,7 @@ EVT_BEGIN(evt_fire)
     RETURN
 EVT_END()
 
-#include "driver/imgdrv.h"
-#include "driver/offscreendrv.h"
-#include "driver/camdrv.h"
-#include "system.h"
 extern void test_kururing_mapdisp(s32 camId);
-#include "driver/npcdrv.h"
 
 USER_FUNC(evt_cam_get_pos);
 USER_FUNC(evt_cam_letter_box_disable);
@@ -3070,7 +3059,6 @@ void kururing_capture(CameraId camId, MapObjectEntry* mobj) {
     PSMTXIdentity(mobj->paperTexMtx);
     memcpy(camGetPtr(camId), saved, 0x260);
 }
-
 
 static inline BOOL kururing_in_box(f32 x, f32 z, f32 px, f32 pz, f32 r) {
     if (x - r <= px && px <= x + r && z - r <= pz && pz <= z + r) {

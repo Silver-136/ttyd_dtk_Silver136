@@ -81,6 +81,9 @@ u8 enemy_monoshiri_sort_table[] = {
 #include "driver/swdrv.h"
 #include "mario/mario_party.h"
 #include "memory.h"
+#include "evt/evt_lottery.h"
+#include "icon_ids.h"
+#include "driver/animdrv.h"
 
 void winMarioInit();
 void winItemInit();
@@ -735,8 +738,6 @@ void winMsgMain(WindowWork* wp) {
     }
 }
 
-#include "evt/evt_lottery.h"
-#include "icon_ids.h"
 void windowDispGX_Waku_col(u16 gxTexMapID, GXColor color, f32 x, f32 y, f32 width, f32 height, f32 curve);
 void winIconInit(void);
 void winIconSet(u32 id, Vec translate, Vec scale, GXColor color);
@@ -881,7 +882,6 @@ static inline void winRootTexQuad(WindowWork* wp, s32 id, f32 x, f32 y, f32 w, f
     GXPosition3f32(x + w, y, 0.0f);
     GXTexCoord2f32(1.0f, 0.0f);
 }
-
 
 #pragma inline_max_total_size(100000)
 void winKirinukiGX(WindowWork* wp, s32 type, f32 x, f32 y, f32 w, f32 h) {
@@ -1037,11 +1037,9 @@ void winNameGX(WindowWork* wp, s32 type, f32 x, f32 y, f32 w, f32 h) {
     }
 }
 
-
 void winFontInit(void);
 void winFontSetLabel(Vec pos, Vec scale, GXColor color, const char* msg);
 void* L_msgGetWork(void);
-#include "driver/animdrv.h"
 
 static inline void winBookTex(WindowWork* w, s32 id, f32 x, f32 y, f32 width, f32 height) {
     GXTexObj obj;
@@ -1567,7 +1565,6 @@ WinSortData sort_8[] = {
     {NULL, NULL},
 };
 WinSortData* sort_data[] = {sort_1, sort_2, sort_3, sort_4, sort_5, sort_6, sort_7, sort_8};
-
 
 void sort_1_1_func(WindowWork* wp) {
     s32 sel = wp->item.cursor[0];
@@ -2452,7 +2449,6 @@ void winZClear(void) {
     GXPosition3f32(-500.0f, -100.0f, 0.0f);
     GXSetColorUpdate(GX_TRUE);
 }
-
 
 #ifdef VERSION_G8ME01
 void winFontSetWidth(Vec pos, Vec scale, GXColor color, f32 width, const char* fmt, ...);

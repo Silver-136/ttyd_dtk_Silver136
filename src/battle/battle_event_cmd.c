@@ -29,6 +29,10 @@
 #include "battle/battle_ac_help.h"
 #include "pmario_sound.h"
 #include <math.h>
+#include <string.h>
+#include "data/item_data.h"
+#include "driver/animdrv.h"
+#include "eff/n64/eff_coin_n64.h"
 
 //s32* eventId
 USER_FUNC(btlevtcmd_WaitEventEnd) {
@@ -138,9 +142,7 @@ USER_FUNC(btlevtcmd_GetPosFloat) {
     f32 x, y, z;
     s32 id;
 
-
     id = evtGetValue(event, args[0]);
-
 
     id = BattleTransID(event, id);
     unit = BattleGetUnitPtr(_battleWorkPointer, id);
@@ -2654,7 +2656,6 @@ USER_FUNC(btlevtcmd_CheckCommandUnit) {
     return EVT_RETURN_DONE;
 }
 
-
 USER_FUNC(btlevtcmd_ChangeKind) {
     s32 btlId, id, kind;
     EvtWord* args = event->args;
@@ -3394,67 +3395,12 @@ USER_FUNC(btlevtcmd_PartsFaceDirectionSub) {
     return EVT_RETURN_DONE;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /* half_A begin PRE */
 /* first-half (target order 1..153) functions, generated block */
-#include <string.h>
-#include "data/item_data.h"
 s32 BattleEnemyUseItemCheck(BattleUnit* unit);
 void BtlUnit_PayWeaponCost(BattleUnit* unit, BattleWeapon* weapon);
 BattleWeapon* BattleGetSelectWeapon(BattleWork* wp);
 extern ItemData itemDataTable[];
-#include "driver/animdrv.h"
 void btlDispChangePeraAnime(BattleUnitPart* part, s32 anim);
 void BtlUnit_PoseSoundInit(BattleUnitPart* part);
 void btlDispPoseAnime(BattleUnitPart* part);
@@ -3470,7 +3416,6 @@ void BattleSamplingEnemy(BattleWorkWeaponTargets* targets, BattleWeapon* weapon,
 void BattleDamageDirect(s32 unitId, BattleUnit* target, BattleUnitPart* part, s32 damage, s32 fpDamage, u32 result, u32 pattern, s32 flag);
 s32 BattlePreCheckDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPart* part, BattleWeapon* weapon, u32 flags);
 void* itemEntry(const char* name, s32 itemId, s32 type, s32 collectFlag, s32 evtCode, f32 x, f32 y, f32 z);
-#include "eff/n64/eff_coin_n64.h"
 static inline void bec_coin(BattleUnit* unit, s32 item) {
     s32 coins;
     Vec pos;
@@ -3604,7 +3549,6 @@ USER_FUNC(btlevtcmd_DispItemIcon) {
     itemDelete(((ItemEntry*)event->userdatap[1])->name);
     return EVT_RETURN_DONE;
 }
-
 
 USER_FUNC(btlevtcmd_CommandFlyItem) {
     EvtWord* args = event->args;
@@ -4240,7 +4184,6 @@ USER_FUNC(btlevtcmd_GetConfuseActEvent) {
     evtSetValue(event, out, (EvtWord)evt);
     return EVT_RETURN_DONE;
 }
-
 
 USER_FUNC(btlevtcmd_MarioJumpParam) {
     EvtWord* args = event->args;
@@ -5041,7 +4984,6 @@ USER_FUNC(btlevtcmd_AudienceDeclareACResult) {
     BattleActionCommandDeclareACResult(wp, weapon, result);
     return EVT_RETURN_DONE;
 }
-
 
 USER_FUNC(btlevtcmd_AudienceDeclareAcrobatResult) {
     EvtWord* args = event->args;
@@ -5910,7 +5852,6 @@ USER_FUNC(btlevtcmd_GetItemRecoverParam) {
     return EVT_RETURN_DONE;
 }
 
-
 USER_FUNC(btlevtcmd_WeaponAftereffect) {
     BattleWork* wp = _battleWorkPointer;
     BattleWeapon* w = (BattleWeapon*)evtGetValue(event, event->args[0]);
@@ -6637,7 +6578,6 @@ USER_FUNC(btlevtcmd_StatusWindowOnOff) {
     return EVT_RETURN_DONE;
 }
 /* half_A end MID */
-
 
 USER_FUNC(btlevtcmd_StageDispellFog) {
     BattleFogForceStop();

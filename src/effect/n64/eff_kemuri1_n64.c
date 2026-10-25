@@ -7,6 +7,7 @@
 #include "system.h"
 #include "eff/eff_magic1_n64.h"
 #include "libc_decls.h"
+#include "driver/dispdrv.h"
 
 // One entry per element: entry 0 is the effect header (type, position, frame counter, duration, texture frames),
 // entries 1.. are the puffs (position, speeds, direction, colour).
@@ -199,7 +200,6 @@ EffectEntry* effKemuri1N64Entry(s32 type, f32 x, f32 y, f32 z, f32 angleOfs) {
     return effect;
 }
 
-#include "driver/dispdrv.h"
 void effKemuri1Disp(CameraId cameraId, EffectEntry* effect);
 
 void effKemuri1Main(EffectEntry* effect) {

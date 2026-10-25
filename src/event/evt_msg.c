@@ -7,6 +7,13 @@
 #include <string.h>
 #include <stdio.h>
 #include "battle/battle_unit.h"
+#include "evt/evt_npc.h"
+#include "driver/camdrv.h"
+#include "mario/mario.h"
+#include "mario/mario_party.h"
+#include "party.h"
+#include "battle/battle.h"
+#include "battle/battle_sub.h"
 
 // US message buffer is twice as large
 #ifdef VERSION_G8ME01
@@ -19,15 +26,9 @@ void evt_msg_init(void) {
     //stubbed in retail
 }
 
-
 s32 _evt_msg_print(EventEntry* event, BOOL isFirstCall, s32 flags, const char* msg, s32 callback, EvtWord name);
 void msgWindow_Add(const char* msg, s32 id);
 
-#include "evt/evt_npc.h"
-#include "driver/camdrv.h"
-#include "mario/mario.h"
-#include "mario/mario_party.h"
-#include "party.h"
 extern float __fabsf(float);
 
 s32 msgWindow_Entry(const char* msg, s32 callback, s32 priority);
@@ -163,12 +164,6 @@ USER_FUNC(evt_msg_print) {
     return _evt_msg_print(event, isFirstCall, a, b, c, d);
 }
 
-#include "party.h"
-#include "mario/mario_party.h"
-#include "battle/battle.h"
-#include "battle/battle_sub.h"
-
-
 const char* partyMsgStr[] = {"", "_kur", "_nok", "_bom", "_yos", "_win", "_viv", "_chu", "_jug", "_tel", "_lui"};
 const char* battlePartyMsgStr[] = {"_kur", "_nok", "_yos", "_win", "_viv", "_bom", "_chu"};
 #ifndef VERSION_G8ME01
@@ -189,7 +184,6 @@ const char* msg_es_article_cap_tbl[6] = {"Un ", "Una ", "", "", "Unos ", "Unas "
 const char* msg_es_article_tbl[6] = {"un ", "una ", "", "", "unos ", "unas "};
 
 char* strstr(const char* s, const char* sub);
-
 
 // clang-format on
 #endif
