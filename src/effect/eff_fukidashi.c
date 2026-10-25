@@ -18,8 +18,9 @@
 #include "icon_ids.h"
 #include "eff/eff_magic1_n64.h"
 #include "libc_decls.h"
+#include "pmario_sound.h"
+#include "sfx_name_word.h"
 
-extern s32 psndSFXOn_3D();
 
 EffectEntry* effFukidashiEntry(s32 type, s32 number, NpcEntry* npc, f32 x, f32 y, f32 z, f32 size,
                                f32 angle, s32 duration);
@@ -189,7 +190,7 @@ EffectEntry* effFukidashiEntry(s32 type, s32 number, NpcEntry* npc, f32 x, f32 y
                 pos.x = x;
                 pos.y = y;
                 pos.z = z;
-                psndSFXOn_3D(0x5D, &pos);
+                psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_BIKKURI_MARK1), &pos);
                 break;
             }
             case 1: {
@@ -197,7 +198,7 @@ EffectEntry* effFukidashiEntry(s32 type, s32 number, NpcEntry* npc, f32 x, f32 y
                 pos.x = x;
                 pos.y = y;
                 pos.z = z;
-                psndSFXOn_3D(0x5E, &pos);
+                psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_QUESTION_MARK1), &pos);
                 break;
             }
         }

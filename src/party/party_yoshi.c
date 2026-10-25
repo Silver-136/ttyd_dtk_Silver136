@@ -19,6 +19,8 @@
 #include "mario/mario_cam.h"
 #include <dolphin/pad.h>
 #include "party/party_yoshi.h"
+#include "pmario_sound.h"
+#include "sfx_name_word.h"
 
 typedef struct YoshiWork {
     u8 pad0[0x4];         // 0x0
@@ -34,7 +36,6 @@ extern void partyChgPose(PartyEntry* party, const char* pose);
 extern f32 marioGetMoveRate(void);
 extern HitEntry* dou10_yoko_yari2(void* out);
 extern void psndSFXOff(s32 id);
-extern s32 psndSFXOn_3D(s32 id, Vec* pos);
 extern void* marioSearchHead(Vec* pos, f32 range, f32* height);
 double sin(double);
 
@@ -461,7 +462,7 @@ void yoshi_use(PartyEntry* party) {
 
     switch (party->useMotionId) {
         case 10:
-            psndSFXOn_3D(0x93F, &party->position);
+            psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_YOSH_RIDE1), &party->position);
             party->flags &= ~PARTY_FLAG_FORCE_FALL;
         case 11:
             marioChgMot(MARIO_MOTION_YOSHI);
@@ -505,7 +506,7 @@ void yoshi_use(PartyEntry* party) {
                 }
                 YW(party)->count++;
                 if (YW(party)->count % 10 == 0) {
-                    psndSFXOn_3D(0x940, &party->position);
+                    psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_YOSH_MOVE1), &party->position);
                 }
                 break;
             }
@@ -542,7 +543,7 @@ void yoshi_use(PartyEntry* party) {
                 partyChgPose(party, "PYS_R_2");
                 YW(party)->count++;
                 if (YW(party)->count % 10 == 0) {
-                    psndSFXOn_3D(0x940, &party->position);
+                    psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_YOSH_MOVE1), &party->position);
                 }
             } else {
                 if (strcmp(party->animName, "PYS_S_2")) {
@@ -647,7 +648,7 @@ void yoshi_use(PartyEntry* party) {
             mario->mot.yoshi.bobSpeed = sin(3.141592653589793f * YW(party)->angle / 180.0f);
             mario->mot.yoshi.bobOfs = 0.0f;
             mario->mot.yoshi.baseY = party->position.y;
-            party->yoshiPsndSFXId = psndSFXOn_3D(0x941, &party->position);
+            party->yoshiPsndSFXId = psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_YOSH_JUMP1), &party->position);
         case 21: {
                 f32 s = sin(3.141592653589793f * YW(party)->angle / 180.0f);
                 mario->mot.yoshi.bobSpeed = s * (YW(party)->angle <= 180.0f ? 0.5f : 0.37f);

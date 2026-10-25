@@ -35,6 +35,8 @@
 #include "mot/mot_dokan.h"
 #include "koopa_hit.h"
 #include "eff/eff_kemuri.h"
+#include "pmario_sound.h"
+#include "sfx_name_word.h"
 
 
 typedef struct MarioJumpData {
@@ -68,7 +70,6 @@ void mot_shadow(void);
 void mot_partyUse(void);
 void mot_dummy(void);
 
-s32 psndSFXOn_3D(s32 id, Vec* position);
 void* marioChkLandon(f32* y, f32 spd);
 BOOL marioGetRub(s32 mask, s32* a, s32* b, s32* c);
 BOOL marioCreviceWallChk(Vec pos);
@@ -663,7 +664,7 @@ void marioLandOn(void) {
         } else {
             sfx = 0x14f;
         }
-        psndSFXOn_3D(sfx, &pos);
+        psndSFXOn_3D(SFX_NAME_WORD(sfx), &pos);
     }
     if (mario->flags & MARIO_FLAG_TUBE_MODE) {
         mario->flags &= ~(MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING);
@@ -1125,9 +1126,9 @@ void mot_bottomless(void) {
             if (hit == NULL) {
                 mario->position.y += step;
             } else {
-                psndSFXOn_3D(0xb9, &mario->position);
+                psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_VOICE_MARIO_DAMAGED1), &mario->position);
                 marioChgPose("M_D_2");
-                psndSFXOn_3D(0x197, &mario->position);
+                psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_FALL_CRUSH1), &mario->position);
                 marioDmgRetQuakeOn();
                 mario->hitobjStandOn = hit;
                 mario->hitobjJumpFrom = NULL;

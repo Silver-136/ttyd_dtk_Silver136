@@ -14,6 +14,8 @@
 #include "party/party_hit.h"
 #include "mario/mario_hit.h"
 #include "eff/eff_ripple.h"
+#include "pmario_sound.h"
+#include "sfx_name_word.h"
 
 #ifdef VERSION_G8ME01
 // US has no local duplicate: this is the global vivian_init
@@ -213,7 +215,6 @@ void vivian_move(PartyEntry* party) {
 #ifdef VERSION_G8ME01
 #endif
 extern void partyChgPose(PartyEntry* party, const char* name);
-extern s32 psndSFXOn_3D(s32 id, Vec* pos);
 
 static inline void vivianFollow(PartyEntry* party) {
     HitEntry* hit;
@@ -327,7 +328,7 @@ void vivian_use(PartyEntry* party) {
         marioChgPaper("PM_B_1");
         party->useMotionId = 4;
         party->moveFrames = 30;
-        psndSFXOn_3D(0x936, &party->position);
+        psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_VIVIAN_SHADOW1), &party->position);
     case 4:
         vivianFollow(party);
         if (30 - party->moveFrames <= 24) {
@@ -353,7 +354,7 @@ void vivian_use(PartyEntry* party) {
         if (party->camId != 4) {
             effRippleSetCamId(rip, party->camId);
         }
-        psndSFXOn_3D(0x935, &party->position);
+        psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_VIVIAN_SHADOW1_2), &party->position);
         L_partyVivianTailStop(party);
         party->useMotionId = 5;
     case 5:
@@ -403,7 +404,7 @@ void vivian_use(PartyEntry* party) {
     case 20:
         party->work.vivian.followOfs = 0.0f;
         m->flags &= ~MARIO_FLAG_WALLS_DISABLED;
-        psndSFXOn_3D(0x934, &party->position);
+        psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_VIVIAN_SHADOW1_1), &party->position);
         party->useMotionId = 21;
     case 21:
         vivianFollow(party);
@@ -426,7 +427,7 @@ void vivian_use(PartyEntry* party) {
         party->poseTime = 24;
         party->useMotionId = 24;
         party->moveFrames = 24;
-        psndSFXOn_3D(0x937, &party->position);
+        psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_VIVIAN_SHADOW2), &party->position);
     case 24:
         vivianFollow(party);
         animPoseSetLocalTime(party->paperAnimGroup, party->moveFrames);
