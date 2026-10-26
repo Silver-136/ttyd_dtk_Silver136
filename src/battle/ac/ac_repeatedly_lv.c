@@ -19,16 +19,16 @@ typedef struct RepeatedlyLvWork {
     u32 maxMask; // 0xC
     f32 rate;    // 0x10
     f32 gauge;   // 0x14
-    s16 s18;     // 0x18
-    s16 s1a;     // 0x1A
-    s16 s1c;     // 0x1C
+    s16 level;   // 0x18, gauge levels reached (gauge / levelStep, +1 when full); output in outputParams[2]
+    s16 pressGain; // 0x1A, params[3]; each counted press adds 0.4 * pressGain to the gauge
+    s16 pressCount; // 0x1C, counted presses; odd/even picks maskB/maskA for the alternating commands (params[0] 11-15)
     s16 s1e;     // 0x1E
-    s16 s20;     // 0x20
-    s16 s22;     // 0x22
-    u8 u24;      // 0x24
+    s16 timeLeft; // 0x20, frames left (params[1]), counted down; cleared when the maxMask button is let go; the command ends at 0
+    s16 unheldFrames; // 0x22, frames the maxMask button is not held before the start; the command fails at 150
+    u8 gaugeWidth; // 0x24, params[2]; the width argument of BattleAcDrawGauge (third int, see the float-first prototype)
     s8 state;    // 0x25
-    u8 u26;      // 0x26
-    u8 u27;      // 0x27
+    u8 levelStep; // 0x26, params[5] (0 -> 100); gauge points per level when computing level
+    u8 countOnPress; // 0x27, TRUE: a press counts on trigger (or held with HOLD_OVERHEAT); FALSE (params[0] 7, 8): on release (BattlePadCheckUp)
     u8 pad[8];
     s32 endTimer; // 0x30
 } RepeatedlyLvWork;
@@ -40,7 +40,7 @@ static void _init_param(BattleWork* work) {
     RepeatedlyLvWork* p = (RepeatedlyLvWork*)ac->work;
     s32 v;
     p->maxMask = 0;
-    p->u27 = 1;
+    p->countOnPress = 1;
     switch (ac->params[0]) {
         case 2:
             p->mask = p->maskA = p->maskB = 0x200;
@@ -57,7 +57,7 @@ static void _init_param(BattleWork* work) {
         case 8:
             p->maxMask = 0x100;
         case 7:
-            p->u27 = 0;
+            p->countOnPress = 0;
         case 6:
             p->mask = p->maskA = p->maskB = 0x40000;
             break;
@@ -85,15 +85,15 @@ static void _init_param(BattleWork* work) {
             p->mask = p->maskA = p->maskB = 0x100;
             break;
     }
-    p->s22 = 0;
-    p->s1e = p->s20 = ac->params[1];
-    p->s18 = 0;
+    p->unheldFrames = 0;
+    p->s1e = p->timeLeft = ac->params[1];
+    p->level = 0;
     p->gauge = 0.0f;
-    p->s1c = 0;
-    p->u24 = ac->params[2];
-    p->s1a = ac->params[3];
+    p->pressCount = 0;
+    p->gaugeWidth = ac->params[2];
+    p->pressGain = ac->params[3];
     p->rate = 0.01f * (f32)ac->params[4];
-    p->u26 = ac->params[5];
+    p->levelStep = ac->params[5];
     v = work->actionCommands.countdown;
     if (v > 0) {
         work->actionCommands.countdown = v - 1;
@@ -141,8 +141,8 @@ s32 battleAcMain_RepeatedlyLv(BattleWork* work) {
         case 100:
             if (!((ac->setupFlags & 1) && (ac->mAcUnit->mTokenFlags & kConfusedAction))) {
                 if (p->maxMask != 0 && !BattlePadCheckNow(p->maxMask) && !autoCmd) {
-                    p->s22++;
-                    if (p->s22 < 150) {
+                    p->unheldFrames++;
+                    if (p->unheldFrames < 150) {
                         break;
                     }
                     ac->outputParams[2] = 0;
@@ -166,15 +166,15 @@ s32 battleAcMain_RepeatedlyLv(BattleWork* work) {
                 ac->result &= ~1;
                 ac->result |= 2;
                 r = irand(100);
-                p->s18 = 0;
+                p->level = 0;
                 while (r < 0) {
-                    r -= p->u26;
+                    r -= p->levelStep;
                     if (r < 0) {
                         break;
                     }
-                    p->s18++;
+                    p->level++;
                 }
-                ac->outputParams[2] = p->s18;
+                ac->outputParams[2] = p->level;
                 ac->mResultCount++;
                 battleAcDelete_RepeatedlyLv(work);
                 return 0;
@@ -185,38 +185,38 @@ s32 battleAcMain_RepeatedlyLv(BattleWork* work) {
                 case 13:
                 case 14:
                 case 15:
-                    if (p->s1c & 1) {
+                    if (p->pressCount & 1) {
                         p->mask = p->maskB;
                     } else {
                         p->mask = p->maskA;
                     }
                     break;
             }
-            if (p->u27) {
+            if (p->countOnPress) {
                 if (ac->acFlags & AC_REPEATEDLY_LV_FLAG_HOLD_OVERHEAT) {
                     if (BattlePadCheckNow(p->mask)) {
                         hit = 1;
-                        p->s1c++;
+                        p->pressCount++;
                     }
                 } else {
                     if (BattlePadCheckTrigger(p->mask)) {
                         hit = 1;
-                        p->s1c++;
+                        p->pressCount++;
                     }
                 }
             } else {
                 if (BattlePadCheckUp(p->mask)) {
                     hit = 1;
-                    p->s1c++;
+                    p->pressCount++;
                 }
             }
             if (autoCmd && !hit) {
                 hit = 1;
-                p->s1c++;
+                p->pressCount++;
             }
             if (p->state == 0) {
                 if (hit) {
-                    p->gauge = 0.4f * (f32)p->s1a + p->gauge;
+                    p->gauge = 0.4f * (f32)p->pressGain + p->gauge;
                 }
                 if (p->gauge >= 100.0f) {
                     p->gauge = 100.0f;
@@ -239,30 +239,30 @@ s32 battleAcMain_RepeatedlyLv(BattleWork* work) {
             }
             ac->outputParams[1] = (s32)p->gauge;
             g = (s32)p->gauge;
-            if (p->u26 == 0) {
-                p->u26 = 100;
+            if (p->levelStep == 0) {
+                p->levelStep = 100;
             }
-            p->s18 = 0;
+            p->level = 0;
             while (g > 0) {
-                g -= p->u26;
-                p->s18++;
+                g -= p->levelStep;
+                p->level++;
                 if (g <= 0) {
                     break;
                 }
             }
-            if (p->s18 == 0 && (ac->acFlags & AC_REPEATEDLY_LV_FLAG_MIN_LEVEL_1)) {
-                p->s18 = 1;
+            if (p->level == 0 && (ac->acFlags & AC_REPEATEDLY_LV_FLAG_MIN_LEVEL_1)) {
+                p->level = 1;
             }
             if (p->state && !(ac->acFlags & AC_REPEATEDLY_LV_FLAG_NO_FULL_BONUS)) {
-                p->s18++;
+                p->level++;
             }
-            ac->outputParams[2] = p->s18;
+            ac->outputParams[2] = p->level;
             if (p->maxMask != 0 && !BattlePadCheckNow(p->maxMask)) {
-                p->s20 = 0;
+                p->timeLeft = 0;
             }
             BattleAcGaugeSeUpdate(p->gauge);
-            if (p->s20 > 0) {
-                p->s20--;
+            if (p->timeLeft > 0) {
+                p->timeLeft--;
                 break;
             }
             ac->result &= ~1;
@@ -466,7 +466,7 @@ static void actionCommandDisp(f32 x, f32 y) {
             break;
         }
     }
-    BattleAcDrawGauge(disp->gaugeRatio, (s32)x, (s32)y, p->u24, count, arr[0], arr[1], arr[2], flags);
+    BattleAcDrawGauge(disp->gaugeRatio, (s32)x, (s32)y, p->gaugeWidth, count, arr[0], arr[1], arr[2], flags);
     if (ac->acFlags & AC_REPEATEDLY_LV_FLAG_SHOW_TARGET_MARK_UNUSED) {
         Vec pos = {0.0f, 0.0f, 0.0f};
         pos.x = -288.0f + x + (f32)(ac->params[6] * 0xB0) / 100.0f;

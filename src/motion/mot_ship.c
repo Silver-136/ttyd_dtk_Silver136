@@ -261,8 +261,8 @@ static inline void shipEff(f32 s) {
     EFFP()->position.x = mm->position.x;
     EFFP()->position.y = mm->position.y + zz;
     EFFP()->position.z = mm->position.z;
-    EFFP()->f10 = s;
-    EFFP()->f14 = mm->displayDirection;
+    EFFP()->size = s;
+    EFFP()->yaw = mm->displayDirection;
 }
 
 // FAKE: case-0 block as an inline helper so hit/attr/r are inline temps numbered

@@ -61,7 +61,7 @@ typedef struct FighterData {
     s32 setupId;
     const char* taunt;
     const char* victory;
-    s16 field_18; // priority, order, sortId?
+    s16 startPoints; // ranking points a fighter starts with; copied to points.total when no ranking is saved (GSWF 2529 off); 250 for Rawk Hawk down to 0
     // pad 2 bytes
 } FighterData;
 
@@ -110,8 +110,8 @@ typedef struct RuleData {
     const char* name;
     const char* desc;
     s32 id;
-    s32 field_C;
-    s32 field_10;
+    s32 param; // first rule parameter: evt_tou_get_rule_info returns it; the tou.c script stores it in GSW_GLITZ_PIT_CONDITION_PARAM
+    s32 param2; // evt_tou_get_rule_info returns it in args[4]; the script stores it in GSW_GLITZ_PIT_CONDITION_PARAM2 (field_C is the CONDITION_PARAM twin: param)
 } RuleData;
 
 typedef struct DispWork {
@@ -661,8 +661,8 @@ static USER_FUNC(evt_tou_get_rule_info) {
     }
     evtSetValue(event, args[1], (EvtWord)rules[i].name);
     evtSetValue(event, args[2], rules[i].id);
-    evtSetValue(event, args[3], rules[i].field_C);
-    evtSetValue(event, args[4], rules[i].field_10);
+    evtSetValue(event, args[3], rules[i].param);
+    evtSetValue(event, args[4], rules[i].param2);
     return EVT_RETURN_DONE;
 }
 
@@ -1137,7 +1137,7 @@ static void rankingInit(void) {
                 entry->points.bytes[j] = swByteGet(2 * entry->id + 519 + j);
             }
         } else {
-            entry->points.total = fighterDt[entry->id].field_18;
+            entry->points.total = fighterDt[entry->id].startPoints;
         }
         if (entry->id == FIGHTER_PLAYER) {
             entry->flags |= RANK_PLAYER;

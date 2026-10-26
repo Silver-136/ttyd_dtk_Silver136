@@ -68,14 +68,14 @@ typedef struct MukiWork {
     s32 timer;             // 0x8
     s32 timeLeft;          // 0xc
     s32 unitId;            // 0x10
-    f32 f14;               // 0x14
-    f32 f18;               // 0x18
-    f32 f1c;               // 0x1c
-    f32 f20;               // 0x20
+    f32 atkBoost;          // 0x14, attack gain 0..9 (+0.25 US / +0.2 JP per type-0 object hit); wait_game_end returns it, set_weapon puts it in atkChangeStrength
+    f32 atkDisp;           // 0x18, shown attack value; eases toward atkBoost each frame, drives the red gauge fill and number
+    f32 defBoost;          // 0x1c, defense gain 0..9 (type-1 object hits); wait_game_end returns it, set_weapon puts it in defChangeStrength
+    f32 defDisp;           // 0x20, shown defense value; eases toward defBoost, drives the blue gauge fill and number
     s32 t24;               // 0x24
     s32 t28;               // 0x28
-    f32 f2c;               // 0x2c
-    f32 f30;               // 0x30
+    f32 gaugeX;            // 0x2c, x of the two gauges; slides from -400 to -120 in state 3, passed to btlGetScreenPoint
+    f32 gaugeY;            // 0x30, y of the attack gauge (90); the defense gauge is drawn 30 below
     s32 t34;               // 0x34
     s32 kind38;            // 0x38
     s32 t3c;               // 0x3c
@@ -203,10 +203,10 @@ static void main_base(void) {
     switch (w->state) {
     case 1:
         w->state = 2;
-        w->f14 = w->f18 = 0.0f;
-        w->f1c = w->f20 = 0.0f;
-        w->f2c = -400.0f;
-        w->f30 = 90.0f;
+        w->atkBoost = w->atkDisp = 0.0f;
+        w->defBoost = w->defDisp = 0.0f;
+        w->gaugeX = -400.0f;
+        w->gaugeY = 90.0f;
         w->timeLeft = 899;
         for (i = 0; i < 9; i++) {
             w->o3d[i].kind = 1;
@@ -226,7 +226,7 @@ static void main_base(void) {
         break;
     case 3:
         w->timer++;
-        w->f2c = intplGetValue(EASING_QUADRATIC_OUT, -400.0f, -120.0f, w->timer, 30);
+        w->gaugeX = intplGetValue(EASING_QUADRATIC_OUT, -400.0f, -120.0f, w->timer, 30);
         if (w->timer >= 30) {
             w->state = 4;
             w->timer = 0;
@@ -253,7 +253,7 @@ static void main_base(void) {
                 w->o3d[i].kind = 6;
                 w->obj[i].kind = 9;
             }
-            n = (s32)(w->f14 + w->f1c);
+            n = (s32)(w->atkBoost + w->defBoost);
             if (n >= 1) {
                 if (n == 1) {
                     n = 2;
@@ -294,35 +294,35 @@ static void main_base(void) {
     case 7:
         break;
     }
-    d = w->f14 - w->f18;
+    d = w->atkBoost - w->atkDisp;
     if (d != 0.0f) {
         if (d > 0.0f) {
             step = (0.1f * d < 0.1f) ? 0.1f : 0.1f * d;
-            w->f18 += step;
-            if (w->f14 - w->f18 < 0.0f) {
-                w->f18 = w->f14;
+            w->atkDisp += step;
+            if (w->atkBoost - w->atkDisp < 0.0f) {
+                w->atkDisp = w->atkBoost;
             }
         } else {
             step = (0.1f * d > -0.1f) ? 0.1f : -0.1f * d;
-            w->f18 -= step;
-            if (w->f14 - w->f18 > 0.0f) {
-                w->f18 = w->f14;
+            w->atkDisp -= step;
+            if (w->atkBoost - w->atkDisp > 0.0f) {
+                w->atkDisp = w->atkBoost;
             }
         }
     }
-    d = w->f1c - w->f20;
+    d = w->defBoost - w->defDisp;
     if (d != 0.0f) {
         if (d > 0.0f) {
             step = (0.1f * d < 0.1f) ? 0.1f : 0.1f * d;
-            w->f20 += step;
-            if (w->f1c - w->f20 < 0.0f) {
-                w->f20 = w->f1c;
+            w->defDisp += step;
+            if (w->defBoost - w->defDisp < 0.0f) {
+                w->defDisp = w->defBoost;
             }
         } else {
             step = (0.1f * d > -0.1f) ? 0.1f : -0.1f * d;
-            w->f20 -= step;
-            if (w->f1c - w->f20 > 0.0f) {
-                w->f20 = w->f1c;
+            w->defDisp -= step;
+            if (w->defBoost - w->defDisp > 0.0f) {
+                w->defDisp = w->defBoost;
             }
         }
     }
@@ -380,12 +380,12 @@ void main_cursor(void) {
                 effHitEntry(0, 5, ob->pos.x, ob->pos.y, ob->pos.z, 1.0f);
                 switch (ob->type) {
                 case 0:
-                    prev = w->f14;
-                    w->f14 += VERSION_PICK(0.25f, 0.2f);
-                    if (w->f14 > 9.0f) {
-                        w->f14 = 9.0f;
+                    prev = w->atkBoost;
+                    w->atkBoost += VERSION_PICK(0.25f, 0.2f);
+                    if (w->atkBoost > 9.0f) {
+                        w->atkBoost = 9.0f;
                     }
-                    if ((s32)w->f14 > (s32)prev) {
+                    if ((s32)w->atkBoost > (s32)prev) {
                         w->t24 = 60;
                         psndSFXOn("SFX_BTL_SAC_BODY6");
                         AUD_CALL(num)
@@ -393,12 +393,12 @@ void main_cursor(void) {
                     psndSFXOn("SFX_BTL_SAC_BODY4");
                     break;
                 case 1:
-                    prev = w->f1c;
-                    w->f1c += VERSION_PICK(0.25f, 0.2f);
-                    if (w->f1c > 9.0f) {
-                        w->f1c = 9.0f;
+                    prev = w->defBoost;
+                    w->defBoost += VERSION_PICK(0.25f, 0.2f);
+                    if (w->defBoost > 9.0f) {
+                        w->defBoost = 9.0f;
                     }
-                    if ((s32)w->f1c > (s32)prev) {
+                    if ((s32)w->defBoost > (s32)prev) {
                         w->t28 = 60;
                         psndSFXOn("SFX_BTL_SAC_BODY6");
                         AUD_CALL(num)
@@ -736,8 +736,8 @@ static void disp_2D(CameraId cam, void* param) {
         Vec p = {0.0f, 0.0f, 0.0f};
         GXColor c;
         s32 t;
-        x = w->f2c;
-        y = w->f30;
+        x = w->gaugeX;
+        y = w->gaugeY;
         p.x = x;
         p.y = y;
         p.z = 0.0f;
@@ -754,10 +754,10 @@ static void disp_2D(CameraId cam, void* param) {
         PSMTXTransApply(m, m, 8.0f + addf(x, 32.0f), y, 0.0f);
         btlDispTexPlane2(m, BTL_TEX(0x43), c, 0);
         x = x - 32.0f - 8.0f;
-        frac = w->f18 - (f32)(s32)w->f18;
+        frac = w->atkDisp - (f32)(s32)w->atkDisp;
         btlDispGXInit2DRasta();
         GXLoadPosMtxImm(camGetPtr(CAMERA_2D)->view, 0);
-        d = w->f14 - w->f18;
+        d = w->atkBoost - w->atkDisp;
         if (d != 0.0f) {
             r = 0xFF;
             g = 0xB4;
@@ -782,15 +782,15 @@ static void disp_2D(CameraId cam, void* param) {
             iconDispGx2(m, 0x10, ICON_PLUS);
             PSMTXScale(m, 0.7f, 0.7f, 0.7f);
             PSMTXTransApply(m, m, x - 25.0f, y - 14.0f, 0.0f);
-            iconNumberDispGx(m, (s32)w->f18, 0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
+            iconNumberDispGx(m, (s32)w->atkDisp, 0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
         }
     }
     if (w->state >= 2 && w->state <= 7) {
         Vec p = {0.0f, 0.0f, 0.0f};
         GXColor c;
         s32 t;
-        x = w->f2c;
-        y = w->f30 - 30.0f;
+        x = w->gaugeX;
+        y = w->gaugeY - 30.0f;
         p.x = x;
         p.y = y;
         p.z = 0.0f;
@@ -808,7 +808,7 @@ static void disp_2D(CameraId cam, void* param) {
         PSMTXTransApply(m, m, 8.0f + addf(x, 32.0f), y, 0.0f);
         btlDispTexPlane2(m, BTL_TEX(0x43), c, 0);
         x = x - 32.0f - 8.0f;
-        frac = w->f20 - (f32)(s32)w->f20;
+        frac = w->defDisp - (f32)(s32)w->defDisp;
         btlDispGXInit2DRasta();
         GXLoadPosMtxImm(camGetPtr(CAMERA_2D)->view, 0);
         if (d != 0.0f) {
@@ -835,7 +835,7 @@ static void disp_2D(CameraId cam, void* param) {
             iconDispGx2(m, 0x10, ICON_PLUS);
             PSMTXScale(m, 0.7f, 0.7f, 0.7f);
             PSMTXTransApply(m, m, x - 25.0f, y - 14.0f, 0.0f);
-            iconNumberDispGx(m, (s32)w->f20, 0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
+            iconNumberDispGx(m, (s32)w->defDisp, 0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
         }
     }
 }
@@ -968,8 +968,8 @@ static USER_FUNC(wait_game_end) {
     MukiWork* w = get_ptr();
     EvtWord* args = event->args;
     if (w->state == 7) {
-        evtSetValue(event, args[0], (s32)w->f14);
-        evtSetValue(event, args[1], (s32)w->f1c);
+        evtSetValue(event, args[0], (s32)w->atkBoost);
+        evtSetValue(event, args[1], (s32)w->defBoost);
         return 2;
     }
     return 0;

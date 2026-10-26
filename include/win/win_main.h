@@ -44,10 +44,10 @@ typedef struct WinBadgeEnt {
 
 typedef struct WinMarioState {
     s32 poseId; // 0x188
-    s32 f18C;   // 0x18C
-    s32 f190;   // 0x190
-    s32 f194;   // 0x194
-    s32 f198;   // 0x198
+    s32 hammerHold; // 0x18C, frames the hammer pose holds (30 once the swing reaches loop time 0.89); the pose time only follows retraceCount while 0
+    s32 mode;   // 0x190, 0 = Mario page, 1 = special move list (A on the star power row); switched on in winMarioMain, opens the list in the draw
+    s32 specialCursor; // 0x194, cursor in the special move list (wraps at specialCount); selects the superActionTable help and help box y
+    s32 specialCount; // 0x198, number of star powers obtained (bits of mStarPowersObtained); list length, SP orb count, star power rows reachable
 } WinMarioState;
 
 typedef struct WinPartyState {
@@ -126,10 +126,10 @@ typedef struct WinLogPage {
     s32 idx;        // 0x18, first row shown
     f32 scroll;     // 0x1C
     f32 scrollTgt;  // 0x20
-    f32 f24;        // 0x24
-    f32 tf24;       // 0x28
-    f32 f2C;        // 0x2C
-    f32 tf2C;       // 0x30
+    f32 iconX;      // 0x24, x of the selected-entry icon box (texture 0x95/0x96 + item icon; US page counter); eases toward iconTx
+    f32 iconTx;     // 0x28, target of iconX (not in the field list: partner of f24, renamed to match)
+    f32 iconY;      // 0x2C, y of the selected-entry icon box; eases toward iconTy
+    f32 iconTy;     // 0x30, target of iconY (not in the field list: partner of f2C, renamed to match)
 } WinLogPage;
 
 typedef struct WinLogMenu {
@@ -147,32 +147,32 @@ struct EffectEntry;
 struct MonosiriWork;
 
 typedef struct WinLogState {
-    s32 fD68;                   // 0xD68
+    s32 state;                  // 0xD68, log window state machine (switch in the log main: 0 menu, 10+ sub page by menu id, 1000/1001 sort menu, back via savedState)
     s32 cursor;                 // 0xD6C
     s32 count;                  // 0xD70
     WinLogMenu menu[5];         // 0xD74
-    s32 fE14;                   // 0xE14
+    s32 mapSel;                 // 0xE14, tubuDt point nearest the map cursor (-1: none); help text, blinking marker, cursor pull toward it
     s32 mapIdx;                 // 0xE18
     s32 pose;                   // 0xE1C
     f32 mapX;                   // 0xE20
     f32 mapY;                   // 0xE24
-    f32 fE28;                   // 0xE28
-    f32 fE2C;                   // 0xE2C
-    f32 fE30;                   // 0xE30
-    f32 fE34;                   // 0xE34
+    f32 mapWinTgtX;             // 0xE28, target of mapWinX
+    f32 mapWinX;                // 0xE2C, x of the map panel passed to mapGX; eases toward mapWinTgtX
+    f32 mapWinTgtY;             // 0xE30, target of mapWinY (20 open, -480 closed)
+    f32 mapWinY;                // 0xE34, y of the map panel passed to mapGX (drawn while > -480); eases toward mapWinTgtY
     f32 scrollX;                // 0xE38
     f32 scrollY;                // 0xE3C
     s32 stoneNum;               // 0xE40
     struct EffectEntry* eff[7]; // 0xE44
-    s32 fE60;                   // 0xE60
-    f32 fE64;                   // 0xE64
-    f32 fE68;                   // 0xE68
-    f32 fE6C;                   // 0xE6C
-    f32 fE70;                   // 0xE70
-    f32 fE74;                   // 0xE74
-    f32 fE78;                   // 0xE78
-    f32 fE7C;                   // 0xE7C
-    f32 fE80;                   // 0xE80
+    s32 stoneSel;               // 0xE60, selected crystal star (0-6, stone_tbl index; left/right wrap); help text when < stoneNum
+    f32 stoneWinTgtX;           // 0xE64, target of stoneWinX
+    f32 stoneWinX;              // 0xE68, x of the crystal star ring (texture 0x24, shadows, star stone effects); eases toward stoneWinTgtX
+    f32 stoneWinTgtY;           // 0xE6C, target of stoneWinY (20 open, -480 closed)
+    f32 stoneWinY;              // 0xE70, y of the crystal star ring (drawn while > -480); eases toward stoneWinTgtY
+    f32 stoneAlphaTgt;          // 0xE74, target of stoneAlpha (255 open, 0 closed)
+    f32 stoneAlpha;             // 0xE78, alpha of the ring background (texture 0x24); eases toward stoneAlphaTgt
+    f32 stoneAngleTgt;          // 0xE7C, target ring angle: 51.43 (360/7) * stoneSel
+    f32 stoneAngle;             // 0xE80, ring angle in degrees: stone i is drawn at 51.43 * i - stoneAngle about y; eases toward stoneAngleTgt
     WinLogPage badge;           // 0xE84
     s16 badgeIds[100];          // 0xEB8, badge ids - 0xF0
     WinLogPage recipe;          // 0xF80 (US 0xF84)

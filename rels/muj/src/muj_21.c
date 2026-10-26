@@ -207,13 +207,13 @@ static USER_FUNC(fune_eff) {
     ((EffFunemizuWork*)eff1->userdata)->position.x = pos.x - 81.3f;
     ((EffFunemizuWork*)eff1->userdata)->position.y = pos.y - 51.0f;
     ((EffFunemizuWork*)eff1->userdata)->position.z = pos.z - 38.9f;
-    ((EffFunemizuWork*)eff1->userdata)->f10 = 1.0f;
-    ((EffFunemizuWork*)eff1->userdata)->f14 = 270.0f;
+    ((EffFunemizuWork*)eff1->userdata)->size = 1.0f;
+    ((EffFunemizuWork*)eff1->userdata)->yaw = 270.0f;
     ((EffFunemizuWork*)eff2->userdata)->position.x = pos.x - 49.5f;
     ((EffFunemizuWork*)eff2->userdata)->position.y = pos.y - 51.0f;
     ((EffFunemizuWork*)eff2->userdata)->position.z = 70.7f + pos.z;
-    ((EffFunemizuWork*)eff2->userdata)->f10 = 1.0f;
-    ((EffFunemizuWork*)eff2->userdata)->f14 = 305.0f;
+    ((EffFunemizuWork*)eff2->userdata)->size = 1.0f;
+    ((EffFunemizuWork*)eff2->userdata)->yaw = 305.0f;
     if (gp->retraceCount % 15 == 0) {
         effWaterDamageN64Entry(5, 30, 106.1f + pos.x, pos.y - 50.0f, 106.1f + pos.z, 2.0f);
     }

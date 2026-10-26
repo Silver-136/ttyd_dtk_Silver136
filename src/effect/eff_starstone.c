@@ -264,7 +264,7 @@ static u8* color_tbl[] = { diamond_1_color0_tbl, diamond_2_color0_tbl, diamond_3
     GXSetChanCtrl(GX_COLOR0A0, 0, GX_SRC_REG, GX_SRC_VTX, 0, GX_DF_NONE, GX_AF_NONE);                \
     GXSetNumTexGens(1);                                \
     GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, 30, 0, 125);            \
-    PSMTXTrans(m, (w)->f24, (w)->f28, 0.0f);           \
+    PSMTXTrans(m, (w)->texScrollX, (w)->texScrollY, 0.0f);           \
     GXLoadTexMtxImm(m, 30, GX_MTX2x4);                         \
     GXSetNumTevStages(2);                              \
     GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);                         \
@@ -340,14 +340,14 @@ EffectEntry* effStarStoneEntry(s32 type, f32 x, f32 y, f32 z, f32 scale) {
     work->position.z = z;
     work->rot.y = 0.0f;
     work->scale = 1.5f * scale;
-    work->f24 = 0.0f;
-    work->f28 = 0.0f;
+    work->texScrollX = 0.0f;
+    work->texScrollY = 0.0f;
     work->cam = 4;
     work->state = 0;
-    work->f4c = 0.0f;
-    work->f48 = 0.0f;
-    work->f54 = 0.0f;
-    work->f50 = 0.0f;
+    work->half0OffsetZ = 0.0f;
+    work->half0OffsetX = 0.0f;
+    work->half1OffsetZ = 0.0f;
+    work->half1OffsetX = 0.0f;
     work->f58 = 90.0f;
     work->r = 255;
     work->g = 255;
@@ -428,23 +428,23 @@ void effStarStoneMain(EffectEntry* effect) {
     case 0:
         switch (type) {
         case 6:
-            w->f24 -= 0.01f;
-            if (w->f24 <= 0.0f) {
-                w->f24 += 1.0f;
+            w->texScrollX -= 0.01f;
+            if (w->texScrollX <= 0.0f) {
+                w->texScrollX += 1.0f;
             }
             break;
         default:
-            w->f24 += 0.01f;
-            if (w->f24 >= 1.0f) {
-                w->f24 -= 1.0f;
+            w->texScrollX += 0.01f;
+            if (w->texScrollX >= 1.0f) {
+                w->texScrollX -= 1.0f;
             }
             break;
         }
         break;
     case 1:
         w->flags |= STAR_STONE_FLAG_FALLING;
-        w->f44 = 0.0f;
-        w->f40 = 0.4f;
+        w->speedY = 0.0f;
+        w->gravity = 0.4f;
         w->state++;
         break;
     case 2:
@@ -452,12 +452,12 @@ void effStarStoneMain(EffectEntry* effect) {
     case 4:
     case 5:
         hit = 0;
-        if (w->f44 < 0.0f) {
-            dist = 10.0f + __fabsf(w->f44);
+        if (w->speedY < 0.0f) {
+            dist = 10.0f + __fabsf(w->speedY);
             if (hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, w->position.x, w->position.y, w->position.z, 0.0f, -1.0f, 0.0f)) {
                 hit = 1;
                 w->position.y = 10.0f + hy;
-                w->f44 *= -0.5f;
+                w->speedY *= -0.5f;
                 w->state++;
                 if (w->flags & STAR_STONE_FLAG_SHINE_SFX_ON) {
                     w->flags &= ~STAR_STONE_FLAG_SHINE_SFX_ON;
@@ -475,14 +475,14 @@ void effStarStoneMain(EffectEntry* effect) {
             }
         }
         if (!hit) {
-            w->position.y += w->f44;
-            w->f44 -= w->f40;
+            w->position.y += w->speedY;
+            w->speedY -= w->gravity;
         }
         if (w->state > 2) {
-            w->f48 -= (f32)sin(6.2831855f * (90.0f + camGetPtr(w->cam)->viewYaw) / 360.0f);
-            w->f4c -= (f32)cos(6.2831855f * (90.0f + camGetPtr(w->cam)->viewYaw) / 360.0f);
-            w->f50 += (f32)sin(6.2831855f * (90.0f + camGetPtr(w->cam)->viewYaw) / 360.0f);
-            w->f54 += (f32)cos(6.2831855f * (90.0f + camGetPtr(w->cam)->viewYaw) / 360.0f);
+            w->half0OffsetX -= (f32)sin(6.2831855f * (90.0f + camGetPtr(w->cam)->viewYaw) / 360.0f);
+            w->half0OffsetZ -= (f32)cos(6.2831855f * (90.0f + camGetPtr(w->cam)->viewYaw) / 360.0f);
+            w->half1OffsetX += (f32)sin(6.2831855f * (90.0f + camGetPtr(w->cam)->viewYaw) / 360.0f);
+            w->half1OffsetZ += (f32)cos(6.2831855f * (90.0f + camGetPtr(w->cam)->viewYaw) / 360.0f);
             w->rot.z += (90.0f - w->rot.z) / 10.0f;
         }
         if (w->state > 3) {
@@ -636,7 +636,7 @@ void effStarStoneDisp_2(CameraId cameraId, EffectEntry *effect) {
     GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_AND, GX_ALWAYS, 0);
     GXSetZMode(1, GX_LEQUAL, 0);
     GXSetCullMode(GX_CULL_BACK);
-    PSMTXTrans(m, w->position.x + w->f48, w->position.y, w->position.z + w->f4c);
+    PSMTXTrans(m, w->position.x + w->half0OffsetX, w->position.y, w->position.z + w->half0OffsetZ);
     PSMTXScale(s, 1.1f * w->scale, 1.1f * w->scale, 1.1f * w->scale);
     PSMTXConcat(m, s, m);
     PSMTXRotRad(r, 'y', w->rot.y * 0.01745329252f);
@@ -666,7 +666,7 @@ void effStarStoneDisp_2(CameraId cameraId, EffectEntry *effect) {
         }
     }
 
-    PSMTXTrans(m, w->position.x + w->f50, w->position.y, w->position.z + w->f54);
+    PSMTXTrans(m, w->position.x + w->half1OffsetX, w->position.y, w->position.z + w->half1OffsetZ);
     PSMTXScale(s, 1.1f * w->scale, 1.1f * w->scale, 1.1f * w->scale);
     PSMTXConcat(m, s, m);
     PSMTXRotRad(r, 'y', w->rot.y * 0.01745329252f);
@@ -700,7 +700,7 @@ void effStarStoneDisp_2(CameraId cameraId, EffectEntry *effect) {
     GXSetChanCtrl(GX_COLOR0A0, 0, GX_SRC_REG, GX_SRC_VTX, 0, GX_DF_NONE, GX_AF_NONE);
     GXSetNumTexGens(1);
     GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, 30, 0, 125);
-    PSMTXTrans(m, w->f24, w->f28, 0.0f);
+    PSMTXTrans(m, w->texScrollX, w->texScrollY, 0.0f);
     GXLoadTexMtxImm(m, 30, GX_MTX2x4);
     GXSetNumTevStages(2);
     GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
@@ -724,7 +724,7 @@ void effStarStoneDisp_2(CameraId cameraId, EffectEntry *effect) {
     GXSetZCompLoc(1);
     GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_AND, GX_ALWAYS, 0);
     GXSetZMode(1, GX_LEQUAL, 0);
-    PSMTXTrans(m, w->position.x + w->f48, w->position.y, w->position.z + w->f4c);
+    PSMTXTrans(m, w->position.x + w->half0OffsetX, w->position.y, w->position.z + w->half0OffsetZ);
     PSMTXScale(s, w->scale, w->scale, w->scale);
     PSMTXConcat(m, s, m);
     PSMTXRotRad(r, 'y', w->rot.y * 0.01745329252f);
@@ -754,7 +754,7 @@ void effStarStoneDisp_2(CameraId cameraId, EffectEntry *effect) {
         }
     }
 
-    PSMTXTrans(m, w->position.x + w->f50, w->position.y, w->position.z + w->f54);
+    PSMTXTrans(m, w->position.x + w->half1OffsetX, w->position.y, w->position.z + w->half1OffsetZ);
     PSMTXScale(s, w->scale, w->scale, w->scale);
     PSMTXConcat(m, s, m);
     PSMTXRotRad(r, 'y', w->rot.y * 0.01745329252f);

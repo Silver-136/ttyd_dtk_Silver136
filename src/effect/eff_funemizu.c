@@ -134,12 +134,12 @@ EffectEntry* effFunemizuEntry(s32 type, f32 x, f32 y, f32 z, f32 size, f32 yaw) 
     work->position.x = x;
     work->position.y = y;
     work->position.z = z;
-    work->f18 = 0.0f;
-    work->f1c = 0.0f;
-    work->f20 = 0.0f;
-    work->f24 = 0.0f;
-    work->f2c = 0.0f;
-    work->f28 = 0.0f;
+    work->wave0Width = 0.0f;
+    work->wave1Width = 0.0f;
+    work->wave0Height = 0.0f;
+    work->wave1Height = 0.0f;
+    work->wave1Scroll = 0.0f;
+    work->wave0Scroll = 0.0f;
     work->timer = 0;
     work->scale = 1.0f;
     work->cam = CAMERA_3D;
@@ -147,10 +147,10 @@ EffectEntry* effFunemizuEntry(s32 type, f32 x, f32 y, f32 z, f32 size, f32 yaw) 
         p->position.x = 0.0f;
         p->position.y = 0.0f;
         p->position.z = 0.0f;
-        p->f10 = size / 2;
-        p->f14 = yaw;
-        p->f34 = p->f10 + irand(2);
-        p->f38 = 0.1f + irand(10) / 100.0f;
+        p->size = size / 2;
+        p->yaw = yaw;
+        p->speedY = p->size + irand(2);
+        p->gravity = 0.1f + irand(10) / 100.0f;
         p->delay = irand(5);
         p->alpha = 255;
     }
@@ -178,7 +178,7 @@ void effFunemizuMain(EffectEntry* effect) {
         work->timer -= 1000;
     }
     if (work->type == 0 || work->type == 2) {
-        f = work->f10;
+        f = work->size;
         a = f;
         b = f - 1.0f;
         if (a < 0.0f) {
@@ -193,37 +193,37 @@ void effFunemizuMain(EffectEntry* effect) {
         if (b > 1.0f) {
             b = 1.0f;
         }
-        work->f18 += (a - work->f18) / 10.0f;
-        work->f1c += (b - work->f1c) / 10.0f;
-        if (work->f10 > 1.0f) {
-            work->f20 += (a - work->f20) / 10.0f;
-            work->f24 += (b - work->f24) / 10.0f;
+        work->wave0Width += (a - work->wave0Width) / 10.0f;
+        work->wave1Width += (b - work->wave1Width) / 10.0f;
+        if (work->size > 1.0f) {
+            work->wave0Height += (a - work->wave0Height) / 10.0f;
+            work->wave1Height += (b - work->wave1Height) / 10.0f;
         } else {
-            work->f20 += (a - work->f20) / 2;
-            work->f24 += (b - work->f24) / 2;
+            work->wave0Height += (a - work->wave0Height) / 2;
+            work->wave1Height += (b - work->wave1Height) / 2;
         }
-        work->f28 += 0.05f * work->f18;
-        work->f2c += 0.1f * work->f1c;
-        if (work->f10 > 0.1f && work->timer % 10 == 0) {
-            t = 6.2831855f * (work->f14 - camGetPtr(CAMERA_3D)->viewYaw) / 360.0f;
+        work->wave0Scroll += 0.05f * work->wave0Width;
+        work->wave1Scroll += 0.1f * work->wave1Width;
+        if (work->size > 0.1f && work->timer % 10 == 0) {
+            t = 6.2831855f * (work->yaw - camGetPtr(CAMERA_3D)->viewYaw) / 360.0f;
             s = sin(t);
             c = cos(t);
-            effFunemizuEntry(1, work->position.x - 14.0f * c, work->position.y, work->position.z - 14.0f * s, work->f10, work->f14);
+            effFunemizuEntry(1, work->position.x - 14.0f * c, work->position.y, work->position.z - 14.0f * s, work->size, work->yaw);
         }
     } else {
-        work->f18 = 1.0f;
+        work->wave0Width = 1.0f;
         for (i = 1, work++; i < effect->count; i++, work++) {
             if (work->position.y < 0.0f) {
                 dead++;
             } else if (work->delay) {
                 work->delay--;
             } else {
-                c = cos(6.2831855f * work->f14 / 360.0f);
-                work->position.x += work->f10 * c;
-                s = sin(6.2831855f * work->f14 / 360.0f);
-                work->position.z += work->f10 * -s;
-                work->position.y += work->f34;
-                work->f34 -= work->f38;
+                c = cos(6.2831855f * work->yaw / 360.0f);
+                work->position.x += work->size * c;
+                s = sin(6.2831855f * work->yaw / 360.0f);
+                work->position.z += work->size * -s;
+                work->position.y += work->speedY;
+                work->speedY -= work->gravity;
                 work->alpha -= 8;
                 if (work->alpha < 0) {
                     work->alpha = 0;
@@ -280,7 +280,7 @@ void effFunemizuDisp(CameraId cameraId, EffectEntry* effect) {
     GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_AND, GX_ALWAYS, 0);
     GXSetZMode(GX_TRUE, GX_LEQUAL, GX_FALSE);
     PSMTXTrans(trans, work->position.x, work->position.y, work->position.z);
-    PSMTXRotRad(rot, 'y', MTXDegToRad(work->f14 - camGetPtr(cameraId)->viewYaw));
+    PSMTXRotRad(rot, 'y', MTXDegToRad(work->yaw - camGetPtr(cameraId)->viewYaw));
     PSMTXScale(scale, work->scale, work->scale, work->scale);
     PSMTXConcat(trans, rot, trans);
     PSMTXConcat(trans, scale, trans);
@@ -309,11 +309,11 @@ void effFunemizuDisp(CameraId cameraId, EffectEntry* effect) {
         PSMTXConcat(mtx, trans, trans);
         PSMTXScale(scale, 1.0f, 1.0f, z);
         PSMTXConcat(trans, scale, trans);
-        PSMTXScale(scale, work->f18, work->f20, work->f18);
+        PSMTXScale(scale, work->wave0Width, work->wave0Height, work->wave0Width);
         PSMTXConcat(trans, scale, scale);
         GXLoadPosMtxImm(scale, GX_PNMTX0);
         GXSetCurrentMtx(GX_PNMTX0);
-        PSMTXTrans(scale, work->f28, 0.0f, 0.0f);
+        PSMTXTrans(scale, work->wave0Scroll, 0.0f, 0.0f);
         GXLoadTexMtxImm(scale, GX_TEXMTX0, GX_MTX2x4);
         if (type == 0) {
             GXClearVtxDesc();
@@ -348,11 +348,11 @@ void effFunemizuDisp(CameraId cameraId, EffectEntry* effect) {
                 GXCallDisplayList(gor_fune_dl_0_tbl[u], gor_fune_dl_0_size_tbl[u] * 32);
             }
         }
-        PSMTXScale(scale, work->f1c, work->f24, work->f1c);
+        PSMTXScale(scale, work->wave1Width, work->wave1Height, work->wave1Width);
         PSMTXConcat(trans, scale, scale);
         GXLoadPosMtxImm(scale, GX_PNMTX0);
         GXSetCurrentMtx(GX_PNMTX0);
-        PSMTXTrans(scale, work->f2c, 0.0f, 0.0f);
+        PSMTXTrans(scale, work->wave1Scroll, 0.0f, 0.0f);
         GXLoadTexMtxImm(scale, GX_TEXMTX0, GX_MTX2x4);
         if (type == 0) {
             GXClearVtxDesc();
@@ -409,7 +409,7 @@ void effFunemizuShibukiDisp(CameraId cameraId, EffectEntry* effect) {
     GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_AND, GX_ALWAYS, 0);
     GXSetZMode(GX_TRUE, GX_LEQUAL, GX_FALSE);
     PSMTXTrans(trans, work->position.x, work->position.y, work->position.z);
-    PSMTXRotRad(rot, 'y', MTXDegToRad(work->f14 - camGetPtr(cameraId)->viewYaw));
+    PSMTXRotRad(rot, 'y', MTXDegToRad(work->yaw - camGetPtr(cameraId)->viewYaw));
     PSMTXConcat(trans, rot, trans);
     PSMTXConcat(cam->view, trans, mtx);
     GXSetNumChans(1);

@@ -750,11 +750,11 @@ USER_FUNC(kaizoku_fune_eff) {
     ((EffFunemizuWork*)eff->userdata)->position.x = 140.0f * dir + pos.x;
     ((EffFunemizuWork*)eff->userdata)->position.y = pos.y - 160.0f;
     ((EffFunemizuWork*)eff->userdata)->position.z = 40.0f + pos.z;
-    ((EffFunemizuWork*)eff->userdata)->f10 = speed;
+    ((EffFunemizuWork*)eff->userdata)->size = speed;
     if (angle < 180.0f) {
-        ((EffFunemizuWork*)eff->userdata)->f14 = 135.0f + angle;
+        ((EffFunemizuWork*)eff->userdata)->yaw = 135.0f + angle;
     } else {
-        ((EffFunemizuWork*)eff->userdata)->f14 = 45.0f + angle;
+        ((EffFunemizuWork*)eff->userdata)->yaw = 45.0f + angle;
     }
     return EVT_RETURN_BLOCK;
 }
@@ -1830,13 +1830,13 @@ static USER_FUNC(fune_eff) {
     ((EffFunemizuWork*)eff1->userdata)->position.x = pos.x + off85;
     ((EffFunemizuWork*)eff1->userdata)->position.y = pos.y - 51.0f;
     ((EffFunemizuWork*)eff1->userdata)->position.z = 30.0f + pos.z;
-    ((EffFunemizuWork*)eff1->userdata)->f10 = speed;
-    ((EffFunemizuWork*)eff1->userdata)->f14 = 225.0f;
+    ((EffFunemizuWork*)eff1->userdata)->size = speed;
+    ((EffFunemizuWork*)eff1->userdata)->yaw = 225.0f;
     ((EffFunemizuWork*)eff2->userdata)->position.x = pos.x - 15.0f;
     ((EffFunemizuWork*)eff2->userdata)->position.y = pos.y - 51.0f;
     ((EffFunemizuWork*)eff2->userdata)->position.z = 90.0f + pos.z;
-    ((EffFunemizuWork*)eff2->userdata)->f10 = speed;
-    ((EffFunemizuWork*)eff2->userdata)->f14 = 180.0f;
+    ((EffFunemizuWork*)eff2->userdata)->size = speed;
+    ((EffFunemizuWork*)eff2->userdata)->yaw = 180.0f;
     if (speed > 1.0f && gp->retraceCount % 15 == 0) {
         effWaterDamageN64Entry(5, 30, pos.x - 150.0f, pos.y - 50.0f, pos.z, 2.0f);
     }

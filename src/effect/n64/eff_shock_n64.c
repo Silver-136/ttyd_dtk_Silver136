@@ -127,8 +127,8 @@ EffectEntry* effShockN64Entry(s32 type, f32 x, f32 y, f32 z, f32 a, f32 b) {
     w->age = 0;
     w->life = 30;
     w->c10 = 255;
-    w->c14 = 255;
-    w->c18 = 255;
+    w->flashAlpha = 255;
+    w->alpha = 255;
     w->position.x = x;
     w->position.y = y;
     w->position.z = z;
@@ -192,9 +192,9 @@ void effShockMain(EffectEntry* effect) {
     } else {
         w->scale += 0.05f * (8.0f - w->scale);
     }
-    w->c14 *= 0.9f;
+    w->flashAlpha *= 0.9f;
     if (life < 5) {
-        w->c18 *= 0.8f;
+        w->alpha *= 0.8f;
     }
     if (age > 6) {
         w->c10 -= 13;
@@ -222,12 +222,12 @@ void effShockDisp(CameraId cameraId, EffectEntry* effect) {
     PSMTXRotRad(rot, 'y', 0.017453292f * -camGetPtr(CAMERA_3D)->viewYaw);
     PSMTXConcat(base, rot, base);
     PSMTXConcat(camera->view, base, res);
-    GXSetTevColor(GX_TEVREG0, (GXColor){w->col0[0], w->col0[1], w->col0[2], w->c18});
+    GXSetTevColor(GX_TEVREG0, (GXColor){w->col0[0], w->col0[1], w->col0[2], w->alpha});
     GXSetTevColor(GX_TEVREG1, (GXColor){w->col1[0], w->col1[1], w->col1[2], 0});
     GXSetCullMode(GX_CULL_NONE);
     if (type - 1 <= 1U || type == 3) {
         if (type == 1) {
-            GXSetTevColor(GX_TEVREG0, (GXColor){0xFF, 0xFF, 0, w->c14});
+            GXSetTevColor(GX_TEVREG0, (GXColor){0xFF, 0xFF, 0, w->flashAlpha});
         }
         PSMTXTrans(base, 0.0f, w->offset2, 0.0f);
         PSMTXScale(mtx, 0.25f * w->scale, 0.25f * w->scale, 1.0f);

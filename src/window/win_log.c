@@ -191,7 +191,7 @@ void winLogInit(WindowWork* w) {
     EffectEntry* e;
     WinSortEnt tmp;
 
-    w->log.fD68 = 0;
+    w->log.state = 0;
     w->log.cursor = 0;
     w->log.count = 0;
     winLogAddMenu(w, 0);
@@ -224,11 +224,11 @@ void winLogInit(WindowWork* w) {
 
     w->mapRes = NULL;
     w->log.pose = -1;
-    w->log.fE14 = -1;
+    w->log.mapSel = -1;
     w->log.mapIdx = 0;
     w->log.mapX = w->log.mapY = 0.0f;
-    w->log.fE28 = w->log.fE2C = 0.0f;
-    w->log.fE30 = w->log.fE34 = -480.0f;
+    w->log.mapWinTgtX = w->log.mapWinX = 0.0f;
+    w->log.mapWinTgtY = w->log.mapWinY = -480.0f;
     w->log.scrollX = w->log.scrollY = 0.0f;
 
     area = gp->currentAreaName;
@@ -282,11 +282,11 @@ void winLogInit(WindowWork* w) {
     if (w->log.scrollX < -148.0f) w->log.scrollX = -148.0f;
     if (w->log.scrollY < -240.0f) w->log.scrollY = -240.0f;
 
-    w->log.fE60 = 0;
-    w->log.fE80 = w->log.fE7C = 51.42857f * w->log.fE60;
-    w->log.fE64 = w->log.fE68 = 0.0f;
-    w->log.fE6C = w->log.fE70 = -480.0f;
-    w->log.fE74 = w->log.fE78 = 0.0f;
+    w->log.stoneSel = 0;
+    w->log.stoneAngle = w->log.stoneAngleTgt = 51.42857f * w->log.stoneSel;
+    w->log.stoneWinTgtX = w->log.stoneWinX = 0.0f;
+    w->log.stoneWinTgtY = w->log.stoneWinY = -480.0f;
+    w->log.stoneAlphaTgt = w->log.stoneAlpha = 0.0f;
 
     w->log.badge.num = 0;
 #ifdef VERSION_G8ME01
@@ -308,8 +308,8 @@ void winLogInit(WindowWork* w) {
     w->log.badge.y = w->log.badge.ty = -240.0f;
     w->log.badge.idx = 0;
     w->log.badge.scroll = w->log.badge.scrollTgt = 0.0f;
-    w->log.badge.f24 = w->log.badge.tf24 = -200.0f;
-    w->log.badge.f2C = w->log.badge.tf2C = -300.0f;
+    w->log.badge.iconX = w->log.badge.iconTx = -200.0f;
+    w->log.badge.iconY = w->log.badge.iconTy = -300.0f;
 
     w->log.recipe.num = 0;
 #ifdef VERSION_G8ME01
@@ -331,8 +331,8 @@ void winLogInit(WindowWork* w) {
     w->log.recipe.y = w->log.recipe.ty = -240.0f;
     w->log.recipe.idx = 0;
     w->log.recipe.scroll = w->log.recipe.scrollTgt = 0.0f;
-    w->log.recipe.f24 = w->log.recipe.tf24 = -200.0f;
-    w->log.recipe.f2C = w->log.recipe.tf2C = -300.0f;
+    w->log.recipe.iconX = w->log.recipe.iconTx = -200.0f;
+    w->log.recipe.iconY = w->log.recipe.iconTy = -300.0f;
 
     w->log.enemyNum = 0;
     for (i = 1; i < 0xD8; i++) {
@@ -382,13 +382,13 @@ void winLogInit2(WindowWork* w) {
     w->log.badge.x = w->log.badge.tx = 320.0f;
     w->log.badge.y = w->log.badge.ty = -240.0f;
     w->log.badge.scroll = w->log.badge.scrollTgt = w->log.badge.idx * 0xE8;
-    w->log.badge.f24 = w->log.badge.tf24 = -200.0f;
-    w->log.badge.f2C = w->log.badge.tf2C = -300.0f;
+    w->log.badge.iconX = w->log.badge.iconTx = -200.0f;
+    w->log.badge.iconY = w->log.badge.iconTy = -300.0f;
     w->log.recipe.x = w->log.recipe.tx = 320.0f;
     w->log.recipe.y = w->log.recipe.ty = -240.0f;
     w->log.recipe.scroll = w->log.recipe.scrollTgt = w->log.recipe.idx * 0xE8;
-    w->log.recipe.f24 = w->log.recipe.tf24 = -200.0f;
-    w->log.recipe.f2C = w->log.recipe.tf2C = -300.0f;
+    w->log.recipe.iconX = w->log.recipe.iconTx = -200.0f;
+    w->log.recipe.iconY = w->log.recipe.iconTy = -300.0f;
     winMsgEntry(w, 0, w->log.menu[w->log.cursor].msg, 0);
 }
 
@@ -449,7 +449,7 @@ s32 winLogMain(WindowWork* w) {
     s32 ix;
     s32 iy;
 
-    switch (w->log.fD68) {
+    switch (w->log.state) {
     case 0:
         if (w->buttonTrg & PAD_BUTTON_B) {
             psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_CANCEL1 | PSND_SFX_BYPASS_MUTE));
@@ -473,26 +473,26 @@ s32 winLogMain(WindowWork* w) {
                 w->log.menu[i].state = 30;
             }
             w->log.menu[w->log.cursor].state = 10;
-            w->log.fD68 = w->log.menu[w->log.cursor].id + 10;
+            w->log.state = w->log.menu[w->log.cursor].id + 10;
             switch (w->log.menu[w->log.cursor].id) {
             case 0:
-                w->log.fE30 = 20.0f;
+                w->log.mapWinTgtY = 20.0f;
                 break;
             case 1:
-                w->log.fE6C = 20.0f;
-                w->log.fE74 = 255.0f;
+                w->log.stoneWinTgtY = 20.0f;
+                w->log.stoneAlphaTgt = 255.0f;
                 break;
             case 2:
                 w->log.badge.tx = -130.0f;
                 w->log.badge.ty = 120.0f;
-                w->log.badge.tf24 = -200.0f;
-                w->log.badge.tf2C = 60.0f;
+                w->log.badge.iconTx = -200.0f;
+                w->log.badge.iconTy = 60.0f;
                 break;
             case 3:
                 w->log.recipe.tx = -130.0f;
                 w->log.recipe.ty = 120.0f;
-                w->log.recipe.tf24 = -200.0f;
-                w->log.recipe.tf2C = 60.0f;
+                w->log.recipe.iconTx = -200.0f;
+                w->log.recipe.iconTy = 60.0f;
                 break;
             case 4:
                 break;
@@ -562,8 +562,8 @@ s32 winLogMain(WindowWork* w) {
                 w->log.menu[i].state = 40;
             }
             w->log.menu[w->log.cursor].state = 20;
-            w->log.fD68 = 0;
-            w->log.fE30 = -480.0f;
+            w->log.state = 0;
+            w->log.mapWinTgtY = -480.0f;
             fileFree(w->mapRes);
             w->mapRes = NULL;
             if (w->log.pose != -1) animPoseRelease(w->log.pose);
@@ -591,11 +591,11 @@ s32 winLogMain(WindowWork* w) {
         if (min < 50.0f) {
             sprintf(name, "menu_monosiri_%s", tubuDt[sel].map);
             sprintf(help, "menu_map_%s", tubuDt[sel].map);
-            if (w->log.fE14 != sel) psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_TABI_MOVE1 | PSND_SFX_BYPASS_MUTE));
-            w->log.fE14 = sel;
+            if (w->log.mapSel != sel) psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_TABI_MOVE1 | PSND_SFX_BYPASS_MUTE));
+            w->log.mapSel = sel;
             winMsgEntry(w, 0, help, name);
         } else {
-            w->log.fE14 = -1;
+            w->log.mapSel = -1;
             winMsgEntry(w, 0, "msg_menu_kiroku_map", 0);
         }
         dx = keyGetStickX(0) / 8.0f;
@@ -612,9 +612,9 @@ s32 winLogMain(WindowWork* w) {
                 dy = -8.0f;
             }
         }
-        if (dx == 0.0f && dy == 0.0f && w->log.fE14 != -1) {
-            dx = 304.0f + tubuDt[w->log.fE14].x - w->log.mapX;
-            dy = 240.0f + tubuDt[w->log.fE14].y - w->log.mapY;
+        if (dx == 0.0f && dy == 0.0f && w->log.mapSel != -1) {
+            dx = 304.0f + tubuDt[w->log.mapSel].x - w->log.mapX;
+            dy = 240.0f + tubuDt[w->log.mapSel].y - w->log.mapY;
             dx *= 0.2f;
             dy *= 0.2f;
         }
@@ -646,29 +646,29 @@ s32 winLogMain(WindowWork* w) {
                 w->log.menu[i].state = 40;
             }
             w->log.menu[w->log.cursor].state = 20;
-            w->log.fD68 = 0;
-            w->log.fE6C = -480.0f;
-            w->log.fE74 = 0.0f;
+            w->log.state = 0;
+            w->log.stoneWinTgtY = -480.0f;
+            w->log.stoneAlphaTgt = 0.0f;
         } else if (w->dirRep & DEMO_STICK_LEFT) {
-            w->log.fE60--;
-            while (w->log.fE60 < 0) w->log.fE60 += 7;
-            w->log.fE7C = 51.42857f * w->log.fE60;
-            while (w->log.fE80 < w->log.fE7C) w->log.fE80 += 360.0f;
+            w->log.stoneSel--;
+            while (w->log.stoneSel < 0) w->log.stoneSel += 7;
+            w->log.stoneAngleTgt = 51.42857f * w->log.stoneSel;
+            while (w->log.stoneAngle < w->log.stoneAngleTgt) w->log.stoneAngle += 360.0f;
             psndSFXOn(SFX_NAME_WORD(PSND_SFX_BTL_CURSOR_MOVE1 | PSND_SFX_BYPASS_MUTE));
             psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_SSTONE_MOVE1 | PSND_SFX_BYPASS_MUTE));
         } else if (w->dirRep & DEMO_STICK_RIGHT) {
-            w->log.fE60++;
-            while (w->log.fE60 > 6) w->log.fE60 -= 7;
-            w->log.fE7C = 51.42857f * w->log.fE60;
-            while (w->log.fE80 > w->log.fE7C) w->log.fE80 -= 360.0f;
+            w->log.stoneSel++;
+            while (w->log.stoneSel > 6) w->log.stoneSel -= 7;
+            w->log.stoneAngleTgt = 51.42857f * w->log.stoneSel;
+            while (w->log.stoneAngle > w->log.stoneAngleTgt) w->log.stoneAngle -= 360.0f;
             psndSFXOn(SFX_NAME_WORD(PSND_SFX_BTL_CURSOR_MOVE1 | PSND_SFX_BYPASS_MUTE));
             psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_SSTONE_MOVE1 | PSND_SFX_BYPASS_MUTE));
         } else if (w->buttonTrg & PAD_BUTTON_START) {
             return -2;
         }
         w->helpTgtY = w->helpTgtX = -50.0f;
-        if (w->log.fE60 < w->log.stoneNum) {
-            winMsgEntry(w, -1, itemDataTable[stone_tbl[w->log.fE60]].description, itemDataTable[stone_tbl[w->log.fE60]].name);
+        if (w->log.stoneSel < w->log.stoneNum) {
+            winMsgEntry(w, -1, itemDataTable[stone_tbl[w->log.stoneSel]].description, itemDataTable[stone_tbl[w->log.stoneSel]].name);
         } else {
             winMsgEntry(w, -1, "msg_menu_stone_none_help", "msg_menu_stone_none_name");
         }
@@ -681,11 +681,11 @@ s32 winLogMain(WindowWork* w) {
                 w->log.menu[i].state = 40;
             }
             w->log.menu[w->log.cursor].state = 20;
-            w->log.fD68 = 0;
+            w->log.state = 0;
             w->log.badge.tx = 330.0f;
             w->log.badge.ty = -250.0f;
-            w->log.badge.tf24 = -200.0f;
-            w->log.badge.tf2C = -300.0f;
+            w->log.badge.iconTx = -200.0f;
+            w->log.badge.iconTy = -300.0f;
         } else if (w->buttonRep & PAD_TRIGGER_L) {
             w->log.badge.idx--;
             if (w->log.badge.idx < 0) w->log.badge.idx = 0;
@@ -718,9 +718,9 @@ s32 winLogMain(WindowWork* w) {
             psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_TABI_MOVE1 | PSND_SFX_BYPASS_MUTE));
         } else if (w->buttonTrg & PAD_TRIGGER_Z) {
             winSortEntry(w, 4, -310.0f, 150.0f);
-            w->savedState = w->log.fD68;
+            w->savedState = w->log.state;
             psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1 | PSND_SFX_BYPASS_MUTE));
-            w->log.fD68 = 1000;
+            w->log.state = 1000;
         } else if (w->buttonTrg & PAD_BUTTON_START) {
             return -2;
         }
@@ -740,11 +740,11 @@ s32 winLogMain(WindowWork* w) {
                 w->log.menu[i].state = 40;
             }
             w->log.menu[w->log.cursor].state = 20;
-            w->log.fD68 = 0;
+            w->log.state = 0;
             w->log.recipe.tx = 330.0f;
             w->log.recipe.ty = -250.0f;
-            w->log.recipe.tf24 = -200.0f;
-            w->log.recipe.tf2C = -300.0f;
+            w->log.recipe.iconTx = -200.0f;
+            w->log.recipe.iconTy = -300.0f;
         } else if (w->buttonRep & PAD_TRIGGER_L) {
             w->log.recipe.idx--;
             if (w->log.recipe.idx < 0) w->log.recipe.idx = 0;
@@ -777,9 +777,9 @@ s32 winLogMain(WindowWork* w) {
             psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_TABI_MOVE1 | PSND_SFX_BYPASS_MUTE));
         } else if (w->buttonTrg & PAD_TRIGGER_Z) {
             winSortEntry(w, 5, -310.0f, 150.0f);
-            w->savedState = w->log.fD68;
+            w->savedState = w->log.state;
             psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1 | PSND_SFX_BYPASS_MUTE));
-            w->log.fD68 = 1000;
+            w->log.state = 1000;
         } else if (w->buttonTrg & PAD_BUTTON_START) {
             return -2;
         }
@@ -799,7 +799,7 @@ s32 winLogMain(WindowWork* w) {
                 w->log.menu[i].state = 40;
             }
             w->log.menu[w->log.cursor].state = 20;
-            w->log.fD68 = 0;
+            w->log.state = 0;
             w->log.f102C = 320.0f;
             w->log.f1034 = -240.0f;
         } else if (w->buttonRep & PAD_TRIGGER_L) {
@@ -842,14 +842,14 @@ s32 winLogMain(WindowWork* w) {
         } else if (w->buttonTrg & PAD_BUTTON_A) {
             if (swGet(w->log.enemy[w->log.enemySel].id + 0x117A)) {
                 psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1 | PSND_SFX_BYPASS_MUTE));
-                w->log.fD68 = 21;
+                w->log.state = 21;
                 w->log.mono = monosiriInit(w->log.enemy[w->log.enemySel].id, -60.0f, 150.0f);
             }
         } else if (w->buttonTrg & PAD_TRIGGER_Z) {
             winSortEntry(w, 6, -310.0f, 150.0f);
-            w->savedState = w->log.fD68;
+            w->savedState = w->log.state;
             psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1 | PSND_SFX_BYPASS_MUTE));
-            w->log.fD68 = 1001;
+            w->log.state = 1001;
         } else if (w->buttonTrg & PAD_BUTTON_START) {
             return -2;
         }
@@ -864,7 +864,7 @@ s32 winLogMain(WindowWork* w) {
     case 21:
         if (w->buttonTrg & PAD_BUTTON_B) {
             psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_CANCEL1 | PSND_SFX_BYPASS_MUTE));
-            w->log.fD68 = 22;
+            w->log.state = 22;
             monosiriClose(w->log.mono);
         } else if (w->buttonTrg & PAD_BUTTON_START) {
             monosiriExit(w->log.mono);
@@ -875,7 +875,7 @@ s32 winLogMain(WindowWork* w) {
         break;
     case 22:
         if (monosiriCloseWait(w->log.mono)) {
-            w->log.fD68 = 14;
+            w->log.state = 14;
             monosiriExit(w->log.mono);
         } else {
             monosiriMain(w->log.mono);
@@ -884,7 +884,7 @@ s32 winLogMain(WindowWork* w) {
     case 1000:
     case 1001:
         if (!winSortWait(w)) {
-            w->log.fD68 = w->savedState;
+            w->log.state = w->savedState;
         }
         if (w->buttonTrg & PAD_BUTTON_START) {
             return -2;
@@ -947,24 +947,24 @@ void winLogMain2(WindowWork* w) {
         w->log.menu[i].x += (w->log.menu[i].tx - w->log.menu[i].x) / FPS_EASE(8.0f);
         w->log.menu[i].y += (w->log.menu[i].ty - w->log.menu[i].y) / FPS_EASE(8.0f);
     }
-    w->log.fE2C += (w->log.fE28 - w->log.fE2C) / FPS_EASE_D(8.0f, 8.0);
-    w->log.fE34 += (w->log.fE30 - w->log.fE34) / FPS_EASE_D(8.0f, 8.0);
-    w->log.fE68 += (w->log.fE64 - w->log.fE68) / FPS_EASE_D(8.0f, 8.0);
-    w->log.fE70 += (w->log.fE6C - w->log.fE70) / FPS_EASE_D(8.0f, 8.0);
-    w->log.fE78 += (w->log.fE74 - w->log.fE78) / FPS_EASE_D(8.0f, 8.0);
-    w->log.fE80 += (w->log.fE7C - w->log.fE80) / FPS_EASE(4.0f);
+    w->log.mapWinX += (w->log.mapWinTgtX - w->log.mapWinX) / FPS_EASE_D(8.0f, 8.0);
+    w->log.mapWinY += (w->log.mapWinTgtY - w->log.mapWinY) / FPS_EASE_D(8.0f, 8.0);
+    w->log.stoneWinX += (w->log.stoneWinTgtX - w->log.stoneWinX) / FPS_EASE_D(8.0f, 8.0);
+    w->log.stoneWinY += (w->log.stoneWinTgtY - w->log.stoneWinY) / FPS_EASE_D(8.0f, 8.0);
+    w->log.stoneAlpha += (w->log.stoneAlphaTgt - w->log.stoneAlpha) / FPS_EASE_D(8.0f, 8.0);
+    w->log.stoneAngle += (w->log.stoneAngleTgt - w->log.stoneAngle) / FPS_EASE(4.0f);
     w->log.badge.scrollTgt = w->log.badge.idx * 0xE8;
     w->log.badge.scroll += (w->log.badge.scrollTgt - w->log.badge.scroll) / FPS_EASE(6.0f);
     w->log.badge.x += (w->log.badge.tx - w->log.badge.x) / FPS_EASE(6.0f);
     w->log.badge.y += (w->log.badge.ty - w->log.badge.y) / FPS_EASE(6.0f);
-    w->log.badge.f24 += (w->log.badge.tf24 - w->log.badge.f24) / FPS_EASE(6.0f);
-    w->log.badge.f2C += (w->log.badge.tf2C - w->log.badge.f2C) / FPS_EASE(6.0f);
+    w->log.badge.iconX += (w->log.badge.iconTx - w->log.badge.iconX) / FPS_EASE(6.0f);
+    w->log.badge.iconY += (w->log.badge.iconTy - w->log.badge.iconY) / FPS_EASE(6.0f);
     w->log.recipe.scrollTgt = w->log.recipe.idx * 0xE8;
     w->log.recipe.scroll += (w->log.recipe.scrollTgt - w->log.recipe.scroll) / FPS_EASE(6.0f);
     w->log.recipe.x += (w->log.recipe.tx - w->log.recipe.x) / FPS_EASE(6.0f);
     w->log.recipe.y += (w->log.recipe.ty - w->log.recipe.y) / FPS_EASE(6.0f);
-    w->log.recipe.f24 += (w->log.recipe.tf24 - w->log.recipe.f24) / FPS_EASE(6.0f);
-    w->log.recipe.f2C += (w->log.recipe.tf2C - w->log.recipe.f2C) / FPS_EASE(6.0f);
+    w->log.recipe.iconX += (w->log.recipe.iconTx - w->log.recipe.iconX) / FPS_EASE(6.0f);
+    w->log.recipe.iconY += (w->log.recipe.iconTy - w->log.recipe.iconY) / FPS_EASE(6.0f);
 }
 
 void mapGX(WindowWork* w, f32 x, f32 y);
@@ -991,23 +991,23 @@ void winLogDisp(CameraId cam, void* param, s32 idx) {
     y = w->menu[idx].y;
 
     winBgGX(w, 4, x, y);
-    if (y + w->log.fE34 > -480.0f) {
-        mapGX(w, x + w->log.fE2C, y + w->log.fE34);
+    if (y + w->log.mapWinY > -480.0f) {
+        mapGX(w, x + w->log.mapWinX, y + w->log.mapWinY);
     }
-    if (y + w->log.fE70 > -480.0f) {
+    if (y + w->log.stoneWinY > -480.0f) {
         winTexInit(*w->res->data);
-        winTexSet(0x24, (Vec){x + w->log.fE68, y + w->log.fE70, 0.0f}, (Vec){60.0f, 1.0f, 1.0f}, (GXColor){0xFF, 0xFF, 0xFF, w->log.fE78});
+        winTexSet(0x24, (Vec){x + w->log.stoneWinX, y + w->log.stoneWinY, 0.0f}, (Vec){60.0f, 1.0f, 1.0f}, (GXColor){0xFF, 0xFF, 0xFF, w->log.stoneAlpha});
         for (i = 0; i < 7; i++) {
             Vec v = {0.0f, 0.0f, 170.0f};
             PSMTXRotRad(m1, 'x', 0.43633232f);
-            PSMTXRotRad(m2, 'y', 0.017453292f * (51.42857f * i - w->log.fE80));
+            PSMTXRotRad(m2, 'y', 0.017453292f * (51.42857f * i - w->log.stoneAngle));
             PSMTXMultVec(m2, &v, &v);
             PSMTXMultVec(m1, &v, &v);
-            winKageGX(w, v.x + (x + w->log.fE68), (v.y + (y + w->log.fE70)) - 30.0f, v.z, 1.0f, (GXColor){0x00, 0x00, 0x00, 0x80});
+            winKageGX(w, v.x + (x + w->log.stoneWinX), (v.y + (y + w->log.stoneWinY)) - 30.0f, v.z, 1.0f, (GXColor){0x00, 0x00, 0x00, 0x80});
             wk = w->log.eff[i]->userdata;
-            wk->position.x = v.x + (x + w->log.fE68);
+            wk->position.x = v.x + (x + w->log.stoneWinX);
             wk = w->log.eff[i]->userdata;
-            wk->position.y = 20.0f + (v.y + (y + w->log.fE70));
+            wk->position.y = 20.0f + (v.y + (y + w->log.stoneWinY));
             wk = w->log.eff[i]->userdata;
             wk->position.z = v.z;
         }
@@ -1024,19 +1024,19 @@ void winLogDisp(CameraId cam, void* param, s32 idx) {
             u16 width;
 
             black = (GXColor){0x00, 0x00, 0x00, 0xFF};
-            winKirinukiGX(w, 0, (x + w->log.badge.f24) - 50.0f, (y + w->log.badge.f2C) - 120.0f, 100.0f, 30.0f);
+            winKirinukiGX(w, 0, (x + w->log.badge.iconX) - 50.0f, (y + w->log.badge.iconY) - 120.0f, 100.0f, 30.0f);
             sprintf(buf, (u32)gp->language != LANGUAGE_JP ? "%d/%d" : "%d\201^%d", w->log.badge.page, w->log.badge.num);
             width = 0.75f * FontGetMessageWidth(buf);
             winFontInit();
-            winFontSet((Vec){(f32)((100 - width) / 2) + ((x + w->log.badge.f24) - 50.0f), (y + w->log.badge.f2C) - 128.0f, 0.0f},
+            winFontSet((Vec){(f32)((100 - width) / 2) + ((x + w->log.badge.iconX) - 50.0f), (y + w->log.badge.iconY) - 128.0f, 0.0f},
                        (Vec){0.75f, 0.75f, 0.75f}, black, buf);
         }
 #endif
         winTexInit(*w->res->data);
-        winTexSet(0x95, (Vec){x + w->log.badge.f24, y + w->log.badge.f2C, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, c2);
+        winTexSet(0x95, (Vec){x + w->log.badge.iconX, y + w->log.badge.iconY, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, c2);
         if (swGet(w->log.badgeIds[w->log.badge.cursor] + 0x80)) {
             winIconInit();
-            winIconSet(itemDataTable[w->log.badgeIds[w->log.badge.cursor] + 0xF0].icon_id, (Vec){x + w->log.badge.f24, (y + w->log.badge.f2C) - 4.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, c2);
+            winIconSet(itemDataTable[w->log.badgeIds[w->log.badge.cursor] + 0xF0].icon_id, (Vec){x + w->log.badge.iconX, (y + w->log.badge.iconY) - 4.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, c2);
         }
     }
     if (w->log.recipe.x < 320.0f && w->log.recipe.y > -240.0f) {
@@ -1048,22 +1048,22 @@ void winLogDisp(CameraId cam, void* param, s32 idx) {
             u16 width;
 
             black = (GXColor){0x00, 0x00, 0x00, 0xFF};
-            winKirinukiGX(w, 0, (x + w->log.recipe.f24) - 50.0f, (y + w->log.recipe.f2C) - 120.0f, 100.0f, 30.0f);
+            winKirinukiGX(w, 0, (x + w->log.recipe.iconX) - 50.0f, (y + w->log.recipe.iconY) - 120.0f, 100.0f, 30.0f);
             sprintf(buf, (u32)gp->language != LANGUAGE_JP ? "%d/%d" : "%d\201^%d", w->log.recipe.page, w->log.recipe.num);
             width = 0.75f * FontGetMessageWidth(buf);
             winFontInit();
-            winFontSet((Vec){(f32)((100 - width) / 2) + ((x + w->log.recipe.f24) - 50.0f), (y + w->log.recipe.f2C) - 128.0f, 0.0f},
+            winFontSet((Vec){(f32)((100 - width) / 2) + ((x + w->log.recipe.iconX) - 50.0f), (y + w->log.recipe.iconY) - 128.0f, 0.0f},
                        (Vec){0.75f, 0.75f, 0.75f}, black, buf);
         }
 #endif
         winTexInit(*w->res->data);
-        winTexSet(0x96, (Vec){x + w->log.recipe.f24, y + w->log.recipe.f2C, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, c2);
+        winTexSet(0x96, (Vec){x + w->log.recipe.iconX, y + w->log.recipe.iconY, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, c2);
         if (swGet(w->log.recipeIds[w->log.recipe.cursor] + 0x41)) {
             winIconInit();
-            winIconSet(itemDataTable[w->log.recipeIds[w->log.recipe.cursor] + 0xB3].icon_id, (Vec){x + w->log.recipe.f24, (y + w->log.recipe.f2C) - 10.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, c2);
+            winIconSet(itemDataTable[w->log.recipeIds[w->log.recipe.cursor] + 0xB3].icon_id, (Vec){x + w->log.recipe.iconX, (y + w->log.recipe.iconY) - 10.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, c2);
         }
     }
-    if (w->log.fD68 == 14 || (u32)(w->log.fD68 - 20) <= 2 || w->log.fD68 == 1001) {
+    if (w->log.state == 14 || (u32)(w->log.state - 20) <= 2 || w->log.state == 1001) {
         monoshiriGX(w, x - 170.0f, 130.0f + y);
     }
     for (i = 0; i < w->log.count; i++) {
@@ -1128,7 +1128,7 @@ void mapGX(WindowWork* w, f32 x, f32 y) {
         for (i = 0; i < sizeof(tubuDt) / sizeof(TubuDt); i++) {
             t = &tubuDt[i];
             if (swByteGet(0) >= t->id || tubuCheck(t->type)) { // GSW_STORY_PROGRESS
-                if (w->log.fE14 == i) {
+                if (w->log.mapSel == i) {
                     winTexSet((tex = 0xBA, ((gp->retraceCount >> 4) & 1) ? tex = 0xB9 : 0, tex), (Vec){mx + t->x, my + t->y, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white);
                 } else {
                     winTexSet(t->big ? 0xBA : 0xB8, (Vec){mx + t->x, my + t->y, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white);

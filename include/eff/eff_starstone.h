@@ -23,19 +23,19 @@ typedef struct EffStarStoneWork {
     f32 scale;       // 0x14
     Vec rot;         // 0x18, degrees; drawn turned about y by rot.y, about z by rot.z, then about y by rot.x
                      // (rot.y is stone_ry)
-    f32 f24;         // 0x24
-    f32 f28;         // 0x28
+    f32 texScrollX;  // 0x24, x translation of the texture matrix (DISP_MID); scrolled by 0.01 per frame in state 0 (type 6 backwards), wraps at 1
+    f32 texScrollY;  // 0x28, y translation of the texture matrix; set to 0 at entry, never changed
     s32 timer;       // 0x2C
     GXColor color;   // 0x30
     EffectEntry* dust; // 0x34
     s32 cam;         // 0x38
     s32 state;       // 0x3C
-    f32 f40;         // 0x40
-    f32 f44;         // 0x44
-    f32 f48;         // 0x48
-    f32 f4c;         // 0x4C
-    f32 f50;         // 0x50
-    f32 f54;         // 0x54
+    f32 gravity;     // 0x40, set to 0.4 when the fall starts; subtracted from speedY each frame
+    f32 speedY;      // 0x44, vertical speed: added to position.y; on landing reversed and halved (bounce); its size sets the ground-check distance
+    f32 half0OffsetX; // 0x48, x offset of the first stone half (dl_0); drifts apart from the other half after the first bounce
+    f32 half0OffsetZ; // 0x4C, z offset of the first stone half (dl_0)
+    f32 half1OffsetX; // 0x50, x offset of the second stone half (dl_1), moves opposite to half0OffsetX
+    f32 half1OffsetZ; // 0x54, z offset of the second stone half (dl_1)
     f32 f58;         // 0x58
     u8 r, g, b, a;   // 0x5C
     s32 sfx;         // 0x60
