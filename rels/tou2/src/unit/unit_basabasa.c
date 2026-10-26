@@ -72,7 +72,7 @@ BattleUnitKind unit_basabasa = {
     "SFX_BTL_DAMAGE_FIRE1", // fireDamageSfxName
     "SFX_BTL_DAMAGE_ICE1", // iceDamageSfxName
     "SFX_BTL_DAMAGE_BIRIBIRI1", // electricDamageSfxName
-    0x4040002, // attributeFlags
+    kCeiling | kUnitLeader | kUnitFaceCamera, // attributeFlags
     &regist, // statusVulnerability
     1, // numParts
     parts, // mParts

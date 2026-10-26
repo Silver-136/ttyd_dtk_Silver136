@@ -37,7 +37,7 @@ void _btlSamplingEnemy(BattleWorkWeaponTargets* d) {
     {
     for (i = 0; i < 64; i++) {
         BattleUnit* unit = BattleGetUnitPtr(wp, i);
-        if (unit && !BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL) && !(unit->mAttributeFlags & 0x40)) {
+        if (unit && !BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL) && !(unit->mAttributeFlags & kUnitNeverTargetable)) {
             part = unit->mParts;
             np2 = unit->mKindParams->numParts & 0xFF;
             for (j = 0; j < np2; j++) {
@@ -68,7 +68,7 @@ void _btlSamplingEnemy(BattleWorkWeaponTargets* d) {
                 t->posZ = z;
                 t->score = 0;
                 t->reserved_20 = -1;
-                if ((unit->mAttributeFlags & 1) && !(part->attributes & 0x20000)) {
+                if ((unit->mAttributeFlags & kUnitMapObject) && !(part->attributes & kIgnoreMapObjectOffset)) {
                     t->score += d->direction * 300;
                 }
                 t->score += part->hitOffsetX * dir;

@@ -452,7 +452,7 @@ next:
                         xlu = 1;
                     }
                 }
-                if (xlu && (part->attributes & 0x8000)) {
+                if (xlu && (part->attributes & kNoTranslucentLook)) {
                     xlu = 0;
                     PART_POSETYPE(part) = 0;
                 }
@@ -650,7 +650,7 @@ void btlUnitPartsDisp(CameraId camId, BattleUnitPart* param) {
             zscale *= -1.0f;
             PSMTXRotRad(pRy2, 'y', 0.017453292f * ((dir + (part->mRotation.y + part->mBaseRotation.y)) - 2.0f * (180.0f - (a - camAngle))));
         }
-        if (part->attributes & 0x8000000) {
+        if (part->attributes & kIgnoreUnitSize) {
             PSMTXScale(pS2, part->mBaseScale.x * part->mScale.x, part->mBaseScale.y * part->mScale.y, zscale * (part->mBaseScale.z * part->mScale.z));
         } else {
             PSMTXScale(pS2, unit->mSizeMultiplier * (part->mBaseScale.x * part->mScale.x), unit->mSizeMultiplier * (part->mBaseScale.y * part->mScale.y), zscale * (part->mBaseScale.z * part->mScale.z));
@@ -680,7 +680,7 @@ void btlUnitPartsDisp(CameraId camId, BattleUnitPart* param) {
         ey = unit->mPosition.y + part->mPositionOffset.y + getGravityDispOffset(part) + getFloatDispOffset(part);
         ez = unit->mPosition.z + part->mPositionOffset.z;
         dir = 0.0f;
-        if (part->mOwner->mAttributeFlags & 0x4000000) {
+        if (part->mOwner->mAttributeFlags & kUnitFaceCamera) {
             cam = camGetCurPtr();
             a = CAMDIR(cam);
             dir = reviseAngle(a - angleABf(cam->cameraPos.x, cam->cameraPos.z, ex, ez));

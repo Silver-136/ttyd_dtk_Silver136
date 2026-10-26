@@ -25,9 +25,9 @@ typedef struct SoundEnvList {
 } SoundEnvList;
 
 typedef enum SoundEffectFlags {
-    SFX_FLAG_2 = (1 << 29),
-    SFX_FLAG_4 = (1 << 30),
-    SFX_FLAG_8 = (1 << 31)
+    SFX_FLAG_EFX = (1 << 29),    // 0x20000000, a MusyX sound effect (SoundEfx*)
+    SFX_FLAG_SONG = (1 << 30),   // 0x40000000, played as a song (SoundSong*)
+    SFX_FLAG_STREAM = (1 << 31)  // 0x80000000, a streamed .stm sound (SoundSS*, streamName)
 } SoundEffectFlags;
 
 // sound effect table entry; __psndSFXOn looks names up here

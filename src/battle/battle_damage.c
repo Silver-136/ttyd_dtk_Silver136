@@ -125,7 +125,7 @@ void BattleDamageDirect(s32 unitId, BattleUnit* target, BattleUnitPart* part, s3
             f32 x, y, z;
             BtlUnit_GetHitPos(target, part, &x, &y, &z);
             if (pattern != 2 && pattern != 3 && pattern != 0x15 && pattern != 0x16 && pattern != 0x14 &&
-                pattern != 0x13 && pattern != 0x1b && pattern != 7 && (u8)result != 0x16) {
+                pattern != 0x13 && pattern != 0x1b && pattern != 7 && (u8)result != DAMAGE_CODE_STATUS_ONLY) {
                 s32 dir = BtlUnit_GetBelong(target) == 0 ? -1 : 1;
                 if (result & 0x20000) {
                     effMissStarEntry(1, 1, x, y, z, dir);
@@ -1645,14 +1645,14 @@ s32 BattleCheckDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPart* 
             if (status & 1) {
                 result = flags | DAMAGE_CODE_NORMAL;
             } else {
-                result = flags | 0x16;
+                result = flags | DAMAGE_CODE_STATUS_ONLY;
             }
         }
         if (status & 4) {
-            result = flags | 0x1C;
+            result = flags | DAMAGE_CODE_FRIGHT;
         }
         if (status & 8) {
-            result = flags | 0x1D;
+            result = flags | DAMAGE_CODE_GALE_FORCE;
         }
         if (((u32)flags & DAMAGE_RESULT_FINAL_HIT) && (status & 0x10)) {
             code = 0x717;
@@ -1685,7 +1685,7 @@ s32 BattleCheckDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPart* 
             pattern = 0;
         }
         if (pattern == 0xE || pattern == 0x10) {
-            if (target->mAttributeFlags & 0x4000) {
+            if (target->mAttributeFlags & kUnitNoHammerKnockback) {
                 pattern = 0;
             }
             if (irand(100) >= target->mKindParams->hammerKnockbackChance) {

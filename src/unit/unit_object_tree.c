@@ -62,7 +62,7 @@ BattleUnitKind unit_object_tree = {
     "SFX_BTL_DAMAGE_FIRE1", // fireDamageSfxName
     "SFX_BTL_DAMAGE_ICE1", // iceDamageSfxName
     "SFX_BTL_DAMAGE_BIRIBIRI1", // electricDamageSfxName
-    0x12003001, // attributeFlags
+    kUnitMapObject | kNoGravityBob | kActsInZeroGravity | kUnitNoHpGauge | kUnitNoncombatant, // attributeFlags
     &regist, // statusVulnerability
     1, // numParts
     parts, // mParts

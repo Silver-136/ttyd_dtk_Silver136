@@ -35,7 +35,9 @@ typedef enum PartsAttribute_Flags {          // 32-bit size
     kIsShelled = (1 << 12),                  // 0x1000
     kIsBombFlippable = (1 << 13),            // 0x2000
     kClone = (1 << 14),                      // 0x4000, attacks pass through unless SPECIAL_CONTACTS_CLONES
+    kNoTranslucentLook = (1 << 15),          // 0x8000, keeps its normal look while the unit is invisible/dodgy
     kNotTargetable = (1 << 16),              // 0x10000
+    kIgnoreMapObjectOffset = (1 << 17),      // 0x20000, not moved back by its unit's kUnitMapObject
     kNotMainTarget = (1 << 18),              // 0x40000, never chosen as the main/important target part (battle_detect)
     kUntattleable = (1 << 19),               // 0x80000
     kJumplikeCannotTarget = (1 << 20),       // 0x100000
@@ -45,6 +47,7 @@ typedef enum PartsAttribute_Flags {          // 32-bit size
     kHidden = (1 << 24),                     // 0x1000000, not drawn
     kNoShadow = (1 << 25),                   // 0x2000000, no shadow
     kMotionBlur = (1 << 26),                 // 0x4000000, also drawn with btlUnitPartsBlurDisp
+    kIgnoreUnitSize = (1 << 27),             // 0x8000000, scaled without the unit's mSizeMultiplier
     kAbsolutePosition = (1 << 28),           // 0x10000000, mPosition is the world position, not an offset from the unit
     kImmuneToDamageAndStatus = (1 << 29),   // 0x20000000, no HP/FP damage and no status (battle_damage.c)
     kImmuneToNegativeStatus = (1 << 30),    // 0x40000000, sleep, stop, poison, ... and instant kill blocked
@@ -79,14 +82,17 @@ typedef enum BattleUnit_Flags {
 } BattleUnit_Flags;
 
 typedef enum BattleUnitAttribute_Flags { // 32-bit size
-    kUnknown_0x1 = (1 << 0),             // 0x1
+    kUnitMapObject = (1 << 0),           // 0x1, map object: target sampling puts it 300 units further back
+                                         // (unless the part has kIgnoreMapObjectOffset)
     kCeiling = (1 << 1),                 // 0x2
     kFloating = (1 << 2),                // 0x4
     kPermanentlyInvisible = (1 << 3),    // 0x8, drawn translucent and attacks miss (like STATUS_INVISIBLE)
     kVeiled = (1 << 4),                  // 0x10
     kShellShielded = (1 << 5),           // 0x20
+    kUnitNeverTargetable = (1 << 6),     // 0x40, skipped by target sampling (battle_detect)
     kNoGravityBob = (1 << 12),           // 0x1000, no zero-gravity bob (like kFloating)
     kActsInZeroGravity = (1 << 13),      // 0x2000, not stopped by the zero-gravity cannot-act event
+    kUnitNoHammerKnockback = (1 << 14),  // 0x4000, Super/Ultra Hammer knock-away damage patterns are dropped
     kUndead = (1 << 16),                 // 0x10000, keeps taking turns while KO'd (STATUS_INSTANT_KILL)
     kInactive = (1 << 17),               // 0x20000
     kUnitLeader = (1 << 18),             // 0x40000, the side whose leaders are all down is defeated
@@ -95,6 +101,7 @@ typedef enum BattleUnitAttribute_Flags { // 32-bit size
     kNoDamageNumber = (1 << 22),         // 0x400000, the damage star with the HP number is not shown
     kUnitHidden = (1 << 24),             // 0x1000000, no part is drawn
     kUnitNoHpGauge = (1 << 25),          // 0x2000000, no HP gauge (BattleDrawEnemyHP)
+    kUnitFaceCamera = (1 << 26),         // 0x4000000, parts are turned to face the camera
     kUnitNoncombatant = (1 << 28),       // 0x10000000, not counted when checking whether its side is defeated
     kUnitNoShadow = (1 << 29),           // 0x20000000, no part casts a shadow
     kUnitHpFixed = (1 << 30)             // 0x40000000, HP neither falls from damage nor rises from HP Regen (lecture mode)
