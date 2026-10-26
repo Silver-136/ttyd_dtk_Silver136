@@ -104,7 +104,8 @@ typedef enum MarioTrigFlags {
     MARIO_TRIG_FLAG_DISABLE_TRIGGERS = (1 << 25),
     MARIO_TRIG_FLAG_DISABLE_SUB_STICK = (1 << 26),
     MARIO_TRIG_FLAG_DISABLE_STICK = (1 << 27),
-    MARIO_TRIG_FLAG_DISABLE_PARTY_SLIT = (1 << 30)
+    MARIO_TRIG_FLAG_DISABLE_PARTY_SLIT = (1 << 30),
+    MARIO_TRIG_FLAG_NORMALIZING = (1 << 31) // evt_mario_normalize running: the partner does not start slit mode
 } MarioTrigFlags;
 #pragma enumsalwaysint on
 

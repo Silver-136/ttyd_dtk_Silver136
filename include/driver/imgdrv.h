@@ -12,8 +12,13 @@ typedef struct ImageRect {
     u16 height; //0x6
 } ImageRect;
 
+// ImageShadow.flags (evt_img capture setup, imgCapture)
+#define IMG_SHADOW_ACTIVE (1 << 2)        // a capture is set up for this shadow
+#define IMG_SHADOW_PENDING (1 << 4)       // the capture has not been taken yet
+#define IMG_SHADOW_COPY_PENDING (1 << 8)  // allocMode: the captured texture still has to be copied
+
 typedef struct ImageShadow {
-    s32 flags;        //0x0
+    s32 flags;        //0x0, IMG_SHADOW_*
     u16 x;            //0x4
     u16 y;            //0x6
     ImageRect rect;   //0x8, capture rectangle

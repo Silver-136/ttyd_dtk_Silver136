@@ -696,7 +696,7 @@ USER_FUNC(evt_mario_normalize) {
             party->slitOn = 0;
 #endif
         }
-        mp->trigFlags |= 0x80000000;
+        mp->trigFlags |= MARIO_TRIG_FLAG_NORMALIZING;
         event->userdata[1] = 0;
         off = !marioChkCtrl();
         if (off) {
@@ -715,7 +715,7 @@ USER_FUNC(evt_mario_normalize) {
                     marioCtrlOff();
                     partyCtrlOff();
                 }
-                mp->trigFlags &= ~0x80000000;
+                mp->trigFlags &= ~MARIO_TRIG_FLAG_NORMALIZING;
                 return EVT_RETURN_DONE;
             }
         }
@@ -805,7 +805,7 @@ USER_FUNC(evt_mario_normalize) {
             break;
     }
     if (ret == 2) {
-        mp->trigFlags &= ~0x80000000;
+        mp->trigFlags &= ~MARIO_TRIG_FLAG_NORMALIZING;
         if (event->userdata[1]) {
             marioCtrlOff();
             partyCtrlOff();

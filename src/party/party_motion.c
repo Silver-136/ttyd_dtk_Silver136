@@ -323,14 +323,14 @@ void party_motion_stay(PartyEntry* party) {
     if (party->trigFlags & PARTY_TRIG_CHG_MOT) {
         party->trigFlags &= ~PARTY_TRIG_CHG_MOT;
         partyChgPoseId(party, 1);
-        if (!(party->trigFlags & 0x800000)) {
+        if (!(party->trigFlags & PARTY_TRIG_LANDED)) {
             if (!(party->flags & PARTY_FLAG_IS_PARTNER)) {
                 partyClearFootmark();
             } else {
                 partyClearFootmark2();
             }
         }
-        party->trigFlags &= ~0x800000;
+        party->trigFlags &= ~PARTY_TRIG_LANDED;
         party->yoshiPsndSFXId = -1;
         partyForceSetSpd(party, 0.0f);
     }
@@ -854,7 +854,7 @@ void party_motion_homing_walk(PartyEntry* party) {
         } else if (d3 >= 50.0f) {
             spd = 3.0f;
         }
-        if (party->playerPtr->flags & 0x8000) {
+        if (party->playerPtr->flags & MARIO_FLAG_IS_PUSHING) {
             spd = 1.0f;
             lim = 100.0f;
         }
@@ -868,7 +868,7 @@ void party_motion_homing_walk(PartyEntry* party) {
             } else if (d3 >= 50.0f) {
                 spd = 3.0f;
             }
-            if (party->playerPtr->flags & 0x8000) {
+            if (party->playerPtr->flags & MARIO_FLAG_IS_PUSHING) {
                 spd = 1.0f;
             }
             partySetTargetSpd(party, spd);
@@ -879,7 +879,7 @@ void party_motion_homing_walk(PartyEntry* party) {
             } else if (d3 >= 50.0f) {
                 spd = 3.0f;
             }
-            if (party->playerPtr->flags & 0x8000) {
+            if (party->playerPtr->flags & MARIO_FLAG_IS_PUSHING) {
                 spd = 1.0f;
             }
             partySetTargetSpd(party, spd);
@@ -994,7 +994,7 @@ found:
                 dir = party->targetDir;
                 partySetTargetSpd(party, 0.0f);
                 party->gravity = 0.0f;
-                if (!(party->flags & 0x200)) {
+                if (!(party->flags & PARTY_FLAG_KEEP_POSE_UNUSED)) {
                     partyChgPoseId(party, 1);
                 }
                 partyChgMot(party, 0);
@@ -1110,7 +1110,7 @@ found:
             party->hitobjPush = hit;
             if (hitGetAttr(hit) & HIT_ATTR_SLIT) {
                 if (party->slitOn != 1) {
-                    if (!(party->playerPtr->trigFlags & 0x80000000)) {
+                    if (!(party->playerPtr->trigFlags & MARIO_TRIG_FLAG_NORMALIZING)) {
                         party->trigFlags |= PARTY_TRIG_SLIT_INIT;
                         party->slitOn = 1;
                     }
@@ -1284,7 +1284,7 @@ void party_motion_homing_fly(PartyEntry* party) {
     } else if (d3 >= 50.0f) {
         spd = 3.0f;
     }
-    if (party->playerPtr->flags & 0x8000) {
+    if (party->playerPtr->flags & MARIO_FLAG_IS_PUSHING) {
         spd = 1.0f;
         lim = 100.0f;
     }
@@ -1391,7 +1391,7 @@ void party_motion_homing_fly(PartyEntry* party) {
                 dir = party->targetDir;
                 partySetTargetSpd(party, 0.0f);
                 party->gravity = 0.0f;
-                if (!(party->flags & 0x200)) {
+                if (!(party->flags & PARTY_FLAG_KEEP_POSE_UNUSED)) {
                     partyChgPoseId(party, 1);
                 }
                 partyChgMot(party, 0);
@@ -1481,7 +1481,7 @@ void party_motion_homing_fly(PartyEntry* party) {
             party->hitobjPush = hit;
             if (hitGetAttr(hit) & HIT_ATTR_SLIT) {
                 if (party->slitOn != 1) {
-                    if (!(party->playerPtr->trigFlags & 0x80000000)) {
+                    if (!(party->playerPtr->trigFlags & MARIO_TRIG_FLAG_NORMALIZING)) {
                         party->trigFlags |= PARTY_TRIG_SLIT_INIT;
                         party->slitOn = 1;
                     }
@@ -2273,7 +2273,7 @@ void party_motion_jump(PartyEntry* party) {
                 N_partyPlaySfxPartyLanding1(party);
                 party->velY = 0.0f;
                 partyChgMot(party, 0);
-                party->trigFlags |= 0x800000;
+                party->trigFlags |= PARTY_TRIG_LANDED;
                 break;
             }
         }
@@ -2577,14 +2577,14 @@ void party_motion_damage(PartyEntry* party) {
 void allPartySlitOn(void) {
     PartyEntry* party = partyGetPtr(marioGetPartyId());
     if (party) {
-        if (!(party->playerPtr->trigFlags & 0x80000000)) {
+        if (!(party->playerPtr->trigFlags & MARIO_TRIG_FLAG_NORMALIZING)) {
             party->trigFlags |= PARTY_TRIG_SLIT_INIT;
             party->slitOn = 1;
         }
     }
     party = partyGetPtr(marioGetExtraPartyId());
     if (party) {
-        if (!(party->playerPtr->trigFlags & 0x80000000)) {
+        if (!(party->playerPtr->trigFlags & MARIO_TRIG_FLAG_NORMALIZING)) {
             party->trigFlags |= PARTY_TRIG_SLIT_INIT;
             party->slitOn = 1;
         }
@@ -2652,7 +2652,7 @@ void partyChgMotSlitFloor(PartyEntry* party) {
     if (party->flags & PARTY_FLAG_MOT_SLIT_FLOOR) {
         return;
     }
-    if (!(party->playerPtr->trigFlags & 0x80000000)) {
+    if (!(party->playerPtr->trigFlags & MARIO_TRIG_FLAG_NORMALIZING)) {
         party->trigFlags |= PARTY_TRIG_SLIT_INIT;
         party->slitOn = 1;
     }
@@ -2680,7 +2680,7 @@ BOOL party_slit(PartyEntry* party) {
     // US: a partner not yet in slit mode joins in while Mario is on a slit floor
     if (party->slitOn != 1) {
         if (mario->flags & MARIO_FLAG_PAPER_MODE) {
-            if (mario->trigFlags & 0x80000000) {
+            if (mario->trigFlags & MARIO_TRIG_FLAG_NORMALIZING) {
                 return TRUE;
             }
             party->trigFlags |= PARTY_TRIG_SLIT_INIT;
@@ -2901,7 +2901,7 @@ BOOL party_roll(PartyEntry* party) {
                 party->slitOn = 0;
                 party->flags &= ~PARTY_FLAG_PAPER_MODE;
                 party->flags2 &= ~PARTY_DISP_FLAG_SLIT;
-                party->flags &= ~0x200;
+                party->flags &= ~PARTY_FLAG_KEEP_POSE_UNUSED;
                 party->flags2 &= ~PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
                 party->flags2 &= ~PARTY_DISP_FLAG_NO_FLIP;
                 party->slitStep = 100;

@@ -40,6 +40,7 @@ typedef enum PartyFlags {
     PARTY_FLAG_IS_STEPPING = (1 << 6),
     PARTY_FLAG_IN_SHALLOW_WATER = (1 << 7),
     PARTY_FLAG_IS_BEING_USED = (1 << 8),
+    PARTY_FLAG_KEEP_POSE_UNUSED = (1 << 9), // 0x200, no stand pose when the follower stops; nothing sets it
     PARTY_FLAG_PAPER_MODE = (1 << 12),
     PARTY_FLAG_MOT_SLIT_FLOOR = (1 << 13),
     PARTY_FLAG_IS_RIDING_PLANE = (1 << 16),
@@ -174,6 +175,7 @@ typedef enum PartyTrigFlags {
     PARTY_TRIG_BEHIND_DIR_SET = (1 << 20),       // 0x100000, party_set_behind_dir
     PARTY_TRIG_DOOR_MOVE = (1 << 21),            // 0x200000, door and loading-zone gathering
     PARTY_TRIG_JUMP_TARGET_SET = (1 << 22),      // 0x400000
+    PARTY_TRIG_LANDED = (1 << 23),               // 0x800000, landed: the next motion change keeps the footmarks
     PARTY_TRIG_SPLASH = (1 << 24),               // 0x1000000, water splash requested
     PARTY_TRIG_HOME_DIR_FROM_MOVE_UNUSED = (1 << 16), // 0x10000, behind-Mario direction from moveTarget (no code sets it)
 } PartyTrigFlags;

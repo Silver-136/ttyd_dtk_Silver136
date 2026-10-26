@@ -70,33 +70,33 @@ static inline BOOL isBombRock(HitEntry* hit) {
 }
 
 
-#define BOMHEI_CLEAN_SFX(p)                    \
-    if ((u32)(p)->work.bomhei.sfxId != 0xFFFFFFFFU) {             \
-        psndSFXOff((p)->work.bomhei.sfxId);         \
-        (p)->work.bomhei.sfxId = -1;                \
-    }                                          \
-    if ((u32)(p)->work.bomhei.sfxId2 != 0xFFFFFFFFU) {             \
-        psndSFXOff((p)->work.bomhei.sfxId2);         \
-        (p)->work.bomhei.sfxId2 = -1;                \
+#define BOMHEI_CLEAN_SFX(p)                            \
+    if ((u32)(p)->work.bomhei.sfxId != 0xFFFFFFFFU) {  \
+        psndSFXOff((p)->work.bomhei.sfxId);            \
+        (p)->work.bomhei.sfxId = -1;                   \
+    }                                                  \
+    if ((u32)(p)->work.bomhei.sfxId2 != 0xFFFFFFFFU) { \
+        psndSFXOff((p)->work.bomhei.sfxId2);           \
+        (p)->work.bomhei.sfxId2 = -1;                  \
     }
 
-#define BOMHEI_CLEAN_FLAGS(p)                  \
-    (p)->flags2 &= ~(1 << 4);                  \
-    (p)->flags &= ~(1 << 25);                  \
-    (p)->flags &= ~(1U << 31);                 \
-    (p)->flags &= ~(1 << 8);
+#define BOMHEI_CLEAN_FLAGS(p)                         \
+    (p)->flags2 &= ~PARTY_DISP_FLAG_NO_MAKE_DISP_DIR; \
+    (p)->flags &= ~PARTY_FLAG_FORCE_FALL;             \
+    (p)->flags &= ~PARTY_FLAG_IS_EVT_USE;             \
+    (p)->flags &= ~PARTY_FLAG_IS_BEING_USED;
 
-#define BOMHEI_FREE(p)                         \
-    if ((p)->useStruct != NULL) {         \
-        __memFree(HEAP_DEFAULT, (p)->useStruct);     \
-        (p)->useStruct = NULL;            \
+#define BOMHEI_FREE(p)                           \
+    if ((p)->useStruct != NULL) {                \
+        __memFree(HEAP_DEFAULT, (p)->useStruct); \
+        (p)->useStruct = NULL;                   \
     }
 
 void bomhei_bye(PartyEntry* party) {
     if (party->trigFlags & PARTY_TRIG_CHG_RUN_MODE) {
         party->trigFlags &= ~PARTY_TRIG_CHG_RUN_MODE;
         partyGoodbyeInit(party);
-        party->playerPtr->flags &= ~(1 << 13);
+        party->playerPtr->flags &= ~MARIO_FLAG_IS_CARRYING_BOBBERY;
         BOMHEI_CLEAN_SFX(party);
     }
     if (partyGoodbyeMain(party)) {
@@ -131,10 +131,10 @@ u8 bomheiGetStatus(void) {
 
 void bomhei_exit(PartyEntry* party) {
     PartyEntry* p;
-    party->playerPtr->flags &= ~(1 << 13);
+    party->playerPtr->flags &= ~MARIO_FLAG_IS_CARRYING_BOBBERY;
     p = partyGetPtr(marioGetPartyId());
     if (p != NULL && p->currentMemberId == PARTY_MEMBER_BOBBERY && (p->flags & PARTY_FLAG_IS_BEING_USED)) {
-        p->playerPtr->flags &= ~(1 << 13);
+        p->playerPtr->flags &= ~MARIO_FLAG_IS_CARRYING_BOBBERY;
         if (p->runMode != 9) {
             partyChgRunMode(p, 2);
             p->moveMode = 0;
@@ -148,7 +148,7 @@ void bomhei_exit(PartyEntry* party) {
 void bomhei_use_cancel(void) {
     PartyEntry* p = partyGetPtr(marioGetPartyId());
     if (p != NULL && p->currentMemberId == PARTY_MEMBER_BOBBERY && (p->flags & PARTY_FLAG_IS_BEING_USED)) {
-        p->playerPtr->flags &= ~(1 << 13);
+        p->playerPtr->flags &= ~MARIO_FLAG_IS_CARRYING_BOBBERY;
         if (p->runMode != 9) {
             partyChgRunMode(p, 2);
             p->moveMode = 0;
@@ -162,7 +162,7 @@ void bomhei_use_cancel(void) {
 void bomhei_use_cancel2() {
     PartyEntry* p = partyGetPtr(marioGetPartyId());
     if (p != NULL && p->currentMemberId == PARTY_MEMBER_BOBBERY && (p->flags & PARTY_FLAG_IS_BEING_USED) && (p->playerPtr->flags & (1 << 13))) {
-        p->playerPtr->flags &= ~(1 << 13);
+        p->playerPtr->flags &= ~MARIO_FLAG_IS_CARRYING_BOBBERY;
         marioChgPose("M_S_1");
         if (p->runMode != 9) {
             partyChgRunMode(p, 2);
@@ -198,7 +198,7 @@ void bomhei_use_post(PartyEntry* party) {
         party->moveMode = 0;
         party->trigFlags |= PARTY_TRIG_CHG_RUN_MODE;
     }
-    party->playerPtr->flags &= ~(1 << 13);
+    party->playerPtr->flags &= ~MARIO_FLAG_IS_CARRYING_BOBBERY;
     BOMHEI_CLEAN_SFX(party);
     BOMHEI_FREE(party);
 }

@@ -72,7 +72,7 @@ USER_FUNC(evt_img_alloc_capture) {
     } else {
         offId = -1;
     }
-    if (sh->flags & 4) {
+    if (sh->flags & IMG_SHADOW_ACTIVE) {
         return EVT_RETURN_DONE;
     }
     x -= x & 1;
@@ -80,7 +80,7 @@ USER_FUNC(evt_img_alloc_capture) {
     w += w & 1;
     h += h & 1;
     for (i = 0; i < 3; i++) {
-        if (i != shadowId && (img->shadows[i].flags & 4) && (img->width != (u16)w || img->height != (u16)h)) {
+        if (i != shadowId && (img->shadows[i].flags & IMG_SHADOW_ACTIVE) && (img->width != (u16)w || img->height != (u16)h)) {
             return EVT_RETURN_DONE;
         }
     }
@@ -115,10 +115,10 @@ USER_FUNC(evt_img_alloc_capture) {
         }
     }
     sh->offscreenId = offId;
-    sh->flags = 0x14;
+    sh->flags = IMG_SHADOW_ACTIVE | IMG_SHADOW_PENDING;
     sh->allocMode = allocMode;
     if (allocMode != 0) {
-        sh->flags |= 0x100;
+        sh->flags |= IMG_SHADOW_COPY_PENDING;
     }
     return EVT_RETURN_DONE;
 }

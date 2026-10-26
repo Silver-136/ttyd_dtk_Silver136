@@ -109,10 +109,10 @@ void imgDisp(CameraId camId, void* param) {
 
     for (i = 0; i < 3; i++) {
         sh = entry->shadows + i;
-        if (!(sh->flags & 4)) {
+        if (!(sh->flags & IMG_SHADOW_ACTIVE)) {
             texs[i] = NULL;
             datas[i] = NULL;
-        } else if (sh->flags & 0x10) {
+        } else if (sh->flags & IMG_SHADOW_PENDING) {
             texs[i] = NULL;
             datas[i] = NULL;
         } else {
@@ -222,12 +222,12 @@ void imgDisp_ProjPlane(CameraId camId, void* param) {
         case 0:
             return;
         case 1:
-            flags = 0x20000;
+            flags = MAP_OBJ_FLAG_PROJ_SHADOW;
             PSMTXIdentity(mtx);
             GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_CLEAR);
             break;
         case 2:
-            flags = 0x40000;
+            flags = MAP_OBJ_FLAG_DEPTH_SHADOW_2;
             PSMTXTrans(mtx, 0.0f, 0.0f, entry->offsetZ);
             GXSetBlendMode(GX_BM_SUBTRACT, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_CLEAR);
             break;
@@ -298,12 +298,12 @@ void imgCapture_Prim(ImageEntry* entry, s32 id) {
     u32 size;
     GXTexObj* obj;
     smartEntry* buf;
-    if (!(sh->flags & 4)) return;
+    if (!(sh->flags & IMG_SHADOW_ACTIVE)) return;
     offId = sh->offscreenId;
-    sh->flags |= 0x10;
+    sh->flags |= IMG_SHADOW_PENDING;
     if (offId != -1) {
         if (sh->allocMode) {
-            if (sh->flags & 0x100) {
+            if (sh->flags & IMG_SHADOW_COPY_PENDING) {
                 offscreenGetTexObj(offId, &obj, &buf);
                 if (obj) {
                     w = GXGetTexObjWidth(obj);
@@ -322,10 +322,10 @@ void imgCapture_Prim(ImageEntry* entry, s32 id) {
                     offscreenGetBoundingBox(offId, &sh->rect.left, &sh->rect.top, &sh->rect.width, &sh->rect.height);
                     sh->rect.width -= sh->rect.left;
                     sh->rect.height -= sh->rect.top;
-                    sh->flags &= ~0x100;
+                    sh->flags &= ~IMG_SHADOW_COPY_PENDING;
                 }
             }
-            if (!(sh->flags & 0x100)) sh->flags &= ~0x10;
+            if (!(sh->flags & IMG_SHADOW_COPY_PENDING)) sh->flags &= ~IMG_SHADOW_PENDING;
         } else {
             GXTexObj* o2;
             smartEntry* b2;
@@ -336,18 +336,18 @@ void imgCapture_Prim(ImageEntry* entry, s32 id) {
                 offscreenGetBoundingBox(offId, &sh->rect.left, &sh->rect.top, &sh->rect.width, &sh->rect.height);
                 sh->rect.width -= sh->rect.left;
                 sh->rect.height -= sh->rect.top;
-                sh->flags &= ~0x10;
+                sh->flags &= ~IMG_SHADOW_PENDING;
             }
         }
     } else if (sh->allocMode) {
-        if (sh->flags & 0x100) {
+        if (sh->flags & IMG_SHADOW_COPY_PENDING) {
             imgCaptureCopy(sh, entry);
-            sh->flags &= ~0x100;
+            sh->flags &= ~IMG_SHADOW_COPY_PENDING;
         }
-        if (!(sh->flags & 0x100)) sh->flags &= ~0x10;
+        if (!(sh->flags & IMG_SHADOW_COPY_PENDING)) sh->flags &= ~IMG_SHADOW_PENDING;
     } else {
         imgCaptureCopy(sh, entry);
-        sh->flags &= ~0x10;
+        sh->flags &= ~IMG_SHADOW_PENDING;
     }
 }
 
@@ -407,7 +407,7 @@ s32 imgEntry(const char* name, s32 type) {
         if (!(entry->flags & IMAGE_FLAG_IN_USE)) break;
     }
 
-    entry->flags = 9;
+    entry->flags = IMAGE_FLAG_IN_USE | IMAGE_FLAG_NO_VIRTUAL_POINT;
     entry->type = type;
     strcpy(entry->name, name);
     entry->poseId = -1;
@@ -464,7 +464,7 @@ void imgMain(void) {
         if (entry->flags & IMAGE_FLAG_IN_USE && entry->poseId != -1 && !(entry->flags & IMAGE_FLAG_HIDE)) {
             if (entry->type == 2 || entry->type == type) {
                 for (shadow = 0; shadow < 3; shadow++) {
-                    if (entry->shadows[shadow].flags & 4) break;
+                    if (entry->shadows[shadow].flags & IMG_SHADOW_ACTIVE) break;
                 }
                 if (shadow != 3) {
                     dispEntry(entry->camId, entry->order, 1, imgDisp, entry);
@@ -508,9 +508,9 @@ ImageEntry* imgNameToPtr(const char* name, s32 type) {
 
 void imgFreeCapture(ImageEntry* entry, s32 shadowId) {
     ImageShadow* shadow = &entry->shadows[shadowId];
-    if (shadow->flags & 4) {
-        shadow->flags &= ~0x10;
-        if (shadow->flags & 0x100) {
+    if (shadow->flags & IMG_SHADOW_ACTIVE) {
+        shadow->flags &= ~IMG_SHADOW_PENDING;
+        if (shadow->flags & IMG_SHADOW_COPY_PENDING) {
             shadow->flags = 0;
         } else if (!shadow->allocMode) {
             shadow->flags = 0;
@@ -559,10 +559,10 @@ void imgShadowDisp(CameraId camId, void* param) {
 
     for (i = 0; i < 3; i++) {
         sh = &entry->shadows[i];
-        if (!(sh->flags & 4)) {
+        if (!(sh->flags & IMG_SHADOW_ACTIVE)) {
             objs[i] = NULL;
             datas[i] = NULL;
-        } else if (sh->flags & 0x10) {
+        } else if (sh->flags & IMG_SHADOW_PENDING) {
             objs[i] = NULL;
             datas[i] = NULL;
         } else {
