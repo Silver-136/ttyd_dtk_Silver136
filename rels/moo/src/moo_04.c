@@ -263,7 +263,7 @@ EVT_BEGIN(moo_04_init_evt)
             CALL(evt_fade_entry, 16, 2000, 255, 255, 255)
             CALL(evt_fade_end_wait)
             CALL(evt_fade_set_mapchange_type, 1, 10, 1000, 9, 1000)
-            SET_VALUE(GSWF(4175), 1)
+            SET_VALUE(GSWF_AJI_TELEPORT_TO_TIK_PENDING, 1)
             CALL(evt_bero_mapchange, STRING("tik_00"), 0)
         END_INLINE_EVENT
     END_SWITCH

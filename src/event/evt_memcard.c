@@ -403,7 +403,7 @@ EVT_BEGIN(evt_memcard_save)
         RETURN
     END_IF
     LABEL(1)
-    SET_VALUE(GSW(4), LW(10))
+    SET_VALUE(GSW_SAVE_RESUME_POINT, LW(10))
     IF_INT_EQUAL(LW(10), 23)
         CALL(evt_msg_print, 0, STRING("msg_savefile_first_warnning"), 0, 0)
         ELSE

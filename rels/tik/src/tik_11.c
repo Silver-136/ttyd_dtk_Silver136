@@ -757,7 +757,7 @@ EVT_BEGIN(powerdownya_table_talk)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
     CALL(evt_set_dir_to_target, STRING("me"), STRING("mario"))
-    IF_INT_EQUAL(GSWF(1342), 0)
+    IF_INT_EQUAL(GSWF_TIK_11_CHET_RIPPO_FIRST_TALK_DONE, 0)
 #ifdef VERSION_G8ME01
         CALL(evt_sub_get_language, LW(15))
         SWITCH(LW(15))
@@ -770,12 +770,12 @@ EVT_BEGIN(powerdownya_table_talk)
             CALL(evt_msg_print, MSG_PRINT_DIRECT_TEXT, LW(14), 0, STRING("me"))
         END_SWITCH
 #endif
-        SET_VALUE(GSWF(1342), 1)
-        SET_VALUE(GSWF(1371), 1)
+        SET_VALUE(GSWF_TIK_11_CHET_RIPPO_FIRST_TALK_DONE, 1)
+        SET_VALUE(GSWF_TIK_11_CHET_RIPPO_GREETED_VISIT, 1)
         ELSE
-        IF_INT_EQUAL(GSWF(1371), 0)
+        IF_INT_EQUAL(GSWF_TIK_11_CHET_RIPPO_GREETED_VISIT, 0)
             CALL(evt_msg_print, 0, STRING("powerdown_00_01"), 0, STRING("me"))
-            SET_VALUE(GSWF(1371), 1)
+            SET_VALUE(GSWF_TIK_11_CHET_RIPPO_GREETED_VISIT, 1)
             ELSE
             CALL(evt_msg_print, 0, STRING("powerdown_01"), 0, STRING("me"))
         END_IF
@@ -849,7 +849,7 @@ EVT_BEGIN(tik_11_init_evt)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
     CALL_CHILD(PTR(evt_bero_info_run))
-    SET_VALUE(GSWF(1371), 0)
+    SET_VALUE(GSWF_TIK_11_CHET_RIPPO_GREETED_VISIT, 0)
     CALL(evt_npc_setup, PTR(npcEnt))
     CALL(evt_map_playanim, STRING("anm_kem"), MAP_ANIM_PLAY_LOOP, 0)
     RETURN

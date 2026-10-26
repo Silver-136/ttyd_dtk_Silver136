@@ -76,8 +76,8 @@ static BeroEntry bero_entry_data[] = {
 static EVT_BEGIN(chibitoge_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_GREATER_OR_EQUAL(STG2_26_PRAISE_FROM_THE_PUNI)
-        IF_INT_EQUAL(GSWF(2884), 1)
-            IF_INT_EQUAL(GSWF(2840), 0)
+        IF_INT_EQUAL(GSWF_MRI_LEFT_AFTER_BOSS_BATTLE, 1)
+            IF_INT_EQUAL(GSWF_MRI_04_BABY_JABBI_GIFT_THIS_VISIT, 0)
                 CALL(evt_npc_set_position, STRING("me"), -120, 0, -15)
             END_IF
         END_IF
@@ -110,7 +110,7 @@ static EVT_BEGIN(chibitoge_talk)
     CALL(evt_npc_move_position, STRING("me"), -60, 40, 0, FLOAT(120.0f), 0)
     CALL(evt_npc_move_position, STRING("me"), 75, 40, 0, FLOAT(120.0f), 0)
     CALL(evt_npc_set_position, STRING("me"), 0, -1000, 0)
-    SET_VALUE(GSWF(2840), 1)
+    SET_VALUE(GSWF_MRI_04_BABY_JABBI_GIFT_THIS_VISIT, 1)
     RETURN
 EVT_END()
 

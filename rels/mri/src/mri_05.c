@@ -76,7 +76,7 @@ USER_FUNC(mario_shabon_init) {
 EVT_BEGIN(puni_4_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_GREATER_OR_EQUAL(STG2_26_PRAISE_FROM_THE_PUNI)
-        IF_INT_EQUAL(GSWF(2884), 1)
+        IF_INT_EQUAL(GSWF_MRI_LEFT_AFTER_BOSS_BATTLE, 1)
             CALL(evt_npc_set_position, STRING("me"), -130, -309, 90)
         END_IF
     END_SWITCH
@@ -96,7 +96,7 @@ EVT_END()
 EVT_BEGIN(puni_5_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_GREATER_OR_EQUAL(STG2_26_PRAISE_FROM_THE_PUNI)
-        IF_INT_EQUAL(GSWF(2884), 1)
+        IF_INT_EQUAL(GSWF_MRI_LEFT_AFTER_BOSS_BATTLE, 1)
             CALL(evt_npc_set_position, STRING("me"), 130, -309, 90)
         END_IF
     END_SWITCH

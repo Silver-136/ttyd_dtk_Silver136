@@ -94,7 +94,7 @@ static EVT_BEGIN(hint_plate)
 EVT_END()
 
 EVT_BEGIN(kabenuke_check_evt)
-    IF_INT_EQUAL(GSWF(4381), 1)
+    IF_INT_EQUAL(GSWF_LAS_12_PASSED_THROUGH_WALL, 1)
         RETURN
     END_IF
     LABEL(0)
@@ -108,7 +108,7 @@ EVT_BEGIN(kabenuke_check_evt)
     WAIT_MS(2000)
     CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
     CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)
-    SET_VALUE(GSWF(4381), 1)
+    SET_VALUE(GSWF_LAS_12_PASSED_THROUGH_WALL, 1)
     RETURN
 EVT_END()
 
@@ -119,9 +119,9 @@ EVT_BEGIN(las_12_init_evt)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
     CALL_CHILD(PTR(evt_bero_info_run))
-    CALL(evt_mobj_floatswitch_blue, 0, STRING("switch"), 150, 60, 0, PTR(switch_evt), GSWF(4342))
-    CALL(evt_mobj_itembox, STRING("box"), -150, 0, 0, MOBJ_ITEMBOX_NORMAL, 0, PTR(box_evt), GSWF(4363))
-    IF_INT_EQUAL(GSWF(4342), 0)
+    CALL(evt_mobj_floatswitch_blue, 0, STRING("switch"), 150, 60, 0, PTR(switch_evt), GSWF_LAS_12_SWITCH_PRESSED)
+    CALL(evt_mobj_itembox, STRING("box"), -150, 0, 0, MOBJ_ITEMBOX_NORMAL, 0, PTR(box_evt), GSWF_LAS_12_PALACE_KEY_CHEST)
+    IF_INT_EQUAL(GSWF_LAS_12_SWITCH_PRESSED, 0)
         CALL(evt_mobj_flag_onoff, 1, STRING("box"), MOBJ_FLAG_NO_DISP)
         CALL(evt_mobj_hit_onoff, STRING("box"), 0)
     END_IF

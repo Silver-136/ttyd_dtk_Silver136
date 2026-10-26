@@ -62,7 +62,7 @@ static BeroEntry bero_entry_data[] = {
 EVT_BEGIN(evt_ki_6)
     CALL(evt_item_delete_check, STRING("item_ki_6"), LW(0))
     IF_INT_EQUAL(LW(0), 1)
-        CALL(evt_item_entry, STRING("item_ki_6"), ITEM_COIN, 192, 92, -120, ITEM_TYPE_FALL_NO_PICKUP, GSWF(1786), 0)
+        CALL(evt_item_entry, STRING("item_ki_6"), ITEM_COIN, 192, 92, -120, ITEM_TYPE_FALL_NO_PICKUP, GSWF_HEI_02_COIN_TREE, 0)
     END_IF
     RETURN
 EVT_END()
@@ -118,7 +118,7 @@ EVT_BEGIN(hei_02_init_evt)
     SET_VALUE(LW(0), PTR(kusa_data))
     CALL_CHILD(PTR(evt_sub_kusa_access_entry))
     CALL(evt_map_playanim, STRING("anm_mugi_1"), MAP_ANIM_PLAY_LOOP, 0)
-    CALL(evt_mobj_badgeblk, STRING("m"), 425, 25, -50, ITEM_POW_BLOCK, 0, GSWF(1787), 0)
+    CALL(evt_mobj_badgeblk, STRING("m"), 425, 25, -50, ITEM_POW_BLOCK, 0, GSWF_HEI_02_POW_BLOCK_BLOCK, 0)
     CALL(evt_cloud_init)
     CALL(evt_cloud_ent, 0, STRING("kusa_1"), STRING("a_kusa_1"), 0)
     CALL(evt_cloud_ent, 0, STRING("kusa_2"), STRING("a_kusa_2"), 0)

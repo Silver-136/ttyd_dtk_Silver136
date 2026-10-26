@@ -91,7 +91,7 @@ static BeroEntry bero_entry_data[] = {
 };
 
 EVT_BEGIN(tik_18_cloud_evt)
-    SET_VALUE(GSWF(1351), 1)
+    SET_VALUE(GSWF_TIK_18_WALL_BLOWN_AWAY, 1)
     RETURN
 EVT_END()
 
@@ -121,7 +121,7 @@ EVT_BEGIN(tik_18_init_evt)
     CALL(evt_hit_damage_return_set, PTR(hitDmgRetPoints))
     CALL_CHILD(PTR(evt_gazigazi_entry))
     CALL(evt_map_playanim, STRING("anm_mizu"), MAP_ANIM_PLAY_LOOP, 0)
-    IF_INT_EQUAL(GSWF(1351), 0)
+    IF_INT_EQUAL(GSWF_TIK_18_WALL_BLOWN_AWAY, 0)
         CALL(evt_cloud_init)
         CALL(evt_cloud_ent, 0, STRING("s_win_1"), STRING("a_win_1"), PTR(tik_18_cloud_evt))
         ELSE
@@ -136,8 +136,8 @@ EVT_BEGIN(tik_18_init_evt)
         CALL(evt_npc_check_delete, STRING("ハンニャー２"))
     END_IF
     CALL(evt_map_entry_airport_harbor, 1, STRING("S_Ship_Change_01"), STRING("ue"))
-    CALL(evt_mobj_badgeblk, STRING("mobj_01"), 110, 0, -38, ITEM_SLOW_SHROOM, 0, GSWF(1365), 0)
-    CALL(evt_mobj_badgeblk, STRING("mobj_02"), 310, 0, -38, ITEM_GRADUAL_SYRUP, 0, GSWF(1366), 0)
+    CALL(evt_mobj_badgeblk, STRING("mobj_01"), 110, 0, -38, ITEM_SLOW_SHROOM, 0, GSWF_TIK_18_SLOW_SHROOM_BLOCK, 0)
+    CALL(evt_mobj_badgeblk, STRING("mobj_02"), 310, 0, -38, ITEM_GRADUAL_SYRUP, 0, GSWF_TIK_18_GRADUAL_SYRUP_BLOCK, 0)
     RETURN
 EVT_END()
 

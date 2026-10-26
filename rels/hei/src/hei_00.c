@@ -749,10 +749,10 @@ EVT_BEGIN(moji_msg)
 EVT_END()
 
 static EVT_BEGIN(switch_evt)
-    IF_INT_EQUAL(GSWF(1776), 0)
+    IF_INT_EQUAL(GSWF_HEI_SUN_STONE_PLACED, 0)
         RETURN
     END_IF
-    IF_INT_EQUAL(GSWF(1777), 0)
+    IF_INT_EQUAL(GSWF_HEI_MOON_STONE_PLACED, 0)
         RETURN
     END_IF
     CALL(evt_mario_key_onoff, 0)
@@ -950,10 +950,10 @@ USER_FUNC(hei_00_mario_keyoff_check) {
 }
 
 EVT_BEGIN(setting_sun_stone)
-    IF_INT_EQUAL(GSWF(1776), 1)
+    IF_INT_EQUAL(GSWF_HEI_SUN_STONE_PLACED, 1)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("taiyou_ana"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("taiyounoisi"), MAP_OBJ_FLAG_HIDDEN)
-        IF_INT_EQUAL(GSWF(1777), 1)
+        IF_INT_EQUAL(GSWF_HEI_MOON_STONE_PLACED, 1)
             CALL(evt_mapobj_trans, 1, STRING("isi_4"), -80, 0, 0)
             CALL(evt_mapobj_trans, 1, STRING("taiyounoisi"), -80, 0, 0)
             CALL(evt_hit_bind_mapobj, STRING("a_isi_4"), STRING("isi_4"))
@@ -968,14 +968,14 @@ static s32 itemsel_table00[] = {
 };
 
 EVT_BEGIN(sun_stone_set_event)
-    IF_INT_EQUAL(GSWF(1776), 0)
+    IF_INT_EQUAL(GSWF_HEI_SUN_STONE_PLACED, 0)
         CALL(evt_mario_key_onoff, 0)
         CALL(evt_win_item_select, 0, PTR(itemsel_table00), LW(0), 0)
         IF_INT_EQUAL(LW(0), -1)
             CALL(evt_mario_key_onoff, 1)
             RETURN
         END_IF
-        SET_VALUE(GSWF(1776), 1)
+        SET_VALUE(GSWF_HEI_SUN_STONE_PLACED, 1)
         CALL(evt_pouch_remove_item, ITEM_SUN_STONE, LW(0))
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("taiyou_ana"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("taiyounoisi"), MAP_OBJ_FLAG_HIDDEN)
@@ -990,10 +990,10 @@ EVT_BEGIN(sun_stone_set_event)
 EVT_END()
 
 EVT_BEGIN(setting_moon_stone)
-    IF_INT_EQUAL(GSWF(1777), 1)
+    IF_INT_EQUAL(GSWF_HEI_MOON_STONE_PLACED, 1)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("tuki_ana"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("tukinoisi"), MAP_OBJ_FLAG_HIDDEN)
-        IF_INT_EQUAL(GSWF(1776), 1)
+        IF_INT_EQUAL(GSWF_HEI_SUN_STONE_PLACED, 1)
             CALL(evt_mapobj_trans, 1, STRING("isi_3"), 80, 0, 0)
             CALL(evt_mapobj_trans, 1, STRING("tukinoisi"), 80, 0, 0)
             CALL(evt_hit_bind_mapobj, STRING("a_isi_3"), STRING("isi_3"))
@@ -1008,14 +1008,14 @@ static s32 itemsel_table01[] = {
 };
 
 EVT_BEGIN(moon_stone_set_event)
-    IF_INT_EQUAL(GSWF(1777), 0)
+    IF_INT_EQUAL(GSWF_HEI_MOON_STONE_PLACED, 0)
         CALL(evt_mario_key_onoff, 0)
         CALL(evt_win_item_select, 0, PTR(itemsel_table01), LW(0), 0)
         IF_INT_EQUAL(LW(0), -1)
             CALL(evt_mario_key_onoff, 1)
             RETURN
         END_IF
-        SET_VALUE(GSWF(1777), 1)
+        SET_VALUE(GSWF_HEI_MOON_STONE_PLACED, 1)
         CALL(evt_pouch_remove_item, ITEM_MOON_STONE, LW(0))
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("tuki_ana"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("tukinoisi"), MAP_OBJ_FLAG_HIDDEN)
@@ -1040,7 +1040,7 @@ EVT_END()
 EVT_BEGIN(ki_data_evt_02)
     CALL(evt_item_delete_check, STRING("item_ki02"), LW(0))
     IF_INT_EQUAL(LW(0), 1)
-        CALL(evt_item_entry, STRING("item_ki02"), ITEM_MUSHROOM, -408, 139, -127, ITEM_TYPE_FALL_NO_PICKUP, GSWF(1778), 0)
+        CALL(evt_item_entry, STRING("item_ki02"), ITEM_MUSHROOM, -408, 139, -127, ITEM_TYPE_FALL_NO_PICKUP, GSWF_HEI_00_MUSHROOM_TREE, 0)
     END_IF
     RETURN
 EVT_END()
@@ -1204,10 +1204,10 @@ EVT_BEGIN(hei_00_init_evt)
         CALL(evt_mapobj_flag_onoff, 0, 0, STRING("h_dokan"), MAP_OBJ_FLAG_HIDDEN)
         SET_VALUE(LW(0), STRING("dokan"))
         CALL_CHILD(PTR(bero_case_switch_on))
-        SET_VALUE(GSWF(1774), 1)
-        SET_VALUE(GSWF(1775), 1)
-        SET_VALUE(GSWF(1776), 1)
-        SET_VALUE(GSWF(1777), 1)
+        SET_VALUE(GSWF_HEI_SUN_STONE_TAKEN, 1)
+        SET_VALUE(GSWF_HEI_MOON_STONE_TAKEN, 1)
+        SET_VALUE(GSWF_HEI_SUN_STONE_PLACED, 1)
+        SET_VALUE(GSWF_HEI_MOON_STONE_PLACED, 1)
         ELSE
         CALL(evt_mapobj_flag_onoff, 0, 1, STRING("h_dokan"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_trans, 0, STRING("h_dokan"), 0, -20, 0)
@@ -1217,9 +1217,9 @@ EVT_BEGIN(hei_00_init_evt)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG1_08_OPENING_THE_PATH)
         CALL(evt_mapobj_get_position, STRING("isi_3"), LW(0), LW(1), LW(2))
         CALL(evt_mapobj_get_position, STRING("isi_4"), LW(10), LW(11), LW(12))
-        CALL(evt_mobj_timerswitch, 0, STRING("sw_1"), LW(0), 25, LW(2), STRING("sw_2"), LW(10), 25, LW(12), 120, PTR(dokan_evt), GSWF(1804))
-        IF_INT_EQUAL(GSWF(1776), 1)
-            IF_INT_EQUAL(GSWF(1777), 1)
+        CALL(evt_mobj_timerswitch, 0, STRING("sw_1"), LW(0), 25, LW(2), STRING("sw_2"), LW(10), 25, LW(12), 120, PTR(dokan_evt), GSWF_HEI_00_TIMER_SWITCHES_PRESSED)
+        IF_INT_EQUAL(GSWF_HEI_SUN_STONE_PLACED, 1)
+            IF_INT_EQUAL(GSWF_HEI_MOON_STONE_PLACED, 1)
                 CALL(evt_mapobj_flag_onoff, 1, 0, STRING("s_moji"), MAP_OBJ_FLAG_HIDDEN)
                 CALL(evt_hitobj_onoff, STRING("a_moji"), 1, 1)
                 CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_moji"), 0, PTR(moji_msg), 0)
@@ -1227,16 +1227,16 @@ EVT_BEGIN(hei_00_init_evt)
         END_IF
     END_IF
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("taiyounoisi"), MAP_OBJ_FLAG_HIDDEN)
-    IF_INT_EQUAL(GSWF(1774), 1)
-        IF_INT_EQUAL(GSWF(1776), 0)
+    IF_INT_EQUAL(GSWF_HEI_SUN_STONE_TAKEN, 1)
+        IF_INT_EQUAL(GSWF_HEI_SUN_STONE_PLACED, 0)
             CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_isi_4"), 0, PTR(sun_stone_set_event), 0)
             ELSE
             CALL_CHILD(PTR(setting_sun_stone))
         END_IF
     END_IF
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("tukinoisi"), MAP_OBJ_FLAG_HIDDEN)
-    IF_INT_EQUAL(GSWF(1775), 1)
-        IF_INT_EQUAL(GSWF(1777), 0)
+    IF_INT_EQUAL(GSWF_HEI_MOON_STONE_TAKEN, 1)
+        IF_INT_EQUAL(GSWF_HEI_MOON_STONE_PLACED, 0)
             CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_isi_3"), 0, PTR(moon_stone_set_event), 0)
             ELSE
             CALL_CHILD(PTR(setting_moon_stone))
@@ -1245,7 +1245,7 @@ EVT_BEGIN(hei_00_init_evt)
     SET_VALUE(LW(0), PTR(ki_data))
     CALL_CHILD(PTR(evt_sub_tree_access_entry))
     CALL(evt_map_playanim, STRING("anm_mugi_1"), MAP_ANIM_PLAY_LOOP, 0)
-    CALL(evt_mobj_badgeblk, STRING("mobj_hatenablk"), 450, 60, 0, ITEM_MUSHROOM, 0, GSWF(1780), 0)
+    CALL(evt_mobj_badgeblk, STRING("mobj_hatenablk"), 450, 60, 0, ITEM_MUSHROOM, 0, GSWF_HEI_00_MUSHROOM_BLOCK, 0)
     CALL(evt_mobj_save_blk, STRING("mobj_save"), -455, 135, -75, 0, 0)
     CALL(evt_npc_pera_onoff, STRING("ゴンババ影"), 0)
     IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, STG2_25_02_PEACH_SHALL_WE_DANCE)

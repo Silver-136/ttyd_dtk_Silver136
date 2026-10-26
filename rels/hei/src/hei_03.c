@@ -64,15 +64,15 @@ static BeroEntry bero_entry_data[] = {
 };
 
 static EVT_BEGIN(dead_evt1)
-    SET_VALUE(GSWF(1788), 1)
-    SET_VALUE(GSWF(1789), 1)
+    SET_VALUE(GSWF_HEI_03_PILLAR_ENEMY_1_DEFEATED, 1)
+    SET_VALUE(GSWF_HEI_03_PILLAR_ENEMY_2_DEFEATED, 1)
     CALL_CHILD(PTR(enemy_common_dead_event))
     RETURN
 EVT_END()
 
 static EVT_BEGIN(dead_evt2)
-    SET_VALUE(GSWF(1789), 1)
-    SET_VALUE(GSWF(1788), 1)
+    SET_VALUE(GSWF_HEI_03_PILLAR_ENEMY_2_DEFEATED, 1)
+    SET_VALUE(GSWF_HEI_03_PILLAR_ENEMY_1_DEFEATED, 1)
     CALL_CHILD(PTR(enemy_common_dead_event))
     RETURN
 EVT_END()
@@ -198,12 +198,12 @@ static EVT_BEGIN(hashira_evt)
     SET_VALUE(LW(0), LW(0))
     SPAWN_EVENT_GET_ID(PTR(hashira_evt_sub), LW(15))
     IF_INT_EQUAL(LW(2), 0)
-        IF_INT_EQUAL(GSWF(1789), 0)
+        IF_INT_EQUAL(GSWF_HEI_03_PILLAR_ENEMY_2_DEFEATED, 0)
             SET_VALUE(LW(0), LW(1))
             SPAWN_EVENT(PTR(hashira_evt_sub))
         END_IF
         ELSE
-        IF_INT_EQUAL(GSWF(1788), 0)
+        IF_INT_EQUAL(GSWF_HEI_03_PILLAR_ENEMY_1_DEFEATED, 0)
             SET_VALUE(LW(0), LW(1))
             SPAWN_EVENT(PTR(hashira_evt_sub))
         END_IF
@@ -251,7 +251,7 @@ EVT_BEGIN(hei_03_init_evt)
     SET_VALUE(GF(0), 0)
     SET_VALUE(GF(1), 0)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG1_04_BALD_CLEFT)
-        IF_INT_EQUAL(GSWF(1788), 0)
+        IF_INT_EQUAL(GSWF_HEI_03_PILLAR_ENEMY_1_DEFEATED, 0)
             CALL(evt_npc_set_anim, STRING("シンノスケ1"), STRING("SIN_Z_1"))
             CALL(evt_npc_set_position, STRING("シンノスケ1"), -119, 65, -77)
             CALL(evt_npc_set_ry, STRING("シンノスケ1"), 90)
@@ -262,7 +262,7 @@ EVT_BEGIN(hei_03_init_evt)
             CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_hasira_1"), 0, PTR(hashira_evt), GW(0))
             SET_VALUE(GF(0), 1)
         END_IF
-        IF_INT_EQUAL(GSWF(1789), 0)
+        IF_INT_EQUAL(GSWF_HEI_03_PILLAR_ENEMY_2_DEFEATED, 0)
             CALL(evt_npc_set_anim, STRING("シンノスケ2"), STRING("SIN_Z_1"))
             CALL(evt_npc_set_position, STRING("シンノスケ2"), 120, 63, -77)
             CALL(evt_npc_set_ry, STRING("シンノスケ2"), 270)
@@ -275,11 +275,11 @@ EVT_BEGIN(hei_03_init_evt)
         END_IF
         BEGIN_INLINE_EVENT
             LABEL(0)
-            IF_INT_EQUAL(GSWF(1788), 0)
+            IF_INT_EQUAL(GSWF_HEI_03_PILLAR_ENEMY_1_DEFEATED, 0)
                 WAIT_FRAMES(1)
                 GOTO(0)
             END_IF
-            IF_INT_EQUAL(GSWF(1789), 0)
+            IF_INT_EQUAL(GSWF_HEI_03_PILLAR_ENEMY_2_DEFEATED, 0)
                 WAIT_FRAMES(1)
                 GOTO(0)
             END_IF

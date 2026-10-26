@@ -191,7 +191,7 @@ void badgeShop_bottakuruGeneration(void) {
     for (i = 0; i < 4; i++) {
         for (m = 0; m < sizeof(badge_bottakuru_table) / sizeof(badge_bottakuru_table[0]); m++) {
             if (table[i][0] == badge_bottakuru_table[m]) {
-                evtSetValue(NULL, i + GSW(118), m);
+                evtSetValue(NULL, i + GSW_BADGESHOP_CHARLIETON_STOCK, m);
             }
         }
     }
@@ -203,8 +203,8 @@ void badgeShop_bteresaGeneration(void) {
 
     has = pouchCheckItem(ITEM_SPECIAL_CARD);
     if (has) {
-        if (!evtGetValue(NULL, GSWF(246))) {
-            evtSetValue(NULL, GSWF(246), 1);
+        if (!evtGetValue(NULL, GSWF_PARLOR_SPECIAL_CARD_PRIZES_ADDED)) {
+            evtSetValue(NULL, GSWF_PARLOR_SPECIAL_CARD_PRIZES_ADDED, 1);
             for (ptr = badge_bteresa_table_card_special; *ptr; ptr++) {
                 badgeShop_add(bdsw->bteresa_table, (s16)*ptr, 1);
             }
@@ -213,8 +213,8 @@ void badgeShop_bteresaGeneration(void) {
 
     has = pouchCheckItem(ITEM_SILVER_CARD);
     if (has) {
-        if (!evtGetValue(NULL, GSWF(247))) {
-            evtSetValue(NULL, GSWF(247), 1);
+        if (!evtGetValue(NULL, GSWF_PARLOR_SILVER_CARD_PRIZES_ADDED)) {
+            evtSetValue(NULL, GSWF_PARLOR_SILVER_CARD_PRIZES_ADDED, 1);
             for (ptr = badge_bteresa_table_card_silver; *ptr; ptr++) {
                 badgeShop_add(bdsw->bteresa_table, (s16)*ptr, 1);
             }
@@ -223,8 +223,8 @@ void badgeShop_bteresaGeneration(void) {
 
     has = pouchCheckItem(ITEM_GOLD_CARD);
     if (has) {
-        if (!evtGetValue(NULL, GSWF(248))) {
-            evtSetValue(NULL, GSWF(248), 1);
+        if (!evtGetValue(NULL, GSWF_PARLOR_GOLD_CARD_PRIZES_ADDED)) {
+            evtSetValue(NULL, GSWF_PARLOR_GOLD_CARD_PRIZES_ADDED, 1);
             for (ptr = badge_bteresa_table_card_gold; *ptr; ptr++) {
                 badgeShop_add(bdsw->bteresa_table, (s16)*ptr, 1);
             }
@@ -233,8 +233,8 @@ void badgeShop_bteresaGeneration(void) {
 
     has = pouchCheckItem(ITEM_PLATINUM_CARD);
     if (has) {
-        if (!evtGetValue(NULL, GSWF(249))) {
-            evtSetValue(NULL, GSWF(249), 1);
+        if (!evtGetValue(NULL, GSWF_PARLOR_PLATINUM_CARD_PRIZES_ADDED)) {
+            evtSetValue(NULL, GSWF_PARLOR_PLATINUM_CARD_PRIZES_ADDED, 1);
             for (ptr = badge_bteresa_table_card_platinum; *ptr; ptr++) {
                 badgeShop_add(bdsw->bteresa_table, (s16)*ptr, 1);
             }
@@ -258,54 +258,54 @@ void badgeShop_bargainGeneration(void) {
     s32 count;
     s32 v7;
 
-    if (evtGetValue(NULL, GSW_STORY_PROGRESS) >= STG1_16_HOOKTAIL && !evtGetValue(0, GSWF(238))) {
-        evtSetValue(NULL, GSWF(238), 1);
+    if (evtGetValue(NULL, GSW_STORY_PROGRESS) >= STG1_16_HOOKTAIL && !evtGetValue(0, GSWF_BADGESHOP_STAGE_1_STOCK_ADDED)) {
+        evtSetValue(NULL, GSWF_BADGESHOP_STAGE_1_STOCK_ADDED, 1);
         for (ptr = badge_special_table_stage_1_clear; *ptr; ptr++) {
             badgeShop_add(bdsw->special_table, (s16)*ptr, 1);
         }
     }
 
-    if (evtGetValue(NULL, GSW_STORY_PROGRESS) >= STG2_25_AFTER_THE_BOSS_BATTLE && !evtGetValue(0, GSWF(239))) {
-        evtSetValue(NULL, GSWF(239), 1);
+    if (evtGetValue(NULL, GSW_STORY_PROGRESS) >= STG2_25_AFTER_THE_BOSS_BATTLE && !evtGetValue(0, GSWF_BADGESHOP_STAGE_2_STOCK_ADDED)) {
+        evtSetValue(NULL, GSWF_BADGESHOP_STAGE_2_STOCK_ADDED, 1);
         for (ptr = badge_special_table_stage_2_clear; *ptr; ptr++) {
             badgeShop_add(bdsw->special_table, (s16)*ptr, 1);
         }
     }
 
-    if (evtGetValue(NULL, GSW_STORY_PROGRESS) >= STG3_32_BOSS_BATTLE && !evtGetValue(0, GSWF(240))) {
-        evtSetValue(NULL, GSWF(240), 1);
+    if (evtGetValue(NULL, GSW_STORY_PROGRESS) >= STG3_32_BOSS_BATTLE && !evtGetValue(0, GSWF_BADGESHOP_STAGE_3_STOCK_ADDED)) {
+        evtSetValue(NULL, GSWF_BADGESHOP_STAGE_3_STOCK_ADDED, 1);
         for (ptr = badge_special_table_stage_3_clear; *ptr; ptr++) {
             badgeShop_add(bdsw->special_table, (s16)*ptr, 1);
         }
     }
 
-    if (evtGetValue(NULL, GSW_STORY_PROGRESS) >= STG4_15_02_BACK_TO_NORMAL && !evtGetValue(0, GSWF(241))) {
-        evtSetValue(NULL, GSWF(241), 1);
+    if (evtGetValue(NULL, GSW_STORY_PROGRESS) >= STG4_15_02_BACK_TO_NORMAL && !evtGetValue(0, GSWF_BADGESHOP_STAGE_4_STOCK_ADDED)) {
+        evtSetValue(NULL, GSWF_BADGESHOP_STAGE_4_STOCK_ADDED, 1);
         for (ptr = badge_special_table_stage_4_clear; *ptr; ptr++) {
             badgeShop_add(bdsw->special_table, (s16)*ptr, 1);
         }
     }
 
-    if (evtGetValue(NULL, GSW_STORY_PROGRESS) >= STG5_33_CORTEZ_AND_THE_TREASURE && !evtGetValue(0, GSWF(242))) {
-        evtSetValue(NULL, GSWF(242), 1);
+    if (evtGetValue(NULL, GSW_STORY_PROGRESS) >= STG5_33_CORTEZ_AND_THE_TREASURE && !evtGetValue(0, GSWF_BADGESHOP_STAGE_5_STOCK_ADDED)) {
+        evtSetValue(NULL, GSWF_BADGESHOP_STAGE_5_STOCK_ADDED, 1);
         for (ptr = badge_special_table_stage_5_clear; *ptr; ptr++) {
             badgeShop_add(bdsw->special_table, (s16)*ptr, 1);
         }
     }
 
-    if (evtGetValue(NULL, GSW_STORY_PROGRESS) >= STG6_53_THE_REAL_GARNET_STAR && !evtGetValue(0, GSWF(243))) {
-        evtSetValue(NULL, GSWF(243), 1);
+    if (evtGetValue(NULL, GSW_STORY_PROGRESS) >= STG6_53_THE_REAL_GARNET_STAR && !evtGetValue(0, GSWF_BADGESHOP_STAGE_6_STOCK_ADDED)) {
+        evtSetValue(NULL, GSWF_BADGESHOP_STAGE_6_STOCK_ADDED, 1);
         for (ptr = badge_special_table_stage_6_clear; *ptr; ptr++) {
             badgeShop_add(bdsw->special_table, (s16)*ptr, 1);
         }
     }
 
-    if (evtGetValue(NULL, GSW_STORY_PROGRESS) >= STG7_20_LORD_CRUMP_DEFEATED && !evtGetValue(0, GSWF(244))) {
-        evtSetValue(NULL, GSWF(244), 1);
+    if (evtGetValue(NULL, GSW_STORY_PROGRESS) >= STG7_20_LORD_CRUMP_DEFEATED && !evtGetValue(0, GSWF_BADGESHOP_STAGE_7_STOCK_ADDED)) {
+        evtSetValue(NULL, GSWF_BADGESHOP_STAGE_7_STOCK_ADDED, 1);
     }
 
-    if (evtGetValue(NULL, GSW_STORY_PROGRESS) >= STG8_16_THE_RETURN_OF_THE_QUEEN && !evtGetValue(0, GSWF(245))) {
-        evtSetValue(NULL, GSWF(245), 1);
+    if (evtGetValue(NULL, GSW_STORY_PROGRESS) >= STG8_16_THE_RETURN_OF_THE_QUEEN && !evtGetValue(0, GSWF_BADGESHOP_STAGE_8_STOCK_ADDED)) {
+        evtSetValue(NULL, GSWF_BADGESHOP_STAGE_8_STOCK_ADDED, 1);
     }
 
     memset(table, 0, sizeof(table));
@@ -547,7 +547,7 @@ USER_FUNC(evt_badgeShop_bottakuru_dec) {
     value = evtGetValue(event, *event->args);
     badgeShop_add(bdsw->bottakuru_table, (s16)value, -1);
     for (i = 0; i < 4; i++) {
-        if (value == badge_bottakuru_table[evtGetValue(event, i + GSW(118))]) {
+        if (value == badge_bottakuru_table[evtGetValue(event, i + GSW_BADGESHOP_CHARLIETON_STOCK)]) {
             evtSetValue(event, GSW(118 + i), (sizeof(badge_bottakuru_table) / sizeof(s32)) - 1); //last entry aka kNullItem
         }
     }
@@ -593,7 +593,7 @@ USER_FUNC(evt_badgeShop_bottakuru_get_kind_cnt) {
     int i;
 
     for (count = 0, i = 0; i < 4; i++) {
-        if (badge_bottakuru_table[evtGetValue(event, i + GSW(118))]) {
+        if (badge_bottakuru_table[evtGetValue(event, i + GSW_BADGESHOP_CHARLIETON_STOCK)]) {
             count++;
         }
     }

@@ -78,11 +78,11 @@ EVT_BEGIN(kpa_init)
     CALL(kpa_score_disp_init)
     CALL(evt_bero_get_entername, LW(0))
     IF_STR_EQUAL(LW(0), STRING("kpa_replay"))
-        SET_VALUE(GSW(1222), 180)
+        SET_VALUE(GSW_KPA_TIME_LEFT, 180)
         ELSE
         IF_STR_NOT_EQUAL(LW(0), STRING("kpa_next_map"))
-            SET_VALUE(GSW(1221), 1)
-            SET_VALUE(GSW(1222), 180)
+            SET_VALUE(GSW_KPA_TRY_COUNT, 1)
+            SET_VALUE(GSW_KPA_TIME_LEFT, 180)
         END_IF
     END_IF
     CALL(evt_cam_type_change, 1, 4)
@@ -299,8 +299,8 @@ EVT_BEGIN(kpa_dead)
         CALL(evt_mario_set_pos, LW(4), LW(0), LW(5))
         WAIT_FRAMES(1)
     END_LOOP
-    IF_INT_LESS(GSW(1221), 99)
-        ADD(GSW(1221), 1)
+    IF_INT_LESS(GSW_KPA_TRY_COUNT, 99)
+        ADD(GSW_KPA_TRY_COUNT, 1)
     END_IF
     CALL(kpa_status_get_stage, LW(0))
     SWITCH(LW(0))
@@ -359,7 +359,7 @@ USER_FUNC(kpa_set_scale) {
 }
 
 EVT_BEGIN(kpa_bgm_change)
-    IF_INT_GREATER(GSW(1222), 30)
+    IF_INT_GREATER(GSW_KPA_TIME_LEFT, 30)
         SET_VALUE(LW(2), 0)
         ELSE
         SET_VALUE(LW(2), 1)
@@ -367,7 +367,7 @@ EVT_BEGIN(kpa_bgm_change)
     SET_VALUE(LW(3), -1)
     SET_VALUE(LW(4), -1)
     LABEL(10)
-    IF_INT_GREATER(GSW(1222), 30)
+    IF_INT_GREATER(GSW_KPA_TIME_LEFT, 30)
         SET_VALUE(LW(3), 0)
         ADD(LW(3), LSW(1))
         ELSE
@@ -512,7 +512,7 @@ EVT_END()
 EVT_BEGIN(kpa_time)
     CALL(evt_seq_wait, SEQ_GAME)
     SET_VALUE(LW(1), 180)
-    SUBTRACT(LW(1), GSW(1222))
+    SUBTRACT(LW(1), GSW_KPA_TIME_LEFT)
     SET_VALUE(LW(3), LW(1))
     DIVIDE(LW(1), 10)
     MODULO(LW(3), 10)
@@ -534,7 +534,7 @@ EVT_BEGIN(kpa_time)
             IF_INT_EQUAL(LF(0), 0)
                 ADD(LW(2), LW(3))
             END_IF
-            CALL(kpa_set_time, LW(2), LW(1), GSW(1222))
+            CALL(kpa_set_time, LW(2), LW(1), GSW_KPA_TIME_LEFT)
             IF_INT_GREATER_OR_EQUAL(LW(2), 10000)
                 BREAK_LOOP
             END_IF

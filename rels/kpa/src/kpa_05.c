@@ -91,7 +91,7 @@ static EVT_BEGIN(jumpstand_evt)
     DELETE_EVENT(GW(15))
     BEGIN_INLINE_EVENT
         WAIT_MS(500)
-        CALL(evt_koopa_get_level, GSW(1223))
+        CALL(evt_koopa_get_level, GSW_KPA_BOWSER_LEVEL)
         CALL(evt_bero_mapchange, STRING("kpa_06"), STRING("kpa_next_map"))
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
@@ -126,7 +126,7 @@ EVT_BEGIN(kpa_05_init_evt)
     CALL_CHILD(PTR(kpa_read_item))
     CALL(evt_map_playanim, STRING("anm_magu"), MAP_ANIM_PLAY_LOOP, 0)
     SPAWN_EVENT(PTR(kpa_fall))
-    CALL(kpa_status_init, 3, GSW(1221), GSW(1222))
+    CALL(kpa_status_init, 3, GSW_KPA_TRY_COUNT, GSW_KPA_TIME_LEFT)
     SET_VALUE(LSW(1), 2)
     SPAWN_EVENT(PTR(kpa_stage_start))
     SPAWN_EVENT_GET_ID(PTR(kpa_time), GW(15))

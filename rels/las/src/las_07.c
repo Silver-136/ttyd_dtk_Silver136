@@ -88,9 +88,9 @@ static EVT_BEGIN(e2_door_open)
 EVT_END()
 
 static EVT_BEGIN(door_matigai_evt)
-    IF_INT_EQUAL(GSWF(4325), 1)
+    IF_INT_EQUAL(GSWF_LAS_WRONG_DOOR_SFX_PENDING, 1)
         CALL(evt_snd_sfxon, STRING("SFX_STG8_DOOR_NG_OPEN1"), 0)
-        SET_VALUE(GSWF(4325), 0)
+        SET_VALUE(GSWF_LAS_WRONG_DOOR_SFX_PENDING, 0)
     END_IF
     SET_VALUE(LW(0), 0)
     RETURN
@@ -183,9 +183,9 @@ EVT_BEGIN(las_07_init_evt)
         CALL(evt_seq_wait, SEQ_GAME)
         CALL(evt_cam_road_reset)
     END_INLINE_EVENT
-    CALL(evt_mobj_badgeblk, STRING("mobj00"), -100, 60, -300, ITEM_COIN, 0, GSWF(4373), 0)
-    CALL(evt_mobj_badgeblk, STRING("mobj01"), 100, 60, -300, ITEM_JAMMIN_JELLY, 0, GSWF(4374), 0)
-    CALL(evt_mobj_badgeblk, STRING("mobj_badge_gat"), 0, 60, -300, ITEM_P_UP_D_DOWN_P, 0, GSWF(4376), 1)
+    CALL(evt_mobj_badgeblk, STRING("mobj00"), -100, 60, -300, ITEM_COIN, 0, GSWF_LAS_07_COIN_BLOCK, 0)
+    CALL(evt_mobj_badgeblk, STRING("mobj01"), 100, 60, -300, ITEM_JAMMIN_JELLY, 0, GSWF_LAS_07_JAMMIN_JELLY_BLOCK, 0)
+    CALL(evt_mobj_badgeblk, STRING("mobj_badge_gat"), 0, 60, -300, ITEM_P_UP_D_DOWN_P, 0, GSWF_LAS_07_P_UP_D_DOWN_P_BADGE_BLOCK, 1)
     RETURN
 EVT_END()
 

@@ -624,11 +624,11 @@ EVT_BEGIN(mail_evt)
     CALL(evt_mario_balloon_off)
     CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
     CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)
-    IF_INT_EQUAL(GSWF(37), 0)
-        SET_VALUE(GSWF(37), 1)
+    IF_INT_EQUAL(GSWF_MAIL_TUTORIAL_SEEN, 0)
+        SET_VALUE(GSWF_MAIL_TUTORIAL_SEEN, 1)
         CALL(evt_msg_print, 0, STRING("mail_first_hit"), 0, 0)
         ELSE
-        IF_INT_EQUAL(GSWF(38), 0)
+        IF_INT_EQUAL(GSWF_MAIL_TUTORIAL_REPEAT_OFF, 0)
             CALL(evt_msg_print, 0, STRING("mail_first_hit"), 0, 0)
         END_IF
     END_IF
@@ -638,7 +638,7 @@ EVT_BEGIN(mail_evt)
 EVT_END()
 
 EVT_BEGIN(mail_evt_nok_01)
-    IF_INT_EQUAL(GSWF(7), 1)
+    IF_INT_EQUAL(GSWF_MAIL_FRANKLY_SENT, 1)
         RETURN
     END_IF
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -655,7 +655,7 @@ EVT_BEGIN(mail_evt_nok_01)
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
-    SET_VALUE(GSWF(7), 1)
+    SET_VALUE(GSWF_MAIL_FRANKLY_SENT, 1)
     CALL(evt_pouch_receive_mail, 16)
     CALL(evt_pouch_receive_mail, 26)
     CALL_CHILD(PTR(mail_evt))
@@ -673,8 +673,8 @@ EVT_BEGIN(mail_evt_gor_03)
         IF_INT_EQUAL(LW(5), 1)
             SET_VALUE(LF(0), 0)
             IF_INT_EQUAL(GSW_STORY_PROGRESS, STG2_47_AFTER_GETTING_THE_TICKET)
-                IF_INT_EQUAL(GSWF(8), 0)
-                    SET_VALUE(GSWF(8), 1)
+                IF_INT_EQUAL(GSWF_MAIL_KOOPLEY_SENT, 0)
+                    SET_VALUE(GSWF_MAIL_KOOPLEY_SENT, 1)
                     CALL(evt_pouch_receive_mail, 17)
                     SET_VALUE(LF(0), 1)
                 END_IF
@@ -705,8 +705,8 @@ EVT_BEGIN(mail_evt_gor_02)
         IF_INT_EQUAL(LW(5), 1)
             SET_VALUE(LF(0), 0)
             IF_INT_EQUAL(GSW_STORY_PROGRESS, STG3_51_FRANKLYS_HOUSE_STG_3)
-                IF_INT_EQUAL(GSWF(9), 0)
-                    SET_VALUE(GSWF(9), 1)
+                IF_INT_EQUAL(GSWF_MAIL_KOOPIE_KOO_SENT, 0)
+                    SET_VALUE(GSWF_MAIL_KOOPIE_KOO_SENT, 1)
                     CALL(evt_pouch_receive_mail, 18)
                     SET_VALUE(LF(0), 1)
                 END_IF
@@ -727,7 +727,7 @@ EVT_BEGIN(mail_evt_gor_02)
 EVT_END()
 
 EVT_BEGIN(mail_evt_gor_01)
-    IF_INT_EQUAL(GSWF(10), 1)
+    IF_INT_EQUAL(GSWF_MAIL_PETUNI_SENT, 1)
         RETURN
     END_IF
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -744,7 +744,7 @@ EVT_BEGIN(mail_evt_gor_01)
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
-    SET_VALUE(GSWF(10), 1)
+    SET_VALUE(GSWF_MAIL_PETUNI_SENT, 1)
     CALL(evt_pouch_receive_mail, 19)
     CALL_CHILD(PTR(mail_evt))
     RETURN
@@ -765,8 +765,8 @@ EVT_BEGIN(mail_evt_gor_04)
         IF_INT_EQUAL(LW(5), 1)
             SET_VALUE(LF(0), 0)
             IF_INT_EQUAL(GSW_STORY_PROGRESS, STG5_66_BELDAM_FINDS_OUT)
-                IF_INT_EQUAL(GSWF(11), 0)
-                    SET_VALUE(GSWF(11), 1)
+                IF_INT_EQUAL(GSWF_MAIL_BOO_SENT, 0)
+                    SET_VALUE(GSWF_MAIL_BOO_SENT, 1)
                     CALL(evt_pouch_receive_mail, 20)
                     SET_VALUE(LF(0), 1)
                 END_IF
@@ -787,7 +787,7 @@ EVT_BEGIN(mail_evt_gor_04)
 EVT_END()
 
 EVT_BEGIN(mail_evt_rsh_03_a)
-    IF_INT_EQUAL(GSWF(12), 1)
+    IF_INT_EQUAL(GSWF_MAIL_PA_PATCH_SENT, 1)
         RETURN
     END_IF
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -808,14 +808,14 @@ EVT_BEGIN(mail_evt_rsh_03_a)
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
-    SET_VALUE(GSWF(12), 1)
+    SET_VALUE(GSWF_MAIL_PA_PATCH_SENT, 1)
     CALL(evt_pouch_receive_mail, 21)
     CALL_CHILD(PTR(mail_evt))
     RETURN
 EVT_END()
 
 EVT_BEGIN(mail_evt_hom_00)
-    IF_INT_EQUAL(GSWF(13), 1)
+    IF_INT_EQUAL(GSWF_MAIL_KING_K_SENT, 1)
         RETURN
     END_IF
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -832,14 +832,14 @@ EVT_BEGIN(mail_evt_hom_00)
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
-    SET_VALUE(GSWF(13), 1)
+    SET_VALUE(GSWF_MAIL_KING_K_SENT, 1)
     CALL(evt_pouch_receive_mail, 22)
     CALL_CHILD(PTR(mail_evt))
     RETURN
 EVT_END()
 
 EVT_BEGIN(mail_evt_gor_02_2)
-    IF_INT_EQUAL(GSWF(14), 1)
+    IF_INT_EQUAL(GSWF_MAIL_ZIP_TOAD_SENT, 1)
         RETURN
     END_IF
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -856,14 +856,14 @@ EVT_BEGIN(mail_evt_gor_02_2)
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
-    SET_VALUE(GSWF(14), 1)
+    SET_VALUE(GSWF_MAIL_ZIP_TOAD_SENT, 1)
     CALL(evt_pouch_receive_mail, 23)
     CALL_CHILD(PTR(mail_evt))
     RETURN
 EVT_END()
 
 EVT_BEGIN(mail_evt_bom_01)
-    IF_INT_EQUAL(GSWF(15), 1)
+    IF_INT_EQUAL(GSWF_MAIL_RAWK_HAWK_SENT, 1)
         RETURN
     END_IF
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -882,14 +882,14 @@ EVT_BEGIN(mail_evt_bom_01)
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
-    SET_VALUE(GSWF(15), 1)
+    SET_VALUE(GSWF_MAIL_RAWK_HAWK_SENT, 1)
     CALL(evt_pouch_receive_mail, 24)
     CALL_CHILD(PTR(mail_evt))
     RETURN
 EVT_END()
 
 EVT_BEGIN(mail_evt_tik_00)
-    IF_INT_EQUAL(GSWF(16), 1)
+    IF_INT_EQUAL(GSWF_MAIL_GHOST_T_SENT, 1)
         RETURN
     END_IF
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -910,7 +910,7 @@ EVT_BEGIN(mail_evt_tik_00)
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
-    SET_VALUE(GSWF(16), 1)
+    SET_VALUE(GSWF_MAIL_GHOST_T_SENT, 1)
     CALL(evt_pouch_receive_mail, 25)
     CALL(evt_pouch_receive_mail, 33)
     CALL_CHILD(PTR(mail_evt))
@@ -918,7 +918,7 @@ EVT_BEGIN(mail_evt_tik_00)
 EVT_END()
 
 EVT_BEGIN(mail_evt_win_01)
-    IF_INT_EQUAL(GSWF(17), 1)
+    IF_INT_EQUAL(GSWF_MAIL_RDM_ISSUE_1_SENT, 1)
         RETURN
     END_IF
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -935,14 +935,14 @@ EVT_BEGIN(mail_evt_win_01)
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
-    SET_VALUE(GSWF(17), 1)
+    SET_VALUE(GSWF_MAIL_RDM_ISSUE_1_SENT, 1)
     CALL(evt_pouch_receive_mail, 27)
     CALL_CHILD(PTR(mail_evt))
     RETURN
 EVT_END()
 
 EVT_BEGIN(mail_evt_tou_01)
-    IF_INT_EQUAL(GSWF(18), 1)
+    IF_INT_EQUAL(GSWF_MAIL_RDM_ISSUE_2_SENT, 1)
         RETURN
     END_IF
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -959,16 +959,16 @@ EVT_BEGIN(mail_evt_tou_01)
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
-    SET_VALUE(GSWF(18), 1)
+    SET_VALUE(GSWF_MAIL_RDM_ISSUE_2_SENT, 1)
     CALL(evt_pouch_receive_mail, 28)
-    SET_VALUE(GSWF(250), 1)
-    CALL(evt_sub_save_playtime, GSW(5))
+    SET_VALUE(GSWF_SHOP_MRI_07_DOUBLE_POINTS_SALE, 1)
+    CALL(evt_sub_save_playtime, GSW_SHOP_MRI_07_SALE_START_TIME)
     CALL_CHILD(PTR(mail_evt))
     RETURN
 EVT_END()
 
 EVT_BEGIN(mail_evt_usu_01)
-    IF_INT_EQUAL(GSWF(19), 1)
+    IF_INT_EQUAL(GSWF_MAIL_RDM_ISSUE_3_SENT, 1)
         RETURN
     END_IF
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -985,7 +985,7 @@ EVT_BEGIN(mail_evt_usu_01)
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
-    SET_VALUE(GSWF(19), 1)
+    SET_VALUE(GSWF_MAIL_RDM_ISSUE_3_SENT, 1)
     CALL(evt_pouch_receive_mail, 29)
     CALL_CHILD(mail_evt)
     RETURN
@@ -1002,11 +1002,11 @@ EVT_BEGIN(mail_evt_gor_01_2)
         IF_INT_EQUAL(LW(5), 1)
             SET_VALUE(LF(0), 0)
             IF_INT_EQUAL(GSW_STORY_PROGRESS, STG5_59_01_A_MAIL_FROM_PEACH)
-                IF_INT_EQUAL(GSWF(20), 0)
-                    SET_VALUE(GSWF(20), 1)
+                IF_INT_EQUAL(GSWF_MAIL_RDM_ISSUE_4_SENT, 0)
+                    SET_VALUE(GSWF_MAIL_RDM_ISSUE_4_SENT, 1)
                     CALL(evt_pouch_receive_mail, 30)
-                    SET_VALUE(GSWF(251), 1)
-                    CALL(evt_sub_save_playtime, GSW(14))
+                    SET_VALUE(GSWF_SHOP_USU_01_DOUBLE_POINTS_SALE, 1)
+                    CALL(evt_sub_save_playtime, GSW_SHOP_USU_01_SALE_START_TIME)
                     SET_VALUE(LF(0), 1)
                 END_IF
             END_IF
@@ -1026,7 +1026,7 @@ EVT_BEGIN(mail_evt_gor_01_2)
 EVT_END()
 
 EVT_BEGIN(mail_evt_rsh_03_a_2)
-    IF_INT_EQUAL(GSWF(21), 1)
+    IF_INT_EQUAL(GSWF_MAIL_RDM_ISSUE_5_SENT, 1)
         RETURN
     END_IF
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -1043,14 +1043,14 @@ EVT_BEGIN(mail_evt_rsh_03_a_2)
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
-    SET_VALUE(GSWF(21), 1)
+    SET_VALUE(GSWF_MAIL_RDM_ISSUE_5_SENT, 1)
     CALL(evt_pouch_receive_mail, 31)
     CALL_CHILD(mail_evt)
     RETURN
 EVT_END()
 
 EVT_BEGIN(mail_evt_pik_00)
-    IF_INT_EQUAL(GSWF(22), 1)
+    IF_INT_EQUAL(GSWF_MAIL_RDM_ISSUE_6_SENT, 1)
         RETURN
     END_IF
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -1069,10 +1069,10 @@ EVT_BEGIN(mail_evt_pik_00)
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
-    SET_VALUE(GSWF(22), 1)
+    SET_VALUE(GSWF_MAIL_RDM_ISSUE_6_SENT, 1)
     CALL(evt_pouch_receive_mail, 32)
-    SET_VALUE(GSWF(252), 1)
-    CALL(evt_sub_save_playtime, GSW(23))
+    SET_VALUE(GSWF_SHOP_RSH_03_DOUBLE_POINTS_SALE, 1)
+    CALL(evt_sub_save_playtime, GSW_SHOP_RSH_03_SALE_START_TIME)
     CALL_CHILD(mail_evt)
     RETURN
 EVT_END()

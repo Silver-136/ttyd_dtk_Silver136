@@ -76,8 +76,8 @@ EVT_BEGIN(kpa_04_init_evt)
     SET_VALUE(LW(0), PTR(kpa_act_stg2_mobj))
     CALL_CHILD(PTR(kpa_read_mobj))
     SPAWN_EVENT(PTR(kpa_fall))
-    CALL(kpa_status_init, 2, GSW(1221), GSW(1222))
-    DEBUG_PUT_REG(GSW(1222))
+    CALL(kpa_status_init, 2, GSW_KPA_TRY_COUNT, GSW_KPA_TIME_LEFT)
+    DEBUG_PUT_REG(GSW_KPA_TIME_LEFT)
     SET_VALUE(LSW(1), 0)
     SET_VALUE(LSWF(2), 1)
     SPAWN_EVENT(PTR(kpa_bgm_change))
@@ -87,7 +87,7 @@ EVT_BEGIN(kpa_04_init_evt)
     IF_BITS_SET(LW(0), GW_FLAG_NO_ENTRANCE)
         RETURN
     END_IF
-    CALL(evt_koopa_set_level, GSW(1223))
+    CALL(evt_koopa_set_level, GSW_KPA_BOWSER_LEVEL)
     RETURN
 EVT_END()
 

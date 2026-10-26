@@ -422,12 +422,12 @@ EVT_BEGIN(las_21_init_evt)
         SPAWN_EVENT(PTR(hikari_evt))
     END_IF
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG8_06_MOVING_PLANETS)
-        IF_INT_EQUAL(GSWF(4353), 0)
+        IF_INT_EQUAL(GSWF_LAS_19_SWITCH_1_ON, 0)
             SET_VALUE(LW(0), -220)
             ELSE
             SET_VALUE(LW(0), -580)
         END_IF
-        IF_INT_EQUAL(GSWF(4354), 0)
+        IF_INT_EQUAL(GSWF_LAS_19_SWITCH_2_ON, 0)
             SET_VALUE(LW(1), -120)
             ELSE
             SET_VALUE(LW(1), -580)

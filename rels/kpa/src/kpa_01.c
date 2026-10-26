@@ -847,14 +847,14 @@ EVT_END()
 
 EVT_BEGIN(hammer_AB_init_evt)
     CALL_CHILD(PTR(npc_init_evt))
-    IF_INT_EQUAL(GSWF(4775), 0)
+    IF_INT_EQUAL(GSWF_KPA_01_HAMMER_BROS_FIRST_TALK_DONE, 0)
         CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_TALK_TURN)
     END_IF
     RETURN
 EVT_END()
 
 EVT_BEGIN(hammer_AB_talk_evt)
-    IF_INT_EQUAL(GSWF(4775), 0)
+    IF_INT_EQUAL(GSWF_KPA_01_HAMMER_BROS_FIRST_TALK_DONE, 0)
         CALL(evt_msg_print, 0, STRING("kpa_stg1_006"), 0, STRING("ハンマーＡ"))
         CALL(evt_msg_print, 0, STRING("kpa_stg1_007"), 0, STRING("ハンマーＢ"))
         SET_VALUE(LSWF(1), 0)
@@ -875,7 +875,7 @@ EVT_BEGIN(hammer_AB_talk_evt)
         CALL(evt_msg_print, 0, STRING("kpa_stg1_008"), PTR(kpa_stg1_008_cb), STRING("ハンマーＡ"))
         CALL(evt_npc_set_autotalkpose, STRING("mario"), STRING("KPA_S_1"), STRING("KPA_T_1"))
         CALL(evt_msg_print, 0, STRING("kpa_stg1_009"), 0, STRING("mario"))
-        SET_VALUE(GSWF(4775), 1)
+        SET_VALUE(GSWF_KPA_01_HAMMER_BROS_FIRST_TALK_DONE, 1)
         CALL(evt_npc_flag_onoff, 0, STRING("ハンマーＡ"), NPC_FLAG_NO_TALK_TURN)
         CALL(evt_npc_flag_onoff, 0, STRING("ハンマーＢ"), NPC_FLAG_NO_TALK_TURN)
         ELSE

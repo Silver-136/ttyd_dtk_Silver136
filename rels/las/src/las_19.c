@@ -281,19 +281,19 @@ EVT_BEGIN(change_map_evt)
 EVT_END()
 
 static EVT_BEGIN(switch1_evt)
-    IF_INT_EQUAL(GSWF(4353), 0)
-        SET_VALUE(GSWF(4353), 1)
+    IF_INT_EQUAL(GSWF_LAS_19_SWITCH_1_ON, 0)
+        SET_VALUE(GSWF_LAS_19_SWITCH_1_ON, 1)
         ELSE
-        SET_VALUE(GSWF(4353), 0)
+        SET_VALUE(GSWF_LAS_19_SWITCH_1_ON, 0)
     END_IF
     RETURN
 EVT_END()
 
 static EVT_BEGIN(switch2_evt)
-    IF_INT_EQUAL(GSWF(4354), 0)
-        SET_VALUE(GSWF(4354), 1)
+    IF_INT_EQUAL(GSWF_LAS_19_SWITCH_2_ON, 0)
+        SET_VALUE(GSWF_LAS_19_SWITCH_2_ON, 1)
         ELSE
-        SET_VALUE(GSWF(4354), 0)
+        SET_VALUE(GSWF_LAS_19_SWITCH_2_ON, 0)
     END_IF
     RETURN
 EVT_END()
@@ -351,18 +351,18 @@ EVT_BEGIN(las_19_init_evt)
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG8_06_MOVING_PLANETS)
         CALL(evt_mobj_switch_float_blk, STRING("switch1"), 375, -320, -45, STRING(""), 2, PTR(switch1_evt), 0)
         CALL(evt_mobj_switch_float_blk, STRING("switch2"), 450, -320, -45, STRING(""), 0, PTR(switch2_evt), 0)
-        IF_INT_EQUAL(GSWF(4353), 0)
+        IF_INT_EQUAL(GSWF_LAS_19_SWITCH_1_ON, 0)
             CALL(evt_mobj_set_anim, STRING("switch1"), STRING("A_3"))
             ELSE
             CALL(evt_mobj_set_anim, STRING("switch1"), STRING("S_1"))
         END_IF
-        IF_INT_EQUAL(GSWF(4354), 0)
+        IF_INT_EQUAL(GSWF_LAS_19_SWITCH_2_ON, 0)
             CALL(evt_mobj_set_anim, STRING("switch2"), STRING("A_3"))
             ELSE
             CALL(evt_mobj_set_anim, STRING("switch2"), STRING("S_1"))
         END_IF
     END_IF
-    CALL(evt_mobj_badgeblk, STRING("mobj_item00"), 30, -440, -40, ITEM_THUNDER_RAGE, 0, GSWF(4387), 0)
+    CALL(evt_mobj_badgeblk, STRING("mobj_item00"), 30, -440, -40, ITEM_THUNDER_RAGE, 0, GSWF_LAS_19_THUNDER_RAGE_BLOCK, 0)
     RETURN
 EVT_END()
 

@@ -52,7 +52,7 @@ static USER_FUNC(npc_set_me) {
 }
 
 static EVT_BEGIN(evt_chorobon)
-    SET_VALUE(GSWF(1774), 1)
+    SET_VALUE(GSWF_HEI_SUN_STONE_TAKEN, 1)
     CALL(evt_mario_wait_movable)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_npc_flag_onoff, 0, STRING("チョロボン"), NPC_FLAG_ENEMY)
@@ -100,7 +100,7 @@ EVT_BEGIN(hei_12_init_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG1_TORIDE1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG1_HEI3"))
     CALL(evt_snd_set_rev_mode, 1)
-    IF_INT_EQUAL(GSWF(1774), 0)
+    IF_INT_EQUAL(GSWF_HEI_SUN_STONE_TAKEN, 0)
         CALL(evt_npc_change_interrupt, STRING("チョロボン"), 1, 0)
         CALL(evt_npc_restart_regular_event, STRING("チョロボン"))
         CALL(evt_npc_set_position, STRING("チョロボン"), 0, 400, 0)
@@ -113,7 +113,7 @@ EVT_BEGIN(hei_12_init_evt)
             CALL(evt_npc_set_battle_info, STRING("チョロボン"), 23)
         END_IF
     END_IF
-    IF_INT_EQUAL(GSWF(1774), 0)
+    IF_INT_EQUAL(GSWF_HEI_SUN_STONE_TAKEN, 0)
         CALL(evt_item_entry, STRING("sun_st"), ITEM_SUN_STONE, 0, 0, 0, ITEM_TYPE_GROUND, -1, PTR(evt_chorobon))
     END_IF
     CALL(evt_map_playanim, STRING("mizu"), MAP_ANIM_PLAY_LOOP, 0)

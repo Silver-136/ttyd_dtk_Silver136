@@ -1613,7 +1613,7 @@ EVT_BEGIN(peach_change_evt)
 #endif
     END_IF
     CALL(btlevtcmd_GetHp, UNIT_ID_SELF, LW(0))
-    SET_VALUE(GSW(1124), LW(0))
+    SET_VALUE(GSW_LAS_SHADOW_QUEEN_HP_UNUSED, LW(0))
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     RETURN
 EVT_END()

@@ -55,7 +55,7 @@ EvtWord mri_11_init_evt[192];
 EVT_BEGIN(toge_7_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_GREATER_OR_EQUAL(STG2_26_PRAISE_FROM_THE_PUNI)
-        IF_INT_EQUAL(GSWF(2884), 1)
+        IF_INT_EQUAL(GSWF_MRI_LEFT_AFTER_BOSS_BATTLE, 1)
             CALL(evt_npc_set_position, STRING("me"), -220, 0, 110)
         END_IF
     END_SWITCH
@@ -79,7 +79,7 @@ EVT_END()
 EVT_BEGIN(toge_8_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_GREATER_OR_EQUAL(STG2_26_PRAISE_FROM_THE_PUNI)
-        IF_INT_EQUAL(GSWF(2884), 1)
+        IF_INT_EQUAL(GSWF_MRI_LEFT_AFTER_BOSS_BATTLE, 1)
             CALL(evt_npc_set_position, STRING("me"), -75, 0, -100)
         END_IF
     END_SWITCH
@@ -103,7 +103,7 @@ EVT_END()
 EVT_BEGIN(toge_9_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_GREATER_OR_EQUAL(STG2_26_PRAISE_FROM_THE_PUNI)
-        IF_INT_EQUAL(GSWF(2884), 1)
+        IF_INT_EQUAL(GSWF_MRI_LEFT_AFTER_BOSS_BATTLE, 1)
             CALL(evt_npc_set_position, STRING("me"), 70, 0, 80)
         END_IF
     END_SWITCH
@@ -127,7 +127,7 @@ EVT_END()
 EVT_BEGIN(toge_10_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_GREATER_OR_EQUAL(STG2_26_PRAISE_FROM_THE_PUNI)
-        IF_INT_EQUAL(GSWF(2884), 1)
+        IF_INT_EQUAL(GSWF_MRI_LEFT_AFTER_BOSS_BATTLE, 1)
             CALL(evt_npc_set_position, STRING("me"), 180, 0, 60)
         END_IF
     END_SWITCH
@@ -158,7 +158,7 @@ EVT_END()
 EVT_BEGIN(toge_11_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_GREATER_OR_EQUAL(STG2_26_PRAISE_FROM_THE_PUNI)
-        IF_INT_EQUAL(GSWF(2884), 1)
+        IF_INT_EQUAL(GSWF_MRI_LEFT_AFTER_BOSS_BATTLE, 1)
             CALL(evt_npc_set_position, STRING("me"), -70, 0, -35)
         END_IF
     END_SWITCH

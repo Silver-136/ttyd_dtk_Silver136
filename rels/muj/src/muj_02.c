@@ -483,7 +483,7 @@ static HitDamageReturn hitDmgRetPoints[] = {
 };
 
 static EVT_BEGIN(evt_switch_init)
-    IF_INT_EQUAL(GSWF(1349), 0)
+    IF_INT_EQUAL(GSWF_TIK_17_MUJ_PIPE_RAISED, 0)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_dakan"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_dokan"), 1, 0)
     END_IF

@@ -819,7 +819,7 @@ WinMgrSelect* winMgrSelectEntry(EvtWord type, s32 newItem, BOOL a3) {
             memset(sel->items, 0, 0x10);
             sel->numItems = 0;
             for (i = 0; i < 4; i++) {
-                m = badge_bottakuru_table[evtGetValue(NULL, GSW(118) + i)];
+                m = badge_bottakuru_table[evtGetValue(NULL, GSW_BADGESHOP_CHARLIETON_STOCK + i)];
                 if (m) {
                     sel->items[sel->numItems++].id = m;
                 }

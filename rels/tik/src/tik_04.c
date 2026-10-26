@@ -217,15 +217,15 @@ EVT_BEGIN(plane_tobashi_check)
         SET_VALUE(LF(0), 1)
     END_IF
     IF_INT_EQUAL(LF(0), 1)
-        SET_VALUE(GSWF(1339), 1)
+        SET_VALUE(GSWF_TIK_04_PLANE_FLIGHT_LANDED, 1)
         RETURN
     END_IF
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 1)
     WAIT_MS(750)
-    IF_INT_EQUAL(GSWF(1370), 0)
+    IF_INT_EQUAL(GSWF_TIK_04_PLANE_HINT_SEEN, 0)
         CALL(evt_msg_print, 0, STRING("mac_0_094_01"), 0, STRING("extparty"))
-        SET_VALUE(GSWF(1370), 1)
+        SET_VALUE(GSWF_TIK_04_PLANE_HINT_SEEN, 1)
         ELSE
         CALL(evt_msg_print, 0, STRING("mac_0_094_01_1"), 0, STRING("extparty"))
     END_IF
@@ -236,7 +236,7 @@ EVT_BEGIN(plane_tobashi_check)
 EVT_END()
 
 EVT_BEGIN(tik04_wall_blow_evt)
-    SET_VALUE(GSWF(1336), 1)
+    SET_VALUE(GSWF_TIK_04_WALL_BLOWN_AWAY, 1)
     RETURN
 EVT_END()
 
@@ -313,11 +313,11 @@ EVT_BEGIN(tik_04_init_evt)
     END_IF
     CALL(evt_map_entry_airport_harbor, 0, STRING("hikou"), STRING("a_hikou"))
     IF_INT_LESS_OR_EQUAL(GSW_STORY_PROGRESS, STG0_12_02_PAPER_MAGE_1)
-        IF_INT_EQUAL(GSWF(1339), 0)
+        IF_INT_EQUAL(GSWF_TIK_04_PLANE_FLIGHT_LANDED, 0)
             SPAWN_EVENT(PTR(plane_tobashi_check))
         END_IF
     END_IF
-    IF_INT_EQUAL(GSWF(1336), 0)
+    IF_INT_EQUAL(GSWF_TIK_04_WALL_BLOWN_AWAY, 0)
         CALL(evt_cloud_init)
         CALL(evt_cloud_ent, 0, STRING("win_1"), STRING("a_win_1"), PTR(tik04_wall_blow_evt))
         ELSE
@@ -329,22 +329,22 @@ EVT_BEGIN(tik_04_init_evt)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("dai_toreru"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("dai_6"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_hitobj_onoff, STRING("a_dai_6"), 1, 0)
-    IF_INT_EQUAL(GSWF(1335), 0)
+    IF_INT_EQUAL(GSWF_TIK_04_STAIRS_SWITCH_PRESSED, 0)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("s_dai_nise"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_dai_nise"), 1, 1)
-        CALL(evt_mobj_switch_blue, 0, STRING("mobj_switch00"), 275, 0, 100, PTR(tik_04_switch_evt), GSWF(1335))
+        CALL(evt_mobj_switch_blue, 0, STRING("mobj_switch00"), 275, 0, 100, PTR(tik_04_switch_evt), GSWF_TIK_04_STAIRS_SWITCH_PRESSED)
         ELSE
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("dai_6"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_dai_6"), 1, 1)
     END_IF
-    CALL(evt_item_entry, STRING("blackkey"), ITEM_BLACK_KEY_0x21, 175, 125, -100, ITEM_TYPE_STILL, GSWF(1337), 0)
+    CALL(evt_item_entry, STRING("blackkey"), ITEM_BLACK_KEY_0x21, 175, 125, -100, ITEM_TYPE_STILL, GSWF_TIK_04_BLACK_KEY, 0)
     CALL(evt_mobj_jumpstand_blue, 0, STRING("mobj_jump00"), 150, -450, 0, 0, 0, 0)
-    CALL(evt_mobj_lv_blk, STRING("block"), -425, 0, 0, 0, GSWF(1338), STRING("MOBJ_Lv1BigBigBlock"))
-    IF_INT_EQUAL(GSWF(1338), 0)
+    CALL(evt_mobj_lv_blk, STRING("block"), -425, 0, 0, 0, GSWF_TIK_04_LV1_BIGBIG_BLOCK_BROKEN, STRING("MOBJ_Lv1BigBigBlock"))
+    IF_INT_EQUAL(GSWF_TIK_04_LV1_BIGBIG_BLOCK_BROKEN, 0)
         CALL(evt_mobj_flag_onoff, 1, STRING("block"), MOBJ_FLAG_NO_CULL)
     END_IF
-    CALL(evt_mobj_itembox, STRING("mobj_box00"), 310, 0, -25, MOBJ_ITEMBOX_NORMAL, 0, PTR(mobj_box00), GSWF(1357))
-    CALL(evt_mobj_brick, STRING("mobj_box01"), -150, 60, 130, ITEM_PRETTY_LUCKY, MOBJ_BRICK_HIDDEN_BADGE, 0, GSWF(1358))
+    CALL(evt_mobj_itembox, STRING("mobj_box00"), 310, 0, -25, MOBJ_ITEMBOX_NORMAL, 0, PTR(mobj_box00), GSWF_TIK_04_HAPPY_HEART_P_CHEST)
+    CALL(evt_mobj_brick, STRING("mobj_box01"), -150, 60, 130, ITEM_PRETTY_LUCKY, MOBJ_BRICK_HIDDEN_BADGE, 0, GSWF_TIK_04_PRETTY_LUCKY_HIDDEN_BLOCK)
     CALL(evt_item_entry, STRING("item_02"), ITEM_STAR_PIECE, -460, 25, -100, ITEM_TYPE_STILL, GSWF_STARPIECE_24, 0)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG5_43_X_NAUTS_RETREAT)
         CALL(evt_npc_check_delete, STRING("カメック"))

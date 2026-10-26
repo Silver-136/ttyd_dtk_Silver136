@@ -85,7 +85,7 @@ static BeroEntry e3_bero[] = {
 };
 
 EVT_BEGIN(gon_00_init_evt)
-    SET_VALUE(GSWF(255), 1)
+    SET_VALUE(GSWF_GON_00_VISITED_UNUSED, 1)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
     CALL_CHILD(PTR(evt_bero_info_run))

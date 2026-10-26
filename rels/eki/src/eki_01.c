@@ -187,32 +187,32 @@ static EVT_BEGIN(evt_lock)
 EVT_END()
 
 EVT_BEGIN(evt_kami_1)
-    SET_VALUE(GSWF(3748), 1)
+    SET_VALUE(GSWF_EKI_01_PAPER_1_BLOWN_AWAY, 1)
     RETURN
 EVT_END()
 
 EVT_BEGIN(evt_kami_2)
-    SET_VALUE(GSWF(3749), 1)
+    SET_VALUE(GSWF_EKI_01_PAPER_2_BLOWN_AWAY, 1)
     RETURN
 EVT_END()
 
 EVT_BEGIN(evt_kami_3)
-    SET_VALUE(GSWF(3750), 1)
+    SET_VALUE(GSWF_EKI_01_PAPER_3_BLOWN_AWAY, 1)
     RETURN
 EVT_END()
 
 EVT_BEGIN(evt_kami_4)
-    SET_VALUE(GSWF(3751), 1)
+    SET_VALUE(GSWF_EKI_01_PAPER_4_BLOWN_AWAY, 1)
     RETURN
 EVT_END()
 
 EVT_BEGIN(evt_kami_5)
-    SET_VALUE(GSWF(3752), 1)
+    SET_VALUE(GSWF_EKI_01_PAPER_5_BLOWN_AWAY, 1)
     RETURN
 EVT_END()
 
 EVT_BEGIN(evt_kami_6)
-    SET_VALUE(GSWF(3753), 1)
+    SET_VALUE(GSWF_EKI_01_PAPER_6_BLOWN_AWAY, 1)
     RETURN
 EVT_END()
 
@@ -223,7 +223,7 @@ EVT_BEGIN(eki_01_init_evt)
     CALL(evt_snd_bgmoff, PSND_FADEOUT)
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG6_EKI2_2"))
     IF_INT_LESS(GSW_STORY_PROGRESS, STG6_30_ORIGAMI_STAIRS)
-        CALL(evt_mobj_switch_blue, 0, STRING("origami_sw"), 90, 10, -60, PTR(evt_origami), GSWF(3727))
+        CALL(evt_mobj_switch_blue, 0, STRING("origami_sw"), 90, 10, -60, PTR(evt_origami), GSWF_EKI_01_ORIGAMI_SWITCH_PRESSED)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("dann"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("n_origami"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_oritatami"), 1, 0)
@@ -234,42 +234,42 @@ EVT_BEGIN(eki_01_init_evt)
         CALL(evt_hitobj_onoff, STRING("a_oritatami"), 1, 1)
     END_IF
     IF_INT_LESS(GSW_STORY_PROGRESS, STG6_32_UNLOCKING_THE_DOOR)
-        CALL(evt_mobj_lock, STRING("lock"), 25, 394, 10, 0, -80, PTR(evt_chk), PTR(evt_lock), GSWF(3726))
+        CALL(evt_mobj_lock, STRING("lock"), 25, 394, 10, 0, -80, PTR(evt_chk), PTR(evt_lock), GSWF_EKI_01_DOOR_UNLOCKED)
         SET_VALUE(LW(0), 0)
         CALL_CHILD(PTR(bero_case_switch_off))
     END_IF
     CALL(evt_cloud_init)
-    IF_INT_EQUAL(GSWF(3748), 0)
+    IF_INT_EQUAL(GSWF_EKI_01_PAPER_1_BLOWN_AWAY, 0)
         CALL(evt_cloud_ent, 0, STRING("kami_1"), STRING("a_kami_1"), PTR(evt_kami_1))
         ELSE
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("kami_1"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_kami_1"), 1, 0)
     END_IF
-    IF_INT_EQUAL(GSWF(3749), 0)
+    IF_INT_EQUAL(GSWF_EKI_01_PAPER_2_BLOWN_AWAY, 0)
         CALL(evt_cloud_ent, 0, STRING("kami_2"), STRING("a_kami_2"), PTR(evt_kami_2))
         ELSE
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("kami_2"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_kami_2"), 1, 0)
     END_IF
-    IF_INT_EQUAL(GSWF(3750), 0)
+    IF_INT_EQUAL(GSWF_EKI_01_PAPER_3_BLOWN_AWAY, 0)
         CALL(evt_cloud_ent, 0, STRING("kami_3"), STRING("a_kami_3"), PTR(evt_kami_3))
         ELSE
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("kami_3"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_kami_3"), 1, 0)
     END_IF
-    IF_INT_EQUAL(GSWF(3751), 0)
+    IF_INT_EQUAL(GSWF_EKI_01_PAPER_4_BLOWN_AWAY, 0)
         CALL(evt_cloud_ent, 0, STRING("kami_4"), STRING("a_kami_4"), PTR(evt_kami_4))
         ELSE
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("kami_4"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_kami_4"), 1, 0)
     END_IF
-    IF_INT_EQUAL(GSWF(3752), 0)
+    IF_INT_EQUAL(GSWF_EKI_01_PAPER_5_BLOWN_AWAY, 0)
         CALL(evt_cloud_ent, 0, STRING("kami_5"), STRING("a_kami_5"), PTR(evt_kami_5))
         ELSE
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("kami_5"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_kami_5"), 1, 0)
     END_IF
-    IF_INT_EQUAL(GSWF(3753), 0)
+    IF_INT_EQUAL(GSWF_EKI_01_PAPER_6_BLOWN_AWAY, 0)
         CALL(evt_cloud_ent, 0, STRING("kami_6"), STRING("a_kami_6"), PTR(evt_kami_6))
         ELSE
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("kami_6"), MAP_OBJ_FLAG_HIDDEN)
