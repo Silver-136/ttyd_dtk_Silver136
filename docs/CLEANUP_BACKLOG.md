@@ -46,30 +46,24 @@ data order 10, sound-name integer round trips (`SFX_NAME_WORD`) 9, no-op casts 6
   unless their meaning is clear (then `_UNUSED`).
 - Padding arrays (`u8 pad_..[n]`, `u8 field_..[n]`) in struct layouts: 455; many are views that should become the
   real struct type.
-- Icon ids: every icon the game code uses has a name except `ICON_1D4` / `ICON_1D5` (one use each); the US-only
-  per-language icon tables (statuswindow, kpa, evt_shop) still list raw US ids for the non-English variants.
-- Saved-game flags and variables by number: `GSWF(n)` 2,657, `GSW(n)` 311, `LSW/LSWF(n)` 417 uses. Names need
-  evidence from the code that sets and tests each one.
+- Names come only from the game's own data (symbols, strings, labels, message keys, model and event names) or
+  from what our code does; other people's or other projects' names are not used (2026-10-26). Inherited struct
+  field names are credited in NAME_PROVENANCE.md.
+- Icon ids: every icon the game code uses has a name; unused placeholders stay ICON_xxx. The US-only per-language
+  icon tables (statuswindow, kpa, evt_shop) still list raw US ids for the non-English variants.
+- Saved-game flags and variables by number: `GSWF(n)`, `GSW(n)`, `LSW/LSWF(n)`. Named so far: story progress
+  (StoryProgress, 407 game labels), Trouble Center, Star Pieces and Shine Sprites (game strings). About 280 more
+  GSWF are item/block collect flags (most used only in the call that creates the item); the rest need evidence from
+  the scripts that set and test them.
 - Names with an address suffix (25) and debug strings by address (`str_8...`, 6 in shadowdrv).
 - Ghidra-style locals left: 14.
-- Ready to name from checked reference notes (each verified against the code that reads it): unit attribute bits
-  0x1 (map object), 0x40, 0x4000, 0x4000000 and part bits 0x8 (bodyguard redirect target), 0x8000, 0x20000,
-  0x8000000 still used as raw numbers; sound list entry kinds (efx / song / stream bits of pssfxlist); damage codes
-  0x16 / 0x1C / 0x1D still raw in battle_damage.c. Dead bits (no reader): weapon special 0x200, target weighting
-  0x2000.
-- From the reference-folder survey (2026-10-26), still open (done: Trouble Center names, map-object kinds, stage
-  hazard types, cooking item ids and recipe comments, block items, weapon icon blocks, Station Keys, original
-  Filed/opcode spellings, story progress values):
-  - Saved flags: GSWF_STARPIECE_00..99 = GSWF(5567..5666) and GSWF_SHINE_00..41 = GSWF(5525..5566) (game strings);
-    about 423 item/block collect flags nameable from the item and room in the scripts.
-  - evt_mobj: the raw item ids in badge block / item calls; kururing's item argument is read and ignored.
-  - Placeholder icons left in icon_ids.h have labels in the US icon list (Modding FAQ); two used ones (ICON_1D4 /
-    ICON_1D5: white box / small white x).
-  - JP demo name leads: partyWalkSe (our partyPlaySfxFootstep), partyPrevRunMode (our partyRestoreRunMode).
-  - Comments: English attack names for 710 of 743 BattleWeapon definitions, message paraphrases next to message
-    calls (only 95 of 6,224 have one).
-- Room and NPC comments: a place-name comment per map REL room (274 of 278 rooms have one in the reference lists)
-  and English identities for the Japanese NPC names in setup tables (about 90 % covered).
+- Battle values still unnamed: pose types 30, 32-34, 37, 41, 47, 51, 53-55 (59 direct uses); token bits 0x20,
+  0x40, 0x80, 0x100; unit flag 0x10; unit attribute 0x100000. Dead bits (no reader): weapon special 0x200, target
+  weighting 0x2000.
+- JP demo name leads: partyWalkSe (our partyPlaySfxFootstep), partyPrevRunMode (our partyRestoreRunMode).
+- Comments from the game's own data: message paraphrases next to message calls (only 95 of 6,224 have one), place
+  comments per room and NPC identities where the game's data (debug story list maps, NPC tribe table, messages)
+  shows them.
 - Unnamed bits in smaller drivers' flag words (module-local words, a few driver fields).
 
 ## 4. Structure and layout of the source
