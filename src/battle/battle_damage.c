@@ -71,7 +71,7 @@ void BattleDamageDirect(s32 unitId, BattleUnit* target, BattleUnitPart* part, s3
     }
     BtlUnit_GetHitPos(target, part, &pos.x, &pos.y, &pos.z);
 
-    if (!(result & 0x2000)) {
+    if (!(result & DAMAGE_RESULT_ABSORBED)) {
         if (damage != 0 || fpDamage != 0) {
             f32 x, y, z;
             BtlUnit_GetHitPos(target, part, &x, &y, &z);
@@ -140,7 +140,7 @@ void BattleDamageDirect(s32 unitId, BattleUnit* target, BattleUnitPart* part, s3
         effRecoveryEntry(0, __fabs(damage), x, y, z);
     }
 
-    if (!(result & 0x2000) && damage > 0) {
+    if (!(result & DAMAGE_RESULT_ABSORBED) && damage > 0) {
         s32 n = 0;
         s32 i = target->badgesEquipped.PityFlower;
         for (; i > 0; i--) {
@@ -298,7 +298,7 @@ void BattleDamageDirect(s32 unitId, BattleUnit* target, BattleUnitPart* part, s3
     } else if ((u32)target->damagePattern == ATTACKPATTERN_BLOW) {
         target->damagePattern = 0;
     }
-    target->mTokenFlags |= 1;
+    target->mTokenFlags |= kDamagedThisTurn;
     BattleRunHitEvent(target, result);
 }
 
@@ -582,7 +582,7 @@ skip:
         damage = 0;
     }
     if (defenseAttr == DEFENSE_ATTR_ABSORB) {
-        *result |= 0x2000;
+        *result |= DAMAGE_RESULT_ABSORBED;
         return (u32)damage * -1;
     }
     if (damage <= 0) {
@@ -603,7 +603,7 @@ s32 BattleCalculateFpDamage(BattleUnit* attacker, BattleUnit* target, BattleUnit
     s32 reduce = 0;
     s32 (*fn)(BattleUnit*, BattleWeapon*, BattleUnit*, BattleUnitPart*);
 
-    if (*resultFlags & 0x2000) {
+    if (*resultFlags & DAMAGE_RESULT_ABSORBED) {
         return 0;
     }
     fn = (s32 (*)(BattleUnit*, BattleWeapon*, BattleUnit*, BattleUnitPart*))weapon->fpDamageFn;
@@ -627,8 +627,8 @@ s32 BattleCalculateFpDamage(BattleUnit* attacker, BattleUnit* target, BattleUnit
     if (damage < 0) {
         damage = 0;
     }
-    if (damage > 0 && (*resultFlags & 0xFF) == 0x1E) {
-        *resultFlags = (*resultFlags & ~0xFF) | 0x17;
+    if (damage > 0 && (*resultFlags & 0xFF) == DAMAGE_CODE_NO_DAMAGE) {
+        *resultFlags = (*resultFlags & ~0xFF) | DAMAGE_CODE_NORMAL;
     }
     return damage;
 }
@@ -1493,20 +1493,20 @@ s32 _checkDamageCode_EmergencyRevival(BattleUnit* unit, u32* flags) {
     s32 kind = unit->currentKind;
     if (kind == UNIT_MARIO) {
         if ((s32)pouchCheckItem(ITEM_LIFE_SHROOM) > 0) {
-            *flags |= 0x800;
+            *flags |= DAMAGE_RESULT_REVIVAL;
             return 1;
         }
         return 0;
     }
     if (kind >= TYPE_PARTNER_MIN && kind < TYPE_PARTNER_MAX) {
         if ((s32)pouchCheckItem(ITEM_LIFE_SHROOM) > 0) {
-            *flags |= 0x800;
+            *flags |= DAMAGE_RESULT_REVIVAL;
             return 1;
         }
         return 0;
     }
     if (unit->heldItem == ITEM_LIFE_SHROOM) {
-        *flags |= 0x800;
+        *flags |= DAMAGE_RESULT_REVIVAL;
         return 1;
     }
     return 0;
@@ -1559,12 +1559,12 @@ s32 BattleCheckDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPart* 
                 BattleDamageDirect(attacker->unitId, target, part, 0, 0, result, weapon->damagePattern, 0);
                 return 21;
             case 3:
-                flags |= 0x100;
+                flags |= DAMAGE_RESULT_FINAL_HIT;
                 result = flags | DAMAGE_CODE_SUPERGUARDED;
                 BattleDamageDirect(attacker->unitId, target, part, 0, 0, result, weapon->damagePattern, 0);
                 return 21;
             case 4:
-                flags |= 0x100;
+                flags |= DAMAGE_RESULT_FINAL_HIT;
                 result = flags | DAMAGE_CODE_SUPERGUARDED;
                 BattleDamageDirect(attacker->unitId, target, part, 0, 0, result, weapon->damagePattern, 0);
                 if (attacker->hitEventCode) {
@@ -1575,7 +1575,7 @@ s32 BattleCheckDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPart* 
                 return -1;
             case 1:
             default:
-                flags |= 0x100;
+                flags |= DAMAGE_RESULT_FINAL_HIT;
                 result = flags | DAMAGE_CODE_SUPERGUARDED;
                 BattleDamageDirect(attacker->unitId, target, part, 0, 0, result, weapon->damagePattern, 0);
                 BattleDamageDirect(-5, attacker, NULL, 1, 0, 0x137, 0, 1);
@@ -1777,7 +1777,7 @@ void BattleAttackDeclare(s32* unitIdx, s32* partIdx) {
         if (unit->protectId != *unitIdx) {
             continue;
         }
-        if (unit->mTokenFlags & 1) {
+        if (unit->mTokenFlags & kDamagedThisTurn) {
             continue;
         }
         if (unit->mTokenFlags & kProtectedByBodyguard) {
@@ -1834,7 +1834,7 @@ void __declare(s32 unitIdx, s32 partIdx, s32* outUnit, s32* outPart) {
         if (unit->protectId != unitIdx) {
             continue;
         }
-        if (unit->mTokenFlags & 1) {
+        if (unit->mTokenFlags & kDamagedThisTurn) {
             continue;
         }
         if (unit->mTokenFlags & kProtectedByBodyguard) {
@@ -1915,28 +1915,28 @@ s32 BattleCheckCounter(CounterWork* work, BattleUnit* attacker, BattleUnit* targ
         work->msg = 0x12B;
         work->count++;
         work->hitEvent = DAMAGE_CODE_AVOID_TOP_SPIKY;
-        *flags |= 0x100;
+        *flags |= DAMAGE_RESULT_FINAL_HIT;
         work->attackHits = 0;
     } else if ((part->counterAttributes & kCounterPreemptiveFrontSpiky) && !attacker->badgesEquipped.SpikeShield && !(weapon->counterResistFlags & COUNTER_RESIST_PREEMPTIVE_SPIKY)) {
         work->type = DAMAGE_CODE_COUNTER_PREEMPTIVE_SPIKY;
         work->msg = 0x12C;
         work->count++;
         work->hitEvent = DAMAGE_CODE_AVOID_PREEMPTIVE_SPIKY;
-        *flags |= 0x100;
+        *flags |= DAMAGE_RESULT_FINAL_HIT;
         work->attackHits = 0;
     } else if ((part->counterAttributes & kCounterFrontSpiky) && !attacker->badgesEquipped.SpikeShield && !(weapon->counterResistFlags & COUNTER_RESIST_FRONT_SPIKY)) {
         work->type = DAMAGE_CODE_COUNTER_FRONT_SPIKY;
         work->msg = 0x12D;
         work->count++;
         work->hitEvent = DAMAGE_CODE_AVOID_FRONT_SPIKY;
-        *flags |= 0x100;
+        *flags |= DAMAGE_RESULT_FINAL_HIT;
         work->attackHits = 0;
     } else if (((part->counterAttributes & kCounterFiery) || (part->counterAttributes & kCounterFieryStatus)) && !attacker->badgesEquipped.IcePower && !(weapon->counterResistFlags & COUNTER_RESIST_FIERY)) {
         work->type = DAMAGE_CODE_COUNTER_FIERY;
         work->msg = 0x12E;
         work->count++;
         work->hitEvent = DAMAGE_CODE_AVOID_FIERY;
-        *flags |= 0x100;
+        *flags |= DAMAGE_RESULT_FINAL_HIT;
         work->attackHits = 0;
         if (part->counterAttributes & kCounterFieryStatus) {
             work->burnStatus = 1;
@@ -1946,7 +1946,7 @@ s32 BattleCheckCounter(CounterWork* work, BattleUnit* attacker, BattleUnit* targ
         work->msg = 0x12F;
         work->count++;
         work->hitEvent = DAMAGE_CODE_AVOID_ICY;
-        *flags |= 0x100;
+        *flags |= DAMAGE_RESULT_FINAL_HIT;
         work->attackHits = 0;
         if (part->counterAttributes & kCounterIcyStatus) {
             work->freezeStatus = 1;
@@ -1956,7 +1956,7 @@ s32 BattleCheckCounter(CounterWork* work, BattleUnit* attacker, BattleUnit* targ
         work->msg = 0x130;
         work->count++;
         work->hitEvent = DAMAGE_CODE_AVOID_ELECTRIC;
-        *flags |= 0x100;
+        *flags |= DAMAGE_RESULT_FINAL_HIT;
         work->attackHits = 0;
         if (part->counterAttributes & kCounterElectricStatus) {
             work->electricStatus = 1;
@@ -1968,21 +1968,21 @@ s32 BattleCheckCounter(CounterWork* work, BattleUnit* attacker, BattleUnit* targ
                 work->type = DAMAGE_CODE_COUNTER_EXPLOSIVE;
                 work->msg = 0x131;
                 work->count++;
-                *flags |= 0x100;
+                *flags |= DAMAGE_RESULT_FINAL_HIT;
             }
         }
         if ((part->counterAttributes & kCounterVolatileExplosive) && !(weapon->counterResistFlags & COUNTER_RESIST_VOLATILE_EXPLOSIVE)) {
             work->type = DAMAGE_CODE_COUNTER_VOLATILE_EXPLOSIVE;
             work->msg = 0x132;
             work->count++;
-            *flags |= 0x100;
+            *flags |= DAMAGE_RESULT_FINAL_HIT;
         }
         if ((BtlUnit_CheckStatus(target, STATUS_ELECTRIC) || (part->counterAttributes & kCounterElectric) || (part->counterAttributes & kCounterElectricStatus)) &&
             !(weapon->counterResistFlags & COUNTER_RESIST_ELECTRIC) && !BtlUnit_CheckStatus(attacker, STATUS_ELECTRIC)) {
             work->type = DAMAGE_CODE_COUNTER_ELECTRIFIED;
             work->msg = 0x134;
             work->count++;
-            *flags |= 0x100;
+            *flags |= DAMAGE_RESULT_FINAL_HIT;
             if (part->counterAttributes & kCounterElectricStatus) {
                 work->electricStatus = 1;
             }
@@ -1990,13 +1990,13 @@ s32 BattleCheckCounter(CounterWork* work, BattleUnit* attacker, BattleUnit* targ
         if (BtlUnit_CheckStatus(target, STATUS_PAYBACK) && !(weapon->counterResistFlags & COUNTER_RESIST_PAYBACK)) {
             work->type = DAMAGE_CODE_COUNTER_PAYBACK;
             work->msg = 0x135;
-            *flags |= 0x100;
+            *flags |= DAMAGE_RESULT_FINAL_HIT;
             work->payback = 1;
         }
         if (((part->counterAttributes & kCounterPoison) || (part->counterAttributes & kCounterPoisonStatus)) && !(weapon->counterResistFlags & COUNTER_RESIST_POISON)) {
             work->type = DAMAGE_CODE_COUNTER_POISON;
             work->msg = 0x133;
-            *flags |= 0x100;
+            *flags |= DAMAGE_RESULT_FINAL_HIT;
             work->payback = 1;
             if (part->counterAttributes & kCounterPoisonStatus) {
                 work->poisonStatus = 1;
@@ -2005,13 +2005,13 @@ s32 BattleCheckCounter(CounterWork* work, BattleUnit* attacker, BattleUnit* targ
         if (BtlUnit_CheckStatus(target, STATUS_HOLD_FAST) && !(weapon->counterResistFlags & COUNTER_RESIST_HOLD_FAST)) {
             work->type = DAMAGE_CODE_COUNTER_HOLD_FAST;
             work->msg = 0x136;
-            *flags |= 0x100;
+            *flags |= DAMAGE_RESULT_FINAL_HIT;
             work->holdFast = 1;
         }
         if (target->badgesEquipped.ReturnPostage && !(weapon->counterResistFlags & COUNTER_RESIST_PAYBACK)) {
             work->type = DAMAGE_CODE_COUNTER_PAYBACK;
             work->msg = 0x135;
-            *flags |= 0x100;
+            *flags |= DAMAGE_RESULT_FINAL_HIT;
             work->returnPostage = 1;
         }
     }

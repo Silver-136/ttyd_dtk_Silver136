@@ -76,6 +76,7 @@ typedef enum BattleDamageResultFlags {
     DAMAGE_RESULT_REVIVAL = 0x800, // a Life Shroom can revive the unit
     DAMAGE_RESULT_GUARD_RETURN = 0x1000, // the target is a bodyguard: it goes back to its place afterwards
                                          // (btldefaultevt_guard_return)
+    DAMAGE_RESULT_ABSORBED = 0x2000, // DEFENSE_ATTR_ABSORB: the hit heals; no damage display, Pity Flower or FP damage
     DAMAGE_RESULT_BACKFIRE = 0x4000, // the default damage event runs _backfire
     DAMAGE_RESULT_FREEZE_CRUSH = 0x8000, // SPECIAL_FREEZE_CRUSH broke the target's freeze
     DAMAGE_RESULT_AC_SUCCESS = 0x20000, // the attack's action command succeeded

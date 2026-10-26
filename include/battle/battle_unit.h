@@ -16,6 +16,7 @@ typedef enum BattleUnitAlliance {
 } BattleUnitAlliance;
 
 typedef enum BattleUnitToken_Flags {
+    kDamagedThisTurn = (1 << 0),    // 0x1, took damage (cleared each turn); such a unit does not bodyguard
     kBodyguarding = (1 << 1),       // 0x2, took a hit meant for another unit (hit event DAMAGE_CODE_BODYGUARD_MOVE)
     kProtectedByBodyguard = (1 << 2), // 0x4, a bodyguard took the hit meant for it (DAMAGE_CODE_PROTECTED)
     kChargeConsumed = (1 << 3),     // 0x8, the attack used up the Charge; cleared with the status when the action ends
