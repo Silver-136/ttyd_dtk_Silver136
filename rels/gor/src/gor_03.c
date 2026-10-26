@@ -53,6 +53,7 @@
 #include "evt/evt_sub.h"
 #include "gor.h"
 #include "evt/evt_shop.h"
+#include "evt/evt_lottery.h"
 #include "data_tables.h"
 #include "mario/mario_pouch.h"
 #include <dolphin/pad.h>
@@ -157,11 +158,6 @@ USER_FUNC(evt_hitobj_attr_onoff);
 USER_FUNC(evt_item_entry);
 USER_FUNC(evt_item_get_item);
 USER_FUNC(evt_item_get_item_end_wait);
-USER_FUNC(evt_lottery);
-USER_FUNC(evt_lottery_buy);
-USER_FUNC(evt_lottery_error_check);
-USER_FUNC(evt_lottery_flag);
-USER_FUNC(evt_lottery_todaynum);
 USER_FUNC(evt_mapobj_clear_offscreen);
 USER_FUNC(evt_mapobj_rotate);
 USER_FUNC(evt_mapobj_set_offscreen);
@@ -4741,7 +4737,7 @@ EVT_END()
 EVT_BEGIN(kuzi_bomb_talk_husei)
     CALL(evt_unitwin_alloc, 0)
     CALL(evt_lottery_flag, LW(0))
-    IF_BITS_SET(LW(0), 16)
+    IF_BITS_SET(LW(0), LOTTERY_FLAG_NEW_DAY)
         SET_VALUE(LW(0), 0)
         ELSE
         SET_VALUE(LW(0), 1)
@@ -4755,7 +4751,7 @@ EVT_BEGIN(kuzi_bomb_talk_husei)
     WAIT_MS(800)
     IF_INT_EQUAL(LW(0), 1)
         CALL(evt_lottery_flag, LW(0))
-        IF_BITS_SET(LW(0), 8)
+        IF_BITS_SET(LW(0), LOTTERY_FLAG_REBOUGHT)
             SET_VALUE(LW(0), 1)
             ELSE
             SET_VALUE(LW(0), 0)
@@ -5005,7 +5001,7 @@ EVT_BEGIN(kuzi_keiziban_normal)
         RETURN
     END_IF
     CALL(evt_lottery_flag, LW(0))
-    IF_BITS_SET(LW(0), 16)
+    IF_BITS_SET(LW(0), LOTTERY_FLAG_NEW_DAY)
         SET_VALUE(LW(0), 0)
         ELSE
         SET_VALUE(LW(0), 1)
@@ -5015,16 +5011,16 @@ EVT_BEGIN(kuzi_keiziban_normal)
         CALL(evt_mario_set_dir, 270, 300, 0)
         CALL(evt_lottery_flag, LW(1))
         SET_VALUE(LW(0), 4)
-        IF_BITS_SET(LW(1), 32768)
+        IF_BITS_SET(LW(1), LOTTERY_FLAG_MATCH1)
             SET_VALUE(LW(0), 3)
         END_IF
-        IF_BITS_SET(LW(1), 16384)
+        IF_BITS_SET(LW(1), LOTTERY_FLAG_MATCH2)
             SET_VALUE(LW(0), 2)
         END_IF
-        IF_BITS_SET(LW(1), 8192)
+        IF_BITS_SET(LW(1), LOTTERY_FLAG_MATCH3)
             SET_VALUE(LW(0), 1)
         END_IF
-        IF_BITS_SET(LW(1), 4096)
+        IF_BITS_SET(LW(1), LOTTERY_FLAG_MATCH4)
             SET_VALUE(LW(0), 0)
         END_IF
         IF_INT_NOT_EQUAL(LW(0), 4)
@@ -5121,7 +5117,7 @@ EVT_END()
 
 EVT_BEGIN(kuzi_bomb_talk)
     CALL(evt_lottery, 0, LW(0), LW(1))
-    IF_BITS_SET(LW(0), 4)
+    IF_BITS_SET(LW(0), LOTTERY_FLAG_CLOCK_ERROR)
         CALL_CHILD(PTR(kuzi_bomb_talk_husei))
         ELSE
         CALL_CHILD(PTR(kuzi_bomb_talk_normal))
@@ -5133,7 +5129,7 @@ EVT_BEGIN(kuzi_keiziban_entry)
     CALL(evt_unitwin_alloc, 0)
     CALL(unitwin_lottery_disp_onoff, 1)
     CALL(evt_lottery, 1, LW(0), LW(1))
-    IF_BITS_SET(LW(0), 4)
+    IF_BITS_SET(LW(0), LOTTERY_FLAG_CLOCK_ERROR)
         CALL_CHILD(PTR(kuzi_keiziban_husei))
         ELSE
         CALL_CHILD(PTR(kuzi_keiziban_normal))

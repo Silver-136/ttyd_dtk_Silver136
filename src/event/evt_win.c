@@ -36,8 +36,24 @@ extern ItemData itemDataTable[];
 void FontDrawString(f32 x, f32 y, const char* str);
 
 
+// UnitWinWork.flags
+typedef enum UnitWinFlags {
+    UNITWIN_FLAG_SELECTED = (1 << 0),             // 0x1, an entry is under the cursor
+    UNITWIN_FLAG_BUYING = (1 << 1),               // 0x2, the entry's event is running
+    UNITWIN_FLAG_WINMGR = (1 << 7),               // 0x80, evt_unitwin_alloc(1): window-manager windows, no main event
+    UNITWIN_FLAG_LOTTERY = (1 << 8),              // 0x100, unitwin_lottery_disp_onoff
+    UNITWIN_FLAG_COIN = (1 << 12),                // 0x1000, unitwincoin_disp_onoff: coin counter
+    UNITWIN_FLAG_SHINE_WINDOW_UNUSED = (1 << 13), // 0x2000, Shine Sprite counter window; nothing sets it
+    UNITWIN_FLAG_SHINE_UNUSED = (1 << 14),        // 0x4000, Shine Sprite counter; nothing sets it
+    UNITWIN_FLAG_STAR_PIECE_UNUSED = (1 << 15),   // 0x8000, Star Piece counter; nothing sets it
+} UnitWinFlags;
+
+// UnitWinWork.flags2: evt_unitwin_free asks, the running event agrees
+#define UNITWIN_FREE_REQUEST (1 << 0)
+#define UNITWIN_FREE_OK (1 << 1)
+
 typedef struct UnitWinWork {
-    u16 flags;             // 0x0
+    u16 flags;             // 0x0, UnitWinFlags
     u16 pad2;              // 0x2
     UnitWinSell* entries; // 0x4
     s32* goods;            // 0x8
@@ -57,7 +73,7 @@ typedef struct UnitWinWork {
     u8 pad48[4];           // 0x48
     s32 skipEntry;        // 0x4C, never written (0 after the memset); both lists skip the entry equal to it
     s32 mode;              // 0x50
-    u16 flags2;            // 0x54
+    u16 flags2;            // 0x54, UNITWIN_FREE_*
     u8 pad56[2];           // 0x56
     s32 count;             // 0x58
     s32 coinTick;          // 0x5C
@@ -192,14 +208,14 @@ USER_FUNC(evt_unitwin_alloc) {
     wp->mode = 0;
     _wp = wp;
     if (arg) {
-        wp->flags |= 0x80;
+        wp->flags |= UNITWIN_FLAG_WINMGR;
     } else {
-        wp->flags &= ~0x80;
+        wp->flags &= ~UNITWIN_FLAG_WINMGR;
     }
     iconEntry2D("yubicursor_2", ICON_YUBI_CURSOR);
     iconFlagOn("yubicursor_2", ICON_FLAG_HIDDEN);
     iconFlagOn("yubicursor_2", ICON_FLAG_FLIP_X);
-    if (!(wp->flags & 0x80)) {
+    if (!(wp->flags & UNITWIN_FLAG_WINMGR)) {
         wp->evt = evtEntry(main_evt, 0, 0);
         wp->evt->lwData[0] = (EvtWord)wp;
     }
@@ -217,9 +233,9 @@ USER_FUNC(evt_unitwin_free) {
         return EVT_RETURN_DONE;
     }
     if (isFirstCall) {
-        wp->flags2 |= 1;
+        wp->flags2 |= UNITWIN_FREE_REQUEST;
     }
-    if (!(wp->flags2 & 2)) {
+    if (!(wp->flags2 & UNITWIN_FREE_OK)) {
         return EVT_RETURN_BLOCK;
     }
     for (i = 0; i < wp->goodsMax; i++) {
@@ -227,7 +243,7 @@ USER_FUNC(evt_unitwin_free) {
         sprintf(name, "uwn%d", i);
         iconDelete(name);
     }
-    if (wp->flags & 0x80) {
+    if (wp->flags & UNITWIN_FLAG_WINMGR) {
         for (i = 0; i < 3; i++) {
             winMgrDelete(wp->winId[i]);
         }
@@ -279,9 +295,9 @@ USER_FUNC(unitwincoin_disp_onoff) {
     wp->coin = pouchGetCoin();
     wp->coinTick = 0;
     if (on) {
-        wp->flags |= 0x1000;
+        wp->flags |= UNITWIN_FLAG_COIN;
     } else {
-        wp->flags &= ~0x1000;
+        wp->flags &= ~UNITWIN_FLAG_COIN;
     }
     return EVT_RETURN_DONE;
 }
@@ -299,9 +315,9 @@ USER_FUNC(unitwin_lottery_disp_onoff) {
     s32 on = evtGetValue(event, event->args[0]);
     UnitWinWork* wp = _wp;
     if (on) {
-        wp->flags |= 0x100;
+        wp->flags |= UNITWIN_FLAG_LOTTERY;
     } else {
-        wp->flags &= ~0x100;
+        wp->flags &= ~UNITWIN_FLAG_LOTTERY;
     }
     return EVT_RETURN_DONE;
 }
@@ -330,11 +346,11 @@ USER_FUNC(evt_unitwin_select_func) {
     s32 i;
     char name[32];
     MapObject* obj;
-    if (wp->flags2 & 1) {
-        wp->flags2 |= 2;
+    if (wp->flags2 & UNITWIN_FREE_REQUEST) {
+        wp->flags2 |= UNITWIN_FREE_OK;
         return EVT_RETURN_DONE;
     }
-    wp->flags &= ~1;
+    wp->flags &= ~UNITWIN_FLAG_SELECTED;
     btn = keyGetButtonTrg(0);
     if ((marioChkCtrl() ? FALSE : TRUE) || (marioChkKey() ? FALSE : TRUE)) {
         btn = 0;
@@ -347,7 +363,7 @@ USER_FUNC(evt_unitwin_select_func) {
         UNITWIN_CLOSE(wp);
         return EVT_RETURN_BLOCK;
     }
-    if (!(wp->flags & 2)) {
+    if (!(wp->flags & UNITWIN_FLAG_BUYING)) {
         if (hit != NULL) {
             for (i = 0; i < wp->goodsMax; i++) {
                 const char* hitName = hitGetName(hit);
@@ -372,12 +388,12 @@ USER_FUNC(evt_unitwin_select_func) {
             UNITWIN_CLOSE(wp);
         }
         if (wp->selected != -1) {
-            wp->flags |= 1;
+            wp->flags |= UNITWIN_FLAG_SELECTED;
             if (btn & 0x100) {
                 marioKeyOff();
                 wp->childEvt = evtEntry(wp->entries[wp->goodsIdx].evt, 0, 0);
                 wp->childEvt->lwData[0] = (EvtWord)wp;
-                wp->flags |= 2;
+                wp->flags |= UNITWIN_FLAG_BUYING;
                 winMgrClose(wp->winId[0]);
                 winMgrClose(wp->winId[1]);
                 wp->selected = -1;
@@ -385,7 +401,7 @@ USER_FUNC(evt_unitwin_select_func) {
             }
         }
     } else if (!evtCheckID(wp->childEvt->eventId)) {
-        wp->flags &= ~2;
+        wp->flags &= ~UNITWIN_FLAG_BUYING;
         marioKeyOn();
         if (wp->bought) {
             wp->itemFlags[wp->goodsIdx] |= 1;
@@ -409,14 +425,14 @@ USER_FUNC(evt_unitwin_select_func) {
 
 USER_FUNC(evt_unitwin_main_func) {
     UnitWinWork* wp = (UnitWinWork*)event->lwData[0];
-    if (wp->flags2 & 1) {
-        wp->flags2 |= 2;
+    if (wp->flags2 & UNITWIN_FREE_REQUEST) {
+        wp->flags2 |= UNITWIN_FREE_OK;
         return EVT_RETURN_DONE;
     }
     if (wp->timer > 0) {
         wp->timer--;
     } else {
-        wp->flags &= ~1;
+        wp->flags &= ~UNITWIN_FLAG_SELECTED;
     }
     dispEntry(CAMERA_2D, 1000.0f, 0, evt_unitwin_disp_func, wp);
     return EVT_RETURN_BLOCK;
@@ -492,7 +508,7 @@ void evt_unitwin_disp_func(CameraId cameraId, void* param) {
     s32 lv;
 
     flag = 0; // FAKE: dead store, moves flag's variable record before i so the case 5-7 flag web is a split temp coloured before i's (target r21)
-    if (wp->flags & 1) {
+    if (wp->flags & UNITWIN_FLAG_SELECTED) {
         const char* name = itemDataTable[wp->goods[wp->goodsIdx]].id;
         const char* desc = itemDataTable[wp->goods[wp->goodsIdx]].description;
 
@@ -537,7 +553,7 @@ void evt_unitwin_disp_func(CameraId cameraId, void* param) {
         }
     }
 
-    if (wp->flags & 0xD000) {
+    if (wp->flags & (UNITWIN_FLAG_COIN | UNITWIN_FLAG_SHINE_UNUSED | UNITWIN_FLAG_STAR_PIECE_UNUSED)) {
         Mtx mtx;
         Mtx scale;
         s32 coin;
@@ -547,10 +563,10 @@ void evt_unitwin_disp_func(CameraId cameraId, void* param) {
         PSMTXTrans(mtx, -220.0f, -113.0f, 0.0f);
         PSMTXScale(scale, 0.7f, 0.7f, 0.7f);
         PSMTXConcat(mtx, scale, mtx);
-        if (wp->flags & 0x1000) {
+        if (wp->flags & UNITWIN_FLAG_COIN) {
             iconDispGx2(mtx, 0x10, ICON_ITEM_COIN);
             coin = pouchGetCoin();
-        } else if (wp->flags & 0x4000) {
+        } else if (wp->flags & UNITWIN_FLAG_SHINE_UNUSED) {
             iconDispGx2(mtx, 0x10, ICON_ITEM_SHINE_SPRITE);
             coin = pouchGetSuperCoin();
         } else {
@@ -582,7 +598,7 @@ void evt_unitwin_disp_func(CameraId cameraId, void* param) {
         }
     }
 
-    if (wp->flags & 0x2000) {
+    if (wp->flags & UNITWIN_FLAG_SHINE_WINDOW_UNUSED) {
         Mtx mtx;
         Mtx scale;
         s32 delta;
@@ -605,7 +621,7 @@ void evt_unitwin_disp_func(CameraId cameraId, void* param) {
         }
     }
 
-    if ((wp->flags & 0x100) && (lotteryGetPtr()->flags & 2)) {
+    if ((wp->flags & UNITWIN_FLAG_LOTTERY) && (lotteryGetPtr()->flags & LOTTERY_FLAG_TICKET)) {
         Mtx mtx;
         char buf[32];
 

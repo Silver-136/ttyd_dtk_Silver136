@@ -28,34 +28,34 @@ USER_FUNC(evt_lottery) {
     dbg_lotteryinfo = TRUE;
     lot = &gp->mLotteryInfo;
 
-    lot->flags &= ~0x1000;
-    lot->flags &= ~0x2000;
-    lot->flags &= ~0x4000;
-    lot->flags &= ~0x8000;
+    lot->flags &= ~LOTTERY_FLAG_MATCH4;
+    lot->flags &= ~LOTTERY_FLAG_MATCH3;
+    lot->flags &= ~LOTTERY_FLAG_MATCH2;
+    lot->flags &= ~LOTTERY_FLAG_MATCH1;
 
-    if (lot->flags & 8) {
+    if (lot->flags & LOTTERY_FLAG_REBOUGHT) {
         if (lot->buyTime < now) {
             OSTicksToCalendarTime(lot->buyTime, &a1);
             OSTicksToCalendarTime(now, &a2);
             if (a1.year != a2.year || a1.mon != a2.mon || a1.mday != a2.mday) {
-                lot->flags &= ~4;
-                lot->flags &= ~8;
+                lot->flags &= ~LOTTERY_FLAG_CLOCK_ERROR;
+                lot->flags &= ~LOTTERY_FLAG_REBOUGHT;
             }
         } else {
-            lot->flags |= 4;
-            lot->flags &= ~8;
+            lot->flags |= LOTTERY_FLAG_CLOCK_ERROR;
+            lot->flags &= ~LOTTERY_FLAG_REBOUGHT;
         }
     }
 
-    if (lot->flags & 2) {
+    if (lot->flags & LOTTERY_FLAG_TICKET) {
         if (lot->times[idx] < now) {
             OSTicksToCalendarTime(lot->times[idx], &b1);
             OSTicksToCalendarTime(now, &b2);
             if (b1.year == b2.year && b1.mon == b2.mon && b1.mday == b2.mday) {
-                lot->flags &= ~0x10;
+                lot->flags &= ~LOTTERY_FLAG_NEW_DAY;
             } else {
-                if (!(lot->flags & 8)) {
-                    lot->flags |= 0x10;
+                if (!(lot->flags & LOTTERY_FLAG_REBOUGHT)) {
+                    lot->flags |= LOTTERY_FLAG_NEW_DAY;
                 }
                 lot->times[idx] = now;
             }
@@ -63,19 +63,19 @@ USER_FUNC(evt_lottery) {
             OSTicksToCalendarTime(lot->times[idx], &c1);
             OSTicksToCalendarTime(now, &c2);
             if (c1.year == c2.year && c1.mon == c2.mon && c1.mday == c2.mday) {
-                lot->flags &= ~0x10;
+                lot->flags &= ~LOTTERY_FLAG_NEW_DAY;
             } else {
-                lot->flags |= 0x10;
+                lot->flags |= LOTTERY_FLAG_NEW_DAY;
                 lot->times[idx] = now;
             }
-            lot->flags |= 4;
+            lot->flags |= LOTTERY_FLAG_CLOCK_ERROR;
         }
     } else {
         lot->times[idx] = 0;
     }
 
-    if (!(lot->flags & 1)) {
-        lot->flags |= 1;
+    if (!(lot->flags & LOTTERY_FLAG_INIT)) {
+        lot->flags |= LOTTERY_FLAG_INIT;
         lot->lastTime = now;
         lot->todayNum = rand() % 10000;
     } else if (lot->lastTime < now) {
@@ -85,7 +85,7 @@ USER_FUNC(evt_lottery) {
             if (idx == 1) {
                 lot->lastTime = now;
             }
-            if (!(lot->flags & 2)) {
+            if (!(lot->flags & LOTTERY_FLAG_TICKET)) {
                 lot->todayNum = rand() % 10000;
             } else if (!(now < lot->buyTime)) {
                 day = OSTicksToSeconds(now - lot->buyTime) / 60 / 60 / 24;
@@ -119,23 +119,23 @@ USER_FUNC(evt_lottery) {
                 }
                 if (day == lot->days[0]) {
                     lot->todayNum = lot->number;
-                    lot->flags |= 0x1000;
+                    lot->flags |= LOTTERY_FLAG_MATCH4;
                 } else if (day == lot->days[1]) {
                     do {
                         lot->todayNum = lot->number % 1000 + rand() % 10 * 1000;
                     } while (lot->todayNum == lot->number);
-                    lot->flags |= 0x2000;
+                    lot->flags |= LOTTERY_FLAG_MATCH3;
                 } else if (day == lot->days[2]) {
                     do {
                         lot->todayNum = lot->number % 100 + rand() % 100 * 100;
                     } while (lot->todayNum == lot->number || lot->todayNum % 1000 == lot->number % 1000);
-                    lot->flags |= 0x4000;
+                    lot->flags |= LOTTERY_FLAG_MATCH2;
                 } else if (day == lot->days[3]) {
                     do {
                         lot->todayNum = lot->number % 10 + rand() % 1000 * 10;
                     } while (lot->todayNum == lot->number || lot->todayNum % 1000 == lot->number % 1000 ||
                         lot->todayNum % 100 == lot->number % 100);
-                    lot->flags |= 0x8000;
+                    lot->flags |= LOTTERY_FLAG_MATCH1;
                 } else {
                     do {
                         lot->todayNum = rand() % 10000;
@@ -143,12 +143,12 @@ USER_FUNC(evt_lottery) {
                         lot->number % 100 == lot->todayNum % 100 || lot->number % 10 == lot->todayNum % 10);
                 }
             } else {
-                lot->flags |= 4;
+                lot->flags |= LOTTERY_FLAG_CLOCK_ERROR;
                 lot->todayNum = -1;
             }
         }
     } else {
-        lot->flags |= 4;
+        lot->flags |= LOTTERY_FLAG_CLOCK_ERROR;
         lot->todayNum = -1;
         lot->lastTime = now;
     }
@@ -156,7 +156,7 @@ USER_FUNC(evt_lottery) {
     evtSetValue(event, args[1], lot->flags);
     evtSetValue(event, args[2], lot->todayNum);
     OSTicksToCalendarTime(now, &e);
-    if (lot->flags & 2) {
+    if (lot->flags & LOTTERY_FLAG_TICKET) {
         OSTime bt;
         OSTicksToCalendarTime(lot->buyTime, &e);
         bt = lot->buyTime;
@@ -187,19 +187,19 @@ USER_FUNC(evt_lottery_buy) {
     lot->days[1] = 115 - rand() % 30;
     lot->days[2] = 35 - rand() % 10;
     lot->days[3] = 10 - rand() % 6;
-    if (lot->flags & 4) {
-        lot->flags |= 8;
+    if (lot->flags & LOTTERY_FLAG_CLOCK_ERROR) {
+        lot->flags |= LOTTERY_FLAG_REBOUGHT;
         lot->lastTime = now;
         lot->times[0] = now;
         lot->times[1] = now;
     }
-    if (lot->flags & 2) {
-        lot->flags |= 8;
+    if (lot->flags & LOTTERY_FLAG_TICKET) {
+        lot->flags |= LOTTERY_FLAG_REBOUGHT;
         lot->lastTime = now;
         lot->times[0] = now;
         lot->times[1] = now;
     }
-    lot->flags |= 2;
+    lot->flags |= LOTTERY_FLAG_TICKET;
     evtSetValue(event, args[0], lot->number);
     return EVT_RETURN_DONE;
 }
@@ -223,10 +223,10 @@ USER_FUNC(evt_lottery_error_check) {
     u16 flags = lot->flags;
     BOOL err = FALSE;
 
-    if (flags & 4) {
+    if (flags & LOTTERY_FLAG_CLOCK_ERROR) {
         err = TRUE;
     }
-    if ((flags & 2) && now < lot->buyTime) {
+    if ((flags & LOTTERY_FLAG_TICKET) && now < lot->buyTime) {
         err = TRUE;
     }
     if (now < lot->times[0]) {
@@ -238,7 +238,7 @@ USER_FUNC(evt_lottery_error_check) {
     if (now < lot->lastTime) {
         err = TRUE;
     }
-    if ((flags & 8) && lot->buyTime < now) {
+    if ((flags & LOTTERY_FLAG_REBOUGHT) && lot->buyTime < now) {
         OSTicksToCalendarTime(lot->buyTime, &a);
         OSTicksToCalendarTime(now, &b);
         if (a.year != b.year || a.mon != b.mon || a.mday != b.mday) {
