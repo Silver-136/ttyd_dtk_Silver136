@@ -935,7 +935,7 @@ u8 BattleMajinaiCheck(void) {
         return 0;
     }
     pouch->mTurnsUntilMerleeActivation = 0;
-    if ((u32)wp->fbatInfo->setup->battleFlags & 0x20) {
+    if ((u32)wp->fbatInfo->setup->battleFlags & NPC_BATTLE_MERLEE_SAFE_CURSE_UNUSED) {
         r = irand(100);
         if (r < 45) pouch->mMerleeNextCurseType = 1;
         else if (r < 90) pouch->mMerleeNextCurseType = 2;

@@ -315,7 +315,7 @@ void btlseqEnd(BattleWork* wp) {
     }
     case 0x7000002:
         if (!fadeIsFinish()) break;
-        if (!((u32)wp->fbatInfo->setup->battleFlags & 0x40)) {
+        if (!((u32)wp->fbatInfo->setup->battleFlags & NPC_BATTLE_NO_GAME_OVER)) {
             seqSetSeq(SEQ_GAME_OVER, (const char*)1, NULL);
             break;
         }
@@ -691,7 +691,7 @@ void btlseqEnd(BattleWork* wp) {
             }
         }
         if (ok) {
-            if ((u32)fd->battleFlags & 0x20000000) {
+            if ((u32)fd->battleFlags & NPC_BATTLE_STORY) {
                 BtlUnit_snd_se(mario, "SFX_VOICE_MARIO_PAUSE3", EVT_NULLPTR, 0);
             } else {
                 BtlUnit_snd_se(mario, "SFX_VOICE_MARIO_PAUSE1", EVT_NULLPTR, 0);
@@ -752,7 +752,7 @@ void btlseqEnd(BattleWork* wp) {
             }
         }
         if (!ok) {
-            if ((u32)fd->battleFlags & 0x20000000) {
+            if ((u32)fd->battleFlags & NPC_BATTLE_STORY) {
                 BtlUnit_snd_se(mario, "SFX_VOICE_MARIO_RELIEF1", EVT_NULLPTR, 0);
             } else {
                 BtlUnit_snd_se(mario, "SFX_VOICE_MARIO_RELIEF2", EVT_NULLPTR, 0);
@@ -812,7 +812,7 @@ void btlseqEnd(BattleWork* wp) {
         id = BattleTransPartyId(kind);
         fd = wp->fbatInfo->setup;
         mario = BattleGetMarioPtr(wp);
-        if ((u32)fd->battleFlags & 0x40) {
+        if ((u32)fd->battleFlags & NPC_BATTLE_NO_GAME_OVER) {
             if (mario->currentHp <= 0) mario->currentHp = 1;
         }
         BattleSetMarioParamToFieldBattle(wp);

@@ -50,6 +50,24 @@ typedef struct NpcBattleSelect {
     struct BattleStageData* stageData; // 0x8
 } NpcBattleSelect;
 
+// NpcSetupBattleInfo.battleFlags / NpcBattleInfo.battleFlags
+typedef enum NpcBattleFlags {
+    NPC_BATTLE_NO_COIN_DROP = (1 << 0),               // 0x1
+    NPC_BATTLE_NO_HEART_DROP = (1 << 1),              // 0x2
+    NPC_BATTLE_NO_FLOWER_DROP = (1 << 2),             // 0x4
+    NPC_BATTLE_NO_ITEM_DROP = (1 << 3),               // 0x8
+    NPC_BATTLE_NO_ESCAPE = (1 << 4),                  // 0x10, Run Away disabled; the stage walls close
+    NPC_BATTLE_MERLEE_SAFE_CURSE_UNUSED = (1 << 5),   // 0x20, Merlee never rolls curse type 4; nothing sets it
+    NPC_BATTLE_NO_GAME_OVER = (1 << 6),               // 0x40, losing leaves Mario at 1 HP instead
+    NPC_BATTLE_EXTRA_COINS = (1 << 8),                // 0x100, coin multiplier + 1
+    NPC_BATTLE_NO_PARTY_ENTRY = (1 << 20),            // 0x100000, Mario and the partner skip their entry events
+    NPC_BATTLE_NO_JUMP = (1 << 24),                   // 0x1000000, Jump command disabled
+    NPC_BATTLE_NO_HAMMER = (1 << 25),                 // 0x2000000, Hammer command disabled
+    NPC_BATTLE_NO_PARTY_CHANGE = (1 << 26),           // 0x4000000, partner change disabled
+    NPC_BATTLE_NO_BUMP_ATTACK = (1 << 28),            // 0x10000000, Bump Attack cannot win the battle at once
+    NPC_BATTLE_STORY = (1 << 29),                     // 0x20000000, story fight: Mario's other end-of-battle voices
+} NpcBattleFlags;
+
 typedef struct NpcSetupBattleInfo {
     const char* name;           // 0x0
     const char* mapName;        // 0x4, never read; map the battle is set on
@@ -57,7 +75,7 @@ typedef struct NpcSetupBattleInfo {
     s32 swFlag;                 // 0xC
     NpcBattleSelect* altSelect; // 0x10, used when swFlag is set
     NpcBattleSelect* select;    // 0x14
-    s32 battleFlags;            // 0x18, -> NpcBattleInfo.battleFlags
+    s32 battleFlags;            // 0x18, NpcBattleFlags, -> NpcBattleInfo.battleFlags
     s32 randomMode;             // 0x1C, -> NpcBattleInfo.randomMode; 0 rolls randomValues from randomRanges
     s8 randomRanges[16][2];     // 0x20, {min, max} per NpcBattleInfo.randomValues byte
     const char* bgmName;        // 0x40, -> NpcBattleInfo.bgmName, played by seq_battle
@@ -71,7 +89,7 @@ typedef struct NpcBattleRandom {
 
 typedef struct NpcBattleInfo {
     struct BattleStageData* stageData; // 0x0
-    s32 battleFlags;                   // 0x4, 0x10/0x40/0x20000000 checked by the battle end sequence
+    s32 battleFlags;                   // 0x4, NpcBattleFlags
     ItemType fixedItem;                // 0x8
     ItemType itemDropped;              // 0xC
     s32 heartsDropped;                 // 0x10

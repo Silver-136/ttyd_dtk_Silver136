@@ -2062,7 +2062,7 @@ void fbatBattleMode(void) {
             data->target->interruptFlags &= 0xF00;
             evtStopID(data->target->regularEvtId);
             info = &data->info;
-            if (!(cur->battleInfo.battleFlags & 0x10000000)) {
+            if (!(cur->battleInfo.battleFlags & NPC_BATTLE_NO_BUMP_ATTACK)) {
                 if (pouchEquipCheckBadge(ITEM_BUMP_ATTACK) && NPC_ENEMY_LEVEL(cur) < pouch->level) {
                     skip = TRUE;
                     win = TRUE;
@@ -2199,7 +2199,7 @@ void fbatBattleMode(void) {
                     if (pouchEquipCheckBadge(ITEM_MONEY_MONEY)) {
                         mult += pouchEquipCheckBadge(ITEM_MONEY_MONEY);
                     }
-                    if (cur->battleInfo.battleFlags & 0x100) {
+                    if (cur->battleInfo.battleFlags & NPC_BATTLE_EXTRA_COINS) {
                         mult++;
                     }
                     apply:

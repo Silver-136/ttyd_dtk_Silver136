@@ -138,7 +138,7 @@ void _btlcmd_MakeActClassTable(BattleWork* wp) {
             cmd->act[0].enabled = 0;
             cmd->act[0].disableReason = 3;
         }
-        if (info->battleFlags & 0x1000000) {
+        if (info->battleFlags & NPC_BATTLE_NO_JUMP) {
             cmd->act[0].enabled = 0;
             cmd->act[0].disableReason = 3;
         }
@@ -200,7 +200,7 @@ void _btlcmd_MakeActClassTable(BattleWork* wp) {
             cmd->act[num].enabled = 0;
             cmd->act[num].disableReason = 3;
         }
-        if (info->battleFlags & 0x2000000) {
+        if (info->battleFlags & NPC_BATTLE_NO_HAMMER) {
             cmd->act[num].enabled = 0;
             cmd->act[num].disableReason = 3;
         }
@@ -751,7 +751,7 @@ void _btlcmd_MakeOperationTable(BattleWork* wp) {
             cmd->operation[0].enabled = 0;
             cmd->operation[0].disableReason = 3;
         }
-        if (info->battleFlags & 0x4000000) {
+        if (info->battleFlags & NPC_BATTLE_NO_PARTY_CHANGE) {
             cmd->operation[0].enabled = 0;
             cmd->operation[0].disableReason = 3;
         }
@@ -841,7 +841,7 @@ void _btlcmd_MakeOperationTable(BattleWork* wp) {
         cmd->operation[idx].enabled = 0;
         cmd->operation[idx].disableReason = 3;
     }
-    if (wp->fbatInfo->setup->battleFlags & 0x10) {
+    if (wp->fbatInfo->setup->battleFlags & NPC_BATTLE_NO_ESCAPE) {
         cmd->operation[idx].enabled = 0;
         cmd->operation[idx].disableReason = 3;
     }

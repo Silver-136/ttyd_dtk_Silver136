@@ -63,7 +63,7 @@ BattleGroupSetup btlgrp_nok_hei_ep = {
     50, // noItemWeight
     battle_heart_drop_param_default, // hpDropTable
     battle_heart_drop_param_default, // fpDropTable
-    5, // field_1C
+    5, // reserved_1C
 };
 
 NpcBattleSelect btlgrpsel_nok_btlno_hei_test1_off[] = {
@@ -79,8 +79,8 @@ NpcSetupBattleInfo btlsetup_nok_tbl[] = {
         -1, // swFlag
         NULL, // altSelect
         btlgrpsel_nok_btlno_hei_test1_off, // select
-        0x100000, // battleFlags
-        6, // field_1C
+        NPC_BATTLE_NO_PARTY_ENTRY, // battleFlags
+        6, // randomMode
         {{1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}}, // field_20
         "BGM_ZAKO_BATTLE1", // bgmName
     },

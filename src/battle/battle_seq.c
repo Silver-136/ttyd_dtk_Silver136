@@ -363,7 +363,7 @@ void btlseqFirstAct(BattleWork* wp) {
                         for (i = 0; i < 64; i++) {
                             unit = BattleGetUnitPtr(wp, i);
                             if (unit && unit->entryEventCode) {
-                                if ((((NpcBattleInfo*)info)->battleFlags & 0x100000) && (unit->currentKind == UNIT_MARIO || (unit->currentKind >= TYPE_PARTNER_MIN && unit->currentKind < TYPE_PARTNER_MAX))) {
+                                if ((((NpcBattleInfo*)info)->battleFlags & NPC_BATTLE_NO_PARTY_ENTRY) && (unit->currentKind == UNIT_MARIO || (unit->currentKind >= TYPE_PARTNER_MIN && unit->currentKind < TYPE_PARTNER_MAX))) {
                                     continue;
                                 }
                                 if (marioGetPtr()->currMotionId == MARIO_MOTION_YOSHI && unit->currentKind == UNIT_MARIO) {
@@ -513,7 +513,7 @@ void btlseqFirstAct(BattleWork* wp) {
             if (!BattleWaitAllActiveEvtEnd(wp)) {
                 break;
             }
-            if ((u32)wp->fbatInfo->setup->battleFlags & 0x10) {
+            if ((u32)wp->fbatInfo->setup->battleFlags & NPC_BATTLE_NO_ESCAPE) {
                 BattleSetSeq(wp, SEQ_FIRST_ACT, 0x2000009);
                 BattleStage_WallCloseCheck();
             } else {

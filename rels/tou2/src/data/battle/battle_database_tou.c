@@ -200,7 +200,7 @@ BattleGroupSetup btlgrp_tou_tou_rank_19 = {
     100, // noItemWeight
     battle_heart_drop_param_default, // hpDropTable
     battle_heart_drop_param_default, // fpDropTable
-    5, // field_1C
+    5, // reserved_1C
 };
 
 BattleUnitSetup btlparty_tou_tou_rank_18[] = {
@@ -243,7 +243,7 @@ BattleGroupSetup btlgrp_tou_tou_rank_18 = {
     100, // noItemWeight
     battle_heart_drop_param_default, // hpDropTable
     battle_heart_drop_param_default, // fpDropTable
-    5, // field_1C
+    5, // reserved_1C
 };
 
 BattleUnitSetup btlparty_tou_tou_rank_17[] = {
@@ -286,7 +286,7 @@ BattleGroupSetup btlgrp_tou_tou_rank_17 = {
     100, // noItemWeight
     battle_heart_drop_param_default, // hpDropTable
     battle_heart_drop_param_default, // fpDropTable
-    5, // field_1C
+    5, // reserved_1C
 };
 
 BattleUnitSetup btlparty_tou_tou_rank_16[] = {
@@ -329,7 +329,7 @@ BattleGroupSetup btlgrp_tou_tou_rank_16 = {
     100, // noItemWeight
     battle_heart_drop_param_default, // hpDropTable
     battle_heart_drop_param_default, // fpDropTable
-    5, // field_1C
+    5, // reserved_1C
 };
 
 BattleUnitSetup btlparty_tou_tou_rank_15[] = {
@@ -372,7 +372,7 @@ BattleGroupSetup btlgrp_tou_tou_rank_15 = {
     100, // noItemWeight
     battle_heart_drop_param_default, // hpDropTable
     battle_heart_drop_param_default, // fpDropTable
-    5, // field_1C
+    5, // reserved_1C
 };
 
 BattleUnitSetup btlparty_tou_tou_rank_14[] = {
@@ -415,7 +415,7 @@ BattleGroupSetup btlgrp_tou_tou_rank_14 = {
     100, // noItemWeight
     battle_heart_drop_param_default, // hpDropTable
     battle_heart_drop_param_default, // fpDropTable
-    5, // field_1C
+    5, // reserved_1C
 };
 
 BattleUnitSetup btlparty_tou_tou_rank_13[] = {
@@ -458,7 +458,7 @@ BattleGroupSetup btlgrp_tou_tou_rank_13 = {
     100, // noItemWeight
     battle_heart_drop_param_default, // hpDropTable
     battle_heart_drop_param_default, // fpDropTable
-    5, // field_1C
+    5, // reserved_1C
 };
 
 BattleUnitSetup btlparty_tou_tou_rank_12[] = {
@@ -511,7 +511,7 @@ BattleGroupSetup btlgrp_tou_tou_rank_12 = {
     100, // noItemWeight
     battle_heart_drop_param_default, // hpDropTable
     battle_heart_drop_param_default, // fpDropTable
-    5, // field_1C
+    5, // reserved_1C
 };
 
 BattleUnitSetup btlparty_tou_tou_rank_11[] = {
@@ -564,7 +564,7 @@ BattleGroupSetup btlgrp_tou_tou_rank_11 = {
     100, // noItemWeight
     battle_heart_drop_param_default, // hpDropTable
     battle_heart_drop_param_default, // fpDropTable
-    5, // field_1C
+    5, // reserved_1C
 };
 
 BattleUnitSetup btlparty_tou_tou_rank_10[] = {
@@ -597,7 +597,7 @@ BattleGroupSetup btlgrp_tou_tou_rank_10 = {
     100, // noItemWeight
     battle_heart_drop_param_default, // hpDropTable
     battle_heart_drop_param_default, // fpDropTable
-    5, // field_1C
+    5, // reserved_1C
 };
 
 BattleUnitSetup btlparty_tou_tou_rank_9[] = {
@@ -630,7 +630,7 @@ BattleGroupSetup btlgrp_tou_tou_rank_9 = {
     100, // noItemWeight
     battle_heart_drop_param_default, // hpDropTable
     battle_heart_drop_param_default, // fpDropTable
-    5, // field_1C
+    5, // reserved_1C
 };
 
 BattleUnitSetup btlparty_tou_tou_rank_8[] = {
@@ -663,7 +663,7 @@ BattleGroupSetup btlgrp_tou_tou_rank_8 = {
     100, // noItemWeight
     battle_heart_drop_param_default, // hpDropTable
     battle_heart_drop_param_default, // fpDropTable
-    5, // field_1C
+    5, // reserved_1C
 };
 
 BattleUnitSetup btlparty_tou_tou_rank_7[] = {
@@ -706,7 +706,7 @@ BattleGroupSetup btlgrp_tou_tou_rank_7 = {
     100, // noItemWeight
     battle_heart_drop_param_default, // hpDropTable
     battle_heart_drop_param_default, // fpDropTable
-    5, // field_1C
+    5, // reserved_1C
 };
 
 BattleUnitSetup btlparty_tou_tou_rank_6[] = {
@@ -749,7 +749,7 @@ BattleGroupSetup btlgrp_tou_tou_rank_6 = {
     100, // noItemWeight
     battle_heart_drop_param_default, // hpDropTable
     battle_heart_drop_param_default, // fpDropTable
-    5, // field_1C
+    5, // reserved_1C
 };
 
 BattleUnitSetup btlparty_tou_tou_rank_5[] = {
@@ -792,7 +792,7 @@ BattleGroupSetup btlgrp_tou_tou_rank_5 = {
     100, // noItemWeight
     battle_heart_drop_param_default, // hpDropTable
     battle_heart_drop_param_default, // fpDropTable
-    5, // field_1C
+    5, // reserved_1C
 };
 
 BattleUnitSetup btlparty_tou_tou_rank_4[] = {
@@ -815,7 +815,7 @@ BattleGroupSetup btlgrp_tou_tou_rank_4 = {
     100, // noItemWeight
     battle_heart_drop_param_default, // hpDropTable
     battle_heart_drop_param_default, // fpDropTable
-    5, // field_1C
+    5, // reserved_1C
 };
 
 BattleUnitSetup btlparty_tou_tou_rank_3[] = {
@@ -858,7 +858,7 @@ BattleGroupSetup btlgrp_tou_tou_rank_3 = {
     100, // noItemWeight
     battle_heart_drop_param_default, // hpDropTable
     battle_heart_drop_param_default, // fpDropTable
-    5, // field_1C
+    5, // reserved_1C
 };
 
 BattleUnitSetup btlparty_tou_tou_rank_2[] = {
@@ -891,7 +891,7 @@ BattleGroupSetup btlgrp_tou_tou_rank_2 = {
     100, // noItemWeight
     battle_heart_drop_param_default, // hpDropTable
     battle_heart_drop_param_default, // fpDropTable
-    5, // field_1C
+    5, // reserved_1C
 };
 
 BattleUnitSetup btlparty_tou_tou_rank_1[] = {
@@ -914,7 +914,7 @@ BattleGroupSetup btlgrp_tou_tou_rank_1 = {
     100, // noItemWeight
     battle_heart_drop_param_default, // hpDropTable
     battle_heart_drop_param_default, // fpDropTable
-    5, // field_1C
+    5, // reserved_1C
 };
 
 BattleUnitSetup btlparty_tou_tou_add_1[] = {
@@ -967,7 +967,7 @@ BattleGroupSetup btlgrp_tou_tou_add_1 = {
     100, // noItemWeight
     battle_heart_drop_param_default, // hpDropTable
     battle_heart_drop_param_default, // fpDropTable
-    5, // field_1C
+    5, // reserved_1C
 };
 
 BattleUnitSetup btlparty_tou_tou_add_2[] = {
@@ -1020,7 +1020,7 @@ BattleGroupSetup btlgrp_tou_tou_add_2 = {
     100, // noItemWeight
     battle_heart_drop_param_default, // hpDropTable
     battle_heart_drop_param_default, // fpDropTable
-    5, // field_1C
+    5, // reserved_1C
 };
 
 BattleUnitSetup btlparty_tou_tou_boss[] = {
@@ -1043,7 +1043,7 @@ BattleGroupSetup btlgrp_tou_tou_boss = {
     100, // noItemWeight
     battle_heart_drop_param_default, // hpDropTable
     battle_heart_drop_param_default, // fpDropTable
-    5, // field_1C
+    5, // reserved_1C
 };
 
 BattleUnitSetup btlparty_tou_tou_champ[] = {
@@ -1066,7 +1066,7 @@ BattleGroupSetup btlgrp_tou_tou_champ = {
     100, // noItemWeight
     battle_heart_drop_param_default, // hpDropTable
     battle_heart_drop_param_default, // fpDropTable
-    5, // field_1C
+    5, // reserved_1C
 };
 
 BattleUnitSetup btlparty_tou_tou_koopa[] = {
@@ -1089,7 +1089,7 @@ BattleGroupSetup btlgrp_tou_tou_koopa = {
     100, // noItemWeight
     battle_heart_drop_param_default, // hpDropTable
     battle_heart_drop_param_default, // fpDropTable
-    5, // field_1C
+    5, // reserved_1C
 };
 
 NpcBattleSelect btlgrpsel_tou_btlno_tou_test1_off[] = {
@@ -1224,7 +1224,7 @@ NpcSetupBattleInfo btlsetup_tou_tbl[] = {
         -1, // swFlag
         NULL, // altSelect
         btlgrpsel_tou_btlno_tou_test1_off, // select
-        0, 0, // battleFlags..field_1C
+        0, 0, // battleFlags..randomMode
         {{1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}}, // field_20
         "BGM_ZAKO_BATTLE1", // bgmName
     },
@@ -1235,8 +1235,8 @@ NpcSetupBattleInfo btlsetup_tou_tbl[] = {
         -1, // swFlag
         NULL, // altSelect
         btlgrpsel_tou_btlno_tou_01_01_off, // select
-        0x40, // battleFlags
-        0, // field_1C
+        NPC_BATTLE_NO_GAME_OVER, // battleFlags
+        0, // randomMode
         {{4, 4}, {4, 4}, {0}, {0}, {4, 4}, {4, 4}, {0}, {4, 4}, {4, 4}, {0}, {10, 10}, {4, 4}, {1, 1}, {1, 1}, {1, 1}, {1, 1}}, // field_20
         "BGM_ZAKO_BATTLE1", // bgmName
     },
@@ -1247,8 +1247,8 @@ NpcSetupBattleInfo btlsetup_tou_tbl[] = {
         -1, // swFlag
         NULL, // altSelect
         btlgrpsel_tou_btlno_tou_01_02_off, // select
-        0x40, // battleFlags
-        0, // field_1C
+        NPC_BATTLE_NO_GAME_OVER, // battleFlags
+        0, // randomMode
         {{4, 4}, {4, 4}, {0}, {0}, {4, 4}, {4, 4}, {0}, {4, 4}, {10, 10}, {0}, {4, 4}, {4, 4}, {1, 1}, {1, 1}, {1, 1}, {1, 1}}, // field_20
         "BGM_ZAKO_BATTLE1", // bgmName
     },
@@ -1259,8 +1259,8 @@ NpcSetupBattleInfo btlsetup_tou_tbl[] = {
         -1, // swFlag
         NULL, // altSelect
         btlgrpsel_tou_btlno_tou_01_03_off, // select
-        0x40, // battleFlags
-        0, // field_1C
+        NPC_BATTLE_NO_GAME_OVER, // battleFlags
+        0, // randomMode
         {{4, 4}, {4, 4}, {0}, {0}, {4, 4}, {4, 4}, {0}, {4, 4}, {4, 4}, {0}, {4, 4}, {4, 4}, {1, 1}, {1, 1}, {1, 1}, {1, 1}}, // field_20
         "BGM_ZAKO_BATTLE1", // bgmName
     },
@@ -1271,8 +1271,8 @@ NpcSetupBattleInfo btlsetup_tou_tbl[] = {
         -1, // swFlag
         NULL, // altSelect
         btlgrpsel_tou_btlno_tou_01_04_off, // select
-        0x40, // battleFlags
-        0, // field_1C
+        NPC_BATTLE_NO_GAME_OVER, // battleFlags
+        0, // randomMode
         {{4, 4}, {4, 4}, {0}, {0}, {4, 4}, {4, 4}, {0}, {4, 4}, {4, 4}, {0}, {4, 4}, {4, 4}, {1, 1}, {1, 1}, {1, 1}, {1, 1}}, // field_20
         "BGM_ZAKO_BATTLE1", // bgmName
     },
@@ -1283,8 +1283,8 @@ NpcSetupBattleInfo btlsetup_tou_tbl[] = {
         -1, // swFlag
         NULL, // altSelect
         btlgrpsel_tou_btlno_tou_01_05_off, // select
-        0x40, // battleFlags
-        0, // field_1C
+        NPC_BATTLE_NO_GAME_OVER, // battleFlags
+        0, // randomMode
         {{4, 4}, {4, 4}, {0}, {0}, {4, 4}, {4, 4}, {0}, {4, 4}, {4, 4}, {0}, {4, 4}, {4, 4}, {1, 1}, {1, 1}, {1, 1}, {1, 1}}, // field_20
         "BGM_ZAKO_BATTLE1", // bgmName
     },
@@ -1295,8 +1295,8 @@ NpcSetupBattleInfo btlsetup_tou_tbl[] = {
         -1, // swFlag
         NULL, // altSelect
         btlgrpsel_tou_btlno_tou_01_06_off, // select
-        0x40, // battleFlags
-        0, // field_1C
+        NPC_BATTLE_NO_GAME_OVER, // battleFlags
+        0, // randomMode
         {{4, 4}, {4, 4}, {0}, {0}, {4, 4}, {4, 4}, {0}, {4, 4}, {4, 4}, {0}, {4, 4}, {4, 4}, {1, 1}, {1, 1}, {1, 1}, {1, 1}}, // field_20
         "BGM_ZAKO_BATTLE1", // bgmName
     },
@@ -1307,8 +1307,8 @@ NpcSetupBattleInfo btlsetup_tou_tbl[] = {
         -1, // swFlag
         NULL, // altSelect
         btlgrpsel_tou_btlno_tou_01_07_off, // select
-        0x40, // battleFlags
-        0, // field_1C
+        NPC_BATTLE_NO_GAME_OVER, // battleFlags
+        0, // randomMode
         {{4, 4}, {4, 4}, {0}, {0}, {4, 4}, {4, 4}, {0}, {4, 4}, {4, 4}, {0}, {4, 4}, {4, 4}, {1, 1}, {1, 1}, {1, 1}, {1, 1}}, // field_20
         "BGM_ZAKO_BATTLE1", // bgmName
     },
@@ -1319,8 +1319,8 @@ NpcSetupBattleInfo btlsetup_tou_tbl[] = {
         -1, // swFlag
         NULL, // altSelect
         btlgrpsel_tou_btlno_tou_01_08_off, // select
-        0x40, // battleFlags
-        0, // field_1C
+        NPC_BATTLE_NO_GAME_OVER, // battleFlags
+        0, // randomMode
         {{4, 4}, {4, 4}, {0}, {0}, {4, 4}, {4, 4}, {0}, {4, 4}, {4, 4}, {0}, {4, 4}, {4, 4}, {1, 1}, {1, 1}, {1, 1}, {1, 1}}, // field_20
         "BGM_ZAKO_BATTLE1", // bgmName
     },
@@ -1331,8 +1331,8 @@ NpcSetupBattleInfo btlsetup_tou_tbl[] = {
         -1, // swFlag
         NULL, // altSelect
         btlgrpsel_tou_btlno_tou_01_09_off, // select
-        0x40, // battleFlags
-        0, // field_1C
+        NPC_BATTLE_NO_GAME_OVER, // battleFlags
+        0, // randomMode
         {{4, 4}, {4, 4}, {0}, {0}, {4, 4}, {4, 4}, {0}, {4, 4}, {4, 4}, {0}, {4, 4}, {4, 4}, {1, 1}, {1, 1}, {1, 1}, {1, 1}}, // field_20
         "BGM_ZAKO_BATTLE1", // bgmName
     },
@@ -1343,8 +1343,8 @@ NpcSetupBattleInfo btlsetup_tou_tbl[] = {
         -1, // swFlag
         NULL, // altSelect
         btlgrpsel_tou_btlno_tou_01_10_off, // select
-        0x20000040, // battleFlags
-        0, // field_1C
+        (NPC_BATTLE_NO_GAME_OVER | NPC_BATTLE_STORY), // battleFlags
+        0, // randomMode
         {{4, 4}, {4, 4}, {0}, {0}, {4, 4}, {4, 4}, {0}, {4, 4}, {4, 4}, {0}, {4, 4}, {4, 4}, {1, 1}, {1, 1}, {1, 1}, {1, 1}}, // field_20
         "BGM_CHUBOSS_BATTLE1", // bgmName
     },
@@ -1355,8 +1355,8 @@ NpcSetupBattleInfo btlsetup_tou_tbl[] = {
         -1, // swFlag
         NULL, // altSelect
         btlgrpsel_tou_btlno_tou_01_11_off, // select
-        0x40, // battleFlags
-        0, // field_1C
+        NPC_BATTLE_NO_GAME_OVER, // battleFlags
+        0, // randomMode
         {{4, 4}, {4, 4}, {0}, {0}, {4, 4}, {4, 4}, {0}, {4, 4}, {4, 4}, {0}, {4, 4}, {4, 4}, {1, 1}, {1, 1}, {1, 1}, {1, 1}}, // field_20
         "BGM_ZAKO_BATTLE1", // bgmName
     },
@@ -1367,8 +1367,8 @@ NpcSetupBattleInfo btlsetup_tou_tbl[] = {
         -1, // swFlag
         NULL, // altSelect
         btlgrpsel_tou_btlno_tou_01_12_off, // select
-        0x40, // battleFlags
-        0, // field_1C
+        NPC_BATTLE_NO_GAME_OVER, // battleFlags
+        0, // randomMode
         {{4, 4}, {4, 4}, {0}, {0}, {4, 4}, {4, 4}, {0}, {4, 4}, {4, 4}, {0}, {4, 4}, {4, 4}, {1, 1}, {1, 1}, {1, 1}, {1, 1}}, // field_20
         "BGM_ZAKO_BATTLE1", // bgmName
     },
@@ -1379,8 +1379,8 @@ NpcSetupBattleInfo btlsetup_tou_tbl[] = {
         -1, // swFlag
         NULL, // altSelect
         btlgrpsel_tou_btlno_tou_01_13_off, // select
-        0x40, // battleFlags
-        0, // field_1C
+        NPC_BATTLE_NO_GAME_OVER, // battleFlags
+        0, // randomMode
         {{4, 4}, {4, 4}, {0}, {0}, {4, 4}, {4, 4}, {0}, {4, 4}, {10, 10}, {0}, {4, 4}, {4, 4}, {1, 1}, {1, 1}, {1, 1}, {1, 1}}, // field_20
         "BGM_ZAKO_BATTLE1", // bgmName
     },
@@ -1391,8 +1391,8 @@ NpcSetupBattleInfo btlsetup_tou_tbl[] = {
         -1, // swFlag
         NULL, // altSelect
         btlgrpsel_tou_btlno_tou_01_14_off, // select
-        0x40, // battleFlags
-        0, // field_1C
+        NPC_BATTLE_NO_GAME_OVER, // battleFlags
+        0, // randomMode
         {{4, 4}, {4, 4}, {0}, {0}, {4, 4}, {4, 4}, {0}, {4, 4}, {4, 4}, {0}, {4, 4}, {4, 4}, {1, 1}, {1, 1}, {1, 1}, {1, 1}}, // field_20
         "BGM_ZAKO_BATTLE1", // bgmName
     },
@@ -1403,8 +1403,8 @@ NpcSetupBattleInfo btlsetup_tou_tbl[] = {
         -1, // swFlag
         NULL, // altSelect
         btlgrpsel_tou_btlno_tou_01_15_off, // select
-        0x40, // battleFlags
-        0, // field_1C
+        NPC_BATTLE_NO_GAME_OVER, // battleFlags
+        0, // randomMode
         {{4, 4}, {4, 4}, {0}, {10, 10}, {4, 4}, {4, 4}, {0}, {4, 4}, {4, 4}, {0}, {4, 4}, {4, 4}, {1, 1}, {1, 1}, {1, 1}, {1, 1}}, // field_20
         "BGM_ZAKO_BATTLE1", // bgmName
     },
@@ -1415,8 +1415,8 @@ NpcSetupBattleInfo btlsetup_tou_tbl[] = {
         -1, // swFlag
         NULL, // altSelect
         btlgrpsel_tou_btlno_tou_01_16_off, // select
-        0x40, // battleFlags
-        0, // field_1C
+        NPC_BATTLE_NO_GAME_OVER, // battleFlags
+        0, // randomMode
         {{4, 4}, {4, 4}, {0}, {0}, {4, 4}, {4, 4}, {0}, {4, 4}, {4, 4}, {0}, {4, 4}, {4, 4}, {1, 1}, {1, 1}, {1, 1}, {1, 1}}, // field_20
         "BGM_ZAKO_BATTLE1", // bgmName
     },
@@ -1427,8 +1427,8 @@ NpcSetupBattleInfo btlsetup_tou_tbl[] = {
         -1, // swFlag
         NULL, // altSelect
         btlgrpsel_tou_btlno_tou_01_17_off, // select
-        0x40, // battleFlags
-        0, // field_1C
+        NPC_BATTLE_NO_GAME_OVER, // battleFlags
+        0, // randomMode
         {{4, 4}, {4, 4}, {0}, {0}, {4, 4}, {4, 4}, {0}, {4, 4}, {4, 4}, {0}, {4, 4}, {4, 4}, {1, 1}, {1, 1}, {1, 1}, {1, 1}}, // field_20
         "BGM_ZAKO_BATTLE1", // bgmName
     },
@@ -1439,8 +1439,8 @@ NpcSetupBattleInfo btlsetup_tou_tbl[] = {
         -1, // swFlag
         NULL, // altSelect
         btlgrpsel_tou_btlno_tou_01_18_off, // select
-        0x40, // battleFlags
-        0, // field_1C
+        NPC_BATTLE_NO_GAME_OVER, // battleFlags
+        0, // randomMode
         {{4, 4}, {4, 4}, {0}, {0}, {4, 4}, {4, 4}, {0}, {4, 4}, {4, 4}, {0}, {4, 4}, {4, 4}, {1, 1}, {1, 1}, {1, 1}, {1, 1}}, // field_20
         "BGM_ZAKO_BATTLE1", // bgmName
     },
@@ -1451,8 +1451,8 @@ NpcSetupBattleInfo btlsetup_tou_tbl[] = {
         -1, // swFlag
         NULL, // altSelect
         btlgrpsel_tou_btlno_tou_01_19_off, // select
-        0x40, // battleFlags
-        0, // field_1C
+        NPC_BATTLE_NO_GAME_OVER, // battleFlags
+        0, // randomMode
         {{4, 4}, {4, 4}, {0}, {0}, {4, 4}, {4, 4}, {0}, {4, 4}, {10, 10}, {0}, {4, 4}, {4, 4}, {1, 1}, {1, 1}, {1, 1}, {1, 1}}, // field_20
         "BGM_ZAKO_BATTLE1", // bgmName
     },
@@ -1463,8 +1463,8 @@ NpcSetupBattleInfo btlsetup_tou_tbl[] = {
         -1, // swFlag
         NULL, // altSelect
         btlgrpsel_tou_btlno_tou_01_20_off, // select
-        0x40, // battleFlags
-        0, // field_1C
+        NPC_BATTLE_NO_GAME_OVER, // battleFlags
+        0, // randomMode
         {{4, 4}, {4, 4}, {0}, {0}, {4, 4}, {4, 4}, {0}, {4, 4}, {4, 4}, {0}, {4, 4}, {4, 4}, {1, 1}, {1, 1}, {1, 1}, {1, 1}}, // field_20
         "BGM_ZAKO_BATTLE1", // bgmName
     },
@@ -1475,8 +1475,8 @@ NpcSetupBattleInfo btlsetup_tou_tbl[] = {
         -1, // swFlag
         NULL, // altSelect
         btlgrpsel_tou_btlno_tou_01_21_off, // select
-        0x40, // battleFlags
-        0, // field_1C
+        NPC_BATTLE_NO_GAME_OVER, // battleFlags
+        0, // randomMode
         {{4, 4}, {4, 4}, {0}, {0}, {4, 4}, {4, 4}, {0}, {4, 4}, {4, 4}, {0}, {4, 4}, {4, 4}, {1, 1}, {1, 1}, {1, 1}, {1, 1}}, // field_20
         "BGM_ZAKO_BATTLE1", // bgmName
     },
@@ -1487,8 +1487,8 @@ NpcSetupBattleInfo btlsetup_tou_tbl[] = {
         -1, // swFlag
         NULL, // altSelect
         btlgrpsel_tou_btlno_tou_01_22_off, // select
-        0x20000040, // battleFlags
-        0, // field_1C
+        (NPC_BATTLE_NO_GAME_OVER | NPC_BATTLE_STORY), // battleFlags
+        0, // randomMode
         {{4, 4}, {4, 4}, {0}, {0}, {4, 4}, {4, 4}, {0}, {4, 4}, {4, 4}, {0}, {4, 4}, {4, 4}, {1, 1}, {1, 1}, {1, 1}, {1, 1}}, // field_20
         "BGM_BOSS_STG3_CHAMP1", // bgmName
     },
@@ -1499,8 +1499,8 @@ NpcSetupBattleInfo btlsetup_tou_tbl[] = {
         -1, // swFlag
         NULL, // altSelect
         btlgrpsel_tou_btlno_tou_01_23_off, // select
-        0x20000010, // battleFlags
-        6, // field_1C
+        (NPC_BATTLE_NO_ESCAPE | NPC_BATTLE_STORY), // battleFlags
+        6, // randomMode
         {{4, 4}, {4, 4}, {0}, {0}, {4, 4}, {4, 4}, {0}, {4, 4}, {4, 4}, {0}, {4, 4}, {4, 4}, {1, 1}, {1, 1}, {1, 1}, {1, 1}}, // field_20
         "BGM_BOSS_STG3_GANCE1", // bgmName
     },
@@ -1512,9 +1512,9 @@ NpcSetupBattleInfo btlsetup_tou_tbl[] = {
         NULL, // altSelect
         btlgrpsel_tou_btlno_tou_01_24_off, // select
 #ifdef VERSION_G8ME01
-        0x20000040, // battleFlags
+        (NPC_BATTLE_NO_GAME_OVER | NPC_BATTLE_STORY), // battleFlags
 #else
-        0x20000000, // battleFlags
+        NPC_BATTLE_STORY, // battleFlags
 #endif
         0, // field_1C
         {{0}, {0}, {0}, {0}, {4, 4}, {4, 4}, {0}, {0}, {4, 4}, {0}, {4, 4}, {4, 4}, {1, 1}, {1, 1}, {1, 1}, {1, 1}}, // field_20

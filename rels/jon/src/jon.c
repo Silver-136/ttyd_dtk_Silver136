@@ -2865,16 +2865,16 @@ USER_FUNC(shikakeFlag) {
 
     switch (type) {
         case 0:
-            npc->battleInfo.battleFlags |= 0x4000000;
+            npc->battleInfo.battleFlags |= NPC_BATTLE_NO_PARTY_CHANGE;
             break;
         case 1:
-            npc->battleInfo.battleFlags |= 0x2000000;
+            npc->battleInfo.battleFlags |= NPC_BATTLE_NO_HAMMER;
             break;
         case 2:
-            npc->battleInfo.battleFlags |= 0x1000000;
+            npc->battleInfo.battleFlags |= NPC_BATTLE_NO_JUMP;
             break;
         case 3:
-            npc->battleInfo.battleFlags |= 0x100;
+            npc->battleInfo.battleFlags |= NPC_BATTLE_EXTRA_COINS;
             break;
     }
     return EVT_RETURN_DONE;
@@ -2902,7 +2902,7 @@ USER_FUNC(setup_npc_ex_para) {
 }
 
 USER_FUNC(yattukeFlag) {
-    npcNameToPtr("\223G")->battleInfo.battleFlags |= 0x10000000;
+    npcNameToPtr("\223G")->battleInfo.battleFlags |= NPC_BATTLE_NO_BUMP_ATTACK;
     return EVT_RETURN_DONE;
 }
 
