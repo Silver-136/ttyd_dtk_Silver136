@@ -368,10 +368,10 @@ EVT_END()
 s32 _firstattack_setting(EventEntry* event, BOOL isFirstCall) {
     FieldBattleData* fbat = fbatGetPointer();
 
-    fbat->hitKind = 0x10000000;
+    fbat->hitKind = FBAT_HIT_ENEMY_FIRST;
     fbat->firstAttackParam = 0x10;
     fbat->firstAttackFlags &= ~1;
-    fbatSetAttackAnnounce(0x10000000);
+    fbatSetAttackAnnounce(FBAT_HIT_ENEMY_FIRST);
     fbatSetAttackAnnounceEnable();
     return EVT_RETURN_DONE;
 }

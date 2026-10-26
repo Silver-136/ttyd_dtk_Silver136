@@ -68,8 +68,8 @@ void seq_battleInit(BattleSeqWork* work) {
     evtStopAll(4);
     psndSetFlag(PSND_FLAG_MUTE_SFX);
     switch (fbatGetPointer()->hitKind) {
-        case 0x1000000:
-        case 0x800000:
+        case FBAT_HIT_BOMB:
+        case FBAT_HIT_SHELL:
             if (debug_battle_flag == 0) {
                 marioCtrlOff();
                 partyCtrlOff();
@@ -117,8 +117,8 @@ void seq_battleMain(BattleSeqWork* work) {
         case 2:
             pouchGetPtr();
             switch (fbatGetPointer()->hitKind) {
-                case 0x1000000:
-                case 0x800000:
+                case FBAT_HIT_BOMB:
+                case FBAT_HIT_SHELL:
                     if (debug_battle_flag == 0) {
                         marioGetPtr()->flags &= ~MARIO_FLAG_ACTIVE;
                     }
@@ -275,31 +275,31 @@ BOOL battle_init(void) {
         BattleInformationSetFirstAttack(info, 0);
     } else {
         switch (fbat->hitKind) {
-            case 0x20000:
+            case FBAT_HIT_JUMP:
                 BattleInformationSetFirstAttack(info, 1);
                 break;
-            case 0x40000:
+            case FBAT_HIT_HIP:
                 BattleInformationSetFirstAttack(info, 2);
                 break;
-            case 0x80000:
+            case FBAT_HIT_JUMP_UNUSED:
                 BattleInformationSetFirstAttack(info, 3);
                 break;
-            case 0x100000:
+            case FBAT_HIT_HAMMER:
                 BattleInformationSetFirstAttack(info, 4);
                 break;
-            case 0x200000:
+            case FBAT_HIT_SPIN_HAMMER:
                 BattleInformationSetFirstAttack(info, 5);
                 break;
-            case 0x400000:
+            case FBAT_HIT_ULTRA_SPIN_HAMMER:
                 BattleInformationSetFirstAttack(info, 6);
                 break;
-            case 0x800000:
+            case FBAT_HIT_SHELL:
                 BattleInformationSetFirstAttack(info, 7);
                 break;
-            case 0x1000000:
+            case FBAT_HIT_BOMB:
                 BattleInformationSetFirstAttack(info, 8);
                 break;
-            case 0x10000000:
+            case FBAT_HIT_ENEMY_FIRST:
                 BattleInformationSetFirstAttack(info, fbat->firstAttackParam);
                 break;
             default:

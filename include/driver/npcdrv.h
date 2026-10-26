@@ -321,9 +321,38 @@ typedef struct NpcWork {
     NpcEntry* talkTarget; // 0x10, NPC that A would talk to this frame
 } NpcWork;
 
+// Field hit kinds: fbatHitCheck results, FieldBattleData.hitKind, fbatSetAttackAnnounce
+typedef enum FbatHitKind {
+    FBAT_HIT_NONE = 0,
+    FBAT_HIT_TOUCH = 0x10000,           // plain contact: no first strike
+    FBAT_HIT_JUMP = 0x20000,            // Mario first strikes ...
+    FBAT_HIT_HIP = 0x40000,             // ... landing in MARIO_MOTION_HIP
+    FBAT_HIT_JUMP_UNUSED = 0x80000,     // handled like a jump; nothing produces it
+    FBAT_HIT_HAMMER = 0x100000,
+    FBAT_HIT_SPIN_HAMMER = 0x200000,    // below hammer level 3
+    FBAT_HIT_ULTRA_SPIN_HAMMER = 0x400000,
+    FBAT_HIT_SHELL = 0x800000,          // the partner's shell (party member kind 2)
+    FBAT_HIT_BOMB = 0x1000000,          // the partner's bomb (party member kind 3)
+    FBAT_HIT_MARIO_FIRST = 0x1FE0000,   // every Mario first strike above
+    FBAT_HIT_ENEMY_FIRST = 0x10000000,  // the enemy strikes first
+} FbatHitKind;
+
+// fbatHitCheck flags: which hits to look for
+typedef enum FbatCheckFlags {
+    FBAT_CHECK_CURRENT = (1 << 0),      // 0x1, hammer: where the swing is now (not the whole swing); party: only while attacking
+    FBAT_CHECK_TOUCH = (1 << 4),        // 0x10, body contact; with it nothing is found while Mario is invincible
+    FBAT_CHECK_JUMP = (1 << 5),         // 0x20
+    FBAT_CHECK_HAMMER = (1 << 6),       // 0x40
+    FBAT_CHECK_SPIN_HAMMER = (1 << 7),  // 0x80
+    FBAT_CHECK_SHELL = (1 << 8),        // 0x100
+    FBAT_CHECK_BOMB = (1 << 9),         // 0x200
+    FBAT_CHECK_ENEMY = (1 << 12),       // 0x1000, field enemies (otherwise other NPCs)
+    FBAT_CHECK_REACTION = (1 << 13),    // 0x2000, only NPCs with reactionFlags bit 0; no first-strike announce
+} FbatCheckFlags;
+
 typedef struct FirstStrikeInfo {
     BOOL enabled;        // 0x0
-    u32 hitKind;            // 0x4, fbatSetAttackAnnounce kind (0x20000.. first-strike types), 0 when done
+    u32 hitKind;            // 0x4, FbatHitKind, 0 when done
     u32 type;            // 0x8
     s32 timer;           // 0xC, frames into the announce slide (0..100)
     f32 x;               // 0x10, announce x, slides -600 -> 0 -> 600

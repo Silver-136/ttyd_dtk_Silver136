@@ -1478,19 +1478,19 @@ void fbatSetAttackAnnounce(s32 hitKind) {
     firstStrike->hitKind = hitKind;
     firstStrike->timer = 0;
     switch (firstStrike->hitKind) {
-        case 0x20000:
-        case 0x40000:
-        case 0x80000:
-        case 0x100000:
-        case 0x200000:
-        case 0x400000:
-        case 0x800000:
-        case 0x1000000:
+        case FBAT_HIT_JUMP:
+        case FBAT_HIT_HIP:
+        case FBAT_HIT_JUMP_UNUSED:
+        case FBAT_HIT_HAMMER:
+        case FBAT_HIT_SPIN_HAMMER:
+        case FBAT_HIT_ULTRA_SPIN_HAMMER:
+        case FBAT_HIT_SHELL:
+        case FBAT_HIT_BOMB:
             firstStrike->msg_tag = "fb_sensei_shita"; // You struck first!
             firstStrike->type = 2;
             firstStrike->color = (GXColor){ 0xFF, 0x80, 0x80, 0xFF };
             break;
-        case 0x10000000:
+        case FBAT_HIT_ENEMY_FIRST:
             firstStrike->msg_tag = "fb_sensei_sareta"; // Your foe struck first!
             firstStrike->type = 1;
             firstStrike->color = (GXColor){ 0x80, 0x80, 0xFF, 0xFF };
@@ -1645,7 +1645,7 @@ void fbatEncountCheck(void) {
     }
     data = gp->fbatData;
     kind = (u32*)&data->hitKind;
-    npc = fbatHitCheck(0x13f1, kind);
+    npc = fbatHitCheck(FBAT_CHECK_ENEMY | FBAT_CHECK_BOMB | FBAT_CHECK_SHELL | FBAT_CHECK_SPIN_HAMMER | FBAT_CHECK_HAMMER | FBAT_CHECK_JUMP | FBAT_CHECK_TOUCH | FBAT_CHECK_CURRENT, kind);
     if (npc && (data->mode == 1)) {
         AnimationPose *pose;
         f32 rel;
@@ -1654,39 +1654,39 @@ void fbatEncountCheck(void) {
             return;
         }
         switch (*kind) {
-            case 0x10000:
+            case FBAT_HIT_TOUCH:
 
             default:
                 break;
 
-            case 0x20000:
+            case FBAT_HIT_JUMP:
 
-            case 0x40000:
+            case FBAT_HIT_HIP:
 
-            case 0x80000:
+            case FBAT_HIT_JUMP_UNUSED:
                 marioChgMotJump2();
                 if (dbg_battleskip != 1) {
                     animPoseSetAnim(npc->poseId, npc->tribe->damageAnimation, 1);
                 }
                 break;
 
-            case 0x100000:
+            case FBAT_HIT_HAMMER:
 
-            case 0x200000:
+            case FBAT_HIT_SPIN_HAMMER:
 
-            case 0x400000:
+            case FBAT_HIT_ULTRA_SPIN_HAMMER:
                 if (dbg_battleskip != 1) {
                     animPoseSetAnim(npc->poseId, npc->tribe->damageAnimation, 1);
                 }
                 break;
 
-            case 0x800000:
+            case FBAT_HIT_SHELL:
                 if (dbg_battleskip != 1) {
                     animPoseSetAnim(npc->poseId, npc->tribe->damageAnimation, 1);
                 }
                 break;
 
-            case 0x1000000:
+            case FBAT_HIT_BOMB:
                 if (dbg_battleskip != 1) {
                     animPoseSetAnim(npc->poseId, npc->tribe->damageAnimation, 1);
                 }
@@ -1715,52 +1715,52 @@ void fbatEncountCheck(void) {
 
         pose->rotationY += 0.75f * (pose->peraTargetRotY - pose->rotationY);
         switch (*kind) {
-            case 0x20000:
+            case FBAT_HIT_JUMP:
 
-            case 0x40000:
+            case FBAT_HIT_HIP:
 
-            case 0x80000:
+            case FBAT_HIT_JUMP_UNUSED:
 
-            case 0x100000:
+            case FBAT_HIT_HAMMER:
 
-            case 0x200000:
+            case FBAT_HIT_SPIN_HAMMER:
 
-            case 0x400000:
+            case FBAT_HIT_ULTRA_SPIN_HAMMER:
 
-            case 0x800000:
+            case FBAT_HIT_SHELL:
 
-            case 0x1000000:
+            case FBAT_HIT_BOMB:
                 effSmallStarEntry(3, 3, npc->position.x, npc->position.y + npc->height, npc->position.z, 0.0f, -1.0f, 0.0f);
                 break;
 
-            case 0x10000000:
+            case FBAT_HIT_ENEMY_FIRST:
                 effSmallStarEntry(3, 3, mario->position.x, mario->position.y + mario->wPlayerCollisionBox.y, mario->position.z, 0.0f, -1.0f, 0.0f);
                 break;
 
         }
 
         switch (*kind) {
-            case 0x20000:
+            case FBAT_HIT_JUMP:
 
-            case 0x40000:
+            case FBAT_HIT_HIP:
 
-            case 0x80000:
+            case FBAT_HIT_JUMP_UNUSED:
 
-            case 0x100000:
+            case FBAT_HIT_HAMMER:
 
-            case 0x200000:
+            case FBAT_HIT_SPIN_HAMMER:
 
-            case 0x400000:
+            case FBAT_HIT_ULTRA_SPIN_HAMMER:
 
-            case 0x800000:
+            case FBAT_HIT_SHELL:
 
-            case 0x1000000:
+            case FBAT_HIT_BOMB:
                 if (npc) {
                     psndSFXOn_3D("SFX_BTL_FLD_ENEMY_DAMAGED1", &npc->position);
                 }
                 break;
 
-            case 0x10000000:
+            case FBAT_HIT_ENEMY_FIRST:
                 psndSFXOn_3D("SFX_BTL_FLD_MARIO_DAMAGED1", &mario->position);
                 break;
 
@@ -1899,7 +1899,7 @@ void fbatEncountCheck(void) {
     data = gp->fbatData;
     if (data->mode == 1) {
         u32 *kind = (u32*)&data->hitKind;
-        npc = fbatHitCheck(0x2361, kind);
+        npc = fbatHitCheck(FBAT_CHECK_REACTION | FBAT_CHECK_BOMB | FBAT_CHECK_SHELL | FBAT_CHECK_HAMMER | FBAT_CHECK_JUMP | FBAT_CHECK_CURRENT, kind);
         if (npc && (data->mode == 1)) {
             u32 k = *kind;
             FieldBattleData *d = gp->fbatData;
@@ -1910,11 +1910,11 @@ void fbatEncountCheck(void) {
                 npc->fbatHitKind = k;
             }
             switch (*kind) {
-                case 0x20000:
+                case FBAT_HIT_JUMP:
 
-                case 0x40000:
+                case FBAT_HIT_HIP:
 
-                case 0x80000:
+                case FBAT_HIT_JUMP_UNUSED:
                     marioChgMotJump2();
                     break;
 
@@ -2068,7 +2068,7 @@ void fbatBattleMode(void) {
                     win = TRUE;
                     goto decided;
                 }
-                if (pouchEquipCheckBadge(ITEM_FIRST_ATTACK) && ((u32)data->hitKind & 0x01FE0000) &&
+                if (pouchEquipCheckBadge(ITEM_FIRST_ATTACK) && ((u32)data->hitKind & FBAT_HIT_MARIO_FIRST) &&
                     NPC_ENEMY_LEVEL(cur) < pouch->level) {
                     skip = TRUE;
                     win = TRUE;
@@ -2089,7 +2089,7 @@ void fbatBattleMode(void) {
                 }
                 marioFBattlePrepare();
                 seqSetSeq(SEQ_BATTLE, NULL, NULL);
-                if ((u32)data->hitKind == 0x10000000) {
+                if ((u32)data->hitKind == FBAT_HIT_ENEMY_FIRST) {
                     marioChgDamagePose();
                 }
                 data->subState = 1;
@@ -2276,7 +2276,7 @@ NpcEntry* fbatNpcTalkCheck(void) {
 }
 
 NpcEntry* fbatHitCheckAll(void) {
-    return fbatHitCheck(0x13f1, NULL);
+    return fbatHitCheck(FBAT_CHECK_ENEMY | FBAT_CHECK_BOMB | FBAT_CHECK_SHELL | FBAT_CHECK_SPIN_HAMMER | FBAT_CHECK_HAMMER | FBAT_CHECK_JUMP | FBAT_CHECK_TOUCH | FBAT_CHECK_CURRENT, NULL);
 }
 
 // FAKE: fbatHitCheck reads its NpcEntry/MarioWork/GlobalWork/CameraEntry/FieldBattleData fields as (*(T*)&((S*)p)->field): the plain field forms lower the function's inline cost, and the deferred inliner then pulls _npcHitCheckSphere/_npcHitCheckHammerAllMotion into it
@@ -2351,19 +2351,19 @@ void* fbatHitCheck(u32 flags, void* result) {
     res.kind = 0;
     res.dist = 1000.0f;
     res.bits &= ~1;
-    soft = flags & 0x2000;
+    soft = flags & FBAT_CHECK_REACTION;
     if (soft) {
         res.bits |= 1;
     }
 
-    if (flags & 0x30) {
-        noJump = flags & 0x10;
+    if (flags & (FBAT_CHECK_TOUCH | FBAT_CHECK_JUMP)) {
+        noJump = flags & FBAT_CHECK_TOUCH;
         total = wp->total;
         npc = wp->entries;
         if (!noJump || mario->mutekiTimer <= 0) {
             if (fbat_canHit(npc)) {
-                f1000a = flags & 0x1000;
-                f20 = flags & 0x20;
+                f1000a = flags & FBAT_CHECK_ENEMY;
+                f20 = flags & FBAT_CHECK_JUMP;
                 for (i = 0; i < total; i++, npc++) {
                     f32 dx, dz;
                     if (npc == NULL) continue;
@@ -2388,21 +2388,21 @@ void* fbatHitCheck(u32 flags, void* result) {
                         if ((*(s32*)&((NpcEntry*)npc)->attackMode) == 0 ||
                             (evtGetPtrID((*(s32*)&((NpcEntry*)npc)->regularEvtId)) ? evtGetPtrID((*(s32*)&((NpcEntry*)npc)->regularEvtId))->wNpcEventType == NPC_EVENT_BLOW : 0)) {
                             if (npc->flags & NPC_FLAG_NO_PLAYER_ATTACK) continue;
-                            res.kind = 0x10000;
+                            res.kind = FBAT_HIT_TOUCH;
                             hit = npc;
                             res.dist = dist;
-                            if (!soft) fbatSetAttackAnnounce(0x10000);
+                            if (!soft) fbatSetAttackAnnounce(FBAT_HIT_TOUCH);
                         } else if (pouchEquipCheckBadge(ITEM_CHILL_OUT)) {
-                            res.kind = 0x10000;
+                            res.kind = FBAT_HIT_TOUCH;
                             hit = npc;
                             res.dist = dist;
-                            if (!soft) fbatSetAttackAnnounce(0x10000);
+                            if (!soft) fbatSetAttackAnnounce(FBAT_HIT_TOUCH);
                         } else {
-                            res.kind = 0x10000000;
+                            res.kind = FBAT_HIT_ENEMY_FIRST;
                             hit = npc;
                             res.dist = dist;
                             if (!soft) {
-                                fbatSetAttackAnnounce(0x10000000);
+                                fbatSetAttackAnnounce(FBAT_HIT_ENEMY_FIRST);
                             }
                             res.evtId = (*(s32*)&((NpcEntry*)npc)->attackMode);
                         }
@@ -2413,31 +2413,31 @@ void* fbatHitCheck(u32 flags, void* result) {
                         hit = npc;
                         res.dist = dist;
                         if (marioGetJabaraState() == 6) {
-                            res.kind = 0x20000;
-                            if (!soft) fbatSetAttackAnnounce(0x20000);
+                            res.kind = FBAT_HIT_JUMP;
+                            if (!soft) fbatSetAttackAnnounce(FBAT_HIT_JUMP);
                         } else if (mario->currMotionId == MARIO_MOTION_HIP) {
-                            res.kind = 0x40000;
-                            if (!soft) fbatSetAttackAnnounce(0x40000);
+                            res.kind = FBAT_HIT_HIP;
+                            if (!soft) fbatSetAttackAnnounce(FBAT_HIT_HIP);
                         } else {
-                            res.kind = 0x20000;
-                            if (!soft) fbatSetAttackAnnounce(0x20000);
+                            res.kind = FBAT_HIT_JUMP;
+                            if (!soft) fbatSetAttackAnnounce(FBAT_HIT_JUMP);
                         }
                     } else if (marioGetJabaraState() == 6 && !(npc->flags & NPC_FLAG_NO_PLAYER_ATTACK)) {
-                        res.kind = 0x20000;
+                        res.kind = FBAT_HIT_JUMP;
                         hit = npc;
                         res.dist = dist;
-                        if (!soft) fbatSetAttackAnnounce(0x20000);
+                        if (!soft) fbatSetAttackAnnounce(FBAT_HIT_JUMP);
                     }
                 }
             }
         }
     }
 
-    if (flags & 0x40) {
+    if (flags & FBAT_CHECK_HAMMER) {
         while (hit == NULL) {
-            if ((flags & 0x10) && mario->mutekiTimer > 0) break;
+            if ((flags & FBAT_CHECK_TOUCH) && mario->mutekiTimer > 0) break;
             if (!fbat_canHit(npc)) break;
-            if (flags & 1) {
+            if (flags & FBAT_CHECK_CURRENT) {
                 MarioWork* m;
                 s32 v;
                 f32 f;
@@ -2465,13 +2465,13 @@ void* fbatHitCheck(u32 flags, void* result) {
                 y = m->position.y + r * c2;
                 npc = wp->entries;
                 for (i = 0; i < total; i++, npc++) {
-                    FH_NPC_FILTER2(flags & 0x1000, 2)
+                    FH_NPC_FILTER2(flags & FBAT_CHECK_ENEMY, 2)
                     if (!_npcHitCheckSphere(npc, &dist, x, y, z, 12.0f)) continue;
                     if (dist >= res.dist) continue;
                     res.dist = dist;
                     hit = npc;
-                    res.kind = 0x100000;
-                    if (!soft) fbatSetAttackAnnounce(0x100000);
+                    res.kind = FBAT_HIT_HAMMER;
+                    if (!soft) fbatSetAttackAnnounce(FBAT_HIT_HAMMER);
                     break;
                 }
             } else {
@@ -2479,13 +2479,13 @@ void* fbatHitCheck(u32 flags, void* result) {
                 angle = reviseAngle(mario->displayDirection - 90.0f + (*(f32*)&((CameraEntry*)camGetPtr(CAMERA_3D))->viewYaw));
                 npc = wp->entries;
                 for (i = 0; i < total; i++, npc++) {
-                    FH_NPC_FILTER(flags & 0x1000, 2)
+                    FH_NPC_FILTER(flags & FBAT_CHECK_ENEMY, 2)
                     if (!_npcHitCheckHammerAllMotion(npc, &dist, r, angle)) continue;
                     if (dist >= res.dist) continue;
                     res.dist = dist;
                     hit = npc;
-                    res.kind = 0x100000;
-                    if (!soft) fbatSetAttackAnnounce(0x100000);
+                    res.kind = FBAT_HIT_HAMMER;
+                    if (!soft) fbatSetAttackAnnounce(FBAT_HIT_HAMMER);
                     break;
                 }
             }
@@ -2493,11 +2493,11 @@ void* fbatHitCheck(u32 flags, void* result) {
         }
     }
 
-    if (flags & 0x80) {
+    if (flags & FBAT_CHECK_SPIN_HAMMER) {
         while (hit == NULL) {
-            if ((flags & 0x10) && mario->mutekiTimer > 0) break;
+            if ((flags & FBAT_CHECK_TOUCH) && mario->mutekiTimer > 0) break;
             if (!fbat_canHit(npc)) break;
-            if (flags & 1) {
+            if (flags & FBAT_CHECK_CURRENT) {
                 f32 angle, r;
                 MarioWork* m;
                 f32 c, s, x, y, z;
@@ -2512,12 +2512,12 @@ void* fbatHitCheck(u32 flags, void* result) {
                 y = 15.0f + m->position.y;
                 npc = wp->entries;
                 for (i = 0; i < total; i++, npc++) {
-                    FH_NPC_FILTER(flags & 0x1000, 2)
+                    FH_NPC_FILTER(flags & FBAT_CHECK_ENEMY, 2)
                     if (!_npcHitCheckSphere(npc, &dist, x, y, z, 12.0f)) continue;
                     if (dist >= res.dist) continue;
                     res.dist = dist;
                     hit = npc;
-                    { FbatHitResult* rp = &res; if (pouchGetHammerLv() < 3) { rp->kind = 0x200000; } else { rp->kind = 0x400000; } } // FAKE: store through a pointer to res (keeps the two branch stores, no if-conversion); same field
+                    { FbatHitResult* rp = &res; if (pouchGetHammerLv() < 3) { rp->kind = FBAT_HIT_SPIN_HAMMER; } else { rp->kind = FBAT_HIT_ULTRA_SPIN_HAMMER; } } // FAKE: store through a pointer to res (keeps the two branch stores, no if-conversion); same field
                     if (!soft) fbatSetAttackAnnounce(res.kind);
                     break;
                 }
@@ -2526,12 +2526,12 @@ void* fbatHitCheck(u32 flags, void* result) {
                 angle2 = reviseAngle(mario->displayDirection - 90.0f + (*(f32*)&((CameraEntry*)camGetPtr(CAMERA_3D))->viewYaw));
                 npc = wp->entries;
                 for (i = 0; i < total; i++, npc++) {
-                    FH_NPC_FILTER(flags & 0x1000, 2)
+                    FH_NPC_FILTER(flags & FBAT_CHECK_ENEMY, 2)
                     if (!_npcHitCheckHammerAllMotion(npc, &dist, r2, angle2)) continue;
                     if (dist >= res.dist) continue;
                     res.dist = dist;
                     hit = npc;
-                    { FbatHitResult* rp = &res; if (pouchGetHammerLv() < 3) { rp->kind = 0x200000; } else { rp->kind = 0x400000; } } // FAKE: store through a pointer to res (keeps the two branch stores, no if-conversion); same field
+                    { FbatHitResult* rp = &res; if (pouchGetHammerLv() < 3) { rp->kind = FBAT_HIT_SPIN_HAMMER; } else { rp->kind = FBAT_HIT_ULTRA_SPIN_HAMMER; } } // FAKE: store through a pointer to res (keeps the two branch stores, no if-conversion); same field
                     if (!soft) fbatSetAttackAnnounce(res.kind);
                     break;
                 }
@@ -2540,14 +2540,14 @@ void* fbatHitCheck(u32 flags, void* result) {
         }
     }
 
-    if (flags & 0x100) {
+    if (flags & FBAT_CHECK_SHELL) {
         party = partyGetPtr(marioGetPartyId());
         while (hit == NULL) {
             u32 b;
             f32 x, y, z, r;
-            if ((flags & 0x10) && mario->mutekiTimer > 0) break;
+            if ((flags & FBAT_CHECK_TOUCH) && mario->mutekiTimer > 0) break;
             if (!fbat_canHit(npc)) break;
-            b = flags & 1;
+            b = flags & FBAT_CHECK_CURRENT;
             if (b) {
                 s32 st;
                 if (party == NULL) break;
@@ -2563,30 +2563,30 @@ void* fbatHitCheck(u32 flags, void* result) {
             z = party->position.z;
             npc = wp->entries;
             for (i = 0; i < total; i++, npc++) {
-                FH_NPC_FILTER(flags & 0x1000, 4)
+                FH_NPC_FILTER(flags & FBAT_CHECK_ENEMY, 4)
                 if (!_npcHitCheckSphere(npc, &dist, x, y, z, r)) continue;
                 if (dist >= res.dist) continue;
                 res.dist = dist;
                 hit = npc;
-                res.kind = 0x800000;
-                if (!soft) fbatSetAttackAnnounce(0x800000);
+                res.kind = FBAT_HIT_SHELL;
+                if (!soft) fbatSetAttackAnnounce(FBAT_HIT_SHELL);
                 break;
             }
             break;
         }
     }
 
-    if (flags & 0x200) {
+    if (flags & FBAT_CHECK_BOMB) {
         party = partyGetPtr(marioGetPartyId());
         while (hit == NULL) {
-            if ((flags & 0x10) && mario->mutekiTimer > 0) break;
+            if ((flags & FBAT_CHECK_TOUCH) && mario->mutekiTimer > 0) break;
             if (!fbat_canHit(npc)) break;
-            if (!(flags & 1)) break;
+            if (!(flags & FBAT_CHECK_CURRENT)) break;
             if (party == NULL) break;
             if (party->memberKind != 3) break;
             if (!(*(u8*)&((FieldBattleData*)gp->fbatData)->sandersBombTrigger)) break;
             npc = wp->entries;
-            flags &= 0x1000;
+            flags &= FBAT_CHECK_ENEMY;
             for (i = 0; i < total; i++, npc++) {
                 FH_NPC_FILTER(flags, 8)
                 if (!_npcHitCheckSphere(npc, &dist, party->position.x, 0.5f * party->height + party->position.y,
@@ -2594,8 +2594,8 @@ void* fbatHitCheck(u32 flags, void* result) {
                 if (dist >= res.dist) continue;
                 res.dist = dist;
                 hit = npc;
-                res.kind = 0x1000000;
-                if (!soft) fbatSetAttackAnnounce(0x1000000);
+                res.kind = FBAT_HIT_BOMB;
+                if (!soft) fbatSetAttackAnnounce(FBAT_HIT_BOMB);
                 break;
             }
             break;
