@@ -251,7 +251,7 @@ EVT_BEGIN(aji_02_init_evt)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("yukayu2"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("ato"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
-    CALL(evt_mobj_badgeblk, STRING("mobj00"), -125, 60, -125, 149, 0, GSWF(4211), 0)
+    CALL(evt_mobj_badgeblk, STRING("mobj00"), -125, 60, -125, ITEM_SUPER_SHROOM, 0, GSWF(4211), 0)
     SPAWN_EVENT(PTR(evt_emergency))
     RETURN
 EVT_END()

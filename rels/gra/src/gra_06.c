@@ -400,7 +400,7 @@ EVT_BEGIN(gra_06_init_evt)
     END_IF
     CALL(evt_mobj_save_blk, STRING("mobj_save"), -125, 60, 235, 0, 0)
     CALL(evt_mobj_recovery_blk, STRING("mobj_recover"), 10, -270, 60, 270, 0, 0)
-    CALL(evt_mobj_brick, STRING("mobj_hidden1"), 67, 90, -13, 121, MOBJ_BRICK_HIDDEN_ITEM, 0, GSWF(2090))
+    CALL(evt_mobj_brick, STRING("mobj_hidden1"), 67, 90, -13, ITEM_COIN, MOBJ_BRICK_HIDDEN_ITEM, 0, GSWF(2090))
     CALL_CHILD(PTR(evt_usu_kagemario_party_kill))
     IF_INT_EQUAL(GSWF(2078), 0)
         CALL(evt_hitobj_onoff, STRING("A_Mon"), 1, 0)

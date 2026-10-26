@@ -155,8 +155,8 @@ EVT_BEGIN(tik_15_init_evt)
     END_IF
     CALL(evt_mobj_lv_blk, STRING("block00"), -370, 0, -25, 0, GSWF(1343), STRING("MOBJ_Lv1BigBlock"))
     CALL(evt_mobj_lv_blk, STRING("block01"), -420, 0, -25, 0, GSWF(1344), STRING("MOBJ_Lv1BigBlock"))
-    CALL(evt_mobj_badgeblk, STRING("mobj_01"), 50, 0, -38, 148, 0, GSWF(1362), 0)
-    CALL(evt_mobj_badgeblk, STRING("mobj_02"), -140, 0, -38, 132, 0, GSWF(1363), 0)
+    CALL(evt_mobj_badgeblk, STRING("mobj_01"), 50, 0, -38, ITEM_MUSHROOM, 0, GSWF(1362), 0)
+    CALL(evt_mobj_badgeblk, STRING("mobj_02"), -140, 0, -38, ITEM_FIRE_FLOWER, 0, GSWF(1363), 0)
     RETURN
 EVT_END()
 

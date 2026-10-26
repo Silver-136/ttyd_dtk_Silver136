@@ -183,9 +183,9 @@ EVT_BEGIN(las_07_init_evt)
         CALL(evt_seq_wait, SEQ_GAME)
         CALL(evt_cam_road_reset)
     END_INLINE_EVENT
-    CALL(evt_mobj_badgeblk, STRING("mobj00"), -100, 60, -300, 121, 0, GSWF(4373), 0)
-    CALL(evt_mobj_badgeblk, STRING("mobj01"), 100, 60, -300, 156, 0, GSWF(4374), 0)
-    CALL(evt_mobj_badgeblk, STRING("mobj_badge_gat"), 0, 60, -300, 263, 0, GSWF(4376), 1)
+    CALL(evt_mobj_badgeblk, STRING("mobj00"), -100, 60, -300, ITEM_COIN, 0, GSWF(4373), 0)
+    CALL(evt_mobj_badgeblk, STRING("mobj01"), 100, 60, -300, ITEM_JAMMIN_JELLY, 0, GSWF(4374), 0)
+    CALL(evt_mobj_badgeblk, STRING("mobj_badge_gat"), 0, 60, -300, ITEM_P_UP_D_DOWN_P, 0, GSWF(4376), 1)
     RETURN
 EVT_END()
 

@@ -97,7 +97,7 @@ EVT_BEGIN(hei_06_init_evt)
     SET_VALUE(LW(0), PTR(kusa_data))
     CALL_CHILD(PTR(evt_sub_kusa_access_entry))
     CALL(evt_mobj_recovery_blk, STRING("mobj_recover"), 5, 375, 160, -75, 0, 0)
-    CALL(evt_mobj_badgeblk, STRING("mobj_hatenablk"), -25, 110, -75, 132, 0, GSWF(1795), 0)
+    CALL(evt_mobj_badgeblk, STRING("mobj_hatenablk"), -25, 110, -75, ITEM_FIRE_FLOWER, 0, GSWF(1795), 0)
     CALL(evt_item_entry, STRING("item_00"), ITEM_INN_COUPON, 50, 50, 105, ITEM_TYPE_STILL, GSWF(1806), 0)
     RETURN
 EVT_END()

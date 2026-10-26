@@ -362,7 +362,7 @@ EVT_BEGIN(las_19_init_evt)
             CALL(evt_mobj_set_anim, STRING("switch2"), STRING("S_1"))
         END_IF
     END_IF
-    CALL(evt_mobj_badgeblk, STRING("mobj_item00"), 30, -440, -40, 129, 0, GSWF(4387), 0)
+    CALL(evt_mobj_badgeblk, STRING("mobj_item00"), 30, -440, -40, ITEM_THUNDER_RAGE, 0, GSWF(4387), 0)
     RETURN
 EVT_END()
 

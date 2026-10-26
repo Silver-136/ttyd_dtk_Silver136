@@ -210,7 +210,7 @@ EVT_BEGIN(las_03_init_evt)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
     CALL_CHILD(PTR(evt_bero_info_run))
-    CALL(evt_mobj_badgeblk, STRING("mobj_badge_gat"), -350, 0, -100, 264, 0, GSWF(4375), 1)
+    CALL(evt_mobj_badgeblk, STRING("mobj_badge_gat"), -350, 0, -100, ITEM_ALL_OR_NOTHING, 0, GSWF(4375), 1)
     SPAWN_EVENT(PTR(toge_evt))
     RETURN
 EVT_END()

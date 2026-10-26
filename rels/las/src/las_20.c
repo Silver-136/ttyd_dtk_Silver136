@@ -475,8 +475,8 @@ EVT_BEGIN(las_20_init_evt)
     CALL(evt_hitobj_onoff, STRING("A_move_dai"), 0, 0)
     CALL(evt_mobj_switch_red, 0, STRING("dai_switch"), -250, -290, 100, PTR(dai_evt), 0)
     SPAWN_EVENT(PTR(hosi_init))
-    CALL(evt_mobj_badgeblk, STRING("mobj_item00"), 295, -440, -15, 136, 0, GSWF(4388), 0)
-    CALL(evt_mobj_badgeblk, STRING("mobj_item01"), 640, -320, -135, 151, 0, GSWF(4389), 0)
+    CALL(evt_mobj_badgeblk, STRING("mobj_item00"), 295, -440, -15, ITEM_REPEL_CAPE, 0, GSWF(4388), 0)
+    CALL(evt_mobj_badgeblk, STRING("mobj_item01"), 640, -320, -135, ITEM_LIFE_SHROOM, 0, GSWF(4389), 0)
     RETURN
 EVT_END()
 

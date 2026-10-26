@@ -136,8 +136,8 @@ EVT_BEGIN(tik_18_init_evt)
         CALL(evt_npc_check_delete, STRING("ハンニャー２"))
     END_IF
     CALL(evt_map_entry_airport_harbor, 1, STRING("S_Ship_Change_01"), STRING("ue"))
-    CALL(evt_mobj_badgeblk, STRING("mobj_01"), 110, 0, -38, 157, 0, GSWF(1365), 0)
-    CALL(evt_mobj_badgeblk, STRING("mobj_02"), 310, 0, -38, 158, 0, GSWF(1366), 0)
+    CALL(evt_mobj_badgeblk, STRING("mobj_01"), 110, 0, -38, ITEM_SLOW_SHROOM, 0, GSWF(1365), 0)
+    CALL(evt_mobj_badgeblk, STRING("mobj_02"), 310, 0, -38, ITEM_GRADUAL_SYRUP, 0, GSWF(1366), 0)
     RETURN
 EVT_END()
 

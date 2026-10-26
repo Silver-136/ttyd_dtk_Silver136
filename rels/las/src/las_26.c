@@ -486,8 +486,8 @@ EVT_BEGIN(las_26_init_evt)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, 400)
         SPAWN_EVENT(PTR(sekai_yami_evt))
     END_IF
-    CALL(evt_mobj_badgeblk, STRING("mobj_01"), 1000, 60, -150, 150, 0, GSWF(4385), 0)
-    CALL(evt_mobj_badgeblk, STRING("mobj_02"), 1365, 60, -150, 156, 0, GSWF(4386), 0)
+    CALL(evt_mobj_badgeblk, STRING("mobj_01"), 1000, 60, -150, ITEM_ULTRA_SHROOM, 0, GSWF(4385), 0)
+    CALL(evt_mobj_badgeblk, STRING("mobj_02"), 1365, 60, -150, ITEM_JAMMIN_JELLY, 0, GSWF(4386), 0)
     RETURN
 EVT_END()
 
