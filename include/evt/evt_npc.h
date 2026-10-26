@@ -120,7 +120,7 @@ USER_FUNC(evt_npc_kamek_kemuri1);
 USER_FUNC(evt_npc_kamek_kemuri2);
 USER_FUNC(evt_npc_majo_disp_on);
 USER_FUNC(evt_npc_reaction_flag_onoff);
-USER_FUNC(evt_npc_release_fieldnpc);
+USER_FUNC(evt_npc_release_filednpc);
 USER_FUNC(evt_npc_restart_regular_event);
 USER_FUNC(evt_npc_return_interrupt);
 USER_FUNC(evt_npc_reverse_ry);

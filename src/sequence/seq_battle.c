@@ -257,7 +257,7 @@ BOOL battle_init(void) {
 #endif
     _battleWorkPointer = NULL;
     animPoseBattleInit();
-    npcReleaseFieldNpc();
+    npcReleaseFiledNpc();
     gp->inBattle = 1;
     evtmgrReInit();
     psndSetFlag(0x10);
@@ -341,7 +341,7 @@ void battle_exit(void) {
     effAutoRelease(TRUE);
     animPoseAutoRelease(TRUE);
     evtmgrReInit();
-    npcRecoveryFieldNpc();
+    npcRecoveryFiledNpc();
     gp->inBattle = 0;
 #ifndef VERSION_G8ME01
     memClear(HEAP_BATTLE);

@@ -88,7 +88,7 @@ NpcWork* npcGetWorkPtr(void) {
     return gp->inBattle ? &work.battle : &work.field;
 }
 
-void npcReleaseFieldNpc(void) {
+void npcReleaseFiledNpc(void) {
     NpcWork* wp;
     NpcFieldEntry* field;
     NpcEntry* entry;
@@ -119,7 +119,7 @@ void npcReleaseFieldNpc(void) {
     }
 }
 
-void npcRecoveryFieldNpc(void) {
+void npcRecoveryFiledNpc(void) {
     NpcWork* wp;
     NpcFieldEntry* field;
     NpcEntry* entry;
@@ -3371,6 +3371,6 @@ void npcDisp_offscreen_xlu(CameraId camId, void* param);
 void npcDisp(CameraId camId, void* param);
 void npcDisp_xlu(CameraId cameraId, void* param);
 void mtx_setup(NpcEntry* entry, Mtx mtx, s32 history);
-void npcRecoveryFieldNpc(void);
-void npcReleaseFieldNpc(void);
+void npcRecoveryFiledNpc(void);
+void npcReleaseFiledNpc(void);
 NpcWork* npcGetWorkPtr(void);

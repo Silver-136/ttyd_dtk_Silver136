@@ -265,7 +265,7 @@ typedef struct NpcFieldEntry {
     char mModelName[64];                // 0x0
     char mAnimName[64];                 // 0x40
     u32 mFlags;                         // 0x80
-    f32 peraRotY;                       // 0x84, AnimPose fields saved by npcReleaseFieldNpc
+    f32 peraRotY;                       // 0x84, AnimPose fields saved by npcReleaseFiledNpc
     f32 rotationY;                      // 0x88
     f32 scaleZFlip;                     // 0x8C
     f32 peraTargetRotY;                 // 0x90
@@ -331,8 +331,8 @@ typedef struct FieldBattleData {
 } FieldBattleData;
 
 NpcWork* npcGetWorkPtr(void);
-void npcReleaseFieldNpc(void);
-void npcRecoveryFieldNpc(void);
+void npcReleaseFiledNpc(void);
+void npcRecoveryFiledNpc(void);
 void npcInit(void);
 void npcReset(BOOL inBattle);
 s32 npcGetReactionOfLivingBody(BOOL inBattle);

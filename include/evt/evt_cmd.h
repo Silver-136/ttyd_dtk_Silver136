@@ -45,10 +45,10 @@
 // Termination
 // #define END EVT_CMD(0, OPCODE_END_SCRIPT),
 #define END
-#define RETURN EVT_CMD(0, OPCODE_END_EVENT),
+#define RETURN EVT_CMD(0, OPCODE_END_EVT),
 
 // Labels / Jumps
-#define LABEL(LABEL_ID) EVT_CMD(1, OPCODE_LABEL), LABEL_ID,
+#define LABEL(LABEL_ID) EVT_CMD(1, OPCODE_LBL), LABEL_ID,
 #define GOTO(LABEL_ID) EVT_CMD(1, OPCODE_GOTO), LABEL_ID,
 
 // Loops
@@ -66,7 +66,7 @@
 #define DEBUG_BP EVT_CMD(0, OPCODE_DEBUG_BP),
 
 // Waiting
-#define WAIT_FRAMES(FRAMES) EVT_CMD(1, OPCODE_WAIT_FRAME), FRAMES,
+#define WAIT_FRAMES(FRAMES) EVT_CMD(1, OPCODE_WAIT_FRM), FRAMES,
 #define WAIT_MS(MILLISECONDS) EVT_CMD(1, OPCODE_WAIT_MSEC), MILLISECONDS,
 // Blocks the current script as long as (expr) is true.
 #define WAIT_WHILE(expr) EVT_CMD(1, OPCODE_HALT), expr,
@@ -74,24 +74,24 @@
 // Conditionals
 #define IF_STR_EQUAL(var1, var2) EVT_CMD(2, OPCODE_IF_STR_EQUAL), var1, var2,
 #define IF_STR_NOT_EQUAL(var1, var2) EVT_CMD(2, OPCODE_IF_STR_NOT_EQUAL), var1, var2,
-#define IF_STR_LESS(var1, var2) EVT_CMD(2, OPCODE_IF_STR_LESS), var1, var2,
-#define IF_STR_GREATER(var1, var2) EVT_CMD(2, OPCODE_IF_STR_GREATER), var1, var2,
-#define IF_STR_LESS_OR_EQUAL(var1, var2) EVT_CMD(2, OPCODE_IF_STR_LESS_EQUAL), var1, var2,
-#define IF_STR_GREATER_OR_EQUAL(var1, var2) EVT_CMD(2, OPCODE_IF_STR_GREATER_EQUAL), var1, var2,
+#define IF_STR_LESS(var1, var2) EVT_CMD(2, OPCODE_IF_STR_SMALL), var1, var2,
+#define IF_STR_GREATER(var1, var2) EVT_CMD(2, OPCODE_IF_STR_LARGE), var1, var2,
+#define IF_STR_LESS_OR_EQUAL(var1, var2) EVT_CMD(2, OPCODE_IF_STR_SMALL_EQUAL), var1, var2,
+#define IF_STR_GREATER_OR_EQUAL(var1, var2) EVT_CMD(2, OPCODE_IF_STR_LARGE_EQUAL), var1, var2,
 
 #define IF_FLOAT_EQUAL(var1, var2) EVT_CMD(2, OPCODE_IFF_EQUAL), var1, var2,
 #define IF_FLOAT_NOT_EQUAL(var1, var2) EVT_CMD(2, OPCODE_IFF_NOT_EQUAL), var1, var2,
-#define IF_FLOAT_LESS(var1, var2) EVT_CMD(2, OPCODE_IFF_LESS), var1, var2,
-#define IF_FLOAT_GREATER(var1, var2) EVT_CMD(2, OPCODE_IFF_GREATER), var1, var2,
-#define IF_FLOAT_LESS_OR_EQUAL(var1, var2) EVT_CMD(2, OPCODE_IFF_LESS_EQUAL), var1, var2,
-#define IF_FLOAT_GREATER_OR_EQUAL(var1, var2) EVT_CMD(2, OPCODE_IFF_GREATER_EQUAL), var1, var2,
+#define IF_FLOAT_LESS(var1, var2) EVT_CMD(2, OPCODE_IFF_SMALL), var1, var2,
+#define IF_FLOAT_GREATER(var1, var2) EVT_CMD(2, OPCODE_IFF_LARGE), var1, var2,
+#define IF_FLOAT_LESS_OR_EQUAL(var1, var2) EVT_CMD(2, OPCODE_IFF_SMALL_EQUAL), var1, var2,
+#define IF_FLOAT_GREATER_OR_EQUAL(var1, var2) EVT_CMD(2, OPCODE_IFF_LARGE_EQUAL), var1, var2,
 
 #define IF_INT_EQUAL(var1, var2) EVT_CMD(2, OPCODE_IF_EQUAL), var1, var2,
 #define IF_INT_NOT_EQUAL(var1, var2) EVT_CMD(2, OPCODE_IF_NOT_EQUAL), var1, var2,
-#define IF_INT_LESS(var1, var2) EVT_CMD(2, OPCODE_IF_LESS), var1, var2,
-#define IF_INT_GREATER(var1, var2) EVT_CMD(2, OPCODE_IF_GREATER), var1, var2,
-#define IF_INT_LESS_OR_EQUAL(var1, var2) EVT_CMD(2, OPCODE_IF_LESS_EQUAL), var1, var2,
-#define IF_INT_GREATER_OR_EQUAL(var1, var2) EVT_CMD(2, OPCODE_IF_GREATER_EQUAL), var1, var2,
+#define IF_INT_LESS(var1, var2) EVT_CMD(2, OPCODE_IF_SMALL), var1, var2,
+#define IF_INT_GREATER(var1, var2) EVT_CMD(2, OPCODE_IF_LARGE), var1, var2,
+#define IF_INT_LESS_OR_EQUAL(var1, var2) EVT_CMD(2, OPCODE_IF_SMALL_EQUAL), var1, var2,
+#define IF_INT_GREATER_OR_EQUAL(var1, var2) EVT_CMD(2, OPCODE_IF_LARGE_EQUAL), var1, var2,
 
 #define IF_BITS_SET(var1, var2) EVT_CMD(2, OPCODE_IF_FLAG), var1, var2,
 #define IF_BITS_CLEAR(var1, var2) EVT_CMD(2, OPCODE_IF_NOT_FLAG), var1, var2,
@@ -104,10 +104,10 @@
 #define SWITCH_RAW(expr) EVT_CMD(1, OPCODE_SWITCHI), expr,
 #define CASE_EQUAL(expr) EVT_CMD(1, OPCODE_CASE_EQUAL), expr,
 #define CASE_NOT_EQUAL(expr) EVT_CMD(1, OPCODE_CASE_NOT_EQUAL), expr,
-#define CASE_LESS(expr) EVT_CMD(1, OPCODE_CASE_LESS), expr,
-#define CASE_GREATER(expr) EVT_CMD(1, OPCODE_CASE_GREATER), expr,
-#define CASE_LESS_OR_EQUAL(expr) EVT_CMD(1, OPCODE_CASE_LESS_EQUAL), expr,
-#define CASE_GREATER_OR_EQUAL(expr) EVT_CMD(1, OPCODE_CASE_GREATER_EQUAL), expr,
+#define CASE_LESS(expr) EVT_CMD(1, OPCODE_CASE_SMALL), expr,
+#define CASE_GREATER(expr) EVT_CMD(1, OPCODE_CASE_LARGE), expr,
+#define CASE_LESS_OR_EQUAL(expr) EVT_CMD(1, OPCODE_CASE_SMALL_EQUAL), expr,
+#define CASE_GREATER_OR_EQUAL(expr) EVT_CMD(1, OPCODE_CASE_LARGE_EQUAL), expr,
 #define CASE_DEFAULT EVT_CMD(0, OPCODE_CASE_ETC),
 #define CASE_OR_EQUAL(val) EVT_CMD(1, OPCODE_CASE_OR), val,
 #define CASE_AND_EQUAL(val) EVT_CMD(1, OPCODE_CASE_AND), val,
@@ -150,9 +150,9 @@
 #define READ_FLOAT_INDEXED(dest, offset) EVT_CMD(2, OPCODE_READF_N), dest, offset,
 
 // User Work / User Flag Base
-#define SET_UW_BASE(expr) EVT_CMD(1, OPCODE_SET_USER_WORK), expr,
-#define SET_UF_BASE(expr) EVT_CMD(1, OPCODE_SET_USER_FLAG), expr,
-#define ALLOCATE_UW(count, destVar) EVT_CMD(2, OPCODE_ALLOC_USER_WORK), count, destVar,
+#define SET_UW_BASE(expr) EVT_CMD(1, OPCODE_SET_USER_WRK), expr,
+#define SET_UF_BASE(expr) EVT_CMD(1, OPCODE_SET_USER_FLG), expr,
+#define ALLOCATE_UW(count, destVar) EVT_CMD(2, OPCODE_ALLOC_USER_WRK), count, destVar,
 
 // Bitwise Operations
 #define AND(target, val) EVT_CMD(2, OPCODE_AND), target, val,
@@ -180,12 +180,12 @@
 #define CALL(...) EVT_CMD(NUMARGS((EvtWord)__VA_ARGS__), OPCODE_USER_FUNC), (EvtWord)__VA_ARGS__,
 
 // Spawning / Controlling Events
-#define SPAWN_EVENT(script) EVT_CMD(1, OPCODE_RUN_EVENT), PTR(script),
-#define SPAWN_EVENT_GET_ID(script, idOut) EVT_CMD(2, OPCODE_RUN_EVENT_ID), script, idOut,
+#define SPAWN_EVENT(script) EVT_CMD(1, OPCODE_RUN_EVT), PTR(script),
+#define SPAWN_EVENT_GET_ID(script, idOut) EVT_CMD(2, OPCODE_RUN_EVT_ID), script, idOut,
 // Blocks until the child finished
-#define CALL_CHILD(script) EVT_CMD(1, OPCODE_RUN_CHILD_EVENT), PTR(script),
-#define DELETE_EVENT(tid) EVT_CMD(1, OPCODE_DELETE_EVENT), tid,
-#define RESTART_EVENT(script) EVT_CMD(1, OPCODE_RESTART_EVENT), script,
+#define CALL_CHILD(script) EVT_CMD(1, OPCODE_RUN_CHILD_EVT), PTR(script),
+#define DELETE_EVENT(tid) EVT_CMD(1, OPCODE_DELETE_EVT), tid,
+#define RESTART_EVENT(script) EVT_CMD(1, OPCODE_RESTART_EVT), script,
 
 #define SET_PRIORITY(priority) EVT_CMD(1, OPCODE_SET_PRI), priority,
 #define SET_SPEED(timeScale) EVT_CMD(1, OPCODE_SET_SPD), timeScale,
@@ -197,15 +197,15 @@
 #define RESUME_TYPES_OTHER(types) EVT_CMD(1, OPCODE_START_OTHER), types,
 #define SUSPEND_EVENT(tid) EVT_CMD(1, OPCODE_STOP_ID), tid,
 #define RESUME_EVENT(tid) EVT_CMD(1, OPCODE_START_ID), tid,
-#define IS_EVENT_RUNNING(tid, resultOut) EVT_CMD(2, OPCODE_CHECK_EVENT), tid, resultOut,
+#define IS_EVENT_RUNNING(tid, resultOut) EVT_CMD(2, OPCODE_CHK_EVT), tid, resultOut,
 
 // Inline-block Events
-#define BEGIN_INLINE_EVENT EVT_CMD(0, OPCODE_INLINE_EVENT),
-#define BEGIN_INLINE_EVENT_GET_ID(idOut) EVT_CMD(1, OPCODE_INLINE_EVENT_ID), idOut,
+#define BEGIN_INLINE_EVENT EVT_CMD(0, OPCODE_INLINE_EVT),
+#define BEGIN_INLINE_EVENT_GET_ID(idOut) EVT_CMD(1, OPCODE_INLINE_EVT_ID), idOut,
 #define END_INLINE_EVENT EVT_CMD(0, OPCODE_END_INLINE),
 // Siblings are tied to the current script's lifetime
-#define BEGIN_SIBLING_EVENT EVT_CMD(0, OPCODE_BROTHER_EVENT),
-#define BEGIN_SIBLING_EVENT_GET_ID(idOut) EVT_CMD(1, OPCODE_BROTHER_EVENT_ID), idOut,
+#define BEGIN_SIBLING_EVENT EVT_CMD(0, OPCODE_BROTHER_EVT),
+#define BEGIN_SIBLING_EVENT_GET_ID(idOut) EVT_CMD(1, OPCODE_BROTHER_EVT_ID), idOut,
 #define END_SIBLING_EVENT EVT_CMD(0, OPCODE_END_BROTHER),
 
 // Data types

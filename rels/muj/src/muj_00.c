@@ -2632,7 +2632,7 @@ EVT_BEGIN(kaizoku_vs_dai3)
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
-    CALL(evt_npc_release_fieldnpc, 1)
+    CALL(evt_npc_release_filednpc, 1)
     CALL(evt_npc_set_battle_info, STRING("第三勢力幹部"), 5)
     CALL(evt_npc_battle_start, STRING("第三勢力幹部"))
     CALL(evt_npc_wait_battle_end)
