@@ -790,7 +790,7 @@ void BattleBreakSlotDispReel(CameraId camId, void* param) {
     for (; i < 3; i++, reel++) {
         if ((reel->flags & 1) && reel->state >= 1 && reel->state <= 4) {
             PSMTXTrans(trans, 42.0f * i + 226.0f, 122.0f, 0.0f);
-            iconDispGxCol(trans, 0x10, ICON_1D4, (GXColor){0xFF, 0xFF, 0xFF, 0xD0});
+            iconDispGxCol(trans, 0x10, ICON_SLOT_REEL_BOX, (GXColor){0xFF, 0xFF, 0xFF, 0xD0});
         }
     }
 

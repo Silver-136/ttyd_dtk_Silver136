@@ -619,7 +619,7 @@ void kpa_status_disp(CameraId camera, void* param) {
     pos.x += 20.0f;
     iconDispGx(0.7f, &pos, 0x10, ICON_ITEM_COIN);
     pos.x += 30.0f;
-    iconDispGx(1.0f, &pos, 0x10, ICON_1D5);
+    iconDispGx(1.0f, &pos, 0x10, ICON_TIMES_SMALL);
 
     n = pouchGetKpaCoin();
     digit[0] = n / 10;
