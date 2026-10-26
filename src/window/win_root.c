@@ -204,22 +204,22 @@ s32 winRootMain(WindowWork* w) {
         case 1:
             winPartyInit2(w);
             w->active = 12;
-            w->flags |= 0x4000;
+            w->flags |= WINDOW_FLAG_DIRECT_OPEN;
             break;
         case 2:
             winItemInit2(w);
             w->active = 13;
-            w->flags |= 0x4000;
+            w->flags |= WINDOW_FLAG_DIRECT_OPEN;
             break;
         case 3:
             winBadgeInit2(w);
             w->active = 14;
-            w->flags |= 0x4000;
+            w->flags |= WINDOW_FLAG_DIRECT_OPEN;
             break;
         case 4:
             winLogInit2(w);
             w->active = 15;
-            w->flags |= 0x4000;
+            w->flags |= WINDOW_FLAG_DIRECT_OPEN;
             break;
         }
         if (gp->flags & GW_FLAG_E3) {
@@ -340,10 +340,10 @@ s32 winRootMain(WindowWork* w) {
             w->helpTgtY = 185.0f;
             w->active = 10;
             winMsgEntry(w, 0, w->tab[w->tabSel].msg, 0);
-            w->flags &= ~0x4000;
+            w->flags &= ~WINDOW_FLAG_DIRECT_OPEN;
         } else if (ret == -2) {
             w->active = 20;
-            w->flags &= ~0x4000;
+            w->flags &= ~WINDOW_FLAG_DIRECT_OPEN;
         }
         break;
     case 20:
@@ -395,7 +395,7 @@ s32 winRootMain(WindowWork* w) {
     winSortMain(w);
 
     if (w->active < 20) {
-        if (w->flags & 0x4000) {
+        if (w->flags & WINDOW_FLAG_DIRECT_OPEN) {
             w->helpX += (w->helpTgtX - w->helpX) / WR_FSTEP(4.0f);
             w->helpY += (w->helpTgtY - w->helpY) / WR_FSTEP(4.0f);
         } else {
@@ -2432,11 +2432,11 @@ void winMailDisp(WindowWork* wp) {
                 mail = mailGetPtr(id);
                 {
                 GXColor black = { 0x00, 0x00, 0x00, 0xFF };
-                if (mail->flags & 1) {
+                if (mail->flags & MAIL_FLAG_PEACH) {
                     col = (GXColor){ 0xD7, 0xAC, 0xBC, 0xFF };
-                } else if (mail->flags & 2) {
+                } else if (mail->flags & MAIL_FLAG_TROUBLE) {
                     col = (GXColor){ 0xD3, 0xD7, 0xAC, 0xFF };
-                } else if (mail->flags & 4) {
+                } else if (mail->flags & MAIL_FLAG_INFO) {
                     col = (GXColor){ 0xAC, 0xC2, 0xD7, 0xFF };
                 } else {
                     col = (GXColor){ 0xE1, 0xE1, 0xE1, 0xFF };
@@ -2463,11 +2463,11 @@ void winMailDisp(WindowWork* wp) {
             GXColor col;
 
             mail = mailGetPtr(wp->item.mail[wp->item.mailSel].id);
-            if (mail->flags & 1) {
+            if (mail->flags & MAIL_FLAG_PEACH) {
                 col = (GXColor){ 0xD7, 0xAC, 0xBC, 0xFF };
-            } else if (mail->flags & 2) {
+            } else if (mail->flags & MAIL_FLAG_TROUBLE) {
                 col = (GXColor){ 0xD3, 0xD7, 0xAC, 0xFF };
-            } else if (mail->flags & 4) {
+            } else if (mail->flags & MAIL_FLAG_INFO) {
                 col = (GXColor){ 0xAC, 0xC2, 0xD7, 0xFF };
             } else {
                 col = (GXColor){ 0xE1, 0xE1, 0xE1, 0xFF };
@@ -2492,7 +2492,7 @@ void winMailDisp(WindowWork* wp) {
 #else
             winFontSetLabel((Vec){ 80.0f + wp->item.mailX, (wp->item.mailY - 80.0f) + (f32)(wp->item.mailLine * 21), 0.0f }, (Vec){ 0.75f, 0.75f, 0.75f }, (GXColor){ 0x00, 0x00, 0x00, 0xFF }, mail->body);
 #endif
-            if (mail->flags & 0x1000) {
+            if (mail->flags & MAIL_FLAG_PICTURE) {
                 winTexInit((TEXPalette*)*wp->mailRes->data);
                 winTexSet(mail->icon, (Vec){ 210.0f + wp->item.mailX, 7.0f + ((wp->item.mailY - (f32)((wp->item.mailLines - 1) * 21)) + (f32)(wp->item.mailLine * 21)), 0.0f }, (Vec){ 1.0f, 1.0f, 1.0f }, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
             }
