@@ -39,17 +39,17 @@ s32 offscreenEntry(const char* name) {
 
     //check if already created
     for (i = 0, count = wp->count, entry = wp->entries; i < count; i++, entry++) {
-        if (entry->flags & 1 && !strcmp(entry->name, name)) {
+        if (entry->flags & OFFSCREEN_FLAG_ACTIVE && !strcmp(entry->name, name)) {
             break;
         }
     }
 
     //find new slot
     for (i = 0, entry = wp->entries; i < count; i++, entry++) {
-        if (!(entry->flags & 1)) break;
+        if (!(entry->flags & OFFSCREEN_FLAG_ACTIVE)) break;
     }
 
-    entry->flags = 1;
+    entry->flags = OFFSCREEN_FLAG_ACTIVE;
     strcpy(entry->name, name);
     entry->currLeft = 1020;
     entry->currTop = 1020;
@@ -71,7 +71,7 @@ void offscreenDisp(CameraId camId, void* param) {
     u16 width, height;
 
     for (i = 0, count = wp->count, entry = wp->entries; i < count; i++, entry++) {
-        if (entry->flags & 1 && entry->flags & 2) {
+        if (entry->flags & OFFSCREEN_FLAG_ACTIVE && entry->flags & OFFSCREEN_FLAG_BOX) {
             width = entry->currRight - entry->currLeft;
             height = entry->currBottom - entry->currTop;
             GXSetTexCopySrc(entry->currLeft, entry->currTop, width, height);
@@ -82,7 +82,7 @@ void offscreenDisp(CameraId camId, void* param) {
             GXPixModeSync();
             GXInitTexObj(&entry->texObj, entry->texBuf->address, width, height, (GXTexFmt)entry->texFmt,
                 GX_CLAMP, GX_CLAMP, GX_FALSE);
-            entry->flags |= 4;
+            entry->flags |= OFFSCREEN_FLAG_COPIED;
         }
     }
 }
@@ -93,9 +93,9 @@ void offscreenMain(void) {
     OffscreenEntry* entry;
 
     for (i = 0, count = wp->count, entry = wp->entries; i < count; i++, entry++) {
-        if (entry->flags & 1) {
-            entry->flags &= ~2;
-            entry->flags &= ~4;
+        if (entry->flags & OFFSCREEN_FLAG_ACTIVE) {
+            entry->flags &= ~OFFSCREEN_FLAG_BOX;
+            entry->flags &= ~OFFSCREEN_FLAG_COPIED;
             entry->prevLeft = entry->currLeft;
             entry->prevTop = entry->currTop;
             entry->prevRight = entry->currRight;
@@ -114,7 +114,7 @@ void offscreenAddBoundingBox(s32 id, u16 left, u16 top, u16 right, u16 bottom) {
 
     if (right > left) {
         entry = &offscreenGetWorkGp()->entries[id];
-        if (entry->flags & 1) {
+        if (entry->flags & OFFSCREEN_FLAG_ACTIVE) {
             if (left >= 2) {
                 left -= 2;
             }
@@ -133,19 +133,19 @@ void offscreenAddBoundingBox(s32 id, u16 left, u16 top, u16 right, u16 bottom) {
             bottom += (bottom & 1);
             if (left < entry->currLeft) {
                 entry->currLeft = left;
-                entry->flags |= 2;
+                entry->flags |= OFFSCREEN_FLAG_BOX;
             }
             if (top < entry->currTop) {
                 entry->currTop = top;
-                entry->flags |= 2;
+                entry->flags |= OFFSCREEN_FLAG_BOX;
             }
             if (right > entry->currRight) {
                 entry->currRight = right;
-                entry->flags |= 2;
+                entry->flags |= OFFSCREEN_FLAG_BOX;
             }
             if (bottom > entry->currBottom) {
                 entry->currBottom = bottom;
-                entry->flags |= 2;
+                entry->flags |= OFFSCREEN_FLAG_BOX;
             }
         }
     }
@@ -154,10 +154,10 @@ void offscreenAddBoundingBox(s32 id, u16 left, u16 top, u16 right, u16 bottom) {
 BOOL offscreenGetBoundingBox(s32 id, u16* left, u16* top, u16* right, u16* bottom) {
     OffscreenEntry* entry = &offscreenGetWorkGp()->entries[id];
 
-    if (!(entry->flags & 1)) {
+    if (!(entry->flags & OFFSCREEN_FLAG_ACTIVE)) {
         return FALSE;
     }
-    if (!(entry->flags & 2)) {
+    if (!(entry->flags & OFFSCREEN_FLAG_BOX)) {
         return FALSE;
     }
     *left = entry->currLeft;
@@ -170,17 +170,17 @@ BOOL offscreenGetBoundingBox(s32 id, u16* left, u16* top, u16* right, u16* botto
 void offscreenGetTexObj(s32 id, GXTexObj** texObj, smartEntry** texBuf) {
     OffscreenEntry* entry = &offscreenGetWorkGp()->entries[id];
 
-    if (!(entry->flags & 1)) {
+    if (!(entry->flags & OFFSCREEN_FLAG_ACTIVE)) {
         *texObj = NULL;
         *texBuf = NULL;
         return;
     }
-    if (!(entry->flags & 2)) {
+    if (!(entry->flags & OFFSCREEN_FLAG_BOX)) {
         *texObj = NULL;
         *texBuf = NULL;
         return;
     }
-    if (!(entry->flags & 4)) {
+    if (!(entry->flags & OFFSCREEN_FLAG_COPIED)) {
         *texObj = NULL;
         *texBuf = NULL;
         return;
@@ -195,7 +195,7 @@ s32 offscreenNameToId(const char* name) {
     OffscreenEntry* entry;
 
     for (i = 0, count = wp->count, entry = wp->entries; i < count; i++, entry++) {
-        if (entry->flags & 1 && !strcmp(entry->name, name)) {
+        if (entry->flags & OFFSCREEN_FLAG_ACTIVE && !strcmp(entry->name, name)) {
             break;
         }
     }
@@ -208,7 +208,7 @@ OffscreenEntry* offscreenNameToPtr(const char* name) {
     OffscreenEntry* entry;
 
     for (i = 0, count = wp->count, entry = wp->entries; i < count; i++, entry++) {
-        if (entry->flags & 1 && !strcmp(entry->name, name)) {
+        if (entry->flags & OFFSCREEN_FLAG_ACTIVE && !strcmp(entry->name, name)) {
             break;
         }
     }
@@ -221,7 +221,7 @@ void offscreenDelete(const char* name) {
     OffscreenEntry* entry;
 
     for (i = 0, count = wp->count, entry = wp->entries; i < count; i++, entry++) {
-        if (entry->flags & 1 && !strcmp(entry->name, name)) {
+        if (entry->flags & OFFSCREEN_FLAG_ACTIVE && !strcmp(entry->name, name)) {
             break;
         }
     }
@@ -231,7 +231,7 @@ void offscreenDelete(const char* name) {
 BOOL offscreenGetBoundingBox_BeforeFrame(s32 id, u16* left, u16* top, u16* right, u16* bottom) {
     OffscreenEntry* entry = &offscreenGetWorkGp()->entries[id];
 
-    if (!(entry->flags & 1)) {
+    if (!(entry->flags & OFFSCREEN_FLAG_ACTIVE)) {
         return FALSE;
     }
     if (entry->prevLeft > entry->prevRight) {
