@@ -98,7 +98,7 @@ s32 battleAcMain_PendulumCraneTiming(BattleWork* work) {
             work->actionCommands.outputParams[2] = _get_angle_hp(0);
             cw->rate = 50;
             work->actionCommands.mAcState = 99;
-            work->actionCommands.result = 1;
+            work->actionCommands.result = AC_RESULT_RUNNING;
             cw->sfxId = -1;
             break;
         case 100:
@@ -171,7 +171,7 @@ s32 battleAcMain_PendulumCraneTiming(BattleWork* work) {
             }
             if (BattlePadCheckTrigger(cw->button) || inRange) {
                 work->actionCommands.outputParams[0] = 1;
-                work->actionCommands.result = 2;
+                work->actionCommands.result = AC_RESULT_SUCCESS;
                 work->actionCommands.mResultCount++;
                 work->actionCommands.mAcState = 1002;
                 break;

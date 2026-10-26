@@ -38,7 +38,7 @@ s32 battleAcMain_PowerGaugeLv(BattleWork* work) {
             tw->counter = 0;
             work->actionCommands.outputParams[0] = 0;
             work->actionCommands.mAcState = 99;
-            work->actionCommands.result = 1;
+            work->actionCommands.result = AC_RESULT_RUNNING;
             tw->limit = 100;
             tw->gauge = 0.0f;
             break;
@@ -69,7 +69,7 @@ s32 battleAcMain_PowerGaugeLv(BattleWork* work) {
                     work->actionCommands.result = 0;
                     work->actionCommands.result &= ~2;
                 } else {
-                    work->actionCommands.result = 2;
+                    work->actionCommands.result = AC_RESULT_SUCCESS;
                     work->actionCommands.mResultCount++;
                     if (ac->params[1] <= 1) {
                         work->actionCommands.outputParams[0] = 1;
@@ -96,7 +96,7 @@ s32 battleAcMain_PowerGaugeLv(BattleWork* work) {
             work->actionCommands.setupParam--;
             if (work->actionCommands.setupParam < 0) {
                 if ((s32)work->actionCommands.outputParams[0] > 0) {
-                    work->actionCommands.result = 2;
+                    work->actionCommands.result = AC_RESULT_SUCCESS;
                     work->actionCommands.mResultCount++;
                 } else {
                     work->actionCommands.result = 0;

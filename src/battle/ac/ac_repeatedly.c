@@ -143,7 +143,7 @@ s32 battleAcMain_Repeatedly(BattleWork* work) {
             d->delta[2] = -16;
             d->delta[3] = 0;
             d->gauge = 0.0f;
-            work->actionCommands.result = 1;
+            work->actionCommands.result = AC_RESULT_RUNNING;
             r->grace = 0;
             _init_param(work);
             work->actionCommands.mAcState = 99;
@@ -263,7 +263,7 @@ s32 battleAcMain_Repeatedly(BattleWork* work) {
             }
             work->actionCommands.result &= ~1;
             if (r->gauge >= r->pos || r->done) {
-                work->actionCommands.result |= 2;
+                work->actionCommands.result |= AC_RESULT_SUCCESS;
             }
             battleAcDelete_Repeatedly(work);
             work->actionCommands.mAcState = 1002;

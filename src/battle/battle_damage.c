@@ -406,7 +406,7 @@ s32 BattleCalculateDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPa
         return 0;
     }
     if (attacker && (weapon->special & SPECIAL_BADGE_POWER) && attacker->badgesEquipped.AllOrNothing &&
-        !((u32)wp->actionCommands.result & 2) && !(flags & DAMAGE_RESULT_AC_SUCCESS)) {
+        !((u32)wp->actionCommands.result & AC_RESULT_SUCCESS) && !(flags & DAMAGE_RESULT_AC_SUCCESS)) {
         return 0;
     }
     damage = weapon->hpDamageWork[0];
@@ -420,7 +420,7 @@ s32 BattleCalculateDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPa
         damage += attacker->badgesEquipped.PowerPlus;
         damage += attacker->badgesEquipped.PUpDDown;
         if (attacker->badgesEquipped.AllOrNothing) {
-            if (((u32)wp->actionCommands.result & 2) || (flags & DAMAGE_RESULT_AC_SUCCESS)) {
+            if (((u32)wp->actionCommands.result & AC_RESULT_SUCCESS) || (flags & DAMAGE_RESULT_AC_SUCCESS)) {
                 damage += attacker->badgesEquipped.AllOrNothing;
             } else {
                 damage = 0;
@@ -614,7 +614,7 @@ s32 BattleCalculateFpDamage(BattleUnit* attacker, BattleUnit* target, BattleUnit
         return 0;
     }
     if (attacker && (weapon->special & SPECIAL_BADGE_POWER) && attacker->badgesEquipped.AllOrNothing &&
-        !((u32)wp->actionCommands.result & 2)) {
+        !((u32)wp->actionCommands.result & AC_RESULT_SUCCESS)) {
         return 0;
     }
     if (fn) {

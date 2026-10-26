@@ -55,7 +55,7 @@ s32 BattleActionCommandResult(BattleWork* wp) {
     if (result) {
         return result(wp);
     } else {
-        return wp->actionCommands.result & 2;
+        return wp->actionCommands.result & AC_RESULT_SUCCESS;
     }
 }
 
@@ -83,7 +83,7 @@ void BattleActionCommandSetup(BattleWork* work, s32 id, BattleUnit* unit, s32 se
     work->actionCommands.setupFlags = setupFlags;
     work->actionCommands.mAcState = 0;
     work->actionCommands.mResultCount = 0;
-    work->actionCommands.result = 1;
+    work->actionCommands.result = AC_RESULT_RUNNING;
     work->actionCommands.maincb = NULL;
     work->actionCommands.dispcb = NULL;
     work->actionCommands.resultcb = NULL;

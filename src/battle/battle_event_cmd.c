@@ -4859,7 +4859,7 @@ USER_FUNC(btlevtcmd_StopAC) {
 USER_FUNC(btlevtcmd_ResultAC) {
     BattleWork* wp = _battleWorkPointer;
     BattleActionCommandResult(wp);
-    if (wp->actionCommands.result & 1) {
+    if (wp->actionCommands.result & AC_RESULT_RUNNING) {
         return EVT_RETURN_BLOCK;
     }
     BattleAcHelpSetDispType(0);

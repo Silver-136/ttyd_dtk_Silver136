@@ -84,7 +84,7 @@ s32 battleAcMain_GaugeTiming(BattleWork* work) {
             cw->cnt = 0;
             GAC(work)->out0 = 0;
             work->actionCommands.mAcState = 99;
-            work->actionCommands.result = 1;
+            work->actionCommands.result = AC_RESULT_RUNNING;
             cw->maxFrames = GAC(work)->maxFrames;
             cw->inRange = 0;
             cw->timer = 0;
@@ -268,7 +268,7 @@ s32 battleAcMain_GaugeTiming(BattleWork* work) {
             }
             if (cw->phase == 2) {
                 if (cw->inRange) {
-                    work->actionCommands.result = 2;
+                    work->actionCommands.result = AC_RESULT_SUCCESS;
                     work->actionCommands.mResultCount++;
                 } else {
                     work->actionCommands.result = 0;
@@ -281,7 +281,7 @@ s32 battleAcMain_GaugeTiming(BattleWork* work) {
             GAC(work)->setupParam--;
             if (GAC(work)->setupParam < 0) {
                 if (cw->passed) {
-                    work->actionCommands.result = 2;
+                    work->actionCommands.result = AC_RESULT_SUCCESS;
                     work->actionCommands.mResultCount++;
                 } else {
                     work->actionCommands.result = 0;

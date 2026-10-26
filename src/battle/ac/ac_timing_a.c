@@ -107,20 +107,20 @@ s32 battleAcResult_TimingA(BattleWork* work) {
         if (irand(100) >= 0) {
             work->actionCommands.result = 0;
         } else {
-            work->actionCommands.result = 2;
+            work->actionCommands.result = AC_RESULT_SUCCESS;
             work->actionCommands.mResultCount++;
         }
         return work->actionCommands.result;
     }
     if (work->actionCommands.mAcUnit->badgesEquipped.AutoCommand) {
-        work->actionCommands.result = 2;
+        work->actionCommands.result = AC_RESULT_SUCCESS;
         work->actionCommands.mResultCount++;
         return work->actionCommands.result;
     }
     work->actionCommands.result = 0;
     if (work->flags & BATTLE_FLAG_LECTURE_JUMP) {
         work->actionCommands.outputParams[0] = 3;
-        work->actionCommands.result = 2;
+        work->actionCommands.result = AC_RESULT_SUCCESS;
         work->actionCommands.mResultCount++;
         return work->actionCommands.result;
     }
@@ -147,7 +147,7 @@ s32 battleAcResult_TimingA(BattleWork* work) {
         return work->actionCommands.result;
     }
     work->actionCommands.outputParams[0] = 3;
-    work->actionCommands.result = 2;
+    work->actionCommands.result = AC_RESULT_SUCCESS;
     work->actionCommands.mResultCount++;
     return work->actionCommands.result;
 }

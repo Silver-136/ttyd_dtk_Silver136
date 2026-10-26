@@ -9,6 +9,12 @@ typedef struct BattleWork BattleWork;
 
 typedef s32 (*BattleACMainCallback)(BattleWork* work);
 typedef s32 (*BattleACResultCallback)(BattleWork* work);
+
+// BattleActionCommands.result (btlevtcmd_GetResultAC)
+typedef enum BattleACResultFlags {
+    AC_RESULT_RUNNING = (1 << 0),  // 0x1, the command is still running (btlevtcmd_ResultAC waits)
+    AC_RESULT_SUCCESS = (1 << 1),  // 0x2
+} BattleACResultFlags;
 typedef void (*BattleACDeleteCallback)(BattleWork* work);
 
 typedef struct BattleACDispParams {
@@ -116,7 +122,7 @@ typedef struct BattleActions {
     BattleACDeleteCallback deletecb; // 0x1C
     s32 mDefenseResult;              // 0x20
     s32 mResultCount;                // 0x24
-    s32 result;                      // 0x28
+    s32 result;                      // 0x28, BattleACResultFlags
     s8 mBaseAcDifficulty;            // 0x2C
     u8 mAcDifficulty;                // 0x2D
     u8 pad_2E[2];                    // 0x2E, never accessed

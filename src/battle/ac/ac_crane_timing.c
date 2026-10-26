@@ -60,7 +60,7 @@ s32 battleAcMain_CraneTiming(BattleWork* work) {
             cw->button = 0x100;
             work->actionCommands.outputParams[0] = 0;
             work->actionCommands.mAcState = 99;
-            work->actionCommands.result = 1;
+            work->actionCommands.result = AC_RESULT_RUNNING;
             break;
         case 100:
             unit = BattleGetUnitPtr(work, AC_PARAMS(work)->unitId);
@@ -101,7 +101,7 @@ s32 battleAcMain_CraneTiming(BattleWork* work) {
                 if (__fabs(cw->basePos.x - cw->pos.x) > 20.0) {
                     work->actionCommands.result = 0;
                 } else {
-                    work->actionCommands.result = 2;
+                    work->actionCommands.result = AC_RESULT_SUCCESS;
                     work->actionCommands.mResultCount++;
                 }
                 work->actionCommands.mAcState = 1002;

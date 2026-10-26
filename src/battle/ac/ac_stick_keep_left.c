@@ -60,7 +60,7 @@ s32 battleAcMain_StickKeepLeft(BattleWork* work) {
         }
         switch (work->actionCommands.mAcState) {
             case 0:
-                work->actionCommands.result = 1;
+                work->actionCommands.result = AC_RESULT_RUNNING;
                 cw->idx = 0;
                 memset(disp, 0, sizeof(BattleACDispParams));
                 disp->iconX = -300.0f;
@@ -93,7 +93,7 @@ s32 battleAcMain_StickKeepLeft(BattleWork* work) {
                     if (irand(100) >= 0) {
                         work->actionCommands.result = 0;
                     } else {
-                        work->actionCommands.result = 2;
+                        work->actionCommands.result = AC_RESULT_SUCCESS;
                         work->actionCommands.mResultCount++;
                     }
                     return 0;
@@ -116,7 +116,7 @@ s32 battleAcMain_StickKeepLeft(BattleWork* work) {
                 if ((&(work)->actionCommands)->countdown > 0) {
                     (&(work)->actionCommands)->countdown--;
                     loop = 1;
-                    work->actionCommands.result = 2;
+                    work->actionCommands.result = AC_RESULT_SUCCESS;
                     work->actionCommands.mAcState = 1003;
                 }
                 cw->timer--;
@@ -128,7 +128,7 @@ s32 battleAcMain_StickKeepLeft(BattleWork* work) {
                         work->actionCommands.mAcState = 1003;
                         work->actionCommands.outputParams[2] = 2;
                         if (SKL_P(work)->acFlags & AC_STICK_KEEP_LEFT_FLAG_NO_EARLY_RELEASE_FAIL) {
-                            work->actionCommands.result |= 2;
+                            work->actionCommands.result |= AC_RESULT_SUCCESS;
                             work->actionCommands.result &= ~1;
                         }
                         loop = 1;
@@ -170,12 +170,12 @@ s32 battleAcMain_StickKeepLeft(BattleWork* work) {
                         if (!ok) {
                             break;
                         }
-                        work->actionCommands.result |= 2;
+                        work->actionCommands.result |= AC_RESULT_SUCCESS;
                         work->actionCommands.result &= ~1;
                         loop = 1;
                         work->actionCommands.mAcState = 1003;
                     } else if (ok) {
-                        work->actionCommands.result |= 2;
+                        work->actionCommands.result |= AC_RESULT_SUCCESS;
                         work->actionCommands.result &= ~1;
                         loop = 1;
                         work->actionCommands.mAcState = 1003;

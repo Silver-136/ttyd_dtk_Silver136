@@ -70,7 +70,7 @@ s32 battleAcMain_MonosiriTarget(BattleWork* work) {
             cw->inRange = 0;
             cw->angle = 0.0f;
             work->actionCommands.mAcState = 99;
-            work->actionCommands.result = 1;
+            work->actionCommands.result = AC_RESULT_RUNNING;
             cw->sfxId = -1;
             break;
         case 100:
@@ -97,7 +97,7 @@ s32 battleAcMain_MonosiriTarget(BattleWork* work) {
             }
             if (BattlePadCheckTrigger(PAD_BUTTON_A) || autoCommand) {
                 if (cw->inRange) {
-                    work->actionCommands.result = 2;
+                    work->actionCommands.result = AC_RESULT_SUCCESS;
                     work->actionCommands.mResultCount++;
                 } else {
                     if (autoCommand) {
