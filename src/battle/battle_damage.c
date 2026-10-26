@@ -27,6 +27,7 @@
 #include "battle/battle_disp.h"
 #include "eff/eff_fukidashi.h"
 #include "eff/eff_updown.h"
+#include "battle/unit_work.h"
 
 
 void _getSickStatusParam(BattleUnit* unit, BattleWeapon* weapon, u32 type, s8* outTime, s8* outStrength);
@@ -526,8 +527,9 @@ skip:
         if (wp->majinaiState == 2 && target->currentKind == UNIT_MARIO) {
             defense += 3;
         }
-        if (part->attributes & VERSION_PICK(0x20, 0x80)) {
-            if ((defense += target->work[1]) < 0) {
+        // JP tests bit 0x20 here; Hooktail's parts carry kPartUnitWorkDefense (0x80) in both versions
+        if (part->attributes & VERSION_PICK(0x20, kPartUnitWorkDefense)) {
+            if ((defense += target->work[UNIT_WORK_PART_DEFENSE]) < 0) {
                 defense = 0;
             }
         }

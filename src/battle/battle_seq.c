@@ -40,6 +40,7 @@
 #include "battle/battle_damage.h"
 #include "battle/battle_seq_command.h"
 #include "battle/battle_seq_end.h"
+#include "battle/unit_work.h"
 
 
 #define STAGE_WORK(wp) (&(wp)->stageObjectWork)
@@ -254,7 +255,7 @@ void BattleCheckAllPinchStatus(BattleWork* wp, BOOL noAudience) {
         } else {
             unit = BattleGetMarioPtr(wp);
             if (unit) {
-                unit->work[8] = 0;
+                unit->work[MARIO_WORK_PINCH_VOICE] = 0;
             }
             wp->alertTick = 0;
         }

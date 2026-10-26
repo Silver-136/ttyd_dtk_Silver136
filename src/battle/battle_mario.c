@@ -21,6 +21,7 @@
 #include "battle/battle_audience.h"
 #include "eff/eff_fire.h"
 #include "battle/battle_damage.h"
+#include "battle/unit_work.h"
 static USER_FUNC(_get_mario_hammer_lv);
 #include "driver/animdrv.h"
 #include "driver/effdrv.h"
@@ -5744,7 +5745,7 @@ EVT_BEGIN(marioAttackEvent_FireNaguri)
     CALL(btlevtcmd_GetStageSize, EVT_NULLPTR, LW(1), EVT_NULLPTR)
     CALL(btlevtcmd_SetPartsPos, UNIT_ID_SELF, 3, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 3, STRING("M_H_8"))
-    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 3, 0, 1)
+    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 3, MARIO_PARTS_WORK_FIRE_BALL, 1)
     BEGIN_SIBLING_EVENT
         CALL(_mario_fire_ball_controll, UNIT_ID_SELF, 3)
     END_SIBLING_EVENT
@@ -5822,7 +5823,7 @@ EVT_BEGIN(marioAttackEvent_FireNaguri)
             CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("M_S_1"))
         END_SIBLING_EVENT
         CALL(btlevtcmd_WaitEventEnd, LW(14))
-        CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 3, 0, 0)
+        CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 3, MARIO_PARTS_WORK_FIRE_BALL, 0)
         CALL(evt_audience_ap_recovery)
         CALL(btlevtcmd_InviteApInfoReport)
         CALL(btlevtcmd_GetPartsPos, UNIT_ID_SELF, 3, LW(0), LW(1), LW(2))
@@ -5933,7 +5934,7 @@ EVT_BEGIN(marioAttackEvent_FireNaguri_object)
         CALL(btlevtcmd_FaceDirectionAdd, UNIT_ID_SELF, LW(0), LW(5))
         CALL(btlevtcmd_JumpPartsSetting, UNIT_ID_SELF, 3, 0, FLOAT(6.0f), FLOAT(0.2998047f))
         CALL(btlevtcmd_FallPartsPosition, UNIT_ID_SELF, 3, LW(0), LW(1), LW(2), 0)
-        CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 3, 0, 0)
+        CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 3, MARIO_PARTS_WORK_FIRE_BALL, 0)
         RETURN
     END_IF
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
@@ -5941,7 +5942,7 @@ EVT_BEGIN(marioAttackEvent_FireNaguri_object)
     CALL(btlevtcmd_TransStageFloorPosition, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_JumpPartsSetting, UNIT_ID_SELF, 3, 0, FLOAT(4.0f), FLOAT(0.5f))
     CALL(btlevtcmd_JumpPartsPosition, UNIT_ID_SELF, 3, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE)
-    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 3, 0, 0)
+    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 3, MARIO_PARTS_WORK_FIRE_BALL, 0)
     CALL(btlevtcmd_CommandGetWeaponAddress, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_WeaponAftereffect, LW(0))
     CALL(btlevtcmd_GetResultAC, LW(0))
@@ -6555,7 +6556,7 @@ USER_FUNC(_mario_fire_ball_controll) {
 
     }
     eff = (EffectEntry*)event->userdata[1];
-    if (part->work[0] == 0) {
+    if (part->work[MARIO_PARTS_WORK_FIRE_BALL] == 0) {
         effDelete(eff);
         return EVT_RETURN_DONE;
     }

@@ -19,6 +19,7 @@
 #include "evt/evt_snd.h"
 #include "evt/evt_sub.h"
 #include "unit/unit_mario.h"
+#include "battle/unit_work.h"
 
 USER_FUNC(_get_local_frame);
 static USER_FUNC(_mario_makkuro_set);
@@ -261,7 +262,7 @@ static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetRunSound, UNIT_ID_SELF, STRING("SFX_MARIO_BATTLE_MOVE1L"), STRING("SFX_MARIO_BATTLE_MOVE1R"), 0, 10, 10)
     CALL(btlevtcmd_AnimeSetPoseSoundTable, UNIT_ID_SELF, 1, PTR(pose_sound_timing_table))
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 8, 0)
-    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 3, 0, 0)
+    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 3, MARIO_PARTS_WORK_FIRE_BALL, 0)
     CALL(_mario_super_emblem_anim_set, UNIT_ID_SELF)
     CALL(btlevtcmd_SetEventEntry, UNIT_ID_SELF, PTR(battle_entry_event))
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG4_10_02_TRADING_PLACES)
@@ -288,12 +289,12 @@ USER_FUNC(_get_local_frame) {
 s32 mario_pinch_pose_sound_callback(BattleUnit* unit) {
     s32 ret;
 
-    if (unit->work[8] & 1) {
+    if (unit->work[MARIO_WORK_PINCH_VOICE] & 1) {
         ret = BtlUnit_snd_se(unit, "SFX_VOICE_MARIO_RELIEF2", EVT_NULLPTR, 0);
     } else {
         ret = BtlUnit_snd_se(unit, "SFX_VOICE_MARIO_RELIEF1", EVT_NULLPTR, 0);
     }
-    unit->work[8]++;
+    unit->work[MARIO_WORK_PINCH_VOICE]++;
     return ret;
 }
 

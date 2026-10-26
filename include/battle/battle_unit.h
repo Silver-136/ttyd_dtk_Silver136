@@ -37,9 +37,10 @@ typedef enum PartsAttribute_Flags {          // 32-bit size
     kGuardTargetPart = (1 << 3),             // 0x8, the part an attack is redirected to when this unit bodyguards
     kUnknown_0x10 = (1 << 4),                // 0x10
     kUnknown_0x40 = (1 << 6),                // 0x40
-    // 0x80, set on Hooktail's two body parts; no code reads it (Hooktail's reaction to Attack FX R is in its damage
-    // event, which tests DAMAGE_RESULT_ATTACK_FX_R)
-    kHooktailMarker_UNUSED = (1 << 7),
+    // 0x80, US: the unit's UNIT_WORK_PART_DEFENSE slot is added to this part's defence (BattlePreCheckDamage);
+    // Hooktail's two body parts, whose damage event lowers the slot when Attack FX R hits. JP tests bit 0x20 there
+    // instead, which these parts do not have.
+    kPartUnitWorkDefense = (1 << 7),
     kWeakToIcePower = (1 << 8),              // 0x100
     kPartWinged = (1 << 11),                   // 0x800, grounded by SPECIAL_GROUND_WINGED
     kPartShelled = (1 << 12),                  // 0x1000, flipped by SPECIAL_FLIP_SHELLED

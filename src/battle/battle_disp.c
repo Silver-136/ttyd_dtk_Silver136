@@ -23,6 +23,7 @@
 #include "driver/shadowdrv.h"
 #include "battle/battle_seq_command.h"
 #include "driver/mapdrv.h"
+#include "battle/unit_work.h"
 
 
 extern ItemData itemDataTable[];
@@ -320,8 +321,8 @@ void btlDispMain(void) {
     for (i = 0; i < 0x40; i++) {
         unit = BattleGetUnitPtr(_battleWorkPointer, i);
         if (!unit) continue;
-        if (unit->currentKind == UNIT_SHELL_SHIELD && unit->work[2] != 0) {
-            target = BattleGetUnitPtr(wp, unit->work[0]);
+        if (unit->currentKind == UNIT_SHELL_SHIELD && unit->work[SHELL_SHIELD_WORK_FOLLOW] != 0) {
+            target = BattleGetUnitPtr(wp, unit->work[SHELL_SHIELD_WORK_TARGET]);
             if (target) {
                 if (target->attackEventId && evtCheckID(target->attackEventId)) {
                     if (!((u32)target->attackEventFlags & ACT_EVENT_SHELL_FOLLOWS)) goto next;
@@ -331,7 +332,7 @@ void btlDispMain(void) {
                 BtlUnit_GetPos(target, &tpos.x, &tpos.y, &tpos.z);
                 tpos.z += 7.0f;
                 h = BattleGetFloorHeight(wp, tpos.x, tpos.y, tpos.z);
-                switch (unit->work[2]) {
+                switch (unit->work[SHELL_SHIELD_WORK_FOLLOW]) {
                     case 2:
                         // FAKE: double temp for the fabs result (register order of the diff/fabs webs)
                         { f64 a = __fabs(pos.x - tpos.x);
@@ -347,7 +348,7 @@ void btlDispMain(void) {
                     case 3:
                         if (__fabs(pos.x - tpos.x) < 1.0) {
                             BtlUnit_SetPos(unit, tpos.x, h, tpos.z);
-                            unit->work[2] = 1;
+                            unit->work[SHELL_SHIELD_WORK_FOLLOW] = 1;
                         } else if (tpos.x > pos.x) {
                             pos.x += 1.0f;
                             BtlUnit_SetPos(unit, pos.x, h, tpos.z);
@@ -525,9 +526,9 @@ next:
             }
             { s32 k = unit->currentKind;
             if (k == 0xE4 || k == 0x8D || k == 0x86 || (u32)(k - 0x1F) <= 2 || (u32)(k - 0xBD) <= 4 || k == 0x85) {
-                    viv.x = unit->work[0];
-                    viv.y = unit->work[1];
-                    viv.z = unit->work[2];
+                    viv.x = unit->work[SHADOW_TAIL_WORK_X];
+                    viv.y = unit->work[SHADOW_TAIL_WORK_Y];
+                    viv.z = unit->work[SHADOW_TAIL_WORK_Z];
                     animPoseVivianMain(part->poseId, &viv);
             } }
             BtlUnit_ControlPoseSoundMain(part);

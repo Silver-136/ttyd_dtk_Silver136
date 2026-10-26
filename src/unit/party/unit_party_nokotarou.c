@@ -25,6 +25,7 @@
 #include "battle/battle_status_effect.h"
 #include "battle/battle_damage.h"
 #include "system.h"
+#include "battle/unit_work.h"
 
 USER_FUNC(btlevtcmd_SetEventEntry);
 USER_FUNC(btlevtcmd_SetJumpSound);
@@ -1245,13 +1246,13 @@ EVT_BEGIN(partyNokotarouAttack_KouraGuard)
         WAIT_FRAMES(50)
         CALL(btlevtcmd_OnAttribute, LW(3), kUnitUnderShellShield)
         CALL(btlevtcmd_GetUnitId, LW(3), LW(0))
-        CALL(btlevtcmd_SetUnitWork, LW(10), 0, LW(0))
+        CALL(btlevtcmd_SetUnitWork, LW(10), SHELL_SHIELD_WORK_TARGET, LW(0))
         CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_NEUTRAL)
-        CALL(btlevtcmd_SetUnitWork, LW(10), 2, 3)
+        CALL(btlevtcmd_SetUnitWork, LW(10), SHELL_SHIELD_WORK_FOLLOW, 3)
         BEGIN_SIBLING_EVENT_GET_ID(LW(15))
             SET_VALUE(LW(5), 5)
             LOOP(LW(5))
-                CALL(btlevtcmd_GetUnitWork, LW(10), 2, LW(10))
+                CALL(btlevtcmd_GetUnitWork, LW(10), SHELL_SHIELD_WORK_FOLLOW, LW(10))
                 IF_INT_NOT_EQUAL(LW(0), 3)
                     BREAK_LOOP
                 END_IF
@@ -1260,7 +1261,7 @@ EVT_BEGIN(partyNokotarouAttack_KouraGuard)
             END_LOOP
         END_SIBLING_EVENT
         CALL(btlevtcmd_WaitEventEnd, LW(15))
-        CALL(btlevtcmd_SetUnitWork, LW(10), 2, 0)
+        CALL(btlevtcmd_SetUnitWork, LW(10), SHELL_SHIELD_WORK_FOLLOW, 0)
         IF_BITS_SET(LW(6), 2)
             CALL(btlevtcmd_AcGetOutputParam, 1, LW(0))
         ELSE

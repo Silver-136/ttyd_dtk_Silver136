@@ -5,6 +5,7 @@
 #include "battle/battle_status_effect.h"
 #include "battle/battle_audience.h"
 #include "battle/battle_actrecord.h"
+#include "battle/unit_work.h"
 
 #include "battle/battle_disp.h"
 #include "mario/mario_pouch.h"
@@ -1829,7 +1830,7 @@ BattleUnit* BtlUnit_GetGuardKouraPtr(BattleUnit* unit) {
 
     for (; i < 64; i++) {
         other = BattleGetUnitPtr(wp, i);
-        if (other && other->currentKind == UNIT_SHELL_SHIELD && other->work[0] == id) {
+        if (other && other->currentKind == UNIT_SHELL_SHIELD && other->work[SHELL_SHIELD_WORK_TARGET] == id) {
             break;
         }
     }
@@ -2148,7 +2149,7 @@ BOOL BtlUnit_CheckShadowGuard(BattleUnit* unit) {
     if (unit->mAttributeFlags & kUnitInVeil) {
         return TRUE;
     }
-    if (unit->currentKind == UNIT_VIVIAN && unit->work[4] > 0) {
+    if (unit->currentKind == UNIT_VIVIAN && unit->work[VIVIAN_WORK_HIDE_TURNS] > 0) {
         return TRUE;
     }
     return FALSE;
