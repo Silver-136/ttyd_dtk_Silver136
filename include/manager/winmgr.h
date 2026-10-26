@@ -21,8 +21,16 @@ struct WinMgrDesc {
     void (*disp)(WinMgrEntry* entry); //0x24
 };
 
+// WinMgrEntry.flags (winMgrEntry, winMgrMain, winMgrSeq)
+typedef enum WinMgrFlags {
+    WINMGR_FLAG_ACTIVE = (1 << 0),      // 0x1, slot in use
+    WINMGR_FLAG_VISIBLE = (1 << 1),     // 0x2, drawn
+    WINMGR_FLAG_ANIMATING = (1 << 2),   // 0x4, opening or closing animation running
+    WINMGR_FLAG_AUTO_DELETE = (1 << 3), // 0x8, winMgrCloseAutoDelete: freed once closed
+} WinMgrFlags;
+
 struct WinMgrEntry {
-    s32 flags; //0x0
+    s32 flags; //0x0, WinMgrFlags
     s32 state; //0x4
     s32 timer; //0x8
     s32 alpha; //0xC

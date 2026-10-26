@@ -289,12 +289,12 @@ void winMgrMain(void) {
 
     entry = wp->mEntries;
     for (i = 0; i < wp->mNumEntries; i++, entry++) {
-        if (entry->flags & 1) {
+        if (entry->flags & WINMGR_FLAG_ACTIVE) {
             winMgrSeq(entry);
             if (entry->description->main) {
                 entry->description->main(entry);
             }
-            if (entry->flags & 2) {
+            if (entry->flags & WINMGR_FLAG_VISIBLE) {
                 dispEntry((CameraId)entry->description->camId, entry->priority + 300, 0, winMgrDisp, entry);
             }
         }
@@ -302,15 +302,15 @@ void winMgrMain(void) {
 }
 
 void winMgrSeq(WinMgrEntry* entry) {
-    entry->flags |= 4;
+    entry->flags |= WINMGR_FLAG_ANIMATING;
     switch (entry->description->type) {
         case 0:
             switch (entry->state) {
                 case 0:
-                    entry->flags &= ~4;
+                    entry->flags &= ~WINMGR_FLAG_ANIMATING;
                     break;
                 case 1:
-                    entry->flags |= 2;
+                    entry->flags |= WINMGR_FLAG_VISIBLE;
                     entry->rotation = intplGetValue(EASING_SIN_OUT, 30.0f, 0.0f, entry->timer, FPS_FRAMES(8));
                     entry->scale = intplGetValue(EASING_SIN_OUT, 0.0f, 1.0f, entry->timer, FPS_FRAMES(8));
                     entry->alpha = 255;
@@ -326,9 +326,9 @@ void winMgrSeq(WinMgrEntry* entry) {
                     entry->timer++;
                     if (entry->timer > FPS_FRAMES(8)) {
                         entry->state = 0;
-                        entry->flags &= ~2;
-                        if (entry->flags & 8) {
-                            entry->flags &= ~1;
+                        entry->flags &= ~WINMGR_FLAG_VISIBLE;
+                        if (entry->flags & WINMGR_FLAG_AUTO_DELETE) {
+                            entry->flags &= ~WINMGR_FLAG_ACTIVE;
                         }
                     }
                     break;
@@ -337,10 +337,10 @@ void winMgrSeq(WinMgrEntry* entry) {
         case 1:
             switch (entry->state) {
                 case 0:
-                    entry->flags &= ~4;
+                    entry->flags &= ~WINMGR_FLAG_ANIMATING;
                     break;
                 case 1:
-                    entry->flags |= 2;
+                    entry->flags |= WINMGR_FLAG_VISIBLE;
                     entry->rotation = 0.0f;
                     entry->scale = intplGetValue(EASING_SIN_OUT, 0.0f, 1.0f, entry->timer, FPS_FRAMES(8));
                     entry->alpha = intplGetValue(EASING_SIN_OUT, 0.0f, 255.0f, entry->timer, FPS_FRAMES(8));
@@ -356,9 +356,9 @@ void winMgrSeq(WinMgrEntry* entry) {
                     entry->timer++;
                     if (entry->timer > FPS_FRAMES(8)) {
                         entry->state = 0;
-                        entry->flags &= ~2;
-                        if (entry->flags & 8) {
-                            entry->flags &= ~1;
+                        entry->flags &= ~WINMGR_FLAG_VISIBLE;
+                        if (entry->flags & WINMGR_FLAG_AUTO_DELETE) {
+                            entry->flags &= ~WINMGR_FLAG_ACTIVE;
                         }
                     }
                     break;
@@ -367,23 +367,23 @@ void winMgrSeq(WinMgrEntry* entry) {
         case 2:
             switch (entry->state) {
                 case 0:
-                    entry->flags &= ~4;
+                    entry->flags &= ~WINMGR_FLAG_ANIMATING;
                     break;
                 case 1:
-                    entry->flags |= 2;
+                    entry->flags |= WINMGR_FLAG_VISIBLE;
                     entry->rotation = 0.0f;
                     entry->scale = 1.0f;
                     entry->alpha = 255;
                     entry->state = 0;
                     break;
                 case 2:
-                    entry->flags &= ~2;
+                    entry->flags &= ~WINMGR_FLAG_VISIBLE;
                     entry->rotation = 0.0f;
                     entry->scale = 1.0f;
                     entry->alpha = 255;
                     entry->state = 0;
-                    if (entry->flags & 8) {
-                        entry->flags &= ~1;
+                    if (entry->flags & WINMGR_FLAG_AUTO_DELETE) {
+                        entry->flags &= ~WINMGR_FLAG_ACTIVE;
                     }
                     break;
             }
@@ -397,12 +397,12 @@ s32 winMgrEntry(WinMgrDesc* desc) {
 
     entry = wp->mEntries;
     for (i = 0; i < wp->mNumEntries; i++, entry++) {
-        if (!(entry->flags & 1)) {
+        if (!(entry->flags & WINMGR_FLAG_ACTIVE)) {
             break;
         }
     }
     entry->flags = 0;
-    entry->flags |= 1;
+    entry->flags |= WINMGR_FLAG_ACTIVE;
     entry->state = 0;
     entry->timer = 0;
     entry->description = desc;
@@ -421,7 +421,7 @@ void winMgrSetParam(s32 id, void* param) {
     WinMgrEntry* entry;
 
     entry = &wp->mEntries[id];
-    if (entry->flags & 1) {
+    if (entry->flags & WINMGR_FLAG_ACTIVE) {
         entry->param = param;
     }
 }
@@ -430,7 +430,7 @@ void winMgrOpen(s32 id) {
     WinMgrEntry* entry;
 
     entry = &wp->mEntries[id];
-    if (entry->flags & 1) {
+    if (entry->flags & WINMGR_FLAG_ACTIVE) {
         entry->state = 1;
         entry->timer = 0;
         entry->scroll = 0;
@@ -443,7 +443,7 @@ void winMgrClose(s32 id) {
     WinMgrEntry* entry;
 
     entry = &wp->mEntries[id];
-    if (entry->flags & 1) {
+    if (entry->flags & WINMGR_FLAG_ACTIVE) {
         entry->state = 2;
         entry->timer = 0;
     }
@@ -453,10 +453,10 @@ void winMgrCloseAutoDelete(s32 id) {
     WinMgrEntry* entry;
 
     entry = &wp->mEntries[id];
-    if (entry->flags & 1) {
+    if (entry->flags & WINMGR_FLAG_ACTIVE) {
         entry->state = 2;
         entry->timer = 0;
-        entry->flags |= 8;
+        entry->flags |= WINMGR_FLAG_AUTO_DELETE;
     }
 }
 
@@ -472,7 +472,7 @@ void winMgrSetSize(s32 id, s32 x, s32 y, s32 width, s32 height) {
     WinMgrEntry* entry;
 
     entry = &wp->mEntries[id];
-    if (entry->flags & 1) {
+    if (entry->flags & WINMGR_FLAG_ACTIVE) {
         entry->x = x;
         entry->y = y;
         entry->width = width;
@@ -484,7 +484,7 @@ void winMgrSetPriority(s32 id, s32 priority) {
     WinMgrEntry* entry;
 
     entry = &wp->mEntries[id];
-    if (entry->flags & 1) {
+    if (entry->flags & WINMGR_FLAG_ACTIVE) {
         entry->priority = priority;
     }
 }
@@ -502,7 +502,7 @@ void winMgrHelpInit(WinMgrEntry* entry) {
 void winMgrHelpMain(WinMgrEntry* entry) {
     u16 lines = 0;
 
-    if (!(entry->flags & 4)) {
+    if (!(entry->flags & WINMGR_FLAG_ANIMATING)) {
         if (entry->msg) {
             FontGetMessageWidthLine(entry->msg, &lines);
             entry->lines = lines + 1;
@@ -528,7 +528,7 @@ void winMgrHelpDraw(WinMgrEntry* entry) {
     Mtx scale;
     char buf[0x400];
 
-    if (!(entry->flags & 4)) {
+    if (!(entry->flags & WINMGR_FLAG_ANIMATING)) {
         GXSetScissor(0, 384, 608, 56);
         if (!strcmp(entry->msg, msgSearch("msg_lottery_number"))) {
             sprintf(buf, entry->msg, lotteryGetPtr()->number);
@@ -1806,7 +1806,7 @@ void select_disp2(WinMgrEntry* entry) {
             ew = entry->width;
             ex = entry->x;
             ey = d->y + h / 2;
-            if (e->flags & 1) {
+            if (e->flags & WINMGR_FLAG_ACTIVE) {
                 e->x = ex;
                 e->y = ey;
                 e->width = ew;

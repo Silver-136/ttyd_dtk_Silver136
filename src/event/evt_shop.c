@@ -719,7 +719,7 @@ void point_disp(WinMgrEntry* entry) {
     Mtx m;
     Mtx s;
 
-    if (entry->flags & 4) {
+    if (entry->flags & WINMGR_FLAG_ANIMATING) {
         return;
     }
     PSMTXTrans(m, 10.0f + (30.0f + entry->x), entry->y - 36.0f, 0.0f);
@@ -758,7 +758,7 @@ void title_disp(WinMgrEntry* entry) {
     Mtx s;
 #endif
 
-    if (entry->flags & 4) {
+    if (entry->flags & WINMGR_FLAG_ANIMATING) {
         return;
     }
     msg = msgSearch("msg_shop_point_list4");
@@ -800,7 +800,7 @@ void list_disp(WinMgrEntry* entry) {
     Mtx m;
     Mtx s;
 
-    if (entry->flags & 4) {
+    if (entry->flags & WINMGR_FLAG_ANIMATING) {
         return;
     }
     pouch = pouchGetPtr();

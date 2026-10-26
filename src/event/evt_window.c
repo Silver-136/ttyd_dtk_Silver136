@@ -253,7 +253,7 @@ static void coin_disp(WinMgrEntry* entry) {
     s32 diff;
     pouchGetPtr();
     w = entry->param;
-    if (entry->flags & 4) {
+    if (entry->flags & WINMGR_FLAG_ANIMATING) {
         return;
     }
     switch (w->type) {

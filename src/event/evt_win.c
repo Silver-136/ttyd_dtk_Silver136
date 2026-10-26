@@ -158,7 +158,7 @@ void unitwin_point_disp(WinMgrEntry* entry) {
     Mtx trans;
     Mtx scale;
     s32 d;
-    if (!(entry->flags & 4)) {
+    if (!(entry->flags & WINMGR_FLAG_ANIMATING)) {
         PSMTXTrans(trans, 10.0f + (30.0f + entry->x), entry->y - 36.0f, 0.0f);
         if ((u32)gp->language == 0) {
             PSMTXScale(scale, 1.1f, 1.1f, 1.1f);
