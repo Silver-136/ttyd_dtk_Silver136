@@ -45,8 +45,6 @@
 #include "driver/extdrv.h"
 #include "driver/seqdrv.h"
 #ifdef VERSION_G8ME01
-USER_FUNC(N_evt_sub_status_gauge_force_update);
-USER_FUNC(evt_sub_get_language);
 #endif
 
 typedef struct Fan {
@@ -91,28 +89,11 @@ void psndSFX_vol(s32 id, u8 vol);
 static void pose_main(void);
 void fan_disp(CameraId camera, void* param);
 
-s32 N_evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos(EventEntry* event, BOOL isFirstCall);
 s32 evt_cloud_ent(EventEntry* event, BOOL isFirstCall);
 s32 evt_cloud_init(EventEntry* event, BOOL isFirstCall);
 s32 evt_end_count(EventEntry* event, BOOL isFirstCall);
-s32 evt_item_entry(EventEntry* event, BOOL isFirstCall);
-s32 evt_item_get_item_end_wait(EventEntry* event, BOOL isFirstCall);
-s32 evt_item_set_bound_rate(EventEntry* event, BOOL isFirstCall);
-s32 evt_item_set_gravity(EventEntry* event, BOOL isFirstCall);
-s32 evt_item_set_jump_power(EventEntry* event, BOOL isFirstCall);
-s32 evt_item_set_move_dir_speed(EventEntry* event, BOOL isFirstCall);
-s32 evt_map_checkanim(EventEntry* event, BOOL isFirstCall);
-s32 evt_mapobj_rotate(EventEntry* event, BOOL isFirstCall);
-s32 evt_mario_balloon_bikkuri(EventEntry* event, BOOL isFirstCall);
-s32 evt_mario_balloon_off(EventEntry* event, BOOL isFirstCall);
-s32 evt_mario_get_pos(EventEntry* event, BOOL isFirstCall);
-s32 evt_msg_print_insert(EventEntry* event, BOOL isFirstCall);
-s32 evt_npc_reverse_ry(EventEntry* event, BOOL isFirstCall);
-s32 evt_party_yoshi_ride(EventEntry* event, BOOL isFirstCall);
-s32 evt_pouch_get_yoshiname(EventEntry* event, BOOL isFirstCall);
 s32 evt_pouch_open_mail(EventEntry* event, BOOL isFirstCall);
 s32 evt_pouch_receive_mail(EventEntry* event, BOOL isFirstCall);
-s32 evt_pouch_remove_item(EventEntry* event, BOOL isFirstCall);
 s32 evt_tou_get_ranking(EventEntry* event, BOOL isFirstCall);
 void ext_fan_dispent(void);
 void ext_fan_main(void);

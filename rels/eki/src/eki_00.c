@@ -28,6 +28,7 @@
 #include "driver/casedrv.h"
 #include "driver/itemdrv.h"
 #include "driver/envdrv.h"
+#include "evt/evt_pouch.h"
 
 #include "manager/evtmgr.h"
 #include "driver/mapdrv.h"
@@ -138,17 +139,12 @@ static void moamoa_jump(ExtdrvPose* pose, Moamoa* moa, s32 next, s32 checkGround
 static void ext_disp(CameraId camera, void* param);
 static void ext_shadow_disp(CameraId camera, void* param);
 
-s32 evt_map_set_tevcallback(EventEntry* event, BOOL isFirstCall);
-s32 evt_mapobj_rotate(EventEntry* event, BOOL isFirstCall);
 s32 evt_mario_dispflag_onoff(EventEntry* event, BOOL isFirstCall);
-s32 evt_mario_get_pos(EventEntry* event, BOOL isFirstCall);
 static s32 evt_moamoa_blow(EventEntry* event, BOOL isFirstCall);
 static s32 evt_moamoa_flag_onoff(EventEntry* event, BOOL isFirstCall);
 static s32 evt_moamoa_fusion(EventEntry* event, BOOL isFirstCall);
 static s32 evt_moamoa_fusion_debug(EventEntry* event, BOOL isFirstCall);
 static s32 evt_moamoa_kind_onoff(EventEntry* event, BOOL isFirstCall);
-s32 evt_npc_reverse_ry(EventEntry* event, BOOL isFirstCall);
-s32 evt_sub_get_mapname(EventEntry* event, BOOL isFirstCall);
 static void ext_moamoa_dispent(void);
 static void ext_moamoa_init(void);
 static s32 evt_moamoa_target_off(EventEntry* event, BOOL isFirstCall);
@@ -156,20 +152,6 @@ static s32 evt_moamoa_end_wait(EventEntry* event, BOOL isFirstCall);
 static s32 evt_moamoa_ry_reset(EventEntry* event, BOOL isFirstCall);
 static s32 evt_moamoa_exit(EventEntry* event, BOOL isFirstCall);
 
-s32 evt_item_delete_check(EventEntry* event, BOOL isFirstCall);
-s32 evt_item_entry(EventEntry* event, BOOL isFirstCall);
-s32 evt_item_get_position(EventEntry* event, BOOL isFirstCall);
-s32 evt_item_set_bound_rate(EventEntry* event, BOOL isFirstCall);
-s32 evt_item_set_gravity(EventEntry* event, BOOL isFirstCall);
-s32 evt_item_set_jump_power(EventEntry* event, BOOL isFirstCall);
-s32 evt_item_set_move_dir_speed(EventEntry* event, BOOL isFirstCall);
-s32 evt_item_set_position(EventEntry* event, BOOL isFirstCall);
-s32 evt_map_checkanim(EventEntry* event, BOOL isFirstCall);
-s32 evt_mapobj_clear_offscreen(EventEntry* event, BOOL isFirstCall);
-s32 evt_mapobj_set_offscreen(EventEntry* event, BOOL isFirstCall);
-s32 evt_mobj_switch_blue(EventEntry* event, BOOL isFirstCall);
-s32 evt_party_jump_pos(EventEntry* event, BOOL isFirstCall);
-s32 evt_pouch_remove_item(EventEntry* event, BOOL isFirstCall);
 s32 evt_win_item_select(EventEntry* event, BOOL isFirstCall);
 s32 img_set_color(EventEntry* event, BOOL isFirstCall);
 

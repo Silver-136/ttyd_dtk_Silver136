@@ -211,17 +211,12 @@ void moamoa_joint_position(Moamoa* moa, Vec* out);
 static void ext_disp(CameraId camera, void* param);
 static void ext_shadow_disp(CameraId camera, void* param);
 
-s32 evt_map_set_tevcallback(EventEntry* event, BOOL isFirstCall);
-s32 evt_mapobj_rotate(EventEntry* event, BOOL isFirstCall);
 s32 evt_mario_dispflag_onoff(EventEntry* event, BOOL isFirstCall);
-s32 evt_mario_get_pos(EventEntry* event, BOOL isFirstCall);
 static s32 evt_moamoa_blow(EventEntry* event, BOOL isFirstCall);
 static s32 evt_moamoa_flag_onoff(EventEntry* event, BOOL isFirstCall);
 static s32 evt_moamoa_fusion(EventEntry* event, BOOL isFirstCall);
 static s32 evt_moamoa_fusion_debug(EventEntry* event, BOOL isFirstCall);
 static s32 evt_moamoa_kind_onoff(EventEntry* event, BOOL isFirstCall);
-s32 evt_npc_reverse_ry(EventEntry* event, BOOL isFirstCall);
-s32 evt_sub_get_mapname(EventEntry* event, BOOL isFirstCall);
 s32 npc_anim_wait(EventEntry* event, BOOL isFirstCall);
 static s32 ramp_r(EventEntry* event, BOOL isFirstCall);
 static void resha_tev(MapTevCallbackInfo* info);

@@ -19,6 +19,7 @@
 #include "mario/mario_pouch.h"
 #include "driver/casedrv.h"
 #include "driver/itemdrv.h"
+#include "evt/evt_item.h"
 #pragma inline_max_total_size(11500)
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
@@ -134,19 +135,12 @@ static void moamoa_jump(ExtdrvPose* pose, Moamoa* moa, s32 next, s32 checkGround
 static void ext_disp(CameraId camera, void* param);
 static void ext_shadow_disp(CameraId camera, void* param);
 
-s32 evt_cam3d_evt_set_at(EventEntry* event, BOOL isFirstCall);
-s32 evt_cam3d_evt_set_xyz(EventEntry* event, BOOL isFirstCall);
-s32 evt_cam3d_evt_xyz_off(EventEntry* event, BOOL isFirstCall);
-s32 evt_item_entry(EventEntry* event, BOOL isFirstCall);
-s32 evt_item_get_item(EventEntry* event, BOOL isFirstCall);
 s32 evt_mario_flag_onoff(EventEntry* event, BOOL isFirstCall);
-s32 evt_mario_get_pos(EventEntry* event, BOOL isFirstCall);
 static s32 evt_moamoa_end_wait(EventEntry* event, BOOL isFirstCall);
 static s32 evt_moamoa_exit(EventEntry* event, BOOL isFirstCall);
 static s32 evt_moamoa_flag_onoff(EventEntry* event, BOOL isFirstCall);
 static s32 evt_moamoa_ry_reset(EventEntry* event, BOOL isFirstCall);
 static s32 evt_moamoa_target_off(EventEntry* event, BOOL isFirstCall);
-s32 evt_npc_set_tribe(EventEntry* event, BOOL isFirstCall);
 static s32 npc_jump(EventEntry* event, BOOL isFirstCall);
 static void ext_moamoa_dispent(void);
 static void ext_moamoa_init(void);
