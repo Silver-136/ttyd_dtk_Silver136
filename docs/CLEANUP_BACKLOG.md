@@ -51,12 +51,12 @@ data order 10, sound-name integer round trips (`SFX_NAME_WORD`) 9, no-op casts 6
 
 ## 3. Names
 
-- Battle unit / part work slots (suggested by jdaster64): done for every unit script (be7a50d8, 15839d7d,
-  60f10223): file-local UNIT_WORK_* / PARTS_WORK_* defines per unit and REL copy, shared ones in
-  include/battle/unit_work.h. 678 numeric slot calls left: calls on other units' slots (cross-unit families: Blooper
-  body/arms, Smorg body/tentacles/mouth, Cortez and his weapons, the Sirens' line, Barriern satellites, Bobbery's
-  bomb), write-only or unclear slots, and the two Magnum Battender files (two units in one file each). Next: shared
-  family headers for the cross-unit slots.
+- Battle unit / part work slots (suggested by jdaster64): named in every unit script (file-local UNIT_WORK_* /
+  PARTS_WORK_*), with shared names in include/battle/unit_work.h (C-read slots, the sisters' line, Barriern
+  satellites, Bobbery's bomb, Mario) and family headers rels/rsh|tik|muj/include/unit_boss_moamoa|gesso|cortez.h.
+  183 numeric slot arguments left (cleanup_tools/work_slots_left.py): the lecture units' shared slots (Goombella /
+  Frankly tutorials), other-unit calls in black_peach, champion, sambo, kamec, wanwan, mahorn, and write-only or
+  unclear slots.
 - Placeholder struct fields: the remaining `field_0x..` / `unk..` uses (about 60) are all writes; write-only or
   unused fields keep offset names unless their meaning is clear (then `_UNUSED`).
 - Padding arrays (`u8 pad_..[n]`, `u8 field_..[n]`) in struct layouts: 455; many are views that should become the
