@@ -39,6 +39,8 @@
 
 #define STAGE_WORK(wp) (&(wp)->stageObjectWork)
 
+// FAKE: the definition (battle_sub.c) is intpl_sub(mode, cur, steps, start, end); the same registers (ints and floats go in
+// separate ones), but only this order gives the retail call code here
 f32 intpl_sub(s32 type, f32 start, f32 end, s32 cur, s32 max);
 void FontDrawString(f32 x, f32 y, const char* str);
 EffectEntry* effNozleEntry(s32 type, f32 x, f32 y, f32 z, f32 rx, f32 ry, s32 lifetime);
