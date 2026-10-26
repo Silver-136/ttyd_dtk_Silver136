@@ -4,11 +4,11 @@
 #include "driver/hitdrv.h"
 #include "driver/mobjdrv.h"
 #include "driver/npcdrv.h"
+#include "eff/eff_mario_balloon.h"
 #include <string.h>
 #include "mario/mario_hit.h"
 
 extern NpcEntry* fbatNpcTalkCheck(void);
-extern EffectEntry* effMarioBalloonEntry(s32 type, NpcEntry* npc);
 
 void marioBaloonInit(void) {
     marioGetPtr()->balloonEffect = NULL;

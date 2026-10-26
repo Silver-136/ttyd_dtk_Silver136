@@ -60,7 +60,6 @@ static inline void effitemget_cam_move(CameraEntry* camera, Vec ofs) {
     camera->curveA = 11;
 }
 
-EffectEntry* effMarioBalloonEntry(s32 type, NpcEntry* npc);
 static EffectEntry* eff;
 
 static USER_FUNC(efffukidashichange_cam);

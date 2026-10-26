@@ -4,16 +4,16 @@
 #include "driver/effdrv.h"
 #include "mario/mario.h"
 #include "mario/mariost.h"
+#include "driver/npcdrv.h"
 #include "memory.h"
 #include "system.h"
 #include <dolphin/gx.h>
 #include <dolphin/mtx.h>
 
-EffectEntry* effMarioBalloonEntry(s32 type, MarioWork* mario);
 void effMarioBalloonMain(EffectEntry* effect);
 void effMarioBalloonDisp(CameraId cameraId, EffectEntry* effect);
 
-EffectEntry* effMarioBalloonEntry(s32 type, MarioWork* mario) {
+EffectEntry* effMarioBalloonEntry(s32 type, NpcEntry* npc) {
     EffectEntry* effect;
     MarioBalloonWork* work;
 
@@ -25,7 +25,7 @@ EffectEntry* effMarioBalloonEntry(s32 type, MarioWork* mario) {
     effect->callback = effMarioBalloonMain;
     work->type = type;
     work->rotation = 0.0f;
-    work->mario = mario;
+    work->npc = npc;
     work->camera = 4;
     switch (type) {
     case 0:
@@ -40,19 +40,19 @@ EffectEntry* effMarioBalloonEntry(s32 type, MarioWork* mario) {
 
 void effMarioBalloonMain(EffectEntry* effect) {
     MarioBalloonWork* work = effect->userdata;
-    MarioWork* mario;
+    NpcEntry* npc;
     Vec pos;
 
-    mario = work->mario;
-    if (mario == NULL) {
-        mario = marioGetPtr();
+    npc = work->npc;
+    if (npc == NULL) {
+        MarioWork* mario = marioGetPtr();
         work->position.x = mario->position.x;
         work->position.y = 10.0f + (mario->position.y + mario->wPlayerCollisionBox.y);
         work->position.z = mario->position.z;
     } else {
-        work->position.x = mario->position.x;
-        work->position.y = 10.0f + (mario->position.y + mario->camShiftRate.x);
-        work->position.z = mario->position.z;
+        work->position.x = npc->position.x;
+        work->position.y = 10.0f + (npc->position.y + npc->height);
+        work->position.z = npc->position.z;
     }
     work->rotation += 4.0f;
     pos = (Vec){0.0f, 0.0f, 0.0f};

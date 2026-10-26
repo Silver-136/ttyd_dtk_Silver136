@@ -26,6 +26,7 @@
 #include "driver/itemdrv.h"
 
 #include "driver/npcdrv.h"
+#include "eff/eff_mario_balloon.h"
 #include "evt/evt_npc.h"
 #include "mario/mariost.h"
 #include "system.h"
@@ -134,7 +135,6 @@ void goryuugijo_upsidewindow_disp_sub(s32 slot, s32 reel);
 void goryuugijo_upsidewindow_dispoff_sub(s32 slot, s32 reel);
 s32 slot_rotate_sub(GoryuuWork* wp, SlotWork* data, s32 reel);
 void slot_neon_sub(GoryuuWork* wp, SlotWork* data);
-EffectEntry* effMarioBalloonEntry(s32 type, NpcEntry* npc);
 
 USER_FUNC(desk_talk_func);
 USER_FUNC(desk_talk_init_func);
