@@ -133,7 +133,7 @@ typedef enum NpcFlags {
     NPC_FLAG_TALK_POSE = (1 << 9),             // 0x200, uses its talk/stay animations in conversations
     NPC_FLAG_AUTO_MOVE_ANIM = (1 << 10),       // 0x400, stay/walk/run animation picked from its speed
     NPC_FLAG_HIDE = (1 << 11),                 // 0x800, whole display skipped (npc_hide_onoff)
-    NPC_FLAG_NO_PUSH_MARIO_UNUSED = (1 << 14),        // 0x4000, does not push Mario out of its body (never set)
+    NPC_FLAG_NO_PUSH_MARIO_UNUSED = (1 << 14),        // 0x4000, does not push Mario out of its body (no code sets it)
     NPC_FLAG_INSTANT_TURN = (1 << 15),         // 0x8000, paper turn snaps (pose flag 0x100)
     NPC_FLAG_WALL_BOUNCE = (1 << 16),          // 0x10000, move direction mirrored at walls
     NPC_FLAG_GRAVITY = (1 << 17),              // 0x20000, falls

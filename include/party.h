@@ -154,12 +154,12 @@ typedef enum PartyDispFlags {
     PARTY_DISP_FLAG_SHADOW_NODECAY = (1 << 21),  // 0x200000, shadow drawn with color_tbl_nodecay
     PARTY_DISP_FLAG_OUT_OF_SCREEN = (1 << 23),   // 0x800000, evt_party_outofscreen
     PARTY_DISP_FLAG_PAPER = (1 << 26),           // 0x4000000, partyPaperOn
-    PARTY_DISP_FLAG_TURN_LEFT_UNUSED = (1 << 6),  // 0x40, extra 180-degree yaw while facing left (never set)
-    PARTY_DISP_FLAG_TURN_RIGHT_UNUSED = (1 << 7), // 0x80, extra 180-degree yaw while facing right (never set)
+    PARTY_DISP_FLAG_TURN_LEFT_UNUSED = (1 << 6),  // 0x40, extra 180-degree yaw while facing left (no code sets it)
+    PARTY_DISP_FLAG_TURN_RIGHT_UNUSED = (1 << 7), // 0x80, extra 180-degree yaw while facing right (no code sets it)
     PARTY_DISP_FLAG_SLIT_DIR_280 = (1 << 9),      // 0x200, slit walk drawn at direction 280 (else 260)
 } PartyDispFlags;
 
-// PartyEntry.trigFlags: one-shot change requests and door-move state (evt_party_trigflg_onoff). 0x10000 (never set)
+// PartyEntry.trigFlags: one-shot change requests and door-move state (evt_party_trigflg_onoff). 0x10000 (no code sets it)
 // and 0x800000 are not named.
 typedef enum PartyTrigFlags {
     PARTY_TRIG_SLIT_INIT = (1 << 0),             // 0x1, start of the slit / roll paper motion
@@ -175,7 +175,7 @@ typedef enum PartyTrigFlags {
     PARTY_TRIG_DOOR_MOVE = (1 << 21),            // 0x200000, door and loading-zone gathering
     PARTY_TRIG_JUMP_TARGET_SET = (1 << 22),      // 0x400000
     PARTY_TRIG_SPLASH = (1 << 24),               // 0x1000000, water splash requested
-    PARTY_TRIG_HOME_DIR_FROM_MOVE_UNUSED = (1 << 16), // 0x10000, behind-Mario direction from moveTarget (never set)
+    PARTY_TRIG_HOME_DIR_FROM_MOVE_UNUSED = (1 << 16), // 0x10000, behind-Mario direction from moveTarget (no code sets it)
 } PartyTrigFlags;
 
 typedef struct PartyEntry {

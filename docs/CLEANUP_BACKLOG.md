@@ -25,9 +25,14 @@ data order 10, sound-name integer round trips (`SFX_NAME_WORD`) 9, no-op casts 6
 
 ## 2. Types and declarations
 
-- Calls through function-pointer casts: 46 (icon drawing family 20, window frame 4, party slit-floor motion 3,
+- Calls through function-pointer casts: 42 (icon drawing family 20, window frame 4, party slit-floor motion 3,
   sound pitch 2, party menu setup 2, puni map data getters 3, single sites). Each needs a prototype that the
-  definition and every caller compile identically with.
+  definition and every caller compile identically with. Tested without a fit so far: windowDispGX_Waku_col
+  float-first (fits all but msgdrv), BtlUnit_snd_se_pos word pitch, typed puni getidx calls (the casts cross
+  pointer/scalar argument shapes; worth a look as a possible retail ABI mismatch).
+- Largest families of disagreeing private declarations (review priorities): BtlUnit_SetAnim 18, FontDrawString 15,
+  BattleAcDrawGauge 9, partyChgPose 9, psndSFX_pit 9, effMarioBalloonEntry 8, spline_getvalue / spline_maketable 8,
+  envAddTev 7, envSetYamiView 7.
 - Private function declarations: about 650 still have no header to move into, and a few hundred disagree with the
   function's definition (type questions, one family at a time).
 - `itemEntry` has no header prototype because evt_mobj needs a float-first private declaration (FAKES row).

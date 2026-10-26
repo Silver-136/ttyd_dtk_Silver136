@@ -21,7 +21,6 @@
 #include "mot/mot_jump.h"
 
 
-#define SFX3D(id, pos) ((s32 (*)(s32, Vec*))psndSFXOn_3D)(id, pos)
 
 BOOL chkCollision(f32* outY);
 static void flyMain(void);
@@ -199,8 +198,8 @@ void mot_plane(void) {
         mp->mot.plane.startY = mp->position.y;
         mp->mot.plane.groundY = 0.0f;
         mp->motPlane->flags = (hitGetAttr(mp->hitobjJumpFrom) >> 4) & 1;
-        SFX3D(0x17d, &mp->position);
-        SFX3D(0xaf, &mp->position);
+        psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_AIRPLANE_JUMP1), &mp->position);
+        psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_VOICE_MARIO_AC2_5), &mp->position);
     case 1:
         marioMakeJumpPara();
         planeRoll1(mp, 0.125f, 30.0f);
@@ -386,7 +385,7 @@ void mot_plane(void) {
         mp->jumpVelocityY *= 0.5f;
         marioChgPose("M_J_1B");
         mp->currSubMotionId = 80;
-        SFX3D(0x180, &mp->position);
+        psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_AIRPLANE3), &mp->position);
         allPartyRideOff2();
     case 80:
         planeRoll2(mp, 0.3f, 28.0f);
@@ -518,7 +517,7 @@ static void flyMain(void) {
         {
             MarioWork* m = marioGetPtr();
             if ((u32)m->motPlane->sfxId == 0xFFFFFFFF) {
-                m->motPlane->sfxId = SFX3D(0x17f, &m->position);
+                m->motPlane->sfxId = psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_AIRPLANE2), &m->position);
             }
         }
     case 14:

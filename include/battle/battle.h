@@ -41,11 +41,13 @@ typedef enum BattleFlags {
     BATTLE_FLAG_LECTURE_FREE = (1 << 27),         // 0x8000000, free practice: Tactics replaced by Lecture End
     BATTLE_FLAG_LECTURE_ATTACK = (1 << 28),       // 0x10000000, attacks only (no items, special, tactics)
     BATTLE_FLAG_DISABLE_HRESET = (1 << 29),       // 0x20000000, battleDisableHResetCheck (Reset button counted)
-    BATTLE_FLAG_ZERO_GRAVITY_UNUSED = (1 << 30),         // 0x40000000, zero-gravity battle (never set in the game)
+    BATTLE_FLAG_ZERO_GRAVITY_UNUSED = (1 << 30),         // 0x40000000, zero-gravity battle (no code sets it)
     BATTLE_SEQ_END = (1 << 31),                   // 0x80000000
-    BATTLE_FLAG_ACT_DECIDED_UNUSED = (1 << 2),    // 0x4, set when the command and target are fixed; never read
-    BATTLE_FLAG_FORCE_STATUS_ICONS_UNUSED = (1 << 16), // 0x10000, draw every status icon for one frame (never set)
-    BATTLE_FLAG_FORCE_ITEM_ICONS_UNUSED = (1 << 17),   // 0x20000, draw a held-item icon on every unit (never set)
+    BATTLE_FLAG_ACT_DECIDED_UNUSED = (1 << 2),    // 0x4, set when the command and target are fixed; no code tests it
+    BATTLE_FLAG_FORCE_STATUS_ICONS_UNUSED = (1 << 16), // 0x10000, draw every status icon (cleared each frame; no code sets it)
+    // 0x20000, draw a held-item icon on every unit; set only inside btlUnitItemDisp2, which runs only while the bit
+    // is already set, so normal play never turns it on
+    BATTLE_FLAG_FORCE_ITEM_ICONS_UNUSED = (1 << 17),
 } BattleFlags;
 
 typedef enum BattleSequence {
