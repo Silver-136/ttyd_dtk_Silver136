@@ -46,8 +46,6 @@ USER_FUNC(evt_win_item_maketable);
 USER_FUNC(evt_win_item_select);
 USER_FUNC(puni_away);
 USER_FUNC(puni_parent);
-#ifdef VERSION_G8ME01
-#endif
 static void alpha_tev(MapTevCallbackInfo* info);
 static USER_FUNC(alpha_init_func);
 static USER_FUNC(alpha_set_func);

@@ -24,8 +24,6 @@
 
 USER_FUNC(evt_mario_get_name_hitobj_head);
 USER_FUNC(evt_win_item_select);
-#ifdef VERSION_G8ME01
-#endif
 
 static EvtWord door01_close[12];
 static EvtWord door01_open[12];

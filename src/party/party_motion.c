@@ -36,8 +36,6 @@ static s32 upstairs_count;
 static f32 upstairs_dy;
 
 BOOL party_slit(PartyEntry* party);
-#ifdef VERSION_G8ME01
-#endif
 BOOL party_roll(PartyEntry* party);
 void partyFlyAdjustY(PartyEntry* party);
 void partyWalkChkGnd(PartyEntry* party);
@@ -307,8 +305,6 @@ static void partyGorFix(PartyEntry* party);
 static void partyPoseA2(PartyEntry* party);
 s32 getFrontFloor(PartyEntry* party, Vec* out, f32 dir);
 
-#ifdef VERSION_G8ME01
-#endif
 
 void party_force_reset_outofscreen(PartyEntry* party);
 

@@ -1189,8 +1189,6 @@ void select_main(WinMgrEntry* entry) {
     }
 }
 
-#ifdef VERSION_G8ME01
-#endif
 void select_disp(WinMgrEntry* entry) {
     WinMgrSelect* sel = entry->param;
     u32 left, top, wd, ht;

@@ -15,8 +15,6 @@
 #include "party/party_motion.h"
 #include "driver/mapdrv.h"
 
-#ifdef VERSION_G8ME01
-#endif
 
 double fabs(double);
 BOOL marioCreviceWallChk(const Vec* p);

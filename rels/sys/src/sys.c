@@ -32,8 +32,6 @@
 typedef void (*voidfunctionptr)(void);
 extern voidfunctionptr _ctors[];
 extern voidfunctionptr _dtors[];
-#ifdef VERSION_G8ME01
-#endif
 void display_func(CameraId cameraId, void* param);
 typedef struct SysChar {
     f32 x;

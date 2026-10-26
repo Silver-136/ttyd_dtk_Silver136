@@ -43,8 +43,6 @@
 #include "battle/battle_weapon_power.h"
 #include "battle/battle_database_common.h"
 #include "battle/battle_damage.h"
-#ifdef VERSION_G8ME01
-#endif
 
 typedef struct HandElem {
     u16 flip;

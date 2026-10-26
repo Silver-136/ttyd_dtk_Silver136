@@ -672,8 +672,6 @@ USER_FUNC(evt_mario_set_pose) {
     SETPOSE_BODY
 }
 
-#ifdef VERSION_G8ME01
-#endif
 
 USER_FUNC(evt_mario_normalize) {
     s32 ret = 0;

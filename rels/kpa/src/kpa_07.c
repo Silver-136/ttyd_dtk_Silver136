@@ -25,8 +25,6 @@
 #include "evt/evt_npc.h"
 #include "driver/msgdrv.h"
 #include "driver/seqdrv.h"
-#ifdef VERSION_G8ME01
-#endif
 
 
 USER_FUNC(evt_mario_dispflag_onoff);

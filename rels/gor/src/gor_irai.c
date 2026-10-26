@@ -29,8 +29,6 @@
 #include "pmario_sound.h"
 #include <dolphin/pad.h>
 #include <demo/DEMOPad.h>
-#ifdef VERSION_G8ME01
-#endif
 
 typedef struct IraiWork {
     s32 state;

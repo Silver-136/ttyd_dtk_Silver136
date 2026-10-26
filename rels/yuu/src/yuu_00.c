@@ -94,8 +94,6 @@ USER_FUNC(yuuminigame_get_dataadr);
 USER_FUNC(yuuminigame_set_dataadr);
 USER_FUNC(yuuranking_get_monte);
 USER_FUNC(yuuranking_wait_button);
-#ifdef VERSION_G8ME01
-#endif
 BOOL yuuminigame1_gamerule(EventEntry* event, BOOL isFirstCall, MiniGameWork* wp, HikokiWork* data);
 void yuuminigame_main_1hikoki(EventEntry* event, BOOL isFirstCall);
 void yuuminigame_init_1hikoki(EventEntry* event, BOOL isFirstCall);

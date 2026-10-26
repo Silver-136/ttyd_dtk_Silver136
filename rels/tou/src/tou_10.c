@@ -52,8 +52,6 @@ USER_FUNC(name_check);
 USER_FUNC(setYoshiColor);
 USER_FUNC(tou_10_mario_keyoff_check);
 USER_FUNC(tou_10_mario_free_wait);
-#ifdef VERSION_G8ME01
-#endif
 
 EvtWord room_out[8];
 static EvtWord n_door_open[12];

@@ -18,8 +18,6 @@
 #include "pmario_sound.h"
 #include "driver/itemdrv.h"
 
-#ifdef VERSION_G8ME01
-#endif
 
 EvtWord n_bero_in[25];
 EvtWord n_bero_out[12];

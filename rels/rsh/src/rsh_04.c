@@ -30,8 +30,6 @@
 
 USER_FUNC(evt_win_item_select);
 static USER_FUNC(mario_flag);
-#ifdef VERSION_G8ME01
-#endif
 
 static BeroEntry bero_data_a[3];
 static BeroEntry bero_data_b[3];

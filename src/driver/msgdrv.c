@@ -32,8 +32,6 @@ const char R_no_messages_DU[] = "<col ff0000ff>No messages.[Dutch]<col>\012<key>
 const char R_no_messages_US[] = "<col ff0000ff>No messages.<col>\n<key>";
 #endif
 
-#ifdef VERSION_G8ME01
-#endif
 // target .bss/.sbss pad (uninitialised objects are emitted in reverse order, so this sits last)
 
 #define WIN_STATE(w) (*(u16*)(w)->state)

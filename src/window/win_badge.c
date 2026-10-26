@@ -276,8 +276,6 @@ void winBadgeMain2(WindowWork* w) {
     }
 }
 
-#ifdef VERSION_G8ME01
-#endif
 void badge_disp(WindowWork* w, f32 xo, f32 yo);
 
 #define Q ((pouch->maximumBP + 9) / 10)

@@ -40,8 +40,6 @@ USER_FUNC(evt_mario_dispflag_onoff);
 USER_FUNC(evt_win_item_select);
 USER_FUNC(toron_check);
 USER_FUNC(mario_normalize_wait);
-#ifdef VERSION_G8ME01
-#endif
 void yuurei_callback(s32 type, void* param);
 void powan_callback(s32 type, void* param);
 

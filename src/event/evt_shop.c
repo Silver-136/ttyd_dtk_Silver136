@@ -35,8 +35,6 @@
 #include "win/win_main.h"
 #include "evt/evt_pouch.h"
 #include "icon_ids.h"
-#ifdef VERSION_G8ME01
-#endif
 
 #define SHOP_PTS(p) ((p)->mShopPoints)
 

@@ -26,8 +26,6 @@ void envGlareFilter(s32 on, s16 x0, s16 y0, s16 x1, s16 y1);
 
 USER_FUNC(evt_cloud_ent);
 USER_FUNC(evt_cloud_init);
-#ifdef VERSION_G8ME01
-#endif
 static USER_FUNC(test_glare);
 static void sun_tev(MapTevCallbackInfo* info);
 

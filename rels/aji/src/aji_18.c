@@ -26,8 +26,6 @@
 s32 key_list[4];
 
 USER_FUNC(evt_win_item_select);
-#ifdef VERSION_G8ME01
-#endif
 static USER_FUNC(make_list);
 static USER_FUNC(sysflag);
 

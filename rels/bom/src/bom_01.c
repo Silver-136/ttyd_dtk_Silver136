@@ -58,8 +58,6 @@
 #include "data_tables.h"
 #include "evt/evt_npc.h"
 #include "driver/seqdrv.h"
-#ifdef VERSION_G8ME01
-#endif
 
 
 typedef struct SightWork {

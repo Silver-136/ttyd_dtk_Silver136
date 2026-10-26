@@ -15,8 +15,6 @@
 #include "driver/casedrv.h"
 #include "pmario_sound.h"
 
-#ifdef VERSION_G8ME01
-#endif
 
 static BeroEntry bero_entry_data[3];
 #ifdef VERSION_G8ME01

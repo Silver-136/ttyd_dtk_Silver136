@@ -41,8 +41,6 @@
 #include "evt/evt_npc.h"
 #include "aji.h"
 #include "driver/seqdrv.h"
-#ifdef VERSION_G8ME01
-#endif
 
 typedef struct DanceData {
     u16 flags;

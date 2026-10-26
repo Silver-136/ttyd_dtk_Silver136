@@ -31,8 +31,6 @@
 
 extern ItemData itemDataTable[];
 
-#ifdef VERSION_G8ME01
-#endif
 
 BattleWeapon* chri_waza[4] = {
     &partyWeapon_ChristineNormalAttack,

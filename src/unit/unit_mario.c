@@ -408,8 +408,6 @@ static USER_FUNC(_get_mario_hammer_lv) {
 
 #ifdef VERSION_G8ME01
 #endif
-#ifdef VERSION_G8ME01
-#endif
 EVT_BEGIN(mario_dead_event)
     CALL(evt_btl_camera_set_prilimit, BTL_CAM_PRI_EVENT)
 #ifdef VERSION_G8ME01

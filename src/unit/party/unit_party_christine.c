@@ -35,8 +35,6 @@ USER_FUNC(btlevtcmd_SetJumpSound);
 USER_FUNC(_set_hustle);
 USER_FUNC(_monosiri_flag_on);
 USER_FUNC(btlevtcmd_get_monosiri_msg_no);
-#ifdef VERSION_G8ME01
-#endif
 static void __makeTechMenuFunc(BattleCommand* command, s32* count);
 static USER_FUNC(krb_get_dir);
 

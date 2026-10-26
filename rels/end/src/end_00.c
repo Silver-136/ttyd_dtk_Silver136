@@ -42,8 +42,6 @@
 #include "end.h"
 #include "driver/extdrv.h"
 #include "driver/seqdrv.h"
-#ifdef VERSION_G8ME01
-#endif
 
 #define ARRAY_SIZE(a) (sizeof(a) / sizeof((a)[0]))
 typedef struct EndMoa { Vec pos; s32 chain; s32 idx; } EndMoa;

@@ -119,8 +119,6 @@ USER_FUNC(evt_win_party_lankup_chk);
 USER_FUNC(get_mario_dir_target);
 USER_FUNC(urouro_init_func);
 USER_FUNC(urouro_main_func);
-#ifdef VERSION_G8ME01
-#endif
 void kuragarisan_msgcb(s32 type, void* param);
 static USER_FUNC(enzan_set_f_i);
 static USER_FUNC(enzan_set_i_f);

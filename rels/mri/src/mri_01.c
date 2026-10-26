@@ -57,8 +57,6 @@ USER_FUNC(kpa_chg_pose);
 static USER_FUNC(evtflash);
 void bossrobot_batu(CameraId camera, void* param);
 USER_FUNC(evt_countdown_stop);
-#ifdef VERSION_G8ME01
-#endif
 void mri_stg3_012_cb(s32 type, void* param);
 
 static EvtWord guide_init[29];

@@ -37,8 +37,6 @@ USER_FUNC(evt_mario_get_name_hitobj_ride);
 USER_FUNC(evt_nannpc_entry);
 USER_FUNC(suifu_option_func);
 USER_FUNC(suifu_option_init_func);
-#ifdef VERSION_G8ME01
-#endif
 static USER_FUNC(tornade_alpha_func);
 void elmosalpha_func(NanNPC* npc);
 

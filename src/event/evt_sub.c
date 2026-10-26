@@ -52,8 +52,6 @@ s32 effStageClearEndChk();
 #include "manager/winmgr.h"
 #include <stdio.h>
 #include <dolphin/os.h>
-#ifdef VERSION_G8ME01
-#endif
 
 
 #define KEYFN(name, fn)                                       \
@@ -95,8 +93,6 @@ USER_FUNC(evt_pouch_get_starstone);
 USER_FUNC(evt_pouch_receive_mail);
 USER_FUNC(evt_snd_envoff_f);
 USER_FUNC(evt_snd_sfx_all_stop);
-#ifdef VERSION_G8ME01
-#endif
 USER_FUNC(evt_win_one_message);
 USER_FUNC(stone_bg);
 void coingetDisp(WinMgrEntry* entry);

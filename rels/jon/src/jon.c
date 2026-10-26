@@ -59,8 +59,6 @@ USER_FUNC(evt_win_coin_on);
 USER_FUNC(evt_win_coin_wait);
 USER_FUNC(evt_win_other_select);
 static USER_FUNC(gonbaba_wait_landon);
-#ifdef VERSION_G8ME01
-#endif
 void iri_12_msgcb(s32 type, void* param);
 void _unresolved(void);
 void _epilog(void);

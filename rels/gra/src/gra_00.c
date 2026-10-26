@@ -30,8 +30,6 @@
 #include "gra.h"
 #include "evt/evt_npc.h"
 #include "data_tables.h"
-#ifdef VERSION_G8ME01
-#endif
 
 
 static USER_FUNC(cam_r);

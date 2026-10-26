@@ -43,8 +43,6 @@ void printCount(CameraId camera, void* param);
 USER_FUNC(countDisp);
 USER_FUNC(evt_mario_dispflag_onoff);
 USER_FUNC(evt_win_item_select);
-#ifdef VERSION_G8ME01
-#endif
 
 static BeroEntry bero_entry_data[4];
 EvtWord mony_peton_setup[139];

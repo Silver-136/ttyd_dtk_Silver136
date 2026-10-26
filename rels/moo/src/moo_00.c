@@ -36,8 +36,6 @@ static USER_FUNC(mario_kirimomi);
 USER_FUNC(mario_reset);
 USER_FUNC(party_kirimomi);
 USER_FUNC(party_reset);
-#ifdef VERSION_G8ME01
-#endif
 
 static BeroEntry bero_entry_data[3];
 static f32 spline_dt[9];

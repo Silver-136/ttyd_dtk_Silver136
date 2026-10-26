@@ -16,8 +16,6 @@
 #include "pmario_sound.h"
 
 USER_FUNC(evt_snd_envoff_f);
-#ifdef VERSION_G8ME01
-#endif
 
 EvtWord kpa_00_first_evt[61];
 EvtWord kpa_00_fly_evt[380];

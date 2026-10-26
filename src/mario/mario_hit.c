@@ -34,8 +34,6 @@ static const Vec zv1 = {0.0f, 0.0f, 0.0f};
 
 extern HitEntry* kpaSearchGround(f32* a, f32* b, f32* c, f32 d);
 extern HitEntry* marioSearchHead(Vec* pos, f32* h, f32 d);
-#ifdef VERSION_G8ME01
-#endif
 
 static inline BOOL marioChkBeroSub(s32 attr) {
     BOOL r = TRUE;

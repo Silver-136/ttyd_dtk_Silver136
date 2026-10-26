@@ -18,8 +18,6 @@
 #include "data_tables.h"
 
 static USER_FUNC(_set_draw_callback);
-#ifdef VERSION_G8ME01
-#endif
 USER_FUNC(btlevtcmd_AfterReactionEntry);
 USER_FUNC(btlevtcmd_SetEventPhase);
 static void _fire_point_callback(BattleUnitPart* part, s32 group);

@@ -16,8 +16,6 @@
 #include "pmario_sound.h"
 #include "driver/itemdrv.h"
 
-#ifdef VERSION_G8ME01
-#endif
 
 static EvtWord n_close[12];
 static EvtWord n_open[12];

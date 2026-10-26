@@ -37,8 +37,6 @@
 #include "mario/mario_pouch.h"
 #include "manager/evtmgr_cmd.h"
 #include "driver/seqdrv.h"
-#ifdef VERSION_G8ME01
-#endif
 
 typedef struct PosterWork { u32 flags; s32 group; s32 shape; } PosterWork;
 PosterWork* poster;

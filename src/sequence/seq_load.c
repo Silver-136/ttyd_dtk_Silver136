@@ -84,14 +84,10 @@ typedef struct WinDt {
     u8 next[4]; // 0x18
 } WinDt;
 
-#ifndef VERSION_G8ME01
-#endif
 extern BOOL psndENVOn(u32 flags, const char* name);
 double sin(double);
 double fmod(double, double);
 void FontDrawString(f32 x, f32 y, const char* str);
-#ifdef VERSION_G8ME01
-#endif
 void loadMain(SequenceWork* seq);
 void loadDraw(CameraId camera, void* param);
 void continueGame(void);

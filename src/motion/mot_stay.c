@@ -49,8 +49,6 @@ BOOL marioChkDeepSleep(void) {
     return result;
 }
 
-#ifdef VERSION_G8ME01
-#endif
 void mot_stay(void) {
     MarioWork* mario;
     MarioWork* m;

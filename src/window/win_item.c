@@ -23,8 +23,6 @@
 #include "mot/mot_slit.h"
 #include "win/win_item.h"
 
-#ifdef VERSION_G8ME01
-#endif
 void itemUseDisp(WinMgrEntry* entry);
 void itemUseDisp2(WinMgrEntry* entry);
 void item_disp(WindowWork* w, f32 xo, f32 yo);

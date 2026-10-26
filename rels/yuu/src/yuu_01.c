@@ -35,8 +35,6 @@
 #include "evt/evt_movefloor.h"
 #include "yuu.h"
 #include "driver/seqdrv.h"
-#ifdef VERSION_G8ME01
-#endif
 
 typedef struct FuneWork {
     u32 flags;

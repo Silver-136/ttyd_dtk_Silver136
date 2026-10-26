@@ -47,8 +47,6 @@ static USER_FUNC(starstone_set_pos);
 static USER_FUNC(starstone_set_ry);
 USER_FUNC(urouro_init_func);
 USER_FUNC(urouro_main_func);
-#ifdef VERSION_G8ME01
-#endif
 static USER_FUNC(yami_view);
 void iri_08_msg(s32 type, void** work);
 extern s32 envSetYami[];

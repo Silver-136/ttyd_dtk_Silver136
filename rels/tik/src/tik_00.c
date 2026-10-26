@@ -53,8 +53,6 @@
 #include "data_tables.h"
 #include "mario/mario_pouch.h"
 #include "driver/seqdrv.h"
-#ifdef VERSION_G8ME01
-#endif
 
 typedef struct UranaiWork {
     s32 lwData[16];

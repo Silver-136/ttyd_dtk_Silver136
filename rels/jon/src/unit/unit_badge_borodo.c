@@ -25,8 +25,6 @@ extern ItemData itemDataTable[];
 void BtlUnit_EquipItem(BattleUnit* unit, s32 flags, ItemType type);
 
 USER_FUNC(btlevtcmd_CheckUnitFlag);
-#ifdef VERSION_G8ME01
-#endif
 static USER_FUNC(_steal_item);
 
 BattleUnitKind unit_badge_borodo;

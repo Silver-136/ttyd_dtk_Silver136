@@ -43,8 +43,6 @@ static USER_FUNC(get_yoshi_color);
 USER_FUNC(icon_off);
 USER_FUNC(tou_champion_belt);
 USER_FUNC(tou_08_belt_camid);
-#ifdef VERSION_G8ME01
-#endif
 
 static EvtWord evt_toile[42];
 static EvtWord n_door_open[12];

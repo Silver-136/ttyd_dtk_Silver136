@@ -80,8 +80,6 @@ static USER_FUNC(evt_cloud_main);
 USER_FUNC(evt_mri_cloud_ent);
 USER_FUNC(evt_mri_cloud_init);
 USER_FUNC(get_puni_pos);
-#ifdef VERSION_G8ME01
-#endif
 static USER_FUNC(starstone_entry);
 static USER_FUNC(starstone_set_pos);
 static USER_FUNC(starstone_set_ry);

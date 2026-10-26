@@ -40,8 +40,6 @@
 #include "driver/fadedrv.h"
 #include "system.h"
 #include <dolphin/pad.h>
-#ifdef VERSION_G8ME01
-#endif
 
 static OSTime wwstart;
 static s32 x_flag_data[2];

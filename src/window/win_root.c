@@ -720,8 +720,6 @@ void windowDispGX_Waku_col(u16 gxTexMapID, GXColor color, f32 x, f32 y, f32 widt
 void winIconInit(void);
 void winFontInit(void);
 
-#ifdef VERSION_G8ME01
-#endif
 void winMsgDisp(WindowWork* wp, f32 x, f32 y) {
     GXColor white = { 0xFF, 0xFF, 0xFF, 0xFF };
     GXColor black = { 0x00, 0x00, 0x00, 0xFF };
@@ -2416,8 +2414,6 @@ void winZClear(void) {
     GXSetColorUpdate(GX_TRUE);
 }
 
-#ifdef VERSION_G8ME01
-#endif
 void winMailDisp(WindowWork* wp) {
     s32 i;
     s32 id;

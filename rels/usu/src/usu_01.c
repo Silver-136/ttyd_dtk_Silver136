@@ -41,8 +41,6 @@
 #include "evt/evt_shop.h"
 #include "data_tables.h"
 #include "driver/seqdrv.h"
-#ifdef VERSION_G8ME01
-#endif
 
 extern ItemData itemDataTable[];
 

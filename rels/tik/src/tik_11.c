@@ -47,8 +47,6 @@ USER_FUNC(unitwin_getpartylank);
 USER_FUNC(unitwin_setmariolevel);
 USER_FUNC(unitwin_setpartylank);
 USER_FUNC(evt_win_party_lankdown_chk);
-#ifdef VERSION_G8ME01
-#endif
 static USER_FUNC(wariai_enzan_1f);
 static USER_FUNC(enzan_set_f_i);
 static USER_FUNC(enzan_set_i_f);

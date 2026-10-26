@@ -82,8 +82,6 @@ USER_FUNC(ship_rotate);
 USER_FUNC(ship_rotate_rev);
 USER_FUNC(tobikakaru_end);
 USER_FUNC(tobikakaru_init);
-#ifdef VERSION_G8ME01
-#endif
 void suifu_kyorokyoro_init(NanNPC* npc);
 static void alpha_tev(MapTevCallbackInfo* info);
 

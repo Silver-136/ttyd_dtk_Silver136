@@ -153,8 +153,6 @@ static USER_FUNC(evt_tou_get_rule_info);
 USER_FUNC(evt_tou_get_rule_msg2);
 static USER_FUNC(evt_tou_print_ranking);
 static USER_FUNC(getYoshiColor);
-#ifdef VERSION_G8ME01
-#endif
 static USER_FUNC(tou_champion_belt_onoff);
 USER_FUNC(tou_champion_belt);
 static f32 camGetRy(void);

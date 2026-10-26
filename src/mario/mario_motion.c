@@ -57,8 +57,6 @@ typedef struct MotCaseEntry {
     s32 type;
 } MotCaseEntry;
 
-#ifdef VERSION_G8ME01
-#endif
 void mot_talk(void);
 void mot_getItem(void);
 void mot_kaze(void);

@@ -37,8 +37,6 @@
 USER_FUNC(evt_mario_dispflag_onoff);
 USER_FUNC(evt_pouch_open_mail);
 USER_FUNC(evt_pouch_receive_mail);
-#ifdef VERSION_G8ME01
-#endif
 static USER_FUNC(set_dir);
 
 EvtWord bero_out_event[5];

@@ -33,8 +33,6 @@ EffectEntry* effSmallStarN64Entry(s32 type, s32 count, f32 x, f32 y, f32 z, f32 
                                   f32 dz);
 HitEntry* hitCheckFilter(HitFilterCallback callback, f32* hitX, f32* hitY, f32* hitZ, f32* distance, f32* hitNX,
                          f32* hitNY, f32* hitNZ, f32 x, f32 y, f32 z, f32 nx, f32 ny, f32 nz);
-#ifdef VERSION_G8ME01
-#endif
 extern void partyChgPose(PartyEntry* party, char* pose);
 double sqrt(double);
 HitEntry* ccwall(PartyEntry* party, s32 mode);

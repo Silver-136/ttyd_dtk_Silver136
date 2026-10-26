@@ -254,8 +254,6 @@ USER_FUNC(camGetPos);
 USER_FUNC(chain_main);
 USER_FUNC(kamec_fire_magic_delete);
 USER_FUNC(kamec_fire_magic);
-#ifdef VERSION_G8ME01
-#endif
 
 EvtWord enemy_common_dead_event[156];
 EvtWord enemy_event_dead_event_sub[36];

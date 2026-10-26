@@ -36,8 +36,6 @@ typedef struct GameOverWork {
 
 
 USER_FUNC(evt_mario_dispflag_onoff);
-#ifdef VERSION_G8ME01
-#endif
 
 static GameOverWork work;
 static GameOverWork* wp = &work;

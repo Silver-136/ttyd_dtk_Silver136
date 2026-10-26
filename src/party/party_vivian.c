@@ -212,8 +212,6 @@ void vivian_move(PartyEntry* party) {
 }
 
 
-#ifdef VERSION_G8ME01
-#endif
 extern void partyChgPose(PartyEntry* party, const char* name);
 
 static inline void vivianFollow(PartyEntry* party) {

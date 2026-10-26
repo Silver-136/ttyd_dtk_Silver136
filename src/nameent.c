@@ -59,8 +59,6 @@ const char* hiragana_tbl[] = {
     "\x81\x44", "\x81\x40", NULL,       NULL,       NULL,       NULL
 };
 
-#ifdef VERSION_G8ME01
-#endif
 const char* katakana_tbl[] = {
     "\x83\x41", "\x83\x43", "\x83\x45", "\x83\x47", "\x83\x49", "\x83\x8F",
     "\x81\x40", "\x83\x92", "\x81\x40", "\x83\x93", "\x82\x4F", "\x82\x50",

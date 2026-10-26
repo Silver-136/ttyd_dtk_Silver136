@@ -6749,9 +6749,6 @@ end:
     return TRUE;
 }
 
-#ifndef VERSION_G8ME01
-#else
-#endif
 BOOL psndENVOff(u32 flags) {
     return psndENVOff_f_d(flags, 1000, 0);
 }

@@ -28,8 +28,6 @@
 #include "pmario_sound.h"
 #include "driver/itemdrv.h"
 
-#ifdef VERSION_G8ME01
-#endif
 
 BeroEntry bero_bluejail[1];
 static BeroEntry bero_entry_data[5];

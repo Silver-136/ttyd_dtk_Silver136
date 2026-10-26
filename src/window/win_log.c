@@ -970,8 +970,6 @@ void effStarStoneDraw(CameraId cam, EffectEntry* e);
 void mapGX(WindowWork* w, f32 x, f32 y);
 void monoshiriGX(WindowWork* w, f32 x, f32 y);
 
-#ifdef VERSION_G8ME01
-#endif
 
 void winLogDisp(CameraId cam, void* param, s32 idx) {
     static const GXColor kW = {0xFF, 0xFF, 0xFF, 0xFF};
@@ -1202,8 +1200,6 @@ void mapGX(WindowWork* w, f32 x, f32 y) {
 }
 
 
-#ifdef VERSION_G8ME01
-#endif
 void monoshiriGX(WindowWork* w, f32 x, f32 y) {
     GXColor k1;
     GXColor white = {0xFF, 0xFF, 0xFF, 0xFF};

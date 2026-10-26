@@ -50,8 +50,6 @@ static USER_FUNC(mario_flag);
 USER_FUNC(omiseFukki);
 USER_FUNC(omiseHozon);
 USER_FUNC(npc_alpha_except_tenin);
-#ifdef VERSION_G8ME01
-#endif
 
 static BeroEntry bero_data_a[3];
 static BeroEntry bero_data_b[3];

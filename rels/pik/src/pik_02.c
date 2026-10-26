@@ -46,8 +46,6 @@ USER_FUNC(hoshi_jump);
 USER_FUNC(hoshi_r);
 USER_FUNC(kpa_chg_pose);
 USER_FUNC(reset_stone_cam);
-#ifdef VERSION_G8ME01
-#endif
 static USER_FUNC(set_starstone_pos);
 static USER_FUNC(starstone_entry);
 static USER_FUNC(starstone_fall);

@@ -28,8 +28,6 @@ USER_FUNC(zakogun_escape2);
 USER_FUNC(zakogun_ext_init1);
 USER_FUNC(zakogun_ext_init3);
 USER_FUNC(check_exist_kenkyu);
-#ifdef VERSION_G8ME01
-#endif
 extern s32 down_ceil[];
 extern BattleUnitKind unit_boss_gundan_zako_group2;
 extern BattleUnitKind unit_boss_gundan_zako_group3;

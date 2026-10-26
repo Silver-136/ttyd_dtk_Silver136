@@ -70,8 +70,6 @@ f32 evt_yoshi_spd;
 s32 evt_yoshi_frm;
 f32 jumpheight;
 
-#ifdef VERSION_G8ME01
-#endif
 void inertia(PartyEntry* party);
 void searchGround(PartyEntry* party);
 void searchGround2(PartyEntry* party);
