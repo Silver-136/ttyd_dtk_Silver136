@@ -287,7 +287,7 @@ s32 winItemMain(WindowWork* w) {
                     w->item.state = 100;
                     w->item.bookTgtX = -170.0f;
                     w->item.bookTgtY = 160.0f;
-                    w->flags |= 0x8000;
+                    w->flags |= WINDOW_FLAG_BOOK_OPEN;
                     book = luigi_book_list[c - 0x37];
                     w->item.bookIdx = c - 0x37;
                     w->item.bookPage = 0;
@@ -373,7 +373,7 @@ s32 winItemMain(WindowWork* w) {
                 w->item.state = 10;
                 w->item.bookTgtX = 320.0f;
                 w->item.bookTgtY = -240.0f;
-                w->flags &= ~0x8000;
+                w->flags &= ~WINDOW_FLAG_BOOK_OPEN;
                 w->helpX = w->helpTgtX;
                 w->helpY = w->helpTgtY;
             }
@@ -385,14 +385,14 @@ s32 winItemMain(WindowWork* w) {
                 w->item.state = 10;
                 w->item.bookTgtX = 320.0f;
                 w->item.bookTgtY = -240.0f;
-                w->flags &= ~0x8000;
+                w->flags &= ~WINDOW_FLAG_BOOK_OPEN;
                 w->helpX = w->helpTgtX;
                 w->helpY = w->helpTgtY;
             }
         } else if (w->buttonTrg & PAD_BUTTON_START) {
             w->item.bookTgtX = 320.0f;
             w->item.bookTgtY = -240.0f;
-            w->flags &= ~0x8000;
+            w->flags &= ~WINDOW_FLAG_BOOK_OPEN;
             w->helpX = w->helpTgtX;
             w->helpY = w->helpTgtY;
             return -2;

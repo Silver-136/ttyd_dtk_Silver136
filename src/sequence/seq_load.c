@@ -43,8 +43,17 @@
 #include "evt/evt_cmd.h"
 
 #endif
+// LoadWork.flags (file select)
+typedef enum LoadWorkFlags {
+    LOAD_FLAG_DIM = (1 << 0),          // 0x1
+    LOAD_FLAG_NO_DELETE = (1 << 4),    // 0x10
+    LOAD_FLAG_NO_COPY = (1 << 5),      // 0x20
+    LOAD_FLAG_HIDE_CURSOR = (1 << 6),  // 0x40
+    LOAD_FLAG_RECHECK = (1 << 7),      // 0x80
+} LoadWorkFlags;
+
 typedef struct LoadWork {
-    u16 flags;         // 0x0
+    u16 flags;         // 0x0, LoadWorkFlags
     FileEntry* file;   // 0x4
     f32 x;             // 0x8
     f32 y;             // 0xC
@@ -172,8 +181,8 @@ void seq_loadMain(SequenceWork* seq) {
             break;
         case 1:
             wp->evt = evtEntryType(evt_memcard_check, 0, 0, 0);
-            if (wp->flags & 0x80) {
-                wp->flags &= ~0x80;
+            if (wp->flags & LOAD_FLAG_RECHECK) {
+                wp->flags &= ~LOAD_FLAG_RECHECK;
                 wp->evt->lwData[10] = 1;
                 wp->evt->printWindowId = wp->printWindowId;
             }
@@ -188,7 +197,7 @@ void seq_loadMain(SequenceWork* seq) {
                     seq->state++;
                     wp->state = 0;
                     wp->cardCode = cardGetCode();
-                    wp->flags &= ~0x40;
+                    wp->flags &= ~LOAD_FLAG_HIDE_CURSOR;
                     if (OSGetSoundMode() == 0) {
                         SoundSetOutputMode(SND_OUTPUTMODE_MONO);
                         gp->soundMode = 0;
@@ -266,11 +275,11 @@ void loadMain(SequenceWork* seq) {
         }
     }
     if (i < 4) {
-        wp->flags &= ~0x10;
+        wp->flags &= ~LOAD_FLAG_NO_DELETE;
     } else {
-        wp->flags |= 0x10;
+        wp->flags |= LOAD_FLAG_NO_DELETE;
     }
-    wp->flags &= ~0x20;
+    wp->flags &= ~LOAD_FLAG_NO_COPY;
     for (i = 0; i < 4; i++) {
         flags = SLOTFLAGS(i);
         if (!(flags & 1) && !(flags & 2)) {
@@ -278,7 +287,7 @@ void loadMain(SequenceWork* seq) {
         }
     }
     if (i >= 4) {
-        wp->flags |= 0x20;
+        wp->flags |= LOAD_FLAG_NO_COPY;
     }
 
     switch (wp->state) {
@@ -313,7 +322,7 @@ void loadMain(SequenceWork* seq) {
                         }
                         break;
                     case 4:
-                        if (!(wp->flags & 0x10)) {
+                        if (!(wp->flags & LOAD_FLAG_NO_DELETE)) {
                             for (i = 0; i < 4; i++) {
                                 flags = SLOTFLAGS(i);
                                 if (!(flags & 1) || (flags & 2)) {
@@ -330,7 +339,7 @@ void loadMain(SequenceWork* seq) {
                         }
                         break;
                     case 5:
-                        if (!(wp->flags & 0x20)) {
+                        if (!(wp->flags & LOAD_FLAG_NO_COPY)) {
                             for (i = 0; i < 4; i++) {
                                 flags = SLOTFLAGS(i);
                                 if (!(flags & 2) && !(flags & 1)) {
@@ -384,14 +393,14 @@ void loadMain(SequenceWork* seq) {
             }
             break;
         case 0x14:
-            wp->flags |= 0x40;
+            wp->flags |= LOAD_FLAG_HIDE_CURSOR;
             wp->evt = evtEntryType(evt_memcard_start, 0, 0, 0);
             wp->evt->lwData[0] = wp->slot;
             wp->state++;
             break;
         case 0x15:
             if (!evtCheckID(wp->evt->eventId)) {
-                wp->flags &= ~0x40;
+                wp->flags &= ~LOAD_FLAG_HIDE_CURSOR;
                 if (evtGetValue(NULL, (s32)0xFD050F80) == 1) {
                     wp->state++;
                 } else {
@@ -406,14 +415,14 @@ void loadMain(SequenceWork* seq) {
             break;
         case 0x17:
             if (fadeIsFinish()) {
-                wp->flags |= 0x40;
+                wp->flags |= LOAD_FLAG_HIDE_CURSOR;
                 wp->evt = evtEntryType(evt_continue, 0, 0, 0);
                 wp->state++;
             }
             break;
         case 0x18:
             if (!evtCheckID(wp->evt->eventId)) {
-                wp->flags &= ~0x40;
+                wp->flags &= ~LOAD_FLAG_HIDE_CURSOR;
                 continueGame();
             }
             break;
@@ -520,7 +529,7 @@ void loadMain(SequenceWork* seq) {
             wp->ty = win_dt2[wp->slot].y + win_dt2[wp->slot].ofsY;
             break;
         case 0x29:
-            wp->flags |= 0x40;
+            wp->flags |= LOAD_FLAG_HIDE_CURSOR;
             wp->evt = evtEntryType(evt_memcard_delete, 0, 0, 0);
             wp->evt->lwData[0] = wp->slot;
             wp->state++;
@@ -528,11 +537,11 @@ void loadMain(SequenceWork* seq) {
         case 0x2a:
             if (!evtCheckID(wp->evt->eventId)) {
                 if (evtGetValue(NULL, (s32)0xFAA2B580) == 0) {
-                    wp->flags &= ~0x40;
+                    wp->flags &= ~LOAD_FLAG_HIDE_CURSOR;
                     wp->slot = 4;
                     wp->state = 1;
                 } else {
-                    wp->flags |= 0x80;
+                    wp->flags |= LOAD_FLAG_RECHECK;
                     seq->state = 1;
                     return;
                 }
@@ -611,7 +620,7 @@ void loadMain(SequenceWork* seq) {
             wp->ty = win_dt2[wp->slot].y + win_dt2[wp->slot].ofsY;
             break;
         case 0x34:
-            wp->flags |= 0x40;
+            wp->flags |= LOAD_FLAG_HIDE_CURSOR;
             wp->evt = evtEntryType(evt_memcard_copy, 0, 0, 0);
             wp->evt->lwData[0] = wp->copyFrom;
             wp->evt->lwData[1] = wp->copyTo;
@@ -620,18 +629,18 @@ void loadMain(SequenceWork* seq) {
         case 0x35:
             if (!evtCheckID(wp->evt->eventId)) {
                 if (evtGetValue(NULL, (s32)0xFAA2B580) == 0) {
-                    wp->flags &= ~0x40;
+                    wp->flags &= ~LOAD_FLAG_HIDE_CURSOR;
                     wp->slot = 5;
                     wp->state = 1;
                 } else {
-                    wp->flags |= 0x80;
+                    wp->flags |= LOAD_FLAG_RECHECK;
                     seq->state = 1;
                     return;
                 }
             }
             break;
         case 0x64:
-            wp->flags |= 1;
+            wp->flags |= LOAD_FLAG_DIM;
             sound = wp->soundModeSel;
             if (dir & 0x1000) {
                 wp->soundModeSel = wp->soundModeSel - 1;
@@ -663,7 +672,7 @@ void loadMain(SequenceWork* seq) {
                 psndBGMOn(PSND_CONTINUE | PSND_UNSILENT, NULL);
                 psndENVOff(0x200);
                 wp->soundMode = wp->soundModeSel;
-                wp->flags &= ~1;
+                wp->flags &= ~LOAD_FLAG_DIM;
                 wp->state = 1;
                 break;
             } else if (trg & 0x200) {
@@ -676,7 +685,7 @@ void loadMain(SequenceWork* seq) {
                 } else {
                     SoundSetOutputMode(SND_OUTPUTMODE_STEREO);
                 }
-                wp->flags &= ~1;
+                wp->flags &= ~LOAD_FLAG_DIM;
                 wp->state = 1;
                 break;
             }
@@ -709,7 +718,7 @@ void loadMain(SequenceWork* seq) {
 #endif
             break;
         case 0xc8:
-            wp->flags |= 1;
+            wp->flags |= LOAD_FLAG_DIM;
             if (dir & 0x1000) {
                 wp->rumbleOffSel--;
                 SFX(5);
@@ -720,7 +729,7 @@ void loadMain(SequenceWork* seq) {
                 gp->rumbleEnabled = wp->rumbleOffSel == 0;
                 SFX(0x12);
                 wp->rumbleOff = wp->rumbleOffSel;
-                wp->flags &= ~1;
+                wp->flags &= ~LOAD_FLAG_DIM;
                 wp->state = 1;
                 if (gp->rumbleEnabled) {
                     evtEntryType(evt_shake, 0, 0, 0);
@@ -728,7 +737,7 @@ void loadMain(SequenceWork* seq) {
             } else if (trg & 0x200) {
                 SFX(0x13);
                 wp->rumbleOffSel = wp->rumbleOff;
-                wp->flags &= ~1;
+                wp->flags &= ~LOAD_FLAG_DIM;
                 wp->state = 1;
             }
             if (wp->rumbleOffSel >= 2) {
@@ -909,10 +918,10 @@ void loadDraw(CameraId camera, void* param) {
         if (wp->state == 0x33 && (i == wp->copyFrom || i == wp->copyTo)) {
             col = white;
         }
-        if (i == 4 && (wp->flags & 0x10)) {
+        if (i == 4 && (wp->flags & LOAD_FLAG_NO_DELETE)) {
             col = dark;
         }
-        if (i == 5 && (wp->flags & 0x20)) {
+        if (i == 5 && (wp->flags & LOAD_FLAG_NO_COPY)) {
             col = dark;
         }
 #ifdef VERSION_G8ME01
@@ -1137,7 +1146,7 @@ void loadDraw(CameraId camera, void* param) {
         }
     }
 
-    if (wp->flags & 1) {
+    if (wp->flags & LOAD_FLAG_DIM) {
         wp->alpha += 0.05f;
     } else {
         wp->alpha -= 0.05f;
@@ -1269,7 +1278,7 @@ void loadDraw(CameraId camera, void* param) {
 #endif
     }
 
-    if (!(wp->flags & 0x40)) {
+    if (!(wp->flags & LOAD_FLAG_HIDE_CURSOR)) {
         winTexInit(*wp->file->data);
 #ifdef VERSION_G8ME01
         winTexSet(0, (Vec){2.0f + wp->x, wp->y - 2.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0, 0, 0, 128});

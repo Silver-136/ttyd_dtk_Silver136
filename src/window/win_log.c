@@ -520,7 +520,7 @@ s32 winLogMain(WindowWork* w) {
 #endif
         }
         if (w->log.pose == -1) {
-            if (w->flags & 0x2000) {
+            if (w->flags & WINDOW_FLAG_8BIT) {
                 anim = "W_1";
                 w->log.pose = animPoseEntry("d_mario", 0);
                 switch (marioGetColor()) {
@@ -1169,7 +1169,7 @@ void mapGX(WindowWork* w, f32 x, f32 y) {
             animPoseGetAnimPosePtr(w->mario.poseId);
             data = animPoseGetAnimDataPtr(w->mario.poseId);
             scale = 1.5f;
-            if (w->flags & 0x2000) {
+            if (w->flags & WINDOW_FLAG_8BIT) {
                 scale = 3.0f;
             }
             PSMTXTrans(m, mx + tubuDt[w->log.mapIdx].x, my + tubuDt[w->log.mapIdx].y, 0.0f);

@@ -64,7 +64,7 @@ void winMarioInit(WindowWork* w) {
     s32 i;
 
     pouch = pouchGetPtr();
-    if (w->flags & 0x2000) {
+    if (w->flags & WINDOW_FLAG_8BIT) {
         name = "S_1";
         switch (marioGetColor()) {
             case 0:
@@ -178,7 +178,7 @@ s32 winMarioMain(WindowWork* w) {
                 }
             } else if (w->buttonTrg & PAD_BUTTON_B) {
                 psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_CANCEL1 | PSND_SFX_BYPASS_MUTE));
-                if (w->flags & 0x2000) {
+                if (w->flags & WINDOW_FLAG_8BIT) {
                     COLOR_ANIM(anims[1], "S_1")
                 } else {
                     anims[1] = "M_S_1";
@@ -201,7 +201,7 @@ s32 winMarioMain(WindowWork* w) {
             w->helpTgtY = lp->y;
             switch (w->marioSel) {
             case 2:
-                if (w->flags & 0x2000) {
+                if (w->flags & WINDOW_FLAG_8BIT) {
                     COLOR_ANIM(anims[0], lp->pose2)
                 } else {
                     anims[0] = hammer_pose[pouchGetHammerLv()];
@@ -214,13 +214,13 @@ s32 winMarioMain(WindowWork* w) {
                 } else {
                     w->mario.f18C--;
                 }
-                if (w->flags & 0x2000) {
+                if (w->flags & WINDOW_FLAG_8BIT) {
                     w->mario.f18C = 0;
                 }
                 break;
             default:
                 w->mario.f18C = 0;
-                if (w->flags & 0x2000) {
+                if (w->flags & WINDOW_FLAG_8BIT) {
                     COLOR_ANIM(anims[0], lp->pose2)
                 } else {
                     anims[0] = lp->pose0;

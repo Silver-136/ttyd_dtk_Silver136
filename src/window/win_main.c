@@ -103,7 +103,7 @@ BOOL winCheck(void) {
         return FALSE;
     }
 
-    if (wp->flags & 0x1000) {
+    if (wp->flags & WINDOW_FLAG_LECTURE) {
         return FALSE;
     }
 
@@ -116,13 +116,13 @@ BOOL winCheck(void) {
 
 void winOpenEnable(void) {
     if (wp) {
-        wp->flags &= ~1;
+        wp->flags &= ~WINDOW_FLAG_OPEN_DISABLE;
     }
 }
 
 void winOpenDisable(void) {
     if (wp) {
-        wp->flags |= 1;
+        wp->flags |= WINDOW_FLAG_OPEN_DISABLE;
     }
 }
 
@@ -138,7 +138,7 @@ void winMain(void) {
     s32 i;
 
     mario = marioGetPtr();
-    if (!(wp->flags & 1) && seqGetSeq() == SEQ_GAME && !seqCheckSeq()) {
+    if (!(wp->flags & WINDOW_FLAG_OPEN_DISABLE) && seqGetSeq() == SEQ_GAME && !seqCheckSeq()) {
         wp->buttonTrg = keyGetButtonTrg(0);
         wp->buttonRep = keyGetButtonRep(0);
         wp->dirTrg = keyGetDirTrg(0);
@@ -174,7 +174,7 @@ void winMain(void) {
 
         switch (wp->menuState) {
             case WIN_MENU_IDLE:
-                if (!(wp->flags & 0x1000)) {
+                if (!(wp->flags & WINDOW_FLAG_LECTURE)) {
                     if (marioStGetSystemLevel() != 0) {
                         break;
                     }
@@ -228,7 +228,7 @@ void winMain(void) {
                 if (gp->flags & 0x1000) {
                     wp->menuSel = 1;
                 }
-                if (!(wp->flags & 0x1000)) {
+                if (!(wp->flags & WINDOW_FLAG_LECTURE)) {
                     marioStSystemLevel(4);
                 } else {
                     npcStopForEvent();
@@ -249,9 +249,9 @@ void winMain(void) {
                     kpaPauseSE2();
                 }
                 if (mario->flags & MARIO_FLAG_IS_8_BIT) {
-                    wp->flags |= 0x2000;
+                    wp->flags |= WINDOW_FLAG_8BIT;
                 } else {
-                    wp->flags &= ~0x2000;
+                    wp->flags &= ~WINDOW_FLAG_8BIT;
                 }
                 for (i = 0; i < 4; i++) {
                     padRumbleHardOff(i);
@@ -331,7 +331,7 @@ void winMain(void) {
                 fbatChangeMode(1);
                 psndClearFlag(PSND_FLAG_MUTE_SFX);
                 statusWinForceUpdate();
-                if (!(wp->flags & 0x1000)) {
+                if (!(wp->flags & WINDOW_FLAG_LECTURE)) {
                     marioStSystemLevel(0);
                 } else {
                     npcStartForEvent();
@@ -431,7 +431,7 @@ void winMain(void) {
         if (wp->menuState == WIN_MENU_ROOT) {
             switch (marioGetPtr()->characterId) {
                 case 0:
-                    if (!(wp->flags & 0x1000)) {
+                    if (!(wp->flags & WINDOW_FLAG_LECTURE)) {
                         dispEntry(CAMERA_2D, 250.0f, 0, winDisp, NULL);
                     } else {
                         dispEntry(CAMERA_2D, 500.0f, 0, winDisp, NULL);
@@ -868,7 +868,7 @@ USER_FUNC(itemUseFunc2) {
 USER_FUNC(famicom_check) {
     EvtWord* args = event->args;
 
-    if (wp->flags & 0x2000) {
+    if (wp->flags & WINDOW_FLAG_8BIT) {
         evtSetValue(event, args[0], 1);
     } else {
         evtSetValue(event, args[0], 0);
@@ -1376,23 +1376,23 @@ USER_FUNC(lecture_step_wait) {
     s32 n = evtGetValue(event, event->args[0]);
 
     if (isFirstCall) {
-        wp->flags &= ~0x800;
+        wp->flags &= ~WINDOW_FLAG_LECTURE_KEY_MASK;
     }
     if (wp->lectureStep < n) {
         return EVT_RETURN_BLOCK;
     }
-    wp->flags |= 0x800;
+    wp->flags |= WINDOW_FLAG_LECTURE_KEY_MASK;
     return EVT_RETURN_DONE;
 }
 
 USER_FUNC(lecture_key_mask_off) {
-    wp->flags &= ~0x800;
+    wp->flags &= ~WINDOW_FLAG_LECTURE_KEY_MASK;
     return EVT_RETURN_DONE;
 }
 
 void winLectureKeyMask(void) {
-    if (wp->flags & 0x1000) {
-        if (wp->flags & 0x800) {
+    if (wp->flags & WINDOW_FLAG_LECTURE) {
+        if (wp->flags & WINDOW_FLAG_LECTURE_KEY_MASK) {
             wp->buttonTrg = 0;
             wp->buttonRep = 0;
             wp->dirTrg = 0;
@@ -1447,18 +1447,18 @@ void winLectureKeyMask(void) {
 }
 
 void winLectureOn(void) {
-    wp->flags |= 0x1000;
-    wp->flags |= 0x800;
+    wp->flags |= WINDOW_FLAG_LECTURE;
+    wp->flags |= WINDOW_FLAG_LECTURE_KEY_MASK;
     wp->lectureStep = 0;
     wp->lectureEvent = evtEntry(evt_lecture_msg, 0, 0);
 }
 
 BOOL winLectureCheck(void) {
 
-    if ((wp->flags & 0x1000) && evtCheckID(wp->lectureEvent->eventId)) {
+    if ((wp->flags & WINDOW_FLAG_LECTURE) && evtCheckID(wp->lectureEvent->eventId)) {
         return TRUE;
     }
-    wp->flags &= ~0x1000;
+    wp->flags &= ~WINDOW_FLAG_LECTURE;
     return FALSE;
 }
 

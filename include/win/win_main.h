@@ -209,8 +209,18 @@ typedef enum WinMenuState {
     WIN_MENU_YUU_WAIT =       401, // wait for it
 } WinMenuState;
 
+// WindowWork.flags (pause menu; cleared to 0 when the menu closes)
+typedef enum WindowWorkFlags {
+    WINDOW_FLAG_OPEN_DISABLE = (1 << 0),      // 0x1, winOpenDisable / winOpenEnable
+    WINDOW_FLAG_LECTURE_KEY_MASK = (1 << 11), // 0x800
+    WINDOW_FLAG_LECTURE = (1 << 12),          // 0x1000, winLectureOn / winLectureCheck
+    WINDOW_FLAG_8BIT = (1 << 13),             // 0x2000, famicom_check
+    WINDOW_FLAG_DIRECT_OPEN = (1 << 14),      // 0x4000
+    WINDOW_FLAG_BOOK_OPEN = (1 << 15),        // 0x8000
+} WindowWorkFlags;
+
 typedef struct WindowWork {
-    u16 flags;                  // 0x0
+    u16 flags;                  // 0x0, WindowWorkFlags
     u8 pad_2[2];                // 0x2
     s32 buttonTrg;              // 0x4
     s32 buttonRep;              // 0x8

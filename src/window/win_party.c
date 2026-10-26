@@ -100,7 +100,7 @@ void winPartyInit(WindowWork* wp) {
         for (j = 0; j < PARTNER_COUNT; j++) {
             if (j == winPartyDt[i].partyId && (pouch->partyData[j].flags & 1) &&
                 !(pouch->partyData[j].flags & 2)) {
-                if (wp->flags & 0x2000) {
+                if (wp->flags & WINDOW_FLAG_8BIT) {
                     poseName = winPartyDt[i].poseName2;
                     switch (pouchGetPartyColor(PARTNER_YOSHI)) {
                         case 0:
@@ -461,7 +461,7 @@ void winPartyDisp(s32 camId, void* param, s32 idx) {
                     break;
                 }
             }
-            if (wp->flags & 0x2000) {
+            if (wp->flags & WINDOW_FLAG_8BIT) {
                 animName = winPartyDt[j].animName2;
                 if (winPartyDt[j].partyId == 4) {
                     switch (pouchGetPartyColor(PARTNER_YOSHI)) {
@@ -507,7 +507,7 @@ void winPartyDisp(s32 camId, void* param, s32 idx) {
                     break;
                 }
             }
-            if (wp->flags & 0x2000) {
+            if (wp->flags & WINDOW_FLAG_8BIT) {
                 animName = winPartyDt[j].animName2;
                 if (winPartyDt[j].partyId == 4) {
                     switch (pouchGetPartyColor(PARTNER_YOSHI)) {

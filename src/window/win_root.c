@@ -462,7 +462,7 @@ void winRootDisp(s32 camId, WindowWork* wp) {
         winMailDisp(wp);
         winMsgDisp(wp, wp->msgOfsX, wp->msgOfsY);
         winSortGX(wp);
-        if (!(wp->flags & 0x8000)) {
+        if (!(wp->flags & WINDOW_FLAG_BOOK_OPEN)) {
             winTexInit((TEXPalette*)*wp->res->data);
             winTexSet(0, (Vec){2.0f + wp->helpX, wp->helpY - 2.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0x00, 0x00, 0x00, 0x80});
             winTexSet(0, (Vec){wp->helpX, wp->helpY, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white);

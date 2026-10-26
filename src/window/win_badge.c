@@ -63,7 +63,7 @@ void mario_change(WindowWork* w, s32 unused) {
     const char* animL;
     const char* animR;
 
-    if (w->flags & 0x2000) {
+    if (w->flags & WINDOW_FLAG_8BIT) {
         if (hasLeft && !hasRight) {
             animL = "S_2";
             animR = "W_15";
