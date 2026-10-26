@@ -126,15 +126,13 @@ void winOpenDisable(void) {
     }
 }
 
+typedef struct {
 #ifdef VERSION_G8ME01
-typedef struct {
     const char* s[6];
-} WinLangTbl;
 #else
-typedef struct {
     const char* s[2];
-} WinLangTbl;
 #endif
+} WinLangTbl;
 static const WinLangTbl winLangTbl;
 
 void winMain(void) {

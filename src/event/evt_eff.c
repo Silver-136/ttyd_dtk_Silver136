@@ -953,16 +953,14 @@ USER_FUNC(evt_eff_fukidashi) {
                     f32 ww;
                     if (((PartyEntry*)p)->currentMemberId == PARTY_MEMBER_FLURRIE) yy = 30.0f;
                     ww = ((PartyEntry*)p)->height / 3.0f;
-                    entry = effFukidashiEntry(a, number, (NpcEntry*)FUKIDASHI_PARTY, 0.0f, yy, 0.0f, ww, angle, duration);
-                }
 #else
                 h = ((PartyEntry*)p)->height;
                 {
                     f32 yy = 2.0f * h / 3.0f;
                     f32 ww = h / 3.0f;
+#endif
                     entry = effFukidashiEntry(a, number, (NpcEntry*)FUKIDASHI_PARTY, 0.0f, yy, 0.0f, ww, angle, duration);
                 }
-#endif
             }
             break;
         case FUKIDASHI_AT_FOLLOWER:

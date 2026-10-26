@@ -126,12 +126,9 @@ static LoadWork work;
 static LoadWork* wp = &work;
 #ifdef VERSION_G8ME01
 __declspec(section ".sdata2") const u32 seq_logo_zero_color[2];
-
-static EvtWord evt_shake[12];
-#else
-
-static EvtWord evt_shake[12];
 #endif
+
+static EvtWord evt_shake[12];
 
 s32 evt_seq_load_keep_msg_window(EventEntry* evt, BOOL isFirstCall) {
     fadeReset(4);
@@ -744,15 +741,9 @@ void loadMain(SequenceWork* seq) {
             }
 #ifdef VERSION_G8ME01
             wp->tx = -74.0f;
-            wp->ty = 4.0f + (30.0f - 50.0f * wp->rumbleOffSel);
-            break;
-    }
-    wp->x += (wp->tx - wp->x) / 4.0f;
-    wp->y += (wp->ty - wp->y) / 4.0f;
-    { f32 s = 2.0f * (f32)sin(gp->retraceCount / 8.0f); wp->x += __fabsf(s); }
-    dispEntry(CAMERA_3D, 1000.0f, 0, loadDraw, NULL);
 #else
             wp->tx = (-74.0f);
+#endif
             wp->ty = 4.0f + (30.0f - 50.0f * wp->rumbleOffSel);
             break;
     }
@@ -760,7 +751,6 @@ void loadMain(SequenceWork* seq) {
     wp->y += (wp->ty - wp->y) / 4.0f;
     { f32 s = 2.0f * (f32)sin(gp->retraceCount / 8.0f); wp->x += __fabsf(s); }
     dispEntry(CAMERA_3D, 1000.0f, 0, loadDraw, NULL);
-#endif
 }
 
 #define GXFIFO_F32 (*(volatile f32*)0xCC008000)
@@ -968,9 +958,9 @@ void loadDraw(CameraId camera, void* param) {
         if (i == wp->slot) {
             FontDrawColor((GXColor){255, 255, 255, 255});
         }
-#ifdef VERSION_G8ME01
         FontDrawScale(0.6f);
         FontDrawEdge();
+#ifdef VERSION_G8ME01
         if (LANG == 0) {
             str = "\x83\x66\x81\x5B\x83\x5E";
         } else {
@@ -978,16 +968,12 @@ void loadDraw(CameraId camera, void* param) {
         }
         sprintf(buf, "%s%s", str, winZenkakuStr(i + 1));
         FontDrawString(win1[0]->x - 100.0f, 84.0f + win1[0]->y, buf);
-        FontDrawEdgeOff();
-        FontDrawScale(1.0f);
 #else
-        FontDrawScale(0.6f);
-        FontDrawEdge();
         sprintf(buf, "\203f\201[\203^%s", winZenkakuStr(i + 1));
         FontDrawString(win1->x - 100.0f, 84.0f + win1->y, buf);
+#endif
         FontDrawEdgeOff();
         FontDrawScale(1.0f);
-#endif
         FontDrawColor((GXColor){32, 32, 32, 255});
         if (i == wp->slot) {
             FontDrawColor((GXColor){0, 0, 0, 255});

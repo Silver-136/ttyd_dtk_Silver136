@@ -51,24 +51,15 @@ typedef struct ZakoGun {
 #else
 #define ZAKOGUNWORK_PAD 0x48
 #endif
-#ifdef VERSION_G8ME01
 typedef struct ZakoGunWork {
     s32 flag;
     s32 targetId;
+#ifdef VERSION_G8ME01
     Vec targetPos;
     u8 field_0x14[ZAKOGUNWORK_PAD - 0x14];
-    Vec start;
-    Vec end;
-    s32 timer;
-    s32 steps;
-    s32 count;
-    s32 sfx;
-} ZakoGunWork;
 #else
-typedef struct ZakoGunWork {
-    s32 flag;
-    s32 targetId;
     u8 field_0x8[ZAKOGUNWORK_PAD - 0x8];
+#endif
     Vec start;
     Vec end;
     s32 timer;
@@ -76,7 +67,6 @@ typedef struct ZakoGunWork {
     s32 count;
     s32 sfx;
 } ZakoGunWork;
-#endif
 extern ZakoGun* zakogun;
 extern ZakoGunWork* work;
 

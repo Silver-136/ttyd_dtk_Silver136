@@ -486,10 +486,10 @@ void winMarioDisp(s32 camId, void* param, s32 idx) {
     cx += 0.8f * FontGetMessageWidth(msgSearch("name_mario"));
     cx += 20.0f;
     winIconInit();
-#ifdef VERSION_G8ME01
     winIconSet(ICON_MARIO, (Vec){cx, 142.0f + y, 0.0f}, (Vec){0.6f, 0.6f, 0.6f}, white);
     cx += 20.0f;
     winFontInit();
+#ifdef VERSION_G8ME01
     winFontSetEdgeWidth((Vec){cx, 152.0f + y, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, white, 45.0f, msgSearch("msg_menu_mario_level"));
     sprintf(buf, "%s", winZenkakuStr(pouch->level));
     nameW = FontGetMessageWidth(buf);
@@ -499,9 +499,6 @@ void winMarioDisp(s32 camId, void* param, s32 idx) {
     winFontInit();
     winFontSetEdgeWidth((Vec){(190.0f + (x - 265.0f)) - nameW - 10.0f, 152.0f + y, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, white, 20.0f, buf);
 #else
-    winIconSet(ICON_MARIO, (Vec){cx, 142.0f + y, 0.0f}, (Vec){0.6f, 0.6f, 0.6f}, white);
-    cx += 20.0f;
-    winFontInit();
     winFontSetEdge((Vec){cx, 152.0f + y, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, white, msgSearch("msg_menu_mario_level"));
     sprintf(buf, "%s", winZenkakuStr(pouch->level));
     winFontInit();
