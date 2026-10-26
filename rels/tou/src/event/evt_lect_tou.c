@@ -1121,14 +1121,14 @@ static USER_FUNC(juyoitem_end) {
 
     effSoftDelete((EffectEntry*)event->lwData[9]);
     marioSetCamId(CAMERA_3D);
-    iconFlagOff(item->name, 0x200);
+    iconFlagOff(item->name, ICON_FLAG_CAM_EFFECT_B);
     return EVT_RETURN_DONE;
 }
 
 static USER_FUNC(juyoitem_gogo) {
     ItemEntry* item = (ItemEntry*)event->lwData[8];
 
-    iconFlagOff(item->name, 0x200);
+    iconFlagOff(item->name, ICON_FLAG_CAM_EFFECT_B);
     itemSetPosition(item, 0.0f, -1000.0f, 0.0f);
     marioChgStayMotion();
     marioStSystemLevel(0);
@@ -1136,7 +1136,7 @@ static USER_FUNC(juyoitem_gogo) {
 }
 
 static USER_FUNC(juyoitem_goato) {
-    iconFlagOn(((ItemEntry*)event->lwData[8])->name, 2);
+    iconFlagOn(((ItemEntry*)event->lwData[8])->name, ICON_FLAG_HIDDEN);
     return EVT_RETURN_DONE;
 }
 

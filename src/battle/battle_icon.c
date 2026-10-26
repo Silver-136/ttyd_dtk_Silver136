@@ -40,9 +40,9 @@ void BattleIconMain(void) {
                 iconSetPos(icon->base->name, icon->position.x, icon->position.y, icon->position.z);
                 iconSetScale(icon->base->name, icon->scale * icon->scaleMul);
                 if (icon->flags & 2) {
-                    iconFlagOn(icon->base->name, 2);
+                    iconFlagOn(icon->base->name, ICON_FLAG_HIDDEN);
                 } else {
-                    iconFlagOff(icon->base->name, 2);
+                    iconFlagOff(icon->base->name, ICON_FLAG_HIDDEN);
                 }
             }
         }

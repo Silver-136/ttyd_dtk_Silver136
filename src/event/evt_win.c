@@ -197,8 +197,8 @@ USER_FUNC(evt_unitwin_alloc) {
         wp->flags &= ~0x80;
     }
     iconEntry2D("yubicursor_2", ICON_YUBI_CURSOR);
-    iconFlagOn("yubicursor_2", 2);
-    iconFlagOn("yubicursor_2", 4);
+    iconFlagOn("yubicursor_2", ICON_FLAG_HIDDEN);
+    iconFlagOn("yubicursor_2", ICON_FLAG_FLIP_X);
     if (!(wp->flags & 0x80)) {
         wp->evt = evtEntry(main_evt, 0, 0);
         wp->evt->lwData[0] = (EvtWord)wp;
@@ -257,7 +257,7 @@ USER_FUNC(evt_unitwin_selltable_setup) {
             sprintf(name, "uwn%d", i);
             iconEntry(name, itemDataTable[wp->goods[i]].icon_id);
             iconSetPos(name, pos.x, pos.y + 6.0f, pos.z);
-            iconFlagOn(name, 0x40);
+            iconFlagOn(name, ICON_FLAG_NO_MAP_BLEND);
         } else {
             wp->itemFlags[i] |= 1;
         }
@@ -396,11 +396,11 @@ USER_FUNC(evt_unitwin_select_func) {
         if (obj != NULL) {
             sprintf(name, "uwn%d", i);
             if (wp->itemFlags[i] & 1) {
-                iconFlagOn(name, 2);
+                iconFlagOn(name, ICON_FLAG_HIDDEN);
             } else if (obj->flags & MAP_OBJ_FLAG_HIDDEN) {
-                iconFlagOn(name, 2);
+                iconFlagOn(name, ICON_FLAG_HIDDEN);
             } else {
-                iconFlagOff(name, 2);
+                iconFlagOff(name, ICON_FLAG_HIDDEN);
             }
         }
     }
@@ -1384,10 +1384,10 @@ void evt_unitwin_disp_func(CameraId cameraId, void* param) {
         if (line2) {
             FontDrawString(k - 274, 66.0f, line2);
         }
-        iconFlagOff("yubicursor_2", 2);
+        iconFlagOff("yubicursor_2", ICON_FLAG_HIDDEN);
         iconSetPos("yubicursor_2", wp->cursorX, wp->cursorY, 0.0f);
     } else {
-        iconFlagOn("yubicursor_2", 2);
+        iconFlagOn("yubicursor_2", ICON_FLAG_HIDDEN);
     }
 }
 

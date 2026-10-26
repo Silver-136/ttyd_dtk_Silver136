@@ -978,7 +978,7 @@ void _GetExpIcon_Init(SeqEndWork* work) {
         iconEntry2D(name, EXP_ICON);
         work->icons[i] = iconNameToPtr(name);
         iconSetScale(name, 0.9f);
-        iconFlagOn(name, 2);
+        iconFlagOn(name, ICON_FLAG_HIDDEN);
         work->counter[i] = 0;
         work->iconPos[i].x = 24.0f - 18.0f * (work->expDisp / 10) + 36.0f * i;
         work->iconPos[i].y = 25.0f;
@@ -990,7 +990,7 @@ void _GetExpIcon_Init(SeqEndWork* work) {
         iconEntry2D(name, EXP_ICON);
         work->icons[i] = iconNameToPtr(name);
         iconSetScale(name, 0.45f);
-        iconFlagOn(name, 2);
+        iconFlagOn(name, ICON_FLAG_HIDDEN);
         work->counter[i] = 0;
         work->iconPos[i].x = 86.899994f - 16.199999f * (i - 9);
         work->iconPos[i].y = 0.0f;
@@ -1009,7 +1009,7 @@ void _GetExpIcon_Main(BattleWork* wp) {
 
     digits[1] = exp / 10;
     for (i = 0; i < digits[1]; i++) {
-        iconFlagOff(work->icons[i]->name, 2);
+        iconFlagOff(work->icons[i]->name, ICON_FLAG_HIDDEN);
         if (work->alpha[i] <= 0) {
             work->alpha[i] = 0x40;
         } else {
@@ -1024,13 +1024,13 @@ void _GetExpIcon_Main(BattleWork* wp) {
         work->iconPos[i].x = 24.0f - 18.0f * (work->expDisp / 10) + 36.0f * i;
     }
     for (; i < 10; i++) {
-        iconFlagOn(work->icons[i]->name, 2);
+        iconFlagOn(work->icons[i]->name, ICON_FLAG_HIDDEN);
         work->alpha[i] = 0;
         work->counter[i] = 0;
     }
     digits[0] = exp % 10;
     for (i = 10; i - 10 < digits[0]; i++) {
-        iconFlagOff(work->icons[i]->name, 2);
+        iconFlagOff(work->icons[i]->name, ICON_FLAG_HIDDEN);
         if (work->alpha[i] <= 0) {
             work->alpha[i] = 0x40;
         } else {
@@ -1041,7 +1041,7 @@ void _GetExpIcon_Main(BattleWork* wp) {
         }
     }
     for (; i < 19; i++) {
-        iconFlagOn(work->icons[i]->name, 2);
+        iconFlagOn(work->icons[i]->name, ICON_FLAG_HIDDEN);
         work->alpha[i] = 0;
     }
     ofs = 0.0f;

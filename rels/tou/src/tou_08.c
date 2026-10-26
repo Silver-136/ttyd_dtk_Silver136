@@ -916,7 +916,7 @@ USER_FUNC(tou_08_belt_camid) {
 }
 
 USER_FUNC(icon_off) {
-    iconFlagOn(itemNameToPtr("belt")->name, 2);
+    iconFlagOn(itemNameToPtr("belt")->name, ICON_FLAG_HIDDEN);
     return EVT_RETURN_DONE;
 }
 

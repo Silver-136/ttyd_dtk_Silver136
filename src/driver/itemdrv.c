@@ -998,11 +998,11 @@ void itemseq_GetItem(ItemEntry* entry) {
             wp->effect = effItemGetEntry(type, mario->position.x, 62.0f + mario->position.y, mario->position.z);
             if (entry->flags2 & ITEM_FLAG2_UPGRADE_GET) {
                 ((ItemGetWork*)wp->effect->userdata)->camera = 5;
-                iconFlagOn(entry->name, 0x200);
+                iconFlagOn(entry->name, ICON_FLAG_CAM_EFFECT_B);
                 marioSetCamId(CAMERA_3D_EFFECTB);
             } else {
                 ((ItemGetWork*)wp->effect->userdata)->camera = 5;
-                iconFlagOn(entry->name, 0x100);
+                iconFlagOn(entry->name, ICON_FLAG_CAM_EFFECT_A);
                 if (type == 0 || type == 3) {
                     marioSetCamId(CAMERA_3D_EFFECTA);
                 }
@@ -1070,7 +1070,7 @@ void itemseq_GetItem(ItemEntry* entry) {
 #endif
             }
             if (!entry->effect) {
-                iconNameToPtr(entry->name)->uflags |= 0x80;
+                iconNameToPtr(entry->name)->uflags |= ICON_FLAG_ITEM_NO_MAP_BLEND;
             }
             break;
         case 2:
@@ -1117,7 +1117,7 @@ void itemseq_GetItem(ItemEntry* entry) {
             }
             effSoftDelete(wp->effect);
             marioSetCamId(CAMERA_3D);
-            iconFlagOff(entry->name, 0x100);
+            iconFlagOff(entry->name, ICON_FLAG_CAM_EFFECT_A);
             if (entry->itemId == ITEM_WEDDING_RING) {
 #ifdef VERSION_G8ME01
                 iconChange(entry->name, 0x11C);
@@ -1126,7 +1126,7 @@ void itemseq_GetItem(ItemEntry* entry) {
 #endif
             }
             if (!entry->effect) {
-                iconNameToPtr(entry->name)->uflags &= ~0x80;
+                iconNameToPtr(entry->name)->uflags &= ~ICON_FLAG_ITEM_NO_MAP_BLEND;
             }
             if (entry->flags2 & ITEM_FLAG2_IN_POUCH) {
                 itemGetEnd(entry);
@@ -1136,7 +1136,7 @@ void itemseq_GetItem(ItemEntry* entry) {
             entry->subState = 5;
             winMgrCloseAutoDelete(entry->winId[2]);
             marioChgStayMotion();
-            iconFlagOn(entry->name, 2);
+            iconFlagOn(entry->name, ICON_FLAG_HIDDEN);
             {
                 s32 id = entry->itemId;
                 if (id >= 0xF0 && id < 0x153) {
@@ -1152,7 +1152,7 @@ void itemseq_GetItem(ItemEntry* entry) {
             }
             effSoftDelete(wp->effect);
             marioSetCamId(CAMERA_3D);
-            iconFlagOff(entry->name, 0x100);
+            iconFlagOff(entry->name, ICON_FLAG_CAM_EFFECT_A);
             itemGetEnd(entry);
             itemDelete(entry->name);
             break;
@@ -1189,7 +1189,7 @@ void itemseq_GetItem(ItemEntry* entry) {
             winMgrOpen(entry->winId[0]);
             winMgrSetParam(entry->winId[0], entry);
             marioChgGetItemMotion();
-            iconFlagOff(entry->name, 2);
+            iconFlagOff(entry->name, ICON_FLAG_HIDDEN);
             if (mario->flags & MARIO_FLAG_BG_MODE) {
                 entry->flags2 |= ITEM_FLAG2_NO_Z_MOVE;
             }

@@ -604,19 +604,19 @@ USER_FUNC(irai_main_func) {
     switch (wp->state) {
         case 0:
             iconEntry2D("iraiYubi", VERSION_PICK(0x1F0, 0x1F8));
-            iconFlagOn("iraiYubi", 4);
+            iconFlagOn("iraiYubi", ICON_FLAG_FLIP_X);
             iconEntry2D("iraiArrowUp", VERSION_PICK(0x205, 0x20C));
-            iconFlagOn("iraiArrowUp", 8);
+            iconFlagOn("iraiArrowUp", ICON_FLAG_FLIP_Y);
             iconEntry2D("iraiArrowDown", VERSION_PICK(0x205, 0x20C));
             iconEntry2D("iraiLButton", VERSION_PICK(0x7E, 0x86));
             iconSetScale("iraiLButton", 0.8f);
             iconEntry2D("iraiRButton", VERSION_PICK(0x80, 0x88));
             iconSetScale("iraiRButton", 0.8f);
-            iconFlagOn("iraiYubi", 2);
-            iconFlagOn("iraiArrowUp", 2);
-            iconFlagOn("iraiArrowDown", 2);
-            iconFlagOn("iraiLButton", 2);
-            iconFlagOn("iraiRButton", 2);
+            iconFlagOn("iraiYubi", ICON_FLAG_HIDDEN);
+            iconFlagOn("iraiArrowUp", ICON_FLAG_HIDDEN);
+            iconFlagOn("iraiArrowDown", ICON_FLAG_HIDDEN);
+            iconFlagOn("iraiLButton", ICON_FLAG_HIDDEN);
+            iconFlagOn("iraiRButton", ICON_FLAG_HIDDEN);
             wp->state = 1;
             psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_OPEN1));
             break;
@@ -700,24 +700,24 @@ USER_FUNC(irai_main_func) {
             wp->yubiX = -129;
             wp->yubiY = 120 - (wp->cursor - wp->top) * 30;
             iconSetPos("iraiYubi", wp->yubiX, wp->yubiY, 0.0f);
-            iconFlagOff("iraiYubi", 2);
+            iconFlagOff("iraiYubi", ICON_FLAG_HIDDEN);
             iconSetPos("iraiArrowUp", 231.0f, 178.0f, 0.0f);
             iconSetPos("iraiArrowDown", 231.0f, -190.0f, 0.0f);
             iconSetPos("iraiLButton", 261.0f, 146.0f, 0.0f);
             iconSetPos("iraiRButton", 261.0f, -190.0f, 0.0f);
             if (wp->top == 0) {
-                iconFlagOn("iraiArrowUp", 2);
-                iconFlagOn("iraiLButton", 2);
+                iconFlagOn("iraiArrowUp", ICON_FLAG_HIDDEN);
+                iconFlagOn("iraiLButton", ICON_FLAG_HIDDEN);
             } else {
-                iconFlagOff("iraiArrowUp", 2);
-                iconFlagOff("iraiLButton", 2);
+                iconFlagOff("iraiArrowUp", ICON_FLAG_HIDDEN);
+                iconFlagOff("iraiLButton", ICON_FLAG_HIDDEN);
             }
             if (wp->top >= wp->count - 10) {
-                iconFlagOn("iraiArrowDown", 2);
-                iconFlagOn("iraiRButton", 2);
+                iconFlagOn("iraiArrowDown", ICON_FLAG_HIDDEN);
+                iconFlagOn("iraiRButton", ICON_FLAG_HIDDEN);
             } else {
-                iconFlagOff("iraiArrowDown", 2);
-                iconFlagOff("iraiRButton", 2);
+                iconFlagOff("iraiArrowDown", ICON_FLAG_HIDDEN);
+                iconFlagOff("iraiRButton", ICON_FLAG_HIDDEN);
             }
             break;
         case 100:

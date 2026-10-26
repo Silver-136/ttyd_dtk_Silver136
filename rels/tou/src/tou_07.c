@@ -794,7 +794,7 @@ static USER_FUNC(paper_on) {
 }
 
 USER_FUNC(tou_07_icon_off) {
-    iconFlagOn(itemNameToPtr("belt")->name, 2);
+    iconFlagOn(itemNameToPtr("belt")->name, ICON_FLAG_HIDDEN);
     return EVT_RETURN_DONE;
 }
 

@@ -1735,7 +1735,7 @@ USER_FUNC(evt_sub_get_coin) {
     case 0:
         iconEntry("iraiCoin", ICON_ITEM_COIN);
         iconSetPos("iraiCoin", b.x, b.y, b.z);
-        iconFlagOn("iraiCoin", 0x102);
+        iconFlagOn("iraiCoin", ICON_FLAG_HIDDEN | ICON_FLAG_CAM_EFFECT_A);
         ((ItemGetWork*)eff->userdata)->camera = 5;
         marioChgGetItemMotion();
         event->userdata3 = winMgrEntry(coinget_window_desc);
@@ -1751,7 +1751,7 @@ USER_FUNC(evt_sub_get_coin) {
         return EVT_RETURN_BLOCK;
     case 1:
         if ((s32)OSTicksToMilliseconds((u32)gp->renderTime - (u32)event->savedTime) > event->userdata[2]) {
-            iconFlagOff("iraiCoin", 2);
+            iconFlagOff("iraiCoin", ICON_FLAG_HIDDEN);
             work[1] = 1;
             event->userdata[2] = 500;
             event->savedTime = gp->renderTime;

@@ -30,9 +30,27 @@ typedef struct IconBinary {
 
 // flags, 1 = in use, 0x10 = 2D, 0x1000 = animated(?), 0x2000 = ?(something to do with bin)
 
+// IconEntry.flags (iconFlagOn/iconFlagOff)
+typedef enum IconFlags {
+    ICON_FLAG_ACTIVE = (1 << 0),             // 0x1, slot in use
+    ICON_FLAG_HIDDEN = (1 << 1),             // 0x2, not drawn
+    ICON_FLAG_FLIP_X = (1 << 2),             // 0x4
+    ICON_FLAG_FLIP_Y = (1 << 3),             // 0x8
+    ICON_FLAG_2D = (1 << 4),                 // 0x10, iconEntry2D: 2D camera, no light, fog or Z
+    ICON_FLAG_GRAY = (1 << 5),               // 0x20, drawn in gray (channels mixed in equal parts)
+    ICON_FLAG_NO_MAP_BLEND = (1 << 6),       // 0x40, ignores mapSetBlend (set by iconEntry while a blend is on)
+    ICON_FLAG_ITEM_NO_MAP_BLEND = (1 << 7),  // 0x80, ignores mapSetBlend (set by itemdrv)
+    ICON_FLAG_CAM_EFFECT_A = (1 << 8),       // 0x100, drawn by CAMERA_3D_EFFECTA
+    ICON_FLAG_CAM_EFFECT_B = (1 << 9),       // 0x200, drawn by CAMERA_3D_EFFECTB
+    ICON_FLAG_CULL_BACK = (1 << 10),         // 0x400
+    ICON_FLAG_CULL_FRONT = (1 << 11),        // 0x800
+    ICON_FLAG_ANIMATED = (1 << 12),          // 0x1000, frames advance (icon data type bit 0)
+    ICON_FLAG_DATA_PENDING = (1 << 13),      // 0x2000, the icon data was not loaded yet at the entry
+} IconFlags;
+
 typedef struct IconEntry {
     union {
-        s16 flags;    // 0x0
+        s16 flags;    // 0x0, IconFlags
         u16 uflags;   // 0x0, unsigned view (icondrv uses lhz)
     };
     u8 pad_02;     // 0x2, never accessed

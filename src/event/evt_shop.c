@@ -970,7 +970,7 @@ USER_FUNC(evt_shop_setup) {
         sprintf(buf, "shp%d", i);
         iconEntry(buf, itemDataTable[wp->items[i].id].icon_id);
         iconSetPos(buf, pos.x, pos.y + 6.0f, pos.z);
-        iconFlagOn(buf, 0x40);
+        iconFlagOn(buf, ICON_FLAG_NO_MAP_BLEND);
         wp->itemFlags[i] = 0;
         if (wp->items[i].id == 0x33 && pouchCheckItem(ITEM_CONTACT_LENS)) {
             wp->itemFlags[i] |= 1;
@@ -1345,11 +1345,11 @@ USER_FUNC(evt_shop_main_func) {
         if (mobj) {
             sprintf(buf, "shp%d", i);
             if (wp->itemFlags[i] & 1) {
-                iconFlagOn(buf, 2);
+                iconFlagOn(buf, ICON_FLAG_HIDDEN);
             } else if (mobj->flags & MAP_OBJ_FLAG_HIDDEN) {
-                iconFlagOn(buf, 2);
+                iconFlagOn(buf, ICON_FLAG_HIDDEN);
             } else {
-                iconFlagOff(buf, 2);
+                iconFlagOff(buf, ICON_FLAG_HIDDEN);
             }
         }
     }
