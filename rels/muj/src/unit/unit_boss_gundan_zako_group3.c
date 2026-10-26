@@ -50,7 +50,6 @@ typedef struct ZakoGunWork { s32 flag; s32 targetId;
 extern ZakoGun* zakogun;
 extern ZakoGunWork* work;
 void zakogun_set_pose(ZakoGun* zako, s32 base, s32 num, s32 div);
-void zakogun_ext_init123_common(ExtdrvPose* pose, s32 i);
 double sqrt(double x);
 
 USER_FUNC(zakogun_damage_pose);

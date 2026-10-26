@@ -44,3 +44,4 @@ s32 zakogun_get_kanbu_id(void);
 BattleUnit* zakogun_get_ptr(void);
 void zakogun_ext_main3(void);
 void zakogun_ext_main2(void);
+void zakogun_ext_init123_common(ExtdrvPose* pose, s32 i);

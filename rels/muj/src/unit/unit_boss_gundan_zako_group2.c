@@ -75,7 +75,6 @@ typedef struct ZakoGunWork {
 #endif
 extern ZakoGun* zakogun;
 extern ZakoGunWork* work;
-void zakogun_ext_init123_common(ExtdrvPose* pose, s32 i);
 void zakogun_set_pose(ZakoGun* zako, s32 base, s32 num, s32 div);
 
 USER_FUNC(shake_ceil);

@@ -62,7 +62,6 @@ USER_FUNC(zakogun_set_target_id);
 USER_FUNC(zakogun_start_sukima);
 USER_FUNC(zakogun_escape1);
 USER_FUNC(zakogun_dead1);
-void zakogun_ext_init123_common(ExtdrvPose* pose, s32 i);
 USER_FUNC(zakogun_ext_init1);
 USER_FUNC(zakogun_get_kanbu_id_evtcmd);
 void zakogun_ext_main(void);
