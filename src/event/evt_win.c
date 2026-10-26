@@ -30,6 +30,7 @@
 #include "statuswindow.h"
 #include "win/win_main.h"
 #include "data_tables.h"
+#include <dolphin/pad.h>
 
 extern ItemData itemDataTable[];
 
@@ -389,7 +390,7 @@ USER_FUNC(evt_unitwin_select_func) {
         }
         if (wp->selected != -1) {
             wp->flags |= UNITWIN_FLAG_SELECTED;
-            if (btn & 0x100) {
+            if (btn & PAD_BUTTON_A) {
                 marioKeyOff();
                 wp->childEvt = evtEntry(wp->entries[wp->goodsIdx].evt, 0, 0);
                 wp->childEvt->lwData[0] = (EvtWord)wp;

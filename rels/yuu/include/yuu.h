@@ -89,6 +89,8 @@ void yuuminigame_disp_2fune(CameraId camera, void* param);
 void yuuminigame_disp_1hikoki(CameraId camera, void* param);
 void ext_yuunpc_minigame4_init_sub(void);
 s32 yuunpc_juni(Vec* pos);
+// yuunpc_wp_flag_on/off/check
+#define YUUNPC_WP_FLAG_WAIT 1 // race NPCs hold their start until yuunpc_go
 void yuunpc_wp_flag_off(u16 flag);
 void yuuminigame_init_1hikoki(struct EventEntry* event, BOOL isFirstCall);
 void yuuminigame_main_1hikoki(struct EventEntry* event, BOOL isFirstCall);

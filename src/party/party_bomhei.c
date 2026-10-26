@@ -435,7 +435,7 @@ void bomhei_use_main(PartyEntry* party) {
         party->moveFrames = sysMsec2Frame(200);
         party->useMotionId = 31;
     case 31:
-        if (!(party->flags & PARTY_FLAG_IS_EVT_USE) && (gp->buttonNew[0] & 0x400)) {
+        if (!(party->flags & PARTY_FLAG_IS_EVT_USE) && (gp->buttonNew[0] & PAD_BUTTON_X)) {
             BWORK(party)->timer = (s16)(sysMsec2Frame(500) + 1);
             party->useMotionId = 50;
         }
@@ -446,7 +446,7 @@ void bomhei_use_main(PartyEntry* party) {
         }
         party->useMotionId = 32;
     case 32:
-        if (!(party->flags & PARTY_FLAG_IS_EVT_USE) && (gp->buttonNew[0] & 0x400)) {
+        if (!(party->flags & PARTY_FLAG_IS_EVT_USE) && (gp->buttonNew[0] & PAD_BUTTON_X)) {
             BWORK(party)->timer = (s16)(sysMsec2Frame(500) + 1);
         }
         partyChgPose(party, !(BWORK(party)->flags & 2) ? "W_1" : "W_2");

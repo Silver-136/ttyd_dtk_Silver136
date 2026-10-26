@@ -5803,7 +5803,7 @@ void goryuugijo_main_slot(EventEntry* event, BOOL isFirstCall) {
                     u32 key = keyGetDirRep(0);
 
                     dir = 1;
-                    if (key & 0x4000) {
+                    if (key & DEMO_STICK_LEFT) {
                         dir = -1;
                     }
                 }

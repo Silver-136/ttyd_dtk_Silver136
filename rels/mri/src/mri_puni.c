@@ -424,7 +424,7 @@ BOOL _areacheck(f32 x, f32 z, f32 r, f32 px, f32 pz) {
         if (t > 0.5f) {                           \
             u = (t - 0.5f) / 0.5f;                \
         } else {                                  \
-            u = floorY;                             \
+            u = floorY;                           \
         }                                         \
         p->pos.y = 10.0f * u + (base);            \
     }
@@ -3762,19 +3762,19 @@ void puniModeTrap_sub(PuniData* p) {
 #define TRAP_NPC(name, setpos)                \
     {                                         \
         n = npcNameToPtr(name);               \
-        p->flags |= 0x800;                     \
+        p->flags |= PUNI_FLAG_HIDDEN;         \
         n->position.x = p->pos.x;             \
         n->position.y = p->pos.y;             \
         n->position.z = p->pos.z;             \
-        n->direction = p->dir;                   \
-        n->flags |= NPC_FLAG_NO_HIT;                     \
+        n->direction = p->dir;                \
+        n->flags |= NPC_FLAG_NO_HIT;          \
     }
 #define TRAP_HIDE(name)                       \
     {                                         \
         n = npcNameToPtr(name);               \
-        p->flags &= ~0x800;                    \
-        p->flags |= 0x100000;                  \
-        n->flags &= ~NPC_FLAG_NO_HIT;                    \
+        p->flags &= ~PUNI_FLAG_HIDDEN;        \
+        p->flags |= PUNI_FLAG_COLLIDE;        \
+        n->flags &= ~NPC_FLAG_NO_HIT;         \
         n->position.x = 0.0f;                 \
         n->position.y = -1000.0f;             \
         n->position.z = 0.0f;                 \
@@ -3932,7 +3932,7 @@ void puniModeExit(PuniData* p) {
                     Vec puniModeExit_v0 = {0.0f, 0.0f, 0.0f};
                     p->vel = puniModeExit_v0;
                 }
-                p->flags &= ~PUNI_FLAG_COLLIDE & ~0x1000;
+                p->flags &= ~PUNI_FLAG_COLLIDE & ~PUNI_FLAG_WALL_CHECK;
                 if (Punigp->flags & (PUNI_WORK_FLAG_PIPE_WEST | PUNI_WORK_FLAG_PIPE_EAST)) {
                     p->modeVar0 = 0;
                     p->npc->flags |= 4;
@@ -3989,7 +3989,7 @@ void puniModePoint(PuniData* p) {
                 PSVECAdd(&p->vel, &d, &p->vel);
             } else {
                 p->vel = (Vec){0.0f, 0.0f, 0.0f};
-                p->flags &= ~PUNI_FLAG_COLLIDE & ~0x1000;
+                p->flags &= ~PUNI_FLAG_COLLIDE & ~PUNI_FLAG_WALL_CHECK;
                 p->modeStep = 1;
             }
             break;
@@ -4784,7 +4784,7 @@ void puniSound(void) {
     }
     k = 0;
     for (i = 110; i < 210; i++) {
-        if ((Punidat[i].flags & 0x400) && ((Punidat[i].anim == 1) || (Punidat[i].anim == 2))) {
+        if ((Punidat[i].flags & PUNI_FLAG_ACTIVE) && ((Punidat[i].anim == 1) || (Punidat[i].anim == 2))) {
             k++;
         }
     }
@@ -6275,7 +6275,7 @@ USER_FUNC(evt_puni_count) {
     }
     count = 0;
     for (i = start; i < end; i++) {
-        if ((Punidat[i].flags & 0x400) && !(Punidat[i].flags & 0x8000)) {
+        if ((Punidat[i].flags & PUNI_FLAG_ACTIVE) && !(Punidat[i].flags & PUNI_FLAG_STRAY)) {
             count++;
         }
     }
@@ -6319,7 +6319,7 @@ USER_FUNC(evt_puni_zenmetsu_check) {
     }
     count = 0;
     for (i = start; i < end; i++) {
-        if ((Punidat[i].flags & 0x400) && !(Punidat[i].flags & 0x4000)) {
+        if ((Punidat[i].flags & PUNI_FLAG_ACTIVE) && !(Punidat[i].flags & PUNI_FLAG_DEAD)) {
             count++;
         }
     }
@@ -6596,7 +6596,8 @@ USER_FUNC(puni_disp_info_sub) {
     s32 i;
     EvtWord packed;
     for (i = 1; i < 103; i++) {
-        if ((Punidat[i].flags & 0x400) && !(Punidat[i].flags & 0x804000) && !(Punidat[i].flags & 0x80)) {
+        if ((Punidat[i].flags & PUNI_FLAG_ACTIVE) && !(Punidat[i].flags & (PUNI_FLAG_NOT_IN_PARTY | PUNI_FLAG_DEAD)) &&
+            !(Punidat[i].flags & PUNI_FLAG_NPC_CHIBI_TOGE)) {
             if (Punidat[i].mode != 16 && Punidat[i].mode != 15) {
                 count++;
             }

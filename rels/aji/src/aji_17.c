@@ -18,6 +18,7 @@
 #include "evt/evt_snd.h"
 #include "driver/mapdrv.h"
 #include "driver/casedrv.h"
+#include <dolphin/pad.h>
 
 #include "manager/evtmgr_cmd.h"
 #include "driver/npcdrv.h"
@@ -3451,9 +3452,9 @@ s32 btn_check(EventEntry* event, BOOL isFirstCall) {
     EvtWord* args = event->args;
     s32 dir = evtGetValue(event, args[0]);
     u32 btn = keyGetButtonTrg(0);
-    s32 a = btn & 0x100;
-    s32 b = btn & 0x200;
-    s32 x = btn & 0x400;
+    s32 a = btn & PAD_BUTTON_A;
+    s32 b = btn & PAD_BUTTON_B;
+    s32 x = btn & PAD_BUTTON_X;
     s32 ret = 0;
 
     switch (dir) {

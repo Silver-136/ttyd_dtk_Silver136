@@ -36,6 +36,7 @@
 #include "party/party_move.h"
 #include "driver/itemdrv.h"
 #include "mario/mario_kemuri.h"
+#include <dolphin/pad.h>
 
 
 
@@ -470,7 +471,7 @@ BOOL marioChkCtrl(void) {
 }
 
 BOOL N_marioChkUseParty(void) {
-    if ((u16)gp->buttonNew[0] & 0x100F) {
+    if ((u16)gp->buttonNew[0] & (PAD_BUTTON_LEFT | PAD_BUTTON_RIGHT | PAD_BUTTON_DOWN | PAD_BUTTON_UP | PAD_BUTTON_START)) {
         return TRUE;
     }
     return mp->ctrlOffCount;

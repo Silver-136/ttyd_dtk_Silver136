@@ -210,7 +210,7 @@ USER_FUNC(re_init_yuunpc) {
 }
 
 USER_FUNC(yuunpc_go) {
-    yuunpc_wp_flag_off(1);
+    yuunpc_wp_flag_off(YUUNPC_WP_FLAG_WAIT);
     return EVT_RETURN_DONE;
 }
 

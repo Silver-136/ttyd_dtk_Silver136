@@ -9,6 +9,7 @@
 #include "dolphin/mtx.h"
 #include "libc_decls.h"
 #include "sound.h"
+#include "demo/DEMOPad.h"
 
 #ifdef VERSION_G8ME01
 // US version: all functions exact (loadDraw needs the two FAKE spellings marked inside it).
@@ -291,15 +292,15 @@ void loadMain(SequenceWork* seq) {
         case 1:
             wp->msg = msgSearch("msg_savefile_select");
             prev = wp->slot;
-            if (dir & 0x1000) {
+            if (dir & DEMO_STICK_UP) {
                 wp->slot = win_dt[prev].next[0];
-            } else if (dir & 0x2000) {
+            } else if (dir & DEMO_STICK_DOWN) {
                 wp->slot = win_dt[prev].next[1];
-            } else if (dir & 0x4000) {
+            } else if (dir & DEMO_STICK_LEFT) {
                 wp->slot = win_dt[prev].next[2];
-            } else if (dir & 0x8000) {
+            } else if (dir & DEMO_STICK_RIGHT) {
                 wp->slot = win_dt[prev].next[3];
-            } else if (trg & 0x100) {
+            } else if (trg & PAD_BUTTON_A) {
                 flags = SLOTFLAGS(wp->slot);
                 switch (wp->slot) {
                     case 0:
@@ -364,7 +365,7 @@ void loadMain(SequenceWork* seq) {
                         wp->state = 0xc8;
                         break;
                 }
-            } else if (trg & 0x200) {
+            } else if (trg & PAD_BUTTON_B) {
                 SFX(0x13);
                 wp->state = 0xa;
             }
@@ -490,15 +491,15 @@ void loadMain(SequenceWork* seq) {
         case 0x28:
             wp->msg = msgSearch("msg_savefile_delete_select");
             prev = wp->slot;
-            if (dir & 0x1000) {
+            if (dir & DEMO_STICK_UP) {
                 wp->slot = win_dt2[prev].next[0];
-            } else if (dir & 0x2000) {
+            } else if (dir & DEMO_STICK_DOWN) {
                 wp->slot = win_dt2[prev].next[1];
-            } else if (dir & 0x4000) {
+            } else if (dir & DEMO_STICK_LEFT) {
                 wp->slot = win_dt2[prev].next[2];
-            } else if (dir & 0x8000) {
+            } else if (dir & DEMO_STICK_RIGHT) {
                 wp->slot = win_dt2[prev].next[3];
-            } else if (trg & 0x100) {
+            } else if (trg & PAD_BUTTON_A) {
                 if (prev < 4) {
                     flags = SLOTFLAGS(wp->slot);
                     if ((flags & 2) || !(flags & 1)) {
@@ -512,7 +513,7 @@ void loadMain(SequenceWork* seq) {
                     wp->state = 1;
                     SFX(0x13);
                 }
-            } else if (trg & 0x200) {
+            } else if (trg & PAD_BUTTON_B) {
                 wp->slot = 4;
                 wp->state = 1;
                 SFX(0x13);
@@ -545,15 +546,15 @@ void loadMain(SequenceWork* seq) {
         case 0x32:
             wp->msg = msgSearch("msg_savefile_copy_select");
             prev = wp->slot;
-            if (dir & 0x1000) {
+            if (dir & DEMO_STICK_UP) {
                 wp->slot = win_dt2[prev].next[0];
-            } else if (dir & 0x2000) {
+            } else if (dir & DEMO_STICK_DOWN) {
                 wp->slot = win_dt2[prev].next[1];
-            } else if (dir & 0x4000) {
+            } else if (dir & DEMO_STICK_LEFT) {
                 wp->slot = win_dt2[prev].next[2];
-            } else if (dir & 0x8000) {
+            } else if (dir & DEMO_STICK_RIGHT) {
                 wp->slot = win_dt2[prev].next[3];
-            } else if (trg & 0x100) {
+            } else if (trg & PAD_BUTTON_A) {
                 if (prev < 4) {
                     flags = SLOTFLAGS(wp->slot);
                     if (!(flags & 2) && !(flags & 1)) {
@@ -568,7 +569,7 @@ void loadMain(SequenceWork* seq) {
                     wp->state = 1;
                     SFX(0x13);
                 }
-            } else if (trg & 0x200) {
+            } else if (trg & PAD_BUTTON_B) {
                 wp->slot = 5;
                 wp->state = 1;
                 SFX(0x13);
@@ -582,27 +583,27 @@ void loadMain(SequenceWork* seq) {
         case 0x33:
             wp->msg = msgSearch("msg_savefile_copy_point");
             prev = wp->slot;
-            if (dir & 0x1000) {
+            if (dir & DEMO_STICK_UP) {
                 do {
                     wp->slot = win_dt3[wp->slot].next[0];
                 } while (wp->slot == wp->copyFrom);
-            } else if (dir & 0x2000) {
+            } else if (dir & DEMO_STICK_DOWN) {
                 do {
                     wp->slot = win_dt3[wp->slot].next[1];
                 } while (wp->slot == wp->copyFrom);
-            } else if (dir & 0x4000) {
+            } else if (dir & DEMO_STICK_LEFT) {
                 do {
                     wp->slot = win_dt3[wp->slot].next[2];
                 } while (wp->slot == wp->copyFrom);
-            } else if (dir & 0x8000) {
+            } else if (dir & DEMO_STICK_RIGHT) {
                 do {
                     wp->slot = win_dt3[wp->slot].next[3];
                 } while (wp->slot == wp->copyFrom);
-            } else if (trg & 0x100) {
+            } else if (trg & PAD_BUTTON_A) {
                 wp->state = 0x34;
                 wp->copyTo = wp->slot;
                 SFX(0x12);
-            } else if (trg & 0x200) {
+            } else if (trg & PAD_BUTTON_B) {
                 wp->slot = wp->copyFrom;
                 wp->state = 0x32;
                 SFX(0x13);
@@ -637,13 +638,13 @@ void loadMain(SequenceWork* seq) {
         case 0x64:
             wp->flags |= LOAD_FLAG_DIM;
             sound = wp->soundModeSel;
-            if (dir & 0x1000) {
+            if (dir & DEMO_STICK_UP) {
                 wp->soundModeSel = wp->soundModeSel - 1;
                 SFX(5);
-            } else if (dir & 0x2000) {
+            } else if (dir & DEMO_STICK_DOWN) {
                 wp->soundModeSel = wp->soundModeSel + 1;
                 SFX(5);
-            } else if (trg & 0x100) {
+            } else if (trg & PAD_BUTTON_A) {
                 switch (sound) {
                     case 0:
                         OSSetSoundMode(0);
@@ -670,7 +671,7 @@ void loadMain(SequenceWork* seq) {
                 wp->flags &= ~LOAD_FLAG_DIM;
                 wp->state = 1;
                 break;
-            } else if (trg & 0x200) {
+            } else if (trg & PAD_BUTTON_B) {
                 SFX(0x13);
                 psndBGMOn(PSND_CONTINUE | PSND_UNSILENT, NULL);
                 psndENVOff(0x200);
@@ -714,13 +715,13 @@ void loadMain(SequenceWork* seq) {
             break;
         case 0xc8:
             wp->flags |= LOAD_FLAG_DIM;
-            if (dir & 0x1000) {
+            if (dir & DEMO_STICK_UP) {
                 wp->rumbleOffSel--;
                 SFX(5);
-            } else if (dir & 0x2000) {
+            } else if (dir & DEMO_STICK_DOWN) {
                 wp->rumbleOffSel++;
                 SFX(5);
-            } else if (trg & 0x100) {
+            } else if (trg & PAD_BUTTON_A) {
                 gp->rumbleEnabled = wp->rumbleOffSel == 0;
                 SFX(0x12);
                 wp->rumbleOff = wp->rumbleOffSel;
@@ -729,7 +730,7 @@ void loadMain(SequenceWork* seq) {
                 if (gp->rumbleEnabled) {
                     evtEntryType(evt_shake, 0, 0, 0);
                 }
-            } else if (trg & 0x200) {
+            } else if (trg & PAD_BUTTON_B) {
                 SFX(0x13);
                 wp->rumbleOffSel = wp->rumbleOff;
                 wp->flags &= ~LOAD_FLAG_DIM;

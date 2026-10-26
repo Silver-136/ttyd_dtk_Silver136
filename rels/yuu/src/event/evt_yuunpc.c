@@ -60,6 +60,24 @@ typedef struct YuuNpc {
     f32 animSpeed;
     u64 time;
 } YuuNpc;
+
+// YuuNpc.flags
+typedef enum YuuNpcFlags {
+    YUUNPC_FLAG_WRAP = (1 << 0),        // 0x1, crowd member moved to the other side of the view when the camera passes
+    YUUNPC_FLAG_RUNNER = (1 << 1),      // 0x2, race NPC (ids 200 and up)
+    YUUNPC_FLAG_POSE_HELD = (1 << 2),   // 0x4, pose shown at one frame (pose speed <= 0)
+    YUUNPC_TURN_AWAY = (1 << 3),        // 0x8, turning round (turnTimer)
+    YUUNPC_TURN_BACK = (1 << 4),        // 0x10, turning back to the course (turnTimer)
+    YUUNPC_TURN_FACING_BACK = 0x18,     // turned round, waiting
+    YUUNPC_TURN_MASK = 0x18,            // 0 = facing the course
+    YUUNPC_FLAG_ON_GROUND = (1 << 5),   // 0x20
+    YUUNPC_FLAG_FELL = (1 << 6),        // 0x40, fell below y -100: no longer ranked (yuunpc_juni)
+    YUUNPC_FLAG_GONE = (1 << 7),        // 0x80, fell below y -500: hidden, no longer moved
+    YUUNPC_SP_YUUSP0 = (1 << 8),        // 0x100, shown by the NPC "yuusp0" (slot[0])
+    YUUNPC_SP_YUUSP1 = (2 << 8),        // 0x200, "yuusp1" (slot[1])
+    YUUNPC_SP_YUUSP2 = (3 << 8),        // 0x300, "yuusp2" (slot[2])
+    YUUNPC_SP_MASK = 0x300,             // 0 = drawn as one of the crowd
+} YuuNpcFlags;
 typedef struct YuuNpcWork {
     u16 flags;
     s32 numNpc;
@@ -399,17 +417,17 @@ static inline void pose_change_inl(YuuNpc* npc, s16 id, f32 speed, f32 frame) {
     YuuNpcPose* pose = &yuunpc_wp->pose[id];
 
     if (speed <= 0.0f) {
-        npc->flags |= 4;
+        npc->flags |= YUUNPC_FLAG_POSE_HELD;
         npc->poseId = id;
         npc->animSpeed = 1.0f;
         npc->time = OSMillisecondsToTicks(1000.0f * (frame * (pose->frames * npc->animSpeed)) / 60.0f);
     } else {
         u16 flags = npc->flags;
-        npc->flags &= ~4;
+        npc->flags &= ~YUUNPC_FLAG_POSE_HELD;
         if (npc->poseId == id) {
             f32 old = npc->animSpeed;
             if (old != speed) {
-                if (flags & 4) {
+                if (flags & YUUNPC_FLAG_POSE_HELD) {
                     frame = 60.0f * OSTicksToMilliseconds(npc->time) / 1000.0f;
                     frame /= pose->frames * old;
                 } else {
@@ -425,12 +443,12 @@ static inline void pose_change_inl(YuuNpc* npc, s16 id, f32 speed, f32 frame) {
         npc->animSpeed = speed;
         npc->time = gp->renderTime - OSMillisecondsToTicks(1000.0f * (frame * (pose->frames * npc->animSpeed)) / 60.0f);
     }
-    switch (npc->flags & 0x300) {
+    switch (npc->flags & YUUNPC_SP_MASK) {
         case 0:
             break;
-        case 0x100:
-        case 0x200:
-        case 0x300:
+        case YUUNPC_SP_YUUSP0:
+        case YUUNPC_SP_YUUSP1:
+        case YUUNPC_SP_YUUSP2:
             animPoseSetAnim(npc->npc->poseId, pose->anim, TRUE);
             animPoseMain(npc->npc->poseId);
             break;
@@ -442,7 +460,7 @@ void yuunpc_pose_change(YuuNpc* npc, s16 id, f32 speed, f32 frame) {
     YuuNpcPose* pose = &yuunpc_wp->pose[id];
 
     if (speed <= 0.0f) {
-        npc->flags |= 4;
+        npc->flags |= YUUNPC_FLAG_POSE_HELD;
         npc->poseId = id;
         npc->animSpeed = 1.0f;
         npc->time = OSMillisecondsToTicks(1000.0f * (frame * (pose->frames * npc->animSpeed)) / 60.0f);
@@ -452,7 +470,7 @@ void yuunpc_pose_change(YuuNpc* npc, s16 id, f32 speed, f32 frame) {
         if (npc->poseId == id) {
             f32 old = npc->animSpeed;
             if (old != speed) {
-                if (flags & 4) {
+                if (flags & YUUNPC_FLAG_POSE_HELD) {
                     frame = 60.0f * OSTicksToMilliseconds(npc->time) / 1000.0f;
                     frame /= pose->frames * old;
                 } else {
@@ -468,12 +486,12 @@ void yuunpc_pose_change(YuuNpc* npc, s16 id, f32 speed, f32 frame) {
         npc->animSpeed = speed;
         npc->time = gp->renderTime - OSMillisecondsToTicks(1000.0f * (frame * (pose->frames * npc->animSpeed)) / 60.0f);
     }
-    switch (npc->flags & 0x300) {
+    switch (npc->flags & YUUNPC_SP_MASK) {
         case 0:
             break;
-        case 0x100:
-        case 0x200:
-        case 0x300:
+        case YUUNPC_SP_YUUSP0:
+        case YUUNPC_SP_YUUSP1:
+        case YUUNPC_SP_YUUSP2:
             animPoseSetAnim(npc->npc->poseId, pose->anim, TRUE);
             animPoseMain(npc->npc->poseId);
             break;
@@ -511,7 +529,7 @@ f32 yuunpc_pose_sub(ExtdrvPose* ext, YuuNpc* npc) {
         (*ext->mtx)[0][2] = s;
         (*ext->mtx)[2][0] = -s;
     }
-    if (npc->flags & 4) {
+    if (npc->flags & YUUNPC_FLAG_POSE_HELD) {
         t = 60.0f * OSTicksToMilliseconds(npc->time) / 1000.0f;
         t /= pose->frames * npc->animSpeed;
     } else {
@@ -523,10 +541,10 @@ f32 yuunpc_pose_sub(ExtdrvPose* ext, YuuNpc* npc) {
             t = 0.0f;
         }
     }
-    switch (npc->flags & 0x300) {
-        case 0x100:
-        case 0x200:
-        case 0x300: {
+    switch (npc->flags & YUUNPC_SP_MASK) {
+        case YUUNPC_SP_YUUSP0:
+        case YUUNPC_SP_YUUSP1:
+        case YUUNPC_SP_YUUSP2: {
             f32 rot;
             animPoseSetLocalTime(npc->npc->poseId, (s32)(pose->frames * t));
             rot = 3600.0f + (90.0f - ext->dir);
@@ -569,7 +587,7 @@ void ext_yuunpc_minigame1_init(void) {
         npc->poseId = yuunpc_wp->numPoses;
         row = i / 5;
         npc->id = i;
-        npc->flags |= 1;
+        npc->flags |= YUUNPC_FLAG_WRAP;
         ext->flags |= (EXT_POSE_FLAG_VISIBLE | EXT_POSE_FLAG_BILLBOARD | EXT_POSE_FLAG_NO_SHADOW);
         PSMTXIdentity(*ext->mtx);
         z = 30.0f + (60.0f * (i % 5) + -560.0f);
@@ -613,7 +631,7 @@ void yuunpc_pose_minigame1_main(void) {
     right = 500.0f + camX;
 
     for (i = 0; i < yuunpc_wp->numNpc; i++, ext++, npc++) {
-        if (npc->flags & 1) {
+        if (npc->flags & YUUNPC_FLAG_WRAP) {
             x = (*ext->mtx)[0][3];
             if (x > camX) {
                 while (TRUE) {
@@ -678,7 +696,7 @@ void ext_yuunpc_minigame2_init(void) {
         npc->poseId = yuunpc_wp->numPoses;
         row = i / 4;
         npc->id = i;
-        npc->flags |= 1;
+        npc->flags |= YUUNPC_FLAG_WRAP;
         ext->flags |= (EXT_POSE_FLAG_VISIBLE | EXT_POSE_FLAG_BILLBOARD | EXT_POSE_FLAG_NO_SHADOW);
         PSMTXIdentity(*ext->mtx);
         z = 30.0f + (60.0f * (i % 4) + -655.0f);
@@ -722,7 +740,7 @@ void yuunpc_pose_minigame2_main(void) {
     right = 500.0f + camX;
 
     for (i = 0; i < yuunpc_wp->numNpc; i++, ext++, npc++) {
-        if (npc->flags & 1) {
+        if (npc->flags & YUUNPC_FLAG_WRAP) {
             x = (*ext->mtx)[0][3];
             if (x > camX) {
                 while (TRUE) {
@@ -795,7 +813,7 @@ void ext_yuunpc_minigame3_init(void) {
         npc->poseId = yuunpc_wp->numPoses;
         row = i / 4;
         npc->id = i;
-        npc->flags |= 1;
+        npc->flags |= YUUNPC_FLAG_WRAP;
         ext->flags |= (EXT_POSE_FLAG_VISIBLE | EXT_POSE_FLAG_BILLBOARD | EXT_POSE_FLAG_NO_SHADOW);
         PSMTXIdentity(*ext->mtx);
         z = 30.0f + (60.0f * (i % 4) + -750.0f);
@@ -839,7 +857,7 @@ void yuunpc_pose_minigame3_main(void) {
     right = 600.0f + camX;
 
     for (i = 0; i < yuunpc_wp->numNpc; i++, ext++, npc++) {
-        if (npc->flags & 1) {
+        if (npc->flags & YUUNPC_FLAG_WRAP) {
             x = (*ext->mtx)[0][3];
             if (x > camX) {
                 while (TRUE) {
@@ -1046,7 +1064,7 @@ s32 yuunpc_juni(Vec* pos) {
     YuuNpc* npc = yuunpc_wp->npcs;
 
     for (i = 0; i < yuunpc_wp->numNpc; i++, npc++) {
-        if ((npc->flags & 2) && !(npc->flags & 0x40) && x < npc->pos.x) {
+        if ((npc->flags & YUUNPC_FLAG_RUNNER) && !(npc->flags & YUUNPC_FLAG_FELL) && x < npc->pos.x) {
             n++;
         }
     }
@@ -1084,7 +1102,7 @@ void ext_yuunpc_minigame4_init_sub(void) {
     yuunpc_set_jump_pose("c_nokorin", "R_1", 5.0f);
     yuunpc_set_jump_pose("c_joho_a", "R_1", 17.0f);
     yuunpc_maphit_init();
-    yuunpc_wp->flags |= 1;
+    yuunpc_wp->flags |= YUUNPC_WP_FLAG_WAIT;
     ext = extGetPosePtr();
     yuunpc_wp->slot[0] = yuunpc_wp->slot[1] = yuunpc_wp->slot[2] = -1;
     p0 = (Vec){0.0f, -1000.0f, 0.0f};
@@ -1127,7 +1145,7 @@ void ext_yuunpc_minigame4_init_sub(void) {
             s16 id;
 
             row = i / 4;
-            npc->flags |= 1;
+            npc->flags |= YUUNPC_FLAG_WRAP;
             ext->flags |= (EXT_POSE_FLAG_VISIBLE | EXT_POSE_FLAG_BILLBOARD | EXT_POSE_FLAG_NO_SHADOW);
             PSMTXIdentity(*ext->mtx);
             z = 30.0f + (60.0f * (i % 4) + -750.0f);
@@ -1163,7 +1181,7 @@ void ext_yuunpc_minigame4_init_sub(void) {
             f32 step;
             s32 j2;
 
-            npc->flags |= 2;
+            npc->flags |= YUUNPC_FLAG_RUNNER;
             m = i - 200;
             cols = sqrtf(700.0f);
             row = m / cols;
@@ -1172,25 +1190,25 @@ void ext_yuunpc_minigame4_init_sub(void) {
                 if (yuunpc_wp->slot[j2] == i) {
                     switch (j2) {
                         case 0:
-                            npc->flags |= 0x100;
+                            npc->flags |= YUUNPC_SP_YUUSP0;
                             break;
                         case 1:
-                            npc->flags |= 0x200;
+                            npc->flags |= YUUNPC_SP_YUUSP1;
                             break;
                         case 2:
-                            npc->flags |= 0x300;
+                            npc->flags |= YUUNPC_SP_YUUSP2;
                             break;
                     }
                     break;
                 }
             }
-            switch (npc->flags & 0x300) {
+            switch (npc->flags & YUUNPC_SP_MASK) {
                 case 0:
                     ext->flags |= (EXT_POSE_FLAG_VISIBLE | EXT_POSE_FLAG_NO_SHADOW);
                     break;
-                case 0x100:
-                case 0x200:
-                case 0x300:
+                case YUUNPC_SP_YUUSP0:
+                case YUUNPC_SP_YUUSP1:
+                case YUUNPC_SP_YUUSP2:
                     break;
             }
             PSMTXIdentity(*ext->mtx);
@@ -1203,8 +1221,8 @@ void ext_yuunpc_minigame4_init_sub(void) {
             ext->dir = 270.0f;
             npc->animSpeed = 1.0f;
             npc->pos = (Vec){(*ext->mtx)[0][3], (*ext->mtx)[1][3], (*ext->mtx)[2][3]};
-            switch (npc->flags & 0x300) {
-                case 0x100: {
+            switch (npc->flags & YUUNPC_SP_MASK) {
+                case YUUNPC_SP_YUUSP0: {
                     f32 rot;
 
                     npc->npc = npcNameToPtr("yuusp0");
@@ -1219,7 +1237,7 @@ void ext_yuunpc_minigame4_init_sub(void) {
                     npc->poses[3] = yuunpc_pose_check("c_luigi", "R_1");
                     break;
                 }
-                case 0x200: {
+                case YUUNPC_SP_YUUSP1: {
                     f32 rot;
 
                     npc->state = 6;
@@ -1234,7 +1252,7 @@ void ext_yuunpc_minigame4_init_sub(void) {
                     npc->poses[3] = yuunpc_pose_check("c_nokorin", "R_1");
                     break;
                 }
-                case 0x300: {
+                case YUUNPC_SP_YUUSP2: {
                     f32 rot;
 
                     npc->npc = npcNameToPtr("yuusp2");
@@ -1287,7 +1305,7 @@ void ext_yuunpc_minigame4_init_sub(void) {
             }
             npc->motion = 0;
             pose_change_inl(npc, npc->poses[0], 1.0f, rand() / 32767.0f);
-            npc->flags |= 0x20;
+            npc->flags |= YUUNPC_FLAG_ON_GROUND;
             errper_set_rtn(npc);
         }
     }
@@ -1325,44 +1343,44 @@ static inline f32 yuunpc_rnd10(YuuNpc* npc) /* */ {
 
 #define YUU_STOP(npc)                                                              \
     do {                                                                           \
-        (npc)->motion = 0;                                                     \
+        (npc)->motion = 0;                                                         \
         yuunpc_pose_change((npc), (npc)->poses[0], 1.0f, rand() / 32767.0f);       \
         (npc)->speed = 0.0f;                                                       \
     } while (0)
 
-#define YUU_JUMP(npc)                                                                                                    \
-    do {                                                                                                                 \
-        (npc)->motion = 4;                                                                                           \
+#define YUU_JUMP(npc)                                                                                                                      \
+    do {                                                                                                                                   \
+        (npc)->motion = 4;                                                                                                                 \
         yuunpc_pose_change((npc), (npc)->poses[3], 0.0f, yuunpc_wp->pose[(npc)->poses[3]].jump / yuunpc_wp->pose[(npc)->poses[3]].frames); \
-        (npc)->vy = 6.5f;                                                                                                \
-        (npc)->dir.x = 1.0f;                                                                                             \
-        (npc)->dir.z = 0.0f;                                                                                             \
-        if (!(c26 & 0x1f)) {                                                                                             \
-            psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_EVT_GAME_SLIT_NPC_JUMP1), &(npc)->pos);                                                               \
-        }                                                                                                                \
-        c26++;                                                                                                           \
+        (npc)->vy = 6.5f;                                                                                                                  \
+        (npc)->dir.x = 1.0f;                                                                                                               \
+        (npc)->dir.z = 0.0f;                                                                                                               \
+        if (!(c26 & 0x1f)) {                                                                                                               \
+            psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_EVT_GAME_SLIT_NPC_JUMP1), &(npc)->pos);                                                    \
+        }                                                                                                                                  \
+        c26++;                                                                                                                             \
     } while (0)
 
 #define YUU_RUN(npc)                                                               \
     do {                                                                           \
-        (npc)->motion = 2;                                                     \
+        (npc)->motion = 2;                                                         \
         yuunpc_pose_change((npc), (npc)->poses[2], 1.0f, rand() / 32767.0f);       \
-        if ((npc)->flags & 0x18) {                                                 \
+        if ((npc)->flags & YUUNPC_TURN_MASK) {                                     \
             (npc)->speed = 1.0f;                                                   \
         } else {                                                                   \
             (npc)->speed = 2.25f;                                                  \
         }                                                                          \
     } while (0)
 
-#define YUU_WALK(npc)                                                                                         \
-    do {                                                                                                      \
-        (npc)->motion = 1;                                                                                \
+#define YUU_WALK(npc)                                                                                                  \
+    do {                                                                                                               \
+        (npc)->motion = 1;                                                                                             \
         yuunpc_pose_change((npc), (npc)->poses[1], yuunpc_wp->pose[(npc)->poses[1]].walkAnimSpeed, rand() / 32767.0f); \
-        if ((npc)->flags & 0x18) {                                                                            \
-            (npc)->speed = 0.5f;                                                                              \
-        } else {                                                                                              \
-            (npc)->speed = 1.0f;                                                                              \
-        }                                                                                                     \
+        if ((npc)->flags & YUUNPC_TURN_MASK) {                                                                         \
+            (npc)->speed = 0.5f;                                                                                       \
+        } else {                                                                                                       \
+            (npc)->speed = 1.0f;                                                                                       \
+        }                                                                                                              \
     } while (0)
 
 void yuunpc_pose_minigame4_main(void) {
@@ -1398,7 +1416,7 @@ void yuunpc_pose_minigame4_main(void) {
     right = 500.0f + camX;
 
     for (i = 0; i < yuunpc_wp->numNpc; i++, ext++, npc++) {
-        if (npc->flags & 1) {
+        if (npc->flags & YUUNPC_FLAG_WRAP) {
             x = (*ext->mtx)[0][3];
             if (x > camX) {
                 while (TRUE) {
@@ -1436,36 +1454,36 @@ void yuunpc_pose_minigame4_main(void) {
                 }
             }
         }
-        if (npc->flags & 2) {
-            if (yuunpc_yuuminigame4_ptr == NULL || (npc->flags & 0x80)) {
+        if (npc->flags & YUUNPC_FLAG_RUNNER) {
+            if (yuunpc_yuuminigame4_ptr == NULL || (npc->flags & YUUNPC_FLAG_GONE)) {
                 continue;
             }
             mg = yuunpc_yuuminigame4_ptr->data;
-            switch (npc->flags & 0x18) {
+            switch (npc->flags & YUUNPC_TURN_MASK) {
             case 0:
                 break;
-            case 8:
+            case YUUNPC_TURN_AWAY:
                 if (npc->turnTimer == 0) {
-                    npc->flags |= 0x18;
+                    npc->flags |= YUUNPC_TURN_FACING_BACK;
                 }
                 break;
-            case 0x10:
+            case YUUNPC_TURN_BACK:
                 if (npc->turnTimer == 0) {
-                    npc->flags &= ~0x18;
+                    npc->flags &= ~YUUNPC_TURN_MASK;
                     npc->turnBaseDir = 0.0f;
                     npc->motion = 0;
                     yuunpc_pose_change(npc, npc->poses[0], 1.0f, rand() / 32767.0f);
                     npc->speed = 0.0f;
                 }
                 break;
-            case 0x18:
+            case YUUNPC_TURN_FACING_BACK:
                 break;
             }
             switch (npc->motion) {
             case 0:
             case 1:
             case 2:
-                if (!(npc->flags & 0x20)) {
+                if (!(npc->flags & YUUNPC_FLAG_ON_GROUND)) {
                     npc->motion = 3;
                     yuunpc_pose_change(npc, npc->poses[3], 0.0f, yuunpc_wp->pose[npc->poses[3]].jump / yuunpc_wp->pose[npc->poses[3]].frames);
                     npc->vy = 0.0f;
@@ -1473,7 +1491,7 @@ void yuunpc_pose_minigame4_main(void) {
                 break;
             case 3:
             case 4:
-                if (npc->flags & 0x20) {
+                if (npc->flags & YUUNPC_FLAG_ON_GROUND) {
                     npc->motion = 0;
                     yuunpc_pose_change(npc, npc->poses[0], 1.0f, rand() / 32767.0f);
                     npc->speed = 0.0f;
@@ -1711,7 +1729,7 @@ void yuunpc_pose_minigame4_main(void) {
                     d = 0.0f;
                 }
                 cnt = d / 0.0f;
-                switch (npc->flags & 0x18) {
+                switch (npc->flags & YUUNPC_TURN_MASK) {
                 case 0:
                     if (mg->state == 0) {
                         n = 1;
@@ -1740,8 +1758,8 @@ void yuunpc_pose_minigame4_main(void) {
                             n = d / 2.9166667f;
                         }
                     }
-                    if (!(yuunpc_wp->flags & 1) && npc->goal.x > npc->pos.x && n <= 0) {
-                        npc->flags |= 8;
+                    if (!(yuunpc_wp->flags & YUUNPC_WP_FLAG_WAIT) && npc->goal.x > npc->pos.x && n <= 0) {
+                        npc->flags |= YUUNPC_TURN_AWAY;
                         npc->turnTimer = 30;
                         npc->turnBaseDir = ext->dir;
                         npc->motion = 0;
@@ -1750,10 +1768,10 @@ void yuunpc_pose_minigame4_main(void) {
                         errper_set_rtn(npc);
                     }
                     break;
-                case 8:
-                case 0x10:
+                case YUUNPC_TURN_AWAY:
+                case YUUNPC_TURN_BACK:
                     break;
-                case 0x18:
+                case YUUNPC_TURN_FACING_BACK:
                     if (cnt < 30) {
                         n = 0;
                     } else {
@@ -1761,22 +1779,22 @@ void yuunpc_pose_minigame4_main(void) {
                         n = d / 2.9166667f;
                     }
                     if (npc->goal.x == npc->pos.x || mg->state == 0 || ((mg->state == 4 || mg->state == 8) && cnt + n >= mg->timer)) {
-                        npc->flags &= ~8;
+                        npc->flags &= ~YUUNPC_TURN_AWAY;
                         npc->turnTimer = 30;
                         errper_set_rtn(npc);
                     }
                     break;
                 }
             }
-            switch (npc->flags & 0x18) {
+            switch (npc->flags & YUUNPC_TURN_MASK) {
             case 0:
                 break;
-            case 8:
+            case YUUNPC_TURN_AWAY:
                 npc->turnTimer--;
                 ext->dir = npc->turnBaseDir + -450.0f * (1.0f - npc->turnTimer / 30.0f);
                 ext->dir = (3600.0f + ext->dir) - (s32)((3600.0f + ext->dir) / 360.0f) * 360;
                 break;
-            case 0x18:
+            case YUUNPC_TURN_FACING_BACK:
                 t = gp->retraceCount + (u16)npc->id;
                 if (t & 0x20) {
                     n = 15 - (t & 0x1f);
@@ -1786,7 +1804,7 @@ void yuunpc_pose_minigame4_main(void) {
                 ext->dir = -450.0f + npc->turnBaseDir + 2.0f * n;
                 ext->dir = (3600.0f + ext->dir) - (s32)((3600.0f + ext->dir) / 360.0f) * 360;
                 break;
-            case 0x10:
+            case YUUNPC_TURN_BACK:
                 npc->turnTimer--;
                 ext->dir = -180.0f + (-450.0f + npc->turnBaseDir) + -450.0f * (1.0f - npc->turnTimer / 30.0f);
                 ext->dir = (3600.0f + ext->dir) - (s32)((3600.0f + ext->dir) / 360.0f) * 360;
@@ -1800,12 +1818,12 @@ void yuunpc_pose_minigame4_main(void) {
                 case 2:
                 case 3:
                 case 4:
-                    switch (npc->flags & 0x18) {
-                    case 0x18:
+                    switch (npc->flags & YUUNPC_TURN_MASK) {
+                    case YUUNPC_TURN_FACING_BACK:
                         dz = 0.0f;
                         break;
-                    case 8:
-                    case 0x10:
+                    case YUUNPC_TURN_AWAY:
+                    case YUUNPC_TURN_BACK:
                         dz = 0.0f;
                         break;
                     case 0:
@@ -1816,12 +1834,12 @@ void yuunpc_pose_minigame4_main(void) {
                 case 6:
                 case 7:
                 case 8:
-                    switch (npc->flags & 0x18) {
-                    case 0x18:
+                    switch (npc->flags & YUUNPC_TURN_MASK) {
+                    case YUUNPC_TURN_FACING_BACK:
                         dz = -0.0f;
                         break;
-                    case 8:
-                    case 0x10:
+                    case YUUNPC_TURN_AWAY:
+                    case YUUNPC_TURN_BACK:
                         dz = -0.0f;
                         break;
                     case 0:
@@ -1845,7 +1863,7 @@ void yuunpc_pose_minigame4_main(void) {
                     if (goalincheck(npc) == -1) {
                         break;
                     }
-                    if (yuunpc_wp->flags & 1) {
+                    if (yuunpc_wp->flags & YUUNPC_WP_FLAG_WAIT) {
                         break;
                     }
                     if (npc->state >= 2 || (npc->state <= 1 && irand(36) == 0)) {
@@ -1857,7 +1875,7 @@ void yuunpc_pose_minigame4_main(void) {
                                 YUU_WALK(npc);
                                 kind = 1;
                             }
-                        } else if (!(npc->flags & 0x18) || ((npc->flags & 0x18) && (hb >= npc->pos.y || (hb < npc->pos.y && ha < npc->pos.y)))) {
+                        } else if (!(npc->flags & YUUNPC_TURN_MASK) || ((npc->flags & YUUNPC_TURN_MASK) && (hb >= npc->pos.y || (hb < npc->pos.y && ha < npc->pos.y)))) {
                             YUU_RUN(npc);
                             kind = 1;
                         }
@@ -1868,7 +1886,7 @@ void yuunpc_pose_minigame4_main(void) {
                         YUU_STOP(npc);
                         break;
                     }
-                    if (npc->flags & 0x18) {
+                    if (npc->flags & YUUNPC_TURN_MASK) {
                         Vec v1, s1;
 
                         PSVECSubtract(&npc->dest, &npc->pos, &v1);
@@ -1932,7 +1950,7 @@ void yuunpc_pose_minigame4_main(void) {
                         YUU_STOP(npc);
                         break;
                     }
-                    if (npc->flags & 0x18) {
+                    if (npc->flags & YUUNPC_TURN_MASK) {
                         Vec v3, s3;
 
                         PSVECSubtract(&npc->dest, &npc->pos, &v3);
@@ -2001,24 +2019,24 @@ void yuunpc_pose_minigame4_main(void) {
             case 1:
             case 2:
                 if (hitcheck(npc) == -1) {
-                    npc->flags &= ~0x20;
+                    npc->flags &= ~YUUNPC_FLAG_ON_GROUND;
                 } else {
-                    npc->flags |= 0x20;
+                    npc->flags |= YUUNPC_FLAG_ON_GROUND;
                 }
                 break;
             case 3:
             case 4:
                 hitcheck(npc);
                 if (fallcheck(npc) == -1) {
-                    npc->flags |= 0x20;
+                    npc->flags |= YUUNPC_FLAG_ON_GROUND;
                 } else {
-                    npc->flags &= ~0x20;
+                    npc->flags &= ~YUUNPC_FLAG_ON_GROUND;
                 }
                 if (npc->pos.y <= -100.0f) {
-                    npc->flags |= 0x40;
+                    npc->flags |= YUUNPC_FLAG_FELL;
                 }
                 if (npc->pos.y <= -500.0f) {
-                    npc->flags |= 0x80;
+                    npc->flags |= YUUNPC_FLAG_GONE;
                     ext->flags &= ~EXT_POSE_FLAG_VISIBLE;
                 }
                 break;

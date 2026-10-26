@@ -1307,7 +1307,7 @@ USER_FUNC(evt_shop_main_func) {
         }
         if (wp->sel != -1) {
             wp->flags |= 1;
-            if (trg & 0x100) {
+            if (trg & PAD_BUTTON_A) {
                 marioKeyOff();
                 wp->buyEvt = evtEntry(buy_evt, 0, 0);
                 wp->buyEvt->lwData[0] = (EvtWord)wp;
