@@ -4170,12 +4170,12 @@ void BattleAudience_Case_FallObject_Aud(s32 index, u8 type) {
     s32 i, no;
 
     switch (type) {
-        case 0:
-        case 1:
-        case 3:
-        case 4:
-        case 5:
-        case 8:
+        case STAGE_FALL_BASIN:
+        case STAGE_FALL_BUCKET:
+        case STAGE_FALL_LARGE_BUG:
+        case STAGE_FALL_FORK:
+        case STAGE_FALL_WATER:
+        case STAGE_FALL_STAGE_LIGHT:
             if ((u8)BattleAudience_GetSysCtrl(index) == TRUE && BattleAudienceGetPtr(index)->status != AUDIENCE_STATUS_INTRUDE) {
                 BattleAudience_ChangeStatus(index, AUDIENCE_STATUS_DAMAGE);
             }
@@ -4187,7 +4187,7 @@ void BattleAudience_Case_FallObject_Aud(s32 index, u8 type) {
                 }
             }
             break;
-        case 7:
+        case STAGE_FALL_METEOR:
             if ((u8)BattleAudience_GetSysCtrl(index) == TRUE && BattleAudienceGetPtr(index)->status != AUDIENCE_STATUS_INTRUDE) {
                 BattleAudience_ChangeStatus(index, AUDIENCE_STATUS_DAMAGE);
             }
@@ -4199,7 +4199,7 @@ void BattleAudience_Case_FallObject_Aud(s32 index, u8 type) {
                 }
             }
             break;
-        case 6:
+        case STAGE_FALL_BOWSER_STATUE:
             if ((u8)BattleAudience_GetSysCtrl(index) == TRUE && BattleAudienceGetPtr(index)->status != AUDIENCE_STATUS_INTRUDE) {
                 BattleAudience_ChangeStatus(index, AUDIENCE_STATUS_DAMAGE);
             }

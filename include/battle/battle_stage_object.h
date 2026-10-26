@@ -43,6 +43,29 @@ typedef union BattleWeaponData {
     u32 raw[0xC0 / 4];
 } BattleWeaponData;
 
+// Falling stage objects (BattleStageFallObjectData.rates/weapons index; FallObjectEntry.type). Names from the user's
+// stage prop notes; the code agrees: basin and bucket play the TUB sounds, water does no damage, the Bowser statue
+// picks a random side, the audience never throws the Bowser statue or the meteor.
+typedef enum StageFallObjectType {
+    STAGE_FALL_BASIN = 0,
+    STAGE_FALL_BUCKET = 1,
+    STAGE_FALL_SMALL_BUGS = 2,
+    STAGE_FALL_LARGE_BUG = 3,
+    STAGE_FALL_FORK = 4,
+    STAGE_FALL_WATER = 5,
+    STAGE_FALL_BOWSER_STATUE = 6,
+    STAGE_FALL_METEOR = 7,
+    STAGE_FALL_STAGE_LIGHT = 8,
+} StageFallObjectType;
+
+// Stage nozzle jets (BattleStageNozzleData.typeRate/weapons index; nozzleType)
+typedef enum StageNozzleType {
+    STAGE_NOZZLE_FOG = 0,
+    STAGE_NOZZLE_ICE = 1,       // ELEMENT_ICE, no damage function
+    STAGE_NOZZLE_EXPLOSION = 2, // ELEMENT_EXPLOSION
+    STAGE_NOZZLE_FIRE = 3,
+} StageNozzleType;
+
 typedef struct BattleStageNozzleData {
     u8 dirRate[3][4]; //0x0, weights for each nozzle's next direction
     u8 typeRate[4]; //0xC

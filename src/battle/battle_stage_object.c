@@ -3278,23 +3278,23 @@ USER_FUNC(_nozzle_work_effect) {
         }
         event->userWork[0] = 90;
         switch (sw->nozzleType) {
-            case 1:
+            case STAGE_NOZZLE_ICE:
                 sfx = "SFX_BTL_STAGE_SMOKE1";
                 effType = 0;
                 break;
-            case 2:
+            case STAGE_NOZZLE_EXPLOSION:
                 sfx = NULL;
                 effType = 1;
                 break;
-            case 3:
+            case STAGE_NOZZLE_FIRE:
                 sfx = "SFX_BTL_STAGE_FIRE1";
                 effType = 2;
                 break;
         }
         switch (sw->nozzleType) {
-            case 1:
-            case 2:
-            case 3:
+            case STAGE_NOZZLE_ICE:
+            case STAGE_NOZZLE_EXPLOSION:
+            case STAGE_NOZZLE_FIRE:
                 obj = BattleSearchObjectPtr("nozzle_l");
                 angle1 = _get_nozzle_dir(0);
                 if (sw->nozzleDir[0]) {
@@ -3738,7 +3738,7 @@ s32 _object_fall_attack(EventEntry *event, BOOL isFirstCall) {
                 w->prevTypes[j] = e->type;
             }
             e->weapon = fd->weapons[e->type];
-            if (e->type == 6) {
+            if (e->type == STAGE_FALL_BOWSER_STATUE) {
                 if (irand(100) < 50) {
                     e->weapon.weapon.targetClassFlags |= 0x100;
                     e->weapon.weapon.targetClassFlags &= ~0x200;
@@ -3749,7 +3749,7 @@ s32 _object_fall_attack(EventEntry *event, BOOL isFirstCall) {
             }
             weapon = &e->weapon.weapon;
             e->kind = 0;
-            if (((pouchGetPtr()->mStarPowersObtained && (!(BattleAudienceBaseGetPtr()->flags & 0x4000))) && (e->type != 6)) && (e->type != 7)) {
+            if (((pouchGetPtr()->mStarPowersObtained && (!(BattleAudienceBaseGetPtr()->flags & 0x4000))) && (e->type != STAGE_FALL_BOWSER_STATUE)) && (e->type != STAGE_FALL_METEOR)) {
                 if (((u32)wp->debug.flags & 2) || (irand(100) < 10)) {
                     e->kind = 1;
                     e->partId = -1;
@@ -3879,35 +3879,35 @@ s32 _object_fall_attack(EventEntry *event, BOOL isFirstCall) {
             e3->sfxId = -1;
             e3->field_0x12 = 0;
             switch (e3->type) {
-                case 0:
+                case STAGE_FALL_BASIN:
                     e3->effect = effFallEntry(4, pos.x, pos.y, pos.z, width, hit.y - pos.y, dir, 1, 90);
                     break;
 
-                case 1:
+                case STAGE_FALL_BUCKET:
                     e3->effect = effFallEntry(5, pos.x, pos.y, pos.z, width, hit.y - pos.y, dir, 1, 90);
                     break;
 
-                case 2:
+                case STAGE_FALL_SMALL_BUGS:
                     e3->effect = effFallEntry(0, pos.x, pos.y, pos.z, width, hit.y - pos.y, dir, 100, 90);
                     break;
 
-                case 3:
+                case STAGE_FALL_LARGE_BUG:
                     e3->effect = effFallEntry(1, pos.x, pos.y, pos.z, width, hit.y - pos.y, dir, 1, 90);
                     break;
 
-                case 4:
+                case STAGE_FALL_FORK:
                     e3->effect = effFallEntry(2, pos.x, pos.y, 5.0f + pos.z, width, hit.y - pos.y, dir, 1, 90);
                     break;
 
-                case 8:
+                case STAGE_FALL_STAGE_LIGHT:
                     e3->effect = effFallEntry(8, pos.x, pos.y, pos.z, width, hit.y - pos.y, dir, 1, 90);
                     break;
 
-                case 5:
+                case STAGE_FALL_WATER:
                     e3->effect = effFallEntry(3, pos.x, pos.y, pos.z, width, hit.y - pos.y, dir, 1, 90);
                     break;
 
-                case 6:
+                case STAGE_FALL_BOWSER_STATUE:
                     if (BtlUnit_GetBelong(unit) == 0) {
                     e3->effect = effFallEntry(6, -300.0f, pos.y, 15.0f + pos.z, 0.0f, 0.0f, dir, 1, 180);
                 } else {
@@ -3915,7 +3915,7 @@ s32 _object_fall_attack(EventEntry *event, BOOL isFirstCall) {
                 }
                     break;
 
-                case 7:
+                case STAGE_FALL_METEOR:
                     e3->effect = effFallEntry(7, pos.x, pos.y, 5.0f + pos.z, width, hit.y - pos.y, dir, 1, 180);
                     break;
 
@@ -3931,12 +3931,12 @@ s32 _object_fall_attack(EventEntry *event, BOOL isFirstCall) {
                 psndSFXOff(e3->sfxId);
                 BattleAudience_GetHomePosition(e3->unitId, &sfxPos.x, &sfxPos.y, &sfxPos.z);
                 switch (e3->type) {
-                    case 5:
+                    case STAGE_FALL_WATER:
                         break;
 
-                    case 0:
+                    case STAGE_FALL_BASIN:
 
-                    case 1:
+                    case STAGE_FALL_BUCKET:
                         psndSFXOn_3D(SFX_NAME_WORD("SFX_BTL_STAGE_DAMAGE_TUB1"), &sfxPos); // FAKE: integer cast makes the literal a hoisted @ temp (same pointer)
                         break;
 
@@ -3964,12 +3964,12 @@ s32 _object_fall_attack(EventEntry *event, BOOL isFirstCall) {
 
                         case 6:
                             switch (e3->type) {
-                            case 5:
+                            case STAGE_FALL_WATER:
                                 break;
 
-                            case 0:
+                            case STAGE_FALL_BASIN:
 
-                            case 1:
+                            case STAGE_FALL_BUCKET:
                                 psndSFXOn_3D(sfxTub2, &sfxPos);
                                 break;
 
@@ -3979,13 +3979,13 @@ s32 _object_fall_attack(EventEntry *event, BOOL isFirstCall) {
 
                         case 1:
                             switch (e3->type) {
-                            case 0:
+                            case STAGE_FALL_BASIN:
 
-                            case 1:
+                            case STAGE_FALL_BUCKET:
                                 psndSFXOn_3D(SFX_NAME_WORD("SFX_BTL_STAGE_DAMAGE_TUB1"), &sfxPos); // FAKE: integer cast makes the literal a hoisted @ temp (same pointer)
                                 break;
 
-                            case 5:
+                            case STAGE_FALL_WATER:
                                 psndSFXOn_3D(sfxRest, &sfxPos);
                                 break;
 
