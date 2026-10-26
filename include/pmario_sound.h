@@ -226,3 +226,4 @@ u32 psndBGMChkSilent(s32 id);
 BOOL psndENVOn_f_d(u32 flags, const char* name, u32 fadetime, s32 r6);
 BOOL psndBGMOn_f(u32 r3, const char* bgm_name, u32 fadetime, s32 r6);
 BOOL psndENVOn(u32 flags, const char* name);
+BOOL psndBGMOn_f_d(u32 flags, const char* bgm_name, u32 fadetime, u32 fadeout, s32 r7);

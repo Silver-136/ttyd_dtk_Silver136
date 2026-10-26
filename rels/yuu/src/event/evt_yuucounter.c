@@ -1,6 +1,7 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "rels/yuu/include/yuu.h"
+#include "evt/evt_yuugijou.h"
 
 #include "dolphin/os.h"
 #include "memory.h"
@@ -29,7 +30,6 @@ typedef struct YuuCounterWork {
 } YuuCounterWork;
 static void* yuunpc_wp;
 static YuuCounterWork* _wp;
-void evtYuuSetWindowEvt(EvtWord* evt);
 void evt_yuucounter_disp_func(CameraId camera, void* param);
 static const GXColor white = {0xFF, 0xFF, 0xFF, 0xFF};
 static const GXColor bgColor = {0xFF, 0xFF, 0xFF, 0x99};

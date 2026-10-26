@@ -479,3 +479,5 @@ void mapSetFog(s32 type, f32 start, f32 end, GXColor color);
 void mapGetFog(s32* type, f32* start, f32* end, GXColor* color);
 void mapSetProjMtx(Mtx mtx);
 void mapSetProjTexObj(GXTexObj* obj, void* imgRef);
+void mapObjSetOffScreen(const char* name, const char* offscreen);
+void mapGrpSetOffScreen(const char* name, const char* offscreen);

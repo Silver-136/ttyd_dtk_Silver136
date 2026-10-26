@@ -4954,7 +4954,6 @@ void stub_fn(void);
 void psndBGMMain(void);
 void psndENVMain(void);
 void psndSFXMain(void);
-BOOL psndBGMOn_f_d(u32 flags, const char* bgm_name, u32 fadetime, u32 fadeout, s32 r7);
 s32 __psndSFXOn(const char* name, u8 vol, u8 pan, u16 pitch, Vec* pos, u32 r8, u16 dist, s32 r10);
 
 static f32 angleABf(f32 x1, f32 y1, f32 x2, f32 y2) {

@@ -37,7 +37,6 @@ typedef struct CloudWork {
     f32 lastFrame; // 0xC4
 } CloudWork;
 
-void mapGrpSetOffScreen(const char* name, const char* offscreen);
 
 static CloudWork cloud[16];
 static u8 cloud_once_flag;

@@ -61,7 +61,6 @@ const char* evtNoLabel[] = {
 
 //local prototypes
 s32 johoya_data_make(const char* prefix, s32 type);
-const char* search_evt_moji(s32 id);
 
 USER_FUNC(johoya_data_alloc) {
     InformantWork* wp = &_jdt;

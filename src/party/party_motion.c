@@ -47,7 +47,6 @@ s32 partyGetFootmarkId();
 
 void psndSFX_vol(s32 id, u8 vol);
 void psndSFX_pit(s32 id, s16 pit);
-BOOL psndBGMOn_f_d(u32 flags, const char* bgm_name, u32 fadetime, u32 fadeout, s32 r7);
 
 USER_FUNC(evt_snd_bgmon) {
     EvtWord* args = event->args;

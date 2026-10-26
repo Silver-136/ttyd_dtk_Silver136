@@ -127,3 +127,4 @@ extern const char R_no_messages_FR[];
 extern const char R_no_messages_IT[];
 void msgWindow_Continue(s32 id);
 void msgWindow_Repeat(s32 id);
+void msgWindow_ForceClose(const char* name);

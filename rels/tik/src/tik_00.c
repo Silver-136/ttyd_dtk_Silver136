@@ -68,7 +68,6 @@ typedef struct UranaiWork {
 } UranaiWork;
 void uranai_cap(CameraId cameraId, void* param);
 static inline f32 tanf(f32 x) { return tan(x); }
-const char* search_evt_moji(s32 id);
 s32 uranaisi_ryokin_rtn(s32 type);
 static s32 ssf;
 UranaiWork* uranai_wp;

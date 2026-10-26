@@ -118,3 +118,4 @@ USER_FUNC(yuugijou_set_yupflag);
 USER_FUNC(yuuminigame_end);
 USER_FUNC(yuuminigame_get_window_evt);
 USER_FUNC(yuuminigame_window_end);
+void evtYuuSetWindowEvt(EvtWord* evt);

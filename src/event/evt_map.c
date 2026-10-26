@@ -17,8 +17,6 @@
 #include "eff/eff_torch.h"
 
 
-void mapObjSetOffScreen(const char* name, const char* offscreen);
-void mapGrpSetOffScreen(const char* name, const char* offscreen);
 void mapObjSetColor(const char* name, GXColor color);
 void mapSetBlend(GXColor color);
 void mapSetBlend2(GXColor color);

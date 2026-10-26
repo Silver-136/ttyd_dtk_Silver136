@@ -39,7 +39,6 @@ typedef struct BattleSeqWork {
     s32 counter;    // 0x10
 } BattleSeqWork;
 
-
 s32 debug_battle_flag;
 s32 seq_battle_unk_8041874c;
 

@@ -320,7 +320,6 @@ USER_FUNC(evt_msg_print_add_insert) {
     return EVT_RETURN_DONE;
 }
 
-void msgWindow_ForceClose(const char* name);
 
 USER_FUNC(evt_msg_continue) {
     if (isFirstCall) {

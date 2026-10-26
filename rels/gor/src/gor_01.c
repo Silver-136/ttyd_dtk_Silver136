@@ -27,6 +27,7 @@
 #include "driver/casedrv.h"
 #include "driver/itemdrv.h"
 #include "driver/envdrv.h"
+#include "evt/evt_johoya.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "driver/npcdrv.h"
@@ -69,7 +70,6 @@ typedef struct ShopSel {
     s32 sel;
 } ShopSel;
 NpcEntry* fbatNpcTalkCheck(MarioWork* mario);
-const char* search_evt_moji(s32 id);
 void effStarStoneDraw(CameraId camera, void* param);
 s32* iri_09_item_tbl;
 s32 naniga_okorukana_cook(void);
