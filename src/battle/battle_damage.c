@@ -315,27 +315,27 @@ u32 BattleCheckPikkyoro(BattleWeapon* weapon, u32* flags) {
     }
     if (weapon->special & SPECIAL_ATTACK_FX) {
         f = (u32)wp->badgeEquippedFlags;
-        if (f & 0x100) {
+        if (f & BATTLE_BADGE_ATTACK_FX_R) {
             table[0] = 1;
             idx = 0;
             count++;
         }
-        if (f & 0x200) {
+        if (f & BATTLE_BADGE_ATTACK_FX_Y) {
             table[1] = 1;
             idx = 1;
             count++;
         }
-        if (f & 0x400) {
+        if (f & BATTLE_BADGE_ATTACK_FX_B) {
             table[2] = 1;
             idx = 2;
             count++;
         }
-        if (f & 0x800) {
+        if (f & BATTLE_BADGE_ATTACK_FX_G) {
             table[3] = 1;
             idx = 3;
             count++;
         }
-        if (f & 0x1000) {
+        if (f & BATTLE_BADGE_ATTACK_FX_P) {
             table[4] = 1;
             idx = 4;
             count++;

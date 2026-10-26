@@ -977,7 +977,7 @@ USER_FUNC(_check_pose_stay) {
     stay = FALSE;
     if (unit->currentKind == UNIT_MARIO) {
         stay = TRUE;
-        if (wp->badgeEquippedFlags & 1) {
+        if (wp->badgeEquippedFlags & BATTLE_BADGE_QUICK_CHANGE) {
             if (!(unit->mTokenFlags & kConfusedAction)) {
                 stay = FALSE;
             }

@@ -206,6 +206,21 @@ typedef struct BattleAfterReaction {
     s32 tag;    // 0x4
 } BattleAfterReaction;
 
+// BattleWork.badgeEquippedFlags: badges Mario has equipped (BattleInit, from the pouch)
+typedef enum BattleBadgeFlags {
+    BATTLE_BADGE_QUICK_CHANGE = (1 << 0),   // 0x1, ITEM_QUICK_CHANGE
+    BATTLE_BADGE_PEEKABOO = (1 << 1),       // 0x2, ITEM_PEEKABOO
+    BATTLE_BADGE_TIMING_TUTOR = (1 << 2),   // 0x4, ITEM_TIMING_TUTOR
+    BATTLE_BADGE_HEART_FINDER = (1 << 3),   // 0x8, ITEM_HEART_FINDER
+    BATTLE_BADGE_FLOWER_FINDER = (1 << 4),  // 0x10, ITEM_FLOWER_FINDER
+    BATTLE_BADGE_MONEY_MONEY = (1 << 7),    // 0x80, ITEM_MONEY_MONEY
+    BATTLE_BADGE_ATTACK_FX_R = (1 << 8),    // 0x100, ITEM_ATTACK_FX_R
+    BATTLE_BADGE_ATTACK_FX_Y = (1 << 9),    // 0x200, ITEM_ATTACK_FX_Y
+    BATTLE_BADGE_ATTACK_FX_B = (1 << 10),   // 0x400, ITEM_ATTACK_FX_B
+    BATTLE_BADGE_ATTACK_FX_G = (1 << 11),   // 0x800, ITEM_ATTACK_FX_G
+    BATTLE_BADGE_ATTACK_FX_P = (1 << 12),   // 0x1000, ITEM_ATTACK_FX_P
+} BattleBadgeFlags;
+
 struct BattleWork {
     s16 turnCount;                      // 0x0
     u16 turnSubSeq;                     // 0x2
@@ -254,7 +269,7 @@ struct BattleWork {
     BreakSlotWork breakSlot;            // 0x1616C, battle_break_slot.c
     BattleWorkPartyInfo partyInfo[7];   // 0x162A0
     u32 tattledUnitTypeFlags[8];        // 0x163B8
-    s32 badgeEquippedFlags;             // 0x163D8
+    s32 badgeEquippedFlags;             // 0x163D8, BattleBadgeFlags
     FileEntry* menuTex;                 // 0x163DC
     BattleStage stage;                  // 0x163E0
     BattleActRecord actRecord;          // 0x16F1C, battle condition counters (battle_actrecord)

@@ -230,37 +230,37 @@ BOOL Btl_UnitSetup(BattleWork* wp) {
     for (j = 0; j < 200; j++) {
         switch (pouch->equippedBadges[j]) {
             case ITEM_QUICK_CHANGE:
-                wp->badgeEquippedFlags |= 1 << 0;
+                wp->badgeEquippedFlags |= BATTLE_BADGE_QUICK_CHANGE;
                 break;
             case ITEM_PEEKABOO:
-                wp->badgeEquippedFlags |= 1 << 1;
+                wp->badgeEquippedFlags |= BATTLE_BADGE_PEEKABOO;
                 break;
             case ITEM_TIMING_TUTOR:
-                wp->badgeEquippedFlags |= 1 << 2;
+                wp->badgeEquippedFlags |= BATTLE_BADGE_TIMING_TUTOR;
                 break;
             case ITEM_HEART_FINDER:
-                wp->badgeEquippedFlags |= 1 << 3;
+                wp->badgeEquippedFlags |= BATTLE_BADGE_HEART_FINDER;
                 break;
             case ITEM_FLOWER_FINDER:
-                wp->badgeEquippedFlags |= 1 << 4;
+                wp->badgeEquippedFlags |= BATTLE_BADGE_FLOWER_FINDER;
                 break;
             case ITEM_MONEY_MONEY:
-                wp->badgeEquippedFlags |= 1 << 7;
+                wp->badgeEquippedFlags |= BATTLE_BADGE_MONEY_MONEY;
                 break;
             case ITEM_ATTACK_FX_R:
-                wp->badgeEquippedFlags |= 1 << 8;
+                wp->badgeEquippedFlags |= BATTLE_BADGE_ATTACK_FX_R;
                 break;
             case ITEM_ATTACK_FX_B:
-                wp->badgeEquippedFlags |= 1 << 10;
+                wp->badgeEquippedFlags |= BATTLE_BADGE_ATTACK_FX_B;
                 break;
             case ITEM_ATTACK_FX_G:
-                wp->badgeEquippedFlags |= 1 << 11;
+                wp->badgeEquippedFlags |= BATTLE_BADGE_ATTACK_FX_G;
                 break;
             case ITEM_ATTACK_FX_Y:
-                wp->badgeEquippedFlags |= 1 << 9;
+                wp->badgeEquippedFlags |= BATTLE_BADGE_ATTACK_FX_Y;
                 break;
             case ITEM_ATTACK_FX_P:
-                wp->badgeEquippedFlags |= 1 << 12;
+                wp->badgeEquippedFlags |= BATTLE_BADGE_ATTACK_FX_P;
                 break;
             default:
                 break;

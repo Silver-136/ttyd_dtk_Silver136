@@ -262,7 +262,7 @@ void peach_stay(void) {
 #define MT (mp->multiTimer)
     if (mp->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) {
         mp->trigFlags &= ~MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
-        mp->flags &= 0xFFF0FFFF;
+        mp->flags &= ~(MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING | MARIO_FLAG_IS_STEPPING | MARIO_FLAG_HAS_INPUT_JUMP);
         mp->airTimer = 0;
         MT = 0;
         mp->currSubMotionId = 0;
@@ -327,7 +327,7 @@ void peach_walk(void) {
     MarioWork* mp = marioGetPtr();
     if (mp->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) {
         mp->trigFlags &= ~MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
-        mp->flags &= 0xFFF0FFFF;
+        mp->flags &= ~(MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING | MARIO_FLAG_IS_STEPPING | MARIO_FLAG_HAS_INPUT_JUMP);
         if (mp->forceMoveTimer == 0) {
             mp->baseSpeed = marioGetWalkSpd();
         }
@@ -353,7 +353,7 @@ void peach_dash(void) {
     MarioWork* mp = marioGetPtr();
     if (mp->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) {
         mp->trigFlags &= ~MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
-        mp->flags &= 0xFFF0FFFF;
+        mp->flags &= ~(MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING | MARIO_FLAG_IS_STEPPING | MARIO_FLAG_HAS_INPUT_JUMP);
         if (mp->forceMoveTimer == 0) {
             mp->baseSpeed = marioGetDashSpd();
         }

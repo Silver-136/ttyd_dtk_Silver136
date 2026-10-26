@@ -2370,7 +2370,7 @@ void _btlcmd_SetAttackEvent(BattleUnit* unit, BattleCommand* cmd) {
             UEVT(unit) = btldefaultevt_ChangeParty;
             unit->attackEventFlags = ACT_EVENT_KEEP_STATUS_WINDOW;
             cmd->cursor[1].absPos = 0;
-            if (wp->badgeEquippedFlags & 1) {
+            if (wp->badgeEquippedFlags & BATTLE_BADGE_QUICK_CHANGE) {
                 unit->moveState = 3;
             }
             if (unit->currentKind == UNIT_MARIO) {

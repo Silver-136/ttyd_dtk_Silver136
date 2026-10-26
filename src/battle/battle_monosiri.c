@@ -739,7 +739,7 @@ BOOL battleCheckUnitMonosiriFlag(BattleUnit* unit) {
     BattleWork* wp = _battleWorkPointer;
     BattleUnitType kind = unit->currentKind;
     s32 flag;
-    if (wp->badgeEquippedFlags & 2) {
+    if (wp->badgeEquippedFlags & BATTLE_BADGE_PEEKABOO) {
         return TRUE;
     }
     flag = swGet(kind + 0x117A);

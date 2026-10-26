@@ -38,7 +38,7 @@ s32 BattleAcrobatMain(BattleWork* work) {
         work->mStylishResult = 1;
         return EVT_RETURN_YIELD;
     }
-    if ((work->badgeEquippedFlags & 4) && (work->mStylishCurFrame > work->mStylishWindowStart && work->mStylishCurFrame <= work->mStylishWindowEnd)) {
+    if ((work->badgeEquippedFlags & BATTLE_BADGE_TIMING_TUTOR) && (work->mStylishCurFrame > work->mStylishWindowStart && work->mStylishCurFrame <= work->mStylishWindowEnd)) {
         Vec v11 = { 0 };
         v11.x = unit->mPosition.x;
         v11.y = unit->mPosition.y;

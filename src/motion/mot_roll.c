@@ -339,7 +339,7 @@ s32 marioRollTryCancel(void) {
         if (!r) {
             ret = 1;
             mario->currSubMotionId = 0x14;
-            CAMF() |= 0x200;
+            CAMF() |= CAMERA_FLAG_LETTER_BOX_OFF;
         }
     }
     return ret;
@@ -354,7 +354,7 @@ s32 marioRollCancel(void) {
         return 0;
     }
     mario->currSubMotionId = 0x14;
-    CAMF() |= 0x200;
+    CAMF() |= CAMERA_FLAG_LETTER_BOX_OFF;
     return 1;
 }
 
@@ -585,7 +585,7 @@ void mot_roll(void) {
         MarioWork* m;
         s32 z0 = 0;
         s32 z1;
-        CAMF() |= 0x200;
+        CAMF() |= CAMERA_FLAG_LETTER_BOX_OFF;
         marioAdjustMoveDir();
         v31 = mario->displayDirection;
         if (v31 < 90.0f || v31 > 270.0f) {
@@ -651,7 +651,7 @@ void mot_roll(void) {
             mario->currSubMotionId = 0x1e;
             marioChgPose("M_I_U");
             marioChgPaper("PM_R_1B");
-            CAMF() &= ~0x200;
+            CAMF() &= ~CAMERA_FLAG_LETTER_BOX_OFF;
         }
         break;
     case 0x14:
@@ -741,7 +741,7 @@ void mot_roll(void) {
                 marioGetPtr()->motStruct = z;
             }
             allPartyRideOff();
-            CAMF() &= ~0x200;
+            CAMF() &= ~CAMERA_FLAG_LETTER_BOX_OFF;
             mario->currSubMotionId = 0x16;
         }
         break;
@@ -759,9 +759,9 @@ void mot_roll(void) {
     if (mario->buttonTrg & PAD_BUTTON_B) {
         if (!rollChk()) {
             mario->currSubMotionId = 0x14;
-            CAMF() |= 0x200;
+            CAMF() |= CAMERA_FLAG_LETTER_BOX_OFF;
         } else {
-            mario->buttonTrg |= 0x100;
+            mario->buttonTrg |= PAD_BUTTON_A;
         }
     }
     v26 = mario->tubeScaleY;

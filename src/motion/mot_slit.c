@@ -301,10 +301,10 @@ BOOL marioGetMotSlitCancel3(void) {
 }
 
 #define CLR_DISP 0xFEFFF3FF
-#define CLR_SLITFLAGS(m) \
-    (m)->flags &= ~0x400000; \
-    (m)->flags &= ~0x200000; \
-    (m)->dispFlags &= CLR_DISP; \
+#define CLR_SLITFLAGS(m)                           \
+    (m)->flags &= ~MARIO_FLAG_PARTY_WALK_DISABLED; \
+    (m)->flags &= ~MARIO_FLAG_GONE_THROUGH_BARS;   \
+    (m)->dispFlags &= CLR_DISP;                    \
     (m)->dispFlags &= CLR_DISP;
 
 static inline void slitSetDir(MarioWork* m, f32 a) {
@@ -388,7 +388,7 @@ void mot_slit_post(void) {
         }
         m->flags &= ~MARIO_FLAG_PARTY_WALK_DISABLED;
         m->flags &= ~MARIO_FLAG_GONE_THROUGH_BARS;
-        m->dispFlags &= 0xFEFFF3FF;
+        m->dispFlags &= ~(MARIO_DISP_FLAG_LEFT_ONLY | MARIO_DISP_FLAG_RIGHT_ONLY | MARIO_DISP_FLAG_SLIT);
         m->dispFlags &= CLR_DISP;
         marioPaperOff();
         mapResetPaperAmbColor();
@@ -484,13 +484,13 @@ static inline BOOL slitContinueChk(void) {
 #endif
 #define SPEEDCHK(m) SPEEDCHK_IF(m, (m)->baseSpeed >= (m)->mBaseDashSpeed)
 #define SPEEDCHK_US(m) SPEEDCHK_IF(m, SPEEDCHK_COND(m))
-#define SPEEDCHK_IF(m, c) \
-    if (c) { \
+#define SPEEDCHK_IF(m, c)                     \
+    if (c) {                                  \
         (m)->baseSpeed = (m)->mBaseWalkSpeed; \
-        if (!((m)->trigFlags & 0x8000)) { \
-            marioChgPose("M_R_1"); \
-        } \
-        m->mot.slit.flags |= 1; \
+        if (!((m)->trigFlags & 0x8000)) {     \
+            marioChgPose("M_R_1");            \
+        }                                     \
+        m->mot.slit.flags |= 1;               \
     }
 
 static inline f32 slitWalkSpeed(void) {
@@ -522,32 +522,32 @@ static inline f32 slitWalkSpeed(void) {
         (m)->displayDirection = 280.0f;                             \
     }
 
-#define CAMFIX(m) \
-    { \
+#define CAMFIX(m)                     \
+    {                                 \
         MarioWork* p = marioGetPtr(); \
-        p->camShiftTargetZ = 0.0f; \
-        p->camShiftRate.z = 0.004f; \
+        p->camShiftTargetZ = 0.0f;    \
+        p->camShiftRate.z = 0.004f;   \
     }
 
 #ifdef VERSION_G8ME01
-#define SLITSTOP(m) \
-    if (!marioChkKey()) { \
-        (m)->baseSpeed = 0.0f; \
-        m->slitState = 10; \
-        m->mot.slit.count = 0; \
-        marioChgPose("M_S_1"); \
+#define SLITSTOP(m)               \
+    if (!marioChkKey()) {         \
+        (m)->baseSpeed = 0.0f;    \
+        m->slitState = 10;        \
+        m->mot.slit.count = 0;    \
+        marioChgPose("M_S_1");    \
         marioChgPaper("PM_S_1B"); \
-        break; \
+        break;                    \
     }
-#define SLITSTOP2(m) \
-    if (!marioChkKey()) { \
-        m->mot.slit.timer = 0; \
-        (m)->baseSpeed = 0.0f; \
-        m->slitState = 10; \
-        m->mot.slit.count = 0; \
-        marioChgPose("M_S_1"); \
+#define SLITSTOP2(m)              \
+    if (!marioChkKey()) {         \
+        m->mot.slit.timer = 0;    \
+        (m)->baseSpeed = 0.0f;    \
+        m->slitState = 10;        \
+        m->mot.slit.count = 0;    \
+        marioChgPose("M_S_1");    \
         marioChgPaper("PM_S_1B"); \
-        break; \
+        break;                    \
     }
 #else
 #define SLITSTOP(m)

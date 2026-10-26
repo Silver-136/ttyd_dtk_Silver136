@@ -3740,11 +3740,11 @@ s32 _object_fall_attack(EventEntry *event, BOOL isFirstCall) {
             e->weapon = fd->weapons[e->type];
             if (e->type == STAGE_FALL_BOWSER_STATUE) {
                 if (irand(100) < 50) {
-                    e->weapon.weapon.targetClassFlags |= 0x100;
-                    e->weapon.weapon.targetClassFlags &= ~0x200;
+                    e->weapon.weapon.targetClassFlags |= TARGET_CLASS_NO_OPPOSITE_SIDE;
+                    e->weapon.weapon.targetClassFlags &= ~TARGET_CLASS_NO_OWN_SIDE;
                 } else {
-                    e->weapon.weapon.targetClassFlags &= ~0x100;
-                    e->weapon.weapon.targetClassFlags |= 0x200;
+                    e->weapon.weapon.targetClassFlags &= ~TARGET_CLASS_NO_OPPOSITE_SIDE;
+                    e->weapon.weapon.targetClassFlags |= TARGET_CLASS_NO_OWN_SIDE;
                 }
             }
             weapon = &e->weapon.weapon;
