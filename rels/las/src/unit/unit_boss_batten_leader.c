@@ -42,7 +42,7 @@
 #define UNIT_WORK_ROD_LIGHT_PATTERN 7 // which rod light light_rod_anim_rtn plays: 8 btl_shuryolight_rod_normal (init, every attack), 9 btl_shuryolight_rod_off (hit on a non-body part)
 #define UNIT_WORK_SHIELD_EFFECT 8     // EffectEntry* of the effSyuryouEntry glow while all four satellites are out (check_satellite creates it; deletes it and sets 0 when one is lost)
 #define UNIT_WORK_SATELLITE 9         // first of four satellite unit ids (slots 9-12, -1 = empty): sub_call_satellite fills them, player_before_phase_event packs them, check_satellite clears dead ones
-#define UNIT_WORK_SATELLITE_SPLINE 13 // first of four BattenSpline* move works (slots 13-16, one per satellite slot; 0 when the move ends); satellite 3 uses work[16], past the array
+#define UNIT_WORK_SATELLITE_SPLINE 13 // first of four BattenSpline* move works (slots 13-16, one per satellite slot; 0 when the move ends); see the BUG note in battenSatelliteTo_Init
 
 Vec nowv;
 f32 maer;
@@ -2692,6 +2692,8 @@ u8 battenSatelliteTo_Init(BattleUnit* unit, s32 n, Vec* table) {
     if (unit->work[UNIT_WORK_SATELLITE + n] == -1) {
         return FALSE;
     }
+    // BUG: n goes up to 3, so the fourth satellite's spline is stored in work[16], one past the 16 work slots
+    // (it lands on currentTarget)
     unit->work[UNIT_WORK_SATELLITE_SPLINE + n] = (EvtWord)sp;
     sp->n = 5;
     sp->table = table;

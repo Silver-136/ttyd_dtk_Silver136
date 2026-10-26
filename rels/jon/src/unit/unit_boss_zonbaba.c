@@ -19,7 +19,7 @@
 // BattleUnit.work slots (btlevtcmd_Get/Set/AddUnitWork)
 #define UNIT_WORK_HP_STAGE 0          // 0 full, 1 once HP <= 50%, 2 once HP <= 25% (prints tik_boss_15); attack_event picks its attack table by it
 #define UNIT_WORK_RECOVERS_LEFT 1     // heals left (2 at start, recover_event subtracts 1); at 0 attack_event gives the recover draw weight 0
-#define UNIT_WORK_RECOVER_TALK_DONE 2 // meant to be 1 after the first recover printed tik_boss_14; recover_event calls GetUnitWork instead of SetUnitWork, so it stays 0
+#define UNIT_WORK_RECOVER_TALK_DONE 2 // 1 once recover_event printed tik_boss_14 (never set: see the BUG note there)
 
 USER_FUNC(btlevtcmd_SetEventEntry);
 USER_FUNC(btlevtcmd_SetEventPhase);
@@ -1053,6 +1053,8 @@ EVT_BEGIN(recover_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_RECOVER_TALK_DONE, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
+        // BUG: GetUnitWork (reading into the constant 1) where SetUnitWork was meant: the slot stays 0, so
+        // tik_boss_14 is printed on every recover
         CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_RECOVER_TALK_DONE, 1)
         CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("tik_boss_14"), 0, -2)
         CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_ON)
