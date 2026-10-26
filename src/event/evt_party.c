@@ -516,7 +516,7 @@ USER_FUNC(evt_party_jump_pos) {
             p->gravity = 0.0f;
             p->work.common.accelY = 0.0f;
             p->moveSpeed = 0.0f;
-            partyRestoreRunMode(p);
+            partyPrevRunMode(p);
             return EVT_RETURN_YIELD;
         }
         break;

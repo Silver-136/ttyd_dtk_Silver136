@@ -570,7 +570,7 @@ void N_partyPlaySfxPartyLanding1(PartyEntry* party) {
     psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_LANDING1), &party->position);
 }
 
-void partyPlaySfxFootstep(PartyEntry* party, s32 arg) {
+void partyWalkSe(PartyEntry* party, s32 arg) {
     s32 a;
     s32 b;
 
@@ -648,7 +648,7 @@ void partyChgWalkPose(PartyEntry* party, f32 spd) {
 
     if (party->flags2 & PARTY_DISP_FLAG_SLIT) {
         partyChgPoseId(party, 3);
-        partyPlaySfxFootstep(party, 1);
+        partyWalkSe(party, 1);
         return;
     }
     a = (1.0f == party->playerPtr->playerGravity) ? 1.65f : 2.0f;
@@ -656,17 +656,17 @@ void partyChgWalkPose(PartyEntry* party, f32 spd) {
     if (a - b < spd && spd < spd + b) {
         if (N_marioGetMovementSpeed() == 1) {
             partyChgPoseId(party, 2);
-            partyPlaySfxFootstep(party, 0);
+            partyWalkSe(party, 0);
         } else {
             partyChgPoseId(party, 3);
-            partyPlaySfxFootstep(party, 1);
+            partyWalkSe(party, 1);
         }
     } else if (spd >= a) {
         partyChgPoseId(party, 3);
-        partyPlaySfxFootstep(party, 1);
+        partyWalkSe(party, 1);
     } else {
         partyChgPoseId(party, 2);
-        partyPlaySfxFootstep(party, 0);
+        partyWalkSe(party, 0);
     }
 }
 
@@ -1306,7 +1306,7 @@ void partyForceWalk(PartyEntry* party) {
         case 1:
             if (party->forceMoveFrames <= 0) {
                 party->forceMoveFrames = 0;
-                partyRestoreRunMode(party);
+                partyPrevRunMode(party);
                 break;
             }
             partyChgWalkPose(party, party->moveSpeed);
@@ -1319,7 +1319,7 @@ void partyForceWalk(PartyEntry* party) {
             }
             if (--party->forceMoveFrames <= 0) {
                 party->forceMoveFrames = 0;
-                partyRestoreRunMode(party);
+                partyPrevRunMode(party);
                 break;
             }
             party->flags &= ~PARTY_FLAG_IN_SHALLOW_WATER;

@@ -799,7 +799,7 @@ void N_partyForceChgRunMode(PartyEntry* party, s32 mode, s32 sub) {
 }
 #pragma dont_inline reset
 
-void partyRestoreRunMode(PartyEntry* party) {
+void partyPrevRunMode(PartyEntry* party) {
     if (party->runMode == party->prevRunMode) {
         return;
     }

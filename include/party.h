@@ -195,7 +195,7 @@ typedef struct PartyEntry {
     s16 forceMoveFrames;                // 0x28, partySetForceMove frame count; evt_party_move waits for 0
     s16 mutekiTimer;                    // 0x2A, copied from MarioWork 0x4C (marioSetMutekiTime)
     s8 kemuriTimer;                     // 0x2C, frames between effKemuri2Entry dust puffs (mario_kemuri)
-    s8 footstepTimer;                   // 0x2D, partyPlaySfxFootstep frame counter
+    s8 footstepTimer;                   // 0x2D, partyWalkSe frame counter
     s8 dirKind;                         // 0x2E, set from the pipe exit dir (partyDokanEnd)
     s8 currentSlotId;                   // 0x2F
     s8 port;                            // 0x30, controller port (partyUpdateKeyData)
@@ -325,7 +325,7 @@ f32 partyGetHeight(PartyEntry* party);
 void partyInitCamId(PartyEntry* party);
 void partyKeyOff(void);
 void partyKeyOn(void);
-void partyRestoreRunMode(PartyEntry* party);
+void partyPrevRunMode(PartyEntry* party);
 void partyRun(PartyEntry* party);
 void partyStop(PartyEntry* party);
 void party_force_ride_yoshi(PartyEntry* party);
