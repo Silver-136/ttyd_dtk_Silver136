@@ -276,7 +276,7 @@ void btlseqInit(BattleWork* wp) {
 
         case 0x1000001:
             mario = marioGetPtr();
-            mario->dispFlags |= 1;
+            mario->dispFlags |= MARIO_DISP_FLAG_HIDE;
             party = partyGetPtr(marioGetPartyId());
             if (party) {
                 party->flags2 |= PARTY_DISP_FLAG_HIDE;

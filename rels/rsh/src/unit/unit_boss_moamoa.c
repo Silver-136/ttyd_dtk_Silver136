@@ -1184,7 +1184,7 @@ static void ext_moamoa_init(void) {
     wp->targetScale = 1.0f;
     wp->scale = 1.0f;
     for (i = 0; i < wp->count; i++, pose++, elem++) {
-        pose->flags |= 5;
+        pose->flags |= (EXT_POSE_FLAG_VISIBLE | EXT_POSE_FLAG_NO_SHADOW);
         PSMTXIdentity(*pose->mtx);
         moamoa_pose(elem);
     }
@@ -1266,13 +1266,13 @@ static void ext_moamoa_main(void) {
             s = 1.0f - t;
             if (a->y == -1000.0f || b->y == -1000.0f) {
                 v = (Vec){0.0f, -1000.0f, 0.0f};
-                pose->flags &= ~1;
+                pose->flags &= ~EXT_POSE_FLAG_VISIBLE;
             } else {
                 PSVECScale(a, &v, t);
                 PSVECScale(b, &w, s);
                 PSVECAdd(&v, &w, &v);
                 PSVECAdd(&v, &e4->pos, &v);
-                pose->flags |= 1;
+                pose->flags |= EXT_POSE_FLAG_VISIBLE;
             }
             if (e4->owner != &wp->unitId) {
                 for (j = 1; j < 5; j++) {

@@ -542,7 +542,7 @@ void marioChkGnd(void) {
             if (hit && d <= 11.0f && d >= 5.0f && w->groundSlope <= 30.0f) {
                 w->stepUpY = sy;
                 if (w->baseSpeed) {
-                    if (!((u32)w->dispFlags & 0x1000000)) {
+                    if (!((u32)w->dispFlags & MARIO_DISP_FLAG_SLIT)) {
                         marioChgMot(MARIO_MOTION_UPSTAIRS);
                     } else {
                         marioChgMotSub(MARIO_MOTION_UPSTAIRS, 0);
@@ -741,7 +741,7 @@ HitEntry* marioSearchGround(f32* y, f32* b, f32* c, f32 spd, f32 h) {
             hit = marioHitCheckVecInl(&v, &dir, &outPos, &outNrm, &dist);
         }
         if (hit) {
-            if ((u32)w->dispFlags & 0x1000000) {
+            if ((u32)w->dispFlags & MARIO_DISP_FLAG_SLIT) {
                 lim = 75.0f;
             } else if (w->currMotionId == MARIO_MOTION_HIP) {
                 lim = 75.0f;
@@ -1471,7 +1471,7 @@ HitEntry* marioSearchHead(Vec* pos, f32* h, f32 dd) {
         if (hit) {
             f32 r = marioHitNrmAngle(&outNrm);
             if (!(w->flags & MARIO_FLAG_TUBE_MODE)) {
-                f32 lim = ((u32)w->dispFlags & 0x1000000) ? 75.0f : 50.0f;
+                f32 lim = ((u32)w->dispFlags & MARIO_DISP_FLAG_SLIT) ? 75.0f : 50.0f;
                 if (r <= 180.0f - lim && r >= lim) {
                     hit = NULL;
                 }

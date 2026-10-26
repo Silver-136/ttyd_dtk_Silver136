@@ -192,7 +192,7 @@ void effAutoRelease(BOOL inBattle) {
     EffectEntry* entry = wp->entries;
 
     for (i = 0; i < count; i++, entry++) {
-        if (entry->flags & 1 && (s32)entry->inBattle == inBattle && entry && entry->flags) {
+        if (entry->flags & EFFECT_FLAG_ACTIVE && (s32)entry->inBattle == inBattle && entry && entry->flags) {
             __memFree(HEAP_EFFECT, entry->userdata);
             entry->flags = 0;
         }
@@ -245,7 +245,7 @@ void effMain(void) {
         } else if ((s32)entry->inBattle != 0) {
             continue;
         }
-        if (entry->flags & 1) {
+        if (entry->flags & EFFECT_FLAG_ACTIVE) {
             if (entry->callback) {
                 entry->callback(entry);
             }

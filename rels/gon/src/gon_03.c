@@ -921,7 +921,7 @@ static void senkaron_ext_main(void) {
                 }
                 break;
             case 0x61:
-                pose->flags |= 4;
+                pose->flags |= EXT_POSE_FLAG_NO_SHADOW;
                 if ((*pose->mtx)[1][3] > -100.0f) {
                     (*pose->mtx)[0][3] += senkaron[i].vx;
                     (*pose->mtx)[1][3] += senkaron[i].vy;
@@ -937,7 +937,7 @@ static void senkaron_ext_main(void) {
                     (*pose->mtx)[1][3] = 200.0f;
                     (*pose->mtx)[2][3] = randf(-125.0f, 140.0f);
                     pose->dir = randf(0.0f, 360.0f);
-                    pose->flags &= ~4;
+                    pose->flags &= ~EXT_POSE_FLAG_NO_SHADOW;
                     senkaron[i].state = 0;
                     senkaron[i].timer = randf(1.0f, 1000.0f);
                     senkaron[i].vy = 0.0f;

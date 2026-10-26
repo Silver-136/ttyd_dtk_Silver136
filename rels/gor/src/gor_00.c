@@ -4879,7 +4879,7 @@ USER_FUNC(npc_all_delete) {
     NpcEntry* npc = wp->entries;
 
     for (i = 0; i < total; i++, npc++) {
-        if (npc->flags & 1) {
+        if (npc->flags & NPC_FLAG_IN_USE) {
             if (npc->moveEvent != NULL) {
                 if (npc->regularEvtId != 0) {
                     evtDeleteID(npc->regularEvtId);
