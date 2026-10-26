@@ -97,7 +97,7 @@ void npcReleaseFiledNpc(void) {
 
     wp = &work.field;
     field = release_wp;
-    if (wp->flags & 2) {
+    if (wp->flags & NPC_WORK_FIELD_RELEASED) {
         entry = wp->entries;
         for (i = 0; i < wp->total; i++, entry++) {
             if (entry->flags & NPC_FLAG_IN_USE && entry->flags & NPC_FLAG_READY && animPoseGetAnimPosePtr(entry->poseId)->paperId == -1) {
@@ -128,7 +128,7 @@ void npcRecoveryFiledNpc(void) {
 
     wp = &work.field;
     field = release_wp;
-    if (wp->flags & 2) {
+    if (wp->flags & NPC_WORK_FIELD_RELEASED) {
         entry = wp->entries;
         for (i = 0; i < wp->total; i++, entry++) {
             if (entry->flags & NPC_FLAG_IN_USE && entry->flags & NPC_FLAG_READY && entry->poseId == -1) {
@@ -153,7 +153,7 @@ void npcRecoveryFiledNpc(void) {
                 field++; // next release_wp entry
             }
         }
-        wp->flags &= ~2;
+        wp->flags &= ~NPC_WORK_FIELD_RELEASED;
     }
 }
 
@@ -1633,7 +1633,7 @@ void fbatEncountCheck(void) {
     if (marioStGetSystemLevel() != 0) {
         return;
     }
-    if (!(wp->flags & 1)) {
+    if (!(wp->flags & NPC_WORK_ALWAYS_ENCOUNT)) {
         if ((!npc->width) && (!npc->width)) {
         }
         if (marioKeyOffChk() || marioCtrlOffChk()) {
@@ -2298,7 +2298,7 @@ static inline BOOL fbat_canHit(NpcEntry* npc) {
     MarioWork* m = marioGetPtr();
     NpcWork* wp = npcGetWorkPtrInline();
     if (m->flags & (MARIO_FLAG_BG_MODE | MARIO_FLAG_IS_8_BIT)) return FALSE;
-    if (!(wp->flags & 1) && (m->flags & (MARIO_FLAG_CTRL_OFF | MARIO_FLAG_KEY_OFF))) return FALSE;
+    if (!(wp->flags & NPC_WORK_ALWAYS_ENCOUNT) && (m->flags & (MARIO_FLAG_CTRL_OFF | MARIO_FLAG_KEY_OFF))) return FALSE;
     if ((*(s32*)&((GlobalWork*)gp)->mapEventId)) return FALSE;
     if (seqGetSeq() != SEQ_GAME) return FALSE;
     if ((*(u16*)&((MarioWork*)m)->currMotionId) == MARIO_MOTION_SHIP) return FALSE;

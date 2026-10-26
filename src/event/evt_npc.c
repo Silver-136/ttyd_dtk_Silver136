@@ -2715,9 +2715,9 @@ USER_FUNC(evt_npc_release_filednpc) {
     BOOL set = evtGetValue(event, *event->args);
     NpcWork* wp = npcGetWorkPtr();
     if (set) {
-        wp->flags |= 2;
+        wp->flags |= NPC_WORK_FIELD_RELEASED;
     } else {
-        wp->flags &= ~2;
+        wp->flags &= ~NPC_WORK_FIELD_RELEASED;
     }
     return EVT_RETURN_DONE;
 }

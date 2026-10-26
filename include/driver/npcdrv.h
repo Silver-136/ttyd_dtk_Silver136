@@ -313,10 +313,17 @@ typedef struct NpcFieldEntry {
     f32 peraTargetRotY;                 // 0x90
 } NpcFieldEntry;
 
+// NpcWork.flags
+typedef enum NpcWorkFlags {
+    NPC_WORK_ALWAYS_ENCOUNT = (1 << 0), // 0x1, talk and field-battle contact also while Mario cannot move
+                                        // (gor_01 chusan1_alwaysencont)
+    NPC_WORK_FIELD_RELEASED = (1 << 1), // 0x2, field NPC models released (evt_npc_release_filednpc)
+} NpcWorkFlags;
+
 typedef struct NpcWork {
     s32 count;            // 0x0, currently allocated
     s32 total;            // 0x4, maximum allowed
-    s32 flags;            // 0x8
+    s32 flags;            // 0x8, NpcWorkFlags
     NpcEntry* entries;    // 0xC
     NpcEntry* talkTarget; // 0x10, NPC that A would talk to this frame
 } NpcWork;

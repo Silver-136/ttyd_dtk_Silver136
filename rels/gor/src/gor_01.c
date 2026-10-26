@@ -377,9 +377,9 @@ USER_FUNC(chusan1_alwaysencont) {
     NpcWork* wp = npcGetWorkPtr();
 
     if (evtGetValue(event, args[0])) {
-        wp->flags |= 1;
+        wp->flags |= NPC_WORK_ALWAYS_ENCOUNT;
     } else {
-        wp->flags &= ~1;
+        wp->flags &= ~NPC_WORK_ALWAYS_ENCOUNT;
     }
     return EVT_RETURN_DONE;
 }
