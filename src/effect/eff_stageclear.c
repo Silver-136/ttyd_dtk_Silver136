@@ -337,7 +337,7 @@ void effStageClearDisp(CameraId cameraId, EffectEntry* effect) {
 #ifdef VERSION_G8ME01
                 effGetTexObj(niji_tbl[gp->language], &tex);
 #else
-                effGetTexObj(niji_tbl[gp->language != 0], &tex);
+                effGetTexObj(niji_tbl[gp->language != LANGUAGE_JP], &tex);
 #endif
                 GXLoadTexObj(&tex, GX_TEXMAP1);
                 GXSetNumTevStages(3);

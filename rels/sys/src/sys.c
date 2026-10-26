@@ -644,7 +644,7 @@ void display_func(CameraId cameraId, void* param) {
         TEXGetGXTexObjFromPalette(*wp->file->data, &tex, (u16)niji_tbl[gp->language]);
         GXLoadTexObj(&tex, GX_TEXMAP1);
         setChanMatColor((GXColor){0x00, 0x00, 0x00, 0xFF}, getLightColor(chr->rot));
-        if ((u32)gp->language != 0) {
+        if ((u32)gp->language != LANGUAGE_JP) {
             PSMTXScale(scale, 0.8f, 0.8f, 0.8f);
         } else {
             PSMTXScale(scale, 1.0f, 1.0f, 1.0f);
@@ -674,7 +674,7 @@ void display_func(CameraId cameraId, void* param) {
         C_MTXLightPerspective(proj, 25.0f, 640.0f, 0.5f, 0.5f, 0.5f, 0.5f);
         C_MTXLookAt(view, &eye, &up, &target);
         PSMTXConcat(proj, view, proj);
-        if ((u32)gp->language != 0) {
+        if ((u32)gp->language != LANGUAGE_JP) {
             PSMTXScale(scale, 0.5f, 0.5f, 0.5f);
         } else {
             PSMTXScale(scale, 1.0f, 1.0f, 1.0f);

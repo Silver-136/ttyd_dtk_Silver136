@@ -731,7 +731,7 @@ void DrawMenuPinchMark(void) {
                 a = 0xFF;
             }
         } else {
-            id = gp->language == 0 ? 6 : 7;
+            id = gp->language == LANGUAGE_JP ? 6 : 7;
             r = 0xFF;
             g = 0xE9;
             b = 0x40;
@@ -782,7 +782,7 @@ void DrawMenuPinchMark(void) {
             PSMTXTrans(m, p.x - 20.0f, 60.0f + p.y, 0.0f);
         }
         PSMTXConcat(cam->view, m, out);
-        if ((u32)gp->language != 0) {
+        if ((u32)gp->language != LANGUAGE_JP) {
             PSMTXScale(s, 1.5f, 1.5f, 1.5f);
             PSMTXConcat(out, s, out);
         }
@@ -838,7 +838,7 @@ void N_DrawMenuPartyPinchMark(void) {
             PSMTXTrans(m, p.x - 20.0f, 60.0f + p.y, 0.0f);
         }
         PSMTXConcat(cam->view, m, out);
-        if ((u32)gp->language != 0) {
+        if ((u32)gp->language != LANGUAGE_JP) {
             PSMTXScale(s, 1.5f, 1.5f, 1.5f);
             PSMTXConcat(out, s, out);
         }

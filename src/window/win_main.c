@@ -257,13 +257,13 @@ void winMain(void) {
                     padRumbleHardOff(i);
                 }
 #ifdef VERSION_G8ME01
-                fileAsyncf(4, 0, "%s/w/%s/mail.tpl", getMarioStDvdRoot(), (u32)gp->language == 0 ? "jp" : "us");
+                fileAsyncf(4, 0, "%s/w/%s/mail.tpl", getMarioStDvdRoot(), (u32)gp->language == LANGUAGE_JP ? "jp" : "us");
 #else
                 fileAsyncf(4, 0, "%s/w/jp/mail.tpl", getMarioStDvdRoot());
 #endif
                 {
 #ifdef VERSION_G8ME01
-                    fileAsyncf(4, 0, "%s/w/%s/%s", getMarioStDvdRoot(), (u32)gp->language == 0 ? "jp" : "us", winGetMapTplName());
+                    fileAsyncf(4, 0, "%s/w/%s/%s", getMarioStDvdRoot(), (u32)gp->language == LANGUAGE_JP ? "jp" : "us", winGetMapTplName());
 #else
                     const char* name = winGetMapTplName();
                     fileAsyncf(4, 0, "%s/w/jp/%s", getMarioStDvdRoot(), name);
@@ -987,7 +987,7 @@ void winFontSetR(Vec pos, Vec scale, GXColor color, const char* fmt, ...) {
         vsprintf(buf, fmt, args);
         msg = buf;
     }
-    if ((u32)gp->language != 0) {
+    if ((u32)gp->language != LANGUAGE_JP) {
         ref = FontGetMessageWidth("999");
     } else {
         ref = FontGetMessageWidth("９９９");

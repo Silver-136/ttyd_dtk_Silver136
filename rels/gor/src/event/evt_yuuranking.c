@@ -492,7 +492,7 @@ static void evt_yuuranking_disp_func(CameraId camera, void* param) {
                 FontDrawColor((GXColor){0xFF, 0x3F, 0x3F, 0xFF});
             }
 #ifdef VERSION_G8ME01
-            rk = (const u8*)ranks[gp->language != 0][i];
+            rk = (const u8*)ranks[gp->language != LANGUAGE_JP][i];
 #else
             rk = (const u8*)ranks[i];
 #endif

@@ -985,7 +985,7 @@ void JUTFont_DrawStart(GXColor color) {
     GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_A0, GX_CA_TEXA, GX_CA_ZERO);
     GXLoadTexObj(&fgTexObj, GX_TEXMAP0);
 #ifdef VERSION_G8ME01
-    if ((u32)gp->language == 0) {
+    if ((u32)gp->language == LANGUAGE_JP) {
         PSMTXScale(mtx, 0.001953125f, 0.0009765625f, 1.0f);
     } else {
         PSMTXScale(mtx, 0.001953125f, 0.00390625f, 1.0f);

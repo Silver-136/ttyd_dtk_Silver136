@@ -150,7 +150,7 @@ void _get_item_announce_disp(s32 cameraId, void* param) {
     no = BattleAudience_GetPresentItemNo();
     itemName = msgSearch(itemDataTable[no].name);
 #ifdef VERSION_G8ME01
-    if ((u32)gp->language == 0) {
+    if ((u32)gp->language == LANGUAGE_JP) {
         msg = msgSearch("btl_msg_get_item");
         sprintf(buf, msg, itemName);
     } else {

@@ -496,7 +496,7 @@ USER_FUNC(evt_exchange_msg_set) {
     s32 n = exchange_ret_tbl_no();
 
 #ifdef VERSION_G8ME01
-    if ((u32)gp->language == 0) {
+    if ((u32)gp->language == LANGUAGE_JP) {
         sprintf(exchange_msgp, msg, value, exchange_ryokin_medal_tbl[n][0].medal, exchange_ryokin_medal_tbl[n][0].ryokin, exchange_ryokin_medal_tbl[n][1].medal, exchange_ryokin_medal_tbl[n][1].ryokin, exchange_ryokin_medal_tbl[n][2].medal, exchange_ryokin_medal_tbl[n][2].ryokin);
     } else {
         sprintf(exchange_msgp, msg, value);

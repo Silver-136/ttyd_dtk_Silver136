@@ -380,7 +380,7 @@ static void disp_proc(CameraId cameraId, void* param) {
     left = -winW / 2.0f;
     windowDispGX_System(0, 0xFF, left - 30.0f, 165.0f, 310.0f, 330.0f);
 #ifdef VERSION_G8ME01
-    if ((u32)gp->language == 0) {
+    if ((u32)gp->language == LANGUAGE_JP) {
         title = "\x83\x89\x83\x93\x83\x4C\x83\x93\x83\x4F";
     } else {
         title = msgSearch("stg3_ranking");
@@ -421,7 +421,7 @@ static void disp_proc(CameraId cameraId, void* param) {
         PSMTXScale(scale, 0.8f, 0.8f, 0.8f);
         if (num != 0) {
 #ifdef VERSION_G8ME01
-            if ((u32)gp->language == 0) {
+            if ((u32)gp->language == LANGUAGE_JP) {
                 sprintf(entry, "%s%s", num / 10 ? suuji[num / 10] : "", suuji[num % 10]);
             } else {
                 sprintf(entry, "%2d", num);

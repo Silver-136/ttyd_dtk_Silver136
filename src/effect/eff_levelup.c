@@ -81,7 +81,7 @@ EffectEntry* effLevelupEntry(s32 type, f32 x, f32 y, f32 z, s32 limit) {
 #ifdef VERSION_G8ME01
         a = 0.0f;
         b = a;
-        s = (u32)gp->language == 3 ? 0.9f : 1.0f;
+        s = (u32)gp->language == LANGUAGE_FR ? 0.9f : 1.0f;
         for (j = 0; j < i - 1; j++) {
             effGetTexObj(texid_tbl[gp->language][j], &texObj);
             a += s * (f32)GXGetTexObjWidth(&texObj);
@@ -236,7 +236,7 @@ void effLevelupDisp(CameraId cameraId, EffectEntry* effect) {
 #ifdef VERSION_G8ME01
                 effGetTexObj(*(s32*)((u8*)texid_tbl[gp->language] + tofs + 2 * sizeof(s32)), &texObj);
 #else
-                effGetTexObj(*(s32*)((u8*)texid_tbl[gp->language != 0] + tofs + 2 * sizeof(s32)), &texObj);
+                effGetTexObj(*(s32*)((u8*)texid_tbl[gp->language != LANGUAGE_JP] + tofs + 2 * sizeof(s32)), &texObj);
 #endif
                 GXLoadTexObj(&texObj, GX_TEXMAP0);
                 color = (GXColor){ 0, 0, 0, 0x80 };
@@ -245,7 +245,7 @@ void effLevelupDisp(CameraId cameraId, EffectEntry* effect) {
 #ifdef VERSION_G8ME01
                 effGetTexObj(*(s32*)((u8*)texid_tbl[gp->language] + tofs - sizeof(s32)), &texObj);
 #else
-                effGetTexObj(*(s32*)((u8*)texid_tbl[gp->language != 0] + tofs - sizeof(s32)), &texObj);
+                effGetTexObj(*(s32*)((u8*)texid_tbl[gp->language != LANGUAGE_JP] + tofs - sizeof(s32)), &texObj);
 #endif
                 GXLoadTexObj(&texObj, GX_TEXMAP0);
                 color = (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF };
@@ -261,7 +261,7 @@ void effLevelupDisp(CameraId cameraId, EffectEntry* effect) {
             effGetTexObj(*(s32*)((u8*)texid_tbl[gp->language] + tofs - sizeof(s32)), &texObj2);
             width = GXGetTexObjWidth(&texObj2);
             height = GXGetTexObjHeight(&texObj2);
-            if ((u32)gp->language == 3) {
+            if ((u32)gp->language == LANGUAGE_FR) {
                 width *= 0.9f;
                 height *= 0.9f;
             }
@@ -272,7 +272,7 @@ void effLevelupDisp(CameraId cameraId, EffectEntry* effect) {
                 f32 half = width * halfScale;
 #else
                 s32 arr[2][4] = { { 0, 128, 120, 24 }, { 0, 176, 68, 24 } };
-                f32 width = *(s32*)((u8*)arr[gp->language != 0] + tofs);
+                f32 width = *(s32*)((u8*)arr[gp->language != LANGUAGE_JP] + tofs);
 
                 f32 half = width * halfScale;
 #endif

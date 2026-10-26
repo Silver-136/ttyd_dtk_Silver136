@@ -1163,7 +1163,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
                     data->charCount++;
                 } else {
 #ifdef VERSION_G8ME01
-                    if ((u32)gp->language == 0) {
+                    if ((u32)gp->language == LANGUAGE_JP) {
                         glyph = kanjiSearch(0x94B5);
                     } else {
                         glyph = hankakuSearch(-48);
@@ -1413,7 +1413,7 @@ const char* msgSearch(const char* tag) {
 
 BOOL _ismbblead(u32 c) {
 #ifdef VERSION_G8ME01
-    if ((u32)gp->language != 0) {
+    if ((u32)gp->language != LANGUAGE_JP) {
         return FALSE;
     }
 #endif

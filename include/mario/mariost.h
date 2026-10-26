@@ -31,6 +31,17 @@ typedef enum GlobalWorkFlags {
     GW_FLAG_NO_LETTER_BOX_UNUSED = (1 << 15), // 0x8000, the letter box is not drawn; nothing sets it
 } GlobalWorkFlags;
 
+// GlobalWork.language: index into the game's language prefix tables ("jp", "us", "ge", "fr", "sp", "it" in
+// seq_load, nameent and seq_mapchange; effdrv and seq_mapchange also list "du")
+typedef enum Language {
+    LANGUAGE_JP = 0,
+    LANGUAGE_US = 1,
+    LANGUAGE_GE = 2,
+    LANGUAGE_FR = 3,
+    LANGUAGE_SP = 4,
+    LANGUAGE_IT = 5,
+} Language;
+
 typedef struct GlobalWork {
     s32 flags; //0x0, GlobalWorkFlags
     s32 framerate; //0x4
@@ -68,7 +79,7 @@ typedef struct GlobalWork {
     void* mapAlloc; //0x160
     s32 mapEventId; //0x164, map init event id (seq_mapchange.c)
     FieldBattleData* fbatData; //0x168
-    s32 language; //0x16C
+    s32 language; //0x16C, Language
     u16 fbWidth; //0x170
     u16 efbHeight; //0x172
     s32 mGSW0; //0x174

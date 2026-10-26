@@ -185,7 +185,7 @@ void telop(CameraId cameraId, void* param) {
 
 #ifdef VERSION_G8ME01
     {
-        const char* def = (u32)gp->language != 0 ? "???" : "\x81H\x81H\x81H";
+        const char* def = (u32)gp->language != LANGUAGE_JP ? "???" : "\x81H\x81H\x81H";
         msg = (msg_tbl[wp->id] != NULL) ? msgSearch(msg_tbl[wp->id]) : def;
     }
 #else

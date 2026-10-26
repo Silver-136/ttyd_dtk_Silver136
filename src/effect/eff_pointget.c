@@ -298,11 +298,11 @@ void effPointGetDisp(CameraId cameraId, EffectEntry* effect) {
         ox = (f32)(pass * 4);
         oy = (f32)(-pass * 4);
         if (pass != 0) {
-            effGetTexObj(texid_tbl[gp->language != 0][3], &texObj);
+            effGetTexObj(texid_tbl[gp->language != LANGUAGE_JP][3], &texObj);
             GXLoadTexObj(&texObj, GX_TEXMAP0);
             GXSetChanMatColor(GX_COLOR0A0, (GXColor){ 0, 0, 0, 0x80 });
         } else {
-            effGetTexObj(texid_tbl[gp->language != 0][2], &texObj);
+            effGetTexObj(texid_tbl[gp->language != LANGUAGE_JP][2], &texObj);
             GXLoadTexObj(&texObj, GX_TEXMAP0);
             GXSetChanMatColor(GX_COLOR0A0, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
         }
@@ -326,11 +326,11 @@ void effPointGetDisp(CameraId cameraId, EffectEntry* effect) {
             GXTexCoord2f32(0.0f, 1.0f);
         }
         if (pass != 0) {
-            effGetTexObj(texid_tbl[gp->language != 0][1], &texObj);
+            effGetTexObj(texid_tbl[gp->language != LANGUAGE_JP][1], &texObj);
             GXLoadTexObj(&texObj, GX_TEXMAP0);
             GXSetChanMatColor(GX_COLOR0A0, (GXColor){ 0, 0, 0, 0x80 });
         } else {
-            effGetTexObj(texid_tbl[gp->language != 0][0], &texObj);
+            effGetTexObj(texid_tbl[gp->language != LANGUAGE_JP][0], &texObj);
             GXLoadTexObj(&texObj, GX_TEXMAP0);
             GXSetChanMatColor(GX_COLOR0A0, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
         }

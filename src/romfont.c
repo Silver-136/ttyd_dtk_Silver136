@@ -194,7 +194,7 @@ void romFontMake(void);
 
 const char* romFontGetMessage(s32 msg) {
 #ifdef VERSION_G8ME01
-    if (wp->language != 0 && (u32)gp->language == 0) {
+    if (wp->language != 0 && (u32)gp->language == LANGUAGE_JP) {
         return msg_tbl[1][msg];
     }
     return msg_tbl[gp->language][msg];

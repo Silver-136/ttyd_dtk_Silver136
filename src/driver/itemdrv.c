@@ -802,7 +802,7 @@ void winNameDisp(WinMgrEntry* win) {
 
     name = msgSearch(itemDataTable[entry->itemId].name);
 #ifdef VERSION_G8ME01
-    if ((u32)gp->language == 0) {
+    if ((u32)gp->language == LANGUAGE_JP) {
         if (entry->itemId >= 0xF0 && entry->itemId < 0x153) {
             sprintf(buffer, msgSearch("msg_window_badge_get"), name);
         } else {
@@ -851,7 +851,7 @@ void winNameDisp2(WinMgrEntry* win) {
 
     name = msgSearch(itemDataTable[entry->itemId].name);
 #ifdef VERSION_G8ME01
-    if ((u32)gp->language == 0) {
+    if ((u32)gp->language == LANGUAGE_JP) {
         sprintf(buffer, msgSearch("msg_window_item_release"), name);
     } else {
         strcpy(buffer, msgSearch("msg_window_item_release"));

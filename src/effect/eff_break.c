@@ -59,7 +59,7 @@ EffectEntry* effBreakEntry(s32 type, s32 duration, f32 x, f32 y, f32 z) {
 #else
     effect = effEntry();
     count = 7;
-    if ((u32)gp->language != 0) {
+    if ((u32)gp->language != LANGUAGE_JP) {
         count = 7;
     }
     effect->type = "Break";
@@ -218,7 +218,7 @@ void effBreakDisp(CameraId cameraId, EffectEntry* effect) {
 #ifdef VERSION_G8ME01
         effGetTexObj(texid_tbl[gp->language].ids[i - 1], &texObj);
 #else
-        effGetTexObj(texid_tbl[gp->language != 0][i - 1], &texObj);
+        effGetTexObj(texid_tbl[gp->language != LANGUAGE_JP][i - 1], &texObj);
 #endif
         GXLoadTexObj(&texObj, GX_TEXMAP0);
         PSMTXTrans(mtx, 0.0f, work->offsetY, 0.0f);

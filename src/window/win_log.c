@@ -505,13 +505,13 @@ s32 winLogMain(WindowWork* w) {
         break;
     case 10:
 #ifdef VERSION_G8ME01
-        if (fileAsyncf(4, NULL, "%s/w/%s/%s", getMarioStDvdRoot(), (u32)gp->language == 0 ? "jp" : "us", winGetMapTplName()) == 0U) break;
+        if (fileAsyncf(4, NULL, "%s/w/%s/%s", getMarioStDvdRoot(), (u32)gp->language == LANGUAGE_JP ? "jp" : "us", winGetMapTplName()) == 0U) break;
 #else
         if (fileAsyncf(4, NULL, "%s/w/jp/%s", getMarioStDvdRoot(), winGetMapTplName()) == 0U) break;
 #endif
         if (!w->mapRes) {
 #ifdef VERSION_G8ME01
-            w->mapRes = fileAllocf(4, "%s/w/%s/%s", getMarioStDvdRoot(), (u32)gp->language == 0 ? "jp" : "us", winGetMapTplName());
+            w->mapRes = fileAllocf(4, "%s/w/%s/%s", getMarioStDvdRoot(), (u32)gp->language == LANGUAGE_JP ? "jp" : "us", winGetMapTplName());
 #else
             w->mapRes = fileAllocf(4, "%s/w/jp/%s", getMarioStDvdRoot(), winGetMapTplName());
 #endif
@@ -1025,7 +1025,7 @@ void winLogDisp(CameraId cam, void* param, s32 idx) {
 
             black = (GXColor){0x00, 0x00, 0x00, 0xFF};
             winKirinukiGX(w, 0, (x + w->log.badge.f24) - 50.0f, (y + w->log.badge.f2C) - 120.0f, 100.0f, 30.0f);
-            sprintf(buf, (u32)gp->language != 0 ? "%d/%d" : "%d\201^%d", w->log.badge.page, w->log.badge.num);
+            sprintf(buf, (u32)gp->language != LANGUAGE_JP ? "%d/%d" : "%d\201^%d", w->log.badge.page, w->log.badge.num);
             width = 0.75f * FontGetMessageWidth(buf);
             winFontInit();
             winFontSet((Vec){(f32)((100 - width) / 2) + ((x + w->log.badge.f24) - 50.0f), (y + w->log.badge.f2C) - 128.0f, 0.0f},
@@ -1049,7 +1049,7 @@ void winLogDisp(CameraId cam, void* param, s32 idx) {
 
             black = (GXColor){0x00, 0x00, 0x00, 0xFF};
             winKirinukiGX(w, 0, (x + w->log.recipe.f24) - 50.0f, (y + w->log.recipe.f2C) - 120.0f, 100.0f, 30.0f);
-            sprintf(buf, (u32)gp->language != 0 ? "%d/%d" : "%d\201^%d", w->log.recipe.page, w->log.recipe.num);
+            sprintf(buf, (u32)gp->language != LANGUAGE_JP ? "%d/%d" : "%d\201^%d", w->log.recipe.page, w->log.recipe.num);
             width = 0.75f * FontGetMessageWidth(buf);
             winFontInit();
             winFontSet((Vec){(f32)((100 - width) / 2) + ((x + w->log.recipe.f24) - 50.0f), (y + w->log.recipe.f2C) - 128.0f, 0.0f},
@@ -1229,7 +1229,7 @@ void monoshiriGX(WindowWork* w, f32 x, f32 y) {
     winFontInit();
 #ifdef VERSION_G8ME01
     winFontSetWidth((Vec){(x - 108.0f) + (100 - tw) / 2, y - 166.0f, 0.0f}, (Vec){0.75f, 0.75f, 0.75f}, k1, 80.0f, msg);
-    sprintf(buf, (u32)gp->language != 0 ? "%d/%d" : "%d\201^%d", w->log.enemyKnown, w->log.enemyNum);
+    sprintf(buf, (u32)gp->language != LANGUAGE_JP ? "%d/%d" : "%d\201^%d", w->log.enemyKnown, w->log.enemyNum);
 #else
     winFontSet((Vec){(x - 108.0f) + (100 - tw) / 2, y - 166.0f, 0.0f}, (Vec){0.75f, 0.75f, 0.75f}, k1, msg);
     sprintf(buf, "%d\201^%d", w->log.enemyKnown, w->log.enemyNum);
@@ -1253,13 +1253,13 @@ void monoshiriGX(WindowWork* w, f32 x, f32 y) {
             }
         } else {
 #ifdef VERSION_G8ME01
-            name = (u32)gp->language != 0 ? "???" : "\201H\201H\201H";
+            name = (u32)gp->language != LANGUAGE_JP ? "???" : "\201H\201H\201H";
 #else
             name = "\201H\201H\201H";
 #endif
         }
 #ifdef VERSION_G8ME01
-        sprintf(num, (u32)gp->language != 0 ? "%d. " : "%d\201D", enemy_monoshiri_sort_table[id]);
+        sprintf(num, (u32)gp->language != LANGUAGE_JP ? "%d. " : "%d\201D", enemy_monoshiri_sort_table[id]);
         winFontSetWidth((Vec){((24.0f + x) - 5.0f) + (i / 8) * 216, (y - 16.0f) - (i % 8) * 24, 0.0f}, (Vec){0.75f, 0.75f, 0.75f}, k2, 40.0f, num);
         winFontSetWidth((Vec){(56.0f + x) + (i / 8) * 216, (y - 16.0f) - (i % 8) * 24, 0.0f}, (Vec){0.75f, 0.75f, 0.75f}, k2, 145.0f, name);
 #else
@@ -1319,13 +1319,13 @@ void monosiriMain(MonosiriWork* m) {
     case 0:
         if (fileAsyncf(4, NULL, "%s/w/%s/win.tpl", getMarioStDvdRoot(), lang[gp->language]) == 0U) break;
 #ifdef VERSION_G8ME01
-        if (fileAsyncf(0, NULL, "%s/w/%s/mono.dat", getMarioStDvdRoot(), (u32)gp->language == 0 ? "jp" : "us") == 0U) break;
+        if (fileAsyncf(0, NULL, "%s/w/%s/mono.dat", getMarioStDvdRoot(), (u32)gp->language == LANGUAGE_JP ? "jp" : "us") == 0U) break;
 #else
         if (fileAsyncf(0, NULL, "%s/w/jp/mono.dat", getMarioStDvdRoot()) == 0U) break;
 #endif
         m->file1 = fileAllocf(4, "%s/w/%s/win.tpl", getMarioStDvdRoot(), lang[gp->language]);
 #ifdef VERSION_G8ME01
-        m->file2 = fileAllocf(0, "%s/w/%s/mono.dat", getMarioStDvdRoot(), (u32)gp->language == 0 ? "jp" : "us");
+        m->file2 = fileAllocf(0, "%s/w/%s/mono.dat", getMarioStDvdRoot(), (u32)gp->language == LANGUAGE_JP ? "jp" : "us");
 #else
         m->file2 = fileAllocf(0, "%s/w/jp/mono.dat", getMarioStDvdRoot());
 #endif
@@ -1645,12 +1645,12 @@ void monosiri_disp(CameraId camera, void* param) {
         if (id == 0x4D || id == 0x87) {
             if (evtGetValue(NULL, GSW_STORY_PROGRESS) < STG4_14_NAME_GUESSING) {
 #ifdef VERSION_G8ME01
-                sprintf(buf, (u32)gp->language != 0 ? "%d. %s" : "%d\201D%s", enemy_monoshiri_sort_table[id], msgSearch("btl_un_hatena"));
+                sprintf(buf, (u32)gp->language != LANGUAGE_JP ? "%d. %s" : "%d\201D%s", enemy_monoshiri_sort_table[id], msgSearch("btl_un_hatena"));
             } else {
-                sprintf(buf, (u32)gp->language != 0 ? "%d. %s" : "%d\201D%s", enemy_monoshiri_sort_table[id], msgSearch("btl_un_rampell"));
+                sprintf(buf, (u32)gp->language != LANGUAGE_JP ? "%d. %s" : "%d\201D%s", enemy_monoshiri_sort_table[id], msgSearch("btl_un_rampell"));
             }
         } else {
-            sprintf(buf, (u32)gp->language != 0 ? "%d. %s" : "%d\201D%s", enemy_monoshiri_sort_table[id], msgSearch(te->enemyTag));
+            sprintf(buf, (u32)gp->language != LANGUAGE_JP ? "%d. %s" : "%d\201D%s", enemy_monoshiri_sort_table[id], msgSearch(te->enemyTag));
 #else
                 sprintf(buf, "%d\201D%s", enemy_monoshiri_sort_table[id], msgSearch("btl_un_hatena"));
             } else {
@@ -1664,7 +1664,7 @@ void monosiri_disp(CameraId camera, void* param) {
         winFontInit();
         winFontSet((Vec){(16.0f + x) + (248.0f - w) / 2.0f, y - 180.0f, 0.0f}, (Vec){0.75f, 0.75f, 0.75f}, black, buf);
 #ifdef VERSION_G8ME01
-        sprintf(buf, (u32)gp->language != 0 ? "%s %s" : "%s\201@%s", msgSearch("menu_monosiri_derutokoro"), msgSearch(te->locationTag));
+        sprintf(buf, (u32)gp->language != LANGUAGE_JP ? "%s %s" : "%s\201@%s", msgSearch("menu_monosiri_derutokoro"), msgSearch(te->locationTag));
 #else
         sprintf(buf, "%s\201@%s", msgSearch("menu_monosiri_derutokoro"), msgSearch(te->locationTag));
 #endif

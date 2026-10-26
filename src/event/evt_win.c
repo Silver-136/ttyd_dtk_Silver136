@@ -177,7 +177,7 @@ void unitwin_point_disp(WinMgrEntry* entry) {
     s32 d;
     if (!(entry->flags & WINMGR_FLAG_ANIMATING)) {
         PSMTXTrans(trans, 10.0f + (30.0f + entry->x), entry->y - 36.0f, 0.0f);
-        if ((u32)gp->language == 0) {
+        if ((u32)gp->language == LANGUAGE_JP) {
             PSMTXScale(scale, 1.1f, 1.1f, 1.1f);
             PSMTXConcat(trans, scale, trans);
             iconDispGx2(trans, 0x10, VERSION_PICK(0x1F1, 0x226));
