@@ -83,7 +83,7 @@ void partyPaperOff(PartyEntry* party) {
 }
 
 void partyPaperLightOff(PartyEntry* party) {
-    animPoseSetMaterialLightFlagOff(party->paperAnimGroup, 1);
+    animPoseSetMaterialLightFlagOff(party->paperAnimGroup, MATERIAL_LIGHT_PAPER);
 }
 
 static inline BOOL partyIsPinch(PartyEntry* party) {
@@ -615,7 +615,7 @@ static inline void partyReInitClear(PartyEntry* party) {
     poseId = party->paperAnimGroup;
     if (poseId >= 0) {
         animPoseSetMaterialFlagOff(poseId, -1);
-        animPoseSetMaterialLightFlagOn(poseId, 2);
+        animPoseSetMaterialLightFlagOn(poseId, MATERIAL_LIGHT_CHARA);
     }
 }
 
@@ -632,7 +632,7 @@ void partyReInit(void) {
         poseId = party->paperAnimGroup;
         if (poseId >= 0) {
             animPoseSetMaterialFlagOff(poseId, -1);
-            animPoseSetMaterialLightFlagOn(poseId, 2);
+            animPoseSetMaterialLightFlagOn(poseId, MATERIAL_LIGHT_CHARA);
         }
         party->slitOn = 0;
         if (party->paperAnimName) {
@@ -669,7 +669,7 @@ void partyReInit(void) {
             poseId = party->paperAnimGroup;
             if (poseId >= 0) {
                 animPoseSetMaterialFlagOff(poseId, -1);
-                animPoseSetMaterialLightFlagOn(poseId, 2);
+                animPoseSetMaterialLightFlagOn(poseId, MATERIAL_LIGHT_CHARA);
             }
             if (party->paperAnimName) {
                 animPoseSetPaperAnimGroup(party->paperAnimGroup, NULL, FALSE);
@@ -1288,7 +1288,7 @@ s32 partyDokanInit(PartyEntry* party) {
             party->motionStep = 0;
             party->flags2 |= PARTY_DISP_FLAG_NO_FLIP;
             party->flags2 |= PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
-            animPoseSetMaterialLightFlagOff(party->paperAnimGroup, 1);
+            animPoseSetMaterialLightFlagOff(party->paperAnimGroup, MATERIAL_LIGHT_PAPER);
 #else
             party->spinSpeed = 30.0f;
             party->motionStep = 0;
@@ -1299,7 +1299,7 @@ s32 partyDokanInit(PartyEntry* party) {
 #ifdef VERSION_G8ME01
             party->flags2 |= PARTY_DISP_FLAG_NO_FLIP;
             party->flags2 |= PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
-            animPoseSetMaterialLightFlagOff(party->paperAnimGroup, 1);
+            animPoseSetMaterialLightFlagOff(party->paperAnimGroup, MATERIAL_LIGHT_PAPER);
         case 1:
             partyPaperOn(party, "p_dokan_y");
             partyChgPaper(party, "PM_D_1A");
@@ -1310,7 +1310,7 @@ s32 partyDokanInit(PartyEntry* party) {
             party->scale = (Vec){1.0f, 1.0f, 1.0f};
             party->flags2 |= PARTY_DISP_FLAG_NO_FLIP;
             party->flags2 |= PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
-            animPoseSetMaterialLightFlagOff(party->paperAnimGroup, 1);
+            animPoseSetMaterialLightFlagOff(party->paperAnimGroup, MATERIAL_LIGHT_PAPER);
 #else
         case 1:
             partyPaperOn(party, "p_dokan_y");
@@ -1330,7 +1330,7 @@ s32 partyDokanInit(PartyEntry* party) {
 #ifdef VERSION_G8ME01
             party->flags2 |= PARTY_DISP_FLAG_NO_FLIP;
             party->flags2 |= PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
-            animPoseSetMaterialLightFlagOff(party->paperAnimGroup, 1);
+            animPoseSetMaterialLightFlagOff(party->paperAnimGroup, MATERIAL_LIGHT_PAPER);
             break;
         case 4:
             party->displayDirectionTarget = mario->displayDirection;
@@ -1354,7 +1354,7 @@ s32 partyDokanInit(PartyEntry* party) {
                 party->dispOfs.z = -4.0f;
             }
             party->flags2 |= PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
-            animPoseSetMaterialLightFlagOff(party->paperAnimGroup, 1);
+            animPoseSetMaterialLightFlagOff(party->paperAnimGroup, MATERIAL_LIGHT_PAPER);
             break;
     }
 #else
@@ -1377,7 +1377,7 @@ s32 partyDokanInit(PartyEntry* party) {
     partyChgPoseId(party, 0);
     party->flags2 |= PARTY_DISP_FLAG_NO_FLIP;
     party->flags2 |= PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
-    animPoseSetMaterialLightFlagOff(party->paperAnimGroup, 1);
+    animPoseSetMaterialLightFlagOff(party->paperAnimGroup, MATERIAL_LIGHT_PAPER);
     party->displayDirectionTarget = revise360(180.0f + mario->displayDirection);
     party->displayDirection = mario->displayDirection;
     party->moveDir = mario->moveDirection;
@@ -1427,7 +1427,7 @@ s32 partyDokanMain(PartyEntry* party) {
 #ifdef VERSION_G8ME01
                     party->flags2 |= PARTY_DISP_FLAG_NO_FLIP;
                     party->flags2 |= PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
-                    animPoseSetMaterialLightFlagOff(party->paperAnimGroup, 1);
+                    animPoseSetMaterialLightFlagOff(party->paperAnimGroup, MATERIAL_LIGHT_PAPER);
                     break;
                 case 4:
                     party->rot.x = 0.0f;
@@ -1468,7 +1468,7 @@ s32 partyDokanMain(PartyEntry* party) {
             party->targetDir = mario->directionView;
             party->moveDir = mario->directionView;
             partyPaperOff(party);
-            animPoseSetMaterialLightFlagOn(party->paperAnimGroup, 1);
+            animPoseSetMaterialLightFlagOn(party->paperAnimGroup, MATERIAL_LIGHT_PAPER);
             party->flags2 &= ~PARTY_DISP_FLAG_NO_FLIP;
             party->flags2 &= ~PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
             party->flags &= ~PARTY_FLAG_DISABLE_FLOORS;

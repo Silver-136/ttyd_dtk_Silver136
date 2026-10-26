@@ -1059,7 +1059,7 @@ void _pose_def(BattleUnitPart* part) {
             PART_POSESTATE(part) = 1;
             animPoseSetEffect(part->poseId, NULL, 0);
             if (part->mOwner->flags & BATTLE_UNIT_FLAG_SOLID_MODEL) {
-                animPoseSetMaterialLightFlagOn(part->poseId, 8);
+                animPoseSetMaterialLightFlagOn(part->poseId, MATERIAL_LIGHT_PAPER_CRAFT);
             }
             break;
     }

@@ -1,4 +1,5 @@
 #include "driver/icondrv.h"
+#include "driver/animdrv.h"
 #include "driver/camdrv.h"
 #include <dolphin/gx.h>
 #include <dolphin/mtx.h>
@@ -603,7 +604,7 @@ void iconGX(Mtx mtx, IconEntry* entry) {
     }
     GXLoadTexObj(&texObj, GX_TEXMAP0);
     if (!(entry->uflags & 0x10)) {
-        mapSetMaterialLight(4, pos);
+        mapSetMaterialLight(MATERIAL_LIGHT_MAT_COLOR, pos);
     } else {
         GXSetNumChans(1);
         GXSetChanMatColor(GX_COLOR0A0, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });

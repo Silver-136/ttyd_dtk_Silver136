@@ -1,4 +1,5 @@
 #include "driver/mapdrv.h"
+#include "driver/animdrv.h"
 #include "driver/arcdrv.h"
 #include "manager/dvdmgr.h"
 #include "manager/arammgr.h"
@@ -257,7 +258,7 @@ MapObject* _mapEnt(MapFileJoint* joint, MapObject* parent, Mtx mtx, s32 index) {
     obj->next = NULL;
     obj->child = NULL;
     if (joint->drawMode) {
-        if (joint->drawMode->modeFlags & 1) {
+        if (joint->drawMode->modeFlags & DRAW_MODE_BACKGROUND) {
             obj->flags |= MAP_OBJ_FLAG_BACKGROUND;
         }
         switch (joint->drawMode->blendType) {
@@ -303,9 +304,9 @@ MapObject* _mapEnt(MapFileJoint* joint, MapObject* parent, Mtx mtx, s32 index) {
                 obj->blendMode = (obj->flags & MAP_OBJ_FLAG_BACKGROUND) ? 5 : 2;
                 break;
         }
-        if (joint->drawMode->modeFlags & 2) {
+        if (joint->drawMode->modeFlags & DRAW_MODE_GROUP) {
             obj->flags |= MAP_OBJ_FLAG_GROUP;
-            if (joint->drawMode->modeFlags & 0x10) {
+            if (joint->drawMode->modeFlags & DRAW_MODE_DEPTH_OFFSET) {
                 obj->flags |= MAP_OBJ_FLAG_DEPTH_OFFSET;
             }
             switch (joint->drawMode->blendType) {
@@ -326,7 +327,7 @@ MapObject* _mapEnt(MapFileJoint* joint, MapObject* parent, Mtx mtx, s32 index) {
                 obj->flags |= MAP_OBJ_FLAG_DEPTH_OFFSET;
             }
         }
-        if (joint->drawMode->modeFlags & 4) {
+        if (joint->drawMode->modeFlags & DRAW_MODE_CHAR_SHADOW) {
             obj->flags |= MAP_OBJ_FLAG_CHAR_SHADOW;
         }
     } else {
@@ -409,7 +410,7 @@ void makeDisplayList(BOOL group) {
                 continue;
             }
             dm = obj->joints->drawMode;
-            if (dm->modeFlags & 8) {
+            if (dm->modeFlags & DRAW_MODE_MAP_LIGHTS) {
                 continue;
             }
             if (dm->lightMask) {
@@ -867,7 +868,7 @@ void _mapLoad(MapWork* wp, BOOL group, const char* map) {
                 continue;
             }
             dm = o->joints->drawMode;
-            if (dm->modeFlags & 8) {
+            if (dm->modeFlags & DRAW_MODE_MAP_LIGHTS) {
                 continue;
             }
             if (dm->lightMask) {
@@ -2024,7 +2025,7 @@ s32 mapSetLight(MapObject* obj, LightEntry** lights) {
     count = 0;
     PSMTXMultVec(obj->modelWorldMtx, &obj->center, &pos);
     dm = obj->joints->drawMode;
-    if (dm->modeFlags & 8) {
+    if (dm->modeFlags & DRAW_MODE_MAP_LIGHTS) {
         if (!dm->lightMask) {
             count = lightGetNearObj(&pos, lights, 8, 0);
         } else {
@@ -3034,24 +3035,24 @@ void mapSetMaterialLight(s32 flags, Vec position) {
 
     count = 0;
     attnFn = GX_AF_NONE;
-    paper = flags & 1;
+    paper = flags & MATERIAL_LIGHT_PAPER;
     if (paper) {
         lights[0] = lightGetPaper();
         count = 1;
     }
-    paperCraft = flags & 8;
+    paperCraft = flags & MATERIAL_LIGHT_PAPER_CRAFT;
     if (paperCraft) {
         lights[count] = lightGetPaperCraft();
         count++;
     }
-    if (flags & 0x10) {
+    if (flags & MATERIAL_LIGHT_PAPER_PLAIN) {
         lights[count] = lightGetPaper();
         count++;
     }
-    if ((flags & 2) && lightCheckCharaLight() && count < 8) {
+    if ((flags & MATERIAL_LIGHT_CHARA) && lightCheckCharaLight() && count < 8) {
         count += lightGetNearObj(&position, &lights[count], 8 - count, LIGHT_CHARA);
     }
-    if (flags & 0x19) {
+    if (flags & (MATERIAL_LIGHT_PAPER | MATERIAL_LIGHT_PAPER_CRAFT | MATERIAL_LIGHT_PAPER_PLAIN)) {
         if (count == 1) {
             if (paper) {
                 ambColor = paper_ambient;
@@ -3127,7 +3128,7 @@ void mapSetMaterialLight(s32 flags, Vec position) {
     GXSetFog(GX_FOG_NONE, 0.0f, 0.0f, 0.0f, 0.0f, matColor);
     GXSetNumChans(1);
     GXSetChanAmbColor(GX_COLOR0A0, ambient);
-    if (flags & 4) {
+    if (flags & MATERIAL_LIGHT_MAT_COLOR) {
         GXSetChanMatColor(GX_COLOR0A0, matColor);
         GXSetChanCtrl(GX_COLOR0, count > 0, GX_SRC_REG, GX_SRC_REG, lightMask, GX_DF_CLAMP, (GXAttnFn)attnFn);
         GXSetChanCtrl(GX_ALPHA0, GX_FALSE, GX_SRC_REG, GX_SRC_REG, GX_LIGHT_NULL, GX_DF_CLAMP, GX_AF_NONE);

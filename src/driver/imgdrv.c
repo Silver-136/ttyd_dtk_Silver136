@@ -153,7 +153,7 @@ void imgDisp(CameraId camId, void* param) {
     }
     animPoseSetStartTime(entry->poseId, entry->animTime);
     animPoseMain(entry->poseId);
-    animPoseSetMaterialLightFlagOn(entry->poseId, 1);
+    animPoseSetMaterialLightFlagOn(entry->poseId, MATERIAL_LIGHT_PAPER);
     entry->loopTimes = animPoseGetLoopTimes(entry->poseId);
     if (entry->flags & IMAGE_FLAG_NO_VIRTUAL_POINT) {
         zFill();
@@ -603,7 +603,7 @@ void imgShadowDisp(CameraId camId, void* param) {
     if (entry->animName != NULL) animPoseSetAnim(entry->poseId, entry->animName, 0);
     animPoseSetStartTime(entry->poseId, entry->animTime);
     animPoseMain(entry->poseId);
-    animPoseSetMaterialLightFlagOn(entry->poseId, 1);
+    animPoseSetMaterialLightFlagOn(entry->poseId, MATERIAL_LIGHT_PAPER);
     entry->loopTimes = animPoseGetLoopTimes(entry->poseId);
     {
         f32 x0, y0, w, h;

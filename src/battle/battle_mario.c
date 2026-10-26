@@ -6611,7 +6611,7 @@ USER_FUNC(_paper_light_off) {
     s32 part;
     id = BattleTransID(event, id);
     part = evtGetValue(event, args[1]);
-    animPoseSetMaterialLightFlagOff(BattleGetUnitPartsPtr(id, part)->poseId, 1);
+    animPoseSetMaterialLightFlagOff(BattleGetUnitPartsPtr(id, part)->poseId, MATERIAL_LIGHT_PAPER);
     return EVT_RETURN_DONE;
 }
 

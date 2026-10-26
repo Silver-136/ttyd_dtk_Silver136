@@ -203,6 +203,6 @@ EVT_BEGIN(gra_02_init_evt)
 EVT_END()
 
 static USER_FUNC(booboo_main) {
-    animPoseSetMaterialLightFlagOn(npcNameToPtr((const char*)booboo_name[0])->poseId, 0x10);
+    animPoseSetMaterialLightFlagOn(npcNameToPtr((const char*)booboo_name[0])->poseId, MATERIAL_LIGHT_PAPER_PLAIN);
     return EVT_RETURN_DONE;
 }

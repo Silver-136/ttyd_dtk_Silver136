@@ -2855,7 +2855,7 @@ USER_FUNC(iri_12_paper_init) {
     NpcEntry* npc = npcNameToPtr("\203}\203b\203L\203m");
 
     animPosePaperPeraOff(npc->poseId);
-    animPoseSetMaterialLightFlagOff(npc->poseId, 1);
+    animPoseSetMaterialLightFlagOff(npc->poseId, MATERIAL_LIGHT_PAPER);
     return EVT_RETURN_DONE;
 }
 

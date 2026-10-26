@@ -200,6 +200,15 @@ typedef enum AnimationPoseFlags {
     ANIM_POSE_FLAG_INSTANT_TURN = (1 << 8),         // 0x100, paper rotation snaps to the target (NPC_FLAG_INSTANT_TURN)
 } AnimationPoseFlags;
 
+// AnimationPose.materialLightFlag / mapSetMaterialLight flags: the lights used for the material
+typedef enum MaterialLightFlags {
+    MATERIAL_LIGHT_PAPER = (1 << 0),        // 0x1, the paper light, with the paper ambient
+    MATERIAL_LIGHT_CHARA = (1 << 1),        // 0x2, the nearest character lights (LIGHT_CHARA)
+    MATERIAL_LIGHT_MAT_COLOR = (1 << 2),    // 0x4, material colour from the register, not the vertices
+    MATERIAL_LIGHT_PAPER_CRAFT = (1 << 3),  // 0x8, the papercraft light, with its ambient
+    MATERIAL_LIGHT_PAPER_PLAIN = (1 << 4),  // 0x10, the paper light without the paper ambient
+} MaterialLightFlags;
+
 typedef struct AnimationPose {
     u32 flags;                          // 0x0, AnimationPoseFlags
     s32 typeFlags;                      // 0x4
@@ -243,7 +252,7 @@ typedef struct AnimationPose {
     void (*gxCallback)(s32 wXluStage);  // 0xE0
     BOOL disableDraw;                   // 0xE4
     s32 materialFlag;                   // 0xE8
-    s32 materialLightFlag;              // 0xEC
+    s32 materialLightFlag;              // 0xEC, MaterialLightFlags
     GXColor materialColor;              // 0xF0
     GXColor materialColor2;             // 0xF4
     f32 paperScaleXZ;                   // 0xF8, paper-mode draw scale

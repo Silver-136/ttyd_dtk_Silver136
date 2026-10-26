@@ -525,7 +525,7 @@ s32 npcEntry(const char* description, const char* animName) {
     if (!strcmp(animName, "c_luigi")) {
         entry->flags |= 0x800000u;
     }
-    animPoseSetMaterialLightFlagOn(entry->poseId, 2);
+    animPoseSetMaterialLightFlagOn(entry->poseId, MATERIAL_LIGHT_CHARA);
     wp->count++;
     return i;
 }

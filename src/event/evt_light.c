@@ -32,13 +32,13 @@ USER_FUNC(evt_light_mario_lighting_onoff) {
     on = evtGetValue(event, *event->args);
     mario = marioGetPtr();
     if (on) {
-        animPoseSetMaterialLightFlagOn(mario->paperAnimGroupId[0], 2);
-        animPoseSetMaterialLightFlagOn(mario->paperAnimGroupId[1], 2);
-        animPoseSetMaterialLightFlagOn(mario->paperAnimGroupId[2], 2);
+        animPoseSetMaterialLightFlagOn(mario->paperAnimGroupId[0], MATERIAL_LIGHT_CHARA);
+        animPoseSetMaterialLightFlagOn(mario->paperAnimGroupId[1], MATERIAL_LIGHT_CHARA);
+        animPoseSetMaterialLightFlagOn(mario->paperAnimGroupId[2], MATERIAL_LIGHT_CHARA);
     } else {
-        animPoseSetMaterialLightFlagOff(mario->paperAnimGroupId[0], 2);
-        animPoseSetMaterialLightFlagOff(mario->paperAnimGroupId[1], 2);
-        animPoseSetMaterialLightFlagOff(mario->paperAnimGroupId[2], 2);
+        animPoseSetMaterialLightFlagOff(mario->paperAnimGroupId[0], MATERIAL_LIGHT_CHARA);
+        animPoseSetMaterialLightFlagOff(mario->paperAnimGroupId[1], MATERIAL_LIGHT_CHARA);
+        animPoseSetMaterialLightFlagOff(mario->paperAnimGroupId[2], MATERIAL_LIGHT_CHARA);
     }
     return EVT_RETURN_DONE;
 }
@@ -51,9 +51,9 @@ USER_FUNC(evt_light_party_lighting_onoff) {
     on = evtGetValue(event, *event->args);
     party = partyGetPtr(marioGetPartyId());
     if (on) {
-        animPoseSetMaterialLightFlagOn(party->paperAnimGroup, 2);
+        animPoseSetMaterialLightFlagOn(party->paperAnimGroup, MATERIAL_LIGHT_CHARA);
     } else {
-        animPoseSetMaterialLightFlagOff(party->paperAnimGroup, 2);
+        animPoseSetMaterialLightFlagOff(party->paperAnimGroup, MATERIAL_LIGHT_CHARA);
     }
     return EVT_RETURN_DONE;
 }
@@ -67,9 +67,9 @@ USER_FUNC(evt_light_npc_lighting_onoff) {
     on = evtGetValue(event, args[0]);
     npc = npcNameToPtr((const char*)evtGetValue(event, args[1]));
     if (on) {
-        animPoseSetMaterialLightFlagOn(npc->poseId, 2);
+        animPoseSetMaterialLightFlagOn(npc->poseId, MATERIAL_LIGHT_CHARA);
     } else {
-        animPoseSetMaterialLightFlagOff(npc->poseId, 2);
+        animPoseSetMaterialLightFlagOff(npc->poseId, MATERIAL_LIGHT_CHARA);
     }
     return EVT_RETURN_DONE;
 }

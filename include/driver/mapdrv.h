@@ -108,12 +108,21 @@ typedef struct MapFileJointPart {
     MapFileMesh* mesh; // 0x4
 } MapFileJointPart;
 
+// MapJointDrawMode.modeFlags (map file data, read by _mapEnt and the draw passes)
+typedef enum MapDrawModeFlags {
+    DRAW_MODE_BACKGROUND = (1 << 0),    // 0x1, -> MAP_OBJ_FLAG_BACKGROUND
+    DRAW_MODE_GROUP = (1 << 1),         // 0x2, -> MAP_OBJ_FLAG_GROUP
+    DRAW_MODE_CHAR_SHADOW = (1 << 2),   // 0x4, -> MAP_OBJ_FLAG_CHAR_SHADOW
+    DRAW_MODE_MAP_LIGHTS = (1 << 3),    // 0x8, lit by map lights (lightMask, or the nearest); never display-list baked
+    DRAW_MODE_DEPTH_OFFSET = (1 << 4),  // 0x10, with GROUP: -> MAP_OBJ_FLAG_DEPTH_OFFSET
+} MapDrawModeFlags;
+
 typedef struct MapJointDrawMode {
     u8 blendType;            // 0x0, 0..3, selects MapObject.blendMode
     u8 cullMode;             // 0x1
-    u8 modeFlags;            // 0x2, 1 = MapObject flag 8, 2 = group (flag 0x10), 8 = use lightMask, 0x10 = flag 0x8000
+    u8 modeFlags;            // 0x2, MapDrawModeFlags
     u8 pad_03;               // 0x3, never accessed
-    u32 lightMask;           // 0x4, bit i = map light i applies (with modeFlags 8)
+    u32 lightMask;           // 0x4, bit i = map light i applies (with DRAW_MODE_MAP_LIGHTS)
     s32 hitAttributes;       // 0x8, copied to HitEntry.attributes
     u8 pad_0C[0x10 - 0xC];   // 0xC, never accessed
 } MapJointDrawMode;

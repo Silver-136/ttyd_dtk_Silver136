@@ -534,7 +534,7 @@ s32 mobjEntry(const char* name, const char* animPoseName) {
     animPosePeraOff(entry->poseId);
     strcpy(entry->animName, animPoseName);
     animPoseSetAnim(entry->poseId, "S_1", 1);
-    animPoseSetMaterialLightFlagOn(entry->poseId, 2);
+    animPoseSetMaterialLightFlagOn(entry->poseId, MATERIAL_LIGHT_CHARA);
     mobjHitEntry(entry, 0);
     entry->offscreenId = -1;
     return idx;

@@ -788,7 +788,7 @@ void animPoseSetPaperAnimGroup(s32 poseId, const char* animName, BOOL someflag) 
 
     if (!animName) {
         pose->paperId = -1;
-        animPoseSetMaterialLightFlagOff(poseId, 1);
+        animPoseSetMaterialLightFlagOff(poseId, MATERIAL_LIGHT_PAPER);
         return;
     }
     pose->paperId = animPaperPoseGetId(animName, pose->type);
@@ -804,7 +804,7 @@ void animPoseSetPaperAnimGroup(s32 poseId, const char* animName, BOOL someflag) 
         pose->flags &= ~ANIM_POSE_FLAG_PAPER_GROUP;
         pose->flags &= ~ANIM_POSE_FLAG_PAPER_ANIM_CHANGED;
     }
-    animPoseSetMaterialLightFlagOn(poseId, 1);
+    animPoseSetMaterialLightFlagOn(poseId, MATERIAL_LIGHT_PAPER);
 }
 
 void animPoseSetPaperAnim(s32 poseId, const char* animName, BOOL reset) {
@@ -858,7 +858,7 @@ void animPoseSetEffect(s32 poseId, const char* animName, BOOL someflag) {
     }
     if (!animName) {
         pose->paperId = -1;
-        animPoseSetMaterialLightFlagOff(poseId, 1);
+        animPoseSetMaterialLightFlagOff(poseId, MATERIAL_LIGHT_PAPER);
         return;
     }
     pose->paperId = animEffectPoseEntry(animName, pose->type);
@@ -870,7 +870,7 @@ void animPoseSetEffect(s32 poseId, const char* animName, BOOL someflag) {
     } else {
         pose->flags &= ~ANIM_POSE_FLAG_PAPER_GROUP;
     }
-    animPoseSetMaterialLightFlagOn(poseId, 1);
+    animPoseSetMaterialLightFlagOn(poseId, MATERIAL_LIGHT_PAPER);
 }
 
 void animPoseSetEffectAnim(s32 poseId, const char* animName, BOOL reset) {

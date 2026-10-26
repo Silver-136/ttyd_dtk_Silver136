@@ -306,7 +306,7 @@ static USER_FUNC(booboo_main) {
     u32 i;
 
     for (i = 0; i < 5; i++) {
-        animPoseSetMaterialLightFlagOn(npcNameToPtr(booboo_name[i].name)->poseId, 0x10);
+        animPoseSetMaterialLightFlagOn(npcNameToPtr(booboo_name[i].name)->poseId, MATERIAL_LIGHT_PAPER_PLAIN);
     }
     return EVT_RETURN_DONE;
 }

@@ -2316,7 +2316,7 @@ static USER_FUNC(booboo_main) {
 
     for (i = 0; i < 8; i++) {
         if (npcNameToPtr_NoAssert(booboo_name[i].name) != NULL) {
-            animPoseSetMaterialLightFlagOn(npcNameToPtr(booboo_name[i].name)->poseId, 0x10);
+            animPoseSetMaterialLightFlagOn(npcNameToPtr(booboo_name[i].name)->poseId, MATERIAL_LIGHT_PAPER_PLAIN);
         }
     }
     return EVT_RETURN_DONE;

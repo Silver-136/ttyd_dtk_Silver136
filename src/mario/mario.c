@@ -851,13 +851,13 @@ void marioReInit(void) {
         animPoseSetMaterialFlagOff(wp->paperAnimGroupId[2], -1);
     }
     if (wp->paperAnimGroupId[0] >= 0) {
-        animPoseSetMaterialLightFlagOn(wp->paperAnimGroupId[0], 2);
+        animPoseSetMaterialLightFlagOn(wp->paperAnimGroupId[0], MATERIAL_LIGHT_CHARA);
     }
     if (wp->paperAnimGroupId[1] >= 0) {
-        animPoseSetMaterialLightFlagOn(wp->paperAnimGroupId[1], 2);
+        animPoseSetMaterialLightFlagOn(wp->paperAnimGroupId[1], MATERIAL_LIGHT_CHARA);
     }
     if (wp->paperAnimGroupId[2] >= 0) {
-        animPoseSetMaterialLightFlagOn(wp->paperAnimGroupId[2], 2);
+        animPoseSetMaterialLightFlagOn(wp->paperAnimGroupId[2], MATERIAL_LIGHT_CHARA);
     }
     wp->scale = (Vec){1.0f, 1.0f, 1.0f};
     wp->bottomlessResetPosition = (Vec){0.0f, 74.0f, 0.0f};
@@ -1591,11 +1591,11 @@ void marioPaperOff(void) {
 }
 
 void marioPaperLightOn(void) {
-    animPoseSetMaterialLightFlagOn(mp->paperAnimGroupId[0], 1);
+    animPoseSetMaterialLightFlagOn(mp->paperAnimGroupId[0], MATERIAL_LIGHT_PAPER);
 }
 
 void marioPaperLightOff(void) {
-    animPoseSetMaterialLightFlagOff(mp->paperAnimGroupId[0], 1);
+    animPoseSetMaterialLightFlagOff(mp->paperAnimGroupId[0], MATERIAL_LIGHT_PAPER);
 }
 
 void marioGetScreenPos(Vec position, f32* x, f32* y, f32* z) {
