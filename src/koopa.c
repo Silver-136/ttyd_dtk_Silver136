@@ -907,7 +907,7 @@ s32 kpaHipAttackCheck(void) {
 }
 
 s32 kpaJumpChk(void) {
-    return ((MarioWork*)marioGetPtr())->airTimer != 0;
+    return marioGetPtr()->airTimer != 0;
 }
 
 void kpaPauseSE2(void) {

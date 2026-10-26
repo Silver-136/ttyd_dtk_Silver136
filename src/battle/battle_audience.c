@@ -2383,7 +2383,7 @@ void BattleAudience_Entry_Sub(s32 index, s32 type, u8 status) {
 
     BattleAudienceBaseGetPtr();
     stage = (u8*)BattleStageGetPtr();
-    m = (BattleAudienceMember*)BattleAudienceGetPtr(index);
+    m = BattleAudienceGetPtr(index);
     m->step = 0;
     m->counter = 0;
     m->status = status;

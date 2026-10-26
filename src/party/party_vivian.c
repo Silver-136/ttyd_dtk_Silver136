@@ -78,7 +78,7 @@ void mot_vivian(void) {
 void L_partyVivianTailStart(PartyEntry* party);
 
 void mot_vivian_post(void) {
-    PartyEntry* party = (PartyEntry*)partyGetPtr(marioGetPartyId());
+    PartyEntry* party = partyGetPtr(marioGetPartyId());
     MarioWork* mario = marioGetPtr();
 
     if (mario->currMotionId == MARIO_MOTION_DAMAGE_TOGE || mario->currMotionId == MARIO_MOTION_DAMAGE) {
@@ -125,7 +125,7 @@ void vivian_init_801809C0(PartyEntry* party) {
 }
 
 s32 vivianGetStatus(void) {
-    PartyEntry* party = (PartyEntry*)partyGetPtr(marioGetPartyId());
+    PartyEntry* party = partyGetPtr(marioGetPartyId());
     u8 st;
 
     if (party == NULL) {
