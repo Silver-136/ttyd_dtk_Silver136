@@ -90,6 +90,7 @@ typedef enum MarioTrigFlags {
     MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION = (1 << 0),
     MARIO_TRIG_FLAG_USE_PARTNER = (1 << 1),
     MARIO_TRIG_FLAG_SHIP_PLANE_EVT_ON = (1 << 2),
+    MARIO_TRIG_FLAG_ZOOM_UP_LEVEL_UNUSED = (1 << 4), // 0x10, request taken (and cleared) by marioCamZoomUpLevelMain; nothing sets it
     MARIO_TRIG_FLAG_DISP_DIR_CORRECTION = (1 << 8),
     MARIO_TRIG_FLAG_DISP_DIR_LEFT = (1 << 9),
     MARIO_TRIG_FLAG_DISP_DIR_RIGHT = (1 << 10),
@@ -289,6 +290,7 @@ typedef enum MarioDispFlags {
     MARIO_DISP_FLAG_NO_REAR_POSE = (1 << 2),      // 0x4
     MARIO_DISP_FLAG_NO_DIR_FLIP = (1 << 3),       // 0x8
     MARIO_DISP_FLAG_FLIP = (1 << 4),              // 0x10
+    MARIO_DISP_FLAG_CAM_STILL_UNUSED = (1 << 5),  // 0x20, the 3D camera did not move in x since the last frame (set while the stick is tilted); nothing reads it
     MARIO_DISP_FLAG_NO_MAKE_DISP_DIR = (1 << 8),  // 0x100, display direction not recomputed
     MARIO_DISP_FLAG_DISP_DIR_SNAP = (1 << 9),     // 0x200, turns happen at once
     MARIO_DISP_FLAG_LEFT_ONLY = (1 << 10),        // 0x400, always drawn facing direction 0

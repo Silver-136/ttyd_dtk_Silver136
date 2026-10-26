@@ -2567,13 +2567,13 @@ int puniModeAway_sub(PuniData* p) {
     }
     puniMoveAtari(p, start, dir, 0, mag);
     if (p->hitMove != NULL || p->hitCheck != NULL) {
-        if (p->hitMove != NULL && (p->hitMove->attributes & 4)) {
+        if (p->hitMove != NULL && (p->hitMove->attributes & HIT_ATTR_NPC_ONLY)) {
             p->pushDir.x = -p->wallNrm.x;
             p->pushDir.y = -p->wallNrm.y;
             p->pushDir.z = -p->wallNrm.z;
             p->modeStep = 1;
             return 1;
-        } else if (p->hitCheck != NULL && (p->hitCheck->attributes & 4)) {
+        } else if (p->hitCheck != NULL && (p->hitCheck->attributes & HIT_ATTR_NPC_ONLY)) {
             p->pushDir.x = -p->wallNrm.x;
             p->pushDir.y = -p->wallNrm.y;
             p->pushDir.z = -p->wallNrm.z;
@@ -2942,14 +2942,14 @@ int puniModeWind_sub(PuniData* p) {
         return 2;
     }
     if (p->hitMove != NULL || p->hitCheck != NULL) {
-        if (p->hitMove != NULL && (p->hitMove->attributes & 4)) {
+        if (p->hitMove != NULL && (p->hitMove->attributes & HIT_ATTR_NPC_ONLY)) {
             p->pushDir.x = -p->wallNrm.x;
             p->pushDir.y = 0.0f;
             p->pushDir.z = -p->wallNrm.z;
             p->savedPos = p->pos;
             p->modeStep = 3;
             return 1;
-        } else if (p->hitCheck != NULL && (p->hitCheck->attributes & 4)) {
+        } else if (p->hitCheck != NULL && (p->hitCheck->attributes & HIT_ATTR_NPC_ONLY)) {
             p->pushDir.x = -p->wallNrm.x;
             p->pushDir.y = 0.0f;
             p->pushDir.z = -p->wallNrm.z;
@@ -3341,10 +3341,10 @@ void puniModeUpdraft(PuniData *p) {
         ((PuniBalloonWork*)p->effect->userdata)->position.z = q.z;
         if ((p->hitMove != NULL) || (p->hitCheck != NULL)) {
             s32 f = 0;
-            if ((p->hitMove != NULL) && (p->hitMove->attributes & 4)) {
+            if ((p->hitMove != NULL) && (p->hitMove->attributes & HIT_ATTR_NPC_ONLY)) {
                 f = 1;
             }
-            if ((p->hitCheck != NULL) && (p->hitCheck->attributes & 4)) {
+            if ((p->hitCheck != NULL) && (p->hitCheck->attributes & HIT_ATTR_NPC_ONLY)) {
                 f = 1;
             }
             if (f == 0) {

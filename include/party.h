@@ -40,7 +40,7 @@ typedef enum PartyFlags {
     PARTY_FLAG_IS_STEPPING = (1 << 6),
     PARTY_FLAG_IN_SHALLOW_WATER = (1 << 7),
     PARTY_FLAG_IS_BEING_USED = (1 << 8),
-    PARTY_FLAG_KEEP_POSE_UNUSED = (1 << 9), // 0x200, no stand pose when the follower stops; nothing sets it
+    PARTY_FLAG_KEEP_POSE_UNUSED = (1 << 9), // 0x200, keep pose and facing (no stand pose on stopping, no display-direction update, fixed rotation offset); nothing sets it
     PARTY_FLAG_PAPER_MODE = (1 << 12),
     PARTY_FLAG_MOT_SLIT_FLOOR = (1 << 13),
     PARTY_FLAG_IS_RIDING_PLANE = (1 << 16),

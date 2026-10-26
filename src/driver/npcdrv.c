@@ -523,7 +523,7 @@ s32 npcEntry(const char* description, const char* animName) {
         entry->flags |= NPC_FLAG_VIVIAN_TYPE;
     }
     if (!strcmp(animName, "c_luigi")) {
-        entry->flags |= 0x800000u;
+        entry->flags |= NPC_FLAG_LUIGI_POSE_FLIP;
     }
     animPoseSetMaterialLightFlagOn(entry->poseId, MATERIAL_LIGHT_CHARA);
     wp->count++;

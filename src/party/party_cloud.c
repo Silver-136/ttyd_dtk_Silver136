@@ -445,7 +445,7 @@ void N__cloud_use(PartyEntry* party) {
         hit = hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz,
                              party->position.x, 18.0f + mario->position.y, party->position.z,
                              dirSin, ys, dirCos);
-        if (hit != NULL && (hitGetAttr(hit) & 4)) {
+        if (hit != NULL && (hitGetAttr(hit) & HIT_ATTR_NPC_ONLY)) {
             hit = NULL;
         }
         CW(party)->hitDown = hit;
@@ -584,7 +584,7 @@ void getHitBreatheout2(PartyEntry* party, f32 angle) {
     hit = hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz,
                          party->position.x, mario->position.y + height, party->position.z,
                          dirSin, ys, dirCos);
-    if (hit != NULL && (hitGetAttr(hit) & 4)) {
+    if (hit != NULL && (hitGetAttr(hit) & HIT_ATTR_NPC_ONLY)) {
         hit = NULL;
     }
     CW(party)->hitFront = hit;
@@ -618,7 +618,7 @@ void getHitBreatheout2(PartyEntry* party, f32 angle) {
     hit = hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz,
                          party->position.x, mario->position.y + height, party->position.z,
                          dirSin, ys, dirCos);
-    if (hit != NULL && (hitGetAttr(hit) & 4)) {
+    if (hit != NULL && (hitGetAttr(hit) & HIT_ATTR_NPC_ONLY)) {
         hit = NULL;
     }
     CW(party)->hitSweep[0] = hit;
@@ -630,7 +630,7 @@ void getHitBreatheout2(PartyEntry* party, f32 angle) {
     hit = hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz,
                          party->position.x, mario->position.y + height, party->position.z,
                          dirSin, ys, dirCos);
-    if (hit != NULL && (hitGetAttr(hit) & 4)) {
+    if (hit != NULL && (hitGetAttr(hit) & HIT_ATTR_NPC_ONLY)) {
         hit = NULL;
     }
     CW(party)->hitSweep[1] = hit;

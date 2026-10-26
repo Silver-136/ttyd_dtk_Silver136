@@ -559,7 +559,7 @@ void partyWalkChkGnd(PartyEntry* party) {
     hit = partySearchGround(party, 15.0f, -15.0f);
     if (hit) {
         attr = hitGetAttr(hit);
-        if (attr & 0x200) {
+        if (attr & HIT_ATTR_WATER_HAZARD) {
             hit = NULL;
             if (!party->splashTimer) {
                 party->trigFlags |= PARTY_TRIG_SPLASH;
@@ -576,12 +576,12 @@ void partyWalkChkGnd(PartyEntry* party) {
     }
     party->position.y = party->groundY;
     party->flags |= PARTY_FLAG_IS_GROUNDED;
-    if (attr & 0x100) {
+    if (attr & HIT_ATTR_SHALLOW_WATER) {
         party->flags |= PARTY_FLAG_IN_SHALLOW_WATER;
     } else {
         party->flags &= ~PARTY_FLAG_IN_SHALLOW_WATER;
     }
-    if (attr & 0x40000000) {
+    if (attr & HIT_ATTR_DAMAGE_RETURN) {
         party->damageHit = hit;
     }
     if (partyChkNoStandMobj(hit)) {
@@ -662,11 +662,11 @@ void partyFlyAdjustY(PartyEntry* party) {
     hit = partySearchGround(party, 10.0f, 0.0f);
     if (hit) {
         attr = hitGetAttr(hit);
-        if (attr & 0x800) {
+        if (attr & HIT_ATTR_TOGE) {
             partyChgRunMode(party, 0xD);
             return;
         }
-        if (attr & 0x100) {
+        if (attr & HIT_ATTR_SHALLOW_WATER) {
             party->flags |= PARTY_FLAG_IN_SHALLOW_WATER;
         } else {
             party->flags &= ~PARTY_FLAG_IN_SHALLOW_WATER;
@@ -1412,12 +1412,12 @@ void party_motion_homing_fly(PartyEntry* party) {
             continue;
         }
         attr = hitGetAttr(hit);
-        if (attr & 0x100) {
+        if (attr & HIT_ATTR_SHALLOW_WATER) {
             party->flags |= PARTY_FLAG_IN_SHALLOW_WATER;
         } else {
             party->flags &= ~PARTY_FLAG_IN_SHALLOW_WATER;
         }
-        if (attr & 0x800) {
+        if (attr & HIT_ATTR_TOGE) {
             partyChgMot(party, 0);
             break;
         }
@@ -1528,11 +1528,11 @@ void party_motion_homing_fly(PartyEntry* party) {
     hit = partySearchGround(party, 10.0f, 10.0f);
     if (hit) {
         attr = hitGetAttr(hit);
-        if (attr & 0x800) {
+        if (attr & HIT_ATTR_TOGE) {
             partyChgRunMode(party, 13);
             return;
         }
-        if (attr & 0x100) {
+        if (attr & HIT_ATTR_SHALLOW_WATER) {
             party->flags |= PARTY_FLAG_IN_SHALLOW_WATER;
         } else {
             party->flags &= ~PARTY_FLAG_IN_SHALLOW_WATER;

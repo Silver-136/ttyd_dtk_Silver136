@@ -38,6 +38,7 @@
 #include "pmario_sound.h"
 #include "sfx_name_word.h"
 #include "driver/casedrv.h"
+#include "driver/hitdrv.h"
 
 
 typedef struct MarioJumpData {
@@ -255,10 +256,10 @@ BOOL marioChkTalkable(void) {
 void marioBoots(void) {
     MarioWork* mario = marioGetPtr();
     u32 flags = mario->flags;
-    if (flags & 0x80000000) {
+    if (flags & MARIO_FLAG_IS_8_BIT) {
         return;
     }
-    if (flags & 0x100000) {
+    if (flags & MARIO_FLAG_PAPER_MODE) {
         return;
     }
     if (mario->characterId == CHARACTER_BOWSER) {
@@ -274,7 +275,7 @@ void marioBoots(void) {
         marioChgMot(MARIO_MOTION_HIP);
         return;
     }
-    if (!(flags & 0x80000)) {
+    if (!(flags & MARIO_FLAG_HAS_INPUT_JUMP)) {
         return;
     }
     if (!marioChkHipAttack()) {
@@ -640,13 +641,13 @@ void marioLandOn(void) {
     pos = mario->position;
     if (stand) {
         attr = hitGetAttr(stand);
-        if (attr & 0x100) {
+        if (attr & HIT_ATTR_SHALLOW_WATER) {
             sfx = 0x150;
-        } else if (attr & 0x200000) {
+        } else if (attr & HIT_ATTR_WOOD) {
             sfx = 0x151;
-        } else if (attr & 0x100000) {
+        } else if (attr & HIT_ATTR_SNOW) {
             sfx = 0x152;
-        } else if (attr & 0x1000) {
+        } else if (attr & HIT_ATTR_GRASS) {
             sfx = 0x153;
         } else if (attr & 0x400000) {
             sfx = 0x154;
@@ -662,12 +663,12 @@ void marioLandOn(void) {
     }
     mario->mot.jump.dist = __fabsf(distABf(mario->position.x, mario->position.z, mario->lastGroundPos.x, mario->lastGroundPos.z));
     attr = hitGetAttr(mario->hitobjStandOn);
-    if (mario->currMotionId != MARIO_MOTION_DAMAGE && (attr & 0x200)) {
+    if (mario->currMotionId != MARIO_MOTION_DAMAGE && (attr & HIT_ATTR_WATER_HAZARD)) {
         set_damage_root_ypos(mario->position.y);
         marioChgMot(MARIO_MOTION_DAMAGE);
         return;
     }
-    if (mario->currMotionId != MARIO_MOTION_DAMAGE_TOGE && (attr & 0x800)) {
+    if (mario->currMotionId != MARIO_MOTION_DAMAGE_TOGE && (attr & HIT_ATTR_TOGE)) {
         set_damage_root_ypos(mario->position.y);
         marioChgMot(MARIO_MOTION_DAMAGE_TOGE);
         return;
@@ -733,7 +734,7 @@ void marioLandOn(void) {
         return;
     }
     flags = mario->flags;
-    if (flags & 0x1000000) {
+    if (flags & MARIO_FLAG_TUBE_MODE) {
         marioChgRollMotion();
         return;
     }
@@ -743,14 +744,14 @@ void marioLandOn(void) {
         return;
     }
     if (mario->currMotionId != MARIO_MOTION_SLIT) {
-        if (!(flags & 0x20)) {
+        if (!(flags & MARIO_FLAG_FORCED_MOVEMENT)) {
             marioChgMot(MARIO_MOTION_STAY);
             return;
         }
         marioChgMot(mario->baseSpeed > mario->mBaseWalkSpeed ? MARIO_MOTION_DASH : MARIO_MOTION_WALK);
         return;
     }
-    if (flags & 0x100000) {
+    if (flags & MARIO_FLAG_PAPER_MODE) {
         marioSlitReenter();
         return;
     }

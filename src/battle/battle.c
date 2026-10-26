@@ -215,7 +215,7 @@ BOOL Btl_UnitSetup(BattleWork* wp) {
         heldItem = setup->stolenItems[enemy->groupSetupId];
         if (heldItem) {
             enemy->heldItem = heldItem;
-            enemy->flags |= 0x40000000u;
+            enemy->flags |= BATTLE_UNIT_FLAG_STOLEN_ITEM;
         } else {
             enemy->heldItem = setup->heldItems[i];
             BtlUnit_EquipItem(enemy, EQUIP_RESET, setup->heldItems[i]);

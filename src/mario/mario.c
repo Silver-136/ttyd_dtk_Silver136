@@ -311,7 +311,7 @@ void marioItemGetChk(void) {
         work->itemGetDisableTimer = (s16)var;
         if ((s16)var <= 0) {
             work->itemGetDisableTimer = 0;
-            mp->flags &= ~0x4000u;
+            mp->flags &= ~MARIO_FLAG_ITEM_GET_DISABLED;
         }
     }
 }
@@ -1082,21 +1082,21 @@ void marioMain(void) {
             return;
         }
         flags = wp->flags;
-        if (flags & 0x40000) {
+        if (flags & MARIO_FLAG_IS_STEPPING) {
             marioMove();
             marioChkOverhead();
             if (wp->airTimer > 100) {
                 marioChgMot(MARIO_MOTION_FALL);
                 marioSetFallPara();
             }
-        } else if (flags & 0x10000) {
+        } else if (flags & MARIO_FLAG_IS_JUMPING) {
             marioJump();
             marioChkOverhead();
             marioMove();
             if (!marioChkRollMot2() && wp->airTimer > 5) {
                 marioChkGnd2();
             }
-        } else if (flags & 0x20000) {
+        } else if (flags & MARIO_FLAG_IS_FALLING) {
             if (wp->currMotionId != MARIO_MOTION_SHIP) {
                 marioMove();
                 if (wp->currMotionId == MARIO_MOTION_HIP) {
@@ -1530,7 +1530,7 @@ void marioChgPaper(const char* name) {
     s32 flags = wp->dispFlags;
     const char* animName;
 
-    if (flags & 0x40000000 && !(flags & 2) && !(mp->flags & MARIO_FLAG_IS_8_BIT)) {
+    if (flags & MARIO_DISP_FLAG_PAPER && !(flags & MARIO_DISP_FLAG_POSE_LOCK) && !(mp->flags & MARIO_FLAG_IS_8_BIT)) {
         animName = mp->paperAnimName;
         if (!animName || strcmp(animName, name)) { // only when the animation changes
             wp->paperAnimName = name;

@@ -80,9 +80,9 @@ void marioCamMain(void) {
     mario2 = marioGetPtr();
     if (mario2->controlStickSensitivity) {
         if (camera->cameraPos.x == mario2->prevCamPosX) {
-            mario2->dispFlags |= 0x20;
+            mario2->dispFlags |= MARIO_DISP_FLAG_CAM_STILL_UNUSED;
         } else {
-            mario2->dispFlags &= ~0x20;
+            mario2->dispFlags &= ~MARIO_DISP_FLAG_CAM_STILL_UNUSED;
         }
     }
     mario2->prevCamPosX = camera->cameraPos.x;
@@ -314,10 +314,10 @@ BOOL marioCamZoomUpLevelMain(void) {
     CameraEntry* camera;
 
     mario = marioGetPtr();
-    if (!(mario->trigFlags & 0x10)) {
+    if (!(mario->trigFlags & MARIO_TRIG_FLAG_ZOOM_UP_LEVEL_UNUSED)) {
         return FALSE;
     }
-    mario->trigFlags &= ~0x10;
+    mario->trigFlags &= ~MARIO_TRIG_FLAG_ZOOM_UP_LEVEL_UNUSED;
 
     if (marioBgmodeChk() == 1) {
         return FALSE;

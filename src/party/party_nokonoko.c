@@ -912,7 +912,7 @@ HitEntry* ccwall(PartyEntry* party, s32 mode) {
     dist = 0.5f * party->width + party->moveSpeed;
     sincosf(&s, &c, party->targetDir);
     hit = hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, x, y, z, s, 0.0f, c);
-    if (hit != NULL && !(hitGetAttr(hit) & 5)) {
+    if (hit != NULL && !(hitGetAttr(hit) & (HIT_ATTR_SHELL_THROUGH | HIT_ATTR_NPC_ONLY))) {
         sincosf(&s1, &c1, 180.0f + party->targetDir);
         party->position.x = hx + 0.5f * (s1 * party->width);
         party->position.z = hz + 0.5f * (c1 * party->width);
@@ -935,7 +935,7 @@ HitEntry* ccwall(PartyEntry* party, s32 mode) {
     dist = 0.4f * party->width + party->moveSpeed;
     sincosf(&s, &c, party->targetDir);
     hit = hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, x, y, z, s, 0.0f, c);
-    if (hit != NULL && !(hitGetAttr(hit) & 5)) {
+    if (hit != NULL && !(hitGetAttr(hit) & (HIT_ATTR_SHELL_THROUGH | HIT_ATTR_NPC_ONLY))) {
         sincosf(&s2, &c2, 180.0f + party->targetDir);
         party->position.x = hx + 0.5f * (s2 * party->width);
         party->position.z = hz + 0.5f * (c2 * party->width);
@@ -962,7 +962,7 @@ HitEntry* ccwall(PartyEntry* party, s32 mode) {
     dist = 0.4f * party->width + party->moveSpeed;
     sincosf(&s, &c, party->targetDir);
     hit = hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, x, y, z, s, 0.0f, c);
-    if (hit != NULL && !(hitGetAttr(hit) & 5)) {
+    if (hit != NULL && !(hitGetAttr(hit) & (HIT_ATTR_SHELL_THROUGH | HIT_ATTR_NPC_ONLY))) {
         sincosf(&s3, &c3, 180.0f + party->targetDir);
         party->position.x = hx + 0.5f * (s3 * party->width);
         party->position.z = hz + 0.5f * (c3 * party->width);

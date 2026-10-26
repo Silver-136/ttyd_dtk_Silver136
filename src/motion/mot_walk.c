@@ -20,19 +20,19 @@ void marioWalkDashSe(HitEntry* hitObj, u32 interval) {
     mario = marioGetPtr();
     hitAttr = hitGetAttr(hitObj);
     if ((mario->multiTimer % interval) == 0) {
-        if (hitAttr & 0x100) {
+        if (hitAttr & HIT_ATTR_SHALLOW_WATER) {
             psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_MOVE2R), &mario->position);
             return;
         }
-        if (hitAttr & 0x200000) {
+        if (hitAttr & HIT_ATTR_WOOD) {
             psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_MOVE3R), &mario->position);
             return;
         }
-        if (hitAttr & 0x100000) {
+        if (hitAttr & HIT_ATTR_SNOW) {
             psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_MOVE4R), &mario->position);
             return;
         }
-        if (hitAttr & 0x1000) {
+        if (hitAttr & HIT_ATTR_GRASS) {
             if (strncmp(gp->currentMapName, "mri", 3) != 0) {
                 psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_MOVE5R), &mario->position);
                 return;
@@ -48,19 +48,19 @@ void marioWalkDashSe(HitEntry* hitObj, u32 interval) {
         return;
     }
     if ((mario->multiTimer % (interval >> 1U)) == 0) {
-        if (hitAttr & 0x100) {
+        if (hitAttr & HIT_ATTR_SHALLOW_WATER) {
             psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_MOVE2L), &mario->position);
             return;
         }
-        if (hitAttr & 0x200000) {
+        if (hitAttr & HIT_ATTR_WOOD) {
             psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_MOVE3L), &mario->position);
             return;
         }
-        if (hitAttr & 0x100000) {
+        if (hitAttr & HIT_ATTR_SNOW) {
             psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_MOVE4L), &mario->position);
             return;
         }
-        if (hitAttr & 0x1000) {
+        if (hitAttr & HIT_ATTR_GRASS) {
             if (strncmp(gp->currentMapName, "mri", 3) != 0) {
                 psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_MOVE5L), &mario->position);
                 return;

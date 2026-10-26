@@ -103,7 +103,7 @@ s32 marioGetJabaraState(void) {
 BOOL marioPriCheckJabara(void) {
     MarioWork* mario = marioGetPtr();
     u32 flags = mario->flags;
-    if ((flags & 0x80000000) || (flags & VERSION_PICK(0x100000, 0x2100000))) {
+    if ((flags & MARIO_FLAG_IS_8_BIT) || (flags & VERSION_PICK(0x100000, 0x2100000))) {
         mario->wMotionTimer = 0;
         return FALSE;
     }
@@ -114,7 +114,7 @@ static inline BOOL priChk(void) {
     MarioWork* mario = marioGetPtr();
     u32 flags = mario->flags;
     BOOL ret;
-    if ((flags & 0x80000000) || (flags & VERSION_PICK(0x100000, 0x2100000))) {
+    if ((flags & MARIO_FLAG_IS_8_BIT) || (flags & VERSION_PICK(0x100000, 0x2100000))) {
         mario->wMotionTimer = 0;
         ret = FALSE;
     } else {

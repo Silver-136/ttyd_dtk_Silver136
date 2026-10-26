@@ -45,11 +45,11 @@ void mario_kemuri(void) {
             attr = hitGetAttr(mario->hitobjJumpFrom);
         }
         {
-            if (attr & 0x1000) {
+            if (attr & HIT_ATTR_GRASS) {
                 kemuri_mugi();
-            } else if (attr & 0x100) {
+            } else if (attr & HIT_ATTR_SHALLOW_WATER) {
                 mario_kemuri_landon();
-            } else if (attr & 0x100000) {
+            } else if (attr & HIT_ATTR_SNOW) {
                 mario = marioGetPtr();
                 if (mario->currMotionId != MARIO_MOTION_DASH && mario->currMotionId != MARIO_MOTION_WALK) {
                     ct = 8;
@@ -94,9 +94,9 @@ void mario_land_kemuri(void) {
             mario->trigFlags &= ~MARIO_TRIG_FLAG_DISABLE_JUMP_KEMURI;
         } else {
             attr = hitGetAttr(hit);
-            if (attr & 0x1000) {
+            if (attr & HIT_ATTR_GRASS) {
                 kemuri_mugi();
-            } else if (attr & 0x100) {
+            } else if (attr & HIT_ATTR_SHALLOW_WATER) {
                 mario_kemuri_landon();
             } else {
                 eff = effKemuriEntry(0, mario->position.x, mario->position.y, mario->position.z, 0.0f);

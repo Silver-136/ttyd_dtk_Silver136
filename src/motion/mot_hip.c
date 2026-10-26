@@ -257,7 +257,7 @@ void mot_hip(void) {
             mario->dispOfs2.y = 0.0f;
             marioChgPose("M_A_1B");
             attr = hitGetAttr(hit);
-            if (attr & 0x200) {
+            if (attr & HIT_ATTR_WATER_HAZARD) {
                 set_damage_root_ypos(mario->position.y);
                 d = -0.4f;
                 mario->jumpVelocityY = d;
@@ -272,7 +272,7 @@ void mot_hip(void) {
                 marioChgMot(MARIO_MOTION_DAMAGE_TOGE);
                 return;
             }
-            if (attr & 0x800) {
+            if (attr & HIT_ATTR_TOGE) {
                 set_damage_root_ypos(mario->position.y);
                 marioChgMot(MARIO_MOTION_DAMAGE_TOGE);
                 return;
@@ -341,7 +341,7 @@ s32 U_chkground(void) {
         mario->flags &= ~MARIO_FLAG_STOP_AIR_MOVEMENT;
         camFollowYOn();
         attr = hitGetAttr(hit);
-        if (attr & 0x200) {
+        if (attr & HIT_ATTR_WATER_HAZARD) {
             set_damage_root_ypos(mario->position.y);
             v = -0.4f;
             mario->jumpVelocityY = v;

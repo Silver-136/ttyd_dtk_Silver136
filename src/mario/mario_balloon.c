@@ -51,9 +51,9 @@ static inline BOOL chkBalloonStand(HitEntry* hit) {
 
     if (hit != NULL) {
         attr = hitGetAttr(hit);
-        if (attr & 0x800000) {
+        if (attr & HIT_ATTR_BERO) {
             ret = FALSE;
-        } else if (attr & 0x80000000) {
+        } else if (attr & HIT_ATTR_MOBJ) {
             if (mobjGetHint(mobjHitObjPtrToPtr(hit)) == 1) {
                 ret = TRUE;
             }
@@ -102,10 +102,10 @@ static inline BOOL chkBalloonPush(HitEntry* hit) {
 
     if (hit != NULL) {
         attr = hitGetAttr(hit);
-        if (attr & 0x800000) {
+        if (attr & HIT_ATTR_BERO) {
             ret = FALSE;
         } else {
-            if (attr & 0x80000000) {
+            if (attr & HIT_ATTR_MOBJ) {
                 if (mobjGetHint(mobjHitObjPtrToPtr(hit)) == 1) {
                     ret = TRUE;
                 }

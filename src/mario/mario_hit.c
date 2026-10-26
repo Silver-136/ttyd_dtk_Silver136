@@ -35,7 +35,7 @@ static const Vec zv1 = {0.0f, 0.0f, 0.0f};
 
 static inline BOOL marioChkBeroSub(s32 attr) {
     BOOL r = TRUE;
-    if (attr & 0x80) {
+    if (attr & HIT_ATTR_SHIP_ONLY) {
         r = FALSE;
         if (marioGetPtr()->currMotionId == MARIO_MOTION_SHIP) {
             r = TRUE;
@@ -47,29 +47,29 @@ static inline BOOL marioChkBeroSub(s32 attr) {
 static inline BOOL marioChkBeroInl(HitEntry* hit) {
     s32 attr = hitGetAttr(hit);
     MarioWork* w = marioGetPtr();
-    if ((attr & 0x80000) && !(w->flags & MARIO_FLAG_TUBE_MODE)) {
+    if ((attr & HIT_ATTR_ROLL_THROUGH) && !(w->flags & MARIO_FLAG_TUBE_MODE)) {
         return FALSE;
     }
-    if (!(attr & 0x80)) {
-        return (attr & 0x800000) ? 1 : 0;
+    if (!(attr & HIT_ATTR_SHIP_ONLY)) {
+        return (attr & HIT_ATTR_BERO) ? 1 : 0;
     }
     return w->currMotionId == MARIO_MOTION_SHIP;
 }
 
 static inline BOOL marioChkBeroSub2(s32 attr) {
-    if (!(attr & 0x80)) {
+    if (!(attr & HIT_ATTR_SHIP_ONLY)) {
         return TRUE;
     }
     return marioGetPtr()->currMotionId == MARIO_MOTION_SHIP;
 }
 
 static inline BOOL marioChkBeroSub3(s32 attr) {
-    return (attr & 0x80) ? (marioGetPtr()->currMotionId == MARIO_MOTION_SHIP) : TRUE;
+    return (attr & HIT_ATTR_SHIP_ONLY) ? (marioGetPtr()->currMotionId == MARIO_MOTION_SHIP) : TRUE;
 }
 
 static inline BOOL marioChkBeroSub4(s32 attr) {
     BOOL r = TRUE;
-    if (attr & 0x80) {
+    if (attr & HIT_ATTR_SHIP_ONLY) {
         r = marioGetPtr()->currMotionId == MARIO_MOTION_SHIP;
     }
     return r;
@@ -77,14 +77,14 @@ static inline BOOL marioChkBeroSub4(s32 attr) {
 
 static inline BOOL marioChkBeroSub5(HitEntry* hit) {
     s32 attr = hitGetAttr(hit);
-    if (!(attr & 0x80)) {
+    if (!(attr & HIT_ATTR_SHIP_ONLY)) {
         return TRUE;
     }
     return marioGetPtr()->currMotionId == MARIO_MOTION_SHIP;
 }
 
 static inline BOOL marioChkBeroSub6(s32 attr) {
-    if (attr & 0x80) {
+    if (attr & HIT_ATTR_SHIP_ONLY) {
         return marioGetPtr()->currMotionId == MARIO_MOTION_SHIP;
     } else {
         return TRUE;
@@ -363,11 +363,11 @@ void clear_hitobj_ride(void) {
 BOOL marioChkBero(HitEntry* hit) {
     s32 attr = hitGetAttr(hit);
     MarioWork* w = marioGetPtr();
-    if ((attr & 0x80000) && !(w->flags & MARIO_FLAG_TUBE_MODE)) {
+    if ((attr & HIT_ATTR_ROLL_THROUGH) && !(w->flags & MARIO_FLAG_TUBE_MODE)) {
         return FALSE;
     }
-    if (!(attr & 0x80)) {
-        return (attr & 0x800000) ? 1 : 0;
+    if (!(attr & HIT_ATTR_SHIP_ONLY)) {
+        return (attr & HIT_ATTR_BERO) ? 1 : 0;
     }
     return w->currMotionId == MARIO_MOTION_SHIP;
 }
@@ -913,21 +913,21 @@ void marioChkToge(void) {
     }
     if (w->hitobjFront != NULL) {
         attr = hitGetAttr(w->hitobjFront);
-        if (w->currMotionId != MARIO_MOTION_DAMAGE_TOGE && (attr & 0x800) && w->frontWallDist < 0.5f * w->wPlayerCollisionBox.x) {
+        if (w->currMotionId != MARIO_MOTION_DAMAGE_TOGE && (attr & HIT_ATTR_TOGE) && w->frontWallDist < 0.5f * w->wPlayerCollisionBox.x) {
             set_damage_root_ypos(w->position.y);
             marioChgMot(MARIO_MOTION_DAMAGE_TOGE);
         }
     }
     if (w->hitobjWall != NULL) {
         attr = hitGetAttr(w->hitobjWall);
-        if (w->currMotionId != MARIO_MOTION_DAMAGE_TOGE && (attr & 0x800)) {
+        if (w->currMotionId != MARIO_MOTION_DAMAGE_TOGE && (attr & HIT_ATTR_TOGE)) {
             set_damage_root_ypos(w->position.y);
             marioChgMot(MARIO_MOTION_DAMAGE_TOGE);
         }
     }
     if (w->hitobjHead != NULL) {
         attr = hitGetAttr(w->hitobjHead);
-        if (w->currMotionId != MARIO_MOTION_DAMAGE_TOGE && (attr & 0x800)) {
+        if (w->currMotionId != MARIO_MOTION_DAMAGE_TOGE && (attr & HIT_ATTR_TOGE)) {
             set_damage_root_ypos(w->position.y);
             marioChgMot(MARIO_MOTION_DAMAGE_TOGE);
         }
@@ -2558,7 +2558,7 @@ void marioCheckWallShip(f32 dx, f32 dz) {
                 BOOL r;
                 w->wallPushTimer = 20;
                 attr = hitGetAttr(hit);
-                r = !(attr & 0x80) ? TRUE : marioGetPtr()->currMotionId == MARIO_MOTION_SHIP;
+                r = !(attr & HIT_ATTR_SHIP_ONLY) ? TRUE : marioGetPtr()->currMotionId == MARIO_MOTION_SHIP;
                 if (r) w->hitobjPush = hit;
             }
         }

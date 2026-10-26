@@ -668,7 +668,7 @@ void yoshi_use(PartyEntry* party) {
                 party->position.y = mario->mot.yoshi.baseY + mario->mot.yoshi.bobOfs;
             } else {
                 attr = hitGetAttr(hit);
-                if (attr & 0x200) {
+                if (attr & HIT_ATTR_WATER_HAZARD) {
                     if (party->position.y <= party->groundY) {
                         party->useMotionId = 70;
                     }
@@ -1083,7 +1083,7 @@ void searchGround(PartyEntry* party) {
             psndSFXOff(party->yoshiPsndSFXId);
             party->yoshiPsndSFXId = -1;
         }
-        if (attr & 0x200) {
+        if (attr & HIT_ATTR_WATER_HAZARD) {
             if (!L_chgMotion(party, 70)) {
                 return;
             }
@@ -1170,7 +1170,7 @@ void searchGround2(PartyEntry* party) {
         return;
     }
     attr = hitGetAttr(hit);
-    if (attr & 0x200) {
+    if (attr & HIT_ATTR_WATER_HAZARD) {
         Vec pos = party->position;
         marioSetSplash(0, &pos);
         L_sweatEntry(party, NULL);
@@ -1188,7 +1188,7 @@ void searchGround2(PartyEntry* party) {
         party->useMotionId = 70;
         return;
     }
-    if (attr & 0x800) {
+    if (attr & HIT_ATTR_TOGE) {
         yoshi_damageToge(party);
     }
     party->flags |= PARTY_FLAG_IS_GROUNDED;
@@ -1234,7 +1234,7 @@ void checkWall(PartyEntry* party, f32 spd, f32 dir) {
             yoshi_damageToge(party);
         }
         attr = hitGetAttr(hit);
-        if ((attr & 0x800004) && !(attr & 0x80080)) {
+        if ((attr & (HIT_ATTR_NPC_ONLY | HIT_ATTR_BERO)) && !(attr & (HIT_ATTR_SHIP_ONLY | HIT_ATTR_ROLL_THROUGH))) {
             movePos(&party->position.x, &party->position.z, spd, dir);
             return;
         }

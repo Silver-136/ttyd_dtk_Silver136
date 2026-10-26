@@ -291,7 +291,7 @@ static inline BOOL bomheiChkHitAttr(PartyEntry* party) {
             party->useMotionId = 60;
             return TRUE;
         }
-        if (attr & 0x200) {
+        if (attr & HIT_ATTR_WATER_HAZARD) {
             party->useMotionId = 40;
             return TRUE;
         }

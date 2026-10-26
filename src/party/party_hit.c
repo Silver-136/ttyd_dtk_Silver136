@@ -161,7 +161,7 @@ void partyChkGnd(PartyEntry* party) {
         hit = partySearchGround(party, 11.0f, party->velY);
         if (hit) {
             attr = hitGetAttr(hit);
-            if (attr & 0x200) {
+            if (attr & HIT_ATTR_WATER_HAZARD) {
                 hit = NULL;
             }
         }
@@ -173,7 +173,7 @@ void partyChkGnd(PartyEntry* party) {
             party->gravity = -1.0f;
         } else {
             party->flags |= PARTY_FLAG_IS_GROUNDED;
-            if (attr & 0x100) {
+            if (attr & HIT_ATTR_SHALLOW_WATER) {
                 party->flags |= PARTY_FLAG_IN_SHALLOW_WATER;
             } else {
                 party->flags &= ~PARTY_FLAG_IN_SHALLOW_WATER;

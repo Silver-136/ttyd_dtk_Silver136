@@ -133,7 +133,7 @@ static inline const char* partyChgPoseIdNoPinch_inl(PartyEntry* party, s32 index
     }
     party->animName = v6;
     party->poseTime = 0;
-    party->trigFlags |= 0x2000u;
+    party->trigFlags |= PARTY_TRIG_CHG_ANIM;
     return v6;
 }
 
@@ -167,7 +167,7 @@ const char* partyChgPoseId(PartyEntry* party, s32 index) {
     }
     party->animName = v6;
     party->poseTime = 0;
-    party->trigFlags |= 0x2000u;
+    party->trigFlags |= PARTY_TRIG_CHG_ANIM;
     return v6;
 }
 
@@ -626,7 +626,7 @@ void partyReInit(void) {
 
     party = partyGetPtr(marioGetExtraPartyId());
     if (party) {
-        party->flags = 0xD;
+        party->flags = PARTY_FLAG_IS_ACTIVE | PARTY_FLAG_IS_FOLLOWER | PARTY_FLAG_IS_PARTNER;
         party->flags2 = 0;
         poseId = party->paperAnimGroup;
         if (poseId >= 0) {
@@ -2210,7 +2210,7 @@ void partyPreDisp(PartyEntry* party) {
     s32 mode;
     s32 v;
 
-    if (!(party->flags2 & PARTY_DISP_FLAG_NO_MAKE_DISP_DIR) && !(party->flags & 0x200)) {
+    if (!(party->flags2 & PARTY_DISP_FLAG_NO_MAKE_DISP_DIR) && !(party->flags & PARTY_FLAG_KEEP_POSE_UNUSED)) {
         partyMakeDispDir(party);
     }
     if (party->trigFlags & (PARTY_TRIG_CHG_ANIM | PARTY_TRIG_CHG_PAPER_ANIM)) {
@@ -2300,7 +2300,7 @@ void partyDisp(CameraId cam, void* param) {
     if (!partyCountActive()) {
         return;
     }
-    if (party->flags & 0x200) {
+    if (party->flags & PARTY_FLAG_KEEP_POSE_UNUSED) {
         party->rotOfs.x = -6.8f;
         party->rotOfsY = 6.8f;
     }

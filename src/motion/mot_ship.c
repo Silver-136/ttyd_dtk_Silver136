@@ -72,13 +72,13 @@ const char* paper_ship[4] = {"p_hune", "p_hune_g", "p_hune_y", "p_hune_v"};
 static inline s32 harborKind(HitEntry* hit) {
     s32 k = 0;
     s32 attr = hitGetAttr(hit);
-    if (attr & 0x4000) {
+    if (attr & HIT_ATTR_SHIP_PANEL1) {
         k = 1;
-    } else if (attr & 0x8000) {
+    } else if (attr & HIT_ATTR_SHIP_PANEL2) {
         k = 2;
-    } else if (attr & 0x10000) {
+    } else if (attr & HIT_ATTR_SHIP_PANEL3) {
         k = 3;
-    } else if (attr & 0x20000) {
+    } else if (attr & HIT_ATTR_SHIP_PANEL4) {
         k = 4;
     }
     return k;
@@ -277,17 +277,17 @@ static inline void shipDecideDir(MarioWork* m, Vec* pp1, Vec* pp2) {
             m2 = marioGetPtr();
             attr = hitGetAttr(hit);
             r = 0;
-            if (attr & 0x4000) {
+            if (attr & HIT_ATTR_SHIP_PANEL1) {
                 hitObjGetPos(hitGetName((HitEntry*)m2->hitobjJumpFrom), pp1);
                 ff = revise360(angleABf(m2->position.x, m2->position.z, pp1->x, pp1->z) - m2->targetYaw);
                 r = (ff >= 180.0f) ? 2 : 1;
-            } else if (attr & 0x8000) {
+            } else if (attr & HIT_ATTR_SHIP_PANEL2) {
                 hitObjGetPos(hitGetName((HitEntry*)m2->hitobjJumpFrom), pp2);
                 ff = revise360(angleABf(m2->position.x, m2->position.z, pp2->x, pp2->z) - m2->targetYaw);
                 r = (ff >= 180.0f) ? 2 : 1;
-            } else if (attr & 0x10000) {
+            } else if (attr & HIT_ATTR_SHIP_PANEL3) {
                 r = 2;
-            } else if (attr & 0x20000) {
+            } else if (attr & HIT_ATTR_SHIP_PANEL4) {
                 r = 1;
             }
             marioGetPtr()->motShip->flags = r;
