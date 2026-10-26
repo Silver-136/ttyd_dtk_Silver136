@@ -788,7 +788,7 @@ EVT_BEGIN(evt_kaidan_pera)
             WAIT_FRAMES(1)
         END_LOOP
     END_INLINE_EVENT
-    CALL(evt_cam3d_evt_set, 250, 125, 650, 250, 80, -140, 450, 11)
+    CALL(evt_cam3d_evt_set, 250, 125, 650, 250, 80, -140, 450, EASING_SINE_IN_OUT)
     WAIT_MS(1500)
     SET_VALUE(LW(0), GSWF(1482))
     CALL_CHILD(PTR(evt_kaidan_pera_anime))
@@ -813,7 +813,7 @@ EVT_BEGIN(evt_kaidan_pera)
             WAIT_FRAMES(1)
         END_LOOP
     END_INLINE_EVENT
-    CALL(evt_cam3d_evt_off, 450, 11)
+    CALL(evt_cam3d_evt_off, 450, EASING_SINE_IN_OUT)
     WAIT_MS(500)
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_mobj_hitevt_onoff, STRING("me"), 1)
@@ -830,9 +830,9 @@ EVT_BEGIN(evt_hashi_pera)
         END_IF
     END_LOOP
     IF_INT_EQUAL(LW(0), 0)
-        CALL(evt_cam3d_evt_set, 280, 1000, 450, 280, 900, -140, 300, 11)
+        CALL(evt_cam3d_evt_set, 280, 1000, 450, 280, 900, -140, 300, EASING_SINE_IN_OUT)
         ELSE
-        CALL(evt_cam3d_evt_set, 0, 1000, 450, 0, 900, -140, 300, 11)
+        CALL(evt_cam3d_evt_set, 0, 1000, 450, 0, 900, -140, 300, EASING_SINE_IN_OUT)
     END_IF
     WAIT_MS(500)
     CALL(evt_paper_entry, STRING("OFF_gon_04_3"))
@@ -879,7 +879,7 @@ EVT_BEGIN(evt_hashi_pera)
     END_IF
     CALL(evt_offscreen_delete, STRING("offscreen2"))
     WAIT_MS(1000)
-    CALL(evt_cam3d_evt_off, 300, 11)
+    CALL(evt_cam3d_evt_off, 300, EASING_SINE_IN_OUT)
     WAIT_MS(300)
     CALL(evt_mario_key_onoff, 1)
     RETURN

@@ -524,7 +524,7 @@ static USER_FUNC(bgm_start_wait) {
 EVT_BEGIN(slit_majin_lecture_init)
     CALL(lect_set_systemlevel, 0)
     CALL(lect_test_systemlevel)
-    CALL(evt_cam3d_evt_set_rel, FLOAT(0.0f), FLOAT(98.0f), FLOAT(558.0f), FLOAT(0.0f), FLOAT(42.0f), FLOAT(-101.799805f), 1000, 0)
+    CALL(evt_cam3d_evt_set_rel, FLOAT(0.0f), FLOAT(98.0f), FLOAT(558.0f), FLOAT(0.0f), FLOAT(42.0f), FLOAT(-101.799805f), 1000, EASING_LINEAR)
     WAIT_MS(1000)
     CALL(evt_mario_set_dir, 90, 300, 0)
     WAIT_FRAMES(1)

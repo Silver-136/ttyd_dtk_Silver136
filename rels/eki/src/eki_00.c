@@ -1388,7 +1388,7 @@ static EVT_BEGIN(evt_origami)
             BREAK_LOOP
         END_IF
     END_LOOP
-    CALL(evt_cam3d_evt_set, 340, 80, 280, -130, 90, -15, 1000, 11)
+    CALL(evt_cam3d_evt_set, 340, 80, 280, -130, 90, -15, 1000, EASING_SINE_IN_OUT)
     WAIT_MS(500)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     SUBTRACT(LW(0), 1)
@@ -1419,7 +1419,7 @@ static EVT_BEGIN(evt_origami)
         GOTO(0)
     END_IF
     SET_VALUE(GSW_STORY_PROGRESS, STG6_41_ORIGAMI_STAIRS)
-    CALL(evt_cam3d_evt_off, 500, 11)
+    CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
     WAIT_MS(500)
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_exit_case_evt)
@@ -1472,7 +1472,7 @@ static EVT_BEGIN(evt_meet_moamoa)
         CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
         CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)
     END_INLINE_EVENT
-    CALL(evt_cam3d_evt_set, 32, 151, 528, 32, 56, -12, 500, 11)
+    CALL(evt_cam3d_evt_set, 32, 151, 528, 32, 56, -12, 500, EASING_SINE_IN_OUT)
     WAIT_MS(2000)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_DANGER4"))
     BEGIN_INLINE_EVENT
@@ -1497,7 +1497,7 @@ static EVT_BEGIN(evt_meet_moamoa)
         CASE_EQUAL(7)
         CALL(evt_msg_print, 0, STRING("stg6_eki_03_6"), 0, STRING("party"))
     END_SWITCH
-    CALL(evt_cam3d_evt_off, 500, 11)
+    CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
     WAIT_MS(500)
     SET_VALUE(GSW_STORY_PROGRESS, STG6_39_SMORG_1ST_ENCOUNTER)
     CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_POSE_LOCK)
@@ -1507,14 +1507,14 @@ EVT_END()
 
 static EVT_BEGIN(evt_moamoa_escape)
     CALL(evt_mario_key_onoff, 0)
-    CALL(evt_cam3d_evt_set, 0, 151, 528, 0, 56, -12, 500, 11)
+    CALL(evt_cam3d_evt_set, 0, 151, 528, 0, 56, -12, 500, EASING_SINE_IN_OUT)
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 180)
     BEGIN_INLINE_EVENT
         CALL(evt_moamoa_end_wait)
         CALL(evt_moamoa_exit)
     END_INLINE_EVENT
     WAIT_MS(3000)
-    CALL(evt_cam3d_evt_off, 500, 11)
+    CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
     WAIT_MS(500)
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_lever"), 0, PTR(evt_origami), GW(10))
     SET_VALUE(GSW_STORY_PROGRESS, STG6_40_SWATTING_SMORGS)

@@ -191,7 +191,7 @@ EVT_BEGIN(bigdoor_event)
         CALL(evt_mario_wait_landon)
         CALL(evt_mario_set_mov_spd, FLOAT(0.0f))
     END_INLINE_EVENT
-    CALL(evt_cam3d_evt_set, 150, 432, 40, 0, 337, -480, 500, 11)
+    CALL(evt_cam3d_evt_set, 150, 432, 40, 0, 337, -480, 500, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
     BEGIN_INLINE_EVENT
         CALL(evt_cam_shake, 4, FLOAT(0.0009765625f), FLOAT(0.0f), 200)
@@ -228,7 +228,7 @@ EVT_BEGIN(bigdoor_event)
     CALL_CHILD(PTR(bero_case_switch_on))
     CALL(evt_hitobj_attr_onoff, 1, 1, STRING("w_bero_3"), 4)
     SET_VALUE(GSW_STORY_PROGRESS, STG5_20_THE_BLUE_BLOCK)
-    CALL(evt_cam3d_evt_off, 500, 11)
+    CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
     CALL(evt_mario_key_onoff, 1)
     RETURN
 EVT_END()

@@ -63,7 +63,7 @@ EVT_BEGIN(evt_anim)
             WAIT_FRAMES(1)
         END_LOOP
     END_INLINE_EVENT
-    CALL(evt_cam3d_evt_set, -1017, -239, -331, -21, -22, 53, 10000, 11)
+    CALL(evt_cam3d_evt_set, -1017, -239, -331, -21, -22, 53, 10000, EASING_SINE_IN_OUT)
     WAIT_MS(10000)
     WAIT_MS(4000)
     CALL(evt_snd_sfxoff, GW(10))
@@ -166,10 +166,10 @@ EVT_BEGIN(tou_20_init_evt)
     END_INLINE_EVENT
     CALL(evt_bero_get_entername, LW(0))
     IF_STR_EQUAL(LW(0), STRING("start"))
-        CALL(evt_cam3d_evt_set, -3020, 129, -6, -212, 722, 807, 0, 11)
+        CALL(evt_cam3d_evt_set, -3020, 129, -6, -212, 722, 807, 0, EASING_SINE_IN_OUT)
         SPAWN_EVENT(PTR(evt_anim))
         ELSE
-        CALL(evt_cam3d_evt_set, -700, 866, 4657, -700, 38, -60, 0, 11)
+        CALL(evt_cam3d_evt_set, -700, 866, 4657, -700, 38, -60, 0, EASING_SINE_IN_OUT)
         SPAWN_EVENT(PTR(evt_anim2))
     END_IF
     CALL(evt_bg_auto_scroll_onoff, 1)

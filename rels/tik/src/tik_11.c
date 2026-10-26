@@ -348,7 +348,7 @@ EVT_BEGIN(powerdownya_mario_level_rtn)
     BEGIN_INLINE_EVENT
         CALL(evt_cam_shake, 4, FLOAT(0.009765625f), FLOAT(0.0f), 1600)
     END_INLINE_EVENT
-    CALL(evt_cam3d_evt_set, -9, 212, 886, -9, 56, 0, 1600, 11)
+    CALL(evt_cam3d_evt_set, -9, 212, 886, -9, 56, 0, 1600, EASING_SINE_IN_OUT)
     WAIT_MS(1600)
     BEGIN_INLINE_EVENT
         CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, 100, 7000)
@@ -419,7 +419,7 @@ EVT_BEGIN(powerdownya_mario_level_rtn)
         END_LOOP
         CALL(bgScrollControll, 1)
     END_INLINE_EVENT
-    CALL(evt_cam3d_evt_off, 1600, 11)
+    CALL(evt_cam3d_evt_off, 1600, EASING_SINE_IN_OUT)
     WAIT_MS(1400)
     CALL(evt_mario_set_pose, STRING("M_S_1"))
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, -20, 0, 500)
@@ -560,7 +560,7 @@ EVT_BEGIN(powerdownya_party_lank_rtn)
     BEGIN_INLINE_EVENT
         CALL(evt_cam_shake, 4, FLOAT(0.009765625f), FLOAT(0.0f), 1600)
     END_INLINE_EVENT
-    CALL(evt_cam3d_evt_set, -9, 212, 886, -9, 56, 0, 1600, 11)
+    CALL(evt_cam3d_evt_set, -9, 212, 886, -9, 56, 0, 1600, EASING_SINE_IN_OUT)
     WAIT_MS(1600)
     BEGIN_INLINE_EVENT
         CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, 100, 7000)
@@ -706,7 +706,7 @@ EVT_BEGIN(powerdownya_party_lank_rtn)
         END_LOOP
         CALL(bgScrollControll, 1)
     END_INLINE_EVENT
-    CALL(evt_cam3d_evt_off, 1600, 11)
+    CALL(evt_cam3d_evt_off, 1600, EASING_SINE_IN_OUT)
     WAIT_MS(1400)
     CALL(evt_party_set_breed_pose, 0, 1)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, -20, 0, 500)

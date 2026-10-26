@@ -1954,7 +1954,7 @@ EVT_END()
 
 static EVT_BEGIN(evt_toile)
     CALL(evt_mario_key_onoff, 0)
-    CALL(evt_cam3d_evt_set, 450, 133, -1033, 450, 37, -492, 0, 11)
+    CALL(evt_cam3d_evt_set, 450, 133, -1033, 450, 37, -492, 0, EASING_SINE_IN_OUT)
     WAIT_FRAMES(1)
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG3_DRAINING1"), 450, 0, -500, LW(3))
     BEGIN_INLINE_EVENT_GET_ID(LW(4))
@@ -1969,7 +1969,7 @@ static EVT_BEGIN(evt_toile)
         END_LOOP
     END_INLINE_EVENT
     CALL(evt_seq_wait, SEQ_GAME)
-    CALL(evt_cam3d_evt_set, -450, 133, -1033, -450, 37, -492, 5000, 0)
+    CALL(evt_cam3d_evt_set, -450, 133, -1033, -450, 37, -492, 5000, EASING_LINEAR)
     BEGIN_INLINE_EVENT
         WAIT_MS(333)
         CALL(evt_eff_fukidashi, 1, STRING("a"), STRING("ガードマン６"), 1, 0, 0, 0, 0, 0, 0, 0)
@@ -1985,7 +1985,7 @@ EVT_END()
 
 static EVT_BEGIN(evt_toile2)
     CALL(evt_mario_key_onoff, 0)
-    CALL(evt_cam3d_evt_set, -450, 133, -1033, -450, 37, -492, 0, 11)
+    CALL(evt_cam3d_evt_set, -450, 133, -1033, -450, 37, -492, 0, EASING_SINE_IN_OUT)
     WAIT_FRAMES(1)
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG3_DRAINING1"), -450, 0, -500, LW(3))
     BEGIN_INLINE_EVENT_GET_ID(LW(4))
@@ -2000,7 +2000,7 @@ static EVT_BEGIN(evt_toile2)
         END_LOOP
     END_INLINE_EVENT
     CALL(evt_seq_wait, SEQ_GAME)
-    CALL(evt_cam3d_evt_set, 450, 133, -1033, 450, 37, -492, 5000, 0)
+    CALL(evt_cam3d_evt_set, 450, 133, -1033, 450, 37, -492, 5000, EASING_LINEAR)
     BEGIN_INLINE_EVENT
         WAIT_MS(333)
         CALL(evt_eff_fukidashi, 1, STRING("a"), STRING("ガードマン４"), 1, 0, 0, 0, 0, 0, 0, 0)
@@ -2059,7 +2059,7 @@ EVT_BEGIN(evt_souko_talk)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)
     CALL(evt_party_yoshi_ride, 0, 0)
-    CALL(evt_cam3d_evt_set, 0, 133, -1033, 0, 47, -490, 1000, 11)
+    CALL(evt_cam3d_evt_set, 0, 133, -1033, 0, 47, -490, 1000, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
     CALL(evt_msg_print, 0, STRING("stg3_tou_240_02"), 0, STRING("キノシコワ"))
     WAIT_MS(300)
@@ -2089,7 +2089,7 @@ EVT_BEGIN(evt_souko_talk)
         ELSE
         SET_VALUE(LW(0), 40)
     END_IF
-    CALL(evt_cam3d_evt_set, LW(0), 133, -1033, LW(0), 47, -490, 1000, 11)
+    CALL(evt_cam3d_evt_set, LW(0), 133, -1033, LW(0), 47, -490, 1000, EASING_SINE_IN_OUT)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     IF_INT_LESS(LW(0), 0)
         ADD(LW(0), 30)
@@ -2107,7 +2107,7 @@ EVT_BEGIN(evt_souko_talk)
     END_IF
     CALL(evt_npc_set_position, STRING("キノシコワ"), 0, -1000, 0)
     SET_VALUE(GSWF(2445), 1)
-    CALL(evt_cam3d_evt_off, 500, 11)
+    CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
     CALL(evt_mario_key_onoff, 1)
     RETURN
 EVT_END()

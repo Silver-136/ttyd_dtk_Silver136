@@ -317,9 +317,9 @@ EVT_BEGIN(evt_sub_starstone)
     CALL(evt_fade_entry, 9, 300, 255, 255, 255)
 #endif
     IF_INT_EQUAL(LF(8), 1)
-        CALL(evt_cam3d_evt_set_npc_rel, STRING("にせマリオ"), 0, 50, 397, 0, 70, 25, 2000, 11)
+        CALL(evt_cam3d_evt_set_npc_rel, STRING("にせマリオ"), 0, 50, 397, 0, 70, 25, 2000, EASING_SINE_IN_OUT)
         ELSE
-        CALL(evt_cam3d_evt_set_rel, 0, 50, 397, 0, 70, 25, 2000, 11)
+        CALL(evt_cam3d_evt_set_rel, 0, 50, 397, 0, 70, 25, 2000, EASING_SINE_IN_OUT)
     END_IF
     CALL(evt_snd_sfxon_3d, STRING("SFX_SE2_EVT_STARSTONE_GET1"), LW(5), LW(3), LW(6), 0)
     SET_VALUE(LW(7), LW(1))

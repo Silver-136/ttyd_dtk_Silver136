@@ -2,6 +2,7 @@
 
 #include <dolphin/types.h>
 #include "evt/evt_cmd.h"
+#include "system.h" // EasingType for the curve arguments
 
 typedef union BeroINFO {
     const char* name;

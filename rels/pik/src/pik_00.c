@@ -813,10 +813,10 @@ static EVT_BEGIN(hom_10_init_evt)
         CALL(evt_mapobj_trans, 1, STRING("train"), -1500, 0, 0)
     END_IF
     CALL(evt_cam_letter_box_onoff, 1, 1)
-    CALL(evt_cam3d_evt_set, LW(0), 300, 1400, LW(0), 125, 0, 0, 11)
+    CALL(evt_cam3d_evt_set, LW(0), 300, 1400, LW(0), 125, 0, 0, EASING_SINE_IN_OUT)
     BEGIN_INLINE_EVENT
         CALL(evt_seq_wait, SEQ_GAME)
-        CALL(evt_cam3d_evt_set, LW(1), 300, 1400, LW(1), 125, 0, 8000, 0)
+        CALL(evt_cam3d_evt_set, LW(1), 300, 1400, LW(1), 125, 0, 8000, EASING_LINEAR)
         WAIT_MS(4000)
         CALL(evt_bero_mapchange, STRING("rsh_02_a"), STRING("nidome"))
     END_INLINE_EVENT
@@ -1061,12 +1061,12 @@ EVT_BEGIN(talk_papa_taihou_kyoka)
         WAIT_MS(500)
         CALL(evt_msg_print, 0, STRING("stg7_pik_03"), 0, STRING("ナリキンパパ"))
         CALL(zoom, LW(0), LW(1), LW(2), LW(3), LW(4), LW(5))
-        CALL(evt_cam3d_evt_set, LW(0), LW(1), LW(2), LW(3), LW(4), LW(5), 500, 11)
+        CALL(evt_cam3d_evt_set, LW(0), LW(1), LW(2), LW(3), LW(4), LW(5), 500, EASING_SINE_IN_OUT)
         WAIT_MS(500)
         CALL(evt_msg_print, 0, STRING("stg7_pik_04"), 0, STRING("ナリキンパパ"))
         ELSE
         CALL(zoom, LW(0), LW(1), LW(2), LW(3), LW(4), LW(5))
-        CALL(evt_cam3d_evt_set, LW(0), LW(1), LW(2), LW(3), LW(4), LW(5), 500, 11)
+        CALL(evt_cam3d_evt_set, LW(0), LW(1), LW(2), LW(3), LW(4), LW(5), 500, EASING_SINE_IN_OUT)
         WAIT_MS(500)
         CALL(evt_msg_print, 0, STRING("stg7_pik_05"), 0, STRING("ナリキンパパ"))
     END_IF
@@ -1100,35 +1100,35 @@ EVT_BEGIN(talk_papa_taihou_kyoka)
             CALL(evt_msg_select, 0, STRING("stg7_pik_11_yn"))
             IF_INT_EQUAL(LW(0), 1)
                 CALL(evt_msg_print_add, 0, STRING("stg7_pik_06"))
-                CALL(evt_cam3d_evt_off, 500, 11)
+                CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
                 RETURN
             END_IF
             CALL(evt_msg_print_add, 0, STRING("stg7_pik_12"))
             CALL(evt_msg_select, 0, STRING("stg7_pik_11_yn"))
             IF_INT_EQUAL(LW(0), 1)
                 CALL(evt_msg_print_add, 0, STRING("stg7_pik_06"))
-                CALL(evt_cam3d_evt_off, 500, 11)
+                CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
                 RETURN
             END_IF
             CALL(evt_msg_print_add, 0, STRING("stg7_pik_13"))
             CALL(evt_msg_select, 0, STRING("stg7_pik_11_yn"))
             IF_INT_EQUAL(LW(0), 1)
                 CALL(evt_msg_print_add, 0, STRING("stg7_pik_06"))
-                CALL(evt_cam3d_evt_off, 500, 11)
+                CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
                 RETURN
             END_IF
             CALL(evt_msg_print_add, 0, STRING("stg7_pik_14"))
             CALL(evt_msg_select, 0, STRING("stg7_pik_11_yn"))
             IF_INT_EQUAL(LW(0), 1)
                 CALL(evt_msg_print_add, 0, STRING("stg7_pik_06"))
-                CALL(evt_cam3d_evt_off, 500, 11)
+                CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
                 RETURN
             END_IF
             CALL(evt_msg_print_add, 0, STRING("stg7_pik_15"))
             CALL(evt_msg_select, 0, STRING("stg7_pik_11_yn"))
             IF_INT_EQUAL(LW(0), 1)
                 CALL(evt_msg_print_add, 0, STRING("stg7_pik_06"))
-                CALL(evt_cam3d_evt_off, 500, 11)
+                CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
                 RETURN
             END_IF
             CALL(evt_msg_print_add, 0, STRING("stg7_pik_16"))
@@ -1180,7 +1180,7 @@ EVT_BEGIN(talk_papa_taihou_kyoka)
             END_IF
         END_IF
     END_SWITCH
-    CALL(evt_cam3d_evt_off, 500, 11)
+    CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
     RETURN
 EVT_END()
 
@@ -1717,13 +1717,13 @@ EVT_BEGIN(evt_pik_00_arrival)
     CALL(evt_party_cont_onoff, 0, 0)
     CALL(evt_mario_set_pos, 0, -1000, 0)
     CALL(evt_party_set_pos, 0, 0, -1000, 0)
-    CALL(evt_cam3d_evt_set, 507, 309, 1118, 3, 81, -72, 0, 11)
+    CALL(evt_cam3d_evt_set, 507, 309, 1118, 3, 81, -72, 0, EASING_SINE_IN_OUT)
     CALL(evt_seq_wait, SEQ_GAME)
     BEGIN_INLINE_EVENT
         WAIT_MS(2000)
         CALL(evt_telop_entry, 12)
     END_INLINE_EVENT
-    CALL(evt_cam3d_evt_set, 347, 236, 740, 3, 81, -72, 10000, 11)
+    CALL(evt_cam3d_evt_set, 347, 236, 740, 3, 81, -72, 10000, EASING_SINE_IN_OUT)
     WAIT_MS(10000)
     SET_VALUE(GSWF(3580), 1)
     CALL(evt_snd_bgm_scope, 0, 0)

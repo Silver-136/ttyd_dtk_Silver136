@@ -439,7 +439,7 @@ EVT_BEGIN(ufo_main)
         END_IF
         SET_VALUE(GW(11), 110)
         CALL(evt_snd_sfxoff, LW(5))
-        CALL(evt_cam3d_evt_set, 50, 145, 529, 50, 50, -13, 2000, 11)
+        CALL(evt_cam3d_evt_set, 50, 145, 529, 50, 50, -13, 2000, EASING_SINE_IN_OUT)
         IF_INT_EQUAL(LF(0), 1)
             BEGIN_INLINE_EVENT
                 CALL(evt_item_move_3d_position, LW(8), 40, 105, GW(11), 3000, 11)
@@ -580,7 +580,7 @@ EVT_END()
 
 EVT_BEGIN(evt_ufo_sousaban)
     CALL(evt_mario_key_onoff, 0)
-    CALL(evt_cam3d_evt_set, 230, 200, 380, 230, 130, -13, 1000, 11)
+    CALL(evt_cam3d_evt_set, 230, 200, 380, 230, 130, -13, 1000, EASING_SINE_IN_OUT)
     WAIT_MS(1200)
     CALL(evt_mapobj_get_position, STRING("S_kure"), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG7_CRANE_MOVE1"), LW(0), LW(1), LW(2), LW(3))
@@ -600,7 +600,7 @@ EVT_BEGIN(evt_ufo_sousaban)
             END_IF
         END_LOOP
     END_INLINE_EVENT
-    CALL(evt_cam3d_evt_set, -65, 175, 529, -65, 80, -13, 3000, 11)
+    CALL(evt_cam3d_evt_set, -65, 175, 529, -65, 80, -13, 3000, EASING_SINE_IN_OUT)
     WAIT_MS(3400)
     IF_INT_EQUAL(GSWF(4218), 0)
         SET_VALUE(GSWF(4218), 1)
@@ -694,7 +694,7 @@ EVT_BEGIN(evt_ufo_sousaban)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_hikari"), MAP_OBJ_FLAG_HIDDEN)
     SET_VALUE(GF(14), 1)
     CALL(evt_cam_shift_reset)
-    CALL(evt_cam3d_evt_off, 500, 11)
+    CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
     WAIT_MS(500)
     CALL(evt_mario_key_onoff, 1)
     RETURN
@@ -714,7 +714,7 @@ static EVT_BEGIN(evt_sw)
         SET_VALUE(GSWF(4197), 1)
         CALL(evt_mario_key_onoff, 0)
         WAIT_MS(1000)
-        CALL(evt_cam3d_evt_set, 20, 125, 394, 20, 55, 0, 1000, 11)
+        CALL(evt_cam3d_evt_set, 20, 125, 394, 20, 55, 0, 1000, EASING_SINE_IN_OUT)
         WAIT_MS(1500)
         BEGIN_INLINE_EVENT
             CALL(evt_mapobj_get_position, STRING("S_pato4"), LW(0), LW(1), LW(2))
@@ -740,7 +740,7 @@ static EVT_BEGIN(evt_sw)
         SPAWN_EVENT(PTR(evt_hari))
         WAIT_MS(500)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_sui_01"), 0, PTR(evt_ufo_sousaban), 0)
-        CALL(evt_cam3d_evt_off, 500, 11)
+        CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
         CALL(evt_mario_key_onoff, 1)
     END_IF
     RETURN

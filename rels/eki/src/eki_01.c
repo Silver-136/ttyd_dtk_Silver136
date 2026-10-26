@@ -132,7 +132,7 @@ static BeroEntry bero_data[] = {
 
 static EVT_BEGIN(evt_origami)
     CALL(evt_mario_key_onoff, 0)
-    CALL(evt_cam3d_evt_set, 516, 126, 408, 171, 90, -55, 1000, 11)
+    CALL(evt_cam3d_evt_set, 516, 126, 408, 171, 90, -55, 1000, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
     CALL(evt_mapobj_get_position, STRING("dann"), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG6_PERA_KAI_DOWN1"), LW(0), LW(1), LW(2), 0)
@@ -158,7 +158,7 @@ static EVT_BEGIN(evt_origami)
     WAIT_MS(LW(1))
     WAIT_MS(1000)
     SET_VALUE(GSW_STORY_PROGRESS, STG6_30_ORIGAMI_STAIRS)
-    CALL(evt_cam3d_evt_off, 500, 11)
+    CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
     WAIT_MS(500)
     CALL(evt_mario_key_onoff, 1)
     RETURN

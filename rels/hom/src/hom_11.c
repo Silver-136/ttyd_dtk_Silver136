@@ -43,10 +43,10 @@ EVT_BEGIN(hom_11_init_evt)
         CALL(evt_mapobj_trans, 1, STRING("train"), -1500, 0, 0)
     END_IF
     CALL(evt_cam_letter_box_onoff, 1, 1)
-    CALL(evt_cam3d_evt_set, LW(0), 300, 1400, LW(0), 125, 0, 0, 11)
+    CALL(evt_cam3d_evt_set, LW(0), 300, 1400, LW(0), 125, 0, 0, EASING_SINE_IN_OUT)
     BEGIN_INLINE_EVENT
         CALL(evt_seq_wait, SEQ_GAME)
-        CALL(evt_cam3d_evt_set, LW(1), 300, 1400, LW(1), 125, 0, 8000, 0)
+        CALL(evt_cam3d_evt_set, LW(1), 300, 1400, LW(1), 125, 0, 8000, EASING_LINEAR)
         WAIT_MS(4000)
         CALL(evt_bero_mapchange, STRING("rsh_02_b"), STRING("nidome"))
     END_INLINE_EVENT

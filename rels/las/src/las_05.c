@@ -1085,7 +1085,7 @@ static EVT_BEGIN(senkaron_event)
         END_INLINE_EVENT
         CALL(evt_npc_set_anim, STRING("黒カロン"), STRING("KRN_D_3"))
         WAIT_MS(300)
-        CALL(evt_cam3d_evt_set, 550, 80, 310, 550, 30, -90, 300, 0)
+        CALL(evt_cam3d_evt_set, 550, 80, 310, 550, 30, -90, 300, EASING_LINEAR)
         WAIT_MS(300)
         CALL(evt_msg_toge, 1, 0, 0, 0)
         CALL(evt_msg_print, 0, STRING("stg8_las_02"), 0, STRING("黒カロン"))
@@ -1121,7 +1121,7 @@ static EVT_BEGIN(senkaron_event)
             CALL(evt_npc_set_position, STRING("黒カロン"), LW(13), LW(10), LW(14))
         END_LOOP
         CALL(evt_npc_set_anim, STRING("黒カロン"), STRING("KRN_R_1"))
-        CALL(evt_cam3d_evt_off, 300, 0)
+        CALL(evt_cam3d_evt_off, 300, EASING_LINEAR)
         CALL(senkaronAttackStart)
         CALL(senkaronFlagOnMesPushing)
         BEGIN_INLINE_EVENT

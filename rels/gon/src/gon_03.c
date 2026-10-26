@@ -224,7 +224,7 @@ EVT_BEGIN(tegami_event)
             BREAK_LOOP
         END_IF
     END_LOOP
-    CALL(evt_cam3d_evt_set, -30, 75, 150, -30, 25, -250, 3000, 11)
+    CALL(evt_cam3d_evt_set, -30, 75, 150, -30, 25, -250, 3000, EASING_SINE_IN_OUT)
     CALL(evt_party_set_dir, 0, 270, -1)
     CALL(evt_party_move_pos, 0, -40, -110, 1500)
     BEGIN_SIBLING_EVENT
@@ -276,7 +276,7 @@ EVT_BEGIN(tegami_event)
         CALL(evt_msg_print, 0, STRING("stg1_gon_06"), 0, STRING("party"))
     END_IF
     CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
-    CALL(evt_cam3d_evt_off, 1000, 11)
+    CALL(evt_cam3d_evt_off, 1000, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
     CALL(evt_party_cont_onoff, 0, 1)
     CALL(evt_party_run, 0)
@@ -299,7 +299,7 @@ static EVT_BEGIN(senkaron_event)
         CALL(evt_eff_fukidashi, 0, STRING("fukidashi"), 0, 0, 0, 0, 0, 0, 0, 0, 0)
         CALL(evt_npc_set_anim, STRING("リーダー"), STRING("KRN_D_3"))
         WAIT_MS(1000)
-        CALL(evt_cam3d_evt_set, 350, 80, 310, 350, 30, -90, 300, 0)
+        CALL(evt_cam3d_evt_set, 350, 80, 310, 350, 30, -90, 300, EASING_LINEAR)
         WAIT_MS(300)
         CALL(evt_msg_print, 0, STRING("stg1_gon_10"), 0, 0)
         WAIT_MS(300)
@@ -335,7 +335,7 @@ static EVT_BEGIN(senkaron_event)
             END_IF
         END_LOOP
         CALL(evt_npc_set_anim, STRING("リーダー"), STRING("KRN_R_1"))
-        CALL(evt_cam3d_evt_off, 300, 0)
+        CALL(evt_cam3d_evt_off, 300, EASING_LINEAR)
         WAIT_MS(700)
         CALL(evt_snd_sfxon, STRING("SFX_STG1_HONE_DOWN1_2"), 0)
         CALL(senkaronAttackStart)

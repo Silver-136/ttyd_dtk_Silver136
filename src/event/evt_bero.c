@@ -1208,7 +1208,7 @@ USER_FUNC(evt_camera_change_event_from_road) {
     cam->startTimeA = gp->renderTime;
     cam->durationA = (u32)OSMillisecondsToTicks(500);
     cam->stateA = 3;
-    cam->curveA = 11;
+    cam->curveA = EASING_SINE_IN_OUT;
     }
     }
     return EVT_RETURN_DONE;
@@ -1382,7 +1382,7 @@ EVT_BEGIN(bero_case_exec_pipe_sub)
                     END_IF
                     WAIT_FRAMES(1)
                 END_LOOP
-                CALL(evt_bero_cam3d_change, 500, 11)
+                CALL(evt_bero_cam3d_change, 500, EASING_SINE_IN_OUT)
             END_IF
         END_INLINE_EVENT
     END_IF
@@ -1458,7 +1458,7 @@ EVT_BEGIN(bero_case_exec_pipe_sub)
         CALL_CHILD(PTR(bero_case_switch_off))
         SPAWN_EVENT(PTR(evt_bero_nonride_check))
         CALL(evt_bero_cam_shift_init)
-        CALL(evt_cam3d_evt_off, 500, 11)
+        CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
         ELSE
         CALL(evt_bero_disppos_load)
         CALL(evt_mario_paper_pose_off)
