@@ -94,11 +94,13 @@ data order 10, sound-name integer round trips (`SFX_NAME_WORD`) 9, no-op casts 6
 
 - Version blocks: 2,155 `#if`/`#ifdef VERSION_*` blocks (1,889 at adoption; more now because duplicated US/JP copies were
   split into small per-difference blocks, which removed about 20,000 duplicated lines).
-- Private copies of one struct that could share a header: the star "arc block" work in sac_bakugame / deka / muki /
-  scissor / suki, the `{?, count, elems}` work in hei_10 / rsh_00 / tou_03, `LectButtonDisp` (11 copies),
-  `BoobooName` (2), the Pianta Parlor (Monte) structs (5); private views of BattleActions / BattleACDispParams /
-  SequenceWork / MapFileMesh in ac_*.c, seq_battle and mobjdrv.
-- Offset-only field names that the placeholder count misses (sac_bakugame `s7c`, `c0`, `cc`, `dc`, `e0`, `f0` ...).
+- Private copies of one struct: done for the star stone block (SacStarStone in sac_common.h: bakugame, muki, suki;
+  deka has its own variant), Maya animation, audience sound/member, ChuchuParty, EnvironmentWork views,
+  LectButtonDisp, BoobooName. Kept apart on purpose: the per-map crowd works in hei_10 / rsh_00 / tou_03 (same
+  `{flag, count, members, defs[32]}` frame, different member structs; rsh_00's MoamoaWork is not the swarm in
+  include/moamoa.h) and gor_03's Monte (a different layout from yuu's; only the 0x38-byte piece is shared). Left:
+  private views of BattleActions / BattleACDispParams / SequenceWork / MapFileMesh in ac_*.c, seq_battle, mobjdrv.
+- Offset-only field names: 89 named from their uses (2026-10-26); the rest are write-only or unclear (about 120).
 - Hand-expanded code that a macro or inline probably produced: psndENVMain's `ENVAPPLY` cases and psndENVOn_f_d's
   offset sum, the Smorg hop code's temporaries (hand-inlined `randf` in map units: settled as written, Codex round 9
   found the inline call changes literal-pool order).
