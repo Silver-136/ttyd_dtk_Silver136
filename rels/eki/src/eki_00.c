@@ -53,65 +53,8 @@
 #include "data_tables.h"
 #include "mario/mario_pouch.h"
 #include "driver/extdrv.h"
+#include "moamoa.h"
 
-typedef struct MoamoaPoseDef {
-    char model[16];
-    char anim[8];
-    s16 loop;
-    f32 speed;
-    s32 start;
-    s32 count;
-} MoamoaPoseDef;
-typedef struct Moamoa {
-    u16 flags;
-    s16 state;
-    s16 timer;
-    u8 field_0x6[2];
-    Vec target;
-    f32 vy;
-    s16 jumpTimer;
-    u8 field_0x1a[2];
-    f32 speed;
-    f32 gravity;
-    s16 next;
-    u8 field_0x26[2];
-    f32 lastX;
-    f32 lastZ;
-    Vec field_0x30;
-    s16 pose;
-    u8 field_0x3e[2];
-    OSTime startTime;
-    s16 group;
-    s16 order;
-    u8 kind;
-    u8 field_0x4d[3];
-} Moamoa;
-typedef struct MoamoaWork {
-    u16 flags;
-    u8 field_0x2[2];
-    s32 count;
-    Moamoa* moa;
-    MapObject* mobj;
-    f32 mobjY;
-    Vec target[3];
-    s16 hitCount;
-    s16 targetHits[2]; // hits near each target; above 50 the escape event for that side runs
-    s16 field_0x3e;
-    s16 hammerFrames; // frames Mario has been in the hammer motion
-    s16 idleFrames;
-    void* escapeEvt;
-    s32 animPoseId;
-    s32 numDefs;
-    MoamoaPoseDef defs[32];
-    f32 angle;
-    f32 dist;
-    s32 bounceCount;
-    f32 breathDir;
-    f32 breathDist;
-    Vec breathPos;
-    s16 chainNum[128];
-    s16 chainIdx[128][2];
-} MoamoaWork;
 static MoamoaWork* wp;
 static f32 randf(f32 min, f32 max);
 static void moamoa_pose_init(void);
@@ -189,8 +132,6 @@ static inline f32 moa_cos(f32 x) {
     }
     return a;
 }
-
-
 
 static s32 moamoa_hit_check(ExtdrvPose* pose, Moamoa* moa);
 static void moamoa_jump(ExtdrvPose* pose, Moamoa* moa, s32 next, s32 checkGround, f32 x, f32 y, f32 z, f32 speed, f32 gravity);
@@ -304,8 +245,6 @@ static ExtTexInfo ext_moamoa_data[] = {
     {"c_n_moa_b", "D_1", 8.0f},
     {0},
 };
-
-
 
 void envAddTev(s32 type, MapTevCallbackInfo* info);
 
@@ -1581,7 +1520,6 @@ static EVT_BEGIN(evt_moamoa_escape)
     RETURN
 EVT_END()
 
-
 s32 img_set_color(EventEntry* event, BOOL isFirstCall) {
     EvtWord* args = event->args;
     const char* name = (const char*)evtGetValue(event, args[0]);
@@ -1992,5 +1930,4 @@ EVT_BEGIN(eki_00_init_evt)
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_kan"), 0, PTR(evt_kanban), 0)
     RETURN
 EVT_END()
-
 

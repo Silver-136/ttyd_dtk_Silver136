@@ -51,64 +51,8 @@
 #include "data_tables.h"
 #include "driver/extdrv.h"
 #include "driver/seqdrv.h"
-// target .bss/.sbss pad (uninitialised objects are emitted in reverse order, so this sits last)
+#include "moamoa.h"
 
-typedef struct MoamoaPoseDef {
-    char model[16];
-    char anim[8];
-    s16 loop;
-    f32 speed;
-    s32 start;
-    s32 count;
-} MoamoaPoseDef;
-typedef struct Moamoa {
-    u16 flags;
-    s16 state;
-    s16 timer;
-    u8 field_0x6[2];
-    Vec target;
-    f32 vy;
-    s16 jumpTimer;
-    u8 field_0x1a[2];
-    f32 speed;
-    f32 gravity;
-    s16 next;
-    u8 field_0x26[2];
-    f32 lastX;
-    f32 lastZ;
-    u8 field_0x30[0x3c - 0x30];
-    s16 pose;
-    u8 field_0x3e[2];
-    OSTime startTime;
-    u8 field_0x48[4];
-    u8 kind;
-    u8 field_0x4d[3];
-} Moamoa;
-typedef struct MoamoaWork {
-    u16 flags;
-    u8 field_0x2[2];
-    s32 count;
-    Moamoa* moa;
-    MapObject* mobj;
-    f32 mobjY;
-    Vec target[3];
-    s16 hitCount;
-    s16 targetHits[2]; // hits near each target; above 50 the escape event for that side runs
-    s16 field_0x3e;
-    s16 hammerFrames; // frames Mario has been in the hammer motion
-    s16 idleFrames;
-    EventEntry* escapeEvt;
-    u8 field_0x48[0x4c - 0x48];
-    s32 numDefs;
-    MoamoaPoseDef defs[32];
-    f32 angle;
-    f32 dist;
-    s32 bounceCount;
-    f32 breathDir;
-    f32 breathDist;
-    Vec breathPos;
-    u8 field_0x570[0x870 - 0x570];
-} MoamoaWork;
 static MoamoaWork* wp;
 static f32 randf(f32 min, f32 max);
 static void moamoa_pose_init(void);
@@ -183,8 +127,6 @@ static inline f32 moa_cos(f32 x) {
     }
     return a;
 }
-
-
 
 static void ext_moamoa_main(void);
 static s32 moamoa_hit_check(ExtdrvPose* pose, Moamoa* moa);
@@ -589,7 +531,6 @@ static s32 evt_moamoa_target_off(EventEntry* event, BOOL isFirstCall) {
     return EVT_RETURN_DONE;
 }
 
-
 static f32 randf(f32 min, f32 max) {
     f32 r = rand() / 32767.0f;
 
@@ -804,7 +745,6 @@ static s32 moamoa_hit_check(ExtdrvPose* pose, Moamoa* moa) {
 }
 #pragma opt_propagation reset
 #pragma opt_lifetimes reset
-
 
 #pragma opt_propagation off
 #pragma opt_lifetimes off
@@ -1398,7 +1338,6 @@ static void ext_moamoa_main(void) {
 }
 #pragma opt_propagation reset
 #pragma opt_lifetimes reset
-
 
 static void ext_moamoa_dispent(void) {
     if (wp->flags & 1) {
