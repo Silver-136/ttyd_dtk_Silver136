@@ -59,7 +59,19 @@ extern voidfunctionptr _ctors[];
 extern voidfunctionptr _dtors[];
 static void rankingInit(void);
 void rankingInit(void);
-typedef struct RankEntry { u16 flags; s32 id; union { s16 score; u8 sw[2]; }; } RankEntry;
+// RankEntry.flags (the Glitz Pit ranking)
+#define RANK_FLAG_BEATEN (1 << 0) // Mario beat this fighter (saved in swSet(0x9A1 + id))
+#define RANK_FLAG_HIDDEN (1 << 1) // not in the ranking yet
+#define RANK_FLAG_PLAYER (1 << 2) // Mario's own entry (id 20, drawn in red)
+
+typedef struct RankEntry {
+    u16 flags; // RANK_FLAG_*
+    s32 id;
+    union {
+        s16 score;
+        u8 sw[2];
+    };
+} RankEntry;
 typedef struct RankWork { s32 num; RankEntry* entries; } RankWork;
 static RankWork* rank_wp;
 static void rankingExit(void);
@@ -84,7 +96,7 @@ static DispWork* dwp;
 static FighterData fighterDt[23];
 static FighterData fighterDt_re[21];
 static void rankingControll(void);
-#define GET_RANK(rank, i) rank = 0; for (i = 0; i < rank_wp->num; i++) { if (!(rank_wp->entries[i].flags & 2)) { if (rank_wp->entries[i].flags & 4) { break; } rank++; } }
+#define GET_RANK(rank, i) rank = 0; for (i = 0; i < rank_wp->num; i++) { if (!(rank_wp->entries[i].flags & RANK_FLAG_HIDDEN)) { if (rank_wp->entries[i].flags & RANK_FLAG_PLAYER) { break; } rank++; } }
 static void insert(s32* list, s32 num, s32 from, s32 to);
 #define SORT_SCORE(list, n)                                                                    \
     for (i = 0; i < n - 1; i++) {                                                              \
@@ -262,7 +274,7 @@ static void rankingInit(void) {
         entry->flags = 0;
         entry->id = i;
         if (swGet(entry->id + 0x9A1)) {
-            entry->flags |= 1;
+            entry->flags |= RANK_FLAG_BEATEN;
         }
         if (swGet(0x9E1)) {
             for (j = 0; j < 2; j++) {
@@ -272,28 +284,28 @@ static void rankingInit(void) {
             entry->score = fighterDt[entry->id].score;
         }
         if (entry->id == 20) {
-            entry->flags |= 4;
+            entry->flags |= RANK_FLAG_PLAYER;
         }
     }
     swSet(0x9E1);
     if (evtGetValue(NULL, GSW_STORY_PROGRESS) < STG3_34_RETURN_TO_ROGUEPORT) {
-        rank_wp->entries[21].flags |= 2;
-        rank_wp->entries[22].flags |= 2;
+        rank_wp->entries[21].flags |= RANK_FLAG_HIDDEN;
+        rank_wp->entries[22].flags |= RANK_FLAG_HIDDEN;
         if (evtGetValue(NULL, GSWF(2412))) {
-            rank_wp->entries[18].flags |= 2;
+            rank_wp->entries[18].flags |= RANK_FLAG_HIDDEN;
         }
         if (evtGetValue(NULL, GSWF(2413))) {
-            rank_wp->entries[21].flags &= ~2;
+            rank_wp->entries[21].flags &= ~RANK_FLAG_HIDDEN;
             if (!evtGetValue(NULL, GSWF(2530))) {
-                rank_wp->entries[21].flags |= 1;
+                rank_wp->entries[21].flags |= RANK_FLAG_BEATEN;
             }
             evtSetValue(NULL, GSWF(2530), 1);
         }
         if (evtGetValue(NULL, GSWF(2421))) {
-            rank_wp->entries[11].flags |= 2;
-            rank_wp->entries[22].flags &= ~2;
+            rank_wp->entries[11].flags |= RANK_FLAG_HIDDEN;
+            rank_wp->entries[22].flags &= ~RANK_FLAG_HIDDEN;
             if (!evtGetValue(NULL, GSWF(2531))) {
-                rank_wp->entries[22].flags |= 1;
+                rank_wp->entries[22].flags |= RANK_FLAG_BEATEN;
             }
             evtSetValue(NULL, GSWF(2531), 1);
         }
@@ -307,7 +319,7 @@ static void rankingExit(void) {
     RankEntry* entry = rank_wp->entries;
 
     for (i = 0; i < rank_wp->num; i++, entry++) {
-        if (entry->flags & 1) {
+        if (entry->flags & RANK_FLAG_BEATEN) {
             swSet(entry->id + 0x9A1);
         } else {
             swClear(entry->id + 0x9A1);
@@ -378,8 +390,8 @@ static void rankingControll(void) {
 
     entry = rank_wp->entries;
     for (i = 0; i < rank_wp->num; i++, entry++) {
-        if (!(entry->flags & 4)) {
-            if (entry->flags & 1) {
+        if (!(entry->flags & RANK_FLAG_PLAYER)) {
+            if (entry->flags & RANK_FLAG_BEATEN) {
                 lose[nlose++] = i;
             } else {
                 win[nwin++] = i;
@@ -481,7 +493,7 @@ static USER_FUNC(evt_tou_get_next_match) {
 
     for (i = 0; i < rank_wp->num; i++) {
         entry = &rank_wp->entries[i];
-        if (!(entry->flags & 2)) {
+        if (!(entry->flags & RANK_FLAG_HIDDEN)) {
             list[n++] = entry->id;
         }
     }
@@ -539,7 +551,7 @@ static USER_FUNC(evt_tou_get_fighter_rank) {
 
     for (i = 0; i < rank_wp->num; i++) {
         entry = &rank_wp->entries[i];
-        if (!(entry->flags & 2)) {
+        if (!(entry->flags & RANK_FLAG_HIDDEN)) {
             if (id == entry->id) {
                 break;
             }
@@ -653,7 +665,7 @@ static USER_FUNC(evt_tou_set_ranking_win_lose) {
     if (lose == 0) {
         for (i = 0; i < rank_wp->num; i++) {
             if (id == rank_wp->entries[i].id) {
-                rank_wp->entries[i].flags |= 1;
+                rank_wp->entries[i].flags |= RANK_FLAG_BEATEN;
                 break;
             }
         }
@@ -661,7 +673,7 @@ static USER_FUNC(evt_tou_set_ranking_win_lose) {
     } else {
         for (i = 0; i < rank_wp->num; i++) {
             if (id == rank_wp->entries[i].id) {
-                rank_wp->entries[i].flags &= ~1;
+                rank_wp->entries[i].flags &= ~RANK_FLAG_BEATEN;
                 break;
             }
         }
@@ -670,7 +682,7 @@ static USER_FUNC(evt_tou_set_ranking_win_lose) {
     min = 1000;
     max = -1000;
     for (i = 0; i < rank_wp->num; i++) {
-        if (!(rank_wp->entries[i].flags & 2)) {
+        if (!(rank_wp->entries[i].flags & RANK_FLAG_HIDDEN)) {
             rank_wp->entries[i].score += rand() % 4 + (rand() % 4 - 3);
             if (rank_wp->entries[i].score < min) {
                 min = rank_wp->entries[i].score;
@@ -881,7 +893,7 @@ static void disp_proc(CameraId cameraId, void* param) {
     for (i = 0; i < rank_wp->num; i++) {
         tx = 10.0f + x;
         y = dwp->y + (top - yoff - 40.0f);
-        if (!(rank_wp->entries[i].flags & 2)) {
+        if (!(rank_wp->entries[i].flags & RANK_FLAG_HIDDEN)) {
             PSMTXScale(scale, 0.8f, 0.8f, 0.8f);
             if (rank != 0) {
 #ifdef VERSION_G8ME01
@@ -903,7 +915,7 @@ static void disp_proc(CameraId cameraId, void* param) {
                 FontDrawMessageMtx(mtx, buf);
             }
             FontDrawStart();
-            if (rank_wp->entries[i].flags & 4) {
+            if (rank_wp->entries[i].flags & RANK_FLAG_PLAYER) {
                 GXColor color = {0xFF, 0x00, 0x00, 0xFF};
                 FontDrawColor(color);
             } else {
