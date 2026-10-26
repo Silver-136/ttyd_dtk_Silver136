@@ -78,7 +78,11 @@ typedef struct HandWork {
     s32 timer;
     s32 state;
 } HandWork;
-typedef struct QueenConnect { s32 poseId[3]; u8 field_0xc[0x40 - 0xC]; s32 idx[2]; } QueenConnect;
+typedef struct QueenConnect {
+    s32 poseId[3];
+    u8 field_0xc[0x40 - 0xC];
+    s32 idx[2];
+} QueenConnect;
 ExtTexInfo hand_data[32];
 HandWork* hand_wp;
 u8* lightGetPaperCraft(void);

@@ -56,9 +56,16 @@
 #include "pmario_sound.h"
 #include "driver/seqdrv.h"
 
-typedef struct MonosiriFollow { s32 seq; s32* list; s32 count; } MonosiriFollow;
+typedef struct MonosiriFollow {
+    s32 seq;
+    s32* list;
+    s32 count;
+} MonosiriFollow;
 
-typedef struct DoorColorWork { GXColor color; GXColor color2; } DoorColorWork;
+typedef struct DoorColorWork {
+    GXColor color;
+    GXColor color2;
+} DoorColorWork;
 DoorColorWork* _door;
 static u8* _ap;
 static s32 xlw[16];

@@ -35,7 +35,10 @@
 
 void mabutaDisp(CameraId camera, void* param);
 static void depthDisp(CameraId camera, void* param);
-typedef struct TegamiWork { s32 alpha; FileEntry* tpl; } TegamiWork;
+typedef struct TegamiWork {
+    s32 alpha;
+    FileEntry* tpl;
+} TegamiWork;
 static f32 view_dy;
 static s32 view_trg;
 static TegamiWork* wp;

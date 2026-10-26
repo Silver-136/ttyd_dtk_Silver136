@@ -93,7 +93,10 @@ typedef struct ShelfAccess {
     EvtWord* evt;
     const char* msg2;
 } ShelfAccess;
-typedef struct ShelfAccessTbl3 { ShelfAccess rows[3]; const char* end[1]; } ShelfAccessTbl3;
+typedef struct ShelfAccessTbl3 {
+    ShelfAccess rows[3];
+    const char* end[1];
+} ShelfAccessTbl3;
 static ShelfAccessTbl3 access_tbl;
 static EvtWord evt_access[32];
 static EvtWord evt_access_entry[25];

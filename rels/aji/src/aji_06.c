@@ -32,7 +32,10 @@
 #include "driver/seqdrv.h"
 
 typedef struct YukaAnimData { u16 flags; u8 field_0x2[6]; OSTime time; f32 frame; f32 speed; struct { u8 field_0x0[8]; f32 length; }* data; } YukaAnimData;
-typedef struct YukaAnim { YukaAnimData* anim; u32 flags; } YukaAnim;
+typedef struct YukaAnim {
+    YukaAnimData* anim;
+    u32 flags;
+} YukaAnim;
 #define YUKA_NOW() OSTicksToMilliseconds(gp->inBattle ? gp->renderTime : gp->renderFieldTime)
 YukaAnim yuka_anim;
 s32 g_Kusuri1_No;

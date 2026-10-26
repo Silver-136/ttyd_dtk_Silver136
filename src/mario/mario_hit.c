@@ -1227,7 +1227,10 @@ HitEntry* marioChkLandon2(f32* y, f32 spd, f32 ofs) {
 extern void marioClearJumpPara(void);
 extern void marioChgStayMotion(void);
 
-typedef struct { u8 pad[0x15]; char name[16]; } MobjNameView;
+typedef struct {
+    u8 pad[0x15];
+    char name[16];
+} MobjNameView;
 
 static inline BOOL marioChkHeadBlock(HitEntry* hit) {
     MobjNameView* mobj;

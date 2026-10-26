@@ -44,7 +44,11 @@
 #include "driver/seqdrv.h"
 
 #define ARRAY_SIZE(a) (sizeof(a) / sizeof((a)[0]))
-typedef struct EndMoa { Vec pos; s32 chain; s32 idx; } EndMoa;
+typedef struct EndMoa {
+    Vec pos;
+    s32 chain;
+    s32 idx;
+} EndMoa;
 typedef struct EndWork {
     FileEntry* tpl;
     s32 mode;

@@ -28,7 +28,11 @@ extern EvtWord luigi_gor_first_talk[];
 extern BattleUnitKind unit_lecture_frankli_sac;
 extern BattleUnitKind unit_monban;
 
-typedef struct CookRecipe { const char* a; const char* b; const char* out; } CookRecipe;
+typedef struct CookRecipe {
+    const char* a;
+    const char* b;
+    const char* out;
+} CookRecipe;
 extern CookRecipe R_cookbook_recipe_table[];
 extern s32 R_mystery_cook_list[];
 /* one-ingredient recipes (cook_chk): result without the Cookbook, result2 once Mario has it (trouble

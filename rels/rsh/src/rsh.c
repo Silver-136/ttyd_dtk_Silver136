@@ -35,7 +35,11 @@
 #include "npc_event.h"
 #include "rsh.h"
 
-typedef struct RshRndNpc { const char* name; const char* model; EvtWord* talkEvt; } RshRndNpc;
+typedef struct RshRndNpc {
+    const char* name;
+    const char* model;
+    EvtWord* talkEvt;
+} RshRndNpc;
 typedef void (*voidfunctionptr)(void);
 extern voidfunctionptr _ctors[];
 extern voidfunctionptr _dtors[];

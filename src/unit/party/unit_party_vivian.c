@@ -86,9 +86,18 @@ PoseTableEntry pose_table_vivian_stay[24];
 static BattleDataEntry data_table[20];
 BattleUnitKindPart unitpartsdata_Party_Vivian[1];
 BattleUnitKind unitdata_Party_Vivian;
-typedef struct { BattleUnitDefense d; u8 pad[3]; } VivDef;
-typedef struct { BattleUnitDefenseAttr d; u8 pad[3]; } VivDefAttr;
-typedef struct { StatusVulnerability d; u8 pad[2]; } VivRegist;
+typedef struct {
+    BattleUnitDefense d;
+    u8 pad[3];
+} VivDef;
+typedef struct {
+    BattleUnitDefenseAttr d;
+    u8 pad[3];
+} VivDefAttr;
+typedef struct {
+    StatusVulnerability d;
+    u8 pad[2];
+} VivRegist;
 static VivDef defence;
 static VivDefAttr defence_attr;
 static VivRegist regist;

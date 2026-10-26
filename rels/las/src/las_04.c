@@ -32,7 +32,10 @@
 #include "driver/hitdrv.h"
 #include <math.h>
 
-typedef struct FirebarBall { s32 pose; Vec pos; } FirebarBall;
+typedef struct FirebarBall {
+    s32 pose;
+    Vec pos;
+} FirebarBall;
 typedef struct FirebarSetup {
     u8 type;
     u8 count;

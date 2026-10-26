@@ -27,8 +27,15 @@
 #include "driver/hitdrv.h"
 
 static inline f32 addf(f32 a, f32 b) { return a + b; }
-typedef struct EntryMgrEntry { s32 used; s32 id; f32 reg[3]; } EntryMgrEntry;
-typedef struct EntryMgr { s32 count; EntryMgrEntry* entries; } EntryMgr;
+typedef struct EntryMgrEntry {
+    s32 used;
+    s32 id;
+    f32 reg[3];
+} EntryMgrEntry;
+typedef struct EntryMgr {
+    s32 count;
+    EntryMgrEntry* entries;
+} EntryMgr;
 
 USER_FUNC(dou_namiatari_check);
 USER_FUNC(evt_mario_dispflag_onoff);

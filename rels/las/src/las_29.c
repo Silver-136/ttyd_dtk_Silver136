@@ -47,9 +47,18 @@
 #include "driver/seqdrv.h"
 
 void _hikariEntry(const char* name, s32 type, f32 scale);
-typedef struct HikariData { s32 key; s32 id; } HikariData;
-typedef struct HikariList40 { HikariData entries[40]; s32 endKey; } HikariList40;
-typedef struct HikariList27 { HikariData entries[27]; s32 endKey; } HikariList27;
+typedef struct HikariData {
+    s32 key;
+    s32 id;
+} HikariData;
+typedef struct HikariList40 {
+    HikariData entries[40];
+    s32 endKey;
+} HikariList40;
+typedef struct HikariList27 {
+    HikariData entries[27];
+    s32 endKey;
+} HikariList27;
 #define HIKARI_DATA ((HikariData*)&hikari_data)
 
 USER_FUNC(add_vy);

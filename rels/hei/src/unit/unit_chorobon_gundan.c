@@ -55,9 +55,18 @@ BattleUnit* chorogun_get_ptr(void);
 extern EvtWord escape_chorogun_event[];
 
 BattleUnitKind unit_chorobon_gundan;
-typedef struct { BattleUnitDefense v; u8 pad[3]; } DefencePad;
-typedef struct { BattleUnitDefenseAttr v; u8 pad[3]; } DefenceAttrPad;
-typedef struct { StatusVulnerability v; u8 pad[2]; } RegistPad;
+typedef struct {
+    BattleUnitDefense v;
+    u8 pad[3];
+} DefencePad;
+typedef struct {
+    BattleUnitDefenseAttr v;
+    u8 pad[3];
+} DefenceAttrPad;
+typedef struct {
+    StatusVulnerability v;
+    u8 pad[2];
+} RegistPad;
 static DefencePad defence;
 static DefenceAttrPad defence_attr;
 static RegistPad regist;

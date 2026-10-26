@@ -608,7 +608,9 @@ void imgShadowDisp(CameraId camId, void* param) {
     {
         f32 x0, y0, w, h;
         f32 sc, z;
-        typedef struct { u16 p, q, w, h; } RM;
+        typedef struct {
+            u16 p, q, w, h;
+        } RM;
         if (entry->flags & IMAGE_FLAG_NO_VIRTUAL_POINT) {
             sc = 1.0f;
             z = 0.0f;

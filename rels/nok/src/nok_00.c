@@ -38,7 +38,11 @@
 #include "manager/evtmgr_cmd.h"
 #include "driver/seqdrv.h"
 
-typedef struct PosterWork { u32 flags; s32 group; s32 shape; } PosterWork;
+typedef struct PosterWork {
+    u32 flags;
+    s32 group;
+    s32 shape;
+} PosterWork;
 PosterWork* poster;
 void draw_poster(void* userdata, s32 group);
 void animPoseSetDispCallBack(s32 poseId, void (*callback)(void*, s32), void* userdata);

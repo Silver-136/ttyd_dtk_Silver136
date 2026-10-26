@@ -46,8 +46,12 @@ void effKemuTestDisp(CameraId cameraId, void* param);
 
 #pragma defer_codegen off
 
-typedef struct { f32 v[3]; } KemuF3;
-typedef struct { f32 v[4]; } KemuF4;
+typedef struct {
+    f32 v[3];
+} KemuF3;
+typedef struct {
+    f32 v[4];
+} KemuF4;
 
 static const KemuF3 kemu_c = { { 0.5f, 0.3f, 0.8f } };
 static const KemuF3 kemu_a = { { 0.0f, 10.0f, 10.0f } };

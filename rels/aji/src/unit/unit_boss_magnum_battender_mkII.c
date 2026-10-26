@@ -64,7 +64,11 @@ typedef struct BattenEffWork {
     u8 field_0x10[0x28 - 0x10];
     Mtx mtx;
 } BattenEffWork;
-typedef struct TargetWork { s32 state; s32 count; EffectEntry* eff; } TargetWork;
+typedef struct TargetWork {
+    s32 state;
+    s32 count;
+    EffectEntry* eff;
+} TargetWork;
 extern EvtWord aud_hit_event[];
 void aud_get_pod_pos(BattleUnit* unit, f32* x, f32* y, f32* z);
 void aud_fire_eff(f32 x, f32 y, f32 z);

@@ -44,8 +44,12 @@ EVT_BEGIN(msg_heavy_bomb_fire)
     CALL(btlevtcmd_AnnounceMessage, 0, 0, -225, STRING("btl_msg_audience_heavybomb_dynamite"), 120)
     RETURN
 EVT_END()
-typedef struct { f32 v[65]; } AudDeltaArr;
-typedef struct { s32 v[11]; } AudWArr;
+typedef struct {
+    f32 v[65];
+} AudDeltaArr;
+typedef struct {
+    s32 v[11];
+} AudWArr;
 const AudDeltaArr R_audience_delta_multiplier = {{8.0f,11.0f,14.0f,17.0f,20.0f,23.0f,26.0f,29.0f,32.0f,35.0f,38.0f,41.0f,44.0f,47.0f,50.0f,53.0f,56.0f,59.0f,62.0f,65.0f,68.0f,71.0f,74.0f,77.0f,80.0f,83.0f,86.0f,89.0f,92.0f,95.0f,98.0f,101.0f,104.0f,107.0f,110.0f,113.0f,116.0f,119.0f,122.0f,125.0f,128.0f,131.0f,134.0f,137.0f,140.0f,143.0f,146.0f,149.0f,152.0f,155.0f,158.0f,161.0f,164.0f,167.0f,170.0f,173.0f,176.0f,179.0f,182.0f,185.0f,188.0f,191.0f,194.0f,197.0f,200.0f}};
 const AudWArr R_num_audience_type_weights = {{20,40,20,5,3,2,1,1,1,1,1}};
 

@@ -104,10 +104,14 @@ void seq_mapChangeExit(SequenceWork* work) {
 }
 
 #ifdef VERSION_G8ME01
-typedef struct { const char* s[7]; } LangTbl;
+typedef struct {
+    const char* s[7];
+} LangTbl;
 static const LangTbl lang_tbl = {{"jp", "us", "ge", "fr", "sp", "it", "du"}};
 #else
-typedef struct { const char* s[2]; } LangTbl;
+typedef struct {
+    const char* s[2];
+} LangTbl;
 static const LangTbl lang_tbl = {{"jp", "us"}};
 #endif
 void seq_mapChangeMain(SequenceWork* work) {

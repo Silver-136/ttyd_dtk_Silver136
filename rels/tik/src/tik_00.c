@@ -124,7 +124,10 @@ static ShopperData35 shopper_data;
 EvtWord uranaisi_next_evt[152];
 EvtWord uranaisi_starpiece_evt[60];
 EvtWord uranaisi_supercoin_evt[60];
-typedef struct CardName { const char* name; s32 value; } CardName;
+typedef struct CardName {
+    const char* name;
+    s32 value;
+} CardName;
 static CardName name_tbl[9];
 EvtWord evt_uranai_cap[4];
 EvtWord uranai_init[147];

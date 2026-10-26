@@ -60,7 +60,11 @@ static s16 tex_lang5[] = {135, 136, 137, -1, 138, 139, 140, -1, 141, 142, 143, 1
 static s16 tex_shadow_lang5[] = {147, 148, 149, -1, 150, 151, 152, -1, 153, 154, 155, 156};
 static s16 tex_lang6[] = {130, 131, 132, 133, 134, 131, 135, 136};
 static s16 tex_shadow_lang6[] = {137, 138, 139, 140, 141, 138, 142, 143};
-typedef struct TexSet { s16* tex; s16* shadow; s32 count; } TexSet;
+typedef struct TexSet {
+    s16* tex;
+    s16* shadow;
+    s32 count;
+} TexSet;
 static TexSet texid_tbl[6] = { { tex_jp, tex_shadow_jp, 8 }, { tex_us, tex_shadow_us, 14 }, { tex_lang3, tex_shadow_lang3, 12 }, { tex_lang4, tex_shadow_lang4, 16 }, { tex_lang5, tex_shadow_lang5, 12 }, { tex_lang6, tex_shadow_lang6, 8 } };
 u32 niji_tbl[] = {144, 154, 150, 156, 158, 144};
 static EVT_BEGIN(evt_shake)

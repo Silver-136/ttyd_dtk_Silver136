@@ -47,7 +47,10 @@ typedef struct Flower {
     f32 targetScale;
     s32 alpha;
 } Flower;
-typedef struct FlowerWork { s32 count; Flower* flowers; } FlowerWork;
+typedef struct FlowerWork {
+    s32 count;
+    Flower* flowers;
+} FlowerWork;
 void flower_disp(CameraId camera, void* param);
 static s32 ssf[3];
 

@@ -28,7 +28,11 @@
 #include "aji.h"
 #include "driver/seqdrv.h"
 
-typedef struct MonitorWork { void* buf; s32 ready; s32 kanbu; } MonitorWork;
+typedef struct MonitorWork {
+    void* buf;
+    s32 ready;
+    s32 kanbu;
+} MonitorWork;
 static MonitorWork* monitor_wp;
 void monitor_cap_capture(CameraId cameraId, void* param);
 

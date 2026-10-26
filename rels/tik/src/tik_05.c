@@ -78,7 +78,11 @@ typedef struct BrokenPiece {
     f32 gx;
     f32 gy;
 } BrokenPiece;
-typedef struct BrokenWork { s32 copied; smartEntry* tex; smartEntry* pieces; } BrokenWork;
+typedef struct BrokenWork {
+    s32 copied;
+    smartEntry* tex;
+    smartEntry* pieces;
+} BrokenWork;
 static u8* _ap;
 static KaitenParam* ckp0;
 static KaitenParam* ckp1;

@@ -8,7 +8,11 @@
 #include "string.h"
 #include "memory.h"
 
-typedef struct KeijibanEntry { s16 flags; s16 evtNo; s16 index; } KeijibanEntry;
+typedef struct KeijibanEntry {
+    s16 flags;
+    s16 evtNo;
+    s16 index;
+} KeijibanEntry;
 typedef struct KeijibanData {
     KeijibanEntry* entries;
     s32 count;

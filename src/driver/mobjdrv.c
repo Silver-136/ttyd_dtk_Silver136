@@ -27,7 +27,10 @@
 
 
 /* static map-file joint data for the mobj cube models (same layout as a loaded map file) */
-typedef struct CubeDrawMode { MapJointDrawMode mode; u32 field_0x10; } CubeDrawMode;
+typedef struct CubeDrawMode {
+    MapJointDrawMode mode;
+    u32 field_0x10;
+} CubeDrawMode;
 typedef struct CubeMesh {
     u8 reserved_00;              // 0x0
     u8 padding[2];        // 0x1
@@ -37,7 +40,10 @@ typedef struct CubeMesh {
     void* vcdTable;       // 0xC, cubeDDT
     u32* lists[15];       // 0x10, display lists in cubeDN
 } CubeMesh;
-typedef struct CubeJoint { MapFileJoint joint; MapFileJointPart part; } CubeJoint;
+typedef struct CubeJoint {
+    MapFileJoint joint;
+    MapFileJointPart part;
+} CubeJoint;
 
 CubeDrawMode cubeMSJ = {{0, 1, 0, 0, 0, (s32)0x80000000}, 0};
 
@@ -45,8 +51,14 @@ CubeDrawMode front2MSJ = {{0, 1, 0, 0, 0, 0}, 0};
 
 // static data from inlined header functions
 
-typedef struct CubeVtxData34 { s32 count; Vec v[34]; } CubeVtxData34;
-typedef struct CubeVtxData18 { s32 count; Vec v[18]; } CubeVtxData18;
+typedef struct CubeVtxData34 {
+    s32 count;
+    Vec v[34];
+} CubeVtxData34;
+typedef struct CubeVtxData18 {
+    s32 count;
+    Vec v[18];
+} CubeVtxData18;
 CubeVtxData34 cubeDVP = {
     8,
     {

@@ -44,7 +44,10 @@
 #include "cam_road.h"
 #include "driver/seqdrv.h"
 
-typedef struct GonbabaProj { GXTexObj obj; smartEntry* tex; } GonbabaProj;
+typedef struct GonbabaProj {
+    GXTexObj obj;
+    smartEntry* tex;
+} GonbabaProj;
 void make_gonbaba_projection(CameraId camera, void* param);
 
 USER_FUNC(cam_test);

@@ -36,7 +36,10 @@
 #include "driver/seqdrv.h"
 
 static void draw(CameraId camera, void* param);
-typedef struct AaaWork { FileEntry* tpl; s32 alpha; } AaaWork;
+typedef struct AaaWork {
+    FileEntry* tpl;
+    s32 alpha;
+} AaaWork;
 static AaaWork* wp;
 
 USER_FUNC(evt_snd_env_lpf);

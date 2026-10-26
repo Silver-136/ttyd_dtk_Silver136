@@ -44,7 +44,10 @@ void* _mapAlloc(u32 size);
 #else
 #include "memory.h"
 #endif
-typedef struct { Vec pos; Vec delta; } BeltWork;
+typedef struct {
+    Vec pos;
+    Vec delta;
+} BeltWork;
 
 USER_FUNC(bg_cam_chk);
 USER_FUNC(evt_mario_get_name_hitobj_head);
@@ -73,11 +76,20 @@ typedef struct ShikakeMove {
     s32 param1;
     s32 time;
 } ShikakeMove;
-typedef struct ShikakeMoveTbl7 { ShikakeMove rows[7]; const char* end[2]; } ShikakeMoveTbl7;
+typedef struct ShikakeMoveTbl7 {
+    ShikakeMove rows[7];
+    const char* end[2];
+} ShikakeMoveTbl7;
 ShikakeMoveTbl7 left_right_tbl;
-typedef struct ShikakeMoveTbl6 { ShikakeMove rows[6]; const char* end[2]; } ShikakeMoveTbl6;
+typedef struct ShikakeMoveTbl6 {
+    ShikakeMove rows[6];
+    const char* end[2];
+} ShikakeMoveTbl6;
 ShikakeMoveTbl6 up_down_tbl;
-typedef struct ShikakeMoveTbl15 { ShikakeMove rows[15]; const char* end[2]; } ShikakeMoveTbl15;
+typedef struct ShikakeMoveTbl15 {
+    ShikakeMove rows[15];
+    const char* end[2];
+} ShikakeMoveTbl15;
 ShikakeMoveTbl15 r_tbl;
 EvtWord shikake_init[66];
 static EvtWord evt_sw[134];

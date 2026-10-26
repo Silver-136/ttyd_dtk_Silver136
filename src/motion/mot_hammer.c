@@ -67,7 +67,10 @@ static inline s32 hamLv(void) {
 }
 
 
-typedef struct { u8 pad[0x15]; char name[0x10]; } HamMobj;
+typedef struct {
+    u8 pad[0x15];
+    char name[0x10];
+} HamMobj;
 
 static const char isS1_str[14];
 static const char isB1_str[17];

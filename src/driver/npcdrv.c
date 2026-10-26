@@ -2329,7 +2329,9 @@ static inline BOOL fbat_canHit(NpcEntry* npc) {
     if (npc->flags & NPC_FLAG_2D) continue;                                                 \
     if ((*(u32*)&((NpcEntry*)npc)->statusFlags) & 4) continue;
 
-typedef struct { s32 v[11]; } SinTbl;
+typedef struct {
+    s32 v[11];
+} SinTbl;
 static const SinTbl sSinTbl = {{0, 0, 0, 0, 45, 60, 90, 100, 101, 101, 101}};
 
 void* fbatHitCheck(u32 flags, void* result) {

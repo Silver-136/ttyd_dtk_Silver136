@@ -26,7 +26,9 @@
 #define UNIT_WORK_HP_50 2        // 50% of max HP, threshold of the second HP line
 #define UNIT_WORK_HP_25 3        // 25% of max HP, threshold of the third HP line
 
-typedef struct FakerStatus { s16 data[15]; } FakerStatus;
+typedef struct FakerStatus {
+    s16 data[15];
+} FakerStatus;
 #ifdef VERSION_G8ME01
 typedef struct FakerParam {
     f32 size;

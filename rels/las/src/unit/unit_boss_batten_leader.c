@@ -110,11 +110,26 @@ static BattleUnitKindPart parts[7];
 EvtWord hakai_snd_event[9];
 BattleUnitSetup entry_batten_satellite;
 /* light blink sequence read by the light event: {mapobj name, frames} steps, then a NULL name */
-typedef struct LightStep { const char* name; s32 time; } LightStep;
-typedef struct LightSeq1 { LightStep steps[1]; const char* end; } LightSeq1;
-typedef struct LightSeq2 { LightStep steps[2]; const char* end; } LightSeq2;
-typedef struct LightSeq3 { LightStep steps[3]; const char* end; } LightSeq3;
-typedef struct LightSeq4 { LightStep steps[4]; const char* end; } LightSeq4;
+typedef struct LightStep {
+    const char* name;
+    s32 time;
+} LightStep;
+typedef struct LightSeq1 {
+    LightStep steps[1];
+    const char* end;
+} LightSeq1;
+typedef struct LightSeq2 {
+    LightStep steps[2];
+    const char* end;
+} LightSeq2;
+typedef struct LightSeq3 {
+    LightStep steps[3];
+    const char* end;
+} LightSeq3;
+typedef struct LightSeq4 {
+    LightStep steps[4];
+    const char* end;
+} LightSeq4;
 LightSeq3 btl_shuryolight_pow_normal;
 LightSeq1 btl_shuryolight_pow_tenmetu2;
 LightSeq2 btl_shuryolight_pow_tenmetu;

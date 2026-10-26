@@ -167,8 +167,14 @@ static NpcSetupInfo npc_data[3];
 EvtWord evt_ghost_diary[5];
 EvtWord evt_ghost_diary_read[53];
 /* shelf access table: hit, msg; a NULL hit ends it */
-typedef struct ShelfMsg { const char* hit; const char* msg; } ShelfMsg;
-typedef struct ShelfMsgTbl6 { ShelfMsg rows[6]; const char* end[1]; } ShelfMsgTbl6;
+typedef struct ShelfMsg {
+    const char* hit;
+    const char* msg;
+} ShelfMsg;
+typedef struct ShelfMsgTbl6 {
+    ShelfMsg rows[6];
+    const char* end[1];
+} ShelfMsgTbl6;
 static ShelfMsgTbl6 access_tbl;
 static EvtWord evt_access[14];
 static EvtWord evt_access2[47];

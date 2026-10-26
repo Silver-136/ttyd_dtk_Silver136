@@ -72,10 +72,17 @@ typedef struct RankEntry {
         u8 sw[2];
     };
 } RankEntry;
-typedef struct RankWork { s32 num; RankEntry* entries; } RankWork;
+typedef struct RankWork {
+    s32 num;
+    RankEntry* entries;
+} RankWork;
 static RankWork* rank_wp;
 static void rankingExit(void);
-typedef struct DispWork { f32 y; f32 targetY; s32 page; } DispWork;
+typedef struct DispWork {
+    f32 y;
+    f32 targetY;
+    s32 page;
+} DispWork;
 typedef struct FighterData {
     u16 flags;
     const char* name;

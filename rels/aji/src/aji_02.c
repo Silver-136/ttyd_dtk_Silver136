@@ -42,7 +42,10 @@ static BeroEntry bero_entry_data[2];
 u8 root_0[10];
 u8 root_1[14];
 u8 root_2[15];
-typedef struct RootRoute { u8* panels; s32 count; } RootRoute;
+typedef struct RootRoute {
+    u8* panels;
+    s32 count;
+} RootRoute;
 RootRoute root_data[3];
 static EvtWord hikaru_on[4];
 static EvtWord hikaru_off[4];

@@ -64,9 +64,14 @@ USER_FUNC(evt_msg_fmt_int);
 USER_FUNC(evt_msg_fmt_str);
 #endif
 
-typedef struct FuwaTable { f32 v[40]; } FuwaTable;
+typedef struct FuwaTable {
+    f32 v[40];
+} FuwaTable;
 static const FuwaTable fuwa_table = {{0.0f, 0.5f, 1.0f, 1.4f, 1.8f, 2.0f, 2.3f, 2.5f, 2.6f, 2.7f, 2.7f, 2.7f, 2.6f, 2.5f, 2.3f, 2.0f, 1.8f, 1.4f, 1.0f, 0.5f, -0.0f, -0.5f, -1.0f, -1.4f, -1.8f, -2.0f, -2.3f, -2.5f, -2.6f, -2.7f, -2.7f, -2.7f, -2.6f, -2.5f, -2.3f, -2.0f, -1.8f, -1.4f, -1.0f, -0.5f}};
-typedef struct ExchangeRyokin { s32 ryokin; s32 medal; } ExchangeRyokin;
+typedef struct ExchangeRyokin {
+    s32 ryokin;
+    s32 medal;
+} ExchangeRyokin;
 s32 exchange_ret_tbl_no(void);
 s32 yuugijou_montemedal_keep(EventEntry* event, BOOL isFirstCall);
 typedef struct GoryuuWork {
@@ -2822,7 +2827,9 @@ s32 upsidegara[2][3][8] = {
     },
 };
 
-typedef struct I3 { s32 v[3]; } I3;
+typedef struct I3 {
+    s32 v[3];
+} I3;
 static const I3 disp_slot_icons = {{ICON_BUTTON_A_ALT, ICON_BUTTON_A_ALT, ICON_BUTTON_A_ALT}};
 
 EVT_BEGIN(ranking_set)

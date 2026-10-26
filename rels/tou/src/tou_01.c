@@ -52,7 +52,10 @@
 #include "mario/mario_pouch.h"
 #include "driver/seqdrv.h"
 
-typedef struct ShadowWork { GXTexObj obj; smartEntry* tex; } ShadowWork;
+typedef struct ShadowWork {
+    GXTexObj obj;
+    smartEntry* tex;
+} ShadowWork;
 void make_shadow_disp(CameraId camera, void* param);
 
 static USER_FUNC(anim_tevcallback);

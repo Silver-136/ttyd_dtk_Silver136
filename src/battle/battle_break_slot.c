@@ -27,8 +27,12 @@
 #include "battle/battle_sub.h"
 #include "icon_ids.h"
 
-typedef struct { s32 v[8]; } SlotCards8;
-typedef struct { s32 v[5]; } SlotCards5;
+typedef struct {
+    s32 v[8];
+} SlotCards8;
+typedef struct {
+    s32 v[5];
+} SlotCards5;
 
 
 BreakSlotReel* BattleBreakSlotReelGetPtr(s32 no);

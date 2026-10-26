@@ -463,9 +463,18 @@ typedef struct HeadSphere {
     s32 radius;
     s32 mode;
 } HeadSphere; // mode: 0 always, 1 grounded only, 2 airborne only, 3 neither flag
-typedef struct HeadSphereSet1 { s32 count; HeadSphere spheres[1]; } HeadSphereSet1;
-typedef struct HeadSphereSet3 { s32 count; HeadSphere spheres[3]; } HeadSphereSet3;
-typedef struct HeadSphereSet4 { s32 count; HeadSphere spheres[4]; } HeadSphereSet4;
+typedef struct HeadSphereSet1 {
+    s32 count;
+    HeadSphere spheres[1];
+} HeadSphereSet1;
+typedef struct HeadSphereSet3 {
+    s32 count;
+    HeadSphere spheres[3];
+} HeadSphereSet3;
+typedef struct HeadSphereSet4 {
+    s32 count;
+    HeadSphere spheres[4];
+} HeadSphereSet4;
 static HeadSphereSet3 head_sphere_data_lv1 = {
     3,
     {

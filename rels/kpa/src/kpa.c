@@ -33,7 +33,11 @@
 #include "driver/seqdrv.h"
 #include "icon_ids.h"
 
-typedef struct KpaWork { u8 stage; u8 lives; u8 time; } KpaWork;
+typedef struct KpaWork {
+    u8 stage;
+    u8 lives;
+    u8 time;
+} KpaWork;
 KpaWork* kwp;
 void kpa_stageclear_disp(CameraId camera, void* param);
 void FontDrawString(f32 x, f32 y, const char* message);
