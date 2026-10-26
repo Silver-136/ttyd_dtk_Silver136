@@ -191,7 +191,7 @@ void marioChgRollMotion(void) {
 void marioChgJumpStandMotion(f32 v) {
     MarioWork* mario = marioGetPtr();
     camFollowYOn();
-    if (marioChkSts(0x10)) {
+    if (marioChkSts(MARIO_STS_ROLL)) {
         mario->mot.jump.standHeight = v;
         effKemuriEntry(0, mario->position.x, mario->position.y, mario->position.z, 0.0f);
         marioChgMot(MARIO_MOTION_JUMP_STAND);
@@ -509,7 +509,7 @@ void marioJump(void) {
         marioSetPeakYpos();
         marioSetFallPara();
         marioMakeJumpPara();
-        if (!marioChkSts(0x10)) {
+        if (!marioChkSts(MARIO_STS_ROLL)) {
             marioChgMot(MARIO_MOTION_FALL);
         } else {
             mario->jumpVelocityY = -0.03f;
@@ -572,7 +572,7 @@ void marioFall(void) {
     if (mario->characterId == CHARACTER_BOWSER) {
         kpaClearHitobjRide();
     }
-    if (marioChkSts(0x10) == TRUE) {
+    if (marioChkSts(MARIO_STS_ROLL) == TRUE) {
         mot_fall_roll();
         return;
     }

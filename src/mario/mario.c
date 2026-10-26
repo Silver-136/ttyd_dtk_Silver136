@@ -402,7 +402,7 @@ BOOL marioCheckMenuDisable(void) {
     }
 #ifdef VERSION_G8ME01
     if (vivianGetStatus()) {
-        if (!(partyGetPtr(marioGetPartyId())->flags & 0x80000000)) {
+        if (!(partyGetPtr(marioGetPartyId())->flags & PARTY_FLAG_IS_EVT_USE)) {
             if (vivianGetStatus() == 2) {
                 return FALSE;
             }
@@ -610,22 +610,22 @@ BOOL marioChkSts(s32 flags) {
     MarioWork* wp = mp;
     BOOL ret = FALSE;
 
-    if (flags & 1 && wp->flags & MARIO_FLAG_IS_JUMPING) {
+    if (flags & MARIO_STS_JUMPING && wp->flags & MARIO_FLAG_IS_JUMPING) {
         ret = TRUE;
     }
-    if (flags & 2 && wp->flags & MARIO_FLAG_IS_FALLING) {
+    if (flags & MARIO_STS_FALLING && wp->flags & MARIO_FLAG_IS_FALLING) {
         ret = TRUE;
     }
-    if (flags & 4 && wp->flags & MARIO_FLAG_PAPER_MODE) {
+    if (flags & MARIO_STS_PAPER && wp->flags & MARIO_FLAG_PAPER_MODE) {
         ret = TRUE;
     }
-    if (flags & 0x20 && wp->currMotionId == MARIO_MOTION_KAZE) {
+    if (flags & MARIO_STS_KAZE && wp->currMotionId == MARIO_MOTION_KAZE) {
         ret = TRUE;
     }
-    if (flags & 0x10 && wp->currMotionId == MARIO_MOTION_ROLL) {
+    if (flags & MARIO_STS_ROLL && wp->currMotionId == MARIO_MOTION_ROLL) {
         ret = TRUE;
     }
-    if (flags & 8 && wp->currMotionId == MARIO_MOTION_JABARA) {
+    if (flags & MARIO_STS_JABARA && wp->currMotionId == MARIO_MOTION_JABARA) {
         ret = TRUE;
     }
     return ret;
@@ -783,7 +783,7 @@ void marioReInit(void) {
     f32 f1A0;
     f32 f19C;
 
-    dotFlag = (wp = mp)->flags & 0x80000000;
+    dotFlag = (wp = mp)->flags & MARIO_FLAG_IS_8_BIT;
     camId = marioGetCamId();
     charId = wp->characterId;
     slot0 = wp->currPartySlotId[0];

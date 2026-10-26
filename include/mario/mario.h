@@ -529,6 +529,15 @@ s16 marioSetMutekiTime(s32 msec);
 BOOL marioBgmodeChk(void);
 void marioBgmodeOn(void);
 void marioBgmodeOff(void);
+// marioChkSts: TRUE when Mario is in any of the given states
+typedef enum MarioStsCheck {
+    MARIO_STS_JUMPING = (1 << 0),  // 0x1, MARIO_FLAG_IS_JUMPING
+    MARIO_STS_FALLING = (1 << 1),  // 0x2, MARIO_FLAG_IS_FALLING
+    MARIO_STS_PAPER = (1 << 2),    // 0x4, MARIO_FLAG_PAPER_MODE
+    MARIO_STS_JABARA = (1 << 3),   // 0x8, MARIO_MOTION_JABARA
+    MARIO_STS_ROLL = (1 << 4),     // 0x10, MARIO_MOTION_ROLL
+    MARIO_STS_KAZE = (1 << 5),     // 0x20, MARIO_MOTION_KAZE
+} MarioStsCheck;
 BOOL marioChkSts(s32 flags);
 void marioResetHitObj(const char* name);
 void marioReset(void);

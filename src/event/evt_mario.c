@@ -1369,7 +1369,7 @@ USER_FUNC(evt_mario_jump_jumpstand) {
     switch (event->userdata[0]) {
         case 0:
             mp->dispFlags |= MARIO_DISP_FLAG_NO_REAR_POSE;
-            if (marioChkSts(0x10)) {
+            if (marioChkSts(MARIO_STS_ROLL)) {
                 effKemuriEntry(0, mp->position.x, mp->position.y, mp->position.z, 0.0f);
             }
             marioChgMot(MARIO_MOTION_JUMP_3);

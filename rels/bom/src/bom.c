@@ -81,12 +81,12 @@ USER_FUNC(bress) {
             timers[i]--;
         }
     }
-    if (mario != NULL && event->userdata[0] == 0 && !marioChkSts(4) && !marioChkSts(0x10) && !marioChkSts(8) &&
+    if (mario != NULL && event->userdata[0] == 0 && !marioChkSts(MARIO_STS_PAPER) && !marioChkSts(MARIO_STS_ROLL) && !marioChkSts(MARIO_STS_JABARA) &&
         vivianGetStatus() != 2) {
         effMistEntry(4, 30, mario->position.x, 24.0f + mario->position.y, mario->position.z, 270.0f - mario->displayDirection);
         event->userdata[0] = irand(60) + 60;
     }
-    if (party != NULL && event->userdata[1] == 0 && !marioChkSts(4) && !marioChkSts(0x10) && !marioChkSts(8) &&
+    if (party != NULL && event->userdata[1] == 0 && !marioChkSts(MARIO_STS_PAPER) && !marioChkSts(MARIO_STS_ROLL) && !marioChkSts(MARIO_STS_JABARA) &&
         vivianGetStatus() != 2) {
         effMistEntry(4, 30, party->position.x, party->position.y + offset[party->currentMemberId], party->position.z,
                      270.0f - party->displayDirection);

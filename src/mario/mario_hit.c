@@ -1950,7 +1950,7 @@ HitEntry* searchFrontWall(Vec* pos, f32* h, f32 dx, f32 dz, f32 w) {
         return NULL;
     }
     sincosf(&s, &c, dz);
-    if (marioChkSts(0x10) && !strcmp(gp->currentMapName, "eki_04") &&
+    if (marioChkSts(MARIO_STS_ROLL) && !strcmp(gp->currentMapName, "eki_04") &&
         (__fabsf(mp->groundRot.x) >= 45.0f || __fabsf(mp->groundRot.z) >= 45.0f)) {
         pos->x += dx * s;
         pos->z += dx * c;
