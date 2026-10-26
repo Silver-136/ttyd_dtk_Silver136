@@ -1246,7 +1246,7 @@ void continueGame(void) {
     psndClearFlag(PSND_FLAG_NO_SFX);
     countDownSaveReStart();
     gp->flags |= GW_FLAG_SAVE_LOADED;
-    switch (swByteGet(4)) {
+    switch (swByteGet(4)) { // GSW_SAVE_RESUME_POINT
         case 0:
             gp->areaFadeInType = 0;
             gp->areaFadeOutType = 28;

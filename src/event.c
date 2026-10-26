@@ -584,7 +584,7 @@ void stg0_00_init(void) {
 }
 
 void stg0_05_init(void) {
-    swSet(0x49B);
+    swSet(0x49B); // GSWF_GOR_00_GOOMBELLA_ASSAULT_STARTED
 }
 
 void stg0_08_init(void) {
@@ -592,16 +592,16 @@ void stg0_08_init(void) {
 }
 
 void stg0_11_init(void) {
-    swSet(0x4B7);
+    swSet(0x4B7); // GSWF_GOR_02_TUTORIAL_PIPE_TAKEN
 }
 
 void stg0_12_02_init(void) {
-    swSet(0x537);
+    swSet(0x537); // GSWF_TIK_04_STAIRS_SWITCH_PRESSED
 }
 
 void stg0_13_init00(void) {
     pouchGetItem(ITEM_PLANE_CURSE);
-    swSet(0x539);
+    swSet(0x539); // GSWF_TIK_04_BLACK_KEY
 }
 
 void stg0_16_init(void) {
@@ -610,26 +610,26 @@ void stg0_16_init(void) {
 
 // Stage 1 ----------------------------------------------------------------------------
 void stg1_01a_init(void) {
-    swSet(0x6F7);
+    swSet(0x6F7); // GSWF_HEI_01_BUSH_PIPE_REVEALED
 }
 
 void stg1_03_init(void) {
-    swSet(7);
+    swSet(7); // GSWF_MAIL_FRANKLY_SENT
     pouchReceiveMail(0x10);
     pouchReceiveMail(0x1A);
 }
 
 void stg1_06_01_init(void) {
     pouchGetItem(ITEM_MOON_STONE);
-    swSet(0x6EF);
+    swSet(0x6EF); // GSWF_HEI_MOON_STONE_TAKEN
     pouchGetItem(ITEM_SUN_STONE);
-    swSet(0x6EE);
+    swSet(0x6EE); // GSWF_HEI_SUN_STONE_TAKEN
 }
 
 void stg1_08_init(void) {
     partyJoin(PARTNER_KOOPS);
-    swSet(0x6F5);
-    swSet(0x6F6);
+    swSet(0x6F5); // GSWF_HEI_01_KOOPS_JOIN_REQUEST_SEEN
+    swSet(0x6F6); // GSWF_HEI_01_KOOPIE_KOO_FAREWELL_SEEN
 }
 
 void stg1_09_init(void) {
@@ -693,7 +693,7 @@ void stg1_16_init00(void) {
 }
 
 void stg1_16_init01(void) {
-    swSet(0x5DA);
+    swSet(0x5DA); // GSWF_GON_11_HOOKTAIL_INTRO_SKIP
 }
 
 void stg1_17_init(void) {
@@ -702,9 +702,9 @@ void stg1_17_init(void) {
 }
 
 void stg1_19_init(void) {
-    swSet(0x1067);
-    swSet(0x1068);
-    swSet(0x1069);
+    swSet(0x1067); // GSWF_AJI_15_VISITED
+    swSet(0x1068); // GSWF_AJI_01_PEACH_NOBODY_AROUND_SEEN
+    swSet(0x1069); // GSWF_AJI_01_PEACH_DOOR_OPENS_SEEN
 }
 
 void stg1_20_init(void) {
@@ -717,12 +717,12 @@ void stg1_30_init(void) {
 }
 
 void stg1_30_init01(void) {
-    swSet(0x4A4);
-    swSet(0x4A3);
+    swSet(0x4A4); // GSWF_GOR_ZESS_T_GOT_CONTACT_LENS
+    swSet(0x4A3); // GSWF_GOR_ZESS_T_BLOCKING_WEST_GATE
 }
 
 void stg1_35_init01(void) {
-    swSet(0x536);
+    swSet(0x536); // GSWF_TIK_03_SECRET_PASSAGE_OPEN
 }
 
 void stg2_00_init(void) {
@@ -747,70 +747,70 @@ void stg2_09_init(void) {
 void stg2_10_init(void) {
     pouchRemoveItem(ITEM_NECKLACE);
     partyJoin(PARTNER_FLURRIE);
-    swSet(0x11);
+    swSet(0x11); // GSWF_MAIL_RDM_ISSUE_1_SENT
     pouchReceiveMail(0x1B);
 }
 
 void stg2_11_init(void) {
-    swSet(0xB0A);
+    swSet(0xB0A); // GSWF_MRI_00_PUNIO_LEFT_WITH_MARIO
 }
 
 void stg2_12_01_init(void) {
-    swSet(0xB3C);
+    swSet(0xB3C); // GSWF_MRI_PUNIO_JOINED
     swByteSet(0x28B, 0);
 }
 
 void stg2_14_init(void) {
     pouchGetItem(ITEM_RED_KEY);
-    swSet(0xB17);
+    swSet(0xB17); // GSWF_MRI_04_RED_KEY
 }
 
 void stg2_15_init(void) {
     pouchRemoveItem(ITEM_RED_KEY);
-    swSet(0xB10);
-    swSet(0xB11);
+    swSet(0xB10); // GSWF_MRI_03_RED_JAIL_UNLOCKED
+    swSet(0xB11); // GSWF_MRI_03_RED_JAIL_OPENED
 }
 
 void stg2_16_init00(void) {
-    swSet(0xB3F);
+    swSet(0xB3F); // GSWF_MRI_PUNIPER_JOINED
     swByteSet(0x28B, 9);
     pouchGetItem(ITEM_PUNI_ORB);
 }
 
 void stg2_16_init01(void) {
-    swSet(0xB0D);
+    swSet(0xB0D); // GSWF_MRI_01_ELDER_TIP_SEEN
 }
 
 void stg2_18_init01(void) {
-    swSet(0xB3E);
+    swSet(0xB3E); // GSWF_MRI_JABBLE_JOINED
 }
 
 void stg2_18_init02(void) {
-    swSet(0xB1F);
-    swSet(0xB21);
+    swSet(0xB1F); // GSWF_MRI_08_JABBI_SQUAD_INTRO_SEEN
+    swSet(0xB21); // GSWF_MRI_08_JABBI_SQUAD_DEFEATED
 }
 
 void stg2_19_init(void) {
-    swSet(0xB24);
+    swSet(0xB24); // GSWF_MRI_09_BLUE_KEY_CHEST
     pouchGetItem(ITEM_BLUE_KEY);
 }
 
 void stg2_20_init(void) {
-    swSet(0xB14);
+    swSet(0xB14); // GSWF_MRI_PUNIO_WAITING_AT_JAIL
 }
 
 void stg2_21_init00(void) {
     pouchRemoveItem(ITEM_BLUE_KEY);
-    swSet(0xB12);
-    swSet(0xB13);
-    swSet(0xB3D);
-    swClear(0xB14);
+    swSet(0xB12); // GSWF_MRI_03_BLUE_JAIL_UNLOCKED
+    swSet(0xB13); // GSWF_MRI_03_BLUE_JAIL_OPENED
+    swSet(0xB3D); // GSWF_MRI_PETUNI_JOINED
+    swClear(0xB14); // GSWF_MRI_PUNIO_WAITING_AT_JAIL
     swByteSet(0x28B, 0x62);
 }
 
 void stg2_21_init02(void) {
-    swSet(0xB27);
-    swSet(0xB29);
+    swSet(0xB27); // GSWF_MRI_11_JABBI_SQUAD_INTRO_SEEN
+    swSet(0xB29); // GSWF_MRI_11_JABBI_SQUAD_DEFEATED
 }
 
 void stg2_21_01_init(void) {
@@ -830,11 +830,11 @@ void stg2_21_01_init(void) {
 }
 
 void stg2_21_02_init(void) {
-    swSet(0xB38);
+    swSet(0xB38); // GSWF_MRI_17_PILLAR_SCENE_SEEN
 }
 
 void stg2_21_03_init(void) {
-    swSet(0xB22);
+    swSet(0xB22); // GSWF_MRI_09_WALL_PUZZLE_SOLVED
 }
 
 void stg2_21_04_init(void) {
@@ -858,26 +858,26 @@ void stg2_21_06_init00(void) {
 }
 
 void stg2_21_06_init01(void) {
-    swSet(0xB33);
+    swSet(0xB33); // GSWF_MRI_16_WATER_SWITCH_PRESSED
 }
 
 void stg2_23_init(void) {
-    swSet(0xB30);
+    swSet(0xB30); // GSWF_MRI_14_CRUMP_REENTRY_PENDING
 }
 
 void stg2_23_01_init(void) {
-    swClear(0xB30);
-    swSet(0xB40);
+    swClear(0xB30); // GSWF_MRI_14_CRUMP_REENTRY_PENDING
+    swSet(0xB40); // GSWF_MRI_COUNTDOWN_START_PENDING
 }
 
 void stg2_25_init(void) {
-    swClear(0xB40);
+    swClear(0xB40); // GSWF_MRI_COUNTDOWN_START_PENDING
     pouchGetItem(ITEM_EMERALD_STAR);
     pouchGetStarStone(2);
 }
 
 void stg2_25_02_init(void) {
-    swSet(0x106A);
+    swSet(0x106A); // GSWF_AJI_16_PEACH_STG2_SCENE_SEEN
 }
 
 void stg2_26_init(void) {
@@ -885,13 +885,13 @@ void stg2_26_init(void) {
 }
 
 void stg2_40_init(void) {
-    swSet(0xB44);
+    swSet(0xB44); // GSWF_MRI_LEFT_AFTER_BOSS_BATTLE
     pouchReceiveMail(1);
     pouchOpenMail(1);
 }
 
 void stg2_44_init(void) {
-    swSet(0x4CE);
+    swSet(0x4CE); // GSWF_GOR_03_BACK_DOOR_PASSWORD_DONE
 }
 
 void stg2_47_init(void) {
@@ -899,12 +899,12 @@ void stg2_47_init(void) {
 }
 
 void stg2_end_init(void) {
-    swSet(8);
+    swSet(8); // GSWF_MAIL_KOOPLEY_SENT
     pouchReceiveMail(0x11);
 }
 
 void stg3_06_init(void) {
-    swSet(0x954);
+    swSet(0x954); // GSWF_GLITZ_PIT_MATCH_RESERVED
     swByteSet(0x1F5, 0x13);
     swByteSet(0x1F6, 0x2B);
     swByteSet(0x1F7, 1);
@@ -918,12 +918,12 @@ void stg3_07_init__9(void) {
         swSet(0x9B4 - i);
     }
     swByteSet(0x1FB, 20 - i);
-    swClear(0x954);
-    swSet(0x958);
-    swSet(0x95B);
-    swSet(0x95C);
-    swSet(0x9CD);
-    swSet(0x98B);
+    swClear(0x954); // GSWF_GLITZ_PIT_MATCH_RESERVED
+    swSet(0x958); // GSWF_TOU_GOOMBA_BROS_AFTER_MATCH_SEEN
+    swSet(0x95B); // GSWF_TOU_GOOMBA_BROS_OPENING_SEEN
+    swSet(0x95C); // GSWF_TOU_GOOMBA_BROS_FIRST_WIN
+    swSet(0x9CD); // GSWF_TOU_GOOMBA_BROS_AMBUSH_TALK_SEEN
+    swSet(0x98B); // GSWF_GLITZ_PIT_CONDITION_KEPT
 }
 
 void stg3_07_init__8(void) {
@@ -933,8 +933,8 @@ void stg3_07_init__8(void) {
         swSet(0x9B4 - i);
     }
     swByteSet(0x1FB, 20 - i);
-    swClear(0x954);
-    swSet(0x966);
+    swClear(0x954); // GSWF_GLITZ_PIT_MATCH_RESERVED
+    swSet(0x966); // GSWF_TOU_RANK_18_KING_K_TALK_DONE
 }
 
 void stg3_07_init__7(void) {
@@ -944,7 +944,7 @@ void stg3_07_init__7(void) {
         swSet(0x9B4 - i);
     }
     swByteSet(0x1FB, 20 - i);
-    swSet(0x967);
+    swSet(0x967); // GSWF_TOU_RANK_17_KING_K_TALK_DONE
 }
 
 void stg3_07_init__6(void) {
@@ -954,7 +954,7 @@ void stg3_07_init__6(void) {
         swSet(0x9B4 - i);
     }
     swByteSet(0x1FB, 20 - i);
-    swSet(0x968);
+    swSet(0x968); // GSWF_TOU_RANK_16_KING_K_TALK_DONE
 }
 
 void stg3_10_init__5(void) {
@@ -964,7 +964,7 @@ void stg3_10_init__5(void) {
         swSet(0x9B4 - i);
     }
     swByteSet(0x1FB, 20 - i);
-    swSet(0x969);
+    swSet(0x969); // GSWF_TOU_RANK_15_KING_K_TALK_DONE
 }
 
 void stg3_12_init__4(void) {
@@ -975,13 +975,13 @@ void stg3_12_init__4(void) {
         swSet(0x9B4 - i);
     }
     swByteSet(0x1FB, 20 - i);
-    swSet(0x96A);
-    swSet(0x957);
+    swSet(0x96A); // GSWF_TOU_RANK_14_KING_K_TALK_DONE
+    swSet(0x957); // GSWF_TOU_10_JUMP_STORY_TO_EGG
     *(u64*)copytobyte = (u64)gp->retraceLocalTime;
     for (i = 0; i < 8; i++) {
         swByteSet(0x1FC + i, copytobyte[i]);
     }
-    swSet(0x12);
+    swSet(0x12); // GSWF_MAIL_RDM_ISSUE_2_SENT
     pouchReceiveMail(0x1C);
 }
 
@@ -992,7 +992,7 @@ void stg3_12_init__3(void) {
         swSet(0x9B4 - i);
     }
     swByteSet(0x1FB, 20 - i);
-    swSet(0x96B);
+    swSet(0x96B); // GSWF_TOU_RANK_13_KING_K_TALK_DONE
 }
 
 void stg3_12_init__2(void) {
@@ -1002,7 +1002,7 @@ void stg3_12_init__2(void) {
         swSet(0x9B4 - i);
     }
     swByteSet(0x1FB, 20 - i);
-    swSet(0x96C);
+    swSet(0x96C); // GSWF_GLITZ_PIT_KP_KOOPAS_RETIRED
 }
 
 void stg3_12_init__1(void) {
@@ -1012,14 +1012,14 @@ void stg3_12_init__1(void) {
         swSet(0x9B4 - i);
     }
     swByteSet(0x1FB, 20 - i);
-    swSet(0x96D);
+    swSet(0x96D); // GSWF_GLITZ_PIT_SIR_SWOOP_JOINED
 }
 
 void stg3_12_2_init(void) {
     yoshiSetColor();
     pouchSetYoshiName((char*)msgSearch("name_party3"));
     partyJoin(PARTNER_YOSHI);
-    swSet(0x95D);
+    swSet(0x95D); // GSWF_TOU_ARMORED_HARRIERS_OPENING_SEEN
 }
 
 void stg3_20_init_10(void) {
@@ -1030,7 +1030,7 @@ void stg3_20_init_10(void) {
     }
     swByteSet(0x1FB, 20 - i);
     swSet(0x96E);
-    swSet(0x95E);
+    swSet(0x95E); // GSWF_TOU_ARMORED_HARRIERS_FIRST_WIN
     pouchReceiveMail(6);
     pouchOpenMail(6);
 }
@@ -1052,7 +1052,7 @@ void stg3_20_init_8(void) {
         swSet(0x9B4 - i);
     }
     swByteSet(0x1FB, 20 - i);
-    swSet(0x970);
+    swSet(0x970); // GSWF_TOU_RANK_8_MAIL_DONE
 }
 
 void stg3_20_01_init(void) {
@@ -1073,9 +1073,9 @@ void stg3_20_init_7(void) {
         swSet(0x9B4 - i);
     }
     swByteSet(0x1FB, 20 - i);
-    swSet(0x971);
-    swSet(0x994);
-    swSet(0x9D5);
+    swSet(0x971); // GSWF_TOU_RANK_7_MAIL_DONE
+    swSet(0x994); // GSWF_TOU_08_JUMP_STORY_CONFISCATED
+    swSet(0x9D5); // GSWF_TOU_04_CONFISCATED_EXIT_SEEN
     pouchReceiveMail(9);
     pouchOpenMail(9);
 }
@@ -1087,8 +1087,8 @@ void stg3_20_init_6(void) {
         swSet(0x9B4 - i);
     }
     swByteSet(0x1FB, 20 - i);
-    swSet(0x972);
-    swClear(0x994);
+    swSet(0x972); // GSWF_TOU_RANK_6_CAKE_DONE
+    swClear(0x994); // GSWF_TOU_08_JUMP_STORY_CONFISCATED
 }
 
 void stg3_20_init_5(void) {
@@ -1098,7 +1098,7 @@ void stg3_20_init_5(void) {
         swSet(0x9B4 - i);
     }
     swByteSet(0x1FB, 20 - i);
-    swSet(0x973);
+    swSet(0x973); // GSWF_TOU_RANK_5_BOWSER_EVENT_DONE
 }
 
 void stg3_20_init_4(void) {
@@ -1108,12 +1108,12 @@ void stg3_20_init_4(void) {
         swSet(0x9B4 - i);
     }
     swByteSet(0x1FB, 20 - i);
-    swSet(0x974);
-    swSet(0x995);
+    swSet(0x974); // GSWF_TOU_RANK_4_MAIL_DONE
+    swSet(0x995); // GSWF_TOU_08_JUMP_STORY_MAJORS_4TH
 }
 
 void stg3_20_06_init(void) {
-    swClear(0x995);
+    swClear(0x995); // GSWF_TOU_08_JUMP_STORY_MAJORS_4TH
     pouchReceiveMail(10);
     pouchOpenMail(10);
 }
@@ -1134,14 +1134,14 @@ void stg3_20_09_init(void) {
 
 void stg3_20_12_init(void) {
     pouchRemoveItem(ITEM_STORAGE_KEY_0x12);
-    swSet(0x979);
-    swSet(0x97A);
-    swSet(0x97B);
-    swSet(0x97C);
-    swSet(0x97D);
-    swSet(0x97E);
-    swSet(0x97F);
-    swSet(0x980);
+    swSet(0x979); // GSWF_TOU_06_BIG_BLOCK_A_BROKEN
+    swSet(0x97A); // GSWF_TOU_06_BIG_BLOCK_B_BROKEN
+    swSet(0x97B); // GSWF_TOU_06_BIG_BLOCK_C_BROKEN
+    swSet(0x97C); // GSWF_TOU_06_BIG_BLOCK_D_BROKEN
+    swSet(0x97D); // GSWF_TOU_06_BIG_BLOCK_E_BROKEN
+    swSet(0x97E); // GSWF_TOU_06_BIG_BLOCK_F_BROKEN
+    swSet(0x97F); // GSWF_TOU_06_BIG_BLOCK_G_BROKEN
+    swSet(0x980); // GSWF_TOU_06_BIG_BLOCK_H_BROKEN
 }
 
 void stg3_20_init_3(void) {
@@ -1151,7 +1151,7 @@ void stg3_20_init_3(void) {
         swSet(0x9B4 - i);
     }
     swByteSet(0x1FB, 20 - i);
-    swSet(0x975);
+    swSet(0x975); // GSWF_GLITZ_PIT_DESTRUCTORS_JOINED
     pouchReceiveMail(13);
     pouchOpenMail(13);
 }
@@ -1164,8 +1164,8 @@ void stg3_20_init_2(void) {
     }
     swByteSet(0x1FB, 20 - i);
     swSet(0x976);
-    swSet(0x990);
-    swSet(0x993);
+    swSet(0x990); // GSWF_TOU_POISON_CAKE_DELIVERED
+    swSet(0x993); // GSWF_TOU_POISON_CAKE_RECOVERED
 }
 
 void stg3_20_init_1(void) {
@@ -1175,15 +1175,15 @@ void stg3_20_init_1(void) {
         swSet(0x9B4 - i);
     }
     swByteSet(0x1FB, 20 - i);
-    swSet(0x977);
-    swSet(0x95A);
-    swSet(0x996);
+    swSet(0x977); // GSWF_TOU_RANK_1_MAIL_DONE
+    swSet(0x95A); // GSWF_TOU_08_GUARD_ESCORT_UNUSED
+    swSet(0x996); // GSWF_TOU_08_JUMP_STORY_MAJORS_1ST
     pouchReceiveMail(14);
     pouchOpenMail(14);
 }
 
 void stg3_20_13_init(void) {
-    swClear(0x996);
+    swClear(0x996); // GSWF_TOU_08_JUMP_STORY_MAJORS_1ST
 }
 
 void stg3_20_14_init(void) {
@@ -1197,9 +1197,9 @@ void stg3_20_15_init(void) {
 }
 
 void stg3_21_init(void) {
-    swSet(0x954);
+    swSet(0x954); // GSWF_GLITZ_PIT_MATCH_RESERVED
     swByteSet(0x1F5, 0);
-    swSet(0x94F);
+    swSet(0x94F); // GSWF_GLITZ_PIT_TITLE_MATCH_BOOKED
     swByteSet(0x1F6, 6);
     swByteSet(0x1F7, 1);
     swByteSet(0x1F8, 1);
@@ -1213,31 +1213,31 @@ void stg3_30_init(void) {
     }
     swByteSet(0x1FB, 20 - i);
     swSet(0x978);
-    swClear(0x94F);
-    swClear(0x954);
+    swClear(0x94F); // GSWF_GLITZ_PIT_TITLE_MATCH_BOOKED
+    swClear(0x954); // GSWF_GLITZ_PIT_MATCH_RESERVED
     swByteSet(0x1F5, 0);
-    swSet(0x955);
-    swSet(0x95F);
-    swSet(0x960);
-    swSet(0x9D1);
-    swSet(0x9D2);
-    swSet(0x9D3);
-    swSet(0x9D4);
+    swSet(0x955); // GSWF_GLITZ_PIT_MATCH_JUST_ENDED
+    swSet(0x95F); // GSWF_TOU_RAWK_HAWK_OPENING_SEEN
+    swSet(0x960); // GSWF_TOU_RAWK_HAWK_FIRST_WIN
+    swSet(0x9D1); // GSWF_TOU_RAWK_HAWK_INTRO_SEEN
+    swSet(0x9D2); // GSWF_TOU_RAWK_HAWK_67_HP_TALK
+    swSet(0x9D3); // GSWF_TOU_RAWK_HAWK_34_HP_TALK
+    swSet(0x9D4); // GSWF_TOU_RAWK_HAWK_25_HP_TALK
 }
 
 void stg3_31_00_init(void) {
-    swClear(0x955);
+    swClear(0x955); // GSWF_GLITZ_PIT_MATCH_JUST_ENDED
     pouchGetItem(ITEM_CHAMPS_BELT);
     pouchReceiveMail(0x2B);
     pouchOpenMail(0x2B);
 }
 
 void stg3_31_init(void) {
-    swClear(0x955);
+    swClear(0x955); // GSWF_GLITZ_PIT_MATCH_JUST_ENDED
 }
 
 void stg3_32_init(void) {
-    swSet(0x961);
+    swSet(0x961); // GSWF_TOU_05_DUCT_GRATE_FELL
 }
 
 void stg3_33_init(void) {
@@ -1246,35 +1246,35 @@ void stg3_33_init(void) {
 }
 
 void stg3_33_03_init(void) {
-    swSet(0x106B);
-    swSet(0x106C);
+    swSet(0x106B); // GSWF_AJI_09_UNIFORM_TAKEN
+    swSet(0x106C); // GSWF_AJI_PEACH_IN_UNIFORM
 }
 
 void stg3_33_04_init(void) {
-    swClear(0x106C);
+    swClear(0x106C); // GSWF_AJI_PEACH_IN_UNIFORM
 }
 
 void stg3_34_init(void) {
     int i;
 
-    swSet(0x962);
-    swSet(0x963);
+    swSet(0x962); // GSWF_TOU_02_FANS_MOB_RAWK_HAWK_SEEN
+    swSet(0x963); // GSWF_TOU_02_FANS_MOB_MARIO_SEEN
     marioSetCharMode(CHARACTER_MARIO);
     pouchRemoveItem(ITEM_CHAMPS_BELT);
     for (i = 0; i < 20; i++) {
         swClear(i + 0x9A1);
     }
-    swClear(0x958);
-    swClear(0x95F);
-    swClear(0x960);
-    swClear(0x94F);
-    swClear(0x9E1);
-    swClear(0x9E4);
-    swClear(0x963);
+    swClear(0x958); // GSWF_TOU_GOOMBA_BROS_AFTER_MATCH_SEEN
+    swClear(0x95F); // GSWF_TOU_RAWK_HAWK_OPENING_SEEN
+    swClear(0x960); // GSWF_TOU_RAWK_HAWK_FIRST_WIN
+    swClear(0x94F); // GSWF_GLITZ_PIT_TITLE_MATCH_BOOKED
+    swClear(0x9E1); // GSWF_GLITZ_PIT_RANKING_SAVED
+    swClear(0x9E4); // GSWF_GLITZ_PIT_LAST_OPPONENT_SAVED
+    swClear(0x963); // GSWF_TOU_02_FANS_MOB_MARIO_SEEN
 }
 
 void stg3_35_init(void) {
-    swSet(0x9C0);
+    swSet(0x9C0); // GSWF_TOU_LEFT_AFTER_CHAPTER
 }
 
 void stg3_50_init(void) {
@@ -1283,8 +1283,8 @@ void stg3_50_init(void) {
 }
 
 void stg3_52_init(void) {
-    swSet(0x53D);
-    swSet(9);
+    swSet(0x53D); // GSWF_TIK_08_PIPE_REJECTED
+    swSet(9); // GSWF_MAIL_KOOPIE_KOO_SENT
     pouchReceiveMail(0x12);
 }
 
@@ -1302,14 +1302,14 @@ void stage4_04_init(void) {
 
 void stage4_04_01_init(void) {
     pouchRemoveItem(ITEM_SHOP_KEY);
-    swSet(0x82B);
+    swSet(0x82B); // GSWF_GRA_00_BLACK_KEY
     pouchGetItem(ITEM_BLACK_KEY_0x23);
 }
 
 void stage4_05_init(void) {
     pouchRemoveItem(ITEM_BLACK_KEY_0x23);
     pouchGetItem(ITEM_TUBE_CURSE);
-    swSet(0x13);
+    swSet(0x13); // GSWF_MAIL_RDM_ISSUE_3_SENT
     pouchReceiveMail(0x1D);
 }
 
@@ -1338,14 +1338,14 @@ void stg4_13_02_init(void) {
 }
 
 void stg4_13_03_init(void) {
-    swSet(0x81B);
+    swSet(0x81B); // GSWF_GRA_01_AFTER_DOOPLISS_SCENE_SEEN
 }
 
 void stg4_14_init(void) {
     pouchGetItem(ITEM_THE_LETTER_P);
-    swSet(0x81B);
-    swSet(0x8B6);
-    swSet(0x8B7);
+    swSet(0x81B); // GSWF_GRA_01_AFTER_DOOPLISS_SCENE_SEEN
+    swSet(0x8B6); // GSWF_JIN_08_STEEPLE_KEY_TAKEN
+    swSet(0x8B7); // GSWF_JIN_08_DOOR_UNLOCKED
 }
 
 void stg4_15_init(void) {
@@ -1371,8 +1371,8 @@ void stg4_30_init(void) {
 }
 
 void stg4_35_init(void) {
-    swSet(0x4C0);
-    swSet(0x4C1);
+    swSet(0x4C0); // GSWF_GOR_BOBBERY_DOOR_UNLOCKED
+    swSet(0x4C1); // GSWF_GOR_BOBBERY_DECLINE_REMARK_DONE
 }
 
 void stg4_36_init(void) {
@@ -1384,20 +1384,20 @@ void stg4_37_init(void) {
 }
 
 void stg4_end_init(void) {
-    swSet(0xA);
+    swSet(0xA); // GSWF_MAIL_PETUNI_SENT
     pouchReceiveMail(0x13);
 }
 
 void stg5_12_init01(void) {
-    swSet(0xC36);
+    swSet(0xC36); // GSWF_MUJ_01_CREW_SPLIT_SKIP
 }
 
 void stg5_15_init01(void) {
-    swSet(0xC3B);
+    swSet(0xC3B); // GSWF_MUJ_03_FLEEING_SAILORS_SEEN
 }
 
 void stg5_15_init02(void) {
-    swSet(0xC39);
+    swSet(0xC39); // GSWF_MUJ_01_BOBBERY_MISSING_SCENE_SEEN
 }
 
 void stg5_17_init(void) {
@@ -1424,8 +1424,8 @@ void stg5_19_init01(void) {
 
 void stg5_19_init02(void) {
     pouchRemoveItem(ITEM_SKULL_GEM);
-    swSet(0xC43);
-    swSet(0xC4D);
+    swSet(0xC43); // GSWF_MUJ_05_SKULL_GEM_PLACED
+    swSet(0xC4D); // GSWF_MUJ_05_SKULL_ROCK_OPENED
 }
 
 void stg5_19_01_init(void) {
@@ -1433,16 +1433,16 @@ void stg5_19_01_init(void) {
 }
 
 void stg5_21_init00(void) {
-    swSet(0xBA2);
+    swSet(0xBA2); // GSWF_DOU_05_BIG_DOOR_SWITCH_PRESSED
 }
 
 void stg5_21_init01(void) {
-    swSet(0xBA1);
-    swSet(0xBA3);
+    swSet(0xBA1); // GSWF_DOU_04_GROTTO_KEY
+    swSet(0xBA3); // GSWF_DOU_05_DOOR_UNLOCKED
 }
 
 void stg5_21_init03(void) {
-    swSet(0xBA5);
+    swSet(0xBA5); // GSWF_DOU_09_BOMB_WALL_BLOWN
 }
 
 void stg5_21_01_init00(void) {
@@ -1463,13 +1463,13 @@ void stg5_29_init(void) {
 }
 
 void stg5_30_init01(void) {
-    swSet(0xBA6);
+    swSet(0xBA6); // GSWF_DOU_11_SAILORS_SHOUT_SEEN
 }
 
 void stg5_30_init02(void) {
-    swSet(0xBA7);
-    swSet(0xBA8);
-    swSet(0xBB0);
+    swSet(0xBA7); // GSWF_DOU_11_SWITCH_1_PRESSED
+    swSet(0xBA8); // GSWF_DOU_11_SWITCH_2_PRESSED
+    swSet(0xBB0); // GSWF_DOU_11_SAILORS_CROSSED
 }
 
 void stg5_43_init(void) {
@@ -1478,9 +1478,9 @@ void stg5_43_init(void) {
 }
 
 void stg5_47_init(void) {
-    swSet(0x106F);
-    swSet(0x1070);
-    swSet(0x1071);
+    swSet(0x106F); // GSWF_AJI_11_PEACH_ENTRY_LINE_SEEN
+    swSet(0x1070); // GSWF_AJI_11_DATA_DISK_TAKEN
+    swSet(0x1071); // GSWF_AJI_11_DATA_DISK_PLAYED
 }
 
 void stg5_58_init(void) {
@@ -1488,15 +1488,15 @@ void stg5_58_init(void) {
 }
 
 void stg5_59_01_init(void) {
-    swSet(0x49C);
+    swSet(0x49C); // GSWF_GOR_00_PLACE_BY_SHIP
 }
 
 void stg5_60_init(void) {
     pouchReceiveMail(4);
     pouchOpenMail(4);
-    swSet(0x14);
+    swSet(0x14); // GSWF_MAIL_RDM_ISSUE_4_SENT
     pouchReceiveMail(0x1E);
-    swClear(0x49C);
+    swClear(0x49C); // GSWF_GOR_00_PLACE_BY_SHIP
 }
 
 void stg5_62_init(void) {
@@ -1504,15 +1504,15 @@ void stg5_62_init(void) {
 }
 
 void stg5_63_init(void) {
-    swSet(0xC35);
+    swSet(0xC35); // GSWF_GOR_SAILING_TO_KEELHAUL
 }
 
 void stg5_64_init(void) {
-    swClear(0xC35);
+    swClear(0xC35); // GSWF_GOR_SAILING_TO_KEELHAUL
 }
 
 void stg5_64_01_init(void) {
-    swSet(0xC47);
+    swSet(0xC47); // GSWF_MUJ_05_WEDDING_RING
     pouchGetItem(ITEM_WEDDING_RING);
 }
 
@@ -1521,11 +1521,11 @@ void stg5_64_02_init(void) {
 }
 
 void stg5_64_03_init(void) {
-    swSet(0x49A);
+    swSet(0x49A); // GSWF_MUJ_SAILING_TO_ROGUEPORT
 }
 
 void stg5_65_init(void) {
-    swClear(0x49A);
+    swClear(0x49A); // GSWF_MUJ_SAILING_TO_ROGUEPORT
     swSet(0x4CF);
 }
 
@@ -1535,7 +1535,7 @@ void stg5_66_init(void) {
 }
 
 void stg6_00_init(void) {
-    swSet(0xB);
+    swSet(0xB); // GSWF_MAIL_BOO_SENT
     pouchReceiveMail(0x14);
 }
 
@@ -1565,7 +1565,7 @@ void stg6_20_init(void) {
 }
 
 void stg6_22_init(void) {
-    swSet(0x15);
+    swSet(0x15); // GSWF_MAIL_RDM_ISSUE_5_SENT
     pouchReceiveMail(0x1F);
 }
 
@@ -1596,17 +1596,17 @@ void stg6_33_init(void) {
 }
 
 void stg6_34_init(void) {
-    swSet(0xE95);
-    swSet(0xE96);
-    swSet(0xE97);
-    swSet(0xE98);
-    swSet(0xE99);
-    swSet(0xE9A);
-    swSet(0xE9B);
-    swSet(0xE9C);
-    swSet(0xE9D);
-    swSet(0xE9E);
-    swSet(0xE9F);
+    swSet(0xE95); // GSWF_EKI_03_POSTER_5_BLOWN_AWAY
+    swSet(0xE96); // GSWF_EKI_03_POSTER_6_BLOWN_AWAY
+    swSet(0xE97); // GSWF_EKI_03_POSTER_7_BLOWN_AWAY
+    swSet(0xE98); // GSWF_EKI_03_POSTER_8_BLOWN_AWAY
+    swSet(0xE99); // GSWF_EKI_03_POSTER_9_BLOWN_AWAY
+    swSet(0xE9A); // GSWF_EKI_03_POSTER_10_BLOWN_AWAY
+    swSet(0xE9B); // GSWF_EKI_03_POSTER_11_BLOWN_AWAY
+    swSet(0xE9C); // GSWF_EKI_03_POSTER_12_BLOWN_AWAY
+    swSet(0xE9D); // GSWF_EKI_03_POSTER_13_BLOWN_AWAY
+    swSet(0xE9E); // GSWF_EKI_03_POSTER_14_BLOWN_AWAY
+    swSet(0xE9F); // GSWF_EKI_03_POSTER_15_BLOWN_AWAY
 }
 
 void stg6_37_init(void) {
@@ -1622,12 +1622,12 @@ void stg6_39_init(void) {
 }
 
 void stg6_44_init(void) {
-    swSet(0xD);
+    swSet(0xD); // GSWF_MAIL_KING_K_SENT
     pouchReceiveMail(0x16);
 }
 
 void stg6_47_00_init(void) {
-    swSet(0xC);
+    swSet(0xC); // GSWF_MAIL_PA_PATCH_SENT
     pouchReceiveMail(0x15);
 }
 
@@ -1646,7 +1646,7 @@ void stg6_70_init(void) {
 }
 
 void stg6_71_01_init(void) {
-    swSet(0xE);
+    swSet(0xE); // GSWF_MAIL_ZIP_TOAD_SENT
     pouchReceiveMail(0x17);
     gp->retraceLocalTime += (OSTime)OS_TIMER_CLOCK * 180;
 }
@@ -1657,48 +1657,48 @@ void stg6_72_init(void) {
 
 void stg6_end_init01(void) {
     pouchGetItem(ITEM_ULTRA_HAMMER);
-    swSet(0x4AB);
+    swSet(0x4AB); // GSWF_GOR_01_ULTRA_HAMMER_CHEST
 }
 
 void stg6_end_init02(void) {
-    swSet(0x53C);
+    swSet(0x53C); // GSWF_TIK_07_LV2_BIG_BLOCK_BROKEN
 }
 
 void stg7_01_init(void) {
-    swSet(0xF2C);
+    swSet(0xF2C); // GSWF_BOM_FIRST_ARRIVAL_DONE
 }
 
 void stg7_03_white_0(void) {
-    swSet(0x16);
+    swSet(0x16); // GSWF_MAIL_RDM_ISSUE_6_SENT
     pouchReceiveMail(0x20);
-    swSet(0xF22);
+    swSet(0xF22); // GSWF_PIK_GOLDBOB_PERMISSION_GIVEN
     pouchGetItem(ITEM_GOLDBOB_GUIDE);
 }
 
 void stg7_03_white_1(void) {
-    swSet(0xF25);
+    swSet(0xF25); // GSWF_NOK_GENERAL_WHITE_HINT_HEARD
 }
 
 void stg7_03_white_2(void) {
-    swSet(0xF26);
+    swSet(0xF26); // GSWF_MUJ_01_WHITE_HINT_HEARD_UNUSED
 }
 
 void stg7_03_white_3(void) {
-    swSet(0xF27);
+    swSet(0xF27); // GSWF_TOU_GENERAL_WHITE_HINT_HEARD
 }
 
 void stg7_03_white_4(void) {
-    swSet(0xF31);
+    swSet(0xF31); // GSWF_MRI_GENERAL_WHITE_HINT_HEARD
 }
 
 void stg7_03_white_5(void) {
-    swSet(0xF28);
-    swSet(0xF);
+    swSet(0xF28); // GSWF_USU_GENERAL_WHITE_HINT_HEARD
+    swSet(0xF); // GSWF_MAIL_RAWK_HAWK_SENT
     pouchReceiveMail(0x18);
 }
 
 void stg7_04_init(void) {
-    swSet(0xF24);
+    swSet(0xF24); // GSWF_BOM_GENERAL_WHITE_AGREED
 }
 
 void stg7_06_init(void) {
@@ -1723,31 +1723,31 @@ void stg7_15_room_A_init(void) {
 
 void stg7_15_room_B_init(void) {
     pouchGetItem(ITEM_CARD_KEY_0x1D);
-    swSet(0x1056);
+    swSet(0x1056); // GSWF_AJI_05_LIT_FLOOR_DONE
 }
 
 void stg7_15_room_C_init(void) {
     pouchGetItem(ITEM_CARD_KEY_0x1E);
-    swSet(0x1057);
+    swSet(0x1057); // GSWF_AJI_12_LIT_FLOOR_DONE
 }
 
 void stg7_16_init(void) {
     pouchGetItem(ITEM_CARD_KEY_0x1F);
-    swSet(0x1054);
-    swSet(0x1063);
+    swSet(0x1054); // GSWF_AJI_11_CARD_KEY
+    swSet(0x1063); // GSWF_AJI_10_VISITED
 }
 
 void stg7_17_init(void) {
     pouchRemoveItem(ITEM_CARD_KEY_0x1D);
     pouchRemoveItem(ITEM_CARD_KEY_0x1E);
     pouchRemoveItem(ITEM_CARD_KEY_0x1F);
-    swSet(0x105F);
-    swSet(0x1060);
-    swSet(0x1061);
+    swSet(0x105F); // GSWF_AJI_18_CARD_KEY_SLOT_1_FILLED
+    swSet(0x1060); // GSWF_AJI_18_CARD_KEY_SLOT_2_FILLED
+    swSet(0x1061); // GSWF_AJI_18_CARD_KEY_SLOT_3_FILLED
 }
 
 void stg7_19_init(void) {
-    swSet(0x1055);
+    swSet(0x1055); // GSWF_AJI_13_CARD_KEY
     pouchGetItem(ITEM_CARD_KEY_0x20);
 }
 
@@ -1761,15 +1761,15 @@ void stg7_25_00_init(void) {
 }
 
 void stg7_50_init(void) {
-    swSet(0x104F);
+    swSet(0x104F); // GSWF_AJI_TELEPORT_TO_TIK_PENDING
 }
 
 void stg7_51_init(void) {
-    swSet(0x10);
+    swSet(0x10); // GSWF_MAIL_GHOST_T_SENT
     pouchReceiveMail(0x19);
     pouchReceiveMail(0x21);
-    swClear(0x104F);
-    swSet(0x52F);
+    swClear(0x104F); // GSWF_AJI_TELEPORT_TO_TIK_PENDING
+    swSet(0x52F); // GSWF_TIK_00_STG7_DOOR_OPENED
 }
 
 void stg7_52_init(void) {
@@ -1785,50 +1785,50 @@ void stg8_02_init(void) {
 }
 
 void stg8_05_init(void) {
-    swSet(0x111C);
-    swSet(0x10E6);
-    swSet(0x10E7);
-    swSet(0x10E8);
-    swSet(0x10E9);
-    swSet(0x1109);
+    swSet(0x111C); // GSWF_LAS_09_VISITED_AFTER_GLOOMTAIL
+    swSet(0x10E6); // GSWF_LAS_09_CHAIN_CHOMP_1_BLOWN_UP
+    swSet(0x10E7); // GSWF_LAS_09_CHAIN_CHOMP_2_BLOWN_UP
+    swSet(0x10E8); // GSWF_LAS_09_SWITCH_1_PRESSED
+    swSet(0x10E9); // GSWF_LAS_09_SWITCH_2_PRESSED
+    swSet(0x1109); // GSWF_LAS_26_STAR_KEY_CHEST
     pouchGetItem(ITEM_STAR_KEY);
 }
 
 void stg8_06_init(void) {
     pouchRemoveItem(ITEM_STAR_KEY);
-    swSet(0x10EA);
-    swSet(0x10EB);
-    swSet(0x10EC);
-    swSet(0x10ED);
-    swSet(0x10EE);
-    swSet(0x10EF);
-    swSet(0x10F0);
-    swSet(0x10F1);
-    swSet(0x10F2);
+    swSet(0x10EA); // GSWF_LAS_10_FIRST_CUTSCENE_SEEN
+    swSet(0x10EB); // GSWF_LAS_10_KEY_SLOT_1_FILLED
+    swSet(0x10EC); // GSWF_LAS_10_KEY_SLOT_2_FILLED
+    swSet(0x10ED); // GSWF_LAS_10_KEY_SLOT_3_FILLED
+    swSet(0x10EE); // GSWF_LAS_10_KEY_SLOT_4_FILLED
+    swSet(0x10EF); // GSWF_LAS_10_KEY_SLOT_5_FILLED
+    swSet(0x10F0); // GSWF_LAS_10_KEY_SLOT_6_FILLED
+    swSet(0x10F1); // GSWF_LAS_10_KEY_SLOT_7_FILLED
+    swSet(0x10F2); // GSWF_LAS_10_KEY_SLOT_8_FILLED
     evtSetValue(0, GSW(0x462), 8);
-    swSet(0x10F3);
-    swSet(0x10F4);
-    swSet(0x10F5);
-    swSet(0x10F6);
-    swSet(0x10F7);
-    swSet(0x10F8);
-    swSet(0x10F9);
-    swSet(0x10FA);
-    swSet(0x10FB);
-    swSet(0x10FC);
+    swSet(0x10F3); // GSWF_LAS_11_15_BIG_BLOCK_1_BROKEN
+    swSet(0x10F4); // GSWF_LAS_11_15_BIG_BLOCK_2_BROKEN
+    swSet(0x10F5); // GSWF_LAS_11_SWITCH_PRESSED
+    swSet(0x10F6); // GSWF_LAS_12_SWITCH_PRESSED
+    swSet(0x10F7); // GSWF_LAS_13_SWITCH_PUZZLE_SOLVED
+    swSet(0x10F8); // GSWF_LAS_14_WALL_BLOWN_AWAY
+    swSet(0x10F9); // GSWF_LAS_11_15_BIG_BLOCK_3_BROKEN
+    swSet(0x10FA); // GSWF_LAS_11_15_BIG_BLOCK_4_BROKEN
+    swSet(0x10FB); // GSWF_LAS_15_SWITCH_PRESSED
+    swSet(0x10FC); // GSWF_LAS_16_WALL_BOMBED
     swSet(0x10FD);
-    swSet(0x10FE);
-    swSet(0x10FF);
-    swSet(0x1100);
+    swSet(0x10FE); // GSWF_LAS_17_ENEMIES_IN_ORDER_UNUSED
+    swSet(0x10FF); // GSWF_LAS_17_SWITCH_PRESSED
+    swSet(0x1100); // GSWF_LAS_18_SWITCH_PRESSED
     evtSetValue(0, GSW(0x463), 4);
-    swSet(0x110A);
-    swSet(0x110B);
-    swSet(0x110C);
-    swSet(0x110D);
-    swSet(0x110E);
-    swSet(0x110F);
-    swSet(0x1110);
-    swSet(0x1111);
+    swSet(0x110A); // GSWF_LAS_11_PALACE_KEY_CHEST
+    swSet(0x110B); // GSWF_LAS_12_PALACE_KEY_CHEST
+    swSet(0x110C); // GSWF_LAS_13_PALACE_KEY_CHEST
+    swSet(0x110D); // GSWF_LAS_14_PALACE_KEY_CHEST
+    swSet(0x110E); // GSWF_LAS_15_PALACE_KEY_CHEST
+    swSet(0x110F); // GSWF_LAS_16_PALACE_KEY_CHEST
+    swSet(0x1110); // GSWF_LAS_17_PALACE_KEY_CHEST
+    swSet(0x1111); // GSWF_LAS_18_PALACE_KEY_CHEST
 }
 
 void stg8_10_init(void) {
@@ -1837,23 +1837,23 @@ void stg8_10_init(void) {
 
 void stg8_11_init(void) {
     pouchRemoveItem(ITEM_PALACE_KEY_0x2F);
-    swSet(0x1103);
+    swSet(0x1103); // GSWF_LAS_22_DOOR_UNLOCKED
 }
 
 void stg8_13_init(void) {
-    swSet(0x1104);
-    swSet(0x1105);
-    swSet(0x1106);
+    swSet(0x1104); // GSWF_LAS_24_HAKO_BLOWN_AWAY
+    swSet(0x1105); // GSWF_LAS_24_BIG_BLOCK_BROKEN
+    swSet(0x1106); // GSWF_LAS_24_FLOOR_BROKEN
 }
 
 void stg8_14_init(void) {
     pouchGetItem(ITEM_PALACE_KEY_0x30);
-    swSet(0x1112);
+    swSet(0x1112); // GSWF_LAS_24_PALACE_KEY_CHEST
 }
 
 void stg8_15_init(void) {
     pouchRemoveItem(ITEM_PALACE_KEY_0x30);
-    swSet(0x1107);
+    swSet(0x1107); // GSWF_LAS_25_DOOR_UNLOCKED
 }
 
 void N_stg9_02_init(void) {

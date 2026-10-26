@@ -566,7 +566,7 @@ void puniSetYPosition(PuniData* p) {
                 break;
             case 2:
                 _ymode_mri_09(p);
-                if (!swGet(0xB23)) {
+                if (!swGet(0xB23)) { // GSWF_MRI_09_BREAKING_FLOOR_BROKEN
                     if (AC(p, -35.0f, 35.0f, 40.0f, 110.0f)) {
                         p->pos.y = 6.0f;
                     }
@@ -574,7 +574,7 @@ void puniSetYPosition(PuniData* p) {
                 break;
             case 3:
                 p->pos.y = 0.0f;
-                if (!swGet(0xB2A)) {
+                if (!swGet(0xB2A)) { // GSWF_MRI_12_BREAKING_FLOOR_BROKEN
                     if (AC(p, -80.0f, -10.0f, -99.0f, -29.0f)) {
                         p->pos.y = 6.0f;
                     }
@@ -588,7 +588,7 @@ void puniSetYPosition(PuniData* p) {
                 break;
             case 6:
                 p->pos.y = 0.0f;
-                if (!swGet(0xB37)) {
+                if (!swGet(0xB37)) { // GSWF_MRI_17_BREAKING_FLOOR_BROKEN
                     if (AC(p, -35.0f, 35.0f, -70.0f, 0.0f)) {
                         p->pos.y = 6.0f;
                     }
@@ -5126,14 +5126,14 @@ USER_FUNC(evt_puni_set_maze) {
             puniMapDataSetI(13, 5, puniMapdata_MRI_06, 50.0f, -1.0f);
             break;
         case 2:
-            if (swGet(0xB22)) {
+            if (swGet(0xB22)) { // GSWF_MRI_09_WALL_PUZZLE_SOLVED
                 puniMapDataSetI(7, 6, puniMapdata_MRI_09_01, 150.0f, -1.0f);
             } else {
                 puniMapDataSetI(7, 6, puniMapdata_MRI_09, 150.0f, -1.0f);
             }
             break;
         case 3:
-            if (swGet(0xB33)) {
+            if (swGet(0xB33)) { // GSWF_MRI_16_WATER_SWITCH_PRESSED
                 puniMapDataSetI(11, 9, puniMapdata_MRI_16, -269.0f, -320.0f);
             }
             break;
@@ -5343,26 +5343,26 @@ s32 evt_puni_debug_info(EventEntry *event, BOOL isFirstCall) {
         }
         trap = 0;
         if (i == 1) {
-            if (!swGet(0xB3C)) {
+            if (!swGet(0xB3C)) { // GSWF_MRI_PUNIO_JOINED
                 trap = 1;
             }
         } else
             if (i == 2) {
-            if (!swGet(0xB3D)) {
+            if (!swGet(0xB3D)) { // GSWF_MRI_PETUNI_JOINED
                 trap = 1;
             }
         } else
             if (i == 4) {
-            if (!swGet(0xB3F)) {
+            if (!swGet(0xB3F)) { // GSWF_MRI_PUNIPER_JOINED
                 trap = 1;
             }
         } else
             if (i == 3) {
-            if (!swGet(0xB3E)) {
+            if (!swGet(0xB3E)) { // GSWF_MRI_JABBLE_JOINED
                 trap = 1;
             }
         } else
-            if ((swByteGet(0x28B) + 5) <= i) {
+            if ((swByteGet(0x28B) + 5) <= i) { // GSW_MRI_PUNI_FOLLOWER_COUNT
             trap = 1;
         }
         if (a == 0) {
@@ -5378,7 +5378,7 @@ s32 evt_puni_debug_info(EventEntry *event, BOOL isFirstCall) {
         } else {
             sprintf(buf, "No%03d,＜トラップにかかっています＞\n", i);
         }
-        if ((i == 1) && swGet(0xB14)) {
+        if ((i == 1) && swGet(0xB14)) { // GSWF_MRI_PUNIO_WAITING_AT_JAIL
             sprintf(buf, "No%03d,＜mri_03の牢屋に滞在しています＞\n", i);
         }
     }
@@ -5419,7 +5419,7 @@ USER_FUNC(evt_puni_setup) {
     if (Punigp->floor == 9 || Punigp->floor == 12) {
         Punigp->flags |= PUNI_WORK_FLAG_BATTLE_FLOOR;
     }
-    if (swByteGet(0x299) == 1) {
+    if (swByteGet(0x299) == 1) { // GSW_MRI_PUNI_ROOM
         return EVT_RETURN_DONE;
     }
     p = &Punidat[1];
@@ -5445,24 +5445,24 @@ USER_FUNC(evt_puni_setup) {
         puniswTrapGetindex(i, &a);
         if (a != 0) continue;
         if (i == 1) {
-            if (!swGet(0xB3C)) continue;
-            if (swGet(0xB14)) continue;
+            if (!swGet(0xB3C)) continue; // GSWF_MRI_PUNIO_JOINED
+            if (swGet(0xB14)) continue; // GSWF_MRI_PUNIO_WAITING_AT_JAIL
             Punigp->reserved_364 = p;
             p->flags |= PUNI_FLAG_NPC_GUIDE;
         } else if (i == 2) {
-            if (!swGet(0xB3D)) continue;
+            if (!swGet(0xB3D)) continue; // GSWF_MRI_PETUNI_JOINED
             Punigp->reserved_368 = p;
             p->flags |= PUNI_FLAG_NPC_GUIDE_SISTER;
         } else if (i == 4) {
-            if (!swGet(0xB3F)) continue;
+            if (!swGet(0xB3F)) continue; // GSWF_MRI_PUNIPER_JOINED
             Punigp->reserved_370 = p;
             p->flags |= PUNI_FLAG_NPC_RIVAL;
         } else if (i == 3) {
-            if (!swGet(0xB3E)) continue;
+            if (!swGet(0xB3E)) continue; // GSWF_MRI_JABBLE_JOINED
             Punigp->reserved_36C = p;
             p->flags |= PUNI_FLAG_NPC_CHIBI_TOGE;
         } else {
-            if (swByteGet(0x28B) + 5 <= i) continue;
+            if (swByteGet(0x28B) + 5 <= i) continue; // GSW_MRI_PUNI_FOLLOWER_COUNT
             p->flags |= PUNI_FLAG_SPRITE_PUNI;
         }
         if (b0 == 0) {
@@ -5825,34 +5825,34 @@ USER_FUNC(evt_puni_init_puni) {
     s32 chk = evtGetValue(event, args[5]);
 
     if (idx == 1) {
-        if (chk != 0 && swGet(0xB3C) == 0) {
+        if (chk != 0 && swGet(0xB3C) == 0) { // GSWF_MRI_PUNIO_JOINED
             return EVT_RETURN_DONE;
         }
-        if (chk != 0 && swGet(0xB14) != 0) {
+        if (chk != 0 && swGet(0xB14) != 0) { // GSWF_MRI_PUNIO_WAITING_AT_JAIL
             return EVT_RETURN_DONE;
         }
         Punigp->reserved_364 = p;
         p->flags |= PUNI_FLAG_NPC_GUIDE;
     } else if (idx == 2) {
-        if (chk != 0 && swGet(0xB3D) == 0) {
+        if (chk != 0 && swGet(0xB3D) == 0) { // GSWF_MRI_PETUNI_JOINED
             return EVT_RETURN_DONE;
         }
         Punigp->reserved_368 = p;
         p->flags |= PUNI_FLAG_NPC_GUIDE_SISTER;
     } else if (idx == 4) {
-        if (chk != 0 && swGet(0xB3F) == 0) {
+        if (chk != 0 && swGet(0xB3F) == 0) { // GSWF_MRI_PUNIPER_JOINED
             return EVT_RETURN_DONE;
         }
         Punigp->reserved_370 = p;
         p->flags |= PUNI_FLAG_NPC_RIVAL;
     } else if (idx == 3) {
-        if (chk != 0 && swGet(0xB3E) == 0) {
+        if (chk != 0 && swGet(0xB3E) == 0) { // GSWF_MRI_JABBLE_JOINED
             return EVT_RETURN_DONE;
         }
         Punigp->reserved_36C = p;
         p->flags |= PUNI_FLAG_NPC_CHIBI_TOGE;
     } else {
-        if (chk != 0 && swByteGet(0x28B) + 5 <= idx) {
+        if (chk != 0 && swByteGet(0x28B) + 5 <= idx) { // GSW_MRI_PUNI_FOLLOWER_COUNT
             return EVT_RETURN_DONE;
         }
         p->flags |= PUNI_FLAG_SPRITE_PUNI;
@@ -6603,15 +6603,15 @@ USER_FUNC(puni_disp_info_sub) {
             }
         }
     }
-    total = swGet(0xB3C);
-    total += swGet(0xB3D);
-    total += swGet(0xB3F);
-    total += swByteGet(0x28B);
+    total = swGet(0xB3C); // GSWF_MRI_PUNIO_JOINED
+    total += swGet(0xB3D); // GSWF_MRI_PETUNI_JOINED
+    total += swGet(0xB3F); // GSWF_MRI_PUNIPER_JOINED
+    total += swByteGet(0x28B); // GSW_MRI_PUNI_FOLLOWER_COUNT
     done = FALSE;
-    if (Punigp->floor == 9 && !swGet(0xB21)) {
+    if (Punigp->floor == 9 && !swGet(0xB21)) { // GSWF_MRI_08_JABBI_SQUAD_DEFEATED
         done = TRUE;
     }
-    if (Punigp->floor == 12 && !swGet(0xB29)) {
+    if (Punigp->floor == 12 && !swGet(0xB29)) { // GSWF_MRI_11_JABBI_SQUAD_DEFEATED
         done = TRUE;
     }
     if (done) {

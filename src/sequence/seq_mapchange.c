@@ -280,7 +280,7 @@ void seq_mapChangeMain(SequenceWork* work) {
             mario = marioGetPtr();
             party = partyGetPtr(marioGetPartyId());
             extraParty = partyGetPtr(marioGetExtraPartyId());
-            switch (swByteGet(4)) {
+            switch (swByteGet(4)) { // GSW_SAVE_RESUME_POINT
             case 0:
                 mario->position = gp->savePlayerPos;
                 evt_cam_road_reset(0, 0);

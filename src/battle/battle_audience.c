@@ -1405,7 +1405,7 @@ BOOL BattleAudienceItemOn(s32 index, u16 itemId, s32 numItems) {
 
     if (audience->flags & AUDIENCE_FLAG_EVENT_CTRL) return FALSE;
     if (audience_kind[member->type].itemTable->type == 0) return FALSE;
-    if (itemId >= 0x79 && itemId < 0xEC && swGet(0xEB) == 0) return FALSE;
+    if (itemId >= 0x79 && itemId < 0xEC && swGet(0xEB) == 0) return FALSE; // GSWF_ITEM_TUTORIAL_SEEN
     st = index % 20;
     if (st < 4 || st > 15) return FALSE;
     if (!AUD_U8CALL(BattleAudience_GetExist, index)) return FALSE;

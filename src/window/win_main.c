@@ -201,11 +201,11 @@ void winMain(void) {
                         if (strcmp(gp->currentAreaName, "yuu") == 0) {
                             break;
                         }
-                        if ((wp->buttonTrg & PAD_BUTTON_LEFT) && (swByteGet(0) >= STG0_07_GOOMBELLA_JOINS || partyChkJoin(PARTNER_GOOMBELLA))) {
+                        if ((wp->buttonTrg & PAD_BUTTON_LEFT) && (swByteGet(0) >= STG0_07_GOOMBELLA_JOINS || partyChkJoin(PARTNER_GOOMBELLA))) { // GSW_STORY_PROGRESS
                             wp->menuSel = 1;
                         } else if (wp->buttonTrg & PAD_BUTTON_UP) {
                             wp->menuSel = 2;
-                        } else if ((wp->buttonTrg & PAD_BUTTON_RIGHT) && (swByteGet(0) >= STG0_17_BADGE_TUTORIAL || pouchGetHaveBadgeCnt())) {
+                        } else if ((wp->buttonTrg & PAD_BUTTON_RIGHT) && (swByteGet(0) >= STG0_17_BADGE_TUTORIAL || pouchGetHaveBadgeCnt())) { // GSW_STORY_PROGRESS
                             wp->menuSel = 3;
                         } else if (wp->buttonTrg & PAD_BUTTON_DOWN) {
                             wp->menuSel = 4;

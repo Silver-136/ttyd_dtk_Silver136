@@ -72,7 +72,7 @@ static USER_FUNC(check) {
 }
 
 USER_FUNC(evt_kagemario_init) {
-    s32 sequence = swByteGet(0);
+    s32 sequence = swByteGet(0); // GSW_STORY_PROGRESS
 
     if (sequence >= STG4_10_02_TRADING_PLACES && sequence < STG4_15_02_BACK_TO_NORMAL) {
         color_change_evt(1);

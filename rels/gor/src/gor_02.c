@@ -3907,17 +3907,17 @@ USER_FUNC(monosiri_check) {
             }
         }
     }
-    if (swGet(0x4BD) && !swGet(0x1181)) {
+    if (swGet(0x4BD) && !swGet(0x1181)) { // GSWF_GOR_GATEKEEPER_DEFEATED
         evtSetValue(event, args[0], 1);
         evtSetValue(event, args[1], 7);
         return EVT_RETURN_DONE;
     }
-    if (swGet(0x13DD) && !swGet(0x1225)) {
+    if (swGet(0x13DD) && !swGet(0x1225)) { // GSWF_PIT_BONETAIL_DEFEATED
         evtSetValue(event, args[0], 1);
         evtSetValue(event, args[1], 0xAB);
         return EVT_RETURN_DONE;
     }
-    if (swGet(0x8B2) && !swGet(0x11C6)) {
+    if (swGet(0x8B2) && !swGet(0x11C6)) { // GSWF_JIN_00_ATOMIC_BOO_DEFEATED
         evtSetValue(event, args[0], 1);
         evtSetValue(event, args[1], 0x4C);
         return EVT_RETURN_DONE;

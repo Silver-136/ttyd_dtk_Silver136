@@ -403,7 +403,7 @@ s32 winItemMain(WindowWork* w) {
             if ((s32)pouchCheckMail(w->item.mail[w->item.mailSel].id) == 1) {
                 pouchOpenMail(w->item.mail[w->item.mailSel].id);
             }
-            swSet(0x26);
+            swSet(0x26); // GSWF_MAIL_TUTORIAL_REPEAT_OFF
             psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_MAIL_MOVE1 | PSND_SFX_BYPASS_MUTE));
             w->item.state = 201;
             mail = mailGetPtr(w->item.mail[w->item.mailSel].id);

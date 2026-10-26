@@ -515,11 +515,11 @@ USER_FUNC(evt_tou_set_rule_result) {
     s32 result = evtGetValue(event, event->args[0]);
 
     if (result & 4) {
-        swSet(2443);
+        swSet(2443); // GSWF_GLITZ_PIT_CONDITION_KEPT
     } else if (result & 2) {
-        swClear(2443);
+        swClear(2443); // GSWF_GLITZ_PIT_CONDITION_KEPT
     } else if (result & 1) {
-        swClear(2443);
+        swClear(2443); // GSWF_GLITZ_PIT_CONDITION_KEPT
     }
     return EVT_RETURN_DONE;
 }
@@ -539,7 +539,7 @@ USER_FUNC(evt_tou_set_ranking_win_lose) {
                 break;
             }
         }
-        swSet(2442);
+        swSet(2442); // GSWF_GLITZ_PIT_BEAT_LAST_OPPONENT
     } else {
         for (i = 0; i < rank_wp->count; i++) {
             if (id == rank_wp->entries[i].id) {
@@ -547,7 +547,7 @@ USER_FUNC(evt_tou_set_ranking_win_lose) {
                 break;
             }
         }
-        swClear(2442);
+        swClear(2442); // GSWF_GLITZ_PIT_BEAT_LAST_OPPONENT
     }
 
     min = 1000;
@@ -568,7 +568,7 @@ USER_FUNC(evt_tou_set_ranking_win_lose) {
         }
     }
     swByteSet(507, id);
-    swSet(2532);
+    swSet(2532); // GSWF_GLITZ_PIT_LAST_OPPONENT_SAVED
     rankingControll();
     return EVT_RETURN_DONE;
 }
@@ -943,9 +943,9 @@ static void rankingControll(void) {
         }
 
         // Check if a match is booked (2532), and move our opponent (507) to above us for the fight. 
-        if (swGet(2532)) {
+        if (swGet(2532)) { // GSWF_GLITZ_PIT_LAST_OPPONENT_SAVED
             for (idx = 0; idx < nAbove; idx++) {
-                if (above[idx] == swByteGet(507)) {
+                if (above[idx] == swByteGet(507)) { // GSW_GLITZ_PIT_LAST_OPPONENT
                     break;
                 }
             }
@@ -1008,9 +1008,9 @@ static void rankingControll(void) {
         }
 
         // Check if a match is booked (2532), and move our opponent (507) to above us for the fight.
-        if (swGet(2532)) {
+        if (swGet(2532)) { // GSWF_GLITZ_PIT_LAST_OPPONENT_SAVED
             for (idx = 0; idx < nBelow; idx++) {
-                if (below[idx] == swByteGet(507)) {
+                if (below[idx] == swByteGet(507)) { // GSW_GLITZ_PIT_LAST_OPPONENT
                     break;
                 }
             }
@@ -1073,13 +1073,13 @@ USER_FUNC(tou2_rankingReset) {
     for (i = 0; i < 20; i++) {
         swClear(i + 2465);
     }
-    swClear(2392);
-    swClear(2399);
-    swClear(2400);
-    swClear(2383);
-    swClear(2529);
-    swClear(2532);
-    swClear(2403);
+    swClear(2392); // GSWF_TOU_GOOMBA_BROS_AFTER_MATCH_SEEN
+    swClear(2399); // GSWF_TOU_RAWK_HAWK_OPENING_SEEN
+    swClear(2400); // GSWF_TOU_RAWK_HAWK_FIRST_WIN
+    swClear(2383); // GSWF_GLITZ_PIT_TITLE_MATCH_BOOKED
+    swClear(2529); // GSWF_GLITZ_PIT_RANKING_SAVED
+    swClear(2532); // GSWF_GLITZ_PIT_LAST_OPPONENT_SAVED
+    swClear(2403); // GSWF_TOU_02_FANS_MOB_MARIO_SEEN
     rankingInit();
     return EVT_RETURN_DONE;
 }
@@ -1131,7 +1131,7 @@ static void rankingInit(void) {
         if (swGet(entry->id + 2465)) {
             entry->flags |= RANK_BELOW;
         }
-        if (swGet(2529)) {
+        if (swGet(2529)) { // GSWF_GLITZ_PIT_RANKING_SAVED
             int j;
             for (j = 0; j < 2; j++) {
                 entry->points.bytes[j] = swByteGet(2 * entry->id + 519 + j);
@@ -1144,7 +1144,7 @@ static void rankingInit(void) {
         }
     }
 
-    swSet(2529);
+    swSet(2529); // GSWF_GLITZ_PIT_RANKING_SAVED
 
     // Set up the initial run-through
     if (evtGetValue(NULL, GSW_STORY_PROGRESS) < STG3_34_RETURN_TO_ROGUEPORT) {

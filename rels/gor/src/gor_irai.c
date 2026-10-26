@@ -523,7 +523,7 @@ USER_FUNC(irai_init_func) {
     wp = _mapAlloc(sizeof(IraiWork));
     memset(wp, 0, sizeof(IraiWork));
     wp->state = 0;
-    seq = swByteGet(0);
+    seq = swByteGet(0); // GSW_STORY_PROGRESS
     wp->list[0] = 1;
     wp->list[1] = 2;
     wp->list[2] = 3;

@@ -276,7 +276,7 @@ static void rankingInit(void) {
         if (swGet(entry->id + 0x9A1)) {
             entry->flags |= RANK_FLAG_BEATEN;
         }
-        if (swGet(0x9E1)) {
+        if (swGet(0x9E1)) { // GSWF_GLITZ_PIT_RANKING_SAVED
             for (j = 0; j < 2; j++) {
                 entry->sw[j] = swByteGet(j + (entry->id * 2 + 0x207));
             }
@@ -287,7 +287,7 @@ static void rankingInit(void) {
             entry->flags |= RANK_FLAG_PLAYER;
         }
     }
-    swSet(0x9E1);
+    swSet(0x9E1); // GSWF_GLITZ_PIT_RANKING_SAVED
     if (evtGetValue(NULL, GSW_STORY_PROGRESS) < STG3_34_RETURN_TO_ROGUEPORT) {
         rank_wp->entries[21].flags |= RANK_FLAG_HIDDEN;
         rank_wp->entries[22].flags |= RANK_FLAG_HIDDEN;
@@ -345,13 +345,13 @@ USER_FUNC(evt_rankingReset) {
     for (i = 0; i < 20; i++) {
         swClear(i + 0x9A1);
     }
-    swClear(0x958);
-    swClear(0x95F);
-    swClear(0x960);
-    swClear(0x94F);
-    swClear(0x9E1);
-    swClear(0x9E4);
-    swClear(0x963);
+    swClear(0x958); // GSWF_TOU_GOOMBA_BROS_AFTER_MATCH_SEEN
+    swClear(0x95F); // GSWF_TOU_RAWK_HAWK_OPENING_SEEN
+    swClear(0x960); // GSWF_TOU_RAWK_HAWK_FIRST_WIN
+    swClear(0x94F); // GSWF_GLITZ_PIT_TITLE_MATCH_BOOKED
+    swClear(0x9E1); // GSWF_GLITZ_PIT_RANKING_SAVED
+    swClear(0x9E4); // GSWF_GLITZ_PIT_LAST_OPPONENT_SAVED
+    swClear(0x963); // GSWF_TOU_02_FANS_MOB_MARIO_SEEN
     rankingInit();
     return EVT_RETURN_DONE;
 }
@@ -419,9 +419,9 @@ static void rankingControll(void) {
         if (nwin > 16) {
             MOVE_FLAG(win, nwin, 0x100, 14);
         }
-        if (swGet(0x9E4)) {
+        if (swGet(0x9E4)) { // GSWF_GLITZ_PIT_LAST_OPPONENT_SAVED
             for (i = 0; i < nwin; i++) {
-                if (win[i] == swByteGet(0x1FB)) {
+                if (win[i] == swByteGet(0x1FB)) { // GSW_GLITZ_PIT_LAST_OPPONENT
                     break;
                 }
             }
@@ -445,9 +445,9 @@ static void rankingControll(void) {
                 }
             }
         }
-        if (swGet(0x9E4)) {
+        if (swGet(0x9E4)) { // GSWF_GLITZ_PIT_LAST_OPPONENT_SAVED
             for (i = 0; i < nlose; i++) {
-                if (lose[i] == swByteGet(0x1FB)) {
+                if (lose[i] == swByteGet(0x1FB)) { // GSW_GLITZ_PIT_LAST_OPPONENT
                     break;
                 }
             }
@@ -669,7 +669,7 @@ static USER_FUNC(evt_tou_set_ranking_win_lose) {
                 break;
             }
         }
-        swSet(0x98A);
+        swSet(0x98A); // GSWF_GLITZ_PIT_BEAT_LAST_OPPONENT
     } else {
         for (i = 0; i < rank_wp->num; i++) {
             if (id == rank_wp->entries[i].id) {
@@ -677,7 +677,7 @@ static USER_FUNC(evt_tou_set_ranking_win_lose) {
                 break;
             }
         }
-        swClear(0x98A);
+        swClear(0x98A); // GSWF_GLITZ_PIT_BEAT_LAST_OPPONENT
     }
     min = 1000;
     max = -1000;
@@ -693,7 +693,7 @@ static USER_FUNC(evt_tou_set_ranking_win_lose) {
         }
     }
     swByteSet(0x1FB, id);
-    swSet(0x9E4);
+    swSet(0x9E4); // GSWF_GLITZ_PIT_LAST_OPPONENT_SAVED
     rankingControll();
     return EVT_RETURN_DONE;
 }
@@ -702,11 +702,11 @@ static USER_FUNC(evt_tou_set_rule_result) {
     s32 result = evtGetValue(event, event->args[0]);
 
     if (result & 4) {
-        swSet(0x98B);
+        swSet(0x98B); // GSWF_GLITZ_PIT_CONDITION_KEPT
     } else if (result & 2) {
-        swClear(0x98B);
+        swClear(0x98B); // GSWF_GLITZ_PIT_CONDITION_KEPT
     } else if (result & 1) {
-        swClear(0x98B);
+        swClear(0x98B); // GSWF_GLITZ_PIT_CONDITION_KEPT
     }
     return EVT_RETURN_DONE;
 }

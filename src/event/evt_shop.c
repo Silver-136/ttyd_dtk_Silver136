@@ -1053,13 +1053,13 @@ USER_FUNC(add_shop_point) {
     s32 t3 = evtGetValue(event, args[3]);
     PouchData* pouch = pouchGetPtr();
 
-    if (!strcmp(gp->currentMapName, "mri_07") && swGet(0xFA) && t1 < 900000) {
+    if (!strcmp(gp->currentMapName, "mri_07") && swGet(0xFA) && t1 < 900000) { // GSWF_SHOP_MRI_07_DOUBLE_POINTS_SALE
         add *= 2;
     }
-    if (!strcmp(gp->currentMapName, "usu_01") && swGet(0xFB) && t2 < 900000) {
+    if (!strcmp(gp->currentMapName, "usu_01") && swGet(0xFB) && t2 < 900000) { // GSWF_SHOP_USU_01_DOUBLE_POINTS_SALE
         add *= 2;
     }
-    if (!strncmp(gp->currentMapName, "rsh_03", 6) && swGet(0xFC) && t3 < 900000) {
+    if (!strncmp(gp->currentMapName, "rsh_03", 6) && swGet(0xFC) && t3 < 900000) { // GSWF_SHOP_RSH_03_DOUBLE_POINTS_SALE
         add *= 2;
     }
     SHOP_PTS(pouch) += add;

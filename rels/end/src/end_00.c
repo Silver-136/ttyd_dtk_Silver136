@@ -685,7 +685,7 @@ void end_image_disp(CameraId cameraId, void* param) {
     if (id >= ((TEXPalette*)*end_wp->tpl->data)->numDescriptors) {
         return;
     }
-    if (id == 9 && swGet(0x5E7)) {
+    if (id == 9 && swGet(0x5E7)) { // GSWF_GON_12_MOWZ_MET_WITH_KOOPS
         id = 53;
     }
     GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_CLEAR);

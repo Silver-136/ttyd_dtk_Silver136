@@ -166,7 +166,7 @@ USER_FUNC(elder_talk_sub_punicheck) {
 
     for (i = 1; i < 103; i++) {
         puniGetPunidat();
-        if (i == 1 && swGet(0xB14)) {
+        if (i == 1 && swGet(0xB14)) { // GSWF_MRI_PUNIO_WAITING_AT_JAIL
             continue;
         }
         puniswGetindex(LSW(0), i - 1, &puni, c);

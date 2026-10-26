@@ -195,10 +195,10 @@ void winLogInit(WindowWork* w) {
     w->log.cursor = 0;
     w->log.count = 0;
     winLogAddMenu(w, 0);
-    if (swByteGet(0) >= 0x13) winLogAddMenu(w, 1);
-    if (swByteGet(0) >= STG0_07_GOOMBELLA_JOINS) winLogAddMenu(w, 4);
-    if (swByteGet(0) >= 0x14) winLogAddMenu(w, 2);
-    if (swGet(0x40)) winLogAddMenu(w, 3);
+    if (swByteGet(0) >= 0x13) winLogAddMenu(w, 1); // GSW_STORY_PROGRESS
+    if (swByteGet(0) >= STG0_07_GOOMBELLA_JOINS) winLogAddMenu(w, 4); // GSW_STORY_PROGRESS
+    if (swByteGet(0) >= 0x14) winLogAddMenu(w, 2); // GSW_STORY_PROGRESS
+    if (swGet(0x40)) winLogAddMenu(w, 3); // GSWF_GOR_ZESS_T_DISH_RECEIVED
 
     w->log.stoneNum = 0;
     for (i = 0; i < 7; i++) {
@@ -235,14 +235,14 @@ void winLogInit(WindowWork* w) {
     if (!strcmp(gp->currentMapName, "pik_02") || !strcmp(gp->currentMapName, "pik_03")) area = "sin";
     if (!strcmp(gp->currentMapName, "win_04") || !strcmp(gp->currentMapName, "win_05")) area = "hou";
     if (!strncmp(gp->currentMapName, "rsh", 3)) {
-        if (swByteGet(0) < 0x136) {
+        if (swByteGet(0) < 0x136) { // GSW_STORY_PROGRESS
             area = "gor";
-        } else if (swByteGet(0) < 0x14E || swGet(0xDFB)) {
+        } else if (swByteGet(0) < 0x14E || swGet(0xDFB)) { // GSW_STORY_PROGRESS, GSWF_HOM_TRAIN_STOPPED_AT_RIVERSIDE
             area = "eki";
-        } else if (swGet(0xDFC)) {
+        } else if (swGet(0xDFC)) { // GSWF_HOM_TRAIN_AT_POSHLEY
             area = "pik";
         } else {
-            switch (swByteGet(0x366)) {
+            switch (swByteGet(0x366)) { // GSW_HOM_TRAIN_LEG
             case 0:
                 area = "gor";
                 break;
@@ -412,16 +412,16 @@ static inline BOOL tubuCheck(u8 type) {
     case 0:
         return FALSE;
     case 1:
-        if (swGet(0xFD)) return TRUE;
+        if (swGet(0xFD)) return TRUE; // GSWF_WIN_04_ENTERED
         break;
     case 2:
-        if (swGet(0xFE)) return TRUE;
+        if (swGet(0xFE)) return TRUE; // GSWF_TIK_01_VISITED
         break;
     case 3:
-        if (swGet(0xFF)) return TRUE;
+        if (swGet(0xFF)) return TRUE; // GSWF_GON_00_VISITED
         break;
     case 4:
-        if (swGet(0x100)) return TRUE;
+        if (swGet(0x100)) return TRUE; // GSWF_GRA_00_ENTERED
         break;
     }
     return FALSE;
@@ -578,7 +578,7 @@ s32 winLogMain(WindowWork* w) {
         by = 120.0f + w->log.scrollY;
         for (k = 0; k < 0x5D; k++) {
             t = &tubuDt[k];
-            if (swByteGet(0) >= t->id || tubuCheck(t->type)) {
+            if (swByteGet(0) >= t->id || tubuCheck(t->type)) { // GSW_STORY_PROGRESS
                 if (t->big) {
                     f32 d = distABf(bx + t->x, by + t->y, x, y);
                     if (min > d) {
@@ -1080,13 +1080,13 @@ void winLogDisp(CameraId cam, void* param, s32 idx) {
 }
 
 const char* winGetMapTplName(void) {
-    if (swByteGet(0) < 0x13) return "map0.tpl";
-    if (swByteGet(0) < 0x41) return "map1.tpl";
-    if (swByteGet(0) < 0x79) return "map2.tpl";
-    if (swByteGet(0) < 0xAF) return "map3.tpl";
-    if (swByteGet(0) < 0xDE) return "map4.tpl";
-    if (swByteGet(0) < 0x110) return "map5.tpl";
-    if (swByteGet(0) < 0x15C) return "map6.tpl";
+    if (swByteGet(0) < 0x13) return "map0.tpl"; // GSW_STORY_PROGRESS
+    if (swByteGet(0) < 0x41) return "map1.tpl"; // GSW_STORY_PROGRESS
+    if (swByteGet(0) < 0x79) return "map2.tpl"; // GSW_STORY_PROGRESS
+    if (swByteGet(0) < 0xAF) return "map3.tpl"; // GSW_STORY_PROGRESS
+    if (swByteGet(0) < 0xDE) return "map4.tpl"; // GSW_STORY_PROGRESS
+    if (swByteGet(0) < 0x110) return "map5.tpl"; // GSW_STORY_PROGRESS
+    if (swByteGet(0) < 0x15C) return "map6.tpl"; // GSW_STORY_PROGRESS
     return "map7.tpl";
 }
 
@@ -1127,7 +1127,7 @@ void mapGX(WindowWork* w, f32 x, f32 y) {
         winTexInit(*w->res->data);
         for (i = 0; i < sizeof(tubuDt) / sizeof(TubuDt); i++) {
             t = &tubuDt[i];
-            if (swByteGet(0) >= t->id || tubuCheck(t->type)) {
+            if (swByteGet(0) >= t->id || tubuCheck(t->type)) { // GSW_STORY_PROGRESS
                 if (w->log.fE14 == i) {
                     winTexSet((tex = 0xBA, ((gp->retraceCount >> 4) & 1) ? tex = 0xB9 : 0, tex), (Vec){mx + t->x, my + t->y, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white);
                 } else {
@@ -1135,7 +1135,7 @@ void mapGX(WindowWork* w, f32 x, f32 y) {
                 }
             }
         }
-        sw = swByteGet(0);
+        sw = swByteGet(0); // GSW_STORY_PROGRESS
         id = -1;
         if (sw >= 0x13 && sw < 0x37) {
             id = ICON_SAC_DEKA;
