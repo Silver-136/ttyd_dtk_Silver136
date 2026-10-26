@@ -83,10 +83,11 @@ data order 10, sound-name integer round trips (`SFX_NAME_WORD`) 9, no-op casts 6
   shows them.
 - Raw flag masks: about 230 bit tests/sets by number are left outside sound tables and counter/byte arithmetic
   (2026-10-26, down from about 1,800). Left: words whose bits mean different things per caller (evt_npc move
-  functions' moveFlags), struct words with no enum yet (mot_hammer hammer2, mot_jabara, itemdrv flags2,
-  tou FighterData, evt_bero, rsh, sac_bakugame, evt_mobj typeData), matrix-part masks in animdrv (fine as numbers),
+  functions' moveFlags), evt_mobj typeData words (per object kind; the switch block's high bits are never read in C),
+  tou.c's own FighterData copy (tou2.c has the FighterFlags names), matrix-part masks in animdrv (fine as numbers),
   and bits with no setter or no known meaning (kept numeric: MapObjectFlags 0x20, GlobalWorkFlags 0x40,
-  MarioDispFlags bit 29, PartyFlags bits 15/18, MarioTrigFlags bit 15, HitAttributes bit 10, damage result 0x10000,
+  MarioDispFlags bit 29, PartyFlags bits 15/18, MarioTrigFlags bit 15, HitAttributes bit 10, ItemEntry flags bit 7,
+  MapObjectFlags 0x20 (set on A-button objects, never read), damage result 0x10000,
   unit attribute 0x100). Tools: flag_names.py (struct fields), word_masks.py (values by source, also locals),
   material_flags.py (pose material word).
 
