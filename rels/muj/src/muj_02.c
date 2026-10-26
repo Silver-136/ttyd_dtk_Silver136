@@ -509,7 +509,7 @@ EVT_END()
 static EVT_BEGIN(evt_kusa_6)
     CALL(evt_item_delete_check, STRING("item_kusa_6"), LW(0))
     IF_INT_EQUAL(LW(0), 1)
-        CALL(evt_item_entry, STRING("item_kusa_6"), ITEM_STAR_PIECE, -500, 0, 110, ITEM_TYPE_SCATTER_NO_PICKUP, GSWF(5641), 0)
+        CALL(evt_item_entry, STRING("item_kusa_6"), ITEM_STAR_PIECE, -500, 0, 110, ITEM_TYPE_SCATTER_NO_PICKUP, GSWF_STARPIECE_74, 0)
     END_IF
     RETURN
 EVT_END()

@@ -3566,7 +3566,7 @@ EVT_BEGIN(muj_00_init_evt)
     CALL(evt_npc_flag_onoff, 1, STRING(/*"船ダミー"*/"\x91\x44\x83\x5F\x83\x7E\x81\x5B"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_DRAW | NPC_FLAG_NO_WALL_COLLISION)
 #endif
     CALL(evt_eff64, STRING("sunlight"), STRING("sunlight_n64"), 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
-    CALL(evt_mobj_kururing_floor, STRING("kururin1"), 1375, 35, -430, STRING("S_ground"), 125, GSWF(5638))
+    CALL(evt_mobj_kururing_floor, STRING("kururin1"), 1375, 35, -430, STRING("S_ground"), 125, GSWF_STARPIECE_71)
     CALL(evt_paper_entry, STRING("OFF_d_yabu"))
     CALL(evt_paper_entry, STRING("OFF_d_kaiten"))
     CALL(evt_map_playanim, STRING("S_mizu"), 1, 0)

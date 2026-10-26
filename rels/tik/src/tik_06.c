@@ -261,7 +261,7 @@ EVT_BEGIN(tik_06_init_evt)
     CALL_CHILD(PTR(iri_12_init))
     CALL(evt_mobj_signboard, STRING("board"), -50, 0, 50, PTR(evt_kanban), LSWF(0))
     CALL(evt_mobj_signboard, STRING("board2"), 50, 0, -250, PTR(evt_kanban2), LSWF(0))
-    CALL(evt_item_entry, STRING("item_00"), ITEM_STAR_PIECE, 290, 0, -50, ITEM_TYPE_STILL, GSWF(5593), 0)
+    CALL(evt_item_entry, STRING("item_00"), ITEM_STAR_PIECE, 290, 0, -50, ITEM_TYPE_STILL, GSWF_STARPIECE_26, 0)
     RETURN
 EVT_END()
 

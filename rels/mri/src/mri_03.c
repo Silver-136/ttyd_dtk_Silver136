@@ -168,7 +168,7 @@ EVT_BEGIN(jail_alpha)
     IF_INT_EQUAL(GSWF(2834), 0)
         CALL(evt_map_blend_set_mobj_flag, 1, STRING("mobj_lock01"), 2048)
     END_IF
-    IF_INT_EQUAL(GSWF(5613), 0)
+    IF_INT_EQUAL(GSWF_STARPIECE_46, 0)
         CALL(evt_map_blend_set_mobj_flag, 1, STRING("kururin1"), 2048)
     END_IF
     SPAWN_EVENT(PTR(jail_alpha_mario_check))
@@ -1474,7 +1474,7 @@ EVT_BEGIN(mri_03_init_evt)
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG2_MRI4"))
     END_SWITCH
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_hako_r_saku"), MAP_OBJ_FLAG_CLIP)
-    CALL(evt_mobj_kururing_floor, STRING("kururin1"), -150, 0, -200, STRING("S_yuka_oku"), 125, GSWF(5613))
+    CALL(evt_mobj_kururing_floor, STRING("kururin1"), -150, 0, -200, STRING("S_yuka_oku"), 125, GSWF_STARPIECE_46)
     CALL(evt_npc_setup, PTR(npcEnt))
     CALL(evt_map_playanim, STRING("mizu_01"), 1, 0)
     CALL(evt_map_playanim, STRING("mizu_02"), 1, 0)

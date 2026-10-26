@@ -1339,7 +1339,7 @@ EVT_BEGIN(muj_05_init_evt)
     END_IF
     CALL(evt_eff64, STRING("sunlight"), STRING("sunlight_n64"), 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
     CALL(evt_mobj_recovery_blk, STRING("mobj_recover"), 12, 125, 60, -90, 0, 0)
-    CALL(evt_item_entry, STRING("item_01"), ITEM_STAR_PIECE, 395, -15, 120, ITEM_TYPE_STILL, GSWF(5643), 0)
+    CALL(evt_item_entry, STRING("item_01"), ITEM_STAR_PIECE, 395, -15, 120, ITEM_TYPE_STILL, GSWF_STARPIECE_76, 0)
     SET_VALUE(LW(0), PTR(tree_tbl))
     CALL_CHILD(evt_sub_tree_access_entry)
     SET_VALUE(LW(0), PTR(kusa_tbl))

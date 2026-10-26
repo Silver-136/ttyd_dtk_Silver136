@@ -2244,7 +2244,7 @@ EVT_BEGIN(evt_kusa_04)
     END_IF
     CALL(evt_item_delete_check, STRING("item_kusa_04"), LW(0))
     IF_INT_EQUAL(LW(0), 1)
-        CALL(evt_item_entry, STRING("item_kusa_04"), ITEM_STAR_PIECE, 130, 0, 455, ITEM_TYPE_SCATTER_NO_PICKUP, GSWF(5628), 0)
+        CALL(evt_item_entry, STRING("item_kusa_04"), ITEM_STAR_PIECE, 130, 0, 455, ITEM_TYPE_SCATTER_NO_PICKUP, GSWF_STARPIECE_61, 0)
     END_IF
     RETURN
 EVT_END()
@@ -3688,7 +3688,7 @@ EVT_BEGIN(usu_00_init_evt)
         CALL(evt_mobj_save_blk, STRING("mobj_save"), 365, 60, -50, 0, 0)
     END_IF
     IF_INT_EQUAL(GF(1), 0)
-        CALL(evt_item_entry, STRING("item00"), ITEM_STAR_PIECE, -220, 0, -225, ITEM_TYPE_STILL, GSWF(5629), 0)
+        CALL(evt_item_entry, STRING("item00"), ITEM_STAR_PIECE, -220, 0, -225, ITEM_TYPE_STILL, GSWF_STARPIECE_62, 0)
     END_IF
     CALL_CHILD(PTR(evt_usu_kagemario_party_kill))
     CALL(evt_npc_setup, PTR(npcEnt))

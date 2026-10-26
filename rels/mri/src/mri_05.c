@@ -655,7 +655,7 @@ EVT_BEGIN(mri_05_init_evt)
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_dai_mae"), 0, PTR(punipuni_ball01), 0)
     SPAWN_EVENT(PTR(door_switch_init))
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_sui"), 0, PTR(door_switch), 0)
-    CALL(evt_mobj_powerupblk, STRING("pblk00"), 250, -250, 100, 0, GSWF(5542), 0)
+    CALL(evt_mobj_powerupblk, STRING("pblk00"), 250, -250, 100, 0, GSWF_SHINE_17, 0)
     SPAWN_EVENT(PTR(mario_shabon_check))
     RETURN
 EVT_END()

@@ -1563,7 +1563,7 @@ EVT_BEGIN(nok_01_init_evt)
     IF_BITS_SET(LW(0), 4096)
         SET_VALUE(LSWF(4), 1)
     END_IF
-    CALL(evt_mobj_kururing_floor, STRING("kururin2"), 400, 0, 140, STRING("S_guround"), 125, GSWF(5602))
+    CALL(evt_mobj_kururing_floor, STRING("kururin2"), 400, 0, 140, STRING("S_guround"), 125, GSWF_STARPIECE_35)
     CALL(evt_item_entry, STRING("item_00"), ITEM_MEGA_RUSH_P, -180, 70, -425, ITEM_TYPE_STILL, GSWF(1628), 0)
     IF_INT_EQUAL(GSWF_TROUBLE_DONE(TROUBLE_LISTEN_TO_ME), 1)
         CALL(evt_item_entry, STRING("iri_08"), ITEM_TURTLEY_LEAF, -317, 128, -374, ITEM_TYPE_STILL, GSWF(1629), 0)

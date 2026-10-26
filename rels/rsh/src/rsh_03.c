@@ -341,7 +341,7 @@ EVT_BEGIN(talk_cook_nabe_return)
         CALL(evt_item_entry, STRING("orei"), ITEM_STAR_PIECE, 0, 0, 0, ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
         CALL(evt_item_get_item, STRING("orei"))
         CALL(evt_item_get_item_end_wait, STRING("orei"))
-        SET_VALUE(GSWF(5650), 1)
+        SET_VALUE(GSWF_STARPIECE_83, 1)
         CALL(evt_pouch_remove_item, ITEM_GALLEY_POT, LW(0))
     END_IF
     RETURN
@@ -515,7 +515,7 @@ EVT_BEGIN(talk_waitless_pias_return)
         CALL(evt_item_entry, STRING("orei"), ITEM_STAR_PIECE, 0, 0, 0, ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
         CALL(evt_item_get_item, STRING("orei"))
         CALL(evt_item_get_item_end_wait, STRING("orei"))
-        SET_VALUE(GSWF(5651), 1)
+        SET_VALUE(GSWF_STARPIECE_84, 1)
 #ifdef VERSION_G8ME01
         CALL(evt_npc_set_anim, STRING("ウェイトレス"), STRING("S_1"))
 #endif

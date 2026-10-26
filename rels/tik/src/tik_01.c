@@ -550,7 +550,7 @@ EVT_BEGIN(tik_01_init_evt)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("bom_kabe_3"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     CALL(evt_mobj_itembox, STRING("mobj_box00"), 540, 125, -100, MOBJ_ITEMBOX_NORMAL, 0, PTR(mobj_box00), GSWF(1355))
-    CALL(evt_mobj_kururing_floor, STRING("kururin1"), -100, 0, 50, STRING("jimen"), 125, GSWF(5589))
+    CALL(evt_mobj_kururing_floor, STRING("kururin1"), -100, 0, 50, STRING("jimen"), 125, GSWF_STARPIECE_22)
     CALL(evt_mobj_save_blk, STRING("mobj_save"), -455, 135, -60, 0, 0)
     SET_VALUE(LW(0), STRING("ugo_yuka_1"))
     SET_VALUE(LW(1), STRING("a_ugo_yuka_1"))

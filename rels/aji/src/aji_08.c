@@ -181,7 +181,7 @@ EVT_BEGIN(aji_08_init_evt)
     CALL(evt_map_playanim, STRING("bari"), 1, 0)
     CALL(evt_map_playanim, STRING("awa1"), 1, 0)
     CALL(evt_map_playanim, STRING("awa2"), 1, 0)
-    CALL(evt_item_entry, STRING("item00"), ITEM_STAR_PIECE, -975, 170, 75, ITEM_TYPE_STILL, GSWF(5666), 0)
+    CALL(evt_item_entry, STRING("item00"), ITEM_STAR_PIECE, -975, 170, 75, ITEM_TYPE_STILL, GSWF_STARPIECE_99, 0)
     BEGIN_INLINE_EVENT
         LOOP(0)
             CALL(evt_mapobj_get_position, STRING("S_ita"), LW(0), LW(1), LW(2))

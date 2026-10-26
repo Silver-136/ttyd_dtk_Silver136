@@ -127,7 +127,7 @@ EVT_BEGIN(eki_02_init_evt)
     BEGIN_INLINE_EVENT
         CALL(hit_move)
     END_INLINE_EVENT
-    CALL(evt_item_entry, STRING("item"), ITEM_STAR_PIECE, 540, 140, -40, ITEM_TYPE_STILL, GSWF(5653), 0)
+    CALL(evt_item_entry, STRING("item"), ITEM_STAR_PIECE, 540, 140, -40, ITEM_TYPE_STILL, GSWF_STARPIECE_86, 0)
     RETURN
 EVT_END()
 

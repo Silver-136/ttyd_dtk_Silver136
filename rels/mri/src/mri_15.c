@@ -212,7 +212,7 @@ EVT_END()
 EVT_BEGIN(ueki_evt_01)
     CALL(evt_item_delete_check, STRING("item_ueki01"), LW(0))
     IF_INT_EQUAL(LW(0), 1)
-        CALL(evt_item_entry, STRING("item_ueki01"), ITEM_STAR_PIECE, -37, 0, 96, ITEM_TYPE_GROUND, GSWF(5616), 0)
+        CALL(evt_item_entry, STRING("item_ueki01"), ITEM_STAR_PIECE, -37, 0, 96, ITEM_TYPE_GROUND, GSWF_STARPIECE_49, 0)
     END_IF
     RETURN
 EVT_END()

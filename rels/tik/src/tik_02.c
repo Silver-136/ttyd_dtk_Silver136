@@ -775,7 +775,7 @@ EVT_BEGIN(tik_02_init_evt)
         ELSE
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("bom_kabe_3"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
-    CALL(evt_mobj_powerupblk, STRING("pblk1"), 350, 60, 100, 0, GSWF(5531), 0)
+    CALL(evt_mobj_powerupblk, STRING("pblk1"), 350, 60, 100, 0, GSWF_SHINE_06, 0)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG0_19_BLOOPER_BATTLE)
         CALL(evt_hit_bind_mapobj, STRING("a_ugo_yuka_1"), STRING("ugo_yuka_1"))
         CALL(evt_hit_bind_mapobj, STRING("a_ugo_yuka_2"), STRING("ugo_yuka_2"))

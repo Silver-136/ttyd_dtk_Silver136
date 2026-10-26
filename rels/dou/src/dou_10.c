@@ -562,7 +562,7 @@ EVT_BEGIN(dou_10_init_evt)
     SET_VALUE(LW(0), STRING("s10_fune_01"))
     SET_VALUE(LW(1), 0)
     SPAWN_EVENT_GET_ID(PTR(dou_puka_event_main0), LW(10))
-    CALL(evt_mobj_powerupblk, STRING("pblk00"), 130, 50, -135, 0, GSWF(5558), 0)
+    CALL(evt_mobj_powerupblk, STRING("pblk00"), 130, 50, -135, 0, GSWF_SHINE_33, 0)
     RETURN
 EVT_END()
 

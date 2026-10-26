@@ -2803,7 +2803,7 @@ EVT_BEGIN(bom_01_init_evt)
         CALL_CHILD(PTR(musume_c_entry))
     END_SWITCH
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING(("A_ie_door")), 0, PTR(evt_door), 0)
-    CALL(evt_item_entry, STRING(("item_00")), ITEM_STAR_PIECE, -180, 5, 450, ITEM_TYPE_STILL, GSWF(5659), 0)
+    CALL(evt_item_entry, STRING(("item_00")), ITEM_STAR_PIECE, -180, 5, 450, ITEM_TYPE_STILL, GSWF_STARPIECE_92, 0)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG6_71_01)
         SET_VALUE(GSWF(3885), 1)

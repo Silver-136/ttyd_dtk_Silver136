@@ -345,7 +345,7 @@ EVT_BEGIN(tik_04_init_evt)
     END_IF
     CALL(evt_mobj_itembox, STRING("mobj_box00"), 310, 0, -25, MOBJ_ITEMBOX_NORMAL, 0, PTR(mobj_box00), GSWF(1357))
     CALL(evt_mobj_brick, STRING("mobj_box01"), -150, 60, 130, ITEM_PRETTY_LUCKY, MOBJ_BRICK_HIDDEN_BADGE, 0, GSWF(1358))
-    CALL(evt_item_entry, STRING("item_02"), ITEM_STAR_PIECE, -460, 25, -100, ITEM_TYPE_STILL, GSWF(5591), 0)
+    CALL(evt_item_entry, STRING("item_02"), ITEM_STAR_PIECE, -460, 25, -100, ITEM_TYPE_STILL, GSWF_STARPIECE_24, 0)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG5_43_X_NAUTS_RETREAT)
         CALL(evt_npc_check_delete, STRING("カメック"))
         CALL(evt_npc_check_delete, STRING("トゲノコ"))

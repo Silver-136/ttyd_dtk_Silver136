@@ -918,7 +918,7 @@ EVT_BEGIN(badge_evt2)
 EVT_END()
 
 EVT_BEGIN(badge_evt3)
-    SET_VALUE(GSWF(5665), 1)
+    SET_VALUE(GSWF_STARPIECE_98, 1)
     RETURN
 EVT_END()
 
@@ -1045,7 +1045,7 @@ EVT_BEGIN(aji_03_init_evt)
         CALL(evt_item_entry, STRING("keihin06"), ITEM_FEELING_FINE_P, -150, 50, -100, ITEM_TYPE_STILL, -1, PTR(badge_evt2))
     END_IF
     CALL(evt_item_entry, STRING("keihin07"), ITEM_COIN, -100, 50, -100, ITEM_TYPE_STILL, -1, 0)
-    IF_INT_EQUAL(GSWF(5665), 0)
+    IF_INT_EQUAL(GSWF_STARPIECE_98, 0)
         CALL(evt_item_entry, STRING("keihin08"), ITEM_STAR_PIECE, -50, 50, -100, ITEM_TYPE_STILL, -1, PTR(badge_evt3))
     END_IF
     SPAWN_EVENT(PTR(evt_emergency))

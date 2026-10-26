@@ -1103,7 +1103,7 @@ EVT_BEGIN(nok_00_init_evt)
     END_LOOP
     CALL(evt_hit_damage_return_set, PTR(hitDmgRetPoints))
     CALL_CHILD(PTR(evt_gazigazi_entry))
-    CALL(evt_mobj_kururing_floor, STRING("kururin1"), -70, 0, 350, STRING("S_ground03"), 125, GSWF(5601))
+    CALL(evt_mobj_kururing_floor, STRING("kururin1"), -70, 0, 350, STRING("S_ground03"), 125, GSWF_STARPIECE_34)
     RETURN
 EVT_END()
 

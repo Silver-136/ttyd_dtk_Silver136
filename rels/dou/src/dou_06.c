@@ -59,7 +59,7 @@ EVT_BEGIN(dou_06_init_evt)
     WAIT_FRAMES(1)
     CALL(evt_map_playanim, STRING("nami"), 1, 0)
     CALL(evt_map_playanim, STRING("moku"), 1, 0)
-    CALL(evt_mobj_kururing_floor, STRING("kururin1"), 50, 0, 0, STRING("s06_jimen"), 125, GSWF(5647))
+    CALL(evt_mobj_kururing_floor, STRING("kururin1"), 50, 0, 0, STRING("s06_jimen"), 125, GSWF_STARPIECE_80)
     RETURN
 EVT_END()
 

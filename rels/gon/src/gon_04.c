@@ -1004,11 +1004,11 @@ EVT_BEGIN(gon_04_init_evt)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG1_12_01_KEY)
         CALL(evt_item_entry, STRING("key00"), ITEM_CASTLE_KEY_0x0D, -150, 150, -125, ITEM_TYPE_STILL, -1, PTR(key_get))
     END_IF
-    CALL(evt_item_entry, STRING("item00"), ITEM_STAR_PIECE, 150, 400, -125, ITEM_TYPE_STILL, GSWF(5604), 0)
+    CALL(evt_item_entry, STRING("item00"), ITEM_STAR_PIECE, 150, 400, -125, ITEM_TYPE_STILL, GSWF_STARPIECE_37, 0)
 #ifdef VERSION_G8ME01
-    CALL(evt_item_entry, STRING("item01"), ITEM_STAR_PIECE, 420, 910, -175, ITEM_TYPE_STILL, GSWF(5605), 0)
+    CALL(evt_item_entry, STRING("item01"), ITEM_STAR_PIECE, 420, 910, -175, ITEM_TYPE_STILL, GSWF_STARPIECE_38, 0)
 #else
-    CALL(evt_item_entry, STRING("item01"), ITEM_STAR_PIECE, 400, 900, -175, ITEM_TYPE_STILL, GSWF(5605), 0)
+    CALL(evt_item_entry, STRING("item01"), ITEM_STAR_PIECE, 400, 900, -175, ITEM_TYPE_STILL, GSWF_STARPIECE_38, 0)
 #endif
     CALL(evt_mobj_lv_blk, STRING("mobj_blk00"), 395, 200, -125, 0, GSWF(1485), STRING("MOBJ_Lv1BigBlock"))
     CALL(evt_mobj_lv_blk, STRING("mobj_blk01"), 445, 150, -125, 0, GSWF(1486), STRING("MOBJ_Lv2BigBlock"))
@@ -1020,7 +1020,7 @@ EVT_BEGIN(gon_04_init_evt)
         CALL_CHILD(PTR(bero_case_switch_off))
     END_IF
     CALL(evt_mobj_recovery_blk, STRING("mobj_recover"), 6, 550, 960, -125, 0, 0)
-    CALL(evt_mobj_powerupblk, STRING("pblk1"), -250, 60, -130, 0, GSWF(5538), 0)
+    CALL(evt_mobj_powerupblk, STRING("pblk1"), -250, 60, -130, 0, GSWF_SHINE_13, 0)
     CALL(evt_map_playanim, STRING("hokori"), 1, 0)
     CALL(evt_paper_entry, STRING("OFF_gon_04_2"))
     SET_VALUE(GF(10), 0)

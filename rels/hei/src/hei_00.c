@@ -1032,7 +1032,7 @@ EVT_END()
 static EVT_BEGIN(ki_data_evt_01)
     CALL(evt_item_delete_check, STRING("item_ki01"), LW(0))
     IF_INT_EQUAL(LW(0), 1)
-        CALL(evt_item_entry, STRING("item_ki01"), ITEM_STAR_PIECE, -468, 139, -127, ITEM_TYPE_FALL_NO_PICKUP, GSWF(5598), 0)
+        CALL(evt_item_entry, STRING("item_ki01"), ITEM_STAR_PIECE, -468, 139, -127, ITEM_TYPE_FALL_NO_PICKUP, GSWF_STARPIECE_31, 0)
     END_IF
     RETURN
 EVT_END()

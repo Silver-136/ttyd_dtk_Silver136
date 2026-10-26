@@ -750,7 +750,7 @@ EVT_BEGIN(mri_17_init_evt)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG2_21_01_MYSTERY_PILLAR)
         CALL(evt_mobj_switch_blue, 1, STRING("switch"), 60, -309, 53, PTR(switch_event), 0)
     END_IF
-    CALL(evt_item_entry, STRING("item_01"), ITEM_STAR_PIECE, 168, -310, -44, ITEM_TYPE_STILL, GSWF(5617), 0)
+    CALL(evt_item_entry, STRING("item_01"), ITEM_STAR_PIECE, 168, -310, -44, ITEM_TYPE_STILL, GSWF_STARPIECE_50, 0)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS_OR_EQUAL(STG2_20_PUNIO_PETUNI)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_hako"), MAP_OBJ_FLAG_HIDDEN)

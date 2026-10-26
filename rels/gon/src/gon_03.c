@@ -552,7 +552,7 @@ EVT_BEGIN(gon_03_init_evt)
     CALL(evt_map_playanim, STRING("hokori"), 1, 0)
     CALL(evt_npc_set_balloontype, STRING("リーダー"), 0)
     CALL(evt_npc_set_balloontype, STRING("リチャード"), 0)
-    CALL(evt_mobj_kururing_floor, STRING("kururin1"), -298, 0, -197, STRING("s_heya"), 125, GSWF(5603))
+    CALL(evt_mobj_kururing_floor, STRING("kururin1"), -298, 0, -197, STRING("s_heya"), 125, GSWF_STARPIECE_36)
     RETURN
 EVT_END()
 

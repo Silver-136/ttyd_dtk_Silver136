@@ -894,9 +894,9 @@ EVT_BEGIN(rsh_00_init_evt)
     CALL(evt_mobj_save_blk, STRING("mobj_save"), -210, 60, -145, 0, 0)
     CALL(evt_sub_get_mapname, LW(0))
     IF_STR_NOT_EQUAL(LW(0), STRING("rsh_00_c"))
-        CALL(evt_mobj_kururing_floor, STRING("kururin1"), -132, 0, -95, STRING("s_zentai"), 125, GSWF(5648))
+        CALL(evt_mobj_kururing_floor, STRING("kururin1"), -132, 0, -95, STRING("s_zentai"), 125, GSWF_STARPIECE_81)
         ELSE
-        CALL(evt_mobj_kururing_floor, STRING("kururin1"), -132, 0, -95, STRING("s_yuka1"), 125, GSWF(5648))
+        CALL(evt_mobj_kururing_floor, STRING("kururin1"), -132, 0, -95, STRING("s_yuka1"), 125, GSWF_STARPIECE_81)
     END_IF
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG6_02_A_CASE_OF_LOST_STEW, STG6_04_GRILLING_HEFF_T)
@@ -1005,9 +1005,9 @@ EVT_BEGIN(rsh_00_init_evt_nidome)
     CALL(evt_mobj_save_blk, STRING("mobj_save"), -210, 60, -145, 0, 0)
     CALL(evt_sub_get_mapname, LW(0))
     IF_STR_NOT_EQUAL(LW(0), STRING("rsh_00_c"))
-        CALL(evt_mobj_kururing_floor, STRING("kururin1"), -132, 0, -95, STRING("s_zentai"), 125, GSWF(5648))
+        CALL(evt_mobj_kururing_floor, STRING("kururin1"), -132, 0, -95, STRING("s_zentai"), 125, GSWF_STARPIECE_81)
         ELSE
-        CALL(evt_mobj_kururing_floor, STRING("kururin1"), -132, 0, -95, STRING("s_yuka1"), 125, GSWF(5648))
+        CALL(evt_mobj_kururing_floor, STRING("kururin1"), -132, 0, -95, STRING("s_yuka1"), 125, GSWF_STARPIECE_81)
     END_IF
     CALL_CHILD(PTR(evt_access_entry))
     IF_INT_EQUAL(GSWF(3460), 1)

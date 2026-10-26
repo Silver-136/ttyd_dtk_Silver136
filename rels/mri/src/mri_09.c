@@ -490,7 +490,7 @@ EVT_BEGIN(mri_09_init_evt)
     END_SWITCH
     CALL(evt_mobj_itembox, STRING("mobj_box00"), 125, 0, 25, MOBJ_ITEMBOX_NORMAL, 0, PTR(get_blue_jail_key), GSWF(2852))
     CALL(evt_item_entry, STRING("item100"), ITEM_CHARGE, -250, -234, 75, ITEM_TYPE_STILL, GSWF(2853), 0)
-    CALL(evt_mobj_powerupblk, STRING("pblk1"), 0, -174, -125, 0, GSWF(5543), 0)
+    CALL(evt_mobj_powerupblk, STRING("pblk1"), 0, -174, -125, 0, GSWF_SHINE_18, 0)
     SPAWN_EVENT(PTR(breakyuka_init))
     CALL(evt_mobj_breaking_floor, STRING("mobj_bf00"), 0, 0, 75, 1, PTR(breakyuka_main), GSWF(2851))
     RETURN

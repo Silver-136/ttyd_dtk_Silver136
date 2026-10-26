@@ -401,6 +401,6 @@ EVT_BEGIN(eki_06_init_evt)
         CALL(evt_hitobj_onoff, STRING("a_hako"), 1, 0)
     END_IF
     CALL(evt_mapobj_trans, 1, STRING("HAKO"), 0, FLOAT(0.099609375f), 0)
-    CALL(evt_mobj_powerupblk, STRING("pblk01"), 95, 295, -80, 0, GSWF(5562), 0)
+    CALL(evt_mobj_powerupblk, STRING("pblk01"), 95, 295, -80, 0, GSWF_SHINE_37, 0)
     RETURN
 EVT_END()

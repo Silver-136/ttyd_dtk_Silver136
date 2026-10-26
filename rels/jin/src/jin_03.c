@@ -221,7 +221,7 @@ EVT_BEGIN(jin_03_init_evt)
             SPAWN_EVENT(PTR(jin_03_kaidan_naka_kesu))
         END_IF
     END_IF
-    CALL(evt_mobj_kururing_floor, STRING("kururin1"), 125, 0, 0, STRING("S_yuka"), 125, GSWF(5634))
+    CALL(evt_mobj_kururing_floor, STRING("kururin1"), 125, 0, 0, STRING("S_yuka"), 125, GSWF_STARPIECE_67)
     RETURN
 EVT_END()
 

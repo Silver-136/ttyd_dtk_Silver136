@@ -216,7 +216,7 @@ EVT_BEGIN(mri_12_init_evt)
     SPAWN_EVENT(PTR(punipuni_ball00_init))
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_dai_mae"), 0, PTR(punipuni_ball00), 0)
     CALL(evt_npc_change_fbat_mode, 1)
-    CALL(evt_item_entry, STRING("item_00"), ITEM_STAR_PIECE, -175, -310, -85, ITEM_TYPE_STILL, GSWF(5615), 0)
+    CALL(evt_item_entry, STRING("item_00"), ITEM_STAR_PIECE, -175, -310, -85, ITEM_TYPE_STILL, GSWF_STARPIECE_48, 0)
     RETURN
 EVT_END()
 

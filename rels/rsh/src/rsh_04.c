@@ -1029,7 +1029,7 @@ static EVT_BEGIN(talk_konari)
                     CALL(evt_msg_print, 0, STRING("stg6_rsh_99"), 0, 0)
                     CALL(evt_pouch_remove_item, ITEM_AUTOGRAPH, LW(0))
                     SET_VALUE(GSW_STORY_PROGRESS, STG6_12_GIVE_AUTOGRAPH)
-                    SET_VALUE(GSWF(5560), 1)
+                    SET_VALUE(GSWF_SHINE_35, 1)
                 END_IF
             END_IF
         END_IF
@@ -1224,7 +1224,7 @@ static NpcSetupInfo npc_data[] = {
 };
 
 EVT_BEGIN(evt_tana_5)
-    IF_INT_EQUAL(GSWF(5652), 1)
+    IF_INT_EQUAL(GSWF_STARPIECE_85, 1)
         IF_INT_LESS(GSW_STORY_PROGRESS, STG6_56_ROGUEPORT_STATION)
             CALL(evt_msg_print, 0, LW(1), 0, 0)
             ELSE
@@ -1236,7 +1236,7 @@ EVT_BEGIN(evt_tana_5)
     CALL(evt_item_entry, STRING("_item00"), ITEM_STAR_PIECE, -260, 0, -240, ITEM_TYPE_STILL, -1, 0)
     CALL(evt_item_flag_on, STRING("_item00"), 2)
     CALL(evt_item_get_item, STRING("_item00"))
-    SET_VALUE(GSWF(5652), 1)
+    SET_VALUE(GSWF_STARPIECE_85, 1)
     CALL(evt_mario_key_onoff, 1)
     RETURN
 EVT_END()

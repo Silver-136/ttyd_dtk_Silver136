@@ -56,7 +56,7 @@ EVT_BEGIN(jin_09_init_evt)
     CALL(evt_bero_get_info)
     CALL_CHILD(PTR(evt_bero_info_run))
     CALL_CHILD(PTR(evt_usu_kagemario_party_kill))
-    CALL(evt_mobj_powerupblk, STRING("blk00"), -120, 60, 90, 0, GSWF(5550), 0)
+    CALL(evt_mobj_powerupblk, STRING("blk00"), -120, 60, 90, 0, GSWF_SHINE_25, 0)
     BEGIN_INLINE_EVENT
         LOOP(0)
             CALL(evt_sub_random, 3000, LW(0))

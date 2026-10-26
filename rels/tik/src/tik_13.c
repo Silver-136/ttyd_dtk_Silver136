@@ -49,7 +49,7 @@ EVT_BEGIN(tik_13_init_evt)
             CALL(evt_snd_sfxon_3d, STRING("SFX_STG0_AMB_WATERDROP2"), LW(0), LW(1), LW(2), 0)
         END_LOOP
     END_INLINE_EVENT
-    CALL(evt_item_entry, STRING("item_00"), ITEM_STAR_PIECE, -30, 52, -70, ITEM_TYPE_STILL, GSWF(5596), 0)
+    CALL(evt_item_entry, STRING("item_00"), ITEM_STAR_PIECE, -30, 52, -70, ITEM_TYPE_STILL, GSWF_STARPIECE_29, 0)
     RETURN
 EVT_END()
 

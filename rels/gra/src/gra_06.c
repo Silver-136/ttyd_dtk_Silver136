@@ -380,7 +380,7 @@ EVT_BEGIN(teresa_oidasare_evt)
 EVT_END()
 
 EVT_BEGIN(gra_06_init_evt)
-    CALL(evt_item_entry, STRING("item00"), ITEM_STAR_PIECE, -130, 0, 150, ITEM_TYPE_STILL, GSWF(5633), 0)
+    CALL(evt_item_entry, STRING("item00"), ITEM_STAR_PIECE, -130, 0, 150, ITEM_TYPE_STILL, GSWF_STARPIECE_66, 0)
     CALL(evt_kagemario_init)
     IF_INT_EQUAL(GSWF(2227), 1)
         SET_VALUE(LW(0), PTR(bero_entry_data))
