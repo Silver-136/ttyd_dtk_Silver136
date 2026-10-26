@@ -123,7 +123,7 @@ static HitDamageReturn dmgReturnPt[] = {
 static EvtWord hikaru_yuka_init[] = {
     CALL_CHILD(hikaru_off)
     CALL(evt_hitobj_attr_onoff, 1, 1, STRING("A_no1"), 2048)
-    CALL(evt_mobj_itembox, STRING("box"), -255, 10, -10, 2, 0, PTR(evt_box), GSWF(4178))
+    CALL(evt_mobj_itembox, STRING("box"), -255, 10, -10, MOBJ_ITEMBOX_GRAY, 0, PTR(evt_box), GSWF(4178))
     CALL(evt_hit_damage_return_set, PTR(dmgReturnPt))
     BEGIN_INLINE_EVENT
         CALL(ride_chk)

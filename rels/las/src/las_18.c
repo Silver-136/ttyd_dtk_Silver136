@@ -197,7 +197,7 @@ EVT_BEGIN(las_18_init_evt)
     IF_INT_EQUAL(GSWF(4352), 0)
         SPAWN_EVENT(PTR(vivian_check))
     END_IF
-    CALL(evt_mobj_itembox, STRING("box"), 0, 0, 0, 0, 0, PTR(box_evt), GSWF(4369))
+    CALL(evt_mobj_itembox, STRING("box"), 0, 0, 0, MOBJ_ITEMBOX_NORMAL, 0, PTR(box_evt), GSWF(4369))
     IF_INT_EQUAL(GSWF(4352), 0)
         CALL(evt_mobj_flag_onoff, 1, STRING("box"), MOBJ_FLAG_NO_DISP)
         CALL(evt_mobj_hit_onoff, STRING("box"), 0)

@@ -161,7 +161,7 @@ static HitDamageReturn dmgReturnPt[] = {
 };
 
 static EVT_BEGIN(hikaru_yuka_init)
-    CALL(evt_mobj_itembox, STRING("box"), -350, 10, -10, 2, 0, PTR(evt_box), GSWF(4179))
+    CALL(evt_mobj_itembox, STRING("box"), -350, 10, -10, MOBJ_ITEMBOX_GRAY, 0, PTR(evt_box), GSWF(4179))
     CALL(evt_hit_damage_return_set, PTR(dmgReturnPt))
     BEGIN_INLINE_EVENT
         CALL(thunder_main)

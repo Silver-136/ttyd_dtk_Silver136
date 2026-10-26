@@ -2854,7 +2854,7 @@ EVT_BEGIN(last_evt_4)
 #endif
     ADD(LW(0), 5)
     ADD(LW(1), 20)
-    CALL(evt_mobj_itembox, STRING("box"), LW(0), LW(1), LW(2), 4, 0, 0, 0)
+    CALL(evt_mobj_itembox, STRING("box"), LW(0), LW(1), LW(2), MOBJ_ITEMBOX_GOLDEN, 0, 0, 0)
     CALL(evt_mobj_set_scale, STRING("box"), FLOAT(0.2998047f), FLOAT(0.2998047f), FLOAT(0.2998047f))
     CALL(evt_mobj_flag_onoff, 0, STRING("box"), MOBJ_FLAG_GRAVITY)
     BEGIN_INLINE_EVENT

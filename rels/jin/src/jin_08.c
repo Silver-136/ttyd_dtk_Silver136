@@ -358,8 +358,8 @@ EVT_BEGIN(jin_08_init_evt)
         CALL_CHILD(PTR(bero_case_switch_off))
     END_IF
     CALL(evt_mobj_kururing_floor, STRING("kururin1"), 115, 0, 105, STRING("group87"), 125, GSWF(5637))
-    CALL(evt_mobj_itembox, STRING("mobj_box01"), 60, 0, -65, 0, 0, PTR(mobj_box01), GSWF(2239))
-    CALL(evt_mobj_itembox, STRING("mobj_box02"), 120, 0, -65, 0, 0, PTR(mobj_box02), GSWF(2240))
+    CALL(evt_mobj_itembox, STRING("mobj_box01"), 60, 0, -65, MOBJ_ITEMBOX_NORMAL, 0, PTR(mobj_box01), GSWF(2239))
+    CALL(evt_mobj_itembox, STRING("mobj_box02"), 120, 0, -65, MOBJ_ITEMBOX_NORMAL, 0, PTR(mobj_box02), GSWF(2240))
     SPAWN_EVENT(PTR(oumu_check))
     RETURN
 EVT_END()

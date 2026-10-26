@@ -1035,7 +1035,7 @@ EVT_BEGIN(dmo_00_init_evt)
     CALL(evt_npc_set_position, STRING("hako"), -125, 0, 450)
     CALL(evt_npc_flag_onoff, 1, STRING("hako"), NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_npc_pera_onoff, STRING("hako"), 0)
-    CALL(evt_mobj_itembox, STRING("hako"), 340, 110, -20, 1, 0, 0, 0)
+    CALL(evt_mobj_itembox, STRING("hako"), 340, 110, -20, MOBJ_ITEMBOX_BIG, 0, 0, 0)
     CALL(evt_mobj_flag_onoff, 1, STRING("hako"), MOBJ_FLAG_NO_DISP)
 #ifdef VERSION_G8ME01
     CALL(evt_npc_entry, STRING("ロテン１"), STRING("c_roten"))

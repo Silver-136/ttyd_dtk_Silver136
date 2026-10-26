@@ -5295,10 +5295,10 @@ EVT_BEGIN(gor_01_init_evt)
     CALL(evt_pouch_check_item, ITEM_ULTRA_HAMMER, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         IF_INT_EQUAL(GSWF(1196), 0)
-            CALL(evt_mobj_itembox, STRING("mobj_box00"), 340, 110, -20, 1, 0, PTR(ultrahammer_get), GSWF(1195))
+            CALL(evt_mobj_itembox, STRING("mobj_box00"), 340, 110, -20, MOBJ_ITEMBOX_BIG, 0, PTR(ultrahammer_get), GSWF(1195))
             SPAWN_EVENT(ultrahammer_check)
         ELSE
-            CALL(evt_mobj_itembox, STRING("mobj_box00"), 275, 0, 75, 1, 0, PTR(ultrahammer_get), GSWF(1195))
+            CALL(evt_mobj_itembox, STRING("mobj_box00"), 275, 0, 75, MOBJ_ITEMBOX_BIG, 0, PTR(ultrahammer_get), GSWF(1195))
         END_IF
     END_IF
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_saku"), MAP_OBJ_FLAG_CLIP)

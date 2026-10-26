@@ -107,7 +107,7 @@ EVT_BEGIN(tik_21_init_evt)
     CALL_CHILD(PTR(evt_bero_info_run))
     CALL(evt_hit_damage_return_set, PTR(hitDmgRetPoints))
     SPAWN_EVENT(PTR(hari_trap))
-    CALL(evt_mobj_itembox, STRING("mobj_box00"), 150, 0, -100, 0, 0, PTR(mobj_box00), GSWF(1368))
+    CALL(evt_mobj_itembox, STRING("mobj_box00"), 150, 0, -100, MOBJ_ITEMBOX_NORMAL, 0, PTR(mobj_box00), GSWF(1368))
     RETURN
 EVT_END()
 

@@ -248,7 +248,7 @@ EVT_BEGIN(tik_17_init_evt)
     IF_INT_EQUAL(GSWF(1350), 0)
         CALL(evt_mobj_flag_onoff, 1, STRING("block"), MOBJ_FLAG_NO_CULL)
     END_IF
-    CALL(evt_mobj_itembox, STRING("mobj_box01"), -125, 100, -110, 0, 0, PTR(mobj_box01), GSWF(1364))
+    CALL(evt_mobj_itembox, STRING("mobj_box01"), -125, 100, -110, MOBJ_ITEMBOX_NORMAL, 0, PTR(mobj_box01), GSWF(1364))
     SET_VALUE(LW(0), STRING("dai_3"))
     SET_VALUE(LW(1), STRING("a_dai_3"))
     SET_VALUE(LW(2), 0)

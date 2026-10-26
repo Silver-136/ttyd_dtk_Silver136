@@ -749,7 +749,7 @@ EVT_BEGIN(las_04_init_evt)
     SPAWN_EVENT(PTR(firebar_evt))
     CALL(evt_map_playanim, STRING("mizu"), 1, 0)
     CALL(evt_map_playanim, STRING("hamon"), 1, 0)
-    CALL(evt_mobj_brick, STRING("mobj_01"), 0, 150, 0, 134, 11, 0, GSWF(4384))
+    CALL(evt_mobj_brick, STRING("mobj_01"), 0, 150, 0, 134, MOBJ_BRICK_HIDDEN_ITEM, 0, GSWF(4384))
     CALL(evt_mobj_save_blk, STRING("mobj_save"), -950, 140, -100, 0, 0)
     RETURN
 EVT_END()

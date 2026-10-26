@@ -150,7 +150,7 @@ EVT_BEGIN(las_13_init_evt)
         CALL(evt_mobj_floatswitch_red, 0, STRING("switch1"), 150, 60, 0, PTR(switch1_evt), GSWF(4343))
         CALL(evt_mobj_floatswitch_red, 0, STRING("switch2"), -150, 60, 0, PTR(switch2_evt), GSWF(4343))
     END_IF
-    CALL(evt_mobj_itembox, STRING("box"), 0, 0, 0, 0, 0, PTR(box_evt), GSWF(4364))
+    CALL(evt_mobj_itembox, STRING("box"), 0, 0, 0, MOBJ_ITEMBOX_NORMAL, 0, PTR(box_evt), GSWF(4364))
     IF_INT_EQUAL(GSWF(4343), 0)
         CALL(evt_mobj_flag_onoff, 1, STRING("box"), MOBJ_FLAG_NO_DISP)
         CALL(evt_mobj_hit_onoff, STRING("box"), 0)

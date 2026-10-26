@@ -424,7 +424,7 @@ EVT_BEGIN(mri_16_init_evt)
     CALL(evt_hit_damage_return_set, PTR(hitDmgRetPoints))
     CALL_CHILD(PTR(evt_gazigazi_entry))
     CALL(evt_item_entry, STRING("item_00"), ITEM_DIZZY_DIAL, -115, 0, -25, ITEM_TYPE_GROUND, GSWF(2869), 0)
-    CALL(evt_mobj_itembox, STRING("mobj_box00"), -125, 0, 125, 0, 0, PTR(mobj_box00), GSWF(2885))
+    CALL(evt_mobj_itembox, STRING("mobj_box00"), -125, 0, 125, MOBJ_ITEMBOX_NORMAL, 0, PTR(mobj_box00), GSWF(2885))
     CALL(evt_mobj_powerupblk, STRING("pblk1"), 65, -260, -70, 0, GSWF(5544), 0)
     RETURN
 EVT_END()

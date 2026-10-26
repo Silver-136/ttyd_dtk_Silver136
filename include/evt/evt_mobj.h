@@ -2,6 +2,27 @@
 
 #include "evt/evt_cmd.h"
 
+// evt_mobj_brick kind (args[5], raw): the model and block behaviour; 10 and up are hidden until hit
+typedef enum MobjBrickKind {
+    MOBJ_BRICK_PLAIN = 0,         // MOBJ_FlowBrickBlock, breakable brick
+    MOBJ_BRICK_ITEM = 1,          // MOBJ_BrickHatenaBlock, gives its item
+    MOBJ_BRICK_BADGE = 2,         // MOBJ_BrickBadgeBlock
+    MOBJ_BRICK_TEN_COIN = 3,      // MOBJ_10CountBlock, coins on up to ten hits
+    MOBJ_BRICK_HIDDEN_PLAIN = 10, // MOBJ_HiddenHatenaBlock with the plain brick behaviour
+    MOBJ_BRICK_HIDDEN_ITEM = 11,  // MOBJ_HiddenHatenaBlock
+    MOBJ_BRICK_HIDDEN_BADGE = 12, // MOBJ_HiddenBadgeBlock
+    MOBJ_BRICK_HIDDEN_TEN_COIN = 13, // MOBJ_Hidden10CountBlock
+} MobjBrickKind;
+
+// evt_mobj_itembox kind (args[4]): the chest model
+typedef enum MobjItemboxKind {
+    MOBJ_ITEMBOX_NORMAL = 0,      // MOBJ_TreasureBox
+    MOBJ_ITEMBOX_BIG = 1,         // MOBJ_BigTreasureBox
+    MOBJ_ITEMBOX_GRAY = 2,        // MOBJ_GrayTreasureBox
+    MOBJ_ITEMBOX_BLACK = 3,       // MOBJ_BlackTreasureBox
+    MOBJ_ITEMBOX_GOLDEN = 4,      // MOBJ_GoldenTreasureBox (also any other value)
+} MobjItemboxKind;
+
 USER_FUNC(evt_mobj_delete);
 USER_FUNC(evt_mobj_entry);
 USER_FUNC(evt_mobj_flag_onoff);

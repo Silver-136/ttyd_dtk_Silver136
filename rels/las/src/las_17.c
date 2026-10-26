@@ -183,7 +183,7 @@ EVT_BEGIN(las_17_init_evt)
         CALL(evt_npc_check_delete, STRING("ノコノコ"))
         CALL(evt_npc_check_delete, STRING("シンノスケ"))
     END_IF
-    CALL(evt_mobj_itembox, STRING("box"), 0, 0, 0, 0, 0, PTR(box_evt), GSWF(4368))
+    CALL(evt_mobj_itembox, STRING("box"), 0, 0, 0, MOBJ_ITEMBOX_NORMAL, 0, PTR(box_evt), GSWF(4368))
     IF_INT_EQUAL(GSWF(4351), 0)
         CALL(evt_mobj_flag_onoff, 1, STRING("box"), MOBJ_FLAG_NO_DISP)
         CALL(evt_mobj_hit_onoff, STRING("box"), 0)

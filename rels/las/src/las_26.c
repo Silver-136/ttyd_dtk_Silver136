@@ -232,7 +232,7 @@ EVT_BEGIN(bonbaba_evt)
     WAIT_MS(600)
     CALL(evt_cam3d_evt_set, 255, 220, 648, 255, 170, 150, 1000, 11)
     WAIT_MS(1000)
-    CALL(evt_mobj_itembox, STRING("box"), 270, 60, 0, 0, 0, PTR(box_evt), GSWF(4361))
+    CALL(evt_mobj_itembox, STRING("box"), 270, 60, 0, MOBJ_ITEMBOX_NORMAL, 0, PTR(box_evt), GSWF(4361))
     CALL(evt_mobj_flag_onoff, 0, STRING("box"), MOBJ_FLAG_GRAVITY)
     BEGIN_INLINE_EVENT
         CALL(evt_npc_get_position, STRING("ボンババ"), LW(0), LW(1), LW(2))
@@ -481,7 +481,7 @@ EVT_BEGIN(las_26_init_evt)
         CALL(evt_hitobj_onoff, STRING("baba"), 1, 0)
     END_SWITCH
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 388)
-        CALL(evt_mobj_itembox, STRING("box"), 270, 0, 178, 0, 0, PTR(box_evt), GSWF(4361))
+        CALL(evt_mobj_itembox, STRING("box"), 270, 0, 178, MOBJ_ITEMBOX_NORMAL, 0, PTR(box_evt), GSWF(4361))
     END_IF
     IF_INT_EQUAL(GSW_STORY_PROGRESS, 400)
         SPAWN_EVENT(PTR(sekai_yami_evt))

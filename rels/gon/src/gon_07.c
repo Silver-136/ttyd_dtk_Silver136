@@ -286,7 +286,7 @@ EVT_BEGIN(gon_07_init_evt)
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 43)
         SET_VALUE(GSWF(1494), 1)
     END_IF
-    CALL(evt_mobj_itembox, STRING("gon07treasure"), 0, 0, 0, 0, 0, PTR(item_evt), GSWF(1494))
+    CALL(evt_mobj_itembox, STRING("gon07treasure"), 0, 0, 0, MOBJ_ITEMBOX_NORMAL, 0, PTR(item_evt), GSWF(1494))
     CALL(evt_hitobj_onoff, STRING("a_togeshita"), 1, 0)
     IF_INT_EQUAL(GSWF(1495), 0)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ana_after"), MAP_OBJ_FLAG_HIDDEN)

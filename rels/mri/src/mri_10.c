@@ -87,7 +87,7 @@ EVT_BEGIN(mri_10_init_evt)
     CALL(evt_map_playanim, STRING("mizu_02"), 1, 0)
     CALL(evt_map_playanim, STRING("awa_01"), 1, 0)
     CALL(evt_map_playanim, STRING("awa_02"), 1, 0)
-    CALL(evt_mobj_itembox, STRING("mobj_box00"), 0, 0, 25, 1, 0, PTR(item_evt), GSWF(2854))
+    CALL(evt_mobj_itembox, STRING("mobj_box00"), 0, 0, 25, MOBJ_ITEMBOX_BIG, 0, PTR(item_evt), GSWF(2854))
     RETURN
 EVT_END()
 

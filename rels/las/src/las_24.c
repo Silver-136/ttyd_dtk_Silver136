@@ -326,8 +326,8 @@ EVT_BEGIN(las_24_init_evt)
     CALL(evt_hitobj_onoff, STRING("A_move_dai"), 0, 0)
     CALL(evt_mobj_floatswitch_red, 0, STRING("dai_switch"), -150, -440, 75, PTR(dai_evt), 0)
     CALL(evt_mobj_badgeblk, STRING("mobj_hatena_gat"), -625, -200, -100, 121, 0, GSWF(4390), 0)
-    CALL(evt_mobj_brick, STRING("mobj_kakusi"), -625, -115, -100, 161, 11, 0, GSWF(4391))
-    CALL(evt_mobj_itembox, STRING("box"), -255, -380, 75, 0, 0, PTR(box_evt), GSWF(4370))
+    CALL(evt_mobj_brick, STRING("mobj_kakusi"), -625, -115, -100, 161, MOBJ_BRICK_HIDDEN_ITEM, 0, GSWF(4391))
+    CALL(evt_mobj_itembox, STRING("box"), -255, -380, 75, MOBJ_ITEMBOX_NORMAL, 0, PTR(box_evt), GSWF(4370))
     RETURN
 EVT_END()
 

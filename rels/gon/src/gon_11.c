@@ -926,7 +926,7 @@ EVT_BEGIN(iri_16_box_evt)
 EVT_END()
 
 EVT_BEGIN(iri_16_cloud_evt)
-    CALL(evt_mobj_itembox, STRING("box"), 0, 0, 0, 0, 0, PTR(iri_16_box_evt), GSWF_TROUBLE_WORK(2))
+    CALL(evt_mobj_itembox, STRING("box"), 0, 0, 0, MOBJ_ITEMBOX_NORMAL, 0, PTR(iri_16_box_evt), GSWF_TROUBLE_WORK(2))
     CALL(evt_hitobj_onoff, STRING("A_kura"), 1, 0)
     CALL(evt_snd_bgmoff, PSND_PAUSE)
     CALL(evt_snd_bgmon, PSND_SLOT(1), STRING("BGM_FF_ENV_SUCCESS1"))
@@ -950,7 +950,7 @@ static EVT_BEGIN(iri_16_init)
             CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_kura"), 0, PTR(iri_16_touch_evt), 0)
             ELSE
             CALL(evt_hitobj_onoff, STRING("A_kura"), 1, 0)
-            CALL(evt_mobj_itembox, STRING("box"), 0, 0, 0, 0, 0, PTR(iri_16_box_evt), GSWF_TROUBLE_WORK(2))
+            CALL(evt_mobj_itembox, STRING("box"), 0, 0, 0, MOBJ_ITEMBOX_NORMAL, 0, PTR(iri_16_box_evt), GSWF_TROUBLE_WORK(2))
         END_IF
         ELSE
         CALL(evt_hitobj_onoff, STRING("A_taka"), 1, 0)

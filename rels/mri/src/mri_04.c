@@ -469,11 +469,11 @@ EVT_BEGIN(mri_04_init_evt)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG2_MRI1"))
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG2_MRI5"))
     END_SWITCH
-    CALL(evt_mobj_itembox, STRING("mobj_box00"), -155, 0, 35, 0, 0, PTR(item_mri_04), GSWF(2837))
+    CALL(evt_mobj_itembox, STRING("mobj_box00"), -155, 0, 35, MOBJ_ITEMBOX_NORMAL, 0, PTR(item_mri_04), GSWF(2837))
     IF_INT_EQUAL(GSW_STORY_PROGRESS, 90)
-        CALL(evt_mobj_itembox, STRING("mobj_box01"), -105, 0, 70, 0, 0, 0, 0)
+        CALL(evt_mobj_itembox, STRING("mobj_box01"), -105, 0, 70, MOBJ_ITEMBOX_NORMAL, 0, 0, 0)
         ELSE
-        CALL(evt_mobj_itembox, STRING("mobj_box01"), -105, 0, 70, 0, 0, 0, 1)
+        CALL(evt_mobj_itembox, STRING("mobj_box01"), -105, 0, 70, MOBJ_ITEMBOX_NORMAL, 0, 0, 1)
     END_IF
     CALL(evt_map_playanim, STRING("mizu_01"), 1, 0)
     CALL(evt_map_playanim, STRING("mizu_02"), 1, 0)

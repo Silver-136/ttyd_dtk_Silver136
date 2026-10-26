@@ -655,7 +655,7 @@ EVT_BEGIN(mri_06_init_evt)
     END_IF
     SPAWN_EVENT(PTR(puni_piders_check))
     CALL(evt_mobj_badgeblk, STRING("mobj_badge_gat"), -150, 85, -138, 277, 0, GSWF(2845), 1)
-    CALL(evt_mobj_brick, STRING("mobj_hidden1"), -150, 0, -138, 121, 11, 0, LSWF(1))
+    CALL(evt_mobj_brick, STRING("mobj_hidden1"), -150, 0, -138, 121, MOBJ_BRICK_HIDDEN_ITEM, 0, LSWF(1))
     IF_INT_EQUAL(GSWF(2846), 0)
         CALL(evt_cloud_init)
         CALL(evt_cloud_ent, 0, STRING("S_nisekabe"), STRING("A_nisekabe"), PTR(cloud_wind_event))

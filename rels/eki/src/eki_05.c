@@ -173,7 +173,7 @@ EVT_BEGIN(eki_05_init_evt)
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_garasu_1"), 0, PTR(grass_open_1), 0)
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_garasu_2"), 0, PTR(grass_open_2), 0)
     IF_INT_LESS(GSW_STORY_PROGRESS, 319)
-        CALL(evt_mobj_itembox, STRING("tbox"), -85, 295, 0, 1, 0, PTR(evt_boots), GSWF(3728))
+        CALL(evt_mobj_itembox, STRING("tbox"), -85, 295, 0, MOBJ_ITEMBOX_BIG, 0, PTR(evt_boots), GSWF(3728))
     END_IF
     IF_INT_LESS(GSW_STORY_PROGRESS, 320)
         CALL(evt_item_entry, STRING("elvkey"), ITEM_ELEVATOR_KEY_0x1A, -135, 136, -70, ITEM_TYPE_STILL_NO_TOUCH, -1, PTR(evt_elvkey))

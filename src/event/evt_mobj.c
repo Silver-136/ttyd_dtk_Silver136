@@ -1953,19 +1953,19 @@ USER_FUNC(evt_mobj_itembox) {
     flagVar = args[7];
     inBattle = gp->inBattle != 0;
     switch (kind) {
-    case 0:
+    case MOBJ_ITEMBOX_NORMAL:
         anim = "MOBJ_TreasureBox";
         break;
-    case 1:
+    case MOBJ_ITEMBOX_BIG:
         anim = "MOBJ_BigTreasureBox";
         break;
-    case 2:
+    case MOBJ_ITEMBOX_GRAY:
         anim = "MOBJ_GrayTreasureBox";
         break;
-    case 3:
+    case MOBJ_ITEMBOX_BLACK:
         anim = "MOBJ_BlackTreasureBox";
         break;
-    case 4:
+    case MOBJ_ITEMBOX_GOLDEN:
     default:
         anim = "MOBJ_GoldenTreasureBox";
         break;
@@ -2214,25 +2214,25 @@ USER_FUNC(evt_mobj_recovery_blk) {
     s32 flagVar;
     EvtWord* args = event->args;
     const char* anim;
-    s32 kind;
+    s32 coinCost;
     const char* name;
     MapObjectEntry* mobj;
     f32 x, y, z;
     name = (const char*)evtGetValue(event, args[0]);
-    kind = evtGetValue(event, args[1]);
+    coinCost = evtGetValue(event, args[1]);
     x = evtGetFloat(event, args[2]);
     y = evtGetFloat(event, args[3]);
     z = evtGetFloat(event, args[4]);
     evtGetValue(event, args[5]);
     flagVar = args[6];
     inBattle = gp->inBattle != 0;
-    anim = kind == 0 ? "MOBJ_RecoveryBlock" : "MOBJ_CoinTakenRecoveryBlock";
+    anim = coinCost == 0 ? "MOBJ_RecoveryBlock" : "MOBJ_CoinTakenRecoveryBlock";
     if (animGroupBaseAsync(anim, inBattle, NULL) == 0) {
         return EVT_RETURN_BLOCK;
     }
     mobjEntry(name, anim);
     mobj = mobjNameToPtr(name);
-    mobj->typeData[1] = kind;
+    mobj->typeData[1] = coinCost;
     mobjSetPosition(name, x, y, z);
     mobj->flags |= MOBJ_FLAG_UPDATE_MTX;
     mobj->mainFunc = mobj_recovery_blk;
@@ -2241,7 +2241,7 @@ USER_FUNC(evt_mobj_recovery_blk) {
     mobj->flags |= MOBJ_FLAG_UPDATE_MTX;
     mobj->flags |= MOBJ_FLAG_HIT_HEAD;
     mobj->flagVar = flagVar;
-    if (kind == 0) {
+    if (coinCost == 0) {
         mobj->state = 0;
     } else {
         mobj->state = -1;
@@ -2823,28 +2823,28 @@ USER_FUNC(evt_mobj_brick) {
     flagVar = args[7];
     inBattle = gp->inBattle != 0;
     switch (kind) {
-    case 0:
+    case MOBJ_BRICK_PLAIN:
         anim = "MOBJ_FlowBrickBlock";
         break;
-    case 1:
+    case MOBJ_BRICK_ITEM:
         anim = "MOBJ_BrickHatenaBlock";
         break;
-    case 2:
+    case MOBJ_BRICK_BADGE:
         anim = "MOBJ_BrickBadgeBlock";
         break;
-    case 3:
+    case MOBJ_BRICK_TEN_COIN:
         anim = "MOBJ_10CountBlock";
         break;
-    case 10:
+    case MOBJ_BRICK_HIDDEN_PLAIN:
         anim = "MOBJ_HiddenHatenaBlock";
         break;
-    case 11:
+    case MOBJ_BRICK_HIDDEN_ITEM:
         anim = "MOBJ_HiddenHatenaBlock";
         break;
-    case 12:
+    case MOBJ_BRICK_HIDDEN_BADGE:
         anim = "MOBJ_HiddenBadgeBlock";
         break;
-    case 13:
+    case MOBJ_BRICK_HIDDEN_TEN_COIN:
         anim = "MOBJ_Hidden10CountBlock";
         break;
     }
@@ -2857,24 +2857,24 @@ USER_FUNC(evt_mobj_brick) {
     mobjEntry(name, anim);
     mobj = mobjNameToPtr(name);
     mobjSetPosition(name, x, y, z);
-    if ((s32)kind >= 10) {
+    if ((s32)kind >= MOBJ_BRICK_HIDDEN_PLAIN) {
         mobj->flags |= MOBJ_FLAG_HIDDEN;
     }
     switch (kind) {
-    case 0:
-    case 10:
+    case MOBJ_BRICK_PLAIN:
+    case MOBJ_BRICK_HIDDEN_PLAIN:
         mobj->mainFunc = mobj_brickblk;
         break;
-    case 1:
-    case 11:
+    case MOBJ_BRICK_ITEM:
+    case MOBJ_BRICK_HIDDEN_ITEM:
         mobj->mainFunc = mobj_badgeblk;
         break;
-    case 2:
-    case 12:
+    case MOBJ_BRICK_BADGE:
+    case MOBJ_BRICK_HIDDEN_BADGE:
         mobj->mainFunc = mobj_badgeblk;
         break;
-    case 3:
-    case 13:
+    case MOBJ_BRICK_TEN_COIN:
+    case MOBJ_BRICK_HIDDEN_TEN_COIN:
         mobj->mainFunc = mobj_10countblk;
         break;
     }
@@ -2895,25 +2895,25 @@ USER_FUNC(evt_mobj_brick) {
     if (evtGetValue(event, flagVar)) {
         const char* anim2 = NULL;
         switch (kind) {
-        case 0:
-        case 10:
+        case MOBJ_BRICK_PLAIN:
+        case MOBJ_BRICK_HIDDEN_PLAIN:
             animPoseSetAnim(mobj->poseId, "S_1", 1);
             mobj->state = 99;
             break;
-        case 1:
-        case 11:
+        case MOBJ_BRICK_ITEM:
+        case MOBJ_BRICK_HIDDEN_ITEM:
             animPoseSetAnim(mobj->poseId, "S_2", 1);
             anim2 = "MOBJ_Block";
             mobj->state = 90;
             break;
-        case 2:
-        case 12:
+        case MOBJ_BRICK_BADGE:
+        case MOBJ_BRICK_HIDDEN_BADGE:
             animPoseSetAnim(mobj->poseId, "S_2", 1);
             anim2 = "MOBJ_PinkBlock";
             mobj->state = 90;
             break;
-        case 3:
-        case 13:
+        case MOBJ_BRICK_TEN_COIN:
+        case MOBJ_BRICK_HIDDEN_TEN_COIN:
             animPoseSetAnim(mobj->poseId, "S_2", 1);
             anim2 = "MOBJ_Block";
             mobj->state = 90;

@@ -282,9 +282,9 @@ EVT_BEGIN(eki_03_init_evt)
 #ifdef VERSION_G8ME01
     CALL(evt_mobj_blk, STRING("blk01"), 250, 300, -100, 0, 0, LSWF(1))
 #else
-    CALL(evt_mobj_brick, STRING("blk01"), 250, 300, -100, 0, 0, 0, LSWF(1))
+    CALL(evt_mobj_brick, STRING("blk01"), 250, 300, -100, 0, MOBJ_BRICK_PLAIN, 0, LSWF(1))
 #endif
-    CALL(evt_mobj_brick, STRING("blk02"), 250, 385, -100, 129, 11, 0, GSWF(3754))
+    CALL(evt_mobj_brick, STRING("blk02"), 250, 385, -100, 129, MOBJ_BRICK_HIDDEN_ITEM, 0, GSWF(3754))
     CALL(evt_map_set_tevcallback, 2, PTR(sun_tev))
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("sun"), MAP_OBJ_TEV_CALLBACK(2))
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("sun"), MAP_OBJ_FLAG_DISPLAY_LIST)

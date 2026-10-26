@@ -488,7 +488,7 @@ EVT_BEGIN(mri_09_init_evt)
         CALL(evt_hitobj_onoff, STRING("A_f2_rak03"), 1, 1)
         CALL(evt_hitobj_onoff, STRING("A_f2_rak04"), 1, 0)
     END_SWITCH
-    CALL(evt_mobj_itembox, STRING("mobj_box00"), 125, 0, 25, 0, 0, PTR(get_blue_jail_key), GSWF(2852))
+    CALL(evt_mobj_itembox, STRING("mobj_box00"), 125, 0, 25, MOBJ_ITEMBOX_NORMAL, 0, PTR(get_blue_jail_key), GSWF(2852))
     CALL(evt_item_entry, STRING("item100"), ITEM_CHARGE, -250, -234, 75, ITEM_TYPE_STILL, GSWF(2853), 0)
     CALL(evt_mobj_powerupblk, STRING("pblk1"), 0, -174, -125, 0, GSWF(5543), 0)
     SPAWN_EVENT(PTR(breakyuka_init))
