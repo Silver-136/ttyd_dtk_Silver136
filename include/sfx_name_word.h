@@ -217,5 +217,11 @@ typedef u32 SfxNameWord;
 #define PSND_ENV_SYS_FL1 0x75
 /* the bits of an id that select the pssfxlist entry */
 #define PSND_SFX_INDEX_MASK 0x1FFF
+/* set in an id: silent while PSND_FLAG_DOOR_IN is set */
+#define PSND_SFX_DOOR_MUTE 0x10000
 /* set in an id: the sound plays even while sound effects are globally muted */
 #define PSND_SFX_BYPASS_MUTE 0x20000
+/* set in an id: the sound survives psndSFXAllOff */
+#define PSND_SFX_KEEP 0x40000
+/* set in an id: an environment sound (psndENV), kept through the mute, psndSFXAllOff and the battle start */
+#define PSND_SFX_ENV 0x4000000

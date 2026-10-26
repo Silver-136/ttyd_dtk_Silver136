@@ -37,7 +37,7 @@ typedef struct SoundEffectEntry {
     const char* streamName; // 0x8, .stm name
     u8 volume;              // 0xC
     u8 pan;                 // 0xD
-    u8 specialFlag;         // 0xE, 1 sets PaperSoundEffect flag 0x200
+    u8 specialFlag;         // 0xE, 1 sets PSFX_FLAG_NO_MUTE
     u8 reverb;              // 0xF, aux/reverb send
     u8 priority;            // 0x10, an existing SFX with a higher priority is not stolen
     u8 delay;               // 0x11, start delay frames
@@ -70,10 +70,25 @@ typedef struct PaperSoundBGM {
     s64 startTime;          // 0x30, gp->renderTime when started (psndBGMPlayTime)
 } PaperSoundBGM;
 
+// PaperSoundEffect.flags (__psndSFXOn sets them from the sound id and its pssfxlist entry)
+typedef enum PaperSfxFlags {
+    PSFX_FLAG_START = (1 << 0),             // 0x1, waiting to start (delay countdown in psndSFXMain)
+    PSFX_FLAG_3D = (1 << 1),                // 0x2, positional: volume and pan from calc3D every frame
+    PSFX_FLAG_POS_UNUSED = (1 << 2),        // 0x4, position given with the r8 argument set; never read
+    PSFX_FLAG_BATTLE_START = (1 << 4),      // 0x10, started while PSND_FLAG_BATTLE_START was set
+    PSFX_FLAG_ENV = (1 << 5),               // 0x20, environment sound (PSND_SFX_ENV)
+    PSFX_FLAG_FADE_OUT = (1 << 6),          // 0x40
+    PSFX_FLAG_KEEP = (1 << 7),              // 0x80, survives psndSFXAllOff (PSND_SFX_KEEP)
+    PSFX_FLAG_NEW_UNUSED = (1 << 8),        // 0x100, set at the start, cleared once started; never read
+    PSFX_FLAG_NO_MUTE = (1 << 9),           // 0x200, not muted by PSND_FLAG_MUTE_SFX (entry specialFlag 1)
+    PSFX_FLAG_DOOR_MUTE = (1 << 10),        // 0x400, silent while PSND_FLAG_DOOR_IN (PSND_SFX_DOOR_MUTE)
+    PSFX_FLAG_BYPASS_MUTE = (1 << 11),      // 0x800, PSND_SFX_BYPASS_MUTE
+} PaperSfxFlags;
+
 typedef struct PaperSoundEffect {
     u32 listId;            // 0x0, searchPSSFXList id, 0xFFFFFFFF = free slot
     u16 serial;            // 0x4, psnd.sfxSerial at start (checked against the id handed out)
-    u16 flags;             // 0x6
+    u16 flags;             // 0x6, PaperSfxFlags
     u8 volume;             // 0x8
     u8 entryVolume;        // 0x9, SoundEffectEntry volume, scales volume
     u8 pan;                // 0xA

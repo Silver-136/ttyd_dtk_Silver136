@@ -5235,7 +5235,7 @@ void psndStopAllFadeOut(void) {
     for (i = 0; i < 40; i++) {
         sfx = &pssfx[i];
         if (sfx->listId != 0xFFFFFFFF) {
-            sfx->flags |= 0x40;
+            sfx->flags |= PSFX_FLAG_FADE_OUT;
         }
     }
     wp->sfxFadeState = 2;
@@ -5295,8 +5295,8 @@ void psndSFXAllOff(void) {
 
     for (i = 0; i < 40; i++) {
         sfx = &pssfx[i];
-        if (sfx->listId != 0xFFFFFFFF && !(sfx->flags & 0xA0)) {
-            sfx->flags |= 0x40;
+        if (sfx->listId != 0xFFFFFFFF && !(sfx->flags & (PSFX_FLAG_ENV | PSFX_FLAG_KEEP))) {
+            sfx->flags |= PSFX_FLAG_FADE_OUT;
         }
     }
     if (wp->sfxFadeState != 2) {
@@ -5312,7 +5312,7 @@ void L_psndBGM_stop(void) {
     psnd.flags &= ~PSND_FLAG_BATTLE_START;
     for (i = 0; i < 40; i++) {
         sfx = &pssfx[i];
-        if (sfx->listId != 0xFFFFFFFF && (sfx->flags & 0x10) && !(sfx->flags & 0x820)) {
+        if (sfx->listId != 0xFFFFFFFF && (sfx->flags & PSFX_FLAG_BATTLE_START) && !(sfx->flags & (PSFX_FLAG_ENV | PSFX_FLAG_BYPASS_MUTE))) {
             psndSFXOff(i);
         }
     }
@@ -5907,7 +5907,7 @@ void psndSFXMain(void) {
     none = -1;
     sfx[0] = pssfx;
     for (i = 0, base = sfx[0]; i < 40; i++, base++) {
-        if ((base->listId != 0xFFFFFFFF) && ( !(base->flags & 1) )) {
+        if ((base->listId != 0xFFFFFFFF) && ( !(base->flags & PSFX_FLAG_START) )) {
             f = pssfxlist[base->listId & PSND_SFX_INDEX_MASK].fxId;
             if (f & 0x80000000) {
                 if (!SoundSSCheck(base->channel)) {
@@ -5952,8 +5952,8 @@ void psndSFXMain(void) {
         }
         e = &pssfxlist[sfx[0]->listId & PSND_SFX_INDEX_MASK];
         cnt++;
-        if (sfx[0]->flags & 1) {
-            sfx[0]->flags &= ~0x100;
+        if (sfx[0]->flags & PSFX_FLAG_START) {
+            sfx[0]->flags &= ~PSFX_FLAG_NEW_UNUSED;
             if (sfx[0]->delay) {
                 sfx[0]->delay--;
                 continue;
@@ -6000,7 +6000,7 @@ sgfound:
                     SoundSongSetVolCh(sfx[0]->channel, SFX_VOL(sfx[0]));
                 }
             } else {
-                if (sfx[0]->flags & 2) {
+                if (sfx[0]->flags & PSFX_FLAG_3D) {
                     *((u32*)b) = calc3D(sfx[0]->listId, &sfx[0]->position, SFX_VOL(sfx[0]), sfx[0]->dist);
                     sfx[0]->channel = SoundEfxPlayEx(e->fxId & 0xFFFF, 0, b[0], b[1]);
                     if (sfx[0]->channel != ( -1) ) {
@@ -6030,9 +6030,9 @@ sgfound:
                 sfx[0]->channel = none;
                 continue;
             }
-            sfx[0]->flags &= ~1;
+            sfx[0]->flags &= ~PSFX_FLAG_START;
         }
-        if (sfx[0]->flags & 2) {
+        if (sfx[0]->flags & PSFX_FLAG_3D) {
             *((u32*)b) = calc3D(sfx[0]->listId, &sfx[0]->position, SFX_VOL(sfx[0]), sfx[0]->dist);
             f = e->fxId;
             if (f & 0x80000000) {
@@ -6067,7 +6067,7 @@ sgfound:
                 SoundEfxSetVolume(sfx[0]->channel, SFX_VOL(sfx[0]));
             }
         }
-        if (( !(sfx[0]->flags & 0xA30) ) && (psnd.flags & PSND_FLAG_MUTE_SFX)) {
+        if (( !(sfx[0]->flags & (PSFX_FLAG_BATTLE_START | PSFX_FLAG_ENV | PSFX_FLAG_NO_MUTE | PSFX_FLAG_BYPASS_MUTE)) ) && (psnd.flags & PSND_FLAG_MUTE_SFX)) {
             f = e->fxId;
             if (f & 0x80000000) {
                 SoundSSSetVolCh(sfx[0]->channel, 0);
@@ -6077,7 +6077,7 @@ sgfound:
                 SoundEfxSetVolume(sfx[0]->channel, 0);
             }
         }
-        if (sfx[0]->flags & 0x40) {
+        if (sfx[0]->flags & PSFX_FLAG_FADE_OUT) {
             f = e->fxId;
             if (f & 0x80000000) {
                 r = (u8)SoundSSGetVolCh(sfx[0]->channel);
@@ -6102,7 +6102,7 @@ sgfound:
                 }
             }
         }
-        if ((psnd.flags & PSND_FLAG_DOOR_IN) && (sfx[0]->flags & 0x400)) {
+        if ((psnd.flags & PSND_FLAG_DOOR_IN) && (sfx[0]->flags & PSFX_FLAG_DOOR_MUTE)) {
             f = e->fxId;
             if (f & 0x80000000) { SoundSSSetVolCh(sfx[0]->channel, 0);
             } else if (f & 0x40000000) { SoundSongSetVolCh(sfx[0]->channel, 0);
@@ -6191,27 +6191,27 @@ s32 __psndSFXOn(const char *name, u8 vol, u8 pan, u16 pitch, Vec *pos, u32 r8, u
     if (pan == 0xFF) {
         pan = entry->pan;
     }
-    sfx->flags = 0x101;
+    sfx->flags = PSFX_FLAG_START | PSFX_FLAG_NEW_UNUSED;
     if (psnd.flags & PSND_FLAG_BATTLE_START) {
-        sfx->flags |= 0x10;
+        sfx->flags |= PSFX_FLAG_BATTLE_START;
     }
-    if (id & 0x4000000) {
-        sfx->flags |= 0x20;
+    if (id & PSND_SFX_ENV) {
+        sfx->flags |= PSFX_FLAG_ENV;
     }
     if ((sid == 0x518) || (sid == 0x742)) {
-        sfx->flags |= 0x280;
+        sfx->flags |= (PSFX_FLAG_KEEP | PSFX_FLAG_NO_MUTE);
     }
     if (entry->specialFlag == 1) {
-        sfx->flags |= 0x200;
+        sfx->flags |= PSFX_FLAG_NO_MUTE;
     }
-    if (id & 0x10000) {
-        sfx->flags |= 0x400;
+    if (id & PSND_SFX_DOOR_MUTE) {
+        sfx->flags |= PSFX_FLAG_DOOR_MUTE;
     }
     if (id & PSND_SFX_BYPASS_MUTE) {
-        sfx->flags |= 0x800;
+        sfx->flags |= PSFX_FLAG_BYPASS_MUTE;
     }
-    if (id & 0x40000) {
-        sfx->flags |= 0x80;
+    if (id & PSND_SFX_KEEP) {
+        sfx->flags |= PSFX_FLAG_KEEP;
     }
     sfx->listId = id;
     sfx->volume = vol;
@@ -6225,9 +6225,9 @@ s32 __psndSFXOn(const char *name, u8 vol, u8 pan, u16 pitch, Vec *pos, u32 r8, u
     if (pos != NULL) {
         sfx->position = *pos;
         if (r8 == 0) {
-            sfx->flags |= 2;
+            sfx->flags |= PSFX_FLAG_3D;
         } else {
-            sfx->flags |= 4;
+            sfx->flags |= PSFX_FLAG_POS_UNUSED;
         }
     }
     sfx->dist = dist;
@@ -6281,7 +6281,7 @@ void psndSFX_pit(s32 id, u16 pitch) {
     if (sfx->listId == 0xFFFFFFFF) {
         return;
     }
-    if (sfx->flags & 1) {
+    if (sfx->flags & PSFX_FLAG_START) {
         sfx->pitch = pitch;
     } else {
         SoundEffectEntry* entry = &pssfxlist[sfx->listId & PSND_SFX_INDEX_MASK];
@@ -6332,7 +6332,7 @@ void psndSFXOff(s32 id) {
     if (lid == 0xFFFFFFFF) {
         return;
     }
-    if (sfx->flags & 1) {
+    if (sfx->flags & PSFX_FLAG_START) {
         sfx->listId = -1;
         sfx->channel = -1;
         return;
@@ -6491,7 +6491,7 @@ void psndENVMain(void) {
             case 2:
                 if (e->sfx != -1) {
                     PaperSoundEffect* s = &(pssfx)[e->sfx & 0xff];
-                    if ((u32)s->channel != -1 || (s->flags & 1)) break;
+                    if ((u32)s->channel != -1 || (s->flags & PSFX_FLAG_START)) break;
                 }
                 ENVDONE(e)
                 break;
@@ -6500,13 +6500,13 @@ void psndENVMain(void) {
         case 1:
             switch (e->state) {
             case 0:
-                { u8 vv; ENVVOL(e, &psnd, vv) e->sfx = __psndSFXOn(SFX_NAME_WORD(e->sfxId | 0x4000000), vv, 0xff, 0, &e->position, 0, e->dist, 0); }
+                { u8 vv; ENVVOL(e, &psnd, vv) e->sfx = __psndSFXOn(SFX_NAME_WORD(e->sfxId | PSND_SFX_ENV), vv, 0xff, 0, &e->position, 0, e->dist, 0); }
                 e->state++;
                 break;
             case 1:
                 if (e->sfx != -1) {
                     PaperSoundEffect* s = &(pssfx)[e->sfx & 0xff];
-                    if ((u32)s->channel != -1 || (s->flags & 1)) break;
+                    if ((u32)s->channel != -1 || (s->flags & PSFX_FLAG_START)) break;
                 }
                 ENVDONE(e)
                 break;
@@ -6519,13 +6519,13 @@ void psndENVMain(void) {
                 if (e->timer == 0) e->state++;
                 break;
             case 1:
-                { u8 vv; ENVVOL(e, &psnd, vv) e->sfx = __psndSFXOn(SFX_NAME_WORD(e->sfxId | 0x4000000), vv, 0xff, 0, &e->position, 0, e->dist, 0); }
+                { u8 vv; ENVVOL(e, &psnd, vv) e->sfx = __psndSFXOn(SFX_NAME_WORD(e->sfxId | PSND_SFX_ENV), vv, 0xff, 0, &e->position, 0, e->dist, 0); }
                 e->state++;
                 break;
             case 2:
                 if (e->sfx != -1) {
                     PaperSoundEffect* s = &(pssfx)[e->sfx & 0xff];
-                    if ((u32)s->channel != -1 || (s->flags & 1)) break;
+                    if ((u32)s->channel != -1 || (s->flags & PSFX_FLAG_START)) break;
                 }
                 ENVDONE(e)
                 break;
@@ -6540,7 +6540,7 @@ void psndENVMain(void) {
             case 1:
                 if (e->sfx != -1) {
                     PaperSoundEffect* s = &(pssfx)[e->sfx & 0xff];
-                    if ((u32)s->channel != -1 || (s->flags & 1)) break;
+                    if ((u32)s->channel != -1 || (s->flags & PSFX_FLAG_START)) break;
                 }
                 ENVDONE(e)
                 break;
@@ -6552,9 +6552,9 @@ void psndENVMain(void) {
     {                                                                                        \
         u8 vol;                                                                              \
         u16 lpf;                                                                             \
-        ENVVOL(ent, &psnd, vol)                                                                \
+        ENVVOL(ent, &psnd, vol)                                                              \
         {                                                                                    \
-            s32 id = *(s32*)&ent->sfx;                                                         \
+            s32 id = *(s32*)&ent->sfx;                                                       \
             PaperSoundEffect* sfx;                                                           \
             if (id != 0xFFFFFFFF) {                                                          \
                 sfx = &pssfx[id & 0xFF];                                                     \
@@ -6564,10 +6564,10 @@ void psndENVMain(void) {
             }                                                                                \
         }                                                                                    \
         lpf = 0;                                                                             \
-        if (psnd.envId[0] == ent->id) lpf = psnd.envLpf[0];                                    \
-        if (psnd.envId[1] == ent->id) lpf = psnd.envLpf[1];                                    \
+        if (psnd.envId[0] == ent->id) lpf = psnd.envLpf[0];                                  \
+        if (psnd.envId[1] == ent->id) lpf = psnd.envLpf[1];                                  \
         {                                                                                    \
-            s32 id = ent->sfx;                                                                 \
+            s32 id = ent->sfx;                                                               \
             PaperSoundEffect* sfx;                                                           \
             if (id != 0xFFFFFFFF) {                                                          \
                 sfx = &pssfx[id & 0xFF];                                                     \
@@ -6575,9 +6575,9 @@ void psndENVMain(void) {
                     SoundEffectEntry* entry = &pssfxlist[sfx->listId & PSND_SFX_INDEX_MASK]; \
                     sfx->lpf = lpf;                                                          \
                     {                                                                        \
-                        if (sfx->flags & 1) {                                                \
-                        } else if (!(entry->fxId & SFX_FLAG_STREAM)) {                            \
-                            if (!(entry->fxId & SFX_FLAG_STREAM)) {                               \
+                        if (sfx->flags & PSFX_FLAG_START) {                                  \
+                        } else if (!(entry->fxId & SFX_FLAG_STREAM)) {                       \
+                            if (!(entry->fxId & SFX_FLAG_STREAM)) {                          \
                                 SoundEfxSetLPF(sfx->channel, (s16)lpf);                      \
                             }                                                                \
                         }                                                                    \
