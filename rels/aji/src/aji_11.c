@@ -13,6 +13,7 @@
 #include "evt/evt_item.h"
 #include "evt/evt_pouch.h"
 #include "driver/casedrv.h"
+#include "pmario_sound.h"
 
 #include "driver/mapdrv.h"
 #include "mario/mario.h"
@@ -205,14 +206,14 @@ EVT_BEGIN(peach_evt_disksys)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("monitor_03"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_snd_sfxon_3d, STRING("SFX_PEACH_DISC_SET1"), 57, 0, -10, 0)
         CALL(evt_snd_sfxon_3d, STRING("SFX_PEACH_MONITOR_ON1"), 57, 0, -10, 0)
-        CALL(evt_snd_bgmoff, 1024)
-        CALL(evt_snd_bgmon, 1, STRING("BGM_FF_PEACH_DISCSET1"))
+        CALL(evt_snd_bgmoff, PSND_PAUSE)
+        CALL(evt_snd_bgmon, PSND_SLOT(1), STRING("BGM_FF_PEACH_DISCSET1"))
         CALL(evt_map_playanim, STRING("monitor_01"), 0, 0)
         CALL(evt_map_checkanim, STRING("monitor_01"), LW(0), LW(1))
         WAIT_MS(LW(1))
         WAIT_MS(2500)
-        CALL(evt_snd_bgmoff, 513)
-        CALL(evt_snd_bgmon, 288, 0)
+        CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
+        CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)
         CALL(evt_msg_print, 0, STRING("peach_aji_247"), 0, STRING("mario"))
         CALL(evt_map_playanim, STRING("monitor_02"), 1, 0)
         WAIT_MS(3000)
@@ -305,7 +306,7 @@ EVT_BEGIN(aji_11_init_evt)
         CASE_DEFAULT
         CALL(evt_snd_bgmon, 512, STRING("BGM_STG7_DUN2"))
     END_SWITCH
-    CALL(evt_snd_envon, 272, STRING("ENV_STG7_AJI6"))
+    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI6"))
     CALL(evt_snd_set_rev_mode, 1)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)

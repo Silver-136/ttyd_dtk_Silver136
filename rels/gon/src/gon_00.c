@@ -5,6 +5,7 @@
 #include "evt/evt_mobj.h"
 #include "party/party_motion.h"
 #include "evt/evt_sub.h"
+#include "pmario_sound.h"
 
 
 static BeroEntry bero_entry_data[4];
@@ -89,8 +90,8 @@ EVT_BEGIN(gon_00_init_evt)
     CALL(evt_bero_get_info)
     CALL_CHILD(PTR(evt_bero_info_run))
     WAIT_FRAMES(1)
-    CALL(evt_snd_bgmoff, 512)
-    CALL(evt_snd_envon, 272, STRING("ENV_STG1_GON1"))
+    CALL(evt_snd_bgmoff, PSND_FADEOUT)
+    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG1_GON1"))
     CALL(evt_snd_set_rev_mode, 2)
     CALL(evt_mobj_save_blk, STRING("mobj_save"), 160, 60, -90, 0, 0)
     CALL(evt_mobj_recovery_blk, STRING("mobj_recover"), 6, -150, 260, 0, 0, 0)

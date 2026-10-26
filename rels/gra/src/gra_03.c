@@ -5,6 +5,7 @@
 #include "evt/evt_snd.h"
 #include "party/party_motion.h"
 #include "evt/evt_mobj.h"
+#include "pmario_sound.h"
 
 USER_FUNC(evt_kagemario_init);
 
@@ -49,7 +50,7 @@ static BeroEntry bero_entry_data[] = {
 
 EVT_BEGIN(gra_03_init_evt)
     CALL(evt_snd_bgmon, 512, STRING("BGM_STG4_GRA1"))
-    CALL(evt_snd_envon, 272, STRING("ENV_STG4_GRA1"))
+    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG4_GRA1"))
     CALL(evt_mobj_brick, STRING("blk00"), -120, 60, 90, 0, 3, 0, GSWF(2083))
     CALL(evt_mobj_badgeblk, STRING("blk01"), 230, 60, -88, 133, 0, GSWF(2084), 0)
     CALL(evt_kagemario_init)

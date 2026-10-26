@@ -8,6 +8,7 @@
 #include "party/party_motion.h"
 #include "evt/evt_sub.h"
 #include "evt/evt_cam.h"
+#include "pmario_sound.h"
 
 
 static EvtWord kpa_act_stg2_mobj[80];
@@ -80,7 +81,7 @@ EVT_BEGIN(kpa_04_init_evt)
     SET_VALUE(LSW(1), 0)
     SET_VALUE(LSWF(2), 1)
     SPAWN_EVENT(PTR(kpa_bgm_change))
-    CALL(evt_snd_envoff, 512)
+    CALL(evt_snd_envoff, PSND_FADEOUT)
     SPAWN_EVENT(PTR(kpa_time))
     CALL(evt_sub_get_system_flag, LW(0))
     IF_BITS_SET(LW(0), 2)

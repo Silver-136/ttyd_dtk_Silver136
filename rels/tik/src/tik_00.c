@@ -1695,8 +1695,8 @@ EVT_END()
 EVT_BEGIN(evt_open_01)
     CALL(evt_mapobj_trans, 1, STRING("card"), 0, -1000, 0)
     CALL(evt_mapobj_trans, 1, STRING("ie_1_naka"), 0, FLOAT(0.19921875f), 0)
-    CALL(evt_snd_bgmoff, 18432)
-    CALL(evt_snd_envoff, 18432)
+    CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
+    CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_snd_env_lpf, 0, 800)
     CALL(evt_mobj_check, STRING("pblk1"), LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -1712,8 +1712,8 @@ EVT_BEGIN(evt_close_01)
     CALL(evt_door_end_wait)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("mon"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("kuro_maku"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_snd_bgmon, 160, 0)
-    CALL(evt_snd_envon, 160, 0)
+    CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
+    CALL(evt_snd_envon, PSND_CONTINUE | PSND_UNSILENT, 0)
     CALL(evt_snd_env_lpf, 0, 0)
     CALL(evt_mobj_check, STRING("pblk1"), LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -1872,15 +1872,15 @@ static const char* mise_npc[] = {
 };
 
 EVT_BEGIN(evt_open_02)
-    CALL(evt_snd_bgmoff, 18432)
-    CALL(evt_snd_envoff, 18432)
+    CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
+    CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_snd_env_lpf, 0, 800)
     RETURN
 EVT_END()
 
 EVT_BEGIN(evt_close_02)
-    CALL(evt_snd_bgmon, 160, 0)
-    CALL(evt_snd_envon, 160, 0)
+    CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
+    CALL(evt_snd_envon, PSND_CONTINUE | PSND_UNSILENT, 0)
     CALL(evt_snd_env_lpf, 0, 0)
     RETURN
 EVT_END()
@@ -2038,15 +2038,15 @@ static const char* door_data_03_npc[] = {
 };
 
 EVT_BEGIN(evt_open_03)
-    CALL(evt_snd_bgmoff, 18432)
-    CALL(evt_snd_envoff, 18432)
+    CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
+    CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_snd_env_lpf, 0, 800)
     RETURN
 EVT_END()
 
 EVT_BEGIN(evt_close_03)
-    CALL(evt_snd_bgmon, 160, 0)
-    CALL(evt_snd_envon, 160, 0)
+    CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
+    CALL(evt_snd_envon, PSND_CONTINUE | PSND_UNSILENT, 0)
     CALL(evt_snd_env_lpf, 0, 0)
     RETURN
 EVT_END()
@@ -2135,15 +2135,15 @@ EVT_BEGIN(evt_open_04_open)
             CALL(evt_mapobj_flag_onoff, 1, 0, STRING("wa_pu"), MAP_OBJ_FLAG_HIDDEN)
         END_IF
     END_SWITCH
-    CALL(evt_snd_bgmoff, 18432)
-    CALL(evt_snd_envoff, 18432)
+    CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
+    CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_snd_env_lpf, 0, 800)
     RETURN
 EVT_END()
 
 static EVT_BEGIN(evt_door_04_close)
-    CALL(evt_snd_bgmon, 160, 0)
-    CALL(evt_snd_envon, 160, 0)
+    CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
+    CALL(evt_snd_envon, PSND_CONTINUE | PSND_UNSILENT, 0)
     CALL(evt_snd_env_lpf, 0, 0)
     IF_INT_LESS(GSW_STORY_PROGRESS, 377)
         IF_INT_EQUAL(GSWF(1329), 0)
@@ -2536,7 +2536,7 @@ EVT_END()
 
 EVT_BEGIN(kurihakase_event)
     CALL(evt_party_stop, 0)
-    CALL(evt_snd_envon_f, 272, STRING("ENV_STG0_TIK2"), 2000)
+    CALL(evt_snd_envon_f, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_TIK2"), 2000)
     CALL(evt_npc_set_position, STRING("クリハカセ"), -30, 0, 170)
     CALL(evt_npc_flag_onoff, 1, STRING("クリハカセ"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     BEGIN_INLINE_EVENT
@@ -2708,10 +2708,10 @@ EVT_BEGIN(tik_00_init_evt)
     IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, 402)
         IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, 377)
             CALL(evt_snd_bgmon, 512, STRING("BGM_STG0_TIK1"))
-            CALL(evt_snd_envon, 272, STRING("ENV_STG0_TIK2"))
+            CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_TIK2"))
             ELSE
-            CALL(evt_snd_bgmoff, 512)
-            CALL(evt_snd_envoff, 512)
+            CALL(evt_snd_bgmoff, PSND_FADEOUT)
+            CALL(evt_snd_envoff, PSND_FADEOUT)
         END_IF
     END_IF
     CALL(evt_snd_set_rev_mode, 2)

@@ -14,6 +14,7 @@
 #include "evt/evt_pouch.h"
 #include "driver/npcdrv.h"
 #include "driver/mapdrv.h"
+#include "pmario_sound.h"
 
 #include "driver/dispdrv.h"
 #include "driver/camdrv.h"
@@ -547,7 +548,7 @@ static KusaAccess kusa_tbl[] = {
 
 EVT_BEGIN(muj_02_init_evt)
     CALL(evt_snd_bgmon, 512, STRING("BGM_STG5_MUJ1"))
-    CALL(evt_snd_envon, 272, STRING("ENV_STG5_MUJ4"))
+    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG5_MUJ4"))
     SET_VALUE(GSWF(3152), 0)
     CALL_CHILD(PTR(evt_switch_init))
     SET_VALUE(LW(0), PTR(bero_entry_data))

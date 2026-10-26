@@ -653,13 +653,13 @@ const char* door_npc[] = {
 };
 
 static EVT_BEGIN(door_open)
-    CALL(evt_snd_envoff, 18432)
+    CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_snd_env_lpf, 0, 800)
     RETURN
 EVT_END()
 
 static EVT_BEGIN(door_close)
-    CALL(evt_snd_envon, 160, 0)
+    CALL(evt_snd_envon, PSND_CONTINUE | PSND_UNSILENT, 0)
     CALL(evt_snd_env_lpf, 0, 0)
     RETURN
 EVT_END()
@@ -1240,7 +1240,7 @@ const char* oh_data[] = {
 
 static EVT_BEGIN(evt_taihou)
     CALL(evt_mario_key_onoff, 0)
-    CALL(evt_snd_bgmoff, 512)
+    CALL(evt_snd_bgmoff, PSND_FADEOUT)
     CALL(evt_msg_print, 0, STRING(("stg7_bom_63")), 0, STRING(("me")))
     WAIT_MS(300)
     CALL(evt_npc_flag_onoff, 1, STRING(("me")), 32)
@@ -1872,7 +1872,7 @@ static EVT_BEGIN(evt_taihou)
     CALL(evt_cam3d_evt_set, -60, 26, 493, 22, 33, 257, 0, 11)
     WAIT_MS(2000)
     CALL(evt_msg_print, 0, STRING(("stg7_bom_91")), 0, STRING(("\221\272\222\267")))
-    CALL(evt_snd_bgmoff_f, 512, 2000)
+    CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)
     WAIT_MS(300)
     WAIT_MS(2000)
     CALL(evt_pouch_remove_item, ITEM_GOLDBOB_GUIDE, LW(0))
@@ -2768,13 +2768,13 @@ EVT_BEGIN(bom_01_init_evt)
         CALL(evt_bero_get_entername, LW(0))
         IF_STR_EQUAL(LW(0), STRING(("minnnanokoe")))
             CALL(evt_snd_bgmon, 512, STRING(("BGM_EVT_STG8_VOICE1")))
-            CALL(evt_snd_envoff, 512)
+            CALL(evt_snd_envoff, PSND_FADEOUT)
             SET_VALUE(LF(0), 1)
         END_IF
     END_IF
     IF_INT_EQUAL(LF(0), 0)
         CALL(evt_snd_bgmon, 512, STRING(("BGM_STG7_BOM1")))
-        CALL(evt_snd_envon, 272, STRING(("ENV_STG7_BOM2")))
+        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING(("ENV_STG7_BOM2")))
     END_IF
     SET_VALUE(LW(0), STRING(("group10")))
     SPAWN_EVENT(PTR(evt_bom_01_karakara))

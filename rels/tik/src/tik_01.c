@@ -22,6 +22,7 @@
 #include "driver/mapdrv.h"
 #include "mario/mario_pouch.h"
 #include "driver/casedrv.h"
+#include "pmario_sound.h"
 
 USER_FUNC(evt_npc_set_damage_anim);
 USER_FUNC(evt_npc_set_run_anim);
@@ -517,7 +518,7 @@ EVT_BEGIN(tik_01_init_evt)
         CALL(evt_snd_bgmon_f, 768, STRING("BGM_STG0_TIK1"), 3000)
         SET_VALUE(GSWF(1369), 1)
     END_IF
-    CALL(evt_snd_envon, 272, STRING("ENV_STG0_TIK1"))
+    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_TIK1"))
     CALL(evt_snd_set_rev_mode, 2)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)

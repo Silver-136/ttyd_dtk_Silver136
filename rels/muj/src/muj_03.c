@@ -15,6 +15,7 @@
 #include "evt/evt_mobj.h"
 #include "driver/npcdrv.h"
 #include "mario/mario_pouch.h"
+#include "pmario_sound.h"
 
 
 EvtWord muj_03_event_01[22];
@@ -183,7 +184,7 @@ static KusaAccess kusa_tbl[] = {
 
 EVT_BEGIN(muj_03_init_evt)
     CALL(evt_snd_bgmon, 512, STRING("BGM_STG5_MUJ1"))
-    CALL(evt_snd_envon, 272, STRING("ENV_STG5_MUJ5"))
+    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG5_MUJ5"))
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
     CALL_CHILD(PTR(evt_bero_info_run))

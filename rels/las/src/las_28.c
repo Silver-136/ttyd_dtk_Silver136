@@ -16,6 +16,7 @@
 #include "evt/evt_snd.h"
 #include "evt/evt_sub.h"
 #include "driver/mapdrv.h"
+#include "pmario_sound.h"
 
 #include "driver/npcdrv.h"
 #include "driver/effdrv.h"
@@ -405,7 +406,7 @@ EVT_BEGIN(syuryo_evt)
     END_LOOP
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)
-    CALL(evt_snd_envoff_f, 512, 2000)
+    CALL(evt_snd_envoff_f, PSND_FADEOUT, 2000)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     SUBTRACT(LW(0), 30)
     ADD(LW(2), 25)
@@ -497,11 +498,11 @@ EVT_BEGIN(syuryo_evt)
     CALL(evt_mario_set_pose, STRING("M_R_1"))
     WAIT_WHILE(GF(0))
     CALL(evt_mario_dispflag_onoff, 0, 2)
-    CALL(evt_snd_bgmoff, 512)
+    CALL(evt_snd_bgmoff, PSND_FADEOUT)
     CALL(evt_npc_set_battle_info, STRING("シュリョー"), 15)
     CALL(evt_npc_battle_start, STRING("シュリョー"))
     CALL(evt_npc_wait_battle_end)
-    CALL(evt_snd_bgmoff, 512)
+    CALL(evt_snd_bgmoff, PSND_FADEOUT)
     CALL(evt_shuryolight_run_evt, PTR(shuryolight_pow_tenmetu), PTR(shuryolight_head_off), PTR(shuryolight_tue_normal))
     CALL(evt_party_stop, 0)
     CALL(evt_mario_set_pos, -75, 0, 0)
@@ -753,7 +754,7 @@ EVT_BEGIN(koopa_evt)
     CALL(evt_snd_sfxoff, LW(0))
     CALL(evt_npc_set_anim, STRING("シュリョー"), STRING("S_3"))
     CALL(evt_shuryolight_run_head_evt, PTR(shuryolight_head_off))
-    CALL(evt_snd_bgmoff, 512)
+    CALL(evt_snd_bgmoff, PSND_FADEOUT)
     WAIT_MS(1000)
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG8_CEILING_BREAK1"), 75, 300, 0, LW(0))
     CALL(evt_eff64, 0, STRING("hokori_n64"), 0, 75, 300, 0, 90, 0, 0, 0, 0, 0, 0, 0)
@@ -1080,7 +1081,7 @@ EVT_BEGIN(koopa_evt)
         CALL(evt_npc_kamek_move_position, STRING("ババ"), LW(0), LW(2), 5, 0, FLOAT(120.0f), 0)
     END_INLINE_EVENT
     WAIT_MS(400)
-    CALL(evt_snd_bgmoff, 512)
+    CALL(evt_snd_bgmoff, PSND_FADEOUT)
     CALL(evt_npc_set_battle_info, STRING("クッパ"), 13)
     CALL(evt_npc_battle_start, STRING("クッパ"))
     CALL(evt_npc_wait_battle_end)
@@ -1208,10 +1209,10 @@ EVT_END()
 EVT_BEGIN(las_28_init_evt)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, 400)
         CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_DANGER2"))
-        CALL(evt_snd_envoff, 512)
+        CALL(evt_snd_envoff, PSND_FADEOUT)
         ELSE
-        CALL(evt_snd_bgmoff, 512)
-        CALL(evt_snd_envon, 272, STRING("ENV_STG8_LAS9"))
+        CALL(evt_snd_bgmoff, PSND_FADEOUT)
+        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS9"))
     END_IF
     CALL(evt_snd_set_rev_mode, 2)
     SET_VALUE(LW(0), PTR(bero_entry_data))

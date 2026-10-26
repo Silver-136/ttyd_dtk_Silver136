@@ -10,13 +10,14 @@
 #include "party/party_motion.h"
 #include "driver/mapdrv.h"
 #include "driver/seqdrv.h"
+#include "pmario_sound.h"
 
 
 EvtWord hom_11_init_evt[140];
 
 EVT_BEGIN(hom_11_init_evt)
-    CALL(evt_snd_bgmoff, 512)
-    CALL(evt_snd_envon, 272, STRING("ENV_STG6_RSH2"))
+    CALL(evt_snd_bgmoff, PSND_FADEOUT)
+    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG6_RSH2"))
     CALL(evt_mario_cont_onoff, 0)
     CALL(evt_party_cont_onoff, 0, 0)
     CALL(evt_party_cont_onoff, 1, 0)

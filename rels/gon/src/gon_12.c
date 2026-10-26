@@ -13,6 +13,7 @@
 #include "evt/evt_snd.h"
 #include "driver/mapdrv.h"
 #include "mario/mario_pouch.h"
+#include "pmario_sound.h"
 
 #include "driver/npcdrv.h"
 #include "evt/evt_npc.h"
@@ -102,8 +103,8 @@ static EVT_BEGIN(chuchurina_sogu)
         CALL(evt_npc_set_position, STRING("チュチュリーナ"), 0, -1000, 0)
         RETURN
     END_IF
-    CALL(evt_snd_bgmoff, 512)
-    CALL(evt_snd_envoff, 512)
+    CALL(evt_snd_bgmoff, PSND_FADEOUT)
+    CALL(evt_snd_envoff, PSND_FADEOUT)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)
     CALL(evt_mario_set_pos, 200, 0, 0)
@@ -221,7 +222,7 @@ static EVT_BEGIN(chuchurina_sogu)
     CALL(evt_mario_set_dir, 90, 200, 0)
     CALL(evt_msg_continue)
     CALL(evt_snd_bgmon, 512, STRING("BGM_STG1_GON1"))
-    CALL(evt_snd_envon, 272, STRING("ENV_STG1_GON1"))
+    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG1_GON1"))
     SPAWN_EVENT(PTR(bero_case_entry))
     CALL(evt_cam3d_evt_off, 500, 4)
     CALL(evt_mario_key_onoff, 1)
@@ -293,7 +294,7 @@ EVT_BEGIN(gon_12_init_evt)
         CALL_CHILD(PTR(evt_bero_info_run))
     END_IF
     CALL(evt_snd_bgmon, 512, STRING("BGM_STG1_GON1"))
-    CALL(evt_snd_envon, 272, STRING("ENV_STG1_GON1"))
+    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG1_GON1"))
     CALL(evt_snd_set_rev_mode, 2)
     CALL(evt_npc_setup, PTR(npcEnt))
     CALL(evt_npc_change_fbat_mode, 1)

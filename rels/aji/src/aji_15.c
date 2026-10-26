@@ -13,6 +13,7 @@
 #include "driver/mapdrv.h"
 #include "system.h"
 #include "driver/casedrv.h"
+#include "pmario_sound.h"
 
 #include "mario/mario.h"
 #include "manager/evtmgr_cmd.h"
@@ -95,8 +96,8 @@ USER_FUNC(peach_set_pos) {
 }
 
 EVT_BEGIN(peach_evt_syawa_main)
-    CALL(evt_snd_bgmoff, 10240)
-    CALL(evt_snd_envoff, 1024)
+    CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(2))
+    CALL(evt_snd_envoff, PSND_PAUSE)
     CALL(evt_mario_key_onoff, 0)
     CALL(peach_chk_aftershower, LW(0))
     IF_INT_EQUAL(LW(0), 0)
@@ -329,9 +330,9 @@ EVT_BEGIN(peach_evt_syawa_main)
     CALL(evt_npc_set_autotalkpose, STRING("mario"), STRING("P_S_2"), STRING("P_T_2"))
     CALL(evt_msg_print, 0, STRING("peach_aji_37"), 0, STRING("mario"))
     CALL(evt_npc_set_autotalkpose, STRING("mario"), STRING("P_S_1"), STRING("P_T_1"))
-    CALL(evt_snd_bgmon, 160, 0)
-    CALL(evt_snd_envoff, 513)
-    CALL(evt_snd_envon, 288, 0)
+    CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
+    CALL(evt_snd_envoff, PSND_FADEOUT | PSND_SLOT(1))
+    CALL(evt_snd_envon, PSND_CONTINUE | PSND_FADEIN, 0)
     SET_VALUE(GSWF(4220), 1)
     CALL(evt_cam3d_evt_off, 800, 11)
     CALL(evt_mario_key_onoff, 1)
@@ -368,10 +369,10 @@ EVT_BEGIN(aji_15_init_evt)
         CALL(evt_mario_set_mode, 1)
         CALL(evt_npc_check_delete, STRING("軍団ザコエリート"))
         CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_PEACH1"))
-        CALL(evt_snd_envoff, 512)
+        CALL(evt_snd_envoff, PSND_FADEOUT)
         ELSE
         CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_PEACH1"))
-        CALL(evt_snd_envoff, 512)
+        CALL(evt_snd_envoff, PSND_FADEOUT)
     END_IF
     CALL(evt_snd_set_rev_mode, 1)
     CALL_CHILD(PTR(peach_evt_syawa_init))

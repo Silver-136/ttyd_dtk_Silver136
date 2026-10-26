@@ -13,6 +13,7 @@
 #include "party/party_motion.h"
 #include "driver/mapdrv.h"
 #include "driver/casedrv.h"
+#include "pmario_sound.h"
 
 #ifdef VERSION_G8ME01
 #endif
@@ -112,7 +113,7 @@ EVT_BEGIN(moo_05_init_evt)
     CALL(evt_bero_get_info)
     CALL_CHILD(PTR(evt_bero_info_run))
     CALL(evt_snd_bgmon, 512, STRING("BGM_STG7_MON1"))
-    CALL(evt_snd_envon, 272, STRING("ENV_STG7_MOO1"))
+    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_MOO1"))
     CALL(evt_map_playanim, STRING("hosi_01"), 1, 0)
     CALL(evt_map_playanim, STRING("hosi_02"), 1, 0)
     CALL(evt_map_playanim, STRING("hosi_03"), 1, 0)

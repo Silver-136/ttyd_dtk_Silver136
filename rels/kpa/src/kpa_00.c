@@ -13,6 +13,7 @@
 #include "driver/npcdrv.h"
 #include "system.h"
 #include "driver/seqdrv.h"
+#include "pmario_sound.h"
 
 USER_FUNC(evt_snd_envoff_f);
 #ifdef VERSION_G8ME01
@@ -158,8 +159,8 @@ EVT_BEGIN(kpa_00_fly_evt)
     CALL(evt_snd_sfxoff, LW(3))
     WAIT_MS(800)
     SET_VALUE(GSW_STORY_PROGRESS, 61)
-    CALL(evt_snd_bgmoff_f, 512, 1000)
-    CALL(evt_snd_envoff_f, 512, 1000)
+    CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 1000)
+    CALL(evt_snd_envoff_f, PSND_FADEOUT, 1000)
     CALL(evt_fade_entry, 6, 300, 0, 0, 0)
     CALL(evt_fade_end_wait)
     WAIT_MS(2000)
@@ -202,7 +203,7 @@ static NpcSetupInfo npcEnt[] = {
 
 EVT_BEGIN(kpa_00_init_evt)
     CALL(evt_mario_set_mode, 2)
-    CALL(evt_snd_envon, 272, STRING("ENV_KOOPA_KPA1"))
+    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_KOOPA_KPA1"))
     CALL(evt_npc_setup, PTR(npcEnt))
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(59)

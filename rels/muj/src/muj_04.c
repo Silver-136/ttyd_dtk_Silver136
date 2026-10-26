@@ -11,6 +11,7 @@
 #include "mario/mario_pouch.h"
 #include "system.h"
 #include "driver/casedrv.h"
+#include "pmario_sound.h"
 
 #include "mario/mario.h"
 #include "driver/hitdrv.h"
@@ -524,7 +525,7 @@ static KusaAccess kusa_tbl[] = {
 
 EVT_BEGIN(muj_04_init_evt)
     CALL(evt_snd_bgmon, 512, STRING("BGM_STG5_MUJ1"))
-    CALL(evt_snd_envon, 272, STRING("ENV_STG5_MUJ6"))
+    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG5_MUJ6"))
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
     CALL_CHILD(PTR(evt_bero_info_run))

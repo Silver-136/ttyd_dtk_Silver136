@@ -10,6 +10,7 @@
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
 #include "system.h"
+#include "pmario_sound.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "mario/mariost.h"
@@ -690,8 +691,8 @@ EVT_BEGIN(hom_10_evt_resha_left)
 EVT_END()
 
 EVT_BEGIN(hom_10_init_evt)
-    CALL(evt_snd_bgmoff, 512)
-    CALL(evt_snd_envon, 272, STRING("ENV_STG6_RSH2"))
+    CALL(evt_snd_bgmoff, PSND_FADEOUT)
+    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG6_RSH2"))
     CALL(evt_mario_cont_onoff, 0)
     CALL(evt_party_cont_onoff, 0, 0)
     CALL(evt_party_cont_onoff, 1, 0)

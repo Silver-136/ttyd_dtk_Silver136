@@ -24,6 +24,7 @@
 #include "driver/mapdrv.h"
 #include "system.h"
 #include "driver/casedrv.h"
+#include "pmario_sound.h"
 
 #include "driver/npcdrv.h"
 #include "manager/evtmgr.h"
@@ -287,11 +288,11 @@ EVT_BEGIN(jon_init_evt)
     END_IF
     IF_INT_NOT_EQUAL(GSW_PIT_FLOOR, 99)
         CALL(evt_snd_bgmon, 512, STRING("BGM_STG0_100DN1"))
-        CALL(evt_snd_envoff, 512)
+        CALL(evt_snd_envoff, PSND_FADEOUT)
         CALL(evt_snd_set_rev_mode, 1)
         ELSE
-        CALL(evt_snd_bgmoff, 512)
-        CALL(evt_snd_envon, 272, STRING("ENV_STG0_DAN1"))
+        CALL(evt_snd_bgmoff, PSND_FADEOUT)
+        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_DAN1"))
         CALL(evt_snd_set_rev_mode, 2)
     END_IF
     RETURN

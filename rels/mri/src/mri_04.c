@@ -14,6 +14,7 @@
 #include "evt/evt_snd.h"
 #include "driver/mapdrv.h"
 #include "mario/mario_pouch.h"
+#include "pmario_sound.h"
 
 #include "driver/npcdrv.h"
 #include "evt/evt_npc.h"
@@ -199,9 +200,9 @@ static EVT_BEGIN(chuchurina_sogu)
     CALL(evt_npc_set_anim, STRING("第三勢力部下"), STRING("D_2"))
     CALL(evt_bero_exec_wait, 65536)
     WAIT_MS(1500)
-    CALL(evt_snd_bgmoff, 1024)
-    CALL(evt_snd_bgmon, 1, STRING("BGM_EVT_CYUCYURINA1"))
-    CALL(evt_snd_envoff, 512)
+    CALL(evt_snd_bgmoff, PSND_PAUSE)
+    CALL(evt_snd_bgmon, PSND_SLOT(1), STRING("BGM_EVT_CYUCYURINA1"))
+    CALL(evt_snd_envoff, PSND_FADEOUT)
     CALL(evt_npc_flag_onoff, 1, STRING("チュチュリーナ"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_npc_flag_onoff, 0, STRING("チュチュリーナ"), NPC_FLAG_AUTO_MOVE_ANIM)
     BEGIN_INLINE_EVENT
@@ -286,9 +287,9 @@ static EVT_BEGIN(chuchurina_sogu)
     CALL(evt_npc_jump_position_nohit, STRING("チュチュリーナ"), -18, 135, -200, 300, 10)
     CALL(evt_npc_flag_onoff, 1, STRING("チュチュリーナ"), NPC_FLAG_NO_DRAW)
     WAIT_MS(700)
-    CALL(evt_snd_bgmoff, 513)
-    CALL(evt_snd_bgmon, 288, 0)
-    CALL(evt_snd_envon, 272, STRING("ENV_STG2_MRI5"))
+    CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
+    CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)
+    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG2_MRI5"))
     CALL(evt_cam3d_evt_set, 125, 90, 262, 125, 40, 0, 0, 11)
     WAIT_FRAMES(1)
     CALL(evt_msg_print_party, STRING("stg2_mri_e13_06"))
@@ -458,14 +459,14 @@ EVT_BEGIN(mri_04_init_evt)
     CALL_CHILD(PTR(evt_sub_kusa_access_entry))
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(90)
-        CALL(evt_snd_bgmoff, 512)
-        CALL(evt_snd_envoff, 512)
+        CALL(evt_snd_bgmoff, PSND_FADEOUT)
+        CALL(evt_snd_envoff, PSND_FADEOUT)
         CASE_BETWEEN(109, 110)
         CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_DANGER4"))
-        CALL(evt_snd_envon, 272, STRING("ENV_STG2_MRI9"))
+        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG2_MRI9"))
         CASE_DEFAULT
         CALL(evt_snd_bgmon, 512, STRING("BGM_STG2_MRI1"))
-        CALL(evt_snd_envon, 272, STRING("ENV_STG2_MRI5"))
+        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG2_MRI5"))
     END_SWITCH
     CALL(evt_mobj_itembox, STRING("mobj_box00"), -155, 0, 35, 0, 0, PTR(item_mri_04), GSWF(2837))
     IF_INT_EQUAL(GSW_STORY_PROGRESS, 90)

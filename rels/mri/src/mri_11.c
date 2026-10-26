@@ -20,6 +20,7 @@
 #include "evt/evt_snd.h"
 #include "driver/npcdrv.h"
 #include "driver/mapdrv.h"
+#include "pmario_sound.h"
 
 USER_FUNC(urouro_init_func);
 USER_FUNC(urouro_main_func);
@@ -323,7 +324,7 @@ static EVT_BEGIN(puni_win_offscreen)
 EVT_END()
 
 static EVT_BEGIN(puni_win)
-    CALL(evt_snd_bgmoff, 512)
+    CALL(evt_snd_bgmoff, PSND_FADEOUT)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)
     CALL(evt_puni_winddisable_onoff, 1)
@@ -387,7 +388,7 @@ static EVT_BEGIN(puni_win)
 EVT_END()
 
 static EVT_BEGIN(puni_lose)
-    CALL(evt_snd_bgmoff, 512)
+    CALL(evt_snd_bgmoff, PSND_FADEOUT)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)
     CALL(evt_puni_get_position, 1, LW(0), LW(1), LW(2))
@@ -503,7 +504,7 @@ static EVT_BEGIN(puni_vs_toge_init)
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG2_SIREN1"), -400, 0, 0, GW(0))
     CALL(evt_map_playanim, STRING("light_02"), 1, 0)
     CALL(evt_cam3d_evt_set, 275, 140, 516, -275, 50, 0, 1000, 11)
-    CALL(evt_snd_bgmoff_f, 512, 1000)
+    CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 1000)
     WAIT_MS(1000)
     CALL_CHILD(PTR(mri_guide_goryu))
     CALL_CHILD(PTR(toge_enter))
@@ -533,7 +534,7 @@ static EVT_BEGIN(puni_vs_toge)
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG2_SIREN1"), -400, 0, 0, GW(0))
     CALL(evt_map_playanim, STRING("light_02"), 1, 0)
     CALL(evt_cam3d_evt_set, 275, 140, 516, -275, 50, 0, 1000, 11)
-    CALL(evt_snd_bgmoff_f, 512, 1000)
+    CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 1000)
     WAIT_MS(1000)
     CALL_CHILD(PTR(mri_guide_goryu))
     CALL_CHILD(PTR(toge_enter))
@@ -590,10 +591,10 @@ EVT_BEGIN(mri_11_init_evt)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(109, 110)
         CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_DANGER4"))
-        CALL(evt_snd_envon, 272, STRING("ENV_STG2_MRI9"))
+        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG2_MRI9"))
         CASE_DEFAULT
         CALL(evt_snd_bgmon, 512, STRING("BGM_STG2_MRI1"))
-        CALL(evt_snd_envon, 272, STRING("ENV_STG2_MRI8"))
+        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG2_MRI8"))
     END_SWITCH
     CALL(evt_map_playanim, STRING("mizu_01"), 1, 0)
     CALL(evt_map_playanim, STRING("mizu_02"), 1, 0)

@@ -14,6 +14,7 @@
 #include "driver/mapdrv.h"
 #include "mario/mario_pouch.h"
 #include "system.h"
+#include "pmario_sound.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "evt/evt_bero.h"
@@ -201,7 +202,7 @@ EVT_BEGIN(water_shikake)
         CALL(evt_mario_wait_landon)
         CALL(evt_mario_set_mov_spd, FLOAT(0.0f))
     END_INLINE_EVENT
-    CALL(evt_snd_bgmoff, 14336)
+    CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(3))
     SET_VALUE(LW(10), 1)
     LOOP(0)
         SET_VALUE(LF(0), 1)
@@ -251,11 +252,11 @@ EVT_BEGIN(water_shikake)
     DELETE_EVENT(LW(10))
     CALL_CHILD(PTR(cam_shake2))
     BEGIN_INLINE_EVENT
-        CALL(evt_snd_bgmoff, 1024)
-        CALL(evt_snd_bgmon, 1, STRING("BGM_FF_ENV_SUCCESS1"))
+        CALL(evt_snd_bgmoff, PSND_PAUSE)
+        CALL(evt_snd_bgmon, PSND_SLOT(1), STRING("BGM_FF_ENV_SUCCESS1"))
         WAIT_MS(2000)
-        CALL(evt_snd_bgmoff, 513)
-        CALL(evt_snd_bgmon, 288, 0)
+        CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
+        CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)
     END_INLINE_EVENT
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_mizu_now"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_mizu_after"), MAP_OBJ_FLAG_HIDDEN)
@@ -280,7 +281,7 @@ EVT_BEGIN(water_shikake)
     CALL(evt_hitobj_onoff, STRING("A_mizi_kusa"), 1, 1)
     CALL(evt_puni_set_ymode, 5)
     CALL(evt_puni_set_maze)
-    CALL(evt_snd_bgmon, 160, 0)
+    CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
     CALL(evt_mario_key_onoff, 1)
     RETURN
 EVT_END()
@@ -376,10 +377,10 @@ EVT_BEGIN(mri_16_init_evt)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(109, 110)
         CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_DANGER4"))
-        CALL(evt_snd_envon, 272, STRING("ENV_STG2_MRI9"))
+        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG2_MRI9"))
         CASE_DEFAULT
         CALL(evt_snd_bgmon, 512, STRING("BGM_STG2_MRI1"))
-        CALL(evt_snd_envon, 272, STRING("ENV_STG2_MRI10"))
+        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG2_MRI10"))
     END_SWITCH
     CALL(evt_map_playanim, STRING("mizu_01"), 1, 0)
     CALL(evt_map_playanim, STRING("mizu_02"), 1, 0)

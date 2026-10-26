@@ -11,6 +11,7 @@
 #include "evt/evt_mobj.h"
 #include "driver/mapdrv.h"
 #include "mario/mario_pouch.h"
+#include "pmario_sound.h"
 
 
 static TreeAccess tree_tbl[4];
@@ -74,7 +75,7 @@ EVT_BEGIN(bom_04_init_evt)
     CALL_CHILD(PTR(evt_bom_snowfall))
     CALL_CHILD(PTR(evt_tree))
     CALL(evt_snd_bgmon, 512, STRING("BGM_STG7_BOM1"))
-    CALL(evt_snd_envon, 272, STRING("ENV_STG7_BOM1"))
+    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_BOM1"))
     CALL(evt_item_entry, STRING("item00"), ITEM_STAR_PIECE, 450, 5, 110, 16, GSWF(5663), 0)
     CALL(evt_mobj_badgeblk, STRING("mobj_badge_gat"), 150, 0, -75, 279, 0, GSWF(3887), 1)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_bom04_hei2"), MAP_OBJ_FLAG_CLIP)

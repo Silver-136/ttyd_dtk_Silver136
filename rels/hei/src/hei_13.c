@@ -13,6 +13,7 @@
 #include "driver/mobjdrv.h"
 #include "mario/mario_pouch.h"
 #include "driver/casedrv.h"
+#include "pmario_sound.h"
 
 
 static BeroEntry bero_entry_data[5];
@@ -138,7 +139,7 @@ EVT_BEGIN(hei_13_init_evt)
     CALL_CHILD(PTR(evt_sub_tree_access_entry))
     CALL(evt_map_playanim, STRING("anm_mugi"), 1, 0)
     CALL(evt_snd_bgmon, 512, STRING("BGM_STG1_HEI1"))
-    CALL(evt_snd_envon, 272, STRING("ENV_STG1_HEI1"))
+    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG1_HEI1"))
     CALL(evt_sub_get_system_flag, LW(0))
     IF_BITS_CLEAR(LW(0), 4096)
         CALL(evt_run_case_evt, CASE_HAMMER, 1, STRING("a_kan_5"), 0, PTR(evt_anm_kan), 0)

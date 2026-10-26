@@ -19,6 +19,7 @@
 #include "evt/evt_yuugijou.h"
 #include "mot/mot_roll.h"
 #include "rels/yuu/include/yuu.h"
+#include "pmario_sound.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "driver/camdrv.h"
@@ -707,7 +708,7 @@ EVT_BEGIN(minigame04_end)
         SET_VALUE(GSWF(1229), 1)
         CALL(evt_mario_set_prev_party_pos, 0, 0, -1000, 0)
         CALL(evt_mario_set_prev_party_pos, 1, 0, -1000, 0)
-        CALL(evt_snd_bgmoff, 512)
+        CALL(evt_snd_bgmoff, PSND_FADEOUT)
         CALL(evt_bero_mapchange, STRING("gor_03"), STRING("A_dokan_02"))
         RETURN
     END_IF
@@ -716,7 +717,7 @@ EVT_BEGIN(minigame04_end)
     CALL(yuugijou_montemedal_wait)
     WAIT_MS(200)
     CALL(yuugijou_montemedal_disp_onoff, 0)
-    CALL(evt_snd_bgmoff, 512)
+    CALL(evt_snd_bgmoff, PSND_FADEOUT)
     CALL(evt_snd_sfxoff, GW(10))
     CALL(evt_fade_out, 1000)
     CALL(evt_cam3d_evt_off, 0, 11)

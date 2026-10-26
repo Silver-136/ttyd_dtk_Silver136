@@ -13,6 +13,7 @@
 #include "party/party_motion.h"
 #include "evt/evt_sub.h"
 #include "driver/mapdrv.h"
+#include "pmario_sound.h"
 
 USER_FUNC(get_hosi_name);
 
@@ -457,7 +458,7 @@ EVT_END()
 
 EVT_BEGIN(las_20_init_evt)
     CALL(evt_snd_bgmon, 512, STRING("BGM_STG8_LST3"))
-    CALL(evt_snd_envon, 272, STRING("ENV_STG8_LAS5"))
+    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS5"))
     CALL(evt_snd_set_rev_mode, 2)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)

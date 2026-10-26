@@ -21,6 +21,7 @@
 #include "evt/evt_mobj.h"
 #include "driver/npcdrv.h"
 #include "driver/casedrv.h"
+#include "pmario_sound.h"
 
 #include "driver/hitdrv.h"
 #include "string.h"
@@ -889,11 +890,11 @@ EVT_BEGIN(ukishima_check)
         WAIT_MS(1000)
         ELSE
         CALL(evt_mario_key_onoff, 0)
-        CALL(evt_snd_bgmoff, 1024)
-        CALL(evt_snd_bgmon, 1, STRING("BGM_FF_ENV_SUCCESS1"))
+        CALL(evt_snd_bgmoff, PSND_PAUSE)
+        CALL(evt_snd_bgmon, PSND_SLOT(1), STRING("BGM_FF_ENV_SUCCESS1"))
         WAIT_MS(2000)
-        CALL(evt_snd_bgmoff, 513)
-        CALL(evt_snd_bgmon, 288, 0)
+        CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
+        CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)
         SPAWN_EVENT(PTR(ukishima_watari))
     END_IF
     RETURN
@@ -1341,7 +1342,7 @@ EVT_BEGIN(suifu_orei)
         CALL(evt_party_stop, 0)
         CALL(evt_party_set_dir, 0, 90, 200)
     END_INLINE_EVENT
-    CALL(evt_snd_bgmoff_f, 512, 3000)
+    CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 3000)
     CALL(evt_set_dir_to_target, STRING("水夫D"), STRING("mario"))
     CALL(evt_msg_print, 0, STRING("stg5_dou_16"), 0, STRING("水夫D"))
     CALL(evt_set_dir_to_target, STRING("水夫E"), STRING("mario"))
@@ -2399,7 +2400,7 @@ static HitDamageReturn hitDmgRetPoints[] = {
 
 EVT_BEGIN(dou_11_init_evt)
     CALL(evt_snd_bgmon, 512, STRING("BGM_STG5_DOU1"))
-    CALL(evt_snd_envon, 272, STRING("ENV_STG5_DOU12"))
+    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG5_DOU12"))
     CALL(evt_snd_set_rev_mode, 2)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)

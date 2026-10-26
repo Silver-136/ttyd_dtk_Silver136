@@ -22,6 +22,7 @@
 #include "mario/mario_pouch.h"
 #include "system.h"
 #include "driver/casedrv.h"
+#include "pmario_sound.h"
 
 #include "party.h"
 #include "mario/mario.h"
@@ -387,7 +388,7 @@ EVT_BEGIN(moo_00_init_evt)
         CALL_CHILD(PTR(evt_bero_info_run))
     END_SWITCH
     CALL(evt_snd_bgmon, 512, STRING("BGM_STG7_MON1"))
-    CALL(evt_snd_envon, 272, STRING("ENV_STG7_MOO1"))
+    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_MOO1"))
     CALL(evt_map_playanim, STRING("hosi_01"), 1, 0)
     CALL(evt_map_playanim, STRING("hosi_02"), 1, 0)
     CALL(evt_map_playanim, STRING("hosi_03"), 1, 0)

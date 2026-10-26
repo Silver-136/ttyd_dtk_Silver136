@@ -21,6 +21,7 @@
 #include "driver/mapdrv.h"
 #include "system.h"
 #include "driver/casedrv.h"
+#include "pmario_sound.h"
 
 #include "driver/effdrv.h"
 #include "manager/evtmgr_cmd.h"
@@ -400,11 +401,11 @@ EVT_BEGIN(bomb_wanwan)
     CALL(evt_paper_delete, STRING("OFF_d_bom_ver2"))
     CALL(evt_offscreen_delete, STRING("ofs"))
     CALL(evt_hitobj_onoff, LW(15), 0, 0)
-    CALL(evt_snd_bgmoff, 1024)
-    CALL(evt_snd_bgmon, 1, STRING("BGM_FF_ENV_SUCCESS1"))
+    CALL(evt_snd_bgmoff, PSND_PAUSE)
+    CALL(evt_snd_bgmon, PSND_SLOT(1), STRING("BGM_FF_ENV_SUCCESS1"))
     WAIT_MS(2000)
-    CALL(evt_snd_bgmoff, 513)
-    CALL(evt_snd_bgmon, 288, 0)
+    CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
+    CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)
     RETURN
 EVT_END()
 
@@ -516,11 +517,11 @@ EVT_BEGIN(switch_1_evt)
     END_LOOP
     CALL(evt_hitobj_onoff, STRING("A_daizadai1"), 0, 0)
     IF_INT_EQUAL(GSWF(4329), 1)
-        CALL(evt_snd_bgmoff, 1024)
-        CALL(evt_snd_bgmon, 1, STRING("BGM_FF_ENV_SUCCESS1"))
+        CALL(evt_snd_bgmoff, PSND_PAUSE)
+        CALL(evt_snd_bgmon, PSND_SLOT(1), STRING("BGM_FF_ENV_SUCCESS1"))
         WAIT_MS(2000)
-        CALL(evt_snd_bgmoff, 513)
-        CALL(evt_snd_bgmon, 288, 0)
+        CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
+        CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)
     END_IF
     CALL(evt_map_entry_airport_harbor, 1, STRING("S_Ship_Change"), STRING("Ship_Change2"))
     WAIT_MS(1000)
@@ -611,11 +612,11 @@ EVT_BEGIN(switch_2_evt)
         END_IF
     END_LOOP
     IF_INT_EQUAL(GSWF(4328), 1)
-        CALL(evt_snd_bgmoff, 1024)
-        CALL(evt_snd_bgmon, 1, STRING("BGM_FF_ENV_SUCCESS1"))
+        CALL(evt_snd_bgmoff, PSND_PAUSE)
+        CALL(evt_snd_bgmon, PSND_SLOT(1), STRING("BGM_FF_ENV_SUCCESS1"))
         WAIT_MS(2000)
-        CALL(evt_snd_bgmoff, 513)
-        CALL(evt_snd_bgmon, 288, 0)
+        CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
+        CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)
     END_IF
     CALL(evt_map_entry_airport_harbor, 1, STRING("S_Ship_Change1"), STRING("Ship_Change1"))
     CALL(evt_hitobj_attr_onoff, 0, 1, STRING("Ship_Change1"), 32768)
@@ -851,7 +852,7 @@ EVT_BEGIN(majyorin_evt_main)
     SET_VALUE(GSW_STORY_PROGRESS, 391)
     CALL(evt_cam3d_evt_off, 500, 11)
     CALL(evt_mario_key_onoff, 1)
-    CALL(evt_snd_bgmoff_f, 512, 2000)
+    CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)
     CALL(evt_npc_change_fbat_mode, 1)
     CALL(evt_npc_start_for_event)
     RETURN
@@ -883,8 +884,8 @@ EVT_BEGIN(majyorin_evt)
 EVT_END()
 
 EVT_BEGIN(las_09_init_evt)
-    CALL(evt_snd_bgmoff, 512)
-    CALL(evt_snd_envon, 272, STRING("ENV_STG8_LAS3"))
+    CALL(evt_snd_bgmoff, PSND_FADEOUT)
+    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS3"))
     CALL(evt_snd_set_rev_mode, 2)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)

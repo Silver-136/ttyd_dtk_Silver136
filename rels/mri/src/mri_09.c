@@ -25,6 +25,7 @@
 #include "driver/mapdrv.h"
 #include "mario/mario_pouch.h"
 #include "system.h"
+#include "pmario_sound.h"
 
 #ifdef VERSION_G8ME01
 #endif
@@ -203,11 +204,11 @@ EVT_BEGIN(wall_roll)
     WAIT_MS(2000)
     BEGIN_INLINE_EVENT
         WAIT_MS(2000)
-        CALL(evt_snd_bgmoff, 1024)
-        CALL(evt_snd_bgmon, 1, STRING("BGM_FF_ENV_SUCCESS1"))
+        CALL(evt_snd_bgmoff, PSND_PAUSE)
+        CALL(evt_snd_bgmon, PSND_SLOT(1), STRING("BGM_FF_ENV_SUCCESS1"))
         WAIT_MS(2000)
-        CALL(evt_snd_bgmoff, 513)
-        CALL(evt_snd_bgmon, 288, 0)
+        CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
+        CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)
     END_INLINE_EVENT
     SET_VALUE(LW(0), STRING("OFF_d_roll_right"))
     SET_VALUE(LW(1), STRING("S_isk_01A04"))
@@ -455,10 +456,10 @@ EVT_BEGIN(mri_09_init_evt)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(109, 110)
         CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_DANGER4"))
-        CALL(evt_snd_envon, 272, STRING("ENV_STG2_MRI9"))
+        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG2_MRI9"))
         CASE_DEFAULT
         CALL(evt_snd_bgmon, 512, STRING("BGM_STG2_MRI1"))
-        CALL(evt_snd_envon, 272, STRING("ENV_STG2_MRI1"))
+        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG2_MRI1"))
     END_SWITCH
     CALL(evt_npc_change_fbat_mode, 1)
     CALL(evt_map_playanim, STRING("mizu_01"), 1, 0)

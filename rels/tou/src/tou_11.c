@@ -21,6 +21,7 @@
 #include "system.h"
 #include "driver/casedrv.h"
 #include "driver/seqdrv.h"
+#include "pmario_sound.h"
 
 USER_FUNC(evt_cloud_ent);
 USER_FUNC(evt_cloud_init);
@@ -245,8 +246,8 @@ EVT_BEGIN(evt_tojikome_sandome)
     WAIT_MS(1000)
     CALL(evt_msg_print_party, STRING("stg3_tou_421_01"))
     CALL(evt_snd_bgmon, 512, STRING("BGM_STG3_TOU1"))
-    CALL(evt_snd_bgmoff, 26624)
-    CALL(evt_snd_envon, 272, STRING("ENV_STG3_TOU6"))
+    CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
+    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU6"))
     CALL(evt_party_run, 0)
     CALL(evt_mario_key_onoff, 1)
     RETURN
@@ -265,11 +266,11 @@ EVT_END()
 
 EVT_BEGIN(evt_postar)
     BEGIN_INLINE_EVENT
-        CALL(evt_snd_bgmoff, 1024)
-        CALL(evt_snd_bgmon, 1, STRING("BGM_FF_ENV_SUCCESS1"))
+        CALL(evt_snd_bgmoff, PSND_PAUSE)
+        CALL(evt_snd_bgmon, PSND_SLOT(1), STRING("BGM_FF_ENV_SUCCESS1"))
         WAIT_MS(2000)
-        CALL(evt_snd_bgmoff, 513)
-        CALL(evt_snd_bgmon, 288, 0)
+        CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
+        CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)
     END_INLINE_EVENT
     SET_VALUE(GSWF(2387), 1)
     RETURN
@@ -295,7 +296,7 @@ EVT_BEGIN(tou_11_init_evt)
     CALL(evt_bero_get_entername, LW(0))
     IF_STR_EQUAL(LW(0), STRING("nidome"))
         CALL(evt_snd_bgmon, 512, STRING("BGM_STG3_TOU2"))
-        CALL(evt_snd_envon, 272, STRING("ENV_STG3_TOU6"))
+        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU6"))
         SPAWN_EVENT(PTR(evt_tojikome_nidome))
         CALL(evt_mario_set_pos, 30, 0, -100)
         CALL(evt_party_set_pos, 0, 60, 0, -100)
@@ -304,7 +305,7 @@ EVT_BEGIN(tou_11_init_evt)
     END_IF
     IF_STR_EQUAL(LW(0), STRING("sandome"))
         CALL(evt_snd_bgmon, 512, STRING("BGM_STG3_TOU2"))
-        CALL(evt_snd_envon, 272, STRING("ENV_STG3_TOU6"))
+        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU6"))
         SPAWN_EVENT(PTR(evt_tojikome_sandome))
         CALL(evt_mario_set_pos, 30, 0, -100)
         CALL(evt_party_set_pos, 0, 60, 0, -100)
@@ -314,23 +315,23 @@ EVT_BEGIN(tou_11_init_evt)
         RETURN
     END_IF
     IF_INT_EQUAL(GSWF(2383), 1)
-        CALL(evt_snd_bgmoff, 512)
-        CALL(evt_snd_envoff, 512)
+        CALL(evt_snd_bgmoff, PSND_FADEOUT)
+        CALL(evt_snd_envoff, PSND_FADEOUT)
         SPAWN_EVENT(PTR(evt_tojikome))
         RETURN
     END_IF
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(127, 137)
         CALL(evt_snd_bgmon, 512, STRING("BGM_STG3_TOU2"))
-        CALL(evt_snd_envon, 272, STRING("ENV_STG3_TOU6"))
-        CALL(evt_snd_bgmoff, 26624)
+        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU6"))
+        CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
         CASE_GREATER_OR_EQUAL(165)
         CALL(evt_snd_bgmon, 512, STRING("BGM_STG3_TOU2"))
-        CALL(evt_snd_envon, 272, STRING("ENV_STG3_TOU6"))
-        CALL(evt_snd_bgmoff, 26624)
+        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU6"))
+        CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
         CASE_DEFAULT
         CALL(evt_snd_bgmon, 512, STRING("BGM_STG3_TOU1"))
-        CALL(evt_snd_envon, 272, STRING("ENV_STG3_TOU6"))
+        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU6"))
     END_SWITCH
     RETURN
 EVT_END()

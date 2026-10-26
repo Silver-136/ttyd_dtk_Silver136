@@ -13,6 +13,7 @@
 #include "evt/evt_snd.h"
 #include "driver/npcdrv.h"
 #include "driver/casedrv.h"
+#include "pmario_sound.h"
 
 
 static BeroEntry bero_entry_data[3];
@@ -243,8 +244,8 @@ EVT_BEGIN(hei_03_init_evt)
     CALL(evt_bero_get_info)
     CALL_CHILD(PTR(evt_bero_info_run))
     CALL(evt_snd_bgmon, 512, STRING("BGM_STG1_HEI1"))
-    CALL(evt_snd_bgmoff, 6144)
-    CALL(evt_snd_envon, 272, STRING("ENV_STG1_HEI4"))
+    CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(1))
+    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG1_HEI4"))
     CALL(evt_snd_set_rev_mode, 1)
     CALL(evt_map_playanim, STRING("anm_hokori"), 1, 0)
     SET_VALUE(GF(0), 0)

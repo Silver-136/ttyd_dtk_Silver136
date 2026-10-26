@@ -23,6 +23,7 @@
 #include "mario/mario_pouch.h"
 #include "system.h"
 #include "driver/casedrv.h"
+#include "pmario_sound.h"
 
 #include "driver/npcdrv.h"
 #include "evt/evt_bero.h"
@@ -186,7 +187,7 @@ EVT_BEGIN(bonbaba_evt)
     CALL(evt_msg_print, 0, STRING("stg8_las_48"), 0, STRING("ボンババ"))
     CALL(evt_cam3d_evt_set, -299, 25, 748, -328, 134, -34, 3000, 11)
     WAIT_MS(2500)
-    CALL(evt_snd_bgmoff, 512)
+    CALL(evt_snd_bgmoff, PSND_FADEOUT)
     CALL(evt_npc_set_battle_info, STRING("ボンババ"), 14)
     CALL(evt_npc_battle_start, STRING("ボンババ"))
     CALL(evt_npc_wait_battle_end)
@@ -429,17 +430,17 @@ EVT_END()
 
 EVT_BEGIN(las_26_init_evt)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, 387)
-        CALL(evt_snd_bgmoff, 512)
-        CALL(evt_snd_envon, 272, STRING("ENV_STG8_LAS1"))
+        CALL(evt_snd_bgmoff, PSND_FADEOUT)
+        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS1"))
         CALL(evt_snd_set_rev_mode, 2)
         ELSE
         IF_INT_EQUAL(GSW_STORY_PROGRESS, 400)
-            CALL(evt_snd_bgmoff, 512)
-            CALL(evt_snd_envon, 272, STRING("ENV_STG8_LAS8"))
+            CALL(evt_snd_bgmoff, PSND_FADEOUT)
+            CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS8"))
             CALL(evt_snd_set_rev_mode, 2)
             ELSE
-            CALL(evt_snd_bgmoff, 512)
-            CALL(evt_snd_envon, 272, STRING("ENV_STG8_LAS1"))
+            CALL(evt_snd_bgmoff, PSND_FADEOUT)
+            CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS1"))
             CALL(evt_snd_set_rev_mode, 2)
         END_IF
     END_IF

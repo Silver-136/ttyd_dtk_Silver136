@@ -11,6 +11,7 @@
 #include "party/party_motion.h"
 #include "evt/evt_item.h"
 #include "mario/mario_pouch.h"
+#include "pmario_sound.h"
 
 
 static BeroEntry bero_entry_data[5];
@@ -120,10 +121,10 @@ EVT_BEGIN(mri_18_init_evt)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(109, 110)
         CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_DANGER4"))
-        CALL(evt_snd_envon, 272, STRING("ENV_STG2_MRI9"))
+        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG2_MRI9"))
         CASE_DEFAULT
         CALL(evt_snd_bgmon, 512, STRING("BGM_STG2_MRI1"))
-        CALL(evt_snd_envon, 272, STRING("ENV_STG2_MRI4"))
+        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG2_MRI4"))
     END_SWITCH
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)

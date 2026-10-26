@@ -6,6 +6,7 @@
 #include "evt/evt_mario.h"
 #include "driver/mapdrv.h"
 #include "mario/mario_pouch.h"
+#include "pmario_sound.h"
 
 #include "stdio.h"
 #include "evt/evt_bero.h"
@@ -136,10 +137,10 @@ EVT_END()
 EVT_BEGIN(las_30_init_evt)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, 400)
         CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_DANGER2"))
-        CALL(evt_snd_envoff, 512)
+        CALL(evt_snd_envoff, PSND_FADEOUT)
     ELSE
-        CALL(evt_snd_bgmoff, 512)
-        CALL(evt_snd_envon, 272, STRING("ENV_STG8_LAS1"))
+        CALL(evt_snd_bgmoff, PSND_FADEOUT)
+        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS1"))
     END_IF
     CALL(evt_snd_set_rev_mode, 2)
     SET_VALUE(LW(0), PTR(bero_entry_data))

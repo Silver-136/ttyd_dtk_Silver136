@@ -4,6 +4,7 @@
 #include "evt/evt_map.h"
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
+#include "pmario_sound.h"
 
 
 BeroEntry bero_data_a_nidome[2];
@@ -80,16 +81,16 @@ BeroEntry bero_data_c_nidome[] = {
 EVT_BEGIN(rsh_08_a_init_evt)
     IF_INT_EQUAL(GSWF(3460), 1)
         CALL(evt_snd_bgmon, 512, STRING("BGM_STG6_PIK1"))
-        CALL(evt_snd_envoff, 512)
-        CALL(evt_snd_bgmoff, 26624)
+        CALL(evt_snd_envoff, PSND_FADEOUT)
+        CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
         ELSE
         IF_INT_EQUAL(GSWF(3461), 1)
             CALL(evt_snd_bgmon, 512, STRING("BGM_STG0_GOR1"))
-            CALL(evt_snd_envoff, 512)
-            CALL(evt_snd_bgmoff, 26624)
+            CALL(evt_snd_envoff, PSND_FADEOUT)
+            CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
             ELSE
-            CALL(evt_snd_bgmoff, 512)
-            CALL(evt_snd_envon, 272, STRING("ENV_STG6_RSH1_3"))
+            CALL(evt_snd_bgmoff, PSND_FADEOUT)
+            CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG6_RSH1_3"))
         END_IF
     END_IF
     SET_VALUE(LW(0), PTR(bero_data_a_nidome))

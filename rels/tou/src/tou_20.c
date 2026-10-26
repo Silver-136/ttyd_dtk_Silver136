@@ -11,6 +11,7 @@
 #include "evt/evt_snd.h"
 #include "evt/evt_sub.h"
 #include "driver/mapdrv.h"
+#include "pmario_sound.h"
 
 USER_FUNC(evt_mario_dispflag_onoff);
 
@@ -124,7 +125,7 @@ EVT_BEGIN(evt_anim2)
 EVT_END()
 
 EVT_BEGIN(tou_20_init_evt)
-    CALL(evt_snd_envoff, 512)
+    CALL(evt_snd_envoff, PSND_FADEOUT)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
     CALL(evt_mario_cont_onoff, 0)

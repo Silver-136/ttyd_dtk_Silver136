@@ -19,6 +19,7 @@
 #include "evt/evt_item.h"
 #include "evt/evt_pouch.h"
 #include "driver/mapdrv.h"
+#include "pmario_sound.h"
 
 #include "driver/npcdrv.h"
 #include "driver/animdrv.h"
@@ -750,7 +751,7 @@ EVT_END()
 
 EVT_BEGIN(nok_00_koopa_evt)
     CALL(evt_snd_bgmon, 512, STRING("BGM_STG1_NOK1"))
-    CALL(evt_snd_envon, 272, STRING("ENV_STG1_NOK1"))
+    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG1_NOK1"))
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_kill_party, 0)
     CALL(evt_mario_set_pos, -500, 0, 0)
@@ -786,7 +787,7 @@ EVT_BEGIN(nok_00_koopa_evt)
     WAIT_MS(300)
     CALL(evt_msg_print, 0, STRING("kpa_stg2_004"), 0, STRING("ノコノコA"))
     CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_KUPPA1"))
-    CALL(evt_snd_envon, 272, STRING("ENV_STG1_NOK1"))
+    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG1_NOK1"))
     CALL(evt_npc_get_position, STRING("ノコノコA"), LW(0), LW(1), LW(2))
     SET_VALUE(LW(3), LW(0))
     ADD(LW(3), 1)
@@ -1020,7 +1021,7 @@ EVT_BEGIN(nok_00_koopa_evt)
             CALL(evt_snd_bgm_freq, 0, LW(0))
             WAIT_MS(50)
         END_LOOP
-        CALL(evt_snd_bgmoff_f, 512, 2000)
+        CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)
         SET_VALUE(GF(1), 1)
     END_INLINE_EVENT
     CALL(evt_npc_set_autotalkpose, STRING("mario"), STRING("KPA_S_2"), STRING("KPA_T_4"))
@@ -1056,7 +1057,7 @@ EVT_BEGIN(nok_00_init_evt)
         SET_VALUE(LW(0), PTR(bero_entry_data))
         CALL(evt_bero_get_info)
         CALL(evt_snd_bgmon, 512, STRING("BGM_STG1_NOK1"))
-        CALL(evt_snd_envon, 272, STRING("ENV_STG1_NOK1"))
+        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG1_NOK1"))
         IF_INT_LESS(GSW_STORY_PROGRESS, 26)
             SPAWN_EVENT(PTR(bero_case_entry))
             SPAWN_EVENT(PTR(first_time_camera))

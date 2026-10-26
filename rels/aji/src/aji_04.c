@@ -375,8 +375,8 @@ EVT_END()
 
 EVT_BEGIN(kuizu_sekizou)
     CALL(evt_mario_key_onoff, 0)
-    CALL(evt_snd_bgmoff_f, 512, 2000)
-    CALL(evt_snd_envoff_f, 512, 2000)
+    CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)
+    CALL(evt_snd_envoff_f, PSND_FADEOUT, 2000)
     CALL(evt_snd_sfxon, STRING("SFX_STG7_QUAKE1"), GW(10))
     BEGIN_INLINE_EVENT
         CALL(evt_cam_shake, 4, FLOAT(0.0048828125f), FLOAT(0.0f), 2500)
@@ -427,7 +427,7 @@ EVT_BEGIN(kuizu_sekizou)
     SET_VALUE(LW(14), 0)
     SET_VALUE(LW(15), 0)
     SET_INT_READ_ADDR(PTR(&kuizu_data))
-    CALL(evt_snd_bgmoff, 18432)
+    CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     LOOP(0)
         READ_INT4(LW(9), LW(10), LW(11), LW(12))
         CALL(evt_map_playanim, LW(9), 1, 0)
@@ -479,8 +479,8 @@ EVT_BEGIN(kuizu_sekizou)
             END_IF
             WAIT_FRAMES(1)
         END_LOOP
-        CALL(evt_snd_bgmoff, 513)
-        CALL(evt_snd_bgmon, 288, 0)
+        CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
+        CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)
         CALL(evt_msg_continue)
         CALL(evt_msg_toge, 2, 95, 65, 0)
         ADD(LW(13), 1)
@@ -526,7 +526,7 @@ EVT_BEGIN(kuizu_sekizou)
                 CALL(evt_msg_print, 0, STRING("stg7_aji_24"), PTR(kuti_callback), 0)
                 CALL_CHILD(PTR(offscreen_to_normal))
                 CALL(evt_snd_bgmon, 512, STRING("BGM_STG7_DUN2"))
-                CALL(evt_snd_envon, 272, STRING("ENV_STG7_AJI1"))
+                CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI1"))
                 CALL(evt_msg_toge, 2, 95, 65, 0)
                 SPAWN_EVENT(PTR(sekizou_talk))
                 CALL(evt_msg_print, 0, STRING("stg7_aji_25"), PTR(kuti_callback), 0)
@@ -558,7 +558,7 @@ EVT_BEGIN(kuizu_sekizou)
                 CASE_EQUAL(3)
                 SPAWN_EVENT(PTR(sekizou_talk))
                 CALL(evt_msg_print, 0, STRING("stg7_aji_28"), PTR(kuti_callback), 0)
-                CALL(evt_snd_bgmoff_f, 512, 2000)
+                CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)
                 CALL_CHILD(PTR(offscreen_to_normal))
                 SET_VALUE(LW(0), 360)
                 SET_VALUE(LW(1), 500)
@@ -642,7 +642,7 @@ EVT_BEGIN(kuizu_sekizou)
                 CALL(evt_mario_set_pose, STRING("M_S_1"))
                 CALL(evt_mario_dispflag_onoff, 0, 2)
                 CALL(evt_snd_bgmon_f, 768, STRING("BGM_STG7_DUN2"), 2000)
-                CALL(evt_snd_envon_f, 272, STRING("ENV_STG7_AJI1"), 2000)
+                CALL(evt_snd_envon_f, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI1"), 2000)
                 CALL(evt_npc_set_position, STRING("バリアーン１"), 0, -1000, 0)
                 CALL(evt_npc_set_position, STRING("バリアーン２"), 0, -1000, 0)
                 WAIT_MS(1000)
@@ -708,14 +708,14 @@ static void callback(s32 type, void** work) {
                 psndSFXOn("SFX_STG7_QUIZ_START1");
             } else if (evt->lwData[5] == 4) {
                 psndBGMOff(0x400);
-                psndBGMOn(1, "BGM_EVT_QUIZ2");
+                psndBGMOn(PSND_SLOT(1), "BGM_EVT_QUIZ2");
             }
         }
     } else if (type == 3) {
         evt->lwData[5]++;
         if (evt->lwData[5] == 1) {
             psndBGMOff(0x400);
-            psndBGMOn(1, "BGM_EVT_QUIZ2");
+            psndBGMOn(PSND_SLOT(1), "BGM_EVT_QUIZ2");
         }
     }
     evt = ((MsgWinData*)*work)->event;
@@ -734,7 +734,7 @@ void kuti_callback(s32 type, void** work) {
 
 EVT_BEGIN(aji_04_init_evt)
     CALL(evt_snd_bgmon, 512, STRING("BGM_STG7_DUN2"))
-    CALL(evt_snd_envon, 272, STRING("ENV_STG7_AJI1"))
+    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI1"))
     CALL(evt_snd_set_rev_mode, 1)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)

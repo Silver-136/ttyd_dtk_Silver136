@@ -1547,7 +1547,7 @@ EVT_BEGIN(peach_change_evt)
         CALL(btlevtcmd_SpawnUnit, LW(0), PTR(&entry_shadow_hand_2), 0)
         SET_VALUE(GW(9), LW(0))
     END_INLINE_EVENT
-    CALL(evt_snd_bgmoff_f, 513, 2000)
+    CALL(evt_snd_bgmoff_f, PSND_FADEOUT | PSND_SLOT(1), 2000)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     SET_FLOAT_VALUE(LW(1), LW(1))
     SET_FLOAT_VALUE(LW(3), FLOAT(0.0f))

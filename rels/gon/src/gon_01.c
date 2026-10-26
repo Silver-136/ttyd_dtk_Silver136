@@ -19,6 +19,7 @@
 #include "mario/mario_pouch.h"
 #include "system.h"
 #include "driver/seqdrv.h"
+#include "pmario_sound.h"
 
 USER_FUNC(evt_mario_dispflag_onoff);
 
@@ -300,9 +301,9 @@ EVT_END()
 EVT_BEGIN(gon_01_GATEEVENT_evt)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)
-    CALL(evt_snd_bgmoff, 1024)
-    CALL(evt_snd_bgmon, 1, STRING("BGM_EVT_CASTLE1"))
-    CALL(evt_snd_envoff, 1024)
+    CALL(evt_snd_bgmoff, PSND_PAUSE)
+    CALL(evt_snd_bgmon, PSND_SLOT(1), STRING("BGM_EVT_CASTLE1"))
+    CALL(evt_snd_envoff, PSND_PAUSE)
     CALL(evt_cam3d_evt_set, -200, 525, 690, 350, 675, 37, 0, 11)
     CALL(evt_seq_wait, SEQ_GAME)
     BEGIN_INLINE_EVENT
@@ -335,10 +336,10 @@ EVT_BEGIN(gon_01_GATEEVENT_evt)
         CASE_EQUAL(2)
         CALL(evt_msg_print, 0, STRING("stg1_gon_01"), 0, STRING("party"))
     END_SWITCH
-    CALL(evt_snd_bgmoff, 513)
-    CALL(evt_snd_bgmon, 288, 0)
-    CALL(evt_snd_envoff, 513)
-    CALL(evt_snd_envon, 288, 0)
+    CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
+    CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)
+    CALL(evt_snd_envoff, PSND_FADEOUT | PSND_SLOT(1))
+    CALL(evt_snd_envon, PSND_CONTINUE | PSND_FADEIN, 0)
     CALL(evt_party_run, 0)
     CALL(evt_mario_key_onoff, 1)
     RETURN
@@ -365,8 +366,8 @@ static HitDamageReturn hitDmgRetPoints[] = {
 };
 
 EVT_BEGIN(gon_01_init_evt)
-    CALL(evt_snd_bgmoff, 512)
-    CALL(evt_snd_envon, 272, STRING("ENV_STG1_GON2"))
+    CALL(evt_snd_bgmoff, PSND_FADEOUT)
+    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG1_GON2"))
     CALL(evt_snd_set_rev_mode, 0)
     IF_INT_EQUAL(GSWF(1476), 1)
         SET_VALUE(LW(0), PTR(bero_entry_data))

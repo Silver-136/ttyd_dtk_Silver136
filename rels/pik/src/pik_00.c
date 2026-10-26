@@ -785,8 +785,8 @@ static EVT_BEGIN(hom_10_evt_resha_left)
 EVT_END()
 
 static EVT_BEGIN(hom_10_init_evt)
-    CALL(evt_snd_bgmoff, 512)
-    CALL(evt_snd_envon, 272, STRING("ENV_STG6_RSH2"))
+    CALL(evt_snd_bgmoff, PSND_FADEOUT)
+    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG6_RSH2"))
     CALL(evt_mario_cont_onoff, 0)
     CALL(evt_party_cont_onoff, 0, 0)
     CALL(evt_party_cont_onoff, 1, 0)
@@ -1386,7 +1386,7 @@ static s32 item_tbl_madam[] = {
 };
 
 static EVT_BEGIN(talk_madam_ring_return)
-    CALL(evt_snd_bgmoff, 18432)
+    CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_msg_print, 0, STRING("stg6_pik_04_06"), 0, STRING("マダム"))
     CALL(evt_win_item_select, 0, PTR(item_tbl_madam), LW(1), 0)
     IF_INT_NOT_EQUAL(LW(1), -1)
@@ -1398,7 +1398,7 @@ static EVT_BEGIN(talk_madam_ring_return)
         ELSE
         CALL(evt_msg_print, 0, STRING("stg6_pik_04_10"), 0, STRING("マダム"))
     END_IF
-    CALL(evt_snd_bgmon, 160, 0)
+    CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
     RETURN
 EVT_END()
 
@@ -1429,7 +1429,7 @@ static EVT_BEGIN(talk_madam)
         RETURN
     END_IF
     IF_INT_EQUAL(GSWF(3430), 0)
-        CALL(evt_snd_bgmoff, 18432)
+        CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
         IF_INT_EQUAL(GSWF(3429), 0)
             SET_VALUE(GSWF(3429), 1)
             CALL(evt_msg_print, 0, STRING("stg6_pik_04_01"), 0, 0)
@@ -1443,7 +1443,7 @@ static EVT_BEGIN(talk_madam)
             ELSE
             CALL(evt_msg_print_add, 0, STRING("stg6_pik_04_03"))
         END_IF
-        CALL(evt_snd_bgmon, 160, 0)
+        CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
         RETURN
     END_IF
     CALL(evt_pouch_check_item, ITEM_GOLD_RING, LW(0))
@@ -1583,15 +1583,15 @@ const char* ie1_mobj[] = {
 };
 
 static EVT_BEGIN(door_1_open)
-    CALL(evt_snd_bgmoff, 18432)
-    CALL(evt_snd_envoff, 18432)
+    CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
+    CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_snd_env_lpf, 0, 800)
     RETURN
 EVT_END()
 
 static EVT_BEGIN(door_1_close)
-    CALL(evt_snd_bgmon, 160, 0)
-    CALL(evt_snd_envon, 160, 0)
+    CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
+    CALL(evt_snd_envon, PSND_CONTINUE | PSND_UNSILENT, 0)
     CALL(evt_snd_env_lpf, 0, 0)
     RETURN
 EVT_END()
@@ -1644,15 +1644,15 @@ const char* door_2_npc[] = {
 };
 
 static EVT_BEGIN(door_2_open)
-    CALL(evt_snd_bgmoff, 18432)
-    CALL(evt_snd_envoff, 18432)
+    CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
+    CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_snd_env_lpf, 0, 800)
     RETURN
 EVT_END()
 
 static EVT_BEGIN(door_2_close)
-    CALL(evt_snd_bgmon, 160, 0)
-    CALL(evt_snd_envon, 160, 0)
+    CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
+    CALL(evt_snd_envon, PSND_CONTINUE | PSND_UNSILENT, 0)
     CALL(evt_snd_env_lpf, 0, 0)
     RETURN
 EVT_END()
@@ -1851,8 +1851,8 @@ EVT_BEGIN(pik_00_init_evt)
         SPAWN_EVENT(PTR(evt_pik_yajirushi))
     END_LOOP
     CALL(evt_snd_bgmon, 512, STRING("BGM_STG6_PIK1"))
-    CALL(evt_snd_envon, 272, STRING("ENV_STG6_PIK1"))
-    CALL(evt_snd_bgmon, 160, 0)
+    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG6_PIK1"))
+    CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
     CALL(evt_npc_setup, PTR(npc_data))
     CALL(evt_mobj_save_blk, STRING("mobj_save"), -100, 60, 25, 0, 0)
     CALL(evt_mobj_kururing_floor, STRING("kururin1"), 8, -5, 130, STRING("jimenn"), 125, GSWF(5655))

@@ -13,6 +13,7 @@
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
 #include "driver/seqdrv.h"
+#include "pmario_sound.h"
 
 USER_FUNC(evt_mario_dispflag_onoff);
 
@@ -156,7 +157,7 @@ EVT_BEGIN(bom_00_init_evt)
     CALL(evt_bero_get_info)
     CALL_CHILD(PTR(evt_bero_info_run))
     CALL(evt_snd_bgmon, 512, STRING("BGM_STG7_BOM1"))
-    CALL(evt_snd_envon, 272, STRING("ENV_STG7_BOM1"))
+    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_BOM1"))
     CALL_CHILD(PTR(evt_bom_snowfall))
     CALL_CHILD(PTR(evt_tree))
     CALL(evt_mobj_brick, STRING("mobj_badge_gat2"), 215, 65, -75, 255, 12, 0, GSWF(3891))

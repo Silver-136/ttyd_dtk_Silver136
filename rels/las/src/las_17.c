@@ -18,6 +18,7 @@
 #include "driver/npcdrv.h"
 #include "mario/mario_pouch.h"
 #include "driver/casedrv.h"
+#include "pmario_sound.h"
 
 
 static EvtWord e_door_close[12];
@@ -123,13 +124,13 @@ EVT_BEGIN(enemy4_dead_evt)
         CALL(evt_mario_key_onoff, 0)
         CALL(evt_npc_change_fbat_mode, 7)
         CALL(evt_npc_stop_for_event)
-        CALL(evt_snd_bgmoff, 1024)
-        CALL(evt_snd_bgmon, 1, STRING("BGM_FF_ENV_SUCCESS1"))
+        CALL(evt_snd_bgmoff, PSND_PAUSE)
+        CALL(evt_snd_bgmon, PSND_SLOT(1), STRING("BGM_FF_ENV_SUCCESS1"))
         WAIT_MS(1000)
         CALL(evt_cam3d_evt_set, 235, 90, 387, -147, 90, -8, 500, 11)
         WAIT_MS(1000)
-        CALL(evt_snd_bgmoff, 513)
-        CALL(evt_snd_bgmon, 288, 0)
+        CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
+        CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)
         WAIT_MS(500)
         CALL(evt_snd_sfxon_3d, STRING("SFX_STG8_SWITCH_BIKKURI_APPEAR1"), -225, 60, 0, 0)
         CALL(evt_eff, 0, STRING("kemuri_test"), 7, -205, 60, 20, 1, 0, 0, 0, 0, 0, 0, 0)
@@ -158,7 +159,7 @@ EVT_END()
 
 EVT_BEGIN(las_17_init_evt)
     CALL(evt_snd_bgmon, 512, STRING("BGM_STG8_LST2"))
-    CALL(evt_snd_envon, 272, STRING("ENV_STG8_LAS1"))
+    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS1"))
     CALL(evt_snd_set_rev_mode, 2)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)

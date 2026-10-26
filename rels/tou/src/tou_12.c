@@ -16,6 +16,7 @@
 #include "driver/npcdrv.h"
 #include "driver/mapdrv.h"
 #include "mario/mario_pouch.h"
+#include "pmario_sound.h"
 
 
 static EvtWord w_door_open[12];
@@ -106,13 +107,13 @@ static EVT_BEGIN(evt_block_broken)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
     CALL(evt_party_move_pos2, 0, 95, 10, FLOAT(80.0f))
-    CALL(evt_snd_bgmoff, 1024)
-    CALL(evt_snd_bgmon, 1, STRING("BGM_FF_ENV_SURPRISED2"))
+    CALL(evt_snd_bgmoff, PSND_PAUSE)
+    CALL(evt_snd_bgmon, PSND_SLOT(1), STRING("BGM_FF_ENV_SURPRISED2"))
     CALL(evt_party_set_dir, 0, 90, 200)
     WAIT_MS(300)
     CALL(evt_msg_print_party, STRING("stg3_tou_307_10"))
-    CALL(evt_snd_bgmoff, 513)
-    CALL(evt_snd_bgmon, 288, 0)
+    CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
+    CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)
     WAIT_MS(300)
     CALL(evt_msg_print, 0, STRING("stg3_tou_307_11"), 0, STRING("ブロッツダミー"))
     CALL(evt_mario_key_onoff, 1)
@@ -260,21 +261,21 @@ static NpcSetupInfo npcEnt[] = {
 
 EVT_BEGIN(tou_12_init_evt)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, 163)
-        CALL(evt_snd_bgmoff, 512)
-        CALL(evt_snd_envoff, 512)
+        CALL(evt_snd_bgmoff, PSND_FADEOUT)
+        CALL(evt_snd_envoff, PSND_FADEOUT)
         ELSE
         SWITCH(GSW_STORY_PROGRESS)
             CASE_BETWEEN(127, 137)
             CALL(evt_snd_bgmon, 512, STRING("BGM_STG3_TOU2"))
-            CALL(evt_snd_envon, 272, STRING("ENV_STG3_TOU6"))
-            CALL(evt_snd_bgmoff, 26624)
+            CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU6"))
+            CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
             CASE_GREATER_OR_EQUAL(165)
             CALL(evt_snd_bgmon, 512, STRING("BGM_STG3_TOU2"))
-            CALL(evt_snd_envon, 272, STRING("ENV_STG3_TOU6"))
-            CALL(evt_snd_bgmoff, 26624)
+            CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU6"))
+            CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
             CASE_DEFAULT
             CALL(evt_snd_bgmon, 512, STRING("BGM_STG3_TOU1"))
-            CALL(evt_snd_envon, 272, STRING("ENV_STG3_TOU6"))
+            CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU6"))
         END_SWITCH
     END_IF
     SET_VALUE(LW(0), PTR(bero_data))

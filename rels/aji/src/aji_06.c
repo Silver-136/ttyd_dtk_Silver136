@@ -17,6 +17,7 @@
 #include "mario/mario_pouch.h"
 #include "system.h"
 #include "driver/casedrv.h"
+#include "pmario_sound.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "driver/mapdrv.h"
@@ -892,7 +893,7 @@ EVT_BEGIN(peach_evt_kusuri_nomu)
         SET_VALUE(LW(0), STRING("S_pato1"))
         SPAWN_EVENT_GET_ID(PTR(peach_evt_pato_on), GW(0))
         ELSE
-        CALL(evt_snd_bgmoff, 512)
+        CALL(evt_snd_bgmoff, PSND_FADEOUT)
         WAIT_MS(300)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         CALL(evt_snd_sfxon_3d, STRING("SFX_PEACH_TOUMEI1"), LW(0), LW(1), LW(2), 0)
@@ -1473,7 +1474,7 @@ static EVT_BEGIN(peach_evt_stg5)
     SET_VALUE(LW(0), STRING("s_bero"))
     CALL_CHILD(PTR(bero_case_switch_on))
     WAIT_MS(1000)
-    CALL(evt_snd_bgmoff, 512)
+    CALL(evt_snd_bgmoff, PSND_FADEOUT)
     CALL(evt_msg_print, 0, STRING("peach_aji_221"), 0, 0)
     WAIT_MS(500)
     CALL(evt_msg_print, 0, STRING("peach_aji_222"), 0, STRING("mario"))
@@ -1686,10 +1687,10 @@ EVT_END()
 EVT_BEGIN(aji_06_init_evt)
     IF_INT_LESS(GSW_STORY_PROGRESS, 352)
         CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_PEACH1"))
-        CALL(evt_snd_envoff, 512)
+        CALL(evt_snd_envoff, PSND_FADEOUT)
         ELSE
         CALL(evt_snd_bgmon, 512, STRING("BGM_STG7_DUN2"))
-        CALL(evt_snd_envon, 272, STRING("ENV_STG7_AJI2"))
+        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI2"))
     END_IF
     CALL(evt_snd_set_rev_mode, 1)
     SET_VALUE(LW(0), PTR(bero_entry_data))

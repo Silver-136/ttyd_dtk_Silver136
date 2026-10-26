@@ -9,6 +9,7 @@
 #include "party/party_motion.h"
 #include "evt/evt_telop.h"
 #include "driver/mapdrv.h"
+#include "pmario_sound.h"
 
 #include "mario/mario.h"
 #include "mario/mario_party.h"
@@ -121,7 +122,7 @@ EVT_END()
 
 EVT_BEGIN(aji_19_init_evt)
     CALL(evt_snd_bgmon, 512, STRING("BGM_STG7_DUN1"))
-    CALL(evt_snd_envon, 272, STRING("ENV_STG7_AJI1"))
+    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI1"))
     CALL(evt_snd_set_rev_mode, 1)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)

@@ -415,10 +415,10 @@ void btlseqEnd(BattleWork* wp) {
         }
         if (!flag) {
             psndBGMOff(0x400);
-            psndBGMOn(1, "BGM_BATTLE_WIN1");
+            psndBGMOn(PSND_SLOT(1), "BGM_BATTLE_WIN1");
         } else {
             psndBGMOff(0x400);
-            psndBGMOn(1, "BGM_BATTLE_WIN2");
+            psndBGMOn(PSND_SLOT(1), "BGM_BATTLE_WIN2");
         }
     }
     case 0x7000009:
@@ -543,7 +543,7 @@ void btlseqEnd(BattleWork* wp) {
             work->evtId = e->eventId;
             BattleStatusWindowSystemOff();
             psndBGMOff(0x400);
-            psndBGMOn(1, "BGM_BATTLE_WIN3");
+            psndBGMOn(PSND_SLOT(1), "BGM_BATTLE_WIN3");
         }
         work->timer = work->timer + 1;
         if (evtCheckID(work->evtId)) break;

@@ -13,6 +13,7 @@
 #include "evt/evt_item.h"
 #include "mario/mario_pouch.h"
 #include "system.h"
+#include "pmario_sound.h"
 
 #include "driver/npcdrv.h"
 #include "driver/animdrv.h"
@@ -268,8 +269,8 @@ static EVT_BEGIN(evt_boss)
     WAIT_MS(2000)
     CALL(evt_cam3d_evt_set, -50, 475, 1104, -50, 35, -13, 1000, 11)
     WAIT_MS(300)
-    CALL(evt_snd_bgmoff, 512)
-    CALL(evt_snd_envoff, 512)
+    CALL(evt_snd_bgmoff, PSND_FADEOUT)
+    CALL(evt_snd_envoff, PSND_FADEOUT)
     CALL(evt_npc_set_battle_info, STRING("ロボット"), 5)
     CALL(evt_npc_battle_start, STRING("ロボット"))
     CALL(evt_npc_wait_battle_end)
@@ -406,10 +407,10 @@ EVT_BEGIN(aji_14_init_evt)
     CALL(evt_bero_get_entername, LW(0))
     IF_STR_NOT_EQUAL(LW(0), STRING("tuzuki"))
         CALL(evt_snd_bgmon, 512, STRING("BGM_STG7_DUN2"))
-        CALL(evt_snd_envon, 272, STRING("ENV_STG7_AJI2"))
+        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI2"))
         ELSE
-        CALL(evt_snd_bgmoff, 512)
-        CALL(evt_snd_envoff, 512)
+        CALL(evt_snd_bgmoff, PSND_FADEOUT)
+        CALL(evt_snd_envoff, PSND_FADEOUT)
     END_IF
     CALL(evt_snd_set_rev_mode, 1)
     SET_VALUE(LW(0), PTR(bero_entry_data))

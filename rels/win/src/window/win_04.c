@@ -19,6 +19,7 @@
 #include "driver/mapdrv.h"
 #include "system.h"
 #include "driver/casedrv.h"
+#include "pmario_sound.h"
 
 #include "driver/dispdrv.h"
 #include "stdlib.h"
@@ -538,7 +539,7 @@ EVT_BEGIN(clouda_nakama)
     CALL(evt_item_flag_on, STRING("necklace"), 2)
     CALL(evt_item_set_position, STRING("necklace"), 280, 50, 0)
     CALL(evt_mario_dump_item, 63)
-    CALL(evt_snd_bgmoff, 512)
+    CALL(evt_snd_bgmoff, PSND_FADEOUT)
     WAIT_MS(500)
     BEGIN_INLINE_EVENT
         CALL(evt_party_move_pos2, 0, 185, -20, FLOAT(120.0f))
@@ -929,8 +930,8 @@ EVT_BEGIN(clouda_nakama)
     CALL(evt_party_run, 1)
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_snd_bgmon, 512, STRING("BGM_STG2_WIN1"))
-    CALL(evt_snd_bgmoff, 22528)
-    CALL(evt_snd_envon, 272, STRING("ENV_STG2_WIN2"))
+    CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(5))
+    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG2_WIN2"))
     CALL(evt_snd_env_lpf, 0, 800)
     SET_VALUE(LW(0), 1)
     RETURN
@@ -1322,8 +1323,8 @@ EVT_BEGIN(win_04_init_evt)
     CALL(evt_bero_get_info)
     CALL_CHILD(PTR(evt_bero_info_run))
     CALL(evt_snd_bgmon, 512, STRING("BGM_STG2_WIN1"))
-    CALL(evt_snd_envon, 272, STRING("ENV_STG2_WIN2"))
-    CALL(evt_snd_bgmoff, 22528)
+    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG2_WIN2"))
+    CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(5))
     CALL(evt_snd_env_lpf, 0, 800)
     CALL(evt_mobj_save_blk, STRING("mobj_save"), -125, 60, -95, 0, 0)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, 80)

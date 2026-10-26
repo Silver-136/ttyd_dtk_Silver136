@@ -14,6 +14,7 @@
 #include "evt/evt_pouch.h"
 #include "system.h"
 #include "driver/casedrv.h"
+#include "pmario_sound.h"
 
 #include "mario/mario.h"
 #include "driver/npcdrv.h"
@@ -580,7 +581,7 @@ static s32 item_tbl2[] = {
 static EVT_BEGIN(talk_syashou)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(294, 300)
-        CALL(evt_snd_bgmoff, 18432)
+        CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     END_SWITCH
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(283)
@@ -702,7 +703,7 @@ static EVT_BEGIN(talk_syashou)
     END_SWITCH
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(294, 301)
-        CALL(evt_snd_bgmon, 160, 0)
+        CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
     END_SWITCH
     RETURN
 EVT_END()
@@ -775,7 +776,7 @@ static EVT_BEGIN(talk_sarary)
 EVT_END()
 
 EVT_BEGIN(talk_papa_mama)
-    CALL(evt_snd_bgmoff, 18432)
+    CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_cam3d_evt_set, -220, 105, 186, -220, 40, -183, 500, 11)
     WAIT_MS(500)
     CALL(evt_msg_print, 0, STRING("stg6_rsh_86"), 0, STRING("ナリキンママ"))
@@ -818,7 +819,7 @@ EVT_BEGIN(talk_papa_mama)
     CALL(evt_npc_flag_onoff, 0, STRING("ナリキンパパ"), NPC_FLAG_NO_HIT)
     CALL(evt_npc_flag_onoff, 0, STRING("ナリキンママ"), NPC_FLAG_NO_HIT)
     CALL(evt_party_run, 0)
-    CALL(evt_snd_bgmon, 160, 0)
+    CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
     CALL(evt_cam3d_evt_off, 500, 11)
     RETURN
 EVT_END()
@@ -966,7 +967,7 @@ static EVT_BEGIN(talk_konari)
         CASE_LESS(289)
         CALL(evt_msg_print, 0, STRING("stg6_rsh_90"), 0, 0)
         CASE_LESS(291)
-        CALL(evt_snd_bgmoff, 18432)
+        CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
         IF_INT_LESS(GSW_STORY_PROGRESS, 290)
             SET_VALUE(GSW_STORY_PROGRESS, 290)
             CALL(evt_msg_print, 0, STRING("stg6_rsh_91"), 0, 0)
@@ -980,7 +981,7 @@ static EVT_BEGIN(talk_konari)
             ELSE
             CALL(evt_msg_print_add, 0, STRING("stg6_rsh_93"))
         END_IF
-        CALL(evt_snd_bgmon, 160, 0)
+        CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
         CASE_LESS(294)
         CALL(evt_pouch_check_item, ITEM_AUTOGRAPH, LW(0))
         IF_INT_LESS_OR_EQUAL(LW(0), 0)
@@ -1441,37 +1442,37 @@ EVT_BEGIN(rsh_04_init_evt)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(284, 286)
         CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_POWAN1"))
-        CALL(evt_snd_envon, 272, STRING("ENV_STG6_RSH1_3"))
+        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG6_RSH1_3"))
         CASE_BETWEEN(304, 309)
         CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_POWAN1"))
-        CALL(evt_snd_envon, 272, STRING("ENV_STG6_RSH1_3"))
+        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG6_RSH1_3"))
         CASE_BETWEEN(310, 325)
         CALL(evt_snd_bgmon, 512, STRING("BGM_STG6_HOM1"))
-        CALL(evt_snd_envoff, 512)
-        CALL(evt_snd_bgmoff, 26624)
+        CALL(evt_snd_envoff, PSND_FADEOUT)
+        CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
         CASE_BETWEEN(327, 328)
-        CALL(evt_snd_bgmoff, 512)
-        CALL(evt_snd_envon, 272, STRING("ENV_STG6_RSH1_3"))
+        CALL(evt_snd_bgmoff, PSND_FADEOUT)
+        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG6_RSH1_3"))
         CASE_BETWEEN(329, 331)
         CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_DANGER4"))
-        CALL(evt_snd_envon, 272, STRING("ENV_STG6_RSH1_3"))
+        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG6_RSH1_3"))
         CASE_BETWEEN(334, 344)
         CALL(evt_snd_bgmon, 512, STRING("BGM_STG6_PIK1"))
-        CALL(evt_snd_envoff, 512)
-        CALL(evt_snd_bgmoff, 26624)
+        CALL(evt_snd_envoff, PSND_FADEOUT)
+        CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
         CASE_DEFAULT
         CALL(evt_sub_get_mapname, LW(0))
         IF_STR_EQUAL(LW(0), STRING("rsh_04_a"))
             CALL(evt_snd_bgmon, 512, STRING("BGM_STG6_RSH1"))
-            CALL(evt_snd_envon, 272, STRING("ENV_STG6_RSH1"))
+            CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG6_RSH1"))
         END_IF
         IF_STR_EQUAL(LW(0), STRING("rsh_04_b"))
             CALL(evt_snd_bgmon, 512, STRING("BGM_STG6_RSH3"))
-            CALL(evt_snd_envon, 272, STRING("ENV_STG6_RSH1"))
+            CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG6_RSH1"))
         END_IF
         IF_STR_EQUAL(LW(0), STRING("rsh_04_c"))
             CALL(evt_snd_bgmon, 512, STRING("BGM_STG6_RSH2"))
-            CALL(evt_snd_envon, 272, STRING("ENV_STG6_RSH1"))
+            CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG6_RSH1"))
         END_IF
     END_SWITCH
     RETURN
@@ -1710,24 +1711,24 @@ EVT_BEGIN(rsh_04_init_evt_nidome)
     CALL(evt_npc_setup, PTR(npc_data))
     IF_INT_EQUAL(GSWF(3460), 1)
         CALL(evt_snd_bgmon, 512, STRING("BGM_STG6_PIK1"))
-        CALL(evt_snd_envoff, 512)
-        CALL(evt_snd_bgmoff, 26624)
+        CALL(evt_snd_envoff, PSND_FADEOUT)
+        CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
         ELSE
         IF_INT_EQUAL(GSWF(3461), 1)
             CALL(evt_snd_bgmon, 512, STRING("BGM_STG0_GOR1"))
-            CALL(evt_snd_envoff, 512)
-            CALL(evt_snd_bgmoff, 26624)
+            CALL(evt_snd_envoff, PSND_FADEOUT)
+            CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
             ELSE
             CALL(evt_sub_get_mapname, LW(0))
             IF_STR_EQUAL(LW(0), STRING("rsh_04_a"))
                 CALL(evt_snd_bgmon, 512, STRING("BGM_STG6_RSH1"))
-                CALL(evt_snd_envon, 272, STRING("ENV_STG6_RSH1"))
+                CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG6_RSH1"))
             END_IF
             IF_STR_EQUAL(LW(0), STRING("rsh_04_b"))
             END_IF
             IF_STR_EQUAL(LW(0), STRING("rsh_04_c"))
                 CALL(evt_snd_bgmon, 512, STRING("BGM_STG6_RSH2"))
-                CALL(evt_snd_envon, 272, STRING("ENV_STG6_RSH1"))
+                CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG6_RSH1"))
             END_IF
         END_IF
     END_IF

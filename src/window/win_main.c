@@ -655,7 +655,7 @@ EVT_BEGIN(evt_diary_read)
         RETURN
     END_IF
     CALL(evt_msg_continue)
-    CALL(evt_snd_bgmoff_f, 512, 2000)
+    CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)
     CALL(evt_mario_dispflag_onoff, 1, 2)
     CALL(evt_mario_adjust_dir)
     CALL(evt_mario_set_pose, STRING("M_L_2"))
@@ -700,7 +700,7 @@ EVT_BEGIN(evt_diary_read)
     CALL(evt_mario_set_pose, STRING("M_I_O"))
     CALL(evt_msg_print, 0, STRING("stg6_rsh_diary_05"), 0, STRING("\202\344\202\244\202\352\202\242"))
     WAIT_MS(300)
-    CALL(evt_snd_bgmoff, 512)
+    CALL(evt_snd_bgmoff, PSND_FADEOUT)
     BEGIN_INLINE_EVENT
         CALL(evt_env_blur_on, 0, 0)
     END_INLINE_EVENT

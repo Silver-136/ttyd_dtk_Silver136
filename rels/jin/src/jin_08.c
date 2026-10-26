@@ -18,6 +18,7 @@
 #include "driver/npcdrv.h"
 #include "system.h"
 #include "driver/casedrv.h"
+#include "pmario_sound.h"
 
 USER_FUNC(evt_kagemario_init);
 USER_FUNC(evt_win_item_select);
@@ -327,7 +328,7 @@ EVT_END()
 
 EVT_BEGIN(jin_08_init_evt)
     CALL(evt_snd_bgmon, 512, STRING("BGM_STG4_JIN1"))
-    CALL(evt_snd_envon, 272, STRING("ENV_STG4_JIN1"))
+    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG4_JIN1"))
     CALL(evt_snd_set_rev_mode, 2)
     CALL(evt_kagemario_init)
     SET_VALUE(LW(0), PTR(bero_entry_data))

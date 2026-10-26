@@ -61,7 +61,7 @@ void seq_battleInit(BattleSeqWork* work) {
     if (evtGetValue(NULL, GSW0) < 109 || evtGetValue(NULL, GSW0) >= 111) {
         if (evtGetValue(NULL, GSW0) != 402) {
             psndBGMOff(0x400);
-            psndBGMOn(1, (char*)npc->battleInfo.bgmName);
+            psndBGMOn(PSND_SLOT(1), (char*)npc->battleInfo.bgmName);
         }
     }
     psndENVOff(0x400);
@@ -359,10 +359,10 @@ void battle_exit(void) {
     PSMTXScale(mtx, 3.0f, 3.0f, 3.0f);
     PSMTXMultVec(mtx, &light->position, &light->position);
     if (evtGetValue(NULL, GSW0) >= 109 && evtGetValue(NULL, GSW0) < 111) {
-        psndBGMOn_f(0x120, 0, 0x2EE, 1);
+        psndBGMOn_f(PSND_CONTINUE | PSND_FADEIN, 0, 0x2EE, 1);
     } else if (evtGetValue(NULL, GSW0) != 402 && seqGetNextSeq() != 5) {
-        psndBGMOn(0x120, NULL);
-        psndENVOn(0x120, NULL);
+        psndBGMOn(PSND_CONTINUE | PSND_FADEIN, NULL);
+        psndENVOn(PSND_CONTINUE | PSND_FADEIN, NULL);
     }
 }
 

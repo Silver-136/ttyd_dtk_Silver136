@@ -10,6 +10,7 @@
 #include "evt/evt_sub.h"
 #include "evt/evt_cam.h"
 #include "driver/seqdrv.h"
+#include "pmario_sound.h"
 
 USER_FUNC(evt_mario_dispflag_onoff);
 USER_FUNC(evt_snd_envoff_f);
@@ -18,8 +19,8 @@ static EvtWord epilogue_evt[62];
 EvtWord gor_11_init_evt[29];
 
 static EVT_BEGIN(epilogue_evt)
-    CALL(evt_snd_bgmoff, 512)
-    CALL(evt_snd_envon, 272, STRING("ENV_END_MUJ1"))
+    CALL(evt_snd_bgmoff, PSND_FADEOUT)
+    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_END_MUJ1"))
     CALL(evt_cam_ctrl_onoff, 4, 0)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
@@ -31,7 +32,7 @@ static EVT_BEGIN(epilogue_evt)
     WAIT_MS(3000)
     CALL(evt_fade_in, 1000)
     WAIT_MS(5000)
-    CALL(evt_snd_envoff_f, 512, 3000)
+    CALL(evt_snd_envoff_f, PSND_FADEOUT, 3000)
     CALL(evt_fade_set_mapchange_type, 0, 10, 1500, -1, -1)
     CALL(evt_bero_mapchange, STRING("gor_00"), STRING(""))
     RETURN

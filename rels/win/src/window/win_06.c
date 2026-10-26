@@ -14,6 +14,7 @@
 #include "evt/evt_telop.h"
 #include "driver/mapdrv.h"
 #include "system.h"
+#include "pmario_sound.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "driver/camdrv.h"
@@ -180,15 +181,15 @@ EVT_END()
 EVT_BEGIN(win_06_init_evt)
     IF_INT_LESS(GSW_STORY_PROGRESS, 71)
         BEGIN_INLINE_EVENT
-            CALL(evt_snd_bgmoff, 512)
-            CALL(evt_snd_envon, 272, STRING("ENV_STG2_WIN1"))
+            CALL(evt_snd_bgmoff, PSND_FADEOUT)
+            CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG2_WIN1"))
             WAIT_MS(9000)
             CALL(evt_snd_bgmon_f, 768, STRING("BGM_STG2_WIN1"), 2000)
             CALL(evt_snd_bgm_scope, 0, 1)
         END_INLINE_EVENT
         ELSE
         CALL(evt_snd_bgmon, 512, STRING("BGM_STG2_WIN1"))
-        CALL(evt_snd_envon, 272, STRING("ENV_STG2_WIN1"))
+        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG2_WIN1"))
     END_IF
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)

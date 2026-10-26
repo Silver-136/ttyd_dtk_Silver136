@@ -14,6 +14,7 @@
 #include "driver/mapdrv.h"
 #include "mario/mario_pouch.h"
 #include "system.h"
+#include "pmario_sound.h"
 
 USER_FUNC(evt_mario_get_name_hitobj_head);
 
@@ -327,7 +328,7 @@ EVT_BEGIN(gon_09_init_evt)
     CALL(evt_bero_get_info)
     CALL_CHILD(PTR(evt_bero_info_run))
     CALL(evt_snd_bgmon, 512, STRING("BGM_STG1_GON1"))
-    CALL(evt_snd_envon, 272, STRING("ENV_STG1_GON1"))
+    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG1_GON1"))
     CALL(evt_snd_set_rev_mode, 2)
     CALL(evt_npc_change_fbat_mode, 1)
     CALL(evt_npc_entry, STRING("\"カロン00\""), STRING("c_karon_g"))

@@ -12,6 +12,7 @@
 #include "driver/mobjdrv.h"
 #include "mario/mario_pouch.h"
 #include "driver/casedrv.h"
+#include "pmario_sound.h"
 
 #include "eff/eff_small_star.h"
 #include "manager/evtmgr_cmd.h"
@@ -91,11 +92,11 @@ EVT_BEGIN(switch_check)
         CALL(small_star, LW(0), LW(1), LW(2))
         CALL(evt_mobj_delete, STRING("switch1"))
         CALL(evt_mobj_delete, STRING("switch2"))
-        CALL(evt_snd_bgmoff, 1024)
-        CALL(evt_snd_bgmon, 1, STRING("BGM_FF_ENV_SUCCESS1"))
+        CALL(evt_snd_bgmoff, PSND_PAUSE)
+        CALL(evt_snd_bgmon, PSND_SLOT(1), STRING("BGM_FF_ENV_SUCCESS1"))
         WAIT_MS(2000)
-        CALL(evt_snd_bgmoff, 513)
-        CALL(evt_snd_bgmon, 288, 0)
+        CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
+        CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)
         CALL(evt_cam3d_evt_set, 0, 100, 363, 0, 30, -30, 500, 11)
         WAIT_MS(1000)
         CALL(evt_mobj_set_position, STRING("box"), 0, -30, 0)
@@ -137,7 +138,7 @@ EVT_END()
 
 EVT_BEGIN(las_13_init_evt)
     CALL(evt_snd_bgmon, 512, STRING("BGM_STG8_LST2"))
-    CALL(evt_snd_envon, 272, STRING("ENV_STG8_LAS1"))
+    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS1"))
     CALL(evt_snd_set_rev_mode, 2)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)

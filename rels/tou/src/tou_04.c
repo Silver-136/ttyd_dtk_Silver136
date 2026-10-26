@@ -16,6 +16,7 @@
 #include "driver/npcdrv.h"
 #include "system.h"
 #include "driver/casedrv.h"
+#include "pmario_sound.h"
 
 #include "evt/evt_npc.h"
 #include "driver/msgdrv.h"
@@ -2122,7 +2123,7 @@ EVT_BEGIN(evt_bred_nigeru)
         CALL(evt_party_set_dir, 0, 270, 200)
     END_INLINE_EVENT
     CALL(evt_mario_set_dir, 270, 200, 0)
-    CALL(evt_snd_bgmoff_f, 512, 2000)
+    CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)
     CALL(evt_msg_print, 0, STRING("stg3_tou_297_27_00"), 0, STRING(/*"チャンピョン"*/"\x83\x60\x83\x83\x83\x93\x83\x73\x83\x87\x83\x93"))
     WAIT_MS(300)
     CALL(evt_npc_sound_data_set, STRING(/*"チャンピョン"*/"\x83\x60\x83\x83\x83\x93\x83\x73\x83\x87\x83\x93"), EVT_NULLPTR, EVT_NULLPTR, 20000, EVT_NULLPTR, EVT_NULLPTR)
@@ -2193,27 +2194,27 @@ EVT_BEGIN(tou_04_init_evt)
         SPAWN_EVENT(PTR(evt_kinoshikowa3))
     END_IF
     IF_INT_EQUAL(GSW_STORY_PROGRESS, 163)
-        CALL(evt_snd_bgmoff, 512)
-        CALL(evt_snd_envoff, 512)
+        CALL(evt_snd_bgmoff, PSND_FADEOUT)
+        CALL(evt_snd_envoff, PSND_FADEOUT)
         ELSE
         IF_INT_EQUAL(LW(1), 0)
             SWITCH(GSW_STORY_PROGRESS)
                 CASE_BETWEEN(127, 137)
                 CALL(evt_snd_bgmon, 512, STRING("BGM_STG3_TOU2"))
-                CALL(evt_snd_envon, 272, STRING("ENV_STG3_TOU4"))
-                CALL(evt_snd_bgmoff, 26624)
+                CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU4"))
+                CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
                 CASE_GREATER_OR_EQUAL(165)
                 CALL(evt_snd_bgmon, 512, STRING("BGM_STG3_TOU2"))
-                CALL(evt_snd_envon, 272, STRING("ENV_STG3_TOU4"))
-                CALL(evt_snd_bgmoff, 26624)
+                CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU4"))
+                CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
                 CASE_DEFAULT
                 CALL(evt_snd_bgmon, 512, STRING("BGM_STG3_TOU1"))
-                CALL(evt_snd_bgmon, 160, 0)
-                CALL(evt_snd_envon, 272, STRING("ENV_STG3_TOU4"))
+                CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
+                CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU4"))
             END_SWITCH
             ELSE
             CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_STG3_GANCE1"))
-            CALL(evt_snd_envon, 272, STRING("ENV_STG3_TOU4"))
+            CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU4"))
         END_IF
     END_IF
     IF_INT_EQUAL(GSWF(2383), 1)

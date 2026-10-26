@@ -18,6 +18,7 @@
 #include "driver/mapdrv.h"
 #include "driver/npcdrv.h"
 #include "system.h"
+#include "pmario_sound.h"
 
 #include "driver/effdrv.h"
 #include "mario/mariost.h"
@@ -73,7 +74,7 @@ EVT_END()
 
 static EVT_BEGIN(epilogue_evt)
     CALL(evt_snd_bgmon_f, 768, STRING("BGM_ENDING5"), 800)
-    CALL(evt_snd_envon, 272, STRING("ENV_END_MUJ2"))
+    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_END_MUJ2"))
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_set_pos, 40, 28, 64)
     CALL(evt_mario_set_dir, 90, 0, 0)
@@ -117,7 +118,7 @@ static EVT_BEGIN(epilogue_evt)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
         WAIT_MS(3000)
-        CALL(evt_snd_bgmoff_f, 512, 3000)
+        CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 3000)
         WAIT_MS(1500)
         CALL(evt_snd_bgmon_f, 768, STRING("BGM_ENDING3"), 2000)
     END_INLINE_EVENT

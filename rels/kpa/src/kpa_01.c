@@ -16,6 +16,7 @@
 #include "driver/mapdrv.h"
 #include "system.h"
 #include "driver/casedrv.h"
+#include "pmario_sound.h"
 
 #include "stdio.h"
 #include "manager/evtmgr_cmd.h"
@@ -229,7 +230,7 @@ EVT_END()
 
 EVT_BEGIN(kpa_01_touzyo_evt)
     CALL(evt_snd_bgmon, 512, STRING("BGM_STGK_CASTLE1"))
-    CALL(evt_snd_envoff, 512)
+    CALL(evt_snd_envoff, PSND_FADEOUT)
     CALL(evt_snd_set_rev_mode, 2)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_kill_party, 0)
@@ -822,7 +823,7 @@ EVT_BEGIN(douzou_3_touch_evt)
     CALL(evt_npc_set_autotalkpose, STRING("mario"), STRING("KPA_S_1"), STRING("KPA_T_1"))
     CALL(evt_msg_print, 0, STRING("kpa_stg1_014_2"), PTR(kpa_stg1_014_2_cb), STRING("mario"))
     WAIT_MS(300)
-    CALL(evt_snd_bgmoff, 513)
+    CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
     CALL(evt_mario_key_onoff, 1)
     RETURN
 EVT_END()
@@ -1083,7 +1084,7 @@ EVT_BEGIN(kpa_01_init_evt)
         SPAWN_EVENT(kpa_01_touzyo_evt)
         SPAWN_EVENT(kpa_01_pos_check)
         CASE_EQUAL(60)
-        CALL(evt_snd_bgmoff, 30720)
+        CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(7))
         CALL(evt_bero_get_entername, LW(0))
         IF_STR_EQUAL(LW(0), STRING("player"))
             CALL(evt_mario_set_pos, -700, 0, 0)

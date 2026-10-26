@@ -21,6 +21,7 @@
 #include "system.h"
 #include "driver/casedrv.h"
 #include "driver/seqdrv.h"
+#include "pmario_sound.h"
 
 USER_FUNC(evt_kagemario_init);
 #ifdef VERSION_G8ME01
@@ -237,7 +238,7 @@ EVT_BEGIN(gra_06_saku_open)
 EVT_END()
 
 EVT_BEGIN(first_gra06jin)
-    CALL(evt_snd_envon, 272, STRING("ENV_STG4_GRA1"))
+    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG4_GRA1"))
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_cam3d_evt_set, -84, 562, 619, -431, 402, 73, 0, 11)
     CALL(evt_mario_set_pos, -320, 0, 365)
@@ -251,7 +252,7 @@ EVT_BEGIN(first_gra06jin)
     CALL(evt_cam3d_evt_set, 305, 562, 372, -42, 402, -174, 5000, 0)
     WAIT_MS(6000)
     CALL(evt_cam3d_evt_set, 1050, 219, 1169, 88, 250, 153, 2000, 0)
-    CALL(evt_snd_bgmoff_f, 512, 3000)
+    CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 3000)
     BEGIN_INLINE_EVENT
         CALL(evt_party_move_pos2, 0, -110, 350, FLOAT(100.0f))
     END_INLINE_EVENT
@@ -261,7 +262,7 @@ EVT_BEGIN(first_gra06jin)
     CALL(evt_mario_mov_pos2, -67, 312, FLOAT(100.0f))
     WAIT_FRAMES(1)
     CALL(evt_snd_bgmon, 512, STRING("BGM_STG4_JIN1"))
-    CALL(evt_snd_envon, 272, STRING("ENV_STG4_GRA1"))
+    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG4_GRA1"))
     CALL(evt_party_stop, 0)
     CALL(evt_party_set_dir, 0, 90, 200)
     WAIT_MS(300)
@@ -416,7 +417,7 @@ EVT_BEGIN(gra_06_init_evt)
         SPAWN_EVENT(PTR(first_gra06jin))
         ELSE
         CALL(evt_snd_bgmon, 512, STRING("BGM_STG4_JIN1"))
-        CALL(evt_snd_envon, 272, STRING("ENV_STG4_GRA1"))
+        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG4_GRA1"))
     END_IF
     RETURN
 EVT_END()

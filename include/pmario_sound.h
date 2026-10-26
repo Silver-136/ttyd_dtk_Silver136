@@ -58,7 +58,7 @@ typedef struct PaperSoundFade {
 typedef struct PaperSoundBGM {
     u32 listId;             // 0x0, index into psbgmlist, 0xFFFFFFFF = idle
     s32 streamId;           // 0x4, sound stream/song channel
-    u32 flags;              // 0x8, psndBGMOn flags (0x40 = paused/muted)
+    u32 flags;              // 0x8, copy of the psndBGMOn word (only PSND_QUICK is read back)
     u8 pad_0C;              // 0xC, never accessed
     u8 group;               // 0xD, SoundBGMEntry params byte 2; a new BGM in the same nonzero group keeps playing
     u8 volume;              // 0xE, base volume from SoundBGMEntry
@@ -155,6 +155,20 @@ BOOL psndBGMStartCheck(s32 id);
 
 /* psndSetFlag/psndClearFlag: sound effects play at volume 0 unless their id has PSND_SFX_BYPASS_MUTE */
 #define PSND_FLAG_MUTE_SFX 0x80
+
+// First argument of psndBGMOn*/psndBGMOff* and psndENVOn*/psndENVOff* (and evt_snd_bgmon/bgmoff/envon/envoff): one
+// layout for BGM and environment sound. Low nibble: the BGM player / environment slot (0 field music, 1 fanfares and
+// battle music). PSND_FADEOUT/PSND_PAUSE/PSND_SILENT act in the Off functions, the others in the On functions.
+#define PSND_SLOT(n) (n)
+#define PSND_RESTART 0x10          // restart even if the same song or group is already playing
+#define PSND_CONTINUE 0x20         // resume the faded-out (PSND_PAUSE) song: SoundSSContinueCh/SoundSongContinueCh
+#define PSND_QUICK 0x40            // BGM: dip and undo move 5 steps per frame; ENV (US): dip applied at once
+#define PSND_UNSILENT 0x80         // with PSND_CONTINUE: undo PSND_SILENT
+#define PSND_FADEIN 0x100          // fade in over the fade time
+#define PSND_FADEOUT 0x200         // Off: fade out, then free the slot
+#define PSND_PAUSE 0x400           // Off: fade to 0 but keep the slot (PSND_CONTINUE brings it back)
+#define PSND_SILENT 0x800          // Off: dip to a lower volume (psndBGMChkSilent) and stay there
+#define PSND_SILENT_LEVEL(n) ((n) << 12) // dip target silent_tbl[n] = (n + 1) * 10 % of the volume, n = 0..9
 void psndSetFlag(s32 flag);
 void psndSFXOff(s32 id);
 void L_psndBGM_stop(void);

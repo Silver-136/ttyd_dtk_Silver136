@@ -21,6 +21,7 @@
 #include "driver/mapdrv.h"
 #include "system.h"
 #include "driver/casedrv.h"
+#include "pmario_sound.h"
 
 #include "stdio.h"
 #include "memory.h"
@@ -137,11 +138,11 @@ EVT_BEGIN(evt_ana)
 EVT_END()
 
 EVT_BEGIN(evt_kontena)
-    CALL(evt_snd_bgmoff, 1024)
-    CALL(evt_snd_bgmon, 1, STRING("BGM_FF_ENV_SUCCESS1"))
+    CALL(evt_snd_bgmoff, PSND_PAUSE)
+    CALL(evt_snd_bgmon, PSND_SLOT(1), STRING("BGM_FF_ENV_SUCCESS1"))
     WAIT_MS(2000)
-    CALL(evt_snd_bgmoff, 513)
-    CALL(evt_snd_bgmon, 288, 0)
+    CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
+    CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)
     SET_VALUE(GSW_STORY_PROGRESS, 149)
     RETURN
 EVT_END()
@@ -220,7 +221,7 @@ EVT_END()
 EVT_BEGIN(evt_chuchu)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_CYUCYURINA1"))
-    CALL(evt_snd_envoff, 512)
+    CALL(evt_snd_envoff, PSND_FADEOUT)
     CALL(evt_npc_set_position, STRING("チュチュリーナ"), -100, 50, -60)
     CALL(evt_npc_set_ry, STRING("チュチュリーナ"), 270)
     CALL(evt_seq_wait, SEQ_GAME)
@@ -322,8 +323,8 @@ EVT_BEGIN(evt_chuchu)
         END_IF
     END_LOOP
     CALL(evt_snd_bgmon, 512, STRING("BGM_STG3_TOU1"))
-    CALL(evt_snd_bgmoff, 26624)
-    CALL(evt_snd_envon, 272, STRING("ENV_STG3_TOU6"))
+    CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
+    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU6"))
     CALL(evt_msg_print_party, STRING("stg3_tou_316"))
     BEGIN_INLINE_EVENT_GET_ID(LW(11))
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -331,8 +332,8 @@ EVT_BEGIN(evt_chuchu)
         CALL(evt_eff_fukidashi, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
         WAIT_MS(1500)
     END_INLINE_EVENT
-    CALL(evt_snd_bgmoff, 1024)
-    CALL(evt_snd_bgmon, 1, STRING("BGM_FF_MAIL_RECEPTION2"))
+    CALL(evt_snd_bgmoff, PSND_PAUSE)
+    CALL(evt_snd_bgmon, PSND_SLOT(1), STRING("BGM_FF_MAIL_RECEPTION2"))
     SPAWN_EVENT_GET_ID(PTR(evt_sub_mail_vibration), LW(10))
     WAIT_MS(500)
     LOOP(0)
@@ -351,8 +352,8 @@ EVT_BEGIN(evt_chuchu)
         WAIT_FRAMES(1)
     END_LOOP
     CALL(evt_mario_balloon_off)
-    CALL(evt_snd_bgmoff, 513)
-    CALL(evt_snd_bgmon, 288, 0)
+    CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
+    CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_MAIL_RECEPTION1"), LW(0), LW(1), LW(2), 0)
     DELETE_EVENT(LW(10))
@@ -593,21 +594,21 @@ EVT_BEGIN(tou_06_init_evt)
         SPAWN_EVENT(PTR(evt_chuchu))
         ELSE
         IF_INT_EQUAL(GSW_STORY_PROGRESS, 163)
-            CALL(evt_snd_bgmoff, 512)
-            CALL(evt_snd_envoff, 512)
+            CALL(evt_snd_bgmoff, PSND_FADEOUT)
+            CALL(evt_snd_envoff, PSND_FADEOUT)
             ELSE
             SWITCH(GSW_STORY_PROGRESS)
                 CASE_BETWEEN(127, 137)
                 CALL(evt_snd_bgmon, 512, STRING("BGM_STG3_TOU2"))
-                CALL(evt_snd_envon, 272, STRING("ENV_STG3_TOU6"))
-                CALL(evt_snd_bgmoff, 26624)
+                CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU6"))
+                CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
                 CASE_GREATER_OR_EQUAL(165)
                 CALL(evt_snd_bgmon, 512, STRING("BGM_STG3_TOU2"))
-                CALL(evt_snd_envon, 272, STRING("ENV_STG3_TOU6"))
-                CALL(evt_snd_bgmoff, 26624)
+                CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU6"))
+                CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
                 CASE_DEFAULT
                 CALL(evt_snd_bgmon, 512, STRING("BGM_STG3_TOU1"))
-                CALL(evt_snd_envon, 272, STRING("ENV_STG3_TOU6"))
+                CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU6"))
             END_SWITCH
         END_IF
     END_IF

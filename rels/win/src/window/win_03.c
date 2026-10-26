@@ -12,6 +12,7 @@
 #include "driver/mapdrv.h"
 #include "mario/mario_pouch.h"
 #include "driver/casedrv.h"
+#include "pmario_sound.h"
 
 #include "driver/camdrv.h"
 #include "mario/mariost.h"
@@ -269,11 +270,11 @@ EVT_BEGIN(cloud_lostitem)
         SET_VALUE(GF(0), 0)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
-        CALL(evt_snd_bgmoff, 1024)
-        CALL(evt_snd_bgmon, 1, STRING("BGM_FF_ENV_SURPRISED3"))
+        CALL(evt_snd_bgmoff, PSND_PAUSE)
+        CALL(evt_snd_bgmon, PSND_SLOT(1), STRING("BGM_FF_ENV_SURPRISED3"))
         WAIT_MS(3000)
-        CALL(evt_snd_bgmoff, 513)
-        CALL(evt_snd_bgmon, 288, 0)
+        CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
+        CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)
     END_INLINE_EVENT
     CALL(evt_msg_toge, 1, 0, 0, 0)
     CALL(evt_msg_print, 0, STRING("stg2_win_e04_00_05"), 0, 0)
@@ -312,8 +313,8 @@ EVT_BEGIN(win_03_init_evt)
     CALL_CHILD(evt_bero_info_run)
     CALL(evt_run_case_evt, CASE_STAND_ON_A, 1, STRING("n_bero"), 0, PTR(dummy_event), 0)
     CALL(evt_snd_bgmon, 512, STRING("BGM_STG2_WIN1"))
-    CALL(evt_snd_envon, 272, STRING("ENV_STG2_WIN1"))
-    CALL(evt_snd_bgmon, 160, 0)
+    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG2_WIN1"))
+    CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
     SET_VALUE(LW(0), PTR(tree_access_data))
     CALL_CHILD(evt_sub_tree_access_entry)
     CALL(evt_mobj_recovery_blk, STRING("mobj_recover"), 7, 425, 60, 75, 0, 0)

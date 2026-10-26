@@ -18,6 +18,7 @@
 #include "evt/evt_item.h"
 #include "driver/mapdrv.h"
 #include "system.h"
+#include "pmario_sound.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "dolphin/mtx.h"
@@ -1459,8 +1460,8 @@ static EVT_BEGIN(epilogue_evt)
     CALL(evt_npc_battle_start, STRING("ノコノコH"))
     CALL(evt_npc_wait_battle_end)
     CALL(evt_map_set_blend, 0, 0, 0, 0, 255)
-    CALL(evt_snd_bgmoff_f, 512, 3000)
-    CALL(evt_snd_envoff_f, 512, 3000)
+    CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 3000)
+    CALL(evt_snd_envoff_f, PSND_FADEOUT, 3000)
     CALL(evt_fade_set_mapchange_type, 1, 10, 1, 9, 900)
     CALL(evt_bero_mapchange, STRING("tou_08"), STRING(""))
     RETURN
@@ -1525,15 +1526,15 @@ EVT_BEGIN(nok_01_init_evt)
         CALL(evt_bero_get_entername, LW(0))
         IF_STR_EQUAL(LW(0), STRING("sekai_yami1"))
             CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_STG8_WITCH"))
-            CALL(evt_snd_envoff, 512)
+            CALL(evt_snd_envoff, PSND_FADEOUT)
         END_IF
         IF_STR_EQUAL(LW(0), STRING("minnnanokoe"))
             CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_STG8_VOICE1"))
-            CALL(evt_snd_envoff, 512)
+            CALL(evt_snd_envoff, PSND_FADEOUT)
         END_IF
         ELSE
         CALL(evt_snd_bgmon, 512, STRING("BGM_STG1_NOK1"))
-        CALL(evt_snd_envon, 272, STRING("ENV_STG1_NOK2"))
+        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG1_NOK2"))
     END_IF
     CALL(evt_npc_setup, PTR(npcEnt))
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 23)

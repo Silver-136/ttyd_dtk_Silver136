@@ -17,6 +17,7 @@
 #include "evt/evt_cam.h"
 #include "evt/evt_hit.h"
 #include "driver/casedrv.h"
+#include "pmario_sound.h"
 
 #include "stdio.h"
 #include "string.h"
@@ -336,7 +337,7 @@ EVT_BEGIN(evt_rsh_door_open)
                 CALL(evt_party_run, 0)
                 CALL(evt_mario_key_onoff, 1)
                 CASE_BETWEEN(306, 307)
-                CALL(evt_snd_bgmoff, 18432)
+                CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
                 CASE_EQUAL(326)
                 CALL(evt_mario_key_onoff, 0)
                 CALL(evt_img_wait_animend, STRING("capture_img"))
@@ -385,7 +386,7 @@ EVT_BEGIN(evt_rsh_door_open)
                 SET_VALUE(GSWF(3435), 1)
             END_IF
             IF_INT_EQUAL(GSWF(3445), 1)
-                CALL(evt_snd_bgmoff, 2048)
+                CALL(evt_snd_bgmoff, PSND_SILENT)
             END_IF
             SET_VALUE(GSWF(3459), 1)
         END_IF
@@ -461,7 +462,7 @@ EVT_BEGIN(evt_rsh_door_close)
             IF_STR_EQUAL(LW(1), STRING("heya_5"))
                 SWITCH(GSW_STORY_PROGRESS)
                     CASE_BETWEEN(306, 307)
-                    CALL(evt_snd_bgmon, 160, 0)
+                    CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
                 END_SWITCH
             END_IF
         END_IF
@@ -481,7 +482,7 @@ EVT_BEGIN(evt_rsh_door_close)
         IF_INT_EQUAL(LF(0), 1)
             IF_STR_EQUAL(LW(1), STRING("heya_4"))
                 IF_INT_EQUAL(GSWF(3445), 1)
-                    CALL(evt_snd_bgmon, 160, 0)
+                    CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
                 END_IF
             END_IF
         END_IF

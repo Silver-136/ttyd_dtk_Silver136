@@ -18,6 +18,7 @@
 #include "driver/mapdrv.h"
 #include "mario/mario_pouch.h"
 #include "driver/seqdrv.h"
+#include "pmario_sound.h"
 
 USER_FUNC(evt_pouch_open_mail);
 USER_FUNC(evt_pouch_receive_mail);
@@ -220,8 +221,8 @@ static EVT_BEGIN(peach_mail)
     CALL(evt_bero_exec_wait, 65536)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_FIND1_2"), LW(0), LW(1), LW(2), 0)
-    CALL(evt_snd_bgmoff, 1024)
-    CALL(evt_snd_bgmon, 1, STRING("BGM_FF_MAIL_RECEPTION1"))
+    CALL(evt_snd_bgmoff, PSND_PAUSE)
+    CALL(evt_snd_bgmon, PSND_SLOT(1), STRING("BGM_FF_MAIL_RECEPTION1"))
     CALL(evt_eff_fukidashi, 0, STRING(""), 0, 0, 0, 0, 0, 0, 0, 0, 0)
     SPAWN_EVENT_GET_ID(PTR(evt_sub_mail_vibration), LW(10))
     WAIT_MS(500)
@@ -239,8 +240,8 @@ static EVT_BEGIN(peach_mail)
         WAIT_FRAMES(1)
     END_LOOP
     CALL(evt_mario_balloon_off)
-    CALL(evt_snd_bgmoff, 513)
-    CALL(evt_snd_bgmon, 288, 0)
+    CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
+    CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_MAIL_RECEPTION1"), LW(0), LW(1), LW(2), 0)
     DELETE_EVENT(LW(10))
@@ -289,7 +290,7 @@ EVT_BEGIN(tik_07_init_evt)
     CALL(evt_bero_get_info)
     CALL_CHILD(PTR(evt_bero_info_run))
     CALL(evt_snd_bgmon, 512, STRING("BGM_STG0_TIK1"))
-    CALL(evt_snd_envon, 272, STRING("ENV_STG0_TIK1"))
+    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_TIK1"))
     CALL(evt_snd_set_rev_mode, 2)
     CALL(evt_mobj_save_blk, STRING("mobj_save"), 475, 60, 125, 0, 0)
     CALL(evt_mobj_lv_blk, STRING("mobj_blk01"), -300, 100, -50, PTR(evt_block), GSWF(1340), STRING("MOBJ_Lv2BigBlock"))

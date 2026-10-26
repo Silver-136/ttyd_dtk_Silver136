@@ -4,6 +4,7 @@
 #include "evt/evt_npc.h"
 #include "evt/evt_snd.h"
 #include "party/party_motion.h"
+#include "pmario_sound.h"
 
 #include "driver/mapdrv.h"
 #include "driver/envdrv.h"
@@ -55,7 +56,7 @@ EVT_BEGIN(hei_09_init_evt)
     CALL(evt_bero_get_info)
     CALL_CHILD(PTR(evt_bero_info_run))
     CALL(evt_snd_bgmon, 512, STRING("BGM_STG1_TORIDE1"))
-    CALL(evt_snd_envon, 272, STRING("ENV_STG1_HEI3"))
+    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG1_HEI3"))
     CALL(evt_snd_set_rev_mode, 1)
     CALL(evt_npc_change_fbat_mode, 1)
     CALL(evt_map_playanim, STRING("mizu"), 1, 0)

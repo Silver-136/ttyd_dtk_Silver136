@@ -11,6 +11,7 @@
 #include "evt/evt_item.h"
 #include "evt/evt_mobj.h"
 #include "mario/mario_pouch.h"
+#include "pmario_sound.h"
 
 
 static BeroEntry bero_entry_data[2];
@@ -49,7 +50,7 @@ static HitDamageReturn hitDmgRetPoints[] = {
 
 EVT_BEGIN(tik_20_init_evt)
     CALL(evt_snd_bgmon, 512, STRING("BGM_STG0_TIK1"))
-    CALL(evt_snd_envon, 272, STRING("ENV_STG0_TIK7"))
+    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_TIK7"))
     CALL(evt_snd_set_rev_mode, 2)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)

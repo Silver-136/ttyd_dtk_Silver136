@@ -15,6 +15,7 @@
 #include "evt/evt_telop.h"
 #include "evt/evt_item.h"
 #include "mario/mario_pouch.h"
+#include "pmario_sound.h"
 
 #include "driver/mapdrv.h"
 #include "dolphin/gx.h"
@@ -1681,7 +1682,7 @@ EVT_BEGIN(dai3_shurai_sub)
     CALL(evt_npc_flag_onoff, 1, STRING("水夫C"), NPC_FLAG_TALK_POSE)
     CALL(evt_npc_flag_onoff, 1, STRING("水夫D"), NPC_FLAG_TALK_POSE)
     CALL(evt_npc_flag_onoff, 1, STRING("水夫E"), NPC_FLAG_TALK_POSE)
-    CALL(evt_snd_bgmoff, 512)
+    CALL(evt_snd_bgmoff, PSND_FADEOUT)
     CALL(evt_snd_sfxon, STRING("SFX_STG5_CANNON_FIRING1"), 0)
     CALL(evt_cam_shake, 4, FLOAT(0.009765625f), FLOAT(0.0f), 1000)
     CALL(evt_mario_set_dir, 270, 200, 0)
@@ -1795,11 +1796,11 @@ EVT_BEGIN(dai3_shurai_sub)
         WAIT_FRAMES(1)
     END_LOOP
     BEGIN_INLINE_EVENT
-        CALL(evt_snd_bgmoff, 1024)
-        CALL(evt_snd_bgmon, 1, STRING("BGM_FF_ENV_SURPRISED1"))
+        CALL(evt_snd_bgmoff, PSND_PAUSE)
+        CALL(evt_snd_bgmon, PSND_SLOT(1), STRING("BGM_FF_ENV_SURPRISED1"))
         WAIT_MS(2000)
-        CALL(evt_snd_bgmoff, 513)
-        CALL(evt_snd_bgmon, 288, 0)
+        CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
+        CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)
     END_INLINE_EVENT
     WAIT_MS(500)
     CALL(evt_msg_print, 0, STRING("stg5_muj_110"), 0, STRING("第三勢力幹部"))
@@ -2539,7 +2540,7 @@ EVT_BEGIN(kaizoku_vs_dai3)
     WAIT_MS(400)
     CALL(evt_npc_flag_onoff, 1, STRING("コルテス"), NPC_FLAG_NO_VIEW_CORRECTION)
     CALL(evt_npc_pera_onoff, STRING("コルテス"), 0)
-    CALL(evt_snd_bgmoff_f, 512, 2000)
+    CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)
     CALL(evt_msg_print, 0, STRING("stg5_muj_119"), 0, STRING("コルテス"))
     CALL(evt_msg_continue)
     SET_VALUE(GF(0), 1)
@@ -2836,8 +2837,8 @@ EVT_BEGIN(dai3_beat_back)
 #else
     CALL_CHILD(PTR(evt_memcard_save))
 #endif
-    CALL(evt_snd_bgmoff_f, 512, 2000)
-    CALL(evt_snd_envoff_f, 512, 2000)
+    CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)
+    CALL(evt_snd_envoff_f, PSND_FADEOUT, 2000)
     CALL(evt_snd_sfx_all_stop)
     CALL(evt_fade_set_mapchange_type, 1, 55, 0, 54, 0)
     CALL(evt_bero_mapchange, STRING("aji_10"), STRING(""))
@@ -3029,7 +3030,7 @@ EVT_BEGIN(option_ship_main)
 EVT_END()
 
 EVT_BEGIN(leave_island)
-    CALL(evt_snd_bgmoff, 512)
+    CALL(evt_snd_bgmoff, PSND_FADEOUT)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
     CALL(evt_mario_cont_onoff, 0)
@@ -3206,7 +3207,7 @@ EVT_BEGIN(leave_island)
         CALL(evt_nannpc_ppflag_onoff, LW(0), 0, 4)
         ADD(LW(0), 1)
     END_LOOP
-    CALL(evt_snd_bgmoff_f, 512, 2000)
+    CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)
     CALL(evt_eff_softdelete, STRING("sunlight"))
     SET_VALUE(LW(10), 600)
     SPAWN_EVENT(PTR(back_dark))
@@ -3548,7 +3549,7 @@ EVT_BEGIN(muj_00_init_evt)
             END_IF
         END_IF
     END_IF
-    CALL(evt_snd_envon, 272, STRING("ENV_STG5_MUJ2"))
+    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG5_MUJ2"))
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
 #ifdef VERSION_G8ME01

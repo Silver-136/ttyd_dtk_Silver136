@@ -20,6 +20,7 @@
 #include "driver/mapdrv.h"
 #include "mario/mario_pouch.h"
 #include "driver/casedrv.h"
+#include "pmario_sound.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "driver/imgdrv.h"
@@ -302,7 +303,7 @@ EVT_BEGIN(wana_offscreen)
     BEGIN_INLINE_EVENT
         CALL(evt_snd_sfxon_3d, STRING("SFX_OFF2_DOOR_GRID_SHUT1"), 50, 0, 0, 0)
         WAIT_MS(1750)
-        CALL(evt_snd_bgmoff, 512)
+        CALL(evt_snd_bgmoff, PSND_FADEOUT)
         CALL(evt_snd_sfxon_3d, STRING("SFX_STG2_DOOR_GRID_DOWN1"), 50, 0, 0, 0)
         SPAWN_EVENT(PTR(wana_kemuri))
         CALL(evt_cam_shake, 4, FLOAT(0.029296875f), FLOAT(0.0f), 500)
@@ -480,7 +481,7 @@ EVT_BEGIN(trap_event)
     CALL(evt_npc_set_position, LW(10), 0, -1000, 0)
     WAIT_WHILE(GF(0))
     WAIT_MS(2000)
-    CALL(evt_snd_bgmoff_f, 512, 1000)
+    CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 1000)
     CALL(evt_cam3d_evt_set, 34, 122, 390, 34, 56, 14, 500, 11)
     WAIT_MS(500)
     CALL(evt_npc_set_ry, STRING("ガイド"), 90)
@@ -734,10 +735,10 @@ EVT_BEGIN(mri_17_init_evt)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(109, 110)
         CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_DANGER4"))
-        CALL(evt_snd_envon, 272, STRING("ENV_STG2_MRI9"))
+        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG2_MRI9"))
         CASE_DEFAULT
         CALL(evt_snd_bgmon, 512, STRING("BGM_STG2_MRI1"))
-        CALL(evt_snd_envon, 272, STRING("ENV_STG2_MRI4"))
+        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG2_MRI4"))
     END_SWITCH
     SET_VALUE(LW(10), STRING("punipuni"))
     SET_VALUE(LW(11), 0)

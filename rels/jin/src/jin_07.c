@@ -16,6 +16,7 @@
 #include "mario/mario_pouch.h"
 #include "system.h"
 #include "driver/casedrv.h"
+#include "pmario_sound.h"
 
 #pragma defer_codegen on
 #include "manager/evtmgr_cmd.h"
@@ -404,8 +405,8 @@ USER_FUNC(senteresa_okure_move) {
 }
 
 EVT_BEGIN(evt_teresa_box_open)
-    CALL(evt_snd_bgmoff, 512)
-    CALL(evt_snd_envoff, 1024)
+    CALL(evt_snd_bgmoff, PSND_FADEOUT)
+    CALL(evt_snd_envoff, PSND_PAUSE)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_cam3d_evt_set, 1, 100, 400, 0, 38, 48, 500, 11)
     CALL(evt_mapobj_get_position, STRING("hako"), LW(10), LW(11), LW(12))
@@ -444,8 +445,8 @@ EVT_BEGIN(evt_teresa_box_open)
         SET_VALUE(GF(0), 1)
     END_INLINE_EVENT
     CALL(evt_ext_entry, 200, PTR(senteresa_ext_entry_data), PTR(senteresa_ext_init), PTR(senteresa_ext_main), PTR(senteresa_ext_dispent))
-    CALL(evt_snd_bgmoff, 1024)
-    CALL(evt_snd_bgmon, 1, STRING("BGM_FF_ENV_SURPRISED2"))
+    CALL(evt_snd_bgmoff, PSND_PAUSE)
+    CALL(evt_snd_bgmon, PSND_SLOT(1), STRING("BGM_FF_ENV_SURPRISED2"))
     BEGIN_INLINE_EVENT
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         CALL(evt_snd_sfxon_3d, STRING("SFX_STG4_TELESA_APPEAR1"), LW(0), LW(1), LW(2), 0)
@@ -577,15 +578,15 @@ EVT_BEGIN(evt_teresa_box_open)
     SET_VALUE(GSW_STORY_PROGRESS, 196)
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_snd_bgmon, 512, STRING("BGM_STG4_JIN1"))
-    CALL(evt_snd_envoff, 513)
-    CALL(evt_snd_envon, 288, 0)
+    CALL(evt_snd_envoff, PSND_FADEOUT | PSND_SLOT(1))
+    CALL(evt_snd_envon, PSND_CONTINUE | PSND_FADEIN, 0)
     CALL(evt_exit_case_evt)
     RETURN
 EVT_END()
 
 EVT_BEGIN(jin_07_init_evt)
     CALL(evt_snd_bgmon, 512, STRING("BGM_STG4_JIN1"))
-    CALL(evt_snd_envon, 272, STRING("ENV_STG4_JIN3"))
+    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG4_JIN3"))
     CALL(evt_snd_set_rev_mode, 2)
     CALL(evt_kagemario_init)
     SET_VALUE(LW(0), PTR(bero_entry_data))

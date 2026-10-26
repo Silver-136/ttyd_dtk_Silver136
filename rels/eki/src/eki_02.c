@@ -6,6 +6,7 @@
 #include "party/party_motion.h"
 #include "evt/evt_item.h"
 #include "mario/mario_pouch.h"
+#include "pmario_sound.h"
 
 #include "mario/mario.h"
 #include "driver/hitdrv.h"
@@ -110,8 +111,8 @@ EVT_BEGIN(eki_02_init_evt)
     SET_VALUE(LW(0), PTR(bero_data))
     CALL(evt_bero_get_info)
     CALL_CHILD(PTR(evt_bero_info_run))
-    CALL(evt_snd_bgmoff, 512)
-    CALL(evt_snd_envon, 272, STRING("ENV_STG6_EKI3"))
+    CALL(evt_snd_bgmoff, PSND_FADEOUT)
+    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG6_EKI3"))
 #ifdef VERSION_G8ME01
     CALL(evt_map_playanim, STRING("anm_sikake_1"), 1, 1)
     CALL(evt_map_playanim, STRING("anm_sikake_2"), 1, 1)

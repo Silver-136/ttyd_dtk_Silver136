@@ -16,6 +16,7 @@
 #include "driver/npcdrv.h"
 #include "system.h"
 #include "driver/casedrv.h"
+#include "pmario_sound.h"
 
 #include "memory.h"
 #include "mario/mariost.h"
@@ -718,8 +719,8 @@ EVT_BEGIN(hom_00_init_evt)
 #endif
     CALL(evt_npc_setup, PTR(npc_data))
     CALL(evt_snd_bgmon, 512, STRING("BGM_STG6_HOM1"))
-    CALL(evt_snd_envon, 272, STRING("ENV_STG6_EKI1"))
-    CALL(evt_snd_bgmon, 160, 0)
+    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG6_EKI1"))
+    CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
     CALL(evt_mobj_save_blk, STRING("mobj_save"), -175, 140, -170, 0, 0)
     CALL(evt_mobj_recovery_blk, STRING("mobj_recover"), 15, -125, 140, -170, 0, 0)
     IF_INT_EQUAL(GSWF(3578), 0)

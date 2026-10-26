@@ -9,6 +9,7 @@
 #include "evt/evt_snd.h"
 #include "party/party_motion.h"
 #include "driver/mapdrv.h"
+#include "pmario_sound.h"
 
 
 static EvtWord w_door_close[22];
@@ -200,7 +201,7 @@ EVT_BEGIN(las_23_init_evt)
         ELSE
         CALL(evt_snd_bgmon, 512, STRING("BGM_STG8_LST3"))
     END_IF
-    CALL(evt_snd_envon, 272, STRING("ENV_STG8_LAS1"))
+    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS1"))
     CALL(evt_snd_set_rev_mode, 2)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)

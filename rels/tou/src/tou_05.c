@@ -28,6 +28,7 @@
 #include "system.h"
 #include "driver/casedrv.h"
 #include "driver/seqdrv.h"
+#include "pmario_sound.h"
 
 USER_FUNC(evt_mario_dispflag_onoff);
 void gans_msg_callback(s32 type, void** work);
@@ -159,7 +160,7 @@ EVT_BEGIN(evt_takurami)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("kami_2"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_msg_print_party, STRING("stg3_tou_458"))
     WAIT_MS(300)
-    CALL(evt_snd_bgmoff_f, 512, 2000)
+    CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)
     CALL(evt_npc_set_position, STRING("ガンス"), 0, 0, -160)
     CALL(evt_npc_flag_onoff, 1, STRING("ガンス"), NPC_FLAG_INSTANT_TURN)
     CALL(evt_set_dir_to_target, STRING("ガンス"), STRING("mario"))
@@ -627,8 +628,8 @@ static EVT_BEGIN(evt_kinoshikowa)
 EVT_END()
 
 static EVT_BEGIN(evt_sensyu)
-    CALL(evt_snd_bgmoff, 512)
-    CALL(evt_snd_envoff, 512)
+    CALL(evt_snd_bgmoff, PSND_FADEOUT)
+    CALL(evt_snd_envoff, PSND_FADEOUT)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_seq_wait, SEQ_GAME)
     WAIT_MS(1000)
@@ -748,7 +749,7 @@ EVT_BEGIN(evt_sensyu2)
     CALL(evt_seq_wait, SEQ_GAME)
     WAIT_MS(1000)
     CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_STG3_GANCE1"))
-    CALL(evt_snd_envoff, 512)
+    CALL(evt_snd_envoff, PSND_FADEOUT)
     CALL(evt_msg_print, 0, STRING("stg3_tou_51"), 0, STRING("ガンス"))
     WAIT_MS(300)
     CALL(evt_eff_fukidashi, 1, STRING("eff"), STRING("ガンス"), 0, 0, 0, 0, 0, 0, 0, 0)
@@ -1293,29 +1294,29 @@ EVT_BEGIN(tou_05_init_evt)
     END_IF
     IF_INT_EQUAL(GSWF(2393), 1)
         CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_STG3_GANCE1"))
-        CALL(evt_snd_envoff, 512)
+        CALL(evt_snd_envoff, PSND_FADEOUT)
         SET_VALUE(LW(0), 1)
         SPAWN_EVENT(PTR(evt_1st_leagu))
         ELSE
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("kami_2"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     IF_INT_EQUAL(GSW_STORY_PROGRESS, 163)
-        CALL(evt_snd_bgmoff, 512)
-        CALL(evt_snd_envoff, 512)
+        CALL(evt_snd_bgmoff, PSND_FADEOUT)
+        CALL(evt_snd_envoff, PSND_FADEOUT)
         ELSE
         IF_INT_EQUAL(LW(0), 0)
             SWITCH(GSW_STORY_PROGRESS)
                 CASE_BETWEEN(127, 137)
                 CALL(evt_snd_bgmon, 512, STRING("BGM_STG3_TOU2"))
-                CALL(evt_snd_envon, 272, STRING("ENV_STG3_TOU6"))
-                CALL(evt_snd_bgmoff, 26624)
+                CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU6"))
+                CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
                 CASE_GREATER_OR_EQUAL(165)
                 CALL(evt_snd_bgmon, 512, STRING("BGM_STG3_TOU2"))
-                CALL(evt_snd_envon, 272, STRING("ENV_STG3_TOU6"))
-                CALL(evt_snd_bgmoff, 26624)
+                CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU6"))
+                CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
                 CASE_DEFAULT
                 CALL(evt_snd_bgmon, 512, STRING("BGM_STG3_TOU1"))
-                CALL(evt_snd_envon, 272, STRING("ENV_STG3_TOU6"))
+                CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU6"))
             END_SWITCH
         END_IF
     END_IF

@@ -21,6 +21,7 @@
 #include "driver/mapdrv.h"
 #include "system.h"
 #include "driver/casedrv.h"
+#include "pmario_sound.h"
 
 #include "evt/evt_npc.h"
 #include "party.h"
@@ -548,7 +549,7 @@ EVT_BEGIN(geso_battle)
         END_LOOP
     END_INLINE_EVENT
     CALL(evt_mario_key_onoff, 0)
-    CALL(evt_snd_bgmoff_f, 512, 500)
+    CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 500)
     CALL(evt_party_stop, 0)
     CALL(evt_npc_set_position, STRING("ゲッソーのゲソ"), 0, -1000, 0)
     WAIT_MS(300)
@@ -758,7 +759,7 @@ EVT_BEGIN(tik_02_init_evt)
     CALL_CHILD(PTR(evt_bero_info_run))
     CALL(evt_npc_setup, PTR(npcEnt))
     CALL(evt_snd_bgmon, 512, STRING("BGM_STG0_TIK1"))
-    CALL(evt_snd_envon, 272, STRING("ENV_STG0_TIK4"))
+    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_TIK4"))
     CALL(evt_snd_set_rev_mode, 2)
     CALL(evt_map_playanim, STRING("anm_nami_1"), 1, 0)
     CALL(evt_map_playanim, STRING("anm_nami_2"), 1, 0)

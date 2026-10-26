@@ -14,6 +14,7 @@
 #include "evt/evt_party.h"
 #include "mario/mario_pouch.h"
 #include "driver/casedrv.h"
+#include "pmario_sound.h"
 
 #include "driver/mobjdrv.h"
 #include "driver/animdrv.h"
@@ -136,11 +137,11 @@ EVT_BEGIN(vivian_check)
         IF_INT_EQUAL(LW(15), 160)
             IF_INT_EQUAL(GSWF(4382), 0)
                 SET_VALUE(GSWF(4382), 1)
-                CALL(evt_snd_bgmoff, 1024)
-                CALL(evt_snd_bgmon, 1, STRING("BGM_FF_ENV_SUCCESS1"))
+                CALL(evt_snd_bgmoff, PSND_PAUSE)
+                CALL(evt_snd_bgmon, PSND_SLOT(1), STRING("BGM_FF_ENV_SUCCESS1"))
                 WAIT_MS(2000)
-                CALL(evt_snd_bgmoff, 513)
-                CALL(evt_snd_bgmon, 288, 0)
+                CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
+                CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)
             END_IF
         END_IF
         WAIT_FRAMES(1)
@@ -185,7 +186,7 @@ EVT_END()
 
 EVT_BEGIN(las_18_init_evt)
     CALL(evt_snd_bgmon, 512, STRING("BGM_STG8_LST2"))
-    CALL(evt_snd_envon, 272, STRING("ENV_STG8_LAS1"))
+    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS1"))
     CALL(evt_snd_set_rev_mode, 2)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)

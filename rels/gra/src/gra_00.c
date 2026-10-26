@@ -16,6 +16,7 @@
 #include "driver/npcdrv.h"
 #include "mario/mario_pouch.h"
 #include "system.h"
+#include "pmario_sound.h"
 
 #include "driver/camdrv.h"
 #include "driver/msgdrv.h"
@@ -325,7 +326,7 @@ EVT_BEGIN(evt_machibuse)
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
-    CALL(evt_snd_bgmoff_f, 512, 120)
+    CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 120)
     BEGIN_INLINE_EVENT
         WAIT_MS(200)
         CALL(evt_mario_key_onoff, 0)
@@ -351,7 +352,7 @@ EVT_BEGIN(evt_machibuse)
     WAIT_MS(800)
     CALL(evt_mario_set_pose, STRING("M_S_1"))
     CALL(evt_snd_bgmon, 512, STRING("BGM_FF_ENV_RPL_APPEAR1"))
-    CALL(evt_snd_envoff, 1024)
+    CALL(evt_snd_envoff, PSND_PAUSE)
     CALL_CHILD(PTR(evt_yabure_on))
     IF_INT_LESS(LW(0), -48)
         SET_VALUE(LF(0), 1)
@@ -466,8 +467,8 @@ EVT_BEGIN(evt_machibuse)
             SET_VALUE(GSW_STORY_PROGRESS, 210)
             CALL(evt_pouch_remove_item, ITEM_THE_LETTER_P, LW(0))
             CALL(evt_snd_bgmon, 512, STRING("BGM_STG4_GRA1"))
-            CALL(evt_snd_envoff, 513)
-            CALL(evt_snd_envon, 288, 0)
+            CALL(evt_snd_envoff, PSND_FADEOUT | PSND_SLOT(1))
+            CALL(evt_snd_envon, PSND_CONTINUE | PSND_FADEIN, 0)
             CALL(evt_gra_vivian_pose_set, 1, STRING("PTR_S_1"))
             CALL(evt_gra_vivian_pose_set, 2, STRING("PTR_W_1"))
             CALL(evt_gra_vivian_pose_set, 3, STRING("PTR_R_1"))
@@ -587,7 +588,7 @@ EVT_END()
 EVT_BEGIN(gra_00_init_evt)
     SET_VALUE(GSWF(256), 1)
     CALL(evt_snd_bgmon, 512, STRING("BGM_STG4_GRA1"))
-    CALL(evt_snd_envon, 272, STRING("ENV_STG4_USU1"))
+    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG4_USU1"))
     CALL(evt_kagemario_init)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)

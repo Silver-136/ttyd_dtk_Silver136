@@ -20,6 +20,7 @@
 #include "mario/mario_pouch.h"
 #include "system.h"
 #include "driver/casedrv.h"
+#include "pmario_sound.h"
 
 #include "party.h"
 #include "evt/evt_bero.h"
@@ -267,11 +268,11 @@ EVT_BEGIN(bridge_evt_02)
     CALL(evt_img_release, STRING("capture_img"))
     CALL(evt_mapobj_clear_offscreen, 1, STRING("S"))
     BEGIN_INLINE_EVENT
-        CALL(evt_snd_bgmoff, 1024)
-        CALL(evt_snd_bgmon, 1, STRING("BGM_FF_ENV_SUCCESS1"))
+        CALL(evt_snd_bgmoff, PSND_PAUSE)
+        CALL(evt_snd_bgmon, PSND_SLOT(1), STRING("BGM_FF_ENV_SUCCESS1"))
         WAIT_MS(2000)
-        CALL(evt_snd_bgmoff, 513)
-        CALL(evt_snd_bgmon, 288, 0)
+        CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
+        CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)
     END_INLINE_EVENT
     WAIT_MS(1000)
     CALL(evt_cam3d_evt_off, 500, 11)
@@ -363,7 +364,7 @@ EVT_BEGIN(nokotaro_nakama)
         WAIT_FRAMES(1)
     END_LOOP
     CALL(evt_mario_key_onoff, 0)
-    CALL(evt_snd_bgmoff_f, 512, 3000)
+    CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 3000)
     CALL(evt_npc_change_fbat_mode, 7)
     CALL(evt_npc_stop_for_event)
     CALL(evt_npc_set_position, STRING("ノコタロウ"), 300, 0, 0)
@@ -774,8 +775,8 @@ static EVT_BEGIN(peach_mail)
         CALL(evt_party_set_pos, 0, LW(0), LW(1), LW(2))
         CALL(evt_party_set_dir, 0, 270, 0)
     END_IF
-    CALL(evt_snd_bgmoff, 1024)
-    CALL(evt_snd_bgmon, 1, STRING("BGM_FF_MAIL_RECEPTION1"))
+    CALL(evt_snd_bgmoff, PSND_PAUSE)
+    CALL(evt_snd_bgmon, PSND_SLOT(1), STRING("BGM_FF_MAIL_RECEPTION1"))
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_FIND1_2"), LW(0), LW(1), LW(2), 0)
     CALL(evt_eff_fukidashi, 0, STRING("eff0"), 0, 0, 0, 0, 0, 0, 0, 0, 0)
@@ -808,8 +809,8 @@ static EVT_BEGIN(peach_mail)
         WAIT_FRAMES(1)
     END_LOOP
     CALL(evt_mario_balloon_off)
-    CALL(evt_snd_bgmoff, 513)
-    CALL(evt_snd_bgmon, 288, 0)
+    CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
+    CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_HAND_UP1_4"), LW(0), LW(1), LW(2), 0)
     DELETE_EVENT(LW(10))
@@ -901,7 +902,7 @@ EVT_BEGIN(hei_01_init_evt)
         SPAWN_EVENT(PTR(peach_mail))
     END_IF
     CALL(evt_snd_bgmon, 512, STRING("BGM_STG1_HEI1"))
-    CALL(evt_snd_envon, 272, STRING("ENV_STG1_HEI2"))
+    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG1_HEI2"))
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("USIROKUSA"), MAP_OBJ_FLAG_CLIP)
     IF_INT_LESS(GSW_STORY_PROGRESS, 25)
         IF_INT_EQUAL(GSWF(1805), 0)

@@ -31,6 +31,7 @@
 #include "system.h"
 #include "driver/casedrv.h"
 #include "driver/seqdrv.h"
+#include "pmario_sound.h"
 
 USER_FUNC(evt_mario_dispflag_onoff);
 USER_FUNC(evt_pouch_add_coin);
@@ -177,15 +178,15 @@ const char* ie_3_npc[] = {
 };
 
 static EVT_BEGIN(door_1_open)
-    CALL(evt_snd_bgmoff, 18432)
-    CALL(evt_snd_envoff, 18432)
+    CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
+    CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_snd_env_lpf, 0, 800)
     RETURN
 EVT_END()
 
 static EVT_BEGIN(door_1_close)
-    CALL(evt_snd_bgmon, 160, 0)
-    CALL(evt_snd_envon, 160, 0)
+    CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
+    CALL(evt_snd_envon, PSND_CONTINUE | PSND_UNSILENT, 0)
     CALL(evt_snd_env_lpf, 0, 0)
     RETURN
 EVT_END()
@@ -239,15 +240,15 @@ const char* hotel_npc[] = {
 
 static EVT_BEGIN(door_2_open)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("ERE"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_snd_bgmoff, 18432)
-    CALL(evt_snd_envoff, 18432)
+    CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
+    CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_snd_env_lpf, 0, 800)
     RETURN
 EVT_END()
 
 static EVT_BEGIN(door_2_close)
-    CALL(evt_snd_bgmon, 160, 0)
-    CALL(evt_snd_envon, 160, 0)
+    CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
+    CALL(evt_snd_envon, PSND_CONTINUE | PSND_UNSILENT, 0)
     CALL(evt_snd_env_lpf, 0, 0)
     RETURN
 EVT_END()
@@ -949,8 +950,8 @@ static EVT_BEGIN(epilogue_evt)
     WAIT_MS(2000)
     CALL(evt_msg_print, 0, STRING("ep_44"), 0, 0)
     WAIT_MS(1000)
-    CALL(evt_snd_bgmoff_f, 512, 3000)
-    CALL(evt_snd_envoff_f, 512, 3000)
+    CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 3000)
+    CALL(evt_snd_envoff_f, PSND_FADEOUT, 3000)
     CALL(evt_fade_set_mapchange_type, 1, 10, 900, 9, 900)
     CALL(evt_bero_mapchange, STRING("tik_00"), STRING(""))
     RETURN
@@ -964,7 +965,7 @@ EVT_BEGIN(pik_04_init_evt)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, 402)
         CALL(evt_snd_bgm_scope, 0, 1)
     END_IF
-    CALL(evt_snd_envon, 272, STRING("ENV_STG6_PIK1_2"))
+    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG6_PIK1_2"))
     CALL(evt_map_playanim, STRING("anm_taki"), 1, 0)
     CALL(evt_map_playanim, STRING("anm_mizu_1"), 1, 0)
     CALL(evt_map_playanim, STRING("anm_mizu_2"), 1, 0)

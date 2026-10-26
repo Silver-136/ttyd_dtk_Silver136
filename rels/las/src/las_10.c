@@ -16,6 +16,7 @@
 #include "evt/evt_pouch.h"
 #include "system.h"
 #include "driver/casedrv.h"
+#include "pmario_sound.h"
 
 #include "mario/mario_pouch.h"
 #include "party.h"
@@ -483,7 +484,7 @@ EVT_END()
 
 EVT_BEGIN(tenkyugi_evt)
     CALL(evt_mario_key_onoff, 0)
-    CALL(evt_snd_bgmoff_f, 512, 3000)
+    CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 3000)
     CALL(evt_snd_sfxon, STRING("SFX_STG8_CELESTIAL_SHAKE1"), LW(10))
     CALL(evt_cam_shake, 4, FLOAT(0.009765625f), FLOAT(0.0f), 1200)
     CALL(evt_snd_sfxoff, LW(10))
@@ -1125,17 +1126,17 @@ EVT_BEGIN(las_10_init_evt)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, 389)
         CALL(evt_bero_get_entername, LW(0))
         IF_STR_EQUAL(LW(0), STRING("ret_chgmap_evt"))
-            CALL(evt_snd_bgmoff, 512)
-            CALL(evt_snd_envon, 272, STRING("ENV_STG8_LAS4"))
+            CALL(evt_snd_bgmoff, PSND_FADEOUT)
+            CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS4"))
             CALL(evt_snd_set_rev_mode, 2)
             ELSE
             CALL(evt_snd_bgmon, 512, STRING("BGM_STG8_LST2"))
-            CALL(evt_snd_envon, 272, STRING("ENV_STG8_LAS4"))
+            CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS4"))
             CALL(evt_snd_set_rev_mode, 2)
         END_IF
         ELSE
         CALL(evt_snd_bgmon, 512, STRING("BGM_STG8_LST2"))
-        CALL(evt_snd_envon, 272, STRING("ENV_STG8_LAS4"))
+        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS4"))
         CALL(evt_snd_set_rev_mode, 2)
     END_IF
     SET_VALUE(LW(0), PTR(bero_entry_data))

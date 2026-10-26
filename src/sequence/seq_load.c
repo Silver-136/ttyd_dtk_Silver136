@@ -401,7 +401,7 @@ void loadMain(SequenceWork* seq) {
             break;
         case 0x16:
             fadeEntry(0x1b, 0, (GXColor){0, 0, 0, 255});
-            psndBGMOff_f_d(0x200, 2000, 0);
+            psndBGMOff_f_d(PSND_FADEOUT, 2000, 0);
             wp->state++;
             break;
         case 0x17:
@@ -437,7 +437,7 @@ void loadMain(SequenceWork* seq) {
             if (fadeIsFinish() && !nameEntWait()) {
                 fadeEntry(0x18, 0, (GXColor){0, 0, 0, 255});
                 if (!nameEntIsCancel()) {
-                    psndBGMOff_f_d(0x200, 3000, 0);
+                    psndBGMOff_f_d(PSND_FADEOUT, 3000, 0);
                 }
                 wp->state++;
             }
@@ -660,7 +660,7 @@ void loadMain(SequenceWork* seq) {
                     SoundSetOutputMode(SND_OUTPUTMODE_STEREO);
                 }
                 SFX(0x12);
-                psndBGMOn(0xa0, NULL);
+                psndBGMOn(PSND_CONTINUE | PSND_UNSILENT, NULL);
                 psndENVOff(0x200);
                 wp->soundMode = wp->soundModeSel;
                 wp->flags &= ~1;
@@ -668,7 +668,7 @@ void loadMain(SequenceWork* seq) {
                 break;
             } else if (trg & 0x200) {
                 SFX(0x13);
-                psndBGMOn(0xa0, NULL);
+                psndBGMOn(PSND_CONTINUE | PSND_UNSILENT, NULL);
                 psndENVOff(0x200);
                 wp->soundModeSel = wp->soundMode;
                 if (OSGetSoundMode() == 0) {
@@ -698,7 +698,7 @@ void loadMain(SequenceWork* seq) {
                         SoundSetOutputMode(SND_OUTPUTMODE_SURROUND);
                         break;
                 }
-                psndENVOn(0x110, (const char*)PSND_ENV_SYS_FL1);
+                psndENVOn(PSND_RESTART | PSND_FADEIN, (const char*)PSND_ENV_SYS_FL1);
             }
 #ifdef VERSION_G8ME01
             wp->tx = -74.0f;

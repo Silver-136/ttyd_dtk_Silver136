@@ -16,6 +16,7 @@
 #include "driver/mapdrv.h"
 #include "system.h"
 #include "driver/casedrv.h"
+#include "pmario_sound.h"
 
 #include "party.h"
 #include "mario/mario.h"
@@ -213,8 +214,8 @@ EVT_BEGIN(evt_kou2)
             CALL(dot_mario)
             WAIT_MS(1000)
             SET_VALUE(GSWF(4217), 1)
-            CALL(evt_snd_bgmoff, 512)
-            CALL(evt_snd_envoff, 512)
+            CALL(evt_snd_bgmoff, PSND_FADEOUT)
+            CALL(evt_snd_envoff, PSND_FADEOUT)
             CALL(evt_mario_key_onoff, 1)
         END_IF
     END_IF
@@ -434,7 +435,7 @@ EVT_BEGIN(peach_evt_kou_in)
     SET_VALUE(LW(0), LW(9))
     CALL_CHILD(PTR(peach_evt_ka_close))
     IF_INT_EQUAL(GSWF(4203), 1)
-        CALL(evt_snd_bgmoff, 1024)
+        CALL(evt_snd_bgmoff, PSND_PAUSE)
         IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 167)
             IF_STR_EQUAL(LW(9), STRING("S_kou1_ka"))
                 IF_INT_EQUAL(GSWF(4205), 0)
@@ -491,8 +492,8 @@ EVT_END()
 EVT_BEGIN(peach_evt_kou_out)
     SET_VALUE(LW(10), LW(0))
     SET_VALUE(LW(9), LW(1))
-    CALL(evt_snd_bgmoff, 513)
-    CALL(evt_snd_bgmon, 288, 0)
+    CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
+    CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)
     SET_VALUE(LW(0), LW(9))
     CALL_CHILD(PTR(peach_evt_ka_open))
     CALL(evt_mario_mov_pos2, LW(10), -55, FLOAT(60.0f))
@@ -802,11 +803,11 @@ EVT_BEGIN(aji_09_init_evt)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_memo1"), 0, PTR(evt_memo1), 0)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_memo2"), 0, PTR(evt_memo2), 0)
         CALL(evt_snd_bgmon, 512, STRING("BGM_STG7_DUN2"))
-        CALL(evt_snd_envon, 272, STRING("ENV_STG7_AJI2"))
+        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI2"))
         ELSE
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_memo"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_PEACH1"))
-        CALL(evt_snd_envoff, 512)
+        CALL(evt_snd_envoff, PSND_FADEOUT)
     END_IF
     CALL(evt_snd_set_rev_mode, 1)
     RETURN

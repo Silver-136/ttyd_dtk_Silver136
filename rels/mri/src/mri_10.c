@@ -11,6 +11,7 @@
 #include "evt/evt_lecture.h"
 #include "evt/evt_item.h"
 #include "mario/mario_pouch.h"
+#include "pmario_sound.h"
 
 
 static BeroEntry bero_entry_data[2];
@@ -38,8 +39,8 @@ static BeroEntry bero_entry_data[] = {
 };
 
 static EVT_BEGIN(item_evt)
-    CALL(evt_snd_bgmoff, 1024)
-    CALL(evt_snd_envoff, 1024)
+    CALL(evt_snd_bgmoff, PSND_PAUSE)
+    CALL(evt_snd_envoff, PSND_PAUSE)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_puni_puninum_onoff, 0)
     CALL(evt_mobj_get_position, STRING("mobj_box00"), LW(0), LW(1), LW(2))
@@ -49,10 +50,10 @@ static EVT_BEGIN(item_evt)
     CALL(evt_item_get_important_item, STRING("item00"))
     CALL(evt_item_get_item, STRING("item00"))
     CALL(evt_item_get_item_end_wait, STRING("item00"))
-    CALL(evt_snd_bgmoff, 513)
-    CALL(evt_snd_bgmon, 288, 0)
-    CALL(evt_snd_envoff, 513)
-    CALL(evt_snd_envon, 288, 0)
+    CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
+    CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)
+    CALL(evt_snd_envoff, PSND_FADEOUT | PSND_SLOT(1))
+    CALL(evt_snd_envon, PSND_CONTINUE | PSND_FADEIN, 0)
     SET_VALUE(GSW_STORY_PROGRESS, 105)
     CALL(evt_puni_puninum_onoff, 1)
     CALL(evt_mario_key_onoff, 1)
@@ -76,10 +77,10 @@ EVT_BEGIN(mri_10_init_evt)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(109, 110)
         CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_DANGER4"))
-        CALL(evt_snd_envon, 272, STRING("ENV_STG2_MRI9"))
+        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG2_MRI9"))
         CASE_DEFAULT
         CALL(evt_snd_bgmon, 512, STRING("BGM_STG2_MRI1"))
-        CALL(evt_snd_envon, 272, STRING("ENV_STG2_MRI1"))
+        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG2_MRI1"))
     END_SWITCH
     CALL(evt_map_playanim, STRING("mizu_01"), 1, 0)
     CALL(evt_map_playanim, STRING("mizu_02"), 1, 0)

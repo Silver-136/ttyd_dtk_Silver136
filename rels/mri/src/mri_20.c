@@ -11,6 +11,7 @@
 #include "party/party_motion.h"
 #include "evt/evt_item.h"
 #include "mario/mario_pouch.h"
+#include "pmario_sound.h"
 
 
 BeroEntry bero_black_shadow[1];
@@ -144,10 +145,10 @@ EVT_BEGIN(mri_20_init_evt)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(109, 110)
         CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_DANGER4"))
-        CALL(evt_snd_envon, 272, STRING("ENV_STG2_MRI9"))
+        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG2_MRI9"))
         CASE_DEFAULT
         CALL(evt_snd_bgmon, 512, STRING("BGM_STG2_MRI1"))
-        CALL(evt_snd_envon, 272, STRING("ENV_STG2_MRI4"))
+        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG2_MRI4"))
     END_SWITCH
     IF_INT_GREATER(GSW_STORY_PROGRESS, 113)
         CALL(evt_npc_check_delete, STRING("軍団ザコ２"))

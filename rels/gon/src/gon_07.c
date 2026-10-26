@@ -21,6 +21,7 @@
 #include "mario/mario_pouch.h"
 #include "driver/casedrv.h"
 #include "driver/seqdrv.h"
+#include "pmario_sound.h"
 
 
 static EvtWord door01_close[12];
@@ -137,7 +138,7 @@ static EVT_BEGIN(item_evt)
     END_IF
     SET_VALUE(GSW_STORY_PROGRESS, 43)
     SET_VALUE(GSWF(1494), 1)
-    CALL(evt_snd_bgmoff, 512)
+    CALL(evt_snd_bgmoff, PSND_FADEOUT)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mobj_get_position, STRING("gon07treasure"), LW(0), LW(1), LW(2))
     CALL(evt_item_entry, STRING("k_slit"), ITEM_BLACK_KEY_0x22, LW(0), LW(1), LW(2), 16, -1, 0)
@@ -259,11 +260,11 @@ static EVT_BEGIN(bomb_wall_evt)
     CALL(evt_mapobj_clear_offscreen, 1, STRING("S_ana"))
     CALL(evt_paper_delete, STRING("OFF_d_bom_ver2"))
     CALL(evt_offscreen_delete, STRING("ofs"))
-    CALL(evt_snd_bgmoff, 1024)
-    CALL(evt_snd_bgmon, 1, STRING("BGM_FF_ENV_SUCCESS1"))
+    CALL(evt_snd_bgmoff, PSND_PAUSE)
+    CALL(evt_snd_bgmon, PSND_SLOT(1), STRING("BGM_FF_ENV_SUCCESS1"))
     WAIT_MS(2000)
-    CALL(evt_snd_bgmoff, 513)
-    CALL(evt_snd_bgmon, 288, 0)
+    CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
+    CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)
     CALL(evt_hitobj_onoff, STRING("san"), 1, 0)
     SET_VALUE(LW(0), STRING("e_bero"))
     CALL_CHILD(PTR(bero_case_switch_on))
@@ -278,9 +279,9 @@ EVT_BEGIN(gon_07_init_evt)
     CALL(evt_bero_get_info)
     CALL_CHILD(PTR(evt_bero_info_run))
     CALL(evt_snd_bgmon, 512, STRING("BGM_STG1_GON1"))
-    CALL(evt_snd_envon, 272, STRING("ENV_STG1_GON1"))
+    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG1_GON1"))
     CALL(evt_snd_set_rev_mode, 2)
-    CALL(evt_snd_bgmoff, 18432)
+    CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 43)
         SET_VALUE(GSWF(1494), 1)
     END_IF

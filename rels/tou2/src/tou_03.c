@@ -1668,7 +1668,7 @@ EVT_BEGIN(evt_random_battle2)
     END_IF
     SET_VALUE(LW(0), GSW_STORY_PROGRESS)
     SET_VALUE(GSW_STORY_PROGRESS, 178)
-    CALL(evt_snd_bgmoff_f, 512, 2000)
+    CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)
     SET_VALUE(GSW_STORY_PROGRESS, LW(0))
     RETURN
 EVT_END()
@@ -2039,7 +2039,7 @@ EVT_BEGIN(evt_match)
         SET_VALUE(GSWF(2383), 0)
     END_IF
     CALL(evt_fade_set_mapchange_type, 0, 2, 300, 1, 300)
-    CALL(evt_snd_envoff, 512)
+    CALL(evt_snd_envoff, PSND_FADEOUT)
     CALL(snd_sfx_stop)
     SWITCH(LW(10))
         CASE_LESS(1)
@@ -4490,7 +4490,7 @@ static EVT_BEGIN(evt_boss)
 #endif
     WAIT_MS(300)
     CALL(evt_cam3d_evt_set, 0, 210, 852, 0, 135, -12, 1000, 11)
-    CALL(evt_snd_bgmoff, 512)
+    CALL(evt_snd_bgmoff, PSND_FADEOUT)
 #ifdef VERSION_G8ME01
     CALL(evt_npc_set_battle_info, STRING("マッチョガンス"), 23)
     CALL(evt_npc_battle_start, STRING("マッチョガンス"))
@@ -4918,7 +4918,7 @@ static EVT_BEGIN(evt_boss)
     CALL(evt_mario_set_pose, STRING(("M_N_2")))
 #endif
     WAIT_MS(500)
-    CALL(evt_snd_bgmoff_f, 512, 2000)
+    CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)
     CALL(evt_party_run, 0)
     CALL(evt_cam3d_evt_set, 0, 200, 584, 0, 100, -8, 2000, 11)
     CALL(evt_mario_mov_pos2, 0, 75, FLOAT(60.0f))
@@ -4926,13 +4926,13 @@ static EVT_BEGIN(evt_boss)
     SET_VALUE(LW(0), 3)
 #ifdef VERSION_G8ME01
     SET_VALUE(LW(1), STRING("stone"))
-    CALL(evt_snd_bgmoff_f, 512, 2000)
-    CALL(evt_snd_bgmoff, 513)
+    CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)
+    CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
     CALL_CHILD(evt_sub_starstone)
 #else
     SET_VALUE(LW(1), STRING(("stone")))
-    CALL(evt_snd_bgmoff_f, 512, 2000)
-    CALL(evt_snd_bgmoff, 513)
+    CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)
+    CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
     CALL_CHILD(PTR(evt_sub_starstone))
 #endif
     RETURN
@@ -5309,16 +5309,16 @@ EVT_END()
 EVT_BEGIN(tou_03_init_evt)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(163)
-        CALL(evt_snd_bgmoff, 512)
-        CALL(evt_snd_envoff, 512)
+        CALL(evt_snd_bgmoff, PSND_FADEOUT)
+        CALL(evt_snd_envoff, PSND_FADEOUT)
         CASE_DEFAULT
         BEGIN_INLINE_EVENT
-            CALL(evt_snd_envoff, 512)
+            CALL(evt_snd_envoff, PSND_FADEOUT)
             WAIT_MS(1000)
 #ifdef VERSION_G8ME01
-            CALL(evt_snd_envon, 272, STRING("ENV_STG3_TOU3"))
+            CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU3"))
 #else
-            CALL(evt_snd_envon, 272, STRING(("ENV_STG3_TOU3")))
+            CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING(("ENV_STG3_TOU3")))
 #endif
         END_INLINE_EVENT
     END_SWITCH
@@ -5390,7 +5390,7 @@ EVT_BEGIN(tou_03_init_evt)
 #else
         CALL(evt_snd_bgmon, 512, STRING(("BGM_STG3_TOU2")))
 #endif
-        CALL(evt_snd_bgmon, 160, 0)
+        CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
         SPAWN_EVENT(PTR(evt_tougi))
         CASE_EQUAL(163)
 #ifdef VERSION_G8ME01
@@ -5416,7 +5416,7 @@ EVT_BEGIN(tou_03_init_evt)
         IF_INT_EQUAL(GSW_GLITZ_PIT_OPPONENT, 0)
             IF_INT_EQUAL(GSWF(2383), 1)
                 IF_INT_EQUAL(GSWF(2455), 0)
-                    CALL(evt_snd_bgmoff, 512)
+                    CALL(evt_snd_bgmoff, PSND_FADEOUT)
                     SPAWN_EVENT(PTR(evt_champion))
                     ELSE
                     SPAWN_EVENT(PTR(evt_champion2))
@@ -5448,7 +5448,7 @@ EVT_BEGIN(tou_03_init_evt)
 #else
             CALL(evt_snd_bgmon, 512, STRING(("BGM_STG3_TOU2")))
 #endif
-            CALL(evt_snd_bgmon, 160, 0)
+            CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
             SPAWN_EVENT(PTR(evt_watch_match))
             CASE_LESS(164)
             CASE_DEFAULT
@@ -5457,7 +5457,7 @@ EVT_BEGIN(tou_03_init_evt)
 #else
             CALL(evt_snd_bgmon, 512, STRING(("BGM_STG3_TOU2")))
 #endif
-            CALL(evt_snd_bgmon, 160, 0)
+            CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
             SPAWN_EVENT(PTR(evt_watch_match))
         END_SWITCH
     END_IF

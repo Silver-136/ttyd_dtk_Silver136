@@ -14,6 +14,7 @@
 #include "driver/mapdrv.h"
 #include "mario/mario_pouch.h"
 #include "system.h"
+#include "pmario_sound.h"
 
 
 static BeroEntry bero_entry_data[5];
@@ -187,7 +188,7 @@ EVT_BEGIN(win_02_init_evt)
     CALL(evt_bero_get_info)
     CALL_CHILD(PTR(evt_bero_info_run))
     CALL(evt_snd_bgmon, 512, STRING("BGM_STG2_WIN1"))
-    CALL(evt_snd_envon, 272, STRING("ENV_STG2_WIN1"))
+    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG2_WIN1"))
     SET_VALUE(LW(0), PTR(tree_access_data))
     CALL_CHILD(PTR(evt_sub_tree_access_entry))
     CALL(evt_map_entry_airport_harbor, 0, STRING("hikou"), STRING("a_hi"))

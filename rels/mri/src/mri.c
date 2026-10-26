@@ -531,8 +531,8 @@ EVT_BEGIN(mri_countdown)
         RETURN
     END_IF
     SET_VALUE(GSW_STORY_PROGRESS, 127)
-    CALL(evt_snd_bgmoff_f, 512, 500)
-    CALL(evt_snd_envoff_f, 512, 500)
+    CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 500)
+    CALL(evt_snd_envoff_f, PSND_FADEOUT, 500)
     CALL(evt_snd_sfxon, STRING("SFX_STG2_QUAKE1"), 0)
     CALL(evt_cam_shake, 4, FLOAT(0.0048828125f), FLOAT(0.0f), 500)
     CALL(evt_cam_shake, 4, FLOAT(0.009765625f), FLOAT(0.0f), 500)

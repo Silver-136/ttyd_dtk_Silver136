@@ -18,6 +18,7 @@
 #include "driver/mapdrv.h"
 #include "mario/mario_pouch.h"
 #include "driver/seqdrv.h"
+#include "pmario_sound.h"
 
 
 EvtWord bero_05_custom_in[30];
@@ -233,7 +234,7 @@ EVT_BEGIN(puni_soguu_3)
     CALL(evt_npc_set_anim, STRING("ガイド"), STRING("S_1"))
     WAIT_MS(500)
     CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_STG2_PUNI1"))
-    CALL(evt_snd_envoff, 512)
+    CALL(evt_snd_envoff, PSND_FADEOUT)
     CALL(evt_msg_print, 0, STRING("mac_1_012"), 0, STRING("ガイド"))
     CALL(evt_cam3d_evt_set, -400, -35, 432, -418, -105, 24, 500, 11)
     WAIT_MS(500)
@@ -327,7 +328,7 @@ EVT_BEGIN(puni_soguu_3)
     WAIT_MS(800)
     CALL(evt_cam3d_evt_off, 0, 11)
     CALL(evt_snd_bgmon, 512, STRING("BGM_STG0_TIK1"))
-    CALL(evt_snd_envon, 272, STRING("ENV_STG0_TIK1"))
+    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_TIK1"))
     CALL(evt_party_run, 0)
     CALL(evt_party_run, 1)
     SET_VALUE(GSW_STORY_PROGRESS, 67)
@@ -387,8 +388,8 @@ EVT_BEGIN(puni_switch)
     CALL(evt_msg_print, 0, STRING("mac_1_030"), 0, STRING("me"))
     CALL(evt_snd_sfxon_3d, STRING("SFX_MOBJ_BIKKURI_SWITCH_ON1"), 220, 50, 0, 0)
     CALL(evt_cam_shake, 4, FLOAT(0.01953125f), FLOAT(0.0f), 100)
-    CALL(evt_snd_bgmoff, 1024)
-    CALL(evt_snd_bgmon, 1, STRING("BGM_FF_ENV_SUCCESS1"))
+    CALL(evt_snd_bgmoff, PSND_PAUSE)
+    CALL(evt_snd_bgmon, PSND_SLOT(1), STRING("BGM_FF_ENV_SUCCESS1"))
     SET_VALUE(GSWF(1334), 1)
     CALL(evt_map_playanim, STRING("anm_para"), 0, 0)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("kabe_1"), MAP_OBJ_FLAG_HIDDEN)
@@ -403,8 +404,8 @@ EVT_BEGIN(puni_switch)
     CALL(evt_mario_key_onoff, 1)
     WAIT_MS(1500)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("para"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_snd_bgmoff, 513)
-    CALL(evt_snd_bgmon, 288, 0)
+    CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
+    CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)
     RETURN
 EVT_END()
 
@@ -463,7 +464,7 @@ EVT_END()
 
 EVT_BEGIN(tik_03_init_evt)
     CALL(evt_snd_bgmon, 512, STRING("BGM_STG0_TIK1"))
-    CALL(evt_snd_envon, 272, STRING("ENV_STG0_TIK1"))
+    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_TIK1"))
     CALL(evt_snd_set_rev_mode, 2)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)

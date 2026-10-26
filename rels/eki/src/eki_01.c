@@ -11,6 +11,7 @@
 #include "evt/evt_mobj.h"
 #include "evt/evt_pouch.h"
 #include "driver/mapdrv.h"
+#include "pmario_sound.h"
 
 USER_FUNC(evt_cloud_ent);
 USER_FUNC(evt_cloud_init);
@@ -219,8 +220,8 @@ EVT_BEGIN(eki_01_init_evt)
     SET_VALUE(LW(0), PTR(bero_data))
     CALL(evt_bero_get_info)
     CALL_CHILD(PTR(evt_bero_info_run))
-    CALL(evt_snd_bgmoff, 512)
-    CALL(evt_snd_envon, 272, STRING("ENV_STG6_EKI2_2"))
+    CALL(evt_snd_bgmoff, PSND_FADEOUT)
+    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG6_EKI2_2"))
     IF_INT_LESS(GSW_STORY_PROGRESS, 313)
         CALL(evt_mobj_switch_blue, 0, STRING("origami_sw"), 90, 10, -60, PTR(evt_origami), GSWF(3727))
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("dann"), MAP_OBJ_FLAG_HIDDEN)

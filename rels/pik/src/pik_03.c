@@ -18,6 +18,7 @@
 #include "mario/mario_pouch.h"
 #include "driver/casedrv.h"
 #include "driver/seqdrv.h"
+#include "pmario_sound.h"
 
 
 EvtWord bero_in[45];
@@ -90,8 +91,8 @@ static EVT_BEGIN(evt_daiza)
     CALL(evt_npc_stop_for_event)
     SET_VALUE(LW(0), 6)
     SET_VALUE(LW(1), STRING("star"))
-    CALL(evt_snd_bgmoff_f, 512, 2000)
-    CALL(evt_snd_bgmoff, 513)
+    CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)
+    CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
     CALL_CHILD(PTR(evt_sub_starstone))
     CALL(evt_mario_key_onoff, 1)
     RETURN
@@ -102,7 +103,7 @@ EVT_BEGIN(pik_03_init_evt)
     CALL(evt_bero_get_info)
     CALL_CHILD(PTR(evt_bero_info_run))
     CALL(evt_snd_bgmon, 512, STRING("BGM_STG6_PIK2"))
-    CALL(evt_snd_envon, 272, STRING("ENV_STG6_PIK3"))
+    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG6_PIK3"))
     CALL(evt_snd_set_rev_mode, 2)
     IF_INT_LESS(GSW_STORY_PROGRESS, 338)
         CALL(evt_item_entry, STRING("star"), ITEM_GARNET_STAR, 0, 45, -950, 17, -1, 0)

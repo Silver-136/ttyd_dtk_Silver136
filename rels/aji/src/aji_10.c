@@ -11,6 +11,7 @@
 #include "evt/evt_snd.h"
 #include "evt/evt_sub.h"
 #include "system.h"
+#include "pmario_sound.h"
 
 #include "mario/mario.h"
 #include "manager/evtmgr_cmd.h"
@@ -921,7 +922,7 @@ EVT_BEGIN(peach_move)
 EVT_END()
 
 EVT_BEGIN(peach_evt_stg3_syuryo_talk)
-    CALL(evt_snd_bgmoff, 512)
+    CALL(evt_snd_bgmoff, PSND_FADEOUT)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_npc_flag_onoff, 1, STRING("シュリョー"), NPC_FLAG_NO_HIT)
     CALL_CHILD(PTR(peach_move))
@@ -1275,10 +1276,10 @@ static NpcSetupInfo npcEnt[] = {
 EVT_BEGIN(aji_10_init_evt)
     IF_INT_LESS(GSW_STORY_PROGRESS, 352)
         CALL(evt_snd_bgmon, 512, STRING("BGM_STG7_DUN1"))
-        CALL(evt_snd_envon, 272, STRING("ENV_STG7_AJI5"))
+        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI5"))
         ELSE
         CALL(evt_snd_bgmon, 512, STRING("BGM_STG7_DUN2"))
-        CALL(evt_snd_envon, 272, STRING("ENV_STG7_AJI5"))
+        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI5"))
     END_IF
     CALL(evt_snd_set_rev_mode, 1)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("monitor"), MAP_OBJ_FLAG_HIDDEN)

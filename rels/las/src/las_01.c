@@ -6,6 +6,7 @@
 #include "party/party_motion.h"
 #include "evt/evt_item.h"
 #include "mario/mario_pouch.h"
+#include "pmario_sound.h"
 
 
 static EvtWord w_door_close[22];
@@ -89,7 +90,7 @@ static BeroEntry bero_entry_data[] = {
 
 EVT_BEGIN(las_01_init_evt)
     CALL(evt_snd_bgmon, 512, STRING("BGM_STG8_LST1"))
-    CALL(evt_snd_envon, 272, STRING("ENV_STG8_LAS2"))
+    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS2"))
     CALL(evt_snd_set_rev_mode, 2)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)

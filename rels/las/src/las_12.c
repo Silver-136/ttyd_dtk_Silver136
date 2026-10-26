@@ -14,6 +14,7 @@
 #include "driver/mobjdrv.h"
 #include "mario/mario_pouch.h"
 #include "driver/casedrv.h"
+#include "pmario_sound.h"
 
 
 static EvtWord w_door_close[12];
@@ -101,18 +102,18 @@ EVT_BEGIN(kabenuke_check_evt)
     IF_INT_LESS(LW(0), 0)
         GOTO(0)
     END_IF
-    CALL(evt_snd_bgmoff, 1024)
-    CALL(evt_snd_bgmon, 1, STRING("BGM_FF_ENV_SUCCESS1"))
+    CALL(evt_snd_bgmoff, PSND_PAUSE)
+    CALL(evt_snd_bgmon, PSND_SLOT(1), STRING("BGM_FF_ENV_SUCCESS1"))
     WAIT_MS(2000)
-    CALL(evt_snd_bgmoff, 513)
-    CALL(evt_snd_bgmon, 288, 0)
+    CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
+    CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)
     SET_VALUE(GSWF(4381), 1)
     RETURN
 EVT_END()
 
 EVT_BEGIN(las_12_init_evt)
     CALL(evt_snd_bgmon, 512, STRING("BGM_STG8_LST2"))
-    CALL(evt_snd_envon, 272, STRING("ENV_STG8_LAS1"))
+    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS1"))
     CALL(evt_snd_set_rev_mode, 2)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)

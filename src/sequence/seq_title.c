@@ -83,8 +83,8 @@ void L_titleInit(SequenceWork* work) {
         psndSFXAllOff();
     } else if (seqGetPrevSeq() != SEQ_LOGO) {
         if (seqGetPrevSeq() == SEQ_MAP_CHANGE) {
-            psndBGMOff_f_d(512, 3000, 0);
-            psndBGMOff_f_d(513, 3000, 0);
+            psndBGMOff_f_d(PSND_FADEOUT, 3000, 0);
+            psndBGMOff_f_d(PSND_FADEOUT | PSND_SLOT(1), 3000, 0);
             psndSFXAllOff();
         } else if (seqGetPrevSeq() == SEQ_GAME_OVER) {
             psndStopAllFadeOut();
@@ -221,7 +221,7 @@ void titleMain(SequenceWork* work) {
         case 20:
             fadeEntry(0x21, 0, (GXColor){0x00, 0x00, 0x00, 0xFF});
             fadeEntry(FADE_OUT_BLACK, 1000, (GXColor){0x00, 0x00, 0x00, 0xFF});
-            psndBGMOff_f_d(0x200, 1000, 0);
+            psndBGMOff_f_d(PSND_FADEOUT, 1000, 0);
             wp2->counter = 0;
             wp2->state++;
             break;

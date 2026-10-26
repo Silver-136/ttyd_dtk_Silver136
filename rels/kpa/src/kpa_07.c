@@ -13,6 +13,7 @@
 #include "evt/evt_snd.h"
 #include "evt/evt_sub.h"
 #include "system.h"
+#include "pmario_sound.h"
 
 #include "driver/npcdrv.h"
 #include "string.h"
@@ -391,7 +392,7 @@ EVT_BEGIN(kpa_07_evt)
     END_INLINE_EVENT
     WAIT_MS(2000)
     SET_VALUE(GSW_STORY_PROGRESS, 344)
-    CALL(evt_snd_bgmoff_f, 512, 1000)
+    CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 1000)
     CALL(evt_fade_entry, 6, 300, 0, 0, 0)
     CALL(evt_fade_end_wait)
     SET_VALUE(GF(0), 1)
@@ -412,7 +413,7 @@ EVT_END()
 EVT_BEGIN(kpa_07_init_evt)
     CALL(evt_mario_set_mode, 2)
     CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_KUPPA1"))
-    CALL(evt_snd_envoff, 512)
+    CALL(evt_snd_envoff, PSND_FADEOUT)
     CALL(evt_npc_setup, PTR(npcEnt))
     CALL(evt_npc_entry, STRING("belt"), STRING("c_bred_h"))
     CALL(evt_npc_set_tribe, STRING("belt"), STRING("ブレッドハート"))

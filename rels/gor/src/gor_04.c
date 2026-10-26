@@ -19,6 +19,7 @@
 #include "mario/mario_pouch.h"
 #include "system.h"
 #include "driver/casedrv.h"
+#include "pmario_sound.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "mario/mariost.h"
@@ -744,8 +745,8 @@ static EVT_BEGIN(hom_10_evt_resha_left)
 EVT_END()
 
 static EVT_BEGIN(hom_10_init_evt)
-    CALL(evt_snd_bgmoff, 512)
-    CALL(evt_snd_envon, 272, STRING("ENV_STG6_RSH2"))
+    CALL(evt_snd_bgmoff, PSND_FADEOUT)
+    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG6_RSH2"))
     CALL(evt_mario_cont_onoff, 0)
     CALL(evt_party_cont_onoff, 0, 0)
     CALL(evt_party_cont_onoff, 1, 0)
@@ -958,8 +959,8 @@ static EVT_BEGIN(peach_mail)
     CALL(evt_mario_normalize)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_FIND1_2"), LW(0), LW(1), LW(2), 0)
-    CALL(evt_snd_bgmoff, 1024)
-    CALL(evt_snd_bgmon, 1, STRING("BGM_FF_MAIL_RECEPTION1"))
+    CALL(evt_snd_bgmoff, PSND_PAUSE)
+    CALL(evt_snd_bgmon, PSND_SLOT(1), STRING("BGM_FF_MAIL_RECEPTION1"))
     CALL(evt_eff_fukidashi, 0, STRING(""), 0, 0, 0, 0, 0, 0, 0, 0, 0)
     SPAWN_EVENT_GET_ID(PTR(evt_sub_mail_vibration), LW(10))
     WAIT_MS(500)
@@ -983,8 +984,8 @@ static EVT_BEGIN(peach_mail)
         WAIT_FRAMES(1)
     END_LOOP
     CALL(evt_mario_balloon_off)
-    CALL(evt_snd_bgmoff, 513)
-    CALL(evt_snd_bgmon, 288, 0)
+    CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
+    CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_MAIL_RECEPTION1"), LW(0), LW(1), LW(2), 0)
     DELETE_EVENT(LW(10))
@@ -1220,7 +1221,7 @@ EVT_BEGIN(ekiin_talk)
             CALL(evt_msg_print, 0, STRING("train_04"), 0, STRING("me"))
             CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_HIT)
             CALL(evt_npc_status_onoff, 1, STRING("me"), 2)
-            CALL(evt_snd_bgmoff_f, 512, 2000)
+            CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)
             CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
             IF_INT_GREATER_OR_EQUAL(LW(0), -350)
                 CALL(evt_npc_move_position, STRING("me"), -390, 80, 0, FLOAT(120.0f), 0)
@@ -1670,7 +1671,7 @@ EVT_BEGIN(evt_hikousen_return)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("bou_10"), MAP_OBJ_FLAG_HIDDEN)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
-        CALL(evt_snd_bgmoff_f, 512, 3000)
+        CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 3000)
         WAIT_MS(2000)
         CALL(evt_snd_bgmon_f, 768, STRING("BGM_STG0_GOR1"), 2000)
     END_INLINE_EVENT
@@ -2022,15 +2023,15 @@ EVT_BEGIN(gor_04_init_evt)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, 215)
         CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_KUPPA1"))
         CALL(evt_snd_bgm_scope, 0, 1)
-        CALL(evt_snd_envon, 272, STRING("ENV_STG0_GOR5"))
+        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR5"))
         ELSE
         CALL(evt_bero_get_entername, LW(0))
         IF_STR_NOT_EQUAL(LW(0), STRING("hikousen_return"))
             CALL(evt_snd_bgmon, 512, STRING("BGM_STG0_GOR1"))
         END_IF
-        CALL(evt_snd_envon, 272, STRING("ENV_STG0_GOR5"))
+        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR5"))
     END_IF
-    CALL(evt_snd_bgmon, 160, 0)
+    CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
     CALL_CHILD(PTR(evt_bero_info_run))

@@ -18,6 +18,7 @@
 #include "driver/mapdrv.h"
 #include "system.h"
 #include "driver/casedrv.h"
+#include "pmario_sound.h"
 
 #include "string.h"
 #include "memory.h"
@@ -233,7 +234,7 @@ static s32 itemsel_table01[] = {
 };
 
 EVT_BEGIN(sanders_talk_sub)
-    CALL(evt_snd_bgmoff_f, 512, 2000)
+    CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_msg_print, 0, STRING("stg5_muj_45"), 0, STRING("me"))
     CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_ORGEL1"))
@@ -281,7 +282,7 @@ static EVT_BEGIN(sanders_talk)
             CALL(evt_msg_print, 0, STRING("stg5_muj_48"), 0, STRING("me"))
             BEGIN_INLINE_EVENT
                 SET_VALUE(LW(0), 32000)
-                CALL(evt_snd_bgmoff_f, 512, 3000)
+                CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 3000)
                 LOOP(100)
                     SUBTRACT(LW(0), 300)
                     CALL(evt_snd_bgm_freq, 0, LW(0))
@@ -532,7 +533,7 @@ EVT_BEGIN(sanders_kyushutsu_sub)
     CALL(evt_party_stop, 0)
     SET_VALUE(GSW_STORY_PROGRESS, 235)
     CALL(evt_msg_print, 0, STRING("stg5_muj_33_01"), 0, STRING("サンダース"))
-    CALL(evt_snd_bgmoff_f, 512, 2000)
+    CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     IF_INT_LESS_OR_EQUAL(LW(0), -110)
         CALL(evt_npc_set_ry, STRING("サンダース"), 270)
@@ -1064,11 +1065,11 @@ EVT_BEGIN(dokuroiwa_bomb)
     CALL(evt_mapobj_get_position, STRING("S_dokuro_iwa"), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG5_OBJ_ROCK_BREAK1"), LW(0), LW(1), LW(2), 0)
     BEGIN_INLINE_EVENT
-        CALL(evt_snd_bgmoff, 1024)
-        CALL(evt_snd_bgmon, 1, STRING("BGM_FF_ENV_SUCCESS1"))
+        CALL(evt_snd_bgmoff, PSND_PAUSE)
+        CALL(evt_snd_bgmon, PSND_SLOT(1), STRING("BGM_FF_ENV_SUCCESS1"))
         WAIT_MS(2000)
-        CALL(evt_snd_bgmoff, 513)
-        CALL(evt_snd_bgmon, 288, 0)
+        CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
+        CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
         CALL(evt_cam_shake, 4, FLOAT(0.029296875f), FLOAT(0.0f), 1000)
@@ -1301,13 +1302,13 @@ EVT_BEGIN(muj_05_init_evt)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(234)
         CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_DANGER4"))
-        CALL(evt_snd_envon, 272, STRING("ENV_STG5_MUJ7"))
+        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG5_MUJ7"))
         CASE_EQUAL(238)
-        CALL(evt_snd_bgmoff, 512)
-        CALL(evt_snd_envon, 272, STRING("ENV_STG5_MUJ7"))
+        CALL(evt_snd_bgmoff, PSND_FADEOUT)
+        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG5_MUJ7"))
         CASE_DEFAULT
         CALL(evt_snd_bgmon, 512, STRING("BGM_STG5_MUJ1"))
-        CALL(evt_snd_envon, 272, STRING("ENV_STG5_MUJ7"))
+        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG5_MUJ7"))
     END_SWITCH
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)

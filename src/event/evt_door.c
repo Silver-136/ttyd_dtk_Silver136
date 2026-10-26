@@ -445,8 +445,8 @@ EVT_BEGIN(house_in)
         RETURN
     END_IF
     POKE_INT(1, PTR(&DoorFLAG))
-    CALL(evt_snd_bgmoff, 18432)
-    CALL(evt_snd_envoff, 18432)
+    CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
+    CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_snd_env_lpf, 0, 800)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_cam_letter_box_disable, 1)
@@ -513,8 +513,8 @@ EVT_BEGIN(house_out)
         RETURN
     END_IF
     POKE_INT(1, PTR(&DoorFLAG))
-    CALL(evt_snd_bgmon, 160, 0)
-    CALL(evt_snd_envon, 160, 0)
+    CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
+    CALL(evt_snd_envon, PSND_CONTINUE | PSND_UNSILENT, 0)
     CALL(evt_snd_env_lpf, 0, 0)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_cam_letter_box_disable, 1)

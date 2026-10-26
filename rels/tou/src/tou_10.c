@@ -23,6 +23,7 @@
 #include "driver/mapdrv.h"
 #include "system.h"
 #include "driver/casedrv.h"
+#include "pmario_sound.h"
 
 #include "mario/mario.h"
 #include "mario/mario_pouch.h"
@@ -1543,7 +1544,7 @@ EVT_BEGIN(evt_okorareru)
         WAIT_FRAMES(1)
         GOTO(0)
     END_IF
-    CALL(evt_snd_bgmoff_f, 512, 2000)
+    CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)
     WAIT_MS(1000)
@@ -1614,7 +1615,7 @@ EVT_BEGIN(evt_okorareru)
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_party_run, 0)
     CALL(evt_snd_bgmon_f, 768, STRING("BGM_STG3_TOU1"), 2000)
-    CALL(evt_snd_bgmoff, 26624)
+    CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
     RETURN
 EVT_END()
 
@@ -1679,15 +1680,15 @@ EVT_BEGIN(tou_10_init_evt)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(127, 137)
         CALL(evt_snd_bgmon, 512, STRING("BGM_STG3_TOU2"))
-        CALL(evt_snd_envon, 272, STRING("ENV_STG3_TOU6"))
-        CALL(evt_snd_bgmoff, 26624)
+        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU6"))
+        CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
         CASE_GREATER_OR_EQUAL(165)
         CALL(evt_snd_bgmon, 512, STRING("BGM_STG3_TOU2"))
-        CALL(evt_snd_envon, 272, STRING("ENV_STG3_TOU6"))
-        CALL(evt_snd_bgmoff, 26624)
+        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU6"))
+        CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
         CASE_DEFAULT
         CALL(evt_snd_bgmon, 512, STRING("BGM_STG3_TOU1"))
-        CALL(evt_snd_envon, 272, STRING("ENV_STG3_TOU6"))
+        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU6"))
     END_SWITCH
     IF_INT_EQUAL(GSWF(2391), 1)
         IF_INT_LESS(GSW_STORY_PROGRESS, 137)

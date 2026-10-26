@@ -363,7 +363,7 @@ void seq_gameOverMain(SequenceWork* work) {
                 GXColor color = {0, 0, 0, 255};
                 fadeEntry(36, 0, color);
             }
-            psndBGMOff_f_d(0x200, 4000, FALSE);
+            psndBGMOff_f_d(PSND_FADEOUT, 4000, FALSE);
             work->state++;
             break;
         case 6:

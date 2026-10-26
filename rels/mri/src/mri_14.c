@@ -20,6 +20,7 @@
 #include "mario/mario_pouch.h"
 #include "system.h"
 #include "driver/casedrv.h"
+#include "pmario_sound.h"
 
 #include "driver/fadedrv.h"
 #include "mario/mariost.h"
@@ -214,7 +215,7 @@ EVT_BEGIN(dai3_kanbu)
     SET_VALUE(GF(0), 0)
     SET_VALUE(GF(1), 1)
     SPAWN_EVENT(PTR(kanbu_urouro))
-    CALL(evt_snd_bgmoff, 1024)
+    CALL(evt_snd_bgmoff, PSND_PAUSE)
     CALL(evt_cam3d_evt_set, 0, 300, 1000, 0, 30, -1, 0, 11)
     CALL(evt_seq_wait, SEQ_GAME)
     WAIT_MS(1000)
@@ -249,8 +250,8 @@ EVT_BEGIN(dai3_kanbu)
     WAIT_MS(1000)
     SET_VALUE(GSWF(2864), 1)
     SET_VALUE(GSW_STORY_PROGRESS, 108)
-    CALL(evt_snd_bgmoff, 513)
-    CALL(evt_snd_bgmon, 288, 0)
+    CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
+    CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)
     CALL(evt_fade_set_mapchange_type, 0, 2, 500, 9, 500)
     CALL(evt_bero_mapchange, STRING("mri_14"), STRING("w_bero"))
     RETURN
@@ -436,7 +437,7 @@ EVT_BEGIN(time_bomb)
     SET_VALUE(GF(10), 0)
     WAIT_WHILE(GF(15))
     WAIT_MS(1000)
-    CALL(evt_snd_bgmoff_f, 512, 3000)
+    CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 3000)
     CALL(evt_npc_set_ry, STRING("第三勢力幹部"), 270)
     CALL(evt_npc_flag_onoff, 1, STRING("第三勢力幹部"), NPC_FLAG_NO_HIT | NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION)
     SET_VALUE(LW(10), 1)
@@ -562,7 +563,7 @@ EVT_BEGIN(time_bomb)
     WAIT_MS(1000)
     CALL(evt_cam3d_evt_set, 248, 125, 212, -7, 38, -208, 500, 11)
     WAIT_MS(500)
-    CALL(evt_snd_envon, 272, STRING("ENV_STG2_MRI9"))
+    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG2_MRI9"))
     CALL(evt_msg_print_party, STRING("stg2_mri_e23_00"))
     SET_VALUE(LW(10), STRING("第三勢力幹部"))
     CALL(evt_msg_print, 0, STRING("stg2_mri_e23_01"), 0, LW(10))
@@ -817,10 +818,10 @@ EVT_BEGIN(mri_14_init_evt)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(109, 110)
         CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_DANGER4"))
-        CALL(evt_snd_envon, 272, STRING("ENV_STG2_MRI9"))
+        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG2_MRI9"))
         CASE_DEFAULT
         CALL(evt_snd_bgmon, 512, STRING("BGM_STG2_MRI1"))
-        CALL(evt_snd_envon, 272, STRING("ENV_STG2_MRI1"))
+        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG2_MRI1"))
     END_SWITCH
     CALL(evt_map_playanim, STRING("mizu_01"), 1, 0)
     CALL(evt_map_playanim, STRING("mizu_02"), 1, 0)

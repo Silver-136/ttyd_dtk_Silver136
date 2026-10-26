@@ -15,6 +15,7 @@
 #include "evt/evt_snd.h"
 #include "party/party_motion.h"
 #include "driver/npcdrv.h"
+#include "pmario_sound.h"
 
 
 static ShopObj obj_list[6];
@@ -292,10 +293,10 @@ EVT_BEGIN(mri_07_init_evt)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(109, 110)
         CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_DANGER4"))
-        CALL(evt_snd_envon, 272, STRING("ENV_STG2_MRI9"))
+        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG2_MRI9"))
         CASE_DEFAULT
         CALL(evt_snd_bgmon, 512, STRING("BGM_STG2_MRI1"))
-        CALL(evt_snd_envon, 272, STRING("ENV_STG2_MRI1"))
+        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG2_MRI1"))
     END_SWITCH
     CALL(evt_mobj_recovery_blk, STRING("mobj_recover"), 8, 290, 82, 120, 0, 0)
     CALL(evt_npc_setup, PTR(npcEnt))

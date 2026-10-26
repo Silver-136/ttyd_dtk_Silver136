@@ -21,6 +21,7 @@
 #include "driver/mapdrv.h"
 #include "system.h"
 #include "driver/casedrv.h"
+#include "pmario_sound.h"
 
 #include "driver/msgdrv.h"
 #include "mario/mario.h"
@@ -1520,7 +1521,7 @@ EVT_END()
 
 static EVT_BEGIN(peach_evt_stg1)
     CALL(evt_snd_bgmon, 512, STRING("BGM_STG7_DUN1"))
-    CALL(evt_snd_envon, 272, STRING("ENV_STG7_AJI1"))
+    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI1"))
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_cont_onoff, 0)
     CALL(evt_seq_wait, SEQ_GAME)
@@ -1927,7 +1928,7 @@ EVT_BEGIN(peach_evt_init)
         RETURN
     END_IF
     CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_PEACH1"))
-    CALL(evt_snd_envoff, 512)
+    CALL(evt_snd_envoff, PSND_FADEOUT)
     SPAWN_EVENT(PTR(peach_evt_ele_init))
     SPAWN_EVENT(PTR(peach_evt_key_init))
     IF_INT_EQUAL(GSW_STORY_PROGRESS, 58)
@@ -2211,7 +2212,7 @@ EVT_BEGIN(aji_01_init_evt)
         CALL(evt_npc_check_delete, STRING("バリアーンＺ"))
         ELSE
         CALL(evt_snd_bgmon, 512, STRING("BGM_STG7_DUN2"))
-        CALL(evt_snd_envon, 272, STRING("ENV_STG7_AJI1"))
+        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI1"))
         CALL_CHILD(PTR(evt_elv_init))
         CALL_CHILD(PTR(evt_key_init))
     END_IF

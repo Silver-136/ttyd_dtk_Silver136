@@ -1081,7 +1081,7 @@ void itemseq_GetItem(ItemEntry* entry) {
                     entry->flags |= 0x2000;
                     psndBGMOff(0x201);
                     if (!(entry->flags & 8)) {
-                        psndBGMOn(0xA0, NULL);
+                        psndBGMOn(PSND_CONTINUE | PSND_UNSILENT, NULL);
                     }
                 }
             }
@@ -1098,7 +1098,7 @@ void itemseq_GetItem(ItemEntry* entry) {
             if (!(entry->flags & 0x8000) && !(entry->flags & 0x2000)) {
                 psndBGMOff(0x201);
                 if (!(entry->flags & 8)) {
-                    psndBGMOn(0xA0, NULL);
+                    psndBGMOn(PSND_CONTINUE | PSND_UNSILENT, NULL);
                 }
             }
             if (entry->flags2 & 0x2000) {

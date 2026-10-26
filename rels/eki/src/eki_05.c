@@ -13,6 +13,7 @@
 #include "driver/mapdrv.h"
 #include "mario/mario_pouch.h"
 #include "driver/casedrv.h"
+#include "pmario_sound.h"
 
 #ifdef VERSION_G8ME01
 #endif
@@ -167,8 +168,8 @@ EVT_BEGIN(eki_05_init_evt)
     SET_VALUE(LW(0), PTR(bero_data))
     CALL(evt_bero_get_info)
     CALL_CHILD(PTR(evt_bero_info_run))
-    CALL(evt_snd_bgmoff, 512)
-    CALL(evt_snd_envon, 272, STRING("ENV_STG6_EKI2"))
+    CALL(evt_snd_bgmoff, PSND_FADEOUT)
+    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG6_EKI2"))
     SET_VALUE(GF(0), 0)
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_garasu_1"), 0, PTR(grass_open_1), 0)
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_garasu_2"), 0, PTR(grass_open_2), 0)

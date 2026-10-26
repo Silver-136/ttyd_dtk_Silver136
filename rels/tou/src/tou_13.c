@@ -13,6 +13,7 @@
 #include "evt/evt_snd.h"
 #include "driver/mapdrv.h"
 #include "driver/casedrv.h"
+#include "pmario_sound.h"
 
 
 static BeroEntry bero_data[3];
@@ -137,15 +138,15 @@ EVT_BEGIN(tou_13_init_evt)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(127, 137)
         CALL(evt_snd_bgmon, 512, STRING("BGM_STG3_TOU2"))
-        CALL(evt_snd_envon, 272, STRING("ENV_STG3_TOU7"))
-        CALL(evt_snd_bgmoff, 26624)
+        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU7"))
+        CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
         CASE_GREATER_OR_EQUAL(165)
         CALL(evt_snd_bgmon, 512, STRING("BGM_STG3_TOU2"))
-        CALL(evt_snd_envon, 272, STRING("ENV_STG3_TOU7"))
-        CALL(evt_snd_bgmoff, 26624)
+        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU7"))
+        CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
         CASE_DEFAULT
         CALL(evt_snd_bgmon, 512, STRING("BGM_STG3_TOU1"))
-        CALL(evt_snd_envon, 272, STRING("ENV_STG3_TOU7"))
+        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU7"))
         CALL(evt_snd_set_rev_mode, 2)
     END_SWITCH
     SET_VALUE(LW(0), PTR(bero_data))

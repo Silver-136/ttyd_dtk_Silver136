@@ -17,6 +17,7 @@
 #include "driver/npcdrv.h"
 #include "driver/mapdrv.h"
 #include "system.h"
+#include "pmario_sound.h"
 
 #include "mario/mario.h"
 #include "party.h"
@@ -208,8 +209,8 @@ static EVT_BEGIN(epilogue_evt)
     WAIT_MS(500)
     CALL(evt_msg_print, 0, STRING("ep_45"), 0, 0)
     WAIT_MS(2000)
-    CALL(evt_snd_bgmoff_f, 512, 3000)
-    CALL(evt_snd_envoff_f, 512, 3000)
+    CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 3000)
+    CALL(evt_snd_envoff_f, PSND_FADEOUT, 3000)
     CALL(evt_fade_set_mapchange_type, 1, 10, 900, 9, 900)
     CALL(evt_bero_mapchange, STRING("gor_00"), STRING("epilogue2"))
     RETURN
@@ -218,7 +219,7 @@ EVT_END()
 EVT_BEGIN(moo_04_init_evt)
     IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, 402)
         CALL(evt_snd_bgmon, 512, STRING("BGM_STG7_MON1"))
-        CALL(evt_snd_envon, 272, STRING("ENV_STG7_MOO4"))
+        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_MOO4"))
     END_IF
     CALL(evt_npc_setup, PTR(npcEnt))
     SWITCH(GSW_STORY_PROGRESS)

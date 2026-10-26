@@ -993,8 +993,8 @@ f32 guide_move_data[] = {
 };
 
 EVT_BEGIN(open_bigtree)
-    CALL(evt_snd_bgmoff, 1024)
-    CALL(evt_snd_bgmon, 1, STRING("BGM_FF_ENV_SUCCESS1"))
+    CALL(evt_snd_bgmoff, PSND_PAUSE)
+    CALL(evt_snd_bgmon, PSND_SLOT(1), STRING("BGM_FF_ENV_SUCCESS1"))
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 1)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_non"), MAP_OBJ_FLAG_HIDDEN)
@@ -1027,8 +1027,8 @@ EVT_BEGIN(open_bigtree)
     CALL(evt_eff_fukidashi, 4, STRING(""), 0, 0, 0, 0, 0, 0, 0, 0, 60)
     CALL(evt_cam3d_evt_set, 21, 288, 213, 21, 205, -216, 500, 11)
     WAIT_MS(1200)
-    CALL(evt_snd_bgmoff, 513)
-    CALL(evt_snd_bgmon, 288, 0)
+    CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
+    CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)
     CALL(evt_msg_print, 0, STRING("stg2_mri_e10_00"), 0, STRING("extparty"))
     CALL(evt_party_get_pos, 1, LW(0), LW(1), LW(2))
     CALL(evt_npc_set_position, STRING("ガイド"), LW(0), LW(1), LW(2))
@@ -1642,25 +1642,25 @@ EVT_BEGIN(mri_00_init_evt)
         CALL(evt_bero_get_entername, LW(0))
         IF_STR_EQUAL(LW(0), STRING("sekai_yami1"))
             CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_STG8_WITCH"))
-            CALL(evt_snd_envoff, 512)
+            CALL(evt_snd_envoff, PSND_FADEOUT)
             SET_VALUE(LF(0), 1)
         END_IF
         IF_STR_EQUAL(LW(0), STRING("minnnanokoe"))
             CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_STG8_VOICE1"))
-            CALL(evt_snd_envoff, 512)
+            CALL(evt_snd_envoff, PSND_FADEOUT)
             SET_VALUE(LF(0), 1)
         END_IF
     END_IF
     IF_INT_EQUAL(LF(0), 0)
         IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, 73)
             CALL(evt_snd_bgmon, 512, STRING("BGM_STG2_MRI1"))
-            CALL(evt_snd_envon, 272, STRING("ENV_STG2_MRI2"))
+            CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG2_MRI2"))
             ELSE
             BEGIN_INLINE_EVENT
                 WAIT_MS(2000)
                 CALL(evt_snd_bgmon, 512, STRING("BGM_STG2_MRI1"))
             END_INLINE_EVENT
-            CALL(evt_snd_envon, 272, STRING("ENV_STG2_MRI2"))
+            CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG2_MRI2"))
         END_IF
     END_IF
     CALL(evt_item_entry, STRING("i"), ITEM_FP_PLUS, 528, 0, 110, 0, GSWF(2825), 0)

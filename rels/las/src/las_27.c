@@ -5,6 +5,7 @@
 #include "evt/evt_mobj.h"
 #include "party/party_motion.h"
 #include "driver/mapdrv.h"
+#include "pmario_sound.h"
 
 #include "stdio.h"
 #include "evt/evt_bero.h"
@@ -108,8 +109,8 @@ static EVT_BEGIN(shan_init)
 EVT_END()
 
 EVT_BEGIN(las_27_init_evt)
-    CALL(evt_snd_bgmoff, 512)
-    CALL(evt_snd_envon, 272, STRING("ENV_STG8_LAS9"))
+    CALL(evt_snd_bgmoff, PSND_FADEOUT)
+    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS9"))
     CALL(evt_snd_set_rev_mode, 2)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)

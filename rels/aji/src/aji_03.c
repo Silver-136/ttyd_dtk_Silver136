@@ -15,6 +15,7 @@
 #include "driver/mapdrv.h"
 #include "mario/mario_pouch.h"
 #include "driver/casedrv.h"
+#include "pmario_sound.h"
 
 #include "driver/dispdrv.h"
 #include "driver/camdrv.h"
@@ -875,11 +876,11 @@ static EVT_BEGIN(evt_haguruma)
     CALL(evt_win_item_select, 0, PTR(haguruma_tbl), LW(0), 0)
     IF_INT_NOT_EQUAL(LW(0), -1)
         BEGIN_INLINE_EVENT
-            CALL(evt_snd_bgmoff, 1024)
-            CALL(evt_snd_bgmon, 1, STRING("BGM_FF_ENV_SUCCESS1"))
+            CALL(evt_snd_bgmoff, PSND_PAUSE)
+            CALL(evt_snd_bgmon, PSND_SLOT(1), STRING("BGM_FF_ENV_SUCCESS1"))
             WAIT_MS(2000)
-            CALL(evt_snd_bgmoff, 513)
-            CALL(evt_snd_bgmon, 288, 0)
+            CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
+            CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)
         END_INLINE_EVENT
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_zenmais_nashi"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_zenmais_ari"), MAP_OBJ_FLAG_HIDDEN)
@@ -923,7 +924,7 @@ EVT_END()
 
 EVT_BEGIN(aji_03_init_evt)
     CALL(evt_snd_bgmon, 512, STRING("BGM_STG7_DUN2"))
-    CALL(evt_snd_envon, 272, STRING("ENV_STG7_AJI3"))
+    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI3"))
     CALL(evt_snd_set_rev_mode, 1)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)

@@ -8,6 +8,7 @@
 #include "evt/evt_item.h"
 #include "driver/mapdrv.h"
 #include "mario/mario_pouch.h"
+#include "pmario_sound.h"
 
 #include "driver/npcdrv.h"
 #include "evt/evt_bero.h"
@@ -95,8 +96,8 @@ EVT_BEGIN(hei_08_init_evt)
     CALL(evt_bero_get_info)
     CALL_CHILD(PTR(evt_bero_info_run))
     CALL(evt_snd_bgmon, 512, STRING("BGM_STG1_TORIDE1"))
-    CALL(evt_snd_bgmon, 160, 0)
-    CALL(evt_snd_envon, 272, STRING("ENV_STG1_HEI3"))
+    CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
+    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG1_HEI3"))
     CALL(evt_snd_set_rev_mode, 1)
     CALL(evt_npc_change_fbat_mode, 1)
     IF_INT_EQUAL(GSWF(1775), 0)

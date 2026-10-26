@@ -18,6 +18,7 @@
 #include "driver/npcdrv.h"
 #include "driver/casedrv.h"
 #include "driver/seqdrv.h"
+#include "pmario_sound.h"
 
 USER_FUNC(evt_mario_dispflag_onoff);
 
@@ -105,7 +106,7 @@ static BeroEntry bero_entry_data[] = {
 
 static EVT_BEGIN(first_evt)
     CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_DANGER2"))
-    CALL(evt_snd_envoff, 512)
+    CALL(evt_snd_envoff, PSND_FADEOUT)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_npc_set_position, STRING("手下１"), 225, 0, -25)
     CALL(evt_npc_set_position, STRING("手下２"), 265, 0, 25)
@@ -134,7 +135,7 @@ static EVT_BEGIN(first_evt)
         CALL(evt_npc_move_position, STRING("手下２"), -160, 0, 0, FLOAT(200.0f), 0)
     END_INLINE_EVENT
     CALL(evt_npc_move_position, STRING("手下１"), -200, 0, 0, FLOAT(200.0f), 0)
-    CALL(evt_snd_bgmoff, 512)
+    CALL(evt_snd_bgmoff, PSND_FADEOUT)
     CALL(evt_npc_set_battle_info, STRING("手下１"), 6)
     CALL(evt_npc_battle_start, STRING("手下１"))
     CALL(evt_npc_wait_battle_end)
@@ -171,7 +172,7 @@ static EVT_BEGIN(first_evt)
     SET_VALUE(GSW_STORY_PROGRESS, 361)
     CALL(evt_cam3d_evt_off, 500, 11)
     CALL(evt_snd_bgmon, 512, STRING("BGM_STG7_DUN2"))
-    CALL(evt_snd_envon, 272, STRING("ENV_STG7_AJI2"))
+    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI2"))
     CALL(evt_party_run, 0)
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_telop_entry, 16)
@@ -213,7 +214,7 @@ EVT_BEGIN(aji_00_init_evt)
         ELSE
         CALL(evt_snd_bgmon, 512, STRING("BGM_STG7_DUN2"))
     END_IF
-    CALL(evt_snd_envon, 272, STRING("ENV_STG7_AJI2"))
+    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI2"))
     CALL(evt_snd_set_rev_mode, 1)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)

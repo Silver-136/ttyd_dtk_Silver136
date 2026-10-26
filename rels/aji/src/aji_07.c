@@ -15,6 +15,7 @@
 #include "mario/mario_pouch.h"
 #include "system.h"
 #include "driver/casedrv.h"
+#include "pmario_sound.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "mario/mario.h"
@@ -286,7 +287,7 @@ EVT_END()
 
 EVT_BEGIN(aji_07_init_evt)
     CALL(evt_snd_bgmon, 512, STRING("BGM_STG7_DUN2"))
-    CALL(evt_snd_envon, 272, STRING("ENV_STG7_AJI4"))
+    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI4"))
     CALL(evt_snd_set_rev_mode, 1)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)

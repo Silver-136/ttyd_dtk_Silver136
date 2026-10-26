@@ -17,6 +17,7 @@
 #include "evt/evt_snd.h"
 #include "driver/mapdrv.h"
 #include "system.h"
+#include "pmario_sound.h"
 
 #include "driver/camdrv.h"
 #include "dolphin/os.h"
@@ -149,7 +150,7 @@ EVT_BEGIN(evt_to_tou)
     CALL(evt_cam3d_evt_set, -2000, 241, 534, -2000, 145, -8, 0, 11)
     WAIT_FRAMES(1)
     CALL(evt_snd_bgmon_f_d, 768, STRING("BGM_STG3_URN1"), 18000, 18000)
-    CALL(evt_snd_bgmoff, 26624)
+    CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
     CALL(evt_snd_bgm_scope, 0, 1)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_cont_onoff, 0)
@@ -387,7 +388,7 @@ EVT_BEGIN(tou_00_koopa_evt)
             CALL(evt_snd_bgm_freq, 0, LW(0))
             WAIT_MS(50)
         END_LOOP
-        CALL(evt_snd_bgmoff_f, 512, 2000)
+        CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)
     END_INLINE_EVENT
     SUBTRACT_FLOAT(LW(0), FLOAT(10.0f))
     ADD_FLOAT(LW(1), FLOAT(20.0f))
@@ -613,7 +614,7 @@ EVT_BEGIN(tou_00_init_evt)
         SPAWN_EVENT(PTR(tou_00_koopa_evt))
         RETURN
     END_IF
-    CALL(evt_snd_envon, 272, STRING("ENV_STG3_TOU8"))
+    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU8"))
     CALL(evt_map_playanim, STRING("jet"), 1, 0)
     CALL(evt_map_playanim, STRING("lightcoloer"), 1, 0)
     SET_VALUE(LW(0), STRING("coloer_light_1"))

@@ -11,6 +11,7 @@
 #include "party/party_motion.h"
 #include "evt/evt_sub.h"
 #include "system.h"
+#include "pmario_sound.h"
 
 #include "mario/mario.h"
 #include "party.h"
@@ -118,7 +119,7 @@ EVT_END()
 
 EVT_BEGIN(moo_03_init_evt)
     CALL(evt_snd_bgmon, 512, STRING("BGM_STG7_MON1"))
-    CALL(evt_snd_envon, 272, STRING("ENV_STG7_MOO3"))
+    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_MOO3"))
     CALL(evt_map_playanim, STRING("hosi_01"), 1, 0)
     CALL(z)
     CALL(evt_cam3d_evt_set, 0, 0, LW(0), 0, 0, 0, 0, 11)

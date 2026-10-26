@@ -783,7 +783,7 @@ EVT_BEGIN(end_image_main_evt)
             WAIT_MS(3000)
             SET_VALUE(GF(0), 0)
             BEGIN_INLINE_EVENT
-                CALL(evt_snd_bgmoff_f, 512, 5000)
+                CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 5000)
                 WAIT_MS(5000)
                 IF_INT_EQUAL(GF(0), 0)
                     CALL(evt_snd_bgmon, 513, STRING("BGM_EVT_PEACH1"))
@@ -840,8 +840,8 @@ EVT_BEGIN(end_return_title_evt)
 #else
     CALL_CHILD(PTR(evt_memcard_save))
 #endif
-    CALL(evt_snd_bgmoff_f, 512, 2000)
-    CALL(evt_snd_bgmoff_f, 513, 2000)
+    CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)
+    CALL(evt_snd_bgmoff_f, PSND_FADEOUT | PSND_SLOT(1), 2000)
     CALL(evt_fade_set_mapchange_type, 1, 17, 2000, -1, -1)
     CALL(evt_seq_set_seq, SEQ_MAP_CHANGE, STRING("title"), 0)
     RETURN

@@ -19,6 +19,7 @@
 #include "driver/mapdrv.h"
 #include "system.h"
 #include "driver/casedrv.h"
+#include "pmario_sound.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "dolphin/mtx.h"
@@ -129,15 +130,15 @@ const char* ie1_npc[] = {
 };
 
 EVT_BEGIN(evt_ie1_door_open)
-    CALL(evt_snd_bgmoff, 18432)
-    CALL(evt_snd_envoff, 18432)
+    CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
+    CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_snd_env_lpf, 0, 800)
     RETURN
 EVT_END()
 
 EVT_BEGIN(evt_ie1_door_close)
-    CALL(evt_snd_bgmon, 160, 0)
-    CALL(evt_snd_envon, 160, 0)
+    CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
+    CALL(evt_snd_envon, PSND_CONTINUE | PSND_UNSILENT, 0)
     CALL(evt_snd_env_lpf, 0, 0)
     RETURN
 EVT_END()
@@ -180,15 +181,15 @@ const char* ie2_npc[] = {
 };
 
 EVT_BEGIN(evt_ie2_door_open)
-    CALL(evt_snd_bgmoff, 18432)
-    CALL(evt_snd_envoff, 18432)
+    CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
+    CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_snd_env_lpf, 0, 800)
     RETURN
 EVT_END()
 
 EVT_BEGIN(evt_ie2_door_close)
-    CALL(evt_snd_bgmon, 160, 0)
-    CALL(evt_snd_envon, 160, 0)
+    CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
+    CALL(evt_snd_envon, PSND_CONTINUE | PSND_UNSILENT, 0)
     CALL(evt_snd_env_lpf, 0, 0)
     RETURN
 EVT_END()
@@ -238,15 +239,15 @@ const char* ie3_npc[] = {
 };
 
 EVT_BEGIN(evt_ie3_door_open)
-    CALL(evt_snd_bgmoff, 18432)
-    CALL(evt_snd_envoff, 18432)
+    CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
+    CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_snd_env_lpf, 0, 800)
     RETURN
 EVT_END()
 
 EVT_BEGIN(evt_ie3_door_close)
-    CALL(evt_snd_bgmon, 160, 0)
-    CALL(evt_snd_envon, 160, 0)
+    CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
+    CALL(evt_snd_envon, PSND_CONTINUE | PSND_UNSILENT, 0)
     CALL(evt_snd_env_lpf, 0, 0)
     RETURN
 EVT_END()
@@ -1631,19 +1632,19 @@ EVT_BEGIN(bom_02_init_evt)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, 400)
         CALL(evt_bero_get_entername, LW(0))
         IF_STR_EQUAL(LW(0), STRING("sekai_yami2"))
-            CALL(evt_snd_bgmoff, 512)
-            CALL(evt_snd_envoff, 512)
+            CALL(evt_snd_bgmoff, PSND_FADEOUT)
+            CALL(evt_snd_envoff, PSND_FADEOUT)
             SET_VALUE(LF(0), 1)
         END_IF
         IF_STR_EQUAL(LW(0), STRING("minnnanokoe"))
             CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_STG8_VOICE1"))
-            CALL(evt_snd_envoff, 512)
+            CALL(evt_snd_envoff, PSND_FADEOUT)
             SET_VALUE(LF(0), 1)
         END_IF
     END_IF
     IF_INT_EQUAL(LF(0), 0)
         CALL(evt_snd_bgmon, 512, STRING("BGM_STG7_BOM1"))
-        CALL(evt_snd_envon, 272, STRING("ENV_STG7_BOM3"))
+        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_BOM3"))
     END_IF
     CALL_CHILD(PTR(evt_bom_snowfall))
     CALL(evt_npc_setup, PTR(npcEnt))

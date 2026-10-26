@@ -19,6 +19,7 @@
 #include "driver/npcdrv.h"
 #include "mario/mario_pouch.h"
 #include "driver/casedrv.h"
+#include "pmario_sound.h"
 
 #include "string.h"
 #include "dolphin/os.h"
@@ -460,7 +461,7 @@ USER_FUNC(evt_moamoa_set_seq_all) {
 }
 
 static EVT_BEGIN(evt_moamoa)
-    CALL(evt_snd_bgmoff_f, 512, 120)
+    CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 120)
     CALL(evt_cam3d_evt_set, -70, 113, 373, 126, 38, -13, 500, 11)
     WAIT_MS(500)
     CALL(evt_npc_flag_onoff, 1, STRING("運転手"), NPC_FLAG_NO_HIT)
@@ -480,8 +481,8 @@ static EVT_BEGIN(evt_moamoa)
     CALL(evt_npc_reverse_ry, STRING("me"))
     CALL(evt_msg_print, 0, STRING("stg6_rsh_232"), 0, STRING("me"))
     BEGIN_INLINE_EVENT
-        CALL(evt_snd_bgmoff, 1024)
-        CALL(evt_snd_bgmon, 1, STRING("BGM_FF_ENV_SURPRISED1"))
+        CALL(evt_snd_bgmoff, PSND_PAUSE)
+        CALL(evt_snd_bgmon, PSND_SLOT(1), STRING("BGM_FF_ENV_SURPRISED1"))
         WAIT_MS(2000)
         CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_DANGER4"))
     END_INLINE_EVENT
@@ -899,37 +900,37 @@ EVT_BEGIN(rsh_00_init_evt)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(284, 286)
         CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_POWAN1"))
-        CALL(evt_snd_envon, 272, STRING("ENV_STG6_RSH1_4"))
+        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG6_RSH1_4"))
         CASE_BETWEEN(304, 309)
         CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_POWAN1"))
-        CALL(evt_snd_envon, 272, STRING("ENV_STG6_RSH1_4"))
+        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG6_RSH1_4"))
         CASE_BETWEEN(310, 325)
         CALL(evt_snd_bgmon, 512, STRING("BGM_STG6_HOM1"))
-        CALL(evt_snd_envoff, 512)
-        CALL(evt_snd_bgmoff, 26624)
+        CALL(evt_snd_envoff, PSND_FADEOUT)
+        CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
         CASE_BETWEEN(327, 328)
-        CALL(evt_snd_bgmoff, 512)
-        CALL(evt_snd_envon, 272, STRING("ENV_STG6_RSH1_4"))
+        CALL(evt_snd_bgmoff, PSND_FADEOUT)
+        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG6_RSH1_4"))
         CASE_BETWEEN(329, 331)
         CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_DANGER4"))
-        CALL(evt_snd_envon, 272, STRING("ENV_STG6_RSH1_4"))
+        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG6_RSH1_4"))
         CASE_BETWEEN(334, 344)
         CALL(evt_snd_bgmon, 512, STRING("BGM_STG6_PIK1"))
-        CALL(evt_snd_envoff, 512)
-        CALL(evt_snd_bgmoff, 26624)
+        CALL(evt_snd_envoff, PSND_FADEOUT)
+        CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
         CASE_DEFAULT
         CALL(evt_sub_get_mapname, LW(0))
         IF_STR_EQUAL(LW(0), STRING("rsh_00_a"))
             CALL(evt_snd_bgmon, 512, STRING("BGM_STG6_RSH1"))
-            CALL(evt_snd_envon, 272, STRING("ENV_STG6_RSH1_4"))
+            CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG6_RSH1_4"))
         END_IF
         IF_STR_EQUAL(LW(0), STRING("rsh_00_b"))
             CALL(evt_snd_bgmon, 512, STRING("BGM_STG6_RSH3"))
-            CALL(evt_snd_envon, 272, STRING("ENV_STG6_RSH1_4"))
+            CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG6_RSH1_4"))
         END_IF
         IF_STR_EQUAL(LW(0), STRING("rsh_00_c"))
             CALL(evt_snd_bgmon, 512, STRING("BGM_STG6_RSH2"))
-            CALL(evt_snd_envon, 272, STRING("ENV_STG6_RSH1_4"))
+            CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG6_RSH1_4"))
         END_IF
     END_SWITCH
     RETURN
@@ -1010,24 +1011,24 @@ EVT_BEGIN(rsh_00_init_evt_nidome)
     CALL_CHILD(PTR(evt_access_entry))
     IF_INT_EQUAL(GSWF(3460), 1)
         CALL(evt_snd_bgmon, 512, STRING("BGM_STG6_PIK1"))
-        CALL(evt_snd_envoff, 512)
-        CALL(evt_snd_bgmoff, 26624)
+        CALL(evt_snd_envoff, PSND_FADEOUT)
+        CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
         ELSE
         IF_INT_EQUAL(GSWF(3461), 1)
             CALL(evt_snd_bgmon, 512, STRING("BGM_STG0_GOR1"))
-            CALL(evt_snd_envoff, 512)
-            CALL(evt_snd_bgmoff, 26624)
+            CALL(evt_snd_envoff, PSND_FADEOUT)
+            CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
             ELSE
             CALL(evt_sub_get_mapname, LW(0))
             IF_STR_EQUAL(LW(0), STRING("rsh_00_a"))
                 CALL(evt_snd_bgmon, 512, STRING("BGM_STG6_RSH1"))
-                CALL(evt_snd_envon, 272, STRING("ENV_STG6_RSH1_4"))
+                CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG6_RSH1_4"))
             END_IF
             IF_STR_EQUAL(LW(0), STRING("rsh_00_b"))
             END_IF
             IF_STR_EQUAL(LW(0), STRING("rsh_00_c"))
                 CALL(evt_snd_bgmon, 512, STRING("BGM_STG6_RSH2"))
-                CALL(evt_snd_envon, 272, STRING("ENV_STG6_RSH1_4"))
+                CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG6_RSH1_4"))
             END_IF
         END_IF
     END_IF

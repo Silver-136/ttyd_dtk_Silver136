@@ -16,6 +16,7 @@
 #include "driver/mapdrv.h"
 #include "mario/mario_pouch.h"
 #include "system.h"
+#include "pmario_sound.h"
 
 
 static BeroEntry bero_entry_data[7];
@@ -230,7 +231,7 @@ EVT_END()
 
 EVT_BEGIN(tik_17_init_evt)
     CALL(evt_snd_bgmon, 512, STRING("BGM_STG0_TIK1"))
-    CALL(evt_snd_envon, 272, STRING("ENV_STG0_TIK7"))
+    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_TIK7"))
     CALL(evt_snd_set_rev_mode, 2)
     CALL_CHILD(PTR(evt_switch_00_init))
     CALL_CHILD(PTR(evt_switch_01_init))

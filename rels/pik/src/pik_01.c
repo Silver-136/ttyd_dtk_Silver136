@@ -20,6 +20,7 @@
 #include "evt/evt_pouch.h"
 #include "system.h"
 #include "driver/casedrv.h"
+#include "pmario_sound.h"
 
 #include "mario/mario.h"
 #include "manager/evtmgr_cmd.h"
@@ -198,7 +199,7 @@ static const char* name_tbl[] = {
 
 EVT_BEGIN(evt_powan)
     CALL(evt_mario_key_onoff, 0)
-    CALL(evt_snd_bgmoff, 18432)
+    CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_msg_print, 0, STRING("stg6_pik_06"), 0, 0)
     WAIT_MS(300)
     CALL(evt_npc_flag_onoff, 1, STRING("ポワン探偵"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_GRAVITY)
@@ -228,15 +229,15 @@ EVT_BEGIN(evt_powan)
         CALL(evt_msg_print, 0, STRING("stg6_pik_07_6"), 0, STRING("party"))
     END_SWITCH
     WAIT_MS(500)
-    CALL(evt_snd_bgmoff, 1024)
+    CALL(evt_snd_bgmoff, PSND_PAUSE)
     CALL(evt_set_dir_to_target, STRING("ポワン探偵"), STRING("mario"))
     CALL(evt_msg_print, 0, STRING("stg6_pik_08"), 0, STRING("ポワン探偵"))
     CALL(evt_mario_set_dir, 270, 200, 0)
     CALL(evt_party_set_dir, 0, 270, 200)
     BEGIN_INLINE_EVENT
         WAIT_MS(500)
-        CALL(evt_snd_bgmoff, 1024)
-        CALL(evt_snd_bgmon, 1, STRING("BGM_EVT_POWAN1"))
+        CALL(evt_snd_bgmoff, PSND_PAUSE)
+        CALL(evt_snd_bgmon, PSND_SLOT(1), STRING("BGM_EVT_POWAN1"))
     END_INLINE_EVENT
     CALL(evt_cam3d_evt_set, -350, 120, 40, -55, 50, -236, 500, 11)
     WAIT_MS(1000)
@@ -288,9 +289,9 @@ EVT_BEGIN(evt_powan)
     CALL(evt_cam3d_evt_off, 500, 11)
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_party_run, 0)
-    CALL(evt_snd_bgmoff, 513)
-    CALL(evt_snd_bgmon, 288, 0)
-    CALL(evt_snd_bgmon, 160, 0)
+    CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
+    CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)
+    CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
     CALL(evt_exit_case_evt)
     RETURN
 EVT_END()
@@ -1325,19 +1326,19 @@ EVT_BEGIN(pik_01_init_evt)
         IF_INT_EQUAL(GSW_STORY_PROGRESS, 400)
             CALL(evt_bero_get_entername, LW(0))
             IF_STR_EQUAL(LW(0), STRING("sekai_yami2"))
-                CALL(evt_snd_bgmoff, 512)
-                CALL(evt_snd_envoff, 512)
+                CALL(evt_snd_bgmoff, PSND_FADEOUT)
+                CALL(evt_snd_envoff, PSND_FADEOUT)
                 SET_VALUE(LF(1), 1)
             END_IF
             IF_STR_EQUAL(LW(0), STRING("minnnanokoe"))
                 CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_STG8_VOICE1"))
-                CALL(evt_snd_envoff, 512)
+                CALL(evt_snd_envoff, PSND_FADEOUT)
                 SET_VALUE(LF(1), 1)
             END_IF
         END_IF
         IF_INT_EQUAL(LF(1), 0)
             CALL(evt_snd_bgmon, 512, STRING("BGM_STG6_PIK1"))
-            CALL(evt_snd_envon, 272, STRING("ENV_STG6_PIK1_1"))
+            CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG6_PIK1_1"))
         END_IF
         ELSE
         CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_KUPPA1"))
