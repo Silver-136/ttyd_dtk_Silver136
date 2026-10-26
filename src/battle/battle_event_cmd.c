@@ -1710,7 +1710,7 @@ USER_FUNC(btlevtcmd_RecoverHp) {
         unit->hpGauge.targetHp = unit->currentHp;
         unit->hpGauge.drainTimer = unit->hpGauge.drainLength;
         unit->hpGauge.visibleTimer = unit->hpGauge.visibleLength;
-        unit->hpGauge.flags |= 1;
+        unit->hpGauge.flags |= HP_GAUGE_FLAG_TIMED;
     } else {
         BtlUnit_RecoverHp(unit, hp);
     }

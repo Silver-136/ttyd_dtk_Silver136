@@ -772,9 +772,14 @@ typedef struct BattleWorkUnitBadgesEquipped {
     u8 AutoCommand;   // 0x27
 } BattleWorkUnitBadgesEquipped;
 
+// BattleWorkHpGauge.flags
+typedef enum HpGaugeFlags {
+    HP_GAUGE_FLAG_TIMED = (1 << 0), // 0x1, the gauge hides when visibleTimer runs out
+} HpGaugeFlags;
+
 typedef struct BattleWorkHpGauge {
     u16 mode;          // 0x0, gauge style; 1 = trailing bar
-    u16 flags;         // 0x2, 1 = hide the gauge when visibleTimer runs out
+    u16 flags;         // 0x2, HpGaugeFlags
     s16 drainTimer;    // 0x4, frames left of the bar animation
     s16 drainLength;   // 0x6, bar animation length (20, or 40 in mode 1)
     s16 visibleTimer;  // 0x8, frames the gauge stays up; fades out below 20

@@ -1477,7 +1477,7 @@ USER_FUNC(_set_hp_gauge_fade_flag) {
     id = evtGetValue(event, event->args[0]);
     unit = BattleGetUnitPtr(wp, BattleTransID(event, id));
     if (unit) {
-        unit->hpGauge.flags |= 1;
+        unit->hpGauge.flags |= HP_GAUGE_FLAG_TIMED;
     }
     return EVT_RETURN_DONE;
 }

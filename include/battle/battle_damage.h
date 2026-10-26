@@ -116,3 +116,14 @@ void BattleAttackDeclare(s32* unitIdx, s32* partIdx);
 void BattleInitCounterPreCheckWork(CounterWork* work);
 s32 BattleCheckCounter(CounterWork* work, struct BattleUnit* attacker, struct BattleUnit* target,
                        struct BattleWorkUnitPart* part, struct BattleWeapon* weapon, u32* flags);
+
+// BattleSetStatusDamage results (BattleSetStatusDamageFromWeapon ORs them for every status it tries)
+typedef enum StatusDamageResult {
+    STATUS_RESULT_TIMED = (1 << 0),        // 0x1, a timed status landed: a no-damage hit counts as normal
+    STATUS_RESULT_UNTIMED = (1 << 1),      // 0x2, a buff or a status without duration (DAMAGE_CODE_STATUS_ONLY)
+    STATUS_RESULT_FRIGHT = (1 << 2),       // 0x4, -> DAMAGE_CODE_FRIGHT
+    STATUS_RESULT_GALE_FORCE = (1 << 3),   // 0x8, -> DAMAGE_CODE_GALE_FORCE
+    STATUS_RESULT_INSTANT_KILL = (1 << 4), // 0x10, on the final hit the target dies
+    STATUS_RESULT_SLEEP = (1 << 5),        // 0x20, the damage is applied without the hit reaction
+} StatusDamageResult;
+

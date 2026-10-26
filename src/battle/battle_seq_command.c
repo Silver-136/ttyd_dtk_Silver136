@@ -2575,7 +2575,7 @@ void BattleDrawEnemyHP(CameraId camId, void* param) {
         position.x += (f32)unit->mHpGaugeOffset[0];
         position.y += (f32)unit->mHpGaugeOffset[1];
         btlGetScreenPoint(&position, &screen);
-        if ((unit->flags & BATTLE_UNIT_FLAG_SHOW_HP) && (unit->hpGauge.flags & 1) && unit->hpGauge.visibleTimer < 20) {
+        if ((unit->flags & BATTLE_UNIT_FLAG_SHOW_HP) && (unit->hpGauge.flags & HP_GAUGE_FLAG_TIMED) && unit->hpGauge.visibleTimer < 20) {
             color.a = intplGetValue(EASING_LINEAR, 0.0f, 255.0f, unit->hpGauge.visibleTimer, 20);
         }
         ofs = 20;

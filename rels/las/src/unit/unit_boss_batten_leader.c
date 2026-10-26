@@ -2670,7 +2670,7 @@ USER_FUNC(_hp_gauge_flag_on) {
     id = BattleTransID(event, id);
     unit = BattleGetUnitPtr(wp, id);
     if (unit != NULL) {
-        unit->hpGauge.flags |= 1;
+        unit->hpGauge.flags |= HP_GAUGE_FLAG_TIMED;
     }
     return EVT_RETURN_DONE;
 }

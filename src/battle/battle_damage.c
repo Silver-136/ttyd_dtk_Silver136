@@ -127,7 +127,7 @@ void BattleDamageDirect(s32 unitId, BattleUnit* target, BattleUnitPart* part, s3
             if (pattern != 2 && pattern != 3 && pattern != 0x15 && pattern != 0x16 && pattern != 0x14 &&
                 pattern != 0x13 && pattern != 0x1b && pattern != 7 && (u8)result != DAMAGE_CODE_STATUS_ONLY) {
                 s32 dir = BtlUnit_GetBelong(target) == 0 ? -1 : 1;
-                if (result & 0x20000) {
+                if (result & DAMAGE_RESULT_AC_SUCCESS) {
                     effMissStarEntry(1, 1, x, y, z, dir);
                 } else {
                     effMissStarEntry(0, 1, x, y, z, dir);
@@ -215,10 +215,10 @@ void BattleDamageDirect(s32 unitId, BattleUnit* target, BattleUnitPart* part, s3
             target->hpGauge.drainTimer = target->hpGauge.drainLength;
             target->hpGauge.visibleTimer = target->hpGauge.visibleLength;
         }
-        if (result & 0x100) {
-            target->hpGauge.flags |= 1;
+        if (result & DAMAGE_RESULT_FINAL_HIT) {
+            target->hpGauge.flags |= HP_GAUGE_FLAG_TIMED;
         } else {
-            target->hpGauge.flags &= ~1;
+            target->hpGauge.flags &= ~HP_GAUGE_FLAG_TIMED;
         }
     }
     if (target->fpDamageTaken) {
@@ -259,7 +259,7 @@ void BattleDamageDirect(s32 unitId, BattleUnit* target, BattleUnitPart* part, s3
     }
     if (target->currentHp <= 0) {
         target->currentHp = 0;
-        if (result & 0x100) {
+        if (result & DAMAGE_RESULT_FINAL_HIT) {
             result |= DAMAGE_RESULT_ZERO_HP;
             if (target->mAttributeFlags & kUndead) {
                 switch ((u8)result) {
@@ -278,14 +278,14 @@ void BattleDamageDirect(s32 unitId, BattleUnit* target, BattleUnitPart* part, s3
             }
             if ((u32)target->damagePattern == ATTACKPATTERN_BLOW) {
                 s32 b = 1;
-                if ((result & 0x400) && !(result & 0x800) && (result & 0x100) && target->vulnStatus->galeForceRate) {
+                if ((result & DAMAGE_RESULT_DEATH) && !(result & DAMAGE_RESULT_REVIVAL) && (result & DAMAGE_RESULT_FINAL_HIT) && target->vulnStatus->galeForceRate) {
                     b = 0;
                 }
                 if (b) {
                     target->damagePattern = 0;
                 }
             }
-            if (result & 0x400) {
+            if (result & DAMAGE_RESULT_DEATH) {
                 if (target->currentKind >= TYPE_PARTNER_MIN && target->currentKind < TYPE_PARTNER_MAX) {
                     BattleAudience_Case_PartyDown();
                 }
@@ -1051,16 +1051,16 @@ s32 BattleSetStatusDamage(u32* result, BattleUnit* unit, BattleUnitPart* part, u
     }
 
     ok = 0;
-    if ((u32)type == 0x19) {
-        *result |= 4;
-    } else if ((u32)type == 0x1a) {
-        *result |= 8;
+    if ((u32)type == STATUS_FRIGHT) {
+        *result |= STATUS_RESULT_FRIGHT;
+    } else if ((u32)type == STATUS_GALE_FORCE) {
+        *result |= STATUS_RESULT_GALE_FORCE;
     } else {
-        if ((u32)type == 1) {
-            *result |= 0x20;
+        if ((u32)type == STATUS_SLEEP) {
+            *result |= STATUS_RESULT_SLEEP;
         }
-        if ((u32)type == 0x1b) {
-            *result |= 0x10;
+        if ((u32)type == STATUS_INSTANT_KILL) {
+            *result |= STATUS_RESULT_INSTANT_KILL;
         }
         ok = BtlUnit_SetStatus(unit, type, time, strength);
     }
@@ -1077,13 +1077,13 @@ s32 BattleSetStatusDamage(u32* result, BattleUnit* unit, BattleUnitPart* part, u
         case STATUS_HOLD_FAST:
         case STATUS_HP_REGEN:
         case STATUS_FP_REGEN:
-            *result |= 2;
+            *result |= STATUS_RESULT_UNTIMED;
             break;
         default:
             if (time > 0) {
-                *result |= 1;
+                *result |= STATUS_RESULT_TIMED;
             } else {
-                *result |= 2;
+                *result |= STATUS_RESULT_UNTIMED;
             }
             break;
     }
@@ -1642,20 +1642,20 @@ s32 BattleCheckDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPart* 
             result = flags | DAMAGE_CODE_NORMAL;
         }
         if ((result & 0xFF) == DAMAGE_CODE_NO_DAMAGE && status) {
-            if (status & 1) {
+            if (status & STATUS_RESULT_TIMED) {
                 result = flags | DAMAGE_CODE_NORMAL;
             } else {
                 result = flags | DAMAGE_CODE_STATUS_ONLY;
             }
         }
-        if (status & 4) {
+        if (status & STATUS_RESULT_FRIGHT) {
             result = flags | DAMAGE_CODE_FRIGHT;
         }
-        if (status & 8) {
+        if (status & STATUS_RESULT_GALE_FORCE) {
             result = flags | DAMAGE_CODE_GALE_FORCE;
         }
-        if (((u32)flags & DAMAGE_RESULT_FINAL_HIT) && (status & 0x10)) {
-            code = 0x717;
+        if (((u32)flags & DAMAGE_RESULT_FINAL_HIT) && (status & STATUS_RESULT_INSTANT_KILL)) {
+            code = DAMAGE_RESULT_DEATH | DAMAGE_RESULT_ZERO_HP | DAMAGE_RESULT_FINAL_HIT | DAMAGE_CODE_NORMAL;
             target->damagePattern = 0;
             _checkDamageCode_EmergencyRevival(target, (u32*)&code);
             BattleRunHitEvent(target, code);
@@ -1697,7 +1697,7 @@ s32 BattleCheckDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPart* 
                 pattern = 0;
             }
         }
-        if (status & 0x20) {
+        if (status & STATUS_RESULT_SLEEP) {
             BattleDamageDirect(attacker->unitId, target, part, damage, fpDamage, result, pattern, 0);
         } else {
             BattleDamageDirect(attacker->unitId, target, part, damage, fpDamage, result, pattern, 1);
