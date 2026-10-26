@@ -5,6 +5,7 @@
 #include "battle/battle_status_effect.h"
 #include "battle/battle_database_common.h"
 #include "battle/battle_detect.h"
+#include "mario/mario_pouch.h"
 
 extern ItemData itemDataTable[];
 
@@ -51,17 +52,17 @@ void* BattleEnemyUseItemCheck(BattleUnit* self) {
         return NULL;
     }
     switch (itemId) {
-    case 0x80: case 0x81: case 0x82: case 0x83: case 0x84: case 0x85: case 0x8B: case 0x90:
+    case ITEM_THUNDER_BOLT: case ITEM_THUNDER_RAGE: case ITEM_SHOOTING_STAR: case ITEM_ICE_STORM: case ITEM_FIRE_FLOWER: case ITEM_EARTH_QUAKE: case ITEM_POW_BLOCK: case ITEM_HP_DRAIN_ITEM:
         return _check_attack_item(self);
-    case 0x89: case 0x8A: case 0x8C: case 0x8D: case 0x92: case 0x93:
+    case ITEM_RUIN_POWDER: case ITEM_SLEEPY_SHEEP: case ITEM_STOPWATCH: case ITEM_DIZZY_DIAL: case ITEM_MINI_MR_MINI: case ITEM_MR_SOFTENER:
         return _check_status_attack_item(self);
-    case 0x86: case 0x87: case 0x88: case 0x8E: case 0x8F:
+    case ITEM_BOOS_SHEET: case ITEM_VOLT_SHROOM: case ITEM_REPEL_CAPE: case ITEM_POWER_PUNCH: case ITEM_COURAGE_SHELL:
         return _check_status_support_item(self);
-    case 0x99:
+    case ITEM_TASTY_TONIC:
         return _check_status_recover_item(self);
-    case 0x9D:
+    case ITEM_SLOW_SHROOM:
         return _check_hp_recover_item(self);
-    case 0x9E:
+    case ITEM_GRADUAL_SYRUP:
         return _check_fp_recover_item(self);
     default:
         if (itemDataTable[itemId].hp_restored != 0) {
@@ -113,7 +114,7 @@ void* _check_attack_item(BattleUnit* self) {
     if (targets->numTargets <= 0) {
         return NULL;
     }
-    if (itemId == 0x8B || itemId == 0x85) {
+    if (itemId == ITEM_POW_BLOCK || itemId == ITEM_EARTH_QUAKE) {
         for (i = 0; i < targets->numTargets; i++) {
             GETUNIT();
             if (unit->currentKind == UNIT_KOOPS && !NOFLAG && !BtlUnit_CanActStatus(unit)) {
@@ -136,27 +137,27 @@ void* _check_status_attack_item(BattleUnit* self) {
         GETUNIT();
         if (!NOFLAG) {
             switch (itemId) {
-            case 0x8A: case 0x8C:
+            case ITEM_SLEEPY_SHEEP: case ITEM_STOPWATCH:
                 if (BtlUnit_CanActStatus(unit)) {
                     RET();
                 }
                 break;
-            case 0x92:
+            case ITEM_MINI_MR_MINI:
                 if (BtlUnit_CanActStatus(unit) && !BtlUnit_CheckStatus(unit, STATUS_TINY)) {
                     RET();
                 }
                 break;
-            case 0x93:
+            case ITEM_MR_SOFTENER:
                 if (BtlUnit_CanActStatus(unit) && !BtlUnit_CheckStatus(unit, STATUS_DEFENSE_DOWN)) {
                     RET();
                 }
                 break;
-            case 0x89:
+            case ITEM_RUIN_POWDER:
                 if (BtlUnit_CanActStatus(unit) && !BtlUnit_CheckStatus(unit, STATUS_CONFUSE)) {
                     RET();
                 }
                 break;
-            case 0x8D:
+            case ITEM_DIZZY_DIAL:
                 if (BtlUnit_CanActStatus(unit) && !BtlUnit_CheckStatus(unit, STATUS_DIZZY)) {
                     RET();
                 }
@@ -176,27 +177,27 @@ void* _check_status_support_item(BattleUnit* self) {
         GETUNIT();
         if (!NOFLAG) {
             switch (itemId) {
-            case 0x8E:
+            case ITEM_POWER_PUNCH:
                 if (BtlUnit_CanActStatus(unit) && !BtlUnit_CheckStatus(unit, STATUS_HUGE)) {
                     RET();
                 }
                 break;
-            case 0x8F:
+            case ITEM_COURAGE_SHELL:
                 if (!BtlUnit_CheckStatus(unit, STATUS_DEFENSE_UP)) {
                     RET();
                 }
                 break;
-            case 0x86:
+            case ITEM_BOOS_SHEET:
                 if (!BtlUnit_CheckStatus(unit, STATUS_INVISIBLE)) {
                     RET();
                 }
                 break;
-            case 0x87:
+            case ITEM_VOLT_SHROOM:
                 if (!BtlUnit_CheckStatus(unit, STATUS_ELECTRIC)) {
                     RET();
                 }
                 break;
-            case 0x88:
+            case ITEM_REPEL_CAPE:
                 if (!BtlUnit_CheckStatus(unit, STATUS_DODGY)) {
                     RET();
                 }
@@ -216,7 +217,7 @@ void* _check_status_recover_item(BattleUnit* self) {
         GETUNIT();
         if (!NOFLAG) {
             switch (itemId) {
-            case 0x99:
+            case ITEM_TASTY_TONIC:
                 if (BtlUnit_CheckStatus(unit, STATUS_SLEEP) ||
                     BtlUnit_CheckStatus(unit, STATUS_STOP) ||
                     BtlUnit_CheckStatus(unit, STATUS_DIZZY) ||

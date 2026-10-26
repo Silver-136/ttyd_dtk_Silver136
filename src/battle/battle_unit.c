@@ -1765,28 +1765,28 @@ s32 BtlUnit_GetWeaponCost(BattleUnit* unit, BattleWeapon* weapon) {
     if (weapon->itemId) {
         count = pouchEquipCheckBadge(weapon->itemId);
         switch (weapon->itemId) {
-            case 0xF0:
-            case 0xF1:
-            case 0xF2:
-            case 0xF3:
-            case 0xF7:
-            case 0xF8:
-            case 0xF9:
-            case 0xFC:
-            case 0x100:
-            case 0x101:
-            case 0x14C:
-            case 0x14D:
-            case 0x14E:
-            case 0x151:
-            case 0x152:
+            case ITEM_POWER_JUMP:
+            case ITEM_MULTIBOUNCE:
+            case ITEM_POWER_BOUNCE:
+            case ITEM_TORNADO_JUMP:
+            case ITEM_POWER_SMASH:
+            case ITEM_QUAKE_HAMMER:
+            case ITEM_HAMMER_THROW:
+            case ITEM_FIRE_DRIVE:
+            case ITEM_CHARGE:
+            case ITEM_CHARGE_P:
+            case ITEM_MEGA_JUMP:
+            case ITEM_MEGA_SMASH:
+            case ITEM_MEGA_QUAKE:
+            case ITEM_SUPER_CHARGE:
+            case ITEM_SUPER_CHARGE_P:
                 cost = cost * pow(2.0, count - 1);
                 break;
-            case 0xF4:
-            case 0xF5:
-            case 0xF6:
-            case 0xFB:
-            case 0xFD:
+            case ITEM_SHRINK_STOMP:
+            case ITEM_SLEEPY_STOMP:
+            case ITEM_SOFT_STOMP:
+            case ITEM_HEAD_RATTLE:
+            case ITEM_ICE_SMASH:
                 cost *= count;
                 break;
         }

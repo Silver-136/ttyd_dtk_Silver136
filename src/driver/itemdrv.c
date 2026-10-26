@@ -388,7 +388,7 @@ void itemMain(void) {
 
         if (entry->flags & ITEM_FLAG_ACTIVE) {
             switch (entry->itemId) {
-                case 0x72: case 0x73: case 0x74: case 0x75: case 0x76: case 0x77: case 0x78:
+                case ITEM_DIAMOND_STAR: case ITEM_EMERALD_STAR: case ITEM_GOLD_STAR: case ITEM_RUBY_STAR: case ITEM_SAPPHIRE_STAR: case ITEM_GARNET_STAR: case ITEM_CRYSTAL_STAR:
                     if (!(entry->flags2 & ITEM_FLAG2_HIDDEN)) {
                         ((EffStarStoneWork*)entry->effect->userdata)->position.x = entry->position.x;
                         ((EffStarStoneWork*)entry->effect->userdata)->position.y = 16.0f + entry->position.y;
@@ -410,7 +410,7 @@ void itemMain(void) {
                     break;
             }
             entry->baseTime = gp->renderTime;
-            if (entry->itemId == 0x79 || entry->itemId == 0x7A) {
+            if (entry->itemId == ITEM_COIN || entry->itemId == ITEM_PIANTA_TOKEN) {
                 if (irand(1000) < 30) {
                     dx = 10 - irand(20);
                     dy = irand(20) + 10;
@@ -511,7 +511,7 @@ ItemEntry* itemEntry(const char* name, s32 itemId, u16 type, s32 collectFlag, Ev
 #ifdef VERSION_G8ME01
         entry = NULL;
         for (e = base, i = 0; i < wp->count; i++, e++) {
-            if (e->flags & ITEM_FLAG_ACTIVE && e->itemId == 0x79 && e->flags & ITEM_FLAG_REPLACEABLE) {
+            if (e->flags & ITEM_FLAG_ACTIVE && e->itemId == ITEM_COIN && e->flags & ITEM_FLAG_REPLACEABLE) {
                 entry = e;
                 break;
             }
@@ -519,14 +519,14 @@ ItemEntry* itemEntry(const char* name, s32 itemId, u16 type, s32 collectFlag, Ev
         if (entry) {
 #else
         entry = wp->entries;
-        if (entry->flags & ITEM_FLAG_ACTIVE && entry->itemId == 0x79 && entry->flags & ITEM_FLAG_REPLACEABLE) {
+        if (entry->flags & ITEM_FLAG_ACTIVE && entry->itemId == ITEM_COIN && entry->flags & ITEM_FLAG_REPLACEABLE) {
 #endif
             itemDelete(entry->name);
         } else {
 #ifdef VERSION_G8ME01
             entry = NULL;
             for (e = base, i = 0; i < wp->count; i++, e++) {
-                if (e->flags & ITEM_FLAG_ACTIVE && e->itemId == 0x7C && e->flags & ITEM_FLAG_REPLACEABLE) {
+                if (e->flags & ITEM_FLAG_ACTIVE && e->itemId == ITEM_FLOWER && e->flags & ITEM_FLAG_REPLACEABLE) {
                     entry = e;
                     break;
                 }
@@ -534,7 +534,7 @@ ItemEntry* itemEntry(const char* name, s32 itemId, u16 type, s32 collectFlag, Ev
             if (entry) {
 #else
             entry = wp->entries;
-            if (entry->flags & ITEM_FLAG_ACTIVE && entry->itemId == 0x7C && entry->flags & ITEM_FLAG_REPLACEABLE) {
+            if (entry->flags & ITEM_FLAG_ACTIVE && entry->itemId == ITEM_FLOWER && entry->flags & ITEM_FLAG_REPLACEABLE) {
 #endif
                 itemDelete(entry->name);
             } else {
@@ -543,7 +543,7 @@ ItemEntry* itemEntry(const char* name, s32 itemId, u16 type, s32 collectFlag, Ev
                 entry = NULL;
 #else
                 entry = wp->entries;
-                if (entry->flags & ITEM_FLAG_ACTIVE && entry->itemId == 0x7B && entry->flags & ITEM_FLAG_REPLACEABLE) {
+                if (entry->flags & ITEM_FLAG_ACTIVE && entry->itemId == ITEM_HEART && entry->flags & ITEM_FLAG_REPLACEABLE) {
                     itemDelete(entry->name);
                 } else {
                     entry = NULL;
@@ -580,7 +580,7 @@ ItemEntry* itemEntry(const char* name, s32 itemId, u16 type, s32 collectFlag, Ev
     }
 
     switch (entry->itemId) {
-    case 0x72: case 0x73: case 0x74: case 0x75: case 0x76: case 0x77: case 0x78:
+    case ITEM_DIAMOND_STAR: case ITEM_EMERALD_STAR: case ITEM_GOLD_STAR: case ITEM_RUBY_STAR: case ITEM_SAPPHIRE_STAR: case ITEM_GARNET_STAR: case ITEM_CRYSTAL_STAR:
         entry->effect = effStarStoneEntry(entry->itemId - 0x72, x, 16.0f + y, z, 1.0f);
         break;
     default:
@@ -594,7 +594,7 @@ ItemEntry* itemEntry(const char* name, s32 itemId, u16 type, s32 collectFlag, Ev
     entry->bounceFactor = entry->gravityScale = 1.0f;
     entry->baseTime = gp->renderTime;
     switch (entry->itemId) {
-    case 0x79: case 0x7A: case 0x7B: case 0x7C:
+    case ITEM_COIN: case ITEM_PIANTA_TOKEN: case ITEM_HEART: case ITEM_FLOWER:
         entry->flags |= ITEM_FLAG_QUICK_GET;
         break;
     }
@@ -679,7 +679,7 @@ void itemDelete(const char* name) {
         if (!strcmp(entry->name, name)) {
             itemCheckBadge(entry);
             switch (entry->itemId) {
-                case 0x72: case 0x73: case 0x74: case 0x75: case 0x76: case 0x77: case 0x78:
+                case ITEM_DIAMOND_STAR: case ITEM_EMERALD_STAR: case ITEM_GOLD_STAR: case ITEM_RUBY_STAR: case ITEM_SAPPHIRE_STAR: case ITEM_GARNET_STAR: case ITEM_CRYSTAL_STAR:
                     effSoftDelete(entry->effect);
                     break;
                 default:
@@ -946,7 +946,7 @@ void itemseq_GetItem(ItemEntry* entry) {
             mario->floorMove.z = 0.0f;
             mario->baseSpeed = 0.0f;
             mario->moveDist = 0.0f;
-            if (entry->itemId == 7 || entry->itemId == 8 || entry->itemId == 10 || entry->itemId == 11) {
+            if (entry->itemId == ITEM_SUPER_BOOTS || entry->itemId == ITEM_ULTRA_BOOTS || entry->itemId == ITEM_SUPER_HAMMER || entry->itemId == ITEM_ULTRA_HAMMER) {
                 entry->flags2 |= ITEM_FLAG2_UPGRADE_GET;
             }
         case 1:
@@ -969,10 +969,10 @@ void itemseq_GetItem(ItemEntry* entry) {
             }
             type = 7;
             bgm = -1;
-            if (entry->itemId == 0x57) {
+            if (entry->itemId == ITEM_SHINE_SPRITE) {
                 type = 4;
                 bgm = -1;
-            } else if (entry->itemId == 0x7D) {
+            } else if (entry->itemId == ITEM_STAR_PIECE) {
                 type = 8;
                 bgm = 0;
             } else if (entry->itemId < 0xC) {
@@ -1058,7 +1058,7 @@ void itemseq_GetItem(ItemEntry* entry) {
                 winMgrOpen(entry->winId[2]);
                 winMgrSetParam(entry->winId[2], entry);
             }
-            if (entry->itemId == 0x49) {
+            if (entry->itemId == ITEM_WEDDING_RING) {
 #ifdef VERSION_G8ME01
                 iconChange(entry->name, 0x11B);
 #else
@@ -1105,7 +1105,7 @@ void itemseq_GetItem(ItemEntry* entry) {
                 entry->subState = 6;
                 break;
             }
-            if (entry->itemId >= 0x79 && entry->itemId < 0xEC && entry->itemId != 0x7D && !swGet(0xEB) && !(gp->flags & 0x1000)) {
+            if (entry->itemId >= 0x79 && entry->itemId < 0xEC && entry->itemId != ITEM_STAR_PIECE && !swGet(0xEB) && !(gp->flags & 0x1000)) {
                 swSet(0xEB);
                 entry->subState = 4;
                 wp->msgWindowId = msgWindow_Entry(msgSearch("item_first_hit"), 0, 0);
@@ -1114,7 +1114,7 @@ void itemseq_GetItem(ItemEntry* entry) {
             effSoftDelete(wp->effect);
             marioSetCamId(CAMERA_3D);
             iconFlagOff(entry->name, 0x100);
-            if (entry->itemId == 0x49) {
+            if (entry->itemId == ITEM_WEDDING_RING) {
 #ifdef VERSION_G8ME01
                 iconChange(entry->name, 0x11C);
 #else
@@ -1300,9 +1300,9 @@ void itemseq_Bound(ItemEntry* entry) {
                     }
                     if (!(entry->flags2 & ITEM_FLAG2_SPREAD)) {
                         switch (entry->itemId) {
-                            case 0x79:
-                            case 0x7B:
-                            case 0x7C:
+                            case ITEM_COIN:
+                            case ITEM_HEART:
+                            case ITEM_FLOWER:
                                 entry->speed = irand(30) + 45;
                                 if (irand(100) < 50) {
                                     entry->direction = 90.0f + camera->viewYaw + irand(60) - 30.0f;
@@ -1497,22 +1497,22 @@ void itemseq_Bound(ItemEntry* entry) {
                     {
                     pos = (Vec){entry->position.x, entry->position.y, entry->position.z};
                     switch (itemId = entry->itemId) {
-                        case 0x79:
+                        case ITEM_COIN:
                             psndSFXOn_3D("SFX_COIN_LEAPED1", &pos);
                             break;
-                        case 0x7A:
+                        case ITEM_PIANTA_TOKEN:
                             psndSFXOn_3D("SFX_EVT_GAME_MONTE_LEAPED1", &pos);
                             break;
-                        case 0x7B:
+                        case ITEM_HEART:
                             psndSFXOn_3D("SFX_HEART_LEAPED1", &pos);
                             break;
-                        case 0x7C:
+                        case ITEM_FLOWER:
                             psndSFXOn_3D("SFX_FLOWER_LEAPED1", &pos);
                             break;
-                        case 0x7D:
+                        case ITEM_STAR_PIECE:
                             psndSFXOn_3D("SFX_STAR_PIECE_LEAPED1", &pos);
                             break;
-                        case 0x72: case 0x73: case 0x74: case 0x75: case 0x76: case 0x77: case 0x78:
+                        case ITEM_DIAMOND_STAR: case ITEM_EMERALD_STAR: case ITEM_GOLD_STAR: case ITEM_RUBY_STAR: case ITEM_SAPPHIRE_STAR: case ITEM_GARNET_STAR: case ITEM_CRYSTAL_STAR:
                             psndSFXOn_3D("SFX_EVT_STARSTONE_JUMP1", &pos);
                             break;
                         default:
@@ -1581,21 +1581,21 @@ void itemGetSound(ItemEntry* entry) {
 
     pos = (Vec){entry->position.x, entry->position.y, entry->position.z};
     switch (entry->itemId) {
-        case 0x79:
+        case ITEM_COIN:
             effStardustEntry(1, 3, 30, entry->position.x, 35.0f + entry->position.y, entry->position.z, 16.0f, 16.0f);
             psndSFXOn_3D("SFX_COIN_GET1", &pos);
             break;
-        case 0x7A:
+        case ITEM_PIANTA_TOKEN:
             effStardustEntry(1, 3, 30, entry->position.x, 35.0f + entry->position.y, entry->position.z, 16.0f, 16.0f);
             psndSFXOn_3D("SFX_EVT_GAME_MONTE_COUNT1", &pos);
             break;
-        case 0x7B:
+        case ITEM_HEART:
             psndSFXOn_3D("SFX_HEART_GET1", &pos);
             break;
-        case 0x7C:
+        case ITEM_FLOWER:
             psndSFXOn_3D("SFX_FLOWER_GET1", &pos);
             break;
-        case 0x7D:
+        case ITEM_STAR_PIECE:
             break;
     }
 }

@@ -7,6 +7,7 @@
 #include "system.h"
 #include "battle/battle_sub.h"
 #include "battle/battle_detect.h"
+#include "mario/mario_pouch.h"
 
 extern ItemData itemDataTable[];
 
@@ -513,49 +514,49 @@ void BattleChoiceSamplingEnemy(BattleWorkWeaponTargets* d, u32 flags, s32* unitO
                     w[id] = 1;
                 }
                 switch (d->weapon->itemId) {
-                case 0:
+                case ITEM_NULL:
                     break;
-                case 0x8E:
+                case ITEM_POWER_PUNCH:
                     if (!BtlUnit_CanActStatus(unit) || BtlUnit_CheckStatus(unit, STATUS_HUGE)) {
                         w[id] = 1;
                     }
                     break;
-                case 0x92:
+                case ITEM_MINI_MR_MINI:
                     if (BtlUnit_CheckStatus(unit, STATUS_TINY)) {
                         w[id] = 1;
                     }
                     break;
-                case 0x93:
+                case ITEM_MR_SOFTENER:
                     if (BtlUnit_CheckStatus(unit, STATUS_DEFENSE_DOWN)) {
                         w[id] = 1;
                     }
                     break;
-                case 0x8F:
+                case ITEM_COURAGE_SHELL:
                     if (BtlUnit_CheckStatus(unit, STATUS_DEFENSE_UP)) {
                         w[id] = 1;
                     }
                     break;
-                case 0x86:
+                case ITEM_BOOS_SHEET:
                     if (BtlUnit_CheckStatus(unit, STATUS_INVISIBLE)) {
                         w[id] = 1;
                     }
                     break;
-                case 0x87:
+                case ITEM_VOLT_SHROOM:
                     if (BtlUnit_CheckStatus(unit, STATUS_ELECTRIC)) {
                         w[id] = 1;
                     }
                     break;
-                case 0x88:
+                case ITEM_REPEL_CAPE:
                     if (BtlUnit_CheckStatus(unit, STATUS_DODGY)) {
                         w[id] = 1;
                     }
                     break;
-                case 0x89:
+                case ITEM_RUIN_POWDER:
                     if (BtlUnit_CheckStatus(unit, STATUS_CONFUSE)) {
                         w[id] = 1;
                     }
                     break;
-                case 0x99:
+                case ITEM_TASTY_TONIC:
                     if (!BtlUnit_CheckStatus(unit, STATUS_SLEEP) && !BtlUnit_CheckStatus(unit, STATUS_STOP)
                         && !BtlUnit_CheckStatus(unit, STATUS_DIZZY) && !BtlUnit_CheckStatus(unit, STATUS_POISON)
                         && !BtlUnit_CheckStatus(unit, STATUS_CONFUSE) && !BtlUnit_CheckStatus(unit, STATUS_BURN)
