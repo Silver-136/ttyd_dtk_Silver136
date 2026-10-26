@@ -702,7 +702,7 @@ void envGlare(EnvironmentGlare* glare) {
         batchCount = 0;
         texMtxId = 0x1E;
         while ((batchCount < 8) && (doneCount < glareCount)) {
-            MTXTrans(texMtx, (glare->coordScale * glareCur->coords[0].x) / (f32) gp->fbWidth, (glare->coordScale * glareCur->coords[0].y) / (f32) gp->efbHeight, 0.0f); //temp_r4, temp_r5_3, as 2 3 and temp_f4 as last
+            MTXTrans(texMtx, (glare->coordScale * glareCur->coords[0].x) / (f32) gp->fbWidth, (glare->coordScale * glareCur->coords[0].y) / (f32) gp->efbHeight, 0.0f);
             GXLoadTexMtxImm(texMtx, texMtxId, GX_MTX2x4);
             texMtxId += 3;
             batchCount += 1;

@@ -72,7 +72,8 @@ data order 10, sound-name integer round trips (`SFX_NAME_WORD`) 9, no-op casts 6
 - Names with an address suffix: 5 unreferenced .sbss words with no name evidence (the JP demo map names the
   neighbouring objects only), the JP-only party init copies, jumptable_80374848, and the shadowdrv debug strings
   by address (`str_8...`, 6; open research).
-- Ghidra-style locals left: 14.
+- Ghidra- or m2c-style local names: none left (2026-10-26). JP demo map: every invented function was checked
+  against it (cleanup_tools/demo_names.py); no further original name fits (2026-10-26).
 - Battle values still unnamed: pose types 32-34 and 53-55 (no code found selects them; only Mario's pose table
   lists 32). Dead bits (no reader): weapon special 0x200, target weighting 0x2000.
 - Comments from the game's own data: message paraphrases next to message calls (only 95 of 6,224 have one), place
