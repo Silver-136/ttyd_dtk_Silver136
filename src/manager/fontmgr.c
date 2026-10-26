@@ -691,8 +691,8 @@ void FontDrawMessageMtx(Mtx mtx, const char* msg) {
     }
 }
 
-void hankakuSearch(s8 c) {
-    JUTFont_CodeToGlyph(FONT_CH(c));
+u16 hankakuSearch(s8 c) {
+    return JUTFont_CodeToGlyph(FONT_CH(c));
 }
 
 u16 kanjiSearch(u32 code) {

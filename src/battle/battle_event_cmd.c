@@ -3370,7 +3370,6 @@ USER_FUNC(btlevtcmd_PartsFaceDirectionSub) {
 /* first-half (target order 1..153) functions, generated block */
 s32 BattleEnemyUseItemCheck(BattleUnit* unit);
 extern ItemData itemDataTable[];
-void btlDispChangePeraAnime(BattleUnitPart* part, s32 anim);
 void _MoveSoundControlEndCore(BattleUnit* unit, BecSndWork* work);
 void _MoveSoundControlCore(BattleUnit* unit, BecSndWork* work, BattleUnitPart* part, f32 x, f32 y, f32 z);
 ItemEntry* itemEntry(const char* name, s32 itemId, u16 type, s32 collectFlag, EvtWord* evtCode, f32 x, f32 y, f32 z);
@@ -5480,7 +5479,7 @@ USER_FUNC(btlevtcmd_AnimeChangePaperAnime) {
     pno = evtGetValue(event, args[1]);
     part = BattleGetUnitPartsPtr(id, pno);
     value = evtGetValue(event, args[2]);
-    btlDispChangePeraAnime(part, value);
+    btlDispChangePeraAnime(part, (const char*)value);
     return EVT_RETURN_DONE;
 }
 

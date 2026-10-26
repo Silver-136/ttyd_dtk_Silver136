@@ -21,7 +21,6 @@
 #include <string.h>
 #include "driver/mobjdrv.h"
 
-void* marioChkFront(Vec* out, Vec* pos, f32 dir, f32 dist);
 
 
 static f32 marioJumpStandData[] = {1.52f, -0.188f, 2.925f, -0.847f, -0.1f, -0.4f, 0.024f, -0.004f, 0.125f, 0.7f};
@@ -170,7 +169,7 @@ void mot_jumpSw(void) {
                 t.y = 0.5f * mario->wPlayerCollisionBox.y + ((MapObjectEntry*)mobj)->position.y;
                 t.z = ((MapObjectEntry*)mobj)->position.z;
                 v = t;
-                if (marioChkFront((Vec*)&out, &v, mario->directionView, 5.0f * mario->wPlayerCollisionBox.x) != NULL && out >= 0.0f &&
+                if (marioChkFront(&out, &v, mario->directionView, 5.0f * mario->wPlayerCollisionBox.x) != NULL && out >= 0.0f &&
                     out <= 0.5f * mario->wPlayerCollisionBox.x + 30.0f) {
                     mario->moveDirection = mario->directionView = revise360(180.0f + mario->directionView);
                 }
@@ -265,7 +264,7 @@ void mot_jumpNpc(void) {
                 t.y = 0.5f * mario->wPlayerCollisionBox.y + ((MapObjectEntry*)mobj)->position.y;
                 t.z = ((MapObjectEntry*)mobj)->position.z;
                 v = t;
-                if (marioChkFront(&out, &v, mario->directionView, 5.0f * mario->wPlayerCollisionBox.x) != NULL && out.x >= 0.0f &&
+                if (marioChkFront(&out.x, &v, mario->directionView, 5.0f * mario->wPlayerCollisionBox.x) != NULL && out.x >= 0.0f &&
                     out.x <= 0.5f * mario->wPlayerCollisionBox.x + 30.0f) {
                     mario->moveDirection = mario->directionView = revise360(180.0f + mario->directionView);
                 }

@@ -574,7 +574,7 @@ HitEntry* partySearchFrontWall(PartyEntry* party, Vec* pos, f32 dist, f32 ang) {
 }
 
 
-void partySearchHead(PartyEntry *party, Vec *pos, f32 *dist, f32 angle) {
+HitEntry* partySearchHead(PartyEntry* party, Vec* pos, f32* dist, f32 angle) {
     f32 lx;
     f32 ly;
     f32 lz;
@@ -700,6 +700,7 @@ void partySearchHead(PartyEntry *party, Vec *pos, f32 *dist, f32 angle) {
         pos->z = lz;
         *dist = 0.0f;
     }
+    return hit;
 }
 
 void partyHitStrippedPool(f32* f, s32 i) {

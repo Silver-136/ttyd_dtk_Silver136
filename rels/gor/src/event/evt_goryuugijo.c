@@ -14,15 +14,15 @@ typedef struct GoryuuWork {
     EventEntry* subEvent;
     u16 flags;
     s32 type;
-    s32 (*init)(EventEntry* event, BOOL isFirstCall);
-    s32 (*main)(EventEntry* event, BOOL isFirstCall);
+    void (*init)(EventEntry* event, BOOL isFirstCall);
+    void (*main)(EventEntry* event, BOOL isFirstCall);
     void (*disp)(CameraId camera, void* param);
     void* data;
 } GoryuuWork;
-s32 goryuugijo_init_montemedal(EventEntry* event, BOOL isFirstCall);
-s32 goryuugijo_main_montemedal(EventEntry* event, BOOL isFirstCall);
-s32 goryuugijo_init_slot(EventEntry* event, BOOL isFirstCall);
-s32 goryuugijo_main_slot(EventEntry* event, BOOL isFirstCall);
+void goryuugijo_init_montemedal(EventEntry* event, BOOL isFirstCall);
+void goryuugijo_main_montemedal(EventEntry* event, BOOL isFirstCall);
+void goryuugijo_init_slot(EventEntry* event, BOOL isFirstCall);
+void goryuugijo_main_slot(EventEntry* event, BOOL isFirstCall);
 void evt_goryuugijo_disp_func(CameraId camera, void* param);
 
 USER_FUNC(evt_goryuugijo_main_func);

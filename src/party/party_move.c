@@ -31,7 +31,6 @@ s32 partyMoveMain(PartyEntry* party, s32 hosei);
 f32 partyUpdMoveSpd(PartyEntry* party, f32 spd);
 extern void party_set_behind_dir(PartyEntry* party);
 static void flyMain(PartyEntry* party);
-extern HitEntry* partySearchHead(PartyEntry* party, Vec* pos, f32* h, f32 a);
 
 static inline void partyModeTail(PartyEntry* party) {
     Vec pos;

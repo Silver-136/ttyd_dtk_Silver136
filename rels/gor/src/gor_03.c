@@ -74,8 +74,8 @@ typedef struct GoryuuWork {
     EventEntry* subEvent;
     u16 flags;
     s32 type;
-    s32 (*init)(EventEntry* event, BOOL isFirstCall);
-    s32 (*main)(EventEntry* event, BOOL isFirstCall);
+    void (*init)(EventEntry* event, BOOL isFirstCall);
+    void (*main)(EventEntry* event, BOOL isFirstCall);
     void (*disp)(CameraId camera, void* param);
     void* data;
 } GoryuuWork;

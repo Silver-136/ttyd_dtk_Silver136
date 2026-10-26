@@ -4,6 +4,8 @@
 #include "driver/hitdrv.h"
 #include "dolphin/mtx.h"
 
+struct HitEntry;
+
 BOOL marioChkBero(HitEntry* hit);
 HitEntry* marioHitCheckVec(Vec* pos, Vec* dir, Vec* outPos, Vec* outNrm, f32* dist);
 
@@ -36,3 +38,4 @@ f32 marioChkOverhead(void);
 HitEntry* marioSearchUnder(void);
 HitEntry* marioChkLandon(f32* a, f32 d);
 HitEntry* marioSearchHead(Vec* pos, f32* h, f32 dd);
+struct HitEntry* marioChkFront(f32* out, const Vec* pos, f32 angle, f32 dist);

@@ -39,7 +39,6 @@ BOOL party_slit(PartyEntry* party);
 BOOL party_roll(PartyEntry* party);
 void partyFlyAdjustY(PartyEntry* party);
 void partyWalkChkGnd(PartyEntry* party);
-void* partySearchHead(PartyEntry* party, Vec* pos, f32* height, f32 dir);
 s32 partyGetFootmarkId();
 
 // Note: the real evt_snd user functions live in this split (see evt_snd.c).
