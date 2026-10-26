@@ -65,7 +65,10 @@ data order 10, sound-name integer round trips (`SFX_NAME_WORD`) 9, no-op casts 6
 - Comments from the game's own data: message paraphrases next to message calls (only 95 of 6,224 have one), place
   comments per room and NPC identities where the game's data (debug story list maps, NPC tribe table, messages)
   shows them.
-- Unnamed bits in smaller drivers' flag words (module-local words, a few driver fields).
+- Raw flag masks: about 1,050 tests/sets of flag words by number are left (2026-10-26, down from about 1,800):
+  module-local words (yuunpc crowd, puni, sac_bakugame, party_bomhei, yuugijou), matrix-part masks in animdrv
+  (a local switch over combinations, fine as numbers), and bits with no setter or no known meaning (kept numeric:
+  e.g. MapObjectFlags 0x20, GlobalWorkFlags 0x40, damage result 0x10000, unit attribute 0x100, slot flags).
 
 ## 4. Structure and layout of the source
 
