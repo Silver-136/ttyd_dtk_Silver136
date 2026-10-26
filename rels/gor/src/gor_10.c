@@ -15,6 +15,7 @@
 #include "rels/gor/include/gor.h"
 #include "driver/mapdrv.h"
 #include "mario/mario.h"
+#include "party.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "driver/camdrv.h"
@@ -162,7 +163,7 @@ EVT_BEGIN(tegami_init_evt)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
     CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_HIDE)
-    CALL(evt_party_dispflg_onoff, 0, 1, 1)
+    CALL(evt_party_dispflg_onoff, 0, PARTY_DISP_FLAG_HIDE, 1)
     BEGIN_INLINE_EVENT
         CALL(tegami)
     END_INLINE_EVENT
@@ -336,7 +337,7 @@ EVT_BEGIN(mezame_init_evt)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
     CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_HIDE)
-    CALL(evt_party_dispflg_onoff, 0, 1, 1)
+    CALL(evt_party_dispflg_onoff, 0, PARTY_DISP_FLAG_HIDE, 1)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("marukongou"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("densha"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("pukupuku"), MAP_OBJ_FLAG_HIDDEN)

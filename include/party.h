@@ -140,10 +140,44 @@ typedef union PartyWork {
     PartyWorkVivian vivian;
 } PartyWork;
 
+// PartyEntry.flags2: the partner's display flags (evt_party_dispflg_onoff; scripts pair it with
+// evt_mario_dispflag_onoff, and the bits mirror MarioDispFlags). 0x40/0x80 (never set) and 0x200 are not named.
+typedef enum PartyDispFlags {
+    PARTY_DISP_FLAG_HIDE = (1 << 0),             // 0x1, no draw, no shadow
+    PARTY_DISP_FLAG_POSE_LOCK = (1 << 1),        // 0x2, pose and paper changes ignored
+    PARTY_DISP_FLAG_NO_FLIP = (1 << 3),          // 0x8, partyDisp does not mirror
+    PARTY_DISP_FLAG_NO_MAKE_DISP_DIR = (1 << 4), // 0x10, partyMakeDispDir skipped
+    PARTY_DISP_FLAG_DISP_DIR_SNAP = (1 << 5),    // 0x20, turns happen at once
+    PARTY_DISP_FLAG_SLIT = (1 << 8),             // 0x100, paper slit mode
+    PARTY_DISP_FLAG_FAMICOM = (1 << 15),         // 0x8000, partySetFamicomMode
+    PARTY_DISP_FLAG_SHADOW_OFF = (1 << 20),      // 0x100000, partyShadowOff
+    PARTY_DISP_FLAG_SHADOW_NODECAY = (1 << 21),  // 0x200000, shadow drawn with color_tbl_nodecay
+    PARTY_DISP_FLAG_OUT_OF_SCREEN = (1 << 23),   // 0x800000, evt_party_outofscreen
+    PARTY_DISP_FLAG_PAPER = (1 << 26),           // 0x4000000, partyPaperOn
+} PartyDispFlags;
+
+// PartyEntry.trigFlags: one-shot change requests and door-move state (evt_party_trigflg_onoff). 0x10000 (never set)
+// and 0x800000 are not named.
+typedef enum PartyTrigFlags {
+    PARTY_TRIG_SLIT_INIT = (1 << 0),             // 0x1, start of the slit / roll paper motion
+    PARTY_TRIG_CHG_MOT = (1 << 1),               // 0x2, motion changed
+    PARTY_TRIG_CHG_MOVE_MODE = (1 << 2),         // 0x4, move mode changed
+    PARTY_TRIG_CHG_RUN_MODE = (1 << 3),          // 0x8, partyChgRunMode
+    PARTY_TRIG_DISP_DIR_CORRECTION = (1 << 12),  // 0x1000
+    PARTY_TRIG_CHG_ANIM = (1 << 13),             // 0x2000, pose changed
+    PARTY_TRIG_CHG_PAPER_ANIM = (1 << 14),       // 0x4000, paper pose changed
+    PARTY_TRIG_FOLLOW_CLOSE = (1 << 17),         // 0x20000, door move: follow close
+    PARTY_TRIG_HALF_PUSH = (1 << 18),            // 0x40000, door move: halved push box (partyMarioHosei)
+    PARTY_TRIG_BEHIND_DIR_SET = (1 << 20),       // 0x100000, party_set_behind_dir
+    PARTY_TRIG_DOOR_MOVE = (1 << 21),            // 0x200000, door and loading-zone gathering
+    PARTY_TRIG_JUMP_TARGET_SET = (1 << 22),      // 0x400000
+    PARTY_TRIG_SPLASH = (1 << 24),               // 0x1000000, water splash requested
+} PartyTrigFlags;
+
 typedef struct PartyEntry {
     u32 flags;                          // 0x0
-    u32 flags2;                         // 0x4
-    u32 trigFlags;                      // 0x8, evt_party_trigflg_onoff; 2 = motion changed, 4 = move mode changed, 0x2000 pose / 0x4000 paper changed
+    u32 flags2;                         // 0x4, PartyDispFlags
+    u32 trigFlags;                      // 0x8, PartyTrigFlags
     s32 paperAnimGroup;                 // 0xC
     s32 reserved_10;                    // 0x10, only set to -1 at entry
     s32 paperPoseId;                    // 0x14

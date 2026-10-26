@@ -20,6 +20,7 @@
 #include "pmario_sound.h"
 #include "driver/itemdrv.h"
 #include "mario/mario.h"
+#include "party.h"
 
 #include "mario/mario_pouch.h"
 #include "evt/evt_bero.h"
@@ -688,7 +689,7 @@ EVT_BEGIN(hontonosugata_mario)
     CALL(evt_cam3d_evt_set, -16, 790, 433, -16, 731, 92, 0, 11)
     WAIT_FRAMES(1)
     WAIT_MS(500)
-    CALL(evt_party_dispflg_onoff, 0, 16, 0)
+    CALL(evt_party_dispflg_onoff, 0, PARTY_DISP_FLAG_NO_MAKE_DISP_DIR, 0)
     CALL(evt_item_get_position, STRING("rubystar"), LW(0), LW(1), LW(2))
     SUBTRACT(LW(2), 5)
     CALL(evt_party_move_pos, 0, LW(0), LW(2), 500)

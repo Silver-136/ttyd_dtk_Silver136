@@ -245,8 +245,8 @@ void cloud_move(PartyEntry* party) {
     f32 a;
 
 #endif
-    if (party->trigFlags & 8) {
-        party->trigFlags &= ~8;
+    if (party->trigFlags & PARTY_TRIG_CHG_RUN_MODE) {
+        party->trigFlags &= ~PARTY_TRIG_CHG_RUN_MODE;
         partyMoveFlyInit(party, 1);
 #ifdef VERSION_G8ME01
         party->work.cloud.hoverAngle = 0.0f;
@@ -258,7 +258,7 @@ void cloud_move(PartyEntry* party) {
         a = sin((3.1415927f * party->work.cloud.hoverAngle) / 180.0f);
         party->dispOfs.y = 3.0f + 3.0f * a;
         if (party->moveMode != 2) {
-            party->trigFlags &= ~0x40000;
+            party->trigFlags &= ~PARTY_TRIG_HALF_PUSH;
         }
 #else
         cloud_hover_init(party);
@@ -266,7 +266,7 @@ void cloud_move(PartyEntry* party) {
     partyFlyMain(party);
     cloud_hover_main(party);
     if (party->moveMode != 2) {
-        party->trigFlags &= ~0x40000;
+        party->trigFlags &= ~PARTY_TRIG_HALF_PUSH;
 #endif
     }
 }
@@ -305,7 +305,7 @@ void cloud_use(PartyEntry* party) {
     }
     cloudCalcPos(party);
     party->position = party->moveTarget;
-    party->flags2 |= 0x10;
+    party->flags2 |= PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
     party->flags &= ~PARTY_FLAG_IS_EVT_USE;
     if (party->useStruct != NULL) {
         __memFree(HEAP_DEFAULT, party->useStruct);
@@ -330,8 +330,8 @@ void N__cloud_use(PartyEntry* party) {
     f32 dir;
     PartyCloud* cl;
 
-    if (party->trigFlags & 8) {
-        party->trigFlags &= ~8;
+    if (party->trigFlags & PARTY_TRIG_CHG_RUN_MODE) {
+        party->trigFlags &= ~PARTY_TRIG_CHG_RUN_MODE;
         party->work.cloud.hoverAngleBits = 0;
         party->work.cloud.hoverSpeedBits = 0;
         marioAdjustMoveDir();
@@ -389,7 +389,7 @@ void N__cloud_use(PartyEntry* party) {
         party->useMotionId = 11;
         mario->dispFlags |= MARIO_DISP_FLAG_NO_REAR_POSE;
         mario->dispFlags |= MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
-        party->flags2 |= 0x10;
+        party->flags2 |= PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
         CW(party)->breathDist = 0.0f;
         CW(party)->breathDir = mario->displayDirection;
         if (!(party->flags & PARTY_FLAG_IS_EVT_USE)) {
@@ -504,16 +504,16 @@ void N__cloud_use(PartyEntry* party) {
         }
         cloudCalcPos(party);
         party->position = party->moveTarget;
-        party->flags2 &= ~0x10;
+        party->flags2 &= ~PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
         if (mario->currMotionId == MARIO_MOTION_CLOUD) {
             mario->dispFlags &= ~MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
             mario->dispFlags &= ~MARIO_DISP_FLAG_NO_REAR_POSE;
             marioAdjustMoveDir();
-            party->trigFlags |= 0x40000;
+            party->trigFlags |= PARTY_TRIG_HALF_PUSH;
             mario->dispFlags &= ~MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
             marioChgMot(MARIO_MOTION_STAY);
         }
-        party->flags2 |= 0x10;
+        party->flags2 |= PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
         partyChgRunMode(party, 2);
         party->moveArg = 0;
         partyChgMoveMode(party, 2);

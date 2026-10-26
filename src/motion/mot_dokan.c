@@ -63,7 +63,7 @@ static void _partyEntry(s32 flag) {
             } else {
                 off = 120.0f;
             }
-            party->flags2 &= ~1;
+            party->flags2 &= ~PARTY_DISP_FLAG_HIDE;
             party->displayDirectionTarget = revise360(mario->displayDirection + off);
             party->displayDirection = mario->displayDirection;
             party->moveDir = mario->moveDirection;
@@ -81,7 +81,7 @@ static void _partyEntry(s32 flag) {
             } else {
                 off = -120.0f;
             }
-            party->flags2 &= ~1;
+            party->flags2 &= ~PARTY_DISP_FLAG_HIDE;
             party->displayDirectionTarget = revise360(mario->displayDirection + off);
             party->displayDirection = mario->displayDirection;
             party->moveDir = mario->moveDirection;

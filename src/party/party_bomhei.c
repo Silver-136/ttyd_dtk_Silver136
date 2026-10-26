@@ -93,8 +93,8 @@ static inline BOOL isBombRock(HitEntry* hit) {
     }
 
 void bomhei_bye(PartyEntry* party) {
-    if (party->trigFlags & 8) {
-        party->trigFlags &= ~8;
+    if (party->trigFlags & PARTY_TRIG_CHG_RUN_MODE) {
+        party->trigFlags &= ~PARTY_TRIG_CHG_RUN_MODE;
         partyGoodbyeInit(party);
         party->playerPtr->flags &= ~(1 << 13);
         BOMHEI_CLEAN_SFX(party);
@@ -196,7 +196,7 @@ void bomhei_use_post(PartyEntry* party) {
     BOMHEI_CLEAN_FLAGS(party);
     if (party->runMode != 9) {
         party->moveMode = 0;
-        party->trigFlags |= 8;
+        party->trigFlags |= PARTY_TRIG_CHG_RUN_MODE;
     }
     party->playerPtr->flags &= ~(1 << 13);
     BOMHEI_CLEAN_SFX(party);
@@ -321,8 +321,8 @@ void bomhei_use_main(PartyEntry* party) {
     f32 x, z;
     f32 tmp;
 
-    if (party->trigFlags & 8) {
-        party->trigFlags &= ~8;
+    if (party->trigFlags & PARTY_TRIG_CHG_RUN_MODE) {
+        party->trigFlags &= ~PARTY_TRIG_CHG_RUN_MODE;
         party->flags &= ~(PARTY_FLAG_IS_JUMPING | PARTY_FLAG_IS_FALLING | PARTY_FLAG_IS_STEPPING);
         party->flags &= ~(PARTY_FLAG_DISABLE_FRONT_WALL_CHK | PARTY_FLAG_FORCE_FALL);
         party->flags &= ~PARTY_FLAG_DISABLE_FLOORS;
@@ -369,7 +369,7 @@ void bomhei_use_main(PartyEntry* party) {
         if (--party->moveFrames > 0) {
             break;
         }
-        party->flags2 |= 0x10;
+        party->flags2 |= PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
         partyChgPose(party, "L_1");
         BWORK(party)->timer = (s16)sysMsec2Frame(3000);
         party->useMotionId = 10;
@@ -404,7 +404,7 @@ void bomhei_use_main(PartyEntry* party) {
         party->accelY = -tmp;
         tmp = 10.5f;
         party->moveFrames = (s16)tmp;
-        party->flags2 &= ~0x10;
+        party->flags2 &= ~PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
         party->flags |= PARTY_FLAG_IS_JUMPING;
         bomheiChkHitAttr(party);
         break;
@@ -646,7 +646,7 @@ void bomhei_use_main(PartyEntry* party) {
     case 100:
         partyChgRunMode(party, 2);
         party->moveMode = 0;
-        party->flags2 &= ~0x10;
+        party->flags2 &= ~PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
         party->flags &= ~PARTY_FLAG_IS_EVT_USE;
         party->flags &= ~PARTY_FLAG_IS_BEING_USED;
         BOMHEI_FREE(party);

@@ -48,7 +48,7 @@ USER_FUNC(pre_kurio_use) {
         return EVT_RETURN_DONE;
     }
 
-    if (party->flags2 & 0x4000000) {
+    if (party->flags2 & PARTY_DISP_FLAG_PAPER) {
         return EVT_RETURN_DONE;
     }
 
@@ -210,8 +210,8 @@ void kuribo_use(PartyEntry* party) {
     Vec pos;
     EventEntry* evt;
 
-    if (party->trigFlags & 8) {
-        party->trigFlags &= ~8;
+    if (party->trigFlags & PARTY_TRIG_CHG_RUN_MODE) {
+        party->trigFlags &= ~PARTY_TRIG_CHG_RUN_MODE;
         if (PSVECDistance(&player->position, &party->position) > 125.0f) {
             party->useMotionId = 0;
         } else {
@@ -291,8 +291,8 @@ void kuribo_use(PartyEntry* party) {
 }
 
 void kuribo_bye(PartyEntry* party) {
-    if (party->trigFlags & 8) {
-        party->trigFlags &= ~8;
+    if (party->trigFlags & PARTY_TRIG_CHG_RUN_MODE) {
+        party->trigFlags &= ~PARTY_TRIG_CHG_RUN_MODE;
         partyGoodbyeInit(party);
     }
     if (partyGoodbyeMain(party)) {

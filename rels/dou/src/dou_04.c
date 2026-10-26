@@ -20,6 +20,7 @@
 #include "mario/mario_pouch.h"
 #include "pmario_sound.h"
 #include "driver/itemdrv.h"
+#include "party.h"
 
 #include "mario/mario.h"
 #include "manager/evtmgr_cmd.h"
@@ -452,10 +453,10 @@ EVT_BEGIN(kuribo_talk)
                     CALL(evt_mario_set_dir, 270, 300, 0)
                 END_INLINE_EVENT
                 BEGIN_INLINE_EVENT
-                    CALL(evt_party_dispflg_onoff, 0, 16, 1)
+                    CALL(evt_party_dispflg_onoff, 0, PARTY_DISP_FLAG_NO_MAKE_DISP_DIR, 1)
                     CALL(evt_party_move_pos2, 0, -144, 86, 40)
                     WAIT_FRAMES(1)
-                    CALL(evt_party_dispflg_onoff, 0, 16, 0)
+                    CALL(evt_party_dispflg_onoff, 0, PARTY_DISP_FLAG_NO_MAKE_DISP_DIR, 0)
                     SET_VALUE(GF(0), 0)
                 END_INLINE_EVENT
                 CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_HIT)
@@ -478,10 +479,10 @@ EVT_BEGIN(kuribo_talk)
                 END_INLINE_EVENT
                 BEGIN_INLINE_EVENT
                     WAIT_MS(250)
-                    CALL(evt_party_dispflg_onoff, 0, 16, 1)
+                    CALL(evt_party_dispflg_onoff, 0, PARTY_DISP_FLAG_NO_MAKE_DISP_DIR, 1)
                     CALL(evt_party_get_pos, 0, LW(0), LW(1), LW(2))
                     CALL(evt_party_jump_pos, 0, LW(0), LW(1), LW(2), 200, 1, 5)
-                    CALL(evt_party_dispflg_onoff, 0, 16, 0)
+                    CALL(evt_party_dispflg_onoff, 0, PARTY_DISP_FLAG_NO_MAKE_DISP_DIR, 0)
                 END_INLINE_EVENT
                 CALL(evt_msg_print, 0, STRING("irai_21_005"), 0, STRING("me"))
                 CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))

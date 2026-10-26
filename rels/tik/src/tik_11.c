@@ -16,6 +16,7 @@
 #include "system.h"
 #include "driver/casedrv.h"
 #include "mario/mario.h"
+#include "party.h"
 
 #include "driver/npcdrv.h"
 #include "eff/eff_stardust.h"
@@ -603,7 +604,7 @@ EVT_BEGIN(powerdownya_party_lank_rtn)
         END_SWITCH
         WAIT_MS(500)
         DELETE_EVENT(GW(1))
-        CALL(evt_party_dispflg_onoff, 0, 16, 1)
+        CALL(evt_party_dispflg_onoff, 0, PARTY_DISP_FLAG_NO_MAKE_DISP_DIR, 1)
         CALL(evt_party_get_pos, 0, LW(3), LW(4), LW(5))
         CALL(effect_stardust, 4, LW(3), LW(4), LW(5), FLOAT(50.0f), FLOAT(50.0f), 14, 60)
         CALL(evt_party_get_dispdir, 0, LW(9))
@@ -619,7 +620,7 @@ EVT_BEGIN(powerdownya_party_lank_rtn)
             CALL(evt_party_set_dispdir, 0, LW(8))
             WAIT_FRAMES(1)
         END_LOOP
-        CALL(evt_party_dispflg_onoff, 0, 16, 0)
+        CALL(evt_party_dispflg_onoff, 0, PARTY_DISP_FLAG_NO_MAKE_DISP_DIR, 0)
         CALL(evt_party_flg_onoff, 0, 33554432, 0)
         CALL(evt_mario_goodbye_party, 0)
         CALL(evt_mario_hello_party, 0, LW(1))

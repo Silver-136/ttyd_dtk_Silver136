@@ -93,7 +93,7 @@ void mot_vivian_post(void) {
             partyPaperOff(party);
             party->flags &= ~PARTY_FLAG_IS_BEING_USED;
             party->flags &= ~PARTY_FLAG_IS_EVT_USE;
-            party->flags2 &= ~0x200000;
+            party->flags2 &= ~PARTY_DISP_FLAG_SHADOW_NODECAY;
             party->work.vivian.shadowSize = 10.0f;
             {
                 Vec zero2 = {0.0f, 0.0f, 0.0f};
@@ -175,7 +175,7 @@ BOOL N_vivianDisplayTailCheck(PartyEntry* party) {
     if ((party->tailFlags & 1)) {
         return FALSE;
     }
-    if (party->flags2 & 0x800000) {
+    if (party->flags2 & PARTY_DISP_FLAG_OUT_OF_SCREEN) {
         return FALSE;
     }
     if (strcmp(gp->currentMapName, "bom_01") == 0 && -1000.0f == party->position.y) {
@@ -203,8 +203,8 @@ void vivianShadow(PartyEntry* party) {
 }
 
 void vivian_move(PartyEntry* party) {
-    if (party->trigFlags & 8) {
-        party->trigFlags &= ~8;
+    if (party->trigFlags & PARTY_TRIG_CHG_RUN_MODE) {
+        party->trigFlags &= ~PARTY_TRIG_CHG_RUN_MODE;
         partyMoveFlyInit(party, 1);
     }
     partyFlyMain(party);
@@ -280,8 +280,8 @@ void vivian_use(PartyEntry* party) {
     void* rip;
     f32 d;
     MarioWork* m = party->playerPtr;
-    if (party->trigFlags & 8) {
-        party->trigFlags &= ~8;
+    if (party->trigFlags & PARTY_TRIG_CHG_RUN_MODE) {
+        party->trigFlags &= ~PARTY_TRIG_CHG_RUN_MODE;
         party->useMotionId = 0;
         party->work.vivian.shadowSize = 10.0f;
         party->trailPos = party->position;
@@ -313,7 +313,7 @@ void vivian_use(PartyEntry* party) {
         if (--party->moveFrames > 0) {
             break;
         }
-        party->flags2 |= 0x200000;
+        party->flags2 |= PARTY_DISP_FLAG_SHADOW_NODECAY;
         party->displayDirectionTarget = m->displayDirectionTarget;
         party->moveDir = toMovedirSimple(party->displayDirectionTarget);
         party->trailPos = party->position;
@@ -503,7 +503,7 @@ void vivian_use(PartyEntry* party) {
             party->work.vivian.shadowSize = 10.0f;
             partyPaperOff(party);
             party->flags &= ~PARTY_FLAG_IS_BEING_USED;
-            party->flags2 &= ~0x200000;
+            party->flags2 &= ~PARTY_DISP_FLAG_SHADOW_NODECAY;
             party->work.vivian.shadowSize = 10.0f;
             party->dispOfs.y = 0.0f;
             partyChgRunMode(party, 2);

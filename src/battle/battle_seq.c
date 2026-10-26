@@ -279,7 +279,7 @@ void btlseqInit(BattleWork* wp) {
             mario->dispFlags |= 1;
             party = partyGetPtr(marioGetPartyId());
             if (party) {
-                party->flags2 |= 1;
+                party->flags2 |= PARTY_DISP_FLAG_HIDE;
             }
             Btl_UnitSetup(wp);
             BattleSetSeq(wp, SEQ_INIT, 0x1000002);

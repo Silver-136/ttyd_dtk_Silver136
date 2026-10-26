@@ -936,7 +936,7 @@ EVT_BEGIN(tyuou_teresa_talk)
     END_INLINE_EVENT
     CALL(evt_party_stop, 0)
     BEGIN_INLINE_EVENT
-        CALL(evt_party_dispflg_onoff, 0, 16, 1)
+        CALL(evt_party_dispflg_onoff, 0, PARTY_DISP_FLAG_NO_MAKE_DISP_DIR, 1)
         CALL(evt_party_get_pos, 0, LW(0), LW(1), LW(2))
         CALL(evt_npc_get_position, STRING(/*"中央テレサ"*/"\x92\x86\x89\x9B\x83\x65\x83\x8C\x83\x54"), LW(3), LW(4), LW(5))
         IF_INT_LESS(LW(0), LW(3))
@@ -946,7 +946,7 @@ EVT_BEGIN(tyuou_teresa_talk)
         END_IF
         CALL(evt_party_jump_pos, 0, LW(0), LW(1), LW(2), 300, 0, -1000)
         WAIT_MS(300)
-        CALL(evt_party_dispflg_onoff, 0, 16, 0)
+        CALL(evt_party_dispflg_onoff, 0, PARTY_DISP_FLAG_NO_MAKE_DISP_DIR, 0)
     END_INLINE_EVENT
     SET_VALUE(GF(0), 0)
     BEGIN_INLINE_EVENT

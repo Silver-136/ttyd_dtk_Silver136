@@ -13,6 +13,7 @@
 #include "driver/mapdrv.h"
 #include "pmario_sound.h"
 #include "mario/mario.h"
+#include "party.h"
 
 USER_FUNC(evt_mario_dispflag_onoff);
 
@@ -78,7 +79,7 @@ static f32 spline_dt[] = {
 
 EVT_BEGIN(evt_anim2)
     CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_HIDE)
-    CALL(evt_party_dispflg_onoff, 0, 1, 1)
+    CALL(evt_party_dispflg_onoff, 0, PARTY_DISP_FLAG_HIDE, 1)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("Hikousen"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_trans, 1, STRING("Hikousen"), FLOAT(-808.0f), FLOAT(971.0f), FLOAT(4897.0f))
     WAIT_MS(2000)

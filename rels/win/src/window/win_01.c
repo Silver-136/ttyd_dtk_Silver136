@@ -18,6 +18,7 @@
 #include "mario/mario_pouch.h"
 #include "pmario_sound.h"
 #include "driver/itemdrv.h"
+#include "party.h"
 
 USER_FUNC(evt_pouch_open_mail);
 USER_FUNC(evt_pouch_receive_mail);
@@ -177,7 +178,7 @@ EVT_BEGIN(guide_bigtree)
     CALL(evt_party_cont_onoff, 1, 0)
     CALL(evt_party_set_pos, 1, 0, -1000, 0)
     WAIT_MS(1500)
-    CALL(evt_party_dispflg_onoff, 1, 1, 0)
+    CALL(evt_party_dispflg_onoff, 1, PARTY_DISP_FLAG_HIDE, 0)
     CALL(evt_party_cont_onoff, 1, 1)
     CALL(evt_mario_clear_party, 1)
     BEGIN_INLINE_EVENT

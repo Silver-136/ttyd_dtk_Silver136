@@ -12,6 +12,7 @@
 #include "driver/seqdrv.h"
 #include "pmario_sound.h"
 #include "mario/mario.h"
+#include "party.h"
 
 USER_FUNC(evt_mario_dispflag_onoff);
 USER_FUNC(evt_snd_envoff_f);
@@ -25,7 +26,7 @@ static EVT_BEGIN(epilogue_evt)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
     CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_HIDE)
-    CALL(evt_party_dispflg_onoff, 0, 1, 1)
+    CALL(evt_party_dispflg_onoff, 0, PARTY_DISP_FLAG_HIDE, 1)
     CALL(evt_seq_wait, SEQ_GAME)
     WAIT_MS(7000)
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 8000)

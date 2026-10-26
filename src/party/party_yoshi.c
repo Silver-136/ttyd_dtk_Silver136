@@ -140,9 +140,9 @@ void marioRideYoshi(void) {
     PartyEntry* party = partyGetPtr(marioGetPartyId());
     PartyEntry* extra;
 
-    party->trigFlags &= ~8;
-    party->trigFlags &= ~4;
-    party->trigFlags &= ~2;
+    party->trigFlags &= ~PARTY_TRIG_CHG_RUN_MODE;
+    party->trigFlags &= ~PARTY_TRIG_CHG_MOVE_MODE;
+    party->trigFlags &= ~PARTY_TRIG_CHG_MOT;
     party->flags |= PARTY_FLAG_IS_BEING_USED;
     party->runMode = 3;
     party->useMotionId = 11;
@@ -239,8 +239,8 @@ void marioYoshiForceCancel(void) {
 }
 
 void yoshi_bye(PartyEntry* party) {
-    if (party->trigFlags & 8) {
-        party->trigFlags &= ~8;
+    if (party->trigFlags & PARTY_TRIG_CHG_RUN_MODE) {
+        party->trigFlags &= ~PARTY_TRIG_CHG_RUN_MODE;
         partyGoodbyeInit(party);
     }
     if (party->flags & PARTY_FLAG_IS_BEING_USED) {
@@ -352,8 +352,8 @@ void yoshi_use(PartyEntry* party) {
     } else {
         L_partyClearCont(party);
     }
-    if (party->trigFlags & 8) {
-        party->trigFlags &= ~8;
+    if (party->trigFlags & PARTY_TRIG_CHG_RUN_MODE) {
+        party->trigFlags &= ~PARTY_TRIG_CHG_RUN_MODE;
         party->flags &= ~(PARTY_FLAG_IS_JUMPING | PARTY_FLAG_IS_FALLING | PARTY_FLAG_IS_STEPPING);
         party->flags &= ~(PARTY_FLAG_DISABLE_FRONT_WALL_CHK | PARTY_FLAG_FORCE_FALL);
         party->flags &= ~PARTY_FLAG_DISABLE_FLOORS;

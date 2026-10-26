@@ -34,6 +34,7 @@
 #include "mario/mario_pouch.h"
 #include "driver/casedrv.h"
 #include "pmario_sound.h"
+#include "party.h"
 
 #include "driver/effdrv.h"
 #include "driver/mapdrv.h"
@@ -2138,7 +2139,7 @@ EVT_BEGIN(lastdungeon)
         ADD(LW(2), -50)
         CALL(evt_mario_mov_pos2, LW(0), LW(2), FLOAT(120.0f))
         CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_HIDE)
-        CALL(evt_party_dispflg_onoff, 0, 1, 1)
+        CALL(evt_party_dispflg_onoff, 0, PARTY_DISP_FLAG_HIDE, 1)
     END_INLINE_EVENT
     CALL(evt_snd_sfxon, STRING("SFX_EVT_MAP_KAKAGERU3_3"), 0)
     BEGIN_INLINE_EVENT

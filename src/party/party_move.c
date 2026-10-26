@@ -39,8 +39,8 @@ static inline void partyModeTail(PartyEntry* party) {
     Vec pos;
 
     party->moveDir = party->targetDir;
-    if (party->trigFlags & 0x1000000) {
-        party->trigFlags &= ~0x1000000;
+    if (party->trigFlags & PARTY_TRIG_SPLASH) {
+        party->trigFlags &= ~PARTY_TRIG_SPLASH;
         pos = party->position;
         marioSetSplash(0, &pos);
         party->splashTimer = 20;
@@ -290,7 +290,7 @@ f32 partyGetTargetMovespd2(PartyEntry* party) {
         }
         return mario->mBaseDashSpeed;
     }
-    if (party->trigFlags & 0x20000) {
+    if (party->trigFlags & PARTY_TRIG_FOLLOW_CLOSE) {
         if (mario->baseSpeed > 0.0f) {
             return mario->baseSpeed;
         }
@@ -649,7 +649,7 @@ void partyChgWalkPose(PartyEntry* party, f32 spd) {
     f32 a;
     f32 b;
 
-    if (party->flags2 & 0x100) {
+    if (party->flags2 & PARTY_DISP_FLAG_SLIT) {
         partyChgPoseId(party, 3);
         partyPlaySfxFootstep(party, 1);
         return;
@@ -843,7 +843,7 @@ void partyChgMoveMode(PartyEntry* party, s32 mode) {
     }
     party = p;
     party->moveMode = mode;
-    party->trigFlags |= 4;
+    party->trigFlags |= PARTY_TRIG_CHG_MOVE_MODE;
 }
 
 void partyChgMot(PartyEntry* party, s32 mot) {
@@ -853,7 +853,7 @@ void partyChgMot(PartyEntry* party, s32 mot) {
         party->flags &= ~PARTY_FLAG_DISABLE_FLOORS;
     }
     party->motionId = mot;
-    party->trigFlags |= 2;
+    party->trigFlags |= PARTY_TRIG_CHG_MOT;
 }
 
 void partySetDir(PartyEntry* party, f32 x, f32 z) {
@@ -873,8 +873,8 @@ void partyMoveBehindMario3(PartyEntry* party, s32 arg) {
     if (party->currentMemberId == PARTY_MEMBER_YOSHI && party->runMode == 3) {
         return;
     }
-    party->trigFlags |= 0x100000;
-    party->trigFlags |= 0x40000;
+    party->trigFlags |= PARTY_TRIG_BEHIND_DIR_SET;
+    party->trigFlags |= PARTY_TRIG_HALF_PUSH;
     party_set_behind_dir(party);
     party->moveArg = arg;
     partyChgMoveMode(party, 2);
@@ -951,7 +951,7 @@ void partyGetMoveDirSpd(PartyEntry* party, f32* dir, f32* spd) {
             }
         }
     }
-    if (party->trigFlags & 0x200000) {
+    if (party->trigFlags & PARTY_TRIG_DOOR_MOVE) {
         hosei = 0;
     }
     if (hosei >= 30) {
@@ -978,7 +978,7 @@ s32 partyMarioHosei(PartyEntry* party) {
     f32 scale;
     f32 d;
 
-    if (!(party->trigFlags & 0x40000)) {
+    if (!(party->trigFlags & PARTY_TRIG_HALF_PUSH)) {
         kx = 0.4f;
         kz = 0.3f;
         ky = kx;
@@ -1055,8 +1055,8 @@ void partyChkWall(PartyEntry* party) {
 }
 
 void party_move_mode_wait(PartyEntry* party) {
-    if (party->trigFlags & 4) {
-        party->trigFlags &= ~4;
+    if (party->trigFlags & PARTY_TRIG_CHG_MOVE_MODE) {
+        party->trigFlags &= ~PARTY_TRIG_CHG_MOVE_MODE;
         partyChgPoseId(party, 1);
         party->flags &= ~PARTY_FLAG_IS_BEING_USED;
         if (party->currentMemberId == PARTY_MEMBER_FLURRIE) {
@@ -1108,8 +1108,8 @@ void partyWalkInit(PartyEntry* party) {
 }
 
 void partyMoveWalk(PartyEntry* party) {
-    if (party->trigFlags & 8) {
-        party->trigFlags &= ~8;
+    if (party->trigFlags & PARTY_TRIG_CHG_RUN_MODE) {
+        party->trigFlags &= ~PARTY_TRIG_CHG_RUN_MODE;
         party->flags &= ~PARTY_FLAG_IS_BEING_USED;
         partyWalkInit(party);
     }
@@ -1176,8 +1176,8 @@ void partyWalkMain(PartyEntry* party) {
 }
 
 void party_move_mode_stay(PartyEntry* party) {
-    if (party->trigFlags & 4) {
-        party->trigFlags &= ~4;
+    if (party->trigFlags & PARTY_TRIG_CHG_MOVE_MODE) {
+        party->trigFlags &= ~PARTY_TRIG_CHG_MOVE_MODE;
         partyChgPoseId(party, 1);
         if (party->currentMemberId == PARTY_MEMBER_FLURRIE) {
             cloud_hover_init(party);
@@ -1203,8 +1203,8 @@ void party_move_mode_stay(PartyEntry* party) {
 }
 
 void party_move_mode_walk(PartyEntry* party) {
-    if (party->trigFlags & 4) {
-        party->trigFlags &= ~4;
+    if (party->trigFlags & PARTY_TRIG_CHG_MOVE_MODE) {
+        party->trigFlags &= ~PARTY_TRIG_CHG_MOVE_MODE;
     }
     switch (party->motionId) {
         case 0:
@@ -1234,8 +1234,8 @@ void party_move_mode_walk(PartyEntry* party) {
 }
 
 void party_move_mode_behind_mario(PartyEntry* party) {
-    if (party->trigFlags & 4) {
-        party->trigFlags &= ~4;
+    if (party->trigFlags & PARTY_TRIG_CHG_MOVE_MODE) {
+        party->trigFlags &= ~PARTY_TRIG_CHG_MOVE_MODE;
     }
     switch (party->motionId) {
         case 0:
@@ -1263,8 +1263,8 @@ void party_move_mode_behind_mario(PartyEntry* party) {
 }
 
 void party_move_mode_beside_mario(PartyEntry* party) {
-    if (party->trigFlags & 4) {
-        party->trigFlags &= ~4;
+    if (party->trigFlags & PARTY_TRIG_CHG_MOVE_MODE) {
+        party->trigFlags &= ~PARTY_TRIG_CHG_MOVE_MODE;
     }
     switch (party->motionId) {
         case 0:
@@ -1292,8 +1292,8 @@ void partyForceWalk(PartyEntry* party) {
     HitEntry* hit;
     s32 attr;
 
-    if (party->trigFlags & 8) {
-        party->trigFlags &= ~8;
+    if (party->trigFlags & PARTY_TRIG_CHG_RUN_MODE) {
+        party->trigFlags &= ~PARTY_TRIG_CHG_RUN_MODE;
         if (party->flags & PARTY_FLAG_IS_BEING_USED) {
             if (party->currentMemberId == PARTY_MEMBER_BOBBERY) {
                 bomhei_use_cancel();
@@ -1417,8 +1417,8 @@ void partyFlyMain(PartyEntry* party) {
 }
 
 static inline void party_move_mode_behind_mario_continue(PartyEntry* party) {
-    if (party->trigFlags & 4) {
-        party->trigFlags &= ~4;
+    if (party->trigFlags & PARTY_TRIG_CHG_MOVE_MODE) {
+        party->trigFlags &= ~PARTY_TRIG_CHG_MOVE_MODE;
     }
     switch (party->motionId) {
         case 0:
@@ -1882,7 +1882,7 @@ BOOL partyGetAppearPos4(PartyEntry* party, Vec* out) {
 
     if (party->currentMemberId == PARTY_MEMBER_FLURRIE) {
         radius = 32.0f;
-    } else if (party->trigFlags & 0x200000) {
+    } else if (party->trigFlags & PARTY_TRIG_DOOR_MOVE) {
         radius = 28.0f;
     } else {
         radius = 26.0f;
@@ -1905,7 +1905,7 @@ BOOL partyGetAppearPos4(PartyEntry* party, Vec* out) {
             out->y = mario->position.y;
         }
     }
-    n = (party->trigFlags & 0x200000) ? 13 : 11;
+    n = (party->trigFlags & PARTY_TRIG_DOOR_MOVE) ? 13 : 11;
 
     for (i = 0; i <= n; i++) {
         if (i == 0) {
@@ -1913,7 +1913,7 @@ BOOL partyGetAppearPos4(PartyEntry* party, Vec* out) {
             ang = party->homeDir;
         } else {
             query.targetDistance = dist;
-            if (party->trigFlags & 0x200000) {
+            if (party->trigFlags & PARTY_TRIG_DOOR_MOVE) {
             if (strcmp(gp->currentMapName, "usu_00") == 0) {
                 ang = toMovedir2(party->homeDir, angE[i]);
             } else {

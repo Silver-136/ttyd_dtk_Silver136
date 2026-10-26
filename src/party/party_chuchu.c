@@ -357,8 +357,8 @@ void chuchu_exit(PartyEntry* party) {
 }
 
 void chuchu_move(PartyEntry* party) {
-    if (party->trigFlags & 8) {
-        party->trigFlags &= ~8;
+    if (party->trigFlags & PARTY_TRIG_CHG_RUN_MODE) {
+        party->trigFlags &= ~PARTY_TRIG_CHG_RUN_MODE;
         party->flags &= ~PARTY_FLAG_IS_BEING_USED;
         partyWalkInit(party, 1);
     }

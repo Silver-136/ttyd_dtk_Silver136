@@ -22,6 +22,7 @@
 #include "pmario_sound.h"
 #include "driver/itemdrv.h"
 #include "mario/mario.h"
+#include "party.h"
 
 #include "driver/dispdrv.h"
 #include "stdlib.h"
@@ -723,19 +724,19 @@ EVT_BEGIN(clouda_nakama)
     CALL(evt_cam3d_evt_set, 225, 170, 391, 225, 100, -3, 0, 11)
     WAIT_MS(300)
     BEGIN_INLINE_EVENT
-        CALL(evt_party_dispflg_onoff, 0, 16, 1)
+        CALL(evt_party_dispflg_onoff, 0, PARTY_DISP_FLAG_NO_MAKE_DISP_DIR, 1)
         CALL(evt_party_get_pos, 0, LW(0), LW(1), LW(2))
         ADD(LW(0), -15)
         CALL(evt_party_move_pos2, 0, LW(0), LW(2), FLOAT(80.0f))
         CALL(evt_party_set_dir, 0, 90, -1)
-        CALL(evt_party_dispflg_onoff, 0, 16, 0)
+        CALL(evt_party_dispflg_onoff, 0, PARTY_DISP_FLAG_NO_MAKE_DISP_DIR, 0)
     END_INLINE_EVENT
-    CALL(evt_party_dispflg_onoff, 1, 16, 1)
+    CALL(evt_party_dispflg_onoff, 1, PARTY_DISP_FLAG_NO_MAKE_DISP_DIR, 1)
     CALL(evt_party_get_pos, 1, LW(0), LW(1), LW(2))
     ADD(LW(0), -25)
     CALL(evt_party_move_pos2, 1, LW(0), LW(2), FLOAT(80.0f))
     CALL(evt_party_set_dir, 1, 90, -1)
-    CALL(evt_party_dispflg_onoff, 1, 16, 0)
+    CALL(evt_party_dispflg_onoff, 1, PARTY_DISP_FLAG_NO_MAKE_DISP_DIR, 0)
     WAIT_MS(700)
     CALL(evt_eff_fukidashi, 1, STRING(""), STRING("クラウダ"), 0, 0, 0, 0, 0, 0, 0, 60)
     WAIT_MS(1000)

@@ -87,8 +87,8 @@ BOOL nokonoko_holdItem(void) {
 }
 
 void nokonoko_bye(PartyEntry* party) {
-    if (party->trigFlags & 8) {
-        party->trigFlags &= ~8;
+    if (party->trigFlags & PARTY_TRIG_CHG_RUN_MODE) {
+        party->trigFlags &= ~PARTY_TRIG_CHG_RUN_MODE;
         partyGoodbyeInit(party);
     }
     if (partyGoodbyeMain(party)) {
@@ -106,8 +106,8 @@ void nokonoko_init(PartyEntry* party) {
 
 void nokonoko_move(PartyEntry* party) {
     marioGetPtr();
-    if (party->trigFlags & 8) {
-        party->trigFlags &= ~8;
+    if (party->trigFlags & PARTY_TRIG_CHG_RUN_MODE) {
+        party->trigFlags &= ~PARTY_TRIG_CHG_RUN_MODE;
         partyWalkInit(party, 1);
     }
     partyUpdMoveSpd(party);
@@ -145,8 +145,8 @@ void nokonoko_use_cancel(void) {
             party->flags &= ~PARTY_FLAG_DISABLE_FLOORS;
             party->flags &= ~PARTY_FLAG_DISABLE_FRONT_WALL_CHK;
             party->flags &= ~PARTY_FLAG_FORCE_FALL;
-            party->flags2 &= ~0x20;
-            party->flags2 &= ~0x10;
+            party->flags2 &= ~PARTY_DISP_FLAG_DISP_DIR_SNAP;
+            party->flags2 &= ~PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
             party->height = 37.0f;
             party->work.nokonoko.shellSpinBits = 0;
             party->work.nokonoko.word17C = 0;
@@ -173,8 +173,8 @@ void nokonoko_use_post(PartyEntry* party) {
     party->flags &= ~PARTY_FLAG_DISABLE_FLOORS;
     party->flags &= ~PARTY_FLAG_DISABLE_FRONT_WALL_CHK;
     party->flags &= ~PARTY_FLAG_FORCE_FALL;
-    party->flags2 &= ~0x20;
-    party->flags2 &= ~0x10;
+    party->flags2 &= ~PARTY_DISP_FLAG_DISP_DIR_SNAP;
+    party->flags2 &= ~PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
     party->height = 37.0f;
     party->work.nokonoko.shellSpinBits = 0;
     party->work.nokonoko.word17C = 0;
@@ -256,8 +256,8 @@ void nokonoko_use(PartyEntry* party) {
             return;
         }
     }
-    if (party->trigFlags & 8) {
-        party->trigFlags &= ~8;
+    if (party->trigFlags & PARTY_TRIG_CHG_RUN_MODE) {
+        party->trigFlags &= ~PARTY_TRIG_CHG_RUN_MODE;
         party->work.nokonoko.heldItem = NULL;
         party->work.nokonoko.shellSpinBits = 0;
         party->work.nokonoko.word17C = 0;
@@ -280,7 +280,7 @@ void nokonoko_use(PartyEntry* party) {
         }
         partyClearJumpPara(party);
         party->flags |= PARTY_FLAG_DISABLE_FLOORS;
-        party->flags2 |= 0x10;
+        party->flags2 |= PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
         partyChgPose(party, "PNK_K_2");
         party->height = 18.5f;
         party->useMotionId = 1;
@@ -581,8 +581,8 @@ void nokonoko_use(PartyEntry* party) {
             ccwall(party, 1);
         }
         party->moveSpeed = 0.0f;
-        party->flags2 &= ~0x10;
-        party->flags2 |= 0x20;
+        party->flags2 &= ~PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
+        party->flags2 |= PARTY_DISP_FLAG_DISP_DIR_SNAP;
         party->useMotionId = 71;
         break;
     case 71:
@@ -676,7 +676,7 @@ void nokonoko_use(PartyEntry* party) {
             ccwall(party, 1);
         }
         party->moveSpeed = 0.0f;
-        party->flags2 &= ~0x10;
+        party->flags2 &= ~PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
         if (party->work.nokonoko.heldItem != NULL) {
             itemNokoForceGet(party->work.nokonoko.heldItem);
             party->work.nokonoko.heldItem = NULL;
@@ -782,8 +782,8 @@ void nokonoko_use(PartyEntry* party) {
         party->flags |= PARTY_FLAG_FORCE_FALL;
         party->flags &= ~PARTY_FLAG_DISABLE_FLOORS;
         party->flags &= ~PARTY_FLAG_DISABLE_FRONT_WALL_CHK;
-        party->flags2 &= ~0x20;
-        party->flags2 &= ~0x10;
+        party->flags2 &= ~PARTY_DISP_FLAG_DISP_DIR_SNAP;
+        party->flags2 &= ~PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
         party->height = 37.0f;
         party->useMotionId = 113;
         break;

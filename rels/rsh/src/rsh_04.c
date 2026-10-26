@@ -16,6 +16,7 @@
 #include "driver/casedrv.h"
 #include "pmario_sound.h"
 #include "driver/itemdrv.h"
+#include "party.h"
 
 #include "mario/mario.h"
 #include "driver/npcdrv.h"
@@ -1521,7 +1522,7 @@ EVT_BEGIN(rsh_04_b_init_evt)
         CALL(evt_mario_set_pos, 220, 0, -20)
         CALL(evt_party_set_pos, 0, 200, 0, -20)
         DEBUG_PUT_MSG(STRING("パーティドア移動フラグクリア"))
-        CALL(evt_party_trigflg_onoff, 0, 3538944, 0)
+        CALL(evt_party_trigflg_onoff, 0, PARTY_TRIG_FOLLOW_CLOSE | PARTY_TRIG_HALF_PUSH | PARTY_TRIG_BEHIND_DIR_SET | PARTY_TRIG_DOOR_MOVE, 0)
     END_IF
     CALL_CHILD(PTR(rsh_04_init_evt))
     RETURN
@@ -1547,7 +1548,7 @@ EVT_BEGIN(rsh_04_c_init_evt)
         CALL(evt_mario_set_pos, -200, 0, -30)
         CALL(evt_party_set_pos, 0, -230, 0, -30)
         DEBUG_PUT_MSG(STRING("パーティドア移動フラグクリア"))
-        CALL(evt_party_trigflg_onoff, 0, 3538944, 0)
+        CALL(evt_party_trigflg_onoff, 0, PARTY_TRIG_FOLLOW_CLOSE | PARTY_TRIG_HALF_PUSH | PARTY_TRIG_BEHIND_DIR_SET | PARTY_TRIG_DOOR_MOVE, 0)
     END_IF
     CALL_CHILD(PTR(rsh_04_init_evt))
     CALL(evt_map_playanim, STRING("ranpu"), 1, 0)

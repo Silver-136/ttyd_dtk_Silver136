@@ -350,7 +350,7 @@ EVT_BEGIN(no00_custom)
         ADD(LW(12), -80)
         CALL(evt_mario_mov_pos2, LW(10), LW(12), FLOAT(150.0f))
         CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_HIDE)
-        CALL(evt_party_dispflg_onoff, 1, 1, 1)
+        CALL(evt_party_dispflg_onoff, 1, PARTY_DISP_FLAG_HIDE, 1)
         SET_VALUE(GF(10), 0)
         SET_VALUE(LW(0), 1)
         RETURN

@@ -21,6 +21,7 @@
 #include "pmario_sound.h"
 #include "driver/itemdrv.h"
 #include "mario/mario.h"
+#include "party.h"
 
 #include "driver/mapdrv.h"
 #include "dolphin/gx.h"
@@ -911,7 +912,7 @@ EVT_END()
 EVT_BEGIN(party_kirimomi_event)
     WAIT_MS(500)
     CALL(evt_party_stop, 0)
-    CALL(evt_party_dispflg_onoff, 0, 16, 1)
+    CALL(evt_party_dispflg_onoff, 0, PARTY_DISP_FLAG_NO_MAKE_DISP_DIR, 1)
     CALL(evt_party_get_dispdir, 0, LW(8))
     SET_VALUE(LW(9), 1980)
     ADD(LW(9), LW(8))
@@ -924,7 +925,7 @@ EVT_BEGIN(party_kirimomi_event)
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
-    CALL(evt_party_dispflg_onoff, 0, 16, 0)
+    CALL(evt_party_dispflg_onoff, 0, PARTY_DISP_FLAG_NO_MAKE_DISP_DIR, 0)
     CALL(evt_party_set_dir, 0, 90, 0)
     CALL(evt_party_run, 0)
     RETURN
