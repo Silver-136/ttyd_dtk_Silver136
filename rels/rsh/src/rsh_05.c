@@ -622,7 +622,6 @@ static void ext_shadow_disp(CameraId camera, void* param) {
     }
 }
 
-#pragma dont_inline on
 static void moamoa_jump(ExtdrvPose* pose, Moamoa* moa, s32 next, s32 checkGround, f32 x, f32 y, f32 z, f32 speed, f32 gravity) {
     f32 hitX, hitY, hitZ, dist, nx, ny, nz;
     f32 dy;
@@ -656,7 +655,6 @@ static void moamoa_jump(ExtdrvPose* pose, Moamoa* moa, s32 next, s32 checkGround
     pose->flags &= ~EXT_POSE_FLAG_NO_SHADOW;
 }
 
-#pragma dont_inline reset
 #pragma opt_propagation off
 #pragma opt_lifetimes off
 static s32 moamoa_hit_check(ExtdrvPose* pose, Moamoa* moa) {

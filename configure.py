@@ -364,7 +364,7 @@ config.libs = [
         "progress_category": "game",
         "objects": [
             Object(MatchingFor("G8MJ01", "G8ME01"), "battle/battle.c", cflags=[*cflags_static, "-O4,s", "-inline off"]),
-            Object(MatchingFor("G8MJ01", "G8ME01"), "battle/battle_ac.c", extra_cflags=["-inline noauto"]),
+            Object(MatchingFor("G8MJ01", "G8ME01"), "battle/battle_ac.c", extra_cflags=["-O4,s", "-inline noauto"]),
             Object(MatchingFor("G8MJ01", "G8ME01"), "battle/battle_damage.c", extra_cflags=["-O4,s", "-inline off"]),
             Object(MatchingFor("G8MJ01", "G8ME01"), "battle/battle_detect.c", extra_cflags=["-O4,s"]),
             Object(MatchingFor("G8MJ01", "G8ME01"), "battle/battle_disp.c", extra_cflags=["-O4,s", "-inline noauto"]),
@@ -392,7 +392,7 @@ config.libs = [
             Object(MatchingFor("G8MJ01", "G8ME01"), "battle/battle_actrecord.c", extra_cflags=["-O4,s", "-inline off"]),
             Object(MatchingFor("G8MJ01", "G8ME01"), "battle/battle_audience_kinopio.c", extra_cflags=["-O4,s", "-inline off"]),
             Object(MatchingFor("G8MJ01", "G8ME01"), "battle/battle_acrobat.c", extra_cflags=["-O4,s"]),
-            Object(MatchingFor("G8MJ01", "G8ME01"), "battle/battle_status_effect.c", extra_cflags=["-inline noauto"]),
+            Object(MatchingFor("G8MJ01", "G8ME01"), "battle/battle_status_effect.c", extra_cflags=["-O4,s", "-inline noauto"]),
             Object(MatchingFor("G8MJ01", "G8ME01"), "battle/battle_audience.c", extra_cflags=["-O4,s", "-inline off"]),
             Object(MatchingFor("G8MJ01", "G8ME01"), "battle/battle_icon.c", extra_cflags=["-O4,s", "-inline off"]),
             Object(MatchingFor("G8MJ01", "G8ME01"), "battle/battle_message.c", extra_cflags=["-O4,s"]),
@@ -2071,13 +2071,13 @@ config.libs = [
             Object(MatchingFor("G8MJ01", "G8ME01"), "unit/unit_ura_noko.c", extra_cflags=["-inline auto,deferred"]),
             Object(MatchingFor("G8MJ01", "G8ME01"), "unit/unit_ura_pata.c", extra_cflags=["-inline auto,deferred"]),
             Object(MatchingFor("G8MJ01", "G8ME01"), "unit/unit_monochrome_pakkun.c"),
-            Object(MatchingFor("G8MJ01", "G8ME01"), "unit/unit_hammer_bros.c"),
+            Object(MatchingFor("G8MJ01", "G8ME01"), "unit/unit_hammer_bros.c", extra_cflags=["-inline noauto"]),
             Object(MatchingFor("G8MJ01", "G8ME01"), "unit/unit_borodo.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "unit/unit_boss_koopa_tou.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "unit/unit_borodo_king.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "unit/unit_fire_bros.c", extra_cflags=["-inline noauto"]),
             Object(MatchingFor("G8MJ01", "G8ME01"), "unit/unit_boss_champion.c", extra_cflags=["-inline auto,deferred"]),
-            Object(MatchingFor("G8MJ01", "G8ME01"), "unit/unit_piders.c", extra_cflags=["-inline auto,deferred"]),
+            Object(MatchingFor("G8MJ01", "G8ME01"), "unit/unit_piders.c", extra_cflags=["-inline noauto,deferred"]),
             Object(MatchingFor("G8MJ01", "G8ME01"), "unit/unit_kamec_green.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "unit/unit_kamec_red.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "unit/unit_kamec_white.c"),
@@ -2088,7 +2088,7 @@ config.libs = [
             Object(MatchingFor("G8MJ01", "G8ME01"), "unit/unit_hinnya.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "unit/unit_sambo.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "unit/unit_wanawana.c", extra_cflags=["-inline noauto,deferred"]),
-            Object(MatchingFor("G8MJ01", "G8ME01"), "tou_03.c", extra_cflags=["-inline auto,deferred"]),
+            Object(MatchingFor("G8MJ01", "G8ME01"), "tou_03.c", extra_cflags=["-inline noauto,deferred"]),
         ]
     )
 ]

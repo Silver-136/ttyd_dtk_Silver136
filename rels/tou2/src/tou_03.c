@@ -375,7 +375,6 @@ s32 _firstattack_setting(EventEntry* event, BOOL isFirstCall) {
     return EVT_RETURN_DONE;
 }
 
-#pragma dont_inline on
 static void pose_init(void) {
     char name[32];
     char anim[32];
@@ -407,9 +406,7 @@ static void pose_init(void) {
     } while (d->group != NULL);
     kyaku_wp->animNum++;
 }
-#pragma dont_inline reset
 
-#pragma dont_inline on
 static void pose_main(void) {
     s32 i;
     ExtdrvPose* pose;
@@ -430,9 +427,7 @@ static void pose_main(void) {
         pose->texId = a->start + (s32)((a->count - 1) * t);
     }
 }
-#pragma dont_inline reset
 
-#pragma dont_inline on
 static void pose_change(Kyaku* kyaku, const char* name, const char* anim) {
     KyakuAnim* a;
     s32 i;
@@ -447,28 +442,21 @@ static void pose_change(Kyaku* kyaku, const char* name, const char* anim) {
         kyaku->time = gp->renderTime + rand();
     }
 }
-#pragma dont_inline reset
 
-#pragma dont_inline on
 void __tou_srand(u32 seed) {
     x[0] = seed;
 }
-#pragma dont_inline reset
 
-#pragma dont_inline on
 u32 __tou_rand(void) {
     x[0] = x[0] * 1103515245 + 12345;
     return ((u32)x[0] >> 16) & 0x7FFF;
 }
-#pragma dont_inline reset
 
-#pragma dont_inline on
 static f32 randf(f32 min, f32 max) {
     f32 r = __tou_rand() / 32767.0f;
 
     return r * (max - min) + min;
 }
-#pragma dont_inline reset
 
 void ext_kyaku_init(void) {
     s32 far;
@@ -3686,11 +3674,9 @@ static s32 screen_evt(EventEntry* event, BOOL isFirstCall) {
     return EVT_RETURN_BLOCK;
 }
 
-#pragma dont_inline on
 void GXSetTexCoordGen(GXTexCoordID dst, GXTexGenType func, GXTexGenSrc src, u32 mtx) {
     GXSetTexCoordGen2(dst, func, src, mtx, GX_FALSE, GX_PTIDENTITY);
 }
-#pragma dont_inline reset
 
 void screen_tev(MapTevCallbackInfo* info) {
     GXTexObj tex;
@@ -3869,17 +3855,13 @@ s32 confupose(EventEntry* event, BOOL isFirstCall) {
     return EVT_RETURN_DONE;
 }
 
-#pragma dont_inline on
 static f32 sinf(f32 x) {
     return sin(x);
 }
-#pragma dont_inline reset
 
-#pragma dont_inline on
 static f32 cosf(f32 x) {
     return cos(x);
 }
-#pragma dont_inline reset
 
 static const Vec item_jump_zero = {0.0f, 0.0f, 0.0f};
 static inline s32 item_jump_sub(EventEntry* event, BOOL isFirstCall, f32 speed, f32 g) {

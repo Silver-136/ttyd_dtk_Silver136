@@ -51,7 +51,6 @@ static EvtWord nagemakuri_attack_event_sub_no_last[13];
 static EvtWord nagemakuri_attack_event_sub_last[76];
 static EvtWord wait_event[6];
 
-#pragma dont_inline on
 static void hammer_bros_get_next_target(s32* unitIdx, s32* partIdx) {
     BattleWorkWeaponTargets* wt = &_battleWorkPointer->weaponTargets;
 
@@ -65,9 +64,7 @@ static void hammer_bros_get_next_target(s32* unitIdx, s32* partIdx) {
         *partIdx = 0;
     }
 }
-#pragma dont_inline reset
 
-#pragma dont_inline on
 static void hammer_bros_get_target(s32* unitIdx, s32* partIdx) {
     BattleWorkWeaponTargets* wt = &_battleWorkPointer->weaponTargets;
     BattleWorkTarget* target = &wt->targets[wt->targetIndices[wt->currentTarget]];
@@ -75,7 +72,6 @@ static void hammer_bros_get_target(s32* unitIdx, s32* partIdx) {
     *unitIdx = target->unitIdx;
     *partIdx = target->partIdx;
 }
-#pragma dont_inline reset
 
 static USER_FUNC(hammer_bros_nagemakuri_set_target) {
     EvtWord* args = event->args;

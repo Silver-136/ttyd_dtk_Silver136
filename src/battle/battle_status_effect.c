@@ -122,7 +122,6 @@ EffectEntry* effSleepEntry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32 scal
 #define EFF_SLEEP(u) ((u)->sleepEff)
 #define EFF_SPARK(u) ((u)->sparkEff)
 
-#pragma optimize_for_size on
 void BSE_Sleep(BattleUnit* unit) {
     f32 x, y, z;
     f32* wk;
@@ -194,14 +193,12 @@ void BSE_BiribiriDelete(BattleUnit* unit) {
         EFF_SPARK(unit) = NULL;
     }
 }
-#pragma optimize_for_size reset
 
 EffectEntry* effFireEntry(s32 type, s32 duration, f32 x, f32 y, f32 z, f32 scale);
 EffectEntry* effIceEntry(s32 type, s32 duration, f32 x, f32 y, f32 z, f32 scale);
 #define EFF_FIRE(u) ((u)->fireEff)
 #define EFF_ICE(u) ((u)->iceEff)
 
-#pragma optimize_for_size on
 void BSE_Fire(BattleUnit* unit) {
     f32 x, y, z;
     f32* wk;
@@ -272,7 +269,6 @@ void BSE_FreezeDelete(BattleUnit* unit) {
     }
 }
 
-#pragma optimize_for_size reset
 
 void BSE_Kagegakure(BattleUnit* unit) {
     char name[0x10];
@@ -314,7 +310,6 @@ void BSE_TurnFirstProcessEffectEntry(BattleUnit* unit, s16 active) {
 BOOL BtlUnit_CheckShadowGuard(BattleUnit* unit);
 f32 sinfd(f32 degrees);
 
-#pragma optimize_for_size on
 BOOL BSE_TurnFirstProcessEffectMain(BattleUnit* unit) {
     BattleUnitPart* part;
     f32 x, y, z;
@@ -368,9 +363,7 @@ BOOL BSE_TurnFirstProcessEffectMain(BattleUnit* unit) {
     }
     return TRUE;
 }
-#pragma optimize_for_size reset
 
-#pragma optimize_for_size on
 void BattleStatusChangeInfoWorkInit(BattleUnit* unit) {
     s32 i;
     StChgInfo* e = &unit->statusChangeInfo[0];
@@ -384,7 +377,6 @@ void BattleStatusChangeInfoWorkInit(BattleUnit* unit) {
         p->reserved_04 = 0;
     }
 }
-#pragma optimize_for_size reset
 
 s32 _get_pri(s8 type) {
     s8* val;
@@ -401,7 +393,6 @@ s32 _get_pri(s8 type) {
     return -1;
 }
 
-#pragma optimize_for_size on
 void BattleStatusChangeInfoSetAnnouce(BattleUnit* unit, s32 type, s32 strength, s32 changed) {
     StChgInfo* e = &unit->statusChangeInfo[0];
     StChgInfo tmp, swap;
@@ -450,8 +441,6 @@ Ld:;
     }
 }
 
-#pragma optimize_for_size reset
-#pragma optimize_for_size on
 BOOL BattleStatusChangeAnnouceMain(BattleWork* wp) {
     s32 i;
     BOOL ret;
@@ -470,9 +459,7 @@ BOOL BattleStatusChangeAnnouceMain(BattleWork* wp) {
 BOOL BattleStatusChangeAnnouceMain_Unit(BattleUnit* unit) {
     return FALSE;
 }
-#pragma optimize_for_size reset
 
-#pragma optimize_for_size on
 void BattleStatusChangeMsgWorkInit(void) {
     StChgMsg* msg = ST_CHG_MSG(0);
     s32 i;
@@ -482,7 +469,6 @@ void BattleStatusChangeMsgWorkInit(void) {
         msg[i].type = -1;
     }
 }
-#pragma optimize_for_size reset
 
 void BattleStatusChangeMsgSetAnnouce(BattleUnit* unit, s32 index, s32 changed) {
     StChgMsg* msg = ST_CHG_MSG(index);
@@ -502,7 +488,6 @@ void BattleStatusChangeMsgSetAnnouce(BattleUnit* unit, s32 index, s32 changed) {
     }
 }
 
-#pragma optimize_for_size on
 void BattleStatusChangeMsgAdjust(BattleWork* wp) {
     s32 t;
     StChgWork* base;

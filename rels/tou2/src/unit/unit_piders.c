@@ -98,19 +98,15 @@ static USER_FUNC(piders_yarn_init) {
     return EVT_RETURN_DONE;
 }
 
-#pragma dont_inline on
 void GXPosition3f32_(f32 x, f32 y, f32 z) {
     GXWGFifo.f32 = x;
     GXWGFifo.f32 = y;
     GXWGFifo.f32 = z;
 }
-#pragma dont_inline reset
 
 // GXEnd and GXPosition3f32 are ordinary functions in this file instead of the SDK inlines (names don't matter)
-#pragma dont_inline on
 void GXEnd_(void) {
 }
-#pragma dont_inline reset
 
 BattleUnitKind unit_piders = {
     UNIT_PIDER, // mUnitType
@@ -364,7 +360,6 @@ static USER_FUNC(piders_renzoku_attack_set_target) {
     return EVT_RETURN_DONE;
 }
 
-#pragma dont_inline on
 static void piders_get_target(s32* unitIdx, s32* partIdx) {
     BattleWorkWeaponTargets* wt = &_battleWorkPointer->weaponTargets;
     BattleWorkTarget* target = &wt->targets[wt->targetIndices[wt->currentTarget]];
@@ -372,9 +367,7 @@ static void piders_get_target(s32* unitIdx, s32* partIdx) {
     *unitIdx = target->unitIdx;
     *partIdx = target->partIdx;
 }
-#pragma dont_inline reset
 
-#pragma dont_inline on
 static void piders_get_next_target(s32* unitIdx, s32* partIdx) {
     BattleWorkWeaponTargets* wt = &_battleWorkPointer->weaponTargets;
 
@@ -388,7 +381,6 @@ static void piders_get_next_target(s32* unitIdx, s32* partIdx) {
         *partIdx = 0;
     }
 }
-#pragma dont_inline reset
 
 static BattleWeapon weapon_piders_attack = {
     NULL, 0, // name..icon
