@@ -11,7 +11,7 @@
 #include "icon_ids.h"
 #include "dolphin/si.h"
 
-void BattleAcDrawGauge();
+void BattleAcDrawGauge(); // no prototype here: the call compiles to the retail code only without one
 
 typedef struct RepeatDisp {
     s32 frame;        // 0x0

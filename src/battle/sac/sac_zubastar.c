@@ -25,7 +25,7 @@
 #include "battle/battle_audience.h"
 #include "battle/battle_sub.h"
 
-void BattleAcDrawGauge(s32 x, s32 y, s32 icon, f32 ratio, s32 a, s32 b, s32 c, s32 d, s32 e);
+void BattleAcDrawGauge(s32 x, s32 y, s32 width, f32 ratio, s32 level, s32 a, s32 b, s32 c, s32 flags);
 
 typedef struct ZSObj {
     /* 0x00 */ s32 a;

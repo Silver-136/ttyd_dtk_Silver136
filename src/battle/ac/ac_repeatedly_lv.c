@@ -9,6 +9,7 @@
 #include <string.h>
 
 s32 BattleACGetButtonIcon(s32 button, s32 pressed);
+// float first here: the retail call loads the ratio before the other arguments (battle_ac.c defines x, y, width, ratio, ...)
 void BattleAcDrawGauge(f32 anim, s32 x, s32 y, u8 a, s32 n, s32 v0, s32 v1, s32 v2, s32 flags);
 
 typedef struct RepeatedlyLvWork {

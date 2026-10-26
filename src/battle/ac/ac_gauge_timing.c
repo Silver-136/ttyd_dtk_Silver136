@@ -11,7 +11,7 @@
 #include "battle/battle_disp.h"
 
 u16 BattleACGetButtonIcon(s32 button, s32 pressed);
-void BattleAcDrawGauge(s32 x, s32 y, s32 icon, f32 ratio, s32 a, s32 b, s32 c, s32 d, s32 e);
+void BattleAcDrawGauge(s32 x, s32 y, s32 width, f32 ratio, s32 level, s32 a, s32 b, s32 c, s32 flags);
 
 static void actionCommandDisp(f32 x, f32 y);
 
