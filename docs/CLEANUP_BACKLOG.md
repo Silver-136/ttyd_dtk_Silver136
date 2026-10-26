@@ -31,8 +31,9 @@ data order 10, sound-name integer round trips (`SFX_NAME_WORD`) 9, no-op casts 6
   float-first (fits all but msgdrv), BtlUnit_snd_se_pos word pitch, typed puni getidx calls (the casts cross
   pointer/scalar argument shapes; worth a look as a possible retail ABI mismatch).
 - Largest families of disagreeing private declarations (review priorities): BtlUnit_SetAnim 18, FontDrawString 15,
-  BattleAcDrawGauge 9, partyChgPose 9, psndSFX_pit 9, effMarioBalloonEntry 8, spline_getvalue / spline_maketable 8,
-  envAddTev 7, envSetYamiView 7.
+  psndSFX_pit 9. Settled: partyChgPose, effMarioBalloonEntry, spline_getvalue / spline_maketable, envAddTev,
+  envSetYamiView (header prototypes); BattleAcDrawGauge (callers agree with the definition except ac_repeatedly,
+  unprototyped, and ac_repeatedly_lv, ratio first: both change code otherwise).
 - Private function declarations: about 650 still have no header to move into, and a few hundred disagree with the
   function's definition (type questions, one family at a time).
 - `itemEntry` has no header prototype because evt_mobj needs a float-first private declaration (FAKES row).
