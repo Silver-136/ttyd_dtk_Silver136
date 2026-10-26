@@ -158,7 +158,7 @@ void mot_jumpSw(void) {
         marioPreJump();
         chgPoseB(mario);
         if (mario->hitobjJumpFrom != NULL) {
-            if (hitGetAttr((HitEntry*)mario->hitobjJumpFrom) & 0x80000000) {
+            if (hitGetAttr((HitEntry*)mario->hitobjJumpFrom) & HIT_ATTR_MOBJ) {
                 mobj = mobjHitObjPtrToPtr(mario->hitobjJumpFrom);
                 mario->mot.jump.standSpeed = ((MapObjectEntry*)mobj)->position.x;
                 mario->mot.jump.standHeight = ((MapObjectEntry*)mobj)->position.z;
@@ -253,7 +253,7 @@ void mot_jumpNpc(void) {
         }
         chgPoseB(mario);
         if (mario->hitobjJumpFrom != NULL) {
-            if (hitGetAttr((HitEntry*)mario->hitobjJumpFrom) & 0x80000000) {
+            if (hitGetAttr((HitEntry*)mario->hitobjJumpFrom) & HIT_ATTR_MOBJ) {
                 mobj = mobjHitObjPtrToPtr(mario->hitobjJumpFrom);
                 mario->mot.jump.standSpeed = ((MapObjectEntry*)mobj)->position.x;
                 mario->mot.jump.standHeight = ((MapObjectEntry*)mobj)->position.z;

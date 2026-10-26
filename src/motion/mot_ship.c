@@ -156,7 +156,7 @@ void marioShipSetDispDir(void) {
 }
 
 BOOL marioChkShipPlace(HitEntry* hit) {
-    return (hitGetAttr(hit) & 0x3C000) != 0;
+    return (hitGetAttr(hit) & (HIT_ATTR_SHIP_PANEL1 | HIT_ATTR_SHIP_PANEL2 | HIT_ATTR_SHIP_PANEL3 | HIT_ATTR_SHIP_PANEL4)) != 0;
 }
 
 void marioForceShipAnime(void) {

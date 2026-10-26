@@ -49,11 +49,11 @@ static inline void partyModeTail(PartyEntry* party) {
         party->splashTimer = 0;
     }
     if (party->runMode != 13) {
-        if (party->hitobjStandOn && (hitGetAttr(party->hitobjStandOn) & 0x800)) {
+        if (party->hitobjStandOn && (hitGetAttr(party->hitobjStandOn) & HIT_ATTR_TOGE)) {
             partyChgRunMode(party, 13);
-        } else if ((void*)party->hitobjFront && (hitGetAttr((void*)party->hitobjFront) & 0x800)) {
+        } else if ((void*)party->hitobjFront && (hitGetAttr((void*)party->hitobjFront) & HIT_ATTR_TOGE)) {
             partyChgRunMode(party, 13);
-        } else if ((void*)party->hitobjHead && (hitGetAttr((void*)party->hitobjHead) & 0x800)) {
+        } else if ((void*)party->hitobjHead && (hitGetAttr((void*)party->hitobjHead) & HIT_ATTR_TOGE)) {
             partyChgRunMode(party, 13);
         }
     }
@@ -692,7 +692,7 @@ BOOL partyChkNoStandMobj(HitEntry* hit) {
     if (!hit) {
         return FALSE;
     }
-    if (!(hitGetAttr(hit) & 0x80000000)) {
+    if (!(hitGetAttr(hit) & HIT_ATTR_MOBJ)) {
         return FALSE;
     }
     names = objNames;
@@ -781,7 +781,7 @@ s32 partyMoveMain(PartyEntry* party, s32 hosei) {
         hit = partySearchGround(party, v, v);
         pos.y = party->groundY;
         if (hit) {
-            if (hitGetAttr(hit) & 0x200) {
+            if (hitGetAttr(hit) & HIT_ATTR_WATER_HAZARD) {
                 party->hitobjStandOn = hit;
                 party->flags &= ~PARTY_FLAG_IS_GROUNDED;
                 if (!(party->flags & PARTY_FLAG_IS_FALLING)) {
@@ -909,7 +909,7 @@ void partyMoveCheckWall(PartyEntry* party) {
     party->position.z = pos.z;
     hit = partySearchGround(party, 10.0f, 10.0f);
     pos.y = party->groundY;
-    if (hit && (hitGetAttr(hit) & 0x200)) {
+    if (hit && (hitGetAttr(hit) & HIT_ATTR_WATER_HAZARD)) {
         hit = NULL;
     }
     party->hitobjStandOn = hit;
@@ -1492,7 +1492,7 @@ static inline BOOL partyAppearChkFloor(HitEntry* hit) {
     if (!hit) {
         return FALSE;
     }
-    if (hitGetAttr(hit) & 0xa00) {
+    if (hitGetAttr(hit) & (HIT_ATTR_WATER_HAZARD | HIT_ATTR_TOGE)) {
         return FALSE;
     }
     if (partyChkNoStandMobj(hit)) {
@@ -1985,7 +1985,7 @@ BOOL partyGetAppearPos5(PartyEntry* party, HitEntry* hit, Vec* out) {
     if (!hit) {
         return FALSE;
     }
-    if (!(hitGetAttr(hit) & 0x80000000)) {
+    if (!(hitGetAttr(hit) & HIT_ATTR_MOBJ)) {
         return FALSE;
     }
     mobj = &((MapObjectEntry*)mobjHitObjPtrToPtr(hit))->position;
@@ -2006,7 +2006,7 @@ BOOL partyGetAppearPos5(PartyEntry* party, HitEntry* hit, Vec* out) {
             pos.z = c * r + mobj->z;
             dir = (Vec){0.0f, -1.0f, 0.0f};
             floor = partyHitCheck(party, &pos, &dir, &hitPos, &hitNrm, &dist);
-            if (!floor || !(hitGetAttr(floor) & 0x200)) {
+            if (!floor || !(hitGetAttr(floor) & HIT_ATTR_WATER_HAZARD)) {
                 break;
             }
         }

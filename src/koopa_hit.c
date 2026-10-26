@@ -548,7 +548,7 @@ HitEntry* kpaHitCheck(void) {
             break;
         }
         hit = hitCheckSphereFilter(NULL, x, y, z, r);
-        if ((m->flags & MARIO_FLAG_IS_JUMPING) && (hitGetAttr(hit) & 0x80000000) && mobjHitObjPtrToPtr(hit)->position.y > y) {
+        if ((m->flags & MARIO_FLAG_IS_JUMPING) && (hitGetAttr(hit) & HIT_ATTR_MOBJ) && mobjHitObjPtrToPtr(hit)->position.y > y) {
             KHEAD(j) = hit;
         }
         if (hit) {

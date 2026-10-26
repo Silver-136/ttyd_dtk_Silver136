@@ -72,7 +72,7 @@ static inline BOOL chkBalloonJump(HitEntry* hit) {
     CaseEntry* entry;
 
     if (hit != NULL) {
-        if (hitGetAttr(hit) & 0x80000000) {
+        if (hitGetAttr(hit) & HIT_ATTR_MOBJ) {
             if (mobjGetHint(mobjHitObjPtrToPtr(hit)) == 1) {
                 ret = TRUE;
             }
@@ -134,7 +134,7 @@ static inline s32 chkItemBox(HitEntry* hit) {
     s32 ret = -1;
 
     marioGetPtr();
-    if (!(hitGetAttr(hit) & 0x80000000)) {
+    if (!(hitGetAttr(hit) & HIT_ATTR_MOBJ)) {
         ret = -1;
     } else {
         mobj = mobjHitObjPtrToPtr(hit);
@@ -221,7 +221,7 @@ BOOL chkBalloon(HitEntry* hit) {
     CaseEntry* entry;
 
     if (hit != NULL) {
-        if (hitGetAttr(hit) & 0x80000000) {
+        if (hitGetAttr(hit) & HIT_ATTR_MOBJ) {
             if (mobjGetHint(mobjHitObjPtrToPtr(hit)) == 1) {
                 ret = TRUE;
             }

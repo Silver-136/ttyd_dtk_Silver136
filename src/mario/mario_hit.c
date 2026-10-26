@@ -155,13 +155,13 @@ BOOL chkFilterAttr2(HitCheckQuery* query, HitEntry* entry) {
 
 BOOL chkfilterVec(HitCheckQuery* query, HitEntry* entry) {
     MapObjectEntry* mobj;
-    if (entry->attributes & 0x80080) {
+    if (entry->attributes & (HIT_ATTR_SHIP_ONLY | HIT_ATTR_ROLL_THROUGH)) {
         return TRUE;
     }
-    if (!(entry->attributes & 0x800000) && (entry->attributes & 0x4)) {
+    if (!(entry->attributes & HIT_ATTR_BERO) && (entry->attributes & HIT_ATTR_NPC_ONLY)) {
         return FALSE;
     }
-    if (!(entry->attributes & 0x80000000)) {
+    if (!(entry->attributes & HIT_ATTR_MOBJ)) {
         return TRUE;
     }
     mobj = mobjHitObjPtrToPtr(entry);
@@ -175,13 +175,13 @@ BOOL chkfilterVec(HitCheckQuery* query, HitEntry* entry) {
 
 BOOL chkfilterVecRoll(HitCheckQuery* query, HitEntry* entry) {
     MapObjectEntry* mobj;
-    if (entry->attributes & 0x80) {
+    if (entry->attributes & HIT_ATTR_SHIP_ONLY) {
         return TRUE;
     }
-    if (!(entry->attributes & 0x800000) && (entry->attributes & 0x80004)) {
+    if (!(entry->attributes & HIT_ATTR_BERO) && (entry->attributes & (HIT_ATTR_NPC_ONLY | HIT_ATTR_ROLL_THROUGH))) {
         return FALSE;
     }
-    if (!(entry->attributes & 0x80000000)) {
+    if (!(entry->attributes & HIT_ATTR_MOBJ)) {
         return TRUE;
     }
     mobj = mobjHitObjPtrToPtr(entry);
@@ -195,10 +195,10 @@ BOOL chkfilterVecRoll(HitCheckQuery* query, HitEntry* entry) {
 
 BOOL chkfilterVecVivian(HitCheckQuery* query, HitEntry* entry) {
     MapObjectEntry* mobj;
-    if ((entry->attributes & 0x80804) && !(entry->attributes & 0x800000)) {
+    if ((entry->attributes & (HIT_ATTR_NPC_ONLY | HIT_ATTR_TOGE | HIT_ATTR_ROLL_THROUGH)) && !(entry->attributes & HIT_ATTR_BERO)) {
         return FALSE;
     }
-    if (!(entry->attributes & 0x80000000)) {
+    if (!(entry->attributes & HIT_ATTR_MOBJ)) {
         return TRUE;
     }
     mobj = mobjHitObjPtrToPtr(entry);
@@ -520,7 +520,7 @@ void marioChkGnd(void) {
         }
         return;
     }
-    if (w->currMotionId != MARIO_MOTION_DAMAGE && w->hitobjStandOn && (hitGetAttr(w->hitobjStandOn) & 0x200)) {
+    if (w->currMotionId != MARIO_MOTION_DAMAGE && w->hitobjStandOn && (hitGetAttr(w->hitobjStandOn) & HIT_ATTR_WATER_HAZARD)) {
         if (w->jumpVelocityY >= 0.0f) {
             marioSetFallPara();
         }
@@ -528,7 +528,7 @@ void marioChkGnd(void) {
         marioChgMot(MARIO_MOTION_DAMAGE);
         return;
     }
-    if (w->hitobjStandOn && (hitGetAttr(w->hitobjStandOn) & 0x800)) {
+    if (w->hitobjStandOn && (hitGetAttr(w->hitobjStandOn) & HIT_ATTR_TOGE)) {
         if (vivianGetStatus() != 2 && vivianGetStatus() != 1 && vivianGetStatus() != 3) {
             set_damage_root_ypos(w->position.y);
             marioChgMot(MARIO_MOTION_DAMAGE_TOGE);
@@ -1240,7 +1240,7 @@ static inline BOOL marioChkHeadBlock(HitEntry* hit) {
     if (!hit) {
         return FALSE;
     }
-    if (!(hitGetAttr(hit) & 0x80000000)) {
+    if (!(hitGetAttr(hit) & HIT_ATTR_MOBJ)) {
         return FALSE;
     }
     mobj = (MobjNameView*)mobjHitObjPtrToPtr(hit);
@@ -1610,7 +1610,7 @@ HitEntry* marioSearchHead_jabara(Vec* pos, f32* h, s32* side, f32 d) {
         v.y = 0.5f + pos->y;
         hit = marioHitCheck2(&v, &dir, &outPos, &outNrm, &dist);
         if (hit) {
-            if (hitGetAttr(hit) & 0x40000) {
+            if (hitGetAttr(hit) & HIT_ATTR_JABARA) {
                 if (pos->y + base >= outPos.y) {
                     pos->y = outPos.y;
                     *h = 0.0f;
@@ -1683,13 +1683,13 @@ void marioCheckWall(f32 dx, f32 dz) {
                 s32 lim = strncmp(hitGetName(hit), "dokan", 5) != 0 ? 20 : 10;
                 if (++w->wallPushTimer >= lim) {
                     w->wallPushTimer = lim;
-                    if (!(hitGetAttr(hit) & 0x80) ? TRUE : marioGetPtr()->currMotionId == MARIO_MOTION_SHIP) {
+                    if (!(hitGetAttr(hit) & HIT_ATTR_SHIP_ONLY) ? TRUE : marioGetPtr()->currMotionId == MARIO_MOTION_SHIP) {
                         w->hitobjPush = hit;
                     }
 #else
             if (++w->wallPushTimer >= 20) {
                 w->wallPushTimer = 20;
-                if (!(hitGetAttr(hit) & 0x80) ? TRUE : marioGetPtr()->currMotionId == MARIO_MOTION_SHIP) {
+                if (!(hitGetAttr(hit) & HIT_ATTR_SHIP_ONLY) ? TRUE : marioGetPtr()->currMotionId == MARIO_MOTION_SHIP) {
                     w->hitobjPush = hit;
 #endif
                 }
@@ -1823,7 +1823,7 @@ void marioCheckWall_roll(f32 dx, f32 dz) {
             w->hitobjWall = hit;
             if (++w->wallPushTimer >= 20) {
                 w->wallPushTimer = 20;
-                if (!(hitGetAttr(hit) & 0x80) ? 1 : marioGetPtr()->currMotionId == MARIO_MOTION_SHIP) {
+                if (!(hitGetAttr(hit) & HIT_ATTR_SHIP_ONLY) ? 1 : marioGetPtr()->currMotionId == MARIO_MOTION_SHIP) {
                     w->hitobjPush = hit;
                 }
             }
@@ -2094,20 +2094,20 @@ HitEntry* dou10_yoko_yari(f32* out) {
             Vec dir = {0.0f, -1.0f, 0.0f};
             hit = marioHitCheckVecInl(&pos2, &dir, &outPos, &outNrm, &d);
         }
-        if (hit && (hitGetAttr(hit) & 0x800)) {
+        if (hit && (hitGetAttr(hit) & HIT_ATTR_TOGE)) {
             w->hitobjFront = hit;
             *out = 0.8f;
         }
         pos = w->position;
         hit = searchFrontWall(&pos, &h, 20.0f, 0.0f, 20.0f);
-        if (hit && (hitGetAttr(hit) & 0x800)) {
+        if (hit && (hitGetAttr(hit) & HIT_ATTR_TOGE)) {
             w->hitobjFront = hit;
             *out = 0.8f;
         }
         pos = w->position;
         movePos(&pos.x, &pos.z, step, 270.0f);
         hit = searchFrontWall(&pos, &h, 20.0f, 0.0f, 20.0f);
-        if (hit && (hitGetAttr(hit) & 0x800)) {
+        if (hit && (hitGetAttr(hit) & HIT_ATTR_TOGE)) {
             w->hitobjFront = hit;
             *out = 0.8f;
         }
@@ -2116,7 +2116,7 @@ HitEntry* dou10_yoko_yari(f32* out) {
         pos = w->position;
         movePos(&pos.x, &pos.z, step, 90.0f);
         hit = searchFrontWall(&pos, &h, 20.0f, 0.0f, 20.0f);
-        if (hit && (hitGetAttr(hit) & 0x800)) {
+        if (hit && (hitGetAttr(hit) & HIT_ATTR_TOGE)) {
             w->hitobjFront = hit;
             *out = 0.8f;
         }
@@ -2142,27 +2142,27 @@ HitEntry* dou10_yoko_yari2(f32* out) {
         Vec dir = {0.0f, -1.0f, 0.0f};
         hit = marioHitCheckVecInl(&pos2, &dir, &outPos, &outNrm, &d);
     }
-    if (hit && (hitGetAttr(hit) & 0x800)) {
+    if (hit && (hitGetAttr(hit) & HIT_ATTR_TOGE)) {
         w->hitobjFront = hit;
         *out = 0.8f;
     }
     pos = w->position;
     hit = searchFrontWall(&pos, &h, 20.0f, 0.0f, 20.0f);
-    if (hit && (hitGetAttr(hit) & 0x800)) {
+    if (hit && (hitGetAttr(hit) & HIT_ATTR_TOGE)) {
         w->hitobjFront = hit;
         *out = 0.8f;
     }
     pos = w->position;
     movePos(&pos.x, &pos.z, 8.0f, 270.0f);
     hit = searchFrontWall(&pos, &h, 20.0f, 0.0f, 20.0f);
-    if (hit && (hitGetAttr(hit) & 0x800)) {
+    if (hit && (hitGetAttr(hit) & HIT_ATTR_TOGE)) {
         w->hitobjFront = hit;
         *out = 0.8f;
     }
     pos = w->position;
     movePos(&pos.x, &pos.z, 8.0f, 90.0f);
     hit = searchFrontWall(&pos, &h, 20.0f, 0.0f, 20.0f);
-    if (hit && (hitGetAttr(hit) & 0x800)) {
+    if (hit && (hitGetAttr(hit) & HIT_ATTR_TOGE)) {
         w->hitobjFront = hit;
         *out = 0.8f;
     }

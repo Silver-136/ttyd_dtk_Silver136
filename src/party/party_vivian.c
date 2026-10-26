@@ -226,7 +226,7 @@ static inline void vivianFollow(PartyEntry* party) {
 
     marioGetScreenPos(m->position, &sx, &sy, &sz);
     hit = marioSearchGround(&gx, &gy, &gz, 37.0f, -37.0f);
-    if (hit && !(hitGetAttr(hit) & 0xA00)) {
+    if (hit && !(hitGetAttr(hit) & (HIT_ATTR_WATER_HAZARD | HIT_ATTR_TOGE))) {
         m->hitobjStandOn = hit;
         m->position.y = gx;
         if (m->floorMove.y < 0.0f) {

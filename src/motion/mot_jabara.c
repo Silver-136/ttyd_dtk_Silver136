@@ -402,7 +402,7 @@ void mot_jabara(void) {
             mario->currSubMotionId = 0x1e;
             break;
         }
-        if (hitGetAttr(mario->hitobjHead) & 0x40000) {
+        if (hitGetAttr(mario->hitobjHead) & HIT_ATTR_JABARA) {
             mario->mot.jabara.dir = mario->displayDirectionTarget;
             mario->displayDirection = mario->displayDirectionTarget;
             mario->currSubMotionId = 0x46;
@@ -641,7 +641,7 @@ void mot_jabara(void) {
                 {
                     BOOL hit = FALSE;
                     f32 f31 = 1.0f;
-                    if (mario->hitobjHead != NULL && (hitGetAttr(mario->hitobjHead) & 0x40000)) {
+                    if (mario->hitobjHead != NULL && (hitGetAttr(mario->hitobjHead) & HIT_ATTR_JABARA)) {
                         hit = TRUE;
                     }
                     if (hit) {

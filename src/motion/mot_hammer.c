@@ -146,7 +146,7 @@ void mot_hammer(void) {
             mario->directionView = r;
             HAM_DIR(mario, mario->mot.hammer.dir);
         }
-        if (hitGetAttr(hit) & 0x80000000) {
+        if (hitGetAttr(hit) & HIT_ATTR_MOBJ) {
             s32 ok = chkBlock((HamMobj*)mobjHitObjPtrToPtr(hit));
             if (ok) {
                 kind = 0;
@@ -587,7 +587,7 @@ void mot_hammer2(void) {
         mario->dispFlags |= MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
         ang2 = revise360(270.0f - mario->displayDirection);
         hit = hammerHitWall(ang2, &s, &co, &len, &hx, &hy, &hz, &nx, &ny, &nz);
-        if (hit && (hitGetAttr(hit) & 0x800005)) {
+        if (hit && (hitGetAttr(hit) & (HIT_ATTR_SHELL_THROUGH | HIT_ATTR_NPC_ONLY | HIT_ATTR_BERO))) {
             ang = ang; // FAKE: self-assignment keeps the branch; removing it (or the if) changes codegen
         }
         if (hit) {
@@ -717,7 +717,7 @@ HitEntry *hitEstimate(s32 *out) {
         q.targetDir = dir1;
         q.targetDistance = 14.0f;
         hit = hitCheckVecFilter(&q, NULL);
-        if (hit && (!(hitGetAttr(hit) & 0x800005))) {
+        if (hit && (!(hitGetAttr(hit) & (HIT_ATTR_SHELL_THROUGH | HIT_ATTR_NPC_ONLY | HIT_ATTR_BERO)))) {
             *out = 7;
             return hit;
         }
@@ -735,7 +735,7 @@ HitEntry *hitEstimate(s32 *out) {
         q.targetDir = dir2;
         q.targetDistance = 26.0f;
         hit = hitCheckVecFilter(&q, NULL);
-        if (hit && (!(hitGetAttr(hit) & 0x800005))) {
+        if (hit && (!(hitGetAttr(hit) & (HIT_ATTR_SHELL_THROUGH | HIT_ATTR_NPC_ONLY | HIT_ATTR_BERO)))) {
             *out = ((q.hitPos.y - mario->position.y) > 30.0f) ? (4) : (5);
             return hit;
         }
@@ -753,7 +753,7 @@ HitEntry *hitEstimate(s32 *out) {
         q.targetDir = dir3;
         q.targetDistance = 30.0f;
         hit = hitCheckVecFilter(&q, NULL);
-        if (hit && (!(hitGetAttr(hit) & 0x800005))) {
+        if (hit && (!(hitGetAttr(hit) & (HIT_ATTR_SHELL_THROUGH | HIT_ATTR_NPC_ONLY | HIT_ATTR_BERO)))) {
             *out = 5;
             return hit;
         }
@@ -786,7 +786,7 @@ HitEntry *hitEstimate(s32 *out) {
                 q.targetDir = dir4b;
                 q.targetDistance = d;
                 hit = hitCheckVecFilter(&q, NULL);
-                if (hit && (!(hitGetAttr(hit) & 0x800005))) {
+                if (hit && (!(hitGetAttr(hit) & (HIT_ATTR_SHELL_THROUGH | HIT_ATTR_NPC_ONLY | HIT_ATTR_BERO)))) {
                     *out = ((q.hitPos.y - mario->position.y) > 13.0f) ? (5) : (6);
                     return hit;
                 }

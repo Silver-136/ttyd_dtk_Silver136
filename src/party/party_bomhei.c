@@ -56,7 +56,7 @@ static inline BOOL isBombRock(HitEntry* hit) {
     if (hit == NULL) {
         return FALSE;
     }
-    if (hitGetAttr(hit) & 0x80000000) {
+    if (hitGetAttr(hit) & HIT_ATTR_MOBJ) {
         if (strcmp(mobjHitObjPtrToPtr(hit)->animName, "MOBJ_BombRock") == 0) {
             return TRUE;
         }
@@ -233,7 +233,7 @@ void bomhei_use(PartyEntry* party) {
             }
             mario_controll(party);
         }
-        if (party->useMotionId <= 10 && mario->hitobjStandOn != NULL && (hitGetAttr(mario->hitobjStandOn) & 0x80000000)) {
+        if (party->useMotionId <= 10 && mario->hitobjStandOn != NULL && (hitGetAttr(mario->hitobjStandOn) & HIT_ATTR_MOBJ)) {
             mobj = mobjHitObjPtrToPtr(mario->hitobjStandOn);
             if (strcmp(mobj->animName, "MOBJ_RedJumpStand") == 0 ||
                 strcmp(mobj->animName, "MOBJ_RedJumpStand2") == 0 ||

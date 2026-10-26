@@ -770,7 +770,7 @@ static void flyMain(void) {
             if (mp->hitobjStandOn != NULL) {
                 h = mp->hitobjStandOn;
             }
-            if (h != NULL && (hitGetAttr(h) & 0x200)) {
+            if (h != NULL && (hitGetAttr(h) & HIT_ATTR_WATER_HAZARD)) {
                 mp->currSubMotionId = 70;
             }
         }

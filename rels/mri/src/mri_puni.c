@@ -12,6 +12,7 @@
 #include "driver/icondrv.h"
 #include "evt/evt_sub.h"
 #include "driver/npcdrv.h"
+#include "driver/hitdrv.h"
 
 #include "driver/swdrv.h"
 
@@ -3130,32 +3131,32 @@ void puniModeFall(PuniData* p) {
         puniMoveAtari(p, start, dir, 0, mag);
         h0 = p->hitMove;
         if (h0 != NULL || p->hitCheck != NULL) {
-            if (h0 != NULL && (h0->attributes & 4)) {
+            if (h0 != NULL && (h0->attributes & HIT_ATTR_NPC_ONLY)) {
                 break;
             }
             h1 = p->hitCheck;
-            if (h1 != NULL && (h1->attributes & 4)) {
+            if (h1 != NULL && (h1->attributes & HIT_ATTR_NPC_ONLY)) {
                 break;
             }
-            if (h0 != NULL && (h0->attributes & 0x100)) {
+            if (h0 != NULL && (h0->attributes & HIT_ATTR_SHALLOW_WATER)) {
                 p->modeVar0 = 0x12;
                 p->anim = 0;
                 p->modeStep = 2;
                 break;
             }
-            if (h1 != NULL && (h1->attributes & 0x100)) {
+            if (h1 != NULL && (h1->attributes & HIT_ATTR_SHALLOW_WATER)) {
                 p->modeVar0 = 0x12;
                 p->anim = 0;
                 p->modeStep = 2;
                 break;
             }
-            if (h0 != NULL && (h0->attributes & 0x200)) {
+            if (h0 != NULL && (h0->attributes & HIT_ATTR_WATER_HAZARD)) {
                 p->modeVar0 = 0x16;
                 p->anim = 3;
                 p->modeStep = 2;
                 break;
             }
-            if (h1 != NULL && (h1->attributes & 0x200)) {
+            if (h1 != NULL && (h1->attributes & HIT_ATTR_WATER_HAZARD)) {
                 p->modeVar0 = 0x16;
                 p->anim = 3;
                 p->modeStep = 2;

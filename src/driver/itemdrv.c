@@ -1487,7 +1487,7 @@ void itemseq_Bound(ItemEntry* entry) {
                     entry->flags |= ITEM_FLAG_NO_TOUCH_GET;
                 } else {
                     entry->bounceCount++;
-                    if (!(hitGetAttr(hit) & 0x80000000) && entry->maxBounces != 0 && entry->bounceCount >= entry->maxBounces) {
+                    if (!(hitGetAttr(hit) & HIT_ATTR_MOBJ) && entry->maxBounces != 0 && entry->bounceCount >= entry->maxBounces) {
                         itemModeChange(entry, ITEM_MODE_GROUND);
                         entry->flags2 &= ~ITEM_FLAG2_NO_PICKUP_RISING;
                         entry->flags2 &= ~ITEM_FLAG2_NO_PICKUP_UNTIL_BOUND;
@@ -1527,7 +1527,7 @@ void itemseq_Bound(ItemEntry* entry) {
                     isFloor = FALSE;
                     if (entry->flags & 0x80 && entry->velocityY != 0.0f) {
                         bounce = TRUE;
-                    } else if (hitGetAttr(hit) & 0x80000000 && entry->velocityY != 0.0f) {
+                    } else if (hitGetAttr(hit) & HIT_ATTR_MOBJ && entry->velocityY != 0.0f) {
                         mobj = mobjHitObjPtrToPtr(hit);
                         if (mario->characterId == CHARACTER_BOWSER) {
                             bounce = FALSE;

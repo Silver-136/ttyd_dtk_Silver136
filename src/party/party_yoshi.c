@@ -1124,7 +1124,7 @@ void searchGround(PartyEntry* party) {
             }
             return;
         }
-        if (hit && (hitGetAttr(hit) & 0x40000000)) {
+        if (hit && (hitGetAttr(hit) & HIT_ATTR_DAMAGE_RETURN)) {
             mario->damageHit = hit;
         }
         if (!(party->flags & (PARTY_FLAG_IS_JUMPING | PARTY_FLAG_IS_FALLING))) {
@@ -1235,7 +1235,7 @@ void checkWall(PartyEntry* party, f32 spd, f32 dir) {
                 mario->hitobjWall = NULL;
             }
         }
-        if (hitGetAttr(hit) & 0x800) {
+        if (hitGetAttr(hit) & HIT_ATTR_TOGE) {
             yoshi_damageToge(party);
         }
         attr = hitGetAttr(hit);
@@ -1268,12 +1268,12 @@ void checkWall(PartyEntry* party, f32 spd, f32 dir) {
             }
         }
         hit = dou10_yoko_yari2(&work1);
-        if (hit && (hitGetAttr(hit) & 0x800)) {
+        if (hit && (hitGetAttr(hit) & HIT_ATTR_TOGE)) {
             yoshi_damageToge(party);
         }
     } else {
         hit = dou10_yoko_yari2(&work2);
-        if (hit && (hitGetAttr(hit) & 0x800)) {
+        if (hit && (hitGetAttr(hit) & HIT_ATTR_TOGE)) {
             yoshi_damageToge(party);
         }
     }
@@ -1315,7 +1315,7 @@ void L_getStick(PartyEntry* party, f32* angle, f32* speed) {
         } else {
             dist = 1.5f * (mario->mBaseWalkSpeed * marioGetMoveRate());
         }
-        if (hitGetAttr(mario->hitobjStandOn) & 0x100) {
+        if (hitGetAttr(mario->hitobjStandOn) & HIT_ATTR_SHALLOW_WATER) {
             mario->flags |= MARIO_FLAG_IN_SHALLOW_WATER;
             dist *= 0.75f;
         } else {

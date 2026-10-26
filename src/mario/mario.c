@@ -1346,10 +1346,10 @@ void marioMoveMain(void) {
     }
     spd = wp->baseSpeed;
     if (wp->hitobjStandOn) {
-        if (hitGetAttr(wp->hitobjStandOn) & 0x40000000) {
+        if (hitGetAttr(wp->hitobjStandOn) & HIT_ATTR_DAMAGE_RETURN) {
             wp->damageHit = wp->hitobjStandOn;
         }
-        if (hitGetAttr(wp->hitobjStandOn) & 0x100) {
+        if (hitGetAttr(wp->hitobjStandOn) & HIT_ATTR_SHALLOW_WATER) {
             wp->flags |= MARIO_FLAG_IN_SHALLOW_WATER;
             spd *= 0.75f;
         } else {
@@ -1411,7 +1411,7 @@ void marioMoveMain(void) {
             marioCheckWall_roll(dist, spd);
         }
         N_dou10_yoko_yari3(&wp->frontWallDist);
-        if (wp->hitobjFront && (hitGetAttr(wp->hitobjFront) & 0x800)) {
+        if (wp->hitobjFront && (hitGetAttr(wp->hitobjFront) & HIT_ATTR_TOGE)) {
             set_damage_root_ypos(wp->position.y);
             marioChgMot(MARIO_MOTION_DAMAGE_TOGE);
             return;

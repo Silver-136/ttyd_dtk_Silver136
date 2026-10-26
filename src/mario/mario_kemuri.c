@@ -265,7 +265,7 @@ void party_kemuri(PartyEntry* party) {
             if (party->moveKind != 1) {
                 if (party->runMode == 3 && party->currentMemberId == PARTY_MEMBER_YOSHI) {
                     if ((void*)party->hitobjStandOn != NULL) {
-                        if (!(hitGetAttr((void*)party->hitobjStandOn) & 0x100)) {
+                        if (!(hitGetAttr((void*)party->hitobjStandOn) & HIT_ATTR_SHALLOW_WATER)) {
                             if (party->moveSpeed < 2.0f) {
                             } else if (party->kemuriTimer++ > 6) {
                                 {
@@ -281,7 +281,7 @@ void party_kemuri(PartyEntry* party) {
                     }
                 } else if (party->motionId == 1) {
                     if ((void*)party->hitobjStandOn != NULL) {
-                        if (!(hitGetAttr((void*)party->hitobjStandOn) & 0x100)) {
+                        if (!(hitGetAttr((void*)party->hitobjStandOn) & HIT_ATTR_SHALLOW_WATER)) {
                             if (party->moveSpeed < 2.0f) {
                             } else if (party->kemuriTimer++ > 6) {
                                 {

@@ -374,7 +374,7 @@ void shadowDisp(CameraId cameraId, void* param) {
 BOOL _filter(HitCheckQuery* query, HitEntry* hit) {
     f32 t = 20.0f;
 
-    if ((hitGetAttr(hit) & 0x80000000) && (*(u32*)mobjHitObjPtrToPtr(hit) & 0x800)) {
+    if ((hitGetAttr(hit) & HIT_ATTR_MOBJ) && (*(u32*)mobjHitObjPtrToPtr(hit) & 0x800)) {
         return FALSE;
     }
     return TRUE;

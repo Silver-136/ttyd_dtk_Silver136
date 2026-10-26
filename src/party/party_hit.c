@@ -25,13 +25,13 @@
 BOOL chkfilter(HitCheckQuery* query, HitEntry* entry) {
     MapObjectEntry* mobj;
     marioGetPtr();
-    if (entry->attributes & 0x80080) {
+    if (entry->attributes & (HIT_ATTR_SHIP_ONLY | HIT_ATTR_ROLL_THROUGH)) {
         return TRUE;
     }
-    if (entry->attributes & 0x800004) {
+    if (entry->attributes & (HIT_ATTR_NPC_ONLY | HIT_ATTR_BERO)) {
         return FALSE;
     }
-    if (!(entry->attributes & 0x80000000)) {
+    if (!(entry->attributes & HIT_ATTR_MOBJ)) {
         return TRUE;
     }
     mobj = mobjHitObjPtrToPtr(entry);
@@ -46,16 +46,16 @@ BOOL chkfilter(HitCheckQuery* query, HitEntry* entry) {
 BOOL chkfilterYoshi(HitCheckQuery* query, HitEntry* entry) {
     MapObjectEntry* mobj;
     marioGetPtr();
-    if (entry->attributes & 0x80080) {
+    if (entry->attributes & (HIT_ATTR_SHIP_ONLY | HIT_ATTR_ROLL_THROUGH)) {
         return TRUE;
     }
-    if (entry->attributes & 0x800000) {
+    if (entry->attributes & HIT_ATTR_BERO) {
         return TRUE;
     }
-    if (entry->attributes & 0x4) {
+    if (entry->attributes & HIT_ATTR_NPC_ONLY) {
         return FALSE;
     }
-    if (!(entry->attributes & 0x80000000)) {
+    if (!(entry->attributes & HIT_ATTR_MOBJ)) {
         return TRUE;
     }
     mobj = mobjHitObjPtrToPtr(entry);
@@ -70,13 +70,13 @@ BOOL chkfilterYoshi(HitCheckQuery* query, HitEntry* entry) {
 BOOL chkfilterNokotaro(HitCheckQuery* query, HitEntry* entry) {
     MapObjectEntry* mobj;
     marioGetPtr();
-    if (entry->attributes & 0x800005) {
+    if (entry->attributes & (HIT_ATTR_SHELL_THROUGH | HIT_ATTR_NPC_ONLY | HIT_ATTR_BERO)) {
         return FALSE;
     }
-    if (entry->attributes & 0x80080) {
+    if (entry->attributes & (HIT_ATTR_SHIP_ONLY | HIT_ATTR_ROLL_THROUGH)) {
         return TRUE;
     }
-    if (!(entry->attributes & 0x80000000)) {
+    if (!(entry->attributes & HIT_ATTR_MOBJ)) {
         return TRUE;
     }
     mobj = mobjHitObjPtrToPtr(entry);

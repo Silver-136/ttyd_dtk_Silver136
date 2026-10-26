@@ -64,11 +64,11 @@ USER_FUNC(pre_kurio_use) {
     {
         MapObjectEntry* mobj;
         hit = ((MarioWork*)mario)->hitobjPush;
-        if (!hit || !(hitGetAttr(hit) & 0x80000000)) {
+        if (!hit || !(hitGetAttr(hit) & HIT_ATTR_MOBJ)) {
             hit = ((MarioWork*)mario)->hitobjFront;
-            if (!hit || !(hitGetAttr(hit) & 0x80000000)) {
+            if (!hit || !(hitGetAttr(hit) & HIT_ATTR_MOBJ)) {
                 hit = ((MarioWork*)mario)->hitobjStandOn;
-                if (!hit || !(hitGetAttr(hit) & 0x80000000)) {
+                if (!hit || !(hitGetAttr(hit) & HIT_ATTR_MOBJ)) {
                     event->lwData[0] = (EvtWord)"msg_kuri_map";
                     return EVT_RETURN_DONE;
                 }

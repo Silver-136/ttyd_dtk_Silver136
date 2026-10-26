@@ -781,7 +781,7 @@ void mot_slit(void) {
     if (m->flags & MARIO_FLAG_PAPER_MODE) {
         if (m->hitobjPush != NULL) {
             if (m->hitobjStandOn != NULL && m->currMotionId == MARIO_MOTION_SLIT) {
-                if (hitGetAttr(m->hitobjPush) & 0x2000) {
+                if (hitGetAttr(m->hitobjPush) & HIT_ATTR_SLIT) {
                     HitCheckQuery q;
                     HitCheckQuery* qp;
                     f32 sn, cs;
@@ -826,7 +826,7 @@ void mot_slit(void) {
             }
         } else {
             st = m->slitState;
-            if (!(st >= 0x5a && st <= 0x5e) && m->hitobjStandOn != NULL && (hitGetAttr(m->hitobjStandOn) & 0x2000)) {
+            if (!(st >= 0x5a && st <= 0x5e) && m->hitobjStandOn != NULL && (hitGetAttr(m->hitobjStandOn) & HIT_ATTR_SLIT)) {
                 m->mot.slit.counter += 3;
                 marioChgPaper("PM_S_1H");
                 if (m->mot.slit.counter >= 0xf && m->currMotionId == MARIO_MOTION_SLIT) {

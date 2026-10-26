@@ -587,7 +587,7 @@ void kpaFall(void) {
         } else {
             mp->hitobjStandOn = h;
             mp->hitobjJumpFrom = NULL;
-            if (hitGetAttr(h) & 0x200) {
+            if (hitGetAttr(h) & HIT_ATTR_WATER_HAZARD) {
                 mp->position.y += fs;
             } else {
                 mp->position.y = ly;

@@ -33,10 +33,46 @@ typedef struct HitDamageReturn {
     Vec position;           // 0x4
 } HitDamageReturn;
 
+// HitEntry.attributes: collision attributes from the map's hit joints (names from the joints that carry them and
+// from the code that tests them: marioChkToge, the walk-sound and hazard checks). DAMAGE_RETURN, MOBJ and BERO are
+// set at run time. 0x2, 0x8, 0x40, 0x400, 0x400000 and bits 24-29 are not named.
+typedef enum HitAttributes {
+    HIT_ATTR_SHELL_THROUGH = (1 << 0),     // 0x1, Koops' shell passes through
+    HIT_ATTR_NPC_ONLY = (1 << 2),          // 0x4, only NPCs collide (hitCheckAttr(4) probes skip it)
+    HIT_ATTR_PLANE_PANEL_R = (1 << 4),     // 0x10, plane panel facing right (yaw 90)
+    HIT_ATTR_PLANE_PANEL_L = (1 << 5),     // 0x20, plane panel facing left (yaw 270)
+    HIT_ATTR_SHIP_ONLY = (1 << 7),         // 0x80, only the paper boat collides
+    HIT_ATTR_SHALLOW_WATER = (1 << 8),     // 0x100
+    HIT_ATTR_WATER_HAZARD = (1 << 9),      // 0x200, deep water: falling in respawns Mario
+    HIT_ATTR_TOGE = (1 << 11),             // 0x800, spikes (marioChkToge)
+    HIT_ATTR_GRASS = (1 << 12),            // 0x1000, footstep and effect material
+    HIT_ATTR_SLIT = (1 << 13),             // 0x2000, paper slit (tube/slit) passage
+    HIT_ATTR_SHIP_PANEL1 = (1 << 14),      // 0x4000
+    HIT_ATTR_SHIP_PANEL2 = (1 << 15),      // 0x8000
+    HIT_ATTR_SHIP_PANEL3 = (1 << 16),      // 0x10000
+    HIT_ATTR_SHIP_PANEL4 = (1 << 17),      // 0x20000
+    HIT_ATTR_JABARA = (1 << 18),           // 0x40000, bellows (jabara) floor
+    HIT_ATTR_ROLL_THROUGH = (1 << 19),     // 0x80000, rolled-up (paper roll) Mario passes
+    HIT_ATTR_SNOW = (1 << 20),             // 0x100000, footstep material
+    HIT_ATTR_WOOD = (1 << 21),             // 0x200000, footstep material
+    HIT_ATTR_BERO = (1 << 23),             // 0x800000, an exit (set by the bero/door scripts)
+    HIT_ATTR_DAMAGE_RETURN = (1 << 30),    // 0x40000000, hitDamageReturnSet
+    HIT_ATTR_MOBJ = (1 << 31),             // 0x80000000, a map object's hit cube
+} HitAttributes;
+
+// HitEntry.flags
+typedef enum HitEntryFlags {
+    HIT_FLAG_OFF = (1 << 0),        // 0x1, evt_hitobj_onoff
+    HIT_FLAG_ANIM_MTX = (1 << 4),   // 0x10
+    HIT_FLAG_MAPOBJ_BIND = (1 << 5), // 0x20
+    HIT_FLAG_MTX_DIRTY = (1 << 6),  // 0x40
+    HIT_FLAG_DELETED = (1 << 7),    // 0x80
+} HitEntryFlags;
+
 struct HitEntry {
-    u16 flags;                      // 0x0
+    u16 flags;                      // 0x0, HitEntryFlags
     u8 pad_02[0x4 - 0x2];             // 0x2, never accessed
-    s32 attributes;                 // 0x4
+    s32 attributes;                 // 0x4, HitAttributes
     MapFileJoint* joint;            // 0x8
     Mtx worldMtx;                   // 0xC
     Mtx localMtx;                   // 0x3C

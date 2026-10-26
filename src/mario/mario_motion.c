@@ -598,7 +598,7 @@ void marioFall(void) {
     if (hit) {
         mario->hitobjStandOn = hit;
         mario->hitobjJumpFrom = NULL;
-        if (hitGetAttr(hit) & 0x200) {
+        if (hitGetAttr(hit) & HIT_ATTR_WATER_HAZARD) {
             mario->position.y += spd;
         } else {
             mario->position.y = y;
@@ -633,7 +633,7 @@ void marioLandOn(void) {
     s32 sfx;
     void* stand;
 
-    if (!(hitGetAttr(mario->hitobjStandOn) & 0x200)) {
+    if (!(hitGetAttr(mario->hitobjStandOn) & HIT_ATTR_WATER_HAZARD)) {
         marioClearJumpPara();
     }
     mario->flags &= ~MARIO_FLAG_STOP_AIR_MOVEMENT;
@@ -683,7 +683,7 @@ void marioLandOn(void) {
         marioChgMot(MARIO_MOTION_DAMAGE_TOGE);
         return;
     }
-    if (hitGetAttr(mario->hitobjStandOn) & 0x80000000) {
+    if (hitGetAttr(mario->hitobjStandOn) & HIT_ATTR_MOBJ) {
         mobj = mobjHitObjPtrToPtr(mario->hitobjStandOn);
         if (!strcmp(mobj->animName, "MOBJ_RedSwitch")) {
             marioChgMot(MARIO_MOTION_JUMP_SW);
@@ -853,7 +853,7 @@ BOOL marioChkJump(void) {
         return FALSE;
     }
     if (mario->hitobjFrontA) {
-        if ((hitGetAttr(mario->hitobjFrontA) & 0x80000000) && mobjGetHint(mobjHitObjPtrToPtr(mario->hitobjFrontA)) == 1) {
+        if ((hitGetAttr(mario->hitobjFrontA) & HIT_ATTR_MOBJ) && mobjGetHint(mobjHitObjPtrToPtr(mario->hitobjFrontA)) == 1) {
             return FALSE;
         }
         ce = caseCheckHitObj(mario->hitobjFrontA);
@@ -862,7 +862,7 @@ BOOL marioChkJump(void) {
         }
     }
     if (mario->hitobjFront) {
-        if ((hitGetAttr(mario->hitobjFront) & 0x80000000) && mobjGetHint(mobjHitObjPtrToPtr(mario->hitobjFront)) == 1) {
+        if ((hitGetAttr(mario->hitobjFront) & HIT_ATTR_MOBJ) && mobjGetHint(mobjHitObjPtrToPtr(mario->hitobjFront)) == 1) {
             return FALSE;
         }
         ce = caseCheckHitObj(mario->hitobjFront);
@@ -871,7 +871,7 @@ BOOL marioChkJump(void) {
         }
     }
     if (mario->hitobjStandOn) {
-        if ((hitGetAttr(mario->hitobjStandOn) & 0x80000000) && mobjGetHint(mobjHitObjPtrToPtr(mario->hitobjStandOn)) == 1) {
+        if ((hitGetAttr(mario->hitobjStandOn) & HIT_ATTR_MOBJ) && mobjGetHint(mobjHitObjPtrToPtr(mario->hitobjStandOn)) == 1) {
             return FALSE;
         }
         ce = caseCheckHitObj(mario->hitobjStandOn);

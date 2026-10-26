@@ -824,7 +824,7 @@ void mot_roll(void) {
         RW()->spdZ = v27;
     }
     if (mario->hitobjStandOn) {
-        if (!(hitGetAttr(mario->hitobjStandOn) & 0xa00) && mario->airTimer == 0 && (mario->buttonTrg & PAD_BUTTON_A)) {
+        if (!(hitGetAttr(mario->hitobjStandOn) & (HIT_ATTR_WATER_HAZARD | HIT_ATTR_TOGE)) && mario->airTimer == 0 && (mario->buttonTrg & PAD_BUTTON_A)) {
             if (!(strcmp(gp->currentMapName, "eki_04") == 0 && __fabsf(mario->groundSlope) >= 40.0f)) {
                 MarioWork* m = marioGetPtr();
                 camFollowYOff();

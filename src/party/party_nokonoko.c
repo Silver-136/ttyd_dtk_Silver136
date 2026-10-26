@@ -610,7 +610,7 @@ void nokonoko_use(PartyEntry* party) {
         NOKO_ITEM(party, psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_PNK_KOURA_WALL1), &party->position); noko_star(party, 1);)
         hit = ccwall(party, 1);
         if (hit != NULL) {
-            if (!(hitGetAttr(hit) & 0x80000000)) {
+            if (!(hitGetAttr(hit) & HIT_ATTR_MOBJ)) {
                 party->useMotionId = 100;
                 return;
             }

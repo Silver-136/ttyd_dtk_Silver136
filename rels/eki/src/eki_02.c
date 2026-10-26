@@ -79,7 +79,7 @@ USER_FUNC(hit_move) {
         event->userdata[1] = 0;
         return EVT_RETURN_BLOCK;
     }
-    if (!(hit->flags & 0x30)) {
+    if (!(hit->flags & (HIT_FLAG_ANIM_MTX | HIT_FLAG_MAPOBJ_BIND))) {
         event->userdata[0] = 0;
         event->userdata[1] = 0;
         return EVT_RETURN_BLOCK;

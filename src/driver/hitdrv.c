@@ -196,7 +196,7 @@ inline void hitPreCheck(void) {
     for (; i < wp->entries->count; entry++, i++) {
         hit = entry->hitEntries;
         for (j = 0; j < entry->hitNumJoints; j++, hit++) {
-            if (hit->joint->partCount != 0 && !(hit->flags & 0x81)) {
+            if (hit->joint->partCount != 0 && !(hit->flags & (HIT_FLAG_OFF | HIT_FLAG_DELETED))) {
                 if (prev == NULL) {
                     hitActiveListTop = hit;
                     prev = hit;
@@ -221,7 +221,7 @@ inline HitEntry* hitNameToPtrNoChk(const char* name) {
     for (i = 0; i < wp->entries->count; map++, i++) {
         hit = map->hitEntries;
         for (j = 0; j < map->hitNumJoints; j++, hit++) {
-            if (!(hit->flags & 0x80) && !strcmp(hit->joint->name, name)) {
+            if (!(hit->flags & HIT_FLAG_DELETED) && !strcmp(hit->joint->name, name)) {
                 return hit;
             }
         }
@@ -238,11 +238,11 @@ void hitDelete(const char* name) {
         HitEntry* hit;
 
         for (j = 0, hit = wp->entries[i].hitEntries; j < wp->entries[i].hitNumJoints; j++, hit++) {
-            if (hit->flags & 0x80) {
+            if (hit->flags & HIT_FLAG_DELETED) {
                 continue;
             }
             if (strcmp(name, hit->joint->name) == 0) {
-                hit->flags |= 0x80;
+                hit->flags |= HIT_FLAG_DELETED;
                 hitPreCheck();
                 return;
             }
@@ -284,8 +284,8 @@ void hitMain(void) {
                 if (hit != NULL) {
                     mapCalcAnimMatrix(hit->animMtx, hit->localMtx, anim, joints[1]);
                     recalc = TRUE;
-                    hit->flags |= 0x10;
-                    hit->flags |= 0x40;
+                    hit->flags |= HIT_FLAG_ANIM_MTX;
+                    hit->flags |= HIT_FLAG_MTX_DIRTY;
                     anim->flags |= 0x1000;
                 }
             }
@@ -413,7 +413,7 @@ void hitGrpAttrOff(const char* name, u32 mask) {
 void hitReCalcMatrix(HitEntry* hit, Mtx mtx) {
     Vec world;
 
-    hit->flags |= 0x40;
+    hit->flags |= HIT_FLAG_MTX_DIRTY;
     hitReCalcMatrix2(hit, mtx, FALSE);
     MTXMultVec(hit->worldMtx, &hit->joint->bboxMax, &world);
     hit->radius = PSVECDistance(&world, &hit->centerWorld);
@@ -423,24 +423,24 @@ void hitReCalcMatrix2(HitEntry* hit, Mtx mtx, BOOL recursion) {
     int doCalc;
 
     doCalc = 0;
-    if (hit->flags & 0x40) {
+    if (hit->flags & HIT_FLAG_MTX_DIRTY) {
         doCalc = 1;
     }
     if (recursion != 0) {
         doCalc = 1;
     }
     if (doCalc != 0) {
-        if (hit->flags & 0x10) {
+        if (hit->flags & HIT_FLAG_ANIM_MTX) {
             PSMTXConcat(mtx, hit->animMtx, hit->worldMtx);
         } else {
             PSMTXConcat(mtx, hit->localMtx, hit->worldMtx);
         }
-        if (hit->flags & 0x20) {
+        if (hit->flags & HIT_FLAG_MAPOBJ_BIND) {
             PSMTXConcat(hit->worldMtx, hit->mapObj->transformMtx, hit->worldMtx);
         }
         PSMTXMultVec(hit->worldMtx, &hit->centerLocal, &hit->centerWorld);
         hitCalcVtxPosition(hit);
-        hit->flags &= ~0x40;
+        hit->flags &= ~HIT_FLAG_MTX_DIRTY;
         if (hit->child != NULL) {
             hitReCalcMatrix2(hit->child, hit->worldMtx, TRUE);
         }
@@ -1076,7 +1076,7 @@ HitEntry* hitCheckSphereFilter(HitFilterCallback callback, f32 x, f32 y, f32 z,
     for (i = 0; i < map->count; mapEntry++, i++) {
         hitObj = mapEntry->hitEntries;
         for (j = 0; j < mapEntry->hitNumJoints; j++, hitObj++) {
-            if ((hitObj->attributes & 0x80000000) && (hitObj->joint->partCount != 0)) {
+            if ((hitObj->attributes & HIT_ATTR_MOBJ) && (hitObj->joint->partCount != 0)) {
                 entryFlags = hitObj->flags;
                 if (!(entryFlags & 1) && !(entryFlags & 0x80)) {
                     dist = PSVECDistance(&center, &hitObj->centerWorld);
@@ -1145,7 +1145,7 @@ HitEntry* hitNameToPtr(const char* name) {
         map = &wp->entries[i];
         hit = map->hitEntries;
         for (j = 0; j < map->hitNumJoints; j++, hit++) {
-            if (!(hit->flags & 0x80) && !strcmp(hit->joint->name, name)) {
+            if (!(hit->flags & HIT_FLAG_DELETED) && !strcmp(hit->joint->name, name)) {
                 return hit;
             }
         }
@@ -1226,7 +1226,7 @@ s32 hitGetAttr(HitEntry* hit) {
 }
 
 void hitDamageReturnSet(HitEntry* hit, HitDamageReturn* damage, BOOL recursion) {
-    hit->attributes |= 0x40000000;
+    hit->attributes |= HIT_ATTR_DAMAGE_RETURN;
     hit->damage = damage;
     if (hit->child != NULL) {
         hitDamageReturnSet(hit->child, damage, TRUE);
@@ -1266,7 +1266,7 @@ void hitBindMapObj(const char* hitName, const char* mapobjName) {
         return;
     }
     hit->mapObj = mapObj;
-    hit->flags |= 0x20;
+    hit->flags |= HIT_FLAG_MAPOBJ_BIND;
 }
 
 void hitBindUpdate(const char* name) {
@@ -1279,7 +1279,7 @@ void hitBindUpdate(const char* name) {
         mapErrorEntry(1, name);
         return;
     }
-    if (hit->flags & 0x20) {
+    if (hit->flags & HIT_FLAG_MAPOBJ_BIND) {
         parent = hit->parent;
         if (parent != NULL) {
             hitReCalcMatrix(hit, parent->worldMtx);

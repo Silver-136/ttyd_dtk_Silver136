@@ -287,7 +287,7 @@ void N_partyFollowCloseOff(PartyEntry* party) {
 
 static inline HitEntry* partyBehindGround(PartyEntry* party) {
     HitEntry* hit = partySearchGround(party, 10.0f, 0.0f);
-    if (hit && (hitGetAttr(hit) & 0x200)) {
+    if (hit && (hitGetAttr(hit) & HIT_ATTR_WATER_HAZARD)) {
         hit = NULL;
         if (!party->splashTimer) {
             party->trigFlags |= PARTY_TRIG_SPLASH;
@@ -1010,7 +1010,7 @@ found:
         if (!(party->flags & PARTY_FLAG_DISABLE_FLOORS)) {
             party->flags &= ~PARTY_FLAG_IN_SHALLOW_WATER;
             hit = partySearchGround(party, 10.0f, 0.0f);
-            if (hit && (hitGetAttr(hit) & 0x200)) {
+            if (hit && (hitGetAttr(hit) & HIT_ATTR_WATER_HAZARD)) {
                 hit = NULL;
                 if (!party->splashTimer) {
                     party->trigFlags |= PARTY_TRIG_SPLASH;
@@ -1112,7 +1112,7 @@ found:
         party->hitobjFront = hit;
         if (party->moveSpeed) {
             party->hitobjPush = hit;
-            if (hitGetAttr(hit) & 0x2000) {
+            if (hitGetAttr(hit) & HIT_ATTR_SLIT) {
                 if (party->slitOn != 1) {
                     if (!(party->playerPtr->trigFlags & 0x80000000)) {
                         party->trigFlags |= PARTY_TRIG_SLIT_INIT;
@@ -1191,12 +1191,12 @@ found:
         partyChgMot(party, 3);
         party->gravity = -1.0f;
     } else {
-        if (hitGetAttr(hit) & 0x100) {
+        if (hitGetAttr(hit) & HIT_ATTR_SHALLOW_WATER) {
             party->flags |= PARTY_FLAG_IN_SHALLOW_WATER;
         } else {
             party->flags &= ~PARTY_FLAG_IN_SHALLOW_WATER;
         }
-        if (hitGetAttr(hit) & 0x40000000) {
+        if (hitGetAttr(hit) & HIT_ATTR_DAMAGE_RETURN) {
             party->damageHit = hit;
         }
     }
@@ -1409,7 +1409,7 @@ void party_motion_homing_fly(PartyEntry* party) {
         }
         party->flags &= ~PARTY_FLAG_IN_SHALLOW_WATER;
         hit = partySearchGround(party, 100.0f, 100.0f);
-        if (hit && (hitGetAttr(hit) & 0x200)) {
+        if (hit && (hitGetAttr(hit) & HIT_ATTR_WATER_HAZARD)) {
             hit = NULL;
         }
         party->hitobjStandOn = hit;
@@ -1445,7 +1445,7 @@ void party_motion_homing_fly(PartyEntry* party) {
         dir = angleABf(party->position.x, party->position.z, ap.x, ap.z);
         hit = partySearchGround(party, 10.0f, 0.0f);
         ap.y = party->groundY;
-        if (hit && (hitGetAttr(hit) & 0x200)) {
+        if (hit && (hitGetAttr(hit) & HIT_ATTR_WATER_HAZARD)) {
             hit = NULL;
         }
         if (hit) {
@@ -1483,7 +1483,7 @@ void party_motion_homing_fly(PartyEntry* party) {
         party->hitobjFront = hit;
         if (party->moveSpeed) {
             party->hitobjPush = hit;
-            if (hitGetAttr(hit) & 0x2000) {
+            if (hitGetAttr(hit) & HIT_ATTR_SLIT) {
                 if (party->slitOn != 1) {
                     if (!(party->playerPtr->trigFlags & 0x80000000)) {
                         party->trigFlags |= PARTY_TRIG_SLIT_INIT;
@@ -1956,7 +1956,7 @@ void party_motion_behind_mario_fly(PartyEntry* party) {
     }
     hit = partySearchGround(party, 100.0f, 100.0f);
     if (hit) {
-        if (hitGetAttr(hit) & 0x200) {
+        if (hitGetAttr(hit) & HIT_ATTR_WATER_HAZARD) {
             hit = NULL;
             if (!party->splashTimer) {
                 party->trigFlags |= PARTY_TRIG_SPLASH;
@@ -2031,7 +2031,7 @@ void party_motion_beside_mario(PartyEntry* party) {
         partyMoveCheckWall(party);
         partyChgWalkPose(party, party->moveSpeed);
         hit = partySearchGround(party, 10.0f, 0.0f);
-        if (hit && (hitGetAttr(hit) & 0x200)) {
+        if (hit && (hitGetAttr(hit) & HIT_ATTR_WATER_HAZARD)) {
             hit = NULL;
             if (!party->splashTimer) {
                 party->trigFlags |= PARTY_TRIG_SPLASH;
@@ -2256,7 +2256,7 @@ void party_motion_jump(PartyEntry* party) {
             party->flags &= ~PARTY_FLAG_IS_JUMPING;
             party->flags |= PARTY_FLAG_IS_FALLING;
             hit = partySearchGround(party, __fabsf(party->velY), 0.0f);
-            if (hit && (hitGetAttr(hit) & 0x200)) {
+            if (hit && (hitGetAttr(hit) & HIT_ATTR_WATER_HAZARD)) {
                 if (!party->splashTimer) {
                     party->trigFlags |= PARTY_TRIG_SPLASH;
                     party->flags |= PARTY_FLAG_FORCE_FALL;
@@ -2341,7 +2341,7 @@ void party_motion_jump2(PartyEntry* party) {
             if (party->velY <= 0.0f) {
                 hit = partySearchGround(party, __fabsf(party->velY), 0.0f);
                 pos.y = party->groundY;
-                if (hit && (hitGetAttr(hit) & 0x200)) {
+                if (hit && (hitGetAttr(hit) & HIT_ATTR_WATER_HAZARD)) {
                     if (!party->splashTimer) {
                         party->trigFlags |= PARTY_TRIG_SPLASH;
                         party->flags |= PARTY_FLAG_FORCE_FALL;
@@ -2392,7 +2392,7 @@ s32 party_motion_fall(PartyEntry* party) {
     if (!(party->flags & PARTY_FLAG_FORCE_FALL)) {
         hit = partySearchGround(party, 10.0f, __fabsf(party->velY));
     }
-    if (hit && (hitGetAttr(hit) & 0x200)) {
+    if (hit && (hitGetAttr(hit) & HIT_ATTR_WATER_HAZARD)) {
         hit = NULL;
         if (party->moveKind == 0 && !party->splashTimer) {
             party->trigFlags |= PARTY_TRIG_SPLASH;
@@ -2501,7 +2501,7 @@ static inline BOOL partyChkHitAttr200(HitEntry* hit) {
     if (!hit) {
         return FALSE;
     }
-    if (hitGetAttr(hit) & 0x200) {
+    if (hitGetAttr(hit) & HIT_ATTR_WATER_HAZARD) {
         return TRUE;
     }
     return FALSE;
@@ -2762,10 +2762,10 @@ BOOL party_slit(PartyEntry* party) {
             }
 #ifdef VERSION_G8ME01
             if (!partyChkBetweenWalls(party, party->position) && !(mario->flags & MARIO_FLAG_PAPER_MODE) &&
-                !(hitGetAttr(party->hitobjFront) & 0x2000) && !(hitGetAttr(party->hitobjPush) & 0x2000))
+                !(hitGetAttr(party->hitobjFront) & HIT_ATTR_SLIT) && !(hitGetAttr(party->hitobjPush) & HIT_ATTR_SLIT))
 #else
-            if (!(mario->flags & MARIO_FLAG_PAPER_MODE) && !(hitGetAttr(party->hitobjFront) & 0x2000) &&
-                !(hitGetAttr(party->hitobjPush) & 0x2000))
+            if (!(mario->flags & MARIO_FLAG_PAPER_MODE) && !(hitGetAttr(party->hitobjFront) & HIT_ATTR_SLIT) &&
+                !(hitGetAttr(party->hitobjPush) & HIT_ATTR_SLIT))
 #endif
             {
                 party->slitStep = 40;
