@@ -1003,7 +1003,7 @@ EVT_BEGIN(marioAttackEvent_Deka)
     BEGIN_SIBLING_EVENT
         IF_INT_NOT_EQUAL(LW(14), -1)
             CALL(btlevtcmd_GetUnitKind, UNIT_ID_PARTNER, LW(0))
-            IF_INT_EQUAL(LW(0), 228)
+            IF_INT_EQUAL(LW(0), UNIT_VIVIAN)
                 LOOP(0)
                     CALL(btlevtcmd_SetUnitWork, LW(14), 3, 1)
                     CALL(btlevtcmd_GetPos, LW(14), LW(0), LW(1), LW(2))
@@ -1075,7 +1075,7 @@ EVT_BEGIN(marioAttackEvent_Deka)
     CALL(btlevtcmd_SacBgsetMove, 1)
     IF_INT_NOT_EQUAL(LW(14), -1)
         CALL(btlevtcmd_GetUnitKind, UNIT_ID_PARTNER, LW(0))
-        IF_INT_EQUAL(LW(0), 228)
+        IF_INT_EQUAL(LW(0), UNIT_VIVIAN)
             CALL(btlevtcmd_SetUnitWork, LW(14), 3, 0)
         END_IF
     END_IF

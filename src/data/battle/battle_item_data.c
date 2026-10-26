@@ -3930,7 +3930,7 @@ EVT_BEGIN(ItemEvent_ThrowAttack)
         END_IF
     END_IF
     CALL(btlevtcmd_GetUnitKind, UNIT_ID_SELF, LW(0))
-    IF_INT_EQUAL(LW(0), 222)
+    IF_INT_EQUAL(LW(0), UNIT_MARIO)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("M_C_1"))
         BEGIN_SIBLING_EVENT
             WAIT_MS(500)

@@ -589,7 +589,7 @@ static EVT_BEGIN(hip_attack_event)
         SET_VALUE(LW(15), 0)
         CALL(btlevtcmd_GetUnitKind, LW(3), LW(0))
         SWITCH(LW(0))
-            CASE_EQUAL(222)
+            CASE_EQUAL(UNIT_MARIO)
             CALL(mario_cannot_use_command, LW(15))
             CASE_BETWEEN(224, 230)
 #ifdef VERSION_G8ME01
