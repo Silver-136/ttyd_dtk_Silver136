@@ -69,7 +69,7 @@ typedef struct ShopSel {
     s32 sel;
 } ShopSel;
 NpcEntry* fbatNpcTalkCheck(MarioWork* mario);
-s32 search_evt_moji(s32 id);
+const char* search_evt_moji(s32 id);
 void effStarStoneDraw(CameraId camera, void* param);
 s32* iri_09_item_tbl;
 s32 naniga_okorukana_cook(void);
@@ -2932,7 +2932,7 @@ static USER_FUNC(evt_osreport) {
 
     switch (evtGetValue(event, args[0])) {
         case 0:
-            evtSetValue(event, args[1], search_evt_moji(evtGetValue(event, GSW_STORY_PROGRESS)));
+            evtSetValue(event, args[1], (EvtWord)search_evt_moji(evtGetValue(event, GSW_STORY_PROGRESS)));
             break;
     }
     return EVT_RETURN_DONE;

@@ -320,7 +320,7 @@ USER_FUNC(evt_msg_print_add_insert) {
     return EVT_RETURN_DONE;
 }
 
-void msgWindow_ForceClose(s32 id);
+void msgWindow_ForceClose(const char* name);
 
 USER_FUNC(evt_msg_continue) {
     if (isFirstCall) {
@@ -343,7 +343,7 @@ USER_FUNC(evt_msg_repeat) {
 }
 
 USER_FUNC(evt_msg_close) {
-    msgWindow_ForceClose(evtGetValue(event, *event->args));
+    msgWindow_ForceClose((const char*)evtGetValue(event, *event->args));
     return EVT_RETURN_DONE;
 }
 

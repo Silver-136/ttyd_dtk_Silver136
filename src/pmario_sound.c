@@ -4954,7 +4954,7 @@ void stub_fn(void);
 void psndBGMMain(void);
 void psndENVMain(void);
 void psndSFXMain(void);
-BOOL psndBGMOn_f_d(u32 flags, char* bgm_name, u32 fadetime, u32 fadeout, s32 r7);
+BOOL psndBGMOn_f_d(u32 flags, const char* bgm_name, u32 fadetime, u32 fadeout, s32 r7);
 s32 __psndSFXOn(const char* name, u8 vol, u8 pan, u16 pitch, Vec* pos, u32 r8, u16 dist, s32 r10);
 
 static f32 angleABf(f32 x1, f32 y1, f32 x2, f32 y2) {
@@ -5476,7 +5476,7 @@ BOOL psndBGMOn(u32 r3, char* bgm_name) {
     return psndBGMOn_f_d(r3, bgm_name, 1000, 750, 0);
 }
 
-BOOL psndBGMOn_f(u32 r3, char* bgm_name, u32 fadetime, s32 r6) {
+BOOL psndBGMOn_f(u32 r3, const char* bgm_name, u32 fadetime, s32 r6) {
     return psndBGMOn_f_d(r3, bgm_name, fadetime, 750, r6);
 }
 
@@ -5525,7 +5525,7 @@ static inline s32 psndBGMSearch(char* name) {
     }
     return i;
 }
-static inline void psndBGMSearchP(char* name, s32* pi) {
+static inline void psndBGMSearchP(const char* name, s32* pi) {
     SoundBGMEntry* entry;
     entry = psbgmlist;
     if (SFX_NAME_IS_ID(name)) {
@@ -5541,7 +5541,7 @@ static inline void psndBGMSearchP(char* name, s32* pi) {
         *pi = 0;
     }
 }
-BOOL psndBGMOn_f_d(u32 flags, char *bgm_name, u32 fadetime, u32 fadeout, s32 r7) {
+BOOL psndBGMOn_f_d(u32 flags, const char* bgm_name, u32 fadetime, u32 fadeout, s32 r7) {
     PaperSoundBGM *bgm;
     s32 idx;
     PaperSoundFade *fade2;

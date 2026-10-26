@@ -45,11 +45,9 @@ s32 partyGetFootmarkId();
 // Note: the real evt_snd user functions live in this split (see evt_snd.c).
 // Functions are defined in reverse order (-inline deferred).
 
-BOOL psndENVOn(s32 a, s32 b);
 void psndSFX_vol(s32 id, u8 vol);
 void psndSFX_pit(s32 id, s16 pit);
-BOOL psndBGMOn_f_d(s32 a, s32 b, s32 c, s32 d, s32 e);
-void psndBGMOn_f(s32 a, s32 b, s32 c, s32 d);
+BOOL psndBGMOn_f_d(u32 flags, const char* bgm_name, u32 fadetime, u32 fadeout, s32 r7);
 
 USER_FUNC(evt_snd_bgmon) {
     EvtWord* args = event->args;
@@ -60,7 +58,7 @@ USER_FUNC(evt_snd_bgmon) {
 USER_FUNC(evt_snd_bgmon_f) {
     EvtWord* args = event->args;
     s32 a = args[0];
-    s32 bgm_name = args[1];
+    const char* bgm_name = (const char*)args[1];
     s32 fadetime = evtGetValue(event, args[2]);
     psndBGMOn_f(a, bgm_name, fadetime, 0);
     return EVT_RETURN_DONE;
@@ -69,10 +67,10 @@ USER_FUNC(evt_snd_bgmon_f) {
 USER_FUNC(evt_snd_bgmon_f_d) {
     EvtWord* args = event->args;
     s32 a = args[0];
-    s32 b = args[1];
+    const char* bgm_name = (const char*)args[1];
     s32 c = evtGetValue(event, args[2]);
     evtGetValue(event, args[3]);
-    psndBGMOn_f_d(a, b, c, c, 0);
+    psndBGMOn_f_d(a, bgm_name, c, c, 0);
     return EVT_RETURN_DONE;
 }
 
@@ -227,7 +225,7 @@ USER_FUNC(evt_snd_sfx_dist) {
 
 USER_FUNC(evt_snd_envon) {
     EvtWord* args = event->args;
-    psndENVOn(args[0], args[1]);
+    psndENVOn(args[0], (const char*)args[1]);
     return EVT_RETURN_DONE;
 }
 

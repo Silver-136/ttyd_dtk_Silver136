@@ -39,8 +39,6 @@ typedef struct BattleSeqWork {
     s32 counter;    // 0x10
 } BattleSeqWork;
 
-void psndBGMOn_f(u32 a, u32 b, u32 c, u32 d);
-BOOL psndENVOn(u32 a, char* b);
 
 s32 debug_battle_flag;
 s32 seq_battle_unk_8041874c;

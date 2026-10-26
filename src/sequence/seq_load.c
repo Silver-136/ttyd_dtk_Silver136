@@ -84,7 +84,6 @@ typedef struct WinDt {
     u8 next[4]; // 0x18
 } WinDt;
 
-extern BOOL psndENVOn(u32 flags, const char* name);
 double sin(double);
 double fmod(double, double);
 void FontDrawString(f32 x, f32 y, const char* str);

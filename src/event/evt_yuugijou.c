@@ -20,7 +20,7 @@ PiantaParlorWork yuugijouwork;
 
 //.sbss
 PiantaParlorWork* yuwp;
-s32 yuu_window_evt;
+EvtWord* yuu_window_evt;
 
 EVT_BEGIN(minigame_end)
     SET_VALUE(4244967296, 2)
@@ -394,12 +394,12 @@ USER_FUNC(yuuminigame_end) {
 }
 
 USER_FUNC(yuuminigame_get_window_evt) {
-    evtSetValue(event, event->args[0], yuu_window_evt);
+    evtSetValue(event, event->args[0], (EvtWord)yuu_window_evt);
     return EVT_RETURN_DONE;
 }
 
-void evtYuuSetWindowEvt(s32 value) {
-    yuu_window_evt = value;
+void evtYuuSetWindowEvt(EvtWord* evt) {
+    yuu_window_evt = evt;
 }
 
 void evtYuuWindow(void) {

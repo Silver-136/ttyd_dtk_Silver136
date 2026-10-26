@@ -17,8 +17,8 @@
 #include "eff/eff_torch.h"
 
 
-void mapObjSetOffScreen(const char* name, s32 val);
-void mapGrpSetOffScreen(const char* name, s32 val);
+void mapObjSetOffScreen(const char* name, const char* offscreen);
+void mapGrpSetOffScreen(const char* name, const char* offscreen);
 void mapObjSetColor(const char* name, GXColor color);
 void mapSetBlend(GXColor color);
 void mapSetBlend2(GXColor color);
@@ -279,11 +279,11 @@ USER_FUNC(evt_mapobj_set_offscreen) {
     EvtWord* args = event->args;
     s32 type = evtGetValue(event, args[0]);
     const char* name = (const char*)evtGetValue(event, args[1]);
-    s32 val = evtGetValue(event, args[2]);
+    const char* offscreen = (const char*)evtGetValue(event, args[2]);
     if (type == 0) {
-        mapObjSetOffScreen(name, val);
+        mapObjSetOffScreen(name, offscreen);
     } else {
-        mapGrpSetOffScreen(name, val);
+        mapGrpSetOffScreen(name, offscreen);
     }
     return EVT_RETURN_DONE;
 }
