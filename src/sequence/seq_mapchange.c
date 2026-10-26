@@ -206,13 +206,13 @@ void seq_mapChangeMain(SequenceWork* work) {
         break;
     case 3:
         if (setupDataCheck()) {
-            if (psndGetFlag() & 0x1000) {
+            if (psndGetFlag() & PSND_FLAG_BGM_WAIT_0) {
                 if (psndBGMPlayTime(0) < 3000) break;
-                psndClearFlag(0x1000);
+                psndClearFlag(PSND_FLAG_BGM_WAIT_0);
             }
-            if (psndGetFlag() & 0x2000) {
+            if (psndGetFlag() & PSND_FLAG_BGM_WAIT_1) {
                 if (psndBGMPlayTime(1) < 3000) break;
-                psndClearFlag(0x2000);
+                psndClearFlag(PSND_FLAG_BGM_WAIT_1);
             }
             setupDataBase(_next_area, _next_map);
             psndMapChange();

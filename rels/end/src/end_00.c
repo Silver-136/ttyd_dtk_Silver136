@@ -1347,7 +1347,7 @@ USER_FUNC(evt_end_staff_roll_init) {
         end_wp->alpha = 0;
         end_wp->mode = 0;
         end_wp->pos = 0;
-        psndSetFlag(4);
+        psndSetFlag(PSND_FLAG_NO_SFX);
 #ifndef VERSION_G8ME01
         gp->language = 1;
         JUTFont_Free();
@@ -1373,7 +1373,7 @@ USER_FUNC(evt_end_staff_roll_init) {
 #pragma dont_inline on
 void end_staff_roll_exit(void) {
     fileFree(end_wp->tpl);
-    psndClearFlag(4);
+    psndClearFlag(PSND_FLAG_NO_SFX);
 #ifndef VERSION_G8ME01
     gp->language = 0;
     JUTFont_Free();
@@ -1388,12 +1388,12 @@ USER_FUNC(evt_end_font_restore) {
     JUTFont_Free();
     JUTFontSetup(0);
 #endif
-    psndClearFlag(4);
+    psndClearFlag(PSND_FLAG_NO_SFX);
     return 2;
 }
 
 USER_FUNC(end_bgm_wait_stop) {
-    psndSetFlag(0x1000);
+    psndSetFlag(PSND_FLAG_BGM_WAIT_0);
     return 2;
 }
 

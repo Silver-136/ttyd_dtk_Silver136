@@ -104,7 +104,7 @@ USER_FUNC(demo_init) {
         wp->x = 0.0f;
         wp->y = 0.0f;
         statusWinDispOff();
-        psndSetFlag(4);
+        psndSetFlag(PSND_FLAG_NO_SFX);
     }
     if (fileAsyncf(4, NULL, "%s/demo.tpl", getMarioStDvdRoot()) != 0U) {
         wp->tpl = fileAllocf(4, "%s/demo.tpl", getMarioStDvdRoot());
@@ -121,7 +121,7 @@ void demo_exit(void) {
     if (wp->tpl != NULL) {
         fileFree(wp->tpl);
     }
-    psndClearFlag(4);
+    psndClearFlag(PSND_FLAG_NO_SFX);
     cam = camGetPtr(CAMERA_3D);
     cam->viewport[0] = 0.0f;
     cam->viewport[1] = 0.0f;

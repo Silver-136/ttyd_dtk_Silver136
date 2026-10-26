@@ -551,14 +551,14 @@ USER_FUNC(evt_cam_letter_box_onoff) {
 
     if (on) {
         camera->flags |= CAMERA_FLAG_LETTER_BOX;
-        psndSetFlag(0x20);
+        psndSetFlag(PSND_FLAG_LETTER_BOX);
         camera->letterBoxAlpha = 255;
         camera->letterBoxTop = 0;
         camera->letterBoxBottom = 0;
         camera->letterBoxCamId = CAMERA_2D;
     } else {
         camera->flags &= ~CAMERA_FLAG_LETTER_BOX;
-        psndClearFlag(0x20);
+        psndClearFlag(PSND_FLAG_LETTER_BOX);
     }
     if (flag) {
         camera->flags |= CAMERA_FLAG_LETTER_BOX_INSTANT;
@@ -573,10 +573,10 @@ USER_FUNC(evt_cam_letter_box_disable) {
 
     if (disable) {
         camera->flags |= CAMERA_FLAG_LETTER_BOX_OFF;
-        psndSetFlag(0x40);
+        psndSetFlag(PSND_FLAG_LETTER_BOX_OFF);
     } else {
         camera->flags &= ~CAMERA_FLAG_LETTER_BOX_OFF;
-        psndClearFlag(0x40);
+        psndClearFlag(PSND_FLAG_LETTER_BOX_OFF);
     }
     return EVT_RETURN_DONE;
 }

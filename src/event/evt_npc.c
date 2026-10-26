@@ -529,7 +529,7 @@ USER_FUNC(evt_npc_move_position) {
 
     // Footstep SFX
     sfxFlag = 0;
-    if (psndGetFlag() & 0x100) {
+    if (psndGetFlag() & PSND_FLAG_DOOR_IN) {
         if (!(animPoseGetMaterialFlag(npc->poseId) & 0x1800)) {
             sfxFlag = 0x10000;
         }
@@ -600,7 +600,7 @@ USER_FUNC(evt_npc_jump_position) {
         npc->moveOffset.y = 0.0f;
 
         sfxFlag = 0;
-        if (psndGetFlag() & 0x100 && !(animPoseGetMaterialFlag(npc->poseId) & 0x1800)) {
+        if (psndGetFlag() & PSND_FLAG_DOOR_IN && !(animPoseGetMaterialFlag(npc->poseId) & 0x1800)) {
             sfxFlag = 0x10000;
         }
         if (npc->jumpSfx != 0) {
@@ -711,7 +711,7 @@ USER_FUNC(evt_npc_jump_position) {
     npc->jumpGravity = 1.0f;
 
     sfxFlag = 0;
-    if (psndGetFlag() & 0x100) {
+    if (psndGetFlag() & PSND_FLAG_DOOR_IN) {
         if (!(animPoseGetMaterialFlag(npc->poseId) & 0x1800)) {
             sfxFlag = 0x10000;
         }
@@ -748,7 +748,7 @@ USER_FUNC(evt_npc_jump_position_nohit) {
         event->userdata3 = npc->flags & NPC_FLAG_SHADOW_NO_FLOOR;
         npc->flags &= ~NPC_FLAG_SHADOW_NO_FLOOR;
 
-        if (psndGetFlag() & 0x100) {
+        if (psndGetFlag() & PSND_FLAG_DOOR_IN) {
             if (!(animPoseGetMaterialFlag(npc->poseId) & 0x1800)) {
                 sfxFlag = 0x10000;
             }
@@ -772,7 +772,7 @@ USER_FUNC(evt_npc_jump_position_nohit) {
     npc->flags |= event->userdata3;
 
     sfxFlag = 0;
-    if (psndGetFlag() & 0x100) {
+    if (psndGetFlag() & PSND_FLAG_DOOR_IN) {
         if (!(animPoseGetMaterialFlag(npc->poseId) & 0x1800)) {
             sfxFlag = 0x10000;
         }
@@ -892,7 +892,7 @@ USER_FUNC(evt_npc_glide_position) {
 
     // Footstep SFX
     sfxFlag = 0;
-    if (psndGetFlag() & 0x100) {
+    if (psndGetFlag() & PSND_FLAG_DOOR_IN) {
         if (!(animPoseGetMaterialFlag(npc->poseId) & 0x1800)) {
             sfxFlag = 0x10000;
         }
@@ -1058,7 +1058,7 @@ USER_FUNC(evt_npc_homing_target) {
 
     // Footstep SFX
     sfxFlag = 0;
-    if (psndGetFlag() & 0x100) {
+    if (psndGetFlag() & PSND_FLAG_DOOR_IN) {
         if (!(animPoseGetMaterialFlag(npc->poseId) & 0x1800)) {
             sfxFlag = 0x10000;
         }
@@ -1888,7 +1888,7 @@ USER_FUNC(evt_npc_battle_start) {
             partyCtrlOff();
         }
         BattleInformationSetResult(info, 0);
-        psndSetFlag(0x10);
+        psndSetFlag(PSND_FLAG_BATTLE_START);
         seqSetSeq(SEQ_BATTLE, NULL, NULL);
         return EVT_RETURN_BLOCK;
     }

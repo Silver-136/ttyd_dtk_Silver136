@@ -153,8 +153,19 @@ s32 psndSFXOnEx_3D(const char* name, Vec* position, u8 vol, u8 pan, u16 pitch, u
 BOOL psndBGMOff_f_d(s32 flags, u32 fadetime, u32 someswitch);
 BOOL psndBGMStartCheck(s32 id);
 
-/* psndSetFlag/psndClearFlag: sound effects play at volume 0 unless their id has PSND_SFX_BYPASS_MUTE */
-#define PSND_FLAG_MUTE_SFX 0x80
+// psndSetFlag/psndClearFlag/psndGetFlag (PaperSoundWork.flags)
+typedef enum PsndFlags {
+    PSND_FLAG_BGM_OFF = (1 << 0),         // 0x1, setting it fades both BGM players out
+    PSND_FLAG_ENV_OFF = (1 << 1),         // 0x2, setting it stops both environment sounds
+    PSND_FLAG_NO_SFX = (1 << 2),          // 0x4, sound requests that do not force playback are dropped
+    PSND_FLAG_BATTLE_START = (1 << 4),    // 0x10, a battle is starting: sounds started now stop with the field BGM
+    PSND_FLAG_LETTER_BOX = (1 << 5),      // 0x20, the camera letter box is shown
+    PSND_FLAG_LETTER_BOX_OFF = (1 << 6),  // 0x40, the letter box is disabled
+    PSND_FLAG_MUTE_SFX = (1 << 7),        // 0x80, sound effects play at volume 0 unless their id has PSND_SFX_BYPASS_MUTE
+    PSND_FLAG_DOOR_IN = (1 << 8),         // 0x100, snd_door_in .. snd_door_out (cleared on a map change)
+    PSND_FLAG_BGM_WAIT_0 = (1 << 12),     // 0x1000, the map change waits until BGM player 0 has played 3 s
+    PSND_FLAG_BGM_WAIT_1 = (1 << 13),     // 0x2000, the same for player 1
+} PsndFlags;
 
 // First argument of psndBGMOn*/psndBGMOff* and psndENVOn*/psndENVOff* (and evt_snd_bgmon/bgmoff/envon/envoff): one
 // layout for BGM and environment sound. Low nibble: the BGM player / environment slot (0 field music, 1 fanfares and

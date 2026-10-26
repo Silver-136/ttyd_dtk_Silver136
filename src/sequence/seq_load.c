@@ -1240,10 +1240,10 @@ void continueGame(void) {
         m->prevPartyMemberId[0] = 0;
         m->prevPartyMemberId[1] = 0;
     }
-    psndSetFlag(4);
+    psndSetFlag(PSND_FLAG_NO_SFX);
     marioPartyEntry(gp->savePartyId[0]);
     marioPartyEntry(gp->savePartyId[1]);
-    psndClearFlag(4);
+    psndClearFlag(PSND_FLAG_NO_SFX);
     countDownSaveReStart();
     gp->flags |= 1;
     switch (swByteGet(4)) {

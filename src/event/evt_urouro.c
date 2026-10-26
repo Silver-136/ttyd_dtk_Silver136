@@ -123,7 +123,7 @@ USER_FUNC(urouro_main_func) {
             temp = (f32)cos(npc->moveDir * 6.2831855f / 360.0f);
             npc->moveOffset.z = step * -temp;
             sfxFlag = 0;
-            if (psndGetFlag() & 0x100) {
+            if (psndGetFlag() & PSND_FLAG_DOOR_IN) {
                 if (!(animPoseGetMaterialFlag(npc->poseId) & 0x1800)) {
                     sfxFlag = 0x10000;
                 }

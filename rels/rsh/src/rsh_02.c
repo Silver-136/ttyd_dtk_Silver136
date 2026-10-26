@@ -821,7 +821,7 @@ void powan_callback(s32 type, void* param) {
 }
 
 USER_FUNC(bgm_wait_stop) {
-    psndSetFlag(0x1000);
+    psndSetFlag(PSND_FLAG_BGM_WAIT_0);
     return EVT_RETURN_DONE;
 }
 

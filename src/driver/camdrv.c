@@ -735,7 +735,7 @@ void camLetterBox(void) {
             (!party || (party && !(party->flags & PARTY_FLAG_IS_BEING_USED)))) {
             if (!(camera->flags & CAMERA_FLAG_LETTER_BOX)) {
                 camera->flags |= CAMERA_FLAG_LETTER_BOX;
-                psndSetFlag(0x20);
+                psndSetFlag(PSND_FLAG_LETTER_BOX);
                 camera->letterBoxAlpha = 0xFF;
                 camera->letterBoxTop = 0;
                 camera->letterBoxBottom = 0;
@@ -743,7 +743,7 @@ void camLetterBox(void) {
             }
         } else if (seqGetSeq() != SEQ_MAP_CHANGE) {
             camera->flags &= ~CAMERA_FLAG_LETTER_BOX;
-            psndClearFlag(0x20);
+            psndClearFlag(PSND_FLAG_LETTER_BOX);
         }
     }
     if (camera->flags & CAMERA_FLAG_LETTER_BOX) {

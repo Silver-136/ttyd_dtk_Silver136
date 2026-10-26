@@ -191,12 +191,12 @@ EVT_BEGIN(house_open_se)
 EVT_END()
 
 USER_FUNC(snd_door_in) {
-    psndSetFlag(0x100);
+    psndSetFlag(PSND_FLAG_DOOR_IN);
     return EVT_RETURN_DONE;
 }
 
 USER_FUNC(snd_door_out) {
-    psndClearFlag(0x100);
+    psndClearFlag(PSND_FLAG_DOOR_IN);
     return EVT_RETURN_DONE;
 }
 

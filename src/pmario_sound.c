@@ -5261,11 +5261,11 @@ void psndSetReverb(s32 mode) {
 
 void psndSetFlag(s32 flag) {
     psnd.flags |= flag;
-    if (psnd.flags & 1) {
+    if (psnd.flags & PSND_FLAG_BGM_OFF) {
         psndBGMOff_f_d(0, 1000, FALSE);
         psndBGMOff_f_d(1, 1000, FALSE);
     }
-    if (psnd.flags & 2) {
+    if (psnd.flags & PSND_FLAG_ENV_OFF) {
         psndENVOff(0);
         psndENVOff(1);
     }
@@ -5284,7 +5284,7 @@ void psndMapChange(void) {
         psnd.reverb = 0;
     }
     strcpy(psnd.mapName, gp->currentMapName);
-    psnd.flags &= ~0x100;
+    psnd.flags &= ~PSND_FLAG_DOOR_IN;
     psndSFXAllOff();
 }
 
@@ -5309,7 +5309,7 @@ void L_psndBGM_stop(void) {
     PaperSoundEffect* sfx;
     int i;
 
-    psnd.flags &= ~0x10;
+    psnd.flags &= ~PSND_FLAG_BATTLE_START;
     for (i = 0; i < 40; i++) {
         sfx = &pssfx[i];
         if (sfx->listId != 0xFFFFFFFF && (sfx->flags & 0x10) && !(sfx->flags & 0x820)) {
@@ -5344,7 +5344,7 @@ void psndBGMMain(void) {
     s32 c;
 
     PaperSoundBGM* tmpp2;
-    if ((psnd.flags & 0x20) && !(psnd.flags & 0x40)) {
+    if ((psnd.flags & PSND_FLAG_LETTER_BOX) && !(psnd.flags & PSND_FLAG_LETTER_BOX_OFF)) {
         maxv = 0x41;
     }
     if (seqGetSeq() != SEQ_MAP_CHANGE && (gp->retraceCount & 1)) {
@@ -5560,7 +5560,7 @@ BOOL psndBGMOn_f_d(u32 flags, char *bgm_name, u32 fadetime, u32 fadeout, s32 r7)
     fo = fadeout;
     ft = fadetime;
     fl = flags;
-    if (psnd.flags & 1) {
+    if (psnd.flags & PSND_FLAG_BGM_OFF) {
         return 0;
     }
     { s32 gz = 0; if (gz != 0) { { ft = (((ft / (ft + 1)) / ((ft + 1) / ft)) / ((ft / (ft + 2)) / ((ft + 2) / ft))); } { fo = (((fo / (fo + 1)) / ((fo + 1) / fo)) / ((fo / (fo + 2)) / ((fo + 2) / fo))); } } }
@@ -5934,7 +5934,7 @@ void psndSFXMain(void) {
         fade = (p->sfxFadeTime * 127) / p->sfxFadeMax;
     }
     tvol = 100;
-    if ((psnd.flags & 0x20) && ( !(psnd.flags & 0x40)) ) {
+    if ((psnd.flags & PSND_FLAG_LETTER_BOX) && ( !(psnd.flags & PSND_FLAG_LETTER_BOX_OFF)) ) {
         tvol = 120;
     }
     if (( seqGetSeq() != SEQ_MAP_CHANGE ) && (gp->retraceCount & 1)) {
@@ -6102,7 +6102,7 @@ sgfound:
                 }
             }
         }
-        if ((psnd.flags & 0x100) && (sfx[0]->flags & 0x400)) {
+        if ((psnd.flags & PSND_FLAG_DOOR_IN) && (sfx[0]->flags & 0x400)) {
             f = e->fxId;
             if (f & 0x80000000) { SoundSSSetVolCh(sfx[0]->channel, 0);
             } else if (f & 0x40000000) { SoundSongSetVolCh(sfx[0]->channel, 0);
@@ -6138,7 +6138,7 @@ s32 __psndSFXOn(const char *name, u8 vol, u8 pan, u16 pitch, Vec *pos, u32 r8, u
     if (entry->fxId == 0) {
         return -1;
     }
-    if ((psnd.flags & 4) && (r10 == 0)) {
+    if ((psnd.flags & PSND_FLAG_NO_SFX) && (r10 == 0)) {
         return -1;
     }
     if ((((sid == 0x5B) || (sid == 0x8CA)) || (((u32) (sid - 0x1BE)) <= 1)) || (sid == 0x205)) {
@@ -6192,7 +6192,7 @@ s32 __psndSFXOn(const char *name, u8 vol, u8 pan, u16 pitch, Vec *pos, u32 r8, u
         pan = entry->pan;
     }
     sfx->flags = 0x101;
-    if (psnd.flags & 0x10) {
+    if (psnd.flags & PSND_FLAG_BATTLE_START) {
         sfx->flags |= 0x10;
     }
     if (id & 0x4000000) {
@@ -6460,7 +6460,7 @@ void psndENVMain(void) {
     f32 ang, r, a2;
     s32 rr;
     PaperSoundEnv* ent;
-    if ((psnd.flags & 0x20) && !(psnd.flags & 0x40)) lim = 80;
+    if ((psnd.flags & PSND_FLAG_LETTER_BOX) && !(psnd.flags & PSND_FLAG_LETTER_BOX_OFF)) lim = 80;
     if (seqGetSeq() != SEQ_MAP_CHANGE && (gp->retraceCount & 1)) {
         if (psnd.envVolume < lim) psnd.envVolume++;
         if (psnd.envVolume > lim) psnd.envVolume--;
@@ -6667,7 +6667,7 @@ BOOL psndENVOn_f_d(u32 flags, const char* name, u32 fadetime, s32 r6) {
     id = psndENVSearch(psenvlistname, name);
     idx = flags & 0xF;
     fade = &psnd.fade[idx];
-    if (psnd.flags & 2) return FALSE;
+    if (psnd.flags & PSND_FLAG_ENV_OFF) return FALSE;
     // FAKE: env as a byte-offset sum (same address as &psnd.envId[idx]) so the add feeds an lhzu as in the target;
     // the idx * sizeof(u16) offset is a named local o (declared after fade) shared with the unk1C/envFreq stores (same addresses)
     o = idx * sizeof(u16);

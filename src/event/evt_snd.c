@@ -19,8 +19,8 @@ void seq_gameOverInit(SequenceWork* work) {
     psndSetReverb(0);
     L_psndBGM_stop();
     psndClearFlag(PSND_FLAG_MUTE_SFX);
-    psndClearFlag(0x20);
-    psndClearFlag(0x40);
+    psndClearFlag(PSND_FLAG_LETTER_BOX);
+    psndClearFlag(PSND_FLAG_LETTER_BOX_OFF);
     N_pouchUnEquipBadgeID(0x143);
     marioStSystemLevel(4);
 }

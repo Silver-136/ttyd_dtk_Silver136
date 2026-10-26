@@ -259,7 +259,7 @@ BOOL battle_init(void) {
     npcReleaseFiledNpc();
     gp->inBattle = 1;
     evtmgrReInit();
-    psndSetFlag(0x10);
+    psndSetFlag(PSND_FLAG_BATTLE_START);
     info = &fbat->info;
     BattleInformationInit(info);
     BattleInformationSetMode(info, 0);
