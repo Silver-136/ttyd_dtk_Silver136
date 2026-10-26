@@ -444,19 +444,19 @@ static void actionCommandDisp(f32 x, f32 y) {
         Vec pos = {0.0f, 0.0f, 0.0f};
         pos.x = -288.0f + x;
         pos.y = yb = 25.0f + y;
-        iconDispGx(&pos, 0x10, ICON_08F, 1.0f);
+        iconDispGx(&pos, 0x10, ICON_AC_BAR_LEFT, 1.0f);
     }
     for (i = 1; i < n; i++) {
         Vec pos = {0.0f, 0.0f, 0.0f};
         pos.x = x + (f32)(i * 16 - 288);
         pos.y = yb;
-        iconDispGx(&pos, 0x10, ICON_08E, 1.0f);
+        iconDispGx(&pos, 0x10, ICON_AC_BAR_MIDDLE, 1.0f);
     }
     {
         Vec pos = {0.0f, 0.0f, 0.0f};
         pos.x = x + (f32)(i * 16 - 288);
         pos.y = yb;
-        iconDispGx(&pos, 0x10, ICON_090, 1.0f);
+        iconDispGx(&pos, 0x10, ICON_AC_BAR_RIGHT, 1.0f);
     }
 
     if (!(ST_FLAGS(work) & AC_SIGNAL_TIMING_FLAG_HIDE_HIT_COUNT)) {
@@ -479,18 +479,18 @@ static void actionCommandDisp(f32 x, f32 y) {
                 Vec pos = {0.0f, 0.0f, 0.0f};
                 pos.x = x + (f32)(i * 33 - 258);
                 pos.y = yb;
-                iconDispGx(&pos, 0x10, (u16)(ICON_092 + i), 1.0f);
+                iconDispGx(&pos, 0x10, (u16)(ICON_AC_LAMP_1 + i), 1.0f);
             } else {
                 Vec pos = {0.0f, 0.0f, 0.0f};
                 pos.x = x + (f32)(i * 33 - 258);
                 pos.y = yb;
-                iconDispGx(&pos, 0x10, ICON_094, 1.0f);
+                iconDispGx(&pos, 0x10, ICON_AC_LAMP_3, 1.0f);
             }
         } else {
             Vec pos = {0.0f, 0.0f, 0.0f};
             pos.x = x + (f32)(i * 33 - 258);
             pos.y = yb;
-            iconDispGx(&pos, 0x10, ICON_091, 0.5f);
+            iconDispGx(&pos, 0x10, ICON_AC_OFF, 0.5f);
         }
     }
 
@@ -500,12 +500,12 @@ static void actionCommandDisp(f32 x, f32 y) {
                 Vec pos = {0.0f, 0.0f, 0.0f};
                 pos.x = x + (f32)(i * 48 + (ST_LEAD(work) * 33 - 250));
                 pos.y = yb;
-                iconDispGx(&pos, 0x10, ICON_095, 1.0f);
+                iconDispGx(&pos, 0x10, ICON_AC_ON, 1.0f);
             } else {
                 Vec pos = {0.0f, 0.0f, 0.0f};
                 pos.x = x + (f32)(i * 48 + (ST_LEAD(work) * 33 - 250));
                 pos.y = yb;
-                iconDispGx(&pos, 0x10, ICON_091, 1.0f);
+                iconDispGx(&pos, 0x10, ICON_AC_OFF, 1.0f);
             }
         }
     } else if (!(ST_FLAGS(work) & AC_SIGNAL_TIMING_FLAG_HIDE_UPCOMING_BUTTONS)) {

@@ -353,9 +353,9 @@ static void actionCommandDisp(f32 x, f32 y) {
     for (i = 0; i < cnt; i++) {
         f32 target = gw->targets[i];
         if (target <= gw->cursor || __fabs(gw->cursor - target) <= 6.0) {
-            id = ICON_095;
+            id = ICON_AC_ON;
         } else {
-            id = ICON_091;
+            id = ICON_AC_OFF;
         }
         pos = (Vec){0.0f, 0.0f, 0.0f};
         d0 = (Vec){0.0f, 0.0f, 0.0f};

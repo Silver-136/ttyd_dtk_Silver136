@@ -708,12 +708,12 @@ void iconGX(Mtx mtx, IconEntry* entry) {
         y *= 0.6f;
         w *= 0.6f;
         hn *= 0.6f;
-        if (entry->iconId == ICON_18B) {
+        if (entry->iconId == ICON_ITEM_COIN) {
             x *= 0.8f;
             y *= 0.8f;
             w *= 0.8f;
             hn *= 0.8f;
-        } else if (entry->iconId == ICON_18D) {
+        } else if (entry->iconId == ICON_ITEM_STAR_PIECE) {
             x *= 0.9f;
             y *= 0.9f;
             w *= 0.9f;
@@ -792,8 +792,8 @@ void iconSetAlpha(const char* name, u8 alpha) {
     }
 }
 
-static u16 suuji[] = { ICON_1D9, ICON_1DB, ICON_1DD, ICON_1DF, ICON_1E1, ICON_1E3, ICON_1E5, ICON_1E7, ICON_1E9, ICON_1EB };   // 0-9
-u16 suuji_s[] = { ICON_1DA, ICON_1DC, ICON_1DE, ICON_1E0, ICON_1E2, ICON_1E4, ICON_1E6, ICON_1E8, ICON_1EA, ICON_1EC }; // 0-9 small
+static u16 suuji[] = { ICON_NUMBER_0, ICON_NUMBER_1, ICON_NUMBER_2, ICON_NUMBER_3, ICON_NUMBER_4, ICON_NUMBER_5, ICON_NUMBER_6, ICON_NUMBER_7, ICON_NUMBER_8, ICON_NUMBER_9 };   // 0-9
+u16 suuji_s[] = { ICON_NUMBER_SMALL_0, ICON_NUMBER_SMALL_1, ICON_NUMBER_SMALL_2, ICON_NUMBER_SMALL_3, ICON_NUMBER_SMALL_4, ICON_NUMBER_SMALL_5, ICON_NUMBER_SMALL_6, ICON_NUMBER_SMALL_7, ICON_NUMBER_SMALL_8, ICON_NUMBER_SMALL_9 }; // 0-9 small
 
 s32 iconNumberDispGx(Mtx mtx, s32 number, BOOL small, GXColor color) {
     s32 digits[5];

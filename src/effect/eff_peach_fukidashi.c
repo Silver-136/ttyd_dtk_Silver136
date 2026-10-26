@@ -99,7 +99,7 @@ void effPeachFukidashiDisp(CameraId cameraId, EffectEntry* effect) {
     PSMTXRotRad(rot, 'z', MTXDegToRad(work->rot));
     PSMTXConcat(mtx2, scale, out);
     PSMTXConcat(out, rot, out);
-    iconDispGx2(out, 0, ICON_1F2);
+    iconDispGx2(out, 0, ICON_FUKIDASHI);
 
     // icon inside the bubble
     _setPosition(work, 40.0f);
@@ -114,14 +114,14 @@ void effPeachFukidashiDisp(CameraId cameraId, EffectEntry* effect) {
     PSMTXConcat(mtx2, scale, mtx2);
     switch (work->flags & 3) {
         case 0:
-            iconDispGx2(mtx2, 0, ICON_1F5);
+            iconDispGx2(mtx2, 0, ICON_BUTTON_X_ALT);
             break;
         case 1:
-            iconDispGx2(mtx2, 0, ICON_1F3);
+            iconDispGx2(mtx2, 0, ICON_BUTTON_A_ALT);
             break;
         case 2:
         default:
-            iconDispGx2(mtx2, 0, ICON_1F4);
+            iconDispGx2(mtx2, 0, ICON_BUTTON_B_ALT);
             break;
     }
 

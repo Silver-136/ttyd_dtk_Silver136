@@ -296,13 +296,13 @@ static void actionCommandDisp(f32 x, f32 y) {
         Vec pos = {0.0f, 0.0f, 0.0f};
         pos.x = -288.0f + x + (f32)(ac->params[4] * 0xB0) / 100.0f;
         pos.y = 45.0f + y;
-        ICONGX(&pos, 0x10, ICON_096, 1.0f);
+        ICONGX(&pos, 0x10, ICON_AC_GAUGE_MARKER, 1.0f);
     } else {
         s32 icon;
         if (pw->gauge >= (f32)ac->params[4] && pw->gauge <= 100.0f) {
-            icon = ICON_095;
+            icon = ICON_AC_ON;
         } else {
-            icon = ICON_091;
+            icon = ICON_AC_OFF;
         }
         if (flags & AC_POWER_GAUGE_FLAG_LAMP_SHIFT_LEFT) {
             Vec pos = {0.0f, 0.0f, 0.0f};

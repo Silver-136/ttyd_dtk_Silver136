@@ -149,13 +149,13 @@ void _btlcmd_MakeActClassTable(BattleWork* wp) {
         cmd->act[0].name = msgSearch("btl_cmd_act_jump");
         switch (pouch->jumpLevel) {
             case 1:
-                cmd->act[0].icon = ICON_146;
+                cmd->act[0].icon = ICON_BTL_CMD_JUMP_LV1;
                 break;
             case 2:
-                cmd->act[0].icon = ICON_147;
+                cmd->act[0].icon = ICON_BTL_CMD_JUMP_LV2;
                 break;
             default:
-                cmd->act[0].icon = ICON_148;
+                cmd->act[0].icon = ICON_BTL_CMD_JUMP_LV3;
                 break;
         }
         num = 1;
@@ -178,7 +178,7 @@ void _btlcmd_MakeActClassTable(BattleWork* wp) {
             cmd->act[num].disableReason = 3;
         }
         cmd->act[num].name = msgSearch("btl_cmd_act_tech_party");
-        cmd->act[num].icon = ICON_14F;
+        cmd->act[num].icon = ICON_BTL_CMD_TECH_PARTY;
         num++;
     }
     if (unit->currentKind == UNIT_MARIO && pouch->hammerLevel >= 1) {
@@ -211,13 +211,13 @@ void _btlcmd_MakeActClassTable(BattleWork* wp) {
         cmd->act[num].name = msgSearch("btl_cmd_act_hammer");
         switch (pouch->hammerLevel) {
             case 1:
-                cmd->act[num].icon = ICON_149;
+                cmd->act[num].icon = ICON_BTL_CMD_HAMMER_LV1;
                 break;
             case 2:
-                cmd->act[num].icon = ICON_14A;
+                cmd->act[num].icon = ICON_BTL_CMD_HAMMER_LV2;
                 break;
             default:
-                cmd->act[num].icon = ICON_14B;
+                cmd->act[num].icon = ICON_BTL_CMD_HAMMER_LV3;
                 break;
         }
         num++;
@@ -247,7 +247,7 @@ void _btlcmd_MakeActClassTable(BattleWork* wp) {
             cmd->act[num].disableReason = 3;
         }
         cmd->act[num].name = msgSearch("btl_cmd_act_item");
-        cmd->act[num].icon = ICON_14C;
+        cmd->act[num].icon = ICON_BTL_CMD_ITEM;
         num++;
     }
     if (unit->currentKind == UNIT_MARIO && pouch->mStarPowersObtained != 0) {
@@ -263,7 +263,7 @@ void _btlcmd_MakeActClassTable(BattleWork* wp) {
             cmd->act[num].disableReason = 3;
         }
         cmd->act[num].name = msgSearch("btl_cmd_act_super_action");
-        cmd->act[num].icon = ICON_14D;
+        cmd->act[num].icon = ICON_BTL_CMD_SUPER_ACTION;
         num++;
     }
     if (!(wp->flags & BATTLE_FLAG_LECTURE_FREE)) {
@@ -275,7 +275,7 @@ void _btlcmd_MakeActClassTable(BattleWork* wp) {
             cmd->act[num].disableReason = 3;
         }
         cmd->act[num].name = msgSearch("btl_cmd_act_operation");
-        cmd->act[num].icon = ICON_14E;
+        cmd->act[num].icon = ICON_BTL_CMD_OPERATION;
         num++;
     }
     if (wp->flags & BATTLE_FLAG_LECTURE_FREE) {
@@ -283,7 +283,7 @@ void _btlcmd_MakeActClassTable(BattleWork* wp) {
         cmd->act[num].enabled = 1;
         cmd->act[num].disableReason = 0;
         cmd->act[num].name = msgSearch("btl_cmd_act_lecture_end");
-        cmd->act[num].icon = ICON_14E;
+        cmd->act[num].icon = ICON_BTL_CMD_OPERATION;
         if (wp->flags & (BATTLE_FLAG_LECTURE_NO_COMMAND | BATTLE_FLAG_LECTURE_ATTACK)) {
             cmd->act[num].enabled = 0;
             cmd->act[num].disableReason = 3;
@@ -348,11 +348,11 @@ void _btlcmd_GetCursorPtr(BattleCommand* cmd, u32 type, BattleCursor** out) {
 s32 _getJumpIconId(void) {
     switch (pouchGetPtr()->jumpLevel) {
         case 3:
-            return ICON_0A1;
+            return ICON_ITEM_ULTRA_BOOTS;
         case 2:
-            return ICON_0A0;
+            return ICON_ITEM_SUPER_BOOTS;
         default:
-            return ICON_09F;
+            return ICON_ITEM_BOOTS;
     }
 }
 #pragma dont_inline reset
@@ -361,11 +361,11 @@ s32 _getJumpIconId(void) {
 s32 _getHammerIconId(void) {
     switch (pouchGetPtr()->hammerLevel) {
         case 3:
-            return ICON_09E;
+            return ICON_ITEM_ULTRA_HAMMER;
         case 2:
-            return ICON_09D;
+            return ICON_ITEM_SUPER_HAMMER;
         default:
-            return ICON_09C;
+            return ICON_ITEM_HAMMER;
     }
 }
 #pragma dont_inline reset
@@ -586,7 +586,7 @@ s32 _btlcmd_MakeSelectWeaponTable(BattleWork* wp, s32 type) {
                 cmd->weapon[num].weapon = &defaultWeapon_Dummy_NoItem;
                 cmd->weapon[num].enabled = 0;
                 cmd->weapon[num].disableReason = 0;
-                cmd->weapon[num].icon = ICON_162;
+                cmd->weapon[num].icon = ICON_UNAVAILABLE;
                 if (cmd->weapon[num].weapon->name) {
                     cmd->weapon[num].name = msgSearch(cmd->weapon[num].weapon->name);
                 } else {
@@ -633,13 +633,13 @@ s32 _btlcmd_MakeSelectWeaponTable(BattleWork* wp, s32 type) {
 
 BattleCheckPartyEntry _checkPartyTable[8] = {
     {0, NULL, 0, NULL},
-    {UNIT_GOOMBELLA, "btl_cmd_pt_christine", ICON_155, "btl_hlp_cmd_operation_party1"},
-    {UNIT_KOOPS, "btl_cmd_pt_nokotarou", ICON_156, "btl_hlp_cmd_operation_party2"},
-    {UNIT_FLURRIE, "btl_cmd_pt_clauda", ICON_15F, "btl_hlp_cmd_operation_party3"},
-    {UNIT_YOSHI, "btl_cmd_pt_yoshi", ICON_158, "btl_hlp_cmd_operation_party4"},
-    {UNIT_VIVIAN, "btl_cmd_pt_vivian", ICON_160, "btl_hlp_cmd_operation_party5"},
-    {UNIT_BOBBERY, "btl_cmd_pt_sanders", ICON_157, "btl_hlp_cmd_operation_party6"},
-    {UNIT_MS_MOWZ, "btl_cmd_pt_chuchurina", ICON_161, "btl_hlp_cmd_operation_party7"},
+    {UNIT_GOOMBELLA, "btl_cmd_pt_christine", ICON_PARTY_GOOMBELLA, "btl_hlp_cmd_operation_party1"},
+    {UNIT_KOOPS, "btl_cmd_pt_nokotarou", ICON_PARTY_KOOPS, "btl_hlp_cmd_operation_party2"},
+    {UNIT_FLURRIE, "btl_cmd_pt_clauda", ICON_PARTY_FLURRIE, "btl_hlp_cmd_operation_party3"},
+    {UNIT_YOSHI, "btl_cmd_pt_yoshi", ICON_PARTY_YOSHI, "btl_hlp_cmd_operation_party4"},
+    {UNIT_VIVIAN, "btl_cmd_pt_vivian", ICON_PARTY_VIVIAN, "btl_hlp_cmd_operation_party5"},
+    {UNIT_BOBBERY, "btl_cmd_pt_sanders", ICON_PARTY_BOBBERY, "btl_hlp_cmd_operation_party6"},
+    {UNIT_MS_MOWZ, "btl_cmd_pt_chuchurina", ICON_PARTY_MS_MOWZ, "btl_hlp_cmd_operation_party7"},
 };
 
 void _btlcmd_UpdateSelectWeaponTable(BattleWork* wp, s32 type) {
@@ -759,7 +759,7 @@ void _btlcmd_MakeOperationTable(BattleWork* wp) {
         cmd->operation[num].type = 5;
         cmd->operation[num].enabled = 1;
         cmd->operation[num].name = msgSearch("btl_cmd_op_appeal");
-        cmd->operation[num].icon = ICON_164;
+        cmd->operation[num].icon = ICON_BTL_CMD_APPEAL;
         cmd->operation[num].disableReason = 0;
         cmd->operation[num].cost = 0;
         cmd->operation[num].help = "btl_hlp_cmd_operation_appeal";
@@ -780,7 +780,7 @@ void _btlcmd_MakeOperationTable(BattleWork* wp) {
             cmd->operation[num].disableReason = 1;
         }
         cmd->operation[num].name = msgSearch(weapon->name);
-        cmd->operation[num].icon = ICON_166;
+        cmd->operation[num].icon = ICON_BTL_CMD_CHARGE;
         cmd->operation[num].help = weapon->description;
         if (unit->mAttributeFlags & kVeiled) {
             cmd->operation[num].enabled = 0;
@@ -803,7 +803,7 @@ void _btlcmd_MakeOperationTable(BattleWork* wp) {
             cmd->operation[num].disableReason = 1;
         }
         cmd->operation[num].name = msgSearch(weapon->name);
-        cmd->operation[num].icon = ICON_167;
+        cmd->operation[num].icon = ICON_BTL_CMD_SUPER_CHARGE;
         cmd->operation[num].help = weapon->description;
         if (unit->mAttributeFlags & kVeiled) {
             cmd->operation[num].enabled = 0;
@@ -814,7 +814,7 @@ void _btlcmd_MakeOperationTable(BattleWork* wp) {
     cmd->operation[num].type = 6;
     cmd->operation[num].enabled = 1;
     cmd->operation[num].name = msgSearch("btl_cmd_op_defend");
-    cmd->operation[num].icon = ICON_165;
+    cmd->operation[num].icon = ICON_BTL_CMD_DEFEND;
     cmd->operation[num].disableReason = 0;
     cmd->operation[num].cost = 0;
     cmd->operation[num].help = "btl_hlp_cmd_operation_defend";
@@ -826,7 +826,7 @@ void _btlcmd_MakeOperationTable(BattleWork* wp) {
     cmd->operation[idx].type = 3;
     cmd->operation[idx].enabled = BtlUnit_CanActStatus(unit);
     cmd->operation[idx].name = msgSearch("btl_cmd_op_escape");
-    cmd->operation[idx].icon = ICON_163;
+    cmd->operation[idx].icon = ICON_ARROW;
     cmd->operation[idx].cost = 0;
     if (cmd->operation[idx].enabled) {
         cmd->operation[idx].disableReason = 0;
@@ -864,7 +864,7 @@ void _btlcmd_MakeMultiItemTable(BattleWork* wp) {
     cmd->multiItem[0].padE[0] = 1;
     cmd->multiItem[0].enabled = 1;
     cmd->multiItem[0].name = msgSearch("btl_cmd_act_item");
-    cmd->multiItem[0].icon = ICON_14C;
+    cmd->multiItem[0].icon = ICON_BTL_CMD_ITEM;
     cmd->multiItem[0].help = NULL;
     cmd->multiItem[0].cost = 0;
     num = 1;
@@ -901,7 +901,7 @@ void _btlcmd_MakeMultiItemTable(BattleWork* wp) {
         } else {
             cmd->multiItem[num].enabled = BtlUnit_CheckWeaponCost(unit, &badgeWeapon_3KaiItem);
             cmd->multiItem[num].name = msgSearch("in_3kai_item_p");
-            cmd->multiItem[num].icon = ICON_062;
+            cmd->multiItem[num].icon = ICON_TRIPLE_DIP_P;
             cmd->multiItem[num].help = "msg_3kai_item_p";
             cmd->multiItem[num].cost = (u8)BtlUnit_GetWeaponCost(unit, &badgeWeapon_3KaiItem);
         }
@@ -930,20 +930,20 @@ u16 _battleGetPartyIcon(s32 kind) {
             if (entry->kind == UNIT_YOSHI) {
                 switch (pouchGetPartyColor(PARTNER_YOSHI)) {
                     case 1:
-                        return ICON_159;
+                        return ICON_PARTY_YOSHI_1;
                     case 2:
-                        return ICON_15A;
+                        return ICON_PARTY_YOSHI_2;
                     case 3:
-                        return ICON_15B;
+                        return ICON_PARTY_YOSHI_3;
                     case 4:
-                        return ICON_15C;
+                        return ICON_PARTY_YOSHI_4;
                     case 5:
-                        return ICON_15D;
+                        return ICON_PARTY_YOSHI_5;
                     case 6:
-                        return ICON_15E;
+                        return ICON_PARTY_YOSHI_6;
                     case 0:
                     default:
-                        return ICON_158;
+                        return ICON_PARTY_YOSHI;
                 }
             }
             return entry->icon;
@@ -1839,7 +1839,7 @@ void BattleCommandDisplay_WeaponMultiItemCancelCheckDisp(CameraId camId, void* p
     pos.x = -40.0f;
     pos.y = -42 - wp->commandMenu.cursor[13].absPos * 25;
     pos.z = 0.0f;
-    iconDispGx(&pos, 0x14, ICON_1F0, 1.0f);
+    iconDispGx(&pos, 0x14, ICON_YUBI_CURSOR, 1.0f);
 }
 
 #pragma dont_inline on
@@ -2168,7 +2168,7 @@ void BattleCommandDisplay_TargetSelectMenuDisp(CameraId camId, void* param) {
             icon.x = screen1.x;
             icon.y = screen1.y;
             icon.z = 0.0f;
-            iconDispGx(&icon, 0x10, ICON_1EF, 1.0f);
+            iconDispGx(&icon, 0x10, ICON_TARGET_CURSOR, 1.0f);
             if (unit->currentKind == UNIT_YOSHI) {
                 name = pouchGetYoshiName();
             } else {
@@ -2182,7 +2182,7 @@ void BattleCommandDisplay_TargetSelectMenuDisp(CameraId camId, void* param) {
             icon.x = screen1.x;
             icon.y = screen1.y;
             icon.z = 0.0f;
-            iconDispGx(&icon, 0x18, ICON_1EF, 1.0f);
+            iconDispGx(&icon, 0x18, ICON_TARGET_CURSOR, 1.0f);
             if (unit->currentKind == UNIT_YOSHI) {
                 name = pouchGetYoshiName();
             } else {
@@ -2206,7 +2206,7 @@ void BattleCommandDisplay_TargetSelectMenuDisp(CameraId camId, void* param) {
                 icon.x = screen2.x;
                 icon.y = screen2.y;
                 icon.z = 0.0f;
-                iconDispGx(&icon, 0x10, ICON_1EF, 1.0f);
+                iconDispGx(&icon, 0x10, ICON_TARGET_CURSOR, 1.0f);
                 if (unit2->currentKind == UNIT_YOSHI) {
                     name = pouchGetYoshiName();
                 } else {
@@ -2220,7 +2220,7 @@ void BattleCommandDisplay_TargetSelectMenuDisp(CameraId camId, void* param) {
                 icon.x = screen2.x;
                 icon.y = screen2.y;
                 icon.z = 0.0f;
-                iconDispGx(&icon, 0x18, ICON_1EF, 1.0f);
+                iconDispGx(&icon, 0x18, ICON_TARGET_CURSOR, 1.0f);
                 if (unit2->currentKind == UNIT_YOSHI) {
                     name = pouchGetYoshiName();
                 } else {
@@ -2272,7 +2272,7 @@ void BattleCommandDisplay_ProtectPartnerSelectMenuDisp(CameraId camId, void* par
     icon.x = screen.x;
     icon.y = screen.y;
     icon.z = 0.0f;
-    iconDispGx(&icon, 0x10, ICON_1EF, 1.0f);
+    iconDispGx(&icon, 0x10, ICON_TARGET_CURSOR, 1.0f);
     len = strlen(msgSearch(unit->mKindParams->name));
     w = 6.25f * len;
     windowDispGX_Waku_col(0, (GXColor){0xFF, 0xFF, 0xFF, 0xCF}, icon.x - w, 80.0f + icon.y, 12.5f * len, 32.0f, 10.0f);

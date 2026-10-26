@@ -154,7 +154,7 @@ void bakuGameDispStar(CameraId cam, void* param);
 
 static BattleWeapon weapon = {
     "btl_wn_sac_bakugame", // name
-    ICON_198, // icon
+    ICON_SAC_BAKUGAME, // icon
     {0}, // pad_06
     0, // itemId
     "msg_bakugame", // description

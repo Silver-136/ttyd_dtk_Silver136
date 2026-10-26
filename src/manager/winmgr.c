@@ -68,9 +68,9 @@ static s16* mario_status_point_table[3];
 //.sdata
 static WinMgrWork* wp = &work;
 static u16 party_id_table[] = {1, 2, 5, 4, 6, 3, 7, 0};
-static u16 party_icon_table[] = {ICON_155, ICON_156, ICON_15F, ICON_158, ICON_160, ICON_157, ICON_161};
+static u16 party_icon_table[] = {ICON_PARTY_GOOMBELLA, ICON_PARTY_KOOPS, ICON_PARTY_FLURRIE, ICON_PARTY_YOSHI, ICON_PARTY_VIVIAN, ICON_PARTY_BOBBERY, ICON_PARTY_MS_MOWZ};
 static const char* party_labelname_table[] = {"_kur", "_nok", "_win", "_yos", "_viv", "_bom", "_chu"};
-static s32 mario_status_icon_table[] = {ICON_19F, ICON_1A0, ICON_1A1};
+static s32 mario_status_icon_table[] = {ICON_HP, ICON_FP, ICON_BP};
 static const char* mario_status_labelname_table[] = {"_hp", "_fp", "_bp"};
 #ifdef VERSION_G8ME01
 static const char* mario_status_name_table[][3] = {
@@ -545,29 +545,29 @@ void winMgrHelpDraw(WinMgrEntry* entry) {
                     PSMTXTrans(mtx, entry->x + entry->width - 12, entry->y - entry->height - 4, 0.0f);
                     PSMTXScale(scale, 0.6f, 0.6f, 0.6f);
                     PSMTXConcat(mtx, scale, mtx);
-                    iconDispGx2(mtx, 16, ICON_1B6);
+                    iconDispGx2(mtx, 16, ICON_ARROW_DOWN);
                 }
             } else if (entry->scroll + 2 == entry->lines) {
                 if ((gp->retraceCount & 31) < 20) {
                     PSMTXTrans(mtx, entry->x + entry->width - 12, entry->y - entry->height + 44, 0.0f);
                     PSMTXScale(scale, 0.6f, 0.6f, 0.6f);
                     PSMTXConcat(mtx, scale, mtx);
-                    iconDispGx2(mtx, 16, ICON_1B5);
+                    iconDispGx2(mtx, 16, ICON_ARROW_UP);
                 }
             } else if ((gp->retraceCount & 31) < 20) {
                 PSMTXTrans(mtx, entry->x + entry->width - 12, entry->y - entry->height + 44, 0.0f);
                 PSMTXScale(scale, 0.6f, 0.6f, 0.6f);
                 PSMTXConcat(mtx, scale, mtx);
-                iconDispGx2(mtx, 16, ICON_1B5);
+                iconDispGx2(mtx, 16, ICON_ARROW_UP);
                 PSMTXTrans(mtx, entry->x + entry->width - 12, entry->y - entry->height - 4, 0.0f);
                 PSMTXScale(scale, 0.6f, 0.6f, 0.6f);
                 PSMTXConcat(mtx, scale, mtx);
-                iconDispGx2(mtx, 16, ICON_1B6);
+                iconDispGx2(mtx, 16, ICON_ARROW_DOWN);
             }
             PSMTXTrans(mtx, entry->x + entry->width - 12, entry->y - entry->height + 10, 0.0f);
             PSMTXScale(scale, 0.6f, 0.6f, 0.6f);
             PSMTXConcat(mtx, scale, mtx);
-            iconDispGx2(mtx, 16, ICON_070);
+            iconDispGx2(mtx, 16, ICON_SUBSTICK_NEUTRAL);
         }
     }
 }
@@ -1236,7 +1236,7 @@ void select_disp(WinMgrEntry* entry) {
                 } else {
                     winIconInit();
                 }
-                winIconSet(ICON_092, (Vec){entry->x + 15, sel->scrollY + (ofs + (entry->y - 44 - i * 24)), 0.0f}, (Vec){0.6f, 0.6f, 0.6f}, (GXColor){0xFF, 0xFF, 0xFF, 0xC0});
+                winIconSet(ICON_AC_LAMP_1, (Vec){entry->x + 15, sel->scrollY + (ofs + (entry->y - 44 - i * 24)), 0.0f}, (Vec){0.6f, 0.6f, 0.6f}, (GXColor){0xFF, 0xFF, 0xFF, 0xC0});
             }
 #endif
             if (sel->items[i].flags & 1) {
@@ -1303,7 +1303,7 @@ void select_disp(WinMgrEntry* entry) {
         if (sel->newItem) {
             winIconInit();
             for (k = 2; k < 30; k++) {
-                winIconSet(ICON_1B7, (Vec){entry->x + k * entry->width / 31, (entry->y - 56) + sel->scrollY, 0.0f}, (Vec){0.15f, 0.15f, 0.15f}, black);
+                winIconSet(ICON_SP_ORB_1, (Vec){entry->x + k * entry->width / 31, (entry->y - 56) + sel->scrollY, 0.0f}, (Vec){0.15f, 0.15f, 0.15f}, black);
             }
         }
         GXSetScissor(left, top, wd, ht);
@@ -1349,31 +1349,31 @@ void select_disp(WinMgrEntry* entry) {
                 PSMTXTrans(mtx, entry->x + 268, entry->y - 18, 0.0f);
                 PSMTXScale(scale, 0.6f, 0.6f, 0.6f);
                 PSMTXConcat(mtx, scale, mtx);
-                iconDispGxCol(mtx, 16, ICON_211, (GXColor){0xF0, 0xF0, 0xF0, 0xFF});
-                iconDispGx(&(Vec){entry->x + 268, entry->y - 12, 0.0f}, 16, ICON_18B, 0.6f);
+                iconDispGxCol(mtx, 16, ICON_CURRENCY_PLATE, (GXColor){0xF0, 0xF0, 0xF0, 0xFF});
+                iconDispGx(&(Vec){entry->x + 268, entry->y - 12, 0.0f}, 16, ICON_ITEM_COIN, 0.6f);
                 break;
             case 13:
                 PSMTXTrans(mtx, entry->x + 268, entry->y - 18, 0.0f);
                 PSMTXScale(scale, 0.6f, 0.6f, 0.6f);
                 PSMTXConcat(mtx, scale, mtx);
-                iconDispGxCol(mtx, 16, ICON_211, (GXColor){0xF0, 0xF0, 0xF0, 0xFF});
-                iconDispGx(&(Vec){entry->x + 268, entry->y - 12, 0.0f}, 16, ICON_18D, 0.6f);
+                iconDispGxCol(mtx, 16, ICON_CURRENCY_PLATE, (GXColor){0xF0, 0xF0, 0xF0, 0xFF});
+                iconDispGx(&(Vec){entry->x + 268, entry->y - 12, 0.0f}, 16, ICON_ITEM_STAR_PIECE, 0.6f);
                 break;
             case 16:
                 PSMTXTrans(mtx, entry->x + 268, entry->y - 18, 0.0f);
                 PSMTXScale(scale, 0.6f, 0.6f, 0.6f);
                 PSMTXConcat(mtx, scale, mtx);
-                iconDispGxCol(mtx, 16, ICON_211, (GXColor){0xF0, 0xF0, 0xF0, 0xFF});
-                iconDispGx(&(Vec){entry->x + 268, entry->y - 12, 0.0f}, 16, ICON_13F, 0.6f);
+                iconDispGxCol(mtx, 16, ICON_CURRENCY_PLATE, (GXColor){0xF0, 0xF0, 0xF0, 0xFF});
+                iconDispGx(&(Vec){entry->x + 268, entry->y - 12, 0.0f}, 16, ICON_ITEM_PIANTA_TOKEN, 0.6f);
                 break;
         }
-        iconDispGx(&(Vec){sel->cursorX, sel->cursorY, 1.0f}, 20, ICON_1F0, 1.0f);
+        iconDispGx(&(Vec){sel->cursorX, sel->cursorY, 1.0f}, 20, ICON_YUBI_CURSOR, 1.0f);
         if (sel->numItems > 8 && (gp->retraceCount & 31) < 20) {
             if (sel->scrollTop != 0) {
-                iconDispGx(&(Vec){entry->x + entry->width / 2.0f, entry->y - 36, 1.0f}, 16, ICON_1B5, 0.6f);
+                iconDispGx(&(Vec){entry->x + entry->width / 2.0f, entry->y - 36, 1.0f}, 16, ICON_ARROW_UP, 0.6f);
             }
             if (sel->scrollTop != sel->numItems - 8) {
-                iconDispGx(&(Vec){entry->x + entry->width / 2.0f, entry->y - entry->height - 12, 1.0f}, 16, ICON_1B6, 0.6f);
+                iconDispGx(&(Vec){entry->x + entry->width / 2.0f, entry->y - entry->height - 12, 1.0f}, 16, ICON_ARROW_DOWN, 0.6f);
             }
         }
     }
@@ -1382,29 +1382,29 @@ void select_disp(WinMgrEntry* entry) {
 
 static inline s32 select_party_icon(u16 id) /* */ {
     s32 icon = party_icon_table[id];
-    if (icon == ICON_158) {
+    if (icon == ICON_PARTY_YOSHI) {
         switch (pouchGetPartyColor(PARTNER_YOSHI)) {
             case 0:
-                icon = ICON_158;
+                icon = ICON_PARTY_YOSHI;
                 break;
             case 1:
-                icon = ICON_159;
+                icon = ICON_PARTY_YOSHI_1;
                 break;
             case 2:
-                icon = ICON_15A;
+                icon = ICON_PARTY_YOSHI_2;
                 break;
             case 3:
-                icon = ICON_15B;
+                icon = ICON_PARTY_YOSHI_3;
                 break;
             case 4:
-                icon = ICON_15C;
+                icon = ICON_PARTY_YOSHI_4;
                 break;
             case 5:
-                icon = ICON_15D;
+                icon = ICON_PARTY_YOSHI_5;
                 break;
             case 6:
             default:
-                icon = ICON_15E;
+                icon = ICON_PARTY_YOSHI_6;
                 break;
         }
     }
@@ -1466,7 +1466,7 @@ void select_disp_party(WinMgrEntry* entry) {
                 } else {
                     winIconInit();
                 }
-                winIconSet(ICON_102, (Vec){entry->x + 253 + j * 27, sel->scrollY + (ofs + (entry->y - 44 - i * 24)), 0.0f}, (Vec){0.55f, 0.55f, 0.55f}, iconcol);
+                winIconSet(ICON_ITEM_SHINE_SPRITE, (Vec){entry->x + 253 + j * 27, sel->scrollY + (ofs + (entry->y - 44 - i * 24)), 0.0f}, (Vec){0.55f, 0.55f, 0.55f}, iconcol);
             }
         }
         GXSetScissor(left, top, wd, ht);
@@ -1498,13 +1498,13 @@ void select_disp_party(WinMgrEntry* entry) {
         winFontInit();
         winFontSetEdge((Vec){entry->x + entry->width * 3 / 5 + (entry->width * 2 / 5 - 85) / 3 + w, entry->y + 14, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white, msg);
 #endif
-        iconDispGx(&(Vec){sel->cursorX, sel->cursorY, 1.0f}, 20, ICON_1F0, 1.0f);
+        iconDispGx(&(Vec){sel->cursorX, sel->cursorY, 1.0f}, 20, ICON_YUBI_CURSOR, 1.0f);
         if (sel->numItems > 8 && (gp->retraceCount & 31) < 20) {
             if (sel->scrollTop != 0) {
-                iconDispGx(&(Vec){entry->x + entry->width / 2.0f, entry->y - 36, 1.0f}, 16, ICON_1B5, 0.6f);
+                iconDispGx(&(Vec){entry->x + entry->width / 2.0f, entry->y - 36, 1.0f}, 16, ICON_ARROW_UP, 0.6f);
             }
             if (sel->scrollTop != sel->numItems - 8) {
-                iconDispGx(&(Vec){entry->x + entry->width / 2.0f, entry->y - entry->height - 12, 1.0f}, 16, ICON_1B6, 0.6f);
+                iconDispGx(&(Vec){entry->x + entry->width / 2.0f, entry->y - entry->height - 12, 1.0f}, 16, ICON_ARROW_DOWN, 0.6f);
             }
         }
     }
@@ -1586,7 +1586,7 @@ void select_disp_mario(WinMgrEntry* entry) {
             }
             winFontSet((Vec){entry->x + 240, sel->scrollY + (ofs + (entry->y - 32 - i * 24)), 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, *col, buf);
             winIconInit();
-            winIconSet(ICON_163, (Vec){entry->x + 220, sel->scrollY + (ofs + (entry->y - 44 - i * 24)), 0.0f}, (Vec){-0.55f, 0.55f, 0.55f}, iconcol);
+            winIconSet(ICON_ARROW, (Vec){entry->x + 220, sel->scrollY + (ofs + (entry->y - 44 - i * 24)), 0.0f}, (Vec){-0.55f, 0.55f, 0.55f}, iconcol);
         }
         GXSetScissor(left, top, wd, ht);
         msg = msgSearch("msg_window_title_9");
@@ -1617,13 +1617,13 @@ void select_disp_mario(WinMgrEntry* entry) {
         winFontInit();
         winFontSetEdge((Vec){entry->x + entry->width * 3 / 5 + (entry->width * 2 / 5 - 85) / 3 + w, entry->y + 14, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white2, msg);
 #endif
-        iconDispGx(&(Vec){sel->cursorX, sel->cursorY, 1.0f}, 20, ICON_1F0, 1.0f);
+        iconDispGx(&(Vec){sel->cursorX, sel->cursorY, 1.0f}, 20, ICON_YUBI_CURSOR, 1.0f);
         if (sel->numItems > 8 && (gp->retraceCount & 31) < 20) {
             if (sel->scrollTop != 0) {
-                iconDispGx(&(Vec){entry->x + entry->width / 2.0f, entry->y - 36, 1.0f}, 16, ICON_1B5, 0.6f);
+                iconDispGx(&(Vec){entry->x + entry->width / 2.0f, entry->y - 36, 1.0f}, 16, ICON_ARROW_UP, 0.6f);
             }
             if (sel->scrollTop != sel->numItems - 8) {
-                iconDispGx(&(Vec){entry->x + entry->width / 2.0f, entry->y - entry->height - 12, 1.0f}, 16, ICON_1B6, 0.6f);
+                iconDispGx(&(Vec){entry->x + entry->width / 2.0f, entry->y - entry->height - 12, 1.0f}, 16, ICON_ARROW_DOWN, 0.6f);
             }
         }
     }
@@ -1714,17 +1714,17 @@ void select_disp_luigi(WinMgrEntry* entry) {
                 PSMTXTrans(mtx, ent->x + 268, ent->y - 18, 0.0f);
                 PSMTXScale(scale, 0.6f, 0.6f, 0.6f);
                 PSMTXConcat(mtx, scale, mtx);
-                iconDispGxCol(mtx, 16, ICON_211, (GXColor){0xF0, 0xF0, 0xF0, 0xFF});
-                iconDispGx(&(Vec){ent->x + 268, ent->y - 12, 0.0f}, 16, ICON_18B, 0.6f);
+                iconDispGxCol(mtx, 16, ICON_CURRENCY_PLATE, (GXColor){0xF0, 0xF0, 0xF0, 0xFF});
+                iconDispGx(&(Vec){ent->x + 268, ent->y - 12, 0.0f}, 16, ICON_ITEM_COIN, 0.6f);
                 break;
         }
-        iconDispGx(&(Vec){sel->cursorX, sel->cursorY, 1.0f}, 20, ICON_1F0, 1.0f);
+        iconDispGx(&(Vec){sel->cursorX, sel->cursorY, 1.0f}, 20, ICON_YUBI_CURSOR, 1.0f);
         if (sel->numItems > 8 && (gp->retraceCount & 31) < 20) {
             if (sel->scrollTop != 0) {
-                iconDispGx(&(Vec){ent->x + ent->width / 2.0f, ent->y - 36, 1.0f}, 16, ICON_1B5, 0.6f);
+                iconDispGx(&(Vec){ent->x + ent->width / 2.0f, ent->y - 36, 1.0f}, 16, ICON_ARROW_UP, 0.6f);
             }
             if (sel->scrollTop != sel->numItems - 8) {
-                iconDispGx(&(Vec){ent->x + ent->width / 2.0f, ent->y - ent->height - 12, 1.0f}, 16, ICON_1B6, 0.6f);
+                iconDispGx(&(Vec){ent->x + ent->width / 2.0f, ent->y - ent->height - 12, 1.0f}, 16, ICON_ARROW_DOWN, 0.6f);
             }
         }
     }

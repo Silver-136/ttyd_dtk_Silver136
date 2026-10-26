@@ -138,7 +138,7 @@ void yuu_03_icon_monte_disp(CameraId camera, void* param) {
                 if ((gp->retraceCount & 0x1F) < 9) {
                     pos.y += 5.0f;
                 }
-                iconDispGx(&pos, 0, ICON_1B6, 1.0f);
+                iconDispGx(&pos, 0, ICON_ARROW_DOWN, 1.0f);
             }
         }
     }

@@ -220,7 +220,7 @@ void yuu_02_icon_monte_disp(CameraId camera, void* param) {
                 if ((gp->retraceCount & 0x1F) < 9) {
                     pos.x -= 5.0f * dir;
                 }
-                iconDispGx(&pos, 0, ICON_163, -2.0f * dir);
+                iconDispGx(&pos, 0, ICON_ARROW, -2.0f * dir);
             }
         }
     }
@@ -275,7 +275,7 @@ static void monte_disp(CameraId camera, void* param) {
     if (monte != NULL) {
         for (i = 0; i < monte->num; i++) {
             if (monte[i].hidden == 0) {
-                iconDispGx(&monte[i].sub.pos, 0, ICON_13F, 1.0f);
+                iconDispGx(&monte[i].sub.pos, 0, ICON_ITEM_PIANTA_TOKEN, 1.0f);
             }
         }
     }

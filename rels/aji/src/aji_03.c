@@ -1078,7 +1078,7 @@ void icon_disp(CameraId camera, void* param) {
         PSMTXRotRad(rot, 'z', 0.0f);
         PSMTXConcat(trans, scale, trans);
         PSMTXConcat(trans, rot, trans);
-        iconDispGx2(trans, 0x10, ICON_163);
+        iconDispGx2(trans, 0x10, ICON_ARROW);
         PSMTXTrans(trans, event->userdata[1], event->userdata[2], 0.0f);
         PSMTXScale(scale, 1.5f, 1.5f, 1.5f);
         PSMTXConcat(trans, scale, trans);
@@ -1089,7 +1089,7 @@ void icon_disp(CameraId camera, void* param) {
         PSMTXRotRad(rot, 'z', 4.712389f);
         PSMTXConcat(trans, scale, trans);
         PSMTXConcat(trans, rot, trans);
-        iconDispGx2(trans, 0x10, ICON_163);
+        iconDispGx2(trans, 0x10, ICON_ARROW);
         PSMTXTrans(trans, event->userdata[1], event->userdata[2], 0.0f);
         PSMTXScale(scale, 1.5f, 1.5f, 1.5f);
         PSMTXConcat(trans, scale, trans);

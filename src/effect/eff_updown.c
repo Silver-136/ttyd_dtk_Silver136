@@ -23,7 +23,7 @@ extern void iconGetTexObj(GXTexObj* texObj, u16 iconId);
 void effUpdownMain(EffectEntry* effect);
 void effUpdownDisp(CameraId cameraId, EffectEntry* effect);
 
-static u16 icon_id[10] = { ICON_1DA, ICON_1DC, ICON_1DE, ICON_1E0, ICON_1E2, ICON_1E4, ICON_1E6, ICON_1E8, ICON_1EA, ICON_1EC };
+static u16 icon_id[10] = { ICON_NUMBER_SMALL_0, ICON_NUMBER_SMALL_1, ICON_NUMBER_SMALL_2, ICON_NUMBER_SMALL_3, ICON_NUMBER_SMALL_4, ICON_NUMBER_SMALL_5, ICON_NUMBER_SMALL_6, ICON_NUMBER_SMALL_7, ICON_NUMBER_SMALL_8, ICON_NUMBER_SMALL_9 };
 
 static u8 scale_data[30] = {
     0x78, 0x00, 0x73, 0x0D, 0x6E, 0x1C, 0x68, 0x2C, 0x63, 0x3B, 0x5E, 0x4A, 0x59, 0x58, 0x55, 0x64,
@@ -214,11 +214,11 @@ void effUpdownDisp(CameraId cameraId, EffectEntry* effect) {
     polygon(0, alpha, -8.0f, 16.0f, 16.0f, 16.0f, 1.0f, 1.0f);
 
     if (number >= 0) {
-        iconGetTexObj(&texObj, ICON_1ED);
+        iconGetTexObj(&texObj, ICON_PLUS);
         GXLoadTexObj(&texObj, GX_TEXMAP0);
         PSMTXTrans(m5, -5.0f, 0.0f, 1.0f);
     } else {
-        iconGetTexObj(&texObj, ICON_1EE);
+        iconGetTexObj(&texObj, ICON_MINUS);
         GXLoadTexObj(&texObj, GX_TEXMAP0);
         PSMTXTrans(m5, -5.0f, 7.0f, 1.0f);
     }

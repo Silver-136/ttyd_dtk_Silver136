@@ -293,14 +293,14 @@ static void actionCommandDisp(s32 unused, f32 x, f32 y) {
     by = 70.0f + y;
     pos.x = lx;
     pos.y = by;
-    iconDispGx(&pos, 16, ICON_08F, 1.0f);
+    iconDispGx(&pos, 16, ICON_AC_BAR_LEFT, 1.0f);
     lx += 16.0f;
     for (k = 1; k < end; k++) {
         Vec pos2 = {0.0f, 0.0f, -2.0f};
         pos2.x = lx;
         pos2.y = by;
         size = 16;
-        iconDispGx(&pos2, size, ICON_08E, 1.0f);
+        iconDispGx(&pos2, size, ICON_AC_BAR_MIDDLE, 1.0f);
         lx += 16.0f;
     }
 
@@ -308,7 +308,7 @@ static void actionCommandDisp(s32 unused, f32 x, f32 y) {
         Vec pos3 = {0.0f, 0.0f, -2.0f};
         pos3.x = lx;
         pos3.y = by;
-        iconDispGx(&pos3, 16, ICON_090, 1.0f);
+        iconDispGx(&pos3, 16, ICON_AC_BAR_RIGHT, 1.0f);
     }
     if ((work->actionCommands.acFlags) & AC_BUTTON_DOWN_FLAG_REVEAL_ONE_BY_ONE) {
         for (count = 0, j = 0; count < (work->actionCommands.params[2]); count++, j += 4) {

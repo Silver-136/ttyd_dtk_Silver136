@@ -78,13 +78,13 @@ BattleWeapon* chu_waza[4] = {
 };
 
 WindowPartyDt winPartyDt[7] = {
-    {1, ICON_155, "name_party0", "msg_menu_party_kuri", "EFF_m_kuriko", "W_1", "d_mario", "R_2", chri_waza},
-    {2, ICON_156, "name_party1", "msg_menu_party_noko", "EFF_m_noko", "W_1", "d_mario", "R_3", noko_waza},
-    {5, ICON_15F, "name_party4", "msg_menu_party_cloud", "EFF_m_cloud", "W_1", "d_mario", "R_4", cloud_waza},
-    {4, ICON_158, "name_party3", "msg_menu_party_yoshi", "EFF_m_yoshi", "W_1", "d_mario", "R_5", yoshi_waza},
-    {6, ICON_160, "name_party5", "msg_menu_party_vivi", "c_vivian", "PTR_S_1", "d_mario", "R_12", vivi_waza},
-    {3, ICON_157, "name_party2", "msg_menu_party_bom", "EFF_m_bomb", "W_1", "d_mario", "R_13", sand_waza},
-    {7, ICON_161, "name_party6", "msg_menu_party_chu", "EFF_m_chu", "W_1", "d_mario", "R_14", chu_waza},
+    {1, ICON_PARTY_GOOMBELLA, "name_party0", "msg_menu_party_kuri", "EFF_m_kuriko", "W_1", "d_mario", "R_2", chri_waza},
+    {2, ICON_PARTY_KOOPS, "name_party1", "msg_menu_party_noko", "EFF_m_noko", "W_1", "d_mario", "R_3", noko_waza},
+    {5, ICON_PARTY_FLURRIE, "name_party4", "msg_menu_party_cloud", "EFF_m_cloud", "W_1", "d_mario", "R_4", cloud_waza},
+    {4, ICON_PARTY_YOSHI, "name_party3", "msg_menu_party_yoshi", "EFF_m_yoshi", "W_1", "d_mario", "R_5", yoshi_waza},
+    {6, ICON_PARTY_VIVIAN, "name_party5", "msg_menu_party_vivi", "c_vivian", "PTR_S_1", "d_mario", "R_12", vivi_waza},
+    {3, ICON_PARTY_BOBBERY, "name_party2", "msg_menu_party_bom", "EFF_m_bomb", "W_1", "d_mario", "R_13", sand_waza},
+    {7, ICON_PARTY_MS_MOWZ, "name_party6", "msg_menu_party_chu", "EFF_m_chu", "W_1", "d_mario", "R_14", chu_waza},
 };
 
 void winPartyInit(WindowWork* wp) {
@@ -188,26 +188,26 @@ void winPartyInit(WindowWork* wp) {
     wp->party.wazaCount = pouchGetPartyAttackLv(winPartyDt[wp->party.dtIdx].partyId) + 2;
     switch (pouchGetPartyColor(PARTNER_YOSHI)) {
         case 0:
-            winPartyDt[3].nameMsgId = ICON_158;
+            winPartyDt[3].iconId = ICON_PARTY_YOSHI;
             break;
         case 1:
-            winPartyDt[3].nameMsgId = ICON_159;
+            winPartyDt[3].iconId = ICON_PARTY_YOSHI_1;
             break;
         case 2:
-            winPartyDt[3].nameMsgId = ICON_15A;
+            winPartyDt[3].iconId = ICON_PARTY_YOSHI_2;
             break;
         case 3:
-            winPartyDt[3].nameMsgId = ICON_15B;
+            winPartyDt[3].iconId = ICON_PARTY_YOSHI_3;
             break;
         case 4:
-            winPartyDt[3].nameMsgId = ICON_15C;
+            winPartyDt[3].iconId = ICON_PARTY_YOSHI_4;
             break;
         case 5:
-            winPartyDt[3].nameMsgId = ICON_15D;
+            winPartyDt[3].iconId = ICON_PARTY_YOSHI_5;
             break;
         case 6:
         default:
-            winPartyDt[3].nameMsgId = ICON_15E;
+            winPartyDt[3].iconId = ICON_PARTY_YOSHI_6;
             break;
     }
 }
@@ -410,7 +410,7 @@ void winPartyDisp(s32 camId, void* param, s32 idx) {
     winIconInit();
     bx = 60.0f + bx;
     fy = 4.0f + by;
-    winIconSet(ICON_19F, (Vec){bx, fy, 0.0f}, (Vec){0.82f, 0.82f, 0.82f}, white);
+    winIconSet(ICON_HP, (Vec){bx, fy, 0.0f}, (Vec){0.82f, 0.82f, 0.82f}, white);
     for (i = 0; i < ( wp->party.wazaCount - 2) ; i++) {
         winIconSet(itemDataTable[0x57].icon_id, (Vec){bx + (( f32)(i * 34) ), iy = 4.0f + (by - 32.0f), 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, white2);
     }
@@ -584,7 +584,7 @@ void winPartyDisp(s32 camId, void* param, s32 idx) {
     fy = x + (250.0f - w1);
     winFontSet((Vec){fy, y - 100.0f, 0.0f}, (Vec){0.7f, 0.7f, 0.7f}, black, msgSearch("msg_menu_party_waza_kakunin"));
     winIconInit();
-    winIconSet(ICON_1F5, (Vec){fy - 20.0f, y - 110.0f, 0.0f}, (Vec){0.7f, 0.7f, 0.7f}, white);
+    winIconSet(ICON_BUTTON_X_ALT, (Vec){fy - 20.0f, y - 110.0f, 0.0f}, (Vec){0.7f, 0.7f, 0.7f}, white);
     winWazaGX(wp, 0, x - 5.0f, wy = 50.0f + y, 260.0f, 144.0f);
     winFontInit();
     w1 = 0.8f * FontGetMessageWidth(msgSearch("msg_menu_party_waza"));

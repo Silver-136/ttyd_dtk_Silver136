@@ -87,9 +87,9 @@ WinMgrDesc unitwin_desc[3] = {
 };
 
 static s32 party_id_table[8] = {1, 2, 5, 4, 6, 3, 7, 0};
-static s32 party_icon_table[7] = {ICON_155, ICON_156, ICON_15F, ICON_158, ICON_160, ICON_157, ICON_161};
+static s32 party_icon_table[7] = {ICON_PARTY_GOOMBELLA, ICON_PARTY_KOOPS, ICON_PARTY_FLURRIE, ICON_PARTY_YOSHI, ICON_PARTY_VIVIAN, ICON_PARTY_BOBBERY, ICON_PARTY_MS_MOWZ};
 static const char* party_labelname_table[7] = {("_kur"), ("_nok"), ("_win"), ("_yos"), ("_viv"), ("_bom"), ("_chu")};
-static s32 mario_status_icon_table[3] = {ICON_19F, ICON_1A0, ICON_1A1};
+static s32 mario_status_icon_table[3] = {ICON_HP, ICON_FP, ICON_BP};
 static const char* mario_status_labelname_table[3] = {("_hp"), ("_fp"), ("_bp")};
 static const char* mario_status_name_table[3] = {("\202g\202o"), ("\202e\202o"), ("\202a\202o")};
 static s32 mario_status_henka_table[3] = {5, 5, 3};
@@ -196,7 +196,7 @@ USER_FUNC(evt_unitwin_alloc) {
     } else {
         wp->flags &= ~0x80;
     }
-    iconEntry2D("yubicursor_2", ICON_1F0);
+    iconEntry2D("yubicursor_2", ICON_YUBI_CURSOR);
     iconFlagOn("yubicursor_2", 2);
     iconFlagOn("yubicursor_2", 4);
     if (!(wp->flags & 0x80)) {
@@ -423,29 +423,29 @@ USER_FUNC(evt_unitwin_main_func) {
 }
 
 static inline s32 unitwin_party_icon(s32 icon) {
-    if (icon == ICON_158) {
+    if (icon == ICON_PARTY_YOSHI) {
         switch (pouchGetPartyColor(PARTNER_YOSHI)) {
             case 0:
-                icon = ICON_158;
+                icon = ICON_PARTY_YOSHI;
                 break;
             case 1:
-                icon = ICON_159;
+                icon = ICON_PARTY_YOSHI_1;
                 break;
             case 2:
-                icon = ICON_15A;
+                icon = ICON_PARTY_YOSHI_2;
                 break;
             case 3:
-                icon = ICON_15B;
+                icon = ICON_PARTY_YOSHI_3;
                 break;
             case 4:
-                icon = ICON_15C;
+                icon = ICON_PARTY_YOSHI_4;
                 break;
             case 5:
-                icon = ICON_15D;
+                icon = ICON_PARTY_YOSHI_5;
                 break;
             case 6:
             default:
-                icon = ICON_15E;
+                icon = ICON_PARTY_YOSHI_6;
                 break;
         }
     }
@@ -548,17 +548,17 @@ void evt_unitwin_disp_func(CameraId cameraId, void* param) {
         PSMTXScale(scale, 0.7f, 0.7f, 0.7f);
         PSMTXConcat(mtx, scale, mtx);
         if (wp->flags & 0x1000) {
-            iconDispGx2(mtx, 0x10, ICON_18B);
+            iconDispGx2(mtx, 0x10, ICON_ITEM_COIN);
             coin = pouchGetCoin();
         } else if (wp->flags & 0x4000) {
-            iconDispGx2(mtx, 0x10, ICON_102);
+            iconDispGx2(mtx, 0x10, ICON_ITEM_SHINE_SPRITE);
             coin = pouchGetSuperCoin();
         } else {
-            iconDispGx2(mtx, 0x10, ICON_18D);
+            iconDispGx2(mtx, 0x10, ICON_ITEM_STAR_PIECE);
             coin = pouchGetStarPiece();
         }
         PSMTXTrans(mtx, -192.0f, -113.0f, 0.0f);
-        iconDispGx2(mtx, 0x10, ICON_1D6);
+        iconDispGx2(mtx, 0x10, ICON_TIMES);
         PSMTXTrans(mtx, -126.0f, -113.0f, 0.0f);
         iconNumberDispGx(mtx, wp->coin, 0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
         if ((delta = coin - wp->coin)) {
@@ -611,7 +611,7 @@ void evt_unitwin_disp_func(CameraId cameraId, void* param) {
 
         windowDispGX_Waku_col(0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF}, -250.0f, -130.0f, 150.0f, 45.0f, 20.0f);
         PSMTXTrans(mtx, -220.0f, -172.0f, 0.0f);
-        iconDispGx2(mtx, 0x10, ICON_140);
+        iconDispGx2(mtx, 0x10, ICON_ITEM_LOTTERY_PICK);
         sprintf(buf, "%04d", lotteryGetPtr()->number);
         for (i = 0; i < 4; i++) {
             PSMTXTrans(mtx, 20.0f * i + -126.0f - 60.0f, -168.0f, 0.0f);
@@ -729,13 +729,13 @@ void evt_unitwin_disp_func(CameraId cameraId, void* param) {
                 PSMTXTrans(mtx, 244.0f, 82.0f, 0.0f);
                 PSMTXScale(scale, 0.6f, 0.6f, 0.6f);
                 PSMTXConcat(mtx, scale, mtx);
-                iconDispGxCol(mtx, 0x10, ICON_211, (GXColor){0xF0, 0xF0, 0xF0, 0xFF});
+                iconDispGxCol(mtx, 0x10, ICON_CURRENCY_PLATE, (GXColor){0xF0, 0xF0, 0xF0, 0xFF});
                 if (wp->mode == 13) {
-                    icon = ICON_18D;
+                    icon = ICON_ITEM_STAR_PIECE;
                 } else if (wp->mode == 16) {
-                    icon = ICON_13F;
+                    icon = ICON_ITEM_PIANTA_TOKEN;
                 } else {
-                    icon = ICON_18B;
+                    icon = ICON_ITEM_COIN;
                 }
                 {
                     iconDispGx(&(Vec){244.0f, 86.0f, 0.0f}, 0x10, icon, 0.6f);
@@ -891,9 +891,9 @@ void evt_unitwin_disp_func(CameraId cameraId, void* param) {
                 PSMTXTrans(mtx, 244.0f, 82.0f, 0.0f);
                 PSMTXScale(scale, 0.6f, 0.6f, 0.6f);
                 PSMTXConcat(mtx, scale, mtx);
-                iconDispGxCol(mtx, 0x10, ICON_211, (GXColor){0xF0, 0xF0, 0xF0, 0xFF});
+                iconDispGxCol(mtx, 0x10, ICON_CURRENCY_PLATE, (GXColor){0xF0, 0xF0, 0xF0, 0xFF});
                 {
-                    iconDispGx(&(Vec){244.0f, 86.0f, 0.0f}, 0x10, ICON_18B, 0.6f);
+                    iconDispGx(&(Vec){244.0f, 86.0f, 0.0f}, 0x10, ICON_ITEM_COIN, 0.6f);
                 }
             }
             GXGetScissor(&sl, &st, &sw, &sh);
@@ -1100,9 +1100,9 @@ void evt_unitwin_disp_func(CameraId cameraId, void* param) {
                     sprintf(msgName, "%s_levelup%s", help, mario_status_labelname_table[i]);
                     v = *mario_status_point_table[i] + mario_status_henka_table[i] * 2;
                     if (v > 0) {
-                        icon = ICON_1B5;
+                        icon = ICON_ARROW_UP;
                     } else {
-                        icon = ICON_162;
+                        icon = ICON_UNAVAILABLE;
                         bob = 0;
                     }
                     {
@@ -1114,9 +1114,9 @@ void evt_unitwin_disp_func(CameraId cameraId, void* param) {
                 } else {
                     v = *mario_status_point_table[i] - mario_status_henka_table[i];
                     if (v > 0) {
-                        icon = ICON_1B6;
+                        icon = ICON_ARROW_DOWN;
                     } else {
-                        icon = ICON_162;
+                        icon = ICON_UNAVAILABLE;
                         bob = 0;
                     }
                     {

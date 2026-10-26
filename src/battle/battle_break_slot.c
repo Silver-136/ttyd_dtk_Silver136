@@ -25,6 +25,7 @@
 #include "battle/battle_message.h"
 #include "evt/evt_eff.h"
 #include "battle/battle_sub.h"
+#include "icon_ids.h"
 
 typedef struct { s32 v[8]; } SlotCards8;
 typedef struct { s32 v[5]; } SlotCards5;
@@ -189,11 +190,9 @@ EVT_END()
 // US battle textures are 0x16 higher
 u16 tex_id_list_small[5] = {0x41, 0x43, 0x45, 0x44, 0x42};
 u16 tex_id_list_big[5] = {0x46, 0x48, 0x4A, 0x49, 0x47};
-#define BBS_ICON_OFS 8
 #else
 u16 tex_id_list_small[5] = {0x2B, 0x2D, 0x2F, 0x2E, 0x2C};
 u16 tex_id_list_big[5] = {0x30, 0x32, 0x34, 0x33, 0x31};
-#define BBS_ICON_OFS 0
 #endif
 
 EVT_BEGIN(star_effect)
@@ -791,7 +790,7 @@ void BattleBreakSlotDispReel(CameraId camId, void* param) {
     for (; i < 3; i++, reel++) {
         if ((reel->flags & 1) && reel->state >= 1 && reel->state <= 4) {
             PSMTXTrans(trans, 42.0f * i + 226.0f, 122.0f, 0.0f);
-            iconDispGxCol(trans, 0x10, 0x1D4 + BBS_ICON_OFS, (GXColor){0xFF, 0xFF, 0xFF, 0xD0});
+            iconDispGxCol(trans, 0x10, ICON_1D4, (GXColor){0xFF, 0xFF, 0xFF, 0xD0});
         }
     }
 

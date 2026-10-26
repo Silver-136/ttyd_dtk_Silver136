@@ -342,19 +342,19 @@ static void actionCommandDisp(f32 x, f32 y, s32 unused) {
         p.x = -288.0f + x;
         yy = 25.0f + y;
         p.y = yy;
-        iconDispGx(&p, 0x10, ICON_08F, 1.0f);
+        iconDispGx(&p, 0x10, ICON_AC_BAR_LEFT, 1.0f);
     }
     for (i = 1; i < n; i++) {
         Vec p = {0.0f, 0.0f, 0.0f};
         p.x = x + (spacing * (f32)i + -288.0f);
         p.y = yy;
-        iconDispGx(&p, 0x10, ICON_08E, 1.0f);
+        iconDispGx(&p, 0x10, ICON_AC_BAR_MIDDLE, 1.0f);
     }
     {
         Vec p = {0.0f, 0.0f, 0.0f};
         p.x = x + (spacing * (f32)i + -288.0f);
         p.y = yy;
-        iconDispGx(&p, 0x10, ICON_090, 1.0f);
+        iconDispGx(&p, 0x10, ICON_AC_BAR_RIGHT, 1.0f);
     }
     stepX = 33.0f;
     if (ac->acFlags & AC_STICK_KEEP_LEFT_FLAG_COMPACT_GAUGE) {
@@ -367,29 +367,29 @@ static void actionCommandDisp(f32 x, f32 y, s32 unused) {
                 Vec p = {0.0f, 0.0f, 0.0f};
                 p.x = x + (stepX * (f32)j + -258.0f);
                 p.y = yy;
-                iconDispGx(&p, 0x10, (u16)(ICON_092 + j), 1.0f);
+                iconDispGx(&p, 0x10, (u16)(ICON_AC_LAMP_1 + j), 1.0f);
             } else {
                 Vec p = {0.0f, 0.0f, 0.0f};
                 p.x = x + (stepX * (f32)j + -258.0f);
                 p.y = yy;
-                iconDispGx(&p, 0x10, ICON_094, 1.0f);
+                iconDispGx(&p, 0x10, ICON_AC_LAMP_3, 1.0f);
             }
         } else {
             Vec p = {0.0f, 0.0f, 0.0f};
             p.x = x + (stepX * (f32)j + -258.0f);
             p.y = yy;
-            iconDispGx(&p, 0x10, ICON_091, 0.5f);
+            iconDispGx(&p, 0x10, ICON_AC_OFF, 0.5f);
         }
     }
     if (idx < count) {
         Vec p = {0.0f, 0.0f, 0.0f};
         p.x = x + (stepX * (f32)m + -250.0f);
         p.y = yy;
-        iconDispGx(&p, 0x10, ICON_091, 1.0f);
+        iconDispGx(&p, 0x10, ICON_AC_OFF, 1.0f);
     } else {
         Vec p = {0.0f, 0.0f, 0.0f};
         p.x = x + (stepX * (f32)m + -250.0f);
         p.y = yy;
-        iconDispGx(&p, 0x10, ICON_095, 1.0f);
+        iconDispGx(&p, 0x10, ICON_AC_ON, 1.0f);
     }
 }

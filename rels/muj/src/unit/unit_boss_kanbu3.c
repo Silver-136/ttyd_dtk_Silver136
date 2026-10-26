@@ -366,11 +366,7 @@ static EVT_BEGIN(damage_event)
                     WAIT_FRAMES(90)
                     GOTO(10)
                 END_IF
-#ifdef VERSION_G8ME01
                 ELSE
-#else
-            ELSE
-#endif
                 GOTO(10)
             END_IF
             CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_KANBU_CALL_ON1"), EVT_NULLPTR, 0, EVT_NULLPTR)
@@ -830,11 +826,7 @@ static EVT_BEGIN(normal_attack_event)
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_GetFirstAttackTarget, LW(3), LW(4))
-#ifdef VERSION_G8ME01
         ELSE
-#else
-    ELSE
-#endif
         CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
         CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(9))
         CALL(btlevtcmd_ChoiceSamplingEnemy, LW(9), LW(3), LW(4))

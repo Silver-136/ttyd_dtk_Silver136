@@ -600,11 +600,7 @@ EVT_BEGIN(partySandersAttack_NormalAttack)
             CALL(btlevtcmd_AcGetOutputParam, 0, LW(1))
             IF_INT_EQUAL(LW(1), 0)
                 SET_VALUE(LW(0), 5)
-#ifdef VERSION_G8ME01
                 ELSE
-#else
-            ELSE
-#endif
                 BREAK_LOOP
             END_IF
             WAIT_FRAMES(1)
@@ -678,11 +674,7 @@ EVT_BEGIN(partySandersAttack_NormalAttack)
     CALL(btlevtcmd_GetResultAC, LW(6))
     IF_BITS_SET(LW(6), 2)
         CALL(evt_eff64, STRING(""), STRING("bomb_n64"), 1, LW(0), LW(1), LW(2), 0, 0, 0, 0, 0, 0, 0, 0)
-#ifdef VERSION_G8ME01
         ELSE
-#else
-    ELSE
-#endif
         CALL(evt_eff64, STRING(""), STRING("bomb_n64"), 0, LW(0), LW(1), LW(2), 0, 0, 0, 0, 0, 0, 0, 0)
     END_IF
     CALL(evt_btl_camera_shake_h, 0, 5, 0, 10, 13)
@@ -706,11 +698,7 @@ EVT_BEGIN(partySandersAttack_NormalAttack)
         CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
         CALL(btlevtcmd_ACSuccessEffect, LW(6), LW(0), LW(1), LW(2))
         CALL(btlevtcmd_AudienceDeclareACResult, LW(12), LW(6))
-#ifdef VERSION_G8ME01
         ELSE
-#else
-    ELSE
-#endif
         CALL(btlevtcmd_CommandCheckDamage, UNIT_ID_SELF, LW(3), LW(4), DAMAGE_RESULT_FINAL_HIT, LW(5))
         CALL(btlevtcmd_AudienceDeclareACResult, LW(12), -1)
     END_IF
@@ -798,11 +786,7 @@ EVT_BEGIN(partySandersAttack_NormalAttack)
         END_SIBLING_EVENT
         CALL(btlevtcmd_WaitEventEnd, LW(15))
         WAIT_FRAMES(40)
-#ifdef VERSION_G8ME01
         ELSE
-#else
-    ELSE
-#endif
         CALL(evt_audience_acrobat_notry)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("F_1"))
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BTL_THUNDERS_DOWN1"), EVT_NULLPTR, 0, EVT_NULLPTR)
@@ -1020,20 +1004,12 @@ EVT_BEGIN(partySandersAttack_SuperBombAttack)
             CALL(btlevtcmd_ACSuccessEffect, LW(6), LW(0), LW(1), LW(2))
             CALL(btlevtcmd_CommandGetWeaponAddress, UNIT_ID_SELF, LW(0))
             CALL(btlevtcmd_AudienceDeclareACResult, LW(0), LW(6))
-#ifdef VERSION_G8ME01
             ELSE
-#else
-        ELSE
-#endif
             CALL(btlevtcmd_CommandCheckDamage, UNIT_ID_SELF, LW(3), LW(4), DAMAGE_RESULT_FINAL_HIT, LW(5))
             CALL(btlevtcmd_CommandGetWeaponAddress, UNIT_ID_SELF, LW(0))
             CALL(btlevtcmd_AudienceDeclareACResult, LW(0), -1)
         END_IF
-#ifdef VERSION_G8ME01
         ELSE
-#else
-    ELSE
-#endif
         CALL(btlevtcmd_CommandCheckDamage, UNIT_ID_SELF, LW(3), LW(4), DAMAGE_RESULT_FINAL_HIT, LW(5))
         CALL(btlevtcmd_CommandGetWeaponAddress, UNIT_ID_SELF, LW(0))
         CALL(btlevtcmd_AudienceDeclareACResult, LW(0), -1)
@@ -1129,11 +1105,7 @@ EVT_BEGIN(partySandersAttack_SuperBombAttack)
         END_SIBLING_EVENT
         CALL(btlevtcmd_WaitEventEnd, LW(15))
         WAIT_FRAMES(40)
-#ifdef VERSION_G8ME01
         ELSE
-#else
-    ELSE
-#endif
         CALL(evt_audience_acrobat_notry)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("F_1"))
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BTL_THUNDERS_DOWN1"), EVT_NULLPTR, 0, EVT_NULLPTR)
@@ -1191,11 +1163,7 @@ EVT_BEGIN(partySandersAttack_CounterSet)
     CALL(btlevtcmd_StopAC)
     IF_BITS_CLEAR(LW(0), 2)
         CALL(btlevtcmd_AudienceDeclareACResult, LW(12), -1)
-#ifdef VERSION_G8ME01
         ELSE
-#else
-    ELSE
-#endif
         CALL(btlevtcmd_AcGetOutputParam, 0, LW(0))
         SUBTRACT(LW(0), 1)
         CALL(btlevtcmd_GetResultPrizeLv, -1, LW(0), LW(6))

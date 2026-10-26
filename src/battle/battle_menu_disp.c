@@ -240,7 +240,7 @@ void DrawMainIconHukidasi(BattleSubMenu* menu, BattleCommandAct* act, Mtx m, f32
     PSMTXConcat(out, scl, out);
     icon = act->icon;
     if (!icon) {
-        icon = ICON_18B;
+        icon = ICON_ITEM_COIN;
     }
     if (act->enabled == 1) {
         ((void (*)(Mtx, s16, u16))iconDispGx2)(out, 0x10, icon);
@@ -342,7 +342,7 @@ void DrawMainIconCircle(BattleSubMenu* menu, BattleCommandAct* act, Mtx m, Vec v
     PSMTXConcat(out, trn, out);
     icon = act->icon;
     if (!icon) {
-        icon = ICON_18B;
+        icon = ICON_ITEM_COIN;
     }
     if (act->enabled == 1) {
         iconDispGxCol(out, 0x10, icon, (GXColor){c, c, c, 0xFF});
@@ -435,7 +435,7 @@ void DrawSubIconSub(BattleSubMenu* menu, s32 i, Mtx m, s32 enabled, s32 icon, co
     PSMTXConcat(m, trn, out);
     PSMTXConcat(out, scl, out);
     if (!(( u16)icon) ) {
-        icon = ICON_18B;
+        icon = ICON_ITEM_COIN;
     }
     if (enabled == 1) {
         iconDispGxCol(out, 0x10, icon, (GXColor){0xFF, 0xFF, 0xFF, alpha});
@@ -950,13 +950,13 @@ void DrawMenuCursorAndScrollArrow(const Vec* v) {
         pos.x = 155.0f + v->x;
         pos.y = 15.0f + v->y + bob;
         pos.z = 0.0f;
-        iconDispGx(&pos, 0x10, ICON_1B5, 0.75f);
+        iconDispGx(&pos, 0x10, ICON_ARROW_UP, 0.75f);
     }
     if (cursor->relPos < cursor->count - 6) {
         pos.x = 155.0f + v->x;
         pos.y = 20.0f + v->y - 164.0f - bob;
         pos.z = 0.0f;
-        iconDispGx(&pos, 0x10, ICON_1B6, 0.75f);
+        iconDispGx(&pos, 0x10, ICON_ARROW_DOWN, 0.75f);
     }
     n = cursor->absPos - cursor->relPos;
     if (n < 0) {
@@ -968,7 +968,7 @@ void DrawMenuCursorAndScrollArrow(const Vec* v) {
     pos.x = v->x;
     pos.y = v->y - (f32)n * 24.0f;
     pos.z = 0.0f;
-    iconDispGx(&pos, 0x14, ICON_1F0, 1.0f);
+    iconDispGx(&pos, 0x14, ICON_YUBI_CURSOR, 1.0f);
 }
 
 void InitSubMenuCommonProcess(BattleSubMenu** out, BattleCursor** mainCursor, BattleCursor* cursor) {
@@ -1733,10 +1733,12 @@ void DrawOperationWin(void) {
         idx = (s32)menu->scrollPos + i;
         if (idx < cursor->count) {
             enabled[i] = items[idx].enabled;
+            // BUG: tests row i of the list instead of row idx, so once the list scrolls the coin fallback follows the
+            // wrong entry (retail code).
             if (items[i].icon) {
                 icons[i] = items[idx].icon;
             } else {
-                icons[i] = ICON_18B;
+                icons[i] = ICON_ITEM_COIN;
             }
             names[i] = items[idx].name;
             costs[i] = items[idx].cost;
@@ -1808,7 +1810,7 @@ void DrawChangePartyWin(void) {
             if (items[idx].icon) {
                 icons[i] = items[idx].icon;
             } else {
-                icons[i] = ICON_18B;
+                icons[i] = ICON_ITEM_COIN;
             }
             names[i] = items[idx].name;
             costs[i] = 0;
@@ -1880,7 +1882,7 @@ void DrawMultiItemWin(void) {
             if (items[idx].icon) {
                 icons[i] = items[idx].icon;
             } else {
-                icons[i] = ICON_18B;
+                icons[i] = ICON_ITEM_COIN;
             }
             names[i] = items[idx].name;
             costs[i] = items[idx].cost;

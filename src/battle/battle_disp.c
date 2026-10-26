@@ -1271,13 +1271,13 @@ void _btlStockExpDisp(CameraId camId, void* param) {
             Vec pos = {0.0f, 0.0f, -100.0f};
             pos.x = 308.0f + x - 3.5f - 13.0f * i;
             pos.y = y - 220.0f;
-            iconDispGx(&pos, 0x10, ICON_18C, 0.35f);
+            iconDispGx(&pos, 0x10, ICON_STAR_POINT, 0.35f);
         }
         for (i = 0; i < tens; i++) {
             Vec pos = {0.0f, 0.0f, -100.0f};
             pos.x = 4.0f + (308.0f + x - 10.0f - 20.0f * i);
             pos.y = 16.0f + (y - 220.0f);
-            iconDispGx(&pos, 0x10, ICON_18C, 0.5f);
+            iconDispGx(&pos, 0x10, ICON_STAR_POINT, 0.5f);
         }
     }
 }

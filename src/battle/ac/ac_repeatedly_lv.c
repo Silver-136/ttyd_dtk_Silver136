@@ -470,7 +470,7 @@ static void actionCommandDisp(f32 x, f32 y) {
         Vec pos = {0.0f, 0.0f, 0.0f};
         pos.x = -288.0f + x + (f32)(ac->params[6] * 0xB0) / 100.0f;
         pos.y = 45.0f + y;
-        RL_IconDisp(&pos, 0x10, ICON_096, 1.0f);
+        RL_IconDisp(&pos, 0x10, ICON_AC_GAUGE_MARKER, 1.0f);
     }
     if (ac->acFlags & AC_REPEATEDLY_LV_FLAG_SHOW_LEVEL_NUMBER_UNUSED) {
         Mtx m3, m1, m2;

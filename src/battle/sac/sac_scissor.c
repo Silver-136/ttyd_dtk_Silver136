@@ -120,7 +120,7 @@ EvtWord marioAttackEvent_Scissor[300];
 
 BattleWeapon weapon_scissor = {
     "btl_wn_sac_scissor", // name
-    ICON_19C, // icon
+    ICON_SAC_SCISSOR, // icon
     {0}, // pad_06
     0, // itemId
     "msg_scissor", // description
@@ -778,7 +778,7 @@ void star_disp2D_sub(s32 idx, s32 alpha) {
     PSMTXConcat(rotX, rotMtx, rotMtx);
     PSMTXConcat(scaleMtx, rotMtx, rotMtx);
     PSMTXConcat(transMtx, rotMtx, rotMtx);
-    iconDispGxCol(rotMtx, 0x10, ICON_19C, col);
+    iconDispGxCol(rotMtx, 0x10, ICON_SAC_SCISSOR, col);
 }
 
 s32 scissor_timer_get(EventEntry* evt) {

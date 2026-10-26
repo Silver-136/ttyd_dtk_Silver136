@@ -472,14 +472,14 @@ static void disp_proc(CameraId cameraId, void* param) {
         Vec pos = cursorPos;
         pos.x = 15.0f + left;
         pos.y = y - 24.0f;
-        iconDispGx(&pos, 0x10, ICON_123, 0.8f);
+        iconDispGx(&pos, 0x10, ICON_ITEM_CHAMPS_BELT, 0.8f);
     }
     GXSetScissor(0, 0, 608, 480);
     if (dwp->page > 0) {
         {
             Vec pos = upArrowPos;
             pos.x = left + winW;
-            iconDispGx(&pos, 0x10, ICON_205, -1.0f);
+            iconDispGx(&pos, 0x10, ICON_PAGE_ARROW, -1.0f);
         }
         {
             Vec pos = upButtonPos;
@@ -491,7 +491,7 @@ static void disp_proc(CameraId cameraId, void* param) {
         {
             Vec pos = downArrowPos;
             pos.x = left + winW;
-            iconDispGx(&pos, 0x10, ICON_205, 1.0f);
+            iconDispGx(&pos, 0x10, ICON_PAGE_ARROW, 1.0f);
         }
         {
             Vec pos = downButtonPos;

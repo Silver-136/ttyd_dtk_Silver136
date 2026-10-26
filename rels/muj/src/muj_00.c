@@ -3525,26 +3525,15 @@ EVT_BEGIN(muj_00_init_evt)
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 268)
         IF_INT_EQUAL(GSWF(3125), 1)
             CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_STG5_GHOST_SHIP1"))
-#ifdef VERSION_G8ME01
             ELSE
             CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG5_MUJ1"))
         END_IF
         ELSE
-#else
-        ELSE
-            CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG5_MUJ1"))
-        END_IF
-    ELSE
-#endif
         IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, 231)
             IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, 267)
                 IF_INT_EQUAL(GSW_STORY_PROGRESS, 260)
                     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_BOSS_STG5_KORTESS1"))
-#ifdef VERSION_G8ME01
                     ELSE
-#else
-                ELSE
-#endif
                     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG5_MUJ1"))
                 END_IF
             END_IF
@@ -3601,21 +3590,13 @@ EVT_BEGIN(muj_00_init_evt)
     IF_INT_LESS_OR_EQUAL(GSW_STORY_PROGRESS, 255)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ana_before"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_iwa_s011"), MAP_OBJ_FLAG_HIDDEN)
-#ifdef VERSION_G8ME01
         ELSE
-#else
-    ELSE
-#endif
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ana_after"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_iwa_09"), 1, 0)
     END_IF
     IF_INT_LESS(GSW_STORY_PROGRESS, 260)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_iwa_before"), MAP_OBJ_FLAG_HIDDEN)
-#ifdef VERSION_G8ME01
         ELSE
-#else
-    ELSE
-#endif
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_iwa_after"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 257)

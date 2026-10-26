@@ -861,7 +861,7 @@ static void disp_2D(CameraId cam, void* param) {
                 PSMTXScale(sc, 0.75f, 0.75f, 0.75f);
                 PSMTXTrans(tr, x, 40.0f + (w->offsetY + (w->gaugePos.y - 18.0f + t->off.y)), w->gaugePos.z + t->off.z);
                 PSMTXConcat(tr, sc, m);
-                iconDispGxCol(m, 0x10, ICON_095, col);
+                iconDispGxCol(m, 0x10, ICON_AC_ON, col);
             } else if (t->type == 2) {
                 PSMTXScale(sc, 1.0f, 1.0f, 1.0f);
                 PSMTXTrans(tr, x, 40.0f + (w->offsetY + (w->gaugePos.y + t->off.y)), w->gaugePos.z + t->off.z);
@@ -883,9 +883,9 @@ static void disp_2D(CameraId cam, void* param) {
                     {
                         s32 id;
                         if (w->cursor >= t->pos - 7.0f) {
-                            id = ICON_095;
+                            id = ICON_AC_ON;
                         } else {
-                            id = ICON_091;
+                            id = ICON_AC_OFF;
                         }
                         iconDispGxCol(m, 0x10, id, col);
                     }

@@ -1140,25 +1140,25 @@ void mapGX(WindowWork* w, f32 x, f32 y) {
         sw = swByteGet(0);
         id = -1;
         if (sw >= 0x13 && sw < 0x37) {
-            id = ICON_197;
+            id = ICON_SAC_DEKA;
             k = 0;
         } else if (sw >= 0x41 && sw < 0x70) {
-            id = ICON_198;
+            id = ICON_SAC_BAKUGAME;
             k = 1;
         } else if (sw >= 0x79 && sw < 0xA4) {
-            id = ICON_19A;
+            id = ICON_SAC_MUKI;
             k = 2;
         } else if (sw >= 0xAF && sw < 0xD5) {
-            id = ICON_19C;
+            id = ICON_SAC_SCISSOR;
             k = 3;
         } else if (sw >= 0xDE && sw < 0x105) {
-            id = ICON_19D;
+            id = ICON_SAC_GENKI1;
             k = 4;
         } else if (sw >= 0x110 && sw < 0x152) {
-            id = ICON_199;
+            id = ICON_SAC_SUKI;
             k = 5;
         } else if (sw >= 0x15C && sw < 0x175) {
-            id = ICON_19B;
+            id = ICON_SAC_ZUBASTAR;
             k = 6;
         }
         if (id != -1) {
@@ -1290,7 +1290,7 @@ void monoshiriGX(WindowWork* w, f32 x, f32 y) {
     ix = x + (420.0f - fw);
     winFontSet((Vec){ix, y - 210.0f, 0.0f}, (Vec){0.7f, 0.7f, 0.7f}, k1, msg);
     winIconInit();
-    winIconSet(ICON_217, (Vec){ix - 30.0f, y - 220.0f, 0.0f}, (Vec){0.6f, 0.6f, 0.6f}, white);
+    winIconSet(ICON_TRIGGER_Z_ALT, (Vec){ix - 30.0f, y - 220.0f, 0.0f}, (Vec){0.6f, 0.6f, 0.6f}, white);
 }
 
 MonosiriWork* monosiriInit(s32 id, f32 x, f32 y) {

@@ -31,6 +31,7 @@
 #include "evt/evt_sub.h"
 #include "kpa.h"
 #include "driver/seqdrv.h"
+#include "icon_ids.h"
 
 typedef struct KpaWork { u8 stage; u8 lives; u8 time; } KpaWork;
 KpaWork* kwp;
@@ -569,11 +570,6 @@ USER_FUNC(kpa_muteki_check) {
     return EVT_RETURN_DONE;
 }
 
-#ifdef VERSION_G8ME01
-#define KPA_ICON_OFS 8
-#else
-#define KPA_ICON_OFS 0
-#endif
 
 void kpa_status_disp(CameraId camera, void* param) {
     Vec pos;
@@ -621,9 +617,9 @@ void kpa_status_disp(CameraId camera, void* param) {
         pos.x += 20.0f;
     }
     pos.x += 20.0f;
-    iconDispGx(0.7f, &pos, 0x10, 0x18B + KPA_ICON_OFS);
+    iconDispGx(0.7f, &pos, 0x10, ICON_ITEM_COIN);
     pos.x += 30.0f;
-    iconDispGx(1.0f, &pos, 0x10, 0x1D5 + KPA_ICON_OFS);
+    iconDispGx(1.0f, &pos, 0x10, ICON_1D5);
 
     n = pouchGetKpaCoin();
     digit[0] = n / 10;
@@ -637,7 +633,7 @@ void kpa_status_disp(CameraId camera, void* param) {
     pos.x = 50.0f;
     iconDispGx(1.0f, &pos, 0x10, numeric_id[kwp->stage]);
     pos.x += 20.0f;
-    iconDispGx(1.0f, &pos, 0x10, 0x1EE + KPA_ICON_OFS);
+    iconDispGx(1.0f, &pos, 0x10, ICON_MINUS);
 
     n = kwp->lives;
     digit[0] = n / 10;

@@ -19,6 +19,7 @@
 #include "evt/evt_yuugijou.h"
 #include "pmario_sound.h"
 #include <dolphin/pad.h>
+#include "icon_ids.h"
 
 const GXColor yuuranking_unused_color = {0xFF, 0xFF, 0xFF, 0xFF};
 typedef struct YuuRankingWork {
@@ -433,11 +434,7 @@ static void evt_yuuranking_disp_func(CameraId camera, void* param) {
         ix = 70.0f + (10.399994f + wp->x);
         iy = (-40.0f + wp->y) - 24.0f;
         PSMTXTrans(mtx, ix - 10, iy + 2, 0.0f);
-#ifdef VERSION_G8ME01
-        iconDispGxCol(mtx, 0x10, 0x147, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
-#else
-        iconDispGxCol(mtx, 0x10, 0x13F, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
-#endif
+        iconDispGxCol(mtx, 0x10, ICON_ITEM_PIANTA_TOKEN, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
         PSMTXTrans(mtx, ix + 60, iy + 2, 0.0f);
         iconNumberDispGx(mtx, wp->monte, FALSE, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
     } else {

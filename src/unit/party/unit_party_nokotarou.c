@@ -1797,7 +1797,7 @@ static void __makeTechMenuFunc(BattleCommand* command, s32* count) {
     command->weapon[*count].itemId = 0;
     command->weapon[*count].weapon = &partyWeapon_NokotarouKouraAttack;
     command->weapon[*count].enabled = 0;
-    command->weapon[*count].icon = ICON_150;
+    command->weapon[*count].icon = ICON_NOKOTAROU_KOURA_ATTACK;
     command->weapon[*count].name = msgSearch(command->weapon[*count].weapon->name);
     (*count)++;
 
@@ -1806,7 +1806,7 @@ static void __makeTechMenuFunc(BattleCommand* command, s32* count) {
         command->weapon[*count].itemId = 0;
         command->weapon[*count].weapon = &partyWeapon_NokotarouSyubibinKoura;
         command->weapon[*count].enabled = 0;
-        command->weapon[*count].icon = ICON_151;
+        command->weapon[*count].icon = ICON_NOKOTAROU_SYUBIBIN_KOURA;
         command->weapon[*count].name = msgSearch(command->weapon[*count].weapon->name);
         (*count)++;
     }

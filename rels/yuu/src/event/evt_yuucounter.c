@@ -175,7 +175,7 @@ void evt_yuucounter_disp_func(CameraId camera, void* param) {
             }
             scale = 2.5f;
             xOfs = -50.0f;
-            iconId = ICON_202;
+            iconId = ICON_COUNTER_POINT;
             if (wp->data < 0) {
                 return;
             }
@@ -195,7 +195,7 @@ void evt_yuucounter_disp_func(CameraId camera, void* param) {
                 }
             }
             scale = 3.0f;
-            iconId = ICON_201;
+            iconId = ICON_COUNTER_COLON;
             xOfs = -42.0f;
             break;
         case 2:
@@ -222,7 +222,7 @@ void evt_yuucounter_disp_func(CameraId camera, void* param) {
     PSMTXTrans(base, wp->x, wp->y, 0.0f);
     PSMTXScale(scaleMtx, scale, 1.0f, 1.0f);
     PSMTXConcat(base, scaleMtx, mtx);
-    iconDispGxCol(mtx, 0x10, ICON_1F6, bgColor);
+    iconDispGxCol(mtx, 0x10, ICON_COUNTER_BG, bgColor);
 
     switch (wp->type) {
         case 0: {
@@ -240,7 +240,7 @@ void evt_yuucounter_disp_func(CameraId camera, void* param) {
                 if (!skip) {
                     PSMTXTrans(mtx, xOfs + (f32)(j * 30), 8.0f, 0.0f);
                     PSMTXConcat(base, mtx, mtx);
-                    iconDispGxCol(mtx, 0x10, digit + ICON_1F7, numColor);
+                    iconDispGxCol(mtx, 0x10, digit + ICON_COUNTER_DIGIT_0, numColor);
                 }
             }
             break;
@@ -253,7 +253,7 @@ void evt_yuucounter_disp_func(CameraId camera, void* param) {
             for (i = 0; i < 3; i++) {
                 PSMTXTrans(mtx, xOfs + (f32)(i * 30) - (f32)((i == 0) * 16), 8.0f, 0.0f);
                 PSMTXConcat(base, mtx, mtx);
-                iconDispGxCol(mtx, 0x10, digits[i] + ICON_1F7, numColor);
+                iconDispGxCol(mtx, 0x10, digits[i] + ICON_COUNTER_DIGIT_0, numColor);
             }
             PSMTXTrans(mtx, 8.0f + xOfs, 12.0f, 0.0f);
             PSMTXScale(scaleMtx, 2.0f, 2.0f, 2.0f);
@@ -278,7 +278,7 @@ void evt_yuucounter_disp_func(CameraId camera, void* param) {
                 if (!skip2) {
                     PSMTXTrans(mtx, xOfs + (f32)(k * 30), 8.0f, 0.0f);
                     PSMTXConcat(base, mtx, mtx);
-                    iconDispGxCol(mtx, 0x10, digit + ICON_1F7, numColor);
+                    iconDispGxCol(mtx, 0x10, digit + ICON_COUNTER_DIGIT_0, numColor);
                 }
             }
             break;
@@ -300,7 +300,7 @@ void evt_yuucounter_disp_func(CameraId camera, void* param) {
                 PSMTXScale(scaleMtx, 0.5f, 0.5f, 0.5f);
                 PSMTXConcat(mtx, scaleMtx, mtx);
                 PSMTXConcat(base, mtx, mtx);
-                iconDispGxCol(mtx, 0x10, digits[i] + ICON_1F7, numColor);
+                iconDispGxCol(mtx, 0x10, digits[i] + ICON_COUNTER_DIGIT_0, numColor);
             }
             break;
         case 2:

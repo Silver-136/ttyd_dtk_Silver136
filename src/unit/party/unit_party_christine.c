@@ -421,11 +421,7 @@ EVT_BEGIN(partyChristineAttack_NormalAttack)
     LABEL(10)
     IF_INT_GREATER_OR_EQUAL(LW(10), 1)
         CALL(btlevtcmd_CommandPreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), DAMAGE_RESULT_FINAL_HIT | DAMAGE_RESULT_NO_EVADE, LW(5))
-#ifdef VERSION_G8ME01
         ELSE
-#else
-    ELSE
-#endif
         CALL(btlevtcmd_CommandPreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), DAMAGE_RESULT_FINAL_HIT, LW(5))
     END_IF
     SWITCH(LW(5))
@@ -473,11 +469,7 @@ EVT_BEGIN(partyChristineAttack_NormalAttack)
         END_SIBLING_EVENT
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_PARTY_BATTLE_JUMP1"), EVT_NULLPTR, 0, EVT_NULLPTR)
         CALL(btlevtcmd_MarioJumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 36, 3, 0)
-#ifdef VERSION_G8ME01
         ELSE
-#else
-    ELSE
-#endif
         CALL(btlevtcmd_SetRotateOffset, UNIT_ID_SELF, 0, 14, 0)
         CALL(btlevtcmd_ACRGetResult, LW(6), LW(7))
         IF_INT_EQUAL(LW(6), 2)
@@ -489,11 +481,7 @@ EVT_BEGIN(partyChristineAttack_NormalAttack)
                 CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), 16, LW(15))
                 IF_INT_EQUAL(LW(15), 1)
                     SET_VALUE(LW(9), -15)
-#ifdef VERSION_G8ME01
                     ELSE
-#else
-                ELSE
-#endif
                     SET_VALUE(LW(9), 15)
                 END_IF
                 CALL(btlevtcmd_GetPosFloat, UNIT_ID_SELF, LW(5), LW(6), LW(7))
@@ -503,11 +491,7 @@ EVT_BEGIN(partyChristineAttack_NormalAttack)
                     WAIT_FRAMES(1)
                 END_LOOP
             END_SIBLING_EVENT
-#ifdef VERSION_G8ME01
             ELSE
-#else
-        ELSE
-#endif
             BEGIN_SIBLING_EVENT
                 CALL(btlevtcmd_GetPosFloat, UNIT_ID_SELF, LW(5), LW(6), LW(7))
                 SET_VALUE(LW(8), 0)
@@ -586,11 +570,7 @@ EVT_BEGIN(partyChristineAttack_NormalAttack)
         CALL(btlevtcmd_AudienceDeclareACResult, LW(0), LW(6))
         ADD(LW(10), 1)
         GOTO(10)
-#ifdef VERSION_G8ME01
         ELSE
-#else
-    ELSE
-#endif
         CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
         CALL(btlevtcmd_CommandCheckDamage, UNIT_ID_SELF, LW(3), LW(4), DAMAGE_RESULT_FINAL_HIT | DAMAGE_RESULT_AC_SUCCESS, LW(5))
         CALL(btlevtcmd_GetResultAC, LW(0))
@@ -804,11 +784,7 @@ EVT_BEGIN(partyChristineAttack_RenzokuAttack)
     LABEL(10)
     IF_INT_GREATER_OR_EQUAL(LW(10), 1)
         CALL(btlevtcmd_CommandPreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), DAMAGE_RESULT_FINAL_HIT | DAMAGE_RESULT_NO_EVADE, LW(5))
-#ifdef VERSION_G8ME01
         ELSE
-#else
-    ELSE
-#endif
         CALL(btlevtcmd_CommandPreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), DAMAGE_RESULT_FINAL_HIT, LW(5))
     END_IF
     SWITCH(LW(5))
@@ -843,11 +819,7 @@ EVT_BEGIN(partyChristineAttack_RenzokuAttack)
         ADD(LW(2), 5)
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_PARTY_BATTLE_JUMP1"), EVT_NULLPTR, 0, EVT_NULLPTR)
         CALL(btlevtcmd_MarioJumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 36, 3, 0)
-#ifdef VERSION_G8ME01
         ELSE
-#else
-    ELSE
-#endif
         CALL(btlevtcmd_ACRGetResult, LW(6), LW(7))
         CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
         ADD(LW(2), 5)
@@ -925,11 +897,7 @@ EVT_BEGIN(partyChristineAttack_RenzokuAttack)
                                 CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), 16, LW(1))
                                 IF_INT_GREATER_OR_EQUAL(LW(1), 0)
                                     ADD(LW(0), -24)
-#ifdef VERSION_G8ME01
                                     ELSE
-#else
-                                ELSE
-#endif
                                     ADD(LW(0), 24)
                                 END_IF
                                 CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 3, LW(0))
@@ -945,11 +913,7 @@ EVT_BEGIN(partyChristineAttack_RenzokuAttack)
             CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_PARTY_BATTLE_JUMP1"), EVT_NULLPTR, 0, EVT_NULLPTR)
             CALL(btlevtcmd_MarioJumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), LW(8), 0, 0)
             DELETE_EVENT(15)
-#ifdef VERSION_G8ME01
             ELSE
-#else
-        ELSE
-#endif
             BEGIN_SIBLING_EVENT
                 CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
                 CALL(evt_eff64, STRING(""), STRING("kemuri2_n64"), 2, LW(0), LW(1), LW(2), 0, 0, 0, 0, 0, 0, 0, 0)
@@ -997,11 +961,7 @@ EVT_BEGIN(partyChristineAttack_RenzokuAttack)
         IF_INT_LESS_OR_EQUAL(LW(10), 0)
             CALL(btlevtcmd_CommandGetWeaponAddress, UNIT_ID_SELF, LW(0))
             CALL(btlevtcmd_AudienceDeclareACResult, LW(0), -1)
-#ifdef VERSION_G8ME01
             ELSE
-#else
-        ELSE
-#endif
             SET_VALUE(LW(6), LW(10))
             SUBTRACT(LW(6), 1)
             CALL(btlevtcmd_GetResultPrizeLv, LW(3), LW(6), LW(6))
@@ -1027,11 +987,7 @@ EVT_BEGIN(partyChristineAttack_RenzokuAttack)
         ADD(LW(10), 1)
         CALL(btlevtcmd_StartAC, 0)
         GOTO(10)
-#ifdef VERSION_G8ME01
         ELSE
-#else
-    ELSE
-#endif
         CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
         CALL(btlevtcmd_CommandCheckDamage, UNIT_ID_SELF, LW(3), LW(4), DAMAGE_RESULT_FINAL_HIT | DAMAGE_RESULT_AC_SUCCESS, LW(5))
         CALL(btlevtcmd_GetResultPrizeLv, LW(3), LW(10), LW(6))

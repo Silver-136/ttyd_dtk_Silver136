@@ -396,9 +396,9 @@ static void actionCommandDisp(f32 x, f32 y) {
             BattleAcDrawGauge((s32)x, (s32)y, 0xB2, t, 100, 100, 100, 100, 0);
         }
         if (cw->gauge >= (f32)g->target) {
-            icon = ICON_095;
+            icon = ICON_AC_ON;
         } else {
-            icon = ICON_091;
+            icon = ICON_AC_OFF;
         }
         {
         Vec pos = {0.0f, 0.0f, 0.0f};
@@ -422,11 +422,11 @@ static void actionCommandDisp(f32 x, f32 y) {
         bx = -288.0f + x;
         by = 20.0f + y;
         for (i = 0; i < n; i++) {
-            u16 icon = ICON_091;
+            u16 icon = ICON_AC_OFF;
             f32 step;
             step = 100.0f / (f32)(n + 1) * (f32)(i + 1);
             if (cw->inRange) {
-                icon = ICON_095;
+                icon = ICON_AC_ON;
             }
             {
                 Vec pos = {0.0f, 0.0f, 0.0f};

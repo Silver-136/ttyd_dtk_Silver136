@@ -39,9 +39,9 @@
 #include "driver/icondrv.h"
 #include "win/win_main.h"
 #include "sdk/texPalette.h"
+#include "icon_ids.h"
 #ifndef VERSION_G8ME01
 #include "evt/evt_cmd.h"
-
 #endif
 // LoadWork.flags (file select)
 typedef enum LoadWorkFlags {
@@ -776,26 +776,17 @@ static inline void loadDrawBg(u32 id, f32 x0, f32 y0, f32 x1, f32 y1) {
     f64 h;
 
     TEXGetGXTexObjFromPalette(*wp->file->data, &obj, id);
-#ifdef VERSION_G8ME01
     GXInitTexObjLOD(&obj, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
-#else
-    GXInitTexObjLOD(&obj, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
-#endif
     GXLoadTexObj(&obj, GX_TEXMAP0);
     GXSetNumTexGens(1);
     GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX0, GX_FALSE, GX_PTIDENTITY);
     h = __fabs(y0 - y1);
     w = __fabs(x1 - x0);
-#ifdef VERSION_G8ME01
     PSMTXScale(m, (f32)w / GXGetTexObjWidth(&obj), (f32)h / GXGetTexObjHeight(&obj), 1.0f);
-#else
-    PSMTXScale(m, (f32)w / GXGetTexObjWidth(&obj), (f32)h / GXGetTexObjHeight(&obj), 1.0f);
-#endif
     GXLoadTexMtxImm(m, GX_TEXMTX0, GX_MTX2x4);
     GXBegin(GX_QUADS, GX_VTXFMT0, 4);
     GXFIFO_F32 = x0;
     GXFIFO_F32 = y0;
-#ifdef VERSION_G8ME01
     GXFIFO_F32 = 0.0f;
     GXFIFO_F32 = 0.0f;
     GXFIFO_F32 = 0.0f;
@@ -814,26 +805,6 @@ static inline void loadDrawBg(u32 id, f32 x0, f32 y0, f32 x1, f32 y1) {
     GXFIFO_F32 = 0.0f;
     GXFIFO_F32 = 1.0f;
     GXFIFO_F32 = 0.0f;
-#else
-    GXFIFO_F32 = 0.0f;
-    GXFIFO_F32 = 0.0f;
-    GXFIFO_F32 = 0.0f;
-    GXFIFO_F32 = x0;
-    GXFIFO_F32 = y1;
-    GXFIFO_F32 = 0.0f;
-    GXFIFO_F32 = 0.0f;
-    GXFIFO_F32 = 1.0f;
-    GXFIFO_F32 = x1;
-    GXFIFO_F32 = y1;
-    GXFIFO_F32 = 0.0f;
-    GXFIFO_F32 = 1.0f;
-    GXFIFO_F32 = 1.0f;
-    GXFIFO_F32 = x1;
-    GXFIFO_F32 = y0;
-    GXFIFO_F32 = 0.0f;
-    GXFIFO_F32 = 1.0f;
-    GXFIFO_F32 = 0.0f;
-#endif
 }
 
 void loadDraw(CameraId camera, void* param) {
@@ -874,11 +845,7 @@ void loadDraw(CameraId camera, void* param) {
     GXSetZCompLoc(GX_FALSE);
     GXSetAlphaCompare(GX_GEQUAL, 0x80, GX_AOP_OR, GX_NEVER, 0);
     GXSetZMode(GX_FALSE, GX_ALWAYS, GX_FALSE);
-#ifdef VERSION_G8ME01
     GXSetFog(GX_FOG_NONE, 0.0f, 0.0f, 0.0f, 0.0f, (GXColor){255, 255, 255, 255});
-#else
-    GXSetFog(GX_FOG_NONE, 0.0f, 0.0f, 0.0f, 0.0f, (GXColor){255, 255, 255, 255});
-#endif
     GXSetNumChans(0);
     GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_REG, GX_LIGHT_NULL, GX_DF_NONE, GX_AF_NONE);
     GXSetNumTevStages(1);
@@ -1122,7 +1089,7 @@ void loadDraw(CameraId camera, void* param) {
             PSMTXTrans(m, x + (win1[0]->x - w / 2.0f), 1.0f + (win1[0]->y - 22.0f), 0.0f);
             PSMTXScale(s, 1.5f, 1.5f, 1.5f);
             PSMTXConcat(m, s, m);
-            iconDispGxCol(m, 0, 0x208, (GXColor){0, 0, 0, 255});
+            iconDispGxCol(m, 0, ICON_COUNTER_COLON, (GXColor){0, 0, 0, 255});
             for (k = 0; k < 7; k++) {
                 if (stars & (1 << (k + 1))) {
                     PSMTXTrans(m, (win1[0]->x - 106.0f) + k * 32, *(f32*)((u8*)win1[0] + offsetof(WinDt, y)) /* FAKE: win1->y read through a byte offset (same load) keeps &win1->y a late loop temp, as in the target's numbering */ - 52.0f, 0.0f);
@@ -1134,7 +1101,7 @@ void loadDraw(CameraId camera, void* param) {
             PSMTXTrans(m, 8.0f + (x + (win1->x - w / 2.0f)), 1.0f + (win1->y - 22.0f), 0.0f);
             PSMTXScale(s, 1.5f, 1.5f, 1.5f);
             PSMTXConcat(m, s, m);
-            iconDispGxCol(m, 0, 0x201, (GXColor){0, 0, 0, 255});
+            iconDispGxCol(m, 0, ICON_COUNTER_COLON, (GXColor){0, 0, 0, 255});
             // FAKE: y read through a byte offset so the loop-invariant &win1->y becomes a hoisted @ temp (target pop order)
             for (k = 0; k < 7; k++) {
                 if (stars & (1 << (k + 1))) {
@@ -1151,65 +1118,37 @@ void loadDraw(CameraId camera, void* param) {
     } else {
         wp->alpha -= 0.05f;
     }
-#ifdef VERSION_G8ME01
     if (wp->alpha < 0.0f) {
         wp->alpha = 0.0f;
     }
     if (wp->alpha > 1.0f) {
-#else
-    if (wp->alpha < 0.0f) {
-        wp->alpha = 0.0f;
-    }
-    if (wp->alpha > 1.0f) {
-#endif
         wp->alpha = 1.0f;
     }
     nameMaskGX(wp->alpha);
 
     if (wp->state >= 100 && wp->state < 200) {
         winTexInit(*wp->file->data);
-#ifdef VERSION_G8ME01
         winTexSet(0xf, (Vec){0.0f, 0.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){255, 255, 255, 255});
         winTexInit_x2(*wp->file->data);
         winTexSet_x2(0x13, 0x1f, (Vec){0.0f, 100.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){255, 255, 255, 255});
-#else
-        winTexSet(0xf, (Vec){0.0f, 0.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){255, 255, 255, 255});
-        winTexInit_x2(*wp->file->data);
-        winTexSet_x2(0x13, 0x1f, (Vec){0.0f, 100.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){255, 255, 255, 255});
-#endif
         for (i = 0; i < 3; i++) {
             if (i == wp->soundModeSel) {
                 winTexInit(*wp->file->data);
-#ifdef VERSION_G8ME01
                 winTexSet(0x33, (Vec){0.0f, 50 - i * 50, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0, 0, 0, 64});
                 winTexInit_x2(*wp->file->data);
                 winTexSet_x2(i + 0x15, 0x33, (Vec){-4.0f, 54 - i * 50, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){255, 255, 255, 255});
             } else {
                 winTexInit_x2(*wp->file->data);
                 winTexSet_x2(i + 0x15, 0x33, (Vec){0.0f, 50 - i * 50, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){255, 255, 255, 255});
-#else
-                winTexSet(0x33, (Vec){0.0f, 50 - i * 50, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0, 0, 0, 64});
-                winTexInit_x2(*wp->file->data);
-                winTexSet_x2(i + 0x15, 0x33, (Vec){-4.0f, 54 - i * 50, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){255, 255, 255, 255});
-            } else {
-                winTexInit_x2(*wp->file->data);
-                winTexSet_x2(i + 0x15, 0x33, (Vec){0.0f, 50 - i * 50, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){255, 255, 255, 255});
-#endif
             }
         }
     }
 
     if (wp->state >= 200 && wp->state < 300) {
         winTexInit(*wp->file->data);
-#ifdef VERSION_G8ME01
         winTexSet(0xf, (Vec){0.0f, 0.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){255, 255, 255, 255});
         winTexInit_x2(*wp->file->data);
         winTexSet_x2(0x14, 0x1f, (Vec){0.0f, 100.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){255, 255, 255, 255});
-#else
-        winTexSet(0xf, (Vec){0.0f, 0.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){255, 255, 255, 255});
-        winTexInit_x2(*wp->file->data);
-        winTexSet_x2(0x14, 0x1f, (Vec){0.0f, 100.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){255, 255, 255, 255});
-#endif
         for (i = 0; i < 2; i++) {
             if (i == wp->rumbleOffSel) {
                 winTexInit(*wp->file->data);
@@ -1247,46 +1186,25 @@ void loadDraw(CameraId camera, void* param) {
             f32 r1 = wp->copyTo / 2;
             if (r0 == r1) {
                 cx = 0.0f;
-#ifdef VERSION_G8ME01
                 cy = 120.0f - 140.0f * r0;
             } else {
                 cx = -150.0f + 300.0f * c0;
                 cy = 50.0f;
-#else
-                cy = 120.0f - 140.0f * r0;
-            } else {
-                cx = -150.0f + 300.0f * c0;
-                cy = 50.0f;
-#endif
             }
         } else {
             cx = 0.0f;
-#ifdef VERSION_G8ME01
             cy = 50.0f;
         }
         cy -= 40.0f;
         winTexInit(*wp->file->data);
         winTexSetRot(0x1d, (Vec){2.0f + cx, cy - 2.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0, 0, 0, 128}, angle[wp->copyFrom][wp->copyTo]);
         winTexSetRot(0x1d, (Vec){cx, cy, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white, angle[wp->copyFrom][wp->copyTo]);
-#else
-            cy = 50.0f;
-        }
-        cy -= 40.0f;
-        winTexInit(*wp->file->data);
-        winTexSetRot(0x1d, (Vec){2.0f + cx, cy - 2.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0, 0, 0, 128}, angle[wp->copyFrom][wp->copyTo]);
-        winTexSetRot(0x1d, (Vec){cx, cy, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white, angle[wp->copyFrom][wp->copyTo]);
-#endif
     }
 
     if (!(wp->flags & LOAD_FLAG_HIDE_CURSOR)) {
         winTexInit(*wp->file->data);
-#ifdef VERSION_G8ME01
         winTexSet(0, (Vec){2.0f + wp->x, wp->y - 2.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0, 0, 0, 128});
         winTexSet(0, (Vec){wp->x, wp->y, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white);
-#else
-        winTexSet(0, (Vec){2.0f + wp->x, wp->y - 2.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0, 0, 0, 128});
-        winTexSet(0, (Vec){wp->x, wp->y, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white);
-#endif
     }
 
     GXSetViewport(vp[0], vp[1], vp[2], vp[3], vp[4], vp[5]);

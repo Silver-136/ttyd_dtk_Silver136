@@ -1059,7 +1059,7 @@ static void disp_3D(CameraId cam, void* param) {
             switch (o->kind) {
             case 0:
             case 1:
-                icon = ICON_1A3;
+                icon = ICON_STATUS_MARIO;
                 if (o->kind == 1) {
                     s = 2.0f;
                     if (genki_blink(o->timer)) {
@@ -1071,47 +1071,47 @@ static void disp_3D(CameraId cam, void* param) {
             case 3:
                 switch (party->currentKind) {
                 case UNIT_GOOMBELLA:
-                    icon = ICON_1A4;
+                    icon = ICON_STATUS_GOOMBELLA;
                     break;
                 case UNIT_KOOPS:
-                    icon = ICON_1A5;
+                    icon = ICON_STATUS_KOOPS;
                     break;
                 case UNIT_FLURRIE:
-                    icon = ICON_1AE;
+                    icon = ICON_STATUS_FLURRIE;
                     break;
                 case UNIT_YOSHI:
                     switch (pouchGetPartyColor(PARTNER_YOSHI)) {
                     case 1:
-                        icon = ICON_1A8;
+                        icon = ICON_STATUS_YOSHI_1;
                         break;
                     case 2:
-                        icon = ICON_1A9;
+                        icon = ICON_STATUS_YOSHI_2;
                         break;
                     case 3:
-                        icon = ICON_1AA;
+                        icon = ICON_STATUS_YOSHI_3;
                         break;
                     case 4:
-                        icon = ICON_1AB;
+                        icon = ICON_STATUS_YOSHI_4;
                         break;
                     case 5:
-                        icon = ICON_1AC;
+                        icon = ICON_STATUS_YOSHI_5;
                         break;
                     case 6:
-                        icon = ICON_1AD;
+                        icon = ICON_STATUS_YOSHI_6;
                         break;
                     case 0:
-                        icon = ICON_1A7;
+                        icon = ICON_STATUS_YOSHI;
                         break;
                     }
                     break;
                 case UNIT_VIVIAN:
-                    icon = ICON_1AF;
+                    icon = ICON_STATUS_VIVIAN;
                     break;
                 case UNIT_BOBBERY:
-                    icon = ICON_1A6;
+                    icon = ICON_STATUS_BOBBERY;
                     break;
                 case UNIT_MS_MOWZ:
-                    icon = ICON_1B0;
+                    icon = ICON_STATUS_MS_MOWZ;
                     break;
                 default:
                     icon = 0;
@@ -1126,7 +1126,7 @@ static void disp_3D(CameraId cam, void* param) {
                 break;
             case 4:
             case 5:
-                icon = ICON_1B1;
+                icon = ICON_STATUS_FP;
                 if (o->kind == 5) {
                     s = 2.0f;
                     if (genki_blink(o->timer)) {
@@ -1135,7 +1135,7 @@ static void disp_3D(CameraId cam, void* param) {
                 }
                 break;
             case 6:
-                icon = ICON_143;
+                icon = ICON_SAC_GENKI_HAZARD;
                 break;
             }
             PSMTXScale(m, s, s, 1.0f);

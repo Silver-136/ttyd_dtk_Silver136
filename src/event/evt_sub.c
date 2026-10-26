@@ -1737,7 +1737,7 @@ USER_FUNC(evt_sub_get_coin) {
     work = event->wInterpWork;
     switch (state) {
     case 0:
-        iconEntry("iraiCoin", ICON_18B);
+        iconEntry("iraiCoin", ICON_ITEM_COIN);
         iconSetPos("iraiCoin", b.x, b.y, b.z);
         iconFlagOn("iraiCoin", 0x102);
         ((ItemGetWork*)eff->userdata)->camera = 5;

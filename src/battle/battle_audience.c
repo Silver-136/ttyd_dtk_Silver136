@@ -2245,7 +2245,7 @@ void BattleAudienceDispApSrc(CameraId camId, void* param) {
             PSMTXTrans(trans, star->position.x, star->position.y, 0.0f);
             PSMTXConcat(scale, rot, mtx);
             PSMTXConcat(trans, mtx, mtx);
-            iconDispGxCol(mtx, 0x10, ICON_1B2, (GXColor){0xFF, 0xFF, 0xFF, star->alpha});
+            iconDispGxCol(mtx, 0x10, ICON_STATUS_SP, (GXColor){0xFF, 0xFF, 0xFF, star->alpha});
 
         }
     }
@@ -2264,7 +2264,7 @@ void BattleAudienceDispWin(CameraId camId, void* param) {
         Vec pos = {0.0f, 0.0f, 0.0f};
         pos.x = 17.0f + win->x;
         pos.y = win->y - 40.0f;
-        iconDispGx(&pos, 0x10, ICON_209, 0.8f);
+        iconDispGx(&pos, 0x10, ICON_AUDIENCE, 0.8f);
     }
     PSMTXTrans(mtx, 75.0f + win->x, win->y - 40.0f, 0.0f);
     {

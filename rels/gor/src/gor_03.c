@@ -669,7 +669,7 @@ static void monte_disp(CameraId camera, void* param) {
 
     for (i = 0; i < monte->owner->monteCount; i++) {
         if (monte[i].hidden == 0) {
-            iconDispGx(&monte[i].sub.pos, 0x40, ICON_13F, 1.0f);
+            iconDispGx(&monte[i].sub.pos, 0x40, ICON_ITEM_PIANTA_TOKEN, 1.0f);
         }
     }
 }
@@ -2832,7 +2832,7 @@ s32 upsidegara[2][3][8] = {
 };
 
 typedef struct I3 { s32 v[3]; } I3;
-static const I3 disp_slot_icons = {{ICON_1F3, ICON_1F3, ICON_1F3}};
+static const I3 disp_slot_icons = {{ICON_BUTTON_A_ALT, ICON_BUTTON_A_ALT, ICON_BUTTON_A_ALT}};
 
 EVT_BEGIN(ranking_set)
     CALL(evt_mario_key_onoff, 0)
@@ -6125,7 +6125,7 @@ void goryuugijo_disp_slot(CameraId camera, void* param) {
             PSMTXScale(scale, 1.1f, 1.1f, 1.1f);
             PSMTXTrans(trans, -304.0f + sx, 240.0f - sy, 0.0f);
             PSMTXConcat(trans, scale, mtx);
-            iconDispGx2(mtx, 0x10, ICON_1F2);
+            iconDispGx2(mtx, 0x10, ICON_FUKIDASHI);
             PSMTXTrans(trans, -304.0f + sx, 31.35f + (240.0f - sy), 0.0f);
             PSMTXConcat(trans, scale, mtx);
             ((void (*)(Mtx, s16, u16))iconDispGx2)(mtx, 0x10, icons.v[i]);

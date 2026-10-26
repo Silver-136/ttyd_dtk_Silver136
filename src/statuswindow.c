@@ -31,31 +31,31 @@ typedef struct alwaysDtEntry {
 
 //.data
 alwaysDtEntry alwaysDt[] = {
-    { 108, 40, ICON_1D0, 1.0f }, // red hp banner
-    { 38, 40, ICON_1A3, 1.0f },  // mario hp icon
-    { 124, 34, ICON_1D8, 1.0f }, // division sign
-    { 288, 40, ICON_1D1, 1.0f }, // orange fp banner
-    { 220, 40, ICON_1B1, 1.0f }, // fp icon
-    { 305, 34, ICON_1D8, 1.0f }, // division sign
-    { 492, 40, ICON_1D3, 1.0f }, // green item banner
-    { 400, 40, ICON_1B3, 1.0f }, // star points
-    { 490, 40, ICON_1B4, 1.0f }, // coin icon
-    { 422, 34, ICON_1D6, 1.0f }, // "x"
-    { 512, 34, ICON_1D6, 1.0f }, // "x"
-    { 360, 76, ICON_1D2, 1.0f }, // blue sp banner
-    { 220, 80, ICON_1B2, 0.9f }  // star
+    { 108, 40, ICON_STATUS_HP_BANNER, 1.0f }, // red
+    { 38, 40, ICON_STATUS_MARIO, 1.0f },
+    { 124, 34, ICON_SLASH, 1.0f },
+    { 288, 40, ICON_STATUS_FP_BANNER, 1.0f }, // orange
+    { 220, 40, ICON_STATUS_FP, 1.0f },
+    { 305, 34, ICON_SLASH, 1.0f },
+    { 492, 40, ICON_STATUS_COIN_BANNER, 1.0f }, // green, behind the Star Points and coins
+    { 400, 40, ICON_STATUS_STAR_POINTS, 1.0f },
+    { 490, 40, ICON_STATUS_COIN, 1.0f },
+    { 422, 34, ICON_TIMES, 1.0f },
+    { 512, 34, ICON_TIMES, 1.0f },
+    { 360, 76, ICON_STATUS_SP_BANNER, 1.0f }, // blue
+    { 220, 80, ICON_STATUS_SP, 0.9f }
 };
 
 //.sdata
 alwaysDtEntry partysDt[] = {
-    { 108, 76, ICON_1D0, 1.0f },
-    { 38, 80, ICON_1A4, 1.0f },
-    { 124, 70, ICON_1D8, 1.0f },
+    { 108, 76, ICON_STATUS_HP_BANNER, 1.0f },
+    { 38, 80, ICON_STATUS_GOOMBELLA, 1.0f },
+    { 124, 70, ICON_SLASH, 1.0f },
 };
-u16 party_icon[8] = { ICON_1A4, ICON_1A4, ICON_1A5, ICON_1A6, ICON_1A7, ICON_1AE, ICON_1AF, ICON_1B0 };
-u16 gauge_back[8] = { ICON_1B7, ICON_1B8, ICON_1B9, ICON_1BA, ICON_1BB, ICON_1BC, ICON_1BD, ICON_1BE };
-u16 gauge_wakka[16] = { ICON_1C0, ICON_1C1, ICON_1C2, ICON_1C3, ICON_1C4, ICON_1C5, ICON_1C6, ICON_1C7,
-                        ICON_1C8, ICON_1C9, ICON_1CA, ICON_1CB, ICON_1CC, ICON_1CD, ICON_1CE, ICON_1CF };
+u16 party_icon[8] = { ICON_STATUS_GOOMBELLA, ICON_STATUS_GOOMBELLA, ICON_STATUS_KOOPS, ICON_STATUS_BOBBERY, ICON_STATUS_YOSHI, ICON_STATUS_FLURRIE, ICON_STATUS_VIVIAN, ICON_STATUS_MS_MOWZ };
+u16 gauge_back[8] = { ICON_SP_ORB_1, ICON_SP_ORB_2, ICON_SP_ORB_3, ICON_SP_ORB_4, ICON_SP_ORB_5, ICON_SP_ORB_6, ICON_SP_ORB_7, ICON_SP_ORB_8 };
+u16 gauge_wakka[16] = { ICON_SP_ORB_PART_0, ICON_SP_ORB_PART_1, ICON_SP_ORB_PART_2, ICON_SP_ORB_PART_3, ICON_SP_ORB_PART_4, ICON_SP_ORB_PART_5, ICON_SP_ORB_PART_6, ICON_SP_ORB_PART_7,
+                        ICON_SP_ORB_PART_8, ICON_SP_ORB_PART_9, ICON_SP_ORB_PART_10, ICON_SP_ORB_PART_11, ICON_SP_ORB_PART_12, ICON_SP_ORB_PART_13, ICON_SP_ORB_PART_14, ICON_SP_ORB_PART_15 };
 #ifdef VERSION_G8ME01
 // US: pause-menu icons per language
 s16 party_icon_tbl[6] = { 0x215, 0x22B, 0x22C, 0x22D, 0x22E, 0x22F };
@@ -276,7 +276,7 @@ void gaugeDisp(s32 sp, f32 x, f32 y) {
         pos2.x = x + (f32)(i * 32);
         pos2.y = 12.0f + y;
         pos2.z = 0.0f;
-        iconDispGxScaleFirst(1.0f, &pos2, 0x10, i < full ? gauge_back[i] : ICON_1BF);
+        iconDispGxScaleFirst(1.0f, &pos2, 0x10, i < full ? gauge_back[i] : ICON_SP_ORB_EMPTY);
     }
 }
 
@@ -306,7 +306,7 @@ void statusWinDisp(CameraId camId, void* param) {
 
     e = alwaysDt;
     for (i = 0; i < sizeof(alwaysDt) / sizeof(alwaysDt[0]); i++, e++) {
-        if (e->iconId == ICON_1D2 && !*(u16*)&pouchGetPtr()->mStarPowersObtained) {
+        if (e->iconId == ICON_STATUS_SP_BANNER && !*(u16*)&pouchGetPtr()->mStarPowersObtained) {
             break;
         }
         if (!blinkOn) {
@@ -351,26 +351,26 @@ void statusWinDisp(CameraId camId, void* param) {
         if (wp->cur.party == 4) {
             switch (pouchGetPartyColor(PARTNER_YOSHI)) {
                 case 0:
-                    partysDt[1].iconId = ICON_1A7;
+                    partysDt[1].iconId = ICON_STATUS_YOSHI;
                     break;
                 case 1:
-                    partysDt[1].iconId = ICON_1A8;
+                    partysDt[1].iconId = ICON_STATUS_YOSHI_1;
                     break;
                 case 2:
-                    partysDt[1].iconId = ICON_1A9;
+                    partysDt[1].iconId = ICON_STATUS_YOSHI_2;
                     break;
                 case 3:
-                    partysDt[1].iconId = ICON_1AA;
+                    partysDt[1].iconId = ICON_STATUS_YOSHI_3;
                     break;
                 case 4:
-                    partysDt[1].iconId = ICON_1AB;
+                    partysDt[1].iconId = ICON_STATUS_YOSHI_4;
                     break;
                 case 5:
-                    partysDt[1].iconId = ICON_1AC;
+                    partysDt[1].iconId = ICON_STATUS_YOSHI_5;
                     break;
                 case 6:
                 default:
-                    partysDt[1].iconId = ICON_1AD;
+                    partysDt[1].iconId = ICON_STATUS_YOSHI_6;
                     break;
             }
         }
@@ -395,11 +395,7 @@ void statusWinDisp(CameraId camId, void* param) {
         MTXTrans(m2, -190.0f, y2, 0.0f);
         MTXScale(s2, 0.75f, 0.75f, 0.75f);
         MTXConcat(m2, s2, m2);
-#ifdef VERSION_G8ME01
-        iconDispGxCol(m2, 0x10, ICON_212, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
-#else
-        iconDispGxCol(m2, 0x10, 0x212, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
-#endif
+        iconDispGxCol(m2, 0x10, ICON_MENU_DPAD, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
         if (swByteGet(0) >= 7 || partyChkJoin(PARTNER_GOOMBELLA)) {
             MTXTrans(m2, -250.0f, 16.0f + y2, 0.0f);
             MTXScale(s2, 0.75f, 0.75f, 0.75f);
@@ -407,7 +403,7 @@ void statusWinDisp(CameraId camId, void* param) {
 #ifdef VERSION_G8ME01
             iconDispGxCol(m2, 0x10, (u16)party_icon_tbl[gp->language], (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
 #else
-            iconDispGxCol(m2, 0x10, 0x213, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
+            iconDispGxCol(m2, 0x10, ICON_MENU_PARTY, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
 #endif
         }
         MTXTrans(m2, -190.0f, 50.0f + y2, 0.0f);
@@ -422,12 +418,12 @@ void statusWinDisp(CameraId camId, void* param) {
             MTXConcat(m2, s2, m2);
             iconDispGxCol(m2, 0x10, (u16)badge_icon_tbl[gp->language], (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
 #else
-        iconDispGxCol(m2, 0x10, 0x214, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
+        iconDispGxCol(m2, 0x10, ICON_MENU_GEAR, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
         if (swByteGet(0) >= 20 || pouchGetHaveBadgeCnt()) {
             MTXTrans(m2, -130.0f, 16.0f + y2, 0.0f);
             MTXScale(s2, 0.75f, 0.75f, 0.75f);
             MTXConcat(m2, s2, m2);
-            iconDispGxCol(m2, 0x10, 0x215, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
+            iconDispGxCol(m2, 0x10, ICON_MENU_BADGES, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
 #endif
         }
         MTXTrans(m2, -190.0f, y2 - 25.0f, 0.0f);
@@ -436,7 +432,7 @@ void statusWinDisp(CameraId camId, void* param) {
 #ifdef VERSION_G8ME01
         iconDispGxCol(m2, 0x10, (u16)journal_icon_tbl[gp->language], (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
 #else
-        iconDispGxCol(m2, 0x10, 0x216, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
+        iconDispGxCol(m2, 0x10, ICON_MENU_JOURNAL, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
 #endif
     }
 }

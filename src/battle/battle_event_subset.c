@@ -81,11 +81,7 @@ EVT_BEGIN(subsetevt_dead)
         CALL(btlevtcmd_GetHomePos, LW(10), LW(2), LW(3), LW(4))
         CALL(btlevtcmd_SetMoveSpeed, LW(10), FLOAT(4.0f))
         CALL(btlevtcmd_DivePosition, LW(10), LW(2), LW(3), LW(4), 0, 0, 0, 0, -1)
-#ifdef VERSION_G8ME01
         ELSE
-#else
-    ELSE
-#endif
         CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), POSE_TYPE_WALK)
         CALL(btlevtcmd_GetHomePos, LW(10), LW(2), LW(3), LW(4))
         CALL(btlevtcmd_SetMoveSpeed, LW(10), FLOAT(4.0f))
@@ -101,11 +97,7 @@ EVT_BEGIN(subsetevt_dead)
         CALL(btlevtcmd_CheckDamageCode, LW(10), 2048, LW(1))
         IF_INT_NOT_EQUAL(LW(1), 0)
             CALL(btlevtcmd_RunDataEventChild, LW(10), UNIT_DATA_EMERGENCY_REVIVAL_EVENT)
-#ifdef VERSION_G8ME01
             ELSE
-#else
-        ELSE
-#endif
             CALL(btlevtcmd_RunDataEventChild, LW(10), UNIT_DATA_DEAD_EVENT)
         END_IF
         CASE_BETWEEN(224, 230)
@@ -115,11 +107,7 @@ EVT_BEGIN(subsetevt_dead)
             CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(0), UNIT_DATA_EMERGENCY_REVIVAL_EVENT)
             IF_INT_NOT_EQUAL(LW(0), 0)
                 CALL(btlevtcmd_RunDataEventChild, LW(10), UNIT_DATA_EMERGENCY_REVIVAL_EVENT)
-#ifdef VERSION_G8ME01
                 ELSE
-#else
-            ELSE
-#endif
                 CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), POSE_TYPE_KO)
                 BEGIN_SIBLING_EVENT
                     CALL(btlevtcmd_AnimeWaitPlayComplete, LW(10), LW(11))
@@ -151,19 +139,11 @@ EVT_BEGIN(subsetevt_dead)
                 CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 20, -1)
                 CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
             END_IF
-#ifdef VERSION_G8ME01
             ELSE
-#else
-        ELSE
-#endif
             CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(0), UNIT_DATA_DEAD_EVENT)
             IF_INT_NOT_EQUAL(LW(0), 0)
                 CALL(btlevtcmd_RunDataEventChild, LW(10), UNIT_DATA_DEAD_EVENT)
-#ifdef VERSION_G8ME01
                 ELSE
-#else
-            ELSE
-#endif
             END_IF
             CALL(btlevtcmd_KillUnit, LW(10), 1)
             CALL(btlevtcmd_GetBodyId, UNIT_ID_SELF, LW(11))
@@ -197,11 +177,7 @@ EVT_BEGIN(subsetevt_dead)
             IF_INT_NOT_EQUAL(LW(0), 0)
                 CALL(btlevtcmd_ClearAllStatus, LW(10))
                 CALL(btlevtcmd_RunDataEventChild, LW(10), UNIT_DATA_EMERGENCY_REVIVAL_EVENT)
-#ifdef VERSION_G8ME01
                 ELSE
-#else
-            ELSE
-#endif
                 CALL(btlevtcmd_OnUnitFlag, LW(10), BATTLE_UNIT_FLAG_HIDE_HELD_ITEM)
                 SET_VALUE(LW(0), 48)
                 LABEL(5)
@@ -263,11 +239,7 @@ EVT_BEGIN(subsetevt_dead)
             IF_INT_NOT_EQUAL(LW(0), 0)
                 CALL(btlevtcmd_ClearAllStatus, LW(10))
                 CALL(btlevtcmd_RunDataEventChild, LW(10), UNIT_DATA_DEAD_EVENT)
-#ifdef VERSION_G8ME01
                 ELSE
-#else
-            ELSE
-#endif
                 CALL_CHILD(subsetevt_dead_core)
             END_IF
         END_IF

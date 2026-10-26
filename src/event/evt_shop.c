@@ -34,6 +34,7 @@
 #include "evt/evt_sub.h"
 #include "win/win_main.h"
 #include "evt/evt_pouch.h"
+#include "icon_ids.h"
 #ifdef VERSION_G8ME01
 #endif
 
@@ -731,11 +732,11 @@ void point_disp(WinMgrEntry* entry) {
     if (gp->language == 0U) {
         PSMTXScale(s, 1.1f, 1.1f, 1.1f);
         PSMTXConcat(m, s, m);
-        iconDispGx2(m, 0x10, 0x1F1);
+        iconDispGx2(m, 0x10, ICON_1F1);
     } else {
         PSMTXScale(s, 0.8f, 1.1f, 1.1f);
         PSMTXConcat(m, s, m);
-        iconDispGx2(m, 0x10, 0x20A);
+        iconDispGx2(m, 0x10, ICON_20A);
     }
 #endif
     PSMTXTrans(m, 124.0f + entry->x, entry->y - 38.0f, 0.0f);

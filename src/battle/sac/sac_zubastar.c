@@ -100,7 +100,7 @@ ZubaStarWork* GetZubaStarPtr(void);
 
 BattleWeapon weapon_zubastar = {
     "btl_wn_sac_zubastar", // name
-    ICON_19B, // icon
+    ICON_SAC_ZUBASTAR, // icon
     {0}, // pad_06
     0, // itemId
     "msg_zubastar", // description
@@ -899,7 +899,7 @@ static inline void
 dispA(Mtx m, s32 i) {
     GXColor ca = {0xff, 0xff, 0xff, 0};
     ca.a = 0xff - (i + 1) * 50;
-    iconDispGxCol(m, 0x10, ICON_19D, ca);
+    iconDispGxCol(m, 0x10, ICON_SAC_GENKI1, ca);
 }
 
 void zubastar_disp2D(CameraId cam, void* param) {
@@ -945,7 +945,7 @@ void zubastar_disp2D(CameraId cam, void* param) {
             GXPosition3f32(l->x1, l->y1, 0.0f);
         }
     }
-    iconDispGx(&cur->pos, 0x10, ICON_19D, 1.0f);
+    iconDispGx(&cur->pos, 0x10, ICON_SAC_GENKI1, 1.0f);
     if (cur->timer >= 25 && cur->timer < 30) {
         for (i = 0; i < 4; i++) {
             Mtx m;

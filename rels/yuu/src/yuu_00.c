@@ -32,12 +32,8 @@
 #include "evt/evt_movefloor.h"
 #include "yuu.h"
 #include "driver/seqdrv.h"
+#include "icon_ids.h"
 
-#ifdef VERSION_G8ME01
-#define YUU_ICON_OFS 8
-#else
-#define YUU_ICON_OFS 0
-#endif
 typedef struct HikokiWork {
     u32 flags;
     s32 phase;
@@ -1122,7 +1118,7 @@ static inline void monte_disp(CameraId camera, void* param) {
     if (monte != NULL) {
         for (i = 0; i < monte->num; i++) {
             if (monte[i].hidden == 0) {
-                iconDispGx(&monte[i].sub.pos, 0, 0x13F + YUU_ICON_OFS, 1.0f);
+                iconDispGx(&monte[i].sub.pos, 0, ICON_ITEM_PIANTA_TOKEN, 1.0f);
             }
         }
     }

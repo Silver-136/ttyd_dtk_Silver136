@@ -117,7 +117,7 @@ EvtWord marioAttackEvent_Muki[254];
 
 static BattleWeapon weapon = {
     "btl_wn_sac_mukimuki_body", // name
-    ICON_19A, // icon
+    ICON_SAC_MUKI, // icon
     {0}, // pad_06
     0, // itemId
     "msg_mukimuki_body", // description
@@ -780,7 +780,7 @@ static void disp_2D(CameraId cam, void* param) {
             btlDispTexPlane3(m, BTL_TEX(0x45), col[0], col[1], col[2], col[3], 0);
             PSMTXScale(m, 0.7f, 0.7f, 0.7f);
             PSMTXTransApply(m, m, x - 35.0f, y - 14.0f, 0.0f);
-            iconDispGx2(m, 0x10, ICON_1ED);
+            iconDispGx2(m, 0x10, ICON_PLUS);
             PSMTXScale(m, 0.7f, 0.7f, 0.7f);
             PSMTXTransApply(m, m, x - 25.0f, y - 14.0f, 0.0f);
             iconNumberDispGx(m, (s32)w->f18, 0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
@@ -833,7 +833,7 @@ static void disp_2D(CameraId cam, void* param) {
             btlDispTexPlane3(m, BTL_TEX(0x45), col[0], col[1], col[2], col[3], 0);
             PSMTXScale(m, 0.7f, 0.7f, 0.7f);
             PSMTXTransApply(m, m, x - 35.0f, y - 14.0f, 0.0f);
-            iconDispGx2(m, 0x10, ICON_1ED);
+            iconDispGx2(m, 0x10, ICON_PLUS);
             PSMTXScale(m, 0.7f, 0.7f, 0.7f);
             PSMTXTransApply(m, m, x - 25.0f, y - 14.0f, 0.0f);
             iconNumberDispGx(m, (s32)w->f20, 0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});

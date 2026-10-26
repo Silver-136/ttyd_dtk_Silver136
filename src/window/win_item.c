@@ -772,7 +772,7 @@ void item_disp(WindowWork* w, f32 xo, f32 yo) {
     w4 = xo + (220.0f - w2);
     winFontSet((Vec){w4, 20.0f + ((yo - 92.0f) - 10.0f), 0.0f}, (Vec){0.7f, 0.7f, 0.7f}, black, msgSearch("msg_menu_sort_narabikae"));
     winIconInit();
-    winIconSet(ICON_217, (Vec){w4 - 30.0f, 20.0f + ((yo - 100.0f) - 10.0f), 0.0f}, (Vec){0.6f, 0.6f, 0.6f}, white2);
+    winIconSet(ICON_TRIGGER_Z_ALT, (Vec){w4 - 30.0f, 20.0f + ((yo - 100.0f) - 10.0f), 0.0f}, (Vec){0.6f, 0.6f, 0.6f}, white2);
     if (w->item.bookX < 320.0f && w->item.bookY > -240.0f) {
         winBookGX(w, 0, w->item.bookX, w->item.bookY);
     }
@@ -853,7 +853,7 @@ void itemUseDisp(WinMgrEntry* entry) {
                 } else {
                     winIconInit();
                 }
-                winIconSet(ICON_19E, (Vec){entry->x + 30, entry->y - 20 - off, 0.0f}, (Vec){0.65f, 0.65f, 0.65f}, white3);
+                winIconSet(ICON_MARIO, (Vec){entry->x + 30, entry->y - 20 - off, 0.0f}, (Vec){0.65f, 0.65f, 0.65f}, white3);
                 winTexInit(*w->res->data);
                 GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_C0);
                 GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_A0, GX_CA_TEXA, GX_CA_ZERO);
@@ -890,7 +890,7 @@ void itemUseDisp(WinMgrEntry* entry) {
                 } else {
                     winIconInit();
                 }
-                winIconSet(list[i - 1]->nameMsgId, (Vec){entry->x + 30, yoff + (entry->y - 20 - i * 28), 0.0f}, (Vec){0.65f, 0.65f, 0.65f}, white3);
+                winIconSet(list[i - 1]->iconId, (Vec){entry->x + 30, yoff + (entry->y - 20 - i * 28), 0.0f}, (Vec){0.65f, 0.65f, 0.65f}, white3);
                 winFontInit();
                 winFontSet((Vec){entry->x + 50, yoff + (entry->y - 8 - i * 28), 0.0f}, (Vec){FontGetMessageWidth(name) < 160.0f ? 1.0f : 160.0f / FontGetMessageWidth(name), 1.0f, 1.0f}, black, name);
                 winFontSet((Vec){entry->x + 220, yoff + (entry->y - 8 - i * 28), 0.0f}, (Vec){0.9f, 0.9f, 0.9f}, black, WI_HP_NAME);
@@ -902,7 +902,7 @@ void itemUseDisp(WinMgrEntry* entry) {
         if (w->party.count > 1) {
             winIconInit();
             for (i = 2; i < 30; i++) {
-                winIconSet(ICON_1B7, (Vec){entry->x + (entry->width / 31) * i, entry->y - 84, 0.0f}, (Vec){0.15f, 0.15f, 0.15f}, black);
+                winIconSet(ICON_SP_ORB_1, (Vec){entry->x + (entry->width / 31) * i, entry->y - 84, 0.0f}, (Vec){0.15f, 0.15f, 0.15f}, black);
             }
         }
     }

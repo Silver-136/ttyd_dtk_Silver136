@@ -452,7 +452,7 @@ static void actionCommandDisp(f32 x, f32 y) {
         Vec pos = {0.0f, 0.0f, 0.0f};
         pos.x = (-288.0f + x) + (176.0f * r->pos) / 100.0f;
         pos.y = 45.0f + y;
-        iconDispGx(&pos, 0x10, ICON_096, 1.0f);
+        iconDispGx(&pos, 0x10, ICON_AC_GAUGE_MARKER, 1.0f);
     }
     d->frame++;
     d->frame2++;

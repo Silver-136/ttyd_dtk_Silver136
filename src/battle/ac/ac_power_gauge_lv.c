@@ -184,7 +184,7 @@ static void actionCommandDisp(f32 x, f32 y) {
         Vec pos = {0.0f, 0.0f, 0.0f};
         pos.x = -200.0f + x;
         pos.y = 25.0f + y;
-        iconDispGx(&pos, 0x10, ICON_08C, 1.0f);
+        iconDispGx(&pos, 0x10, ICON_AC_GAUGE_FRAME, 1.0f);
     }
     ratio = tw->gauge / 100.0f;
     if (ratio > 1.0f) {

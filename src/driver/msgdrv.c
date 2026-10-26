@@ -67,20 +67,20 @@ MsgIcon msgIcon[] = {
     {"PAD_B", ICON_BUTTON_B},
     {"STICK_LEFT", ICON_STICK_LEFT},
     {"STICK", ICON_STICK_NEUTRAL},
-    {"AC_ON", ICON_095},
+    {"AC_ON", ICON_AC_ON},
     {"BUTTON_L", ICON_TRIGGER_L},
     {"BUTTON_R", ICON_TRIGGER_R},
-    {"HM", ICON_19F},
+    {"HM", ICON_HP},
     {"PAD_X", ICON_BUTTON_X},
     {"PAD_X_ON", ICON_BUTTON_X_PRESSED},
     {"PAD_Y", ICON_BUTTON_Y},
     {"PAD_Y_ON", ICON_BUTTON_Y_PRESSED},
     {"PAD_Z_OFF", ICON_TRIGGER_Z},
-    {"PAD_ST_OFF", ICON_084},
-    {"black_key", ICON_130},
-    {"ANM_PAD_A", ICON_20B},
-    {"ANM_STICK_RIGHT", ICON_20C},
-    {"ANM_PAD_START", ICON_20D}
+    {"PAD_ST_OFF", ICON_BUTTON_START},
+    {"black_key", ICON_ITEM_BLACK_KEY},
+    {"ANM_PAD_A", ICON_BUTTON_A_ANIM},
+    {"ANM_STICK_RIGHT", ICON_STICK_RIGHT_ANIM},
+    {"ANM_PAD_START", ICON_BUTTON_START_ANIM}
 };
 
 s32 msgWindowOpen_SE_Data[] = {
@@ -2084,6 +2084,6 @@ void selectWindow_Disp(CameraId camId, void* param) {
     data->cursorY += 0.3f * (window->y - (f32)(data->sel * 31 + 58) - data->cursorY);
     pos.y = data->cursorY;
     pos.z = 0.0f;
-    iconDispGxAlpha(&pos, 0x14, ICON_1F0, window->alpha, 1.0f);
+    iconDispGxAlpha(&pos, 0x14, ICON_YUBI_CURSOR, window->alpha, 1.0f);
 }
 

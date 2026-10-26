@@ -404,7 +404,7 @@ void BattleAcDrawGauge(s32 x, s32 y, s32 width, f32 ratio, s32 level, s32 a, s32
     pos = (Vec){0.0f, 0.0f, 0.0f};
     pos.x = x - 200;
     pos.y = y + 25;
-    iconDispGx(&pos, 0x10, ICON_08C, 1.0f);
+    iconDispGx(&pos, 0x10, ICON_AC_GAUGE_FRAME, 1.0f);
 
     if (level >= 2) {
         gaugeQuad(cam, x - 289, y + 50, x - 289 + width * a / max, y + 32, 0x21, 0x21, 0x75, 0xFF);

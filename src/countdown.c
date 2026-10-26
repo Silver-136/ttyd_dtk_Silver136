@@ -11,6 +11,7 @@
 #include <dolphin/os.h>
 #include <string.h>
 #include "pmario_sound.h"
+#include "icon_ids.h"
 
 
 //.sdata2
@@ -20,11 +21,6 @@ static const GXColor sShadow = {255, 255, 255, 153};
 //.sbss
 static CountdownWork* wp;
 
-#ifdef VERSION_G8ME01
-#define CD_ICON_OFS 7
-#else
-#define CD_ICON_OFS 0
-#endif
 static void countDownDisp(CameraId cameraId, void* param);
 
 void countDownInit(void) {
@@ -154,7 +150,7 @@ static void countDownDisp(CameraId cameraId, void* param) {
         PSMTXConcat(base, scale, mtx);
         {
             GXColor shadow = sShadow;
-            iconDispGxCol(mtx, 0x10, 0x1f6 + CD_ICON_OFS, shadow);
+            iconDispGxCol(mtx, 0x10, ICON_COUNTER_BG, shadow);
         }
         digits[0] = sec / 100;
         sec %= 100;
@@ -163,11 +159,11 @@ static void countDownDisp(CameraId cameraId, void* param) {
         for (i = 0; i < 3; i++) {
             PSMTXTrans(mtx, i * 30 - 50, 8.0f, 0.0f);
             PSMTXConcat(base, mtx, mtx);
-            iconDispGxCol(mtx, 0x10, (u16)(digits[i] + 0x1f7 + CD_ICON_OFS), white2);
+            iconDispGxCol(mtx, 0x10, (u16)(digits[i] + ICON_COUNTER_DIGIT_0), white2);
         }
         PSMTXTrans(mtx, 28.0f, 10.0f, 0.0f);
         PSMTXConcat(base, mtx, mtx);
-        iconDispGxCol(mtx, 0x10, 0x201 + CD_ICON_OFS, white3);
+        iconDispGxCol(mtx, 0x10, ICON_COUNTER_COLON, white3);
         digits[0] = msec / 100;
         digits[1] = (msec % 100) / 10;
         for (i = 0; i < 2; i++) {
@@ -175,7 +171,7 @@ static void countDownDisp(CameraId cameraId, void* param) {
             PSMTXScale(scale, 0.5f, 0.5f, 0.5f);
             PSMTXConcat(mtx, scale, mtx);
             PSMTXConcat(base, mtx, mtx);
-            iconDispGxCol(mtx, 0x10, (u16)(digits[i] + 0x1f7 + CD_ICON_OFS), white2);
+            iconDispGxCol(mtx, 0x10, (u16)(digits[i] + ICON_COUNTER_DIGIT_0), white2);
         }
     }
 }

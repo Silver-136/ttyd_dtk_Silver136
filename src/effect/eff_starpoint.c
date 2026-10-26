@@ -145,7 +145,7 @@ void effStarPointDisp(CameraId cameraId, EffectEntry* effect) {
         if (work->alpha) {
             PSMTXTrans(trans, work->position.x, work->position.y, work->position.z);
             PSMTXConcat(mtx, trans, trans);
-            iconDispGx2(trans, 0, ICON_18C);
+            iconDispGx2(trans, 0, ICON_STAR_POINT);
         }
     }
 }

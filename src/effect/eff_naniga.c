@@ -382,7 +382,7 @@ void effNanigaDisp3(CameraId cameraId, EffectEntry* effect) {
     PSMTXConcat(mT, mR, mT);
     PSMTXConcat(mT, mS, mC);
     if (work->state < 4) {
-        iconDispGxCol(mC, 0, ICON_184, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
+        iconDispGxCol(mC, 0, ICON_ITEM_MYSTERY, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
     } else {
         iconDispGxCol(mC, 0, item->icon_id, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
     }

@@ -244,7 +244,7 @@ static void actionCommandDisp(f32 x, f32 y) {
         Vec pos = {0.0f, 0.0f, 0.0f};
         pos.x = px;
         pos.y = py;
-        ICON(&pos, 0x10, ICON_08C, 1.0f);
+        ICON(&pos, 0x10, ICON_AC_GAUGE_FRAME, 1.0f);
     }
     full = 0;
     ratio = AC_WORK(ac)->gauge / 100.0f;
@@ -305,10 +305,10 @@ static void actionCommandDisp(f32 x, f32 y) {
             break;
     }
     {
-        s32 id = ICON_091;
+        s32 id = ICON_AC_OFF;
         Vec pos;
         if (AC_WORK(ac)->inZone) {
-            id = ICON_095;
+            id = ICON_AC_ON;
         }
         {
             Vec zero = {0.0f, 0.0f, 0.0f};

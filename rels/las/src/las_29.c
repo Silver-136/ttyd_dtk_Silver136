@@ -2396,11 +2396,7 @@ EVT_BEGIN(last_evt_4)
         ADD(LW(3), 1)
         IF_INT_GREATER_OR_EQUAL(LW(3), 5)
             SUBTRACT_FLOAT(LW(5), FLOAT(5.6992188f))
-#ifdef VERSION_G8ME01
             ELSE
-#else
-        ELSE
-#endif
             ADD_FLOAT(LW(5), FLOAT(5.6992188f))
         END_IF
     END_LOOP

@@ -278,7 +278,7 @@ struct BattleWeapon;
 
 typedef struct WindowPartyDt {
     s32 partyId;            // 0x0
-    s32 nameMsgId;          // 0x4
+    s32 iconId;             // 0x4
     const char* name;       // 0x8
     const char* msg;        // 0xC
     const char* poseName;   // 0x10

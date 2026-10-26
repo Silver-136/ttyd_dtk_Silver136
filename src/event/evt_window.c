@@ -16,6 +16,7 @@
 #include "sfx_name_word.h"
 #include "nameent.h"
 #include "statuswindow.h"
+#include "icon_ids.h"
 
 typedef struct CoinWin {
     s32 id;    // 0x0
@@ -30,11 +31,6 @@ typedef struct OneMsgWin {
     s32 id;    // 0x8
 } OneMsgWin;
 
-#ifdef VERSION_G8ME01
-#define EW_ICON_OFS 8
-#else
-#define EW_ICON_OFS 0
-#endif
 s32 coinwin_se_wait;
 s32 unk_80418b3c;
 static void coin_disp(WinMgrEntry* entry);
@@ -259,15 +255,15 @@ static void coin_disp(WinMgrEntry* entry) {
     switch (w->type) {
     case 0:
         target = pouchGetCoin();
-        icon = 0x18B + EW_ICON_OFS;
+        icon = ICON_ITEM_COIN;
         break;
     case 1:
         target = pouchGetSuperCoin();
-        icon = 0x102 + EW_ICON_OFS;
+        icon = ICON_ITEM_SHINE_SPRITE;
         break;
     case 2:
         target = pouchGetStarPiece();
-        icon = 0x18D + EW_ICON_OFS;
+        icon = ICON_ITEM_STAR_PIECE;
         break;
     }
     PSMTXTrans(pos, -220.f, -113.f, 0.f);
@@ -275,7 +271,7 @@ static void coin_disp(WinMgrEntry* entry) {
     PSMTXConcat(pos, scale, pos);
     iconDispGx2(pos, 0x10, icon);
     PSMTXTrans(pos, -192.f, -113.f, 0.f);
-    iconDispGx2(pos, 0x10, 0x1D6 + EW_ICON_OFS);
+    iconDispGx2(pos, 0x10, ICON_TIMES);
     PSMTXTrans(pos, -126.f, -113.f, 0.f);
     {
         GXColor white = {0xFF, 0xFF, 0xFF, 0xFF};

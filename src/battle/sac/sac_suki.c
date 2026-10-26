@@ -104,7 +104,7 @@ void N__disp_2D(s32 side, s32 idx);
 
 static BattleWeapon weapon = {
     "btl_wn_sac_sukkari_sukkiri", // name
-    ICON_199, // icon
+    ICON_SAC_SUKI, // icon
     {0}, // pad_06
     0, // itemId
     "msg_sukkari_sukkiri", // description
@@ -458,20 +458,20 @@ static void disp_2D(CameraId cam, void* param) {
 
     PSMTXScale(m, 26.0f, 1.0f, 1.0f);
     PSMTXTransApply(m, m, w->pos.x, 60.0f + w->pos.y, w->pos.z);
-    iconDispGx2(m, 0x10, ICON_08E);
+    iconDispGx2(m, 0x10, ICON_AC_BAR_MIDDLE);
     {
         Vec a = {0.0f, 0.0f, 0.0f};
         a.x = 215.0f + w->pos.x;
         a.y = 60.0f + w->pos.y;
         a.z = w->pos.z;
-        iconDispGx(&a, 0x10, ICON_090, 1.0f);
+        iconDispGx(&a, 0x10, ICON_AC_BAR_RIGHT, 1.0f);
     }
     {
         Vec b = {0.0f, 0.0f, 0.0f};
         b.x = w->pos.x - 215.0f;
         b.y = 60.0f + w->pos.y;
         b.z = w->pos.z;
-        iconDispGx(&b, 0x10, ICON_08F, 1.0f);
+        iconDispGx(&b, 0x10, ICON_AC_BAR_LEFT, 1.0f);
     }
     GXSetScissor(0, 0x91, gp->fbWidth, 0x50);
     for (i = 0; i < 7; i++) {
