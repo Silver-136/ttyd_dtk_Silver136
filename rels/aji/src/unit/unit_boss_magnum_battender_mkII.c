@@ -64,22 +64,6 @@ typedef struct BattenEffWork {
     Mtx mtx;
 } BattenEffWork;
 typedef struct TargetWork { s32 state; s32 count; EffectEntry* eff; } TargetWork;
-typedef struct AudMember {
-    s32 flags;
-    s32 step;
-    s32 counter;
-    u8 pad_0C[0x48 - 0xC];
-    Vec position;
-    u8 pad_54[0x60 - 0x54];
-    Vec scale;
-    u8 pad_6C[0x9C - 0x6C];
-    Vec rotation;
-    u8 pad_A8[0xB4 - 0xA8];
-    Vec home;
-    u8 pad_C0[0xF8 - 0xC0];
-    s32 frame;
-    s32 frames;
-} AudMember;
 extern EvtWord aud_hit_event[];
 void aud_get_pod_pos(BattleUnit* unit, f32* x, f32* y, f32* z);
 void aud_fire_eff(f32 x, f32 y, f32 z);
@@ -602,7 +586,7 @@ USER_FUNC(get_aud_num) {
 USER_FUNC(aud_suikomi) {
     s32 id = BattleTransID(event, evtGetValue(event, event->args[0]));
     s32 done = 0;
-    AudMember* mem;
+    BattleAudienceMember* mem;
     s32 i;
     s32 j;
     f32 x;
@@ -635,12 +619,12 @@ USER_FUNC(aud_suikomi) {
             ids[b] = tmp;
         }
         for (i = 0; i < 20; i++) {
-            mem = (AudMember*)BattleAudienceGetPtr(ids[i]);
+            mem = BattleAudienceGetPtr(ids[i]);
             mem->flags |= 0x10;
             BattleAudience_SetAnim(ids[i], 9, FALSE);
-            mem->frames = i * 3 + 60;
+            mem->interpFramesTotal = i * 3 + 60;
             mem->counter = 0;
-            mem->rotation.y = 0.0f;
+            mem->mRotation.y = 0.0f;
             list[i] = ids[i];
         }
         BtlUnit_GetPos(BattleGetUnitPtr(_battleWorkPointer, id), &x, &y, &z);
@@ -652,19 +636,19 @@ USER_FUNC(aud_suikomi) {
     for (i = 0; i < 200; i++) {
         for (j = 0; j < 20; j++) {
             if (i == list[j]) {
-                mem = (AudMember*)BattleAudienceGetPtr(i);
-                mem->rotation.y += 19.0f;
-                if (mem->frame < mem->frames) {
-                    mem->frame++;
+                mem = BattleAudienceGetPtr(i);
+                mem->mRotation.y += 19.0f;
+                if (mem->interpFramesLeft < mem->interpFramesTotal) {
+                    mem->interpFramesLeft++;
                 } else {
                     done++;
                     mem->flags &= ~4;
                     mem->flags |= 2;
                 }
-                mem->position.x = intplGetValue(EASING_QUADRATIC_OUT, mem->home.x, x2, mem->frame, mem->frames);
-                mem->position.y = intplGetValue(EASING_CUBIC_IN, mem->home.y, y2, mem->frame, mem->frames);
-                mem->position.z = intplGetValue(EASING_QUADRATIC_OUT, mem->home.z, z2, mem->frame, mem->frames);
-                mem->scale.x = mem->scale.y = intplGetValue(EASING_QUADRATIC_OUT, 1.0f, 0.65f, mem->frame, mem->frames);
+                mem->position.x = intplGetValue(EASING_QUADRATIC_OUT, mem->mHomePosition.x, x2, mem->interpFramesLeft, mem->interpFramesTotal);
+                mem->position.y = intplGetValue(EASING_CUBIC_IN, mem->mHomePosition.y, y2, mem->interpFramesLeft, mem->interpFramesTotal);
+                mem->position.z = intplGetValue(EASING_QUADRATIC_OUT, mem->mHomePosition.z, z2, mem->interpFramesLeft, mem->interpFramesTotal);
+                mem->baseScale.x = mem->baseScale.y = intplGetValue(EASING_QUADRATIC_OUT, 1.0f, 0.65f, mem->interpFramesLeft, mem->interpFramesTotal);
                 break;
             }
         }
@@ -703,7 +687,7 @@ USER_FUNC(aud_fire_hit) {
     s32 start = evtGetValue(event, args[2]);
     BattleUnit* unit;
     BattleUnitPart* part;
-    AudMember* mem;
+    BattleAudienceMember* mem;
     EventEntry* evt;
     s32 i;
     f32 x;
@@ -720,13 +704,13 @@ USER_FUNC(aud_fire_hit) {
         part = BtlUnit_GetPartsPtr(unit, BtlUnit_GetBodyPartsId(unit));
         BtlUnit_GetHitPos(unit, part, &hx, &hy, &hz);
         for (i = start; i < start + 2; i++) {
-            mem = (AudMember*)BattleAudienceGetPtr(list[i]);
+            mem = BattleAudienceGetPtr(list[i]);
             BattleAudience_SetAnim(list[i], 9, FALSE);
             mem->position = (Vec){x, y, z};
-            mem->frames = 0;
+            mem->interpFramesTotal = 0;
             mem->counter = 0;
-            mem->rotation.y = 0.0f;
-            mem->scale.x = mem->scale.y = 1.0f;
+            mem->mRotation.y = 0.0f;
+            mem->baseScale.x = mem->baseScale.y = 1.0f;
             mem->flags |= 4;
             evt = evtEntry(aud_hit_event, 0, EVENT_START_IMMEDIATE);
             evt->lwData[0] = list[i];
@@ -752,7 +736,7 @@ USER_FUNC(aud_fire_no_hit) {
     s32 start = evtGetValue(event, args[2]);
     BattleUnit* unit;
     BattleUnitPart* part;
-    AudMember* mem;
+    BattleAudienceMember* mem;
     EventEntry* evt;
     s32 i;
     f32 x;
@@ -769,13 +753,13 @@ USER_FUNC(aud_fire_no_hit) {
         part = BtlUnit_GetPartsPtr(unit, BtlUnit_GetBodyPartsId(unit));
         BtlUnit_GetHitPos(unit, part, &hx, &hy, &hz);
         for (i = start; i < start + 2; i++) {
-            mem = (AudMember*)BattleAudienceGetPtr(list[i]);
+            mem = BattleAudienceGetPtr(list[i]);
             BattleAudience_SetAnim(list[i], 9, FALSE);
             mem->position = (Vec){x, y, z};
-            mem->frames = 0;
+            mem->interpFramesTotal = 0;
             mem->counter = 0;
-            mem->rotation.y = 0.0f;
-            mem->scale.x = mem->scale.y = 1.0f;
+            mem->mRotation.y = 0.0f;
+            mem->baseScale.x = mem->baseScale.y = 1.0f;
             mem->flags |= 4;
             evt = evtEntry(aud_hit_event, 0, EVENT_START_IMMEDIATE);
             evt->lwData[0] = list[i];
