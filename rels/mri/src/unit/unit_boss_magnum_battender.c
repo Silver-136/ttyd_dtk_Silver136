@@ -34,7 +34,7 @@
 #define UNIT_WORK_ARM_1_UNUSED 4     // unit id of the rocket punch launched as arm 1; never read
 #define UNIT_WORK_STAMP_TALK_DONE 5  // 1 after the first stamp attack showed stg2_mri_e24_11; while 0 attack_event always stamps
 #define UNIT_WORK_LOW_HP_TALK_DONE 6 // 1 once damage_event showed its low-HP line (dead_event sets it too)
-// ... and of the rocket punch units it launches (unit_boss_rocket_punch*, the *_r and arm_event* events)
+// ... and of the rocket punch units it launches (unit_boss_rocket_punch below; the *_r and arm_event* events)
 #define ROCKET_PUNCH_WORK_SIDE 0     // which arm: 0/1, or 2/3 for an arm spawned by arm_return_event (no fly-in); arm_check reads it
 #define ROCKET_PUNCH_WORK_WAIT 1     // turns before it attacks: 1 at launch and after each attack (it attacks every second turn)
 

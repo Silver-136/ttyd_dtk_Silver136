@@ -45,7 +45,7 @@
 #define UNIT_WORK_LOW_HP_TALK_DONE 6 // 1 once damage_event showed its low-HP line (dead_event sets it too)
 #define UNIT_WORK_AUD_TALK_DONE 7    // 1 after the first aud_attack_event (stg7_aji_41_04/05); at 35 HP or less with 20 or more audience it goes first while 0
 #define UNIT_WORK_AUD_HIT 8          // 1 once a machine-gun shot of aud_attack_event has hit; the 10th shot then hits without a new check
-// ... and of the rocket punch units it launches (unit_boss_rocket_punch*, the *_r and arm_event* events)
+// ... and of the rocket punch units it launches (unit_boss_rocket_punch_mkII below; the *_r and arm_event* events)
 #define ROCKET_PUNCH_WORK_SIDE 0     // which arm: 0/1, or 2/3 for an arm spawned by arm_return_event (no fly-in); arm_check reads it
 #define ROCKET_PUNCH_WORK_WAIT 1     // turns before it attacks: 1 at launch and after each attack (it attacks every second turn)
 
