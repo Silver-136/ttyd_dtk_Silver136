@@ -67,9 +67,9 @@ data order 10, sound-name integer round trips (`SFX_NAME_WORD`) 9, no-op casts 6
 - Saved-game flags and variables: story progress (StoryProgress, 407 game labels), Trouble Center, Star Pieces
   and Shine Sprites (game strings), and every other GSWF/GSW the scripts use (805 names in
   include/evt/evt_save_flags.h, 2026-10-26, from the scripts and room text; tool cleanup_tools/save_flags.py).
-  Left: the area-local LSW/LSWF values (about 20 numbers, meanings per area), and C code that uses the same values
-  by index (`swSet(0x994)`, mostly event.c's debug story-jump inits and the journal), which cannot use the
-  GSWF() names.
+  Area-local values (LSWF/LSW): 84 names in the area headers rels/<area>/include/<area>.h (tool
+  cleanup_tools/area_flags.py). C code that uses saved values by index (`swSet(0x994)`) cannot use the names;
+  each such line ends with the name as a comment (save_flags.py cnotes).
 - Names with an address suffix: 5 unreferenced .sbss words with no name evidence (the JP demo map names the
   neighbouring objects only), the JP-only party init copies, jumptable_80374848, and the shadowdrv debug strings
   by address (`str_8...`, 6; open research).
@@ -100,7 +100,8 @@ data order 10, sound-name integer round trips (`SFX_NAME_WORD`) 9, no-op casts 6
   SequenceWork / MapFileMesh in ac_*.c, seq_battle and mobjdrv.
 - Offset-only field names that the placeholder count misses (sac_bakugame `s7c`, `c0`, `cc`, `dc`, `e0`, `f0` ...).
 - Hand-expanded code that a macro or inline probably produced: psndENVMain's `ENVAPPLY` cases and psndENVOn_f_d's
-  offset sum, hand-inlined `randf` in several map units, the Smorg hop code's temporaries.
+  offset sum, the Smorg hop code's temporaries (hand-inlined `randf` in map units: settled as written, Codex round 9
+  found the inline call changes literal-pool order).
 - Zero/template vector globals placed by hand (part of the 18 placements).
 - JP-only local duplicates of party init functions (`*_init_800...` names), shared US float constants.
 - Long one-line statements in some map units (nested blocks on one line).
