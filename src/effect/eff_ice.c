@@ -11,38 +11,6 @@
 #include <dolphin/os.h>
 #include "eff/eff_ice.h"
 
-typedef struct MayaPoly {
-    s32 keyCount;          // 0x0
-    MayaHermitKey* keys;   // 0x4
-    s32 count;
-    s16** strips;
-} MayaPoly;
-
-typedef struct MayaKeyList {
-    s32 count;
-    MayaPoly* polys;
-} MayaKeyList;
-
-typedef struct MayaAnimData {
-    u8 pad0[4];
-    f32 endTime;
-    MayaKeyList* lists;
-} MayaAnimData;
-
-typedef struct MayaJoint {
-    Mtx mtx;
-    f32 alpha;
-} MayaJoint;
-
-typedef struct MayaAnim {
-    u16 flags;
-    f32 time;
-    OSTime startTime;
-    MayaAnimData* data;
-    MayaJoint joints[1];
-} MayaAnim;
-
-
 typedef struct EffIceWork {
     s32 type;       // 0x0
     Vec position;   // 0x4

@@ -18,38 +18,6 @@ double sin(double);
 double cos(double);
 u32 strlen(const char* s);
 
-typedef struct MayaPoly {
-    s32 keyCount;          // 0x0
-    MayaHermitKey* keys;   // 0x4
-    s32 count;
-    s16** strips;
-} MayaPoly;
-
-typedef struct MayaKeyList {
-    s32 count;
-    MayaPoly* polys;
-} MayaKeyList;
-
-typedef struct MayaAnimData {
-    u8 pad0[4];
-    f32 endTime;
-    MayaKeyList* lists;
-} MayaAnimData;
-
-typedef struct MayaJoint {
-    Mtx mtx;
-    f32 alpha;
-} MayaJoint;
-
-typedef struct MayaAnim {
-    u16 flags;
-    f32 time;
-    OSTime startTime;
-    MayaAnimData* data;
-    MayaJoint joints[1];
-} MayaAnim;
-
-
 #define QUAD(l, r, t, b, u) \
     GXBegin(GX_QUADS, GX_VTXFMT0, 4); \
     GXPosition3f32((l), (t), 0.0f); GXTexCoord2f32(0.0f, 0.0f); \
@@ -187,7 +155,6 @@ MayaPoly recovery_effAnimRST[] = {
 };
 MayaKeyList recovery_effAnimRSTDt = {1, recovery_effAnimRST};
 MayaAnimData recovery_effAnimDt = { { 0 }, 79.0f, &recovery_effAnimRSTDt };
-
 
 void effRecoveryMain(EffectEntry* effect);
 void effRecoveryMain2(EffectEntry* effect);

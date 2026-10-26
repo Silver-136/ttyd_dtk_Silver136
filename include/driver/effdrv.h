@@ -4,9 +4,42 @@
 #include "manager/filemgr.h"
 #include "sdk/texPalette.h"
 
-struct MayaAnim;
-struct MayaPoly;
-struct MayaAnimData;
+#include <dolphin/mtx.h>
+#include "eff/eff_maya_data.h"
+
+/* Maya effect animation data (the same layout in effdrv and the effects that play it: eff_damage_star, eff_ice,
+ * eff_recovery): MayaAnimData -> MayaKeyList (one entry per animated polygon group) -> MayaPoly (its keys and
+ * polygon strips) -> MayaHermitKey. */
+typedef struct MayaPoly {
+    s32 keyCount;        // 0x0
+    MayaHermitKey* keys; // 0x4
+    s32 count;           // 0x8, polygon strip count
+    s16** strips;        // 0xC
+} MayaPoly;
+
+typedef struct MayaKeyList {
+    s32 count;       // 0x0
+    MayaPoly* polys; // 0x4
+} MayaKeyList;
+
+typedef struct MayaAnimData {
+    u8 pad_00[4];        // 0x0, never accessed
+    f32 endTime;         // 0x4
+    MayaKeyList* lists;  // 0x8
+} MayaAnimData;
+
+typedef struct MayaJoint {
+    Mtx mtx;   // 0x0
+    f32 alpha; // 0x30
+} MayaJoint;
+
+typedef struct MayaAnim {
+    u16 flags;             // 0x0
+    f32 time;              // 0x4
+    OSTime startTime;      // 0x8
+    MayaAnimData* data;    // 0x10
+    MayaJoint joints[1];   // 0x18, one per MayaKeyList entry (effMayaAnimAlloc)
+} MayaAnim;
 
 typedef void (*EffectCallback)(struct EffectEntry* effect);
 

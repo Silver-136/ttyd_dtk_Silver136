@@ -17,38 +17,6 @@
 
 u32 strlen(const char* s);
 
-typedef struct MayaPoly {
-    s32 keyCount;          // 0x0
-    MayaHermitKey* keys;   // 0x4
-    s32 count;
-    s16** strips;
-} MayaPoly;
-
-typedef struct MayaKeyList {
-    s32 count;
-    MayaPoly* polys;
-} MayaKeyList;
-
-typedef struct MayaAnimData {
-    u8 pad0[4];
-    f32 endTime;
-    MayaKeyList* lists;
-} MayaAnimData;
-
-typedef struct MayaJoint {
-    Mtx mtx;
-    f32 alpha;
-} MayaJoint;
-
-typedef struct MayaAnim {
-    u16 flags;
-    f32 time;
-    OSTime startTime;
-    MayaAnimData* data;
-    MayaJoint joints[1];
-} MayaAnim;
-
-
 typedef struct DamageStarWork {
     s32 type;       // 0x0
     Vec position;   // 0x4
@@ -63,8 +31,6 @@ typedef struct DamageStarWork {
     u32 tick;       // 0x40
     MayaAnim* anim; // 0x44
 } DamageStarWork;
-
-
 
 MayaHermitKey damageStar_effHermit_0[] = {
     {
@@ -258,7 +224,6 @@ MayaHermitKey damageStar_effHermit_1[] = {
     },
 };
 
-
 static u8 scale_data[] = {
     0x32, 0x37, 0x3C, 0x46, 0x50, 0x64, 0x96, 0xDC, 0xF0, 0xC8,
     0x8C, 0x64, 0x8C, 0xA0, 0x8C, 0x96, 0x9B, 0x96, 0x94, 0x96,
@@ -282,7 +247,6 @@ MayaPoly damageStar_effAnimRST[] = {
 };
 MayaKeyList damageStar_effAnimRSTDt = {2, damageStar_effAnimRST};
 MayaAnimData damageStar_effAnimDt = { { 0 }, 65.0f, &damageStar_effAnimRSTDt };
-
 
 void effDamageStarMain(EffectEntry* effect);
 void effDamageStarDisp(CameraId cameraId, EffectEntry* effect);
