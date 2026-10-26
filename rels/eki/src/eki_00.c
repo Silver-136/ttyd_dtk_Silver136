@@ -323,12 +323,12 @@ static void moamoa_pose_change(Moamoa* moa, const char* model, const char* anim)
     MoamoaPoseDef* def = wp->defs;
     s32 i;
 
-    if (moa->flags & 0x800) {
+    if (moa->flags & MOAMOA_FLAG_SHOW_KIND) {
         model = group_tbl[moa->kind][0];
-        if (moa->kind >= 2) {
+        if (moa->kind >= MOAMOA_KIND_KINOPIO) {
             anim = group_tbl[moa->kind][1];
         }
-        if (moa->kind == 10) {
+        if (moa->kind == MOAMOA_KIND_MOA_A_S2_UNUSED) {
             anim = "S_2";
         }
     }
@@ -338,12 +338,12 @@ static void moamoa_pose_change(Moamoa* moa, const char* model, const char* anim)
         }
     }
     if (i < wp->numDefs && moa->pose != i) {
-        if (moa->flags & 4) {
+        if (moa->flags & MOAMOA_FLAG_HIT) {
             if (strncmp(anim, "D", 1)) {
                 return;
             }
         }
-        if (moa->flags & 0x10) {
+        if (moa->flags & MOAMOA_FLAG_ESCAPING) {
             if (strncmp(anim, "R", 1)) {
                 return;
             }
@@ -389,7 +389,7 @@ static s32 evt_moamoa_end_wait(EventEntry* event, BOOL isFirstCall) {
     extGetPosePtr();
     moa = wp->moa;
     for (i = 0; i < wp->count; i++, moa++) {
-        if (!(moa->flags & 0x20)) {
+        if (!(moa->flags & MOAMOA_FLAG_GONE)) {
             return EVT_RETURN_BLOCK;
         }
     }
@@ -408,16 +408,16 @@ static s32 evt_moamoa_fusion(EventEntry* event, BOOL isFirstCall) {
             (*pose->mtx)[2][2] = (1.0f);
             (*pose->mtx)[1][1] = (1.0f);
             (*pose->mtx)[0][0] = (1.0f);
-            moa->next = 14;
-            moa->state = 14;
+            moa->next = MOAMOA_STATE_FUSION_WAIT;
+            moa->state = MOAMOA_STATE_FUSION_WAIT;
             moa->timer = i < 100 ? i % 100 : i % 60 + 100;
-            moa->flags |= 0x100;
+            moa->flags |= MOAMOA_FLAG_FUSING;
         }
     }
     extGetPosePtr();
     moa = wp->moa;
     for (i = 0; i < wp->count; i++, moa++) {
-        if (!(moa->flags & 0x200)) {
+        if (!(moa->flags & MOAMOA_FLAG_FUSION_ARRIVED)) {
             return EVT_RETURN_BLOCK;
         }
     }
@@ -425,8 +425,8 @@ static s32 evt_moamoa_fusion(EventEntry* event, BOOL isFirstCall) {
     moa = wp->moa;
     for (i = 0; i < wp->count; i++, pose++, moa++) {
         pose->flags |= EXT_POSE_FLAG_NO_SHADOW;
-        moa->flags |= 0x400;
-        moa->state = 61;
+        moa->flags |= MOAMOA_FLAG_FUSED;
+        moa->state = MOAMOA_STATE_FUSED;
         moamoa_pose_change(moa, "c_n_moa_a", "S_1");
     }
     return EVT_RETURN_DONE;
@@ -444,19 +444,19 @@ static s32 evt_moamoa_kind_onoff(EventEntry* event, BOOL isFirstCall) {
     for (i = 0; i < wp->count; i++, moa++) {
         if (on) {
             if (!all) {
-                if (moa->kind == 1) {
-                    moa->flags |= 0x800;
+                if (moa->kind == MOAMOA_KIND_MOA_B) {
+                    moa->flags |= MOAMOA_FLAG_SHOW_KIND;
                 }
             } else {
-                moa->flags |= 0x800;
+                moa->flags |= MOAMOA_FLAG_SHOW_KIND;
             }
         } else {
             if (!all) {
-                if (moa->kind != 1) {
-                    moa->flags &= ~0x800;
+                if (moa->kind != MOAMOA_KIND_MOA_B) {
+                    moa->flags &= ~MOAMOA_FLAG_SHOW_KIND;
                 }
             } else {
-                moa->flags &= ~0x800;
+                moa->flags &= ~MOAMOA_FLAG_SHOW_KIND;
             }
         }
         moamoa_pose_change(moa, "c_n_moa_a", "S_1");
@@ -472,8 +472,8 @@ static s32 evt_moamoa_blow(EventEntry* event, BOOL isFirstCall) {
     extGetPosePtr();
     moa = wp->moa;
     for (i = 0; i < wp->count; i++, moa++) {
-        moa->flags &= ~0x400;
-        moa->state = 63;
+        moa->flags &= ~MOAMOA_FLAG_FUSED;
+        moa->state = MOAMOA_STATE_BLOW_START;
     }
     return EVT_RETURN_DONE;
 }
@@ -485,11 +485,11 @@ static s32 evt_moamoa_fusion_debug(EventEntry* event, BOOL isFirstCall) {
 
     for (i = 0; i < wp->count; i++, pose++, moa++) {
         pose->flags |= EXT_POSE_FLAG_NO_SHADOW;
-        moa->flags |= 0x400;
-        moa->flags |= 0x100;
-        moa->flags |= 0x200;
-        moa->state = 61;
-        moa->flags |= 0x800;
+        moa->flags |= MOAMOA_FLAG_FUSED;
+        moa->flags |= MOAMOA_FLAG_FUSING;
+        moa->flags |= MOAMOA_FLAG_FUSION_ARRIVED;
+        moa->state = MOAMOA_STATE_FUSED;
+        moa->flags |= MOAMOA_FLAG_SHOW_KIND;
         moamoa_pose_change(moa, "c_n_moa_a", "S_1");
     }
     return EVT_RETURN_DONE;
@@ -501,9 +501,9 @@ static s32 evt_moamoa_target_off(EventEntry* event, BOOL isFirstCall) {
     wp->target[i] = wp->target[1 - i];
     wp->targetHits[i] = 100;
     if (i == 0) {
-        wp->flags |= 0x1000;
+        wp->flags |= MOAMOA_WORK_FLAG_TARGET0_CLEARED;
     } else {
-        wp->flags |= 0x2000;
+        wp->flags |= MOAMOA_WORK_FLAG_TARGET1_CLEARED;
     }
     return EVT_RETURN_DONE;
 }
@@ -537,7 +537,7 @@ static void ext_moamoa_init(void) {
     moa = wp->moa;
     for (i = 0; i < wp->count; i++, pose++, moa++) {
         moa->flags = 0;
-        moa->state = 0;
+        moa->state = MOAMOA_STATE_WANDER;
         moa->timer = 0;
         moamoa_pose_change(moa, "c_n_moa_a", "S_1");
         rad = randf(0.0f, 6.2831855f);
@@ -546,6 +546,8 @@ static void ext_moamoa_init(void) {
         PSMTXIdentity(*pose->mtx);
         (*pose->mtx)[0][3] = wp->target[0].x + dist * moa_sin(rad);
         (*pose->mtx)[1][3] = 0.0f;
+        // BUG: writes [0][3] (x) a second time, so x gets the z value and z stays 0 from PSMTXIdentity
+        // ([2][3] was presumably intended); the ground probe below then starts from that point.
         (*pose->mtx)[0][3] = wp->target[0].z - dist * moa_cos(rad);
         hitX = hitY = hitZ = 0.0f;
         hd = 1000000.0f;
@@ -627,10 +629,10 @@ static void moamoa_jump(ExtdrvPose* pose, Moamoa* moa, s32 next, s32 checkGround
     angle = angleABf((*pose->mtx)[0][3], (*pose->mtx)[2][3], moa->target.x, moa->target.z);
     moa->jumpTimer = d / moa->speed;
     moa->vy = dy / moa->jumpTimer + moa->gravity * moa->jumpTimer / 2;
-    moa->state = 3;
+    moa->state = MOAMOA_STATE_JUMP;
     moa->next = next;
     pose->dir = 180.0f + angle;
-    moa->flags |= 2;
+    moa->flags |= MOAMOA_FLAG_JUMPING;
     pose->flags |= EXT_POSE_FLAG_SHADOW_POS;
     pose->flags &= ~EXT_POSE_FLAG_NO_SHADOW;
 }
@@ -776,9 +778,9 @@ static void ext_moamoa_main(void) {
         wp->idleFrames = 0;
     }
     if (party->flags & PARTY_FLAG_IS_BEING_USED) {
-        wp->flags |= 0x10;
+        wp->flags |= MOAMOA_WORK_FLAG_PARTY_IN_USE;
     } else {
-        wp->flags &= ~0x10;
+        wp->flags &= ~MOAMOA_WORK_FLAG_PARTY_IN_USE;
     }
     wp->breathDir = -1.0f;
     wp->breathDist = -1.0f;
@@ -794,15 +796,15 @@ static void ext_moamoa_main(void) {
         Moamoa *mm;
         extGetPosePtr();
         for (j = 0, mm = wp->moa; j < wp->count; j++, mm++) {
-            if (mm->flags & 4) {
+            if (mm->flags & MOAMOA_FLAG_HIT) {
                 continue;
             }
-            if (mm->flags & 0x10) {
+            if (mm->flags & MOAMOA_FLAG_ESCAPING) {
                 break;
             }
-            mm->state = 25;
+            mm->state = MOAMOA_STATE_ESCAPE_TURN;
             mm->timer = 0;
-            mm->flags |= 0x10;
+            mm->flags |= MOAMOA_FLAG_ESCAPING;
         }
 
         if (wp->escapeEvt == NULL) {
@@ -815,18 +817,18 @@ static void ext_moamoa_main(void) {
     for (i = 0; i < wp->count; i++, pose++, moa++) {
         wp->angle = angleABf(mario->position.x, mario->position.z, (*pose->mtx)[0][3], (*pose->mtx)[2][3]);
         wp->dist = distABf(mario->position.x, mario->position.z, (*pose->mtx)[0][3], (*pose->mtx)[2][3]);
-        if ((((((wp->flags & 1) && (!(wp->flags & 4))) && (!marioKeyOffChk())) && (!marioCtrlOffChk())) && (!hit)) && (!(moa->flags & 0x154))) {
+        if ((((((wp->flags & MOAMOA_WORK_FLAG_ACTIVE) && (!(wp->flags & MOAMOA_WORK_FLAG_NO_HIT))) && (!marioKeyOffChk())) && (!marioCtrlOffChk())) && (!hit)) && (!(moa->flags & (MOAMOA_FLAG_HIT | MOAMOA_FLAG_ESCAPING | MOAMOA_FLAG_OFF_ROOF | MOAMOA_FLAG_FUSING)))) {
             ret = moamoa_hit_check(pose, moa);
             if (ret == 1) {
-                moa->flags |= 4;
-                moa->state = 36;
+                moa->flags |= MOAMOA_FLAG_HIT;
+                moa->state = MOAMOA_STATE_STOMPED;
                 wp->hitCount++;
                 moamoa_pose_change(moa, "c_n_moa_a", "D_1");
                 hit = 1;
             } else
               if ((ret == 2) || (ret == 4)) {
-                moa->flags |= 0xc;
-                moa->state = 47;
+                moa->flags |= (MOAMOA_FLAG_HIT | MOAMOA_FLAG_KNOCKED_AWAY);
+                moa->state = MOAMOA_STATE_KNOCKED_AWAY;
                 wp->hitCount++;
                 moamoa_pose_change(moa, "c_n_moa_a", "D_1");
                 if (ret != 4) {
@@ -835,8 +837,8 @@ static void ext_moamoa_main(void) {
             } else
               if (ret == 3) {
                 angle = (wp->breathDir + wp->angle) / 2.0f;
-                moa->flags |= 0x84;
-                moa->state = 48;
+                moa->flags |= (MOAMOA_FLAG_HIT | MOAMOA_FLAG_BLOWN);
+                moa->state = MOAMOA_STATE_BLOWN_DRIFT;
                 moa->target = moamoa_zero_vec;
                 spd = randf(0.1f, 0.2f);
                 rad = (6.2831855f * angle) / 360.0f;
@@ -849,14 +851,14 @@ static void ext_moamoa_main(void) {
                 hit = 1;
             }
         }
-        if (((wp->flags & 1) && (!(moa->flags & 0x155))) && (wp->dist < 50.0f)) {
-            if (moa->flags & 2) {
-                moa->next = 1;
+        if (((wp->flags & MOAMOA_WORK_FLAG_ACTIVE) && (!(moa->flags & (MOAMOA_FLAG_TO_TARGET | MOAMOA_FLAG_HIT | MOAMOA_FLAG_ESCAPING | MOAMOA_FLAG_OFF_ROOF | MOAMOA_FLAG_FUSING)))) && (wp->dist < 50.0f)) {
+            if (moa->flags & MOAMOA_FLAG_JUMPING) {
+                moa->next = MOAMOA_STATE_FLEE;
             } else {
-                moa->state = 1;
+                moa->state = MOAMOA_STATE_FLEE;
             }
         }
-        if ((((wp->flags & 1) && (!(moa->flags & 0x444))) && (i == (gp->retraceCount % wp->count))) && (irand(1000) < 200)) {
+        if ((((wp->flags & MOAMOA_WORK_FLAG_ACTIVE) && (!(moa->flags & (MOAMOA_FLAG_HIT | MOAMOA_FLAG_OFF_ROOF | MOAMOA_FLAG_FUSED)))) && (i == (gp->retraceCount % wp->count))) && (irand(1000) < 200)) {
             Vec tmp = {0.0f, 0.0f, 0.0f};
             tmp.x = (*pose->mtx)[0][3];
             tmp.y = (*pose->mtx)[1][3];
@@ -865,7 +867,7 @@ static void ext_moamoa_main(void) {
             psndSFXOn_3D(SFX_NAME_WORD("SFX_STG6_MOAMOA_VOICE1"), &sp); // FAKE: integer cast hoists the literal as an @ temp
         }
         switch (moa->state) {
-            case 0:
+            case MOAMOA_STATE_WANDER:
                 if ((i % 50) < 20) {
                     f32 x;
                     f32 z;
@@ -888,7 +890,7 @@ static void ext_moamoa_main(void) {
                         f32 r2 = rand() / 32767.0f;
                         moamoa_jump(pose, moa, moa->state, 1, x, y, z, (r1 * (k1 = 3.0f - 1.5f)) + 1.5f, (r2 * (k2 = 2.0f - 0.8f)) + 0.8f);
                     }
-                    moa->flags |= 1;
+                    moa->flags |= MOAMOA_FLAG_TO_TARGET;
                     break;
                 }
                 {
@@ -915,27 +917,27 @@ static void ext_moamoa_main(void) {
                         moamoa_jump(pose, moa, moa->state, 1, rad, y, z, (r1 * (k1 = 0.5f - 0.3f)) + 0.3f, (r2 * (k2 = 0.8f - 0.5f)) + 0.5f);
                     }
                 }
-                moa->flags &= ~1;
+                moa->flags &= ~MOAMOA_FLAG_TO_TARGET;
                 break;
 
-            case 50:
+            case MOAMOA_STATE_GATHER_WAIT_UNUSED:
                 if ((--moa->timer) < 0) {
                     moa->timer = 0;
                     moa->state++;
                 }
                 break;
 
-            case 51:
+            case MOAMOA_STATE_GATHER_INIT_UNUSED:
                 moa->speed = randf(0.0f, 200.0f);
                 moa->gravity = randf(0.0f, (300.0f * moa->speed) / 200.0f);
                 moa->state++;
                 moa->timer = 0;
 
-            case 52:
+            case MOAMOA_STATE_GATHER_UNUSED:
                 s = (moa->timer < 200) ? (1.0f) : ((800 - moa->timer) / 600.0f);
                 if (s < 0.0f) {
                     s = 0.0f;
-                    moa->flags |= 0x200;
+                    moa->flags |= MOAMOA_FLAG_FUSION_ARRIVED;
                 }
                 tx = wp->target[i % 3].x;
                 ty = wp->target[i % 3].y;
@@ -950,7 +952,7 @@ static void ext_moamoa_main(void) {
                 moa->timer++;
                 break;
 
-            case 1: {
+            case MOAMOA_STATE_FLEE: {
                     f32 rad;
                     {
                         f32 k;
@@ -968,7 +970,7 @@ static void ext_moamoa_main(void) {
                 }
                 break;
 
-            case 2: {
+            case MOAMOA_STATE_APPROACH: {
                     f32 z;
                     f32 x;
                     {
@@ -1002,7 +1004,7 @@ static void ext_moamoa_main(void) {
                     break;
                 }
 
-            case 3:
+            case MOAMOA_STATE_JUMP:
                 (*pose->mtx)[1][3] += moa->vy;
                 moa->vy -= moa->gravity;
                 {
@@ -1014,26 +1016,26 @@ static void ext_moamoa_main(void) {
                     (*pose->mtx)[0][3] = moa->target.x;
                     (*pose->mtx)[1][3] = moa->target.y;
                     (*pose->mtx)[2][3] = moa->target.z;
-                    moa->flags &= ~2;
+                    moa->flags &= ~MOAMOA_FLAG_JUMPING;
                     pose->flags &= ~EXT_POSE_FLAG_SHADOW_POS;
                     moa->timer = 0;
                     moa->state++;
                 }
                 break;
 
-            case 4:
+            case MOAMOA_STATE_LAND:
                 if ((++moa->timer) > 4) {
                     moa->state = moa->next;
                 }
                 break;
 
-            case 36:
+            case MOAMOA_STATE_STOMPED:
 
-            case 37:
+            case MOAMOA_STATE_STOMPED_HOP2:
 
-            case 38: {
+            case MOAMOA_STATE_STOMPED_HOP3: {
                     f32 tz;
-                    if (!(moa->flags & 1)) {
+                    if (!(moa->flags & MOAMOA_FLAG_TO_TARGET)) {
                         tx = mario->position.x;
                         tz = mario->position.z;
                     } else {
@@ -1066,17 +1068,17 @@ static void ext_moamoa_main(void) {
                 }
                 break;
 
-            case 39:
+            case MOAMOA_STATE_SHRINK:
                 if ((++moa->timer) < 30) {
                     (*pose->mtx)[0][0] *= 0.9f;
                     (*pose->mtx)[1][1] *= 0.9f;
                     (*pose->mtx)[2][2] *= 0.9f;
                 } else {
-                    moa->state = 49;
+                    moa->state = MOAMOA_STATE_RESPAWN;
                 }
                 break;
 
-            case 47: {
+            case MOAMOA_STATE_KNOCKED_AWAY: {
                     f32 rad;
                     s = rand() / 32767.0f;
                     dist = randf(300.0f, 500.0f);
@@ -1103,10 +1105,10 @@ static void ext_moamoa_main(void) {
                     sndFlag = 1;
                 }
                 dist = -100.0f;
-                moamoa_jump(pose, moa, 49, 0, x, dist, y, spd, s);
+                moamoa_jump(pose, moa, MOAMOA_STATE_RESPAWN, 0, x, dist, y, spd, s);
                 break;
 
-            case 48:
+            case MOAMOA_STATE_BLOWN_DRIFT:
                 if ((--moa->jumpTimer) > 0) {
                     moa->target.x += moa->vy;
                     moa->target.y += moa->speed;
@@ -1115,13 +1117,13 @@ static void ext_moamoa_main(void) {
                     (*pose->mtx)[1][3] += moa->target.y;
                     (*pose->mtx)[2][3] += moa->target.z;
                 } else {
-                    moa->state = 49;
+                    moa->state = MOAMOA_STATE_RESPAWN;
                 }
                 break;
 
-            case 49:
-                if ((wp->flags & 0x1000) && (wp->flags & 0x2000)) {
-                    moa->state = 62;
+            case MOAMOA_STATE_RESPAWN:
+                if ((wp->flags & MOAMOA_WORK_FLAG_TARGET0_CLEARED) && (wp->flags & MOAMOA_WORK_FLAG_TARGET1_CLEARED)) {
+                    moa->state = MOAMOA_STATE_GONE;
                     break;
                 }
                 if (wp->hitCount < 250) {
@@ -1130,14 +1132,14 @@ static void ext_moamoa_main(void) {
                     (*pose->mtx)[1][3] = wp->target[i % 3].y;
                     (*pose->mtx)[2][3] = wp->target[i % 3].z;
                     moa->flags = 0;
-                    moa->state = 0;
+                    moa->state = MOAMOA_STATE_WANDER;
                     moa->timer = 0;
                 } else {
-                    moa->state = 62;
+                    moa->state = MOAMOA_STATE_GONE;
                 }
                 break;
 
-            case 25:
+            case MOAMOA_STATE_ESCAPE_TURN:
                 if (moa->timer < 30) {
                     PSMTXRotRad(rot, 'y', 0.20943952f);
                     PSMTXConcat(*pose->mtx, rot, *pose->mtx);
@@ -1150,13 +1152,13 @@ static void ext_moamoa_main(void) {
                 }
                 break;
 
-            case 26:
+            case MOAMOA_STATE_ESCAPE_WAIT:
                 if ((--moa->timer) < 0) {
                     moa->state++;
                 }
                 break;
 
-            case 27: {
+            case MOAMOA_STATE_ESCAPE_RUN: {
                     f32 rad;
                     if ((__fabs((*pose->mtx)[0][3]) < 300.0) && (__fabs((*pose->mtx)[2][3]) < 300.0)) {
                         s = rand() / 32767.0f;
@@ -1175,18 +1177,18 @@ static void ext_moamoa_main(void) {
                             moamoa_jump(pose, moa, moa->state, 1, x, 0.0f, grav, 3.0f * ((r1 * (k = 1.0f - 1.0f)) + 1.0f), (r2 * k) + 1.0f);
                         }
                     } else {
-                        moa->state = 62;
+                        moa->state = MOAMOA_STATE_GONE;
                     }
                 }
                 break;
 
-            case 62:
-                moa->flags |= 0x20;
+            case MOAMOA_STATE_GONE:
+                moa->flags |= MOAMOA_FLAG_GONE;
                 pose->flags &= ~EXT_POSE_FLAG_VISIBLE;
                 pose->flags |= EXT_POSE_FLAG_NO_SHADOW;
                 break;
 
-            case 63: {
+            case MOAMOA_STATE_BLOW_START: {
                     f32 k;
                     s = rand() / 32767.0f;
                     spd = randf(2.0f, 3.0f);
@@ -1199,13 +1201,13 @@ static void ext_moamoa_main(void) {
                 moa->state++;
                 break;
 
-            case 64:
+            case MOAMOA_STATE_BLOW_WAIT:
                 if ((--moa->timer) < 0) {
                     moa->state++;
                 }
                 break;
 
-            case 65:
+            case MOAMOA_STATE_BLOW_AWAY:
                 moa->target.x *= 1.1f;
                 moa->target.y *= 1.02f;
                 moa->target.z *= 1.1f;
@@ -1216,13 +1218,13 @@ static void ext_moamoa_main(void) {
                 PSMTXConcat(*pose->mtx, rot2, *pose->mtx);
                 pose->flags &= ~EXT_POSE_FLAG_BILLBOARD;
                 if ((*pose->mtx)[0][3] < (-1000.0f)) {
-                    moa->state = 62;
+                    moa->state = MOAMOA_STATE_GONE;
                 }
                 break;
 
         }
 
-        if (!(moa->flags & 0x98)) {
+        if (!(moa->flags & (MOAMOA_FLAG_KNOCKED_AWAY | MOAMOA_FLAG_ESCAPING | MOAMOA_FLAG_BLOWN))) {
             if ((*pose->mtx)[0][3] > 280.0f) {
                 (*pose->mtx)[0][3] = 280.0f;
             }
@@ -1241,7 +1243,7 @@ static void ext_moamoa_main(void) {
     }
 
     moamoa_pose_main();
-    if (wp->flags & 0x10) {
+    if (wp->flags & MOAMOA_WORK_FLAG_PARTY_IN_USE) {
         mario->floorMove.x = 0.0f;
         mario->floorMove.y = 0.0f;
         mario->floorMove.z = 0.0f;
@@ -1257,11 +1259,11 @@ static void ext_moamoa_main(void) {
 }
 #pragma opt_lifetimes reset
 static void ext_moamoa_dispent(void) {
-    if (wp->flags & 1) {
+    if (wp->flags & MOAMOA_WORK_FLAG_ACTIVE) {
         dispEntry(CAMERA_3D, (0.0f), 1, ext_disp, NULL);
         dispEntry(CAMERA_3D, (0.0f), 2, ext_shadow_disp, NULL);
     }
-    if (wp->flags & 2) {
+    if (wp->flags & MOAMOA_WORK_FLAG_DRAW_OFFSCREEN) {
         dispEntry(CAMERA_OFFSCREEN2, -5000.0f, 1, ext_disp, NULL);
         dispEntry(CAMERA_OFFSCREEN2, -5000.0f, 2, ext_shadow_disp, NULL);
     }
@@ -1626,8 +1628,8 @@ EVT_BEGIN(evt_elv_down)
     CALL(evt_mapobj_set_offscreen, 1, STRING("s_eki_07"), STRING("offscreen"))
     CALL(evt_img_onoff, STRING("capture_img"), 1)
     IF_INT_LESS(GSW_STORY_PROGRESS, 323)
-        CALL(evt_moamoa_flag_onoff, 0, 1)
-        CALL(evt_moamoa_flag_onoff, 1, 2)
+        CALL(evt_moamoa_flag_onoff, 0, MOAMOA_WORK_FLAG_ACTIVE)
+        CALL(evt_moamoa_flag_onoff, 1, MOAMOA_WORK_FLAG_DRAW_OFFSCREEN)
     END_IF
     BEGIN_INLINE_EVENT
         CALL(evt_mapobj_get_position, STRING("d_1"), LW(0), LW(1), LW(2))
@@ -1648,8 +1650,8 @@ EVT_BEGIN(evt_elv_down)
     END_LOOP
     CALL(evt_img_onoff, STRING("capture_img"), 0)
     IF_INT_LESS(GSW_STORY_PROGRESS, 323)
-        CALL(evt_moamoa_flag_onoff, 1, 1)
-        CALL(evt_moamoa_flag_onoff, 0, 2)
+        CALL(evt_moamoa_flag_onoff, 1, MOAMOA_WORK_FLAG_ACTIVE)
+        CALL(evt_moamoa_flag_onoff, 0, MOAMOA_WORK_FLAG_DRAW_OFFSCREEN)
     END_IF
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("s_eki_07"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_hitobj_onoff, STRING("a_eki_07"), 1, 1)
@@ -1746,8 +1748,8 @@ EVT_BEGIN(evt_elv_up)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("s_eki_07"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_img_onoff, STRING("capture_img"), 1)
     IF_INT_LESS(GSW_STORY_PROGRESS, 323)
-        CALL(evt_moamoa_flag_onoff, 0, 1)
-        CALL(evt_moamoa_flag_onoff, 1, 2)
+        CALL(evt_moamoa_flag_onoff, 0, MOAMOA_WORK_FLAG_ACTIVE)
+        CALL(evt_moamoa_flag_onoff, 1, MOAMOA_WORK_FLAG_DRAW_OFFSCREEN)
     END_IF
     BEGIN_INLINE_EVENT
         CALL(evt_mapobj_get_position, STRING("d_1"), LW(0), LW(1), LW(2))
@@ -1768,7 +1770,7 @@ EVT_BEGIN(evt_elv_up)
     END_LOOP
     CALL(evt_img_onoff, STRING("capture_img"), 0)
     IF_INT_LESS(GSW_STORY_PROGRESS, 323)
-        CALL(evt_moamoa_flag_onoff, 0, 2)
+        CALL(evt_moamoa_flag_onoff, 0, MOAMOA_WORK_FLAG_DRAW_OFFSCREEN)
     END_IF
     BEGIN_INLINE_EVENT
         WAIT_MS(200)
