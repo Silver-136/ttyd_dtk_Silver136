@@ -37,12 +37,10 @@ static s32 barriern_satellite_zanzou_sub(BOOL isFirstCall, BattleUnit* unit, f32
 typedef struct BarriernSpline {
     s32 n;
     Vec* table;
-    f32 a[5];
-    f32 b[15];
+    f32 ts[5];
+    Vec tbl[5];
     s32 count;
 } BarriernSpline;
-void spline_maketable(s32 n, Vec* table, f32* a, f32* b);
-void spline_getvalue(f32 t, Vec* out, s32 n, Vec* table, f32* a, f32* b);
 static u8 barriernSatelliteTo_Init(BattleUnit* unit, s32 n, Vec* table);
 static u8 barriernSatelliteTo_Main(BattleUnit* unit, s32 n);
 static void outSplineTableSet_Sub(BattleUnit* unit, s32 n, Vec* table);
@@ -1488,7 +1486,7 @@ static u8 barriernSatelliteTo_Init(BattleUnit* unit, s32 n, Vec* table) {
     sp->n = 5;
     sp->table = table;
     sp->count = 0;
-    spline_maketable(5, sp->table, sp->a, sp->b);
+    spline_maketable(5, sp->table, sp->ts, sp->tbl);
     BtlUnit_GetPartsPtr(BattleGetUnitPtr(_battleWorkPointer, unit->work[4 + n]), 1)->work[2] = (EvtWord)table;
     return TRUE;
 }
@@ -1513,7 +1511,7 @@ static u8 barriernSatelliteTo_Main(BattleUnit* unit, s32 n) {
         }
         return FALSE;
     }
-    spline_getvalue(intplGetValue(EASING_QUADRATIC_OUT, 0.0f, 1.0f, sp->count, 60), &pos, sp->n, sp->table, sp->a, sp->b);
+    spline_getvalue(&pos, intplGetValue(EASING_QUADRATIC_OUT, 0.0f, 1.0f, sp->count, 60), sp->n, sp->table, sp->ts, sp->tbl);
     sat = BattleGetUnitPtr(_battleWorkPointer, unit->work[4 + n]);
     if (sat == NULL) {
         return FALSE;

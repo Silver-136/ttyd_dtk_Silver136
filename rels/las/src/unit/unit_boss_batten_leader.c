@@ -42,12 +42,10 @@ void _light_point_callback(BattleUnitPart* part, s32 group);
 typedef struct BattenSpline {
     s32 n;
     Vec* table;
-    f32 a[5];
-    f32 b[15];
+    f32 ts[5];
+    Vec tbl[5];
     s32 count;
 } BattenSpline;
-void spline_maketable(s32 n, Vec* table, f32* a, f32* b);
-void spline_getvalue(f32 t, Vec* out, s32 n, Vec* table, f32* a, f32* b);
 u8 battenSatelliteTo_Init(BattleUnit* unit, s32 n, Vec* table);
 u8 battenSatelliteTo_Main(BattleUnit* unit, s32 n);
 
@@ -2685,7 +2683,7 @@ u8 battenSatelliteTo_Init(BattleUnit* unit, s32 n, Vec* table) {
     sp->n = 5;
     sp->table = table;
     sp->count = 0;
-    spline_maketable(5, sp->table, sp->a, sp->b);
+    spline_maketable(5, sp->table, sp->ts, sp->tbl);
     BtlUnit_GetPartsPtr(BattleGetUnitPtr(_battleWorkPointer, unit->work[9 + n]), 1)->work[1] = (EvtWord)table;
     return TRUE;
 }
@@ -2709,7 +2707,7 @@ u8 battenSatelliteTo_Main(BattleUnit* unit, s32 n) {
         }
         return FALSE;
     }
-    spline_getvalue(intplGetValue(EASING_QUADRATIC_OUT, 0.0f, 1.0f, sp->count, 60), &pos, sp->n, sp->table, sp->a, sp->b);
+    spline_getvalue(&pos, intplGetValue(EASING_QUADRATIC_OUT, 0.0f, 1.0f, sp->count, 60), sp->n, sp->table, sp->ts, sp->tbl);
     sat = BattleGetUnitPtr(_battleWorkPointer, unit->work[9 + n]);
     if (sat == NULL) {
         return FALSE;

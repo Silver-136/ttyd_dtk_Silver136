@@ -7,8 +7,6 @@
 #include "himo.h"
 
 
-extern void spline_getvalue(Vec* out, s32 n, Vec* pts, f32* t1, f32* t2, f32 t);
-extern void spline_maketable(s32 n, Vec* pts, f32* t1, f32* t2);
 
 typedef struct HimoWork {
     /* 0x00 */ Vec p0;
@@ -17,7 +15,7 @@ typedef struct HimoWork {
     /* 0x48 */ Mtx m1;
     /* 0x78 */ Vec pts[4];
     /* 0xA8 */ f32 t1[4];
-    /* 0xB8 */ f32 t2[12];
+    /* 0xB8 */ Vec t2[4];
 } HimoWork;
 
 s8 Pos[6] ATTRIBUTE_ALIGN(32) = { 1, 0, 0, -1, 0, 0 };
@@ -109,7 +107,7 @@ void vivihimoDisp(CameraId camId, HimoWork* w) {
     CameraEntry* cam;
     Vec* pts;
     f32* t1;
-    f32* t2;
+    Vec* t2;
     s32 i;
     MtxPtr pA;
     MtxPtr pB;
@@ -145,12 +143,12 @@ void vivihimoDisp(CameraId camId, HimoWork* w) {
     pwid = k * (tanBase + (f32)tan(ang0));
     pA = mA;
     pB = mB;
-    spline_getvalue(&prev, 4, pts, t1, t2, 0.0f);
+    spline_getvalue(&prev, 0.0f, 4, pts, t1, t2);
     himoMtx(w, tmp, 0.0f, &prev);
     PSMTXConcat(cam->view, tmp, pA);
     tp = tmp;
     for (i = 0; i < 15;) {
-        spline_getvalue(&cur, 4, pts, t1, t2, t);
+        spline_getvalue(&cur, t, 4, pts, t1, t2);
         GXLoadPosMtxImm(pA, 0);
         himoMtx(w, tp, t, &cur);
         PSMTXConcat(cam->view, tp, pB);

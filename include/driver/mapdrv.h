@@ -446,6 +446,9 @@ void mapGrpFlushOff(const char* name);
 void mapGrpFlushOn(const char* name);
 void mapGrpSetFlushColor(const char* name, u8 r, u8 g, u8 b, u8 a);
 void mapObjClearOffScreen(const char* name);
+// cubic spline through n points: ts gets the parameters, tbl the second derivatives (spline_maketable)
+void spline_maketable(s32 n, Vec* pts, f32* ts, Vec* tbl);
+void spline_getvalue(Vec* out, f32 t, s32 n, Vec* pts, f32* ts, Vec* tbl);
 void mapObjFlagOff(const char* name, u32 flags);
 void mapObjFlagOn(const char* name, u32 flags);
 void mapObjFlushOff(const char* name);

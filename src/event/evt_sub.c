@@ -77,8 +77,6 @@ typedef struct SplineWork {
     s32 manual;    // 0x28
 } SplineWork;
 
-void spline_getvalue(f32* out, f32 t, s32 n, Vec* pts, f32* ts, Vec* tbl);
-void spline_maketable(s32 n, Vec* pts, f32* ts, Vec* tbl);
 
 
 
@@ -1360,7 +1358,7 @@ USER_FUNC(evt_sub_spline_get_value) {
     EvtWord* args = event->args;
     SplineWork* w = (SplineWork*)event->lwData[15];
     f32 el;
-    f32 v[3];
+    Vec v;
     f32 t;
     if (!w->manual) {
         t = intplGetValue(w->mode, 0.0f, 1.0f, w->cur, w->steps);
@@ -1368,10 +1366,10 @@ USER_FUNC(evt_sub_spline_get_value) {
         el = OSTicksToMilliseconds((u64)(event->lifetime - w->start));
         t = intplGetValue(w->mode, 0.0f, 1.0f, (s32)el, w->msec);
     }
-    spline_getvalue(v, t, w->n, w->pts, w->ts, w->tbl);
-    evtSetValue(event, args[0], FLOAT(v[0]));
-    evtSetValue(event, args[1], FLOAT(v[1]));
-    evtSetValue(event, args[2], FLOAT(v[2]));
+    spline_getvalue(&v, t, w->n, w->pts, w->ts, w->tbl);
+    evtSetValue(event, args[0], FLOAT(v.x));
+    evtSetValue(event, args[1], FLOAT(v.y));
+    evtSetValue(event, args[2], FLOAT(v.z));
     w->cur++;
     if (!w->manual) {
         if (w->cur <= w->steps) {
@@ -1393,14 +1391,14 @@ USER_FUNC(evt_sub_spline_get_value_manual) {
     EvtWord* args = event->args;
     SplineWork* w = (SplineWork*)event->lwData[15];
     f32 t = evtGetValue(event, args[0]);
-    f32 v[3];
+    Vec v;
     // FAKE: no-op self-assignment; without it t's conversion is scheduled differently
     t = t;
     t = t / (w->manual ? (f32)w->msec : (f32)w->steps);
-    spline_getvalue(v, t, w->n, w->pts, w->ts, w->tbl);
-    evtSetValue(event, args[1], FLOAT(v[0]));
-    evtSetValue(event, args[2], FLOAT(v[1]));
-    evtSetValue(event, args[3], FLOAT(v[2]));
+    spline_getvalue(&v, t, w->n, w->pts, w->ts, w->tbl);
+    evtSetValue(event, args[1], FLOAT(v.x));
+    evtSetValue(event, args[2], FLOAT(v.y));
+    evtSetValue(event, args[3], FLOAT(v.z));
     return EVT_RETURN_DONE;
 }
 
