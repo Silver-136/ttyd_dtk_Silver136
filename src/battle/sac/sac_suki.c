@@ -60,15 +60,7 @@ typedef struct SukiWork {
     Vec pos;            // 0xD0
     SukiBtn btn[7];     // 0xDC
     SukiBtn btn2[7];    // 0x184
-    s32 starState;      // 0x22C
-    s32 starTimer;      // 0x230
-    Vec spos;           // 0x234
-    Vec from;           // 0x240
-    Vec to;             // 0x24C
-    u8 pad258[0xC];
-    Vec scale;          // 0x264
-    Vec rot;            // 0x270
-    EffectEntry* eff;   // 0x27C
+    SacStarStone star;  // 0x22C
     s32 effMode;        // 0x280
     u8 weapon[0xC0];    // 0x284
     u8 pad344[0x4C8 - 0x344];
@@ -195,7 +187,7 @@ static void main_base(void) {
             w->pos = v;
         }
         if (w->timer == 0) {
-            if (w->starState != 4) {
+            if (w->star.state != 4) {
                 break;
             }
             memcpy(w->btn2, w->btn, sizeof(w->btn));
@@ -224,7 +216,7 @@ static void main_base(void) {
             if (w->round >= 5) {
                 w->state = 5;
                 w->timer = 0;
-                w->starState = 8;
+                w->star.state = 8;
             } else {
                 w->state = 4;
             }
@@ -233,7 +225,7 @@ static void main_base(void) {
         break;
     case 3:
         if (w->timer == 0) {
-            if (w->starState != 4) {
+            if (w->star.state != 4) {
                 break;
             }
             psndSFXOn("SFX_BTL_SAC_SUKKIRI2");
@@ -248,7 +240,7 @@ static void main_base(void) {
         if (w->timer >= 15) {
             w->state = 5;
             w->timer = 0;
-            w->starState = 8;
+            w->star.state = 8;
         }
         break;
     case 4:
@@ -271,7 +263,7 @@ static void main_base(void) {
                 w->state = 2;
                 w->timer = 0;
                 w->round++;
-                w->starState = 5;
+                w->star.state = 5;
                 e = evtEntry(nice_event, 0, EVENT_START_IMMEDIATE);
                 n = w->round + 1;
                 e->lwData[0] = n < 6 ? n : 6;
@@ -333,121 +325,121 @@ static void main_star(void) {
     SukiWork* w = get_ptr();
     BattleUnit* mario = BattleGetMarioPtr(_battleWorkPointer);
 
-    switch (w->starState) {
+    switch (w->star.state) {
     case 1:
-        w->starState = 2;
-        w->starTimer = 0;
-        w->eff = effStarStoneEntry(5, 0.0f, -1000.0f, 0.0f, 1.0f);
-        BtlUnit_GetPos(mario, &w->spos.x, &w->spos.y, &w->spos.z);
-        w->spos.y += mario->mSizeMultiplier * (f32)mario->mHeight + 37.0f;
-        w->from = w->spos;
-        w->to = w->spos;
-        w->to.y += 50.0f;
-        w->to.z += -1.0f;
-        w->scale = (Vec){0.0f, 0.0f, 0.0f};
-        w->rot = (Vec){0.0f, 0.0f, 0.0f};
+        w->star.state = 2;
+        w->star.timer = 0;
+        w->star.eff = effStarStoneEntry(5, 0.0f, -1000.0f, 0.0f, 1.0f);
+        BtlUnit_GetPos(mario, &w->star.pos.x, &w->star.pos.y, &w->star.pos.z);
+        w->star.pos.y += mario->mSizeMultiplier * (f32)mario->mHeight + 37.0f;
+        w->star.from = w->star.pos;
+        w->star.to = w->star.pos;
+        w->star.to.y += 50.0f;
+        w->star.to.z += -1.0f;
+        w->star.scale = (Vec){0.0f, 0.0f, 0.0f};
+        w->star.rot = (Vec){0.0f, 0.0f, 0.0f};
         w->effMode = 4;
     case 2:
-        w->starTimer++;
-        if (w->starTimer <= 100) {
-            w->spos.x = intplGetValue(EASING_LINEAR, w->from.x, w->to.x, w->starTimer, 100);
-            w->spos.y = intplGetValue(EASING_LINEAR, w->from.y, w->to.y, w->starTimer, 100);
-            w->spos.z = intplGetValue(EASING_LINEAR, w->from.z, w->to.z, w->starTimer, 100);
-            w->scale.x = w->scale.y = w->scale.z = intplGetValue(EASING_LINEAR, 0.0f, 2.0f, w->starTimer, 100);
+        w->star.timer++;
+        if (w->star.timer <= 100) {
+            w->star.pos.x = intplGetValue(EASING_LINEAR, w->star.from.x, w->star.to.x, w->star.timer, 100);
+            w->star.pos.y = intplGetValue(EASING_LINEAR, w->star.from.y, w->star.to.y, w->star.timer, 100);
+            w->star.pos.z = intplGetValue(EASING_LINEAR, w->star.from.z, w->star.to.z, w->star.timer, 100);
+            w->star.scale.x = w->star.scale.y = w->star.scale.z = intplGetValue(EASING_LINEAR, 0.0f, 2.0f, w->star.timer, 100);
         } else {
-            w->spos.x = w->to.x;
-            w->spos.y = w->to.y;
-            w->spos.z = w->to.z;
-            w->scale.x = w->scale.y = w->scale.z = 2.0f;
+            w->star.pos.x = w->star.to.x;
+            w->star.pos.y = w->star.to.y;
+            w->star.pos.z = w->star.to.z;
+            w->star.scale.x = w->star.scale.y = w->star.scale.z = 2.0f;
         }
-        w->rot.y = intplGetValue(EASING_QUADRATIC_OUT, 0.0f, 2160.0f, w->starTimer, 120);
-        if (w->starTimer >= 120) {
-            w->starState = 3;
-            w->starTimer = 0;
-            w->from = w->spos;
-            w->to.y = 300.0f;
+        w->star.rot.y = intplGetValue(EASING_QUADRATIC_OUT, 0.0f, 2160.0f, w->star.timer, 120);
+        if (w->star.timer >= 120) {
+            w->star.state = 3;
+            w->star.timer = 0;
+            w->star.from = w->star.pos;
+            w->star.to.y = 300.0f;
         }
         break;
     case 3:
-        w->starTimer++;
-        w->spos.y = intplGetValue(EASING_QUADRATIC_IN, w->from.y, w->to.y, w->starTimer, 60);
-        if (w->starTimer >= 60) {
-            w->starState = 4;
-            w->starTimer = 0;
-            w->spos = (Vec){0.0f, 300.0f, 0.0f};
-            w->scale = (Vec){2.0f, 2.0f, 2.0f};
-            w->rot = (Vec){0.0f, 0.0f, 0.0f};
+        w->star.timer++;
+        w->star.pos.y = intplGetValue(EASING_QUADRATIC_IN, w->star.from.y, w->star.to.y, w->star.timer, 60);
+        if (w->star.timer >= 60) {
+            w->star.state = 4;
+            w->star.timer = 0;
+            w->star.pos = (Vec){0.0f, 300.0f, 0.0f};
+            w->star.scale = (Vec){2.0f, 2.0f, 2.0f};
+            w->star.rot = (Vec){0.0f, 0.0f, 0.0f};
         }
         break;
     case 5:
-        w->starState = 6;
-        w->starTimer = 0;
-        BtlUnit_GetPos(mario, &w->spos.x, &w->spos.y, &w->spos.z);
-        w->spos.y += 100.0f;
-        w->scale = (Vec){1.5f, 1.5f, 1.5f};
-        w->rot = (Vec){0.0f, 0.0f, 0.0f};
-        w->from.y = w->spos.y;
-        w->to.y = 300.0f;
-        effStardustN64Entry(0, w->spos.x, w->spos.y, w->spos.z, 32.0f);
+        w->star.state = 6;
+        w->star.timer = 0;
+        BtlUnit_GetPos(mario, &w->star.pos.x, &w->star.pos.y, &w->star.pos.z);
+        w->star.pos.y += 100.0f;
+        w->star.scale = (Vec){1.5f, 1.5f, 1.5f};
+        w->star.rot = (Vec){0.0f, 0.0f, 0.0f};
+        w->star.from.y = w->star.pos.y;
+        w->star.to.y = 300.0f;
+        effStardustN64Entry(0, w->star.pos.x, w->star.pos.y, w->star.pos.z, 32.0f);
         break;
     case 6:
-        w->starTimer++;
-        w->rot.y = intplGetValue(EASING_LINEAR, 0.0f, 1440.0f, w->starTimer, 40);
-        if (w->starTimer >= 40) {
-            w->starState = 7;
-            w->starTimer = 0;
-            effStardustN64Entry(4, w->spos.x, w->spos.y - 5.0f, w->spos.z, 40.0f);
-            effStardustN64Entry(4, 30.0f + w->spos.x, w->spos.y, w->spos.z, 40.0f);
-            effStardustN64Entry(4, w->spos.x - 30.0f, w->spos.y, w->spos.z, 40.0f);
+        w->star.timer++;
+        w->star.rot.y = intplGetValue(EASING_LINEAR, 0.0f, 1440.0f, w->star.timer, 40);
+        if (w->star.timer >= 40) {
+            w->star.state = 7;
+            w->star.timer = 0;
+            effStardustN64Entry(4, w->star.pos.x, w->star.pos.y - 5.0f, w->star.pos.z, 40.0f);
+            effStardustN64Entry(4, 30.0f + w->star.pos.x, w->star.pos.y, w->star.pos.z, 40.0f);
+            effStardustN64Entry(4, w->star.pos.x - 30.0f, w->star.pos.y, w->star.pos.z, 40.0f);
             psndSFXOn("SFX_BTL_SAC_SUKKIRI3");
         }
         break;
     case 7:
-        w->starTimer++;
-        w->spos.y = intplGetValue(EASING_QUADRATIC_OUT, w->from.y, w->to.y, w->starTimer, 30);
-        if (w->starTimer >= 30) {
-            w->starState = 4;
-            w->starTimer = 0;
-            w->spos = (Vec){0.0f, 300.0f, 0.0f};
-            w->scale = (Vec){2.0f, 2.0f, 2.0f};
-            w->rot = (Vec){0.0f, 0.0f, 0.0f};
+        w->star.timer++;
+        w->star.pos.y = intplGetValue(EASING_QUADRATIC_OUT, w->star.from.y, w->star.to.y, w->star.timer, 30);
+        if (w->star.timer >= 30) {
+            w->star.state = 4;
+            w->star.timer = 0;
+            w->star.pos = (Vec){0.0f, 300.0f, 0.0f};
+            w->star.scale = (Vec){2.0f, 2.0f, 2.0f};
+            w->star.rot = (Vec){0.0f, 0.0f, 0.0f};
         }
         break;
     case 8:
         w->effMode = 4;
         break;
     case 9:
-        w->starTimer++;
-        w->spos.x = intplGetValue(EASING_LINEAR, w->from.x, w->to.x, w->starTimer, 20);
-        w->spos.y = intplGetValue(EASING_QUADRATIC_IN, w->from.y, w->to.y, w->starTimer, 20);
-        w->spos.z = intplGetValue(EASING_LINEAR, w->from.z, w->to.z, w->starTimer, 20);
+        w->star.timer++;
+        w->star.pos.x = intplGetValue(EASING_LINEAR, w->star.from.x, w->star.to.x, w->star.timer, 20);
+        w->star.pos.y = intplGetValue(EASING_QUADRATIC_IN, w->star.from.y, w->star.to.y, w->star.timer, 20);
+        w->star.pos.z = intplGetValue(EASING_LINEAR, w->star.from.z, w->star.to.z, w->star.timer, 20);
         w->effMode = 7;
-        if (w->starTimer >= 20) {
-            w->starState = 8;
-            w->starTimer = 0;
+        if (w->star.timer >= 20) {
+            w->star.state = 8;
+            w->star.timer = 0;
         }
         break;
     case 0:
     case 10:
         break;
     }
-    if (w->eff) {
-        EffStarStoneWork* e = (EffStarStoneWork*)w->eff->userdata;
-        e->position.x = w->spos.x;
-        e->position.y = w->spos.y;
-        e->position.z = w->spos.z;
-        e->rot.x = w->rot.x;
-        e->rot.y = w->rot.y;
-        e->rot.z = w->rot.z;
-        e->scale = 1.5f * w->scale.x;
+    if (w->star.eff) {
+        EffStarStoneWork* e = (EffStarStoneWork*)w->star.eff->userdata;
+        e->position.x = w->star.pos.x;
+        e->position.y = w->star.pos.y;
+        e->position.z = w->star.pos.z;
+        e->rot.x = w->star.rot.x;
+        e->rot.y = w->star.rot.y;
+        e->rot.z = w->star.rot.z;
+        e->scale = 1.5f * w->star.scale.x;
         e->cam = w->effMode;
     }
 }
 
 USER_FUNC(end_suki) {
     SukiWork* w = get_ptr();
-    effDelete(((EffStarStoneWork*)w->eff->userdata)->dust);
-    effDelete(w->eff);
+    effDelete(((EffStarStoneWork*)w->star.eff->userdata)->dust);
+    effDelete(w->star.eff);
     return 2;
 }
 
@@ -592,12 +584,12 @@ static USER_FUNC(wait_game_end) {
 
 static USER_FUNC(star_stone_appear) {
     SukiWork* w = get_ptr();
-    w->starState = 1;
+    w->star.state = 1;
     return 2;
 }
 
 USER_FUNC(wait_star_stone_up_end) {
-    return get_ptr()->starState == 4 ? 2 : 0;
+    return get_ptr()->star.state == 4 ? 2 : 0;
 }
 
 USER_FUNC(star_stone_get_attack_point) {
@@ -614,19 +606,19 @@ static USER_FUNC(star_stone_attack) {
     SukiWork* w = get_ptr();
     s32 i = evtGetValue(event, event->args[0]);
     u8* cam;
-    w->starState = 9;
-    w->starTimer = 0;
-    w->from = w->starPos[i];
-    w->spos = w->from;
+    w->star.state = 9;
+    w->star.timer = 0;
+    w->star.from = w->starPos[i];
+    w->star.pos = w->star.from;
     cam = (u8*)camGetPtr(CAMERA_3D);
-    w->to = *(Vec*)(cam + 0xC);
-    w->to.y += 20.0f;
-    w->to.z += 10.0f;
+    w->star.to = *(Vec*)(cam + 0xC);
+    w->star.to.y += 20.0f;
+    w->star.to.z += 10.0f;
     return 2;
 }
 
 USER_FUNC(wait_star_stone_attack_end) {
-    return get_ptr()->starState == 8 ? 2 : 0;
+    return get_ptr()->star.state == 8 ? 2 : 0;
 }
 
 typedef struct OhkoRateTbl {

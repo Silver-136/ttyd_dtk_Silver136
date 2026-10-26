@@ -87,15 +87,7 @@ typedef struct MukiWork {
     GXColor col74;         // 0x74
     Muki3D o3d[9];         // 0x78
     MukiObj obj[9];        // 0x1bc
-    s32 star;              // 0x3b4
-    s32 starTimer;         // 0x3b8
-    Vec spos;              // 0x3bc
-    Vec from;              // 0x3c8
-    Vec to;                // 0x3d4
-    u8 pad3e0[0xc];
-    Vec scale;             // 0x3ec
-    Vec rot;               // 0x3f8
-    EffectEntry* eff;      // 0x404
+    SacStarStone star;  // 0x3b4
     u8 weapon[0xc0];       // 0x408
 } MukiWork;
 
@@ -648,46 +640,46 @@ static void main_star(void) {
     MukiWork* w = get_ptr();
     BattleUnit* mario = BattleGetMarioPtr(_battleWorkPointer);
 
-    switch (w->star) {
+    switch (w->star.state) {
     case 1:
-        w->star = 2;
-        w->starTimer = 0;
-        w->eff = effStarStoneEntry(2, 0.0f, -1000.0f, 0.0f, 1.0f);
-        BtlUnit_GetPos(mario, &w->spos.x, &w->spos.y, &w->spos.z);
-        w->spos.y += mario->mSizeMultiplier * (f32)mario->mHeight + 37.0f;
-        w->from = w->spos;
-        w->to = w->spos;
-        w->to.y += 50.0f;
-        w->to.z += -1.0f;
-        w->scale = (Vec){0.0f, 0.0f, 0.0f};
-        w->rot = (Vec){0.0f, 0.0f, 0.0f};
+        w->star.state = 2;
+        w->star.timer = 0;
+        w->star.eff = effStarStoneEntry(2, 0.0f, -1000.0f, 0.0f, 1.0f);
+        BtlUnit_GetPos(mario, &w->star.pos.x, &w->star.pos.y, &w->star.pos.z);
+        w->star.pos.y += mario->mSizeMultiplier * (f32)mario->mHeight + 37.0f;
+        w->star.from = w->star.pos;
+        w->star.to = w->star.pos;
+        w->star.to.y += 50.0f;
+        w->star.to.z += -1.0f;
+        w->star.scale = (Vec){0.0f, 0.0f, 0.0f};
+        w->star.rot = (Vec){0.0f, 0.0f, 0.0f};
     case 2:
-        w->starTimer++;
-        if (w->starTimer <= 100) {
-            w->spos.x = intplGetValue(EASING_LINEAR, w->from.x, w->to.x, w->starTimer, 100);
-            w->spos.y = intplGetValue(EASING_LINEAR, w->from.y, w->to.y, w->starTimer, 100);
-            w->spos.z = intplGetValue(EASING_LINEAR, w->from.z, w->to.z, w->starTimer, 100);
-            w->scale.x = w->scale.y = w->scale.z = intplGetValue(EASING_LINEAR, 0.0f, 2.0f, w->starTimer, 100);
+        w->star.timer++;
+        if (w->star.timer <= 100) {
+            w->star.pos.x = intplGetValue(EASING_LINEAR, w->star.from.x, w->star.to.x, w->star.timer, 100);
+            w->star.pos.y = intplGetValue(EASING_LINEAR, w->star.from.y, w->star.to.y, w->star.timer, 100);
+            w->star.pos.z = intplGetValue(EASING_LINEAR, w->star.from.z, w->star.to.z, w->star.timer, 100);
+            w->star.scale.x = w->star.scale.y = w->star.scale.z = intplGetValue(EASING_LINEAR, 0.0f, 2.0f, w->star.timer, 100);
         } else {
-            w->spos.x = w->to.x;
-            w->spos.y = w->to.y;
-            w->spos.z = w->to.z;
-            w->scale.x = w->scale.y = w->scale.z = 2.0f;
+            w->star.pos.x = w->star.to.x;
+            w->star.pos.y = w->star.to.y;
+            w->star.pos.z = w->star.to.z;
+            w->star.scale.x = w->star.scale.y = w->star.scale.z = 2.0f;
         }
-        w->rot.y = intplGetValue(EASING_QUADRATIC_OUT, 0.0f, 2160.0f, w->starTimer, 120);
-        if (w->starTimer >= 120) {
-            w->star = 3;
-            w->starTimer = 0;
-            w->from = w->spos;
-            w->to.y = 300.0f;
+        w->star.rot.y = intplGetValue(EASING_QUADRATIC_OUT, 0.0f, 2160.0f, w->star.timer, 120);
+        if (w->star.timer >= 120) {
+            w->star.state = 3;
+            w->star.timer = 0;
+            w->star.from = w->star.pos;
+            w->star.to.y = 300.0f;
         }
         break;
     case 3:
-        w->starTimer++;
-        w->spos.y = intplGetValue(EASING_QUADRATIC_IN, w->from.y, w->to.y, w->starTimer, 60);
-        if (w->starTimer >= 60) {
-            w->star = 5;
-            w->starTimer = 0;
+        w->star.timer++;
+        w->star.pos.y = intplGetValue(EASING_QUADRATIC_IN, w->star.from.y, w->star.to.y, w->star.timer, 60);
+        if (w->star.timer >= 60) {
+            w->star.state = 5;
+            w->star.timer = 0;
         }
         break;
     case 0:
@@ -695,15 +687,15 @@ static void main_star(void) {
     case 5:
         break;
     }
-    if (w->eff) {
-        EffStarStoneWork* e = (EffStarStoneWork*)w->eff->userdata;
-        e->position.x = w->spos.x;
-        e->position.y = w->spos.y;
-        e->position.z = w->spos.z;
-        e->rot.x = w->rot.x;
-        e->rot.y = w->rot.y;
-        e->rot.z = w->rot.z;
-        e->scale = 1.5f * w->scale.x;
+    if (w->star.eff) {
+        EffStarStoneWork* e = (EffStarStoneWork*)w->star.eff->userdata;
+        e->position.x = w->star.pos.x;
+        e->position.y = w->star.pos.y;
+        e->position.z = w->star.pos.z;
+        e->rot.x = w->star.rot.x;
+        e->rot.y = w->star.rot.y;
+        e->rot.z = w->star.rot.z;
+        e->scale = 1.5f * w->star.scale.x;
     }
 }
 
@@ -711,8 +703,8 @@ USER_FUNC(end_muki) {
     MukiWork* w = get_ptr();
     s32 i;
 
-    effDelete(((EffStarStoneWork*)w->eff->userdata)->dust);
-    effDelete(w->eff);
+    effDelete(((EffStarStoneWork*)w->star.eff->userdata)->dust);
+    effDelete(w->star.eff);
     for (i = 0; i < 9; i++) {
         effDelete(w->obj[i].eff);
     }
@@ -977,7 +969,7 @@ static USER_FUNC(wait_game_end) {
 
 static USER_FUNC(star_stone_appear) {
     MukiWork* w = get_ptr();
-    w->star = 1;
+    w->star.state = 1;
     return 2;
 }
 
