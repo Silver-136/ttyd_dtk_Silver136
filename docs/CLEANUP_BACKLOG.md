@@ -74,10 +74,14 @@ data order 10, sound-name integer round trips (`SFX_NAME_WORD`) 9, no-op casts 6
 - Comments from the game's own data: message paraphrases next to message calls (only 95 of 6,224 have one), place
   comments per room and NPC identities where the game's data (debug story list maps, NPC tribe table, messages)
   shows them.
-- Raw flag masks: about 1,050 tests/sets of flag words by number are left (2026-10-26, down from about 1,800):
-  module-local words (yuunpc crowd, puni, sac_bakugame, party_bomhei, yuugijou), matrix-part masks in animdrv
-  (a local switch over combinations, fine as numbers), and bits with no setter or no known meaning (kept numeric:
-  e.g. MapObjectFlags 0x20, GlobalWorkFlags 0x40, damage result 0x10000, unit attribute 0x100, slot flags).
+- Raw flag masks: about 230 bit tests/sets by number are left outside sound tables and counter/byte arithmetic
+  (2026-10-26, down from about 1,800). Left: words whose bits mean different things per caller (evt_npc move
+  functions' moveFlags), struct words with no enum yet (mot_hammer hammer2, mot_jabara, itemdrv flags2,
+  tou FighterData, evt_bero, rsh, sac_bakugame, evt_mobj typeData), matrix-part masks in animdrv (fine as numbers),
+  and bits with no setter or no known meaning (kept numeric: MapObjectFlags 0x20, GlobalWorkFlags 0x40,
+  MarioDispFlags bit 29, PartyFlags bits 15/18, MarioTrigFlags bit 15, HitAttributes bit 10, damage result 0x10000,
+  unit attribute 0x100). Tools: flag_names.py (struct fields), word_masks.py (values by source, also locals),
+  material_flags.py (pose material word).
 
 ## 4. Structure and layout of the source
 
