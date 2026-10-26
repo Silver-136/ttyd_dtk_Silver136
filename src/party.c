@@ -2284,7 +2284,7 @@ void partyPreDisp(PartyEntry* party) {
             shadowSetCamId(mode, party->camId);
         }
         if (party->flags2 & PARTY_DISP_FLAG_SHADOW_NODECAY) {
-            shadowFlagOn(mode, 4);
+            shadowFlagOn(mode, SHADOW_ENTRY_NO_DECAY);
         }
     }
 }

@@ -4,8 +4,22 @@
 #include <dolphin/mtx.h>
 #include "memory.h"
 
+// DepthShadowWork / ProjShadowWork / CharShadowWork .flags
+typedef enum ShadowWorkFlags {
+    SHADOW_WORK_READY = (1 << 0),             // 0x1, the shadow texture was made this frame
+    SHADOW_WORK_ALLOC = (1 << 1),             // 0x2, allocate the texture buffer when capturing
+    SHADOW_WORK_HALF_SIZE_UNUSED = (1 << 2),  // 0x4, half-size texture; nothing sets it
+} ShadowWorkFlags;
+
+// ShadowEntry.flags (shadowFlagOn)
+typedef enum ShadowEntryFlags {
+    SHADOW_ENTRY_GROUND = (1 << 0),    // 0x1, placed on the ground found below (hit check)
+    SHADOW_ENTRY_PLACED = (1 << 1),    // 0x2, matrix set up this frame
+    SHADOW_ENTRY_NO_DECAY = (1 << 2),  // 0x4, drawn without the decay colours
+} ShadowEntryFlags;
+
 typedef struct DepthShadowWork {
-    s32 flags; //0x0, bit0 = drawn this frame
+    s32 flags; //0x0, ShadowWorkFlags
     s32 drawCount; //0x4
     s32 configIdx; //0x8, index into shadowConfig
     Mtx view; //0xC
@@ -18,7 +32,7 @@ typedef struct DepthShadowWork {
 } DepthShadowWork;
 
 typedef struct ProjShadowWork {
-    s32 flags; //0x0, bit0 = drawn this frame
+    s32 flags; //0x0, ShadowWorkFlags
     s32 drawCount; //0x4
     s32 configIdx; //0x8, index into shadowConfig
     Mtx view; //0xC
@@ -31,7 +45,7 @@ typedef struct ProjShadowWork {
 } ProjShadowWork;
 
 typedef struct ShadowEntry {
-    u16 flags; //0x0
+    u16 flags; //0x0, ShadowEntryFlags
     u8 mode; //0x2
     u8 type; //0x3
     Vec pos; //0x4
@@ -48,7 +62,7 @@ typedef struct ShadowEntry {
 } ShadowEntry;
 
 typedef struct CharShadowWork {
-    s32 flags; //0x0, bit0 = drawn this frame
+    s32 flags; //0x0, ShadowWorkFlags
     s32 drawCount; //0x4
     s32 configIdx; //0x8, index into shadowConfig
     Mtx view; //0xC
