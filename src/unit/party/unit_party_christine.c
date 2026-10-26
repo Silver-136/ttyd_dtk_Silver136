@@ -26,6 +26,12 @@
 #include "evt/evt_cmd.h"
 #include "icon_ids.h"
 
+// BattleUnit.work slots (btlevtcmd_Get/Set/AddUnitWork)
+#define UNIT_WORK_DICTIONARY_STATE 0 // _dictionary state: 0 idle, 1 open (monosiriInit), 2/3 shown, 4 close requested, 5 closing, 6 closed (the event resets it to 0)
+#define UNIT_WORK_DICTIONARY_WORK 1  // pointer to the monosiriInit work that _dictionary keeps between frames
+#define UNIT_WORK_JUMP_FRAMES_LEFT 2 // frames left in the jump (counted down by a sibling loop); the stylish AC window starts when more than 15 are left
+#define UNIT_WORK_FLIP_ANGLE 3       // extra z rotation added to the jump's travel angle; a stylish success adds 24 per frame for 15 frames
+
 USER_FUNC(_dictionary);
 USER_FUNC(btlevtcmd_SetEventEntry);
 USER_FUNC(btlevtcmd_SetJumpSound);
@@ -185,7 +191,7 @@ static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetWalkSound, UNIT_ID_SELF, STRING("SFX_PARTY_BATTLE_MOVE1L"), STRING("SFX_PARTY_BATTLE_MOVE1R"), 6, 12, 16)
     CALL(btlevtcmd_SetRunSound, UNIT_ID_SELF, STRING("SFX_PARTY_BATTLE_MOVE1L"), STRING("SFX_PARTY_BATTLE_MOVE1R"), 0, 9, 3)
     CALL(btlevtcmd_SetJumpSound, UNIT_ID_SELF, STRING("SFX_PARTY_BATTLE_JUMP1"), STRING("SFX_PARTY_BATTLE_LANDING1"))
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 0, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_DICTIONARY_STATE, 0)
     CALL(btlevtcmd_SetEventEntry, UNIT_ID_SELF, PTR(battle_entry_event))
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
@@ -604,12 +610,12 @@ EVT_END()
 EVT_BEGIN(christine_dictionary_event)
     LABEL(0)
     CALL(_dictionary, LW(3), LW(4))
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 0, LW(0))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_DICTIONARY_STATE, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 6)
         WAIT_FRAMES(1)
         GOTO(0)
     END_IF
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 0, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_DICTIONARY_STATE, 0)
     RETURN
 EVT_END()
 
@@ -692,14 +698,14 @@ EVT_BEGIN(partyChristineAttack_Monosiri)
     END_IF
     CALL(btlevtcmd_SetTalkPose, UNIT_ID_SELF, STRING("PKR_2A_5"))
     CALL(btlevtcmd_SetStayPose, UNIT_ID_SELF, STRING("PKR_2A_5"))
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 0, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_DICTIONARY_STATE, 0)
     SPAWN_EVENT(christine_dictionary_event)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 0, 1)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_DICTIONARY_STATE, 1)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
     CALL(evt_btl_camera_off_posoffset_manual, 0)
     LABEL(10)
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 0, LW(0))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_DICTIONARY_STATE, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 3)
         WAIT_FRAMES(1)
         GOTO(10)
@@ -709,9 +715,9 @@ EVT_BEGIN(partyChristineAttack_Monosiri)
     CALL(_monosiri_flag_on, LW(3))
     CALL(btlevtcmd_SetTalkPose, UNIT_ID_SELF, STRING("PKR_T_1"))
     CALL(btlevtcmd_SetStayPose, UNIT_ID_SELF, STRING("PKR_S_1"))
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 0, 4)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_DICTIONARY_STATE, 4)
     LABEL(20)
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 0, LW(0))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_DICTIONARY_STATE, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         WAIT_FRAMES(1)
         GOTO(20)
@@ -777,7 +783,7 @@ EVT_BEGIN(partyChristineAttack_RenzokuAttack)
         WAIT_MS(1000)
     END_SWITCH
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PKR_J_1A"))
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 3, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_FLIP_ANGLE, 0)
     IF_INT_GREATER_OR_EQUAL(LW(10), 1)
         CALL(btlevtcmd_SetRotateOffset, UNIT_ID_SELF, 0, 14, 0)
         CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, 0, 0)
@@ -818,7 +824,7 @@ EVT_BEGIN(partyChristineAttack_RenzokuAttack)
                 CALL(btlevtcmd_GetPosFloat, UNIT_ID_SELF, LW(12), LW(13), LW(14))
                 CALL(krb_get_dir, LW(5), LW(6), LW(12), LW(13), LW(15))
                 CALL(btlevtcmd_GetRotate, UNIT_ID_SELF, LW(0), LW(1), LW(2))
-                CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 3, LW(9))
+                CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_FLIP_ANGLE, LW(9))
                 ADD(LW(15), LW(9))
                 CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, LW(0), LW(1), LW(15))
                 SET_FLOAT_VALUE(LW(5), LW(12))
@@ -850,18 +856,18 @@ EVT_BEGIN(partyChristineAttack_RenzokuAttack)
             END_SIBLING_EVENT
             SET_VALUE(LW(9), LW(8))
             SUBTRACT(LW(9), 1)
-            CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 2, LW(9))
+            CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_JUMP_FRAMES_LEFT, LW(9))
             BEGIN_SIBLING_EVENT
                 LOOP(LW(9))
                     WAIT_FRAMES(1)
-                    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 2, LW(0))
+                    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_JUMP_FRAMES_LEFT, LW(0))
                     SUBTRACT(LW(0), 1)
-                    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 2, LW(0))
+                    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_JUMP_FRAMES_LEFT, LW(0))
                 END_LOOP
             END_SIBLING_EVENT
             BEGIN_SIBLING_EVENT_GET_ID(LW(15))
                 LOOP(1)
-                    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 2, LW(0))
+                    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_JUMP_FRAMES_LEFT, LW(0))
                     IF_INT_GREATER(LW(0), 15)
                         SUBTRACT(LW(0), 15)
                         CALL(btlevtcmd_ACRStart, UNIT_ID_SELF, 0, LW(0), LW(0), 0)
@@ -872,14 +878,14 @@ EVT_BEGIN(partyChristineAttack_RenzokuAttack)
                             CALL(btlevtcmd_AudienceDeclareAcrobatResult, LW(0), 1, 0, 0, 0)
                             LOOP(15)
                                 CALL(btlevtcmd_AddRotate, UNIT_ID_SELF, 0, 24, 0)
-                                CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 3, LW(0))
+                                CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_FLIP_ANGLE, LW(0))
                                 CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(1))
                                 IF_INT_GREATER_OR_EQUAL(LW(1), 0)
                                     ADD(LW(0), -24)
                                     ELSE
                                     ADD(LW(0), 24)
                                 END_IF
-                                CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 3, LW(0))
+                                CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_FLIP_ANGLE, LW(0))
                                 WAIT_FRAMES(1)
                             END_LOOP
                             CASE_DEFAULT
@@ -1429,8 +1435,8 @@ USER_FUNC(_dictionary) {
     targetId = BattleTransID(event, targetId);
     evtGetValue(event, args[1]);
     unit = BattleGetUnitPtr(wp, selfId);
-    state = unit->work[0];
-    work = (void*)unit->work[1];
+    state = unit->work[UNIT_WORK_DICTIONARY_STATE];
+    work = (void*)unit->work[UNIT_WORK_DICTIONARY_WORK];
     switch (state) {
         case 0:
             break;
@@ -1461,8 +1467,8 @@ USER_FUNC(_dictionary) {
         case 6:
             break;
     }
-    unit->work[0] = state;
-    unit->work[1] = (EvtWord)work;
+    unit->work[UNIT_WORK_DICTIONARY_STATE] = state;
+    unit->work[UNIT_WORK_DICTIONARY_WORK] = (EvtWord)work;
     return EVT_RETURN_DONE;
 }
 

@@ -27,6 +27,10 @@
 #include "manager/evtmgr_cmd.h"
 #include "battle/battle_damage.h"
 
+// BattleUnit.work slots (btlevtcmd_Get/Set/AddUnitWork)
+#define UNIT_WORK_HIT_CUE 0 // nonzero once the first member is 10 frames from landing on the target (zakogun_ext_main1 adds 1); hit_check_event waits for it, then checks damage
+#define UNIT_WORK_DYING 1   // dead_event sets 1; unit_boss_kanbu3 waits longer before its own events go on while it is set
+
 typedef struct ZakoGun {
     s8 field_0x0;
     s8 state;
@@ -299,7 +303,7 @@ static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event))
     CALL(btlevtcmd_SetEventDamage, UNIT_ID_SELF, PTR(damage_event))
     CALL(btlevtcmd_SetEventConfusion, UNIT_ID_SELF, PTR(btldefaultevt_Confuse))
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 0, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_HIT_CUE, 0)
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_SetHomePos, UNIT_ID_SELF, LW(0), LW(1), 15)
     CALL(btlevtcmd_SetPos, UNIT_ID_SELF, LW(0), LW(1), 15)
@@ -367,7 +371,7 @@ EVT_BEGIN(damage_event_kaiten_hammer)
 EVT_END()
 
 static EVT_BEGIN(dead_event)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 1, 1)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_DYING, 1)
     CALL(zakogun_dead1)
     WAIT_FRAMES(36)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BTL_ENEMY_DIE1_1"), EVT_NULLPTR, 0, EVT_NULLPTR)
@@ -404,7 +408,7 @@ static EVT_BEGIN(dead_event)
 EVT_END()
 
 static EVT_BEGIN(attack_event)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 0, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_HIT_CUE, 0)
     SET_VALUE(LW(9), PTR(&weapon_gundan_zako_group1_attack))
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(9))
@@ -436,7 +440,7 @@ EVT_END()
 
 static EVT_BEGIN(hit_check_event)
     LOOP(0)
-        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 0, LW(0))
+        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_HIT_CUE, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
             BREAK_LOOP
         END_IF
@@ -958,7 +962,7 @@ void zakogun_ext_main1(void) {
                 if (zako->timer <= 10) {
                     zako->state = 58;
                     if (i == 0) {
-                        unit->work[0]++;
+                        unit->work[UNIT_WORK_HIT_CUE]++;
                         zakogun_set_pose(zako, 0, 20, 2);
                     }
                 }

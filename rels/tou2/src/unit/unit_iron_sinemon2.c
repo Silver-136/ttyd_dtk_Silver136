@@ -16,6 +16,10 @@
 #include "manager/evtmgr_cmd.h"
 #include "battle/battle_damage.h"
 
+// BattleUnit.work slots (btlevtcmd_Get/Set/AddUnitWork)
+#define UNIT_WORK_GREEN 0    // 1 on the green Iron Cleft (init_event2), 0 on the red one (init_event1); only the red one runs the phase and damage messages
+#define UNIT_WORK_OTHER_ID 1 // unit id of the other Iron Cleft (get_id); it speaks the second line of the phase and damage messages
+
 USER_FUNC(btlevtcmd_SetEventPhase);
 static USER_FUNC(get_id);
 static USER_FUNC(yoshi_exist);
@@ -189,17 +193,17 @@ static BattleDataEntry data_table[] = {
 };
 
 static EVT_BEGIN(init_event1)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 0, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_GREEN, 0)
     CALL(get_id, LW(0), LW(1))
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 1, LW(1))
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_OTHER_ID, LW(1))
     CALL_CHILD(PTR(init_event_sub))
     RETURN
 EVT_END()
 
 static EVT_BEGIN(init_event2)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 0, 1)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_GREEN, 1)
     CALL(get_id, LW(0), LW(1))
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 1, LW(0))
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_OTHER_ID, LW(0))
     CALL_CHILD(PTR(init_event_sub))
     RETURN
 EVT_END()
@@ -248,7 +252,7 @@ static EVT_BEGIN(damage_event)
     IF_INT_EQUAL(LW(0), -1)
         RETURN
     END_IF
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 0, LW(0))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_GREEN, LW(0))
     IF_INT_EQUAL(LW(0), 1)
         RETURN
     END_IF
@@ -265,7 +269,7 @@ static EVT_BEGIN(damage_event)
     WAIT_FRAMES(30)
     CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
     CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg3_tou_272"), 0, -2)
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 1, LW(0))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_OTHER_ID, LW(0))
     CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg3_tou_273"), 0, LW(0))
     CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_ON)
     SET_VALUE(GSWF(2511), 1)
@@ -277,7 +281,7 @@ static EVT_BEGIN(damage_event)
 EVT_END()
 
 static EVT_BEGIN(phase_event)
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 0, LW(0))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_GREEN, LW(0))
     IF_INT_EQUAL(LW(0), 1)
         RETURN
     END_IF
@@ -309,7 +313,7 @@ static EVT_BEGIN(phase_event)
                 CALL(btlevtcmd_SetTalkPoseType, UNIT_ID_SELF, 65)
                 CALL(btlevtcmd_SetStayPoseType, UNIT_ID_SELF, 69)
                 CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg3_tou_268"), 0, -2)
-                CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 1, LW(0))
+                CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_OTHER_ID, LW(0))
                 CALL(btlevtcmd_SetTalkPoseType, LW(0), 65)
                 CALL(btlevtcmd_SetStayPoseType, LW(0), 69)
                 CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg3_tou_269"), 0, LW(0))
@@ -317,7 +321,7 @@ static EVT_BEGIN(phase_event)
                 CALL(btlevtcmd_SetTalkPoseType, UNIT_ID_SELF, 65)
                 CALL(btlevtcmd_SetStayPoseType, UNIT_ID_SELF, 69)
                 CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg3_tou_270"), 0, -2)
-                CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 1, LW(0))
+                CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_OTHER_ID, LW(0))
                 CALL(btlevtcmd_SetTalkPoseType, LW(0), 65)
                 CALL(btlevtcmd_SetStayPoseType, LW(0), 69)
                 CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg3_tou_271"), 0, LW(0))

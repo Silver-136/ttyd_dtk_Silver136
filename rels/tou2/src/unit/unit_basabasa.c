@@ -10,6 +10,9 @@
 #include "battle/battle_sub.h"
 #include "battle/battle_damage.h"
 
+// BattleUnit.work slots (btlevtcmd_Get/Set/AddUnitWork)
+#define UNIT_WORK_START_FLYING 0 // 1 from the battle setup (unitWork) = starts in flight: init_event runs ceil_sky_event (off the ceiling, airborne)
+
 
 BattleUnitKind unit_basabasa;
 static BattleUnitDefense defence;
@@ -290,7 +293,7 @@ static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetHitCursorOffset, UNIT_ID_SELF, 1, 0, -30, 0)
     CALL(btlevtcmd_SetStatusIconOffset, UNIT_ID_SELF, 6, 10)
     CALL(btlevtcmd_SetKissHitOffset, UNIT_ID_SELF, 16, -18, 0)
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 0, LW(0))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_START_FLYING, LW(0))
     IF_INT_EQUAL(LW(0), 1)
         CALL_CHILD(PTR(ceil_sky_event))
         CALL(btlevtcmd_SetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))

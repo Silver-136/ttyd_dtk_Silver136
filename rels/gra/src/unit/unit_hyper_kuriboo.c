@@ -14,6 +14,9 @@
 #include "battle/battle_database_common.h"
 #include "battle/battle_damage.h"
 
+// BattleUnit.work slots (btlevtcmd_Get/Set/AddUnitWork)
+#define UNIT_WORK_CHARGED 0 // 1 once it has used weapon_kuriboo_charge (nothing reads it)
+
 USER_FUNC(btlevtcmd_SetJumpSound);
 static USER_FUNC(krb_get_dir);
 
@@ -220,7 +223,7 @@ static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetRunSound, UNIT_ID_SELF, STRING("SFX_ENM_KURI_MOVE1"), STRING("SFX_ENM_KURI_MOVE2"), 0, 6, 6)
     CALL(btlevtcmd_SetWalkSound, UNIT_ID_SELF, STRING("SFX_ENM_KURI_MOVE1"), STRING("SFX_ENM_KURI_MOVE2"), 0, 6, 6)
     CALL(btlevtcmd_SetJumpSound, UNIT_ID_SELF, STRING("SFX_ENM_KURI_JUMP1"), STRING("SFX_ENM_KURI_LANDING1"))
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 0, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_CHARGED, 0)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
@@ -273,7 +276,7 @@ static EVT_BEGIN(attack_event)
     IF_INT_EQUAL(LW(0), 1)
         SET_VALUE(LW(9), PTR(&weapon_kuriboo_charge))
         CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, LW(9))
-        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 0, 1)
+        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_CHARGED, 1)
         CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT)
         CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, -1)
         CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)

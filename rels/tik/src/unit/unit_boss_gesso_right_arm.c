@@ -15,6 +15,9 @@
 #include "manager/evtmgr_cmd.h"
 #include "battle/battle_damage.h"
 
+// BattleUnit.work slots (btlevtcmd_Get/Set/AddUnitWork)
+#define UNIT_WORK_BODY_ID 0 // unit id of the unit_boss_gesso body (the body sets it when it spawns the arm; -1 = none)
+
 static USER_FUNC(_check_zenei_kouei);
 extern s32 R_defence_attr_turn[];
 extern s32 R_defence_turn[];
@@ -165,7 +168,7 @@ static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), -2)
     SET_VALUE(LW(11), 1)
     CALL_CHILD(PTR(btldefaultevt_Damage))
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 0, LW(3))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_BODY_ID, LW(3))
     IF_INT_NOT_EQUAL(LW(3), -1)
         CALL(btlevtcmd_GetUnitWork, LW(3), 4, LW(0))
         IF_INT_LESS_OR_EQUAL(LW(0), 0)
@@ -202,7 +205,7 @@ EVT_BEGIN(gesso_right_arm_damage_event)
     CALL(btlevtcmd_ResetFaceDirection, LW(10))
     CALL(btlevtcmd_StartWaitEvent, LW(10))
     LABEL(99)
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 0, LW(3))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_BODY_ID, LW(3))
     IF_INT_NOT_EQUAL(LW(3), -1)
         CALL(btlevtcmd_GetUnitWork, LW(3), 4, LW(0))
         IF_INT_LESS_OR_EQUAL(LW(0), 0)
@@ -314,7 +317,7 @@ static EVT_BEGIN(attack_event)
     SET_VALUE(LW(11), 0)
     CALL(btlevtcmd_GetUnitKind, LW(3), LW(0))
     IF_INT_EQUAL(LW(0), UNIT_MARIO)
-        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 0, LW(9))
+        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_BODY_ID, LW(9))
         CALL(btlevtcmd_GetUnitWork, LW(9), 5, LW(0))
         IF_INT_EQUAL(LW(0), 0)
             SET_VALUE(LW(11), 1)
@@ -323,7 +326,7 @@ static EVT_BEGIN(attack_event)
     END_IF
     IF_INT_NOT_EQUAL(LW(11), 0)
         CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
-        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 0, LW(9))
+        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_BODY_ID, LW(9))
         CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("tik_02_gs_04_1"), 0, LW(9))
         CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("tik_02_gs_04_2"), 0, LW(9))
         CALL(evt_msg_select, 0, STRING("tik_02_gs_04_3"))
@@ -392,24 +395,24 @@ EVT_BEGIN(gesso_arm_dead_event)
     IF_INT_EQUAL(LW(0), UNIT_BLOOPER_RIGHT_TENTACLE)
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_GESSO_ARM_GOOUT1"), EVT_NULLPTR, 0, EVT_NULLPTR)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("GSO_F1_1"))
-        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 0, LW(3))
+        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_BODY_ID, LW(3))
         IF_INT_NOT_EQUAL(LW(3), -1)
             CALL(btlevtcmd_SetUnitWork, LW(3), 2, -1)
         END_IF
         WAIT_FRAMES(50)
-        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 0, LW(3))
+        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_BODY_ID, LW(3))
         IF_INT_NOT_EQUAL(LW(3), -1)
             CALL(btlevtcmd_SetUnitWork, LW(3), 2, -1)
         END_IF
     ELSE
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_GESSO_ARM_GOOUT1"), EVT_NULLPTR, 0, EVT_NULLPTR)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("GSO_F1_1"))
-        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 0, LW(3))
+        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_BODY_ID, LW(3))
         IF_INT_NOT_EQUAL(LW(3), -1)
             CALL(btlevtcmd_SetUnitWork, LW(3), 1, -1)
         END_IF
         WAIT_FRAMES(80)
-        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 0, LW(3))
+        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_BODY_ID, LW(3))
         IF_INT_NOT_EQUAL(LW(3), -1)
             CALL(btlevtcmd_SetUnitWork, LW(3), 1, -1)
         END_IF
@@ -492,10 +495,10 @@ EVT_END()
 EVT_BEGIN(gesso_arm_damage_pose_event)
     CALL(btlevtcmd_GetUnitKind, UNIT_ID_SELF, LW(0))
     IF_INT_EQUAL(LW(0), UNIT_BLOOPER_RIGHT_TENTACLE)
-        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 0, LW(3))
+        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_BODY_ID, LW(3))
         ELSE
         IF_INT_EQUAL(LW(0), UNIT_BLOOPER_LEFT_TENTACLE)
-            CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 0, LW(3))
+            CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_BODY_ID, LW(3))
             ELSE
             RETURN
         END_IF

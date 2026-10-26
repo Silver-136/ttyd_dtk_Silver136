@@ -17,6 +17,11 @@
 #include "manager/evtmgr_cmd.h"
 #include "battle/battle_damage.h"
 
+// BattleUnit.work slots (btlevtcmd_Get/Set/AddUnitWork)
+#define UNIT_WORK_SPIN_DONE 0   // 1 ends the sibling loop that spins the shell during the attack
+#define UNIT_WORK_SPIN_SPEED 1  // degrees per frame of that spin around y (5, 10, 20, 40)
+#define UNIT_WORK_AURA_EFFECT 2 // EffectEntry* of the effUranokoEntry aura that eff_aura keeps on the unit
+
 static USER_FUNC(eff_aura);
 
 BattleUnitKind unit_ura_pata;
@@ -663,24 +668,24 @@ static EVT_BEGIN(first_attack_event)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_NOKO_SHELL1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("NKT_A_1"))
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_NOKO_MOVE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 0, 0)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 1, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_SPIN_DONE, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_SPIN_SPEED, 0)
     BEGIN_SIBLING_EVENT
         LOOP(0)
-            CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 0, LW(15))
+            CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_SPIN_DONE, LW(15))
             IF_INT_EQUAL(LW(15), 1)
                 CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, 0, 0)
                 BREAK_LOOP
             END_IF
             WAIT_FRAMES(1)
-            CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 1, LW(14))
+            CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_SPIN_SPEED, LW(14))
             CALL(btlevtcmd_AddRotate, UNIT_ID_SELF, 0, LW(14), 0)
         END_LOOP
     END_SIBLING_EVENT
     WAIT_MS(100)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 1, 20)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_SPIN_SPEED, 20)
     WAIT_MS(100)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 1, 40)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_SPIN_SPEED, 40)
     WAIT_MS(100)
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(8.0f))
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
@@ -689,7 +694,7 @@ static EVT_BEGIN(first_attack_event)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(btlevtcmd_ResultACDefence, LW(3), PTR(&weapon_nokonoko_attack))
     CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_nokonoko_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 1, 10)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_SPIN_SPEED, 10)
     CALL(btlevtcmd_JumpSetting, UNIT_ID_SELF, 20, FLOAT(3.0f), FLOAT(0.19921875f))
     CALL(btlevtcmd_GetPos, LW(3), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_FaceDirectionSub, UNIT_ID_SELF, LW(0), 50)
@@ -700,7 +705,7 @@ static EVT_BEGIN(first_attack_event)
     CALL(btlevtcmd_FaceDirectionSub, UNIT_ID_SELF, LW(0), 75)
     CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), 0, LW(2), 20, MOVE_SOUND_FROM_TABLE)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_NOKO_MOVE2"), EVT_NULLPTR, 0, EVT_NULLPTR)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 0, 1)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_SPIN_DONE, 1)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_RUN)
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(4.0f))
@@ -759,24 +764,24 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_NOKO_SHELL1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("NKT_A_1"))
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_NOKO_MOVE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 0, 0)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 1, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_SPIN_DONE, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_SPIN_SPEED, 0)
     BEGIN_SIBLING_EVENT
         LOOP(0)
-            CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 0, LW(15))
+            CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_SPIN_DONE, LW(15))
             IF_INT_EQUAL(LW(15), 1)
                 CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, 0, 0)
                 BREAK_LOOP
             END_IF
             WAIT_FRAMES(1)
-            CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 1, LW(14))
+            CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_SPIN_SPEED, LW(14))
             CALL(btlevtcmd_AddRotate, UNIT_ID_SELF, 0, LW(14), 0)
         END_LOOP
     END_SIBLING_EVENT
     WAIT_MS(100)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 1, 20)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_SPIN_SPEED, 20)
     WAIT_MS(100)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 1, 40)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_SPIN_SPEED, 40)
     WAIT_MS(100)
     BEGIN_SIBLING_EVENT_GET_ID(LW(13))
         LOOP(0)
@@ -817,10 +822,10 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_FaceDirectionAdd, UNIT_ID_SELF, LW(0), 100)
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), 0, LW(2), 0, MOVE_SOUND_NONE, 1)
     WAIT_MS(250)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 1, 10)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_SPIN_SPEED, 10)
     WAIT_MS(250)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_NOKO_JUMP1"), EVT_NULLPTR, 0, EVT_NULLPTR)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 0, 1)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_SPIN_DONE, 1)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_ACTION)
     CALL(btlevtcmd_JumpSetting, UNIT_ID_SELF, 20, FLOAT(10.0f), FLOAT(0.39941406f))
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
@@ -833,7 +838,7 @@ static EVT_BEGIN(attack_event)
     CALL(evt_btl_camera_add_zoom, 0, -50)
     CALL(btlevtcmd_ResultACDefence, LW(3), PTR(&weapon_nokonoko_attack))
     CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_nokonoko_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 1, 10)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_SPIN_SPEED, 10)
     CALL(btlevtcmd_JumpSetting, UNIT_ID_SELF, 20, FLOAT(3.0f), FLOAT(0.19921875f))
     CALL(btlevtcmd_GetPos, LW(3), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_FaceDirectionSub, UNIT_ID_SELF, LW(0), 50)
@@ -844,7 +849,7 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_FaceDirectionSub, UNIT_ID_SELF, LW(0), 75)
     CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), 0, LW(2), 20, MOVE_SOUND_FROM_TABLE)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_NOKO_MOVE2"), EVT_NULLPTR, 0, EVT_NULLPTR)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 0, 1)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_SPIN_DONE, 1)
     GOTO(98)
     LABEL(98)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
@@ -898,17 +903,17 @@ static EVT_BEGIN(ura_attack_event)
         WAIT_FRAMES(1)
     END_LOOP
     WAIT_FRAMES(30)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 0, 0)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 1, 5)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_SPIN_DONE, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_SPIN_SPEED, 5)
     BEGIN_SIBLING_EVENT
         LOOP(0)
-            CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 0, LW(15))
+            CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_SPIN_DONE, LW(15))
             IF_INT_EQUAL(LW(15), 1)
                 CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, 0, 0)
                 BREAK_LOOP
             END_IF
             WAIT_FRAMES(1)
-            CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 1, LW(14))
+            CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_SPIN_SPEED, LW(14))
             CALL(btlevtcmd_AddRotate, UNIT_ID_SELF, 0, LW(14), 0)
         END_LOOP
     END_SIBLING_EVENT
@@ -920,11 +925,11 @@ static EVT_BEGIN(ura_attack_event)
         CALL(eff_aura, UNIT_ID_SELF)
     END_SIBLING_EVENT
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_URANOKO_MOVE1"), EVT_NULLPTR, 0, LW(15))
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 1, 10)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_SPIN_SPEED, 10)
     WAIT_MS(400)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 1, 20)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_SPIN_SPEED, 20)
     WAIT_MS(400)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 1, 40)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_SPIN_SPEED, 40)
     WAIT_MS(400)
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
@@ -1006,7 +1011,7 @@ static EVT_BEGIN(ura_attack_event)
     CALL(btlevtcmd_JumpSetting, UNIT_ID_SELF, 20, FLOAT(10.0f), FLOAT(0.39941406f))
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 20, MOVE_SOUND_FROM_TABLE)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 0, 1)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_SPIN_DONE, 1)
     WAIT_FRAMES(3)
     LABEL(99)
     CALL(btlevtcmd_ResetFaceDirection, -2)
@@ -1027,10 +1032,10 @@ static USER_FUNC(eff_aura) {
     f32 x, y, z;
 
     if (isFirstCall) {
-        unit->work[2] = (EvtWord)effUranokoEntry(0, 120, 0.0f, -1000.0f, 0.0f);
+        unit->work[UNIT_WORK_AURA_EFFECT] = (EvtWord)effUranokoEntry(0, 120, 0.0f, -1000.0f, 0.0f);
     }
     BtlUnit_GetPos(unit, &x, &y, &z);
-    eff = (EffectEntry*)unit->work[2];
+    eff = (EffectEntry*)unit->work[UNIT_WORK_AURA_EFFECT];
     if (!(eff->flags & EFFECT_FLAG_ACTIVE)) {
         return EVT_RETURN_DONE;
     }

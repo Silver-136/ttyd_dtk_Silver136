@@ -22,7 +22,7 @@
 #define SHADOW_TAIL_WORK_X 0
 #define SHADOW_TAIL_WORK_Y 1
 #define SHADOW_TAIL_WORK_Z 2
+#define SHADOW_TAIL_WORK_HOLD 3         // 1 keeps the anchor in place (during their attacks)
 
 // Vivian (unit_party_vivian, battle_unit)
-#define VIVIAN_WORK_TAIL_HOLD 3         // 1 keeps the tail anchor in place (during her attack)
 #define VIVIAN_WORK_HIDE_TURNS 4        // turns left hidden in the shadow (Veil); BtlUnit_CheckShadowGuard

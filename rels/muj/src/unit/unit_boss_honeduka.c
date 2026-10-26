@@ -4,6 +4,9 @@
 #include "battle/battle_event_cmd.h"
 #include "battle/battle_sub.h"
 
+// BattleUnit.work slots (btlevtcmd_Get/Set/AddUnitWork)
+#define UNIT_WORK_OWNER 0 // unit id whose UNIT_DATA_WEAPON_BREAK_EVENT the damage sub event runs (no code spawns this unit or sets the slot)
+
 
 BattleUnitKind unit_boss_honeduka;
 static BattleUnitDefense defence;
@@ -127,7 +130,7 @@ static EVT_BEGIN(damage_event)
 EVT_END()
 
 EVT_BEGIN(honeduka_damage_sub_event)
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 0, LW(3))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_OWNER, LW(3))
     CALL(btlevtcmd_RunDataEventChild, LW(3), UNIT_DATA_WEAPON_BREAK_EVENT)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN

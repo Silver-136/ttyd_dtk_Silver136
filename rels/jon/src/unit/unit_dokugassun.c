@@ -19,6 +19,9 @@
 #include "manager/evtmgr_cmd.h"
 #include "battle/battle_damage.h"
 
+// BattleUnit.work slots (btlevtcmd_Get/Set/AddUnitWork)
+#define UNIT_WORK_LOWERED 0 // 1 while it hangs low (y 10, hammer and shell can reach it), 0 while raised (y 40); unison_phase_event flips it at random (25 %)
+
 USER_FUNC(btlevtcmd_SetEventUnisonPhase);
 static USER_FUNC(eff_poison_barrier);
 static USER_FUNC(eff_poison_breath);
@@ -365,7 +368,7 @@ static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event))
     CALL(btlevtcmd_SetEventDamage, UNIT_ID_SELF, PTR(damage_event))
     CALL(btlevtcmd_SetEventConfusion, UNIT_ID_SELF, PTR(attack_event))
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 0, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_LOWERED, 0)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 1, 0)
     SPAWN_EVENT(PTR(barrier_event))
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
@@ -422,7 +425,7 @@ static EVT_BEGIN(unison_phase_event)
     END_IF
     CALL(evt_sub_random, 99, LW(0))
     IF_INT_LESS(LW(0), 25)
-        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 0, LW(0))
+        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_LOWERED, LW(0))
         IF_INT_EQUAL(LW(0), 1)
             CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_KUMO_MOVE4"), EVT_NULLPTR, 0, EVT_NULLPTR)
             CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
@@ -430,7 +433,7 @@ static EVT_BEGIN(unison_phase_event)
             CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 60, 10, EASING_QUADRATIC_OUT, 0, MOVE_SOUND_FROM_TABLE)
             CALL(btlevtcmd_SetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
             CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 1, kPartNotHammerTarget | kPartNotShellTossTarget)
-            CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 0, 0)
+            CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_LOWERED, 0)
         ELSE
             CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_KUMO_MOVE5"), EVT_NULLPTR, 0, EVT_NULLPTR)
             CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
@@ -438,7 +441,7 @@ static EVT_BEGIN(unison_phase_event)
             CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 60, -10, EASING_QUADRATIC_OUT, 0, MOVE_SOUND_FROM_TABLE)
             CALL(btlevtcmd_SetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
             CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, kPartNotHammerTarget | kPartNotShellTossTarget)
-            CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 0, 1)
+            CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_LOWERED, 1)
         END_IF
     END_IF
     LABEL(99)

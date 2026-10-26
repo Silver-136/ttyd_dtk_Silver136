@@ -24,6 +24,11 @@
 #include "battle/battle_database_common.h"
 #include "driver/extdrv.h"
 
+// BattleUnit.work slots (btlevtcmd_Get/Set/AddUnitWork)
+#define UNIT_WORK_ALL_LANDED 0 // 1 once all 25 members have landed (zakogun_ext_main2); hit_check_event waits for it before the final hit; the attacks clear it
+#define UNIT_WORK_HIT_LANDED 1 // fall attack: 1 once a hit landed; the final hit then skips the avoid check
+#define UNIT_WORK_DYING 2      // dead_event sets 1; unit_boss_kanbu3 waits longer before its exit while it is set
+
 typedef struct ZakoGun {
     s8 field_0x0;
     s8 state;
@@ -332,7 +337,7 @@ static EVT_BEGIN(damage_event)
 EVT_END()
 
 static EVT_BEGIN(dead_event)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 2, 1)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_DYING, 1)
     BEGIN_INLINE_EVENT
         CALL(up_ceil)
     END_INLINE_EVENT
@@ -388,8 +393,8 @@ static EVT_BEGIN(attack_event)
 EVT_END()
 
 EVT_BEGIN(fall_attack_event)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 0, 0)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 1, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ALL_LANDED, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_HIT_LANDED, 0)
     SET_VALUE(LW(9), PTR(&weapon_gundan_zako_group2_attack))
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(9))
@@ -421,7 +426,7 @@ EVT_BEGIN(fall_attack_event)
 EVT_END()
 
 static EVT_BEGIN(shake_attack_event)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 0, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ALL_LANDED, 0)
     SET_VALUE(LW(9), PTR(&weapon_gundan_zako_group2_yusuri_attack))
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(9))
@@ -665,7 +670,7 @@ void zakogun_ext_main2(void) {
                     zako->state = 40;
                     work->count++;
                     if (work->count == 25) {
-                        unit->work[0] = 1;
+                        unit->work[UNIT_WORK_ALL_LANDED] = 1;
                     }
                 }
                 break;
@@ -927,7 +932,7 @@ static EVT_BEGIN(hit_check_event)
         CALL_CHILD(PTR(hit_check_event_sub))
     END_LOOP
     LOOP(0)
-        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 0, LW(0))
+        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_ALL_LANDED, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
             BREAK_LOOP
         END_IF
@@ -947,7 +952,7 @@ EVT_END()
 EVT_BEGIN(hit_check_event_sub)
     IF_INT_EQUAL(LW(9), PTR(&weapon_gundan_zako_group2_attack))
         IF_INT_EQUAL(LW(15), 1)
-            CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 1, LW(0))
+            CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_HIT_LANDED, LW(0))
             IF_INT_EQUAL(LW(0), 1)
                 GOTO(92)
             END_IF
@@ -987,7 +992,7 @@ EVT_BEGIN(hit_check_event_sub)
         CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), 0, LW(5))
     END_IF
     IF_INT_EQUAL(LW(9), PTR(&weapon_gundan_zako_group2_attack))
-        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 1, 1)
+        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_HIT_LANDED, 1)
     END_IF
     GOTO(98)
     LABEL(98)

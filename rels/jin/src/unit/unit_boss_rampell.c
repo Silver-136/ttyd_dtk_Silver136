@@ -23,6 +23,10 @@
 #include "battle/battle_database_common.h"
 #include "battle/battle_damage.h"
 
+// BattleUnit.work slots (btlevtcmd_Get/Set/AddUnitWork)
+#define UNIT_WORK_TALK_STATE 0 // 0 before the opening line, 1 after it (phase_event, stg4_jin_08_01), 2 once to_faker_mario has run
+#define UNIT_WORK_HALF_HP 1    // half its max HP; below it the phase event runs to_faker_mario
+
 static USER_FUNC(_mario_makkuro_set);
 USER_FUNC(btlevtcmd_SetEventPhase);
 USER_FUNC(btlevtcmd_SetJumpSound);
@@ -269,7 +273,7 @@ EVT_BEGIN(rampell_zoom)
 EVT_END()
 
 EVT_BEGIN(to_faker_mario)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 0, 2)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_TALK_STATE, 2)
     CALL(btlevtcmd_WaitAttackEnd)
     CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
     CALL_CHILD(rampell_zoom)
@@ -356,11 +360,11 @@ static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event))
     CALL(btlevtcmd_SetEventDamage, UNIT_ID_SELF, PTR(damage_event))
     CALL(btlevtcmd_SetEventConfusion, UNIT_ID_SELF, PTR(btldefaultevt_Confuse))
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 0, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_TALK_STATE, 0)
     CALL(btlevtcmd_GetMaxHp, UNIT_ID_SELF, LW(0))
     MULTIPLY(LW(0), 50)
     DIVIDE(LW(0), 100)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 1, LW(0))
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_HALF_HP, LW(0))
     CALL(btlevtcmd_SetWalkSound, UNIT_ID_SELF, STRING("SFX_BOSS_RNPL_MOVE1L"), STRING("SFX_BOSS_RNPL_MOVE1R"), 0, 15, 15)
     CALL(btlevtcmd_SetRunSound, UNIT_ID_SELF, STRING("SFX_BOSS_RNPL_MOVE1L"), STRING("SFX_BOSS_RNPL_MOVE1R"), 0, 8, 8)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
@@ -375,7 +379,7 @@ static EVT_BEGIN(damage_event)
 EVT_END()
 
 static EVT_BEGIN(dead_event)
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 0, LW(0))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_TALK_STATE, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 2)
         CALL_CHILD(PTR(to_faker_mario))
         RETURN
@@ -405,7 +409,7 @@ static EVT_BEGIN(phase_event)
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_CheckActStatus, UNIT_ID_SELF, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
-            CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 0, LW(0))
+            CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_TALK_STATE, LW(0))
             IF_INT_NOT_EQUAL(LW(0), 2)
                 CALL(btlevtcmd_get_turn, LW(0))
                 IF_INT_GREATER_OR_EQUAL(LW(0), 5)
@@ -414,10 +418,10 @@ static EVT_BEGIN(phase_event)
                     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
                 END_IF
             END_IF
-            CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 0, LW(0))
+            CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_TALK_STATE, LW(0))
             SWITCH(LW(0))
                 CASE_EQUAL(0)
-                CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 0, 1)
+                CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_TALK_STATE, 1)
                 CALL(btlevtcmd_PhaseEventStartDeclare, UNIT_ID_SELF)
                 CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
                 CALL_CHILD(PTR(rampell_zoom))
@@ -428,7 +432,7 @@ static EVT_BEGIN(phase_event)
                 CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
                 CASE_EQUAL(1)
                 CALL(btlevtcmd_GetHp, UNIT_ID_SELF, LW(0))
-                CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 1, LW(1))
+                CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_HALF_HP, LW(1))
                 IF_INT_LESS(LW(0), LW(1))
                     CALL(btlevtcmd_PhaseEventStartDeclare, UNIT_ID_SELF)
                     CALL_CHILD(PTR(to_faker_mario))

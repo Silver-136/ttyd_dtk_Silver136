@@ -12,6 +12,9 @@
 #include "battle/battle_sub.h"
 #include "battle/battle_damage.h"
 
+// BattleUnit.work slots (btlevtcmd_Get/Set/AddUnitWork)
+#define UNIT_WORK_SPARK_SFX 0 // sound id of the looping SFX_ENM_BOMB_WAIT1 that wait_event_spark starts once lit; -1 = none; bomb_event stops it
+
 
 BattleUnitKind unit_bomhei;
 static BattleUnitDefense defence;
@@ -243,11 +246,11 @@ static EVT_BEGIN(bomb_event)
     CALL(evt_btl_camera_shake_w, 0, 5, 0, 15, 0)
     CALL(btlevtcmd_OnAttribute, UNIT_ID_SELF, kUnitHidden)
     CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 1, kNoShadow)
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 0, LW(0))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_SPARK_SFX, LW(0))
     IF_INT_NOT_EQUAL(LW(0), -1)
         CALL(evt_snd_sfxoff, LW(0))
     END_IF
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 0, -1)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_SPARK_SFX, -1)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BTL_ENEMY_DIE1_2"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BTL_ENM_BOMB_ATTACK2"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
@@ -274,7 +277,7 @@ static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event))
     CALL(btlevtcmd_SetEventDamage, UNIT_ID_SELF, PTR(damage_event))
     CALL(btlevtcmd_SetEventConfusion, UNIT_ID_SELF, PTR(attack_event))
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 0, -1)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_SPARK_SFX, -1)
     CALL(btlevtcmd_SetRunSound, UNIT_ID_SELF, STRING("SFX_ENM_BOMB_MOVE2"), STRING("SFX_ENM_BOMB_MOVE2"), 0, 4, 4)
     CALL(btlevtcmd_SetWalkSound, UNIT_ID_SELF, STRING("SFX_ENM_BOMB_MOVE2"), STRING("SFX_ENM_BOMB_MOVE2"), 0, 10, 10)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
@@ -543,10 +546,10 @@ EVT_END()
 
 static EVT_BEGIN(wait_event_spark)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 0, LW(15))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_SPARK_SFX, LW(15))
     IF_INT_EQUAL(LW(15), -1)
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_BOMB_WAIT1"), EVT_NULLPTR, 0, LW(15))
-        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 0, LW(15))
+        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_SPARK_SFX, LW(15))
     END_IF
     RETURN
 EVT_END()

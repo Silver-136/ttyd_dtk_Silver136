@@ -11,6 +11,16 @@
 #include "battle/battle_sub.h"
 #include "battle/battle_damage.h"
 
+// BattleUnit.work slots (btlevtcmd_Get/Set/AddUnitWork)
+#define UNIT_WORK_RETURNED 0        // boomerangs back in hand: boomerang_move_event adds 1 at its end; the attack waits for 1 (normal) or 2 (renzoku)
+#define UNIT_WORK_TARGET1 1         // unit id of the first target (-1 = none)
+#define UNIT_WORK_TARGET2 2         // unit id of the second target (-1 = none)
+#define UNIT_WORK_TARGET1_PART 3    // part id of the first target
+#define UNIT_WORK_TARGET2_PART 4    // part id of the second target
+#define UNIT_WORK_TARGET1_HIT 5     // 1 if the outbound pass hit the first target; the last boomerang's return pass then damages it without a new check (damage_check_last)
+#define UNIT_WORK_TARGET2_HIT 6     // 1 if the outbound pass hit the second target (same use as UNIT_WORK_TARGET1_HIT)
+#define UNIT_WORK_AC_DEFENCE_DONE 7 // 1 once btlevtcmd_ResultACDefence ran for the current pass; attack_event clears it and boomerang_move_event clears it when the boomerang turns back
+
 
 BattleUnitKind unit_boomerang_bros;
 static BattleUnitDefense defence;
@@ -232,7 +242,7 @@ static EVT_BEGIN(damage_event)
 EVT_END()
 
 static EVT_BEGIN(attack_event)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 7, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_AC_DEFENCE_DONE, 0)
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL_CHILD(PTR(normal_attack_event))
@@ -289,10 +299,10 @@ static EVT_BEGIN(damage_check_sub)
     LABEL(90)
     GOTO(99)
     LABEL(91)
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 7, LW(8))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_AC_DEFENCE_DONE, LW(8))
     IF_INT_EQUAL(LW(8), 0)
         CALL(btlevtcmd_ResultACDefence, LW(3), LW(6))
-        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 7, 1)
+        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_AC_DEFENCE_DONE, 1)
     END_IF
     IF_INT_EQUAL(LW(7), 1)
         CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(6), DAMAGE_RESULT_FINAL_HIT, LW(5))
@@ -313,10 +323,10 @@ EVT_END()
 
 static EVT_BEGIN(damage_check_last)
     IF_INT_EQUAL(LW(0), 1)
-        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 7, LW(8))
+        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_AC_DEFENCE_DONE, LW(8))
         IF_INT_EQUAL(LW(8), 0)
             CALL(btlevtcmd_ResultACDefence, LW(3), LW(6))
-            CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 7, 1)
+            CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_AC_DEFENCE_DONE, 1)
         END_IF
         CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(6), DAMAGE_RESULT_FINAL_HIT, LW(5))
         ELSE
@@ -342,12 +352,12 @@ EVT_BEGIN(boomerang_move_event)
             WAIT_FRAMES(1)
             CALL(btlevtcmd_GetPartsPos, UNIT_ID_SELF, LW(15), LW(10), LW(12), LW(13))
             IF_INT_EQUAL(LW(9), 2)
-                CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 7, 0)
+                CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_AC_DEFENCE_DONE, 0)
             END_IF
             SWITCH(LW(9))
                 CASE_EQUAL(0)
-                CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 1, LW(3))
-                CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 3, LW(4))
+                CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_TARGET1, LW(3))
+                CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_TARGET1_PART, LW(4))
                 IF_INT_EQUAL(LW(3), -1)
                     SET_VALUE(LW(9), 1)
                     BREAK_SWITCH
@@ -358,11 +368,11 @@ EVT_BEGIN(boomerang_move_event)
                 END_IF
                 CALL_CHILD(damage_check_no_last)
                 SET_VALUE(LW(9), 1)
-                CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 5, LW(0))
+                CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_TARGET1_HIT, LW(0))
                 CASE_END
                 CASE_EQUAL(1)
-                CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 2, LW(3))
-                CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 4, LW(4))
+                CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_TARGET2, LW(3))
+                CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_TARGET2_PART, LW(4))
                 IF_INT_EQUAL(LW(3), -1)
                     SET_VALUE(LW(9), 2)
                     BREAK_SWITCH
@@ -373,11 +383,11 @@ EVT_BEGIN(boomerang_move_event)
                 END_IF
                 CALL_CHILD(damage_check_no_last)
                 SET_VALUE(LW(9), 2)
-                CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 6, LW(0))
+                CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_TARGET2_HIT, LW(0))
                 CASE_END
                 CASE_EQUAL(2)
-                CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 2, LW(3))
-                CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 4, LW(4))
+                CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_TARGET2, LW(3))
+                CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_TARGET2_PART, LW(4))
                 IF_INT_EQUAL(LW(3), -1)
                     SET_VALUE(LW(9), 3)
                     BREAK_SWITCH
@@ -386,7 +396,7 @@ EVT_BEGIN(boomerang_move_event)
                 IF_INT_LESS(LW(10), LW(11))
                     BREAK_SWITCH
                 END_IF
-                CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 6, LW(0))
+                CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_TARGET2_HIT, LW(0))
                 IF_INT_EQUAL(LW(14), 0)
                     CALL_CHILD(damage_check_no_last)
                 ELSE
@@ -395,8 +405,8 @@ EVT_BEGIN(boomerang_move_event)
                 SET_VALUE(LW(9), 3)
                 CASE_END
                 CASE_EQUAL(3)
-                CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 1, LW(3))
-                CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 3, LW(4))
+                CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_TARGET1, LW(3))
+                CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_TARGET1_PART, LW(4))
                 IF_INT_EQUAL(LW(3), -1)
                     SET_VALUE(LW(9), 4)
                     BREAK_SWITCH
@@ -405,7 +415,7 @@ EVT_BEGIN(boomerang_move_event)
                 IF_INT_LESS(LW(10), LW(11))
                     BREAK_SWITCH
                 END_IF
-                CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 5, LW(0))
+                CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_TARGET1_HIT, LW(0))
                 IF_INT_EQUAL(LW(14), 0)
                     CALL_CHILD(damage_check_no_last)
                 ELSE
@@ -435,7 +445,7 @@ EVT_BEGIN(boomerang_move_event)
     CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, LW(15), kHidden)
     CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, LW(15), kNoShadow)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_BOOME_ATTACK4"), EVT_NULLPTR, 0, EVT_NULLPTR)
-    CALL(btlevtcmd_AddUnitWork, UNIT_ID_SELF, 0, 1)
+    CALL(btlevtcmd_AddUnitWork, UNIT_ID_SELF, UNIT_WORK_RETURNED, 1)
     RETURN
 EVT_END()
 
@@ -469,9 +479,9 @@ static EVT_BEGIN(normal_attack_event)
     SET_VALUE(LW(0), 1)
     SET_VALUE(LW(1), 3)
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 5, 0)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 6, 0)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 0, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_TARGET1_HIT, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_TARGET2_HIT, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_RETURNED, 0)
     LABEL(10)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, LW(0), LW(3))
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, LW(1), LW(4))
@@ -491,7 +501,7 @@ static EVT_BEGIN(normal_attack_event)
     SPAWN_EVENT(PTR(boomerang_move_event))
     LOOP(0)
         WAIT_FRAMES(1)
-        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 0, LW(0))
+        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_RETURNED, LW(0))
         IF_INT_GREATER_OR_EQUAL(LW(0), 1)
             BREAK_LOOP
         END_IF
@@ -527,9 +537,9 @@ static EVT_BEGIN(renzoku_attack_event)
     SET_VALUE(LW(0), 1)
     SET_VALUE(LW(1), 3)
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 5, 0)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 6, 0)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 0, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_TARGET1_HIT, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_TARGET2_HIT, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_RETURNED, 0)
     LABEL(10)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, LW(0), LW(3))
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, LW(1), LW(4))
@@ -555,7 +565,7 @@ static EVT_BEGIN(renzoku_attack_event)
     SPAWN_EVENT(PTR(boomerang_move_event))
     LOOP(0)
         WAIT_FRAMES(1)
-        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 0, LW(0))
+        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_RETURNED, LW(0))
         IF_INT_GREATER_OR_EQUAL(LW(0), 2)
             BREAK_LOOP
         END_IF
@@ -633,10 +643,10 @@ EVT_BEGIN(normal_attack_event_confuse)
     GOTO(97)
     LABEL(91)
     IF_INT_EQUAL(LW(10), 0)
-        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 7, LW(8))
+        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_AC_DEFENCE_DONE, LW(8))
         IF_INT_EQUAL(LW(8), 0)
             CALL(btlevtcmd_ResultACDefence, LW(3), PTR(&weapon_boomerang_bros_attack))
-            CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 7, 1)
+            CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_AC_DEFENCE_DONE, 1)
         END_IF
         ADD(LW(10), 1)
     END_IF
@@ -728,10 +738,10 @@ EVT_BEGIN(renzoku_attack_event_confuse)
     GOTO(97)
     LABEL(91)
     IF_INT_EQUAL(LW(10), 0)
-        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 7, LW(8))
+        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_AC_DEFENCE_DONE, LW(8))
         IF_INT_EQUAL(LW(8), 0)
             CALL(btlevtcmd_ResultACDefence, LW(3), PTR(&weapon_boomerang_bros_renzoku_attack))
-            CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 7, 1)
+            CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_AC_DEFENCE_DONE, 1)
         END_IF
         ADD(LW(10), 1)
     END_IF

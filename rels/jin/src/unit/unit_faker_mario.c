@@ -19,6 +19,12 @@
 #include "manager/evtmgr_cmd.h"
 #include "battle/battle_damage.h"
 
+// BattleUnit.work slots (btlevtcmd_Get/Set/AddUnitWork)
+#define UNIT_WORK_HP_TALK_STEP 0 // HP lines spoken: 0 none, 1 below slot 1 (stg4_jin_26_<partner>; forced to 1 when GW(20) != 0), 2 below slot 2 (stg4_jin_26_01), 3 below slot 3 (stg4_jin_26_02)
+#define UNIT_WORK_HP_66 1        // 66% of max HP, threshold of the first HP line
+#define UNIT_WORK_HP_50 2        // 50% of max HP, threshold of the second HP line
+#define UNIT_WORK_HP_25 3        // 25% of max HP, threshold of the third HP line
+
 typedef struct FakerStatus { s16 data[15]; } FakerStatus;
 #ifdef VERSION_G8ME01
 typedef struct FakerParam {
@@ -583,16 +589,16 @@ static EVT_BEGIN(init_event_fmario)
     SET_VALUE(LW(1), LW(0))
     MULTIPLY(LW(1), 66)
     DIVIDE(LW(1), 100)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 1, LW(1))
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_HP_66, LW(1))
     SET_VALUE(LW(1), LW(0))
     MULTIPLY(LW(1), 50)
     DIVIDE(LW(1), 100)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 2, LW(1))
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_HP_50, LW(1))
     SET_VALUE(LW(1), LW(0))
     MULTIPLY(LW(1), 25)
     DIVIDE(LW(1), 100)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 3, LW(1))
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 0, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_HP_25, LW(1))
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_HP_TALK_STEP, 0)
     SET_VALUE(GW(21), 0)
     CALL(btlevtcmd_SetWalkSound, UNIT_ID_SELF, STRING("SFX_BOSS_NM_MOVE1L"), STRING("SFX_BOSS_NM_MOVE1R"), 0, 20, 20)
     CALL(btlevtcmd_SetRunSound, UNIT_ID_SELF, STRING("SFX_BOSS_NM_MOVE1L"), STRING("SFX_BOSS_NM_MOVE1R"), 0, 10, 10)
@@ -778,18 +784,18 @@ EVT_BEGIN(phase_event_fmario)
             CALL_CHILD(party_change_event)
         END_IF
         CALL(btlevtcmd_GetHp, UNIT_ID_SELF, LW(0))
-        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 0, LW(2))
+        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_HP_TALK_STEP, LW(2))
         IF_INT_NOT_EQUAL(GW(20), 0)
             IF_INT_EQUAL(LW(2), 0)
-                CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 0, 1)
+                CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_HP_TALK_STEP, 1)
                 SET_VALUE(LW(2), 1)
             END_IF
         END_IF
         SWITCH(LW(2))
             CASE_EQUAL(0)
-            CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 1, LW(1))
+            CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_HP_66, LW(1))
             IF_INT_LESS(LW(0), LW(1))
-                CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 0, 1)
+                CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_HP_TALK_STEP, 1)
                 CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
                 CALL_CHILD(enemy_zoom)
                 SWITCH(GW(18))
@@ -806,9 +812,9 @@ EVT_BEGIN(phase_event_fmario)
                 CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_ON)
             END_IF
             CASE_EQUAL(1)
-            CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 2, LW(1))
+            CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_HP_50, LW(1))
             IF_INT_LESS(LW(0), LW(1))
-                CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 0, 2)
+                CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_HP_TALK_STEP, 2)
                 CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
                 CALL_CHILD(fmario_zoom)
                 CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg4_jin_26_01"), 0, -2)
@@ -816,9 +822,9 @@ EVT_BEGIN(phase_event_fmario)
                 CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_ON)
             END_IF
             CASE_EQUAL(2)
-            CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 3, LW(1))
+            CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_HP_25, LW(1))
             IF_INT_LESS(LW(0), LW(1))
-                CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 0, 3)
+                CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_HP_TALK_STEP, 3)
                 CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
                 CALL_CHILD(fmario_zoom)
                 CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg4_jin_26_02"), 0, -2)

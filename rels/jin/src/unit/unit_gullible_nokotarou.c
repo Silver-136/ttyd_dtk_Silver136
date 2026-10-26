@@ -11,6 +11,11 @@
 #include "battle/battle_sub.h"
 #include "battle/battle_damage.h"
 
+// BattleUnit.work slots (btlevtcmd_Get/Set/AddUnitWork)
+#define UNIT_WORK_SPIN_ON 8       // 1 keeps the _koura_rotate_start spin loop running; _koura_rotate_stop and _restore_koura_pose clear it
+#define UNIT_WORK_SPIN_SPEED 9    // target spin speed in degrees per frame around y (45 before each attack); the loop ramps the current speed toward it by 1 per frame; the sign gives the direction
+#define UNIT_WORK_SPIN_REVERSE 10 // nonzero makes the spin loop reverse direction (negates speed and target), then clears it
+
 USER_FUNC(btlevtcmd_SetJumpSound);
 
 BattleUnitKind unit_gullible_nokotarou;
@@ -242,9 +247,9 @@ static EVT_BEGIN(init_event_nokotarou)
     CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event_nokotarou))
     CALL(btlevtcmd_SetEventDamage, UNIT_ID_SELF, PTR(damage_event_nokotarou))
     CALL(btlevtcmd_SetEventConfusion, UNIT_ID_SELF, PTR(btldefaultevt_Confuse))
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 8, 0)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 9, 0)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 10, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_SPIN_ON, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_SPIN_SPEED, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_SPIN_REVERSE, 0)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 11, 0)
     CALL(btlevtcmd_SetWalkSound, UNIT_ID_SELF, STRING("SFX_PARTY_BATTLE_MOVE1L"), STRING("SFX_PARTY_BATTLE_MOVE1R"), 6, 12, 16)
     CALL(btlevtcmd_SetRunSound, UNIT_ID_SELF, STRING("SFX_PARTY_BATTLE_MOVE1L"), STRING("SFX_PARTY_BATTLE_MOVE1R"), 0, 9, 3)
@@ -346,7 +351,7 @@ static EVT_BEGIN(_change_koura_pose_fast)
 EVT_END()
 
 static EVT_BEGIN(_restore_koura_pose)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 8, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_SPIN_ON, 0)
     CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, 0, 0)
     WAIT_FRAMES(1)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PNK_K_1"))
@@ -363,23 +368,23 @@ static EVT_BEGIN(_restore_koura_pose)
 EVT_END()
 
 static EVT_BEGIN(_koura_rotate_start)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 8, 1)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 10, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_SPIN_ON, 1)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_SPIN_REVERSE, 0)
     BEGIN_INLINE_EVENT
         LABEL(0)
-        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 8, LW(1))
+        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_SPIN_ON, LW(1))
         IF_INT_EQUAL(LW(1), 0)
             GOTO(10)
         END_IF
-        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 10, LW(11))
+        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_SPIN_REVERSE, LW(11))
         IF_INT_NOT_EQUAL(LW(11), 0)
-            CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 10, 0)
-            CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 9, LW(10))
+            CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_SPIN_REVERSE, 0)
+            CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_SPIN_SPEED, LW(10))
             MULTIPLY(LW(10), -1)
             MULTIPLY(LW(0), -1)
-            CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 9, LW(10))
+            CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_SPIN_SPEED, LW(10))
         END_IF
-        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 9, LW(10))
+        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_SPIN_SPEED, LW(10))
         IF_INT_GREATER_OR_EQUAL(LW(10), 0)
             ADD(LW(0), 1)
             IF_INT_GREATER(LW(0), LW(10))
@@ -400,7 +405,7 @@ static EVT_BEGIN(_koura_rotate_start)
 EVT_END()
 
 static EVT_BEGIN(_koura_rotate_stop)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 8, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_SPIN_ON, 0)
     CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, 0, 0)
     RETURN
 EVT_END()
@@ -452,7 +457,7 @@ static EVT_BEGIN(attack_event_nokotarou_koura)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_ATTACK)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BTL_NOKO_ATTACK1"), EVT_NULLPTR, 0, LW(13))
     SET_VALUE(LW(0), 15)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 9, 45)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_SPIN_SPEED, 45)
     CALL_CHILD(_koura_rotate_start)
     WAIT_FRAMES(30)
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(6))
@@ -551,7 +556,7 @@ static EVT_BEGIN(attack_event_nokotarou_shubibin)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BTL_NOKO_SHUBIBIN1"), EVT_NULLPTR, 0, LW(13))
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 5, 0)
     SET_VALUE(LW(0), 15)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 9, 45)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_SPIN_SPEED, 45)
     CALL_CHILD(_koura_rotate_start)
     WAIT_MS(500)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 4)

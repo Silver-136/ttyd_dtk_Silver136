@@ -22,6 +22,11 @@ s32 darkCount;
 f32 point[4];
 #include "battle/battle_break_slot.h"
 
+// BattleUnit.work slots (btlevtcmd_Get/Set/AddUnitWork)
+#define UNIT_WORK_LESSON 0       // lecture step: 0 start, 1 after the turn-1 intro (BATTLE_FLAG_LECTURE_SPECIAL), 2 action-command lesson (BATTLE_FLAG_LECTURE_ATTACK), 3 last lesson (BATTLE_FLAG_LECTURE_NO_COMMAND)
+#define UNIT_WORK_AC_SUCCESSES 1 // successful action commands in step 2: 0 -> mac_0_b_t3_006, 1 -> 007, 2 -> 013/014 and step 3
+#define UNIT_WORK_AC_FAILURES 2  // failed action commands in step 2: 0 -> mac_0_b_t3_008, 1 -> 009, then 010 each time
+
 static USER_FUNC(_battle_set_lecture_unit_id);
 USER_FUNC(_set_actend_event);
 USER_FUNC(aud_attack_end);
@@ -337,9 +342,9 @@ static EVT_BEGIN(init_event)
     CALL(_battle_set_lecture_unit_id, LW(0))
     CALL(_set_actend_event, UNIT_ID_MARIO, PTR(actend_event))
     CALL(_set_actend_event, UNIT_ID_PARTNER, PTR(actend_event))
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 0, 0)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 1, 0)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 2, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_LESSON, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_AC_SUCCESSES, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_AC_FAILURES, 0)
     CALL(btlevtcmd_SetMaxMoveCount, UNIT_ID_SELF, 0)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
@@ -370,7 +375,7 @@ static EVT_BEGIN(phase_event)
             CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_ON)
             CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
             CALL(btlevtcmd_onoff_battleflag, 1, BATTLE_FLAG_LECTURE_SPECIAL)
-            CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 0, 1)
+            CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_LESSON, 1)
             GOTO(99)
         END_IF
     END_IF
@@ -536,9 +541,9 @@ static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), -2)
     SET_VALUE(LW(11), 1)
     CALL_CHILD(PTR(btldefaultevt_Damage))
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 0, LW(0))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_LESSON, LW(0))
     IF_INT_EQUAL(LW(0), 2)
-        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 1, LW(0))
+        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_AC_SUCCESSES, LW(0))
         IF_INT_EQUAL(LW(0), 2)
             WAIT_MS(1000)
             CALL(get_ac_result, LW(0))

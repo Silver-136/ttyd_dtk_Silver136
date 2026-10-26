@@ -29,6 +29,14 @@
 #include "battle/battle_damage.h"
 #include "icon_ids.h"
 
+// BattleUnit.work slots (btlevtcmd_Get/Set/AddUnitWork)
+#define UNIT_WORK_PART1_RUNNING 0 // MadowaseAttack: 1 while the body (part 1) still runs its route; the attack waits until slots 0-3 are all 0
+#define UNIT_WORK_PART2_RUNNING 1 // MadowaseAttack: 1 while part 2 still runs its route
+#define UNIT_WORK_PART3_RUNNING 2 // MadowaseAttack: 1 while part 3 still runs its route
+#define UNIT_WORK_PART4_RUNNING 3 // MadowaseAttack: 1 while part 4 still runs its route
+#define UNIT_WORK_SPIN_EVENT_ID 4 // NormalAttack: id of the sibling event that spins her back after a slap (0 = none); deleted before the next slap
+#define UNIT_WORK_MAX_SLAPS 5     // NormalAttack: number of slaps (2, 3, 4 by party tech level); the attack ends when the slap count reaches it
+
 void btlUnitPartsDisp(CameraId camId, BattleUnitPart* parts);
 void BtlUnit_EquipItem(BattleUnit* unit, s32 flags, ItemType type);
 
@@ -639,11 +647,11 @@ EVT_BEGIN(partyChuchurinaAttack_NormalAttack)
     CALL(btlevtcmd_GetPartyTechLv, UNIT_ID_SELF, LW(0))
     SWITCH(LW(0))
         CASE_EQUAL(2)
-        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 5, 4)
+        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_MAX_SLAPS, 4)
         CASE_EQUAL(1)
-        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 5, 3)
+        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_MAX_SLAPS, 3)
         CASE_DEFAULT
-        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 5, 2)
+        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_MAX_SLAPS, 2)
     END_SWITCH
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
     CALL(evt_btl_camera_set_zoom, 0, 300)
@@ -672,7 +680,7 @@ EVT_BEGIN(partyChuchurinaAttack_NormalAttack)
     CALL(btlevtcmd_WaitEventEnd, LW(14))
     SET_VALUE(LW(13), 18)
     SET_VALUE(LW(10), 0)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 4, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_SPIN_EVENT_ID, 0)
     LABEL(10)
     ADD(LW(10), 1)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PCH_A1_2"))
@@ -726,16 +734,16 @@ EVT_BEGIN(partyChuchurinaAttack_NormalAttack)
     ELSE
         SET_VALUE(LW(12), PTR(&partyWeapon_ChuchurinaNormalAttackLeft))
     END_IF
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 4, LW(15))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_SPIN_EVENT_ID, LW(15))
     IF_INT_NOT_EQUAL(LW(15), 0)
         DELETE_EVENT(LW(15))
-        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 4, 0)
+        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_SPIN_EVENT_ID, 0)
     END_IF
     IF_INT_NOT_EQUAL(LW(14), 0)
         DELETE_EVENT(LW(14))
         SET_VALUE(LW(14), 0)
     END_IF
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 5, LW(0))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_MAX_SLAPS, LW(0))
     IF_INT_GREATER_OR_EQUAL(LW(10), LW(0))
         GOTO(20)
     ELSE
@@ -797,7 +805,7 @@ EVT_BEGIN(partyChuchurinaAttack_NormalAttack)
             CASE_END
         END_SWITCH
         CALL(evt_btl_camera_shake_h, 0, 2, 0, 12, 13)
-        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 5, LW(0))
+        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_MAX_SLAPS, LW(0))
         IF_INT_GREATER_OR_EQUAL(LW(10), LW(0))
             CALL(evt_snd_sfxon, STRING("SFX_BTL_CHUCHURINA_ATTACK3"), 0)
             IF_BITS_SET(LW(6), 2)
@@ -854,7 +862,7 @@ EVT_BEGIN(partyChuchurinaAttack_NormalAttack)
                         CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, LW(0), 0)
                         WAIT_FRAMES(1)
                     END_LOOP
-                    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 5, LW(0))
+                    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_MAX_SLAPS, LW(0))
                     IF_INT_LESS(LW(10), LW(0))
                         SET_VALUE(LW(7), LW(13))
                         IF_INT_GREATER_OR_EQUAL(LW(7), 0)
@@ -892,7 +900,7 @@ EVT_BEGIN(partyChuchurinaAttack_NormalAttack)
                 BEGIN_SIBLING_EVENT_GET_ID(LW(15))
                     CALL(btlevtcmd_GetRotate, UNIT_ID_SELF, EVT_NULLPTR, LW(8), EVT_NULLPTR)
                     SET_VALUE(LW(7), 360)
-                    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 5, LW(0))
+                    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_MAX_SLAPS, LW(0))
                     IF_INT_GREATER_OR_EQUAL(LW(10), LW(0))
                         SET_VALUE(LW(0), LW(8))
                         IF_INT_GREATER_OR_EQUAL(LW(8), 180)
@@ -926,7 +934,7 @@ EVT_BEGIN(partyChuchurinaAttack_NormalAttack)
                         WAIT_FRAMES(1)
                     END_LOOP
                 END_SIBLING_EVENT
-                CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 4, LW(15))
+                CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_SPIN_EVENT_ID, LW(15))
                 WAIT_FRAMES(10)
             END_SWITCH
         ELSE
@@ -961,7 +969,7 @@ EVT_BEGIN(partyChuchurinaAttack_NormalAttack)
             GOTO(95)
         END_IF
         MULTIPLY(LW(13), -1)
-        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 5, LW(0))
+        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_MAX_SLAPS, LW(0))
         IF_INT_LESS(LW(10), LW(0))
             GOTO(10)
         END_IF
@@ -1155,10 +1163,10 @@ EVT_BEGIN(partyChuchurinaAttack_MadowaseAttack)
     END_SIBLING_EVENT
     WAIT_FRAMES(85)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_NEUTRAL)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 0, 1)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 1, 1)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 2, 1)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 3, 1)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_PART1_RUNNING, 1)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_PART2_RUNNING, 1)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_PART3_RUNNING, 1)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_PART4_RUNNING, 1)
     CALL(btlevtcmd_SetPartsBlur, UNIT_ID_SELF, 1, 255, 255, 255, 255, 100, 100, 100, 50, 1)
     CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 1, kMotionBlur)
     CALL(btlevtcmd_SetPartsBlur, UNIT_ID_SELF, 2, 255, 255, 255, 255, 100, 100, 100, 50, 1)
@@ -1207,7 +1215,7 @@ EVT_BEGIN(partyChuchurinaAttack_MadowaseAttack)
         CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 20, MOVE_SOUND_FROM_TABLE)
         CALL(evt_eff, STRING(""), STRING("bomb"), 0, LW(0), LW(1), LW(2), FLOAT(1.0f), 0, 0, 0, 0, 0, 0, 0)
         CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, kMotionBlur)
-        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 0, 0)
+        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_PART1_RUNNING, 0)
     END_SIBLING_EVENT
     BEGIN_SIBLING_EVENT
         SET_VALUE(LW(6), 2)
@@ -1241,7 +1249,7 @@ EVT_BEGIN(partyChuchurinaAttack_MadowaseAttack)
         CALL(evt_eff, STRING(""), STRING("bomb"), 0, LW(0), LW(1), LW(2), FLOAT(1.0f), 0, 0, 0, 0, 0, 0, 0)
         CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 2, kHidden | kNoShadow)
         CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 2, kMotionBlur)
-        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 1, 0)
+        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_PART2_RUNNING, 0)
     END_SIBLING_EVENT
     BEGIN_SIBLING_EVENT
         SET_VALUE(LW(6), 3)
@@ -1274,7 +1282,7 @@ EVT_BEGIN(partyChuchurinaAttack_MadowaseAttack)
         CALL(evt_eff, STRING(""), STRING("bomb"), 0, LW(0), LW(1), LW(2), FLOAT(1.0f), 0, 0, 0, 0, 0, 0, 0)
         CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 3, kHidden | kNoShadow)
         CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 3, kMotionBlur)
-        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 2, 0)
+        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_PART3_RUNNING, 0)
     END_SIBLING_EVENT
     BEGIN_SIBLING_EVENT
         SET_VALUE(LW(6), 4)
@@ -1315,17 +1323,17 @@ EVT_BEGIN(partyChuchurinaAttack_MadowaseAttack)
         CALL(evt_eff, STRING(""), STRING("bomb"), 0, LW(0), LW(1), LW(2), FLOAT(1.0f), 0, 0, 0, 0, 0, 0, 0)
         CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 4, kHidden | kNoShadow)
         CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 4, kMotionBlur)
-        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 3, 0)
+        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_PART4_RUNNING, 0)
     END_SIBLING_EVENT
     LABEL(9)
     SET_VALUE(LW(0), 0)
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 0, LW(1))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_PART1_RUNNING, LW(1))
     ADD(LW(0), LW(1))
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 1, LW(1))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_PART2_RUNNING, LW(1))
     ADD(LW(0), LW(1))
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 2, LW(1))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_PART3_RUNNING, LW(1))
     ADD(LW(0), LW(1))
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 3, LW(1))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_PART4_RUNNING, LW(1))
     ADD(LW(0), LW(1))
     IF_INT_NOT_EQUAL(LW(0), 0)
         WAIT_FRAMES(1)

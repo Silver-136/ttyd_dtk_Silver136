@@ -23,6 +23,11 @@
 #include "battle/battle_database_common.h"
 #include "battle/battle_damage.h"
 
+// BattleUnit.work slots (btlevtcmd_Get/Set/AddUnitWork)
+#define UNIT_WORK_HP_STAGE 0 // HP stage: 0 start (drop kick/screw), 1 at <= 67 % (next attack flying chop, then 2), 2 (three attacks), 3 at <= 34 % if not tiny (next attack roof shake from the ceiling, then 4), 4 (all attacks, foot stamp/healing on the ceiling)
+// BattleUnitPart.work slots (btlevtcmd_Get/SetPartsWork)
+#define PARTS_WORK_FALL_EVENT 0 // part 1, slots 0-9 (index = drop number): event id of each falling object's hit event in roof_shake_attack_event, 0 once waited on
+
 
 USER_FUNC(btlevtcmd_SetEventEntry);
 USER_FUNC(btlevtcmd_SetEventPhase);
@@ -549,7 +554,7 @@ static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventConfusion, UNIT_ID_SELF, PTR(btldefaultevt_Confuse))
     CALL(btlevtcmd_SetEventEntry, UNIT_ID_SELF, PTR(entry_event))
     CALL(init_ceil)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 0, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_HP_STAGE, 0)
     CALL(btlevtcmd_SetWalkSound, UNIT_ID_SELF, STRING("SFX_BOSS_BLED_MOVE1L"), STRING("SFX_BOSS_BLED_MOVE1R"), 0, 15, 15)
     CALL(btlevtcmd_SetRunSound, UNIT_ID_SELF, STRING("SFX_BOSS_BLED_MOVE1L"), STRING("SFX_BOSS_BLED_MOVE1R"), 0, 8, 8)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
@@ -730,7 +735,7 @@ static EVT_BEGIN(phase_event)
     IF_INT_EQUAL(LW(0), 0)
         GOTO(99)
     END_IF
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 0, LW(0))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_HP_STAGE, LW(0))
     SWITCH(LW(0))
         CASE_EQUAL(0)
         CALL(btlevtcmd_GetMaxHp, UNIT_ID_SELF, LW(0))
@@ -742,7 +747,7 @@ static EVT_BEGIN(phase_event)
         CALL(btlevtcmd_GetHp, UNIT_ID_SELF, LW(1))
         DEBUG_PUT_REG(LW(1))
         IF_INT_LESS_OR_EQUAL(LW(1), LW(0))
-            CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 0, 1)
+            CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_HP_STAGE, 1)
             IF_INT_EQUAL(GSWF(2514), 0)
                 SET_VALUE(GSWF(2514), 1)
                 CALL(btlevtcmd_StopWaitEvent, UNIT_ID_SELF)
@@ -786,7 +791,7 @@ static EVT_BEGIN(phase_event)
             SET_VALUE(LW(0), 0)
             CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_TINY, LW(1))
             IF_INT_EQUAL(LW(1), 0)
-                CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 0, 3)
+                CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_HP_STAGE, 3)
                 IF_INT_LESS(GSW_STORY_PROGRESS, STG3_30_A_NEW_CHAMPION)
                     IF_INT_EQUAL(GSWF(2515), 0)
                         SET_VALUE(GSWF(2515), 1)
@@ -863,7 +868,7 @@ static EVT_BEGIN(attack_event)
         CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
         RETURN
     END_IF
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 0, LW(0))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_HP_STAGE, LW(0))
     SWITCH(LW(0))
         CASE_EQUAL(0)
         CALL(btlevtcmd_DrawLots, LW(0), 2, 10, 15)
@@ -876,7 +881,7 @@ static EVT_BEGIN(attack_event)
             CALL_CHILD(PTR(screw_attack_event))
         END_SWITCH
         CASE_EQUAL(1)
-        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 0, 2)
+        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_HP_STAGE, 2)
         SET_VALUE(LW(9), PTR(&weapon_champion_flying_chop_attack))
         CALL_CHILD(PTR(flying_chop_attack_event))
         CASE_EQUAL(2)
@@ -893,7 +898,7 @@ static EVT_BEGIN(attack_event)
             CALL_CHILD(PTR(flying_chop_attack_event))
         END_SWITCH
         CASE_EQUAL(3)
-        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 0, 4)
+        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_HP_STAGE, 4)
         CALL_CHILD(PTR(to_ceiling))
         SET_VALUE(LW(9), PTR(&weapon_champion_roof_shake_attack))
         CALL_CHILD(PTR(roof_shake_attack_event))
@@ -1423,7 +1428,7 @@ USER_FUNC(eff_fall_hit_wait) {
 
 EVT_BEGIN(roof_shake_attack_event)
     SET_VALUE(LW(15), 0)
-    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 1, 0, 0)
+    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 1, PARTS_WORK_FALL_EVENT, 0)
     CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 1, 1, 0)
     CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 1, 2, 0)
     CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 1, 3, 0)

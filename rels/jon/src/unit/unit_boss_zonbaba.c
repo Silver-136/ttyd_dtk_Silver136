@@ -16,6 +16,11 @@
 #include "battle/battle_database_common.h"
 #include "battle/battle_damage.h"
 
+// BattleUnit.work slots (btlevtcmd_Get/Set/AddUnitWork)
+#define UNIT_WORK_HP_STAGE 0          // 0 full, 1 once HP <= 50%, 2 once HP <= 25% (prints tik_boss_15); attack_event picks its attack table by it
+#define UNIT_WORK_RECOVERS_LEFT 1     // heals left (2 at start, recover_event subtracts 1); at 0 attack_event gives the recover draw weight 0
+#define UNIT_WORK_RECOVER_TALK_DONE 2 // meant to be 1 after the first recover printed tik_boss_14; recover_event calls GetUnitWork instead of SetUnitWork, so it stays 0
+
 USER_FUNC(btlevtcmd_SetEventEntry);
 USER_FUNC(btlevtcmd_SetEventPhase);
 USER_FUNC(btlevtcmd_SetTalkBodyId);
@@ -566,9 +571,9 @@ static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventConfusion, UNIT_ID_SELF, PTR(btldefaultevt_Confuse))
     CALL(btlevtcmd_SetTalkBodyId, UNIT_ID_SELF, 1)
     CALL(btlevtcmd_SetBaseScale, UNIT_ID_SELF, FLOAT(1.2998047f), FLOAT(1.2998047f), FLOAT(0.5f))
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 0, 0)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 1, 2)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 2, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_HP_STAGE, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_RECOVERS_LEFT, 2)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_RECOVER_TALK_DONE, 0)
     CALL(btlevtcmd_SetEventEntry, UNIT_ID_SELF, PTR(battle_entry_event))
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
@@ -676,7 +681,7 @@ static EVT_BEGIN(phase_event)
     IF_INT_EQUAL(LW(0), 0)
         GOTO(99)
     END_IF
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 0, LW(0))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_HP_STAGE, LW(0))
     SWITCH(LW(0))
         CASE_EQUAL(0)
         CALL(btlevtcmd_GetMaxHp, UNIT_ID_SELF, LW(0))
@@ -684,7 +689,7 @@ static EVT_BEGIN(phase_event)
         DIVIDE(LW(0), 100)
         CALL(btlevtcmd_GetHp, UNIT_ID_SELF, LW(1))
         IF_INT_LESS_OR_EQUAL(LW(1), LW(0))
-            CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 0, 1)
+            CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_HP_STAGE, 1)
         END_IF
         CASE_EQUAL(1)
         CALL(btlevtcmd_GetMaxHp, UNIT_ID_SELF, LW(0))
@@ -693,7 +698,7 @@ static EVT_BEGIN(phase_event)
         CALL(btlevtcmd_GetHp, UNIT_ID_SELF, LW(1))
         IF_INT_LESS_OR_EQUAL(LW(1), LW(0))
             CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
-            CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 0, 2)
+            CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_HP_STAGE, 2)
             CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("tik_boss_15"), 0, -2)
             CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_ON)
         END_IF
@@ -1045,17 +1050,17 @@ EVT_BEGIN(breath2_attack_event)
 EVT_END()
 
 EVT_BEGIN(recover_event)
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 2, LW(0))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_RECOVER_TALK_DONE, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
-        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 2, 1)
+        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_RECOVER_TALK_DONE, 1)
         CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("tik_boss_14"), 0, -2)
         CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_ON)
     END_IF
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 1, LW(0))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_RECOVERS_LEFT, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         SUBTRACT(LW(0), 1)
-        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 1, LW(0))
+        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_RECOVERS_LEFT, LW(0))
     END_IF
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, LW(9))
     CALL(btlevtcmd_RecoverHp, UNIT_ID_SELF, 1, 20)
@@ -1075,7 +1080,7 @@ static EVT_BEGIN(attack_event)
         CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
         RETURN
     END_IF
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 0, LW(0))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_HP_STAGE, LW(0))
     SWITCH(LW(0))
         CASE_EQUAL(0)
         CALL(btlevtcmd_DrawLots, LW(0), 6, 25, 20, 10, 10, 10, 10)
@@ -1105,7 +1110,7 @@ static EVT_BEGIN(attack_event)
         END_SWITCH
         CASE_EQUAL(1)
         SET_VALUE(LW(1), 0)
-        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 1, LW(0))
+        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_RECOVERS_LEFT, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
             SET_VALUE(LW(1), 20)
         END_IF
@@ -1139,7 +1144,7 @@ static EVT_BEGIN(attack_event)
         END_SWITCH
         CASE_EQUAL(2)
         SET_VALUE(LW(1), 0)
-        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 1, LW(0))
+        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_RECOVERS_LEFT, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
             SET_VALUE(LW(1), 50)
         END_IF

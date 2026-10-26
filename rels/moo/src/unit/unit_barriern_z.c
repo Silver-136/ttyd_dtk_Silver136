@@ -22,6 +22,19 @@
 #include "manager/evtmgr_cmd.h"
 #include "battle/battle_damage.h"
 
+// BattleUnit.work slots (btlevtcmd_Get/Set/AddUnitWork)
+#define UNIT_WORK_SATELLITE_COUNT 0   // number of satellites: the setup value is how many init_event spawns; the split event stores the new count
+#define UNIT_WORK_WAWAWA_ATTACK 1     // 1 during wawawa_attack_event (barrier and satellites attack together), 0 during wakka_attack_event; the hit events pick blur and part speed by it
+#define UNIT_WORK_SHOTS_DONE 2        // shots of the wawawa attack that have finished; the attack waits until it reaches 5
+#define UNIT_WORK_BARRIER_EFFECT 3    // barrier EffectEntry (effSyuryouEntry) while a satellite is alive; deleted when none is left (SFX_ENM_BARRI_BARRIER_BREAK1)
+#define UNIT_WORK_SATELLITE 4         // first of the satellite unit ids (slots 4..7), -1 = none
+#define UNIT_WORK_SATELLITE_SPLINE 10 // first of the per-satellite BarriernSpline pointers (slot 10 + n) of a move in progress; freed after 60 frames
+// BattleUnitPart.work slots (btlevtcmd_Get/SetPartsWork)
+#define PARTS_WORK_TARGET_UNIT 0 // part 1: first of the target unit ids (slots 0-4) of the current attack
+#define PARTS_WORK_TARGET_PART 5 // part 1: first of the target part ids (slots 5-9), paired with PARTS_WORK_TARGET_UNIT
+#define PARTS_WORK_TARGET_HIT 10 // part 1: first of the per-target hit flags (slots 10-14): 1 once that target was hit; the last shot then hits it without a damage check
+#define PARTS_WORK_SFX 15        // shot parts (7..): id of the SFX_ENM_BARRI_ATTACK7/8 sound, stopped when the shot ends
+
 static u8 barriernSatelliteTo_Init(BattleUnit* unit, s32 n, Vec* table);
 static u8 barriernSatelliteTo_Main(BattleUnit* unit, s32 n);
 
@@ -477,7 +490,7 @@ static EVT_BEGIN(init_event)
         ADD(LW(0), 1)
     END_LOOP
     SET_VALUE(LW(6), 0)
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 0, LW(7))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_SATELLITE_COUNT, LW(7))
     LABEL(0)
     IF_INT_LESS(LW(6), LW(7))
         CALL(btlevtcmd_GetUnitId, UNIT_ID_SELF, LW(5))
@@ -667,7 +680,7 @@ static USER_FUNC(barriern_satellite_zanzou) {
     BattleUnit* sat;
     f32 scales[5] = {1.7f, 2.4f, 3.1f, 3.8f, 4.5f};
 
-    sat = BattleGetUnitPtr(wp, unit->work[4 + n]);
+    sat = BattleGetUnitPtr(wp, unit->work[UNIT_WORK_SATELLITE + n]);
     return barriern_satellite_zanzou_sub(isFirstCall, sat, scales, n, 0);
 }
 
@@ -680,7 +693,7 @@ static USER_FUNC(barriern_satellite_zanzou2) {
     BattleUnit* sat;
     f32 scales[5] = {1.7f, 2.4f, 3.1f, 3.8f, 4.5f};
 
-    sat = BattleGetUnitPtr(wp, unit->work[4 + n]);
+    sat = BattleGetUnitPtr(wp, unit->work[UNIT_WORK_SATELLITE + n]);
     return barriern_satellite_zanzou_sub(isFirstCall, sat, scales, n, 1);
 }
 
@@ -797,7 +810,7 @@ static EVT_BEGIN(unison_phase_event)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_BARRI_ATTACK9"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(barriern_zanzou3, UNIT_ID_SELF)
     CALL_CHILD(satellite_blur_on)
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 0, LW(1))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_SATELLITE_COUNT, LW(1))
     IF_INT_GREATER_OR_EQUAL(LW(1), 1)
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_BARRI_SPLIT1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     END_IF
@@ -827,7 +840,7 @@ static EVT_BEGIN(unison_phase_event)
     CALL(barriernSatelliteToOutside, UNIT_ID_SELF, LW(0))
     WAIT_FRAMES(60)
     CALL_CHILD(satellite_blur_off)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 0, LW(0))
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_SATELLITE_COUNT, LW(0))
     LABEL(99)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
@@ -910,7 +923,7 @@ static EVT_BEGIN(start_avoid)
 EVT_END()
 
 static EVT_BEGIN(wakka_attack_common_event_no_hit)
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 1, LW(6))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_WAWAWA_ATTACK, LW(6))
     IF_INT_EQUAL(LW(6), 0)
         CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, LW(15), kMotionBlur)
     ELSE
@@ -947,7 +960,7 @@ static EVT_BEGIN(wakka_attack_common_event_no_hit)
             WAIT_FRAMES(1)
         END_LOOP
     END_SIBLING_EVENT
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 1, LW(6))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_WAWAWA_ATTACK, LW(6))
     IF_INT_EQUAL(LW(6), 0)
         CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(6), LW(7), LW(8))
         CALL(btlevtcmd_GetStageSize, LW(6), EVT_NULLPTR, EVT_NULLPTR)
@@ -998,7 +1011,7 @@ static EVT_BEGIN(wakka_attack_common_event_no_hit)
 EVT_END()
 
 static EVT_BEGIN(wakka_attack_common_event_hit)
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 1, LW(6))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_WAWAWA_ATTACK, LW(6))
     IF_INT_EQUAL(LW(6), 0)
         CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, LW(15), kMotionBlur)
         ELSE
@@ -1014,7 +1027,7 @@ static EVT_BEGIN(wakka_attack_common_event_hit)
         CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, LW(15), kHidden)
     END_IF
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("A_5"))
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 1, LW(6))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_WAWAWA_ATTACK, LW(6))
     IF_INT_EQUAL(LW(6), 0)
         CALL(btlevtcmd_SetPartsScale, UNIT_ID_SELF, LW(15), 1, 0, 1)
         BEGIN_SIBLING_EVENT
@@ -1118,9 +1131,9 @@ static EVT_BEGIN(wakka_attack_event)
         END_IF
         GOTO(99)
     END_IF
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 1, 0)
-    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 1, 0, LW(3))
-    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 1, 5, LW(4))
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_WAWAWA_ATTACK, 0)
+    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 1, PARTS_WORK_TARGET_UNIT, LW(3))
+    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 1, PARTS_WORK_TARGET_PART, LW(4))
     SET_VALUE(LW(9), PTR(&weapon_wakka_attack))
     SET_VALUE(LW(10), 1)
     SET_VALUE(LW(12), -2)
@@ -1159,9 +1172,9 @@ static EVT_BEGIN(wakka_attack_event)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("A_4"))
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_BARRI_ATTACK3"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_BARRI_ATTACK7"), EVT_NULLPTR, 0, LW(0))
-    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 7, 15, LW(0))
+    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 7, PARTS_WORK_SFX, LW(0))
     CALL_CHILD(damage_check_event_sub)
-    CALL(btlevtcmd_GetPartsWork, UNIT_ID_SELF, 7, 15, LW(0))
+    CALL(btlevtcmd_GetPartsWork, UNIT_ID_SELF, 7, PARTS_WORK_SFX, LW(0))
     CALL(evt_snd_sfxoff, LW(0))
     SET_VALUE(LW(0), -6)
     CALL(btlevtcmd_GetFaceDirection, UNIT_ID_SELF, LW(14))
@@ -1194,20 +1207,20 @@ static EVT_BEGIN(wawawa_attack_event)
         END_IF
         GOTO(99)
     END_IF
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 1, 1)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 2, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_WAWAWA_ATTACK, 1)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_SHOTS_DONE, 0)
     CALL(barriern_wawawa_set_target, LW(0), LW(1), LW(2), LW(3), LW(4), LW(5), LW(6), LW(7), LW(8), LW(9))
-    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 1, 0, LW(0))
+    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 1, PARTS_WORK_TARGET_UNIT, LW(0))
     CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 1, 1, LW(2))
     CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 1, 2, LW(4))
     CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 1, 3, LW(6))
     CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 1, 4, LW(8))
-    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 1, 5, LW(1))
+    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 1, PARTS_WORK_TARGET_PART, LW(1))
     CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 1, 6, LW(3))
     CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 1, 7, LW(5))
     CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 1, 8, LW(7))
     CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 1, 9, LW(9))
-    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 1, 10, 0)
+    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 1, PARTS_WORK_TARGET_HIT, 0)
     CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 1, 11, 0)
     CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 1, 12, 0)
     CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 1, 13, 0)
@@ -1220,8 +1233,8 @@ static EVT_BEGIN(wawawa_attack_event)
     CALL(btlevtcmd_AttackDeclareAll, UNIT_ID_SELF)
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, PTR(&weapon_wawawa_attack))
-    CALL(btlevtcmd_GetPartsWork, UNIT_ID_SELF, 1, 0, LW(3))
-    CALL(btlevtcmd_GetPartsWork, UNIT_ID_SELF, 1, 5, LW(4))
+    CALL(btlevtcmd_GetPartsWork, UNIT_ID_SELF, 1, PARTS_WORK_TARGET_UNIT, LW(3))
+    CALL(btlevtcmd_GetPartsWork, UNIT_ID_SELF, 1, PARTS_WORK_TARGET_PART, LW(4))
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_BARRI_ATTACK5"), EVT_NULLPTR, 0, EVT_NULLPTR)
@@ -1316,7 +1329,7 @@ static EVT_BEGIN(wawawa_attack_event)
         ADD(LW(15), 1)
     END_LOOP
     LOOP(0)
-        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 2, LW(0))
+        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_SHOTS_DONE, LW(0))
         IF_INT_GREATER_OR_EQUAL(LW(0), 5)
             BREAK_LOOP
         END_IF
@@ -1351,7 +1364,7 @@ static EVT_BEGIN(wawawa_attack_event_sub)
     CALL(btlevtcmd_GetPartsWork, UNIT_ID_SELF, 1, LW(14), LW(4))
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_BARRI_ATTACK4"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_BARRI_ATTACK8"), EVT_NULLPTR, 0, LW(0))
-    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, LW(15), 15, LW(0))
+    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, LW(15), PARTS_WORK_SFX, LW(0))
     LOOP(0)
         IF_INT_GREATER_OR_EQUAL(LW(13), 3)
             CALL_CHILD(wawawa_attack_event_sub_last)
@@ -1368,8 +1381,8 @@ static EVT_BEGIN(wawawa_attack_event_sub)
             END_IF
         END_IF
     END_LOOP
-    CALL(btlevtcmd_AddUnitWork, UNIT_ID_SELF, 2, 1)
-    CALL(btlevtcmd_GetPartsWork, UNIT_ID_SELF, LW(15), 15, LW(0))
+    CALL(btlevtcmd_AddUnitWork, UNIT_ID_SELF, UNIT_WORK_SHOTS_DONE, 1)
+    CALL(btlevtcmd_GetPartsWork, UNIT_ID_SELF, LW(15), PARTS_WORK_SFX, LW(0))
     CALL(evt_snd_sfxoff, LW(0))
     RETURN
 EVT_END()
@@ -1461,16 +1474,16 @@ EVT_END()
 static u8 barriernSatelliteTo_Init(BattleUnit* unit, s32 n, Vec* table) {
     BarriernSpline* sp;
 
-    if (unit->work[4 + n] == -1) {
+    if (unit->work[UNIT_WORK_SATELLITE + n] == -1) {
         return FALSE;
     }
     sp = BTL_ALLOC(sizeof(BarriernSpline));
-    unit->work[10 + n] = (EvtWord)sp;
+    unit->work[UNIT_WORK_SATELLITE_SPLINE + n] = (EvtWord)sp;
     sp->n = 5;
     sp->table = table;
     sp->count = 0;
     spline_maketable(5, sp->table, sp->ts, sp->tbl);
-    BtlUnit_GetPartsPtr(BattleGetUnitPtr(_battleWorkPointer, unit->work[4 + n]), 1)->work[2] = (EvtWord)table;
+    BtlUnit_GetPartsPtr(BattleGetUnitPtr(_battleWorkPointer, unit->work[UNIT_WORK_SATELLITE + n]), 1)->work[2] = (EvtWord)table;
     return TRUE;
 }
 
@@ -1480,22 +1493,22 @@ static u8 barriernSatelliteTo_Main(BattleUnit* unit, s32 n) {
     Vec upos;
     Vec pos;
 
-    if (unit->work[4 + n] == -1) {
+    if (unit->work[UNIT_WORK_SATELLITE + n] == -1) {
         return FALSE;
     }
-    sp = (BarriernSpline*)unit->work[10 + n];
+    sp = (BarriernSpline*)unit->work[UNIT_WORK_SATELLITE_SPLINE + n];
     if (sp == NULL) {
         return FALSE;
     }
     if (sp->count >= 60) {
         if (sp != NULL) {
             BTL_FREE(sp);
-            unit->work[10 + n] = 0;
+            unit->work[UNIT_WORK_SATELLITE_SPLINE + n] = 0;
         }
         return FALSE;
     }
     spline_getvalue(&pos, intplGetValue(EASING_QUADRATIC_OUT, 0.0f, 1.0f, sp->count, 60), sp->n, sp->table, sp->ts, sp->tbl);
-    sat = BattleGetUnitPtr(_battleWorkPointer, unit->work[4 + n]);
+    sat = BattleGetUnitPtr(_battleWorkPointer, unit->work[UNIT_WORK_SATELLITE + n]);
     if (sat == NULL) {
         return FALSE;
     }
@@ -1518,8 +1531,8 @@ static USER_FUNC(barriernSatelliteToInside) {
     unit = BattleGetUnitPtr(_battleWorkPointer, id);
     if (isFirstCall) {
         for (i = 0; i < 4; i++) {
-            if (unit->work[4 + i] != -1) {
-                EvtWord table = BtlUnit_GetPartsPtr(BattleGetUnitPtr(_battleWorkPointer, unit->work[4 + i]), 1)->work[2];
+            if (unit->work[UNIT_WORK_SATELLITE + i] != -1) {
+                EvtWord table = BtlUnit_GetPartsPtr(BattleGetUnitPtr(_battleWorkPointer, unit->work[UNIT_WORK_SATELLITE + i]), 1)->work[2];
 
                 if (table == (EvtWord)splineTableOut1_1) {
                     barriernSatelliteTo_Init(unit, i, splineTableIn1_1);
@@ -1674,17 +1687,17 @@ static USER_FUNC(outSplineTableSet) {
 
     switch (evtGetValue(event, args[1])) {
         case 1:
-            part = BtlUnit_GetPartsPtr(BattleGetUnitPtr(_battleWorkPointer, unit->work[4]), 1);
+            part = BtlUnit_GetPartsPtr(BattleGetUnitPtr(_battleWorkPointer, unit->work[UNIT_WORK_SATELLITE]), 1);
             part->work[2] = (EvtWord)splineTableOut1_1;
             break;
         case 2:
-            part = BtlUnit_GetPartsPtr(BattleGetUnitPtr(_battleWorkPointer, unit->work[4]), 1);
+            part = BtlUnit_GetPartsPtr(BattleGetUnitPtr(_battleWorkPointer, unit->work[UNIT_WORK_SATELLITE]), 1);
             part->work[2] = (EvtWord)splineTableOut2_1;
             part = BtlUnit_GetPartsPtr(BattleGetUnitPtr(_battleWorkPointer, unit->work[5]), 1);
             part->work[2] = (EvtWord)splineTableOut2_2;
             break;
         case 3:
-            part = BtlUnit_GetPartsPtr(BattleGetUnitPtr(_battleWorkPointer, unit->work[4]), 1);
+            part = BtlUnit_GetPartsPtr(BattleGetUnitPtr(_battleWorkPointer, unit->work[UNIT_WORK_SATELLITE]), 1);
             part->work[2] = (EvtWord)splineTableOut3_1;
             part = BtlUnit_GetPartsPtr(BattleGetUnitPtr(_battleWorkPointer, unit->work[5]), 1);
             part->work[2] = (EvtWord)splineTableOut3_2;
@@ -1692,7 +1705,7 @@ static USER_FUNC(outSplineTableSet) {
             part->work[2] = (EvtWord)splineTableOut3_3;
             break;
         case 4:
-            part = BtlUnit_GetPartsPtr(BattleGetUnitPtr(_battleWorkPointer, unit->work[4]), 1);
+            part = BtlUnit_GetPartsPtr(BattleGetUnitPtr(_battleWorkPointer, unit->work[UNIT_WORK_SATELLITE]), 1);
             part->work[2] = (EvtWord)splineTableOut4_1;
             part = BtlUnit_GetPartsPtr(BattleGetUnitPtr(_battleWorkPointer, unit->work[5]), 1);
             part->work[2] = (EvtWord)splineTableOut4_2;
@@ -1706,7 +1719,7 @@ static USER_FUNC(outSplineTableSet) {
 }
 
 static void outSplineTableSet_Sub(BattleUnit* unit, s32 n, Vec* table) {
-    BtlUnit_GetPartsPtr(BattleGetUnitPtr(_battleWorkPointer, unit->work[4 + n]), 1)->work[2] = (EvtWord)table;
+    BtlUnit_GetPartsPtr(BattleGetUnitPtr(_battleWorkPointer, unit->work[UNIT_WORK_SATELLITE + n]), 1)->work[2] = (EvtWord)table;
 }
 
 static USER_FUNC(barriern_wawawa_set_target) {
@@ -1785,8 +1798,8 @@ static USER_FUNC(_check_satellite) {
     if (!alive) {
         part = BtlUnit_GetPartsPtr(unit, BtlUnit_GetBodyPartsId(unit));
         if (part->attributes & kImmuneToDamageAndStatus) {
-            effDelete((EffectEntry*)unit->work[3]);
-            unit->work[3] = 0;
+            effDelete((EffectEntry*)unit->work[UNIT_WORK_BARRIER_EFFECT]);
+            unit->work[UNIT_WORK_BARRIER_EFFECT] = 0;
             BtlUnit_snd_se(unit, "SFX_ENM_BARRI_BARRIER_BREAK1", 0xF1194D80, 0);
             BtlUnit_GetPos(unit, &x, &y, &z);
             for (j = 0; j < 20; j++) {
@@ -1809,12 +1822,12 @@ static USER_FUNC(_check_satellite) {
 
             BtlUnit_snd_se(unit, "SFX_ENM_BARRI_BARRIER1", 0xF1194D80, 0);
             BtlUnit_GetPos(unit, &px, &py, &pz);
-            unit->work[3] = (EvtWord)effSyuryouEntry(1, 1000, 0.0f, -1000.0f, 0.0f);
+            unit->work[UNIT_WORK_BARRIER_EFFECT] = (EvtWord)effSyuryouEntry(1, 1000, 0.0f, -1000.0f, 0.0f);
         }
         part->attributes |= kImmuneToDamageAndStatus;
         evtSetValue(event, args[0], 1);
-        if (unit->work[3] != 0) {
-            f32* ud = ((EffectEntry*)unit->work[3])->userdata;
+        if (unit->work[UNIT_WORK_BARRIER_EFFECT] != 0) {
+            f32* ud = ((EffectEntry*)unit->work[UNIT_WORK_BARRIER_EFFECT])->userdata;
 
             BtlUnit_GetPos(unit, &x, &y, &z);
             ud[1] = x;

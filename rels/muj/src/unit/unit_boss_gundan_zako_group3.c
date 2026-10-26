@@ -25,6 +25,9 @@
 #include "manager/evtmgr_cmd.h"
 #include "battle/battle_damage.h"
 
+// BattleUnit.work slots (btlevtcmd_Get/Set/AddUnitWork)
+#define UNIT_WORK_REACHED_TARGET 0 // 1 once the group's x reaches the current target (zakogun_ext_main3); hit_check_event waits for it, checks damage and clears it
+
 typedef struct ZakoGun {
     s8 field_0x0;
     s8 state;
@@ -341,7 +344,7 @@ static EVT_BEGIN(dead_event)
 EVT_END()
 
 static EVT_BEGIN(attack_event)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 0, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_REACHED_TARGET, 0)
     SET_VALUE(LW(9), PTR(&weapon_gundan_zako_group3_attack))
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(9))
@@ -685,7 +688,7 @@ USER_FUNC(zakogun_attack3_2) {
             if (work->targetId != -1) {
                 BattleUnit* target = BattleGetUnitPtr(_battleWorkPointer, work->targetId);
                 if (work->pos.x <= target->mPosition.x) {
-                    unit->work[0] = 1;
+                    unit->work[UNIT_WORK_REACHED_TARGET] = 1;
                 }
             }
             if (work->pos.x <= -200.0f) {
@@ -776,7 +779,7 @@ USER_FUNC(zakogun_escape3) {
 static EVT_BEGIN(hit_check_event)
     LABEL(10)
     LOOP(0)
-        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 0, LW(0))
+        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_REACHED_TARGET, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
             BREAK_LOOP
         END_IF
@@ -813,7 +816,7 @@ static EVT_BEGIN(hit_check_event)
     GOTO(98)
     LABEL(98)
     CALL(btlevtcmd_GetSelectNextEnemy, LW(3), LW(4))
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 0, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_REACHED_TARGET, 0)
     IF_INT_NOT_EQUAL(LW(3), -1)
         CALL(zakogun_set_target_id, LW(3))
         GOTO(10)

@@ -12,6 +12,14 @@
 #include "evt/evt_sub.h"
 #include "battle/battle_sub.h"
 #include "battle/battle_damage.h"
+#include "battle/unit_work.h"
+
+// BattleUnit.work slots (btlevtcmd_Get/Set/AddUnitWork)
+#define UNIT_WORK_LINE_POS 4         // line position the unit stands at (0 x 55, 1 x 105, 2 x 155); unison_phase_event moves it when UNIT_WORK_NEXT_LINE_POS differs
+#define UNIT_WORK_NEXT_LINE_POS 5    // line position by HP rank that majo_unison_phase_event assigns each turn (majo3_sort: 0 = most HP)
+#define UNIT_WORK_LOW_HP_TALK_DONE 6 // 1 once the HP fell below the threshold and Beldam's phase_event showed the message
+#define UNIT_WORK_LOW_HP_ATTACK 7    // 1 once a low-HP message ran (Beldam's phase_event sets it); attack_event then queues flame_attack_event (UNIT_WORK_ATTACK_STEP = 1) and sets it to 2
+#define UNIT_WORK_ATTACK_STEP 8      // attack choice: 0 kagenuke_attack_event, 1 flame_attack_event once (then 2), 2 random (70 kagenuke / 30 flame)
 
 USER_FUNC(btlevtcmd_SetEventEntry);
 USER_FUNC(btlevtcmd_SetEventPhase);
@@ -288,10 +296,10 @@ static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventDamage, UNIT_ID_SELF, PTR(damage_event))
     CALL(btlevtcmd_SetEventConfusion, UNIT_ID_SELF, PTR(btldefaultevt_Confuse))
     CALL(btlevtcmd_SetEventEntry, UNIT_ID_SELF, PTR(entry_event))
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 4, 0)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 5, 0)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 6, 0)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 7, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_LINE_POS, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_NEXT_LINE_POS, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_LOW_HP_TALK_DONE, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_LOW_HP_ATTACK, 0)
     CALL(btlevtcmd_GetUnitId, UNIT_ID_SELF, GW(10))
     CALL(btlevtcmd_SpawnUnit, GW(9), PTR(&entry_marilyn), 0)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
@@ -317,8 +325,8 @@ static EVT_BEGIN(init_event)
     SET_VALUE(GW(12), 0)
     SET_VALUE(GW(11), 0)
     SET_VALUE(GW(14), 2)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 8, 0)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 3, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ATTACK_STEP, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, SHADOW_TAIL_WORK_HOLD, 0)
     SPAWN_EVENT(PTR(majo3_shadow_tail_event))
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
@@ -437,10 +445,10 @@ static EVT_BEGIN(unison_phase_event)
     CALL(btlevtcmd_CheckPhase, LW(0), 67108867)
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL_CHILD(PTR(majo_unison_phase_event))
-        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 4, LW(3))
-        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 5, LW(4))
+        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_LINE_POS, LW(3))
+        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_NEXT_LINE_POS, LW(4))
         IF_INT_NOT_EQUAL(LW(3), LW(4))
-            CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 4, LW(4))
+            CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_LINE_POS, LW(4))
             CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
             CALL_CHILD(PTR(vivian_down))
             WAIT_MS(500)
@@ -476,18 +484,18 @@ static EVT_BEGIN(attack_event)
         CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
         RETURN
     END_IF
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 7, LW(0))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_LOW_HP_ATTACK, LW(0))
     IF_INT_EQUAL(LW(0), 1)
-        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 8, 1)
-        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 7, 2)
+        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ATTACK_STEP, 1)
+        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_LOW_HP_ATTACK, 2)
     END_IF
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 8, LW(0))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_ATTACK_STEP, LW(0))
     SWITCH(LW(0))
         CASE_EQUAL(0)
         SET_VALUE(LW(9), PTR(&weapon_vivian_kagenuke_attack1))
         CALL_CHILD(PTR(kagenuke_attack_event))
         CASE_EQUAL(1)
-        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 8, 2)
+        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ATTACK_STEP, 2)
         SET_VALUE(LW(9), PTR(&weapon_vivian_flame_attack1))
         CALL_CHILD(PTR(flame_attack_event))
         CASE_EQUAL(2)

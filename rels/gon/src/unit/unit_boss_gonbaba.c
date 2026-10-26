@@ -2,6 +2,7 @@
 #include "evt/evt_cmd.h"
 #include "evt/evt_sub.h"
 #include "eff/n64/eff_kemuri9_n64.h"
+#include "battle/unit_work.h"
 
 #include "battle/battle_unit.h"
 #include "manager/evtmgr_cmd.h"
@@ -23,6 +24,13 @@
 #include "evt/evt_snd.h"
 #include "battle/battle_database_common.h"
 #include "battle/battle_damage.h"
+
+// BattleUnit.work slots (btlevtcmd_Get/Set/AddUnitWork)
+#define UNIT_WORK_POWER_DOWN 0     // subtracted from its attack power (weaponGetPower_Gonbaba, min 1); +1 (up to 20) per hit with DAMAGE_RESULT_ATTACK_FX_R
+#define UNIT_WORK_MESSAGE_STEP 2   // damage messages shown: 1 stg1_gon_21, 2 stg1_gon_22, 3 stg1_gon_31_04 (after the negotiation)
+#define UNIT_WORK_NEGOTIATED 3     // 1 once negotiation_event has run; at 0 dead_event runs the negotiation instead of dying
+#define UNIT_WORK_EATEN_AUDIENCE 4 // audience members in its stomach: gon_extra_eaten_event sets 6; each GNB_D_1 hit lets up to two out, the value doubling as their audience index
+#define UNIT_WORK_ATTACK_STEP 5    // attack order: 0 firebreath next, 1 fumituke next, 2 = random from then on
 
 u8* lightGetPaperCraft(void);
 
@@ -61,7 +69,7 @@ static EvtWord wait_event[6];
 s32 weaponGetPower_Gonbaba(BattleUnit* unit, s32* weapon) {
     s32 power = weapon[8];
 
-    power -= unit->work[0];
+    power -= unit->work[UNIT_WORK_POWER_DOWN];
     if (power <= 0) {
         power = 1;
     }
@@ -610,7 +618,7 @@ EVT_BEGIN(negotiation_event)
     CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
     LABEL(50)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_EVENT, BTL_CAM_MODE_DEFAULT)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 3, 1)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_NEGOTIATED, 1)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("GNB_W_4"))
     CALL(btlevtcmd_ftomsec, 35, LW(0))
     WAIT_MS(LW(0))
@@ -927,7 +935,7 @@ USER_FUNC(_set_gonbaba_light) {
 
 EVT_BEGIN(gon_extra_eaten_event)
     WAIT_FRAMES(14)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 4, 6)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_EATEN_AUDIENCE, 6)
     CALL(evt_audience_flag_on, LW(0), 18)
     CALL(evt_audience_flag_off, LW(0), 4)
     CALL(evt_audience_set_animpose, LW(0), 9, 0)
@@ -1063,16 +1071,16 @@ EVT_END()
 EVT_BEGIN(gonbaba_damage_sub_event)
     CALL(btlevtcmd_CheckDamageCode, UNIT_ID_SELF, DAMAGE_RESULT_ATTACK_FX_R, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
-        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 0, LW(0))
+        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_POWER_DOWN, LW(0))
         IF_INT_LESS(LW(0), 20)
             ADD(LW(0), 1)
         END_IF
-        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 0, LW(0))
-        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 1, LW(0))
+        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_POWER_DOWN, LW(0))
+        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_PART_DEFENSE, LW(0))
         IF_INT_GREATER(LW(0), -2)
             SUBTRACT(LW(0), 1)
         END_IF
-        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 1, LW(0))
+        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_PART_DEFENSE, LW(0))
         CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, 1, PTR(pose_table_weak))
     END_IF
     CALL(btlevtcmd_GetDamage, LW(10), LW(0))
@@ -1087,11 +1095,11 @@ EVT_BEGIN(gonbaba_damage_sub_event)
         CALL(btlevtcmd_AnimeChangePose, LW(10), 1, STRING("GNB_D_2"))
     ELSE
         CALL(btlevtcmd_AnimeChangePose, LW(10), 1, STRING("GNB_D_1"))
-        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 4, LW(0))
+        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_EATEN_AUDIENCE, LW(0))
         SET_VALUE(LW(9), LW(0))
         IF_INT_GREATER_OR_EQUAL(LW(0), 1)
             SUBTRACT(LW(0), 1)
-            CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 4, LW(0))
+            CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_EATEN_AUDIENCE, LW(0))
             BEGIN_INLINE_EVENT
                 CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
                 SUBTRACT(LW(0), 350)
@@ -1111,11 +1119,11 @@ EVT_BEGIN(gonbaba_damage_sub_event)
                 CALL(evt_audience_delete, LW(9))
             END_INLINE_EVENT
         END_IF
-        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 4, LW(0))
+        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_EATEN_AUDIENCE, LW(0))
         SET_VALUE(LW(9), LW(0))
         IF_INT_GREATER_OR_EQUAL(LW(0), 1)
             SUBTRACT(LW(0), 1)
-            CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 4, LW(0))
+            CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_EATEN_AUDIENCE, LW(0))
             BEGIN_INLINE_EVENT
                 CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
                 SUBTRACT(LW(0), 320)
@@ -1146,11 +1154,11 @@ EVT_BEGIN(gonbaba_damage_sub_event)
     IF_INT_EQUAL(LW(0), 0)
         RETURN
     END_IF
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 3, LW(0))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_NEGOTIATED, LW(0))
     IF_INT_EQUAL(LW(0), 1)
         GOTO(50)
     END_IF
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 2, LW(0))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_MESSAGE_STEP, LW(0))
     IF_INT_GREATER_OR_EQUAL(LW(0), 2)
         RETURN
     END_IF
@@ -1165,19 +1173,19 @@ EVT_BEGIN(gonbaba_damage_sub_event)
     CALL(btlevtcmd_SetStayPose, UNIT_ID_SELF, STRING("GNB_S_4"))
     CALL(evt_btl_camera_set_prilimit, BTL_CAM_PRI_EVENT)
     CALL(evt_btl_camera_wait_move_end)
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 2, LW(0))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_MESSAGE_STEP, LW(0))
     SWITCH(LW(0))
         CASE_EQUAL(0)
         CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_EVENT, BTL_CAM_MODE_FREE)
         CALL(evt_btl_camera_set_moveto, 1, 93, 160, 536, 93, 123, 25, 20, 0)
         WAIT_FRAMES(20)
-        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 2, 1)
+        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_MESSAGE_STEP, 1)
         CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg1_gon_21"), 0, -2)
         CASE_EQUAL(1)
         CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_EVENT, BTL_CAM_MODE_FREE)
         CALL(evt_btl_camera_set_moveto, 1, 93, 160, 536, 93, 123, 25, 20, 0)
         WAIT_FRAMES(20)
-        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 2, 2)
+        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_MESSAGE_STEP, 2)
         CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg1_gon_22"), 0, -2)
     END_SWITCH
     CALL(evt_btl_camera_set_prilimit, BTL_CAM_PRI_NORMAL)
@@ -1186,11 +1194,11 @@ EVT_BEGIN(gonbaba_damage_sub_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
     LABEL(50)
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 2, LW(0))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_MESSAGE_STEP, LW(0))
     IF_INT_GREATER_OR_EQUAL(LW(0), 3)
         RETURN
     END_IF
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 2, 3)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_MESSAGE_STEP, 3)
     CALL(btlevtcmd_WaitAttackEnd)
     CALL(btlevtcmd_SetTalkPose, UNIT_ID_SELF, STRING("GNB_T_4"))
     CALL(btlevtcmd_SetStayPose, UNIT_ID_SELF, STRING("GNB_S_4"))
@@ -1224,7 +1232,7 @@ EVT_BEGIN(gonbaba_damage_sub_event)
 EVT_END()
 
 static EVT_BEGIN(dead_event)
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 3, LW(0))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_NEGOTIATED, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL_CHILD(negotiation_event)
         RETURN
@@ -1333,12 +1341,12 @@ static EVT_BEGIN(init_event)
     CALL(evt_audience_base_flag_on, 16384)
     CALL(btlevtcmd_SetEventEntry, UNIT_ID_SELF, PTR(battle_entry_event))
     CALL(btlevtcmd_SetBaseScale, UNIT_ID_SELF, FLOAT(1.2998047f), FLOAT(1.2998047f), FLOAT(0.5f))
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 3, 0)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 0, 0)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 1, 0)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 2, 0)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 4, 0)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 5, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_NEGOTIATED, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_POWER_DOWN, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_PART_DEFENSE, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_MESSAGE_STEP, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_EATEN_AUDIENCE, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ATTACK_STEP, 0)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
@@ -1354,13 +1362,13 @@ static EVT_BEGIN(attack_event)
         CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
         RETURN
     END_IF
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 5, LW(0))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_ATTACK_STEP, LW(0))
     SWITCH(LW(0))
         CASE_EQUAL(0)
-        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 5, 1)
+        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ATTACK_STEP, 1)
         CALL_CHILD(PTR(firebreath_attack_event))
         CASE_EQUAL(1)
-        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 5, 2)
+        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ATTACK_STEP, 2)
         CALL_CHILD(PTR(fumituke_attack_event))
         CASE_DEFAULT
         CALL(evt_sub_random, 99, LW(0))

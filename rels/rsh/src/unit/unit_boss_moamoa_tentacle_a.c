@@ -10,6 +10,9 @@
 #include "battle/battle_sub.h"
 #include "battle/battle_damage.h"
 
+// BattleUnit.work slots (btlevtcmd_Get/Set/AddUnitWork)
+#define UNIT_WORK_BODY 0 // unit id of the Smorg body (unit_boss_moamoa) that spawned it
+
 extern s32 boss_moamoa_check_zenei_kouei[];
 extern PoseTableEntry moamoa1_weakness_pose_table[];
 extern s32 moamoa_defence_no_parts[];
@@ -190,7 +193,7 @@ static EVT_BEGIN(dead_event)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("R_1A"))
     WAIT_FRAMES(1)
     CALL(btlevtcmd_AnimeWaitPlayComplete, UNIT_ID_SELF, 1)
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 0, LW(1))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_BODY, LW(1))
     CALL(btlevtcmd_SetUnitWork, LW(1), 5, -1)
     CALL(btlevtcmd_GetUnitWork, LW(1), 5, LW(0))
     IF_INT_EQUAL(LW(0), -1)
@@ -335,7 +338,7 @@ static EVT_BEGIN(evt_attack)
     ELSE
         SET_VALUE(LF(0), 1)
     END_IF
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 0, LW(6))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_BODY, LW(6))
     CALL(btlevtcmd_SetUnitWork, LW(6), 0, 0)
     CALL(btlevtcmd_AnimeChangePose, LW(6), 1, STRING("S_1_1"))
     SET_VALUE(LW(15), 0)

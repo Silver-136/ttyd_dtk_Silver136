@@ -24,6 +24,9 @@
 #include "battle/battle_sub.h"
 #include "battle/battle_damage.h"
 
+// BattleUnit.work slots (btlevtcmd_Get/Set/AddUnitWork)
+#define UNIT_WORK_FACE_HIDDEN 0 // 1 while it hides its face (kaokakusi_event, pose_table_kaokakusi); surprise_event and breath_event reveal it (0, pose_table); attack_event picks surprise/breath while 1
+
 typedef struct AtmTeresa {
     u8 state;
     u8 flag;
@@ -413,7 +416,7 @@ static EVT_BEGIN(attack_event)
         CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
         RETURN
     END_IF
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 0, LW(0))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_FACE_HIDDEN, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         SET_VALUE(LW(1), 30)
         ADD(LW(1), 20)
@@ -471,7 +474,7 @@ EVT_BEGIN(kaokakusi_event)
         CALL(btlevtcmd_AddPartsRotate, UNIT_ID_SELF, 1, 0, 12, 0)
     END_LOOP
     WAIT_FRAMES(20)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 0, 1)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_FACE_HIDDEN, 1)
     CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, 1, PTR(pose_table_kaokakusi))
     RETURN
 EVT_END()
@@ -585,7 +588,7 @@ EVT_BEGIN(surprise_event)
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, LW(3))
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
     CALL(evt_btl_camera_set_zoom, 0, 200)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 0, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_FACE_HIDDEN, 0)
     CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, 1, PTR(pose_table))
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("A_2"))
     CALL(btlevtcmd_SetPartsRotate, UNIT_ID_SELF, 1, 0, 0, 0)
@@ -765,7 +768,7 @@ static EVT_BEGIN(breath_event)
     SUBTRACT(LW(1), 10)
     CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 60, 10, EASING_QUADRATIC_OUT, 0, MOVE_SOUND_FROM_TABLE)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 0, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_FACE_HIDDEN, 0)
     CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, 1, PTR(pose_table))
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("A_3"))
     CALL(btlevtcmd_SetPartsRotate, UNIT_ID_SELF, 1, 0, 0, 0)

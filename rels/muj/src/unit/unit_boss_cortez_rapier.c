@@ -11,6 +11,10 @@
 #include "battle/battle_damage.h"
 #include "system.h"
 
+// BattleUnit.work slots (btlevtcmd_Get/Set/AddUnitWork)
+#define UNIT_WORK_DOWN_TURNS 1   // turns it lies broken: cortez_weapon_dead_event sets 2, cortez_weapon_phase_event counts down and raises it at 0; attack_event skips while nonzero
+#define UNIT_WORK_WEAPON_INDEX 2 // which of Cortez's four weapons it is (sword 0, saber 1, claw 2, rapier 3); cortez_weapon_get_home_height picks its height by it
+
 USER_FUNC(btlevtcmd_AnimeWaitPlayLoopTiming);
 USER_FUNC(btlevtcmd_SetEventPhase);
 USER_FUNC(btlevtcmd_SetEventUnisonPhase);
@@ -195,8 +199,8 @@ static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event))
     CALL(btlevtcmd_SetEventDamage, UNIT_ID_SELF, PTR(damage_event))
     CALL(btlevtcmd_SetEventConfusion, UNIT_ID_SELF, PTR(btldefaultevt_Confuse))
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 2, 3)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 1, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_WEAPON_INDEX, 3)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_DOWN_TURNS, 0)
     CALL(btlevtcmd_SetMaxMoveCount, UNIT_ID_SELF, 0)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
@@ -222,7 +226,7 @@ static EVT_BEGIN(phase_event)
 EVT_END()
 
 static EVT_BEGIN(attack_event)
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 1, LW(0))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_DOWN_TURNS, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
         RETURN

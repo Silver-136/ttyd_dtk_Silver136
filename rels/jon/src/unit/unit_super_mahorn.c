@@ -23,6 +23,12 @@
 #include "battle/battle_database_common.h"
 #include "battle/battle_damage.h"
 
+// BattleUnit.work slots (btlevtcmd_Get/Set/AddUnitWork)
+#define UNIT_WORK_BUNSIN 4       // 1 on a clone (spawned by the bunsin event), 0 on the real one; clones skip attack/wait and die when hit
+#define UNIT_WORK_KILL_BUNSIN 5  // damage_event: 1 if the real one was hit while clones exist; after the damage all clones are killed
+#define UNIT_WORK_FADED_OUT 6    // clone: 1 once bunsin_kill_event has faded it out, so it fades only once
+#define UNIT_WORK_MAGIC_EFFECT 7 // EffectEntry of the magic shot (effMahorn2Entry); eff_magic_get_posX reads its type-3 element's x
+
 double __fabs(double x);
 static inline double mahorn_fabs(double x) { return __fabs(x); }
 
@@ -556,7 +562,7 @@ static EVT_BEGIN(attack_event)
         CALL_CHILD(PTR(attack_punch_event))
         GOTO(99)
     END_IF
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 4, LW(0))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_BUNSIN, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         RETURN
     END_IF
@@ -705,8 +711,8 @@ static EVT_BEGIN(init_event)
     CALL(set_hand_dest, UNIT_ID_SELF, 4, FLOAT(-25.0f), FLOAT(10.0f), FLOAT(-10.0f))
     CALL(set_hand_dest, UNIT_ID_SELF, 5, FLOAT(25.0f), FLOAT(10.0f), FLOAT(10.0f))
     SPAWN_EVENT(PTR(hand_ctrl_event))
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 4, 0)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 6, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_BUNSIN, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_FADED_OUT, 0)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
@@ -787,12 +793,12 @@ EVT_END()
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), -2)
     SET_VALUE(LW(11), 1)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 5, 0)
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 4, LW(0))
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_KILL_BUNSIN, 0)
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_BUNSIN, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL(mahorn_get_bunsin, LW(1), LW(2), LW(3), LW(4), LW(0))
         IF_INT_GREATER_OR_EQUAL(LW(0), 1)
-            CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 5, 1)
+            CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_KILL_BUNSIN, 1)
         END_IF
         ELSE
         SET_VALUE(LW(0), -2)
@@ -802,7 +808,7 @@ static EVT_BEGIN(damage_event)
     CALL_CHILD(PTR(btldefaultevt_Damage))
     CALL(btlevtcmd_GetUnitId, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), -1)
-        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 5, LW(0))
+        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_KILL_BUNSIN, LW(0))
         IF_INT_EQUAL(LW(0), 1)
             CALL_CHILD(PTR(mahorn_subset_bunsin_all_kill))
         END_IF
@@ -811,7 +817,7 @@ static EVT_BEGIN(damage_event)
 EVT_END()
 
 static EVT_BEGIN(mahorn_subset_bunsin_all_kill)
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 4, LW(0))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_BUNSIN, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL(mahorn_get_bunsin, LW(1), LW(2), LW(3), LW(4), LW(0))
         IF_INT_GREATER_OR_EQUAL(LW(0), 1)
@@ -918,7 +924,7 @@ static EVT_BEGIN(mahorn_subset_blow_dead_event)
 EVT_END()
 
 static EVT_BEGIN(avoid_miss_event)
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 4, LW(0))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_BUNSIN, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         SET_VALUE(LW(0), -2)
         CALL_CHILD(PTR(bunsin_kill_event))
@@ -1650,7 +1656,7 @@ static EVT_BEGIN(spawn_event)
 EVT_END()
 
 static EVT_BEGIN(wait_event)
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 4, LW(0))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_BUNSIN, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL(mahorn_get_bunsin, LW(1), LW(2), LW(3), LW(4), LW(0))
         CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
@@ -1780,7 +1786,7 @@ static USER_FUNC(eff_magic_get_posX) {
     EvtWord* args = event->args;
     s32 id = BattleTransID(event, evtGetValue(event, *args++));
     BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, id);
-    EffectEntry* eff = (EffectEntry*)unit->work[7];
+    EffectEntry* eff = (EffectEntry*)unit->work[UNIT_WORK_MAGIC_EFFECT];
     effMahorn2Data* work = eff->userdata;
     s32 i;
 
@@ -1812,7 +1818,7 @@ static USER_FUNC(eff_magic) {
     x += unit->mSizeMultiplier * unit->faceDirection;
     y += 18.0f * unit->mSizeMultiplier;
     z += 5.0f;
-    unit->work[7] = (EvtWord)effMahorn2Entry(0, x, y, z, a, y, z, unit->mSizeMultiplier, mahorn_fabs((a - x) / time));
+    unit->work[UNIT_WORK_MAGIC_EFFECT] = (EvtWord)effMahorn2Entry(0, x, y, z, a, y, z, unit->mSizeMultiplier, mahorn_fabs((a - x) / time));
     return EVT_RETURN_DONE;
 }
 

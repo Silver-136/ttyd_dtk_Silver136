@@ -31,6 +31,19 @@
 #include "battle/battle_database_common.h"
 #include "battle/battle_damage.h"
 
+// BattleUnit.work slots (btlevtcmd_Get/Set/AddUnitWork)
+#define UNIT_WORK_SATELLITE_COUNT 0   // satellites out after the last sub_call_satellite (its LW(0) count); player_before_phase_event passes it to battenSatelliteToInside
+#define UNIT_WORK_HP_STAGE 1          // 0 full; 1/2/3 once HP <= 75/50/25% (monster_before_phase_event prints stg8_las_66/67/68; 3 also switches to pose_table_furafura)
+#define UNIT_WORK_MISFIRE_CHANCE 2    // percent chance the next attack fizzles into smoke: -1 at start (first damage to a non-body part makes it 100), else +10 per damage point up to 100; each attack event clears it and rolls against it
+#define UNIT_WORK_SELF_SPELL 3        // 4 or 5 while casting shikaeshi or yokeyoke on itself; damage_event then holds the camera 1.5 s, resets it and clears the slot
+#define UNIT_WORK_LIGHT_EVENT 4       // event id of the running light_anim_rtn (head lights); restarted when slot 6 changes, deleted in dead_event
+#define UNIT_WORK_ROD_LIGHT_EVENT 5   // event id of the running light_rod_anim_rtn (rod light); restarted when slot 7 changes, deleted in dead_event
+#define UNIT_WORK_LIGHT_PATTERN 6     // which btl_shuryolight_head_* set light_anim_rtn plays (0 normal, 1 quick, 2-3 tenmetu, 4 random, 5 on, 6 off, 7 dead_event); light_pose_change sets it from the body pose
+#define UNIT_WORK_ROD_LIGHT_PATTERN 7 // which rod light light_rod_anim_rtn plays: 8 btl_shuryolight_rod_normal (init, every attack), 9 btl_shuryolight_rod_off (hit on a non-body part)
+#define UNIT_WORK_SHIELD_EFFECT 8     // EffectEntry* of the effSyuryouEntry glow while all four satellites are out (check_satellite creates it; deletes it and sets 0 when one is lost)
+#define UNIT_WORK_SATELLITE 9         // first of four satellite unit ids (slots 9-12, -1 = empty): sub_call_satellite fills them, player_before_phase_event packs them, check_satellite clears dead ones
+#define UNIT_WORK_SATELLITE_SPLINE 13 // first of four BattenSpline* move works (slots 13-16, one per satellite slot; 0 when the move ends); satellite 3 uses work[16], past the array
+
 Vec nowv;
 f32 maer;
 static s32 xlw[16];
@@ -781,8 +794,8 @@ USER_FUNC(check_satellite) {
             }
             evt->uwBase = event->uwBase;
             evt->ufBase = event->ufBase;
-            effDelete((EffectEntry*)unit->work[8]);
-            unit->work[8] = 0;
+            effDelete((EffectEntry*)unit->work[UNIT_WORK_SHIELD_EFFECT]);
+            unit->work[UNIT_WORK_SHIELD_EFFECT] = 0;
             BtlUnit_GetPos(unit, &x, &y, &z);
             for (i = 0; i < 20; i++) {
                 s32 w = BtlUnit_GetWidth(unit) + 15;
@@ -810,10 +823,10 @@ USER_FUNC(check_satellite) {
 
             BtlUnit_snd_se(unit, "SFX_BOSS_SRYO_LIGHT_ROUND1", 0xF1194D80, 0);
             BtlUnit_GetPos(unit, &px, &py, &pz);
-            unit->work[8] = (EvtWord)effSyuryouEntry(1, 1000, 0.0f, -1000.0f, 0.0f);
+            unit->work[UNIT_WORK_SHIELD_EFFECT] = (EvtWord)effSyuryouEntry(1, 1000, 0.0f, -1000.0f, 0.0f);
         }
-        if (unit->work[8] != 0) {
-            f32* ud = ((EffectEntry*)unit->work[8])->userdata;
+        if (unit->work[UNIT_WORK_SHIELD_EFFECT] != 0) {
+            f32* ud = ((EffectEntry*)unit->work[UNIT_WORK_SHIELD_EFFECT])->userdata;
             f32 ex;
             f32 ey;
             f32 ez;
@@ -1313,13 +1326,13 @@ EVT_BEGIN(light_pose_change)
     SET_VALUE(LW(8), PTR(&btl_shuryolight_head_3_normal))
     SET_VALUE(LW(0), 0)
     LABEL(0)
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 6, LW(1))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_LIGHT_PATTERN, LW(1))
     IF_INT_NOT_EQUAL(LW(0), LW(1))
-        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 6, LW(0))
-        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 4, LW(0))
+        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_LIGHT_PATTERN, LW(0))
+        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_LIGHT_EVENT, LW(0))
         DELETE_EVENT(LW(0))
         SPAWN_EVENT_GET_ID(PTR(light_anim_rtn), LW(0))
-        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 4, LW(0))
+        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_LIGHT_EVENT, LW(0))
     END_IF
     CALL(enzan_lw_load)
     CALL(enzan_lw_load2)
@@ -1359,21 +1372,21 @@ static EVT_BEGIN(init_event)
     SET_VALUE(LW(7), PTR(&btl_shuryolight_head_2_normal))
     SET_VALUE(LW(8), PTR(&btl_shuryolight_head_3_normal))
     SET_VALUE(LW(0), 0)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 6, LW(0))
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_LIGHT_PATTERN, LW(0))
     SPAWN_EVENT_GET_ID(PTR(light_anim_rtn), LW(0))
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 4, LW(0))
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_LIGHT_EVENT, LW(0))
     CALL(enzan_lw_load)
     CALL(enzan_lw_save)
     SET_VALUE(LW(9), PTR(&btl_shuryolight_rod_normal))
     SET_VALUE(LW(0), 8)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 7, LW(0))
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ROD_LIGHT_PATTERN, LW(0))
     SPAWN_EVENT_GET_ID(PTR(light_rod_anim_rtn), LW(0))
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 5, LW(0))
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ROD_LIGHT_EVENT, LW(0))
     CALL(enzan_lw_load)
     CALL(pose_check_evt_run)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 1, 0)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 3, 0)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 2, -1)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_HP_STAGE, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_SELF_SPELL, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_MISFIRE_CHANCE, -1)
     SET_VALUE(LW(0), 9)
     LOOP(4)
         CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, LW(0), -1)
@@ -1415,7 +1428,7 @@ static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), -2)
     SET_VALUE(LW(11), 1)
     CALL_CHILD(PTR(btldefaultevt_Damage))
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 3, LW(0))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_SELF_SPELL, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         SWITCH(LW(0))
             CASE_EQUAL(4)
@@ -1427,7 +1440,7 @@ static EVT_BEGIN(damage_event)
             CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
             WAIT_MS(300)
         END_SWITCH
-        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 3, 0)
+        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_SELF_SPELL, 0)
     END_IF
     RETURN
 EVT_END()
@@ -1450,13 +1463,13 @@ EVT_BEGIN(damage_sub_event)
         CALL(enzan_lw_save)
         SET_VALUE(LW(9), PTR(&btl_shuryolight_rod_off))
         SET_VALUE(LW(0), 9)
-        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 7, LW(1))
+        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_ROD_LIGHT_PATTERN, LW(1))
         IF_INT_NOT_EQUAL(LW(0), LW(1))
-            CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 7, LW(0))
-            CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 5, LW(0))
+            CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ROD_LIGHT_PATTERN, LW(0))
+            CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_ROD_LIGHT_EVENT, LW(0))
             DELETE_EVENT(LW(0))
             SPAWN_EVENT_GET_ID(PTR(light_rod_anim_rtn), LW(0))
-            CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 5, LW(0))
+            CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ROD_LIGHT_EVENT, LW(0))
         END_IF
         CALL(enzan_lw_load)
         CALL(btlevtcmd_AnimeChangePose, LW(10), 1, STRING("D_2"))
@@ -1466,7 +1479,7 @@ EVT_BEGIN(damage_sub_event)
     IF_INT_NOT_EQUAL(LW(0), 0)
         IF_INT_NOT_EQUAL(LW(11), 1)
             CALL(btlevtcmd_GetTotalDamage, LW(10), LW(0))
-            CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 2, LW(1))
+            CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_MISFIRE_CHANCE, LW(1))
             IF_INT_LESS(LW(1), 0)
                 SET_VALUE(LW(1), 100)
                 ELSE
@@ -1476,7 +1489,7 @@ EVT_BEGIN(damage_sub_event)
                     SET_VALUE(LW(1), 100)
                 END_IF
             END_IF
-            CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 2, LW(1))
+            CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_MISFIRE_CHANCE, LW(1))
         END_IF
     END_IF
     WAIT_MS(500)
@@ -1503,7 +1516,7 @@ EVT_BEGIN(monster_before_phase_event)
     IF_INT_EQUAL(LW(0), 0)
         GOTO(0)
     END_IF
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 1, LW(0))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_HP_STAGE, LW(0))
     SWITCH(LW(0))
         CASE_EQUAL(0)
         CALL(btlevtcmd_GetMaxHp, UNIT_ID_SELF, LW(0))
@@ -1511,7 +1524,7 @@ EVT_BEGIN(monster_before_phase_event)
         DIVIDE(LW(0), 100)
         CALL(btlevtcmd_GetHp, UNIT_ID_SELF, LW(1))
         IF_INT_LESS_OR_EQUAL(LW(1), LW(0))
-            CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 1, 1)
+            CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_HP_STAGE, 1)
             CALL(btlevtcmd_StopWaitEvent, UNIT_ID_SELF)
             CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
             SET_VALUE(LW(0), 1)
@@ -1529,7 +1542,7 @@ EVT_BEGIN(monster_before_phase_event)
         DIVIDE(LW(0), 100)
         CALL(btlevtcmd_GetHp, UNIT_ID_SELF, LW(1))
         IF_INT_LESS_OR_EQUAL(LW(1), LW(0))
-            CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 1, 2)
+            CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_HP_STAGE, 2)
             CALL(btlevtcmd_StopWaitEvent, UNIT_ID_SELF)
             CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
             SET_VALUE(LW(0), 1)
@@ -1545,7 +1558,7 @@ EVT_BEGIN(monster_before_phase_event)
         DIVIDE(LW(0), 100)
         CALL(btlevtcmd_GetHp, UNIT_ID_SELF, LW(1))
         IF_INT_LESS_OR_EQUAL(LW(1), LW(0))
-            CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 1, 3)
+            CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_HP_STAGE, 3)
             CALL(btlevtcmd_StopWaitEvent, UNIT_ID_SELF)
             CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, 1, PTR(pose_table_furafura))
             CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
@@ -1593,13 +1606,13 @@ static EVT_BEGIN(dead_event)
     SET_VALUE(LW(7), PTR(&btl_shuryolight_head_2_off))
     SET_VALUE(LW(8), PTR(&btl_shuryolight_head_3_off))
     SET_VALUE(LW(0), 7)
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 6, LW(1))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_LIGHT_PATTERN, LW(1))
     IF_INT_NOT_EQUAL(LW(0), LW(1))
-        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 6, LW(0))
-        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 4, LW(0))
+        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_LIGHT_PATTERN, LW(0))
+        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_LIGHT_EVENT, LW(0))
         DELETE_EVENT(LW(0))
         SPAWN_EVENT_GET_ID(PTR(light_anim_rtn), LW(0))
-        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 4, LW(0))
+        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_LIGHT_EVENT, LW(0))
     END_IF
     CALL(enzan_lw_load)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("D_3"))
@@ -1611,9 +1624,9 @@ static EVT_BEGIN(dead_event)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("D_4"))
     WAIT_MS(500)
     CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_ON)
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 4, LW(0))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_LIGHT_EVENT, LW(0))
     DELETE_EVENT(LW(0))
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 5, LW(0))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_ROD_LIGHT_EVENT, LW(0))
     DELETE_EVENT(LW(0))
     SET_VALUE(LW(10), -2)
     CALL_CHILD(PTR(subsetevt_dead_core_nospin_norotate))
@@ -1834,7 +1847,7 @@ EVT_BEGIN(sub_call_satellite)
     CALL(battenSatelliteToOutside, UNIT_ID_SELF, LW(0))
     WAIT_MS(1000)
     CALL_CHILD(satellite_blur_off)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 0, LW(0))
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_SATELLITE_COUNT, LW(0))
     RETURN
 EVT_END()
 
@@ -1866,7 +1879,7 @@ EVT_BEGIN(player_before_phase_event)
     IF_INT_NOT_EQUAL(LW(1), 0)
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_SRYO_SPLIT1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     END_IF
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 0, LW(1))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_SATELLITE_COUNT, LW(1))
     CALL(battenSatelliteToInside, UNIT_ID_SELF, LW(1))
     CALL_CHILD(satellite_blur_off)
     SET_VALUE(LW(1), 9)
@@ -1911,7 +1924,7 @@ static EVT_BEGIN(attack_event)
         CALL_CHILD(PTR(batten_leader_thunder_attack_event))
         GOTO(99)
     END_IF
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 1, LW(2))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_HP_STAGE, LW(2))
     IF_INT_LESS(LW(2), 2)
         CALL(btlevtcmd_DrawLots, LW(0), 6, 60, 40, 30, 20, 20, 20)
         SWITCH(LW(0))
@@ -1976,18 +1989,18 @@ EVT_BEGIN(batten_leader_thunder_attack_event)
     CALL(enzan_lw_save)
     SET_VALUE(LW(9), PTR(&btl_shuryolight_rod_normal))
     SET_VALUE(LW(0), 8)
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 7, LW(1))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_ROD_LIGHT_PATTERN, LW(1))
     IF_INT_NOT_EQUAL(LW(0), LW(1))
-        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 7, LW(0))
-        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 5, LW(0))
+        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ROD_LIGHT_PATTERN, LW(0))
+        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_ROD_LIGHT_EVENT, LW(0))
         DELETE_EVENT(LW(0))
         SPAWN_EVENT_GET_ID(PTR(light_rod_anim_rtn), LW(0))
-        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 5, LW(0))
+        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ROD_LIGHT_EVENT, LW(0))
     END_IF
     CALL(enzan_lw_load)
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 2, LW(1))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_MISFIRE_CHANCE, LW(1))
     IF_INT_GREATER(LW(1), 0)
-        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 2, 0)
+        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_MISFIRE_CHANCE, 0)
         CALL(btlevtcmd_GetRandomValue, 100, LW(2))
         IF_INT_LESS(LW(2), LW(1))
             CALL(btlevtcmd_GetPosFloat, UNIT_ID_SELF, LW(0), LW(1), LW(2))
@@ -2091,18 +2104,18 @@ EVT_BEGIN(batten_leader_fire_attack_event)
     CALL(enzan_lw_save)
     SET_VALUE(LW(9), PTR(&btl_shuryolight_rod_normal))
     SET_VALUE(LW(0), 8)
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 7, LW(1))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_ROD_LIGHT_PATTERN, LW(1))
     IF_INT_NOT_EQUAL(LW(0), LW(1))
-        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 7, LW(0))
-        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 5, LW(0))
+        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ROD_LIGHT_PATTERN, LW(0))
+        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_ROD_LIGHT_EVENT, LW(0))
         DELETE_EVENT(LW(0))
         SPAWN_EVENT_GET_ID(PTR(light_rod_anim_rtn), LW(0))
-        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 5, LW(0))
+        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ROD_LIGHT_EVENT, LW(0))
     END_IF
     CALL(enzan_lw_load)
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 2, LW(1))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_MISFIRE_CHANCE, LW(1))
     IF_INT_GREATER(LW(1), 0)
-        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 2, 0)
+        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_MISFIRE_CHANCE, 0)
         CALL(btlevtcmd_GetRandomValue, 100, LW(2))
         IF_INT_LESS(LW(2), LW(1))
             CALL(btlevtcmd_GetPosFloat, UNIT_ID_SELF, LW(0), LW(1), LW(2))
@@ -2211,18 +2224,18 @@ EVT_BEGIN(batten_leader_ice_attack_event)
     CALL(enzan_lw_save)
     SET_VALUE(LW(9), PTR(&btl_shuryolight_rod_normal))
     SET_VALUE(LW(0), 8)
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 7, LW(1))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_ROD_LIGHT_PATTERN, LW(1))
     IF_INT_NOT_EQUAL(LW(0), LW(1))
-        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 7, LW(0))
-        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 5, LW(0))
+        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ROD_LIGHT_PATTERN, LW(0))
+        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_ROD_LIGHT_EVENT, LW(0))
         DELETE_EVENT(LW(0))
         SPAWN_EVENT_GET_ID(PTR(light_rod_anim_rtn), LW(0))
-        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 5, LW(0))
+        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ROD_LIGHT_EVENT, LW(0))
     END_IF
     CALL(enzan_lw_load)
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 2, LW(1))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_MISFIRE_CHANCE, LW(1))
     IF_INT_GREATER(LW(1), 0)
-        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 2, 0)
+        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_MISFIRE_CHANCE, 0)
         CALL(btlevtcmd_GetRandomValue, 100, LW(2))
         IF_INT_LESS(LW(2), LW(1))
             CALL(btlevtcmd_GetPosFloat, UNIT_ID_SELF, LW(0), LW(1), LW(2))
@@ -2306,18 +2319,18 @@ EVT_BEGIN(batten_leader_shikaeshi_attack_event)
     CALL(enzan_lw_save)
     SET_VALUE(LW(9), PTR(&btl_shuryolight_rod_normal))
     SET_VALUE(LW(0), 8)
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 7, LW(1))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_ROD_LIGHT_PATTERN, LW(1))
     IF_INT_NOT_EQUAL(LW(0), LW(1))
-        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 7, LW(0))
-        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 5, LW(0))
+        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ROD_LIGHT_PATTERN, LW(0))
+        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_ROD_LIGHT_EVENT, LW(0))
         DELETE_EVENT(LW(0))
         SPAWN_EVENT_GET_ID(PTR(light_rod_anim_rtn), LW(0))
-        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 5, LW(0))
+        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ROD_LIGHT_EVENT, LW(0))
     END_IF
     CALL(enzan_lw_load)
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 2, LW(1))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_MISFIRE_CHANCE, LW(1))
     IF_INT_GREATER(LW(1), 0)
-        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 2, 0)
+        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_MISFIRE_CHANCE, 0)
         CALL(btlevtcmd_GetRandomValue, 100, LW(2))
         IF_INT_LESS(LW(2), LW(1))
             CALL(btlevtcmd_GetPosFloat, UNIT_ID_SELF, LW(0), LW(1), LW(2))
@@ -2334,7 +2347,7 @@ EVT_BEGIN(batten_leader_shikaeshi_attack_event)
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, -1)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
     CALL(evt_btl_camera_set_zoom, 0, 400)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 3, 4)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_SELF_SPELL, 4)
     CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, UNIT_ID_SELF, 1, LW(9), DAMAGE_RESULT_FINAL_HIT, LW(5))
     RETURN
 EVT_END()
@@ -2353,18 +2366,18 @@ EVT_BEGIN(batten_leader_yokeyoke_attack_event)
     CALL(enzan_lw_save)
     SET_VALUE(LW(9), PTR(&btl_shuryolight_rod_normal))
     SET_VALUE(LW(0), 8)
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 7, LW(1))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_ROD_LIGHT_PATTERN, LW(1))
     IF_INT_NOT_EQUAL(LW(0), LW(1))
-        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 7, LW(0))
-        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 5, LW(0))
+        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ROD_LIGHT_PATTERN, LW(0))
+        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_ROD_LIGHT_EVENT, LW(0))
         DELETE_EVENT(LW(0))
         SPAWN_EVENT_GET_ID(PTR(light_rod_anim_rtn), LW(0))
-        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 5, LW(0))
+        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ROD_LIGHT_EVENT, LW(0))
     END_IF
     CALL(enzan_lw_load)
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 2, LW(1))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_MISFIRE_CHANCE, LW(1))
     IF_INT_GREATER(LW(1), 0)
-        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 2, 0)
+        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_MISFIRE_CHANCE, 0)
         CALL(btlevtcmd_GetRandomValue, 100, LW(2))
         IF_INT_LESS(LW(2), LW(1))
             CALL(btlevtcmd_GetPosFloat, UNIT_ID_SELF, LW(0), LW(1), LW(2))
@@ -2381,7 +2394,7 @@ EVT_BEGIN(batten_leader_yokeyoke_attack_event)
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, -1)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
     CALL(evt_btl_camera_set_zoom, 0, 400)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 3, 5)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_SELF_SPELL, 5)
     CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, UNIT_ID_SELF, 1, LW(9), DAMAGE_RESULT_FINAL_HIT, LW(5))
     RETURN
 EVT_END()
@@ -2400,18 +2413,18 @@ EVT_BEGIN(batten_leader_stop_attack_event)
     CALL(enzan_lw_save)
     SET_VALUE(LW(9), PTR(&btl_shuryolight_rod_normal))
     SET_VALUE(LW(0), 8)
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 7, LW(1))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_ROD_LIGHT_PATTERN, LW(1))
     IF_INT_NOT_EQUAL(LW(0), LW(1))
-        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 7, LW(0))
-        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 5, LW(0))
+        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ROD_LIGHT_PATTERN, LW(0))
+        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_ROD_LIGHT_EVENT, LW(0))
         DELETE_EVENT(LW(0))
         SPAWN_EVENT_GET_ID(PTR(light_rod_anim_rtn), LW(0))
-        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 5, LW(0))
+        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ROD_LIGHT_EVENT, LW(0))
     END_IF
     CALL(enzan_lw_load)
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 2, LW(1))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_MISFIRE_CHANCE, LW(1))
     IF_INT_GREATER(LW(1), 0)
-        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 2, 0)
+        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_MISFIRE_CHANCE, 0)
         CALL(btlevtcmd_GetRandomValue, 100, LW(2))
         IF_INT_LESS(LW(2), LW(1))
             CALL(btlevtcmd_GetPosFloat, UNIT_ID_SELF, LW(0), LW(1), LW(2))
@@ -2676,15 +2689,15 @@ u8 battenSatelliteTo_Init(BattleUnit* unit, s32 n, Vec* table) {
     BattenSpline* sp;
 
     sp = BTL_ALLOC(sizeof(BattenSpline));
-    if (unit->work[9 + n] == -1) {
+    if (unit->work[UNIT_WORK_SATELLITE + n] == -1) {
         return FALSE;
     }
-    unit->work[13 + n] = (EvtWord)sp;
+    unit->work[UNIT_WORK_SATELLITE_SPLINE + n] = (EvtWord)sp;
     sp->n = 5;
     sp->table = table;
     sp->count = 0;
     spline_maketable(5, sp->table, sp->ts, sp->tbl);
-    BtlUnit_GetPartsPtr(BattleGetUnitPtr(_battleWorkPointer, unit->work[9 + n]), 1)->work[1] = (EvtWord)table;
+    BtlUnit_GetPartsPtr(BattleGetUnitPtr(_battleWorkPointer, unit->work[UNIT_WORK_SATELLITE + n]), 1)->work[1] = (EvtWord)table;
     return TRUE;
 }
 u8 battenSatelliteTo_Main(BattleUnit* unit, s32 n) {
@@ -2693,22 +2706,22 @@ u8 battenSatelliteTo_Main(BattleUnit* unit, s32 n) {
     Vec upos;
     Vec pos;
 
-    if (unit->work[9 + n] == -1) {
+    if (unit->work[UNIT_WORK_SATELLITE + n] == -1) {
         return FALSE;
     }
-    sp = (BattenSpline*)unit->work[13 + n];
+    sp = (BattenSpline*)unit->work[UNIT_WORK_SATELLITE_SPLINE + n];
     if (sp == NULL) {
         return FALSE;
     }
     if (sp->count >= 60) {
         if (sp != NULL) {
             BTL_FREE(sp);
-            unit->work[13 + n] = 0;
+            unit->work[UNIT_WORK_SATELLITE_SPLINE + n] = 0;
         }
         return FALSE;
     }
     spline_getvalue(&pos, intplGetValue(EASING_QUADRATIC_OUT, 0.0f, 1.0f, sp->count, 60), sp->n, sp->table, sp->ts, sp->tbl);
-    sat = BattleGetUnitPtr(_battleWorkPointer, unit->work[9 + n]);
+    sat = BattleGetUnitPtr(_battleWorkPointer, unit->work[UNIT_WORK_SATELLITE + n]);
     if (sat == NULL) {
         return FALSE;
     }
@@ -2730,8 +2743,8 @@ USER_FUNC(battenSatelliteToInside) {
     unit = BattleGetUnitPtr(_battleWorkPointer, id);
     if (isFirstCall) {
         for (i = 0; i < 4; i++) {
-            if (unit->work[9 + i] != -1) {
-                EvtWord table = BtlUnit_GetPartsPtr(BattleGetUnitPtr(_battleWorkPointer, unit->work[9 + i]), 1)->work[1];
+            if (unit->work[UNIT_WORK_SATELLITE + i] != -1) {
+                EvtWord table = BtlUnit_GetPartsPtr(BattleGetUnitPtr(_battleWorkPointer, unit->work[UNIT_WORK_SATELLITE + i]), 1)->work[1];
 
                 if (table == (EvtWord)splineTableOut1_1) {
                     battenSatelliteTo_Init(unit, i, splineTableIn1_1);

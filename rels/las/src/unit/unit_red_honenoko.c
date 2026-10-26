@@ -16,6 +16,11 @@
 #include "manager/evtmgr_cmd.h"
 #include "battle/battle_damage.h"
 
+// BattleUnit.work slots (btlevtcmd_Get/Set/AddUnitWork)
+#define UNIT_WORK_SPIN_DONE 0    // 1 ends the sibling loop that spins a thrown bone part (25 degrees per frame); the throw sets 0, the landing 1
+#define UNIT_WORK_REWARD_GIVEN 1 // 1 once its coins and EXP were paid out (first collapse or death), so they are paid only once
+#define UNIT_WORK_REVIVE_TURNS 2 // turns until it rebuilds itself: fake_dead_event sets 2-4; rebirth_event counts down and revives at 0; attack_event runs rebirth_event while >= 1
+
 USER_FUNC(btlevtcmd_SetJumpSound);
 static USER_FUNC(honenoko_copy_status);
 
@@ -217,7 +222,7 @@ static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event))
     CALL(btlevtcmd_SetEventDamage, UNIT_ID_SELF, PTR(damage_event))
     CALL(btlevtcmd_SetEventConfusion, UNIT_ID_SELF, PTR(attack_event))
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 1, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_REWARD_GIVEN, 0)
     CALL(btlevtcmd_SetJumpSound, UNIT_ID_SELF, STRING("0"), STRING("SFX_ENM_HONENOKO_LANDING1"))
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
@@ -246,9 +251,9 @@ static EVT_BEGIN(dead_event)
     CALL(btlevtcmd_GetPos, LW(10), LW(0), LW(1), LW(2))
     ADD(LW(2), 10)
     CALL(evt_eff, 0, STRING("kemuri_test"), 4, LW(0), LW(1), LW(2), FLOAT(0.7998047f), 0, 0, 0, 0, 0, 0, 0)
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 1, LW(0))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_REWARD_GIVEN, LW(0))
     IF_INT_EQUAL(LW(0), 0)
-        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 1, 1)
+        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_REWARD_GIVEN, 1)
         CALL(btlevtcmd_GetCoin, LW(10), LW(0))
         CALL(btlevtcmd_StoreCoin, LW(0))
         CALL(btlevtcmd_GetExp, LW(10), LW(0))
@@ -286,9 +291,9 @@ static EVT_BEGIN(fake_dead_event)
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(2), LW(3), LW(4))
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(4.0f))
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(2), LW(3), LW(4), 0, MOVE_SOUND_FROM_TABLE, 0)
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 1, LW(0))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_REWARD_GIVEN, LW(0))
     IF_INT_EQUAL(LW(0), 0)
-        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 1, 1)
+        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_REWARD_GIVEN, 1)
         SET_VALUE(LW(10), -2)
         CALL(btlevtcmd_snd_se, LW(10), STRING("SFX_BTL_ENEMY_DIE1_2"), EVT_NULLPTR, 0, EVT_NULLPTR)
         CALL(btlevtcmd_GetPos, LW(10), LW(0), LW(1), LW(2))
@@ -314,16 +319,16 @@ static EVT_BEGIN(fake_dead_event)
     CALL(btlevtcmd_KillUnit, UNIT_ID_SELF, 2)
     CALL(evt_sub_random, 2, LW(0))
     ADD(LW(0), 2)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 2, LW(0))
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_REVIVE_TURNS, LW(0))
     CALL(btlevtcmd_SetHitOffset, LW(10), LW(11), 0, -20, 0)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
 static EVT_BEGIN(rebirth_event)
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 2, LW(0))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_REVIVE_TURNS, LW(0))
     SUBTRACT(LW(0), 1)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 2, LW(0))
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_REVIVE_TURNS, LW(0))
     IF_INT_GREATER_OR_EQUAL(LW(0), 1)
         RETURN
     END_IF
@@ -346,7 +351,7 @@ static EVT_BEGIN(attack_event)
         CALL_CHILD(PTR(normal_attack_event))
         GOTO(99)
     END_IF
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 2, LW(0))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_REVIVE_TURNS, LW(0))
     IF_INT_GREATER_OR_EQUAL(LW(0), 1)
         CALL_CHILD(PTR(rebirth_event))
         GOTO(99)
@@ -458,9 +463,9 @@ static EVT_BEGIN(normal_attack_event)
     CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 2, kNoShadow)
     CALL(btlevtcmd_GetPartsPos, UNIT_ID_SELF, 1, LW(0), LW(1), LW(2))
     BEGIN_SIBLING_EVENT
-        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 0, 0)
+        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_SPIN_DONE, 0)
         LOOP(0)
-            CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 0, LW(14))
+            CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_SPIN_DONE, LW(14))
             IF_INT_EQUAL(LW(14), 1)
                 BREAK_LOOP
             END_IF
@@ -538,7 +543,7 @@ static EVT_BEGIN(normal_attack_event)
     GOTO(98)
     LABEL(98)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 0, 1)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_SPIN_DONE, 1)
     CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 2, kHidden)
     CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 2, kNoShadow)
     WAIT_FRAMES(10)
@@ -580,10 +585,10 @@ static EVT_BEGIN(call_friend_event)
         ADD(LW(5), 14)
         CALL(btlevtcmd_SetPartsPos, UNIT_ID_SELF, 3, LW(4), LW(5), LW(6))
         BEGIN_SIBLING_EVENT
-            CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 0, 0)
+            CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_SPIN_DONE, 0)
             SET_VALUE(LW(15), 0)
             LOOP(0)
-                CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 0, LW(14))
+                CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_SPIN_DONE, LW(14))
                 IF_INT_EQUAL(LW(14), 1)
                     BREAK_LOOP
                 END_IF
