@@ -131,7 +131,7 @@ USER_FUNC(sac_handbeat) {
     BattleAudienceSoundSetVol(4, volPer, 1);
     if (!handBeatEnable) {
         sound = BattleAudienceSoundGetPtr(4);
-        sound->mFadeoutTime = *(s32*)(sound->header + 0xC) = 180;
+        sound->mFadeoutTime = sound->duration = 180;
         return EVT_RETURN_DONE;
     }
     if (count < 0) {
@@ -179,7 +179,7 @@ USER_FUNC(sac_cheer) {
     }
     if (!cheerEnable) {
         sound = BattleAudienceSoundGetPtr(4);
-        sound->mFadeoutTime = *(s32*)(sound->header + 0xC) = 180;
+        sound->mFadeoutTime = sound->duration = 180;
         return EVT_RETURN_DONE;
     }
     if (count < 0) {

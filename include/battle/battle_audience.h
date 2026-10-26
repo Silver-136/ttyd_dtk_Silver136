@@ -186,7 +186,11 @@ typedef struct BattleAudienceStar {
 } BattleAudienceStar;
 
 typedef struct BattleAudienceSound {
-    u8 header[0x10 - 0x0];         // 0x0, raw head (AudSound view in battle_audience.c)
+    s32 flags;                     // 0x0, AUD_SOUND_FLAG_PLAYING
+    s32 sfxId;                     // 0x4
+    u8 kind;                       // 0x8
+    u8 pad_09[0xC - 0x9];          // 0x9, never accessed
+    s32 duration;                  // 0xC
     s32 mFadeoutTime;              // 0x10
     s32 mForceFadeTimer;           // 0x14
     s32 mForceFadeLength;          // 0x18
