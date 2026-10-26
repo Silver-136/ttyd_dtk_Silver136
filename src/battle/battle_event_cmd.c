@@ -5523,7 +5523,7 @@ USER_FUNC(btlevtcmd_CheckGuardMotionEnable) {
         BtlUnit_CheckStatus(unit, STATUS_TINY) || BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL) || BtlUnit_CheckStatus(unit, STATUS_INVISIBLE)) {
         enable = FALSE;
     }
-    if (BtlUnit_CheckStatusFlag(unit, 1)) {
+    if (BtlUnit_CheckStatusFlag(unit, UNIT_STATUS_FLAG_FLIPPED)) {
         enable = FALSE;
     }
     evtSetValue(event, index, enable);

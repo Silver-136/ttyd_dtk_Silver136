@@ -400,16 +400,16 @@ next:
                 if (unit->currentKind >= UNIT_GOOMBA && unit->currentKind < UNIT_UNUSED_TREE) {
                     poseName = searchPoseTbl(part->poseTable, type);
                 } else {
-                    if (type == 0x1C && !BtlUnit_CheckStatus(unit, STATUS_HOLD_FAST) && (unit->mStatusFlags & 0x20000000)) {
+                    if (type == 0x1C && !BtlUnit_CheckStatus(unit, STATUS_HOLD_FAST) && (unit->mStatusFlags & UNIT_STATUS_FLAG_PERIL)) {
                         poseName = BtlUnit_GetPoseNameFromType(part, 0x39);
                         if (!poseName) poseName = searchPoseTbl(part->poseTable, 0x1C);
-                    } else if (type == 0x1C && !BtlUnit_CheckStatus(unit, STATUS_HOLD_FAST) && (unit->mStatusFlags & 0x10000000)) {
+                    } else if (type == 0x1C && !BtlUnit_CheckStatus(unit, STATUS_HOLD_FAST) && (unit->mStatusFlags & UNIT_STATUS_FLAG_DANGER)) {
                         poseName = BtlUnit_GetPoseNameFromType(part, 0x38);
                         if (!poseName) poseName = searchPoseTbl(part->poseTable, 0x1C);
                     } else {
                         poseName = searchPoseTbl(part->poseTable, type);
                     }
-                    if (BtlUnit_CheckStatusFlag(unit, 0x1000000) && BtlUnit_CanActStatus(unit)) {
+                    if (BtlUnit_CheckStatusFlag(unit, UNIT_STATUS_FLAG_DEFEND) && BtlUnit_CanActStatus(unit)) {
                         poseName = BtlUnit_GetPoseNameFromType(part, 0x2D);
                     }
                 }

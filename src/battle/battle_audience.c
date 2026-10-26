@@ -2930,17 +2930,17 @@ void BattleAudience_ApRecoveryBuild(StarPowerInfo* info) {
     if (b > 0.0f) {
         cnt += 1.0f;
     }
-    if ((u32)mario->mStatusFlags & 0x20000000) {
+    if ((u32)mario->mStatusFlags & UNIT_STATUS_FLAG_PERIL) {
         mm = 3.0f;
-    } else if ((u32)mario->mStatusFlags & 0x10000000) {
+    } else if ((u32)mario->mStatusFlags & UNIT_STATUS_FLAG_DANGER) {
         mm = 2.0f;
     } else {
         mm = 1.0f;
     }
     if (party != NULL) {
-        if ((u32)party->mStatusFlags & 0x20000000) {
+        if ((u32)party->mStatusFlags & UNIT_STATUS_FLAG_PERIL) {
             pm = 2.0f;
-        } else if ((u32)party->mStatusFlags & 0x10000000) {
+        } else if ((u32)party->mStatusFlags & UNIT_STATUS_FLAG_DANGER) {
             pm = 1.5f;
         } else {
             pm = 1.0f;

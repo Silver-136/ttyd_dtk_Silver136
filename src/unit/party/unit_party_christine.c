@@ -1550,7 +1550,7 @@ USER_FUNC(_set_hustle) {
                 }
             }
         } else {
-            BtlUnit_OnStatusFlag(unit, 0x2000000);
+            BtlUnit_OnStatusFlag(unit, UNIT_STATUS_FLAG_HUSTLE);
         }
     }
     return EVT_RETURN_DONE;

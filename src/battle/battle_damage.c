@@ -511,7 +511,7 @@ skip:
         if (target->badgesEquipped.DamageDodge && (flags & DAMAGE_RESULT_GUARD)) {
             defense += target->badgesEquipped.DamageDodge;
         }
-        if (BtlUnit_CheckStatusFlag(target, 0x1000000)) {
+        if (BtlUnit_CheckStatusFlag(target, UNIT_STATUS_FLAG_DEFEND)) {
             defense++;
         }
         if (BtlUnit_CheckStatus(target, STATUS_DEFENSE_UP)) {

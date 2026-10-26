@@ -1495,7 +1495,7 @@ BOOL BtlUnit_GetACPossibility(BattleUnit* unit) {
         BtlUnit_CheckStatus(unit, STATUS_FREEZE) || BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL)) {
         return FALSE;
     }
-    return !BtlUnit_CheckStatusFlag(unit, 1);
+    return !BtlUnit_CheckStatusFlag(unit, UNIT_STATUS_FLAG_FLIPPED);
 }
 
 void* BtlUnit_GetData(BattleUnit* unit, s32 tag) {
@@ -1535,7 +1535,7 @@ BOOL BtlUnit_CanActStatus(BattleUnit* unit) {
         BtlUnit_CheckStatus(unit, STATUS_FREEZE) || BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL)) {
         return FALSE;
     }
-    return !BtlUnit_CheckStatusFlag(unit, 1);
+    return !BtlUnit_CheckStatusFlag(unit, UNIT_STATUS_FLAG_FLIPPED);
 }
 
 void BtlUnit_SetParamFromPouch(BattleUnit* unit) {
@@ -1623,24 +1623,24 @@ void BtlUnit_SetParamToPouch(BattleUnit* unit) {
 
 void BtlUnit_CheckPinchStatus(BattleUnit* unit, BOOL noAudience) {
     if (unit->currentHp <= unit->mKindParams->mPerilHP && unit->currentHp < unit->maxHp) {
-        if (!(unit->mStatusFlags & 0x20000000)) {
-            unit->mStatusFlags |= 0x20000000;
+        if (!(unit->mStatusFlags & UNIT_STATUS_FLAG_PERIL)) {
+            unit->mStatusFlags |= UNIT_STATUS_FLAG_PERIL;
             if (!noAudience && unit->currentKind == UNIT_MARIO) {
                 BattleAudience_Case_MarioDanger();
             }
         }
-    } else if (unit->mStatusFlags & 0x20000000) {
-        unit->mStatusFlags &= ~0x20000000;
+    } else if (unit->mStatusFlags & UNIT_STATUS_FLAG_PERIL) {
+        unit->mStatusFlags &= ~UNIT_STATUS_FLAG_PERIL;
     }
     if (unit->currentHp <= unit->mKindParams->mDangerHP && unit->currentHp < unit->maxHp) {
-        if (!(unit->mStatusFlags & 0x10000000)) {
-            unit->mStatusFlags |= 0x10000000;
-            if (!(unit->mStatusFlags & 0x20000000) && !noAudience && unit->currentKind == UNIT_MARIO) {
+        if (!(unit->mStatusFlags & UNIT_STATUS_FLAG_DANGER)) {
+            unit->mStatusFlags |= UNIT_STATUS_FLAG_DANGER;
+            if (!(unit->mStatusFlags & UNIT_STATUS_FLAG_PERIL) && !noAudience && unit->currentKind == UNIT_MARIO) {
                 BattleAudience_Case_MarioPinch();
             }
         }
-    } else if (unit->mStatusFlags & 0x10000000) {
-        unit->mStatusFlags &= ~0x10000000;
+    } else if (unit->mStatusFlags & UNIT_STATUS_FLAG_DANGER) {
+        unit->mStatusFlags &= ~UNIT_STATUS_FLAG_DANGER;
     }
 }
 
@@ -1951,7 +1951,7 @@ void BtlUnit_SetCommandAnimPose(BattleUnit* unit) {
     BattleUnitPart* part = BtlUnit_GetPartsPtr(unit, BtlUnit_GetBodyPartsId(unit));
     BOOL special = FALSE;
 
-    if (!(unit->mStatusFlags & 0x30000000) && _GetStatusPoseType(unit) == 0x1C) {
+    if (!(unit->mStatusFlags & (UNIT_STATUS_FLAG_DANGER | UNIT_STATUS_FLAG_PERIL)) && _GetStatusPoseType(unit) == 0x1C) {
         special = TRUE;
     }
     if (special) {

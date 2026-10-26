@@ -646,7 +646,7 @@ EVT_BEGIN(_Defence_core)
     END_LOOP
     CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, 0, 0)
     CALL(btlevtcmd_WeaponAftereffect, LW(12))
-    CALL(btlevtcmd_OnStatusFlag, UNIT_ID_SELF, 16777216)
+    CALL(btlevtcmd_OnStatusFlag, UNIT_ID_SELF, UNIT_STATUS_FLAG_DEFEND)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, LW(4), POSE_TYPE_DEFEND)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BTL_MARIO_DEFENCE2"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_ftof, 60, LW(0))

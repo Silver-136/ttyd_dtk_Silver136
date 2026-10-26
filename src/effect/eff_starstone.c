@@ -304,17 +304,17 @@ static u8* color_tbl[] = { diamond_1_color0_tbl, diamond_2_color0_tbl, diamond_3
 
 #define LOOP2(w, tbl, sz, n)                       \
     for (i = 0; i < n##U; i++) {                   \
-        if ((w->flags & 1) || i != 0) {            \
+        if ((w->flags & STAR_STONE_FLAG_FALLING) || i != 0) {            \
             GXCallDisplayList(tbl[i], sz[i] << 5); \
         }                                          \
     }
 
-#define LOOP2V(i1, w, tbl, sz, n) { for (i1 = 0; i1 < n; i1++) { if ((w->flags & 1) || (s32)i1 != 0) { GXCallDisplayList(tbl[i1], sz[i1] << 5); } } }
-#define LOOP2X(i1, w, tbl, sz, n) dq = tbl; sq = sz; for (i1 = 0; i1 < n##U; i1++, sq++, dq++) { if ((w->flags & 1) || i1 != 0) { GXCallDisplayList(*dq, *sq << 5); } }
-#define LOOP2X(i1, w, tbl, sz, n) dq = tbl; sq = sz; for (i1 = 0; i1 < n##U; i1++, sq++, dq++) { if ((w->flags & 1) || i1 != 0) { GXCallDisplayList(*dq, *sq << 5); } }
-#define LOOP2W(i1, w, tbl, sz, n) for (i1 = 0; i1 < n##U; i1++) { if ((w->flags & 1) || i1 != 0) { GXCallDisplayList(tbl[i1], sz[i1] << 5); } }
-#define LOOP2Y(w, tbl, sz, n) { u8** dp = tbl; u8* sp = sz; u32 i; for (i = 0; i < n##U; i++, dp++, sp++) { if ((w->flags & 1) || i != 0) { GXCallDisplayList(*dp, *sp << 5); } } }
-#define LOOP2U(w, tbl, sz, n) dp = tbl; sp = sz; for (i = 0; i < n##U; i++, dp++, sp++) { if ((w->flags & 1) || i != 0) { GXCallDisplayList(*dp, *sp << 5); } }
+#define LOOP2V(i1, w, tbl, sz, n) { for (i1 = 0; i1 < n; i1++) { if ((w->flags & STAR_STONE_FLAG_FALLING) || (s32)i1 != 0) { GXCallDisplayList(tbl[i1], sz[i1] << 5); } } }
+#define LOOP2X(i1, w, tbl, sz, n) dq = tbl; sq = sz; for (i1 = 0; i1 < n##U; i1++, sq++, dq++) { if ((w->flags & STAR_STONE_FLAG_FALLING) || i1 != 0) { GXCallDisplayList(*dq, *sq << 5); } }
+#define LOOP2X(i1, w, tbl, sz, n) dq = tbl; sq = sz; for (i1 = 0; i1 < n##U; i1++, sq++, dq++) { if ((w->flags & STAR_STONE_FLAG_FALLING) || i1 != 0) { GXCallDisplayList(*dq, *sq << 5); } }
+#define LOOP2W(i1, w, tbl, sz, n) for (i1 = 0; i1 < n##U; i1++) { if ((w->flags & STAR_STONE_FLAG_FALLING) || i1 != 0) { GXCallDisplayList(tbl[i1], sz[i1] << 5); } }
+#define LOOP2Y(w, tbl, sz, n) { u8** dp = tbl; u8* sp = sz; u32 i; for (i = 0; i < n##U; i++, dp++, sp++) { if ((w->flags & STAR_STONE_FLAG_FALLING) || i != 0) { GXCallDisplayList(*dp, *sp << 5); } } }
+#define LOOP2U(w, tbl, sz, n) dp = tbl; sp = sz; for (i = 0; i < n##U; i++, dp++, sp++) { if ((w->flags & STAR_STONE_FLAG_FALLING) || i != 0) { GXCallDisplayList(*dp, *sp << 5); } }
 #define LOOP1(tbl, sz, n)                          \
     i = 0; dp = tbl; sp = sz; \
     for (; i < n##U; i++, sp++, dp++) {       \
@@ -363,9 +363,9 @@ EffectEntry* effStarStoneEntry(s32 type, f32 x, f32 y, f32 z, f32 scale) {
         work->color = col;
     }
     if (type >= 7) {
-        work->flags |= 2;
+        work->flags |= STAR_STONE_FLAG_PLAIN;
     }
-    if (!(work->flags & 2)) {
+    if (!(work->flags & STAR_STONE_FLAG_PLAIN)) {
         c = color_tbl[work->type];
         work->dust = effSnowDustN64Entry(2, 4, 0, x, y - 10.0f * work->scale, z, 20.0f * work->scale, 20.0f * work->scale, 1.0f);
         ((EffSnowDustN64Work*)work->dust->userdata)->kr = c[0];
@@ -407,22 +407,22 @@ void effStarStoneMain(EffectEntry* effect) {
         if (w->dust != NULL) {
             effSoftDelete(w->dust);
         }
-        if (w->flags & 8) {
+        if (w->flags & STAR_STONE_FLAG_SHINE_SFX_ON) {
             psndSFXOff(w->sfx);
         }
         effDelete(effect);
         return;
     }
-    if (w->flags & 4) {
-        if (!(w->flags & 8)) {
-            w->flags |= 8;
+    if (w->flags & STAR_STONE_FLAG_SHINE_SFX) {
+        if (!(w->flags & STAR_STONE_FLAG_SHINE_SFX_ON)) {
+            w->flags |= STAR_STONE_FLAG_SHINE_SFX_ON;
             w->sfx = psndSFXOn_3D("SFX_EVT_STARSTONE_SHINE1", &pos);
         }
-        if (w->flags & 8) {
+        if (w->flags & STAR_STONE_FLAG_SHINE_SFX_ON) {
             psndSFX_pos(w->sfx, &pos);
         }
-    } else if (w->flags & 8) {
-        w->flags &= ~8;
+    } else if (w->flags & STAR_STONE_FLAG_SHINE_SFX_ON) {
+        w->flags &= ~STAR_STONE_FLAG_SHINE_SFX_ON;
         psndSFXOff(w->sfx);
     }
     switch (w->state) {
@@ -443,7 +443,7 @@ void effStarStoneMain(EffectEntry* effect) {
         }
         break;
     case 1:
-        w->flags |= 1;
+        w->flags |= STAR_STONE_FLAG_FALLING;
         w->f44 = 0.0f;
         w->f40 = 0.4f;
         w->state++;
@@ -460,15 +460,15 @@ void effStarStoneMain(EffectEntry* effect) {
                 w->position.y = 10.0f + hy;
                 w->f44 *= -0.5f;
                 w->state++;
-                if (w->flags & 8) {
-                    w->flags &= ~8;
+                if (w->flags & STAR_STONE_FLAG_SHINE_SFX_ON) {
+                    w->flags &= ~STAR_STONE_FLAG_SHINE_SFX_ON;
                     psndSFXOff(w->sfx);
                     ((EffStarStoneWork*)effect->userdata)->flags &= ~4;
                 }
-                if (!(w->flags & 0x10)) {
+                if (!(w->flags & STAR_STONE_FLAG_NO_JUMP_SFX)) {
                     psndSFXOn_3D("SFX_EVT_STARSTONE_JUMP1", &pos);
                 }
-                if (!(w->flags & 2) && w->state == 3) {
+                if (!(w->flags & STAR_STONE_FLAG_PLAIN) && w->state == 3) {
                     e = effStardustN64Entry(4, w->position.x, w->position.y + 10.0f * w->scale + 5.0f * w->scale, w->position.z, 20.0f * w->scale);
                     c = color_tbl[w->type];
                     effStardustN64SetColor(e, (f32)c[0] / 255.0f, (f32)c[1] / 255.0f, (f32)c[2] / 255.0f);
@@ -493,7 +493,7 @@ void effStarStoneMain(EffectEntry* effect) {
     }
     w->timer++;
     w->timer %= 60;
-    if (!(w->flags & 2)) {
+    if (!(w->flags & STAR_STONE_FLAG_PLAIN)) {
         if (w->timer % 10 == 0 && w->state == 0) {
             s = (f32)sin(6.2831855f * camGetPtr(CAMERA_3D)->viewYaw / 360.0f);
             co = (f32)cos(6.2831855f * camGetPtr(CAMERA_3D)->viewYaw / 360.0f);
@@ -519,7 +519,7 @@ void effStarStoneMain(EffectEntry* effect) {
             U_shadowSetMode(shadowEntry(w->position.x, w->position.y, w->position.z, 8.0f * w->scale), w->a);
         }
     }
-    if (!(w->flags & 0x20)) {
+    if (!(w->flags & STAR_STONE_FLAG_EXTERNAL_DRAW)) {
         switch (type) {
         case 0:
         case 6:
@@ -607,7 +607,7 @@ void effStarStoneDisp_1(CameraId cameraId, EffectEntry* effect) {
     }
 }
 
-#define LOOP2S(i1, w, tbl, sz, n) for (i1 = 0; i1 < n##U; i1++) { if ((w->flags & 1) || i1 != 0) { GXCallDisplayList(tbl[i1], sz[i1] << 5); } }
+#define LOOP2S(i1, w, tbl, sz, n) for (i1 = 0; i1 < n##U; i1++) { if ((w->flags & STAR_STONE_FLAG_FALLING) || i1 != 0) { GXCallDisplayList(tbl[i1], sz[i1] << 5); } }
 void effStarStoneDisp_2(CameraId cameraId, EffectEntry *effect) {
     Mtx m;
     Mtx s;
@@ -662,7 +662,7 @@ void effStarStoneDisp_2(CameraId cameraId, EffectEntry *effect) {
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S16, 14);
     GXSetArray(GX_VA_TEX0, diamond_2_2_texcoord0_tbl, 4);
     for (dlIdx[0] = 0; dlIdx[0] < 19U; dlIdx[0]++) {
-        if ((w->flags & 1) || (dlIdx[0] != 0)) {
+        if ((w->flags & STAR_STONE_FLAG_FALLING) || (dlIdx[0] != 0)) {
             GXCallDisplayList(diamond_2_2_dl_0_tbl[dlIdx[0]], diamond_2_2_dl_0_size_tbl[dlIdx[0]] << 5);
         }
     }
@@ -692,7 +692,7 @@ void effStarStoneDisp_2(CameraId cameraId, EffectEntry *effect) {
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S16, 14);
     GXSetArray(GX_VA_TEX0, diamond_2_2_texcoord0_tbl, 4);
     for (dlIdx[1] = 0; dlIdx[1] < 19U; dlIdx[1]++) {
-        if ((w->flags & 1) || (dlIdx[1] != 0)) {
+        if ((w->flags & STAR_STONE_FLAG_FALLING) || (dlIdx[1] != 0)) {
             GXCallDisplayList(diamond_2_2_dl_1_tbl[dlIdx[1]], diamond_2_2_dl_1_size_tbl[dlIdx[1]] << 5);
         }
     }
@@ -750,7 +750,7 @@ void effStarStoneDisp_2(CameraId cameraId, EffectEntry *effect) {
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S16, 14);
     GXSetArray(GX_VA_TEX0, diamond_2_2_texcoord0_tbl, 4);
     for (dlIdx[2] = 0; dlIdx[2] < 19U; dlIdx[2]++) {
-        if ((w->flags & 1) || (dlIdx[2] != 0)) {
+        if ((w->flags & STAR_STONE_FLAG_FALLING) || (dlIdx[2] != 0)) {
             GXCallDisplayList(diamond_2_2_dl_0_tbl[dlIdx[2]], diamond_2_2_dl_0_size_tbl[dlIdx[2]] << 5);
         }
     }
@@ -780,7 +780,7 @@ void effStarStoneDisp_2(CameraId cameraId, EffectEntry *effect) {
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S16, 14);
     GXSetArray(GX_VA_TEX0, diamond_2_2_texcoord0_tbl, 4);
     for (dlIdx[3] = 0; dlIdx[3] < 19U; dlIdx[3]++) {
-        if ((w->flags & 1) || (dlIdx[3] != 0)) {
+        if ((w->flags & STAR_STONE_FLAG_FALLING) || (dlIdx[3] != 0)) {
             GXCallDisplayList(diamond_2_2_dl_1_tbl[dlIdx[3]], diamond_2_2_dl_1_size_tbl[dlIdx[3]] << 5);
         }
     }

@@ -206,7 +206,7 @@ void BattleCheckAllPinchStatus(BattleWork* wp, BOOL noAudience) {
     for (i = 0; i < 64; i++) {
         unit = BattleGetUnitPtr(wp, i);
         if (unit) {
-            if ((unit->mStatusFlags & 0x20000000) &&
+            if ((unit->mStatusFlags & UNIT_STATUS_FLAG_PERIL) &&
                 !BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL) &&
                 !BtlUnit_GetBelong(unit)) {
                 if (unit->currentKind == UNIT_MARIO ||
@@ -234,7 +234,7 @@ void BattleCheckAllPinchStatus(BattleWork* wp, BOOL noAudience) {
         for (i = 0; i < 64; i++) {
             unit = BattleGetUnitPtr(wp, i);
             if (unit) {
-                if ((unit->mStatusFlags & 0x10000000) &&
+                if ((unit->mStatusFlags & UNIT_STATUS_FLAG_DANGER) &&
                     !BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL) &&
                     !BtlUnit_GetBelong(unit)) {
                     if (unit->currentKind == UNIT_MARIO ||
@@ -2360,8 +2360,8 @@ void btlseqAct(BattleWork* wp) {
                         decrement = TRUE;
                     }
                     if (decrement) {
-                        if (BtlUnit_CheckStatusFlag(unit, 0x2000000)) {
-                            BtlUnit_OffStatusFlag(unit, 0x2000000);
+                        if (BtlUnit_CheckStatusFlag(unit, UNIT_STATUS_FLAG_HUSTLE)) {
+                            BtlUnit_OffStatusFlag(unit, UNIT_STATUS_FLAG_HUSTLE);
                         } else {
                             unit->movesRemaining--;
                         }
@@ -2462,8 +2462,8 @@ void btlseqTurnFirstProcess(BattleWork* wp) {
             BtlUnit_ResetMoveStatus(unit);
             kind = unit->mKindParams;
             unit->movePriority = kind->turnOrder + irand(kind->turnOrderVariance) - kind->turnOrderVariance / 2;
-            if (BtlUnit_CheckStatusFlag(unit, 0x1000000)) {
-                BtlUnit_OffStatusFlag(unit, 0x1000000);
+            if (BtlUnit_CheckStatusFlag(unit, UNIT_STATUS_FLAG_DEFEND)) {
+                BtlUnit_OffStatusFlag(unit, UNIT_STATUS_FLAG_DEFEND);
             }
         }
     }

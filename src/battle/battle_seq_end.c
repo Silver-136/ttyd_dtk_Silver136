@@ -325,9 +325,9 @@ void btlseqEnd(BattleWork* wp) {
         BattleUnit* mario = BattleGetMarioPtr(wp);
         BattleUnit* party = BattleGetPartyPtr(wp);
         s8 i;
-        if (party && BtlUnit_CheckStatusFlag(party, 1)) {
+        if (party && BtlUnit_CheckStatusFlag(party, UNIT_STATUS_FLAG_FLIPPED)) {
             party->flippedTurns = 0;
-            BtlUnit_OffStatusFlag(party, 1);
+            BtlUnit_OffStatusFlag(party, UNIT_STATUS_FLAG_FLIPPED);
             BtlUnit_GetPartsPtr(party, BtlUnit_GetBodyPartsId(party))->poseTable = pose_table_nokotarou_stay;
         }
         BattleConsumeReserveItem();
@@ -682,10 +682,10 @@ void btlseqEnd(BattleWork* wp) {
         ok = 1;
         mario = BattleGetMarioPtr(wp);
         party2 = BattleGetPartyPtr(wp);
-        if (((u32)mario->mStatusFlags & 0x10000000) || ((u32)mario->mStatusFlags & 0x20000000)) {
+        if (((u32)mario->mStatusFlags & UNIT_STATUS_FLAG_DANGER) || ((u32)mario->mStatusFlags & UNIT_STATUS_FLAG_PERIL)) {
             ok = 0;
         } else if (party2) {
-            if (((u32)mario->mStatusFlags & 0x10000000) || ((u32)mario->mStatusFlags & 0x20000000) ||
+            if (((u32)mario->mStatusFlags & UNIT_STATUS_FLAG_DANGER) || ((u32)mario->mStatusFlags & UNIT_STATUS_FLAG_PERIL) ||
                 BtlUnit_CheckStatus(party2, STATUS_INSTANT_KILL)) {
                 ok = 0;
             }
@@ -743,10 +743,10 @@ void btlseqEnd(BattleWork* wp) {
         NpcBattleInfo* fd = wp->fbatInfo->setup;
         BattleUnit* mario = BattleGetMarioPtr(wp);
         BattleUnit* party = BattleGetPartyPtr(wp);
-        if (((u32)mario->mStatusFlags & 0x10000000) || ((u32)mario->mStatusFlags & 0x20000000)) {
+        if (((u32)mario->mStatusFlags & UNIT_STATUS_FLAG_DANGER) || ((u32)mario->mStatusFlags & UNIT_STATUS_FLAG_PERIL)) {
             ok = 0;
         } else if (party) {
-            if (((u32)mario->mStatusFlags & 0x10000000) || ((u32)mario->mStatusFlags & 0x20000000) ||
+            if (((u32)mario->mStatusFlags & UNIT_STATUS_FLAG_DANGER) || ((u32)mario->mStatusFlags & UNIT_STATUS_FLAG_PERIL) ||
                 BtlUnit_CheckStatus(party, STATUS_INSTANT_KILL)) {
                 ok = 0;
             }

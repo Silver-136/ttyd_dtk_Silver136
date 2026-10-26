@@ -1104,7 +1104,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
                 window->type = 11;
             } else if (strcmp(tag, "wpos") == 0) {
                 sscanf(args, "%hd%hd%hd%hd", &winX, &winY, &winHeight, &winWidth);
-                window->flags |= 4;
+                window->flags |= WINDOW_FLAG_WPOS;
                 window->x = winX;
                 window->y = winY;
                 window->height = winHeight;
@@ -1129,7 +1129,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
                 entry++;
                 data->charCount++;
             } else if (strcmp(tag, "nowinse") == 0) {
-                window->flags |= 8;
+                window->flags |= WINDOW_FLAG_NOWINSE;
             } else if (strcmp(tag, "icon") == 0) {
                 isHM = FALSE;
                 if ((( (s8) args [0] ) >= '0') && (((s8) args [0]) <= '9') ) {
@@ -1485,7 +1485,7 @@ s32 msgWindow_Entry(const char* msg, s32 callback, u16 priority) {
     window->delete = msgWindow_Delete;
     WIN_STATE(window) = 5;
     window->type = -1;
-    window->flags |= 2;
+    window->flags |= WINDOW_FLAG_BUSY;
     copy = __memAlloc(HEAP_DEFAULT, strlen(msg));
     strcpy(copy, msg);
     smart = smartAlloc(sizeof(MsgWinData), 1);
@@ -1526,7 +1526,7 @@ s32 msgWindow_Entry(const char* msg, s32 callback, u16 priority) {
     case 8:
     case 9:
     case 10:
-        if (!(window->flags & 4)) {
+        if (!(window->flags & WINDOW_FLAG_WPOS)) {
             window->x = -280.0f;
             window->y = 225.0f;
             window->height = 560.0f;
@@ -1578,7 +1578,7 @@ void msgWindow_Add(char* msg, s32 id) {
     ((MsgWinData*)smart->address)->lastUpdateTime = gp->renderTime;
     msgAnalize(smart, msg);
     WIN_STATE(window) = 1;
-    window->flags |= 2;
+    window->flags |= WINDOW_FLAG_BUSY;
 }
 
 void msgWindow_Continue(s32 id) {
@@ -1586,7 +1586,7 @@ void msgWindow_Continue(s32 id) {
     MsgWinData* data;
 
     WIN_STATE(window) = 1;
-    window->flags |= 2;
+    window->flags |= WINDOW_FLAG_BUSY;
     data = window->userdata->address;
     data->lastUpdateTime = gp->renderTime;
 }
@@ -1596,7 +1596,7 @@ void msgWindow_Repeat(s32 id) {
     MsgWinData* data;
 
     WIN_STATE(window) = 1;
-    window->flags |= 2;
+    window->flags |= WINDOW_FLAG_BUSY;
     data = window->userdata->address;
     data->lastUpdateTime = gp->renderTime;
     data->openTime = gp->renderTime;
@@ -1678,7 +1678,7 @@ void msgWindow_Main(WindowEntry* window) {
 
     switch (WIN_STATE(window)) {
     case 5:
-        if (!(window->flags & 8)) {
+        if (!(window->flags & WINDOW_FLAG_NOWINSE)) {
             se = msgWindowOpen_SE_Data[window->type * 2];
             if (se >= 0) {
                 psndSFXOn(SFX_NAME_WORD(se | PSND_SFX_BYPASS_MUTE));
@@ -1687,7 +1687,7 @@ void msgWindow_Main(WindowEntry* window) {
         window->timestamp = gp->renderTime;
         WIN_STATE(window) = 6;
     case 6:
-        window->flags |= 2;
+        window->flags |= WINDOW_FLAG_BUSY;
         window->alpha = OSTicksToMilliseconds(gp->renderTime - window->timestamp) * 255 / 200;
         if (window->alpha > 255) {
             window->alpha = 255;
@@ -1697,7 +1697,7 @@ void msgWindow_Main(WindowEntry* window) {
         }
         break;
     case 7:
-        if (!(window->flags & 8)) {
+        if (!(window->flags & WINDOW_FLAG_NOWINSE)) {
             se = msgWindowOpen_SE_Data[window->type * 2 + 1];
             if (se >= 0) {
                 psndSFXOn(SFX_NAME_WORD(se | PSND_SFX_BYPASS_MUTE));
@@ -1727,7 +1727,7 @@ void msgWindow_Main(WindowEntry* window) {
             break;
         case 1:
             WIN_STATE(window) = 2;
-            window->flags &= ~2;
+            window->flags &= ~WINDOW_FLAG_BUSY;
             if (WIN_DATA(window)->flags & 8) {
                 BtlUnit_ChangeStayAnim(WIN_DATA(window)->unitId);
             } else {
@@ -1844,7 +1844,7 @@ void msgWindow_Clear_Main(WindowEntry* window) {
         data->lastUpdateTime = gp->renderTime;
     case 1:
     case 6:
-        window->flags |= 2;
+        window->flags |= WINDOW_FLAG_BUSY;
         if (window->alpha < 255) {
             window->alpha = OSTicksToMilliseconds(gp->renderTime - window->timestamp) * 255 / 200;
             if (window->alpha > 255) {
@@ -1864,7 +1864,7 @@ void msgWindow_Clear_Main(WindowEntry* window) {
                 break;
             case 1:
                 WIN_STATE(window) = 2;
-                window->flags &= ~2;
+                window->flags &= ~WINDOW_FLAG_BUSY;
                 if (WIN_DATA(window)->flags & 8) {
                     BtlUnit_ChangeStayAnim(WIN_DATA(window)->unitId);
                 } else {
@@ -2058,7 +2058,7 @@ void selectWindow_Main(WindowEntry* window) {
     case 7:
         if (window->alpha == 0) {
             WIN_STATE(window) = 4;
-            window->flags &= ~2;
+            window->flags &= ~WINDOW_FLAG_BUSY;
             return;
         }
         window->alpha -= 25;
