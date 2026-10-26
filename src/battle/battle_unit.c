@@ -2047,10 +2047,10 @@ void BtlUnit_ControlPoseSoundMain(BattleUnitPart* part) {
 }
 #pragma pop
 
-s32 BtlUnit_snd_se(BattleUnit* unit, const char* sfxName, s32 volume, s32 pan) {
+s32 BtlUnit_snd_se(BattleUnit* unit, const char* sfxName, s32 volume, s32 pitch) {
     Vec pos;
     BtlUnit_GetPos(unit, &pos.x, &pos.y, &pos.z);
-    return ((s32 (*)(BattleUnit*, const char*, s32, s32, Vec*))BtlUnit_snd_se_pos)(unit, sfxName, volume, pan, &pos);
+    return ((s32 (*)(BattleUnit*, const char*, s32, s32, Vec*))BtlUnit_snd_se_pos)(unit, sfxName, volume, pitch, &pos);
 }
 
 s32 BtlUnit_snd_se_pos(BattleUnit* unit, const char* sfxName, s32 volume, s16 pitch, Vec* pos) {

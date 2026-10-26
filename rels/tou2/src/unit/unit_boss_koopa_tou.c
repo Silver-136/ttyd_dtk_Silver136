@@ -22,6 +22,11 @@
 #include "battle/battle_sub.h"
 #include "battle/battle_damage.h"
 
+// BattleUnit.work slots (btlevtcmd_Get/Set/AddUnitWork)
+#define UNIT_WORK_HALF_HP 2      // half of its max HP (set at init); harf_hp_event compares the HP against it
+#define UNIT_WORK_HALF_HP_DONE 3 // 1 once harf_hp_event has played the stg3_tou_403_06_02 line
+#define UNIT_WORK_ATTACK_STEP 4  // fixed opening order: 0 fire, 1 bite, 2 hip attack; from 3 on attack_event draws lots
+
 typedef struct IconJumpWork {
     Vec start;
     Vec pos;
@@ -365,9 +370,9 @@ static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 1, 0)
     CALL(btlevtcmd_GetMaxHp, UNIT_ID_SELF, LW(0))
     DIVIDE(LW(0), 2)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 2, LW(0))
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 3, 0)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 4, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_HALF_HP, LW(0))
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_HALF_HP_DONE, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ATTACK_STEP, 0)
     CALL(btlevtcmd_SetWalkSound, UNIT_ID_SELF, STRING("SFX_BOSS_KOOPA_MOVE1L"), STRING("SFX_BOSS_KOOPA_MOVE1R"), 0, 15, 15)
     CALL(btlevtcmd_SetRunSound, UNIT_ID_SELF, STRING("SFX_BOSS_KOOPA_MOVE1L"), STRING("SFX_BOSS_KOOPA_MOVE1R"), 0, 8, 8)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
@@ -448,12 +453,12 @@ static EVT_BEGIN(phase_event)
 EVT_END()
 
 static EVT_BEGIN(harf_hp_event)
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 3, LW(1))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_HALF_HP_DONE, LW(1))
     IF_INT_EQUAL(LW(1), 0)
         CALL(btlevtcmd_GetHp, UNIT_ID_SELF, LW(0))
-        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 2, LW(1))
+        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_HALF_HP, LW(1))
         IF_INT_LESS(LW(0), LW(1))
-            CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 3, 1)
+            CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_HALF_HP_DONE, 1)
             CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
             CALL_CHILD(PTR(koopa_zoom))
             CALL(btlevtcmd_SetTalkPose, UNIT_ID_SELF, STRING("KPA_T_3"))
@@ -475,20 +480,20 @@ static EVT_BEGIN(attack_event)
         CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
         RETURN
     END_IF
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 4, LW(0))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_ATTACK_STEP, LW(0))
     SWITCH(LW(0))
         CASE_EQUAL(0)
         SET_VALUE(LW(9), PTR(&weapon_koopa_fire_attack))
         CALL_CHILD(PTR(fire_attack_event))
-        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 4, 1)
+        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ATTACK_STEP, 1)
         CASE_EQUAL(1)
         SET_VALUE(LW(9), PTR(&weapon_koopa_bite_attack))
         CALL_CHILD(PTR(bite_attack_event))
-        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 4, 2)
+        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ATTACK_STEP, 2)
         CASE_EQUAL(2)
         SET_VALUE(LW(9), PTR(&weapon_koopa_hip_attack))
         CALL_CHILD(PTR(hip_attack_event))
-        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 4, 3)
+        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ATTACK_STEP, 3)
         CASE_DEFAULT
         CALL(btlevtcmd_DrawLots, LW(0), 4, 30, 30, 0, 30)
         SWITCH(LW(0))

@@ -16,6 +16,12 @@
 #include "manager/evtmgr_cmd.h"
 #include "battle/battle_damage.h"
 
+// BattleUnit.work slots (btlevtcmd_Get/Set/AddUnitWork)
+#define UNIT_WORK_NPC 0               // unit id of the npc_christine unit spawned at init; speaker of the mac_0_b_t1_* messages
+#define UNIT_WORK_AC_SUCCESS_TALKED 1 // 1 once phase_event has shown mac_0_b_t1_001 after a successful action command (_mario_ac_success_check)
+#define UNIT_WORK_AC_FAIL_TALKED 2    // 1 once phase_event has shown mac_0_b_t1_002 after a failed action command (_mario_ac_failed_check)
+#define UNIT_WORK_HALF_HP_TALKED 3    // 1 once phase_event has shown mac_0_b_t1_003 at HP <= half of max
+
 USER_FUNC(btlevtcmd_SetEventPhase);
 USER_FUNC(_mario_ac_failed_check);
 USER_FUNC(_mario_ac_success_check);
@@ -181,12 +187,12 @@ static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventPhase, UNIT_ID_SELF, PTR(phase_event))
     CALL(btlevtcmd_onoff_battleflag, 1, BATTLE_FLAG_NO_OBJECT_FALL)
     CALL(btlevtcmd_SpawnUnit, LW(3), PTR(&entry_npc_christine), 0)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 0, LW(3))
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_NPC, LW(3))
     CALL(btlevtcmd_SetPos, LW(3), -140, 0, 5)
     CALL(btlevtcmd_SetHomePos, LW(3), -140, 0, 5)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 1, 0)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 2, 0)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 3, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_AC_SUCCESS_TALKED, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_AC_FAIL_TALKED, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_HALF_HP_TALKED, 0)
     CALL(btlevtcmd_SetWalkSound, UNIT_ID_SELF, STRING("SFX_BOSS_KANBU_MOVE1L"), STRING("SFX_BOSS_KANBU_MOVE1R"), 0, 10, 10)
     CALL(btlevtcmd_SetRunSound, UNIT_ID_SELF, STRING("SFX_BOSS_KANBU_MOVE1L"), STRING("SFX_BOSS_KANBU_MOVE1R"), 0, 6, 6)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
@@ -213,7 +219,7 @@ static EVT_BEGIN(phase_event)
             END_SIBLING_EVENT
             CALL(btlevtcmd_WaitEventEnd, LW(5))
             CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
-            CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 0, LW(3))
+            CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_NPC, LW(3))
             CALL(btlevtcmd_SetTalkPose, LW(3), STRING("PKR_T_1"))
             CALL(btlevtcmd_SetStayPose, LW(3), STRING("PKR_S_1"))
             CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("mac_0_b_t1_000"), 0, LW(3))
@@ -238,39 +244,39 @@ static EVT_BEGIN(phase_event)
     END_IF
     CALL(btlevtcmd_CheckPhase, LW(0), 67108867)
     IF_INT_NOT_EQUAL(LW(0), 0)
-        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 3, LW(0))
+        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_HALF_HP_TALKED, LW(0))
         IF_INT_EQUAL(LW(0), 0)
             CALL(btlevtcmd_GetMaxHp, UNIT_ID_SELF, LW(1))
             DIVIDE(LW(1), 2)
             CALL(btlevtcmd_GetHp, UNIT_ID_SELF, LW(0))
             IF_INT_LESS_OR_EQUAL(LW(0), LW(1))
-                CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 3, 1)
+                CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_HALF_HP_TALKED, 1)
                 CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
-                CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 0, LW(3))
-                CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 0, LW(3))
+                CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_NPC, LW(3))
+                CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_NPC, LW(3))
                 CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("mac_0_b_t1_003"), 0, LW(3))
                 CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_ON)
                 RETURN
             END_IF
         END_IF
-        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 1, LW(0))
+        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_AC_SUCCESS_TALKED, LW(0))
         IF_INT_EQUAL(LW(0), 0)
             CALL(_mario_ac_success_check, LW(0))
             IF_INT_NOT_EQUAL(LW(0), 0)
                 CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
-                CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 1, 1)
-                CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 0, LW(3))
+                CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_AC_SUCCESS_TALKED, 1)
+                CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_NPC, LW(3))
                 CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("mac_0_b_t1_001"), 0, LW(3))
                 CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_ON)
             END_IF
         END_IF
-        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 2, LW(0))
+        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_AC_FAIL_TALKED, LW(0))
         IF_INT_EQUAL(LW(0), 0)
             CALL(_mario_ac_failed_check, LW(0))
             IF_INT_NOT_EQUAL(LW(0), 0)
                 CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
-                CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 2, 1)
-                CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 0, LW(3))
+                CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_AC_FAIL_TALKED, 1)
+                CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_NPC, LW(3))
                 CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("mac_0_b_t1_002"), 0, LW(3))
                 CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_ON)
             END_IF
@@ -360,7 +366,7 @@ static EVT_BEGIN(dead_event)
     END_SIBLING_EVENT
     CALL(btlevtcmd_WaitEventEnd, LW(5))
     CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 0, LW(3))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_NPC, LW(3))
     CALL(btlevtcmd_SetTalkPose, LW(3), STRING("PKR_T_1"))
     CALL(btlevtcmd_SetStayPose, LW(3), STRING("PKR_S_1"))
     CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("mac_0_b_t1_004"), 0, LW(3))

@@ -14,6 +14,9 @@
 #include "manager/evtmgr_cmd.h"
 #include "battle/battle_damage.h"
 
+// BattleUnit.work slots (btlevtcmd_Get/Set/AddUnitWork)
+#define UNIT_WORK_RAISED 0 // 1 once move_event_sub has lifted it to y 40 out of hammer and shell-toss reach; move_event and teresa_check_move only count Boos still at 0
+
 static USER_FUNC(teresa_check_move);
 static USER_FUNC(teresa_check_teresa);
 static USER_FUNC(teresa_check_trans);
@@ -67,10 +70,10 @@ static USER_FUNC(teresa_check_move) {
     for (i = 0; i < 64; i++) {
         BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, i);
         if (unit != NULL) {
-            if (unit->currentKind == UNIT_BOO && unit->work[0] == 0) {
+            if (unit->currentKind == UNIT_BOO && unit->work[UNIT_WORK_RAISED] == 0) {
                 num++;
             }
-            if (unit->currentKind == UNIT_DARK_BOO && unit->work[0] == 0) {
+            if (unit->currentKind == UNIT_DARK_BOO && unit->work[UNIT_WORK_RAISED] == 0) {
                 num++;
             }
         }
@@ -365,7 +368,7 @@ static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event))
     CALL(btlevtcmd_SetEventDamage, UNIT_ID_SELF, PTR(damage_event))
     CALL(btlevtcmd_SetEventConfusion, UNIT_ID_SELF, PTR(attack_event))
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 0, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_RAISED, 0)
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     SET_VALUE(LW(1), 15)
     CALL(btlevtcmd_SetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))

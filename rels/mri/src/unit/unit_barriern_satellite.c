@@ -10,6 +10,9 @@
 #include "battle/battle_event_default.h"
 #include "manager/evtmgr_cmd.h"
 
+// BattleUnit.work slots (btlevtcmd_Get/Set/AddUnitWork)
+#define UNIT_WORK_IDLE_POSE 1 // 1 lets wait_event play the S_4 pose for 180 frames at random times; the barriern_custom unit sets it when spawning the satellite and in its wait_event
+
 USER_FUNC(btlevtcmd_SetEventUnisonPhase);
 static USER_FUNC(battleGetBarriernSatelliteInitPos);
 
@@ -175,7 +178,7 @@ static EVT_BEGIN(wait_event)
     CALL(evt_sub_random, 120, LW(0))
     ADD(LW(0), 30)
     WAIT_FRAMES(LW(0))
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 1, LW(0))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_IDLE_POSE, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_CheckActStatus, UNIT_ID_SELF, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)

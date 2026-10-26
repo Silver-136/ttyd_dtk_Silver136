@@ -17,6 +17,12 @@
 #include "battle/battle_database_common.h"
 #include "data_tables.h"
 
+// BattleUnit.work slots (btlevtcmd_Get/Set/AddUnitWork)
+#define UNIT_WORK_FUSE_LIT 0     // 1 once attack_event has lit the fuse (with BATTLE_UNIT_FLAG_FUSE_LIT_UNUSED); freeze damage puts it out; _fire_point_callback draws the flame only while set
+#define UNIT_WORK_FUSE_LEFT 1    // fuse length 3..0 (init 3): picks pose tables, G_1..G_4 poses and the flame locator8..11; phase_event shortens it by 1 per turn while lit and at 0 starts the explosion
+#define UNIT_WORK_FUSE_SFX 2     // id of the looping SFX_ENM_HEAVYB_WAIT1 fuse sound, -1 none; switched off on freeze, death and explosion
+#define UNIT_WORK_GUARD_WEAPON 3 // which self-targeted weapon the next lit-fuse turn uses: 0 weapon_heavy_bomb_guard, 1 _guard_2, 2 _guard_3, then back to 0
+
 static USER_FUNC(_set_draw_callback);
 USER_FUNC(btlevtcmd_AfterReactionEntry);
 USER_FUNC(btlevtcmd_SetEventPhase);
@@ -526,10 +532,10 @@ static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event))
     CALL(btlevtcmd_SetEventDamage, UNIT_ID_SELF, PTR(damage_event))
     CALL(btlevtcmd_SetEventConfusion, UNIT_ID_SELF, PTR(btldefaultevt_Confuse))
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 0, 0)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 1, 3)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 2, -1)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 3, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_FUSE_LIT, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_FUSE_LEFT, 3)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_FUSE_SFX, -1)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_GUARD_WEAPON, 0)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 2, STRING("F_1"))
     CALL(btlevtcmd_AnimeSetPoseSoundTable, UNIT_ID_SELF, 1, PTR(pose_sound_timing_table))
     CALL(_set_draw_callback)
@@ -542,13 +548,13 @@ static EVT_BEGIN(damage_event)
     SET_VALUE(LW(11), 1)
     CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_FREEZE, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
-        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 0, LW(0))
+        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_FUSE_LIT, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
-            CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 2, LW(0))
+            CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_FUSE_SFX, LW(0))
             CALL(evt_snd_sfxoff, LW(0))
-            CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 2, -1)
-            CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 0, 0)
-            CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 1, LW(0))
+            CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_FUSE_SFX, -1)
+            CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_FUSE_LIT, 0)
+            CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_FUSE_LEFT, LW(0))
             SWITCH(LW(0))
                 CASE_EQUAL(2)
                 CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, 1, PTR(pose_table_2))
@@ -585,17 +591,17 @@ EVT_END()
 static EVT_BEGIN(phase_event)
     CALL(btlevtcmd_CheckPhase, LW(0), 67108867)
     IF_INT_NOT_EQUAL(LW(0), 0)
-        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 0, LW(0))
+        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_FUSE_LIT, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
             CALL(btlevtcmd_PhaseEventStartDeclare, UNIT_ID_SELF)
-            CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 1, LW(0))
+            CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_FUSE_LEFT, LW(0))
             IF_INT_EQUAL(LW(0), 0)
                 CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("K_4"))
                 CALL(btlevtcmd_AfterReactionEntry, UNIT_ID_SELF, UNIT_DATA_EXPLOSION_EVENT)
                 RETURN
             END_IF
             CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_HEAVYB_WAIT2"), EVT_NULLPTR, 0, EVT_NULLPTR)
-            CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 1, LW(0))
+            CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_FUSE_LEFT, LW(0))
             SWITCH(LW(0))
                 CASE_EQUAL(3)
                 CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, 1, PTR(pose_table_3_to_2))
@@ -606,9 +612,9 @@ static EVT_BEGIN(phase_event)
             END_SWITCH
             CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
             WAIT_FRAMES(40)
-            CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 1, LW(0))
+            CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_FUSE_LEFT, LW(0))
             SUBTRACT(LW(0), 1)
-            CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 1, LW(0))
+            CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_FUSE_LEFT, LW(0))
             SWITCH(LW(0))
                 CASE_EQUAL(2)
                 CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, 1, PTR(pose_table_2_fire))
@@ -627,9 +633,9 @@ EVT_END()
 
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_HEAVYB_ATTACK1"), EVT_NULLPTR, 0, EVT_NULLPTR)
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 0, LW(0))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_FUSE_LIT, LW(0))
     IF_INT_EQUAL(LW(0), 0)
-        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 1, LW(0))
+        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_FUSE_LEFT, LW(0))
         SWITCH(LW(0))
             CASE_EQUAL(3)
             CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("G_1"))
@@ -642,12 +648,12 @@ static EVT_BEGIN(attack_event)
         END_SWITCH
         WAIT_FRAMES(40)
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_HEAVYB_WAIT1"), EVT_NULLPTR, 0, LW(0))
-        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 2, LW(0))
+        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_FUSE_SFX, LW(0))
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_HEAVYB_ATTACK2"), EVT_NULLPTR, 0, EVT_NULLPTR)
-        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 0, 1)
+        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_FUSE_LIT, 1)
         CALL(btlevtcmd_OnUnitFlag, UNIT_ID_SELF, BATTLE_UNIT_FLAG_FUSE_LIT_UNUSED)
     ELSE
-        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 1, LW(0))
+        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_FUSE_LEFT, LW(0))
         SWITCH(LW(0))
             CASE_EQUAL(3)
             CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("G_1"))
@@ -659,17 +665,17 @@ static EVT_BEGIN(attack_event)
             CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("G_4"))
         END_SWITCH
         WAIT_FRAMES(40)
-        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 3, LW(0))
+        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_GUARD_WEAPON, LW(0))
         SWITCH(LW(0))
             CASE_EQUAL(0)
             SET_VALUE(LW(12), PTR(&weapon_heavy_bomb_guard))
-            CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 3, 1)
+            CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_GUARD_WEAPON, 1)
             CASE_EQUAL(1)
             SET_VALUE(LW(12), PTR(&weapon_heavy_bomb_guard_2))
-            CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 3, 2)
+            CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_GUARD_WEAPON, 2)
             CASE_EQUAL(2)
             SET_VALUE(LW(12), PTR(&weapon_heavy_bomb_guard_3))
-            CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 3, 0)
+            CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_GUARD_WEAPON, 0)
         END_SWITCH
         CALL(btlevtcmd_WeaponAftereffect, LW(12))
         CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, UNIT_ID_SELF, 1, LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
@@ -684,7 +690,7 @@ static EVT_BEGIN(wait_event)
 EVT_END()
 
 static EVT_BEGIN(dead_event)
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 2, LW(0))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_FUSE_SFX, LW(0))
     IF_INT_NOT_EQUAL(LW(0), -1)
         CALL(evt_snd_sfxoff, LW(0))
     END_IF
@@ -710,9 +716,9 @@ static EVT_BEGIN(dead_event)
 EVT_END()
 
 static EVT_BEGIN(explosion_event)
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 2, LW(0))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_FUSE_SFX, LW(0))
     CALL(evt_snd_sfxoff, LW(0))
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 2, -1)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_FUSE_SFX, -1)
 #ifdef VERSION_G8ME01
     CALL(evt_btl_camera_shake_h, 0, 10, 0, 60, 4)
 #endif
@@ -769,11 +775,11 @@ static void _fire_point_callback(BattleUnitPart* part, s32 group) {
     const char* name;
     s32 poseId;
 
-    if (unit->work[0] == 0) {
+    if (unit->work[UNIT_WORK_FUSE_LIT] == 0) {
         return;
     }
     poseId = part->poseId;
-    switch (unit->work[1]) {
+    switch (unit->work[UNIT_WORK_FUSE_LEFT]) {
         case 0:
             name = "locator11";
             break;

@@ -21,6 +21,10 @@
 #include "battle/battle_database_common.h"
 #include "battle/battle_damage.h"
 
+// BattleUnit.work slots (btlevtcmd_Get/Set/AddUnitWork)
+#define UNIT_WORK_CLONE 4        // 0 for the original: wait_event then also restarts the poses of the copies (mahorn_get_bunsin); nothing in this file sets it nonzero
+#define UNIT_WORK_MAGIC_EFFECT 7 // EffectEntry* of the magic shot (effMahorn2Entry, eff_magic); eff_magic_get_posX reads the x of its type-3 element
+
 double __fabs(double x);
 static inline double mahorn_fabs(double x) { return __fabs(x); }
 
@@ -496,7 +500,7 @@ static EVT_BEGIN(init_event)
     CALL(set_hand_dest, UNIT_ID_SELF, 4, FLOAT(-25.0f), FLOAT(10.0f), FLOAT(-10.0f))
     CALL(set_hand_dest, UNIT_ID_SELF, 5, FLOAT(25.0f), FLOAT(10.0f), FLOAT(10.0f))
     SPAWN_EVENT(PTR(hand_ctrl_event))
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 4, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_CLONE, 0)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 6, 0)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
@@ -1265,7 +1269,7 @@ static EVT_BEGIN(recover_magic_event)
 EVT_END()
 
 static EVT_BEGIN(wait_event)
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 4, LW(0))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_CLONE, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL(mahorn_get_bunsin, LW(1), LW(2), LW(3), LW(4), LW(0))
         CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
@@ -1395,7 +1399,7 @@ static USER_FUNC(eff_magic_get_posX) {
     EvtWord* args = event->args;
     s32 id = BattleTransID(event, evtGetValue(event, *args++));
     BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, id);
-    EffectEntry* eff = (EffectEntry*)unit->work[7];
+    EffectEntry* eff = (EffectEntry*)unit->work[UNIT_WORK_MAGIC_EFFECT];
     effMahorn2Data* work = eff->userdata;
     s32 i;
 
@@ -1427,7 +1431,7 @@ static USER_FUNC(eff_magic) {
     x += unit->mSizeMultiplier * unit->faceDirection;
     y += 18.0f * unit->mSizeMultiplier;
     z += 5.0f;
-    unit->work[7] = (EvtWord)effMahorn2Entry(0, x, y, z, a, y, z, unit->mSizeMultiplier, mahorn_fabs((a - x) / time));
+    unit->work[UNIT_WORK_MAGIC_EFFECT] = (EvtWord)effMahorn2Entry(0, x, y, z, a, y, z, unit->mSizeMultiplier, mahorn_fabs((a - x) / time));
     return EVT_RETURN_DONE;
 }
 

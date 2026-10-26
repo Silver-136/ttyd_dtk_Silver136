@@ -22,6 +22,16 @@
 #include "manager/evtmgr_cmd.h"
 #include "battle/battle_damage.h"
 
+// BattleUnit.work slots (btlevtcmd_Get/Set/AddUnitWork)
+#define UNIT_WORK_LOW 0          // 1 while hanging low (y 10, hammer and shell toss can reach it; move_kuutei_event), 0 while high up (y 70; move_kuuchu_event)
+#define UNIT_WORK_THREAD_ALPHA 1 // alpha of the thread piders_draw_yarn draws: 255 normally; battle_end_event sets 254, then yarn_event fades it by 2 per frame
+#define UNIT_WORK_THREAD_END_Y 2 // y of the thread's lower end (piders_draw_yarn; the upper end is at y 400); entry_event lowers it from 400 to 0 over 40 frames
+#define UNIT_WORK_FIRST_DROP 3   // 1 until the first move_kuutei_event, which then plays SFX_ENM_PAIDA_MOVE1 instead of MOVE2 and clears it
+#define UNIT_WORK_WINDUP_ANGLE 4 // part 2 rotation (degrees) reached at the end of the wind-up (piders_attack_common_event1); piders_attack_common_event1_2 starts from it
+#define UNIT_WORK_TARGET_UNIT 5  // first of three slots (5-7): target unit of each shot of renzoku_attack_event (slots 5-7)
+#define UNIT_WORK_TARGET_PART 8  // first of three slots (8-10): target part of each shot of renzoku_attack_event (slots 8-10)
+#define UNIT_WORK_TARGET_HIT 11  // first of three slots (11-13): 1 once a shot hit that target; the last shot at a target that was hit only plays the hit (renzoku_attack_event_sub_last) (slots 11-13)
+
 typedef struct PidersYarn {
     f32 x0;
     f32 y0;
@@ -251,7 +261,7 @@ static USER_FUNC(piders_draw_yarn) {
 
     // from the pider down to its hanging height, and up to the ceiling
     BtlUnit_GetHomePos(unit, &yarn->x1, &yarn->y1, &yarn->z1);
-    yarn->y1 = unit->work[2];
+    yarn->y1 = unit->work[UNIT_WORK_THREAD_END_Y];
     BtlUnit_GetHomePos(unit, &yarn->x0, &yarn->y0, &yarn->z0);
     yarn->y0 = 400.0f;
     yarn->alpha = alpha;
@@ -316,7 +326,7 @@ static USER_FUNC(piders_get_first_pos_attr) {
             break;
         }
     }
-    attr = unit->work[0];
+    attr = unit->work[UNIT_WORK_LOW];
     if (BtlUnit_CanActStatus(unit)) {
         if (attr == 0) {
             attr = 1;
@@ -459,10 +469,10 @@ static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventDamage, UNIT_ID_SELF, PTR(damage_event))
     CALL(btlevtcmd_SetEventConfusion, UNIT_ID_SELF, PTR(attack_event))
     CALL(btlevtcmd_SetEventEntry, UNIT_ID_SELF, PTR(entry_event))
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 0, 0)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 2, 0)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 3, 1)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 1, 255)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_LOW, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_THREAD_END_Y, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_FIRST_DROP, 1)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_THREAD_ALPHA, 255)
     CALL(piders_yarn_init)
     SPAWN_EVENT(PTR(yarn_event))
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
@@ -483,11 +493,11 @@ static EVT_BEGIN(yarn_event)
     IF_INT_EQUAL(LW(0), -1)
         GOTO(99)
     END_IF
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 1, LW(0))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_THREAD_ALPHA, LW(0))
     IF_INT_LESS(LW(0), 255)
         IF_INT_GREATER(LW(0), 2)
             SUBTRACT(LW(0), 2)
-            CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 1, LW(0))
+            CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_THREAD_ALPHA, LW(0))
         END_IF
     END_IF
     CALL(piders_draw_yarn, LW(0))
@@ -501,14 +511,14 @@ static EVT_BEGIN(entry_event)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     SET_VALUE(LW(1), 180)
     CALL(btlevtcmd_SetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 2, 400)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_THREAD_END_Y, 400)
     DIVIDE(LW(0), 10)
     ADD(LW(0), 80)
     WAIT_FRAMES(LW(0))
     CALL(evt_sub_intpl_init, EASING_QUADRATIC_OUT, 400, 0, 40)
     LOOP(40)
         CALL(evt_sub_intpl_get_value)
-        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 2, LW(0))
+        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_THREAD_END_Y, LW(0))
         WAIT_FRAMES(1)
     END_LOOP
     RETURN
@@ -599,7 +609,7 @@ static EVT_BEGIN(blow_dead_event)
 EVT_END()
 
 static EVT_BEGIN(battle_end_event)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 1, 254)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_THREAD_ALPHA, 254)
     RETURN
 EVT_END()
 
@@ -635,9 +645,9 @@ static EVT_BEGIN(yure_event)
 EVT_END()
 
 static EVT_BEGIN(move_kuutei_event)
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 3, LW(0))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_FIRST_DROP, LW(0))
     IF_INT_EQUAL(LW(0), 1)
-        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 3, 0)
+        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_FIRST_DROP, 0)
         BEGIN_SIBLING_EVENT
             LOOP(4)
                 CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_PAIDA_MOVE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
@@ -658,7 +668,7 @@ static EVT_BEGIN(move_kuutei_event)
     CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 30, -10, EASING_QUADRATIC_OUT, 0, MOVE_SOUND_FROM_TABLE)
     CALL(btlevtcmd_SetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, kPartNotHammerTarget | kPartNotShellTossTarget)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 0, 1)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_LOW, 1)
     RETURN
 EVT_END()
 
@@ -675,7 +685,7 @@ static EVT_BEGIN(move_kuuchu_event)
     CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 30, 10, EASING_QUADRATIC_OUT, 0, MOVE_SOUND_FROM_TABLE)
     CALL(btlevtcmd_SetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 1, kPartNotHammerTarget | kPartNotShellTossTarget)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 0, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_LOW, 0)
     RETURN
 EVT_END()
 
@@ -694,7 +704,7 @@ static EVT_BEGIN(unison_phase_event)
     END_IF
     CALL(piders_get_zyun, UNIT_ID_SELF, LW(14))
     IF_INT_EQUAL(LW(14), 1)
-        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 0, LW(0))
+        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_LOW, LW(0))
         IF_INT_EQUAL(LW(0), 1)
             CALL_CHILD(PTR(move_kuuchu_event))
             ELSE
@@ -738,9 +748,9 @@ static EVT_BEGIN(unison_phase_event)
 EVT_END()
 
 static EVT_BEGIN(attack_event)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 11, 0)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 12, 0)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 13, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_TARGET_HIT, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_TARGET_HIT + 1, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_TARGET_HIT + 2, 0)
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL_CHILD(LW(0))
@@ -865,7 +875,7 @@ static EVT_BEGIN(piders_attack_common_event1)
         WAIT_FRAMES(1)
     END_LOOP
     WAIT_FRAMES(10)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 4, LW(0))
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_WINDUP_ANGLE, LW(0))
     RETURN
 EVT_END()
 
@@ -883,7 +893,7 @@ static EVT_BEGIN(piders_attack_common_event1_2)
     SET_FLOAT_VALUE(LW(0), FLOAT(30.0f))
     MULTIPLY_FLOAT(LW(0), LW(1))
     CALL(btlevtcmd_SetPartsRotateOffset, UNIT_ID_SELF, 2, 0, LW(0), 0)
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 4, LW(0))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_WINDUP_ANGLE, LW(0))
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_PAIDA_ATTACK1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(evt_sub_intpl_init, EASING_QUADRATIC_OUT, LW(0), 100, 5)
     LOOP(5)
@@ -893,7 +903,7 @@ static EVT_BEGIN(piders_attack_common_event1_2)
         WAIT_FRAMES(1)
     END_LOOP
     WAIT_FRAMES(5)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 4, LW(0))
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_WINDUP_ANGLE, LW(0))
     RETURN
 EVT_END()
 
@@ -975,14 +985,14 @@ static EVT_BEGIN(renzoku_attack_event)
         GOTO(99)
     END_IF
     CALL(piders_renzoku_attack_set_target, LW(0), LW(1), LW(2), LW(3), LW(4), LW(5))
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 5, LW(0))
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 6, LW(2))
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 7, LW(4))
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 8, LW(1))
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 9, LW(3))
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 10, LW(5))
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 5, LW(3))
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 8, LW(4))
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_TARGET_UNIT, LW(0))
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_TARGET_UNIT + 1, LW(2))
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_TARGET_UNIT + 2, LW(4))
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_TARGET_PART, LW(1))
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_TARGET_PART + 1, LW(3))
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_TARGET_PART + 2, LW(5))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_TARGET_UNIT, LW(3))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_TARGET_PART, LW(4))
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(btlevtcmd_WeaponAftereffect, LW(9))
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))

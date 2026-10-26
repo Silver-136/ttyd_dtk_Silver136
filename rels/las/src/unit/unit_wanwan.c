@@ -16,6 +16,13 @@
 #include "manager/evtmgr_cmd.h"
 #include "battle/battle_damage.h"
 
+// BattleUnit.work slots (btlevtcmd_Get/Set/AddUnitWork)
+#define UNIT_WORK_SOUND_VOLUME 1 // volume of the wait sounds (SFX_ENM_WAN_*): 127 at init and each attack, sound_gensui_event lowers it to 70 % per loop, at least 32
+#define UNIT_WORK_CHAIN_STATE 2  // chain_main mode: 0 the links hang free between parts 1 and 9; 2 records each link's offset from part 9 and becomes 1, which keeps them there (damage, sleep, stop and freeze)
+// BattleUnitPart.work slots (btlevtcmd_Get/SetPartsWork)
+#define PARTS_WORK_OFFSET_X 0 // parts 1-8: x offset from part 9 recorded by chain_main for UNIT_WORK_CHAIN_STATE 1
+#define PARTS_WORK_OFFSET_Y 1 // parts 1-8: y offset from part 9 recorded by chain_main for UNIT_WORK_CHAIN_STATE 1
+
 double sqrt(double x);
 
 USER_FUNC(btlevtcmd_SetJumpSound);
@@ -215,7 +222,7 @@ static EVT_BEGIN(init_event)
     CALL(chain_init, UNIT_ID_SELF)
     SPAWN_EVENT(PTR(chain_event))
     CALL(btlevtcmd_SetJumpSound, UNIT_ID_SELF, STRING("0"), STRING("SFX_ENM_WAN_LANDING1"))
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 1, 127)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_SOUND_VOLUME, 127)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
@@ -237,11 +244,11 @@ static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), -2)
     SET_VALUE(LW(11), 1)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 0, 1)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 2, 2)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_CHAIN_STATE, 2)
     CALL(btlevtcmd_OnAttribute, LW(10), kUnitAirborne)
     CALL_CHILD(PTR(btldefaultevt_Damage))
     CALL(btlevtcmd_OffAttribute, LW(10), kUnitAirborne)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 2, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_CHAIN_STATE, 0)
     RETURN
 EVT_END()
 
@@ -347,8 +354,8 @@ static EVT_BEGIN(attack_event)
         END_IF
         GOTO(99)
     END_IF
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 1, 127)
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 1, LW(14))
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_SOUND_VOLUME, 127)
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_SOUND_VOLUME, LW(14))
     CALL(btlevtcmd_WeaponAftereffect, PTR(&weapon_wanwan_attack))
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
@@ -445,10 +452,10 @@ static EVT_BEGIN(attack_event)
 EVT_END()
 
 static EVT_BEGIN(wait_event)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 2, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_CHAIN_STATE, 0)
     CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_SLEEP, LW(15))
     IF_INT_NOT_EQUAL(LW(15), 0)
-        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 2, 2)
+        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_CHAIN_STATE, 2)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("WAN_N_1"))
         CALL(btlevtcmd_SetPartsRotateOffset, UNIT_ID_SELF, 1, 0, 10, 0)
         BEGIN_SIBLING_EVENT
@@ -472,7 +479,7 @@ static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_FREEZE, LW(15))
     OR(LW(15), LW(14))
     IF_INT_NOT_EQUAL(LW(15), 0)
-        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 2, 2)
+        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_CHAIN_STATE, 2)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("WAN_Y_1"))
         BEGIN_SIBLING_EVENT
             LABEL(5)
@@ -567,12 +574,12 @@ static EVT_BEGIN(wait_event)
 EVT_END()
 
 static EVT_BEGIN(sound_gensui_event)
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 1, LW(11))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_SOUND_VOLUME, LW(11))
     MULTIPLY_FLOAT(LW(11), FLOAT(0.69921875f))
     IF_INT_LESS(LW(11), 32)
         SET_VALUE(LW(11), 32)
     END_IF
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 1, LW(11))
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_SOUND_VOLUME, LW(11))
     RETURN
 EVT_END()
 
@@ -624,22 +631,22 @@ static USER_FUNC(chain_main) {
     BtlUnit_GetPos(unit, &x, &y, &z);
     BtlUnit_SetPartsPos(BtlUnit_GetPartsPtr(unit, 9), x - 20.0f * unit->faceDirection, y, z);
     // 2: remember the chain's shape relative to the stake
-    if (unit->work[2] == 2) {
+    if (unit->work[UNIT_WORK_CHAIN_STATE] == 2) {
         BtlUnit_GetPartsPos(BtlUnit_GetPartsPtr(unit, 9), &x, &y, &z);
         for (i = 8; i >= 1; i--) {
             part = BtlUnit_GetPartsPtr(unit, i);
             BtlUnit_GetPartsPos(part, &x2, &y2, &z2);
-            part->work[0] = x2 - x;
-            part->work[1] = y2 - y;
+            part->work[PARTS_WORK_OFFSET_X] = x2 - x;
+            part->work[PARTS_WORK_OFFSET_Y] = y2 - y;
         }
-        unit->work[2] = 1;
+        unit->work[UNIT_WORK_CHAIN_STATE] = 1;
     }
     // 1: keep that shape
-    if (unit->work[2] == 1) {
+    if (unit->work[UNIT_WORK_CHAIN_STATE] == 1) {
         BtlUnit_GetPartsPos(BtlUnit_GetPartsPtr(unit, 9), &x, &y, &z);
         for (i = 8; i >= 1; i--) {
             part = BtlUnit_GetPartsPtr(unit, i);
-            BtlUnit_SetPartsPos(part, x + part->work[0], y + part->work[1], z);
+            BtlUnit_SetPartsPos(part, x + part->work[PARTS_WORK_OFFSET_X], y + part->work[PARTS_WORK_OFFSET_Y], z);
         }
         return EVT_RETURN_DONE;
     }

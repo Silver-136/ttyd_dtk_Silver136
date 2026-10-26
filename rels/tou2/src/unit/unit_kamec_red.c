@@ -22,6 +22,14 @@
 #include "battle/battle_database_common.h"
 #include "battle/battle_damage.h"
 
+// BattleUnit.work slots (btlevtcmd_Get/Set/AddUnitWork)
+#define UNIT_WORK_FLYING 0          // nonzero: flying form (pose_table_sky, airborne at y 40, sky magic events); setup value (0 in the one tou setup), copied to clones, cleared by dmg_fall_event
+#define UNIT_WORK_CLONE 1           // 1 on a copy made by spawn_event (kClone part, data_table_bunsin, no own attack or wait animation, removed by any hit)
+#define UNIT_WORK_HIT_WITH_CLONES 2 // 1 when the real unit is hit while copies exist; after the damage, kamec_subset_bunsin_all_kill removes the copies
+#define UNIT_WORK_FADING 3          // 1 once bunsin_kill_event has started fading this copy out, so a second call skips the fade
+#define UNIT_WORK_STAFF_EFFECT 4    // EffectEntry* of the wand charge effect (eff_staff1 thunderflare, eff_staff2 pokopi charge) kept on the wand tip
+#define UNIT_WORK_MAGIC_EFFECT 5    // EffectEntry* of the last magic shot (effMagic1N64Entry in eff_magic); eff_magic_get_posX reads its x
+
 EffectEntry* effThunderflareN64Entry(s32 type, f32 x, f32 y, f32 z, f32 scale, s32 lifetime);
 
 static USER_FUNC(eff_magic);
@@ -93,7 +101,7 @@ static USER_FUNC(eff_magic_get_posX) {
     s32 id = BattleTransID(event, evtGetValue(event, args[0]));
     BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, id);
 
-    evtSetFloat(event, args[1], ((EffMagic1N64Work*)((EffectEntry*)unit->work[5])->userdata)->offset.x);
+    evtSetFloat(event, args[1], ((EffMagic1N64Work*)((EffectEntry*)unit->work[UNIT_WORK_MAGIC_EFFECT])->userdata)->offset.x);
     return EVT_RETURN_DONE;
 }
 
@@ -584,9 +592,9 @@ static BattleUnitSetup entry_kamec = {
 };
 
 static EVT_BEGIN(init_event)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 1, 0)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 3, 0)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 4, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_CLONE, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_FADING, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_STAFF_EFFECT, 0)
     CALL_CHILD(PTR(init_event2))
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
@@ -597,10 +605,10 @@ static EVT_BEGIN(init_event2)
     CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event))
     CALL(btlevtcmd_SetEventDamage, UNIT_ID_SELF, PTR(damage_event))
     CALL(btlevtcmd_SetEventConfusion, UNIT_ID_SELF, PTR(attack_event))
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 0, LW(0))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_FLYING, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, 1, PTR(pose_table_sky))
-        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 1, LW(0))
+        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_CLONE, LW(0))
         IF_INT_EQUAL(LW(0), 0)
             CALL(btlevtcmd_ChangeDataTable, UNIT_ID_SELF, PTR(data_table_sky))
             ELSE
@@ -660,12 +668,12 @@ EVT_END()
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), -2)
     SET_VALUE(LW(11), 1)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 2, 0)
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 1, LW(0))
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_HIT_WITH_CLONES, 0)
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_CLONE, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL(kamec_get_bunsin, LW(1), LW(2), LW(3), LW(4), LW(0))
         IF_INT_GREATER_OR_EQUAL(LW(0), 1)
-            CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 2, 1)
+            CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_HIT_WITH_CLONES, 1)
         END_IF
         ELSE
         SET_VALUE(LW(0), -2)
@@ -675,7 +683,7 @@ static EVT_BEGIN(damage_event)
     CALL_CHILD(PTR(btldefaultevt_Damage))
     CALL(btlevtcmd_GetUnitId, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), -1)
-        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 2, LW(0))
+        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_HIT_WITH_CLONES, LW(0))
         IF_INT_EQUAL(LW(0), 1)
             CALL_CHILD(PTR(kamec_subset_bunsin_all_kill))
         END_IF
@@ -684,7 +692,7 @@ static EVT_BEGIN(damage_event)
 EVT_END()
 
 static EVT_BEGIN(kamec_subset_bunsin_all_kill)
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 1, LW(0))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_CLONE, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL(kamec_get_bunsin, LW(1), LW(2), LW(3), LW(4), LW(0))
         IF_INT_GREATER_OR_EQUAL(LW(0), 1)
@@ -791,7 +799,7 @@ static EVT_BEGIN(kamec_subset_blow_dead_event)
 EVT_END()
 
 static EVT_BEGIN(avoid_miss_event)
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 1, LW(0))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_CLONE, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         SET_VALUE(LW(0), -2)
         CALL_CHILD(PTR(bunsin_kill_event))
@@ -830,7 +838,7 @@ static EVT_BEGIN(dmg_fall_event)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_DAMAGE)
     WAIT_MS(500)
     CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, 1, PTR(pose_table))
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 1, LW(0))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_CLONE, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_ChangeDataTable, UNIT_ID_SELF, PTR(data_table))
     ELSE
@@ -857,7 +865,7 @@ static EVT_BEGIN(dmg_fall_event)
     CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), 0, LW(2), 10, MOVE_SOUND_FROM_TABLE)
     CALL(btlevtcmd_SetHomePos, UNIT_ID_SELF, LW(0), 0, LW(2))
     WAIT_MS(500)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 0, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_FLYING, 0)
     CALL_CHILD(init_event2)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_DAMAGE)
     RETURN
@@ -878,7 +886,7 @@ static EVT_BEGIN(attack_event)
         CALL_CHILD(PTR(attack_magic_event))
         GOTO(99)
     END_IF
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 1, LW(0))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_CLONE, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         RETURN
     END_IF
@@ -1233,7 +1241,7 @@ static EVT_BEGIN(sky_magic_common_event)
 EVT_END()
 
 static EVT_BEGIN(magic_common_event1)
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 0, LW(0))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_FLYING, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_GetUnitId, UNIT_ID_SELF, LW(13))
         IF_INT_NOT_EQUAL(LW(3), LW(13))
@@ -1248,7 +1256,7 @@ static EVT_BEGIN(magic_common_event1)
 EVT_END()
 
 static EVT_BEGIN(magic_common_event2)
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 0, LW(0))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_FLYING, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL_CHILD(PTR(ground_magic_common_event2))
         ELSE
@@ -1662,7 +1670,7 @@ static USER_FUNC(eff_magic) {
     y += 20.0f * unit->mSizeMultiplier;
     z += 5.0f;
     eff = effMagic1N64Entry(0, type, x, y, z, tx, ty, tz);
-    unit->work[5] = (EvtWord)eff;
+    unit->work[UNIT_WORK_MAGIC_EFFECT] = (EvtWord)eff;
     ((EffMagic1N64Work*)eff->userdata)->scale = unit->mSizeMultiplier;
     return EVT_RETURN_DONE;
 }
@@ -1676,12 +1684,12 @@ static USER_FUNC(eff_staff2) {
     f32* wk;
 
     if (isFirstCall) {
-        unit->work[4] = (EvtWord)effPokopiPchargeN64Entry(0, 60, 0.0f, -1000.0f, 0.0f, 1.0f);
+        unit->work[UNIT_WORK_STAFF_EFFECT] = (EvtWord)effPokopiPchargeN64Entry(0, 60, 0.0f, -1000.0f, 0.0f, 1.0f);
     }
-    if (!(((EffectEntry*)unit->work[4])->flags & 1)) {
+    if (!(((EffectEntry*)unit->work[UNIT_WORK_STAFF_EFFECT])->flags & 1)) {
         return EVT_RETURN_DONE;
     }
-    wk = ((EffectEntry*)unit->work[4])->userdata;
+    wk = ((EffectEntry*)unit->work[UNIT_WORK_STAFF_EFFECT])->userdata;
     wk[13] = unit->mSizeMultiplier;
     BtlUnit_GetPos(unit, &x, &y, &z);
     wk[1] = x + 22.5f * unit->mSizeMultiplier * unit->faceDirection;
@@ -1699,12 +1707,12 @@ static USER_FUNC(eff_staff1) {
     f32* wk;
 
     if (isFirstCall) {
-        unit->work[4] = (EvtWord)effThunderflareN64Entry(0, 0.0f, -1000.0f, 0.0f, 1.0f, 60);
+        unit->work[UNIT_WORK_STAFF_EFFECT] = (EvtWord)effThunderflareN64Entry(0, 0.0f, -1000.0f, 0.0f, 1.0f, 60);
     }
-    if (!(((EffectEntry*)unit->work[4])->flags & 1)) {
+    if (!(((EffectEntry*)unit->work[UNIT_WORK_STAFF_EFFECT])->flags & 1)) {
         return EVT_RETURN_DONE;
     }
-    wk = ((EffectEntry*)unit->work[4])->userdata;
+    wk = ((EffectEntry*)unit->work[UNIT_WORK_STAFF_EFFECT])->userdata;
     wk[10] = unit->mSizeMultiplier;
     BtlUnit_GetPos(unit, &x, &y, &z);
     wk[2] = x + 22.5f * unit->mSizeMultiplier * unit->faceDirection;
@@ -1813,7 +1821,7 @@ static USER_FUNC(kamec_get_live_num) {
 static EVT_BEGIN(spawn_event)
     CALL(btlevtcmd_SpawnUnit, LW(3), PTR(&entry_kamec), 0)
     CALL(btlevtcmd_SetAlpha, LW(3), 1, 0)
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 0, LW(10))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_FLYING, LW(10))
     CALL(btlevtcmd_SetUnitWork, LW(3), 0, LW(10))
     WAIT_FRAMES(2)
     CALL(btlevtcmd_SetPos, LW(3), LW(0), LW(1), LW(2))
@@ -1829,7 +1837,7 @@ static EVT_BEGIN(spawn_event)
 EVT_END()
 
 static EVT_BEGIN(wait_event)
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 1, LW(0))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_CLONE, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         RETURN
     END_IF

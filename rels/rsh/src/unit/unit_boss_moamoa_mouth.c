@@ -10,6 +10,9 @@
 #include "battle/battle_sub.h"
 #include "battle/battle_damage.h"
 
+// BattleUnit.work slots (btlevtcmd_Get/Set/AddUnitWork)
+#define UNIT_WORK_BODY 0 // unit id of the body that spawned it (moamoa_mouth_on sets it)
+
 extern PoseTableEntry moamoa1_weakness_pose_table[];
 extern s32 moamoa_defence_no_parts[];
 
@@ -185,7 +188,7 @@ static EVT_BEGIN(dead_event)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("L_2_6"))
     WAIT_FRAMES(1)
     CALL(btlevtcmd_AnimeWaitPlayComplete, UNIT_ID_SELF, 1)
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 0, LW(1))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_BODY, LW(1))
     CALL(btlevtcmd_SetUnitWork, LW(1), 6, -1)
     CALL(btlevtcmd_SetPartsDefenceTable, LW(1), 1, PTR(moamoa_defence_no_parts))
     CALL(btlevtcmd_OffPartsAttribute, LW(1), 1, kImmuneToDamageAndStatus)
@@ -280,7 +283,7 @@ static EVT_BEGIN(evt_attack)
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, PTR(&weapon_moamoa_attack))
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 0, LW(6))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_BODY, LW(6))
     CALL(btlevtcmd_SetUnitWork, LW(6), 0, 0)
     CALL(btlevtcmd_AnimeChangePose, LW(6), 1, STRING("S_1_1"))
     SET_VALUE(LW(15), 0)

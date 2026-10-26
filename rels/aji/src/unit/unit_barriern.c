@@ -1220,20 +1220,20 @@ static EVT_BEGIN(wawawa_attack_event)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_SHOTS_DONE, 0)
     CALL(barriern_wawawa_set_target, LW(0), LW(1), LW(2), LW(3), LW(4), LW(5), LW(6), LW(7), LW(8), LW(9))
     CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 1, PARTS_WORK_TARGET_UNIT, LW(0))
-    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 1, 1, LW(2))
-    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 1, 2, LW(4))
-    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 1, 3, LW(6))
-    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 1, 4, LW(8))
+    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 1, PARTS_WORK_TARGET_UNIT + 1, LW(2))
+    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 1, PARTS_WORK_TARGET_UNIT + 2, LW(4))
+    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 1, PARTS_WORK_TARGET_UNIT + 3, LW(6))
+    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 1, PARTS_WORK_TARGET_UNIT + 4, LW(8))
     CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 1, PARTS_WORK_TARGET_PART, LW(1))
-    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 1, 6, LW(3))
-    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 1, 7, LW(5))
-    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 1, 8, LW(7))
-    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 1, 9, LW(9))
+    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 1, PARTS_WORK_TARGET_PART + 1, LW(3))
+    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 1, PARTS_WORK_TARGET_PART + 2, LW(5))
+    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 1, PARTS_WORK_TARGET_PART + 3, LW(7))
+    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 1, PARTS_WORK_TARGET_PART + 4, LW(9))
     CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 1, PARTS_WORK_TARGET_HIT, 0)
-    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 1, 11, 0)
-    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 1, 12, 0)
-    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 1, 13, 0)
-    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 1, 14, 0)
+    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 1, PARTS_WORK_TARGET_HIT + 1, 0)
+    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 1, PARTS_WORK_TARGET_HIT + 2, 0)
+    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 1, PARTS_WORK_TARGET_HIT + 3, 0)
+    CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 1, PARTS_WORK_TARGET_HIT + 4, 0)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT)
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, -1)
     CALL(evt_btl_camera_set_zoom, 0, 250)
@@ -1697,31 +1697,31 @@ static USER_FUNC(outSplineTableSet) {
     switch (evtGetValue(event, args[1])) {
         case 1:
             part = BtlUnit_GetPartsPtr(BattleGetUnitPtr(_battleWorkPointer, unit->work[UNIT_WORK_SATELLITE]), 1);
-            part->work[2] = (EvtWord)splineTableOut1_1;
+            part->work[PARTS_WORK_TARGET_UNIT + 2] = (EvtWord)splineTableOut1_1;
             break;
         case 2:
             part = BtlUnit_GetPartsPtr(BattleGetUnitPtr(_battleWorkPointer, unit->work[UNIT_WORK_SATELLITE]), 1);
-            part->work[2] = (EvtWord)splineTableOut2_1;
-            part = BtlUnit_GetPartsPtr(BattleGetUnitPtr(_battleWorkPointer, unit->work[5]), 1);
-            part->work[2] = (EvtWord)splineTableOut2_2;
+            part->work[PARTS_WORK_TARGET_UNIT + 2] = (EvtWord)splineTableOut2_1;
+            part = BtlUnit_GetPartsPtr(BattleGetUnitPtr(_battleWorkPointer, unit->work[UNIT_WORK_SATELLITE + 1]), 1);
+            part->work[PARTS_WORK_TARGET_UNIT + 2] = (EvtWord)splineTableOut2_2;
             break;
         case 3:
             part = BtlUnit_GetPartsPtr(BattleGetUnitPtr(_battleWorkPointer, unit->work[UNIT_WORK_SATELLITE]), 1);
-            part->work[2] = (EvtWord)splineTableOut3_1;
-            part = BtlUnit_GetPartsPtr(BattleGetUnitPtr(_battleWorkPointer, unit->work[5]), 1);
-            part->work[2] = (EvtWord)splineTableOut3_2;
+            part->work[PARTS_WORK_TARGET_UNIT + 2] = (EvtWord)splineTableOut3_1;
+            part = BtlUnit_GetPartsPtr(BattleGetUnitPtr(_battleWorkPointer, unit->work[UNIT_WORK_SATELLITE + 1]), 1);
+            part->work[PARTS_WORK_TARGET_UNIT + 2] = (EvtWord)splineTableOut3_2;
             part = BtlUnit_GetPartsPtr(BattleGetUnitPtr(_battleWorkPointer, unit->work[6]), 1);
-            part->work[2] = (EvtWord)splineTableOut3_3;
+            part->work[PARTS_WORK_TARGET_UNIT + 2] = (EvtWord)splineTableOut3_3;
             break;
         case 4:
             part = BtlUnit_GetPartsPtr(BattleGetUnitPtr(_battleWorkPointer, unit->work[UNIT_WORK_SATELLITE]), 1);
-            part->work[2] = (EvtWord)splineTableOut4_1;
-            part = BtlUnit_GetPartsPtr(BattleGetUnitPtr(_battleWorkPointer, unit->work[5]), 1);
-            part->work[2] = (EvtWord)splineTableOut4_2;
+            part->work[PARTS_WORK_TARGET_UNIT + 2] = (EvtWord)splineTableOut4_1;
+            part = BtlUnit_GetPartsPtr(BattleGetUnitPtr(_battleWorkPointer, unit->work[UNIT_WORK_SATELLITE + 1]), 1);
+            part->work[PARTS_WORK_TARGET_UNIT + 2] = (EvtWord)splineTableOut4_2;
             part = BtlUnit_GetPartsPtr(BattleGetUnitPtr(_battleWorkPointer, unit->work[6]), 1);
-            part->work[2] = (EvtWord)splineTableOut4_3;
+            part->work[PARTS_WORK_TARGET_UNIT + 2] = (EvtWord)splineTableOut4_3;
             part = BtlUnit_GetPartsPtr(BattleGetUnitPtr(_battleWorkPointer, unit->work[7]), 1);
-            part->work[2] = (EvtWord)splineTableOut4_4;
+            part->work[PARTS_WORK_TARGET_UNIT + 2] = (EvtWord)splineTableOut4_4;
             break;
     }
     return EVT_RETURN_DONE;

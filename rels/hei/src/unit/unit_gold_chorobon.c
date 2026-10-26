@@ -14,6 +14,11 @@
 #include "manager/evtmgr_cmd.h"
 #include "battle/battle_damage.h"
 
+// BattleUnit.work slots (btlevtcmd_Get/Set/AddUnitWork)
+#define UNIT_WORK_CHOROGUN_CALLED 0 // 1 once damage_event has called the chorogun unit (HP 1-7: entry_chorogun, call_chorogun_event)
+#define UNIT_WORK_CHOROGUN_GONE 1   // 1 once the chorogun has been sent off (escape_chorogun_event, or damage_event when this unit drops to 0 HP while the chorogun is out); stops it running twice
+#define UNIT_WORK_CHOROGUN 2        // unit id of the chorogun unit it called
+
 USER_FUNC(btlevtcmd_SetJumpSound);
 USER_FUNC(chorogun_appear);
 USER_FUNC(chorogun_escape_all);
@@ -309,8 +314,8 @@ static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventConfusion, UNIT_ID_SELF, PTR(btldefaultevt_Confuse))
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     CALL_CHILD(PTR(chorogun_entry))
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 0, 0)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 1, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_CHOROGUN_CALLED, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_CHOROGUN_GONE, 0)
     CALL(btlevtcmd_AnimeSetPoseSoundTable, UNIT_ID_SELF, 1, PTR(pose_sound_timing_table))
     CALL(btlevtcmd_SetJumpSound, UNIT_ID_SELF, STRING("SFX_BOSS_G_CHORO_MOVE1"), STRING("SFX_BOSS_G_CHORO_LANDING1"))
     RETURN
@@ -319,24 +324,24 @@ EVT_END()
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), -2)
     SET_VALUE(LW(11), 1)
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 2, LW(0))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_CHOROGUN, LW(0))
     CALL(btlevtcmd_GetUnitId, LW(0), LW(1))
     IF_INT_NOT_EQUAL(LW(1), -1)
-        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 1, LW(0))
+        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_CHOROGUN_GONE, LW(0))
         IF_INT_EQUAL(LW(0), 0)
             CALL(btlevtcmd_CheckDamageCode, UNIT_ID_SELF, DAMAGE_RESULT_ZERO_HP, LW(0))
             IF_INT_NOT_EQUAL(LW(0), 0)
                 CALL(btlevtcmd_CheckDamageCode, UNIT_ID_SELF, DAMAGE_RESULT_REVIVAL, LW(0))
                 IF_INT_EQUAL(LW(0), 0)
-                    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 0, LW(0))
+                    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_CHOROGUN_CALLED, LW(0))
                     IF_INT_NOT_EQUAL(LW(0), 0)
-                        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 1, 1)
+                        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_CHOROGUN_GONE, 1)
                         CALL(btlevtcmd_WaitAttackEnd)
-                        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 2, LW(10))
+                        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_CHOROGUN, LW(10))
                         CALL_CHILD(PTR(chorogun_dead_reward))
                         SET_VALUE(LW(10), -2)
                         CALL(chorogun_escape_all)
-                        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 2, LW(3))
+                        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_CHOROGUN, LW(3))
                         CALL(btlevtcmd_KillUnit, LW(3), 0)
                     END_IF
                 END_IF
@@ -344,16 +349,16 @@ static EVT_BEGIN(damage_event)
         END_IF
     END_IF
     CALL_CHILD(PTR(btldefaultevt_Damage))
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 0, LW(0))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_CHOROGUN_CALLED, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_GetHp, UNIT_ID_SELF, LW(0))
         IF_INT_LESS_OR_EQUAL(LW(0), 7)
             IF_INT_GREATER_OR_EQUAL(LW(0), 1)
                 CALL(btlevtcmd_WaitAttackEnd)
                 CALL(btlevtcmd_SpawnUnit, LW(3), PTR(&entry_chorogun), 0)
-                CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 2, LW(3))
+                CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_CHOROGUN, LW(3))
                 CALL_CHILD(PTR(call_chorogun_event))
-                CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 0, 1)
+                CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_CHOROGUN_CALLED, 1)
                 GOTO(99)
             END_IF
         END_IF

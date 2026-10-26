@@ -13,6 +13,9 @@
 #include "battle/battle_database_common.h"
 #include "battle/battle_damage.h"
 
+// BattleUnit.work slots (btlevtcmd_Get/Set/AddUnitWork)
+#define UNIT_WORK_INTRO_TALK 0 // 1 (from the battle setup) marks the unit that shows stg3_tou_83_* / stg3_tou_84 on turn 1 (once, GSWF(2509))
+
 USER_FUNC(btlevtcmd_SetEventPhase);
 USER_FUNC(btlevtcmd_SetJumpSound);
 static USER_FUNC(krb_get_dir);
@@ -197,7 +200,7 @@ static EVT_BEGIN(damage_event)
 EVT_END()
 
 static EVT_BEGIN(phase_event)
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 0, LW(0))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_INTRO_TALK, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         IF_INT_EQUAL(GSWF(2509), 0)
             CALL(btlevtcmd_CheckPhase, LW(0), 67108865)

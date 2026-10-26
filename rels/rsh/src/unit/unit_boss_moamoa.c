@@ -27,6 +27,14 @@
 #include "data_tables.h"
 #include "driver/extdrv.h"
 
+// BattleUnit.work slots (btlevtcmd_Get/Set/AddUnitWork)
+#define UNIT_WORK_REGROW_TURNS 1 // turns until the lost limbs grow back (2); phase_event counts down only while slots 3-6 are all -1, then resets it to 2 and runs moamoa_tentacl_on or moamoa_mouth_on
+#define UNIT_WORK_MOUTH_FORM 2   // 0 tentacle form, 1 mouth form (phase_event sets 1 at regrow time once HP <= 50 % of max); picks which limbs regrow and which ones dead_event removes
+#define UNIT_WORK_TENTACLE_C 3   // unit id of tentacle_c (-1 once gone)
+#define UNIT_WORK_TENTACLE_B 4   // unit id of tentacle_b (-1 once gone)
+#define UNIT_WORK_TENTACLE_A 5   // unit id of tentacle_a (-1 once gone; tentacle_a's dead event clears it)
+#define UNIT_WORK_MOUTH 6        // unit id of the mouth (-1 none: init sets -1, moamoa_mouth_on sets it, the mouth's dead_event clears it)
+
 typedef struct MoamoaGroup {
     char anim[16];
     char pose[8];
@@ -376,8 +384,8 @@ static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event))
     CALL(btlevtcmd_SetEventDamage, UNIT_ID_SELF, PTR(damage_event))
     CALL(btlevtcmd_SetEventConfusion, UNIT_ID_SELF, PTR(btldefaultevt_Confuse))
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 1, 2)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 2, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_REGROW_TURNS, 2)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_MOUTH_FORM, 0)
     CALL(btlevtcmd_GetUnitId, UNIT_ID_SELF, LW(4))
     CALL(btlevtcmd_SpawnUnit, LW(3), PTR(&entry_boss_moamoa_tentacle_c), 0)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
@@ -424,7 +432,7 @@ const char* MOAMOA_TAIJOU[] = {
 
 static EVT_BEGIN(dead_event)
     CALL(btlevtcmd_WaitAttackEnd)
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 2, LW(0))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_MOUTH_FORM, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 1)
         SET_VALUE(LW(0), 5)
         CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, LW(0), LW(1))
@@ -632,21 +640,21 @@ static EVT_BEGIN(phase_event)
     IF_INT_EQUAL(LW(0), 0)
         GOTO(0)
     END_IF
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 6, LW(0))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_MOUTH, LW(0))
     IF_INT_EQUAL(LW(0), -1)
-        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 5, LW(0))
+        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_TENTACLE_A, LW(0))
         IF_INT_EQUAL(LW(0), -1)
-            CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 4, LW(0))
+            CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_TENTACLE_B, LW(0))
             IF_INT_EQUAL(LW(0), -1)
-                CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 3, LW(0))
+                CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_TENTACLE_C, LW(0))
                 IF_INT_EQUAL(LW(0), -1)
-                    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 1, LW(1))
+                    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_REGROW_TURNS, LW(1))
                     IF_INT_NOT_EQUAL(LW(1), 0)
                         SUBTRACT(LW(1), 1)
-                        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 1, LW(1))
+                        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_REGROW_TURNS, LW(1))
                         IF_INT_EQUAL(LW(1), 0)
-                            CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 1, 2)
-                            CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 2, LW(0))
+                            CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_REGROW_TURNS, 2)
+                            CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_MOUTH_FORM, LW(0))
                             SWITCH(LW(0))
                                 CASE_EQUAL(0)
                                 CALL(btlevtcmd_GetMaxHp, UNIT_ID_SELF, LW(0))
@@ -654,13 +662,13 @@ static EVT_BEGIN(phase_event)
                                 DIVIDE(LW(0), 100)
                                 CALL(btlevtcmd_GetHp, UNIT_ID_SELF, LW(1))
                                 IF_INT_LESS_OR_EQUAL(LW(1), LW(0))
-                                    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 2, 1)
+                                    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_MOUTH_FORM, 1)
                                     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("S_1_2"))
                                     WAIT_MS(1000)
                                     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("S_1_1"))
                                 END_IF
                             END_SWITCH
-                            CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 2, LW(1))
+                            CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_MOUTH_FORM, LW(1))
                             IF_INT_NOT_EQUAL(LW(1), 1)
                                 CALL_CHILD(PTR(moamoa_tentacl_on))
                                 ELSE
@@ -918,13 +926,13 @@ USER_FUNC(moamoa1_on) {
     for (i = 1; i < 4; i++) {
         switch (i) {
             case 1:
-                part = BattleGetUnitPartsPtr(unit->work[3], 1);
+                part = BattleGetUnitPartsPtr(unit->work[UNIT_WORK_TENTACLE_C], 1);
                 break;
             case 2:
-                part = BattleGetUnitPartsPtr(unit->work[4], 1);
+                part = BattleGetUnitPartsPtr(unit->work[UNIT_WORK_TENTACLE_B], 1);
                 break;
             case 3:
-                part = BattleGetUnitPartsPtr(unit->work[5], 1);
+                part = BattleGetUnitPartsPtr(unit->work[UNIT_WORK_TENTACLE_A], 1);
                 break;
         }
         wp->poseId[i] = part->poseId;
@@ -939,13 +947,13 @@ USER_FUNC(moamoa1_on) {
     for (i = 0; i < wp->count; i++, elem++) {
         if (elem->chain < 5) {
             elem->poseId = wp->poseId[3];
-            elem->owner = &unit->work[5];
+            elem->owner = &unit->work[UNIT_WORK_TENTACLE_A];
         } else if (elem->chain < 10) {
             elem->poseId = wp->poseId[2];
-            elem->owner = &unit->work[4];
+            elem->owner = &unit->work[UNIT_WORK_TENTACLE_B];
         } else if (elem->chain < 15) {
             elem->poseId = wp->poseId[1];
-            elem->owner = &unit->work[3];
+            elem->owner = &unit->work[UNIT_WORK_TENTACLE_C];
         } else if (elem->chain < 30) {
             elem->poseId = wp->poseId[0];
             elem->owner = &wp->unitId;
@@ -964,7 +972,7 @@ USER_FUNC(moamoa2_on) {
     Vec* p;
     s32 i;
 
-    wp->poseId[4] = BattleGetUnitPartsPtr(unit->work[6], 1)->poseId;
+    wp->poseId[4] = BattleGetUnitPartsPtr(unit->work[UNIT_WORK_MOUTH], 1)->poseId;
     animPoseWorldPositionEvalOn(wp->poseId[4]);
     ap = animPoseGetAnimPosePtr(wp->poseId[4]);
     p = *ap->worldPositions;
@@ -984,7 +992,7 @@ USER_FUNC(moamoa2_on) {
             elem->owner = &wp->unitId;
         } else if (elem->chain < 30) {
             elem->poseId = wp->poseId[4];
-            elem->owner = &unit->work[6];
+            elem->owner = &unit->work[UNIT_WORK_MOUTH];
         } else {
             elem->poseId = wp->poseId[0];
             elem->owner = &wp->unitId;
@@ -1334,16 +1342,16 @@ USER_FUNC(moamoa_set_bodyScale) {
         extReset();
         return 2;
     }
-    if (unit->work[6] == -1) {
+    if (unit->work[UNIT_WORK_MOUTH] == -1) {
         n += 3;
     }
-    if (unit->work[5] == -1) {
+    if (unit->work[UNIT_WORK_TENTACLE_A] == -1) {
         n++;
     }
-    if (unit->work[4] == -1) {
+    if (unit->work[UNIT_WORK_TENTACLE_B] == -1) {
         n++;
     }
-    if (unit->work[3] == -1) {
+    if (unit->work[UNIT_WORK_TENTACLE_C] == -1) {
         n++;
     }
     wp->targetScale = 0.333f * (n - 3) + 1.0f;
