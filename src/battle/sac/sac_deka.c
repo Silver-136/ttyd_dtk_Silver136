@@ -183,7 +183,7 @@ static void yuka_init(void) {
     f32 x;
     f32 z;
 
-    mapGrpFlagOn("stg_b_yuka", 0x400001);
+    mapGrpFlagOn("stg_b_yuka", (MAP_OBJ_FLAG_HIDDEN | MAP_OBJ_FLAG_KURURING));
     PSMTXMultVec(mo->modelWorldMtx, &mo->joints->bboxMin, &w->min);
     PSMTXMultVec(mo->modelWorldMtx, &mo->joints->bboxMax, &w->max);
     w->w0 = w->texW = w->max.x - w->min.x;
@@ -305,7 +305,7 @@ USER_FUNC(yuka_end) {
     w->tex->address = NULL;
     smartFree(w->mesh);
     w->mesh->address = NULL;
-    mapGrpFlagOff("stg_b_yuka", 0x400001);
+    mapGrpFlagOff("stg_b_yuka", (MAP_OBJ_FLAG_HIDDEN | MAP_OBJ_FLAG_KURURING));
     return 2;
 }
 

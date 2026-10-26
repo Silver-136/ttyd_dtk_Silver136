@@ -5576,15 +5576,15 @@ USER_FUNC(goryuugijo_get_slot_phase) {
 }
 
 void goryuugijo_upsidewindow_dispoff_sub(s32 slot, s32 reel) {
-    mapGrpFlagOn(drumname[slot].window[reel][0], 1);
-    mapGrpFlagOn(drumname[slot].window[reel][1], 1);
-    mapGrpFlagOn(drumname[slot].window[reel][2], 1);
+    mapGrpFlagOn(drumname[slot].window[reel][0], MAP_OBJ_FLAG_HIDDEN);
+    mapGrpFlagOn(drumname[slot].window[reel][1], MAP_OBJ_FLAG_HIDDEN);
+    mapGrpFlagOn(drumname[slot].window[reel][2], MAP_OBJ_FLAG_HIDDEN);
 }
 
 void goryuugijo_upsidewindow_disp_sub(s32 slot, s32 reel) {
-    mapGrpFlagOn(drumname[slot].window[reel][0], 1);
-    mapGrpFlagOn(drumname[slot].window[reel][1], 1);
-    mapGrpFlagOn(drumname[slot].window[reel][2], 1);
+    mapGrpFlagOn(drumname[slot].window[reel][0], MAP_OBJ_FLAG_HIDDEN);
+    mapGrpFlagOn(drumname[slot].window[reel][1], MAP_OBJ_FLAG_HIDDEN);
+    mapGrpFlagOn(drumname[slot].window[reel][2], MAP_OBJ_FLAG_HIDDEN);
 }
 
 USER_FUNC(goryuugijo_door_init_slot) {

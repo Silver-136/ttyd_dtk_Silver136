@@ -223,7 +223,7 @@ USER_FUNC(evt_unitwin_free) {
         return EVT_RETURN_BLOCK;
     }
     for (i = 0; i < wp->goodsMax; i++) {
-        mapObjFlagOff(wp->entries[i].mapObj, 0x4000);
+        mapObjFlagOff(wp->entries[i].mapObj, MAP_OBJ_FLAG_DISABLED);
         sprintf(name, "uwn%d", i);
         iconDelete(name);
     }
@@ -252,7 +252,7 @@ USER_FUNC(evt_unitwin_selltable_setup) {
     for (i = 0; wp->entries[i].mapObj != NULL; i++) {
         wp->goodsMax++;
         mapObjGetPos(wp->entries[i].mapObj, &pos);
-        mapObjFlagOn(wp->entries[i].mapObj, 0x4000);
+        mapObjFlagOn(wp->entries[i].mapObj, MAP_OBJ_FLAG_DISABLED);
         if (wp->goods[i] != 0) {
             sprintf(name, "uwn%d", i);
             iconEntry(name, itemDataTable[wp->goods[i]].icon_id);

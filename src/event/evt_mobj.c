@@ -3286,7 +3286,7 @@ USER_FUNC(evt_mobj_kururing_floor) {
         char oname[16] = "o_";
         char iname[16] = "i_";
     }
-    mapGrpFlagOn(grp, 0x400000);
+    mapGrpFlagOn(grp, MAP_OBJ_FLAG_KURURING);
     animPoseSetAnim(mobj->poseId, "S_1", 1);
     animPoseWorldPositionEvalOn(mobj->poseId);
     return EVT_RETURN_DONE;

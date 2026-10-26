@@ -291,14 +291,14 @@ static USER_FUNC(ride_chk) {
         }
         if (onoff[i] != 0) {
             sprintf(name, "hikaru_%02d", i + 1);
-            mapGrpFlagOff(name, 1);
+            mapGrpFlagOff(name, MAP_OBJ_FLAG_HIDDEN);
             sprintf(name, "nashi_%02d", i + 1);
-            mapGrpFlagOn(name, 1);
+            mapGrpFlagOn(name, MAP_OBJ_FLAG_HIDDEN);
         } else {
             sprintf(name, "hikaru_%02d", i + 1);
-            mapGrpFlagOn(name, 1);
+            mapGrpFlagOn(name, MAP_OBJ_FLAG_HIDDEN);
             sprintf(name, "nashi_%02d", i + 1);
-            mapGrpFlagOff(name, 1);
+            mapGrpFlagOff(name, MAP_OBJ_FLAG_HIDDEN);
         }
     }
     if (evtGetValue(event, GSW_STORY_PROGRESS) >= 362) {
@@ -358,14 +358,14 @@ static USER_FUNC(loop_onoff) {
     for (i = 1; i <= 30; i++) {
         if (i == event->userdata[1]) {
             sprintf(name, "hikaru_%02d", i);
-            mapGrpFlagOff(name, 1);
+            mapGrpFlagOff(name, MAP_OBJ_FLAG_HIDDEN);
             sprintf(name, "nashi_%02d", i);
-            mapGrpFlagOn(name, 1);
+            mapGrpFlagOn(name, MAP_OBJ_FLAG_HIDDEN);
         } else {
             sprintf(name, "hikaru_%02d", i);
-            mapGrpFlagOn(name, 1);
+            mapGrpFlagOn(name, MAP_OBJ_FLAG_HIDDEN);
             sprintf(name, "nashi_%02d", i);
-            mapGrpFlagOff(name, 1);
+            mapGrpFlagOff(name, MAP_OBJ_FLAG_HIDDEN);
         }
     }
     return EVT_RETURN_BLOCK;
@@ -377,9 +377,9 @@ USER_FUNC(all_flag_off) {
 
     for (i = 1; i <= 30; i++) {
         sprintf(name, "hikaru_%02d", i);
-        mapGrpFlagOn(name, 1);
+        mapGrpFlagOn(name, MAP_OBJ_FLAG_HIDDEN);
         sprintf(name, "nashi_%02d", i);
-        mapGrpFlagOn(name, 1);
+        mapGrpFlagOn(name, MAP_OBJ_FLAG_HIDDEN);
         sprintf(name, "A_hikaru_%02d", i);
         hitGrpAttrOff(name, 0x800);
     }
@@ -402,9 +402,9 @@ USER_FUNC(hikaru_on_func) {
         for (j = 0; j < count; j++, p++) {
             if (i == *p) {
                 sprintf(name, "hikaru_%02d", i);
-                mapGrpFlagOff(name, 1);
+                mapGrpFlagOff(name, MAP_OBJ_FLAG_HIDDEN);
                 sprintf(name, "nashi_%02d", i);
-                mapGrpFlagOn(name, 1);
+                mapGrpFlagOn(name, MAP_OBJ_FLAG_HIDDEN);
                 sprintf(name, "A_hikaru_%02d", i);
                 hitGrpAttrOff(name, 0x800);
                 break;
@@ -412,9 +412,9 @@ USER_FUNC(hikaru_on_func) {
         }
         if (j >= count) {
             sprintf(name, "hikaru_%02d", i);
-            mapGrpFlagOn(name, 1);
+            mapGrpFlagOn(name, MAP_OBJ_FLAG_HIDDEN);
             sprintf(name, "nashi_%02d", i);
-            mapGrpFlagOff(name, 1);
+            mapGrpFlagOff(name, MAP_OBJ_FLAG_HIDDEN);
             sprintf(name, "A_hikaru_%02d", i);
             hitGrpAttrOn(name, 0x800);
         }
@@ -428,9 +428,9 @@ USER_FUNC(hikaru_off_func) {
 
     for (i = 1; i <= 30; i++) {
         sprintf(name, "hikaru_%02d", i);
-        mapGrpFlagOn(name, 1);
+        mapGrpFlagOn(name, MAP_OBJ_FLAG_HIDDEN);
         sprintf(name, "nashi_%02d", i);
-        mapGrpFlagOn(name, 1);
+        mapGrpFlagOn(name, MAP_OBJ_FLAG_HIDDEN);
     }
     return EVT_RETURN_DONE;
 }

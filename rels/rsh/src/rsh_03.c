@@ -1416,7 +1416,7 @@ USER_FUNC(fire) {
     Vec pos;
 
     mapObjGetPos(name, &pos);
-    mapObjFlagOn(name, 0x4000);
+    mapObjFlagOn(name, MAP_OBJ_FLAG_DISABLED);
     effFireEntry(3, 0, pos.x, pos.y - 4.0f, pos.z, 0.5f);
     return EVT_RETURN_DONE;
 }

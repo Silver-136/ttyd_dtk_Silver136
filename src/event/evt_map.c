@@ -433,7 +433,7 @@ USER_FUNC(evt_map_replace_mapobj) {
     s32 type = evtGetValue(event, args[1]);
     Vec pos;
     mapObjGetPos(name, &pos);
-    mapObjFlagOn(name, 0x4000);
+    mapObjFlagOn(name, MAP_OBJ_FLAG_DISABLED);
     switch (type) {
     case 0:
         effTorchEntry(0, pos.x, pos.y - 3.0f, pos.z, 0.6f);

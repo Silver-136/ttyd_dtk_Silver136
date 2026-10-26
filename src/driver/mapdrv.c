@@ -418,7 +418,7 @@ void makeDisplayList(BOOL group) {
             if (shadowGetCharShadowProjection() && (obj->flags & MAP_OBJ_FLAG_CHAR_SHADOW)) {
                 continue;
             }
-            if (!(e->flags & 0x8000)) {
+            if (!(e->flags & MAP_ENTRY_VER_1_02)) {
                 continue;
             }
             for (j = 0; j < obj->joints->partCount; j++) {
@@ -784,9 +784,9 @@ void _mapLoad(MapWork* wp, BOOL group, const char* map) {
         MapFileJoint* hitJoint = mapSearchDmdJoint(info->joint, info->hitName);
         Mtx scale;
         if (strcmp(info->version, "ver1.02") == 0) {
-            wp->entries[group].flags |= 0x8000;
+            wp->entries[group].flags |= MAP_ENTRY_VER_1_02;
         } else {
-            wp->entries[group].flags &= 0x7FFF;
+            wp->entries[group].flags &= ~MAP_ENTRY_VER_1_02;
         }
         PSMTXScale(scale, 10.0f, 10.0f, 10.0f);
         wp->entries[group].rootMapObj = mapEntry(mapJoint, scale, group);
@@ -824,7 +824,7 @@ void _mapLoad(MapWork* wp, BOOL group, const char* map) {
             wp->entries[group].fogEnd = (&wo->entries[group])->fogTable->end;
             wp->entries[group].fogColor = (&wo->entries[group])->fogTable->color;
             if (wo->entries[group].fogEnable != 0) {
-                wp->entries[group].flags |= 1;
+                wp->entries[group].flags |= MAP_ENTRY_FOG;
             }
         } else {
             wo->entries[group].fogEnable = 0;
@@ -832,7 +832,7 @@ void _mapLoad(MapWork* wp, BOOL group, const char* map) {
             wp->entries[group].fogStart = 0.0f;
             wp->entries[group].fogEnd = 0.0f;
             wp->entries[group].fogColor = (GXColor){0, 0, 0, 0};
-            wp->entries[group].flags &= ~1;
+            wp->entries[group].flags &= ~MAP_ENTRY_FOG;
         }
         if (activeGroup != 1) {
             sprintf(str1, "./m/%s/c", map);
@@ -876,7 +876,7 @@ void _mapLoad(MapWork* wp, BOOL group, const char* map) {
             if (shadowGetCharShadowProjection() && (o->flags & MAP_OBJ_FLAG_CHAR_SHADOW)) {
                 continue;
             }
-            if (!(w3->entries[group].flags & 0x8000)) {
+            if (!(w3->entries[group].flags & MAP_ENTRY_VER_1_02)) {
                 continue;
             }
             o->flags |= MAP_OBJ_FLAG_DISPLAY_LIST;
@@ -1592,16 +1592,16 @@ static inline void mapSetObjFog(MapObject* obj);
 void mapSetTextureMatrix(struct MapMaterial* mat);
 
 static inline BOOL mapObjIsTranslucent(u32 flags, GXColor objColor, GXColor matColor) {
-    if ((flags & 0x40) && objColor.a != 0xFF) {
+    if ((flags & MAP_OBJ_FLAG_COLOR) && objColor.a != 0xFF) {
         return TRUE;
     }
     if (matColor.a != 0xFF) {
         return TRUE;
     }
-    if (!(flags & 0x800) && (mapGetWork()->entries[0].flags & 2) && mapGetWork()->entries[0].blend.a != 0xFF) {
+    if (!(flags & MAP_OBJ_FLAG_NO_MAP_BLEND) && (mapGetWork()->entries[0].flags & MAP_ENTRY_BLEND) && mapGetWork()->entries[0].blend.a != 0xFF) {
         return TRUE;
     }
-    if (!(flags & 0x1000) && (mapGetWork()->entries[0].flags & 4) && mapGetWork()->entries[0].blend2.a != 0xFF) {
+    if (!(flags & MAP_OBJ_FLAG_NO_MAP_BLEND2) && (mapGetWork()->entries[0].flags & MAP_ENTRY_BLEND2) && mapGetWork()->entries[0].blend2.a != 0xFF) {
         return TRUE;
     }
     return FALSE;
@@ -2359,7 +2359,7 @@ void mapSetMaterialTev(s32 texCount, s32 drawMode, s32 flags, Mtx mtx) {
         tevStage = GX_TEVSTAGE1;
     }
 
-    if (!(flags & 0x10000000)) {
+    if (!(flags & MAP_OBJ_FLAG_NO_COLOR_STAGE)) {
         GXSetTevKColorSel(tevStage, GX_TEV_KCSEL_K0);
         GXSetTevKAlphaSel(tevStage, GX_TEV_KASEL_K0_A);
         GXSetTevOrder(tevStage, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR_NULL);
@@ -2371,7 +2371,7 @@ void mapSetMaterialTev(s32 texCount, s32 drawMode, s32 flags, Mtx mtx) {
         tevStage++;
     }
 
-    if ((flags & 4) && shadowGetCharShadowProjection() && shadowGetCharShadowTexObj()) {
+    if ((flags & MAP_OBJ_FLAG_CHAR_SHADOW) && shadowGetCharShadowProjection() && shadowGetCharShadowTexObj()) {
         GXColor shColor = shadowGetCharShadowColor();
         Mtx shMtx;
         PSMTXConcat(shadowGetCharShadowProjTexMtx(), mtx, shMtx);
@@ -2391,7 +2391,7 @@ void mapSetMaterialTev(s32 texCount, s32 drawMode, s32 flags, Mtx mtx) {
         coord = (GXTexCoordID)(coord + 1);
     }
 
-    if (flags & 0x400) {
+    if (flags & MAP_OBJ_FLAG_PROJ_TEX) {
         Mtx pjMtx;
         GXSetTevColorOp((GXTevStageID)(tevStage - 1), GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVREG0);
         GXSetTevAlphaOp((GXTevStageID)tevStage - 1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVREG0);
@@ -2418,7 +2418,7 @@ void mapSetMaterialTev(s32 texCount, s32 drawMode, s32 flags, Mtx mtx) {
         tevStage += 2;
     }
 
-    if ((flags & 0x10000) && shadowGetDepthShadowTexObj()) {
+    if ((flags & MAP_OBJ_FLAG_DEPTH_SHADOW) && shadowGetDepthShadowTexObj()) {
         GXTexObj* depthTex = shadowGetDepthShadowTexObj();
         MtxPtr depthMtx = shadowGetDepthShadowDepthMtx();
         MtxPtr projTexMtx = shadowGetDepthShadowProjTexMtx();
@@ -2574,7 +2574,7 @@ void mapSetMaterialTev(s32 texCount, s32 drawMode, s32 flags, Mtx mtx) {
         }
     }
 
-    if ((flags & 0x20000) && shadowGetProjShadowTexObj()) {
+    if ((flags & MAP_OBJ_FLAG_PROJ_SHADOW) && shadowGetProjShadowTexObj()) {
         GXTexObj* projTex = shadowGetProjShadowTexObj();
         MtxPtr projTexMtx = shadowGetProjShadowProjTexMtx();
         GXColor projColor = shadowGetProjShadowColor();
@@ -2599,7 +2599,7 @@ void mapSetMaterialTev(s32 texCount, s32 drawMode, s32 flags, Mtx mtx) {
         coord = (GXTexCoordID)(coord + 1);
     }
 
-    if ((flags & 0x40000) && shadowGetDepthShadowTexObj()) {
+    if ((flags & MAP_OBJ_FLAG_DEPTH_SHADOW_2) && shadowGetDepthShadowTexObj()) {
         GXTexObj* depthTex = shadowGetDepthShadowTexObj();
         MtxPtr depthMtx = shadowGetDepthShadowDepthMtx();
         MtxPtr projTexMtx = shadowGetDepthShadowProjTexMtx();
@@ -2687,11 +2687,11 @@ void mapSetMaterialTev(s32 texCount, s32 drawMode, s32 flags, Mtx mtx) {
         }
     }
 
-    if (flags & 0x80100000) {
+    if (flags & (MAP_OBJ_FLAG_PULSE | MAP_OBJ_FLAG_FLUSH)) {
         s32 r, g, b, a;
         f32 pulse;
 
-        if (flags & 0x100000) {
+        if (flags & MAP_OBJ_FLAG_FLUSH) {
             r = current_mp->color.r;
             g = current_mp->color.g;
             b = current_mp->color.b;
@@ -2714,7 +2714,7 @@ void mapSetMaterialTev(s32 texCount, s32 drawMode, s32 flags, Mtx mtx) {
         tevStage++;
     }
 
-    if (flags & 0x800000) {
+    if (flags & MAP_OBJ_FLAG_WAVE_TEX) {
         Vec camPos = {0.0f, 0.0f, 1.0f};
         Vec camUp = {0.0f, 1.0f, 0.0f};
         Vec target = {0.0f, 0.0f, 0.0f};
@@ -2746,7 +2746,7 @@ void mapSetMaterialTev(s32 texCount, s32 drawMode, s32 flags, Mtx mtx) {
         coord = (GXTexCoordID)(coord + 1);
     }
 
-    if (flags & 0xF000000) {
+    if (flags & MAP_OBJ_TEV_CALLBACK_MASK) {
         MapTevCallbackInfo info;
         MapTevCallback callback;
         MapTevCallbackInfo* ip = &info;
@@ -2758,7 +2758,7 @@ void mapSetMaterialTev(s32 texCount, s32 drawMode, s32 flags, Mtx mtx) {
         info.texMap = map;
         info.texCoord = coord;
         info.indStage = 0;
-        callback = ((MapTevCallback*)((u8*)&mapWork[activeGroup] + offsetof(MapEntry, tevCallbacks)))[(u32)(flags & 0xF000000) >> 24];
+        callback = ((MapTevCallback*)((u8*)&mapWork[activeGroup] + offsetof(MapEntry, tevCallbacks)))[(u32)(flags & MAP_OBJ_TEV_CALLBACK_MASK) >> 24];
         if (callback) {
             callback(ip);
         }
@@ -2786,19 +2786,19 @@ void mapSetMaterialLastStageBlend(s32 flags, GXColor color1, GXColor color2) {
     if (color2.r != 0xFF) {
         color.a = color.a * color2.r / 255;
     }
-    if ((wp->entries[0].flags & 2) && !(flags & 0x800)) {
+    if ((wp->entries[0].flags & MAP_ENTRY_BLEND) && !(flags & 0x800)) {
         color.r = color.r * wp->entries[0].blend.r / 255;
         color.g = color.g * wp->entries[0].blend.g / 255;
         color.b = color.b * wp->entries[0].blend.b / 255;
         color.a = color.a * wp->entries[0].blend.a / 255;
     }
-    if ((wp->entries[0].flags & 4) && !(flags & 0x1000)) {
+    if ((wp->entries[0].flags & MAP_ENTRY_BLEND2) && !(flags & 0x1000)) {
         color.r = color.r * wp->entries[0].blend2.r / 255;
         color.g = color.g * wp->entries[0].blend2.g / 255;
         color.b = color.b * wp->entries[0].blend2.b / 255;
         color.a = color.a * wp->entries[0].blend2.a / 255;
     }
-    if ((wp->entries[0].flags & 8) && !(flags & 0x800)) {
+    if ((wp->entries[0].flags & MAP_ENTRY_COLOR_UNUSED) && !(flags & 0x800)) {
         color.r = color.r * wp->entries[0].color.r / 255;
         color.g = color.g * wp->entries[0].color.g / 255;
         color.b = color.b * wp->entries[0].color.b / 255;
@@ -2814,7 +2814,7 @@ void mapSetMaterialFog(void) {
     CameraEntry* camera = camGetCurPtr();
     MapWork* wp = mapGetWork();
 
-    if (wp->entries[0].flags & 1) {
+    if (wp->entries[0].flags & MAP_ENTRY_FOG) {
         GXSetFog((GXFogType)fog_type[wp->entries[0].fogType], wp->entries[0].fogStart, wp->entries[0].fogEnd,
                  camera->near, camera->far, wp->entries[0].fogColor);
     } else {
@@ -2826,7 +2826,7 @@ static inline void mapSetObjFog(MapObject* obj) {
     CameraEntry* camera = camGetCurPtr();
     MapWork* wp = mapGetWork();
 
-    if ((wp->entries[0].flags & 1) && !(obj->flags & MAP_OBJ_FLAG_NO_FOG)) {
+    if ((wp->entries[0].flags & MAP_ENTRY_FOG) && !(obj->flags & MAP_OBJ_FLAG_NO_FOG)) {
         GXSetFog((GXFogType)fog_type[wp->entries[0].fogType], wp->entries[0].fogStart, wp->entries[0].fogEnd,
                  camera->near, camera->far, wp->entries[0].fogColor);
     } else {
@@ -3172,7 +3172,7 @@ void mapSetPolygon(MapObject* obj, MapFileMesh* mesh) {
     texCount = vcd->texCount;
 
     GXSetCullMode(culling[obj->joints->drawMode->cullMode]);
-    if (!(wp->entries[obj->groupIndex].flags & 0x8000)) {
+    if (!(wp->entries[obj->groupIndex].flags & MAP_ENTRY_VER_1_02)) {
         GXClearVtxDesc();
         GXSetVtxAttrFmtv(GX_VTXFMT0, attr_fmt);
         GXSetVtxDesc(GX_VA_POS, GX_INDEX16);
@@ -3360,7 +3360,7 @@ void mapObjFlagOn(const char* name, u32 flags) {
         error_count %= 32;
         return;
     }
-    if (!(flags & 0x100) || obj->displayListSize[0]) {
+    if (!(flags & MAP_OBJ_FLAG_DISPLAY_LIST) || obj->displayListSize[0]) {
         obj->flags |= flags;
     }
 }
@@ -3592,31 +3592,31 @@ void mapGetFog(s32* type, f32* start, f32* end, GXColor* color) {
 }
 
 void mapFogOn(void) {
-    mapGetWork()->entries[0].flags |= 1;
+    mapGetWork()->entries[0].flags |= MAP_ENTRY_FOG;
 }
 
 void mapFogOff(void) {
-    mapGetWork()->entries[0].flags &= ~1;
+    mapGetWork()->entries[0].flags &= ~MAP_ENTRY_FOG;
 }
 
 void mapSetBlend(GXColor* color) {
     MapWork* wp = &mapWork[activeGroup];
 
     wp->entries[0].blend = *color;
-    wp->entries[0].flags |= 2;
+    wp->entries[0].flags |= MAP_ENTRY_BLEND;
 }
 
 void mapSetBlend2(GXColor* color) {
     MapWork* wp = &mapWork[activeGroup];
 
     wp->entries[0].blend2 = *color;
-    wp->entries[0].flags |= 4;
+    wp->entries[0].flags |= MAP_ENTRY_BLEND2;
 }
 
 void mapGetBlend(GXColor* color) {
     MapWork* wp = &mapWork[activeGroup];
 
-    if (wp->entries[0].flags & 2) {
+    if (wp->entries[0].flags & MAP_ENTRY_BLEND) {
         *color = wp->entries[0].blend;
     } else {
         *color = (GXColor){0xFF, 0xFF, 0xFF, 0xFF};
@@ -3626,7 +3626,7 @@ void mapGetBlend(GXColor* color) {
 void mapGetBlend2(GXColor* color) {
     MapWork* wp = &mapWork[activeGroup];
 
-    if (wp->entries[0].flags & 4) {
+    if (wp->entries[0].flags & MAP_ENTRY_BLEND2) {
         *color = wp->entries[0].blend2;
     } else {
         *color = (GXColor){0xFF, 0xFF, 0xFF, 0xFF};
@@ -3634,11 +3634,11 @@ void mapGetBlend2(GXColor* color) {
 }
 
 void mapBlendOff(void) {
-    mapGetWork()->entries[0].flags &= ~2;
+    mapGetWork()->entries[0].flags &= ~MAP_ENTRY_BLEND;
 }
 
 void mapBlendOff2(void) {
-    mapGetWork()->entries[0].flags &= ~4;
+    mapGetWork()->entries[0].flags &= ~MAP_ENTRY_BLEND2;
 }
 
 void mapObjSetColor(const char* name, GXColor* color) {
@@ -3775,16 +3775,16 @@ void spline_getvalue(Vec* out, f32 t, s32 n, Vec* pts, f32* ts, Vec* tbl) {
 }
 
 BOOL mapTestXLU(u32 flags, GXColor* color, GXColor* matColor) {
-    if ((flags & 0x40) && color->a != 0xFF) {
+    if ((flags & MAP_OBJ_FLAG_COLOR) && color->a != 0xFF) {
         return TRUE;
     }
     if (matColor->a != 0xFF) {
         return TRUE;
     }
-    if (!(flags & 0x800) && (mapGetWork()->entries[0].flags & 2) && mapGetWork()->entries[0].blend.a != 0xFF) {
+    if (!(flags & MAP_OBJ_FLAG_NO_MAP_BLEND) && (mapGetWork()->entries[0].flags & MAP_ENTRY_BLEND) && mapGetWork()->entries[0].blend.a != 0xFF) {
         return TRUE;
     }
-    if (!(flags & 0x1000) && (mapGetWork()->entries[0].flags & 4) && mapGetWork()->entries[0].blend2.a != 0xFF) {
+    if (!(flags & MAP_OBJ_FLAG_NO_MAP_BLEND2) && (mapGetWork()->entries[0].flags & MAP_ENTRY_BLEND2) && mapGetWork()->entries[0].blend2.a != 0xFF) {
         return TRUE;
     }
     return FALSE;
@@ -3795,19 +3795,19 @@ void mapSetTevCallback(s32 index, MapTevCallback callback) {
 }
 
 void mapObjFlushOn(const char* name) {
-    mapObjFlagOn(name, 0x100000);
+    mapObjFlagOn(name, MAP_OBJ_FLAG_FLUSH);
 }
 
 void mapObjFlushOff(const char* name) {
-    mapObjFlagOff(name, 0x100000);
+    mapObjFlagOff(name, MAP_OBJ_FLAG_FLUSH);
 }
 
 void mapGrpFlushOn(const char* name) {
-    mapGrpFlagOn(name, 0x100000);
+    mapGrpFlagOn(name, MAP_OBJ_FLAG_FLUSH);
 }
 
 void mapGrpFlushOff(const char* name) {
-    mapGrpFlagOff(name, 0x100000);
+    mapGrpFlagOff(name, MAP_OBJ_FLAG_FLUSH);
 }
 
 void mapObjSetFlushColor(const char* name, u8 r, u8 g, u8 b, u8 a) {
@@ -3819,12 +3819,12 @@ void mapObjSetFlushColor(const char* name, u8 r, u8 g, u8 b, u8 a) {
     color.a = a;
 
     mapObjSetColor(name, &color);
-    mapObjFlagOff(name, 0x40);
+    mapObjFlagOff(name, MAP_OBJ_FLAG_COLOR);
 }
 
 void mapGrpSetFlushColor(const char* name, u8 r, u8 g, u8 b, u8 a) {
     mapGrpSetColor(name, (GXColor){r, g, b, a});
-    mapGrpFlagOff(name, 0x40);
+    mapGrpFlagOff(name, MAP_OBJ_FLAG_COLOR);
 }
 
 void mapObjGetFlushColor(const char* name, u8* r, u8* g, u8* b, u8* a) {

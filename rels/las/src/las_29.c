@@ -404,7 +404,7 @@ static USER_FUNC(rousoku_init) {
     }
     for (i = 1; i <= 66; i++) {
         sprintf(name, "hi%d", i);
-        mapGrpFlagOn(name, 1);
+        mapGrpFlagOn(name, MAP_OBJ_FLAG_HIDDEN);
         _hikariEntry(name, type, 0.5f);
     }
     return EVT_RETURN_DONE;

@@ -196,14 +196,14 @@ static USER_FUNC(ride_chk) {
         }
         if (onoff[i] != 0) {
             sprintf(name, "hikaru_%02d", i + 1);
-            mapGrpFlagOff(name, 1);
+            mapGrpFlagOff(name, MAP_OBJ_FLAG_HIDDEN);
             sprintf(name, "nashi_%02d", i + 1);
-            mapGrpFlagOn(name, 1);
+            mapGrpFlagOn(name, MAP_OBJ_FLAG_HIDDEN);
         } else {
             sprintf(name, "hikaru_%02d", i + 1);
-            mapGrpFlagOn(name, 1);
+            mapGrpFlagOn(name, MAP_OBJ_FLAG_HIDDEN);
             sprintf(name, "nashi_%02d", i + 1);
-            mapGrpFlagOff(name, 1);
+            mapGrpFlagOff(name, MAP_OBJ_FLAG_HIDDEN);
         }
     }
     if (evtGetValue(event, GSWF(4182))) {
@@ -244,9 +244,9 @@ USER_FUNC(_hikaru_off) {
 
     for (i = 1; i < 25; i++) {
         sprintf(name, "hikaru_%02d", i);
-        mapGrpFlagOn(name, 1);
+        mapGrpFlagOn(name, MAP_OBJ_FLAG_HIDDEN);
         sprintf(name, "nashi_%02d", i);
-        mapGrpFlagOn(name, 1);
+        mapGrpFlagOn(name, MAP_OBJ_FLAG_HIDDEN);
     }
     return EVT_RETURN_DONE;
 }
@@ -257,9 +257,9 @@ USER_FUNC(_hikaru_on) {
 
     for (i = 1; i < 25; i++) {
         sprintf(name, "hikaru_%02d", i);
-        mapGrpFlagOn(name, 1);
+        mapGrpFlagOn(name, MAP_OBJ_FLAG_HIDDEN);
         sprintf(name, "nashi_%02d", i);
-        mapGrpFlagOff(name, 1);
+        mapGrpFlagOff(name, MAP_OBJ_FLAG_HIDDEN);
     }
     return EVT_RETURN_DONE;
 }
@@ -289,14 +289,14 @@ static USER_FUNC(loop_onoff) {
     for (i = 1; i < 25; i++) {
         if (i == event->userdata[1]) {
             sprintf(name, "hikaru_%02d", i);
-            mapGrpFlagOff(name, 1);
+            mapGrpFlagOff(name, MAP_OBJ_FLAG_HIDDEN);
             sprintf(name, "nashi_%02d", i);
-            mapGrpFlagOn(name, 1);
+            mapGrpFlagOn(name, MAP_OBJ_FLAG_HIDDEN);
         } else {
             sprintf(name, "hikaru_%02d", i);
-            mapGrpFlagOn(name, 1);
+            mapGrpFlagOn(name, MAP_OBJ_FLAG_HIDDEN);
             sprintf(name, "nashi_%02d", i);
-            mapGrpFlagOff(name, 1);
+            mapGrpFlagOff(name, MAP_OBJ_FLAG_HIDDEN);
         }
     }
     return EVT_RETURN_BLOCK;

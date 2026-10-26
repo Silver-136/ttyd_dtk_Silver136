@@ -241,9 +241,9 @@ static USER_FUNC(mario_chk) {
     }
     for (i = 1; i <= 44; i++) {
         sprintf(name, "hikaru_%02d", i);
-        mapGrpFlagOn(name, 1);
+        mapGrpFlagOn(name, MAP_OBJ_FLAG_HIDDEN);
         sprintf(name, "nashi_%02d", i);
-        mapGrpFlagOff(name, 1);
+        mapGrpFlagOff(name, MAP_OBJ_FLAG_HIDDEN);
     }
     for (i = 0; i < 50; i++) {
         hitGrpAttrOn((const char*)hit_list[i], 0x800);
@@ -258,13 +258,13 @@ static USER_FUNC(mario_chk) {
         hit = (HitEntry*)mario->hitobjUnder;
     }
     if (hit == NULL) {
-        mapGrpFlagOff("hikaru_01", 1);
-        mapGrpFlagOn("nashi_01", 1);
+        mapGrpFlagOff("hikaru_01", MAP_OBJ_FLAG_HIDDEN);
+        mapGrpFlagOn("nashi_01", MAP_OBJ_FLAG_HIDDEN);
         hitGrpAttrOff("A_hikaru_01", 0x800);
         event->userdata[2] = 0;
     } else if (strncmp(hitGetName(hit), "A_hikaru_", strlen("A_hikaru_")) != 0) {
-        mapGrpFlagOff("hikaru_01", 1);
-        mapGrpFlagOn("nashi_01", 1);
+        mapGrpFlagOff("hikaru_01", MAP_OBJ_FLAG_HIDDEN);
+        mapGrpFlagOn("nashi_01", MAP_OBJ_FLAG_HIDDEN);
         hitGrpAttrOff("A_hikaru_01", 0x800);
         event->userdata[2] = 0;
     } else if (strcmp(hitGetName(hit), "A_hikaru_01") == 0 && event->userdata[2] == 0) {
@@ -279,9 +279,9 @@ static USER_FUNC(mario_chk) {
     }
     sscanf((const char*)hit_list[j], "A_hikaru_%02d", &n);
     sprintf(name, "hikaru_%02d", n);
-    mapGrpFlagOff(name, 1);
+    mapGrpFlagOff(name, MAP_OBJ_FLAG_HIDDEN);
     sprintf(name, "nashi_%02d", n);
-    mapGrpFlagOn(name, 1);
+    mapGrpFlagOn(name, MAP_OBJ_FLAG_HIDDEN);
     sprintf(name, "A_hikaru_%02d", n);
     hitGrpAttrOff(name, 0x800);
     j++;
@@ -290,9 +290,9 @@ static USER_FUNC(mario_chk) {
     }
     sscanf((const char*)hit_list[j], "A_hikaru_%02d", &n);
     sprintf(name, "hikaru_%02d", n);
-    mapGrpFlagOff(name, 1);
+    mapGrpFlagOff(name, MAP_OBJ_FLAG_HIDDEN);
     sprintf(name, "nashi_%02d", n);
-    mapGrpFlagOn(name, 1);
+    mapGrpFlagOn(name, MAP_OBJ_FLAG_HIDDEN);
     sprintf(name, "A_hikaru_%02d", n);
     hitGrpAttrOff(name, 0x800);
 #ifdef VERSION_G8ME01
@@ -302,9 +302,9 @@ static USER_FUNC(mario_chk) {
     }
     sscanf((const char*)hit_list[j], "A_hikaru_%02d", &n);
     sprintf(name, "hikaru_%02d", n);
-    mapGrpFlagOff(name, 1);
+    mapGrpFlagOff(name, MAP_OBJ_FLAG_HIDDEN);
     sprintf(name, "nashi_%02d", n);
-    mapGrpFlagOn(name, 1);
+    mapGrpFlagOn(name, MAP_OBJ_FLAG_HIDDEN);
     sprintf(name, "A_hikaru_%02d", n);
     hitGrpAttrOff(name, 0x800);
 #endif
@@ -325,9 +325,9 @@ static USER_FUNC(hikaru_off) {
 
     for (i = 1; i <= 44; i++) {
         sprintf(name, "hikaru_%02d", i);
-        mapGrpFlagOn(name, 1);
+        mapGrpFlagOn(name, MAP_OBJ_FLAG_HIDDEN);
         sprintf(name, "nashi_%02d", i);
-        mapGrpFlagOn(name, 1);
+        mapGrpFlagOn(name, MAP_OBJ_FLAG_HIDDEN);
         sprintf(name, "A_hikaru_%02d", i);
         hitGrpAttrOff(name, 0x800);
     }

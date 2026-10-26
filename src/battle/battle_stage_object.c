@@ -158,22 +158,22 @@ void BattleStageObjectInit(void) {
     sw->fogEffect = NULL;
     mapGrpFlagOff(mapGetWork()->entries[0].rootMapObj->joints->name, 2);
     if (mapGetMapObj("A1")) {
-        mapGrpFlagOn("A1", 1);
-        mapGrpFlagOff("A1", 2);
+        mapGrpFlagOn("A1", MAP_OBJ_FLAG_HIDDEN);
+        mapGrpFlagOff("A1", MAP_OBJ_FLAG_CLIP);
     }
     if (mapGetMapObj("A2")) {
-        mapGrpFlagOn("A2", 1);
-        mapGrpFlagOff("A2", 2);
+        mapGrpFlagOn("A2", MAP_OBJ_FLAG_HIDDEN);
+        mapGrpFlagOff("A2", MAP_OBJ_FLAG_CLIP);
     }
     if (mapGetMapObj("B")) {
-        mapGrpFlagOn("B", 1);
-        mapGrpFlagOff("B", 2);
+        mapGrpFlagOn("B", MAP_OBJ_FLAG_HIDDEN);
+        mapGrpFlagOff("B", MAP_OBJ_FLAG_CLIP);
     }
     if (mapGetMapObj("C")) {
-        mapGrpFlagOn("C", 1);
-        mapGrpFlagOff("C", 2);
+        mapGrpFlagOn("C", MAP_OBJ_FLAG_HIDDEN);
+        mapGrpFlagOff("C", MAP_OBJ_FLAG_CLIP);
     }
-    mapGrpFlagOn("escape_wall", 1);
+    mapGrpFlagOn("escape_wall", MAP_OBJ_FLAG_HIDDEN);
 
     id = 1;
     if (data) {
@@ -224,7 +224,7 @@ void BattleStageObjectInit(void) {
             obj->prevPositionOffset = (Vec){999.0f, 999.0f, 999.0f};
             obj->prevRotation = (Vec){999.0f, 999.0f, 999.0f};
             obj->prevPositionOffset2 = (Vec){999.0f, 999.0f, 999.0f};
-            mapGrpFlagOff(obj->data->name, 1);
+            mapGrpFlagOff(obj->data->name, MAP_OBJ_FLAG_HIDDEN);
             switch (data->mSpawnSpecialUnitType) {
                 case 0:
                     unit = BtlUnit_Entry(&_entry_tree_data);
@@ -267,7 +267,7 @@ void BattleStageObjectInit(void) {
             obj->prevPositionOffset = (Vec){999.0f, 999.0f, 999.0f};
             obj->prevRotation = (Vec){999.0f, 999.0f, 999.0f};
             obj->prevPositionOffset2 = (Vec){999.0f, 999.0f, 999.0f};
-            mapGrpFlagOff(obj->data->name, 1);
+            mapGrpFlagOff(obj->data->name, MAP_OBJ_FLAG_HIDDEN);
         }
     }
 
@@ -288,7 +288,7 @@ void BattleStageObjectInit(void) {
     obj->prevPositionOffset = (Vec){999.0f, 999.0f, 999.0f};
     obj->prevRotation = (Vec){999.0f, 999.0f, 999.0f};
     obj->prevPositionOffset2 = (Vec){999.0f, 999.0f, 999.0f};
-    mapGrpFlagOn(obj->data->name, 1);
+    mapGrpFlagOn(obj->data->name, MAP_OBJ_FLAG_HIDDEN);
     obj->mFlags |= 1;
     id++;
 
@@ -313,7 +313,7 @@ void BattleStageObjectInit(void) {
         obj->prevPositionOffset = (Vec){999.0f, 999.0f, 999.0f};
         obj->prevRotation = (Vec){999.0f, 999.0f, 999.0f};
         obj->prevPositionOffset2 = (Vec){999.0f, 999.0f, 999.0f};
-        mapGrpFlagOn(obj->data->name, 1);
+        mapGrpFlagOn(obj->data->name, MAP_OBJ_FLAG_HIDDEN);
         obj->mFlags |= 1;
         id++;
         j++;
@@ -354,8 +354,8 @@ void BattleStageObjectInit(void) {
     }
     if (!hasIronFrame) {
         STAGE_WORK(wp)->flags |= STAGE_FLAG_NO_IRON_FRAME;
-        mapGrpFlagOn("if_body", 1);
-        mapGrpFlagOn("if_wire", 1);
+        mapGrpFlagOn("if_body", MAP_OBJ_FLAG_HIDDEN);
+        mapGrpFlagOn("if_wire", MAP_OBJ_FLAG_HIDDEN);
     }
 }
 
@@ -442,11 +442,11 @@ void BattleStageObjectMain(void) {
         }
         if (obj->mFlags & 1) {
             if (!(mapGetMapObj(obj->data->name)->flags & MAP_OBJ_FLAG_HIDDEN)) {
-                mapGrpFlagOn(obj->data->name, 1);
+                mapGrpFlagOn(obj->data->name, MAP_OBJ_FLAG_HIDDEN);
             }
         } else {
             if (mapGetMapObj(obj->data->name)->flags & MAP_OBJ_FLAG_HIDDEN) {
-                mapGrpFlagOff(obj->data->name, 1);
+                mapGrpFlagOff(obj->data->name, MAP_OBJ_FLAG_HIDDEN);
             }
         }
     }

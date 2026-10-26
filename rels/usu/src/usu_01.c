@@ -2259,7 +2259,7 @@ USER_FUNC(shop_item_disp_off) {
     s32 i;
 
     for (i = 0; i < 6; i++) {
-        mapObjFlagOn(obj_list[i].mobj, 1);
+        mapObjFlagOn(obj_list[i].mobj, MAP_OBJ_FLAG_HIDDEN);
     }
     return EVT_RETURN_DONE;
 }
@@ -2268,7 +2268,7 @@ USER_FUNC(shop_item_disp_on) {
     s32 i;
 
     for (i = 0; i < 6; i++) {
-        mapObjFlagOff(obj_list[i].mobj, 1);
+        mapObjFlagOff(obj_list[i].mobj, MAP_OBJ_FLAG_HIDDEN);
     }
     return EVT_RETURN_DONE;
 }

@@ -654,7 +654,7 @@ EVT_BEGIN(hei_10_init_evt)
     CALL(evt_map_playanim, STRING(("mizu")), 1, 0)
     CALL(evt_map_set_tevcallback, 1, PTR(hei_test_water_tev))
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING(("mizu")), 16777216)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING(("mizu")), 256)
+    CALL(evt_mapobj_flag_onoff, 1, 0, STRING(("mizu")), MAP_OBJ_FLAG_DISPLAY_LIST)
     RETURN
 EVT_END()
 

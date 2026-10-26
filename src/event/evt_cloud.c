@@ -168,7 +168,7 @@ static USER_FUNC(evt_cloud_main) {
             img->flags &= ~IMAGE_FLAG_HIDE;
             img->animName = "A_1";
             img->animTime = animTimeGetTime(group);
-            mapGrpFlagOn(wp->groupName, 1);
+            mapGrpFlagOn(wp->groupName, MAP_OBJ_FLAG_HIDDEN);
             wp->timer = 30;
             wp->state++;
             wp->lastFrame = 0.0f;
@@ -200,7 +200,7 @@ static USER_FUNC(evt_cloud_main) {
             }
             break;
         case 10:
-            mapGrpFlagOff(wp->groupName, 1);
+            mapGrpFlagOff(wp->groupName, MAP_OBJ_FLAG_HIDDEN);
             wp->state = 99;
             break;
         case 20:

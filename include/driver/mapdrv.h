@@ -190,13 +190,18 @@ typedef enum MapObjFlags {
     MAP_OBJ_FLAG_ANIM_MTX = (1 << 13),       // 0x2000, joint animation matrix
     MAP_OBJ_FLAG_DISABLED = (1 << 14),       // 0x4000, skipped by every draw pass
     MAP_OBJ_FLAG_DEPTH_OFFSET = (1 << 15),   // 0x8000, projection depth bias by its place among its siblings
+    MAP_OBJ_FLAG_DEPTH_SHADOW = (1 << 16),   // 0x10000, receives the depth shadow (mapSetMaterialTev)
+    MAP_OBJ_FLAG_PROJ_SHADOW = (1 << 17),    // 0x20000, receives the projected shadow
+    MAP_OBJ_FLAG_DEPTH_SHADOW_2 = (1 << 18), // 0x40000, depth shadow, second TEV setup
     MAP_OBJ_FLAG_NO_FOG = (1 << 19),         // 0x80000
     MAP_OBJ_FLAG_FLUSH = (1 << 20),          // 0x100000, mapObjFlushOn
     MAP_OBJ_FLAG_TRANSFORM = (1 << 21),      // 0x200000, mapObjRotate/Translate/Scale applied
     MAP_OBJ_FLAG_KURURING = (1 << 22),       // 0x400000, drawn by test_kururing_mapdisp
+    MAP_OBJ_FLAG_WAVE_TEX = (1 << 23),       // 0x800000, scrolling wave texture stage
     MAP_OBJ_FLAG_NO_COLOR_STAGE = (1 << 28), // 0x10000000, no final colour-multiply TEV stage
     MAP_OBJ_FLAG_SCREEN_RECT = (1 << 29),    // 0x20000000, mapDispMapObj_bbox screen rectangle
 } MapObjFlags;
+#define MAP_OBJ_FLAG_PULSE 0x80000000 // pulsing yellow highlight stage (with FLUSH: the object colour)
 #define MAP_OBJ_TEV_CALLBACK_MASK 0x0F000000
 #define MAP_OBJ_TEV_CALLBACK(n) ((n) << 24)
 
@@ -312,6 +317,15 @@ typedef struct MapMaterialNameTable {
     s32 count;                  // 0x0
     MapMaterialName entries[];  // 0x4
 } MapMaterialNameTable;
+
+// MapEntry.flags
+typedef enum MapEntryFlags {
+    MAP_ENTRY_FOG = (1 << 0),           // 0x1, mapFogOn; set from the map's fog table
+    MAP_ENTRY_BLEND = (1 << 1),         // 0x2, mapSetBlend
+    MAP_ENTRY_BLEND2 = (1 << 2),        // 0x4, mapSetBlend2
+    MAP_ENTRY_COLOR_UNUSED = (1 << 3),  // 0x8, multiply by entries[0].color; nothing sets it
+    MAP_ENTRY_VER_1_02 = (1 << 15),     // 0x8000, map file version "ver1.02"
+} MapEntryFlags;
 
 typedef struct MapEntry {
     union {

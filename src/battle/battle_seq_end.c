@@ -1462,8 +1462,8 @@ USER_FUNC(_disable_enemy_unit_disp) {
     if (obj) {
         wp->stageObjectWork.flags |= STAGE_FLAG_NO_IRON_FRAME;
         obj->mFlags |= 1;
-        mapGrpFlagOn("if_body", 1);
-        mapGrpFlagOn("if_wire", 1);
+        mapGrpFlagOn("if_body", MAP_OBJ_FLAG_HIDDEN);
+        mapGrpFlagOn("if_wire", MAP_OBJ_FLAG_HIDDEN);
     }
     return 2;
 }

@@ -298,7 +298,7 @@ void iconEntry(const char* name, u16 iconId) {
         entry->uflags |= 0x2000;
     }
     entry->uflags |= 1;
-    if (mapGetWork()->entries[0].flags & 2) {
+    if (mapGetWork()->entries[0].flags & MAP_ENTRY_BLEND) {
         if (!strncmp(gp->currentMapName, "aji", 3) && evtGetValue(0, GSW_STORY_PROGRESS) == 0x178) {
             entry->uflags &= ~0x40;
         } else {
@@ -648,7 +648,7 @@ void iconGX(Mtx mtx, IconEntry* entry) {
         GXSetTevColorIn(GX_TEVSTAGE1, GX_CC_ZERO, GX_CC_C0, GX_CC_CPREV, GX_CC_ZERO);
         GXSetTevAlphaIn(GX_TEVSTAGE1, GX_CA_ZERO, GX_CA_A0, GX_CA_APREV, GX_CA_ZERO);
         if (!(entry->uflags & 0x10) && !(entry->uflags & 0x40) && !(entry->uflags & 0x80) &&
-            (mapGetWork()->entries[0].flags & 2)) {
+            (mapGetWork()->entries[0].flags & MAP_ENTRY_BLEND)) {
             GXColor blend;
             mapGetBlend(&blend);
             GXSetTevColor(GX_TEVREG1, blend);

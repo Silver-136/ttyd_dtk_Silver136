@@ -1933,11 +1933,11 @@ USER_FUNC(under) {
     }
     if ((hit != NULL && strcmp(hitGetName(hit), "a_home_yuka") == 0) || flag) {
         if (event->userdata[0] == 0 || flag) {
-            mapGrpFlagOn("ie_1", 1);
+            mapGrpFlagOn("ie_1", MAP_OBJ_FLAG_HIDDEN);
             event->userdata[0] = 1;
         }
     } else if (event->userdata[0] != 0) {
-        mapGrpFlagOff("ie_1", 1);
+        mapGrpFlagOff("ie_1", MAP_OBJ_FLAG_HIDDEN);
         event->userdata[0] = 0;
     }
     return EVT_RETURN_BLOCK;

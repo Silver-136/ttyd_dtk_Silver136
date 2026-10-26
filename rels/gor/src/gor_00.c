@@ -4847,15 +4847,15 @@ USER_FUNC(funeflag_save) {
 }
 
 USER_FUNC(funeflag_reset) {
-    mapGrpFlagOn("S_fune_b", 1);
-    mapGrpFlagOn("S_fune_c", 1);
+    mapGrpFlagOn("S_fune_b", MAP_OBJ_FLAG_HIDDEN);
+    mapGrpFlagOn("S_fune_c", MAP_OBJ_FLAG_HIDDEN);
     return EVT_RETURN_DONE;
 }
 
 USER_FUNC(funeflag_load) {
-    mapGrpFlagOff("S_fune_b", 1);
+    mapGrpFlagOff("S_fune_b", MAP_OBJ_FLAG_HIDDEN);
     mapGrpFlagOn("S_fune_b", event->lwData[8]);
-    mapGrpFlagOff("S_fune_c", 1);
+    mapGrpFlagOff("S_fune_c", MAP_OBJ_FLAG_HIDDEN);
     mapGrpFlagOn("S_fune_c", event->lwData[9]);
     return EVT_RETURN_DONE;
 }

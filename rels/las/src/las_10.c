@@ -1225,10 +1225,10 @@ USER_FUNC(temae_kesu) {
     s32 prev;
     s32 next;
 
-    mapGrpFlagOff("S_kesu", 1);
-    mapGrpFlagOff("S11_kabe", 1);
-    mapGrpFlagOff("S112_kabe", 1);
-    mapGrpFlagOff("S113_kabe", 1);
+    mapGrpFlagOff("S_kesu", MAP_OBJ_FLAG_HIDDEN);
+    mapGrpFlagOff("S11_kabe", MAP_OBJ_FLAG_HIDDEN);
+    mapGrpFlagOff("S112_kabe", MAP_OBJ_FLAG_HIDDEN);
+    mapGrpFlagOff("S113_kabe", MAP_OBJ_FLAG_HIDDEN);
     // show the walls of the camera's octant and its neighbours
     idx = (157.5f + cam->viewYaw) / 45.0f;
     idx %= 8;
@@ -1244,9 +1244,9 @@ USER_FUNC(temae_kesu) {
     mapGrpFlagOn((const char*)kabe_list_3[prev], 1);
     mapGrpFlagOn((const char*)kabe_list_3[next], 1);
     if (idx >= 2 && idx <= 4) {
-        mapGrpFlagOn("S14_hashira", 1);
-        mapGrpFlagOn("S115_hashira", 1);
-        mapGrpFlagOn("S116_hashira", 1);
+        mapGrpFlagOn("S14_hashira", MAP_OBJ_FLAG_HIDDEN);
+        mapGrpFlagOn("S115_hashira", MAP_OBJ_FLAG_HIDDEN);
+        mapGrpFlagOn("S116_hashira", MAP_OBJ_FLAG_HIDDEN);
     }
     return EVT_RETURN_DONE;
 }

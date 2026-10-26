@@ -966,7 +966,7 @@ USER_FUNC(evt_shop_setup) {
     wp->count = 6;
     for (i = 0; i < wp->count; i++) {
         mapObjGetPos(wp->objs[i].mobj, &pos);
-        mapObjFlagOn(wp->objs[i].mobj, 0x4000);
+        mapObjFlagOn(wp->objs[i].mobj, MAP_OBJ_FLAG_DISABLED);
         sprintf(buf, "shp%d", i);
         iconEntry(buf, itemDataTable[wp->items[i].id].icon_id);
         iconSetPos(buf, pos.x, pos.y + 6.0f, pos.z);
