@@ -21,6 +21,7 @@
 #include "pmario_sound.h"
 #include "driver/itemdrv.h"
 #include "mario/mario.h"
+#include "driver/mapdrv.h"
 
 #include "driver/fadedrv.h"
 #include "mario/mariost.h"
@@ -1954,7 +1955,7 @@ void bossrobot_batu(CameraId camera, void* param) {
     PSMTXTrans(rot, 0.0f, 0.0f, 0.2f);
     PSMTXConcat(mtx, rot, mtx);
     animPosePeraOff(batu->poseId);
-    animPoseSetMaterialFlagOn(batu->poseId, 0x40);
+    animPoseSetMaterialFlagOn(batu->poseId, MAP_OBJ_FLAG_COLOR);
     animPoseSetMaterialEvtColor(batu->poseId, (GXColor){0xFF, 0xFF, 0xFF, *alpha});
     switch (dispGetCurWork()->renderMode) {
         case 0:

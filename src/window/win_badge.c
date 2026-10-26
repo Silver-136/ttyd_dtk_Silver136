@@ -14,6 +14,7 @@
 #include <demo/DEMOPad.h>
 #include "sfx_name_word.h"
 #include "win/win_mario.h"
+#include "driver/mapdrv.h"
 
 extern ItemData itemDataTable[];
 
@@ -81,13 +82,13 @@ void mario_change(WindowWork* w, s32 unused) {
             animPoseRelease(w->mario.poseId);
             w->mario.poseId = animPoseEntry("d_mario", 0);
             animPoseSetAnim(w->mario.poseId, animL, 1);
-            animPoseSetMaterialFlagOn(w->mario.poseId, 0x1800);
+            animPoseSetMaterialFlagOn(w->mario.poseId, (MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2));
         }
         if (w->log.pose != -1) {
             animPoseRelease(w->log.pose);
             w->log.pose = animPoseEntry("d_mario", 0);
             animPoseSetAnim(w->log.pose, animR, 1);
-            animPoseSetMaterialFlagOn(w->log.pose, 0x1800);
+            animPoseSetMaterialFlagOn(w->log.pose, (MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2));
         }
     } else {
         if (hasLeft && !hasRight) {
@@ -103,13 +104,13 @@ void mario_change(WindowWork* w, s32 unused) {
             animPoseRelease(w->mario.poseId);
             w->mario.poseId = animPoseEntry(model, 0);
             animPoseSetAnim(w->mario.poseId, "M_S_1", 1);
-            animPoseSetMaterialFlagOn(w->mario.poseId, 0x1800);
+            animPoseSetMaterialFlagOn(w->mario.poseId, (MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2));
         }
         if (w->log.pose != -1) {
             animPoseRelease(w->log.pose);
             w->log.pose = animPoseEntry(model, 0);
             animPoseSetAnim(w->log.pose, "M_W_1", 1);
-            animPoseSetMaterialFlagOn(w->log.pose, 0x1800);
+            animPoseSetMaterialFlagOn(w->log.pose, (MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2));
         }
     }
 }

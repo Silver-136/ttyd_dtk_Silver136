@@ -9,6 +9,7 @@
 #include "system.h"
 #include <dolphin/gx.h>
 #include "driver/effdrv.h"
+#include "driver/mapdrv.h"
 
 
 //.sdata
@@ -177,7 +178,7 @@ EffectEntry* effNiceEntry(s32 type, f32 x, f32 y, f32 z) {
         size = gp->inBattle != 0;
         userdata->poseId = animPoseEntry(anim_tbl[gp->language][type], size);
         animPoseSetAnim(userdata->poseId, "A_1", TRUE);
-        animPoseSetMaterialFlagOn(userdata->poseId, 0x1800);
+        animPoseSetMaterialFlagOn(userdata->poseId, (MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2));
         animPoseSetGXFunc(userdata->poseId, rendermodeFunc, FALSE);
         break;
     }
@@ -246,7 +247,7 @@ void effNiceMain(EffectEntry* effect) {
             if (pose->localFrame > start) {
                 t = 1.0f - (pose->localFrame - start) / (len - start);
                 if (t < 0.0f) t = 0.0f;
-                animPoseSetMaterialFlagOn(wp->poseId, 0x40);
+                animPoseSetMaterialFlagOn(wp->poseId, MAP_OBJ_FLAG_COLOR);
                 animPoseSetMaterialEvtColor(wp->poseId, (GXColor){0xFF, 0xFF, 0xFF, 255.0f * t});
             }
 #ifdef VERSION_G8ME01
@@ -260,7 +261,7 @@ void effNiceMain(EffectEntry* effect) {
             if (pose->localFrame > start) {
                 t = 1.0f - (pose->localFrame - start) / (len - start);
                 if (t < 0.0f) t = 0.0f;
-                animPoseSetMaterialFlagOn(wp->poseId, 0x40);
+                animPoseSetMaterialFlagOn(wp->poseId, MAP_OBJ_FLAG_COLOR);
                 animPoseSetMaterialEvtColor(wp->poseId, (GXColor){0xFF, 0xFF, 0xFF, 255.0f * t});
             }
             break;
@@ -271,7 +272,7 @@ void effNiceMain(EffectEntry* effect) {
             if (pose->localFrame > start) {
                 t = 1.0f - (pose->localFrame - start) / (len - start);
                 if (t < 0.0f) t = 0.0f;
-                animPoseSetMaterialFlagOn(wp->poseId, 0x40);
+                animPoseSetMaterialFlagOn(wp->poseId, MAP_OBJ_FLAG_COLOR);
                 animPoseSetMaterialEvtColor(wp->poseId, (GXColor){0xFF, 0xFF, 0xFF, 255.0f * t});
             }
             break;
@@ -282,7 +283,7 @@ void effNiceMain(EffectEntry* effect) {
             if (pose->localFrame > start) {
                 t = 1.0f - (pose->localFrame - start) / (len - start);
                 if (t < 0.0f) t = 0.0f;
-                animPoseSetMaterialFlagOn(wp->poseId, 0x40);
+                animPoseSetMaterialFlagOn(wp->poseId, MAP_OBJ_FLAG_COLOR);
                 animPoseSetMaterialEvtColor(wp->poseId, (GXColor){0xFF, 0xFF, 0xFF, 255.0f * t});
             }
             break;

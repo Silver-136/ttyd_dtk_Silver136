@@ -832,8 +832,8 @@ void mobjMain(void) {
             s32 shadowId;
             mapGetBlend(&blend1);
             mapGetBlend2(&blend2);
-            if ((mw->entries[0].flags & 2) && !(animPoseGetMaterialFlag(entry->poseId) & 0x800) && blend1.a != 0xff) {
-            } else if ((mw->entries[0].flags & 4) && !(animPoseGetMaterialFlag(entry->poseId) & 0x1000) &&
+            if ((mw->entries[0].flags & 2) && !(animPoseGetMaterialFlag(entry->poseId) & MAP_OBJ_FLAG_NO_MAP_BLEND) && blend1.a != 0xff) {
+            } else if ((mw->entries[0].flags & 4) && !(animPoseGetMaterialFlag(entry->poseId) & MAP_OBJ_FLAG_NO_MAP_BLEND2) &&
                        blend2.a != 0xff) {
             } else {
                 shadowId = shadowEntry(entry->position.x, entry->position.y, entry->position.z,
@@ -860,7 +860,7 @@ void mobjMain(void) {
             continue;
         }
         if (entry->offscreenId == -1) {
-            if ((animPoseGetMaterialFlag(entry->poseId) & 0x40) && evt.a != 0xff) {
+            if ((animPoseGetMaterialFlag(entry->poseId) & MAP_OBJ_FLAG_COLOR) && evt.a != 0xff) {
                 dispEntry(entry->camId, dispCalcZ(&entry->position), 2, mobjDispXLU, entry);
             } else {
                 dispEntry(entry->camId, dispCalcZ(&entry->position), 0, mobjDisp, entry);
@@ -868,7 +868,7 @@ void mobjMain(void) {
                 dispEntry(entry->camId, dispCalcZ(&entry->position), 2, mobjDisp, entry);
             }
         } else {
-            if ((animPoseGetMaterialFlag(entry->poseId) & 0x40) && evt.a != 0xff) {
+            if ((animPoseGetMaterialFlag(entry->poseId) & MAP_OBJ_FLAG_COLOR) && evt.a != 0xff) {
                 dispEntry(CAMERA_OFFSCREEN2, dispCalcZ(&entry->position), 2, mobjDisp_OffscreenXLU, entry);
             } else {
                 dispEntry(CAMERA_OFFSCREEN2, dispCalcZ(&entry->position), 0, mobjDisp_OffscreenXLU, entry);

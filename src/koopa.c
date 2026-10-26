@@ -22,6 +22,7 @@
 #include "party.h"
 #include "mario/mario_hit.h"
 #include "mario/mario_kemuri.h"
+#include "driver/mapdrv.h"
 
 void kpa2DMain(void);
 void kpa3DMain(void);
@@ -132,13 +133,13 @@ s32 kpaMutekiCheck(void) {
 
 void kpaMutekiOn(void) {
     MarioWork* mp = marioGetPtr();
-    animPoseSetMaterialFlagOn(mp->paperAnimGroupId[0], 0x80000000);
+    animPoseSetMaterialFlagOn(mp->paperAnimGroupId[0], MAP_OBJ_FLAG_PULSE);
     KPW(mp)->flags |= 0x10000;
 }
 
 void kpaMutekiOff(void) {
     MarioWork* mp = marioGetPtr();
-    animPoseSetMaterialFlagOff(mp->paperAnimGroupId[0], 0x80000000);
+    animPoseSetMaterialFlagOff(mp->paperAnimGroupId[0], MAP_OBJ_FLAG_PULSE);
     KPW(mp)->flags &= ~0x10000;
 }
 

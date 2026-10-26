@@ -326,9 +326,9 @@ static USER_FUNC(_mario_makkuro_set) {
 
     if (unit) {
         mapSetTevCallback(11, callback);
-        animPoseSetMaterialFlagOn(BtlUnit_GetPartsPtr(unit, 1)->poseId, 0xB000000);
-        animPoseSetMaterialFlagOn(BtlUnit_GetPartsPtr(unit, 2)->poseId, 0xB000000);
-        animPoseSetMaterialFlagOn(BtlUnit_GetPartsPtr(unit, 3)->poseId, 0xB000000);
+        animPoseSetMaterialFlagOn(BtlUnit_GetPartsPtr(unit, 1)->poseId, MAP_OBJ_TEV_CALLBACK(11));
+        animPoseSetMaterialFlagOn(BtlUnit_GetPartsPtr(unit, 2)->poseId, MAP_OBJ_TEV_CALLBACK(11));
+        animPoseSetMaterialFlagOn(BtlUnit_GetPartsPtr(unit, 3)->poseId, MAP_OBJ_TEV_CALLBACK(11));
     }
     return EVT_RETURN_DONE;
 }

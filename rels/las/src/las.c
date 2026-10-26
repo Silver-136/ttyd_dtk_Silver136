@@ -88,14 +88,14 @@ USER_FUNC(mobj_set_color) {
     MapObjectEntry* mobj = mobjNameToPtr(name);
 
     animPoseSetMaterialEvtColor(mobj->poseId, (GXColor){r, g, b, 255});
-    animPoseSetMaterialFlagOn(mobj->poseId, 0x40);
+    animPoseSetMaterialFlagOn(mobj->poseId, MAP_OBJ_FLAG_COLOR);
     return EVT_RETURN_DONE;
 }
 
 USER_FUNC(mobj_color_off) {
     MapObjectEntry* mobj = mobjNameToPtr((const char*)evtGetValue(event, event->args[0]));
 
-    animPoseSetMaterialFlagOff(mobj->poseId, 0x40);
+    animPoseSetMaterialFlagOff(mobj->poseId, MAP_OBJ_FLAG_COLOR);
     return EVT_RETURN_DONE;
 }
 

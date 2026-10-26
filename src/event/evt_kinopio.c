@@ -24,6 +24,7 @@
 #include "party/party_motion.h"
 #include "evt/evt_sub.h"
 #include "mario/mario_pouch.h"
+#include "driver/mapdrv.h"
 
 ItemEntry* itemEntry(const char* name, s32 itemId, u16 type, s32 collectFlag, EvtWord* evtCode, f32 x, f32 y, f32 z);
 
@@ -239,7 +240,7 @@ USER_FUNC(snd_on) {
 
 USER_FUNC(N_cameraman_on) {
     NpcEntry* npc = npcNameToPtr("\217h\211\256\202\314\203J\203\201\203\211\203}\203\223");
-    animPoseSetMaterialFlagOn(npc->poseId, 0x1800);
+    animPoseSetMaterialFlagOn(npc->poseId, (MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2));
     return 2;
 }
 

@@ -1511,7 +1511,7 @@ s32 img_set_color(EventEntry* event, BOOL isFirstCall) {
     u8 b = evtGetValue(event, args[3]);
     u8 a = evtGetValue(event, args[4]);
     ImageEntry* img = imgNameToPtr(name, gp->inBattle != 0);
-    animPoseSetMaterialFlagOn(img->poseId, 0x40);
+    animPoseSetMaterialFlagOn(img->poseId, MAP_OBJ_FLAG_COLOR);
     animPoseSetMaterialEvtColor(img->poseId, (GXColor){r, g, b, a});
     return EVT_RETURN_DONE;
 }

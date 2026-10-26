@@ -2778,7 +2778,7 @@ void mapSetMaterialLastStageBlend(s32 flags, GXColor color1, GXColor color2) {
     MapWork* wp = mapGetWork();
     GXColor color = {0xFF, 0xFF, 0xFF, 0xFF};
 
-    if (flags & 0x40) {
+    if (flags & MAP_OBJ_FLAG_COLOR) {
         color.r = color.r * color1.r / 255;
         color.g = color.g * color1.g / 255;
         color.b = color.b * color1.b / 255;
@@ -2787,19 +2787,19 @@ void mapSetMaterialLastStageBlend(s32 flags, GXColor color1, GXColor color2) {
     if (color2.r != 0xFF) {
         color.a = color.a * color2.r / 255;
     }
-    if ((wp->entries[0].flags & MAP_ENTRY_BLEND) && !(flags & 0x800)) {
+    if ((wp->entries[0].flags & MAP_ENTRY_BLEND) && !(flags & MAP_OBJ_FLAG_NO_MAP_BLEND)) {
         color.r = color.r * wp->entries[0].blend.r / 255;
         color.g = color.g * wp->entries[0].blend.g / 255;
         color.b = color.b * wp->entries[0].blend.b / 255;
         color.a = color.a * wp->entries[0].blend.a / 255;
     }
-    if ((wp->entries[0].flags & MAP_ENTRY_BLEND2) && !(flags & 0x1000)) {
+    if ((wp->entries[0].flags & MAP_ENTRY_BLEND2) && !(flags & MAP_OBJ_FLAG_NO_MAP_BLEND2)) {
         color.r = color.r * wp->entries[0].blend2.r / 255;
         color.g = color.g * wp->entries[0].blend2.g / 255;
         color.b = color.b * wp->entries[0].blend2.b / 255;
         color.a = color.a * wp->entries[0].blend2.a / 255;
     }
-    if ((wp->entries[0].flags & MAP_ENTRY_COLOR_UNUSED) && !(flags & 0x800)) {
+    if ((wp->entries[0].flags & MAP_ENTRY_COLOR_UNUSED) && !(flags & MAP_OBJ_FLAG_NO_MAP_BLEND)) {
         color.r = color.r * wp->entries[0].color.r / 255;
         color.g = color.g * wp->entries[0].color.g / 255;
         color.b = color.b * wp->entries[0].color.b / 255;

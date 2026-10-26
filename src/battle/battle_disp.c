@@ -22,6 +22,7 @@
 #include "dolphin/mtx.h"
 #include "driver/shadowdrv.h"
 #include "battle/battle_seq_command.h"
+#include "driver/mapdrv.h"
 
 
 extern ItemData itemDataTable[];
@@ -806,14 +807,14 @@ void btlUnitPartsDisp(CameraId camId, BattleUnitPart* param) {
         color->b = color->b * unit->moveColorLvDisp / 255;
     }
     animPoseSetMaterialEvtColor(part->poseId, *color);
-    animPoseSetMaterialFlagOn(part->poseId, 0x40);
+    animPoseSetMaterialFlagOn(part->poseId, MAP_OBJ_FLAG_COLOR);
     if (part->dispCallback) {
         part->dispCallback(part, 0);
     }
     if (BtlUnit_CheckStatus(unit, STATUS_CHARGE)) {
-        animPoseSetMaterialFlagOn(part->poseId, 0x800000);
+        animPoseSetMaterialFlagOn(part->poseId, MAP_OBJ_FLAG_WAVE_TEX);
     } else {
-        animPoseSetMaterialFlagOff(part->poseId, 0x800000);
+        animPoseSetMaterialFlagOff(part->poseId, MAP_OBJ_FLAG_WAVE_TEX);
     }
     animPoseDrawMtx(part->poseId, drawMtx, 1, rotY, 2.0f);
     animPoseDrawMtx(part->poseId, drawMtx, 2, rotY, 2.0f);
@@ -925,7 +926,7 @@ void btlUnitPartsBlurDisp(CameraId camId, BattleUnitPart* part) {
             color.a = color.a * (u8)((c[0].a * (10 - i)) / 10 + (c[1].a * i) / 10) / 255;
             if (color.a) {
                 animPoseSetMaterialEvtColor(part->poseId, color);
-                animPoseSetMaterialFlagOn(part->poseId, 0x40);
+                animPoseSetMaterialFlagOn(part->poseId, MAP_OBJ_FLAG_COLOR);
                 animPoseDrawMtx(part->poseId, entry->orientation, 1, entry->rotation, 2.0f);
                 animPoseDrawMtx(part->poseId, entry->orientation, 2, entry->rotation, 2.0f);
                 animPoseDrawMtx(part->poseId, entry->orientation, 3, entry->rotation, 2.0f);

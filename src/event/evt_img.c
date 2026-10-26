@@ -6,6 +6,7 @@
 #include "manager/evtmgr_cmd.h"
 #include <dolphin/gx.h>
 #include "sdk/DEMOInit.h"
+#include "driver/mapdrv.h"
 
 typedef struct DEMORenderModeObj {
     u8 pad[4];
@@ -37,7 +38,7 @@ USER_FUNC(evt_img_set_paper) {
     ImageEntry* img = imgNameToPtr(name, group);
     img->poseId = animPaperPoseGetId(anim, group);
     img->animTime = animTimeGetTime(group);
-    animPoseSetMaterialFlagOn(img->poseId, 0x1800);
+    animPoseSetMaterialFlagOn(img->poseId, (MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2));
     return EVT_RETURN_DONE;
 }
 
@@ -208,7 +209,7 @@ USER_FUNC(evt_img_set_color) {
     u8 b = evtGetValue(event, args[3]);
     u8 a = evtGetValue(event, args[4]);
     ImageEntry* img = imgNameToPtr(name, gp->inBattle != 0);
-    animPoseSetMaterialFlagOn(img->poseId, 0x40);
+    animPoseSetMaterialFlagOn(img->poseId, MAP_OBJ_FLAG_COLOR);
     animPoseSetMaterialEvtColor(img->poseId, (GXColor){r, g, b, a});
     return EVT_RETURN_DONE;
 }

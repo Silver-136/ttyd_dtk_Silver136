@@ -8,6 +8,7 @@
 #include "memory.h"
 #include <dolphin/mtx.h>
 #include "driver/effdrv.h"
+#include "driver/mapdrv.h"
 #ifdef VERSION_G8ME01
 const char* eff_irekae_str_tbl[6] = {"EFF_Irekae", "EFF_Irekae", "EFF_Irekae_D", "EFF_Irekae_F_Sp", "EFF_Irekae_F_Sp", "EFF_Irekae_I"};
 #endif
@@ -118,7 +119,7 @@ void effIrekaeruDisp(CameraId cameraId, EffectEntry* effect) {
         PSMTXRotRad(rot, 'y', MTXDegToRad(-camGetPtr(cameraId)->viewYaw));
         PSMTXConcat(mtx, rot, mtx);
         PSMTXConcat(mtx, scale, mtx);
-        animPoseSetMaterialFlagOn(work->poseId, 0x40);
+        animPoseSetMaterialFlagOn(work->poseId, MAP_OBJ_FLAG_COLOR);
         animPoseSetMaterialEvtColor(work->poseId, (GXColor){ 0xFF, 0xFF, 0xFF, work->alpha });
         animPoseMain(work->poseId);
         animPoseDrawMtx(work->poseId, mtx, 1, 0.0f, 2.0f);

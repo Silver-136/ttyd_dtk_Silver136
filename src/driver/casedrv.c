@@ -105,7 +105,7 @@ void caseMain(void) {
             yoshiGetStatus() != 1) {
             btn = 0;
         }
-        flag100 = btn & 0x100;
+        flag100 = btn & PAD_BUTTON_A;
         entry = wp->entries;
         for (i = 0; i < wp->count; i++, entry++) {
             if (!(entry->flags & 1)) continue;

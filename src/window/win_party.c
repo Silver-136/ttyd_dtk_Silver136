@@ -28,6 +28,7 @@
 #include "sfx_name_word.h"
 #include "win/win_mario.h"
 #include "win/win_root.h"
+#include "driver/mapdrv.h"
 
 extern ItemData itemDataTable[];
 
@@ -156,7 +157,7 @@ void winPartyInit(WindowWork* wp) {
                 }
                 wp->party.poseIds[wp->party.count] = animPoseEntry(poseName, 0);
                 animPoseSetAnim(wp->party.poseIds[wp->party.count], animName, 1);
-                animPoseSetMaterialFlagOn(wp->party.poseIds[wp->party.count], 0x1800);
+                animPoseSetMaterialFlagOn(wp->party.poseIds[wp->party.count], (MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2));
                 wp->party.partyIds[wp->party.count] = j;
                 wp->party.count++;
             }
@@ -453,7 +454,7 @@ void winPartyDisp(s32 camId, void* param, s32 idx) {
             PSMTXRotRad(ry, 'y', 3.1415927f);
             PSMTXConcat(m, s, m);
             PSMTXConcat(m, ry, m);
-            animPoseSetMaterialFlagOff(pose, 0x40);
+            animPoseSetMaterialFlagOff(pose, MAP_OBJ_FLAG_COLOR);
             for (j = 0; j < 7; j++) {
                 if (wp->party.partyIds[i] == winPartyDt[j].partyId) {
                     break;
@@ -498,7 +499,7 @@ void winPartyDisp(s32 camId, void* param, s32 idx) {
             PSMTXRotRad(ry, 'y', 3.1415927f);
             PSMTXConcat(m, s, m);
             PSMTXConcat(m, ry, m);
-            animPoseSetMaterialFlagOn(pose, 0x40);
+            animPoseSetMaterialFlagOn(pose, MAP_OBJ_FLAG_COLOR);
             animPoseSetMaterialEvtColor(pose, (GXColor){0x80, 0x80, 0x80, 0xFF});
             for (j = 0; j < 7; j++) {
                 if (wp->party.partyIds[i] == winPartyDt[j].partyId) {

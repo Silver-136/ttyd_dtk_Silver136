@@ -28,6 +28,7 @@
 #include "driver/msgdrv.h"
 #include "libc_decls.h"
 #include "win/win_log.h"
+#include "driver/mapdrv.h"
 
 typedef struct TubuDt {
     s16 x;
@@ -553,7 +554,7 @@ s32 winLogMain(WindowWork* w) {
                 w->log.pose = animPoseEntry(model, 0);
                 animPoseSetAnim(w->log.pose, "M_W_1", 1);
             }
-            animPoseSetMaterialFlagOn(w->log.pose, 0x1800);
+            animPoseSetMaterialFlagOn(w->log.pose, (MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2));
         }
         if (w->buttonTrg & PAD_BUTTON_B) {
             psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_CANCEL1 | PSND_SFX_BYPASS_MUTE));
@@ -1502,7 +1503,7 @@ void capture(CameraId camera, void* param) {
     if (animPoseGetVivianType(m->pose1)) {
         animPoseVivianMain(m->pose1, &(Vec){0.0f, 0.0f, 0.0f});
     }
-    animPoseSetMaterialFlagOn(m->pose1, 0x1800);
+    animPoseSetMaterialFlagOn(m->pose1, (MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2));
     animPosePeraOff(m->pose1);
     PSMTXIdentity(t);
     animPoseDrawMtx(m->pose1, t, 1, 0.0f, 1.0f);
@@ -1517,7 +1518,7 @@ void capture(CameraId camera, void* param) {
         for (i = 0; 500 > i; i++) {
             idx[i] = cnt[i % g_moamoa_chain_num]++;
         }
-        animPoseSetMaterialFlagOn(m->pose2, 0x1800);
+        animPoseSetMaterialFlagOn(m->pose2, (MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2));
         animPosePeraOff(m->pose2);
         for (i = 0; i < 500; i++) {
             k = i % g_moamoa_chain_num;

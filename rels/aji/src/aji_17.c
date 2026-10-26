@@ -3237,7 +3237,7 @@ void peach_capture(CameraId cameraId, void* param) {
     }
     PSMTXCopy(lookAt, camGetCurPtr()->view);
     PSMTXIdentity(ident);
-    animPoseSetMaterialFlagOff(npc->poseId, 0x40);
+    animPoseSetMaterialFlagOff(npc->poseId, MAP_OBJ_FLAG_COLOR);
     animPoseMain(npc->poseId);
     animPoseDrawMtx(npc->poseId, ident, 1, 0.0f, 1.0f);
     animPoseDrawMtx(npc->poseId, ident, 2, 0.0f, 1.0f);

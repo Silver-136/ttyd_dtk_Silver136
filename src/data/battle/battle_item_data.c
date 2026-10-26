@@ -31,6 +31,7 @@
 #include "battle/battle_detect.h"
 #include "battle/battle_damage.h"
 #include "eff/eff_naniga.h"
+#include "driver/mapdrv.h"
 
 extern ItemData itemDataTable[];
 void _nancy_disp(CameraId cameraId, void* param);
@@ -4519,7 +4520,7 @@ void _nancy_disp(CameraId cameraId, void* param) {
     PSMTXConcat(scale, mtx, mtx);
     PSMTXConcat(trans, mtx, mtx);
     animPoseSetMaterialEvtColor(event->userdata[1], (GXColor){0xFF, 0xFF, 0xFF, alpha});
-    animPoseSetMaterialFlagOn(event->userdata[1], 0x40);
+    animPoseSetMaterialFlagOn(event->userdata[1], MAP_OBJ_FLAG_COLOR);
     animPoseDrawMtx(event->userdata[1], mtx, 1, 0.0f, 2.0f);
     animPoseDrawMtx(event->userdata[1], mtx, 2, 0.0f, 2.0f);
     animPoseDrawMtx(event->userdata[1], mtx, 3, 0.0f, 2.0f);

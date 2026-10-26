@@ -191,8 +191,8 @@ void effMahojinMain(EffectEntry* effect) {
                         EffMahojinWork* q = p;
                         s32 k;
                         for (k = 0; k < effect->count; q++, k++) {
-                            animPoseSetMaterialFlagOn(q->poseId[0], 0xA000000);
-                            animPoseSetMaterialFlagOn(q->poseId[1], 0xA000000);
+                            animPoseSetMaterialFlagOn(q->poseId[0], MAP_OBJ_TEV_CALLBACK(10));
+                            animPoseSetMaterialFlagOn(q->poseId[1], MAP_OBJ_TEV_CALLBACK(10));
                         }
                     }
                     mahojin_rate = 0;
@@ -323,7 +323,7 @@ void effMahojinDisp(CameraId cameraId, EffectEntry* effect) {
             }
             if (p->poseId[pass] != -1) {
                 animPoseMain(p->poseId[pass]);
-                animPoseSetMaterialFlagOn(p->poseId[pass], 0x40);
+                animPoseSetMaterialFlagOn(p->poseId[pass], MAP_OBJ_FLAG_COLOR);
                 animPoseSetMaterialEvtColor(p->poseId[pass], (GXColor){ 0xFF, 0xFF, 0xFF, p->alpha * alpha / 255 });
                 animPoseDrawMtx(p->poseId[pass], mtx, 3, 0.0f, 10.0f);
             }

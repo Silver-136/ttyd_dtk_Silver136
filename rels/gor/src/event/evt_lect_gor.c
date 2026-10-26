@@ -1179,7 +1179,7 @@ static USER_FUNC(lect_mobj_set_nosysblend) {
     } else {
         mobj = event->thisMapObj;
     }
-    animPoseSetMaterialFlagOn(mobj->poseId, 0x1800);
+    animPoseSetMaterialFlagOn(mobj->poseId, (MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2));
     return EVT_RETURN_DONE;
 }
 

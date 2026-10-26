@@ -18,6 +18,7 @@
 #include "dolphin/os.h"
 #include "poly_trig.h"
 #include "eff/eff_fall.h"
+#include "driver/mapdrv.h"
 
 typedef struct EffFallWork {
     s32 type;       // 0x0
@@ -943,12 +944,12 @@ void effFallDisp(CameraId cameraId, EffectEntry* effect) {
                 PSMTXConcat(scl, rot, rot);
                 PSMTXTrans(scl, 82.655f, -88.8f, 0.0f);
                 PSMTXConcat(rot, scl, scl);
-                animPoseSetMaterialFlagOn(e->pose0, 0x40);
+                animPoseSetMaterialFlagOn(e->pose0, MAP_OBJ_FLAG_COLOR);
                 animPoseSetMaterialEvtColor(e->pose0, (GXColor){ 0, 0, 0, 255 });
                 animPoseDrawMtx(e->pose0, scl, 1, 0.0f, 10.0f);
                 animPoseDrawMtx(e->pose0, scl, 2, 0.0f, 10.0f);
                 animPoseDrawMtx(e->pose0, scl, 3, 0.0f, 10.0f);
-                animPoseSetMaterialFlagOn(e->pose0, 0x40);
+                animPoseSetMaterialFlagOn(e->pose0, MAP_OBJ_FLAG_COLOR);
                 animPoseSetMaterialEvtColor(e->pose0, (GXColor){ 255, 255, 255, 255 });
                 animPoseDrawMtx(e->pose0, trans, 1, 0.0f, 10.0f);
                 animPoseDrawMtx(e->pose0, trans, 2, 0.0f, 10.0f);
@@ -962,7 +963,7 @@ void effFallDisp(CameraId cameraId, EffectEntry* effect) {
                 PSMTXScale(scl, e->scale, e->scale, e->scale);
                 PSMTXConcat(trans, scl, trans);
                 PSMTXConcat(mtx, trans, trans);
-                animPoseSetMaterialFlagOn(e->pose0, 0x40);
+                animPoseSetMaterialFlagOn(e->pose0, MAP_OBJ_FLAG_COLOR);
                 animPoseSetMaterialEvtColor(e->pose0, (GXColor){ 255, 255, 255, e->alpha });
                 animPoseDrawMtx(e->pose0, trans, 1, 0.0f, 10.0f);
                 animPoseDrawMtx(e->pose0, trans, 2, 0.0f, 10.0f);
@@ -999,7 +1000,7 @@ void effFallDispInseki(CameraId cameraId, EffectEntry* effect) {
                 PSMTXConcat(mtx, trans, trans);
                 PSMTXConcat(trans, rot, trans);
                 PSMTXConcat(trans, scl, trans);
-                animPoseSetMaterialFlagOn(w->pose0, 0x40);
+                animPoseSetMaterialFlagOn(w->pose0, MAP_OBJ_FLAG_COLOR);
                 animPoseSetMaterialEvtColor(w->pose0, (GXColor){ 0, 0, 0, 255 });
             } else {
                 PSMTXTrans(trans, w->pos2.x, w->pos2.y, w->pos2.z);
@@ -1008,7 +1009,7 @@ void effFallDispInseki(CameraId cameraId, EffectEntry* effect) {
                 PSMTXConcat(mtx, trans, trans);
                 PSMTXConcat(trans, rot, trans);
                 PSMTXConcat(trans, scl, trans);
-                animPoseSetMaterialFlagOn(w->pose0, 0x40);
+                animPoseSetMaterialFlagOn(w->pose0, MAP_OBJ_FLAG_COLOR);
                 animPoseSetMaterialEvtColor(w->pose0, (GXColor){ 255, 255, 255, 255 });
             }
             animPoseDrawMtx(w->pose0, trans, 1, 0.0f, 10.0f);

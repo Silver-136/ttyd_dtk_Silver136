@@ -835,7 +835,7 @@ USER_FUNC(img_alpha) {
     s32 alpha = evtGetValue(event, event->args[0]);
     ImageEntry* img = imgNameToPtr("img", gp->inBattle != 0);
 
-    animPoseSetMaterialFlagOn(img->poseId, 0x40);
+    animPoseSetMaterialFlagOn(img->poseId, MAP_OBJ_FLAG_COLOR);
     animPoseSetMaterialEvtColor(img->poseId, (GXColor){0xFF, 0xFF, 0xFF, alpha});
     PSMTXTrans(trans, 0.0f, 1.5f, 0.0f);
     PSMTXScale(scale, 0.9f, 0.9f, 0.9f);

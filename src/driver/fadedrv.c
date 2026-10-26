@@ -16,6 +16,7 @@
 #include "version.h"
 #include "libc_decls.h"
 #include "evt/evt_img.h"
+#include "driver/mapdrv.h"
 
 #ifdef VERSION_G8ME01
 // US-only named constant (dispdrv reads it by name), followed by a zero word
@@ -558,7 +559,7 @@ void fadeMain(void) {
                             entry->image = NULL;
                         }
                         entry->paperPoseId = animPaperPoseEntry(entry->animFile, entry->imageType);
-                        animPoseSetMaterialFlagOn(entry->paperPoseId, 0x1800);
+                        animPoseSetMaterialFlagOn(entry->paperPoseId, (MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2));
                         imgEntry("fImg_peron", entry->imageType);
                         entry->image = imgNameToPtr("fImg_peron", entry->imageType);
                         entry->image->poseId = animPaperPoseGetId(entry->animFile, entry->imageType);
@@ -652,10 +653,10 @@ void fadeMain(void) {
                             animPoseRelease(entry->poseId);
                         }
                         entry->poseId = animPoseEntry(entry->animFile, entry->imageType);
-                        animPoseSetMaterialFlagOn(entry->poseId, 0x1800);
+                        animPoseSetMaterialFlagOn(entry->poseId, (MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2));
                         animPoseSetAnim(entry->poseId, entry->animName, TRUE);
                         entry->animColor = (GXColor){0xFF, 0xFF, 0xFF, 0xFF};
-                        animPoseSetMaterialFlagOff(entry->poseId, 0x40);
+                        animPoseSetMaterialFlagOff(entry->poseId, MAP_OBJ_FLAG_COLOR);
                         entry->state++;
                     case 1:
                         animPoseMain(entry->poseId);
@@ -679,10 +680,10 @@ void fadeMain(void) {
                             animPoseRelease(entry->poseId);
                         }
                         entry->poseId = animPoseEntry(entry->animFile, entry->imageType);
-                        animPoseSetMaterialFlagOn(entry->poseId, 0x1800);
+                        animPoseSetMaterialFlagOn(entry->poseId, (MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2));
                         animPoseSetAnim(entry->poseId, entry->animName, TRUE);
                         entry->animColor = (GXColor){0xFF, 0xFF, 0xFF, 0xFF};
-                        animPoseSetMaterialFlagOff(entry->poseId, 0x40);
+                        animPoseSetMaterialFlagOff(entry->poseId, MAP_OBJ_FLAG_COLOR);
                         entry->state++;
                     case 1:
                         if (animPoseGetLoopTimes(entry->poseId) >= 0.5f) {
@@ -690,7 +691,7 @@ void fadeMain(void) {
                             entry->animColor.g *= 0.98f;
                             entry->animColor.b *= 0.98f;
                             animPoseSetMaterialEvtColor(entry->poseId, entry->animColor);
-                            animPoseSetMaterialFlagOn(entry->poseId, 0x40);
+                            animPoseSetMaterialFlagOn(entry->poseId, MAP_OBJ_FLAG_COLOR);
                         }
                         animPoseMain(entry->poseId);
                         if (animPoseGetLoopTimes(entry->poseId) >= 1.0f) {
@@ -727,7 +728,7 @@ void fadeMain(void) {
                             animPoseRelease(entry->poseId);
                         }
                         entry->poseId = animPoseEntry(entry->animFile, entry->imageType);
-                        animPoseSetMaterialFlagOn(entry->poseId, 0x1800);
+                        animPoseSetMaterialFlagOn(entry->poseId, (MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2));
                         animPoseSetAnim(entry->poseId, entry->animName, TRUE);
                         entry->state++;
                         if (entry->type == 0x22 || entry->type == 0x28) {

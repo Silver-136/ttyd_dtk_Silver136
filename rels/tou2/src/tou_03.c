@@ -4072,7 +4072,7 @@ s32 gans_white_on(EventEntry* event, BOOL isFirstCall) {
     if (isFirstCall) {
         gans_alpha = 0;
         mapSetTevCallback(12, callback);
-        animPoseSetMaterialFlagOn(npc->poseId, 0xC000000);
+        animPoseSetMaterialFlagOn(npc->poseId, MAP_OBJ_TEV_CALLBACK(12));
     }
     gans_alpha += 5;
     if (gans_alpha > 255) {
@@ -4086,7 +4086,7 @@ s32 gans_white_off(EventEntry* event, BOOL isFirstCall) {
     NpcEntry* npc = npcNameToPtr("\203K\203\223\203X");
 
     mapSetTevCallback(12, NULL);
-    animPoseSetMaterialFlagOff(npc->poseId, 0xC000000);
+    animPoseSetMaterialFlagOff(npc->poseId, MAP_OBJ_TEV_CALLBACK(12));
     return EVT_RETURN_DONE;
 }
 

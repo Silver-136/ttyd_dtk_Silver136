@@ -12,6 +12,7 @@
 #include "libc_decls.h"
 #include "poly_trig.h"
 #include "eff/eff_mobj_broken.h"
+#include "driver/mapdrv.h"
 
 
 #define PI 3.1415927f
@@ -333,11 +334,11 @@ static void effMObjBrokenDisp2(CameraId cameraId, EffectEntry* effect) {
                 continue;
             }
             if (pass == 0) {
-                animPoseSetMaterialFlagOn(work->poseId, 0x40);
+                animPoseSetMaterialFlagOn(work->poseId, MAP_OBJ_FLAG_COLOR);
                 color = (GXColor){0, 0, 0, 128};
                 animPoseSetMaterialEvtColor(work->poseId, color);
             } else {
-                animPoseSetMaterialFlagOn(work->poseId, 0x40);
+                animPoseSetMaterialFlagOn(work->poseId, MAP_OBJ_FLAG_COLOR);
                 color = (GXColor){255, 255, 255, 254};
                 animPoseSetMaterialEvtColor(work->poseId, color);
             }

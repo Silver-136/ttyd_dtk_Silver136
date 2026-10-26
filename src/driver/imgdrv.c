@@ -470,14 +470,14 @@ void imgMain(void) {
                     dispEntry(entry->camId, entry->order, 1, imgDisp, entry);
                     switch (entry->shadowId) {
                         case 0:
-                            animPoseSetMaterialFlagOff(entry->poseId, 0x10000);
+                            animPoseSetMaterialFlagOff(entry->poseId, MAP_OBJ_FLAG_DEPTH_SHADOW);
                             break;
                         case 1:
                             dispEntry(CAMERA_SHADOW, 0.0f, 1, imgShadowDisp, entry);
                             dispEntry(CAMERA_3D_IMAGE, 0.0f, 5, imgDisp_ProjPlane, entry);
                             break;
                         case 2:
-                            animPoseSetMaterialFlagOn(entry->poseId, 0x10000);
+                            animPoseSetMaterialFlagOn(entry->poseId, MAP_OBJ_FLAG_DEPTH_SHADOW);
                             dispEntry(CAMERA_SHADOW, 0.0f, 6, imgShadowDisp, entry);
                             dispEntry(CAMERA_3D_IMAGE, 0.0f, 5, imgDisp_ProjPlane, entry);
                             break;

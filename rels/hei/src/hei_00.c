@@ -94,17 +94,17 @@ static EvtWord epilogue_evt[90];
 EvtWord hei_00_init_evt[297];
 
 static USER_FUNC(proj_on) {
-    animPoseSetMaterialFlagOn(marioGetPtr()->paperAnimGroupId[0], 0x400);
-    animPoseSetMaterialFlagOn(marioGetPtr()->paperAnimGroupId[1], 0x400);
-    animPoseSetMaterialFlagOn(marioGetPtr()->paperAnimGroupId[2], 0x400);
+    animPoseSetMaterialFlagOn(marioGetPtr()->paperAnimGroupId[0], MAP_OBJ_FLAG_PROJ_TEX);
+    animPoseSetMaterialFlagOn(marioGetPtr()->paperAnimGroupId[1], MAP_OBJ_FLAG_PROJ_TEX);
+    animPoseSetMaterialFlagOn(marioGetPtr()->paperAnimGroupId[2], MAP_OBJ_FLAG_PROJ_TEX);
     animPoseSetMaterialFlagOn(partyGetPtr(marioGetPartyId())->paperAnimGroup, 0x400);
     return EVT_RETURN_DONE;
 }
 
 static USER_FUNC(proj_off) {
-    animPoseSetMaterialFlagOff(marioGetPtr()->paperAnimGroupId[0], 0x400);
-    animPoseSetMaterialFlagOff(marioGetPtr()->paperAnimGroupId[1], 0x400);
-    animPoseSetMaterialFlagOff(marioGetPtr()->paperAnimGroupId[2], 0x400);
+    animPoseSetMaterialFlagOff(marioGetPtr()->paperAnimGroupId[0], MAP_OBJ_FLAG_PROJ_TEX);
+    animPoseSetMaterialFlagOff(marioGetPtr()->paperAnimGroupId[1], MAP_OBJ_FLAG_PROJ_TEX);
+    animPoseSetMaterialFlagOff(marioGetPtr()->paperAnimGroupId[2], MAP_OBJ_FLAG_PROJ_TEX);
     animPoseSetMaterialFlagOff(partyGetPtr(marioGetPartyId())->paperAnimGroup, 0x400);
     return EVT_RETURN_DONE;
 }

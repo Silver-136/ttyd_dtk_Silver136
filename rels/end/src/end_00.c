@@ -199,12 +199,12 @@ void end_credit_npc_disp(CameraId cameraId, void* param) {
 
     if (evtGetValue(NULL, GF(10)) == 0) {
         mapSetTevCallback(1, end_silhouette_tev);
-        animPoseSetMaterialFlagOn(actor->poseId, 0x1000000);
+        animPoseSetMaterialFlagOn(actor->poseId, MAP_OBJ_TEV_CALLBACK(1));
         animPoseSetGXFunc(actor->poseId, end_silhouette_rendermode, 0);
         animPoseDrawMtx(actor->poseId, actor->mtx, 1, 0.0f, 2.0f);
         animPoseDrawMtx(actor->poseId, actor->mtx, 2, 0.0f, 2.0f);
         animPoseDrawMtx(actor->poseId, actor->mtx, 3, 0.0f, 2.0f);
-        animPoseSetMaterialFlagOff(actor->poseId, 0x1000000);
+        animPoseSetMaterialFlagOff(actor->poseId, MAP_OBJ_TEV_CALLBACK(1));
     }
 }
 
@@ -1401,7 +1401,7 @@ USER_FUNC(evt_end_npc_silhouette_on) {
     NpcEntry* npc = npcNameToPtr((const char*)evtGetValue(event, event->args[0]));
 
     mapSetTevCallback(1, end_silhouette_tev);
-    animPoseSetMaterialFlagOn(npc->poseId, 0x1000000);
+    animPoseSetMaterialFlagOn(npc->poseId, MAP_OBJ_TEV_CALLBACK(1));
     animPoseSetGXFunc(npc->poseId, end_silhouette_rendermode, 0);
     return 2;
 }

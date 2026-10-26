@@ -1914,7 +1914,7 @@ EVT_BEGIN(pik_00_init_evt)
 EVT_END()
 
 USER_FUNC(img_flag) {
-    animPoseSetMaterialFlagOn(imgNameToPtr("img", gp->inBattle != 0)->poseId, 0x1800);
+    animPoseSetMaterialFlagOn(imgNameToPtr("img", gp->inBattle != 0)->poseId, (MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2));
     return EVT_RETURN_DONE;
 }
 

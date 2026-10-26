@@ -5,6 +5,7 @@
 #include "memory.h"
 #include <dolphin/mtx.h>
 #include "driver/effdrv.h"
+#include "driver/mapdrv.h"
 
 EffectEntry* effTreasureMapEntry(s32 type, f32 x, f32 y, f32 z) {
     EffectEntry* effect;
@@ -88,7 +89,7 @@ void effTreasureMapDisp(CameraId cameraId, EffectEntry* effect) {
                 PSMTXRotRad(rot, 'y', MTXDegToRad(work->rotY));
                 PSMTXConcat(trans, scale, mtx);
                 PSMTXConcat(mtx, rot, mtx);
-                animPoseSetMaterialFlagOn(work->poseId, 0x40);
+                animPoseSetMaterialFlagOn(work->poseId, MAP_OBJ_FLAG_COLOR);
                 animPoseSetMaterialEvtColor(work->poseId, (GXColor){ 0x2E, 0x1B, 0x08, work->alpha });
             } else {
                 PSMTXTrans(trans, work->position.x, work->position.y, work->position.z);
@@ -96,7 +97,7 @@ void effTreasureMapDisp(CameraId cameraId, EffectEntry* effect) {
                 PSMTXRotRad(rot, 'y', MTXDegToRad(work->rotY));
                 PSMTXConcat(trans, scale, mtx);
                 PSMTXConcat(mtx, rot, mtx);
-                animPoseSetMaterialFlagOn(work->poseId, 0x40);
+                animPoseSetMaterialFlagOn(work->poseId, MAP_OBJ_FLAG_COLOR);
                 animPoseSetMaterialEvtColor(work->poseId, (GXColor){ 0xFF, 0xFF, 0xFF, work->alpha });
             }
             animPoseMain(work->poseId);

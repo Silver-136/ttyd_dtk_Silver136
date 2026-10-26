@@ -7,6 +7,7 @@
 #include <dolphin/gx.h>
 #include <dolphin/mtx.h>
 #include "eff/eff_batten.h"
+#include "driver/mapdrv.h"
 
 typedef struct EffBattenWork {
     s32 type;      // 0x0
@@ -253,7 +254,7 @@ void effBattenDisp2(CameraId cameraId, EffectEntry* effect) {
     PSMTXConcat(mtx, rot, mtx);
     PSMTXConcat(mtx, scale, mtx);
     PSMTXConcat(mtx, work->mtx, mtx);
-    animPoseSetMaterialFlagOn(work->poseId, 0x40);
+    animPoseSetMaterialFlagOn(work->poseId, MAP_OBJ_FLAG_COLOR);
     animPoseSetMaterialEvtColor(work->poseId, (GXColor){ 0xFF, 0xFF, 0xFF, work->alpha });
     animPoseMain(work->poseId);
     animPoseDrawMtx(work->poseId, mtx, 1, 0.0f, 2.0f);

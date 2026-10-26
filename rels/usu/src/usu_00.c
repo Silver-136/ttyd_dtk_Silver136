@@ -287,7 +287,7 @@ static USER_FUNC(getYoshiColor) {
 }
 
 USER_FUNC(party_tev) {
-    animPoseSetMaterialFlagOff(partyGetPtr(0)->paperAnimGroup, 0x0F000000);
+    animPoseSetMaterialFlagOff(partyGetPtr(0)->paperAnimGroup, MAP_OBJ_TEV_CALLBACK_MASK);
     return EVT_RETURN_DONE;
 }
 
@@ -3153,7 +3153,7 @@ static USER_FUNC(anim_tevcallback) {
     if (npc == NULL) {
         return EVT_RETURN_DONE;
     }
-    animPoseSetMaterialFlagOn(npc->poseId, (flag & 0xF) << 24);
+    animPoseSetMaterialFlagOn(npc->poseId, MAP_OBJ_TEV_CALLBACK(flag & 0xF));
     return EVT_RETURN_DONE;
 }
 

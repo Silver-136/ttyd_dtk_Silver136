@@ -2945,7 +2945,7 @@ s32 mobj_breaking_floor(MapObjectEntry* mobj) {
             mobj->flags |= MOBJ_FLAG_NO_SHADOW;
             evtSetValue(NULL, mobj->flagVar, 1);
             mobj->state = 1;
-            animPoseSetMaterialFlagOn(mobj->poseId, 0x40);
+            animPoseSetMaterialFlagOn(mobj->poseId, MAP_OBJ_FLAG_COLOR);
             animPoseSetMaterialEvtColor(mobj->poseId, c2);
             mobj->timer = 64;
         }

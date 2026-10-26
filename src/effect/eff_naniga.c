@@ -19,6 +19,7 @@
 #include "libc_decls.h"
 #include "eff/eff_kemutest.h"
 #include "eff/eff_naniga.h"
+#include "driver/mapdrv.h"
 
 extern ItemData itemDataTable[];
 
@@ -362,7 +363,7 @@ void effNanigaDisp2(CameraId cameraId, EffectEntry* effect) {
     PSMTXScale(mS, work->scale, work->scale, work->scale);
     PSMTXConcat(mT, mR, mT);
     PSMTXConcat(mT, mS, mC);
-    animPoseSetMaterialFlagOn(work->pose, 0x40);
+    animPoseSetMaterialFlagOn(work->pose, MAP_OBJ_FLAG_COLOR);
     animPoseSetMaterialEvtColor(work->pose, (GXColor){ 0xFF, 0xFF, 0xFF, work->alpha });
     animPoseMain(work->pose);
     animPoseDrawMtx(work->pose, mC, 1, 0.0f, 10.0f);

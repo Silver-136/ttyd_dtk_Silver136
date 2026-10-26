@@ -10,6 +10,7 @@
 #include "eff/eff_magic1_n64.h"
 #include "libc_decls.h"
 #include "mario/mario_sbr.h"
+#include "driver/mapdrv.h"
 
 #define fabs(x) __fabs(x)
 #define fabsf(x) __fabsf(x)
@@ -124,7 +125,7 @@ USER_FUNC(urouro_main_func) {
             npc->moveOffset.z = step * -temp;
             sfxFlag = 0;
             if (psndGetFlag() & PSND_FLAG_DOOR_IN) {
-                if (!(animPoseGetMaterialFlag(npc->poseId) & 0x1800)) {
+                if (!(animPoseGetMaterialFlag(npc->poseId) & (MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2))) {
                     sfxFlag = 0x10000;
                 }
             }

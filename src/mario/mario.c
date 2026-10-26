@@ -37,6 +37,7 @@
 #include "driver/itemdrv.h"
 #include "mario/mario_kemuri.h"
 #include <dolphin/pad.h>
+#include "driver/mapdrv.h"
 
 
 
@@ -1992,7 +1993,7 @@ void marioDispBlurSub(Mtx unused, s32 blurId) {
         yofs + (wp->dispOfs2.y + (wp->dispOfs.y + blurPos[blurId].y)),
         wp->dispOfs2.z + (wp->dispOfs.z + blurPos[blurId].z));
     MTXConcat(rotMtx, mtx, mtx);
-    animPoseSetMaterialFlagOn(wp->paperAnimGroupId[marioAnimeId()], 0x40);
+    animPoseSetMaterialFlagOn(wp->paperAnimGroupId[marioAnimeId()], MAP_OBJ_FLAG_COLOR);
     animPoseSetMaterialEvtColor(wp->paperAnimGroupId[marioAnimeId()], (GXColor){0xFF, 0xFF, 0xFF, 0x80 - (blurId << 4)});
     animPoseDrawMtx(wp->paperAnimGroupId[marioAnimeId()], mtx, 1, 0.0f, 1.0f);
     animPoseDrawMtx(wp->paperAnimGroupId[marioAnimeId()], mtx, 2, 0.0f, 1.0f);
@@ -2047,7 +2048,7 @@ void marioDispBlur(CameraId camId, void* param) {
     for (i = 7; i > 0; i--) {
         marioDispBlurSub(mtx, i);
     }
-    animPoseSetMaterialFlagOff(wp->paperAnimGroupId[marioAnimeId()], 0x40);
+    animPoseSetMaterialFlagOff(wp->paperAnimGroupId[marioAnimeId()], MAP_OBJ_FLAG_COLOR);
     animPoseSetMaterialFlagOn(wp->paperAnimGroupId[marioAnimeId()], flag);
 }
 #pragma opt_dead_assignments reset

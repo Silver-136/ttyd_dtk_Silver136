@@ -5,6 +5,7 @@
 #include "memory.h"
 #include <dolphin/mtx.h>
 #include "driver/effdrv.h"
+#include "driver/mapdrv.h"
 
 typedef struct EffLasMonWork {
     s32 type;     // 0x0
@@ -96,7 +97,7 @@ void effLasMonDisp(CameraId cameraId, EffectEntry* effect) {
         PSMTXTrans(mtx, work->position.x, work->position.y, work->position.z);
         PSMTXScale(scale, work->scale, work->scale, work->scale);
         PSMTXConcat(mtx, scale, mtx);
-        animPoseSetMaterialFlagOn(work->poseId, 0x40);
+        animPoseSetMaterialFlagOn(work->poseId, MAP_OBJ_FLAG_COLOR);
         animPoseSetMaterialEvtColor(work->poseId, (GXColor){ 0xFF, 0xFF, 0xFF, work->alpha });
         animPoseMain(work->poseId);
         animPoseDrawMtx(work->poseId, mtx, 1, 0.0f, 10.0f);

@@ -16,6 +16,7 @@
 #include "driver/casedrv.h"
 #include "pmario_sound.h"
 #include "driver/itemdrv.h"
+#include "driver/mapdrv.h"
 
 #include "driver/mobjdrv.h"
 #include "driver/animdrv.h"
@@ -93,7 +94,7 @@ USER_FUNC(switch_set_alpha) {
         mobj->flags |= MOBJ_FLAG_NO_SHADOW;
     }
     animPoseSetMaterialEvtColor(mobj->poseId, (GXColor){255, 255, 255, alpha});
-    animPoseSetMaterialFlagOn(mobj->poseId, 0x40);
+    animPoseSetMaterialFlagOn(mobj->poseId, MAP_OBJ_FLAG_COLOR);
     return EVT_RETURN_DONE;
 }
 
@@ -105,7 +106,7 @@ USER_FUNC(switch_alpha_off) {
     }
     mobj->flags &= ~MOBJ_FLAG_NO_SHADOW;
     animPoseSetMaterialEvtColor(mobj->poseId, (GXColor){255, 255, 255, 255});
-    animPoseSetMaterialFlagOff(mobj->poseId, 0x40);
+    animPoseSetMaterialFlagOff(mobj->poseId, MAP_OBJ_FLAG_COLOR);
     return EVT_RETURN_DONE;
 }
 

@@ -5,6 +5,7 @@
 #include "memory.h"
 #include <dolphin/mtx.h>
 #include "driver/effdrv.h"
+#include "driver/mapdrv.h"
 
 EffectEntry* effNokotarouEntry(s32 type, s32 duration, f32 x, f32 y, f32 z, f32 size) {
     EffectEntry* effect;
@@ -97,7 +98,7 @@ void effNokotarouDisp(CameraId cameraId, EffectEntry* effect) {
         PSMTXRotRad(rot, 'y', MTXDegToRad(-camGetPtr(cameraId)->viewYaw));
         PSMTXConcat(mtx, rot, mtx);
         PSMTXConcat(mtx, scale, mtx);
-        animPoseSetMaterialFlagOn(work->poseId, 0x40);
+        animPoseSetMaterialFlagOn(work->poseId, MAP_OBJ_FLAG_COLOR);
         animPoseSetMaterialEvtColor(work->poseId, (GXColor){ 0xFF, 0xFF, 0xFF, work->alpha });
         animPoseMain(work->poseId);
         animPoseDrawMtx(work->poseId, mtx, 1, 0.0f, 2.0f);
@@ -116,7 +117,7 @@ void effNokotarouDisp(CameraId cameraId, EffectEntry* effect) {
             PSMTXRotRad(rot, 'y', MTXDegToRad(-camGetPtr(cameraId)->viewYaw));
             PSMTXConcat(mtx, rot, mtx);
             PSMTXConcat(mtx, scale, mtx);
-            animPoseSetMaterialFlagOn(work->poseId2, 0x40);
+            animPoseSetMaterialFlagOn(work->poseId2, MAP_OBJ_FLAG_COLOR);
             animPoseSetMaterialEvtColor(work->poseId2, (GXColor){ 0xFF, 0xFF, 0xFF, work->alpha });
             animPoseMain(work->poseId2);
             animPoseDrawMtx(work->poseId2, mtx, 1, 0.0f, 2.0f);

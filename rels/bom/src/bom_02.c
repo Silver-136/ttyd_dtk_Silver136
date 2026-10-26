@@ -1724,7 +1724,7 @@ static USER_FUNC(anim_tevcallback) {
     if (npc == NULL) {
         return EVT_RETURN_DONE;
     }
-    animPoseSetMaterialFlagOn(npc->poseId, (flag & 0xF) << 24);
+    animPoseSetMaterialFlagOn(npc->poseId, MAP_OBJ_TEV_CALLBACK(flag & 0xF));
     return EVT_RETURN_DONE;
 }
 
@@ -1733,7 +1733,7 @@ static USER_FUNC(anim_tevcallback_mobj) {
     const char* name = (const char*)evtGetValue(event, args[0]);
     s32 flag = evtGetValue(event, args[1]);
 
-    animPoseSetMaterialFlagOn(mobjNameToPtr(name)->poseId, (flag & 0xF) << 24);
+    animPoseSetMaterialFlagOn(mobjNameToPtr(name)->poseId, MAP_OBJ_TEV_CALLBACK(flag & 0xF));
     return EVT_RETURN_DONE;
 }
 

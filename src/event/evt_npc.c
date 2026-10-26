@@ -20,6 +20,7 @@
 #include "libc_decls.h"
 #include <math.h>
 #include "sfx_name_word.h"
+#include "driver/mapdrv.h"
 
 
 #ifdef __MWERKS__
@@ -530,7 +531,7 @@ USER_FUNC(evt_npc_move_position) {
     // Footstep SFX
     sfxFlag = 0;
     if (psndGetFlag() & PSND_FLAG_DOOR_IN) {
-        if (!(animPoseGetMaterialFlag(npc->poseId) & 0x1800)) {
+        if (!(animPoseGetMaterialFlag(npc->poseId) & (MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2))) {
             sfxFlag = 0x10000;
         }
     }
@@ -600,7 +601,7 @@ USER_FUNC(evt_npc_jump_position) {
         npc->moveOffset.y = 0.0f;
 
         sfxFlag = 0;
-        if (psndGetFlag() & PSND_FLAG_DOOR_IN && !(animPoseGetMaterialFlag(npc->poseId) & 0x1800)) {
+        if (psndGetFlag() & PSND_FLAG_DOOR_IN && !(animPoseGetMaterialFlag(npc->poseId) & (MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2))) {
             sfxFlag = 0x10000;
         }
         if (npc->jumpSfx != 0) {
@@ -712,7 +713,7 @@ USER_FUNC(evt_npc_jump_position) {
 
     sfxFlag = 0;
     if (psndGetFlag() & PSND_FLAG_DOOR_IN) {
-        if (!(animPoseGetMaterialFlag(npc->poseId) & 0x1800)) {
+        if (!(animPoseGetMaterialFlag(npc->poseId) & (MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2))) {
             sfxFlag = 0x10000;
         }
     }
@@ -749,7 +750,7 @@ USER_FUNC(evt_npc_jump_position_nohit) {
         npc->flags &= ~NPC_FLAG_SHADOW_NO_FLOOR;
 
         if (psndGetFlag() & PSND_FLAG_DOOR_IN) {
-            if (!(animPoseGetMaterialFlag(npc->poseId) & 0x1800)) {
+            if (!(animPoseGetMaterialFlag(npc->poseId) & (MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2))) {
                 sfxFlag = 0x10000;
             }
         }
@@ -773,7 +774,7 @@ USER_FUNC(evt_npc_jump_position_nohit) {
 
     sfxFlag = 0;
     if (psndGetFlag() & PSND_FLAG_DOOR_IN) {
-        if (!(animPoseGetMaterialFlag(npc->poseId) & 0x1800)) {
+        if (!(animPoseGetMaterialFlag(npc->poseId) & (MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2))) {
             sfxFlag = 0x10000;
         }
     }
@@ -893,7 +894,7 @@ USER_FUNC(evt_npc_glide_position) {
     // Footstep SFX
     sfxFlag = 0;
     if (psndGetFlag() & PSND_FLAG_DOOR_IN) {
-        if (!(animPoseGetMaterialFlag(npc->poseId) & 0x1800)) {
+        if (!(animPoseGetMaterialFlag(npc->poseId) & (MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2))) {
             sfxFlag = 0x10000;
         }
     }
@@ -1059,7 +1060,7 @@ USER_FUNC(evt_npc_homing_target) {
     // Footstep SFX
     sfxFlag = 0;
     if (psndGetFlag() & PSND_FLAG_DOOR_IN) {
-        if (!(animPoseGetMaterialFlag(npc->poseId) & 0x1800)) {
+        if (!(animPoseGetMaterialFlag(npc->poseId) & (MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2))) {
             sfxFlag = 0x10000;
         }
     }

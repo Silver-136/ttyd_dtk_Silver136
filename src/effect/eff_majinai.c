@@ -79,7 +79,7 @@ void effMajinaiMain(EffectEntry* effect) {
             if (!gp->inBattle) {
                 mario = marioGetPtr();
                 for (i = 0; i < 5; i++) {
-                    animPoseSetMaterialFlagOn(mario->paperAnimGroupId[i], 0x800);
+                    animPoseSetMaterialFlagOn(mario->paperAnimGroupId[i], MAP_OBJ_FLAG_NO_MAP_BLEND);
                 }
             } else {
                 unit = BattleGetMarioPtr(_battleWorkPointer);
@@ -108,7 +108,7 @@ void effMajinaiMain(EffectEntry* effect) {
             if (!gp->inBattle) {
                 mario = marioGetPtr();
                 for (i = 0; i < 5; i++) {
-                    animPoseSetMaterialFlagOff(mario->paperAnimGroupId[i], 0x800);
+                    animPoseSetMaterialFlagOff(mario->paperAnimGroupId[i], MAP_OBJ_FLAG_NO_MAP_BLEND);
                 }
             } else {
                 unit = BattleGetMarioPtr(_battleWorkPointer);
@@ -140,7 +140,7 @@ void effMajinaiDisp(CameraId cameraId, EffectEntry* effect) {
         PSMTXRotRad(rot, 'y', MTXDegToRad(-camGetPtr(cameraId)->viewYaw));
         PSMTXConcat(mtx, rot, mtx);
         PSMTXConcat(mtx, scale, mtx);
-        animPoseSetMaterialFlagOn(work->poseId, 0x840);
+        animPoseSetMaterialFlagOn(work->poseId, (MAP_OBJ_FLAG_COLOR | MAP_OBJ_FLAG_NO_MAP_BLEND));
         animPoseSetMaterialEvtColor(work->poseId, (GXColor){ 0xFF, 0xFF, 0xFF, work->alpha });
         animPoseMain(work->poseId);
         animPoseDrawMtx(work->poseId, mtx, 1, 0.0f, 10.0f);

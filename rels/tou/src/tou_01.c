@@ -200,9 +200,9 @@ EvtWord tou_01_init_evt[627];
 #endif
 
 static USER_FUNC(proj_off) {
-    animPoseSetMaterialFlagOff(marioGetPtr()->paperAnimGroupId[0], 0x400);
-    animPoseSetMaterialFlagOff(marioGetPtr()->paperAnimGroupId[1], 0x400);
-    animPoseSetMaterialFlagOff(marioGetPtr()->paperAnimGroupId[2], 0x400);
+    animPoseSetMaterialFlagOff(marioGetPtr()->paperAnimGroupId[0], MAP_OBJ_FLAG_PROJ_TEX);
+    animPoseSetMaterialFlagOff(marioGetPtr()->paperAnimGroupId[1], MAP_OBJ_FLAG_PROJ_TEX);
+    animPoseSetMaterialFlagOff(marioGetPtr()->paperAnimGroupId[2], MAP_OBJ_FLAG_PROJ_TEX);
     if (partyGetPtr(marioGetPartyId()) != NULL) {
         animPoseSetMaterialFlagOff(partyGetPtr(marioGetPartyId())->paperAnimGroup, 0x400);
     }
@@ -642,16 +642,16 @@ EVT_BEGIN(evt_hotdog)
 EVT_END()
 
 static USER_FUNC(proj_on) {
-    animPoseSetMaterialFlagOn(marioGetPtr()->paperAnimGroupId[0], 0x400);
-    animPoseSetMaterialFlagOn(marioGetPtr()->paperAnimGroupId[1], 0x400);
-    animPoseSetMaterialFlagOn(marioGetPtr()->paperAnimGroupId[2], 0x400);
+    animPoseSetMaterialFlagOn(marioGetPtr()->paperAnimGroupId[0], MAP_OBJ_FLAG_PROJ_TEX);
+    animPoseSetMaterialFlagOn(marioGetPtr()->paperAnimGroupId[1], MAP_OBJ_FLAG_PROJ_TEX);
+    animPoseSetMaterialFlagOn(marioGetPtr()->paperAnimGroupId[2], MAP_OBJ_FLAG_PROJ_TEX);
     if (partyGetPtr(marioGetPartyId()) != NULL) {
         animPoseSetMaterialFlagOn(partyGetPtr(marioGetPartyId())->paperAnimGroup, 0x400);
     }
     if (partyGetPtr(marioGetExtraPartyId()) != NULL) {
         animPoseSetMaterialFlagOn(partyGetPtr(marioGetExtraPartyId())->paperAnimGroup, 0x400);
     }
-    animPoseSetMaterialFlagOn(npcNameToPtr("\224\362\213\363\221D")->poseId, 0x400);
+    animPoseSetMaterialFlagOn(npcNameToPtr("\224\362\213\363\221D")->poseId, MAP_OBJ_FLAG_PROJ_TEX);
     return EVT_RETURN_DONE;
 }
 
@@ -3077,7 +3077,7 @@ static USER_FUNC(anim_tevcallback) {
     if (obj == NULL) {
         return EVT_RETURN_DONE;
     }
-    animPoseSetMaterialFlagOn(obj->poseId, (index & 0xF) << 24);
+    animPoseSetMaterialFlagOn(obj->poseId, MAP_OBJ_TEV_CALLBACK(index & 0xF));
     return EVT_RETURN_DONE;
 }
 
@@ -3090,7 +3090,7 @@ static USER_FUNC(anim_tevcallback_mobj) {
     if (obj == NULL) {
         return EVT_RETURN_DONE;
     }
-    animPoseSetMaterialFlagOn(obj->poseId, (index & 0xF) << 24);
+    animPoseSetMaterialFlagOn(obj->poseId, MAP_OBJ_TEV_CALLBACK(index & 0xF));
     return EVT_RETURN_DONE;
 }
 

@@ -18,6 +18,7 @@
 #include "sfx_name_word.h"
 #include "battle/battle_seq_end.h"
 #include "win/win_root.h"
+#include "driver/mapdrv.h"
 
 extern ItemData itemDataTable[];
 
@@ -93,9 +94,9 @@ void winMarioInit(WindowWork* w) {
         w->mario.poseId = animPoseEntry(name, 0);
         animPoseSetAnim(w->mario.poseId, "M_S_1", 1);
     }
-    animPoseSetMaterialFlagOn(w->mario.poseId, 0x1800);
+    animPoseSetMaterialFlagOn(w->mario.poseId, (MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2));
     if (marioGetPtr()->flags & MARIO_FLAG_IS_SHADOW_MARIO) {
-        animPoseSetMaterialFlagOn(w->mario.poseId, 0x0A000000);
+        animPoseSetMaterialFlagOn(w->mario.poseId, MAP_OBJ_TEV_CALLBACK(10));
     }
     w->mario.f18C = 0;
     w->mario.f190 = 0;

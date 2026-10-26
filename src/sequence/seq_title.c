@@ -99,12 +99,12 @@ void L_titleInit(SequenceWork* work) {
             }
             psndBGMOn(PSND_FADEOUT, "BGM_DIGEST1");
             if ((u32)psbgm[0].streamId != 0xFFFFFFFFU) {
-                sound.streams[psbgm[0].streamId].flags |= 0x8000;
+                sound.streams[psbgm[0].streamId].flags |= SOUND_STREAM_FLAG_PAUSE;
             }
         } else {
             psndBGMOn(PSND_FADEOUT, "BGM_TITLE1");
             if ((u32)psbgm[0].streamId != 0xFFFFFFFFU) {
-                sound.streams[psbgm[0].streamId].flags |= 0x8000;
+                sound.streams[psbgm[0].streamId].flags |= SOUND_STREAM_FLAG_PAUSE;
             }
         }
     }
@@ -142,7 +142,7 @@ void titleMain(SequenceWork* work) {
             wp2->timer--;
             if (wp2->timer == 0) {
                 if ((u32)psbgm[0].streamId != 0xFFFFFFFFU) {
-                    sound.streams[psbgm[0].streamId].flags &= ~0x8000;
+                    sound.streams[psbgm[0].streamId].flags &= ~SOUND_STREAM_FLAG_PAUSE;
                 }
             }
             if (fadeIsFinish()) {
@@ -166,7 +166,7 @@ void titleMain(SequenceWork* work) {
             wp2->timer--;
             if (wp2->timer == 0) {
                 if ((u32)psbgm[0].streamId != 0xFFFFFFFFU) {
-                    sound.streams[psbgm[0].streamId].flags &= ~0x8000;
+                    sound.streams[psbgm[0].streamId].flags &= ~SOUND_STREAM_FLAG_PAUSE;
                 }
                 if (seqGetPrevSeq() == SEQ_GAME_OVER) {
                     psndSFXOn(SFX_NAME_WORD(PSND_SFX_BTL_CLAUD_ATTACK2));
@@ -252,42 +252,42 @@ void titleMain(SequenceWork* work) {
         dispEntry(CAMERA_3D_EFFECTB, 0.0f, 0, disp2, NULL);
         switch (wp2->debug) {
             case 0:
-                if (keyGetButtonTrg(0) & ~0x400) {
+                if (keyGetButtonTrg(0) & ~PAD_BUTTON_X) {
                     wp2->debug = 0;
                 } else if (keyGetButtonTrg(0) & PAD_BUTTON_X) {
                     wp2->debug++;
                 }
                 break;
             case 1:
-                if (keyGetButtonTrg(0) & ~0x200) {
+                if (keyGetButtonTrg(0) & ~PAD_BUTTON_B) {
                     wp2->debug = 0;
                 } else if (keyGetButtonTrg(0) & PAD_BUTTON_B) {
                     wp2->debug++;
                 }
                 break;
             case 2:
-                if (keyGetButtonTrg(0) & ~0x20) {
+                if (keyGetButtonTrg(0) & ~PAD_TRIGGER_R) {
                     wp2->debug = 0;
                 } else if (keyGetButtonTrg(0) & PAD_TRIGGER_R) {
                     wp2->debug++;
                 }
                 break;
             case 3:
-                if (keyGetButtonTrg(0) & ~0x200) {
+                if (keyGetButtonTrg(0) & ~PAD_BUTTON_B) {
                     wp2->debug = 0;
                 } else if (keyGetButtonTrg(0) & PAD_BUTTON_B) {
                     wp2->debug++;
                 }
                 break;
             case 4:
-                if (keyGetButtonTrg(0) & ~0x800) {
+                if (keyGetButtonTrg(0) & ~PAD_BUTTON_Y) {
                     wp2->debug = 0;
                 } else if (keyGetButtonTrg(0) & PAD_BUTTON_Y) {
                     wp2->debug++;
                 }
                 break;
             case 5:
-                if (keyGetButtonTrg(0) & ~0x40) {
+                if (keyGetButtonTrg(0) & ~PAD_TRIGGER_L) {
                     wp2->debug = 0;
                 } else if (keyGetButtonTrg(0) & PAD_TRIGGER_L) {
                     wp2->debug = -1;

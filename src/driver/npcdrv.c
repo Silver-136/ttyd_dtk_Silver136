@@ -42,6 +42,7 @@
 #include "eff/eff_small_star.h"
 #include "koopa_motion.h"
 #include "mot/mot_hammer.h"
+#include "driver/mapdrv.h"
 
 f32 cloudGetBreathPower(Vec pos, f32 width);
 
@@ -260,7 +261,7 @@ static inline void npcDimColor(NpcEntry* entry) {
         color.g /= 2;
         color.b /= 2;
         animPoseSetMaterialEvtColor(entry->poseId, color);
-        animPoseSetMaterialFlagOn(entry->poseId, 0x40);
+        animPoseSetMaterialFlagOn(entry->poseId, MAP_OBJ_FLAG_COLOR);
     }
 }
 
@@ -279,7 +280,7 @@ void npcDisp_xlu(CameraId cameraId, void* param) {
         color.g /= 2;
         color.b /= 2;
         animPoseSetMaterialEvtColor(entry->poseId, color);
-        animPoseSetMaterialFlagOn(entry->poseId, 0x40);
+        animPoseSetMaterialFlagOn(entry->poseId, MAP_OBJ_FLAG_COLOR);
     }
 
     npcLuigiPoseFlip(entry);
@@ -306,7 +307,7 @@ void npcDisp(CameraId camId, void* param) {
         color.g /= 2;
         color.b /= 2;
         animPoseSetMaterialEvtColor(entry->poseId, color);
-        animPoseSetMaterialFlagOn(entry->poseId, 0x40);
+        animPoseSetMaterialFlagOn(entry->poseId, MAP_OBJ_FLAG_COLOR);
     }
     switch (dispGetCurWork()->renderMode) {
         case 0:
@@ -321,7 +322,7 @@ void npcDisp(CameraId camId, void* param) {
                 }
                 color.b /= 2;
                 animPoseSetMaterialEvtColor(entry->poseId, color);
-                animPoseSetMaterialFlagOn(entry->poseId, 0x40);
+                animPoseSetMaterialFlagOn(entry->poseId, MAP_OBJ_FLAG_COLOR);
             }
 #endif
 
@@ -423,7 +424,7 @@ void npcDisp_blur(CameraId camId, void* param) {
     do {
         mtx_setup(entry, mtx, i);
         MTXTransApply(mtx, mtx, x, 0.0f, z);
-        animPoseSetMaterialFlagOn(entry->poseId, 0x40);
+        animPoseSetMaterialFlagOn(entry->poseId, MAP_OBJ_FLAG_COLOR);
         animPoseSetMaterialEvtColor(entry->poseId, (GXColor){0xFF, 0xFF, 0xFF, (u8)(0x80 - alpha)});
         animPoseDrawMtx(entry->poseId, mtx, 1, rotY, 2.0f);
         animPoseDrawMtx(entry->poseId, mtx, 2, rotY, 2.0f);
@@ -431,7 +432,7 @@ void npcDisp_blur(CameraId camId, void* param) {
         i--;
         alpha -= 25;
     } while (i > 0);
-    animPoseSetMaterialFlagOff(entry->poseId, 0x40);
+    animPoseSetMaterialFlagOff(entry->poseId, MAP_OBJ_FLAG_COLOR);
     animPoseSetMaterialFlagOn(entry->poseId, flag);
 }
 #pragma pop
@@ -959,10 +960,10 @@ void npcMain(void) {
                         (entry->flags & NPC_FLAG_NO_CULL)) {
                         if (entry->color.r != 0xFF || entry->color.g != 0xFF || entry->color.b != 0xFF ||
                             entry->color.a != 0xFF) {
-                            animPoseSetMaterialFlagOn(entry->poseId, 0x40);
+                            animPoseSetMaterialFlagOn(entry->poseId, MAP_OBJ_FLAG_COLOR);
                             animPoseSetMaterialEvtColor(entry->poseId, entry->color);
                         } else {
-                            animPoseSetMaterialFlagOff(entry->poseId, 0x40);
+                            animPoseSetMaterialFlagOff(entry->poseId, MAP_OBJ_FLAG_COLOR);
                         }
                         prio = 5000.0f + 5000.0f * dv.z;
                         if (prio < 0.0f) {

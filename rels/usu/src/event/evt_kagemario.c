@@ -51,13 +51,13 @@ static s32 color_change_evt(s32 on) {
 
     if (on == 0) {
         for (i = 0; i < 3; i++) {
-            animPoseSetMaterialFlagOff(marioGetPtr()->paperAnimGroupId[i], 0x0A000000);
+            animPoseSetMaterialFlagOff(marioGetPtr()->paperAnimGroupId[i], MAP_OBJ_TEV_CALLBACK(10));
         }
         marioGetPtr()->flags &= ~MARIO_FLAG_IS_SHADOW_MARIO;
     } else {
         mapSetTevCallback(10, callback);
         for (i = 0; i < 3; i++) {
-            animPoseSetMaterialFlagOn(marioGetPtr()->paperAnimGroupId[i], 0x0A000000);
+            animPoseSetMaterialFlagOn(marioGetPtr()->paperAnimGroupId[i], MAP_OBJ_TEV_CALLBACK(10));
         }
         marioGetPtr()->flags |= MARIO_FLAG_IS_SHADOW_MARIO;
     }
@@ -66,7 +66,7 @@ static s32 color_change_evt(s32 on) {
 
 static USER_FUNC(check) {
     if (partyGetPtr(0) != NULL) {
-        animPoseSetMaterialFlagOff(partyGetPtr(0)->paperAnimGroup, 0x0A000000);
+        animPoseSetMaterialFlagOff(partyGetPtr(0)->paperAnimGroup, MAP_OBJ_TEV_CALLBACK(10));
     }
     return EVT_RETURN_BLOCK;
 }

@@ -329,7 +329,7 @@ void effMugiKemuriDisp(CameraId camId, void* param) {
             PSMTXConcat(rz, scale, scale);
             PSMTXConcat(trans, scale, trans);
             if (data->poseId != -1) {
-                animPoseSetMaterialFlagOn(data->poseId, 0x40);
+                animPoseSetMaterialFlagOn(data->poseId, MAP_OBJ_FLAG_COLOR);
                 animPoseSetMaterialEvtColor(data->poseId, (GXColor){0xFF, 0xFF, 0xFF, (u8)data->alpha});
                 animPoseMain(data->poseId);
                 animPoseDrawMtx(data->poseId, trans, 1, 0.0f, 15.0f);
@@ -359,7 +359,7 @@ void effMugiKemuri2Disp(CameraId camId, void* param) {
             PSMTXConcat(rz, scale, scale);
             PSMTXConcat(trans, scale, trans);
             if (data->poseId != -1) {
-                animPoseSetMaterialFlagOn(data->poseId, 0x40);
+                animPoseSetMaterialFlagOn(data->poseId, MAP_OBJ_FLAG_COLOR);
                 animPoseSetMaterialEvtColor(data->poseId, (GXColor){0xFF, 0xFF, 0xFF, (u8)data->alpha});
                 animPoseMain(data->poseId);
                 animPoseDrawMtx(data->poseId, trans, 1, 0.0f, 15.0f);

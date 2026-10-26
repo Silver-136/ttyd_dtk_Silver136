@@ -2280,10 +2280,10 @@ USER_FUNC(ie2_npc_disp_off) {
     s32 i;
 
     for (i = 0; show[i] != NULL; i++) {
-        animPoseSetMaterialFlagOff(npcNameToPtr(show[i])->poseId, 0x1800);
+        animPoseSetMaterialFlagOff(npcNameToPtr(show[i])->poseId, (MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2));
     }
     for (i = 0; hide[i] != NULL; i++) {
-        animPoseSetMaterialFlagOn(npcNameToPtr(hide[i])->poseId, 0x1800);
+        animPoseSetMaterialFlagOn(npcNameToPtr(hide[i])->poseId, (MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2));
     }
     return EVT_RETURN_DONE;
 }
@@ -2295,10 +2295,10 @@ USER_FUNC(ie2_npc_disp_on) {
     s32 i;
 
     for (i = 0; hide[i] != NULL; i++) {
-        animPoseSetMaterialFlagOn(npcNameToPtr(hide[i])->poseId, 0x1800);
+        animPoseSetMaterialFlagOn(npcNameToPtr(hide[i])->poseId, (MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2));
     }
     for (i = 0; show[i] != NULL; i++) {
-        animPoseSetMaterialFlagOff(npcNameToPtr(show[i])->poseId, 0x1800);
+        animPoseSetMaterialFlagOff(npcNameToPtr(show[i])->poseId, (MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2));
     }
     return EVT_RETURN_DONE;
 }

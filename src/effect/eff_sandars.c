@@ -10,6 +10,7 @@
 #include <dolphin/mtx.h>
 #include "eff/eff_magic1_n64.h"
 #include "libc_decls.h"
+#include "driver/mapdrv.h"
 
 void effSandarsMain(EffectEntry* effect);
 void effSandarsDisp(CameraId cameraId, EffectEntry* effect);
@@ -194,7 +195,7 @@ void effSandarsDisp(CameraId cameraId, EffectEntry* effect) {
     PSMTXConcat(mtx, scale, view);
     PSMTXScale(scale, work->bombScale, work->bombScale, work->bombScale);
     PSMTXConcat(view, scale, view);
-    animPoseSetMaterialFlagOn(work->poseId, 0x40);
+    animPoseSetMaterialFlagOn(work->poseId, MAP_OBJ_FLAG_COLOR);
     animPoseSetMaterialEvtColor(work->poseId, (GXColor){ 0xFF, 0xFF, 0xFF, work->alpha });
     animPoseMain(work->poseId);
     animPoseDrawMtx(work->poseId, view, 1, 0.0f, 4.0f);

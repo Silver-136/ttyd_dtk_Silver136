@@ -2160,33 +2160,33 @@ void winSortMain(WindowWork* wp) {
     }
 #ifdef VERSION_G8ME01
     // US: the 0x1000 button closes the sort menu first, without a sound
-    if (trg & 0x1000) {
+    if (trg & PAD_BUTTON_START) {
         wp->sortActive = 0;
         wp->sortTgtX = -600.0f;
     } else
 #endif
-    if (trg & 0x200) {
+    if (trg & PAD_BUTTON_B) {
         psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_CANCEL1 | PSND_SFX_BYPASS_MUTE));
         wp->sortActive = 0;
         wp->sortTgtX = -600.0f;
-    } else if (rep & 0x1000) {
+    } else if (rep & DEMO_STICK_UP) {
         psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_MOVE1 | PSND_SFX_BYPASS_MUTE));
         wp->sortSel--;
         if (wp->sortSel < 0) {
             wp->sortSel = wp->sortNum - 1;
         }
-    } else if (rep & 0x2000) {
+    } else if (rep & DEMO_STICK_DOWN) {
         psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_MOVE1 | PSND_SFX_BYPASS_MUTE));
         wp->sortSel++;
         if (wp->sortSel >= wp->sortNum) {
             wp->sortSel = 0;
         }
-    } else if (trg & 0x100) {
+    } else if (trg & PAD_BUTTON_A) {
         psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1 | PSND_SFX_BYPASS_MUTE));
         sort_data[wp->sortType][wp->sortSel].func(wp);
     }
 #ifndef VERSION_G8ME01
-    else if (trg & 0x1000) {
+    else if (trg & PAD_BUTTON_START) {
         wp->sortActive = 0;
         wp->sortTgtX = -600.0f;
     }

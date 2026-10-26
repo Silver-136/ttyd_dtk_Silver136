@@ -20,6 +20,7 @@
 #include "sfx_name_word.h"
 #include "eff/eff_magic1_n64.h"
 #include "battle/battle_unit.h"
+#include "driver/mapdrv.h"
 const char R_no_messages_JP[] = "<col ff0000ff>\203\201\203b\203Z\201[\203W\202\252\202\240\202\350\202\334\202\271\202\361</col>\n<key>";
 #ifdef VERSION_G8ME01
 const char R_no_messages_US[] = "<col ff0000ff>No messages.[English]<col>\012<key>";
@@ -118,8 +119,8 @@ void msgDispKeyWait_render(s32 wXluStage);
 void msgInit(void) {
     msgw->poseId = animPoseEntry("hoshi_2", 2);
     animPoseSetAnim(msgw->poseId, "HOS_C_1", TRUE);
-    animPoseSetMaterialFlagOn(msgw->poseId, 0x1800);
-    animPoseSetMaterialFlagOff(msgw->poseId, 0x40);
+    animPoseSetMaterialFlagOn(msgw->poseId, (MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2));
+    animPoseSetMaterialFlagOff(msgw->poseId, MAP_OBJ_FLAG_COLOR);
     animPoseSetGXFunc(msgw->poseId, msgDispKeyWait_render, 0);
     msgw->entries[0].address = NULL;
     msgw->entries[0].lookup = NULL;
@@ -1205,8 +1206,8 @@ void msgAnalize(smartEntry* smart, char* msg) {
                 sscanf(args, "%s%s%d%d%f%d", anim1, anim2, &animX, &animY, &animScale, &animFlip);
                 entry->value = animPoseEntry(anim1, 2);
                 animPoseSetAnim(entry->value, anim2, 1);
-                animPoseSetMaterialFlagOn(entry->value, 0x1800);
-                animPoseSetMaterialFlagOff(entry->value, 0x40);
+                animPoseSetMaterialFlagOn(entry->value, (MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2));
+                animPoseSetMaterialFlagOff(entry->value, MAP_OBJ_FLAG_COLOR);
                 /* FAKE: one-trip loop (j is dead here); it enables the backend array-to-register pass that removes the zz/z3/z4 stores */
                 for (j = 0; j < 1; j++) {
                     animPoseSetGXFunc(msgw->poseId, msgDispKeyWait_render, 0);

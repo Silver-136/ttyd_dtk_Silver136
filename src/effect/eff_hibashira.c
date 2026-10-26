@@ -6,6 +6,7 @@
 #include <dolphin/mtx.h>
 #include "eff/eff_magic1_n64.h"
 #include "driver/effdrv.h"
+#include "driver/mapdrv.h"
 
 typedef struct EffHibashiraWork {
     s32 type;     // 0x0
@@ -190,7 +191,7 @@ void effHibashiraDisp(CameraId cameraId, EffectEntry* effect) {
             PSMTXScale(scale, work->scale, work->scale, work->scale);
             PSMTXConcat(mtx, scale, mtx);
             PSMTXConcat(base, mtx, mtx);
-            animPoseSetMaterialFlagOn(work->poseId, 0x40);
+            animPoseSetMaterialFlagOn(work->poseId, MAP_OBJ_FLAG_COLOR);
             animPoseSetMaterialEvtColor(work->poseId,
                                         (GXColor){ 0xFF, 0xFF, 0xFF, work->alpha * alpha / 255 });
             animPoseMain(work->poseId);

@@ -1174,7 +1174,7 @@ static USER_FUNC(anim_tevcallback) {
     if (npc == NULL) {
         return EVT_RETURN_DONE;
     }
-    animPoseSetMaterialFlagOn(npc->poseId, (flag & 0xF) << 24);
+    animPoseSetMaterialFlagOn(npc->poseId, MAP_OBJ_TEV_CALLBACK(flag & 0xF));
     return EVT_RETURN_DONE;
 }
 
