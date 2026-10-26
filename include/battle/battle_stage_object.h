@@ -78,12 +78,22 @@ typedef struct BattleStageFallObjectData {
     BattleWeaponData weapons[9]; //0xCC
 } BattleStageFallObjectData;
 
+// BattleStageObjectWork.flags
+typedef enum BattleStageFlags {
+    STAGE_FLAG_NO_BG_A1_DESTROY = (1 << 1),       // 0x2, background layer A1 absent, destroyed or not destroyable
+    STAGE_FLAG_NO_BG_A2_DESTROY = (1 << 2),       // 0x4, the same for layer A2
+    STAGE_FLAG_NO_BG_B_DESTROY = (1 << 3),        // 0x8, the same for layer B
+    STAGE_FLAG_WALL_CLOSED = (1 << 4),            // 0x10, the closing-wall event has started
+    STAGE_FLAG_NO_IRON_FRAME = (1 << 5),          // 0x20, no iron frame (none on the stage, or it has fallen)
+    STAGE_FLAG_KEEP_IRON_FRAME_UNUSED = (1 << 6), // 0x40, the iron frame never falls; nothing sets it
+} BattleStageFlags;
+
 // BattleWork.stageObjectWork (0x180C0)
 typedef struct BattleStageObjectWork {
     u8 pad_00[0x4 - 0x0]; //0x0, never accessed
     Vec bgRotation; //0x4
     Vec bgRotationPrev; //0x10
-    u8 flags; //0x1C
+    u8 flags; //0x1C, BattleStageFlags
     s32 bgDestroyEvtId; //0x20
     s32 bgEvtId[4]; //0x24
     BattleStageNozzleData* nozzleData; //0x34

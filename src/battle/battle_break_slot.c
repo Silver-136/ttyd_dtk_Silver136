@@ -882,7 +882,7 @@ void BattleBreakSlot_PointInc(void) {
                 reel->index = reel->numCards - 1;
             }
             reel->item = reel->cards[reel->index];
-            if ((u32)dbg->flags & 0x80000) {
+            if ((u32)dbg->flags & BATTLE_DEBUG_SLOT_ITEM) {
                 item_appear_force(reel, dbg->slotItem);
             }
             if (slot->flags & 1) {
@@ -898,7 +898,7 @@ void BattleBreakSlot_PointInc(void) {
                 reel->index = reel->numCards - 1;
             }
             reel->item = reel->cards[reel->index];
-            if ((u32)dbg->flags & 0x80000) {
+            if ((u32)dbg->flags & BATTLE_DEBUG_SLOT_ITEM) {
                 item_appear_force(reel, dbg->slotItem);
             }
             if (slot->flags & 1) {

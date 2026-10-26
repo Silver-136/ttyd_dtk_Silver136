@@ -49,7 +49,6 @@ s32 seq_battle_unk_8041874c;
 static inline BOOL loadTpl(const char* path) {
     return (u32)fileAsyncf(4, NULL, "%s/%s", getMarioStDvdRoot(), path) != 0;
 }
-#define GSW0 (-170000000)
 
 void seq_battleInit(BattleSeqWork* work) {
     FieldBattleData* fbat;
@@ -58,8 +57,8 @@ void seq_battleInit(BattleSeqWork* work) {
     debug_battle_flag = gp->debugBattle;
     fbat = fbatGetPointer();
     npc = fbat->target;
-    if (evtGetValue(NULL, GSW0) < 109 || evtGetValue(NULL, GSW0) >= 111) {
-        if (evtGetValue(NULL, GSW0) != STG8_END_AFTER_THE_BATTLE) {
+    if (evtGetValue(NULL, GSW_STORY_PROGRESS) < STG2_23_TIME_BOMB_ACTIVATED || evtGetValue(NULL, GSW_STORY_PROGRESS) >= STG2_24_BOSS_BATTLE) {
+        if (evtGetValue(NULL, GSW_STORY_PROGRESS) != STG8_END_AFTER_THE_BATTLE) {
             psndBGMOff(0x400);
             psndBGMOn(PSND_SLOT(1), (char*)npc->battleInfo.bgmName);
         }
@@ -358,9 +357,9 @@ void battle_exit(void) {
     { Vec v = {-200.0f, 100.0f, 100.0f}; light->position = v; }
     PSMTXScale(mtx, 3.0f, 3.0f, 3.0f);
     PSMTXMultVec(mtx, &light->position, &light->position);
-    if (evtGetValue(NULL, GSW0) >= 109 && evtGetValue(NULL, GSW0) < 111) {
+    if (evtGetValue(NULL, GSW_STORY_PROGRESS) >= STG2_23_TIME_BOMB_ACTIVATED && evtGetValue(NULL, GSW_STORY_PROGRESS) < STG2_24_BOSS_BATTLE) {
         psndBGMOn_f(PSND_CONTINUE | PSND_FADEIN, 0, 0x2EE, 1);
-    } else if (evtGetValue(NULL, GSW0) != STG8_END_AFTER_THE_BATTLE && seqGetNextSeq() != SEQ_GAME_OVER) {
+    } else if (evtGetValue(NULL, GSW_STORY_PROGRESS) != STG8_END_AFTER_THE_BATTLE && seqGetNextSeq() != SEQ_GAME_OVER) {
         psndBGMOn(PSND_CONTINUE | PSND_FADEIN, NULL);
         psndENVOn(PSND_CONTINUE | PSND_FADEIN, NULL);
     }

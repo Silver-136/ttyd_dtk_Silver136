@@ -61,8 +61,24 @@ typedef enum BattleSequence {
     SEQ_END = 7
 } BattleSequence;
 
+// BattleDebugCtrl.flags: debug switches that force a stage or audience effect
+typedef enum BattleDebugFlags {
+    BATTLE_DEBUG_FORCE_OBJECT_FALL = (1 << 0),        // 0x1
+    BATTLE_DEBUG_FORCE_FALL_ON_AUDIENCE = (1 << 1),   // 0x2, a falling stage object lands on the audience
+    BATTLE_DEBUG_FORCE_DESTROY_A1 = (1 << 4),         // 0x10
+    BATTLE_DEBUG_FORCE_DESTROY_A2 = (1 << 5),         // 0x20
+    BATTLE_DEBUG_FORCE_DESTROY_B = (1 << 6),          // 0x40
+    BATTLE_DEBUG_FORCE_IRON_FRAME_FALL = (1 << 7),    // 0x80
+    BATTLE_DEBUG_FORCE_NOZZLE_WORK = (1 << 8),        // 0x100
+    BATTLE_DEBUG_FORCE_NOZZLE_DIR_CHANGE = (1 << 9),  // 0x200
+    BATTLE_DEBUG_AUDIENCE_NUM = (1 << 16),            // 0x10000, the audience count is audienceNum
+    BATTLE_DEBUG_ITEM_THROW = (1 << 17),              // 0x20000, the audience throws items far more often
+    BATTLE_DEBUG_FORCE_LUIGI = (1 << 18),             // 0x40000, Luigi joins the audience (otherwise 1 in 20)
+    BATTLE_DEBUG_SLOT_ITEM = (1 << 19),               // 0x80000, the slot item is slotItem
+} BattleDebugFlags;
+
 typedef struct BattleDebugCtrl {
-    s32 flags;        // 0x0, 0x10000 force audienceNum, 0x20000/0x40000 audience, 0x80000 force slotItem
+    s32 flags;        // 0x0, BattleDebugFlags
     s32 pad_04;       // 0x4, never accessed
     s32 pad_08;       // 0x8, never accessed
     s32 audienceNum;  // 0xC, mTargetAudienceCount when flags & 0x10000
@@ -247,7 +263,7 @@ struct BattleWork {
     u8 pad_16F3E[0x16F40 - 0x16F3E];    // 0x16F3E (US 0x16F5A), never accessed
     BattleAfterReaction afterReactions[64]; // 0x16F40 (US 0x16F5C), BattleAfterReactionEntry/Release/Main queue
     BattleStageObject stageObjects[32]; // 0x17140
-    BattleStageObjectWork stageObjectWork; // 0x180C0, battle_stage_object.c (flags 0x20: stage has a ceiling)
+    BattleStageObjectWork stageObjectWork; // 0x180C0, battle_stage_object.c (flags: BattleStageFlags)
     BattleIcon icons[16];               // 0x182B0
     BattleAnnounce announce;            // 0x18C70
     s8 alertTick;                       // 0x18FE0

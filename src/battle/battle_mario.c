@@ -6345,7 +6345,7 @@ USER_FUNC(_jump_star_effect) {
 
 USER_FUNC(_bgset_iron_frame_check) {
     s32 ret = *event->args;
-    if (_battleWorkPointer->stageObjectWork.flags & 0x20) {
+    if (_battleWorkPointer->stageObjectWork.flags & STAGE_FLAG_NO_IRON_FRAME) {
         evtSetValue(event, ret, 0);
     } else {
         evtSetValue(event, ret, 1);

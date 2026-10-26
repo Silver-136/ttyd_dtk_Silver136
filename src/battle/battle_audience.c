@@ -657,7 +657,7 @@ u8 BattleAudience_CheckReactionPerPhase(void) {
                                     BattleAudienceAddPhaseEvtList(3);
                                     break;
                                 }
-                                if (BattleAudienceGetPtr(i)->flags & 0x80) {
+                                if (BattleAudienceGetPtr(i)->flags & AUDIENCE_MEMBER_FLAG_WIDE) {
                                     i += 2;
                                 } else {
                                     i++;
@@ -1060,7 +1060,7 @@ void BattleAudienceSettingAudience(void) {
     if (i < 65) lim = i;
     audience->mAudienceDeltaMultiplier = delta.v[lim];
 
-    if (bflags->flags & 0x10000) {
+    if (bflags->flags & BATTLE_DEBUG_AUDIENCE_NUM) {
         audience->mTargetAudienceCount = (f32)bflags->audienceNum;
         if (audience->mTargetAudienceCount > (f32)audience->mMaxAudience) {
             audience->mTargetAudienceCount = (f32)audience->mMaxAudience;
@@ -1223,7 +1223,7 @@ void BattleAudienceSettingAudience(void) {
         i++;
         i %= 12;
     }
-    if (hasKind == 1 && used != 0 && (irand(20) == 0 || (bflags->flags & 0x40000))) {
+    if (hasKind == 1 && used != 0 && (irand(20) == 0 || (bflags->flags & BATTLE_DEBUG_FORCE_LUIGI))) {
         for (i = 0; i < 12; i++) perm[i] = i;
         for (i = 0; i < 24; i++) {
             s32 a = irand(12);
@@ -1236,7 +1236,7 @@ void BattleAudienceSettingAudience(void) {
             s32 id = perm[i];
             if (counts[id] > 0) {
                 counts[id]--;
-                counts[12]++;
+                counts[AUDIENCE_LUIGI]++;
                 break;
             }
         }
@@ -1359,7 +1359,7 @@ void BattleAudienceCtrlProcess(void) {
         }
     }
 
-    if ((u32)bflags->flags & 0x20000) {
+    if ((u32)bflags->flags & BATTLE_DEBUG_ITEM_THROW) {
         audience->itemThrowMax = 10000;
     }
     if (wp->flags & BATTLE_FLAG_COMMAND_INPUT) {
@@ -1369,7 +1369,7 @@ void BattleAudienceCtrlProcess(void) {
             case 1: chance = 6000; break;
             case 2: chance = 30000; break;
             }
-            if ((u32)bflags->flags & 0x20000) {
+            if ((u32)bflags->flags & BATTLE_DEBUG_ITEM_THROW) {
                 chance = 60;
             }
             if (irand(chance) == 0) {

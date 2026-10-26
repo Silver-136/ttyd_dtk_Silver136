@@ -5803,8 +5803,8 @@ USER_FUNC(btlevtcmd_WeaponAftereffect) {
     a2 = 0;
     a1 = 0;
     r = irand(w->stageEffectRates[0] + w->stageEffectRates[1] + w->stageEffectRates[2] + w->stageEffectRates[3]);
-    if ((u32)wp->debug.flags & 0x10) a1 = 1;
-    if ((u32)wp->debug.flags & 0x20) a2 = 1;
+    if ((u32)wp->debug.flags & BATTLE_DEBUG_FORCE_DESTROY_A1) a1 = 1;
+    if ((u32)wp->debug.flags & BATTLE_DEBUG_FORCE_DESTROY_A2) a2 = 1;
     r -= w->stageEffectRates[0];
     if (r < 0) {
         a2 = 1;
@@ -5820,22 +5820,22 @@ USER_FUNC(btlevtcmd_WeaponAftereffect) {
             }
         }
     }
-    if (wp->stageObjectWork.flags & 4) a2 = 0;
-    if (wp->stageObjectWork.flags & 2) a1 = 0;
-    if ((wp->stageObjectWork.flags & 2) && !(wp->stageObjectWork.flags & 8)) {
-        if (irand(100) < w->stageEffectRates[4] || ((u32)wp->debug.flags & 0x40)) {
+    if (wp->stageObjectWork.flags & STAGE_FLAG_NO_BG_A2_DESTROY) a2 = 0;
+    if (wp->stageObjectWork.flags & STAGE_FLAG_NO_BG_A1_DESTROY) a1 = 0;
+    if ((wp->stageObjectWork.flags & STAGE_FLAG_NO_BG_A1_DESTROY) && !(wp->stageObjectWork.flags & STAGE_FLAG_NO_BG_B_DESTROY)) {
+        if (irand(100) < w->stageEffectRates[4] || ((u32)wp->debug.flags & BATTLE_DEBUG_FORCE_DESTROY_B)) {
             b = 1;
-            if (!(wp->stageObjectWork.flags & 4)) a2 = 1;
+            if (!(wp->stageObjectWork.flags & STAGE_FLAG_NO_BG_A2_DESTROY)) a2 = 1;
         }
     }
     if (a1) BattleStage_DestroyA1();
     if (a2) BattleStage_DestroyA2();
     if (b) BattleStage_DestroyB();
-    if (irand(100) < w->stageEffectRates[5] || ((u32)wp->debug.flags & 0x200)) BattleStage_NozzleDirChangeCheck();
-    if (irand(100) < w->stageEffectRates[6] || ((u32)wp->debug.flags & 0x100)) BattleStage_NozzleWorkCheck(1);
-    if (irand(100) < w->stageEffectRates[7] || ((u32)wp->debug.flags & 0x80)) BattleStage_IronFrameFallCheck();
-    if (wp->stageObjectWork.flags & 0x20) {
-        if ((u32)wp->debug.flags & 1) {
+    if (irand(100) < w->stageEffectRates[5] || ((u32)wp->debug.flags & BATTLE_DEBUG_FORCE_NOZZLE_DIR_CHANGE)) BattleStage_NozzleDirChangeCheck();
+    if (irand(100) < w->stageEffectRates[6] || ((u32)wp->debug.flags & BATTLE_DEBUG_FORCE_NOZZLE_WORK)) BattleStage_NozzleWorkCheck(1);
+    if (irand(100) < w->stageEffectRates[7] || ((u32)wp->debug.flags & BATTLE_DEBUG_FORCE_IRON_FRAME_FALL)) BattleStage_IronFrameFallCheck();
+    if (wp->stageObjectWork.flags & STAGE_FLAG_NO_IRON_FRAME) {
+        if ((u32)wp->debug.flags & BATTLE_DEBUG_FORCE_OBJECT_FALL) {
             BattleStage_ObjectFallCheck();
         } else if (irand(100) < w->stageEffectRates[8]) {
             BattleStage_ObjectFallCheck();

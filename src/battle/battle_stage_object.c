@@ -335,25 +335,25 @@ void BattleStageObjectInit(void) {
         STAGE_WORK(wp)->bgEvtId[3] = evtEntry(stage->bgCEvt, 10, 0)->eventId;
     }
     if (!countA1) {
-        STAGE_WORK(wp)->flags |= 2;
+        STAGE_WORK(wp)->flags |= STAGE_FLAG_NO_BG_A1_DESTROY;
     }
     if (!countA2) {
-        STAGE_WORK(wp)->flags |= 4;
+        STAGE_WORK(wp)->flags |= STAGE_FLAG_NO_BG_A2_DESTROY;
     }
     if (!countB) {
-        STAGE_WORK(wp)->flags |= 8;
+        STAGE_WORK(wp)->flags |= STAGE_FLAG_NO_BG_B_DESTROY;
     }
     if (stage->disableBgA1Destroy) {
-        STAGE_WORK(wp)->flags |= 2;
+        STAGE_WORK(wp)->flags |= STAGE_FLAG_NO_BG_A1_DESTROY;
     }
     if (stage->disableBgA2Destroy) {
-        STAGE_WORK(wp)->flags |= 4;
+        STAGE_WORK(wp)->flags |= STAGE_FLAG_NO_BG_A2_DESTROY;
     }
     if (stage->disableBgBDestroy) {
-        STAGE_WORK(wp)->flags |= 8;
+        STAGE_WORK(wp)->flags |= STAGE_FLAG_NO_BG_B_DESTROY;
     }
     if (!hasIronFrame) {
-        STAGE_WORK(wp)->flags |= 0x20;
+        STAGE_WORK(wp)->flags |= STAGE_FLAG_NO_IRON_FRAME;
         mapGrpFlagOn("if_body", 1);
         mapGrpFlagOn("if_wire", 1);
     }
@@ -2762,13 +2762,13 @@ USER_FUNC(_mobj_destroy) {
     }
     switch (layer) {
         case 0:
-            STAGE_WORK(wp)->flags |= 2;
+            STAGE_WORK(wp)->flags |= STAGE_FLAG_NO_BG_A1_DESTROY;
             break;
         case 1:
-            STAGE_WORK(wp)->flags |= 4;
+            STAGE_WORK(wp)->flags |= STAGE_FLAG_NO_BG_A2_DESTROY;
             break;
         case 2:
-            STAGE_WORK(wp)->flags |= 8;
+            STAGE_WORK(wp)->flags |= STAGE_FLAG_NO_BG_B_DESTROY;
             break;
     }
     return EVT_RETURN_DONE;
@@ -3052,8 +3052,8 @@ void BattleStage_WallCloseCheck(void) {
     BattleWork* wp = _battleWorkPointer;
     BattleStageObjectWork* sw = STAGE_WORK(wp);
 
-    if (!(sw->flags & 0x10)) {
-        sw->flags |= 0x10;
+    if (!(sw->flags & STAGE_FLAG_WALL_CLOSED)) {
+        sw->flags |= STAGE_FLAG_WALL_CLOSED;
         sw->closeWallEvtId = evtEntry(_close_wall_event, 10, 0)->eventId;
     }
 }
@@ -3089,8 +3089,8 @@ void BattleStage_IronFrameFallCheck(void) {
     BattleWork* wp = _battleWorkPointer;
     BattleStageObjectWork* sw = STAGE_WORK(wp);
 
-    if (!(sw->flags & 0x40) && !(sw->flags & 0x20)) {
-        sw->flags |= 0x20;
+    if (!(sw->flags & STAGE_FLAG_KEEP_IRON_FRAME_UNUSED) && !(sw->flags & STAGE_FLAG_NO_IRON_FRAME)) {
+        sw->flags |= STAGE_FLAG_NO_IRON_FRAME;
         sw->fallFrameEvtId = evtEntry(_fall_frame_event, 10, 0)->eventId;
     }
 }
@@ -3751,8 +3751,8 @@ s32 _object_fall_attack(EventEntry *event, BOOL isFirstCall) {
             }
             weapon = &e->weapon.weapon;
             e->kind = 0;
-            if (((pouchGetPtr()->mStarPowersObtained && (!(BattleAudienceBaseGetPtr()->flags & 0x4000))) && (e->type != STAGE_FALL_BOWSER_STATUE)) && (e->type != STAGE_FALL_METEOR)) {
-                if (((u32)wp->debug.flags & 2) || (irand(100) < 10)) {
+            if (((pouchGetPtr()->mStarPowersObtained && (!(BattleAudienceBaseGetPtr()->flags & AUDIENCE_FLAG_NO_AUDIENCE_EVENTS))) && (e->type != STAGE_FALL_BOWSER_STATUE)) && (e->type != STAGE_FALL_METEOR)) {
+                if (((u32)wp->debug.flags & BATTLE_DEBUG_FORCE_FALL_ON_AUDIENCE) || (irand(100) < 10)) {
                     e->kind = 1;
                     e->partId = -1;
                     e->unitId = BattleAudience_HaitiRandForFallObject();
