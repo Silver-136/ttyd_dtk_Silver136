@@ -3,8 +3,18 @@
 #include <dolphin/ar.h>
 #include <dolphin/arq.h>
 
+// ARAMEntry.flags (set by the requests and their ARQ callbacks)
+typedef enum ARAMEntryFlags {
+    ARAM_FLAG_IN_USE = (1 << 0),         // 0x1
+    ARAM_FLAG_TO_ARAM = (1 << 1),        // 0x2, the copy into ARAM was requested ...
+    ARAM_FLAG_IN_ARAM = (1 << 2),        // 0x4, ... and is done
+    ARAM_FLAG_TO_MRAM = (1 << 3),        // 0x8, the copy back to main memory was requested ...
+    ARAM_FLAG_IN_MRAM = (1 << 4),        // 0x10, ... and is done
+    ARAM_FLAG_FREE = (1 << 5),           // 0x20, copied back: aramMgrGarbage drops the entry
+} ARAMEntryFlags;
+
 typedef struct ARAMEntry {
-    vu16 flags; //0x0
+    vu16 flags; //0x0, ARAMEntryFlags
     u8 pad_0x2[2]; //0x2
     ARQRequest request; //0x4
     u32 size; //0x24

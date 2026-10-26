@@ -50,11 +50,11 @@ void aramMgrGarbage(void) {
 
     head = wp->head;
     for (entry = head; entry != NULL; entry = entry->next) {
-        if (entry->flags & 2) {
-            while (!(entry->flags & 4)) {}
+        if (entry->flags & ARAM_FLAG_TO_ARAM) {
+            while (!(entry->flags & ARAM_FLAG_IN_ARAM)) {}
         }
-        if (entry->flags & 8) {
-            while (!(entry->flags & 0x10)) {}
+        if (entry->flags & ARAM_FLAG_TO_MRAM) {
+            while (!(entry->flags & ARAM_FLAG_IN_MRAM)) {}
         }
     }
 
@@ -62,7 +62,7 @@ void aramMgrGarbage(void) {
     prev = NULL;
     first = NULL;
     while (entry != NULL) {
-        if (entry->flags & 0x20) {
+        if (entry->flags & ARAM_FLAG_FREE) {
             entry->flags = 0;
             if (prev != NULL) {
                 prev->next = entry->next;
@@ -110,7 +110,7 @@ void arqCallbackToAram(u32 request) {
     for (entry = wp->head; entry != NULL; entry = entry->next) {
         if (request == (u32)&entry->request) break;
     }
-    entry->flags |= 4;
+    entry->flags |= ARAM_FLAG_IN_ARAM;
 }
 
 ARAMEntry* aramMgrToAramAsync(void* src, u32 size) {
@@ -120,7 +120,7 @@ ARAMEntry* aramMgrToAramAsync(void* src, u32 size) {
     int i;
 
     for (i = 0, curr = wp->entries; i < wp->count; i++, curr++) {
-        if (!(curr->flags & 1)) {
+        if (!(curr->flags & ARAM_FLAG_IN_USE)) {
             entry = curr;
             break;
         }
@@ -137,8 +137,8 @@ ARAMEntry* aramMgrToAramAsync(void* src, u32 size) {
     DCStoreRange(src, size);
     ARQPostRequest(&entry->request, ARAM_OWNER, ARQ_TYPE_MRAM_TO_ARAM, ARQ_PRIORITY_LOW,
         (u32)src, addr, size, arqCallbackToAram);
-    entry->flags |= 1;
-    entry->flags |= 2;
+    entry->flags |= ARAM_FLAG_IN_USE;
+    entry->flags |= ARAM_FLAG_TO_ARAM;
     entry->mramAddr = src;
     entry->size = size;
     entry->aramAddr = addr;
@@ -155,7 +155,7 @@ ARAMEntry* aramMgrToAramAsync(void* src, u32 size) {
 
 ARAMEntry* aramMgrToAram(void* src, u32 size) {
     ARAMEntry* entry = aramMgrToAramAsync(src, size);
-    while (!(entry->flags & 4)) {}
+    while (!(entry->flags & ARAM_FLAG_IN_ARAM)) {}
     return entry;
 }
 
@@ -165,17 +165,17 @@ void arqCallbackToMram(u32 request) {
     for (entry = wp->head; entry != NULL; entry = entry->next) {
         if (request == (u32)&entry->request) break;
     }
-    entry->flags |= 0x10;
-    entry->flags |= 0x20;
+    entry->flags |= ARAM_FLAG_IN_MRAM;
+    entry->flags |= ARAM_FLAG_FREE;
     DCInvalidateRange(entry->dest, entry->size);
     ICInvalidateRange(entry->dest, entry->size);
 }
 
 void aramMgrToMram(ARAMEntry* entry, void* dest) {
-    while (!(entry->flags & 4)) {}
+    while (!(entry->flags & ARAM_FLAG_IN_ARAM)) {}
     ARQPostRequest(&entry->request, ARAM_OWNER, ARQ_TYPE_ARAM_TO_MRAM, ARQ_PRIORITY_LOW,
         entry->aramAddr, (u32)dest, entry->size, arqCallbackToMram);
-    entry->flags |= 8;
+    entry->flags |= ARAM_FLAG_TO_MRAM;
     entry->dest = dest;
-    while (!(entry->flags & 0x10)) {}
+    while (!(entry->flags & ARAM_FLAG_IN_MRAM)) {}
 }
