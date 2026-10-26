@@ -200,6 +200,12 @@ typedef enum AnimationPoseFlags {
     ANIM_POSE_FLAG_INSTANT_TURN = (1 << 8),         // 0x100, paper rotation snaps to the target (NPC_FLAG_INSTANT_TURN)
 } AnimationPoseFlags;
 
+// AnimationPose.typeFlags (0 for a plain animPoseEntry)
+typedef enum AnimPoseTypeFlags {
+    ANIM_POSE_TYPE_SUB = (1 << 0),    // 0x1, entered as a paper or effect pose (reference counted)
+    ANIM_POSE_TYPE_PAPER = (1 << 1),  // 0x2, paper pose (animPaperPoseEntry): own vertex scratch, own local time
+} AnimPoseTypeFlags;
+
 // AnimationPose.materialLightFlag / mapSetMaterialLight flags: the lights used for the material
 typedef enum MaterialLightFlags {
     MATERIAL_LIGHT_PAPER = (1 << 0),        // 0x1, the paper light, with the paper ambient
@@ -211,7 +217,7 @@ typedef enum MaterialLightFlags {
 
 typedef struct AnimationPose {
     u32 flags;                          // 0x0, AnimationPoseFlags
-    s32 typeFlags;                      // 0x4
+    s32 typeFlags;                      // 0x4, AnimPoseTypeFlags
     s32 references;                     // 0x8
     s32 type;                           // 0xC
     s32 fileId;                         // 0x10
