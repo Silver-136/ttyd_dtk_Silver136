@@ -47,6 +47,8 @@ EvtWord evt_action_walk[57];
 EvtWord evt_action[111];
 EvtWord dig_00_init_evt[107];
 
+// dig_00 (JP demo and JP release only; the US release drops this REL): a credits test left on the disc. It plays
+// demo.thp (Super Mario Sunshine's credits video) while TTYD characters pop up, like the real staff roll in end_00.
 void dig_thpInit(void) {
     u32 type;
 
