@@ -467,7 +467,7 @@ void loadMain(SequenceWork* seq) {
                     gp->areaFadeInType = 0;
                     gp->areaFadeOutType = 25;
                     swInit();
-                    swByteSet(0, 0);
+                    swByteSet(0, STG0_00_PROLOGUE);
                     if (code == 0) {
                         gp->saveSlot = wp->slot;
 #ifdef VERSION_G8ME01
@@ -1374,7 +1374,7 @@ void continueGame(void) {
             gp->areaFadeInType = 0;
             gp->areaFadeOutType = 25;
             swInit();
-            swByteSet(0, 0);
+            swByteSet(0, STG0_00_PROLOGUE);
             seqSetSeq(SEQ_MAP_CHANGE, "aaa_00", "prologue");
             break;
         case 24:

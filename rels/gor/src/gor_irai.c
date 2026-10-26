@@ -530,44 +530,44 @@ USER_FUNC(irai_init_func) {
     wp->list[3] = 4;
     wp->list[4] = 5;
     wp->list[5] = 6;
-    if (seq >= 56) {
+    if (seq >= STG1_17_FATHER_SON_REUNITED) {
         wp->list[6] = 7;
         wp->list[7] = 8;
         wp->list[8] = 9;
     }
-    if (seq >= 112) {
+    if (seq >= STG2_25_AFTER_THE_BOSS_BATTLE) {
         wp->list[9] = 10;
         wp->list[10] = 11;
         wp->list[11] = 12;
     }
-    if (seq >= 164) {
+    if (seq >= STG3_32_BOSS_BATTLE) {
         wp->list[12] = 13;
         wp->list[13] = 14;
         wp->list[14] = 15;
     }
-    if (seq >= 215) {
+    if (seq >= STG4_15_05_PEACH_X_NAUT_PHD_REPORT) {
         wp->list[15] = 16;
         wp->list[16] = 17;
         wp->list[17] = 18;
     }
-    if (seq >= 261) {
+    if (seq >= STG5_43_X_NAUTS_RETREAT) {
         wp->list[18] = 20;
         wp->list[19] = 21;
     }
-    if (seq >= 281) {
+    if (seq >= STG5_END_THE_TRAIN_LEAVES) {
         wp->list[20] = 19;
     }
-    if (seq >= 339) {
+    if (seq >= STG6_54_WELCOME_BACK) {
         wp->list[21] = 22;
         wp->list[22] = 23;
         wp->list[23] = 24;
     }
-    if (seq >= 373) {
+    if (seq >= STG7_20_LORD_CRUMP_DEFEATED) {
         wp->list[24] = 25;
         wp->list[25] = 26;
         wp->list[26] = 27;
     }
-    if (seq >= 401) {
+    if (seq >= STG8_16_THE_RETURN_OF_THE_QUEEN) {
         wp->list[27] = 28;
         wp->list[28] = 29;
         wp->list[29] = 30;

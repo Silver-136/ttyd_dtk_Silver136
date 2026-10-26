@@ -74,7 +74,7 @@ static USER_FUNC(check) {
 USER_FUNC(evt_kagemario_init) {
     s32 sequence = swByteGet(0);
 
-    if (sequence >= 201 && sequence < 212) {
+    if (sequence >= STG4_10_02_TRADING_PLACES && sequence < STG4_15_02_BACK_TO_NORMAL) {
         color_change_evt(1);
         evtEntry(evt_check, 0, 0);
     } else {

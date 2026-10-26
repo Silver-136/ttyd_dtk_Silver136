@@ -1514,7 +1514,7 @@ void _prolog(void) {
     for (ctor = _ctors; *ctor != NULL; ctor++) {
         (*ctor)();
     }
-    if (swByteGet(0) < 0x153) {
+    if (swByteGet(0) < STG6_54_WELCOME_BACK) {
         relSetEvtAddr("rsh_00_a", rsh_00_a_init_evt);
         relSetEvtAddr("rsh_00_b", rsh_00_b_init_evt);
         relSetEvtAddr("rsh_00_c", rsh_00_c_init_evt);
