@@ -291,7 +291,7 @@ EVT_BEGIN(tou_12_init_evt)
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG3_32_BOSS_BATTLE)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("gor_hae"), MAP_OBJ_FLAG_HIDDEN)
         ELSE
-        CALL(evt_map_playanim, STRING("anm_hae"), 1, 0)
+        CALL(evt_map_playanim, STRING("anm_hae"), MAP_ANIM_PLAY_LOOP, 0)
         BEGIN_INLINE_EVENT
             LOOP(0)
                 CALL(evt_sub_random, 1000, LW(0))

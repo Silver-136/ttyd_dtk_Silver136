@@ -114,10 +114,10 @@ static EVT_BEGIN(toile_in)
 EVT_END()
 
 static EVT_BEGIN(toile_out)
-    CALL(evt_map_playanim, STRING("anm_mizu"), 0, 0)
+    CALL(evt_map_playanim, STRING("anm_mizu"), MAP_ANIM_PLAY_ONCE, 0)
     BEGIN_INLINE_EVENT
         WAIT_MS(1000)
-        CALL(evt_map_playanim, STRING("anm_futa"), 0, 0)
+        CALL(evt_map_playanim, STRING("anm_futa"), MAP_ANIM_PLAY_ONCE, 0)
     END_INLINE_EVENT
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG3_TOILET1"), LW(0), LW(1), LW(2), 0)

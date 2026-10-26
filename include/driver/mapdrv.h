@@ -434,6 +434,12 @@ void mapObjSetFlushColor(const char* name, u8 r, u8 g, u8 b, u8 a);
 void mapObjTranslate(const char* name, f32 x, f32 y, f32 z);
 void mapPauseAnimation(const char* name);
 void mapPauseAnimationAll(const char* name);
+// mapPlayAnimationLv / evt_map_playanim mode
+typedef enum MapAnimPlayMode {
+    MAP_ANIM_PLAY_ONCE = 0,
+    MAP_ANIM_PLAY_LOOP = 1,   // MAP_ANIM_FLAG_LOOP
+    MAP_ANIM_PLAY_AT_END = 2, // started one animation length in the past: shows the final pose
+} MapAnimPlayMode;
 void mapPlayAnimationLv(const char* name, s32 mode, s32 level);
 void mapReStartAnimation(const char* name);
 void mapReStartAnimationAll(const char* name);

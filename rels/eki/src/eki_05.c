@@ -115,7 +115,7 @@ static BeroEntry bero_data[] = {
 
 EVT_BEGIN(grass_open_1)
     IF_INT_EQUAL(GF(0), 1)
-        CALL(evt_map_playanim, STRING("anm_nata"), 0, 0)
+        CALL(evt_map_playanim, STRING("anm_nata"), MAP_ANIM_PLAY_ONCE, 0)
         SET_VALUE(GF(0), 0)
     END_IF
     RETURN
@@ -123,10 +123,10 @@ EVT_END()
 
 EVT_BEGIN(grass_open_2)
     IF_INT_EQUAL(GF(0), 0)
-        CALL(evt_map_playanim, STRING("anm_tana"), 0, 0)
+        CALL(evt_map_playanim, STRING("anm_tana"), MAP_ANIM_PLAY_ONCE, 0)
         SET_VALUE(GF(0), 1)
         ELSE
-        CALL(evt_map_playanim, STRING("anm_nata"), 0, 0)
+        CALL(evt_map_playanim, STRING("anm_nata"), MAP_ANIM_PLAY_ONCE, 0)
         SET_VALUE(GF(0), 0)
     END_IF
     RETURN
@@ -181,7 +181,7 @@ EVT_BEGIN(eki_05_init_evt)
     END_IF
     BEGIN_INLINE_EVENT
         LOOP(0)
-            CALL(evt_map_playanim, STRING("anm_mizu"), 0, 0)
+            CALL(evt_map_playanim, STRING("anm_mizu"), MAP_ANIM_PLAY_ONCE, 0)
             CALL(evt_map_checkanim, STRING("anm_mizu"), LW(0), LW(1))
             WAIT_MS(700)
             CALL(evt_snd_sfxon_3d, STRING("SFX_STG5_AMB_WATERDROP1"), -129, 295, -17, 0)

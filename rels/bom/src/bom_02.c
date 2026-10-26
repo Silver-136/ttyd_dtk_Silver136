@@ -1683,7 +1683,7 @@ EVT_BEGIN(bom_02_init_evt)
     END_IF
     CALL(evt_eff, 0, STRING("nice"), 0, 0, -1000, 0, 0, 0, 0, 0, 0, 0, 0, 0)
     CALL(evt_eff, 0, STRING("nice"), 1, 0, -1000, 0, 0, 0, 0, 0, 0, 0, 0, 0)
-    CALL(evt_map_playanim, STRING("yuge"), 1, 0)
+    CALL(evt_map_playanim, STRING("yuge"), MAP_ANIM_PLAY_LOOP, 0)
     IF_INT_EQUAL(GSWF(3880), 1)
         IF_INT_EQUAL(GSWF(3876), 0)
             CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_w_bed"), 0, PTR(evt_white_bed), 0)

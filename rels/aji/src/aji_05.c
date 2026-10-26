@@ -133,7 +133,7 @@ static EvtWord hikaru_yuka_init[] = {
     END_INLINE_EVENT
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("yukayu1"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("yukayu2"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_map_playanim, STRING("denyuka"), 1, 0)
+    CALL(evt_map_playanim, STRING("denyuka"), MAP_ANIM_PLAY_LOOP, 0)
     OPCODE_END_SCRIPT,
     RETURN
 };

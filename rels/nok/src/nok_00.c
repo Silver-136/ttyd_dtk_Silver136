@@ -1073,7 +1073,7 @@ EVT_BEGIN(nok_00_init_evt)
     IF_INT_EQUAL(GSWF(1624), 0)
         SET_VALUE(GSWF(1624), 1)
     END_IF
-    CALL(evt_map_playanim, STRING("S_kawa"), 1, 0)
+    CALL(evt_map_playanim, STRING("S_kawa"), MAP_ANIM_PLAY_LOOP, 0)
     SET_VALUE(LW(0), PTR(&yado_data))
     CALL_CHILD(PTR(evt_door_setup))
     SET_VALUE(LW(0), PTR(&mise_data))

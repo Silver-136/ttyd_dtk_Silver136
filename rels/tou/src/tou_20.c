@@ -145,9 +145,9 @@ EVT_BEGIN(tou_20_init_evt)
             WAIT_FRAMES(1)
         END_LOOP
     END_INLINE_EVENT
-    CALL(evt_map_playanim, STRING("lightcoloer"), 1, 0)
-    CALL(evt_map_playanim, STRING("jet"), 1, 0)
-    CALL(evt_map_playanim, STRING("omori"), 1, 0)
+    CALL(evt_map_playanim, STRING("lightcoloer"), MAP_ANIM_PLAY_LOOP, 0)
+    CALL(evt_map_playanim, STRING("jet"), MAP_ANIM_PLAY_LOOP, 0)
+    CALL(evt_map_playanim, STRING("omori"), MAP_ANIM_PLAY_LOOP, 0)
     BEGIN_INLINE_EVENT
         LOOP(0)
             CALL(evt_mapobj_rotate, 1, STRING("puro_2"), LW(0), 0, 0)

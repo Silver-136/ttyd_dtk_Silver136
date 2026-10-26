@@ -479,7 +479,7 @@ EVT_BEGIN(gon_06_init_evt)
     CALL(evt_sub_rumble_onoff, 1, 0)
     WAIT_FRAMES(1)
     CALL(evt_npc_change_fbat_mode, 1)
-    CALL(evt_map_playanim, STRING("hokori"), 1, 0)
+    CALL(evt_map_playanim, STRING("hokori"), MAP_ANIM_PLAY_LOOP, 0)
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG1_13_01_01_PAPER_MAGE_2)
         SET_VALUE(GSWF(1493), 1)
     END_IF

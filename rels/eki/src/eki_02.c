@@ -115,11 +115,11 @@ EVT_BEGIN(eki_02_init_evt)
     CALL(evt_snd_bgmoff, PSND_FADEOUT)
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG6_EKI3"))
 #ifdef VERSION_G8ME01
-    CALL(evt_map_playanim, STRING("anm_sikake_1"), 1, 1)
-    CALL(evt_map_playanim, STRING("anm_sikake_2"), 1, 1)
+    CALL(evt_map_playanim, STRING("anm_sikake_1"), MAP_ANIM_PLAY_LOOP, 1)
+    CALL(evt_map_playanim, STRING("anm_sikake_2"), MAP_ANIM_PLAY_LOOP, 1)
 #else
-    CALL(evt_map_playanim, STRING("anm_sikake_1"), 1, 0)
-    CALL(evt_map_playanim, STRING("anm_sikake_2"), 1, 0)
+    CALL(evt_map_playanim, STRING("anm_sikake_1"), MAP_ANIM_PLAY_LOOP, 0)
+    CALL(evt_map_playanim, STRING("anm_sikake_2"), MAP_ANIM_PLAY_LOOP, 0)
 #endif
     IF_INT_LESS(GSW_STORY_PROGRESS, STG6_31_KEY)
         CALL(evt_item_entry, STRING("key"), ITEM_STATION_KEY_0x19, 525, 220, 29, ITEM_TYPE_STILL, -1, PTR(evt_key))

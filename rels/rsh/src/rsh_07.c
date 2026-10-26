@@ -158,11 +158,11 @@ EVT_BEGIN(rsh_07_init_evt)
     IF_INT_EQUAL(GSWF(3579), 0)
         IF_INT_EQUAL(GSWF(3580), 0)
             IF_INT_EQUAL(GSWF(3581), 0)
-                CALL(evt_map_playanim, STRING("yure"), 1, 0)
-                CALL(evt_map_playanim, STRING("hai_sora"), 1, 0)
-                CALL(evt_map_playanim, STRING("hai_yama"), 1, 0)
-                CALL(evt_map_playanim, STRING("hai_iwayama"), 1, 0)
-                CALL(evt_map_playanim, STRING("hai_saboten"), 1, 0)
+                CALL(evt_map_playanim, STRING("yure"), MAP_ANIM_PLAY_LOOP, 0)
+                CALL(evt_map_playanim, STRING("hai_sora"), MAP_ANIM_PLAY_LOOP, 0)
+                CALL(evt_map_playanim, STRING("hai_yama"), MAP_ANIM_PLAY_LOOP, 0)
+                CALL(evt_map_playanim, STRING("hai_iwayama"), MAP_ANIM_PLAY_LOOP, 0)
+                CALL(evt_map_playanim, STRING("hai_saboten"), MAP_ANIM_PLAY_LOOP, 0)
             END_IF
         END_IF
     END_IF

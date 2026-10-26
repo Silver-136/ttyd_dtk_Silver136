@@ -5921,9 +5921,9 @@ EVT_BEGIN(gor_00_init_evt)
     IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, STG4_15_07_BOWSER_ACTION_STAGE)
         CALL(evt_mobj_save_blk, STRING("mobj_save"), -275, 75, 100, 0, 0)
     END_IF
-    CALL(evt_map_playanim, STRING("nami"), 1, 0)
-    CALL(evt_map_playanim, STRING("nami_02"), 1, 0)
-    CALL(evt_map_playanim, STRING("hiki_nami"), 1, 0)
+    CALL(evt_map_playanim, STRING("nami"), MAP_ANIM_PLAY_LOOP, 0)
+    CALL(evt_map_playanim, STRING("nami_02"), MAP_ANIM_PLAY_LOOP, 0)
+    CALL(evt_map_playanim, STRING("hiki_nami"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_paper_entry, STRING("OFF_d_kaiten"))
     CALL(evt_hit_damage_return_set, PTR(dmgRetPoint))
 #ifdef VERSION_G8ME01

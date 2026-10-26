@@ -566,7 +566,7 @@ EVT_BEGIN(muj_02_init_evt)
 #endif
         CALL(evt_npc_check_delete, STRING("チョロボン７"))
     END_IF
-    CALL(evt_map_playanim, STRING("mizu"), 1, 0)
+    CALL(evt_map_playanim, STRING("mizu"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_hit_damage_return_set, PTR(hitDmgRetPoints))
     CALL_CHILD(PTR(evt_gazigazi_entry))
     CALL(evt_eff64, STRING("sunlight"), STRING("sunlight_n64"), 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)

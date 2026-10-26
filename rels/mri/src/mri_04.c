@@ -475,11 +475,11 @@ EVT_BEGIN(mri_04_init_evt)
         ELSE
         CALL(evt_mobj_itembox, STRING("mobj_box01"), -105, 0, 70, MOBJ_ITEMBOX_NORMAL, 0, 0, 1)
     END_IF
-    CALL(evt_map_playanim, STRING("mizu_01"), 1, 0)
-    CALL(evt_map_playanim, STRING("mizu_02"), 1, 0)
-    CALL(evt_map_playanim, STRING("awa_01"), 1, 0)
-    CALL(evt_map_playanim, STRING("awa_02"), 1, 0)
-    CALL(evt_map_playanim, STRING("hikari_01"), 1, 0)
+    CALL(evt_map_playanim, STRING("mizu_01"), MAP_ANIM_PLAY_LOOP, 0)
+    CALL(evt_map_playanim, STRING("mizu_02"), MAP_ANIM_PLAY_LOOP, 0)
+    CALL(evt_map_playanim, STRING("awa_01"), MAP_ANIM_PLAY_LOOP, 0)
+    CALL(evt_map_playanim, STRING("awa_02"), MAP_ANIM_PLAY_LOOP, 0)
+    CALL(evt_map_playanim, STRING("hikari_01"), MAP_ANIM_PLAY_LOOP, 0)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG2_12_RIVAL_ARRIVAL)
         SPAWN_EVENT(PTR(black_shadow))
     END_IF

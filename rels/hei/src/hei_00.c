@@ -1244,7 +1244,7 @@ EVT_BEGIN(hei_00_init_evt)
     END_IF
     SET_VALUE(LW(0), PTR(ki_data))
     CALL_CHILD(PTR(evt_sub_tree_access_entry))
-    CALL(evt_map_playanim, STRING("anm_mugi_1"), 1, 0)
+    CALL(evt_map_playanim, STRING("anm_mugi_1"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_mobj_badgeblk, STRING("mobj_hatenablk"), 450, 60, 0, ITEM_MUSHROOM, 0, GSWF(1780), 0)
     CALL(evt_mobj_save_blk, STRING("mobj_save"), -455, 135, -75, 0, 0)
     CALL(evt_npc_pera_onoff, STRING("ゴンババ影"), 0)

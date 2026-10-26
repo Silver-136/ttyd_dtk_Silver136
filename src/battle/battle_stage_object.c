@@ -139,7 +139,7 @@ void BattleStageObjectInit(void) {
         case 1:
         case 2:
         case 3:
-            mapPlayAnimationLv("den", 1, 0);
+            mapPlayAnimationLv("den", MAP_ANIM_PLAY_LOOP, 0);
             break;
     }
     switch (pouchGetPtr()->rank) {

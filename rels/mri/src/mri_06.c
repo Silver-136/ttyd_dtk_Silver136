@@ -442,7 +442,7 @@ static EVT_BEGIN(door_switch_init)
         SET_VALUE(LW(0), STRING("e_bero"))
         CALL_CHILD(PTR(bero_case_switch_off))
         ELSE
-        CALL(evt_map_playanim, STRING("light"), 2, 0)
+        CALL(evt_map_playanim, STRING("light"), MAP_ANIM_PLAY_AT_END, 0)
     END_IF
     RETURN
 EVT_END()
@@ -643,10 +643,10 @@ EVT_BEGIN(mri_06_init_evt)
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG2_MRI1"))
     END_SWITCH
     CALL(evt_mobj_save_blk, STRING("mobj_save"), -250, -249, -100, PTR(mri_puni_save), 0)
-    CALL(evt_map_playanim, STRING("mizu_01"), 1, 0)
-    CALL(evt_map_playanim, STRING("mizu_02"), 1, 0)
-    CALL(evt_map_playanim, STRING("awa_01"), 1, 0)
-    CALL(evt_map_playanim, STRING("awa_02"), 1, 0)
+    CALL(evt_map_playanim, STRING("mizu_01"), MAP_ANIM_PLAY_LOOP, 0)
+    CALL(evt_map_playanim, STRING("mizu_02"), MAP_ANIM_PLAY_LOOP, 0)
+    CALL(evt_map_playanim, STRING("awa_01"), MAP_ANIM_PLAY_LOOP, 0)
+    CALL(evt_map_playanim, STRING("awa_02"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_npc_change_fbat_mode, 1)
     SPAWN_EVENT(PTR(door_switch_init))
     SPAWN_EVENT(PTR(puni_lose))

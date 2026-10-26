@@ -42,7 +42,7 @@ EVT_BEGIN(tik_13_init_evt)
     CALL_CHILD(PTR(evt_bero_info_run))
     BEGIN_INLINE_EVENT
         LOOP(0)
-            CALL(evt_map_playanim, STRING("anm_mizu"), 0, 0)
+            CALL(evt_map_playanim, STRING("anm_mizu"), MAP_ANIM_PLAY_ONCE, 0)
             CALL(evt_map_checkanim, STRING("anm_mizu"), LW(0), LW(1))
             WAIT_MS(LW(1))
             CALL(evt_mapobj_get_position, STRING("Tshatu"), LW(0), LW(1), LW(2))

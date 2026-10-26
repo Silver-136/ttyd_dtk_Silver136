@@ -178,9 +178,9 @@ EVT_BEGIN(aji_08_init_evt)
     BEGIN_INLINE_EVENT
         CALL(slit_chk)
     END_INLINE_EVENT
-    CALL(evt_map_playanim, STRING("bari"), 1, 0)
-    CALL(evt_map_playanim, STRING("awa1"), 1, 0)
-    CALL(evt_map_playanim, STRING("awa2"), 1, 0)
+    CALL(evt_map_playanim, STRING("bari"), MAP_ANIM_PLAY_LOOP, 0)
+    CALL(evt_map_playanim, STRING("awa1"), MAP_ANIM_PLAY_LOOP, 0)
+    CALL(evt_map_playanim, STRING("awa2"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_item_entry, STRING("item00"), ITEM_STAR_PIECE, -975, 170, 75, ITEM_TYPE_STILL, GSWF_STARPIECE_99, 0)
     BEGIN_INLINE_EVENT
         LOOP(0)

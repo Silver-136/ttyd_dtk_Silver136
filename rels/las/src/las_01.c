@@ -96,7 +96,7 @@ EVT_BEGIN(las_01_init_evt)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
     CALL_CHILD(PTR(evt_bero_info_run))
-    CALL(evt_map_playanim, STRING("hamon"), 1, 0)
+    CALL(evt_map_playanim, STRING("hamon"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_item_entry, STRING("item_01"), ITEM_STOPWATCH, -710, 448, -175, ITEM_TYPE_STILL, GSWF(4383), 0)
     RETURN
 EVT_END()

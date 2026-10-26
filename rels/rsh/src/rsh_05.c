@@ -1874,7 +1874,7 @@ EVT_BEGIN(rsh_05_init_evt)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG6_27_RIVERSIDE_STATION, STG6_42_DRAWBRIDGE_DOWN)
         CASE_DEFAULT
-        CALL(evt_map_playanim, STRING("yure"), 1, 0)
+        CALL(evt_map_playanim, STRING("yure"), MAP_ANIM_PLAY_LOOP, 0)
     END_SWITCH
     CALL_CHILD(PTR(evt_access_entry))
     SWITCH(GSW_STORY_PROGRESS)
@@ -1953,7 +1953,7 @@ EVT_BEGIN(rsh_05_init_evt_nidome)
     IF_INT_EQUAL(GSWF(3579), 0)
         IF_INT_EQUAL(GSWF(3580), 0)
             IF_INT_EQUAL(GSWF(3581), 0)
-                CALL(evt_map_playanim, STRING("yure"), 1, 0)
+                CALL(evt_map_playanim, STRING("yure"), MAP_ANIM_PLAY_LOOP, 0)
             END_IF
         END_IF
     END_IF

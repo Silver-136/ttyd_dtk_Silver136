@@ -118,7 +118,7 @@ EVT_BEGIN(hei_08_init_evt)
     IF_INT_EQUAL(GSWF(1775), 0)
         CALL(evt_item_entry, STRING("moon_st"), ITEM_MOON_STONE, 0, 0, 0, ITEM_TYPE_GROUND, -1, PTR(evt_chorobon))
     END_IF
-    CALL(evt_map_playanim, STRING("mizu"), 1, 0)
+    CALL(evt_map_playanim, STRING("mizu"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_map_set_tevcallback, 1, PTR(hei_test_water_tev))
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("mizu_1"), MAP_OBJ_TEV_CALLBACK(1))
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("mizu_1"), MAP_OBJ_FLAG_DISPLAY_LIST)

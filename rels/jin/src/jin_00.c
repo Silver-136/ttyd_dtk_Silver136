@@ -2184,7 +2184,7 @@ EVT_BEGIN(jin_00_init_evt)
         CALL(evt_hit_bind_update, STRING("a_oki01"))
         CALL(evt_hitobj_onoff, STRING("a_futa"), 0, 0)
     END_IF
-    CALL(evt_map_playanim, STRING("hikari"), 1, 0)
+    CALL(evt_map_playanim, STRING("hikari"), MAP_ANIM_PLAY_LOOP, 0)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG4_10_02_TRADING_PLACES)
         SET_VALUE(LW(0), STRING("w_bero"))
         CALL_CHILD(PTR(bero_case_switch_off))

@@ -2051,7 +2051,7 @@ EVT_END()
 
 EVT_BEGIN(yakan_anime)
     LOOP(0)
-        CALL(evt_map_playanim, STRING("yakan"), 1, 0)
+        CALL(evt_map_playanim, STRING("yakan"), MAP_ANIM_PLAY_LOOP, 0)
         CALL(evt_map_checkanim, STRING("yakan"), LW(0), LW(1))
         WAIT_MS(LW(1))
     END_LOOP
@@ -2091,8 +2091,8 @@ EVT_BEGIN(muj_01_init_evt)
             CALL_CHILD(musume_c_entry)
         END_IF
     END_IF
-    CALL(evt_map_playanim, STRING("mizu"), 1, 0)
-    CALL(evt_map_playanim, STRING("fuku_hata"), 1, 0)
+    CALL(evt_map_playanim, STRING("mizu"), MAP_ANIM_PLAY_LOOP, 0)
+    CALL(evt_map_playanim, STRING("fuku_hata"), MAP_ANIM_PLAY_LOOP, 0)
     SPAWN_EVENT(yakan_anime)
     CALL(evt_mobj_save_blk, STRING("mobj_save"), 100, 60, -25, 0, 0)
     CALL(evt_item_entry, STRING("item_00"), ITEM_STAR_PIECE, 475, 0, 100, ITEM_TYPE_STILL, GSWF_STARPIECE_72, 0)

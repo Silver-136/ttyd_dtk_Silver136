@@ -1148,7 +1148,7 @@ EVT_BEGIN(last_evt_1)
     CALL(evt_eff64, 0, STRING("kemuri1_n64"), 4, LW(0), LW(1), LW(2), 0, 0, 0, 0, 0, 0, 0, 0)
     CALL(evt_mapobj_get_position, STRING("S_haka"), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG8_GRAVE_LIGHT2"), LW(0), LW(1), LW(2), 0)
-    CALL(evt_map_playanim, STRING("hihi"), 0, 0)
+    CALL(evt_map_playanim, STRING("hihi"), MAP_ANIM_PLAY_ONCE, 0)
     BEGIN_INLINE_EVENT
         CALL(evt_map_checkanim, STRING("hihi"), LW(0), LW(1))
         SUBTRACT(LW(1), 1000)

@@ -158,7 +158,7 @@ EVT_BEGIN(gon_02_init_evt)
     CALL(evt_npc_flag_onoff, 1, STRING("\"カロン04\""), NPC_FLAG_NO_VIEW_CORRECTION)
     CALL(evt_npc_set_width, STRING("\"カロン04\""), 30)
     CALL(evt_npc_set_height, STRING("\"カロン04\""), 7)
-    CALL(evt_map_playanim, STRING("hokori"), 1, 0)
+    CALL(evt_map_playanim, STRING("hokori"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_mobj_badgeblk, STRING("m"), 200, 60, -50, ITEM_POWER_BOUNCE, 0, GSWF(1502), 1)
     RETURN
 EVT_END()

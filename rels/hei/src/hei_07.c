@@ -145,7 +145,7 @@ EVT_BEGIN(sekizou_move)
         CALL(evt_snd_sfxoff, LW(10))
         CALL(evt_snd_sfxon_3d, STRING("SFX_DOKAN_APPEAR1"), LW(0), LW(1), LW(2), 0)
     END_INLINE_EVENT
-    CALL(evt_map_playanim, STRING("anm_sekizou"), 0, 0)
+    CALL(evt_map_playanim, STRING("anm_sekizou"), MAP_ANIM_PLAY_ONCE, 0)
     CALL(evt_map_checkanim, STRING("anm_sekizou"), LW(0), LW(1))
     WAIT_MS(LW(1))
     CALL(evt_snd_sfxoff, GW(15))
@@ -161,7 +161,7 @@ EVT_BEGIN(sekizou_move)
 EVT_END()
 
 EVT_BEGIN(animation_wait)
-    CALL(evt_map_playanim, LW(0), 0, 0)
+    CALL(evt_map_playanim, LW(0), MAP_ANIM_PLAY_ONCE, 0)
     CALL(evt_map_checkanim, LW(0), LW(1), LW(2))
     BEGIN_INLINE_EVENT
         MULTIPLY_FLOAT(LW(2), FLOAT(0.7998047f))
@@ -204,7 +204,7 @@ EVT_BEGIN(seikai_anime)
     CALL(evt_eff, STRING(""), STRING("confetti"), 3, LW(0), LW(1), LW(2), 160, 0, 0, 0, 0, 0, 0, 0)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("dennshoku"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("dennshoku_2"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_map_playanim, STRING("anm_seikai"), 1, 0)
+    CALL(evt_map_playanim, STRING("anm_seikai"), MAP_ANIM_PLAY_LOOP, 0)
     WAIT_MS(1800)
     RETURN
 EVT_END()
@@ -212,14 +212,14 @@ EVT_END()
 EVT_BEGIN(seikai_anime_stop)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("dennshoku"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("dennshoku_2"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_map_playanim, STRING("anm_seikai"), 0, 0)
+    CALL(evt_map_playanim, STRING("anm_seikai"), MAP_ANIM_PLAY_ONCE, 0)
     RETURN
 EVT_END()
 
 EVT_BEGIN(fuseikai_anime)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("dennshoku"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("dennshoku_2"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_map_playanim, STRING("anm_fuseikai"), 1, 0)
+    CALL(evt_map_playanim, STRING("anm_fuseikai"), MAP_ANIM_PLAY_LOOP, 0)
     WAIT_MS(1500)
     RETURN
 EVT_END()
@@ -227,7 +227,7 @@ EVT_END()
 EVT_BEGIN(fuseikai_anime_stop)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("dennshoku"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("dennshoku_2"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_map_playanim, STRING("anm_fuseikai"), 0, 0)
+    CALL(evt_map_playanim, STRING("anm_fuseikai"), MAP_ANIM_PLAY_ONCE, 0)
     RETURN
 EVT_END()
 
@@ -355,7 +355,7 @@ EVT_END()
 
 static EVT_BEGIN(offscreen_to_normal)
     WAIT_MS(1000)
-    CALL(evt_map_playanim, STRING("anm_kuti_1"), 2, 0)
+    CALL(evt_map_playanim, STRING("anm_kuti_1"), MAP_ANIM_PLAY_AT_END, 0)
     CALL(evt_img_free_capture, STRING("capture_img"), 0)
     CALL(evt_offscreen_entry, STRING("offscreen"))
     CALL(evt_mapobj_set_offscreen, 1, STRING("hei_07"), STRING("offscreen"))
@@ -465,8 +465,8 @@ EVT_BEGIN(a_sekizou_1)
     SET_VALUE(LW(0), STRING("anm_kaiten1"))
     CALL_CHILD(PTR(animation_wait))
     CALL(evt_msg_print_add, 0, STRING("stg1_hei_22"))
-    CALL(evt_map_playanim, STRING("anm_denshoku"), 1, 0)
-    CALL(evt_map_playanim, STRING("anm_mamekyuu"), 1, 0)
+    CALL(evt_map_playanim, STRING("anm_denshoku"), MAP_ANIM_PLAY_LOOP, 0)
+    CALL(evt_map_playanim, STRING("anm_mamekyuu"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_QUIZ1"))
     CALL_CHILD(PTR(offscreen_to_quiz))
     WAIT_MS(1000)
@@ -490,7 +490,7 @@ EVT_BEGIN(a_sekizou_1)
             SUBTRACT(LW(0), 1)
             GOTO(10)
         END_IF
-        CALL(evt_map_playanim, LW(5), 1, 0)
+        CALL(evt_map_playanim, LW(5), MAP_ANIM_PLAY_LOOP, 0)
         WAIT_MS(400)
         IF_INT_NOT_EQUAL(LW(11), 0)
             CALL(evt_snd_sfxon, STRING("SFX_QUIZ_START1"), 0)
@@ -722,7 +722,7 @@ EVT_BEGIN(hei_07_init_evt)
     END_IF
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG1_HEI4"))
     CALL(evt_snd_set_rev_mode, 1)
-    CALL(evt_map_playanim, STRING("anm_hokori"), 1, 0)
+    CALL(evt_map_playanim, STRING("anm_hokori"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_mapobj_trans, 1, STRING("hei_07_2"), 0, -1000, 0)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("hei_07_2"), MAP_OBJ_FLAG_HIDDEN)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG1_06_QUIZ)
@@ -735,7 +735,7 @@ EVT_BEGIN(hei_07_init_evt)
         CALL(evt_hitobj_onoff, STRING("a_sekizou_1_b"), 0, 0)
         SET_VALUE(LW(0), STRING("dokan"))
         CALL_CHILD(PTR(bero_case_switch_on))
-        CALL(evt_map_playanim, STRING("anm_sekizou"), 2, 0)
+        CALL(evt_map_playanim, STRING("anm_sekizou"), MAP_ANIM_PLAY_AT_END, 0)
     END_IF
     CALL(evt_npc_change_fbat_mode, 1)
     CALL(evt_mobj_save_blk, STRING("mobj_save"), -120, 60, -75, 0, 0)
@@ -760,7 +760,7 @@ static void callback(s32 type, void** work) {
                 case 5:
                     mapCheckAnimation("anm_kuti_1", &valid, &frame);
                     if (valid) {
-                        mapPlayAnimationLv("anm_kuti_1", 0, 0);
+                        mapPlayAnimationLv("anm_kuti_1", MAP_ANIM_PLAY_ONCE, 0);
                     }
                     break;
             }
@@ -770,7 +770,7 @@ static void callback(s32 type, void** work) {
                 case 5:
                     mapCheckAnimation("anm_egao", &valid, &frame);
                     if (valid) {
-                        mapPlayAnimationLv("anm_egao", 0, 0);
+                        mapPlayAnimationLv("anm_egao", MAP_ANIM_PLAY_ONCE, 0);
                         evt->lwData[14]++;
                         if (evt->lwData[14] > 1) {
                             evt->lwData[15] = 0;
@@ -784,13 +784,13 @@ static void callback(s32 type, void** work) {
                 case 5:
                     mapCheckAnimation("anm_kuti_1", &valid, &frame);
                     if (valid) {
-                        mapPlayAnimationLv("anm_kuti_1", 0, 0);
+                        mapPlayAnimationLv("anm_kuti_1", MAP_ANIM_PLAY_ONCE, 0);
                     }
                     break;
                 case 3:
                     evt->lwData[14]++;
                     if (evt->lwData[14] >= 2) {
-                        mapPlayAnimationLv("anm_egao", 0, 0);
+                        mapPlayAnimationLv("anm_egao", MAP_ANIM_PLAY_ONCE, 0);
                         evt->lwData[14] = 0;
                         evt->lwData[15] = 1;
                     }

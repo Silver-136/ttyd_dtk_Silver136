@@ -518,7 +518,7 @@ EVT_BEGIN(evt_dakuto2)
         WAIT_MS(400)
         CALL(evt_snd_sfxon_3d, STRING("SFX_STG3_AIRDUCT_SHAKE1"), 135, 80, -95, 0)
     END_INLINE_EVENT
-    CALL(evt_map_playanim, STRING("anm_futa"), 0, 0)
+    CALL(evt_map_playanim, STRING("anm_futa"), MAP_ANIM_PLAY_ONCE, 0)
     CALL(evt_map_checkanim, STRING("anm_futa"), LW(0), LW(1))
     WAIT_MS(LW(1))
     CALL(evt_mario_key_onoff, 1)

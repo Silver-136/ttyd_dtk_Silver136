@@ -137,7 +137,7 @@ static EVT_BEGIN(door_open)
             WAIT_MS(280)
             CALL(evt_snd_sfxon_3d, STRING("SFX_STG1_GRID_UP1"), LW(0), LW(1), LW(2), 0)
         END_INLINE_EVENT
-        CALL(evt_map_playanim, STRING("anm_mon"), 0, 0)
+        CALL(evt_map_playanim, STRING("anm_mon"), MAP_ANIM_PLAY_ONCE, 0)
         CALL(evt_map_checkanim, STRING("anm_mon"), LW(0), LW(1))
         WAIT_MS(LW(1))
         CALL(evt_snd_sfxoff, LW(10))
@@ -237,7 +237,7 @@ EVT_BEGIN(hei_05_init_evt)
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(1))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG1_HEI4"))
     CALL(evt_snd_set_rev_mode, 1)
-    CALL(evt_map_playanim, STRING("anm_hokori"), 1, 0)
+    CALL(evt_map_playanim, STRING("anm_hokori"), MAP_ANIM_PLAY_LOOP, 0)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG1_05_BRISTLE)
         IF_INT_EQUAL(GSWF(1792), 0)
             CALL(evt_npc_set_anim, STRING("シンエモン1"), STRING("KUR_Z_1"))
@@ -275,7 +275,7 @@ EVT_BEGIN(hei_05_init_evt)
         END_INLINE_EVENT
         ELSE
         CALL(evt_hitobj_onoff, STRING("a_mon"), 0, 0)
-        CALL(evt_map_playanim, STRING("anm_mon"), 2, 0)
+        CALL(evt_map_playanim, STRING("anm_mon"), MAP_ANIM_PLAY_AT_END, 0)
     END_IF
     RETURN
 EVT_END()

@@ -117,7 +117,7 @@ static EVT_BEGIN(damage_event)
         CALL(_rumble_switch, UNIT_ID_SELF)
         RETURN
     END_IF
-    CALL(evt_map_playanim, STRING("switch_a"), 0, 0)
+    CALL(evt_map_playanim, STRING("switch_a"), MAP_ANIM_PLAY_ONCE, 0)
     WAIT_MS(500)
     RETURN
 EVT_END()

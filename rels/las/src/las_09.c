@@ -895,7 +895,7 @@ EVT_BEGIN(las_09_init_evt)
     END_IF
     CALL(evt_hit_damage_return_set, PTR(dmgRetPoint))
     CALL_CHILD(PTR(evt_gazigazi_entry))
-    CALL(evt_map_playanim, STRING("mizu"), 1, 0)
+    CALL(evt_map_playanim, STRING("mizu"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_npc_setup, PTR(npcEnt))
     CALL(evt_mobj_recovery_blk, STRING("r_blk"), 10, 190, 50, 25, 0, 0)
     CALL(evt_mobj_save_blk, STRING("mobj_save"), -190, 50, 25, 0, 0)

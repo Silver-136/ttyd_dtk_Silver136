@@ -640,11 +640,11 @@ EVT_BEGIN(muj_10_init_evt)
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG5_42_PIRATES_VS_X_NAUTS)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_b"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
-    CALL(evt_map_playanim, STRING("mizu"), 1, 0)
-    CALL(evt_map_playanim, STRING("noname"), 1, 0)
+    CALL(evt_map_playanim, STRING("mizu"), MAP_ANIM_PLAY_LOOP, 0)
+    CALL(evt_map_playanim, STRING("noname"), MAP_ANIM_PLAY_LOOP, 0)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG5_42_PIRATES_VS_X_NAUTS)
         IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, STG5_41_RETURN_TO_THE_GROTTO)
-            CALL(evt_map_playanim, STRING("fune"), 1, 0)
+            CALL(evt_map_playanim, STRING("fune"), MAP_ANIM_PLAY_LOOP, 0)
         END_IF
         BEGIN_INLINE_EVENT
             LOOP(0)

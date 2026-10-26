@@ -5267,7 +5267,7 @@ EVT_BEGIN(gor_03_init_evt)
             CALL(evt_npc_set_tribe, STRING("ピートン"), STRING("ピートン（指輪）"))
         END_IF
     END_SWITCH
-    CALL(evt_map_playanim, STRING("mizu"), 1, 0)
+    CALL(evt_map_playanim, STRING("mizu"), MAP_ANIM_PLAY_LOOP, 0)
     SET_VALUE(LW(0), PTR(&door_data_01_0))
 #ifdef VERSION_G8ME01
     CALL_CHILD(evt_door_entry)
@@ -5673,13 +5673,13 @@ void slot_neon_sub(GoryuuWork* wp, SlotWork* data) {
     }
     if (data->flags & 2) {
         if (data->neonCount == 0 || data->neonCount == 12 || data->neonCount == 24) {
-            mapPlayAnimationLv(drumname[data->nowSlot].neon[0], 0, 0);
+            mapPlayAnimationLv(drumname[data->nowSlot].neon[0], MAP_ANIM_PLAY_ONCE, 0);
         }
         if (data->neonCount == 6 || data->neonCount == 18) {
-            mapPlayAnimationLv(drumname[data->nowSlot].neon[1], 0, 0);
+            mapPlayAnimationLv(drumname[data->nowSlot].neon[1], MAP_ANIM_PLAY_ONCE, 0);
         }
     } else if (data->neonCount == 24) {
-        mapPlayAnimationLv(drumname[data->nowSlot].neon[0], 0, 0);
+        mapPlayAnimationLv(drumname[data->nowSlot].neon[0], MAP_ANIM_PLAY_ONCE, 0);
     }
     if (data->neonCount <= 78) {
         data->neonCount++;
@@ -5878,7 +5878,7 @@ void goryuugijo_main_slot(EventEntry* event, BOOL isFirstCall) {
                 for (i = 0; i < 3; i++) {
                     goryuugijo_upsidewindow_disp_sub(data->nowSlot, i);
                 }
-                mapPlayAnimationLv(drumname[data->nowSlot].neon[1], 0, 0);
+                mapPlayAnimationLv(drumname[data->nowSlot].neon[1], MAP_ANIM_PLAY_ONCE, 0);
                 data->counter = 0;
                 data->phase++;
             }
@@ -6014,7 +6014,7 @@ void goryuugijo_main_slot(EventEntry* event, BOOL isFirstCall) {
                 caseDelete(data->caseId[0]);
                 caseDelete(data->caseId[1]);
                 data->flags |= 1;
-                mapPlayAnimationLv(drumname[data->nowSlot].neon[2], 1, 0);
+                mapPlayAnimationLv(drumname[data->nowSlot].neon[2], MAP_ANIM_PLAY_LOOP, 0);
                 data->flags |= 8;
             } else {
                 data->phase = 11;
@@ -6049,9 +6049,9 @@ void goryuugijo_main_slot(EventEntry* event, BOOL isFirstCall) {
             break;
         case 10:
             if (data->monteEvt == NULL || !evtCheckID(data->monteEvt->eventId)) {
-                mapPlayAnimationLv(drumname[data->nowSlot].neon[2], 2, 0);
+                mapPlayAnimationLv(drumname[data->nowSlot].neon[2], MAP_ANIM_PLAY_AT_END, 0);
                 data->flags &= ~8;
-                mapPlayAnimationLv(drumname[data->nowSlot].neon[1], 0, 0);
+                mapPlayAnimationLv(drumname[data->nowSlot].neon[1], MAP_ANIM_PLAY_ONCE, 0);
                 data->counter = 0;
                 data->monteEvt = NULL;
                 data->phase++;
@@ -6087,9 +6087,9 @@ void goryuugijo_main_slot(EventEntry* event, BOOL isFirstCall) {
                 }
             }
             if (data->flags & 8) {
-                mapPlayAnimationLv(drumname[data->nowSlot].neon[2], 2, 0);
+                mapPlayAnimationLv(drumname[data->nowSlot].neon[2], MAP_ANIM_PLAY_AT_END, 0);
                 data->flags &= ~8;
-                mapPlayAnimationLv(drumname[data->nowSlot].neon[1], 0, 0);
+                mapPlayAnimationLv(drumname[data->nowSlot].neon[1], MAP_ANIM_PLAY_ONCE, 0);
             }
             break;
     }

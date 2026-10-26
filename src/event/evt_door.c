@@ -329,7 +329,7 @@ EVT_BEGIN(in_houseanim)
                 CALL(evt_snd_sfxon_3d, STRING("SFX_HOUSE_OPEN1"), LW(2), LW(3), LW(4), 0)
             END_IF
         END_INLINE_EVENT
-        CALL(evt_map_playanim, LW(0), 0, 0)
+        CALL(evt_map_playanim, LW(0), MAP_ANIM_PLAY_ONCE, 0)
         CALL(evt_map_checkanim, LW(0), LW(4), LW(5))
         WAIT_MS(LW(5))
     END_IF
@@ -349,7 +349,7 @@ EVT_BEGIN(out_houseanim)
                 END_LOOP
             END_IF
         END_INLINE_EVENT
-        CALL(evt_map_playanim, LW(2), 0, 0)
+        CALL(evt_map_playanim, LW(2), MAP_ANIM_PLAY_ONCE, 0)
         CALL(evt_map_checkanim, LW(2), LW(4), LW(5))
         WAIT_MS(LW(5))
         BEGIN_INLINE_EVENT

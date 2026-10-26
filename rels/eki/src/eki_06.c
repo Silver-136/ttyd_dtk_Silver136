@@ -109,7 +109,7 @@ EVT_BEGIN(evt_box_open)
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG6_BOX_OPEN1"), -240, 0, 40, 0)
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG6_BOX_OPEN1"), -140, 0, 40, 0)
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG6_BOX_OPEN1"), -40, 0, 40, 0)
-    CALL(evt_map_playanim, STRING("anm_hako"), 0, 0)
+    CALL(evt_map_playanim, STRING("anm_hako"), MAP_ANIM_PLAY_ONCE, 0)
     CALL(evt_map_checkanim, STRING("anm_hako"), LW(0), LW(1))
     WAIT_MS(LW(1))
     CALL(evt_hitobj_onoff, STRING("a_hako"), 1, 0)
@@ -173,7 +173,7 @@ EVT_BEGIN(evt_sw_complete)
             CALL(evt_mario_mov_pos2, LW(0), -25, FLOAT(80.0f))
         END_IF
     END_INLINE_EVENT
-    CALL(evt_map_playanim, STRING("anm_kaidan167"), 0, 0)
+    CALL(evt_map_playanim, STRING("anm_kaidan167"), MAP_ANIM_PLAY_ONCE, 0)
     BEGIN_INLINE_EVENT
         WAIT_MS(900)
         CALL(evt_mapobj_get_position, STRING("origami"), LW(0), LW(1), LW(2))
@@ -389,7 +389,7 @@ EVT_BEGIN(eki_06_init_evt)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("origami"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_ori"), 1, 0)
         CASE_DEFAULT
-        CALL(evt_map_playanim, STRING("anm_kaidan167"), 2, 0)
+        CALL(evt_map_playanim, STRING("anm_kaidan167"), MAP_ANIM_PLAY_AT_END, 0)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("n_origami"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("oku_1"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("oku_2"), MAP_OBJ_FLAG_HIDDEN)
@@ -397,7 +397,7 @@ EVT_BEGIN(eki_06_init_evt)
     END_SWITCH
     IF_INT_LESS(GSW_STORY_PROGRESS, STG6_34_3_BLUE_BLOCKS)
         ELSE
-        CALL(evt_map_playanim, STRING("anm_hako"), 2, 0)
+        CALL(evt_map_playanim, STRING("anm_hako"), MAP_ANIM_PLAY_AT_END, 0)
         CALL(evt_hitobj_onoff, STRING("a_hako"), 1, 0)
     END_IF
     CALL(evt_mapobj_trans, 1, STRING("HAKO"), 0, FLOAT(0.099609375f), 0)

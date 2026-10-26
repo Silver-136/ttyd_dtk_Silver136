@@ -851,7 +851,7 @@ EVT_BEGIN(tik_11_init_evt)
     CALL_CHILD(PTR(evt_bero_info_run))
     SET_VALUE(GSWF(1371), 0)
     CALL(evt_npc_setup, PTR(npcEnt))
-    CALL(evt_map_playanim, STRING("anm_kem"), 1, 0)
+    CALL(evt_map_playanim, STRING("anm_kem"), MAP_ANIM_PLAY_LOOP, 0)
     RETURN
 EVT_END()
 

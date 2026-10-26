@@ -174,7 +174,7 @@ static EvtWord hikaru_yuka_init[] = {
     CALL(evt_hit_damage_return_set, PTR(dmgReturnPt))
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("yukayu1"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("yukayu2"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_map_playanim, STRING("denyuka"), 1, 0)
+    CALL(evt_map_playanim, STRING("denyuka"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_sub_random, 300, LW(0))
     SWITCH(LW(0))
         CASE_LESS(100)

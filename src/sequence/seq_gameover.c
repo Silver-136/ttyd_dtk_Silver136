@@ -250,7 +250,7 @@ EVT_BEGIN(evt_gameover)
     CALL(evt_cam_ctrl_onoff, 4, 1)
     CALL(evt_cam3d_evt_set, 0, 208, 653, 0, 91, -30, 0, EASING_SINE_IN_OUT)
     WAIT_FRAMES(1)
-    CALL(evt_map_playanim, STRING("anm_hokori"), 1, 0)
+    CALL(evt_map_playanim, STRING("anm_hokori"), MAP_ANIM_PLAY_LOOP, 0)
 #ifdef VERSION_G8ME01
     CALL(evt_sub_get_language, LW(0))
     IF_INT_EQUAL(LW(0), 4)

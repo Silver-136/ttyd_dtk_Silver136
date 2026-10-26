@@ -213,7 +213,7 @@ EVT_BEGIN(hikari_evt)
             CASE_EQUAL(5)
             SET_VALUE(LW(1), STRING("hikari_06"))
         END_SWITCH
-        CALL(evt_map_playanim, LW(1), 0, 0)
+        CALL(evt_map_playanim, LW(1), MAP_ANIM_PLAY_ONCE, 0)
         CALL(evt_map_checkanim, LW(1), LW(2), LW(3))
         WAIT_MS(LW(3))
     END_LOOP

@@ -581,7 +581,7 @@ EVT_BEGIN(tou_06_init_evt)
             CALL(evt_party_cont_onoff, 0, 1)
         END_INLINE_EVENT
     END_IF
-    CALL(evt_map_playanim, STRING("anm_hae"), 1, 0)
+    CALL(evt_map_playanim, STRING("anm_hae"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("gor_hae"), MAP_OBJ_FLAG_HIDDEN)
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_HELP_WANTED)
         CALL_CHILD(PTR(iri_13_init))

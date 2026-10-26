@@ -37,9 +37,9 @@ static EVT_BEGIN(epilogue_evt)
 EVT_END()
 
 EVT_BEGIN(gor_12_init_evt)
-    CALL(evt_map_playanim, STRING("anm_umi"), 1, 0)
-    CALL(evt_map_playanim, STRING("anm_nami"), 1, 0)
-    CALL(evt_map_playanim, STRING("anm_kirakira"), 1, 0)
+    CALL(evt_map_playanim, STRING("anm_umi"), MAP_ANIM_PLAY_LOOP, 0)
+    CALL(evt_map_playanim, STRING("anm_nami"), MAP_ANIM_PLAY_LOOP, 0)
+    CALL(evt_map_playanim, STRING("anm_kirakira"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_sub_get_system_flag, LW(0))
     IF_BITS_SET(LW(0), 2)
         RETURN

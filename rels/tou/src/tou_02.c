@@ -2253,7 +2253,7 @@ EVT_BEGIN(tou_02_init_evt)
         SET_VALUE(GSWF(2403), 1)
     END_IF
 #ifdef VERSION_G8ME01
-    CALL(evt_map_playanim, STRING("anm_paneru"), 1, 0)
+    CALL(evt_map_playanim, STRING("anm_paneru"), MAP_ANIM_PLAY_LOOP, 0)
 #else
     CALL(evt_map_playanim, STRING(("anm_paneru")), 1, 0)
 #endif

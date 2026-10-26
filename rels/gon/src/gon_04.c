@@ -1021,7 +1021,7 @@ EVT_BEGIN(gon_04_init_evt)
     END_IF
     CALL(evt_mobj_recovery_blk, STRING("mobj_recover"), 6, 550, 960, -125, 0, 0)
     CALL(evt_mobj_powerupblk, STRING("pblk1"), -250, 60, -130, 0, GSWF_SHINE_13, 0)
-    CALL(evt_map_playanim, STRING("hokori"), 1, 0)
+    CALL(evt_map_playanim, STRING("hokori"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_paper_entry, STRING("OFF_gon_04_2"))
     SET_VALUE(GF(10), 0)
     RETURN

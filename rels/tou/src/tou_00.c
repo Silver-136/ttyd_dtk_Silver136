@@ -615,8 +615,8 @@ EVT_BEGIN(tou_00_init_evt)
         RETURN
     END_IF
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU8"))
-    CALL(evt_map_playanim, STRING("jet"), 1, 0)
-    CALL(evt_map_playanim, STRING("lightcoloer"), 1, 0)
+    CALL(evt_map_playanim, STRING("jet"), MAP_ANIM_PLAY_LOOP, 0)
+    CALL(evt_map_playanim, STRING("lightcoloer"), MAP_ANIM_PLAY_LOOP, 0)
     SET_VALUE(LW(0), STRING("coloer_light_1"))
     SPAWN_EVENT(PTR(evt_light))
     SET_VALUE(LW(0), STRING("coloer_light_2"))

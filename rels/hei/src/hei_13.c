@@ -114,7 +114,7 @@ EVT_BEGIN(evt_anm_kan)
         END_IF
     END_INLINE_EVENT
     LABEL(99)
-    CALL(evt_map_playanim, STRING("anm_kan_1"), 0, 0)
+    CALL(evt_map_playanim, STRING("anm_kan_1"), MAP_ANIM_PLAY_ONCE, 0)
     RETURN
 EVT_END()
 
@@ -138,7 +138,7 @@ EVT_BEGIN(hei_13_init_evt)
     CALL(evt_mobj_brick, STRING("10m"), 325, 60, -100, ITEM_NULL, MOBJ_BRICK_TEN_COIN, 0, GSWF(1799))
     SET_VALUE(LW(0), PTR(ki_data))
     CALL_CHILD(PTR(evt_sub_tree_access_entry))
-    CALL(evt_map_playanim, STRING("anm_mugi"), 1, 0)
+    CALL(evt_map_playanim, STRING("anm_mugi"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG1_HEI1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG1_HEI1"))
     CALL(evt_sub_get_system_flag, LW(0))
