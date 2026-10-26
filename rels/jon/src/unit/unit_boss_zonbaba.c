@@ -1053,7 +1053,7 @@ EVT_BEGIN(recover_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_RECOVER_TALK_DONE, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
-        // BUG: GetUnitWork (reading into the constant 1) where SetUnitWork was meant: the slot stays 0, so
+        // BUG: GetUnitWork (reading into the constant 1), apparently meant as SetUnitWork: the slot stays 0, so
         // tik_boss_14 is printed on every recover
         CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_RECOVER_TALK_DONE, 1)
         CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("tik_boss_14"), 0, -2)

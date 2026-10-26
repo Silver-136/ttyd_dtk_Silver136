@@ -47,7 +47,8 @@
 #define UNIT_WORK_AUD_HIT 8          // 1 once a machine-gun shot of aud_attack_event has hit; the 10th shot then hits without a new check
 // ... and of the rocket punch units it launches (unit_boss_rocket_punch_mkII below; the *_r and arm_event* events)
 #define ROCKET_PUNCH_WORK_SIDE 0     // which arm: 0/1, or 2/3 for an arm spawned by arm_return_event (no fly-in); arm_check reads it
-#define ROCKET_PUNCH_WORK_WAIT 1     // turns before it attacks: 1 at launch and after each attack (it attacks every second turn)
+// attack_event_r subtracts 1 and waits while the result is 1 or more; set to 1 at launch and after each attack
+#define ROCKET_PUNCH_WORK_WAIT 1
 
 typedef struct ArmWork {
     Vec prevPos;

@@ -36,7 +36,8 @@
 #define UNIT_WORK_LOW_HP_TALK_DONE 6 // 1 once damage_event showed its low-HP line (dead_event sets it too)
 // ... and of the rocket punch units it launches (unit_boss_rocket_punch below; the *_r and arm_event* events)
 #define ROCKET_PUNCH_WORK_SIDE 0     // which arm: 0/1, or 2/3 for an arm spawned by arm_return_event (no fly-in); arm_check reads it
-#define ROCKET_PUNCH_WORK_WAIT 1     // turns before it attacks: 1 at launch and after each attack (it attacks every second turn)
+// attack_event_r subtracts 1 and waits while the result is 1 or more; set to 1 at launch and after each attack
+#define ROCKET_PUNCH_WORK_WAIT 1
 
 
 static EffectEntry* eff_charge;

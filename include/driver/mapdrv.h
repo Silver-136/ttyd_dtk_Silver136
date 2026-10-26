@@ -181,8 +181,8 @@ typedef struct MapHeader {
 } MapHeader;
 
 // MapObject.flags, named from mapdrv (draw passes, _mapEnt, the mapObj* setters) and envdrv. Bits 24-27 are not
-// flags but the index of the TEV callback (MAP_OBJ_TEV_CALLBACK). 0x10000/0x20000/0x40000/0x800000/0x80000000 (only
-// set on animation poses, which share the material flag layout) and 0x40000000 are not named.
+// flags but the index of the TEV callback (MAP_OBJ_TEV_CALLBACK). 0x80000000 (only set on animation poses, which
+// share the material flag layout) and 0x40000000 are not named.
 typedef enum MapObjFlags {
     MAP_OBJ_FLAG_HIDDEN = (1 << 0),          // 0x1, not drawn by its own camera (offscreen pass still draws it)
     MAP_OBJ_FLAG_CLIP = (1 << 1),            // 0x2, view frustum cull (small bounding boxes, _mapEnt)
