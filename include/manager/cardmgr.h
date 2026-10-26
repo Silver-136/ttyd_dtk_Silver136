@@ -55,8 +55,21 @@ typedef struct {
     CardSaveSlot saves[4]; //0x2000 (+ 0x4000 * save_index)
 } CardData;
 
+// CardWork.flags (cardmgr.c)
+typedef enum CardFlags {
+    CARD_FLAG_BUSY = (1 << 0),            // 0x1, a memcard_* card call is in progress
+    CARD_FLAG_EXEC = (1 << 1),            // 0x2, an operation is running (cardIsExec)
+    CARD_FLAG_DONE = (1 << 8),            // 0x100, the last operation finished
+    CARD_FLAG_FAILED = (1 << 9),          // 0x200, the last operation stopped with a card error
+    CARD_FLAG_HEADER_INVALID = (1 << 10), // 0x400, read_main: headerCheck failed
+    CARD_FLAG_ERASE = (1 << 11),          // 0x800, cardErase: clear the slot copy once the write is done
+    CARD_FLAG_WRITTEN = (1 << 13),        // 0x2000, a write completed (memcard_open rechecks the serial)
+    CARD_FLAG_INSERT_CHANGED = (1 << 14), // 0x4000, cardInsertChanged
+    CARD_FLAG_INSERT_WATCH = (1 << 15),   // 0x8000, cardInsertWatchStart .. cardInsertWatchEnd
+} CardFlags;
+
 typedef struct {
-    vu16 flags; //0x0
+    vu16 flags; //0x0, CardFlags
     u8 pad_2[0x4 - 0x2]; //0x2
     void* workArea; //0x4
     s32 chan; //0x8
