@@ -22,11 +22,61 @@ typedef struct PuniAnimSet {
     s16 end[10];    // 0x3C
 } PuniAnimSet;
 
+// PuniData.flags (mri_puni). Kinds: PUNI/TOGE/SPRITE_*/NPC_* (one each). 0x4, 0x2000 and 0x400000 (set, never
+// read), 0x10000/0x200000 (scripts only) and 0x80000000 are not named.
+typedef enum PuniFlags {
+    PUNI_FLAG_PUNI = (1 << 0),               // 0x1
+    PUNI_FLAG_TOGE = (1 << 1),               // 0x2
+    PUNI_FLAG_SPRITE_PUNI = (1 << 3),        // 0x8
+    PUNI_FLAG_SPRITE_TOGE = (1 << 4),        // 0x10
+    PUNI_FLAG_NPC_GUIDE = (1 << 5),          // 0x20
+    PUNI_FLAG_NPC_GUIDE_SISTER = (1 << 6),   // 0x40
+    PUNI_FLAG_NPC_CHIBI_TOGE = (1 << 7),     // 0x80
+    PUNI_FLAG_NPC_RIVAL = (1 << 8),          // 0x100
+    PUNI_FLAG_MOVE_STOP = (1 << 9),          // 0x200, evt_puni_all_movestop
+    PUNI_FLAG_ACTIVE = (1 << 10),            // 0x400
+    PUNI_FLAG_HIDDEN = (1 << 11),            // 0x800
+    PUNI_FLAG_WALL_CHECK = (1 << 12),        // 0x1000
+    PUNI_FLAG_DEAD = (1 << 14),              // 0x4000, evt_mri_puni_win_attack revives by clearing it
+    PUNI_FLAG_STRAY = (1 << 15),             // 0x8000, puniModeHagure
+    PUNI_FLAG_SCRIPT_ANIM = (1 << 17),       // 0x20000
+    PUNI_FLAG_SCRIPT_CONTROL = (1 << 18),    // 0x40000, around cutscenes
+    PUNI_FLAG_IN_CHAIN = (1 << 19),          // 0x80000, evt_mri_toge_make_retsu
+    PUNI_FLAG_COLLIDE = (1 << 20),           // 0x100000
+    PUNI_FLAG_NOT_IN_PARTY = (1 << 23),      // 0x800000
+    PUNI_FLAG_OWN_ANIM_TIME = (1 << 24),     // 0x1000000
+    PUNI_FLAG_UPDATED = (1 << 25),           // 0x2000000
+    PUNI_FLAG_SENSED = (1 << 26),            // 0x4000000
+    PUNI_FLAG_DIZZY = (1 << 27),             // 0x8000000
+    PUNI_FLAG_PUSHING = (1 << 28),           // 0x10000000
+    PUNI_FLAG_NEAR = (1 << 29),              // 0x20000000
+    PUNI_FLAG_KEEP = (1 << 30),              // 0x40000000
+} PuniFlags;
+
+// PuniData.flags2. 0x1 is not named.
+typedef enum PuniFlags2 {
+    PUNI_FLAG2_DIZZY_ICON = (1 << 1),        // 0x2
+    PUNI_FLAG2_CROSSING_LEDGE = (1 << 2),    // 0x4
+    PUNI_FLAG2_ON_SLOPE = (1 << 3),          // 0x8
+    PUNI_FLAG2_DEATH_PENDING = (1 << 4),     // 0x10
+    PUNI_FLAG2_OBSTACLE = (1 << 5),          // 0x20
+} PuniFlags2;
+
+// PuniWork.flags: the pipe (bero directionId) the floor was entered from, and floor properties
+typedef enum PuniWorkFlags {
+    PUNI_WORK_FLAG_PIPE_WEST = (1 << 0),     // 0x1, directionId 6
+    PUNI_WORK_FLAG_PIPE_EAST = (1 << 1),     // 0x2, directionId 2
+    PUNI_WORK_FLAG_PIPE_UP = (1 << 2),       // 0x4, directionId 8
+    PUNI_WORK_FLAG_PIPE_DOWN = (1 << 3),     // 0x8, directionId 9
+    PUNI_WORK_FLAG_NO_NEXT_MAP = (1 << 4),   // 0x10
+    PUNI_WORK_FLAG_BATTLE_FLOOR = (1 << 5),  // 0x20, floors 9 and 12
+} PuniWorkFlags;
+
 typedef struct PuniWork {
     s32 systemMode;           // 0x0
     PuniAnimSet anim[2];      // 0x4
     u8 animNames[0x324 - 0xA4];   // 0xA4
-    u32 flags;               // 0x324
+    u32 flags;               // 0x324, PuniWorkFlags
     s32 floor;               // 0x328
     f32 posY[4];              // 0x32C
     s32 ymode;                // 0x33C
@@ -73,8 +123,8 @@ typedef struct PuniWork {
 
 typedef struct PuniData {
     NpcEntry* npc;                      // 0x0
-    s32 flags;                          // 0x4
-    s32 flags2;                         // 0x8
+    s32 flags;                          // 0x4, PuniFlags
+    s32 flags2;                         // 0x8, PuniFlags2
     u16 mode;                           // 0xC
     u16 prevMode;                       // 0xE
     u8 pad_10[0x114 - 0x10];            // 0x10

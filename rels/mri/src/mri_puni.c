@@ -103,7 +103,7 @@ void evt_icon_disp_func(CameraId camId, void* param) {
     if (Punigp->floor == 9 || Punigp->floor == 12) {
         for (i = 1; i < 211; i++) {
             p = &Punidat[i];
-            if ((p->flags & 0x400) && !(p->flags & 0x804000)) {
+            if ((p->flags & PUNI_FLAG_ACTIVE) && !(p->flags & (PUNI_FLAG_DEAD | PUNI_FLAG_NOT_IN_PARTY))) {
                 Vec a;
                 Vec b;
                 a = p->pos;
@@ -114,7 +114,7 @@ void evt_icon_disp_func(CameraId camId, void* param) {
                         p->flags2 &= ~1;
                     }
                 }
-                if (p->flags2 & 2) {
+                if (p->flags2 & PUNI_FLAG2_DIZZY_ICON) {
                     b = a;
                     puniSinCosRet(p->index + gp->retraceCount * 10, &a.z, &a.x, 9.0f, 9.0f);
                     a.y += 13.0f;
@@ -281,18 +281,18 @@ void puniAnimation(PuniData* p, PunidrvPose* t) {
     s32 f;
     s32 ofs;
 
-    if (!(p->flags & 0x40000)) {
-    if (p->flags & 0x1E0) {
-        if (p->flags & 0x20) {
+    if (!(p->flags & PUNI_FLAG_SCRIPT_CONTROL)) {
+    if (p->flags & (PUNI_FLAG_NPC_GUIDE | PUNI_FLAG_NPC_GUIDE_SISTER | PUNI_FLAG_NPC_CHIBI_TOGE | PUNI_FLAG_NPC_RIVAL)) {
+        if (p->flags & PUNI_FLAG_NPC_GUIDE) {
             npc = npcNameToPtr("\203K\203C\203hsp");
             names = (char*)( &Punigp->animNames[0]) ;
-        } else if (p->flags & 0x40) {
+        } else if (p->flags & PUNI_FLAG_NPC_GUIDE_SISTER) {
             npc = npcNameToPtr("\203K\203C\203h\226\205sp");
             names = (char*)( &Punigp->animNames[160]) ;
-        } else if (p->flags & 0x80) {
+        } else if (p->flags & PUNI_FLAG_NPC_CHIBI_TOGE) {
             npc = npcNameToPtr("\202\277\202\321\203g\203Qsp");
             names = (char*)( &Punigp->animNames[320]) ;
-        } else if (p->flags & 0x100) {
+        } else if (p->flags & PUNI_FLAG_NPC_RIVAL) {
             npc = npcNameToPtr("\203\211\203C\203o\203\213sp");
             names = (char*)( &Punigp->animNames[480]) ;
         } else {
@@ -300,7 +300,7 @@ void puniAnimation(PuniData* p, PunidrvPose* t) {
             names = (char*)( &Punigp->animNames[480]) ;
         }
         ofs = p->marioDist;
-        if (p->flags & 0x1000000) {
+        if (p->flags & PUNI_FLAG_OWN_ANIM_TIME) {
             p->animTime++;
         } else {
             if (p->mode != 2) {
@@ -313,14 +313,14 @@ void puniAnimation(PuniData* p, PunidrvPose* t) {
             }
             p->animTime = gp->retraceCount + ofs;
         }
-        if (!(p->flags & 0x20000)) {
+        if (!(p->flags & PUNI_FLAG_SCRIPT_ANIM)) {
             animPoseSetAnim(npc->poseId, names + ( p->anim * 16) , 1);
             animPoseSetLocalTime(npc->poseId, p->animTime);
         }
         show = 0;
-        if (p->flags & 0x400) { show = 1;
+        if (p->flags & PUNI_FLAG_ACTIVE) { show = 1;
         }
-        if (p->flags & 0x800) { show = 0;
+        if (p->flags & PUNI_FLAG_HIDDEN) { show = 0;
         }
         if (show) {
             npc->position.x = p->pos.x + p->dispOfs.x;
@@ -341,15 +341,15 @@ void puniAnimation(PuniData* p, PunidrvPose* t) {
         npc->rotationOffset.y = p->rotOffsetY;
     } else {
         set = &Punigp->anim[0];
-        if (p->flags & 0x8) { set = &Punigp->anim[0];
+        if (p->flags & PUNI_FLAG_SPRITE_PUNI) { set = &Punigp->anim[0];
         }
-        if (p->flags & 0x10) { set = &Punigp->anim[1];
+        if (p->flags & PUNI_FLAG_SPRITE_TOGE) { set = &Punigp->anim[1];
         }
         tbl = set->table[p->anim];
         cnt = set->count[p->anim];
         end = set->end[p->anim];
         ofs = p->marioDist;
-        if (p->flags & 0x1000000) {
+        if (p->flags & PUNI_FLAG_OWN_ANIM_TIME) {
             f = p->animTime % cnt;
             if (( end == ( -2 )) && ( cnt <= p->animTime) ) { f = cnt - 1;
             }
@@ -367,9 +367,9 @@ void puniAnimation(PuniData* p, PunidrvPose* t) {
             t->texId = tbl[(( u32)(gp->retraceCount + ofs) ) % ( (u32)set->count [p->anim])];
         }
         show = 0;
-        if (p->flags & 0x400) { show = 1;
+        if (p->flags & PUNI_FLAG_ACTIVE) { show = 1;
         }
-        if (p->flags & 0x800) { show = 0;
+        if (p->flags & PUNI_FLAG_HIDDEN) { show = 0;
         }
         if (show) {
             (*t->mtx)[0][3] = p->pos.x + p->dispOfs.x;
@@ -478,7 +478,7 @@ void _ymode_mri_09(PuniData* p) {
 
 void _ymode_mri_16_00(PuniData* p) {
     u32 old = p->flags2;
-    p->flags2 &= ~8;
+    p->flags2 &= ~PUNI_FLAG2_ON_SLOPE;
     if (p->pos.y <= -200.0f && p->pos.y >= -400.0f) {
         if (p->pos.x <= 40.0f && p->pos.x >= -210.0f && p->pos.z <= -76.46314f && p->pos.z >= -200.0f) {
             if (p->pos.x <= -190.0f) {
@@ -495,14 +495,14 @@ void _ymode_mri_16_00(PuniData* p) {
                 p->pos.y = -400.0f;
             }
             if (p->pos.y < -320.0f && p->pos.y > -400.0f) {
-                p->flags2 |= 8;
+                p->flags2 |= PUNI_FLAG2_ON_SLOPE;
             }
         }
         if (p->pos.x <= 40.0f && p->pos.x >= -200.0f && p->pos.z > -76.46314f && p->pos.z < 200.0f) {
             p->pos.y = -400.0f;
         }
     }
-    if (!(p->flags2 & 4) && !(p->flags2 & 8) && (old & 8)) {
+    if (!(p->flags2 & PUNI_FLAG2_CROSSING_LEDGE) && !(p->flags2 & PUNI_FLAG2_ON_SLOPE) && (old & 8)) {
         if (p->pos.z > -76.46314f && p->prevPos.z <= -76.46314f) {
             p->pos = p->prevPos;
             p->pos.z -= 0.0002f;
@@ -512,7 +512,7 @@ void _ymode_mri_16_00(PuniData* p) {
 
 void _ymode_mri_16_01(PuniData* p) {
     u32 old = p->flags2;
-    p->flags2 &= ~8;
+    p->flags2 &= ~PUNI_FLAG2_ON_SLOPE;
     if (p->pos.y <= 100.0f && p->pos.y >= 0.0f) {
         if (p->pos.x <= 40.0f && p->pos.x >= -200.0f && p->pos.z > -200.0f && p->pos.z < 200.0f) {
             p->pos.y = 0.0f;
@@ -532,11 +532,11 @@ void _ymode_mri_16_01(PuniData* p) {
                 p->pos.y = 0.0f;
             }
             if (p->pos.y < 80.0f && p->pos.y > 0.0f) {
-                p->flags2 |= 8;
+                p->flags2 |= PUNI_FLAG2_ON_SLOPE;
             }
         }
     }
-    if (!(p->flags2 & 4) && !(p->flags2 & 8) && (old & 8)) {
+    if (!(p->flags2 & PUNI_FLAG2_CROSSING_LEDGE) && !(p->flags2 & PUNI_FLAG2_ON_SLOPE) && (old & 8)) {
         if (p->pos.z > 60.00006f && p->prevPos.z <= 60.00006f) {
             p->pos = p->prevPos;
             p->pos.z -= 0.0002f;
@@ -551,7 +551,7 @@ void _ymode_mri_16_01(PuniData* p) {
 #define AC(p, x0, x1, z0, z1) (_aok = 1, _ax = (p)->pos.x, _az = (p)->pos.z, ((x0) > _ax ? _aok = 0 : 0), ((x1) < _ax ? _aok = 0 : 0), ((z0) > _az ? _aok = 0 : 0), ((z1) < _az ? _aok = 0 : 0), _aok)
 //(x0,x1,z0,z1) (ok = 1, (p->pos.x < (x0) ? ok = 0 : 0), (p->pos.x > (x1) ? ok = 0 : 0), (p->pos.z < (z0) ? ok = 0 : 0), (p->pos.z > (z1) ? ok = 0 : 0), ok)
 void puniSetYPosition(PuniData* p) {
-    if (p->flags & 1) {
+    if (p->flags & PUNI_FLAG_PUNI) {
         BOOL _aok;
         f32 _ax, _az;
         switch (Punigp->ymode) {
@@ -1157,7 +1157,7 @@ void PuniDokuritsu(PuniData* p) {
     PuniData* c2;
     PuniData* par;
     p->groupId = -1;
-    p->flags &= ~0x80000;
+    p->flags &= ~PUNI_FLAG_IN_CHAIN;
     p->depth = 0;
     c1 = p->child1;
     par = p->parent;
@@ -1235,7 +1235,7 @@ BOOL searchParent(PuniData* p) {
     s32 i;
 
     for (i = 0; i < PUNI_DATA_MAX; i++, q++) {
-        if ((q->flags & 0x80000) && q->child2 == NULL && (q->child1 == NULL || q->depth < 2) && q != p &&
+        if ((q->flags & PUNI_FLAG_IN_CHAIN) && q->child2 == NULL && (q->child1 == NULL || q->depth < 2) && q != p &&
             (s16)level > q->depth) {
             found = q;
             level = q->depth + 1;
@@ -1314,7 +1314,7 @@ int puniMoveAtari(PuniData* p, Vec start, Vec dir, int reflect, f32 dist) {
     p->hitCheck = NULL;
     p->hitMove = NULL;
     d = dist;
-    if (p->flags & 0x1000) {
+    if (p->flags & PUNI_FLAG_WALL_CHECK) {
         p->hitMove = hitCheckFilter(NULL, &hit.x, &hit.y, &hit.z, &d, &n.x, &n.y, &n.z, start.x, start.y, start.z, dir.x, dir.y, dir.z);
     }
     if (p->hitMove == NULL) {
@@ -1407,7 +1407,7 @@ void puniMoveHit(PuniData* p, Vec start, Vec dir, f32 dist) {
     p->hitCheck = NULL;
     p->hitMove = NULL;
     d = dist;
-    if (p->flags & 0x1000) {
+    if (p->flags & PUNI_FLAG_WALL_CHECK) {
         p->hitMove = hitCheckFilter(NULL, &pa.x, &pa.y, &pa.z, &d, &hit.x, &hit.y, &hit.z, start.x, start.y, start.z, dir.x, dir.y, dir.z);
     }
     if (p->hitMove == NULL) {
@@ -1474,7 +1474,7 @@ void puniMoveDecel(PuniData* p) {
     p->hitCheck = NULL;
     p->hitMove = NULL;
     d = dist;
-    if (p->flags & 0x1000) {
+    if (p->flags & PUNI_FLAG_WALL_CHECK) {
         p->hitMove = hitCheckFilter(NULL, &pa.x, &pa.y, &pa.z, &d, &hit.x, &hit.y, &hit.z, s2.x, s2.y, s2.z, d2.x, d2.y, d2.z);
     }
     if (p->hitMove == NULL) {
@@ -1592,7 +1592,7 @@ void puniMoveNormal(PuniData* p) {
     p->hitCheck = NULL;
     p->hitMove = NULL;
     d = dist;
-    if (p->flags & 0x1000) {
+    if (p->flags & PUNI_FLAG_WALL_CHECK) {
         p->hitMove = hitCheckFilter(NULL, &pa.x, &pa.y, &pa.z, &d, &hit.x, &hit.y, &hit.z, s2.x, s2.y, s2.z, d2.x, d2.y, d2.z);
     }
     if (p->hitMove == NULL) {
@@ -1654,7 +1654,7 @@ void puniParaAttack(PuniData* a, PuniData* b) {
     }
     r = qrnd(y);
     c = r < x;
-    if (b->flags & 0x8000000) {
+    if (b->flags & PUNI_FLAG_DIZZY) {
         c = 1;
     }
     if (c) {
@@ -1666,11 +1666,11 @@ void puniParaAttack(PuniData* a, PuniData* b) {
             }
             b->target = a;
             b->flags |= 0x2000;
-            b->flags &= ~0x8000000;
-            b->flags2 &= ~2;
+            b->flags &= ~PUNI_FLAG_DIZZY;
+            b->flags2 &= ~PUNI_FLAG2_DIZZY_ICON;
             b->mode = 9;
             b->modeStep = 0;
-            b->flags &= ~0x2000000;
+            b->flags &= ~PUNI_FLAG_UPDATED;
         }
     } else if (b->attacked == 0) {
         a->damage = b->attack - a->defense;
@@ -1680,11 +1680,11 @@ void puniParaAttack(PuniData* a, PuniData* b) {
         }
         a->target = b;
         a->flags |= 0x2000;
-        a->flags &= ~0x8000000;
-        a->flags2 &= ~2;
+        a->flags &= ~PUNI_FLAG_DIZZY;
+        a->flags2 &= ~PUNI_FLAG2_DIZZY_ICON;
         a->mode = 9;
         a->modeStep = 0;
-        a->flags &= ~0x2000000;
+        a->flags &= ~PUNI_FLAG_UPDATED;
     }
     a->attacked = 1;
     b->attacked = 1;
@@ -1694,8 +1694,8 @@ void puniParaDamage(PuniData* p) {
     p->hp -= p->damage;
     if (p->hp <= 0) {
         p->hp = 0;
-        p->flags |= 0x4000;
-        p->flags2 |= 0x10;
+        p->flags |= PUNI_FLAG_DEAD;
+        p->flags2 |= PUNI_FLAG2_DEATH_PENDING;
     }
 }
 
@@ -1764,7 +1764,7 @@ PuniData* puniSearchRandom(s32 start, s32 count) {
             idx = start;
         }
         p = &Punidat[idx];
-        if ((p->flags & 0x400) && !(p->flags & 0x4000)) {
+        if ((p->flags & PUNI_FLAG_ACTIVE) && !(p->flags & PUNI_FLAG_DEAD)) {
             break;
         }
         idx++;
@@ -1789,7 +1789,7 @@ PuniData* searchBattle(PuniData* self, s32 start, s32 count, f32 maxDist) {
 
     q = &Punidat[start];
     for (i = start; i < start + count; i++, q++) {
-        if ((q->flags & 0x400) && !(q->flags & 0x4000) && q->mode != 9 && q->mode != 13) {
+        if ((q->flags & PUNI_FLAG_ACTIVE) && !(q->flags & PUNI_FLAG_DEAD) && q->mode != 9 && q->mode != 13) {
             f32 d = PSVECSquareDistance(&self->pos, &q->pos);
             if (d < minDist) {
                 minDist = d;
@@ -1810,7 +1810,7 @@ PuniData* searchMikata(PuniData* self) {
     s32 i;
 
     for (i = 1; i < 103; i++, q++) {
-        if ((q->flags & 0x400) && !(q->flags & 0x4000) && q->mode != 9 && q->mode != 13) {
+        if ((q->flags & PUNI_FLAG_ACTIVE) && !(q->flags & PUNI_FLAG_DEAD) && q->mode != 9 && q->mode != 13) {
             f32 d = PSVECSquareDistance(&self->pos, &q->pos);
             if (d < minDist) {
                 minDist = d;
@@ -1831,7 +1831,7 @@ PuniData* searchTeki(PuniData* self) {
     s32 i;
 
     for (i = 110; i < 210; i++, q++) {
-        if ((q->flags & 0x400) && !(q->flags & 0x4000) && q->mode != 9 && q->mode != 13) {
+        if ((q->flags & PUNI_FLAG_ACTIVE) && !(q->flags & PUNI_FLAG_DEAD) && q->mode != 9 && q->mode != 13) {
             f32 d = PSVECSquareDistance(&self->pos, &q->pos);
             if (d < minDist) {
                 minDist = d;
@@ -1852,7 +1852,7 @@ PuniData* searchBattleMikata(PuniData* self) {
     s32 i;
 
     for (i = 1; i < 103; i++, q++) {
-        if ((q->flags & 0x400) && !(q->flags & 0x4000) && q->mode != 9 && q->mode != 13) {
+        if ((q->flags & PUNI_FLAG_ACTIVE) && !(q->flags & PUNI_FLAG_DEAD) && q->mode != 9 && q->mode != 13) {
             f32 d = PSVECSquareDistance(&self->pos, &q->pos);
             if (d < minDist) {
                 minDist = d;
@@ -1874,7 +1874,7 @@ static inline PuniData* searchBattleTeki_inl(PuniData* self) {
 
     q = &Punidat[110];
     for (i = 110; i < 210; i++) {
-        if ((q->flags & 0x400) && !(q->flags & 0x4000) && q->mode != 9 && q->mode != 13) {
+        if ((q->flags & PUNI_FLAG_ACTIVE) && !(q->flags & PUNI_FLAG_DEAD) && q->mode != 9 && q->mode != 13) {
             f32 d = PSVECSquareDistance(&self->pos, &q->pos);
             if (d < minDist) {
                 minDist = d;
@@ -1902,7 +1902,7 @@ static inline PuniData* searchBattleMikata_inl(PuniData* self) {
 
     q = &Punidat[1];
     for (i = 1; i < 103; i++) {
-        if ((q->flags & 0x400) && !(q->flags & 0x4000) && q->mode != 9 && q->mode != 13) {
+        if ((q->flags & PUNI_FLAG_ACTIVE) && !(q->flags & PUNI_FLAG_DEAD) && q->mode != 9 && q->mode != 13) {
             f32 d = PSVECSquareDistance(&self->pos, &q->pos);
             if (d < minDist) {
                 minDist = d;
@@ -1929,7 +1929,7 @@ PuniData* searchBattleTeki(PuniData* self) {
     s32 i;
 
     for (i = 110; i < 210; i++, q++) {
-        if ((q->flags & 0x400) && !(q->flags & 0x4000) && q->mode != 9 && q->mode != 13) {
+        if ((q->flags & PUNI_FLAG_ACTIVE) && !(q->flags & PUNI_FLAG_DEAD) && q->mode != 9 && q->mode != 13) {
             f32 d = PSVECSquareDistance(&self->pos, &q->pos);
             if (d < minDist) {
                 minDist = d;
@@ -1945,7 +1945,7 @@ PuniData* searchBattleTeki(PuniData* self) {
 
 void puniSearch(PuniData* p) {
     if ((s32)(gp->retraceCount & 3) == (*( s16*)( &p->index) & 3)) {
-        if (p->flags & 1) {
+        if (p->flags & PUNI_FLAG_PUNI) {
             p->target = searchBattleTeki_inl(p);
         } else {
             p->target = searchBattleMikata_inl(p);
@@ -1957,14 +1957,14 @@ void puniModeChangeAttack(void) {
     s32 i;
     PuniData* p = &Punidat[1];
     for (i = 1; i < 211; i++, p++) {
-        if (p->flags & 0x400) {
+        if (p->flags & PUNI_FLAG_ACTIVE) {
             switch (p->mode) {
             case 0:
             case 1:
             case 2:
             case 0x1d: {
                 PuniData* f;
-                if (p->flags & 1) {
+                if (p->flags & PUNI_FLAG_PUNI) {
                     f = searchBattleTeki_inl(p);
                 } else {
                     f = searchBattleMikata_inl(p);
@@ -1974,7 +1974,7 @@ void puniModeChangeAttack(void) {
                     p->mode = 7;
                     p->modeStep = 0;
                     p->depth = 0;
-                    p->flags |= 0x100000;
+                    p->flags |= PUNI_FLAG_COLLIDE;
                     PuniDokuritsu(p);
                     if (p->effect) {
                         effDelete(p->effect);
@@ -1993,7 +1993,7 @@ void puniModeChangeAway(void) {
     PuniData* p = &Punidat[1];
 
     for (i = 1; i <= 102; i++, p++) {
-        if (!(p->flags & 0x400)) {
+        if (!(p->flags & PUNI_FLAG_ACTIVE)) {
             continue;
         }
         if (1000000.0f == p->awayTargetDistSq) {
@@ -2030,7 +2030,7 @@ void puniModeChangeFallCheck(void) {
     PuniData* p = &Punidat[1];
 
     for (i = 1; i <= 102; i++, p++) {
-        if (!(p->flags & 0x400)) {
+        if (!(p->flags & PUNI_FLAG_ACTIVE)) {
             continue;
         }
         pos = p->pos;
@@ -2059,7 +2059,7 @@ void puniFukki(PuniData* self) {
     PuniData* p = &Punidat[1];
 
     for (i = 1; i <= 102; i++, p++) {
-        if ((p->flags & 0x400) && p->mode == 16) {
+        if ((p->flags & PUNI_FLAG_ACTIVE) && p->mode == 16) {
             if (!(32.0 < __fabs(self->pos.y - p->pos.y)) && PSVECSquareDistance(&self->pos, &p->pos) < 900.0f) {
                 p->mode = 1;
                 puniFukki(p);
@@ -2115,7 +2115,7 @@ void puniModeParentpre(PuniData* p) {
 
     searchParent(p);
     p->mode = 2;
-    p->flags |= 0x180000;
+    p->flags |= (PUNI_FLAG_IN_CHAIN | PUNI_FLAG_COLLIDE);
     PSVECSubtract(&p->parent->pos, &p->pos, &v);
     p->prevParentDist = p->parentDist = PSVECMag(&v);
     p->timer = 0;
@@ -2153,7 +2153,7 @@ void puniModeParent(PuniData* p) {
             }
             break;
     }
-    if (p->flags & 0x200) {
+    if (p->flags & PUNI_FLAG_MOVE_STOP) {
         return;
     }
     flag = 0;
@@ -2304,7 +2304,7 @@ void puniModeSearch(PuniData* p) {
     k = c & 0xFF;
     if (k <= 2) {
         p->mode = 1;
-        p->flags |= 0x100000;
+        p->flags |= PUNI_FLAG_COLLIDE;
         return;
     }
     k--;
@@ -2514,8 +2514,8 @@ void puniModeAwayjump(PuniData* p) {
             p->modeStep = 1;
             p->anim = 7;
             p->animTime = 0;
-            p->flags |= 0x1000000;
-            if (p->flags & 0x80) {
+            p->flags |= PUNI_FLAG_OWN_ANIM_TIME;
+            if (p->flags & PUNI_FLAG_NPC_CHIBI_TOGE) {
                 psndSFXOn_3D("SFX_STG2_TOGETTI_JUMP1", &p->pos);
             } else {
                 psndSFXOn_3D("SFX_STG2_PUNI_JUMP1", &p->pos);
@@ -2534,7 +2534,7 @@ void puniModeAwayjump(PuniData* p) {
                 p->pos.y = p->modeF0;
                 p->mode = 6;
                 p->anim = 2;
-                p->flags &= ~0x1000000;
+                p->flags &= ~PUNI_FLAG_OWN_ANIM_TIME;
                 p->modeStep = 0;
             }
             break;
@@ -2616,7 +2616,7 @@ void puniModeAway(PuniData* p) {
             }
             break;
         case 1:
-            p->flags2 |= 4;
+            p->flags2 |= PUNI_FLAG2_CROSSING_LEDGE;
             PSVECNormalize((Vec*)&p->pushDir.x, &sub);
             PSVECScale(&sub, &p->vel, p->radius.x);
             PSVECAdd(&p->pos, &p->vel, &p->pos);
@@ -2715,8 +2715,8 @@ void puniModeDamage(PuniData* p) {
                 p->hp -= p->damage;
                 if (p->hp <= 0) {
                     p->hp = 0;
-                    p->flags |= 0x4000;
-                    p->flags2 |= 0x10;
+                    p->flags |= PUNI_FLAG_DEAD;
+                    p->flags2 |= PUNI_FLAG2_DEATH_PENDING;
                 }
                 if ((p->hp * 100) / p->maxHp <= 30) {
                     p->mode = 8;
@@ -2738,19 +2738,19 @@ void puniModePiyori(PuniData* p) {
         p->prevMode = p->mode;
         PuniDokuritsu(p);
         p->target = Punigp->marioPuni;
-        p->flags &= ~0x8000000;
-        p->flags2 &= ~2;
+        p->flags &= ~PUNI_FLAG_DIZZY;
+        p->flags2 &= ~PUNI_FLAG2_DIZZY_ICON;
         p->mode = 13;
         p->modeStep = 0;
         return;
     }
     switch (p->modeStep) {
         case 0:
-            if (p->flags & 2) {
+            if (p->flags & PUNI_FLAG_TOGE) {
                 p->timer = 600;
                 p->anim = 4;
-                p->flags |= 0x8100000;
-                p->flags2 |= 2;
+                p->flags |= (PUNI_FLAG_COLLIDE | PUNI_FLAG_DIZZY);
+                p->flags2 |= PUNI_FLAG2_DIZZY_ICON;
                 p->modeStep = 2;
             } else {
                 p->modeStep = 10;
@@ -2758,8 +2758,8 @@ void puniModePiyori(PuniData* p) {
             break;
         case 2:
             if (p->timer-- == 0) {
-                p->flags &= ~0x8000000;
-                p->flags2 &= ~2;
+                p->flags &= ~PUNI_FLAG_DIZZY;
+                p->flags2 &= ~PUNI_FLAG2_DIZZY_ICON;
                 p->modeStep = 10;
             }
             break;
@@ -2813,7 +2813,7 @@ void puniModeEscape(PuniData* p) {
         return;
     }
     if ((s32)(gp->retraceCount & 3) == (p->index & 3)) {
-        if (p->flags & 1) {
+        if (p->flags & PUNI_FLAG_PUNI) {
             p->target = searchBattleTeki_inl(p);
         } else {
             p->target = searchBattleMikata_inl(p);
@@ -2876,7 +2876,7 @@ void puniModeRecover(PuniData* p) {
                 p->modeStep = 0;
             } else {
                 if (((s32)gp->retraceCount & 3) == (*(s16*)(&p->index) & 3)) {
-                    if (p->flags & 1) {
+                    if (p->flags & PUNI_FLAG_PUNI) {
                         p->target = searchBattleTeki_inl(p);
                     } else {
                         p->target = searchBattleMikata_inl(p);
@@ -2988,12 +2988,12 @@ void puniModeWind(PuniData* p) {
 
     switch (p->modeStep) {
         case 0:
-            if (p->flags & 0x18) {
+            if (p->flags & (PUNI_FLAG_SPRITE_PUNI | PUNI_FLAG_SPRITE_TOGE)) {
                 p->rotOffsetY = 8.0f;
             } else {
                 p->dispOfs.y = 8.0f;
             }
-            p->flags &= ~0x100000;
+            p->flags &= ~PUNI_FLAG_COLLIDE;
             PSVECSubtract(&p->pos, &mario->position, &d);
             if (d.x < 0.0f) {
                 p->modeVar0 = 0;
@@ -3013,7 +3013,7 @@ void puniModeWind(PuniData* p) {
             p->moveStart = d;
             p->modeF0 = 0.0f;
             p->modeF1 = 0.0f;
-            if (p->flags & 1) {
+            if (p->flags & PUNI_FLAG_PUNI) {
                 p->accelStep = 0.06f;
             } else {
                 p->accelStep = 0.6f;
@@ -3029,7 +3029,7 @@ void puniModeWind(PuniData* p) {
             p->modeF0 += p->modeF1;
             p->modeF1 += p->accelStep;
             if (puniModeWind_sub(p) == 0 && p->modeF0 >= p->modeF2) {
-                if (p->flags & 1) {
+                if (p->flags & PUNI_FLAG_PUNI) {
                     p->accelStep = 0.03f;
                 } else {
                     p->accelStep = 0.003f;
@@ -3050,7 +3050,7 @@ void puniModeWind(PuniData* p) {
             }
             break;
         case 3:
-            p->flags2 |= 4;
+            p->flags2 |= PUNI_FLAG2_CROSSING_LEDGE;
             PSVECNormalize(&p->pushDir, &d);
             PSVECScale(&d, &p->vel, p->radius.x);
             p->modeStep = 4;
@@ -3111,7 +3111,7 @@ void puniModeFall(PuniData* p) {
 
     switch (p->modeStep) {
     case 0:
-        p->flags &= ~0x00100000;
+        p->flags &= ~PUNI_FLAG_COLLIDE;
         {
             Vec v = {0.0f, -0.8f, 0.0f};
             p->vel = v;
@@ -3185,7 +3185,7 @@ void puniModeFall(PuniData* p) {
             if (Punigp->floor == 0x12 && p->pos.y < -300.0f) {
                 s32 zero = 0;
                 puniswTrapSetindex(*(s16*)(&p->index), &zero);
-                p->flags &= ~0x00800000;
+                p->flags &= ~PUNI_FLAG_NOT_IN_PARTY;
             }
             {
                 Vec v = {0.0f, 0.0f, 0.0f};
@@ -3377,14 +3377,14 @@ void puniModeWonder(PuniData* p) {
             p->timer = 20;
             p->anim = 9;
             p->animTime = 0;
-            p->flags |= 0x1000000;
+            p->flags |= PUNI_FLAG_OWN_ANIM_TIME;
             p->modeStep = 1;
         case 1:
             if (p->timer-- == 0) {
                 p->npc->flags &= ~4;
                 p->mode = 21;
                 p->anim = 1;
-                p->flags &= ~0x1000000;
+                p->flags &= ~PUNI_FLAG_OWN_ANIM_TIME;
                 p->modeStep = 0;
             }
             break;
@@ -3509,12 +3509,12 @@ void puniModeWater(PuniData* p) {
     Vec d;
     switch (p->modeStep) {
         case 0:
-            p->flags |= 0x800;
+            p->flags |= PUNI_FLAG_HIDDEN;
             p->timer = 60;
             p->modeStep = 1;
         case 1:
             if (p->timer-- == 0) {
-                p->flags &= ~0x800;
+                p->flags &= ~PUNI_FLAG_HIDDEN;
                 p->modeStep = 2;
             }
             break;
@@ -3614,7 +3614,7 @@ void puniModeHagure(PuniData* p) {
         case 0:
             p->effect = effFukidashiEntry(4, 0, (u8*)&p->bubblePos - offsetof(NpcEntry, position), -1, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
             p->anim = 6;
-            p->flags |= 0x100000;
+            p->flags |= PUNI_FLAG_COLLIDE;
             p->modeStep = 1;
         case 1:
             p->modeVar0 = rand() % 21 + 30;
@@ -3722,28 +3722,28 @@ void puniModeDodai(PuniData* p) {
 
 void puniModeTrap_sub(PuniData* p) {
     NpcEntry* n;
-    if (p->flags & 0x20) {
+    if (p->flags & PUNI_FLAG_NPC_GUIDE) {
         n = npcNameToPtr("\203K\203C\203h");
-        p->flags &= ~0x800;
-        p->flags |= 0x100000;
+        p->flags &= ~PUNI_FLAG_HIDDEN;
+        p->flags |= PUNI_FLAG_COLLIDE;
         n->flags &= ~NPC_FLAG_NO_HIT;
         n->position.x = 0.0f;
         n->position.y = -1000.0f;
         n->position.z = 0.0f;
     }
-    if (p->flags & 0x40) {
+    if (p->flags & PUNI_FLAG_NPC_GUIDE_SISTER) {
         n = npcNameToPtr("\203K\203C\203h\226\205");
-        p->flags &= ~0x800;
-        p->flags |= 0x100000;
+        p->flags &= ~PUNI_FLAG_HIDDEN;
+        p->flags |= PUNI_FLAG_COLLIDE;
         n->flags &= ~NPC_FLAG_NO_HIT;
         n->position.x = 0.0f;
         n->position.y = -1000.0f;
         n->position.z = 0.0f;
     }
-    if (p->flags & 0x100) {
+    if (p->flags & PUNI_FLAG_NPC_RIVAL) {
         n = npcNameToPtr("\203\211\203C\203o\203\213");
-        p->flags &= ~0x800;
-        p->flags |= 0x100000;
+        p->flags &= ~PUNI_FLAG_HIDDEN;
+        p->flags |= PUNI_FLAG_COLLIDE;
         n->flags &= ~NPC_FLAG_NO_HIT;
         n->position.x = 0.0f;
         n->position.y = -1000.0f;
@@ -3776,28 +3776,28 @@ void puniModeTrap_sub(PuniData* p) {
 void puniModeTrap(PuniData* p) {
     NpcEntry* n;
     if (p->modeStep == 0) {
-        p->flags |= 0x100000;
-        if (p->flags & 0x20) TRAP_NPC("\203K\203C\203h", 0)
-        if (p->flags & 0x40) TRAP_NPC("\203K\203C\203h\226\205", 0)
-        if (p->flags & 0x100) TRAP_NPC("\203\211\203C\203o\203\213", 0) {
+        p->flags |= PUNI_FLAG_COLLIDE;
+        if (p->flags & PUNI_FLAG_NPC_GUIDE) TRAP_NPC("\203K\203C\203h", 0)
+        if (p->flags & PUNI_FLAG_NPC_GUIDE_SISTER) TRAP_NPC("\203K\203C\203h\226\205", 0)
+        if (p->flags & PUNI_FLAG_NPC_RIVAL) TRAP_NPC("\203\211\203C\203o\203\213", 0) {
             Vec v_ = {0.0f, 0.0f, 0.0f};
             p->vel = v_;
         }
         p->prevMode = p->mode;
     }
     if (p->breathPower > 10.0f) {
-        if (p->flags & 0x20) TRAP_HIDE("\203K\203C\203h")
-        if (p->flags & 0x40) TRAP_HIDE("\203K\203C\203h\226\205")
-        if (p->flags & 0x100) TRAP_HIDE("\203\211\203C\203o\203\213")
+        if (p->flags & PUNI_FLAG_NPC_GUIDE) TRAP_HIDE("\203K\203C\203h")
+        if (p->flags & PUNI_FLAG_NPC_GUIDE_SISTER) TRAP_HIDE("\203K\203C\203h\226\205")
+        if (p->flags & PUNI_FLAG_NPC_RIVAL) TRAP_HIDE("\203\211\203C\203o\203\213")
         PuniDokuritsu(p);
         p->target = Punigp->marioPuni;
         p->prevMode = p->mode;
         p->mode = 13;
         p->modeStep = 0;
     } else if (p->massTarget != -1) {
-        if (p->flags & 0x20) TRAP_HIDE("\203K\203C\203h")
-        if (p->flags & 0x40) TRAP_HIDE("\203K\203C\203h\226\205")
-        if (p->flags & 0x100) TRAP_HIDE("\203\211\203C\203o\203\213")
+        if (p->flags & PUNI_FLAG_NPC_GUIDE) TRAP_HIDE("\203K\203C\203h")
+        if (p->flags & PUNI_FLAG_NPC_GUIDE_SISTER) TRAP_HIDE("\203K\203C\203h\226\205")
+        if (p->flags & PUNI_FLAG_NPC_RIVAL) TRAP_HIDE("\203\211\203C\203o\203\213")
         PuniDokuritsu(p);
         p->prevMode = p->mode;
         p->mode = 4;
@@ -3806,7 +3806,7 @@ void puniModeTrap(PuniData* p) {
 }
 
 void puniModeEnterSubInit(PuniData* p) {
-    if (Punigp->flags & 3) {
+    if (Punigp->flags & (PUNI_WORK_FLAG_PIPE_WEST | PUNI_WORK_FLAG_PIPE_EAST)) {
         p->modeVar0 = 0;
         p->scale = 0.0f;
         p->npc->flags |= 4;
@@ -3814,7 +3814,7 @@ void puniModeEnterSubInit(PuniData* p) {
 }
 
 void puniModeEnterSub(PuniData* p) {
-    if (Punigp->flags & 3) {
+    if (Punigp->flags & (PUNI_WORK_FLAG_PIPE_WEST | PUNI_WORK_FLAG_PIPE_EAST)) {
         p->modeVar0++;
         if (p->modeVar0 >= 10) {
             p->scale += 0.1f;
@@ -3832,11 +3832,11 @@ void puniModeEnter(PuniData* p) {
                 p->startTime = gp->renderTime;
             }
             p->timer = 200;
-            if ((Punigp->flags & 8) && !(Punigp->flags & 0x10)) {
+            if ((Punigp->flags & PUNI_WORK_FLAG_PIPE_DOWN) && !(Punigp->flags & PUNI_WORK_FLAG_NO_NEXT_MAP)) {
                 p->timer = 700;
             }
             p->timer += qrnd(500);
-            if (Punigp->flags & 3) {
+            if (Punigp->flags & (PUNI_WORK_FLAG_PIPE_WEST | PUNI_WORK_FLAG_PIPE_EAST)) {
                 p->modeVar0 = 0;
                 p->scale = 0.0f;
                 p->npc->flags |= 4;
@@ -3850,7 +3850,7 @@ void puniModeEnter(PuniData* p) {
             break;
         }
         case 2:
-            if (Punigp->flags & 3) {
+            if (Punigp->flags & (PUNI_WORK_FLAG_PIPE_WEST | PUNI_WORK_FLAG_PIPE_EAST)) {
                 p->modeVar0++;
                 if (p->modeVar0 >= 10) {
                     p->scale += 0.1f;
@@ -3866,7 +3866,7 @@ void puniModeEnter(PuniData* p) {
                 PSVECScale(&d, &d, 1.0f);
                 PSVECAdd(&p->vel, &d, &p->vel);
             } else {
-                p->flags |= 0x1000;
+                p->flags |= PUNI_FLAG_WALL_CHECK;
                 {
                     Vec puni_enter_dir = {0.0f, 0.0f, 0.0f};
                     p->vel = puni_enter_dir;
@@ -3879,7 +3879,7 @@ void puniModeEnter(PuniData* p) {
         case 3: {
             searchParent(p);
             p->mode = 2;
-            p->flags |= 0x180000;
+            p->flags |= (PUNI_FLAG_IN_CHAIN | PUNI_FLAG_COLLIDE);
             PSVECSubtract(&p->parent->pos, &p->pos, &d);
             p->prevParentDist = p->parentDist = PSVECMag(&d);
             p->timer = 0;
@@ -3891,14 +3891,14 @@ void puniModeEnter(PuniData* p) {
 }
 
 void puniModeExitSubInit(PuniData* p) {
-    if (Punigp->flags & 3) {
+    if (Punigp->flags & (PUNI_WORK_FLAG_PIPE_WEST | PUNI_WORK_FLAG_PIPE_EAST)) {
         p->modeVar0 = 0;
         p->npc->flags |= 4;
     }
 }
 
 void puniModeExitSub(PuniData* p) {
-    if (Punigp->flags & 3) {
+    if (Punigp->flags & (PUNI_WORK_FLAG_PIPE_WEST | PUNI_WORK_FLAG_PIPE_EAST)) {
         p->modeVar0++;
         if (p->modeVar0 >= 10) {
             p->scale -= 0.3f;
@@ -3924,8 +3924,8 @@ void puniModeExit(PuniData* p) {
                     Vec puniModeExit_v0 = {0.0f, 0.0f, 0.0f};
                     p->vel = puniModeExit_v0;
                 }
-                p->flags &= ~0x100000 & ~0x1000;
-                if (Punigp->flags & 3) {
+                p->flags &= ~PUNI_FLAG_COLLIDE & ~0x1000;
+                if (Punigp->flags & (PUNI_WORK_FLAG_PIPE_WEST | PUNI_WORK_FLAG_PIPE_EAST)) {
                     p->modeVar0 = 0;
                     p->npc->flags |= 4;
                 }
@@ -3933,7 +3933,7 @@ void puniModeExit(PuniData* p) {
             }
             break;
         case 1:
-            if (Punigp->flags & 3) {
+            if (Punigp->flags & (PUNI_WORK_FLAG_PIPE_WEST | PUNI_WORK_FLAG_PIPE_EAST)) {
                 p->modeVar0++;
                 if (p->modeVar0 >= 10) {
                     p->scale -= 0.3f;
@@ -3950,7 +3950,7 @@ void puniModeExit(PuniData* p) {
                 PSVECAdd(&p->vel, &d, &p->vel);
             } else {
                 p->mode = 30;
-                p->flags &= ~0x100000;
+                p->flags &= ~PUNI_FLAG_COLLIDE;
                 {
                     Vec puniModeExit_v1 = {0.0f, 0.0f, 0.0f};
                     p->vel = puniModeExit_v1;
@@ -3981,7 +3981,7 @@ void puniModePoint(PuniData* p) {
                 PSVECAdd(&p->vel, &d, &p->vel);
             } else {
                 p->vel = (Vec){0.0f, 0.0f, 0.0f};
-                p->flags &= ~0x100000 & ~0x1000;
+                p->flags &= ~PUNI_FLAG_COLLIDE & ~0x1000;
                 p->modeStep = 1;
             }
             break;
@@ -3994,7 +3994,7 @@ void puniModePoint(PuniData* p) {
                 PSVECAdd(&p->vel, &d, &p->vel);
             } else {
                 p->mode = 30;
-                p->flags &= ~0x100000;
+                p->flags &= ~PUNI_FLAG_COLLIDE;
                 p->vel = (Vec){0.0f, 0.0f, 0.0f};
                 p->pos = (Vec){0.0f, -1000.0f, 0.0f};
                 p->prevPos = p->pos;
@@ -4008,7 +4008,7 @@ void puniModePoint(PuniData* p) {
 
 void puniModeDokan(PuniData* p) {
     p->modeStep = 0;
-    p->flags |= 0x800;
+    p->flags |= PUNI_FLAG_HIDDEN;
     p->npc->flags |= 4;
     {
         Vec v = {0.0f, 0.0f, 0.0f};
@@ -4186,7 +4186,7 @@ static inline void puniModeCheckPos(PuniData* p) {
 void puniModeMain(PuniData* p) {
     switch (p->mode) {
         case 0:
-            p->flags &= ~0x8000;
+            p->flags &= ~PUNI_FLAG_STRAY;
             if (p->breathPower > 10.0f) {
                 p->prevMode = p->mode;
                 PuniDokuritsu(p);
@@ -4199,10 +4199,10 @@ void puniModeMain(PuniData* p) {
             break;
         case 1: {
             Vec d;
-            p->flags &= ~0x8000;
+            p->flags &= ~PUNI_FLAG_STRAY;
             searchParent(p);
             p->mode = 2;
-            p->flags |= 0x180000;
+            p->flags |= (PUNI_FLAG_IN_CHAIN | PUNI_FLAG_COLLIDE);
             PSVECSubtract(&p->parent->pos, &p->pos, &d);
             {
                 f32 m = PSVECMag(&d);
@@ -4215,113 +4215,113 @@ void puniModeMain(PuniData* p) {
             break;
         }
         case 2:
-            p->flags &= ~0x8000;
+            p->flags &= ~PUNI_FLAG_STRAY;
             puniModeParent(p);
             break;
         case 3:
-            p->flags &= ~0x8000;
+            p->flags &= ~PUNI_FLAG_STRAY;
             puniModeSearch(p);
             break;
         case 4:
-            p->flags |= 0x8000;
+            p->flags |= PUNI_FLAG_STRAY;
             puniModeMass(p);
             break;
         case 5:
-            p->flags |= 0x8000;
+            p->flags |= PUNI_FLAG_STRAY;
             puniModeAwayjump(p);
             break;
         case 6:
-            p->flags |= 0x8000;
+            p->flags |= PUNI_FLAG_STRAY;
             puniModeAway(p);
             break;
         case 7:
-            p->flags &= ~0x8000;
+            p->flags &= ~PUNI_FLAG_STRAY;
             puniModeAttack(p);
             break;
         case 9:
-            p->flags &= ~0x8000;
+            p->flags &= ~PUNI_FLAG_STRAY;
             puniModeDamage(p);
             break;
         case 10:
-            p->flags &= ~0x8000;
+            p->flags &= ~PUNI_FLAG_STRAY;
             puniModePiyori(p);
             break;
         case 8:
-            p->flags &= ~0x8000;
+            p->flags &= ~PUNI_FLAG_STRAY;
             puniModeEscape(p);
             break;
         case 11:
-            p->flags &= ~0x8000;
+            p->flags &= ~PUNI_FLAG_STRAY;
             puniModeRecover(p);
             break;
         case 12:
-            p->flags &= ~0x8000;
+            p->flags &= ~PUNI_FLAG_STRAY;
             puniModeDead(p);
             break;
         case 13:
-            p->flags &= ~0x8000;
+            p->flags &= ~PUNI_FLAG_STRAY;
             puniModeWind(p);
             break;
         case 14:
             break;
         case 15:
-            p->flags |= 0x8000;
+            p->flags |= PUNI_FLAG_STRAY;
             puniModeCheckPos(p);
             break;
         case 16:
-            p->flags |= 0x8000;
+            p->flags |= PUNI_FLAG_STRAY;
             puniModeHagure(p);
             break;
         case 18:
-            p->flags |= 0x8000;
+            p->flags |= PUNI_FLAG_STRAY;
             puniModePreupdraft(p);
             break;
         case 19:
-            p->flags |= 0x8000;
+            p->flags |= PUNI_FLAG_STRAY;
             puniModeUpdraft(p);
             break;
         case 20:
-            p->flags |= 0x8000;
+            p->flags |= PUNI_FLAG_STRAY;
             puniModeWonder(p);
             break;
         case 21:
-            p->flags |= 0x8000;
+            p->flags |= PUNI_FLAG_STRAY;
             puniModeFunbari(p);
             break;
         case 22:
-            p->flags |= 0x8000;
+            p->flags |= PUNI_FLAG_STRAY;
             puniModeWater(p);
             break;
         case 17:
-            p->flags |= 0x8000;
+            p->flags |= PUNI_FLAG_STRAY;
             puniModeFall(p);
             break;
         case 23:
-            p->flags |= 0x8000;
+            p->flags |= PUNI_FLAG_STRAY;
             puniModeDodai(p);
             break;
         case 24:
-            p->flags &= ~0x8000;
+            p->flags &= ~PUNI_FLAG_STRAY;
             puniModeTrap(p);
             break;
         case 25:
-            p->flags &= ~0x8000;
+            p->flags &= ~PUNI_FLAG_STRAY;
             puniModeEnter(p);
             break;
         case 26:
-            p->flags &= ~0x8000;
+            p->flags &= ~PUNI_FLAG_STRAY;
             puniModeExit(p);
             break;
         case 28:
-            p->flags &= ~0x8000;
+            p->flags &= ~PUNI_FLAG_STRAY;
             puniModeDokan(p);
             break;
         case 27:
-            p->flags &= ~0x8000;
+            p->flags &= ~PUNI_FLAG_STRAY;
             puniModePoint(p);
             break;
         case 29:
-            p->flags &= ~0x8000;
+            p->flags &= ~PUNI_FLAG_STRAY;
             if (p->modeFunc != NULL) {
                 p->modeFunc(p);
             }
@@ -4344,7 +4344,7 @@ static inline void puniMoveHitInl(PuniData* p, Vec* s2, Vec* d2, f32 dist) {
     p->hitCheck = NULL;
     p->hitMove = NULL;
     d = dist;
-    if (p->flags & 0x1000) {
+    if (p->flags & PUNI_FLAG_WALL_CHECK) {
         p->hitMove = hitCheckFilter(NULL, &pa.x, &pa.y, &pa.z, &d, &hit.x, &hit.y, &hit.z, s2->x, s2->y, s2->z, d2->x, d2->y, d2->z);
     }
     if (p->hitMove == NULL) {
@@ -4535,8 +4535,8 @@ void puniOption(void) {
     f32 dist, r2, r;
 
     for (p = Punidat; p < Punidat + PUNI_DATA_MAX; p++) {
-        p->flags &= ~0x20000000;
-        if (!(p->flags & 0x400) || !(p->flags & 0x100000)) {
+        p->flags &= ~PUNI_FLAG_NEAR;
+        if (!(p->flags & PUNI_FLAG_ACTIVE) || !(p->flags & PUNI_FLAG_COLLIDE)) {
             continue;
         }
         if (p < Punidat + 110) {
@@ -4547,13 +4547,13 @@ void puniOption(void) {
             end = Punidat + 209;
         }
         for (q = start; q <= end; q++) {
-            if (!(q->flags & 0x400) || !(q->flags & 0x100000) || p == q) {
+            if (!(q->flags & PUNI_FLAG_ACTIVE) || !(q->flags & PUNI_FLAG_COLLIDE) || p == q) {
                 continue;
             }
             dist = PSVECDistance(&p->pos, &q->pos);
             r = p->radius.x + q->radius.x;
             r2 = p->radius.z + (r + p->radius.y);
-            if (q->flags2 & 0x20) {
+            if (q->flags2 & PUNI_FLAG2_OBSTACLE) {
                 if (dist < r) {
                     PSVECSubtract(&p->pos, &q->pos, &diff);
                     if (0.0f == PSVECMag(&diff)) {
@@ -4566,12 +4566,12 @@ void puniOption(void) {
                 }
             } else if (dist <= r2) {
                 if (dist < r2 - p->radius.y) {
-                    p->flags |= 0x20000000;
+                    p->flags |= PUNI_FLAG_NEAR;
                 }
-                if (!(p->flags & 0x10000000) && dist < p->radius.x + q->radius.x) {
-                    p->flags |= 0x10000000;
+                if (!(p->flags & PUNI_FLAG_PUSHING) && dist < p->radius.x + q->radius.x) {
+                    p->flags |= PUNI_FLAG_PUSHING;
                 }
-                if (p->flags & 0x10000000) {
+                if (p->flags & PUNI_FLAG_PUSHING) {
                     PSVECSubtract(&p->pos, &q->pos, &diff);
                     if (0.0f == PSVECMag(&diff)) {
                         diff.x = 1.0f;
@@ -4587,11 +4587,11 @@ void puniOption(void) {
         }
     }
     for (p = Punidat; p < Punidat + PUNI_DATA_MAX; p++) {
-        if (!(p->flags & 0x400) || !(p->flags & 0x100000)) {
+        if (!(p->flags & PUNI_FLAG_ACTIVE) || !(p->flags & PUNI_FLAG_COLLIDE)) {
             continue;
         }
-        if (!(p->flags & 0x20000000)) {
-            p->flags &= ~0x10000000;
+        if (!(p->flags & PUNI_FLAG_NEAR)) {
+            p->flags &= ~PUNI_FLAG_PUSHING;
         }
         if (PSVECMag(&p->vel) >= 8.0f) {
             PSVECNormalize(&p->vel, &p->vel);
@@ -4607,18 +4607,18 @@ void puniCollideAll(void) {
     f32 dist, r2, r;
 
     for (p = Punidat; p <= Punidat + 109; p++) {
-        p->flags &= ~0x20000000;
-        if (!(p->flags & 0x400) || !(p->flags & 0x100000)) {
+        p->flags &= ~PUNI_FLAG_NEAR;
+        if (!(p->flags & PUNI_FLAG_ACTIVE) || !(p->flags & PUNI_FLAG_COLLIDE)) {
             continue;
         }
         for (q = Punidat; q <= Punidat + 109; q++) {
-            if (!(q->flags & 0x400) || !(q->flags & 0x100000) || p == q) {
+            if (!(q->flags & PUNI_FLAG_ACTIVE) || !(q->flags & PUNI_FLAG_COLLIDE) || p == q) {
                 continue;
             }
             dist = PSVECDistance(&p->pos, &q->pos);
             r = p->radius.x + q->radius.x;
             r2 = p->radius.z + (r + p->radius.y);
-            if (q->flags2 & 0x20) {
+            if (q->flags2 & PUNI_FLAG2_OBSTACLE) {
                 if (dist < r) {
                     PSVECSubtract(&p->pos, &q->pos, &diff);
                     if (0.0f == PSVECMag(&diff)) {
@@ -4631,12 +4631,12 @@ void puniCollideAll(void) {
                 }
             } else if (dist <= r2) {
                 if (dist < r2 - p->radius.y) {
-                    p->flags |= 0x20000000;
+                    p->flags |= PUNI_FLAG_NEAR;
                 }
-                if (!(p->flags & 0x10000000) && dist < p->radius.x + q->radius.x) {
-                    p->flags |= 0x10000000;
+                if (!(p->flags & PUNI_FLAG_PUSHING) && dist < p->radius.x + q->radius.x) {
+                    p->flags |= PUNI_FLAG_PUSHING;
                 }
-                if (p->flags & 0x10000000) {
+                if (p->flags & PUNI_FLAG_PUSHING) {
                     PSVECSubtract(&p->pos, &q->pos, &diff);
                     if (0.0f == PSVECMag(&diff)) {
                         diff.x = 1.0f;
@@ -4652,11 +4652,11 @@ void puniCollideAll(void) {
         }
     }
     for (p = Punidat; p <= Punidat + 109; p++) {
-        if (!(p->flags & 0x400) || !(p->flags & 0x100000)) {
+        if (!(p->flags & PUNI_FLAG_ACTIVE) || !(p->flags & PUNI_FLAG_COLLIDE)) {
             continue;
         }
-        if (!(p->flags & 0x20000000)) {
-            p->flags &= ~0x10000000;
+        if (!(p->flags & PUNI_FLAG_NEAR)) {
+            p->flags &= ~PUNI_FLAG_PUSHING;
         }
         if (PSVECMag(&p->vel) >= 8.0f) {
             PSVECNormalize(&p->vel, &p->vel);
@@ -4680,7 +4680,7 @@ void puniSound(void) {
     special = 0;
     for (i = 1; i <= 102; i++) {
         p = &Punidat[i];
-        if ((p->flags & 0x400) && (((p->anim) == 1) || ((p->anim) == 2))) {
+        if ((p->flags & PUNI_FLAG_ACTIVE) && (((p->anim) == 1) || ((p->anim) == 2))) {
             if (i == 3) {
                 special++;
             } else {
@@ -4723,7 +4723,7 @@ void puniSound(void) {
         k = 0;
         for (i = 1; i <= 102; i++) {
             p = &Punidat[i];
-            if ((p->flags & 0x400) && (((p->anim) == 1) || ((p->anim) == 2))) {
+            if ((p->flags & PUNI_FLAG_ACTIVE) && (((p->anim) == 1) || ((p->anim) == 2))) {
                 k++;
                 if (k == n) {
                     break;
@@ -4835,35 +4835,35 @@ void puni_puni_main(void) {
     t->pos = mario->position;
     puniMapFindbuff(t->pos);
     puniModeALLCheck();
-    if (Punigp->flags & 0x20) {
+    if (Punigp->flags & PUNI_WORK_FLAG_BATTLE_FLOOR) {
         
         for (i = 1, p = Punidat + 1; i < 211; i++, p++) {
             PSVECSubtract(&p->pos, &p->prevPos, &diff);
             p->moveDist = PSVECMag(&diff);
-            if (!(p->flags & 0x400)) continue;
-            p->flags &= ~0x6000000;
-            p->flags2 &= ~4;
+            if (!(p->flags & PUNI_FLAG_ACTIVE)) continue;
+            p->flags &= ~(PUNI_FLAG_UPDATED | PUNI_FLAG_SENSED);
+            p->flags2 &= ~PUNI_FLAG2_CROSSING_LEDGE;
             p->attacked = 0;
             puniParaRecover(p);
         }
     }
-    if (Punigp->flags & 0x20) {
+    if (Punigp->flags & PUNI_WORK_FLAG_BATTLE_FLOOR) {
         for (k = 0; k < 2; k++) {
             
             for (i = 1, p = Punidat + 1; i < 211; i++, p++) {
-                if (!(p->flags & 0x400)) continue;
+                if (!(p->flags & PUNI_FLAG_ACTIVE)) continue;
                 if (k == 0) {
                     if (p->mode != 7) continue;
-                    p->flags |= 0x2000000;
+                    p->flags |= PUNI_FLAG_UPDATED;
                 } else {
-                    if (p->flags & 0x2000000) continue;
-                    p->flags |= 0x2000000;
+                    if (p->flags & PUNI_FLAG_UPDATED) continue;
+                    p->flags |= PUNI_FLAG_UPDATED;
                 }
-                if (!(p->flags & 0x4000000)) {
+                if (!(p->flags & PUNI_FLAG_SENSED)) {
 
-                    p->flags |= 0x4000000;
-                    if (p->flags2 & 0x10) {
-                        p->flags2 &= ~0x10;
+                    p->flags |= PUNI_FLAG_SENSED;
+                    if (p->flags2 & PUNI_FLAG2_DEATH_PENDING) {
+                        p->flags2 &= ~PUNI_FLAG2_DEATH_PENDING;
                         p->mode = 12;
                         p->modeStep = 0;
                     }
@@ -4912,7 +4912,7 @@ void puni_puni_main(void) {
     } else {
         
         for (i = 1, p = Punidat + 1; i <= 109; i++, p++) {
-            if (p->flags & 0x400) {
+            if (p->flags & PUNI_FLAG_ACTIVE) {
                 PartyEntry* party;
                 PuniTarget* tt;
                 s32 jj;
@@ -4957,15 +4957,15 @@ void puni_puni_main(void) {
         }
         puniCollideAll();
     }
-    if (Punigp->flags & 0x20) {
+    if (Punigp->flags & PUNI_WORK_FLAG_BATTLE_FLOOR) {
         s32 ii;
         PuniData* q;
         PunidrvPose* ps;
         ps = puniGetPosePtr();
         
         for (ii = 1, q = Punidat + 1; ii < 211; ii++, ps++, q++) {
-            if (q->flags & 0x400) {
-                if (!(q->flags & 0x200)) {
+            if (q->flags & PUNI_FLAG_ACTIVE) {
+                if (!(q->flags & PUNI_FLAG_MOVE_STOP)) {
                     q->prevPos = q->pos;
                     puniMoveMain(q);
                 }
@@ -4979,8 +4979,8 @@ void puni_puni_main(void) {
         ps = puniGetPosePtr();
         
         for (ii = 1, q = Punidat + 1; ii <= 109; ii++, ps++, q++) {
-            if (q->flags & 0x400) {
-                if (!(q->flags & 0x200)) {
+            if (q->flags & PUNI_FLAG_ACTIVE) {
+                if (!(q->flags & PUNI_FLAG_MOVE_STOP)) {
                     q->prevPos = q->pos;
                     puniMoveMain(q);
                 }
@@ -5187,7 +5187,7 @@ void puni_init_para(PuniData* p, f32 x, f32 y, f32 z) {
     p->child1 = NULL;
     p->child2 = NULL;
     PuniDokuritsu(p);
-    p->flags |= 0x1401;
+    p->flags |= (PUNI_FLAG_PUNI | PUNI_FLAG_ACTIVE | PUNI_FLAG_WALL_CHECK);
 }
 
 void toge_init_para(PuniData* p, f32 x, f32 y, f32 z) {
@@ -5213,7 +5213,7 @@ void toge_init_para(PuniData* p, f32 x, f32 y, f32 z) {
     p->attacked = 0;
     p->hitRate = 50;
     p->hitRateGuard = 70;
-    p->flags |= 0x101402;
+    p->flags |= (PUNI_FLAG_TOGE | PUNI_FLAG_ACTIVE | PUNI_FLAG_WALL_CHECK | PUNI_FLAG_COLLIDE);
 }
 
 USER_FUNC(evt_puni_rnd_pos) {
@@ -5392,24 +5392,24 @@ USER_FUNC(evt_puni_setup) {
 
     Punigp->allMode = 0;
     if (a0 == 2) {
-        Punigp->flags &= ~0xF;
+        Punigp->flags &= ~(PUNI_WORK_FLAG_PIPE_WEST | PUNI_WORK_FLAG_PIPE_EAST | PUNI_WORK_FLAG_PIPE_UP | PUNI_WORK_FLAG_PIPE_DOWN);
         switch (a1) {
             case 6:
-                Punigp->flags |= 1;
+                Punigp->flags |= PUNI_WORK_FLAG_PIPE_WEST;
                 break;
             case 2:
-                Punigp->flags |= 2;
+                Punigp->flags |= PUNI_WORK_FLAG_PIPE_EAST;
                 break;
             case 8:
-                Punigp->flags |= 4;
+                Punigp->flags |= PUNI_WORK_FLAG_PIPE_UP;
                 break;
             case 9:
-                Punigp->flags |= 8;
+                Punigp->flags |= PUNI_WORK_FLAG_PIPE_DOWN;
                 break;
         }
     }
     if (Punigp->floor == 9 || Punigp->floor == 12) {
-        Punigp->flags |= 0x20;
+        Punigp->flags |= PUNI_WORK_FLAG_BATTLE_FLOOR;
     }
     if (swByteGet(0x299) == 1) {
         return EVT_RETURN_DONE;
@@ -5421,12 +5421,12 @@ USER_FUNC(evt_puni_setup) {
         f32 fx, fy, fz;
         s32 a;
         f32 sx, sy, sz;
-        if (p->flags & 0x40000000) {
-            p->flags &= ~0x40000000;
+        if (p->flags & PUNI_FLAG_KEEP) {
+            p->flags &= ~PUNI_FLAG_KEEP;
             continue;
         }
         if (i >= 103) {
-            p->flags2 |= 0x20;
+            p->flags2 |= PUNI_FLAG2_OBSTACLE;
             continue;
         }
         puni_swget_idx(i, &b0, &pos);
@@ -5440,22 +5440,22 @@ USER_FUNC(evt_puni_setup) {
             if (!swGet(0xB3C)) continue;
             if (swGet(0xB14)) continue;
             Punigp->reserved_364 = p;
-            p->flags |= 0x20;
+            p->flags |= PUNI_FLAG_NPC_GUIDE;
         } else if (i == 2) {
             if (!swGet(0xB3D)) continue;
             Punigp->reserved_368 = p;
-            p->flags |= 0x40;
+            p->flags |= PUNI_FLAG_NPC_GUIDE_SISTER;
         } else if (i == 4) {
             if (!swGet(0xB3F)) continue;
             Punigp->reserved_370 = p;
-            p->flags |= 0x100;
+            p->flags |= PUNI_FLAG_NPC_RIVAL;
         } else if (i == 3) {
             if (!swGet(0xB3E)) continue;
             Punigp->reserved_36C = p;
-            p->flags |= 0x80;
+            p->flags |= PUNI_FLAG_NPC_CHIBI_TOGE;
         } else {
             if (swByteGet(0x28B) + 5 <= i) continue;
-            p->flags |= 8;
+            p->flags |= PUNI_FLAG_SPRITE_PUNI;
         }
         if (b0 == 0) {
             if (gp->flags & 1) {
@@ -5472,7 +5472,7 @@ USER_FUNC(evt_puni_setup) {
                 ex = bero_get_BeroEX();
                 ey = puni_init_posy(bero_get_BeroEY());
                 ez = bero_get_BeroEZ();
-                if (!(Punigp->flags & 8)) {
+                if (!(Punigp->flags & PUNI_WORK_FLAG_PIPE_DOWN)) {
                     sx = randf(sx - 10.0f, sx + 10.0f);
                     sz = randf(sz - 10.0f, sz + 10.0f);
                 } else {
@@ -5482,14 +5482,14 @@ USER_FUNC(evt_puni_setup) {
                 p->moveStart.y = ey;
                 p->moveStart.z = randf(ez - 10.0f, ez + 10.0f);
                 p->mode = 25;
-                p->flags &= ~0x1000;
+                p->flags &= ~PUNI_FLAG_WALL_CHECK;
             }
         } else {
             sx = fx;
             sy = fy;
             sz = fz;
             p->mode = 15;
-            p->flags |= 0x8000;
+            p->flags |= PUNI_FLAG_STRAY;
         }
         p->modeStep = 0;
         p->anim = 0;
@@ -5517,7 +5517,7 @@ USER_FUNC(evt_puni_setup) {
         p->child1 = NULL;
         p->child2 = NULL;
         PuniDokuritsu(p);
-        p->flags |= 0x1401;
+        p->flags |= (PUNI_FLAG_PUNI | PUNI_FLAG_ACTIVE | PUNI_FLAG_WALL_CHECK);
     }
     bero = bero_get_ptr();
     n = bero_get_BeroNUM();
@@ -5526,7 +5526,7 @@ USER_FUNC(evt_puni_setup) {
     for (j = 0; j < n; j++) {
         if (bero[j]->directionId == 9) {
             PuniData* q = Punidat + j + 103;
-            q->flags |= 0x100400;
+            q->flags |= (PUNI_FLAG_ACTIVE | PUNI_FLAG_COLLIDE);
             q->prevMode = 28;
             q->mode = 28;
             q->radius.x = 25.0f;
@@ -5566,7 +5566,7 @@ s32 evt_toge_setup(EventEntry *event, BOOL isFirstCall) {
         p = &Punidat[kind];
         rx = randf(x - 50.0f, x + 50.0f);
         rz = randf(z - 120.0f, z + 120.0f);
-        p->flags |= 0x10;
+        p->flags |= PUNI_FLAG_SPRITE_TOGE;
         p->mode = 0;
         p->index = kind;
         p->anim = 0;
@@ -5591,7 +5591,7 @@ s32 evt_toge_setup(EventEntry *event, BOOL isFirstCall) {
         p->attacked = 0;
         p->hitRate = 50;
         p->hitRateGuard = 70;
-        p->flags |= 0x101402;
+        p->flags |= (PUNI_FLAG_TOGE | PUNI_FLAG_ACTIVE | PUNI_FLAG_WALL_CHECK | PUNI_FLAG_COLLIDE);
     }
 
     return 2;
@@ -5712,28 +5712,28 @@ USER_FUNC(evt_puni_exit) {
 
     Punigp->allMode = 5;
     if (mode == 2) {
-        Punigp->flags &= ~0xF;
+        Punigp->flags &= ~(PUNI_WORK_FLAG_PIPE_WEST | PUNI_WORK_FLAG_PIPE_EAST | PUNI_WORK_FLAG_PIPE_UP | PUNI_WORK_FLAG_PIPE_DOWN);
         switch (i) {
             case 6:
-                Punigp->flags |= 1;
+                Punigp->flags |= PUNI_WORK_FLAG_PIPE_WEST;
                 break;
             case 2:
-                Punigp->flags |= 2;
+                Punigp->flags |= PUNI_WORK_FLAG_PIPE_EAST;
                 break;
             case 8:
-                Punigp->flags |= 4;
+                Punigp->flags |= PUNI_WORK_FLAG_PIPE_UP;
                 break;
             case 9:
-                Punigp->flags |= 8;
+                Punigp->flags |= PUNI_WORK_FLAG_PIPE_DOWN;
                 break;
         }
     }
     if (map == NULL) {
-        Punigp->flags |= 0x10;
+        Punigp->flags |= PUNI_WORK_FLAG_NO_NEXT_MAP;
     } else {
-        Punigp->flags &= ~0x10;
+        Punigp->flags &= ~PUNI_WORK_FLAG_NO_NEXT_MAP;
     }
-    if (!(Punigp->flags & 8)) {
+    if (!(Punigp->flags & PUNI_WORK_FLAG_PIPE_DOWN)) {
         sx = bero_get_BeroSX();
         sy = puni_init_posy(bero_get_BeroSY());
         sz = bero_get_BeroSZ();
@@ -5765,12 +5765,12 @@ USER_FUNC(evt_puni_exit) {
         notMri00 = 1;
     }
     for (i = 1, p = &Punidat[1]; i <= 102; i++, p++) {
-        if (!(p->flags & 0x400) || (p->flags & 0x800000)) {
+        if (!(p->flags & PUNI_FLAG_ACTIVE) || (p->flags & PUNI_FLAG_NOT_IN_PARTY)) {
             continue;
         }
-        if (p->flags & 0x8000) {
+        if (p->flags & PUNI_FLAG_STRAY) {
             if (map == NULL) {
-                p->flags |= 0x40000000;
+                p->flags |= PUNI_FLAG_KEEP;
             } else {
                 puniHagurePos(p);
                 pos = p->pos;
@@ -5824,30 +5824,30 @@ USER_FUNC(evt_puni_init_puni) {
             return EVT_RETURN_DONE;
         }
         Punigp->reserved_364 = p;
-        p->flags |= 0x20;
+        p->flags |= PUNI_FLAG_NPC_GUIDE;
     } else if (idx == 2) {
         if (chk != 0 && swGet(0xB3D) == 0) {
             return EVT_RETURN_DONE;
         }
         Punigp->reserved_368 = p;
-        p->flags |= 0x40;
+        p->flags |= PUNI_FLAG_NPC_GUIDE_SISTER;
     } else if (idx == 4) {
         if (chk != 0 && swGet(0xB3F) == 0) {
             return EVT_RETURN_DONE;
         }
         Punigp->reserved_370 = p;
-        p->flags |= 0x100;
+        p->flags |= PUNI_FLAG_NPC_RIVAL;
     } else if (idx == 3) {
         if (chk != 0 && swGet(0xB3E) == 0) {
             return EVT_RETURN_DONE;
         }
         Punigp->reserved_36C = p;
-        p->flags |= 0x80;
+        p->flags |= PUNI_FLAG_NPC_CHIBI_TOGE;
     } else {
         if (chk != 0 && swByteGet(0x28B) + 5 <= idx) {
             return EVT_RETURN_DONE;
         }
-        p->flags |= 8;
+        p->flags |= PUNI_FLAG_SPRITE_PUNI;
     }
     p->mode = type;
     p->modeStep = 0;
@@ -5876,7 +5876,7 @@ USER_FUNC(evt_puni_init_puni) {
     p->child1 = NULL;
     p->child2 = NULL;
     PuniDokuritsu(p);
-    p->flags |= 0x1401;
+    p->flags |= (PUNI_FLAG_PUNI | PUNI_FLAG_ACTIVE | PUNI_FLAG_WALL_CHECK);
     return EVT_RETURN_DONE;
 }
 
@@ -5889,7 +5889,7 @@ USER_FUNC(evt_puni_init_teki) {
     f32 y = evtGetFloat(event, args[3]);
     f32 z = evtGetFloat(event, args[4]);
 
-    p->flags |= 0x10;
+    p->flags |= PUNI_FLAG_SPRITE_TOGE;
     p->mode = type;
     p->anim = 0;
     p->modeStep = 0;
@@ -5913,7 +5913,7 @@ USER_FUNC(evt_puni_init_teki) {
     p->attacked = 0;
     p->hitRate = 50;
     p->hitRateGuard = 70;
-    p->flags |= 0x101402;
+    p->flags |= (PUNI_FLAG_TOGE | PUNI_FLAG_ACTIVE | PUNI_FLAG_WALL_CHECK | PUNI_FLAG_COLLIDE);
     return EVT_RETURN_DONE;
 }
 
@@ -5972,7 +5972,7 @@ USER_FUNC(evt_puni_korokoro) {
     switch (p->anim) {
         case 5:
             if (isFirstCall) {
-                if (p->flags & 8) {
+                if (p->flags & PUNI_FLAG_SPRITE_PUNI) {
                     p->rotOffsetY = 8.0f;
                 } else {
                     p->dispOfs.y = 8.0f;
@@ -5981,7 +5981,7 @@ USER_FUNC(evt_puni_korokoro) {
             p->spin += evtGetValue(event, args[1]);
             return EVT_RETURN_BLOCK;
         default:
-            if (p->flags & 8) {
+            if (p->flags & PUNI_FLAG_SPRITE_PUNI) {
                 p->rotOffsetY = 0.0f;
             } else {
                 p->dispOfs.y = 0.0f;
@@ -6103,7 +6103,7 @@ USER_FUNC(evt_puni_set_mode) {
 
 USER_FUNC(evt_puni_setsudan) {
     PuniData* p = &Punidat[evtGetValue(event, event->args[0])];
-    if (p->flags & 0x400) {
+    if (p->flags & PUNI_FLAG_ACTIVE) {
         PuniDokuritsu(p);
         puniDeleteEffect(p);
     }
@@ -6135,9 +6135,9 @@ USER_FUNC(evt_puni_dokan_onoff) {
     s32 on = evtGetValue(event, args[1]);
     PuniData* p = &Punidat[puni_bero_id_filter(id)] + 103;
     if (on == 0) {
-        p->flags |= 0x100000;
+        p->flags |= PUNI_FLAG_COLLIDE;
     } else {
-        p->flags &= ~0x100000;
+        p->flags &= ~PUNI_FLAG_COLLIDE;
     }
     return EVT_RETURN_DONE;
 }
@@ -6242,11 +6242,11 @@ USER_FUNC(evt_puni_all_movestop) {
     s32 i;
     for (i = 1; i < 103; i++) {
         PuniData* p = &Punidat[i];
-        if (p->flags & 0x400) {
+        if (p->flags & PUNI_FLAG_ACTIVE) {
             if (stop == 0) {
-                p->flags &= ~0x200;
+                p->flags &= ~PUNI_FLAG_MOVE_STOP;
             } else {
-                p->flags |= 0x200;
+                p->flags |= PUNI_FLAG_MOVE_STOP;
             }
         }
     }
@@ -6285,7 +6285,7 @@ USER_FUNC(evt_puni_count_area) {
     s32 i;
     for (i = 1, count = 0; i < 103; i++) {
         PuniData* p = &Punidat[i];
-        if ((p->flags & 0x400) && p->mode != 16) {
+        if ((p->flags & PUNI_FLAG_ACTIVE) && p->mode != 16) {
             if (!(10.0 < __fabs(y - p->pos.y)) && !(r < __fabs(x - p->pos.x)) && !(r < __fabs(z - p->pos.z))) {
                 count++;
             }
@@ -6343,7 +6343,7 @@ USER_FUNC(evt_puni_landon_check) {
     count = 0;
     for (i = start; i < end; i++) {
         p = &Punidat[i];
-        if ((p->flags & 0x400) && p->pos.y > y) {
+        if ((p->flags & PUNI_FLAG_ACTIVE) && p->pos.y > y) {
             count++;
         }
     }
@@ -6433,8 +6433,8 @@ USER_FUNC(evt_puni_all_save) {
     PuniData* p = Punidat + 1;
     Vec pos;
     for (i = 1; i <= 102; i++, p++) {
-        if ((p->flags & 0x400) && !(p->flags & 0x800000)) {
-            if (p->flags & 0x8000) {
+        if ((p->flags & PUNI_FLAG_ACTIVE) && !(p->flags & PUNI_FLAG_NOT_IN_PARTY)) {
+            if (p->flags & PUNI_FLAG_STRAY) {
                 puniHagurePos(p);
                 pos = p->pos;
                 off = (p->index- 1) * 7;

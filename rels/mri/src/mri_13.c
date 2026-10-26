@@ -224,7 +224,7 @@ USER_FUNC(yuka_fall_check) {
 
     for (i = 1; i < 103; i++) {
         PuniData* puni = &puniGetPunidat()[i];
-        if (puni->flags & 0x400) {
+        if (puni->flags & PUNI_FLAG_ACTIVE) {
             Vec dir = {0.0f, -1.0f, 0.0f};
             Vec fall = {0.0f, -3.0f, 0.0f};
             Vec pos;
@@ -371,11 +371,11 @@ EVT_BEGIN(yuka_event)
     WAIT_MS(1000)
     CALL(evt_snd_sfxon, STRING("SFX_STG2_QUAKE1"), GW(4))
     SPAWN_EVENT_GET_ID(PTR(yuka_shake), LW(10))
-    CALL(evt_puni_flag_onoff, 1, 0, 262144)
+    CALL(evt_puni_flag_onoff, 1, 0, PUNI_FLAG_SCRIPT_CONTROL)
     CALL(evt_puni_set_mode, 1, 30)
     CALL(evt_npc_flag_onoff, 1, STRING("ガイドsp"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     CALL(evt_msg_print, 0, STRING("stg2_mri_e21_00"), 0, STRING("ガイドsp"))
-    CALL(evt_puni_flag_onoff, 1, 1, 262144)
+    CALL(evt_puni_flag_onoff, 1, 1, PUNI_FLAG_SCRIPT_CONTROL)
     CALL(evt_puni_set_mode, 1, 30)
     CALL(evt_cam3d_evt_set, 330, -240, 404, -50, -60, 50, 0, 11)
     WAIT_MS(1000)
@@ -424,17 +424,17 @@ EVT_BEGIN(yuka_event)
     CALL(evt_snd_sfxoff, GW(3))
     CALL(evt_snd_sfxon, STRING("SFX_STG2_FLOOR_STOP1"), 0)
     WAIT_MS(1000)
-    CALL(evt_puni_flag_onoff, 1, 0, 262144)
+    CALL(evt_puni_flag_onoff, 1, 0, PUNI_FLAG_SCRIPT_CONTROL)
     CALL(evt_puni_set_mode, 1, 30)
     CALL(evt_npc_get_position, STRING("ガイドsp"), LW(0), LW(1), LW(2))
     ADD(LW(1), 20)
     CALL(evt_msg_toge, 2, LW(0), LW(1), LW(2))
     CALL(evt_msg_print, 0, STRING("stg2_mri_e21_00_01"), 0, STRING("ガイドsp"))
-    CALL(evt_puni_flag_onoff, 1, 1, 262144)
+    CALL(evt_puni_flag_onoff, 1, 1, PUNI_FLAG_SCRIPT_CONTROL)
     SET_VALUE(LW(10), 1)
     LOOP(0)
         CALL(evt_puni_set_mode, LW(10), 1)
-        CALL(evt_puni_flag_onoff, LW(10), 0, 32768)
+        CALL(evt_puni_flag_onoff, LW(10), 0, PUNI_FLAG_STRAY)
         ADD(LW(10), 1)
         IF_INT_EQUAL(LW(10), 103)
             BREAK_LOOP

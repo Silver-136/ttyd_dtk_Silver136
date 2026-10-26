@@ -630,7 +630,7 @@ BOOL toge_searchParent(PuniData* self, s16 group) {
 
     for (i = 110; i <= 209; i++) {
         PuniData* p = &puniGetPunidat()[i];
-        if ((p->flags & 0x400) && (p->flags & 0x80000) && p->groupId == group && p->child1 == NULL && p != self &&
+        if ((p->flags & PUNI_FLAG_ACTIVE) && (p->flags & PUNI_FLAG_IN_CHAIN) && p->groupId == group && p->child1 == NULL && p != self &&
             (s16)order > p->depth) {
             parent = p;
             order = p->depth + 1;
@@ -707,7 +707,7 @@ void togeMakeRetsu(Vec* pos, s16 leader, s16 start, s16 end) {
     puni->moveFunc = NULL;
     puni->groupId = puni->index;
     puni->anim = 1;
-    puni->flags |= 0x80000;
+    puni->flags |= PUNI_FLAG_IN_CHAIN;
     for (i = start; i <= end; i++) {
         puni = &puniGetPunidat()[i];
         puni->modeFunc = togeModeParent;
@@ -716,7 +716,7 @@ void togeMakeRetsu(Vec* pos, s16 leader, s16 start, s16 end) {
         puni->pos.y = pos->y;
         puni->pos.z = pos->z;
         puni->anim = 1;
-        puni->flags |= 0x80000;
+        puni->flags |= PUNI_FLAG_IN_CHAIN;
         toge_searchParent(puni, leader);
     }
 }
@@ -749,13 +749,13 @@ USER_FUNC(evt_mri_toge_retsu_stop) {
     puni->modeFunc = NULL;
     puni->moveFunc = NULL;
     puni->anim = 0;
-    puni->flags &= ~0x80000;
+    puni->flags &= ~PUNI_FLAG_IN_CHAIN;
     for (i = start; i <= end; i++) {
         puni = &puniGetPunidat()[i];
         puni->modeFunc = NULL;
         puni->moveFunc = NULL;
         puni->anim = 0;
-        puni->flags &= ~0x80000;
+        puni->flags &= ~PUNI_FLAG_IN_CHAIN;
     }
     return EVT_RETURN_DONE;
 }
@@ -765,13 +765,13 @@ USER_FUNC(evt_mri_toge_enter_init) {
 
     for (i = 110; i <= 209; i++) {
         PuniData* puni = &puniGetPunidat()[i];
-        if (puni->flags & 0x400) {
+        if (puni->flags & PUNI_FLAG_ACTIVE) {
             puni->pos.x = 0.0f;
             puni->pos.y = -1000.0f;
             puni->pos.z = 0.0f;
             puni->mode = 0x1D;
             puni->anim = 0;
-            puni->flags &= ~0x100000;
+            puni->flags &= ~PUNI_FLAG_COLLIDE;
         }
     }
     return EVT_RETURN_DONE;
@@ -782,7 +782,7 @@ USER_FUNC(evt_mri_puni_win_init) {
 
     for (i = 1; i <= 102; i++) {
         PuniData* puni = &puniGetPunidat()[i];
-        if (puni->flags & 0x400) {
+        if (puni->flags & PUNI_FLAG_ACTIVE) {
             puni->hp = puni->maxHp;
             puni->rotOffsetY = 0.0f;
             puni->spin = 0.0f;
@@ -815,12 +815,12 @@ USER_FUNC(evt_mri_puni_win_attack) {
     wp->beroEndRange = 100.0f;
     for (i = 1; i <= 102; i++) {
         PuniData* puni = &puniGetPunidat()[i];
-        if (puni->flags & 0x400) {
+        if (puni->flags & PUNI_FLAG_ACTIVE) {
             PuniDokuritsu(puni);
             puni->anim = 1;
             puni->modeStep = 0;
-            if (puni->flags & 0x4000) {
-                puni->flags &= ~0x4000;
+            if (puni->flags & PUNI_FLAG_DEAD) {
+                puni->flags &= ~PUNI_FLAG_DEAD;
                 puni->mode = 0x1D;
                 puni->modeFunc = puniModeWinjump;
                 puni->moveFunc = puniMoveDecel;
@@ -846,7 +846,7 @@ USER_FUNC(evt_mri_puni_win_end) {
     wp->allMode = 0;
     for (i = 1; i <= 102; i++) {
         PuniData* puni = &puniGetPunidat()[i];
-        if (puni->flags & 0x400) {
+        if (puni->flags & PUNI_FLAG_ACTIVE) {
             f32 rx;
             f32 rz;
             PuniDokuritsu(puni);

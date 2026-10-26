@@ -218,7 +218,7 @@ EVT_BEGIN(water_shikake)
         END_IF
         IF_INT_EQUAL(LF(0), 1)
             CALL(evt_puni_set_mode, LW(10), 16)
-            CALL(evt_puni_flag_onoff, LW(10), 0, 1048576)
+            CALL(evt_puni_flag_onoff, LW(10), 0, PUNI_FLAG_COLLIDE)
             CALL(puni_get_id, LW(10), LW(3))
             AND(LW(3), 8)
             SUBTRACT(LW(3), 4)

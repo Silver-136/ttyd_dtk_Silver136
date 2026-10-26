@@ -649,7 +649,7 @@ EVT_BEGIN(time_bomb)
     SET_VALUE(LW(10), 1)
     LOOP(0)
         CALL(evt_puni_set_mode, LW(10), 1)
-        CALL(evt_puni_flag_onoff, LW(10), 1, 32768)
+        CALL(evt_puni_flag_onoff, LW(10), 1, PUNI_FLAG_STRAY)
         ADD(LW(10), 1)
         IF_INT_EQUAL(LW(10), 103)
             BREAK_LOOP
