@@ -34,8 +34,15 @@ data order 10, sound-name integer round trips (`SFX_NAME_WORD`) 9, no-op casts 6
   psndSFX_pit 9. Settled: partyChgPose, effMarioBalloonEntry, spline_getvalue / spline_maketable, envAddTev,
   envSetYamiView (header prototypes); BattleAcDrawGauge (callers agree with the definition except ac_repeatedly,
   unprototyped, and ac_repeatedly_lv, ratio first: both change code otherwise).
-- Private function declarations: about 650 still have no header to move into, and a few hundred disagree with the
-  function's definition (type questions, one family at a time).
+- Private function declarations without a header: 404 (85 are each REL's own `_prolog`/`_epilog`/`_unresolved`;
+  114 are tou_03, which cannot include the evt headers because it defines its own out-of-line GXSetTexCoordGen).
+  Most of the rest are retail mismatches the bytes prove: different argument counts (partyWalkInit, winBadgeExit,
+  effStageClearEndChk, effThunderflareN64Entry), narrowed parameters or returns (BattleStageSet*Dark*,
+  psndSFX_pit/vol, msgWindow_Entry, hankakuSearch per version), Vec/GXColor by value vs pointer
+  (cloudGetBreathPower, mapObjSetColor, mapSetBlend, partyNrmToAngle, marioCreviceWallChk), argument order that
+  changes code (intpl_sub, marioSetForceMove, gor_irai's FontDrawString).
+- MayaAnim / MayaAnimData are copied privately in effdrv, eff_damage_star, eff_ice and eff_recovery (shared-struct
+  candidate).
 - `itemEntry` has no header prototype because evt_mobj needs a float-first private declaration (FAKES row).
 - Signed-byte casts `(s32)(u8)` on character and party ids, and u8 casts on BOOL audience getters: kept until an
   accessor or prototype explains them.
