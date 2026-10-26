@@ -407,7 +407,7 @@ void effRecoveryMain(EffectEntry* effect) {
                 break;
             case 3:
                 if (p->timer < 40) {
-                    a = intplGetValue(EASING_COS_IN_OUT, 0.0f, 360.0f, ++p->timer, 40);
+                    a = intplGetValue(EASING_SINE_IN_OUT, 0.0f, 360.0f, ++p->timer, 40);
                     d = distABf(0.0f, 0.0f, p->position.x, p->position.z);
                     d *= 0.99f;
                     a = 6.2831855f * (90.0f + (a + 360.0f * (f32)(i - 2) / (f32)amount)) / 360.0f;

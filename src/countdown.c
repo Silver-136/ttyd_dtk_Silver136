@@ -85,7 +85,7 @@ void countDownMain(void) {
         switch (wp->state) {
         case 0:
             if (++wp->counter < 30) {
-                wp->offX = intplGetValue(EASING_COS_IN_OUT, 300.0f, 0.0f, wp->counter, 30);
+                wp->offX = intplGetValue(EASING_SINE_IN_OUT, 300.0f, 0.0f, wp->counter, 30);
             } else {
                 wp->counter = 0;
                 wp->state++;
@@ -99,7 +99,7 @@ void countDownMain(void) {
             break;
         case 2:
             if (++wp->counter < 30) {
-                wp->offX = intplGetValue(EASING_COS_IN_OUT, 0.0f, 300.0f, wp->counter, 30);
+                wp->offX = intplGetValue(EASING_SINE_IN_OUT, 0.0f, 300.0f, wp->counter, 30);
             } else {
                 wp->counter = 0;
                 wp->state++;

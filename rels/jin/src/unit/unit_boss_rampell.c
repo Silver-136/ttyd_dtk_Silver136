@@ -333,7 +333,7 @@ EVT_BEGIN(to_faker_mario)
     END_IF
     CALL(evt_snd_sfxon, STRING("SFX_BOSS_RNPLTRANSFORM5"), 0)
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(5), LW(6), LW(7))
-    CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, -50, 0, 1000)
+    CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, -50, 0, 1000)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value_para, LW(0), LW(1))
         CALL(btlevtcmd_SetPos, UNIT_ID_SELF, LW(5), LW(0), LW(7))

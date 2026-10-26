@@ -469,7 +469,7 @@ EVT_END()
 EVT_BEGIN(moya_effect01)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_hai_l_01"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_hai_r_01"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 1500, 0, 7000)
+    CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 1500, 0, 7000)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
         SET_VALUE(LW(2), 0)
@@ -487,7 +487,7 @@ EVT_END()
 EVT_BEGIN(moya_effect02)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_hai_l_02"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_hai_r_02"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 1500, 0, 7000)
+    CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 1500, 0, 7000)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
         SET_VALUE(LW(2), 0)
@@ -505,7 +505,7 @@ EVT_END()
 EVT_BEGIN(moya_effect03)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_hai_l_03"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_hai_r_03"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 1500, 0, 7000)
+    CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 1500, 0, 7000)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
         SET_VALUE(LW(2), 0)
@@ -523,7 +523,7 @@ EVT_END()
 EVT_BEGIN(moya_effect04)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_hai_l_04"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_hai_r_04"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 1500, 0, 7000)
+    CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 1500, 0, 7000)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
         SET_VALUE(LW(2), 0)
@@ -541,7 +541,7 @@ EVT_END()
 EVT_BEGIN(moya_effect05)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_hai_l_05"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_hai_r_05"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 1500, 0, 7000)
+    CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 1500, 0, 7000)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
         SET_VALUE(LW(2), 0)
@@ -764,7 +764,7 @@ EVT_BEGIN(nami_alpha)
     CALL(evt_map_set_tevcallback, 1, PTR(alpha_tev))
     CALL(evt_mapobj_flag_onoff, 0, 1, STRING("S_umi_l_siro_b"), MAP_OBJ_TEV_CALLBACK(1))
     CALL(evt_mapobj_flag_onoff, 0, 0, STRING("S_umi_l_siro_b"), MAP_OBJ_FLAG_DISPLAY_LIST)
-    CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 255, 0, 500)
+    CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 255, 0, 500)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
         CALL(alpha_set_func, LW(0))
@@ -783,7 +783,7 @@ EVT_BEGIN(moonout_effect)
     CALL(evt_mapobj_flag_onoff, 0, 1, STRING("S_hai03_moon"), MAP_OBJ_TEV_CALLBACK(1))
     CALL(evt_mapobj_flag_onoff, 0, 0, STRING("S_hai02"), MAP_OBJ_FLAG_DISPLAY_LIST)
     CALL(evt_mapobj_flag_onoff, 0, 0, STRING("S_hai03_moon"), MAP_OBJ_FLAG_DISPLAY_LIST)
-    CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 255, 0, 1500)
+    CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 255, 0, 1500)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
         CALL(alpha_set_func, LW(0))
@@ -1302,7 +1302,7 @@ EVT_BEGIN(onryo_event)
     CALL(evt_npc_set_color, STRING(/*"エルモスF"*/"\x83\x47\x83\x8B\x83\x82\x83\x58\x46"), 255, 255, 255, 0)
     CALL(evt_npc_set_color, STRING(/*"エルモスG"*/"\x83\x47\x83\x8B\x83\x82\x83\x58\x47"), 255, 255, 255, 0)
     CALL(evt_snd_sfxon, STRING("SFX_STG5_ELMOS_APPEAR1_2"), 0)
-    CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 0, 255, 1000)
+    CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, 255, 1000)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
         CALL(evt_npc_set_color, STRING(/*"エルモスA"*/"\x83\x47\x83\x8B\x83\x82\x83\x58\x41"), 255, 255, 255, LW(0))
@@ -1584,7 +1584,7 @@ EVT_END()
 
 EVT_BEGIN(kaizoku_hata)
     LOOP(0)
-        CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, -4000, 4000, 2500)
+        CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, -4000, 4000, 2500)
         LOOP(0)
             CALL(evt_sub_intpl_msec_get_value)
             DIVIDE_FLOAT(LW(0), FLOAT(100.0f))
@@ -1595,7 +1595,7 @@ EVT_BEGIN(kaizoku_hata)
             WAIT_FRAMES(1)
         END_LOOP
         WAIT_MS(500)
-        CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 4000, -4000, 2500)
+        CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 4000, -4000, 2500)
         LOOP(0)
             CALL(evt_sub_intpl_msec_get_value)
             DIVIDE_FLOAT(LW(0), FLOAT(100.0f))
@@ -1730,7 +1730,7 @@ EVT_END()
 
 EVT_BEGIN(anm_kaji)
     LOOP(0)
-        CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 500, -500, 2000)
+        CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 500, -500, 2000)
         LOOP(0)
             CALL(evt_sub_intpl_msec_get_value)
             DIVIDE_FLOAT(LW(0), FLOAT(100.0f))
@@ -1740,7 +1740,7 @@ EVT_BEGIN(anm_kaji)
                 BREAK_LOOP
             END_IF
         END_LOOP
-        CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, -500, 500, 2000)
+        CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, -500, 500, 2000)
         LOOP(0)
             CALL(evt_sub_intpl_msec_get_value)
             DIVIDE_FLOAT(LW(0), FLOAT(100.0f))
@@ -1874,7 +1874,7 @@ EVT_BEGIN(anm_yure)
     CALL(evt_snd_sfxon_3d, STRING("SFX_EVT_OPN_SHIP_MOVE1"), GW(0), GW(1), GW(2), GW(4))
     CALL(evt_snd_sfx_dist, GW(4), 60)
     LOOP(0)
-        CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 500, -500, 2000)
+        CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 500, -500, 2000)
         LOOP(0)
             CALL(evt_sub_intpl_msec_get_value)
             DIVIDE_FLOAT(LW(0), FLOAT(100.0f))
@@ -1888,7 +1888,7 @@ EVT_BEGIN(anm_yure)
                 BREAK_LOOP
             END_IF
         END_LOOP
-        CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, -500, 500, 2000)
+        CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, -500, 500, 2000)
         LOOP(0)
             CALL(evt_sub_intpl_msec_get_value)
             DIVIDE_FLOAT(LW(0), FLOAT(100.0f))
@@ -2005,7 +2005,7 @@ static EVT_BEGIN(evt_prologue)
     END_INLINE_EVENT
     SET_FLOAT_VALUE(GW(10), FLOAT(0.0f))
     SET_FLOAT_VALUE(LW(2), FLOAT(-1800.0f))
-    CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, -1800, 0, 10000)
+    CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, -1800, 0, 10000)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
         SET_FLOAT_VALUE(LW(3), LW(0))
@@ -2050,7 +2050,7 @@ static EVT_BEGIN(evt_prologue)
     END_INLINE_EVENT
     SET_FLOAT_VALUE(GW(10), FLOAT(0.0f))
     SET_FLOAT_VALUE(LW(2), FLOAT(0.0f))
-    CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 0, 1800, 10000)
+    CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, 1800, 10000)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
         SET_FLOAT_VALUE(LW(3), LW(0))
@@ -2281,11 +2281,11 @@ USER_FUNC(logo) {
             break;
         case 1:
             if (wp->counter < VERSION_PICK(180, FPS_FRAMES(180))) {
-                wp->alpha = intplGetValue(EASING_COS_IN_OUT, 0.0f, 255.0f, ++wp->counter, VERSION_PICK(180, FPS_FRAMES(180)));
+                wp->alpha = intplGetValue(EASING_SINE_IN_OUT, 0.0f, 255.0f, ++wp->counter, VERSION_PICK(180, FPS_FRAMES(180)));
 #ifdef VERSION_G8ME01
-                wp->y = intplGetValue(EASING_COS_IN_OUT, -50.0f, 0.0f, ++wp->counter, FPS_FRAMES(180)); /* FAKE */
+                wp->y = intplGetValue(EASING_SINE_IN_OUT, -50.0f, 0.0f, ++wp->counter, FPS_FRAMES(180)); /* FAKE */
 #else
-                wp->y = intplGetValue(EASING_COS_IN_OUT, -50.0f, 0.0f, ++wp->counter, 180);
+                wp->y = intplGetValue(EASING_SINE_IN_OUT, -50.0f, 0.0f, ++wp->counter, 180);
 #endif
             } else if (gp->retraceCount % 15 == 0) {
                 wp->state++;
@@ -2300,11 +2300,11 @@ USER_FUNC(logo) {
             break;
         case 3:
             if (wp->counter < VERSION_PICK(120, FPS_FRAMES(120))) {
-                wp->alpha = intplGetValue(EASING_COS_IN_OUT, 255.0f, 0.0f, ++wp->counter, VERSION_PICK(120, FPS_FRAMES(120)));
+                wp->alpha = intplGetValue(EASING_SINE_IN_OUT, 255.0f, 0.0f, ++wp->counter, VERSION_PICK(120, FPS_FRAMES(120)));
 #ifdef VERSION_G8ME01
-                wp->y = intplGetValue(EASING_COS_IN_OUT, 0.0f, 100.0f, ++wp->counter, FPS_FRAMES(120)); /* FAKE */
+                wp->y = intplGetValue(EASING_SINE_IN_OUT, 0.0f, 100.0f, ++wp->counter, FPS_FRAMES(120)); /* FAKE */
 #else
-                wp->y = intplGetValue(EASING_COS_IN_OUT, 0.0f, 100.0f, ++wp->counter, 120);
+                wp->y = intplGetValue(EASING_SINE_IN_OUT, 0.0f, 100.0f, ++wp->counter, 120);
 #endif
             } else {
                 wp->state++;

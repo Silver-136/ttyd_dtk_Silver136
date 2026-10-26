@@ -162,7 +162,7 @@ void titleMain(SequenceWork* work) {
             break;
         case 2:
             wp2->topPosX = 0.0f;
-            wp2->topPosY = intplGetValue(EASING_COS_BOUNCE, 300.0f, 120.0f, wp2->counter, TFR);
+            wp2->topPosY = intplGetValue(EASING_BOUNCE_SHRINKING, 300.0f, 120.0f, wp2->counter, TFR);
             wp2->timer--;
             if (wp2->timer == 0) {
                 if ((u32)psbgm[0].streamId != 0xFFFFFFFFU) {
@@ -173,7 +173,7 @@ void titleMain(SequenceWork* work) {
                 }
             }
             wp2->bottomPosX = 0.0f;
-            wp2->bottomPosY = intplGetValue(EASING_COS_IN_OUT, -300.0f, -170.0f, wp2->counter, TFR);
+            wp2->bottomPosY = intplGetValue(EASING_SINE_IN_OUT, -300.0f, -170.0f, wp2->counter, TFR);
             wp2->counter++;
             if (wp2->counter > TFR) {
                 titleLoadDemo();
@@ -226,8 +226,8 @@ void titleMain(SequenceWork* work) {
             wp2->state++;
             break;
         case 21:
-            wp2->topPosY = intplGetValue(EASING_COS_IN_OUT, 120.0f, 400.0f, wp2->counter, TFR);
-            wp2->bottomPosY = intplGetValue(EASING_COS_IN_OUT, -170.0f, -400.0f, wp2->counter, TFR);
+            wp2->topPosY = intplGetValue(EASING_SINE_IN_OUT, 120.0f, 400.0f, wp2->counter, TFR);
+            wp2->bottomPosY = intplGetValue(EASING_SINE_IN_OUT, -170.0f, -400.0f, wp2->counter, TFR);
             wp2->counter++;
             if (wp2->counter > TFR) {
                 wp2->counter = TFR;

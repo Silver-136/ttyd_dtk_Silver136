@@ -142,7 +142,7 @@ static USER_FUNC(evt_chuchu_back_loop) {
     }
     elapsed = OSTicksToMilliseconds((u32)gp->renderTime - event->userdata[0]);
     if (elapsed < total) {
-        npc->rotation.z = intplGetValue(EASING_COS_IN_OUT, 0.0f, 360.0f, elapsed, total);
+        npc->rotation.z = intplGetValue(EASING_SINE_IN_OUT, 0.0f, 360.0f, elapsed, total);
         return EVT_RETURN_BLOCK;
     }
     npc->rotation.z = 0.0f;

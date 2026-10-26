@@ -524,7 +524,7 @@ EVT_BEGIN(btldefaultevt_ChangeParty)
 EVT_END()
 
 EVT_BEGIN(btldefaultevt_BiribiriMove)
-    CALL(evt_sub_intpl_init, EASING_COS_FAST_OVERSHOOT, 0, 5, 16)
+    CALL(evt_sub_intpl_init, EASING_WAVE_SHRINKING_FASTER, 0, 5, 16)
     LABEL(0)
     CALL(evt_sub_intpl_get_value)
     CALL(btlevtcmd_SetDispOffset, UNIT_ID_SELF, LW(0), 0, 0)

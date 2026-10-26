@@ -69,7 +69,7 @@ void effQueen2Main(EffectEntry* effect) {
     }
     switch (work->state) {
         case 0:
-            work->alpha = intplGetValue(EASING_COS_IN_OUT, 0.0f, 128.0f, work->timer++, 60);
+            work->alpha = intplGetValue(EASING_SINE_IN_OUT, 0.0f, 128.0f, work->timer++, 60);
             if (work->timer > 60) {
                 work->timer = 0;
                 work->state++;
@@ -78,7 +78,7 @@ void effQueen2Main(EffectEntry* effect) {
         case 1: {
                 f32 base = work->baseScale;
                 s32 t = work->timer++;
-                work->scale = intplGetValue(EASING_COS_IN_OUT, base, 3.0f, t, 120);
+                work->scale = intplGetValue(EASING_SINE_IN_OUT, base, 3.0f, t, 120);
             }
             if (work->timer > 120) {
                 work->timer = 0;

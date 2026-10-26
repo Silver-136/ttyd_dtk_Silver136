@@ -258,7 +258,7 @@ EVT_BEGIN(evt_action_1_2)
     END_IF
     MULTIPLY_FLOAT(LW(9), FLOAT(10.0f))
     SET_VALUE(LW(5), LW(10))
-    CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 0, LW(9), 700)
+    CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, LW(9), 700)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
         DIVIDE_FLOAT(LW(0), FLOAT(10.0f))
@@ -279,7 +279,7 @@ EVT_BEGIN(evt_action_1_2)
         ELSE
         WAIT_MS(1000)
     END_IF
-    CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, LW(9), 0, 400)
+    CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, LW(9), 0, 400)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
         DIVIDE_FLOAT(LW(0), FLOAT(10.0f))

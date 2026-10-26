@@ -314,9 +314,9 @@ void effGonbabaBreathMain(EffectEntry* effect) {
                 work->velY *= 0.9f;
                 work->position.x += work->velX;
                 work->position.y += work->velY;
-                work->from[0] = intplGetValue(EASING_COS_IN_OUT, work->from[0], work->to[0], 30 - work->life, 30);
-                work->from[1] = intplGetValue(EASING_COS_IN_OUT, work->from[1], work->to[1], 30 - work->life, 30);
-                work->from[2] = intplGetValue(EASING_COS_IN_OUT, work->from[2], work->to[2], 30 - work->life, 30);
+                work->from[0] = intplGetValue(EASING_SINE_IN_OUT, work->from[0], work->to[0], 30 - work->life, 30);
+                work->from[1] = intplGetValue(EASING_SINE_IN_OUT, work->from[1], work->to[1], 30 - work->life, 30);
+                work->from[2] = intplGetValue(EASING_SINE_IN_OUT, work->from[2], work->to[2], 30 - work->life, 30);
                 break;
             case 17:
                 if (work->life == 0) {
@@ -336,9 +336,9 @@ void effGonbabaBreathMain(EffectEntry* effect) {
                 work->velY *= 0.9f;
                 work->position.x += work->velX;
                 work->position.y += work->velY;
-                work->from[0] = intplGetValue(EASING_COS_IN_OUT, work->from[0], work->to[0], 60 - work->life, 60);
-                work->from[1] = intplGetValue(EASING_COS_IN_OUT, work->from[1], work->to[1], 60 - work->life, 60);
-                work->from[2] = intplGetValue(EASING_COS_IN_OUT, work->from[2], work->to[2], 60 - work->life, 60);
+                work->from[0] = intplGetValue(EASING_SINE_IN_OUT, work->from[0], work->to[0], 60 - work->life, 60);
+                work->from[1] = intplGetValue(EASING_SINE_IN_OUT, work->from[1], work->to[1], 60 - work->life, 60);
+                work->from[2] = intplGetValue(EASING_SINE_IN_OUT, work->from[2], work->to[2], 60 - work->life, 60);
                 break;
         }
     }

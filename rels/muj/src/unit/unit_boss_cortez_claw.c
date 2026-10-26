@@ -302,7 +302,7 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_WaitEventEnd, LW(15))
     WAIT_MS(500)
     BEGIN_SIBLING_EVENT
-        CALL(evt_sub_intpl_init, EASING_COS_IN_OUT, 45, 0, 15)
+        CALL(evt_sub_intpl_init, EASING_SINE_IN_OUT, 45, 0, 15)
         LOOP(15)
             CALL(evt_sub_intpl_get_value)
             CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, 0, LW(0))

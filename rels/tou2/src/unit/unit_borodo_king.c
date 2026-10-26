@@ -498,7 +498,7 @@ static EVT_BEGIN(_borodo_normal_attack)
             SET_VALUE(LW(6), 0)
         END_IF
         CALL(btlevtcmd_SetRotateOffsetFromCenterOffset, -2)
-        CALL(evt_sub_intpl_init, EASING_COS_IN, LW(5), LW(6), 24)
+        CALL(evt_sub_intpl_init, EASING_SINE_IN, LW(5), LW(6), 24)
         LOOP(25)
             CALL(evt_sub_intpl_get_value)
             CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, 0, LW(0))

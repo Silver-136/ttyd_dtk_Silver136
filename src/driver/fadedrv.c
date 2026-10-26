@@ -739,11 +739,11 @@ void fadeMain(void) {
                         if (entry->type == 0x22 || entry->type == 0x28) {
                             if (!(entry->flags & FADE_FLAG_NARROW_FAST)) {
                                 if (entry->scaleTimer < FPS_FRAMES(180)) {
-                                    entry->scale = intplGetValue(EASING_SIN_OUT, 3.0f, 1.0f, ++entry->scaleTimer, FPS_FRAMES(180));
+                                    entry->scale = intplGetValue(EASING_SINE_OUT, 3.0f, 1.0f, ++entry->scaleTimer, FPS_FRAMES(180));
                                 }
                             } else {
                                 if (entry->scaleTimer < FPS_FRAMES(90)) {
-                                    entry->scale = intplGetValue(EASING_SIN_OUT, 1.5f, 1.0f, ++entry->scaleTimer, FPS_FRAMES(90));
+                                    entry->scale = intplGetValue(EASING_SINE_OUT, 1.5f, 1.0f, ++entry->scaleTimer, FPS_FRAMES(90));
                                 }
                             }
                         }
@@ -787,7 +787,7 @@ void fadeMain(void) {
                     case 1:
                         animPoseMain(entry->poseId);
                         if (entry->scaleTimer < FPS_FRAMES(120)) {
-                            entry->scale = intplGetValue(EASING_SIN_OUT, 1.0f, 3.0f, ++entry->scaleTimer, FPS_FRAMES(120));
+                            entry->scale = intplGetValue(EASING_SINE_OUT, 1.0f, 3.0f, ++entry->scaleTimer, FPS_FRAMES(120));
                         } else {
                             entry->flags |= FADE_FLAG_DONE;
                             entry->state++;

@@ -218,7 +218,7 @@ EVT_BEGIN(namiyoke_fail_recover)
             BREAK_LOOP
         END_IF
     END_LOOP
-    CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 0, -10, 300)
+    CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, -10, 300)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value_para, LW(0), LW(1))
         CALL(evt_mario_set_pos, -660, LW(0), 100)
@@ -227,7 +227,7 @@ EVT_BEGIN(namiyoke_fail_recover)
             BREAK_LOOP
         END_IF
     END_LOOP
-    CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, -10, 0, 300)
+    CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, -10, 0, 300)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value_para, LW(0), LW(1))
         CALL(evt_mario_set_pos, -660, LW(0), 100)
@@ -236,7 +236,7 @@ EVT_BEGIN(namiyoke_fail_recover)
             BREAK_LOOP
         END_IF
     END_LOOP
-    CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 0, -5, 200)
+    CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, -5, 200)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value_para, LW(0), LW(1))
         CALL(evt_mario_set_pos, -660, LW(0), 100)
@@ -245,7 +245,7 @@ EVT_BEGIN(namiyoke_fail_recover)
             BREAK_LOOP
         END_IF
     END_LOOP
-    CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, -5, 0, 200)
+    CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, -5, 0, 200)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value_para, LW(0), LW(1))
         CALL(evt_mario_set_pos, -660, LW(0), 100)
@@ -254,7 +254,7 @@ EVT_BEGIN(namiyoke_fail_recover)
             BREAK_LOOP
         END_IF
     END_LOOP
-    CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 0, -1, 100)
+    CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, -1, 100)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value_para, LW(0), LW(1))
         CALL(evt_mario_set_pos, -660, LW(0), 100)
@@ -263,7 +263,7 @@ EVT_BEGIN(namiyoke_fail_recover)
             BREAK_LOOP
         END_IF
     END_LOOP
-    CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, -1, 0, 100)
+    CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, -1, 0, 100)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value_para, LW(0), LW(1))
         CALL(evt_mario_set_pos, -660, LW(0), 100)

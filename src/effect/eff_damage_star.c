@@ -387,7 +387,7 @@ void effDamageStarMain(EffectEntry* effect) {
             if (frame < 20) {
                 work->scale.x = work->scale.y = work->scale.z = 0.01f * scale_data[frame];
             } else if (frame < 40) {
-                work->rotation = intplGetValue(EASING_COS_IN_OUT, 0.0f, 720.0f, frame - 20, 19);
+                work->rotation = intplGetValue(EASING_SINE_IN_OUT, 0.0f, 720.0f, frame - 20, 19);
             } else if (frame < 50) {
                 work->scale.x = intplGetValue(EASING_QUADRATIC_OUT, 1.0f, 1.5f, frame - 40, 9);
                 work->scale.y = intplGetValue(EASING_QUADRATIC_OUT, 1.0f, 0.5f, frame - 40, 9);

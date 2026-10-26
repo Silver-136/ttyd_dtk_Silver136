@@ -8,9 +8,9 @@ f32 distABf(f32 x1, f32 y1, f32 x2, f32 y2);
 f32 compAngle(f32 angle1, f32 angle2);
 f32 angleABf(f32 x1, f32 y1, f32 x2, f32 y2);
 
-// intplGetValue modes (any other value is called as a function pointer). The curves are Paper Mario's
-// update_lerp easings (same formulas; names as in the papermario decomp); TTYD adds mode 9, the fast overshoot
-// with its oscillation growing towards the end, so the PM64 modes 9-12 are 10-13 here.
+// intplGetValue modes (any other value is called as a function pointer). WAVE: a cosine wave around the end
+// value whose size shrinks (or grows) over the steps; FASTER: its frequency rises as the steps go on; BOUNCE:
+// the wave folded to one side. Paper Mario 64 has the same formulas except mode 9.
 typedef enum EasingType {
     EASING_LINEAR = 0,
     EASING_QUADRATIC_IN = 1,
@@ -19,13 +19,13 @@ typedef enum EasingType {
     EASING_QUADRATIC_OUT = 4,
     EASING_CUBIC_OUT = 5,
     EASING_QUARTIC_OUT = 6,
-    EASING_COS_SLOW_OVERSHOOT = 7,
-    EASING_COS_FAST_OVERSHOOT = 8,
-    EASING_COS_FAST_OVERSHOOT_GROWING = 9,
-    EASING_COS_BOUNCE = 10,
-    EASING_COS_IN_OUT = 11,
-    EASING_SIN_OUT = 12,
-    EASING_COS_IN = 13,
+    EASING_WAVE_SHRINKING = 7,
+    EASING_WAVE_SHRINKING_FASTER = 8,
+    EASING_WAVE_GROWING_FASTER = 9,
+    EASING_BOUNCE_SHRINKING = 10,
+    EASING_SINE_IN_OUT = 11,
+    EASING_SINE_OUT = 12,
+    EASING_SINE_IN = 13,
 } EasingType;
 
 f32 intplGetValue(s32 mode, f32 start, f32 end, s32 currStep, s32 steps);

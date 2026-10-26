@@ -1119,7 +1119,7 @@ EVT_BEGIN(usu00_stage4_coming_event)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
         WAIT_MS(5100)
-        CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 0, 180, 500)
+        CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, 180, 500)
         LOOP(0)
             CALL(evt_sub_intpl_msec_get_value)
             MULTIPLY_FLOAT(LW(0), FLOAT(0.44433594f))
@@ -1130,7 +1130,7 @@ EVT_BEGIN(usu00_stage4_coming_event)
             END_IF
         END_LOOP
         WAIT_MS(500)
-        CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 180, 0, 500)
+        CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 180, 0, 500)
         LOOP(0)
             CALL(evt_sub_intpl_msec_get_value)
             MULTIPLY_FLOAT(LW(0), FLOAT(0.44433594f))
@@ -3391,7 +3391,7 @@ static EVT_BEGIN(minnnanokoe_evt)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
         LOOP(0)
-            CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 6000, 6500, 500)
+            CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 6000, 6500, 500)
             LABEL(1)
             CALL(evt_sub_intpl_msec_get_value)
             DIVIDE_FLOAT(LW(0), FLOAT(100.0f))
@@ -3400,7 +3400,7 @@ static EVT_BEGIN(minnnanokoe_evt)
             IF_INT_EQUAL(LW(1), 1)
                 GOTO(1)
             END_IF
-            CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 6500, 6000, 500)
+            CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 6500, 6000, 500)
             LABEL(2)
             CALL(evt_sub_intpl_msec_get_value)
             DIVIDE_FLOAT(LW(0), FLOAT(100.0f))

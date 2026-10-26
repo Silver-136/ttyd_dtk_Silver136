@@ -221,7 +221,7 @@ EVT_BEGIN(dokan_event)
         CALL(evt_mapobj_get_position, STRING("S_dokan2"), LW(0), LW(1), LW(2))
         CALL(evt_snd_sfxon_3d, STRING("SFX_STG2_DOKAN_APPEAR1"), LW(0), LW(1), LW(2), 0)
     END_INLINE_EVENT
-    CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, -50, 0, 3000)
+    CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, -50, 0, 3000)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
         CALL(evt_mapobj_trans, 1, STRING("S_dokan2"), 0, LW(0), 0)

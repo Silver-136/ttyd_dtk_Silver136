@@ -131,7 +131,7 @@ void effMahorn2Main(EffectEntry *effect) {
                 break;
             case 2:
                 if (data->intplStep < 90) {
-                    data->scale = intplGetValue(EASING_COS_IN_OUT, 0.0f, 3.0f, ++data->intplStep, 45);
+                    data->scale = intplGetValue(EASING_SINE_IN_OUT, 0.0f, 3.0f, ++data->intplStep, 45);
                 }
                 break;
             case 3:

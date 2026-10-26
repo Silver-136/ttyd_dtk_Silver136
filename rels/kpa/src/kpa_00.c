@@ -60,7 +60,7 @@ EVT_BEGIN(kpa_00_fly_evt)
     SET_FLOAT_VALUE(GW(1), FLOAT(0.25f))
     SET_FLOAT_VALUE(GW(2), FLOAT(0.0f))
     BEGIN_INLINE_EVENT
-        CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 180, 0, 3000)
+        CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 180, 0, 3000)
         LABEL(0)
         CALL(evt_sub_intpl_msec_get_value)
         CALL(evt_sub_get_sincos, LW(0), LW(2), LW(3))
@@ -72,7 +72,7 @@ EVT_BEGIN(kpa_00_fly_evt)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
         WAIT_MS(500)
-        CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 90, 0, 3000)
+        CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 90, 0, 3000)
         LABEL(3)
         CALL(evt_sub_intpl_msec_get_value)
         CALL(evt_sub_get_sincos, LW(0), LW(2), LW(3))
@@ -84,7 +84,7 @@ EVT_BEGIN(kpa_00_fly_evt)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
         WAIT_MS(1000)
-        CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 100, 600, 2000)
+        CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 100, 600, 2000)
         LABEL(2)
         CALL(evt_sub_intpl_msec_get_value)
         DIVIDE_FLOAT(LW(0), FLOAT(1000.0f))
@@ -96,7 +96,7 @@ EVT_BEGIN(kpa_00_fly_evt)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
         WAIT_MS(1500)
-        CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 100, 600, 2000)
+        CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 100, 600, 2000)
         LABEL(5)
         CALL(evt_sub_intpl_msec_get_value)
         DIVIDE_FLOAT(LW(0), FLOAT(1000.0f))
@@ -126,7 +126,7 @@ EVT_BEGIN(kpa_00_fly_evt)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
         WAIT_MS(500)
-        CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 10, 190, 3000)
+        CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 10, 190, 3000)
         LABEL(4)
         CALL(evt_sub_intpl_msec_get_value)
         SET_FLOAT_VALUE(LW(2), GW(2))
@@ -141,7 +141,7 @@ EVT_BEGIN(kpa_00_fly_evt)
     END_INLINE_EVENT
     CALL(evt_snd_sfxon_3d, STRING("SFX_KUPPA_AIRSHIP_MOVE1"), 0, 0, 0, LW(3))
     SET_VALUE(LW(4), -1000)
-    CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 0, 210, 3000)
+    CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, 210, 3000)
     LABEL(1)
     CALL(evt_sub_intpl_msec_get_value)
     SET_FLOAT_VALUE(LW(2), GW(0))

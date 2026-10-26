@@ -2213,7 +2213,7 @@ EVT_BEGIN(mode2_honeduka_damage_event)
         END_SIBLING_EVENT
     END_IF
     BEGIN_SIBLING_EVENT_GET_ID(LW(9))
-        CALL(evt_sub_intpl_init, EASING_COS_FAST_OVERSHOOT, 6, 0, 30)
+        CALL(evt_sub_intpl_init, EASING_WAVE_SHRINKING_FASTER, 6, 0, 30)
         LOOP(30)
             CALL(evt_sub_intpl_get_value)
             CALL(btlevtcmd_SetPartsDispOffset, UNIT_ID_SELF, 4, 0, LW(0), 0)

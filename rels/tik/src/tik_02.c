@@ -360,7 +360,7 @@ EVT_BEGIN(ukishima_move)
     LOOP(0)
         CALL(evt_mapobj_get_position, LW(4), LW(11), LW(12), LW(13))
         CALL(evt_snd_sfxon_3d, STRING("SFX_STG1_TIK_FLOOR_MOVE1"), LW(11), LW(12), LW(13), LW(10))
-        CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, LW(6), LW(7), LW(8))
+        CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, LW(6), LW(7), LW(8))
         LOOP(0)
             CALL(evt_sub_intpl_msec_get_value_para, LW(0), LW(1))
             CALL(evt_mapobj_trans, 0, LW(4), LW(0), 0, 0)
@@ -378,7 +378,7 @@ EVT_BEGIN(ukishima_move)
         WAIT_MS(LW(9))
         CALL(evt_mapobj_get_position, LW(4), LW(11), LW(12), LW(13))
         CALL(evt_snd_sfxon_3d, STRING("SFX_STG1_TIK_FLOOR_MOVE1"), LW(11), LW(12), LW(13), LW(10))
-        CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, LW(7), LW(6), LW(8))
+        CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, LW(7), LW(6), LW(8))
         LOOP(0)
             CALL(evt_sub_intpl_msec_get_value_para, LW(0), LW(1))
             CALL(evt_mapobj_trans, 0, LW(4), LW(0), 0, 0)
@@ -420,7 +420,7 @@ static EVT_BEGIN(ukishima_apper)
             BREAK_LOOP
         END_IF
     END_LOOP
-    CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 0, -10, 400)
+    CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, -10, 400)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value_para, LW(0), LW(1))
 #ifdef VERSION_G8ME01
@@ -437,7 +437,7 @@ static EVT_BEGIN(ukishima_apper)
             BREAK_LOOP
         END_IF
     END_LOOP
-    CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, -10, 0, 400)
+    CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, -10, 0, 400)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value_para, LW(0), LW(1))
 #ifdef VERSION_G8ME01
@@ -454,7 +454,7 @@ static EVT_BEGIN(ukishima_apper)
             BREAK_LOOP
         END_IF
     END_LOOP
-    CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 0, -5, 300)
+    CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, -5, 300)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value_para, LW(0), LW(1))
 #ifdef VERSION_G8ME01
@@ -471,7 +471,7 @@ static EVT_BEGIN(ukishima_apper)
             BREAK_LOOP
         END_IF
     END_LOOP
-    CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, -5, 0, 300)
+    CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, -5, 0, 300)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value_para, LW(0), LW(1))
 #ifdef VERSION_G8ME01
@@ -488,7 +488,7 @@ static EVT_BEGIN(ukishima_apper)
             BREAK_LOOP
         END_IF
     END_LOOP
-    CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 0, -1, 200)
+    CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, -1, 200)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value_para, LW(0), LW(1))
 #ifdef VERSION_G8ME01
@@ -505,7 +505,7 @@ static EVT_BEGIN(ukishima_apper)
             BREAK_LOOP
         END_IF
     END_LOOP
-    CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, -1, 0, 200)
+    CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, -1, 0, 200)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value_para, LW(0), LW(1))
 #ifdef VERSION_G8ME01
@@ -656,7 +656,7 @@ EVT_BEGIN(geso_battle)
     CALL(hokori_color_func, STRING("hokori01"))
     WAIT_MS(2000)
     BEGIN_INLINE_EVENT
-        CALL(evt_sub_intpl_msec_init, EASING_COS_IN, -30, 0, 1600)
+        CALL(evt_sub_intpl_msec_init, EASING_SINE_IN, -30, 0, 1600)
         LOOP(100)
             CALL(evt_sub_intpl_msec_get_value)
             CALL(evt_mapobj_trans, 0, STRING("s_dokan_1"), 0, LW(0), 0)

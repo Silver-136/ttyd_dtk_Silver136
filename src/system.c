@@ -172,17 +172,17 @@ f32 intplGetValue(s32 mode, f32 start, f32 end, s32 currStep, s32 steps) {
             return start + (((step * step * step) * (end - start)) / (total * total * total));
         case EASING_QUARTIC_IN:
             return start + (((step * step * step * step) * (end - start)) / (total * (total * (total * total))));
-        case EASING_COS_SLOW_OVERSHOOT:
+        case EASING_WAVE_SHRINKING:
             f2 = (f32)cos(4.0f * (3.141592f * (step / total)));
             f1 = (end - start);
             f3 = (total - step);
             return end - ((f3 * (f3 * (f1 * f2))) / (total * total));
-        case EASING_COS_FAST_OVERSHOOT:
+        case EASING_WAVE_SHRINKING_FASTER:
             f2 = (f32)cos((4.0f * (3.141592f * ((step * step) / total))) / ((15.0f * total) / 100.0f));
             f1 = (end - start);
             f3 = (total - step);
             return end - ((f3 * (f3 * (f1 * f2))) / (total * total));
-        case EASING_COS_FAST_OVERSHOOT_GROWING:
+        case EASING_WAVE_GROWING_FASTER:
             return end - ((step * (step * ((end - start) * (f32)cos((4.0f * (3.141592f * ((step * step) / total))) /
                                                                     ((15.0f * total) / 100.0f))))) /
                           (total * total));
@@ -195,7 +195,7 @@ f32 intplGetValue(s32 mode, f32 start, f32 end, s32 currStep, s32 steps) {
         case EASING_QUARTIC_OUT:
             f4 = (total - step);
             return (start + (end - start)) - (((f4 * f4 * f4 * f4) * (end - start)) / (total * total * total * total));
-        case EASING_COS_BOUNCE:
+        case EASING_BOUNCE_SHRINKING:
             f2 = (f32)cos((4.0f * (3.141592f * ((step * step) / total))) / ((40.0f * total) / 100.0f));
             f3 = (total - step);
             f1 = (f3 * (f3 * f2)) / (total * total);
@@ -203,17 +203,17 @@ f32 intplGetValue(s32 mode, f32 start, f32 end, s32 currStep, s32 steps) {
                 f1 = -f1;
             }
             return -((f1 * (end - start)) - end);
-        case EASING_COS_IN_OUT:
+        case EASING_SINE_IN_OUT:
             f3 = (f32)cos((3.141592f * step) / total);
             f2 = (end - start);
             f0 = 0.5f;
             f1 = (f2 * (1.0f - f3));
             return start + (f1 * f0);
-        case EASING_SIN_OUT:
+        case EASING_SINE_OUT:
             f1 = (f32)sin((HALF_PI * step) / total);
             f0 = (end - start);
             return start + (f0 * f1);
-        case EASING_COS_IN:
+        case EASING_SINE_IN:
             f2 = (f32)cos((HALF_PI * step) / total);
             f1 = (end - start);
             return start + (f1 * (1.0f - f2));

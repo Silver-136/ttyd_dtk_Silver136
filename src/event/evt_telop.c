@@ -62,7 +62,7 @@ USER_FUNC(evt_telop_entry) {
     case 1:
         ms = OSTicksToMilliseconds((u32)event->lifetime - (u32)wp->time);
         if (ms < 1000) {
-            wp->alpha = intplGetValue(EASING_COS_IN_OUT, -256.0f, 256.0f, ms, 1000);
+            wp->alpha = intplGetValue(EASING_SINE_IN_OUT, -256.0f, 256.0f, ms, 1000);
         } else {
             wp->time = event->lifetime;
             event->userdata[0]++;
@@ -80,7 +80,7 @@ USER_FUNC(evt_telop_entry) {
     case 3:
         ms = OSTicksToMilliseconds((u32)event->lifetime - (u32)wp->time);
         if (ms < 1000) {
-            wp->alpha = intplGetValue(EASING_COS_IN_OUT, 256.0f, -256.0f, ms, 1000);
+            wp->alpha = intplGetValue(EASING_SINE_IN_OUT, 256.0f, -256.0f, ms, 1000);
         } else {
             event->userdata[0]++;
         }

@@ -265,7 +265,7 @@ EVT_BEGIN(evt_gon_04flowblock_updown1)
         BEGIN_SIBLING_EVENT
 #endif
             WAIT_FRAMES(10)
-            CALL(evt_sub_intpl_init, EASING_COS_IN_OUT, 10, 3, 4)
+            CALL(evt_sub_intpl_init, EASING_SINE_IN_OUT, 10, 3, 4)
             LABEL(0)
             CALL(evt_sub_intpl_get_value)
             DIVIDE_FLOAT(LW(0), FLOAT(1000.0f))
@@ -396,7 +396,7 @@ EVT_BEGIN(evt_gon_04flowblock_updown1)
             END_SIBLING_EVENT
             BEGIN_SIBLING_EVENT
 #endif
-                CALL(evt_sub_intpl_init, EASING_COS_IN_OUT, 10, 3, 10)
+                CALL(evt_sub_intpl_init, EASING_SINE_IN_OUT, 10, 3, 10)
                 LABEL(2)
                 CALL(evt_sub_intpl_get_value)
                 DIVIDE_FLOAT(LW(0), FLOAT(1000.0f))
@@ -493,7 +493,7 @@ EVT_BEGIN(evt_gon_04flowblock_updown2)
         BEGIN_SIBLING_EVENT
 #endif
             WAIT_FRAMES(10)
-            CALL(evt_sub_intpl_init, EASING_COS_IN_OUT, 10, 3, 4)
+            CALL(evt_sub_intpl_init, EASING_SINE_IN_OUT, 10, 3, 4)
             LABEL(0)
             CALL(evt_sub_intpl_get_value)
             DIVIDE_FLOAT(LW(0), FLOAT(1000.0f))
@@ -624,7 +624,7 @@ EVT_BEGIN(evt_gon_04flowblock_updown2)
             END_SIBLING_EVENT
             BEGIN_SIBLING_EVENT
 #endif
-                CALL(evt_sub_intpl_init, EASING_COS_IN_OUT, 10, 3, 10)
+                CALL(evt_sub_intpl_init, EASING_SINE_IN_OUT, 10, 3, 10)
                 LABEL(2)
                 CALL(evt_sub_intpl_get_value)
                 DIVIDE_FLOAT(LW(0), FLOAT(1000.0f))
@@ -776,7 +776,7 @@ EVT_BEGIN(evt_kaidan_pera)
     BEGIN_INLINE_EVENT
         CALL(evt_map_get_fog, LW(4), LW(5), LW(6), LW(7), LW(8), LW(9))
         CONVERT_MS_TO_FRAME(LW(10), 500)
-        CALL(evt_sub_intpl_init, EASING_COS_IN_OUT, 0, 250, LW(10))
+        CALL(evt_sub_intpl_init, EASING_SINE_IN_OUT, 0, 250, LW(10))
         LOOP(0)
             CALL(evt_sub_intpl_get_value)
             SET_VALUE(LW(2), LW(5))
@@ -801,7 +801,7 @@ EVT_BEGIN(evt_kaidan_pera)
     BEGIN_INLINE_EVENT
         CALL(evt_map_get_fog, LW(4), LW(5), LW(6), LW(7), LW(8), LW(9))
         CONVERT_MS_TO_FRAME(LW(10), 500)
-        CALL(evt_sub_intpl_init, EASING_COS_IN_OUT, 0, 250, LW(10))
+        CALL(evt_sub_intpl_init, EASING_SINE_IN_OUT, 0, 250, LW(10))
         LOOP(0)
             CALL(evt_sub_intpl_get_value)
             SET_VALUE(LW(2), LW(5))
