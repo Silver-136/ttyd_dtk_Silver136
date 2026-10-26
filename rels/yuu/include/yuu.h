@@ -16,6 +16,23 @@ typedef struct MiniGameWork {
     void (*disp)(CameraId camera, void* param);
     void* data;
 } MiniGameWork;
+
+// Pianta Parlor minigame piece (yuu_00..yuu_03)
+typedef struct MonteSub {
+    s32 unk0;
+    Vec pos;
+    f32 scale;
+    u8 unk14[0x38 - 0x14];
+} MonteSub;
+typedef struct Monte {
+    u8 hidden;
+    u8 unk1;
+    s16 num;
+    u8 state;
+    u8 unk5[3];
+    MonteSub sub;
+    MiniGameWork* wp;
+} Monte;
 // minigame 4 (yuu_03) work
 typedef struct SlitWork {
     u32 flags;
