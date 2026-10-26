@@ -28,6 +28,7 @@
 #include "evt/evt_damage.h"
 #include "evt/evt_npc.h"
 #include "driver/hitdrv.h"
+#include "driver/seqdrv.h"
 
 static USER_FUNC(eff_guruguru);
 USER_FUNC(evt_mario_dispflag_onoff);
@@ -307,7 +308,7 @@ static EVT_BEGIN(first_evt)
         WAIT_MS(3000)
         SET_VALUE(GF(0), 1)
     END_INLINE_EVENT
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     LOOP(0)
         IF_INT_NOT_EQUAL(GF(0), 0)
             BREAK_LOOP
@@ -857,7 +858,7 @@ EVT_BEGIN(majyorin_evt_main)
 EVT_END()
 
 EVT_BEGIN(majyorin_evt)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     SET_VALUE(LF(0), 0)
     LOOP(0)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -938,7 +939,7 @@ EVT_BEGIN(las_09_init_evt)
             CALL(evt_mario_set_dir, 90, 0, 0)
             CALL(evt_party_set_dir, 0, 90, 0)
             BEGIN_INLINE_EVENT
-                CALL(evt_seq_wait, 2)
+                CALL(evt_seq_wait, SEQ_GAME)
                 CALL(evt_bero_exec_wait, 65536)
                 SPAWN_EVENT(PTR(majyorin_evt_main))
             END_INLINE_EVENT

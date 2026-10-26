@@ -42,6 +42,7 @@
 #include "evt/evt_sub.h"
 #include "data_tables.h"
 #include "driver/extdrv.h"
+#include "driver/seqdrv.h"
 typedef struct SharinData {
     const char* name;
     s32 field_0x4;
@@ -2137,7 +2138,7 @@ static EVT_BEGIN(hom_10_init_evt)
     CALL(evt_cam_letter_box_onoff, 1, 1)
     CALL(evt_cam3d_evt_set, LW(0), 300, 1400, LW(0), 125, 0, 0, 11)
     BEGIN_INLINE_EVENT
-        CALL(evt_seq_wait, 2)
+        CALL(evt_seq_wait, SEQ_GAME)
         CALL(evt_cam3d_evt_set, LW(1), 300, 1400, LW(1), 125, 0, 8000, 0)
         WAIT_MS(4000)
         CALL(evt_bero_mapchange, STRING("rsh_02_a"), STRING("nidome"))

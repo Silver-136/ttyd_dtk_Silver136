@@ -32,6 +32,7 @@
 #include "evt/evt_sub.h"
 #include "tou.h"
 #include "evt/evt_npc.h"
+#include "driver/seqdrv.h"
 
 USER_FUNC(evt_mario_flag_onoff);
 USER_FUNC(evt_pouch_open_mail);
@@ -204,7 +205,7 @@ static EVT_BEGIN(evt_sensyu)
     CALL(evt_party_set_pos, 0, 0, 0, -190)
     CALL(evt_npc_set_position, STRING("ガンス"), 0, 0, -155)
     CALL(evt_cam3d_evt_set, 0, 145, 534, 0, 50, -8, 0, 11)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     SET_VALUE(LW(1), 0)
     SPAWN_EVENT(PTR(bero_open_door_play_se))
     CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 0, -180, 500)
@@ -256,7 +257,7 @@ static EVT_BEGIN(evt_champion)
     CALL(evt_mario_set_dir, 90, 0, 0)
     CALL(evt_party_set_dir, 0, 90, 0)
     CALL(evt_npc_set_ry, STRING("キノシコワ"), 90)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     SET_VALUE(LW(1), 0)
     SPAWN_EVENT(PTR(bero_open_door_play_se))
     CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 0, -180, 500)
@@ -422,7 +423,7 @@ EVT_BEGIN(evt_champion_re)
     CALL(evt_party_set_dir, 0, 270, 0)
     CALL(evt_set_dir_to_target, STRING("キノシコワ"), STRING("mario"))
     CALL(evt_cam3d_evt_set, 45, 91, 266, 45, 57, -11, 0, 11)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     WAIT_MS(1000)
     CALL(evt_msg_print, 0, STRING("stg3_tou_re_140"), 0, STRING("キノシコワ"))
     CALL(evt_npc_flag_onoff, 1, STRING("キノシコワ"), NPC_FLAG_NO_HIT)

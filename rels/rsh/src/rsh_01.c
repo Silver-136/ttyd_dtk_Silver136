@@ -20,6 +20,7 @@
 #include "driver/npcdrv.h"
 #include "driver/mapdrv.h"
 #include "driver/casedrv.h"
+#include "driver/seqdrv.h"
 
 USER_FUNC(evt_win_item_select);
 
@@ -541,7 +542,7 @@ EVT_BEGIN(evt_pikary_arrival)
     CALL(evt_npc_flag_onoff, 1, STRING("ウェイトレス"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_GRAVITY)
     CALL(evt_party_stop, 0)
     CALL(evt_mario_key_onoff, 0)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     WAIT_MS(1000)
     CALL(evt_msg_print, 0, STRING("stg6_rsh_248"), 0, STRING("車掌"))
     WAIT_MS(300)

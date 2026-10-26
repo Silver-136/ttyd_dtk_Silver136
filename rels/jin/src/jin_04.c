@@ -24,6 +24,7 @@
 #include "jin.h"
 #include "evt/evt_npc.h"
 #include "manager/evtmgr_cmd.h"
+#include "driver/seqdrv.h"
 
 USER_FUNC(evt_kagemario_change);
 USER_FUNC(evt_kagemario_init);
@@ -271,7 +272,7 @@ EVT_BEGIN(irekawatta_mario)
     CALL(evt_cam3d_evt_set_npc_rel, STRING("にせマリオ"), 0, 50, 397, 0, 70, 25, 0, 11)
     CALL(evt_mario_dispflag_onoff, 1, 2)
     CALL(evt_mario_set_pose, STRING("M_D_2"))
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_fade_end_wait)
     LABEL(101)
     CALL(evt_npc_set_stay_anim, STRING("にせマリオ"))
@@ -901,7 +902,7 @@ EVT_BEGIN(jin_04_init_evt)
         CASE_EQUAL(211)
         CALL(evt_mario_key_onoff, 0)
         BEGIN_INLINE_EVENT
-            CALL(evt_seq_wait, 2)
+            CALL(evt_seq_wait, SEQ_GAME)
             SPAWN_EVENT(PTR(hontonosugata_mario))
         END_INLINE_EVENT
     END_SWITCH

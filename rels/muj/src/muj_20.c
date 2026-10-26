@@ -43,6 +43,7 @@
 #include "muj.h"
 #include "data_tables.h"
 #include <dolphin/pad.h>
+#include "driver/seqdrv.h"
 
 typedef struct MarcoShip {
     f32 angle;
@@ -1012,7 +1013,7 @@ EVT_BEGIN(onryo_event)
 #endif
     CALL(evt_cam3d_evt_set, 0, 600, 2155, 0, 350, -108, 0, 11)
     CALL(evt_map_playanim, STRING("yoru_hiru"), 2, 0)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     WAIT_MS(4000)
     CALL(evt_msg_toge, 1, 0, 0, 0)
     CALL(evt_msg_print, 0, STRING("stg5_sea_00"), 0, 0)
@@ -1538,7 +1539,7 @@ EVT_BEGIN(muj_20_koopa_evt)
     CALL(evt_npc_set_rotate, STRING("飛クッパ"), 0, 0, 180)
     CALL(evt_npc_set_anim, STRING("飛クッパ"), STRING("HKPA_O_3"))
     CALL(evt_cam3d_evt_set, 0, 322, 480, 0, 218, -113, 0, 11)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     WAIT_MS(2000)
     SET_VALUE(GF(0), 0)
     CALL(evt_snd_sfxon, STRING("SFX_KUPPA_AIRSHIP_FALL1"), GW(0))
@@ -1629,7 +1630,7 @@ EVT_BEGIN(gor_muj_ship)
     BEGIN_INLINE_EVENT
         CALL(kaizoku_fune_eff)
     END_INLINE_EVENT
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     SPAWN_EVENT(PTR(kaizoku_hata))
     BEGIN_INLINE_EVENT
         WAIT_MS(3500)
@@ -1688,7 +1689,7 @@ static EVT_BEGIN(muj_gor_ship)
     BEGIN_INLINE_EVENT
         CALL(kaizoku_fune_eff)
     END_INLINE_EVENT
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     SPAWN_EVENT(PTR(kaizoku_hata))
     BEGIN_INLINE_EVENT
         WAIT_MS(3500)
@@ -2134,7 +2135,7 @@ static EVT_BEGIN(epilogue_evt)
     CALL(evt_npc_set_ry, STRING("水夫ボム兵"), 270)
     CALL(evt_npc_flag_onoff, 1, STRING("水夫ボム兵"), NPC_FLAG_INSTANT_TURN)
     CALL(evt_cam3d_evt_set, 25, 305, 1091, 25, 150, -108, 0, 11)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     SPAWN_EVENT(PTR(fune_move))
     WAIT_MS(10000)
     CALL(evt_fade_set_mapchange_type, 1, 10, 900, 9, 900)

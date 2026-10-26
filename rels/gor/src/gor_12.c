@@ -9,6 +9,7 @@
 #include "evt/evt_seq.h"
 #include "party/party_motion.h"
 #include "evt/evt_cam.h"
+#include "driver/seqdrv.h"
 
 USER_FUNC(evt_mario_dispflag_onoff);
 USER_FUNC(evt_snd_envoff_f);
@@ -23,7 +24,7 @@ static EVT_BEGIN(epilogue_evt)
     CALL(evt_party_stop, 0)
     CALL(evt_mario_dispflag_onoff, 1, 1)
     CALL(evt_party_dispflg_onoff, 0, 1, 1)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     WAIT_MS(7000)
     CALL(evt_snd_bgmoff_f, 512, 8000)
     CALL(evt_snd_envoff_f, 512, 8000)

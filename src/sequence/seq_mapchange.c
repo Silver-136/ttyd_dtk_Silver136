@@ -41,7 +41,7 @@ char _next_map[0x20];
 char _next_bero[0x20];
 
 EVT_BEGIN(key_off)
-CALL(evt_seq_wait, 2)
+CALL(evt_seq_wait, SEQ_GAME)
 CALL(evt_fade_end_wait)
 CALL(evt_mario_key_onoff, 1)
 RETURN

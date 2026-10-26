@@ -20,6 +20,7 @@
 #include "mario/mario_pouch.h"
 #include "system.h"
 #include "driver/casedrv.h"
+#include "driver/seqdrv.h"
 
 USER_FUNC(evt_kagemario_init);
 #ifdef VERSION_G8ME01
@@ -65,7 +66,7 @@ EVT_BEGIN(gra_06_ido)
 EVT_END()
 
 EVT_BEGIN(gra_06_ido_in_sub)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_mario_set_pos, 210, -100, 318)
     CALL(evt_party_set_pos, 0, 210, -100, 318)
     CALL(evt_party_set_pos, 1, 210, -100, 318)
@@ -241,7 +242,7 @@ EVT_BEGIN(first_gra06jin)
     CALL(evt_cam3d_evt_set, -84, 562, 619, -431, 402, 73, 0, 11)
     CALL(evt_mario_set_pos, -320, 0, 365)
     CALL(evt_party_set_pos, 0, -350, 0, 365)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_mario_normalize)
     BEGIN_INLINE_EVENT
         WAIT_MS(1500)
@@ -286,7 +287,7 @@ EVT_BEGIN(teresa_oidasare_evt)
     CALL(evt_party_set_pos, 0, 72, 370, -155)
     CALL(evt_cam3d_event_from_road, 65, 60, -115, 0, LW(0), LW(1), LW(2), LW(3), LW(4), LW(5))
     CALL(evt_cam3d_evt_set, LW(0), LW(1), LW(2), LW(3), LW(4), LW(5), 0, 11)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
 #ifdef VERSION_G8ME01
     CALL(evt_mario_cont_onoff, 1)
     CALL(evt_mario_dispflag_onoff, 1, 2)

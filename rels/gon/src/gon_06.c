@@ -25,6 +25,7 @@
 #include "evt/evt_bero.h"
 #include "gon.h"
 #include "mario/mario_pouch.h"
+#include "driver/seqdrv.h"
 
 static USER_FUNC(bgm_start_wait);
 USER_FUNC(evt_mario_dispflag_onoff);
@@ -159,7 +160,7 @@ EVT_BEGIN(tsuritenjo_event)
     CALL(evt_party_set_pos, 0, 670, 0, 0)
     CALL(evt_cam_road_reset)
     CALL(evt_bero_mario_go_init)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     SET_VALUE(LW(1), 1)
     SPAWN_EVENT(PTR(bero_play_enter_anime))
     CALL(evt_bero_mario_go_wait)

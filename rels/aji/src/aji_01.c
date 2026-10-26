@@ -28,6 +28,7 @@
 #include "evt/evt_npc.h"
 #include "aji.h"
 #include "mario/mario_pouch.h"
+#include "driver/seqdrv.h"
 
 USER_FUNC(evt_npc_set_stay_anim);
 USER_FUNC(evt_win_item_select);
@@ -1522,7 +1523,7 @@ static EVT_BEGIN(peach_evt_stg1)
     CALL(evt_snd_envon, 272, STRING("ENV_STG7_AJI1"))
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_cont_onoff, 0)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     WAIT_MS(1500)
     CALL(evt_fade_set_mapchange_type, 0, 12, 100, 11, 100)
     CALL(evt_bero_mapchange, STRING("aji_02"), STRING("peach_evt_stg1"))
@@ -1534,7 +1535,7 @@ static EVT_BEGIN(peach_evt_stg1_1)
         RETURN
     END_IF
     CALL(evt_mario_key_onoff, 0)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_bero_exec_wait, 65536)
     CALL(evt_npc_set_autotalkpose, STRING("mario"), STRING("P_S_4"), STRING("P_T_4"))
     CALL(evt_msg_print, 0, STRING("peach_aji_39"), 0, STRING("mario"))
@@ -1549,7 +1550,7 @@ EVT_BEGIN(peach_evt_stg1_2)
     IF_INT_EQUAL(GSWF(4201), 1)
         RETURN
     END_IF
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     LOOP(0)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         IF_INT_GREATER_OR_EQUAL(LW(0), 900)
@@ -1583,7 +1584,7 @@ EVT_BEGIN(peach_evt_stg1_2)
 EVT_END()
 
 static EVT_BEGIN(peach_evt_stg3_1)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     LOOP(0)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         IF_INT_GREATER(LW(0), 490)
@@ -1610,7 +1611,7 @@ EVT_END()
 
 static EVT_BEGIN(peach_evt_stg3)
     CALL(evt_mario_key_onoff, 0)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_bero_exec_wait, 65536)
     CALL(evt_msg_print, 0, STRING("peach_aji_126"), 0, STRING("mario"))
     SET_VALUE(GSW_STORY_PROGRESS, 166)
@@ -1639,7 +1640,7 @@ static EVT_BEGIN(peach_evt_stg5)
 EVT_END()
 
 static EVT_BEGIN(peach_evt_stg5_1)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_bero_exec_wait, 65536)
     CALL(evt_bero_get_entername, LW(0))
     IF_STR_EQUAL(LW(0), STRING("n_bero_1"))
@@ -1889,7 +1890,7 @@ EVT_BEGIN(peach_evt_key_init)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_lights4_r"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_lights4_m"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_bero_exec_wait, 65536)
     IF_INT_EQUAL(LF(0), 0)
         SET_VALUE(LW(0), STRING("n_bero_4"))
@@ -1938,7 +1939,7 @@ EVT_BEGIN(peach_evt_init)
         IF_STR_EQUAL(LW(0), STRING("e_bero_5"))
             SPAWN_EVENT(PTR(peach_evt_stg3))
             BEGIN_INLINE_EVENT
-                CALL(evt_seq_wait, 2)
+                CALL(evt_seq_wait, SEQ_GAME)
                 CALL(evt_bero_exec_wait, 65536)
                 CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ekagi4_aka"), MAP_OBJ_FLAG_HIDDEN)
                 CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ekagi4_mid"), MAP_OBJ_FLAG_HIDDEN)
@@ -1966,7 +1967,7 @@ EVT_BEGIN(peach_evt_init)
     END_IF
     IF_INT_EQUAL(GSW_STORY_PROGRESS, 167)
         BEGIN_INLINE_EVENT
-            CALL(evt_seq_wait, 2)
+            CALL(evt_seq_wait, SEQ_GAME)
             CALL(evt_bero_exec_wait, 65536)
             SET_VALUE(LW(0), STRING("w_bero_3"))
             CALL_CHILD(PTR(bero_case_switch_off))
@@ -1984,7 +1985,7 @@ EVT_BEGIN(peach_evt_init)
             CALL(evt_npc_flag_onoff, 1, STRING("見張り"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
             CALL(evt_npc_set_stay_anim, STRING("見張り"))
             BEGIN_INLINE_EVENT
-                CALL(evt_seq_wait, 2)
+                CALL(evt_seq_wait, SEQ_GAME)
                 CALL(evt_bero_exec_wait, 65536)
                 SET_VALUE(LW(0), STRING("w_bero_3"))
                 CALL_CHILD(PTR(bero_case_switch_off))
@@ -2001,7 +2002,7 @@ EVT_BEGIN(peach_evt_init)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, 262)
         SPAWN_EVENT(PTR(peach_evt_stg5))
         BEGIN_INLINE_EVENT
-            CALL(evt_seq_wait, 2)
+            CALL(evt_seq_wait, SEQ_GAME)
             CALL(evt_bero_exec_wait, 65536)
             SET_VALUE(LW(0), STRING("w_bero_3"))
             CALL_CHILD(PTR(bero_case_switch_off))

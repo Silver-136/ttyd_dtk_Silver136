@@ -13,6 +13,7 @@
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
 #include "driver/mapdrv.h"
+#include "driver/seqdrv.h"
 
 USER_FUNC(evt_cloud_ent);
 USER_FUNC(evt_cloud_init);
@@ -231,7 +232,7 @@ EVT_BEGIN(change_map_evt)
         WAIT_MS(4500)
         SET_VALUE(GF(0), 1)
     END_INLINE_EVENT
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     LOOP(0)
         IF_INT_NOT_EQUAL(GF(0), 0)
             BREAK_LOOP

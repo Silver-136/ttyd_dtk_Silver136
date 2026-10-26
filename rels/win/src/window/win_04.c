@@ -31,6 +31,7 @@
 #include "evt/evt_bero.h"
 #include "win.h"
 #include "mario/mario_pouch.h"
+#include "driver/seqdrv.h"
 
 typedef struct Flower {
     s16 state;
@@ -1302,7 +1303,7 @@ static EVT_BEGIN(cloud_toujou)
     CALL(evt_party_set_pos, 0, 0, -1000, 0)
     CALL(evt_party_set_pos, 1, 0, -1000, 0)
     CALL(evt_cam3d_evt_set, 75, 205, 539, 75, 110, -3, 0, 11)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     WAIT_MS(1000)
     CALL(evt_msg_toge, 1, 0, 0, 0)
     CALL(evt_msg_print, 0, STRING("stg2_win_e04_00_02"), 0, 0)

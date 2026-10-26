@@ -28,6 +28,7 @@
 #include "string.h"
 #include "win/win_main.h"
 #include "pmario_sound.h"
+#include "driver/seqdrv.h"
 
 
 void mabutaDisp(CameraId camera, void* param);
@@ -165,7 +166,7 @@ EVT_BEGIN(tegami_init_evt)
         CALL(tegami)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
-        CALL(evt_seq_wait, 2)
+        CALL(evt_seq_wait, SEQ_GAME)
         CALL(evt_fade_end_wait)
         CALL(evt_cam_letter_box_camid, 8)
         WAIT_MS(200)
@@ -235,7 +236,7 @@ USER_FUNC(cam_yure) {
 }
 
 EVT_BEGIN(evt_mezame)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     WAIT_MS(1000)
     CALL(evt_fade_end_wait)
     BEGIN_INLINE_EVENT_GET_ID(LW(10))

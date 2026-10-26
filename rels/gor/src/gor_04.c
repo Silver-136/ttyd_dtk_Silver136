@@ -32,6 +32,7 @@
 #include "party/party_motion.h"
 #include "gor.h"
 #include "data_tables.h"
+#include "driver/seqdrv.h"
 typedef struct SharinData {
     const char* name;
     s32 field_0x4;
@@ -772,7 +773,7 @@ static EVT_BEGIN(hom_10_init_evt)
     CALL(evt_cam_letter_box_onoff, 1, 1)
     CALL(evt_cam3d_evt_set, LW(0), 300, 1400, LW(0), 125, 0, 0, 11)
     BEGIN_INLINE_EVENT
-        CALL(evt_seq_wait, 2)
+        CALL(evt_seq_wait, SEQ_GAME)
         CALL(evt_cam3d_evt_set, LW(1), 300, 1400, LW(1), 125, 0, 8000, 0)
         WAIT_MS(4000)
         CALL(evt_bero_mapchange, STRING("rsh_02_a"), STRING("nidome"))
@@ -869,7 +870,7 @@ EVT_BEGIN(evt_train2)
     CALL(evt_cam3d_evt_set, -360, 232, 603, -360, 137, 62, 0, 11)
     CALL(evt_npc_flag_onoff, 1, STRING("駅員"), NPC_FLAG_INSTANT_TURN)
     CALL(evt_npc_set_position, STRING("駅員"), -400, 80, 100)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     WAIT_MS(1000)
     LOOP(0)
         IF_INT_EQUAL(GW(0), 0)
@@ -1572,7 +1573,7 @@ EVT_BEGIN(evt_hikousen_return)
     WAIT_FRAMES(1)
     CALL(evt_snd_sfxon, STRING("SFX_STG3_AIR_SHIP_DRIVE5"), 0)
     CALL(evt_cam_letter_box_onoff, 1, 1)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     SET_VALUE(GF(0), 0)
     SET_FLOAT_VALUE(GW(2), FLOAT(3000.0f))
     SET_FLOAT_VALUE(GW(3), FLOAT(1000.0f))
@@ -1707,7 +1708,7 @@ EVT_BEGIN(gor_04_koopa_evt)
     CALL(evt_npc_set_position, STRING(/*"ババ"*/"\x83\x6F\x83\x6F"), 170, 25, 154)
     CALL(evt_mario_set_dir, 90, 0, 0)
     CALL(evt_npc_set_ry, STRING(/*"ババ"*/"\x83\x6F\x83\x6F"), 270)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_fade_end_wait)
     WAIT_MS(1000)
     CALL(evt_cam3d_evt_set, 128, 163, 666, 128, 71, 113, 2000, 11)

@@ -19,6 +19,7 @@
 #include "evt/evt_bero.h"
 #include "aji.h"
 #include "mario/mario_pouch.h"
+#include "driver/seqdrv.h"
 
 USER_FUNC(evt_snd_sfxon_3d_ex);
 USER_FUNC(evt_win_item_select);
@@ -280,7 +281,7 @@ static EVT_BEGIN(peach_evt_stg5)
             END_IF
         END_IF
     END_IF
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_bero_exec_wait, 65536)
     SET_VALUE(LW(0), STRING("w_bero"))
     CALL_CHILD(PTR(bero_case_switch_off))

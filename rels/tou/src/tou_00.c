@@ -24,6 +24,7 @@
 #include "manager/evtmgr_cmd.h"
 #include "driver/effdrv.h"
 #include "evt/evt_npc.h"
+#include "driver/seqdrv.h"
 
 USER_FUNC(evt_snd_bgm_freq);
 USER_FUNC(kemuri_move);
@@ -167,7 +168,7 @@ EVT_BEGIN(evt_to_tou)
     CALL(evt_mapobj_flag_onoff, 0, 1, STRING("bou_4"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 0, 1, STRING("bou_2"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_snd_sfxon, STRING("SFX_STG3_AIR_SHIP_DRIVE3"), 0)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_cam3d_evt_set, 0, 241, 534, 0, 145, -8, 15000, 11)
     CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, -25000, 0, 18000)
     CALL(time_shift)
@@ -246,7 +247,7 @@ EVT_BEGIN(evt_to_gor)
     CALL(evt_mapobj_trans, 1, STRING("hikousen"), -30, 20, 0)
     CALL(evt_mapobj_rotate, 1, STRING("hikousen"), 0, 180, 0)
     CALL(evt_mario_bgmode_on)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     SPAWN_EVENT_GET_ID(PTR(evt_pos_keep), LW(9))
     BEGIN_INLINE_EVENT
         WAIT_MS(1000)
@@ -362,7 +363,7 @@ EVT_BEGIN(tou_00_koopa_evt)
             SET_FLOAT_VALUE(LW(1), LW(2))
         END_LOOP
     END_INLINE_EVENT
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_npc_set_anim, STRING("飛クッパ"), STRING("HKPA_W_1"))
     CALL(evt_snd_sfxon, STRING("SFX_KUPPA_AIRSHIP_MOVE1"), GW(2))
     CALL(evt_sub_intpl_msec_init, EASING_LINEAR, -2300, -2000, 7500)
@@ -583,7 +584,7 @@ static NpcSetupInfo npcEnt[] = {
 };
 
 EVT_BEGIN(evt_skip)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     WAIT_MS(1100)
     LOOP(0)
         CALL(evt_key_get_buttontrg, 0, LW(0))

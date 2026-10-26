@@ -34,6 +34,7 @@
 #include "tou2.h"
 #include "data_tables.h"
 #include "driver/extdrv.h"
+#include "driver/seqdrv.h"
 #ifdef VERSION_G8ME01
 USER_FUNC(evt_mario_balloon_off);
 USER_FUNC(evt_mario_balloon_tenten);
@@ -880,7 +881,7 @@ EVT_BEGIN(evt_tougi)
     ELSE
         CALL_CHILD(s2_door_open)
     END_IF
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_cam3d_evt_set, 0, 258, 962, 0, 215, 412, 5000, 0)
     WAIT_MS(5000)
     WAIT_MS(2000)
@@ -1851,7 +1852,7 @@ EVT_END()
 EVT_BEGIN(evt_match)
 #ifdef VERSION_G8ME01
     BEGIN_INLINE_EVENT
-        CALL(evt_seq_wait, 2)
+        CALL(evt_seq_wait, SEQ_GAME)
         CALL(evt_mario_set_pos, -600, 0, 0)
         CALL(evt_party_set_pos, 0, -610, 0, -10)
     END_INLINE_EVENT
@@ -2069,7 +2070,7 @@ EVT_BEGIN(evt_kurikuri_opening)
     CALL(evt_npc_set_position, STRING(/*"敵４"*/"\223G\202S"), 110, 60, 0)
     CALL(evt_npc_set_position, STRING(/*"敵５"*/"\223G\202T"), 130, 60, -25)
     CALL(evt_cam3d_evt_set, 1075, 547, 998, 0, 287, -8, 0, 11)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_snd_bgmon, 512, PTR("BGM_FF_ENV_TOU1"))
     CALL(evt_cam3d_evt_set, -1024, 547, 1050, 0, 287, -8, 6000, 0)
     WAIT_MS(6000)
@@ -2248,7 +2249,7 @@ EVT_BEGIN(evt_shinemon_opening)
     CALL(evt_npc_status_onoff, 1, STRING(("\203K\203\223\203X")), 2)
     CALL(evt_npc_set_position, STRING(("\203K\203\223\203X")), 0, 60, -130)
     CALL(evt_cam3d_evt_set, 1075, 547, 998, 0, 287, -8, 0, 11)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_snd_bgmon, 512, STRING(("BGM_FF_ENV_TOU1")))
     CALL(evt_cam3d_evt_set, -1024, 547, 1050, 0, 287, -8, 5000, 0)
     WAIT_MS(5000)
@@ -2496,7 +2497,7 @@ EVT_BEGIN(evt_champ_opening)
     BEGIN_INLINE_EVENT
         CALL(tou_champion_belt, STRING(("\223G\202P")))
     END_INLINE_EVENT
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_snd_bgmon, 512, STRING(("BGM_STG3_TOU2")))
     CALL(evt_snd_bgm_scope, 0, 1)
     WAIT_MS(2000)
@@ -2640,7 +2641,7 @@ EVT_BEGIN(evt_champ_opening_re)
     CALL(evt_npc_status_onoff, 1, STRING(("\203L\203m\203V\203R\203\217")), 2)
     CALL(evt_npc_set_position, STRING(("\203L\203m\203V\203R\203\217")), 0, 60, -130)
     CALL(evt_cam3d_evt_set, 0, 481, 1310, 0, 295, -145, 0, 11)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_snd_bgmon, 512, STRING(("BGM_STG3_TOU2")))
     CALL(evt_snd_bgm_scope, 0, 1)
     CALL(evt_cam3d_evt_set, 0, 281, 1310, 0, 95, -145, 3000, 0)
@@ -3022,7 +3023,7 @@ EVT_BEGIN(evt_default_opening)
             END_INLINE_EVENT
         END_IF
     END_IF
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_snd_bgmon, 512, STRING(("BGM_FF_ENV_TOU1")))
     CALL(evt_cam3d_evt_set, 0, 331, 1310, 0, 145, -145, 3000, 11)
     BEGIN_INLINE_EVENT
@@ -3399,7 +3400,7 @@ static EVT_BEGIN(evt_champion)
     BEGIN_INLINE_EVENT
         CALL(tou_champion_belt, STRING("敵１"))
     END_INLINE_EVENT
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_mario_set_pos, -600, 0, 0)
     CALL(evt_party_set_pos, 0, -610, 0, -10)
     WAIT_MS(2000)
@@ -3425,7 +3426,7 @@ static EVT_BEGIN(evt_champion)
     BEGIN_INLINE_EVENT
         CALL(tou_champion_belt, STRING(("\223G\202P")))
     END_INLINE_EVENT
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     WAIT_MS(2000)
     CALL(evt_npc_flag_onoff, 0, STRING(("\203K\203\223\203X")), 32768)
     CALL(evt_cam3d_evt_set, 0, 155, 327, 0, 96, -8, 0, 0)
@@ -3568,7 +3569,7 @@ EVT_BEGIN(evt_champion2)
     BEGIN_INLINE_EVENT
         CALL(tou_champion_belt, STRING("敵１"))
     END_INLINE_EVENT
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_mario_set_pos, -600, 0, 0)
     CALL(evt_party_set_pos, 0, -610, 0, -10)
     WAIT_MS(1000)
@@ -3586,7 +3587,7 @@ EVT_BEGIN(evt_champion2)
     BEGIN_INLINE_EVENT
         CALL(tou_champion_belt, STRING(("\223G\202P")))
     END_INLINE_EVENT
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     WAIT_MS(1000)
     CALL(evt_npc_set_ry, STRING(("\203K\203\223\203X")), 270)
     CALL(evt_msg_print, 0, STRING(("stg3_tou_418")), 0, STRING(("\203K\203\223\203X")))

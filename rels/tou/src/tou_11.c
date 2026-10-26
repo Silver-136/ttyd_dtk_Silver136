@@ -20,6 +20,7 @@
 #include "driver/mapdrv.h"
 #include "system.h"
 #include "driver/casedrv.h"
+#include "driver/seqdrv.h"
 
 USER_FUNC(evt_cloud_ent);
 USER_FUNC(evt_cloud_init);
@@ -126,7 +127,7 @@ EVT_BEGIN(evt_tojikome)
     CALL(evt_party_set_pos, 0, 0, 0, -200)
     CALL(evt_npc_set_position, STRING("ガードマン"), 0, 0, -160)
     CALL(evt_npc_status_onoff, 1, STRING("ガードマン"), 2)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     SET_VALUE(LW(1), 0)
     SPAWN_EVENT(PTR(bero_open_door_play_se))
     CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 0, -180, 500)
@@ -213,7 +214,7 @@ EVT_BEGIN(evt_tojikome_nidome)
     CALL(evt_snd_bgm_scope, 0, 0)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     WAIT_MS(1000)
     CALL(evt_msg_print_party, STRING("stg3_tou_409_02"))
     CALL(evt_party_move_pos2, 0, 10, -140, FLOAT(60.0f))
@@ -240,7 +241,7 @@ EVT_BEGIN(evt_tojikome_sandome)
     CALL(evt_snd_bgm_scope, 0, 0)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     WAIT_MS(1000)
     CALL(evt_msg_print_party, STRING("stg3_tou_421_01"))
     CALL(evt_snd_bgmon, 512, STRING("BGM_STG3_TOU1"))

@@ -30,6 +30,7 @@
 #include "mario/mario_pouch.h"
 #include "system.h"
 #include "driver/casedrv.h"
+#include "driver/seqdrv.h"
 
 USER_FUNC(evt_mario_dispflag_onoff);
 USER_FUNC(evt_pouch_add_coin);
@@ -942,7 +943,7 @@ static EVT_BEGIN(epilogue_evt)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_dispflag_onoff, 1, 1)
     CALL(evt_cam3d_evt_set, 50, 150, 842, 50, 50, 250, 0, 11)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     SPAWN_EVENT(PTR(epilogue_evt_sub))
     CALL(evt_fade_end_wait)
     WAIT_MS(2000)

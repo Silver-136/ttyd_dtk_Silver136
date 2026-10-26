@@ -49,6 +49,7 @@
 #include "evt/evt_npc.h"
 #include "data_tables.h"
 #include "driver/extdrv.h"
+#include "driver/seqdrv.h"
 // target .bss/.sbss pad (uninitialised objects are emitted in reverse order, so this sits last)
 
 typedef struct MoamoaPoseDef {
@@ -1491,7 +1492,7 @@ EVT_END()
 
 static EVT_BEGIN(evt_meet_moamoa)
     CALL(evt_mario_key_onoff, 0)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     WAIT_MS(1500)
     CALL(evt_party_stop, 0)
     CALL(evt_npc_set_anim, STRING(("\x83" "E\x83" "F\x83" "C\x83g\x83\x8c\x83X")), STRING("G_1"))

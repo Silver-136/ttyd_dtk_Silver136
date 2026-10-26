@@ -12,6 +12,7 @@
 #include "evt/evt_seq.h"
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
+#include "driver/seqdrv.h"
 
 USER_FUNC(evt_mario_dispflag_onoff);
 
@@ -100,7 +101,7 @@ static EVT_BEGIN(first_evt)
     CALL(evt_snd_bgm_scope, 0, 1)
     CALL(evt_cam_letter_box_onoff, 1, 0)
     CALL(evt_cam3d_evt_set, -176, 567, 533, -176, 471, -9, 0, 11)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_cam3d_evt_set, -176, 183, 533, -176, 87, -9, 6000, 11)
     WAIT_MS(6000)
     SET_VALUE(GF(0), 0)
@@ -128,7 +129,7 @@ EVT_BEGIN(first_evt2)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
     CALL(evt_cam3d_evt_set, -176, 567, 533, -176, 471, -9, 0, 11)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_cam3d_evt_set, -176, 183, 533, -176, 87, -9, 6000, 11)
     WAIT_MS(6000)
     SET_VALUE(GF(0), 0)

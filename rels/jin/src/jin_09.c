@@ -11,6 +11,7 @@
 #include "party/party_motion.h"
 #include "evt/evt_sub.h"
 #include "evt/evt_mobj.h"
+#include "driver/seqdrv.h"
 
 USER_FUNC(evt_kagemario_init);
 
@@ -90,7 +91,7 @@ EVT_BEGIN(jin_09_init_evt)
                 CALL(evt_party_set_pos, 0, 0, 395, 0)
             END_IF
             CALL(evt_cam_road_reset)
-            CALL(evt_seq_wait, 2)
+            CALL(evt_seq_wait, SEQ_GAME)
             CALL(evt_mario_cont_onoff, 1)
             WAIT_MS(180)
             CALL(evt_party_cont_onoff, 0, 1)
@@ -102,7 +103,7 @@ EVT_BEGIN(jin_09_init_evt)
     END_IF
     BEGIN_INLINE_EVENT
         IF_INT_NOT_EQUAL(LW(0), 0)
-            CALL(evt_seq_wait, 2)
+            CALL(evt_seq_wait, SEQ_GAME)
             LOOP(0)
                 CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
                 IF_INT_LESS(LW(1), 365)

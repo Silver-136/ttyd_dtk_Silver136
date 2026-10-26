@@ -30,6 +30,7 @@
 #include "evt/evt_memcard.h"
 #include "evt/evt_sub.h"
 #include "mario/mario_cam.h"
+#include "driver/seqdrv.h"
 
 
 
@@ -558,7 +559,7 @@ EVT_BEGIN(evt_garnet)
     CALL(evt_npc_set_position, STRING("ポワン探偵"), -30, 0, 710)
     CALL(evt_npc_set_ry, STRING("ポワン探偵"), 90)
     CALL(hoshi)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     BEGIN_INLINE_EVENT
         CALL(evt_mario_mov_pos, 0, 570, 1000)
     END_INLINE_EVENT
@@ -748,7 +749,7 @@ EVT_BEGIN(pik_02_koopa_evt)
     CALL(evt_mario_set_dir, 270, 0, 0)
     CALL(evt_npc_set_ry, STRING("ババ"), 270)
     CALL(evt_cam3d_evt_set, 0, 360, -338, 0, 250, -1130, 0, 11)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_KUPPA1"))
     CALL(evt_snd_bgm_scope, 0, 1)
     CALL(evt_cam3d_evt_set, 0, 150, -338, 0, 40, -1130, 7000, 0)

@@ -40,6 +40,7 @@
 #include "data_tables.h"
 #include "mario/mario_pouch.h"
 #include "cam_road.h"
+#include "driver/seqdrv.h"
 
 typedef struct GonbabaProj { GXTexObj obj; smartEntry* tex; } GonbabaProj;
 void make_gonbaba_projection(CameraId camera, void* param);
@@ -336,7 +337,7 @@ static EVT_BEGIN(first_evt)
     CALL(evt_party_dispflg_onoff, 0, 1, 1)
     CALL(evt_mario_cont_onoff, 0)
     CALL(evt_cam3d_evt_set, 250, 350, 1041, 250, 130, -36, 0, 11)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     BEGIN_INLINE_EVENT
         WAIT_MS(1000)
         CALL(evt_telop_entry, 1)
@@ -1069,7 +1070,7 @@ EVT_BEGIN(hei_00_koopa_evt)
     CALL(evt_mario_kill_party, 0)
     CALL(evt_npc_set_position, STRING("ババ"), -500, 75, 0)
     CALL(evt_cam3d_evt_set, -148, 195, 539, -148, 95, -22, 0, 11)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_bero_exec_wait, 65536)
 #ifdef VERSION_G8ME01
     CALL(evt_mario_kill_party, 0)
@@ -1159,7 +1160,7 @@ static EVT_BEGIN(epilogue_evt)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_dispflag_onoff, 1, 1)
     CALL(evt_cam3d_evt_set, -200, 140, 574, -8, 70, 10, 0, 11)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_fade_end_wait)
     WAIT_MS(1000)
     CALL(evt_npc_move_position, STRING("クリスチーヌ"), -50, 35, 0, 60, 0)

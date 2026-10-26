@@ -1854,7 +1854,7 @@ EVT_BEGIN(evt_bero_initial_pos)
 EVT_END()
 
 EVT_BEGIN(evt_bero_mario_enter)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_npc_change_fbat_mode, 7)
     CALL(evt_npc_stop_for_event)
     CALL_CHILD(LW(7))

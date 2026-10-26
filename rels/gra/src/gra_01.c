@@ -12,6 +12,7 @@
 #include "evt/evt_snd.h"
 #include "party/party_motion.h"
 #include "evt/evt_mobj.h"
+#include "driver/seqdrv.h"
 
 USER_FUNC(evt_kagemario_init);
 
@@ -66,7 +67,7 @@ EVT_BEGIN(gra_01_after_ranpel2)
     CALL(evt_gra_vivian_pose_set, 3, STRING("PTR_S_4"))
     CALL(evt_gra_vivian_pose_set, 7, STRING("PTR_T_5"))
     CALL(evt_party_set_homing_dist, 0, FLOAT(20.0f))
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_mario_mov_pos2, -540, 0, FLOAT(150.0f))
     CALL(evt_mario_set_dir, 270, 300, 0)
     CALL(evt_party_stop, 0)

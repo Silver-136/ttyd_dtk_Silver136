@@ -20,6 +20,7 @@
 #include "system.h"
 #include "evt/evt_bero.h"
 #include "manager/evtmgr_cmd.h"
+#include "driver/seqdrv.h"
 
 static USER_FUNC(evt_chuchu_back_loop);
 
@@ -108,7 +109,7 @@ static EVT_BEGIN(chuchurina_sogu)
     CALL(evt_mario_set_pos, 200, 0, 0)
     CALL(evt_party_set_pos, 0, 230, 0, 15)
     CALL(evt_bero_mario_go_init)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     SET_VALUE(LW(1), 0)
     SPAWN_EVENT(PTR(bero_play_enter_anime))
     CALL(evt_bero_mario_go_wait)

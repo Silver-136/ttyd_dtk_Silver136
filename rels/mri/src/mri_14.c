@@ -33,6 +33,7 @@
 #include "evt/evt_sub.h"
 #include "mri.h"
 #include "data_tables.h"
+#include "driver/seqdrv.h"
 
 USER_FUNC(evt_npc_set_anim_localtime);
 static USER_FUNC(evtflash);
@@ -215,7 +216,7 @@ EVT_BEGIN(dai3_kanbu)
     SPAWN_EVENT(PTR(kanbu_urouro))
     CALL(evt_snd_bgmoff, 1024)
     CALL(evt_cam3d_evt_set, 0, 300, 1000, 0, 30, -1, 0, 11)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     WAIT_MS(1000)
     CALL(evt_cam3d_evt_set, 75, 123, 122, 75, 55, -170, 1000, 11)
     WAIT_MS(2000)

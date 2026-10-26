@@ -33,6 +33,7 @@
 #include "hom.h"
 #include "mario/mario_pouch.h"
 #include "manager/evtmgr_cmd.h"
+#include "driver/seqdrv.h"
 
 static smartEntry* ind_lp;
 void envGlareFilter(s32 on, s16 x0, s16 y0, s16 x1, s16 y1);
@@ -588,7 +589,7 @@ EVT_BEGIN(evt_hom_touchaku)
     CALL(evt_npc_set_ry, STRING(/*"トロン"*/"\x83\x67\x83\x8D\x83\x93"), 90)
     CALL(evt_npc_set_ry, STRING(/*"ポワン探偵"*/"\x83\x7C\x83\x8F\x83\x93\x92\x54\x92\xE3"), 90)
     CALL(evt_npc_set_position, STRING(/*"駅員2"*/"\x89\x77\x88\xF5\x32"), -750, 80, 100)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     BEGIN_INLINE_EVENT
         WAIT_MS(3000)
         CALL(evt_telop_entry, 11)
@@ -694,7 +695,7 @@ EVT_BEGIN(evt_hom_touchaku_nidome)
     CALL(evt_mario_set_pos, 0, -1000, 0)
     CALL(evt_party_set_pos, 0, 0, -1000, 0)
     CALL(evt_cam3d_evt_set, 406, 317, 596, -389, 137, -44, 0, 11)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     CALL_CHILD(PTR(hom_10_evt_resha_stop))
     WAIT_MS(2500)
     LOOP(0)

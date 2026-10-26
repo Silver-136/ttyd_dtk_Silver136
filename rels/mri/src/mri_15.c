@@ -16,6 +16,7 @@
 #include "driver/npcdrv.h"
 #include "mario/mario_pouch.h"
 #include "driver/casedrv.h"
+#include "driver/seqdrv.h"
 
 USER_FUNC(evt_mario_get_name_hitobj_ride);
 
@@ -156,7 +157,7 @@ EVT_BEGIN(dai3_battle_init)
 EVT_END()
 
 EVT_BEGIN(dai3_battle)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     IF_INT_EQUAL(GSWF(2866), 0)
         SPAWN_EVENT_GET_ID(PTR(dai3_escape), LW(10))
     END_IF

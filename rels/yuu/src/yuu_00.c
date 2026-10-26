@@ -31,6 +31,7 @@
 #include "driver/icondrv.h"
 #include "evt/evt_movefloor.h"
 #include "yuu.h"
+#include "driver/seqdrv.h"
 
 #ifdef VERSION_G8ME01
 #define YUU_ICON_OFS 8
@@ -349,7 +350,7 @@ EVT_END()
 EVT_BEGIN(minigame01_start_cam)
     CALL(evt_cam3d_evt_set, FLOAT(-1230.0f), FLOAT(360.0f), FLOAT(1140.0f), FLOAT(-1230.0f), FLOAT(160.0f), FLOAT(-10.0f), 0, 11)
     WAIT_FRAMES(1)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_cam3d_evt_set, FLOAT(700.0f), FLOAT(360.0f), FLOAT(1140.0f), FLOAT(700.0f), FLOAT(160.0f), FLOAT(-10.0f), 6000, 0)
     WAIT_MS(1000)
     CALL(evt_yuutitle_alloc, 0, 0, STRING("menu_title_minigame1"))
@@ -360,7 +361,7 @@ EVT_BEGIN(minigame01_start_cam)
 EVT_END()
 
 EVT_BEGIN(minigame01_start_cam_cancel)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_yuutitle_free)
     CALL(evt_cam3d_evt_off, 0, 11)
     WAIT_FRAMES(1)
@@ -878,13 +879,13 @@ EVT_BEGIN(minigame01_start)
         LOOP(0)
             IS_EVENT_RUNNING(LW(8), LW(9))
             IF_INT_EQUAL(LW(9), 0)
-                CALL(evt_seq_wait, 2)
+                CALL(evt_seq_wait, SEQ_GAME)
                 BREAK_LOOP
                 ELSE
                 CALL(evt_key_get_buttontrg, 0, LW(9))
                 IF_BITS_SET(LW(9), 768)
                     DELETE_EVENT(LW(8))
-                    CALL(evt_seq_wait, 2)
+                    CALL(evt_seq_wait, SEQ_GAME)
                     CALL_CHILD(PTR(minigame01_start_cam_cancel))
                     BREAK_LOOP
                 END_IF

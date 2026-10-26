@@ -17,6 +17,7 @@
 #include "driver/npcdrv.h"
 #include "driver/mapdrv.h"
 #include "mario/mario_pouch.h"
+#include "driver/seqdrv.h"
 
 
 EvtWord bero_05_custom_in[30];
@@ -170,7 +171,7 @@ EVT_END()
 
 EVT_BEGIN(puni_soguu_3)
     CALL(evt_mario_key_onoff, 0)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_bero_exec_wait, 65536)
     WAIT_MS(200)
     CALL(evt_mario_normalize)

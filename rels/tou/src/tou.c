@@ -51,6 +51,7 @@
 #include "evt/evt_sub.h"
 #include "tou.h"
 #include <dolphin/pad.h>
+#include "driver/seqdrv.h"
 
 typedef void (*voidfunctionptr)(void);
 extern voidfunctionptr _ctors[];
@@ -3180,7 +3181,7 @@ EVT_BEGIN(evt_tou_match_after_default)
         CALL(evt_mario_set_dir, 90, 0, 0)
         CALL(evt_party_set_dir, 0, 90, 0)
     END_IF
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     CALL(octo_stop)
     WAIT_MS(1000)
     CALL(evt_tou_get_ranking, LW(0))

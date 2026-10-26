@@ -42,6 +42,7 @@
 #include "muj.h"
 #include "driver/hitdrv.h"
 #include "data_tables.h"
+#include "driver/seqdrv.h"
 
 static u8 muj_00_bss_0C[4];
 static u8* _ap;
@@ -2520,7 +2521,7 @@ EVT_BEGIN(kaizoku_vs_dai3)
     SPAWN_EVENT_GET_ID(PTR(kaizoku_move_every), LW(11))
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_hai"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_cam3d_evt_set, -847, 334, 977, -847, 78, -475, 0, 11)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_msg_print, 0, STRING("stg5_muj_118"), 0, STRING("第三勢力幹部"))
     DELETE_EVENT(GW(8))
     CALL(evt_cam3d_evt_set, 0, 470, -91, 0, 400, -383, 500, 11)
@@ -2802,7 +2803,7 @@ EVT_BEGIN(dai3_beat_back)
     SET_VALUE(GW(4), 215)
     IF_INT_EQUAL(LW(0), 0)
         ELSE
-        CALL(evt_seq_wait, 2)
+        CALL(evt_seq_wait, SEQ_GAME)
     END_IF
     SET_FLOAT_VALUE(GW(7), GW(1))
     SPAWN_EVENT_GET_ID(PTR(nameraka_rotate), LW(9))
@@ -3094,7 +3095,7 @@ EVT_BEGIN(leave_island)
     CALL(evt_npc_set_position, STRING("マルコ"), 750, 25, -415)
     CALL(evt_npc_set_ry, STRING("マルコ"), 270)
     CALL(evt_cam3d_evt_set, 750, 438, 999, 750, 225, -233, 0, 11)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_fade_end_wait)
     WAIT_MS(2000)
     CALL(evt_cam3d_evt_set, 660, 267, -170, 660, 190, -603, 0, 11)
@@ -3398,7 +3399,7 @@ EVT_BEGIN(into_muj_ship)
     CALL(evt_cam3d_evt_set, 682, 199, 75, 682, 78, -614, 0, 11)
     SPAWN_EVENT_GET_ID(PTR(option_ship_korutesu), LW(8))
     SPAWN_EVENT_GET_ID(PTR(option_ship_mario), LW(9))
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_snd_sfxon, STRING("SFX_STG5_SHIP_ARRIVAL1_4"), 0)
     SET_FLOAT_VALUE(LW(0), GW(0))
     SET_FLOAT_VALUE(LW(1), GW(0))

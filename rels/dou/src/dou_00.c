@@ -16,6 +16,7 @@
 #include "driver/mapdrv.h"
 #include "driver/envdrv.h"
 #include "evt/evt_bero.h"
+#include "driver/seqdrv.h"
 
 void water_tev(MapTevCallbackInfo* info);
 
@@ -88,7 +89,7 @@ EVT_BEGIN(totsunyu_event)
     CALL(evt_map_set_blend, 0, 0, 0, 0, 255)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     WAIT_MS(1000)
     CALL(evt_msg_toge, 1, 0, 0, 0)
     CALL(evt_msg_print, 0, STRING("stg5_dou_00"), 0, 0)

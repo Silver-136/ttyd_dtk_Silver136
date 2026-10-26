@@ -12,6 +12,7 @@
 #include "driver/effdrv.h"
 #include "evt/evt_bero.h"
 #include "manager/evtmgr_cmd.h"
+#include "driver/seqdrv.h"
 
 USER_FUNC(hi_onoff);
 USER_FUNC(mugen_kairou_get_list);
@@ -280,7 +281,7 @@ const char* taimatu_data[] = {
 };
 
 EVT_BEGIN(hikari_anim)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_bero_exec_wait, 65536)
     SET_VALUE(LW(0), 0)
     LOOP(0)
@@ -320,7 +321,7 @@ EVT_BEGIN(mugen_kairou_init)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, 385)
         CALL(mugen_kairou_get_list, GSW(1121), LW(0))
         CALL(hi_onoff, LW(0), 1)
-        CALL(evt_seq_wait, 2)
+        CALL(evt_seq_wait, SEQ_GAME)
         CALL(evt_bero_exec_wait, 65536)
         CALL(mugen_kairou_get_list, GSW(1121), LW(0))
         SWITCH(LW(0))

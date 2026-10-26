@@ -24,6 +24,7 @@
 #include "evt/evt_sub.h"
 #include "aji.h"
 #include "manager/evtmgr_cmd.h"
+#include "driver/seqdrv.h"
 
 
 USER_FUNC(all_flag_off);
@@ -183,7 +184,7 @@ static EvtWord hikaru_yuka_init[] = {
         SET_VALUE(GW(10), 2)
     END_SWITCH
     CALL(evt_mario_key_onoff, 0)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_bero_exec_wait, 65536)
     CALL_CHILD(hikaru_yuka)
     CALL(evt_mario_key_onoff, 1)
@@ -206,7 +207,7 @@ static EVT_BEGIN(peach_evt_stg1)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("yukayu1"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("yukayu2"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("ato"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     WAIT_MS(1500)
     CALL(evt_fade_set_mapchange_type, 0, 12, 100, 11, 100)
     CALL(evt_bero_mapchange, STRING("aji_16"), STRING("peach_evt_stg1"))

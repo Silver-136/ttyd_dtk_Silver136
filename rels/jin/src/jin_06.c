@@ -14,6 +14,7 @@
 #include "party/party_motion.h"
 #include "driver/mapdrv.h"
 #include "mario/mario_pouch.h"
+#include "driver/seqdrv.h"
 
 USER_FUNC(evt_cloud_ent);
 USER_FUNC(evt_cloud_init);
@@ -116,7 +117,7 @@ EVT_BEGIN(jin_06_init_evt)
             CALL(evt_mario_set_pos, 5, 365, 0)
             CALL(evt_party_set_pos, 0, 5, 645, 0)
             CALL(evt_cam_road_reset)
-            CALL(evt_seq_wait, 2)
+            CALL(evt_seq_wait, SEQ_GAME)
             CALL(evt_mario_wait_landon)
             CALL(evt_mario_key_onoff, 1)
             CALL(evt_cam_letter_box_disable, 0)
@@ -127,7 +128,7 @@ EVT_BEGIN(jin_06_init_evt)
     END_IF
     BEGIN_INLINE_EVENT
         IF_INT_NOT_EQUAL(LW(0), 0)
-            CALL(evt_seq_wait, 2)
+            CALL(evt_seq_wait, SEQ_GAME)
             LOOP(0)
                 CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
                 IF_INT_LESS(LW(1), 365)

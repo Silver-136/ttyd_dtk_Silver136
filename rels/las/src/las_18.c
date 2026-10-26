@@ -19,6 +19,7 @@
 #include "driver/animdrv.h"
 #include "evt/evt_bero.h"
 #include "las.h"
+#include "driver/seqdrv.h"
 
 USER_FUNC(get_mobj_seq);
 USER_FUNC(switch_alpha_off);
@@ -107,7 +108,7 @@ USER_FUNC(switch_alpha_off) {
 }
 
 EVT_BEGIN(vivian_check)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     SET_VALUE(LW(15), 0)
     LOOP(0)
         CALL(get_mobj_seq, STRING("switch"), LW(0))

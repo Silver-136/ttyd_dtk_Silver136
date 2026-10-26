@@ -8,6 +8,7 @@
 #include "evt/evt_seq.h"
 #include "evt/evt_sub.h"
 #include "evt/evt_cam.h"
+#include "driver/seqdrv.h"
 
 
 EvtWord kpa_act_stg1_mobj[151];
@@ -72,7 +73,7 @@ static EVT_BEGIN(kpa_goal)
     CALL(evt_sub_get_system_flag, LW(0))
     IF_BITS_SET(LW(0), 4096)
         CALL(evt_cam_letter_box_disable, 0)
-        CALL(evt_seq_set_seq, 5, 0, 0)
+        CALL(evt_seq_set_seq, SEQ_GAME_OVER, 0, 0)
         ELSE
         BEGIN_INLINE_EVENT
             WAIT_MS(300)

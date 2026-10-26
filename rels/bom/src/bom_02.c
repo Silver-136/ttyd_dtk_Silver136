@@ -33,6 +33,7 @@
 #include "evt/evt_shop.h"
 #include "data_tables.h"
 #include "mario/mario_pouch.h"
+#include "driver/seqdrv.h"
 
 static USER_FUNC(anim_tevcallback);
 static USER_FUNC(anim_tevcallback_mobj);
@@ -1447,7 +1448,7 @@ static EVT_BEGIN(sekai_yami_evt)
     CALL(evt_bg_set_color, 64, 64, 64, 255)
     CALL(yami_view, -800)
     CALL(evt_cam3d_evt_set, -30, 88, 723, -30, 55, 24, 0, 11)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_snd_sfxon, STRING("SFX_STG8_QUAKE1"), LW(15))
     SET_VALUE(GF(0), 0)
     BEGIN_INLINE_EVENT
@@ -1585,7 +1586,7 @@ static EVT_BEGIN(minnnanokoe_evt)
     CALL(yami_view, -800)
     CALL(evt_bg_set_color, 64, 64, 64, 255)
     CALL(evt_cam3d_evt_set, 50, 218, 1025, 50, 70, 188, 0, 11)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     WAIT_MS(500)
     CALL(evt_npc_flag_onoff, 0, STRING("村長"), NPC_FLAG_INSTANT_TURN)
     CALL(evt_cam3d_evt_set, 30, 92, 484, 30, 40, 188, 2000, 11)

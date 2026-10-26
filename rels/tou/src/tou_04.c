@@ -27,6 +27,7 @@
 #include "mario/mario_pouch.h"
 #include "manager/evtmgr_cmd.h"
 #include "manager/fontmgr.h"
+#include "driver/seqdrv.h"
 
 USER_FUNC(evt_tou_get_ranking);
 USER_FUNC(evt_win_item_select);
@@ -1420,7 +1421,7 @@ EVT_BEGIN(evt_gans)
     CALL(evt_npc_set_position, STRING("ガンス"), -350, 0, -570)
     CALL(evt_mario_set_pos, -350, 0, -580)
     CALL(evt_party_set_pos, 0, -350, 0, -600)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     SET_VALUE(LW(1), 5)
     SPAWN_EVENT(PTR(bero_open_door_play_se))
     CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 0, -180, 500)
@@ -1472,7 +1473,7 @@ static EVT_BEGIN(evt_kinoshikowa)
     CALL(evt_npc_set_position, STRING("キノシコワ"), -350, 0, -570)
     CALL(evt_mario_set_pos, -350, 0, -580)
     CALL(evt_party_set_pos, 0, -350, 0, -590)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     SET_VALUE(LW(1), 5)
     SPAWN_EVENT(PTR(bero_open_door_play_se))
     CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 0, -180, 500)
@@ -1541,7 +1542,7 @@ EVT_BEGIN(evt_kinoshikowa2)
     CALL(evt_npc_set_position, STRING("キノシコワ"), -350, 0, -570)
     CALL(evt_mario_set_pos, -350, 0, -580)
     CALL(evt_party_set_pos, 0, -350, 0, -590)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     SET_VALUE(LW(1), 5)
     SPAWN_EVENT(PTR(bero_open_door_play_se))
     CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 0, -180, 500)
@@ -1598,7 +1599,7 @@ EVT_BEGIN(evt_kinoshikowa3)
     CALL(evt_npc_set_ry, STRING("キノシコワ"), 270)
     CALL(evt_mario_set_dir, 270, 0, 0)
     CALL(evt_party_set_dir, 0, 270, 0)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     SET_VALUE(LW(1), 6)
     SPAWN_EVENT(PTR(bero_open_door_play_se))
     CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 0, -180, 500)
@@ -1654,7 +1655,7 @@ EVT_END()
 
 static EVT_BEGIN(evt_gardman)
     CALL(evt_mario_key_onoff, 0)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     SET_VALUE(LW(1), 7)
     SPAWN_EVENT(PTR(bero_open_door_play_se))
     CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 0, -180, 500)
@@ -1723,7 +1724,7 @@ EVT_END()
 
 EVT_BEGIN(evt_gardman2)
     CALL(evt_mario_key_onoff, 0)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     SET_VALUE(LW(1), 6)
     SPAWN_EVENT(PTR(bero_open_door_play_se))
     CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 0, -180, 500)
@@ -1787,7 +1788,7 @@ EVT_END()
 
 EVT_BEGIN(evt_gardman3)
     CALL(evt_mario_key_onoff, 0)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     SET_VALUE(LW(1), 6)
     SPAWN_EVENT(PTR(bero_open_door_play_se))
     CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 0, -180, 500)
@@ -1885,7 +1886,7 @@ EVT_END()
 
 EVT_BEGIN(evt_gardman4)
     CALL(evt_mario_key_onoff, 0)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     SET_VALUE(LW(1), 3)
     SPAWN_EVENT(PTR(bero_open_door_play_se))
     CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 0, -180, 500)
@@ -1965,7 +1966,7 @@ static EVT_BEGIN(evt_toile)
             END_IF
         END_LOOP
     END_INLINE_EVENT
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_cam3d_evt_set, -450, 133, -1033, -450, 37, -492, 5000, 0)
     BEGIN_INLINE_EVENT
         WAIT_MS(333)
@@ -1996,7 +1997,7 @@ static EVT_BEGIN(evt_toile2)
             END_IF
         END_LOOP
     END_INLINE_EVENT
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_cam3d_evt_set, 450, 133, -1033, 450, 37, -492, 5000, 0)
     BEGIN_INLINE_EVENT
         WAIT_MS(333)
@@ -2149,7 +2150,7 @@ EVT_END()
 
 EVT_BEGIN(out_from_tou_10_re)
     CALL(evt_npc_set_position, STRING("ガードマン１"), -590, 0, 350)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_bero_exec_wait, 65536)
     CALL(evt_npc_move_position, STRING("ガードマン１"), -590, 300, 0, FLOAT(80.0f), 1)
     RETURN

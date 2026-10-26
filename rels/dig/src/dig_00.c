@@ -22,6 +22,7 @@
 #include "driver/npcdrv.h"
 #include "evt/evt_npc.h"
 #include "stdlib.h"
+#include "driver/seqdrv.h"
 
 void FontDrawString(f32 x, f32 y, const char* str);
 void movie_draw(CameraId camera, void* param);
@@ -414,7 +415,7 @@ EVT_BEGIN(dig_00_init_evt)
     CALL(evt_fade_set_mapchange_type, 1, -1, -1, 20, 1000)
     BEGIN_INLINE_EVENT
         SET_TYPE(0)
-        CALL(evt_seq_wait, 2)
+        CALL(evt_seq_wait, SEQ_GAME)
         CALL(evt_fade_end_wait)
         LOOP(0)
             CALL(evt_key_get_buttontrg, 0, LW(0))
@@ -430,7 +431,7 @@ EVT_BEGIN(dig_00_init_evt)
         CALL(evt_fade_entry, 21, 1000, 255, 255, 255)
         CALL(evt_fade_end_wait)
         CALL(evt_fade_set_mapchange_type, 1, 21, 0, -1, -1)
-        CALL(evt_seq_set_seq, 3, STRING("title"), 0)
+        CALL(evt_seq_set_seq, SEQ_MAP_CHANGE, STRING("title"), 0)
     END_INLINE_EVENT
     RETURN
 EVT_END()

@@ -7,6 +7,7 @@
 #include "party/party_motion.h"
 #include "evt/evt_map.h"
 #include "evt/evt_mobj.h"
+#include "driver/seqdrv.h"
 
 
 static EvtWord w1_door_close[22];
@@ -178,7 +179,7 @@ EVT_BEGIN(las_07_init_evt)
     CALL(evt_bero_get_info)
     CALL_CHILD(PTR(evt_bero_info_run))
     BEGIN_INLINE_EVENT
-        CALL(evt_seq_wait, 2)
+        CALL(evt_seq_wait, SEQ_GAME)
         CALL(evt_cam_road_reset)
     END_INLINE_EVENT
     CALL(evt_mobj_badgeblk, STRING("mobj00"), -100, 60, -300, 121, 0, GSWF(4373), 0)

@@ -42,6 +42,7 @@
 #include "jin.h"
 #include "data_tables.h"
 #include "mario/mario_pouch.h"
+#include "driver/seqdrv.h"
 
 typedef struct Teresa {
     Vec vel;
@@ -368,7 +369,7 @@ EVT_BEGIN(jin_00_dai)
 EVT_END()
 
 EVT_BEGIN(jin_00_dai_in_sub)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_mario_set_pos, 390, -60, 0)
     CALL(evt_party_set_pos, 0, 390, -60, -10)
@@ -731,7 +732,7 @@ EVT_BEGIN(first_jin00)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_cam3d_evt_set, 227, 365, 1120, 227, 128, -223, 0, 11)
     CALL(evt_snd_bgm_scope, 0, 1)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     WAIT_FRAMES(1)
     CALL(evt_cam3d_evt_set, -328, 365, 1120, -328, 128, -223, 5000, 0)
     BEGIN_INLINE_EVENT
@@ -863,7 +864,7 @@ static EVT_BEGIN(evt_unlock)
 EVT_END()
 
 EVT_BEGIN(tyuou_teresa_kusukusu)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     WAIT_MS(1000)
     LOOP(0)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -879,7 +880,7 @@ EVT_BEGIN(tyuou_teresa_kusukusu)
 EVT_END()
 
 EVT_BEGIN(tyuou_teresa_look_mario)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     LOOP(0)
         CALL(evt_set_dir_to_target, STRING("中央テレサ"), STRING("mario"))
         WAIT_FRAMES(1)
@@ -2158,7 +2159,7 @@ EVT_BEGIN(jin_00_init_evt)
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 197)
         IF_INT_EQUAL(GSWF(2226), 0)
             BEGIN_INLINE_EVENT
-                CALL(evt_seq_wait, 2)
+                CALL(evt_seq_wait, SEQ_GAME)
                 WAIT_MS(1000)
                 SPAWN_EVENT(PTR(senteresa_evt))
             END_INLINE_EVENT

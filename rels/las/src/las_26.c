@@ -27,6 +27,7 @@
 #include "driver/npcdrv.h"
 #include "evt/evt_bero.h"
 #include "evt/evt_npc.h"
+#include "driver/seqdrv.h"
 
 USER_FUNC(bonbaba_wait_landon);
 USER_FUNC(evt_snd_sfxon_3d_ex);
@@ -110,7 +111,7 @@ EVT_BEGIN(bonbaba_evt)
         CALL(evt_mario_set_party, 0, 1)
     END_IF
     CALL(evt_cam3d_evt_set, -435, 150, 459, -435, 67, -13, 0, 11)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_mario_set_pos, -600, 0, 0)
     CALL(evt_party_set_pos, 0, -600, 0, 0)
     CALL(evt_mapobj_rotate, 0, STRING("S_door1_1"), 0, FLOAT(-70.0f), 0)
@@ -361,7 +362,7 @@ static EVT_BEGIN(sekai_yami_evt)
     CALL(evt_npc_set_position, STRING("クリハカセ"), -58, 0, -280)
     CALL(evt_npc_set_ry, STRING("クリハカセ"), 270)
     CALL(evt_npc_flag_onoff, 1, STRING("クリハカセ"), NPC_FLAG_TALK_POSE)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     WAIT_MS(1000)
     CALL(evt_snd_sfxon, STRING("SFX_STG8_CEILING_BREAK1"), LW(10))
     CALL(evt_eff64, 0, STRING("hokori_n64"), 0, -58, 200, -280, 60, 0, 0, 0, 0, 0, 0, 0)

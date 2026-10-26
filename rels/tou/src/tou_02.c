@@ -42,6 +42,7 @@
 #include "data_tables.h"
 #include "evt/evt_npc.h"
 #include "driver/extdrv.h"
+#include "driver/seqdrv.h"
 #ifdef VERSION_G8ME01
 USER_FUNC(N_evt_sub_status_gauge_force_update);
 USER_FUNC(evt_sub_get_language);
@@ -1010,7 +1011,7 @@ static EVT_BEGIN(init_champ)
             CALL(evt_npc_set_position, STRING(("me")), -15, 0, 25)
             CALL(evt_npc_flag_onoff, 1, STRING(("me")), 32768)
             BEGIN_INLINE_EVENT
-                CALL(evt_seq_wait, 2)
+                CALL(evt_seq_wait, SEQ_GAME)
                 CALL(evt_npc_flag_onoff, 0, STRING(("me")), 32768)
             END_INLINE_EVENT
         END_IF
@@ -1100,7 +1101,7 @@ EVT_BEGIN(init_shikowa)
             CALL(evt_npc_set_position, STRING(("me")), -25, 0, 75)
             CALL(evt_npc_flag_onoff, 1, STRING(("me")), 32768)
             BEGIN_INLINE_EVENT
-                CALL(evt_seq_wait, 2)
+                CALL(evt_seq_wait, SEQ_GAME)
                 CALL(evt_npc_flag_onoff, 0, STRING(("me")), 32768)
             END_INLINE_EVENT
         END_IF
@@ -1123,7 +1124,7 @@ static EVT_BEGIN(init_uranoko)
             CALL(evt_npc_set_position, STRING(("me")), -75, 0, 50)
             CALL(evt_npc_flag_onoff, 1, STRING(("me")), 32768)
             BEGIN_INLINE_EVENT
-                CALL(evt_seq_wait, 2)
+                CALL(evt_seq_wait, SEQ_GAME)
                 CALL(evt_npc_flag_onoff, 0, STRING(("me")), 32768)
             END_INLINE_EVENT
         END_IF
@@ -1147,7 +1148,7 @@ EVT_BEGIN(init_ironA)
             CALL(evt_npc_set_position, STRING(("me")), -30, 0, -50)
             CALL(evt_npc_flag_onoff, 1, STRING(("me")), 32768)
             BEGIN_INLINE_EVENT
-                CALL(evt_seq_wait, 2)
+                CALL(evt_seq_wait, SEQ_GAME)
                 CALL(evt_npc_flag_onoff, 0, STRING(("me")), 32768)
             END_INLINE_EVENT
         END_IF
@@ -1171,7 +1172,7 @@ EVT_BEGIN(init_ironB)
             CALL(evt_npc_set_position, STRING(("me")), -60, 0, -25)
             CALL(evt_npc_flag_onoff, 1, STRING(("me")), 32768)
             BEGIN_INLINE_EVENT
-                CALL(evt_seq_wait, 2)
+                CALL(evt_seq_wait, SEQ_GAME)
                 CALL(evt_npc_flag_onoff, 0, STRING(("me")), 32768)
             END_INLINE_EVENT
         END_IF
@@ -1194,7 +1195,7 @@ EVT_BEGIN(init_borodo)
             CALL(evt_npc_set_position, STRING(("me")), -100, 0, 100)
             CALL(evt_npc_flag_onoff, 1, STRING(("me")), 32768)
             BEGIN_INLINE_EVENT
-                CALL(evt_seq_wait, 2)
+                CALL(evt_seq_wait, SEQ_GAME)
                 CALL(evt_npc_flag_onoff, 0, STRING(("me")), 32768)
             END_INLINE_EVENT
         END_IF
@@ -1428,7 +1429,7 @@ EVT_BEGIN(evt_tougi2)
         ELSE
         CALL(evt_cam3d_evt_set, 0, 90, 190, 0, 38, -158, 0, 11)
     END_IF
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     SET_VALUE(LW(1), 2)
     SPAWN_EVENT(PTR(bero_open_door_play_se))
     CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 0, -180, 500)
@@ -2106,7 +2107,7 @@ static EVT_BEGIN(evt_after_peach)
     CALL(evt_party_set_pos, 0, 60, 0, 100)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING(("door_1_a")), 1)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING(("door_1_b")), 1)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_bero_exec_wait, 65536)
     CALL(evt_fade_end_wait)
     WAIT_MS(2000)

@@ -38,6 +38,7 @@
 #include "mri.h"
 #include "data_tables.h"
 #include "mario/mario_pouch.h"
+#include "driver/seqdrv.h"
 
 void* puniGetPunigp(void);
 void puniswGetindex(s32 flag, s32 index, s32* a, s32* b);
@@ -2681,7 +2682,7 @@ EVT_BEGIN(boss_battle_win)
     CALL(evt_party_cont_onoff, 0, 1)
     SET_VALUE(LW(10), STRING("ボスロボット"))
     SPAWN_EVENT_GET_ID(PTR(boss_robot_electro), LW(15))
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     SET_VALUE(GF(0), 0)
     BEGIN_INLINE_EVENT
         LOOP(0)
@@ -3077,7 +3078,7 @@ EVT_BEGIN(mri_01_koopa_first_evt)
     CALL(evt_npc_set_ry, STRING("プニ族"), 90)
     CALL(evt_npc_set_ry, STRING("プニ族B"), 270)
     CALL(evt_cam3d_evt_set, -126, 134, 399, -126, 65, 8, 0, 11)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_bero_exec_wait, 65536)
     CALL(evt_fade_end_wait)
     SET_VALUE(LW(0), STRING("w_bero"))
@@ -3472,7 +3473,7 @@ EVT_BEGIN(mri_01_init_evt)
             CALL(evt_mario_set_pos, 226, 0, 48)
             CALL(evt_mario_set_dir, 90, 0, 0)
             BEGIN_INLINE_EVENT
-                CALL(evt_seq_wait, 2)
+                CALL(evt_seq_wait, SEQ_GAME)
                 SPAWN_EVENT(PTR(mri_01_koopa_second_evt))
             END_INLINE_EVENT
         END_IF

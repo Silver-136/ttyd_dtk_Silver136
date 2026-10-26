@@ -34,6 +34,7 @@
 #include "data_tables.h"
 #include "mario/mario_pouch.h"
 #include "manager/evtmgr_cmd.h"
+#include "driver/seqdrv.h"
 #ifdef VERSION_G8ME01
 #endif
 
@@ -675,7 +676,7 @@ EVT_BEGIN(first_time_camera)
     CALL(evt_party_set_pos, 0, -555, 0, 0)
     CALL(evt_npc_set_position, STRING("ノコノコA"), -250, 0, 65)
     CALL(evt_cam3d_evt_set, 730, 617, 915, 245, 93, 144, 0, 11)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     BEGIN_INLINE_EVENT
         WAIT_MS(1000)
         CALL(evt_telop_entry, 2)
@@ -758,7 +759,7 @@ EVT_BEGIN(nok_00_koopa_evt)
     CALL(evt_npc_flag_onoff, 1, STRING("ノコノコA"), NPC_FLAG_INSTANT_TURN)
     CALL(evt_npc_set_ry, STRING("ノコノコA"), 90)
     CALL(evt_cam3d_evt_set, -315, 146, 529, -315, 50, -13, 0, 11)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     SET_VALUE(GF(0), 0)
     BEGIN_INLINE_EVENT
         WAIT_MS(300)

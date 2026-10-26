@@ -28,6 +28,7 @@
 #include "data/mapdata.h"
 #include "evt/evt_sub.h"
 #include "kpa.h"
+#include "driver/seqdrv.h"
 
 typedef struct KpaWork { u8 stage; u8 lives; u8 time; } KpaWork;
 KpaWork* kwp;
@@ -446,7 +447,7 @@ EVT_BEGIN(kpa_stage_start)
     CALL(evt_cam3d_evt_set, LW(0), LW(1), LW(2), LW(0), LW(1), 0, 0, 11)
     WAIT_FRAMES(1)
     CALL(evt_mario_set_dispdir, 180)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_twoddisp_init)
 #ifdef VERSION_G8ME01
     CALL(evt_twoddisp_entry, STRING("batu"), 477)
@@ -506,7 +507,7 @@ EVT_BEGIN(kpa_status_main_evt)
 EVT_END()
 
 EVT_BEGIN(kpa_time)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     SET_VALUE(LW(1), 180)
     SUBTRACT(LW(1), GSW(1222))
     SET_VALUE(LW(3), LW(1))

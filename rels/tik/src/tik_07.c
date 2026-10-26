@@ -17,6 +17,7 @@
 #include "evt/evt_snd.h"
 #include "driver/mapdrv.h"
 #include "mario/mario_pouch.h"
+#include "driver/seqdrv.h"
 
 USER_FUNC(evt_pouch_open_mail);
 USER_FUNC(evt_pouch_receive_mail);
@@ -199,7 +200,7 @@ EVT_BEGIN(tik_07_down_evt)
     CALL(evt_party_set_pos, 1, 85, 300, -30)
     CALL(evt_cam3d_evt_set, FLOAT(100.0f), FLOAT(252.59961f), FLOAT(528.6992f), FLOAT(100.0f), FLOAT(157.09961f), FLOAT(-13.0f), 0, 11)
     BEGIN_INLINE_EVENT
-        CALL(evt_seq_wait, 2)
+        CALL(evt_seq_wait, SEQ_GAME)
         CALL(evt_mario_cont_onoff, 1)
         CALL(evt_party_cont_onoff, 0, 1)
         CALL(evt_party_cont_onoff, 1, 1)
@@ -215,7 +216,7 @@ EVT_END()
 
 static EVT_BEGIN(peach_mail)
     CALL(evt_mario_key_onoff, 0)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_bero_exec_wait, 65536)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_FIND1_2"), LW(0), LW(1), LW(2), 0)

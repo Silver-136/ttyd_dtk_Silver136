@@ -55,6 +55,7 @@
 #include "bom.h"
 #include "data_tables.h"
 #include "evt/evt_npc.h"
+#include "driver/seqdrv.h"
 #ifdef VERSION_G8ME01
 #endif
 
@@ -728,7 +729,7 @@ static EVT_BEGIN(first_evt)
     CALL(evt_cam3d_evt_set, 340, 100, -53, 340, 80, -302, 0, 11)
     CALL(evt_mario_set_pos, -580, 0, 0)
     CALL(evt_party_set_pos, 0, -580, 0, 0)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     BEGIN_INLINE_EVENT
         WAIT_MS(6000)
         CALL(evt_telop_entry, 13)
@@ -2639,7 +2640,7 @@ static EVT_BEGIN(minnnanokoe_evt)
         END_LOOP
     END_INLINE_EVENT
     CALL(evt_cam3d_evt_set, 400, 106, 331, 400, 45, -13, 0, 11)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     WAIT_MS(500)
     WAIT_MS(1000)
     BEGIN_INLINE_EVENT

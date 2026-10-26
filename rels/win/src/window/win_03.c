@@ -24,6 +24,7 @@
 #include "evt/evt_sub.h"
 #include "party/party_motion.h"
 #include "data_tables.h"
+#include "driver/seqdrv.h"
 
 USER_FUNC(camera_action);
 
@@ -218,7 +219,7 @@ static EVT_BEGIN(cloud_toujou)
     CALL(evt_npc_change_fbat_mode, 7)
     CALL(evt_npc_stop_for_event)
     CALL(evt_cam3d_evt_set, -10, 150, 491, -10, 90, -6, 0, 11)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     CALL(camera_action)
     CALL(evt_msg_toge, 1, 0, 0, 0)
     CALL(evt_msg_print, 0, STRING("stg2_win_e04_00_01"), 0, 0)
@@ -246,7 +247,7 @@ EVT_BEGIN(cloud_lostitem)
         CALL(evt_npc_set_position, STRING("パックン2"), 0, -100, 0)
     END_IF
     CALL(evt_cam3d_evt_set, 290, 150, 491, 290, 90, -6, 0, 11)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     WAIT_MS(1000)
     SET_VALUE(GF(0), 1)
     BEGIN_INLINE_EVENT

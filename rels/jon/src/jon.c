@@ -42,6 +42,7 @@
 #include "data/npc_data.h"
 #include "npc_event.h"
 #include "jon.h"
+#include "driver/seqdrv.h"
 
 void raster_disp(CameraId cameraId, void* param);
 typedef void (*voidfunctionptr)(void);
@@ -1603,7 +1604,7 @@ EVT_BEGIN(shikake_setup)
     END_IF
     BEGIN_INLINE_EVENT
         CALL(evt_mario_key_onoff, 0)
-        CALL(evt_seq_wait, 2)
+        CALL(evt_seq_wait, SEQ_GAME)
         CALL(evt_bero_exec_wait, 65536)
         CALL(evt_npc_stop_for_event)
         CALL(evt_mario_wait_landon)
@@ -2422,7 +2423,7 @@ static EVT_BEGIN(iri_12_makkino_talk)
 EVT_END()
 
 EVT_BEGIN(iri_12_makkino_fall)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_bero_exec_wait, 2)
     CALL(evt_bero_get_start_position, LW(0), LW(1), LW(2))
     CALL(evt_npc_flag_onoff, 1, STRING("マッキノ"), NPC_FLAG_NO_HIT)
@@ -2448,7 +2449,7 @@ EVT_END()
 
 EVT_BEGIN(iri_12_makkino_fall_return)
     CALL(evt_mario_key_onoff, 0)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_bero_exec_wait, 2)
     CALL(evt_bero_get_start_position, LW(0), LW(1), LW(2))
     CALL(evt_npc_flag_onoff, 1, STRING("マッキノ"), NPC_FLAG_NO_HIT)
@@ -2657,7 +2658,7 @@ EVT_BEGIN(zonbaba_first_event)
     CALL(evt_npc_set_position, STRING("敵"), 175, 0, 0)
     CALL(evt_npc_set_anim, STRING("敵"), STRING("GNB_S_1"))
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("oFF_jon_06"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     WAIT_MS(3500)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_SURPRISED2_3"), LW(0), LW(1), LW(2), 0)

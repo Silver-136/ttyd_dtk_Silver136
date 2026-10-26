@@ -31,6 +31,7 @@
 #include "evt/evt_npc.h"
 #include "mario/mario_pouch.h"
 #include "manager/evtmgr_cmd.h"
+#include "driver/seqdrv.h"
 
 
 USER_FUNC(bgm_wait_stop);
@@ -1451,7 +1452,7 @@ EVT_BEGIN(rsh_02_a_init_evt)
             BEGIN_INLINE_EVENT
                 CALL(evt_mario_key_onoff, 0)
                 CALL(evt_party_stop, 0)
-                CALL(evt_seq_wait, 2)
+                CALL(evt_seq_wait, SEQ_GAME)
                 CALL(evt_snd_bgmoff_f, 512, 5000)
                 WAIT_MS(3000)
                 CALL(evt_msg_print, 0, STRING("stg6_rsh_13"), 0, 0)
@@ -1659,7 +1660,7 @@ EVT_BEGIN(rsh_02_c_init_evt)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("tobira_5"), MAP_OBJ_FLAG_HIDDEN)
         BEGIN_INLINE_EVENT
             CALL(evt_mario_key_onoff, 0)
-            CALL(evt_seq_wait, 2)
+            CALL(evt_seq_wait, SEQ_GAME)
             WAIT_MS(1000)
             CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
             CALL(evt_snd_sfxon_3d, STRING("SFX_STG6_TRAIN_CHIME1"), LW(0), LW(1), LW(2), 0)

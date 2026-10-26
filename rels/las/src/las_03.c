@@ -13,6 +13,7 @@
 #include "evt/evt_mario.h"
 #include "evt/evt_mobj.h"
 #include "system.h"
+#include "driver/seqdrv.h"
 
 u16 toge_flag;
 
@@ -175,7 +176,7 @@ EVT_BEGIN(toge_evt)
         READ_INT2(LW(0), LW(1))
         CALL(evt_hit_bind_mapobj, LW(1), LW(0))
     END_LOOP
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_bero_exec_wait, 65536)
     LOOP(0)
         CALL(evt_mario_get_motion, LW(0))

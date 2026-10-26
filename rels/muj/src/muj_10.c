@@ -28,6 +28,7 @@
 #include "muj.h"
 #include "driver/hitdrv.h"
 #include "data_tables.h"
+#include "driver/seqdrv.h"
 
 USER_FUNC(evt_mario_dispflag_onoff);
 USER_FUNC(evt_mario_get_name_hitobj_ride);
@@ -287,7 +288,7 @@ EVT_BEGIN(oidasare_event)
     CALL(evt_party_set_pos, 0, 30, 50, -278)
     CALL(evt_party_set_dir, 0, 90, 0)
     CALL(evt_cam3d_evt_set, 220, 200, 480, 220, 70, -258, 0, 11)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_snd_sfxon_3d, STRING("SFX_DOOR_OPEN_WOOD1"), 19, 118, -236, 0)
     WAIT_MS(1000)
     CALL(evt_mario_cont_onoff, 1)

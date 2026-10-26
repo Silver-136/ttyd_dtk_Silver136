@@ -8,6 +8,7 @@
 #include "evt/evt_mario.h"
 #include "evt/evt_mobj.h"
 #include "evt/evt_seq.h"
+#include "driver/seqdrv.h"
 
 
 static EvtWord kpa_act_stg2_mobj[209];
@@ -79,7 +80,7 @@ static EVT_BEGIN(kpa_fall)
 EVT_END()
 
 EVT_BEGIN(kairyu_evt)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     LOOP(0)
         IF_INT_NOT_EQUAL(LSWF(3), 0)
             BREAK_LOOP

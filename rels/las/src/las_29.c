@@ -43,6 +43,7 @@
 #include "evt/evt_sub.h"
 #include "las.h"
 #include "mario/mario_party.h"
+#include "driver/seqdrv.h"
 
 void _hikariEntry(const char* name, s32 type, f32 scale);
 typedef struct HikariData { s32 key; s32 id; } HikariData;
@@ -174,7 +175,7 @@ static BeroEntry bero_entry_data[] = {
 static EVT_BEGIN(syuryo_init)
     CALL(evt_npc_set_autotalkpose, STRING("me"), STRING("S_3"), STRING("T_4"))
     BEGIN_INLINE_EVENT
-        CALL(evt_seq_wait, 2)
+        CALL(evt_seq_wait, SEQ_GAME)
         CALL(evt_npc_set_anim, STRING("me"), STRING("S_3"))
     END_INLINE_EVENT
     RETURN
@@ -883,7 +884,7 @@ EVT_BEGIN(last_evt_1)
     CALL(evt_mario_set_pos, -420, 0, 0)
     CALL(evt_party_set_pos, 0, -460, 0, 20)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_kabekesu"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     WAIT_MS(300)
     SET_VALUE(LW(1), 0)
     SPAWN_EVENT(PTR(bero_open_door_play_se))
@@ -1204,7 +1205,7 @@ EVT_BEGIN(last_evt_2)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("hikari"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_cam3d_evt_set, -283, 0, 472, 200, 150, -12, 0, 11)
     WAIT_FRAMES(1)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     WAIT_MS(500)
     CALL(evt_npc_flag_onoff, 0, STRING("シュリョー"), NPC_FLAG_INSTANT_TURN)
     CALL(evt_msg_print, 0, STRING("stg8_las_115"), 0, STRING("影の女王"))
@@ -1306,7 +1307,7 @@ EVT_BEGIN(last_evt_3)
     CALL(evt_map_set_blend, 0, 0, 0, 0, 255)
     CALL_CHILD(PTR(flush_on))
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_kabekesu"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     WAIT_MS(1000)
     SET_VALUE(LSWF(10), 0)
 #ifdef VERSION_G8ME01
@@ -1589,7 +1590,7 @@ EVT_BEGIN(last_evt_3)
             GOTO(1)
         END_IF
         CALL(evt_msg_print, 0, STRING("stg8_las_139"), 0, 0)
-        CALL(evt_seq_set_seq, 5, 0, 0)
+        CALL(evt_seq_set_seq, SEQ_GAME_OVER, 0, 0)
     END_IF
     WAIT_MS(500)
 #ifndef VERSION_G8ME01
@@ -1676,7 +1677,7 @@ EVT_BEGIN(last_evt_3_1)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_o_hikari"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("hikari"), MAP_OBJ_FLAG_HIDDEN)
     CALL(rou_hikari_front_onoff, 1, 1)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     SET_VALUE(GF(2), 0)
     SPAWN_EVENT(PTR(b_peach_fuwafuwa))
     WAIT_MS(500)
@@ -1900,7 +1901,7 @@ EVT_BEGIN(last_evt_3_2)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_o_hikari"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("hikari"), MAP_OBJ_FLAG_HIDDEN)
     CALL(rou_hikari_front_onoff, 1, 1)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     SET_VALUE(GF(2), 0)
     SPAWN_EVENT(PTR(b_peach_fuwafuwa))
     SET_VALUE(LW(0), 0)
@@ -2341,7 +2342,7 @@ EVT_BEGIN(last_evt_4)
     CALL(evt_npc_flag_onoff, 1, STRING(/*"クリハカセ"*/"\x83\x4E\x83\x8A\x83\x6E\x83\x4A\x83\x5A"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     CALL(evt_npc_set_position, STRING(/*"クリハカセ"*/"\x83\x4E\x83\x8A\x83\x6E\x83\x4A\x83\x5A"), 0, -1000, 0)
 #endif
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     SET_VALUE(GF(0), 0)
     BEGIN_INLINE_EVENT
         CALL(evt_snd_sfxon, STRING("SFX_STG8_QUAKE1"), LW(9))
@@ -3017,7 +3018,7 @@ EVT_END()
 EVT_BEGIN(shuryolight_delete)
     CALL(evt_npc_check, STRING("シュリョー"), LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
-        CALL(evt_seq_wait, 2)
+        CALL(evt_seq_wait, SEQ_GAME)
         WAIT_MS(500)
         CALL(evt_npc_delete, STRING("シュリョー"))
         CALL(evt_shuryolight_delete)

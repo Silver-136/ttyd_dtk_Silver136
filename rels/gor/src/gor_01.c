@@ -57,6 +57,7 @@
 #include "evt/evt_shop.h"
 #include "data_tables.h"
 #include "driver/msgdrv.h"
+#include "driver/seqdrv.h"
 #ifdef VERSION_G8ME01
 #endif
 
@@ -4342,7 +4343,7 @@ EVT_BEGIN(gor_01_koopa_evt)
     CALL(evt_npc_flag_onoff, 1, STRING("ロテン１"), NPC_FLAG_NO_HIT)
     CALL(evt_npc_flag_onoff, 1, STRING("チューさん１"), NPC_FLAG_NO_HIT)
     CALL(evt_cam3d_evt_set, 200, 160, 616, 200, 65, 74, 0, 11)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_fade_end_wait)
     BEGIN_INLINE_EVENT
         WAIT_MS(200)
@@ -4537,7 +4538,7 @@ static EVT_BEGIN(sekai_yami_evt)
     CALL(evt_party_set_pos, 0, 0, -1000, 0)
     CALL(evt_npc_set_position, STRING("キノじい"), 0, 0, 403)
     CALL(evt_cam3d_evt_set, 0, 350, 1530, 0, 150, 44, 0, 11)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_map_set_tevcallback, 1, PTR(envSetYami))
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S"), MAP_OBJ_TEV_CALLBACK(1))
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S"), MAP_OBJ_FLAG_DISPLAY_LIST)
@@ -4623,7 +4624,7 @@ static EVT_BEGIN(minnnanokoe_evt)
     CALL(anim_tevcallback_mobj, STRING("mobj_box00"), 1)
     CALL(yami_view, -800)
     CALL(evt_bg_set_color, 64, 64, 64, 255)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_eff, STRING("mahojin"), STRING("mahojin"), 8, 0, 5, 250, 0, 0, 0, 0, 0, 0, 0, 0)
     CALL(wait_mahojin)
     CALL(evt_snd_sfxon, STRING("SFX_STG8_STARSTONE_EFFECT1"), 0)
@@ -5038,7 +5039,7 @@ static EVT_BEGIN(epilogue_evt)
     CALL(badgeShop_getBargainTable, LW(0))
     CALL(evt_unitwin_selltable_setup, PTR(uwnobj_list), LW(0))
     CALL(evt_cam3d_evt_set, -80, 225, 400, -80, 200, -100, 0, 11)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     SET_VALUE(GF(15), 1)
     SPAWN_EVENT_GET_ID(PTR(epilogue_evt_sub), LW(0))
     CALL(evt_fade_end_wait)

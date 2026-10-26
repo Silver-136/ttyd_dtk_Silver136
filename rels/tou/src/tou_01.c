@@ -47,6 +47,7 @@
 #include "evt/evt_shop.h"
 #include "data_tables.h"
 #include "mario/mario_pouch.h"
+#include "driver/seqdrv.h"
 
 typedef struct ShadowWork { GXTexObj obj; smartEntry* tex; } ShadowWork;
 void make_shadow_disp(CameraId camera, void* param);
@@ -2468,7 +2469,7 @@ EVT_BEGIN(evt_gondora)
     CALL(evt_hit_bind_mapobj, STRING("a_gondora"), STRING("gondora"))
     CALL(evt_mapobj_trans, 1, STRING("gondora"), 0, 300, 0)
     CALL(evt_hit_bind_update, STRING("a_gondora"))
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_cam3d_evt_set, 0, 115, 1000, 0, 42, 403, 4000, 0)
     SET_VALUE(LW(0), 300)
     SET_VALUE(LW(1), 0)
@@ -2649,7 +2650,7 @@ EVT_END()
 EVT_BEGIN(evt_peach_after)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_cam3d_evt_set, 0, 130, 134, 0, 75, -312, 0, 11)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_bero_exec_wait, 65536)
     BEGIN_INLINE_EVENT
         CALL(evt_mario_mov_pos2, -25, -305, FLOAT(80.0f))
@@ -2748,7 +2749,7 @@ static EVT_BEGIN(sekai_yami_evt)
     CALL(evt_cam3d_evt_set, 420, 200, 1500, -305, 100, -360, 0, 11)
     CALL(evt_mario_set_pos, 0, -1000, 0)
     CALL(evt_party_set_pos, 0, 0, -1000, 0)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     WAIT_MS(1000)
     CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 255, 64, 2000)
     LOOP(0)
@@ -2925,7 +2926,7 @@ static EVT_BEGIN(minnnanokoe_evt)
             END_IF
         END_LOOP
     END_INLINE_EVENT
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     WAIT_MS(1000)
     CALL(evt_msg_print, 0, STRING("stg8_las_148_18"), 0, STRING("キノシコワ"))
     WAIT_MS(300)

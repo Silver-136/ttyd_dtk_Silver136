@@ -40,6 +40,7 @@
 #include "evt/evt_bero.h"
 #include "evt/evt_sub.h"
 #include "gon.h"
+#include "driver/seqdrv.h"
 
 typedef struct CloudWork {
     s32 used;
@@ -229,7 +230,7 @@ EVT_BEGIN(gonbaba_event)
     CALL(evt_cam3d_evt_set, -480, 150, 459, -480, 67, -13, 0, 11)
     CALL(evt_mario_set_pos, -560, 10, 0)
     CALL(evt_party_set_pos, 0, -600, 10, 0)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     BEGIN_INLINE_EVENT
         SET_VALUE(LW(1), 0)
         SPAWN_EVENT(PTR(bero_close_door_play_se))

@@ -17,6 +17,7 @@
 #include "evt/evt_telop.h"
 #include "driver/npcdrv.h"
 #include "driver/casedrv.h"
+#include "driver/seqdrv.h"
 
 USER_FUNC(evt_mario_dispflag_onoff);
 
@@ -108,7 +109,7 @@ static EVT_BEGIN(first_evt)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_npc_set_position, STRING("手下１"), 225, 0, -25)
     CALL(evt_npc_set_position, STRING("手下２"), 265, 0, 25)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_bero_exec_wait, 65536)
     CALL(evt_cam3d_evt_set, -225, 65, 342, -225, 45, -8, 1000, 11)
     WAIT_MS(250)

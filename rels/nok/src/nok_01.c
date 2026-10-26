@@ -32,6 +32,7 @@
 #include "driver/hitdrv.h"
 #include "data_tables.h"
 #include "mario/mario_pouch.h"
+#include "driver/seqdrv.h"
 
 static USER_FUNC(anim_tevcallback);
 USER_FUNC(evt_mario_dispflag_onoff);
@@ -984,7 +985,7 @@ static HitDamageReturn hitDmgRetPoints[] = {
 EVT_BEGIN(nokotarou_tabidachi)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_cam3d_evt_set, 0, 142, 453, 0, 47, -86, 0, 11)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_bero_exec_wait, 65536)
     SUSPEND_TYPES_OTHER(4)
     CALL(evt_fade_end_wait)
@@ -1129,7 +1130,7 @@ static EVT_BEGIN(sekai_yami_evt)
     CALL(evt_npc_get_reglid, STRING("ノコノコI"), LW(0))
     DELETE_EVENT(LW(0))
     CALL(evt_cam3d_evt_set, 650, 90, 467, 13, 90, -17, 0, 11)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     WAIT_MS(1000)
     CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 255, 64, 2000)
     LOOP(0)
@@ -1215,7 +1216,7 @@ static EVT_BEGIN(minnnanokoe_evt)
     CALL(evt_cam3d_evt_set, 562, 320, 474, 0, 100, -50, 0, 11)
     CALL(starstone_entry, STRING("starstone"), 0, 450, -50, 1)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_hasi"), MAP_OBJ_FLAG_CLIP)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     WAIT_MS(500)
     SET_VALUE(GW(0), 450)
     BEGIN_INLINE_EVENT
@@ -1446,7 +1447,7 @@ static EVT_BEGIN(epilogue_evt)
     CALL(evt_npc_set_ry, STRING("村長"), 90)
     CALL(evt_npc_flag_onoff, 1, STRING("村長"), NPC_FLAG_NO_HIT)
     CALL(evt_cam3d_evt_set, 0, 133, 517, 0, 50, -77, 0, 11)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_npc_flag_onoff, 0, STRING("ノコタロウ"), NPC_FLAG_INSTANT_TURN)
     SPAWN_EVENT(PTR(epilogue_evt_sub))
     CALL(evt_fade_end_wait)

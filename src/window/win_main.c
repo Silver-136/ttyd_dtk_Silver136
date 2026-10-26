@@ -710,7 +710,7 @@ EVT_BEGIN(evt_diary_read)
     END_INLINE_EVENT
     WAIT_MS(4000)
     CALL(evt_fade_set_mapchange_type, 1, -1, 600, -1, -1)
-    CALL(evt_seq_set_seq, 5, 0, 0)
+    CALL(evt_seq_set_seq, SEQ_GAME_OVER, 0, 0)
     RETURN
 EVT_END()
 

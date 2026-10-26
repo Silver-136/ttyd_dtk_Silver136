@@ -25,6 +25,7 @@
 #include "mri.h"
 #include "data_tables.h"
 #include "manager/evtmgr_cmd.h"
+#include "driver/seqdrv.h"
 
 USER_FUNC(bero_get_position_normal);
 static USER_FUNC(evt_chuchu_back_loop);
@@ -149,7 +150,7 @@ static USER_FUNC(evt_chuchu_back_loop) {
 static EVT_BEGIN(chuchurina_sogu)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_bero_exec_onoff, 0, 2)
     CALL(evt_mario_normalize)
     CALL(evt_npc_set_position, STRING("チュチュリーナ"), -75, 0, 30)

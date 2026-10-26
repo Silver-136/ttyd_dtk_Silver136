@@ -30,6 +30,7 @@
 #include "data_tables.h"
 #include "mario/mario_pouch.h"
 #include "manager/evtmgr_cmd.h"
+#include "driver/seqdrv.h"
 
 static u8* _ap;
 void puniMoveAtari(PuniData* puni, Vec pos, Vec dir, s32 flag, f32 speed);
@@ -844,7 +845,7 @@ EVT_BEGIN(bluejail_event)
     CALL(evt_npc_flag_onoff, 1, STRING("プニ族"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_npc_flag_onoff, 1, STRING("プニ族"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     CALL(evt_cam3d_evt_set, -160, 160, 540, -160, 60, 0, 0, 11)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     BEGIN_INLINE_EVENT
         WAIT_MS(1500)
         CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 255, 80, 1500)

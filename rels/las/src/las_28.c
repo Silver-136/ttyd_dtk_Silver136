@@ -28,6 +28,7 @@
 #include "evt/evt_bero.h"
 #include "evt/evt_npc.h"
 #include "las.h"
+#include "driver/seqdrv.h"
 
 static char name[8];
 
@@ -205,7 +206,7 @@ static EVT_BEGIN(first_evt)
     CALL(evt_party_set_pos, 0, -640, -124, 0)
     CALL(evt_mario_set_dir, 90, 0, 0)
     CALL(evt_party_set_dir, 0, 90, 0)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_cam3d_evt_set, 332, 200, 1115, -352, 0, -148, 3200, 0)
     WAIT_MS(1800)
     SET_VALUE(LW(1), 0)
@@ -1252,7 +1253,7 @@ EVT_BEGIN(las_28_init_evt)
                 CALL(evt_cam3d_evt_set, 70, 86, 230, 70, 50, -18, 0, 11)
                 CALL(evt_shuryolight_run_evt, PTR(shuryolight_pow_tenmetu), PTR(shuryolight_head_off), PTR(shuryolight_tue_normal))
                 CALL(syuryo_baria)
-                CALL(evt_seq_wait, 2)
+                CALL(evt_seq_wait, SEQ_GAME)
                 CALL(evt_mario_set_pose, STRING("M_S_3"))
                 CALL(evt_npc_set_anim, STRING("シュリョー"), STRING("A_3B"))
                 SPAWN_EVENT(PTR(koopa_evt))
@@ -1270,7 +1271,7 @@ EVT_BEGIN(las_28_init_evt)
         CALL(evt_party_set_pos, 0, 200, 300, 0)
         CALL(evt_cam_road_reset)
         BEGIN_INLINE_EVENT
-            CALL(evt_seq_wait, 2)
+            CALL(evt_seq_wait, SEQ_GAME)
             CALL(evt_mario_cont_onoff, 1)
             WAIT_MS(180)
             CALL(evt_party_cont_onoff, 0, 1)

@@ -29,6 +29,7 @@
 #include "tou.h"
 #include "evt/evt_npc.h"
 #include "manager/evtmgr_cmd.h"
+#include "driver/seqdrv.h"
 
 USER_FUNC(evt_mario_dispflag_onoff);
 USER_FUNC(evt_pouch_open_mail);
@@ -441,7 +442,7 @@ static EVT_BEGIN(evt_sensyu)
     CALL(evt_party_set_dir, 0, 90, 0)
     CALL(evt_set_dir_to_target, STRING("ガンス"), STRING("mario"))
     CALL(evt_cam3d_evt_set, 0, 145, 534, 0, 50, -8, 0, 11)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     WAIT_MS(1000)
     CALL(evt_msg_print, 0, STRING("stg3_tou_50"), 0, STRING("ガンス"))
     WAIT_MS(300)
@@ -497,7 +498,7 @@ static EVT_BEGIN(evt_1st_leagu)
     CALL(evt_npc_set_position, STRING("キノシコワ"), 0, 0, -180)
     CALL(evt_mario_set_pos, 0, 0, -190)
     CALL(evt_party_set_pos, 0, 0, 0, -200)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     BEGIN_INLINE_EVENT
         CALL(tou_champion_belt, STRING("チャンピョン"))
     END_INLINE_EVENT
@@ -832,7 +833,7 @@ EVT_BEGIN(evt_champion_win)
     CALL(evt_npc_check, STRING("ハンマーブロス"), LW(0))
     IF_INT_EQUAL(LW(0), 1)
         BEGIN_INLINE_EVENT
-            CALL(evt_seq_wait, 2)
+            CALL(evt_seq_wait, SEQ_GAME)
             CALL(evt_npc_get_reglid, STRING("ハンマーブロス"), LW(0))
             DELETE_EVENT(LW(0))
         END_INLINE_EVENT
@@ -849,7 +850,7 @@ EVT_BEGIN(evt_champion_win)
     CALL(evt_npc_flag_onoff, 1, STRING("キノシコワ"), NPC_FLAG_INSTANT_TURN)
     CALL(evt_mario_set_dir, 90, 0, 0)
     CALL(evt_party_set_dir, 0, 90, 0)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     WAIT_MS(1000)
     CALL(evt_npc_flag_onoff, 0, STRING("ガンス"), NPC_FLAG_INSTANT_TURN)
     CALL(evt_npc_flag_onoff, 0, STRING("キノシコワ"), NPC_FLAG_INSTANT_TURN)
@@ -1091,7 +1092,7 @@ static EVT_BEGIN(epilogue_evt)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("cake_tukue"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_npc_flag_onoff, 1, STRING("チビヨッシー"), NPC_FLAG_INSTANT_TURN)
     CALL(evt_cam3d_evt_set, 0, 100, 337, 0, 45, -9, 0, 11)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_npc_flag_onoff, 0, STRING("チビヨッシー"), NPC_FLAG_INSTANT_TURN)
     SPAWN_EVENT(PTR(epilogue_evt_sub))
     CALL(evt_fade_end_wait)
@@ -1111,7 +1112,7 @@ EVT_BEGIN(evt_match_after_stop_npcs)
     SPAWN_EVENT_GET_ID(PTR(evt_tou_match_after_default), LW(10))
     CALL(evt_npc_check, STRING("ハンマーブロス"), LW(0))
     IF_INT_EQUAL(LW(0), 1)
-        CALL(evt_seq_wait, 2)
+        CALL(evt_seq_wait, SEQ_GAME)
         CALL(evt_npc_get_reglid, STRING("ハンマーブロス"), LW(0))
         DELETE_EVENT(LW(0))
         CALL(evt_npc_check, STRING("トゲメット"), LW(0))

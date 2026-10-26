@@ -26,6 +26,7 @@
 #include "evt/evt_bero.h"
 #include "evt/evt_sub.h"
 #include "muj.h"
+#include "driver/seqdrv.h"
 
 USER_FUNC(evt_mario_dispflag_onoff);
 USER_FUNC(evt_snd_bgm_freq);
@@ -529,7 +530,7 @@ EVT_BEGIN(korutesu_event_after)
     CALL(evt_npc_set_ry, STRING("コルテス"), 0)
     CALL(evt_npc_pera_onoff, STRING("コルテス"), 0)
     CALL(evt_cam3d_evt_set, -20, 125, 505, -20, 80, 7, 0, 11)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_kabe_r"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_fade_end_wait)
     CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 0, 70, 800)

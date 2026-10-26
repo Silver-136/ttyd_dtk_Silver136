@@ -56,6 +56,7 @@
 #include "evt/evt_npc.h"
 #include "mario/mario_cam.h"
 #include <math.h>
+#include "driver/seqdrv.h"
 
 static inline f32 fid(f32 x) { return x; }
 typedef struct KaitenParam {
@@ -429,7 +430,7 @@ EVT_BEGIN(large_door_stg0)
     CALL(evt_mario_set_pos, 620, 81, 40)
     CALL(evt_party_set_pos, 0, 640, 81, 40)
     CALL(evt_party_set_pos, 1, 660, 81, 40)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_cam3d_evt_set, 300, 700, 1135, 300, 250, 23, 6000, 0)
     WAIT_MS(6500)
     BEGIN_INLINE_EVENT

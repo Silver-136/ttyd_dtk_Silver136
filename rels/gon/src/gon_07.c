@@ -20,6 +20,7 @@
 #include "driver/mapdrv.h"
 #include "mario/mario_pouch.h"
 #include "driver/casedrv.h"
+#include "driver/seqdrv.h"
 
 
 static EvtWord door01_close[12];
@@ -199,7 +200,7 @@ static EVT_BEGIN(item_evt)
             IF_INT_EQUAL(LW(0), 1)
                 SET_VALUE(LW(0), STRING("w_bero"))
                 CALL_CHILD(PTR(bero_case_switch_off))
-                CALL(evt_seq_set_seq, 5, 0, 0)
+                CALL(evt_seq_set_seq, SEQ_GAME_OVER, 0, 0)
             END_IF
             WAIT_FRAMES(1)
         END_LOOP

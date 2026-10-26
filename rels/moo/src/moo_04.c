@@ -22,6 +22,7 @@
 #include "party.h"
 #include "manager/evtmgr_cmd.h"
 #include "evt/evt_npc.h"
+#include "driver/seqdrv.h"
 
 
 USER_FUNC(evt_mario_dispflag_onoff);
@@ -202,7 +203,7 @@ static EVT_BEGIN(epilogue_evt)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_dispflag_onoff, 1, 1)
     CALL(evt_cam3d_evt_set, 75, 165, 533, 75, 70, -8, 0, 11)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_fade_end_wait)
     WAIT_MS(500)
     CALL(evt_msg_print, 0, STRING("ep_45"), 0, 0)
@@ -244,7 +245,7 @@ EVT_BEGIN(moo_04_init_evt)
             CALL(evt_mario_set_pos, 0, -1000, 0)
             CALL(evt_party_set_pos, 0, 0, -1000, 0)
             WAIT_FRAMES(1)
-            CALL(evt_seq_wait, 2)
+            CALL(evt_seq_wait, SEQ_GAME)
             WAIT_MS(3000)
             CALL(evt_msg_print, 0, STRING("stg7_aji_63"), 0, 0)
             WAIT_MS(2000)

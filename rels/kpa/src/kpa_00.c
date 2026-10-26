@@ -12,6 +12,7 @@
 #include "evt/evt_sub.h"
 #include "driver/npcdrv.h"
 #include "system.h"
+#include "driver/seqdrv.h"
 
 USER_FUNC(evt_snd_envoff_f);
 #ifdef VERSION_G8ME01
@@ -28,7 +29,7 @@ EVT_BEGIN(kpa_00_first_evt)
     CALL(evt_mario_kill_party, 0)
     CALL(evt_mario_set_pos, -1000, 0, 0)
     CALL(evt_cam3d_evt_set, 0, 292, 534, 0, 203, -8, 0, 11)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     BEGIN_INLINE_EVENT
         WAIT_MS(2000)
         CALL(evt_snd_bgmon, 512, STRING("BGM_STGK_CASTLE1"))
@@ -54,7 +55,7 @@ EVT_BEGIN(kpa_00_fly_evt)
     CALL(evt_npc_set_scale, STRING("ババ"), FLOAT(0.099609375f), FLOAT(0.099609375f), FLOAT(0.099609375f))
     CALL(evt_npc_set_ry, STRING("ババ"), 90)
     CALL(evt_cam3d_evt_set, 0, 134, 534, 0, 45, -8, 0, 11)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     WAIT_MS(500)
     SET_FLOAT_VALUE(GW(0), FLOAT(-1.0f))
     SET_FLOAT_VALUE(GW(1), FLOAT(0.25f))

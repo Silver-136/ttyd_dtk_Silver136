@@ -31,6 +31,7 @@
 #include "jin.h"
 #include "evt/evt_npc.h"
 #include "data_tables.h"
+#include "driver/seqdrv.h"
 
 static void senteresa_ext_disp(CameraId camera, void* param);
 typedef struct Teresa {
@@ -103,7 +104,7 @@ EVT_BEGIN(jin_07_juyo_oumu_vivian)
     IF_INT_NOT_EQUAL(LSWF(1), 0)
         SET_VALUE(LSWF(1), 0)
         CALL(evt_mario_key_onoff, 0)
-        CALL(evt_seq_wait, 2)
+        CALL(evt_seq_wait, SEQ_GAME)
         CALL(evt_bero_exec_wait, 65536)
         CALL(evt_party_stop, 0)
         CALL(evt_mario_set_dir, 270, 300, 0)
@@ -604,7 +605,7 @@ EVT_BEGIN(jin_07_init_evt)
                 CALL(evt_party_set_pos, 0, 0, 465, -50)
             END_IF
             CALL(evt_cam_road_reset)
-            CALL(evt_seq_wait, 2)
+            CALL(evt_seq_wait, SEQ_GAME)
             CALL(evt_mario_wait_landon)
             CALL(N_evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
             CALL(evt_mario_key_onoff, 1)

@@ -18,6 +18,7 @@
 #include "driver/mapdrv.h"
 #include "mario/mario_pouch.h"
 #include "system.h"
+#include "driver/seqdrv.h"
 
 USER_FUNC(evt_mario_dispflag_onoff);
 
@@ -125,7 +126,7 @@ EVT_BEGIN(honenoko_oidasare_evt)
     CALL(evt_mario_cont_onoff, 0)
     SET_FLOAT_VALUE(LW(0), FLOAT(180.0f))
     CALL_CHILD(PTR(door01_close))
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_mario_set_pose, STRING("M_I_O"))
     CALL(evt_mario_get_party, LW(0))
     SWITCH(LW(0))
@@ -303,7 +304,7 @@ EVT_BEGIN(gon_01_GATEEVENT_evt)
     CALL(evt_snd_bgmon, 1, STRING("BGM_EVT_CASTLE1"))
     CALL(evt_snd_envoff, 1024)
     CALL(evt_cam3d_evt_set, -200, 525, 690, 350, 675, 37, 0, 11)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     BEGIN_INLINE_EVENT
         WAIT_MS(3000)
         CALL(evt_telop_entry, 3)

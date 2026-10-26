@@ -31,6 +31,7 @@
 #include "evt/evt_cmd.h"
 #include "driver/animdrv.h"
 #include "eff/eff_n64.h"
+#include "driver/seqdrv.h"
 void puniHagurePos(PuniData* p);
 void puniMapdata_MRI_06_getidx(f32 x, f32 z, s32* bx, s32* bz);
 void puniMapdata_MRI_09_getidx(f32 x, f32 z, s32* bx, s32* bz);
@@ -6634,7 +6635,7 @@ USER_FUNC(puni_disp_info_sub) {
 
 
 EVT_BEGIN(puni_piders_check)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     LOOP(0)
         CALL(puni_piders_check_func)
         WAIT_FRAMES(1)

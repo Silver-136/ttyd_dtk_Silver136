@@ -25,6 +25,7 @@
 #include "evt/evt_npc.h"
 #include "evt/evt_case.h"
 #include "evt/evt_sub.h"
+#include "driver/seqdrv.h"
 
 USER_FUNC(evt_npc_set_stay_anim);
 USER_FUNC(evt_npc_set_stop_anim);
@@ -236,7 +237,7 @@ EVT_BEGIN(kpa_01_touzyo_evt)
     CALL(evt_mario_set_dir, 90, 0, 0)
     CALL(evt_mario_set_dispdir, 180)
     CALL(evt_cam3d_evt_set, 622, 172, 546, 622, 77, 5, 0, 11)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_cam3d_evt_set, -630, 172, 546, -630, 77, 5, 9000, 11)
     WAIT_MS(9000)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -778,7 +779,7 @@ EVT_BEGIN(kpa_01_syuppatu_evt)
 EVT_END()
 
 EVT_BEGIN(kpa_01_pos_check)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     LOOP(0)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         IF_INT_GREATER_OR_EQUAL(LW(0), 625)
@@ -1092,7 +1093,7 @@ EVT_BEGIN(kpa_01_init_evt)
             CALL(evt_mario_set_pos, 625, 30, 0)
             CALL(evt_mario_set_dir, 90, 0, 0)
             BEGIN_INLINE_EVENT
-                CALL(evt_seq_wait, 2)
+                CALL(evt_seq_wait, SEQ_GAME)
                 WAIT_MS(300)
                 SPAWN_EVENT(kpa_01_syuppatu_evt)
             END_INLINE_EVENT

@@ -41,6 +41,7 @@
 #include "evt/evt_npc.h"
 #include "evt/evt_shop.h"
 #include "data_tables.h"
+#include "driver/seqdrv.h"
 
 static s32* itemsel_table_ram;
 
@@ -1316,7 +1317,7 @@ EVT_BEGIN(kyoshu_event)
     CALL(evt_party_set_pos, 0, -167, 0, 268)
     CALL(evt_party_set_dir, 0, 90, 0)
     CALL(evt_cam3d_evt_set, -110, 119, 615, -110, 40, 172, 0, 11)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     WAIT_MS(1000)
     CALL(evt_msg_print, 0, STRING("stg5_muj_15"), 0, STRING("ガラの悪い水夫"))
     CALL(evt_msg_print, 0, STRING("stg5_muj_16"), 0, STRING("マルコ"))
@@ -1796,7 +1797,7 @@ static EVT_BEGIN(sekai_yami_evt)
     CALL(sekai_yami_omise)
     CALL(evt_cam3d_evt_set, 0, 120, 795, 0, 70, 348, 0, 11)
     SPAWN_EVENT(PTR(sekai_yami_shake))
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_snd_sfxon, STRING("SFX_STG8_QUAKE1"), LW(0))
     BEGIN_INLINE_EVENT
         LOOP(0)
@@ -1934,7 +1935,7 @@ static EVT_BEGIN(minnnanokoe_evt)
             END_IF
         END_LOOP
     END_INLINE_EVENT
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     WAIT_MS(500)
     CALL(evt_npc_flag_onoff, 0, STRING("ガラの悪い水夫"), NPC_FLAG_INSTANT_TURN)
     CALL(evt_msg_print, 0, STRING("stg8_las_148_38"), 0, STRING("水夫D"))
@@ -2029,7 +2030,7 @@ static EVT_BEGIN(epilogue_evt)
     CALL(evt_npc_set_ry, STRING("ガラの悪い水夫"), 90)
     CALL(evt_npc_flag_onoff, 1, STRING("ガラの悪い水夫"), NPC_FLAG_INSTANT_TURN)
     CALL(evt_cam3d_evt_set, -20, 143, 791, -20, 39, 200, 0, 11)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_npc_flag_onoff, 0, STRING("ガラの悪い水夫"), NPC_FLAG_INSTANT_TURN)
     SPAWN_EVENT(PTR(epilogue_evt_sub))
     CALL(evt_fade_end_wait)

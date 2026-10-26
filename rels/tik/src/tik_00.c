@@ -51,6 +51,7 @@
 #include "evt/evt_shop.h"
 #include "data_tables.h"
 #include "mario/mario_pouch.h"
+#include "driver/seqdrv.h"
 #ifdef VERSION_G8ME01
 #endif
 
@@ -2339,7 +2340,7 @@ EVT_BEGIN(tensou_init_event)
     CALL(evt_party_set_pos, 1, -290, 38, -265)
     CALL(evt_party_set_dir, 1, 270, 0)
     CALL(evt_cam_road_reset)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     SET_VALUE(LW(0), PTR(&door_data_04))
     SPAWN_EVENT(PTR(evt_door_open_quick))
     CALL_CHILD(PTR(tensou_return))
@@ -2658,7 +2659,7 @@ static EVT_BEGIN(epilogue_evt)
     CALL(evt_mario_dispflag_onoff, 1, 1)
     CALL(evt_cam3d_evt_set, -350, 160, 582, -350, 65, 40, 0, 11)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("ie_4_naka"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_fade_end_wait)
     WAIT_MS(2000)
     CALL(evt_npc_move_position, STRING("クリスチーヌ"), -345, -25, 0, 60, 0)

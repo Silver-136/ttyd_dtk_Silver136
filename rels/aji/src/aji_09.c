@@ -23,6 +23,7 @@
 #include "manager/evtmgr_cmd.h"
 #include "evt/evt_bero.h"
 #include "aji.h"
+#include "driver/seqdrv.h"
 
 USER_FUNC(check_kou_evt);
 USER_FUNC(dot_mario);
@@ -698,7 +699,7 @@ static EVT_BEGIN(peach_evt_stg3)
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_kou1_ka_ura"), 0, PTR(peach_evt_kou1_out), 0)
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_kou2_ka_omo"), 0, PTR(peach_evt_kou2_in), 0)
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_kou2_ka_ura"), 0, PTR(peach_evt_kou2_out), 0)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_bero_exec_wait, 65536)
     IF_INT_LESS(GSW_STORY_PROGRESS, 168)
         SET_VALUE(LW(0), STRING("s_bero"))
@@ -786,7 +787,7 @@ EVT_BEGIN(aji_09_init_evt)
         CALL(evt_party_set_pos, 0, 160, 107, -105)
         CALL(evt_party_set_pos, 1, 150, 107, -95)
         BEGIN_INLINE_EVENT
-            CALL(evt_seq_wait, 2)
+            CALL(evt_seq_wait, SEQ_GAME)
             CALL(evt_mario_cont_onoff, 1)
             CALL(evt_party_cont_onoff, 0, 1)
             CALL(evt_party_cont_onoff, 1, 1)

@@ -23,6 +23,7 @@
 #include "npc_event.h"
 #include "evt/evt_npc.h"
 #include "data_tables.h"
+#include "driver/seqdrv.h"
 
 
 USER_FUNC(evt_mario_dispflag_onoff);
@@ -480,7 +481,7 @@ EVT_BEGIN(witchtrio_picture)
     CALL(evt_npc_flag_onoff, 1, STRING("ビビアン"), NPC_FLAG_NO_HIT | NPC_FLAG_VIVIAN_TYPE | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_npc_flag_onoff, 1, STRING("マリリン"), NPC_FLAG_NO_HIT | NPC_FLAG_VIVIAN_TYPE | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_npc_flag_onoff, 1, STRING("マジョリン"), NPC_FLAG_NO_HIT | NPC_FLAG_VIVIAN_TYPE | NPC_FLAG_NO_WALL_COLLISION)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     WAIT_MS(1000)
     CALL(evt_npc_change_fbat_mode, 7)
     CALL(evt_npc_stop_for_event)
@@ -803,7 +804,7 @@ EVT_BEGIN(witchtrio_lose)
     CALL(evt_npc_get_position, STRING("ビビアン"), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_GURUGURU_MARK1"), LW(0), LW(1), LW(2), 0)
     CALL(evt_eff_fukidashi, 1, STRING("effvivian"), STRING("ビビアン"), 2, 0, 0, 0, 0, 0, 0, -1)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     WAIT_MS(500)
     CALL(evt_npc_get_position, STRING("マジョリン"), LW(0), LW(1), LW(2))
     CALL(evt_npc_jump_position_nohit, STRING("マジョリン"), LW(0), LW(1), LW(2), 225, 30)

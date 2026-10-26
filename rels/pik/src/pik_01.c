@@ -35,6 +35,7 @@
 #include "pik.h"
 #include "driver/hitdrv.h"
 #include "mario/mario_pouch.h"
+#include "driver/seqdrv.h"
 
 static USER_FUNC(anim_tevcallback);
 USER_FUNC(chk_luigi_color);
@@ -827,7 +828,7 @@ static NpcSetupInfo npc_data[] = {
 EVT_BEGIN(teresa_fuwafuwa)
     CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
     SET_VALUE(LW(3), 0)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_sub_random, 14, LW(4))
     ADD(LW(4), 1)
     MULTIPLY(LW(4), 30)
@@ -961,7 +962,7 @@ EVT_BEGIN(pik_01_koopa_evt)
     CALL(evt_npc_flag_onoff, 1, STRING("ババ"), NPC_FLAG_INSTANT_TURN)
     CALL(evt_npc_set_ry, STRING("ババ"), 90)
     CALL(evt_cam3d_evt_set, -273, 145, 196, -273, 69, -237, 0, 11)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_bero_exec_wait, 65536)
     CALL(evt_npc_flag_onoff, 0, STRING("ババ"), NPC_FLAG_INSTANT_TURN)
     SET_VALUE(GF(0), 0)
@@ -1146,7 +1147,7 @@ static EVT_BEGIN(sekai_yami_evt)
     CALL(yami_view, -800)
     CALL(evt_cam3d_evt_set, 15, 134, 667, 15, 38, 126, 0, 11)
     SPAWN_EVENT(PTR(sekai_yami_shake))
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_snd_sfxon, STRING("SFX_STG8_QUAKE1"), LW(0))
     WAIT_MS(800)
     CALL(evt_npc_reverse_ry, STRING("ポワン探偵"))
@@ -1243,7 +1244,7 @@ static EVT_BEGIN(minnnanokoe_evt)
             END_IF
         END_LOOP
     END_INLINE_EVENT
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     WAIT_MS(500)
     CALL(evt_npc_flag_onoff, 0, STRING("マダム"), NPC_FLAG_INSTANT_TURN)
     CALL(evt_msg_print, 0, STRING("stg8_las_148_53"), 0, STRING("マダム"))

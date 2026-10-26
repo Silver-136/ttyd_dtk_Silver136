@@ -23,6 +23,7 @@
 #include "yuu.h"
 #include "data_tables.h"
 #include <math.h>
+#include "driver/seqdrv.h"
 
 typedef struct YuuNpcPose {
     char name[16];
@@ -2140,7 +2141,7 @@ EVT_BEGIN(evt_yuunpc_minigame4)
     CALL(evt_npc_flag_onoff, 1, STRING("yuusp2"), NPC_FLAG_NO_HIT)
     CALL(evt_ext_entry, 900, PTR(ext_yuunpc_minigame4_data), PTR(ext_yuunpc_minigame4_init), PTR(ext_yuunpc_minigame4_main), PTR(ext_yuunpc_dispent))
     BEGIN_INLINE_EVENT
-        CALL(evt_seq_wait, 2)
+        CALL(evt_seq_wait, SEQ_GAME)
         CALL(evt_npc_delete, STRING("yuunpc0"))
         CALL(evt_npc_delete, STRING("yuunpc1"))
         CALL(evt_npc_delete, STRING("yuunpc2"))

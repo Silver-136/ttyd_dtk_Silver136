@@ -39,6 +39,7 @@
 #include "evt/evt_npc.h"
 #include "evt/evt_shop.h"
 #include "data_tables.h"
+#include "driver/seqdrv.h"
 #ifdef VERSION_G8ME01
 #endif
 
@@ -1124,7 +1125,7 @@ EVT_BEGIN(musume_a_init)
     CALL(evt_npc_change_interrupt, LW(0), 6, PTR(musume_talk))
     BEGIN_INLINE_EVENT
         CALL(evt_npc_flag_onoff, 1, LW(0), NPC_FLAG_INSTANT_TURN)
-        CALL(evt_seq_wait, 2)
+        CALL(evt_seq_wait, SEQ_GAME)
         CALL(evt_npc_wait_pera, LW(0))
         CALL(evt_npc_flag_onoff, 0, LW(0), NPC_FLAG_INSTANT_TURN)
     END_INLINE_EVENT
@@ -1154,7 +1155,7 @@ EVT_BEGIN(musume_b_init)
     CALL(evt_npc_change_interrupt, LW(0), 6, PTR(musume_talk))
     BEGIN_INLINE_EVENT
         CALL(evt_npc_flag_onoff, 1, LW(0), NPC_FLAG_INSTANT_TURN)
-        CALL(evt_seq_wait, 2)
+        CALL(evt_seq_wait, SEQ_GAME)
         CALL(evt_npc_wait_pera, LW(0))
         CALL(evt_npc_flag_onoff, 0, LW(0), NPC_FLAG_INSTANT_TURN)
     END_INLINE_EVENT
@@ -1184,7 +1185,7 @@ EVT_BEGIN(musume_c_init)
     CALL(evt_npc_change_interrupt, LW(0), 6, PTR(musume_talk))
     BEGIN_INLINE_EVENT
         CALL(evt_npc_flag_onoff, 1, LW(0), NPC_FLAG_INSTANT_TURN)
-        CALL(evt_seq_wait, 2)
+        CALL(evt_seq_wait, SEQ_GAME)
         CALL(evt_npc_wait_pera, LW(0))
         CALL(evt_npc_flag_onoff, 0, LW(0), NPC_FLAG_INSTANT_TURN)
     END_INLINE_EVENT

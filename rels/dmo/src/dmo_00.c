@@ -42,6 +42,7 @@
 #include "evt/evt_party.h"
 #include "evt/evt_sub.h"
 #include "statuswindow.h"
+#include "driver/seqdrv.h"
 
 typedef struct DemoWork {
     s32 field_0x0;
@@ -553,7 +554,7 @@ EVT_BEGIN(buttonCheck)
         IF_BITS_SET(LW(0), 4352)
             SET_VALUE(GF(10), 1)
             CALL(evt_fade_set_mapchange_type, 1, 17, 500, -1, -1)
-            CALL(evt_seq_set_seq, 3, STRING("title"), 0)
+            CALL(evt_seq_set_seq, SEQ_MAP_CHANGE, STRING("title"), 0)
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
@@ -561,7 +562,7 @@ EVT_BEGIN(buttonCheck)
 EVT_END()
 
 EVT_BEGIN(demo_evt)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     SET_VALUE(GF(10), 0)
     SPAWN_EVENT_GET_ID(PTR(buttonCheck), GW(10))
     CALL(evt_snd_bgmon, 513, STRING("BGM_DEMO1"))
@@ -950,7 +951,7 @@ EVT_BEGIN(demo_evt)
     END_LOOP
     DELETE_EVENT(GW(10))
     CALL(evt_fade_set_mapchange_type, 1, 17, 2000, -1, -1)
-    CALL(evt_seq_set_seq, 3, STRING("title"), 0)
+    CALL(evt_seq_set_seq, SEQ_MAP_CHANGE, STRING("title"), 0)
     RETURN
 EVT_END()
 

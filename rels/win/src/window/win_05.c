@@ -17,6 +17,7 @@
 #include "evt/evt_sub.h"
 #include "mario/mario_pouch.h"
 #include "system.h"
+#include "driver/seqdrv.h"
 
 
 EvtWord win_05_door_open[10];
@@ -85,7 +86,7 @@ static EVT_BEGIN(cloud_toujou)
     CALL(evt_cam3d_evt_set, 89, 95, 242, 43, 52, 0, 0, 11)
     CALL(evt_map_set_blend, 0, 0, 0, 0, 255)
     CALL(evt_npc_wait_pera, STRING("クラウダ"))
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 0, 255, 500)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)

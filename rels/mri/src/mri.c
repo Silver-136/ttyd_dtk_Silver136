@@ -32,6 +32,7 @@
 #include "stdlib.h"
 #include "mri.h"
 #include "mri_puni.h"
+#include "driver/seqdrv.h"
 
 typedef void (*voidfunctionptr)(void);
 extern voidfunctionptr _ctors[];
@@ -551,7 +552,7 @@ EVT_BEGIN(mri_countdown)
     WAIT_MS(2000)
     CALL(evt_fade_entry, 17, 4000, 0, 0, 0)
     WAIT_MS(4000)
-    CALL(evt_seq_set_seq, 5, 1, 0)
+    CALL(evt_seq_set_seq, SEQ_GAME_OVER, 1, 0)
     RETURN
 EVT_END()
 

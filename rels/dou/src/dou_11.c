@@ -34,6 +34,7 @@
 #include "dou.h"
 #include "evt/evt_npc.h"
 #include "data_tables.h"
+#include "driver/seqdrv.h"
 
 static BOOL _hitIsGroupSub(HitEntry* target, HitEntry* node, BOOL checkSibling);
 BOOL hitIsGroup(HitEntry* target, HitEntry* group);
@@ -1256,7 +1257,7 @@ EVT_BEGIN(torinoko_suifu)
     CALL(evt_npc_set_position, STRING("水夫C"), 0, -1000, 0)
     CALL(evt_npc_set_position, STRING("水夫D"), 0, -1000, 0)
     CALL(evt_npc_set_position, STRING("水夫E"), 0, -1000, 0)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     WAIT_MS(500)
     CALL(evt_msg_toge, 2, -400, 60, 30)
     CALL(evt_msg_print, 0, STRING("stg5_dou_11"), 0, 0)

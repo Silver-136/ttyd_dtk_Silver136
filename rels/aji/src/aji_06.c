@@ -27,6 +27,7 @@
 #include "evt/evt_bero.h"
 #include "evt/evt_sub.h"
 #include "aji.h"
+#include "driver/seqdrv.h"
 
 typedef struct YukaAnimData { u16 flags; u8 field_0x2[6]; OSTime time; f32 frame; f32 speed; struct { u8 field_0x0[8]; f32 length; }* data; } YukaAnimData;
 typedef struct YukaAnim { YukaAnimData* anim; u32 flags; } YukaAnim;
@@ -1463,7 +1464,7 @@ static EVT_BEGIN(peach_evt_stg5)
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_memo2"), 0, PTR(peach_evt_memo2), 0)
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_memo3"), 0, PTR(peach_evt_memo3), 0)
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_memo4"), 0, PTR(peach_evt_memo4), 0)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_bero_exec_wait, 65536)
     CALL(evt_mario_adjust_dir)
     SET_VALUE(LW(0), STRING("s_bero"))
@@ -1601,7 +1602,7 @@ static EVT_BEGIN(peach_evt_stg5_1)
     CALL(evt_mapobj_trans, 0, STRING("S_kaihei2"), 0, -25, 0)
     CALL(evt_mapobj_trans, 0, STRING("S_kaihei3"), 0, -25, 0)
     CALL(evt_mapobj_trans, 0, STRING("S_kaihei4"), 0, -25, 0)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_bero_exec_wait, 65536)
     SET_VALUE(LW(0), STRING("s_bero"))
     CALL_CHILD(PTR(bero_case_switch_off))
@@ -1705,7 +1706,7 @@ EVT_BEGIN(aji_06_init_evt)
         CALL(evt_party_set_pos, 0, 185, 165, -100)
         CALL(evt_party_set_pos, 1, 195, 165, -90)
         BEGIN_INLINE_EVENT
-            CALL(evt_seq_wait, 2)
+            CALL(evt_seq_wait, SEQ_GAME)
             CALL(evt_mario_cont_onoff, 1)
             CALL(evt_party_cont_onoff, 0, 1)
             CALL(evt_party_cont_onoff, 1, 1)

@@ -17,6 +17,7 @@
 #include "evt/evt_mobj.h"
 #include "mario/mario_pouch.h"
 #include "driver/casedrv.h"
+#include "driver/seqdrv.h"
 
 
 EvtWord bero_in[45];
@@ -121,7 +122,7 @@ EVT_BEGIN(pik_03_init_evt)
         CALL(evt_cam_road_reset)
         CALL(evt_mario_key_onoff, 0)
         BEGIN_INLINE_EVENT
-            CALL(evt_seq_wait, 2)
+            CALL(evt_seq_wait, SEQ_GAME)
             CALL(evt_fade_end_wait)
             CALL(evt_mario_key_onoff, 1)
         END_INLINE_EVENT

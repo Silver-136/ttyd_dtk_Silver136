@@ -30,6 +30,7 @@
 #include "evt/evt_npc.h"
 #include "mario/mario_pouch.h"
 #include "manager/evtmgr_cmd.h"
+#include "driver/seqdrv.h"
 
 s32* tbl;
 
@@ -222,7 +223,7 @@ EVT_BEGIN(evt_chuchu)
     CALL(evt_snd_envoff, 512)
     CALL(evt_npc_set_position, STRING("チュチュリーナ"), -100, 50, -60)
     CALL(evt_npc_set_ry, STRING("チュチュリーナ"), 270)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_bero_exec_wait, 65536)
     WAIT_MS(200)
     CALL(evt_party_stop, 0)
@@ -567,14 +568,14 @@ EVT_BEGIN(tou_06_init_evt)
         CALL(evt_mario_cont_onoff, 0)
         CALL(evt_party_cont_onoff, 0, 0)
         BEGIN_INLINE_EVENT
-            CALL(evt_seq_wait, 2)
+            CALL(evt_seq_wait, SEQ_GAME)
             CALL(evt_mario_cont_onoff, 1)
             CALL(evt_mario_wait_landon)
             CALL(evt_mario_key_onoff, 1)
             CALL(evt_mario_cam_on)
         END_INLINE_EVENT
         BEGIN_INLINE_EVENT
-            CALL(evt_seq_wait, 2)
+            CALL(evt_seq_wait, SEQ_GAME)
             CALL(evt_party_cont_onoff, 0, 1)
         END_INLINE_EVENT
     END_IF

@@ -8,6 +8,7 @@
 #include "evt/evt_snd.h"
 #include "party/party_motion.h"
 #include "evt/evt_mobj.h"
+#include "driver/seqdrv.h"
 
 
 static BeroEntry bero_entry_data[3];
@@ -52,7 +53,7 @@ static BeroEntry bero_entry_data[] = {
 
 static EVT_BEGIN(korutesu_event)
     CALL(evt_mario_key_onoff, 0)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_bero_exec_wait, 65536)
     CALL(evt_mario_normalize)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))

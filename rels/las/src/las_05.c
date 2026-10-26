@@ -42,6 +42,7 @@
 #include "mario/mario_pouch.h"
 #include "driver/extdrv.h"
 #include <math.h>
+#include "driver/seqdrv.h"
 
 s32 _kurokaron_run_away(f32 x, f32 z, f32 tx, f32 tz);
 s32 kurokaron_move2(NpcEntry* npc, MarioWork* mario);
@@ -1300,7 +1301,7 @@ static EVT_BEGIN(senkaron_event)
                             CASE_EQUAL(2)
                             IF_INT_GREATER_OR_EQUAL(LW(0), 3000)
                                 CALL(evt_msg_print_party, STRING("stg8_las_06"))
-                                CALL(evt_seq_set_seq, 5, 0, 0)
+                                CALL(evt_seq_set_seq, SEQ_GAME_OVER, 0, 0)
                             END_IF
                         END_SWITCH
                         IF_INT_GREATER(LW(15), 0)

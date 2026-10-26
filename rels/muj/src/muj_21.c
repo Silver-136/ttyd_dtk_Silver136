@@ -23,6 +23,7 @@
 #include "mario/mariost.h"
 #include "muj.h"
 #include "evt/evt_npc.h"
+#include "driver/seqdrv.h"
 
 USER_FUNC(evt_mario_flag_onoff);
 static USER_FUNC(fune_eff);
@@ -82,7 +83,7 @@ static EVT_BEGIN(epilogue_evt)
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG0_SHIP_MOVE1"), LW(0), LW(1), LW(2), LW(3))
     CALL(evt_snd_sfx_vol, LW(3), 63)
     CALL(evt_cam3d_evt_set, 44, 173, 585, 44, 79, 50, 0, 11)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_npc_set_anim, STRING("ピーチ姫"), STRING("P_S_7"))
     WAIT_MS(2000)
     CALL(evt_npc_flag_onoff, 0, STRING("ピーチ姫"), NPC_FLAG_INSTANT_TURN)

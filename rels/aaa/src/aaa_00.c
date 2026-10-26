@@ -31,6 +31,7 @@
 #include "evt/evt_npc.h"
 #include "data_tables.h"
 #include "manager/evtmgr_cmd.h"
+#include "driver/seqdrv.h"
 
 static void draw(CameraId camera, void* param);
 typedef struct AaaWork { FileEntry* tpl; s32 alpha; } AaaWork;
@@ -168,7 +169,7 @@ static EVT_BEGIN(evt_prologue)
     CALL(evt_mario_set_pos, -150, 30, -330)
     CALL(evt_party_set_pos, 0, -150, 30, -330)
     CALL(evt_cam3d_evt_set, 145, 122, 884, 145, 108, -180, 0, 11)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_mario_set_pos, -150, 30, -330)
     CALL(evt_party_set_pos, 0, -150, 30, -330)
     BEGIN_INLINE_EVENT
@@ -382,7 +383,7 @@ EVT_BEGIN(evt_prologue2)
     CALL(evt_npc_set_ry, STRING("ルイージ"), 270)
     CALL(evt_npc_flag_onoff, 1, STRING("ルイージ"), NPC_FLAG_INSTANT_TURN)
     CALL(evt_cam3d_evt_set, -376, 154, 65, -63, 75, -247, 0, 11)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
 #ifdef VERSION_G8ME01
     CALL(evt_mario_set_dir, 90, 0, 0)
 #endif
@@ -430,7 +431,7 @@ static EVT_BEGIN(epilogue_evt)
     CALL(evt_mario_adjust_dir)
     CALL(evt_npc_set_position, STRING("ルイージ"), -44, 40, -163)
     CALL(evt_npc_set_ry, STRING("ルイージ"), 270)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_map_set_blend, 0, 0, 0, 0, 255)
     CALL(evt_mario_set_pose, STRING("M_S_5"))
     CALL(evt_npc_set_anim, STRING("ルイージ"), STRING("S_2"))
@@ -534,7 +535,7 @@ static EVT_BEGIN(epilogue_evt2)
     CALL(evt_npc_set_position, STRING("ルイージ"), -107, 30, -166)
     CALL(evt_npc_set_ry, STRING("ルイージ"), 270)
     CALL(evt_npc_flag_onoff, 1, STRING("ルイージ"), NPC_FLAG_INSTANT_TURN)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_mario_set_pose, STRING("M_N_10"))
     SET_VALUE(LW(0), PTR(&door_1))
     CALL_CHILD(PTR(evt_door_open_quick))

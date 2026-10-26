@@ -22,6 +22,7 @@
 #include "evt/evt_memcard.h"
 #include "evt/evt_npc.h"
 #include "driver/msgdrv.h"
+#include "driver/seqdrv.h"
 #ifdef VERSION_G8ME01
 #endif
 
@@ -110,7 +111,7 @@ EVT_BEGIN(kpa_07_evt)
     CALL(set_starstone_ry, STRING("nise"), 270)
     CALL(evt_cam3d_evt_set, 158, 190, 441, -109, 90, -61, 0, 11)
     CALL(evt_npc_set_tribe, STRING("ババ"), STRING("カメックババ（息切れ）"))
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_cam3d_evt_set, 158, 160, 441, -109, 60, -61, 1500, 11)
     WAIT_MS(1500)
     BEGIN_INLINE_EVENT

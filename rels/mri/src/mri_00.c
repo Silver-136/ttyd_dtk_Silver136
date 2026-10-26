@@ -44,6 +44,7 @@
 #include "evt/evt_bero.h"
 #include "mri.h"
 #include "evt/evt_npc.h"
+#include "driver/seqdrv.h"
 
 typedef struct CloudWork {
     s32 used;
@@ -750,7 +751,7 @@ EVT_BEGIN(first_bigtree)
     CALL(evt_snd_bgm_scope, 0, 1)
     CALL(evt_cam3d_evt_set, -700, 500, 916, 275, 500, -195, 0, 0)
     CALL(evt_cam_letter_box_onoff, 1, 0)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     BEGIN_INLINE_EVENT
         WAIT_MS(3000)
         CALL(evt_telop_entry, 5)
@@ -1121,7 +1122,7 @@ EVT_BEGIN(mario_see_you)
     CALL_CHILD(PTR(mario_see_you_init))
     CALL(evt_mario_cont_onoff, 1)
     CALL(evt_party_cont_onoff, 0, 1)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_fade_end_wait)
     CALL(evt_cam3d_evt_set, -29, 130, 567, -29, 44, 127, 3000, 0)
     WAIT_MS(3000)
@@ -1316,7 +1317,7 @@ static EVT_BEGIN(sekai_yami_evt)
     CALL(evt_npc_set_position, STRING("プニ族長老"), -120, 0, 300)
     CALL(evt_npc_set_ry, STRING("プニ族長老"), 270)
     CALL(evt_cam3d_evt_set, -150, 258, 1648, -150, 180, 150, 0, 11)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     WAIT_MS(1000)
     CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 255, 64, 2000)
     LOOP(0)
@@ -1428,7 +1429,7 @@ static EVT_BEGIN(minnnanokoe_evt)
     CALL(evt_bg_set_color, 64, 64, 64, 255)
     CALL(evt_cam3d_evt_set, -150, 258, 1648, -150, 180, 150, 0, 11)
     CALL(starstone_entry, STRING("starstone"), -150, 660, 200)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     WAIT_MS(500)
     SET_VALUE(GW(0), 660)
     BEGIN_INLINE_EVENT

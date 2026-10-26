@@ -16,6 +16,7 @@
 #include "stdio.h"
 #include "evt/evt_bero.h"
 #include "manager/evtmgr_cmd.h"
+#include "driver/seqdrv.h"
 
 static USER_FUNC(make_name);
 
@@ -117,7 +118,7 @@ static EVT_BEGIN(first_evt)
         WAIT_MS(7000)
         SET_VALUE(GF(0), 1)
     END_INLINE_EVENT
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_mario_normalize)
     CALL(evt_mario_set_dir, 90, 0, 0)
     CALL(evt_hitobj_onoff, STRING("w_bero"), 1, 0)

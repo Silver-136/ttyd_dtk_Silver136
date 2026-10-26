@@ -41,6 +41,7 @@
 #include "evt/evt_memcard.h"
 #include "end.h"
 #include "driver/extdrv.h"
+#include "driver/seqdrv.h"
 #ifdef VERSION_G8ME01
 #endif
 
@@ -842,7 +843,7 @@ EVT_BEGIN(end_return_title_evt)
     CALL(evt_snd_bgmoff_f, 512, 2000)
     CALL(evt_snd_bgmoff_f, 513, 2000)
     CALL(evt_fade_set_mapchange_type, 1, 17, 2000, -1, -1)
-    CALL(evt_seq_set_seq, 3, STRING("title"), 0)
+    CALL(evt_seq_set_seq, SEQ_MAP_CHANGE, STRING("title"), 0)
     RETURN
 EVT_END()
 

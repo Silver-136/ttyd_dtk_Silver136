@@ -22,6 +22,7 @@
 #include "driver/camdrv.h"
 #include "evt/evt_bero.h"
 #include "manager/evtmgr_cmd.h"
+#include "driver/seqdrv.h"
 
 
 USER_FUNC(check_party_pos);
@@ -406,7 +407,7 @@ const char* kabe_list_3[] = {
 };
 
 EVT_BEGIN(las_10_temae_kabe)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     LOOP(0)
         CALL(temae_kesu)
         WAIT_FRAMES(1)
@@ -415,7 +416,7 @@ EVT_BEGIN(las_10_temae_kabe)
 EVT_END()
 
 static EVT_BEGIN(first_evt)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     LOOP(0)
         CALL(evt_mario_get_name_hitobj_ride, LW(0))
         IF_STR_EQUAL(LW(0), STRING("A_3_3"))
@@ -584,7 +585,7 @@ EVT_BEGIN(tenkyugi_evt2)
     CALL(evt_party_dispflg_onoff, 0, 32, 0)
     WAIT_FRAMES(1)
     CALL(evt_cam3d_evt_set, 0, 500, 390, 0, 450, 95, 0, 11)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_mario_set_pos, -55, 400, 60)
     CALL(evt_party_set_pos, 0, -25, 400, 80)
     CALL(evt_snd_sfxon, STRING("SFX_STG8_CELESTIAL_SHAKE1"), LW(10))
@@ -1158,7 +1159,7 @@ EVT_BEGIN(las_10_init_evt)
                 CALL(evt_mario_set_pos, -84, 400, 240)
                 CALL(evt_party_set_pos, 0, -123, 400, 255)
                 CALL(evt_cam_road_reset)
-                CALL(evt_seq_wait, 2)
+                CALL(evt_seq_wait, SEQ_GAME)
                 CALL(evt_bero_exec_wait, 65536)
                 SPAWN_EVENT(PTR(tenkyugi_evt))
             END_INLINE_EVENT

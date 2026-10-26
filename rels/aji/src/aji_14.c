@@ -20,6 +20,7 @@
 #include "evt/evt_sub.h"
 #include "aji.h"
 #include "evt/evt_npc.h"
+#include "driver/seqdrv.h"
 
 USER_FUNC(waku);
 
@@ -150,7 +151,7 @@ static EVT_BEGIN(evt_boss)
     CALL(evt_npc_pera_onoff, STRING("ロボット"), 0)
     CALL(evt_npc_set_anim, STRING("ロボット"), STRING("Z_1"))
     CALL(evt_cam3d_evt_set, 375, 420, 935, -225, -30, 0, 0, 11)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_cam3d_evt_set, 375, 500, 935, -225, 50, 0, 4000, 11)
     CALL(evt_bero_exec_wait, 65536)
     CALL(evt_mario_mov_pos2, -420, 0, FLOAT(80.0f))
@@ -334,7 +335,7 @@ EVT_BEGIN(evt_boss2)
     CALL(evt_party_stop, 0)
     CALL(evt_mario_set_pos, -100, 0, 0)
     CALL(evt_party_set_pos, 0, -140, 0, 15)
-    CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, SEQ_GAME)
     WAIT_MS(1000)
     CALL(evt_item_entry, STRING("dummy"), ITEM_CRYSTAL_STAR, 0, 1000, 0, 17, -1, 0)
     CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 1000, 25, 2000)
