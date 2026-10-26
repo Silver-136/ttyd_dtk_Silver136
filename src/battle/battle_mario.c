@@ -36,7 +36,6 @@ static USER_FUNC(_get_mario_hammer_lv);
 #include "system.h"
 #include "pmario_sound.h"
 
-void BtlUnit_SetAnim(BattleUnitPart* part, s32 anim);
 
 #include "battle/battle_unit.h"
 #include "battle/battle_database_common.h"
@@ -6505,7 +6504,7 @@ USER_FUNC(_kaiten_hammer_acrobat_rotate) {
     EvtWord* args = event->args;
     BattleWork* wp = _battleWorkPointer;
     s32 n;
-    s32 anim;
+    const char* anim;
     f32 rx, ry, rz;
     s32 id = evtGetValue(event, args[0]);
     s32 pn;
@@ -6513,7 +6512,7 @@ USER_FUNC(_kaiten_hammer_acrobat_rotate) {
     pn = evtGetValue(event, args[1]);
     part = BtlUnit_GetPartsPtr(unit, pn);
     n = evtGetValue(event, args[2]);
-    anim = evtGetValue(event, args[3]);
+    anim = (const char*)evtGetValue(event, args[3]);
     if (isFirstCall) {
         BtlUnit_GetRotate(unit, &rx, &ry, &rz);
         event->userdata[0] = n;

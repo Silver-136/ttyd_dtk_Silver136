@@ -115,7 +115,6 @@ typedef struct GenkiWork {
     GenkiStar star[7]; // 0x510
 } GenkiWork;
 
-void BtlUnit_SetAnim(BattleUnitPart* part, const char* anim);
 EffectEntry* effStardustEntry(s32 type, s32 count, s32 camera, f32 x, f32 y, f32 z, f32 vx, f32 vy);
 USER_FUNC(recover_cmd_disable);
 USER_FUNC(star_appear);

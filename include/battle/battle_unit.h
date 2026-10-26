@@ -1100,6 +1100,7 @@ s32 BtlUnit_snd_se_pos(BattleUnit* unit, const char* sfxName, s32 volume, s16 pi
 BattleUnit* BtlUnit_GetGuardKouraPtr(BattleUnit* unit);
 
 BOOL BtlUnit_CanActStatus(BattleUnit* unit);
+void BtlUnit_SetAnim(BattleUnitPart* part, const char* name);
 void BtlUnit_SetAnimType(BattleUnitPart* part, s32 type);
 void BtlUnit_SetBodyAnim(BattleUnit* unit, const char* name);
 void BtlUnit_SetBodyAnimType(BattleUnit* unit, s32 type);

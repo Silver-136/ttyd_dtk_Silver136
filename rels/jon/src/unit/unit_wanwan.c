@@ -17,7 +17,6 @@
 #include "battle/battle_damage.h"
 
 double sqrt(double x);
-void BtlUnit_SetAnim(BattleUnitPart* part, const char* anim);
 
 USER_FUNC(btlevtcmd_SetJumpSound);
 static USER_FUNC(chain_init);

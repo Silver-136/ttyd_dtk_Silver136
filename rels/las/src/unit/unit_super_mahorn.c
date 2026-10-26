@@ -25,7 +25,6 @@
 
 double __fabs(double x);
 static inline double mahorn_fabs(double x) { return __fabs(x); }
-void BtlUnit_SetAnim(BattleUnitPart* part, const char* anim);
 
 static USER_FUNC(hand_ctrl);
 static USER_FUNC(hand_init);

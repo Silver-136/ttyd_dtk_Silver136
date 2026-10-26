@@ -36,7 +36,6 @@ typedef struct BarriernSpline {
 void spline_maketable(s32 n, Vec* table, f32* a, f32* b);
 void spline_getvalue(f32 t, Vec* out, s32 n, Vec* table, f32* a, f32* b);
 static s32 zanzou_count[5];
-void BtlUnit_SetAnim(BattleUnitPart* part, const char* anim);
 static s32 barriern_satellite_zanzou_sub(BOOL isFirstCall, BattleUnit* unit, f32* scales, s32 n, s32 type);
 static s32 barriern_zanzou_sub(BOOL isFirstCall, BattleUnit* unit, f32* scales, s32 type);
 

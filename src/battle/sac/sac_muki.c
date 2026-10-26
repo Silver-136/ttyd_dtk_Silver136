@@ -33,7 +33,6 @@
 #define BTL_TEX(id) ((id) + VERSION_PICK(0, 0x16))
 
 
-void BtlUnit_SetAnim(BattleUnitPart* part, const char* anim);
 
 
 static USER_FUNC(star_stone_appear);

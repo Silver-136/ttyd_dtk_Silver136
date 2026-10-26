@@ -78,7 +78,6 @@ ExtTexInfo hand_data[32];
 HandWork* hand_wp;
 u8* lightGetPaperCraft(void);
 void btl_camera_shake_w(s32 a, s32 b, s32 c, f32 d, f32 e);
-void BtlUnit_SetAnim(BattleUnitPart* part, const char* anim);
 
 USER_FUNC(btlevtcmd_InterruptStop);
 USER_FUNC(btlevtcmd_SetEventEntry);
