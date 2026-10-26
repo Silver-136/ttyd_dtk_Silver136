@@ -278,49 +278,51 @@ void peach_stay(void) {
         marioChgMot(MARIO_MOTION_WALK);
     }
     if (!(mp->flags & MARIO_FLAG_KEY_OFF)) {
-    switch (mp->dispFlags & MARIO_DISP_FLAG_PAPER) { case 0:
-    { if (!(mp->peachFlags & (PEACH_FLAG_STS_MASK | PEACH_FLAG_GUNDAN))) {
-        switch (mp->currSubMotionId) {
-        case 0:
-            if (++MT >= sysMsec2Frame(50000)) {
-                marioChgPose("P_U_1");
-                MT = 80;
-                mp->currSubMotionId = 1;
-                mp->soundId[0] = psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_VOICE_PEACH_SAD1_1), &mp->position);
-                marioAdjustMoveDir();
-            }
-            break;
-        case 1:
-            if (--MT < 0) {
-                marioChgPose("P_S_1");
-                MT = 100;
-                mp->currSubMotionId = 2;
-            }
-            break;
-        case 2:
-            if (--MT < 0) {
-                marioChgPose("P_N_1");
-                MT = 0;
-                mp->currSubMotionId = 20;
-                mp->mot.peach.sleepTimer = 0;
-            }
-            break;
-        case 20:
-            if (++mp->mot.peach.sleepTimer >= sysMsec2Frame(10000)) {
-                mp->mot.peach.sleepTimer = sysMsec2Frame(10000);
-            }
-            if (++MT >= 100) {
-                MT = 0;
-            }
-            if (mp->flags & MARIO_FLAG_KEY_OFF) {
-                marioChgPose("P_S_1");
-                mp->currSubMotionId = 0;
-            }
-            break;
-        }
+        switch (mp->dispFlags & MARIO_DISP_FLAG_PAPER) {
+            case 0:
+                if (!(mp->peachFlags & (PEACH_FLAG_STS_MASK | PEACH_FLAG_GUNDAN))) {
+                    switch (mp->currSubMotionId) {
+                        case 0:
+                            if (++MT >= sysMsec2Frame(50000)) {
+                                marioChgPose("P_U_1");
+                                MT = 80;
+                                mp->currSubMotionId = 1;
+                                mp->soundId[0] = psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_VOICE_PEACH_SAD1_1), &mp->position);
+                                marioAdjustMoveDir();
+                            }
+                            break;
+                        case 1:
+                            if (--MT < 0) {
+                                marioChgPose("P_S_1");
+                                MT = 100;
+                                mp->currSubMotionId = 2;
+                            }
+                            break;
+                        case 2:
+                            if (--MT < 0) {
+                                marioChgPose("P_N_1");
+                                MT = 0;
+                                mp->currSubMotionId = 20;
+                                mp->mot.peach.sleepTimer = 0;
+                            }
+                            break;
+                        case 20:
+                            if (++mp->mot.peach.sleepTimer >= sysMsec2Frame(10000)) {
+                                mp->mot.peach.sleepTimer = sysMsec2Frame(10000);
+                            }
+                            if (++MT >= 100) {
+                                MT = 0;
+                            }
+                            if (mp->flags & MARIO_FLAG_KEY_OFF) {
+                                marioChgPose("P_S_1");
+                                mp->currSubMotionId = 0;
+                            }
+                            break;
+                    }
+                }
+                break;
         }
     }
-    break; } }
 #undef MT
 }
 

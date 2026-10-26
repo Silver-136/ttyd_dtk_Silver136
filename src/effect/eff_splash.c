@@ -537,14 +537,16 @@ void effSplashDisp(CameraId cameraId, EffectEntry* effect) {
         GXLoadTexObj(&texObj, GX_TEXMAP0);
         PSMTXIdentity(trans);
         GXLoadTexMtxImm(trans, GX_TEXMTX0, GX_MTX2x4);
-        switch (type) { case 2:
-            r0 = 1.0f;
-            g0 = 0.869f;
-            b0 = 0.0f;
-            break; default:
-            r0 = (1.0f + color.r / 255.0f) / 2;
-            g0 = (1.0f + color.g / 255.0f) / 2;
-            b0 = (1.0f + color.b / 255.0f) / 2;
+        switch (type) {
+            case 2:
+                r0 = 1.0f;
+                g0 = 0.869f;
+                b0 = 0.0f;
+                break;
+            default:
+                r0 = (1.0f + color.r / 255.0f) / 2;
+                g0 = (1.0f + color.g / 255.0f) / 2;
+                b0 = (1.0f + color.b / 255.0f) / 2;
         }
         GXBegin(GX_QUADS, GX_VTXFMT0, 4);
         GXPosition3f32(-w / 2, (w / 2), 0.0f);

@@ -86,10 +86,38 @@ static FighterData fighterDt_re[21];
 static void rankingControll(void);
 #define GET_RANK(rank, i) rank = 0; for (i = 0; i < rank_wp->num; i++) { if (!(rank_wp->entries[i].flags & 2)) { if (rank_wp->entries[i].flags & 4) { break; } rank++; } }
 static void insert(s32* list, s32 num, s32 from, s32 to);
-#define SORT_SCORE(list, n) for (i = 0; i < n - 1; i++) { for (j = i + 1; j < n; j++) { if (rank_wp->entries[list[i]].score < rank_wp->entries[list[j]].score) { tmp = list[i]; list[i] = list[j]; list[j] = tmp; } } }
-#define SORT_FLAG(list, n) for (i = 0; i < n - 1; i++) { for (j = i + 1; j < n; j++) { pb = &fighterDt[rank_wp->entries[list[i]].id]; if ((fighterDt[rank_wp->entries[list[j]].id].flags & 5) && (pb->flags & 2)) { tmp = list[i]; list[i] = list[j]; list[j] = tmp; } } }
-#define FIND_FLAG(k, list, n, flag) for (k = 0; k < n; k++) { if (fighterDt[rank_wp->entries[list[k]].id].flags & flag) { break; } }
-#define MOVE_FLAG(list, n, flag, pos) FIND_FLAG(k, list, n, flag); if (k < n) { insert(list, n, k, pos); }
+#define SORT_SCORE(list, n)                                                                    \
+    for (i = 0; i < n - 1; i++) {                                                              \
+        for (j = i + 1; j < n; j++) {                                                          \
+            if (rank_wp->entries[list[i]].score < rank_wp->entries[list[j]].score) {           \
+                tmp = list[i];                                                                 \
+                list[i] = list[j];                                                             \
+                list[j] = tmp;                                                                 \
+            }                                                                                  \
+        }                                                                                      \
+    }
+#define SORT_FLAG(list, n)                                                                     \
+    for (i = 0; i < n - 1; i++) {                                                              \
+        for (j = i + 1; j < n; j++) {                                                          \
+            pb = &fighterDt[rank_wp->entries[list[i]].id];                                     \
+            if ((fighterDt[rank_wp->entries[list[j]].id].flags & 5) && (pb->flags & 2)) {      \
+                tmp = list[i];                                                                 \
+                list[i] = list[j];                                                             \
+                list[j] = tmp;                                                                 \
+            }                                                                                  \
+        }                                                                                      \
+    }
+#define FIND_FLAG(k, list, n, flag)                                                            \
+    for (k = 0; k < n; k++) {                                                                  \
+        if (fighterDt[rank_wp->entries[list[k]].id].flags & flag) {                            \
+            break;                                                                             \
+        }                                                                                      \
+    }
+#define MOVE_FLAG(list, n, flag, pos)                                                          \
+    FIND_FLAG(k, list, n, flag);                                                               \
+    if (k < n) {                                                                               \
+        insert(list, n, k, pos);                                                               \
+    }
 static void printRanking(void);
 static RuleData ruleDt_2bu[10];
 static RuleData ruleDt_1bu[14];
