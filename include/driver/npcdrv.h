@@ -199,6 +199,18 @@ typedef enum NpcInterruptFlags {
     NPC_INTERRUPT_MOVE = (1 << 28),    // 0x10000000, restart the regular (move) event
 } NpcInterruptFlags;
 
+// How a Bowser-stage (2D) NPC was beaten: npcGroupDead's reason, kept in koopaEncounterType
+// (evt_npc_get_kpencount_type, npcCalcScore). NpcEntry.hazardFlags holds the same bits as immunities.
+typedef enum NpcKoopaEncount {
+    KPA_ENCOUNT_NONE = 0,              // defeated otherwise (field battle, script)
+    KPA_ENCOUNT_STOMP = (1 << 0),      // 0x1, jumped on by Bowser; NPCs in water are immune
+    KPA_ENCOUNT_FIRE = (1 << 1),       // 0x2, Bowser's fire (combo score)
+    KPA_ENCOUNT_STAR = (1 << 2),       // 0x4, touched while Bowser is invincible
+    KPA_ENCOUNT_MOBJ = (1 << 3),       // 0x8, standing on a map object that bounced (npcKoopaModeMobjBoundDeadCheck)
+    KPA_ENCOUNT_MAGMA = (1 << 4),      // 0x10, fell into magma ("a_magu"): no score
+    KPA_ENCOUNT_GOAL_POLE = (1 << 5),  // 0x20, cleared when Bowser hits the goal pole
+} NpcKoopaEncount;
+
 typedef struct NpcEntry {
     s32 flags;                      // 0x0, NpcFlags
     u32 reactionFlags;              // 0x4
@@ -281,8 +293,8 @@ typedef struct NpcEntry {
     u8 baseCoinCount;               // 0x316
     s8 balloonType;                 // 0x317
     u32 fbatHitKind;                // 0x318, kind from fbatHitCheck when this NPC triggered the battle
-    u16 koopaEncounterType;         // 0x31C
-    u16 hazardFlags;                // 0x31E, 1 water (kpa_03), 2/4/8/0x10 hazard deaths already handled (0x10 magma)
+    u16 koopaEncounterType;         // 0x31C, NpcKoopaEncount
+    u16 hazardFlags;                // 0x31E, NpcKoopaEncount bits the NPC is immune to
     u16 wFbatHitCheckRelated;       // 0x320
     u8 pad_322[2];                  // 0x322
     struct NpcEntry* prev;          // 0x324

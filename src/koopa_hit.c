@@ -106,7 +106,7 @@ s32 kpaEnemyHitChk(f32 x, f32 y, f32 z, f32 h, f32 w) {
     m = marioGetPtr();
 
     if (kpaEnemyFireHitChk(x, y, z, h, w)) {
-        return 2;
+        return KPA_ENEMY_HIT_FIRE;
     }
     // FAKE: no-op self-assignment; fixes the scheduling of the position.y load
     m->wPlayerCollisionBox.y = m->wPlayerCollisionBox.y;
@@ -119,19 +119,19 @@ s32 kpaEnemyHitChk(f32 x, f32 y, f32 z, f32 h, f32 w) {
             if (kpaGetLevel() == 0 && kpaGetStageType() != 1 && m->mutekiTimer == 0 && z < 50.0f) {
                 marioChgMot(MARIO_MOTION_JUMP_NPC);
             }
-            return 1;
+            return KPA_ENEMY_HIT_STOMP;
         }
         if (kpaMutekiCheck() == 1) {
-            return 3;
+            return KPA_ENEMY_HIT_STAR;
         }
         if (m->mutekiTimer != 0) {
-            return 3;
+            return KPA_ENEMY_HIT_STAR;
         }
         if (m->kpaNoHitTimer == 0) {
-            return 4;
+            return KPA_ENEMY_HIT_BOWSER;
         }
     }
-    return 0;
+    return KPA_ENEMY_HIT_NONE;
 }
 
 static inline void kpa_headClear(void) {

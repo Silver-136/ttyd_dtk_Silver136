@@ -728,7 +728,7 @@ void npcMain(void) {
                         f30v = 1.0f;
                     }
                     if (entry->statusFlags & NPC_STATUS_IN_WATER) {
-                        entry->hazardFlags |= 1;
+                        entry->hazardFlags |= KPA_ENCOUNT_STOMP;
                     }
                     if (entry->statusFlags & NPC_STATUS_UPDATE) {
                         if (entry->moveDt > 0.0f) {
@@ -2205,7 +2205,7 @@ void fbatBattleMode(void) {
                     apply:
                     cur->btlCoinDropCount *= mult;
                     if (!stolen) {
-                        npcGroupDead(cur, 0);
+                        npcGroupDead(cur, KPA_ENCOUNT_NONE);
                         break;
                     }
                     if (cur->flags & NPC_FLAG_AUTO_MOVE_ANIM) {
@@ -3175,28 +3175,28 @@ void npcKoopaModeEncountCheck(void) {
             if (entry && entry->flags & NPC_FLAG_IN_USE && entry->flags & NPC_FLAG_2D && !(entry->statusFlags & NPC_STATUS_DEAD)) {
                 switch (kpaEnemyHitChk(entry->position.x, entry->position.y, entry->position.z, entry->height,
                                        entry->width)) {
-                    case 1:
-                        if (!(entry->hazardFlags & 1)) {
-                            npcGroupDead(entry, 1);
+                    case KPA_ENEMY_HIT_STOMP:
+                        if (!(entry->hazardFlags & KPA_ENCOUNT_STOMP)) {
+                            npcGroupDead(entry, KPA_ENCOUNT_STOMP);
                         }
                         break;
-                    case 2:
-                        if (!(entry->hazardFlags & 2)) {
-                            npcGroupDead(entry, 2);
+                    case KPA_ENEMY_HIT_FIRE:
+                        if (!(entry->hazardFlags & KPA_ENCOUNT_FIRE)) {
+                            npcGroupDead(entry, KPA_ENCOUNT_FIRE);
                         }
                         break;
-                    case 3:
-                        if (!(entry->hazardFlags & 4)) {
-                            npcGroupDead(entry, 4);
+                    case KPA_ENEMY_HIT_STAR:
+                        if (!(entry->hazardFlags & KPA_ENCOUNT_STAR)) {
+                            npcGroupDead(entry, KPA_ENCOUNT_STAR);
                         }
                         break;
-                    case 4:
+                    case KPA_ENEMY_HIT_BOWSER:
                         kpaPowDown();
                         break;
                     default:
-                        if (!(entry->hazardFlags & 0x10) && entry->groundHit &&
+                        if (!(entry->hazardFlags & KPA_ENCOUNT_MAGMA) && entry->groundHit &&
                             !strcmp(hitGetName(entry->groundHit), "a_magu")) {
-                            npcGroupDead(entry, 0x10);
+                            npcGroupDead(entry, KPA_ENCOUNT_MAGMA);
                         }
                         break;
                 }
@@ -3222,8 +3222,8 @@ s32 npcKoopaModeMobjBoundDeadCheck(HitEntry* hit) {
     entry = wp->entries;
     for (i = 0; i < total; i++, entry++) {
         if (entry && entry->flags & NPC_FLAG_IN_USE && entry->flags & NPC_FLAG_2D && !(entry->statusFlags & NPC_STATUS_DEAD) &&
-            !(entry->hazardFlags & 8) && entry->groundHit == hit) {
-            npcGroupDead(entry, 8);
+            !(entry->hazardFlags & KPA_ENCOUNT_MOBJ) && entry->groundHit == hit) {
+            npcGroupDead(entry, KPA_ENCOUNT_MOBJ);
             count++;
         }
     }
@@ -3240,20 +3240,20 @@ s32 npcCalcScore(NpcEntry* npc) {
     Vec pos = npc->position;
 
     pos.y += npc->tribe->height;
-    if (npc->koopaEncounterType == 0x10) {
+    if (npc->koopaEncounterType == KPA_ENCOUNT_MAGMA) {
         score = 0;
     } else {
-        if (npc->koopaEncounterType == 8) {
+        if (npc->koopaEncounterType == KPA_ENCOUNT_MOBJ) {
             score = 400;
         }
         if (kpaMutekiCheck()) {
             score += 100;
         }
-        if (npc->koopaEncounterType == 2) {
+        if (npc->koopaEncounterType == KPA_ENCOUNT_FIRE) {
             data->kpaComboCount++;
             score *= data->kpaComboCount;
         }
-        if (npc->koopaEncounterType == 1) {
+        if (npc->koopaEncounterType == KPA_ENCOUNT_STOMP) {
             data->kpaJumpKills++;
             data->kpaJumpScore += score;
         }

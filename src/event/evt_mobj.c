@@ -4237,7 +4237,7 @@ USER_FUNC(evt_mobj_koopa_fireber_dodai) {
         npcEntry(buf, "c_fireber");
         npc = npcNameToPtr(buf);
         npc->flags |= NPC_FLAG_2D;
-        npc->hazardFlags |= 0xf;
+        npc->hazardFlags |= (KPA_ENCOUNT_STOMP | KPA_ENCOUNT_FIRE | KPA_ENCOUNT_STAR | KPA_ENCOUNT_MOBJ);
         npc->position.x = x;
         npc->position.y = 25.0f + y + 25.0f * i;
 #ifdef VERSION_G8ME01
@@ -4559,8 +4559,8 @@ s32 mobj_koopa_pole_evt(MapObjectEntry* mobj) {
         for (i = 0, off = 0; i < npcGetWorkPtr()->total; off += 0x340, i++) {
             NpcEntry* npc = (NpcEntry*)((char*)npcGetWorkPtr()->entries + off);
             u32 flags = (u32)npc->flags;
-            if ((flags & 1) && !(npc->statusFlags & NPC_STATUS_DEAD) && (flags & 0x8000000) && (flags & 8)) {
-                npcGroupDead(npc, 0x20);
+            if ((flags & NPC_FLAG_IN_USE) && !(npc->statusFlags & NPC_STATUS_DEAD) && (flags & NPC_FLAG_2D) && (flags & NPC_FLAG_ENEMY)) {
+                npcGroupDead(npc, KPA_ENCOUNT_GOAL_POLE);
             }
         }
         marioKeyOff();

@@ -4,6 +4,15 @@
 
 HitEntry* kpaChkHitobjRide(void);
 long kpaClearHitobjRide(void);
+// kpaEnemyHitChk results
+typedef enum KpaEnemyHit {
+    KPA_ENEMY_HIT_NONE = 0,
+    KPA_ENEMY_HIT_STOMP = 1,   // Bowser lands on it
+    KPA_ENEMY_HIT_FIRE = 2,    // in Bowser's fire
+    KPA_ENEMY_HIT_STAR = 3,    // touched while Bowser is invincible
+    KPA_ENEMY_HIT_BOWSER = 4,  // it hurts Bowser
+} KpaEnemyHit;
+
 s32 kpaEnemyHitChk(f32 x, f32 y, f32 z, f32 h, f32 w);
 HitEntry* kpaFlameHitCheck(f32 x, f32 y, f32 z, f32 r);
 HitEntry* kpaGetHitFlame(void);

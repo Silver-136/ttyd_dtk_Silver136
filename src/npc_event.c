@@ -4411,7 +4411,7 @@ USER_FUNC(npc_fire_eff_fadeout) {
 USER_FUNC(set_bottle_flag_init) {
     NpcEntry* npc = evtNpcNameToPtr(event, "slave_0");
     npc->flags |= (NPC_FLAG_NO_HIT | NPC_FLAG_GRAVITY | NPC_FLAG_2D | NPC_FLAG_NO_PLAYER_ATTACK);
-    npc->hazardFlags |= 0x1f;
+    npc->hazardFlags |= (KPA_ENCOUNT_STOMP | KPA_ENCOUNT_FIRE | KPA_ENCOUNT_STAR | KPA_ENCOUNT_MOBJ | KPA_ENCOUNT_MAGMA);
     return EVT_RETURN_DONE;
 }
 
