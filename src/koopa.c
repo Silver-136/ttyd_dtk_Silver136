@@ -30,7 +30,6 @@ void kpaFireMain(void);
 void kpaFall(void);
 const f32 vec3_802fc920[3] = {0.0f, 0.0f, 0.0f};
 extern f32 marioJumpData[];
-void* marioChkLandon(f32* outY, f32 y);
 
 #define KPW(m) ((m)->kpaWork)
 

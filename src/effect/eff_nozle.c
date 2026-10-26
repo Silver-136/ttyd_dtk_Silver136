@@ -7,6 +7,7 @@
 #include <dolphin/gx.h>
 #include <dolphin/mtx.h>
 #include "eff/eff_kemu_test.h"
+#include "eff/eff_nozle.h"
 
 typedef struct EffNozleWork {
     s32 type;       // 0x0

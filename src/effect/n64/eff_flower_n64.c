@@ -7,6 +7,7 @@
 #include <dolphin/mtx.h>
 #include <stdlib.h>
 #include "eff/n64/eff_kemuri4_n64.h"
+#include "eff/n64/eff_flower_n64.h"
 
 typedef struct EffFlowerN64Work {
     s32 type;     // 0x0

@@ -32,7 +32,6 @@
 static const Vec zv0 = {0.0f, 0.0f, 0.0f};
 static const Vec zv1 = {0.0f, 0.0f, 0.0f};
 
-extern HitEntry* marioSearchHead(Vec* pos, f32* h, f32 d);
 
 static inline BOOL marioChkBeroSub(s32 attr) {
     BOOL r = TRUE;

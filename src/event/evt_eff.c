@@ -143,27 +143,27 @@
 #include "eff/eff_kemuri.h"
 #include "eff/n64/eff_hagetaka_flush_n64.h"
 #include "eff/eff_fukidashi.h"
+#include "eff/eff_fall.h"
+#include "eff/n64/eff_fall_leaf_n64.h"
+#include "eff/n64/eff_fireflower_n64.h"
+#include "eff/n64/eff_flower_n64.h"
+#include "eff/n64/eff_magic3_n64.h"
+#include "eff/n64/eff_magic_horao_n64.h"
+#include "eff/eff_nozle.h"
+#include "eff/n64/eff_opuku_jetwrain_n64.h"
+#include "eff/eff_particle.h"
+#include "eff/n64/eff_timestamp_n64.h"
 
 #include "party.h"
 
-extern EffectEntry* effFlowerN64Entry(s32, s32, f32, f32, f32);
-extern EffectEntry* effFallLeafN64Entry(s32, s32, f32, f32, f32);
 extern EffectEntry* effGarekiN64Entry(s32, f32, f32, f32, f32);
-extern EffectEntry* effMagic3N64Entry(s32, s32, f32, f32, f32);
 extern EffectEntry* effRotHammerFailN64Entry(s32, s32, f32, f32, f32, f32);
-extern EffectEntry* effFireFlowerN64Entry(s32, s32, f32, f32, f32);
 extern EffectEntry* effWhirlwindN64Entry(s32, s32, s32, f32);
 extern EffectEntry* effThunderflareN64Entry(s32, s32, f32, f32, f32, f32);
 extern EffectEntry* effCoinN64Entry(s32, s32, f32, f32, f32, f32);
-extern EffectEntry* effMagicHoraoN64Entry(s32, s32, s32, s32, f32, f32, f32, f32, f32, f32);
 extern EffectEntry* effLensflareN64Entry(s32, s32, f32, f32, f32, f32);
-extern EffectEntry* effOpukuJetwrainN64Entry(s32, s32, f32, f32, f32, f32);
-extern EffectEntry* effTimestampN64Entry(s32, s32, f32, f32, f32, f32);
 extern EffectEntry* effBoobooN64Entry(s32, s32, f32, f32, f32, f32);
 
-extern EffectEntry* effFallEntry(s32, s32, s32, f32, f32, f32, f32, f32, f32);
-extern EffectEntry* effNozleEntry(s32, s32, f32, f32, f32, f32, f32);
-extern EffectEntry* effParticleEntry(s32, s32, s32, f32, f32, f32, f32, f32, f32);
 
 USER_FUNC(evt_eff) {
     EvtWord* args = event->args;
@@ -271,13 +271,13 @@ USER_FUNC(evt_eff) {
             entry = effLevelupEntry(int2, float3, float4, float5, int6);
             break;
         case 35:
-            entry = effFallEntry(int2, int9, int10, float3, float4, float5, float6, float7, float8);
+            entry = effFallEntry(int2, float3, float4, float5, float6, float7, float8, int9, int10);
             break;
         case 39:
             entry = effMahojinEntry(int2, float3, float4, float5);
             break;
         case 40:
-            entry = effNozleEntry(int2, int8, float3, float4, float5, float6, float7);
+            entry = effNozleEntry(int2, float3, float4, float5, float6, float7, int8);
             break;
         case 26:
             entry = effPuniBalloonEntry(int2, float3, float4, float5, float6);
@@ -301,7 +301,7 @@ USER_FUNC(evt_eff) {
             entry = effScanningEntry(int2, float3, float4, float5);
             break;
         case 59:
-            entry = effParticleEntry(int2, int9, int10, float3, float4, float5, float6, float7, float8);
+            entry = effParticleEntry(int2, float3, float4, float5, float6, float7, float8, int9, int10);
             break;
         case 9:
             effStardustEntry(int2, int8, int9, float3, float4, float5, float6, float7);
@@ -496,7 +496,7 @@ s32 evt_eff64(EventEntry *event, BOOL isFirstCall) {
             break;
 
         case 8:
-            effect = effFlowerN64Entry(int2, int6, float3, float4, float5);
+            effect = effFlowerN64Entry(int2, float3, float4, float5, int6);
             break;
 
         case 9:
@@ -520,7 +520,7 @@ s32 evt_eff64(EventEntry *event, BOOL isFirstCall) {
             break;
 
         case 14:
-            effect = effFallLeafN64Entry(int2, int6, float3, float4, float5);
+            effect = effFallLeafN64Entry(int2, float3, float4, float5, int6);
             break;
 
         case 15:
@@ -548,7 +548,7 @@ s32 evt_eff64(EventEntry *event, BOOL isFirstCall) {
             break;
 
         case 21:
-            effect = effMagic3N64Entry(int2, int6, float3, float4, float5);
+            effect = effMagic3N64Entry(int2, float3, float4, float5, int6);
             break;
 
         case 22:
@@ -665,7 +665,7 @@ s32 evt_eff64(EventEntry *event, BOOL isFirstCall) {
             break;
 
         case 51:
-            effect = effFireFlowerN64Entry(int2, int6, float3, float4, float5);
+            effect = effFireFlowerN64Entry(int2, float3, float4, float5, int6);
             break;
 
         case 52:
@@ -713,7 +713,7 @@ s32 evt_eff64(EventEntry *event, BOOL isFirstCall) {
             break;
 
         case 63:
-            effMagicHoraoN64Entry(int2, int7, int9, int11, float3, float4, float5, float6, float8, float10);
+            effMagicHoraoN64Entry(int2, float3, float4, float5, float6, int7, float8, int9, float10, int11);
             break;
 
         case 64:
@@ -753,7 +753,7 @@ s32 evt_eff64(EventEntry *event, BOOL isFirstCall) {
             break;
 
         case 73:
-            effect = effOpukuJetwrainN64Entry(int2, int7, float3, float4, float5, float6);
+            effect = effOpukuJetwrainN64Entry(int2, float3, float4, float5, float6, int7);
             break;
 
         case 74:
@@ -773,7 +773,7 @@ s32 evt_eff64(EventEntry *event, BOOL isFirstCall) {
             break;
 
         case 78:
-            effect = effTimestampN64Entry(int2, int7, float3, float4, float5, float6);
+            effect = effTimestampN64Entry(int2, float3, float4, float5, float6, int7);
             break;
 
         case 79:

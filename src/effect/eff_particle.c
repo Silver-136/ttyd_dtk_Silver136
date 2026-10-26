@@ -8,6 +8,7 @@
 #include <dolphin/mtx.h>
 #include "libc_decls.h"
 #include <math.h>
+#include "eff/eff_particle.h"
 
 double log(double);
 

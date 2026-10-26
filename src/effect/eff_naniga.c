@@ -18,6 +18,7 @@
 #include "eff/eff_itemget.h"
 #include "libc_decls.h"
 #include "eff/eff_kemutest.h"
+#include "eff/eff_naniga.h"
 
 extern ItemData itemDataTable[];
 

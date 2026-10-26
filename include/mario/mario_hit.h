@@ -34,3 +34,5 @@ void marioHitCheckWidth(void);
 BOOL marioSlitChkWallAround(void);
 f32 marioChkOverhead(void);
 HitEntry* marioSearchUnder(void);
+HitEntry* marioChkLandon(f32* a, f32 d);
+HitEntry* marioSearchHead(Vec* pos, f32* h, f32 dd);

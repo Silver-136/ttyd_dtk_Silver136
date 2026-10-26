@@ -7,6 +7,7 @@
 #include <dolphin/mtx.h>
 #include <stdlib.h>
 #include "eff/eff_magic1_n64.h"
+#include "eff/eff_updown.h"
 
 typedef struct EffUpdownWork {
     s32 type;     // 0x0

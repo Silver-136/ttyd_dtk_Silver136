@@ -92,7 +92,6 @@ BOOL checkHarbor(Vec* out);
 
 
 double __fabs(double);
-HitEntry* marioChkLandon(f32, f32*);
 
 #define SHIP_DIR (marioGetPtr()->motShip->flags & 1)
 
@@ -515,7 +514,7 @@ void mot_ship(void) {
         f30 = m->jumpVelocityY;
         mm = marioGetPtr();
         mm->wPlayerCollisionBox.x = 20.0f;
-        land = marioChkLandon(f30, &ly);
+        land = marioChkLandon(&ly, f30);
         mm->wPlayerCollisionBox.x = 40.0f;
         {
             f32 d;
@@ -816,7 +815,7 @@ void mot_ship(void) {
             f30 = m->jumpVelocityY;
             mm = marioGetPtr();
             mm->wPlayerCollisionBox.x = 20.0f;
-            land = marioChkLandon(f30, &ly);
+            land = marioChkLandon(&ly, f30);
             mm->wPlayerCollisionBox.x = 40.0f;
             {
                 f32 d;

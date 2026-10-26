@@ -30,9 +30,9 @@
 #include "evt/evt_sub.h"
 #include "battle/battle_detect.h"
 #include "battle/battle_damage.h"
+#include "eff/eff_naniga.h"
 
 extern ItemData itemDataTable[];
-EffectEntry* effNanigaEntry(s32 type, s32* table, s32 item, f32 x, f32 y, f32 z);
 void _nancy_disp(CameraId cameraId, void* param);
 void _disp_item_icon(CameraId cameraId, void* param);
 extern s32 R_mystery_item_table[];
@@ -4354,7 +4354,7 @@ USER_FUNC(_naniga_okorukana_check) {
         for (i = 0; R_mystery_item_table[i] != 0; i++) {
         }
         item = R_mystery_item_table[irand(i)];
-        event->userdata[0] = (EvtWord)effNanigaEntry(0, R_mystery_item_table, item, pos.x, pos.y, pos.z);
+        event->userdata[0] = (EvtWord)effNanigaEntry(0, pos.x, pos.y, pos.z, R_mystery_item_table, item);
         effSetName((EffectEntry*)event->userdata[0], "effNaniga");
         evtSetValue(event, out, item);
         if (unit->currentKind == UNIT_MARIO) {

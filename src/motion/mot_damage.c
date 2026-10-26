@@ -21,8 +21,8 @@
 #include "party/party_nokonoko.h"
 #include "mot/mot_slit.h"
 #include "mario/mario_kemuri.h"
+#include "mario/mario_hit.h"
 
-HitEntry* marioChkLandon(f32* outY, f32 y);
 
 
 static EVT_BEGIN(quake_evt)

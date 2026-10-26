@@ -208,9 +208,7 @@ static inline void jabaraLand(f32 y_, void* h_) {
     allPartyRideOff(); \
     JAB_TAIL(MOTSUB_)
 
-void* marioSearchHead(Vec* p, f32* h, f32 r);
 void swingMain(void);
-void* marioChkLandon(f32* outY, f32 y);
 void jabaraSwingStart(s32 s);
 void jabaraSwingWalk(void);
 

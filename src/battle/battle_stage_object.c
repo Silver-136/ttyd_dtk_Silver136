@@ -35,6 +35,7 @@
 #include "battle/battle_event_cmd.h"
 #include "battle/battle_detect.h"
 #include "eff/eff_fall.h"
+#include "eff/eff_nozle.h"
 
 
 #define STAGE_WORK(wp) (&(wp)->stageObjectWork)
@@ -43,8 +44,6 @@
 // separate ones), but only this order gives the retail call code here
 f32 intpl_sub(s32 type, f32 start, f32 end, s32 cur, s32 max);
 void FontDrawString(f32 x, f32 y, const char* str);
-EffectEntry* effNozleEntry(s32 type, f32 x, f32 y, f32 z, f32 rx, f32 ry, s32 lifetime);
-EffectEntry* effFallEntry(s32 type, f32 x, f32 y, f32 z, f32 width, f32 drop, f32 dir, s32 num, s32 duration);
 s32 BattlePreCheckDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPart* part, BattleWeapon* weapon, u32 flags);
 
 //local prototypes

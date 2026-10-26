@@ -7,6 +7,7 @@
 #include <dolphin/mtx.h>
 #include <stdlib.h>
 #include "eff/n64/eff_rothammer_success_n64.h"
+#include "eff/n64/eff_fireflower_n64.h"
 
 typedef struct EffFireFlowerN64Work {
     s32 type;     // 0x0

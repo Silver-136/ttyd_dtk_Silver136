@@ -35,7 +35,6 @@ typedef struct YoshiWork {
 extern f32 marioGetMoveRate(void);
 extern HitEntry* dou10_yoko_yari2(void* out);
 extern void psndSFXOff(s32 id);
-extern void* marioSearchHead(Vec* pos, f32 range, f32* height);
 double sin(double);
 
 f32 ofs_PYS_S_2[52] = {
@@ -1205,7 +1204,7 @@ static void L_searchHead(PartyEntry* party) {
     Vec pos = party->position;
     f32 height = partyGetHeight(party);
 
-    p->hitobjHead = marioSearchHead(&pos, 10.0f, &height);
+    p->hitobjHead = marioSearchHead(&pos, &height, 10.0f);
 }
 
 void checkWall(PartyEntry* party, f32 spd, f32 dir) {

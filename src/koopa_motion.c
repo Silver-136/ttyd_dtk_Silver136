@@ -17,8 +17,8 @@
 #include <dolphin/pad.h>
 #include "sfx_name_word.h"
 #include "eff/eff_mizutama.h"
+#include "mario/mario_hit.h"
 
-extern void* marioChkLandon(f32* outY, f32 y);
 f32 kpaStickSpd(s32 dash);
 
 typedef struct V3 {

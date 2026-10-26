@@ -26,6 +26,7 @@
 #include "eff/n64/eff_stamp_n64.h"
 #include "battle/battle_disp.h"
 #include "eff/eff_fukidashi.h"
+#include "eff/eff_updown.h"
 
 
 void _getSickStatusParam(BattleUnit* unit, BattleWeapon* weapon, u32 type, s8* outTime, s8* outStrength);
@@ -918,7 +919,6 @@ u8 _getRegistStatus(BattleUnit* unit, s32 type) {
     return 100;
 }
 
-EffectEntry* effUpdownEntry(s32 type, s32 strength, s32 time, f32 x, f32 y, f32 z);
 void BattleStatusChangeInfoSetAnnouce(BattleUnit* unit, s32 type, s32 value, s32 flag);
 void BattleStatusChangeMsgSetAnnouce(BattleUnit* unit, s32 type, s32 flag);
 
@@ -1213,14 +1213,14 @@ s32 BattleSetStatusDamage(u32* result, BattleUnit* unit, BattleUnitPart* part, u
         switch (type) {
             case STATUS_DEFENSE_UP:
             case STATUS_DEFENSE_DOWN:
-                effUpdownEntry(1, strength, 0x3c, x, y, 20.0f + z);
+                effUpdownEntry(1, x, y, 20.0f + z, strength, 0x3c);
                 break;
             case STATUS_HUGE:
             case STATUS_TINY:
             case STATUS_ATTACK_UP:
             case STATUS_ATTACK_DOWN:
             case STATUS_CHARGE:
-                effUpdownEntry(0, strength, 0x3c, x, y, 15.0f + z);
+                effUpdownEntry(0, x, y, 15.0f + z, strength, 0x3c);
                 break;
         }
     } else {

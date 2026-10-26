@@ -64,7 +64,6 @@ void mot_shadow(void);
 void mot_partyUse(void);
 void mot_dummy(void);
 
-void* marioChkLandon(f32* y, f32 spd);
 BOOL marioGetRub(s32 mask, s32* a, s32* b, s32* c);
 BOOL marioCreviceWallChk(Vec pos);
 BOOL marioChkPlanePlace(void* hit);

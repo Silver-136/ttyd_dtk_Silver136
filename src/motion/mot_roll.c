@@ -18,7 +18,6 @@
 #include "mot/mot_roll.h"
 #include "party.h"
 
-HitEntry* marioChkLandon(f32* outY, f32 y);
 
 #define CAMF() (camGetPtr(CAMERA_2D)->flags)
 

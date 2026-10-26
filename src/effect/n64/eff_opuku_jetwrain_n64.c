@@ -6,6 +6,7 @@
 #include <dolphin/gx.h>
 #include <dolphin/mtx.h>
 #include "eff/eff_n64.h"
+#include "eff/n64/eff_opuku_jetwrain_n64.h"
 
 double sin(double);
 

@@ -17,7 +17,6 @@
 #include "koopa_motion.h"
 #include "mot/mot_hip.h"
 
-HitEntry* marioChkLandon(f32* outY, f32 y);
 
 #ifdef VERSION_G8ME01
 #define SND1 (mario->soundId[3])
