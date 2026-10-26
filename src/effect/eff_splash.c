@@ -20,8 +20,8 @@ void effSplashGetCol(CameraId cameraId, EffectEntry* effect);
 typedef struct EffSplashWork {
     s32 type;      // 0x0
     Vec position;  // 0x4
-    f32 f10;       // 0x10
-    f32 f14;       // 0x14
+    f32 vx;        // 0x10, random horizontal speed (r * sin); added to position.x each frame after the delay
+    f32 vz;        // 0x14, random horizontal speed (r * cos); added to position.z each frame after the delay
     f32 sx;        // 0x18
     f32 sy;        // 0x1C
     f32 sz;        // 0x20
@@ -102,8 +102,8 @@ EffectEntry* effSplashEntry(s32 type, f32 x, f32 y, f32 z, f32 size) {
         work->position.z = 0.0f;
         work->position.y = 0.0f;
         work->position.x = 0.0f;
-        work->f10 = 0.0f;
-        work->f14 = 0.0f;
+        work->vx = 0.0f;
+        work->vz = 0.0f;
         work->delay = 0;
         work->sz = 1.0f;
         work->sy = 1.0f;
@@ -167,12 +167,12 @@ EffectEntry* effSplashEntry(s32 type, f32 x, f32 y, f32 z, f32 size) {
         r = (f32)irand(5);
         ang = 6.2831855f * ang / 360.0f;
         s = sin(ang);
-        work->f10 = r * s;
+        work->vx = r * s;
         c = cos(ang);
-        work->f14 = r * c;
-        work->position.x = 2.0f * work->f10;
+        work->vz = r * c;
+        work->position.x = 2.0f * work->vx;
         work->position.y = 0.0f;
-        work->position.z = 2.0f * work->f14;
+        work->position.z = 2.0f * work->vz;
         work->vy = 10.0f;
         work->grav = 1.0f;
         work->delay = irand(10);
@@ -233,8 +233,8 @@ void effSplashMain(EffectEntry* effect) {
             work->delay--;
             continue;
         }
-        work->position.x += work->f10;
-        work->position.z += work->f14;
+        work->position.x += work->vx;
+        work->position.z += work->vz;
         work->position.y += work->vy;
         work->vy -= work->grav;
         switch (type) {

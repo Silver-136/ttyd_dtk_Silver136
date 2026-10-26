@@ -14,14 +14,14 @@ typedef struct EffStarPowerN64Work {
     Vec position;  // 0x4
     s32 lifetime;  // 0x10
     s32 frame;     // 0x14
-    s32 c18;       // 0x18
-    s32 c1c;       // 0x1C
-    s32 c20;       // 0x20
-    s32 c24;       // 0x24
-    s32 c28;       // 0x28
-    s32 c2c;       // 0x2C
-    s32 c30;       // 0x30
-    s32 c34;       // 0x34
+    s32 r;         // 0x18, red of GX_TEVREG0 colour; pulsed by a sine for id 1
+    s32 g;         // 0x1C, green of GX_TEVREG0 colour; pulsed by a sine for id 1
+    s32 b;         // 0x20, blue of GX_TEVREG0 colour; pulsed by a sine for id 1
+    s32 alpha;     // 0x24, alpha of the main pass (both TEV colours); faded in over 16 frames and out over the last 16
+    s32 r2;        // 0x28, red of GX_TEVREG1 colour; pulsed by a sine for id 1
+    s32 g2;        // 0x2C, green of GX_TEVREG1 colour; pulsed by a sine for id 1
+    s32 b2;        // 0x30, blue of GX_TEVREG1 colour; pulsed by a sine for id 1
+    s32 trailAlpha; // 0x34, alpha of the extra pass drawn with prevRot*/prevScale at half alpha; pass skipped when 0
     f32 scale;     // 0x38
     f32 rotX;      // 0x3C
     f32 rotY;      // 0x40
@@ -58,14 +58,14 @@ EffectEntry* effStarPowerN64Entry(s32 id, s32 lifetime, f32 x, f32 y, f32 z, f32
     work->position.y = y;
     work->position.z = z;
     work->scale = scale;
-    work->c18 = 255;
-    work->c1c = 255;
-    work->c20 = 120;
-    work->c28 = 255;
-    work->c2c = 120;
-    work->c30 = 0;
-    work->c34 = 255;
-    work->c24 = 255;
+    work->r = 255;
+    work->g = 255;
+    work->b = 120;
+    work->r2 = 255;
+    work->g2 = 120;
+    work->b2 = 0;
+    work->trailAlpha = 255;
+    work->alpha = 255;
     work->rotX = 0.0f;
     work->rotY = 0.0f;
     work->rotZ = 0.0f;
@@ -102,20 +102,20 @@ void effStarPowerMain(EffectEntry* effect) {
     frame = work->frame;
     if (life < 16) {
         life = life * 16;
-        if (work->c24 > life) {
-            work->c24 = life;
+        if (work->alpha > life) {
+            work->alpha = life;
         }
-        if (work->c34 > life) {
-            work->c34 = life;
+        if (work->trailAlpha > life) {
+            work->trailAlpha = life;
         }
     }
     if (frame < 16) {
         life = frame * 16 + 15;
-        if (work->c24 < life) {
-            work->c24 = life;
+        if (work->alpha < life) {
+            work->alpha = life;
         }
-        if (work->c34 < life) {
-            work->c34 = life;
+        if (work->trailAlpha < life) {
+            work->trailAlpha = life;
         }
     }
     work->prevRotX = work->rotX;
@@ -126,21 +126,21 @@ void effStarPowerMain(EffectEntry* effect) {
         work->rotX = (f32)(frame * 4);
         work->rotY = 0.4953f * (4.0f * (f32)frame);
         work->rotZ = 0.2234f * (4.0f * (f32)frame);
-        work->c24 = 255;
+        work->alpha = 255;
         sn = (f32)sin(6.2831855f * (7.12343f * (f32)frame) / 360.0f);
-        work->c34 = (s32)(127.0f * sn + 128.0f) & 0xFF;
+        work->trailAlpha = (s32)(127.0f * sn + 128.0f) & 0xFF;
         sn = (f32)sin(6.2831855f * (1.231f * (f32)frame) / 360.0f);
-        work->c18 = (s32)(127.0f * sn + 215.0f) & 0xFF;
+        work->r = (s32)(127.0f * sn + 215.0f) & 0xFF;
         sn = (f32)sin(6.2831855f * (0.531f * (f32)frame) / 360.0f);
-        work->c1c = (s32)(127.0f * sn + 215.0f) & 0xFF;
+        work->g = (s32)(127.0f * sn + 215.0f) & 0xFF;
         sn = (f32)sin(6.2831855f * (3.231f * (f32)frame) / 360.0f);
-        work->c20 = (s32)(127.0f * sn + 215.0f) & 0xFF;
+        work->b = (s32)(127.0f * sn + 215.0f) & 0xFF;
         sn = (f32)sin(6.2831855f * (0.298f * (f32)frame) / 360.0f);
-        work->c28 = (s32)(127.0f * sn + 188.0f) & 0xFF;
+        work->r2 = (s32)(127.0f * sn + 188.0f) & 0xFF;
         sn = (f32)sin(6.2831855f * (0.831f * (f32)frame) / 360.0f);
-        work->c2c = (s32)(127.0f * sn + 188.0f) & 0xFF;
+        work->g2 = (s32)(127.0f * sn + 188.0f) & 0xFF;
         sn = (f32)sin(6.2831855f * (2.231f * (f32)frame) / 360.0f);
-        work->c30 = (s32)(127.0f * sn + 188.0f) & 0xFF;
+        work->b2 = (s32)(127.0f * sn + 188.0f) & 0xFF;
         sn = (f32)sin(6.2831855f * (2.044f * (f32)frame) / 360.0f);
         work->scale = 0.7f + 0.3f * sn;
     }
@@ -209,14 +209,14 @@ void effStarPowerDisp(CameraId cameraId, EffectEntry* effect) {
 
     camera = camGetPtr(cameraId);
     work = effect->userdata;
-    c18 = work->c18;
-    c1c = work->c1c;
-    c20 = work->c20;
-    c24 = work->c24;
-    c28 = work->c28;
-    c2c = work->c2c;
-    c30 = work->c30;
-    c34 = work->c34;
+    c18 = work->r;
+    c1c = work->g;
+    c20 = work->b;
+    c24 = work->alpha;
+    c28 = work->r2;
+    c2c = work->g2;
+    c30 = work->b2;
+    c34 = work->trailAlpha;
     if (c18 > 255) {
         c18 = 255;
     }

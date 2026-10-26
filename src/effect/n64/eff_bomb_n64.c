@@ -19,8 +19,8 @@ typedef struct EffBombN64Work {
     s32 camId;       // 0x40
     s32 texId;       // 0x44
     u8 pad_48[0x1C]; // 0x48
-    f32 f64;         // 0x64
-    f32 f68;         // 0x68
+    f32 flashScale;  // 0x64, scale of the texture 0x18 flash quad (PSMTXScale in the disp); grows by flashScaleAdd
+    f32 flashScaleAdd; // 0x68, per-frame growth of flashScale; increases until frame 8, then *= 0.6
     u8 pad_6c[0x10]; // 0x6C
     s32 alpha;       // 0x7C
     u8 pad_80[8];    // 0x80
@@ -76,8 +76,8 @@ EffectEntry* effBombN64Entry(s32 type, f32 x, f32 y, f32 z) {
     work->camId = 4;
     work->texId = type != 0 ? type : -1;
     work->alpha = 0;
-    work->f64 = type == 1 ? 1.0f : 3.0f;
-    work->f68 = type == 1 ? 1.0f : 3.0f;
+    work->flashScale = type == 1 ? 1.0f : 3.0f;
+    work->flashScaleAdd = type == 1 ? 1.0f : 3.0f;
     work->type2 = type;
     work->alpha2 = 255;
     switch (type) {
@@ -129,12 +129,12 @@ static void effBombMain(EffectEntry* effect) {
     } else if (frame == 1) {
         effConfettiN64SetCamId(effConfettiN64Entry(type + 4, 50, work->position.x, work->position.y, work->position.z, 1.0f), camId);
     }
-    work->f64 += work->f68;
+    work->flashScale += work->flashScaleAdd;
     if (frame < 8) {
-        work->f68 += type == 2 ? 1.0f : 0.4f;
+        work->flashScaleAdd += type == 2 ? 1.0f : 0.4f;
         work->alpha = (s32)(0.6f * (255.0f - work->alpha));
     } else {
-        work->f68 *= 0.6f;
+        work->flashScaleAdd *= 0.6f;
         work->alpha *= 0.9f;
     }
     if (frame >= 3) {
@@ -192,7 +192,7 @@ static void effBombDisp(CameraId cameraId, EffectEntry* effect) {
         effGetTexObjN64(0x18, &texObj);
         GXLoadTexObj(&texObj, GX_TEXMAP0);
         GXSetTevColor(GX_TEVREG0, (GXColor){0xFF, 0xFF, 0xF0, work->alpha});
-        PSMTXScale(scale, work->f64, work->f64, 1.0f);
+        PSMTXScale(scale, work->flashScale, work->flashScale, 1.0f);
         PSMTXConcat(base, scale, scale);
         GXLoadPosMtxImm(scale, GX_PNMTX0);
         GXSetCurrentMtx(GX_PNMTX0);

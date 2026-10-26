@@ -18,14 +18,14 @@ typedef struct EffMagic2N64Work {
     s32 alpha;    // 0x24
     s32 life;     // 0x28
     s32 age;      // 0x2C
-    s32 a30;
-    s32 a34;
-    s32 a38;
-    s32 a3c;
-    s32 a40;
-    s32 a44;
-    s32 a48;
-    s32 a4c;
+    s32 tex0ScrollX; // 0x30, X translation (/4) of texture matrix GX_TEXMTX0 in effMagic2Disp; += tex0ScrollXStep each frame
+    s32 tex0ScrollXStep; // 0x34, per-frame step of tex0ScrollX (always 0)
+    s32 tex1ScrollX; // 0x38, X translation (/4) of texture matrix GX_TEXMTX1 in effMagic2Disp; += tex1ScrollXStep each frame
+    s32 tex1ScrollXStep; // 0x3C, per-frame step of tex1ScrollX (0x60 for type 1, else 0)
+    s32 tex0ScrollY; // 0x40, Y translation (/4) of texture matrix GX_TEXMTX0; += tex0ScrollYStep, wrapped by +0x100 when negative
+    s32 tex0ScrollYStep; // 0x44, per-frame step of tex0ScrollY (-2 for type 0, else 0)
+    s32 tex1ScrollY; // 0x48, Y translation (/4) of texture matrix GX_TEXMTX1; += tex1ScrollYStep, wrapped by +0x100 when negative
+    s32 tex1ScrollYStep; // 0x4C, per-frame step of tex1ScrollY (-4 for type 0, else 0)
     f32 f50;
     f32 f54;
     f32 f58;
@@ -115,10 +115,10 @@ EffectEntry* effMagic2N64Entry(s32 type, s32 life, f32 x, f32 y, f32 z, f32 scal
     w->offset.x = x;
     w->offset.y = y;
     w->offset.z = z;
-    w->a40 = w->a44 = 0;
-    w->a48 = w->a4c = 0;
-    w->a30 = w->a34 = 0;
-    w->a38 = w->a3c = 0;
+    w->tex0ScrollY = w->tex0ScrollYStep = 0;
+    w->tex1ScrollY = w->tex1ScrollYStep = 0;
+    w->tex0ScrollX = w->tex0ScrollXStep = 0;
+    w->tex1ScrollX = w->tex1ScrollXStep = 0;
     w->position.x = x;
     w->position.y = y;
     w->position.z = z;
@@ -128,11 +128,11 @@ EffectEntry* effMagic2N64Entry(s32 type, s32 life, f32 x, f32 y, f32 z, f32 scal
     w->f50 = 0.0f;
     w->f54 = 0.0f;
     if (type == 1) {
-        w->a3c = 0x60;
+        w->tex1ScrollXStep = 0x60;
         w->scaleTarget = scale;
     } else {
-        w->a44 = -2;
-        w->a4c = -4;
+        w->tex0ScrollYStep = -2;
+        w->tex1ScrollYStep = -4;
         w->scaleTarget = 0.2f * scale;
     }
     return effect;
@@ -194,15 +194,15 @@ void effMagic2Main(EffectEntry* effect) {
     for (i = 0; i < effect->count; i++, w++) {
         w->f58 += w->f5c;
         w->f50 += w->f54;
-        w->a30 += w->a34;
-        w->a38 += w->a3c;
-        w->a40 += w->a44;
-        w->a48 += w->a4c;
-        if (w->a40 < 0) {
-            w->a40 += 0x100;
+        w->tex0ScrollX += w->tex0ScrollXStep;
+        w->tex1ScrollX += w->tex1ScrollXStep;
+        w->tex0ScrollY += w->tex0ScrollYStep;
+        w->tex1ScrollY += w->tex1ScrollYStep;
+        if (w->tex0ScrollY < 0) {
+            w->tex0ScrollY += 0x100;
         }
-        if (w->a48 < 0) {
-            w->a48 += 0x100;
+        if (w->tex1ScrollY < 0) {
+            w->tex1ScrollY += 0x100;
         }
     }
     dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effMagic2Disp, effect);
@@ -260,10 +260,10 @@ void effMagic2Disp(CameraId cameraId, EffectEntry* effect) {
         d = color_rotation_data + idx;
         GXSetTevColor(GX_TEVREG0, (GXColor){d[0], 0, d[2], alpha});
         GXSetTevColor(GX_TEVREG1, (GXColor){0, 0, 0, half});
-        b30 = w->a30;
-        b40 = w->a40;
-        b38 = w->a38;
-        b48 = w->a48;
+        b30 = w->tex0ScrollX;
+        b40 = w->tex0ScrollY;
+        b38 = w->tex1ScrollX;
+        b48 = w->tex1ScrollY;
         if (type == 0) {
             PSMTXScale(m10c, 0.015625f, 0.015625f, 1.0f);
             PSMTXTrans(m13c, (f32)(b30 / 4), (f32)(b40 / 4), 0.0f);

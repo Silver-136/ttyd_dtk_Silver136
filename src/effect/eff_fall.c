@@ -58,12 +58,12 @@ typedef struct EffFallElem {
     s32 timer;        // 0x24
     s32 scroll;       // 0x28
     f32 scale;        // 0x2C
-    f32 f30;          // 0x30
-    f32 f34;          // 0x34
+    f32 gravity;      // 0x30, subtracted from speedY every frame before speedY is added to pos.y (0.1..1.6 per type)
+    f32 speedY;       // 0x34, added to pos.y each frame, minus gravity; *= -0.3/-0.5 on landing bounces
     s32 state;        // 0x38
     s32 alpha;        // 0x3C
     EffFallVtx** vtx; // 0x40
-    f32 f44;          // 0x44
+    f32 sway;         // 0x44, damped sine after a type 2 piece lands (effFallMain state 1); bends the vertex strip sideways by sway * y^2/600
     f32 rot2;         // 0x48
     f32 rot3;         // 0x4C
     Vec vel;          // 0x50
@@ -166,8 +166,8 @@ EffectEntry* effFallEntry(s32 type, f32 x, f32 y, f32 z, f32 width, f32 drop, f3
         switch (type) {
             case 0:
             case 1:
-                e->f34 = 0.0f;
-                e->f30 = 0.2f;
+                e->speedY = 0.0f;
+                e->gravity = 0.2f;
                 if (i == 1) {
                     e->pos.x = 0.0f;
                     e->pos.z = 0.0f;
@@ -178,17 +178,17 @@ EffectEntry* effFallEntry(s32 type, f32 x, f32 y, f32 z, f32 width, f32 drop, f3
                 e->scale = type == 0 ? 0.5f : 1.2f;
                 break;
             case 2:
-                e->f34 = 0.0f;
-                e->f30 = 1.6f;
+                e->speedY = 0.0f;
+                e->gravity = 1.6f;
                 e->pos.x = 0.0f;
                 e->pos.z = 0.0f;
                 e->timer = 0;
-                e->f44 = 0.0f;
+                e->sway = 0.0f;
                 e->scale = 0.5f;
                 break;
             case 3: {
-                e->f34 = 0.0f;
-                e->f30 = 0.1f;
+                e->speedY = 0.0f;
+                e->gravity = 0.1f;
                 e->pos.x = 0.0f;
                 e->pos.y = 200.0f;
                 e->pos.z = 0.0f;
@@ -207,8 +207,8 @@ EffectEntry* effFallEntry(s32 type, f32 x, f32 y, f32 z, f32 width, f32 drop, f3
             }
             case 4:
             case 5:
-                e->f34 = 0.0f;
-                e->f30 = 0.6f;
+                e->speedY = 0.0f;
+                e->gravity = 0.6f;
                 e->pos.x = 0.0f;
                 e->pos.z = 0.0f;
                 e->timer = 0;
@@ -232,8 +232,8 @@ EffectEntry* effFallEntry(s32 type, f32 x, f32 y, f32 z, f32 width, f32 drop, f3
                 e->scale = 0.5f;
                 break;
             case 8:
-                e->f34 = 0.0f;
-                e->f30 = 0.25f;
+                e->speedY = 0.0f;
+                e->gravity = 0.25f;
                 e->pos.x = 0.0f;
                 e->pos.y = 400.0f;
                 e->pos.z = 0.0f;
@@ -325,23 +325,23 @@ void effFallMain(EffectEntry* effect) {
                             psndSFXOn_3D(SFX_NAME_WORD("SFX_BTL_STAGE_FALL_BUG2"), &sndPos);
                             played = 1;
                         }
-                        e->pos.y += e->f34;
-                        e->f34 -= e->f30;
+                        e->pos.y += e->speedY;
+                        e->speedY -= e->gravity;
                         if (distABf(e->pos.x, e->pos.z, 0.0f, 0.0f) < width / 2.0f) {
                             if (e->pos.y < ground) {
                                 e->pos.y = ground;
-                                e->f34 *= -0.3f;
+                                e->speedY *= -0.3f;
                                 e->state++;
                             }
                         } else if (e->pos.y < y) {
                             e->pos.y = y;
-                            e->f34 *= -0.3f;
+                            e->speedY *= -0.3f;
                             e->state++;
                         }
                         break;
                     case 2:
-                        e->pos.y += e->f34;
-                        e->f34 -= e->f30;
+                        e->pos.y += e->speedY;
+                        e->speedY -= e->gravity;
                         a = (6.2831855f * angleABf(0.0f, 0.0f, e->pos.x, e->pos.z)) / 360.0f;
                         if (i == 1) {
                             a = angle / 360.0f;
@@ -382,8 +382,8 @@ void effFallMain(EffectEntry* effect) {
             case 2:
                 switch (e->state) {
                     case 0:
-                        e->pos.y += e->f34;
-                        e->f34 -= e->f30;
+                        e->pos.y += e->speedY;
+                        e->speedY -= e->gravity;
                         if (e->pos.y < y) {
                             e->pos.y = y;
                             e->timer = 0;
@@ -393,7 +393,7 @@ void effFallMain(EffectEntry* effect) {
                         break;
                     case 1: {
                             f32 s = (f32)sin((62.831856f * e->timer) / 60.0f);
-                            e->f44 = ((60.0f - e->timer) * s) / 60.0f;
+                            e->sway = ((60.0f - e->timer) * s) / 60.0f;
                         }
                         e->timer++;
                         if (e->timer > 60) {
@@ -431,7 +431,7 @@ void effFallMain(EffectEntry* effect) {
                 {
                     EffFallVtx* v = *e->vtx;
                     for (i = 0; i < 32; i++, v++) {
-                        v->x += e->f44 * ((v->y * v->y) / 600.0f);
+                        v->x += e->sway * ((v->y * v->y) / 600.0f);
                     }
                 }
                 DCFlushRange(*e->vtx, 0x280);
@@ -439,8 +439,8 @@ void effFallMain(EffectEntry* effect) {
             case 3:
                 switch (e->state) {
                     case 0:
-                        e->pos.y += e->f34;
-                        e->f34 -= e->f30;
+                        e->pos.y += e->speedY;
+                        e->speedY -= e->gravity;
                         if (e->pos.y < y) {
                             e->pos.y = y;
                             e->timer = 0;
@@ -497,23 +497,23 @@ void effFallMain(EffectEntry* effect) {
                         }
                         break;
                     case 1:
-                        e->pos.y += e->f34;
-                        e->f34 -= e->f30;
+                        e->pos.y += e->speedY;
+                        e->speedY -= e->gravity;
                         if (distABf(e->pos.x, e->pos.z, 0.0f, 0.0f) < width / 2.0f) {
                             if (e->pos.y < ground) {
                                 e->pos.y = ground;
-                                e->f34 *= -0.3f;
+                                e->speedY *= -0.3f;
                                 e->state++;
                             }
                         } else if (e->pos.y < y) {
                             e->pos.y = y;
-                            e->f34 *= -0.3f;
+                            e->speedY *= -0.3f;
                             e->state++;
                         }
                         break;
                     case 2:
-                        e->pos.y += e->f34;
-                        e->f34 -= e->f30;
+                        e->pos.y += e->speedY;
+                        e->speedY -= e->gravity;
                         a = (6.2831855f * angleABf(0.0f, 0.0f, e->pos.x, e->pos.z)) / 360.0f;
                         if (i == 1) {
                             a = angle / 360.0f;
@@ -522,10 +522,10 @@ void effFallMain(EffectEntry* effect) {
                         { f32 c = (f32)cos(a); e->pos.z += 2.0f * -c; }
                         if (e->pos.y < y) {
                             e->pos.y = y;
-                            e->f34 *= -0.5f;
+                            e->speedY *= -0.5f;
                             e->pos.y = y;
                             e->timer = 0;
-                            if (e->f34 < 1.0f) {
+                            if (e->speedY < 1.0f) {
                                 e->state++;
                             }
                         }
@@ -650,9 +650,9 @@ void effFallMain(EffectEntry* effect) {
                         e->vel.x = tbl[e->state / 2][0];
                         e->vel.y = tbl[e->state / 2][1];
                         e->vel.z = tbl[e->state / 2][2];
-                        e->f30 = 0.4f;
+                        e->gravity = 0.4f;
                         e->timer = distABf(e->vel.x, e->vel.z, e->pos.x, e->pos.z) / 5.0f;
-                        e->f34 = ((e->vel.y - e->pos.y) / e->timer) + (e->f30 * e->timer) / 2.0f;
+                        e->speedY = ((e->vel.y - e->pos.y) / e->timer) + (e->gravity * e->timer) / 2.0f;
                         e->rotY = angleABf(e->pos.x, e->pos.z, e->vel.x, e->vel.z);
                         e->rot2 = 0.0f;
                         e->state++;
@@ -662,8 +662,8 @@ void effFallMain(EffectEntry* effect) {
                     case 3:
                     case 5:
                     case 7:
-                        e->pos.y += e->f34;
-                        e->f34 -= e->f30;
+                        e->pos.y += e->speedY;
+                        e->speedY -= e->gravity;
                         e->pos.x += 5.0f * polySinf((6.2831855f * e->rotY) / 360.0f);
                         e->pos.z += 5.0f * -polyCosf((6.2831855f * e->rotY) / 360.0f);
                         if ((--e->timer) < 0) {
@@ -712,8 +712,8 @@ void effFallMain(EffectEntry* effect) {
                         break;
                     case 1:
                     case 2:
-                        e->pos.y += e->f34;
-                        e->f34 -= e->f30;
+                        e->pos.y += e->speedY;
+                        e->speedY -= e->gravity;
                         if (e->pos.y < y) {
                             e->pos.y = y;
                             e->timer = 0;

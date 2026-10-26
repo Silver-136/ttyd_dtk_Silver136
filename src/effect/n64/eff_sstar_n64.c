@@ -33,9 +33,9 @@ typedef struct EffSstarN64Work {
     s32 idx;           // 0x3c
     Mtx mtx[8];        // 0x40
     f32 scale;         // 0x1c0
-    s32 c1c4;          // 0x1c4
-    s32 c1c8;          // 0x1c8
-    s32 c1cc;          // 0x1cc
+    s32 r;             // 0x1c4, red of the star colour (GX_TEVREG0 in the disp); random for type 3, else 210
+    s32 g;             // 0x1c8, green of the star colour (GX_TEVREG0); random for type 3, else 186
+    s32 b;             // 0x1cc, blue of the star colour (GX_TEVREG0); 0xFF - r - g for type 3, else 90
     effN64Vtx vtx[10]; // 0x1d0
 } EffSstarN64Work;
 
@@ -94,14 +94,14 @@ EffectEntry* effSstarN64Entry(s32 type, f32 x, f32 y, f32 z, f32 tx, f32 ty, f32
     w->subtype = type;
     if (type == 3) {
         w->scale = 0.2f;
-        w->c1c4 = rand() % 256;
-        w->c1c8 = rand() % (0xFF - w->c1c4);
-        w->c1cc = 0xFF - w->c1c4 - w->c1c8;
+        w->r = rand() % 256;
+        w->g = rand() % (0xFF - w->r);
+        w->b = 0xFF - w->r - w->g;
     } else {
         w->scale = 0.5f;
-        w->c1c4 = 210;
-        w->c1c8 = 186;
-        w->c1cc = 90;
+        w->r = 210;
+        w->g = 186;
+        w->b = 90;
     }
     dx = tx - x;
     dy = ty - y;
@@ -220,9 +220,9 @@ void effSstarDisp(CameraId cameraId, EffectEntry* effect) {
     w = effect->userdata;
     scale = w->scale;
     base = w->subtype;
-    c1 = w->c1c4;
-    c2 = w->c1c8;
-    c3 = w->c1cc;
+    c1 = w->r;
+    c2 = w->g;
+    c3 = w->b;
     PSMTXTrans(mtx, w->position.x, w->position.y, w->position.z);
     PSMTXRotRad(rot, 'y', 0.017453292f * -camGetPtr(cameraId)->viewYaw);
     PSMTXConcat(mtx, rot, tmp);

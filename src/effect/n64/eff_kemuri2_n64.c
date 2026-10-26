@@ -13,7 +13,7 @@ typedef struct EffKemuri2N64Work {
     u8 pad_6[2];    // 0x6
     Vec position;   // 0x8
     u8 pad_14[0x44 - 0x14];
-    f32 field_44;   // 0x44
+    f32 hSpeed;     // 0x44, horizontal speed: position.x/z += hSpeed * dirX/dirZ each frame (as hSpeed in eff_kemuri1)
     f32 velY;       // 0x48
     f32 accelY;     // 0x4C
     f32 dirX;       // 0x50
@@ -49,7 +49,7 @@ EffectEntry* effKemuri2N64Entry(s32 type, f32 x, f32 y, f32 z, f32 dirX, f32 dir
     work->position.x = x;
     work->position.y = y;
     work->position.z = z;
-    work->field_44 = 0.33333334f;
+    work->hSpeed = 0.33333334f;
     work->velY = 1.75f;
     work->accelY = -0.16f;
     return effect;
@@ -70,8 +70,8 @@ static void effKemuri2Main(EffectEntry* effect) {
         return;
     }
     for (i = 0; i < effect->count; i++, work++) {
-        work->position.x += work->field_44 * work->dirX;
-        work->position.z += work->field_44 * work->dirZ;
+        work->position.x += work->hSpeed * work->dirX;
+        work->position.z += work->hSpeed * work->dirZ;
         work->velY += work->accelY;
         work->position.y += work->velY;
     }
