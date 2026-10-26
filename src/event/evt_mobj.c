@@ -172,7 +172,6 @@ EVT_BEGIN(evt_fire)
     RETURN
 EVT_END()
 
-extern void test_kururing_mapdisp(s32 camId);
 
 USER_FUNC(evt_cam_get_pos);
 USER_FUNC(evt_cam_letter_box_disable);

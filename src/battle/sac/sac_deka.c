@@ -35,7 +35,6 @@
 
 
 void psndSFX_pit(s32 id, s32 pitch);
-void test_kururing_mapdisp(CameraId cam);
 
 
 typedef struct DekaTiming {

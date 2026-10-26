@@ -26,7 +26,6 @@ typedef struct WanaWork {
     BattleUnitPart* part;
     smartEntry* tex;
 } WanaWork;
-void test_kururing_mapdisp(CameraId camera);
 static f32 tanf(f32 x);
 void replace_callback(BattleUnitPart* part, s32 type);
 void replace_disp(CameraId camera, void* param);

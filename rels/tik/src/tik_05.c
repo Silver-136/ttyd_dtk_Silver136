@@ -88,7 +88,6 @@ s32 select;
 
 
 void tiz_broken_draw(CameraId cameraId, void* param);
-void effStarStoneDraw(CameraId camera, void* param);
 
 static USER_FUNC(alpha_init_func);
 static USER_FUNC(alpha_set_func);
@@ -1273,7 +1272,7 @@ USER_FUNC(starstone_setting) {
 
     ((EffStarStoneWork*)eff->userdata)->flags |= 0x20;
     ((EffMahojinWork*)mahojin->userdata)[idx + 2].arg = eff;
-    ((EffMahojinWork*)mahojin->userdata)[idx + 2].func = effStarStoneDraw;
+    ((EffMahojinWork*)mahojin->userdata)[idx + 2].func = (DispCallback)effStarStoneDraw;
     return EVT_RETURN_DONE;
 }
 

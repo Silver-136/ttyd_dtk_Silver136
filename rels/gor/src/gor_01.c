@@ -70,7 +70,6 @@ typedef struct ShopSel {
     s32 sel;
 } ShopSel;
 NpcEntry* fbatNpcTalkCheck(MarioWork* mario);
-void effStarStoneDraw(CameraId camera, void* param);
 s32* iri_09_item_tbl;
 s32 naniga_okorukana_cook(void);
 s32 itemNameToID(const char* name);
@@ -6014,7 +6013,7 @@ static USER_FUNC(starstone_entry) {
         ((EffStarStoneWork*)eff->userdata)->flags &= ~4;
         ((EffStarStoneWork*)eff->userdata)->flags |= 0x20;
         ((EffMahojinWork*)effNameToPtr("mahojin")->userdata)[i + 2].arg = eff;
-        ((EffMahojinWork*)effNameToPtr("mahojin")->userdata)[i + 2].func = effStarStoneDraw;
+        ((EffMahojinWork*)effNameToPtr("mahojin")->userdata)[i + 2].func = (DispCallback)effStarStoneDraw;
     }
     return EVT_RETURN_DONE;
 }

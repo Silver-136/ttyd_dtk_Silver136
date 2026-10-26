@@ -1,5 +1,6 @@
 #pragma once
 
+#include "driver/camdrv.h"
 #include "driver/effdrv.h"
 #include "dolphin/types.h"
 #include <dolphin/mtx.h>
@@ -41,3 +42,4 @@ typedef struct EffStarStoneWork {
 } EffStarStoneWork;
 
 EffectEntry* effStarStoneEntry(s32 type, f32 x, f32 y, f32 z, f32 scale);
+void effStarStoneDraw(CameraId cameraId, EffectEntry* effect);

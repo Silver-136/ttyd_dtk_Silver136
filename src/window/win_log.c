@@ -970,7 +970,6 @@ void winLogMain2(WindowWork* w) {
     w->log.recipe.f2C += (w->log.recipe.tf2C - w->log.recipe.f2C) / FPS_EASE(6.0f);
 }
 
-void effStarStoneDraw(CameraId cam, EffectEntry* e);
 void mapGX(WindowWork* w, f32 x, f32 y);
 void monoshiriGX(WindowWork* w, f32 x, f32 y);
 

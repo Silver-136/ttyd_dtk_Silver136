@@ -3,6 +3,7 @@
 #include <dolphin/gx.h>
 #include <dolphin/mtx.h>
 #include <dolphin/os.h>
+#include "driver/camdrv.h"
 
 typedef struct DisplayList {
     u32 offset;      // 0x00 - Offset to vertex data
@@ -481,3 +482,4 @@ void mapSetProjMtx(Mtx mtx);
 void mapSetProjTexObj(GXTexObj* obj, void* imgRef);
 void mapObjSetOffScreen(const char* name, const char* offscreen);
 void mapGrpSetOffScreen(const char* name, const char* offscreen);
+void test_kururing_mapdisp(CameraId cam);
