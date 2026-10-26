@@ -1139,7 +1139,7 @@ static void disp_3D(CameraId cam, void* param) {
             }
             PSMTXScale(m, s, s, 1.0f);
             PSMTXTransApply(m, m, o->pos.x, o->pos.y - 20.0f * s, o->pos.z);
-            ((void (*)(Mtx, u16, s32, GXColor))iconDispGxCol)(m, flags, icon, (GXColor){255, 255, 255, 255});
+            iconDispGxCol(m, flags, icon, (GXColor){255, 255, 255, 255});
         }
     }
 

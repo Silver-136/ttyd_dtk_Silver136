@@ -497,7 +497,7 @@ void iconDispGx2(Mtx mtx, s16 flags, s16 iconId) {
     iconGX(m, ep);
 }
 
-void iconDispGxCol(Mtx pos, s16 flags, s32 iconId, GXColor color) {
+void iconDispGxCol(Mtx pos, u16 flags, s32 iconId, GXColor color) {
     IconEntry entry;
     Mtx m;
     CameraEntry* camera;
@@ -534,11 +534,7 @@ void iconDispGxCol(Mtx pos, s16 flags, s32 iconId, GXColor color) {
     iconGX(m, ep);
 }
 
-#ifdef VERSION_G8ME01
 void iconGetTexObj(GXTexObj* texObj, s32 iconId) {
-#else
-void iconGetTexObj(GXTexObj* texObj, s16 iconId) {
-#endif
     static char dummy[] ATTRIBUTE_ALIGN(32) = "";
     IconBinData* data;
     u16 tplId;

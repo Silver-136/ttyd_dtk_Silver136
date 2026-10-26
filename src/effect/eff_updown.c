@@ -8,6 +8,7 @@
 #include <stdlib.h>
 #include "eff/eff_magic1_n64.h"
 #include "eff/eff_updown.h"
+#include "driver/icondrv.h"
 
 typedef struct EffUpdownWork {
     s32 type;     // 0x0
@@ -20,7 +21,6 @@ typedef struct EffUpdownWork {
     u8 alpha;     // 0x24
 } EffUpdownWork;
 
-extern void iconGetTexObj(GXTexObj* texObj, u16 iconId);
 void effUpdownMain(EffectEntry* effect);
 void effUpdownDisp(CameraId cameraId, EffectEntry* effect);
 
