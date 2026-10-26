@@ -5,6 +5,10 @@
 
 /* mot_plane's work: MarioWork.motPlane (the 0x288 union). Allocated 0x48 by mot_plane's
  * trigger block, freed by mot_plane_post / on landing. Same on JP and US. */
+// MotPlaneWork.flags
+#define MOT_PLANE_FLAG_RIGHT (1 << 0)       // facing right (HIT_ATTR_PLANE_PANEL_R of the take-off panel)
+#define MOT_PLANE_FLAG_DIVE_UNUSED (1 << 4) // set while diving, cleared on the pull-up; never read
+
 typedef struct MotPlaneWork {
     u32 flags;                    // 0x00: bit0 = facing (hit attr bit 4 of the jump-from object), 0x10 = set in the dive, cleared on pull-up
     f32 pitch;                    // 0x04: nose pitch in degrees (sincosf(90 + pitch) in the collision probe)

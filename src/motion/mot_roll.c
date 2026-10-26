@@ -234,13 +234,13 @@ static inline void marioRollCan(void);
 void marioRollFixOn(void) {
     MarioWork* mario = marioGetPtr();
     if (mario->currMotionId == MARIO_MOTION_ROLL) {
-        mario->mot.roll.flags |= 0x200;
+        mario->mot.roll.flags |= ROLL_FLAG_FIX;
     }
 }
 
 s32 marioRollCancelDisable(void) {
     MarioWork* mario = marioGetPtr();
-    if (mario->mot.roll.flags & 0x200) {
+    if (mario->mot.roll.flags & ROLL_FLAG_FIX) {
         return 1;
     }
     if ((mario->flags & MARIO_FLAG_IS_TOUCHING_CEILING) != 0) {
@@ -268,19 +268,19 @@ s32 marioRollKeyDisable(void) {
 
 void setRollEvtFlag(void) {
     MarioWork* mario = marioGetPtr();
-    mario->mot.roll.flags |= 0x100;
+    mario->mot.roll.flags |= ROLL_FLAG_EVT;
 }
 
 void clrRollEvtFlag(void) {
     MarioWork* mario = marioGetPtr();
-    mario->mot.roll.flags &= ~0x100;
+    mario->mot.roll.flags &= ~ROLL_FLAG_EVT;
 }
 
 s32 getRollEvtFlag(void) {
     s32 r = 0;
     MarioWork* mario = marioGetPtr();
     if (mario->flags & MARIO_FLAG_TUBE_MODE) {
-        if (mario->mot.roll.flags & 0x100) {
+        if (mario->mot.roll.flags & ROLL_FLAG_EVT) {
             r = 1;
         }
     }
@@ -320,13 +320,13 @@ s32 marioRollTryCancel(void) {
     if (!(mario->flags & MARIO_FLAG_TUBE_MODE)) {
         return 0;
     }
-    if (mario->mot.roll.flags & 0x200) {
+    if (mario->mot.roll.flags & ROLL_FLAG_FIX) {
         return 0;
     }
     {
         s32 r;
         MarioWork* m = marioGetPtr();
-        if (m->mot.roll.flags & 0x200) {
+        if (m->mot.roll.flags & ROLL_FLAG_FIX) {
             r = 1;
         } else if (m->flags & MARIO_FLAG_IS_TOUCHING_CEILING) {
             r = 1;
@@ -351,7 +351,7 @@ s32 marioRollCancel(void) {
     if (!(mario->flags & MARIO_FLAG_TUBE_MODE)) {
         return 0;
     }
-    if (mario->mot.roll.flags & 0x200) {
+    if (mario->mot.roll.flags & ROLL_FLAG_FIX) {
         return 0;
     }
     mario->currSubMotionId = 0x14;
@@ -529,7 +529,7 @@ void marioReInit_roll(void) {
 static inline s32 rollChk(void) {
     s32 r;
     MarioWork* m = marioGetPtr();
-    if (m->mot.roll.flags & 0x200) {
+    if (m->mot.roll.flags & ROLL_FLAG_FIX) {
         r = 1;
     } else if (m->flags & MARIO_FLAG_IS_TOUCHING_CEILING) {
         r = 1;
@@ -887,7 +887,7 @@ void mot_roll(void) {
             nz = nz * (f32)cos(3.1415927f * ((MarioWork*)mario)->directionView / 180.0f);
         }
     }
-    if (!(mario->flags & (MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING)) && !(mario->mot.roll.flags & 0x20)) {
+    if (!(mario->flags & (MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING)) && !(mario->mot.roll.flags & ROLL_FLAG_NO_SLOPE_UNUSED)) {
         v31 = angleABf(0.0f, 0.0f, v29, -v28);
         if (((MarioWork*)mario)->groundRot.z > 0.05f) {
             v26 = (v31 > 180.0f) ? rollData[5] : rollData[6];
@@ -995,7 +995,7 @@ void mot_roll(void) {
             }
         }
     } else {  // the speed clamp runs only on this path
-        if ((mario->mot.roll.flags & 0x10) && mario->groundRot.z == 0.0f) {
+        if ((mario->mot.roll.flags & ROLL_FLAG_SLOPE_DAMP_UNUSED) && mario->groundRot.z == 0.0f) {
             if (makeVec(135.0f) == 1) {
                 v29 = 0.2f * -v29 + v29;
                 v28 = 0.2f * -v28 + v28;
@@ -1087,7 +1087,7 @@ void mot_roll(void) {
     s = 0.05f * v27;
     if (!getRollEvtFlag() && mario->forceMoveTimer == 0) {
         v30 = angleABf(0.0f, 0.0f, v29, v31);
-        if (!(mario->mot.roll.flags & 0x10000)) {
+        if (!(mario->mot.roll.flags & ROLL_FLAG_NO_SLOPE_SPEED_UNUSED)) {
             s = s * mario->playerGravity;
             if (s < 0.05f) {
                 s = 0.0f;
@@ -1107,7 +1107,7 @@ void mot_roll(void) {
         if ((u32)m->mot.roll.sfxId == (u32)-1) {
             m->mot.roll.sfxId = (s32)psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_ROLL_MOVE1), &m->position);
 #endif
-            m->mot.roll.flags |= 0x1000;
+            m->mot.roll.flags |= ROLL_FLAG_SFX_UNUSED;
         }
     } else {
         MarioWork* m = marioGetPtr();
@@ -1151,7 +1151,7 @@ void mot_roll(void) {
         mario->rot.x = 0.0f;
     }
     if (mario->wStickDir1 || mario->wStickDir2) {
-        mario->mot.roll.flags |= 0x4000;
+        mario->mot.roll.flags |= ROLL_FLAG_STICK_UNUSED;
     }
     if (mario->baseSpeed) {
         MarioWork* m = marioGetPtr();

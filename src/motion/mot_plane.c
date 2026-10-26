@@ -98,7 +98,7 @@ s32 marioPlaneGetFlyingDir(void) {
         return 0;
     }
     ret = -1;
-    if (mp->motPlane->flags & 1) {
+    if (mp->motPlane->flags & MOT_PLANE_FLAG_RIGHT) {
         ret = 1;
     }
     return ret;
@@ -138,7 +138,7 @@ void marioForcePlaneAnime(void) {
     mp->dispFlags |= MARIO_DISP_FLAG_NO_DIR_FLIP;
 }
 
-#define DIRF(mp) ((mp->motPlane->flags & 1) ? 1.0f : -1.0f)
+#define DIRF(mp) ((mp->motPlane->flags & MOT_PLANE_FLAG_RIGHT) ? 1.0f : -1.0f)
 
 static inline f32 planeDir(MarioWork* mp) {
     return DIRF(mp);
@@ -205,7 +205,7 @@ void mot_plane(void) {
         planeRoll1(mp, 0.125f, 30.0f);
         done = FALSE;
         mp->displayDirection += mp->mot.plane.turnSpeed;
-        if (mp->motPlane->flags & 1) {
+        if (mp->motPlane->flags & MOT_PLANE_FLAG_RIGHT) {
             if (mp->displayDirection >= 630.0f) {
                 done = TRUE;
             }
@@ -238,7 +238,7 @@ void mot_plane(void) {
         planeRoll1(mp, 0.125f, 30.0f);
         done = FALSE;
         mp->displayDirection += mp->mot.plane.turnSpeed;
-        if (mp->motPlane->flags & 1) {
+        if (mp->motPlane->flags & MOT_PLANE_FLAG_RIGHT) {
             if (mp->displayDirection >= 1260.0f) {
                 mp->displayDirection = 1260.0f;
                 done = TRUE;
@@ -262,13 +262,13 @@ void mot_plane(void) {
             break;
         }
         marioChgPaper("PM_P_1B");
-        mp->motPlane->yaw = (mp->motPlane->flags & 1) ? 90.0f : 270.0f;
+        mp->motPlane->yaw = (mp->motPlane->flags & MOT_PLANE_FLAG_RIGHT) ? 90.0f : 270.0f;
         mp->mot.plane.turnSpeed = 0.0f;
         mp->motPlane->pitch = 0.0f;
         mp->motPlane->roll = 0.0f;
         mp->motPlane->pitchSpeed = 0.0f;
         mp->motPlane->diveSpeed = 0.0f;
-        if (mp->motPlane->flags & 1) {
+        if (mp->motPlane->flags & MOT_PLANE_FLAG_RIGHT) {
             mp->rotOfs.x = planeData[33];
             mp->dispOfs.x = planeData[34];
         } else {
@@ -286,7 +286,7 @@ void mot_plane(void) {
             m->camShiftTargetZ = 0.0f;
             m->camShiftRate.z = 0.004f;
         }
-        mp->camShiftTargetX = 70.0f * ((mp->motPlane->flags & 1) ? -1.0f : 1.0f);
+        mp->camShiftTargetX = 70.0f * ((mp->motPlane->flags & MOT_PLANE_FLAG_RIGHT) ? -1.0f : 1.0f);
         mp->camShiftTargetY = -70.0f;
         break;
     }
@@ -544,7 +544,7 @@ static void flyMain(void) {
         return;
     }
     mp->motPlane->yaw = revise360(mp->motPlane->roll * planeData[14] + mp->motPlane->yaw);
-    if (mp->motPlane->flags & 1) {
+    if (mp->motPlane->flags & MOT_PLANE_FLAG_RIGHT) {
         if (mp->motPlane->yaw <= 60.0f) {
             mp->motPlane->yaw += 0.1f * (60.0f - mp->motPlane->yaw);
         }
@@ -568,7 +568,7 @@ static void flyMain(void) {
     if (STICK != 0) {
         if (SPD) {
             a = __fabsf((f32)STICK);
-            if (mp->motPlane->flags & 1) {
+            if (mp->motPlane->flags & MOT_PLANE_FLAG_RIGHT) {
                 if (STICK < 0) {
                     if (mp->motPlane->pitch >= planeData[3]) {
                         mp->motPlane->pitch += 0.1f * (planeData[3] - mp->motPlane->pitch);
@@ -634,7 +634,7 @@ static void flyMain(void) {
     }
     SPD += SPD * planeData[1];
     if (mp->motPlane->pitch >= 0.0f) {
-        mp->motPlane->flags |= 0x10;
+        mp->motPlane->flags |= MOT_PLANE_FLAG_DIVE_UNUSED;
         a = (f32)sin(PI * (mp->motPlane->pitch * planeData[7]) / 180.0f);
         a = SPD * (planeData[8] * a);
         SPD = SPD + a;
@@ -683,8 +683,8 @@ static void flyMain(void) {
         }
         mp->motPlane->pitch += v;
     } else if (mp->motPlane->pitch >= -80.0f) {
-        if (mp->motPlane->flags & 0x10) {
-            mp->motPlane->flags &= ~0x10;
+        if (mp->motPlane->flags & MOT_PLANE_FLAG_DIVE_UNUSED) {
+            mp->motPlane->flags &= ~MOT_PLANE_FLAG_DIVE_UNUSED;
         }
         mp->motPlane->diveSpeed = planeData[10] * (f32)sin(PI * (planeData[9] * __fabsf(mp->motPlane->pitch)) / 180.0f);
         SPD += mp->motPlane->diveSpeed;
@@ -693,7 +693,7 @@ static void flyMain(void) {
         { f32 s = (f32)sin(PI * (SPD * planeData[11]) / 180.0f); a = planeData[13] * (s * t); }
         mp->motPlane->pitchSpeed = mp->motPlane->pitchSpeed + a;
         if (STICK != 0) {
-            if (mp->motPlane->flags & 1) {
+            if (mp->motPlane->flags & MOT_PLANE_FLAG_RIGHT) {
                 if (STICK > 0 && mp->motPlane->pitchSpeed >= 1.0f) {
                     mp->motPlane->pitchSpeed = 1.0f;
                 }
@@ -734,7 +734,7 @@ static void flyMain(void) {
     mp->position.x += s2 * (SPD * s);
     if (SPD <= planeData[16]) {
         n = sysMsec2Frame(1000.0f * planeData[17]);
-        if (mp->motPlane->flags & 1) {
+        if (mp->motPlane->flags & MOT_PLANE_FLAG_RIGHT) {
             if ((f32)STICK < 0.0f) {
                 if (++mp->motPlane->stallTimer >= n) {
                     mp->mot.plane.groundY = mp->position.y;

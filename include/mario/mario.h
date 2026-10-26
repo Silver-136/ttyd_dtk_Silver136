@@ -167,9 +167,18 @@ typedef struct MarioMotHammer2 {   // mot_hammer.c mot_hammer2 / mot_ham2_post (
     s32 sfxId;                     // 0x18
 } MarioMotHammer2;
 
+// MarioMotRoll.flags (mot_roll)
+#define ROLL_FLAG_SLOPE_DAMP_UNUSED (1 << 4)   // 0x10, damps the speed on flat ground; nothing sets it
+#define ROLL_FLAG_NO_SLOPE_UNUSED (1 << 5)     // 0x20, ignores the ground slope; nothing sets it
+#define ROLL_FLAG_EVT (1 << 8)                 // 0x100, setRollEvtFlag: an event drives the roll
+#define ROLL_FLAG_FIX (1 << 9)                 // 0x200, marioRollFixOn: the roll cannot be cancelled
+#define ROLL_FLAG_SFX_UNUSED (1 << 12)         // 0x1000, the rolling sound started; never read
+#define ROLL_FLAG_STICK_UNUSED (1 << 14)       // 0x4000, the stick was moved; never read
+#define ROLL_FLAG_NO_SLOPE_SPEED_UNUSED (1 << 16) // 0x10000, keeps the speed off the slope; nothing sets it
+
 typedef struct MarioMotRoll {      // mot_roll.c
     u8 pad00[4];                   // 0x00
-    s32 flags;                     // 0x04
+    s32 flags;                     // 0x04, ROLL_FLAG_*
     s32 sfxId;                     // 0x08, only JP uses it (US moved it to MotRollWork.sfxId)
 } MarioMotRoll;
 
