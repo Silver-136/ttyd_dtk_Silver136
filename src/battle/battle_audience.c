@@ -50,8 +50,10 @@ const AudDeltaArr R_audience_delta_multiplier = {{8.0f,11.0f,14.0f,17.0f,20.0f,2
 const AudWArr R_num_audience_type_weights = {{20,40,20,5,3,2,1,1,1,1,1}};
 
 // BattleAudienceSound with the leading fields named (the header keeps the raw header[] for sac_common)
+#define AUD_SOUND_FLAG_PLAYING (1 << 0) // AudSound.flags
+
 typedef struct AudSound {
-    s32 flags;                     // 0x0
+    s32 flags;                     // 0x0, AUD_SOUND_FLAG_PLAYING
     s32 sfxId;                     // 0x4
     u8 kind;                       // 0x8
     u8 pad_09[0xC - 0x9];       // 0x9, never accessed
@@ -71,7 +73,7 @@ typedef struct AudSound {
 
 #define AUD_SOUND_START(sound, dur, fade)                                                           \
     if ((sound)->sfxId != -1) {                                                                     \
-        (sound)->flags |= 1;                                                                        \
+        (sound)->flags |= AUD_SOUND_FLAG_PLAYING;                                                   \
         (sound)->duration = (dur);                                                                  \
         (sound)->mFadeoutTime = (fade);                                                             \
         (sound)->mBaseSfxVolume = (sound)->mCurrentBaseSfxVolume = psndSFX_get_vol((sound)->sfxId); \
@@ -1107,7 +1109,7 @@ void BattleAudienceSettingAudience(void) {
         break;
     case 6:
         for (i = 0; i < 12; i++) {
-            if (audience_kind[i].flags & 1) {
+            if (audience_kind[i].flags & AUDIENCE_KIND_WIDE) {
                 weights[i] = 2;
             } else {
                 weights[i] = 1;
@@ -1141,7 +1143,7 @@ void BattleAudienceSettingAudience(void) {
                 weights[id] = 0;
             } else if (rec->values[id] != 0) {
                 weights[id] = rec->values[id] * (irand(10) + 1);
-                if (audience_kind[id].flags & 1) {
+                if (audience_kind[id].flags & AUDIENCE_KIND_WIDE) {
                     weights[id] *= 2;
                 }
                 k++;
@@ -1184,7 +1186,7 @@ void BattleAudienceSettingAudience(void) {
     for (i = 0; i < 12; i++) sum += weights[i];
     for (i = 0; i < 12; i++) {
         counts[i] = ar * weights[i] / sum;
-        if (audience_kind[i].flags & 1) {
+        if (audience_kind[i].flags & AUDIENCE_KIND_WIDE) {
             counts[i] /= 2;
             used += counts[i] * 2;
         } else {
@@ -1206,7 +1208,7 @@ void BattleAudienceSettingAudience(void) {
     while (used < ar) {
         s32 id = perm[i];
         if (weights[id] > 0) {
-            if (audience_kind[id].flags & 1) {
+            if (audience_kind[id].flags & AUDIENCE_KIND_WIDE) {
                 if (used <= ar - 2) {
                     used += 2;
                     counts[id]++;
@@ -1421,8 +1423,8 @@ BOOL BattleAudienceItemOn(s32 index, u16 itemId, s32 numItems) {
         s32 i = 0;
         item = BattleAudienceItemGetPtr(0);
         for (; i < numItems; i++, item++) {
-            if (!(item->flags & 1)) {
-                item->flags |= 1;
+            if (!(item->flags & AUDIENCE_ITEM_FLAG_ACTIVE)) {
+                item->flags |= AUDIENCE_ITEM_FLAG_ACTIVE;
                 item->state = 0;
                 item->audienceId = index;
                 item->mItemType = itemId;
@@ -1519,7 +1521,7 @@ void BattleAudienceItemCtrlProcess(void) {
     i = 0;
     it = BattleAudienceItemGetPtr(0);
     for (; i < 100; i++, it++) {
-        if (!(it->flags & 1)) {
+        if (!(it->flags & AUDIENCE_ITEM_FLAG_ACTIVE)) {
             continue;
         }
         aud = (u8*)BattleAudienceGetPtr(it->audienceId);
@@ -1530,7 +1532,7 @@ void BattleAudienceItemCtrlProcess(void) {
         }
         switch (it->state) {
         case 0: {
-            it->flags |= 2;
+            it->flags |= AUDIENCE_ITEM_FLAG_VISIBLE;
             if (it->mItemType == ITEM_NULL) {
                 s32* tbl = (s32*)kd->itemTable;
                 s32 cnt = 0;
@@ -1580,7 +1582,7 @@ void BattleAudienceItemCtrlProcess(void) {
                 BattleUnit* t;
                 f32 dx, n;
                 for (j = 0; j < 100; j++) {
-                    if (j != i && (BattleAudienceItemGetPtr(j)->flags & 1) &&
+                    if (j != i && (BattleAudienceItemGetPtr(j)->flags & AUDIENCE_ITEM_FLAG_ACTIVE) &&
                         BattleAudienceItemGetPtr(j)->state == 1) {
                         it->mode = 2;
                         break;
@@ -1657,7 +1659,7 @@ void BattleAudienceItemCtrlProcess(void) {
             if (a >= 1 || BtlUnit_CheckShadowGuard((BattleUnit*)aud)) {
                 it->mode = 0;
             }
-            if (it->flags & 4) {
+            if (it->flags & AUDIENCE_ITEM_FLAG_HARMLESS_UNUSED) {
                 it->mode = 0;
             }
             if (it->mItemType >= ITEM_THUNDER_BOLT && it->mItemType < ITEM_MAX && pouchGetEmptyHaveItemCnt() <= 0) {
@@ -1699,7 +1701,7 @@ void BattleAudienceItemCtrlProcess(void) {
                 BattleAudience_SetPresentItemNo(it->mItemType);
                 switch (BattleAudience_GetPresentItemType()) {
                 case 0:
-                    it->flags &= ~2;
+                    it->flags &= ~AUDIENCE_ITEM_FLAG_VISIBLE;
                     it->timer = 5;
                     it->state = 7;
                     break;
@@ -1761,9 +1763,9 @@ void BattleAudienceItemCtrlProcess(void) {
             }
             if (it->timer < 30) {
                 if ((it->timer & 3) <= 1) {
-                    it->flags |= 2;
+                    it->flags |= AUDIENCE_ITEM_FLAG_VISIBLE;
                 } else {
-                    it->flags &= ~2;
+                    it->flags &= ~AUDIENCE_ITEM_FLAG_VISIBLE;
                 }
             }
             it->timer--;
@@ -1813,7 +1815,7 @@ void BattleAudienceApSrcCtrlProcess(void) {
     cnt = 0;
     star = base->starpower;
     for (i = 0; i < 100; i++) {
-        if ((u32)base->starpower[i].flags & 1) {
+        if ((u32)base->starpower[i].flags & AUDIENCE_STAR_FLAG_ACTIVE) {
             cnt++;
         }
     }
@@ -1829,7 +1831,7 @@ void BattleAudienceApSrcCtrlProcess(void) {
         }
     } else {
         for (k = 0, i = 0; i < 100; i++) {
-            if ((u32)base->starpower[i].flags & 1) {
+            if ((u32)base->starpower[i].flags & AUDIENCE_STAR_FLAG_ACTIVE) {
                 break;
             }
             k++;
@@ -1846,7 +1848,7 @@ void BattleAudienceApSrcCtrlProcess(void) {
     for (i = 0; i < 100; i++) {
         BattleAudienceStar* s = &base->starpower[i];
         pouchGetPtr();
-        if (!(s->flags & 1)) {
+        if (!(s->flags & AUDIENCE_STAR_FLAG_ACTIVE)) {
             continue;
         }
         switch (s->state) {
@@ -1933,7 +1935,7 @@ BOOL BattleAudienceApSrcEntry(void) {
     BattleAudienceMember* m;
     star = base->starpower;
     for (i = 0; i < 100; i++, star++) {
-        if (!(star->flags & 1)) {
+        if (!(star->flags & AUDIENCE_STAR_FLAG_ACTIVE)) {
             break;
         }
     }
@@ -2268,7 +2270,7 @@ void BattleAudienceDispItem(CameraId camId, void* param) {
     i = 0;
     item = BattleAudienceItemGetPtr(0);
     for (; i < 100; i++, item++) {
-        if ((item->flags & 1) && (item->flags & 2)) {
+        if ((item->flags & AUDIENCE_ITEM_FLAG_ACTIVE) && (item->flags & AUDIENCE_ITEM_FLAG_VISIBLE)) {
             iconId = itemDataTable[item->mItemType].icon_id;
             PSMTXTrans(mtx, 0.0f, -20.0f, 0.0f);
             PSMTXRotRad(rot, 'z', 0.017453292f * item->rotZ);
@@ -2298,7 +2300,7 @@ void BattleAudienceDispApSrc(CameraId camId, void* param) {
     GXSetZMode(GX_TRUE, GX_LEQUAL, GX_FALSE);
     star = ((BattleAudience*)star)->starpower;
     for (i = 0; i < 100; i++, star++) {
-        if (star->flags & 1) {
+        if (star->flags & AUDIENCE_STAR_FLAG_ACTIVE) {
             PSMTXScale(scale, star->scale.x, star->scale.y, star->scale.z);
             PSMTXRotRad(rot, 'z', 0.0f);
             PSMTXTrans(trans, star->position.x, star->position.y, 0.0f);
@@ -2340,7 +2342,7 @@ BOOL BattleAudience_Entry(s32 index, AudienceMemberType type, u8 status) {
     BattleAudienceBaseGetPtr();
     BattleStageGetPtr();
     m = BattleAudienceGetPtr(index);
-    if (!(audience_kind[type & 0xFF].flags & 1)) {
+    if (!(audience_kind[type & 0xFF].flags & AUDIENCE_KIND_WIDE)) {
         if (m->flags & AUDIENCE_MEMBER_FLAG_USED) {
             return FALSE;
         }
@@ -3501,7 +3503,7 @@ void BattleAudienceSoundNoiseAlways(void) {
     right = BattleAudience_GetPPAudienceNum_R();
     left = BattleAudience_GetPPAudienceNum_L();
     sum = right + left;
-    if (!(sound->flags & 1)) {
+    if (!(sound->flags & AUD_SOUND_FLAG_PLAYING)) {
         if (sum == 0) {
             sound->kind = 0;
         }
@@ -3523,7 +3525,7 @@ void BattleAudienceSoundNoiseAlways(void) {
         }
         sound->sfxId = BattleAudienceSound1(name, right, left);
         if (sound->sfxId != -1) {
-            sound->flags |= 1;
+            sound->flags |= AUD_SOUND_FLAG_PLAYING;
             sound->duration = -1;
             sound->mFadeoutTime = 0;
             sound->mBaseSfxVolume = sound->mCurrentBaseSfxVolume = psndSFX_get_vol(sound->sfxId);
@@ -3570,7 +3572,7 @@ void BattleAudienceSoundCheerKind(s32 kind, s32 duration, s32 fade) {
     left = BattleAudience_GetPPAudienceNum_L();
     sound = AudSoundGetPtr(4);
     sound5 = AudSoundGetPtr(5);
-    if ((sound->flags & 1) && (sound5->flags & 1)) {
+    if ((sound->flags & AUD_SOUND_FLAG_PLAYING) && (sound5->flags & AUD_SOUND_FLAG_PLAYING)) {
         if (sound->duration <= sound5->duration) {
             BattleAudienceSoundStop(4);
             sound = AudSoundGetPtr(4);
@@ -3578,10 +3580,10 @@ void BattleAudienceSoundCheerKind(s32 kind, s32 duration, s32 fade) {
             BattleAudienceSoundStop(5);
             sound = AudSoundGetPtr(5);
         }
-    } else if (sound->flags & 1) {
+    } else if (sound->flags & AUD_SOUND_FLAG_PLAYING) {
         sound = AudSoundGetPtr(5);
         lowPitch = 1;
-    } else if (sound5->flags & 1) {
+    } else if (sound5->flags & AUD_SOUND_FLAG_PLAYING) {
         sound = AudSoundGetPtr(4);
         lowPitch = 1;
     } else {
@@ -3690,7 +3692,7 @@ void BattleAudienceSoundHandBeat(void) {
     BattleAudienceSoundStop(9);
     sound->sfxId = BattleAudienceSound1("SFX_AUDIENCE_HANDBEAT1", right, left);
     if (sound->sfxId != -1) {
-        sound->flags |= 1;
+        sound->flags |= AUD_SOUND_FLAG_PLAYING;
         sound->duration = -1;
         right = 0;
         sound->mFadeoutTime = right;
@@ -3860,15 +3862,15 @@ void BattleAudienceSoundSetVolAll(u8 vol, s32 length) {
 }
 
 s32 BattleAudienceSoundCheck(s32 index) {
-    return AudSoundGetPtr(index)->flags & 1;
+    return AudSoundGetPtr(index)->flags & AUD_SOUND_FLAG_PLAYING;
 }
 
 void BattleAudienceSoundStop(s32 index) {
     AudSound* sound = AudSoundGetPtr(index);
 
-    if (sound->flags & 1) {
+    if (sound->flags & AUD_SOUND_FLAG_PLAYING) {
         psndSFXOff(sound->sfxId);
-        sound->flags &= ~1;
+        sound->flags &= ~AUD_SOUND_FLAG_PLAYING;
     }
 }
 
@@ -3927,12 +3929,12 @@ void BattleAudienceSoundMain(void) {
     BattleAudienceNoiseMain();
     for (i = 0, sound = AudSoundGetPtr(0); i < 24; i++, sound++) {
         if (psndSFXChk(sound->sfxId) == -1) {
-            sound->flags &= ~1;
+            sound->flags &= ~AUD_SOUND_FLAG_PLAYING;
             continue;
         }
         if (sound->duration == 0) {
             psndSFXOff(sound->sfxId);
-            sound->flags &= ~1;
+            sound->flags &= ~AUD_SOUND_FLAG_PLAYING;
             continue;
         }
         if (sound->mForceFadeLength > 0) {

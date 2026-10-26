@@ -31,8 +31,10 @@ typedef struct BattleAudienceAnimTable {
     s32* animEatFront;      // 0x48, for Piranha Plants
 } BattleAudienceAnimTable; */
 
+#define AUDIENCE_KIND_WIDE (1 << 0) // BattleAudienceKind.flags: takes two seats (counts double in the type weights)
+
 typedef struct BattleAudienceKind {
-    u8 flags;                          // 0x0, 1: counts double in the audience-type weights
+    u8 flags;                          // 0x0, AUDIENCE_KIND_WIDE
     s32** animTable;                   // 0x4
     BattleAudienceItemKind* itemTable; // 0x8
     f32 itemOffsetX;                   // 0xC, thrown-item spawn offset from the member

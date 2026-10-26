@@ -717,7 +717,7 @@ void BattleBreakSlot_Main(void) {
                     if ((slot->flags & 4) && rr->item != 3) {
                         break;
                     }
-                    if (((u32)dbg2->flags & 0x80000) && rr->item != dbg2->slotItem) {
+                    if (((u32)dbg2->flags & BATTLE_DEBUG_SLOT_ITEM) && rr->item != dbg2->slotItem) {
                         break;
                     }
                     rr->pos.y = 0.0f;

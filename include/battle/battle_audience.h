@@ -143,8 +143,13 @@ typedef struct BattleAudienceMember {
     f32 bobOffset;             // 0x130, type 2: 5 * sin(phase) added to the drawn y
 } BattleAudienceMember;
 
+// BattleAudienceItem.flags
+#define AUDIENCE_ITEM_FLAG_ACTIVE (1 << 0)
+#define AUDIENCE_ITEM_FLAG_VISIBLE (1 << 1)  // drawn (blinks before it lands)
+#define AUDIENCE_ITEM_FLAG_HARMLESS_UNUSED (1 << 2) // never becomes a hazard; nothing sets it
+
 typedef struct BattleAudienceItem {
-    u32 flags;              // 0x0
+    u32 flags;              // 0x0, AUDIENCE_ITEM_FLAG_*
     s32 state;              // 0x4
     s32 timer;              // 0x8, per-state frame timer
     s32 audienceId;         // 0xC, member that threw it
@@ -158,8 +163,10 @@ typedef struct BattleAudienceItem {
     s32 mode;               // 0x44, nonzero once it is a hazard (lands on a unit)
 } BattleAudienceItem;
 
+#define AUDIENCE_STAR_FLAG_ACTIVE (1 << 0) // BattleAudienceStar.flags
+
 typedef struct BattleAudienceStar {
-    s32 flags;                // 0x0
+    s32 flags;                // 0x0, AUDIENCE_STAR_FLAG_ACTIVE
     s32 state;                // 0x4, 0 spawn, 5 rise, 10 wait, 15 spiral to the AP gauge, 20 fade
     Vec position;             // 0x8
     f32 reserved_14;          // 0x14, random -20..20 at spawn, never read
