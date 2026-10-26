@@ -24,6 +24,7 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_damage.h"
+#include "icon_ids.h"
 
 USER_FUNC(_check_aud_item_type);
 USER_FUNC(_clauda_make_extra_work_area);
@@ -83,11 +84,7 @@ static EvtWord party_win_reaction[11];
 
 BattleWeapon partyWeapon_ClaudaNormalAttack = {
     "btl_wn_pwd_normal", // name
-#ifdef VERSION_G8ME01
-    344, // icon
-#else
-    336, // icon
-#endif
+    ICON_PARTNER_MOVE_NORMAL, // icon
     {0}, // pad_06
     0, // itemId
     "msg_pwd_body_press", // description
@@ -125,11 +122,7 @@ BattleWeapon partyWeapon_ClaudaNormalAttack = {
 
 BattleWeapon partyWeapon_ClaudaBreathAttack = {
     "btl_wn_pwd_lv1", // name
-#ifdef VERSION_G8ME01
-    345, // icon
-#else
-    337, // icon
-#endif
+    ICON_PARTNER_MOVE_LV1, // icon
     {0}, // pad_06
     0, // itemId
     "msg_pwd_breath", // description
@@ -173,11 +166,7 @@ BattleWeapon partyWeapon_ClaudaBreathAttack = {
 
 BattleWeapon partyWeapon_ClaudaPredationAttack = {
     "btl_wn_pwd_lv2", // name
-#ifdef VERSION_G8ME01
-    346, // icon
-#else
-    338, // icon
-#endif
+    ICON_PARTNER_MOVE_LV2, // icon
     {0}, // pad_06
     0, // itemId
     "msg_pwd_sexy_kiss", // description
@@ -219,11 +208,7 @@ BattleWeapon partyWeapon_ClaudaPredationAttack = {
 
 BattleWeapon partyWeapon_ClaudaKumogakureAttack = {
     "btl_wn_pwd_lv3", // name
-#ifdef VERSION_G8ME01
-    347, // icon
-#else
-    339, // icon
-#endif
+    ICON_PARTNER_MOVE_LV3, // icon
     {0}, // pad_06
     0, // itemId
     "msg_pwd_kumogakure", // description

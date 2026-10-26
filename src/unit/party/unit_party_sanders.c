@@ -24,6 +24,7 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_damage.h"
+#include "icon_ids.h"
 
 USER_FUNC(_get_bomb_hit_position);
 USER_FUNC(_judge_on_stage);
@@ -251,11 +252,7 @@ EVT_END()
 
 BattleWeapon partyWeapon_SandersFirstAttack = {
     NULL, // name
-#ifdef VERSION_G8ME01
-    344, // icon
-#else
-    336, // icon
-#endif
+    ICON_PARTNER_MOVE_NORMAL, // icon
     {0}, // pad_06
     0, NULL, // itemId..description
     100, // baseAccuracy
@@ -292,11 +289,7 @@ BattleWeapon partyWeapon_SandersFirstAttack = {
 
 BattleWeapon partyWeapon_SandersNormalAttack = {
     "btl_wn_pbm_normal", // name
-#ifdef VERSION_G8ME01
-    344, // icon
-#else
-    336, // icon
-#endif
+    ICON_PARTNER_MOVE_NORMAL, // icon
     {0}, // pad_06
     0, // itemId
     "msg_pbm_bakuhatsu", // description
@@ -334,11 +327,7 @@ BattleWeapon partyWeapon_SandersNormalAttack = {
 
 BattleWeapon partyWeapon_SandersTimeBombSet = {
     "btl_wn_pbm_lv1", // name
-#ifdef VERSION_G8ME01
-    345, // icon
-#else
-    337, // icon
-#endif
+    ICON_PARTNER_MOVE_LV1, // icon
     {0}, // pad_06
     0, // itemId
     "msg_pbm_jigen_bakudan", // description
@@ -376,11 +365,7 @@ BattleWeapon partyWeapon_SandersTimeBombSet = {
 
 BattleWeapon partyWeapon_SandersCounterSet = {
     "btl_wn_pbm_lv2", // name
-#ifdef VERSION_G8ME01
-    346, // icon
-#else
-    338, // icon
-#endif
+    ICON_PARTNER_MOVE_LV2, // icon
     {0}, // pad_06
     0, // itemId
     "msg_pbm_counter", // description
@@ -422,11 +407,7 @@ BattleWeapon partyWeapon_SandersCounterSet = {
 
 BattleWeapon partyWeapon_SandersSuperBombAttack = {
     "btl_wn_pbm_lv3", // name
-#ifdef VERSION_G8ME01
-    347, // icon
-#else
-    339, // icon
-#endif
+    ICON_PARTNER_MOVE_LV3, // icon
     {0}, // pad_06
     0, // itemId
     "msg_pbm_sungoi_bakuhatsu", // description

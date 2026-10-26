@@ -40,6 +40,7 @@ void BtlUnit_SetAnim(BattleUnitPart* part, s32 anim);
 
 #include "battle/battle_unit.h"
 #include "battle/battle_database_common.h"
+#include "icon_ids.h"
 
 
 USER_FUNC(_battle_majinai_effect);
@@ -190,11 +191,7 @@ EvtWord marioAttackEvent_MajinaiExpUp[27];
 
 BattleWeapon marioDefaultWeapon_Jump = {
     "btl_wn_mario_normal_jump", // name
-#ifdef VERSION_G8ME01
-    167, // icon
-#else
-    159, // icon
-#endif
+    ICON_ITEM_BOOTS, // icon
     {0}, // pad_06
     0, // itemId
     "msg_normal_jump", // description
@@ -235,11 +232,7 @@ BattleWeapon marioDefaultWeapon_Jump = {
 
 BattleWeapon marioWeapon_KururinJump = {
     "btl_wn_mario_kururin_jump", // name
-#ifdef VERSION_G8ME01
-    169, // icon
-#else
-    161, // icon
-#endif
+    ICON_ITEM_ULTRA_BOOTS, // icon
     {0}, // pad_06
     0, // itemId
     "msg_kururin_jump", // description
@@ -282,11 +275,7 @@ BattleWeapon marioWeapon_KururinJump = {
 
 BattleWeapon marioWeapon_KururinJump2 = {
     "btl_wn_mario_kururin_jump", // name
-#ifdef VERSION_G8ME01
-    169, // icon
-#else
-    161, // icon
-#endif
+    ICON_ITEM_ULTRA_BOOTS, // icon
     {0}, // pad_06
     0, // itemId
     "msg_kururin_jump", // description
@@ -331,11 +320,7 @@ BattleWeapon marioWeapon_KururinJump2 = {
 
 BattleWeapon marioWeapon_JyabaraJump = {
     "btl_wn_mario_jyabara_jump", // name
-#ifdef VERSION_G8ME01
-    168, // icon
-#else
-    160, // icon
-#endif
+    ICON_ITEM_SUPER_BOOTS, // icon
     {0}, // pad_06
     0, // itemId
     "msg_jyabara_jump", // description
@@ -385,11 +370,7 @@ BattleWeapon marioWeapon_JyabaraJump = {
 
 BattleWeapon marioWeapon_JyabaraJumpFailed = {
     "btl_wn_mario_jyabara_jump", // name
-#ifdef VERSION_G8ME01
-    168, // icon
-#else
-    160, // icon
-#endif
+    ICON_ITEM_SUPER_BOOTS, // icon
     {0}, // pad_06
     0, // itemId
     "msg_jyabara_jump", // description
@@ -503,11 +484,7 @@ BattleWeapon marioDefaultWeapon_FirstAttackUltraHammer = {
 
 BattleWeapon marioDefaultWeapon_Hammer = {
     "btl_wn_mario_normal_hammer", // name
-#ifdef VERSION_G8ME01
-    164, // icon
-#else
-    156, // icon
-#endif
+    ICON_ITEM_HAMMER, // icon
     {0}, // pad_06
     0, // itemId
     "msg_normal_hammer", // description
@@ -548,11 +525,7 @@ BattleWeapon marioDefaultWeapon_Hammer = {
 
 BattleWeapon marioWeapon_KaitenHammer = {
     "btl_wn_mario_kaiten_hammer", // name
-#ifdef VERSION_G8ME01
-    165, // icon
-#else
-    157, // icon
-#endif
+    ICON_ITEM_SUPER_HAMMER, // icon
     {0}, // pad_06
     0, // itemId
     "msg_kaiten_hammer", // description
@@ -625,11 +598,7 @@ BattleWeapon marioWeapon_KaitenHammerInvolved = {
 
 BattleWeapon marioWeapon_UltraHammer = {
     "btl_wn_mario_ultra_hammer", // name
-#ifdef VERSION_G8ME01
-    166, // icon
-#else
-    158, // icon
-#endif
+    ICON_ITEM_ULTRA_HAMMER, // icon
     {0}, // pad_06
     0, // itemId
     "msg_ultra_hammer", // description
@@ -706,11 +675,7 @@ BattleWeapon marioWeapon_UltraHammerInvolved = {
 
 BattleWeapon marioWeapon_UltraHammerFinish = {
     "btl_wn_mario_ultra_hammer", // name
-#ifdef VERSION_G8ME01
-    166, // icon
-#else
-    158, // icon
-#endif
+    ICON_ITEM_ULTRA_HAMMER, // icon
     {0}, // pad_06
     0, // itemId
     "msg_ultra_hammer", // description
@@ -1525,11 +1490,7 @@ BattleWeapon badgeWeapon_IceNaguri = {
 
 BattleWeapon badgeWeapon_Charge = {
     "btl_wn_mario_normal_charge", // name
-#ifdef VERSION_G8ME01
-    167, // icon
-#else
-    159, // icon
-#endif
+    ICON_ITEM_BOOTS, // icon
     {0}, // pad_06
     256, // itemId
     "btl_hlp_cmd_operation_charge", // description
@@ -1568,11 +1529,7 @@ BattleWeapon badgeWeapon_Charge = {
 
 BattleWeapon badgeWeapon_ChargeP = {
     "btl_wn_mario_normal_charge", // name
-#ifdef VERSION_G8ME01
-    167, // icon
-#else
-    159, // icon
-#endif
+    ICON_ITEM_BOOTS, // icon
     {0}, // pad_06
     257, // itemId
     "btl_hlp_cmd_operation_charge", // description
@@ -1611,11 +1568,7 @@ BattleWeapon badgeWeapon_ChargeP = {
 
 BattleWeapon badgeWeapon_SuperCharge = {
     "btl_wn_mario_super_charge", // name
-#ifdef VERSION_G8ME01
-    167, // icon
-#else
-    159, // icon
-#endif
+    ICON_ITEM_BOOTS, // icon
     {0}, // pad_06
     337, // itemId
     "btl_hlp_cmd_operation_super_charge", // description
@@ -1654,11 +1607,7 @@ BattleWeapon badgeWeapon_SuperCharge = {
 
 BattleWeapon badgeWeapon_SuperChargeP = {
     "btl_wn_mario_super_charge", // name
-#ifdef VERSION_G8ME01
-    167, // icon
-#else
-    159, // icon
-#endif
+    ICON_ITEM_BOOTS, // icon
     {0}, // pad_06
     338, // itemId
     "btl_hlp_cmd_operation_super_charge", // description
@@ -1831,11 +1780,7 @@ BattleWeapon badgeWeapon_DefenceCommandP = {
 
 BattleWeapon marioWeapon_BakuGame = {
     "btl_wn_sac_bakugame", // name
-#ifdef VERSION_G8ME01
-    416, // icon
-#else
-    408, // icon
-#endif
+    ICON_SAC_BAKUGAME, // icon
     {0}, // pad_06
     0, // itemId
     "msg_bakugame", // description
@@ -1876,11 +1821,7 @@ BattleWeapon marioWeapon_BakuGame = {
 
 BattleWeapon marioWeapon_Scissor = {
     "btl_wn_sac_scissor", // name
-#ifdef VERSION_G8ME01
-    420, // icon
-#else
-    412, // icon
-#endif
+    ICON_SAC_SCISSOR, // icon
     {0}, // pad_06
     0, // itemId
     "msg_scissor", // description
@@ -1918,11 +1859,7 @@ BattleWeapon marioWeapon_Scissor = {
 
 BattleWeapon marioWeapon_ZubaStar = {
     "btl_wn_sac_zubastar", // name
-#ifdef VERSION_G8ME01
-    419, // icon
-#else
-    411, // icon
-#endif
+    ICON_SAC_ZUBASTAR, // icon
     {0}, // pad_06
     0, // itemId
     "msg_zubastar", // description
@@ -1960,11 +1897,7 @@ BattleWeapon marioWeapon_ZubaStar = {
 
 BattleWeapon marioWeapon_Genki0 = {
     "btl_wn_sac_genki0", // name
-#ifdef VERSION_G8ME01
-    313, // icon
-#else
-    305, // icon
-#endif
+    ICON_SAC_GENKI0, // icon
     {0}, // pad_06
     0, // itemId
     "msg_genkigenki", // description
@@ -2002,11 +1935,7 @@ BattleWeapon marioWeapon_Genki0 = {
 
 BattleWeapon marioWeapon_Genki1 = {
     "btl_wn_sac_genki1", // name
-#ifdef VERSION_G8ME01
-    421, // icon
-#else
-    413, // icon
-#endif
+    ICON_SAC_GENKI1, // icon
     {0}, // pad_06
     0, // itemId
     "msg_super_genki", // description
@@ -2044,11 +1973,7 @@ BattleWeapon marioWeapon_Genki1 = {
 
 BattleWeapon marioWeapon_Deka = {
     "btl_wn_sac_dekkaku_dokkan", // name
-#ifdef VERSION_G8ME01
-    415, // icon
-#else
-    407, // icon
-#endif
+    ICON_SAC_DEKA, // icon
     {0}, // pad_06
     0, // itemId
     "msg_dekkaku_dokkan", // description
@@ -2086,11 +2011,7 @@ BattleWeapon marioWeapon_Deka = {
 
 BattleWeapon marioWeapon_Muki = {
     "btl_wn_sac_mukimuki_body", // name
-#ifdef VERSION_G8ME01
-    418, // icon
-#else
-    410, // icon
-#endif
+    ICON_SAC_MUKI, // icon
     {0}, // pad_06
     0, // itemId
     "msg_mukimuki_body", // description
@@ -2128,11 +2049,7 @@ BattleWeapon marioWeapon_Muki = {
 
 BattleWeapon marioWeapon_Suki = {
     "btl_wn_sac_sukkari_sukkiri", // name
-#ifdef VERSION_G8ME01
-    417, // icon
-#else
-    409, // icon
-#endif
+    ICON_SAC_SUKI, // icon
     {0}, // pad_06
     0, // itemId
     "msg_sukkari_sukkiri", // description

@@ -55,6 +55,7 @@ typedef struct YoshiGundanWork {
 #include "eff/eff_kemu_test.h"
 #include "eff/n64/eff_sweat_n64.h"
 #include "data_tables.h"
+#include "icon_ids.h"
 
 
 USER_FUNC(_attack_aud);
@@ -350,11 +351,7 @@ EVT_END()
 
 BattleWeapon partyWeapon_YoshiNormalAttack = {
     "btl_wn_pys_normal", // name
-#ifdef VERSION_G8ME01
-    344, // icon
-#else
-    336, // icon
-#endif
+    ICON_PARTNER_MOVE_NORMAL, // icon
     {0}, // pad_06
     0, // itemId
     "msg_pys_hip_drop", // description
@@ -395,11 +392,7 @@ BattleWeapon partyWeapon_YoshiNormalAttack = {
 
 BattleWeapon partyWeapon_YoshiNomikomi_Shot = {
     "btl_wn_pys_lv1", // name
-#ifdef VERSION_G8ME01
-    345, // icon
-#else
-    337, // icon
-#endif
+    ICON_PARTNER_MOVE_LV1, // icon
     {0}, // pad_06
     0, // itemId
     "msg_pys_nomikomi", // description
@@ -442,11 +435,7 @@ BattleWeapon partyWeapon_YoshiNomikomi_Shot = {
 
 BattleWeapon partyWeapon_YoshiNomikomi_Spew = {
     "btl_wn_pys_lv1", // name
-#ifdef VERSION_G8ME01
-    345, // icon
-#else
-    337, // icon
-#endif
+    ICON_PARTNER_MOVE_LV1, // icon
     {0}, // pad_06
     0, // itemId
     "msg_pys_nomikomi", // description
@@ -489,11 +478,7 @@ BattleWeapon partyWeapon_YoshiNomikomi_Spew = {
 
 BattleWeapon partyWeapon_YoshiNomikomi_Dmg0 = {
     "btl_wn_pys_lv1", // name
-#ifdef VERSION_G8ME01
-    345, // icon
-#else
-    337, // icon
-#endif
+    ICON_PARTNER_MOVE_LV1, // icon
     {0}, // pad_06
     0, // itemId
     "msg_pys_nomikomi", // description
@@ -531,11 +516,7 @@ BattleWeapon partyWeapon_YoshiNomikomi_Dmg0 = {
 
 BattleWeapon partyWeapon_YoshiNomikomi_Fire = {
     "btl_wn_pys_lv1", // name
-#ifdef VERSION_G8ME01
-    345, // icon
-#else
-    337, // icon
-#endif
+    ICON_PARTNER_MOVE_LV1, // icon
     {0}, // pad_06
     0, // itemId
     "msg_pys_nomikomi", // description
@@ -604,11 +585,7 @@ BattleWeapon partyWeapon_YoshiNomikomi_Involved = {
 
 BattleWeapon partyWeapon_YoshiEggAttack_Minimini = {
     "btl_wn_pys_lv2", // name
-#ifdef VERSION_G8ME01
-    346, // icon
-#else
-    338, // icon
-#endif
+    ICON_PARTNER_MOVE_LV2, // icon
     {0}, // pad_06
     0, // itemId
     "msg_pys_wonder_egg", // description
@@ -657,11 +634,7 @@ BattleWeapon partyWeapon_YoshiEggAttack_Minimini = {
 
 BattleWeapon partyWeapon_YoshiCallGuard = {
     "btl_wn_pys_lv3", // name
-#ifdef VERSION_G8ME01
-    347, // icon
-#else
-    339, // icon
-#endif
+    ICON_PARTNER_MOVE_LV3, // icon
     {0}, // pad_06
     0, // itemId
     "msg_pys_taigun_yoshi", // description

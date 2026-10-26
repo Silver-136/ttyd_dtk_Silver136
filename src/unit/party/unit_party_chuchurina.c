@@ -27,6 +27,7 @@
 #include "evt/evt_snd.h"
 #include "mario/mario_pouch.h"
 #include "battle/battle_damage.h"
+#include "icon_ids.h"
 
 void btlUnitPartsDisp(CameraId camId, BattleUnitPart* parts);
 void BtlUnit_EquipItem(BattleUnit* unit, s32 flags, ItemType type);
@@ -220,11 +221,7 @@ EVT_END()
 
 BattleWeapon partyWeapon_ChuchurinaNormalAttackLeft = {
     "btl_wn_pcr_normal", // name
-#ifdef VERSION_G8ME01
-    344, // icon
-#else
-    336, // icon
-#endif
+    ICON_PARTNER_MOVE_NORMAL, // icon
     {0}, // pad_06
     0, // itemId
     "msg_pch_binta", // description
@@ -266,11 +263,7 @@ BattleWeapon partyWeapon_ChuchurinaNormalAttackLeft = {
 
 BattleWeapon partyWeapon_ChuchurinaNormalAttackRight = {
     "btl_wn_pcr_normal", // name
-#ifdef VERSION_G8ME01
-    344, // icon
-#else
-    336, // icon
-#endif
+    ICON_PARTNER_MOVE_NORMAL, // icon
     {0}, // pad_06
     0, // itemId
     "msg_pch_binta", // description
@@ -312,11 +305,7 @@ BattleWeapon partyWeapon_ChuchurinaNormalAttackRight = {
 
 BattleWeapon partyWeapon_ChuchurinaNormalAttackLeftLast = {
     "btl_wn_pcr_normal", // name
-#ifdef VERSION_G8ME01
-    344, // icon
-#else
-    336, // icon
-#endif
+    ICON_PARTNER_MOVE_NORMAL, // icon
     {0}, // pad_06
     0, // itemId
     "msg_pch_binta", // description
@@ -358,11 +347,7 @@ BattleWeapon partyWeapon_ChuchurinaNormalAttackLeftLast = {
 
 BattleWeapon partyWeapon_ChuchurinaNormalAttackRightLast = {
     "btl_wn_pcr_normal", // name
-#ifdef VERSION_G8ME01
-    344, // icon
-#else
-    336, // icon
-#endif
+    ICON_PARTNER_MOVE_NORMAL, // icon
     {0}, // pad_06
     0, // itemId
     "msg_pch_binta", // description
@@ -404,11 +389,7 @@ BattleWeapon partyWeapon_ChuchurinaNormalAttackRightLast = {
 
 BattleWeapon partyWeapon_ChuchurinaMadowaseAttack = {
     "btl_wn_pcr_madowase", // name
-#ifdef VERSION_G8ME01
-    346, // icon
-#else
-    338, // icon
-#endif
+    ICON_PARTNER_MOVE_LV2, // icon
     {0}, // pad_06
     0, // itemId
     "msg_pch_madowaseru", // description
@@ -452,11 +433,7 @@ BattleWeapon partyWeapon_ChuchurinaMadowaseAttack = {
 
 BattleWeapon partyWeapon_ChuchurinaItemSteal = {
     "btl_wn_pcr_steal", // name
-#ifdef VERSION_G8ME01
-    345, // icon
-#else
-    337, // icon
-#endif
+    ICON_PARTNER_MOVE_LV1, // icon
     {0}, // pad_06
     0, // itemId
     "msg_pch_heart_catch", // description
@@ -495,11 +472,7 @@ BattleWeapon partyWeapon_ChuchurinaItemSteal = {
 
 BattleWeapon partyWeapon_ChuchurinaKiss = {
     "btl_wn_pcr_kiss", // name
-#ifdef VERSION_G8ME01
-    347, // icon
-#else
-    339, // icon
-#endif
+    ICON_PARTNER_MOVE_LV3, // icon
     {0}, // pad_06
     0, // itemId
     "msg_pch_kiss", // description

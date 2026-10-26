@@ -37,8 +37,8 @@ typedef enum ItemType {
     ITEM_SHOP_KEY,                     // 0x15
     ITEM_STEEPLE_KEY_0x16,             // 0x16
     ITEM_STEEPLE_KEY_0x17,             // 0x17
-    ITEM_STEEPLE_KEY_0x18,             // 0x18
-    ITEM_STEEPLE_KEY_0x19,             // 0x19
+    ITEM_STATION_KEY_0x18,             // 0x18
+    ITEM_STATION_KEY_0x19,             // 0x19
     ITEM_ELEVATOR_KEY_0x1A,            // 0x1A
     ITEM_ELEVATOR_KEY_0x1B,            // 0x1B
     ITEM_ELEVATOR_KEY_0x1C,            // 0x1C

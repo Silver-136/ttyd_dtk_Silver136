@@ -1580,19 +1580,19 @@ void stg6_27_init(void) {
 }
 
 void stg6_29_init(void) {
-    pouchGetItem(ITEM_STEEPLE_KEY_0x18);
+    pouchGetItem(ITEM_STATION_KEY_0x18);
 }
 
 void stg6_30_init(void) {
-    pouchRemoveItem(ITEM_STEEPLE_KEY_0x18);
+    pouchRemoveItem(ITEM_STATION_KEY_0x18);
 }
 
 void stg6_32_init(void) {
-    pouchGetItem(ITEM_STEEPLE_KEY_0x19);
+    pouchGetItem(ITEM_STATION_KEY_0x19);
 }
 
 void stg6_33_init(void) {
-    pouchRemoveItem(ITEM_STEEPLE_KEY_0x19);
+    pouchRemoveItem(ITEM_STATION_KEY_0x19);
 }
 
 void stg6_34_init(void) {

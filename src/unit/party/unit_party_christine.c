@@ -28,6 +28,7 @@ BOOL monosiriCloseWait(void* work);
 void monosiriExit(void* work);
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "icon_ids.h"
 
 USER_FUNC(_dictionary);
 USER_FUNC(btlevtcmd_SetEventEntry);
@@ -204,11 +205,7 @@ EVT_END()
 
 BattleWeapon partyWeapon_ChristineNormalAttack = {
     "btl_wn_pkr_normal", // name
-#ifdef VERSION_G8ME01
-    344, // icon
-#else
-    336, // icon
-#endif
+    ICON_PARTNER_MOVE_NORMAL, // icon
     {0}, // pad_06
     0, // itemId
     "msg_pkr_normal_jump", // description
@@ -249,11 +246,7 @@ BattleWeapon partyWeapon_ChristineNormalAttack = {
 
 BattleWeapon partyWeapon_ChristineMonosiri = {
     "btl_wn_pkr_lv1", // name
-#ifdef VERSION_G8ME01
-    345, // icon
-#else
-    337, // icon
-#endif
+    ICON_PARTNER_MOVE_LV1, // icon
     {0}, // pad_06
     0, // itemId
     "msg_pkr_monosiri", // description
@@ -290,11 +283,7 @@ BattleWeapon partyWeapon_ChristineMonosiri = {
 
 BattleWeapon partyWeapon_ChristineRenzokuAttack = {
     "btl_wn_pkr_lv2", // name
-#ifdef VERSION_G8ME01
-    346, // icon
-#else
-    338, // icon
-#endif
+    ICON_PARTNER_MOVE_LV2, // icon
     {0}, // pad_06
     0, // itemId
     "msg_pkr_renzoku_zutsuki", // description
@@ -340,11 +329,7 @@ BattleWeapon partyWeapon_ChristineRenzokuAttack = {
 
 BattleWeapon partyWeapon_ChristineKiss = {
     "btl_wn_pkr_lv3", // name
-#ifdef VERSION_G8ME01
-    347, // icon
-#else
-    339, // icon
-#endif
+    ICON_PARTNER_MOVE_LV3, // icon
     {0}, // pad_06
     0, // itemId
     "msg_pkr_nage_kiss", // description

@@ -11,6 +11,7 @@
 #include "evt/evt_sub.h"
 #include "battle/battle_sub.h"
 #include "system.h"
+#include "icon_ids.h"
 
 USER_FUNC(btlevtcmd_SetEventPhase);
 
@@ -119,11 +120,7 @@ static PoseTableEntry pose_table[] = {
 
 BattleWeapon _lec_weapon_jump = {
     "btl_wn_mario_normal_jump", // name
-#ifdef VERSION_G8ME01
-    167, // icon
-#else
-    159, // icon
-#endif
+    ICON_ITEM_BOOTS, // icon
     {0}, // pad_06
     0, // itemId
     "msg_normal_jump", // description
@@ -160,11 +157,7 @@ BattleWeapon _lec_weapon_jump = {
 
 BattleWeapon _lec_weapon_hammer = {
     "btl_wn_mario_normal_hammer", // name
-#ifdef VERSION_G8ME01
-    164, // icon
-#else
-    156, // icon
-#endif
+    ICON_ITEM_HAMMER, // icon
     {0}, // pad_06
     0, // itemId
     "msg_normal_hammer", // description

@@ -275,11 +275,7 @@ EVT_END()
 
 BattleWeapon partyWeapon_NokotarouFirstAttack = {
     NULL, // name
-#ifdef VERSION_G8ME01
-    344, // icon
-#else
-    336, // icon
-#endif
+    ICON_PARTNER_MOVE_NORMAL, // icon
     {0}, // pad_06
     0, NULL, // itemId..description
     100, // baseAccuracy
@@ -316,11 +312,7 @@ BattleWeapon partyWeapon_NokotarouFirstAttack = {
 
 BattleWeapon partyWeapon_NokotarouKouraAttack = {
     "btl_wn_pnk_normal", // name
-#ifdef VERSION_G8ME01
-    344, // icon
-#else
-    336, // icon
-#endif
+    ICON_PARTNER_MOVE_NORMAL, // icon
     {0}, // pad_06
     0, // itemId
     "msg_pnk_normal_attack", // description
@@ -362,11 +354,7 @@ BattleWeapon partyWeapon_NokotarouKouraAttack = {
 
 BattleWeapon partyWeapon_NokotarouSyubibinKoura = {
     "btl_wn_pnk_lv1", // name
-#ifdef VERSION_G8ME01
-    345, // icon
-#else
-    337, // icon
-#endif
+    ICON_PARTNER_MOVE_LV1, // icon
     {0}, // pad_06
     0, // itemId
     "msg_pnk_syubibin_koura", // description
@@ -413,11 +401,7 @@ BattleWeapon partyWeapon_NokotarouSyubibinKoura = {
 
 BattleWeapon partyWeapon_NokotarouKouraGuard = {
     "btl_wn_pnk_lv2", // name
-#ifdef VERSION_G8ME01
-    346, // icon
-#else
-    338, // icon
-#endif
+    ICON_PARTNER_MOVE_LV2, // icon
     {0}, // pad_06
     0, // itemId
     "msg_pnk_koura_no_mamori", // description
@@ -455,11 +439,7 @@ BattleWeapon partyWeapon_NokotarouKouraGuard = {
 
 BattleWeapon partyWeapon_NokotarouTsuranukiKoura = {
     "btl_wn_pnk_lv3_tsuranuki", // name
-#ifdef VERSION_G8ME01
-    347, // icon
-#else
-    339, // icon
-#endif
+    ICON_PARTNER_MOVE_LV3, // icon
     {0}, // pad_06
     0, // itemId
     "msg_pnk_koura_tsuranuki", // description
@@ -1797,7 +1777,7 @@ static void __makeTechMenuFunc(BattleCommand* command, s32* count) {
     command->weapon[*count].itemId = 0;
     command->weapon[*count].weapon = &partyWeapon_NokotarouKouraAttack;
     command->weapon[*count].enabled = 0;
-    command->weapon[*count].icon = ICON_NOKOTAROU_KOURA_ATTACK;
+    command->weapon[*count].icon = ICON_PARTNER_MOVE_NORMAL;
     command->weapon[*count].name = msgSearch(command->weapon[*count].weapon->name);
     (*count)++;
 
@@ -1806,7 +1786,7 @@ static void __makeTechMenuFunc(BattleCommand* command, s32* count) {
         command->weapon[*count].itemId = 0;
         command->weapon[*count].weapon = &partyWeapon_NokotarouSyubibinKoura;
         command->weapon[*count].enabled = 0;
-        command->weapon[*count].icon = ICON_NOKOTAROU_SYUBIBIN_KOURA;
+        command->weapon[*count].icon = ICON_PARTNER_MOVE_LV1;
         command->weapon[*count].name = msgSearch(command->weapon[*count].weapon->name);
         (*count)++;
     }

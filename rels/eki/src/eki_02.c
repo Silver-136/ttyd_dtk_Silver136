@@ -122,7 +122,7 @@ EVT_BEGIN(eki_02_init_evt)
     CALL(evt_map_playanim, STRING("anm_sikake_2"), 1, 0)
 #endif
     IF_INT_LESS(GSW_STORY_PROGRESS, 314)
-        CALL(evt_item_entry, STRING("key"), ITEM_STEEPLE_KEY_0x19, 525, 220, 29, ITEM_TYPE_STILL, -1, PTR(evt_key))
+        CALL(evt_item_entry, STRING("key"), ITEM_STATION_KEY_0x19, 525, 220, 29, ITEM_TYPE_STILL, -1, PTR(evt_key))
     END_IF
     BEGIN_INLINE_EVENT
         CALL(hit_move)

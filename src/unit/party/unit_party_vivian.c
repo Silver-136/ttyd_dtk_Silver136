@@ -430,11 +430,7 @@ EVT_END()
 
 BattleWeapon partyWeapon_VivianNormalAttack = {
     "btl_wn_ptr_normal", // name
-#ifdef VERSION_G8ME01
-    344, // icon
-#else
-    336, // icon
-#endif
+    ICON_PARTNER_MOVE_NORMAL, // icon
     {0}, // pad_06
     0, // itemId
     "msg_ptr_kagenuke", // description
@@ -477,11 +473,7 @@ BattleWeapon partyWeapon_VivianNormalAttack = {
 
 BattleWeapon partyWeapon_VivianShadowGuard = {
     "btl_wn_ptr_lv1", // name
-#ifdef VERSION_G8ME01
-    345, // icon
-#else
-    337, // icon
-#endif
+    ICON_PARTNER_MOVE_LV1, // icon
     {0}, // pad_06
     0, // itemId
     "msg_ptr_kagegakure", // description
@@ -523,11 +515,7 @@ BattleWeapon partyWeapon_VivianShadowGuard = {
 
 BattleWeapon partyWeapon_VivianMagicalPowder = {
     "btl_wn_ptr_lv2", // name
-#ifdef VERSION_G8ME01
-    346, // icon
-#else
-    338, // icon
-#endif
+    ICON_PARTNER_MOVE_LV2, // icon
     {0}, // pad_06
     0, // itemId
     "msg_ptr_mahou_no_kona", // description
@@ -572,11 +560,7 @@ BattleWeapon partyWeapon_VivianMagicalPowder = {
 
 BattleWeapon partyWeapon_VivianCharmKissAttack = {
     "btl_wn_ptr_lv3", // name
-#ifdef VERSION_G8ME01
-    347, // icon
-#else
-    339, // icon
-#endif
+    ICON_PARTNER_MOVE_LV3, // icon
     {0}, // pad_06
     0, // itemId
     "msg_ptr_meromero_kiss", // description
