@@ -41,7 +41,8 @@ data order 10, sound-name integer round trips (`SFX_NAME_WORD`) 9, no-op casts 6
   unless their meaning is clear (then `_UNUSED`).
 - Padding arrays (`u8 pad_..[n]`, `u8 field_..[n]`) in struct layouts: 455; many are views that should become the
   real struct type.
-- Icon ids still as placeholders: `ICON_xxx` hex names, 920 uses (pad and stick icons are named).
+- Icon ids: every icon the game code uses has a name except `ICON_1D4` / `ICON_1D5` (one use each); the US-only
+  per-language icon tables (statuswindow, kpa, evt_shop) still list raw US ids for the non-English variants.
 - Saved-game flags and variables by number: `GSWF(n)` 2,657, `GSW(n)` 311, `LSW/LSWF(n)` 417 uses. Names need
   evidence from the code that sets and tests each one.
 - Names with an address suffix (25) and debug strings by address (`str_8...`, 6 in shadowdrv).
@@ -50,7 +51,7 @@ data order 10, sound-name integer round trips (`SFX_NAME_WORD`) 9, no-op casts 6
 
 ## 4. Structure and layout of the source
 
-- Version blocks: 2,297 `#if`/`#ifdef VERSION_*` blocks (more than at adoption because duplicated US/JP copies were
+- Version blocks: 2,155 `#if`/`#ifdef VERSION_*` blocks (1,889 at adoption; more now because duplicated US/JP copies were
   split into small per-difference blocks, which removed about 20,000 duplicated lines).
 - Hand-expanded code that a macro or inline probably produced: psndENVMain's `ENVAPPLY` cases and psndENVOn_f_d's
   offset sum, hand-inlined `randf` in several map units, the Smorg hop code's temporaries.
