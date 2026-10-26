@@ -54,13 +54,28 @@ typedef struct WinMgrWork {
     WinMgrEntry* mEntries; //0x4
 } WinMgrWork;
 
+// WinMgrSelectItem.flags
+typedef enum WinMgrSelectItemFlags {
+    SELECT_ITEM_GRAY = (1 << 0),      // 0x1, drawn grayed out
+    SELECT_ITEM_DISABLED = (1 << 1),  // 0x2, cannot be chosen (error sound and help)
+    SELECT_ITEM_OVER_MAX = (1 << 2),  // 0x4, level up: the stat would pass its maximum ("helperr2")
+    SELECT_ITEM_EQUIPPED = (1 << 3),  // 0x8, equipped badge (lamp icon, US only)
+} WinMgrSelectItemFlags;
+
+// WinMgrSelect.flags
+typedef enum WinMgrSelectFlags {
+    SELECT_CANCEL_OK = (1 << 8),      // 0x100, B cancels the selection
+    SELECT_DONE = (1 << 12),          // 0x1000, the windows are closed: winMgrSelect returns the result
+    SELECT_CANCELLED = (1 << 13),     // 0x2000, cancelled with B (result -1)
+} WinMgrSelectFlags;
+
 typedef struct WinMgrSelectItem {
-    u16 flags; //0x0
+    u16 flags; //0x0, WinMgrSelectItemFlags
     u16 id; //0x2
 } WinMgrSelectItem;
 
 typedef struct WinMgrSelect {
-    u16 flags; //0x0
+    u16 flags; //0x0, WinMgrSelectFlags
     u16 pad_2; //0x2
     s32 type; //0x4
     s32 state; //0x8

@@ -477,7 +477,7 @@ void winMgrCloseAutoDelete(s32 id) {
 }
 
 void winMgrDelete(s32 id) {
-    wp->mEntries[id].flags &= ~1;
+    wp->mEntries[id].flags &= ~WINMGR_FLAG_ACTIVE;
 }
 
 BOOL winMgrAction(s32 id) {
@@ -615,7 +615,7 @@ WinMgrSelect* winMgrSelectEntry(EvtWord type, s32 newItem, BOOL a3) {
     sel->scrollY = 0.0f;
     sel->newItem = newItem;
     if (a3) {
-        sel->flags |= 0x100;
+        sel->flags |= SELECT_CANCEL_OK;
     }
     if (n < 0) {
         n = 0;
@@ -681,7 +681,7 @@ WinMgrSelect* winMgrSelectEntry(EvtWord type, s32 newItem, BOOL a3) {
                 if (id) {
 #ifdef VERSION_G8ME01
                     if (sel->type == 12 && id == L_pouchEquipBadge(i)) {
-                        sel->items[sel->numItems].flags |= 8;
+                        sel->items[sel->numItems].flags |= SELECT_ITEM_EQUIPPED;
                     }
 #endif
                     sel->items[sel->numItems++].id = id;
@@ -712,11 +712,11 @@ WinMgrSelect* winMgrSelectEntry(EvtWord type, s32 newItem, BOOL a3) {
                     sel->items[sel->numItems].id = i;
                     if (!evtGetValue(NULL, GSWF(1186))) {
                         if (pouch->partyData[party_id_table[i]].techLevel >= 1) {
-                            sel->items[sel->numItems].flags |= 3;
+                            sel->items[sel->numItems].flags |= (SELECT_ITEM_GRAY | SELECT_ITEM_DISABLED);
                         }
                     } else {
                         if (pouch->partyData[party_id_table[i]].techLevel >= 2) {
-                            sel->items[sel->numItems].flags |= 3;
+                            sel->items[sel->numItems].flags |= (SELECT_ITEM_GRAY | SELECT_ITEM_DISABLED);
                         }
                     }
                     sel->numItems++;
@@ -732,7 +732,7 @@ WinMgrSelect* winMgrSelectEntry(EvtWord type, s32 newItem, BOOL a3) {
                 if (partyChkJoin(party_id_table[i]) && party_id_table[i] != evtGetValue(NULL, GW(1))) {
                     sel->items[sel->numItems].id = i;
                     if (pouch->partyData[party_id_table[i]].techLevel == 0) {
-                        sel->items[sel->numItems].flags |= 3;
+                        sel->items[sel->numItems].flags |= (SELECT_ITEM_GRAY | SELECT_ITEM_DISABLED);
                     }
                     sel->numItems++;
                 }
@@ -760,9 +760,9 @@ WinMgrSelect* winMgrSelectEntry(EvtWord type, s32 newItem, BOOL a3) {
                 }
                 if (cnt == 2 || over) {
                     if (over) {
-                        sel->items[i].flags |= 7;
+                        sel->items[i].flags |= (SELECT_ITEM_GRAY | SELECT_ITEM_DISABLED | SELECT_ITEM_OVER_MAX);
                     } else {
-                        sel->items[i].flags |= 3;
+                        sel->items[i].flags |= (SELECT_ITEM_GRAY | SELECT_ITEM_DISABLED);
                     }
                 }
             }
@@ -779,7 +779,7 @@ WinMgrSelect* winMgrSelectEntry(EvtWord type, s32 newItem, BOOL a3) {
                 if (i != evtGetValue(NULL, GW(1))) {
                     sel->items[sel->numItems].id = i;
                     if (*mario_status_point_table[i] - mario_status_henka_table[i] <= 0) {
-                        sel->items[sel->numItems].flags |= 3;
+                        sel->items[sel->numItems].flags |= (SELECT_ITEM_GRAY | SELECT_ITEM_DISABLED);
                     }
                     sel->numItems++;
                 }
@@ -807,7 +807,7 @@ WinMgrSelect* winMgrSelectEntry(EvtWord type, s32 newItem, BOOL a3) {
                 if (m - badgeShop_ThrowCheck(i + 240) > 0) {
                     sel->items[sel->numItems].id = i + 240;
                     if (itemDataTable[i + 240].star_piece_price > pouchGetStarPiece()) {
-                        sel->items[sel->numItems].flags |= 3;
+                        sel->items[sel->numItems].flags |= (SELECT_ITEM_GRAY | SELECT_ITEM_DISABLED);
                     }
                     sel->numItems++;
                 }
@@ -861,7 +861,7 @@ WinMgrSelect* winMgrSelectEntry(EvtWord type, s32 newItem, BOOL a3) {
             for (i = 0; i < sel->numItems; i++) {
                 sel->items[i].id = i;
                 if (johoya_get(tbl, jdt->info[i].storyId)) {
-                    sel->items[i].flags |= 1;
+                    sel->items[i].flags |= SELECT_ITEM_GRAY;
                 }
             }
             break;
@@ -922,11 +922,11 @@ int select_comp_bteresa(void* a, void* b) {
 
 #endif
 s32 winMgrSelect(WinMgrSelect* sel) {
-    if (sel->flags & 0x1000) {
-        if (sel->flags & 0x2000) {
+    if (sel->flags & SELECT_DONE) {
+        if (sel->flags & SELECT_CANCELLED) {
             return -1;
         }
-        if (sel->newItem && sel->cursor == 0 && (sel->flags & 0x100)) {
+        if (sel->newItem && sel->cursor == 0 && (sel->flags & SELECT_CANCEL_OK)) {
             return -1;
         }
         return sel->items[sel->cursor].id;
@@ -943,8 +943,8 @@ s32 winMgrSelectOther(WinMgrSelect* sel, EventEntry* evt) {
     const char* name;
     char buf[0x40];
 
-    if (sel->flags & 0x1000) {
-    if (sel->flags & 0x2000) {
+    if (sel->flags & SELECT_DONE) {
+    if (sel->flags & SELECT_CANCELLED) {
         return -1;
     }
     id = sel->items[sel->cursor].id;
@@ -1124,7 +1124,7 @@ void select_main(WinMgrEntry* entry) {
             sel->state++;
             break;
         case 1:
-            if ((wp->mEntries[sel->descriptorId[0]].flags & 4)) {
+            if ((wp->mEntries[sel->descriptorId[0]].flags & WINMGR_FLAG_ANIMATING)) {
                 break;
             }
             prev = sel->cursor;
@@ -1165,16 +1165,16 @@ void select_main(WinMgrEntry* entry) {
                 psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_MOVE1 | PSND_SFX_BYPASS_MUTE));
             }
             if (keyGetButtonTrg(0) & PAD_BUTTON_A) {
-                if (sel->items[sel->cursor].flags & 2) {
+                if (sel->items[sel->cursor].flags & SELECT_ITEM_DISABLED) {
                     psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_NOT_CHOICE1 | PSND_SFX_BYPASS_MUTE));
                 } else {
                     psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1 | PSND_SFX_BYPASS_MUTE));
                     sel->state++;
                 }
             } else if (keyGetButtonTrg(0) & PAD_BUTTON_B) {
-                if (sel->flags & 0x100) {
+                if (sel->flags & SELECT_CANCEL_OK) {
                     psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_CANCEL1 | PSND_SFX_BYPASS_MUTE));
-                    sel->flags |= 0x2000;
+                    sel->flags |= SELECT_CANCELLED;
                     sel->state++;
                 }
             }
@@ -1191,13 +1191,13 @@ void select_main(WinMgrEntry* entry) {
             sel->state++;
             break;
         case 3:
-            if ((wp->mEntries[sel->descriptorId[0]].flags & 4)) {
+            if ((wp->mEntries[sel->descriptorId[0]].flags & WINMGR_FLAG_ANIMATING)) {
                 break;
             }
             for (i = 0; i < sel->numDescriptors; i++) {
                 winMgrDelete(sel->descriptorId[i]);
             }
-            sel->flags |= 0x1000;
+            sel->flags |= SELECT_DONE;
             sel->state++;
             break;
         case 4:
@@ -1228,7 +1228,7 @@ void select_disp(WinMgrEntry* entry) {
     tmp = white;
     iconcol = tmp;
 
-    if (!(wp->mEntries[sel->descriptorId[0]].flags & 4)) {
+    if (!(wp->mEntries[sel->descriptorId[0]].flags & WINMGR_FLAG_ANIMATING)) {
         GXSetFog(GX_FOG_NONE, 0.0f, 0.0f, 0.0f, 0.0f, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
         GXGetScissor(&left, &top, &wd, &ht);
         GXSetScissor(entry->x + 304, 274 - entry->y, entry->width, entry->height - 50);
@@ -1244,8 +1244,8 @@ void select_disp(WinMgrEntry* entry) {
                 ofs = ofs + 0.0f;
             }
 #ifdef VERSION_G8ME01
-            if (sel->items[i].flags & 8) {
-                if (sel->items[i].flags & 1) {
+            if (sel->items[i].flags & SELECT_ITEM_EQUIPPED) {
+                if (sel->items[i].flags & SELECT_ITEM_GRAY) {
                     winIconGrayInit();
                 } else {
                     winIconInit();
@@ -1253,7 +1253,7 @@ void select_disp(WinMgrEntry* entry) {
                 winIconSet(ICON_AC_LAMP_1, (Vec){entry->x + 15, sel->scrollY + (ofs + (entry->y - 44 - i * 24)), 0.0f}, (Vec){0.6f, 0.6f, 0.6f}, (GXColor){0xFF, 0xFF, 0xFF, 0xC0});
             }
 #endif
-            if (sel->items[i].flags & 1) {
+            if (sel->items[i].flags & SELECT_ITEM_GRAY) {
                 winIconGrayInit();
             } else {
                 winIconInit();
@@ -1262,10 +1262,10 @@ void select_disp(WinMgrEntry* entry) {
             winFontInit();
 #ifdef VERSION_G8ME01
             winFontSetWidth((Vec){entry->x + 60, sel->scrollY + (ofs + (entry->y - 32 - i * 24)), 0.0f}, (Vec){1.0f, 1.0f, 1.0f},
-                       *((sel->items[i].flags & 1) ? &gray : &black), 185.0f, msgSearch(item->name));
+                       *((sel->items[i].flags & SELECT_ITEM_GRAY) ? &gray : &black), 185.0f, msgSearch(item->name));
 #else
             winFontSet((Vec){entry->x + 60, sel->scrollY + (ofs + (entry->y - 32 - i * 24)), 0.0f}, (Vec){1.0f, 1.0f, 1.0f},
-                       *((sel->items[i].flags & 1) ? &gray : &black), msgSearch(item->name));
+                       *((sel->items[i].flags & SELECT_ITEM_GRAY) ? &gray : &black), msgSearch(item->name));
 #endif
             show = FALSE;
             switch (sel->type) {
@@ -1306,12 +1306,12 @@ void select_disp(WinMgrEntry* entry) {
             }
             winFontInit();
             winFontSetWidth((Vec){entry->x + entry->width - 10 - tw, sel->scrollY + (ofs + (entry->y - 32 - i * 24)), 0.0f}, (Vec){1.0f, 1.0f, 1.0f},
-                       *((sel->items[i].flags & 1) ? &gray : &black), 30.0f, buf);
+                       *((sel->items[i].flags & SELECT_ITEM_GRAY) ? &gray : &black), 30.0f, buf);
 #else
             tw = FontGetMessageWidth(buf);
             winFontInit();
             winFontSet((Vec){entry->x + entry->width - 10 - tw, sel->scrollY + (ofs + (entry->y - 32 - i * 24)), 0.0f}, (Vec){1.0f, 1.0f, 1.0f},
-                       *((sel->items[i].flags & 1) ? &gray : &black), buf);
+                       *((sel->items[i].flags & SELECT_ITEM_GRAY) ? &gray : &black), buf);
 #endif
         }
         if (sel->newItem) {
@@ -1450,7 +1450,7 @@ void select_disp_party(WinMgrEntry* entry) {
     tmp = white;
     iconcol = tmp;
 
-    if (!(wp->mEntries[sel->descriptorId[0]].flags & 4)) {
+    if (!(wp->mEntries[sel->descriptorId[0]].flags & WINMGR_FLAG_ANIMATING)) {
         GXSetFog(GX_FOG_NONE, 0.0f, 0.0f, 0.0f, 0.0f, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
         GXGetScissor(&left, &top, &wd, &ht);
         GXSetScissor(entry->x + 304, 274 - entry->y, entry->width, entry->height - 50);
@@ -1467,15 +1467,15 @@ void select_disp_party(WinMgrEntry* entry) {
             winFontInit();
             winFontSet((Vec){entry->x + 60, sel->scrollY + (ofs + (entry->y - 32 - i * 24)), 0.0f},
                        (Vec){FontGetMessageWidth(select_party_name(sel->items[i].id)) > 170 ? 170.0f / FontGetMessageWidth(select_party_name(sel->items[i].id)) : 1.0f, 1.0f, 1.0f},
-                       *((sel->items[i].flags & 1) ? &gray : &black), select_party_name(sel->items[i].id));
-            if (sel->items[i].flags & 1) {
+                       *((sel->items[i].flags & SELECT_ITEM_GRAY) ? &gray : &black), select_party_name(sel->items[i].id));
+            if (sel->items[i].flags & SELECT_ITEM_GRAY) {
                 winIconGrayInit();
             } else {
                 winIconInit();
             }
             winIconSet(select_party_icon(sel->items[i].id), (Vec){entry->x + 35, sel->scrollY + (ofs + (entry->y - 44 - i * 24)), 0.0f}, (Vec){0.55f, 0.55f, 0.55f}, iconcol);
             for (j = 0; j < pouch->partyData[party_id_table[sel->items[i].id]].techLevel; j++) {
-                if (sel->items[i].flags & 1) {
+                if (sel->items[i].flags & SELECT_ITEM_GRAY) {
                     winIconGrayInit();
                 } else {
                     winIconInit();
@@ -1547,7 +1547,7 @@ void select_disp_mario(WinMgrEntry* entry) {
     tmp = white;
     iconcol = tmp;
 
-    if (!(wp->mEntries[sel->descriptorId[0]].flags & 4)) {
+    if (!(wp->mEntries[sel->descriptorId[0]].flags & WINMGR_FLAG_ANIMATING)) {
         GXSetFog(GX_FOG_NONE, 0.0f, 0.0f, 0.0f, 0.0f, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
         GXGetScissor(&left, &top, &wd, &ht);
         GXSetScissor(entry->x + 304, 274 - entry->y, entry->width, entry->height - 50);
@@ -1564,11 +1564,11 @@ void select_disp_mario(WinMgrEntry* entry) {
             }
             winFontInit();
             col = &black;
-            if (sel->items[i].flags & 1) {
+            if (sel->items[i].flags & SELECT_ITEM_GRAY) {
                 col = &gray;
             }
             winFontSet((Vec){entry->x + 60, sel->scrollY + (ofs + (entry->y - 32 - i * 24)), 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, *col, MARIO_STATUS_NAME(id));
-            if (sel->items[i].flags & 1) {
+            if (sel->items[i].flags & SELECT_ITEM_GRAY) {
                 winIconGrayInit();
             } else {
                 winIconInit();
@@ -1577,11 +1577,11 @@ void select_disp_mario(WinMgrEntry* entry) {
             sprintf(buf, "%3d", *mario_status_point_table[id]);
             winFontInit();
             col = &black;
-            if (sel->items[i].flags & 1) {
+            if (sel->items[i].flags & SELECT_ITEM_GRAY) {
                 col = &gray;
             }
             winFontSet((Vec){entry->x + 160, sel->scrollY + (ofs + (entry->y - 32 - i * 24)), 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, *col, buf);
-            if (sel->items[i].flags & 2) {
+            if (sel->items[i].flags & SELECT_ITEM_DISABLED) {
                 continue;
             }
             switch (sel->type) {
@@ -1595,7 +1595,7 @@ void select_disp_mario(WinMgrEntry* entry) {
             }
             winFontInit();
             col = &black;
-            if (sel->items[i].flags & 1) {
+            if (sel->items[i].flags & SELECT_ITEM_GRAY) {
                 col = &gray;
             }
             winFontSet((Vec){entry->x + 240, sel->scrollY + (ofs + (entry->y - 32 - i * 24)), 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, *col, buf);
@@ -1666,7 +1666,7 @@ void select_disp_luigi(WinMgrEntry* entry) {
     Mtx mtx;
     Mtx scale;
 
-    if (!(wp->mEntries[sel->descriptorId[0]].flags & 4)) {
+    if (!(wp->mEntries[sel->descriptorId[0]].flags & WINMGR_FLAG_ANIMATING)) {
         GXSetFog(GX_FOG_NONE, 0.0f, 0.0f, 0.0f, 0.0f, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
         GXGetScissor(&left, &top, &wd, &ht);
         GXSetScissor(ent->x + 304, 274 - ent->y, ent->width, ent->height - 50);
@@ -1679,7 +1679,7 @@ void select_disp_luigi(WinMgrEntry* entry) {
             winFontInit();
             save = info->initEndPos[info->tagEndPos];
             info->initEndPos[info->tagEndPos] = 0;
-            if (sel->items[i].flags & 1) {
+            if (sel->items[i].flags & SELECT_ITEM_GRAY) {
                 col = &gray;
             } else {
                 col = &black;
@@ -1690,11 +1690,11 @@ void select_disp_luigi(WinMgrEntry* entry) {
             winFontSet((Vec){ent->x + 25, sel->scrollY + (zero + (ent->y - 32 - i * 24)), 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, *col, info->initEndPos);
 #endif
             info->initEndPos[info->tagEndPos] = save;
-            if (sel->type == 17 && !(sel->items[i].flags & 1)) {
+            if (sel->type == 17 && !(sel->items[i].flags & SELECT_ITEM_GRAY)) {
                 sprintf(buf, "%3d", info->cost);
                 winFontInit();
                 col = &black;
-                if (sel->items[i].flags & 1) {
+                if (sel->items[i].flags & SELECT_ITEM_GRAY) {
                     col = &gray;
                 }
                 winFontSet((Vec){ent->x + 245, sel->scrollY + (zero + (ent->y - 32 - i * 24)), 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, *col, buf);
@@ -1791,7 +1791,7 @@ void select_disp2(WinMgrEntry* entry) {
             msg = msgSearch("msg_window_select_7");
             break;
     }
-    if (!(wp->mEntries[sel->descriptorId[1]].flags & 4)) {
+    if (!(wp->mEntries[sel->descriptorId[1]].flags & WINMGR_FLAG_ANIMATING)) {
 #ifdef VERSION_G8ME01
         Mtx trans;
         Mtx scale;
@@ -1842,7 +1842,7 @@ void select_main3(WinMgrEntry* entry) {
 void select_disp3(WinMgrEntry* entry) {
     WinMgrSelect* sel = entry->param;
 
-    if (!(wp->mEntries[sel->descriptorId[2]].flags & 4)) {
+    if (!(wp->mEntries[sel->descriptorId[2]].flags & WINMGR_FLAG_ANIMATING)) {
         ItemData* item = &itemDataTable[sel->items[sel->cursor].id];
         entry->msg = msgSearch(item->description);
         winMgrHelpDraw(entry);
@@ -1858,8 +1858,8 @@ void select_disp3_party(WinMgrEntry* entry) {
     s32 id;
 
     pouch = pouchGetPtr();
-    if (!(wp->mEntries[sel->descriptorId[2]].flags & 4)) {
-        if (sel->items[sel->cursor].flags & 2) {
+    if (!(wp->mEntries[sel->descriptorId[2]].flags & WINMGR_FLAG_ANIMATING)) {
+        if (sel->items[sel->cursor].flags & SELECT_ITEM_DISABLED) {
             help = "helperr";
         } else {
             help = "help";
@@ -1883,9 +1883,9 @@ void select_disp3_mario(WinMgrEntry* entry) {
     const char* help;
 
     pouchGetPtr();
-    if (!(wp->mEntries[sel->descriptorId[2]].flags & 4)) {
-        if (sel->items[sel->cursor].flags & 2) {
-            if (sel->items[sel->cursor].flags & 4) {
+    if (!(wp->mEntries[sel->descriptorId[2]].flags & WINMGR_FLAG_ANIMATING)) {
+        if (sel->items[sel->cursor].flags & SELECT_ITEM_DISABLED) {
+            if (sel->items[sel->cursor].flags & SELECT_ITEM_OVER_MAX) {
                 help = "helperr2";
             } else {
                 help = "helperr";
