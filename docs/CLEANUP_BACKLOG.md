@@ -57,22 +57,16 @@ data order 10, sound-name integer round trips (`SFX_NAME_WORD`) 9, no-op casts 6
   0x8000000 still used as raw numbers; sound list entry kinds (efx / song / stream bits of pssfxlist); damage codes
   0x16 / 0x1C / 0x1D still raw in battle_damage.c. Dead bits (no reader): weapon special 0x200, target weighting
   0x2000.
-- From the reference-folder survey (2026-10-26), each checked against the code:
-  - Trouble Center: GSW(1420) = accepted trouble, GSWF(5374 + n) = trouble n done (82 uses), GSWF(5405..5421) and
-    GSW(1469..1474) = per-trouble work values reset when a trouble starts; GSWF_STARPIECE_00..99 = GSWF(5567..5666)
-    and GSWF_SHINE_00..41 = GSWF(5525..5566) (game strings); about 423 item/block collect flags nameable from the
-    item and room in the scripts.
-  - evt_mobj kinds (brick 27 sites, chest 72, badge block 38) and the raw item ids in those calls; recovery block
-    `kind` is the coin cost; kururing's item argument is ignored.
-  - Stage hazards: 9 fall-object types and 4 nozzle types raw in ~33 places (battle_stage_object.c,
-    battle_audience.c).
-  - Cooking (gor_01.c): SimpleRecipe.result2 is the Cookbook result (comment wrong); ~37 raw item ids; cook-effect
-    return values.
-  - 59 version blocks with weapon icon numbers; the remaining placeholder icons have labels in the US icon list.
-  - `ITEM_STEEPLE_KEY_0x18` / `0x19` are Station Keys (item names in_key_hom_00 / in_key_eki_01).
-  - Original names that differ from ours: npcRecoveryFiledNpc / npcReleaseFiledNpc / evt_npc_release_filednpc
-    (upstream respelled "Field"); 33 of 117 evt opcode names differ from the original mnemonics; JP demo leads
-    partyWalkSe (our partyPlaySfxFootstep) and partyPrevRunMode (our partyRestoreRunMode).
+- From the reference-folder survey (2026-10-26), still open (done: Trouble Center names, map-object kinds, stage
+  hazard types, cooking item ids, weapon icon blocks, Station Keys, original Filed/opcode spellings):
+  - Saved flags: GSWF_STARPIECE_00..99 = GSWF(5567..5666) and GSWF_SHINE_00..41 = GSWF(5525..5566) (game strings);
+    about 423 item/block collect flags nameable from the item and room in the scripts.
+  - Story progress: about 1,320 script comparisons against GSW_STORY_PROGRESS use raw numbers; the game's own step
+    labels (evt_johoya.c evtNoLabel, STG0_07 ...) could name them.
+  - evt_mobj: the raw item ids in badge block / item calls; kururing's item argument is read and ignored.
+  - Placeholder icons left in icon_ids.h have labels in the US icon list (Modding FAQ); two used ones (ICON_1D4 /
+    ICON_1D5: white box / small white x).
+  - JP demo name leads: partyWalkSe (our partyPlaySfxFootstep), partyPrevRunMode (our partyRestoreRunMode).
   - Comments: English attack names for 710 of 743 BattleWeapon definitions, message paraphrases next to message
     calls (only 95 of 6,224 have one).
 - Room and NPC comments: a place-name comment per map REL room (274 of 278 rooms have one in the reference lists)
