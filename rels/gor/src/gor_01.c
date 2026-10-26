@@ -26,6 +26,7 @@
 #include "eff/eff_kemuri.h"
 #include "driver/casedrv.h"
 #include "driver/itemdrv.h"
+#include "driver/envdrv.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "driver/npcdrv.h"
@@ -4469,7 +4470,6 @@ EVT_BEGIN(gor_01_koopa_evt)
     RETURN
 EVT_END()
 
-void envSetYamiView(Mtx mtx);
 
 static USER_FUNC(yami_view) {
     f32 z = evtGetFloat(event, event->args[0]);

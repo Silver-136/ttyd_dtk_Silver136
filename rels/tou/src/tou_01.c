@@ -26,6 +26,7 @@
 #include "driver/casedrv.h"
 #include "pmario_sound.h"
 #include "driver/itemdrv.h"
+#include "driver/envdrv.h"
 
 #include "mario/mario.h"
 #include "mario/mario_party.h"
@@ -53,7 +54,6 @@
 
 typedef struct ShadowWork { GXTexObj obj; smartEntry* tex; } ShadowWork;
 void make_shadow_disp(CameraId camera, void* param);
-void envSetYamiView(Mtx mtx);
 
 static USER_FUNC(anim_tevcallback);
 static USER_FUNC(anim_tevcallback_mobj);

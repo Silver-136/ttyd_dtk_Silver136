@@ -22,6 +22,7 @@
 #include "pmario_sound.h"
 #include "driver/itemdrv.h"
 #include "mario/mario.h"
+#include "driver/envdrv.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "mario/mariost.h"
@@ -2122,7 +2123,6 @@ static USER_FUNC(ramp_r) {
     return EVT_RETURN_DONE;
 }
 
-void envAddTev(s32 type, MapTevCallbackInfo* info);
 
 static void resha_tev(MapTevCallbackInfo* info) {
     envAddTev(7, info);

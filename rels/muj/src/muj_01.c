@@ -21,6 +21,7 @@
 #include "driver/casedrv.h"
 #include "pmario_sound.h"
 #include "driver/itemdrv.h"
+#include "driver/envdrv.h"
 
 #include "driver/effdrv.h"
 #include "manager/evtmgr_cmd.h"
@@ -65,7 +66,6 @@ USER_FUNC(urouro_main_func);
 static USER_FUNC(yami_view);
 extern s32 envSetYami[];
 
-void envSetYamiView(Mtx mtx);
 EvtWord custom_door_dark2[34];
 EvtWord custom_door_light2[30];
 static EvtWord garawaru_init[39];

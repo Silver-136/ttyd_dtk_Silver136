@@ -1,6 +1,7 @@
 #pragma once
 
 #include <dolphin/gx.h>
+#include <dolphin/mtx.h>
 #include "memory.h"
 
 typedef struct EnvironmentGlareTexCoord {
@@ -81,6 +82,8 @@ void envBlurOff(void);
 void envGlare(EnvironmentGlare* glare);
 struct MapTevCallbackInfo;
 void envSetWater(struct MapTevCallbackInfo* info);
+void envAddTev(s32 type, struct MapTevCallbackInfo* info);
 
 
 void envGlareFilterZ(f32 zscale);
+void envSetYamiView(Mtx view);

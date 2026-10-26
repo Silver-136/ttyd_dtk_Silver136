@@ -23,6 +23,7 @@
 #include "driver/itemdrv.h"
 #include "mario/mario.h"
 #include "party.h"
+#include "driver/envdrv.h"
 
 #include "driver/dispdrv.h"
 #include "stdlib.h"
@@ -48,7 +49,6 @@ typedef struct Flower {
 } Flower;
 typedef struct FlowerWork { s32 count; Flower* flowers; } FlowerWork;
 void flower_disp(CameraId camera, void* param);
-void envAddTev(s32 type, void* param);
 static s32 ssf[3];
 
 USER_FUNC(evt_flower);

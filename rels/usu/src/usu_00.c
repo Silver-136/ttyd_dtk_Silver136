@@ -27,6 +27,7 @@
 #include "driver/casedrv.h"
 #include "driver/itemdrv.h"
 #include "mario/mario.h"
+#include "driver/envdrv.h"
 
 #include "mario/mario_pouch.h"
 #include "party.h"
@@ -3133,7 +3134,6 @@ EVT_BEGIN(usu_00_koopa_second_evt)
     RETURN
 EVT_END()
 
-void envSetYamiView(Mtx mtx);
 
 static USER_FUNC(yami_view) {
     f32 z = evtGetFloat(event, event->args[0]);

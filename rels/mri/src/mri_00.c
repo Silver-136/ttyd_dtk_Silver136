@@ -23,6 +23,7 @@
 #include "mario/mario_pouch.h"
 #include "system.h"
 #include "driver/itemdrv.h"
+#include "driver/envdrv.h"
 
 #include "driver/offscreendrv.h"
 #include "mario/mario.h"
@@ -73,7 +74,6 @@ static void _mapsetofs_all(CloudWork* wp);
 static void _mapclsofs_all(CloudWork* wp);
 static s32 _ofs_get_boundingbox(const char* name, s32* x, s32* y, s32* w, s32* h);
 static void _img_alloc_capture(EvtWord name, EvtWord shadowId, EvtWord offName, EvtWord allocMode, EvtWord x, EvtWord y, EvtWord w, EvtWord h);
-void envSetYamiView(Mtx mtx);
 
 static USER_FUNC(anim_tevcallback);
 static USER_FUNC(evt_cloud_main);

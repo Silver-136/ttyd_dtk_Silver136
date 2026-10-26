@@ -28,6 +28,7 @@
 #include "driver/casedrv.h"
 #include "driver/itemdrv.h"
 #include "mario/mario.h"
+#include "driver/envdrv.h"
 
 #include "memory.h"
 #include "string.h"
@@ -2457,7 +2458,6 @@ s32 bom1000_jump(EventEntry* event, BOOL isFirstCall) {
     return EVT_RETURN_DONE;
 }
 
-void envSetYamiView(Mtx mtx);
 
 static s32 yami_view(EventEntry* event, BOOL isFirstCall) {
     f32 z = evtGetFloat(event, event->args[0]);

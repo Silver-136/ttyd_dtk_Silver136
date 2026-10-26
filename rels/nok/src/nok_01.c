@@ -21,6 +21,7 @@
 #include "pmario_sound.h"
 #include "driver/itemdrv.h"
 #include "mario/mario.h"
+#include "driver/envdrv.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "dolphin/mtx.h"
@@ -1082,7 +1083,6 @@ EVT_BEGIN(nokotarou_tabidachi_init)
     RETURN
 EVT_END()
 
-void envSetYamiView(Mtx mtx);
 
 static USER_FUNC(yami_view) {
     f32 z = evtGetFloat(event, event->args[0]);

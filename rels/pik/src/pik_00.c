@@ -26,6 +26,7 @@
 #include "system.h"
 #include "driver/casedrv.h"
 #include "driver/itemdrv.h"
+#include "driver/envdrv.h"
 
 #include "driver/imgdrv.h"
 #include "driver/animdrv.h"
@@ -2000,7 +2001,6 @@ static USER_FUNC(zoom) {
     return EVT_RETURN_DONE;
 }
 
-void envAddTev(s32 type, MapTevCallbackInfo* info);
 
 static void resha_tev(MapTevCallbackInfo* info) {
     envAddTev(7, info);

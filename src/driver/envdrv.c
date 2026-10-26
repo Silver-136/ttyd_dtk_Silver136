@@ -1024,8 +1024,7 @@ envLoadTex(u32 id, s32 map) {
     GXSetTexCoordGen2((GXTexCoordID)coord, gentype, GX_TG_NRM, texmtx_tbl[map], GX_FALSE, mtxsrc); \
     envTevLoadTexMtxImm(t, (GXTexMtx)texmtx_tbl[map], GX_PTTEXMTX0, mtxType)
 
-void envAddTev(s32 type, MapTevCallbackInfo *info);
-void envAddTev(s32 type, MapTevCallbackInfo *info) {
+void envAddTev(s32 type, MapTevCallbackInfo* info) {
     s32 stage;
     int map;
     int coord;

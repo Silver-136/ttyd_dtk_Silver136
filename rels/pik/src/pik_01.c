@@ -22,6 +22,7 @@
 #include "driver/casedrv.h"
 #include "pmario_sound.h"
 #include "driver/itemdrv.h"
+#include "driver/envdrv.h"
 
 #include "mario/mario.h"
 #include "manager/evtmgr_cmd.h"
@@ -1025,7 +1026,6 @@ EVT_BEGIN(pik_01_koopa_evt)
     RETURN
 EVT_END()
 
-void envSetYamiView(Mtx mtx);
 
 static USER_FUNC(yami_view) {
     f32 z = evtGetFloat(event, event->args[0]);
@@ -1101,7 +1101,6 @@ USER_FUNC(kpa_lock_hit_scale) {
     return EVT_RETURN_DONE;
 }
 
-void envAddTev(s32 type, MapTevCallbackInfo* info);
 
 void test_tev(MapTevCallbackInfo* info) {
     envAddTev(4, info);

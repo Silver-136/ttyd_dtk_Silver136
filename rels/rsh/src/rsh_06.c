@@ -16,6 +16,7 @@
 #include "evt/evt_seq.h"
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
+#include "driver/envdrv.h"
 
 #include "manager/evtmgr.h"
 #include "driver/mapdrv.h"
@@ -339,7 +340,6 @@ static ExtTexInfo ext_moamoa_data[] = {
     {0},
 };
 
-void envAddTev(s32 type, MapTevCallbackInfo* info);
 
 #pragma dont_inline on
 static void moamoa_pose_init(void) {
