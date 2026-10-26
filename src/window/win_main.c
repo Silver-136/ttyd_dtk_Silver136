@@ -691,7 +691,7 @@ EVT_BEGIN(evt_diary_read)
             END_IF
         END_LOOP
     END_INLINE_EVENT
-    CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_STG5_GHOST1"))
+    CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_STG5_GHOST1"))
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     ADD(LW(1), 20)
     ADD(LW(2), 20)

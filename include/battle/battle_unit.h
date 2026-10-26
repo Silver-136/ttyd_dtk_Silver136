@@ -53,8 +53,8 @@ typedef enum PartsAttribute_Flags {          // 32-bit size
 
 // BattleUnit.flags (named where the code shows the use; 2, 0x100000/0x200000 (float bob, both needed) and
 // 0x1000000 are not named yet)
-// BattleUnit.mStatusFlags (BtlUnit_*StatusFlag, btlevtcmd_On/Off/CheckStatusFlag). DANGER/PERIL follow this
-// repo's mDangerHP/mPerilHP naming; the original sound and audience names call them pinch and danger.
+// BattleUnit.mStatusFlags (BtlUnit_*StatusFlag, btlevtcmd_On/Off/CheckStatusFlag). Danger = 5 HP, Peril = 1 HP as in
+// the US game text (the original sound and audience symbol names say "pinch" and "danger" for the two states).
 typedef enum BattleUnitStatusFlags {
     UNIT_STATUS_FLAG_FLIPPED = (1 << 0),   // 0x1, set by the flip damage scripts: cannot act, guard or get an AC
     UNIT_STATUS_FLAG_DEFEND = (1 << 24),   // 0x1000000, Defend command: +1 defense until the next turn

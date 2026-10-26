@@ -388,7 +388,7 @@ EVT_BEGIN(moo_00_init_evt)
         CALL(evt_bero_get_info)
         CALL_CHILD(PTR(evt_bero_info_run))
     END_SWITCH
-    CALL(evt_snd_bgmon, 512, STRING("BGM_STG7_MON1"))
+    CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG7_MON1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_MOO1"))
     CALL(evt_map_playanim, STRING("hosi_01"), 1, 0)
     CALL(evt_map_playanim, STRING("hosi_02"), 1, 0)

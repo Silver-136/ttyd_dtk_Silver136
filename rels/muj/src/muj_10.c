@@ -601,14 +601,14 @@ static HitDamageReturn hitDmgRetPoints[] = {
 
 EVT_BEGIN(muj_10_init_evt)
     IF_INT_LESS(GSW_STORY_PROGRESS, 253)
-        CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_STG5_GHOST1"))
+        CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_STG5_GHOST1"))
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG5_MUJ8"))
 #ifdef VERSION_G8ME01
         ELSE
 #else
     ELSE
 #endif
-        CALL(evt_snd_bgmon, 512, STRING("BGM_STG5_DOU1"))
+        CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG5_DOU1"))
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG5_MUJ8"))
     END_IF
     CALL(evt_snd_set_rev_mode, 2)

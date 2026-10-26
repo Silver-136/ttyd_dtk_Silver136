@@ -219,6 +219,8 @@ typedef enum BattleAudienceFlags {
     AUDIENCE_FLAG_PREV_COMMAND_INPUT = (1 << 16),  // 0x10000
     AUDIENCE_FLAG_NO_DISP = (1 << 17),             // 0x20000, aud_set_draw
     AUDIENCE_FLAG_EVENT_CTRL = (1 << 18),          // 0x40000, no reactions, item throws or count changes (lecture)
+    AUDIENCE_FLAG_SP_GAINED_UNUSED = (1 << 1),     // 0x2, set when star power was gained; never read
+    AUDIENCE_FLAG_NO_AUDIENCE_EVENTS = (1 << 14),  // 0x4000, audience events leave the crowd as it is (Hooktail)
 } BattleAudienceFlags;
 
 typedef struct BattleAudience {

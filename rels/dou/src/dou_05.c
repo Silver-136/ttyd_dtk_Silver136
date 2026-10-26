@@ -298,7 +298,7 @@ EVT_BEGIN(nonride_waterfall)
 EVT_END()
 
 EVT_BEGIN(dou_05_init_evt)
-    CALL(evt_snd_bgmon, 512, STRING("BGM_STG5_DOU1"))
+    CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG5_DOU1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG5_DOU5"))
     CALL(evt_snd_set_rev_mode, 2)
     SET_VALUE(LW(0), PTR(bero_entry_data))

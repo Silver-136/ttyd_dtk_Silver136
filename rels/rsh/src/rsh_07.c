@@ -170,24 +170,24 @@ EVT_BEGIN(rsh_07_init_evt)
     CALL_CHILD(PTR(evt_access_entry))
     CALL(evt_mobj_save_blk, STRING("mobj_save"), 210, 60, -145, 0, 0)
     IF_INT_EQUAL(GSWF(3460), 1)
-        CALL(evt_snd_bgmon, 512, STRING("BGM_STG6_PIK1"))
+        CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG6_PIK1"))
         CALL(evt_snd_envoff, PSND_FADEOUT)
         CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
         ELSE
         IF_INT_EQUAL(GSWF(3461), 1)
-            CALL(evt_snd_bgmon, 512, STRING("BGM_STG0_GOR1"))
+            CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_GOR1"))
             CALL(evt_snd_envoff, PSND_FADEOUT)
             CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
             ELSE
             CALL(evt_sub_get_mapname, LW(0))
             IF_STR_EQUAL(LW(0), STRING("rsh_07_a"))
-                CALL(evt_snd_bgmon, 512, STRING("BGM_STG6_RSH1"))
+                CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG6_RSH1"))
                 CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG6_RSH1_3"))
             END_IF
             IF_STR_EQUAL(LW(0), STRING("rsh_07_b"))
             END_IF
             IF_STR_EQUAL(LW(0), STRING("rsh_07_c"))
-                CALL(evt_snd_bgmon, 512, STRING("BGM_STG6_RSH2"))
+                CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG6_RSH2"))
                 CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG6_RSH1_3"))
             END_IF
         END_IF

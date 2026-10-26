@@ -741,7 +741,7 @@ EVT_BEGIN(minigame03_start)
         WAIT_FRAMES(1)
     END_IF
     CALL(evt_mario_mov_pos2, 305, 300, 120)
-    CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_MINIGAME1"))
+    CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_MINIGAME1"))
     CALL(eff_call_minigame, 0, 0, 0, 500)
     WAIT_MS(3000)
     CALL(yuuminigame3_roll_fix_on)

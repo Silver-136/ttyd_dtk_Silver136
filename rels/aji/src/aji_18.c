@@ -264,7 +264,7 @@ static USER_FUNC(sysflag) {
 
 EVT_BEGIN(aji_18_init_evt)
     CALL(sysflag)
-    CALL(evt_snd_bgmon, 512, STRING("BGM_STG7_DUN2"))
+    CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG7_DUN2"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI1"))
     CALL(evt_snd_set_rev_mode, 1)
     SET_VALUE(LW(0), PTR(bero_entry_data))

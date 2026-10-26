@@ -722,15 +722,15 @@ EVT_BEGIN(tou_07_init_evt)
         SET_VALUE(GSWF(2389), 0)
         SWITCH(GSW_STORY_PROGRESS)
             CASE_BETWEEN(127, 137)
-            CALL(evt_snd_bgmon, 512, STRING("BGM_STG3_TOU2"))
+            CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
             CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU2"))
             CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
             CASE_GREATER_OR_EQUAL(165)
-            CALL(evt_snd_bgmon, 512, STRING("BGM_STG3_TOU2"))
+            CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
             CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU2"))
             CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
             CASE_DEFAULT
-            CALL(evt_snd_bgmon, 512, STRING("BGM_STG3_TOU1"))
+            CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU1"))
             CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU6"))
         END_SWITCH
         IF_INT_LESS(GSW_STORY_PROGRESS, 158)
@@ -749,7 +749,7 @@ EVT_BEGIN(tou_07_init_evt)
         RETURN
     END_IF
     IF_INT_EQUAL(GSWF(2375), 1)
-        CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_STG3_GANCE1"))
+        CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_STG3_GANCE1"))
         CALL(evt_snd_envoff, PSND_FADEOUT)
         SPAWN_EVENT(PTR(evt_sensyu))
         RETURN
@@ -760,11 +760,11 @@ EVT_BEGIN(tou_07_init_evt)
         ELSE
         SWITCH(GSW_STORY_PROGRESS)
             CASE_BETWEEN(127, 138)
-            CALL(evt_snd_bgmon, 512, STRING("BGM_STG3_TOU2"))
+            CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
             CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU6"))
             CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
             CASE_DEFAULT
-            CALL(evt_snd_bgmon, 512, STRING("BGM_STG3_TOU1"))
+            CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU1"))
             CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
             CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU6"))
         END_SWITCH

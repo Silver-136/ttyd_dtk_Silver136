@@ -142,7 +142,7 @@ EVT_BEGIN(bonbaba_evt)
     CALL(evt_eff_fukidashi, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 60)
     CALL(evt_eff_fukidashi, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 60)
     WAIT_MS(1000)
-    CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_DANGER2"))
+    CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_DANGER2"))
     BEGIN_INLINE_EVENT
         CALL(evt_snd_sfxon_3d_ex, STRING("SFX_STG8_GNB_ROAR1"), -400, 30, 0, 255, 255, 4300, 16, 0)
         CALL(evt_npc_set_anim, STRING("ボンババ"), STRING("GNB_U_1"))

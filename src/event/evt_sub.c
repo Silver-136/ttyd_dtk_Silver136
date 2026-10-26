@@ -422,7 +422,7 @@ EVT_BEGIN(evt_sub_starstone)
     END_LOOP
     CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
     CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)
-    CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_STAGE_CLEAR1"))
+    CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_STAGE_CLEAR1"))
     CALL(evt_snd_envoff, PSND_FADEOUT)
     CALL(evt_eff_softdelete, STRING("sub_hikari"))
     CALL(stone_bg_open, LW(7))
@@ -1748,7 +1748,7 @@ USER_FUNC(evt_sub_get_coin) {
         work[0] = coin;
         work[1] = 0;
         psndBGMOff(0x3800);
-        psndBGMOn(0x201, "BGM_FF_GET_ITEM1");
+        psndBGMOn(PSND_FADEOUT | PSND_SLOT(1), "BGM_FF_GET_ITEM1");
         event->userdata[2] = 200;
         event->savedTime = gp->renderTime;
         event->userdata[0] = 1;

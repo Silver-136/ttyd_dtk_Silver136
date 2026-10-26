@@ -198,7 +198,7 @@ static NpcSetupInfo npcEnt[] = {
 };
 
 static EVT_BEGIN(epilogue_evt)
-    CALL(evt_snd_bgmon, 512, STRING("BGM_STG7_DUN1"))
+    CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG7_DUN1"))
     CALL(evt_snd_bgm_scope, 0, 1)
     CALL(evt_mario_cont_onoff, 0)
     CALL(evt_mario_key_onoff, 0)
@@ -218,7 +218,7 @@ EVT_END()
 
 EVT_BEGIN(moo_04_init_evt)
     IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, 402)
-        CALL(evt_snd_bgmon, 512, STRING("BGM_STG7_MON1"))
+        CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG7_MON1"))
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_MOO4"))
     END_IF
     CALL(evt_npc_setup, PTR(npcEnt))

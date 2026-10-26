@@ -602,7 +602,7 @@ EVT_BEGIN(tenkyugi_evt2)
     SET_VALUE(GSW_STORY_PROGRESS, 390)
     BEGIN_INLINE_EVENT
         WAIT_MS(1000)
-        CALL(evt_snd_bgmon_f, 768, STRING("BGM_STG8_LST2"), 2000)
+        CALL(evt_snd_bgmon_f, PSND_FADEIN | PSND_FADEOUT, STRING("BGM_STG8_LST2"), 2000)
     END_INLINE_EVENT
     CALL(evt_cam3d_evt_off, 1000, 11)
     CALL(evt_party_run, 0)
@@ -1131,12 +1131,12 @@ EVT_BEGIN(las_10_init_evt)
             CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS4"))
             CALL(evt_snd_set_rev_mode, 2)
             ELSE
-            CALL(evt_snd_bgmon, 512, STRING("BGM_STG8_LST2"))
+            CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG8_LST2"))
             CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS4"))
             CALL(evt_snd_set_rev_mode, 2)
         END_IF
         ELSE
-        CALL(evt_snd_bgmon, 512, STRING("BGM_STG8_LST2"))
+        CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG8_LST2"))
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS4"))
         CALL(evt_snd_set_rev_mode, 2)
     END_IF

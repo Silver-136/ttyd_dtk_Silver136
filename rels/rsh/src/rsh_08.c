@@ -80,12 +80,12 @@ BeroEntry bero_data_c_nidome[] = {
 
 EVT_BEGIN(rsh_08_a_init_evt)
     IF_INT_EQUAL(GSWF(3460), 1)
-        CALL(evt_snd_bgmon, 512, STRING("BGM_STG6_PIK1"))
+        CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG6_PIK1"))
         CALL(evt_snd_envoff, PSND_FADEOUT)
         CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
         ELSE
         IF_INT_EQUAL(GSWF(3461), 1)
-            CALL(evt_snd_bgmon, 512, STRING("BGM_STG0_GOR1"))
+            CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_GOR1"))
             CALL(evt_snd_envoff, PSND_FADEOUT)
             CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
             ELSE

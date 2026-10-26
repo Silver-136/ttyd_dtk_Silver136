@@ -1533,7 +1533,7 @@ EVT_BEGIN(evt_random_battle2)
     CALL(evt_npc_set_position, STRING("乱"), 370, 0, 210)
     CALL(evt_msg_print, 0, STRING("stg3_tou_403_04"), 0, STRING("乱"))
     WAIT_MS(300)
-    CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_KUPPA2"))
+    CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_KUPPA2"))
     CALL(evt_cam3d_evt_set, 300, 134, 732, 300, 38, 190, 1000, 11)
     WAIT_MS(1000)
     CALL(evt_npc_move_position, STRING("乱"), 270, 210, 0, FLOAT(80.0f), 1)
@@ -1545,7 +1545,7 @@ EVT_BEGIN(evt_random_battle2)
     CALL(evt_npc_set_position, STRING(("\227\220")), 370, 0, 210)
     CALL(evt_msg_print, 0, STRING(("stg3_tou_403_04")), 0, STRING(("\227\220")))
     WAIT_MS(300)
-    CALL(evt_snd_bgmon, 512, STRING(("BGM_EVT_KUPPA2")))
+    CALL(evt_snd_bgmon, PSND_FADEOUT, STRING(("BGM_EVT_KUPPA2")))
     CALL(evt_cam3d_evt_set, 300, 134, 732, 300, 38, 190, 1000, 11)
     WAIT_MS(1000)
     CALL(evt_npc_move_position, STRING(("\227\220")), 270, 210, 0, FLOAT(80.0f), 1)
@@ -1937,9 +1937,9 @@ EVT_BEGIN(evt_match)
         SWITCH(GSW_GLITZ_PIT_OPPONENT)
             CASE_EQUAL(19)
 #ifdef VERSION_G8ME01
-            CALL(evt_snd_bgmon, 512, STRING("BGM_FF_ENV_TOU2"))
+            CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_FF_ENV_TOU2"))
 #else
-            CALL(evt_snd_bgmon, 512, STRING(("BGM_FF_ENV_TOU2")))
+            CALL(evt_snd_bgmon, PSND_FADEOUT, STRING(("BGM_FF_ENV_TOU2")))
 #endif
             IF_INT_EQUAL(GSWF(2396), 0)
                 SET_VALUE(GSWF(2396), 1)
@@ -1949,9 +1949,9 @@ EVT_BEGIN(evt_match)
             END_IF
             CASE_EQUAL(10)
 #ifdef VERSION_G8ME01
-            CALL(evt_snd_bgmon, 512, STRING("BGM_FF_ENV_TOU2"))
+            CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_FF_ENV_TOU2"))
 #else
-            CALL(evt_snd_bgmon, 512, STRING(("BGM_FF_ENV_TOU2")))
+            CALL(evt_snd_bgmon, PSND_FADEOUT, STRING(("BGM_FF_ENV_TOU2")))
 #endif
             IF_INT_EQUAL(GSWF(2398), 0)
                 SET_VALUE(GSWF(2398), 1)
@@ -1961,9 +1961,9 @@ EVT_BEGIN(evt_match)
             END_IF
             CASE_EQUAL(0)
 #ifdef VERSION_G8ME01
-            CALL(evt_snd_bgmon, 512, STRING("BGM_FF_ENV_TOU3"))
+            CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_FF_ENV_TOU3"))
 #else
-            CALL(evt_snd_bgmon, 512, STRING(("BGM_FF_ENV_TOU3")))
+            CALL(evt_snd_bgmon, PSND_FADEOUT, STRING(("BGM_FF_ENV_TOU3")))
 #endif
             IF_INT_EQUAL(GSWF(2400), 0)
                 SET_VALUE(GSWF(2400), 1)
@@ -1973,9 +1973,9 @@ EVT_BEGIN(evt_match)
             END_IF
             CASE_DEFAULT
 #ifdef VERSION_G8ME01
-            CALL(evt_snd_bgmon, 512, STRING("BGM_FF_ENV_TOU2"))
+            CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_FF_ENV_TOU2"))
 #else
-            CALL(evt_snd_bgmon, 512, STRING(("BGM_FF_ENV_TOU2")))
+            CALL(evt_snd_bgmon, PSND_FADEOUT, STRING(("BGM_FF_ENV_TOU2")))
 #endif
             CALL_CHILD(PTR(evt_default_win))
         END_SWITCH
@@ -2011,9 +2011,9 @@ EVT_BEGIN(evt_match)
         END_IF
         ELSE
 #ifdef VERSION_G8ME01
-        CALL(evt_snd_bgmon, 512, STRING("BGM_FF_ENV_TOU2"))
+        CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_FF_ENV_TOU2"))
 #else
-        CALL(evt_snd_bgmon, 512, STRING(("BGM_FF_ENV_TOU2")))
+        CALL(evt_snd_bgmon, PSND_FADEOUT, STRING(("BGM_FF_ENV_TOU2")))
 #endif
         SWITCH(GSW_GLITZ_PIT_OPPONENT)
             CASE_EQUAL(19)
@@ -2072,7 +2072,7 @@ EVT_BEGIN(evt_kurikuri_opening)
     CALL(evt_npc_set_position, STRING(/*"敵５"*/"\223G\202T"), 130, 60, -25)
     CALL(evt_cam3d_evt_set, 1075, 547, 998, 0, 287, -8, 0, 11)
     CALL(evt_seq_wait, SEQ_GAME)
-    CALL(evt_snd_bgmon, 512, PTR("BGM_FF_ENV_TOU1"))
+    CALL(evt_snd_bgmon, PSND_FADEOUT, PTR("BGM_FF_ENV_TOU1"))
     CALL(evt_cam3d_evt_set, -1024, 547, 1050, 0, 287, -8, 6000, 0)
     WAIT_MS(6000)
     CALL(evt_cam3d_evt_set, 0, 127, 105, 0, 95, -145, 0, 0)
@@ -2251,7 +2251,7 @@ EVT_BEGIN(evt_shinemon_opening)
     CALL(evt_npc_set_position, STRING(("\203K\203\223\203X")), 0, 60, -130)
     CALL(evt_cam3d_evt_set, 1075, 547, 998, 0, 287, -8, 0, 11)
     CALL(evt_seq_wait, SEQ_GAME)
-    CALL(evt_snd_bgmon, 512, STRING(("BGM_FF_ENV_TOU1")))
+    CALL(evt_snd_bgmon, PSND_FADEOUT, STRING(("BGM_FF_ENV_TOU1")))
     CALL(evt_cam3d_evt_set, -1024, 547, 1050, 0, 287, -8, 5000, 0)
     WAIT_MS(5000)
     CALL(evt_cam3d_evt_set, 0, 127, 105, 0, 95, -145, 0, 0)
@@ -2499,7 +2499,7 @@ EVT_BEGIN(evt_champ_opening)
         CALL(tou_champion_belt, STRING(("\223G\202P")))
     END_INLINE_EVENT
     CALL(evt_seq_wait, SEQ_GAME)
-    CALL(evt_snd_bgmon, 512, STRING(("BGM_STG3_TOU2")))
+    CALL(evt_snd_bgmon, PSND_FADEOUT, STRING(("BGM_STG3_TOU2")))
     CALL(evt_snd_bgm_scope, 0, 1)
     WAIT_MS(2000)
     CALL(evt_npc_flag_onoff, 0, STRING(("\203K\203\223\203X")), 32768)
@@ -2643,7 +2643,7 @@ EVT_BEGIN(evt_champ_opening_re)
     CALL(evt_npc_set_position, STRING(("\203L\203m\203V\203R\203\217")), 0, 60, -130)
     CALL(evt_cam3d_evt_set, 0, 481, 1310, 0, 295, -145, 0, 11)
     CALL(evt_seq_wait, SEQ_GAME)
-    CALL(evt_snd_bgmon, 512, STRING(("BGM_STG3_TOU2")))
+    CALL(evt_snd_bgmon, PSND_FADEOUT, STRING(("BGM_STG3_TOU2")))
     CALL(evt_snd_bgm_scope, 0, 1)
     CALL(evt_cam3d_evt_set, 0, 281, 1310, 0, 95, -145, 3000, 0)
     WAIT_MS(3000)
@@ -3025,7 +3025,7 @@ EVT_BEGIN(evt_default_opening)
         END_IF
     END_IF
     CALL(evt_seq_wait, SEQ_GAME)
-    CALL(evt_snd_bgmon, 512, STRING(("BGM_FF_ENV_TOU1")))
+    CALL(evt_snd_bgmon, PSND_FADEOUT, STRING(("BGM_FF_ENV_TOU1")))
     CALL(evt_cam3d_evt_set, 0, 331, 1310, 0, 145, -145, 3000, 11)
     BEGIN_INLINE_EVENT
         CALL(evt_mario_mov_pos2, -280, 0, FLOAT(120.0f))
@@ -3388,7 +3388,7 @@ static EVT_BEGIN(evt_champion)
     CALL(evt_mario_cont_onoff, 0)
     CALL(evt_party_cont_onoff, 0, 0)
 #ifdef VERSION_G8ME01
-    CALL(evt_snd_bgmon, 512, STRING("BGM_STG3_TOU2"))
+    CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
     CALL(evt_snd_bgm_scope, 0, 1)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("door_2_a"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("door_2_b"), MAP_OBJ_FLAG_HIDDEN)
@@ -3414,7 +3414,7 @@ static EVT_BEGIN(evt_champion)
     CALL(evt_msg_print, 0, STRING("stg3_tou_412"), 0, STRING("ガンス"))
     CALL(evt_npc_set_position, STRING("敵１"), 550, 0, 0)
 #else
-    CALL(evt_snd_bgmon, 512, STRING(("BGM_STG3_TOU2")))
+    CALL(evt_snd_bgmon, PSND_FADEOUT, STRING(("BGM_STG3_TOU2")))
     CALL(evt_snd_bgm_scope, 0, 1)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING(("door_2_a")), 1)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING(("door_2_b")), 1)
@@ -3559,7 +3559,7 @@ EVT_BEGIN(evt_champion2)
     CALL(evt_mario_cont_onoff, 0)
     CALL(evt_party_cont_onoff, 0, 0)
 #ifdef VERSION_G8ME01
-    CALL(evt_snd_bgmon, 512, STRING("BGM_STG3_TOU2"))
+    CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
     CALL(evt_snd_bgm_scope, 0, 1)
     CALL(evt_cam3d_evt_set, 50, 155, 273, 50, 106, -8, 0, 0)
     CALL(evt_npc_set_position, STRING("敵１"), 80, 60, 0)
@@ -3577,7 +3577,7 @@ EVT_BEGIN(evt_champion2)
     CALL(evt_npc_set_ry, STRING("ガンス"), 270)
     CALL(evt_msg_print, 0, STRING("stg3_tou_418"), 0, STRING("ガンス"))
 #else
-    CALL(evt_snd_bgmon, 512, STRING(("BGM_STG3_TOU2")))
+    CALL(evt_snd_bgmon, PSND_FADEOUT, STRING(("BGM_STG3_TOU2")))
     CALL(evt_snd_bgm_scope, 0, 1)
     CALL(evt_cam3d_evt_set, 50, 155, 273, 50, 106, -8, 0, 0)
     CALL(evt_npc_set_position, STRING(("\223G\202P")), 80, 60, 0)
@@ -4144,13 +4144,13 @@ static EVT_BEGIN(evt_boss)
     CALL(evt_party_stop, 0)
     CALL(evt_party_set_dir, 0, 90, 200)
 #ifdef VERSION_G8ME01
-    CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_STG3_GANCE2"))
+    CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_STG3_GANCE2"))
     CALL(evt_msg_print, 0, STRING("stg3_tou_463"), 0, STRING("ガンス"))
     WAIT_MS(300)
     BEGIN_INLINE_EVENT
         CALL(evt_snd_sfxon, STRING("SFX_STG3_GROUND_SHAKE1"), LW(10))
 #else
-    CALL(evt_snd_bgmon, 512, STRING(("BGM_EVT_STG3_GANCE2")))
+    CALL(evt_snd_bgmon, PSND_FADEOUT, STRING(("BGM_EVT_STG3_GANCE2")))
     CALL(evt_msg_print, 0, STRING(("stg3_tou_463")), 0, STRING(("\203K\203\223\203X")))
     WAIT_MS(300)
     BEGIN_INLINE_EVENT
@@ -4537,7 +4537,7 @@ static EVT_BEGIN(evt_boss)
     BEGIN_INLINE_EVENT
         WAIT_MS(4000)
 #ifdef VERSION_G8ME01
-        CALL(evt_snd_bgmon_f, 768, STRING("BGM_EVT_ORGEL1"), 3000)
+        CALL(evt_snd_bgmon_f, PSND_FADEIN | PSND_FADEOUT, STRING("BGM_EVT_ORGEL1"), 3000)
     END_INLINE_EVENT
     CALL(evt_npc_set_position, STRING("キノシコワ"), -325, 0, 0)
     CALL(evt_npc_status_onoff, 1, STRING("キノシコワ"), NPC_STATUS_FACE_MOVE_DIR)
@@ -4547,7 +4547,7 @@ static EVT_BEGIN(evt_boss)
     CALL(evt_eff_fukidashi, 0, STRING("m"), 0, 0, 0, 0, 0, 0, 0, 0, 0)
     CALL(evt_eff_fukidashi, 3, STRING("p"), 0, 0, 0, 0, 0, 0, 0, 0, 0)
 #else
-        CALL(evt_snd_bgmon_f, 768, STRING(("BGM_EVT_ORGEL1")), 3000)
+        CALL(evt_snd_bgmon_f, PSND_FADEIN | PSND_FADEOUT, STRING(("BGM_EVT_ORGEL1")), 3000)
     END_INLINE_EVENT
     CALL(evt_npc_set_position, STRING(("\203L\203m\203V\203R\203\217")), -325, 0, 0)
     CALL(evt_npc_status_onoff, 1, STRING(("\203L\203m\203V\203R\203\217")), NPC_STATUS_FACE_MOVE_DIR)
@@ -5387,9 +5387,9 @@ EVT_BEGIN(tou_03_init_evt)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(128)
 #ifdef VERSION_G8ME01
-        CALL(evt_snd_bgmon, 512, STRING("BGM_STG3_TOU2"))
+        CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
 #else
-        CALL(evt_snd_bgmon, 512, STRING(("BGM_STG3_TOU2")))
+        CALL(evt_snd_bgmon, PSND_FADEOUT, STRING(("BGM_STG3_TOU2")))
 #endif
         CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
         SPAWN_EVENT(PTR(evt_tougi))
@@ -5445,18 +5445,18 @@ EVT_BEGIN(tou_03_init_evt)
         SWITCH(GSW_STORY_PROGRESS)
             CASE_BETWEEN(128, 162)
 #ifdef VERSION_G8ME01
-            CALL(evt_snd_bgmon, 512, STRING("BGM_STG3_TOU2"))
+            CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
 #else
-            CALL(evt_snd_bgmon, 512, STRING(("BGM_STG3_TOU2")))
+            CALL(evt_snd_bgmon, PSND_FADEOUT, STRING(("BGM_STG3_TOU2")))
 #endif
             CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
             SPAWN_EVENT(PTR(evt_watch_match))
             CASE_LESS(164)
             CASE_DEFAULT
 #ifdef VERSION_G8ME01
-            CALL(evt_snd_bgmon, 512, STRING("BGM_STG3_TOU2"))
+            CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
 #else
-            CALL(evt_snd_bgmon, 512, STRING(("BGM_STG3_TOU2")))
+            CALL(evt_snd_bgmon, PSND_FADEOUT, STRING(("BGM_STG3_TOU2")))
 #endif
             CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
             SPAWN_EVENT(PTR(evt_watch_match))

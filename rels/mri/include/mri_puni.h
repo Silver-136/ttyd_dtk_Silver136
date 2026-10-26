@@ -51,6 +51,9 @@ typedef enum PuniFlags {
     PUNI_FLAG_PUSHING = (1 << 28),           // 0x10000000
     PUNI_FLAG_NEAR = (1 << 29),              // 0x20000000
     PUNI_FLAG_KEEP = (1 << 30),              // 0x40000000
+    PUNI_FLAG_MARIO_UNUSED = (1 << 2),        // 0x4, the Mario stand-in entry Punidat[0]; never read
+    PUNI_FLAG_KNOCKED_BACK_UNUSED = (1 << 13), // 0x2000, damage hop in progress; never read
+    PUNI_FLAG_HIT_WALL_UNUSED = (1 << 22),     // 0x400000, the last move hit something; never read
 } PuniFlags;
 
 // PuniData.flags2. 0x1 is not named.

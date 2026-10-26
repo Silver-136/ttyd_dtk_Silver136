@@ -2138,7 +2138,7 @@ EVT_BEGIN(evt_bred_nigeru)
     CALL(evt_msg_print_party, STRING("stg3_tou_297_27_01"))
     CALL(evt_party_run, 0)
     CALL(evt_mario_key_onoff, 1)
-    CALL(evt_snd_bgmon_f, 768, STRING("BGM_STG3_TOU1"), 2000)
+    CALL(evt_snd_bgmon_f, PSND_FADEIN | PSND_FADEOUT, STRING("BGM_STG3_TOU1"), 2000)
     SET_VALUE(GSW_STORY_PROGRESS, 145)
     RETURN
 EVT_END()
@@ -2201,20 +2201,20 @@ EVT_BEGIN(tou_04_init_evt)
         IF_INT_EQUAL(LW(1), 0)
             SWITCH(GSW_STORY_PROGRESS)
                 CASE_BETWEEN(127, 137)
-                CALL(evt_snd_bgmon, 512, STRING("BGM_STG3_TOU2"))
+                CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
                 CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU4"))
                 CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
                 CASE_GREATER_OR_EQUAL(165)
-                CALL(evt_snd_bgmon, 512, STRING("BGM_STG3_TOU2"))
+                CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
                 CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU4"))
                 CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
                 CASE_DEFAULT
-                CALL(evt_snd_bgmon, 512, STRING("BGM_STG3_TOU1"))
+                CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU1"))
                 CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
                 CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU4"))
             END_SWITCH
             ELSE
-            CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_STG3_GANCE1"))
+            CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_STG3_GANCE1"))
             CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU4"))
         END_IF
     END_IF

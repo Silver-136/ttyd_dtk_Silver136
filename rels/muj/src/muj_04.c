@@ -331,7 +331,7 @@ EVT_BEGIN(sanders_funto)
     WAIT_MS(1000)
     CALL(evt_cam3d_evt_set, 0, 260, 532, 0, 165, -10, 1000, 11)
     WAIT_MS(500)
-    CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_DANGER4"))
+    CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_DANGER4"))
     BEGIN_INLINE_EVENT
         CALL(evt_mario_mov_pos2, -150, 0, FLOAT(150.0f))
     END_INLINE_EVENT
@@ -525,7 +525,7 @@ static KusaAccess kusa_tbl[] = {
 };
 
 EVT_BEGIN(muj_04_init_evt)
-    CALL(evt_snd_bgmon, 512, STRING("BGM_STG5_MUJ1"))
+    CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG5_MUJ1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG5_MUJ6"))
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)

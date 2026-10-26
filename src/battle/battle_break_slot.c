@@ -704,7 +704,7 @@ void BattleBreakSlot_Main(void) {
                         rr->index = 0;
                     }
                     rr->item = rr->cards[rr->index];
-                    if ((aud->flags & 0x4000) && BattleBreakSlotReelGetPtr(0)->item == 4 &&
+                    if ((aud->flags & AUDIENCE_FLAG_NO_AUDIENCE_EVENTS) && BattleBreakSlotReelGetPtr(0)->item == 4 &&
                         BattleBreakSlotReelGetPtr(1)->item == 4 && rr->item == 4) {
                         break;
                     }

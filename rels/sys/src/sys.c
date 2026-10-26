@@ -1057,7 +1057,7 @@ EVT_BEGIN(evt_start)
     IF_STR_NOT_EQUAL(LW(1), STRING("stg_3"))
         IF_STR_NOT_EQUAL(LW(1), STRING("stg_5"))
             IF_STR_NOT_EQUAL(LW(1), STRING("stg_6"))
-                CALL(evt_snd_bgmon, 512, STRING("BGM_FF_STG_START1"))
+                CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_FF_STG_START1"))
             END_IF
         END_IF
     END_IF

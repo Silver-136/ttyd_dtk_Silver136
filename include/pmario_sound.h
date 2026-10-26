@@ -165,7 +165,7 @@ BOOL psndBGMStartCheck(s32 id);
 #define PSND_QUICK 0x40            // BGM: dip and undo move 5 steps per frame; ENV (US): dip applied at once
 #define PSND_UNSILENT 0x80         // with PSND_CONTINUE: undo PSND_SILENT
 #define PSND_FADEIN 0x100          // fade in over the fade time
-#define PSND_FADEOUT 0x200         // Off: fade out, then free the slot
+#define PSND_FADEOUT 0x200         // Off: fade out, then free the slot (On calls ignore it; many evt_snd_bgmon scripts pass it anyway)
 #define PSND_PAUSE 0x400           // Off: fade to 0 but keep the slot (PSND_CONTINUE brings it back)
 #define PSND_SILENT 0x800          // Off: dip to a lower volume (psndBGMChkSilent) and stay there
 #define PSND_SILENT_LEVEL(n) ((n) << 12) // dip target silent_tbl[n] = (n + 1) * 10 % of the volume, n = 0..9

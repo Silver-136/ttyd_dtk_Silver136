@@ -292,10 +292,10 @@ EVT_BEGIN(mri_07_init_evt)
     CALL(evt_map_playanim, STRING("awa_02"), 1, 0)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(109, 110)
-        CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_DANGER4"))
+        CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_DANGER4"))
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG2_MRI9"))
         CASE_DEFAULT
-        CALL(evt_snd_bgmon, 512, STRING("BGM_STG2_MRI1"))
+        CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG2_MRI1"))
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG2_MRI1"))
     END_SWITCH
     CALL(evt_mobj_recovery_blk, STRING("mobj_recover"), 8, 290, 82, 120, 0, 0)

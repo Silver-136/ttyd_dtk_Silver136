@@ -1498,7 +1498,7 @@ static EVT_BEGIN(peach_evt_stg5)
     WAIT_MS(600)
     CALL(evt_msg_print, 0, STRING("peach_aji_224"), 0, STRING("mario"))
     CALL(evt_msg_print, 0, STRING("peach_aji_225"), 0, 0)
-    CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_COOKING1"))
+    CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_COOKING1"))
     CALL_CHILD(PTR(peach_evt_kaihei_open_all))
     CALL(evt_mario_key_onoff, 1)
     RETURN
@@ -1687,10 +1687,10 @@ EVT_END()
 
 EVT_BEGIN(aji_06_init_evt)
     IF_INT_LESS(GSW_STORY_PROGRESS, 352)
-        CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_PEACH1"))
+        CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_PEACH1"))
         CALL(evt_snd_envoff, PSND_FADEOUT)
         ELSE
-        CALL(evt_snd_bgmon, 512, STRING("BGM_STG7_DUN2"))
+        CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG7_DUN2"))
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI2"))
     END_IF
     CALL(evt_snd_set_rev_mode, 1)

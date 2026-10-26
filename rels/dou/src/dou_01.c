@@ -70,7 +70,7 @@ static EVT_BEGIN(korutesu_event)
 EVT_END()
 
 EVT_BEGIN(dou_01_init_evt)
-    CALL(evt_snd_bgmon, 512, STRING("BGM_STG5_DOU1"))
+    CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG5_DOU1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG5_DOU2"))
     CALL(evt_snd_set_rev_mode, 2)
     SET_VALUE(LW(0), PTR(bero_entry_data))

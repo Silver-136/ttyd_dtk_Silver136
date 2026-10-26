@@ -675,7 +675,7 @@ u8 BattleAudience_CheckReactionPerPhase(void) {
                         }
                         break;
                     case 9:
-                        if (!(audience->flags & 0x4000)) {
+                        if (!(audience->flags & AUDIENCE_FLAG_NO_AUDIENCE_EVENTS)) {
                             for (i = 0; i <= 59; i++) {
                                 if (check_exe_phase_evt_status(i, 5)) { BattleAudienceAddPhaseEvtList(9); break; }
                             }
@@ -687,14 +687,14 @@ u8 BattleAudience_CheckReactionPerPhase(void) {
                         }
                         break;
                     case 11:
-                        if (!(audience->flags & 0x4000)) {
+                        if (!(audience->flags & AUDIENCE_FLAG_NO_AUDIENCE_EVENTS)) {
                             for (i = 0; i <= 59; i++) {
                                 if (check_exe_phase_evt_status(i, 9) && BattleAudienceGetPtr(i)->status != AUDIENCE_STATUS_IGNITE) { BattleAudienceAddPhaseEvtList(11); break; }
                             }
                         }
                         break;
                     case 12:
-                        if (!(audience->flags & 0x4000)) {
+                        if (!(audience->flags & AUDIENCE_FLAG_NO_AUDIENCE_EVENTS)) {
                             for (i = 0; i <= 59; i++) {
                                 if (check_exe_phase_evt_status(i, 11) && BattleAudienceDetectPakkunEatTarget(i) != -1) { BattleAudienceAddPhaseEvtList(12); break; }
                             }
@@ -2646,7 +2646,7 @@ BOOL BattleAudience_GetEscapeChangeOK(s32 index) {
 
     audience = BattleAudienceBaseGetPtr();
     member = BattleAudienceGetPtr(index);
-    if (audience->flags & 0x4000) {
+    if (audience->flags & AUDIENCE_FLAG_NO_AUDIENCE_EVENTS) {
         return FALSE;
     }
     if (!(u8)BattleAudience_GetSysCtrl(index)) {
@@ -3196,7 +3196,7 @@ void BattleAudienceCheer(s32 type) {
         if (pouchGetPtr()->maximumSP == 0) {
             audience->starPowerGain = 0;
         } else {
-            audience->flags |= 2;
+            audience->flags |= AUDIENCE_FLAG_SP_GAINED_UNUSED;
         }
         BattleAudienceJoy(type);
         if (audience->starPowerGain != 0) {

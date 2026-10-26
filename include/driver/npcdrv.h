@@ -133,7 +133,7 @@ typedef enum NpcFlags {
     NPC_FLAG_TALK_POSE = (1 << 9),             // 0x200, uses its talk/stay animations in conversations
     NPC_FLAG_AUTO_MOVE_ANIM = (1 << 10),       // 0x400, stay/walk/run animation picked from its speed
     NPC_FLAG_HIDE = (1 << 11),                 // 0x800, whole display skipped (npc_hide_onoff)
-    NPC_FLAG_NO_PUSH_MARIO = (1 << 14),        // 0x4000, does not push Mario out of its body
+    NPC_FLAG_NO_PUSH_MARIO_UNUSED = (1 << 14),        // 0x4000, does not push Mario out of its body (never set)
     NPC_FLAG_INSTANT_TURN = (1 << 15),         // 0x8000, paper turn snaps (pose flag 0x100)
     NPC_FLAG_WALL_BOUNCE = (1 << 16),          // 0x10000, move direction mirrored at walls
     NPC_FLAG_GRAVITY = (1 << 17),              // 0x20000, falls
@@ -151,6 +151,7 @@ typedef enum NpcFlags {
     NPC_FLAG_NO_PLAYER_ATTACK = (1 << 29),     // 0x20000000, Mario cannot hit it; its own attack still lands
     NPC_FLAG_NO_WALL_COLLISION = (1 << 30),    // 0x40000000
     NPC_FLAG_NO_TALK_BALLOON = (1 << 31),      // 0x80000000, Mario's talk balloon not shown
+    NPC_FLAG_PASS_NPC_ONLY_WALLS = (1 << 13),   // 0x2000, wall probes skip HIT_ATTR_NPC_ONLY surfaces
 } NpcFlags;
 
 // NpcEntry.statusFlags (evt_npc_status_onoff / evt_npc_status_check, npcMain, npcMoveG)

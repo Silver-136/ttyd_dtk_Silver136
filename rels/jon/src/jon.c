@@ -288,7 +288,7 @@ EVT_BEGIN(jon_init_evt)
         END_IF
     END_IF
     IF_INT_NOT_EQUAL(GSW_PIT_FLOOR, 99)
-        CALL(evt_snd_bgmon, 512, STRING("BGM_STG0_100DN1"))
+        CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_100DN1"))
         CALL(evt_snd_envoff, PSND_FADEOUT)
         CALL(evt_snd_set_rev_mode, 1)
         ELSE
@@ -2676,7 +2676,7 @@ EVT_BEGIN(zonbaba_first_event)
     CALL(evt_mario_set_pose, STRING("M_S_1"))
     CALL(evt_mario_set_dir_npc, STRING("敵"))
     CALL(evt_party_set_dir_npc, 0, STRING("敵"))
-    CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_GONBABA_FLY2"))
+    CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_GONBABA_FLY2"))
     BEGIN_INLINE_EVENT
         CALL(evt_snd_sfxon_3d_ex, STRING("SFX_STG1_GNB_ROAR2"), 0, 0, 0, 255, 255, 4300, 16, 0)
         CALL(evt_npc_set_anim, STRING("敵"), STRING("GNB_U_1"))

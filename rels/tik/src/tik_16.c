@@ -215,7 +215,7 @@ static EVT_BEGIN(evt_switch_01)
 EVT_END()
 
 EVT_BEGIN(tik_16_init_evt)
-    CALL(evt_snd_bgmon, 512, STRING("BGM_STG0_TIK1"))
+    CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_TIK1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_TIK7"))
     CALL(evt_snd_set_rev_mode, 2)
     CALL_CHILD(PTR(evt_switch_00_init))

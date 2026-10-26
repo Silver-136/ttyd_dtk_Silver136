@@ -1638,13 +1638,13 @@ EVT_BEGIN(bom_02_init_evt)
             SET_VALUE(LF(0), 1)
         END_IF
         IF_STR_EQUAL(LW(0), STRING("minnnanokoe"))
-            CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_STG8_VOICE1"))
+            CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_STG8_VOICE1"))
             CALL(evt_snd_envoff, PSND_FADEOUT)
             SET_VALUE(LF(0), 1)
         END_IF
     END_IF
     IF_INT_EQUAL(LF(0), 0)
-        CALL(evt_snd_bgmon, 512, STRING("BGM_STG7_BOM1"))
+        CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG7_BOM1"))
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_BOM3"))
     END_IF
     CALL_CHILD(PTR(evt_bom_snowfall))

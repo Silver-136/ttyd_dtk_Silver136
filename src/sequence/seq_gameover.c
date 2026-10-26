@@ -346,7 +346,7 @@ void seq_gameOverMain(SequenceWork* work) {
             }
             marioReset();
             marioEntry();
-            psndBGMOn(0x200, (char*)PSND_BGM_BATTLE_LOSE1);
+            psndBGMOn(PSND_FADEOUT, (char*)PSND_BGM_BATTLE_LOSE1);
             if ((u32)psbgm[0].streamId != 0xFFFFFFFFU) {
                 sound.streams[psbgm[0].streamId].flags |= 0x8000;
             }

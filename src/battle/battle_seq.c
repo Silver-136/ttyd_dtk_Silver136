@@ -490,7 +490,7 @@ void btlseqFirstAct(BattleWork* wp) {
                 BattleStatusWindowSystemOn();
             }
             BattleConsumeReserveItem();
-            wp->flags &= ~4;
+            wp->flags &= ~BATTLE_FLAG_ACT_DECIDED_UNUSED;
             BattleAudience_PerAct();
             BattleIncSeq(wp, SEQ_FIRST_ACT);
 
@@ -2278,7 +2278,7 @@ void btlseqAct(BattleWork* wp) {
             }
             unit = BattleGetUnitPtr(wp, wp->activeUnitId);
             evt = NULL;
-            if ((wp->flags & BATTLE_FLAG_ZERO_GRAVITY) && !(unit->mAttributeFlags & kActsInZeroGravity) &&
+            if ((wp->flags & BATTLE_FLAG_ZERO_GRAVITY_UNUSED) && !(unit->mAttributeFlags & kActsInZeroGravity) &&
                 !(unit->attackEventFlags & 8) && !(unit->attackEventFlags & 0x10)) {
                 evt = evtEntry(btldefaultevt_CantMoveZeroGravity, 10, 0);
             } else if (unit->attackEventFlags & 0x10) {
@@ -2388,7 +2388,7 @@ void btlseqAct(BattleWork* wp) {
                 }
             }
             BattleConsumeReserveItem();
-            wp->flags &= ~4;
+            wp->flags &= ~BATTLE_FLAG_ACT_DECIDED_UNUSED;
             BattleAudience_PerAct();
             BattleIncSeq(wp, SEQ_ACT);
         case 0x600000A:

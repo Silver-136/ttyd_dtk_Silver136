@@ -327,7 +327,7 @@ USER_FUNC(cam_test2) {
 }
 
 static EVT_BEGIN(first_evt)
-    CALL(evt_snd_bgmon, 512, STRING("BGM_STG1_HEI1"))
+    CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG1_HEI1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG1_HEI1"))
     CALL(evt_snd_bgm_scope, 0, 1)
     CALL(evt_mario_key_onoff, 0)
@@ -895,7 +895,7 @@ static EVT_BEGIN(dokan_evt)
     SPAWN_EVENT(PTR(evt_snd))
     BEGIN_INLINE_EVENT
         WAIT_MS(3200)
-        CALL(evt_snd_bgmon, 512, STRING("BGM_FF_ENV_SUCCESS1"))
+        CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_FF_ENV_SUCCESS1"))
     END_INLINE_EVENT
     CALL(evt_img_set_paper_anim, STRING("img"), STRING("A_1"))
     CALL(evt_mapobj_flag_onoff, 0, 1, STRING("isi_0"), MAP_OBJ_FLAG_HIDDEN)
@@ -930,7 +930,7 @@ static EVT_BEGIN(dokan_evt)
     SET_VALUE(LW(0), STRING("dokan"))
     CALL_CHILD(PTR(bero_case_switch_on))
     SET_VALUE(GSW_STORY_PROGRESS, 34)
-    CALL(evt_snd_bgmon_f, 768, STRING("BGM_STG1_HEI1"), 2000)
+    CALL(evt_snd_bgmon_f, PSND_FADEIN | PSND_FADEOUT, STRING("BGM_STG1_HEI1"), 2000)
     CALL(evt_cam3d_evt_off, 500, 11)
     WAIT_MS(500)
     CALL(evt_mario_key_onoff, 1)
@@ -1077,7 +1077,7 @@ EVT_BEGIN(hei_00_koopa_evt)
 #ifdef VERSION_G8ME01
     CALL(evt_mario_kill_party, 0)
 #endif
-    CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_KUPPA1"))
+    CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_KUPPA1"))
     CALL(evt_snd_bgm_scope, 0, 1)
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG1_HEI1"))
     CALL(evt_mario_mov_pos2, -262, -50, 60)
@@ -1155,7 +1155,7 @@ static EVT_BEGIN(epilogue_npc_entry)
 EVT_END()
 
 static EVT_BEGIN(epilogue_evt)
-    CALL(evt_snd_bgmon, 512, STRING("BGM_STG1_HEI1"))
+    CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG1_HEI1"))
     CALL(evt_snd_bgm_scope, 0, 1)
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG1_HEI1"))
     CALL(evt_mario_cont_onoff, 0)
@@ -1250,7 +1250,7 @@ EVT_BEGIN(hei_00_init_evt)
     CALL(evt_npc_pera_onoff, STRING("ゴンババ影"), 0)
     IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, 114)
         IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, 402)
-            CALL(evt_snd_bgmon, 512, STRING("BGM_STG1_HEI1"))
+            CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG1_HEI1"))
             CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG1_HEI1"))
         END_IF
     END_IF

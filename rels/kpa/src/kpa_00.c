@@ -33,7 +33,7 @@ EVT_BEGIN(kpa_00_first_evt)
     CALL(evt_seq_wait, SEQ_GAME)
     BEGIN_INLINE_EVENT
         WAIT_MS(2000)
-        CALL(evt_snd_bgmon, 512, STRING("BGM_STGK_CASTLE1"))
+        CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STGK_CASTLE1"))
         CALL(evt_snd_bgm_scope, 0, 1)
     END_INLINE_EVENT
     CALL(evt_cam3d_evt_set, 0, 134, 534, 0, 45, -8, 5000, 11)

@@ -221,7 +221,7 @@ EVT_END()
 
 EVT_BEGIN(evt_chuchu)
     CALL(evt_mario_key_onoff, 0)
-    CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_CYUCYURINA1"))
+    CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_CYUCYURINA1"))
     CALL(evt_snd_envoff, PSND_FADEOUT)
     CALL(evt_npc_set_position, STRING("チュチュリーナ"), -100, 50, -60)
     CALL(evt_npc_set_ry, STRING("チュチュリーナ"), 270)
@@ -323,7 +323,7 @@ EVT_BEGIN(evt_chuchu)
             BREAK_LOOP
         END_IF
     END_LOOP
-    CALL(evt_snd_bgmon, 512, STRING("BGM_STG3_TOU1"))
+    CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU1"))
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU6"))
     CALL(evt_msg_print_party, STRING("stg3_tou_316"))
@@ -600,15 +600,15 @@ EVT_BEGIN(tou_06_init_evt)
             ELSE
             SWITCH(GSW_STORY_PROGRESS)
                 CASE_BETWEEN(127, 137)
-                CALL(evt_snd_bgmon, 512, STRING("BGM_STG3_TOU2"))
+                CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
                 CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU6"))
                 CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
                 CASE_GREATER_OR_EQUAL(165)
-                CALL(evt_snd_bgmon, 512, STRING("BGM_STG3_TOU2"))
+                CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
                 CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU6"))
                 CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
                 CASE_DEFAULT
-                CALL(evt_snd_bgmon, 512, STRING("BGM_STG3_TOU1"))
+                CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU1"))
                 CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU6"))
             END_SWITCH
         END_IF

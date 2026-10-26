@@ -1642,24 +1642,24 @@ EVT_BEGIN(mri_00_init_evt)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, 400)
         CALL(evt_bero_get_entername, LW(0))
         IF_STR_EQUAL(LW(0), STRING("sekai_yami1"))
-            CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_STG8_WITCH"))
+            CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_STG8_WITCH"))
             CALL(evt_snd_envoff, PSND_FADEOUT)
             SET_VALUE(LF(0), 1)
         END_IF
         IF_STR_EQUAL(LW(0), STRING("minnnanokoe"))
-            CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_STG8_VOICE1"))
+            CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_STG8_VOICE1"))
             CALL(evt_snd_envoff, PSND_FADEOUT)
             SET_VALUE(LF(0), 1)
         END_IF
     END_IF
     IF_INT_EQUAL(LF(0), 0)
         IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, 73)
-            CALL(evt_snd_bgmon, 512, STRING("BGM_STG2_MRI1"))
+            CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG2_MRI1"))
             CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG2_MRI2"))
             ELSE
             BEGIN_INLINE_EVENT
                 WAIT_MS(2000)
-                CALL(evt_snd_bgmon, 512, STRING("BGM_STG2_MRI1"))
+                CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG2_MRI1"))
             END_INLINE_EVENT
             CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG2_MRI2"))
         END_IF

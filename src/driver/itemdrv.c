@@ -1012,31 +1012,31 @@ void itemseq_GetItem(ItemEntry* entry) {
                         if (!(entry->flags & ITEM_FLAG_BGM_SILENT)) {
                             psndBGMOff(0x3800);
                         }
-                        psndBGMOn(0x211, "BGM_FF_GET_STARPIECE1");
+                        psndBGMOn(PSND_RESTART | PSND_FADEOUT | PSND_SLOT(1), "BGM_FF_GET_STARPIECE1");
                         break;
                     case 1:
                         if (!(entry->flags & ITEM_FLAG_BGM_SILENT)) {
                             psndBGMOff(0x3800);
                         }
-                        psndBGMOn(0x211, "BGM_FF_GET_KEYITEM1");
+                        psndBGMOn(PSND_RESTART | PSND_FADEOUT | PSND_SLOT(1), "BGM_FF_GET_KEYITEM1");
                         break;
                     case 2:
                         if (!(entry->flags & ITEM_FLAG_BGM_SILENT)) {
                             psndBGMOff(0x3800);
                         }
-                        psndBGMOn(0x211, "BGM_FF_GET_BADGE1");
+                        psndBGMOn(PSND_RESTART | PSND_FADEOUT | PSND_SLOT(1), "BGM_FF_GET_BADGE1");
                         break;
                     case 3:
                         if (!(entry->flags & ITEM_FLAG_BGM_SILENT)) {
                             psndBGMOff(0x3800);
                         }
-                        psndBGMOn(0x211, "BGM_FF_GET_IMPORTANT_ITEM1");
+                        psndBGMOn(PSND_RESTART | PSND_FADEOUT | PSND_SLOT(1), "BGM_FF_GET_IMPORTANT_ITEM1");
                         break;
                     default:
                         if (!(entry->flags & ITEM_FLAG_BGM_SILENT)) {
                             psndBGMOff(0x3800);
                         }
-                        psndBGMOn(0x211, "BGM_FF_GET_ITEM1");
+                        psndBGMOn(PSND_RESTART | PSND_FADEOUT | PSND_SLOT(1), "BGM_FF_GET_ITEM1");
                         break;
                 }
             }

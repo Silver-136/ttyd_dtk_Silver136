@@ -197,9 +197,9 @@ static HitDamageReturn dmgRetPoint[] = {
 
 EVT_BEGIN(las_23_init_evt)
     IF_INT_LESS(GSW_STORY_PROGRESS, 390)
-        CALL(evt_snd_bgmon, 512, STRING("BGM_STG8_LST1"))
+        CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG8_LST1"))
         ELSE
-        CALL(evt_snd_bgmon, 512, STRING("BGM_STG8_LST3"))
+        CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG8_LST3"))
     END_IF
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS1"))
     CALL(evt_snd_set_rev_mode, 2)

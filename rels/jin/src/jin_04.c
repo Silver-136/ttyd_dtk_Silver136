@@ -333,7 +333,7 @@ EVT_BEGIN(irekawatta_mario)
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
-    CALL(evt_snd_bgmon, 512, STRING("BGM_STG4_JIN1"))
+    CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG4_JIN1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG4_JIN1"))
     CALL(evt_cam3d_evt_off, 1000, 11)
     SET_VALUE(GSW_STORY_PROGRESS, 201)
@@ -881,7 +881,7 @@ EVT_BEGIN(jin_04_init_evt)
         CALL(evt_snd_bgmoff, PSND_FADEOUT)
         CALL(evt_snd_envoff, PSND_FADEOUT)
         CASE_DEFAULT
-        CALL(evt_snd_bgmon, 512, STRING("BGM_STG4_JIN1"))
+        CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG4_JIN1"))
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG4_JIN1"))
     END_SWITCH
     CALL(evt_snd_set_rev_mode, 2)

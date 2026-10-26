@@ -1518,7 +1518,7 @@ void partyDokanEnd(s32 id, s32 dir) {
         party->dirKind = dir;
         party->flags2 &= ~PARTY_DISP_FLAG_NO_FLIP;
         party->flags2 &= ~PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
-        party->flags2 &= ~0xC0;
+        party->flags2 &= ~(PARTY_DISP_FLAG_TURN_LEFT_UNUSED | PARTY_DISP_FLAG_TURN_RIGHT_UNUSED);
         party->flags &= ~PARTY_FLAG_DISABLE_FLOORS;
         party->flags &= ~PARTY_FLAG_FORCE_FALL;
         partyShadowOn(party);
@@ -2325,13 +2325,13 @@ void partyDisp(CameraId cam, void* param) {
     PSMTXConcat(t, m, m);
     PSMTXRotRad(t, 'y', 0.017453292f * revise360(party->displayDirection - party->camDir));
     PSMTXConcat(t, m, m);
-    if (party->flags2 & 0xC0) {
+    if (party->flags2 & (PARTY_DISP_FLAG_TURN_LEFT_UNUSED | PARTY_DISP_FLAG_TURN_RIGHT_UNUSED)) {
         dir = revise360(party->displayDirection);
         if (dir >= 90.0f && dir <= 270.0f) {
-            PSMTXRotRad(t, 'y', 0.017453292f * ((party->flags2 & 0x40) ? 180.0f : 0.0f));
+            PSMTXRotRad(t, 'y', 0.017453292f * ((party->flags2 & PARTY_DISP_FLAG_TURN_LEFT_UNUSED) ? 180.0f : 0.0f));
             PSMTXConcat(t, m, m);
         } else {
-            PSMTXRotRad(t, 'y', 0.017453292f * ((party->flags2 & 0x40) ? 0.0f : 180.0f));
+            PSMTXRotRad(t, 'y', 0.017453292f * ((party->flags2 & PARTY_DISP_FLAG_TURN_LEFT_UNUSED) ? 0.0f : 180.0f));
             PSMTXConcat(t, m, m);
         }
     }

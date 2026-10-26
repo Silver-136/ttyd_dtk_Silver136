@@ -297,7 +297,7 @@ void kpa_stg5_009_7_cb(s32 type, smartEntry* smart) {
     switch (type) {
         case 3:
             if (info->curPage == 1) {
-                psndBGMOn(0x201, "BGM_FF_GET_ITEM1");
+                psndBGMOn(PSND_FADEOUT | PSND_SLOT(1), "BGM_FF_GET_ITEM1");
             }
             break;
     }
@@ -1487,7 +1487,7 @@ EVT_BEGIN(usu00_vivian_joinup_event)
     WAIT_MS(500)
     CALL(evt_msg_print_party, STRING("stg4_usu_124"))
     CALL(evt_cam3d_evt_off, 1000, 11)
-    CALL(evt_snd_bgmon, 512, STRING("BGM_STG4_USU1"))
+    CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG4_USU1"))
     WAIT_MS(1000)
     SET_VALUE(GSW_STORY_PROGRESS, 206)
     SET_VALUE(GSWF(2081), 0)
@@ -2678,7 +2678,7 @@ EVT_BEGIN(usu_00_koopa_first_evt)
     CALL(evt_mario_mov_pos2, 0, 50, 60)
     CALL(evt_mario_set_dir, 270, 300, 0)
     WAIT_MS(300)
-    CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_KUPPA1"))
+    CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_KUPPA1"))
     CALL(evt_snd_bgm_scope, 0, 1)
     CALL(evt_cam3d_evt_set, -50, 138, 480, -50, 60, 37, 800, 11)
     WAIT_MS(800)
@@ -3583,7 +3583,7 @@ static EVT_BEGIN(epilogue_evt_sub)
 EVT_END()
 
 static EVT_BEGIN(epilogue_evt)
-    CALL(evt_snd_bgmon, 512, STRING("BGM_STG4_USU1"))
+    CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG4_USU1"))
     CALL(evt_snd_bgm_scope, 0, 1)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_HIDE)
@@ -3614,13 +3614,13 @@ EVT_BEGIN(usu_00_init_evt)
     IF_INT_EQUAL(GF(1), 0)
         SWITCH(GSW_STORY_PROGRESS)
             CASE_BETWEEN(201, 202)
-            CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_WITCH1"))
+            CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_WITCH1"))
             CALL(evt_snd_envoff, PSND_FADEOUT)
             CASE_EQUAL(203)
-            CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_WITCH1"))
+            CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_WITCH1"))
             CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG4_USU1"))
             CASE_BETWEEN(204, 205)
-            CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_WITCH1"))
+            CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_WITCH1"))
             CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG4_USU1"))
             CASE_EQUAL(400)
             SET_VALUE(LF(1), 0)
@@ -3631,22 +3631,22 @@ EVT_BEGIN(usu_00_init_evt)
                 SET_VALUE(LF(1), 1)
             END_IF
             IF_STR_EQUAL(LW(0), STRING("minnnanokoe"))
-                CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_STG8_VOICE1"))
+                CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_STG8_VOICE1"))
                 CALL(evt_snd_envoff, PSND_FADEOUT)
                 SET_VALUE(LF(1), 1)
             END_IF
             IF_INT_EQUAL(LF(1), 0)
-                CALL(evt_snd_bgmon, 512, STRING("BGM_STG4_USU1"))
+                CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG4_USU1"))
                 CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG4_USU1"))
             END_IF
             CASE_DEFAULT
             IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, 402)
-                CALL(evt_snd_bgmon, 512, STRING("BGM_STG4_USU1"))
+                CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG4_USU1"))
             END_IF
             CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG4_USU1"))
         END_SWITCH
         ELSE
-        CALL(evt_snd_bgmon, 512, STRING("BGM_STG4_USU1"))
+        CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG4_USU1"))
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG4_USU1"))
     END_IF
     IF_INT_EQUAL(GF(1), 0)

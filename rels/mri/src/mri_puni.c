@@ -1503,10 +1503,10 @@ void puniMoveDecel(PuniData* p) {
         }
     }
     if (p->hitMove != NULL || p->hitCheck != NULL) {
-        p->flags |= 0x400000;
+        p->flags |= PUNI_FLAG_HIT_WALL_UNUSED;
     } else {
         PSVECScale(&p->vel, &p->vel, 0.6f);
-        p->flags &= ~0x400000;
+        p->flags &= ~PUNI_FLAG_HIT_WALL_UNUSED;
     }
 }
 
@@ -1562,9 +1562,9 @@ void puniMoveLimitedNormal(PuniData* p) {
         }
     }
     if (p->hitMove != NULL || p->hitCheck != NULL) {
-        p->flags |= 0x400000;
+        p->flags |= PUNI_FLAG_HIT_WALL_UNUSED;
     } else {
-        p->flags &= ~0x400000;
+        p->flags &= ~PUNI_FLAG_HIT_WALL_UNUSED;
     }
 }
 
@@ -1621,9 +1621,9 @@ void puniMoveNormal(PuniData* p) {
         }
     }
     if (p->hitMove != NULL || p->hitCheck != NULL) {
-        p->flags |= 0x400000;
+        p->flags |= PUNI_FLAG_HIT_WALL_UNUSED;
     } else {
-        p->flags &= ~0x400000;
+        p->flags &= ~PUNI_FLAG_HIT_WALL_UNUSED;
     }
 }
 
@@ -1666,7 +1666,7 @@ void puniParaAttack(PuniData* a, PuniData* b) {
                 b->vel = paraVecA;
             }
             b->target = a;
-            b->flags |= 0x2000;
+            b->flags |= PUNI_FLAG_KNOCKED_BACK_UNUSED;
             b->flags &= ~PUNI_FLAG_DIZZY;
             b->flags2 &= ~PUNI_FLAG2_DIZZY_ICON;
             b->mode = 9;
@@ -1680,7 +1680,7 @@ void puniParaAttack(PuniData* a, PuniData* b) {
             a->vel = paraVecB;
         }
         a->target = b;
-        a->flags |= 0x2000;
+        a->flags |= PUNI_FLAG_KNOCKED_BACK_UNUSED;
         a->flags &= ~PUNI_FLAG_DIZZY;
         a->flags2 &= ~PUNI_FLAG2_DIZZY_ICON;
         a->mode = 9;
@@ -2709,7 +2709,7 @@ void puniModeDamage(PuniData* p) {
             p->pos.y += p->accelStep;
             p->accelStep -= 0.5f;
             if (p->pos.y <= 0.001f) {
-                p->flags &= ~0x2000;
+                p->flags &= ~PUNI_FLAG_KNOCKED_BACK_UNUSED;
                 p->pos.y = 0.0f;
                 p->accelStep = 0.0f;
                 p->prevPos = p->pos;
@@ -4120,7 +4120,7 @@ void puni_puni_init(void) {
     Punigp->seed1 = 0x21708331;
     p = Punidat;
     Punigp->marioPuni = p;
-    p->flags |= 0x180404;
+    p->flags |= (PUNI_FLAG_MARIO_UNUSED | PUNI_FLAG_ACTIVE | PUNI_FLAG_IN_CHAIN | PUNI_FLAG_COLLIDE);
     p->pos = mario->position;
     p->prevPos = p->pos;
     p->radius.x = 10.0f;
@@ -4415,10 +4415,10 @@ void puniMoveMain(PuniData* p) {
             d2 = dir;
             puniMoveHitInl(p, &s2, &d2, dist);
             if (p->hitMove != NULL || p->hitCheck != NULL) {
-                p->flags |= 0x400000;
+                p->flags |= PUNI_FLAG_HIT_WALL_UNUSED;
             } else {
                 PSVECScale(&p->vel, &p->vel, 0.6f);
-                p->flags &= ~0x400000;
+                p->flags &= ~PUNI_FLAG_HIT_WALL_UNUSED;
             }
         }
         mv_end1:
@@ -4444,9 +4444,9 @@ void puniMoveMain(PuniData* p) {
             s2 = start;
             puniMoveHitLimitedInl(p, &s2, &d2, dist);
             if (p->hitMove != NULL || p->hitCheck != NULL) {
-                p->flags |= 0x400000;
+                p->flags |= PUNI_FLAG_HIT_WALL_UNUSED;
             } else {
-                p->flags &= ~0x400000;
+                p->flags &= ~PUNI_FLAG_HIT_WALL_UNUSED;
             }
         }
         mv_end2:
@@ -4468,9 +4468,9 @@ void puniMoveMain(PuniData* p) {
             d2 = dir;
             puniMoveHitInl(p, &s2, &d2, dist);
             if (p->hitMove != NULL || p->hitCheck != NULL) {
-                p->flags |= 0x400000;
+                p->flags |= PUNI_FLAG_HIT_WALL_UNUSED;
             } else {
-                p->flags &= ~0x400000;
+                p->flags &= ~PUNI_FLAG_HIT_WALL_UNUSED;
             }
         }
         mv_end3:
@@ -4515,10 +4515,10 @@ void puniMoveMain(PuniData* p) {
             d2 = dir;
             puniMoveHitInl(p, &s2, &d2, dist);
             if (p->hitMove != NULL || p->hitCheck != NULL) {
-                p->flags |= 0x400000;
+                p->flags |= PUNI_FLAG_HIT_WALL_UNUSED;
             } else {
                 PSVECScale(&p->vel, &p->vel, 0.6f);
-                p->flags &= ~0x400000;
+                p->flags &= ~PUNI_FLAG_HIT_WALL_UNUSED;
             }
         }
         mv_end5:

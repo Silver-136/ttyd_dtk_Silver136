@@ -112,7 +112,7 @@ void seq_e3Init(SequenceWork* seq) {
     fadeEntry(FADE_IN_BLACK, 200, (GXColor){ 0x00, 0x00, 0x00, 0xFF });
     fadeReset(1);
     psndStopAllFadeOut();
-    psndBGMOn(0x200, "BGM_FILE_MENU1");
+    psndBGMOn(PSND_FADEOUT, "BGM_FILE_MENU1");
     seq->state = 0;
     animGroupBaseAsync("OFF_d_meku", 0, NULL);
 }

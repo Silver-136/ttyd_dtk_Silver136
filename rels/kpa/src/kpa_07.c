@@ -413,7 +413,7 @@ EVT_END()
 
 EVT_BEGIN(kpa_07_init_evt)
     CALL(evt_mario_set_mode, 2)
-    CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_KUPPA1"))
+    CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_KUPPA1"))
     CALL(evt_snd_envoff, PSND_FADEOUT)
     CALL(evt_npc_setup, PTR(npcEnt))
     CALL(evt_npc_entry, STRING("belt"), STRING("c_bred_h"))

@@ -415,7 +415,7 @@ EVT_BEGIN(gorotuki_sanninngumi)
     SET_VALUE(GSW_STORY_PROGRESS, 12)
     CALL(evt_hitobj_onoff, STRING("a_rec"), 1, 0)
     CALL(evt_mario_key_onoff, 1)
-    CALL(evt_snd_bgmon_f, 768, STRING("BGM_STG0_TIK1"), 2000)
+    CALL(evt_snd_bgmon_f, PSND_FADEIN | PSND_FADEOUT, STRING("BGM_STG0_TIK1"), 2000)
     RETURN
 EVT_END()
 
@@ -514,9 +514,9 @@ EVT_END()
 EVT_BEGIN(tik_01_init_evt)
     SET_VALUE(GSWF(254), 1)
     IF_INT_EQUAL(GSWF(1369), 1)
-        CALL(evt_snd_bgmon, 512, STRING("BGM_STG0_TIK1"))
+        CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_TIK1"))
         ELSE
-        CALL(evt_snd_bgmon_f, 768, STRING("BGM_STG0_TIK1"), 3000)
+        CALL(evt_snd_bgmon_f, PSND_FADEIN | PSND_FADEOUT, STRING("BGM_STG0_TIK1"), 3000)
         SET_VALUE(GSWF(1369), 1)
     END_IF
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_TIK1"))

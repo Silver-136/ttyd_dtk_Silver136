@@ -182,7 +182,7 @@ static TreeAccess ki_data[] = {
 };
 
 EVT_BEGIN(jin_01_init_evt)
-    CALL(evt_snd_bgmon, 512, STRING("BGM_STG4_JIN1"))
+    CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG4_JIN1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG4_JIN2"))
     CALL(evt_snd_set_rev_mode, 2)
     CALL(evt_kagemario_init)

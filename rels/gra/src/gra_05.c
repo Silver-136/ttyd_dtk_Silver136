@@ -424,7 +424,7 @@ static const char* fukitobashi_tbl[] = {
 };
 
 EVT_BEGIN(gra_05_init_evt)
-    CALL(evt_snd_bgmon, 512, STRING("BGM_STG4_GRA1"))
+    CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG4_GRA1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG4_GRA1"))
     CALL(evt_mobj_brick, STRING("blk00"), -475, 60, 25, 0, 13, 0, GSWF(2085))
     CALL(evt_mobj_powerupblk, STRING("blk01"), 630, 60, 40, 0, GSWF(5548), 0)

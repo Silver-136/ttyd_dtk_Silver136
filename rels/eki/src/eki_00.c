@@ -1533,7 +1533,7 @@ static EVT_BEGIN(evt_meet_moamoa)
     END_INLINE_EVENT
     CALL(evt_cam3d_evt_set, 32, 151, 528, 32, 56, -12, 500, 11)
     WAIT_MS(2000)
-    CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_DANGER4"))
+    CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_DANGER4"))
     BEGIN_INLINE_EVENT
         CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_POSE_LOCK)
         WAIT_MS(1000)
@@ -1770,7 +1770,7 @@ EVT_BEGIN(evt_elv_down)
         CALL_CHILD(PTR(evt_meet_moamoa))
     END_IF
     IF_INT_EQUAL(GSW_STORY_PROGRESS, 322)
-        CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_DANGER4"))
+        CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_DANGER4"))
     END_IF
     CALL(evt_map_checkanim, STRING("anm_ere_door_2"), LW(0), LW(1))
     WAIT_MS(LW(1))

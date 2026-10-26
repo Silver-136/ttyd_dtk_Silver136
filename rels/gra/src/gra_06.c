@@ -263,7 +263,7 @@ EVT_BEGIN(first_gra06jin)
     CALL(evt_cam3d_evt_set, 120, 92, 530, -83, 40, 315, 0, 0)
     CALL(evt_mario_mov_pos2, -67, 312, FLOAT(100.0f))
     WAIT_FRAMES(1)
-    CALL(evt_snd_bgmon, 512, STRING("BGM_STG4_JIN1"))
+    CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG4_JIN1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG4_GRA1"))
     CALL(evt_party_stop, 0)
     CALL(evt_party_set_dir, 0, 90, 200)
@@ -418,7 +418,7 @@ EVT_BEGIN(gra_06_init_evt)
     IF_INT_LESS(GSW_STORY_PROGRESS, 193)
         SPAWN_EVENT(PTR(first_gra06jin))
         ELSE
-        CALL(evt_snd_bgmon, 512, STRING("BGM_STG4_JIN1"))
+        CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG4_JIN1"))
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG4_GRA1"))
     END_IF
     RETURN

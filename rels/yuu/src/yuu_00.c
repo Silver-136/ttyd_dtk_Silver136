@@ -897,7 +897,7 @@ EVT_BEGIN(minigame01_start)
         CALL(evt_cam3d_evt_off, 0, 11)
         WAIT_FRAMES(1)
     END_IF
-    CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_MINIGAME1"))
+    CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_MINIGAME1"))
     WAIT_MS(200)
     CALL(evt_mario_set_pose, STRING("M_I_1"))
     WAIT_MS(400)

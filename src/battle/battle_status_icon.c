@@ -163,7 +163,7 @@ void BattleStatusIconMain(BattleUnit* unit) {
     u32 i;
 
     icon->mNumStatusIcons = 0;
-    if (work->flags & 0x10000 || work->dispFlags & 1) {
+    if (work->flags & BATTLE_FLAG_FORCE_STATUS_ICONS_UNUSED || work->dispFlags & 1) {
         BtlUnit_GetPos(unit, &icon->mPosition.x, &icon->mPosition.y, &icon->mPosition.z);
         icon->mPosition.x += ((f32)(unit->mStatusIconOffset[0]) * unit->mSizeMultiplier);
         icon->mPosition.y += ((f32)(unit->mStatusIconOffset[1]) * unit->mSizeMultiplier);
@@ -282,7 +282,7 @@ BOOL _bsi_default_turn(BattleUnit* unit, IconDispTableEntry* disp, BattleWorkSta
     s32 type = disp->id;
     s8 turns, strength;
     s32 kind;
-    if (_battleWorkPointer->flags & 0x10000) {
+    if (_battleWorkPointer->flags & BATTLE_FLAG_FORCE_STATUS_ICONS_UNUSED) {
         if (type != 1 && !BtlUnit_CheckStatus(unit, disp->id)) return FALSE;
         kind = (s32)unit->currentKind;
         if (!((kind >= UNIT_GOOMBA && kind < UNIT_UNUSED_TREE) || (kind >= UNIT_MARIO && kind < TYPE_PARTNER_MIN) || (kind >= TYPE_PARTNER_MIN && kind < TYPE_PARTNER_MAX))) return FALSE;

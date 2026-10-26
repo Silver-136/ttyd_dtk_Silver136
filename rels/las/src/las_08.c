@@ -356,7 +356,7 @@ EVT_BEGIN(mugen_kairou_init)
 EVT_END()
 
 EVT_BEGIN(las_08_init_evt)
-    CALL(evt_snd_bgmon, 512, STRING("BGM_STG8_LST1"))
+    CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG8_LST1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS1"))
     CALL(evt_snd_set_rev_mode, 2)
     SET_VALUE(LW(0), PTR(bero_entry_data))

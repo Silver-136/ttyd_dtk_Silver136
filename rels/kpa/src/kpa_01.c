@@ -229,7 +229,7 @@ EVT_BEGIN(kpa_01_door_close)
 EVT_END()
 
 EVT_BEGIN(kpa_01_touzyo_evt)
-    CALL(evt_snd_bgmon, 512, STRING("BGM_STGK_CASTLE1"))
+    CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STGK_CASTLE1"))
     CALL(evt_snd_envoff, PSND_FADEOUT)
     CALL(evt_snd_set_rev_mode, 2)
     CALL(evt_mario_key_onoff, 0)
@@ -818,7 +818,7 @@ EVT_BEGIN(douzou_3_touch_evt)
             END_IF
             WAIT_FRAMES(1)
         END_LOOP
-        CALL(evt_snd_bgmon, 513, STRING("BGM_FF_GET_ITEM1"))
+        CALL(evt_snd_bgmon, PSND_FADEOUT | PSND_SLOT(1), STRING("BGM_FF_GET_ITEM1"))
     END_INLINE_EVENT
     CALL(evt_npc_set_autotalkpose, STRING("mario"), STRING("KPA_S_1"), STRING("KPA_T_1"))
     CALL(evt_msg_print, 0, STRING("kpa_stg1_014_2"), PTR(kpa_stg1_014_2_cb), STRING("mario"))

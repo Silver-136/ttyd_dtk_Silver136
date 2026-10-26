@@ -184,11 +184,11 @@ EVT_BEGIN(win_06_init_evt)
             CALL(evt_snd_bgmoff, PSND_FADEOUT)
             CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG2_WIN1"))
             WAIT_MS(9000)
-            CALL(evt_snd_bgmon_f, 768, STRING("BGM_STG2_WIN1"), 2000)
+            CALL(evt_snd_bgmon_f, PSND_FADEIN | PSND_FADEOUT, STRING("BGM_STG2_WIN1"), 2000)
             CALL(evt_snd_bgm_scope, 0, 1)
         END_INLINE_EVENT
         ELSE
-        CALL(evt_snd_bgmon, 512, STRING("BGM_STG2_WIN1"))
+        CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG2_WIN1"))
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG2_WIN1"))
     END_IF
     SET_VALUE(LW(0), PTR(bero_entry_data))

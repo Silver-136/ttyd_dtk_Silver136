@@ -2696,7 +2696,7 @@ EVT_BEGIN(mahojin_event7)
     CALL(evt_exit_case_evt)
     BEGIN_INLINE_EVENT
         WAIT_MS(2000)
-        CALL(evt_snd_bgmon_f, 768, STRING("BGM_STG0_TIK2"), 3000)
+        CALL(evt_snd_bgmon_f, PSND_FADEIN | PSND_FADEOUT, STRING("BGM_STG0_TIK2"), 3000)
     END_INLINE_EVENT
     RETURN
 EVT_END()
@@ -2710,7 +2710,7 @@ EVT_BEGIN(tik_05_init_evt)
     CALL_CHILD(PTR(evt_bero_info_run))
 #endif
     CALL(evt_npc_setup, PTR(npcEnt))
-    CALL(evt_snd_bgmon_f, 768, STRING("BGM_STG0_TIK2"), 3000)
+    CALL(evt_snd_bgmon_f, PSND_FADEIN | PSND_FADEOUT, STRING("BGM_STG0_TIK2"), 3000)
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_TIK1"))
     CALL(evt_snd_set_rev_mode, 2)
     CALL(evt_mapobj_trans, 1, STRING("hosi_1"), 0, -5, 0)

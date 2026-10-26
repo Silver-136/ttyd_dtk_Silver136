@@ -260,7 +260,7 @@ EVT_BEGIN(gonbaba_event)
     CALL(evt_mario_set_pose, STRING("M_N_5B"))
     WAIT_MS(2000)
     CALL(evt_mario_set_pose, STRING("M_S_1"))
-    CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_GONBABA_FLY2"))
+    CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_GONBABA_FLY2"))
     BEGIN_INLINE_EVENT
         CALL(evt_snd_sfxon_3d_ex, STRING("SFX_STG1_GNB_ROAR2"), -900, 30, 490, 255, 255, 4300, 16, 0)
         CALL(evt_npc_set_anim, STRING("ゴンババ"), STRING("GNB_U_1"))
@@ -971,7 +971,7 @@ EVT_BEGIN(gon_11_init_evt)
         CASE_LESS(55)
         CALL(evt_snd_bgmoff, PSND_FADEOUT)
         CASE_DEFAULT
-        CALL(evt_snd_bgmon, 512, STRING("BGM_STG1_GON1"))
+        CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG1_GON1"))
     END_SWITCH
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG1_GON4"))
     CALL(evt_snd_set_rev_mode, 2)

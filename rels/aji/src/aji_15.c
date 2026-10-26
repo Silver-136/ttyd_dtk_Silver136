@@ -368,10 +368,10 @@ EVT_BEGIN(aji_15_init_evt)
     IF_INT_EQUAL(LW(0), 1)
         CALL(evt_mario_set_mode, 1)
         CALL(evt_npc_check_delete, STRING("軍団ザコエリート"))
-        CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_PEACH1"))
+        CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_PEACH1"))
         CALL(evt_snd_envoff, PSND_FADEOUT)
         ELSE
-        CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_PEACH1"))
+        CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_PEACH1"))
         CALL(evt_snd_envoff, PSND_FADEOUT)
     END_IF
     CALL(evt_snd_set_rev_mode, 1)

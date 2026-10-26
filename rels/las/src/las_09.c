@@ -720,7 +720,7 @@ EVT_BEGIN(majyorin_evt_main)
         CALL(evt_party_set_dir, 0, 90, 200)
         SET_VALUE(GF(0), 0)
     END_INLINE_EVENT
-    CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_WITCH1"))
+    CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_WITCH1"))
     CALL(evt_msg_toge, 1, 0, 0, 0)
     CALL(evt_msg_print, 0, STRING("stg8_las_12"), 0, STRING("マジョリン"))
     CALL(evt_mario_set_dir, 90, 300, 0)

@@ -536,7 +536,7 @@ next:
             } else if ((!(unit->flags & BATTLE_UNIT_FLAG_ACTING) || (unit->flags & BATTLE_UNIT_FLAG_SHOW_ITEM_WHILE_ACTING)) && !(unit->flags & BATTLE_UNIT_FLAG_HIDE_HELD_ITEM)) {
                 dispEntry(CAMERA_3D, 0.0f, 2, (DispCallback)btlUnitItemDisp, unit);
             }
-        } else if (wp->flags & 0x20000) {
+        } else if (wp->flags & BATTLE_FLAG_FORCE_ITEM_ICONS_UNUSED) {
             dispEntry(CAMERA_3D, 0.0f, 2, (DispCallback)btlUnitItemDisp2, unit);
         }
     }
@@ -545,8 +545,8 @@ next:
     BattleCommandDisplay(wp);
     BattleAudience_Disp();
     BattleBreakSlot_Disp();
-    if (wp->flags & 0x10000) wp->flags &= ~0x10000;
-    if (wp->flags & 0x20000) wp->flags &= ~0x20000;
+    if (wp->flags & BATTLE_FLAG_FORCE_STATUS_ICONS_UNUSED) wp->flags &= ~BATTLE_FLAG_FORCE_STATUS_ICONS_UNUSED;
+    if (wp->flags & BATTLE_FLAG_FORCE_ITEM_ICONS_UNUSED) wp->flags &= ~BATTLE_FLAG_FORCE_ITEM_ICONS_UNUSED;
 }
 
 #define MTX_TRANS_NEG(m, v) PSMTXTrans(m, -(v).x, -(v).y, -(v).z)
@@ -834,7 +834,7 @@ void btlUnitItemDisp(CameraId camId, BattleUnit* unit) {
     height = BtlUnit_GetHeight(unit);
 
     item = BtlUnit_EnemyItemCanUseCheck(unit->heldItem);
-    if (wp->flags & 0x20000 && !item) {
+    if (wp->flags & BATTLE_FLAG_FORCE_ITEM_ICONS_UNUSED && !item) {
         item = 0x94;
     }
     if (item) {
@@ -858,12 +858,12 @@ void btlUnitItemDisp2(CameraId camId, BattleUnit* unit) {
     if (kind >= 0xDE && kind < 0xE0) goto disp;
     if (kind < 0xE0 || kind >= 0xE7) return;
 disp:
-    if (wp->flags & 0x20000) {
+    if (wp->flags & BATTLE_FLAG_FORCE_ITEM_ICONS_UNUSED) {
         btlUnitItemDisp(camId, unit);
     } else {
-        wp->flags |= 0x20000;
+        wp->flags |= BATTLE_FLAG_FORCE_ITEM_ICONS_UNUSED;
         btlUnitItemDisp(camId, unit);
-        wp->flags &= ~0x20000;
+        wp->flags &= ~BATTLE_FLAG_FORCE_ITEM_ICONS_UNUSED;
     }
 }
 
@@ -984,7 +984,7 @@ void gravityOffsetControl(BattleUnitPart* part) {
     BattleWork* wp = _battleWorkPointer;
     BattleUnit* unit = part->mOwner;
 
-    if (!(wp->flags & BATTLE_FLAG_ZERO_GRAVITY)) {
+    if (!(wp->flags & BATTLE_FLAG_ZERO_GRAVITY_UNUSED)) {
         active = FALSE;
     } else if (unit->mAttributeFlags & (kFloating | kNoGravityBob)) {
         active = FALSE;

@@ -1586,12 +1586,12 @@ void party_motion_behind_mario(PartyEntry* party) {
         if (!(party->trigFlags & PARTY_TRIG_BEHIND_DIR_SET)) {
             {
             f32 t;
-            if (!(party->trigFlags & 0x10000)) {
+            if (!(party->trigFlags & PARTY_TRIG_HOME_DIR_FROM_MOVE_UNUSED)) {
                 t = partyGetFollowDir(party);
                 t += 180.0f;
                 t = revise360(t);
             } else {
-                party->trigFlags &= ~0x10000;
+                party->trigFlags &= ~PARTY_TRIG_HOME_DIR_FROM_MOVE_UNUSED;
                 t = revise360(180.0f + angleABf(mario->position.x, mario->position.z, party->moveTarget.x, party->moveTarget.z));
             }
             party->homeDir = t;
@@ -1867,12 +1867,12 @@ void party_motion_behind_mario_fly(PartyEntry* party) {
         if (!(party->trigFlags & PARTY_TRIG_BEHIND_DIR_SET)) {
             {
             f32 t;
-            if (!(party->trigFlags & 0x10000)) {
+            if (!(party->trigFlags & PARTY_TRIG_HOME_DIR_FROM_MOVE_UNUSED)) {
                 t = partyGetFollowDir(party);
                 t += 180.0f;
                 t = revise360(t);
             } else {
-                party->trigFlags &= ~0x10000;
+                party->trigFlags &= ~PARTY_TRIG_HOME_DIR_FROM_MOVE_UNUSED;
                 t = revise360(angleABf(mario->position.x, mario->position.z, party->moveTarget.x, party->moveTarget.z) + 180.0f);
             }
             party->homeDir = t;
@@ -2621,7 +2621,7 @@ void allPartyForceSlitOff(void) {
 void U_allPartySlitOffReq(void) {
     PartyEntry* party = partyGetPtr(marioGetPartyId());
     if (party && ((party->flags & PARTY_FLAG_PAPER_MODE) || (party->flags2 & PARTY_DISP_FLAG_SLIT))) {
-        party->flags2 &= ~0x3C0;
+        party->flags2 &= ~(PARTY_DISP_FLAG_TURN_LEFT_UNUSED | PARTY_DISP_FLAG_TURN_RIGHT_UNUSED | PARTY_DISP_FLAG_SLIT | PARTY_DISP_FLAG_SLIT_DIR_280);
         partyPaperOff(party);
         party->flags &= ~(PARTY_FLAG_PAPER_MODE | PARTY_FLAG_MOT_SLIT_FLOOR);
         party->slitOn = 0;
@@ -2629,7 +2629,7 @@ void U_allPartySlitOffReq(void) {
     }
     party = partyGetPtr(marioGetExtraPartyId());
     if (party && ((party->flags & PARTY_FLAG_PAPER_MODE) || (party->flags2 & PARTY_DISP_FLAG_SLIT))) {
-        party->flags2 &= ~0x3C0;
+        party->flags2 &= ~(PARTY_DISP_FLAG_TURN_LEFT_UNUSED | PARTY_DISP_FLAG_TURN_RIGHT_UNUSED | PARTY_DISP_FLAG_SLIT | PARTY_DISP_FLAG_SLIT_DIR_280);
         partyPaperOff(party);
         party->flags &= ~(PARTY_FLAG_PAPER_MODE | PARTY_FLAG_MOT_SLIT_FLOOR);
         party->slitOn = 0;
@@ -2644,7 +2644,7 @@ void L_partyForceSlitOff(PartyEntry* party) {
         party->displayDirectionTarget = party->displayDirection;
         party->moveDir = revise360(270.0f - party->displayDirection);
         party->targetDir = party->moveDir;
-        party->flags2 &= ~0x3C0;
+        party->flags2 &= ~(PARTY_DISP_FLAG_TURN_LEFT_UNUSED | PARTY_DISP_FLAG_TURN_RIGHT_UNUSED | PARTY_DISP_FLAG_SLIT | PARTY_DISP_FLAG_SLIT_DIR_280);
         partyPaperOff(party);
         party->flags &= ~(PARTY_FLAG_PAPER_MODE | PARTY_FLAG_MOT_SLIT_FLOOR);
         party->slitOn = 0;
@@ -2706,10 +2706,10 @@ BOOL party_slit(PartyEntry* party) {
         party->moveFrames = 30;
         partyForceSetSpd(party, 0.0f);
         if (revise360(party->targetDir - mario->targetYaw) <= 180.0f) {
-            party->flags2 &= ~0x200;
+            party->flags2 &= ~PARTY_DISP_FLAG_SLIT_DIR_280;
             party->slitStep = 0;
         } else {
-            party->flags2 |= 0x200;
+            party->flags2 |= PARTY_DISP_FLAG_SLIT_DIR_280;
             party->slitStep = 2;
         }
     }
@@ -2748,11 +2748,11 @@ BOOL party_slit(PartyEntry* party) {
                 party->displayDirection = 270.0f;
             } else {
                 if (revise360(party->targetDir - mario->targetYaw) >= 180.0) {
-                    party->flags2 |= 0x200;
+                    party->flags2 |= PARTY_DISP_FLAG_SLIT_DIR_280;
                 } else {
-                    party->flags2 &= ~0x200;
+                    party->flags2 &= ~PARTY_DISP_FLAG_SLIT_DIR_280;
                 }
-                party->displayDirection = (party->flags2 & 0x200) ? 280.0f : 260.0f;
+                party->displayDirection = (party->flags2 & PARTY_DISP_FLAG_SLIT_DIR_280) ? 280.0f : 260.0f;
                 a = revise360(party->targetDir - mario->targetYaw);
                 if (a >= 315.0f || a <= 45.0f || (a >= 135.0f && a <= 225.0f)) {
                     partyChgPaper(party, "PM_S_1E");
@@ -2807,7 +2807,7 @@ BOOL party_slit(PartyEntry* party) {
             }
             break;
         case 42:
-            party->flags2 &= ~0x3C0;
+            party->flags2 &= ~(PARTY_DISP_FLAG_TURN_LEFT_UNUSED | PARTY_DISP_FLAG_TURN_RIGHT_UNUSED | PARTY_DISP_FLAG_SLIT | PARTY_DISP_FLAG_SLIT_DIR_280);
             partyPaperOff(party);
             party->flags &= ~(PARTY_FLAG_PAPER_MODE | PARTY_FLAG_MOT_SLIT_FLOOR);
             party->slitOn = 0;

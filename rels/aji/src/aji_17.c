@@ -2728,7 +2728,7 @@ static EVT_BEGIN(peach_evt_stg6)
     CALL(evt_msg_print, 0, STRING(("peach_aji_304")), 0, STRING(("mario")))
     CALL(evt_cam3d_evt_set, -130, 121, 344, -130, 65, 66, 1500, 11)
     WAIT_MS(1500)
-    CALL(evt_snd_bgmon, 512, STRING(("BGM_EVT_STG8_3RDHEAD1")))
+    CALL(evt_snd_bgmon, PSND_FADEOUT, STRING(("BGM_EVT_STG8_3RDHEAD1")))
     WAIT_MS(2000)
     CALL(evt_msg_print, 0, STRING(("peach_aji_305")), 0, STRING(("\203V\203\205\203\212\203\207\201[")))
     CALL(evt_cam3d_evt_set, 0, 80, 44, 0, 130, -150, 0, 11)
@@ -3060,7 +3060,7 @@ EVT_BEGIN(aji_17_init_evt)
         CALL(evt_mario_kill_party, 0)
         ELSE
 #ifdef VERSION_G8ME01
-        CALL(evt_snd_bgmon, 512, STRING("BGM_STG7_DUN2"))
+        CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG7_DUN2"))
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI4"))
     END_IF
     IF_INT_GREATER(GSW_STORY_PROGRESS, 402)
@@ -3074,7 +3074,7 @@ EVT_BEGIN(aji_17_init_evt)
         CALL(evt_map_pauseanim, 0, STRING("moza"))
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("keyboard"), 0, PTR(tec_talk), 0)
 #else
-        CALL(evt_snd_bgmon, 512, STRING(("BGM_STG7_DUN2")))
+        CALL(evt_snd_bgmon, PSND_FADEOUT, STRING(("BGM_STG7_DUN2")))
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING(("ENV_STG7_AJI4")))
     END_IF
     IF_INT_GREATER(GSW_STORY_PROGRESS, 402)

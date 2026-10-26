@@ -860,9 +860,9 @@ EVT_BEGIN(maffiaboss_ticket_put)
     CALL(evt_item_entry, STRING("ticket"), ITEM_BLIMP_TICKET, 0, -1000, 0, ITEM_TYPE_STILL, -1, 0)
     CALL(evt_item_flag_on, STRING("ticket"), 32768)
     BEGIN_INLINE_EVENT
-        CALL(evt_snd_bgmon, 513, STRING("BGM_FF_GET_KEYITEM1"))
+        CALL(evt_snd_bgmon, PSND_FADEOUT | PSND_SLOT(1), STRING("BGM_FF_GET_KEYITEM1"))
         WAIT_MS(2000)
-        CALL(evt_snd_bgmon, 513, STRING("BGM_STG0_CSN1"))
+        CALL(evt_snd_bgmon, PSND_FADEOUT | PSND_SLOT(1), STRING("BGM_STG0_CSN1"))
     END_INLINE_EVENT
     CALL(evt_item_get_item, STRING("ticket"))
     RETURN
@@ -900,7 +900,7 @@ EVT_BEGIN(maffiaboss_ticket_check)
     END_LOOP
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)
-    CALL(evt_snd_bgmon, 513, STRING("BGM_STG0_CSN1"))
+    CALL(evt_snd_bgmon, PSND_FADEOUT | PSND_SLOT(1), STRING("BGM_STG0_CSN1"))
     CALL(evt_msg_print, 0, STRING("mac_2_116"), 0, STRING("マフィアボス"))
     CALL(evt_npc_set_ry_lr, STRING("マフィアボス"), 0)
     BEGIN_INLINE_EVENT
@@ -1384,7 +1384,7 @@ EVT_BEGIN(maffiaboss_train_ticket)
         CALL(evt_party_set_dir, 0, 90, 200)
     END_INLINE_EVENT
     CALL(evt_cam3d_evt_set, -584, 265, -145, -189, 200, -145, 500, 11)
-    CALL(evt_snd_bgmon, 512, STRING("BGM_STG0_CSN1"))
+    CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_CSN1"))
     WAIT_MS(500)
     CALL(evt_npc_get_position, STRING("マフィアボス"), LW(0), LW(1), LW(2))
     ADD(LW(0), 25)
@@ -1477,7 +1477,7 @@ EVT_BEGIN(maffiaboss_train_ticket)
     CALL(evt_item_flag_on, STRING("ticket"), 32768)
     BEGIN_INLINE_EVENT
         CALL(evt_snd_bgmoff, PSND_PAUSE)
-        CALL(evt_snd_bgmon, 513, STRING("BGM_FF_GET_KEYITEM1"))
+        CALL(evt_snd_bgmon, PSND_FADEOUT | PSND_SLOT(1), STRING("BGM_FF_GET_KEYITEM1"))
         WAIT_MS(2000)
         CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
         CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)
@@ -1539,7 +1539,7 @@ EVT_BEGIN(maffiaboss_train_ticket)
         CALL(evt_del_case_evt, 0, GW(13))
     END_INLINE_EVENT
     CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
-    CALL(evt_snd_bgmon, 512, STRING("BGM_STG0_GOR1"))
+    CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_GOR1"))
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     SET_VALUE(GF(5), 1)
     RETURN
@@ -3926,7 +3926,7 @@ EVT_BEGIN(evt_door_02_1_close)
             CALL(evt_snd_envon, PSND_CONTINUE | PSND_FADEIN, 0)
         END_IF
         ELSE
-        CALL(evt_snd_bgmon, 512, STRING("BGM_STG0_GOR1"))
+        CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_GOR1"))
         CALL(evt_snd_envoff, PSND_FADEOUT | PSND_SLOT(1))
         CALL(evt_snd_envon, PSND_CONTINUE | PSND_FADEIN, 0)
     END_IF
@@ -4515,7 +4515,7 @@ EVT_BEGIN(majorin_nusumigiki)
 EVT_END()
 
 EVT_BEGIN(yuureturn_rtn)
-    CALL(evt_snd_bgmon, 512, STRING("BGM_STG0_GOR1"))
+    CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_GOR1"))
     CALL(evt_snd_envon_f, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR4"), 0)
     CALL(evt_snd_env_lpf, 0, 800)
     CALL(evt_snd_bgmoff_f, PSND_PAUSE, 0)
@@ -4920,7 +4920,7 @@ EVT_BEGIN(kuzi_bomb_talk_husei)
     END_LOOP
     CALL(viewport, 0, 0, 608, 480)
     WAIT_MS(1000)
-    CALL(evt_snd_bgmon, 512, STRING("BGM_STG0_GOR1"))
+    CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_GOR1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR1"))
     CALL(evt_msg_print, 0, STRING("kuji_bomb_056"), 0, STRING("グルメボム兵"))
     CALL(evt_msg_select, 0, STRING("kuji_bomb_057"))
@@ -5237,7 +5237,7 @@ EVT_END()
 
 EVT_BEGIN(gor_03_init_evt)
     IF_INT_EQUAL(GSWF(1229), 0)
-        CALL(evt_snd_bgmon, 512, STRING("BGM_STG0_GOR1"))
+        CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_GOR1"))
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR4"))
         ELSE
         CALL(evt_snd_bgmoff, PSND_FADEOUT)

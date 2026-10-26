@@ -137,7 +137,7 @@ EVT_END()
 
 EVT_BEGIN(las_30_init_evt)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, 400)
-        CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_DANGER2"))
+        CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_DANGER2"))
         CALL(evt_snd_envoff, PSND_FADEOUT)
     ELSE
         CALL(evt_snd_bgmoff, PSND_FADEOUT)

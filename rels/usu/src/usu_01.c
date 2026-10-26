@@ -3049,7 +3049,7 @@ static EVT_BEGIN(mobj_box00)
 EVT_END()
 
 EVT_BEGIN(usu_01_init_evt)
-    CALL(evt_snd_bgmon, 512, STRING("BGM_STG4_USU1"))
+    CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG4_USU1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG4_USU1"))
     CALL(evt_kagemario_init)
     SET_VALUE(LW(0), PTR(bero_entry_data))

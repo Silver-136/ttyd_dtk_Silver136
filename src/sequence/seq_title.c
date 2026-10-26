@@ -97,12 +97,12 @@ void L_titleInit(SequenceWork* work) {
             } else {
                 SoundSetOutputMode(SND_OUTPUTMODE_STEREO);
             }
-            psndBGMOn(0x200, "BGM_DIGEST1");
+            psndBGMOn(PSND_FADEOUT, "BGM_DIGEST1");
             if ((u32)psbgm[0].streamId != 0xFFFFFFFFU) {
                 sound.streams[psbgm[0].streamId].flags |= 0x8000;
             }
         } else {
-            psndBGMOn(0x200, "BGM_TITLE1");
+            psndBGMOn(PSND_FADEOUT, "BGM_TITLE1");
             if ((u32)psbgm[0].streamId != 0xFFFFFFFFU) {
                 sound.streams[psbgm[0].streamId].flags |= 0x8000;
             }

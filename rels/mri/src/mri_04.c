@@ -463,10 +463,10 @@ EVT_BEGIN(mri_04_init_evt)
         CALL(evt_snd_bgmoff, PSND_FADEOUT)
         CALL(evt_snd_envoff, PSND_FADEOUT)
         CASE_BETWEEN(109, 110)
-        CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_DANGER4"))
+        CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_DANGER4"))
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG2_MRI9"))
         CASE_DEFAULT
-        CALL(evt_snd_bgmon, 512, STRING("BGM_STG2_MRI1"))
+        CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG2_MRI1"))
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG2_MRI5"))
     END_SWITCH
     CALL(evt_mobj_itembox, STRING("mobj_box00"), -155, 0, 35, 0, 0, PTR(item_mri_04), GSWF(2837))

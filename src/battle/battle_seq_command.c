@@ -1258,7 +1258,7 @@ s32 BattleCommandInput(BattleWork* work) {
                 psndSFXOn(SFX_NAME_WORD(PSND_SFX_BTL_CURSOR_CANCEL1));
                 BattleCommandDisplay_TargetSelectMenuEnd(wp);
                 cmd->state = 6;
-                wp->flags &= ~4;
+                wp->flags &= ~BATTLE_FLAG_ACT_DECIDED_UNUSED;
                 BattleAcHelpSetDispType(0);
                 BtlUnit_SetCommandAnimPose(unit);
                 if ((cmd->actType == 0 && ((s32)wp->flags & BATTLE_FLAG_JUMP_NO_SUBMENU)) ||
@@ -1273,7 +1273,7 @@ s32 BattleCommandInput(BattleWork* work) {
                 BattleStageOffLightInCommand(1, 1);
                 cmd->state = 0x1d;
                 BattleCommandDisplay_TargetSelectMenuEnd(wp);
-                wp->flags |= 4;
+                wp->flags |= BATTLE_FLAG_ACT_DECIDED_UNUSED;
                 if (wtype == 2 && (s8)(u8)unit->moveState == 0) {
                     switch (cmd->dipMode) {
                     case 2:
@@ -1600,7 +1600,7 @@ BOOL BattleCommandCheckChangePositionEnable(BattleWork* wp) {
     if (wp->flags & BATTLE_FLAG_LECTURE_NO_COMMAND) {
         return FALSE;
     }
-    if (wp->flags & BATTLE_FLAG_ZERO_GRAVITY) {
+    if (wp->flags & BATTLE_FLAG_ZERO_GRAVITY_UNUSED) {
         return FALSE;
     }
     unit = BattleGetMarioPtr(wp);
@@ -2705,7 +2705,7 @@ void* BattleSetConfuseAct(BattleWork* wp, BattleUnit* unit) {
             return subsetevt_confuse_flustered;
         }
         wp->weaponTargets.currentTarget = irand(wp->weaponTargets.numTargets);
-        wp->flags |= 4;
+        wp->flags |= BATTLE_FLAG_ACT_DECIDED_UNUSED;
         return WEVT(weapon);
     case 5:
         _btlcmd_MakeOperationTable(wp);
@@ -2810,7 +2810,7 @@ BOOL BattleCommandAttackAudienceCheck(void) {
     BattleWork* wp = _battleWorkPointer;
     s32 id;
 
-    if (BattlePadCheckTrigger(PAD_BUTTON_X) && !(wp->flags & BATTLE_FLAG_ZERO_GRAVITY)) {
+    if (BattlePadCheckTrigger(PAD_BUTTON_X) && !(wp->flags & BATTLE_FLAG_ZERO_GRAVITY_UNUSED)) {
         if (BattleGetMarioPtr(wp)->mAttributeFlags & kVeiled) {
             return FALSE;
         }
@@ -2822,7 +2822,7 @@ BOOL BattleCommandAttackAudienceCheck(void) {
             wp->commandMenu.actType = 11;
             wp->commandMenu.state = 0x1d;
             BattleStageOffLightInCommand(0, 1);
-            wp->flags |= 4;
+            wp->flags |= BATTLE_FLAG_ACT_DECIDED_UNUSED;
             return TRUE;
         }
     }

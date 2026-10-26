@@ -549,7 +549,7 @@ static KusaAccess kusa_tbl[] = {
 };
 
 EVT_BEGIN(muj_02_init_evt)
-    CALL(evt_snd_bgmon, 512, STRING("BGM_STG5_MUJ1"))
+    CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG5_MUJ1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG5_MUJ4"))
     SET_VALUE(GSWF(3152), 0)
     CALL_CHILD(PTR(evt_switch_init))

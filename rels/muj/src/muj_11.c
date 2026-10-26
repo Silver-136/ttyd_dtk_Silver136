@@ -98,10 +98,10 @@ EVT_END()
 
 EVT_BEGIN(muj_11_init_evt)
     IF_INT_LESS(GSW_STORY_PROGRESS, 253)
-        CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_STG5_GHOST1"))
+        CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_STG5_GHOST1"))
         CALL(evt_snd_envoff, PSND_FADEOUT)
         ELSE
-        CALL(evt_snd_bgmon, 512, STRING("BGM_STG5_DOU1"))
+        CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG5_DOU1"))
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG5_MUJ9"))
     END_IF
     SET_VALUE(LW(0), PTR(bero_entry_data))

@@ -756,7 +756,7 @@ void npcMain(void) {
                             entry->moveOffset.z = 0.0f;
                             npcMoveG(entry);
                         }
-                        if (!(entry->flags & NPC_FLAG_ENEMY) && !(entry->flags & NPC_FLAG_NO_HIT) && !(entry->flags & NPC_FLAG_NO_PUSH_MARIO)) {
+                        if (!(entry->flags & NPC_FLAG_ENEMY) && !(entry->flags & NPC_FLAG_NO_HIT) && !(entry->flags & NPC_FLAG_NO_PUSH_MARIO_UNUSED)) {
                             npcCheckHitMarioSide(entry);
                         }
                         {
@@ -1382,7 +1382,7 @@ HitEntry* npcHitCheckSide(NpcEntry* npc, f32* outX, f32* outZ, f32* angle, f32 d
     if (height > 10.0f) {
         height = 10.0f;
     }
-    if (npc->flags & 0x2000) {
+    if (npc->flags & NPC_FLAG_PASS_NPC_ONLY_WALLS) {
         hit = hitCheckAttr(4, &hx, &hy, &hz, &dist, &nx, &ny, &nz, npc->position.x, npc->position.y + height, npc->position.z, s, 0.0f, c);
     } else {
         hit = hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, npc->position.x, npc->position.y + height, npc->position.z, s, 0.0f, c);
@@ -1399,7 +1399,7 @@ HitEntry* npcHitCheckSide(NpcEntry* npc, f32* outX, f32* outZ, f32* angle, f32 d
 
     dist = sqrtf(dx * dx + dz * dz) + 0.75f * npc->width;
     height = 0.4f * npc->height;
-    if (npc->flags & 0x2000) {
+    if (npc->flags & NPC_FLAG_PASS_NPC_ONLY_WALLS) {
         hit = hitCheckAttr(4, &hx, &hy, &hz, &dist, &nx, &ny, &nz, npc->position.x, npc->position.y + height, npc->position.z, s, 0.0f, c);
     } else {
         hit = hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, npc->position.x, npc->position.y + height, npc->position.z, s, 0.0f, c);
@@ -1416,7 +1416,7 @@ HitEntry* npcHitCheckSide(NpcEntry* npc, f32* outX, f32* outZ, f32* angle, f32 d
 
     dist = sqrtf(dx * dx + dz * dz) + 0.75f * npc->width;
     height = 0.75f * npc->height;
-    if (npc->flags & 0x2000) {
+    if (npc->flags & NPC_FLAG_PASS_NPC_ONLY_WALLS) {
         hit = hitCheckAttr(4, &hx, &hy, &hz, &dist, &nx, &ny, &nz, npc->position.x, npc->position.y + height, npc->position.z, s, 0.0f, c);
     } else {
         hit = hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, npc->position.x, npc->position.y + height, npc->position.z, s, 0.0f, c);

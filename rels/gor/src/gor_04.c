@@ -836,7 +836,7 @@ static EVT_BEGIN(evt_train)
     WAIT_MS(1000)
     CALL(evt_msg_print, 0, STRING("train_07"), 0, STRING("駅員"))
     WAIT_MS(500)
-    CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_STG4_TRAIN1"))
+    CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_STG4_TRAIN1"))
     SPAWN_EVENT(PTR(hom_10_evt_resha_start))
     WAIT_MS(4000)
     CALL(evt_cam3d_evt_set, 410, 90, 571, 410, 90, 121, 2000, 12)
@@ -1450,7 +1450,7 @@ static NpcSetupInfo npcEnt[] = {
 };
 
 EVT_BEGIN(evt_hikousen)
-    CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_STG3_AIRSHIP1"))
+    CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_STG3_AIRSHIP1"))
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_cam_ctrl_onoff, 4, 0)
     BEGIN_INLINE_EVENT
@@ -1675,7 +1675,7 @@ EVT_BEGIN(evt_hikousen_return)
     BEGIN_INLINE_EVENT
         CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 3000)
         WAIT_MS(2000)
-        CALL(evt_snd_bgmon_f, 768, STRING("BGM_STG0_GOR1"), 2000)
+        CALL(evt_snd_bgmon_f, PSND_FADEIN | PSND_FADEOUT, STRING("BGM_STG0_GOR1"), 2000)
     END_INLINE_EVENT
     CALL(evt_mario_set_pos, 350, 135, -352)
     CALL(evt_mario_cont_onoff, 1)
@@ -2023,13 +2023,13 @@ EVT_END()
 
 EVT_BEGIN(gor_04_init_evt)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, 215)
-        CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_KUPPA1"))
+        CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_KUPPA1"))
         CALL(evt_snd_bgm_scope, 0, 1)
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR5"))
         ELSE
         CALL(evt_bero_get_entername, LW(0))
         IF_STR_NOT_EQUAL(LW(0), STRING("hikousen_return"))
-            CALL(evt_snd_bgmon, 512, STRING("BGM_STG0_GOR1"))
+            CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_GOR1"))
         END_IF
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR5"))
     END_IF

@@ -786,7 +786,7 @@ EVT_BEGIN(end_image_main_evt)
                 CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 5000)
                 WAIT_MS(5000)
                 IF_INT_EQUAL(GF(0), 0)
-                    CALL(evt_snd_bgmon, 513, STRING("BGM_EVT_PEACH1"))
+                    CALL(evt_snd_bgmon, PSND_FADEOUT | PSND_SLOT(1), STRING("BGM_EVT_PEACH1"))
                 END_IF
             END_INLINE_EVENT
             WAIT_MS(500)
@@ -862,7 +862,7 @@ EVT_BEGIN(end_00_init_evt)
     BEGIN_INLINE_EVENT
         CALL(evt_end_staff_roll_msg_main)
     END_INLINE_EVENT
-    CALL(evt_snd_bgmon, 512, STRING("BGM_STAFF_ROLL1"))
+    CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STAFF_ROLL1"))
     SET_VALUE(GSW_STORY_PROGRESS, 404)
     RETURN
 EVT_END()

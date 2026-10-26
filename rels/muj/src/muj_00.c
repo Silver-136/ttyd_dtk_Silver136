@@ -1423,7 +1423,7 @@ EVT_BEGIN(mujinto_hyochaku)
     SPAWN_EVENT(PTR(back_light))
     BEGIN_INLINE_EVENT
         WAIT_MS(500)
-        CALL(evt_snd_bgmon, 512, STRING("BGM_STG5_MUJ1"))
+        CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG5_MUJ1"))
         CALL(evt_snd_bgm_scope, 0, 1)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
@@ -1712,7 +1712,7 @@ EVT_BEGIN(dai3_shurai_sub)
     WAIT_MS(3000)
     CALL(evt_msg_print, 0, STRING("stg5_muj_104"), 0, STRING("オドオド水夫"))
     WAIT_MS(1000)
-    CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_DANGER4"))
+    CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_DANGER4"))
     CALL(evt_cam3d_evt_set, 60, 180, 369, 1289, 10, -184, 0, 11)
     SET_VALUE(LW(0), 741)
     SET_VALUE(LW(1), -60)
@@ -2572,7 +2572,7 @@ EVT_BEGIN(kaizoku_vs_dai3)
         CALL_CHILD(PTR(iwapera_offscreen))
         CALL(evt_mapobj_get_position, STRING("S_iwa_before"), LW(0), LW(1), LW(2))
         CALL(evt_snd_sfxon, STRING("SFX_OFF5_SHIP_APPEAR1"), 0)
-        CALL(evt_snd_bgmon, 512, STRING("BGM_BOSS_STG5_KORTESS1"))
+        CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_BOSS_STG5_KORTESS1"))
         WAIT_MS(3500)
         CALL(evt_cam3d_evt_set, 0, 2650, 2025, 0, 250, 225, 500, 11)
         CALL_CHILD(PTR(iwapera_offscreen_end))
@@ -3184,7 +3184,7 @@ EVT_BEGIN(leave_island)
     CALL(evt_mapobj_get_position, STRING("S_b"), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG4_WAVE1"), LW(0), LW(1), LW(2), LW(9))
     CALL(evt_snd_sfxon, STRING("SFX_STG5_SHIP_STARTING1_2"), 0)
-    CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_STG5_GHOST_SHIP1"))
+    CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_STG5_GHOST_SHIP1"))
     BEGIN_INLINE_EVENT
         WAIT_MS(1000)
         CALL(evt_cam3d_evt_set, 944, 164, -240, 33, 155, -611, 13000, 11)
@@ -3298,7 +3298,7 @@ static USER_FUNC(scale_func) {
 }
 
 EVT_BEGIN(muj_gor_ship_start)
-    CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_STG5_GHOST_SHIP1"))
+    CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_STG5_GHOST_SHIP1"))
     BEGIN_INLINE_EVENT
         CALL(evt_sub_intpl_msec_init, EASING_LINEAR, 100, 0, 500)
         LOOP(0)
@@ -3429,7 +3429,7 @@ EVT_BEGIN(into_muj_ship)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, 273)
         SET_VALUE(GSW_STORY_PROGRESS, 274)
     END_IF
-    CALL(evt_snd_bgmon, 512, STRING("BGM_STG5_MUJ1"))
+    CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG5_MUJ1"))
     RETURN
 EVT_END()
 
@@ -3524,28 +3524,28 @@ EVT_BEGIN(muj_00_init_evt)
     END_INLINE_EVENT
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 268)
         IF_INT_EQUAL(GSWF(3125), 1)
-            CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_STG5_GHOST_SHIP1"))
+            CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_STG5_GHOST_SHIP1"))
 #ifdef VERSION_G8ME01
             ELSE
-            CALL(evt_snd_bgmon, 512, STRING("BGM_STG5_MUJ1"))
+            CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG5_MUJ1"))
         END_IF
         ELSE
 #else
         ELSE
-            CALL(evt_snd_bgmon, 512, STRING("BGM_STG5_MUJ1"))
+            CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG5_MUJ1"))
         END_IF
     ELSE
 #endif
         IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, 231)
             IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, 267)
                 IF_INT_EQUAL(GSW_STORY_PROGRESS, 260)
-                    CALL(evt_snd_bgmon, 512, STRING("BGM_BOSS_STG5_KORTESS1"))
+                    CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_BOSS_STG5_KORTESS1"))
 #ifdef VERSION_G8ME01
                     ELSE
 #else
                 ELSE
 #endif
-                    CALL(evt_snd_bgmon, 512, STRING("BGM_STG5_MUJ1"))
+                    CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG5_MUJ1"))
                 END_IF
             END_IF
         END_IF

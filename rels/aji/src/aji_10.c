@@ -1275,10 +1275,10 @@ static NpcSetupInfo npcEnt[] = {
 
 EVT_BEGIN(aji_10_init_evt)
     IF_INT_LESS(GSW_STORY_PROGRESS, 352)
-        CALL(evt_snd_bgmon, 512, STRING("BGM_STG7_DUN1"))
+        CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG7_DUN1"))
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI5"))
         ELSE
-        CALL(evt_snd_bgmon, 512, STRING("BGM_STG7_DUN2"))
+        CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG7_DUN2"))
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI5"))
     END_IF
     CALL(evt_snd_set_rev_mode, 1)

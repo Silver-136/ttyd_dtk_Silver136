@@ -719,7 +719,7 @@ EVT_BEGIN(hom_00_init_evt)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("hasi_R"), MAP_OBJ_FLAG_CLIP)
 #endif
     CALL(evt_npc_setup, PTR(npc_data))
-    CALL(evt_snd_bgmon, 512, STRING("BGM_STG6_HOM1"))
+    CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG6_HOM1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG6_EKI1"))
     CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
     CALL(evt_mobj_save_blk, STRING("mobj_save"), -175, 140, -170, 0, 0)

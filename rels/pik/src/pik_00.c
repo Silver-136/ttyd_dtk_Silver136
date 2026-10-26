@@ -1313,7 +1313,7 @@ static EVT_BEGIN(talk_mama)
                     CALL(evt_set_dir_to_target, STRING("me"), STRING("mario"))
                     WAIT_MS(300)
                     CALL(evt_msg_print, 0, STRING("irai_29_17"), 0, 0)
-                    CALL(evt_snd_bgmon, 512, STRING("BGM_STG6_PIK1"))
+                    CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG6_PIK1"))
                     SET_VALUE(GSWF(5406), 1)
                 END_IF
                 RETURN
@@ -1851,7 +1851,7 @@ EVT_BEGIN(pik_00_init_evt)
         READ_INT(LW(9))
         SPAWN_EVENT(PTR(evt_pik_yajirushi))
     END_LOOP
-    CALL(evt_snd_bgmon, 512, STRING("BGM_STG6_PIK1"))
+    CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG6_PIK1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG6_PIK1"))
     CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
     CALL(evt_npc_setup, PTR(npc_data))
@@ -1947,7 +1947,7 @@ void irai_29_15_cb(s32 type, smartEntry* smart) {
     MsgWinData* info = smart->address;
 
     if (type == 3 && info->curPage == 1) {
-        psndBGMOn(0x200, "BGM_EVT_NOKO_SAIKAI1");
+        psndBGMOn(PSND_FADEOUT, "BGM_EVT_NOKO_SAIKAI1");
     }
 }
 

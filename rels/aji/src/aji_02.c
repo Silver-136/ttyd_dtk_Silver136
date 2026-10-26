@@ -219,10 +219,10 @@ EVT_BEGIN(aji_02_init_evt)
     CALL(evt_bero_get_entername, LW(0))
     CALL(evt_snd_set_rev_mode, 1)
     IF_INT_LESS(GSW_STORY_PROGRESS, 352)
-        CALL(evt_snd_bgmon, 512, STRING("BGM_STG7_DUN1"))
+        CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG7_DUN1"))
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI1"))
         ELSE
-        CALL(evt_snd_bgmon, 512, STRING("BGM_STG7_DUN2"))
+        CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG7_DUN2"))
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI1"))
     END_IF
     IF_STR_EQUAL(LW(0), STRING("peach_evt_stg1"))

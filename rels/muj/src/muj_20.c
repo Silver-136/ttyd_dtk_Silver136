@@ -1131,7 +1131,7 @@ EVT_BEGIN(onryo_event)
     BEGIN_INLINE_EVENT
         CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)
         WAIT_MS(2000)
-        CALL(evt_snd_bgmon_f, 768, STRING("BGM_EVT_STG5_GHOST1"), 2000)
+        CALL(evt_snd_bgmon_f, PSND_FADEIN | PSND_FADEOUT, STRING("BGM_EVT_STG5_GHOST1"), 2000)
         CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     END_INLINE_EVENT
     CALL(evt_set_fune_anim_rate, FLOAT(0.39941406f))
@@ -1243,7 +1243,7 @@ EVT_BEGIN(onryo_event)
     END_INLINE_EVENT
     WAIT_MS(1000)
     BEGIN_INLINE_EVENT
-        CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_DANGER2"))
+        CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_DANGER2"))
     END_INLINE_EVENT
     SET_VALUE(GF(0), 1)
     BEGIN_INLINE_EVENT
@@ -1994,7 +1994,7 @@ static void draw(CameraId camera, void* param) {
 
 static EVT_BEGIN(evt_prologue)
     WAIT_MS(500)
-    CALL(evt_snd_bgmon, 512, STRING("BGM_OPENING1"))
+    CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_OPENING1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_OPN_MUJ1"))
     WAIT_MS(3500)
     SET_VALUE(GF(0), 0)
@@ -2027,7 +2027,7 @@ static EVT_BEGIN(evt_prologue)
             END_IF
         END_LOOP
         IF_INT_EQUAL(GF(1), 0)
-            CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_SAILING1"))
+            CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_SAILING1"))
         END_IF
     END_INLINE_EVENT
     LOOP(0)
@@ -2121,7 +2121,7 @@ EVT_BEGIN(fune_move)
 EVT_END()
 
 static EVT_BEGIN(epilogue_evt)
-    CALL(evt_snd_bgmon, 512, STRING("BGM_STG5_MUJ1"))
+    CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG5_MUJ1"))
     CALL(evt_snd_bgm_scope, 0, 1)
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_END_MUJ3"))
     CALL(evt_mario_cont_onoff, 0)
@@ -2193,22 +2193,22 @@ EVT_BEGIN(muj_20_init_evt)
     CALL(evt_map_playanim, STRING("fune_01"), 1, 0)
     CALL(evt_map_playanim, STRING("kumo"), 1, 0)
     IF_INT_EQUAL(GSWF(3125), 1)
-        CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_STG5_GHOST_SHIP1"))
+        CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_STG5_GHOST_SHIP1"))
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG5_MUJ1_1"))
         SPAWN_EVENT(PTR(gor_muj_ship))
     END_IF
     IF_INT_EQUAL(GSWF(1178), 1)
-        CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_STG5_GHOST_SHIP1"))
+        CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_STG5_GHOST_SHIP1"))
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG5_MUJ1_1"))
         SPAWN_EVENT(PTR(muj_gor_ship))
     END_IF
     IF_INT_EQUAL(GSW_STORY_PROGRESS, 229)
-        CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_SAILING1"))
+        CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_SAILING1"))
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG5_MUJ1_1"))
         SPAWN_EVENT(PTR(onryo_event))
     END_IF
     IF_INT_EQUAL(GSW_STORY_PROGRESS, 230)
-        CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_SAILING1"))
+        CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_SAILING1"))
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG5_MUJ1_1"))
         SPAWN_EVENT(PTR(onryo_event))
     END_IF

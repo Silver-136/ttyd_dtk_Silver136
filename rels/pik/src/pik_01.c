@@ -1332,19 +1332,19 @@ EVT_BEGIN(pik_01_init_evt)
                 SET_VALUE(LF(1), 1)
             END_IF
             IF_STR_EQUAL(LW(0), STRING("minnnanokoe"))
-                CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_STG8_VOICE1"))
+                CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_STG8_VOICE1"))
                 CALL(evt_snd_envoff, PSND_FADEOUT)
                 SET_VALUE(LF(1), 1)
             END_IF
         END_IF
         IF_INT_EQUAL(LF(1), 0)
-            CALL(evt_snd_bgmon, 512, STRING("BGM_STG6_PIK1"))
+            CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG6_PIK1"))
             CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG6_PIK1_1"))
         END_IF
         ELSE
-        CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_KUPPA1"))
+        CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_KUPPA1"))
         CALL(evt_snd_bgm_scope, 0, 1)
-        CALL(evt_snd_bgmon, 512, STRING("ENV_STG6_PIK1_1"))
+        CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("ENV_STG6_PIK1_1"))
     END_IF
     CALL(evt_map_playanim, STRING("anm_sibuki"), 1, 0)
     CALL(evt_map_playanim, STRING("anm_mizu"), 1, 0)
