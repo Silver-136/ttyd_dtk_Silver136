@@ -74,10 +74,16 @@ typedef enum BattleDamageResultFlags {
     DAMAGE_RESULT_ZERO_HP = 0x200, // HP is zero after the final hit
     DAMAGE_RESULT_DEATH = 0x400, // the unit dies (undead only from fire/explosive hits)
     DAMAGE_RESULT_REVIVAL = 0x800, // a Life Shroom can revive the unit
+    DAMAGE_RESULT_GUARD_RETURN = 0x1000, // the target is a bodyguard: it goes back to its place afterwards
+                                         // (btldefaultevt_guard_return)
+    DAMAGE_RESULT_BACKFIRE = 0x4000, // the default damage event runs _backfire
+    DAMAGE_RESULT_FREEZE_CRUSH = 0x8000, // SPECIAL_FREEZE_CRUSH broke the target's freeze
     DAMAGE_RESULT_AC_SUCCESS = 0x20000, // the attack's action command succeeded
     DAMAGE_RESULT_GUARD = 0x40000,
     DAMAGE_RESULT_SUPERGUARD = 0x80000,
     DAMAGE_RESULT_NO_EVADE = 0x100000, // BattlePreCheckDamage reports a hit without the evasion checks
+    DAMAGE_RESULT_FLIPPED = 0x200000, // a shelled or bomb-flippable part was flipped (dmg_turn_event)
+    DAMAGE_RESULT_GROUNDED = 0x400000, // a winged part was grounded on the final hit (dmg_fall_event)
     DAMAGE_RESULT_ATTACK_FX_R = 0x1000000, // an Attack FX badge sound played: R (Hooktail's damage event reacts to it)
     DAMAGE_RESULT_ATTACK_FX_Y = 0x2000000,
     DAMAGE_RESULT_ATTACK_FX_B = 0x4000000,

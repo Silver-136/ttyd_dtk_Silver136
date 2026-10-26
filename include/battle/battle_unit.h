@@ -16,6 +16,8 @@ typedef enum BattleUnitAlliance {
 } BattleUnitAlliance;
 
 typedef enum BattleUnitToken_Flags {
+    kBodyguarding = (1 << 1),       // 0x2, took a hit meant for another unit (hit event DAMAGE_CODE_BODYGUARD_MOVE)
+    kProtectedByBodyguard = (1 << 2), // 0x4, a bodyguard took the hit meant for it (DAMAGE_CODE_PROTECTED)
     kChargeConsumed = (1 << 3),     // 0x8, the attack used up the Charge; cleared with the status when the action ends
     kConfusedAction = (1 << 4),     // 0x10
     kCurrentlyActing = (1 << 12),   // 0x1000
@@ -29,7 +31,9 @@ typedef enum PartsAttribute_Flags {          // 32-bit size
     kGuardTargetPart = (1 << 3),             // 0x8, the part an attack is redirected to when this unit bodyguards
     kUnknown_0x10 = (1 << 4),                // 0x10
     kUnknown_0x40 = (1 << 6),                // 0x40
-    // 0x80, set on Hooktail's two body parts; no code reads it (Hooktail's reaction to Attack FX R is in its damage
+    // 0x80, set on Hooktail's two body parts; no code reads it (its
+                                             // reaction to Attack FX R is in its damage event, which tests
+                                             // DAMAGE_RESULT_ATTACK_FX_R) (Hooktail's reaction to Attack FX R is in its damage
     // event, which tests DAMAGE_RESULT_ATTACK_FX_R)
     kHooktailMarker_UNUSED = (1 << 7),
     kWeakToIcePower = (1 << 8),              // 0x100

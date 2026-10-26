@@ -69,7 +69,7 @@ EvtWord btldefaultevt_DefendParty[7];
 
 EVT_BEGIN(btldefaultevt_Damage)
     CALL(btlevtcmd_SetRotate, LW(10), 0, 0, 0)
-    CALL(btlevtcmd_CheckDamageCode, LW(10), 32768, LW(1))
+    CALL(btlevtcmd_CheckDamageCode, LW(10), DAMAGE_RESULT_FREEZE_CRUSH, LW(1))
     IF_INT_NOT_EQUAL(LW(1), 0)
         CALL(btlevtcmd_OnOffStatus, LW(10), STATUS_FREEZE, 0, 0, 0)
         CALL(btlevtcmd_GetPos, LW(10), LW(0), LW(1), LW(2))
@@ -412,12 +412,12 @@ EVT_BEGIN(btldefaultevt_Damage)
             RETURN
         END_IF
     END_IF
-    CALL(btlevtcmd_CheckDamageCode, LW(10), 16384, LW(1))
+    CALL(btlevtcmd_CheckDamageCode, LW(10), DAMAGE_RESULT_BACKFIRE, LW(1))
     IF_INT_NOT_EQUAL(LW(1), 0)
         CALL(_backfire, LW(10))
         RETURN
     END_IF
-    CALL(btlevtcmd_CheckDamageCode, LW(10), 4096, LW(1))
+    CALL(btlevtcmd_CheckDamageCode, LW(10), DAMAGE_RESULT_GUARD_RETURN, LW(1))
     IF_INT_NOT_EQUAL(LW(1), 0)
         CALL_CHILD(PTR(btldefaultevt_guard_return))
         RETURN

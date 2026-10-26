@@ -389,8 +389,8 @@ s32 BattleCalculateDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPa
     s8 strength;
     s32 (*fn)(BattleUnit*, BattleWeapon*, BattleUnit*, BattleUnitPart*);
 
-    if (target->mTokenFlags & 2) {
-        flags |= 0x1000;
+    if (target->mTokenFlags & kBodyguarding) {
+        flags |= DAMAGE_RESULT_GUARD_RETURN;
     }
     element = weapon->element;
     if (attacker && (weapon->special & SPECIAL_IGNITABLE) && BtlUnit_CheckStatus(attacker, STATUS_BURN)) {
@@ -1612,16 +1612,16 @@ s32 BattleCheckDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPart* 
         }
         if ((weapon->special & SPECIAL_FLIP_SHELLED) && (part->attributes & kPartShelled)) {
             pierce = 1;
-            flags |= 0x200000;
+            flags |= DAMAGE_RESULT_FLIPPED;
         }
         if ((weapon->special & SPECIAL_FLIP_BOMB_FLIPPABLE) && (part->attributes & kPartFlippedByBombs)) {
             pierce = 1;
-            flags |= 0x200000;
+            flags |= DAMAGE_RESULT_FLIPPED;
         }
         if ((weapon->special & SPECIAL_GROUND_WINGED) && (part->attributes & kPartWinged)) {
             pierce = 1;
             if (flags & DAMAGE_RESULT_FINAL_HIT) {
-                flags |= 0x400000;
+                flags |= DAMAGE_RESULT_GROUNDED;
             }
         }
         BattleCheckPikkyoro(weapon, (u32*)&flags);
@@ -1663,7 +1663,9 @@ s32 BattleCheckDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPart* 
             break;
         }
         if (((u32)flags & DAMAGE_RESULT_FINAL_HIT) && (weapon->special & SPECIAL_FREEZE_CRUSH) && BtlUnit_CheckStatus(target, STATUS_FREEZE) && irand(100) < 0) {
-            code2 = 0x8717;
+            // BUG: irand(100) < 0 never holds, so this freeze-crush hit never happens
+            code2 = DAMAGE_RESULT_FREEZE_CRUSH | DAMAGE_RESULT_DEATH | DAMAGE_RESULT_ZERO_HP | DAMAGE_RESULT_FINAL_HIT |
+                    DAMAGE_CODE_NORMAL;
             _checkDamageCode_EmergencyRevival(target, (u32*)&code2);
             BattleRunHitEvent(target, code2);
             ret = 18;
@@ -1798,12 +1800,12 @@ void BattleAttackDeclare(s32* unitIdx, s32* partIdx) {
     }
     if (i < 64) {
         BattleGetUnitPtr(wp, *unitIdx)->damagePattern = 0;
-        BattleRunHitEvent(BattleGetUnitPtr(wp, *unitIdx), 0x1029);
-        BattleGetUnitPtr(wp, *unitIdx)->mTokenFlags |= 4;
+        BattleRunHitEvent(BattleGetUnitPtr(wp, *unitIdx), DAMAGE_RESULT_GUARD_RETURN | DAMAGE_CODE_PROTECTED);
+        BattleGetUnitPtr(wp, *unitIdx)->mTokenFlags |= kProtectedByBodyguard;
         wp->flags |= BATTLE_FLAG_GUARD_MOVE;
         unit->damagePattern = 0;
-        BattleRunHitEvent(unit, 0x1038);
-        unit->mTokenFlags |= 2;
+        BattleRunHitEvent(unit, DAMAGE_RESULT_GUARD_RETURN | DAMAGE_CODE_BODYGUARD_MOVE);
+        unit->mTokenFlags |= kBodyguarding;
         *unitIdx = i;
         *partIdx = part->mKindPartParams->partNum;
     }
@@ -1855,12 +1857,12 @@ void __declare(s32 unitIdx, s32 partIdx, s32* outUnit, s32* outPart) {
     }
     if (i < 64) {
         BattleGetUnitPtr(wp, unitIdx)->damagePattern = 0;
-        BattleRunHitEvent(BattleGetUnitPtr(wp, unitIdx), 0x1029);
-        BattleGetUnitPtr(wp, unitIdx)->mTokenFlags |= 4;
+        BattleRunHitEvent(BattleGetUnitPtr(wp, unitIdx), DAMAGE_RESULT_GUARD_RETURN | DAMAGE_CODE_PROTECTED);
+        BattleGetUnitPtr(wp, unitIdx)->mTokenFlags |= kProtectedByBodyguard;
         wp->flags |= BATTLE_FLAG_GUARD_MOVE;
         unit->damagePattern = 0;
-        BattleRunHitEvent(unit, 0x1038);
-        unit->mTokenFlags |= 2;
+        BattleRunHitEvent(unit, DAMAGE_RESULT_GUARD_RETURN | DAMAGE_CODE_BODYGUARD_MOVE);
+        unit->mTokenFlags |= kBodyguarding;
         *outUnit = i;
         *outPart = part->mKindPartParams->partNum;
     }

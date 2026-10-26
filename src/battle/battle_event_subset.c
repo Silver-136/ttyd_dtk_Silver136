@@ -357,12 +357,12 @@ EVT_BEGIN(btldefaultevt_avoid_guard)
 EVT_END()
 
 EVT_BEGIN(subsetevt_damage)
-    CALL(btlevtcmd_CheckDamageCode, LW(10), 2097152, LW(0))
+    CALL(btlevtcmd_CheckDamageCode, LW(10), DAMAGE_RESULT_FLIPPED, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_RunDataEventChild, LW(10), UNIT_DATA_DAMAGE_TURN_EVENT)
         RETURN
     END_IF
-    CALL(btlevtcmd_CheckDamageCode, LW(10), 4194304, LW(0))
+    CALL(btlevtcmd_CheckDamageCode, LW(10), DAMAGE_RESULT_GROUNDED, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_RunDataEventChild, LW(10), UNIT_DATA_DAMAGE_FALL_EVENT)
         RETURN
