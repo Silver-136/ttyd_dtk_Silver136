@@ -4,6 +4,18 @@
 #include "driver/windowdrv.h"
 #include "memory.h"
 
+// MsgChar.value of a text character (msgAnalize, read by msgDisp)
+typedef enum MsgCharFlags {
+    MSG_CHAR_DYNAMIC = (1 << 0),        // 0x1, <dynamic>: drawn rotated by rot
+    MSG_CHAR_SHAKE = (1 << 1),          // 0x2, <shake>
+    MSG_CHAR_WAVE = (1 << 2),           // 0x4, <wave>
+    MSG_CHAR_TALK = (1 << 3),           // 0x8, plays the voice and moves the speaker's mouth
+    MSG_CHAR_VOICE = (1 << 4),          // 0x10, plays the voice only (US: the '・' character)
+    MSG_CHAR_SEL_ROW_MASK = 0xFF00,     // <select> windows: the row of the character (MSG_CHAR_SEL_ROW)
+    MSG_CHAR_SCALE_X = (1 << 16),       // 0x10000, <scaleX> (US): stretched on x only
+} MsgCharFlags;
+#define MSG_CHAR_SEL_ROW(n) (0x100 << (n))
+
 typedef struct MsgChar {
     union {
         u32 value; //0x0

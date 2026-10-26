@@ -261,7 +261,7 @@ static inline void msgCheckSkip(smartEntry* smart, MsgWinData* data) {
     s32 btn, trgv;
     if (!(data->flags & MSG_WIN_FLAG_NO_SKIP)) {
         btn = 0x100;
-        if (((MsgWinData*)smart->address)->flags & 0x100) {
+        if (((MsgWinData*)smart->address)->flags & MSG_WIN_FLAG_KEY_X) {
             btn = 0x500;
         }
         trgv = keyGetButtonTrg(0);
@@ -408,9 +408,9 @@ s32 msgMain(smartEntry* smart) {
             if (MSG_CB(data)) {
                 MSG_CB(data)(5, smart);
             }
-            if (entry->value & 0x10) {
+            if (entry->value & MSG_CHAR_VOICE) {
                 msgVoiceSE(smart);
-            } else if (entry->value & 8) {
+            } else if (entry->value & MSG_CHAR_TALK) {
                 if (((MsgWinData*)smart->address)->window->type != 3) {
                     ((MsgWinData*)smart->address)->talkTimer = 15;
                 }
@@ -428,9 +428,9 @@ s32 msgMain(smartEntry* smart) {
 
 #ifdef VERSION_G8ME01
 
-// US: <scaleX> letters (flag 0x10000) are stretched on x only
+// US: <scaleX> letters (MSG_CHAR_SCALE_X) are stretched on x only
 #define MSG_DRAW_SCALE(c)                                   \
-    if ((c)->value & 0x10000) {                             \
+    if ((c)->value & MSG_CHAR_SCALE_X) {                    \
         FontDrawScaleVec((Vec){(c)->scale, 1.0f, 1.0f});      \
     }                                                       \
     else {                                                  \
@@ -588,10 +588,10 @@ BOOL msgDisp(smartEntry* smart, u8 alpha, f32 x, f32 y) {
 #endif
                     FontDrawCode(sx, sy, c->glyph);
                     FontDrawColor_();
-                } else if (c->value & 1) {
+                } else if (c->value & MSG_CHAR_DYNAMIC) {
                     w = (u16)(kanjiGetWidth(c->glyph) / 2);
 #ifdef VERSION_G8ME01
-                    if (c->value & 2) {
+                    if (c->value & MSG_CHAR_SHAKE) {
                         sx += irand(10000) % 3;
                         sy += irand(10000) % 3;
                     }
@@ -600,7 +600,7 @@ BOOL msgDisp(smartEntry* smart, u8 alpha, f32 x, f32 y) {
 #else
                     hx = sx;
                     hy = sy;
-                    if (c->value & 2) {
+                    if (c->value & MSG_CHAR_SHAKE) {
                         hx = sx + irand(10000) % 3;
                         hy = sy + irand(10000) % 3;
                     }
@@ -612,7 +612,7 @@ BOOL msgDisp(smartEntry* smart, u8 alpha, f32 x, f32 y) {
                     PSMTXTransApply(m2, m2, hx, hy, 0.0f);
                     FontDrawCodeMtx(m2, c->glyph);
                     c->rot = 1.0f + 0.5f * (c->rot - 1.0f);
-                } else if (c->value & 2) {
+                } else if (c->value & MSG_CHAR_SHAKE) {
 #ifdef VERSION_G8ME01
                     sx += irand(10000) % 3;
                     sy += irand(10000) % 3;
@@ -624,7 +624,7 @@ BOOL msgDisp(smartEntry* smart, u8 alpha, f32 x, f32 y) {
                     FontDrawScale(c->scale);
                     FontDrawCode(hy, hx, c->glyph);
 #endif
-                } else if (c->value & 4) {
+                } else if (c->value & MSG_CHAR_WAVE) {
 #ifdef VERSION_G8ME01
                     t = 0.01f * OSTicksToMilliseconds(gp->renderTime - data->openTime) - 0.02f * sx;
                     sx += 3.2f * (f32)cos(t);
@@ -638,7 +638,7 @@ BOOL msgDisp(smartEntry* smart, u8 alpha, f32 x, f32 y) {
                     FontDrawScale(c->scale);
                     FontDrawCode(sx + 3.2f * hx, sy - 3.2f * hy, c->glyph);
 #endif
-                } else if (c->value & (0x100 << data->sel)) {
+                } else if (c->value & MSG_CHAR_SEL_ROW(data->sel)) {
                     f32 hx2;
                     t = 0.01f * OSTicksToMilliseconds(gp->renderTime - data->openTime) - 0.02f * sx;
 #ifdef VERSION_G8ME01
@@ -711,7 +711,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
 
     MsgWinData* data;
     /* FAKE: nn, fp, fx, ys and yx are one-element arrays (IRO scalarizes them into @ temps). nn is the ruby index copy
-       of i. fp/fx both hold flags & 1 and ys/yx both hold y for the second ruby loop; a dead guard at the loop top
+       of i. fp/fx both hold flags & MSG_CHAR_DYNAMIC and ys/yx both hold y for the second ruby loop; a dead guard at the loop top
        redefines fp and ys (never runs), and fx/yx are re-copied from fp/ys before time is cleared. Same values; the fx copy
        merges only in the second colouring round and the y pair fixes the preheader order, which gives the target
        register order (FAKES.md) */
@@ -853,11 +853,11 @@ void msgAnalize(smartEntry* smart, char* msg) {
 #endif
             entry->value = flags;
             if (( *( (u16*)msg )) == 0x8145) {
-                entry->value |= 0x10;
+                entry->value |= MSG_CHAR_VOICE;
             } else if ((( *( (u16*)msg )) != 0x8140 ) && (( *( (u16*)msg )) != 0x8151) ) {
-                entry->value |= 8;
+                entry->value |= MSG_CHAR_TALK;
             }
-            if (( flags & 1) != 0 ) {
+            if (( flags & MSG_CHAR_DYNAMIC) != 0 ) {
                 entry->rot = fv;
             }
 #ifdef VERSION_G8ME01
@@ -924,8 +924,8 @@ void msgAnalize(smartEntry* smart, char* msg) {
             data->charCount++;
             maxScale = 0.0f;
             if (data->flags & MSG_WIN_FLAG_SELECT) {
-                flags &= ~0xFF00;
-                flags |= 0x100 << data->numSel;
+                flags &= ~MSG_CHAR_SEL_ROW_MASK;
+                flags |= MSG_CHAR_SEL_ROW(data->numSel);
                 data->numSel++;
 #ifdef VERSION_G8ME01
                 if (data->selWidth == 0) {
@@ -993,14 +993,14 @@ void msgAnalize(smartEntry* smart, char* msg) {
 #ifdef VERSION_G8ME01
             } else if (strcmp(tag, "scale") == 0) {
                 sscanf(args, "%f", &scale.x);
-                flags &= ~0x10000;
+                flags &= ~MSG_CHAR_SCALE_X;
                 scale.y = scale.x;
             } else if (strcmp(tag, "scaleX") == 0) {
                 sscanf(args, "%f", &scale.x);
-                flags |= 0x10000;
+                flags |= MSG_CHAR_SCALE_X;
             } else if (strcmp(tag, "/scale") == 0) {
                 Vec one = {1.0f, 1.0f, 1.0f};
-                flags &= ~0x10000;
+                flags &= ~MSG_CHAR_SCALE_X;
                 scale = one;
 #else
             } else if (strcmp(tag, "scale") == 0) {
@@ -1017,17 +1017,17 @@ void msgAnalize(smartEntry* smart, char* msg) {
                 step = data->parseSpeed;
             } else if (strcmp(tag, "dynamic") == 0) {
                 sscanf(args, "%f", &fv);
-                flags |= 1;
+                flags |= MSG_CHAR_DYNAMIC;
             } else if (strcmp(tag, "/dynamic") == 0) {
-                flags &= ~1;
+                flags &= ~MSG_CHAR_DYNAMIC;
             } else if (strcmp(tag, "shake") == 0) {
-                flags |= 2;
+                flags |= MSG_CHAR_SHAKE;
             } else if (strcmp(tag, "/shake") == 0) {
-                flags &= ~2;
+                flags &= ~MSG_CHAR_SHAKE;
             } else if (strcmp(tag, "wave") == 0) {
-                flags |= 4;
+                flags |= MSG_CHAR_WAVE;
             } else if (strcmp(tag, "/wave") == 0) {
-                flags &= ~4;
+                flags &= ~MSG_CHAR_WAVE;
             } else if (strcmp(tag, "col") == 0) {
                 sscanf(args, "%x", &entry->value);
                 entry->glyph = 0xFFF7;
@@ -1111,7 +1111,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
                 window->type = 5;
                 data->flags |= MSG_WIN_FLAG_SELECT;
                 sscanf(args, "%hd%hd%hd%hd%hd", &sel0, &sel1, &data->selWidth, &data->selY);
-                flags |= 0x100;
+                flags |= MSG_CHAR_SEL_ROW(0);
                 data->defSel = sel0;
                 data->cancel = sel1;
                 data->numSel = 1;
@@ -1181,8 +1181,8 @@ void msgAnalize(smartEntry* smart, char* msg) {
                     entry->scale = scale;
 #endif
                     entry->value = flags;
-                    entry->value |= 8;
-                    if (flags & 1) {
+                    entry->value |= MSG_CHAR_TALK;
+                    if (flags & MSG_CHAR_DYNAMIC) {
 
                         entry->rot = fv;
                     }
@@ -1268,8 +1268,8 @@ void msgAnalize(smartEntry* smart, char* msg) {
                 /* second loop open-coded: kR is its counter and glyph its glyph (split webs, numbered as in the target) */
                 yx[0] = y;
                 ys[0] = y;
-                fp[0] = flags & 1;
-                fx[0] = flags & 1;
+                fp[0] = flags & MSG_CHAR_DYNAMIC;
+                fx[0] = flags & MSG_CHAR_DYNAMIC;
                 nn[0] = i;
                 *(int*)zz = 0;
                 *(int*)z3 = 1;
@@ -1335,9 +1335,9 @@ void msgAnalize(smartEntry* smart, char* msg) {
 #endif
             entry->value = flags;
             if (( *( (s8*)msg )) != ' ') {
-                entry->value |= 8;
+                entry->value |= MSG_CHAR_TALK;
             }
-            if (flags & 1) {
+            if (flags & MSG_CHAR_DYNAMIC) {
                 entry->rot = fv;
             }
 #ifdef VERSION_G8ME01
@@ -1717,7 +1717,7 @@ void msgWindow_Main(WindowEntry* window) {
         switch (msgMain(window->userdata)) {
         case 0:
             WIN_STATE(window) = 7;
-            if (WIN_DATA(window)->flags & 8) {
+            if (WIN_DATA(window)->flags & MSG_WIN_FLAG_BATTLE_UNIT) {
                 BtlUnit_ChangeStayAnim(WIN_DATA(window)->unitId);
             } else {
                 npcSetStayPose(WIN_DATA(window)->speakerName);
@@ -1726,7 +1726,7 @@ void msgWindow_Main(WindowEntry* window) {
         case 1:
             WIN_STATE(window) = 2;
             window->flags &= ~WINDOW_FLAG_BUSY;
-            if (WIN_DATA(window)->flags & 8) {
+            if (WIN_DATA(window)->flags & MSG_WIN_FLAG_BATTLE_UNIT) {
                 BtlUnit_ChangeStayAnim(WIN_DATA(window)->unitId);
             } else {
                 npcSetStayPose(WIN_DATA(window)->speakerName);
@@ -1741,7 +1741,7 @@ void msgWindow_Main(WindowEntry* window) {
         break;
     case 3:
         target = 0x100;
-        if (WIN_DATA(window)->flags & 0x100) {
+        if (WIN_DATA(window)->flags & MSG_WIN_FLAG_KEY_X) {
             target = 0x500;
         }
         trg = keyGetButtonTrg(0);
@@ -1796,7 +1796,7 @@ void msgWindow_Main(WindowEntry* window) {
         break;
     case 11:
         target = 0x100;
-        if (WIN_DATA(window)->flags & 0x100) {
+        if (WIN_DATA(window)->flags & MSG_WIN_FLAG_KEY_X) {
             target = 0x500;
         }
         trg = keyGetButtonTrg(0);
@@ -1854,7 +1854,7 @@ void msgWindow_Clear_Main(WindowEntry* window) {
             case 0:
                 WIN_STATE(window) = 7;
                 window->timestamp = gp->renderTime;
-                if (WIN_DATA(window)->flags & 8) {
+                if (WIN_DATA(window)->flags & MSG_WIN_FLAG_BATTLE_UNIT) {
                     BtlUnit_ChangeStayAnim(WIN_DATA(window)->unitId);
                 } else {
                     npcSetStayPose(WIN_DATA(window)->speakerName);
@@ -1863,7 +1863,7 @@ void msgWindow_Clear_Main(WindowEntry* window) {
             case 1:
                 WIN_STATE(window) = 2;
                 window->flags &= ~WINDOW_FLAG_BUSY;
-                if (WIN_DATA(window)->flags & 8) {
+                if (WIN_DATA(window)->flags & MSG_WIN_FLAG_BATTLE_UNIT) {
                     BtlUnit_ChangeStayAnim(WIN_DATA(window)->unitId);
                 } else {
                     npcSetStayPose(WIN_DATA(window)->speakerName);
