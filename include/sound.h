@@ -69,8 +69,17 @@ typedef struct SoundEffect {
     SND_FVECTOR dir;        // 0x7C
 } SoundEffect;
 
+// SoundDVD.flags (their setters are stripped from the retail build except MUTE in SoundDVDMain)
+typedef enum SoundDVDFlags {
+    SOUND_DVD_FLAG_PLAY = (1 << 0),     // 0x1
+    SOUND_DVD_FLAG_MUTE = (1 << 1),     // 0x2
+    SOUND_DVD_FLAG_FADEIN = (1 << 4),   // 0x10
+    SOUND_DVD_FLAG_FADEOUT = (1 << 5),  // 0x20
+    SOUND_DVD_FLAG_FADEMUTE = (1 << 6), // 0x40
+} SoundDVDFlags;
+
 typedef struct SoundDVD {
-    u16 flags;               // 0x0
+    u16 flags;               // 0x0, SoundDVDFlags
     u16 pan;                 // 0x2, SoundDVDSetPanCh
     f32 volTarget;           // 0x4, fade-in stops here
     f32 vol;                 // 0x8, current volume, split into left/right by pan
@@ -106,8 +115,27 @@ typedef struct SoundStreamEntry {
     SND_ADPCMSTREAM_INFO info; // 0x68
 } SoundStreamEntry;
 
+// SoundStream.flags (SoundSS* functions; JP demo map for the stripped setters). 0x800 is not used.
+typedef enum SoundStreamFlags {
+    SOUND_STREAM_FLAG_PLAY = (1 << 0),      // 0x1, channel in use
+    SOUND_STREAM_FLAG_MUTE = (1 << 1),      // 0x2, SoundSSMuteOn
+    SOUND_STREAM_FLAG_END = (1 << 2),       // 0x4, a non-looping stream reached its end
+    SOUND_STREAM_FLAG_STARTED = (1 << 3),   // 0x8, psndBGMStartCheck
+    SOUND_STREAM_FLAG_FADEIN = (1 << 4),    // 0x10
+    SOUND_STREAM_FLAG_FADEOUT = (1 << 5),   // 0x20, SoundSSFadeoutCh
+    SOUND_STREAM_FLAG_FADEMUTE = (1 << 6),  // 0x40
+    SOUND_STREAM_FLAG_DPCM = (1 << 7),      // 0x80, ssDecodeDPCM
+    SOUND_STREAM_FLAG_ADPCM = (1 << 8),     // 0x100
+    SOUND_STREAM_FLAG_LOOP = (1 << 9),      // 0x200
+    SOUND_STREAM_FLAG_ARAM = (1 << 10),     // 0x400
+    SOUND_STREAM_FLAG_READ_L = (1 << 12),   // 0x1000, a read for channel 0 in flight
+    SOUND_STREAM_FLAG_READ_R = (1 << 13),   // 0x2000, a read for channel 1 in flight
+    SOUND_STREAM_FLAG_READ_END = (1 << 14), // 0x4000, no more data will come
+    SOUND_STREAM_FLAG_PAUSE = (1 << 15),    // 0x8000, cleared by N_evt_snd_bgm_unpause
+} SoundStreamFlags;
+
 typedef struct SoundStream {
-    u16 flags;                   // 0x0
+    u16 flags;                   // 0x0, SoundStreamFlags
     u16 slot;                    // 0x2, aram slot
     u16 dataOffset;              // 0x4
     u16 pan;                     // 0x6

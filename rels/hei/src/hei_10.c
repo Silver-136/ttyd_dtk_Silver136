@@ -175,7 +175,7 @@ static void ext_init(void) {
     pose = extGetPosePtr();
     chb = wp->chb;
     for (i = 0; i < wp->count; i++, pose++, chb++) {
-        pose->flags |= 7;
+        pose->flags |= (EXT_POSE_FLAG_VISIBLE | EXT_POSE_FLAG_BILLBOARD | EXT_POSE_FLAG_NO_SHADOW);
         PSMTXIdentity(*pose->mtx);
         (*pose->mtx)[0][3] = randf(-230.0f, 230.0f);
         (*pose->mtx)[1][3] = -15.0f;

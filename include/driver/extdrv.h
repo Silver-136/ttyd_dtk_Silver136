@@ -11,8 +11,16 @@ typedef struct ExtTexInfo {
     f32 frame;         // 0x8
 } ExtTexInfo;
 
+// ExtdrvPose.flags (extMain, extDraw, extDrawShadow; punidrv's bit 2 differs)
+typedef enum ExtPoseFlags {
+    EXT_POSE_FLAG_VISIBLE = (1 << 0),    // 0x1, drawn and sorted
+    EXT_POSE_FLAG_BILLBOARD = (1 << 1),  // 0x2, extMain turns it toward the camera
+    EXT_POSE_FLAG_NO_SHADOW = (1 << 2),  // 0x4, extDrawShadow skips it (evt_nannpc_ppflag_onoff)
+    EXT_POSE_FLAG_SHADOW_POS = (1 << 4), // 0x10, shadow at the fixed shadowY (evt_nannpc_set_shadow_position)
+} ExtPoseFlags;
+
 typedef struct ExtdrvPose {
-    u32 flags;     // 0x0
+    u32 flags;     // 0x0, ExtPoseFlags
     f32 dir;       // 0x4
     f32 shadowY;   // 0x8
     Mtx* mtx;      // 0xC

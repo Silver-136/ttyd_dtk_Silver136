@@ -768,7 +768,7 @@ static void senkaron_ext_main(void) {
                 ep->texId = (gp->retraceCount + i * i) % 24;
                 if (s->timer > 0) {
                     if (skwp->escape) {
-                        ep->flags &= ~1;
+                        ep->flags &= ~EXT_POSE_FLAG_VISIBLE;
                         s->state = 0x63;
                     } else if (skwp->attackStart) {
                         s->timer--;
@@ -954,7 +954,7 @@ static void senkaron_ext_main(void) {
                 }
                 break;
             case 0x61:
-                ep->flags |= 4;
+                ep->flags |= EXT_POSE_FLAG_NO_SHADOW;
                 if ((*ep->mtx)[1][3] > -100.0f) {
                     (*ep->mtx)[0][3] += s->vx;
                     (*ep->mtx)[1][3] += s->vy;
@@ -970,7 +970,7 @@ static void senkaron_ext_main(void) {
                     (*ep->mtx)[1][3] = 250.0f;
                     (*ep->mtx)[2][3] = randf(-270.0f, 270.0f);
                     ep->dir = randf(0.0f, 360.0f);
-                    ep->flags &= ~4;
+                    ep->flags &= ~EXT_POSE_FLAG_NO_SHADOW;
                     s->state = 0;
                     s->timer = rand() % 1000 + 1;
                     s->vy = 0.0f;
@@ -997,7 +997,7 @@ static void senkaron_ext_main(void) {
                         }
                     }
                 } else {
-                    ep->flags &= ~1;
+                    ep->flags &= ~EXT_POSE_FLAG_VISIBLE;
                     s->state = 0x63;
                 }
                 ep->texId = (gp->retraceCount + i * i) % 24;

@@ -61,8 +61,22 @@ typedef enum BattleAudienceStatus {
     AUDIENCE_STATUS_EAT, // 20
 } BattleAudienceStatus;
 
+// BattleAudienceMember.flags (BattleAudience_* getters and setters). 0x400 and up are not used.
+typedef enum BattleAudienceMemberFlags {
+    AUDIENCE_MEMBER_FLAG_USED = (1 << 0),         // 0x1
+    AUDIENCE_MEMBER_FLAG_NOT_EXIST = (1 << 1),    // 0x2, GetExist is FALSE (about to be eaten or sucked in)
+    AUDIENCE_MEMBER_FLAG_DISP = (1 << 2),         // 0x4, drawn
+    AUDIENCE_MEMBER_FLAG_FRONT_CENTER = (1 << 3), // 0x8, rows 0-2, columns 4-15: may hold items, join phase events
+    AUDIENCE_MEMBER_FLAG_NO_SYS_CTRL = (1 << 4),  // 0x10, BattleAudience_GetSysCtrl
+    AUDIENCE_MEMBER_FLAG_TARGETED = (1 << 5),     // 0x20, BattleAudience_SetTarget
+    AUDIENCE_MEMBER_FLAG_ATTACKED = (1 << 6),     // 0x40, BattleAudience_Attack
+    AUDIENCE_MEMBER_FLAG_WIDE = (1 << 7),         // 0x80, takes two seats (Bulky Bob-omb)
+    AUDIENCE_MEMBER_FLAG_WIDE_SUB = (1 << 8),     // 0x100, the second seat of a WIDE member
+    AUDIENCE_MEMBER_FLAG_NO_ESCAPE = (1 << 9),    // 0x200, GetEscapeChangeOK
+} BattleAudienceMemberFlags;
+
 typedef struct BattleAudienceMember {
-    s32 flags;                 // 0x0
+    s32 flags;                 // 0x0, BattleAudienceMemberFlags
     s32 step;                  // 0x4, sub-step of the current status handler
     s32 counter;               // 0x8, per-status counter
     f32 counterF;              // 0xC, per-status float counter
@@ -187,8 +201,28 @@ typedef struct BattleAudienceWindow {
     f32 count;              // 0x18, number to display for audience count
 } BattleAudienceWindow;
 
+// BattleAudience.flags: 0x10..0x1000 are set by one BattleAudience_Case_* each and read by BattleAudience_PerAct.
+// 0x1, 0x2 (set, never read), 0x4 and 0x4000 (Hooktail only) are not named.
+typedef enum BattleAudienceFlags {
+    AUDIENCE_FLAG_PHASE_REACTION = (1 << 3),       // 0x8
+    AUDIENCE_FLAG_AC_GOOD = (1 << 4),              // 0x10
+    AUDIENCE_FLAG_AC_BAD = (1 << 5),               // 0x20
+    AUDIENCE_FLAG_GUARD_GOOD = (1 << 6),           // 0x40
+    AUDIENCE_FLAG_GUARD_BAD = (1 << 7),            // 0x80
+    AUDIENCE_FLAG_ACROBAT_GOOD = (1 << 8),         // 0x100
+    AUDIENCE_FLAG_ACROBAT_BAD = (1 << 9),          // 0x200
+    AUDIENCE_FLAG_ENEMY_DAMAGE = (1 << 10),        // 0x400
+    AUDIENCE_FLAG_ENEMY_NO_DAMAGE = (1 << 11),     // 0x800
+    AUDIENCE_FLAG_KILL_ENEMY = (1 << 12),          // 0x1000
+    AUDIENCE_FLAG_NOISE_ON = (1 << 13),            // 0x2000
+    AUDIENCE_FLAG_PUNI_ESCAPE = (1 << 15),         // 0x8000
+    AUDIENCE_FLAG_PREV_COMMAND_INPUT = (1 << 16),  // 0x10000
+    AUDIENCE_FLAG_NO_DISP = (1 << 17),             // 0x20000, aud_set_draw
+    AUDIENCE_FLAG_EVENT_CTRL = (1 << 18),          // 0x40000, no reactions, item throws or count changes (lecture)
+} BattleAudienceFlags;
+
 typedef struct BattleAudience {
-    s32 flags;                         // 0x0
+    s32 flags;                         // 0x0, BattleAudienceFlags
     EventEntry* event;                 // 0x4
     s32 apStarSfxId;                   // 0x8, SFX_BTL_SYS_AP_STAR1 handle
     FileEntry* normalTex;              // 0xC

@@ -498,7 +498,7 @@ void ext_kyaku_init(void) {
     pose = extGetPosePtr();
     kyaku = kyaku_wp->kyakus;
     for (i = 0; i < kyaku_wp->num; i++, pose++, kyaku++) {
-        pose->flags |= 7;
+        pose->flags |= (EXT_POSE_FLAG_VISIBLE | EXT_POSE_FLAG_BILLBOARD | EXT_POSE_FLAG_NO_SHADOW);
         PSMTXIdentity(*pose->mtx);
         while (TRUE) {
             far = __tou_rand() % 100 >= 30;
@@ -541,7 +541,7 @@ void ext_kyaku_init(void) {
             break;
         }
         if (strcmp(gp->beroEnterName, "s_bero_2") != 0 && (*pose->mtx)[2][3] > 350.0f) {
-            pose->flags &= ~1;
+            pose->flags &= ~EXT_POSE_FLAG_VISIBLE;
         }
         if (0.0f != (*pose->mtx)[1][3]) {
             kyaku->flags |= 1;

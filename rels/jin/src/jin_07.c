@@ -304,7 +304,7 @@ static void senteresa_ext_main(void) {
                 pose->texId = 0;
                 pTeresa[i].wait--;
                 if (pTeresa[i].wait == 0) {
-                    pose->flags |= 1;
+                    pose->flags |= EXT_POSE_FLAG_VISIBLE;
                     g_nNumOutBox[0]++;
                     pTeresa[i].state++;
                 }

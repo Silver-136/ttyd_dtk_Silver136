@@ -285,7 +285,7 @@ void moamoa_init(void) {
     moa = wp->moa;
     for (i = 0; i < wp->count; i++, pose++, moa++) {
         PSMTXIdentity(*pose->mtx);
-        pose->flags |= 5;
+        pose->flags |= (EXT_POSE_FLAG_VISIBLE | EXT_POSE_FLAG_NO_SHADOW);
         moa->flags = 0;
         moa->state = 0;
         moamoa_pose_change(moa, "c_n_moa_a", "S_1");

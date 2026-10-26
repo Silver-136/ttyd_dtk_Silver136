@@ -1005,7 +1005,7 @@ void teresa_ext_main(void) {
                 (*pose->mtx)[0][0] = 1.0f;
                 break;
             case 1:
-                pose->flags &= ~2;
+                pose->flags &= ~EXT_POSE_FLAG_BILLBOARD;
                 (*pose->mtx)[0][3] = x;
                 (*pose->mtx)[1][3] = y;
                 (*pose->mtx)[2][3] = z - 5.0f;
@@ -1034,7 +1034,7 @@ void teresa_ext_main(void) {
                 (*pose->mtx)[0][0] += 0.02f;
                 (*pose->mtx)[1][1] += 0.02f;
                 if (t->timer <= 0) {
-                    pose->flags |= 2;
+                    pose->flags |= EXT_POSE_FLAG_BILLBOARD;
                     t->state = 10;
                     t->timer = 150;
                     t->vel.x = 0.0f;
@@ -1135,7 +1135,7 @@ void teresa_ext_main(void) {
                     t->vel.x = 0.0f;
                     t->vel.y = 0.0f;
                     t->vel.z = 0.0f;
-                    pose->flags &= ~2;
+                    pose->flags &= ~EXT_POSE_FLAG_BILLBOARD;
                 }
                 t->timer--;
                 break;
@@ -1148,7 +1148,7 @@ void teresa_ext_main(void) {
                 break;
             case 51:
             case 52:
-                pose->flags &= ~2;
+                pose->flags &= ~EXT_POSE_FLAG_BILLBOARD;
                 (*pose->mtx)[0][3] = x - 15.0f;
                 (*pose->mtx)[1][3] = y - 5.0f;
                 (*pose->mtx)[2][3] = 5.0f + z;

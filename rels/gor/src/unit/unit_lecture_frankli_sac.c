@@ -185,7 +185,7 @@ static USER_FUNC(lecture_init) {
     s32 i;
 
     slot->flags |= 1;
-    aud->flags |= 0x40000;
+    aud->flags |= AUDIENCE_FLAG_EVENT_CTRL;
     for (i = 0; i < 200; i++) {
         BattleAudience_Delete(i);
     }
@@ -229,10 +229,10 @@ USER_FUNC(hammer_on) {
     BattleAudience* aud = BattleAudienceBaseGetPtr();
     BattleAudienceMember* member = BattleAudienceGetPtr(48);
 
-    aud->flags &= ~0x40000;
+    aud->flags &= ~AUDIENCE_FLAG_EVENT_CTRL;
     if (BattleAudienceItemOn(48, 0xEF, 1) == TRUE) {
-        member->flags &= ~0x200;
-        aud->flags |= 0x40000;
+        member->flags &= ~AUDIENCE_MEMBER_FLAG_NO_ESCAPE;
+        aud->flags |= AUDIENCE_FLAG_EVENT_CTRL;
         return EVT_RETURN_DONE;
     }
     return EVT_RETURN_BLOCK;

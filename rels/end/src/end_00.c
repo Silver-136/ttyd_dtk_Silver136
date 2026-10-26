@@ -1332,7 +1332,7 @@ void end_ext_moamoa_init(void) {
     Vec v;
 
     for (i = 0; i < extGetPoseNum(); i++, pose++, elem++) {
-        pose->flags |= 5;
+        pose->flags |= (EXT_POSE_FLAG_VISIBLE | EXT_POSE_FLAG_NO_SHADOW);
         PSMTXIdentity(*pose->mtx);
         v = (Vec){0.0f, 0.0f, 0.0f};
         v.x = end_randf(-10.0f, 10.0f);
@@ -1375,12 +1375,12 @@ void end_ext_moamoa_main(void) {
         s = 1.0f - t;
         if (a->y == -1000.0f || b->y == -1000.0f) {
             v = (Vec){0.0f, -1000.0f, 0.0f};
-            pose->flags &= ~1;
+            pose->flags &= ~EXT_POSE_FLAG_VISIBLE;
         } else {
             PSVECScale(a, &v, t);
             PSVECScale(b, &w, s);
             PSVECAdd(&v, &w, &v);
-            pose->flags |= 1;
+            pose->flags |= EXT_POSE_FLAG_VISIBLE;
         }
         PSMTXTrans(m1, v.x, v.y, v.z);
         PSMTXScale(m2, npc->scale.x, npc->scale.y, npc->scale.z);

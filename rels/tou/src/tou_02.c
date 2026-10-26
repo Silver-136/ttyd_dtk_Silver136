@@ -1554,7 +1554,7 @@ void ext_fan_init(void) {
     pose = extGetPosePtr();
     fan = fan_wp->fans;
     for (i = 0; i < fan_wp->num; i++, pose++, fan++) {
-        pose->flags |= 7;
+        pose->flags |= (EXT_POSE_FLAG_VISIBLE | EXT_POSE_FLAG_BILLBOARD | EXT_POSE_FLAG_NO_SHADOW);
         PSMTXIdentity(*pose->mtx);
         (*pose->mtx)[0][3] = 0.0f;
         (*pose->mtx)[1][3] = 0.0f;
@@ -1620,7 +1620,7 @@ void ext_fan_main(void) {
             if (fan->state == 0) {
                 fan->pos = mario->position;
                 target = fan->pos;
-                pose->flags &= ~1;
+                pose->flags &= ~EXT_POSE_FLAG_VISIBLE;
                 fan->flags |= 1;
                 break;
             }
@@ -1637,12 +1637,12 @@ void ext_fan_main(void) {
                 if (!found) {
                     found = 1;
                     fan->pos = mario->position;
-                    pose->flags &= ~1;
+                    pose->flags &= ~EXT_POSE_FLAG_VISIBLE;
                     fan->flags |= 1;
                 } else {
                     fan->pos = npcNameToPtr("\203`\203\203\203\223\203s\203\207\203\223")->position;
                     target = fan->pos;
-                    pose->flags &= ~1;
+                    pose->flags &= ~EXT_POSE_FLAG_VISIBLE;
                     fan->flags |= 1;
                     break;
                 }
@@ -1816,7 +1816,7 @@ void ext_fan_main(void) {
                     }
                     break;
                 case 100:
-                    pose->flags &= ~3;
+                    pose->flags &= ~(EXT_POSE_FLAG_VISIBLE | EXT_POSE_FLAG_BILLBOARD);
                     lfan->state++;
                     break;
                 case 101:

@@ -4015,8 +4015,8 @@ USER_FUNC(queen_hand_small_1000hand_2_evt) {
             pose = extGetPosePtr();
             elem = hand_wp->elems;
             for (i = 0; i < hand_wp->num; i++, pose++, elem++) {
-                pose->flags |= 1;
-                pose->flags &= ~2;
+                pose->flags |= EXT_POSE_FLAG_VISIBLE;
+                pose->flags &= ~EXT_POSE_FLAG_BILLBOARD;
                 PSMTXIdentity(*pose->mtx);
                 elem->ofs = irand(20);
                 elem->speed = 1.0f + irand(200) / 100.0f;
@@ -4110,8 +4110,8 @@ USER_FUNC(queen_hand_small_drag_1_evt) {
             pose = extGetPosePtr();
             elem = hand_wp->elems;
             for (i = 0; i < hand_wp->num; i++, pose++, elem++) {
-                pose->flags |= 1;
-                pose->flags &= ~2;
+                pose->flags |= EXT_POSE_FLAG_VISIBLE;
+                pose->flags &= ~EXT_POSE_FLAG_BILLBOARD;
                 PSMTXIdentity(*pose->mtx);
                 elem->ofs = irand(20);
                 elem->speed = 1.0f + irand(200) / 100.0f;
@@ -4200,7 +4200,7 @@ USER_FUNC(queen_hand_small_drag_2_evt) {
         case 99:
             pose = extGetPosePtr();
             for (i = 0; i < hand_wp->num; i++, pose++) {
-                pose->flags &= ~1;
+                pose->flags &= ~EXT_POSE_FLAG_VISIBLE;
             }
             return 1;
     }
@@ -4221,8 +4221,8 @@ USER_FUNC(queen_hand_small_drag_3_evt) {
             pose = extGetPosePtr();
             elem = hand_wp->elems;
             for (i = 0; i < hand_wp->num; i++, pose++, elem++) {
-                pose->flags |= 1;
-                pose->flags &= ~2;
+                pose->flags |= EXT_POSE_FLAG_VISIBLE;
+                pose->flags &= ~EXT_POSE_FLAG_BILLBOARD;
                 PSMTXIdentity(*pose->mtx);
                 elem->ofs = irand(20);
                 elem->speed = 1.0f + irand(200) / 100.0f;
@@ -4284,7 +4284,7 @@ USER_FUNC(queen_hand_small_drag_4_evt) {
         case 99:
             pose = extGetPosePtr();
             for (i = 0; i < hand_wp->num; i++, pose++) {
-                pose->flags &= ~1;
+                pose->flags &= ~EXT_POSE_FLAG_VISIBLE;
             }
             return 1;
     }
@@ -4319,7 +4319,7 @@ USER_FUNC(queen_hand_small_dead_evt) {
         case 99:
             pose = extGetPosePtr();
             for (i = 0; i < hand_wp->num; i++, pose++) {
-                pose->flags &= ~1;
+                pose->flags &= ~EXT_POSE_FLAG_VISIBLE;
             }
             return 1;
     }
@@ -4340,8 +4340,8 @@ USER_FUNC(queen_hand_small_entry_evt) {
             pose = extGetPosePtr();
             elem = hand_wp->elems;
             for (i = 0; i < hand_wp->num; i++, pose++, elem++) {
-                pose->flags |= 1;
-                pose->flags &= ~2;
+                pose->flags |= EXT_POSE_FLAG_VISIBLE;
+                pose->flags &= ~EXT_POSE_FLAG_BILLBOARD;
                 PSMTXIdentity(*pose->mtx);
                 elem->ofs = irand(20);
                 elem->speed = 1.0f + irand(200) / 100.0f;
@@ -4411,8 +4411,8 @@ USER_FUNC(queen_hp_drain_5_evt) {
             pose = extGetPosePtr();
             elem = hand_wp->elems;
             for (i = 0; i < hand_wp->num; i++, pose++, elem++) {
-                pose->flags |= 1;
-                pose->flags &= ~2;
+                pose->flags |= EXT_POSE_FLAG_VISIBLE;
+                pose->flags &= ~EXT_POSE_FLAG_BILLBOARD;
                 PSMTXIdentity(*pose->mtx);
                 elem->ofs = irand(20);
                 elem->speed = 1.0f + irand(200) / 100.0f;
@@ -4516,7 +4516,7 @@ USER_FUNC(queen_hp_drain_3_evt) {
         case 99:
             pose = extGetPosePtr();
             for (i = 0; i < hand_wp->num; i++, pose++) {
-                pose->flags &= ~1;
+                pose->flags &= ~EXT_POSE_FLAG_VISIBLE;
             }
             return 1;
     }
@@ -4538,8 +4538,8 @@ USER_FUNC(queen_hp_drain_2_evt) {
             pose = extGetPosePtr();
             elem = hand_wp->elems;
             for (i = 0; i < hand_wp->num; i++, pose++, elem++) {
-                pose->flags |= 1;
-                pose->flags &= ~2;
+                pose->flags |= EXT_POSE_FLAG_VISIBLE;
+                pose->flags &= ~EXT_POSE_FLAG_BILLBOARD;
                 PSMTXIdentity(*pose->mtx);
                 elem->ofs = irand(20);
                 elem->speed = 1.0f + irand(200) / 100.0f;
@@ -4601,7 +4601,7 @@ USER_FUNC(queen_hp_drain_1_evt) {
         case 99:
             pose = extGetPosePtr();
             for (i = 0; i < hand_wp->num; i++, pose++) {
-                pose->flags &= ~1;
+                pose->flags &= ~EXT_POSE_FLAG_VISIBLE;
             }
             return 1;
     }
@@ -4642,8 +4642,8 @@ USER_FUNC(peach_hand1000_dark_drag_1_evt) {
             pose = extGetPosePtr();
             elem = hand_wp->elems;
             for (i = 0; i < hand_wp->num; i++, pose++, elem++) {
-                pose->flags |= 1;
-                pose->flags &= ~2;
+                pose->flags |= EXT_POSE_FLAG_VISIBLE;
+                pose->flags &= ~EXT_POSE_FLAG_BILLBOARD;
                 PSMTXIdentity(*pose->mtx);
                 elem->ofs = irand(20);
                 elem->speed = 1.0f + irand(200) / 100.0f;
@@ -4831,7 +4831,7 @@ static void hand_init(void) {
     pose = extGetPosePtr();
     elem = hand_wp->elems;
     for (i = 0; i < hand_wp->num; i++, pose++, elem++) {
-        pose->flags |= 6;
+        pose->flags |= (EXT_POSE_FLAG_BILLBOARD | EXT_POSE_FLAG_NO_SHADOW);
         PSMTXIdentity(*pose->mtx);
         elem->animIdx = 0;
         elem->time = gp->renderTime - (u64)irand(100) * 10000000;

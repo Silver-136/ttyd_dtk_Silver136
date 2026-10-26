@@ -650,9 +650,9 @@ USER_FUNC(aud_set_draw) {
     EvtWord* args = event->args;
     BattleAudience* a = BattleAudienceBaseGetPtr();
     if (evtGetValue(event, args[0]) == 0) {
-        a->flags |= 0x20000;
+        a->flags |= AUDIENCE_FLAG_NO_DISP;
     } else {
-        a->flags &= ~0x20000;
+        a->flags &= ~AUDIENCE_FLAG_NO_DISP;
     }
     return 2;
 }

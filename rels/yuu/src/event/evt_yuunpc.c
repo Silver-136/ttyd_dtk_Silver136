@@ -497,7 +497,7 @@ f32 yuunpc_pose_sub(ExtdrvPose* ext, YuuNpc* npc) {
     f32 t;
     f32 a;
 
-    if (!(ext->flags & 2)) {
+    if (!(ext->flags & EXT_POSE_FLAG_BILLBOARD)) {
         f32 c, s;
         a = ext->dir;
         a = 450.0f - a;
@@ -570,7 +570,7 @@ void ext_yuunpc_minigame1_init(void) {
         row = i / 5;
         npc->id = i;
         npc->flags |= 1;
-        ext->flags |= 7;
+        ext->flags |= (EXT_POSE_FLAG_VISIBLE | EXT_POSE_FLAG_BILLBOARD | EXT_POSE_FLAG_NO_SHADOW);
         PSMTXIdentity(*ext->mtx);
         z = 30.0f + (60.0f * (i % 5) + -560.0f);
         (*ext->mtx)[0][3] = 16.666666f * row - 500.0f;
@@ -679,7 +679,7 @@ void ext_yuunpc_minigame2_init(void) {
         row = i / 4;
         npc->id = i;
         npc->flags |= 1;
-        ext->flags |= 7;
+        ext->flags |= (EXT_POSE_FLAG_VISIBLE | EXT_POSE_FLAG_BILLBOARD | EXT_POSE_FLAG_NO_SHADOW);
         PSMTXIdentity(*ext->mtx);
         z = 30.0f + (60.0f * (i % 4) + -655.0f);
         (*ext->mtx)[0][3] = 13.333333f * row - 500.0f;
@@ -796,7 +796,7 @@ void ext_yuunpc_minigame3_init(void) {
         row = i / 4;
         npc->id = i;
         npc->flags |= 1;
-        ext->flags |= 7;
+        ext->flags |= (EXT_POSE_FLAG_VISIBLE | EXT_POSE_FLAG_BILLBOARD | EXT_POSE_FLAG_NO_SHADOW);
         PSMTXIdentity(*ext->mtx);
         z = 30.0f + (60.0f * (i % 4) + -750.0f);
         (*ext->mtx)[0][3] = 13.333333f * row - 600.0f;
@@ -1128,7 +1128,7 @@ void ext_yuunpc_minigame4_init_sub(void) {
 
             row = i / 4;
             npc->flags |= 1;
-            ext->flags |= 7;
+            ext->flags |= (EXT_POSE_FLAG_VISIBLE | EXT_POSE_FLAG_BILLBOARD | EXT_POSE_FLAG_NO_SHADOW);
             PSMTXIdentity(*ext->mtx);
             z = 30.0f + (60.0f * (i % 4) + -750.0f);
             (*ext->mtx)[0][3] = 20.0f * row - 500.0f;
@@ -1186,7 +1186,7 @@ void ext_yuunpc_minigame4_init_sub(void) {
             }
             switch (npc->flags & 0x300) {
                 case 0:
-                    ext->flags |= 5;
+                    ext->flags |= (EXT_POSE_FLAG_VISIBLE | EXT_POSE_FLAG_NO_SHADOW);
                     break;
                 case 0x100:
                 case 0x200:
@@ -2019,7 +2019,7 @@ void yuunpc_pose_minigame4_main(void) {
                 }
                 if (npc->pos.y <= -500.0f) {
                     npc->flags |= 0x80;
-                    ext->flags &= ~1;
+                    ext->flags &= ~EXT_POSE_FLAG_VISIBLE;
                 }
                 break;
             }

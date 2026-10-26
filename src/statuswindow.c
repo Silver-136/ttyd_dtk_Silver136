@@ -87,28 +87,28 @@ void statusWinInit(void) {
     wp->closeY = 334.0f;
     wp->idle = 0;
     wp->forceTimer = 0;
-    wp->flags &= ~0xA;
-    wp->flags |= 5;
+    wp->flags &= ~(STATUS_WINDOW_FLAG_CLOSED | STATUS_WINDOW_FLAG_CLOSE_REQ);
+    wp->flags |= (STATUS_WINDOW_FLAG_OPEN | STATUS_WINDOW_FLAG_OPEN_REQ);
 }
 
 void statusWinReInit(void) {
     wp->idle = 0;
     wp->forceTimer = 0;
-    if (wp->flags & 0x10) {
-        wp->flags &= ~0x10;
-        wp->flags &= ~0xA;
-        wp->flags |= 5;
-    } else if (wp->flags & 1) {
-        wp->flags &= ~0xA;
-        wp->flags |= 5;
+    if (wp->flags & STATUS_WINDOW_FLAG_FORCE_OPEN) {
+        wp->flags &= ~STATUS_WINDOW_FLAG_FORCE_OPEN;
+        wp->flags &= ~(STATUS_WINDOW_FLAG_CLOSED | STATUS_WINDOW_FLAG_CLOSE_REQ);
+        wp->flags |= (STATUS_WINDOW_FLAG_OPEN | STATUS_WINDOW_FLAG_OPEN_REQ);
+    } else if (wp->flags & STATUS_WINDOW_FLAG_OPEN) {
+        wp->flags &= ~(STATUS_WINDOW_FLAG_CLOSED | STATUS_WINDOW_FLAG_CLOSE_REQ);
+        wp->flags |= (STATUS_WINDOW_FLAG_OPEN | STATUS_WINDOW_FLAG_OPEN_REQ);
     }
-    if (wp->flags & 0x20) {
-        wp->flags &= ~0x20;
-        wp->flags |= 0xA;
-        wp->flags &= ~5;
-    } else if (wp->flags & 2) {
-        wp->flags |= 0xA;
-        wp->flags &= ~5;
+    if (wp->flags & STATUS_WINDOW_FLAG_FORCE_CLOSE) {
+        wp->flags &= ~STATUS_WINDOW_FLAG_FORCE_CLOSE;
+        wp->flags |= (STATUS_WINDOW_FLAG_CLOSED | STATUS_WINDOW_FLAG_CLOSE_REQ);
+        wp->flags &= ~(STATUS_WINDOW_FLAG_OPEN | STATUS_WINDOW_FLAG_OPEN_REQ);
+    } else if (wp->flags & STATUS_WINDOW_FLAG_CLOSED) {
+        wp->flags |= (STATUS_WINDOW_FLAG_CLOSED | STATUS_WINDOW_FLAG_CLOSE_REQ);
+        wp->flags &= ~(STATUS_WINDOW_FLAG_OPEN | STATUS_WINDOW_FLAG_OPEN_REQ);
     }
 }
 
@@ -149,7 +149,7 @@ void statusWinMain(void) {
                         wp->idle = gp->framerate * 10;
                         if (!wp->forcedClose && !wp->forceTimer && !statusWinCheck()) {
                             statusWinOpen();
-                            wp->flags |= 0x100;
+                            wp->flags |= STATUS_WINDOW_FLAG_MENU_ICONS;
                         }
                     }
                 } else {
@@ -164,7 +164,7 @@ void statusWinMain(void) {
                         statusWinOpen();
                         wp->forceTimer = gp->framerate * 10;
                         psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_OPEN1));
-                        wp->flags |= 0x100;
+                        wp->flags |= STATUS_WINDOW_FLAG_MENU_ICONS;
                     } else {
                         statusWinClose();
                         wp->forceTimer = gp->framerate * 10;
@@ -183,11 +183,11 @@ void statusWinMain(void) {
                 wp->forceTimer--;
             }
             wp->prevPos = mario->position;
-            if (wp->flags & 0x10) {
-                wp->flags &= ~0xA;
+            if (wp->flags & STATUS_WINDOW_FLAG_FORCE_OPEN) {
+                wp->flags &= ~(STATUS_WINDOW_FLAG_CLOSED | STATUS_WINDOW_FLAG_CLOSE_REQ);
             }
-            if (wp->flags & 0x20) {
-                wp->flags &= ~5;
+            if (wp->flags & STATUS_WINDOW_FLAG_FORCE_CLOSE) {
+                wp->flags &= ~(STATUS_WINDOW_FLAG_OPEN | STATUS_WINDOW_FLAG_OPEN_REQ);
             }
             break;
         case 4:
@@ -198,15 +198,15 @@ void statusWinMain(void) {
             }
             break;
     }
-    if (wp->flags & 4 || wp->flags & 8 || wp->flags & 0x40 || wp->flags & 0x80) {
+    if (wp->flags & STATUS_WINDOW_FLAG_OPEN_REQ || wp->flags & STATUS_WINDOW_FLAG_CLOSE_REQ || wp->flags & STATUS_WINDOW_FLAG_FORCE_OPEN_REQ || wp->flags & STATUS_WINDOW_FLAG_FORCE_CLOSE_REQ) {
         wp->tStart = wp->t;
-        wp->tEnd = (wp->flags & 0x44) ? 1.0f : 0.0f;
+        wp->tEnd = (wp->flags & (STATUS_WINDOW_FLAG_OPEN_REQ | STATUS_WINDOW_FLAG_FORCE_OPEN_REQ)) ? 1.0f : 0.0f;
         wp->timer = 0.0f;
-        wp->duration = (wp->flags & 0x44) ? 16.0f / wp->speed : 28.0f / wp->speed;
-        wp->flags &= ~4;
-        wp->flags &= ~8;
-        wp->flags &= ~0x40;
-        wp->flags &= ~0x80;
+        wp->duration = (wp->flags & (STATUS_WINDOW_FLAG_OPEN_REQ | STATUS_WINDOW_FLAG_FORCE_OPEN_REQ)) ? 16.0f / wp->speed : 28.0f / wp->speed;
+        wp->flags &= ~STATUS_WINDOW_FLAG_OPEN_REQ;
+        wp->flags &= ~STATUS_WINDOW_FLAG_CLOSE_REQ;
+        wp->flags &= ~STATUS_WINDOW_FLAG_FORCE_OPEN_REQ;
+        wp->flags &= ~STATUS_WINDOW_FLAG_FORCE_CLOSE_REQ;
     }
 #ifdef VERSION_G8ME01
     wp->timer += 60.0f / gp->framerate;
@@ -217,7 +217,7 @@ void statusWinMain(void) {
         wp->timer = wp->duration;
         wp->t = wp->tEnd;
         if (wp->t == 0.0f) {
-            wp->flags &= ~0x100;
+            wp->flags &= ~STATUS_WINDOW_FLAG_MENU_ICONS;
         }
     } else {
         inv = (f32)cos(3.1415927f * wp->timer / wp->duration);
@@ -228,7 +228,7 @@ void statusWinMain(void) {
     wp->x = wp->openX * t + wp->closeX * inv;
     wp->y = wp->openY * t + wp->closeY * inv;
     valueUpdate();
-    if (!(wp->flags & 0x1000)) {
+    if (!(wp->flags & STATUS_WINDOW_FLAG_DISP_OFF)) {
         dispEntry(CAMERA_2D, 500.0f, 0, statusWinDisp, NULL);
     }
 }
@@ -390,7 +390,7 @@ void statusWinDisp(CameraId camId, void* param) {
         numDisp(186.0f + x - 6.0f - 10.0f, 4.0f + (2.0f + (y - 78.0f)), wp->cur.partyMaxHp, 1);
     }
 
-    if (wp->flags & 0x100 && !gp->inBattle) {
+    if (wp->flags & STATUS_WINDOW_FLAG_MENU_ICONS && !gp->inBattle) {
         y2 = -180.0f + (wp->openY - wp->y);
         MTXTrans(m2, -190.0f, y2, 0.0f);
         MTXScale(s2, 0.75f, 0.75f, 0.75f);
@@ -592,56 +592,56 @@ void valueUpdate(void) {
 }
 
 void statusWinOpen(void) {
-    wp->flags &= ~0xA;
-    wp->flags |= 5;
+    wp->flags &= ~(STATUS_WINDOW_FLAG_CLOSED | STATUS_WINDOW_FLAG_CLOSE_REQ);
+    wp->flags |= (STATUS_WINDOW_FLAG_OPEN | STATUS_WINDOW_FLAG_OPEN_REQ);
 }
 
 void statusWinClose(void) {
-    wp->flags |= 0xA;
-    wp->flags &= ~5;
+    wp->flags |= (STATUS_WINDOW_FLAG_CLOSED | STATUS_WINDOW_FLAG_CLOSE_REQ);
+    wp->flags &= ~(STATUS_WINDOW_FLAG_OPEN | STATUS_WINDOW_FLAG_OPEN_REQ);
 }
 
 void statusWinForceOpen(void) {
-    wp->flags &= ~0xA;
-    wp->flags &= ~0xA0;
-    wp->flags |= 0x50;
+    wp->flags &= ~(STATUS_WINDOW_FLAG_CLOSED | STATUS_WINDOW_FLAG_CLOSE_REQ);
+    wp->flags &= ~(STATUS_WINDOW_FLAG_FORCE_CLOSE | STATUS_WINDOW_FLAG_FORCE_CLOSE_REQ);
+    wp->flags |= (STATUS_WINDOW_FLAG_FORCE_OPEN | STATUS_WINDOW_FLAG_FORCE_OPEN_REQ);
 }
 
 void statusWinForceClose(void) {
-    wp->flags &= ~5;
-    wp->flags &= ~0x50;
-    wp->flags |= 0xA0;
+    wp->flags &= ~(STATUS_WINDOW_FLAG_OPEN | STATUS_WINDOW_FLAG_OPEN_REQ);
+    wp->flags &= ~(STATUS_WINDOW_FLAG_FORCE_OPEN | STATUS_WINDOW_FLAG_FORCE_OPEN_REQ);
+    wp->flags |= (STATUS_WINDOW_FLAG_FORCE_CLOSE | STATUS_WINDOW_FLAG_FORCE_CLOSE_REQ);
 }
 
 void statusWinForceCloseClear(void) {
-    wp->flags &= ~0xA0;
+    wp->flags &= ~(STATUS_WINDOW_FLAG_FORCE_CLOSE | STATUS_WINDOW_FLAG_FORCE_CLOSE_REQ);
 }
 
 void statusWinForceOff(void) {
-    if (wp->flags & 0x10) {
-        wp->flags &= ~0x10;
+    if (wp->flags & STATUS_WINDOW_FLAG_FORCE_OPEN) {
+        wp->flags &= ~STATUS_WINDOW_FLAG_FORCE_OPEN;
         statusWinOpen();
-    } else if (wp->flags & 1) {
+    } else if (wp->flags & STATUS_WINDOW_FLAG_OPEN) {
         statusWinOpen();
     }
-    if (wp->flags & 0x20) {
-        wp->flags &= ~0x20;
+    if (wp->flags & STATUS_WINDOW_FLAG_FORCE_CLOSE) {
+        wp->flags &= ~STATUS_WINDOW_FLAG_FORCE_CLOSE;
         statusWinClose();
-    } else if (wp->flags & 2) {
+    } else if (wp->flags & STATUS_WINDOW_FLAG_CLOSED) {
         statusWinClose();
     }
 }
 
 void statusWinDispOn(void) {
-    wp->flags &= ~0x1000;
+    wp->flags &= ~STATUS_WINDOW_FLAG_DISP_OFF;
 }
 
 void statusWinDispOff(void) {
-    wp->flags |= 0x1000;
+    wp->flags |= STATUS_WINDOW_FLAG_DISP_OFF;
 }
 
 BOOL statusWinCheck(void) {
-    return (wp->flags & 0x11) ? TRUE : FALSE;
+    return (wp->flags & (STATUS_WINDOW_FLAG_OPEN | STATUS_WINDOW_FLAG_FORCE_OPEN)) ? TRUE : FALSE;
 }
 
 BOOL statusWinCheckUpdate(void) {

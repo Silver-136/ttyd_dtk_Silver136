@@ -2391,7 +2391,7 @@ USER_FUNC(_cortez_collect_energy) {
                 aid = work->audienceId[i];
                 if (aid != -1) {
                     member = BattleAudienceGetPtr(aid);
-                    member->flags |= 0x12;
+                    member->flags |= (AUDIENCE_MEMBER_FLAG_NOT_EXIST | AUDIENCE_MEMBER_FLAG_NO_SYS_CTRL);
                     BattleAudience_SetAnim(aid, 9, TRUE);
                     work->wait[i] = irand(60) + 30;
                     work->srcPos[i] = member->position;

@@ -2375,7 +2375,7 @@ void kpaSen_ext_init(void) {
 
     kpaSen = _mapAlloc(sizeof(KpaSen) * 200);
     for (i = 0; i < extGetPoseNum(); i++, pose++) {
-        pose->flags |= 3;
+        pose->flags |= (EXT_POSE_FLAG_VISIBLE | EXT_POSE_FLAG_BILLBOARD);
         PSMTXIdentity(*pose->mtx);
         if (i < 100) {
             pose->dir = 90.0f;
@@ -2423,10 +2423,10 @@ void kpaSen_ext_init(void) {
         kpaSen[i].state = -1;
         kpaSen[i].t = 0.0f;
         if (i == 6) {
-            pose->flags &= ~1;
+            pose->flags &= ~EXT_POSE_FLAG_VISIBLE;
         }
         if (i == 106 || i == 116) {
-            pose->flags &= ~1;
+            pose->flags &= ~EXT_POSE_FLAG_VISIBLE;
         }
     }
 }

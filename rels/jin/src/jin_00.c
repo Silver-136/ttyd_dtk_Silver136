@@ -1355,7 +1355,7 @@ static void senteresa_ext_main(void) {
                 pTeresa[i].bobPhase += 0.08f;
                 pTeresa[i].wait--;
                 if (pTeresa[i].wait == 0) {
-                    pose->flags &= ~2;
+                    pose->flags &= ~EXT_POSE_FLAG_BILLBOARD;
                     pTeresa[i].wait = i * 30 + rand() % 10 + 295;
                     pTeresa[i].seq++;
                 }

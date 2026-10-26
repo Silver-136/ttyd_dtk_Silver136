@@ -283,13 +283,13 @@ void BattleAudienceCtrlProcessKinopioWait(s32 index, s32 front) {
         m->timer++;
         break;
     }
-    if (m->flags & 0x40) {
-        m->flags &= ~0x60;
+    if (m->flags & AUDIENCE_MEMBER_FLAG_ATTACKED) {
+        m->flags &= ~(AUDIENCE_MEMBER_FLAG_TARGETED | AUDIENCE_MEMBER_FLAG_ATTACKED);
         BattleAudience_ChangeStatus(index, AUDIENCE_STATUS_DAMAGE);
         if (!(BattleAudienceItemGetPtr(0)->mItemType >= 0xEC && BattleAudienceItemGetPtr(0)->mItemType < 0xF0)) {
             BattleAudienceAddTargetNum(-0.14999999f * BattleAudienceBaseGetPtr()->mAudienceDeltaMultiplier, 0.0f);
         }
-    } else if (!(m->flags & 0x20)) {
+    } else if (!(m->flags & AUDIENCE_MEMBER_FLAG_TARGETED)) {
         switch (m->itemId) {
         case -1: {
             rnd = irand(360000);
@@ -503,18 +503,18 @@ void BattleAudienceCtrlProcessKinopioItemOn(s32 index, s32 front) {
     } else {
         BattleAudience_SetAnim(index, 5, FALSE);
     }
-    if (m->flags & 0x40) {
+    if (m->flags & AUDIENCE_MEMBER_FLAG_ATTACKED) {
         item = BattleAudienceItemGetPtr(m->itemId);
-        m->flags &= ~0x60;
+        m->flags &= ~(AUDIENCE_MEMBER_FLAG_TARGETED | AUDIENCE_MEMBER_FLAG_ATTACKED);
         m->itemId = -1;
         item->flags = 0;
         BattleAudience_ChangeStatus(index, AUDIENCE_STATUS_DAMAGE);
         if (!(BattleAudienceItemGetPtr(0)->mItemType >= 0xEC && BattleAudienceItemGetPtr(0)->mItemType < 0xF0)) {
             BattleAudienceAddTargetNum(-0.14999999f * BattleAudienceBaseGetPtr()->mAudienceDeltaMultiplier, 0.0f);
         }
-    } else if (!(m->flags & 0x20) && (bw->flags & BATTLE_FLAG_COMMAND_INPUT)) {
+    } else if (!(m->flags & AUDIENCE_MEMBER_FLAG_TARGETED) && (bw->flags & BATTLE_FLAG_COMMAND_INPUT)) {
         item = BattleAudienceItemGetPtr(m->itemId);
-        if (!(base->flags & 0x40000)) {
+        if (!(base->flags & AUDIENCE_FLAG_EVENT_CTRL)) {
             item->timer--;
             if ((item->flags & 1) && item->timer <= 0 && item->state == 1) {
                 BattleAudience_ChangeStatus(index, AUDIENCE_STATUS_ITEM_THROW);
@@ -530,14 +530,14 @@ void BattleAudienceCtrlProcessKinopioItemThrow(s32 index, s32 front) {
     if (BattleAudience_GetAnimEnd(index) == 1) {
         BattleAudience_ChangeStatus(index, AUDIENCE_STATUS_WAIT);
     }
-    if (m->flags & 0x40) {
-        m->flags &= ~0x60;
+    if (m->flags & AUDIENCE_MEMBER_FLAG_ATTACKED) {
+        m->flags &= ~(AUDIENCE_MEMBER_FLAG_TARGETED | AUDIENCE_MEMBER_FLAG_ATTACKED);
         BattleAudience_ChangeStatus(index, AUDIENCE_STATUS_DAMAGE);
         if (!(BattleAudienceItemGetPtr(0)->mItemType >= 0xEC && BattleAudienceItemGetPtr(0)->mItemType < 0xF0)) {
             BattleAudienceAddTargetNum(-0.14999999f * BattleAudienceBaseGetPtr()->mAudienceDeltaMultiplier, 0.0f);
         }
     } else {
-        if (m->flags & 0x20) {
+        if (m->flags & AUDIENCE_MEMBER_FLAG_TARGETED) {
             return;
         }
     }
@@ -1150,7 +1150,7 @@ void BattleAudienceCtrlProcessKinopioSing(s32 index, s32 front) {
 
 void BattleAudienceCtrlProcessKinopioSingSub(s32 index) {
     BattleAudienceMember* m = BattleAudienceGetPtr(index);
-    if (m->flags & 0x100) {
+    if (m->flags & AUDIENCE_MEMBER_FLAG_WIDE_SUB) {
         BattleAudienceCtrlProcessKinopioSingSub(index - 1);
     } else if (m->status != AUDIENCE_STATUS_SHELL) {
         BattleAudience_ChangeStatus(index, AUDIENCE_STATUS_SLEEP);
@@ -1263,7 +1263,7 @@ void BattleAudienceCtrlProcessKinopioFire(s32 index, s32 front) {
                                {2, 1},  {-3, 0},  {-2, 0}, {-1, 0}, {1, 0},   {2, 0},   {3, 0},  {-2, -1},
                                {-1, -1}, {0, -1}, {1, -1}, {2, -1}, {-1, -2}, {0, -2},  {1, -2}, {0, -3}};
             BattleAudienceSoundBombFire(index);
-            m->flags &= ~4;
+            m->flags &= ~AUDIENCE_MEMBER_FLAG_DISP;
             if (index < 60) {
                 effSandarsEntry(4, m->position.x, 35.0f + m->position.y, m->position.z, 0.0f);
             }
@@ -1295,7 +1295,7 @@ void BattleAudienceCtrlProcessKinopioFire(s32 index, s32 front) {
 void BattleAudienceCtrlProcessKinopioFireSub(s32 index) {
     BattleAudience* base = BattleAudienceBaseGetPtr();
     BattleAudienceMember* m = BattleAudienceGetPtr(index);
-    if (m->flags & 0x100) {
+    if (m->flags & AUDIENCE_MEMBER_FLAG_WIDE_SUB) {
         BattleAudienceCtrlProcessKinopioFireSub(index - 1);
     } else if ((u8)BattleAudience_GetSysCtrl(index)) {
         if (m->type == 9) {
@@ -1349,7 +1349,7 @@ void BattleAudienceCtrlProcessKinopioEat(s32 index, s32 front) {
         }
         if (m->counter <= 0 && 0.0f == t->hopY) {
             BattleAudience_SetAnim(index, 18, FALSE);
-            t->flags |= 2;
+            t->flags |= AUDIENCE_MEMBER_FLAG_NOT_EXIST;
             m->step = 3;
         }
         break;

@@ -17,9 +17,23 @@ typedef struct StatusValue {
     s16 pad16;      // 0x16
 } StatusValue;
 
+// StatusWindowWork.flags (statusWinOpen/Close, statusWinForce*, statusWinDisp*)
+typedef enum StatusWindowFlags {
+    STATUS_WINDOW_FLAG_OPEN = (1 << 0),            // 0x1
+    STATUS_WINDOW_FLAG_CLOSED = (1 << 1),          // 0x2
+    STATUS_WINDOW_FLAG_OPEN_REQ = (1 << 2),        // 0x4
+    STATUS_WINDOW_FLAG_CLOSE_REQ = (1 << 3),       // 0x8
+    STATUS_WINDOW_FLAG_FORCE_OPEN = (1 << 4),      // 0x10
+    STATUS_WINDOW_FLAG_FORCE_CLOSE = (1 << 5),     // 0x20
+    STATUS_WINDOW_FLAG_FORCE_OPEN_REQ = (1 << 6),  // 0x40
+    STATUS_WINDOW_FLAG_FORCE_CLOSE_REQ = (1 << 7), // 0x80
+    STATUS_WINDOW_FLAG_MENU_ICONS = (1 << 8),      // 0x100, draws the pause-menu icons
+    STATUS_WINDOW_FLAG_DISP_OFF = (1 << 12),       // 0x1000
+} StatusWindowFlags;
+
 typedef struct StatusWindowWork {
     u8 pad_0[0x4];  // 0x0
-    u16 flags;          // 0x4
+    u16 flags;          // 0x4, StatusWindowFlags
     u8 align_0x6[2];    // 0x6
     f32 timer;          // 0x8
     f32 duration;       // 0xC

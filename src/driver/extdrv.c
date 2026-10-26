@@ -321,7 +321,7 @@ void extPoseDraw(s32 index) {
     Mtx mtx;
     Mtx nrm;
 
-    if (pose->flags & 1) {
+    if (pose->flags & EXT_POSE_FLAG_VISIBLE) {
         texId = pose->texId;
         if (wp->curTex != texId) {
             tex = &wp->texs[texId];
@@ -348,7 +348,7 @@ void extDraw(void) {
 
     for (i = wp->poseNum - 1, sort = wp->sort; i >= 0; i--, sort++) {
         pose = &wp->poses[sort->index];
-        if (pose->flags & 1) {
+        if (pose->flags & EXT_POSE_FLAG_VISIBLE) {
             texId = pose->texId;
             if (texId != wp->curTex) {
                 tex = &wp->texs[texId];
@@ -492,10 +492,10 @@ void extDrawShadow(void) {
     sort = &wp->sort[wp->poseNum - 1];
     for (i = wp->poseNum - 1; i >= 0; i--, sort--) {
         pose = &wp->poses[sort->index];
-        if (!(pose->flags & 4)) {
+        if (!(pose->flags & EXT_POSE_FLAG_NO_SHADOW)) {
             PSMTXConcat(camGetCurPtr()->view, *pose->mtx, mtx);
             PSMTXConcat(mtx, wp->shadowMtx, mtx);
-            if (pose->flags & 0x10) {
+            if (pose->flags & EXT_POSE_FLAG_SHADOW_POS) {
                 PSMTXTransApply(mtx, mtx, 0.0f, -(*pose->mtx)[1][3] + pose->shadowY, 0.0f);
             }
             GXLoadPosMtxImm(mtx, 0);
