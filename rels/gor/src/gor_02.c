@@ -56,7 +56,6 @@
 #include "pmario_sound.h"
 #include "driver/seqdrv.h"
 
-f32 reviseAngle(f32 angle);
 typedef struct MonosiriFollow { s32 seq; s32* list; s32 count; } MonosiriFollow;
 
 typedef struct DoorColorWork { GXColor color; GXColor color2; } DoorColorWork;

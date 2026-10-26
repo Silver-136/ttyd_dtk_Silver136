@@ -34,7 +34,6 @@ typedef struct YoshiWork {
 
 extern f32 marioGetMoveRate(void);
 extern HitEntry* dou10_yoko_yari2(void* out);
-extern void psndSFXOff(s32 id);
 double sin(double);
 
 f32 ofs_PYS_S_2[52] = {

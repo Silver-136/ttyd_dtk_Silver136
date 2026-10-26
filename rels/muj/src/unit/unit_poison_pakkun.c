@@ -20,7 +20,6 @@
 #include "battle/battle_damage.h"
 
 
-s32 irand(s32 scalar);
 
 static USER_FUNC(shadow_scale_memory);
 static USER_FUNC(shadow_scale_return);

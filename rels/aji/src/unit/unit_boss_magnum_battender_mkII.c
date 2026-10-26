@@ -66,7 +66,6 @@ typedef struct AudMember {
     s32 frame;
     s32 frames;
 } AudMember;
-s32 irand(s32 scalar);
 extern EvtWord aud_hit_event[];
 void aud_get_pod_pos(BattleUnit* unit, f32* x, f32* y, f32* z);
 void aud_fire_eff(f32 x, f32 y, f32 z);

@@ -56,8 +56,6 @@ typedef struct MarioMotTblEntry {
 void mot_talk(void);
 void mot_getItem(void);
 void mot_kaze(void);
-void mot_vivian(void);
-void mot_vivian_post(void);
 void mot_bottomless(void);
 void mot_forceReset(void);
 void mot_shadow(void);

@@ -44,7 +44,6 @@ typedef struct BarriernSpline {
 static u8 barriernSatelliteTo_Init(BattleUnit* unit, s32 n, Vec* table);
 static u8 barriernSatelliteTo_Main(BattleUnit* unit, s32 n);
 static void outSplineTableSet_Sub(BattleUnit* unit, s32 n, Vec* table);
-s32 irand(s32 scalar);
 
 static USER_FUNC(_check_satellite);
 static USER_FUNC(barriern_satellite_zanzou);

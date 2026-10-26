@@ -18,6 +18,7 @@
 #include "evt/evt_map.h"
 #include "evt/evt_snd.h"
 #include "evt/evt_sub.h"
+#include "unit/unit_mario.h"
 
 USER_FUNC(_get_local_frame);
 static USER_FUNC(_mario_makkuro_set);
@@ -25,7 +26,6 @@ USER_FUNC(_mario_super_emblem_anim_set);
 USER_FUNC(btlevtcmd_SetEventEntry);
 USER_FUNC(btlevtcmd_SetJumpSound);
 static USER_FUNC(_get_mario_hammer_lv);
-void faker_mario_makkuro_set(BattleUnit* unit);
 static void callback(MapTevCallbackInfo* info);
 s32 mario_pinch_pose_sound_callback(BattleUnit* unit);
 

@@ -17,7 +17,6 @@ extern ItemData itemDataTable[];
 s32 BtlUnit_GetWeaponCost(BattleUnit* unit, BattleWeapon* weapon);
 double sin(double);
 
-void btlDispGXInit2D(void);
 
 
 #define WP_SUBMENU(wp) ((wp)->commandMenu.subMenu)
@@ -44,7 +43,6 @@ BOOL BattleCommandCheckChangePositionEnable(BattleWork* wp);
 void DrawMenuPartyChangeButton_Sub(u32 id, f32 x, f32 y, f32 angle);
 void DrawMenuPartyChangeButton(void);
 void DrawSubMenuCommonProcessSub1(BattleSubMenu* menu, BattleCursor* cursor, s32 prev, s32 key);
-void btlDispGXQuads2D(f32 x0, f32 y0, f32 x1, f32 y1, u8 r, u8 g, u8 b, u8 a);
 #include "mario/mariost.h"
 #include "sdk/texPalette.h"
 #include "icon_ids.h"
@@ -57,7 +55,6 @@ void btlDispGXQuads2D(f32 x0, f32 y0, f32 x1, f32 y1, u8 r, u8 g, u8 b, u8 a);
 #define FRAMES_STEP(jp, n, x) ((jp) * (x))
 #endif
 void FontDrawStringCenterMtx(Mtx mtx, const char* msg);
-void btlDispGXPoint2D(f32 x, f32 y, u8 r, u8 g, u8 b, u8 a, f32 s, f32 t);
 void GetRingCenter(Vec* out);
 void GetRingOffset(f32 angle, f32* x, f32* y);
 f32 kakutable[3][5] = {{240.0f, 120.0f, 0.0f, 0.0f, 0.0f}, {270.0f, 180.0f, 90.0f, 0.0f, 0.0f}, {270.0f, 203.0f, 157.0f, 90.0f, 0.0f}};

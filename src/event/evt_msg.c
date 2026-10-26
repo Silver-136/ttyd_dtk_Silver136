@@ -32,7 +32,6 @@ void msgWindow_Add(const char* msg, s32 id);
 extern float __fabsf(float);
 
 s32 msgWindow_Entry(const char* msg, s32 callback, s32 priority);
-s32 BattleTransID(EventEntry* event, s32 type);
 
 // the message window's MsgWinData lives in its userdata block
 #define MSGW(w) ((MsgWinData*)(w)->userdata->address)

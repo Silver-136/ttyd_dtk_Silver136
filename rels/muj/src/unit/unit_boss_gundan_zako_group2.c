@@ -20,7 +20,6 @@
 #include "pmario_sound.h"
 #include "battle/battle_damage.h"
 
-s32 irand(s32 scalar);
 #include "dolphin/mtx.h"
 #include "battle/battle_database_common.h"
 #include "driver/extdrv.h"

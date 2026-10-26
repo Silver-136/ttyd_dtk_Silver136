@@ -37,7 +37,6 @@ typedef struct AtmTeresa {
 } AtmTeresa;
 AtmTeresa* teresa;
 s32 teresa_count;
-s32 irand(s32 scalar);
 
 double cos(double x);
 double sin(double x);

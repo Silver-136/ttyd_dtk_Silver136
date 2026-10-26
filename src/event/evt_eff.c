@@ -153,14 +153,14 @@
 #include "eff/n64/eff_opuku_jetwrain_n64.h"
 #include "eff/eff_particle.h"
 #include "eff/n64/eff_timestamp_n64.h"
+#include "eff/n64/eff_whirlwind_n64.h"
+#include "eff/n64/eff_coin_n64.h"
 
 #include "party.h"
 
 extern EffectEntry* effGarekiN64Entry(s32, f32, f32, f32, f32);
 extern EffectEntry* effRotHammerFailN64Entry(s32, s32, f32, f32, f32, f32);
-extern EffectEntry* effWhirlwindN64Entry(s32, s32, s32, f32);
 extern EffectEntry* effThunderflareN64Entry(s32, s32, f32, f32, f32, f32);
-extern EffectEntry* effCoinN64Entry(s32, s32, f32, f32, f32, f32);
 extern EffectEntry* effLensflareN64Entry(s32, s32, f32, f32, f32, f32);
 extern EffectEntry* effBoobooN64Entry(s32, s32, f32, f32, f32, f32);
 
@@ -689,7 +689,7 @@ s32 evt_eff64(EventEntry *event, BOOL isFirstCall) {
             break;
 
         case 57:
-            effect = effWhirlwindN64Entry(int2, raw3, int5, float4);
+            effect = effWhirlwindN64Entry(int2, (MarioWork*)raw3, float4, int5);
             break;
 
         case 58:

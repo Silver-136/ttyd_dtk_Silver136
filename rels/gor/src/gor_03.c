@@ -69,7 +69,6 @@ static const FuwaTable fuwa_table = {{0.0f, 0.5f, 1.0f, 1.4f, 1.8f, 2.0f, 2.3f, 
 typedef struct ExchangeRyokin { s32 ryokin; s32 medal; } ExchangeRyokin;
 s32 exchange_ret_tbl_no(void);
 s32 yuugijou_montemedal_keep(EventEntry* event, BOOL isFirstCall);
-void monteCountDisp(void);
 typedef struct GoryuuWork {
     EventEntry* event;
     EventEntry* subEvent;

@@ -518,7 +518,6 @@ void FontDrawStringShake(f32 x, f32 y, const s8* msg) {
         x += fontScale.x * (width + charspace[gp->language]);
     }
 }
-extern void iconDispGxAlpha(Vec* position, s16 flags, u16 iconId, u8 alpha, f32 scale);
 
 static inline void fontDrawCodeEdgeI(u16 code, s16 x, s16 y) {
     if (fontEdge) {

@@ -116,7 +116,6 @@ s32 evt_cam3d_evt_off(EventEntry* event, BOOL isFirstCall);
 s32 evt_cam3d_evt_set(EventEntry* event, BOOL isFirstCall);
 s32 evt_cam_shake(EventEntry* event, BOOL isFirstCall);
 s32 evt_eff(EventEntry* event, BOOL isFirstCall);
-s32 evt_eff64(EventEntry* event, BOOL isFirstCall);
 s32 evt_eff_delete(EventEntry* event, BOOL isFirstCall);
 s32 evt_eff_fukidashi(EventEntry* event, BOOL isFirstCall);
 s32 evt_ext_entry(EventEntry* event, BOOL isFirstCall);
