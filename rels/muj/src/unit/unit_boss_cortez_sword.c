@@ -298,9 +298,9 @@ EVT_BEGIN(cortez_weapon_set_formation_attribute)
     CALL(btlevtcmd_GetBodyId, LW(9), LW(0))
     CALL(btlevtcmd_GetHomePos, LW(9), EVT_NULLPTR, LW(1), EVT_NULLPTR)
     IF_INT_GREATER_OR_EQUAL(LW(1), 40)
-        CALL(btlevtcmd_OnPartsAttribute, LW(9), LW(0), 6291456)
+        CALL(btlevtcmd_OnPartsAttribute, LW(9), LW(0), (kPartNotHammerTarget | kPartNotShellTossTarget))
     ELSE
-        CALL(btlevtcmd_OffPartsAttribute, LW(9), LW(0), 6291456)
+        CALL(btlevtcmd_OffPartsAttribute, LW(9), LW(0), (kPartNotHammerTarget | kPartNotShellTossTarget))
     END_IF
     RETURN
 EVT_END()

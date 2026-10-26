@@ -323,7 +323,7 @@ static EVT_BEGIN(change_spark_event)
         CALL(btlevtcmd_SetEventConfusion, UNIT_ID_SELF, PTR(attack_event_spark))
         CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, 1, PTR(pose_table_spark))
         CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_DAMAGE)
-        CALL(btlevtcmd_OnPartsCounterAttribute, UNIT_ID_SELF, 1, 8192)
+        CALL(btlevtcmd_OnPartsCounterAttribute, UNIT_ID_SELF, 1, kCounterVolatileExplosive)
         CALL(btlevtcmd_ChangeDataTable, UNIT_ID_SELF, PTR(data_table_spark))
     END_IF
     LABEL(99)

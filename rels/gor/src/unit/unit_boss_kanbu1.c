@@ -346,7 +346,7 @@ static EVT_BEGIN(dead_event)
         GOTO(20)
     END_IF
     CALL(btlevtcmd_GetBackItem, LW(10))
-    CALL(btlevtcmd_OnPartsAttribute, LW(10), 1, 50331648)
+    CALL(btlevtcmd_OnPartsAttribute, LW(10), 1, (kHidden | kNoShadow))
     CALL(btlevtcmd_WaitAttackEnd)
     CALL(btlevtcmd_StopWaitEvent, UNIT_ID_MARIO)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_MARIO, 1, STRING("M_S_1"))

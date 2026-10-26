@@ -1094,13 +1094,13 @@ EVT_BEGIN(dmg_evt)
         RETURN
     END_IF
     IF_INT_LESS_OR_EQUAL(LW(10), 1)
-        CALL(btlevtcmd_CheckAttribute, LW(3), 2, LW(0))
+        CALL(btlevtcmd_CheckAttribute, LW(3), kUnitOnCeiling, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
             GOTO(30)
         END_IF
-        CALL(btlevtcmd_CheckAttribute, LW(3), 4, LW(0))
+        CALL(btlevtcmd_CheckAttribute, LW(3), kUnitAirborne, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
-            CALL(btlevtcmd_CheckPartsAttribute, LW(3), LW(4), 2097152, LW(0))
+            CALL(btlevtcmd_CheckPartsAttribute, LW(3), LW(4), kPartNotHammerTarget, LW(0))
             IF_INT_NOT_EQUAL(LW(0), 0)
                 GOTO(30)
             END_IF
@@ -1108,7 +1108,7 @@ EVT_BEGIN(dmg_evt)
         GOTO(20)
     END_IF
     IF_INT_LESS_OR_EQUAL(LW(10), 3)
-        CALL(btlevtcmd_CheckAttribute, LW(3), 2, LW(0))
+        CALL(btlevtcmd_CheckAttribute, LW(3), kUnitOnCeiling, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
             GOTO(30)
         END_IF
@@ -1116,7 +1116,7 @@ EVT_BEGIN(dmg_evt)
     END_IF
     GOTO(20)
     LABEL(20)
-    CALL(btlevtcmd_CheckPartsAttribute, LW(3), LW(4), 16384, LW(0))
+    CALL(btlevtcmd_CheckPartsAttribute, LW(3), LW(4), kClone, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_CommandCheckDamage, UNIT_ID_MARIO, LW(3), LW(4), DAMAGE_RESULT_FINAL_HIT, LW(5))
     END_IF

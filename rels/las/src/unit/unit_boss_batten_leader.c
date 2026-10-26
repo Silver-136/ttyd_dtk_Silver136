@@ -1578,8 +1578,8 @@ static EVT_BEGIN(dead_event)
                 BEGIN_INLINE_EVENT
                     CALL_CHILD(PTR(subsetevt_dead_core))
                     CALL(btlevtcmd_GetBodyId, LW(10), LW(11))
-                    CALL(btlevtcmd_OnPartsAttribute, LW(10), LW(11), 16777216)
-                    CALL(btlevtcmd_OnPartsAttribute, LW(10), LW(11), 33554432)
+                    CALL(btlevtcmd_OnPartsAttribute, LW(10), LW(11), kHidden)
+                    CALL(btlevtcmd_OnPartsAttribute, LW(10), LW(11), kNoShadow)
                 END_INLINE_EVENT
                 WAIT_MS(200)
             END_IF
@@ -1789,7 +1789,7 @@ static EVT_BEGIN(satellite_blur_on)
         IF_INT_NOT_EQUAL(LW(3), -1)
             CALL(btlevtcmd_GetBodyId, LW(3), LW(4))
             CALL(btlevtcmd_SetPartsBlur, LW(3), LW(4), 255, 255, 255, 255, 255, 255, 255, 100, 0)
-            CALL(btlevtcmd_OnPartsAttribute, LW(3), LW(4), 67108864)
+            CALL(btlevtcmd_OnPartsAttribute, LW(3), LW(4), kMotionBlur)
         END_IF
         ADD(LW(2), 1)
     END_LOOP
@@ -1802,7 +1802,7 @@ static EVT_BEGIN(satellite_blur_off)
         CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, LW(2), LW(3))
         IF_INT_NOT_EQUAL(LW(3), -1)
             CALL(btlevtcmd_GetBodyId, LW(3), LW(4))
-            CALL(btlevtcmd_OffPartsAttribute, LW(3), LW(4), 67108864)
+            CALL(btlevtcmd_OffPartsAttribute, LW(3), LW(4), kMotionBlur)
         END_IF
         ADD(LW(2), 1)
     END_LOOP

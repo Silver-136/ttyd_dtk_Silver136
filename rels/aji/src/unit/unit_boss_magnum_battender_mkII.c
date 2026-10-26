@@ -952,8 +952,8 @@ static EVT_BEGIN(dead_event)
             BEGIN_INLINE_EVENT
                 CALL_CHILD(subsetevt_dead_core)
                 CALL(arm_end, 0)
-                CALL(btlevtcmd_OnPartsAttribute, LW(10), 1, 16777216)
-                CALL(btlevtcmd_OnPartsAttribute, LW(10), 1, 33554432)
+                CALL(btlevtcmd_OnPartsAttribute, LW(10), 1, kHidden)
+                CALL(btlevtcmd_OnPartsAttribute, LW(10), 1, kNoShadow)
             END_INLINE_EVENT
         END_IF
     END_IF
@@ -965,8 +965,8 @@ static EVT_BEGIN(dead_event)
             BEGIN_INLINE_EVENT
                 CALL_CHILD(subsetevt_dead_core)
                 CALL(arm_end, 1)
-                CALL(btlevtcmd_OnPartsAttribute, LW(10), 1, 16777216)
-                CALL(btlevtcmd_OnPartsAttribute, LW(10), 1, 33554432)
+                CALL(btlevtcmd_OnPartsAttribute, LW(10), 1, kHidden)
+                CALL(btlevtcmd_OnPartsAttribute, LW(10), 1, kNoShadow)
             END_INLINE_EVENT
         END_IF
     END_IF

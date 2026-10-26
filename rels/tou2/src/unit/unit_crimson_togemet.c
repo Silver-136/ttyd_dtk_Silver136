@@ -366,7 +366,7 @@ static EVT_BEGIN(dmg_turn_event)
     CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), 5, LW(2), 18, -1)
     CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), 5, LW(2), 12, -1)
     CALL(btlevtcmd_SetHomePos, UNIT_ID_SELF, LW(0), 5, LW(2))
-    CALL(btlevtcmd_OffPartsCounterAttribute, UNIT_ID_SELF, 1, 1)
+    CALL(btlevtcmd_OffPartsCounterAttribute, UNIT_ID_SELF, 1, kCounterTopSpiky)
     RETURN
 EVT_END()
 
@@ -390,7 +390,7 @@ static EVT_BEGIN(wakeup_event)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), 0, LW(2), 18, -1)
     CALL(btlevtcmd_SetPos, UNIT_ID_SELF, LW(0), 0, LW(2))
-    CALL(btlevtcmd_OnPartsCounterAttribute, UNIT_ID_SELF, 1, 1)
+    CALL(btlevtcmd_OnPartsCounterAttribute, UNIT_ID_SELF, 1, kCounterTopSpiky)
     CALL(btlevtcmd_SetHomePos, UNIT_ID_SELF, LW(0), 0, LW(2))
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
@@ -620,7 +620,7 @@ static EVT_BEGIN(ceil_fall_ready_event)
     CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), 5, LW(2), 18, -1)
     CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), 5, LW(2), 12, -1)
     CALL(btlevtcmd_SetHomePos, UNIT_ID_SELF, LW(0), 5, LW(2))
-    CALL(btlevtcmd_OffPartsCounterAttribute, UNIT_ID_SELF, 1, 1)
+    CALL(btlevtcmd_OffPartsCounterAttribute, UNIT_ID_SELF, 1, kCounterTopSpiky)
     RETURN
 EVT_END()
 

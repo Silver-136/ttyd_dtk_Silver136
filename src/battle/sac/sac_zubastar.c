@@ -1011,7 +1011,7 @@ EVT_BEGIN(marioAttackEvent_ZubaStar)
     IF_INT_EQUAL(LW(3), -1)
         GOTO(97)
     END_IF
-    CALL(btlevtcmd_CheckPartsAttribute, LW(3), LW(4), 16384, LW(0))
+    CALL(btlevtcmd_CheckPartsAttribute, LW(3), LW(4), kClone, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_zubastar), DAMAGE_RESULT_FINAL_HIT, LW(5))
     END_IF

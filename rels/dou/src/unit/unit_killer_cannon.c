@@ -550,8 +550,8 @@ static EVT_BEGIN(friend_event_sky)
     IF_INT_EQUAL(LW(12), 1)
         CALL(btlevtcmd_OnOffStatus, LW(3), 16, 1, 1, 1)
     END_IF
-    CALL(btlevtcmd_OnPartsAttribute, LW(3), LW(4), 4194304)
-    CALL(btlevtcmd_OnPartsAttribute, LW(3), LW(4), 2097152)
+    CALL(btlevtcmd_OnPartsAttribute, LW(3), LW(4), kPartNotShellTossTarget)
+    CALL(btlevtcmd_OnPartsAttribute, LW(3), LW(4), kPartNotHammerTarget)
     RETURN
 EVT_END()
 

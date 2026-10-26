@@ -527,7 +527,7 @@ static EVT_BEGIN(phase_event)
                     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 0, 1)
                     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("KPA_U_2"))
                     WAIT_MS(200)
-                    CALL(btlevtcmd_OnPartsCounterAttribute, UNIT_ID_SELF, 1, 1)
+                    CALL(btlevtcmd_OnPartsCounterAttribute, UNIT_ID_SELF, 1, kCounterTopSpiky)
                     CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, 1, PTR(pose_table_forward_leaning))
                 END_IF
                 ELSE
@@ -536,7 +536,7 @@ static EVT_BEGIN(phase_event)
                     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 0, 0)
                     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("KPA_U_3"))
                     WAIT_MS(200)
-                    CALL(btlevtcmd_OffPartsCounterAttribute, UNIT_ID_SELF, 1, 1)
+                    CALL(btlevtcmd_OffPartsCounterAttribute, UNIT_ID_SELF, 1, kCounterTopSpiky)
                     CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, 1, PTR(pose_table))
                 END_IF
             END_IF
