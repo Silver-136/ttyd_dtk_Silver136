@@ -1812,7 +1812,7 @@ USER_FUNC(stone_bg) {
     ((ItemGetWork*)eff->userdata)->camera = 5;
     item = (u8*)itemNameToPtr(name);
     ((EffStarStoneWork*)((ItemEntry*)item)->effect->userdata)->cam = 5;
-    if (npcNameToPtr_NoAssert("\x82\xC9\x82\xB9\x83\x7D\x83\x8A\x83\x49") != NULL && evtGetValue(event, GSW_STORY_PROGRESS) < 211) {
+    if (npcNameToPtr_NoAssert("\x82\xC9\x82\xB9\x83\x7D\x83\x8A\x83\x49") != NULL && evtGetValue(event, GSW_STORY_PROGRESS) < STG4_15_DOOPLISS_BATTLE_2) {
         npcNameToPtr_NoAssert("\x82\xC9\x82\xB9\x83\x7D\x83\x8A\x83\x49")->cameraId = 5;
     } else {
         marioSetCamId(CAMERA_3D_EFFECTA);

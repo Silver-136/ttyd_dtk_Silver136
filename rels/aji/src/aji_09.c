@@ -839,10 +839,10 @@ USER_FUNC(check_kou_evt) {
     evtGetValue(event, args[0]);
     value = evtGetValue(event, args[1]);
     result = 0;
-    if (evtGetValue(NULL, GSW_STORY_PROGRESS) == 0xA6 && evtGetValue(NULL, GSWF(4203)) == 1) {
+    if (evtGetValue(NULL, GSW_STORY_PROGRESS) == STG3_33_01_PEACH_TECS_REQUEST && evtGetValue(NULL, GSWF(4203)) == 1) {
         result = 1;
     }
-    if (evtGetValue(NULL, GSW_STORY_PROGRESS) == 0xA8 && evtGetValue(NULL, GSWF(4206)) == 0 &&
+    if (evtGetValue(NULL, GSW_STORY_PROGRESS) == STG3_33_03_PEACH_GRODUS && evtGetValue(NULL, GSWF(4206)) == 0 &&
         value == evtGetValue(NULL, GSWF(4205))) {
         result = 1;
     }

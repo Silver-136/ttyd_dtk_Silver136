@@ -1823,7 +1823,7 @@ static USER_FUNC(fune_eff) {
     speed = distABf(oldX, oldZ, pos.x, pos.z);
     angleABf(oldX, oldZ, pos.x, pos.z);
     off85 = 85.0f;
-    if (evtGetValue(event, GSW_STORY_PROGRESS) == 2) {
+    if (evtGetValue(event, GSW_STORY_PROGRESS) == STG0_02_MARIOS_HOUSE) {
         speed = 2.0f;
     }
     ((EffFunemizuWork*)eff1->userdata)->scale = 3.0f;

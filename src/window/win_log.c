@@ -1247,7 +1247,7 @@ void monoshiriGX(WindowWork* w, f32 x, f32 y) {
         if (w->log.enemyPage * 16 + i >= w->log.enemyNum) break;
         if (swGet(id + 0x117A)) {
             if (id == 0x4D || id == 0x87) {
-                if (evtGetValue(NULL, GSW_STORY_PROGRESS) < 0xD2) {
+                if (evtGetValue(NULL, GSW_STORY_PROGRESS) < STG4_14_NAME_GUESSING) {
                     name = msgSearch("btl_un_hatena");
                 } else {
                     name = msgSearch("btl_un_rampell");
@@ -1647,7 +1647,7 @@ void monosiri_disp(CameraId camera, void* param) {
         id = m->id;
         te = battleGetUnitMonosiriPtr(id);
         if (id == 0x4D || id == 0x87) {
-            if (evtGetValue(NULL, GSW_STORY_PROGRESS) < 0xD2) {
+            if (evtGetValue(NULL, GSW_STORY_PROGRESS) < STG4_14_NAME_GUESSING) {
 #ifdef VERSION_G8ME01
                 sprintf(buf, (u32)gp->language != 0 ? "%d. %s" : "%d\201D%s", enemy_monoshiri_sort_table[id], msgSearch("btl_un_hatena"));
             } else {

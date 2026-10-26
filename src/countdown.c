@@ -45,7 +45,7 @@ void countDownSaveReStart(void) {
             work->elapsed = (s64)ticks * (u32)(work->limit - work->restart);
         }
         wp->prevTime = gp->renderTime;
-        if (evtGetValue(NULL, GSW_STORY_PROGRESS) < 0x160) {
+        if (evtGetValue(NULL, GSW_STORY_PROGRESS) < STG7_00_START) {
             wp->sfxId = psndSFXOn("SFX_STG2_BOMB_TIMER1");
         } else {
             wp->sfxId = psndSFXOn("SFX_STG7_ALART_WARNING1");
@@ -69,7 +69,7 @@ void countDownStart(u32 limit, u32 restart) {
     wp->y = -180.0f;
     wp->flags = 0;
     wp->flags |= 1;
-    if (evtGetValue(NULL, GSW_STORY_PROGRESS) < 0x160) {
+    if (evtGetValue(NULL, GSW_STORY_PROGRESS) < STG7_00_START) {
         wp->sfxId = psndSFXOn("SFX_STG2_BOMB_TIMER1");
     } else {
         wp->sfxId = psndSFXOn("SFX_STG7_ALART_WARNING1");

@@ -186,6 +186,8 @@ typedef enum PsndFlags {
 // layout for BGM and environment sound. Low nibble: the BGM player / environment slot (0 field music, 1 fanfares and
 // battle music). PSND_FADEOUT/PSND_PAUSE/PSND_SILENT act in the Off functions, the others in the On functions.
 #define PSND_SLOT(n) (n)
+#define PSND_BGM_STREAM 0x80000000  // SoundBGMEntry.flags: a streamed .stm (path); otherwise ...
+#define PSND_BGM_SONG_MASK 0x0FFFFFFF // ... the low bits are the song id
 #define PSND_RESTART 0x10          // restart even if the same song or group is already playing
 #define PSND_CONTINUE 0x20         // resume the faded-out (PSND_PAUSE) song: SoundSSContinueCh/SoundSongContinueCh
 #define PSND_QUICK 0x40            // BGM: dip and undo move 5 steps per frame; ENV (US): dip applied at once

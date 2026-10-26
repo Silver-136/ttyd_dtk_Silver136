@@ -5327,7 +5327,7 @@ void psndBGM_rate(s32 id, u16 rate) {
         return;
     }
     entry = &psbgmlist[bgm->listId];
-    if (entry->flags & 0x80000000) {
+    if (entry->flags & PSND_BGM_STREAM) {
         SoundSSSetPlayFreqCh(bgm->streamId, rate);
     }
 }
@@ -5368,7 +5368,7 @@ void psndBGMMain(void) {
             u32 alive;
             if (bgm->listId == -1) {
                 alive = 0;
-            } else if (psbgmlist[bgm->listId].flags & 0x80000000) {
+            } else if (psbgmlist[bgm->listId].flags & PSND_BGM_STREAM) {
                 if (SoundSSCheck(bgm->streamId)) {
                     alive = 1;
                 } else {
@@ -5409,7 +5409,7 @@ void psndBGMMain(void) {
         a = (u8)(a * b / 127);
         {
             tmpp2 = &psbgm[i & 0xF]; if ((* tmpp2) .listId != -1) {
-                if (psbgmlist[psbgm[i & 0xF].listId].flags & 0x80000000) {
+                if (psbgmlist[psbgm[i & 0xF].listId].flags & PSND_BGM_STREAM) {
                     SoundSSSetVolCh((* tmpp2).streamId, (u8)(a * vol / 100));
                 } else {
                     SoundSongSetVolCh(psbgm[i & 0xF].streamId, (u8)(a * vol / 100));
@@ -5427,7 +5427,7 @@ void psndBGMMain(void) {
             fade->timeMax--;
             if (fade->timeMax <= 0) {
                 if (bgm->listId != -1) {
-                    if (psbgmlist[bgm->listId].flags & 0x80000000) {
+                    if (psbgmlist[bgm->listId].flags & PSND_BGM_STREAM) {
                         SoundSetFadeTime(0, 100);
                         SoundSSFadeoutCh(bgm->streamId);
                     } else {
@@ -5445,7 +5445,7 @@ void psndBGMMain(void) {
         if (fade->dipState == 8) {
             c = (fade->dipTimeMax * fade->dipPercent) / 100;
             if (fade->dipTime > c) {
-                if (!(bgm->flags & 0x40)) {
+                if (!(bgm->flags & PSND_QUICK)) {
                     fade->dipTime--;
                 } else {
                     fade->dipTime -= 5;
@@ -5457,7 +5457,7 @@ void psndBGMMain(void) {
         }
         if (fade->dipState == 0x10) {
             if (fade->dipTime < fade->dipTimeMax) {
-                if (!(bgm->flags & 0x40)) {
+                if (!(bgm->flags & PSND_QUICK)) {
                     fade->dipTime++;
                 } else {
                     fade->dipTime += 5;
@@ -5568,17 +5568,17 @@ BOOL psndBGMOn_f_d(u32 flags, char *bgm_name, u32 fadetime, u32 fadeout, s32 r7)
     idx = fl & 0xF;
     id = i;
     fade = &psbgm[fl & 0xF].fade;
-    if ((evtGetValue(NULL, 0 - (170 * 1000000)) >= 101) && ((evtGetValue(NULL, 0 - (170 * 1000000)) < 102) || (evtGetValue(NULL, 0 - (170 * 1000000)) >= 106))) {
+    if ((evtGetValue(NULL, GSW_STORY_PROGRESS) >= STG2_20_PUNIO_PETUNI) && ((evtGetValue(NULL, GSW_STORY_PROGRESS) < STG2_21_BUBBLES_2) || (evtGetValue(NULL, GSW_STORY_PROGRESS) >= STG2_21_04_ESCAPE))) {
         if (strcmp(gp->currentMapName, "mri_00") && (i == 0x4F)) {
             id = 0x50;
         }
     }
-    if ((evtGetValue(NULL, 0 - (170 * 1000000)) >= 257) && (evtGetValue(NULL, 0 - (170 * 1000000)) < 260)) {
+    if ((evtGetValue(NULL, GSW_STORY_PROGRESS) >= STG5_40_TRUE_IDENTITY) && (evtGetValue(NULL, GSW_STORY_PROGRESS) < STG5_42_PIRATES_VS_X_NAUTS)) {
         if ((id == 0x5A) || (id == 0x5B)) {
             id = 0xA4;
         }
     }
-    if ((evtGetValue(NULL, 0 - (170 * 1000000)) >= 109) && (evtGetValue(NULL, 0 - (170 * 1000000)) < 111)) {
+    if ((evtGetValue(NULL, GSW_STORY_PROGRESS) >= STG2_23_TIME_BOMB_ACTIVATED) && (evtGetValue(NULL, GSW_STORY_PROGRESS) < STG2_24_BOSS_BATTLE)) {
         PaperSoundBGM *b0;
         if (id == 0x4F) {
             id = 0xA4;
@@ -5595,7 +5595,7 @@ BOOL psndBGMOn_f_d(u32 flags, char *bgm_name, u32 fadetime, u32 fadeout, s32 r7)
         if (id == 0x7E) {
             return 0;
         }
-        if (((idx == 0) && (fl & 0x20)) && (fade->state != 4)) {
+        if (((idx == 0) && (fl & PSND_CONTINUE)) && (fade->state != 4)) {
             return 0;
         }
         b0 = psbgm;
@@ -5606,7 +5606,7 @@ BOOL psndBGMOn_f_d(u32 flags, char *bgm_name, u32 fadetime, u32 fadeout, s32 r7)
             psndBGMOff_f_d(0x400, 750, 1);
         }
     }
-    if ((evtGetValue(NULL, 0 - (170 * 1000000)) >= 127) && (evtGetValue(NULL, 0 - (170 * 1000000)) < 178)) {
+    if ((evtGetValue(NULL, GSW_STORY_PROGRESS) >= STG3_00_WELCOME_TO_GLITZVILLE) && (evtGetValue(NULL, GSW_STORY_PROGRESS) < STG4_00_WELCOME_TO_STAGE_4)) {
         PaperSoundBGM *b0;
         if (id == 0x8C) {
             return 0;
@@ -5615,14 +5615,14 @@ BOOL psndBGMOn_f_d(u32 flags, char *bgm_name, u32 fadetime, u32 fadeout, s32 r7)
         if (((id == 0x90) || (id == 0x91)) && (b0->listId == 0xC3)) {
             return 0;
         }
-        if (((id == 0) && (b0->listId == 0xC3)) && (!(fl & 0x20))) {
+        if (((id == 0) && (b0->listId == 0xC3)) && (!(fl & PSND_CONTINUE))) {
             return 0;
         }
         if ((id == 0x92) && (b0->listId == 0xC3)) {
             psndBGMOff_f_d(0x400, 750, 1);
         }
     }
-    if ((evtGetValue(NULL, 0 - (170 * 1000000)) >= 164) && (id == 0x53)) {
+    if ((evtGetValue(NULL, GSW_STORY_PROGRESS) >= STG3_32_BOSS_BATTLE) && (id == 0x53)) {
         id = 0x54;
     }
     if ((id == 0x90) || (id == 0x91)) {
@@ -5634,21 +5634,21 @@ BOOL psndBGMOn_f_d(u32 flags, char *bgm_name, u32 fadetime, u32 fadeout, s32 r7)
     bgm = &psbgm[idx];
     entry = &psbgmlist[id];
     fade2 = &bgm->fade;
-    if ((entry->flags == 0) && (!(fl & 0x20))) {
+    if ((entry->flags == 0) && (!(fl & PSND_CONTINUE))) {
         return 0;
     }
     SoundSetFadeTime(ft, ft);
     old = bgm->listId;
     if (old != 0xFFFFFFFF) {
-        fadetime = fl & 0x10;
+        fadetime = fl & PSND_RESTART;
         if (!fadetime) {
-            if (fl & 0x20) {
-                if (psbgmlist[old].flags & 0x80000000) {
+            if (fl & PSND_CONTINUE) {
+                if (psbgmlist[old].flags & PSND_BGM_STREAM) {
                     SoundSSContinueCh(bgm->streamId);
                 } else {
                     SoundSongContinueCh(bgm->streamId);
                 }
-                if (fl & 0x100) {
+                if (fl & PSND_FADEIN) {
                     fade2->state = 1;
                     fade2->time = ft / PSND_FRAME_MS;
                     fade2->timeMax = 0;
@@ -5657,14 +5657,14 @@ BOOL psndBGMOn_f_d(u32 flags, char *bgm_name, u32 fadetime, u32 fadeout, s32 r7)
                     fade2->time = 1;
                     fade2->timeMax = 1;
                 }
-                if ((fl & 0x80) && (fade2->dipState == 8)) {
+                if ((fl & PSND_UNSILENT) && (fade2->dipState == 8)) {
                     fade2->dipState = 0x10;
                     fade2->dipTimeMax = ft / PSND_FRAME_MS;
                     fade2->dipTime = (fade2->dipTimeMax * fade2->dipPercent) / 100;
-                    if (fl & 0x40) {
-                        bgm->flags |= 0x40;
+                    if (fl & PSND_QUICK) {
+                        bgm->flags |= PSND_QUICK;
                     } else {
-                        bgm->flags &= ~0x40;
+                        bgm->flags &= ~PSND_QUICK;
                     }
                 }
                 goto done;
@@ -5681,7 +5681,7 @@ BOOL psndBGMOn_f_d(u32 flags, char *bgm_name, u32 fadetime, u32 fadeout, s32 r7)
                 }
             }
         }
-        if (entry->flags & 0x80000000) {
+        if (entry->flags & PSND_BGM_STREAM) {
             if (fadetime) {
                 SoundSetFadeTime(0, 100);
                 SoundSSFadeoutCh(bgm->streamId);
@@ -5710,7 +5710,7 @@ BOOL psndBGMOn_f_d(u32 flags, char *bgm_name, u32 fadetime, u32 fadeout, s32 r7)
         bgm->scopeTimer = 0;
     }
     bgm->startTime = gp->renderTime;
-    if (entry->flags & 0x80000000) {
+    if (entry->flags & PSND_BGM_STREAM) {
         bgm->streamId = psndSSFindCh();
 
         if (((u32) bgm->streamId) == 0xFFFFFFFF) {
@@ -5731,10 +5731,10 @@ BOOL psndBGMOn_f_d(u32 flags, char *bgm_name, u32 fadetime, u32 fadeout, s32 r7)
         if (((u32) bgm->streamId) == 0xFFFFFFFF) {
             goto fail;
         }
-        SoundSongPlayCh(bgm->streamId, entry->flags & 0xFFFFFFF);
+        SoundSongPlayCh(bgm->streamId, entry->flags & PSND_BGM_SONG_MASK);
         SoundSongSetVolCh(bgm->streamId, vol);
     }
-    if (fl & 0x100) {
+    if (fl & PSND_FADEIN) {
         fade2->state = 1;
         fade2->time = ft / PSND_FRAME_MS;
         fade2->timeMax = 0;
@@ -5775,10 +5775,10 @@ BOOL psndBGMOff_f_d(s32 flags, u32 fadetime, u32 someswitch) {
         return FALSE;
     }
     if (!someswitch) {
-        if (evtGetValue(NULL, GSW_STORY_PROGRESS) >= 109 && evtGetValue(NULL, GSW_STORY_PROGRESS) < 111 && bgm->listId == 0xA4) {
+        if (evtGetValue(NULL, GSW_STORY_PROGRESS) >= STG2_23_TIME_BOMB_ACTIVATED && evtGetValue(NULL, GSW_STORY_PROGRESS) < STG2_24_BOSS_BATTLE && bgm->listId == 0xA4) {
             return FALSE;
         }
-        if (evtGetValue(NULL, GSW_STORY_PROGRESS) >= 127 && evtGetValue(NULL, GSW_STORY_PROGRESS) < 178 && psbgm[0].listId == 0xC3) {
+        if (evtGetValue(NULL, GSW_STORY_PROGRESS) >= STG3_00_WELCOME_TO_GLITZVILLE && evtGetValue(NULL, GSW_STORY_PROGRESS) < STG4_00_WELCOME_TO_STAGE_4 && psbgm[0].listId == 0xC3) {
             if (bgm->listId != 0x92) {
                 return FALSE;
             }
@@ -5787,7 +5787,7 @@ BOOL psndBGMOff_f_d(s32 flags, u32 fadetime, u32 someswitch) {
     }
     entry = &psbgmlist[bgm->listId];
     fade = &bgm->fade;
-    if (flags & 0x200) {
+    if (flags & PSND_FADEOUT) {
         if (fade->state == 2) {
         } else if (fade->state != 4) {
             fade->state = 2;
@@ -5796,27 +5796,27 @@ BOOL psndBGMOff_f_d(s32 flags, u32 fadetime, u32 someswitch) {
         } else {
             fade->state = 2;
         }
-    } else if (flags & 0x400) {
+    } else if (flags & PSND_PAUSE) {
         if (fade->state != 2 && fade->state != 4) {
             fade->state = 4;
             fade->time = fadetime / PSND_FRAME_MS;
             fade->timeMax = fade->time;
         }
-    } else if (flags & 0x800) {
+    } else if (flags & PSND_SILENT) {
         if (fade->dipState != 8) {
             fade->dipState = 8;
             fade->dipPercent = silent;
             fade->dipTimeMax = fadetime / PSND_FRAME_MS;
             fade->dipTime = fade->dipTimeMax;
-            if ((flags & 0x40) || (gp->flags & 1)) {
-                bgm->flags |= 0x40;
+            if ((flags & PSND_QUICK) || (gp->flags & 1)) {
+                bgm->flags |= PSND_QUICK;
             } else {
-                bgm->flags &= ~0x40;
+                bgm->flags &= ~PSND_QUICK;
             }
 
         }
     } else {
-        if (entry->flags & 0x80000000) {
+        if (entry->flags & PSND_BGM_STREAM) {
             SoundSSStopCh(bgm->streamId);
         } else {
             SoundSongStopCh(bgm->streamId);
@@ -6147,7 +6147,7 @@ s32 __psndSFXOn(const char *name, u8 vol, u8 pan, u16 pitch, Vec *pos, u32 r8, u
         }
         psnd.sfxCooldown = 6;
     }
-    if ((evtGetValue(NULL, 0 - (170 * 1000000)) <= 2) && (sid == 0x365)) {
+    if ((evtGetValue(NULL, GSW_STORY_PROGRESS) <= STG0_02_MARIOS_HOUSE) && (sid == 0x365)) {
         return -1;
     }
     delay = 0;
@@ -6673,9 +6673,9 @@ BOOL psndENVOn_f_d(u32 flags, const char* name, u32 fadetime, s32 r6) {
     o = idx * sizeof(u16);
     env = (u16*)((u8*)psnd.envId + o);
     if ((cur = *env) != 0) {
-        if (!(flags & 0x10)) {
-            if (flags & 0x20) {
-                if (flags & 0x100) {
+        if (!(flags & PSND_RESTART)) {
+            if (flags & PSND_CONTINUE) {
+                if (flags & PSND_FADEIN) {
                     fade->state = 1;
                     fade->time = fadetime / PSND_FRAME_MS;
                     fade->timeMax = 0;
@@ -6684,7 +6684,7 @@ BOOL psndENVOn_f_d(u32 flags, const char* name, u32 fadetime, s32 r6) {
                     fade->time = 1;
                     fade->timeMax = 1;
                 }
-                if (flags & 0x80) {
+                if (flags & PSND_UNSILENT) {
                     if (fade->dipState == 8) {
                         fade->dipState = 0x10;
                         fade->dipTimeMax = fadetime / PSND_FRAME_MS;
@@ -6735,7 +6735,7 @@ BOOL psndENVOn_f_d(u32 flags, const char* name, u32 fadetime, s32 r6) {
     fade->state = 0;
     *(u16*)((u8*)psnd.envLpf + o) = 0x7D00;
     *(u16*)((u8*)psnd.envFreq + o) = 0x7D00;
-    if (flags & 0x100) {
+    if (flags & PSND_FADEIN) {
         fade->state = 1;
         fade->time = fadetime / PSND_FRAME_MS;
         fade->timeMax = 0;

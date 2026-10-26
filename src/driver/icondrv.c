@@ -300,7 +300,7 @@ void iconEntry(const char* name, u16 iconId) {
     }
     entry->uflags |= 1;
     if (mapGetWork()->entries[0].flags & MAP_ENTRY_BLEND) {
-        if (!strncmp(gp->currentMapName, "aji", 3) && evtGetValue(0, GSW_STORY_PROGRESS) == 0x178) {
+        if (!strncmp(gp->currentMapName, "aji", 3) && evtGetValue(0, GSW_STORY_PROGRESS) == STG7_25_THE_LAST_MAIL) {
             entry->uflags &= ~0x40;
         } else {
             entry->uflags |= 0x40;

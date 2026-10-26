@@ -3676,7 +3676,7 @@ s32 screen_init(EventEntry* event, BOOL isFirstCall) {
 #else
     screen_wp->noise = _mapAlloc(GXGetTexBufferSize(64, 64, GX_TF_I8, GX_FALSE, 0));
 #endif
-    if (evtGetValue(event, GSW_STORY_PROGRESS) == 163) {
+    if (evtGetValue(event, GSW_STORY_PROGRESS) == STG3_31_GRUBBAS_PLANS) {
         screen_wp->mode = 1;
     }
     return EVT_RETURN_DONE;

@@ -2038,14 +2038,14 @@ s32 compare_func3(const void* a, const void* b) {
     pouchHiraToKata(msgSearch(ta->enemyTag), buf1);
     pouchHiraToKata(msgSearch(tb->enemyTag), buf2);
     if (((WinSortEnt*)a)->id == 0x4D || ((WinSortEnt*)a)->id == 0x87) {
-        if (evtGetValue(NULL, GSW_STORY_PROGRESS) < 210) {
+        if (evtGetValue(NULL, GSW_STORY_PROGRESS) < STG4_14_NAME_GUESSING) {
             pouchHiraToKata(msgSearch("btl_un_hatena"), buf1);
         } else {
             pouchHiraToKata(msgSearch("btl_un_rampell"), buf1);
         }
     }
     if (((WinSortEnt*)b)->id == 0x4D || ((WinSortEnt*)b)->id == 0x87) {
-        if (evtGetValue(NULL, GSW_STORY_PROGRESS) < 210) {
+        if (evtGetValue(NULL, GSW_STORY_PROGRESS) < STG4_14_NAME_GUESSING) {
             pouchHiraToKata(msgSearch("btl_un_hatena"), buf2);
         } else {
             pouchHiraToKata(msgSearch("btl_un_rampell"), buf2);
@@ -2063,14 +2063,14 @@ s32 compare_func3_r(const void* a, const void* b) {
     pouchHiraToKata(msgSearch(ta->enemyTag), buf1);
     pouchHiraToKata(msgSearch(tb->enemyTag), buf2);
     if (((WinSortEnt*)a)->id == 0x4D || ((WinSortEnt*)a)->id == 0x87) {
-        if (evtGetValue(NULL, GSW_STORY_PROGRESS) < 210) {
+        if (evtGetValue(NULL, GSW_STORY_PROGRESS) < STG4_14_NAME_GUESSING) {
             pouchHiraToKata(msgSearch("btl_un_hatena"), buf1);
         } else {
             pouchHiraToKata(msgSearch("btl_un_rampell"), buf1);
         }
     }
     if (((WinSortEnt*)b)->id == 0x4D || ((WinSortEnt*)b)->id == 0x87) {
-        if (evtGetValue(NULL, GSW_STORY_PROGRESS) < 210) {
+        if (evtGetValue(NULL, GSW_STORY_PROGRESS) < STG4_14_NAME_GUESSING) {
             pouchHiraToKata(msgSearch("btl_un_hatena"), buf2);
         } else {
             pouchHiraToKata(msgSearch("btl_un_rampell"), buf2);

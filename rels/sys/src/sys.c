@@ -190,8 +190,8 @@ void _prolog(void) {
     }
     relSetEvtAddr("sys_00", dummy_evt);
     relSetEvtAddr("sys_01", sys_01_init_evt);
-    if (evtGetValue(NULL, GSW_STORY_PROGRESS) != 2 && evtGetValue(NULL, GSW_STORY_PROGRESS) != 125 && evtGetValue(NULL, GSW_STORY_PROGRESS) != 229 &&
-        evtGetValue(NULL, GSW_STORY_PROGRESS) != 280) {
+    if (evtGetValue(NULL, GSW_STORY_PROGRESS) != STG0_02_MARIOS_HOUSE && evtGetValue(NULL, GSW_STORY_PROGRESS) != STG2_47_AFTER_GETTING_THE_TICKET && evtGetValue(NULL, GSW_STORY_PROGRESS) != STG4_END_OFF_TO_THE_KEYS &&
+        evtGetValue(NULL, GSW_STORY_PROGRESS) != STG5_66_BELDAM_FINDS_OUT) {
         psndStopAllFadeOut();
     }
     camGetPtr(CAMERA_2D)->flags |= CAMERA_FLAG_LETTER_BOX_OFF;

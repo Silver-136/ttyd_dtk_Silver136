@@ -254,7 +254,7 @@ static void rankingInit(void) {
     RankEntry* entry;
 
     memset(rank_wp, 0, sizeof(RankWork));
-    rank_wp->num = evtGetValue(NULL, GSW_STORY_PROGRESS) < 0xAC ? 23 : 21;
+    rank_wp->num = evtGetValue(NULL, GSW_STORY_PROGRESS) < STG3_34_RETURN_TO_ROGUEPORT ? 23 : 21;
     rank_wp->entries = _mapAlloc(rank_wp->num * sizeof(RankEntry));
     memset(rank_wp->entries, 0, rank_wp->num * sizeof(RankEntry));
     entry = rank_wp->entries;
@@ -276,7 +276,7 @@ static void rankingInit(void) {
         }
     }
     swSet(0x9E1);
-    if (evtGetValue(NULL, GSW_STORY_PROGRESS) < 0xAC) {
+    if (evtGetValue(NULL, GSW_STORY_PROGRESS) < STG3_34_RETURN_TO_ROGUEPORT) {
         rank_wp->entries[21].flags |= 2;
         rank_wp->entries[22].flags |= 2;
         if (evtGetValue(NULL, GSWF(2412))) {
@@ -506,7 +506,7 @@ USER_FUNC(evt_tou_get_fighter_info) {
     s32 id = evtGetValue(event, args[0]);
     FighterData* dt;
 
-    if (evtGetValue(NULL, GSW_STORY_PROGRESS) < 0xAC) {
+    if (evtGetValue(NULL, GSW_STORY_PROGRESS) < STG3_34_RETURN_TO_ROGUEPORT) {
         dt = fighterDt;
     } else {
         dt = fighterDt_re;
@@ -521,7 +521,7 @@ static USER_FUNC(evt_tou_get_fighter_name2) {
     s32 id = evtGetValue(event, args[0]);
     FighterData* dt;
 
-    if (evtGetValue(NULL, GSW_STORY_PROGRESS) < 0xAC) {
+    if (evtGetValue(NULL, GSW_STORY_PROGRESS) < STG3_34_RETURN_TO_ROGUEPORT) {
         dt = fighterDt;
     } else {
         dt = fighterDt_re;
@@ -555,7 +555,7 @@ static USER_FUNC(evt_tou_get_fighter_battle_msg) {
     s32 id = evtGetValue(event, args[0]);
     FighterData* dt;
 
-    if (evtGetValue(NULL, GSW_STORY_PROGRESS) < 0xAC) {
+    if (evtGetValue(NULL, GSW_STORY_PROGRESS) < STG3_34_RETURN_TO_ROGUEPORT) {
         dt = fighterDt;
     } else {
         dt = fighterDt_re;
@@ -573,7 +573,7 @@ static USER_FUNC(evt_tou_get_rule_info) {
     s32 i;
     s32 rank;
 
-    if (evtGetValue(NULL, GSW_STORY_PROGRESS) < 0xAC) {
+    if (evtGetValue(NULL, GSW_STORY_PROGRESS) < STG3_34_RETURN_TO_ROGUEPORT) {
         GET_RANK(rank, i);
         if (rank > 10) {
             num = 10;
@@ -617,7 +617,7 @@ USER_FUNC(evt_tou_get_rule_msg2) {
     s32 i;
     s32 rank;
 
-    if (evtGetValue(NULL, GSW_STORY_PROGRESS) < 0xAC) {
+    if (evtGetValue(NULL, GSW_STORY_PROGRESS) < STG3_34_RETURN_TO_ROGUEPORT) {
         GET_RANK(rank, i);
         if (rank > 10) {
             num = 10;
@@ -836,7 +836,7 @@ static void disp_proc(CameraId cameraId, void* param) {
     Mtx mtx;
     char buf[0x100];
 
-    if (evtGetValue(NULL, GSW_STORY_PROGRESS) < 0xAC) {
+    if (evtGetValue(NULL, GSW_STORY_PROGRESS) < STG3_34_RETURN_TO_ROGUEPORT) {
         dt = fighterDt;
     } else {
         dt = fighterDt_re;
@@ -1264,7 +1264,7 @@ void gans_tex(CameraId cameraId, void* param) {
         C_MTXLookAt(lookAt, &pos, &up, &target);
     }
     saved = *camGetPtr(cameraId);
-    npc = npcNameToPtr(evtGetValue(NULL, GSW_STORY_PROGRESS) < 0xAC ? "\203K\203\223\203X" : "\203L\203m\203V\203R\203\217");
+    npc = npcNameToPtr(evtGetValue(NULL, GSW_STORY_PROGRESS) < STG3_34_RETURN_TO_ROGUEPORT ? "\203K\203\223\203X" : "\203L\203m\203V\203R\203\217");
     PSMTXCopy(lookAt, camGetCurPtr()->view);
     animPosePeraOff(npc->poseId);
     PSMTXIdentity(ident);
@@ -2346,7 +2346,7 @@ EVT_BEGIN(evt_michel_7)
 EVT_END()
 
 USER_FUNC(make_monitor) {
-    NpcEntry* npc = npcNameToPtr_NoAssert(evtGetValue(NULL, GSW_STORY_PROGRESS) < 0xAC ? "\203K\203\223\203X" : "\203L\203m\203V\203R\203\217");
+    NpcEntry* npc = npcNameToPtr_NoAssert(evtGetValue(NULL, GSW_STORY_PROGRESS) < STG3_34_RETURN_TO_ROGUEPORT ? "\203K\203\223\203X" : "\203L\203m\203V\203R\203\217");
     GansWork* wp;
 
     if (isFirstCall) {

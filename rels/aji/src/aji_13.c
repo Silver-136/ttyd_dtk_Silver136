@@ -460,7 +460,7 @@ static USER_FUNC(mario_chk) {
             break;
         }
     }
-    if (evtGetValue(event, GSW_STORY_PROGRESS) >= 370) {
+    if (evtGetValue(event, GSW_STORY_PROGRESS) >= STG7_17_CONVEYOR_BELT) {
         MarioWork* mario = marioGetPtr();
         PartyEntry* party = partyGetPtr(0);
         if (mario != NULL && mario->hitobjStandOn != NULL && hitIsGroup(mario->hitobjStandOn, hitNameToPtr("A_bel"))) {

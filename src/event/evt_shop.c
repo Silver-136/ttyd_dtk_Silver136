@@ -1260,7 +1260,7 @@ USER_FUNC(evt_shop_main_func) {
         trg = 0;
     }
     if (!strncmp(gp->currentMapName, "rsh_03", strlen("rsh_03")) &&
-        evtGetValue(event, GSW_STORY_PROGRESS) >= 0x148 && evtGetValue(event, GSW_STORY_PROGRESS) < 0x14C &&
+        evtGetValue(event, GSW_STORY_PROGRESS) >= STG6_45_DAY_3_STARTS && evtGetValue(event, GSW_STORY_PROGRESS) < STG6_48_SMORG_MIASMA &&
         !evtGetValue(event, GSWF(3442))) {
         return EVT_RETURN_BLOCK;
     }

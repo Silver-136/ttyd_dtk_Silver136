@@ -217,7 +217,7 @@ void winMain(void) {
                         break;
                     }
 #ifdef VERSION_G8ME01
-                    if ((gp->flags & 0x1000) && evtGetValue(NULL, GSW_STORY_PROGRESS) < 7) {
+                    if ((gp->flags & 0x1000) && evtGetValue(NULL, GSW_STORY_PROGRESS) < STG0_07_GOOMBELLA_JOINS) {
                         break;
                     }
 #endif

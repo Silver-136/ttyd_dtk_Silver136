@@ -117,7 +117,7 @@ void BattleInformationSetDropMaterial(FieldBattleInfo* info) {
     random = group->randomItemWeight;
     none = group->noItemWeight;
     type = 0;
-    if (evtGetValue(NULL, GSW_STORY_PROGRESS) <= 19) {
+    if (evtGetValue(NULL, GSW_STORY_PROGRESS) <= STG0_16_FRANKLYS_HOUSE) {
         random = 0;
         held = 0;
         none = 100;

@@ -301,7 +301,7 @@ static USER_FUNC(ride_chk) {
             mapGrpFlagOff(name, MAP_OBJ_FLAG_HIDDEN);
         }
     }
-    if (evtGetValue(event, GSW_STORY_PROGRESS) >= 362) {
+    if (evtGetValue(event, GSW_STORY_PROGRESS) >= STG7_09_ELEVATOR_KEY_A_LIT_FLOOR) {
         return EVT_RETURN_DONE;
     }
     return EVT_RETURN_BLOCK;

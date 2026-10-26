@@ -775,7 +775,7 @@ USER_FUNC(tou_gamen_screen_tev_init) {
     screen_wp->y = screen_wp->yTarget = 0.0f;
     screen_wp->count = 0;
     screen_wp->field_28 = -1.0f;
-    if (evtGetValue(event, GSW_STORY_PROGRESS) == 163) {
+    if (evtGetValue(event, GSW_STORY_PROGRESS) == STG3_31_GRUBBAS_PLANS) {
         screen_wp->mode = 1;
     }
     evtEntry(screen_evt, 0, 0);

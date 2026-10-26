@@ -2381,7 +2381,7 @@ void jump_minnnanokoe(s32 i, f32 h) {
     wp->bom[i].vy = wp->bom[i].gravity * wp->bom[i].timer / 2 + h / wp->bom[i].timer;
     wp->bom[i].next = 5;
     wp->bom[i].state = 100;
-    if (evtGetValue(NULL, GSW_STORY_PROGRESS) != 401 && i % 5 == 0) {
+    if (evtGetValue(NULL, GSW_STORY_PROGRESS) != STG8_16_THE_RETURN_OF_THE_QUEEN && i % 5 == 0) {
         Vec pos = (Vec){(*pose->mtx)[0][3], (*pose->mtx)[1][3], (*pose->mtx)[2][3]};
         psndSFXOn_3D("SFX_STG7_BOMB_TOGETHER2", &pos);
     }
