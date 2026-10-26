@@ -3,7 +3,7 @@
 /* Story progress (GSW_STORY_PROGRESS, GSW(0)): one name per step, in the order the story advances. Each name
  * is the game's own step label (evtNoLabel in evt_johoya.c, which the game indexes by this value) followed by
  * the US English name of the step's first entry in the debug story list (src/event.c); 186, 333 and 349 have
- * no entry there. 406 (STG9_END) is the post-game. */
+ * no entry there (their suffixes and comments come from the scripts). 406 (STG9_END) is the post-game. */
 typedef enum StoryProgress {
     STG0_00_PROLOGUE = 0,
     STG0_01_PLAZA = 1,
@@ -191,7 +191,7 @@ typedef enum StoryProgress {
     STG4_02_03_OPENING_THE_GATE = 183,
     STG4_03_SHOP_KEY = 184,
     STG4_04_STORAGE_ROOM_UNLOCKED = 185,
-    STG4_04_01_00 = 186,
+    STG4_04_01_00_UNUSED = 186, // no script sets or tests it
     STG4_04_01_PAPER_MAGE_TUBE_MOD = 187,
     STG4_05_STRAW_TEPEE = 188,
     STG4_06_TREE_TRUNK = 189,
@@ -338,7 +338,7 @@ typedef enum StoryProgress {
     STG6_47_00_BAGGAGE_CAR_SMORGS = 330,
     STG6_47_ESCAPING_THE_SMORGS = 331,
     STG6_48_SMORG_MIASMA = 332,
-    STG6_49_00 = 333,
+    STG6_49_00_TRAIN_ARRIVAL = 333, // set by rsh_01's arrival scene (the passengers thank Mario), before the move to pik_00
     STG6_49_POSHLEY_HEIGHTS = 334,
     STG6_50_THE_SANCTUM_MANAGER = 335,
     STG6_51_3_SURPRISE_GUESTS = 336,
@@ -354,7 +354,7 @@ typedef enum StoryProgress {
     STG6_57_A_MAIL_FROM_PEACH = 346,
     STG6_70_THOUSAND_YEAR_DOOR = 347,
     STG6_71_FRANKLYS_HOUSE_STG_6 = 348,
-    STG6_71_01 = 349,
+    STG6_71_01 = 349, // tested (bom, pik_01, tik_07) but no script sets it: 348 is followed by 350
     STG6_72_3_MINUTES_LATER = 350,
     STG6_END_ULTRA_HAMMER = 351,
     STG7_00_START = 352,
