@@ -52,6 +52,13 @@ data order 10, sound-name integer round trips (`SFX_NAME_WORD`) 9, no-op casts 6
   evidence from the code that sets and tests each one.
 - Names with an address suffix (25) and debug strings by address (`str_8...`, 6 in shadowdrv).
 - Ghidra-style locals left: 14.
+- Ready to name from checked reference notes (each verified against the code that reads it): unit attribute bits
+  0x1 (map object), 0x40, 0x4000, 0x4000000 and part bits 0x8 (bodyguard redirect target), 0x8000, 0x20000,
+  0x8000000 still used as raw numbers; sound list entry kinds (efx / song / stream bits of pssfxlist); damage codes
+  0x16 / 0x1C / 0x1D still raw in battle_damage.c. Dead bits (no reader): weapon special 0x200, target weighting
+  0x2000.
+- Room and NPC comments: a place-name comment per map REL room (274 of 278 rooms have one in the reference lists)
+  and English identities for the Japanese NPC names in setup tables (about 90 % covered).
 - Unnamed bits in smaller drivers' flag words (module-local words, a few driver fields).
 
 ## 4. Structure and layout of the source
