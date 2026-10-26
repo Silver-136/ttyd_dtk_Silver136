@@ -24,10 +24,7 @@
 
 void kpa2DMain(void);
 void kpa3DMain(void);
-#ifdef VERSION_G8ME01
-#define mario_kemuri_80130474 mario_kemuri // US: global name
-#endif
-void mario_kemuri_80130474(void);
+void mario_kemuri(void);
 void kpaFireAttack(void);
 void kpaFireMain(void);
 void kpaFall(void);
@@ -301,7 +298,7 @@ void kpa2DMain(void) {
         mp->floorMove.z = 0.0f;
         marioBottomless();
         marioPreDisp();
-        mario_kemuri_80130474();
+        mario_kemuri();
         marioCamMain();
         mp->frameCounter++;
         return;
@@ -357,7 +354,7 @@ void kpa2DMain(void) {
     marioBottomless();
     marioPreDisp();
     marioBalloonMain();
-    mario_kemuri_80130474();
+    mario_kemuri();
     marioCamMain();
     mp->frameCounter++;
     mp->basePos = mp->position;
@@ -408,7 +405,7 @@ void kpa3DMain(void) {
         marioBottomless();
         marioPreDisp();
         marioBalloonMain();
-        mario_kemuri_80130474();
+        mario_kemuri();
         partyMain();
         marioCamMain();
         mp->frameCounter++;
@@ -446,7 +443,7 @@ void kpa3DMain(void) {
     marioBottomless();
     marioPreDisp();
     marioBalloonMain();
-    mario_kemuri_80130474();
+    mario_kemuri();
     partyMain();
     marioCamMain();
     mp->frameCounter++;

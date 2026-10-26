@@ -288,7 +288,7 @@ void romFontMake(void) {
         }
     }
 
-    /* 3. Deduplicate the sorted list; wp->unk4 = unique count. */
+    /* 3. Deduplicate the sorted list; wp->uniqueChars = unique count. */
     wp->uniqueChars = 0;
 #ifdef VERSION_G8ME01
     uniqueChars = __memAlloc(HEAP_DEFAULT, 0x2000);

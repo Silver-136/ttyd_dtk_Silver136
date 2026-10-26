@@ -15,10 +15,7 @@
 #include "mario/mario_balloon.h"
 #include "party.h"
 
-#ifdef VERSION_G8ME01
-#define mario_kemuri_80130474 mario_kemuri // US: global name
-#endif
-void mario_kemuri_80130474(void);
+void mario_kemuri(void);
 
 void peachChgPose(const char* name);
 
@@ -210,7 +207,7 @@ s32 peachMain(void) {
         marioBottomless();
         marioPreDisp();
         marioBalloonMain();
-        mario_kemuri_80130474();
+        mario_kemuri();
         partyMain();
         marioCamMain();
         mp->frameCounter++;
@@ -249,7 +246,7 @@ s32 peachMain(void) {
     marioBottomless();
     marioPreDisp();
     marioBalloonMain();
-    mario_kemuri_80130474();
+    mario_kemuri();
     partyMain();
     marioCamMain();
     mp->frameCounter++;

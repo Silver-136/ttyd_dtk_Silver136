@@ -887,10 +887,7 @@ void marioReInit(void) {
     wp->returnPos = (Vec){0.0f, -10000.0f, 0.0f};
 }
 
-#ifdef VERSION_G8ME01
-#define mario_kemuri_80130474 mario_kemuri // US: global name
-#endif
-void mario_kemuri_80130474(void);
+void mario_kemuri(void);
 
 static inline void marioMainBlur(MarioWork* wp) {
     if ((wp->frameCounter & 1) && (mp->dispFlags & MARIO_DISP_FLAG_BLUR)) {
@@ -1066,7 +1063,7 @@ void marioMain(void) {
             marioBottomless();
             marioPreDisp();
             marioBalloonMain();
-            mario_kemuri_80130474();
+            mario_kemuri();
             partyMain();
             marioCamMain();
             marioMainEnd(mp);
@@ -1076,7 +1073,7 @@ void marioMain(void) {
             marioBottomless();
             marioPreDisp();
             marioBalloonMain();
-            mario_kemuri_80130474();
+            mario_kemuri();
             partyMain();
             marioCamMain();
             marioMainBlur(wp);
@@ -1129,7 +1126,7 @@ void marioMain(void) {
     marioBottomless();
     marioPreDisp();
     marioBalloonMain();
-    mario_kemuri_80130474();
+    mario_kemuri();
     partyMain();
     marioCamMain();
     marioMainBlur(wp);

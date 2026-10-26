@@ -16,15 +16,12 @@
 
 extern EffectEntry* effKemuri2Entry(s32 type, f32 x, f32 y, f32 z, f32 s, f32 c);
 
-#ifdef VERSION_G8ME01
-#define mario_kemuri_80130474 mario_kemuri
-#endif
 void kemuri(void);
 void kemuri_mugi(void);
 void mario_kemuri_landon(void);
 
 
-void mario_kemuri_80130474(void) {
+void mario_kemuri(void) {
     static s32 ct = 8;
     static s32 left_or_right = 0;
     MarioWork* mario = marioGetPtr();
