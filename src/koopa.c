@@ -134,13 +134,13 @@ s32 kpaMutekiCheck(void) {
 void kpaMutekiOn(void) {
     MarioWork* mp = marioGetPtr();
     animPoseSetMaterialFlagOn(mp->paperAnimGroupId[0], MAP_OBJ_FLAG_PULSE);
-    KPW(mp)->flags |= 0x10000;
+    KPW(mp)->flags |= KPA_WORK_FLAG_MUTEKI;
 }
 
 void kpaMutekiOff(void) {
     MarioWork* mp = marioGetPtr();
     animPoseSetMaterialFlagOff(mp->paperAnimGroupId[0], MAP_OBJ_FLAG_PULSE);
-    KPW(mp)->flags &= ~0x10000;
+    KPW(mp)->flags &= ~KPA_WORK_FLAG_MUTEKI;
 }
 
 void kpaMSetMutekiTimer(void) {
@@ -911,5 +911,5 @@ s32 kpaJumpChk(void) {
 }
 
 void kpaPauseSE2(void) {
-    psndSFXOn(SFX_NAME_WORD(kpaPauseSeTable[irand(28)] | 0x20000));
+    psndSFXOn(SFX_NAME_WORD(kpaPauseSeTable[irand(28)] | PSND_SFX_BYPASS_MUTE));
 }

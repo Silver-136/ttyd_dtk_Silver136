@@ -27,7 +27,7 @@ struct HitEntry;
  * Same layout on JP and US. */
 typedef enum KpaWorkFlags {
     KPA_WORK_FLAG_NO_HIP_ATTACK = (1 << 4),  // 0x10, kpaHipAttackOk returns FALSE
-    KPA_WORK_FLAG_100 = (1 << 8),            // 0x100, koopa_motion sets/clears
+    KPA_WORK_FLAG_WATER_FALL_SFX = (1 << 8), // 0x100, play SFX_KUPPA_WATER_FALL1 on the next drop into water (set while falling or leaving the water)
     KPA_WORK_FLAG_MUTEKI = (1 << 16),        // 0x10000, kpaMutekiOn/Off/Check
     KPA_WORK_FLAG_WEARY = (1 << 24),         // 0x1000000, evt_koopa_weary
     KPA_WORK_FLAG_DEAD = (1 << 28),          // 0x10000000, evt_koopa_chk_dead

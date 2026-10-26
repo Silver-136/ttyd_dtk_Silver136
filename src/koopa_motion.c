@@ -174,7 +174,7 @@ void kpa_stay(void) {
         m->multiTimer = 0;
         m->currSubMotionId = 0;
         if (kpaGetAttackMode() == 0) {
-            if (!(KPW(m)->flags & 0x1000000)) {
+            if (!(KPW(m)->flags & KPA_WORK_FLAG_WEARY)) {
                 kpaChgPose("KPA_S_1", "KPA2_S_1");
             } else {
                 kpaChgPose("KPA_S_2", "KPA2_S_1");
@@ -215,7 +215,7 @@ void kpa_walk(void) {
         m->flags &= ~(MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING | MARIO_FLAG_IS_STEPPING | MARIO_FLAG_HAS_INPUT_JUMP);
         m->currSubMotionId = 0;
         m->multiTimer = 0;
-        if (!(KPW(m)->flags & 0x1000000)) {
+        if (!(KPW(m)->flags & KPA_WORK_FLAG_WEARY)) {
             kpaChgPose("KPA_W_1", "KPA2_W_1");
         } else {
             kpaChgPose("KPA_W_2", "KPA2_W_1");
@@ -436,7 +436,7 @@ void kpa_fall(void) {
     }
     m->airTimer++;
     if (kpaGetStageType() == 1 && kpaGetBodyStatus() <= 1) {
-        KPW(m)->flags |= 0x100;
+        KPW(m)->flags |= KPA_WORK_FLAG_WATER_FALL_SFX;
     }
     if (kpaGetBodyStatus() == 2) {
         m = marioGetPtr();
@@ -545,7 +545,7 @@ BOOL kpaPowDown(void) {
         marioChgMot(MARIO_MOTION_KPA_POW_DOWN);
         return TRUE;
     }
-    KPW(m)->flags |= 0x10000000;
+    KPW(m)->flags |= KPA_WORK_FLAG_DEAD;
     return FALSE;
 }
 
@@ -735,7 +735,7 @@ void kpa_swim(void) {
         m->currSubMotionId = 0;
         m->baseSpeed = 0.0f;
         m->kpaSpeed = 0.0f;
-        KPW(marioGetPtr())->flags |= 0x10;
+        KPW(marioGetPtr())->flags |= KPA_WORK_FLAG_NO_HIP_ATTACK;
     }
     if (m->buttonTrg & PAD_BUTTON_B) {
         kpaAttackStart2();
@@ -827,7 +827,7 @@ void kpa_swim(void) {
         }
         break;
     case 20:
-        KPW(m)->flags |= 0x100;
+        KPW(m)->flags |= KPA_WORK_FLAG_WATER_FALL_SFX;
         m->flags &= ~MARIO_FLAG_IS_FALLING;
         m->flags |= MARIO_FLAG_IS_JUMPING;
         kpaChgPose("KPA_J_1A", "KPA2_J_1A");
@@ -853,8 +853,8 @@ void kpa_swim(void) {
     }
     switch ((s32)m->currSubMotionId) {
     case 0x1E:
-        if (KPW(m)->flags & 0x100) {
-            KPW(m)->flags &= ~0x100;
+        if (KPW(m)->flags & KPA_WORK_FLAG_WATER_FALL_SFX) {
+            KPW(m)->flags &= ~KPA_WORK_FLAG_WATER_FALL_SFX;
             psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_KUPPA_WATER_FALL1), &m->position);
         }
         if (kpaGetAttackMode() == 0) {

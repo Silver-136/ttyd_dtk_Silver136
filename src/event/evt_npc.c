@@ -532,7 +532,7 @@ USER_FUNC(evt_npc_move_position) {
     sfxFlag = 0;
     if (psndGetFlag() & PSND_FLAG_DOOR_IN) {
         if (!(animPoseGetMaterialFlag(npc->poseId) & (MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2))) {
-            sfxFlag = 0x10000;
+            sfxFlag = PSND_SFX_DOOR_MUTE;
         }
     }
 
@@ -602,7 +602,7 @@ USER_FUNC(evt_npc_jump_position) {
 
         sfxFlag = 0;
         if (psndGetFlag() & PSND_FLAG_DOOR_IN && !(animPoseGetMaterialFlag(npc->poseId) & (MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2))) {
-            sfxFlag = 0x10000;
+            sfxFlag = PSND_SFX_DOOR_MUTE;
         }
         if (npc->jumpSfx != 0) {
             psndSFXOnEx_3D(SFX_NAME_WORD(sfxFlag | searchPSSFXList(npc->jumpSfx)), &npc->position, 0xff, 0xff, 0, 8);
@@ -714,7 +714,7 @@ USER_FUNC(evt_npc_jump_position) {
     sfxFlag = 0;
     if (psndGetFlag() & PSND_FLAG_DOOR_IN) {
         if (!(animPoseGetMaterialFlag(npc->poseId) & (MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2))) {
-            sfxFlag = 0x10000;
+            sfxFlag = PSND_SFX_DOOR_MUTE;
         }
     }
     if (npc->landSfx != 0) {
@@ -751,7 +751,7 @@ USER_FUNC(evt_npc_jump_position_nohit) {
 
         if (psndGetFlag() & PSND_FLAG_DOOR_IN) {
             if (!(animPoseGetMaterialFlag(npc->poseId) & (MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2))) {
-                sfxFlag = 0x10000;
+                sfxFlag = PSND_SFX_DOOR_MUTE;
             }
         }
         if (npc->jumpSfx != 0) {
@@ -775,7 +775,7 @@ USER_FUNC(evt_npc_jump_position_nohit) {
     sfxFlag = 0;
     if (psndGetFlag() & PSND_FLAG_DOOR_IN) {
         if (!(animPoseGetMaterialFlag(npc->poseId) & (MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2))) {
-            sfxFlag = 0x10000;
+            sfxFlag = PSND_SFX_DOOR_MUTE;
         }
     }
     if (npc->landSfx != 0) {
@@ -895,7 +895,7 @@ USER_FUNC(evt_npc_glide_position) {
     sfxFlag = 0;
     if (psndGetFlag() & PSND_FLAG_DOOR_IN) {
         if (!(animPoseGetMaterialFlag(npc->poseId) & (MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2))) {
-            sfxFlag = 0x10000;
+            sfxFlag = PSND_SFX_DOOR_MUTE;
         }
     }
 
@@ -1061,7 +1061,7 @@ USER_FUNC(evt_npc_homing_target) {
     sfxFlag = 0;
     if (psndGetFlag() & PSND_FLAG_DOOR_IN) {
         if (!(animPoseGetMaterialFlag(npc->poseId) & (MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2))) {
-            sfxFlag = 0x10000;
+            sfxFlag = PSND_SFX_DOOR_MUTE;
         }
     }
 

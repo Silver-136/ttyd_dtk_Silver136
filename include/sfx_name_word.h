@@ -223,5 +223,9 @@ typedef u32 SfxNameWord;
 #define PSND_SFX_BYPASS_MUTE 0x20000
 /* set in an id: the sound survives psndSFXAllOff */
 #define PSND_SFX_KEEP 0x40000
+/* set in an id: the position is an offset from the listener (calc3D) */
+#define PSND_SFX_LISTENER_OFFSET 0x1000000
+/* set in an id: the sound sits at the listener (calc3D) */
+#define PSND_SFX_AT_LISTENER 0x2000000
 /* set in an id: an environment sound (psndENV), kept through the mute, psndSFXAllOff and the battle start */
 #define PSND_SFX_ENV 0x4000000

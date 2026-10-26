@@ -5031,12 +5031,12 @@ u32 calc3D(s32 id, Vec* pos, u8 vol, u16 dist) {
     s16 span, pan, t;
     PaperSoundWork* wp = &psnd;
 
-    if (id & 0x1000000) {
+    if (id & PSND_SFX_LISTENER_OFFSET) {
         v.x += wp->position.x;
         v.y += wp->position.y;
         v.z += wp->position.z;
     }
-    if (id & 0x2000000) {
+    if (id & PSND_SFX_AT_LISTENER) {
         v = wp->position;
     }
     pd = psnd.direction;
@@ -5487,7 +5487,7 @@ static inline s32 psndSSFindCh(void) {
         }
     }
     for (ch = 0; ch < 3; ch++) {
-        if (SoundSSCheck(ch) & 0x20) {
+        if (SoundSSCheck(ch) & SOUND_STREAM_FLAG_FADEOUT) {
             SoundSSStopCh(ch);
         }
     }
@@ -5908,12 +5908,12 @@ void psndSFXMain(void) {
     for (i = 0, base = sfx[0]; i < 40; i++, base++) {
         if ((base->listId != 0xFFFFFFFF) && ( !(base->flags & PSFX_FLAG_START) )) {
             f = pssfxlist[base->listId & PSND_SFX_INDEX_MASK].fxId;
-            if (f & 0x80000000) {
+            if (f & SFX_FLAG_STREAM) {
                 if (!SoundSSCheck(base->channel)) {
                     base->listId = none;
                     base->channel = none;
                 }
-            } else { r = f & 0x40000000; if (r) {
+            } else { r = f & SFX_FLAG_SONG; if (r) {
                 if (!SoundSongCheck(base->channel)) {
                     base->listId = none;
                     base->channel = -1;
@@ -5958,7 +5958,7 @@ void psndSFXMain(void) {
                 continue;
             }
             f = e->fxId;
-            if (f & 0x80000000) {
+            if (f & SFX_FLAG_STREAM) {
                 for (j = 0; j < 3; j++) {
                     if (!SoundSSCheck(j)) {
                         ch[0] = j;
@@ -5966,7 +5966,7 @@ void psndSFXMain(void) {
                     }
                 }
                 for (j = 0; j < 3; j++) {
-                    if (SoundSSCheck(j) & 0x20) {
+                    if (SoundSSCheck(j) & SOUND_STREAM_FLAG_FADEOUT) {
                         SoundSSStopCh(j);
                     }
                 }
@@ -5984,7 +5984,7 @@ ssfound:
                     SoundSSSetPanCh(sfx[0]->channel, sfx[0]->pan);
                     SoundSSSetVolCh(sfx[0]->channel, SFX_VOL(sfx[0]));
                 }
-            } else if (f & 0x40000000) {
+            } else if (f & SFX_FLAG_SONG) {
                 for (j = 0; j < 4; j++) {
                     if (!SoundSongCheck(j)) {
                         ch[0] = j;
@@ -6034,14 +6034,14 @@ sgfound:
         if (sfx[0]->flags & PSFX_FLAG_3D) {
             *((u32*)b) = calc3D(sfx[0]->listId, &sfx[0]->position, SFX_VOL(sfx[0]), sfx[0]->dist);
             f = e->fxId;
-            if (f & 0x80000000) {
+            if (f & SFX_FLAG_STREAM) {
                 SoundSSSetPanCh(sfx[0]->channel, b[1]);
                 r = (b[0] * psnd.sfxVolume) / 100; if (r < 0) { r = 0; }
                 if (r > 127) { r = 127;
                 }
                 SoundSSSetVolCh(sfx[0]->channel, r);
                 SoundSSSetSrndPanCh(sfx[0]->channel, b[2]);
-            } else if (f & 0x40000000) {
+            } else if (f & SFX_FLAG_SONG) {
                 r = (b[0] * psnd.sfxVolume) / 100; if (r < 0) { r = 0; }
                 if (r > 127) { r = 127;
                 }
@@ -6056,10 +6056,10 @@ sgfound:
             }
         } else {
             f = e->fxId;
-            if (f & 0x80000000) {
+            if (f & SFX_FLAG_STREAM) {
                 SoundSSSetPanCh(sfx[0]->channel, sfx[0]->pan);
                 SoundSSSetVolCh(sfx[0]->channel, SFX_VOL(sfx[0]));
-            } else if (f & 0x40000000) {
+            } else if (f & SFX_FLAG_SONG) {
                 SoundSongSetVolCh(sfx[0]->channel, SFX_VOL(sfx[0]));
             } else {
                 SoundEfxSetPan(sfx[0]->channel, sfx[0]->pan);
@@ -6068,9 +6068,9 @@ sgfound:
         }
         if (( !(sfx[0]->flags & (PSFX_FLAG_BATTLE_START | PSFX_FLAG_ENV | PSFX_FLAG_NO_MUTE | PSFX_FLAG_BYPASS_MUTE)) ) && (psnd.flags & PSND_FLAG_MUTE_SFX)) {
             f = e->fxId;
-            if (f & 0x80000000) {
+            if (f & SFX_FLAG_STREAM) {
                 SoundSSSetVolCh(sfx[0]->channel, 0);
-            } else if (f & 0x40000000) {
+            } else if (f & SFX_FLAG_SONG) {
                 SoundSongSetVolCh(sfx[0]->channel, 0);
             } else {
                 SoundEfxSetVolume(sfx[0]->channel, 0);
@@ -6078,14 +6078,14 @@ sgfound:
         }
         if (sfx[0]->flags & PSFX_FLAG_FADE_OUT) {
             f = e->fxId;
-            if (f & 0x80000000) {
+            if (f & SFX_FLAG_STREAM) {
                 r = (u8)SoundSSGetVolCh(sfx[0]->channel);
                 r = (r * fade) / 127;
                 SoundSSSetVolCh(sfx[0]->channel, r);
                 if (r == 0) {
                     psndSFXOff(i);
                 }
-            } else if (f & 0x40000000) {
+            } else if (f & SFX_FLAG_SONG) {
                 r = (u8)SoundSongGetVolCh(sfx[0]->channel);
                 r = (r * fade) / 127;
                 SoundSongSetVolCh(sfx[0]->channel, r);
@@ -6103,8 +6103,8 @@ sgfound:
         }
         if ((psnd.flags & PSND_FLAG_DOOR_IN) && (sfx[0]->flags & PSFX_FLAG_DOOR_MUTE)) {
             f = e->fxId;
-            if (f & 0x80000000) { SoundSSSetVolCh(sfx[0]->channel, 0);
-            } else if (f & 0x40000000) { SoundSongSetVolCh(sfx[0]->channel, 0);
+            if (f & SFX_FLAG_STREAM) { SoundSSSetVolCh(sfx[0]->channel, 0);
+            } else if (f & SFX_FLAG_SONG) { SoundSongSetVolCh(sfx[0]->channel, 0);
             } else { SoundEfxSetVolume(sfx[0]->channel, 0);
         }
         }
@@ -6769,7 +6769,7 @@ BOOL psndENVOff_f_d(u32 flags, u32 fadetime, s32 r5) {
         return FALSE;
     }
     fade = &psnd.fade[flags & 0xF];
-    if (flags & 0x200) {
+    if (flags & PSND_FADEOUT) {
         if (fade->state == 2) {
         } else if (fade->state != 4) {
             fade->state = 2;
@@ -6779,19 +6779,19 @@ BOOL psndENVOff_f_d(u32 flags, u32 fadetime, s32 r5) {
             fade->state = 2;
         }
 
-    } else if (flags & 0x400) {
+    } else if (flags & PSND_PAUSE) {
         if (fade->state != 2 && fade->state != 4) {
             fade->state = 4;
             fade->time = fadetime / PSND_FRAME_MS;
             fade->timeMax = fade->time;
         }
-    } else if (flags & 0x800) {
+    } else if (flags & PSND_SILENT) {
         fade->dipState = 8;
         fade->dipTimeMax = fadetime / PSND_FRAME_MS;
         fade->dipTime = fade->dipTimeMax;
         fade->dipPercent = silent;
 #ifdef VERSION_G8ME01
-        if (flags & 0x40) {
+        if (flags & PSND_QUICK) {
             fade->dipTime = (fade->dipTimeMax * fade->dipPercent) / 100;
         }
 #endif
