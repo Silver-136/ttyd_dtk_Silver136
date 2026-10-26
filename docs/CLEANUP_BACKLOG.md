@@ -25,15 +25,17 @@ data order 10, sound-name integer round trips (`SFX_NAME_WORD`) 9, no-op casts 6
 
 ## 2. Types and declarations
 
-- Calls through function-pointer casts: 42 (icon drawing family 20, window frame 4, party slit-floor motion 3,
+- Calls through function-pointer casts: 40 (icon drawing family 18, window frame 4, party slit-floor motion 3,
   sound pitch 2, party menu setup 2, puni map data getters 3, single sites). Each needs a prototype that the
-  definition and every caller compile identically with. Tested without a fit so far: windowDispGX_Waku_col
+  definition and every caller compile identically with. Tested without a fit (retail mismatches, Codex rounds 12-13,
+  cleanup_notes/codex_round13_intake.md): iconDispGx (best 14/22), iconDispGx2 (JP definition), windowDispGX_Waku_col
   float-first (fits all but msgdrv), BtlUnit_snd_se_pos word pitch, typed puni getidx calls (the casts cross
   pointer/scalar argument shapes; worth a look as a possible retail ABI mismatch).
-- Largest families of disagreeing private declarations (review priorities): BtlUnit_SetAnim 18, FontDrawString 15,
-  psndSFX_pit 9. Settled: partyChgPose, effMarioBalloonEntry, spline_getvalue / spline_maketable, envAddTev,
-  envSetYamiView (header prototypes); BattleAcDrawGauge (callers agree with the definition except ac_repeatedly,
-  unprototyped, and ac_repeatedly_lv, ratio first: both change code otherwise).
+- Disagreeing private declarations: FontDrawString (14 position-first copies fit; JP gor_irai needs its
+  string-first calls and includes fontmgr.h, so no header prototype yet), psndSFX_pit 9 (no width fits all).
+  Settled: BtlUnit_SetAnim, partyChgPose, effMarioBalloonEntry, spline_getvalue / spline_maketable, envAddTev,
+  envSetYamiView, iconDispGxCol, iconGetTexObj (header prototypes); BattleAcDrawGauge (callers agree with the
+  definition except ac_repeatedly, unprototyped, and ac_repeatedly_lv, ratio first: both change code otherwise).
 - Private function declarations without a header: 404 (85 are each REL's own `_prolog`/`_epilog`/`_unresolved`;
   114 are tou_03, which cannot include the evt headers because it defines its own out-of-line GXSetTexCoordGen).
   Most of the rest are retail mismatches the bytes prove: different argument counts (partyWalkInit, winBadgeExit,
@@ -41,9 +43,6 @@ data order 10, sound-name integer round trips (`SFX_NAME_WORD`) 9, no-op casts 6
   psndSFX_pit/vol, msgWindow_Entry, hankakuSearch per version), Vec/GXColor by value vs pointer
   (cloudGetBreathPower, mapObjSetColor, mapSetBlend, partyNrmToAngle, marioCreviceWallChk), argument order that
   changes code (intpl_sub, marioSetForceMove, gor_irai's FontDrawString).
-- MayaAnim / MayaAnimData are copied privately in effdrv, eff_damage_star, eff_ice and eff_recovery. Not a plain
-  merge: the effects read `data->lists` as a count plus MayaPoly array, effdrv as a count plus key lists (two views
-  of the same animation data; needs a look at the data layout first).
 - `itemEntry` has no header prototype because evt_mobj needs a float-first private declaration (FAKES row).
 - Signed-byte casts `(s32)(u8)` on character and party ids, and u8 casts on BOOL audience getters: kept until an
   accessor or prototype explains them.
@@ -65,10 +64,12 @@ data order 10, sound-name integer round trips (`SFX_NAME_WORD`) 9, no-op casts 6
   field names are credited in NAME_PROVENANCE.md.
 - Icon ids: every icon the game code uses has a name; unused placeholders stay ICON_xxx. The US-only per-language
   icon tables (statuswindow, kpa, evt_shop) still list raw US ids for the non-English variants.
-- Saved-game flags and variables by number: `GSWF(n)`, `GSW(n)`, `LSW/LSWF(n)`. Named so far: story progress
-  (StoryProgress, 407 game labels), Trouble Center, Star Pieces and Shine Sprites (game strings). About 280 more
-  GSWF are item/block collect flags (most used only in the call that creates the item); the rest need evidence from
-  the scripts that set and test them.
+- Saved-game flags and variables: story progress (StoryProgress, 407 game labels), Trouble Center, Star Pieces
+  and Shine Sprites (game strings), and every other GSWF/GSW the scripts use (805 names in
+  include/evt/evt_save_flags.h, 2026-10-26, from the scripts and room text; tool cleanup_tools/save_flags.py).
+  Left: the area-local LSW/LSWF values (about 20 numbers, meanings per area), and C code that uses the same values
+  by index (`swSet(0x994)`, mostly event.c's debug story-jump inits and the journal), which cannot use the
+  GSWF() names.
 - Names with an address suffix: 5 unreferenced .sbss words with no name evidence (the JP demo map names the
   neighbouring objects only), the JP-only party init copies, jumptable_80374848, and the shadowdrv debug strings
   by address (`str_8...`, 6; open research).
