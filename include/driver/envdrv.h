@@ -19,8 +19,11 @@ typedef struct EnvironmentGlare {
     EnvironmentGlareTexCoord coords[]; //0x1C
 } EnvironmentGlare;
 
+// EnvironmentGlareFilter.flags
+#define ENV_GLARE_FILTER_Z (1 << 0) // envGlareFilterZ: zscale applies
+
 typedef struct EnvironmentGlareFilter {
-    u16 flags; //0x0
+    u16 flags; //0x0, ENV_GLARE_FILTER_Z
     u16 type; //0x2
     u16 y0; //0x4
     u16 y1; //0x6
@@ -29,16 +32,31 @@ typedef struct EnvironmentGlareFilter {
     f32 zscale; //0xC
 } EnvironmentGlareFilter;
 
+#define ENV_DOF_PASS1 (1 << 0)
+#define ENV_DOF_PASS2 (1 << 1)
+
 typedef struct EnvironmentDof {
-    u16 flags; //0x0, bit0 = pass 1 on, bit1 = pass 2 on
+    u16 flags; //0x0, ENV_DOF_PASS1 / ENV_DOF_PASS2
     u8 level1; //0x2, pass 1 konst color
     u8 level2; //0x3, pass 2 konst color
     f32 radius1; //0x4, pass 1 sample offset (4 taps)
     f32 radius2; //0x8, pass 2 sample offset
 } EnvironmentDof; // two-pass depth-of-field style screen blur
 
+// EnvironmentWork.flags
+typedef enum EnvironmentFlags {
+    ENV_FLAG_CAPTURE_COLOR_UNUSED = (1 << 0), // 0x1, envCapture copies the screen colour; nothing sets it
+    ENV_FLAG_CAPTURE_DEPTH_UNUSED = (1 << 1), // 0x2, envCapture copies the screen depth; nothing sets it
+    ENV_FLAG_BLUR_CAPTURE = (1 << 2),         // 0x4, envCapture2 copies the screen for the blur
+    ENV_FLAG_BLUR_CAPTURED = (1 << 3),        // 0x8, a blur frame was captured
+    ENV_FLAG_FF_UNUSED = (1 << 28),           // 0x10000000, envDisp_FF draws; nothing sets it
+    ENV_FLAG_GLARE_FILTER = (1 << 29),        // 0x20000000, envGlareFilter with a type
+    ENV_FLAG_BLUR = (1 << 30),                // 0x40000000, envBlurOn
+} EnvironmentFlags;
+#define ENV_FLAG_DOF_UNUSED 0x80000000 // envDisp_DepthOfField draws; nothing sets it
+
 typedef struct EnvironmentWork {
-    s32 flags; //0x0
+    s32 flags; //0x0, EnvironmentFlags
     smartEntry* capture; //0x4
     smartEntry* capture2; //0x8
     GXTexObj captureObj; //0xC

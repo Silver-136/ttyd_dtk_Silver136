@@ -134,7 +134,7 @@ void envCapture(CameraId camId, void* param) {
     var1 = gp->efbHeight;
     var2 = (u16)(((u32)var0 & 0xFFFF) / 2);
     var3 = (u16)(((u32)var1 & 0xFFFF) / 2);
-    if (wp->flags & 1) {
+    if (wp->flags & ENV_FLAG_CAPTURE_COLOR_UNUSED) {
         GXSetTexCopySrc(0, 0, gp->fbWidth, gp->efbHeight);
         GXSetTexCopyDst(var2, var3, GX_TF_RGBA8, GX_TRUE);
         size = GXGetTexBufferSize(var2, var3, GX_TF_RGBA8, GX_FALSE, 0);
@@ -144,7 +144,7 @@ void envCapture(CameraId camId, void* param) {
         GXInitTexObj(&wp->captureObj, wp->capture->address, var2, var3, GX_TF_RGBA8, GX_CLAMP, GX_CLAMP, GX_FALSE);
         GXInitTexObjLOD(&wp->captureObj, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
     }
-    if (wp->flags & 2) {
+    if (wp->flags & ENV_FLAG_CAPTURE_DEPTH_UNUSED) {
         GXSetTexCopySrc(0, 0, var0, var1);
         GXSetTexCopyDst(var2, var3, GX_CTF_Z8M, GX_TRUE);
         size = GXGetTexBufferSize(var2, var3, GX_CTF_Z8M, GX_FALSE, 0);
@@ -162,7 +162,7 @@ void envCapture2(CameraId camId, void* param) {
 
     var0 = (u16)(((u32)gp->fbWidth & 0xFFFF) / 2);
     var1 = (u16)(((u32)gp->efbHeight & 0xFFFF) / 2);
-    if (wp->flags & 4) {
+    if (wp->flags & ENV_FLAG_BLUR_CAPTURE) {
         GXSetTexCopySrc(0, 0, gp->fbWidth, gp->efbHeight);
         GXSetTexCopyDst(var0, var1, GX_TF_RGB565, GX_TRUE);
         GXCopyTex(wp->envBlur, GX_FALSE);
@@ -170,11 +170,11 @@ void envCapture2(CameraId camId, void* param) {
         GXInitTexObj(&wp->envBlurObj, wp->envBlur, var0, var1, GX_TF_RGB565, GX_CLAMP, GX_CLAMP, GX_FALSE);
         GXInitTexObjLOD(&wp->envBlurObj, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
     }
-    if (wp->flags & 0x40000000) {
-        if ((wp->blurWork & 1) && (wp->flags & 8)) {
-            wp->flags &= ~4;
+    if (wp->flags & ENV_FLAG_BLUR) {
+        if ((wp->blurWork & 1) && (wp->flags & ENV_FLAG_BLUR_CAPTURED)) {
+            wp->flags &= ~ENV_FLAG_BLUR_CAPTURE;
         }
-        wp->flags |= 8;
+        wp->flags |= ENV_FLAG_BLUR_CAPTURED;
     }
 }
 
@@ -201,7 +201,7 @@ void envDisp2(CameraId camId, void *param) {
     GXGetProjectionv(pm);
     wp = envGetWork();
     filter = &wp->filter; //CodeWarrior is very good compiler, yesyes
-    if (wp->flags & 0x20000000) {
+    if (wp->flags & ENV_FLAG_GLARE_FILTER) {
         switch (filter->type) {
             case 0:
                 break;
@@ -365,7 +365,7 @@ void envDisp_DepthOfField(void) {
     tbl[0] = texmtx_tbl;
     mg[0] = 0x43300000;
     dof = &wp->dof;
-    if (wp->flags & 0x80000000) {
+    if (wp->flags & ENV_FLAG_DOF_UNUSED) {
         /* FAKE: cam is a one-element array so it becomes an @ temp numbered between mg and tbl2 */
         cam[0] = camGetPtr(CAMERA_2D);
         // FAKE: dead guard (gz is 0) gives cam a second def, so it stays a named web instead of the call-result temp
@@ -392,7 +392,7 @@ void envDisp_DepthOfField(void) {
         for (k = 0; k < 1; k++) {
             GXSetCullMode(GX_CULL_NONE);
         }
-        if ((dof->flags & 1) && dof->radius1) {
+        if ((dof->flags & ENV_DOF_PASS1) && dof->radius1) {
             tbl[0] = texmtx_tbl;
             coord = 0;
             stage = 0;
@@ -433,7 +433,7 @@ void envDisp_DepthOfField(void) {
             GXBegin(GX_QUADS, GX_VTXFMT0, 4);
             DOF_QUAD(gp, 2.0f);
         }
-        if ((dof->flags & 2) && dof->radius2) {
+        if ((dof->flags & ENV_DOF_PASS2) && dof->radius2) {
             /* FAKE: dead read of i2 with a different type. It stops the first front end pass from scalarizing i2;
                the read is then deleted and the second pass scalarizes it, so its @ temp is created after the
                CSE temps and numbers below them. */
@@ -512,7 +512,7 @@ void envDisp_Blur(void) {
     f32 t;
     u8 alpha;
 
-    if ((wp->flags & 0x40000000) && (wp->flags & 8)) {
+    if ((wp->flags & ENV_FLAG_BLUR) && (wp->flags & ENV_FLAG_BLUR_CAPTURED)) {
         cam = camGetPtr(CAMERA_2D);
         GXSetProjection(camGetPtr(CAMERA_2D)->projection, cam->projType);
         GXLoadPosMtxImm(camGetPtr(CAMERA_2D)->view, 0);
@@ -564,9 +564,9 @@ void envBlurOn(s32 type, s32 msec) {
     EnvironmentWork* wp = envGetWork();
     EnvBlurWork* blur = (EnvBlurWork*)&wp->blurWork;
 
-    wp->flags |= 0x40000000;
-    wp->flags |= 4;
-    wp->flags &= ~8;
+    wp->flags |= ENV_FLAG_BLUR;
+    wp->flags |= ENV_FLAG_BLUR_CAPTURE;
+    wp->flags &= ~ENV_FLAG_BLUR_CAPTURED;
     memset(blur, 0, sizeof(EnvBlurWork));
     blur->time = gp->renderTime;
     blur->msec = msec;
@@ -580,8 +580,8 @@ void envBlurOn(s32 type, s32 msec) {
 void envBlurOff(void) {
     EnvironmentWork* wp = envGetWork();
 
-    wp->flags &= ~4;
-    wp->flags &= ~0x40000000;
+    wp->flags &= ~ENV_FLAG_BLUR_CAPTURE;
+    wp->flags &= ~ENV_FLAG_BLUR;
     _mapFree(wp->envBlur);
 }
 
@@ -670,7 +670,7 @@ void envGlare(EnvironmentGlare* glare) {
         }
     }
 
-    if (glareFilter->flags & 1) {
+    if (glareFilter->flags & ENV_GLARE_FILTER_Z) {
         GXSetZMode(GX_TRUE, GX_LEQUAL, GX_FALSE);
     } else {
         GXSetZMode(GX_FALSE, GX_ALWAYS, GX_FALSE);
@@ -735,7 +735,7 @@ void envGlareFilter(s32 type, s32 y0, s32 x0, s32 y1, s32 x1) {
         f->y1 = 0;
         f->x0 = 0;
         f->y0 = 0;
-        wp->flags &= ~0x20000000;
+        wp->flags &= ~ENV_FLAG_GLARE_FILTER;
         return;
     }
     sx0 = x0 - (x0 & 1);
@@ -760,8 +760,8 @@ void envGlareFilter(s32 type, s32 y0, s32 x0, s32 y1, s32 x1) {
     f->y1 = sy1;
     f->x1 = sx1;
     f->zscale = 0.0f;
-    f->flags &= ~1;
-    wp->flags |= 0x20000000;
+    f->flags &= ~ENV_GLARE_FILTER_Z;
+    wp->flags |= ENV_FLAG_GLARE_FILTER;
 }
 
 void envGlareFilterZ(f32 zscale) {
@@ -769,7 +769,7 @@ void envGlareFilterZ(f32 zscale) {
     EnvironmentGlareFilter* f = &wp->filter;
 
     f->zscale = zscale;
-    f->flags |= 1;
+    f->flags |= ENV_GLARE_FILTER_Z;
 }
 
 
@@ -784,7 +784,7 @@ void envDisp_FF(void) {
     f32 ofs;
     s32 i;
 
-    if (wp->flags & 0x10000000) {
+    if (wp->flags & ENV_FLAG_FF_UNUSED) {
         GXSetNumChans(0);
         GXSetChanCtrl(GX_COLOR0A0, GX_DISABLE, GX_SRC_REG, GX_SRC_REG, GX_LIGHT_NULL, GX_DF_CLAMP, GX_AF_NONE);
         GXSetNumTexGens(1);
