@@ -997,7 +997,7 @@ EVT_BEGIN(marioAttackEvent_Deka)
         CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_JUMP)
         CALL(get_ride_pos, 0, LW(0), LW(1), LW(2))
         CALL(btlevtcmd_JumpSetting, UNIT_ID_SELF, 30, 0, FLOAT(0.39941406f))
-        CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 30, -1)
+        CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 30, MOVE_SOUND_FROM_TABLE)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("M_I_Y"))
     END_SIBLING_EVENT
     BEGIN_SIBLING_EVENT
@@ -1020,7 +1020,7 @@ EVT_BEGIN(marioAttackEvent_Deka)
             CALL(btlevtcmd_AnimeChangePoseType, LW(14), LW(15), POSE_TYPE_JUMP)
             CALL(get_ride_pos, 1, LW(0), LW(1), LW(2))
             CALL(btlevtcmd_JumpSetting, LW(14), 30, 0, FLOAT(0.39941406f))
-            CALL(btlevtcmd_JumpPosition, LW(14), LW(0), LW(1), LW(2), 30, -1)
+            CALL(btlevtcmd_JumpPosition, LW(14), LW(0), LW(1), LW(2), 30, MOVE_SOUND_FROM_TABLE)
             CALL(btlevtcmd_AnimeChangePoseType, LW(14), LW(15), POSE_TYPE_NEUTRAL)
         END_IF
     END_SIBLING_EVENT
@@ -1058,7 +1058,7 @@ EVT_BEGIN(marioAttackEvent_Deka)
         CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_JUMP)
         CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
         CALL(btlevtcmd_JumpSetting, UNIT_ID_SELF, 30, 0, FLOAT(0.39941406f))
-        CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 30, -1)
+        CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 30, MOVE_SOUND_FROM_TABLE)
         CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_NEUTRAL)
     END_SIBLING_EVENT
     BEGIN_SIBLING_EVENT
@@ -1066,7 +1066,7 @@ EVT_BEGIN(marioAttackEvent_Deka)
             CALL(btlevtcmd_AnimeChangePoseType, LW(14), LW(15), POSE_TYPE_JUMP)
             CALL(btlevtcmd_GetHomePos, LW(14), LW(0), LW(1), LW(2))
             CALL(btlevtcmd_JumpSetting, LW(14), 30, 0, FLOAT(0.39941406f))
-            CALL(btlevtcmd_JumpPosition, LW(14), LW(0), LW(1), LW(2), 30, -1)
+            CALL(btlevtcmd_JumpPosition, LW(14), LW(0), LW(1), LW(2), 30, MOVE_SOUND_FROM_TABLE)
             CALL(btlevtcmd_StartWaitEvent, LW(14))
         END_IF
     END_SIBLING_EVENT

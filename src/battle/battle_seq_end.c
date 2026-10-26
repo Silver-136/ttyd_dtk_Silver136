@@ -1312,7 +1312,7 @@ EVT_BEGIN(_jump_event)
         CALL(_lvup_object_decide_bound)
     END_INLINE_EVENT
     CALL(btlevtcmd_SetFallAccel, UNIT_ID_MARIO, FLOAT(0.39941406f))
-    CALL(btlevtcmd_JumpPosition, UNIT_ID_MARIO, LW(0), LW(1), LW(2), 30, -1)
+    CALL(btlevtcmd_JumpPosition, UNIT_ID_MARIO, LW(0), LW(1), LW(2), 30, MOVE_SOUND_FROM_TABLE)
     CALL(btlevtcmd_snd_se, UNIT_ID_MARIO, STRING("SFX_VOICE_MARIO_PAUSE2"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_MARIO, 1, STRING("M_V_2"))
     CALL(evt_audience_sound_cheer, 180, 40)

@@ -1131,6 +1131,12 @@ BattleUnit* BtlUnit_GetGuardKouraPtr(BattleUnit* unit);
 
 BOOL BtlUnit_CanActStatus(BattleUnit* unit);
 void BtlUnit_SetAnim(BattleUnitPart* part, const char* name);
+// BtlUnit_LoadSeMode kind: the movement sound of btlevtcmd_MovePosition / JumpPosition / DivePosition ...
+typedef enum BattleMoveSound {
+    MOVE_SOUND_NONE = 0,
+    MOVE_SOUND_FROM_TABLE = -1, // the unit's own sound table entry for this kind of move
+    MOVE_SOUND_KEEP = -2,       // keep the sound already set up (btlevtcmd_SetSeMode ...)
+} BattleMoveSound;
 void BtlUnit_SetAnimType(BattleUnitPart* part, s32 type);
 void BtlUnit_SetBodyAnim(BattleUnit* unit, const char* name);
 void BtlUnit_SetBodyAnimType(BattleUnit* unit, s32 type);

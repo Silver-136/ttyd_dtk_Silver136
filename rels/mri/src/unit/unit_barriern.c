@@ -988,7 +988,7 @@ static EVT_BEGIN(wakka_attack_common_event_no_hit)
             END_LOOP
         END_SIBLING_EVENT
         CALL(btlevtcmd_JumpPartsSetting, UNIT_ID_SELF, LW(15), 0, 4, 0)
-        CALL(btlevtcmd_JumpPartsPosition, UNIT_ID_SELF, LW(15), LW(6), LW(7), LW(8), 0, -1)
+        CALL(btlevtcmd_JumpPartsPosition, UNIT_ID_SELF, LW(15), LW(6), LW(7), LW(8), 0, MOVE_SOUND_FROM_TABLE)
     ELSE
         CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(6), LW(7), LW(8))
         CALL(btlevtcmd_GetStageSize, LW(6), EVT_NULLPTR, EVT_NULLPTR)
@@ -1010,7 +1010,7 @@ static EVT_BEGIN(wakka_attack_common_event_no_hit)
             END_LOOP
         END_SIBLING_EVENT
         CALL(btlevtcmd_JumpPartsSetting, UNIT_ID_SELF, LW(15), 0, 7, 0)
-        CALL(btlevtcmd_JumpPartsPosition, UNIT_ID_SELF, LW(15), LW(6), LW(7), LW(8), 0, -1)
+        CALL(btlevtcmd_JumpPartsPosition, UNIT_ID_SELF, LW(15), LW(6), LW(7), LW(8), 0, MOVE_SOUND_FROM_TABLE)
         CALL(btlevtcmd_SetPartsPos, UNIT_ID_SELF, LW(15), 0, -1000, 0)
     END_IF
     RETURN
@@ -1050,7 +1050,7 @@ static EVT_BEGIN(wakka_attack_common_event_hit)
         END_SIBLING_EVENT
         CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(6), LW(7), LW(8))
         CALL(btlevtcmd_JumpPartsSetting, UNIT_ID_SELF, LW(15), 0, 4, 0)
-        CALL(btlevtcmd_JumpPartsPosition, UNIT_ID_SELF, LW(15), LW(6), LW(7), LW(8), 0, -1)
+        CALL(btlevtcmd_JumpPartsPosition, UNIT_ID_SELF, LW(15), LW(6), LW(7), LW(8), 0, MOVE_SOUND_FROM_TABLE)
         ELSE
         CALL(btlevtcmd_SetPartsScale, UNIT_ID_SELF, LW(15), 1, 0, 1)
         BEGIN_SIBLING_EVENT
@@ -1067,7 +1067,7 @@ static EVT_BEGIN(wakka_attack_common_event_hit)
         END_SIBLING_EVENT
         CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(6), LW(7), LW(8))
         CALL(btlevtcmd_JumpPartsSetting, UNIT_ID_SELF, LW(15), 0, 7, 0)
-        CALL(btlevtcmd_JumpPartsPosition, UNIT_ID_SELF, LW(15), LW(6), LW(7), LW(8), 0, -1)
+        CALL(btlevtcmd_JumpPartsPosition, UNIT_ID_SELF, LW(15), LW(6), LW(7), LW(8), 0, MOVE_SOUND_FROM_TABLE)
         CALL(btlevtcmd_SetPartsPos, UNIT_ID_SELF, LW(15), 0, -1000, 0)
     END_IF
     RETURN
