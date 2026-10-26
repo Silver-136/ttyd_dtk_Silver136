@@ -28,7 +28,7 @@
 typedef struct YuuNpcPose {
     char name[16];
     char anim[8];
-    u16 field_0x18;
+    u16 loop;
     f32 frames;
     f32 jump;
     s32 start;
@@ -350,7 +350,7 @@ void yuunpc_pose_init(ExtTexInfo* data) {
         yuunpc_wp->pose[yuunpc_wp->numPoses].count = n - start + 1;
         n++;
         yuunpc_wp->pose[yuunpc_wp->numPoses].frames += 1.0f;
-        yuunpc_wp->pose[yuunpc_wp->numPoses].field_0x18 = 1;
+        yuunpc_wp->pose[yuunpc_wp->numPoses].loop = 1;
         yuunpc_wp->pose[yuunpc_wp->numPoses].jump = 0.0f;
         yuunpc_wp->pose[yuunpc_wp->numPoses].walkAnimSpeed = 2.0f;
         data++;
@@ -365,7 +365,7 @@ void yuunpc_pose_init(ExtTexInfo* data) {
         yuunpc_wp->pose[yuunpc_wp->numPoses].count = 1;
         yuunpc_wp->pose[yuunpc_wp->numPoses].frames = data->frame;
         data++;
-        yuunpc_wp->pose[yuunpc_wp->numPoses].field_0x18 = 1;
+        yuunpc_wp->pose[yuunpc_wp->numPoses].loop = 1;
         yuunpc_wp->pose[yuunpc_wp->numPoses].jump = 0.0f;
         yuunpc_wp->pose[yuunpc_wp->numPoses].walkAnimSpeed = 1.0f;
         yuunpc_wp->pose[yuunpc_wp->numPoses].flags |= 1;

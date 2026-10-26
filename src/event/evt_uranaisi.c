@@ -8,7 +8,7 @@
 
 
 typedef struct {
-    u16 unk0;
+    u16 flags;
     s16 labelId;
     s16 idx;
 } UranaiInfo;

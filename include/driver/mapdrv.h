@@ -36,7 +36,7 @@ typedef struct MapVtxRec {
     s16 pos;     // 0x0
     s16 nrm;     // 0x2
     s16 clr;     // 0x4
-    s16 unk6;    // 0x6
+    s16 clr1;    // 0x6
     s16 tex[8];  // 0x8
 } MapVtxRec;
 

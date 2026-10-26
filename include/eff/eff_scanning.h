@@ -11,7 +11,7 @@ typedef struct effScanningData {
     s32 animId; //0x14
     s32 state; //0x18
     s32 field_0x1C; //0x1C
-    s32 field_0x20; //0x20
+    s32 alpha; //0x20
 } effScanningData;
 
 EffectEntry* effScanningEntry(s32 int2, f32 float3, f32 float4, f32 float5);

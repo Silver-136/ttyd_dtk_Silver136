@@ -19,11 +19,11 @@ typedef struct RepeatDisp {
     u8 field_0x8[4];  // 0x8
     GXColor color;    // 0xC
     s8 delta[4];      // 0x10
-    f32 unk14;        // 0x14
-    f32 unk18;        // 0x18
+    f32 iconX;        // 0x14
+    f32 iconY;        // 0x18
     f32 unk1C;        // 0x1C
     s32 timer;        // 0x20
-    u8 field_0x24[4]; // 0x24
+    u8 iconStep[4]; // 0x24
     f32 gauge;        // 0x28
 } RepeatDisp;
 
@@ -134,8 +134,8 @@ s32 battleAcMain_Repeatedly(BattleWork* work) {
     switch (work->actionCommands.mAcState) {
         case 0:
             memset(d, 0, sizeof(RepeatDisp));
-            d->unk14 = -300.0f;
-            d->unk18 = 0.0f;
+            d->iconX = -300.0f;
+            d->iconY = 0.0f;
             d->timer = 20;
             d->color = (GXColor){255, 255, 255, 255};
             d->delta[0] = 0;

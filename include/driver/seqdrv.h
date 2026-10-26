@@ -21,7 +21,7 @@ typedef struct SequenceWork {
     s32 state; //0x4, 0-7
     const char* mapName; //0x8
     const char* beroName; //0xC
-    u32 pad_10; //0x10, never accessed
+    u32 counter; //0x10, frame counter (seq_battle)
     u32 pad_14; //0x14, never accessed
     u32 pad_18; //0x18, never accessed
     u32 pad_1C; //0x1C, never accessed

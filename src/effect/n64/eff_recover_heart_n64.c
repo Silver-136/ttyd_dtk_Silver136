@@ -20,7 +20,7 @@ typedef struct EffRecoverHeartN64Work {
     f32 offX;     // 0x24
     s32 alpha;    // 0x28
     s32 frame;    // 0x2C
-    s32 unk30;    // 0x30
+    s32 elapsed;    // 0x30
     s32 delay;    // 0x34
     f32 scaleW;   // 0x38
     f32 scaleH;   // 0x3C
@@ -116,7 +116,7 @@ EffectEntry* effRecoverHeartN64Entry(s32 type, s32 count, f32 x, f32 y, f32 z) {
     work->position.y = y;
     work->position.z = z;
     work->frame = 46;
-    work->unk30 = 0;
+    work->elapsed = 0;
     if (count < 0) {
         work->flag = 1;
         count = -count;
@@ -171,7 +171,7 @@ void effRecoverHeartMain(EffectEntry* effect) {
     tmp.z = work->position.z;
     position = tmp;
     work->frame--;
-    work->unk30++;
+    work->elapsed++;
     lifetime = work->frame;
     if (lifetime < 0) {
         effDelete(effect);

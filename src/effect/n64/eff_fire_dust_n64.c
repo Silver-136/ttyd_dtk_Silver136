@@ -22,7 +22,7 @@ typedef struct EffFireDustWork {
     s32 lifetime;   // 0x38
     s32 frame;      // 0x3c
     s32 cr, cg, cb; // 0x40
-    s32 pad4c;      // 0x4c
+    s32 alpha;      // 0x4c
     s32 r, g, b;    // 0x50
     s32 ca;         // 0x5c
     f32 scale;      // 0x60
@@ -95,7 +95,7 @@ EffectEntry* effFireDustN64Entry(s32 type, s32 count, s32 lifetime, f32 x, f32 y
     } else {
         work->lifetime = lifetime;
     }
-    work->pad4c = 255;
+    work->alpha = 255;
     work->position.x = x;
     work->position.y = y;
     work->position.z = z;
@@ -148,7 +148,7 @@ void effFireDustMain(EffectEntry* effect) {
         effDelete(effect);
     } else {
         if (p->lifetime < 8) {
-            p->pad4c = p->lifetime * 32;
+            p->alpha = p->lifetime * 32;
         }
         height = (s32)p->height;
         range = p->range;
@@ -178,7 +178,7 @@ void effFireDustMain(EffectEntry* effect) {
                 p->unk64 = (f32)(rand() % 15);
                 p->unk68 = (f32)(rand() % 15);
                 p->rot = 0.0f;
-                p->pad4c = 255;
+                p->alpha = 255;
             }
             p->scale = 2.0f * scale_data[p->index];
             p->rot += 4.0f;
@@ -248,7 +248,7 @@ static void main_dl(EffectEntry* effect, Mtx cam) {
     effN64Vtx* vtx;
 
     p = effect->userdata;
-    a = (f32)p->pad4c / 255.0f;
+    a = (f32)p->alpha / 255.0f;
     r = p->r;
     g = p->g;
     b = p->b;
@@ -265,7 +265,7 @@ static void main_dl(EffectEntry* effect, Mtx cam) {
         PSMTXConcat(cam, tr, tr);
         GXLoadPosMtxImm(tr, GX_PNMTX0);
         GXSetCurrentMtx(GX_PNMTX0);
-        GXSetTevColor(GX_TEVREG0, (GXColor){r, g, b, (s32)((f32)p->pad4c * a)});
+        GXSetTevColor(GX_TEVREG0, (GXColor){r, g, b, (s32)((f32)p->alpha * a)});
         switch (i & 7) {
             case 0: vtx = &size8x8_tex22x22_vtx[12]; break;
             case 1: vtx = &size8x8_tex22x22_vtx[16]; break;

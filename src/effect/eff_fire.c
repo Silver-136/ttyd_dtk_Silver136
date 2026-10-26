@@ -10,7 +10,7 @@
 #include "libc_decls.h"
 
 typedef struct EffFireSmokeWork {
-    s32 unk0;       // 0x0
+    s32 type;       // 0x0
     Vec position;   // 0x4
     Vec velocity;   // 0x10
     s32 pad1c[3];   // 0x1C
@@ -782,7 +782,7 @@ static void effFireSmokeEntry(f32 x, f32 y, f32 z, f32 scale) {
     smoke->userdata = sw;
     smoke->callback = effFireSmokeMain;
     smoke->flags |= EFFECT_FLAG_SOFT_DELETABLE;
-    sw->unk0 = 0;
+    sw->type = 0;
     sw->color[3] = 0x80;
     sw->position = (Vec){ x, y, z };
     sw->scale = scale;

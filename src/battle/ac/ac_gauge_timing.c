@@ -24,7 +24,7 @@ typedef struct GaugeAC {
     void* resultcb;          // 0x14
     void* dispcb;            // 0x18
     void* deletecb;          // 0x1C
-    s32 field_0x20;          // 0x20
+    s32 mDefenseResult;          // 0x20
     s32 resultCount;         // 0x24
     s32 result;              // 0x28
     u8 field_0x2C[4];        // 0x2C

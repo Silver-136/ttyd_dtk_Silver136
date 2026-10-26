@@ -13,7 +13,7 @@ typedef struct MoamoaPoseDef {
     char model[16];
     char anim[8];
     s16 loop;
-    f32 speed;
+    f32 frames;         // length of the pose in frames
     s32 start;
     s32 count;
 } MoamoaPoseDef;

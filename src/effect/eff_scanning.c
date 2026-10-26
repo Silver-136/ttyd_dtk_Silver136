@@ -31,7 +31,7 @@ EffectEntry* effScanningEntry(s32 int2, f32 float3, f32 float4, f32 float5) {
     data->animId = -1;
     data->state = 0;
     data->field_0x1C = 0;
-    data->field_0x20 = 255;
+    data->alpha = 255;
 
     return entry;
 }

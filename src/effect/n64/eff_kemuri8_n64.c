@@ -17,10 +17,10 @@ typedef struct EffKemuri8N64Work {
     f32 accel; // 0x14, added to speed each frame
     f32 accelStep; // 0x18, added to accel
     f32 accelStep2; // 0x1C, added to accelStep
-    f32 field_0x20; // 0x20
-    f32 field_0x24; // 0x24
-    f32 field_0x28; // 0x28
-    f32 field_0x2C; // 0x2C
+    f32 vSpeed; // 0x20
+    f32 vAccel; // 0x24
+    f32 vAccelStep; // 0x28
+    f32 vAccelStep2; // 0x2C
     f32 sinAngle;   // 0x30
     f32 cosAngle;   // 0x34
     s32 field_0x38; // 0x38
@@ -97,10 +97,10 @@ EffectEntry* effKemuri8N64Entry(s32 type, f32 x, f32 y, f32 z) {
         work->accel = 0.19999999f;
         work->accelStep = 0.0f;
         work->accelStep2 = 0.0f;
-        work->field_0x20 = 1.75f;
-        work->field_0x24 = -0.16f;
-        work->field_0x28 = 0.0f;
-        work->field_0x2C = 0.0f;
+        work->vSpeed = 1.75f;
+        work->vAccel = -0.16f;
+        work->vAccelStep = 0.0f;
+        work->vAccelStep2 = 0.0f;
         rad = 6.2831855f * (f32)(((i - 1) * 360) / (count - 1)) / 360.0f;
         work->position.x = inline_fn(radius, (f32)sin(rad));
         work->position.y = radius * -(f32)cos(rad);

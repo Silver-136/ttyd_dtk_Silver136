@@ -21,8 +21,8 @@ typedef struct EffKemuri3N64Work {
     Vec rotation;     // 0x24
     Mtx mtx;          // 0x30
     f32 speed;        // 0x60
-    f32 field_0x64;   // 0x64
-    f32 field_0x68;   // 0x68
+    f32 hSpeedScale;   // 0x64
+    f32 rising;   // 0x68
     f32 field_0x6C;   // 0x6C
     f32 vSpeed;       // 0x70, vertical: vSnap adds to vJerk, vJerk to vAccel, vAccel to vSpeed
     f32 vAccel;       // 0x74
@@ -52,8 +52,8 @@ EffectEntry* effKemuri3N64Entry(f32 x, f32 y, f32 z, f32 angle) {
     effect->callback = effKemuri3Main;
     for (i = 0, ofs = 0; i < 5; i++, ofs += 72, work++) {
         work->active = TRUE;
-        work->field_0x64 = 0.29999998f;
-        work->field_0x68 = 0.0f;
+        work->hSpeedScale = 0.29999998f;
+        work->rising = 0.0f;
         work->field_0x6C = 0.0f;
         work->position.x = x;
         work->position.y = y;

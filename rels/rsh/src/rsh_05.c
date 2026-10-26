@@ -259,7 +259,7 @@ static void moamoa_pose_init(void) {
         strcpy(wp->defs[wp->numDefs].anim, anim);
         wp->defs[wp->numDefs].start = start;
         wp->defs[wp->numDefs].count = i - start + 1;
-        wp->defs[wp->numDefs].speed = data->frame;
+        wp->defs[wp->numDefs].frames = data->frame;
         wp->defs[wp->numDefs].loop = 1;
         if (!strncmp(anim, "J", 1)) {
             wp->defs[wp->numDefs].loop = 0;
@@ -282,7 +282,7 @@ static void moamoa_pose_main(void) {
     for (i = 0; i < wp->count; i++, moa++, pose++) {
         now = gp->renderTime;
         def = &wp->defs[moa->pose];
-        t = 60.0f * OSTicksToMilliseconds(now - moa->startTime) / 1000.0f / def->speed;
+        t = 60.0f * OSTicksToMilliseconds(now - moa->startTime) / 1000.0f / def->frames;
 
         if (t >= 1.0f) {
             moa->startTime = now;

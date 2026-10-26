@@ -29,7 +29,7 @@
 /* static map-file joint data for the mobj cube models (same layout as a loaded map file) */
 typedef struct CubeDrawMode { MapJointDrawMode mode; u32 field_0x10; } CubeDrawMode;
 typedef struct CubeMesh {
-    u8 unk0;              // 0x0
+    u8 reserved_00;              // 0x0
     u8 padding[2];        // 0x1
     u8 isPackedDisplay;   // 0x3
     s32 displayListCount; // 0x4

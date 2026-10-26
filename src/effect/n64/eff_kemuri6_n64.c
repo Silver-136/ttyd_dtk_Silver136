@@ -30,7 +30,7 @@ typedef struct EffKemuri6N64Work {
     f32 velocity;    // 0x38
     f32 accel;       // 0x3C
     f32 accelAdd;    // 0x40
-    f32 field_0x44;  // 0x44
+    f32 accelAddStep;  // 0x44
     u8 pad_48[8];    // 0x48
 } EffKemuri6N64Work;
 
@@ -59,7 +59,7 @@ EffectEntry* effKemuri6N64Entry(s32 type, f32 x, f32 y, f32 z) {
         work->active = TRUE;
         work->type = type;
         work->accelAdd = 0.0f;
-        work->field_0x44 = 0.0f;
+        work->accelAddStep = 0.0f;
         work->position.x = x;
         work->position.y = y;
         work->position.z = z;

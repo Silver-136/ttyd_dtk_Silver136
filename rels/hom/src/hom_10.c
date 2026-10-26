@@ -20,16 +20,16 @@
 #include "driver/seqdrv.h"
 typedef struct SharinData {
     const char* name;
-    s32 field_0x4;
-    s32 field_0x8;
+    s32 radiusType;
+    s32 driveSource;
     EvtFloat speed;
 } SharinData;
 typedef struct ClankData {
     const char* name;
-    s32 field_0x4;
-    s32 field_0x8;
-    EvtFloat x;
-    EvtFloat y;
+    s32 radiusType;
+    s32 driveSource;
+    EvtFloat radius;    // circle radius (scales the sin/cos offset)
+    EvtFloat direction; // +1 / -1, multiplies the angle
 } ClankData;
 
 static USER_FUNC(ramp_r);

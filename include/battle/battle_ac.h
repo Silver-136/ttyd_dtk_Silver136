@@ -13,7 +13,8 @@ typedef void (*BattleACDeleteCallback)(BattleWork* work);
 
 typedef struct BattleACDispParams {
     s32 blinkTimer;                 // 0x0, frame counter for the icon blink (ac_repeatedly_lv)
-    u8 pad_04[0xC - 0x4];           // 0x4, no named access
+    s32 frame2;                     // 0x4, frame counter (ac_repeatedly)
+    u8 pad_08[0xC - 0x8];           // 0x8, no named access
     GXColor color;                  // 0xC, icon colour
     s8 colorStep[4];                // 0x10, per-frame colour delta while the icon blinks
     f32 iconX;                      // 0x14, see actionCommandDisp

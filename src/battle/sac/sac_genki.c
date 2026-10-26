@@ -65,7 +65,7 @@ typedef struct GenkiObject {
 typedef struct GenkiStar {
     s32 state;        // 0x00
     s32 timer;        // 0x04
-    s32 unk8;         // 0x08
+    s32 isStone;         // 0x08
     Vec pos;          // 0x0C
     Vec start;        // 0x18
     Vec end;          // 0x24
@@ -1408,7 +1408,7 @@ USER_FUNC(star_appear) {
     for (i = 0; i < 7; i++) {
         GenkiStar* s = &w->star[i];
         s->state = 1;
-        s->unk8 = 0;
+        s->isStone = 0;
     }
     return 2;
 }
@@ -1416,7 +1416,7 @@ USER_FUNC(star_appear) {
 static USER_FUNC(star_stone_appear) {
     GenkiWork* w = get_ptr();
     w->star[0].state = 1;
-    w->star[0].unk8 = 1;
+    w->star[0].isStone = 1;
     return 2;
 }
 

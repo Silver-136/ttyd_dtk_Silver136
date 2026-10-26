@@ -29,7 +29,7 @@ typedef struct SignalTimingWork {
     s32 okStart;    // 0x1C
     s32 okEnd;      // 0x20
     s32 pressed;    // 0x24
-    s32 unk28;      // 0x28
+    s32 nextRangeEnd;      // 0x28
     s32 difficulty; // 0x2C
     s32 okFlag;     // 0x30
     u32 button;     // 0x34
@@ -180,7 +180,7 @@ s32 battleAcMain_SignalTiming(BattleWork *work) {
                 ac->mAcState = 1000;
 
             case 1000:
-                w->unk28 = ((w->next + 1) * ST_STEP(work)) - 1;
+                w->nextRangeEnd = ((w->next + 1) * ST_STEP(work)) - 1;
                 w->next++;
                 if (w->next < (ST_LEAD(work) + 1)) {
                     if (!((work->actionCommands.setupFlags & 1) && (work->actionCommands.mAcUnit->mTokenFlags & kConfusedAction))) {

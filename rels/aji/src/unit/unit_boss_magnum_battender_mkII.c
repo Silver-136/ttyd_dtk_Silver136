@@ -44,7 +44,7 @@ typedef struct ArmWork {
 } ArmWork;
 double atan(double x);
 typedef struct BattenEffWork {
-    s32 field_0x0;
+    s32 type;
     Vec pos;
     u8 field_0x10[0x28 - 0x10];
     Mtx mtx;

@@ -37,6 +37,7 @@
 #include "eff/eff_kemuri.h"
 #include "pmario_sound.h"
 #include "sfx_name_word.h"
+#include "driver/casedrv.h"
 
 
 typedef struct MarioJumpData {
@@ -51,11 +52,6 @@ typedef struct MarioMotTblEntry {
     void (*unk)(void);
     void (*post)(void);
 } MarioMotTblEntry;
-
-typedef struct MotCaseEntry {
-    s32 unk0;
-    s32 type;
-} MotCaseEntry;
 
 void mot_talk(void);
 void mot_getItem(void);
@@ -72,7 +68,6 @@ void* marioChkLandon(f32* y, f32 spd);
 BOOL marioGetRub(s32 mask, s32* a, s32* b, s32* c);
 BOOL marioCreviceWallChk(Vec pos);
 BOOL marioChkPlanePlace(void* hit);
-MotCaseEntry* caseCheckHitObj(void* hit);
 void* fbatNpcTalkCheck(void);
 
 MarioMotTblEntry marioMotTbl[] = {
@@ -843,7 +838,7 @@ void mot_getItem(void) {
 
 BOOL marioChkJump(void) {
     MarioWork* mario = marioGetPtr();
-    MotCaseEntry* ce;
+    CaseEntry* ce;
     if (!(mario->buttonTrg & PAD_BUTTON_A)) {
         return FALSE;
     }
@@ -855,7 +850,7 @@ BOOL marioChkJump(void) {
             return FALSE;
         }
         ce = caseCheckHitObj(mario->hitobjFrontA);
-        if (ce && (ce->type == 9 || ce->type == 4 || ce->type == 12)) {
+        if (ce && (ce->conditionId == CASE_FRONT_A || ce->conditionId == CASE_JUMP_FROM_A || ce->conditionId == CASE_PUSH_A)) {
             return FALSE;
         }
     }
@@ -864,7 +859,7 @@ BOOL marioChkJump(void) {
             return FALSE;
         }
         ce = caseCheckHitObj(mario->hitobjFront);
-        if (ce && (ce->type == 9 || ce->type == 4 || ce->type == 12)) {
+        if (ce && (ce->conditionId == CASE_FRONT_A || ce->conditionId == CASE_JUMP_FROM_A || ce->conditionId == CASE_PUSH_A)) {
             return FALSE;
         }
     }
@@ -873,7 +868,7 @@ BOOL marioChkJump(void) {
             return FALSE;
         }
         ce = caseCheckHitObj(mario->hitobjStandOn);
-        if (ce && ce->type == 5) {
+        if (ce && ce->conditionId == CASE_STAND_ON_A) {
             return FALSE;
         }
     }
