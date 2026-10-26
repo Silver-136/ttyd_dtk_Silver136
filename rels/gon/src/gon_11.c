@@ -19,6 +19,7 @@
 #include "evt/evt_snd.h"
 #include "evt/evt_item.h"
 #include "mario/mario_pouch.h"
+#include "system.h"
 
 #include "driver/npcdrv.h"
 #include "driver/hitdrv.h"
@@ -160,7 +161,7 @@ static EVT_BEGIN(gonbaba_fog_change)
         END_LOOP
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
-        CALL(evt_sub_intpl_init, 11, 0, 400, LW(10))
+        CALL(evt_sub_intpl_init, EASING_COS_IN_OUT, 0, 400, LW(10))
         LOOP(LW(10))
             CALL(evt_sub_intpl_get_value)
             SET_VALUE(GW(0), LW(0))
@@ -171,7 +172,7 @@ static EVT_BEGIN(gonbaba_fog_change)
             WAIT_FRAMES(1)
         END_LOOP
     END_INLINE_EVENT
-    CALL(evt_sub_intpl_init, 11, 0, 1600, LW(10))
+    CALL(evt_sub_intpl_init, EASING_COS_IN_OUT, 0, 1600, LW(10))
     LOOP(LW(10))
         CALL(evt_sub_intpl_get_value)
         SET_VALUE(GW(1), LW(0))
@@ -189,7 +190,7 @@ static EVT_BEGIN(gonbaba_down_shake)
     CALL(evt_snd_sfxon, STRING("SFX_STG1_GNB_DOWN1"), 0)
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG1_GNB_DOWN2"), LW(0), LW(1), LW(2), LW(8))
     BEGIN_INLINE_EVENT
-        CALL(evt_sub_intpl_msec_init, 0, 90, 0, 10000)
+        CALL(evt_sub_intpl_msec_init, EASING_LINEAR, 90, 0, 10000)
         LABEL(0)
         CALL(evt_sub_intpl_msec_get_value)
         CALL(evt_snd_sfx_vol, LW(8), LW(0))
@@ -200,7 +201,7 @@ static EVT_BEGIN(gonbaba_down_shake)
         CALL(evt_snd_sfxoff, LW(8))
     END_INLINE_EVENT
     CALL(evt_cam_shake, 4, FLOAT(0.049804688f), FLOAT(0.0f), 500)
-    CALL(evt_sub_intpl_init, 11, 50, 5, 50)
+    CALL(evt_sub_intpl_init, EASING_COS_IN_OUT, 50, 5, 50)
     LOOP(0)
         CALL(evt_sub_intpl_get_value)
         DIVIDE_FLOAT(LW(0), FLOAT(1000.0f))
@@ -231,7 +232,7 @@ EVT_BEGIN(gonbaba_event)
     BEGIN_INLINE_EVENT
         SET_VALUE(LW(1), 0)
         SPAWN_EVENT(PTR(bero_close_door_play_se))
-        CALL(evt_sub_intpl_msec_init, 11, 180, 0, 500)
+        CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 180, 0, 500)
         LOOP(0)
             CALL(evt_sub_intpl_msec_get_value)
             CALL_CHILD(PTR(door01_close))

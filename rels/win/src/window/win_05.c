@@ -16,6 +16,7 @@
 #include "party/party_motion.h"
 #include "evt/evt_sub.h"
 #include "mario/mario_pouch.h"
+#include "system.h"
 
 
 EvtWord win_05_door_open[10];
@@ -85,7 +86,7 @@ static EVT_BEGIN(cloud_toujou)
     CALL(evt_map_set_blend, 0, 0, 0, 0, 255)
     CALL(evt_npc_wait_pera, STRING("クラウダ"))
     CALL(evt_seq_wait, 2)
-    CALL(evt_sub_intpl_msec_init, 11, 0, 255, 500)
+    CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 0, 255, 500)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
         CALL(evt_map_set_blend, 0, LW(0), LW(0), LW(0), 255)

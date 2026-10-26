@@ -21,6 +21,7 @@
 #include "evt/evt_telop.h"
 #include "evt/evt_item.h"
 #include "mario/mario_pouch.h"
+#include "system.h"
 
 #include "driver/offscreendrv.h"
 #include "mario/mario.h"
@@ -1317,7 +1318,7 @@ static EVT_BEGIN(sekai_yami_evt)
     CALL(evt_cam3d_evt_set, -150, 258, 1648, -150, 180, 150, 0, 11)
     CALL(evt_seq_wait, 2)
     WAIT_MS(1000)
-    CALL(evt_sub_intpl_msec_init, 11, 255, 64, 2000)
+    CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 255, 64, 2000)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
         CALL(evt_bg_set_color, LW(0), LW(0), LW(0), 255)
@@ -1356,7 +1357,7 @@ static EVT_BEGIN(sekai_yami_evt)
     SPAWN_EVENT(PTR(sekai_yami_puni))
     BEGIN_INLINE_EVENT
         WAIT_MS(3000)
-        CALL(evt_sub_intpl_msec_init, 11, 255, 0, 1000)
+        CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 255, 0, 1000)
         LOOP(0)
             CALL(evt_sub_intpl_msec_get_value)
             CALL(evt_mapobj_color, 1, STRING("S_yuka_hika_02"), 255, 255, 255, LW(0))
@@ -1368,7 +1369,7 @@ static EVT_BEGIN(sekai_yami_evt)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_yuka_hika_02"), MAP_OBJ_FLAG_HIDDEN)
     END_INLINE_EVENT
     CALL(evt_snd_sfxon, STRING("SFX_STG8_WORLD_DARK1"), 0)
-    CALL(evt_sub_intpl_msec_init, 11, -800, 800, 5000)
+    CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, -800, 800, 5000)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
         CALL(yami_view, LW(0))
@@ -1447,7 +1448,7 @@ static EVT_BEGIN(minnnanokoe_evt)
             WAIT_FRAMES(1)
         END_LOOP
     END_INLINE_EVENT
-    CALL(evt_sub_intpl_msec_init, 11, 660, 60, 4500)
+    CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 660, 60, 4500)
     LABEL(0)
     CALL(evt_sub_intpl_msec_get_value)
     SET_VALUE(GW(0), LW(0))
@@ -1457,7 +1458,7 @@ static EVT_BEGIN(minnnanokoe_evt)
     END_IF
     BEGIN_INLINE_EVENT
         LOOP(0)
-            CALL(evt_sub_intpl_msec_init, 11, 6000, 6500, 500)
+            CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 6000, 6500, 500)
             LABEL(1)
             CALL(evt_sub_intpl_msec_get_value)
             DIVIDE_FLOAT(LW(0), FLOAT(100.0f))
@@ -1466,7 +1467,7 @@ static EVT_BEGIN(minnnanokoe_evt)
             IF_INT_EQUAL(LW(1), 1)
                 GOTO(1)
             END_IF
-            CALL(evt_sub_intpl_msec_init, 11, 6500, 6000, 500)
+            CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 6500, 6000, 500)
             LABEL(2)
             CALL(evt_sub_intpl_msec_get_value)
             DIVIDE_FLOAT(LW(0), FLOAT(100.0f))

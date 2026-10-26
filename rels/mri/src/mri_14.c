@@ -18,6 +18,7 @@
 #include "evt/evt_snd.h"
 #include "driver/mapdrv.h"
 #include "mario/mario_pouch.h"
+#include "system.h"
 
 #include "driver/fadedrv.h"
 #include "mario/mariost.h"
@@ -161,7 +162,7 @@ static BeroEntry bero_entry_data[] = {
 };
 
 EVT_BEGIN(npc_rotate)
-    CALL(evt_sub_intpl_msec_init, 0, LW(1), LW(2), LW(3))
+    CALL(evt_sub_intpl_msec_init, EASING_LINEAR, LW(1), LW(2), LW(3))
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value_para, LW(0), LW(1))
         CALL(evt_npc_set_rotate, LW(10), 0, LW(0), 0)
@@ -310,7 +311,7 @@ EVT_END()
 
 static EVT_BEGIN(starstone_fuwafuwa)
     LOOP(0)
-        CALL(evt_sub_intpl_msec_init, 11, 0, 500, 500)
+        CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 0, 500, 500)
         CALL(evt_item_get_position, STRING("item00"), LW(5), LW(6), LW(7))
         LABEL(1)
         CALL(evt_sub_intpl_msec_get_value)
@@ -321,7 +322,7 @@ static EVT_BEGIN(starstone_fuwafuwa)
         IF_INT_EQUAL(LW(1), 1)
             GOTO(1)
         END_IF
-        CALL(evt_sub_intpl_msec_init, 11, 500, 0, 500)
+        CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 500, 0, 500)
         LABEL(2)
         CALL(evt_sub_intpl_msec_get_value)
         DIVIDE_FLOAT(LW(0), FLOAT(100.0f))
@@ -393,7 +394,7 @@ EVT_BEGIN(npc_dokan)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
         WAIT_MS(500)
-        CALL(evt_sub_intpl_msec_init, 0, 100, 0, 200)
+        CALL(evt_sub_intpl_msec_init, EASING_LINEAR, 100, 0, 200)
         LOOP(0)
             CALL(evt_sub_intpl_msec_get_value_para, LW(0), LW(1))
             DIVIDE_FLOAT(LW(0), FLOAT(100.0f))
@@ -616,7 +617,7 @@ EVT_BEGIN(time_bomb)
         CALL(evt_snd_sfxon_3d, STRING("SFX_STG2_DOKAN_FALL1"), LW(0), LW(1), LW(2), 0)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
-        CALL(evt_sub_intpl_msec_init, 0, 200, 0, 500)
+        CALL(evt_sub_intpl_msec_init, EASING_LINEAR, 200, 0, 500)
         LOOP(0)
             CALL(evt_sub_intpl_msec_get_value_para, LW(0), LW(1))
             CALL(evt_mapobj_trans, 1, STRING("S_dokan"), 0, LW(0), 0)

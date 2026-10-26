@@ -18,6 +18,7 @@
 #include "mot/mot_roll.h"
 #include "mot/mot_slit.h"
 #include "driver/mapdrv.h"
+#include "system.h"
 
 #include "mario/mario.h"
 #include "mario/mariost.h"
@@ -412,7 +413,7 @@ EVT_BEGIN(init_yuurei)
             CALL(evt_snd_bgmoff, 2048)
             CALL(evt_npc_get_position, STRING("ゆうれい"), LW(3), LW(4), LW(5))
             CALL(evt_snd_sfxon_3d, STRING("SFX_STG6_GHOST_APPEAR1"), LW(3), LW(4), LW(5), 0)
-            CALL(evt_sub_intpl_msec_init, 11, 0, 180, 1000)
+            CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 0, 180, 1000)
             LABEL(0)
             CALL(evt_sub_intpl_msec_get_value)
             CALL(evt_npc_set_color, STRING("ゆうれい"), 255, 255, 255, LW(0))
@@ -427,7 +428,7 @@ EVT_BEGIN(init_yuurei)
             CALL(evt_npc_change_interrupt, STRING("ゆうれい"), 6, PTR(talk_yuurei))
         END_IF
         LOOP(0)
-            CALL(evt_sub_intpl_msec_init, 11, 180, 64, 1000)
+            CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 180, 64, 1000)
             LABEL(1)
             CALL(evt_sub_intpl_msec_get_value)
             CALL(evt_npc_set_color, STRING("ゆうれい"), 255, 255, 255, LW(0))
@@ -435,7 +436,7 @@ EVT_BEGIN(init_yuurei)
             IF_INT_EQUAL(LW(1), 1)
                 GOTO(1)
             END_IF
-            CALL(evt_sub_intpl_msec_init, 11, 64, 180, 1000)
+            CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 64, 180, 1000)
             LABEL(2)
             CALL(evt_sub_intpl_msec_get_value)
             CALL(evt_npc_set_color, STRING("ゆうれい"), 255, 255, 255, LW(0))
@@ -543,7 +544,7 @@ EVT_BEGIN(talk_yuurei)
                 END_LOOP
             END_INLINE_EVENT
             BEGIN_INLINE_EVENT
-                CALL(evt_sub_intpl_msec_init, 0, 180, 60, 5000)
+                CALL(evt_sub_intpl_msec_init, EASING_LINEAR, 180, 60, 5000)
                 LOOP(0)
                     CALL(evt_sub_intpl_msec_get_value)
                     CALL(evt_npc_set_color, STRING("ゆうれい"), 255, 255, 255, LW(0))
@@ -553,7 +554,7 @@ EVT_BEGIN(talk_yuurei)
                     END_IF
                 END_LOOP
             END_INLINE_EVENT
-            CALL(evt_sub_intpl_msec_init, 0, LW(8), 80, 5000)
+            CALL(evt_sub_intpl_msec_init, EASING_LINEAR, LW(8), 80, 5000)
             LOOP(0)
                 CALL(evt_sub_intpl_msec_get_value)
                 CALL(evt_npc_set_position, STRING("ゆうれい"), LW(7), LW(0), LW(9))
@@ -568,7 +569,7 @@ EVT_BEGIN(talk_yuurei)
             CALL(evt_snd_bgmoff, 513)
             CALL(evt_snd_bgmon, 288, 0)
             BEGIN_INLINE_EVENT
-                CALL(evt_sub_intpl_msec_init, 0, 60, 180, 1000)
+                CALL(evt_sub_intpl_msec_init, EASING_LINEAR, 60, 180, 1000)
                 LOOP(0)
                     CALL(evt_sub_intpl_msec_get_value)
                     CALL(evt_npc_set_color, STRING("ゆうれい"), 255, 255, 255, LW(0))
@@ -589,7 +590,7 @@ EVT_BEGIN(talk_yuurei)
                 END_LOOP
                 CALL(evt_snd_sfxoff, LW(10))
             END_INLINE_EVENT
-            CALL(evt_sub_intpl_msec_init, 12, 80, LW(8), 1000)
+            CALL(evt_sub_intpl_msec_init, EASING_SIN_OUT, 80, LW(8), 1000)
             LOOP(0)
                 CALL(evt_sub_intpl_msec_get_value)
                 CALL(evt_npc_set_position, STRING("ゆうれい"), LW(7), LW(0), LW(9))

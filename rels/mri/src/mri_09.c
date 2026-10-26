@@ -24,6 +24,7 @@
 #include "driver/npcdrv.h"
 #include "driver/mapdrv.h"
 #include "mario/mario_pouch.h"
+#include "system.h"
 
 #ifdef VERSION_G8ME01
 #endif
@@ -275,7 +276,7 @@ EVT_BEGIN(slot00_event)
     SET_VALUE(LW(10), GW(0))
     SET_VALUE(LW(11), GW(0))
     ADD(LW(11), 90)
-    CALL(evt_sub_intpl_msec_init, 0, LW(10), LW(11), 500)
+    CALL(evt_sub_intpl_msec_init, EASING_LINEAR, LW(10), LW(11), 500)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
         SET_VALUE(GW(0), LW(0))
@@ -299,7 +300,7 @@ EVT_BEGIN(slot01_event)
     SET_VALUE(LW(10), GW(1))
     SET_VALUE(LW(11), GW(1))
     ADD(LW(11), 90)
-    CALL(evt_sub_intpl_msec_init, 0, LW(10), LW(11), 500)
+    CALL(evt_sub_intpl_msec_init, EASING_LINEAR, LW(10), LW(11), 500)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
         SET_VALUE(GW(1), LW(0))
@@ -323,7 +324,7 @@ EVT_BEGIN(slot02_event)
     SET_VALUE(LW(10), GW(2))
     SET_VALUE(LW(11), GW(2))
     ADD(LW(11), 90)
-    CALL(evt_sub_intpl_msec_init, 0, LW(10), LW(11), 500)
+    CALL(evt_sub_intpl_msec_init, EASING_LINEAR, LW(10), LW(11), 500)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
         SET_VALUE(GW(2), LW(0))
@@ -347,7 +348,7 @@ EVT_BEGIN(slot03_event)
     SET_VALUE(LW(10), GW(3))
     SET_VALUE(LW(11), GW(3))
     ADD(LW(11), 90)
-    CALL(evt_sub_intpl_msec_init, 0, LW(10), LW(11), 500)
+    CALL(evt_sub_intpl_msec_init, EASING_LINEAR, LW(10), LW(11), 500)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
         SET_VALUE(GW(3), LW(0))

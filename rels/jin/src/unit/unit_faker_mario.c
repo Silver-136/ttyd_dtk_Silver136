@@ -3,6 +3,7 @@
 #include "evt/evt_cmd.h"
 #include "evt/evt_msg.h"
 #include "party/party_motion.h"
+#include "system.h"
 
 #include "battle/battle.h"
 #include "battle/battle_sub.h"
@@ -737,7 +738,7 @@ EVT_BEGIN(phase_event_fmario)
             CALL(btlevtcmd_DivePosition, LW(3), -140, 0, 5, 60, 0, 0, 4, 0)
             CALL(btlevtcmd_AnimeChangePose, LW(5), LW(6), STRING("M_Z_1"))
             BEGIN_SIBLING_EVENT_GET_ID(LW(0))
-                CALL(evt_sub_intpl_init, 0, 0, 180, 15)
+                CALL(evt_sub_intpl_init, EASING_LINEAR, 0, 180, 15)
                 LOOP(16)
                     CALL(evt_sub_intpl_get_value)
                     CALL(btlevtcmd_SetRotate, UNIT_ID_MARIO, 0, LW(0), 0)
@@ -755,7 +756,7 @@ EVT_BEGIN(phase_event_fmario)
             CALL(evt_msg_print, 2, STRING("stg4_jin_25"), 0, LW(3))
             WAIT_MS(1000)
             BEGIN_SIBLING_EVENT_GET_ID(LW(0))
-                CALL(evt_sub_intpl_init, 0, 180, 0, 15)
+                CALL(evt_sub_intpl_init, EASING_LINEAR, 180, 0, 15)
                 LOOP(16)
                     CALL(evt_sub_intpl_get_value)
                     CALL(btlevtcmd_SetRotate, UNIT_ID_MARIO, 0, LW(0), 0)

@@ -9,6 +9,7 @@
 #include "evt/evt_mobj.h"
 #include "driver/npcdrv.h"
 #include "mario/mario_pouch.h"
+#include "system.h"
 
 #include "mario/mario.h"
 #include "driver/hitdrv.h"
@@ -273,7 +274,7 @@ EVT_BEGIN(sanders_attack)
     END_INLINE_EVENT
     LOOP(0)
         WAIT_MS(100)
-        CALL(evt_sub_intpl_msec_init, 11, 0, 360, 200)
+        CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 0, 360, 200)
         LOOP(0)
             CALL(evt_sub_intpl_msec_get_value)
             CALL(evt_npc_set_rotate, STRING("サンダース"), 0, LW(0), 0)
@@ -349,7 +350,7 @@ EVT_BEGIN(sanders_funto)
     CALL(evt_msg_print, 0, STRING("stg5_muj_25"), 0, STRING(/*"オドオド水夫"*/"\x83\x49\x83\x68\x83\x49\x83\x68\x90\x85\x95\x76"))
     CALL(evt_msg_print, 0, STRING("stg5_muj_26"), 0, STRING(/*"サンダース"*/"\x83\x54\x83\x93\x83\x5F\x81\x5B\x83\x58"))
     BEGIN_INLINE_EVENT
-        CALL(evt_sub_intpl_msec_init, 11, 0, 360, 200)
+        CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 0, 360, 200)
         LOOP(0)
             CALL(evt_sub_intpl_msec_get_value)
             CALL(evt_npc_set_rotate, STRING(/*"サンダース"*/"\x83\x54\x83\x93\x83\x5F\x81\x5B\x83\x58"), 0, LW(0), 0)
@@ -433,7 +434,7 @@ EVT_BEGIN(yashi_yure)
         CALL(evt_mapobj_get_position, STRING("S_yasi_ki"), LW(0), LW(1), LW(2))
         CALL(evt_snd_sfxon_3d, STRING("SFX_STG5_OBJ_TREE_SHAKE1"), LW(0), LW(1), LW(2), 0)
         CALL(evt_snd_sfxon_3d, STRING("SFX_STG5_OBJ_LEAF_SHAKE1"), LW(0), LW(1), LW(2), 0)
-        CALL(evt_sub_intpl_init, 1, 0, -40, 15)
+        CALL(evt_sub_intpl_init, EASING_QUADRATIC_IN, 0, -40, 15)
         LOOP(16)
             CALL(evt_sub_intpl_get_value)
             CALL(evt_mapobj_trans, 1, STRING("S_yasi_mi02"), 0, LW(0), 0)
@@ -468,7 +469,7 @@ EVT_BEGIN(yashi_yure)
         CALL(evt_snd_sfxon_3d, STRING("SFX_STG5_OBJ_LEAF_SHAKE1"), LW(0), LW(1), LW(2), 0)
         WAIT_MS(100)
         WAIT_MS(50)
-        CALL(evt_sub_intpl_init, 1, 0, -40, 15)
+        CALL(evt_sub_intpl_init, EASING_QUADRATIC_IN, 0, -40, 15)
         LOOP(16)
             CALL(evt_sub_intpl_get_value)
             CALL(evt_mapobj_trans, 1, STRING("S_yasi_mi01"), 0, LW(0), 0)

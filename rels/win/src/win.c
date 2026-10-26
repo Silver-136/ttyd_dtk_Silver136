@@ -6,6 +6,7 @@
 #include "evt/evt_snd.h"
 #include "evt/evt_sub.h"
 #include "evt/evt_bero.h"
+#include "system.h"
 
 #include "data/mapdata.h"
 #include "win.h"
@@ -37,9 +38,9 @@ EVT_BEGIN(evt_win_door_open_pure)
         END_IF
     END_INLINE_EVENT
     IF_INT_EQUAL(LW(0), 0)
-        CALL(evt_sub_intpl_msec_init, 11, 0, -70, LW(1))
+        CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 0, -70, LW(1))
         ELSE
-        CALL(evt_sub_intpl_msec_init, 11, -70, 0, LW(1))
+        CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, -70, 0, LW(1))
     END_IF
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
@@ -72,9 +73,9 @@ EVT_BEGIN(evt_win_door_close_pure)
         CALL(evt_snd_sfxon_3d, STRING("SFX_DOOR_SHUT_WOOD2"), LW(10), LW(11), LW(12), 0)
     END_INLINE_EVENT
     IF_INT_EQUAL(LW(0), 0)
-        CALL(evt_sub_intpl_msec_init, 11, 70, 0, LW(1))
+        CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 70, 0, LW(1))
         ELSE
-        CALL(evt_sub_intpl_msec_init, 11, 0, 70, LW(1))
+        CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 0, 70, LW(1))
     END_IF
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)

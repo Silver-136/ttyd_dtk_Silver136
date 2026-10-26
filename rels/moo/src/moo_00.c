@@ -20,6 +20,7 @@
 #include "evt/evt_item.h"
 #include "driver/mapdrv.h"
 #include "mario/mario_pouch.h"
+#include "system.h"
 
 #include "party.h"
 #include "mario/mario.h"
@@ -156,7 +157,7 @@ static EVT_BEGIN(evt_first)
     CALL(evt_party_set_dir, 0, 90, 0)
     BEGIN_INLINE_EVENT
         WAIT_MS(500)
-        CALL(evt_sub_intpl_msec_init, 0, 0, 5540, 1000)
+        CALL(evt_sub_intpl_msec_init, EASING_LINEAR, 0, 5540, 1000)
         LABEL(30)
         CALL(evt_sub_intpl_msec_get_value)
         CALL(party_kirimomi, LW(0))
@@ -185,7 +186,7 @@ static EVT_BEGIN(evt_first)
         CALL_CHILD(PTR(party_damage_pose2))
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
-        CALL(evt_sub_intpl_msec_init, 0, 0, 5620, 1000)
+        CALL(evt_sub_intpl_msec_init, EASING_LINEAR, 0, 5620, 1000)
         LABEL(20)
         CALL(evt_sub_intpl_msec_get_value)
         CALL(mario_kirimomi, LW(0))

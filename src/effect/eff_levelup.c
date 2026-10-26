@@ -154,9 +154,9 @@ void effLevelupMain(EffectEntry* effect) {
                 break;
             case 3:
                 if (i < 2) {
-                    work->xOffset = intplGetValue(1, 0.0f, 400.0f, work->timer, 30);
+                    work->xOffset = intplGetValue(EASING_QUADRATIC_IN, 0.0f, 400.0f, work->timer, 30);
                 } else {
-                    work->xOffset = intplGetValue(1, 0.0f, -400.0f, work->timer, 30);
+                    work->xOffset = intplGetValue(EASING_QUADRATIC_IN, 0.0f, -400.0f, work->timer, 30);
                 }
                 work->timer++;
                 if (work->timer > 30) {

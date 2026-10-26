@@ -14,6 +14,7 @@
 #include "evt/evt_snd.h"
 #include "driver/npcdrv.h"
 #include "driver/mapdrv.h"
+#include "system.h"
 
 #include "stdio.h"
 #include "manager/evtmgr_cmd.h"
@@ -72,7 +73,7 @@ EVT_BEGIN(kpa_01_door_open)
     CALL(evt_mapobj_get_position, STRING("door"), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_DOOR_OPEN_CASTLE1"), LW(0), LW(1), LW(2), 0)
     BEGIN_INLINE_EVENT
-        CALL(evt_sub_intpl_msec_init, 5, 0, 180, 2000)
+        CALL(evt_sub_intpl_msec_init, EASING_CUBIC_OUT, 0, 180, 2000)
         LABEL(0)
         CALL(evt_sub_intpl_msec_get_value)
         MULTIPLY_FLOAT(LW(0), FLOAT(0.5546875f))
@@ -143,7 +144,7 @@ EVT_BEGIN(kpa_01_door_close)
     SET_FLOAT_VALUE(GW(0), 0)
     SET_VALUE(GW(1), 1)
     BEGIN_INLINE_EVENT
-        CALL(evt_sub_intpl_msec_init, 2, 180, 0, 2000)
+        CALL(evt_sub_intpl_msec_init, EASING_CUBIC_IN, 180, 0, 2000)
         LABEL(0)
         CALL(evt_sub_intpl_msec_get_value)
         MULTIPLY_FLOAT(LW(0), FLOAT(0.5546875f))
@@ -498,7 +499,7 @@ EVT_BEGIN(kpa_01_syuppatu_evt)
     END_INLINE_EVENT
     SET_FLOAT_VALUE(GW(0), FLOAT(0.0f))
     BEGIN_INLINE_EVENT
-        CALL(evt_sub_intpl_msec_init, 0, 0, 360, 2000)
+        CALL(evt_sub_intpl_msec_init, EASING_LINEAR, 0, 360, 2000)
         LABEL(0)
         CALL(evt_sub_intpl_msec_get_value)
         CALL(evt_sub_get_sincos, LW(0), LW(2), LW(3))
@@ -509,7 +510,7 @@ EVT_BEGIN(kpa_01_syuppatu_evt)
         END_IF
     END_INLINE_EVENT
     CALL(evt_snd_sfxon_3d, STRING("SFX_KUPPA_AIRSHIP_MOVE1"), 200, 50, 0, LW(9))
-    CALL(evt_sub_intpl_msec_init, 11, 200, 625, 2000)
+    CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 200, 625, 2000)
     LABEL(1)
     CALL(evt_sub_intpl_msec_get_value)
     SET_FLOAT_VALUE(LW(2), GW(0))
@@ -528,7 +529,7 @@ EVT_BEGIN(kpa_01_syuppatu_evt)
     SET_VALUE(GW(0), 50)
     CALL(evt_npc_get_position, STRING("飛クッパ"), LW(2), LW(3), LW(4))
     CALL(evt_snd_sfxon_3d, STRING("SFX_KUPPA_AIRSHIP_MOVE1"), LW(2), LW(3), LW(4), LW(9))
-    CALL(evt_sub_intpl_msec_init, 1, 0, 1000, 1500)
+    CALL(evt_sub_intpl_msec_init, EASING_QUADRATIC_IN, 0, 1000, 1500)
     LABEL(2)
     CALL(evt_sub_intpl_msec_get_value)
     DIVIDE_FLOAT(LW(0), FLOAT(1000.0f))
@@ -590,7 +591,7 @@ EVT_BEGIN(kpa_01_syuppatu_evt)
     CALL(evt_npc_get_position, STRING("飛クッパ"), LW(2), LW(3), LW(4))
     BEGIN_INLINE_EVENT
         WAIT_MS(1300)
-        CALL(evt_sub_intpl_msec_init, 0, 1000, 100, 1000)
+        CALL(evt_sub_intpl_msec_init, EASING_LINEAR, 1000, 100, 1000)
         LABEL(3)
         CALL(evt_sub_intpl_msec_get_value)
         DIVIDE_FLOAT(LW(0), FLOAT(1000.0f))
@@ -606,7 +607,7 @@ EVT_BEGIN(kpa_01_syuppatu_evt)
         END_IF
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
-        CALL(evt_sub_intpl_msec_init, 11, 180, 430, 3300)
+        CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 180, 430, 3300)
         LABEL(4)
         CALL(evt_sub_intpl_msec_get_value)
         CALL(evt_sub_get_sincos, LW(0), LW(2), LW(3))
@@ -618,7 +619,7 @@ EVT_BEGIN(kpa_01_syuppatu_evt)
         SET_VALUE(GF(0), 1)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
-        CALL(evt_sub_intpl_msec_init, 1, 0, 1000, 2000)
+        CALL(evt_sub_intpl_msec_init, EASING_QUADRATIC_IN, 0, 1000, 2000)
         LABEL(5)
         CALL(evt_sub_intpl_msec_get_value)
         DIVIDE_FLOAT(LW(0), FLOAT(1000.0f))
@@ -661,7 +662,7 @@ EVT_BEGIN(kpa_01_syuppatu_evt)
     CALL(evt_npc_set_ry, STRING("ババ"), 90)
     SET_FLOAT_VALUE(GW(0), FLOAT(0.0f))
     BEGIN_INLINE_EVENT
-        CALL(evt_sub_intpl_msec_init, 0, 180, 540, 2500)
+        CALL(evt_sub_intpl_msec_init, EASING_LINEAR, 180, 540, 2500)
         LABEL(6)
         CALL(evt_sub_intpl_msec_get_value)
         CALL(evt_sub_get_sincos, LW(0), LW(2), LW(3))
@@ -685,7 +686,7 @@ EVT_BEGIN(kpa_01_syuppatu_evt)
             WAIT_FRAMES(10)
         END_LOOP
     END_INLINE_EVENT
-    CALL(evt_sub_intpl_msec_init, 11, 300, 500, 2500)
+    CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 300, 500, 2500)
     LABEL(7)
     CALL(evt_sub_intpl_msec_get_value)
     SET_FLOAT_VALUE(LW(2), GW(0))
@@ -704,7 +705,7 @@ EVT_BEGIN(kpa_01_syuppatu_evt)
     SET_FLOAT_VALUE(GW(2), FLOAT(0.0f))
     BEGIN_INLINE_EVENT
         WAIT_MS(700)
-        CALL(evt_sub_intpl_msec_init, 11, 1000, 300, 800)
+        CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 1000, 300, 800)
         LABEL(8)
         CALL(evt_sub_intpl_msec_get_value)
         DIVIDE_FLOAT(LW(0), FLOAT(1000.0f))
@@ -720,7 +721,7 @@ EVT_BEGIN(kpa_01_syuppatu_evt)
         END_IF
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
-        CALL(evt_sub_intpl_msec_init, 11, 132, 360, 2000)
+        CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 132, 360, 2000)
         LABEL(9)
         CALL(evt_sub_intpl_msec_get_value)
         CALL(evt_sub_get_sincos, LW(0), LW(2), LW(3))
@@ -731,7 +732,7 @@ EVT_BEGIN(kpa_01_syuppatu_evt)
         END_IF
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
-        CALL(evt_sub_intpl_msec_init, 11, 0, -90, 1700)
+        CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 0, -90, 1700)
         LABEL(10)
         CALL(evt_sub_intpl_msec_get_value)
         SET_FLOAT_VALUE(GW(1), LW(0))
@@ -754,7 +755,7 @@ EVT_BEGIN(kpa_01_syuppatu_evt)
             WAIT_FRAMES(10)
         END_LOOP
     END_INLINE_EVENT
-    CALL(evt_sub_intpl_msec_init, 4, 500, 560, 2000)
+    CALL(evt_sub_intpl_msec_init, EASING_QUADRATIC_OUT, 500, 560, 2000)
     LABEL(11)
     CALL(evt_sub_intpl_msec_get_value)
     SET_FLOAT_VALUE(LW(2), GW(0))

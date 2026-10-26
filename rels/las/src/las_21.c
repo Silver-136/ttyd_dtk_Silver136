@@ -11,6 +11,7 @@
 #include "evt/evt_sub.h"
 #include "evt/evt_party.h"
 #include "driver/mapdrv.h"
+#include "system.h"
 
 #include "party.h"
 #include "manager/evtmgr_cmd.h"
@@ -201,7 +202,7 @@ EVT_BEGIN(floatblk_stop_se)
 EVT_END()
 
 EVT_BEGIN(floatblk_shake)
-    CALL(evt_sub_intpl_init, 11, 10, 3, 4)
+    CALL(evt_sub_intpl_init, EASING_COS_IN_OUT, 10, 3, 4)
     LABEL(0)
     CALL(evt_sub_intpl_get_value)
     DIVIDE_FLOAT(LW(0), FLOAT(1000.0f))

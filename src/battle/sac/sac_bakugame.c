@@ -223,17 +223,17 @@ static USER_FUNC(main_star) {
     case 2:
         w->starTimer++;
         if (w->starTimer <= 100) {
-            w->spos.x = intplGetValue(0, w->sfrom.x, w->sto.x, w->starTimer, 100);
-            w->spos.y = intplGetValue(0, w->sfrom.y, w->sto.y, w->starTimer, 100);
-            w->spos.z = intplGetValue(0, w->sfrom.z, w->sto.z, w->starTimer, 100);
-            w->scale.x = w->scale.y = w->scale.z = intplGetValue(0, 0.0f, 2.0f, w->starTimer, 100);
+            w->spos.x = intplGetValue(EASING_LINEAR, w->sfrom.x, w->sto.x, w->starTimer, 100);
+            w->spos.y = intplGetValue(EASING_LINEAR, w->sfrom.y, w->sto.y, w->starTimer, 100);
+            w->spos.z = intplGetValue(EASING_LINEAR, w->sfrom.z, w->sto.z, w->starTimer, 100);
+            w->scale.x = w->scale.y = w->scale.z = intplGetValue(EASING_LINEAR, 0.0f, 2.0f, w->starTimer, 100);
         } else {
             w->spos.x = w->sto.x;
             w->spos.y = w->sto.y;
             w->spos.z = w->sto.z;
             w->scale.x = w->scale.y = w->scale.z = 2.0f;
         }
-        w->rot.y = intplGetValue(4, 0.0f, 2160.0f, w->starTimer, 120);
+        w->rot.y = intplGetValue(EASING_QUADRATIC_OUT, 0.0f, 2160.0f, w->starTimer, 120);
         if (w->starTimer >= 120) {
             w->starState = 3;
             w->starTimer = 0;
@@ -243,7 +243,7 @@ static USER_FUNC(main_star) {
         break;
     case 3:
         w->starTimer++;
-        w->spos.y = intplGetValue(1, w->sfrom.y, w->sto.y, w->starTimer, 60);
+        w->spos.y = intplGetValue(EASING_QUADRATIC_IN, w->sfrom.y, w->sto.y, w->starTimer, 60);
         if (w->starTimer >= 60) {
             w->starState = 4;
             w->starTimer = 0;
@@ -502,7 +502,7 @@ state_end:
             b->scale = 1.0f;
             break;
         case 12:
-            b->scale = intplGetValue(4, 0.0f, 1.0f, b->timer, 30);
+            b->scale = intplGetValue(EASING_QUADRATIC_OUT, 0.0f, 1.0f, b->timer, 30);
             b->timer++;
             if (b->timer > 30) {
                 b->state = 15;
@@ -538,7 +538,7 @@ state_end:
         w->htimer = 0;
         w->hsteps = 30;
     case 2:
-        w->hpos.x = intplGetValue(0, w->hfrom.x, w->hto.x, w->htimer, w->hsteps);
+        w->hpos.x = intplGetValue(EASING_LINEAR, w->hfrom.x, w->hto.x, w->htimer, w->hsteps);
         {
             s32 r = w->htimer % 12;
             if (r >= 0 && r <= 3) {
@@ -620,25 +620,25 @@ state_end:
             psndSFXOn("SFX_BTL_SAC_TIME4");
         }
         if (w->f0 >= 480 && w->f0 < 490) {
-            w->c4 = w->c8 = intplGetValue(0, 2.0f, 3.0f, 489 - w->f0, 10);
+            w->c4 = w->c8 = intplGetValue(EASING_LINEAR, 2.0f, 3.0f, 489 - w->f0, 10);
         }
         if (w->f0 == 360) {
             psndSFXOn("SFX_BTL_SAC_TIME4");
         }
         if (w->f0 >= 360 && w->f0 < 370) {
-            w->c4 = w->c8 = intplGetValue(0, 3.0f, 4.0f, 369 - w->f0, 10);
+            w->c4 = w->c8 = intplGetValue(EASING_LINEAR, 3.0f, 4.0f, 369 - w->f0, 10);
         }
         if (w->f0 == 240) {
             psndSFXOn("SFX_BTL_SAC_TIME4");
         }
         if (w->f0 >= 240 && w->f0 < 250) {
-            w->c4 = w->c8 = intplGetValue(0, 4.0f, 5.0f, 249 - w->f0, 10);
+            w->c4 = w->c8 = intplGetValue(EASING_LINEAR, 4.0f, 5.0f, 249 - w->f0, 10);
         }
         if (w->f0 == 120) {
             psndSFXOn("SFX_BTL_SAC_TIME4");
         }
         if (w->f0 >= 120 && w->f0 < 130) {
-            w->c4 = w->c8 = intplGetValue(0, 5.0f, 6.0f, 129 - w->f0, 10);
+            w->c4 = w->c8 = intplGetValue(EASING_LINEAR, 5.0f, 6.0f, 129 - w->f0, 10);
         }
         if (w->f0 == 599) {
             animPoseSetAnim(w->poseId, "S_1", 0);
@@ -661,7 +661,7 @@ state_end:
         w->c4 = w->c8 = 2.0f;
         w->c0 = 90.0f;
     case 2:
-        w->dc = intplGetValue(4, -1000.0f, 50.0f, w->s80, 30);
+        w->dc = intplGetValue(EASING_QUADRATIC_OUT, -1000.0f, 50.0f, w->s80, 30);
         w->s80++;
         if (w->s80 > 30) {
             w->s7c = 4;
@@ -768,9 +768,9 @@ state_end:
                 BtlUnit_SetBodyAnim(mario, "M_W_1");
             }
             if (w->s80 >= 0 && w->s80 < 8) {
-                x = intplGetValue(0, w->mfrom.x, w->mto.x, w->s80, 7);
+                x = intplGetValue(EASING_LINEAR, w->mfrom.x, w->mto.x, w->s80, 7);
                 y = w->mfrom.y;
-                z = intplGetValue(0, w->mfrom.z, w->mto.z, w->s80, 7);
+                z = intplGetValue(EASING_LINEAR, w->mfrom.z, w->mto.z, w->s80, 7);
                 BtlUnit_SetPos(mario, x, y, z);
             }
             if (w->s80 == 8) {
@@ -781,7 +781,7 @@ state_end:
                 w->to.y += 30.0f * mario->mSizeMultiplier;
             }
             if (w->s80 >= 8 && w->s80 < 13) {
-                w->pos.y = intplGetValue(4, w->from.y, w->to.y, w->s80 - 8, 4);
+                w->pos.y = intplGetValue(EASING_QUADRATIC_OUT, w->from.y, w->to.y, w->s80 - 8, 4);
             }
             if (w->s80 > 15) {
                 w->s7c = 22;
@@ -977,8 +977,8 @@ state_end:
             break;
         }
     case 25:
-        w->pos.x = intplGetValue(0, w->from.x, w->to.x, w->s84 - w->s80, w->s84);
-        w->pos.z = intplGetValue(0, w->from.z, w->to.z, w->s84 - w->s80, w->s84);
+        w->pos.x = intplGetValue(EASING_LINEAR, w->from.x, w->to.x, w->s84 - w->s80, w->s84);
+        w->pos.z = intplGetValue(EASING_LINEAR, w->from.z, w->to.z, w->s84 - w->s80, w->s84);
         w->pos.y += w->vy;
         w->vy += -0.5f;
         switch (w->cc) {
@@ -988,9 +988,9 @@ state_end:
             }
             t = w->s84 - w->s80;
             if (t >= 20 && t <= 34) {
-                x = intplGetValue(0, w->mfrom.x, w->mto.x, t - 20, 14);
+                x = intplGetValue(EASING_LINEAR, w->mfrom.x, w->mto.x, t - 20, 14);
                 y = w->mfrom.y;
-                z = intplGetValue(0, w->mfrom.z, w->mto.z, w->s84 - w->s80 - 20, 14);
+                z = intplGetValue(EASING_LINEAR, w->mfrom.z, w->mto.z, w->s84 - w->s80 - 20, 14);
                 BtlUnit_SetPos(mario, x, y, z);
             }
             if (w->s84 - w->s80 == 34) {
@@ -1132,7 +1132,7 @@ USER_FUNC(bakuGameHeihoReturn) {
         w->htimer = 0;
         w->hsteps = 30;
     case 10:
-        w->hpos.x = intplGetValue(0, w->hfrom.x, w->hto.x, w->htimer, w->hsteps);
+        w->hpos.x = intplGetValue(EASING_LINEAR, w->hfrom.x, w->hto.x, w->htimer, w->hsteps);
         {
             s32 r = w->htimer % 12;
             if (r >= 0 && r <= 3) {

@@ -6,6 +6,7 @@
 #include "evt/evt_snd.h"
 #include "party/party_motion.h"
 #include "evt/evt_sub.h"
+#include "system.h"
 
 
 static BeroEntry bero_entry_data[3];
@@ -55,7 +56,7 @@ EVT_BEGIN(evt_tik09_dokan)
     CALL(evt_mapobj_trans, 0, STRING("dokan_1_s"), 0, 0, 0)
     CALL(evt_hit_bind_update, STRING("a_dokan_1"))
     WAIT_MS(1500)
-    CALL(evt_sub_intpl_init, 13, 0, 30, 100)
+    CALL(evt_sub_intpl_init, EASING_COS_IN, 0, 30, 100)
     LOOP(100)
         CALL(evt_sub_intpl_get_value)
         CALL(evt_mapobj_trans, 0, STRING("dokan_1_s"), 0, LW(0), 0)

@@ -19,6 +19,7 @@
 #include "driver/npcdrv.h"
 #include "driver/mapdrv.h"
 #include "mario/mario_pouch.h"
+#include "system.h"
 
 #include "manager/evtmgr.h"
 #include "driver/msgdrv.h"
@@ -103,7 +104,7 @@ static BeroEntry bero_entry_data[] = {
 EVT_BEGIN(sekizou_kaiten)
     CALL(evt_mapobj_get_position, LW(2), LW(10), LW(11), LW(12))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG7_DSN_ROUND1"), LW(10), LW(11), LW(12), LW(9))
-    CALL(evt_sub_intpl_msec_init, 11, LW(0), -50, LW(1))
+    CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, LW(0), -50, LW(1))
     LABEL(0)
     CALL(evt_sub_intpl_msec_get_value)
     CALL(evt_mapobj_rotate, 1, LW(2), FLOAT(0.0f), LW(0), FLOAT(0.0f))
@@ -113,7 +114,7 @@ EVT_BEGIN(sekizou_kaiten)
     END_IF
     CALL(evt_mapobj_get_position, LW(2), LW(10), LW(11), LW(12))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG7_QUAKE2"), LW(10), LW(11), LW(12), 0)
-    CALL(evt_sub_intpl_msec_init, 11, LW(0), 0, 500)
+    CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, LW(0), 0, 500)
     LABEL(1)
     CALL(evt_sub_intpl_msec_get_value)
     CALL(evt_mapobj_rotate, 1, LW(2), FLOAT(0.0f), LW(0), FLOAT(0.0f))
@@ -128,7 +129,7 @@ EVT_END()
 EVT_BEGIN(sekizou_kaiten2)
     CALL(evt_mapobj_get_position, LW(2), LW(10), LW(11), LW(12))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG7_DSN_ROUND1"), LW(10), LW(11), LW(12), LW(9))
-    CALL(evt_sub_intpl_msec_init, 11, LW(0), 0, LW(1))
+    CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, LW(0), 0, LW(1))
     LABEL(0)
     CALL(evt_sub_intpl_msec_get_value)
     CALL(evt_mapobj_rotate, 1, LW(2), FLOAT(0.0f), LW(0), FLOAT(0.0f))
@@ -350,7 +351,7 @@ EVT_BEGIN(UNK_0x00022be8)
 EVT_END()
 
 EVT_BEGIN(UNK_0x00022c3c)
-    CALL(evt_sub_intpl_msec_init, 11, 0, 70, 100)
+    CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 0, 70, 100)
     LABEL(0)
     CALL(evt_sub_intpl_msec_get_value)
     CALL(evt_mapobj_rotate, 1, STRING("kuti"), 0, 0, LW(0))
@@ -359,7 +360,7 @@ EVT_BEGIN(UNK_0x00022c3c)
     IF_INT_EQUAL(LW(1), 1)
         GOTO(0)
     END_IF
-    CALL(evt_sub_intpl_msec_init, 11, 70, 0, 100)
+    CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 70, 0, 100)
     LABEL(1)
     CALL(evt_sub_intpl_msec_get_value)
     CALL(evt_mapobj_rotate, 1, STRING("kuti"), 0, 0, LW(0))
@@ -580,7 +581,7 @@ EVT_BEGIN(kuizu_sekizou)
 #endif
                 BEGIN_INLINE_EVENT
 #ifdef VERSION_G8ME01
-                    CALL(evt_sub_intpl_msec_init, 2, 200, 20, 300)
+                    CALL(evt_sub_intpl_msec_init, EASING_CUBIC_IN, 200, 20, 300)
                     LOOP(0)
                         CALL(evt_sub_intpl_msec_get_value)
                         CALL(evt_npc_set_position, STRING("バリアーン１"), 50, LW(0), -50)
@@ -597,7 +598,7 @@ EVT_BEGIN(kuizu_sekizou)
                 WAIT_MS(300)
                 BEGIN_INLINE_EVENT
 #ifdef VERSION_G8ME01
-                    CALL(evt_sub_intpl_msec_init, 2, 200, 20, 300)
+                    CALL(evt_sub_intpl_msec_init, EASING_CUBIC_IN, 200, 20, 300)
                     LOOP(0)
                         CALL(evt_sub_intpl_msec_get_value)
                         CALL(evt_npc_set_position, STRING("バリアーン２"), 50, LW(0), 50)

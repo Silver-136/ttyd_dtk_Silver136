@@ -165,7 +165,7 @@ void effNanigaMain(EffectEntry* effect) {
         }
         break;
     case 3:
-        work->offset = intplGetValue(5, work->minOffset, work->maxOffset, work->timer, 300);
+        work->offset = intplGetValue(EASING_CUBIC_OUT, work->minOffset, work->maxOffset, work->timer, 300);
         work->timer++;
         if (work->timer > 300) {
             psndSFXOff(work->sfxId);

@@ -18,6 +18,7 @@
 #include "driver/mobjdrv.h"
 #include "driver/npcdrv.h"
 #include "driver/mapdrv.h"
+#include "system.h"
 
 USER_FUNC(evt_mario_get_name_hitobj_head);
 USER_FUNC(evt_win_item_select);
@@ -203,7 +204,7 @@ static EVT_BEGIN(main_0)
         BEGIN_SIBLING_EVENT
 #endif
             WAIT_FRAMES(10)
-            CALL(evt_sub_intpl_init, 11, 10, 3, 4)
+            CALL(evt_sub_intpl_init, EASING_COS_IN_OUT, 10, 3, 4)
             LABEL(0)
             CALL(evt_sub_intpl_get_value)
             DIVIDE_FLOAT(LW(0), FLOAT(1000.0f))
@@ -334,7 +335,7 @@ static EVT_BEGIN(main_0)
             END_SIBLING_EVENT
             BEGIN_SIBLING_EVENT
 #endif
-                CALL(evt_sub_intpl_init, 11, 10, 3, 10)
+                CALL(evt_sub_intpl_init, EASING_COS_IN_OUT, 10, 3, 10)
                 LABEL(2)
                 CALL(evt_sub_intpl_get_value)
                 DIVIDE_FLOAT(LW(0), FLOAT(1000.0f))

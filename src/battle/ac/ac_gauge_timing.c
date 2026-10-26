@@ -188,13 +188,13 @@ s32 battleAcMain_GaugeTiming(BattleWork* work) {
             case 1: {
                 f32 angle = reviseAngle((f32)(cw->cnt * 360 / GAC(work)->period));
                 if (angle <= 90.0f) {
-                    cw->gauge = intplGetValue(5, 0.0f, 100.0f, (s32)angle, 90);
+                    cw->gauge = intplGetValue(EASING_CUBIC_OUT, 0.0f, 100.0f, (s32)angle, 90);
                 } else if (angle <= 180.0f) {
-                    cw->gauge = intplGetValue(2, 100.0f, 0.0f, (s32)(angle - 90.0f), 90);
+                    cw->gauge = intplGetValue(EASING_CUBIC_IN, 100.0f, 0.0f, (s32)(angle - 90.0f), 90);
                 } else if (angle <= 270.0f) {
-                    cw->gauge = intplGetValue(5, 0.0f, 100.0f, (s32)(angle - 180.0f), 90);
+                    cw->gauge = intplGetValue(EASING_CUBIC_OUT, 0.0f, 100.0f, (s32)(angle - 180.0f), 90);
                 } else {
-                    cw->gauge = intplGetValue(2, 100.0f, 0.0f, (s32)(angle - 270.0f), 90);
+                    cw->gauge = intplGetValue(EASING_CUBIC_IN, 100.0f, 0.0f, (s32)(angle - 270.0f), 90);
                 }
                 if (cw->timer > 0) {
                     cw->timer--;
@@ -323,7 +323,7 @@ void battleAcDisp_GaugeTiming(CameraId cameraId, void* param) {
 
     switch (ac->mAcState) {
         case 99:
-            disp->iconX = intplGetValue(4, -300.0f, 30.0f, 20 - disp->slideTimer, 20);
+            disp->iconX = intplGetValue(EASING_QUADRATIC_OUT, -300.0f, 30.0f, 20 - disp->slideTimer, 20);
         case 100:
         case 1000:
         case 1001:
@@ -336,7 +336,7 @@ void battleAcDisp_GaugeTiming(CameraId cameraId, void* param) {
         case 1004:
         case 1005:
             if (disp->slideTimer >= 40) {
-                disp->iconX = intplGetValue(4, 30.0f, -300.0f, disp->slideTimer - 40, 20);
+                disp->iconX = intplGetValue(EASING_QUADRATIC_OUT, 30.0f, -300.0f, disp->slideTimer - 40, 20);
             } else {
                 disp->iconX = 30.0f;
             }

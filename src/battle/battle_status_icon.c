@@ -422,9 +422,9 @@ BOOL _bsi_regeneration(BattleUnit* unit, IconDispTableEntry* disp, BattleWorkSta
     entry->pivot = (Vec){0.0f,0.0f,0.0f};
     entry->rot = (Vec){0.0f,0.0f,0.0f};
     col = (GXColor){0x00, 0x00, 0x00, 0xFF};
-    col.r = intplGetValue(11, c0.r, c1.r, t, 360);
-    col.g = intplGetValue(11, c0.g, c1.g, t, 360);
-    col.b = intplGetValue(11, c0.b, c1.b, t, 360);
+    col.r = intplGetValue(EASING_COS_IN_OUT, c0.r, c1.r, t, 360);
+    col.g = intplGetValue(EASING_COS_IN_OUT, c0.g, c1.g, t, 360);
+    col.b = intplGetValue(EASING_COS_IN_OUT, c0.b, c1.b, t, 360);
     entry->color = col;
     entry->flags = disp->something2;
     entry->trans = (Vec){0.0f,0.0f,0.0f};

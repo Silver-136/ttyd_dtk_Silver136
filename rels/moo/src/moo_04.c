@@ -16,6 +16,7 @@
 #include "evt/evt_sub.h"
 #include "driver/npcdrv.h"
 #include "driver/mapdrv.h"
+#include "system.h"
 
 #include "mario/mario.h"
 #include "party.h"
@@ -78,7 +79,7 @@ static EVT_BEGIN(mario_fly)
     CALL(evt_mario_set_pos, -300, -300, 0)
     CALL(evt_party_set_pos, 0, -300, -300, 0)
     BEGIN_INLINE_EVENT
-        CALL(evt_sub_intpl_msec_init, 4, 1000, 10, 5000)
+        CALL(evt_sub_intpl_msec_init, EASING_QUADRATIC_OUT, 1000, 10, 5000)
         LABEL(0)
         CALL(evt_sub_intpl_msec_get_value)
         DIVIDE_FLOAT(LW(0), FLOAT(1000.0f))
@@ -140,7 +141,7 @@ EVT_BEGIN(kanbu_fly)
         SET_FLOAT_VALUE(LW(2), FLOAT(0.0f))
         CALL(evt_npc_get_position, STRING("幹部"), LW(3), LW(4), LW(5))
         CALL(evt_snd_sfxon_3d, STRING("SFX_STG7_3RD_FLY1"), LW(3), LW(4), LW(5), LW(9))
-        CALL(evt_sub_intpl_msec_init, 4, 0, 100, 2000)
+        CALL(evt_sub_intpl_msec_init, EASING_QUADRATIC_OUT, 0, 100, 2000)
         LOOP(0)
             CALL(evt_sub_intpl_msec_get_value)
             DIVIDE_FLOAT(LW(0), FLOAT(100.0f))
@@ -163,7 +164,7 @@ EVT_BEGIN(kanbu_fly)
         CALL(evt_npc_set_position, STRING("幹部"), 0, -1000, 0)
         CALL(evt_snd_sfxoff, LW(9))
     END_INLINE_EVENT
-    CALL(evt_sub_intpl_msec_init, 0, 30, 1, 2000)
+    CALL(evt_sub_intpl_msec_init, EASING_LINEAR, 30, 1, 2000)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
         DIVIDE_FLOAT(LW(0), FLOAT(100.0f))

@@ -12,6 +12,7 @@
 #include "party/party_motion.h"
 #include "evt/evt_sub.h"
 #include "evt/evt_pouch.h"
+#include "system.h"
 
 #include "memory.h"
 #include "cam_road.h"
@@ -201,7 +202,7 @@ EVT_BEGIN(bigdoor_event)
         CALL(evt_cam_shake, 4, FLOAT(0.0009765625f), FLOAT(0.0f), 400)
     END_INLINE_EVENT
     CALL(evt_snd_sfxon, STRING("SFX_SLIDE_DOOR1_UP"), LW(10))
-    CALL(evt_sub_intpl_msec_init, 0, 0, 100, 2000)
+    CALL(evt_sub_intpl_msec_init, EASING_LINEAR, 0, 100, 2000)
     SET_FLOAT_VALUE(LW(3), FLOAT(0.0f))
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value_para, LW(0), LW(1))

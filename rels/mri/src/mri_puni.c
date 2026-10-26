@@ -3535,8 +3535,8 @@ void puniModeWater(PuniData* p) {
             u32 t = OSTicksToMilliseconds((u32)gp->renderTime - p->startTimeLo);
             if ((s32)t < 300) {
                 f32 f = (f32)(s32)t / 300.0f;
-                p->pos.x = intplGetValue(0, p->moveStart.x, p->savedPos.x, t, 300);
-                p->pos.z = intplGetValue(0, p->moveStart.z, p->savedPos.z, t, 300);
+                p->pos.x = intplGetValue(EASING_LINEAR, p->moveStart.x, p->savedPos.x, t, 300);
+                p->pos.z = intplGetValue(EASING_LINEAR, p->moveStart.z, p->savedPos.z, t, 300);
                 p->pos.y = f * (p->modeF0 * f + p->modeF1) + p->moveStart.y;
                 p->prevPos = p->pos;
             } else {
@@ -6006,8 +6006,8 @@ USER_FUNC(evt_puni_move_position) {
         p->moveEnd.z = z;
     }
     if ((s32)(t = OSTicksToMilliseconds((u32)gp->renderTime - (u32)event->savedTime)) < frames) {
-        p->pos.x = intplGetValue(0, p->moveStart.x, p->moveEnd.x, t, frames);
-        p->pos.z = intplGetValue(0, p->moveStart.z, p->moveEnd.z, t, frames);
+        p->pos.x = intplGetValue(EASING_LINEAR, p->moveStart.x, p->moveEnd.x, t, frames);
+        p->pos.z = intplGetValue(EASING_LINEAR, p->moveStart.z, p->moveEnd.z, t, frames);
         p->prevPos = p->pos;
         return EVT_RETURN_BLOCK;
     }
@@ -6070,8 +6070,8 @@ USER_FUNC(evt_puni_jump_position) {
     if (t < frames) {
         r = (f32)t / (f32)frames;
         r = (f32)t / (f32)frames;
-        p->pos.x = intplGetValue(0, p->moveStart.x, x, (s32)t, frames);
-        p->pos.z = intplGetValue(0, p->moveStart.z, z, (s32)t, frames);
+        p->pos.x = intplGetValue(EASING_LINEAR, p->moveStart.x, x, (s32)t, frames);
+        p->pos.z = intplGetValue(EASING_LINEAR, p->moveStart.z, z, (s32)t, frames);
         p->pos.y = r * (p->modeF0 * r + p->modeF1) + p->moveStart.y;
         return EVT_RETURN_BLOCK;
     }
@@ -6655,7 +6655,7 @@ EVT_END()
 
 EVT_BEGIN(mri_puninum_fadeout)
     WAIT_MS(1200)
-    CALL(evt_sub_intpl_msec_init, 11, 255, 0, 500)
+    CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 255, 0, 500)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
         CALL(evt_puni_puninum_alpha, 4264967296)
@@ -6668,7 +6668,7 @@ EVT_BEGIN(mri_puninum_fadeout)
 EVT_END()
 
 EVT_BEGIN(mri_puninum_fadein)
-    CALL(evt_sub_intpl_msec_init, 11, 0, 255, 500)
+    CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 0, 255, 500)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
         CALL(evt_puni_puninum_alpha, 4264967296)

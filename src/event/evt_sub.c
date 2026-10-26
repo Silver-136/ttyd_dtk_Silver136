@@ -329,11 +329,11 @@ EVT_BEGIN(evt_sub_starstone)
     SET_FLOAT_VALUE(LW(8), FLOAT(35.0f))
     SET_FLOAT_VALUE(LW(9), LW(3))
 #ifdef VERSION_G8ME01
-    CALL(evt_sub_intpl_msec_init, 4, 0, 3600, 2833)
+    CALL(evt_sub_intpl_msec_init, EASING_QUADRATIC_OUT, 0, 3600, 2833)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
 #else
-    CALL(evt_sub_intpl_init, 4, 0, 3600, 170)
+    CALL(evt_sub_intpl_init, EASING_QUADRATIC_OUT, 0, 3600, 170)
     LOOP(171)
         CALL(evt_sub_intpl_get_value)
 #endif

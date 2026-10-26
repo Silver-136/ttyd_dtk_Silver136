@@ -18,6 +18,7 @@
 #include "evt/evt_item.h"
 #include "driver/mapdrv.h"
 #include "mario/mario_pouch.h"
+#include "system.h"
 
 USER_FUNC(evt_kagemario_init);
 #ifdef VERSION_G8ME01
@@ -198,7 +199,7 @@ EVT_BEGIN(gra_06_saku_open)
         CALL(evt_hitobj_onoff, STRING("A_Mon"), 1, 1)
         CALL(evt_hit_bind_mapobj, STRING("A_mon_L"), STRING("mon_L"))
         CALL(evt_hit_bind_mapobj, STRING("A_mon_R"), STRING("mon_R"))
-        CALL(evt_sub_intpl_msec_init, 11, 0, 900, 1000)
+        CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 0, 900, 1000)
         LOOP(0)
             CALL(evt_sub_intpl_msec_get_value)
             DIVIDE_FLOAT(LW(0), FLOAT(10.0f))
@@ -296,7 +297,7 @@ EVT_BEGIN(teresa_oidasare_evt)
         CASE_DEFAULT
         BEGIN_INLINE_EVENT
             WAIT_MS(300)
-            CALL(evt_sub_intpl_msec_init, 2, 370, 70, 800)
+            CALL(evt_sub_intpl_msec_init, EASING_CUBIC_IN, 370, 70, 800)
             LOOP(0)
                 CALL(evt_sub_intpl_msec_get_value)
                 CALL(evt_party_set_pos, 0, 72, LW(0), -155)
@@ -319,7 +320,7 @@ EVT_BEGIN(teresa_oidasare_evt)
             CALL(evt_cam_shake, 4, FLOAT(0.009765625f), FLOAT(0.0f), 50)
         END_INLINE_EVENT
     END_SWITCH
-    CALL(evt_sub_intpl_msec_init, 2, 360, 60, 800)
+    CALL(evt_sub_intpl_msec_init, EASING_CUBIC_IN, 360, 60, 800)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
         CALL(evt_mario_set_pos, 65, LW(0), -115)

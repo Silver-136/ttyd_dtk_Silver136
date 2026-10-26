@@ -191,7 +191,7 @@ static void main_base(void) {
     case 2:
         if (w->round == 0) {
             Vec v = {0.0f, -45.0f, 0.0f};
-            v.x = intplGetValue(4, -1000.0f, 0.0f, w->timer, 15);
+            v.x = intplGetValue(EASING_QUADRATIC_OUT, -1000.0f, 0.0f, w->timer, 15);
             w->pos = v;
         }
         if (w->timer == 0) {
@@ -218,7 +218,7 @@ static void main_base(void) {
                 }
             }
         }
-        w->offsetY = intplGetValue(0, -80.0f, 0.0f, w->timer, 15);
+        w->offsetY = intplGetValue(EASING_LINEAR, -80.0f, 0.0f, w->timer, 15);
         w->timer++;
         if (w->timer >= 15) {
             if (w->round >= 5) {
@@ -243,7 +243,7 @@ static void main_base(void) {
                 w->btn[i].state = 0;
             }
         }
-        w->offsetY = intplGetValue(0, -60.0f, 0.0f, w->timer, 15);
+        w->offsetY = intplGetValue(EASING_LINEAR, -60.0f, 0.0f, w->timer, 15);
         w->timer++;
         if (w->timer >= 15) {
             w->state = 5;
@@ -300,7 +300,7 @@ static void main_base(void) {
         w->timer++;
         if (w->timer <= 30) {
             Vec v = {0.0f, -45.0f, 0.0f};
-            v.x = intplGetValue(4, 0.0f, -1000.0f, w->timer, 30);
+            v.x = intplGetValue(EASING_QUADRATIC_OUT, 0.0f, -1000.0f, w->timer, 30);
             w->pos = v;
         }
         break;
@@ -350,17 +350,17 @@ static void main_star(void) {
     case 2:
         w->starTimer++;
         if (w->starTimer <= 100) {
-            w->spos.x = intplGetValue(0, w->from.x, w->to.x, w->starTimer, 100);
-            w->spos.y = intplGetValue(0, w->from.y, w->to.y, w->starTimer, 100);
-            w->spos.z = intplGetValue(0, w->from.z, w->to.z, w->starTimer, 100);
-            w->scale.x = w->scale.y = w->scale.z = intplGetValue(0, 0.0f, 2.0f, w->starTimer, 100);
+            w->spos.x = intplGetValue(EASING_LINEAR, w->from.x, w->to.x, w->starTimer, 100);
+            w->spos.y = intplGetValue(EASING_LINEAR, w->from.y, w->to.y, w->starTimer, 100);
+            w->spos.z = intplGetValue(EASING_LINEAR, w->from.z, w->to.z, w->starTimer, 100);
+            w->scale.x = w->scale.y = w->scale.z = intplGetValue(EASING_LINEAR, 0.0f, 2.0f, w->starTimer, 100);
         } else {
             w->spos.x = w->to.x;
             w->spos.y = w->to.y;
             w->spos.z = w->to.z;
             w->scale.x = w->scale.y = w->scale.z = 2.0f;
         }
-        w->rot.y = intplGetValue(4, 0.0f, 2160.0f, w->starTimer, 120);
+        w->rot.y = intplGetValue(EASING_QUADRATIC_OUT, 0.0f, 2160.0f, w->starTimer, 120);
         if (w->starTimer >= 120) {
             w->starState = 3;
             w->starTimer = 0;
@@ -370,7 +370,7 @@ static void main_star(void) {
         break;
     case 3:
         w->starTimer++;
-        w->spos.y = intplGetValue(1, w->from.y, w->to.y, w->starTimer, 60);
+        w->spos.y = intplGetValue(EASING_QUADRATIC_IN, w->from.y, w->to.y, w->starTimer, 60);
         if (w->starTimer >= 60) {
             w->starState = 4;
             w->starTimer = 0;
@@ -392,7 +392,7 @@ static void main_star(void) {
         break;
     case 6:
         w->starTimer++;
-        w->rot.y = intplGetValue(0, 0.0f, 1440.0f, w->starTimer, 40);
+        w->rot.y = intplGetValue(EASING_LINEAR, 0.0f, 1440.0f, w->starTimer, 40);
         if (w->starTimer >= 40) {
             w->starState = 7;
             w->starTimer = 0;
@@ -404,7 +404,7 @@ static void main_star(void) {
         break;
     case 7:
         w->starTimer++;
-        w->spos.y = intplGetValue(4, w->from.y, w->to.y, w->starTimer, 30);
+        w->spos.y = intplGetValue(EASING_QUADRATIC_OUT, w->from.y, w->to.y, w->starTimer, 30);
         if (w->starTimer >= 30) {
             w->starState = 4;
             w->starTimer = 0;
@@ -418,9 +418,9 @@ static void main_star(void) {
         break;
     case 9:
         w->starTimer++;
-        w->spos.x = intplGetValue(0, w->from.x, w->to.x, w->starTimer, 20);
-        w->spos.y = intplGetValue(1, w->from.y, w->to.y, w->starTimer, 20);
-        w->spos.z = intplGetValue(0, w->from.z, w->to.z, w->starTimer, 20);
+        w->spos.x = intplGetValue(EASING_LINEAR, w->from.x, w->to.x, w->starTimer, 20);
+        w->spos.y = intplGetValue(EASING_QUADRATIC_IN, w->from.y, w->to.y, w->starTimer, 20);
+        w->spos.z = intplGetValue(EASING_LINEAR, w->from.z, w->to.z, w->starTimer, 20);
         w->effMode = 7;
         if (w->starTimer >= 20) {
             w->starState = 8;

@@ -18,6 +18,7 @@
 #include "driver/npcdrv.h"
 #include "driver/mapdrv.h"
 #include "mario/mario_pouch.h"
+#include "system.h"
 
 #include "party.h"
 #include "evt/evt_bero.h"
@@ -552,7 +553,7 @@ EVT_BEGIN(evt_nokorin)
         CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_SURPRISED2_3"), LW(0), LW(1), LW(2), 0)
         CALL(evt_snd_sfxon_3d, STRING("SFX_MARIO_DAMAGE1"), LW(0), LW(1), LW(2), 0)
         CALL(evt_mario_set_pose, STRING("M_D_1"))
-        CALL(evt_sub_intpl_msec_init, 5, 0, 3600, 2000)
+        CALL(evt_sub_intpl_msec_init, EASING_CUBIC_OUT, 0, 3600, 2000)
         LABEL(1)
         CALL(evt_sub_intpl_msec_get_value)
         CALL(evt_mario_set_dispdir, LW(0))
@@ -574,7 +575,7 @@ EVT_BEGIN(evt_nokorin)
         CALL(evt_party_get_pos, 0, LW(0), LW(1), LW(2))
         CALL(evt_snd_sfxon_3d, STRING("SFX_PARTY_DAMAGE1"), LW(0), LW(1), LW(2), 0)
         CALL(evt_party_set_pose, 0, STRING("PNK_D_1"))
-        CALL(evt_sub_intpl_msec_init, 5, 0, 3600, 2000)
+        CALL(evt_sub_intpl_msec_init, EASING_CUBIC_OUT, 0, 3600, 2000)
         LABEL(2)
         CALL(evt_sub_intpl_msec_get_value)
         CALL(evt_party_set_dispdir, 0, LW(0))
@@ -632,7 +633,7 @@ EVT_BEGIN(evt_nokorin)
         CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_SURPRISED1_2"), LW(0), LW(1), LW(2), 0)
         CALL(evt_snd_sfxon_3d, STRING("SFX_MARIO_DAMAGE1"), LW(0), LW(1), LW(2), 0)
         CALL(evt_mario_set_pose, STRING("M_D_1"))
-        CALL(evt_sub_intpl_msec_init, 5, 0, -3780, 2000)
+        CALL(evt_sub_intpl_msec_init, EASING_CUBIC_OUT, 0, -3780, 2000)
         LABEL(3)
         CALL(evt_sub_intpl_msec_get_value)
         CALL(evt_mario_set_dispdir, LW(0))
@@ -654,7 +655,7 @@ EVT_BEGIN(evt_nokorin)
         CALL(evt_party_get_pos, 0, LW(0), LW(1), LW(2))
         CALL(evt_snd_sfxon_3d, STRING("SFX_PARTY_DAMAGE1"), LW(0), LW(1), LW(2), 0)
         CALL(evt_party_set_pose, 0, STRING("PNK_D_1"))
-        CALL(evt_sub_intpl_msec_init, 5, 0, -3780, 2000)
+        CALL(evt_sub_intpl_msec_init, EASING_CUBIC_OUT, 0, -3780, 2000)
         LABEL(4)
         CALL(evt_sub_intpl_msec_get_value)
         CALL(evt_party_set_dispdir, 0, LW(0))

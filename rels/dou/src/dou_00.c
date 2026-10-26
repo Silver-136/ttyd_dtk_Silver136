@@ -11,6 +11,7 @@
 #include "evt/evt_telop.h"
 #include "evt/evt_item.h"
 #include "mario/mario_pouch.h"
+#include "system.h"
 
 #include "driver/mapdrv.h"
 #include "driver/envdrv.h"
@@ -69,7 +70,7 @@ static BeroEntry bero_entry_data[] = {
 };
 
 static EVT_BEGIN(back_light)
-    CALL(evt_sub_intpl_msec_init, 11, 0, 255, 2000)
+    CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 0, 255, 2000)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
         CALL(evt_map_set_blend, 0, LW(0), LW(0), LW(0), 255)

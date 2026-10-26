@@ -15,6 +15,7 @@
 #include "evt/evt_item.h"
 #include "evt/evt_map.h"
 #include "driver/npcdrv.h"
+#include "system.h"
 
 #include "mario/mario_pouch.h"
 #include "evt/evt_bero.h"
@@ -206,7 +207,7 @@ EVT_BEGIN(irekawatta_mario)
     WAIT_MS(250)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_SURPRISED1"), LW(0), LW(1), LW(2), 0)
-    CALL(evt_sub_intpl_msec_init, 11, 0, 1440, 1200)
+    CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 0, 1440, 1200)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
         MODULO(LW(0), 360)
@@ -564,7 +565,7 @@ EVT_BEGIN(hontonosugata_mario)
         CALL(evt_mario_get_dispdir, LW(0))
         SET_VALUE(LW(1), LW(0))
         ADD(LW(1), 7200)
-        CALL(evt_sub_intpl_msec_init, 11, LW(0), LW(1), 4000)
+        CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, LW(0), LW(1), 4000)
         LOOP(0)
             CALL(evt_sub_intpl_msec_get_value)
             CALL(evt_mario_set_dispdir, LW(0))

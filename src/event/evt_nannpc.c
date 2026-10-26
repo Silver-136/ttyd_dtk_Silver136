@@ -602,8 +602,8 @@ USER_FUNC(evt_nannpc_jump_position) {
     if (el < duration) {
         elapsed = uel;
         t = (f32)elapsed / (f32)duration;
-        npc->pos.x = intplGetValue(0, npc->ipos[0], x, elapsed, duration);
-        npc->pos.z = intplGetValue(0, npc->ipos[2], z, uel, duration);
+        npc->pos.x = intplGetValue(EASING_LINEAR, npc->ipos[0], x, elapsed, duration);
+        npc->pos.z = intplGetValue(EASING_LINEAR, npc->ipos[2], z, uel, duration);
         npc->pos.y = t * (event->userdataf[1] * t + event->userdataf[2]) + (f32)npc->ipos[1];
         return 0;
     }

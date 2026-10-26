@@ -12,6 +12,7 @@
 #include "evt/evt_sub.h"
 #include "evt/evt_mario.h"
 #include "evt/evt_mobj.h"
+#include "system.h"
 
 u16 toge_flag;
 
@@ -139,7 +140,7 @@ EVT_BEGIN(toge_evt_sub)
     CALL(toge_flag_onoff, LW(2), 1)
     CALL(evt_mapobj_get_position, LW(3), LW(7), LW(8), LW(9))
     CALL(evt_snd_sfxon_3d, STRING("SFX_MOBJ_FLOOR_TRAP1"), LW(7), LW(8), LW(9), 0)
-    CALL(evt_sub_intpl_msec_init, 0, 0, 30, 150)
+    CALL(evt_sub_intpl_msec_init, EASING_LINEAR, 0, 30, 150)
     LABEL(0)
     CALL(evt_sub_intpl_msec_get_value)
     CALL(evt_mapobj_trans, 0, LW(3), 0, LW(0), 0)
@@ -151,7 +152,7 @@ EVT_BEGIN(toge_evt_sub)
     WAIT_MS(1000)
     CALL(evt_mapobj_get_position, LW(3), LW(7), LW(8), LW(9))
     CALL(evt_snd_sfxon_3d, STRING("SFX_MOBJ_FLOOR_TRAP2"), LW(7), LW(8), LW(9), 0)
-    CALL(evt_sub_intpl_msec_init, 0, 30, 0, 400)
+    CALL(evt_sub_intpl_msec_init, EASING_LINEAR, 30, 0, 400)
     LABEL(1)
     CALL(evt_sub_intpl_msec_get_value)
     CALL(evt_mapobj_trans, 0, LW(3), 0, LW(0), 0)

@@ -149,7 +149,7 @@ static EVT_BEGIN(door_custom)
         WAIT_MS(1500)
         SPAWN_EVENT(PTR(bero_close_door_play_se))
         SET_VALUE(LW(9), LW(12))
-        CALL(evt_sub_intpl_msec_init, 11, 180, 0, 500)
+        CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 180, 0, 500)
         LOOP(0)
             CALL(evt_sub_intpl_msec_get_value_para, LW(0), LW(10))
             IF_INT_EQUAL(LW(10), 0)
@@ -712,7 +712,7 @@ void elmosalpha_func(NanNPC* npc) {
         case 2:
             elapsed = OSTicksToMilliseconds((u32)gp->renderTime - (u32)npc->startTime);
             if (elapsed < npc->duration) {
-                npc->color.a = intplGetValue(0, 0.0f, 255.0f, elapsed, npc->duration);
+                npc->color.a = intplGetValue(EASING_LINEAR, 0.0f, 255.0f, elapsed, npc->duration);
             } else {
                 npc->state = 3;
             }

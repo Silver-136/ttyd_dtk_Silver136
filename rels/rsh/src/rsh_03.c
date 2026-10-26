@@ -18,6 +18,7 @@
 #include "evt/evt_hit.h"
 #include "evt/evt_pouch.h"
 #include "eff/eff_fire.h"
+#include "system.h"
 
 #include "mario/mario_pouch.h"
 #include "mario/mario.h"
@@ -1250,7 +1251,7 @@ EVT_BEGIN(evt_shop_open)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("tobira"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("s_tobira_omise"), MAP_OBJ_FLAG_HIDDEN)
     BEGIN_INLINE_EVENT
-        CALL(evt_sub_intpl_msec_init, 11, 255, 0, 500)
+        CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 255, 0, 500)
         LOOP(0)
             CALL(evt_sub_intpl_msec_get_value)
             CALL(npc_alpha_except_tenin, LW(0))
@@ -1296,7 +1297,7 @@ EVT_BEGIN(evt_shop_close)
         CALL(evt_snd_sfxon_3d, STRING("SFX_OFF6_SHOP_OUT1"), LW(0), LW(1), LW(2), 0)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
-        CALL(evt_sub_intpl_msec_init, 11, 0, 255, 500)
+        CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 0, 255, 500)
         LOOP(0)
             CALL(evt_sub_intpl_msec_get_value)
             CALL(npc_alpha_except_tenin, LW(0))

@@ -19,6 +19,7 @@
 #include "driver/mobjdrv.h"
 #include "driver/npcdrv.h"
 #include "driver/mapdrv.h"
+#include "system.h"
 
 #include "stdio.h"
 #include "memory.h"
@@ -291,7 +292,7 @@ EVT_BEGIN(evt_chuchu)
     CALL(evt_npc_move_position, STRING("チュチュリーナ"), 0, -140, 0, FLOAT(80.0f), 1)
     SET_VALUE(LW(1), 0)
     SPAWN_EVENT(PTR(bero_open_door_play_se))
-    CALL(evt_sub_intpl_msec_init, 11, 0, 180, 500)
+    CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 0, 180, 500)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
         MULTIPLY_FLOAT(LW(0), FLOAT(0.44433594f))
@@ -308,7 +309,7 @@ EVT_BEGIN(evt_chuchu)
     WAIT_MS(500)
     SET_VALUE(LW(1), 0)
     SPAWN_EVENT(PTR(bero_close_door_play_se))
-    CALL(evt_sub_intpl_msec_init, 11, 180, 0, 500)
+    CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 180, 0, 500)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
         MULTIPLY_FLOAT(LW(0), FLOAT(0.44433594f))

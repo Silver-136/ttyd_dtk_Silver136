@@ -14,6 +14,7 @@
 #include "evt/evt_snd.h"
 #include "evt/evt_sub.h"
 #include "mario/mario_pouch.h"
+#include "system.h"
 
 #pragma defer_codegen on
 #include "manager/evtmgr_cmd.h"
@@ -422,7 +423,7 @@ EVT_BEGIN(evt_teresa_box_open)
     CALL(evt_mapobj_get_position, STRING("hako"), LW(10), LW(11), LW(12))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG4_TBOX_OPEN1"), LW(10), LW(11), LW(12), 0)
     BEGIN_INLINE_EVENT
-        CALL(evt_sub_intpl_msec_init, 11, 950, 50, 800)
+        CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 950, 50, 800)
         LABEL(0)
         CALL(evt_sub_intpl_msec_get_value)
         DIVIDE_FLOAT(LW(0), FLOAT(10.0f))

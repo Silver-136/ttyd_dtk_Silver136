@@ -11,6 +11,7 @@
 #include "evt/evt_sub.h"
 #include "evt/evt_map.h"
 #include "evt/evt_mobj.h"
+#include "system.h"
 
 USER_FUNC(evt_kagemario_init);
 
@@ -89,7 +90,7 @@ static BeroEntry bero_entry_data[] = {
 
 static EVT_BEGIN(cam_shake)
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG4_KAIDAN_MOVE1"), 300, 100, -200, LW(9))
-    CALL(evt_sub_intpl_init, 11, 0, 10, 30)
+    CALL(evt_sub_intpl_init, EASING_COS_IN_OUT, 0, 10, 30)
     LABEL(0)
     CALL(evt_sub_intpl_get_value)
     DIVIDE_FLOAT(LW(0), FLOAT(1000.0f))
@@ -97,7 +98,7 @@ static EVT_BEGIN(cam_shake)
     IF_INT_EQUAL(LW(1), 1)
         GOTO(0)
     END_IF
-    CALL(evt_sub_intpl_init, 11, 10, 0, 30)
+    CALL(evt_sub_intpl_init, EASING_COS_IN_OUT, 10, 0, 30)
     LABEL(1)
     CALL(evt_sub_intpl_get_value)
     DIVIDE_FLOAT(LW(0), FLOAT(1000.0f))

@@ -269,7 +269,7 @@ void battleAcDisp_Shot(CameraId cameraId, void* param) {
         case 1001:
         case 1002:
         case 1003:
-            disp->iconX = intplGetValue(4, -200.0f, 30.0f, 20 - disp->slideTimer, 20);
+            disp->iconX = intplGetValue(EASING_QUADRATIC_OUT, -200.0f, 30.0f, 20 - disp->slideTimer, 20);
             actionCommandDisp(disp->iconX, disp->iconY);
             if (disp->slideTimer > 0) {
                 disp->slideTimer--;
@@ -278,7 +278,7 @@ void battleAcDisp_Shot(CameraId cameraId, void* param) {
         case 1004:
         case 1005:
             if (disp->slideTimer >= 40) {
-                disp->iconX = intplGetValue(4, 30.0f, -200.0f, disp->slideTimer - 40, 20);
+                disp->iconX = intplGetValue(EASING_QUADRATIC_OUT, 30.0f, -200.0f, disp->slideTimer - 40, 20);
             } else {
                 disp->iconX = 30.0f;
             }
@@ -389,7 +389,7 @@ static void _disp_target_mark_afterimage(CameraId cameraId, void* param) {
             if (sw->life[i] >= 30.0f) {
                 _draw_target_mark((GXColor){0x90, 0x80, 0xA0, 0xFF}, out.x, out.y, out.z, sw->spin[i]);
             } else {
-                u8 a = (u8)intplGetValue(0, 255.0f, 0.0f, (s32)(30.0f - sw->life[i]), 30);
+                u8 a = (u8)intplGetValue(EASING_LINEAR, 255.0f, 0.0f, (s32)(30.0f - sw->life[i]), 30);
                 _draw_target_mark((GXColor){0x90, 0x80, 0xA0, a}, out.x, out.y, out.z, sw->spin[i]);
             }
             if (sw->life[i] <= 0.0f) {

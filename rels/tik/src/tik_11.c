@@ -13,6 +13,7 @@
 #include "evt/evt_snd.h"
 #include "evt/evt_sub.h"
 #include "driver/mapdrv.h"
+#include "system.h"
 
 #include "driver/npcdrv.h"
 #include "eff/eff_stardust.h"
@@ -298,7 +299,7 @@ EVT_BEGIN(powerdownya_mario_level_rtn)
     CALL(evt_snd_bgmoff_f, 1024, 2000)
     CALL(evt_msg_print_add, 0, STRING("powerdown_11"))
     CALL(bgScrollControll, 0)
-    CALL(evt_sub_intpl_msec_init, 11, 0, -20, 500)
+    CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 0, -20, 500)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value_para, LW(0), LW(5))
         CALL(evt_mapobj_trans, 1, STRING("down_pira"), 0, LW(0), 0)
@@ -317,7 +318,7 @@ EVT_BEGIN(powerdownya_mario_level_rtn)
     WAIT_FRAMES(5)
     CALL(evt_msg_print, 0, STRING("powerdown_12"), 0, STRING("me"))
     BEGIN_INLINE_EVENT
-        CALL(evt_sub_intpl_msec_init, 0, 255, 0, 1200)
+        CALL(evt_sub_intpl_msec_init, EASING_LINEAR, 255, 0, 1200)
         LOOP(0)
             CALL(evt_sub_intpl_msec_get_value)
             CALL(evt_mapobj_color, 1, STRING("S"), 255, 255, 255, LW(0))
@@ -330,7 +331,7 @@ EVT_BEGIN(powerdownya_mario_level_rtn)
         END_LOOP
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
-        CALL(evt_sub_intpl_msec_init, 0, 0, 90, 1600)
+        CALL(evt_sub_intpl_msec_init, EASING_LINEAR, 0, 90, 1600)
         LOOP(0)
             CALL(evt_sub_intpl_msec_get_value_para, LW(0), LW(1))
             CALL(evt_mapobj_rotate, 1, STRING("ie_l"), 0, 0, LW(0))
@@ -349,7 +350,7 @@ EVT_BEGIN(powerdownya_mario_level_rtn)
     CALL(evt_cam3d_evt_set, -9, 212, 886, -9, 56, 0, 1600, 11)
     WAIT_MS(1600)
     BEGIN_INLINE_EVENT
-        CALL(evt_sub_intpl_msec_init, 11, 0, 100, 7000)
+        CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 0, 100, 7000)
         LOOP(0)
             CALL(evt_sub_intpl_msec_get_value_para, LW(0), LW(1))
             CALL(enzan_cam_turn_keisan_f, LW(0))
@@ -390,7 +391,7 @@ EVT_BEGIN(powerdownya_mario_level_rtn)
     CALL(effect_stardust, 0, LW(3), LW(7), LW(5), FLOAT(50.0f), FLOAT(50.0f), 20, 120)
     BEGIN_INLINE_EVENT
         WAIT_MS(400)
-        CALL(evt_sub_intpl_msec_init, 0, 0, 255, 1200)
+        CALL(evt_sub_intpl_msec_init, EASING_LINEAR, 0, 255, 1200)
         LOOP(0)
             CALL(evt_sub_intpl_msec_get_value)
             CALL(evt_mapobj_color, 1, STRING("S"), 255, 255, 255, LW(0))
@@ -403,7 +404,7 @@ EVT_BEGIN(powerdownya_mario_level_rtn)
         END_LOOP
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
-        CALL(evt_sub_intpl_msec_init, 0, 90, 0, 1600)
+        CALL(evt_sub_intpl_msec_init, EASING_LINEAR, 90, 0, 1600)
         LOOP(0)
             CALL(evt_sub_intpl_msec_get_value_para, LW(0), LW(1))
             CALL(evt_mapobj_rotate, 1, STRING("ie_l"), 0, 0, LW(0))
@@ -420,7 +421,7 @@ EVT_BEGIN(powerdownya_mario_level_rtn)
     CALL(evt_cam3d_evt_off, 1600, 11)
     WAIT_MS(1400)
     CALL(evt_mario_set_pose, STRING("M_S_1"))
-    CALL(evt_sub_intpl_msec_init, 11, -20, 0, 500)
+    CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, -20, 0, 500)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value_para, LW(0), LW(5))
         CALL(evt_mapobj_trans, 1, STRING("down_pira"), 0, LW(0), 0)
@@ -510,7 +511,7 @@ EVT_BEGIN(powerdownya_party_lank_rtn)
 #ifdef VERSION_G8ME01
     CALL(evt_party_stop, 0)
 #endif
-    CALL(evt_sub_intpl_msec_init, 11, 0, -20, 500)
+    CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 0, -20, 500)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value_para, LW(0), LW(5))
         CALL(evt_mapobj_trans, 1, STRING("down_pira"), 0, LW(0), 0)
@@ -529,7 +530,7 @@ EVT_BEGIN(powerdownya_party_lank_rtn)
     SPAWN_EVENT_GET_ID(PTR(powerdownya_face_left), GW(1))
     CALL(evt_msg_print, 0, STRING("powerdown_12"), 0, STRING("me"))
     BEGIN_INLINE_EVENT
-        CALL(evt_sub_intpl_msec_init, 0, 255, 0, 1200)
+        CALL(evt_sub_intpl_msec_init, EASING_LINEAR, 255, 0, 1200)
         LOOP(0)
             CALL(evt_sub_intpl_msec_get_value)
             CALL(evt_mapobj_color, 1, STRING("S"), 255, 255, 255, LW(0))
@@ -542,7 +543,7 @@ EVT_BEGIN(powerdownya_party_lank_rtn)
         END_LOOP
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
-        CALL(evt_sub_intpl_msec_init, 0, 0, 90, 1600)
+        CALL(evt_sub_intpl_msec_init, EASING_LINEAR, 0, 90, 1600)
         LOOP(0)
             CALL(evt_sub_intpl_msec_get_value_para, LW(0), LW(1))
             CALL(evt_mapobj_rotate, 1, STRING("ie_l"), 0, 0, LW(0))
@@ -561,7 +562,7 @@ EVT_BEGIN(powerdownya_party_lank_rtn)
     CALL(evt_cam3d_evt_set, -9, 212, 886, -9, 56, 0, 1600, 11)
     WAIT_MS(1600)
     BEGIN_INLINE_EVENT
-        CALL(evt_sub_intpl_msec_init, 11, 0, 100, 7000)
+        CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 0, 100, 7000)
         LOOP(0)
             CALL(evt_sub_intpl_msec_get_value_para, LW(0), LW(1))
             CALL(enzan_cam_turn_keisan_f, LW(0))
@@ -677,7 +678,7 @@ EVT_BEGIN(powerdownya_party_lank_rtn)
     CALL(effect_stardust, 0, LW(3), LW(7), LW(5), FLOAT(50.0f), FLOAT(50.0f), 20, 120)
     BEGIN_INLINE_EVENT
         WAIT_MS(400)
-        CALL(evt_sub_intpl_msec_init, 0, 0, 255, 1200)
+        CALL(evt_sub_intpl_msec_init, EASING_LINEAR, 0, 255, 1200)
         LOOP(0)
             CALL(evt_sub_intpl_msec_get_value)
             CALL(evt_mapobj_color, 1, STRING("S"), 255, 255, 255, LW(0))
@@ -690,7 +691,7 @@ EVT_BEGIN(powerdownya_party_lank_rtn)
         END_LOOP
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
-        CALL(evt_sub_intpl_msec_init, 0, 90, 0, 1600)
+        CALL(evt_sub_intpl_msec_init, EASING_LINEAR, 90, 0, 1600)
         LOOP(0)
             CALL(evt_sub_intpl_msec_get_value_para, LW(0), LW(1))
             CALL(evt_mapobj_rotate, 1, STRING("ie_l"), 0, 0, LW(0))
@@ -707,7 +708,7 @@ EVT_BEGIN(powerdownya_party_lank_rtn)
     CALL(evt_cam3d_evt_off, 1600, 11)
     WAIT_MS(1400)
     CALL(evt_party_set_breed_pose, 0, 1)
-    CALL(evt_sub_intpl_msec_init, 11, -20, 0, 500)
+    CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, -20, 0, 500)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value_para, LW(0), LW(5))
         CALL(evt_mapobj_trans, 1, STRING("down_pira"), 0, LW(0), 0)

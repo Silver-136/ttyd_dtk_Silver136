@@ -11,6 +11,7 @@
 #include "party/party_motion.h"
 #include "evt/evt_sub.h"
 #include "mario/mario_pouch.h"
+#include "system.h"
 
 
 static BeroEntry bero_entry_data[2];
@@ -45,7 +46,7 @@ EVT_BEGIN(hari_trap)
         CALL(evt_hitobj_attr_onoff, 1, 1, STRING("a_yuka"), 2048)
         CALL(evt_mapobj_get_position, STRING("s_toge"), LW(0), LW(1), LW(2))
         CALL(evt_snd_sfxon_3d, STRING("SFX_MOBJ_FLOOR_TRAP1"), LW(0), LW(1), LW(2), 0)
-        CALL(evt_sub_intpl_msec_init, 1, -5, 30, 150)
+        CALL(evt_sub_intpl_msec_init, EASING_QUADRATIC_IN, -5, 30, 150)
         LOOP(0)
             CALL(evt_sub_intpl_msec_get_value)
             CALL(evt_mapobj_trans, 1, STRING("s_toge"), 0, LW(0), 0)
@@ -58,7 +59,7 @@ EVT_BEGIN(hari_trap)
         WAIT_MS(1500)
         CALL(evt_mapobj_get_position, STRING("s_toge"), LW(0), LW(1), LW(2))
         CALL(evt_snd_sfxon_3d, STRING("SFX_MOBJ_FLOOR_TRAP2"), LW(0), LW(1), LW(2), 0)
-        CALL(evt_sub_intpl_msec_init, 4, 30, -5, 300)
+        CALL(evt_sub_intpl_msec_init, EASING_QUADRATIC_OUT, 30, -5, 300)
         LOOP(0)
             CALL(evt_sub_intpl_msec_get_value)
             CALL(evt_mapobj_trans, 1, STRING("s_toge"), 0, LW(0), 0)

@@ -16,6 +16,7 @@
 #include "party/party_motion.h"
 #include "evt/evt_pouch.h"
 #include "driver/npcdrv.h"
+#include "system.h"
 
 USER_FUNC(evt_kagemario_init);
 USER_FUNC(evt_win_item_select);
@@ -109,7 +110,7 @@ static EVT_BEGIN(evt_open)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mapobj_get_position, STRING("hako"), LW(10), LW(11), LW(12))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG4_TBOX_OPEN1"), LW(10), LW(11), LW(12), 0)
-    CALL(evt_sub_intpl_msec_init, 11, 900, 0, 800)
+    CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 900, 0, 800)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
         DIVIDE_FLOAT(LW(0), FLOAT(10.0f))
@@ -132,7 +133,7 @@ EVT_BEGIN(evt_open_kagi)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mapobj_get_position, STRING("hako2"), LW(10), LW(11), LW(12))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG4_TBOX_OPEN1"), LW(10), LW(11), LW(12), 0)
-    CALL(evt_sub_intpl_msec_init, 11, 0, -900, 800)
+    CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 0, -900, 800)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
         DIVIDE_FLOAT(LW(0), FLOAT(10.0f))

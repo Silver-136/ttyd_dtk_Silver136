@@ -17,6 +17,7 @@
 #include "evt/evt_item.h"
 #include "evt/evt_pouch.h"
 #include "driver/mapdrv.h"
+#include "system.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "dolphin/mtx.h"
@@ -378,7 +379,7 @@ EVT_BEGIN(urotuku_white)
     CALL(evt_msg_print, 0, STRING("stg7_bom_39"), 0, STRING("me"))
     CALL(evt_mario_set_pose, STRING("M_N_2"))
     CALL(evt_npc_set_position, STRING("ホワイト"), 230, 30, -125)
-    CALL(evt_sub_intpl_msec_init, 11, 0, 180, 500)
+    CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 0, 180, 500)
     LABEL(0)
     CALL(evt_sub_intpl_msec_get_value)
     CALL_CHILD(PTR(evt_ie3_door_1))
@@ -387,7 +388,7 @@ EVT_BEGIN(urotuku_white)
     END_IF
     BEGIN_INLINE_EVENT
         WAIT_MS(1000)
-        CALL(evt_sub_intpl_msec_init, 11, 180, 0, 500)
+        CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 180, 0, 500)
         LABEL(1)
         CALL(evt_sub_intpl_msec_get_value)
         CALL_CHILD(PTR(evt_ie3_door_1))
@@ -400,7 +401,7 @@ EVT_BEGIN(urotuku_white)
     CALL(evt_npc_move_position, STRING("ホワイト"), 200, -85, 0, FLOAT(60.0f), 1)
     BEGIN_INLINE_EVENT
         CALL(evt_msg_print, 0, STRING("stg7_bom_41"), 0, STRING("ホワイト"))
-        CALL(evt_sub_intpl_msec_init, 11, 0, 180, 500)
+        CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 0, 180, 500)
         LABEL(3)
         CALL(evt_sub_intpl_msec_get_value)
         CALL_CHILD(PTR(evt_ie3_door_1))
@@ -408,7 +409,7 @@ EVT_BEGIN(urotuku_white)
             GOTO(3)
         END_IF
         CALL(evt_npc_move_position, STRING("ホワイト"), 230, -125, 0, FLOAT(80.0f), 1)
-        CALL(evt_sub_intpl_msec_init, 11, 180, 0, 500)
+        CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 180, 0, 500)
         LABEL(4)
         CALL(evt_sub_intpl_msec_get_value)
         CALL_CHILD(PTR(evt_ie3_door_1))

@@ -5,6 +5,7 @@
 #include "evt/evt_eff.h"
 #include "evt/evt_msg.h"
 #include "battle/battle_status_effect.h"
+#include "system.h"
 
 #include "battle/battle.h"
 #include "battle/battle_unit.h"
@@ -497,7 +498,7 @@ static EVT_BEGIN(dmg_fall_event)
         CALL(btlevtcmd_SetAlpha, UNIT_ID_SELF, 2, 255)
         CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 2, kHidden)
         WAIT_FRAMES(80)
-        CALL(evt_sub_intpl_init, 0, 255, 0, 30)
+        CALL(evt_sub_intpl_init, EASING_LINEAR, 255, 0, 30)
         LOOP(30)
             CALL(evt_sub_intpl_get_value_para, LW(1), LW(2))
             CALL(btlevtcmd_SetAlpha, UNIT_ID_SELF, 2, LW(1))

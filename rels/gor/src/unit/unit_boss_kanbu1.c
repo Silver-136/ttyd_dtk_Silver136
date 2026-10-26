@@ -1,6 +1,7 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_sub.h"
+#include "system.h"
 
 #include "battle/battle.h"
 #include "battle/battle_event_subset.h"
@@ -203,7 +204,7 @@ static EVT_BEGIN(phase_event)
             CALL(evt_btl_camera_set_moveto, 0, -117, 62, 284, -115, 43, 0, 30, 11)
             WAIT_MS(500)
             BEGIN_SIBLING_EVENT_GET_ID(LW(5))
-                CALL(evt_sub_intpl_init, 0, 0, 180, 15)
+                CALL(evt_sub_intpl_init, EASING_LINEAR, 0, 180, 15)
                 LOOP(16)
                     CALL(evt_sub_intpl_get_value)
                     CALL(btlevtcmd_SetRotate, UNIT_ID_MARIO, 0, LW(0), 0)
@@ -222,7 +223,7 @@ static EVT_BEGIN(phase_event)
             CALL(btlevtcmd_AnimeWaitPlayComplete, UNIT_ID_MARIO, 1)
             CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_MARIO, 1, POSE_TYPE_NEUTRAL)
             BEGIN_SIBLING_EVENT_GET_ID(LW(5))
-                CALL(evt_sub_intpl_init, 0, 180, 0, 15)
+                CALL(evt_sub_intpl_init, EASING_LINEAR, 180, 0, 15)
                 LOOP(16)
                     CALL(evt_sub_intpl_get_value)
                     CALL(btlevtcmd_SetRotate, UNIT_ID_MARIO, 0, LW(0), 0)
@@ -350,7 +351,7 @@ static EVT_BEGIN(dead_event)
     CALL(btlevtcmd_StopWaitEvent, -3)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_MARIO, 1, STRING("M_S_1"))
     BEGIN_SIBLING_EVENT_GET_ID(LW(5))
-        CALL(evt_sub_intpl_init, 0, 0, 180, 15)
+        CALL(evt_sub_intpl_init, EASING_LINEAR, 0, 180, 15)
         LOOP(16)
             CALL(evt_sub_intpl_get_value)
             CALL(btlevtcmd_SetRotate, UNIT_ID_MARIO, 0, LW(0), 0)
@@ -368,7 +369,7 @@ static EVT_BEGIN(dead_event)
     CALL(evt_msg_print, 2, STRING("mac_0_b_t1_005"), 0, LW(3))
     CALL(btlevtcmd_StatusWindowOnOff, 1)
     BEGIN_SIBLING_EVENT_GET_ID(LW(5))
-        CALL(evt_sub_intpl_init, 0, 180, 0, 15)
+        CALL(evt_sub_intpl_init, EASING_LINEAR, 180, 0, 15)
         LOOP(16)
             CALL(evt_sub_intpl_get_value)
             CALL(btlevtcmd_SetRotate, UNIT_ID_MARIO, 0, LW(0), 0)

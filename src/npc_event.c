@@ -4396,10 +4396,10 @@ USER_FUNC(npc_fire_eff_fadeout) {
     eff = npc->unitWork[0];
     npc->unitWork[1] = (char*)npc->unitWork[1] - 1;
     if ((EvtWord)npc->unitWork[1] <= 30) {
-        f32 sc = intplGetValue(1, 1.0f, 0.0f, 30 - (EvtWord)npc->unitWork[1], 30);
+        f32 sc = intplGetValue(EASING_QUADRATIC_IN, 1.0f, 0.0f, 30 - (EvtWord)npc->unitWork[1], 30);
         ((EffFireWork*)eff->userdata)->scaleX = sc;
         ((EffFireWork*)eff->userdata)->scaleY = sc;
-        ((EffFireWork*)eff->userdata)->alpha = (u8)intplGetValue(0, 255.0f, 0.0f, 30 - (EvtWord)npc->unitWork[1], 30);
+        ((EffFireWork*)eff->userdata)->alpha = (u8)intplGetValue(EASING_LINEAR, 255.0f, 0.0f, 30 - (EvtWord)npc->unitWork[1], 30);
     }
     if ((EvtWord)npc->unitWork[1] <= 0) {
         effDelete(eff);

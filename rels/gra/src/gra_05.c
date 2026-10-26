@@ -14,6 +14,7 @@
 #include "evt/evt_sub.h"
 #include "evt/evt_mobj.h"
 #include "driver/mapdrv.h"
+#include "system.h"
 
 USER_FUNC(camera_curve_off);
 USER_FUNC(camera_curve_on);
@@ -385,7 +386,7 @@ EVT_BEGIN(evt_gra_05iwa_move_evt)
             WAIT_MS(300)
         END_LOOP
     END_INLINE_EVENT
-    CALL(evt_sub_intpl_msec_init, 0, 0, 120, 3000)
+    CALL(evt_sub_intpl_msec_init, EASING_LINEAR, 0, 120, 3000)
     LABEL(0)
     CALL(evt_sub_intpl_msec_get_value)
     CALL(evt_mapobj_trans, 0, STRING("S_iwa"), LW(0), 0, 0)

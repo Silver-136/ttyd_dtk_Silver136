@@ -16,6 +16,7 @@
 #include "driver/npcdrv.h"
 #include "driver/mapdrv.h"
 #include "mario/mario_pouch.h"
+#include "system.h"
 
 #include "driver/hitdrv.h"
 #include "dolphin/mtx.h"
@@ -386,7 +387,7 @@ EVT_BEGIN(yuka_event)
     CALL(evt_snd_sfxon, STRING("SFX_STG2_FLOOR_MOVE1"), GW(2))
     CALL(evt_item_get_position, STRING("punipuni"), LW(3), LW(4), LW(5))
     BEGIN_INLINE_EVENT
-        CALL(evt_sub_intpl_msec_init, 0, FLOAT(0.5f), FLOAT(1.0f), 10000)
+        CALL(evt_sub_intpl_msec_init, EASING_LINEAR, FLOAT(0.5f), FLOAT(1.0f), 10000)
         LOOP(0)
             CALL(evt_sub_intpl_msec_get_value_para, LW(0), LW(1))
             CALL(evt_mapobj_scale, 1, STRING("S_sui_kage"), LW(0), LW(0), LW(0))
@@ -397,7 +398,7 @@ EVT_BEGIN(yuka_event)
         END_LOOP
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_sui_kage"), MAP_OBJ_FLAG_HIDDEN)
     END_INLINE_EVENT
-    CALL(evt_sub_intpl_msec_init, 0, 0, -30950, 10000)
+    CALL(evt_sub_intpl_msec_init, EASING_LINEAR, 0, -30950, 10000)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value_para, LW(0), LW(1))
         DIVIDE_FLOAT(LW(0), FLOAT(100.0f))

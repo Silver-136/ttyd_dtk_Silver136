@@ -20,6 +20,7 @@
 #include "party/party_motion.h"
 #include "evt/evt_audience.h"
 #include "battle/battle_status_effect.h"
+#include "system.h"
 
 
 s32 BattleDamageDirect(s32 attackerId, BattleUnit* target, BattleUnitPart* part, s32 damage, s32 fpDamage,
@@ -523,7 +524,7 @@ EVT_BEGIN(btldefaultevt_ChangeParty)
 EVT_END()
 
 EVT_BEGIN(btldefaultevt_BiribiriMove)
-    CALL(evt_sub_intpl_init, 8, 0, 5, 16)
+    CALL(evt_sub_intpl_init, EASING_COS_FAST_OVERSHOOT, 0, 5, 16)
     LABEL(0)
     CALL(evt_sub_intpl_get_value)
     CALL(btlevtcmd_SetDispOffset, UNIT_ID_SELF, LW(0), 0, 0)
@@ -877,7 +878,7 @@ EVT_END()
 EVT_BEGIN(btldefaultevt_avoid_counter_event)
     CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), POSE_TYPE_AVOID_COUNTER)
     BEGIN_SIBLING_EVENT_GET_ID(LW(0))
-        CALL(evt_sub_intpl_init, 5, 0, 1800, 40)
+        CALL(evt_sub_intpl_init, EASING_CUBIC_OUT, 0, 1800, 40)
         LOOP(40)
             CALL(evt_sub_intpl_get_value_para, LW(1), LW(2))
             CALL(btlevtcmd_SetRotate, LW(10), EVT_NULLPTR, LW(1), EVT_NULLPTR)

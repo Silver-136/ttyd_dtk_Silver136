@@ -4272,7 +4272,7 @@ USER_FUNC(_cam_rot) {
         event->userdata[0] = sysMsec2Frame(2000);
         event->userdata[1] = event->userdata[0];
     }
-    rot = intplGetValue(4, 720.0f, 0.0f, event->userdata[0], event->userdata[1]);
+    rot = intplGetValue(EASING_QUADRATIC_OUT, 720.0f, 0.0f, event->userdata[0], event->userdata[1]);
     camGetPtr(CAMERA_3D)->rollAngle = rot;
     event->userdata[0]--;
     if (event->userdata[0] <= 0) {

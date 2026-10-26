@@ -311,8 +311,8 @@ void winMgrSeq(WinMgrEntry* entry) {
                     break;
                 case 1:
                     entry->flags |= 2;
-                    entry->rotation = intplGetValue(12, 30.0f, 0.0f, entry->timer, FPS_FRAMES(8));
-                    entry->scale = intplGetValue(12, 0.0f, 1.0f, entry->timer, FPS_FRAMES(8));
+                    entry->rotation = intplGetValue(EASING_SIN_OUT, 30.0f, 0.0f, entry->timer, FPS_FRAMES(8));
+                    entry->scale = intplGetValue(EASING_SIN_OUT, 0.0f, 1.0f, entry->timer, FPS_FRAMES(8));
                     entry->alpha = 255;
                     entry->timer++;
                     if (entry->timer > FPS_FRAMES(8)) {
@@ -320,8 +320,8 @@ void winMgrSeq(WinMgrEntry* entry) {
                     }
                     break;
                 case 2:
-                    entry->rotation = intplGetValue(12, 0.0f, 30.0f, entry->timer, FPS_FRAMES(8));
-                    entry->scale = intplGetValue(12, 1.0f, 0.0f, entry->timer, FPS_FRAMES(8));
+                    entry->rotation = intplGetValue(EASING_SIN_OUT, 0.0f, 30.0f, entry->timer, FPS_FRAMES(8));
+                    entry->scale = intplGetValue(EASING_SIN_OUT, 1.0f, 0.0f, entry->timer, FPS_FRAMES(8));
                     entry->alpha = 255;
                     entry->timer++;
                     if (entry->timer > FPS_FRAMES(8)) {
@@ -342,8 +342,8 @@ void winMgrSeq(WinMgrEntry* entry) {
                 case 1:
                     entry->flags |= 2;
                     entry->rotation = 0.0f;
-                    entry->scale = intplGetValue(12, 0.0f, 1.0f, entry->timer, FPS_FRAMES(8));
-                    entry->alpha = intplGetValue(12, 0.0f, 255.0f, entry->timer, FPS_FRAMES(8));
+                    entry->scale = intplGetValue(EASING_SIN_OUT, 0.0f, 1.0f, entry->timer, FPS_FRAMES(8));
+                    entry->alpha = intplGetValue(EASING_SIN_OUT, 0.0f, 255.0f, entry->timer, FPS_FRAMES(8));
                     entry->timer++;
                     if (entry->timer > FPS_FRAMES(8)) {
                         entry->state = 0;
@@ -352,7 +352,7 @@ void winMgrSeq(WinMgrEntry* entry) {
                 case 2:
                     entry->rotation = 0.0f;
                     entry->scale = 1.0f;
-                    entry->alpha = intplGetValue(12, 255.0f, 0.0f, entry->timer, FPS_FRAMES(8));
+                    entry->alpha = intplGetValue(EASING_SIN_OUT, 255.0f, 0.0f, entry->timer, FPS_FRAMES(8));
                     entry->timer++;
                     if (entry->timer > FPS_FRAMES(8)) {
                         entry->state = 0;

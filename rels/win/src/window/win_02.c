@@ -13,6 +13,7 @@
 #include "evt/evt_mobj.h"
 #include "driver/mapdrv.h"
 #include "mario/mario_pouch.h"
+#include "system.h"
 
 
 static BeroEntry bero_entry_data[5];
@@ -133,7 +134,7 @@ EVT_BEGIN(evt_hikou_nobiru)
     CALL(evt_hit_get_position, STRING("A_dokan1"), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG2_STEP_EXTEND1"), LW(0), LW(1), LW(2), LW(9))
     BEGIN_INLINE_EVENT
-        CALL(evt_sub_intpl_msec_init, 0, 0, 175, 3000)
+        CALL(evt_sub_intpl_msec_init, EASING_LINEAR, 0, 175, 3000)
         LOOP(0)
             CALL(evt_sub_intpl_msec_get_value)
             CALL(evt_mapobj_trans, 1, STRING("S_dokan_ha"), 0, LW(0), 0)
@@ -150,7 +151,7 @@ EVT_BEGIN(evt_hikou_nobiru)
             WAIT_FRAMES(1)
         END_LOOP
     END_INLINE_EVENT
-    CALL(evt_sub_intpl_msec_init, 0, 0, 175, 3000)
+    CALL(evt_sub_intpl_msec_init, EASING_LINEAR, 0, 175, 3000)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
         CALL(evt_mapobj_trans, 1, STRING("hikou"), 0, LW(0), 0)

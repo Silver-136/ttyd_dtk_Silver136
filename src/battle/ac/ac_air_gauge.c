@@ -226,7 +226,7 @@ f32 _GetGaugeDecValue(void) {
         return base;
     }
     pw->flag = t->flag;
-    base -= intplGetValue(0, t[-1].value, t->value, pw->hold - t[-1].frame, t->frame - t[-1].frame);
+    base -= intplGetValue(EASING_LINEAR, t[-1].value, t->value, pw->hold - t[-1].frame, t->frame - t[-1].frame);
     return base;
 }
 
@@ -240,7 +240,7 @@ void battleAcDisp_AirGauge(CameraId cameraId, void* param) {
     s32 i;
     switch (work->actionCommands.mAcState) {
         case 99:
-            disp->iconX = intplGetValue(4, -300.0f, 30.0f, 20 - disp->slideTimer, 20);
+            disp->iconX = intplGetValue(EASING_QUADRATIC_OUT, -300.0f, 30.0f, 20 - disp->slideTimer, 20);
         case 100:
             i = 4;
         case 1000:
@@ -252,7 +252,7 @@ void battleAcDisp_AirGauge(CameraId cameraId, void* param) {
         case 1002:
         case 1003:
             if (disp->slideTimer >= 40) {
-                disp->iconX = intplGetValue(4, 30.0f, -300.0f, disp->slideTimer - 40, 20);
+                disp->iconX = intplGetValue(EASING_QUADRATIC_OUT, 30.0f, -300.0f, disp->slideTimer - 40, 20);
             } else {
                 disp->iconX = 30.0f;
             }

@@ -8,6 +8,26 @@ f32 distABf(f32 x1, f32 y1, f32 x2, f32 y2);
 f32 compAngle(f32 angle1, f32 angle2);
 f32 angleABf(f32 x1, f32 y1, f32 x2, f32 y2);
 
+// intplGetValue modes (any other value is called as a function pointer). The curves are Paper Mario's
+// update_lerp easings (same formulas; names as in the papermario decomp); TTYD adds mode 9, the fast overshoot
+// with its oscillation growing towards the end, so the PM64 modes 9-12 are 10-13 here.
+typedef enum EasingType {
+    EASING_LINEAR = 0,
+    EASING_QUADRATIC_IN = 1,
+    EASING_CUBIC_IN = 2,
+    EASING_QUARTIC_IN = 3,
+    EASING_QUADRATIC_OUT = 4,
+    EASING_CUBIC_OUT = 5,
+    EASING_QUARTIC_OUT = 6,
+    EASING_COS_SLOW_OVERSHOOT = 7,
+    EASING_COS_FAST_OVERSHOOT = 8,
+    EASING_COS_FAST_OVERSHOOT_GROWING = 9,
+    EASING_COS_BOUNCE = 10,
+    EASING_COS_IN_OUT = 11,
+    EASING_SIN_OUT = 12,
+    EASING_COS_IN = 13,
+} EasingType;
+
 f32 intplGetValue(s32 mode, f32 start, f32 end, s32 currStep, s32 steps);
 //void qqsort(void* array, s32 num_elements, s32 element_size, s32(*compare)(const void**, const void**));
 void makeKey(void);

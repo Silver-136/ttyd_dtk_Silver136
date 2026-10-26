@@ -307,7 +307,7 @@ void battleAcDisp_RepeatedlyLv(CameraId cameraId, BattleWork* work) {
         case 100:
         case 1000:
         case 1001:
-            disp->iconX = intplGetValue(4, -300.0f, 30.0f, 20 - disp->slideTimer, 20);
+            disp->iconX = intplGetValue(EASING_QUADRATIC_OUT, -300.0f, 30.0f, 20 - disp->slideTimer, 20);
             actionCommandDisp(disp->iconX, disp->iconY);
             if (disp->slideTimer > 0) {
                 disp->slideTimer--;
@@ -316,7 +316,7 @@ void battleAcDisp_RepeatedlyLv(CameraId cameraId, BattleWork* work) {
         case 1002:
         case 1003:
             if (disp->slideTimer >= 40) {
-                disp->iconX = intplGetValue(4, 30.0f, -300.0f, disp->slideTimer - 40, 20);
+                disp->iconX = intplGetValue(EASING_QUADRATIC_OUT, 30.0f, -300.0f, disp->slideTimer - 40, 20);
             } else {
                 disp->iconX = 30.0f;
             }

@@ -14,6 +14,7 @@
 #include "evt/evt_item.h"
 #include "evt/evt_pouch.h"
 #include "driver/npcdrv.h"
+#include "system.h"
 
 #include "memory.h"
 #include "mario/mariost.h"
@@ -614,7 +615,7 @@ EVT_BEGIN(evt_hom_touchaku)
     SPAWN_EVENT(bero_open_door_play_se)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_DOOR_OPEN_SLIDE1_3"), LW(0), LW(1), LW(2), 0)
-    CALL(evt_sub_intpl_msec_init, 11, 0, -40, 500)
+    CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 0, -40, 500)
     LABEL(0)
     CALL(evt_sub_intpl_msec_get_value)
     CALL(evt_mapobj_trans, 1, STRING("tobira"), LW(0), 0, 0)
@@ -635,7 +636,7 @@ EVT_BEGIN(evt_hom_touchaku)
     SPAWN_EVENT(bero_close_door_play_se)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_DOOR_SHUT_SLIDE1_3"), LW(0), LW(1), LW(2), 0)
-    CALL(evt_sub_intpl_msec_init, 11, -40, 0, 500)
+    CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, -40, 0, 500)
     LABEL(1)
     CALL(evt_sub_intpl_msec_get_value)
     CALL(evt_mapobj_trans, 1, STRING("tobira"), LW(0), 0, 0)

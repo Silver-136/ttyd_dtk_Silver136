@@ -937,7 +937,7 @@ void DrawMenuCursorAndScrollArrow(const Vec* v) {
     f32 bob;
     s32 n;
 
-    bob = intplGetValue(4, 0.0f, 10.0f, menu->bobTimer, 6);
+    bob = intplGetValue(EASING_QUADRATIC_OUT, 0.0f, 10.0f, menu->bobTimer, 6);
     menu->bobTimer++;
 #ifdef VERSION_G8ME01
     if (menu->bobTimer >= gp->framerate * 12 / 60) {
@@ -1176,12 +1176,12 @@ void DrawSubMenuCommonProcess(f32* x, f32* y, Mtx* a, Vec* b, f32* c, Mtx* d) {
                 {
                     f32 px = b[i].x;
                     f32 py;
-                    b[i].x = intplGetValue(4, px, -60.0f, menu->iconTimer[i], FRAMES(12));
+                    b[i].x = intplGetValue(EASING_QUADRATIC_OUT, px, -60.0f, menu->iconTimer[i], FRAMES(12));
                     py = b[i].y;
-                    b[i].y = intplGetValue(4, py, 55.0f, menu->iconTimer[i], FRAMES(12));
+                    b[i].y = intplGetValue(EASING_QUADRATIC_OUT, py, 55.0f, menu->iconTimer[i], FRAMES(12));
                 }
                 PSMTXTrans(a[i], 20.0f + b[i].x, b[i].y, b[i].z);
-                c[i] = intplGetValue(0, 0.0f, 360.0f, menu->iconTimer[i], FRAMES(12));
+                c[i] = intplGetValue(EASING_LINEAR, 0.0f, 360.0f, menu->iconTimer[i], FRAMES(12));
                 if (c[i] > 360.0f) {
                     c[i] -= 360.0f;
                 }
@@ -1234,7 +1234,7 @@ void DrawSubMenuCommonProcess(f32* x, f32* y, Mtx* a, Vec* b, f32* c, Mtx* d) {
                 menu->rowFlags[i] &= ~1;
                 menu->reserved_114[i] = 0xFF;
                 if (menu->rowTimer[i] >= 0 && i != 6) {
-                    s = intplGetValue(0, 90.0f, 0.0f, menu->rowTimer[i], FRAMES(12));
+                    s = intplGetValue(EASING_LINEAR, 90.0f, 0.0f, menu->rowTimer[i], FRAMES(12));
                     menu->rowFlags[i] |= 1;
                     PSMTXRotRad(d[i], 'y', 0.017453292f * s);
                 }
@@ -1264,7 +1264,7 @@ void DrawSubMenuCommonProcess(f32* x, f32* y, Mtx* a, Vec* b, f32* c, Mtx* d) {
                 }
                 menu->rowFlags[i] |= 1;
                 PSMTXIdentity(d[i]);
-                menu->scrollPos = intplGetValue(4, menu->scrollFrom, menu->scrollTo, menu->rowTimer[i], steps);
+                menu->scrollPos = intplGetValue(EASING_QUADRATIC_OUT, menu->scrollFrom, menu->scrollTo, menu->rowTimer[i], steps);
                 menu->rowTimer[i]++;
                 if (menu->rowTimer[i] > steps) {
                     menu->rowState[i] = 2;
@@ -1545,10 +1545,10 @@ void DrawMainMenu(BattleWork* wp_) {
             pos[i].x += ox;
             pos[i].y += oy;
             pos[i].z = oy;
-            pos[i].x = intplGetValue(4, -60.0f, pos[i].x, menu->iconTimer[i], FRAMES(12));
-            pos[i].y = intplGetValue(4, 55.0f, pos[i].y, menu->iconTimer[i], FRAMES(12));
+            pos[i].x = intplGetValue(EASING_QUADRATIC_OUT, -60.0f, pos[i].x, menu->iconTimer[i], FRAMES(12));
+            pos[i].y = intplGetValue(EASING_QUADRATIC_OUT, 55.0f, pos[i].y, menu->iconTimer[i], FRAMES(12));
             PSMTXTrans(mtx[i], 20.0f + pos[i].x, pos[i].y, pos[i].z);
-            z[i] = intplGetValue(0, 360.0f, 0.0f, menu->iconTimer[i], FRAMES(12));
+            z[i] = intplGetValue(EASING_LINEAR, 360.0f, 0.0f, menu->iconTimer[i], FRAMES(12));
             menu->iconTimer[i]++;
             if (menu->iconTimer[i] > FRAMES(12)) {
                 menu->iconState[i] = 3;

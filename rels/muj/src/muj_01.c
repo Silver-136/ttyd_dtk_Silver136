@@ -17,6 +17,7 @@
 #include "evt/evt_pouch.h"
 #include "muj.h"
 #include "driver/mapdrv.h"
+#include "system.h"
 
 #include "driver/effdrv.h"
 #include "manager/evtmgr_cmd.h"
@@ -135,7 +136,7 @@ EvtWord yakan_anime[17];
 EvtWord muj_01_init_evt[225];
 
 EVT_BEGIN(custom_door_dark2)
-    CALL(evt_sub_intpl_msec_init, 11, 255, 0, 300)
+    CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 255, 0, 300)
     LABEL(0)
     CALL(evt_sub_intpl_msec_get_value)
     CALL(evt_map_set_blend, 1, 255, 255, 255, LW(0))
@@ -148,7 +149,7 @@ EVT_BEGIN(custom_door_dark2)
 EVT_END()
 
 EVT_BEGIN(custom_door_light2)
-    CALL(evt_sub_intpl_msec_init, 11, 0, 255, 300)
+    CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 0, 255, 300)
     LABEL(0)
     CALL(evt_sub_intpl_msec_get_value)
     CALL(evt_map_set_blend, 1, 255, 255, 255, LW(0))
@@ -278,7 +279,7 @@ static EVT_BEGIN(marco_init)
 EVT_END()
 
 EVT_BEGIN(marco_kyorokyoro)
-    CALL(evt_sub_intpl_msec_init, 0, LW(0), LW(1), 150)
+    CALL(evt_sub_intpl_msec_init, EASING_LINEAR, LW(0), LW(1), 150)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value_para, LW(0), LW(1))
         CALL(evt_npc_set_rotate, STRING("マルコ"), 0, LW(0), 0)
@@ -1100,7 +1101,7 @@ EVT_BEGIN(muj_00_door_open)
     IF_INT_NOT_EQUAL(LW(7), 0)
         BEGIN_INLINE_EVENT
             CALL(evt_door_param, LW(0), 6, LW(7), LW(8), LW(9))
-            CALL(evt_sub_intpl_msec_init, 5, 0, 180, 500)
+            CALL(evt_sub_intpl_msec_init, EASING_CUBIC_OUT, 0, 180, 500)
             LABEL(0)
             CALL(evt_sub_intpl_msec_get_value)
             SET_VALUE(LW(5), LW(1))
@@ -1912,7 +1913,7 @@ static EVT_BEGIN(minnnanokoe_evt)
     SET_VALUE(GF(0), 0)
     BEGIN_INLINE_EVENT
         LOOP(0)
-            CALL(evt_sub_intpl_msec_init, 11, 5000, 5500, 500)
+            CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 5000, 5500, 500)
             LABEL(1)
             CALL(evt_sub_intpl_msec_get_value)
             DIVIDE_FLOAT(LW(0), FLOAT(100.0f))
@@ -1921,7 +1922,7 @@ static EVT_BEGIN(minnnanokoe_evt)
             IF_INT_EQUAL(LW(1), 1)
                 GOTO(1)
             END_IF
-            CALL(evt_sub_intpl_msec_init, 11, 5500, 5000, 500)
+            CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 5500, 5000, 500)
             LABEL(2)
             CALL(evt_sub_intpl_msec_get_value)
             DIVIDE_FLOAT(LW(0), FLOAT(100.0f))

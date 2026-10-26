@@ -171,17 +171,17 @@ static USER_FUNC(main_star) {
     case 2:
         w->timer++;
         if (w->timer <= 100) {
-            w->pos.x = intplGetValue(0, w->start.x, w->end.x, w->timer, 100);
-            w->pos.y = intplGetValue(0, w->start.y, w->end.y, w->timer, 100);
-            w->pos.z = intplGetValue(0, w->start.z, w->end.z, w->timer, 100);
-            w->scale.x = w->scale.y = w->scale.z = intplGetValue(0, 0.0f, 2.0f, w->timer, 100);
+            w->pos.x = intplGetValue(EASING_LINEAR, w->start.x, w->end.x, w->timer, 100);
+            w->pos.y = intplGetValue(EASING_LINEAR, w->start.y, w->end.y, w->timer, 100);
+            w->pos.z = intplGetValue(EASING_LINEAR, w->start.z, w->end.z, w->timer, 100);
+            w->scale.x = w->scale.y = w->scale.z = intplGetValue(EASING_LINEAR, 0.0f, 2.0f, w->timer, 100);
         } else {
             w->pos.x = w->end.x;
             w->pos.y = w->end.y;
             w->pos.z = w->end.z;
             w->scale.x = w->scale.y = w->scale.z = 2.0f;
         }
-        w->rot.y = intplGetValue(4, 0.0f, 2160.0f, w->timer, 120);
+        w->rot.y = intplGetValue(EASING_QUADRATIC_OUT, 0.0f, 2160.0f, w->timer, 120);
         if (w->timer >= 120) {
             w->stone_state = 3;
             w->timer = 0;
@@ -191,7 +191,7 @@ static USER_FUNC(main_star) {
         break;
     case 3:
         w->timer++;
-        w->pos.y = intplGetValue(1, w->start.y, w->end.y, w->timer, 60);
+        w->pos.y = intplGetValue(EASING_QUADRATIC_IN, w->start.y, w->end.y, w->timer, 60);
         if (w->timer >= 60) {
             w->stone_state = 4;
             w->timer = 0;
@@ -585,7 +585,7 @@ USER_FUNC(zubastar_main) {
     case 6:
         w->cursor.f4++;
         w->cursor.pos.x = 0.0f;
-        w->cursor.pos.y = intplGetValue(4, 300.0f, 300.0f, w->cursor.f4, 15);
+        w->cursor.pos.y = intplGetValue(EASING_QUADRATIC_OUT, 300.0f, 300.0f, w->cursor.f4, 15);
         w->cursor.pos.z = 0.0f;
         if (w->cursor.f4 >= 15) w->cursor.timer = 10;
         break;
@@ -598,7 +598,7 @@ USER_FUNC(zubastar_main) {
     case 16:
         w->cursor.f4++;
         w->cursor.pos.x = 0.0f;
-        w->cursor.pos.y = intplGetValue(4, 300.0f, 300.0f, w->cursor.f4, 15);
+        w->cursor.pos.y = intplGetValue(EASING_QUADRATIC_OUT, 300.0f, 300.0f, w->cursor.f4, 15);
         w->cursor.pos.z = 0.0f;
         if (w->cursor.f4 >= 15) w->cursor.timer = 20;
         break;
@@ -620,8 +620,8 @@ USER_FUNC(zubastar_main) {
         psndSFXOn("SFX_BTL_SAC_ZUBA_STAR2");
     case 26:
         w->ltimer++;
-        w->cursor.pos.x = intplGetValue(0, w->lstart.x, w->lend.x, w->ltimer, 15);
-        w->cursor.pos.y = intplGetValue(0, w->lstart.y, w->lend.y, w->ltimer, 15);
+        w->cursor.pos.x = intplGetValue(EASING_LINEAR, w->lstart.x, w->lend.x, w->ltimer, 15);
+        w->cursor.pos.y = intplGetValue(EASING_LINEAR, w->lstart.y, w->lend.y, w->ltimer, 15);
         {
             ZSLine* l = &w->lines[w->lidx];
             l->x1 = w->cursor.pos.x;
@@ -664,7 +664,7 @@ USER_FUNC(zubastar_main) {
         break;
     case 6:
         w->gaugeTimer++;
-        w->gaugePos.x = intplGetValue(4, -1000.0f, 50.0f, w->gaugeTimer, 30);
+        w->gaugePos.x = intplGetValue(EASING_QUADRATIC_OUT, -1000.0f, 50.0f, w->gaugeTimer, 30);
         if (w->gaugeTimer >= 30) w->gaugeState = 10;
         break;
     case 10:
@@ -693,7 +693,7 @@ USER_FUNC(zubastar_main) {
         w->gaugeAcc = 0.0f;
         w->fa1 = 0;
         w->gaugeTimer++;
-        w->gaugePos.x = intplGetValue(4, 50.0f, -1000.0f, w->gaugeTimer, 30);
+        w->gaugePos.x = intplGetValue(EASING_QUADRATIC_OUT, 50.0f, -1000.0f, w->gaugeTimer, 30);
         if (w->gaugeTimer >= 30) w->gaugeTimer = 30;
         break;
     case 16:
@@ -709,7 +709,7 @@ USER_FUNC(zubastar_main) {
         break;
     case 21:
         w->gaugeTimer++;
-        w->gaugePos.x = intplGetValue(4, 50.0f, -1000.0f, w->gaugeTimer, 30);
+        w->gaugePos.x = intplGetValue(EASING_QUADRATIC_OUT, 50.0f, -1000.0f, w->gaugeTimer, 30);
         if (w->gaugeTimer >= 30) w->gaugeTimer = 30;
         break;
     }
@@ -783,8 +783,8 @@ USER_FUNC(zubastar_bomb) {
             break;
         }
         case 5:
-            t->pos.x = intplGetValue(0, t->start.x, t->end.x, t->f48, t->f4c);
-            t->pos.z = intplGetValue(0, t->start.z, t->end.z, t->f48, t->f4c);
+            t->pos.x = intplGetValue(EASING_LINEAR, t->start.x, t->end.x, t->f48, t->f4c);
+            t->pos.z = intplGetValue(EASING_LINEAR, t->start.z, t->end.z, t->f48, t->f4c);
             t->pos.y += t->vy;
             t->rot += t->rotSpeed;
             t->vy += -1.25f;
@@ -934,9 +934,9 @@ void zubastar_disp2D(CameraId cam, void* param) {
         s32 a;
         l = &w->lines[i];
         if (l->timer <= 30) {
-            a = intplGetValue(0, 128.0f, 255.0f, l->timer, 30);
+            a = intplGetValue(EASING_LINEAR, 128.0f, 255.0f, l->timer, 30);
         } else {
-            a = intplGetValue(0, 255.0f, 128.0f, l->timer - 30, 30);
+            a = intplGetValue(EASING_LINEAR, 255.0f, 128.0f, l->timer - 30, 30);
         }
         if (l->state == 5) {
             setG(a);

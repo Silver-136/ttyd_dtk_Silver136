@@ -12,6 +12,7 @@
 #include "evt/evt_sub.h"
 #include "win/win_main.h"
 #include "evt/evt_pouch.h"
+#include "system.h"
 
 #include "mario/mario.h"
 #include "driver/npcdrv.h"
@@ -1278,7 +1279,7 @@ static EVT_BEGIN(evt_door_msg)
     CALL(evt_mario_key_onoff, 0)
     BEGIN_INLINE_EVENT
         LOOP(3)
-            CALL(evt_sub_intpl_msec_init, 11, 0, -50, 200)
+            CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 0, -50, 200)
             LABEL(0)
             CALL(evt_sub_intpl_msec_get_value)
             DIVIDE_FLOAT(LW(0), FLOAT(10.0f))
@@ -1287,7 +1288,7 @@ static EVT_BEGIN(evt_door_msg)
             IF_INT_EQUAL(LW(1), 1)
                 GOTO(0)
             END_IF
-            CALL(evt_sub_intpl_msec_init, 11, -50, 0, 200)
+            CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, -50, 0, 200)
             LABEL(1)
             CALL(evt_sub_intpl_msec_get_value)
             DIVIDE_FLOAT(LW(0), FLOAT(10.0f))

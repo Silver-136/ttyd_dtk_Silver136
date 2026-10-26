@@ -74,7 +74,7 @@ void battleAcDisp_TimingA(CameraId cameraId, void* param) {
     int iconSlot;
     switch (work->actionCommands.mAcState) {
         case 99:
-            disp->iconX = intplGetValue(4, -300.0f, 30.0f, 20 - disp->slideTimer, 20);
+            disp->iconX = intplGetValue(EASING_QUADRATIC_OUT, -300.0f, 30.0f, 20 - disp->slideTimer, 20);
         case 100:
             disp->iconX = 30.0f;
             actionCommandDisp(disp->iconX, disp->iconY);

@@ -1924,10 +1924,10 @@ void msgWindow_Disp(CameraId camId, void* param) {
             case 6:
             case 8:
             case 9:
-                ex = intplGetValue(0, pos.x, ( window->height / 2.0f ) + window->x, window->alpha, 255);
-                ey = intplGetValue(0, pos.y, window->y - ( window->width / 2.0f ), window->alpha, 255);
-                w = intplGetValue(0, 10.0f, window->height, window->alpha, 255);
-                h = intplGetValue(0, 10.0f, window->width, window->alpha, 255);
+                ex = intplGetValue(EASING_LINEAR, pos.x, ( window->height / 2.0f ) + window->x, window->alpha, 255);
+                ey = intplGetValue(EASING_LINEAR, pos.y, window->y - ( window->width / 2.0f ), window->alpha, 255);
+                w = intplGetValue(EASING_LINEAR, 10.0f, window->height, window->alpha, 255);
+                h = intplGetValue(EASING_LINEAR, 10.0f, window->width, window->alpha, 255);
                 windowDispGX_Message(window->type, window->tailMode, window->alpha, ex - ( w / 2.0f ), ey + ( h / 2.0f ), w, h, pos.x, pos.y);
                 if (window->alpha == 255) {
                     GXSetScissor(camera->scissor[0], 240.0f - (window->y - 36.0f), camera->scissor[2], 100);
@@ -1941,10 +1941,10 @@ void msgWindow_Disp(CameraId camId, void* param) {
                 } else {
                     window->y = 60.0f + pos.y;
                 }
-                ex = intplGetValue(0, pos.x, ( window->height / 2.0f ) + window->x, window->alpha, 255);
-                ey = intplGetValue(0, pos.y, window->y - ( window->width / 2.0f ), window->alpha, 255);
-                w = intplGetValue(0, 10.0f, window->height, window->alpha, 255);
-                h = intplGetValue(0, 10.0f, window->width, window->alpha, 255);
+                ex = intplGetValue(EASING_LINEAR, pos.x, ( window->height / 2.0f ) + window->x, window->alpha, 255);
+                ey = intplGetValue(EASING_LINEAR, pos.y, window->y - ( window->width / 2.0f ), window->alpha, 255);
+                w = intplGetValue(EASING_LINEAR, 10.0f, window->height, window->alpha, 255);
+                h = intplGetValue(EASING_LINEAR, 10.0f, window->width, window->alpha, 255);
                 windowDispGX_Message(window->type, window->tailMode, window->alpha, ex - ( w / 2.0f ), ey + ( h / 2.0f ), w, h, pos.x, pos.y);
                 if (window->alpha == 255) {
                     sy = 240 - ((( s32)window->y ) - 10);

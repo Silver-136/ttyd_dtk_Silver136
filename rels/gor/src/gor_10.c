@@ -257,7 +257,7 @@ EVT_BEGIN(evt_mezame)
         CALL(evt_snd_sfxoff, GW(2))
     END_IF
     CALL(evt_snd_sfxon, STRING("SFX_VOICE_MARIO_FIND1_2"), 0)
-    CALL(evt_sub_intpl_msec_init, 11, 2400, 1200, 2000)
+    CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 2400, 1200, 2000)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
         DIVIDE_FLOAT(LW(0), FLOAT(10.0f))
@@ -267,7 +267,7 @@ EVT_BEGIN(evt_mezame)
             BREAK_LOOP
         END_IF
     END_LOOP
-    CALL(evt_sub_intpl_msec_init, 1, 1200, 2400, 100)
+    CALL(evt_sub_intpl_msec_init, EASING_QUADRATIC_IN, 1200, 2400, 100)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
         DIVIDE_FLOAT(LW(0), FLOAT(10.0f))
@@ -277,7 +277,7 @@ EVT_BEGIN(evt_mezame)
             BREAK_LOOP
         END_IF
     END_LOOP
-    CALL(evt_sub_intpl_msec_init, 1, 2400, 1200, 100)
+    CALL(evt_sub_intpl_msec_init, EASING_QUADRATIC_IN, 2400, 1200, 100)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
         DIVIDE_FLOAT(LW(0), FLOAT(10.0f))
@@ -287,7 +287,7 @@ EVT_BEGIN(evt_mezame)
             BREAK_LOOP
         END_IF
     END_LOOP
-    CALL(evt_sub_intpl_msec_init, 1, 1200, 2400, 100)
+    CALL(evt_sub_intpl_msec_init, EASING_QUADRATIC_IN, 1200, 2400, 100)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
         DIVIDE_FLOAT(LW(0), FLOAT(10.0f))
@@ -299,7 +299,7 @@ EVT_BEGIN(evt_mezame)
     END_LOOP
     WAIT_MS(500)
     BEGIN_INLINE_EVENT
-        CALL(evt_sub_intpl_msec_init, 1, 500, 0, 2000)
+        CALL(evt_sub_intpl_msec_init, EASING_QUADRATIC_IN, 500, 0, 2000)
         LOOP(0)
             CALL(evt_sub_intpl_msec_get_value)
             DIVIDE_FLOAT(LW(0), FLOAT(10.0f))
@@ -310,7 +310,7 @@ EVT_BEGIN(evt_mezame)
             END_IF
         END_LOOP
     END_INLINE_EVENT
-    CALL(evt_sub_intpl_msec_init, 1, 2400, 0, 2000)
+    CALL(evt_sub_intpl_msec_init, EASING_QUADRATIC_IN, 2400, 0, 2000)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
         DIVIDE_FLOAT(LW(0), FLOAT(10.0f))

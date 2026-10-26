@@ -17,6 +17,7 @@
 #include "evt/evt_sub.h"
 #include "driver/npcdrv.h"
 #include "driver/mapdrv.h"
+#include "system.h"
 
 #include "driver/dispdrv.h"
 #include "stdlib.h"
@@ -392,7 +393,7 @@ EVT_END()
 
 EVT_BEGIN(mirror_trans)
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG2_CRAUD_LIGHT2"), 170, 50, 10, LW(9))
-    CALL(evt_sub_intpl_msec_init, 0, 0, -100, 1500)
+    CALL(evt_sub_intpl_msec_init, EASING_LINEAR, 0, -100, 1500)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value_para, LW(0), LW(1))
         SET_FLOAT_VALUE(GW(1), LW(0))
@@ -407,7 +408,7 @@ EVT_END()
 
 EVT_BEGIN(mirror_rotate)
     LOOP(0)
-        CALL(evt_sub_intpl_msec_init, 0, 0, 360, 6000)
+        CALL(evt_sub_intpl_msec_init, EASING_LINEAR, 0, 360, 6000)
         LOOP(0)
             CALL(evt_sub_intpl_msec_get_value_para, LW(0), LW(1))
             CALL(evt_mapobj_trans, 1, STRING("S_mirre"), 0, GW(1), 0)
@@ -572,7 +573,7 @@ EVT_BEGIN(clouda_nakama)
     CALL(evt_msg_print, 0, STRING("stg2_win_e09_01"), 0, 0)
     BEGIN_INLINE_EVENT
         CALL(evt_snd_sfxon_3d, STRING("SFX_STG2_CRAUD_LIGHT1"), 170, 50, 10, LW(9))
-        CALL(evt_sub_intpl_msec_init, 0, 0, 100, 1500)
+        CALL(evt_sub_intpl_msec_init, EASING_LINEAR, 0, 100, 1500)
         LOOP(0)
             CALL(evt_sub_intpl_msec_get_value_para, LW(0), LW(1))
             CALL(evt_mapobj_trans, 1, STRING("S_syan"), 0, LW(0), 0)
@@ -584,7 +585,7 @@ EVT_BEGIN(clouda_nakama)
         CALL(evt_snd_sfxoff, LW(9))
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
-        CALL(evt_sub_intpl_msec_init, 0, 0, 120, 1500)
+        CALL(evt_sub_intpl_msec_init, EASING_LINEAR, 0, 120, 1500)
         LOOP(0)
             CALL(evt_sub_intpl_msec_get_value)
             CALL(fade_alpha, 0, 0, 0, LW(0))
@@ -619,7 +620,7 @@ EVT_BEGIN(clouda_nakama)
         CALL(evt_map_set_blend, 0, 255, 255, 255, 0)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("hika_"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_map_playanim, STRING("kirakira"), 1, 0)
-        CALL(evt_sub_intpl_msec_init, 0, 0, 255, 1000)
+        CALL(evt_sub_intpl_msec_init, EASING_LINEAR, 0, 255, 1000)
         LOOP(0)
             CALL(evt_sub_intpl_msec_get_value)
             CALL(evt_map_set_blend, 0, 255, 255, 255, LW(0))
@@ -642,7 +643,7 @@ EVT_BEGIN(clouda_nakama)
         CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_CLOUDA1"))
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
-        CALL(evt_sub_intpl_msec_init, 0, 0, 1000, 1500)
+        CALL(evt_sub_intpl_msec_init, EASING_LINEAR, 0, 1000, 1500)
         LOOP(0)
             CALL(evt_sub_intpl_msec_get_value)
             DIVIDE_FLOAT(LW(0), 1000)
@@ -697,7 +698,7 @@ EVT_BEGIN(clouda_nakama)
     ADD(LW(2), 10)
     CALL(evt_eff, 0, STRING("kiss"), 2, LW(0), LW(1), LW(2), -45, 0, 0, 0, 0, 0, 0, 0)
     BEGIN_INLINE_EVENT
-        CALL(evt_sub_intpl_msec_init, 0, 100, 0, 1500)
+        CALL(evt_sub_intpl_msec_init, EASING_LINEAR, 100, 0, 1500)
         LOOP(0)
             CALL(evt_sub_intpl_msec_get_value_para, LW(0), LW(1))
             CALL(evt_mapobj_trans, 1, STRING("S_syan"), 0, LW(0), 0)

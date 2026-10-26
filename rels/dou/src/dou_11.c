@@ -912,7 +912,7 @@ static EVT_BEGIN(ukishima_apper)
     CALL(evt_mapobj_flag_onoff, 1, 0, LW(2), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_hitobj_onoff, LW(3), 1, 1)
     CALL(evt_hit_bind_mapobj, LW(3), LW(2))
-    CALL(evt_sub_intpl_msec_init, 1, -100, 0, 800)
+    CALL(evt_sub_intpl_msec_init, EASING_QUADRATIC_IN, -100, 0, 800)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value_para, LW(0), LW(1))
         CALL(evt_mapobj_trans, 1, LW(2), 0, LW(0), 0)
@@ -922,7 +922,7 @@ static EVT_BEGIN(ukishima_apper)
             BREAK_LOOP
         END_IF
     END_LOOP
-    CALL(evt_sub_intpl_msec_init, 11, 0, -10, 300)
+    CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 0, -10, 300)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value_para, LW(0), LW(1))
         CALL(evt_mapobj_trans, 1, LW(2), 0, LW(0), 0)
@@ -932,7 +932,7 @@ static EVT_BEGIN(ukishima_apper)
             BREAK_LOOP
         END_IF
     END_LOOP
-    CALL(evt_sub_intpl_msec_init, 11, -10, 0, 300)
+    CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, -10, 0, 300)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value_para, LW(0), LW(1))
         CALL(evt_mapobj_trans, 1, LW(2), 0, LW(0), 0)
@@ -942,7 +942,7 @@ static EVT_BEGIN(ukishima_apper)
             BREAK_LOOP
         END_IF
     END_LOOP
-    CALL(evt_sub_intpl_msec_init, 11, 0, -5, 200)
+    CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 0, -5, 200)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value_para, LW(0), LW(1))
         CALL(evt_mapobj_trans, 1, LW(2), 0, LW(0), 0)
@@ -952,7 +952,7 @@ static EVT_BEGIN(ukishima_apper)
             BREAK_LOOP
         END_IF
     END_LOOP
-    CALL(evt_sub_intpl_msec_init, 11, -5, 0, 200)
+    CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, -5, 0, 200)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value_para, LW(0), LW(1))
         CALL(evt_mapobj_trans, 1, LW(2), 0, LW(0), 0)
@@ -962,7 +962,7 @@ static EVT_BEGIN(ukishima_apper)
             BREAK_LOOP
         END_IF
     END_LOOP
-    CALL(evt_sub_intpl_msec_init, 11, 0, -1, 100)
+    CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 0, -1, 100)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value_para, LW(0), LW(1))
         CALL(evt_mapobj_trans, 1, LW(2), 0, LW(0), 0)
@@ -972,7 +972,7 @@ static EVT_BEGIN(ukishima_apper)
             BREAK_LOOP
         END_IF
     END_LOOP
-    CALL(evt_sub_intpl_msec_init, 11, -1, 0, 100)
+    CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, -1, 0, 100)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value_para, LW(0), LW(1))
         CALL(evt_mapobj_trans, 1, LW(2), 0, LW(0), 0)
@@ -1802,7 +1802,7 @@ EVT_BEGIN(haikei_funeyure)
     LOOP(0)
         CALL(evt_mapobj_get_position, STRING("S_h_fune"), LW(0), LW(1), LW(2))
         CALL(evt_snd_sfxon_3d, STRING("SFX_STG5_SHIP_SHAKE1"), LW(0), LW(1), LW(2), 0)
-        CALL(evt_sub_intpl_msec_init, 11, -10, 10, 3000)
+        CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, -10, 10, 3000)
         LOOP(0)
             CALL(evt_sub_intpl_msec_get_value_para, LW(0), LW(1))
             CALL(evt_mapobj_rotate, 1, STRING("S_h_fune"), 0, 0, LW(0))
@@ -1814,7 +1814,7 @@ EVT_BEGIN(haikei_funeyure)
         END_LOOP
         CALL(evt_mapobj_get_position, STRING("S_h_fune"), LW(0), LW(1), LW(2))
         CALL(evt_snd_sfxon_3d, STRING("SFX_STG5_SHIP_SHAKE1"), LW(0), LW(1), LW(2), 0)
-        CALL(evt_sub_intpl_msec_init, 11, 10, -10, 3000)
+        CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 10, -10, 3000)
         LOOP(0)
             CALL(evt_sub_intpl_msec_get_value_para, LW(0), LW(1))
             CALL(evt_mapobj_rotate, 1, STRING("S_h_fune"), 0, 0, LW(0))

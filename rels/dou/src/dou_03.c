@@ -18,6 +18,7 @@
 #include "dou.h"
 #include "evt/evt_pouch.h"
 #include "driver/mapdrv.h"
+#include "system.h"
 
 USER_FUNC(evt_win_item_select);
 
@@ -208,7 +209,7 @@ EVT_BEGIN(watergate_geer_large)
 EVT_END()
 
 EVT_BEGIN(nagare_taru)
-    CALL(evt_sub_intpl_msec_init, 1, 0, 100, 2000)
+    CALL(evt_sub_intpl_msec_init, EASING_QUADRATIC_IN, 0, 100, 2000)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
         CALL(evt_mapobj_trans, 1, STRING("S_taru"), 0, 0, LW(0))
@@ -235,7 +236,7 @@ EVT_BEGIN(nagare_taru_se)
 EVT_END()
 
 EVT_BEGIN(nagare_bin)
-    CALL(evt_sub_intpl_msec_init, 1, 0, 100, 1200)
+    CALL(evt_sub_intpl_msec_init, EASING_QUADRATIC_IN, 0, 100, 1200)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
         CALL(evt_mapobj_trans, 1, STRING("S_bin"), 0, 0, LW(0))

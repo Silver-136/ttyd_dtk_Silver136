@@ -394,12 +394,12 @@ void moamoa_main(void) {
             case 3:
                 if (moa->timer < 20) {
                     if (!(moa->flags & 1)) {
-                        r = intplGetValue(2, 50.0f, 0.0f, ++moa->timer, 20);
+                        r = intplGetValue(EASING_CUBIC_IN, 50.0f, 0.0f, ++moa->timer, 20);
                         (*pose->mtx)[0][3] = moa->pos.x + r * (f32)sin(moa->angle);
                         (*pose->mtx)[1][3] = moa->pos.y - r * (f32)cos(moa->angle);
                         (*pose->mtx)[2][3] = moa->pos.z;
                     } else {
-                        r = intplGetValue(2, 50.0f, 0.0f, ++moa->timer, 20);
+                        r = intplGetValue(EASING_CUBIC_IN, 50.0f, 0.0f, ++moa->timer, 20);
                         (*pose->mtx)[0][3] = moa->pos.x;
                         (*pose->mtx)[1][3] = moa->pos.y - r * (f32)cos(moa->angle);
                         (*pose->mtx)[2][3] = moa->pos.z;
@@ -644,7 +644,7 @@ EVT_BEGIN(evt_handle)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
         LOOP(0)
-            CALL(evt_sub_intpl_msec_init, 11, 0, -40, 300)
+            CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 0, -40, 300)
             LABEL(0)
             CALL(evt_sub_intpl_msec_get_value)
             CALL(evt_mapobj_trans, 1, STRING("handoru_3"), LW(0), 0, 0)
@@ -652,7 +652,7 @@ EVT_BEGIN(evt_handle)
             IF_INT_EQUAL(LW(1), 1)
                 GOTO(0)
             END_IF
-            CALL(evt_sub_intpl_msec_init, 11, -40, 0, 300)
+            CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, -40, 0, 300)
             LABEL(1)
             CALL(evt_sub_intpl_msec_get_value)
             CALL(evt_mapobj_trans, 1, STRING("handoru_3"), LW(0), 0, 0)
@@ -703,7 +703,7 @@ EVT_BEGIN(regu_unten)
             CALL(evt_sub_random, 135, LW(10))
             SUBTRACT(LW(10), 45)
             SET_VALUE(LW(3), LW(10))
-            CALL(evt_sub_intpl_msec_init, 11, LW(2), LW(3), 1000)
+            CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, LW(2), LW(3), 1000)
             LABEL(0)
             CALL(evt_sub_intpl_msec_get_value)
             CALL(evt_mapobj_rotate, 1, STRING("handoru_1"), 0, LW(0), 0)
@@ -718,7 +718,7 @@ EVT_BEGIN(regu_unten)
             CALL(evt_sub_random, 40, LW(10))
             MULTIPLY(LW(10), -1)
             SET_VALUE(LW(5), LW(10))
-            CALL(evt_sub_intpl_msec_init, 11, LW(4), LW(5), 500)
+            CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, LW(4), LW(5), 500)
             LABEL(1)
             CALL(evt_sub_intpl_msec_get_value)
             CALL(evt_mapobj_trans, 1, STRING("handoru_3"), LW(0), 0, 0)
@@ -733,7 +733,7 @@ EVT_BEGIN(regu_unten)
             CALL(evt_sub_random, 135, LW(10))
             SUBTRACT(LW(10), 90)
             SET_VALUE(LW(7), LW(10))
-            CALL(evt_sub_intpl_msec_init, 11, LW(6), LW(7), 1000)
+            CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, LW(6), LW(7), 1000)
             LABEL(2)
             CALL(evt_sub_intpl_msec_get_value)
             CALL(evt_mapobj_rotate, 1, STRING("handoru_2"), 0, LW(0), 0)

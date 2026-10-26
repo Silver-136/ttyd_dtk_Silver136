@@ -17,6 +17,7 @@
 #include "evt/evt_sub.h"
 #include "driver/mapdrv.h"
 #include "driver/npcdrv.h"
+#include "system.h"
 
 #include "driver/effdrv.h"
 #include "mario/mariost.h"
@@ -124,7 +125,7 @@ static EVT_BEGIN(epilogue_evt)
     BEGIN_INLINE_EVENT
         CALL(evt_mapobj_color, 1, STRING("S_nami_kira"), 255, 255, 255, 0)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_nami_kira"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_sub_intpl_msec_init, 0, 0, 255, 1000)
+        CALL(evt_sub_intpl_msec_init, EASING_LINEAR, 0, 255, 1000)
         LOOP(0)
             CALL(evt_sub_intpl_msec_get_value)
             CALL(evt_mapobj_color, 1, STRING("S_nami_kira"), 255, 255, 255, LW(0))
@@ -139,7 +140,7 @@ static EVT_BEGIN(epilogue_evt)
     BEGIN_INLINE_EVENT
         CALL(evt_mapobj_color, 1, STRING("S_sun_hika"), 255, 255, 255, 0)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_sun_hika"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_sub_intpl_msec_init, 0, 0, 255, 1000)
+        CALL(evt_sub_intpl_msec_init, EASING_LINEAR, 0, 255, 1000)
         LOOP(0)
             CALL(evt_sub_intpl_msec_get_value)
             CALL(evt_mapobj_color, 1, STRING("S_sun_hika"), 255, 255, 255, LW(0))

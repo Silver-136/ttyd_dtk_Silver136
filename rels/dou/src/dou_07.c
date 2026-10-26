@@ -16,6 +16,7 @@
 #include "evt/evt_item.h"
 #include "evt/evt_pouch.h"
 #include "driver/npcdrv.h"
+#include "system.h"
 
 #include "driver/mobjdrv.h"
 #include "driver/animdrv.h"
@@ -115,7 +116,7 @@ EVT_BEGIN(apper_elmos)
     SET_VALUE(GSWF(2988), 1)
     CALL(evt_npc_set_position, STRING("エルモス"), 100, -6, -37)
     CALL(evt_npc_set_color, STRING("エルモス"), 255, 255, 255, 0)
-    CALL(evt_sub_intpl_msec_init, 11, 0, 255, 1000)
+    CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 0, 255, 1000)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
         CALL(evt_npc_set_color, STRING("エルモス"), 255, 255, 255, LW(0))

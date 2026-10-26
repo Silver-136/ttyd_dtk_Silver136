@@ -23,6 +23,7 @@
 #include "evt/evt_johoya.h"
 #include "evt/evt_pouch.h"
 #include "driver/mobjdrv.h"
+#include "system.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "mario/mario.h"
@@ -726,7 +727,7 @@ EVT_BEGIN(uranai_init)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("supotto"), MAP_OBJ_FLAG_HIDDEN)
     CALL(supotto_blendmode)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("uranai_mae"), MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2)
-    CALL(evt_sub_intpl_msec_init, 11, 255, 0, 1000)
+    CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 255, 0, 1000)
     SET_VALUE(LW(0), 0)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
@@ -764,7 +765,7 @@ EVT_BEGIN(uranai_main)
         WAIT_MS(500)
         CALL(evt_snd_sfxon, STRING("SFX_EVT_FORTUNE_CARD_MOVE1"), 0)
     END_INLINE_EVENT
-    CALL(evt_sub_intpl_msec_init, 11, -1300, 1300, 3000)
+    CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, -1300, 1300, 3000)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
         DIVIDE_FLOAT(LW(0), FLOAT(10.0f))
@@ -805,7 +806,7 @@ EVT_BEGIN(uranai_main)
         BEGIN_INLINE_EVENT
             SET_VALUE(LW(9), LW(0))
             MULTIPLY_FLOAT(LW(2), FLOAT(10.0f))
-            CALL(evt_sub_intpl_msec_init, 11, LW(2), 0, 360)
+            CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, LW(2), 0, 360)
             LOOP(0)
                 CALL(evt_sub_intpl_msec_get_value)
                 DIVIDE_FLOAT(LW(0), FLOAT(10.0f))
@@ -825,7 +826,7 @@ EVT_BEGIN(uranai_main)
     END_LOOP
     WAIT_MS(1000)
     CALL(evt_snd_sfxon, STRING("SFX_EVT_FORTUNE_CARD_MOVE3"), 0)
-    CALL(evt_sub_intpl_msec_init, 11, 0, 600, 1000)
+    CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 0, 600, 1000)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
         DIVIDE_FLOAT(LW(0), FLOAT(10.0f))
@@ -843,7 +844,7 @@ EVT_BEGIN(uranai_main)
             BREAK_LOOP
         END_IF
     END_LOOP
-    CALL(evt_sub_intpl_msec_init, 11, 600, -600, 1500)
+    CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 600, -600, 1500)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
         DIVIDE_FLOAT(LW(0), FLOAT(10.0f))
@@ -883,9 +884,9 @@ EVT_BEGIN(uranai_main)
         BEGIN_INLINE_EVENT
             IF_INT_EQUAL(LW(9), 4)
                 CALL(evt_snd_sfxon, STRING("SFX_EVT_FORTUNE_CARD_MOVE4"), 0)
-                CALL(evt_sub_intpl_msec_init, 0, 0, 500, 1000)
+                CALL(evt_sub_intpl_msec_init, EASING_LINEAR, 0, 500, 1000)
                 ELSE
-                CALL(evt_sub_intpl_msec_init, 1, 0, -3000, 1000)
+                CALL(evt_sub_intpl_msec_init, EASING_QUADRATIC_IN, 0, -3000, 1000)
             END_IF
             LOOP(0)
                 CALL(evt_sub_intpl_msec_get_value)
@@ -919,7 +920,7 @@ EVT_BEGIN(uranai_main)
         END_LOOP
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
-        CALL(evt_sub_intpl_msec_init, 13, 500, 700, 300)
+        CALL(evt_sub_intpl_msec_init, EASING_COS_IN, 500, 700, 300)
         LOOP(0)
             CALL(evt_sub_intpl_msec_get_value)
             DIVIDE_FLOAT(LW(0), FLOAT(10.0f))
@@ -929,7 +930,7 @@ EVT_BEGIN(uranai_main)
                 BREAK_LOOP
             END_IF
         END_LOOP
-        CALL(evt_sub_intpl_msec_init, 12, 700, -200, 1000)
+        CALL(evt_sub_intpl_msec_init, EASING_SIN_OUT, 700, -200, 1000)
         LOOP(0)
             CALL(evt_sub_intpl_msec_get_value)
             DIVIDE_FLOAT(LW(0), FLOAT(10.0f))
@@ -941,7 +942,7 @@ EVT_BEGIN(uranai_main)
         END_LOOP
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
-        CALL(evt_sub_intpl_msec_init, 11, 0, -450, 1000)
+        CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 0, -450, 1000)
         LOOP(0)
             CALL(evt_sub_intpl_msec_get_value)
             DIVIDE_FLOAT(LW(0), FLOAT(10.0f))
@@ -953,7 +954,7 @@ EVT_BEGIN(uranai_main)
         END_LOOP
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
-        CALL(evt_sub_intpl_msec_init, 11, 0, 37800, 2000)
+        CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 0, 37800, 2000)
         LOOP(0)
             CALL(evt_sub_intpl_msec_get_value)
             DIVIDE_FLOAT(LW(0), FLOAT(10.0f))
@@ -977,7 +978,7 @@ EVT_END()
 EVT_BEGIN(uranai_exit)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("uranai_mae"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("ie_1_door"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_sub_intpl_msec_init, 11, 0, 255, 1000)
+    CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 0, 255, 1000)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
         CALL(evt_mapobj_color, 1, STRING("uranai_mae"), LW(0), LW(0), LW(0), 255)
@@ -1603,10 +1604,10 @@ EVT_BEGIN(evt_wall_01_00)
         CALL(evt_snd_sfxon_3d, STRING("SFX_HOUSE_DOWN1"), LW(0), LW(1), LW(2), 0)
     END_INLINE_EVENT
     IF_INT_EQUAL(LW(1), 0)
-        CALL(evt_sub_intpl_msec_init, 2, 0, 180, 500)
+        CALL(evt_sub_intpl_msec_init, EASING_CUBIC_IN, 0, 180, 500)
         ELSE
         WAIT_MS(300)
-        CALL(evt_sub_intpl_msec_init, 2, 180, 0, 500)
+        CALL(evt_sub_intpl_msec_init, EASING_CUBIC_IN, 180, 0, 500)
     END_IF
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
@@ -1631,10 +1632,10 @@ EVT_BEGIN(evt_wall_01_01)
     END_INLINE_EVENT
     IF_INT_EQUAL(LW(1), 0)
         WAIT_MS(100)
-        CALL(evt_sub_intpl_msec_init, 2, 0, 180, 500)
+        CALL(evt_sub_intpl_msec_init, EASING_CUBIC_IN, 0, 180, 500)
         ELSE
         WAIT_MS(200)
-        CALL(evt_sub_intpl_msec_init, 2, 180, 0, 500)
+        CALL(evt_sub_intpl_msec_init, EASING_CUBIC_IN, 180, 0, 500)
     END_IF
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
@@ -1659,10 +1660,10 @@ EVT_BEGIN(evt_wall_01_02)
     END_INLINE_EVENT
     IF_INT_EQUAL(LW(1), 0)
         WAIT_MS(200)
-        CALL(evt_sub_intpl_msec_init, 2, 0, 180, 500)
+        CALL(evt_sub_intpl_msec_init, EASING_CUBIC_IN, 0, 180, 500)
         ELSE
         WAIT_MS(100)
-        CALL(evt_sub_intpl_msec_init, 2, 180, 0, 500)
+        CALL(evt_sub_intpl_msec_init, EASING_CUBIC_IN, 180, 0, 500)
     END_IF
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
@@ -1755,10 +1756,10 @@ EVT_BEGIN(evt_wall_02_00)
         CALL(evt_snd_sfxon_3d, STRING("SFX_HOUSE_DOWN1"), LW(0), LW(1), LW(2), 0)
     END_INLINE_EVENT
     IF_INT_EQUAL(LW(1), 0)
-        CALL(evt_sub_intpl_msec_init, 2, 0, 180, 500)
+        CALL(evt_sub_intpl_msec_init, EASING_CUBIC_IN, 0, 180, 500)
         ELSE
         WAIT_MS(300)
-        CALL(evt_sub_intpl_msec_init, 2, 180, 0, 500)
+        CALL(evt_sub_intpl_msec_init, EASING_CUBIC_IN, 180, 0, 500)
     END_IF
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
@@ -1783,10 +1784,10 @@ EVT_BEGIN(evt_wall_02_01)
     END_INLINE_EVENT
     IF_INT_EQUAL(LW(1), 0)
         WAIT_MS(100)
-        CALL(evt_sub_intpl_msec_init, 2, 0, 180, 500)
+        CALL(evt_sub_intpl_msec_init, EASING_CUBIC_IN, 0, 180, 500)
         ELSE
         WAIT_MS(200)
-        CALL(evt_sub_intpl_msec_init, 2, 180, 0, 500)
+        CALL(evt_sub_intpl_msec_init, EASING_CUBIC_IN, 180, 0, 500)
     END_IF
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
@@ -1811,10 +1812,10 @@ EVT_BEGIN(evt_wall_02_02)
     END_INLINE_EVENT
     IF_INT_EQUAL(LW(1), 0)
         WAIT_MS(200)
-        CALL(evt_sub_intpl_msec_init, 2, 0, 180, 500)
+        CALL(evt_sub_intpl_msec_init, EASING_CUBIC_IN, 0, 180, 500)
         ELSE
         WAIT_MS(100)
-        CALL(evt_sub_intpl_msec_init, 2, 180, 0, 500)
+        CALL(evt_sub_intpl_msec_init, EASING_CUBIC_IN, 180, 0, 500)
     END_IF
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
@@ -1838,9 +1839,9 @@ EVT_BEGIN(evt_wall_02_03)
     END_INLINE_EVENT
     IF_INT_EQUAL(LW(1), 0)
         WAIT_MS(300)
-        CALL(evt_sub_intpl_msec_init, 2, 0, 180, 500)
+        CALL(evt_sub_intpl_msec_init, EASING_CUBIC_IN, 0, 180, 500)
         ELSE
-        CALL(evt_sub_intpl_msec_init, 2, 180, 0, 500)
+        CALL(evt_sub_intpl_msec_init, EASING_CUBIC_IN, 180, 0, 500)
     END_IF
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
@@ -1918,10 +1919,10 @@ EVT_BEGIN(evt_wall_03_00)
         CALL(evt_snd_sfxon_3d, STRING("SFX_HOUSE_DOWN1"), LW(0), LW(1), LW(2), 0)
     END_INLINE_EVENT
     IF_INT_EQUAL(LW(1), 0)
-        CALL(evt_sub_intpl_msec_init, 2, 0, 180, 500)
+        CALL(evt_sub_intpl_msec_init, EASING_CUBIC_IN, 0, 180, 500)
         ELSE
         WAIT_MS(300)
-        CALL(evt_sub_intpl_msec_init, 2, 180, 0, 500)
+        CALL(evt_sub_intpl_msec_init, EASING_CUBIC_IN, 180, 0, 500)
     END_IF
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
@@ -1946,10 +1947,10 @@ EVT_BEGIN(evt_wall_03_01)
     END_INLINE_EVENT
     IF_INT_EQUAL(LW(1), 0)
         WAIT_MS(100)
-        CALL(evt_sub_intpl_msec_init, 2, 0, 180, 500)
+        CALL(evt_sub_intpl_msec_init, EASING_CUBIC_IN, 0, 180, 500)
         ELSE
         WAIT_MS(200)
-        CALL(evt_sub_intpl_msec_init, 2, 180, 0, 500)
+        CALL(evt_sub_intpl_msec_init, EASING_CUBIC_IN, 180, 0, 500)
     END_IF
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
@@ -1974,10 +1975,10 @@ EVT_BEGIN(evt_wall_03_02)
     END_INLINE_EVENT
     IF_INT_EQUAL(LW(1), 0)
         WAIT_MS(200)
-        CALL(evt_sub_intpl_msec_init, 2, 0, 180, 500)
+        CALL(evt_sub_intpl_msec_init, EASING_CUBIC_IN, 0, 180, 500)
         ELSE
         WAIT_MS(100)
-        CALL(evt_sub_intpl_msec_init, 2, 180, 0, 500)
+        CALL(evt_sub_intpl_msec_init, EASING_CUBIC_IN, 180, 0, 500)
     END_IF
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
@@ -2001,9 +2002,9 @@ EVT_BEGIN(evt_wall_03_03)
     END_INLINE_EVENT
     IF_INT_EQUAL(LW(1), 0)
         WAIT_MS(300)
-        CALL(evt_sub_intpl_msec_init, 2, 0, 180, 500)
+        CALL(evt_sub_intpl_msec_init, EASING_CUBIC_IN, 0, 180, 500)
         ELSE
-        CALL(evt_sub_intpl_msec_init, 2, 180, 0, 500)
+        CALL(evt_sub_intpl_msec_init, EASING_CUBIC_IN, 180, 0, 500)
     END_IF
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
@@ -2246,7 +2247,7 @@ EVT_BEGIN(tensou_return)
     CALL(evt_hit_get_position, STRING("A_tensou"), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG7_WARP_LIGHT1"), LW(0), LW(1), LW(2), LW(9))
     BEGIN_INLINE_EVENT
-        CALL(evt_sub_intpl_msec_init, 5, 0, 5760, 4000)
+        CALL(evt_sub_intpl_msec_init, EASING_CUBIC_OUT, 0, 5760, 4000)
         LOOP(0)
             CALL(evt_sub_intpl_msec_get_value)
             MODULO(LW(0), 360)
@@ -2261,7 +2262,7 @@ EVT_BEGIN(tensou_return)
         END_LOOP
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
-        CALL(evt_sub_intpl_msec_init, 12, 0, 100, 800)
+        CALL(evt_sub_intpl_msec_init, EASING_SIN_OUT, 0, 100, 800)
         LOOP(0)
             CALL(evt_sub_intpl_msec_get_value)
             DIVIDE_FLOAT(LW(0), FLOAT(100.0f))
@@ -2276,7 +2277,7 @@ EVT_BEGIN(tensou_return)
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG7_WARP1_2"), LW(0), LW(1), LW(2), 0)
     CALL(evt_mario_get_pos, 0, LW(2), LW(3), LW(4))
     CALL(evt_party_get_pos, 0, LW(5), LW(6), LW(7))
-    CALL(evt_sub_intpl_msec_init, 12, 70, 0, 1000)
+    CALL(evt_sub_intpl_msec_init, EASING_SIN_OUT, 70, 0, 1000)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
         SET_VALUE(LW(8), LW(0))
@@ -2291,7 +2292,7 @@ EVT_BEGIN(tensou_return)
     END_LOOP
     WAIT_MS(3000)
     CALL(evt_snd_sfxoff, LW(9))
-    CALL(evt_sub_intpl_msec_init, 11, 255, 0, 500)
+    CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 255, 0, 500)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
         CALL(evt_mapobj_color, 1, STRING("wa_pu"), 255, 255, 255, LW(0))
@@ -2443,7 +2444,7 @@ EVT_BEGIN(tensou_event)
     END_INLINE_EVENT
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG7_WARP1"), LW(0), LW(1), LW(2), 0)
-    CALL(evt_sub_intpl_msec_init, 11, 0, 30, 3000)
+    CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 0, 30, 3000)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
         SET_VALUE(GW(0), LW(0))
@@ -2458,7 +2459,7 @@ EVT_BEGIN(tensou_event)
     CALL(evt_mario_get_pos, 0, LW(2), LW(3), LW(4))
     CALL(evt_party_get_pos, 0, LW(5), LW(6), LW(7))
     BEGIN_INLINE_EVENT
-        CALL(evt_sub_intpl_msec_init, 12, 100, 0, 800)
+        CALL(evt_sub_intpl_msec_init, EASING_SIN_OUT, 100, 0, 800)
         LOOP(0)
             CALL(evt_sub_intpl_msec_get_value)
             DIVIDE_FLOAT(LW(0), FLOAT(100.0f))
@@ -2473,7 +2474,7 @@ EVT_BEGIN(tensou_event)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         CALL(evt_snd_sfxon_3d, STRING("SFX_STG7_WARP2"), LW(0), LW(1), LW(2), 0)
     END_INLINE_EVENT
-    CALL(evt_sub_intpl_msec_init, 12, 0, 100, 1000)
+    CALL(evt_sub_intpl_msec_init, EASING_SIN_OUT, 0, 100, 1000)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
         SET_VALUE(LW(8), LW(0))
@@ -2663,7 +2664,7 @@ static EVT_BEGIN(epilogue_evt)
     CALL(evt_npc_move_position, STRING("クリスチーヌ"), -345, -5, 0, 60, 0)
     SET_VALUE(LW(0), PTR(&door_data_04))
     SPAWN_EVENT(PTR(door_open_se))
-    CALL(evt_sub_intpl_msec_init, 5, 0, 180, 500)
+    CALL(evt_sub_intpl_msec_init, EASING_CUBIC_OUT, 0, 180, 500)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
         SPAWN_EVENT(PTR(evt_door_04_00))
@@ -2675,7 +2676,7 @@ static EVT_BEGIN(epilogue_evt)
     CALL(evt_npc_move_position, STRING("クリスチーヌ"), -345, -70, 0, 60, 0)
     SET_VALUE(LW(0), PTR(&door_data_04))
     SPAWN_EVENT(PTR(door_close_se))
-    CALL(evt_sub_intpl_msec_init, 5, 180, 0, 500)
+    CALL(evt_sub_intpl_msec_init, EASING_CUBIC_OUT, 180, 0, 500)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
         SPAWN_EVENT(PTR(evt_door_04_00))

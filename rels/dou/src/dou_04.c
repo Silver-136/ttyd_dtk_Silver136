@@ -118,7 +118,7 @@ EVT_BEGIN(box_event)
     SPAWN_EVENT(PTR(box_pukapuka))
     CALL(evt_hit_bind_mapobj, STRING("a04_m_hako_03"), STRING("s04_m_hako_a"))
     LOOP(0)
-        CALL(evt_sub_intpl_msec_init, 1, 0, 3, 500)
+        CALL(evt_sub_intpl_msec_init, EASING_QUADRATIC_IN, 0, 3, 500)
         LOOP(0)
             CALL(evt_sub_intpl_msec_get_value_para, GW(0), LW(1))
             IF_INT_EQUAL(LW(1), 0)
@@ -126,42 +126,7 @@ EVT_BEGIN(box_event)
             END_IF
             WAIT_FRAMES(1)
         END_LOOP
-        CALL(evt_sub_intpl_msec_init, 0, 3, 50, 3000)
-        LOOP(0)
-            CALL(evt_sub_intpl_msec_get_value_para, GW(0), LW(1))
-            IF_INT_EQUAL(LW(1), 0)
-                BREAK_LOOP
-            END_IF
-            WAIT_FRAMES(1)
-        END_LOOP
-        CALL(evt_mapobj_get_position, STRING("s04_m_hako_a"), LW(0), LW(1), LW(2))
-        CALL(evt_snd_sfxon_3d, STRING("SFX_STG5_STEP_FLOAT1"), LW(0), LW(1), LW(2), 0)
-        CALL(evt_snd_sfxon_3d, STRING("SFX_STG5_STEP_FLOAT2"), LW(0), LW(1), LW(2), 0)
-        CALL(evt_sub_intpl_msec_init, 11, 50, 49, 500)
-        LOOP(0)
-            CALL(evt_sub_intpl_msec_get_value_para, GW(0), LW(1))
-            IF_INT_EQUAL(LW(1), 0)
-                BREAK_LOOP
-            END_IF
-            WAIT_FRAMES(1)
-        END_LOOP
-        CALL(evt_sub_intpl_msec_init, 11, 49, 50, 500)
-        LOOP(0)
-            CALL(evt_sub_intpl_msec_get_value_para, GW(0), LW(1))
-            IF_INT_EQUAL(LW(1), 0)
-                BREAK_LOOP
-            END_IF
-            WAIT_FRAMES(1)
-        END_LOOP
-        CALL(evt_sub_intpl_msec_init, 1, 50, 47, 500)
-        LOOP(0)
-            CALL(evt_sub_intpl_msec_get_value_para, GW(0), LW(1))
-            IF_INT_EQUAL(LW(1), 0)
-                BREAK_LOOP
-            END_IF
-            WAIT_FRAMES(1)
-        END_LOOP
-        CALL(evt_sub_intpl_msec_init, 0, 47, 0, 3000)
+        CALL(evt_sub_intpl_msec_init, EASING_LINEAR, 3, 50, 3000)
         LOOP(0)
             CALL(evt_sub_intpl_msec_get_value_para, GW(0), LW(1))
             IF_INT_EQUAL(LW(1), 0)
@@ -172,7 +137,7 @@ EVT_BEGIN(box_event)
         CALL(evt_mapobj_get_position, STRING("s04_m_hako_a"), LW(0), LW(1), LW(2))
         CALL(evt_snd_sfxon_3d, STRING("SFX_STG5_STEP_FLOAT1"), LW(0), LW(1), LW(2), 0)
         CALL(evt_snd_sfxon_3d, STRING("SFX_STG5_STEP_FLOAT2"), LW(0), LW(1), LW(2), 0)
-        CALL(evt_sub_intpl_msec_init, 11, 0, 1, 500)
+        CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 50, 49, 500)
         LOOP(0)
             CALL(evt_sub_intpl_msec_get_value_para, GW(0), LW(1))
             IF_INT_EQUAL(LW(1), 0)
@@ -180,7 +145,42 @@ EVT_BEGIN(box_event)
             END_IF
             WAIT_FRAMES(1)
         END_LOOP
-        CALL(evt_sub_intpl_msec_init, 11, 1, 0, 500)
+        CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 49, 50, 500)
+        LOOP(0)
+            CALL(evt_sub_intpl_msec_get_value_para, GW(0), LW(1))
+            IF_INT_EQUAL(LW(1), 0)
+                BREAK_LOOP
+            END_IF
+            WAIT_FRAMES(1)
+        END_LOOP
+        CALL(evt_sub_intpl_msec_init, EASING_QUADRATIC_IN, 50, 47, 500)
+        LOOP(0)
+            CALL(evt_sub_intpl_msec_get_value_para, GW(0), LW(1))
+            IF_INT_EQUAL(LW(1), 0)
+                BREAK_LOOP
+            END_IF
+            WAIT_FRAMES(1)
+        END_LOOP
+        CALL(evt_sub_intpl_msec_init, EASING_LINEAR, 47, 0, 3000)
+        LOOP(0)
+            CALL(evt_sub_intpl_msec_get_value_para, GW(0), LW(1))
+            IF_INT_EQUAL(LW(1), 0)
+                BREAK_LOOP
+            END_IF
+            WAIT_FRAMES(1)
+        END_LOOP
+        CALL(evt_mapobj_get_position, STRING("s04_m_hako_a"), LW(0), LW(1), LW(2))
+        CALL(evt_snd_sfxon_3d, STRING("SFX_STG5_STEP_FLOAT1"), LW(0), LW(1), LW(2), 0)
+        CALL(evt_snd_sfxon_3d, STRING("SFX_STG5_STEP_FLOAT2"), LW(0), LW(1), LW(2), 0)
+        CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 0, 1, 500)
+        LOOP(0)
+            CALL(evt_sub_intpl_msec_get_value_para, GW(0), LW(1))
+            IF_INT_EQUAL(LW(1), 0)
+                BREAK_LOOP
+            END_IF
+            WAIT_FRAMES(1)
+        END_LOOP
+        CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 1, 0, 500)
         LOOP(0)
             CALL(evt_sub_intpl_msec_get_value_para, GW(0), LW(1))
             IF_INT_EQUAL(LW(1), 0)
@@ -513,7 +513,7 @@ EVT_BEGIN(kuribo_talk)
                 BEGIN_INLINE_EVENT
                     WAIT_MS(100)
                     CALL(evt_item_get_position, STRING("ff"), LW(2), LW(3), LW(4))
-                    CALL(evt_sub_intpl_msec_init, 1, LW(3), 10, 100)
+                    CALL(evt_sub_intpl_msec_init, EASING_QUADRATIC_IN, LW(3), 10, 100)
                     LOOP(0)
                         CALL(evt_sub_intpl_msec_get_value)
                         CALL(evt_item_set_position, STRING("ff"), LW(2), LW(0), LW(4))

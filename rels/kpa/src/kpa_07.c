@@ -12,6 +12,7 @@
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
 #include "evt/evt_sub.h"
+#include "system.h"
 
 #include "driver/npcdrv.h"
 #include "string.h"
@@ -194,7 +195,7 @@ EVT_BEGIN(kpa_07_evt)
         WAIT_FRAMES(1)
         CALL(evt_npc_set_anim, STRING("ブレッドハート"), STRING("A_2A"))
         ADD(GW(0), 10)
-        CALL(evt_sub_intpl_msec_init, 0, LW(5), 10, 800)
+        CALL(evt_sub_intpl_msec_init, EASING_LINEAR, LW(5), 10, 800)
         LABEL(2)
         CALL(evt_sub_intpl_msec_get_value)
         CALL(evt_npc_set_position, STRING("ブレッドハート"), LW(0), GW(0), LW(4))
@@ -209,7 +210,7 @@ EVT_BEGIN(kpa_07_evt)
         CALL(evt_npc_set_anim, STRING("ブレッドハート"), STRING("S_7"))
         CALL(evt_npc_get_position, STRING("ブレッドハート"), LW(0), LW(1), LW(2))
         CALL(evt_snd_sfxon_3d, STRING("SFX_KUPPA_BRED_TACKLE_HIT1"), LW(0), LW(1), LW(2), 0)
-        CALL(evt_sub_intpl_msec_init, 5, 1000, 333, 200)
+        CALL(evt_sub_intpl_msec_init, EASING_CUBIC_OUT, 1000, 333, 200)
         LABEL(1)
         CALL(evt_sub_intpl_msec_get_value)
         DIVIDE_FLOAT(LW(0), FLOAT(1000.0f))
@@ -247,7 +248,7 @@ EVT_BEGIN(kpa_07_evt)
         SET_VALUE(LW(7), LW(4))
         ADD(LW(7), 10)
         CALL(evt_eff, 0, STRING("hit"), 0, LW(5), LW(6), LW(7), 1, 5, 0, 0, 0, 0, 0, 0)
-        CALL(evt_sub_intpl_msec_init, 4, LW(2), 160, 400)
+        CALL(evt_sub_intpl_msec_init, EASING_QUADRATIC_OUT, LW(2), 160, 400)
         LABEL(0)
         CALL(evt_sub_intpl_msec_get_value)
         CALL(evt_npc_set_position, STRING("ババ"), LW(0), LW(3), LW(4))

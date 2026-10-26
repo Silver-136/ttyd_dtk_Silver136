@@ -10,6 +10,7 @@
 #include "evt/evt_snd.h"
 #include "party/party_motion.h"
 #include "evt/evt_sub.h"
+#include "system.h"
 
 #include "mario/mario.h"
 #include "party.h"
@@ -61,7 +62,7 @@ static EVT_BEGIN(mario_fly)
     CALL(evt_mario_set_pos, -300, -300, 0)
     CALL(evt_party_set_pos, 0, -300, -300, 0)
     BEGIN_INLINE_EVENT
-        CALL(evt_sub_intpl_msec_init, 1, -304, 304, 3000)
+        CALL(evt_sub_intpl_msec_init, EASING_QUADRATIC_IN, -304, 304, 3000)
         LABEL(0)
         CALL(evt_sub_intpl_msec_get_value)
         SET_FLOAT_VALUE(LW(2), LW(0))
@@ -75,7 +76,7 @@ static EVT_BEGIN(mario_fly)
     END_INLINE_EVENT
     WAIT_MS(500)
     BEGIN_INLINE_EVENT
-        CALL(evt_sub_intpl_msec_init, 1, -304, 304, 3000)
+        CALL(evt_sub_intpl_msec_init, EASING_QUADRATIC_IN, -304, 304, 3000)
         LABEL(1)
         CALL(evt_sub_intpl_msec_get_value)
         SET_FLOAT_VALUE(LW(2), LW(0))

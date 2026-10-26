@@ -11,6 +11,7 @@
 #include "evt/evt_sub.h"
 #include "evt/evt_pouch.h"
 #include "driver/mapdrv.h"
+#include "system.h"
 
 #include "eff/eff_stardust.h"
 #include "manager/evtmgr_cmd.h"
@@ -162,7 +163,7 @@ EVT_BEGIN(majinaisi_table_talk)
     CALL(evt_mario_dispflag_onoff, 1, 1)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_EVT_INCANT_CUBE3"), LW(0), LW(1), LW(2), 0)
-    CALL(evt_sub_intpl_msec_init, 11, 0, 60, 1000)
+    CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 0, 60, 1000)
     LABEL(1)
     CALL(evt_sub_intpl_msec_get_value_para, LW(0), LW(1))
     CALL(evt_mapobj_trans, 1, STRING("majinai_BOX"), LW(3), LW(0), LW(5))
@@ -257,7 +258,7 @@ EVT_BEGIN(majinaisi_table_talk)
     SET_VALUE(LW(5), LW(15))
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_EVT_INCANT_CUBE5"), LW(0), LW(1), LW(2), 0)
-    CALL(evt_sub_intpl_msec_init, 11, LW(4), 0, 1000)
+    CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, LW(4), 0, 1000)
     LABEL(3)
     CALL(evt_sub_intpl_msec_get_value_para, LW(0), LW(1))
     CALL(evt_mapobj_trans, 1, STRING("majinai_BOX"), LW(3), LW(0), LW(5))
@@ -279,7 +280,7 @@ EVT_BEGIN(majinaisi_table_talk)
             CALL(evt_map_blend_set_flag, 1, STRING("extparty"), 2048)
         END_IF
         CALL(evt_map_blend_set_flag, 1, STRING("まじない師"), 2048)
-        CALL(evt_sub_intpl_msec_init, 11, 255, 0, 500)
+        CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 255, 0, 500)
         LABEL(4)
         CALL(evt_sub_intpl_msec_get_value)
         CALL(evt_map_set_blend, 0, 255, 255, 255, LW(0))

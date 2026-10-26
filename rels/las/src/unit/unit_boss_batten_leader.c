@@ -2709,7 +2709,7 @@ u8 battenSatelliteTo_Main(BattleUnit* unit, s32 n) {
         }
         return FALSE;
     }
-    spline_getvalue(intplGetValue(4, 0.0f, 1.0f, sp->count, 60), &pos, sp->n, sp->table, sp->a, sp->b);
+    spline_getvalue(intplGetValue(EASING_QUADRATIC_OUT, 0.0f, 1.0f, sp->count, 60), &pos, sp->n, sp->table, sp->a, sp->b);
     sat = BattleGetUnitPtr(_battleWorkPointer, unit->work[9 + n]);
     if (sat == NULL) {
         return FALSE;

@@ -220,7 +220,7 @@ void battleAcDisp_TimingWide(CameraId cameraId, void* param) {
             if ((s32)ac->acFlags & 1) {
                 disp->iconX = 30.0f;
             } else {
-                disp->iconX = intplGetValue(4, -300.0f, 30.0f, 20 - disp->slideTimer, 20);
+                disp->iconX = intplGetValue(EASING_QUADRATIC_OUT, -300.0f, 30.0f, 20 - disp->slideTimer, 20);
             }
             actionCommandDisp(disp->iconX, disp->iconY);
             if (disp->slideTimer > 0) {
@@ -241,7 +241,7 @@ void battleAcDisp_TimingWide(CameraId cameraId, void* param) {
             }
             if (disp->slideTimer >= 40) {
                 if (show) {
-                    disp->iconX = intplGetValue(4, 30.0f, -300.0f, disp->slideTimer - 40, 20);
+                    disp->iconX = intplGetValue(EASING_QUADRATIC_OUT, 30.0f, -300.0f, disp->slideTimer - 40, 20);
                 } else {
                     disp->iconX = 30.0f;
                 }

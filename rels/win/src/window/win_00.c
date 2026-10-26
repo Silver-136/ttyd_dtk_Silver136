@@ -397,7 +397,7 @@ EVT_BEGIN(witchtrio_momeru)
     CALL(evt_item_set_position, STRING("necklace"), LW(0), LW(1), LW(2))
     CALL(evt_eff64, STRING(""), STRING("stardust_n64"), 1, LW(0), LW(1), LW(2), FLOAT(20.0f), 0, 0, 0, 0, 0, 0, 0)
     BEGIN_INLINE_EVENT
-        CALL(evt_sub_intpl_msec_init, 4, 0, 30, 375)
+        CALL(evt_sub_intpl_msec_init, EASING_QUADRATIC_OUT, 0, 30, 375)
         LOOP(0)
             CALL(evt_sub_intpl_msec_get_value_para, GW(10), LW(1))
             IF_INT_EQUAL(LW(1), 0)
@@ -405,7 +405,7 @@ EVT_BEGIN(witchtrio_momeru)
             END_IF
             WAIT_FRAMES(1)
         END_LOOP
-        CALL(evt_sub_intpl_msec_init, 1, 30, 10, 375)
+        CALL(evt_sub_intpl_msec_init, EASING_QUADRATIC_IN, 30, 10, 375)
         LOOP(0)
             CALL(evt_sub_intpl_msec_get_value_para, GW(10), LW(1))
             IF_INT_EQUAL(LW(1), 0)

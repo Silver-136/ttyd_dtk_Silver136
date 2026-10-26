@@ -1098,7 +1098,7 @@ EVT_BEGIN(_curtain_close_event)
         END_IF
     END_IF
     BEGIN_SIBLING_EVENT
-        CALL(evt_sub_intpl_init_float, 0, 0, FLOAT(-40.0f), 29)
+        CALL(evt_sub_intpl_init_float, EASING_LINEAR, 0, FLOAT(-40.0f), 29)
         LOOP(30)
             CALL(evt_sub_intpl_get_float, LW(0), EVT_NULLPTR)
             CALL(_nozzle_set_offset, STRING("nozzle_l"), LW(0))
@@ -1106,7 +1106,7 @@ EVT_BEGIN(_curtain_close_event)
         END_LOOP
     END_SIBLING_EVENT
     BEGIN_SIBLING_EVENT
-        CALL(evt_sub_intpl_init_float, 0, 0, FLOAT(-40.0f), 29)
+        CALL(evt_sub_intpl_init_float, EASING_LINEAR, 0, FLOAT(-40.0f), 29)
         LOOP(30)
             CALL(evt_sub_intpl_get_float, LW(0), EVT_NULLPTR)
             CALL(_nozzle_set_offset, STRING("nozzle_c"), LW(0))
@@ -1114,7 +1114,7 @@ EVT_BEGIN(_curtain_close_event)
         END_LOOP
     END_SIBLING_EVENT
     BEGIN_SIBLING_EVENT
-        CALL(evt_sub_intpl_init_float, 0, 0, FLOAT(-40.0f), 29)
+        CALL(evt_sub_intpl_init_float, EASING_LINEAR, 0, FLOAT(-40.0f), 29)
         LOOP(30)
             CALL(evt_sub_intpl_get_float, LW(0), EVT_NULLPTR)
             CALL(_nozzle_set_offset, STRING("nozzle_r"), LW(0))
@@ -1228,7 +1228,7 @@ EVT_BEGIN(_curtain_close_event)
             CALL(N__set_initial_upgrade_cursor_position, 2)
             CALL(btlevtcmd_BtlStageObjSetRotate, STRING("spotlight"), 0, 0, 70)
             CALL(btlevtcmd_BtlStageObjFlagOnOff, STRING("spotlight"), 1, 0)
-            CALL(evt_sub_intpl_init, 5, 70, 30, 10)
+            CALL(evt_sub_intpl_init, EASING_CUBIC_OUT, 70, 30, 10)
             LOOP(11)
                 CALL(evt_sub_intpl_get_value)
                 CALL(btlevtcmd_BtlStageObjSetRotate, STRING("spotlight"), 0, 0, LW(0))
@@ -1248,7 +1248,7 @@ EVT_BEGIN(_curtain_close_event)
             CALL(N__set_initial_upgrade_cursor_position, 0)
             CALL(btlevtcmd_BtlStageObjSetRotate, STRING("spotlight"), 0, 0, -70)
             CALL(btlevtcmd_BtlStageObjFlagOnOff, STRING("spotlight"), 1, 0)
-            CALL(evt_sub_intpl_init, 5, -70, -30, 10)
+            CALL(evt_sub_intpl_init, EASING_CUBIC_OUT, -70, -30, 10)
             LOOP(11)
                 CALL(evt_sub_intpl_get_value)
                 CALL(btlevtcmd_BtlStageObjSetRotate, STRING("spotlight"), 0, 0, LW(0))
@@ -1325,7 +1325,7 @@ EVT_BEGIN(_move_to_heart_event)
     CALL(_lvup_obj_set_color, 1, 100, 128, 128, 255)
     CALL(_lvup_obj_set_color, 2, 100, 128, 128, 255)
     CALL(_lvup_disp_flag_onoff, 0, 32)
-    CALL(evt_sub_intpl_init, 5, 0, -30, 10)
+    CALL(evt_sub_intpl_init, EASING_CUBIC_OUT, 0, -30, 10)
     LOOP(11)
         CALL(evt_sub_intpl_get_value)
         CALL(btlevtcmd_BtlStageObjSetRotate, STRING("spotlight"), 0, 0, LW(0))
@@ -1344,7 +1344,7 @@ EVT_BEGIN(_move_to_flower_event)
     CALL(_lvup_obj_set_color, 2, 100, 128, 128, 255)
     CALL(_lvup_disp_flag_onoff, 0, 32)
     CALL(btlevtcmd_BtlStageObjGetRotate, STRING("spotlight"), EVT_NULLPTR, EVT_NULLPTR, LW(5))
-    CALL(evt_sub_intpl_init, 5, LW(5), 0, 10)
+    CALL(evt_sub_intpl_init, EASING_CUBIC_OUT, LW(5), 0, 10)
     LOOP(11)
         CALL(evt_sub_intpl_get_value)
         CALL(btlevtcmd_BtlStageObjSetRotate, STRING("spotlight"), 0, 0, LW(0))
@@ -1362,7 +1362,7 @@ EVT_BEGIN(_move_to_badge_point_event)
     CALL(_lvup_obj_set_color, 1, 100, 128, 128, 255)
     CALL(_lvup_obj_set_color, 2, 100, 128, 128, 255)
     CALL(_lvup_disp_flag_onoff, 0, 32)
-    CALL(evt_sub_intpl_init, 5, 0, 30, 10)
+    CALL(evt_sub_intpl_init, EASING_CUBIC_OUT, 0, 30, 10)
     LOOP(11)
         CALL(evt_sub_intpl_get_value)
         CALL(btlevtcmd_BtlStageObjSetRotate, STRING("spotlight"), 0, 0, LW(0))
@@ -1620,11 +1620,11 @@ USER_FUNC(_lvup_spot_move) {
         event->userdata[1]++;
     case 3:
         event->userdata[4]--;
-        e->pos.x = intplGetValue(2, 0.0f, event->userdata[2], event->userdata[4], 21);
-        e->pos.y = intplGetValue(2, -25.0f, event->userdata[3], event->userdata[4], 21);
+        e->pos.x = intplGetValue(EASING_CUBIC_IN, 0.0f, event->userdata[2], event->userdata[4], 21);
+        e->pos.y = intplGetValue(EASING_CUBIC_IN, -25.0f, event->userdata[3], event->userdata[4], 21);
         {
             GXColor c = {0xFF, 0xFF, 0xFF, 0x00};
-            c.a = intplGetValue(0, 255.0f, 128.0f, event->userdata[4], 21);
+            c.a = intplGetValue(EASING_LINEAR, 255.0f, 128.0f, event->userdata[4], 21);
             e->color = c;
         }
         if (event->userdata[4] <= 0) {
@@ -1650,7 +1650,7 @@ USER_FUNC(_lvup_spot_off) {
     for (i = 0; i < 5; i++) {
         GXColor c = {0xFF, 0xFF, 0xFF, 0x00};
         e = spot->entries + i;
-        c.a = intplGetValue(2, 0.0f, event->userdata[2], event->userdata[1], event->userdata[0]);
+        c.a = intplGetValue(EASING_CUBIC_IN, 0.0f, event->userdata[2], event->userdata[1], event->userdata[0]);
 
         e->color = c;
         if (e->color.a == 0) {
@@ -1678,7 +1678,7 @@ USER_FUNC(_lvup_object_noselect_delete) {
     if (event->userdata[0] < event->userdata[2]) {
         for (i = 0; i < work->objCount; i++) {
             if (i != sel) {
-                work->objs[i].color.a = intplGetValue(5, 255.0f, 0.0f, event->userdata[0], event->userdata[2]);
+                work->objs[i].color.a = intplGetValue(EASING_CUBIC_OUT, 255.0f, 0.0f, event->userdata[0], event->userdata[2]);
 
             }
         }
@@ -1709,9 +1709,9 @@ USER_FUNC(_lvup_object_select_move) {
     }
     event->userdata[0]++;
     if (event->userdata[0] < event->userdata[1]) {
-        obj->pos.x = intplGetValue(5, event->userdata[2], event->userdata[4], event->userdata[0], event->userdata[1]);
-        obj->pos.z = intplGetValue(5, event->userdata[3], event->userdata[5], event->userdata[0], event->userdata[1]);
-        obj->rot.y = reviseAngle(intplGetValue(5, 0.0f, 2160.0f, event->userdata[0], event->userdata[1]));
+        obj->pos.x = intplGetValue(EASING_CUBIC_OUT, event->userdata[2], event->userdata[4], event->userdata[0], event->userdata[1]);
+        obj->pos.z = intplGetValue(EASING_CUBIC_OUT, event->userdata[3], event->userdata[5], event->userdata[0], event->userdata[1]);
+        obj->rot.y = reviseAngle(intplGetValue(EASING_CUBIC_OUT, 0.0f, 2160.0f, event->userdata[0], event->userdata[1]));
         return 0;
     }
     obj->pos.x = event->userdata[4];
@@ -1735,9 +1735,9 @@ USER_FUNC(_lvup_object_decide_bound) {
     if (event->userdata[0] < event->userdata[2]) {
         half = event->userdata[2] / 2;
         if (event->userdata[0] < half) {
-            obj->pos.y = event->userdata[1] + intplGetValue(5, 0.0f, event->userdata[3], event->userdata[0], half);
+            obj->pos.y = event->userdata[1] + intplGetValue(EASING_CUBIC_OUT, 0.0f, event->userdata[3], event->userdata[0], half);
         } else {
-            obj->pos.y = event->userdata[1] + intplGetValue(5, event->userdata[3], 0.0f, event->userdata[0] - half, half);
+            obj->pos.y = event->userdata[1] + intplGetValue(EASING_CUBIC_OUT, event->userdata[3], 0.0f, event->userdata[0] - half, half);
         }
         return 0;
     }

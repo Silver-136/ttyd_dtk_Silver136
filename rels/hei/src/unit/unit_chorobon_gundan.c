@@ -517,8 +517,8 @@ void chorogun_ext_main(void) {
             c->state = 21;
             break;
         case 21:
-            d = unit->mPosition.x - unit->mHomePosition.x + intplGetValue(0, c->pos.x, unit->mHomePosition.x, n, 1000);
-            tz = unit->mPosition.z - unit->mHomePosition.z + intplGetValue(0, c->pos.z, unit->mHomePosition.z, n, 1000);
+            d = unit->mPosition.x - unit->mHomePosition.x + intplGetValue(EASING_LINEAR, c->pos.x, unit->mHomePosition.x, n, 1000);
+            tz = unit->mPosition.z - unit->mHomePosition.z + intplGetValue(EASING_LINEAR, c->pos.z, unit->mHomePosition.z, n, 1000);
             if ((*pose->mtx)[1][3] <= unit->mPosition.y) {
                 dx2 = d - (*pose->mtx)[0][3];
                 dz2 = tz - (*pose->mtx)[2][3];

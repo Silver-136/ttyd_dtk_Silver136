@@ -2867,21 +2867,21 @@ EVT_BEGIN(marioAttackEvent_JyabaraJump)
             CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(8), LW(1))
             CALL(btlevtcmd_TransStageFloorPosition, LW(0), LW(8), LW(1))
             CALL(btlevtcmd_GetPos, UNIT_ID_SELF, EVT_NULLPTR, LW(0), EVT_NULLPTR)
-            CALL(evt_sub_intpl_init, 0, LW(0), LW(6), 32)
+            CALL(evt_sub_intpl_init, EASING_LINEAR, LW(0), LW(6), 32)
             LOOP(32)
                 CALL(evt_sub_intpl_get_value)
                 CALL(btlevtcmd_SetPos, UNIT_ID_SELF, EVT_NULLPTR, LW(0), EVT_NULLPTR)
                 WAIT_FRAMES(1)
             END_LOOP
             CALL(btlevtcmd_GetPos, UNIT_ID_SELF, EVT_NULLPTR, LW(0), EVT_NULLPTR)
-            CALL(evt_sub_intpl_init, 0, LW(0), LW(7), 64)
+            CALL(evt_sub_intpl_init, EASING_LINEAR, LW(0), LW(7), 64)
             LOOP(64)
                 CALL(evt_sub_intpl_get_value)
                 CALL(btlevtcmd_SetPos, UNIT_ID_SELF, EVT_NULLPTR, LW(0), EVT_NULLPTR)
                 WAIT_FRAMES(1)
             END_LOOP
             CALL(btlevtcmd_GetPos, UNIT_ID_SELF, EVT_NULLPTR, LW(0), EVT_NULLPTR)
-            CALL(evt_sub_intpl_init, 0, LW(0), LW(8), 32)
+            CALL(evt_sub_intpl_init, EASING_LINEAR, LW(0), LW(8), 32)
             LOOP(32)
                 CALL(evt_sub_intpl_get_value)
                 CALL(btlevtcmd_SetPos, UNIT_ID_SELF, EVT_NULLPTR, LW(0), EVT_NULLPTR)
@@ -2894,7 +2894,7 @@ EVT_BEGIN(marioAttackEvent_JyabaraJump)
             MULTIPLY(LW(7), -30)
             SET_VALUE(LW(1), LW(0))
             ADD(LW(1), LW(7))
-            CALL(evt_sub_intpl_init, 11, LW(0), LW(1), 26)
+            CALL(evt_sub_intpl_init, EASING_COS_IN_OUT, LW(0), LW(1), 26)
             LOOP(26)
                 CALL(evt_sub_intpl_get_value)
                 CALL(btlevtcmd_SetPos, UNIT_ID_SELF, LW(0), EVT_NULLPTR, EVT_NULLPTR)
@@ -2906,7 +2906,7 @@ EVT_BEGIN(marioAttackEvent_JyabaraJump)
             MULTIPLY(LW(7), 60)
             SET_VALUE(LW(1), LW(0))
             ADD(LW(1), LW(7))
-            CALL(evt_sub_intpl_init, 11, LW(0), LW(1), 58)
+            CALL(evt_sub_intpl_init, EASING_COS_IN_OUT, LW(0), LW(1), 58)
             LOOP(58)
                 CALL(evt_sub_intpl_get_value)
                 CALL(btlevtcmd_SetPos, UNIT_ID_SELF, LW(0), EVT_NULLPTR, EVT_NULLPTR)
@@ -2919,7 +2919,7 @@ EVT_BEGIN(marioAttackEvent_JyabaraJump)
             SET_VALUE(LW(1), LW(0))
             ADD(LW(1), LW(7))
             CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(1), EVT_NULLPTR, EVT_NULLPTR)
-            CALL(evt_sub_intpl_init, 11, LW(0), LW(1), 32)
+            CALL(evt_sub_intpl_init, EASING_COS_IN_OUT, LW(0), LW(1), 32)
             LOOP(32)
                 CALL(evt_sub_intpl_get_value)
                 CALL(btlevtcmd_SetPos, UNIT_ID_SELF, LW(0), EVT_NULLPTR, EVT_NULLPTR)
@@ -2930,14 +2930,14 @@ EVT_BEGIN(marioAttackEvent_JyabaraJump)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("M_I_S"))
         CALL(btlevtcmd_AnimeChangePaperAnime, UNIT_ID_SELF, 1, STRING("PM_J_1E"))
         BEGIN_SIBLING_EVENT_GET_ID(LW(15))
-            CALL(evt_sub_intpl_init_float, 5, FLOAT(0.0f), FLOAT(1.1992188f), 10)
+            CALL(evt_sub_intpl_init_float, EASING_CUBIC_OUT, FLOAT(0.0f), FLOAT(1.1992188f), 10)
             LOOP(10)
                 CALL(evt_sub_intpl_get_float, LW(5), EVT_NULLPTR)
                 CALL(btlevtcmd_GetScale, UNIT_ID_SELF, LW(0), LW(1), LW(2))
                 CALL(btlevtcmd_SetScale, UNIT_ID_SELF, LW(0), LW(5), LW(2))
                 WAIT_FRAMES(1)
             END_LOOP
-            CALL(evt_sub_intpl_init_float, 7, FLOAT(1.1992188f), FLOAT(1.0f), 30)
+            CALL(evt_sub_intpl_init_float, EASING_COS_SLOW_OVERSHOOT, FLOAT(1.1992188f), FLOAT(1.0f), 30)
             LOOP(30)
                 CALL(evt_sub_intpl_get_float, LW(5), EVT_NULLPTR)
                 CALL(btlevtcmd_GetScale, UNIT_ID_SELF, LW(0), LW(1), LW(2))
@@ -5174,14 +5174,14 @@ EVT_BEGIN(marioAttackEvent_JishinHammer)
         WAIT_FRAMES(5)
         CALL(btlevtcmd_GetFaceDirection, UNIT_ID_SELF, LW(5))
         MULTIPLY(LW(5), 45)
-        CALL(evt_sub_intpl_init, 11, 0, LW(5), 10)
+        CALL(evt_sub_intpl_init, EASING_COS_IN_OUT, 0, LW(5), 10)
         LOOP(10)
             CALL(evt_sub_intpl_get_value)
             CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, 0, LW(0))
             WAIT_FRAMES(1)
         END_LOOP
         WAIT_FRAMES(8)
-        CALL(evt_sub_intpl_init, 12, LW(5), 0, 15)
+        CALL(evt_sub_intpl_init, EASING_SIN_OUT, LW(5), 0, 15)
         LOOP(15)
             CALL(evt_sub_intpl_get_value)
             CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, 0, LW(0))
@@ -5447,14 +5447,14 @@ EVT_BEGIN(marioAttackEvent_UltraJishinHammer)
         WAIT_FRAMES(10)
         CALL(btlevtcmd_GetFaceDirection, UNIT_ID_SELF, LW(5))
         MULTIPLY(LW(5), 45)
-        CALL(evt_sub_intpl_init, 11, 0, LW(5), 10)
+        CALL(evt_sub_intpl_init, EASING_COS_IN_OUT, 0, LW(5), 10)
         LOOP(15)
             CALL(evt_sub_intpl_get_value)
             CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, 0, LW(0))
             WAIT_FRAMES(1)
         END_LOOP
         WAIT_FRAMES(14)
-        CALL(evt_sub_intpl_init, 12, LW(5), 0, 15)
+        CALL(evt_sub_intpl_init, EASING_SIN_OUT, LW(5), 0, 15)
         LOOP(15)
             CALL(evt_sub_intpl_get_value)
             CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, 0, LW(0))
@@ -6482,7 +6482,7 @@ USER_FUNC(_tatsumaki_effect) {
         psndSFX_pos(ud[7], &v);
     case 1:
         ud[1]++;
-        r = intplGetValue(5, 0.0f, 80.0f, ud[1], 90);
+        r = intplGetValue(EASING_CUBIC_OUT, 0.0f, 80.0f, ud[1], 90);
         ang = ud[1] * 4;
         dx = r * cosfd(ang);
         dz = r * sinfd(ang);
@@ -6564,10 +6564,10 @@ USER_FUNC(_hammer_star_effect) {
         event->userdata[0] = 0;
     }
     if (unit->faceDirection >= 0) {
-        angle = intplGetValue(1, 210.0f, 420.0f, event->userdata[0], 12);
+        angle = intplGetValue(EASING_QUADRATIC_IN, 210.0f, 420.0f, event->userdata[0], 12);
         rot = -10.0f;
     } else {
-        angle = intplGetValue(1, 150.0f, -60.0f, event->userdata[0], 12);
+        angle = intplGetValue(EASING_QUADRATIC_IN, 150.0f, -60.0f, event->userdata[0], 12);
         rot = 10.0f;
     }
     BtlUnit_GetPos(unit, &pos[0], &pos[1], &pos[2]);

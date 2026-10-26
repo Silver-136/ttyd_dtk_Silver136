@@ -12,6 +12,7 @@
 #include "evt/evt_sub.h"
 #include "driver/mobjdrv.h"
 #include "driver/mapdrv.h"
+#include "system.h"
 
 
 static BeroEntry bero_entry_data[7];
@@ -159,7 +160,7 @@ EVT_END()
 static EVT_BEGIN(evt_switch_00)
     CALL(evt_mapobj_get_position, STRING("S_dakan_1"), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_DOKAN_APPEAR1"), LW(0), LW(1), LW(2), 0)
-    CALL(evt_sub_intpl_msec_init, 11, 0, 30, 1000)
+    CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 0, 30, 1000)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value_para, LW(0), LW(1))
         CALL(evt_mapobj_trans, 1, STRING("S_dakan_1"), 0, LW(0), 0)
@@ -196,7 +197,7 @@ EVT_END()
 static EVT_BEGIN(evt_switch_01)
     CALL(evt_mapobj_get_position, STRING("S_dakan_2"), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_DOKAN_APPEAR1"), LW(0), LW(1), LW(2), 0)
-    CALL(evt_sub_intpl_msec_init, 11, 0, 30, 1000)
+    CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 0, 30, 1000)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value_para, LW(0), LW(1))
         CALL(evt_mapobj_trans, 1, STRING("S_dakan_2"), 0, LW(0), 0)

@@ -19,6 +19,7 @@
 #include "evt/evt_sub.h"
 #include "driver/npcdrv.h"
 #include "driver/mapdrv.h"
+#include "system.h"
 
 #include "driver/effdrv.h"
 #include "manager/evtmgr_cmd.h"
@@ -317,7 +318,7 @@ static EVT_BEGIN(first_evt)
     WAIT_MS(2000)
     SET_VALUE(LW(1), 0)
     SPAWN_EVENT(PTR(bero_open_door_play_se))
-    CALL(evt_sub_intpl_msec_init, 11, 0, -180, 500)
+    CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 0, -180, 500)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value_para, LW(0), LW(10))
         IF_INT_EQUAL(LW(10), 0)
@@ -334,7 +335,7 @@ static EVT_BEGIN(first_evt)
     CALL(evt_mario_mov_pos2, -875, 0, FLOAT(150.0f))
     SET_VALUE(LW(1), 0)
     SPAWN_EVENT(PTR(bero_close_door_play_se))
-    CALL(evt_sub_intpl_msec_init, 11, 180, 0, 500)
+    CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 180, 0, 500)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value_para, LW(0), LW(10))
         IF_INT_EQUAL(LW(10), 0)
@@ -443,7 +444,7 @@ EVT_BEGIN(switch_1_evt)
         CALL(evt_mapobj_get_position, STRING("S_daizadai1_3"), LW(0), LW(1), LW(2))
         CALL(evt_snd_sfxon_3d, STRING("SFX_STG8_PORT_APPEAR1"), LW(0), LW(1), LW(2), 0)
         BEGIN_SIBLING_EVENT
-            CALL(evt_sub_intpl_msec_init, 1, 255, 50, 500)
+            CALL(evt_sub_intpl_msec_init, EASING_QUADRATIC_IN, 255, 50, 500)
             LOOP(0)
                 CALL(evt_sub_intpl_msec_get_value)
                 CALL(evt_mapobj_color, 1, STRING("S_daizadai1_3"), 255, 255, 255, LW(0))
@@ -453,7 +454,7 @@ EVT_BEGIN(switch_1_evt)
                 END_IF
             END_LOOP
         END_SIBLING_EVENT
-        CALL(evt_sub_intpl_msec_init, 11, 0, 180, 1000)
+        CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 0, 180, 1000)
         LOOP(0)
             CALL(evt_sub_intpl_msec_get_value)
             CALL(evt_mapobj_rotate, 1, STRING("S_daizadai1_3"), 0, 0, LW(0))
@@ -468,7 +469,7 @@ EVT_BEGIN(switch_1_evt)
         CALL(evt_mapobj_get_position, STRING("S_daizadai1_2"), LW(0), LW(1), LW(2))
         CALL(evt_snd_sfxon_3d, STRING("SFX_STG8_PORT_APPEAR1"), LW(0), LW(1), LW(2), 0)
         BEGIN_SIBLING_EVENT
-            CALL(evt_sub_intpl_msec_init, 1, 255, 50, 500)
+            CALL(evt_sub_intpl_msec_init, EASING_QUADRATIC_IN, 255, 50, 500)
             LOOP(0)
                 CALL(evt_sub_intpl_msec_get_value)
                 CALL(evt_mapobj_color, 1, STRING("S_daizadai1_2"), 255, 255, 255, LW(0))
@@ -478,7 +479,7 @@ EVT_BEGIN(switch_1_evt)
                 END_IF
             END_LOOP
         END_SIBLING_EVENT
-        CALL(evt_sub_intpl_msec_init, 11, 0, -180, 1000)
+        CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 0, -180, 1000)
         LOOP(0)
             CALL(evt_sub_intpl_msec_get_value)
             CALL(evt_mapobj_rotate, 1, STRING("S_daizadai1_2"), 0, 0, LW(0))
@@ -492,7 +493,7 @@ EVT_BEGIN(switch_1_evt)
     CALL(evt_mapobj_get_position, STRING("S_daizadai1_1"), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG8_PORT_APPEAR2"), LW(0), LW(1), LW(2), 0)
     BEGIN_INLINE_EVENT
-        CALL(evt_sub_intpl_msec_init, 1, 255, 50, 500)
+        CALL(evt_sub_intpl_msec_init, EASING_QUADRATIC_IN, 255, 50, 500)
         LOOP(0)
             CALL(evt_sub_intpl_msec_get_value)
             CALL(evt_mapobj_color, 1, STRING("S_daizadai1_1"), 255, 255, 255, LW(0))
@@ -502,7 +503,7 @@ EVT_BEGIN(switch_1_evt)
             END_IF
         END_LOOP
     END_INLINE_EVENT
-    CALL(evt_sub_intpl_msec_init, 11, 0, -180, 1000)
+    CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 0, -180, 1000)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
         CALL(evt_mapobj_rotate, 1, STRING("S_daizadai1_1"), LW(0), 0, 0)
@@ -539,7 +540,7 @@ EVT_BEGIN(switch_2_evt)
         CALL(evt_mapobj_get_position, STRING("S_daizadai2_3"), LW(0), LW(1), LW(2))
         CALL(evt_snd_sfxon_3d, STRING("SFX_STG8_PORT_APPEAR1"), LW(0), LW(1), LW(2), 0)
         BEGIN_SIBLING_EVENT
-            CALL(evt_sub_intpl_msec_init, 1, 255, 50, 500)
+            CALL(evt_sub_intpl_msec_init, EASING_QUADRATIC_IN, 255, 50, 500)
             LOOP(0)
                 CALL(evt_sub_intpl_msec_get_value)
                 CALL(evt_mapobj_color, 1, STRING("S_daizadai2_3"), 255, 255, 255, LW(0))
@@ -549,7 +550,7 @@ EVT_BEGIN(switch_2_evt)
                 END_IF
             END_LOOP
         END_SIBLING_EVENT
-        CALL(evt_sub_intpl_msec_init, 11, 0, 180, 1000)
+        CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 0, 180, 1000)
         LOOP(0)
             CALL(evt_sub_intpl_msec_get_value)
             CALL(evt_mapobj_rotate, 1, STRING("S_daizadai2_3"), 0, 0, LW(0))
@@ -564,7 +565,7 @@ EVT_BEGIN(switch_2_evt)
         CALL(evt_mapobj_get_position, STRING("S_daizadai2_2"), LW(0), LW(1), LW(2))
         CALL(evt_snd_sfxon_3d, STRING("SFX_STG8_PORT_APPEAR1"), LW(0), LW(1), LW(2), 0)
         BEGIN_SIBLING_EVENT
-            CALL(evt_sub_intpl_msec_init, 1, 255, 50, 500)
+            CALL(evt_sub_intpl_msec_init, EASING_QUADRATIC_IN, 255, 50, 500)
             LOOP(0)
                 CALL(evt_sub_intpl_msec_get_value)
                 CALL(evt_mapobj_color, 1, STRING("S_daizadai2_2"), 255, 255, 255, LW(0))
@@ -574,7 +575,7 @@ EVT_BEGIN(switch_2_evt)
                 END_IF
             END_LOOP
         END_SIBLING_EVENT
-        CALL(evt_sub_intpl_msec_init, 11, 0, -180, 1000)
+        CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 0, -180, 1000)
         LOOP(0)
             CALL(evt_sub_intpl_msec_get_value)
             CALL(evt_mapobj_rotate, 1, STRING("S_daizadai2_2"), 0, 0, LW(0))
@@ -588,7 +589,7 @@ EVT_BEGIN(switch_2_evt)
     CALL(evt_mapobj_get_position, STRING("S_daizadai2_1"), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG8_PORT_APPEAR2"), LW(0), LW(1), LW(2), 0)
     BEGIN_INLINE_EVENT
-        CALL(evt_sub_intpl_msec_init, 1, 255, 50, 500)
+        CALL(evt_sub_intpl_msec_init, EASING_QUADRATIC_IN, 255, 50, 500)
         LOOP(0)
             CALL(evt_sub_intpl_msec_get_value)
             CALL(evt_mapobj_color, 1, STRING("S_daizadai2_1"), 255, 255, 255, LW(0))
@@ -598,7 +599,7 @@ EVT_BEGIN(switch_2_evt)
             END_IF
         END_LOOP
     END_INLINE_EVENT
-    CALL(evt_sub_intpl_msec_init, 11, 0, 180, 1000)
+    CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 0, 180, 1000)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
         CALL(evt_mapobj_rotate, 1, STRING("S_daizadai2_1"), LW(0), 0, 0)

@@ -13,6 +13,7 @@
 #include "evt/evt_item.h"
 #include "driver/mapdrv.h"
 #include "mario/mario_pouch.h"
+#include "system.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "mario/mario.h"
@@ -109,7 +110,7 @@ EVT_BEGIN(tensou_ride)
     END_INLINE_EVENT
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG7_WARP1"), LW(0), LW(1), LW(2), 0)
-    CALL(evt_sub_intpl_msec_init, 11, 0, 30, 3000)
+    CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 0, 30, 3000)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
         SET_VALUE(GW(0), LW(0))
@@ -124,7 +125,7 @@ EVT_BEGIN(tensou_ride)
     CALL(evt_mario_get_pos, 0, LW(2), LW(3), LW(4))
     CALL(evt_party_get_pos, 0, LW(5), LW(6), LW(7))
     BEGIN_INLINE_EVENT
-        CALL(evt_sub_intpl_msec_init, 12, 100, 0, 800)
+        CALL(evt_sub_intpl_msec_init, EASING_SIN_OUT, 100, 0, 800)
         LOOP(0)
             CALL(evt_sub_intpl_msec_get_value)
             DIVIDE_FLOAT(LW(0), FLOAT(100.0f))
@@ -139,7 +140,7 @@ EVT_BEGIN(tensou_ride)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         CALL(evt_snd_sfxon_3d, STRING("SFX_STG7_WARP2"), LW(0), LW(1), LW(2), 0)
     END_INLINE_EVENT
-    CALL(evt_sub_intpl_msec_init, 12, 0, 70, 1000)
+    CALL(evt_sub_intpl_msec_init, EASING_SIN_OUT, 0, 70, 1000)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
         SET_VALUE(LW(8), LW(0))
@@ -190,7 +191,7 @@ EVT_BEGIN(evt_tensou2)
     CALL(evt_hit_get_position, STRING("A_tensou"), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG7_WARP_LIGHT1"), LW(0), LW(1), LW(2), LW(9))
     BEGIN_INLINE_EVENT
-        CALL(evt_sub_intpl_msec_init, 5, 0, 5760, 4000)
+        CALL(evt_sub_intpl_msec_init, EASING_CUBIC_OUT, 0, 5760, 4000)
         LOOP(0)
             CALL(evt_sub_intpl_msec_get_value)
             MODULO(LW(0), 360)
@@ -205,7 +206,7 @@ EVT_BEGIN(evt_tensou2)
         END_LOOP
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
-        CALL(evt_sub_intpl_msec_init, 12, 0, 100, 800)
+        CALL(evt_sub_intpl_msec_init, EASING_SIN_OUT, 0, 100, 800)
         LOOP(0)
             CALL(evt_sub_intpl_msec_get_value)
             DIVIDE_FLOAT(LW(0), FLOAT(100.0f))
@@ -220,7 +221,7 @@ EVT_BEGIN(evt_tensou2)
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG7_WARP1_2"), LW(2), LW(3), LW(4), 0)
     CALL(evt_mario_get_pos, 0, LW(2), LW(3), LW(4))
     CALL(evt_party_get_pos, 0, LW(5), LW(6), LW(7))
-    CALL(evt_sub_intpl_msec_init, 12, 70, 0, 1000)
+    CALL(evt_sub_intpl_msec_init, EASING_SIN_OUT, 70, 0, 1000)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
         SET_VALUE(LW(8), LW(0))
@@ -235,7 +236,7 @@ EVT_BEGIN(evt_tensou2)
     END_LOOP
     WAIT_MS(3000)
     CALL(evt_snd_sfxoff, LW(9))
-    CALL(evt_sub_intpl_msec_init, 11, 255, 0, 1000)
+    CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 255, 0, 1000)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
         CALL(evt_mapobj_color, 1, STRING("wa_pu"), 255, 255, 255, LW(0))

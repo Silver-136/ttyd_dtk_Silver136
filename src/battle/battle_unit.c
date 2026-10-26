@@ -2116,12 +2116,12 @@ void BtlUnit_HpGaugeMain(BattleUnit* unit) {
             switch (gauge->mode) {
                 case 1:
                     gauge->barRatio = (f32)unit->currentHp / (f32)unit->maxHp;
-                    gauge->trailRatio = gauge->barRatio + (f32)(gauge->prevHp - gauge->targetHp) * intplGetValue(2, 0.0f, 1.0f, gauge->drainTimer, gauge->drainLength) / (f32)unit->maxHp;
+                    gauge->trailRatio = gauge->barRatio + (f32)(gauge->prevHp - gauge->targetHp) * intplGetValue(EASING_CUBIC_IN, 0.0f, 1.0f, gauge->drainTimer, gauge->drainLength) / (f32)unit->maxHp;
                     break;
                 default:
                     gauge->trailRatio = 0.0f;
                     maxHp = unit->maxHp;
-                    gauge->barRatio = (f32)(gauge->prevHp - gauge->targetHp) * intplGetValue(0, 0.0f, 1.0f, gauge->drainTimer, gauge->drainLength) / (f32)maxHp + (f32)unit->currentHp / (f32)maxHp;
+                    gauge->barRatio = (f32)(gauge->prevHp - gauge->targetHp) * intplGetValue(EASING_LINEAR, 0.0f, 1.0f, gauge->drainTimer, gauge->drainLength) / (f32)maxHp + (f32)unit->currentHp / (f32)maxHp;
                     break;
             }
         }

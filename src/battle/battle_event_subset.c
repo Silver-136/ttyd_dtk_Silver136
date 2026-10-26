@@ -17,6 +17,7 @@
 #include "battle/battle_event_subset.h"
 #include "battle/battle_status_effect.h"
 #include "battle/battle_damage.h"
+#include "system.h"
 
 USER_FUNC(_binta_effect);
 USER_FUNC(btlevtcmd_AnimeCmpPoseType);
@@ -544,7 +545,7 @@ EVT_BEGIN(subsetevt_damage)
             LABEL(10)
             CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), LW(14))
             BEGIN_SIBLING_EVENT_GET_ID(LW(0))
-                CALL(evt_sub_intpl_init_float, 5, FLOAT(1.0f), FLOAT(0.14941406f), 10)
+                CALL(evt_sub_intpl_init_float, EASING_CUBIC_OUT, FLOAT(1.0f), FLOAT(0.14941406f), 10)
                 LOOP(11)
                     CALL(evt_sub_intpl_get_float, LW(5), EVT_NULLPTR)
                     CALL(btlevtcmd_GetScale, LW(10), LW(0), LW(1), LW(2))
@@ -571,14 +572,14 @@ EVT_BEGIN(subsetevt_damage)
                 END_IF
             END_SIBLING_EVENT
             BEGIN_SIBLING_EVENT
-                CALL(evt_sub_intpl_init_float, 5, FLOAT(0.14941406f), FLOAT(1.25f), 10)
+                CALL(evt_sub_intpl_init_float, EASING_CUBIC_OUT, FLOAT(0.14941406f), FLOAT(1.25f), 10)
                 LOOP(10)
                     CALL(evt_sub_intpl_get_float, LW(5), EVT_NULLPTR)
                     CALL(btlevtcmd_GetScale, LW(10), LW(0), LW(1), LW(2))
                     CALL(btlevtcmd_SetScale, LW(10), LW(0), LW(5), LW(2))
                     WAIT_FRAMES(1)
                 END_LOOP
-                CALL(evt_sub_intpl_init_float, 7, FLOAT(1.25f), FLOAT(1.0f), 30)
+                CALL(evt_sub_intpl_init_float, EASING_COS_SLOW_OVERSHOOT, FLOAT(1.25f), FLOAT(1.0f), 30)
                 LOOP(30)
                     CALL(evt_sub_intpl_get_float, LW(5), EVT_NULLPTR)
                     CALL(btlevtcmd_GetScale, LW(10), LW(0), LW(1), LW(2))
@@ -1350,7 +1351,7 @@ EVT_BEGIN(subsetevt_binta_damage_left_last)
         END_IF
         CALL(_binta_effect, LW(10), LW(8))
         SET_VALUE(LW(7), LW(10))
-        CALL(evt_sub_intpl_init, 11, 0, LW(8), 90)
+        CALL(evt_sub_intpl_init, EASING_COS_IN_OUT, 0, LW(8), 90)
         LOOP(90)
             CALL(evt_sub_intpl_get_value)
             CALL(btlevtcmd_SetRotate, LW(7), 0, LW(0), 0)
@@ -1376,7 +1377,7 @@ EVT_BEGIN(subsetevt_binta_damage_right_last)
         END_IF
         CALL(_binta_effect, LW(10), LW(8))
         SET_VALUE(LW(7), LW(10))
-        CALL(evt_sub_intpl_init, 11, 0, LW(8), 90)
+        CALL(evt_sub_intpl_init, EASING_COS_IN_OUT, 0, LW(8), 90)
         LOOP(90)
             CALL(evt_sub_intpl_get_value)
             CALL(btlevtcmd_SetRotate, LW(7), 0, LW(0), 0)

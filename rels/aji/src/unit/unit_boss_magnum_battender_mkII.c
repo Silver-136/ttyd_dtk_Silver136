@@ -648,10 +648,10 @@ USER_FUNC(aud_suikomi) {
                     mem->flags &= ~4;
                     mem->flags |= 2;
                 }
-                mem->position.x = intplGetValue(4, mem->home.x, x2, mem->frame, mem->frames);
-                mem->position.y = intplGetValue(2, mem->home.y, y2, mem->frame, mem->frames);
-                mem->position.z = intplGetValue(4, mem->home.z, z2, mem->frame, mem->frames);
-                mem->scale.x = mem->scale.y = intplGetValue(4, 1.0f, 0.65f, mem->frame, mem->frames);
+                mem->position.x = intplGetValue(EASING_QUADRATIC_OUT, mem->home.x, x2, mem->frame, mem->frames);
+                mem->position.y = intplGetValue(EASING_CUBIC_IN, mem->home.y, y2, mem->frame, mem->frames);
+                mem->position.z = intplGetValue(EASING_QUADRATIC_OUT, mem->home.z, z2, mem->frame, mem->frames);
+                mem->scale.x = mem->scale.y = intplGetValue(EASING_QUADRATIC_OUT, 1.0f, 0.65f, mem->frame, mem->frames);
                 break;
             }
         }
@@ -665,7 +665,7 @@ USER_FUNC(aud_scream_fadeout) {
         scream_fade_start_vol = psndSFX_get_vol(screamId);
     }
     scream_fade_timer--;
-    scream_fade_vol = intplGetValue(0, scream_fade_start_vol, 0.0f, 120 - scream_fade_timer, 120);
+    scream_fade_vol = intplGetValue(EASING_LINEAR, scream_fade_start_vol, 0.0f, 120 - scream_fade_timer, 120);
     psndSFX_vol(screamId, scream_fade_vol);
     if (scream_fade_timer <= 0) {
         return EVT_RETURN_DONE;
@@ -794,8 +794,8 @@ USER_FUNC(aud_target_mark) {
     switch (wp_target->state) {
         case 0:
             wp_target->count++;
-            ew->pos.x = intplGetValue(4, 60.0f + x, x - 5.0f, wp_target->count, 60);
-            ew->pos.y = intplGetValue(4, 20.0f + y, 60.0f + y, wp_target->count, 60);
+            ew->pos.x = intplGetValue(EASING_QUADRATIC_OUT, 60.0f + x, x - 5.0f, wp_target->count, 60);
+            ew->pos.y = intplGetValue(EASING_QUADRATIC_OUT, 20.0f + y, 60.0f + y, wp_target->count, 60);
             ew->pos.z = 20.0f + z;
             if (wp_target->count >= 60) {
                 wp_target->state = 5;
@@ -804,8 +804,8 @@ USER_FUNC(aud_target_mark) {
             break;
         case 5:
             wp_target->count++;
-            ew->pos.x = intplGetValue(4, x - 5.0f, x - 25.0f, wp_target->count, 40);
-            ew->pos.y = intplGetValue(4, 60.0f + y, 20.0f + y, wp_target->count, 40);
+            ew->pos.x = intplGetValue(EASING_QUADRATIC_OUT, x - 5.0f, x - 25.0f, wp_target->count, 40);
+            ew->pos.y = intplGetValue(EASING_QUADRATIC_OUT, 60.0f + y, 20.0f + y, wp_target->count, 40);
             ew->pos.z = 20.0f + z;
             if (wp_target->count >= 40) {
                 wp_target->state = 10;
@@ -814,8 +814,8 @@ USER_FUNC(aud_target_mark) {
             break;
         case 10:
             wp_target->count++;
-            ew->pos.x = intplGetValue(4, x - 25.0f, x, wp_target->count, 20);
-            ew->pos.y = intplGetValue(4, 20.0f + y, y, wp_target->count, 20);
+            ew->pos.x = intplGetValue(EASING_QUADRATIC_OUT, x - 25.0f, x, wp_target->count, 20);
+            ew->pos.y = intplGetValue(EASING_QUADRATIC_OUT, 20.0f + y, y, wp_target->count, 20);
             ew->pos.z = 20.0f + z;
             if (wp_target->count >= 20) {
                 wp_target->state = 15;

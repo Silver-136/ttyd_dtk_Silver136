@@ -10,6 +10,7 @@
 #include "battle/battle_database_common.h"
 #include "battle/battle_sub.h"
 #include "battle/battle_damage.h"
+#include "system.h"
 
 USER_FUNC(btlevtcmd_SetJumpSound);
 
@@ -289,14 +290,14 @@ static EVT_BEGIN(attack_event_clauda)
     CALL(btlevtcmd_JumpContinue, -2)
     CALL(evt_btl_camera_shake_h, 0, 8, 0, 30, 13)
     BEGIN_SIBLING_EVENT_GET_ID(LW(15))
-        CALL(evt_sub_intpl_init_float, 11, FLOAT(1.0f), FLOAT(0.39941406f), 10)
+        CALL(evt_sub_intpl_init_float, EASING_COS_IN_OUT, FLOAT(1.0f), FLOAT(0.39941406f), 10)
         LOOP(10)
             CALL(evt_sub_intpl_get_float, LW(5), EVT_NULLPTR)
             CALL(btlevtcmd_GetScale, UNIT_ID_SELF, LW(0), LW(1), LW(2))
             CALL(btlevtcmd_SetScale, UNIT_ID_SELF, LW(0), LW(5), LW(2))
             WAIT_FRAMES(1)
         END_LOOP
-        CALL(evt_sub_intpl_init_float, 11, FLOAT(0.39941406f), FLOAT(1.0f), 6)
+        CALL(evt_sub_intpl_init_float, EASING_COS_IN_OUT, FLOAT(0.39941406f), FLOAT(1.0f), 6)
         LOOP(6)
             CALL(evt_sub_intpl_get_float, LW(5), EVT_NULLPTR)
             CALL(btlevtcmd_GetScale, UNIT_ID_SELF, LW(0), LW(1), LW(2))
@@ -305,14 +306,14 @@ static EVT_BEGIN(attack_event_clauda)
         END_LOOP
     END_SIBLING_EVENT
     BEGIN_SIBLING_EVENT
-        CALL(evt_sub_intpl_init_float, 11, FLOAT(1.0f), FLOAT(1.5f), 10)
+        CALL(evt_sub_intpl_init_float, EASING_COS_IN_OUT, FLOAT(1.0f), FLOAT(1.5f), 10)
         LOOP(10)
             CALL(evt_sub_intpl_get_float, LW(5), EVT_NULLPTR)
             CALL(btlevtcmd_GetScale, UNIT_ID_SELF, LW(0), LW(1), LW(2))
             CALL(btlevtcmd_SetScale, UNIT_ID_SELF, LW(5), LW(1), LW(2))
             WAIT_FRAMES(1)
         END_LOOP
-        CALL(evt_sub_intpl_init_float, 11, FLOAT(1.5f), FLOAT(1.0f), 6)
+        CALL(evt_sub_intpl_init_float, EASING_COS_IN_OUT, FLOAT(1.5f), FLOAT(1.0f), 6)
         LOOP(6)
             CALL(evt_sub_intpl_get_float, LW(5), EVT_NULLPTR)
             CALL(btlevtcmd_GetScale, UNIT_ID_SELF, LW(0), LW(1), LW(2))

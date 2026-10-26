@@ -656,17 +656,17 @@ s32 star_control(EventEntry* evt, BOOL first) {
     case 2:
         w->phaseStep++;
         if (w->phaseStep <= 100) {
-            w->pos.x = intplGetValue(0, w->from.x, w->to.x, w->phaseStep, 100);
-            w->pos.y = intplGetValue(0, w->from.y, w->to.y, w->phaseStep, 100);
-            w->pos.z = intplGetValue(0, w->from.z, w->to.z, w->phaseStep, 100);
-            w->scale.x = w->scale.y = w->scale.z = intplGetValue(0, 0.0f, 2.0f, w->phaseStep, 100);
+            w->pos.x = intplGetValue(EASING_LINEAR, w->from.x, w->to.x, w->phaseStep, 100);
+            w->pos.y = intplGetValue(EASING_LINEAR, w->from.y, w->to.y, w->phaseStep, 100);
+            w->pos.z = intplGetValue(EASING_LINEAR, w->from.z, w->to.z, w->phaseStep, 100);
+            w->scale.x = w->scale.y = w->scale.z = intplGetValue(EASING_LINEAR, 0.0f, 2.0f, w->phaseStep, 100);
         } else {
             w->pos.x = w->to.x;
             w->pos.y = w->to.y;
             w->pos.z = w->to.z;
             w->scale.x = w->scale.y = w->scale.z = 2.0f;
         }
-        w->rot.y = intplGetValue(4, 0.0f, 2160.0f, w->phaseStep, 120);
+        w->rot.y = intplGetValue(EASING_QUADRATIC_OUT, 0.0f, 2160.0f, w->phaseStep, 120);
         if (w->phaseStep >= 120) {
             w->phase = 3;
             w->phaseStep = 0;
@@ -676,7 +676,7 @@ s32 star_control(EventEntry* evt, BOOL first) {
         break;
     case 3:
         w->phaseStep++;
-        w->pos.y = intplGetValue(1, w->from.y, w->to.y, w->phaseStep, 60);
+        w->pos.y = intplGetValue(EASING_QUADRATIC_IN, w->from.y, w->to.y, w->phaseStep, 60);
         if (w->phaseStep >= 60) {
             w->phase = 4;
             w->phaseStep = 0;
@@ -695,7 +695,7 @@ s32 star_control(EventEntry* evt, BOOL first) {
         break;
     case 4:
         w->phaseStep++;
-        w->pos.y = intplGetValue(4, w->from.y, w->to.y, w->phaseStep, 60);
+        w->pos.y = intplGetValue(EASING_QUADRATIC_OUT, w->from.y, w->to.y, w->phaseStep, 60);
         t->x = w->pos.x;
         t->y = w->pos.y;
         if (w->phaseStep >= 60) {
@@ -756,7 +756,7 @@ void star_disp2D_sub(s32 idx, s32 alpha) {
         if (w->phaseStep > 30) {
             w->phaseStep = 30;
         }
-        alpha = (s32)intplGetValue(0, (f32)(u8)alpha, 0.0f, w->phaseStep, 30);
+        alpha = (s32)intplGetValue(EASING_LINEAR, (f32)(u8)alpha, 0.0f, w->phaseStep, 30);
     }
     col = (GXColor){0xFF, 0xFF, 0xFF, 0x00};
     col.a = alpha;
@@ -800,7 +800,7 @@ s32 scissor_timer_main(void) {
         w->state = 5;
         w->step = 0;
     case 5:
-        w->timerDispX = intplGetValue(4, 320.0f, 120.0f, w->step, 15);
+        w->timerDispX = intplGetValue(EASING_QUADRATIC_OUT, 320.0f, 120.0f, w->step, 15);
         w->step++;
         if (w->step > 15) {
             w->state = 10;
@@ -814,7 +814,7 @@ s32 scissor_timer_main(void) {
         }
         break;
     case 15:
-        w->timerDispX = intplGetValue(4, 120.0f, 320.0f, w->step, 15);
+        w->timerDispX = intplGetValue(EASING_QUADRATIC_OUT, 120.0f, 320.0f, w->step, 15);
         w->step++;
         if (w->step > 15) {
             w->state = 20;
@@ -1096,9 +1096,9 @@ void scissor_disp_control(CameraId camera, void* param) {
         w->blinkFrame -= 60;
     }
     if (w->blinkFrame <= 29) {
-        intplGetValue(0, 0.0f, 255.0f, w->blinkFrame, 29);
+        intplGetValue(EASING_LINEAR, 0.0f, 255.0f, w->blinkFrame, 29);
     } else {
-        intplGetValue(0, 255.0f, 0.0f, w->blinkFrame - 30, 59);
+        intplGetValue(EASING_LINEAR, 255.0f, 0.0f, w->blinkFrame - 30, 59);
     }
     GXSetCullMode(GX_CULL_NONE);
     GXClearVtxDesc();

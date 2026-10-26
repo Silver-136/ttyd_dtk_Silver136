@@ -18,6 +18,7 @@
 #include "evt/evt_sub.h"
 #include "driver/npcdrv.h"
 #include "driver/mapdrv.h"
+#include "system.h"
 
 USER_FUNC(evt_cloud_ent);
 USER_FUNC(evt_cloud_init);
@@ -127,7 +128,7 @@ EVT_BEGIN(evt_tojikome)
     CALL(evt_seq_wait, 2)
     SET_VALUE(LW(1), 0)
     SPAWN_EVENT(PTR(bero_open_door_play_se))
-    CALL(evt_sub_intpl_msec_init, 11, 0, -180, 500)
+    CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 0, -180, 500)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
         CALL_CHILD(PTR(n_door_open))
@@ -139,7 +140,7 @@ EVT_BEGIN(evt_tojikome)
         WAIT_MS(4000)
         SET_VALUE(LW(1), 0)
         SPAWN_EVENT(PTR(bero_close_door_play_se))
-        CALL(evt_sub_intpl_msec_init, 11, -180, 0, 500)
+        CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, -180, 0, 500)
         LOOP(0)
             CALL(evt_sub_intpl_msec_get_value)
             CALL_CHILD(PTR(n_door_open))
@@ -177,7 +178,7 @@ EVT_BEGIN(evt_tojikome)
     CALL(evt_npc_move_position, STRING("ガードマン"), 0, -100, 0, FLOAT(70.0f), 1)
     SET_VALUE(LW(1), 0)
     SPAWN_EVENT(PTR(bero_open_door_play_se))
-    CALL(evt_sub_intpl_msec_init, 11, 0, 180, 500)
+    CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 0, 180, 500)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
         CALL_CHILD(PTR(n_door_open))
@@ -189,7 +190,7 @@ EVT_BEGIN(evt_tojikome)
         WAIT_MS(1000)
         SET_VALUE(LW(1), 0)
         SPAWN_EVENT(PTR(bero_close_door_play_se))
-        CALL(evt_sub_intpl_msec_init, 11, 180, 0, 500)
+        CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 180, 0, 500)
         LOOP(0)
             CALL(evt_sub_intpl_msec_get_value)
             CALL_CHILD(PTR(n_door_open))

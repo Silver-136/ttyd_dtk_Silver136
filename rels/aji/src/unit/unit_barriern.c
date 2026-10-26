@@ -656,7 +656,7 @@ static s32 barriern_zanzou_sub(BOOL isFirstCall, BattleUnit* unit, f32* scales, 
         part = BtlUnit_GetPartsPtr(unit, i);
         s = intpl_ff(start[j], end[j], mode, zanzou_count[0], frames);
         BtlUnit_SetPartsScale(part, s, s, 1.0f);
-        part->color.a = intplGetValue(0, alphaStart, alphaEnd, zanzou_count[0], frames);
+        part->color.a = intplGetValue(EASING_LINEAR, alphaStart, alphaEnd, zanzou_count[0], frames);
     }
     if (zanzou_count[0] >= frames) {
         part = BtlUnit_GetPartsPtr(unit, 1);
@@ -755,7 +755,7 @@ static s32 barriern_satellite_zanzou_sub(BOOL isFirstCall, BattleUnit* unit, f32
     }
     part = BtlUnit_GetPartsPtr(unit, 1);
     {
-        f32 s = intplGetValue(4, 0.8f, scale, zanzou_count[0], frames);
+        f32 s = intplGetValue(EASING_QUADRATIC_OUT, 0.8f, scale, zanzou_count[0], frames);
         BtlUnit_SetPartsScale(part, s, s, 1.0f);
     }
     for (i = 2, j = 0; i <= 6; i++, j++) {
@@ -764,7 +764,7 @@ static s32 barriern_satellite_zanzou_sub(BOOL isFirstCall, BattleUnit* unit, f32
         part = BtlUnit_GetPartsPtr(unit, i);
         s = intplGetValue(mode, start[j], end[j], zanzou_count[(s32)(n + 1)], frames);
         BtlUnit_SetPartsScale(part, s, s, 1.0f);
-        part->color.a = intplGetValue(0, alphaStart, alphaEnd, zanzou_count[(s32)(n + 1)], frames);
+        part->color.a = intplGetValue(EASING_LINEAR, alphaStart, alphaEnd, zanzou_count[(s32)(n + 1)], frames);
     }
     if (zanzou_count[(s32)(n + 1)] >= frames) {
         part = BtlUnit_GetPartsPtr(unit, 1);
@@ -1507,7 +1507,7 @@ static u8 barriernSatelliteTo_Main(BattleUnit* unit, s32 n) {
         }
         return FALSE;
     }
-    spline_getvalue(intplGetValue(4, 0.0f, 1.0f, sp->count, 60), &pos, sp->n, sp->table, sp->a, sp->b);
+    spline_getvalue(intplGetValue(EASING_QUADRATIC_OUT, 0.0f, 1.0f, sp->count, 60), &pos, sp->n, sp->table, sp->a, sp->b);
     sat = BattleGetUnitPtr(_battleWorkPointer, unit->work[4 + n]);
     if (sat == NULL) {
         return FALSE;

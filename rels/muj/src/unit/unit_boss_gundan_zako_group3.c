@@ -472,9 +472,9 @@ void zakogun_ext_main3(void) {
                 zako->state = 10;
                 zakogun_set_pose(zako, 0x16, 10, 1);
             case 10:
-                zako->pos.x = intplGetValue(0, zako->start.x, zako->home.x, zako->timerMax - zako->timer, zako->timerMax);
-                zako->pos.y = intplGetValue(0, zako->start.y, zako->home.y, zako->timerMax - zako->timer, zako->timerMax);
-                zako->pos.z = intplGetValue(0, zako->start.z, zako->home.z, zako->timerMax - zako->timer, zako->timerMax);
+                zako->pos.x = intplGetValue(EASING_LINEAR, zako->start.x, zako->home.x, zako->timerMax - zako->timer, zako->timerMax);
+                zako->pos.y = intplGetValue(EASING_LINEAR, zako->start.y, zako->home.y, zako->timerMax - zako->timer, zako->timerMax);
+                zako->pos.z = intplGetValue(EASING_LINEAR, zako->start.z, zako->home.z, zako->timerMax - zako->timer, zako->timerMax);
                 zako->timer--;
                 if (zako->timer < 0) {
                     zako->state = 15;
@@ -523,8 +523,8 @@ void zakogun_ext_main3(void) {
                 }
                 break;
             case 30:
-                zako->pos.x = intplGetValue(0, zako->start.x, zako->target.x, zako->timerMax - zako->timer, zako->timerMax);
-                zako->pos.z = intplGetValue(0, zako->start.z, zako->target.z, zako->timerMax - zako->timer, zako->timerMax);
+                zako->pos.x = intplGetValue(EASING_LINEAR, zako->start.x, zako->target.x, zako->timerMax - zako->timer, zako->timerMax);
+                zako->pos.z = intplGetValue(EASING_LINEAR, zako->start.z, zako->target.z, zako->timerMax - zako->timer, zako->timerMax);
                 zako->pos.y += zako->vel.y;
                 zako->vel.y += -0.5f;
                 zako->timer--;
@@ -556,8 +556,8 @@ void zakogun_ext_main3(void) {
                 zako->timer = zako->timerMax = 20;
                 zakogun_set_pose(zako, 0x22, 1, 1);
             case 55:
-                zako->pos.x = intplGetValue(0, zako->start.x, zako->target.x, zako->timerMax - zako->timer, zako->timerMax);
-                zako->pos.z = intplGetValue(0, zako->start.z, zako->target.z, zako->timerMax - zako->timer, zako->timerMax);
+                zako->pos.x = intplGetValue(EASING_LINEAR, zako->start.x, zako->target.x, zako->timerMax - zako->timer, zako->timerMax);
+                zako->pos.z = intplGetValue(EASING_LINEAR, zako->start.z, zako->target.z, zako->timerMax - zako->timer, zako->timerMax);
                 zako->pos.y += zako->vel.y;
                 zako->vel.y += -0.5f;
                 zako->timer--;
@@ -574,8 +574,8 @@ void zakogun_ext_main3(void) {
                 zako->state = 65;
                 zakogun_set_pose(zako, 0x16, 10, 1);
             case 65:
-                zako->pos.x = intplGetValue(0, zako->start.x, zako->home.x, zako->timerMax - zako->timer, zako->timerMax);
-                zako->pos.z = intplGetValue(0, zako->start.z, zako->home.z, zako->timerMax - zako->timer, zako->timerMax);
+                zako->pos.x = intplGetValue(EASING_LINEAR, zako->start.x, zako->home.x, zako->timerMax - zako->timer, zako->timerMax);
+                zako->pos.z = intplGetValue(EASING_LINEAR, zako->start.z, zako->home.z, zako->timerMax - zako->timer, zako->timerMax);
                 zako->timer--;
                 if (zako->timer < 0) {
                     zako->state = 15;

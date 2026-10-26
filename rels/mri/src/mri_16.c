@@ -13,6 +13,7 @@
 #include "driver/mobjdrv.h"
 #include "driver/mapdrv.h"
 #include "mario/mario_pouch.h"
+#include "system.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "evt/evt_bero.h"
@@ -170,7 +171,7 @@ static BeroEntry bero_entry_data[] = {
 };
 
 static EVT_BEGIN(cam_shake)
-    CALL(evt_sub_intpl_msec_init, 11, 0, 7, 500)
+    CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 0, 7, 500)
     LABEL(0)
     CALL(evt_sub_intpl_msec_get_value)
     DIVIDE_FLOAT(LW(0), FLOAT(1000.0f))
@@ -183,7 +184,7 @@ static EVT_BEGIN(cam_shake)
 EVT_END()
 
 static EVT_BEGIN(cam_shake2)
-    CALL(evt_sub_intpl_msec_init, 11, 7, 0, 500)
+    CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 7, 0, 500)
     LABEL(0)
     CALL(evt_sub_intpl_msec_get_value)
     DIVIDE_FLOAT(LW(0), FLOAT(1000.0f))

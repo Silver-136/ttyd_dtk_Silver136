@@ -436,7 +436,7 @@ static void main_base(void) {
         break;
     case 4:
         w->timer--;
-        w->offsetY = intplGetValue(0, -40.0f, 0.0f, 30 - w->timer, 30);
+        w->offsetY = intplGetValue(EASING_LINEAR, -40.0f, 0.0f, 30 - w->timer, 30);
         if (w->timer <= 0) {
             w->state = 3;
             w->sfx = psndSFXOn("SFX_BTL_SAC_DOKKAN1_1");
@@ -461,7 +461,7 @@ void main_gauge(void) {
         w->alpha = 255;
     case 2:
         w->gaugeTimer++;
-        w->gaugePos.x = intplGetValue(4, -1000.0f, 0.0f, w->gaugeTimer, 30);
+        w->gaugePos.x = intplGetValue(EASING_QUADRATIC_OUT, -1000.0f, 0.0f, w->gaugeTimer, 30);
         if (w->gaugeTimer >= 30) {
             w->gaugeState = 3;
             w->gaugeTimer = 0;
@@ -485,7 +485,7 @@ void main_gauge(void) {
         break;
     case 5:
         w->gaugeTimer++;
-        w->gaugePos.x = intplGetValue(4, 0.0f, -1000.0f, w->gaugeTimer, 30);
+        w->gaugePos.x = intplGetValue(EASING_QUADRATIC_OUT, 0.0f, -1000.0f, w->gaugeTimer, 30);
         if (w->gaugeTimer >= 30) {
             w->gaugeState = 3;
             w->gaugeTimer = 0;
@@ -544,17 +544,17 @@ static void main_star(void) {
     case 2:
         w->starTimer++;
         if (w->starTimer <= 100) {
-            w->starPos.x = (intplGetValue(0, w->from.x, w->to.x, w->starTimer, 100));
-            w->starPos.y = (intplGetValue(0, w->from.y, w->to.y, w->starTimer, 100));
-            w->starPos.z = (intplGetValue(0, w->from.z, w->to.z, w->starTimer, 100));
-            w->scale.x = w->scale.y = w->scale.z = (intplGetValue(0, 0.0f, 2.0f, w->starTimer, 100));
+            w->starPos.x = (intplGetValue(EASING_LINEAR, w->from.x, w->to.x, w->starTimer, 100));
+            w->starPos.y = (intplGetValue(EASING_LINEAR, w->from.y, w->to.y, w->starTimer, 100));
+            w->starPos.z = (intplGetValue(EASING_LINEAR, w->from.z, w->to.z, w->starTimer, 100));
+            w->scale.x = w->scale.y = w->scale.z = (intplGetValue(EASING_LINEAR, 0.0f, 2.0f, w->starTimer, 100));
         } else {
             w->starPos.x = w->to.x;
             w->starPos.y = w->to.y;
             w->starPos.z = w->to.z;
             w->scale.x = w->scale.y = w->scale.z = 2.0f;
         }
-        w->rot.y = (intplGetValue(4, 0.0f, 2160.0f, w->starTimer, 120));
+        w->rot.y = (intplGetValue(EASING_QUADRATIC_OUT, 0.0f, 2160.0f, w->starTimer, 120));
         if (w->starTimer >= 120) {
             w->starState = 3;
             w->starTimer = 0;
@@ -566,9 +566,9 @@ static void main_star(void) {
         break;
     case 3:
         w->starTimer++;
-        w->starPos.x = (intplGetValue(4, w->from.x, w->to.x, w->starTimer, 60));
-        w->starPos.y = (intplGetValue(4, w->from.y, w->to.y, w->starTimer, 60));
-        w->starPos.z = (intplGetValue(4, w->from.z, w->to.z, w->starTimer, 60));
+        w->starPos.x = (intplGetValue(EASING_QUADRATIC_OUT, w->from.x, w->to.x, w->starTimer, 60));
+        w->starPos.y = (intplGetValue(EASING_QUADRATIC_OUT, w->from.y, w->to.y, w->starTimer, 60));
+        w->starPos.z = (intplGetValue(EASING_QUADRATIC_OUT, w->from.z, w->to.z, w->starTimer, 60));
         if (w->starTimer >= 60) {
             w->starState = 4;
             w->starTimer = 0;
@@ -598,7 +598,7 @@ static void main_star(void) {
     case 7: {
         s32 tbl[11] = {1, 2, 0, 2, 3, 1, 3, 4, 2, 4, 5};
         w->starTimer++;
-        w->scale.x = w->scale.y = w->scale.z = (intplGetValue(4, w->sclFrom, w->sclTo, tbl[w->starTimer / 4], 5));
+        w->scale.x = w->scale.y = w->scale.z = (intplGetValue(EASING_QUADRATIC_OUT, w->sclFrom, w->sclTo, tbl[w->starTimer / 4], 5));
         w->starPos.y = 12.5f * (w->scale.y - 2.0f) + 30.0f;
         if (w->starTimer >= 43) {
             w->starState = 5;
@@ -615,7 +615,7 @@ static void main_star(void) {
     case 9: {
         s32 tbl[11] = {1, 2, 0, 2, 3, 1, 3, 4, 2, 4, 5};
         w->starTimer++;
-        w->scale.x = w->scale.y = w->scale.z = (intplGetValue(4, w->sclFrom, w->sclTo, tbl[w->starTimer / 4], 5));
+        w->scale.x = w->scale.y = w->scale.z = (intplGetValue(EASING_QUADRATIC_OUT, w->sclFrom, w->sclTo, tbl[w->starTimer / 4], 5));
         w->starPos.y = 12.5f * (w->scale.y - 2.0f) + 30.0f;
         if (w->starTimer >= 43) {
             w->starState = 5;
@@ -673,7 +673,7 @@ static void main_star(void) {
         break;
     case 12:
         w->starTimer--;
-        w->starPos.y = (intplGetValue(4, w->from.y, w->to.y, 30 - w->starTimer, 30));
+        w->starPos.y = (intplGetValue(EASING_QUADRATIC_OUT, w->from.y, w->to.y, 30 - w->starTimer, 30));
         if (w->starTimer <= 0) {
             w->starState = 13;
             w->starTimer = 0;
@@ -684,7 +684,7 @@ static void main_star(void) {
         if (w->starTimer > 30) {
             w->starTimer = 30;
         }
-        alpha = (intplGetValue(0, 255.0f, 0.0f, w->starTimer, 30));
+        alpha = (intplGetValue(EASING_LINEAR, 255.0f, 0.0f, w->starTimer, 30));
         break;
     }
     if (w->eff) {

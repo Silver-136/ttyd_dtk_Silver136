@@ -9,6 +9,7 @@
 #include "evt/evt_eff.h"
 #include "battle/battle_sub.h"
 #include "battle/battle_damage.h"
+#include "system.h"
 
 USER_FUNC(btlevtcmd_AnimeWaitPlayLoopTiming);
 USER_FUNC(btlevtcmd_SetEventPhase);
@@ -241,7 +242,7 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("KRT_Z_1"))
     BEGIN_SIBLING_EVENT
         CALL(btlevtcmd_SetRotateOffset, UNIT_ID_SELF, 0, 13, 0)
-        CALL(evt_sub_intpl_init, 0, 0, -2160, 60)
+        CALL(evt_sub_intpl_init, EASING_LINEAR, 0, -2160, 60)
         LOOP(60)
             CALL(evt_sub_intpl_get_value)
             CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, LW(0), 0, 0)
@@ -339,7 +340,7 @@ static EVT_BEGIN(attack_event)
         CALL(btlevtcmd_FaceDirectionSub, UNIT_ID_SELF, LW(0), 50)
         ADD(LW(1), 15)
         BEGIN_SIBLING_EVENT
-            CALL(evt_sub_intpl_init, 5, 0, -30, 20)
+            CALL(evt_sub_intpl_init, EASING_CUBIC_OUT, 0, -30, 20)
             CALL(evt_sub_intpl_get_value)
             LOOP(21)
                 CALL(evt_sub_intpl_get_value)
@@ -349,7 +350,7 @@ static EVT_BEGIN(attack_event)
         END_SIBLING_EVENT
         CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 21, 0, 5, 0, -1)
         BEGIN_SIBLING_EVENT
-            CALL(evt_sub_intpl_init, 4, -30, 0, 20)
+            CALL(evt_sub_intpl_init, EASING_QUADRATIC_OUT, -30, 0, 20)
             CALL(evt_sub_intpl_get_value)
             LOOP(21)
                 CALL(evt_sub_intpl_get_value)

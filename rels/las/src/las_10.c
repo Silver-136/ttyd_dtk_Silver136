@@ -14,6 +14,7 @@
 #include "evt/evt_snd.h"
 #include "evt/evt_sub.h"
 #include "evt/evt_pouch.h"
+#include "system.h"
 
 #include "mario/mario_pouch.h"
 #include "party.h"
@@ -491,7 +492,7 @@ EVT_BEGIN(tenkyugi_evt)
     CALL(evt_mapobj_color, 1, STRING("S_hoshihoshi"), 255, 255, 255, 0)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_hoshihoshi"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_snd_sfxon, STRING("SFX_STG8_CELESTIAL_MOVE1"), 0)
-    CALL(evt_sub_intpl_msec_init, 11, 0, 255, 1000)
+    CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 0, 255, 1000)
     LABEL(0)
     CALL(evt_sub_intpl_msec_get_value)
     CALL(evt_mapobj_color, 1, STRING("S_hoshihoshi"), 255, 255, 255, LW(0))
@@ -500,7 +501,7 @@ EVT_BEGIN(tenkyugi_evt)
         GOTO(0)
     END_IF
     CALL(evt_map_playanim, STRING("en"), 1, 0)
-    CALL(evt_sub_intpl_msec_init, 1, 0, 1000, 3000)
+    CALL(evt_sub_intpl_msec_init, EASING_QUADRATIC_IN, 0, 1000, 3000)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
         DIVIDE_FLOAT(LW(0), FLOAT(1000.0f))
@@ -616,7 +617,7 @@ EVT_BEGIN(kagi_rotate)
     END_INLINE_EVENT
     CALL(evt_mapobj_get_position, LW(10), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG8_KEYSTAND_ROUND1"), LW(0), LW(1), LW(2), LW(8))
-    CALL(evt_sub_intpl_msec_init, 11, 0, 180, 1000)
+    CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 0, 180, 1000)
     LABEL(0)
     CALL(evt_sub_intpl_msec_get_value)
     CALL(evt_mapobj_rotate, 1, LW(10), 0, LW(0), 0)
@@ -897,7 +898,7 @@ EVT_BEGIN(daiza_up)
         CALL(evt_mapobj_get_position, LW(8), LW(0), LW(1), LW(2))
         CALL(evt_snd_sfxon_3d, STRING("SFX_STG8_KEYSTAND_APPEAR2"), LW(0), LW(1), LW(2), 0)
     END_INLINE_EVENT
-    CALL(evt_sub_intpl_msec_init, 11, -10000, 0, 3000)
+    CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, -10000, 0, 3000)
     LABEL(0)
     CALL(evt_sub_intpl_msec_get_value)
     DIVIDE_FLOAT(LW(0), FLOAT(100.0f))
@@ -912,7 +913,7 @@ EVT_BEGIN(daiza_up)
     CALL(evt_eff_softdelete, LW(7))
     WAIT_MS(1000)
     CALL(evt_mapobj_get_position, LW(9), LW(0), LW(1), LW(2))
-    CALL(evt_sub_intpl_msec_init, 11, 0, 255, 1000)
+    CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 0, 255, 1000)
     LABEL(1)
     CALL(evt_sub_intpl_msec_get_value)
     CALL(evt_mapobj_color, 1, LW(9), LW(0), LW(0), LW(0), 255)

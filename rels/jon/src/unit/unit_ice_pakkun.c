@@ -508,7 +508,7 @@ static USER_FUNC(shadow_scale_return) {
     if (isFirstCall) {
         unit->work[1] = 0;
     }
-    part->shadowScale = intplGetValue(0, 0.0f, unit->work[0], unit->work[1], 15);
+    part->shadowScale = intplGetValue(EASING_LINEAR, 0.0f, unit->work[0], unit->work[1], 15);
     if (unit->work[1] >= 15) {
         return EVT_RETURN_DONE;
     }
@@ -524,7 +524,7 @@ static USER_FUNC(shadow_scale_small) {
     if (isFirstCall) {
         unit->work[1] = 0;
     }
-    part->shadowScale = intplGetValue(0, unit->work[0], 0.0f, unit->work[1], 15);
+    part->shadowScale = intplGetValue(EASING_LINEAR, unit->work[0], 0.0f, unit->work[1], 15);
     if (unit->work[1] >= 15) {
         return EVT_RETURN_DONE;
     }

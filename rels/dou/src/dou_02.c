@@ -13,6 +13,7 @@
 #include "evt/evt_item.h"
 #include "evt/evt_mobj.h"
 #include "mario/mario_pouch.h"
+#include "system.h"
 
 
 static BeroEntry bero_entry_data[4];
@@ -93,7 +94,7 @@ static EVT_BEGIN(yari_trap_sub)
         CALL(evt_hitobj_attr_onoff, 1, 1, STRING("bb"), 2048)
         CALL(evt_mapobj_get_position, STRING("s02_yari"), LW(0), LW(1), LW(2))
         CALL(evt_snd_sfxon_3d, STRING("SFX_MOBJ_FLOOR_TRAP1"), LW(0), LW(1), LW(2), 0)
-        CALL(evt_sub_intpl_msec_init, 1, 0, 50, 150)
+        CALL(evt_sub_intpl_msec_init, EASING_QUADRATIC_IN, 0, 50, 150)
         LOOP(0)
             CALL(evt_sub_intpl_msec_get_value)
             CALL(evt_mapobj_trans, 1, STRING("s02_yari"), 0, LW(0), 0)
@@ -106,7 +107,7 @@ static EVT_BEGIN(yari_trap_sub)
         WAIT_MS(1000)
         CALL(evt_mapobj_get_position, STRING("s02_yari"), LW(0), LW(1), LW(2))
         CALL(evt_snd_sfxon_3d, STRING("SFX_MOBJ_FLOOR_TRAP2"), LW(0), LW(1), LW(2), 0)
-        CALL(evt_sub_intpl_msec_init, 4, 50, 0, 300)
+        CALL(evt_sub_intpl_msec_init, EASING_QUADRATIC_OUT, 50, 0, 300)
         LOOP(0)
             CALL(evt_sub_intpl_msec_get_value)
             CALL(evt_mapobj_trans, 1, STRING("s02_yari"), 0, LW(0), 0)

@@ -63,7 +63,7 @@ s32 battleAcMain_PowerGaugeLv(BattleWork* work) {
                 tw->gauge = 101.0f;
                 return 0;
             }
-            tw->gauge = intplGetValue(2, 0.0f, 100.0f, tw->counter, tw->limit);
+            tw->gauge = intplGetValue(EASING_CUBIC_IN, 0.0f, 100.0f, tw->counter, tw->limit);
             if (BattlePadGetNow() == 0x60) {
                 if (tw->gauge < (f32)ac->params[2]) {
                     work->actionCommands.result = 0;
@@ -140,7 +140,7 @@ void battleAcDisp_PowerGaugeLv(CameraId cameraId, void* param) {
     s32 i = 4;
     switch (work->actionCommands.mAcState) {
         case 99:
-            disp->iconX = intplGetValue(4, -300.0f, 30.0f, 20 - AC_SLIDE_TIMER_AT(disp, i), 20);
+            disp->iconX = intplGetValue(EASING_QUADRATIC_OUT, -300.0f, 30.0f, 20 - AC_SLIDE_TIMER_AT(disp, i), 20);
         case 100:
         case 1000:
         case 1002:
@@ -152,7 +152,7 @@ void battleAcDisp_PowerGaugeLv(CameraId cameraId, void* param) {
         case 1003:
         case 1004:
             if (AC_SLIDE_TIMER_AT(disp, i) >= 40) {
-                disp->iconX = intplGetValue(4, 30.0f, -300.0f, AC_SLIDE_TIMER_AT(disp, i) - 40, 20);
+                disp->iconX = intplGetValue(EASING_QUADRATIC_OUT, 30.0f, -300.0f, AC_SLIDE_TIMER_AT(disp, i) - 40, 20);
             } else {
                 disp->iconX = 30.0f;
             }

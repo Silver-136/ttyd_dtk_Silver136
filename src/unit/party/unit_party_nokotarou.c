@@ -24,6 +24,7 @@
 #include "evt/evt_snd.h"
 #include "battle/battle_status_effect.h"
 #include "battle/battle_damage.h"
+#include "system.h"
 
 USER_FUNC(btlevtcmd_SetEventEntry);
 USER_FUNC(btlevtcmd_SetJumpSound);
@@ -1228,9 +1229,9 @@ EVT_BEGIN(partyNokotarouAttack_KouraGuard)
             SET_VALUE(LW(9), LW(10))
             CALL(btlevtcmd_GetRotate, LW(9), EVT_NULLPTR, EVT_NULLPTR, LW(8))
             IF_INT_LESS(LW(8), 180)
-                CALL(evt_sub_intpl_init, 11, LW(8), 0, 50)
+                CALL(evt_sub_intpl_init, EASING_COS_IN_OUT, LW(8), 0, 50)
             ELSE
-                CALL(evt_sub_intpl_init, 11, LW(8), 360, 50)
+                CALL(evt_sub_intpl_init, EASING_COS_IN_OUT, LW(8), 360, 50)
             END_IF
             LOOP(50)
                 CALL(evt_sub_intpl_get_value_para, LW(1), LW(2))

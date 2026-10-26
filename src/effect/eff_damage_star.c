@@ -387,14 +387,14 @@ void effDamageStarMain(EffectEntry* effect) {
             if (frame < 20) {
                 work->scale.x = work->scale.y = work->scale.z = 0.01f * scale_data[frame];
             } else if (frame < 40) {
-                work->rotation = intplGetValue(11, 0.0f, 720.0f, frame - 20, 19);
+                work->rotation = intplGetValue(EASING_COS_IN_OUT, 0.0f, 720.0f, frame - 20, 19);
             } else if (frame < 50) {
-                work->scale.x = intplGetValue(4, 1.0f, 1.5f, frame - 40, 9);
-                work->scale.y = intplGetValue(4, 1.0f, 0.5f, frame - 40, 9);
+                work->scale.x = intplGetValue(EASING_QUADRATIC_OUT, 1.0f, 1.5f, frame - 40, 9);
+                work->scale.y = intplGetValue(EASING_QUADRATIC_OUT, 1.0f, 0.5f, frame - 40, 9);
             } else if (frame < 60) {
-                work->scale.x = intplGetValue(1, 1.5f, 0.1f, frame - 50, 9);
-                work->scale.y = intplGetValue(1, 0.5f, 1.0f, frame - 50, 9);
-                work->position.y = intplGetValue(1, work->position.y, 10.0f + work->position.y, frame - 50, 9);
+                work->scale.x = intplGetValue(EASING_QUADRATIC_IN, 1.5f, 0.1f, frame - 50, 9);
+                work->scale.y = intplGetValue(EASING_QUADRATIC_IN, 0.5f, 1.0f, frame - 50, 9);
+                work->position.y = intplGetValue(EASING_QUADRATIC_IN, work->position.y, 10.0f + work->position.y, frame - 50, 9);
             } else {
                 work->scale.x = work->scale.y = work->scale.z = 0.0f;
             }

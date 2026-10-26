@@ -354,7 +354,7 @@ void battleAcDisp_SignalTiming(CameraId cameraId, BattleWork* work) {
     switch (ac->mAcState) {
         case 99:
         case 100:
-            disp->iconX = intplGetValue(4, -300.0f, 30.0f, 20 - disp->slideTimer, 20);
+            disp->iconX = intplGetValue(EASING_QUADRATIC_OUT, -300.0f, 30.0f, 20 - disp->slideTimer, 20);
             actionCommandDisp(disp->iconX, disp->iconY);
             if (disp->slideTimer > 0) {
                 disp->slideTimer--;
@@ -369,7 +369,7 @@ void battleAcDisp_SignalTiming(CameraId cameraId, BattleWork* work) {
         case 1004:
         case 1005:
             if (disp->slideTimer >= 40) {
-                disp->iconX = intplGetValue(4, 30.0f, -300.0f, disp->slideTimer - 40, 20);
+                disp->iconX = intplGetValue(EASING_QUADRATIC_OUT, 30.0f, -300.0f, disp->slideTimer - 40, 20);
             } else {
                 disp->iconX = 30.0f;
             }

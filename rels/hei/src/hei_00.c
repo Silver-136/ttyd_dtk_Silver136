@@ -20,6 +20,7 @@
 #include "evt/evt_item.h"
 #include "evt/evt_pouch.h"
 #include "driver/mapdrv.h"
+#include "system.h"
 
 #include "mario/mario.h"
 #include "mario/mario_party.h"
@@ -225,7 +226,7 @@ EVT_BEGIN(evt_gonbaba_shadow)
     SET_VALUE(GW(1), 0)
     SET_VALUE(GW(2), 0)
     BEGIN_INLINE_EVENT
-        CALL(evt_sub_intpl_init, 0, -220, -20, 360)
+        CALL(evt_sub_intpl_init, EASING_LINEAR, -220, -20, 360)
         LOOP(361)
             CALL(evt_sub_intpl_get_value)
             SET_VALUE(GW(0), LW(0))
@@ -233,7 +234,7 @@ EVT_BEGIN(evt_gonbaba_shadow)
         END_LOOP
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
-        CALL(evt_sub_intpl_init, 11, 0, -300, 30)
+        CALL(evt_sub_intpl_init, EASING_COS_IN_OUT, 0, -300, 30)
         LOOP(361)
             CALL(evt_sub_intpl_get_value)
             SET_VALUE(GW(1), LW(0))
@@ -241,7 +242,7 @@ EVT_BEGIN(evt_gonbaba_shadow)
         END_LOOP
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
-        CALL(evt_sub_intpl_init, 0, 1200, -1200, 360)
+        CALL(evt_sub_intpl_init, EASING_LINEAR, 1200, -1200, 360)
         LOOP(361)
             CALL(evt_sub_intpl_get_value)
             SET_VALUE(GW(2), LW(0))
@@ -441,7 +442,7 @@ EVT_BEGIN(gonbaba_evt)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
         CONVERT_MS_TO_FRAME(LW(0), 10000)
-        CALL(evt_sub_intpl_init, 0, 75, 18, LW(0))
+        CALL(evt_sub_intpl_init, EASING_LINEAR, 75, 18, LW(0))
         LOOP(601)
             CALL(evt_sub_intpl_get_value)
             DIVIDE_FLOAT(LW(0), FLOAT(100.0f))
@@ -451,7 +452,7 @@ EVT_BEGIN(gonbaba_evt)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
         CONVERT_MS_TO_FRAME(LW(0), 4166)
-        CALL(evt_sub_intpl_init, 11, 210, 114, LW(0))
+        CALL(evt_sub_intpl_init, EASING_COS_IN_OUT, 210, 114, LW(0))
         LOOP(251)
             CALL(evt_sub_intpl_get_value)
             CALL(evt_npc_get_position, STRING("（・ｘ・）"), LW(2), LW(3), LW(4))
@@ -461,7 +462,7 @@ EVT_BEGIN(gonbaba_evt)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
         CONVERT_MS_TO_FRAME(LW(0), 10000)
-        CALL(evt_sub_intpl_init, 11, 0, 290, 600)
+        CALL(evt_sub_intpl_init, EASING_COS_IN_OUT, 0, 290, 600)
         LOOP(601)
             CALL(evt_sub_intpl_get_value)
             CALL(evt_npc_get_position, STRING("（・ｘ・）"), LW(2), LW(3), LW(4))
@@ -471,7 +472,7 @@ EVT_BEGIN(gonbaba_evt)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
         CONVERT_MS_TO_FRAME(LW(0), 10000)
-        CALL(evt_sub_intpl_init, 0, -287, -480, 600)
+        CALL(evt_sub_intpl_init, EASING_LINEAR, -287, -480, 600)
         LOOP(601)
             CALL(evt_sub_intpl_get_value)
             CALL(evt_npc_get_position, STRING("（・ｘ・）"), LW(2), LW(3), LW(4))
@@ -625,7 +626,7 @@ static BeroEntry e3_bero[] = {
 };
 
 static EVT_BEGIN(cam_shake)
-    CALL(evt_sub_intpl_init, 11, 0, 10, 30)
+    CALL(evt_sub_intpl_init, EASING_COS_IN_OUT, 0, 10, 30)
     LABEL(0)
     CALL(evt_sub_intpl_get_value)
     DIVIDE_FLOAT(LW(0), FLOAT(1000.0f))
@@ -638,7 +639,7 @@ static EVT_BEGIN(cam_shake)
 EVT_END()
 
 static EVT_BEGIN(cam_shake2)
-    CALL(evt_sub_intpl_init, 11, 10, 0, 30)
+    CALL(evt_sub_intpl_init, EASING_COS_IN_OUT, 10, 0, 30)
     LABEL(0)
     CALL(evt_sub_intpl_get_value)
     DIVIDE_FLOAT(LW(0), FLOAT(1000.0f))
@@ -776,7 +777,7 @@ static EVT_BEGIN(switch_evt)
     CALL(evt_snd_sfxoff, LW(10))
     WAIT_MS(200)
     CALL(evt_snd_sfxon, STRING("SFX_STG1_ROCK_MOVE1"), LW(10))
-    CALL(evt_sub_intpl_msec_init, 11, 0, 1000, 3000)
+    CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 0, 1000, 3000)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
         DIVIDE_FLOAT(LW(0), FLOAT(1000.0f))
@@ -814,7 +815,7 @@ static EVT_BEGIN(switch_evt)
     CALL(evt_hitobj_onoff, STRING("a_moji"), 1, 1)
     CALL(evt_run_case_evt, 9, 1, STRING("a_moji"), 0, PTR(moji_msg), 0)
     CALL(evt_snd_sfxon, STRING("SFX_STG1ROCK_FONT_APPEAR1"), 0)
-    CALL(evt_sub_intpl_msec_init, 11, 0, 255, 1000)
+    CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 0, 255, 1000)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
         CALL(evt_mapobj_color, 1, STRING("s_moji"), 255, 255, 255, LW(0))
@@ -905,7 +906,7 @@ static EVT_BEGIN(dokan_evt)
     CALL(evt_snd_sfxon_3d, STRING("SFX_DOKAN_APPEAR1"), LW(0), LW(1), LW(2), 0)
     CALL(evt_mapobj_trans, 0, STRING("h_dokan"), 0, -20, 0)
     CALL(evt_mapobj_flag_onoff, 0, 0, STRING("h_dokan"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_sub_intpl_init, 11, -20, 0, 60)
+    CALL(evt_sub_intpl_init, EASING_COS_IN_OUT, -20, 0, 60)
     LABEL(0)
     CALL(evt_sub_intpl_get_value)
     CALL(evt_mapobj_trans, 0, STRING("h_dokan"), 0, LW(0), 0)

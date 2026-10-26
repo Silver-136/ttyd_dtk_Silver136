@@ -10,6 +10,7 @@
 #include "evt/evt_item.h"
 #include "driver/mapdrv.h"
 #include "mario/mario_pouch.h"
+#include "system.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "driver/camdrv.h"
@@ -183,7 +184,7 @@ EVT_BEGIN(aji_08_init_evt)
         LOOP(0)
             CALL(evt_mapobj_get_position, STRING("S_ita"), LW(0), LW(1), LW(2))
             CALL(evt_snd_sfxon_3d, STRING("SFX_STG7_AMB_CEILING_MOVE1"), LW(0), LW(1), LW(2), 0)
-            CALL(evt_sub_intpl_msec_init, 11, -100, 100, 1000)
+            CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, -100, 100, 1000)
             LABEL(0)
             CALL(evt_sub_intpl_msec_get_value)
             DIVIDE_FLOAT(LW(0), FLOAT(10.0f))
@@ -194,7 +195,7 @@ EVT_BEGIN(aji_08_init_evt)
             END_IF
             CALL(evt_mapobj_get_position, STRING("S_ita"), LW(0), LW(1), LW(2))
             CALL(evt_snd_sfxon_3d, STRING("SFX_STG7_AMB_CEILING_MOVE1"), LW(0), LW(1), LW(2), 0)
-            CALL(evt_sub_intpl_msec_init, 11, 100, -100, 1000)
+            CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 100, -100, 1000)
             LABEL(1)
             CALL(evt_sub_intpl_msec_get_value)
             DIVIDE_FLOAT(LW(0), FLOAT(10.0f))

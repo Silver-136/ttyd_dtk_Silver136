@@ -360,7 +360,7 @@ void acrobatMain(EffectEntry* effect) {
             break;
         case 2:
             wp->timer++;
-            wp->position.x = intplGetValue(12, 500.0f, i * 4, wp->timer, 30);
+            wp->position.x = intplGetValue(EASING_SIN_OUT, 500.0f, i * 4, wp->timer, 30);
             if (wp->timer >= 30) {
                 wp->timer = 0;
                 wp->state++;
@@ -368,8 +368,8 @@ void acrobatMain(EffectEntry* effect) {
             break;
         case 3:
             wp->timer++;
-            wp->scaleX = intplGetValue(12, 1.0f, 0.4f, wp->timer, 8);
-            wp->scaleY = intplGetValue(12, 1.0f, 1.5f, wp->timer, 8);
+            wp->scaleX = intplGetValue(EASING_SIN_OUT, 1.0f, 0.4f, wp->timer, 8);
+            wp->scaleY = intplGetValue(EASING_SIN_OUT, 1.0f, 1.5f, wp->timer, 8);
             if (wp->timer >= 8) {
                 wp->timer = 0;
                 wp->state++;
@@ -384,9 +384,9 @@ void acrobatMain(EffectEntry* effect) {
             break;
         case 5:
             wp->timer++;
-            wp->position.x = intplGetValue(8, i * 4, i * 12, wp->timer, 30);
-            wp->scaleX = intplGetValue(12, 0.2f, 1.0f, wp->timer, 30);
-            wp->scaleY = intplGetValue(12, 1.5f, 1.0f, wp->timer, 30);
+            wp->position.x = intplGetValue(EASING_COS_FAST_OVERSHOOT, i * 4, i * 12, wp->timer, 30);
+            wp->scaleX = intplGetValue(EASING_SIN_OUT, 0.2f, 1.0f, wp->timer, 30);
+            wp->scaleY = intplGetValue(EASING_SIN_OUT, 1.5f, 1.0f, wp->timer, 30);
             if (wp->timer >= 30) {
                 wp->timer = 0;
                 wp->state++;
@@ -401,8 +401,8 @@ void acrobatMain(EffectEntry* effect) {
             break;
         case 7:
             wp->timer++;
-            wp->scaleX = intplGetValue(12, 1.0f, 1.5f, wp->timer, 15);
-            wp->scaleY = intplGetValue(12, 1.0f, 0.1f, wp->timer, 15);
+            wp->scaleX = intplGetValue(EASING_SIN_OUT, 1.0f, 1.5f, wp->timer, 15);
+            wp->scaleY = intplGetValue(EASING_SIN_OUT, 1.0f, 0.1f, wp->timer, 15);
             if (wp->timer >= 15) {
                 wp->timer = 0;
                 wp->state++;
@@ -410,8 +410,8 @@ void acrobatMain(EffectEntry* effect) {
             break;
         case 8:
             wp->timer++;
-            wp->scaleX = intplGetValue(12, 1.5f, 0.1f, wp->timer, 15);
-            wp->scaleY = intplGetValue(12, 0.1f, 2.0f, wp->timer, 15);
+            wp->scaleX = intplGetValue(EASING_SIN_OUT, 1.5f, 0.1f, wp->timer, 15);
+            wp->scaleY = intplGetValue(EASING_SIN_OUT, 0.1f, 2.0f, wp->timer, 15);
             if (wp->timer >= 15) {
                 wp->timer = 0;
                 wp->state++;

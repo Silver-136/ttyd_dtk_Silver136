@@ -17,6 +17,7 @@
 #include "evt/evt_snd.h"
 #include "evt/evt_item.h"
 #include "driver/mapdrv.h"
+#include "system.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "dolphin/mtx.h"
@@ -1130,7 +1131,7 @@ static EVT_BEGIN(sekai_yami_evt)
     CALL(evt_cam3d_evt_set, 650, 90, 467, 13, 90, -17, 0, 11)
     CALL(evt_seq_wait, 2)
     WAIT_MS(1000)
-    CALL(evt_sub_intpl_msec_init, 11, 255, 64, 2000)
+    CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 255, 64, 2000)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
         CALL(evt_bg_set_color, LW(0), LW(0), LW(0), 255)
@@ -1160,7 +1161,7 @@ static EVT_BEGIN(sekai_yami_evt)
     SET_VALUE(LW(0), STRING("ノコリン"))
     SPAWN_EVENT(PTR(sekai_yami_npc))
     CALL(evt_snd_sfxon, STRING("SFX_STG8_WORLD_DARK1"), 0)
-    CALL(evt_sub_intpl_msec_init, 11, -600, 600, 5000)
+    CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, -600, 600, 5000)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
         CALL(yami_view, LW(0))
@@ -1234,7 +1235,7 @@ static EVT_BEGIN(minnnanokoe_evt)
             WAIT_FRAMES(1)
         END_LOOP
     END_INLINE_EVENT
-    CALL(evt_sub_intpl_msec_init, 11, 450, 50, 3000)
+    CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 450, 50, 3000)
     LABEL(0)
     CALL(evt_sub_intpl_msec_get_value)
     SET_VALUE(GW(0), LW(0))
@@ -1245,7 +1246,7 @@ static EVT_BEGIN(minnnanokoe_evt)
     SET_VALUE(GF(0), 0)
     BEGIN_INLINE_EVENT
         LOOP(0)
-            CALL(evt_sub_intpl_msec_init, 11, 5000, 5500, 500)
+            CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 5000, 5500, 500)
             LABEL(1)
             CALL(evt_sub_intpl_msec_get_value)
             DIVIDE_FLOAT(LW(0), FLOAT(100.0f))
@@ -1254,7 +1255,7 @@ static EVT_BEGIN(minnnanokoe_evt)
             IF_INT_EQUAL(LW(1), 1)
                 GOTO(1)
             END_IF
-            CALL(evt_sub_intpl_msec_init, 11, 5500, 5000, 500)
+            CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 5500, 5000, 500)
             LABEL(2)
             CALL(evt_sub_intpl_msec_get_value)
             DIVIDE_FLOAT(LW(0), FLOAT(100.0f))

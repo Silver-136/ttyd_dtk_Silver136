@@ -3,6 +3,7 @@
 #include "evt/evt_cmd.h"
 #include "evt/evt_msg.h"
 #include "unit/unit_mario.h"
+#include "system.h"
 
 #include "battle/battle.h"
 #include "battle/battle_sub.h"
@@ -332,7 +333,7 @@ EVT_BEGIN(to_faker_mario)
     END_IF
     CALL(evt_snd_sfxon, STRING("SFX_BOSS_RNPLTRANSFORM5"), 0)
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(5), LW(6), LW(7))
-    CALL(evt_sub_intpl_msec_init, 11, -50, 0, 1000)
+    CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, -50, 0, 1000)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value_para, LW(0), LW(1))
         CALL(btlevtcmd_SetPos, UNIT_ID_SELF, LW(5), LW(0), LW(7))
@@ -496,7 +497,7 @@ static EVT_BEGIN(ogg_attack_event)
     WAIT_MS(200)
     BEGIN_SIBLING_EVENT
         CALL(btlevtcmd_SetRotateOffset, UNIT_ID_SELF, 0, 15, 0)
-        CALL(evt_sub_intpl_msec_init, 1, 0, 135, 200)
+        CALL(evt_sub_intpl_msec_init, EASING_QUADRATIC_IN, 0, 135, 200)
         LOOP(0)
             CALL(evt_sub_intpl_msec_get_value_para, LW(0), LW(1))
             CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, 0, LW(0))
@@ -554,7 +555,7 @@ static EVT_BEGIN(ogg_attack_event)
     CALL(btlevtcmd_AnimeSetMotionSpeed, UNIT_ID_SELF, 1, FLOAT(2.0f))
     BEGIN_SIBLING_EVENT
         CALL(btlevtcmd_SetRotateOffset, UNIT_ID_SELF, 0, 15, 0)
-        CALL(evt_sub_intpl_init, 4, 135, 0, 20)
+        CALL(evt_sub_intpl_init, EASING_QUADRATIC_OUT, 135, 0, 20)
         LOOP(0)
             CALL(evt_sub_intpl_get_value_para, LW(0), LW(1))
             CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, 0, LW(0))

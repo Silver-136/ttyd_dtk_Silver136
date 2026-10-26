@@ -5,6 +5,7 @@
 #include "battle/battle_status_effect.h"
 #include "evt/evt_eff.h"
 #include "evt/evt_sub.h"
+#include "system.h"
 
 #include "battle/battle.h"
 #include "battle/battle_unit.h"
@@ -509,7 +510,7 @@ static EVT_BEGIN(alpha_down_event)
     CALL(btlevtcmd_SetAlpha, LW(0), 1, 254)
     CALL(btlevtcmd_AnimeFlagOnOff, LW(0), 1, 1, 1)
     WAIT_FRAMES(1)
-    CALL(evt_sub_intpl_init, 0, 255, 0, 30)
+    CALL(evt_sub_intpl_init, EASING_LINEAR, 255, 0, 30)
     LOOP(30)
         CALL(evt_sub_intpl_get_value_para, LW(1), LW(2))
         CALL(btlevtcmd_SetAlpha, LW(0), 1, LW(1))
@@ -542,7 +543,7 @@ static EVT_BEGIN(alpha_up_event)
     CALL(btlevtcmd_SetAlpha, LW(0), 1, 0)
     CALL(btlevtcmd_AnimeFlagOnOff, LW(0), 1, 1, 1)
     WAIT_FRAMES(1)
-    CALL(evt_sub_intpl_init, 0, 0, 254, 30)
+    CALL(evt_sub_intpl_init, EASING_LINEAR, 0, 254, 30)
     LOOP(30)
         CALL(evt_sub_intpl_get_value_para, LW(1), LW(2))
         CALL(btlevtcmd_SetAlpha, LW(0), 1, LW(1))

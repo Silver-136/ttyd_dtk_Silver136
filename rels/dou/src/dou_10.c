@@ -13,6 +13,7 @@
 #include "mot/mot_ship.h"
 #include "dou.h"
 #include "evt/evt_mobj.h"
+#include "system.h"
 
 #include "mario/mario.h"
 #include "manager/evtmgr_cmd.h"
@@ -175,7 +176,7 @@ EVT_BEGIN(namiyoke_fail_kaiten)
     CALL(evt_mario_get_dispdir, LW(0))
     SET_VALUE(LW(1), LW(0))
     ADD(LW(1), 1080)
-    CALL(evt_sub_intpl_msec_init, 0, LW(0), LW(1), 1000)
+    CALL(evt_sub_intpl_msec_init, EASING_LINEAR, LW(0), LW(1), 1000)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value_para, LW(0), LW(1))
         CALL(evt_mario_set_dispdir, LW(0))
@@ -191,7 +192,7 @@ EVT_BEGIN(namiyoke_fail_shizumu)
     CALL(evt_mario_cont_onoff, 0)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG5_MINIGAME_SHIP_SINK1"), LW(0), LW(1), LW(2), 0)
-    CALL(evt_sub_intpl_msec_init, 0, 0, -100, 4000)
+    CALL(evt_sub_intpl_msec_init, EASING_LINEAR, 0, -100, 4000)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value_para, LW(0), LW(1))
         CALL(evt_mario_get_pos, 0, LW(7), LW(8), LW(9))
@@ -207,7 +208,7 @@ EVT_END()
 EVT_BEGIN(namiyoke_fail_recover)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG5_MINIGAME_SHIP_FLOAT1"), LW(0), LW(1), LW(2), 0)
-    CALL(evt_sub_intpl_msec_init, 1, -100, 0, 800)
+    CALL(evt_sub_intpl_msec_init, EASING_QUADRATIC_IN, -100, 0, 800)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value_para, LW(0), LW(1))
         CALL(evt_mario_set_pos, -660, LW(0), 100)
@@ -216,7 +217,7 @@ EVT_BEGIN(namiyoke_fail_recover)
             BREAK_LOOP
         END_IF
     END_LOOP
-    CALL(evt_sub_intpl_msec_init, 11, 0, -10, 300)
+    CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 0, -10, 300)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value_para, LW(0), LW(1))
         CALL(evt_mario_set_pos, -660, LW(0), 100)
@@ -225,7 +226,7 @@ EVT_BEGIN(namiyoke_fail_recover)
             BREAK_LOOP
         END_IF
     END_LOOP
-    CALL(evt_sub_intpl_msec_init, 11, -10, 0, 300)
+    CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, -10, 0, 300)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value_para, LW(0), LW(1))
         CALL(evt_mario_set_pos, -660, LW(0), 100)
@@ -234,7 +235,7 @@ EVT_BEGIN(namiyoke_fail_recover)
             BREAK_LOOP
         END_IF
     END_LOOP
-    CALL(evt_sub_intpl_msec_init, 11, 0, -5, 200)
+    CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 0, -5, 200)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value_para, LW(0), LW(1))
         CALL(evt_mario_set_pos, -660, LW(0), 100)
@@ -243,7 +244,7 @@ EVT_BEGIN(namiyoke_fail_recover)
             BREAK_LOOP
         END_IF
     END_LOOP
-    CALL(evt_sub_intpl_msec_init, 11, -5, 0, 200)
+    CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, -5, 0, 200)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value_para, LW(0), LW(1))
         CALL(evt_mario_set_pos, -660, LW(0), 100)
@@ -252,7 +253,7 @@ EVT_BEGIN(namiyoke_fail_recover)
             BREAK_LOOP
         END_IF
     END_LOOP
-    CALL(evt_sub_intpl_msec_init, 11, 0, -1, 100)
+    CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 0, -1, 100)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value_para, LW(0), LW(1))
         CALL(evt_mario_set_pos, -660, LW(0), 100)
@@ -261,7 +262,7 @@ EVT_BEGIN(namiyoke_fail_recover)
             BREAK_LOOP
         END_IF
     END_LOOP
-    CALL(evt_sub_intpl_msec_init, 11, -1, 0, 100)
+    CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, -1, 0, 100)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value_para, LW(0), LW(1))
         CALL(evt_mario_set_pos, -660, LW(0), 100)
@@ -471,7 +472,7 @@ static EVT_BEGIN(yari_trap_sub)
     LOOP(0)
         CALL(evt_mapobj_get_position, STRING("S_yari"), LW(0), LW(1), LW(2))
         CALL(evt_snd_sfxon_3d, STRING("SFX_MOBJ_FLOOR_TRAP1"), LW(0), LW(1), LW(2), 0)
-        CALL(evt_sub_intpl_msec_init, 1, 0, 150, 150)
+        CALL(evt_sub_intpl_msec_init, EASING_QUADRATIC_IN, 0, 150, 150)
         LOOP(0)
             CALL(evt_sub_intpl_msec_get_value)
             CALL(evt_mapobj_trans, 1, STRING("S_yari"), 0, 0, LW(0))
@@ -484,7 +485,7 @@ static EVT_BEGIN(yari_trap_sub)
         WAIT_MS(1000)
         CALL(evt_mapobj_get_position, STRING("S_yari"), LW(0), LW(1), LW(2))
         CALL(evt_snd_sfxon_3d, STRING("SFX_MOBJ_FLOOR_TRAP2"), LW(0), LW(1), LW(2), 0)
-        CALL(evt_sub_intpl_msec_init, 4, 150, 0, 500)
+        CALL(evt_sub_intpl_msec_init, EASING_QUADRATIC_OUT, 150, 0, 500)
         LOOP(0)
             CALL(evt_sub_intpl_msec_get_value)
             CALL(evt_mapobj_trans, 1, STRING("S_yari"), 0, 0, LW(0))

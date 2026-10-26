@@ -578,14 +578,14 @@ void BattleBreakSlot_Main(void) {
                 }
                 rr->counter++;
                 if (rr->counter <= 5) {
-                    y = intplGetValue(0, 110.0f, 142.0f, rr->counter, 5);
+                    y = intplGetValue(EASING_LINEAR, 110.0f, 142.0f, rr->counter, 5);
                     rr->pos = (Vec){42.0f * i + 226.0f, y, 0.0f};
                     rr->scale = (Vec){0.8f, 0.8f, 0.8f};
                     rr->rot = (Vec){0.0f, 0.0f, 0.0f};
                     rr->pivot = (Vec){0.0f, 0.0f, 0.0f};
                     rr->alpha = 255;
                 } else {
-                    y = intplGetValue(4, 142.0f, 174.0f, rr->counter - 5, 20);
+                    y = intplGetValue(EASING_QUADRATIC_OUT, 142.0f, 174.0f, rr->counter - 5, 20);
                     rr->pos = (Vec){42.0f * i + 226.0f, y, 0.0f};
                     rr->scale = (Vec){0.8f, 0.8f, 0.8f};
                     rr->rot = (Vec){0.0f, 0.0f, 0.0f};
@@ -613,7 +613,7 @@ void BattleBreakSlot_Main(void) {
                 }
                 break;
             case 3:
-                y = intplGetValue(0, 142.0f, 174.0f, rr->counter, 20);
+                y = intplGetValue(EASING_LINEAR, 142.0f, 174.0f, rr->counter, 20);
                 rr->pos = (Vec){42.0f * i + 226.0f, y, 0.0f};
                 rr->scale = (Vec){0.8f, 0.8f, 0.8f};
                 rr->rot = (Vec){0.0f, 0.0f, 0.0f};
@@ -625,7 +625,7 @@ void BattleBreakSlot_Main(void) {
                 }
                 break;
             case 4:
-                y = intplGetValue(0, 142.0f, 174.0f, rr->counter, 20);
+                y = intplGetValue(EASING_LINEAR, 142.0f, 174.0f, rr->counter, 20);
                 rr->pos = (Vec){42.0f * i + 226.0f, y, 0.0f};
                 rr->scale = (Vec){0.8f, 0.8f, 0.8f};
                 rr->rot = (Vec){0.0f, 0.0f, 0.0f};
@@ -638,7 +638,7 @@ void BattleBreakSlot_Main(void) {
                 break;
             case 5:
                 rr->flags |= 1;
-                y = intplGetValue(0, -128.0f, 0.0f, rr->counter, 40);
+                y = intplGetValue(EASING_LINEAR, -128.0f, 0.0f, rr->counter, 40);
                 rr->pos = (Vec){i * 128 - 128, y, 0.0f};
                 rr->scale = (Vec){1.0f, 1.0f, 1.0f};
                 rr->rot = (Vec){0.0f, 0.0f, 0.0f};
@@ -656,7 +656,7 @@ void BattleBreakSlot_Main(void) {
             case 6:
                 break;
             case 7:
-                rr->spinSpeed = intplGetValue(0, 0.0f, 22.5f, rr->counter, 20);
+                rr->spinSpeed = intplGetValue(EASING_LINEAR, 0.0f, 22.5f, rr->counter, 20);
                 rr->pos = (Vec){128.0f * i + -128.0f, rr->pos.y + rr->spinSpeed, 0.0f};
                 rr->scale = (Vec){1.0f, 1.0f, 1.0f};
                 rr->rot = (Vec){0.0f, 0.0f, 0.0f};
@@ -730,16 +730,16 @@ void BattleBreakSlot_Main(void) {
             case 10:
                 if (i == 2) {
                     rr->counter++;
-                    rr->spinSpeed = intplGetValue(0, rr->spinSpeed, 0.0f, rr->counter, 20);
+                    rr->spinSpeed = intplGetValue(EASING_LINEAR, rr->spinSpeed, 0.0f, rr->counter, 20);
                     rr->pos.y = rr->spinSpeed * (f32)sin(3.141592f * (2.0f * rr->counter) / 8.0f);
                 }
                 break;
             case 11:
                 rr->spinSpeed = 0.0f;
                 rr->pos.y = 0.0f;
-                y = intplGetValue(0, 1.0f, 2.0f, rr->counter, 60);
+                y = intplGetValue(EASING_LINEAR, 1.0f, 2.0f, rr->counter, 60);
                 rr->scale = (Vec){y, y, 1.0f};
-                rr->alpha = intplGetValue(0, 255.0f, 0.0f, rr->counter, 60);
+                rr->alpha = intplGetValue(EASING_LINEAR, 255.0f, 0.0f, rr->counter, 60);
                 rr->counter++;
                 if (rr->counter > 60) {
                     rr->state = 13;
@@ -749,7 +749,7 @@ void BattleBreakSlot_Main(void) {
             case 12:
                 rr->spinSpeed = 0.0f;
                 rr->pos.y = 0.0f;
-                y = intplGetValue(0, 0.0f, 128.0f, rr->counter, 40);
+                y = intplGetValue(EASING_LINEAR, 0.0f, 128.0f, rr->counter, 40);
                 rr->pos = (Vec){128.0f * i + -128.0f, y, 0.0f};
                 rr->scale = (Vec){1.0f, 1.0f, 1.0f};
                 rr->rot = (Vec){0.0f, 0.0f, 0.0f};

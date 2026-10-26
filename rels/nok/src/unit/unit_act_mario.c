@@ -3,6 +3,7 @@
 #include "evt/evt_cmd.h"
 #include "evt/evt_eff.h"
 #include "evt/evt_audience.h"
+#include "system.h"
 
 #include "battle/battle.h"
 #include "battle/battle_unit.h"
@@ -434,7 +435,7 @@ EVT_BEGIN(_act_clauda_press_attack)
     CALL(btlevtcmd_JumpPosition, LW(5), LW(0), LW(1), LW(2), 60, -1)
     BEGIN_SIBLING_EVENT_GET_ID(LW(15))
         CALL(btlevtcmd_AnimeChangePoseType, LW(3), LW(4), POSE_TYPE_DAMAGE)
-        CALL(evt_sub_intpl_init_float, 5, FLOAT(1.0f), FLOAT(0.14941406f), 10)
+        CALL(evt_sub_intpl_init_float, EASING_CUBIC_OUT, FLOAT(1.0f), FLOAT(0.14941406f), 10)
         LOOP(11)
             CALL(evt_sub_intpl_get_float, LW(7), EVT_NULLPTR)
             CALL(btlevtcmd_GetScale, LW(3), LW(0), LW(1), LW(2))
@@ -442,14 +443,14 @@ EVT_BEGIN(_act_clauda_press_attack)
             WAIT_FRAMES(1)
         END_LOOP
         WAIT_MS(1500)
-        CALL(evt_sub_intpl_init_float, 5, FLOAT(0.14941406f), FLOAT(1.25f), 10)
+        CALL(evt_sub_intpl_init_float, EASING_CUBIC_OUT, FLOAT(0.14941406f), FLOAT(1.25f), 10)
         LOOP(11)
             CALL(evt_sub_intpl_get_float, LW(7), EVT_NULLPTR)
             CALL(btlevtcmd_GetScale, LW(3), LW(0), LW(1), LW(2))
             CALL(btlevtcmd_SetScale, LW(3), LW(0), LW(7), LW(2))
             WAIT_FRAMES(1)
         END_LOOP
-        CALL(evt_sub_intpl_init_float, 7, FLOAT(1.25f), FLOAT(1.0f), 30)
+        CALL(evt_sub_intpl_init_float, EASING_COS_SLOW_OVERSHOOT, FLOAT(1.25f), FLOAT(1.0f), 30)
         LOOP(31)
             CALL(evt_sub_intpl_get_float, LW(7), EVT_NULLPTR)
             CALL(btlevtcmd_GetScale, LW(3), LW(0), LW(1), LW(2))
@@ -461,14 +462,14 @@ EVT_BEGIN(_act_clauda_press_attack)
     END_SIBLING_EVENT
     CALL(btlevtcmd_JumpContinue, LW(5))
     BEGIN_SIBLING_EVENT_GET_ID(LW(14))
-        CALL(evt_sub_intpl_init_float, 11, FLOAT(1.0f), FLOAT(0.39941406f), 10)
+        CALL(evt_sub_intpl_init_float, EASING_COS_IN_OUT, FLOAT(1.0f), FLOAT(0.39941406f), 10)
         LOOP(10)
             CALL(evt_sub_intpl_get_float, LW(7), EVT_NULLPTR)
             CALL(btlevtcmd_GetScale, LW(5), LW(0), LW(1), LW(2))
             CALL(btlevtcmd_SetScale, LW(5), LW(0), LW(7), LW(2))
             WAIT_FRAMES(1)
         END_LOOP
-        CALL(evt_sub_intpl_init_float, 11, FLOAT(0.39941406f), FLOAT(1.0f), 6)
+        CALL(evt_sub_intpl_init_float, EASING_COS_IN_OUT, FLOAT(0.39941406f), FLOAT(1.0f), 6)
         LOOP(6)
             CALL(evt_sub_intpl_get_float, LW(7), EVT_NULLPTR)
             CALL(btlevtcmd_GetScale, LW(5), LW(0), LW(1), LW(2))
@@ -477,14 +478,14 @@ EVT_BEGIN(_act_clauda_press_attack)
         END_LOOP
     END_SIBLING_EVENT
     BEGIN_SIBLING_EVENT
-        CALL(evt_sub_intpl_init_float, 11, FLOAT(1.0f), FLOAT(1.5f), 10)
+        CALL(evt_sub_intpl_init_float, EASING_COS_IN_OUT, FLOAT(1.0f), FLOAT(1.5f), 10)
         LOOP(10)
             CALL(evt_sub_intpl_get_float, LW(7), EVT_NULLPTR)
             CALL(btlevtcmd_GetScale, LW(5), LW(0), LW(1), LW(2))
             CALL(btlevtcmd_SetScale, LW(5), LW(7), LW(1), LW(2))
             WAIT_FRAMES(1)
         END_LOOP
-        CALL(evt_sub_intpl_init_float, 11, FLOAT(1.5f), FLOAT(1.0f), 6)
+        CALL(evt_sub_intpl_init_float, EASING_COS_IN_OUT, FLOAT(1.5f), FLOAT(1.0f), 6)
         LOOP(6)
             CALL(evt_sub_intpl_get_float, LW(7), EVT_NULLPTR)
             CALL(btlevtcmd_GetScale, LW(5), LW(0), LW(1), LW(2))

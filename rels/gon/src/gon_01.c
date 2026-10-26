@@ -17,6 +17,7 @@
 #include "evt/evt_item.h"
 #include "driver/mapdrv.h"
 #include "mario/mario_pouch.h"
+#include "system.h"
 
 USER_FUNC(evt_mario_dispflag_onoff);
 
@@ -138,7 +139,7 @@ EVT_BEGIN(honenoko_oidasare_evt)
         WAIT_MS(1000)
         SET_VALUE(LW(1), 2)
         SPAWN_EVENT(PTR(bero_close_door_play_se))
-        CALL(evt_sub_intpl_msec_init, 11, 180, 0, 500)
+        CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 180, 0, 500)
         LOOP(0)
             CALL(evt_sub_intpl_msec_get_value)
             CALL_CHILD(PTR(door01_close))

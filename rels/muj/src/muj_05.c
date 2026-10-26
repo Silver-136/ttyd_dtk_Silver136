@@ -16,6 +16,7 @@
 #include "evt/evt_pouch.h"
 #include "driver/npcdrv.h"
 #include "driver/mapdrv.h"
+#include "system.h"
 
 #include "string.h"
 #include "memory.h"
@@ -136,7 +137,7 @@ USER_FUNC(evt_dokuroiwa_command_init) {
 }
 
 EVT_BEGIN(sanders_rotate)
-    CALL(evt_sub_intpl_msec_init, 0, LW(1), LW(2), LW(3))
+    CALL(evt_sub_intpl_msec_init, EASING_LINEAR, LW(1), LW(2), LW(3))
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value_para, LW(0), LW(1))
         CALL(evt_npc_set_rotate, LW(10), 0, LW(0), 0)
@@ -750,7 +751,7 @@ EVT_BEGIN(dokuroiwa_touch)
             SPAWN_EVENT(PTR(redeye_flush))
         END_INLINE_EVENT
         BEGIN_INLINE_EVENT
-            CALL(evt_sub_intpl_msec_init, 11, FLOAT(0.0f), FLOAT(1.0f), 500)
+            CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, FLOAT(0.0f), FLOAT(1.0f), 500)
             LOOP(0)
                 CALL(evt_sub_intpl_msec_get_value_para, LW(0), LW(1))
                 CALL(evt_mapobj_scale, 1, STRING("S_hige_iwa02_me"), FLOAT(1.0f), LW(0), FLOAT(1.0f))
@@ -850,7 +851,7 @@ EVT_BEGIN(penalty_event)
 EVT_END()
 
 static EVT_BEGIN(cam_shake)
-    CALL(evt_sub_intpl_init, 11, 0, 10, 30)
+    CALL(evt_sub_intpl_init, EASING_COS_IN_OUT, 0, 10, 30)
     LABEL(0)
     CALL(evt_sub_intpl_get_value)
     DIVIDE_FLOAT(LW(0), FLOAT(1000.0f))
@@ -863,7 +864,7 @@ static EVT_BEGIN(cam_shake)
 EVT_END()
 
 static EVT_BEGIN(cam_shake2)
-    CALL(evt_sub_intpl_init, 11, 10, 0, 30)
+    CALL(evt_sub_intpl_init, EASING_COS_IN_OUT, 10, 0, 30)
     LABEL(0)
     CALL(evt_sub_intpl_get_value)
     DIVIDE_FLOAT(LW(0), FLOAT(1000.0f))
@@ -1183,7 +1184,7 @@ EVT_BEGIN(muj_05_first)
 EVT_END()
 
 EVT_BEGIN(yure_yashi_ha1)
-    CALL(evt_sub_intpl_msec_init, 11, 0, 2, 500)
+    CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 0, 2, 500)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value_para, LW(0), LW(1))
         CALL(evt_mapobj_rotate, 0, STRING("treeA_05_ha_01"), 0, 0, LW(0))
@@ -1206,7 +1207,7 @@ EVT_BEGIN(yure_yashi_ha1)
             RETURN
         END_IF
     END_LOOP
-    CALL(evt_sub_intpl_msec_init, 13, 2, 0, 2000)
+    CALL(evt_sub_intpl_msec_init, EASING_COS_IN, 2, 0, 2000)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value_para, LW(0), LW(1))
         CALL(evt_mapobj_rotate, 0, STRING("treeA_05_ha_01"), 0, 0, LW(0))
@@ -1238,7 +1239,7 @@ EVT_BEGIN(yure_yashi)
         CALL(evt_snd_sfxon_3d, STRING("SFX_STG5_OBJ_TREE_SHAKE2"), LW(0), LW(1), LW(2), 0)
         SPAWN_EVENT(PTR(yure_yashi_ha1))
         WAIT_MS(100)
-        CALL(evt_sub_intpl_msec_init, 11, 1, -1, 800)
+        CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 1, -1, 800)
         LOOP(0)
             CALL(evt_sub_intpl_msec_get_value_para, LW(0), LW(1))
             CALL(evt_mapobj_rotate, 0, STRING("S_treeA_05"), 0, 0, LW(0))
@@ -1250,7 +1251,7 @@ EVT_BEGIN(yure_yashi)
                 RETURN
             END_IF
         END_LOOP
-        CALL(evt_sub_intpl_msec_init, 11, -1, 1, 2000)
+        CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, -1, 1, 2000)
         LOOP(0)
             CALL(evt_sub_intpl_msec_get_value_para, LW(0), LW(1))
             CALL(evt_mapobj_rotate, 0, STRING("S_treeA_05"), 0, 0, LW(0))

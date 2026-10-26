@@ -109,15 +109,15 @@ void effSpiritMain(EffectEntry* effect) {
         case 1:
             if (work->step < work->steps) {
                 work->step++;
-                work->position.x = intplGetValue(11, work->startPos.x, work->endPos.x, work->step, work->steps);
-                work->position.y = intplGetValue(11, work->startPos.y, work->endPos.y, work->step, work->steps);
-                work->position.z = intplGetValue(11, work->startPos.z, work->endPos.z, work->step, work->steps);
+                work->position.x = intplGetValue(EASING_COS_IN_OUT, work->startPos.x, work->endPos.x, work->step, work->steps);
+                work->position.y = intplGetValue(EASING_COS_IN_OUT, work->startPos.y, work->endPos.y, work->step, work->steps);
+                work->position.z = intplGetValue(EASING_COS_IN_OUT, work->startPos.z, work->endPos.z, work->step, work->steps);
                 {
                     f32 ang = 3.1415927f * ((f32)work->step / (f32)work->steps);
                     ang = sin(ang);
                     work->position.y += 50.0f * ang;
                 }
-                work->scale = intplGetValue(11, 1.0f, 0.0f, work->step, work->steps);
+                work->scale = intplGetValue(EASING_COS_IN_OUT, 1.0f, 0.0f, work->step, work->steps);
             } else {
                 effDelete(effect);
                 return;
@@ -126,9 +126,9 @@ void effSpiritMain(EffectEntry* effect) {
     }
     switch (work->colorState) {
         case 0:
-            work->r = intplGetValue(11, 255.0f, 37.0f, work->colorStep, 32);
-            work->g = intplGetValue(11, 242.0f, 254.0f, work->colorStep, 32);
-            work->b = intplGetValue(11, 0.0f, 246.0f, work->colorStep, 32);
+            work->r = intplGetValue(EASING_COS_IN_OUT, 255.0f, 37.0f, work->colorStep, 32);
+            work->g = intplGetValue(EASING_COS_IN_OUT, 242.0f, 254.0f, work->colorStep, 32);
+            work->b = intplGetValue(EASING_COS_IN_OUT, 0.0f, 246.0f, work->colorStep, 32);
             work->colorStep++;
             if (work->colorStep >= 32) {
                 work->colorState = 1;
@@ -136,9 +136,9 @@ void effSpiritMain(EffectEntry* effect) {
             }
             break;
         case 1:
-            work->r = intplGetValue(11, 37.0f, 226.0f, work->colorStep, 32);
-            work->g = intplGetValue(11, 254.0f, 65.0f, work->colorStep, 32);
-            work->b = intplGetValue(11, 246.0f, 255.0f, work->colorStep, 32);
+            work->r = intplGetValue(EASING_COS_IN_OUT, 37.0f, 226.0f, work->colorStep, 32);
+            work->g = intplGetValue(EASING_COS_IN_OUT, 254.0f, 65.0f, work->colorStep, 32);
+            work->b = intplGetValue(EASING_COS_IN_OUT, 246.0f, 255.0f, work->colorStep, 32);
             work->colorStep++;
             if (work->colorStep >= 32) {
                 work->colorState = 2;
@@ -146,9 +146,9 @@ void effSpiritMain(EffectEntry* effect) {
             }
             break;
         case 2:
-            work->r = intplGetValue(11, 226.0f, 255.0f, work->colorStep, 32);
-            work->g = intplGetValue(11, 65.0f, 242.0f, work->colorStep, 32);
-            work->b = intplGetValue(11, 255.0f, 0.0f, work->colorStep, 32);
+            work->r = intplGetValue(EASING_COS_IN_OUT, 226.0f, 255.0f, work->colorStep, 32);
+            work->g = intplGetValue(EASING_COS_IN_OUT, 65.0f, 242.0f, work->colorStep, 32);
+            work->b = intplGetValue(EASING_COS_IN_OUT, 255.0f, 0.0f, work->colorStep, 32);
             work->colorStep++;
             if (work->colorStep >= 32) {
                 work->colorState = 0;

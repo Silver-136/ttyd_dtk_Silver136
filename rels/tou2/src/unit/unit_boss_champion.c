@@ -1343,7 +1343,7 @@ EVT_BEGIN(healing_event)
         CALL(btlevtcmd_BtlIconEntryItemId, 148, LW(5), LW(6), LW(7), LW(8))
         SET_VALUE(LW(0), LW(6))
         ADD(LW(0), -62)
-        CALL(evt_sub_intpl_msec_init, 1, LW(6), LW(0), 500)
+        CALL(evt_sub_intpl_msec_init, EASING_QUADRATIC_IN, LW(6), LW(0), 500)
         LOOP(0)
             CALL(evt_sub_intpl_msec_get_value_para, LW(0), LW(1))
             CALL(btlevtcmd_BtlIconSetPosition, LW(8), LW(5), LW(0), LW(7))
@@ -1382,7 +1382,7 @@ static USER_FUNC(down_ceil) {
         event->userdata[0] = 120;
         *ceil &= ~0x20;
     }
-    body->mPosition.y = wire->mPosition.y = intplGetValue(4, 250.0f, 130.0f, 120 - event->userdata[0], 120);
+    body->mPosition.y = wire->mPosition.y = intplGetValue(EASING_QUADRATIC_OUT, 250.0f, 130.0f, 120 - event->userdata[0], 120);
     event->userdata[0]--;
     if (event->userdata[0] < 0) {
         return EVT_RETURN_DONE;
