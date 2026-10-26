@@ -20,6 +20,9 @@ typedef enum BattleUnitToken_Flags {
     kProtectedByBodyguard = (1 << 2), // 0x4, a bodyguard took the hit meant for it (DAMAGE_CODE_PROTECTED)
     kChargeConsumed = (1 << 3),     // 0x8, the attack used up the Charge; cleared with the status when the action ends
     kConfusedAction = (1 << 4),     // 0x10
+    kKnockedAway = (1 << 5),        // 0x20, knocked flying by the Spin/Ultra Hammer knock-away
+    kKnockedAwayWaiting = (1 << 6), // 0x40, waiting off the stage edge until Mario lets it come back
+    kKnockedAwayReturned = (1 << 7), // 0x80, back at home before the finishing hit
     kCurrentlyActing = (1 << 12),   // 0x1000
     kHasRallyWinkStatus = (1 << 13) // 0x2000
 } BattleUnitToken_Flags;
@@ -31,9 +34,7 @@ typedef enum PartsAttribute_Flags {          // 32-bit size
     kGuardTargetPart = (1 << 3),             // 0x8, the part an attack is redirected to when this unit bodyguards
     kUnknown_0x10 = (1 << 4),                // 0x10
     kUnknown_0x40 = (1 << 6),                // 0x40
-    // 0x80, set on Hooktail's two body parts; no code reads it (its
-                                             // reaction to Attack FX R is in its damage event, which tests
-                                             // DAMAGE_RESULT_ATTACK_FX_R) (Hooktail's reaction to Attack FX R is in its damage
+    // 0x80, set on Hooktail's two body parts; no code reads it (Hooktail's reaction to Attack FX R is in its damage
     // event, which tests DAMAGE_RESULT_ATTACK_FX_R)
     kHooktailMarker_UNUSED = (1 << 7),
     kWeakToIcePower = (1 << 8),              // 0x100
@@ -60,7 +61,6 @@ typedef enum PartsAttribute_Flags {          // 32-bit size
     kImmuneToStatus = (1 << 31)             // 0x80000000, no status at all
 } PartsAttribute_Flags;
 
-// BattleUnit.flags (named where the code shows the use; 0x10 is set by the bomb enemies but has no clear reader)
 // BattleUnit.mStatusFlags (BtlUnit_*StatusFlag, btlevtcmd_On/Off/CheckStatusFlag). Danger = 5 HP, Peril = 1 HP as in
 // the US game text (the original sound and audience symbol names say "pinch" and "danger" for the two states).
 typedef enum BattleUnitStatusFlags {
@@ -76,6 +76,7 @@ typedef enum BattleUnit_Flags {
     BATTLE_UNIT_FLAG_MOVE_COLOR_FADING = (1 << 1),        // 0x2, set while the move colour fades towards its level
     BATTLE_UNIT_FLAG_KIND_CHANGED = (1 << 2),             // 0x4, tattle check also looks at initialKind
     BATTLE_UNIT_FLAG_SWAPPED_OUT = (1 << 3),              // 0x8, partner replaced by another (BattleGetPartyPtr skips it)
+    BATTLE_UNIT_FLAG_FUSE_LIT_UNUSED = (1 << 4),          // 0x10, set when a bomb enemy lights its fuse; never read
     BATTLE_UNIT_FLAG_SHADOW_WITH_PARTNER = (1 << 16),     // 0x10000, drawn and shadowed together with its partner (Veil)
     BATTLE_UNIT_FLAG_FLOAT_CAPABLE = (1 << 20),           // 0x100000, floats (bobs) when FLOAT_ACTIVE is also set
     BATTLE_UNIT_FLAG_FLOAT_ACTIVE = (1 << 21),            // 0x200000, float bob running (off during some attacks)
@@ -104,6 +105,7 @@ typedef enum BattleUnitAttribute_Flags { // 32-bit size
     kInactive = (1 << 17),               // 0x20000
     kUnitLeader = (1 << 18),             // 0x40000, the side whose leaders are all down is defeated
     kNoTurn = (1 << 19),                 // 0x80000, never put in the turn order
+    kUnitNoHpFpSwap_UNUSED = (1 << 20),  // 0x100000, the HP/FP swap item skips the unit; nothing sets it
     kUnitNoSpin = (1 << 21),             // 0x200000, never spins when hit (slap patterns dropped, sac_deka skips it)
     kNoDamageNumber = (1 << 22),         // 0x400000, the damage star with the HP number is not shown
     kUnitHidden = (1 << 24),             // 0x1000000, no part is drawn
@@ -524,20 +526,25 @@ typedef enum BattlePoseType {
     POSE_TYPE_KO = 27,
     POSE_TYPE_NORMAL = 28, // no priority status; fallback of 0..28
     POSE_TYPE_DAMAGE_FIRE = 29, // fire/explosion hit
+    POSE_TYPE_DAMAGE_FIRE_2_UNUSED = 30, // handled like 29 by BtlUnit_SetAnimType; nothing selects it
     POSE_TYPE_DAMAGE_GUARDED = 31, // guarded hit
     POSE_TYPE_DAMAGE_STATUS = 35, // status-only hit
     POSE_TYPE_DAMAGE_TOP_SPIKY = 36, // top-spike counter damage
+    POSE_TYPE_DAMAGE_DRAINED = 37, // set on the target of a Fuzzy's drain (Mario/partner tables)
     POSE_TYPE_DAMAGE_SURPRISED = 38, // surprise damage
     POSE_TYPE_DAMAGE = 39, // general damage; fallback of 29..39
     POSE_TYPE_WALK = 40,
+    POSE_TYPE_RUN_HOME = 41, // running back to the home position
     POSE_TYPE_RUN = 42, // also the battle-exit run
     POSE_TYPE_NEUTRAL = 43, // staging pose (appeal entry, curtain, many attacks)
     POSE_TYPE_JUMP = 44,
     POSE_TYPE_DEFEND = 45,
     POSE_TYPE_BODYGUARD = 46,
+    POSE_TYPE_AVOID_SPIKY_SIDE = 47, // dodging a side spike counter (Pokey)
     POSE_TYPE_AVOID_DODGY = 48,
     POSE_TYPE_AVOID_COUNTER = 49, // counter avoided / superguard
     POSE_TYPE_ATTACK = 50,
+    POSE_TYPE_ATTACK_2 = 51, // second attack pose (switched to partway through an attack)
     POSE_TYPE_ITEM = 52, // receives or uses an item
     POSE_TYPE_DANGER = 56,
     POSE_TYPE_PERIL = 57,

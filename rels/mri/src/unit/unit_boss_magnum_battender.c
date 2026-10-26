@@ -719,7 +719,7 @@ EVT_BEGIN(stamp_attack_event)
     WAIT_MS(1000)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     WAIT_MS(200)
-    CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, 41)
+    CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_RUN_HOME)
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 60, -2, 0)
     RETURN

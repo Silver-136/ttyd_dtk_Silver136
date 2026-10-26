@@ -542,7 +542,7 @@ static EVT_BEGIN(drain_attack_event)
     END_IF
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_CHORO2_ATTACK1_1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_GetBodyId, LW(3), LW(0))
-    CALL(btlevtcmd_AnimeChangePoseType, LW(3), LW(0), 37)
+    CALL(btlevtcmd_AnimeChangePoseType, LW(3), LW(0), POSE_TYPE_DAMAGE_DRAINED)
     BEGIN_INLINE_EVENT
         SET_VALUE(LW(0), 89)
         SET_VALUE(LW(1), 1)

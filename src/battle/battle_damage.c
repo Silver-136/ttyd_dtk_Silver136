@@ -1780,7 +1780,7 @@ void BattleAttackDeclare(s32* unitIdx, s32* partIdx) {
         if (unit->mTokenFlags & 1) {
             continue;
         }
-        if (unit->mTokenFlags & 4) {
+        if (unit->mTokenFlags & kProtectedByBodyguard) {
             continue;
         }
         if (!BtlUnit_CanGuardStatus(unit)) {
@@ -1837,7 +1837,7 @@ void __declare(s32 unitIdx, s32 partIdx, s32* outUnit, s32* outPart) {
         if (unit->mTokenFlags & 1) {
             continue;
         }
-        if (unit->mTokenFlags & 4) {
+        if (unit->mTokenFlags & kProtectedByBodyguard) {
             continue;
         }
         if (!BtlUnit_CanGuardStatus(unit)) {

@@ -645,7 +645,7 @@ static EVT_BEGIN(attack_event)
         CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 2, LW(0))
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_HEAVYB_ATTACK2"), EVT_NULLPTR, 0, EVT_NULLPTR)
         CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 0, 1)
-        CALL(btlevtcmd_OnUnitFlag, UNIT_ID_SELF, 16)
+        CALL(btlevtcmd_OnUnitFlag, UNIT_ID_SELF, BATTLE_UNIT_FLAG_FUSE_LIT_UNUSED)
     ELSE
         CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 1, LW(0))
         SWITCH(LW(0))
