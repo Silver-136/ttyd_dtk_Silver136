@@ -119,7 +119,7 @@ s32 battleAcMain_PendulumCraneTiming(BattleWork* work) {
             stick = (u8*)_battleWorkPointer;
             accel = 0.0f;
             CALC_DIR(dir)
-            if (ac->acFlags & 1) {
+            if (ac->acFlags & AC_PENDULUM_CRANE_FLAG_STICK_BRAKE_UNUSED) {
                 if (stick[0xF33] > 10 && stick[0xF32] < 10) {
                     if (dir < 0.0f) {
                         mag = stick[0xF33] / 128.0f;

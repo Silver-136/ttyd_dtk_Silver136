@@ -127,7 +127,7 @@ s32 battleAcMain_StickKeepLeft(BattleWork* work) {
                         work->actionCommands.result &= ~1;
                         work->actionCommands.mAcState = 1003;
                         work->actionCommands.outputParams[2] = 2;
-                        if (SKL_P(work)->acFlags & 2) {
+                        if (SKL_P(work)->acFlags & AC_STICK_KEEP_LEFT_FLAG_NO_EARLY_RELEASE_FAIL) {
                             work->actionCommands.result |= 2;
                             work->actionCommands.result &= ~1;
                         }
@@ -152,13 +152,13 @@ s32 battleAcMain_StickKeepLeft(BattleWork* work) {
                     }
                     ok = 0;
                     if (cw->idx != SKL_P(work)->params[0] + 1) {
-                        if (!(SKL_P(work)->acFlags & 2)) {
+                        if (!(SKL_P(work)->acFlags & AC_STICK_KEEP_LEFT_FLAG_NO_EARLY_RELEASE_FAIL)) {
                             work->actionCommands.outputParams[2] = 1;
                         }
                     } else {
                         diff = SKL_P(work)->params[1] - cw->timer;
                         if (diff > ac_stickkeepleft_ok_frame[BattleActionCommandGetDifficulty(work)]) {
-                            if (!(SKL_P(work)->acFlags & 2)) {
+                            if (!(SKL_P(work)->acFlags & AC_STICK_KEEP_LEFT_FLAG_NO_EARLY_RELEASE_FAIL)) {
                                 work->actionCommands.outputParams[2] = 1;
                             }
                         } else {
@@ -179,7 +179,7 @@ s32 battleAcMain_StickKeepLeft(BattleWork* work) {
                         work->actionCommands.result &= ~1;
                         loop = 1;
                         work->actionCommands.mAcState = 1003;
-                    } else if (!(SKL_P(work)->acFlags & 2)) {
+                    } else if (!(SKL_P(work)->acFlags & AC_STICK_KEEP_LEFT_FLAG_NO_EARLY_RELEASE_FAIL)) {
                         work->actionCommands.result &= ~1;
                         loop = 1;
                         work->actionCommands.mAcState = 1003;
@@ -329,12 +329,12 @@ static void actionCommandDisp(f32 x, f32 y, s32 unused) {
     n = 10;
     if (count >= 4) {
         n = count * 2 + 3;
-        if (ac->acFlags & 1) {
+        if (ac->acFlags & AC_STICK_KEEP_LEFT_FLAG_COMPACT_GAUGE) {
             n += 2;
         }
     }
     spacing = 16.0f;
-    if (ac->acFlags & 1) {
+    if (ac->acFlags & AC_STICK_KEEP_LEFT_FLAG_COMPACT_GAUGE) {
         spacing = 12.0f;
     }
     {
@@ -357,7 +357,7 @@ static void actionCommandDisp(f32 x, f32 y, s32 unused) {
         iconDispGx(&p, 0x10, ICON_090, 1.0f);
     }
     stepX = 33.0f;
-    if (ac->acFlags & 1) {
+    if (ac->acFlags & AC_STICK_KEEP_LEFT_FLAG_COMPACT_GAUGE) {
         stepX = 24.75f;
     }
     m = count - 1;

@@ -245,7 +245,7 @@ s32 battleAcMain_SignalTiming(BattleWork *work) {
                                 psndSFXOn(sfxOk);
                             }
                         }
-                        if (ST_FLAGS(work) & 0x10) {
+                        if (ST_FLAGS(work) & AC_SIGNAL_TIMING_FLAG_END_ON_HIT) {
                             ST_OUT_HITS(work) = w->hits;
                             ac->result &= ~1;
                             if (w->hits >= ST_NEEDED(work)) {
@@ -408,7 +408,7 @@ static void actionCommandDisp(f32 x, f32 y) {
     w = (SignalTimingWork*)ac->work;
     count = ST_COUNT(work);
     next = w->next;
-    if (!(ST_FLAGS(work) & 1)) {
+    if (!(ST_FLAGS(work) & AC_SIGNAL_TIMING_FLAG_SHOW_BUTTONS)) {
         if (w->okFlag) {
             Vec pos = {0.0f, 0.0f, 0.0f};
             pos.x = -200.0f + x;
@@ -459,11 +459,12 @@ static void actionCommandDisp(f32 x, f32 y) {
         iconDispGx(&pos, 0x10, ICON_090, 1.0f);
     }
 
-    if (!(ST_FLAGS(work) & 4)) {
+    if (!(ST_FLAGS(work) & AC_SIGNAL_TIMING_FLAG_HIDE_HIT_COUNT)) {
         fx = -200.0f + x;
         num = w->hits + ST_EXTRA(work);
-        PSMTXTrans(mTrans, fx + (f32)((ST_FLAGS(work) & 1) ? count * 0x30 - 26 + ST_LEAD(work) * 32 : count * 0x30 - 26 + ST_LEAD(work) * 32), yb, 0.0f);
-        if (ST_FLAGS(work) & 8) {
+        // Both arms of the SHOW_BUTTONS test are the same (retail code): the counter's position does not depend on it.
+        PSMTXTrans(mTrans, fx + (f32)((ST_FLAGS(work) & AC_SIGNAL_TIMING_FLAG_SHOW_BUTTONS) ? count * 0x30 - 26 + ST_LEAD(work) * 32 : count * 0x30 - 26 + ST_LEAD(work) * 32), yb, 0.0f);
+        if (ST_FLAGS(work) & AC_SIGNAL_TIMING_FLAG_LARGE_HIT_COUNT) {
             PSMTXScale(mScale, 1.5f, 1.5f, 1.5f);
         } else {
             PSMTXScale(mScale, 1.0f, 1.0f, 1.0f);
@@ -493,7 +494,7 @@ static void actionCommandDisp(f32 x, f32 y) {
         }
     }
 
-    if (!(ST_FLAGS(work) & 1)) {
+    if (!(ST_FLAGS(work) & AC_SIGNAL_TIMING_FLAG_SHOW_BUTTONS)) {
         for (i = 0; i < count; i++) {
             if (i + ST_LEAD(work) < next) {
                 Vec pos = {0.0f, 0.0f, 0.0f};
@@ -507,7 +508,7 @@ static void actionCommandDisp(f32 x, f32 y) {
                 iconDispGx(&pos, 0x10, ICON_091, 1.0f);
             }
         }
-    } else if (!(ST_FLAGS(work) & 2)) {
+    } else if (!(ST_FLAGS(work) & AC_SIGNAL_TIMING_FLAG_HIDE_UPCOMING_BUTTONS)) {
         yc = 15.0f + y;
         for (i = 0; i < count; i++) {
             f32 scale = 0.8f;

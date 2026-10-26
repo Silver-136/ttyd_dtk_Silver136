@@ -192,7 +192,7 @@ s32 battleAcMain_RepeatedlyLv(BattleWork* work) {
                     break;
             }
             if (p->u27) {
-                if (ac->acFlags & 0x20) {
+                if (ac->acFlags & AC_REPEATEDLY_LV_FLAG_HOLD_OVERHEAT) {
                     if (BattlePadCheckNow(p->mask)) {
                         hit = 1;
                         p->s1c++;
@@ -220,7 +220,7 @@ s32 battleAcMain_RepeatedlyLv(BattleWork* work) {
                 if (p->gauge >= 100.0f) {
                     p->gauge = 100.0f;
                     p->state = 1;
-                    if (ac->acFlags & 0x20) {
+                    if (ac->acFlags & AC_REPEATEDLY_LV_FLAG_HOLD_OVERHEAT) {
                         p->state = -1;
                     }
                 } else {
@@ -249,10 +249,10 @@ s32 battleAcMain_RepeatedlyLv(BattleWork* work) {
                     break;
                 }
             }
-            if (p->s18 == 0 && (ac->acFlags & 0x40)) {
+            if (p->s18 == 0 && (ac->acFlags & AC_REPEATEDLY_LV_FLAG_MIN_LEVEL_1)) {
                 p->s18 = 1;
             }
-            if (p->state && !(ac->acFlags & 1)) {
+            if (p->state && !(ac->acFlags & AC_REPEATEDLY_LV_FLAG_NO_FULL_BONUS)) {
                 p->s18++;
             }
             ac->outputParams[2] = p->s18;
@@ -416,24 +416,24 @@ static void actionCommandDisp(f32 x, f32 y) {
     }
     target = p->gauge / 100.0f;
     if (disp->gaugeRatio <= target) {
-        if (ac->acFlags & 8) {
+        if (ac->acFlags & AC_REPEATEDLY_LV_FLAG_FAST_GAUGE_DISP) {
             disp->gaugeRatio += 0.02f;
         } else {
             disp->gaugeRatio += 0.01f;
         }
-        if (ac->acFlags & 0x10) {
+        if (ac->acFlags & AC_REPEATEDLY_LV_FLAG_INSTANT_GAUGE_DISP) {
             disp->gaugeRatio = target;
         }
         if (disp->gaugeRatio > target) {
             disp->gaugeRatio = target;
         }
     } else {
-        if (ac->acFlags & 8) {
+        if (ac->acFlags & AC_REPEATEDLY_LV_FLAG_FAST_GAUGE_DISP) {
             disp->gaugeRatio -= 0.02f;
         } else {
             disp->gaugeRatio -= 0.01f;
         }
-        if (ac->acFlags & 0x10) {
+        if (ac->acFlags & AC_REPEATEDLY_LV_FLAG_INSTANT_GAUGE_DISP) {
             disp->gaugeRatio = target;
         }
         if (disp->gaugeRatio < target) {
@@ -466,13 +466,13 @@ static void actionCommandDisp(f32 x, f32 y) {
         }
     }
     BattleAcDrawGauge(disp->gaugeRatio, (s32)x, (s32)y, p->u24, count, arr[0], arr[1], arr[2], flags);
-    if (ac->acFlags & 2) {
+    if (ac->acFlags & AC_REPEATEDLY_LV_FLAG_SHOW_TARGET_MARK_UNUSED) {
         Vec pos = {0.0f, 0.0f, 0.0f};
         pos.x = -288.0f + x + (f32)(ac->params[6] * 0xB0) / 100.0f;
         pos.y = 45.0f + y;
         RL_IconDisp(&pos, 0x10, ICON_096, 1.0f);
     }
-    if (ac->acFlags & 4) {
+    if (ac->acFlags & AC_REPEATEDLY_LV_FLAG_SHOW_LEVEL_NUMBER_UNUSED) {
         Mtx m3, m1, m2;
         s32 number = (s32)ac->outputParams[2] + ac->params[7];
         { f32 w = 108.0f; PSMTXTrans(m1, -200.0f + x + w, 25.0f + y, 0.0f); }

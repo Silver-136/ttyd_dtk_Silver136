@@ -203,12 +203,14 @@ s32 battleAcMain_GaugeTiming(BattleWork* work) {
                         cw->inRange = 0;
                         goto done;
                     }
-                } else if ((GAC(work)->opts & 2) || (GAC(work)->opts & 2)) {
+                } else if ((GAC(work)->opts & AC_GAUGE_TIMING_FLAG_CYCLE_PAUSE) || (GAC(work)->opts & AC_GAUGE_TIMING_FLAG_CYCLE_PAUSE)) {
+                    // BUG: the same bit is tested twice (retail code), so the 30-frame else branch below never runs;
+                    // a second bit for a longer pause was probably intended. Same at the wrap test below.
                     if ((s32)cw->gauge <= 0) {
                         cw->hits++;
                         cw->gauge = 0.0f;
                         cw->inRange = 0;
-                        if (GAC(work)->opts & 2) {
+                        if (GAC(work)->opts & AC_GAUGE_TIMING_FLAG_CYCLE_PAUSE) {
                             cw->timer = 15;
                         } else {
                             cw->timer = 30;
@@ -233,15 +235,15 @@ s32 battleAcMain_GaugeTiming(BattleWork* work) {
                     }
                 }
                 cw->gauge = (f32)GAC(work)->period / 100.0f * (f32)cw->cnt + 50.0f;
-                if (GAC(work)->opts & 1) {
+                if (GAC(work)->opts & AC_GAUGE_TIMING_FLAG_WRAP) {
                     s32 g = (s32)cw->gauge;
-                    if ((GAC(work)->opts & 2) || (GAC(work)->opts & 2)) {
+                    if ((GAC(work)->opts & AC_GAUGE_TIMING_FLAG_CYCLE_PAUSE) || (GAC(work)->opts & AC_GAUGE_TIMING_FLAG_CYCLE_PAUSE)) {
                         s32 q = g / 100;
                         if (q > cw->hits) {
                             cw->hits = q;
                             cw->gauge = 0.0f;
                             cw->inRange = 0;
-                            if (GAC(work)->opts & 2) {
+                            if (GAC(work)->opts & AC_GAUGE_TIMING_FLAG_CYCLE_PAUSE) {
                                 cw->timer = 15;
                             } else {
                                 cw->timer = 30;

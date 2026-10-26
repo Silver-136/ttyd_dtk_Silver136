@@ -139,7 +139,7 @@ s32 battleAcMain_StickRotate(BattleWork* work) {
                 sw->roll = 0;
                 sw->count = 0;
                 ac->outputParams[0] = 0;
-                if (AC_PARAMS(work)->flags & 2) {
+                if (AC_PARAMS(work)->flags & AC_STICK_ROTATE_FLAG_GUIDED_UNUSED) {
                     sw->iconA = 3;
                     sw->iconB = 2;
                 }
@@ -175,7 +175,7 @@ s32 battleAcMain_StickRotate(BattleWork* work) {
                 sw->prevDir = 0;
                 ac->outputParams[0]++;
                 sw->timer = AC_PARAMS(work)->startTime;
-                if (AC_PARAMS(work)->flags & 2) {
+                if (AC_PARAMS(work)->flags & AC_STICK_ROTATE_FLAG_GUIDED_UNUSED) {
                     sw->roll = -1;
                     sw->prevDir = 4;
                 }
@@ -215,7 +215,7 @@ s32 battleAcMain_StickRotate(BattleWork* work) {
                 }
                 if (sw->dir == 0) {
                     sw->roll = 0;
-                    if ((AC_PARAMS(work)->flags & 1) && sw->prevDir != 0) {
+                    if ((AC_PARAMS(work)->flags & AC_STICK_ROTATE_FLAG_STRICT_UNUSED) && sw->prevDir != 0) {
                         FINISH(work);
                         break;
                     }
@@ -244,7 +244,7 @@ s32 battleAcMain_StickRotate(BattleWork* work) {
                             if ((s32)ac->outputParams[0] > AC_PARAMS(work)->maxCount) {
                                 ac->outputParams[0] = AC_PARAMS(work)->maxCount;
                             }
-                            if (AC_PARAMS(work)->flags & 1) {
+                            if (AC_PARAMS(work)->flags & AC_STICK_ROTATE_FLAG_STRICT_UNUSED) {
                                 if (sw->count > 1) {
                                     s8 st = sw->stall;
                                     if (st > AC_PARAMS(work)->stepsB) {
@@ -285,9 +285,9 @@ s32 battleAcMain_StickRotate(BattleWork* work) {
                                 }
                             }
                         }
-                    } else if (AC_PARAMS(work)->flags & 2) {
+                    } else if (AC_PARAMS(work)->flags & AC_STICK_ROTATE_FLAG_GUIDED_UNUSED) {
                         sw->roll = 0;
-                        if (AC_PARAMS(work)->flags & 2) {
+                        if (AC_PARAMS(work)->flags & AC_STICK_ROTATE_FLAG_GUIDED_UNUSED) {
                             FINISH(work);
                             break;
                         }
@@ -333,7 +333,7 @@ void battleAcDisp_StickRotate(CameraId cameraId, void* param) {
     void (*fn)(f32, f32);
 #define work ((BattleWork*)param)
 
-    if (AC_PARAMS(work)->flags & 2) {
+    if (AC_PARAMS(work)->flags & AC_STICK_ROTATE_FLAG_GUIDED_UNUSED) {
         fn = actionCommandDisp;
     } else {
         fn = actionCommandDisp2;

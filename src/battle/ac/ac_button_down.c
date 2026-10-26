@@ -63,7 +63,7 @@ s32 battleAcMain_ButtonDown(BattleWork *work) {
                                 break;
 
                             case -3:
-                                if ((work->actionCommands.acFlags) & 4) {
+                                if ((work->actionCommands.acFlags) & AC_BUTTON_DOWN_FLAG_ALLOW_REPEATS) {
                                     p->button[(u32)i] = _button_table[irand(4)];
                                     p->pressed[(u32)i] = 0;
                                 } else {
@@ -173,7 +173,7 @@ s32 battleAcMain_ButtonDown(BattleWork *work) {
                             if (BattlePadGetTrigger()) {
                             ac->result = 0;
                             ac->mAcState = 1001;
-                            if (((work->actionCommands.acFlags) & 2) && ((*((s32*)(&ac->outputParams[0]))) > 0)) {
+                            if (((work->actionCommands.acFlags) & AC_BUTTON_DOWN_FLAG_PARTIAL_SUCCESS) && ((*((s32*)(&ac->outputParams[0]))) > 0)) {
                                 allDone = 1;
                                 ac->result |= 2;
                                 ac->result &= ~1;
@@ -206,7 +206,7 @@ s32 battleAcMain_ButtonDown(BattleWork *work) {
                     ac->result = 0;
                     allDone = 1;
                     ac->mAcState = 1001;
-                    if (((work->actionCommands.acFlags) & 2) && ((*((s32*)(&ac->outputParams[0]))) > 0)) {
+                    if (((work->actionCommands.acFlags) & AC_BUTTON_DOWN_FLAG_PARTIAL_SUCCESS) && ((*((s32*)(&ac->outputParams[0]))) > 0)) {
                         ac->result |= 2;
                         ac->result &= ~1;
                         ac->mAcState = 1001;
@@ -310,7 +310,7 @@ static void actionCommandDisp(s32 unused, f32 x, f32 y) {
         pos3.y = by;
         iconDispGx(&pos3, 16, ICON_090, 1.0f);
     }
-    if ((work->actionCommands.acFlags) & 1) {
+    if ((work->actionCommands.acFlags) & AC_BUTTON_DOWN_FLAG_REVEAL_ONE_BY_ONE) {
         for (count = 0, j = 0; count < (work->actionCommands.params[2]); count++, j += 4) {
             if (!p->pressed[j >> 2]) {
                 break;

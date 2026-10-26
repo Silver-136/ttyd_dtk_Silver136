@@ -139,7 +139,7 @@ s32 battleAcMain_PowerGauge(BattleWork* work) {
                     }
                     break;
             }
-            if (!(ac->acFlags & 1)) {
+            if (!(ac->acFlags & AC_POWER_GAUGE_FLAG_FILL_WHILE_HELD)) {
                 pw->frame2++;
             } else if (pw->phase == 1) {
                 pw->frame2++;
@@ -285,14 +285,14 @@ static void actionCommandDisp(f32 x, f32 y) {
     }
     disp->gaugeRatio = ratio;
 
-    if (ac->acFlags & 2) {
+    if (ac->acFlags & AC_POWER_GAUGE_FLAG_PLAIN_GAUGE) {
         BattleAcDrawGauge((s32)x, (s32)y, 0xB2, ratio, 1, 100, 100, 100, 0);
     } else {
         BattleAcDrawGauge((s32)x, (s32)y, 0xB2, ratio, 2, ac->params[4], 100, 100, 0);
     }
 
     flags = ac->acFlags;
-    if (!(flags & 4)) {
+    if (!(flags & AC_POWER_GAUGE_FLAG_SHOW_ZONE_LAMP)) {
         Vec pos = {0.0f, 0.0f, 0.0f};
         pos.x = -288.0f + x + (f32)(ac->params[4] * 0xB0) / 100.0f;
         pos.y = 45.0f + y;
@@ -304,7 +304,7 @@ static void actionCommandDisp(f32 x, f32 y) {
         } else {
             icon = ICON_091;
         }
-        if (flags & 8) {
+        if (flags & AC_POWER_GAUGE_FLAG_LAMP_SHIFT_LEFT) {
             Vec pos = {0.0f, 0.0f, 0.0f};
             pos.x = 120.0f + (-200.0f + x) - 12.0f;
             pos.y = 18.0f + y;

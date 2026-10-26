@@ -198,7 +198,7 @@ s32 battleAcMain_Shot(BattleWork* work) {
                 if (sw->speed > 100.0f) {
                     sw->speed = 100.0f;
                 }
-                if (ac->acFlags & 1) {
+                if (ac->acFlags & AC_SHOT_FLAG_NO_CHARGE) {
                     SH_OUT(ac)[1] = (s32)((sw->minV + sw->maxV) / 2.0f);
                     SH_RECORD(ac, sw);
                     if (sw->idx >= SH_PARAMS(ac)->count) {
@@ -317,7 +317,7 @@ static void actionCommandDisp(f32 x, f32 y) {
     Mtx m1;
     Mtx m2;
     f32 limit;
-    if (!(ac->acFlags & 1)) {
+    if (!(ac->acFlags & AC_SHOT_FLAG_NO_CHARGE)) {
         Vec pos = {0.0f, 0.0f, 0.0f};
         f32 px = -200.0f + x;
         pos.x = px;

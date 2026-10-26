@@ -447,7 +447,7 @@ static void actionCommandDisp(f32 x, f32 y) {
         flags |= 2;
     }
     BattleAcDrawGauge((s32)x, (s32)y, d->gauge, r->iconParam, 2,
-                      (acw->acFlags & 2) ? 100 : (s32)r->pos, 100, 100, flags);
+                      (acw->acFlags & AC_REPEATEDLY_FLAG_PLAIN_GAUGE) ? 100 : (s32)r->pos, 100, 100, flags);
     {
         Vec pos = {0.0f, 0.0f, 0.0f};
         pos.x = (-288.0f + x) + (176.0f * r->pos) / 100.0f;

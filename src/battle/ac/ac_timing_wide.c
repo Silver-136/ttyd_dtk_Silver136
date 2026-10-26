@@ -108,7 +108,7 @@ s32 battleAcMain_TimingWide(BattleWork* work) {
                 ac->result = 0;
                 ac->mAcState = 0x3EC;
                 tw->state = 4;
-                if ((s32)ac->acFlags & 8) {
+                if ((s32)ac->acFlags & AC_TIMING_WIDE_FLAG_HOLD_AFTER_RESULT) {
                     ac->mAcState = 0x3EB;
                     tw->state = 3;
                 }
@@ -155,7 +155,7 @@ s32 battleAcMain_TimingWide(BattleWork* work) {
                     }
                     ac->mAcState = 0x3EC;
                     tw->state = 4;
-                    if ((s32)ac->acFlags & 8) {
+                    if ((s32)ac->acFlags & AC_TIMING_WIDE_FLAG_HOLD_AFTER_RESULT) {
                         ac->mAcState = 0x3EB;
                         tw->state = 3;
                     }
@@ -217,7 +217,7 @@ void battleAcDisp_TimingWide(CameraId cameraId, void* param) {
         case 0:
         case 1:
         case 2:
-            if ((s32)ac->acFlags & 1) {
+            if ((s32)ac->acFlags & AC_TIMING_WIDE_FLAG_NO_SLIDE_IN) {
                 disp->iconX = 30.0f;
             } else {
                 disp->iconX = intplGetValue(EASING_QUADRATIC_OUT, -300.0f, 30.0f, 20 - disp->slideTimer, 20);
@@ -233,10 +233,10 @@ void battleAcDisp_TimingWide(CameraId cameraId, void* param) {
         case 4:
         case 5:
             show = 1;
-            if (((s32)ac->acFlags & 2) && (ac->result & 2)) {
+            if (((s32)ac->acFlags & AC_TIMING_WIDE_FLAG_KEEP_ICON_ON_SUCCESS_UNUSED) && (ac->result & 2)) {
                 show = 0;
             }
-            if (((s32)ac->acFlags & 4) && !(ac->result & 2)) {
+            if (((s32)ac->acFlags & AC_TIMING_WIDE_FLAG_KEEP_ICON_ON_FAIL_UNUSED) && !(ac->result & 2)) {
                 show = 0;
             }
             if (disp->slideTimer >= 40) {
@@ -315,7 +315,7 @@ static void actionCommandDisp(f32 x, f32 y) {
         case 4:
         case 5:
         case 6:
-            if (!((s32)ac->acFlags & 0x10)) {
+            if (!((s32)ac->acFlags & AC_TIMING_WIDE_FLAG_SWAP_RESULT_ICON)) {
                 if (tw->mode > 0) ICON(a) else ICON(b)
             } else {
                 if (tw->mode > 0) ICON(b) else ICON(a)

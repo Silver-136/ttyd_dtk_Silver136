@@ -688,7 +688,7 @@ EVT_BEGIN(lecAttackEvent_Hammer)
         CALL(btlevtcmd_AcSetParamAll, 4, 25, 0, 0, 0, EVT_NULLPTR, EVT_NULLPTR, EVT_NULLPTR)
         CALL(btlevtcmd_GetUnitWork, UNIT_ID_LECTURE, 1, LW(0))
         IF_INT_EQUAL(LW(0), 5)
-            CALL(btlevtcmd_AcSetFlag, 2)
+            CALL(btlevtcmd_AcSetFlag, AC_STICK_KEEP_LEFT_FLAG_NO_EARLY_RELEASE_FAIL)
         ELSE
             CALL(btlevtcmd_AcSetFlag, 0)
         END_IF

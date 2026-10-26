@@ -664,7 +664,7 @@ EVT_BEGIN(btldefaultevt_Escape)
     ADD(LW(1), 30)
     CALL(_get_escape_rate, LW(2))
     CALL(btlevtcmd_AcSetParamAll, 1, 180, LW(0), LW(1), 0, 4, 6, LW(2))
-    CALL(btlevtcmd_AcSetFlag, 3)
+    CALL(btlevtcmd_AcSetFlag, AC_REPEATEDLY_FLAG_ESCAPE_UNUSED | AC_REPEATEDLY_FLAG_PLAIN_GAUGE)
     CALL(btlevtcmd_SetupAC, UNIT_ID_SELF, 5, 1, 0)
     CALL(_set_escape_ac_hlp_msg)
     BEGIN_INLINE_EVENT
