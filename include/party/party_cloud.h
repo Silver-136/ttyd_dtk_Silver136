@@ -30,7 +30,7 @@ void cloudGetAt(Vec* position);
 void cloudResetAt(void);
 u8 cloudGetStatus(void);
 f32 cloudGetBreathDir(void);
-struct HitEntry* cloudGetHitBreathout(s32 param_1);
+struct HitEntry* cloudGetHitBreathout(s32 which); // 0 front, 1 down, 2-3 the two sweep hits
 
 void cloud_exit(PartyEntry* party);
 void cloud_hover_init(PartyEntry* party);

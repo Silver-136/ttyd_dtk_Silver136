@@ -126,12 +126,12 @@ f32 cloudGetBreathDir() {
     return breathDir;
 }
 
-f32 cloudGetBreathPower(f32 param_1, Vec* param_2) {
+f32 cloudGetBreathPower(f32 size, Vec* pos) {
     PartyEntry* party = partyGetPtr(PARTY_SLOT_PARTY);
     f32 breathPower;
     f32 dist;
     f32 angle;
-    f32 unk8;
+    f32 reach;
     f32 val;
 
     breathPower = 0.0f;
@@ -144,14 +144,14 @@ f32 cloudGetBreathPower(f32 param_1, Vec* param_2) {
         party->currentMemberId == PARTY_MEMBER_FLURRIE 
         && (party->flags & PARTY_FLAG_IS_BEING_USED) != 0 
         && party->useMotionId >= MARIO_MOTION_FALL
-        && ((fabs(party->position.y - param_2->y - 18.0f)) <= val)
+        && ((fabs(party->position.y - pos->y - 18.0f)) <= val)
     ) {
         PartyCloud* cloud = (PartyCloud*)party->useStruct;
-        unk8 = cloud->breathDist;
-        if (-((0.5f * param_1) - distABf(party->position.x, party->position.z, param_2->x, param_2->z)) <= unk8) {
+        reach = cloud->breathDist;
+        if (-((0.5f * size) - distABf(party->position.x, party->position.z, pos->x, pos->z)) <= reach) {
             PartyCloud* cloud = (PartyCloud*)party->useStruct;
             dist = toMovedir(cloud->breathDir);
-            angle = angleABf(party->position.x, party->position.z, param_2->x, param_2->z);
+            angle = angleABf(party->position.x, party->position.z, pos->x, pos->z);
             dist = revise360(angle - dist);
             
             if (dist <= 30.0f || dist >= 330.0f) {
@@ -165,7 +165,7 @@ f32 cloudGetBreathPower(f32 param_1, Vec* param_2) {
     return breathPower;
 }
 
-struct HitEntry* cloudGetHitBreathout(s32 param_1) {
+struct HitEntry* cloudGetHitBreathout(s32 which) {
     u32 partyId = marioGetPartyId();
     PartyEntry* party = partyGetPtr(partyId);
     struct HitEntry* hitBreathout;
@@ -183,13 +183,13 @@ struct HitEntry* cloudGetHitBreathout(s32 param_1) {
     }
 
     hitBreathout = NULL;
-    if (param_1 == 0) {
+    if (which == 0) {
         hitBreathout = ((PartyCloud*)party->useStruct)->hitFront;
-    } else if (param_1 == 1) {
+    } else if (which == 1) {
         hitBreathout = ((PartyCloud*)party->useStruct)->hitDown;
-    } else if (param_1 == 2) {
+    } else if (which == 2) {
         hitBreathout = ((PartyCloud*)party->useStruct)->hitSweep[0];
-    } else if (param_1 == 3) {
+    } else if (which == 3) {
         hitBreathout = ((PartyCloud*)party->useStruct)->hitSweep[1];
     }
     
