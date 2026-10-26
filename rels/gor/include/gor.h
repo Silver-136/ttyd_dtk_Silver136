@@ -29,7 +29,13 @@ extern BattleUnitKind unit_monban;
 typedef struct CookRecipe { const char* a; const char* b; const char* out; } CookRecipe;
 extern CookRecipe R_cookbook_recipe_table[];
 extern s32 R_mystery_cook_list[];
-typedef struct SimpleRecipe { const char* ingredient; const char* result; const char* result2; } SimpleRecipe; /* naniga_okorukana lookup: results go to args[1]/args[2] */
+/* one-ingredient recipes (cook_chk): result without the Cookbook, result2 once Mario has it (trouble
+ * TROUBLE_SEEKING_LEGENDARY_BOOK solved) */
+typedef struct SimpleRecipe {
+    const char* ingredient;
+    const char* result;
+    const char* result2;
+} SimpleRecipe;
 extern SimpleRecipe R_simple_recipe_table[];
 extern f32 gor_ship_puka_data[];
 extern s32* irai_item_table[];

@@ -6077,7 +6077,7 @@ s32 naniga_okorukana_cook(void) {
     if (r < 50) {
         return R_mystery_cook_list[(s32)((u32)(r * 20) / 50.0f)];
     }
-    return 182;
+    return ITEM_MISTAKE;
 }
 
 s32 itemNameToID(const char* name) {
@@ -6100,7 +6100,7 @@ USER_FUNC(cook_chk) {
     ItemData* data = &itemDataTable[item];
     u32 i;
 
-    if (item == 163) {
+    if (item == ITEM_MYSTERY) {
         item = naniga_okorukana_cook();
         evtSetValue(event, args[1], item);
         evtSetValue(event, args[2], item);
@@ -6126,7 +6126,7 @@ USER_FUNC(cook_chk2) {
     ItemData* data2 = &itemDataTable[item2];
     u32 i;
 
-    if (item1 == 163 || item2 == 163) {
+    if (item1 == ITEM_MYSTERY || item2 == ITEM_MYSTERY) {
         item2 = naniga_okorukana_cook();
         evtSetValue(event, (volatile u32)args[2], item2);
         return EVT_RETURN_DONE;
@@ -6185,32 +6185,33 @@ USER_FUNC(get_item_name) {
     return EVT_RETURN_DONE;
 }
 
+// The cooking animation for the result: 0 = flames, 1 = explosion puff (cook_effect).
 s32 chk_cook_eff_type(s32 item) {
-    if (item < 148) {
+    if (item < ITEM_MUSHROOM) {
         return 1;
     }
-    if (item < 161) {
+    if (item < ITEM_POINT_SWAP) {
         return 0;
     }
-    if (item < 179) {
+    if (item < ITEM_SHROOM_FRY) {
         switch (item) {
-            case 161:
-            case 162:
-            case 163:
-            case 164:
-            case 177:
-            case 178:
+            case ITEM_POINT_SWAP:
+            case ITEM_FRIGHT_MASK:
+            case ITEM_MYSTERY:
+            case ITEM_INN_COUPON:
+            case ITEM_SPITE_POUCH:
+            case ITEM_KOOPA_CURSE:
                 return 1;
             default:
                 return 0;
         }
     }
-    if (item < 236) {
+    if (item < ITEM_AUDIENCE_CAN) {
         switch (item) {
-            case 196:
-            case 202:
-            case 203:
-            case 209:
+            case ITEM_ZESS_DYNAMITE:
+            case ITEM_COCONUT_BOMB:
+            case ITEM_COURAGE_MEAL:
+            case ITEM_EGG_BOMB:
                 return 1;
             default:
                 return 0;
@@ -6554,7 +6555,7 @@ EVT_BEGIN(cooking_evt)
         CALL(N_evt_pouch_remove_item_index, LW(15), LW(12), LW(3))
     END_IF
     IF_INT_EQUAL(LW(2), 0)
-        SET_VALUE(LW(2), 182)
+        SET_VALUE(LW(2), ITEM_MISTAKE)
     END_IF
     CALL(evt_msg_print_add, 0, STRING("gor_01_cook_015"))
     SET_VALUE(LW(13), LW(2))
