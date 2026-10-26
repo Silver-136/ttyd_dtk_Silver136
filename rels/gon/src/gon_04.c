@@ -919,7 +919,7 @@ static s32 key_tbl[] = {
 };
 
 static EVT_BEGIN(evt_chk)
-    CALL(evt_pouch_check_item, 13, LW(0))
+    CALL(evt_pouch_check_item, ITEM_CASTLE_KEY_0x0D, LW(0))
     IF_INT_GREATER(LW(0), 0)
         CALL(evt_win_item_select, 0, PTR(key_tbl), LW(0), 0)
         IF_INT_EQUAL(LW(0), -1)
@@ -999,13 +999,13 @@ EVT_BEGIN(gon_04_init_evt)
     CALL(evt_mobj_switch_float_blk, STRING("mobj_fltsw01"), 550, 75, 137, STRING("mobj_fltbl01"), 1, PTR(evt_gon_04flowblock_updown1), LSWF(6))
     CALL(evt_mobj_switch_float_blk, STRING("mobj_fltsw02"), 450, 75, 60, STRING("mobj_fltbl02"), 2, PTR(evt_gon_04flowblock_updown2), LSWF(7))
     IF_INT_LESS(GSW_STORY_PROGRESS, 41)
-        CALL(evt_item_entry, STRING("key00"), 13, -150, 150, -125, 16, -1, PTR(key_get))
+        CALL(evt_item_entry, STRING("key00"), ITEM_CASTLE_KEY_0x0D, -150, 150, -125, 16, -1, PTR(key_get))
     END_IF
-    CALL(evt_item_entry, STRING("item00"), 125, 150, 400, -125, 16, GSWF(5604), 0)
+    CALL(evt_item_entry, STRING("item00"), ITEM_STAR_PIECE, 150, 400, -125, 16, GSWF(5604), 0)
 #ifdef VERSION_G8ME01
-    CALL(evt_item_entry, STRING("item01"), 125, 420, 910, -175, 16, GSWF(5605), 0)
+    CALL(evt_item_entry, STRING("item01"), ITEM_STAR_PIECE, 420, 910, -175, 16, GSWF(5605), 0)
 #else
-    CALL(evt_item_entry, STRING("item01"), 125, 400, 900, -175, 16, GSWF(5605), 0)
+    CALL(evt_item_entry, STRING("item01"), ITEM_STAR_PIECE, 400, 900, -175, 16, GSWF(5605), 0)
 #endif
     CALL(evt_mobj_lv_blk, STRING("mobj_blk00"), 395, 200, -125, 0, GSWF(1485), STRING("MOBJ_Lv1BigBlock"))
     CALL(evt_mobj_lv_blk, STRING("mobj_blk01"), 445, 150, -125, 0, GSWF(1486), STRING("MOBJ_Lv2BigBlock"))

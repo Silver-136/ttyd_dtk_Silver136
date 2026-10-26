@@ -15,6 +15,7 @@
 #include "evt/evt_snd.h"
 #include "evt/evt_item.h"
 #include "driver/npcdrv.h"
+#include "mario/mario_pouch.h"
 
 USER_FUNC(evt_pouch_open_mail);
 USER_FUNC(evt_pouch_receive_mail);
@@ -308,7 +309,7 @@ EVT_END()
 EVT_BEGIN(ki_data_evt_03)
     CALL(evt_item_delete_check, STRING("item_ki03"), LW(0))
     IF_INT_EQUAL(LW(0), 1)
-        CALL(evt_item_entry, STRING("item_ki03"), 121, 312, 106, -122, 14, GSWF(2686), 0)
+        CALL(evt_item_entry, STRING("item_ki03"), ITEM_COIN, 312, 106, -122, 14, GSWF(2686), 0)
     END_IF
     RETURN
 EVT_END()
@@ -336,7 +337,7 @@ EVT_BEGIN(win_01_init_evt)
         SPAWN_EVENT(PTR(peach_mail))
     END_IF
     SPAWN_EVENT(PTR(evt_sub_mail_event))
-    CALL(evt_item_entry, STRING("item_00"), 164, 165, 0, -58, 16, GSWF(2687), 0)
+    CALL(evt_item_entry, STRING("item_00"), ITEM_INN_COUPON, 165, 0, -58, 16, GSWF(2687), 0)
     RETURN
 EVT_END()
 

@@ -8,6 +8,7 @@
 #include "party/party_motion.h"
 #include "evt/evt_mobj.h"
 #include "driver/npcdrv.h"
+#include "mario/mario_pouch.h"
 
 #include "mario/mario.h"
 #include "driver/hitdrv.h"
@@ -453,7 +454,7 @@ EVT_BEGIN(yashi_yure)
             END_LOOP
             CALL(evt_mario_key_onoff, 0)
             CALL(evt_mapobj_trans, 1, STRING("S_yasi_mi02"), 0, -1000, 0)
-            CALL(evt_item_entry, STRING("yashi00"), 166, 0, -1000, 0, 16, -1, 0)
+            CALL(evt_item_entry, STRING("yashi00"), ITEM_COCONUT, 0, -1000, 0, 16, -1, 0)
             CALL(evt_item_flag_on, STRING("yashi00"), 2)
             CALL(evt_item_get_item, STRING("yashi00"))
             CALL(evt_mario_key_onoff, 1)
@@ -488,7 +489,7 @@ EVT_BEGIN(yashi_yure)
             END_LOOP
             CALL(evt_mario_key_onoff, 0)
             CALL(evt_mapobj_trans, 1, STRING("S_yasi_mi01"), 0, -1000, 0)
-            CALL(evt_item_entry, STRING("yashi01"), 166, 0, -1000, 0, 16, -1, 0)
+            CALL(evt_item_entry, STRING("yashi01"), ITEM_COCONUT, 0, -1000, 0, 16, -1, 0)
             CALL(evt_item_flag_on, STRING("yashi01"), 2)
             CALL(evt_item_get_item, STRING("yashi01"))
             CALL(evt_mario_key_onoff, 1)
@@ -525,8 +526,8 @@ EVT_BEGIN(muj_04_init_evt)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
     CALL_CHILD(PTR(evt_bero_info_run))
-    CALL(evt_item_entry, STRING("item_00"), 283, 290, 60, 10, 16, GSWF(3148), 0)
-    CALL(evt_item_entry, STRING("item_01"), 164, -367, 150, -73, 16, GSWF(3158), 0)
+    CALL(evt_item_entry, STRING("item_00"), ITEM_ICE_POWER, 290, 60, 10, 16, GSWF(3148), 0)
+    CALL(evt_item_entry, STRING("item_01"), ITEM_INN_COUPON, -367, 150, -73, 16, GSWF(3158), 0)
     CALL(evt_mobj_powerupblk, STRING("pblk00"), 450, 210, -90, 0, GSWF(5553), 0)
     CALL(evt_npc_setup, PTR(npcEnt))
     CALL(evt_map_playanim, STRING("S_mizu"), 1, 0)

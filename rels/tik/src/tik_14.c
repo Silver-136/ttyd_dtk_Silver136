@@ -6,6 +6,7 @@
 #include "evt/evt_mobj.h"
 #include "evt/evt_snd.h"
 #include "party/party_motion.h"
+#include "mario/mario_pouch.h"
 
 
 static BeroEntry bero_entry_data[3];
@@ -53,7 +54,7 @@ static BeroEntry bero_entry_data[] = {
 static EVT_BEGIN(item_get00)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mobj_get_position, STRING("mobj_box00"), LW(0), LW(1), LW(2))
-    CALL(evt_item_entry, STRING("item00"), 148, LW(0), LW(1), LW(2), 16, -1, 0)
+    CALL(evt_item_entry, STRING("item00"), ITEM_MUSHROOM, LW(0), LW(1), LW(2), 16, -1, 0)
     CALL(evt_item_flag_on, STRING("item00"), 2)
     CALL(evt_mobj_wait_animation_end, STRING("mobj_box00"))
     CALL(evt_item_get_item, STRING("item00"))

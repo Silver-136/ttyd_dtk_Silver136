@@ -16,6 +16,7 @@
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
 #include "driver/mapdrv.h"
+#include "mario/mario_pouch.h"
 
 USER_FUNC(evt_pouch_open_mail);
 USER_FUNC(evt_pouch_receive_mail);
@@ -273,7 +274,7 @@ EVT_END()
 static EVT_BEGIN(mobj_box00)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mobj_get_position, STRING("mobj_box00"), LW(0), LW(1), LW(2))
-    CALL(evt_item_entry, STRING("item00"), 282, LW(0), LW(1), LW(2), 16, -1, 0)
+    CALL(evt_item_entry, STRING("item00"), ITEM_FLOWER_SAVER_P, LW(0), LW(1), LW(2), 16, -1, 0)
     CALL(evt_item_flag_on, STRING("item00"), 258)
     CALL(evt_mobj_wait_animation_end, STRING("mobj_box00"))
     CALL(evt_item_get_item, STRING("item00"))
@@ -296,9 +297,9 @@ EVT_BEGIN(tik_07_init_evt)
     END_IF
     CALL(evt_mobj_itembox, STRING("mobj_box00"), -550, 0, 100, 0, 0, PTR(mobj_box00), GSWF(1359))
     CALL(evt_mobj_powerupblk, STRING("pblk2"), -180, 160, 0, 0, GSWF(5533), 0)
-    CALL(evt_item_entry, STRING("item_00"), 125, 460, 160, -450, 16, GSWF(5594), 0)
+    CALL(evt_item_entry, STRING("item_00"), ITEM_STAR_PIECE, 460, 160, -450, 16, GSWF(5594), 0)
     CALL(evt_item_set_scale, STRING("item_00"), FLOAT(0.5996094f))
-    CALL(evt_item_entry, STRING("item_01"), 125, 125, 0, -60, 16, GSWF(5595), 0)
+    CALL(evt_item_entry, STRING("item_01"), ITEM_STAR_PIECE, 125, 0, -60, 16, GSWF(5595), 0)
     SET_VALUE(LW(0), STRING("ugo_1"))
     SET_VALUE(LW(1), STRING("a_ugo_1"))
     SET_VALUE(LW(2), -20)

@@ -13,6 +13,7 @@
 #include "evt/evt_sub.h"
 #include "evt/evt_pouch.h"
 #include "driver/mapdrv.h"
+#include "mario/mario_pouch.h"
 
 #include "driver/dispdrv.h"
 #include "driver/camdrv.h"
@@ -864,7 +865,7 @@ s32 haguruma_tbl[] = {
 
 static EVT_BEGIN(evt_haguruma)
     CALL(evt_mario_key_onoff, 0)
-    CALL(evt_pouch_check_item, 85, LW(0))
+    CALL(evt_pouch_check_item, ITEM_COG, LW(0))
     IF_INT_LESS(LW(0), 1)
         CALL(evt_msg_print, 0, STRING("stg7_aji_00_00"), 0, 0)
         CALL(evt_mario_key_onoff, 1)
@@ -1030,20 +1031,20 @@ EVT_BEGIN(aji_03_init_evt)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("meta_2_2"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("meta_3_2"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
-    CALL(evt_item_entry, STRING("keihin00"), 121, -150, 50, 100, 16, -1, 0)
-    CALL(evt_item_entry, STRING("keihin01"), 121, -100, 50, 100, 16, -1, 0)
-    CALL(evt_item_entry, STRING("keihin02"), 121, -50, 50, 100, 16, -1, 0)
-    CALL(evt_item_entry, STRING("keihin03"), 121, -150, 50, 0, 16, -1, 0)
+    CALL(evt_item_entry, STRING("keihin00"), ITEM_COIN, -150, 50, 100, 16, -1, 0)
+    CALL(evt_item_entry, STRING("keihin01"), ITEM_COIN, -100, 50, 100, 16, -1, 0)
+    CALL(evt_item_entry, STRING("keihin02"), ITEM_COIN, -50, 50, 100, 16, -1, 0)
+    CALL(evt_item_entry, STRING("keihin03"), ITEM_COIN, -150, 50, 0, 16, -1, 0)
     IF_INT_EQUAL(GSWF(4198), 0)
-        CALL(evt_item_entry, STRING("keihin04"), 285, -100, 50, 0, 16, -1, PTR(badge_evt))
+        CALL(evt_item_entry, STRING("keihin04"), ITEM_FEELING_FINE, -100, 50, 0, 16, -1, PTR(badge_evt))
     END_IF
-    CALL(evt_item_entry, STRING("keihin05"), 121, -50, 50, 0, 16, -1, 0)
+    CALL(evt_item_entry, STRING("keihin05"), ITEM_COIN, -50, 50, 0, 16, -1, 0)
     IF_INT_EQUAL(GSWF(4216), 0)
-        CALL(evt_item_entry, STRING("keihin06"), 286, -150, 50, -100, 16, -1, PTR(badge_evt2))
+        CALL(evt_item_entry, STRING("keihin06"), ITEM_FEELING_FINE_P, -150, 50, -100, 16, -1, PTR(badge_evt2))
     END_IF
-    CALL(evt_item_entry, STRING("keihin07"), 121, -100, 50, -100, 16, -1, 0)
+    CALL(evt_item_entry, STRING("keihin07"), ITEM_COIN, -100, 50, -100, 16, -1, 0)
     IF_INT_EQUAL(GSWF(5665), 0)
-        CALL(evt_item_entry, STRING("keihin08"), 125, -50, 50, -100, 16, -1, PTR(badge_evt3))
+        CALL(evt_item_entry, STRING("keihin08"), ITEM_STAR_PIECE, -50, 50, -100, 16, -1, PTR(badge_evt3))
     END_IF
     SPAWN_EVENT(PTR(evt_emergency))
     RETURN

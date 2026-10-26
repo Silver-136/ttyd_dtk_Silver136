@@ -19,6 +19,7 @@
 #include "evt/evt_item.h"
 #include "driver/npcdrv.h"
 #include "driver/mapdrv.h"
+#include "mario/mario_pouch.h"
 
 USER_FUNC(evt_cloud_ent);
 USER_FUNC(evt_cloud_init);
@@ -447,7 +448,7 @@ EVT_END()
 EVT_BEGIN(ueki_evt_02)
     CALL(evt_item_delete_check, STRING("item_ueki02"), LW(0))
     IF_INT_EQUAL(LW(0), 1)
-        CALL(evt_item_entry, STRING("item_ueki02"), 125, -95, -310, -52, 0, GSWF(5614), 0)
+        CALL(evt_item_entry, STRING("item_ueki02"), ITEM_STAR_PIECE, -95, -310, -52, 0, GSWF(5614), 0)
     END_IF
     RETURN
 EVT_END()

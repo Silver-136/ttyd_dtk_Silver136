@@ -5,6 +5,7 @@
 #include "evt/evt_map.h"
 #include "party/party_motion.h"
 #include "evt/evt_item.h"
+#include "mario/mario_pouch.h"
 
 #include "mario/mario.h"
 #include "driver/hitdrv.h"
@@ -119,12 +120,12 @@ EVT_BEGIN(eki_02_init_evt)
     CALL(evt_map_playanim, STRING("anm_sikake_2"), 1, 0)
 #endif
     IF_INT_LESS(GSW_STORY_PROGRESS, 314)
-        CALL(evt_item_entry, STRING("key"), 25, 525, 220, 29, 16, -1, PTR(evt_key))
+        CALL(evt_item_entry, STRING("key"), ITEM_STEEPLE_KEY_0x19, 525, 220, 29, 16, -1, PTR(evt_key))
     END_IF
     BEGIN_INLINE_EVENT
         CALL(hit_move)
     END_INLINE_EVENT
-    CALL(evt_item_entry, STRING("item"), 125, 540, 140, -40, 16, GSWF(5653), 0)
+    CALL(evt_item_entry, STRING("item"), ITEM_STAR_PIECE, 540, 140, -40, 16, GSWF(5653), 0)
     RETURN
 EVT_END()
 

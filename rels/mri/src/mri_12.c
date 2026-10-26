@@ -15,6 +15,7 @@
 #include "evt/evt_item.h"
 #include "evt/evt_mobj.h"
 #include "driver/mapdrv.h"
+#include "mario/mario_pouch.h"
 
 
 static BeroEntry bero_entry_data[6];
@@ -147,7 +148,7 @@ EVT_END()
 static EVT_BEGIN(evt_f1_ueki_01)
     CALL(evt_item_delete_check, STRING("item_ueki_01"), LW(0))
     IF_INT_EQUAL(LW(0), 1)
-        CALL(evt_item_entry, STRING("item_ueki_01"), 121, -190, -309, 65, 4, GSWF(2860), 0)
+        CALL(evt_item_entry, STRING("item_ueki_01"), ITEM_COIN, -190, -309, 65, 4, GSWF(2860), 0)
     END_IF
     RETURN
 EVT_END()
@@ -212,7 +213,7 @@ EVT_BEGIN(mri_12_init_evt)
     SPAWN_EVENT(PTR(punipuni_ball00_init))
     CALL(evt_run_case_evt, 9, 1, STRING("A_dai_mae"), 0, PTR(punipuni_ball00), 0)
     CALL(evt_npc_change_fbat_mode, 1)
-    CALL(evt_item_entry, STRING("item_00"), 125, -175, -310, -85, 16, GSWF(5615), 0)
+    CALL(evt_item_entry, STRING("item_00"), ITEM_STAR_PIECE, -175, -310, -85, 16, GSWF(5615), 0)
     RETURN
 EVT_END()
 

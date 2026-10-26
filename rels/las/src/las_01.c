@@ -5,6 +5,7 @@
 #include "evt/evt_snd.h"
 #include "party/party_motion.h"
 #include "evt/evt_item.h"
+#include "mario/mario_pouch.h"
 
 
 static EvtWord w_door_close[22];
@@ -94,7 +95,7 @@ EVT_BEGIN(las_01_init_evt)
     CALL(evt_bero_get_info)
     CALL_CHILD(PTR(evt_bero_info_run))
     CALL(evt_map_playanim, STRING("hamon"), 1, 0)
-    CALL(evt_item_entry, STRING("item_01"), 140, -710, 448, -175, 16, GSWF(4383), 0)
+    CALL(evt_item_entry, STRING("item_01"), ITEM_STOPWATCH, -710, 448, -175, 16, GSWF(4383), 0)
     RETURN
 EVT_END()
 

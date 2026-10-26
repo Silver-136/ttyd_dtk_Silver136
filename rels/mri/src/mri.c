@@ -16,6 +16,7 @@
 #include "evt/evt_sub.h"
 #include "evt/evt_pouch.h"
 #include "rels/mri/include/mri.h"
+#include "mario/mario_pouch.h"
 
 #include "data/mapdata.h"
 #include "manager/evtmgr_cmd.h"
@@ -343,14 +344,14 @@ s32 mri_itemsel_table[] = {
 };
 
 EVT_BEGIN(mri_punipuni_setup)
-    CALL(evt_item_entry, LW(10), 64, 0, -20000, 0, 16, -1, 0)
+    CALL(evt_item_entry, LW(10), ITEM_PUNI_ORB, 0, -20000, 0, 16, -1, 0)
     CALL(evt_item_flag_on, LW(10), 2)
     RETURN
 EVT_END()
 
 EVT_BEGIN(mri_punipuni_itemselect)
     SET_VALUE(LW(1), 0)
-    CALL(evt_pouch_check_item, 64, LW(0))
+    CALL(evt_pouch_check_item, ITEM_PUNI_ORB, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL(evt_msg_toge, 1, 0, 0, 0)
         CALL(evt_msg_print, 0, STRING("sys_no_item_to_put_on"), 0, 0)
@@ -366,7 +367,7 @@ EVT_END()
 
 EVT_BEGIN(mri_punipuni_itemset)
     CALL(evt_target_flag_onoff, LW(11), 0, 3)
-    CALL(evt_pouch_remove_item, 64, LW(0))
+    CALL(evt_pouch_remove_item, ITEM_PUNI_ORB, LW(0))
     CALL(evt_item_get_position, LW(10), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG2_PUNIDAMA_SET1"), LW(0), LW(1), LW(2), 0)
     CALL(evt_msg_toge, 1, 0, 0, 0)
@@ -376,7 +377,7 @@ EVT_END()
 
 EVT_BEGIN(mri_punipuni_itemremove)
     CALL(evt_target_flag_onoff, LW(11), 1, 1)
-    CALL(evt_pouch_add_item, 64, LW(0))
+    CALL(evt_pouch_add_item, ITEM_PUNI_ORB, LW(0))
     CALL(evt_item_set_position, LW(10), 0, -20000, 0)
     CALL(evt_msg_toge, 1, 0, 0, 0)
     CALL(evt_msg_print, 0, STRING("sys_stg2_punitama_off"), 0, 0)

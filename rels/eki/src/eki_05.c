@@ -11,6 +11,7 @@
 #include "evt/evt_snd.h"
 #include "evt/evt_lecture.h"
 #include "driver/mapdrv.h"
+#include "mario/mario_pouch.h"
 
 #ifdef VERSION_G8ME01
 #endif
@@ -134,7 +135,7 @@ EVT_BEGIN(evt_boots)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mobj_get_position, STRING("tbox"), LW(0), LW(1), LW(2))
     CALL(lect_juyoitem_rel_set, PTR(all_juyoitem_lecture_rel))
-    CALL(evt_item_entry, STRING("boots"), 8, LW(0), LW(1), LW(2), 17, -1, 0)
+    CALL(evt_item_entry, STRING("boots"), ITEM_ULTRA_BOOTS, LW(0), LW(1), LW(2), 17, -1, 0)
     CALL(evt_mobj_wait_animation_end, STRING("tbox"))
     CALL(evt_item_get_important_item, STRING("boots"))
     CALL(evt_item_get_item, STRING("boots"))
@@ -151,7 +152,7 @@ EVT_END()
 
 static EVT_BEGIN(evt_head)
     CALL(evt_item_delete, STRING("elvkey"))
-    CALL(evt_item_entry, STRING("elvkey"), 26, -135, 166, -70, 4, -1, PTR(evt_elvkey))
+    CALL(evt_item_entry, STRING("elvkey"), ITEM_ELEVATOR_KEY_0x1A, -135, 166, -70, 4, -1, PTR(evt_elvkey))
     CALL(evt_item_set_move_dir_speed, STRING("elvkey"), FLOAT(135.0f), FLOAT(90.0f))
     CALL(evt_item_set_gravity, STRING("elvkey"), FLOAT(1.0f))
     CALL(evt_item_set_bound_rate, STRING("elvkey"), FLOAT(0.5996094f))
@@ -174,7 +175,7 @@ EVT_BEGIN(eki_05_init_evt)
         CALL(evt_mobj_itembox, STRING("tbox"), -85, 295, 0, 1, 0, PTR(evt_boots), GSWF(3728))
     END_IF
     IF_INT_LESS(GSW_STORY_PROGRESS, 320)
-        CALL(evt_item_entry, STRING("elvkey"), 26, -135, 136, -70, 17, -1, PTR(evt_elvkey))
+        CALL(evt_item_entry, STRING("elvkey"), ITEM_ELEVATOR_KEY_0x1A, -135, 136, -70, 17, -1, PTR(evt_elvkey))
         CALL(evt_run_case_evt, 16, 1, STRING("a_t_2"), 0, PTR(evt_head), 0)
     END_IF
     BEGIN_INLINE_EVENT

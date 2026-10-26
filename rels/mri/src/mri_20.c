@@ -10,6 +10,7 @@
 #include "evt/evt_snd.h"
 #include "party/party_motion.h"
 #include "evt/evt_item.h"
+#include "mario/mario_pouch.h"
 
 
 BeroEntry bero_black_shadow[1];
@@ -111,7 +112,7 @@ static BeroEntry bero_entry_data[] = {
 static EVT_BEGIN(evt_ueki_08)
     CALL(evt_item_delete_check, STRING("item_ueki_08"), LW(0))
     IF_INT_EQUAL(LW(0), 1)
-        CALL(evt_item_entry, STRING("item_ueki_08"), 142, 250, -320, 130, 4, GSWF(2875), 0)
+        CALL(evt_item_entry, STRING("item_ueki_08"), ITEM_POWER_PUNCH, 250, -320, 130, 4, GSWF(2875), 0)
     END_IF
     RETURN
 EVT_END()

@@ -10,6 +10,7 @@
 #include "evt/evt_item.h"
 #include "evt/evt_mobj.h"
 #include "driver/npcdrv.h"
+#include "mario/mario_pouch.h"
 
 
 static EvtWord oshimodo_event[32];
@@ -141,7 +142,7 @@ EVT_BEGIN(iri_12_kino_makkino_talk)
     CALL(evt_npc_move_position, STRING("キーノ"), LW(0), LW(2), 0, 60, 0)
     CALL(evt_mario_set_dir_npc, STRING("キーノ"))
     WAIT_MS(500)
-    CALL(evt_item_entry, STRING("tf"), 94, 0, -1000, 0, 17, -1, 0)
+    CALL(evt_item_entry, STRING("tf"), ITEM_SILVER_CARD, 0, -1000, 0, 17, -1, 0)
     CALL(evt_item_get_item, STRING("tf"))
     CALL(evt_item_get_item_end_wait, STRING("tf"))
     WAIT_MS(300)
@@ -258,7 +259,7 @@ EVT_BEGIN(tik_06_init_evt)
     CALL_CHILD(PTR(iri_12_init))
     CALL(evt_mobj_signboard, STRING("board"), -50, 0, 50, PTR(evt_kanban), LSWF(0))
     CALL(evt_mobj_signboard, STRING("board2"), 50, 0, -250, PTR(evt_kanban2), LSWF(0))
-    CALL(evt_item_entry, STRING("item_00"), 125, 290, 0, -50, 16, GSWF(5593), 0)
+    CALL(evt_item_entry, STRING("item_00"), ITEM_STAR_PIECE, 290, 0, -50, 16, GSWF(5593), 0)
     RETURN
 EVT_END()
 

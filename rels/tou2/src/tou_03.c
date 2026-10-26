@@ -1,4 +1,5 @@
 #include "version.h"
+#include "mario/mario_pouch.h"
 #define GXSetTexCoordGen GXSetTexCoordGen_inline_hidden
 #include "eff/n64/eff_pokopi_pcharge_n64.h"
 #include "eff/eff_starstone.h"
@@ -3956,7 +3957,7 @@ EVT_END()
 
 EVT_BEGIN(evt_boss_stone)
     SET_VALUE(LW(10), 0)
-    CALL(evt_item_entry, STRING(("stone")), 116, 0, 0, 0, 17, -1, 0)
+    CALL(evt_item_entry, STRING(("stone")), ITEM_GOLD_STAR, 0, 0, 0, 17, -1, 0)
     LOOP(0)
         CALL(evt_mapobj_get_position, STRING(("kaiten_souti")), LW(0), LW(1), LW(2))
         ADD_FLOAT(LW(1), FLOAT(20.0f))

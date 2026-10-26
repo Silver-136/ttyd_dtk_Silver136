@@ -14,6 +14,7 @@
 #include "evt/evt_mobj.h"
 #include "evt/evt_pouch.h"
 #include "driver/npcdrv.h"
+#include "mario/mario_pouch.h"
 
 #include "driver/camdrv.h"
 #include "driver/msgdrv.h"
@@ -462,7 +463,7 @@ EVT_BEGIN(evt_machibuse)
 #endif
             CALL_CHILD(PTR(name_seikai))
             SET_VALUE(GSW_STORY_PROGRESS, 210)
-            CALL(evt_pouch_remove_item, 68, LW(0))
+            CALL(evt_pouch_remove_item, ITEM_THE_LETTER_P, LW(0))
             CALL(evt_snd_bgmon, 512, STRING("BGM_STG4_GRA1"))
             CALL(evt_snd_envoff, 513)
             CALL(evt_snd_envon, 288, 0)
@@ -597,7 +598,7 @@ EVT_BEGIN(gra_00_init_evt)
     CALL(evt_mobj_brick, STRING("blk01"), 250, 15, 100, 0, 0, 0, LSWF(1))
     CALL(evt_mobj_brick, STRING("blk02"), -265, 60, -85, 0, 3, 0, GSWF(2089))
     IF_INT_EQUAL(GSWF(2091), 0)
-        CALL(evt_item_entry, STRING("majin_key"), 35, -258, 0, -85, 16, -1, PTR(evt_majin_key))
+        CALL(evt_item_entry, STRING("majin_key"), ITEM_BLACK_KEY_0x23, -258, 0, -85, 16, -1, PTR(evt_majin_key))
     END_IF
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(202, 209)

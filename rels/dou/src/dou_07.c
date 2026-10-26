@@ -55,10 +55,10 @@ EVT_BEGIN(erumosu_dead)
 #ifdef VERSION_G8ME01
     WAIT_MS(1000)
     ADD(LW(1), 150)
-    CALL(evt_item_entry, STRING("item_key"), 36, LW(0), LW(1), LW(2), 13, GSWF(2987), 0)
+    CALL(evt_item_entry, STRING("item_key"), ITEM_BLACK_KEY_0x24, LW(0), LW(1), LW(2), 13, GSWF(2987), 0)
 #else
     WAIT_MS(500)
-    CALL(evt_item_entry, STRING("item_key"), 36, LW(0), LW(1), LW(2), 4, GSWF(2987), 0)
+    CALL(evt_item_entry, STRING("item_key"), ITEM_BLACK_KEY_0x24, LW(0), LW(1), LW(2), 4, GSWF(2987), 0)
 #endif
     RETURN
 EVT_END()
@@ -143,7 +143,7 @@ EVT_BEGIN(peramajin_before)
                 CALL(evt_mario_set_dir, 270, 200, 0)
             END_IF
         END_INLINE_EVENT
-        CALL(evt_pouch_check_item, 36, LW(10))
+        CALL(evt_pouch_check_item, ITEM_BLACK_KEY_0x24, LW(10))
         IF_INT_LESS_OR_EQUAL(LW(10), 0)
             CALL(evt_msg_toge, 2, LW(0), LW(1), LW(2))
             CALL(evt_msg_print, 0, STRING("stg1_gon_majin4_08"), PTR(majin_callback), 0)
@@ -178,7 +178,7 @@ EVT_BEGIN(peramajin_before)
         CALL(evt_msg_print, 0, STRING("stg1_gon_majin4_11"), PTR(majin_callback), 0)
         CALL(evt_mario_set_pose, STRING("M_I_N"))
         CALL(evt_cam3d_evt_set, -33, 92, 412, -33, 36, 92, 500, 11)
-        CALL(evt_pouch_remove_item, 36, LW(10))
+        CALL(evt_pouch_remove_item, ITEM_BLACK_KEY_0x24, LW(10))
         CALL(evt_party_run, 0)
         CALL(evt_mario_key_onoff, 1)
         RETURN
@@ -244,7 +244,7 @@ EVT_BEGIN(peramajin_after)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
     CALL(evt_mobj_wait_animation_end, STRING("mobj_box00"))
-    CALL(evt_pouch_add_item, 5, LW(0))
+    CALL(evt_pouch_add_item, ITEM_BOAT_CURSE, LW(0))
     CALL(evt_snd_bgmoff, 1024)
     CALL(evt_snd_bgmon, 1, STRING("BGM_EVT_PERAMAJIN1"))
     CALL(evt_snd_envoff, 1024)
@@ -341,14 +341,14 @@ EVT_BEGIN(dou_07_init_evt)
     CALL(evt_map_playanim, STRING("nami"), 1, 0)
     SET_VALUE(GF(0), 0)
     CALL(evt_mobj_itembox, STRING("mobj_box00"), -33, -18, 56, 3, PTR(peramajin_before), PTR(peramajin_after), GSWF(2980))
-    CALL(evt_item_entry, STRING("item_00"), 270, -75, -30, -15, 16, GSWF(2985), 0)
+    CALL(evt_item_entry, STRING("item_00"), ITEM_P_DOWN_D_UP, -75, -30, -15, 16, GSWF(2985), 0)
     IF_INT_EQUAL(GSWF(2988), 1)
         IF_INT_EQUAL(GSWF(2989), 0)
             SPAWN_EVENT(PTR(apper_elmos))
         END_IF
     END_IF
     IF_INT_EQUAL(GSWF(2989), 1)
-        CALL(evt_item_entry, STRING("item_key"), 36, 100, -6, -37, 14, GSWF(2987), 0)
+        CALL(evt_item_entry, STRING("item_key"), ITEM_BLACK_KEY_0x24, 100, -6, -37, 14, GSWF(2987), 0)
     END_IF
     RETURN
 EVT_END()

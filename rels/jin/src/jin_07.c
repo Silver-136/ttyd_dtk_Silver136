@@ -13,6 +13,7 @@
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
 #include "evt/evt_sub.h"
+#include "mario/mario_pouch.h"
 
 #pragma defer_codegen on
 #include "manager/evtmgr_cmd.h"
@@ -590,7 +591,7 @@ EVT_BEGIN(jin_07_init_evt)
     CALL_CHILD(PTR(evt_usu_kagemario_party_kill))
     CALL(evt_npc_setup, PTR(npcEnt))
     SPAWN_EVENT(PTR(jin_07_juyo_oumu_vivian))
-    CALL(evt_item_entry, STRING("item_00"), 125, 220, 75, -20, 16, GSWF(5636), 0)
+    CALL(evt_item_entry, STRING("item_00"), ITEM_STAR_PIECE, 220, 75, -20, 16, GSWF(5636), 0)
     IF_INT_NOT_EQUAL(GSWF(2079), 0)
         SET_VALUE(GSWF(2079), 0)
         BEGIN_INLINE_EVENT

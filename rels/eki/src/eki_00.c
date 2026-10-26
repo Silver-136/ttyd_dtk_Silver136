@@ -1915,7 +1915,7 @@ EVT_BEGIN(evt_elv)
             CALL(evt_mario_key_onoff, 1)
             RETURN
         END_IF
-        CALL(evt_pouch_remove_item, 26, LW(0))
+        CALL(evt_pouch_remove_item, ITEM_ELEVATOR_KEY_0x1A, LW(0))
         SET_VALUE(GSW_STORY_PROGRESS, 321)
         CALL(evt_snd_sfxon, STRING("SFX_STG6_ELEVATOR_KEY1"), 0)
         CALL(evt_msg_print, 0, STRING("stg6_eki_07"), 0, 0)
@@ -1941,7 +1941,7 @@ EVT_END()
 
 static EVT_BEGIN(evt_head)
     CALL(evt_item_delete, STRING("item"))
-    CALL(evt_item_entry, STRING("item"), 300, -260, 160, -60, 4, GSWF(3745), 0)
+    CALL(evt_item_entry, STRING("item"), ITEM_CLOSE_CALL_P, -260, 160, -60, 4, GSWF(3745), 0)
     CALL(evt_item_set_move_dir_speed, STRING("item"), FLOAT(135.0f), FLOAT(90.0f))
     CALL(evt_item_set_gravity, STRING("item"), FLOAT(1.0f))
     CALL(evt_item_set_bound_rate, STRING("item"), FLOAT(0.5996094f))
@@ -1978,7 +1978,7 @@ EVT_BEGIN(eki_00_init_evt)
     IF_INT_LESS(GSW_STORY_PROGRESS, 323)
         CALL_CHILD(PTR(evt_moamoa_init))
     END_IF
-    CALL(evt_item_entry, STRING("item"), 300, -260, 130, -60, 17, GSWF(3745), 0)
+    CALL(evt_item_entry, STRING("item"), ITEM_CLOSE_CALL_P, -260, 130, -60, 17, GSWF(3745), 0)
     IF_INT_EQUAL(GSWF(3745), 0)
         CALL(evt_run_case_evt, 16, 1, STRING("a_dai_sita"), 0, PTR(evt_head), 0)
     END_IF

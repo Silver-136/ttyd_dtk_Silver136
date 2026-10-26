@@ -13,6 +13,7 @@
 #include "party/party_motion.h"
 #include "evt/evt_item.h"
 #include "driver/mapdrv.h"
+#include "mario/mario_pouch.h"
 
 #ifdef VERSION_G8ME01
 #endif
@@ -269,7 +270,7 @@ EVT_BEGIN(moo_02_init_evt)
     CALL(evt_map_playanim, STRING("hosi_02"), 1, 0)
     CALL(evt_map_playanim, STRING("hosi_03"), 1, 0)
     CALL(evt_map_playanim, STRING("light"), 1, 0)
-    CALL(evt_item_entry, STRING("item00"), 125, -55, 0, -135, 16, GSWF(5664), 0)
+    CALL(evt_item_entry, STRING("item00"), ITEM_STAR_PIECE, -55, 0, -135, 16, GSWF(5664), 0)
     CALL(evt_paper_entry, STRING("OFF_d_bom_ver2"))
     IF_INT_LESS(GSW_STORY_PROGRESS, 359)
         CALL(evt_run_case_evt, 15, 1, STRING("A_iwa_04"), 0, PTR(dokan_evt), 0)
@@ -289,7 +290,7 @@ EVT_BEGIN(moo_02_init_evt)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_iwa_07"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_iwa_07"), 1, 0)
     END_IF
-    CALL(evt_item_entry, STRING("item_01"), 142, 330, 0, 403, 16, GSWF(4037), 0)
+    CALL(evt_item_entry, STRING("item_01"), ITEM_POWER_PUNCH, 330, 0, 403, 16, GSWF(4037), 0)
     RETURN
 EVT_END()
 

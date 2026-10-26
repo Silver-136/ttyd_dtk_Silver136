@@ -971,7 +971,7 @@ EVT_BEGIN(sun_stone_set_event)
             RETURN
         END_IF
         SET_VALUE(GSWF(1776), 1)
-        CALL(evt_pouch_remove_item, 62, LW(0))
+        CALL(evt_pouch_remove_item, ITEM_SUN_STONE, LW(0))
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("taiyou_ana"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("taiyounoisi"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_get_position, STRING("taiyounoisi"), LW(0), LW(1), LW(2))
@@ -1011,7 +1011,7 @@ EVT_BEGIN(moon_stone_set_event)
             RETURN
         END_IF
         SET_VALUE(GSWF(1777), 1)
-        CALL(evt_pouch_remove_item, 61, LW(0))
+        CALL(evt_pouch_remove_item, ITEM_MOON_STONE, LW(0))
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("tuki_ana"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("tukinoisi"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_get_position, STRING("tukinoisi"), LW(0), LW(1), LW(2))
@@ -1027,7 +1027,7 @@ EVT_END()
 static EVT_BEGIN(ki_data_evt_01)
     CALL(evt_item_delete_check, STRING("item_ki01"), LW(0))
     IF_INT_EQUAL(LW(0), 1)
-        CALL(evt_item_entry, STRING("item_ki01"), 125, -468, 139, -127, 14, GSWF(5598), 0)
+        CALL(evt_item_entry, STRING("item_ki01"), ITEM_STAR_PIECE, -468, 139, -127, 14, GSWF(5598), 0)
     END_IF
     RETURN
 EVT_END()
@@ -1035,7 +1035,7 @@ EVT_END()
 EVT_BEGIN(ki_data_evt_02)
     CALL(evt_item_delete_check, STRING("item_ki02"), LW(0))
     IF_INT_EQUAL(LW(0), 1)
-        CALL(evt_item_entry, STRING("item_ki02"), 148, -408, 139, -127, 14, GSWF(1778), 0)
+        CALL(evt_item_entry, STRING("item_ki02"), ITEM_MUSHROOM, -408, 139, -127, 14, GSWF(1778), 0)
     END_IF
     RETURN
 EVT_END()

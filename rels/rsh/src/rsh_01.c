@@ -338,7 +338,7 @@ static EVT_BEGIN(talk_madam_ring_return)
         CALL(evt_msg_print, 0, STRING("stg6_rsh_201"), 0, STRING("マダム"))
         CALL(evt_sub_get_coin, 30)
         CALL(evt_msg_print, 0, STRING("stg6_rsh_202"), 0, STRING("マダム"))
-        CALL(evt_pouch_remove_item, 75, LW(0))
+        CALL(evt_pouch_remove_item, ITEM_GOLD_RING, LW(0))
         ELSE
         CALL(evt_msg_print, 0, STRING("stg6_rsh_201_2"), 0, STRING("マダム"))
     END_IF
@@ -381,7 +381,7 @@ static EVT_BEGIN(talk_madam)
             RETURN
         END_IF
     END_IF
-    CALL(evt_pouch_check_item, 75, LW(0))
+    CALL(evt_pouch_check_item, ITEM_GOLD_RING, LW(0))
     IF_INT_GREATER_OR_EQUAL(LW(0), 1)
         CALL_CHILD(PTR(talk_madam_ring_return))
         RETURN
@@ -517,7 +517,7 @@ static EVT_BEGIN(evt_daiji_kami)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("yuka_3_kami"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("yuka_3"), MAP_OBJ_FLAG_HIDDEN)
     SET_VALUE(GSW_STORY_PROGRESS, 305)
-    CALL(evt_item_entry, STRING("daiji"), 80, 0, 0, 0, 17, -1, 0)
+    CALL(evt_item_entry, STRING("daiji"), ITEM_VITAL_PAPER, 0, 0, 0, 17, -1, 0)
     CALL(evt_item_get_item, STRING("daiji"))
     CALL(evt_item_get_item_end_wait, STRING("daiji"))
     CALL(evt_mario_key_onoff, 1)

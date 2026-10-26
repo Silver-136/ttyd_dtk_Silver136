@@ -20,6 +20,7 @@
 #include "evt/evt_sub.h"
 #include "evt/evt_telop.h"
 #include "evt/evt_item.h"
+#include "mario/mario_pouch.h"
 
 #include "driver/offscreendrv.h"
 #include "mario/mario.h"
@@ -1660,7 +1661,7 @@ EVT_BEGIN(mri_00_init_evt)
             CALL(evt_snd_envon, 272, STRING("ENV_STG2_MRI2"))
         END_IF
     END_IF
-    CALL(evt_item_entry, STRING("i"), 280, 528, 0, 110, 0, GSWF(2825), 0)
+    CALL(evt_item_entry, STRING("i"), ITEM_FP_PLUS, 528, 0, 110, 0, GSWF(2825), 0)
     CALL(evt_npc_setup, PTR(npcEnt))
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 88)
         IF_INT_LESS_OR_EQUAL(GSW_STORY_PROGRESS, 112)

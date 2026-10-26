@@ -20,6 +20,7 @@
 #include "libc_decls.h"
 #include "poly_trig.h"
 #include "driver/mapdrv.h"
+#include "mario/mario_pouch.h"
 
 #include "string.h"
 #include "mario/mariost.h"
@@ -2071,7 +2072,7 @@ static EVT_BEGIN(evt_poster_8)
             ELSE
             CALL(evt_mapobj_get_position, STRING("p_m_8_e"), LW(0), LW(1), LW(2))
         END_IF
-        CALL(evt_item_entry, STRING("key"), 19, LW(0), LW(1), LW(2), 4, -1, PTR(evt_key))
+        CALL(evt_item_entry, STRING("key"), ITEM_STORAGE_KEY_0x13, LW(0), LW(1), LW(2), 4, -1, PTR(evt_key))
         CALL(evt_item_set_move_dir_speed, STRING("key"), FLOAT(180.0f), FLOAT(90.0f))
         CALL(evt_item_set_gravity, STRING("key"), FLOAT(1.0f))
         CALL(evt_item_set_bound_rate, STRING("key"), FLOAT(0.5996094f))
@@ -2079,7 +2080,7 @@ static EVT_BEGIN(evt_poster_8)
         CALL(evt_item_status_on, STRING("key"), 16)
 #else
         CALL(evt_mapobj_get_position, STRING(("p_m_8")), LW(0), LW(1), LW(2))
-        CALL(evt_item_entry, STRING(("key")), 19, LW(0), LW(1), LW(2), 4, -1, PTR(evt_key))
+        CALL(evt_item_entry, STRING(("key")), ITEM_STORAGE_KEY_0x13, LW(0), LW(1), LW(2), 4, -1, PTR(evt_key))
         CALL(evt_item_set_move_dir_speed, STRING(("key")), FLOAT(180.0f), FLOAT((90.0f)))
         CALL(evt_item_set_gravity, STRING(("key")), FLOAT((1.0f)))
         CALL(evt_item_set_bound_rate, STRING(("key")), FLOAT(0.5996094f))
@@ -2244,7 +2245,7 @@ EVT_BEGIN(tou_02_init_evt)
             CALL(evt_pouch_all_party_recovery)
         END_IF
 #endif
-        CALL(evt_pouch_remove_item, 65, LW(0))
+        CALL(evt_pouch_remove_item, ITEM_CHAMPS_BELT, LW(0))
         SPAWN_EVENT(PTR(evt_after_peach))
         SET_VALUE(GSWF(2402), 1)
         SET_VALUE(GSWF(2403), 1)
@@ -2473,7 +2474,7 @@ EVT_BEGIN(tou_02_init_evt)
     END_IF
     IF_INT_EQUAL(GSWF(2463), 1)
         IF_INT_EQUAL(GSW_STORY_PROGRESS, 153)
-            CALL(evt_item_entry, STRING("key"), 19, -110, 200, -180, 16, -1, PTR(evt_key))
+            CALL(evt_item_entry, STRING("key"), ITEM_STORAGE_KEY_0x13, -110, 200, -180, 16, -1, PTR(evt_key))
         END_IF
     END_IF
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("s_kaidan_7"), MAP_OBJ_FLAG_CLIP)
@@ -2557,7 +2558,7 @@ EVT_BEGIN(tou_02_init_evt)
     END_SWITCH
     IF_INT_EQUAL(GSWF(2463), 1)
         IF_INT_EQUAL(GSW_STORY_PROGRESS, 153)
-            CALL(evt_item_entry, STRING(("key")), 19, -110, 200, -180, 16, -1, PTR(evt_key))
+            CALL(evt_item_entry, STRING(("key")), ITEM_STORAGE_KEY_0x13, -110, 200, -180, 16, -1, PTR(evt_key))
         END_IF
     END_IF
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING(("s_kaidan_7")), 2)

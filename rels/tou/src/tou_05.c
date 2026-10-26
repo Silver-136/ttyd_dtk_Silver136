@@ -24,6 +24,7 @@
 #include "evt/evt_pouch.h"
 #include "driver/npcdrv.h"
 #include "driver/mapdrv.h"
+#include "mario/mario_pouch.h"
 
 USER_FUNC(evt_mario_dispflag_onoff);
 void gans_msg_callback(s32 type, void** work);
@@ -322,7 +323,7 @@ EVT_BEGIN(evt_hiki_open)
     END_IF
     IF_STR_EQUAL(LW(0), STRING("hikidasi_N"))
         IF_INT_EQUAL(GSWF(2508), 0)
-            CALL(evt_item_entry, STRING("item02"), 125, 0, -1000, 0, 16, -1, 0)
+            CALL(evt_item_entry, STRING("item02"), ITEM_STAR_PIECE, 0, -1000, 0, 16, -1, 0)
             CALL(evt_item_get_item, STRING("item02"))
             SET_VALUE(GSWF(2508), 1)
             SET_VALUE(GSWF(5625), 1)
@@ -412,7 +413,7 @@ EVT_END()
 
 static EVT_BEGIN(talk_kinoshikowa)
     IF_INT_EQUAL(GSW(1420), 13)
-        CALL(evt_pouch_check_item, 107, LW(0))
+        CALL(evt_pouch_check_item, ITEM_BATTLE_TRUNKS, LW(0))
         IF_INT_EQUAL(GSWF(5406), 0)
             IF_INT_EQUAL(LW(0), 20)
                 IF_INT_EQUAL(GSWF(5405), 0)
@@ -450,7 +451,7 @@ static EVT_BEGIN(talk_kinoshikowa)
         RETURN
     END_IF
     IF_INT_EQUAL(GSW(1420), 23)
-        CALL(evt_pouch_check_item, 99, LW(0))
+        CALL(evt_pouch_check_item, ITEM_WRESTLING_MAG, LW(0))
         IF_INT_GREATER(LW(0), 0)
             CALL(evt_npc_set_anim, STRING("me"), STRING("M_1"))
             WAIT_MS(200)
@@ -504,7 +505,7 @@ static EVT_BEGIN(talk_kinoshikowa)
             CALL(evt_npc_set_anim, STRING("me"), STRING("M_1"))
             WAIT_MS(200)
             CALL(evt_msg_print, 0, STRING("irai_23_02"), 0, 0)
-            CALL(evt_item_entry, STRING("pm"), 99, 0, -1000, 0, 17, -1, 0)
+            CALL(evt_item_entry, STRING("pm"), ITEM_WRESTLING_MAG, 0, -1000, 0, 17, -1, 0)
             CALL(evt_item_get_item, STRING("pm"))
             CALL(evt_item_get_item_end_wait, STRING("pm"))
             CALL(evt_npc_set_ry, STRING("me"), 270)
@@ -886,7 +887,7 @@ static EVT_BEGIN(evt_1st_leagu)
     CALL(evt_mario_set_pose, STRING("M_I_U"))
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     ADD(LW(1), 50)
-    CALL(evt_item_entry, STRING("coin"), 121, LW(0), LW(1), LW(2), 17, -1, 0)
+    CALL(evt_item_entry, STRING("coin"), ITEM_COIN, LW(0), LW(1), LW(2), 17, -1, 0)
     WAIT_MS(1000)
     CALL(evt_item_delete, STRING("coin"))
     CALL(evt_mario_set_pose, STRING("M_S_1"))
@@ -1202,7 +1203,7 @@ EVT_BEGIN(tou_05_init_evt)
     CALL(evt_bero_get_info)
     CALL_CHILD(PTR(evt_bero_info_run))
     CALL(evt_map_playanim, STRING("anm_camera"), 1, 0)
-    CALL(evt_item_entry, STRING("item01"), 125, -135, 0, 105, 16, GSWF(5624), 0)
+    CALL(evt_item_entry, STRING("item01"), ITEM_STAR_PIECE, -135, 0, 105, 16, GSWF(5624), 0)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("paifu"), MAP_OBJ_FLAG_CLIP)
     CALL(evt_bero_get_entername, LW(0))
     IF_STR_EQUAL(LW(0), STRING("fall"))

@@ -13,6 +13,7 @@
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
 #include "driver/mapdrv.h"
+#include "mario/mario_pouch.h"
 
 #include "driver/npcdrv.h"
 #include "evt/evt_npc.h"
@@ -99,7 +100,7 @@ static EVT_BEGIN(chibitoge_talk)
     ADD(LW(0), 25)
     CALL(evt_npc_jump_position_nohit, STRING("me"), LW(0), LW(1), LW(2), 500, 30)
     WAIT_MS(1000)
-    CALL(evt_item_entry, STRING("chibitoge_item"), 148, 0, -1000, 0, 16, -1, 0)
+    CALL(evt_item_entry, STRING("chibitoge_item"), ITEM_MUSHROOM, 0, -1000, 0, 16, -1, 0)
     CALL(evt_item_get_item, STRING("chibitoge_item"))
     CALL(evt_npc_set_ry, STRING("me"), 90)
     WAIT_MS(200)
@@ -321,7 +322,7 @@ static EVT_BEGIN(chuchurina_sogu)
     SET_VALUE(LW(10), STRING("第三勢力部下"))
     SPAWN_EVENT(PTR(enemy_event_dead_event_sub))
     WAIT_MS(500)
-    CALL(evt_item_entry, STRING("item_key"), 16, 60, 0, 0, 4, GSWF(2839), 0)
+    CALL(evt_item_entry, STRING("item_key"), ITEM_RED_KEY, 60, 0, 0, 4, GSWF(2839), 0)
     CALL(evt_puni_set_mode, 1, 1)
     SET_VALUE(GSW_STORY_PROGRESS, 93)
     CALL(N_evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
@@ -413,7 +414,7 @@ EVT_END()
 static EVT_BEGIN(evt_ueki_02)
     CALL(evt_item_delete_check, STRING("item_ueki_02"), LW(0))
     IF_INT_EQUAL(LW(0), 1)
-        CALL(evt_item_entry, STRING("item_ueki_02"), 121, 85, 0, 85, 4, GSWF(2838), 0)
+        CALL(evt_item_entry, STRING("item_ueki_02"), ITEM_COIN, 85, 0, 85, 4, GSWF(2838), 0)
     END_IF
     RETURN
 EVT_END()
@@ -429,7 +430,7 @@ static KusaAccess ueki_access_data[] = {
 EVT_BEGIN(item_mri_04)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mobj_get_position, STRING("mobj_box00"), LW(0), LW(1), LW(2))
-    CALL(evt_item_entry, STRING("item00"), 150, LW(0), LW(1), LW(2), 16, -1, 0)
+    CALL(evt_item_entry, STRING("item00"), ITEM_ULTRA_SHROOM, LW(0), LW(1), LW(2), 16, -1, 0)
     CALL(evt_item_flag_on, STRING("item00"), 2)
     CALL(evt_mobj_wait_animation_end, STRING("mobj_box00"))
     CALL(evt_item_get_item, STRING("item00"))
@@ -483,7 +484,7 @@ EVT_BEGIN(mri_04_init_evt)
         SPAWN_EVENT(PTR(chuchurina_sogu))
     END_IF
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 93)
-        CALL(evt_item_entry, STRING("item_key"), 16, 60, 0, 0, 14, GSWF(2839), 0)
+        CALL(evt_item_entry, STRING("item_key"), ITEM_RED_KEY, 60, 0, 0, 14, GSWF(2839), 0)
     END_IF
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S"), MAP_OBJ_FLAG_CLIP)
     RETURN

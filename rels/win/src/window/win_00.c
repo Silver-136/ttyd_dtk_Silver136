@@ -11,6 +11,7 @@
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
 #include "driver/npcdrv.h"
+#include "mario/mario_pouch.h"
 
 #include "driver/itemdrv.h"
 #include "mario/mariost.h"
@@ -305,7 +306,7 @@ EVT_BEGIN(witchtrio_momeru)
     ADD(LW(0), 17)
     ADD(LW(1), 11)
     ADD(LW(2), 5)
-    CALL(evt_item_entry, STRING("necklace"), 63, LW(0), LW(1), LW(2), 16, -1, 0)
+    CALL(evt_item_entry, STRING("necklace"), ITEM_NECKLACE, LW(0), LW(1), LW(2), 16, -1, 0)
     CALL(evt_item_flag_on, STRING("necklace"), 2)
     WAIT_MS(300)
     CALL(evt_npc_set_autotalkpose, STRING("ビビアン"), STRING("PTR_S_5"), STRING("PTR_T_6"))
@@ -499,7 +500,7 @@ EVT_BEGIN(witchtrio_picture)
     CALL(evt_cam3d_evt_set, -495, 90, 237, -495, 30, -108, 500, 11)
     WAIT_MS(500)
     CALL(evt_msg_print, 0, STRING("stg2_win_e06_02"), 0, STRING("マリリン"))
-    CALL(evt_item_entry, STRING("picture"), 90, 0, -1000, 0, 16, -1, 0)
+    CALL(evt_item_entry, STRING("picture"), ITEM_MARIO_POSTER, 0, -1000, 0, 16, -1, 0)
     CALL(evt_item_flag_on, STRING("picture"), 2)
     SPAWN_EVENT_GET_ID(PTR(majorin_have_picture), LW(10))
     CALL(evt_npc_set_anim, STRING("マジョリン"), STRING("MJR_I_1"))
@@ -794,7 +795,7 @@ EVT_BEGIN(witchtrio_lose)
     CALL(evt_npc_set_autotalkpose, STRING("ビビアン"), STRING("PTR_S_4"), STRING("PTR_T_4"))
     CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_WITCH1"))
     CALL(evt_cam3d_evt_set, -375, 144, 533, -375, 40, -58, 0, 11)
-    CALL(evt_item_entry, STRING("necklace"), 63, 0, -1000, 0, 16, GSWF(2675), PTR(get_necklace))
+    CALL(evt_item_entry, STRING("necklace"), ITEM_NECKLACE, 0, -1000, 0, 16, GSWF(2675), PTR(get_necklace))
     CALL(evt_item_flag_on, STRING("necklace"), 2)
     CALL(evt_npc_get_position, STRING("マリリン"), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_GURUGURU_MARK1"), LW(0), LW(1), LW(2), 0)
@@ -897,7 +898,7 @@ EVT_END()
 static EVT_BEGIN(ki_data_evt_01)
     CALL(evt_item_delete_check, STRING("item_ki01"), LW(0))
     IF_INT_EQUAL(LW(0), 1)
-        CALL(evt_item_entry, STRING("item_ki01"), 138, -694, 111, -130, 14, GSWF(2685), 0)
+        CALL(evt_item_entry, STRING("item_ki01"), ITEM_SLEEPY_SHEEP, -694, 111, -130, 14, GSWF(2685), 0)
     END_IF
     RETURN
 EVT_END()
@@ -1018,9 +1019,9 @@ EVT_BEGIN(win_00_init_evt)
         SPAWN_EVENT(PTR(witchtrio_lose))
     END_IF
     IF_INT_EQUAL(GSW_STORY_PROGRESS, 86)
-        CALL(evt_item_entry, STRING("necklace"), 63, -361, 0, -22, 16, GSWF(2675), PTR(get_necklace))
+        CALL(evt_item_entry, STRING("necklace"), ITEM_NECKLACE, -361, 0, -22, 16, GSWF(2675), PTR(get_necklace))
     END_IF
-    CALL(evt_item_entry, STRING("i"), 154, 385, 0, -115, 0, GSWF(2676), 0)
+    CALL(evt_item_entry, STRING("i"), ITEM_HONEY_SYRUP, 385, 0, -115, 0, GSWF(2676), 0)
     CALL_CHILD(PTR(iri_28_init))
     RETURN
 EVT_END()

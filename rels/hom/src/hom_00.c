@@ -166,7 +166,7 @@ EVT_BEGIN(evt_carry_up_bridge)
     CALL(evt_msg_select, 0, STRING("stg6_hom_10_yn"))
     IF_INT_EQUAL(LW(0), 0)
         CALL(evt_msg_print_add, 0, STRING("stg6_hom_06"))
-        CALL(evt_item_entry, STRING("a"), 24, 0, 0, 0, 17, -1, 0)
+        CALL(evt_item_entry, STRING("a"), ITEM_STEEPLE_KEY_0x18, 0, 0, 0, 17, -1, 0)
         CALL(evt_item_get_item, STRING("a"))
         CALL(evt_item_get_item_end_wait, STRING("a"))
         CALL(evt_msg_print, 0, STRING("stg6_hom_08"), 0, STRING("me"))
@@ -391,7 +391,7 @@ static s32 key_tbl[] = {
 };
 
 static EVT_BEGIN(evt_chk)
-    CALL(evt_pouch_check_item, 24, LW(0))
+    CALL(evt_pouch_check_item, ITEM_STEEPLE_KEY_0x18, LW(0))
     IF_INT_GREATER(LW(0), 0)
         CALL(evt_win_item_select, 0, PTR(key_tbl), LW(0), 0)
         IF_INT_EQUAL(LW(0), -1)

@@ -24,6 +24,7 @@
 #include "poly_trig.h"
 #include "eff/eff_kemutest.h"
 #include "driver/mapdrv.h"
+#include "mario/mario_pouch.h"
 
 #include "memory.h"
 #include "string.h"
@@ -1872,7 +1873,7 @@ static EVT_BEGIN(evt_taihou)
     CALL(evt_snd_bgmoff_f, 512, 2000)
     WAIT_MS(300)
     WAIT_MS(2000)
-    CALL(evt_pouch_remove_item, 82, LW(0))
+    CALL(evt_pouch_remove_item, ITEM_GOLDBOB_GUIDE, LW(0))
     CALL(evt_bero_mapchange, STRING(("moo_03")), 0)
     RETURN
 EVT_END()
@@ -2800,7 +2801,7 @@ EVT_BEGIN(bom_01_init_evt)
         CALL_CHILD(PTR(musume_c_entry))
     END_SWITCH
     CALL(evt_run_case_evt, 9, 1, STRING(("A_ie_door")), 0, PTR(evt_door), 0)
-    CALL(evt_item_entry, STRING(("item_00")), 125, -180, 5, 450, 16, GSWF(5659), 0)
+    CALL(evt_item_entry, STRING(("item_00")), ITEM_STAR_PIECE, -180, 5, 450, 16, GSWF(5659), 0)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(349)
         SET_VALUE(GSWF(3885), 1)

@@ -1098,7 +1098,7 @@ s32 daiza_key_tbl[] = {
 
 EVT_BEGIN(daiza_evt)
     CALL(evt_mario_key_onoff, 0)
-    CALL(evt_pouch_check_item, 37, LW(0))
+    CALL(evt_pouch_check_item, ITEM_STAR_KEY, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL(evt_mario_key_onoff, 1)
         RETURN
@@ -1108,7 +1108,7 @@ EVT_BEGIN(daiza_evt)
         CALL(evt_mario_key_onoff, 1)
         RETURN
     END_IF
-    CALL(evt_pouch_remove_item, 37, LW(0))
+    CALL(evt_pouch_remove_item, ITEM_STAR_KEY, LW(0))
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("hosi_off"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("hosi_on"), MAP_OBJ_FLAG_HIDDEN)
     CALL_CHILD(PTR(kagi_8_syutugen))

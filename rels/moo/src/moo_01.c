@@ -13,6 +13,7 @@
 #include "party/party_motion.h"
 #include "evt/evt_item.h"
 #include "driver/mapdrv.h"
+#include "mario/mario_pouch.h"
 
 #ifdef VERSION_G8ME01
 #endif
@@ -151,7 +152,7 @@ EVT_BEGIN(moo_01_init_evt)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_iwa_08"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_iwa_08"), 1, 0)
     END_IF
-    CALL(evt_item_entry, STRING("item_01"), 135, -80, 0, 140, 16, GSWF(4036), 0)
+    CALL(evt_item_entry, STRING("item_01"), ITEM_VOLT_SHROOM, -80, 0, 140, 16, GSWF(4036), 0)
     RETURN
 EVT_END()
 

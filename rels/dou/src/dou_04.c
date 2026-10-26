@@ -17,6 +17,7 @@
 #include "evt/evt_mobj.h"
 #include "evt/evt_pouch.h"
 #include "driver/npcdrv.h"
+#include "mario/mario_pouch.h"
 
 #include "mario/mario.h"
 #include "manager/evtmgr_cmd.h"
@@ -485,7 +486,7 @@ EVT_BEGIN(kuribo_talk)
                 ADD(LW(0), 10)
                 ADD(LW(1), 15)
                 ADD(LW(2), 5)
-                CALL(evt_item_entry, STRING("ff"), 219, LW(0), LW(1), LW(2), 17, GSWF(2991), 0)
+                CALL(evt_item_entry, STRING("ff"), ITEM_COUPLES_CAKE, LW(0), LW(1), LW(2), 17, GSWF(2991), 0)
                 WAIT_MS(800)
                 CALL(evt_msg_print, 0, STRING("irai_21_006"), 0, STRING("party"))
                 WAIT_MS(500)
@@ -558,7 +559,7 @@ EVT_BEGIN(kuribo_talk)
                 CALL(evt_mario_set_dir, 270, 300, 0)
                 WAIT_MS(300)
                 CALL(evt_pouch_get_haveitemcnt, LW(0))
-                CALL(evt_pouch_check_item, 1, LW(1))
+                CALL(evt_pouch_check_item, ITEM_STRANGE_SACK, LW(1))
                 IF_INT_EQUAL(LW(1), 0)
                     SET_VALUE(LW(1), 10)
                     ELSE
@@ -673,13 +674,13 @@ EVT_BEGIN(dou_04_init_evt)
     SPAWN_EVENT(PTR(lift_event_init))
     CALL(evt_map_playanim, STRING("nami"), 1, 0)
     CALL(evt_map_playanim, STRING("moku"), 1, 0)
-    CALL(evt_item_entry, STRING("kagitsume"), 20, 122, 110, -118, 0, GSWF(2977), 0)
-    CALL(evt_item_entry, STRING("starpice"), 125, -230, 200, 110, 0, GSWF(5646), 0)
+    CALL(evt_item_entry, STRING("kagitsume"), ITEM_GROTTO_KEY, 122, 110, -118, 0, GSWF(2977), 0)
+    CALL(evt_item_entry, STRING("starpice"), ITEM_STAR_PIECE, -230, 200, 110, 0, GSWF(5646), 0)
     CALL(evt_hit_damage_return_set, PTR(hitDmgRetPoints))
     CALL_CHILD(PTR(evt_gazigazi_entry))
     CALL(evt_mobj_powerupblk, STRING("pblk00"), -230, 290, -105, 0, GSWF(5555), 0)
     IF_INT_EQUAL(GSWF(5395), 1)
-        CALL(evt_item_entry, STRING("iri_21"), 219, -165, 10, 106, 16, GSWF(2991), 0)
+        CALL(evt_item_entry, STRING("iri_21"), ITEM_COUPLES_CAKE, -165, 10, 106, 16, GSWF(2991), 0)
     END_IF
     RETURN
 EVT_END()

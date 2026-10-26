@@ -336,11 +336,11 @@ EVT_BEGIN(talk_cook_nabe_return)
     CALL(evt_win_item_select, 0, PTR(item_tbl_cook), LW(1), 0)
     IF_INT_NOT_EQUAL(LW(1), -1)
         CALL(evt_msg_print, 0, STRING("stg6_rsh_70_01"), 0, STRING("コック"))
-        CALL(evt_item_entry, STRING("orei"), 125, 0, 0, 0, 17, -1, 0)
+        CALL(evt_item_entry, STRING("orei"), ITEM_STAR_PIECE, 0, 0, 0, 17, -1, 0)
         CALL(evt_item_get_item, STRING("orei"))
         CALL(evt_item_get_item_end_wait, STRING("orei"))
         SET_VALUE(GSWF(5650), 1)
-        CALL(evt_pouch_remove_item, 74, LW(0))
+        CALL(evt_pouch_remove_item, ITEM_GALLEY_POT, LW(0))
     END_IF
     RETURN
 EVT_END()
@@ -390,15 +390,15 @@ EVT_BEGIN(talk_cook)
         CALL(evt_win_item_select, 0, LW(0), LW(1), 0)
         SWITCH(LW(1))
             CASE_EQUAL(169)
-            CALL(evt_pouch_remove_item, 169, LW(0))
+            CALL(evt_pouch_remove_item, ITEM_GOLDEN_LEAF, LW(0))
             CALL(evt_msg_print, 0, STRING("irai_22_10"), 0, 0)
             OR(GSW(1469), 1)
             CASE_EQUAL(168)
-            CALL(evt_pouch_remove_item, 168, LW(0))
+            CALL(evt_pouch_remove_item, ITEM_MYSTIC_EGG, LW(0))
             CALL(evt_msg_print, 0, STRING("irai_22_11"), 0, 0)
             OR(GSW(1469), 2)
             CASE_EQUAL(170)
-            CALL(evt_pouch_remove_item, 170, LW(0))
+            CALL(evt_pouch_remove_item, ITEM_KEEL_MANGO, LW(0))
             CALL(evt_msg_print, 0, STRING("irai_22_12"), 0, 0)
             OR(GSW(1469), 4)
         END_SWITCH
@@ -415,7 +415,7 @@ EVT_BEGIN(talk_cook)
         END_IF
         RETURN
     END_IF
-    CALL(evt_pouch_check_item, 74, LW(0))
+    CALL(evt_pouch_check_item, ITEM_GALLEY_POT, LW(0))
     IF_INT_GREATER_OR_EQUAL(LW(0), 1)
         CALL_CHILD(PTR(talk_cook_nabe_return))
         RETURN
@@ -497,7 +497,7 @@ EVT_BEGIN(talk_waitless_pias_return)
             ADD(LW(0), 18)
         END_IF
         ADD(LW(1), 18)
-        CALL(evt_item_entry, STRING("yubiwa"), 76, LW(0), LW(1), LW(2), 17, -1, 0)
+        CALL(evt_item_entry, STRING("yubiwa"), ITEM_SHELL_EARRINGS, LW(0), LW(1), LW(2), 17, -1, 0)
         CALL(evt_mario_set_pose, STRING("M_C_3"))
         WAIT_MS(1000)
         CALL(evt_mario_set_pose, STRING("M_S_1"))
@@ -510,7 +510,7 @@ EVT_BEGIN(talk_waitless_pias_return)
         CALL(evt_npc_set_anim, STRING("ウェイトレス"), STRING("A_1"))
         WAIT_MS(500)
 #endif
-        CALL(evt_item_entry, STRING("orei"), 125, 0, 0, 0, 17, -1, 0)
+        CALL(evt_item_entry, STRING("orei"), ITEM_STAR_PIECE, 0, 0, 0, 17, -1, 0)
         CALL(evt_item_get_item, STRING("orei"))
         CALL(evt_item_get_item_end_wait, STRING("orei"))
         SET_VALUE(GSWF(5651), 1)
@@ -523,7 +523,7 @@ EVT_BEGIN(talk_waitless_pias_return)
         WAIT_MS(500)
         CALL(evt_npc_set_anim, STRING("ウェイトレス"), STRING("S_1"))
 #endif
-        CALL(evt_pouch_remove_item, 76, LW(0))
+        CALL(evt_pouch_remove_item, ITEM_SHELL_EARRINGS, LW(0))
         ELSE
         CALL(evt_msg_print, 0, STRING("stg6_rsh_196_2"), 0, STRING("ウェイトレス"))
     END_IF
@@ -567,7 +567,7 @@ static EVT_BEGIN(talk_waitless)
             RETURN
         END_IF
     END_IF
-    CALL(evt_pouch_check_item, 76, LW(0))
+    CALL(evt_pouch_check_item, ITEM_SHELL_EARRINGS, LW(0))
     IF_INT_GREATER_OR_EQUAL(LW(0), 1)
         CALL_CHILD(PTR(talk_waitless_pias_return))
         RETURN

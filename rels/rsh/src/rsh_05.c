@@ -16,6 +16,7 @@
 #include "evt/evt_snd.h"
 #include "evt/evt_sub.h"
 #include "poly_trig.h"
+#include "mario/mario_pouch.h"
 #pragma inline_max_total_size(11500)
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
@@ -1903,7 +1904,7 @@ static EVT_BEGIN(evt_access2)
         SET_VALUE(LSWF(12), 1)
         CALL(evt_mario_key_onoff, 0)
         CALL(evt_msg_print, 0, STRING("stg6_rsh_277"), 0, 0)
-        CALL(evt_item_entry, STRING("a"), 142, 0, -1000, 0, 17, -1, 0)
+        CALL(evt_item_entry, STRING("a"), ITEM_POWER_PUNCH, 0, -1000, 0, 17, -1, 0)
         CALL(evt_item_get_item, STRING("a"))
         CALL(evt_mario_key_onoff, 1)
         ELSE
@@ -2001,7 +2002,7 @@ EVT_BEGIN(rsh_05_a_init_evt)
         CALL(evt_npc_change_interrupt, STRING(("\x83" "E\x83" "F\x83" "C\x83g\x83\x8c\x83X")), 6, PTR(talk_waitless))
     END_SWITCH
     IF_INT_LESS(GSW_STORY_PROGRESS, 299)
-        CALL(evt_item_entry, STRING("diary"), 78, -90, 0, -140, 0, -1, PTR(evt_ghost_diary))
+        CALL(evt_item_entry, STRING("diary"), ITEM_RAGGED_DIARY, -90, 0, -140, 0, -1, PTR(evt_ghost_diary))
     END_IF
     RETURN
 EVT_END()

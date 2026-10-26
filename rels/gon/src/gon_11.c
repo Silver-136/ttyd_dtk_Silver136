@@ -18,6 +18,7 @@
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
 #include "evt/evt_item.h"
+#include "mario/mario_pouch.h"
 
 #include "driver/npcdrv.h"
 #include "driver/hitdrv.h"
@@ -506,7 +507,7 @@ EVT_BEGIN(gonbaba_event)
     CALL(evt_cam3d_evt_set, 245, 75, 450, 245, 50, 200, 500, 11)
     WAIT_MS(500)
     CALL(evt_npc_set_anim, STRING("ノコタロウ父"), STRING("NKP_A_1"))
-    CALL(evt_item_entry, STRING("stone"), 114, 245, 45, 220, 17, -1, 0)
+    CALL(evt_item_entry, STRING("stone"), ITEM_DIAMOND_STAR, 245, 45, 220, 17, -1, 0)
     WAIT_MS(500)
     CALL(evt_item_get_position, STRING("stone"), LW(0), LW(1), LW(2))
     SET_FLOAT_VALUE(LW(3), FLOAT(-1.0f))
@@ -912,7 +913,7 @@ USER_FUNC(evt_iri_16_cloud_ent) {
 EVT_BEGIN(iri_16_box_evt)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mobj_get_position, STRING("box"), LW(0), LW(1), LW(2))
-    CALL(evt_item_entry, STRING("mb"), 110, LW(0), LW(1), LW(2), 17, -1, 0)
+    CALL(evt_item_entry, STRING("mb"), ITEM_ATTACK_FX_B_KEY_ITEM, LW(0), LW(1), LW(2), 17, -1, 0)
     CALL(evt_mobj_wait_animation_end, STRING("box"))
     CALL(evt_item_get_item, STRING("mb"))
     CALL(evt_item_get_item_end_wait, STRING("mb"))

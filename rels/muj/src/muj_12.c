@@ -15,6 +15,7 @@
 #include "evt/evt_snd.h"
 #include "driver/npcdrv.h"
 #include "driver/mapdrv.h"
+#include "mario/mario_pouch.h"
 
 #include "driver/itemdrv.h"
 #include "mario/mariost.h"
@@ -598,7 +599,7 @@ EVT_BEGIN(kosho_event)
     CALL(evt_snd_sfxon_3d, STRING("SFX_EVT_NPC_BIKKURI_MARK1"), LW(0), LW(1), LW(2), 0)
     WAIT_MS(1000)
     CALL(evt_msg_print, 0, STRING("stg5_dou_36"), 0, STRING("extparty"))
-    CALL(evt_item_entry, STRING("jewel"), 71, -115, 0, 30, 16, -1, 0)
+    CALL(evt_item_entry, STRING("jewel"), ITEM_SKULL_GEM, -115, 0, 30, 16, -1, 0)
     WAIT_MS(1000)
     CALL(evt_cam3d_evt_set, 20, 157, 337, 20, 90, -6, 0, 11)
     WAIT_MS(500)
@@ -742,7 +743,7 @@ EVT_BEGIN(muj_12_init_evt)
     END_IF
     IF_INT_EQUAL(GSW_STORY_PROGRESS, 252)
         SPAWN_EVENT(PTR(korutesu_event))
-        CALL(evt_item_entry, STRING("stone"), 118, 63, 38, 138, 16, -1, 0)
+        CALL(evt_item_entry, STRING("stone"), ITEM_SAPPHIRE_STAR, 63, 38, 138, 16, -1, 0)
     END_IF
     IF_INT_EQUAL(GSW_STORY_PROGRESS, 253)
         SPAWN_EVENT(PTR(korutesu_event_after))

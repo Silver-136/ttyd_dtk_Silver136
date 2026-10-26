@@ -244,7 +244,7 @@ EVT_BEGIN(lost_wedding_ring)
     DIVIDE(LW(0), 2)
     CALL(evt_cam3d_evt_set, LW(0), 118, 343, LW(0), 54, -18, 500, 11)
     WAIT_MS(500)
-    CALL(evt_pouch_check_item, 73, LW(10))
+    CALL(evt_pouch_check_item, ITEM_WEDDING_RING, LW(10))
     IF_INT_EQUAL(LW(10), 0)
         CALL(evt_msg_print_party, STRING("stg5_muj_185"))
         ELSE
@@ -278,11 +278,11 @@ static s32 itemsel_table00[] = {
 
 EVT_BEGIN(wedding_ring_consign)
     SET_VALUE(LW(0), 0)
-    CALL(evt_pouch_check_item, 73, LW(10))
+    CALL(evt_pouch_check_item, ITEM_WEDDING_RING, LW(10))
     IF_INT_NOT_EQUAL(LW(10), 0)
         CALL(evt_win_item_select, 0, PTR(itemsel_table00), LW(10), 0)
         IF_INT_NOT_EQUAL(LW(10), -1)
-            CALL(evt_pouch_remove_item, 73, LW(10))
+            CALL(evt_pouch_remove_item, ITEM_WEDDING_RING, LW(10))
             SET_VALUE(LW(0), 1)
         END_IF
     END_IF
@@ -492,7 +492,7 @@ EVT_END()
 EVT_BEGIN(evt_treeb_01)
     CALL(evt_item_delete_check, STRING("item_treeb_01"), LW(0))
     IF_INT_EQUAL(LW(0), 1)
-        CALL(evt_item_entry, STRING("item_treeb_01"), 170, -350, 90, -70, 14, GSWF(3152), 0)
+        CALL(evt_item_entry, STRING("item_treeb_01"), ITEM_KEEL_MANGO, -350, 90, -70, 14, GSWF(3152), 0)
     END_IF
     RETURN
 EVT_END()
@@ -500,7 +500,7 @@ EVT_END()
 static EVT_BEGIN(evt_kusa_2)
     CALL(evt_item_delete_check, STRING("item_kusa_2"), LW(0))
     IF_INT_EQUAL(LW(0), 1)
-        CALL(evt_item_entry, STRING("item_kusa_2"), 121, 323, 0, 50, 4, GSWF(3154), 0)
+        CALL(evt_item_entry, STRING("item_kusa_2"), ITEM_COIN, 323, 0, 50, 4, GSWF(3154), 0)
     END_IF
     RETURN
 EVT_END()
@@ -508,7 +508,7 @@ EVT_END()
 static EVT_BEGIN(evt_kusa_6)
     CALL(evt_item_delete_check, STRING("item_kusa_6"), LW(0))
     IF_INT_EQUAL(LW(0), 1)
-        CALL(evt_item_entry, STRING("item_kusa_6"), 125, -500, 0, 110, 4, GSWF(5641), 0)
+        CALL(evt_item_entry, STRING("item_kusa_6"), ITEM_STAR_PIECE, -500, 0, 110, 4, GSWF(5641), 0)
     END_IF
     RETURN
 EVT_END()

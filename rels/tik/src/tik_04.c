@@ -19,6 +19,7 @@
 #include "driver/mobjdrv.h"
 #include "driver/npcdrv.h"
 #include "driver/mapdrv.h"
+#include "mario/mario_pouch.h"
 
 USER_FUNC(evt_cloud_ent);
 USER_FUNC(evt_cloud_init);
@@ -287,7 +288,7 @@ EVT_END()
 static EVT_BEGIN(mobj_box00)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mobj_get_position, STRING("mobj_box00"), LW(0), LW(1), LW(2))
-    CALL(evt_item_entry, STRING("item00"), 293, LW(0), LW(1), LW(2), 16, -1, 0)
+    CALL(evt_item_entry, STRING("item00"), ITEM_HAPPY_HEART_P, LW(0), LW(1), LW(2), 16, -1, 0)
     CALL(evt_item_flag_on, STRING("item00"), 258)
     CALL(evt_mobj_wait_animation_end, STRING("mobj_box00"))
     CALL(evt_item_get_item, STRING("item00"))
@@ -334,7 +335,7 @@ EVT_BEGIN(tik_04_init_evt)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("dai_6"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_dai_6"), 1, 1)
     END_IF
-    CALL(evt_item_entry, STRING("blackkey"), 33, 175, 125, -100, 16, GSWF(1337), 0)
+    CALL(evt_item_entry, STRING("blackkey"), ITEM_BLACK_KEY_0x21, 175, 125, -100, 16, GSWF(1337), 0)
     CALL(evt_mobj_jumpstand_blue, 0, STRING("mobj_jump00"), 150, -450, 0, 0, 0, 0)
     CALL(evt_mobj_lv_blk, STRING("block"), -425, 0, 0, 0, GSWF(1338), STRING("MOBJ_Lv1BigBigBlock"))
     IF_INT_EQUAL(GSWF(1338), 0)
@@ -342,7 +343,7 @@ EVT_BEGIN(tik_04_init_evt)
     END_IF
     CALL(evt_mobj_itembox, STRING("mobj_box00"), 310, 0, -25, 0, 0, PTR(mobj_box00), GSWF(1357))
     CALL(evt_mobj_brick, STRING("mobj_box01"), -150, 60, 130, 301, 12, 0, GSWF(1358))
-    CALL(evt_item_entry, STRING("item_02"), 125, -460, 25, -100, 16, GSWF(5591), 0)
+    CALL(evt_item_entry, STRING("item_02"), ITEM_STAR_PIECE, -460, 25, -100, 16, GSWF(5591), 0)
     IF_INT_LESS(GSW_STORY_PROGRESS, 261)
         CALL(evt_npc_check_delete, STRING("カメック"))
         CALL(evt_npc_check_delete, STRING("トゲノコ"))

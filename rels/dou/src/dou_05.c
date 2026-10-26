@@ -151,7 +151,7 @@ static s32 key_tbl[] = {
 };
 
 static EVT_BEGIN(evt_chk)
-    CALL(evt_pouch_check_item, 20, LW(0))
+    CALL(evt_pouch_check_item, ITEM_GROTTO_KEY, LW(0))
     IF_INT_GREATER(LW(0), 0)
         CALL(evt_win_item_select, 0, PTR(key_tbl), LW(0), 0)
         IF_INT_EQUAL(LW(0), -1)
@@ -241,9 +241,9 @@ static HitDamageReturn hitDmgRetPoints[] = {
 static EVT_BEGIN(mobj_box00)
     CALL(evt_mario_key_onoff, 0)
 #ifdef VERSION_G8ME01
-    CALL(evt_item_entry, STRING("item00"), 275, 0, -1000, 0, 16, -1, 0)
+    CALL(evt_item_entry, STRING("item00"), ITEM_DEFEND_PLUS_P, 0, -1000, 0, 16, -1, 0)
 #else
-    CALL(evt_item_entry, STRING("item00"), 277, 0, -1000, 0, 16, -1, 0)
+    CALL(evt_item_entry, STRING("item00"), ITEM_DAMAGE_DODGE_P, 0, -1000, 0, 16, -1, 0)
 #endif
     CALL(evt_item_flag_on, STRING("item00"), 258)
     CALL(evt_mobj_wait_animation_end, STRING("mobj_box00"))

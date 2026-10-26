@@ -177,7 +177,7 @@ static s32 key_tbl[] = {
 };
 
 static EVT_BEGIN(key_check_evt)
-    CALL(evt_pouch_check_item, 48, LW(0))
+    CALL(evt_pouch_check_item, ITEM_PALACE_KEY_0x30, LW(0))
     IF_INT_GREATER(LW(0), 0)
         CALL(evt_win_item_select, 0, PTR(key_tbl), LW(0), 0)
         IF_INT_EQUAL(LW(0), -1)
@@ -237,8 +237,8 @@ EVT_BEGIN(las_25_init_evt)
     END_IF
     CALL(evt_mobj_jumpstand_blue, 0, STRING("jump"), 720, -675, -600, 75, 0, 0)
     CALL(evt_mobj_flag_onoff, 0, STRING("jump"), MOBJ_FLAG_GRAVITY)
-    CALL(evt_item_entry, STRING("item02"), 151, 225, -350, 0, 16, GSWF(4379), 0)
-    CALL(evt_item_entry, STRING("item03"), 130, 375, -450, 0, 16, GSWF(4392), 0)
+    CALL(evt_item_entry, STRING("item02"), ITEM_LIFE_SHROOM, 225, -350, 0, 16, GSWF(4379), 0)
+    CALL(evt_item_entry, STRING("item03"), ITEM_SHOOTING_STAR, 375, -450, 0, 16, GSWF(4392), 0)
     CALL(evt_mobj_save_blk, STRING("mobj_save"), 600, 60, -75, 0, 0)
     RETURN
 EVT_END()

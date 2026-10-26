@@ -14,6 +14,7 @@
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
 #include "evt/evt_pouch.h"
+#include "mario/mario_pouch.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "driver/mapdrv.h"
@@ -1420,16 +1421,16 @@ static EVT_BEGIN(peach_evt_stg5)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_dami"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_get_position, STRING("S_dami1"), LW(0), LW(1), LW(2))
     SUBTRACT(LW(1), 3)
-    CALL(evt_item_entry, STRING("kusuri_aka"), 102, LW(0), LW(1), LW(2), 17, -1, 0)
+    CALL(evt_item_entry, STRING("kusuri_aka"), ITEM_RED_POTION, LW(0), LW(1), LW(2), 17, -1, 0)
     CALL(evt_mapobj_get_position, STRING("S_dami2"), LW(0), LW(1), LW(2))
     SUBTRACT(LW(1), 3)
-    CALL(evt_item_entry, STRING("kusuri_ao"), 101, LW(0), LW(1), LW(2), 17, -1, 0)
+    CALL(evt_item_entry, STRING("kusuri_ao"), ITEM_BLUE_POTION, LW(0), LW(1), LW(2), 17, -1, 0)
     CALL(evt_mapobj_get_position, STRING("S_dami3"), LW(0), LW(1), LW(2))
     SUBTRACT(LW(1), 3)
-    CALL(evt_item_entry, STRING("kusuri_ki"), 103, LW(0), LW(1), LW(2), 17, -1, 0)
+    CALL(evt_item_entry, STRING("kusuri_ki"), ITEM_ORANGE_POTION, LW(0), LW(1), LW(2), 17, -1, 0)
     CALL(evt_mapobj_get_position, STRING("S_dami4"), LW(0), LW(1), LW(2))
     SUBTRACT(LW(1), 3)
-    CALL(evt_item_entry, STRING("kusuri_mid"), 104, LW(0), LW(1), LW(2), 17, -1, 0)
+    CALL(evt_item_entry, STRING("kusuri_mid"), ITEM_GREEN_POTION, LW(0), LW(1), LW(2), 17, -1, 0)
     CALL(evt_run_case_evt, 9, 1, STRING("A_kusuri1"), 0, PTR(peach_evt_kusuri_aka), 0)
     CALL(evt_run_case_evt, 9, 1, STRING("A_kusuri2"), 0, PTR(peach_evt_kusuri_ao), 0)
     CALL(evt_run_case_evt, 9, 1, STRING("A_kusuri3"), 0, PTR(peach_evt_kusuri_ki), 0)
@@ -1582,10 +1583,10 @@ EVT_END()
 static EVT_BEGIN(peach_evt_stg5_1)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_dami"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_item_entry, STRING("kusuri_aka"), 102, -110, 31, -107, 17, -1, 0)
-    CALL(evt_item_entry, STRING("kusuri_ao"), 101, -65, 31, -107, 17, -1, 0)
-    CALL(evt_item_entry, STRING("kusuri_ki"), 103, -10, 31, -107, 17, -1, 0)
-    CALL(evt_item_entry, STRING("kusuri_mid"), 104, 35, 31, -107, 17, -1, 0)
+    CALL(evt_item_entry, STRING("kusuri_aka"), ITEM_RED_POTION, -110, 31, -107, 17, -1, 0)
+    CALL(evt_item_entry, STRING("kusuri_ao"), ITEM_BLUE_POTION, -65, 31, -107, 17, -1, 0)
+    CALL(evt_item_entry, STRING("kusuri_ki"), ITEM_ORANGE_POTION, -10, 31, -107, 17, -1, 0)
+    CALL(evt_item_entry, STRING("kusuri_mid"), ITEM_GREEN_POTION, 35, 31, -107, 17, -1, 0)
     CALL(evt_run_case_evt, 9, 1, STRING("A_sui2"), 0, PTR(peach_evt_matigai_kusuri), LW(0))
     CALL(evt_run_case_evt, 9, 1, STRING("A_sui3"), 0, PTR(peach_evt_matigai_kusuri), LW(1))
     CALL(evt_run_case_evt, 9, 1, STRING("A_sui4"), 0, PTR(peach_evt_matigai_kusuri), LW(2))

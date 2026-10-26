@@ -23,6 +23,7 @@
 #include "evt/evt_pouch.h"
 #include "party/party_motion.h"
 #include "evt/evt_sub.h"
+#include "mario/mario_pouch.h"
 
 ItemEntry* itemEntry(const char* name, s32 itemId, u16 type, s32 collectFlag, EvtWord* evtCode, f32 x, f32 y, f32 z);
 
@@ -274,7 +275,7 @@ EVT_BEGIN(kinopio_house_talk_evt)
         END_IF
     END_IF
     SET_VALUE(4224967296, 0)
-    CALL(evt_pouch_check_item, 164, 4264967296)
+    CALL(evt_pouch_check_item, ITEM_INN_COUPON, 4264967296)
     IF_INT_GREATER(4264967296, 0)
         CALL(msg_no, 7, 4264967296)
         CALL(evt_msg_print_add, 0, 4264967296)
@@ -282,7 +283,7 @@ EVT_BEGIN(kinopio_house_talk_evt)
         CALL(evt_msg_select, 0, 4264967296)
         IF_INT_EQUAL(4264967296, 0)
             SET_VALUE(4224967296, 1)
-            CALL(evt_pouch_remove_item, 164, 4264967296)
+            CALL(evt_pouch_remove_item, ITEM_INN_COUPON, 4264967296)
         END_IF
     END_IF
     IF_INT_EQUAL(4224967296, 0)

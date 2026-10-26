@@ -27,6 +27,7 @@
 #include "evt/evt_pouch.h"
 #include "driver/npcdrv.h"
 #include "driver/mapdrv.h"
+#include "mario/mario_pouch.h"
 
 USER_FUNC(evt_mario_dispflag_onoff);
 USER_FUNC(evt_pouch_add_coin);
@@ -793,7 +794,7 @@ EVT_BEGIN(evt_roten)
     CALL(evt_msg_select, 0, STRING("stg7_pik_shop_01"))
     IF_INT_EQUAL(LW(0), 0)
         CALL(evt_pouch_get_haveitemcnt, LW(0))
-        CALL(evt_pouch_check_item, 1, LW(1))
+        CALL(evt_pouch_check_item, ITEM_STRANGE_SACK, LW(1))
         IF_INT_EQUAL(LW(1), 0)
             SET_VALUE(LW(1), 10)
             ELSE
@@ -807,7 +808,7 @@ EVT_BEGIN(evt_roten)
                 WAIT_MS(200)
                 CALL(unitwincoin_disp_onoff, 0)
                 CALL(evt_msg_print_add, 0, STRING("stg7_pik_shop_02"))
-                CALL(evt_item_entry, STRING("rp"), 171, 0, -1000, 0, 17, -1, 0)
+                CALL(evt_item_entry, STRING("rp"), ITEM_FRESH_PASTA, 0, -1000, 0, 17, -1, 0)
                 CALL(evt_item_get_item, STRING("rp"))
                 CALL(evt_item_get_item_end_wait, STRING("rp"))
                 ELSE
@@ -983,8 +984,8 @@ EVT_BEGIN(pik_04_init_evt)
     CALL(evt_hitobj_attr_onoff, 1, 1, STRING("nw_bero"), 4)
     CALL(evt_hitobj_attr_onoff, 1, 1, STRING("se_bero"), 4)
     CALL(evt_run_case_evt, 9, 1, STRING("a_roten"), 0, PTR(evt_roten), 0)
-    CALL(evt_item_entry, STRING("item_00"), 125, -250, 5, -425, 16, GSWF(5657), 0)
-    CALL(evt_item_entry, STRING("item_01"), 164, -305, 0, 105, 16, GSWF(3279), 0)
+    CALL(evt_item_entry, STRING("item_00"), ITEM_STAR_PIECE, -250, 5, -425, 16, GSWF(5657), 0)
+    CALL(evt_item_entry, STRING("item_01"), ITEM_INN_COUPON, -305, 0, 105, 16, GSWF(3279), 0)
     CALL_CHILD(PTR(imginit))
     CALL(evt_run_case_evt, 9, 1, STRING("front_"), 0, PTR(kinopio_house_talk_evt), 0)
     CALL(evt_kinopio_setup, PTR(&kino_dt))

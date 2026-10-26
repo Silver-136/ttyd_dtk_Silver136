@@ -14,6 +14,7 @@
 #include "party/party_motion.h"
 #include "evt/evt_item.h"
 #include "driver/npcdrv.h"
+#include "mario/mario_pouch.h"
 
 USER_FUNC(evt_mario_get_name_hitobj_ride);
 
@@ -207,7 +208,7 @@ EVT_END()
 EVT_BEGIN(ueki_evt_01)
     CALL(evt_item_delete_check, STRING("item_ueki01"), LW(0))
     IF_INT_EQUAL(LW(0), 1)
-        CALL(evt_item_entry, STRING("item_ueki01"), 125, -37, 0, 96, 0, GSWF(5616), 0)
+        CALL(evt_item_entry, STRING("item_ueki01"), ITEM_STAR_PIECE, -37, 0, 96, 0, GSWF(5616), 0)
     END_IF
     RETURN
 EVT_END()

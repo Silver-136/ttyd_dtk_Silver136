@@ -17,6 +17,7 @@
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
 #include "driver/mapdrv.h"
+#include "mario/mario_pouch.h"
 
 #include "driver/fadedrv.h"
 #include "mario/mariost.h"
@@ -506,7 +507,7 @@ EVT_BEGIN(time_bomb)
         WAIT_MS(400)
     END_INLINE_EVENT
     CALL(evt_snd_sfxon, STRING("SFX_STG2_STARSTONE_APPEAR1"), 0)
-    CALL(evt_item_entry, STRING("item00"), 115, 0, 120, -340, 16, -1, 0)
+    CALL(evt_item_entry, STRING("item00"), ITEM_EMERALD_STAR, 0, 120, -340, 16, -1, 0)
     CALL(evt_item_flag_on, STRING("item00"), 2)
     SET_VALUE(LW(0), STRING("item00"))
     SET_VALUE(GW(10), 0)

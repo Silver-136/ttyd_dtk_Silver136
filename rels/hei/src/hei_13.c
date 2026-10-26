@@ -11,6 +11,7 @@
 #include "party/party_motion.h"
 #include "evt/evt_item.h"
 #include "driver/mobjdrv.h"
+#include "mario/mario_pouch.h"
 
 
 static BeroEntry bero_entry_data[5];
@@ -99,13 +100,13 @@ EVT_BEGIN(evt_anm_kan)
         IF_INT_EQUAL(GSW(301), 10)
             SET_VALUE(GF(0), 1)
             WAIT_MS(200)
-            CALL(evt_item_entry, STRING("item_tukushi"), 175, 565, 15, -65, 5, -1, 0)
+            CALL(evt_item_entry, STRING("item_tukushi"), ITEM_HORSETAIL, 565, 15, -65, 5, -1, 0)
             ELSE
             ADD(GSW(301), 1)
             IF_INT_EQUAL(GSW(301), 10)
                 SET_VALUE(GF(0), 1)
                 WAIT_MS(200)
-                CALL(evt_item_entry, STRING("item_tukushi"), 175, 565, 15, -65, 5, -1, 0)
+                CALL(evt_item_entry, STRING("item_tukushi"), ITEM_HORSETAIL, 565, 15, -65, 5, -1, 0)
             END_IF
         END_IF
     END_INLINE_EVENT
@@ -129,7 +130,7 @@ EVT_BEGIN(hei_13_init_evt)
     END_IF
     CALL(evt_sub_get_system_flag, LW(0))
     IF_BITS_CLEAR(LW(0), 4096)
-        CALL(evt_item_entry, STRING("i"), 292, 325, 200, -100, 16, GSWF(1798), 0)
+        CALL(evt_item_entry, STRING("i"), ITEM_HAPPY_HEART, 325, 200, -100, 16, GSWF(1798), 0)
     END_IF
     CALL(evt_mobj_brick, STRING("10m"), 325, 60, -100, 0, 3, 0, GSWF(1799))
     SET_VALUE(LW(0), PTR(ki_data))

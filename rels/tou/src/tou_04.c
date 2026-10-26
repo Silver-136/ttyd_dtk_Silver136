@@ -2014,7 +2014,7 @@ static s32 key_tbl[] = {
 };
 
 static EVT_BEGIN(evt_chk)
-    CALL(evt_pouch_check_item, 18, LW(0))
+    CALL(evt_pouch_check_item, ITEM_STORAGE_KEY_0x12, LW(0))
     IF_INT_GREATER(LW(0), 0)
         CALL(evt_win_item_select, 0, PTR(key_tbl), LW(0), 0)
         IF_INT_EQUAL(LW(0), -1)
@@ -2028,7 +2028,7 @@ static EVT_BEGIN(evt_lock)
     SET_VALUE(GSW_STORY_PROGRESS, 147)
     SET_VALUE(LW(0), STRING("s_bero_4"))
     CALL_CHILD(PTR(bero_case_switch_on))
-    CALL(evt_pouch_remove_item, 18, LW(0))
+    CALL(evt_pouch_remove_item, ITEM_STORAGE_KEY_0x12, LW(0))
     RETURN
 EVT_END()
 
@@ -2160,7 +2160,7 @@ EVT_BEGIN(tou_04_init_evt)
     CALL(evt_cam_road_reset)
     SPAWN_EVENT(PTR(evt_drop))
     CALL(evt_npc_setup, PTR(npcEnt))
-    CALL(evt_item_entry, STRING("item_01"), 272, 515, 15, 125, 16, GSWF(2520), 0)
+    CALL(evt_item_entry, STRING("item_01"), ITEM_LAST_STAND, 515, 15, 125, 16, GSWF(2520), 0)
     CALL(evt_mobj_save_blk, STRING("mobj_save1"), -520, 60, -110, 0, 0)
     CALL(evt_mobj_save_blk, STRING("mobj_save3"), 450, 60, -465, 0, 0)
     SET_VALUE(LW(1), 0)

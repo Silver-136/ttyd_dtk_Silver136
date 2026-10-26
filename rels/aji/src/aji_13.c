@@ -903,7 +903,7 @@ static s32 key_tbl[] = {
 
 static EVT_BEGIN(evt_door_msg)
     CALL(evt_mario_key_onoff, 0)
-    CALL(evt_pouch_check_item, 32, LW(0))
+    CALL(evt_pouch_check_item, ITEM_CARD_KEY_0x20, LW(0))
     IF_INT_LESS(LW(0), 1)
         CALL(evt_msg_print, 0, STRING("stg7_aji_67"), 0, 0)
         CALL(evt_mario_key_onoff, 1)
@@ -963,7 +963,7 @@ EVT_BEGIN(aji_13_init_evt)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("meta_4_2"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     IF_INT_EQUAL(GSWF(4181), 0)
-        CALL(evt_item_entry, STRING("key"), 32, -50, 100, 100, 16, -1, PTR(evt_key_get))
+        CALL(evt_item_entry, STRING("key"), ITEM_CARD_KEY_0x20, -50, 100, 100, 16, -1, PTR(evt_key_get))
     END_IF
     IF_INT_LESS(GSW_STORY_PROGRESS, 371)
         CALL(evt_mobj_switch_blue, 0, STRING("sw"), 650, 200, 100, PTR(evt_sw), GSWF(4184))
@@ -982,7 +982,7 @@ EVT_BEGIN(aji_13_init_evt)
     END_IF
     CALL(evt_mobj_save_blk, STRING("mobj_save"), 200, 60, 100, 0, 0)
     CALL(evt_mobj_recovery_blk, STRING("mobj_recover"), 10, 300, 60, 100, 0, 0)
-    CALL(evt_item_entry, STRING("item00"), 150, -670, 320, -450, 16, GSWF(4215), 0)
+    CALL(evt_item_entry, STRING("item00"), ITEM_ULTRA_SHROOM, -670, 320, -450, 16, GSWF(4215), 0)
     CALL(evt_item_set_scale, STRING("item00"), FLOAT(0.5996094f))
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 373)
         CALL(evt_npc_check_delete, STRING("軍団ザコ魔法使い"))

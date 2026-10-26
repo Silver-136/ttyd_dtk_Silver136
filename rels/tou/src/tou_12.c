@@ -15,6 +15,7 @@
 #include "driver/mobjdrv.h"
 #include "driver/npcdrv.h"
 #include "driver/mapdrv.h"
+#include "mario/mario_pouch.h"
 
 
 static EvtWord w_door_open[12];
@@ -280,7 +281,7 @@ EVT_BEGIN(tou_12_init_evt)
     CALL(evt_bero_get_info)
     CALL_CHILD(PTR(evt_bero_info_run))
     CALL(evt_npc_setup, PTR(npcEnt))
-    CALL(evt_item_entry, STRING("item01"), 125, 190, 0, 30, 16, GSWF(5627), 0)
+    CALL(evt_item_entry, STRING("item01"), ITEM_STAR_PIECE, 190, 0, 30, 16, GSWF(5627), 0)
     IF_INT_LESS(GSW_STORY_PROGRESS, 156)
         CALL(evt_mobj_lv_blk, STRING("aa"), 125, 0, 0, PTR(evt_block_broken), GSWF(2441), STRING("MOBJ_Lv1BigBigBlock"))
         CALL(evt_mobj_flag_onoff, 0, STRING("aa"), MOBJ_FLAG_GRAVITY)

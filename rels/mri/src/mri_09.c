@@ -23,6 +23,7 @@
 #include "evt/evt_party.h"
 #include "driver/npcdrv.h"
 #include "driver/mapdrv.h"
+#include "mario/mario_pouch.h"
 
 #ifdef VERSION_G8ME01
 #endif
@@ -396,7 +397,7 @@ EVT_END()
 EVT_BEGIN(get_blue_jail_key)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mobj_get_position, STRING("mobj_box00"), LW(0), LW(1), LW(2))
-    CALL(evt_item_entry, STRING("item00"), 17, LW(0), LW(1), LW(2), 16, -1, 0)
+    CALL(evt_item_entry, STRING("item00"), ITEM_BLUE_KEY, LW(0), LW(1), LW(2), 16, -1, 0)
     CALL(evt_item_flag_on, STRING("item00"), 2)
     CALL(evt_mobj_wait_animation_end, STRING("mobj_box00"))
     CALL(evt_item_get_item, STRING("item00"))
@@ -487,7 +488,7 @@ EVT_BEGIN(mri_09_init_evt)
         CALL(evt_hitobj_onoff, STRING("A_f2_rak04"), 1, 0)
     END_SWITCH
     CALL(evt_mobj_itembox, STRING("mobj_box00"), 125, 0, 25, 0, 0, PTR(get_blue_jail_key), GSWF(2852))
-    CALL(evt_item_entry, STRING("item100"), 256, -250, -234, 75, 16, GSWF(2853), 0)
+    CALL(evt_item_entry, STRING("item100"), ITEM_CHARGE, -250, -234, 75, 16, GSWF(2853), 0)
     CALL(evt_mobj_powerupblk, STRING("pblk1"), 0, -174, -125, 0, GSWF(5543), 0)
     SPAWN_EVENT(PTR(breakyuka_init))
     CALL(evt_mobj_breaking_floor, STRING("mobj_bf00"), 0, 0, 75, 1, PTR(breakyuka_main), GSWF(2851))

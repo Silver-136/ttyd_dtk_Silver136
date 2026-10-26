@@ -12,6 +12,7 @@
 #include "evt/evt_item.h"
 #include "driver/npcdrv.h"
 #include "driver/mapdrv.h"
+#include "mario/mario_pouch.h"
 
 USER_FUNC(evt_mario_get_name_hitobj_head);
 
@@ -364,7 +365,7 @@ EVT_BEGIN(gon_09_init_evt)
     CALL(evt_npc_flag_onoff, 1, STRING("\"カロン03\""), NPC_FLAG_NO_VIEW_CORRECTION)
     CALL(evt_npc_set_width, STRING("\"カロン03\""), 30)
     CALL(evt_npc_set_height, STRING("\"カロン03\""), 7)
-    CALL(evt_item_entry, STRING("piece00"), 125, 575, 200, -110, 16, GSWF(5607), 0)
+    CALL(evt_item_entry, STRING("piece00"), ITEM_STAR_PIECE, 575, 200, -110, 16, GSWF(5607), 0)
     CALL(evt_mobj_float_blk, STRING("blk_0"), 325, -50, 75, 2, 1, 0, LSWF(1))
     CALL_CHILD(PTR(init_0))
     CALL(evt_mobj_switch_float_blk, STRING("sw_0"), 588, -50, 138, STRING("blk_0"), 2, PTR(main_0), LSWF(1))

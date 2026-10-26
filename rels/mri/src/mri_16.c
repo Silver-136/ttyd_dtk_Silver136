@@ -12,6 +12,7 @@
 #include "evt/evt_sub.h"
 #include "driver/mobjdrv.h"
 #include "driver/mapdrv.h"
+#include "mario/mario_pouch.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "evt/evt_bero.h"
@@ -349,7 +350,7 @@ static HitDamageReturn hitDmgRetPoints[] = {
 static EVT_BEGIN(mobj_box00)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mobj_get_position, STRING("mobj_box00"), LW(0), LW(1), LW(2))
-    CALL(evt_item_entry, STRING("item00"), 244, LW(0), LW(1), LW(2), 16, -1, 0)
+    CALL(evt_item_entry, STRING("item00"), ITEM_SHRINK_STOMP, LW(0), LW(1), LW(2), 16, -1, 0)
     CALL(evt_item_flag_on, STRING("item00"), 258)
     CALL(evt_mobj_wait_animation_end, STRING("mobj_box00"))
     CALL(evt_item_get_item, STRING("item00"))
@@ -419,7 +420,7 @@ EVT_BEGIN(mri_16_init_evt)
     END_IF
     CALL(evt_hit_damage_return_set, PTR(hitDmgRetPoints))
     CALL_CHILD(PTR(evt_gazigazi_entry))
-    CALL(evt_item_entry, STRING("item_00"), 141, -115, 0, -25, 0, GSWF(2869), 0)
+    CALL(evt_item_entry, STRING("item_00"), ITEM_DIZZY_DIAL, -115, 0, -25, 0, GSWF(2869), 0)
     CALL(evt_mobj_itembox, STRING("mobj_box00"), -125, 0, 125, 0, 0, PTR(mobj_box00), GSWF(2885))
     CALL(evt_mobj_powerupblk, STRING("pblk1"), 65, -260, -70, 0, GSWF(5544), 0)
     RETURN

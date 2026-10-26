@@ -619,7 +619,7 @@ s32 elv_key1[] = {
 EVT_BEGIN(elv_unlock1)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_msg_print, 0, STRING("stg7_aji_65"), 0, 0)
-    CALL(evt_pouch_check_item, 27, LW(0))
+    CALL(evt_pouch_check_item, ITEM_ELEVATOR_KEY_0x1B, LW(0))
     IF_INT_LESS(LW(0), 1)
         CALL(evt_mario_key_onoff, 1)
         RETURN
@@ -657,7 +657,7 @@ s32 elv_key2[] = {
 EVT_BEGIN(elv_unlock2)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_msg_print, 0, STRING("stg7_aji_65"), 0, 0)
-    CALL(evt_pouch_check_item, 28, LW(0))
+    CALL(evt_pouch_check_item, ITEM_ELEVATOR_KEY_0x1C, LW(0))
     IF_INT_LESS(LW(0), 1)
         CALL(evt_mario_key_onoff, 1)
         RETURN

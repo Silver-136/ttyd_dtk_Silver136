@@ -168,7 +168,7 @@ static s32 key_tbl[] = {
 };
 
 static EVT_BEGIN(evt_chk)
-    CALL(evt_pouch_check_item, 25, LW(0))
+    CALL(evt_pouch_check_item, ITEM_STEEPLE_KEY_0x19, LW(0))
     IF_INT_GREATER(LW(0), 0)
         CALL(evt_win_item_select, 0, PTR(key_tbl), LW(0), 0)
         IF_INT_EQUAL(LW(0), -1)

@@ -16,6 +16,7 @@
 #include "evt/evt_snd.h"
 #include "evt/evt_item.h"
 #include "evt/evt_sub.h"
+#include "mario/mario_pouch.h"
 
 #include "party.h"
 #include "manager/evtmgr_cmd.h"
@@ -509,7 +510,7 @@ EVT_BEGIN(gon_03_init_evt)
         SPAWN_EVENT(PTR(tegami_event))
     END_IF
     IF_INT_LESS(GSW_STORY_PROGRESS, 46)
-        CALL(evt_item_entry, STRING("key00"), 12, 200, 0, -200, 16, -1, PTR(key_get))
+        CALL(evt_item_entry, STRING("key00"), ITEM_CASTLE_KEY_0x0C, 200, 0, -200, 16, -1, PTR(key_get))
     END_IF
     CALL(evt_npc_entry, STRING("\"カロン2\""), STRING("c_karon_g"))
     CALL(evt_npc_set_position, STRING("\"カロン2\""), -150, 0, 130)

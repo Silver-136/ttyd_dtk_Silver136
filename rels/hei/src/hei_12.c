@@ -7,6 +7,7 @@
 #include "party/party_motion.h"
 #include "evt/evt_item.h"
 #include "driver/mapdrv.h"
+#include "mario/mario_pouch.h"
 
 #include "driver/npcdrv.h"
 #include "evt/evt_bero.h"
@@ -110,7 +111,7 @@ EVT_BEGIN(hei_12_init_evt)
         END_IF
     END_IF
     IF_INT_EQUAL(GSWF(1774), 0)
-        CALL(evt_item_entry, STRING("sun_st"), 62, 0, 0, 0, 0, -1, PTR(evt_chorobon))
+        CALL(evt_item_entry, STRING("sun_st"), ITEM_SUN_STONE, 0, 0, 0, 0, -1, PTR(evt_chorobon))
     END_IF
     CALL(evt_map_playanim, STRING("mizu"), 1, 0)
     CALL(evt_map_set_tevcallback, 1, PTR(hei_test_water_tev))

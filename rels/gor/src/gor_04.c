@@ -16,6 +16,7 @@
 #include "evt/evt_case.h"
 #include "evt/evt_seq.h"
 #include "evt/evt_snd.h"
+#include "mario/mario_pouch.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "mario/mariost.h"
@@ -1107,7 +1108,7 @@ EVT_BEGIN(hikosenkakari_talk)
     CALL(evt_msg_select, 0, STRING("hikou_01"))
     IF_INT_EQUAL(LW(0), 0)
         CALL(evt_msg_print_add, 0, STRING("hikou_04"))
-        CALL(evt_pouch_check_item, 52, LW(0))
+        CALL(evt_pouch_check_item, ITEM_BLIMP_TICKET, LW(0))
         IF_INT_EQUAL(LW(0), 0)
             CALL(evt_msg_print, 0, STRING("hikou_05"), 0, STRING("me"))
             ELSE
@@ -1125,7 +1126,7 @@ EVT_BEGIN(hikosenkakari_talk)
             ADD(LW(1), 20)
             ADD(LW(2), 10)
             SET_VALUE(LW(10), STRING("airship"))
-            CALL(evt_item_entry, LW(10), 52, LW(0), LW(1), LW(2), 16, -1, 0)
+            CALL(evt_item_entry, LW(10), ITEM_BLIMP_TICKET, LW(0), LW(1), LW(2), 16, -1, 0)
             CALL(evt_item_flag_on, LW(10), 2)
             WAIT_MS(1000)
             CALL(evt_item_delete, LW(10))
@@ -1191,7 +1192,7 @@ EVT_BEGIN(ekiin_talk)
     CALL(evt_msg_select, 0, STRING("train_01"))
     IF_INT_EQUAL(LW(0), 0)
         CALL(evt_msg_print_add, 0, STRING("train_03"))
-        CALL(evt_pouch_check_item, 53, LW(0))
+        CALL(evt_pouch_check_item, ITEM_TRAIN_TICKET, LW(0))
         IF_INT_EQUAL(LW(0), 0)
             CALL(evt_msg_print, 0, STRING("train_05"), 0, STRING("me"))
             ELSE
@@ -1207,7 +1208,7 @@ EVT_BEGIN(ekiin_talk)
             ADD(LW(1), 20)
             ADD(LW(2), 10)
             SET_VALUE(LW(10), STRING("train"))
-            CALL(evt_item_entry, LW(10), 53, LW(0), LW(1), LW(2), 16, -1, 0)
+            CALL(evt_item_entry, LW(10), ITEM_TRAIN_TICKET, LW(0), LW(1), LW(2), 16, -1, 0)
             CALL(evt_item_flag_on, LW(10), 2)
             WAIT_MS(1000)
             CALL(evt_item_delete, LW(10))
@@ -2036,7 +2037,7 @@ EVT_BEGIN(gor_04_init_evt)
         CALL(evt_mobj_save_blk, STRING("mobj_save"), 140, 60, 85, 0, 0)
     END_IF
     CALL(evt_mobj_kururing_floor, STRING("kururin1"), -510, 80, 120, STRING("S_ground"), 125, GSWF(5583))
-    CALL(evt_item_entry, STRING("item_00"), 125, 475, 0, 100, 16, GSWF(5584), 0)
+    CALL(evt_item_entry, STRING("item_00"), ITEM_STAR_PIECE, 475, 0, 100, 16, GSWF(5584), 0)
     SPAWN_EVENT(PTR(evt_wing))
     CALL(evt_run_case_evt, 5, 1, STRING("A_noriba"), 0, PTR(evt_hikousen), 0)
     CALL(evt_bero_get_entername, LW(0))

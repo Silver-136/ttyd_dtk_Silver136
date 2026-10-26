@@ -15,6 +15,7 @@
 #include "evt/evt_item.h"
 #include "driver/npcdrv.h"
 #include "driver/mapdrv.h"
+#include "mario/mario_pouch.h"
 
 #include "driver/hitdrv.h"
 #include "dolphin/mtx.h"
@@ -451,7 +452,7 @@ EVT_END()
 static EVT_BEGIN(evt_f1_ueki_01)
     CALL(evt_item_delete_check, STRING("item_ueki_01"), LW(0))
     IF_INT_EQUAL(LW(0), 1)
-        CALL(evt_item_entry, STRING("item_ueki_01"), 148, -190, -309, 115, 4, GSWF(2862), 0)
+        CALL(evt_item_entry, STRING("item_ueki_01"), ITEM_MUSHROOM, -190, -309, 115, 4, GSWF(2862), 0)
     END_IF
     RETURN
 EVT_END()
