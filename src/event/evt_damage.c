@@ -54,10 +54,10 @@ EVT_BEGIN(evt_gazigazi_appear)
     CALL(evt_npc_set_anim, STRING(GAZIGAZI), STRING("GAZ_S_1"))
     SPAWN_EVENT_GET_ID(PTR(evt_gazigazi_anim_loop), LW(9))
     BEGIN_INLINE_EVENT
-        CALL(evt_gazigazi_move_position, STRING(GAZIGAZI), LW(10), LW(11), LW(12), LW(13), LW(14), LW(15), 300, 1)
+        CALL(evt_gazigazi_move_position, STRING(GAZIGAZI), LW(10), LW(11), LW(12), LW(13), LW(14), LW(15), 300, EASING_QUADRATIC_IN)
     END_INLINE_EVENT
     WAIT_MS(1000)
-    CALL(evt_gazigazi_move_position, STRING(GAZIGAZI), LW(13), LW(14), LW(15), LW(10), LW(11), LW(12), 600, 0)
+    CALL(evt_gazigazi_move_position, STRING(GAZIGAZI), LW(13), LW(14), LW(15), LW(10), LW(11), LW(12), 600, EASING_LINEAR)
     DELETE_EVENT(LW(9))
     CALL(evt_npc_set_position, STRING(GAZIGAZI), 0, -1000, 0)
     RETURN

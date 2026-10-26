@@ -416,7 +416,7 @@ EVT_BEGIN(witchtrio_momeru)
             WAIT_FRAMES(1)
         END_LOOP
     END_INLINE_EVENT
-    CALL(win_item_move_3d_position, STRING("necklace"), LW(3), LW(4), LW(5), 750, 0, GW(10))
+    CALL(win_item_move_3d_position, STRING("necklace"), LW(3), LW(4), LW(5), 750, EASING_LINEAR, GW(10))
     CALL(evt_snd_sfxoff, LW(10))
     CALL(evt_npc_set_anim, STRING("マジョリン"), STRING("MJR_S_1"))
     CALL(evt_npc_set_anim, STRING("ビビアン"), STRING("PTR_S_4"))

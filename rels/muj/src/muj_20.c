@@ -286,12 +286,12 @@ USER_FUNC(urouro_fuwafuwa_func) {
 EVT_BEGIN(urouro)
     CALL(evt_npc_get_position, LW(0), LW(11), LW(12), LW(13))
     LOOP(0)
-        CALL(urouro_func, LW(0), LW(11), LW(13), LW(1), LW(3), LW(4), LW(5), 0)
+        CALL(urouro_func, LW(0), LW(11), LW(13), LW(1), LW(3), LW(4), LW(5), EASING_LINEAR)
         BEGIN_INLINE_EVENT
             CALL(evt_npc_get_position, LW(0), LW(11), LW(12), LW(13))
             CALL(evt_snd_sfxon_3d, STRING("SFX_STG5_NPC_ESCAPE1"), LW(11), LW(12), LW(13), 0)
         END_INLINE_EVENT
-        CALL(urouro_func, LW(0), LW(1), LW(3), LW(11), LW(13), LW(4), LW(5), 0)
+        CALL(urouro_func, LW(0), LW(1), LW(3), LW(11), LW(13), LW(4), LW(5), EASING_LINEAR)
         BEGIN_INLINE_EVENT
             CALL(evt_npc_get_position, LW(0), LW(11), LW(12), LW(13))
             CALL(evt_snd_sfxon_3d, STRING("SFX_STG5_NPC_ESCAPE1"), LW(11), LW(12), LW(13), 0)
@@ -414,8 +414,8 @@ USER_FUNC(evt_set_nami_anim_rate) {
 EVT_BEGIN(urouro_fuwafuwa)
     CALL(evt_npc_get_position, LW(0), LW(11), LW(12), LW(13))
     LOOP(0)
-        CALL(urouro_fuwafuwa_func, LW(0), LW(11), LW(12), LW(13), LW(1), LW(2), LW(3), LW(4), LW(5), 0)
-        CALL(urouro_fuwafuwa_func, LW(0), LW(1), LW(2), LW(3), LW(11), LW(12), LW(13), LW(4), LW(5), 0)
+        CALL(urouro_fuwafuwa_func, LW(0), LW(11), LW(12), LW(13), LW(1), LW(2), LW(3), LW(4), LW(5), EASING_LINEAR)
+        CALL(urouro_fuwafuwa_func, LW(0), LW(1), LW(2), LW(3), LW(11), LW(12), LW(13), LW(4), LW(5), EASING_LINEAR)
     END_LOOP
     RETURN
 EVT_END()

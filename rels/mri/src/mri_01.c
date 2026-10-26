@@ -1819,7 +1819,7 @@ EVT_BEGIN(rival_nakama)
     CALL(evt_item_entry, STRING("item00"), ITEM_PUNI_ORB, LW(0), LW(1), LW(2), ITEM_TYPE_STILL, -1, 0)
     CALL(evt_item_flag_on, STRING("item00"), 2)
     ADD(LW(1), 8)
-    CALL(evt_item_move_3d_position, STRING("item00"), LW(0), LW(1), LW(2), 500, 0)
+    CALL(evt_item_move_3d_position, STRING("item00"), LW(0), LW(1), LW(2), 500, EASING_LINEAR)
     WAIT_MS(500)
     CALL(evt_cam3d_evt_set, -40, 115, 400, -40, 45, 7, 0, EASING_SINE_IN_OUT)
     BEGIN_INLINE_EVENT

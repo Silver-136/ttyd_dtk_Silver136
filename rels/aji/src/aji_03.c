@@ -405,7 +405,7 @@ EVT_BEGIN(ufo_main)
         END_IF
         IF_INT_EQUAL(LF(0), 1)
             BEGIN_INLINE_EVENT
-                CALL(evt_item_move_3d_position, LW(8), GW(10), 105, GW(11), 2000, 11)
+                CALL(evt_item_move_3d_position, LW(8), GW(10), 105, GW(11), 2000, EASING_SINE_IN_OUT)
             END_INLINE_EVENT
         END_IF
         CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, -600, 0, 2000)
@@ -422,7 +422,7 @@ EVT_BEGIN(ufo_main)
         CALL(evt_snd_sfxoff, LW(5))
         IF_INT_EQUAL(LF(0), 1)
             BEGIN_INLINE_EVENT
-                CALL(evt_item_move_3d_position, LW(8), GW(10), 105, 110, 3000, 11)
+                CALL(evt_item_move_3d_position, LW(8), GW(10), 105, 110, 3000, EASING_SINE_IN_OUT)
             END_INLINE_EVENT
         END_IF
         CALL(evt_mapobj_get_position, STRING("S_kure"), LW(2), LW(3), LW(4))
@@ -442,7 +442,7 @@ EVT_BEGIN(ufo_main)
         CALL(evt_cam3d_evt_set, 50, 145, 529, 50, 50, -13, 2000, EASING_SINE_IN_OUT)
         IF_INT_EQUAL(LF(0), 1)
             BEGIN_INLINE_EVENT
-                CALL(evt_item_move_3d_position, LW(8), 40, 105, GW(11), 3000, 11)
+                CALL(evt_item_move_3d_position, LW(8), 40, 105, GW(11), 3000, EASING_SINE_IN_OUT)
             END_INLINE_EVENT
         END_IF
         CALL(evt_mapobj_get_position, STRING("S_kure"), LW(2), LW(3), LW(4))

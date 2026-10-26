@@ -1483,9 +1483,9 @@ EVT_BEGIN(evt_mapwrite)
     END_LOOP
     CALL(evt_item_get_position, STRING("item00"), LW(0), LW(1), LW(2))
     IF_INT_EQUAL(GW(15), 0)
-        CALL(evt_item_move_3d_position, STRING("item00"), LW(0), 115, LW(2), 14000, 11)
+        CALL(evt_item_move_3d_position, STRING("item00"), LW(0), 115, LW(2), 14000, EASING_SINE_IN_OUT)
         ELSE
-        CALL(evt_item_move_3d_position, STRING("item00"), LW(0), 115, LW(2), 9333, 11)
+        CALL(evt_item_move_3d_position, STRING("item00"), LW(0), 115, LW(2), 9333, EASING_SINE_IN_OUT)
     END_IF
     CALL(evt_item_get_position, STRING("item00"), LW(0), LW(1), LW(2))
     BEGIN_INLINE_EVENT
@@ -1717,7 +1717,7 @@ EVT_BEGIN(evt_mapwrite)
         CALL(evt_mario_set_pose, STRING("M_L_3"))
     END_INLINE_EVENT
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
-    CALL(evt_item_move_3d_position, STRING("item00"), LW(0), LW(1), LW(2), 2000, 11)
+    CALL(evt_item_move_3d_position, STRING("item00"), LW(0), LW(1), LW(2), 2000, EASING_SINE_IN_OUT)
     CALL(evt_item_delete, STRING("item00"))
     CALL(evt_eff_delete, STRING("map_map"))
     WAIT_MS(500)

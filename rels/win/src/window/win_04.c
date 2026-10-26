@@ -565,7 +565,7 @@ EVT_BEGIN(clouda_nakama)
     BEGIN_INLINE_EVENT
         CALL(evt_item_get_position, STRING("necklace"), LW(0), LW(1), LW(2))
         ADD(LW(0), 50)
-        CALL(evt_item_move_3d_position, STRING("necklace"), LW(0), LW(1), LW(2), 500, 0)
+        CALL(evt_item_move_3d_position, STRING("necklace"), LW(0), LW(1), LW(2), 500, EASING_LINEAR)
         CALL(evt_item_set_position, STRING("necklace"), 0, -1000, 0)
     END_INLINE_EVENT
     WAIT_MS(800)

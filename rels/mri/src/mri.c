@@ -228,13 +228,13 @@ EVT_BEGIN(evt_mri_door_naname_open_pure)
         CALL(evt_mapobj_get_position, LW(10), LW(11), LW(12), LW(13))
         CALL(evt_snd_sfxon_3d, STRING("SFX_DOOR_OPEN_ELEC2_1"), LW(11), LW(12), LW(13), 0)
     END_INLINE_EVENT
-    CALL(evt_mri_door_naname_func, LW(10), FLOAT(0.0f), FLOAT(0.0f), FLOAT(6.5f), FLOAT(-6.5f), 200, 11)
+    CALL(evt_mri_door_naname_func, LW(10), FLOAT(0.0f), FLOAT(0.0f), FLOAT(6.5f), FLOAT(-6.5f), 200, EASING_SINE_IN_OUT)
     WAIT_MS(500)
     BEGIN_INLINE_EVENT
         CALL(evt_mapobj_get_position, LW(10), LW(11), LW(12), LW(13))
         CALL(evt_snd_sfxon_3d, STRING("SFX_DOOR_OPEN_ELEC2_2"), LW(11), LW(12), LW(13), 0)
     END_INLINE_EVENT
-    CALL(evt_mri_door_naname_func, LW(10), FLOAT(6.5f), FLOAT(-6.5f), FLOAT(-34.5f), FLOAT(-46.5f), 500, 11)
+    CALL(evt_mri_door_naname_func, LW(10), FLOAT(6.5f), FLOAT(-6.5f), FLOAT(-34.5f), FLOAT(-46.5f), 500, EASING_SINE_IN_OUT)
     RETURN
 EVT_END()
 
@@ -254,13 +254,13 @@ EVT_BEGIN(evt_mri_door_naname_close_pure)
         CALL(evt_mapobj_get_position, LW(10), LW(11), LW(12), LW(13))
         CALL(evt_snd_sfxon_3d, STRING("SFX_DOOR_SHUT_ELEC2"), LW(11), LW(12), LW(13), 0)
     END_INLINE_EVENT
-    CALL(evt_mri_door_naname_func, LW(10), FLOAT(-34.5f), FLOAT(-46.5f), FLOAT(6.5f), FLOAT(-6.5f), 500, 11)
+    CALL(evt_mri_door_naname_func, LW(10), FLOAT(-34.5f), FLOAT(-46.5f), FLOAT(6.5f), FLOAT(-6.5f), 500, EASING_SINE_IN_OUT)
     WAIT_MS(500)
     BEGIN_INLINE_EVENT
         CALL(evt_mapobj_get_position, LW(10), LW(11), LW(12), LW(13))
         CALL(evt_snd_sfxon_3d, STRING("SFX_DOOR_OPEN_ELEC2_1"), LW(11), LW(12), LW(13), 0)
     END_INLINE_EVENT
-    CALL(evt_mri_door_naname_func, LW(10), FLOAT(6.5f), FLOAT(-6.5f), FLOAT(0.0f), FLOAT(0.0f), 200, 11)
+    CALL(evt_mri_door_naname_func, LW(10), FLOAT(6.5f), FLOAT(-6.5f), FLOAT(0.0f), FLOAT(0.0f), 200, EASING_SINE_IN_OUT)
     RETURN
 EVT_END()
 
