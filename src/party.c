@@ -847,7 +847,7 @@ static inline s32 partyCountActive(void) {
     s32 count = 0;
     s32 i;
     for (i = 0; i < 2; i++) {
-        if (partyPtrTbl[i] && (partyGetPtr(i)->flags & 1)) {
+        if (partyPtrTbl[i] && (partyGetPtr(i)->flags & PARTY_FLAG_IS_ACTIVE)) {
             count++;
         }
     }

@@ -194,7 +194,7 @@ static USER_FUNC(lecture_init) {
             BattleAudience_Entry(seat, AUDIENCE_TOAD, 0);
         } else {
             BattleAudience_Entry(seat, AUDIENCE_HAMMER_BRO, 0);
-            BattleAudienceGetPtr(seats[i])->flags |= 0x200;
+            BattleAudienceGetPtr(seats[i])->flags |= AUDIENCE_MEMBER_FLAG_NO_ESCAPE;
         }
     }
     return EVT_RETURN_DONE;

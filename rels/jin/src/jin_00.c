@@ -1261,7 +1261,7 @@ static void senteresa_ext_main(void) {
     }
     bero = (bero_get_BeroEXEC() & 3) != 0;
     party = 0;
-    if (partyGetPtr(0) != NULL && (partyGetPtr(0)->flags & 0x100)) {
+    if (partyGetPtr(0) != NULL && (partyGetPtr(0)->flags & PARTY_FLAG_IS_BEING_USED)) {
         party = 1;
     }
     for (i = 0; i < n; i++, pose++) {

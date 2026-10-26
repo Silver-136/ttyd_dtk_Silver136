@@ -305,9 +305,9 @@ s32 sw_main(MapObjectEntry* mobj) {
                 mobj->state++;
                 break;
             }
-            mobjNameToPtr("MOBJ_eki_06_su1")->flags |= 2;
-            mobjNameToPtr("MOBJ_eki_06_su2")->flags |= 2;
-            mobjNameToPtr("MOBJ_eki_06_su3")->flags |= 2;
+            mobjNameToPtr("MOBJ_eki_06_su1")->flags |= MOBJ_FLAG_NO_SHADOW;
+            mobjNameToPtr("MOBJ_eki_06_su2")->flags |= MOBJ_FLAG_NO_SHADOW;
+            mobjNameToPtr("MOBJ_eki_06_su3")->flags |= MOBJ_FLAG_NO_SHADOW;
             if (strcmp(mobj->name, "MOBJ_eki_06_su1") == 0) {
                 if (sw_cnt(mobj) == 1) {
                     animPoseSetAnim(mobj->poseId, "ANIM_3", 1);

@@ -441,11 +441,11 @@ void BattleStageObjectMain(void) {
                 break;
         }
         if (obj->mFlags & 1) {
-            if (!(mapGetMapObj(obj->data->name)->flags & 1)) {
+            if (!(mapGetMapObj(obj->data->name)->flags & MAP_OBJ_FLAG_HIDDEN)) {
                 mapGrpFlagOn(obj->data->name, 1);
             }
         } else {
-            if (mapGetMapObj(obj->data->name)->flags & 1) {
+            if (mapGetMapObj(obj->data->name)->flags & MAP_OBJ_FLAG_HIDDEN) {
                 mapGrpFlagOff(obj->data->name, 1);
             }
         }

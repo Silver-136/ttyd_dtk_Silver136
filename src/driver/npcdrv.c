@@ -2903,7 +2903,7 @@ void npcBlurOn(const char* name) {
 }
 
 void npcBlurOff(const char* name) {
-    npcNameToPtr(name)->flags &= ~0x100;
+    npcNameToPtr(name)->flags &= ~NPC_FLAG_BLUR;
 }
 
 s32 npcGetBtlSetupWork(NpcEntry* npc, s32 index) {

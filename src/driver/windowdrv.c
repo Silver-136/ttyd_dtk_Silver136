@@ -1433,7 +1433,7 @@ void windowDispGX2_Waku_col(Mtx mtx, u16 gxTexMapID, GXColor color, f32 x, f32 y
 }
 
 s32 windowCheckID(s32 id) {
-    return windowGetPointer(id)->flags & 2;
+    return windowGetPointer(id)->flags & WINDOW_FLAG_BUSY;
 }
 
 WindowEntry* windowGetPointer(s32 id) {

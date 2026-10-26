@@ -1391,7 +1391,7 @@ void BattleAudienceCtrlProcessKinopioEat(s32 index, s32 front) {
         } else {
             cnt = 0;
             for (i = 0; i <= 59; i++) {
-                if (!(u8)BattleAudience_GetExist(i) && !(BattleAudienceGetPtr(i)->flags & 0x100) &&
+                if (!(u8)BattleAudience_GetExist(i) && !(BattleAudienceGetPtr(i)->flags & AUDIENCE_MEMBER_FLAG_WIDE_SUB) &&
                     BattleAudienceDetectPakkunEatTarget(i) != -1) {
                     list[cnt] = i;
                     cnt++;

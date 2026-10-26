@@ -2078,7 +2078,7 @@ void btlseqMove(BattleWork* wp) {
                     }
                 }
                 wp->activeUnitId = id;
-                BattleGetUnitPtr(wp, id)->mTokenFlags |= 0x1000;
+                BattleGetUnitPtr(wp, id)->mTokenFlags |= kCurrentlyActing;
                 BattleIncSeq(wp, SEQ_MOVE);
                 BattleSetSeq(wp, SEQ_ACT, 0x6000000);
                 for (i = 0; i < 64; i++) {

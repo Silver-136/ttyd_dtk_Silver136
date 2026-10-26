@@ -62,9 +62,9 @@ static inline void bgLoad(BackgroundWork* bgwork, const char* filename) {
             bgwork->flags &= ~BG_NO_AUTOSCROLL;
             bgwork->color = (GXColor){0xFF, 0xFF, 0xFF, 0xFF};
         } else {
-            bgwork->flags |= 2u;
+            bgwork->flags |= BG_DO_MULTIPLY;
             bgwork->multiply = (GXColor){0x00, 0xFF, 0x00, 0xFF};
-            bgwork->flags |= 1u;
+            bgwork->flags |= BG_RENDERING;
             bgwork->color = (GXColor){0xFF, 0xFF, 0xFF, 0xFF};
         }
     }
@@ -84,11 +84,11 @@ void bgSetColor(GXColor color) {
 }
 
 void bgDispOn(void) {
-    bgGetWork()->flags |= 1;
+    bgGetWork()->flags |= BG_RENDERING;
 }
 
 void bgDispOff(void) {
-    bgGetWork()->flags &= ~1;
+    bgGetWork()->flags &= ~BG_RENDERING;
 }
 
 void bgSetScrlOffset(f32 x, f32 y) {
@@ -98,19 +98,19 @@ void bgSetScrlOffset(f32 x, f32 y) {
 }
 
 void bgAutoScrollOff(void) {
-    bgGetWork()->flags |= 4;
+    bgGetWork()->flags |= BG_NO_AUTOSCROLL;
 }
 
 void bgAutoScrollOn(void) {
-    bgGetWork()->flags &= ~4;
+    bgGetWork()->flags &= ~BG_NO_AUTOSCROLL;
 }
 
 void bgTransOffsetOff(void) {
-    bgGetWork()->flags |= 8;
+    bgGetWork()->flags |= BG_NO_TRANSLATION;
 }
 
 void bgTransOffsetOn(void) {
-    bgGetWork()->flags &= ~8;
+    bgGetWork()->flags &= ~BG_NO_TRANSLATION;
 }
 
 void bgMain(void) {

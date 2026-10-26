@@ -971,7 +971,7 @@ u8 BattleAudience_CheckReactionPerPhase(void) {
 void BattleAudience_Disp(void) {
     BattleAudienceBaseGetPtr();
     BattleAudienceAnimProcess();
-    if (!(BattleAudienceBaseGetPtr()->flags & 0x20000)) {
+    if (!(BattleAudienceBaseGetPtr()->flags & AUDIENCE_FLAG_NO_DISP)) {
         dispEntry(CAMERA_3D, 0.0f, 1, BattleAudienceDispAudience, NULL);
         dispEntry(CAMERA_3D, 0.0f, 2, BattleAudienceDispAudience, NULL);
         dispEntry(CAMERA_3D, 0.0f, 1, BattleAudienceDispItem, NULL);
@@ -2599,7 +2599,7 @@ void BattleAudience_SetTarget(s32 index) {
     BattleAudienceMember* member;
     s32 i;
 
-    BattleAudienceGetPtr(index)->flags |= 0x20;
+    BattleAudienceGetPtr(index)->flags |= AUDIENCE_MEMBER_FLAG_TARGETED;
     for (i = 0; i < 200; i++) {
         if (i != index && (u8)BattleAudience_GetExist(i)) {
             member = BattleAudienceGetPtr(i);
@@ -2613,7 +2613,7 @@ void BattleAudience_SetTarget(s32 index) {
 }
 
 void BattleAudience_Attack(s32 index) {
-    BattleAudienceGetPtr(index)->flags |= 0x40;
+    BattleAudienceGetPtr(index)->flags |= AUDIENCE_MEMBER_FLAG_ATTACKED;
 }
 
 BOOL BattleAudience_GetFront(s32 index) {
@@ -2787,7 +2787,7 @@ s32 BattleAudience_NoUsedHaitiRand(void) {
     for (i = 0; i < 10; i++) {
         for (j = 0, k = (20 - haiti[i]) / 2; j < haiti[i]; j++, k++) {
             id = k + i * 20;
-            if (!(BattleAudienceGetPtr(id)->flags & 1) && !(BattleAudienceGetPtr(id)->flags & 0x100)) {
+            if (!(BattleAudienceGetPtr(id)->flags & AUDIENCE_MEMBER_FLAG_USED) && !(BattleAudienceGetPtr(id)->flags & AUDIENCE_MEMBER_FLAG_WIDE_SUB)) {
                 list[count++] = id;
             }
         }
@@ -2821,7 +2821,7 @@ s32 BattleAudience_NoUsedFCHaitiRand(void) {
     for (i = 0; i < 10; i++) {
         for (j = 0, k = (20 - haiti[i]) / 2; j < haiti[i]; j++, k++) {
             id = k + i * 20;
-            if (!(BattleAudienceGetPtr(id)->flags & 1) && !(BattleAudienceGetPtr(id)->flags & 0x100)) {
+            if (!(BattleAudienceGetPtr(id)->flags & AUDIENCE_MEMBER_FLAG_USED) && !(BattleAudienceGetPtr(id)->flags & AUDIENCE_MEMBER_FLAG_WIDE_SUB)) {
                 w = rowW[i] * colW[k] + 1;
                 list[count] = id;
                 if (count) {
@@ -2860,7 +2860,7 @@ s32 BattleAudience_NoUsedFCHaitiRandCenter(void) {
     for (i = 0; i < 10; i++) {
         for (j = 0, k = (20 - haiti[i]) / 2; j < haiti[i]; j++, k++) {
             id = k + i * 20;
-            if (!(BattleAudienceGetPtr(id)->flags & 1) && !(BattleAudienceGetPtr(id)->flags & 0x100)) {
+            if (!(BattleAudienceGetPtr(id)->flags & AUDIENCE_MEMBER_FLAG_USED) && !(BattleAudienceGetPtr(id)->flags & AUDIENCE_MEMBER_FLAG_WIDE_SUB)) {
                 w = rowW[i] * colW[k] + 1;
                 list[count] = id;
                 if (count) {
@@ -3999,7 +3999,7 @@ void BattleAudienceNoiseMain(void) {
 }
 
 void BattleAudience_Case_KillEnemy(s32 level) {
-    BattleAudienceBaseGetPtr()->flags |= 0x1000;
+    BattleAudienceBaseGetPtr()->flags |= AUDIENCE_FLAG_KILL_ENEMY;
 }
 
 void BattleAudience_Case_ActionCommandGood(BattleWeapon* weapon) {
@@ -4040,11 +4040,11 @@ void BattleAudience_Case_ActionCommandBad(BattleWeapon* weapon) {
 }
 
 void BattleAudience_Case_GuardGood(void) {
-    BattleAudienceBaseGetPtr()->flags |= 0x40;
+    BattleAudienceBaseGetPtr()->flags |= AUDIENCE_FLAG_GUARD_GOOD;
 }
 
 void BattleAudience_Case_GuardBad(void) {
-    BattleAudienceBaseGetPtr()->flags |= 0x80;
+    BattleAudienceBaseGetPtr()->flags |= AUDIENCE_FLAG_GUARD_BAD;
 }
 
 void BattleAudience_Case_AcrobatGood(void) {
@@ -4188,11 +4188,11 @@ void BattleAudience_Case_Escape_Bad(void) {
 }
 
 void BattleAudience_Case_EnemyDamage(s32 damage) {
-    BattleAudienceBaseGetPtr()->flags |= 0x400;
+    BattleAudienceBaseGetPtr()->flags |= AUDIENCE_FLAG_ENEMY_DAMAGE;
 }
 
 void BattleAudience_Case_EnemyNoDamage(void) {
-    BattleAudienceBaseGetPtr()->flags |= 0x800;
+    BattleAudienceBaseGetPtr()->flags |= AUDIENCE_FLAG_ENEMY_NO_DAMAGE;
 }
 
 void BattleAudience_Case_Countered(void) {
