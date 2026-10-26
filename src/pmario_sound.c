@@ -5808,7 +5808,7 @@ BOOL psndBGMOff_f_d(s32 flags, u32 fadetime, u32 someswitch) {
             fade->dipPercent = silent;
             fade->dipTimeMax = fadetime / PSND_FRAME_MS;
             fade->dipTime = fade->dipTimeMax;
-            if ((flags & PSND_QUICK) || (gp->flags & 1)) {
+            if ((flags & PSND_QUICK) || (gp->flags & GW_FLAG_SAVE_LOADED)) {
                 bgm->flags |= PSND_QUICK;
             } else {
                 bgm->flags &= ~PSND_QUICK;

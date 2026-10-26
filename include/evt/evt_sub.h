@@ -2,6 +2,7 @@
 
 #include "manager/winmgr.h"
 #include "evt/evt_cmd.h"
+#include "mario/mariost.h" // GlobalWorkFlags for evt_sub_get_system_flag / evt_sub_system_flag_onoff
 #include "dolphin/types.h"
 
 USER_FUNC(evt_key_get_buttontrg);

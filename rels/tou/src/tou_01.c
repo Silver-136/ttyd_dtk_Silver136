@@ -3450,11 +3450,11 @@ EVT_BEGIN(tou_01_init_evt)
     CALL(evt_mobj_jumpstand_blue, 0, STRING("jump"), 180, 610, 160, 20, 0, 0)
 #endif
     CALL(evt_sub_get_system_flag, LW(0))
-    IF_BITS_SET(LW(0), 2)
+    IF_BITS_SET(LW(0), GW_FLAG_NO_ENTRANCE)
         RETURN
     END_IF
     CALL(evt_sub_get_system_flag, LW(0))
-    IF_BITS_SET(LW(0), 1)
+    IF_BITS_SET(LW(0), GW_FLAG_SAVE_LOADED)
         ELSE
         CALL(evt_bero_get_entername, LW(0))
         IF_STR_NOT_EQUAL(LW(0), STRING("a_door_mon"))

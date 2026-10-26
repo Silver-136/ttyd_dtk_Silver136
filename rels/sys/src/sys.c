@@ -1257,7 +1257,7 @@ USER_FUNC(display) {
 USER_FUNC(start) {
     SysWork* wp = g_wp;
 
-    gp->flags |= 0x10;
+    gp->flags |= GW_FLAG_CURTAIN_OPEN;
     if (wp->state < 1) {
         return EVT_RETURN_BLOCK;
     }

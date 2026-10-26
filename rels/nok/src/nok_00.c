@@ -336,7 +336,7 @@ EVT_END()
 
 static EVT_BEGIN(init_white)
     CALL(evt_sub_get_system_flag, LW(0))
-    IF_BITS_SET(LW(0), 4096)
+    IF_BITS_SET(LW(0), GW_FLAG_E3)
         RETURN
     END_IF
     SWITCH(GSW_STORY_PROGRESS)

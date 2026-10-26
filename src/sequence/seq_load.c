@@ -1245,7 +1245,7 @@ void continueGame(void) {
     marioPartyEntry(gp->savePartyId[1]);
     psndClearFlag(PSND_FLAG_NO_SFX);
     countDownSaveReStart();
-    gp->flags |= 1;
+    gp->flags |= GW_FLAG_SAVE_LOADED;
     switch (swByteGet(4)) {
         case 0:
             gp->areaFadeInType = 0;

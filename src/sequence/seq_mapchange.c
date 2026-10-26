@@ -276,7 +276,7 @@ void seq_mapChangeMain(SequenceWork* work) {
             fileAsyncf(4, 0, "%s/battle/audience/audience_normal.tpl", getMarioStDvdRoot());
             fileAsyncf(4, 0, "%s/battle/audience/audience_luigi.tpl", getMarioStDvdRoot());
         }
-        if (gp->flags & 1) {
+        if (gp->flags & GW_FLAG_SAVE_LOADED) {
             mario = marioGetPtr();
             party = partyGetPtr(marioGetPartyId());
             extraParty = partyGetPtr(marioGetExtraPartyId());
@@ -315,7 +315,7 @@ void seq_mapChangeMain(SequenceWork* work) {
                 break;
             }
             statusWinForceUpdate();
-            gp->flags &= ~1;
+            gp->flags &= ~GW_FLAG_SAVE_LOADED;
             marioStSystemLevel(0);
         }
         marioEntry();
@@ -354,7 +354,7 @@ void _unload(const char* prevMap, const char* nextMap, const char* bero) {
     if (seqGetPrevSeq() != SEQ_LOAD && seqGetPrevSeq() != SEQ_TITLE && strcmp(prevMap, "sys_00") &&
         strcmp(prevMap, "sys_01") && strcmp(prevMap, "dig_00")) {
         fadeReset(1);
-        gp->flags &= ~0x10;
+        gp->flags &= ~GW_FLAG_CURTAIN_OPEN;
     }
     for (i = 0; i < 4; i++) {
         padRumbleHardOff(i);
@@ -395,7 +395,7 @@ void _load(const char* prevMapName, const char* newMapName, const char* beroName
     setupDataLoad(map->mapName);
     sprintf(mapFile, "./b/%s.tpl", newMapName);
     bgEntry(mapFile);
-    if (gp->flags & 1) {
+    if (gp->flags & GW_FLAG_SAVE_LOADED) {
         MarioWork* mario;
         PartyEntry* party;
         PartyEntry* extraParty;

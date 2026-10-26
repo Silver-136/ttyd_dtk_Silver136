@@ -89,7 +89,7 @@ static
 #endif
 
 void alarm_handler(OSAlarm* alarm, OSContext* context) {
-    gp->flags |= 0x2000;
+    gp->flags |= GW_FLAG_E3_TIMEOUT;
 }
 
 void seq_e3Init(SequenceWork* seq) {
@@ -105,10 +105,10 @@ void seq_e3Init(SequenceWork* seq) {
     OSSetAlarm(&wp->alarm, (OSTime)OS_TIMER_CLOCK * 600, alarm_handler);
 #endif
     wp->initTime = OSGetTime();
-    gp->flags &= ~2;
-    gp->flags |= 0x20;
-    gp->flags |= 0x1000;
-    gp->flags &= ~0x2000;
+    gp->flags &= ~GW_FLAG_NO_ENTRANCE;
+    gp->flags |= GW_FLAG_NO_SAVE_BLOCK;
+    gp->flags |= GW_FLAG_E3;
+    gp->flags &= ~GW_FLAG_E3_TIMEOUT;
     fadeEntry(FADE_IN_BLACK, 200, (GXColor){ 0x00, 0x00, 0x00, 0xFF });
     fadeReset(1);
     psndStopAllFadeOut();

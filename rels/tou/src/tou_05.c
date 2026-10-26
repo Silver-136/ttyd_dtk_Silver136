@@ -1281,7 +1281,7 @@ EVT_BEGIN(tou_05_init_evt)
         END_INLINE_EVENT
     END_IF
     CALL(evt_sub_get_system_flag, LW(0))
-    IF_BITS_SET(LW(0), 2)
+    IF_BITS_SET(LW(0), GW_FLAG_NO_ENTRANCE)
         RETURN
     END_IF
     SET_VALUE(LW(0), 0)

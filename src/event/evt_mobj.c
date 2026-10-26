@@ -2094,7 +2094,7 @@ s32 mobj_recovery_blk(MapObjectEntry* mobj) {
         psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MOBJ_HP_RECOVER_HIT1), &mobj->position);
         mobj->state++;
     case 1:
-        if (!((u32)gp->flags & 0x1000) && swGet(0xea) == 0) {
+        if (!((u32)gp->flags & GW_FLAG_E3) && swGet(0xea) == 0) {
             swSet(0xea);
             mobj->state = 20;
             break;
@@ -2337,7 +2337,7 @@ USER_FUNC(evt_mobj_save_blk) {
     flagVar = args[5];
     anim = "MOBJ_SaveBlock";
     inBattle = gp->inBattle != 0;
-    if ((u32)gp->flags & 0x20) {
+    if ((u32)gp->flags & GW_FLAG_NO_SAVE_BLOCK) {
         return EVT_RETURN_DONE;
     }
     if (animGroupBaseAsync(anim, inBattle, NULL) == 0) {

@@ -1825,7 +1825,7 @@ EVT_BEGIN(pik_00_init_evt)
             CALL(evt_mapobj_flag_onoff, 1, 1, STRING("train_7"), MAP_OBJ_FLAG_HIDDEN)
         END_IF
         CALL(evt_sub_get_system_flag, LW(0))
-        IF_BITS_SET(LW(0), 1)
+        IF_BITS_SET(LW(0), GW_FLAG_SAVE_LOADED)
             IF_INT_EQUAL(GSWF(3578), 0)
                 CALL_CHILD(PTR(hom_10_evt_resha_right))
                 CALL(evt_mapobj_flag_onoff, 1, 1, STRING("train_5"), MAP_OBJ_FLAG_HIDDEN)
@@ -1838,7 +1838,7 @@ EVT_BEGIN(pik_00_init_evt)
             END_IF
         END_IF
         CALL(evt_sub_get_system_flag, LW(0))
-        IF_BITS_SET(LW(0), 2)
+        IF_BITS_SET(LW(0), GW_FLAG_NO_ENTRANCE)
             SET_VALUE(GSWF(3578), 1)
             CALL_CHILD(PTR(hom_10_evt_resha_left))
             CALL(evt_mapobj_flag_onoff, 1, 1, STRING("train_5"), MAP_OBJ_FLAG_HIDDEN)

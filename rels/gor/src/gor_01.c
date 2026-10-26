@@ -4051,7 +4051,7 @@ EVT_END()
 
 EVT_BEGIN(christine_nakama_after)
     CALL(evt_sub_get_system_flag, LW(0))
-    IF_BITS_SET(LW(0), 32)
+    IF_BITS_SET(LW(0), GW_FLAG_NO_SAVE_BLOCK)
         RETURN
     END_IF
     LOOP(0)

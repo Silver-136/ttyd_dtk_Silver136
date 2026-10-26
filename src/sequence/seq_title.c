@@ -49,10 +49,10 @@ const char* DbgBtlSel_GetMsgDataPtr(void) {
 
 void seq_titleInit(SequenceWork* work) {
     L_titleInit(work);
-    gp->flags &= ~2;
+    gp->flags &= ~GW_FLAG_NO_ENTRANCE;
     gp->flags &= ~0x40;
-    gp->flags &= ~0x20;
-    gp->flags &= ~0x1000;
+    gp->flags &= ~GW_FLAG_NO_SAVE_BLOCK;
+    gp->flags &= ~GW_FLAG_E3;
 }
 
 void seq_titleExit(SequenceWork* work) {

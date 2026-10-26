@@ -253,8 +253,8 @@ static EVT_BEGIN(evt_koopa_after)
 EVT_END()
 
 static USER_FUNC(sysflag) {
-    if (gp->flags & 1) {
-        gp->flags &= ~1;
+    if (gp->flags & GW_FLAG_SAVE_LOADED) {
+        gp->flags &= ~GW_FLAG_SAVE_LOADED;
         fadeEntry(0x1C, 0, (GXColor){0, 0, 0, 0});
     }
     return EVT_RETURN_DONE;

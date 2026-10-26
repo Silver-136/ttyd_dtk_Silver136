@@ -2442,7 +2442,7 @@ EVT_BEGIN(rsh_06_a_init_evt)
     CALL_CHILD(PTR(evt_bero_info_run))
     CALL_CHILD(PTR(rsh_06_init_evt))
     CALL(evt_sub_get_system_flag, LW(0))
-    IF_BITS_SET(LW(0), 2)
+    IF_BITS_SET(LW(0), GW_FLAG_NO_ENTRANCE)
         SPAWN_EVENT(PTR(moamoa_debug))
         RETURN
     END_IF

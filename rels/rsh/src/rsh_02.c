@@ -1398,7 +1398,7 @@ EVT_BEGIN(rsh_02_a_init_evt)
         SET_VALUE(GSWF(3444), 1)
     END_IF
     CALL(evt_sub_get_system_flag, LW(0))
-    IF_BITS_CLEAR(LW(0), 2)
+    IF_BITS_CLEAR(LW(0), GW_FLAG_NO_ENTRANCE)
         IF_INT_LESS(GSW_STORY_PROGRESS, STG6_00_START)
             SET_VALUE(GSWF(3444), 1)
         END_IF

@@ -689,7 +689,7 @@ void camLetterBoxDraw(CameraId cameraId, void* param) {
     f32 projection[GX_PROJECTION_SZ];
     u32 left, top, width, height;
 
-    if (!(gp->flags & 0x8000) && camera->letterBoxAlpha != 0) {
+    if (!(gp->flags & GW_FLAG_NO_LETTER_BOX_UNUSED) && camera->letterBoxAlpha != 0) {
         GXGetViewportv(viewport);
         GXGetProjectionv(projection);
         GXGetScissor(&left, &top, &width, &height);

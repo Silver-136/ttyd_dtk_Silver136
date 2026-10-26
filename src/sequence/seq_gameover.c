@@ -375,7 +375,7 @@ void seq_gameOverMain(SequenceWork* work) {
             strcpy(gp->currentAreaName, "");
             statusWinDispOn();
             camGetPtr(CAMERA_2D)->flags &= ~CAMERA_FLAG_LETTER_BOX_OFF;
-            if (gp->flags & 0x1000) {
+            if (gp->flags & GW_FLAG_E3) {
                 seqSetSeq(SEQ_E3, NULL, NULL);
             } else {
                 seqSetSeq(SEQ_TITLE, NULL, NULL);

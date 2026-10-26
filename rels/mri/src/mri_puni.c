@@ -5467,7 +5467,7 @@ USER_FUNC(evt_puni_setup) {
             p->flags |= PUNI_FLAG_SPRITE_PUNI;
         }
         if (b0 == 0) {
-            if (gp->flags & 1) {
+            if (gp->flags & GW_FLAG_SAVE_LOADED) {
                 sx = randf(mario->position.x - 10.0f, mario->position.x + 10.0f);
                 sy = mario->position.y;
                 sz = randf(mario->position.z - 10.0f, mario->position.z + 10.0f);

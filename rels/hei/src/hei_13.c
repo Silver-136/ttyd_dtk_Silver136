@@ -132,7 +132,7 @@ EVT_BEGIN(hei_13_init_evt)
         CALL(evt_mobj_flag_onoff, 1, STRING("mm"), MOBJ_FLAG_NO_SHADOW)
     END_IF
     CALL(evt_sub_get_system_flag, LW(0))
-    IF_BITS_CLEAR(LW(0), 4096)
+    IF_BITS_CLEAR(LW(0), GW_FLAG_E3)
         CALL(evt_item_entry, STRING("i"), ITEM_HAPPY_HEART, 325, 200, -100, ITEM_TYPE_STILL, GSWF(1798), 0)
     END_IF
     CALL(evt_mobj_brick, STRING("10m"), 325, 60, -100, ITEM_NULL, MOBJ_BRICK_TEN_COIN, 0, GSWF(1799))
@@ -142,7 +142,7 @@ EVT_BEGIN(hei_13_init_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG1_HEI1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG1_HEI1"))
     CALL(evt_sub_get_system_flag, LW(0))
-    IF_BITS_CLEAR(LW(0), 4096)
+    IF_BITS_CLEAR(LW(0), GW_FLAG_E3)
         CALL(evt_run_case_evt, CASE_HAMMER, 1, STRING("a_kan_5"), 0, PTR(evt_anm_kan), 0)
     END_IF
     RETURN

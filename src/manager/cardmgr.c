@@ -304,7 +304,7 @@ void cardCopy2Main(s32 slot) {
     save = &wp->data->saves[slot];
     backup1 = gp->fbatData;
     backup2 = gp->mapAlloc;
-    backup3 = (u32)(gp->flags & 8);
+    backup3 = (u32)(gp->flags & GW_FLAG_PROGRESSIVE);
 #ifdef VERSION_G8ME01
     language = gp->language;
 #endif
@@ -334,9 +334,9 @@ void cardCopy2Main(s32 slot) {
     gp->debugFlag = 0;
     gp->debugBattle = 0;
     if (backup3 != 0) {
-        gp->flags |= 8;
+        gp->flags |= GW_FLAG_PROGRESSIVE;
     } else {
-        gp->flags &= ~8;
+        gp->flags &= ~GW_FLAG_PROGRESSIVE;
     }
 #ifdef VERSION_G8ME01
     gp->language = language;
@@ -408,8 +408,8 @@ void cardWrite(s32 slot) {
         gp->savePartyId[1] = partyId;
         gp->saveTime = OSGetTime();
         gp->saveCount++;
-        gp->flags &= ~1;
-        gp->flags &= ~2;
+        gp->flags &= ~GW_FLAG_SAVE_LOADED;
+        gp->flags &= ~GW_FLAG_NO_ENTRANCE;
         gp->resetType = 0;
 #ifdef VERSION_G8ME01
         gp->resetButtonDown = 0;

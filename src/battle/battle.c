@@ -122,7 +122,7 @@ BOOL BattleMain(void) {
         return FALSE;
     }
 
-    if ((gp->flags & 0x1000) && (gp->flags & 0x2000) && BattleGetSeq(wp, SEQ_UNKNOWN) == 2) {
+    if ((gp->flags & GW_FLAG_E3) && (gp->flags & GW_FLAG_E3_TIMEOUT) && BattleGetSeq(wp, SEQ_UNKNOWN) == 2) {
         wp->flags |= (BATTLE_FLAG_INTERRUPT_STOP | BATTLE_FLAG_DEMO_TIMEOUT);
         BattleSetSeq(wp, SEQ_UNKNOWN, 3);
         BattleSetSeq(wp, SEQ_END, 0x7000000);

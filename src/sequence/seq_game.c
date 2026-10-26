@@ -30,10 +30,10 @@ void seq_gameMain(SequenceWork* wp) {
 
     switch (wp->state) {
         case 0:
-            if ((gp->flags & 0x10) != 0) {
+            if ((gp->flags & GW_FLAG_CURTAIN_OPEN) != 0) {
                 fadeEntry(FADE_IN_WHITE2, 900, (GXColor){0, 0, 0, 0xFF});
                 evtEntryType(maku_spread, 0, 0, 0);
-                gp->flags &= ~0x10;
+                gp->flags &= ~GW_FLAG_CURTAIN_OPEN;
             } else if (!gp->didAreaChange) {
                 fadeEntry(gp->mapFadeOutType, gp->mapFadeOutDuration, (GXColor){0, 0, 0, 0xFF});
             } else {
@@ -47,8 +47,8 @@ void seq_gameMain(SequenceWork* wp) {
             break;
     
         case 1:
-            if (gp->flags & 0x1000 && gp->flags & 0x2000 && fadeIsFinish() && seqCheckSeq() == SEQ_LOGO) {
-                gp->flags &= ~0x2000;
+            if (gp->flags & GW_FLAG_E3 && gp->flags & GW_FLAG_E3_TIMEOUT && fadeIsFinish() && seqCheckSeq() == SEQ_LOGO) {
+                gp->flags &= ~GW_FLAG_E3_TIMEOUT;
                 seqSetSeq(SEQ_GAME_OVER, 0, 0);
             }
             marioGetPtr(); //unused
@@ -61,5 +61,5 @@ void seq_gameMain(SequenceWork* wp) {
 }
 
 void seq_gameExit(SequenceWork* wp) {
-    gp->flags &= ~2;
+    gp->flags &= ~GW_FLAG_NO_ENTRANCE;
 }

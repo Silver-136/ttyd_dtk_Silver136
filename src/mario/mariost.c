@@ -214,7 +214,7 @@ void marioStInit(void) {
         gp->framerate = 50;
     gp->language = 1;
 #else
-    if ((OSGetFontEncode() == OS_FONT_ENCODE_SJIS) && !(gp->flags & 0x1000))
+    if ((OSGetFontEncode() == OS_FONT_ENCODE_SJIS) && !(gp->flags & GW_FLAG_E3))
         gp->language = 0;
     else
         gp->language = 1;
@@ -320,7 +320,7 @@ void marioStMain(void) {
     winMgrMain();
     effMain();
     L_gcResetCheck();
-    if (gp->flags & 0x1000) {
+    if (gp->flags & GW_FLAG_E3) {
         for (i = 0; i < 4; i++) {
             if (gp->dirs[i]) break;
             if (gp->button[i]) break;
@@ -333,7 +333,7 @@ void marioStMain(void) {
         }
         if (i >= 4) {
             if (OSTicksToSeconds(OSGetTime() - none_key) > 120 && (seqGetSeq() == SEQ_GAME || seqGetSeq() == SEQ_BATTLE)) {
-                gp->flags |= 0x2000;
+                gp->flags |= GW_FLAG_E3_TIMEOUT;
             }
         } else {
             none_key = OSGetTime();
@@ -661,10 +661,10 @@ void L_gcResetCheck(void) {
             VIWaitForRetrace();
         }
         if (gp->resetType != 2) {
-            if (!(gp->flags & 4)) {
+            if (!(gp->flags & GW_FLAG_VIDEO_MODE_SET)) {
                 code = OS_RESET_SHUTDOWN;
             } else {
-                if (!(gp->flags & 8)) {
+                if (!(gp->flags & GW_FLAG_PROGRESSIVE)) {
                     code = OS_RESET_RESTART;
                 } else {
                     code = OS_RESET_HOTRESET;

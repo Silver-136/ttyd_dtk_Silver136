@@ -1255,7 +1255,7 @@ EVT_BEGIN(hei_00_init_evt)
         END_IF
     END_IF
     CALL(evt_sub_get_system_flag, LW(0))
-    IF_BITS_SET(LW(0), 4096)
+    IF_BITS_SET(LW(0), GW_FLAG_E3)
         SET_VALUE(LW(0), STRING("dokan_2"))
         CALL_CHILD(PTR(bero_case_switch_off))
         CALL(evt_bero_overwrite, STRING("dokan_2"), PTR(e3_bero))

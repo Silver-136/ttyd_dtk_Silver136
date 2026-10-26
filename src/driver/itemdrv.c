@@ -1109,7 +1109,7 @@ void itemseq_GetItem(ItemEntry* entry) {
                 entry->subState = 6;
                 break;
             }
-            if (entry->itemId >= 0x79 && entry->itemId < 0xEC && entry->itemId != ITEM_STAR_PIECE && !swGet(0xEB) && !(gp->flags & 0x1000)) {
+            if (entry->itemId >= 0x79 && entry->itemId < 0xEC && entry->itemId != ITEM_STAR_PIECE && !swGet(0xEB) && !(gp->flags & GW_FLAG_E3)) {
                 swSet(0xEB);
                 entry->subState = 4;
                 wp->msgWindowId = msgWindow_Entry(msgSearch("item_first_hit"), 0, 0);

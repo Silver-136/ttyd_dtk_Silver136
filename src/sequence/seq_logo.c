@@ -90,10 +90,10 @@ void seq_logoInit(SequenceWork* work) {
                 VIFlush();
                 VIWaitForRetrace();
                 VIWaitForRetrace();
-                gp->flags |= 8;
+                gp->flags |= GW_FLAG_PROGRESSIVE;
                 break;
         }
-        gp->flags |= 4;
+        gp->flags |= GW_FLAG_VIDEO_MODE_SET;
     }
 }
 
@@ -141,7 +141,7 @@ void seq_logoMain(SequenceWork* work) {
 
         case 3:
             if (!wp->progressive) {
-                gp->flags |= 4;
+                gp->flags |= GW_FLAG_VIDEO_MODE_SET;
                 time = gp->renderTime;
                 work->state++;
             }
@@ -193,7 +193,7 @@ void seq_logoMain(SequenceWork* work) {
             if (fadeIsFinish() && !wp->progressive) {
                 work->state++;
                 time = gp->renderTime;
-                gp->flags |= 4;
+                gp->flags |= GW_FLAG_VIDEO_MODE_SET;
             }
             break;
         
@@ -293,7 +293,7 @@ void seq_logoMain(SequenceWork* work) {
             if ((u32)psndPushGroup() == 0U) {
                 DVDMgrSetupCallback(NULL);
                 if (fadeIsFinish()) {
-                    if (!(gp->flags & 8)) {
+                    if (!(gp->flags & GW_FLAG_PROGRESSIVE)) {
                         VIConfigure(&GXNtsc480IntDfMarioSt);
                         VIFlush();
                     } else {
@@ -311,7 +311,7 @@ void seq_logoMain(SequenceWork* work) {
         case 18:
             VISetBlack(FALSE);
             VIWaitForRetrace();
-            if (!(gp->flags & 0x1000)) {
+            if (!(gp->flags & GW_FLAG_E3)) {
                 if (!wp->skipStory) {
 #else
         case 10:
@@ -337,7 +337,7 @@ void seq_logoMain(SequenceWork* work) {
                 arcEntry(0, decode, size);
                 fileFree(first);
             }
-            if (!(gp->flags & 0x1000)) {
+            if (!(gp->flags & GW_FLAG_E3)) {
                 if (!wp->skipStory) { //play story demo
 #endif
                     seqSetSeq(SEQ_MAP_CHANGE, "dmo_00", NULL);
@@ -769,13 +769,13 @@ void progDisp(CameraId camId, void* param) {
                     VIWaitForRetrace();
                     time = gp->renderTime;
                     wp->promptStep++;
-                    gp->flags |= 8;
+                    gp->flags |= GW_FLAG_PROGRESSIVE;
                 } else {
                     OSSetProgressiveMode(0);
                     wp->progressive = 0;
-                    gp->flags &= ~8;
+                    gp->flags &= ~GW_FLAG_PROGRESSIVE;
                 }
-                gp->flags |= 4;
+                gp->flags |= GW_FLAG_VIDEO_MODE_SET;
                 break;
 
             case 4:
@@ -863,14 +863,14 @@ void progDisp(CameraId camId, void* param) {
                     VIWaitForRetrace();
                     time = gp->renderTime;
                     wp->progState++;
-                    gp->flags |= 8;
+                    gp->flags |= GW_FLAG_PROGRESSIVE;
                 } else {
                     OSSetProgressiveMode(0);
                     time = gp->renderTime;
                     wp->progState += 2;
-                    gp->flags &= ~8;
+                    gp->flags &= ~GW_FLAG_PROGRESSIVE;
                 }
-                gp->flags |= 4;
+                gp->flags |= GW_FLAG_VIDEO_MODE_SET;
                 break;
 
             case 3:

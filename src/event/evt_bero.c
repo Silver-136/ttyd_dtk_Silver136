@@ -409,7 +409,7 @@ USER_FUNC(evt_bero_get_into_info) {
         }
         if (!strcmp(bero->hitName, gp->beroEnterName)) break;
     }
-    if ((gp->flags & 2) && !strcmp(gp->beroEnterName, "")) {
+    if ((gp->flags & GW_FLAG_NO_ENTRANCE) && !strcmp(gp->beroEnterName, "")) {
         bero = BeroINFOARR[0];
         event->lwData[1] = 0;
         event->lwData[2] = BeroNUM;
@@ -1719,7 +1719,7 @@ EVT_BEGIN(evt_bero_info_run)
     CALL(evt_bero_set_now_number, LW(1))
     CALL(evt_bero_read_mario_pera)
     CALL(evt_sub_get_system_flag, LW(0))
-    IF_BITS_SET(LW(0), 1)
+    IF_BITS_SET(LW(0), GW_FLAG_SAVE_LOADED)
         DEBUG_PUT_MSG(STRING("\203Z\201[\203u\203u\203\215\203b\203N\202\251\202\347\202\314\203\215\201[\203h\216\236\202\314\217\210\227\235"))
         CALL(evt_bero_exec_onoff, 0, 1)
         WAIT_FRAMES(1)

@@ -588,7 +588,7 @@ EVT_BEGIN(tou_06_init_evt)
     END_IF
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("kaidan"), MAP_OBJ_FLAG_CLIP)
     CALL(evt_sub_get_system_flag, LW(0))
-    IF_BITS_SET(LW(0), 2)
+    IF_BITS_SET(LW(0), GW_FLAG_NO_ENTRANCE)
         RETURN
     END_IF
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_20_08_MS_MOWZ)

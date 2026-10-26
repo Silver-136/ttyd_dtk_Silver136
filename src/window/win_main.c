@@ -217,7 +217,7 @@ void winMain(void) {
                         break;
                     }
 #ifdef VERSION_G8ME01
-                    if ((gp->flags & 0x1000) && evtGetValue(NULL, GSW_STORY_PROGRESS) < STG0_07_GOOMBELLA_JOINS) {
+                    if ((gp->flags & GW_FLAG_E3) && evtGetValue(NULL, GSW_STORY_PROGRESS) < STG0_07_GOOMBELLA_JOINS) {
                         break;
                     }
 #endif
@@ -225,7 +225,7 @@ void winMain(void) {
                     wp->menuSel = 0;
                 }
                 camGetPtr(CAMERA_2D)->flags |= CAMERA_FLAG_LETTER_BOX_OFF;
-                if (gp->flags & 0x1000) {
+                if (gp->flags & GW_FLAG_E3) {
                     wp->menuSel = 1;
                 }
                 if (!(wp->flags & WINDOW_FLAG_LECTURE)) {

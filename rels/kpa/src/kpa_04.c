@@ -84,7 +84,7 @@ EVT_BEGIN(kpa_04_init_evt)
     CALL(evt_snd_envoff, PSND_FADEOUT)
     SPAWN_EVENT(PTR(kpa_time))
     CALL(evt_sub_get_system_flag, LW(0))
-    IF_BITS_SET(LW(0), 2)
+    IF_BITS_SET(LW(0), GW_FLAG_NO_ENTRANCE)
         RETURN
     END_IF
     CALL(evt_koopa_set_level, GSW(1223))

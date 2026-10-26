@@ -5362,7 +5362,7 @@ EVT_BEGIN(tou_03_init_evt)
     CALL(evt_hitobj_onoff, STRING(("a_souti")), 1, 0)
 #endif
     CALL(evt_sub_get_system_flag, LW(0))
-    IF_BITS_SET(LW(0), 2)
+    IF_BITS_SET(LW(0), GW_FLAG_NO_ENTRANCE)
         RETURN
     END_IF
     CALL(evt_npc_setup, PTR(npcEnt))

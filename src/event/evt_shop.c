@@ -190,7 +190,7 @@ static EVT_BEGIN(buy_evt)
     CALL(evt_msg_continue)
 #endif
     CALL(evt_sub_get_system_flag, LW(0))
-    IF_BITS_CLEAR(LW(0), 4096)
+    IF_BITS_CLEAR(LW(0), GW_FLAG_E3)
         IF_INT_EQUAL(GSWF_ITEM_TUTORIAL_SEEN, 0)
             SET_VALUE(GSWF_ITEM_TUTORIAL_SEEN, 1)
             CALL(evt_msg_print, 0, STRING("item_first_hit"), 0, 0)

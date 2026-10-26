@@ -17,8 +17,22 @@ typedef enum SystemLevelFlags {
     SYSTEM_LEVEL_NO_FIELD_BATTLE = (1 << 4), // 0x10, no field battle starts (scripted jumps, jump stands)
 } SystemLevelFlags;
 
+// GlobalWork.flags (scripts: evt_sub_get_system_flag / evt_sub_system_flag_onoff). 0x40 is only tested and cleared
+// by map scripts (no setter in the code) and is not named.
+typedef enum GlobalWorkFlags {
+    GW_FLAG_SAVE_LOADED = (1 << 0),          // 0x1, a save was loaded: the next map change restores the positions
+    GW_FLAG_NO_ENTRANCE = (1 << 1),          // 0x2, map entered without an entrance: story init skipped, first bero
+    GW_FLAG_VIDEO_MODE_SET = (1 << 2),       // 0x4, the video mode was chosen (a reset restarts, not shuts down)
+    GW_FLAG_PROGRESSIVE = (1 << 3),          // 0x8, progressive scan (kept on the memory card; hot reset)
+    GW_FLAG_CURTAIN_OPEN = (1 << 4),         // 0x10, the next map opens with the stage curtain (sys start)
+    GW_FLAG_NO_SAVE_BLOCK = (1 << 5),        // 0x20, save blocks are not created (E3 demo)
+    GW_FLAG_E3 = (1 << 12),                  // 0x1000, E3 demo build behaviour (seq_e3)
+    GW_FLAG_E3_TIMEOUT = (1 << 13),          // 0x2000, the E3 demo went idle: back to the logo
+    GW_FLAG_NO_LETTER_BOX_UNUSED = (1 << 15), // 0x8000, the letter box is not drawn; nothing sets it
+} GlobalWorkFlags;
+
 typedef struct GlobalWork {
-    s32 flags; //0x0
+    s32 flags; //0x0, GlobalWorkFlags
     s32 framerate; //0x4
     s32 debugFlag; //0x8
     s32 debugBattle; //0xC

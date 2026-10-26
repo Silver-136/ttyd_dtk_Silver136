@@ -222,7 +222,7 @@ s32 winRootMain(WindowWork* w) {
             w->flags |= 0x4000;
             break;
         }
-        if (gp->flags & 0x1000) {
+        if (gp->flags & GW_FLAG_E3) {
             w->tabNum = 0;
             WIN_ROOT_ADD_TAB(1);
             winPartyInit2(w);
@@ -332,7 +332,7 @@ s32 winRootMain(WindowWork* w) {
             ret = winLogMain(w);
             break;
         }
-        if ((gp->flags & 0x1000) && ret == -1) {
+        if ((gp->flags & GW_FLAG_E3) && ret == -1) {
             ret = -2;
         }
         if (ret == -1) {

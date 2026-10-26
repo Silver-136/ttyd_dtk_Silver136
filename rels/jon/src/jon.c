@@ -158,7 +158,7 @@ EvtWord zonbaba_first_event[677];
 
 EVT_BEGIN(jon_init_evt)
     CALL(evt_sub_get_system_flag, LW(0))
-    IF_BITS_SET(LW(0), 2)
+    IF_BITS_SET(LW(0), GW_FLAG_NO_ENTRANCE)
         CALL(evt_sub_get_mapname, LW(0))
         IF_STR_EQUAL(LW(0), STRING("jon_00"))
             SET_VALUE(GSW_PIT_FLOOR, 0)

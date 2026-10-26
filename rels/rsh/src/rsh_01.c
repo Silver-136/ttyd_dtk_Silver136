@@ -688,7 +688,7 @@ EVT_BEGIN(rsh_01_a_init_evt)
     END_IF
     CALL_CHILD(PTR(evt_rsh_moamoa_on_window))
     CALL(evt_sub_get_system_flag, LW(0))
-    IF_BITS_SET(LW(0), 2)
+    IF_BITS_SET(LW(0), GW_FLAG_NO_ENTRANCE)
         RETURN
     END_IF
     IF_INT_LESS(GSW_STORY_PROGRESS, STG6_00_START)
