@@ -433,7 +433,7 @@ BOOL BattleSamplingEnemy(BattleWorkWeaponTargets* d, BattleWeapon* weapon, s32 u
     d->classFlags = classFlags;
     d->propFlags = propFlags;
     d->direction = direction;
-    if (BattleGetUnitPtr(_battleWorkPointer, unitId)->mTokenFlags & 0x10) {
+    if (BattleGetUnitPtr(_battleWorkPointer, unitId)->mTokenFlags & kConfusedAction) {
         if ((d->classFlags & TARGET_CLASS_NO_OPPOSITE_SIDE) && !(d->classFlags & TARGET_CLASS_NO_OWN_SIDE)) {
             r = TRUE;
             d->classFlags &= ~TARGET_CLASS_NO_OPPOSITE_SIDE;

@@ -4842,7 +4842,7 @@ USER_FUNC(btlevtcmd_StartAC) {
     BattleWork* wp = _battleWorkPointer;
     s32 help = evtGetValue(event, event->args[0]);
     BattleActionCommandStart(wp);
-    if (help && !(wp->actionCommands.mAcUnit->mTokenFlags & 0x10)) {
+    if (help && !(wp->actionCommands.mAcUnit->mTokenFlags & kConfusedAction)) {
         BattleAcHelpSetDispType(2);
     }
     return EVT_RETURN_DONE;

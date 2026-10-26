@@ -132,7 +132,7 @@ s32 battleAcMain_ShotTarget(BattleWork* work) {
                     cw->inRange = 0;
                 }
                 cw->frame--;
-                if ((ac->setupFlags & 1) && ((u32)ac->mAcUnit->mTokenFlags & 0x10)) {
+                if ((ac->setupFlags & 1) && ((u32)ac->mAcUnit->mTokenFlags & kConfusedAction)) {
                     if (irand(100) >= 0) {
                         ac->result = 0;
                     } else {

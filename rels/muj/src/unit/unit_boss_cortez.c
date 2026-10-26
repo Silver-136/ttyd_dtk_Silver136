@@ -781,7 +781,7 @@ static BattleUnitKindPart parts[] = {
 
 static EVT_BEGIN(init_event)
     CALL(_make_cortez_work_area, UNIT_ID_SELF)
-    CALL(btlevtcmd_OnUnitFlag, UNIT_ID_SELF, 16777216)
+    CALL(btlevtcmd_OnUnitFlag, UNIT_ID_SELF, BATTLE_UNIT_FLAG_SOLID_MODEL)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
     CALL(btlevtcmd_SetEventPhase, UNIT_ID_SELF, PTR(phase_event))
     CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event_mode1))

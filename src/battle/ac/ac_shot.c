@@ -117,7 +117,7 @@ s32 battleAcMain_Shot(BattleWork* work) {
                 ac->mAcState = 1000;
                 sw->sfxId = psndSFXOn(sfx);
             case 1000:
-                if ((ac->setupFlags & 1) && (ac->mAcUnit->mTokenFlags & 0x10)) {
+                if ((ac->setupFlags & 1) && (ac->mAcUnit->mTokenFlags & kConfusedAction)) {
                     f32 range;
                     s32 r;
                     if (ac->setupFlags & 2) {

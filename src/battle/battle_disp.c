@@ -693,7 +693,7 @@ void btlUnitPartsDisp(CameraId camId, BattleUnitPart* param) {
         PSMTXTrans(pPos, ex, ey, ez);
         MTX_TRANS(pDisp, part->mDisplayOffset);
         rotY = reviseAngle(-1.0f * angle - 90.0f);
-        if (!(part->mOwner->flags & 0x1000000)) {
+        if (!(part->mOwner->flags & BATTLE_UNIT_FLAG_SOLID_MODEL)) {
             a = reviseAngle(rotY + unit->mRotation.y + part->mRotation.y + unit->mBaseRotation.y + part->mBaseRotation.y);
             cam = camGetCurPtr();
             a = reviseAngle(a + CAMDIR(cam));
@@ -1057,7 +1057,7 @@ void _pose_def(BattleUnitPart* part) {
         case 0:
             PART_POSESTATE(part) = 1;
             animPoseSetEffect(part->poseId, NULL, 0);
-            if (part->mOwner->flags & 0x1000000) {
+            if (part->mOwner->flags & BATTLE_UNIT_FLAG_SOLID_MODEL) {
                 animPoseSetMaterialLightFlagOn(part->poseId, 8);
             }
             break;

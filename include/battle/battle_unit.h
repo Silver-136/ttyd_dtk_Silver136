@@ -56,8 +56,7 @@ typedef enum PartsAttribute_Flags {          // 32-bit size
     kImmuneToStatus = (1 << 31)             // 0x80000000, no status at all
 } PartsAttribute_Flags;
 
-// BattleUnit.flags (named where the code shows the use; 2, 0x100000/0x200000 (float bob, both needed) and
-// 0x1000000 are not named yet)
+// BattleUnit.flags (named where the code shows the use; 0x10 is set by the bomb enemies but has no clear reader)
 // BattleUnit.mStatusFlags (BtlUnit_*StatusFlag, btlevtcmd_On/Off/CheckStatusFlag). Danger = 5 HP, Peril = 1 HP as in
 // the US game text (the original sound and audience symbol names say "pinch" and "danger" for the two states).
 typedef enum BattleUnitStatusFlags {
@@ -76,6 +75,8 @@ typedef enum BattleUnit_Flags {
     BATTLE_UNIT_FLAG_SHADOW_WITH_PARTNER = (1 << 16),     // 0x10000, drawn and shadowed together with its partner (Veil)
     BATTLE_UNIT_FLAG_FLOAT_CAPABLE = (1 << 20),           // 0x100000, floats (bobs) when FLOAT_ACTIVE is also set
     BATTLE_UNIT_FLAG_FLOAT_ACTIVE = (1 << 21),            // 0x200000, float bob running (off during some attacks)
+    BATTLE_UNIT_FLAG_SOLID_MODEL = (1 << 24),             // 0x1000000, 3D model (large bosses): not mirrored like paper when
+                                                          // it turns away from the camera; model lighting on
     BATTLE_UNIT_FLAG_SHOW_ITEM_WHILE_ACTING = (1 << 25),  // 0x2000000
     BATTLE_UNIT_FLAG_ACTING = (1 << 26),                  // 0x4000000, its attack event has started
     BATTLE_UNIT_FLAG_HIDE_HELD_ITEM = (1 << 27),          // 0x8000000

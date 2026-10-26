@@ -93,7 +93,7 @@ void BattleActionCommandSetup(BattleWork* work, s32 id, BattleUnit* unit, s32 se
     for (; entry->id; entry++) {
         if (entry->id == id) {
             work->actionCommands.maincb = entry->main;
-            if (!(work->actionCommands.mAcUnit->mTokenFlags & 0x10)){
+            if (!(work->actionCommands.mAcUnit->mTokenFlags & kConfusedAction)){
                 work->actionCommands.dispcb = entry->disp;
             }
             work->actionCommands.resultcb = entry->result;

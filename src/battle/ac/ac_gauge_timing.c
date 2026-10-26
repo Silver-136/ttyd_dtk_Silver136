@@ -123,7 +123,7 @@ s32 battleAcMain_GaugeTiming(BattleWork* work) {
         case 99:
             break;
         case 100:
-            if ((GAC(work)->setupFlags & 1) && ((u32)work->actionCommands.mAcUnit->mTokenFlags & 0x10)) {
+            if ((GAC(work)->setupFlags & 1) && ((u32)work->actionCommands.mAcUnit->mTokenFlags & kConfusedAction)) {
                 if (irand(100) >= 0) {
                     GAC(work)->setupParam = 30;
                     cw->passed = 0;

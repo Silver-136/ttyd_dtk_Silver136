@@ -144,7 +144,7 @@ s32 battleAcMain_StickRotate(BattleWork* work) {
                     sw->iconB = 2;
                 }
             case 1000:
-                if ((ac->setupFlags & 1) && (ac->mAcUnit->mTokenFlags & 0x10)) {
+                if ((ac->setupFlags & 1) && (ac->mAcUnit->mTokenFlags & kConfusedAction)) {
                     if (ac->setupFlags & 2) {
                         ac->setupParam--;
                         if (ac->setupParam >= 0) {

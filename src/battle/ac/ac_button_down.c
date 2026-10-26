@@ -131,7 +131,7 @@ s32 battleAcMain_ButtonDown(BattleWork *work) {
                 p->timer = work->actionCommands.params[0];
 
             case 1000:
-                if ((ac->setupFlags & 1) && (((u32)ac->mAcUnit->mTokenFlags) & 0x10)) {
+                if ((ac->setupFlags & 1) && (((u32)ac->mAcUnit->mTokenFlags) & kConfusedAction)) {
                     if (ac->setupFlags & 2) {
                         ac->setupParam--;
                         if (ac->setupParam >= 0) {
