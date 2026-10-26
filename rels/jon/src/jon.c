@@ -243,16 +243,16 @@ EVT_BEGIN(jon_init_evt)
     CALL(evt_sub_get_mapname, LW(0))
     IF_STR_EQUAL(LW(0), STRING("jon_04"))
         IF_INT_EQUAL(GSW_PIT_FLOOR, 49)
-            IF_INT_EQUAL(GSWF(5404), 0)
+            IF_INT_EQUAL(GSWF_TROUBLE_DONE(TROUBLE_ERASE_THAT_GRAFFITI), 0)
 #ifdef VERSION_G8ME01
-                IF_INT_NOT_EQUAL(GSW(1420), 30)
+                IF_INT_NOT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_ERASE_THAT_GRAFFITI)
                     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("after"), MAP_OBJ_FLAG_HIDDEN)
                     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("s_rakugaki"), MAP_OBJ_FLAG_HIDDEN)
                     ELSE
 #endif
                 SET_VALUE(LF(0), 0)
-                IF_INT_EQUAL(GSW(1420), 30)
-                    IF_INT_EQUAL(GSWF(5406), 1)
+                IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_ERASE_THAT_GRAFFITI)
+                    IF_INT_EQUAL(GSWF_TROUBLE_WORK(1), 1)
                         SET_VALUE(LF(0), 1)
                     END_IF
                 END_IF
@@ -260,8 +260,8 @@ EVT_BEGIN(jon_init_evt)
                     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("after"), MAP_OBJ_FLAG_HIDDEN)
                     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_rakugaki"), 0, PTR(evt_iri_30_touch_rakugaki), LW(0))
 #ifndef VERSION_G8ME01
-                    IF_INT_EQUAL(GSW(1420), 30)
-                        IF_INT_EQUAL(GSWF(5405), 1)
+                    IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_ERASE_THAT_GRAFFITI)
+                        IF_INT_EQUAL(GSWF_TROUBLE_WORK(0), 1)
 #endif
                             CALL(evt_run_case_evt, CASE_BOBBERY, 1, STRING("a_rakugaki"), 0, PTR(evt_iri_30_bomb_rakugaki), LW(1))
                             CALL(evt_set_case_wrk, LW(1), 15, LW(0))
@@ -1401,9 +1401,9 @@ EVT_BEGIN(talk_idouya)
         SET_VALUE(LW(1), STRING("dokan_3"))
     END_SWITCH
     IF_STR_EQUAL(LW(0), STRING("tik_06"))
-        IF_INT_EQUAL(GSW(1420), 12)
-            IF_INT_EQUAL(GSWF(5406), 1)
-                SET_VALUE(GSWF(5407), 1)
+        IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_HELP_MY_DADDY)
+            IF_INT_EQUAL(GSWF_TROUBLE_WORK(1), 1)
+                SET_VALUE(GSWF_TROUBLE_WORK(2), 1)
             END_IF
         END_IF
     END_IF
@@ -2220,9 +2220,9 @@ EVT_BEGIN(iri_12_dokan_in_sub)
 EVT_END()
 
 EVT_BEGIN(iri_12_dokan_in)
-    IF_INT_EQUAL(GSW(1420), 12)
-        IF_INT_EQUAL(GSWF(5406), 1)
-            IF_INT_EQUAL(GSWF(5407), 0)
+    IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_HELP_MY_DADDY)
+        IF_INT_EQUAL(GSWF_TROUBLE_WORK(1), 1)
+            IF_INT_EQUAL(GSWF_TROUBLE_WORK(2), 0)
                 SPAWN_EVENT(PTR(iri_12_dokan_in_sub))
             END_IF
         END_IF
@@ -2354,9 +2354,9 @@ EVT_BEGIN(iri_12_makkino_move_dokan_side)
 EVT_END()
 
 EVT_BEGIN(iri_12_enemy_dead_event)
-    IF_INT_EQUAL(GSW(1420), 12)
-        IF_INT_EQUAL(GSWF(5406), 1)
-            IF_INT_EQUAL(GSWF(5407), 0)
+    IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_HELP_MY_DADDY)
+        IF_INT_EQUAL(GSWF_TROUBLE_WORK(1), 1)
+            IF_INT_EQUAL(GSWF_TROUBLE_WORK(2), 0)
                 WAIT_MS(800)
                 SPAWN_EVENT(PTR(iri_12_makkino_move_dokan_side))
             END_IF
@@ -2404,16 +2404,16 @@ EVT_END()
 static EVT_BEGIN(iri_12_makkino_talk)
     CALL(evt_npc_check, STRING("敵"), LW(0))
     IF_INT_EQUAL(LW(0), 0)
-        IF_INT_EQUAL(GSWF(5406), 0)
+        IF_INT_EQUAL(GSWF_TROUBLE_WORK(1), 0)
             CALL(evt_msg_print, 0, STRING("irai_12_008"), PTR(iri_12_msgcb), STRING("マッキノ"))
-            SET_VALUE(GSWF(5406), 1)
+            SET_VALUE(GSWF_TROUBLE_WORK(1), 1)
             CALL(evt_npc_change_interrupt, STRING("マッキノ"), 6, 0)
             SPAWN_EVENT(PTR(iri_12_makkino_move_dokan_side))
             ELSE
             CALL(evt_msg_print, 0, STRING("irai_12_010"), 0, STRING("マッキノ"))
         END_IF
         ELSE
-        IF_INT_EQUAL(GSWF(5406), 0)
+        IF_INT_EQUAL(GSWF_TROUBLE_WORK(1), 0)
             CALL(evt_msg_print, 0, STRING("irai_12_007"), 0, STRING("マッキノ"))
             ELSE
             CALL(evt_msg_print, 0, STRING("irai_12_009"), 0, STRING("マッキノ"))
@@ -2460,7 +2460,7 @@ EVT_BEGIN(iri_12_makkino_fall_return)
     IF_INT_EQUAL(GSW_PIT_FLOOR, 99)
         IF_INT_EQUAL(GSWF(5085), 1)
             SPAWN_EVENT(PTR(iri_12_makkino_return_b100))
-            SET_VALUE(GSWF(5407), 1)
+            SET_VALUE(GSWF_TROUBLE_WORK(2), 1)
             ELSE
             CALL(evt_npc_change_interrupt, STRING("マッキノ"), 1, PTR(iri_12_makkino_buruburu))
             CALL(evt_npc_restart_regular_event, STRING("マッキノ"))
@@ -2468,7 +2468,7 @@ EVT_BEGIN(iri_12_makkino_fall_return)
         END_IF
         ELSE
         CALL_CHILD(PTR(iri_12_makkino_return))
-        SET_VALUE(GSWF(5407), 1)
+        SET_VALUE(GSWF_TROUBLE_WORK(2), 1)
         CALL(evt_mario_key_onoff, 1)
     END_IF
     RETURN
@@ -2491,10 +2491,10 @@ EVT_BEGIN(iri_12_init_fall)
 EVT_END()
 
 static EVT_BEGIN(iri_12_init)
-    IF_INT_EQUAL(GSW(1420), 12)
+    IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_HELP_MY_DADDY)
         SWITCH(GSW_PIT_FLOOR)
             CASE_EQUAL(17)
-            IF_INT_EQUAL(GSWF(5406), 0)
+            IF_INT_EQUAL(GSWF_TROUBLE_WORK(1), 0)
                 CALL(evt_npc_entry, STRING("マッキノ"), STRING("c_suifu_k"))
                 CALL(evt_npc_set_tribe, STRING("マッキノ"), STRING("水夫"))
                 CALL(evt_npc_set_position, STRING("マッキノ"), -50, 0, -120)
@@ -2507,8 +2507,8 @@ static EVT_BEGIN(iri_12_init)
                 CALL_CHILD(PTR(iri_12_init_fall))
             END_IF
             CASE_DEFAULT
-            IF_INT_EQUAL(GSWF(5406), 1)
-                IF_INT_EQUAL(GSWF(5407), 0)
+            IF_INT_EQUAL(GSWF_TROUBLE_WORK(1), 1)
+                IF_INT_EQUAL(GSWF_TROUBLE_WORK(2), 0)
                     CALL_CHILD(PTR(iri_12_init_fall))
                 END_IF
             END_IF
@@ -2564,7 +2564,7 @@ EVT_BEGIN(evt_iri_30_bomb_rakugaki)
     CALL(evt_mapobj_clear_offscreen, 1, STRING("s_rakugaki"))
     CALL(evt_paper_delete, STRING("OFF_d_bom_ver2"))
     CALL(evt_offscreen_delete, STRING("ofs"))
-    SET_VALUE(GSWF(5406), 1)
+    SET_VALUE(GSWF_TROUBLE_WORK(1), 1)
     CALL(evt_exit_case_evt)
     RETURN
 EVT_END()
@@ -2805,15 +2805,15 @@ EVT_BEGIN(zonbaba_first_event)
     CALL(evt_npc_flag_onoff, 1, STRING("敵"), NPC_FLAG_NO_HIT)
     CALL(evt_npc_flag_onoff, 0, STRING("敵"), NPC_FLAG_ENEMY)
     SET_VALUE(GSWF(5085), 1)
-    IF_INT_EQUAL(GSW(1420), 12)
-        IF_INT_EQUAL(GSWF(5406), 1)
-            IF_INT_EQUAL(GSWF(5407), 0)
+    IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_HELP_MY_DADDY)
+        IF_INT_EQUAL(GSWF_TROUBLE_WORK(1), 1)
+            IF_INT_EQUAL(GSWF_TROUBLE_WORK(2), 0)
                 CALL(evt_npc_get_reglid, STRING("マッキノ"), LW(0))
                 DELETE_EVENT(LW(0))
                 CALL(evt_npc_change_interrupt, STRING("マッキノ"), 1, 0)
                 CALL(evt_mario_key_onoff, 0)
                 SPAWN_EVENT(PTR(iri_12_makkino_return_zonbaba))
-                SET_VALUE(GSWF(5407), 1)
+                SET_VALUE(GSWF_TROUBLE_WORK(2), 1)
             END_IF
         END_IF
     END_IF

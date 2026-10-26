@@ -7,7 +7,7 @@
 
 #pragma enumsalwaysint off
 // Script opcodes, named after their original mnemonics (the evtmgr_cmd.c handlers are evt_<mnemonic>; 1 has no
-// handler or name). OPCODE_SET_MSEC_FROM_FRAME keeps the original spelling.
+// handler or name).
 typedef enum EventOpcode {
     OPCODE_NEXT = 0,
     OPCODE_END_SCRIPT = 1,

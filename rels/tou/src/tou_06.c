@@ -397,12 +397,12 @@ static s32 list[] = {
 };
 
 EVT_BEGIN(iri_13_pants_00_evt)
-    SET_VALUE(GSWF(5408), 1)
+    SET_VALUE(GSWF_TROUBLE_WORK(3), 1)
     RETURN
 EVT_END()
 
 EVT_BEGIN(iri_13_init)
-    IF_INT_EQUAL(GSWF(5406), 1)
+    IF_INT_EQUAL(GSWF_TROUBLE_WORK(1), 1)
         RETURN
     END_IF
     CALL(evt_pouch_check_item, ITEM_BATTLE_TRUNKS, LW(0))
@@ -418,7 +418,7 @@ EVT_BEGIN(iri_13_init)
         CALL(iri_13_make_name, LW(2), LW(6))
         SET_VALUE(LF(0), 0)
         IF_INT_EQUAL(LW(2), 0)
-            IF_INT_EQUAL(GSWF(5408), 0)
+            IF_INT_EQUAL(GSWF_TROUBLE_WORK(3), 0)
                 SET_VALUE(LF(0), 1)
             END_IF
         END_IF
@@ -583,7 +583,7 @@ EVT_BEGIN(tou_06_init_evt)
     END_IF
     CALL(evt_map_playanim, STRING("anm_hae"), 1, 0)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("gor_hae"), MAP_OBJ_FLAG_HIDDEN)
-    IF_INT_EQUAL(GSW(1420), 13)
+    IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_HELP_WANTED)
         CALL_CHILD(PTR(iri_13_init))
     END_IF
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("kaidan"), MAP_OBJ_FLAG_CLIP)
@@ -660,7 +660,7 @@ USER_FUNC(make_tbl) {
         tbl[a] = tbl[b];
         tbl[b] = tmp;
     }
-    if (!evtGetValue(NULL, GSWF(5408))) {
+    if (!evtGetValue(NULL, GSWF_TROUBLE_WORK(3))) {
         for (i = 0; i < 25; i++) {
             if (tbl[i] == 0) {
                 tmp = tbl[0];

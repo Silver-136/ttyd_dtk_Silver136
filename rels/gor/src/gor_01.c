@@ -602,10 +602,10 @@ EVT_BEGIN(badgeshopper_talk_evt)
 EVT_END()
 
 EVT_BEGIN(badgemaster_init)
-    IF_INT_EQUAL(GSW(1420), 16)
+    IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_ELUSIVE_BADGE)
         CALL(evt_npc_set_position, STRING("me"), 0, -1000, 0)
     END_IF
-    IF_INT_EQUAL(GSWF(5390), 1)
+    IF_INT_EQUAL(GSWF_TROUBLE_DONE(TROUBLE_ELUSIVE_BADGE), 1)
         CALL(evt_npc_set_position, STRING("me"), 0, -1000, 0)
     END_IF
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 127)
@@ -1183,10 +1183,10 @@ EVT_BEGIN(iri_20_master_tubuyaki)
 EVT_END()
 
 EVT_BEGIN(master_talk)
-    IF_INT_EQUAL(GSW(1420), 20)
-        IF_INT_EQUAL(GSWF(5405), 0)
+    IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_TELL_THAT_PERSON)
+        IF_INT_EQUAL(GSWF_TROUBLE_WORK(0), 0)
         ELSE
-            IF_INT_EQUAL(GSWF(5406), 0)
+            IF_INT_EQUAL(GSWF_TROUBLE_WORK(1), 0)
                 CALL(evt_msg_print, 0, STRING("irai_20_027"), 0, STRING("me"))
                 CALL(evt_mario_set_pose, STRING("M_I_2"))
                 WAIT_MS(1000)
@@ -1200,7 +1200,7 @@ EVT_BEGIN(master_talk)
                 WAIT_MS(1000)
                 CALL(evt_msg_print, 0, STRING("irai_20_029"), 0, STRING("me"))
                 SPAWN_EVENT(iri_20_master_tubuyaki)
-                SET_VALUE(GSWF(5406), 1)
+                SET_VALUE(GSWF_TROUBLE_WORK(1), 1)
                 RETURN
             ELSE
                 CALL(evt_msg_print, 0, STRING("irai_20_031"), 0, STRING("me"))
@@ -1208,11 +1208,11 @@ EVT_BEGIN(master_talk)
             END_IF
         END_IF
     END_IF
-    IF_INT_EQUAL(GSW(1420), 25)
-        IF_INT_EQUAL(GSWF(5406), 1)
-            IF_INT_EQUAL(GSWF(5408), 0)
+    IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_DELIVERY_PLEASE)
+        IF_INT_EQUAL(GSWF_TROUBLE_WORK(1), 1)
+            IF_INT_EQUAL(GSWF_TROUBLE_WORK(3), 0)
                 CALL(evt_msg_print, 0, STRING("irai_25_00_1"), 0, 0)
-                SET_VALUE(GSWF(5407), 1)
+                SET_VALUE(GSWF_TROUBLE_WORK(2), 1)
                 RETURN
             END_IF
         END_IF
@@ -1535,10 +1535,10 @@ EVT_BEGIN(kuribo1_regl)
 EVT_END()
 
 EVT_BEGIN(kuribo1_talk)
-    IF_INT_EQUAL(GSW(1420), 4)
-        IF_INT_EQUAL(GSWF(5405), 0)
+    IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_FIND_THIS_GUY)
+        IF_INT_EQUAL(GSWF_TROUBLE_WORK(0), 0)
             CALL(evt_msg_print, 0, STRING("irai_04_001"), 0, STRING("me"))
-            SET_VALUE(GSWF(5405), 1)
+            SET_VALUE(GSWF_TROUBLE_WORK(0), 1)
             ELSE
             CALL(evt_msg_print, 0, STRING("irai_04_002"), 0, STRING("me"))
         END_IF
@@ -1611,22 +1611,22 @@ EVT_BEGIN(kuribo3_regl)
 EVT_END()
 
 EVT_BEGIN(kuribo3_talk)
-    IF_INT_EQUAL(GSW(1420), 2)
-        IF_INT_EQUAL(GSWF(5406), 0)
-            IF_INT_EQUAL(GSWF(5405), 0)
+    IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_SAFE_DELIVERY)
+        IF_INT_EQUAL(GSWF_TROUBLE_WORK(1), 0)
+            IF_INT_EQUAL(GSWF_TROUBLE_WORK(0), 0)
                 CALL(evt_msg_print, 0, STRING("irai_02_00"), 0, STRING("me"))
                 CALL(evt_item_entry, STRING("irai_item"), ITEM_BOX, 0, -1000, 0, ITEM_TYPE_STILL, -1, 0)
                 CALL(evt_item_flag_on, STRING("irai_item"), 2)
                 CALL(evt_item_get_item, STRING("irai_item"))
-                SET_VALUE(GSWF(5405), 1)
+                SET_VALUE(GSWF_TROUBLE_WORK(0), 1)
                 ELSE
                 CALL(evt_msg_print, 0, STRING("irai_02_01"), 0, STRING("me"))
             END_IF
             ELSE
             CALL(evt_msg_print, 0, STRING("irai_02_02"), 0, STRING("me"))
             CALL(evt_sub_get_coin, 20)
-            SET_VALUE(GSW(1420), 0)
-            SET_VALUE(GSWF(5376), 1)
+            SET_VALUE(GSW_TROUBLE_ACCEPTED, TROUBLE_NONE)
+            SET_VALUE(GSWF_TROUBLE_DONE(TROUBLE_SAFE_DELIVERY), 1)
             CALL(evt_msg_print, 0, STRING("sys_request_finish"), 0, 0)
         END_IF
         RETURN
@@ -1657,7 +1657,7 @@ EVT_END()
 EVT_BEGIN(chusan1_init)
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
-    IF_INT_EQUAL(GSW(1420), 5)
+    IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_HIT_ME_PLEASE)
         CALL(evt_npc_set_position, STRING("me"), -80, 0, 40)
         CALL(evt_npc_set_ry, STRING("me"), 270)
         SET_VALUE(GF(9), 1)
@@ -1667,7 +1667,7 @@ EVT_BEGIN(chusan1_init)
 EVT_END()
 
 EVT_BEGIN(chusan1_regl)
-    IF_INT_NOT_EQUAL(GSW(1420), 5)
+    IF_INT_NOT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_HIT_ME_PLEASE)
         DEBUG_PUT_MSG(STRING("マルチュロ：普段のうろうろ"))
         CALL_CHILD(PTR(gor_villager_urouro))
     END_IF
@@ -1727,8 +1727,8 @@ EVT_BEGIN(chusan1_naguru)
     CALL(evt_npc_reaction_flag_onoff, 0, STRING("チューさん１"), 2)
     IF_INT_GREATER_OR_EQUAL(GW(9), 11)
         CALL(evt_msg_print, 0, STRING("irai_05_015"), 0, STRING("チューさん１"))
-        SET_VALUE(GSW(1420), 0)
-        SET_VALUE(GSWF(5379), 1)
+        SET_VALUE(GSW_TROUBLE_ACCEPTED, TROUBLE_NONE)
+        SET_VALUE(GSWF_TROUBLE_DONE(TROUBLE_HIT_ME_PLEASE), 1)
         CALL(evt_msg_print, 0, STRING("sys_request_finish"), 0, 0)
         ELSE
         CALL(evt_msg_print, 0, STRING("irai_05_016"), 0, STRING("チューさん１"))
@@ -1741,7 +1741,7 @@ EVT_BEGIN(chusan1_naguru)
 EVT_END()
 
 EVT_BEGIN(chusan1_talk)
-    IF_INT_EQUAL(GSW(1420), 5)
+    IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_HIT_ME_PLEASE)
         CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
         CALL(evt_npc_get_position, STRING("me"), LW(10), LW(11), LW(12))
         BEGIN_INLINE_EVENT
@@ -1760,9 +1760,9 @@ EVT_BEGIN(chusan1_talk)
         CALL(evt_set_dir_to_target, STRING("me"), STRING("mario"))
         WAIT_MS(500)
         CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
-        IF_INT_EQUAL(GSWF(5405), 0)
+        IF_INT_EQUAL(GSWF_TROUBLE_WORK(0), 0)
             CALL(evt_msg_print, 0, STRING("irai_05_001"), 0, STRING("me"))
-            SET_VALUE(GSWF(5405), 0)
+            SET_VALUE(GSWF_TROUBLE_WORK(0), 0)
             ELSE
             CALL(evt_msg_print, 0, STRING("irai_05_002"), 0, STRING("me"))
         END_IF
@@ -2114,11 +2114,11 @@ NpcSetupInfo kick2Ent[] = {
 };
 
 static EVT_BEGIN(borodo2_init)
-    IF_INT_EQUAL(GSW(1420), 4)
-        IF_INT_EQUAL(GSWF(5405), 1)
-            IF_INT_EQUAL(GSWF(5406), 1)
-                IF_INT_EQUAL(GSWF(5407), 1)
-                    IF_INT_EQUAL(GSWF(5408), 0)
+    IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_FIND_THIS_GUY)
+        IF_INT_EQUAL(GSWF_TROUBLE_WORK(0), 1)
+            IF_INT_EQUAL(GSWF_TROUBLE_WORK(1), 1)
+                IF_INT_EQUAL(GSWF_TROUBLE_WORK(2), 1)
+                    IF_INT_EQUAL(GSWF_TROUBLE_WORK(3), 0)
                         CALL(evt_npc_entry, STRING("ボロドー２"), STRING("c_borodo_n"))
                         CALL(evt_npc_set_tribe, STRING("ボロドー２"), STRING("盗賊"))
                         CALL(evt_npc_flag_onoff, 1, STRING("ボロドー２"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
@@ -2193,9 +2193,9 @@ static EVT_BEGIN(borodo2_talk)
     CALL(evt_npc_move_position, STRING("me"), 242, -395, 0, FLOAT(120.0f), 0)
     CALL(evt_npc_set_position, STRING("me"), 0, -1000, 0)
     WAIT_WHILE(GF(0))
-    SET_VALUE(GSWF(5408), 1)
-    SET_VALUE(GSW(1420), 0)
-    SET_VALUE(GSWF(5378), 1)
+    SET_VALUE(GSWF_TROUBLE_WORK(3), 1)
+    SET_VALUE(GSW_TROUBLE_ACCEPTED, TROUBLE_NONE)
+    SET_VALUE(GSWF_TROUBLE_DONE(TROUBLE_FIND_THIS_GUY), 1)
     CALL(evt_msg_print, 0, STRING("sys_request_finish"), 0, 0)
     RETURN
 EVT_END()
@@ -4717,20 +4717,20 @@ static EVT_BEGIN(minnnanokoe_evt)
 EVT_END()
 
 EVT_BEGIN(iri_09_init)
-    IF_INT_EQUAL(GSW(1420), 9)
+    IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_ORDER_ME_AN_ITEM)
         CALL(set_fook_evt, PTR(&shopper_data), PTR(iri_09_tentyo_talk))
     END_IF
     RETURN
 EVT_END()
 
 EVT_BEGIN(iri_09_tentyo_talk)
-    IF_INT_EQUAL(GSWF(5383), 1)
+    IF_INT_EQUAL(GSWF_TROUBLE_DONE(TROUBLE_ORDER_ME_AN_ITEM), 1)
         SET_VALUE(LW(0), 0)
         RETURN
     END_IF
-    IF_INT_EQUAL(GSWF(5405), 0)
+    IF_INT_EQUAL(GSWF_TROUBLE_WORK(0), 0)
         CALL(evt_msg_print, 0, STRING("irai_09_001"), 0, STRING("店長"))
-        SET_VALUE(GSWF(5405), 1)
+        SET_VALUE(GSWF_TROUBLE_WORK(0), 1)
         SET_VALUE(LW(0), -1)
         ELSE
         CALL(evt_msg_print, 0, STRING("irai_09_002"), 0, STRING("店長"))
@@ -4747,8 +4747,8 @@ EVT_BEGIN(iri_09_tentyo_talk)
                 END_IF
                 CALL(evt_msg_print, 0, STRING("irai_09_003"), 0, STRING("店長"))
                 CALL(evt_pouch_remove_item, ITEM_COURAGE_SHELL, LW(1))
-                ADD(GSW(1469), 1)
-                IF_INT_EQUAL(GSW(1469), 5)
+                ADD(GSW_TROUBLE_WORK(0), 1)
+                IF_INT_EQUAL(GSW_TROUBLE_WORK(0), 5)
                     SET_VALUE(LF(0), 0)
                     BREAK_LOOP
                 END_IF
@@ -4759,7 +4759,7 @@ EVT_BEGIN(iri_09_tentyo_talk)
                 END_IF
             END_LOOP
             CALL(iri_09_item_tbl_free)
-            IF_INT_LESS(GSW(1469), 5)
+            IF_INT_LESS(GSW_TROUBLE_WORK(0), 5)
                 IF_INT_EQUAL(LF(0), 0)
                     CALL(evt_msg_print_add, 0, STRING("irai_09_006_1"))
                     ELSE
@@ -4771,8 +4771,8 @@ EVT_BEGIN(iri_09_tentyo_talk)
                 CALL(evt_item_get_item, STRING("uk"))
                 CALL(evt_item_get_item_end_wait, STRING("uk"))
                 CALL(evt_msg_print, 0, STRING("irai_09_006"), 0, STRING("店長"))
-                SET_VALUE(GSW(1420), 0)
-                SET_VALUE(GSWF(5383), 1)
+                SET_VALUE(GSW_TROUBLE_ACCEPTED, TROUBLE_NONE)
+                SET_VALUE(GSWF_TROUBLE_DONE(TROUBLE_ORDER_ME_AN_ITEM), 1)
                 CALL(evt_msg_print, 0, STRING("sys_request_finish"), 0, 0)
                 SET_VALUE(LW(0), -1)
                 RETURN
@@ -4790,7 +4790,7 @@ s32 iri_16_item_tbl[] = {
 };
 
 static EVT_BEGIN(iri_16_init)
-    IF_INT_EQUAL(GSW(1420), 16)
+    IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_ELUSIVE_BADGE)
         CALL(evt_npc_entry, STRING("チュチュリーナ"), STRING("c_tyutyu"))
         CALL(evt_npc_set_tribe, STRING("チュチュリーナ"), STRING("チュチュリーナ"))
         CALL(evt_npc_set_position, STRING("チュチュリーナ"), -516, 189, -110)
@@ -4802,15 +4802,15 @@ static EVT_BEGIN(iri_16_init)
 EVT_END()
 
 EVT_BEGIN(iri_16_tyutyu_talk)
-    IF_INT_EQUAL(GSW(1420), 16)
+    IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_ELUSIVE_BADGE)
         CALL(evt_snd_bgmoff_f, PSND_PAUSE, 2000)
         CALL(evt_snd_bgmoff, PSND_PAUSE)
         CALL(evt_snd_bgmon, PSND_SLOT(1), STRING("BGM_EVT_CYUCYURINA1"))
-        IF_INT_EQUAL(GSWF(5405), 0)
+        IF_INT_EQUAL(GSWF_TROUBLE_WORK(0), 0)
             CALL(evt_msg_print, 0, STRING("irai_16_00"), 0, STRING("チュチュリーナ"))
-            SET_VALUE(GSWF(5405), 1)
+            SET_VALUE(GSWF_TROUBLE_WORK(0), 1)
             ELSE
-            IF_INT_EQUAL(GSWF(5407), 0)
+            IF_INT_EQUAL(GSWF_TROUBLE_WORK(2), 0)
                 CALL(evt_msg_print, 0, STRING("irai_16_01"), 0, STRING("チュチュリーナ"))
                 ELSE
                 CALL(evt_npc_flag_onoff, 1, STRING("チュチュリーナ"), NPC_FLAG_NO_HIT)
@@ -4920,8 +4920,8 @@ EVT_BEGIN(iri_16_tyutyu_talk)
 #else
                     CALL_CHILD(PTR(all_party_lecture))
 #endif
-                    SET_VALUE(GSW(1420), 0)
-                    SET_VALUE(GSWF(5390), 1)
+                    SET_VALUE(GSW_TROUBLE_ACCEPTED, TROUBLE_NONE)
+                    SET_VALUE(GSWF_TROUBLE_DONE(TROUBLE_ELUSIVE_BADGE), 1)
                     CALL(evt_msg_print, 0, STRING("sys_request_finish"), 0, 0)
                     CALL(evt_cam3d_evt_off, 500, 11)
                     CALL(evt_party_run, 0)
@@ -5277,16 +5277,16 @@ EVT_BEGIN(gor_01_init_evt)
     SPAWN_EVENT(gor_goki1_urouro)
     SPAWN_EVENT(gor_goki2_urouro)
     IF_INT_EQUAL(LF(1), 0)
-        IF_INT_EQUAL(GSW(1420), 1)
-            CALL(evt_item_entry, STRING("item_key00"), ITEM_HOUSE_KEY, -280, 153, -100, ITEM_TYPE_GROUND, GSWF(5405), 0)
+        IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_NEED_A_KEY)
+            CALL(evt_item_entry, STRING("item_key00"), ITEM_HOUSE_KEY, -280, 153, -100, ITEM_TYPE_GROUND, GSWF_TROUBLE_WORK(0), 0)
         END_IF
         CALL_CHILD(borodo2_init)
         SPAWN_EVENT(iri_09_init)
         SPAWN_EVENT(iri_16_init)
-        IF_INT_EQUAL(GSWF(5390), 1)
+        IF_INT_EQUAL(GSWF_TROUBLE_DONE(TROUBLE_ELUSIVE_BADGE), 1)
             CALL(evt_item_entry, STRING("iri_16"), ITEM_ATTACK_FX_B, -150, 153, -120, ITEM_TYPE_STILL, GSWF(1201), 0)
         END_IF
-        IF_INT_EQUAL(GSWF(5392), 1)
+        IF_INT_EQUAL(GSWF_TROUBLE_DONE(TROUBLE_SEEKING_LEGENDARY_BOOK), 1)
             CALL(evt_item_entry, STRING("iri_18"), ITEM_HONEY_SHROOM, -440, 30, -80, ITEM_TYPE_STILL, GSWF(1202), 0)
         END_IF
     END_IF
@@ -6340,10 +6340,10 @@ EVT_BEGIN(cooking_evt)
     WAIT_FRAMES(1)
     CALL(evt_npc_wait_pera, STRING("ナンシー"))
     CALL(evt_npc_flag_onoff, 0, STRING("ナンシー"), NPC_FLAG_NO_HIT)
-    IF_INT_EQUAL(GSW(1420), 18)
-        IF_INT_EQUAL(GSWF(5405), 0)
+    IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_SEEKING_LEGENDARY_BOOK)
+        IF_INT_EQUAL(GSWF_TROUBLE_WORK(0), 0)
             CALL(evt_msg_print, 0, STRING("irai_18_001"), 0, STRING("ナンシー"))
-            SET_VALUE(GSWF(5405), 1)
+            SET_VALUE(GSWF_TROUBLE_WORK(0), 1)
             CALL(evt_msg_print_add, 0, STRING("irai_18_008_1"))
             ELSE
             CALL(evt_msg_print, 0, STRING("irai_18_002"), 0, STRING("ナンシー"))
@@ -6412,8 +6412,8 @@ EVT_BEGIN(cooking_evt)
                     CALL(evt_npc_wait_pera, STRING("ナンシー"))
                 END_IF
                 CALL(evt_msg_print, 0, STRING("irai_18_007"), 0, STRING("ナンシー"))
-                SET_VALUE(GSW(1420), 0)
-                SET_VALUE(GSWF(5392), 1)
+                SET_VALUE(GSW_TROUBLE_ACCEPTED, TROUBLE_NONE)
+                SET_VALUE(GSWF_TROUBLE_DONE(TROUBLE_SEEKING_LEGENDARY_BOOK), 1)
                 CALL(evt_msg_print, 0, STRING("sys_request_finish"), 0, 0)
                 CALL(evt_mario_key_onoff, 1)
                 RETURN
@@ -6428,8 +6428,8 @@ EVT_BEGIN(cooking_evt)
         END_IF
     END_IF
     IF_INT_EQUAL(GSWF(1197), 0)
-        IF_INT_NOT_EQUAL(GSW(1420), 18)
-            IF_INT_EQUAL(GSWF(5392), 0)
+        IF_INT_NOT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_SEEKING_LEGENDARY_BOOK)
+            IF_INT_EQUAL(GSWF_TROUBLE_DONE(TROUBLE_SEEKING_LEGENDARY_BOOK), 0)
                 CALL(evt_msg_print, 0, STRING("gor_01_cook_000"), 0, STRING("ナンシー"))
             END_IF
         END_IF
@@ -6439,14 +6439,14 @@ EVT_BEGIN(cooking_evt)
         IF_INT_EQUAL(LSWF(1), 0)
             SET_VALUE(LF(0), 0)
             IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 215)
-                IF_INT_NOT_EQUAL(GSW(1420), 18)
-                    IF_INT_EQUAL(GSWF(5392), 0)
+                IF_INT_NOT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_SEEKING_LEGENDARY_BOOK)
+                    IF_INT_EQUAL(GSWF_TROUBLE_DONE(TROUBLE_SEEKING_LEGENDARY_BOOK), 0)
                         SET_VALUE(LF(0), 1)
                     END_IF
                 END_IF
             END_IF
             IF_INT_EQUAL(LF(0), 0)
-                IF_INT_NOT_EQUAL(GSW(1420), 18)
+                IF_INT_NOT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_SEEKING_LEGENDARY_BOOK)
                     CALL(evt_msg_print, 0, STRING("gor_01_cook_002"), 0, STRING("ナンシー"))
                     ELSE
                     CALL(evt_msg_print_add, 0, STRING("gor_01_cook_002"))
@@ -6455,7 +6455,7 @@ EVT_BEGIN(cooking_evt)
                 CALL(evt_msg_print, 0, STRING("gor_01_cook_003"), 0, STRING("ナンシー"))
             END_IF
             ELSE
-            IF_INT_NOT_EQUAL(GSW(1420), 18)
+            IF_INT_NOT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_SEEKING_LEGENDARY_BOOK)
                 CALL(evt_msg_print, 0, STRING("gor_01_cook_004"), 0, STRING("ナンシー"))
                 ELSE
                 CALL(evt_msg_print_add, 0, STRING("gor_01_cook_004"))
@@ -6489,7 +6489,7 @@ EVT_BEGIN(cooking_evt)
     SET_VALUE(LW(14), LW(0))
     SET_VALUE(LW(11), LW(1))
     SET_VALUE(LF(0), 0)
-    IF_INT_EQUAL(GSWF(5392), 1)
+    IF_INT_EQUAL(GSWF_TROUBLE_DONE(TROUBLE_SEEKING_LEGENDARY_BOOK), 1)
         CALL(make_item_tbl, LW(11), LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
             CALL(evt_msg_print, 0, STRING("gor_01_cook_009"), 0, STRING("ナンシー"))
@@ -6543,7 +6543,7 @@ EVT_BEGIN(cooking_evt)
     IF_INT_EQUAL(LW(15), 0)
         CALL(cook_chk, LW(14), LW(0), LW(1))
         CALL(N_evt_pouch_remove_item_index, LW(14), LW(11), LW(3))
-        IF_INT_EQUAL(GSWF(5392), 1)
+        IF_INT_EQUAL(GSWF_TROUBLE_DONE(TROUBLE_SEEKING_LEGENDARY_BOOK), 1)
             SET_VALUE(LW(2), LW(1))
             ELSE
             SET_VALUE(LW(2), LW(0))

@@ -110,7 +110,7 @@ EVT_BEGIN(majorin_talk)
 EVT_END()
 
 static EVT_BEGIN(fabio_init)
-    IF_INT_EQUAL(GSW(1420), 28)
+    IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_ROUST_THESE_CADS)
         CALL(evt_npc_set_position, STRING("me"), -455, 0, -30)
         CALL(evt_npc_set_ry, STRING("me"), 270)
         CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
@@ -119,10 +119,10 @@ static EVT_BEGIN(fabio_init)
 EVT_END()
 
 static EVT_BEGIN(fabio_talk)
-    IF_INT_EQUAL(GSW(1420), 28)
-        IF_INT_EQUAL(GSWF(5405), 0)
+    IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_ROUST_THESE_CADS)
+        IF_INT_EQUAL(GSWF_TROUBLE_WORK(0), 0)
             CALL(evt_msg_print, 0, STRING("irai_28_001"), 0, STRING("me"))
-            SET_VALUE(GSWF(5405), 1)
+            SET_VALUE(GSWF_TROUBLE_WORK(0), 1)
             ELSE
             CALL(evt_msg_print, 0, STRING("irai_28_002"), 0, STRING("me"))
         END_IF
@@ -953,8 +953,8 @@ EVT_BEGIN(iri_28_enemy_all_dead)
         CALL(evt_npc_move_position, STRING("ファビオ"), LW(0), LW(2), 0, 150, 0)
         CALL(evt_npc_set_position, STRING("ファビオ"), 0, -1000, 0)
     END_IF
-    SET_VALUE(GSW(1420), 0)
-    SET_VALUE(GSWF(5402), 1)
+    SET_VALUE(GSW_TROUBLE_ACCEPTED, TROUBLE_NONE)
+    SET_VALUE(GSWF_TROUBLE_DONE(TROUBLE_ROUST_THESE_CADS), 1)
     CALL(evt_msg_print, 0, STRING("sys_request_finish"), 0, 0)
     CALL(evt_mario_key_onoff, 1)
     RETURN
@@ -962,33 +962,33 @@ EVT_END()
 
 EVT_BEGIN(iri_28_enemy_dead)
     CALL_CHILD(PTR(enemy_common_dead_event))
-    ADD(GSW(1469), 1)
-    IF_INT_EQUAL(GSW(1469), 3)
+    ADD(GSW_TROUBLE_WORK(0), 1)
+    IF_INT_EQUAL(GSW_TROUBLE_WORK(0), 3)
         SPAWN_EVENT(PTR(iri_28_enemy_all_dead))
     END_IF
     RETURN
 EVT_END()
 
 EVT_BEGIN(iri_28_init)
-    IF_INT_EQUAL(GSW(1420), 28)
-        SET_VALUE(GSW(1469), 0)
+    IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_ROUST_THESE_CADS)
+        SET_VALUE(GSW_TROUBLE_WORK(0), 0)
         CALL(evt_npc_check, STRING("パックン１"), LW(0))
         IF_INT_EQUAL(LW(0), 1)
             CALL(evt_npc_change_interrupt, STRING("パックン１"), 8, PTR(iri_28_enemy_dead))
             ELSE
-            ADD(GSW(1469), 1)
+            ADD(GSW_TROUBLE_WORK(0), 1)
         END_IF
         CALL(evt_npc_check, STRING("シンエモン"), LW(0))
         IF_INT_EQUAL(LW(0), 1)
             CALL(evt_npc_change_interrupt, STRING("シンエモン"), 8, PTR(iri_28_enemy_dead))
             ELSE
-            ADD(GSW(1469), 1)
+            ADD(GSW_TROUBLE_WORK(0), 1)
         END_IF
         CALL(evt_npc_check, STRING("パックン２"), LW(0))
         IF_INT_EQUAL(LW(0), 1)
             CALL(evt_npc_change_interrupt, STRING("パックン２"), 8, PTR(iri_28_enemy_dead))
             ELSE
-            ADD(GSW(1469), 1)
+            ADD(GSW_TROUBLE_WORK(0), 1)
         END_IF
     END_IF
     RETURN

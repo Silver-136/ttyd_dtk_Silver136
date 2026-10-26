@@ -337,17 +337,17 @@ s32 iri_14_item_tbl[] = {
 };
 
 EVT_BEGIN(majinaisi_direct_talk)
-    IF_INT_EQUAL(GSW(1420), 14)
-        IF_INT_EQUAL(GSWF(5405), 0)
+    IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_HEARTFUL_CAKE_RECIPE)
+        IF_INT_EQUAL(GSWF_TROUBLE_WORK(0), 0)
             CALL(evt_msg_print, 0, STRING("irai_14_00"), 0, 0)
             ELSE
-            IF_INT_EQUAL(GSWF(5406), 0)
+            IF_INT_EQUAL(GSWF_TROUBLE_WORK(1), 0)
                 CALL(evt_msg_print, 0, STRING("irai_14_01"), 0, 0)
                 CALL(evt_mario_set_pose, STRING("M_I_2"))
                 WAIT_MS(1000)
                 CALL(evt_mario_set_pose, STRING("M_S_1"))
                 CALL(evt_msg_print, 0, STRING("irai_14_02"), 0, 0)
-                SET_VALUE(GSWF(5406), 1)
+                SET_VALUE(GSWF_TROUBLE_WORK(1), 1)
                 ELSE
                 CALL(evt_pouch_check_item, ITEM_CAKE_MIX, LW(0))
                 IF_INT_GREATER(LW(0), 0)
@@ -357,8 +357,8 @@ EVT_BEGIN(majinaisi_direct_talk)
                         CALL(evt_pouch_remove_item, ITEM_CAKE_MIX, LW(0))
                         CALL(evt_msg_print, 0, STRING("irai_14_05"), 0, 0)
                         CALL(evt_sub_get_coin, 30)
-                        SET_VALUE(GSW(1420), 0)
-                        SET_VALUE(GSWF(5388), 1)
+                        SET_VALUE(GSW_TROUBLE_ACCEPTED, TROUBLE_NONE)
+                        SET_VALUE(GSWF_TROUBLE_DONE(TROUBLE_HEARTFUL_CAKE_RECIPE), 1)
                         CALL(evt_msg_print, 0, STRING("sys_request_finish"), 0, 0)
                     END_IF
                     ELSE

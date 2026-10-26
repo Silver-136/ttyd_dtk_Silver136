@@ -926,14 +926,14 @@ EVT_BEGIN(iri_16_box_evt)
 EVT_END()
 
 EVT_BEGIN(iri_16_cloud_evt)
-    CALL(evt_mobj_itembox, STRING("box"), 0, 0, 0, 0, 0, PTR(iri_16_box_evt), GSWF(5407))
+    CALL(evt_mobj_itembox, STRING("box"), 0, 0, 0, 0, 0, PTR(iri_16_box_evt), GSWF_TROUBLE_WORK(2))
     CALL(evt_hitobj_onoff, STRING("A_kura"), 1, 0)
     CALL(evt_snd_bgmoff, PSND_PAUSE)
     CALL(evt_snd_bgmon, PSND_SLOT(1), STRING("BGM_FF_ENV_SUCCESS1"))
     WAIT_MS(2000)
     CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
     CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)
-    SET_VALUE(GSWF(5406), 1)
+    SET_VALUE(GSWF_TROUBLE_WORK(1), 1)
     RETURN
 EVT_END()
 
@@ -942,15 +942,15 @@ EVT_BEGIN(iri_16_touch_evt)
 EVT_END()
 
 static EVT_BEGIN(iri_16_init)
-    IF_INT_EQUAL(GSW(1420), 16)
+    IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_ELUSIVE_BADGE)
         CALL(evt_hitobj_onoff, STRING("A_taka"), 1, 0)
-        IF_INT_EQUAL(GSWF(5406), 0)
+        IF_INT_EQUAL(GSWF_TROUBLE_WORK(1), 0)
             CALL(evt_iri_16_cloud_init)
             CALL(evt_iri_16_cloud_ent, PTR(&capturemap), STRING("A_kura"), PTR(iri_16_cloud_evt))
             CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_kura"), 0, PTR(iri_16_touch_evt), 0)
             ELSE
             CALL(evt_hitobj_onoff, STRING("A_kura"), 1, 0)
-            CALL(evt_mobj_itembox, STRING("box"), 0, 0, 0, 0, 0, PTR(iri_16_box_evt), GSWF(5407))
+            CALL(evt_mobj_itembox, STRING("box"), 0, 0, 0, 0, 0, PTR(iri_16_box_evt), GSWF_TROUBLE_WORK(2))
         END_IF
         ELSE
         CALL(evt_hitobj_onoff, STRING("A_taka"), 1, 0)

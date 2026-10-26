@@ -434,7 +434,7 @@ static s32 iri_17_item_tbl[] = {
 };
 
 static EVT_BEGIN(elder_talk)
-    IF_INT_EQUAL(GSW(1420), 10)
+    IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_EMERGENCY_SHROOM)
         CALL(evt_pouch_check_item, ITEM_LIFE_SHROOM, LW(0))
         IF_INT_GREATER_OR_EQUAL(LW(0), 1)
             CALL(evt_msg_print, 0, STRING("irai_10_01"), 0, STRING("me"))
@@ -443,8 +443,8 @@ static EVT_BEGIN(elder_talk)
                 CALL(evt_msg_print, 0, STRING("irai_10_02"), 0, STRING("me"))
                 CALL(evt_sub_get_coin, 60)
                 CALL(evt_pouch_remove_item, ITEM_LIFE_SHROOM, LW(0))
-                SET_VALUE(GSW(1420), 0)
-                SET_VALUE(GSWF(5384), 1)
+                SET_VALUE(GSW_TROUBLE_ACCEPTED, TROUBLE_NONE)
+                SET_VALUE(GSWF_TROUBLE_DONE(TROUBLE_EMERGENCY_SHROOM), 1)
                 CALL(evt_msg_print, 0, STRING("sys_request_finish"), 0, 0)
             END_IF
             ELSE
@@ -452,10 +452,10 @@ static EVT_BEGIN(elder_talk)
         END_IF
         RETURN
     END_IF
-    IF_INT_EQUAL(GSW(1420), 17)
-        IF_INT_EQUAL(GSWF(5405), 0)
+    IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_NEWSLETTER)
+        IF_INT_EQUAL(GSWF_TROUBLE_WORK(0), 0)
             ELSE
-            IF_INT_EQUAL(GSWF(5406), 0)
+            IF_INT_EQUAL(GSWF_TROUBLE_WORK(1), 0)
                 CALL(evt_msg_print, 0, STRING("irai_17_00"), 0, 0)
                 CALL(evt_win_item_select, 0, PTR(iri_17_item_tbl), LW(0), 0)
                 IF_INT_NOT_EQUAL(LW(0), -1)
@@ -464,11 +464,11 @@ static EVT_BEGIN(elder_talk)
                     CALL(evt_item_entry, STRING("kairanban"), ITEM_ROUTING_SLIP, 0, -1000, 0, ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
                     CALL(evt_item_get_item, STRING("kairanban"))
                     CALL(evt_item_get_item_end_wait, STRING("kairanban"))
-                    SET_VALUE(GSWF(5406), 1)
+                    SET_VALUE(GSWF_TROUBLE_WORK(1), 1)
                 END_IF
                 RETURN
                 ELSE
-                IF_INT_EQUAL(GSWF(5407), 0)
+                IF_INT_EQUAL(GSWF_TROUBLE_WORK(2), 0)
                     CALL(evt_msg_print, 0, STRING("irai_17_02"), 0, 0)
                     RETURN
                     ELSE

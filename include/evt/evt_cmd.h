@@ -260,6 +260,50 @@
 #define GSWF_GLITZ_PIT_MATCH_RESERVED GSWF(2388)
 #define GSWF_GLITZ_PIT_WON_LAST_MATCH GSWF(2443)
 
+/* Trouble Center (gor_irai.c). Trouble ids are the game's own: each reward script prints irai_NN messages and sets
+ * GSWF_TROUBLE_DONE(NN). Names are the US trouble titles. */
+typedef enum TroubleId {
+    TROUBLE_NONE = 0,
+    TROUBLE_NEED_A_KEY = 1,              /* Garf, gor_02 */
+    TROUBLE_SAFE_DELIVERY = 2,           /* McGoomba, gor_01 */
+    TROUBLE_PRICE_ADJUSTMENT = 3,        /* Arfur, gor_02 */
+    TROUBLE_FIND_THIS_GUY = 4,           /* Goomther, gor_01 */
+    TROUBLE_HIT_ME_PLEASE = 5,           /* Mousimilian, gor_01 */
+    TROUBLE_IM_HUNGRY = 6,               /* Bomberto, gor_00 */
+    TROUBLE_TRY_TO_FIND_ME = 7,          /* Koopook, gon_08 */
+    TROUBLE_LISTEN_TO_ME = 8,            /* Mayor Kroop, nok_01 */
+    TROUBLE_ORDER_ME_AN_ITEM = 9,        /* Plenn T., gor_01 */
+    TROUBLE_EMERGENCY_SHROOM = 10,       /* Puni Elder, mri_01 */
+    TROUBLE_PLAY_WITH_ME = 11,           /* Lahla, gor_03 */
+    TROUBLE_HELP_MY_DADDY = 12,          /* Pine T. Jr., tik_06 */
+    TROUBLE_HELP_WANTED = 13,            /* Jolene, tou_05 */
+    TROUBLE_HEARTFUL_CAKE_RECIPE = 14,   /* Merlee, tik_12 */
+    TROUBLE_THE_FOOD_I_WANT = 15,        /* Bub-ulber, nok_00 */
+    TROUBLE_ELUSIVE_BADGE = 16,          /* Ms. Mowz, gor_01 */
+    TROUBLE_NEWSLETTER = 17,             /* Mayor Dour, usu_00 */
+    TROUBLE_SEEKING_LEGENDARY_BOOK = 18, /* Zess T., gor_01 (done = Mario has the Cookbook) */
+    TROUBLE_IMPORTANT_THING = 19,        /* Frankie, gor_03 */
+    TROUBLE_TELL_THAT_PERSON = 20,       /* Eve, usu_01 */
+    TROUBLE_LOOKING_FOR_A_GAL = 21,      /* Goom Goom, dou_04 */
+    TROUBLE_GET_THESE_INGREDIENTS = 22,  /* Chef Shimi, rsh_03 */
+    TROUBLE_I_MUST_HAVE_THAT_BOOK = 23,  /* Toodles, pik_00 */
+    TROUBLE_SECURITY_CODE = 24,          /* Businessman, tou_01 */
+    TROUBLE_DELIVERY_PLEASE = 25,        /* Goldbob, pik_00 */
+    TROUBLE_I_CANT_SPEAK = 26,           /* Gob, bom_02 */
+    TROUBLE_I_WANNA_MEET_LUIGI = 27,     /* Toadia, pik_01 */
+    TROUBLE_ROUST_THESE_CADS = 28,       /* Doe T., win_00 */
+    TROUBLE_HELP_ME_MAKE_UP = 29,        /* Bub, pik_01 */
+    TROUBLE_ERASE_THAT_GRAFFITI = 30,    /* Swob, bom_02 */
+} TroubleId;
+#define GSW_TROUBLE_ACCEPTED GSW(1420)              /* TroubleId of the accepted trouble, TROUBLE_NONE if none */
+#define GSWF_TROUBLE_BOARD_EXPLAINED GSWF(5374)     /* the board's first explanation (irai_00..03) was given */
+#define GSWF_TROUBLE_DONE(id) GSWF(5374 + (id))     /* trouble id solved */
+#define GSWF_TROUBLE_WORK(n) GSWF(5405 + (n))       /* n = 0..16: progress flags of the accepted trouble */
+#define GSW_TROUBLE_WORK(n) GSW(1469 + (n))         /* n = 0..5: progress values of the accepted trouble */
+/* the same as save-work indices for swGet / swByteGet in C */
+#define SW_TROUBLE_ACCEPTED 1420
+#define SWF_TROUBLE_DONE(id) ((id) + 5374)
+
 #define EVT_RETURN_BLOCK 0
 #define EVT_RETURN_YIELD 1
 #define EVT_RETURN_DONE 2

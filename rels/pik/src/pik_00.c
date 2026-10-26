@@ -1185,33 +1185,33 @@ EVT_BEGIN(talk_papa_taihou_kyoka)
 EVT_END()
 
 static EVT_BEGIN(talk_papa)
-    IF_INT_EQUAL(GSW(1420), 25)
-        IF_INT_EQUAL(GSWF(5405), 0)
+    IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_DELIVERY_PLEASE)
+        IF_INT_EQUAL(GSWF_TROUBLE_WORK(0), 0)
             CALL(evt_msg_print, 0, STRING("irai_25_00"), 0, 0)
             CALL(evt_item_entry, STRING("butu"), ITEM_PACKAGE, 0, -1000, 0, ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
             CALL(evt_item_get_item, STRING("butu"))
             CALL(evt_item_get_item_end_wait, STRING("butu"))
             CALL(evt_msg_print, 0, STRING("irai_25_01"), 0, 0)
-            SET_VALUE(GSWF(5405), 1)
+            SET_VALUE(GSWF_TROUBLE_WORK(0), 1)
             RETURN
         END_IF
-        IF_INT_EQUAL(GSWF(5408), 0)
+        IF_INT_EQUAL(GSWF_TROUBLE_WORK(3), 0)
             CALL(evt_msg_print, 0, STRING("irai_25_02"), 0, 0)
             RETURN
         END_IF
-        IF_INT_EQUAL(GSWF(5411), 0)
+        IF_INT_EQUAL(GSWF_TROUBLE_WORK(6), 0)
             CALL(evt_msg_print, 0, STRING("irai_25_03"), 0, 0)
-            SET_VALUE(GSWF(5409), 1)
+            SET_VALUE(GSWF_TROUBLE_WORK(4), 1)
             RETURN
         END_IF
         CALL(evt_msg_print, 0, STRING("irai_25_04"), 0, 0)
         CALL(evt_sub_get_coin, 64)
-        SET_VALUE(GSW(1420), 0)
-        SET_VALUE(GSWF(5399), 1)
+        SET_VALUE(GSW_TROUBLE_ACCEPTED, TROUBLE_NONE)
+        SET_VALUE(GSWF_TROUBLE_DONE(TROUBLE_DELIVERY_PLEASE), 1)
         CALL(evt_msg_print, 0, STRING("sys_request_finish"), 0, 0)
         RETURN
     END_IF
-    IF_INT_EQUAL(GSW(1420), 29)
+    IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_HELP_ME_MAKE_UP)
         CALL(evt_msg_print, 0, STRING("irai_29_18_1"), 0, 0)
         RETURN
     END_IF
@@ -1242,8 +1242,8 @@ s32 iri_29_item_tbl[] = {
 };
 
 static EVT_BEGIN(talk_mama)
-    IF_INT_EQUAL(GSW(1420), 29)
-        IF_INT_EQUAL(GSWF(5406), 0)
+    IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_HELP_ME_MAKE_UP)
+        IF_INT_EQUAL(GSWF_TROUBLE_WORK(1), 0)
             CALL(evt_pouch_check_item, ITEM_PRESENT, LW(0))
             IF_INT_GREATER(LW(0), 0)
                 CALL(evt_msg_print, 0, STRING("irai_29_14"), 0, 0)
@@ -1314,7 +1314,7 @@ static EVT_BEGIN(talk_mama)
                     WAIT_MS(300)
                     CALL(evt_msg_print, 0, STRING("irai_29_17"), 0, 0)
                     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG6_PIK1"))
-                    SET_VALUE(GSWF(5406), 1)
+                    SET_VALUE(GSWF_TROUBLE_WORK(1), 1)
                 END_IF
                 RETURN
                 ELSE
@@ -1348,7 +1348,7 @@ static EVT_BEGIN(talk_mama)
 EVT_END()
 
 static EVT_BEGIN(init_konari)
-    IF_INT_EQUAL(GSW(1420), 29)
+    IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_HELP_ME_MAKE_UP)
         RETURN
     END_IF
     CALL(evt_npc_set_position, STRING("me"), -150, 0, 400)
@@ -1408,7 +1408,7 @@ s32 iri_23_item_tbl[] = {
 };
 
 static EVT_BEGIN(talk_madam)
-    IF_INT_EQUAL(GSW(1420), 23)
+    IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_I_MUST_HAVE_THAT_BOOK)
         CALL(evt_pouch_check_item, ITEM_WRESTLING_MAG, LW(0))
         IF_INT_GREATER(LW(0), 0)
             CALL(evt_msg_print, 0, STRING("irai_23_01"), 0, 0)
@@ -1420,8 +1420,8 @@ static EVT_BEGIN(talk_madam)
                 CALL(evt_item_get_item, STRING("mg2"))
                 CALL(evt_item_get_item_end_wait, STRING("mg2"))
                 CALL(evt_msg_print, 0, STRING("irai_23_03"), 0, 0)
-                SET_VALUE(GSW(1420), 0)
-                SET_VALUE(GSWF(5397), 1)
+                SET_VALUE(GSW_TROUBLE_ACCEPTED, TROUBLE_NONE)
+                SET_VALUE(GSWF_TROUBLE_DONE(TROUBLE_I_MUST_HAVE_THAT_BOOK), 1)
                 CALL(evt_msg_print, 0, STRING("sys_request_finish"), 0, 0)
             END_IF
             ELSE

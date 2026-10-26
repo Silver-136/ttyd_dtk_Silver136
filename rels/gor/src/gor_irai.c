@@ -304,7 +304,7 @@ EVT_BEGIN(gor_irai_lecture)
     CALL(evt_msg_select, 0, STRING("irai_01"))
     IF_INT_EQUAL(LW(0), 0)
         CALL(evt_msg_print_add, 0, STRING("irai_03"))
-        SET_VALUE(GSWF(5374), 1)
+        SET_VALUE(GSWF_TROUBLE_BOARD_EXPLAINED, 1)
         ELSE
         CALL(evt_msg_print_add, 0, STRING("irai_02"))
     END_IF
@@ -313,7 +313,7 @@ EVT_BEGIN(gor_irai_lecture)
 EVT_END()
 
 EVT_BEGIN(gor_irai_main)
-    IF_INT_EQUAL(GSWF(5374), 0)
+    IF_INT_EQUAL(GSWF_TROUBLE_BOARD_EXPLAINED, 0)
 #ifdef VERSION_G8ME01
         BEGIN_INLINE_EVENT
             CALL(evt_mario_set_dir, 270, 200, 0)
@@ -353,8 +353,8 @@ EVT_BEGIN(gor_irai_main)
         ADD(LW(0), -1)
         READ_INT_INDEXED(LW(1), LW(0))
         SPAWN_EVENT(LW(1))
-        SET_VALUE(GSW(1420), LW(11))
-        DEBUG_PUT_REG(GSW(1420))
+        SET_VALUE(GSW_TROUBLE_ACCEPTED, LW(11))
+        DEBUG_PUT_REG(GSW_TROUBLE_ACCEPTED)
         ELSE
         CALL(evt_msg_continue)
         GOTO(10)
@@ -366,36 +366,36 @@ EVT_BEGIN(gor_irai_main)
 EVT_END()
 
 EVT_BEGIN(gor_irai_tenshu_main)
-    SET_VALUE(LW(0), GSWF(5375))
-    ADD(LW(0), GSWF(5376))
-    ADD(LW(0), GSWF(5377))
-    ADD(LW(0), GSWF(5378))
-    ADD(LW(0), GSWF(5379))
-    ADD(LW(0), GSWF(5380))
-    ADD(LW(0), GSWF(5381))
-    ADD(LW(0), GSWF(5382))
-    ADD(LW(0), GSWF(5383))
-    ADD(LW(0), GSWF(5384))
-    ADD(LW(0), GSWF(5385))
-    ADD(LW(0), GSWF(5386))
-    ADD(LW(0), GSWF(5387))
-    ADD(LW(0), GSWF(5388))
-    ADD(LW(0), GSWF(5389))
-    ADD(LW(0), GSWF(5390))
-    ADD(LW(0), GSWF(5391))
-    ADD(LW(0), GSWF(5392))
-    ADD(LW(0), GSWF(5393))
-    ADD(LW(0), GSWF(5394))
-    ADD(LW(0), GSWF(5395))
-    ADD(LW(0), GSWF(5396))
-    ADD(LW(0), GSWF(5397))
-    ADD(LW(0), GSWF(5398))
-    ADD(LW(0), GSWF(5399))
-    ADD(LW(0), GSWF(5400))
-    ADD(LW(0), GSWF(5401))
-    ADD(LW(0), GSWF(5402))
-    ADD(LW(0), GSWF(5403))
-    ADD(LW(0), GSWF(5404))
+    SET_VALUE(LW(0), GSWF_TROUBLE_DONE(TROUBLE_NEED_A_KEY))
+    ADD(LW(0), GSWF_TROUBLE_DONE(TROUBLE_SAFE_DELIVERY))
+    ADD(LW(0), GSWF_TROUBLE_DONE(TROUBLE_PRICE_ADJUSTMENT))
+    ADD(LW(0), GSWF_TROUBLE_DONE(TROUBLE_FIND_THIS_GUY))
+    ADD(LW(0), GSWF_TROUBLE_DONE(TROUBLE_HIT_ME_PLEASE))
+    ADD(LW(0), GSWF_TROUBLE_DONE(TROUBLE_IM_HUNGRY))
+    ADD(LW(0), GSWF_TROUBLE_DONE(TROUBLE_TRY_TO_FIND_ME))
+    ADD(LW(0), GSWF_TROUBLE_DONE(TROUBLE_LISTEN_TO_ME))
+    ADD(LW(0), GSWF_TROUBLE_DONE(TROUBLE_ORDER_ME_AN_ITEM))
+    ADD(LW(0), GSWF_TROUBLE_DONE(TROUBLE_EMERGENCY_SHROOM))
+    ADD(LW(0), GSWF_TROUBLE_DONE(TROUBLE_PLAY_WITH_ME))
+    ADD(LW(0), GSWF_TROUBLE_DONE(TROUBLE_HELP_MY_DADDY))
+    ADD(LW(0), GSWF_TROUBLE_DONE(TROUBLE_HELP_WANTED))
+    ADD(LW(0), GSWF_TROUBLE_DONE(TROUBLE_HEARTFUL_CAKE_RECIPE))
+    ADD(LW(0), GSWF_TROUBLE_DONE(TROUBLE_THE_FOOD_I_WANT))
+    ADD(LW(0), GSWF_TROUBLE_DONE(TROUBLE_ELUSIVE_BADGE))
+    ADD(LW(0), GSWF_TROUBLE_DONE(TROUBLE_NEWSLETTER))
+    ADD(LW(0), GSWF_TROUBLE_DONE(TROUBLE_SEEKING_LEGENDARY_BOOK))
+    ADD(LW(0), GSWF_TROUBLE_DONE(TROUBLE_IMPORTANT_THING))
+    ADD(LW(0), GSWF_TROUBLE_DONE(TROUBLE_TELL_THAT_PERSON))
+    ADD(LW(0), GSWF_TROUBLE_DONE(TROUBLE_LOOKING_FOR_A_GAL))
+    ADD(LW(0), GSWF_TROUBLE_DONE(TROUBLE_GET_THESE_INGREDIENTS))
+    ADD(LW(0), GSWF_TROUBLE_DONE(TROUBLE_I_MUST_HAVE_THAT_BOOK))
+    ADD(LW(0), GSWF_TROUBLE_DONE(TROUBLE_SECURITY_CODE))
+    ADD(LW(0), GSWF_TROUBLE_DONE(TROUBLE_DELIVERY_PLEASE))
+    ADD(LW(0), GSWF_TROUBLE_DONE(TROUBLE_I_CANT_SPEAK))
+    ADD(LW(0), GSWF_TROUBLE_DONE(TROUBLE_I_WANNA_MEET_LUIGI))
+    ADD(LW(0), GSWF_TROUBLE_DONE(TROUBLE_ROUST_THESE_CADS))
+    ADD(LW(0), GSWF_TROUBLE_DONE(TROUBLE_HELP_ME_MAKE_UP))
+    ADD(LW(0), GSWF_TROUBLE_DONE(TROUBLE_ERASE_THAT_GRAFFITI))
     IF_INT_EQUAL(LW(0), 30)
         CALL(evt_mario_key_onoff, 0)
         CALL(evt_msg_toge, 2, 150, 12, -156)
@@ -403,12 +403,12 @@ EVT_BEGIN(gor_irai_tenshu_main)
         CALL(evt_mario_key_onoff, 1)
         RETURN
     END_IF
-    IF_INT_EQUAL(GSWF(5374), 0)
+    IF_INT_EQUAL(GSWF_TROUBLE_BOARD_EXPLAINED, 0)
         CALL_CHILD(PTR(gor_irai_lecture))
         RETURN
     END_IF
     CALL(evt_mario_key_onoff, 0)
-    IF_INT_EQUAL(GSW(1420), 0)
+    IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_NONE)
         CALL(evt_msg_toge, 2, 150, 12, -156)
         CALL(evt_msg_print, 0, STRING("irai_06"), 0, 0)
         ELSE
@@ -420,7 +420,7 @@ EVT_BEGIN(gor_irai_tenshu_main)
             DEBUG_PUT_MSG(STRING("依頼メニューキャンセル"))
         END_IF
         IF_INT_EQUAL(LW(0), 0)
-            SET_VALUE(LW(10), GSW(1420))
+            SET_VALUE(LW(10), GSW_TROUBLE_ACCEPTED)
             SET_INT_READ_ADDR(PTR(&irai_msg_hikiukechu))
             ADD(LW(10), -1)
             READ_INT_INDEXED(LW(11), LW(10))
@@ -434,9 +434,9 @@ EVT_BEGIN(gor_irai_tenshu_main)
                 IF_INT_GREATER_OR_EQUAL(LW(10), 30)
                     CALL(evt_msg_print_add, 0, STRING("irai_10"))
                     CALL(evt_pouch_add_coin, -30)
-                    SET_VALUE(LW(11), GSW(1420))
-                    CALL(irai_cancel_func, GSW(1420))
-                    SET_VALUE(GSW(1420), 0)
+                    SET_VALUE(LW(11), GSW_TROUBLE_ACCEPTED)
+                    CALL(irai_cancel_func, GSW_TROUBLE_ACCEPTED)
+                    SET_VALUE(GSW_TROUBLE_ACCEPTED, TROUBLE_NONE)
                     SET_INT_READ_ADDR(PTR(irai_end_event))
                     SET_VALUE(LW(0), LW(11))
                     ADD(LW(0), -1)
@@ -463,10 +463,10 @@ EVT_END()
 void irai_flag_clear(void) {
     s32 i;
 
-    for (i = GSWF(5405); i <= GSWF(5421); i++) {
+    for (i = GSWF_TROUBLE_WORK(0); i <= GSWF_TROUBLE_WORK(16); i++) {
         swClear(i + EVTDAT_GSWF_BASE);
     }
-    for (i = GSW(1469); i <= GSW(1474); i++) {
+    for (i = GSW_TROUBLE_WORK(0); i <= GSW_TROUBLE_WORK(5); i++) {
         swByteSet(i + EVTDAT_GSW_BASE, 0);
     }
 }
@@ -474,9 +474,9 @@ void irai_flag_clear(void) {
 void irai_flag_disp(void) {
     s32 i;
 
-    for (i = GSWF(5405); i <= GSWF(5421); i++) {
+    for (i = GSWF_TROUBLE_WORK(0); i <= GSWF_TROUBLE_WORK(16); i++) {
     }
-    for (i = GSW(1469); i <= GSW(1474); i++) {
+    for (i = GSW_TROUBLE_WORK(0); i <= GSW_TROUBLE_WORK(5); i++) {
     }
 }
 
@@ -621,7 +621,7 @@ USER_FUNC(irai_main_func) {
             psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_OPEN1));
             break;
         case 1:
-            if ((keyGetButtonTrg(0) & PAD_BUTTON_A) && swByteGet(1420) == 0 && !swGet(wp->list[wp->cursor] + 5374)) {
+            if ((keyGetButtonTrg(0) & PAD_BUTTON_A) && swByteGet(SW_TROUBLE_ACCEPTED) == 0 && !swGet(SWF_TROUBLE_DONE(wp->list[wp->cursor]))) {
                 psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1));
                 wp->state = 100;
                 break;
@@ -835,12 +835,12 @@ void irai_window_disp(CameraId camera, void* param) {
     FontDrawColor((GXColor){0x00, 0x00, 0x00, 0xFF});
     FontDrawScale(0.85f);
     for (i = 0; i < wp->count; i++) {
-        if (swGet(wp->list[i] + 5374)) {
+        if (swGet(SWF_TROUBLE_DONE(wp->list[i]))) {
             FontDrawColor((GXColor){0x80, 0x80, 0x80, 0xFF});
         } else {
             FontDrawColor((GXColor){0x00, 0x00, 0x00, 0xFF});
         }
-        if (wp->list[i] == swByteGet(1420)) {
+        if (wp->list[i] == swByteGet(SW_TROUBLE_ACCEPTED)) {
             FontDrawColor((GXColor){0xFF, 0x00, 0x00, 0xFF});
         }
         no = wp->list[i] - 1;
@@ -893,12 +893,12 @@ void irai_window_disp(CameraId camera, void* param) {
     FontDrawColor((GXColor){0x00, 0x00, 0x00, 0xFF});
     FontDrawScale(0.85f);
     for (i = 0; i < wp->count; i++) {
-        if (swGet(wp->list[i] + 5374)) {
+        if (swGet(SWF_TROUBLE_DONE(wp->list[i]))) {
             FontDrawColor((GXColor){0x80, 0x80, 0x80, 0xFF});
         } else {
             FontDrawColor((GXColor){0x00, 0x00, 0x00, 0xFF});
         }
-        if (wp->list[i] == swByteGet(1420)) {
+        if (wp->list[i] == swByteGet(SW_TROUBLE_ACCEPTED)) {
             FontDrawColor((GXColor){0xFF, 0x00, 0x00, 0xFF});
         }
         no = wp->list[i] - 1;

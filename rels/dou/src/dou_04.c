@@ -426,7 +426,7 @@ static HitDamageReturn hitDmgRetPoints[] = {
 };
 
 static EVT_BEGIN(kuribo_init)
-    IF_INT_EQUAL(GSW(1420), 21)
+    IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_LOOKING_FOR_A_GAL)
         CALL(evt_npc_set_position, STRING("me"), -183, 10, 135)
         CALL(evt_npc_set_ry, STRING("me"), 90)
     END_IF
@@ -434,10 +434,10 @@ static EVT_BEGIN(kuribo_init)
 EVT_END()
 
 EVT_BEGIN(kuribo_talk)
-    IF_INT_EQUAL(GSW(1420), 21)
-        IF_INT_EQUAL(GSWF(5405), 0)
+    IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_LOOKING_FOR_A_GAL)
+        IF_INT_EQUAL(GSWF_TROUBLE_WORK(0), 0)
             CALL(evt_msg_print, 0, STRING("irai_21_001"), 0, 0)
-            SET_VALUE(GSWF(5405), 1)
+            SET_VALUE(GSWF_TROUBLE_WORK(0), 1)
             ELSE
             CALL(evt_mario_get_party, LW(0))
             IF_INT_EQUAL(LW(0), 1)
@@ -583,8 +583,8 @@ EVT_BEGIN(kuribo_talk)
                 END_IF
                 CALL(evt_msg_print, 0, STRING("irai_21_013"), 0, STRING("party"))
                 CALL(evt_party_run, 0)
-                SET_VALUE(GSW(1420), 0)
-                SET_VALUE(GSWF(5395), 1)
+                SET_VALUE(GSW_TROUBLE_ACCEPTED, TROUBLE_NONE)
+                SET_VALUE(GSWF_TROUBLE_DONE(TROUBLE_LOOKING_FOR_A_GAL), 1)
                 CALL(evt_msg_print, 0, STRING("sys_request_finish"), 0, 0)
                 ELSE
                 LOOP(0)
@@ -682,7 +682,7 @@ EVT_BEGIN(dou_04_init_evt)
     CALL(evt_hit_damage_return_set, PTR(hitDmgRetPoints))
     CALL_CHILD(PTR(evt_gazigazi_entry))
     CALL(evt_mobj_powerupblk, STRING("pblk00"), -230, 290, -105, 0, GSWF(5555), 0)
-    IF_INT_EQUAL(GSWF(5395), 1)
+    IF_INT_EQUAL(GSWF_TROUBLE_DONE(TROUBLE_LOOKING_FOR_A_GAL), 1)
         CALL(evt_item_entry, STRING("iri_21"), ITEM_COUPLES_CAKE, -165, 10, 106, ITEM_TYPE_STILL, GSWF(2991), 0)
     END_IF
     RETURN

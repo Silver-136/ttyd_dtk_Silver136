@@ -572,17 +572,17 @@ static EVT_BEGIN(init_murabito_e)
 EVT_END()
 
 static EVT_BEGIN(talk_murabito_e)
-    IF_INT_EQUAL(GSW(1420), 30)
+    IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_ERASE_THAT_GRAFFITI)
 #ifdef VERSION_G8ME01
-        IF_INT_EQUAL(GSWF(5406), 0)
+        IF_INT_EQUAL(GSWF_TROUBLE_WORK(1), 0)
 #endif
-        IF_INT_EQUAL(GSWF(5405), 0)
+        IF_INT_EQUAL(GSWF_TROUBLE_WORK(0), 0)
             CALL(evt_msg_print, 0, STRING("irai_30_001"), 0, 0)
-            SET_VALUE(GSWF(5405), 1)
+            SET_VALUE(GSWF_TROUBLE_WORK(0), 1)
             ELSE
             CALL(evt_msg_print, 0, STRING("irai_30_002"), 0, 0)
 #ifndef VERSION_G8ME01
-            IF_INT_EQUAL(GSWF(5406), 0)
+            IF_INT_EQUAL(GSWF_TROUBLE_WORK(1), 0)
 #endif
                 CALL(evt_msg_print_add, 0, STRING("irai_30_003"))
 #ifdef VERSION_G8ME01
@@ -591,7 +591,7 @@ static EVT_BEGIN(talk_murabito_e)
                 ELSE
 #ifdef VERSION_G8ME01
             SET_VALUE(LF(0), 0)
-            IF_INT_EQUAL(GSWF(5405), 0)
+            IF_INT_EQUAL(GSWF_TROUBLE_WORK(0), 0)
                 SET_VALUE(LF(0), 1)
                 ELSE
                 CALL(evt_msg_print, 0, STRING("irai_30_002"), 0, 0)
@@ -651,8 +651,8 @@ static EVT_BEGIN(talk_murabito_e)
                     CALL(evt_npc_status_onoff, 0, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
                 END_IF
                 CALL(evt_msg_print, 0, STRING("irai_30_006"), 0, 0)
-                SET_VALUE(GSW(1420), 0)
-                SET_VALUE(GSWF(5404), 1)
+                SET_VALUE(GSW_TROUBLE_ACCEPTED, TROUBLE_NONE)
+                SET_VALUE(GSWF_TROUBLE_DONE(TROUBLE_ERASE_THAT_GRAFFITI), 1)
                 CALL(evt_msg_print, 0, STRING("sys_request_finish"), 0, 0)
             END_IF
 #ifndef VERSION_G8ME01
@@ -696,7 +696,7 @@ static EVT_BEGIN(talk_murabito_f)
 EVT_END()
 
 static EVT_BEGIN(init_murabito_g)
-    IF_INT_EQUAL(GSW(1420), 25)
+    IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_DELIVERY_PLEASE)
         CALL(evt_npc_set_position, STRING("me"), 270, 30, -180)
         CALL(evt_npc_set_ry, STRING("me"), 90)
         RETURN
@@ -705,16 +705,16 @@ static EVT_BEGIN(init_murabito_g)
 EVT_END()
 
 static EVT_BEGIN(talk_murabito_g)
-    IF_INT_EQUAL(GSW(1420), 25)
-        IF_INT_EQUAL(GSWF(5405), 1)
-            IF_INT_EQUAL(GSWF(5407), 0)
+    IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_DELIVERY_PLEASE)
+        IF_INT_EQUAL(GSWF_TROUBLE_WORK(0), 1)
+            IF_INT_EQUAL(GSWF_TROUBLE_WORK(2), 0)
                 CALL(evt_msg_print, 0, STRING("irai_25_00"), 0, 0)
-                SET_VALUE(GSWF(5406), 1)
+                SET_VALUE(GSWF_TROUBLE_WORK(1), 1)
                 RETURN
             END_IF
         END_IF
-        IF_INT_EQUAL(GSWF(5409), 1)
-            IF_INT_EQUAL(GSWF(5410), 0)
+        IF_INT_EQUAL(GSWF_TROUBLE_WORK(4), 1)
+            IF_INT_EQUAL(GSWF_TROUBLE_WORK(5), 0)
                 CALL(evt_msg_print, 0, STRING("irai_25_01"), 0, 0)
                 RETURN
             END_IF
@@ -744,7 +744,7 @@ s32 iri_26_item_tbl[] = {
 };
 
 static EVT_BEGIN(talk_murabito_h)
-    IF_INT_EQUAL(GSW(1420), 26)
+    IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_I_CANT_SPEAK)
         CALL(evt_pouch_check_item, ITEM_HONEY_CANDY, LW(0))
         IF_INT_GREATER(LW(0), 0)
             CALL(evt_msg_print, 0, STRING("irai_26_01"), 0, 0)
@@ -765,8 +765,8 @@ static EVT_BEGIN(talk_murabito_h)
                 CALL(evt_msg_print, 0, STRING("irai_26_05"), 0, 0)
                 CALL(evt_sub_get_coin, 20)
                 CALL(evt_sub_save_playtime, GSW(1461))
-                SET_VALUE(GSW(1420), 0)
-                SET_VALUE(GSWF(5400), 1)
+                SET_VALUE(GSW_TROUBLE_ACCEPTED, TROUBLE_NONE)
+                SET_VALUE(GSWF_TROUBLE_DONE(TROUBLE_I_CANT_SPEAK), 1)
                 CALL(evt_msg_print, 0, STRING("sys_request_finish"), 0, 0)
             END_IF
             ELSE
@@ -819,12 +819,12 @@ EVT_BEGIN(talk_tenin)
 EVT_END()
 
 static EVT_BEGIN(init_white)
-    IF_INT_EQUAL(GSW(1420), 25)
-        IF_INT_EQUAL(GSWF(5409), 1)
-            IF_INT_EQUAL(GSWF(5411), 0)
+    IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_DELIVERY_PLEASE)
+        IF_INT_EQUAL(GSWF_TROUBLE_WORK(4), 1)
+            IF_INT_EQUAL(GSWF_TROUBLE_WORK(6), 0)
                 CALL(evt_npc_set_position, STRING("ホワイト"), 380, 45, -150)
                 CALL(evt_npc_set_ry, STRING("ホワイト"), 270)
-                IF_INT_EQUAL(GSWF(5410), 1)
+                IF_INT_EQUAL(GSWF_TROUBLE_WORK(5), 1)
                     CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_NO_TALK_TURN)
                     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
                     ELSE
@@ -925,11 +925,11 @@ s32 iri_25_item_tbl[] = {
 };
 
 static EVT_BEGIN(talk_white)
-    IF_INT_EQUAL(GSW(1420), 25)
-        IF_INT_EQUAL(GSWF(5409), 1)
-            IF_INT_EQUAL(GSWF(5411), 0)
+    IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_DELIVERY_PLEASE)
+        IF_INT_EQUAL(GSWF_TROUBLE_WORK(4), 1)
+            IF_INT_EQUAL(GSWF_TROUBLE_WORK(6), 0)
                 SET_VALUE(LF(0), 0)
-                IF_INT_EQUAL(GSWF(5410), 1)
+                IF_INT_EQUAL(GSWF_TROUBLE_WORK(5), 1)
                     SET_VALUE(LF(0), 1)
                 END_IF
                 IF_INT_EQUAL(LF(0), 1)
@@ -941,7 +941,7 @@ static EVT_BEGIN(talk_white)
                 END_IF
                 CALL(evt_msg_print, 0, STRING("irai_25_18"), 0, STRING("ホワイト"))
                 CALL(evt_pouch_remove_item, ITEM_PACKAGE, LW(0))
-                SET_VALUE(GSWF(5411), 1)
+                SET_VALUE(GSWF_TROUBLE_WORK(6), 1)
                 BEGIN_INLINE_EVENT
                     WAIT_MS(1000)
                     CALL(evt_mario_set_dir, 270, 300, 0)
@@ -1082,7 +1082,7 @@ EVT_BEGIN(iri_25_white_bed)
     CALL_CHILD(PTR(talk_white))
     CALL(evt_npc_change_interrupt, STRING("ホワイト"), 6, PTR(talk_white))
     CALL(evt_npc_set_width, STRING("ホワイト"), 30)
-    SET_VALUE(GSWF(5410), 1)
+    SET_VALUE(GSWF_TROUBLE_WORK(5), 1)
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_exit_case_evt)
     RETURN
@@ -1695,17 +1695,17 @@ EVT_BEGIN(bom_02_init_evt)
     CALL(evt_map_replace_mapobj, STRING("hi4"), 1)
     CALL(evt_map_replace_mapobj, STRING("hi5"), 1)
     CALL(evt_map_replace_mapobj, STRING("hi6"), 1)
-    IF_INT_EQUAL(GSW(1420), 25)
-        IF_INT_EQUAL(GSWF(5409), 1)
-            IF_INT_EQUAL(GSWF(5411), 0)
-                IF_INT_EQUAL(GSWF(5410), 0)
+    IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_DELIVERY_PLEASE)
+        IF_INT_EQUAL(GSWF_TROUBLE_WORK(4), 1)
+            IF_INT_EQUAL(GSWF_TROUBLE_WORK(6), 0)
+                IF_INT_EQUAL(GSWF_TROUBLE_WORK(5), 0)
                     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_w_bed"), 0, PTR(iri_25_white_bed), 0)
                 END_IF
             END_IF
         END_IF
     END_IF
     IF_INT_EQUAL(LF(0), 0)
-        IF_INT_EQUAL(GSWF(5404), 1)
+        IF_INT_EQUAL(GSWF_TROUBLE_DONE(TROUBLE_ERASE_THAT_GRAFFITI), 1)
             CALL(evt_item_entry, STRING("iri_30"), ITEM_SNOW_BUNNY, 50, 0, 35, ITEM_TYPE_STILL, GSWF(3890), 0)
         END_IF
     END_IF

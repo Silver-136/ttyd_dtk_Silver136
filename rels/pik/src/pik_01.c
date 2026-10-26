@@ -312,10 +312,10 @@ static EVT_BEGIN(talk_powan)
 EVT_END()
 
 EVT_BEGIN(miyageya_talk)
-    IF_INT_EQUAL(GSW(1420), 27)
+    IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_I_WANNA_MEET_LUIGI)
         CALL(chk_luigi_color, LW(0))
         IF_INT_EQUAL(LW(0), 0)
-            IF_INT_EQUAL(GSWF(5405), 0)
+            IF_INT_EQUAL(GSWF_TROUBLE_WORK(0), 0)
                 CALL(evt_msg_print, 0, STRING("irai_27_001"), 0, 0)
                 CALL(evt_mario_set_pose, STRING("M_N_5B"))
                 WAIT_MS(300)
@@ -323,7 +323,7 @@ EVT_BEGIN(miyageya_talk)
                 WAIT_MS(800)
                 CALL(evt_mario_set_pose, STRING("M_S_1"))
                 CALL(evt_msg_print, 0, STRING("irai_27_001_1"), 0, 0)
-                SET_VALUE(GSWF(5405), 1)
+                SET_VALUE(GSWF_TROUBLE_WORK(0), 1)
                 ELSE
                 CALL(evt_msg_print, 0, STRING("irai_27_002"), 0, 0)
             END_IF
@@ -420,8 +420,8 @@ EVT_BEGIN(miyageya_talk)
             CALL(evt_msg_print, 0, STRING("irai_27_014"), 0, 0)
             CALL(evt_cam3d_evt_off, 800, 11)
             WAIT_MS(800)
-            SET_VALUE(GSW(1420), 0)
-            SET_VALUE(GSWF(5401), 1)
+            SET_VALUE(GSW_TROUBLE_ACCEPTED, TROUBLE_NONE)
+            SET_VALUE(GSWF_TROUBLE_DONE(TROUBLE_I_WANNA_MEET_LUIGI), 1)
             CALL(evt_msg_print, 0, STRING("sys_request_finish"), 0, 0)
             CALL(evt_party_run, 0)
         END_IF
@@ -450,7 +450,7 @@ EVT_BEGIN(miyageya_talk)
                 CALL(evt_msg_print, 0, STRING("stg7_pik_clear_03_0"), 0, STRING("me"))
             END_IF
             ELSE
-            IF_INT_EQUAL(GSWF(5401), 0)
+            IF_INT_EQUAL(GSWF_TROUBLE_DONE(TROUBLE_I_WANNA_MEET_LUIGI), 0)
                 CALL(evt_msg_print, 0, STRING("stg7_pik_clear_03_1"), 0, STRING("me"))
                 ELSE
                 CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
@@ -485,25 +485,25 @@ s32 iri_29_item_tbl3[] = {
 };
 
 EVT_BEGIN(konarikin_talk)
-    IF_INT_EQUAL(GSW(1420), 29)
-        IF_INT_EQUAL(GSWF(5406), 0)
-            IF_INT_EQUAL(GSWF(5405), 0)
+    IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_HELP_ME_MAKE_UP)
+        IF_INT_EQUAL(GSWF_TROUBLE_WORK(1), 0)
+            IF_INT_EQUAL(GSWF_TROUBLE_WORK(0), 0)
                 CALL(evt_msg_print, 0, STRING("irai_29_00"), 0, 0)
                 CALL(evt_msg_select, 0, STRING("irai_29_00_s"))
                 IF_INT_GREATER_OR_EQUAL(LW(0), 3)
                     CALL(evt_msg_continue)
                     RETURN
                 END_IF
-                SET_VALUE(GSW(1469), LW(0))
+                SET_VALUE(GSW_TROUBLE_WORK(0), LW(0))
                 CALL(evt_msg_print_add, 0, STRING("irai_29_01"))
-                SET_VALUE(GSWF(5405), 1)
+                SET_VALUE(GSWF_TROUBLE_WORK(0), 1)
                 ELSE
                 CALL(evt_pouch_check_item, ITEM_PRESENT, LW(0))
                 IF_INT_GREATER(LW(0), 0)
                     CALL(evt_msg_print, 0, STRING("irai_29_11"), 0, 0)
                     RETURN
                 END_IF
-                SWITCH(GSW(1469))
+                SWITCH(GSW_TROUBLE_WORK(0))
                     CASE_EQUAL(0)
                     CALL(evt_pouch_check_item, ITEM_SHROOM_CAKE, LW(0))
                     IF_INT_GREATER(LW(0), 0)
@@ -570,8 +570,8 @@ EVT_BEGIN(konarikin_talk)
             CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
             CALL(evt_npc_move_position, STRING("me"), -222, -225, 0, 120, 0)
             CALL(evt_npc_set_position, STRING("me"), 0, -1000, 0)
-            SET_VALUE(GSW(1420), 0)
-            SET_VALUE(GSWF(5403), 1)
+            SET_VALUE(GSW_TROUBLE_ACCEPTED, TROUBLE_NONE)
+            SET_VALUE(GSWF_TROUBLE_DONE(TROUBLE_HELP_ME_MAKE_UP), 1)
             CALL(evt_msg_print, 0, STRING("sys_request_finish"), 0, 0)
         END_IF
         RETURN
@@ -605,7 +605,7 @@ EVT_END()
 
 EVT_BEGIN(konarikin_init)
     CALL_CHILD(PTR(npc_init_evt))
-    IF_INT_EQUAL(GSW(1420), 29)
+    IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_HELP_ME_MAKE_UP)
         CALL(evt_npc_set_position, STRING("me"), -62, -5, -367)
         RETURN
     END_IF
@@ -1387,10 +1387,10 @@ EVT_BEGIN(pik_01_init_evt)
     END_INLINE_EVENT
     CALL(evt_npc_setup, PTR(npc_data))
     IF_INT_EQUAL(LF(1), 0)
-        IF_INT_EQUAL(GSW(1420), 27)
+        IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_I_WANNA_MEET_LUIGI)
             CALL_CHILD(PTR(iri_27_npc_entry))
         END_IF
-        IF_INT_EQUAL(GSWF(5401), 1)
+        IF_INT_EQUAL(GSWF_TROUBLE_DONE(TROUBLE_I_WANNA_MEET_LUIGI), 1)
             CALL(evt_item_entry, STRING("iri_27"), ITEM_CHOCO_CAKE, -246, 15, 246, ITEM_TYPE_STILL, GSWF(3278), 0)
         END_IF
     END_IF

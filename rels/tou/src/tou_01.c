@@ -817,11 +817,11 @@ EVT_BEGIN(init_sakaba)
 EVT_END()
 
 EVT_BEGIN(talk_sakaba)
-    IF_INT_EQUAL(GSW(1420), 25)
-        IF_INT_EQUAL(GSWF(5407), 1)
-            IF_INT_EQUAL(GSWF(5409), 0)
+    IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_DELIVERY_PLEASE)
+        IF_INT_EQUAL(GSWF_TROUBLE_WORK(2), 1)
+            IF_INT_EQUAL(GSWF_TROUBLE_WORK(4), 0)
                 CALL(evt_msg_print, 0, STRING("irai_25_00"), 0, 0)
-                SET_VALUE(GSWF(5408), 1)
+                SET_VALUE(GSWF_TROUBLE_WORK(3), 1)
                 RETURN
             END_IF
         END_IF
@@ -1550,7 +1550,7 @@ EVT_BEGIN(select_number)
 EVT_END()
 
 static EVT_BEGIN(talk_sarary)
-    IF_INT_EQUAL(GSW(1420), 24)
+    IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_SECURITY_CODE)
         CALL(evt_npc_flag_onoff, 1, STRING("サラリーマン"), NPC_FLAG_NO_HIT)
         BEGIN_INLINE_EVENT
             CALL(evt_party_move_pos2, 0, -160, -95, 60)
@@ -1563,10 +1563,10 @@ static EVT_BEGIN(talk_sarary)
         CALL(evt_npc_wait_pera, STRING("サラリーマン"))
         WAIT_MS(300)
         CALL(evt_npc_flag_onoff, 0, STRING("サラリーマン"), NPC_FLAG_NO_HIT)
-        IF_INT_EQUAL(GSWF(5405), 0)
+        IF_INT_EQUAL(GSWF_TROUBLE_WORK(0), 0)
             CALL(evt_msg_print, 0, STRING("irai_24_001"), 0, 0)
             CALL(evt_msg_print_add, 0, STRING("irai_24_002"))
-            SET_VALUE(GSWF(5405), 1)
+            SET_VALUE(GSWF_TROUBLE_WORK(0), 1)
             ELSE
             CALL(evt_msg_print, 0, STRING("irai_24_006"), 0, 0)
             CALL(evt_msg_select, 0, STRING("irai_24_007"))
@@ -1649,13 +1649,13 @@ static EVT_BEGIN(talk_sarary)
                 SET_VALUE(GSWF(2528), 1)
             END_IF
             CALL(evt_msg_print, 0, STRING("irai_24_027"), 0, 0)
-            SET_VALUE(GSW(1420), 0)
-            SET_VALUE(GSWF(5398), 1)
+            SET_VALUE(GSW_TROUBLE_ACCEPTED, TROUBLE_NONE)
+            SET_VALUE(GSWF_TROUBLE_DONE(TROUBLE_SECURITY_CODE), 1)
             CALL(evt_msg_print, 0, STRING("sys_request_finish"), 0, 0)
         END_IF
         RETURN
     END_IF
-    IF_INT_EQUAL(GSWF(5398), 1)
+    IF_INT_EQUAL(GSWF_TROUBLE_DONE(TROUBLE_SECURITY_CODE), 1)
         CALL(evt_msg_print, 0, STRING("irai_24_030"), 0, 0)
         CALL(evt_msg_select, 0, STRING("irai_24_031"))
         IF_INT_NOT_EQUAL(LW(0), 0)
@@ -3207,7 +3207,7 @@ EVT_BEGIN(tou_01_init_evt)
         CALL_CHILD(PTR(init_roten_1))
         CALL(evt_npc_change_interrupt, STRING("ロテン1"), 6, PTR(talk_roten_1))
     END_IF
-    IF_INT_EQUAL(GSWF(5398), 1)
+    IF_INT_EQUAL(GSWF_TROUBLE_DONE(TROUBLE_SECURITY_CODE), 1)
         CALL(evt_item_entry, STRING("iri_24"), ITEM_HOT_SAUCE, -265, 10, -70, ITEM_TYPE_STILL, GSWF(2528), 0)
     END_IF
     SET_VALUE(LW(0), PTR(&door_1))

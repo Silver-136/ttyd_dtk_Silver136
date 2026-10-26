@@ -395,7 +395,7 @@ static EVT_BEGIN(evt_unlock)
 EVT_END()
 
 EVT_BEGIN(nokkosu_init)
-    IF_INT_EQUAL(GSW(1420), 7)
+    IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_TRY_TO_FIND_ME)
 #ifdef VERSION_G8ME01
         CALL(evt_npc_set_position, STRING("me"), -185, 500, -165)
 #else
@@ -484,8 +484,8 @@ EVT_BEGIN(nokkosu_talk)
     CALL(evt_npc_jump_position_nohit, STRING("me"), -66, 100, -112, 800, 220)
     CALL(evt_npc_set_position, STRING("me"), 0, -1000, 0)
     CALL(evt_sub_save_playtime, GSW(1421))
-    SET_VALUE(GSW(1420), 0)
-    SET_VALUE(GSWF(5381), 1)
+    SET_VALUE(GSW_TROUBLE_ACCEPTED, TROUBLE_NONE)
+    SET_VALUE(GSWF_TROUBLE_DONE(TROUBLE_TRY_TO_FIND_ME), 1)
     CALL(evt_msg_print, 0, STRING("sys_request_finish"), 0, 0)
     RETURN
 EVT_END()

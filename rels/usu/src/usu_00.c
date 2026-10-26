@@ -554,18 +554,18 @@ s32 iri_15_item_tbl[] = {
 };
 
 EVT_BEGIN(village_chief_talk)
-    IF_INT_EQUAL(GSW(1420), 17)
-        IF_INT_EQUAL(GSWF(5405), 0)
+    IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_NEWSLETTER)
+        IF_INT_EQUAL(GSWF_TROUBLE_WORK(0), 0)
             CALL(evt_msg_print, 0, STRING("irai_17_00"), 0, 0)
             CALL(evt_item_entry, STRING("kairanban"), ITEM_ROUTING_SLIP, 0, -1000, 0, ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
             CALL(evt_item_get_item, STRING("kairanban"))
             CALL(evt_item_get_item_end_wait, STRING("kairanban"))
-            SET_VALUE(GSWF(5405), 1)
+            SET_VALUE(GSWF_TROUBLE_WORK(0), 1)
             ELSE
-            IF_INT_EQUAL(GSWF(5406), 0)
+            IF_INT_EQUAL(GSWF_TROUBLE_WORK(1), 0)
                 CALL(evt_msg_print, 0, STRING("irai_17_01"), 0, 0)
                 ELSE
-                IF_INT_EQUAL(GSWF(5407), 0)
+                IF_INT_EQUAL(GSWF_TROUBLE_WORK(2), 0)
                     CALL(evt_msg_print, 0, STRING("irai_17_02"), 0, 0)
                     ELSE
                     CALL(evt_msg_print, 0, STRING("irai_17_03"), 0, 0)
@@ -575,8 +575,8 @@ EVT_BEGIN(village_chief_talk)
                         CALL(evt_msg_print, 0, STRING("irai_17_04"), 0, 0)
                         CALL(evt_sub_get_coin, 30)
                         CALL(evt_msg_print, 0, STRING("irai_17_05"), 0, 0)
-                        SET_VALUE(GSW(1420), 0)
-                        SET_VALUE(GSWF(5391), 1)
+                        SET_VALUE(GSW_TROUBLE_ACCEPTED, TROUBLE_NONE)
+                        SET_VALUE(GSWF_TROUBLE_DONE(TROUBLE_NEWSLETTER), 1)
                         CALL(evt_msg_print, 0, STRING("sys_request_finish"), 0, 0)
                     END_IF
                 END_IF

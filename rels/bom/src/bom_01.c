@@ -2070,8 +2070,8 @@ static EVT_BEGIN(talk_murabito_i)
 EVT_END()
 
 static EVT_BEGIN(init_white)
-    IF_INT_EQUAL(GSW(1420), 25)
-        IF_INT_EQUAL(GSWF(5411), 0)
+    IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_DELIVERY_PLEASE)
+        IF_INT_EQUAL(GSWF_TROUBLE_WORK(6), 0)
             RETURN
         END_IF
     END_IF

@@ -135,7 +135,7 @@ USER_FUNC(iri_22_make_item_tbl) {
     s32 n;
     s32 i;
 
-    bought = evtGetValue(NULL, GSW(1469));
+    bought = evtGetValue(NULL, GSW_TROUBLE_WORK(0));
     for (i = 0; i < 4; i++) {
         iri_22_item_tbl[i] = -1;
     }
@@ -352,10 +352,10 @@ s32 iri_22_item_tbl[] = {
 };
 
 EVT_BEGIN(talk_cook)
-    IF_INT_EQUAL(GSW(1420), 22)
+    IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_GET_THESE_INGREDIENTS)
         CALL(iri_22_make_item_tbl, LW(0), LW(1))
-        IF_INT_EQUAL(GSWF(5405), 0)
-            SET_VALUE(GSWF(5405), 1)
+        IF_INT_EQUAL(GSWF_TROUBLE_WORK(0), 0)
+            SET_VALUE(GSWF_TROUBLE_WORK(0), 1)
             IF_INT_EQUAL(LW(1), 0)
                 CALL(evt_msg_print, 0, STRING("irai_22_00"), 0, 0)
                 ELSE
@@ -364,7 +364,7 @@ EVT_BEGIN(talk_cook)
             END_IF
             ELSE
             IF_INT_EQUAL(LW(1), 0)
-                SWITCH(GSW(1469))
+                SWITCH(GSW_TROUBLE_WORK(0))
                     CASE_EQUAL(0)
                     CALL(evt_msg_print, 0, STRING("irai_22_02"), 0, 0)
                     CASE_EQUAL(1)
@@ -394,21 +394,21 @@ EVT_BEGIN(talk_cook)
             CASE_EQUAL(169)
             CALL(evt_pouch_remove_item, ITEM_GOLDEN_LEAF, LW(0))
             CALL(evt_msg_print, 0, STRING("irai_22_10"), 0, 0)
-            OR(GSW(1469), 1)
+            OR(GSW_TROUBLE_WORK(0), 1)
             CASE_EQUAL(168)
             CALL(evt_pouch_remove_item, ITEM_MYSTIC_EGG, LW(0))
             CALL(evt_msg_print, 0, STRING("irai_22_11"), 0, 0)
-            OR(GSW(1469), 2)
+            OR(GSW_TROUBLE_WORK(0), 2)
             CASE_EQUAL(170)
             CALL(evt_pouch_remove_item, ITEM_KEEL_MANGO, LW(0))
             CALL(evt_msg_print, 0, STRING("irai_22_12"), 0, 0)
-            OR(GSW(1469), 4)
+            OR(GSW_TROUBLE_WORK(0), 4)
         END_SWITCH
-        IF_INT_EQUAL(GSW(1469), 7)
+        IF_INT_EQUAL(GSW_TROUBLE_WORK(0), 7)
             CALL(evt_msg_print_add, 0, STRING("irai_22_13"))
             CALL(evt_sub_get_coin, 40)
-            SET_VALUE(GSW(1420), 0)
-            SET_VALUE(GSWF(5396), 1)
+            SET_VALUE(GSW_TROUBLE_ACCEPTED, TROUBLE_NONE)
+            SET_VALUE(GSWF_TROUBLE_DONE(TROUBLE_GET_THESE_INGREDIENTS), 1)
             CALL(evt_msg_print, 0, STRING("sys_request_finish"), 0, 0)
             ELSE
             IF_INT_NOT_EQUAL(LW(1), -1)

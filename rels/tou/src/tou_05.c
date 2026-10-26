@@ -418,21 +418,21 @@ static EVT_BEGIN(init_kinoshikowa)
 EVT_END()
 
 static EVT_BEGIN(talk_kinoshikowa)
-    IF_INT_EQUAL(GSW(1420), 13)
+    IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_HELP_WANTED)
         CALL(evt_pouch_check_item, ITEM_BATTLE_TRUNKS, LW(0))
-        IF_INT_EQUAL(GSWF(5406), 0)
+        IF_INT_EQUAL(GSWF_TROUBLE_WORK(1), 0)
             IF_INT_EQUAL(LW(0), 20)
-                IF_INT_EQUAL(GSWF(5405), 0)
+                IF_INT_EQUAL(GSWF_TROUBLE_WORK(0), 0)
                     CALL(evt_msg_print, 0, STRING("irai_13_03_b"), 0, 0)
-                    SET_VALUE(GSWF(5405), 1)
+                    SET_VALUE(GSWF_TROUBLE_WORK(0), 1)
                     ELSE
                     CALL(evt_msg_print, 0, STRING("irai_13_04"), 0, 0)
                 END_IF
-                SET_VALUE(GSWF(5406), 1)
+                SET_VALUE(GSWF_TROUBLE_WORK(1), 1)
                 ELSE
-                IF_INT_EQUAL(GSWF(5405), 0)
+                IF_INT_EQUAL(GSWF_TROUBLE_WORK(0), 0)
                     CALL(evt_msg_print, 0, STRING("irai_13_00"), 0, 0)
-                    SET_VALUE(GSWF(5405), 1)
+                    SET_VALUE(GSWF_TROUBLE_WORK(0), 1)
                     ELSE
                     CALL(evt_msg_print, 0, STRING("irai_13_02"), 0, 0)
                 END_IF
@@ -447,8 +447,8 @@ static EVT_BEGIN(talk_kinoshikowa)
                 WAIT_MS(200)
                 CALL(evt_msg_print, 0, STRING("irai_13_05"), 0, 0)
                 CALL(evt_sub_save_playtime, GSW(1437))
-                SET_VALUE(GSW(1420), 0)
-                SET_VALUE(GSWF(5387), 1)
+                SET_VALUE(GSW_TROUBLE_ACCEPTED, TROUBLE_NONE)
+                SET_VALUE(GSWF_TROUBLE_DONE(TROUBLE_HELP_WANTED), 1)
                 CALL(evt_msg_print, 0, STRING("sys_request_finish"), 0, 0)
                 ELSE
                 CALL(evt_msg_print, 0, STRING("irai_13_04"), 0, 0)
@@ -456,7 +456,7 @@ static EVT_BEGIN(talk_kinoshikowa)
         END_IF
         RETURN
     END_IF
-    IF_INT_EQUAL(GSW(1420), 23)
+    IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_I_MUST_HAVE_THAT_BOOK)
         CALL(evt_pouch_check_item, ITEM_WRESTLING_MAG, LW(0))
         IF_INT_GREATER(LW(0), 0)
             CALL(evt_npc_set_anim, STRING("me"), STRING("M_1"))

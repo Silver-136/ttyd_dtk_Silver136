@@ -461,7 +461,7 @@ EVT_END()
 
 static EVT_BEGIN(fabio_init)
     IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, 400)
-        IF_INT_EQUAL(GSWF(5402), 1)
+        IF_INT_EQUAL(GSWF_TROUBLE_DONE(TROUBLE_ROUST_THESE_CADS), 1)
             CALL(evt_npc_set_position, STRING("me"), -375, FLOAT(0.5595703f), -134)
             CALL(evt_npc_set_ry, STRING("me"), 90)
         END_IF

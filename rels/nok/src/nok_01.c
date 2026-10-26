@@ -345,10 +345,10 @@ EVT_BEGIN(nokopapa_talk)
 EVT_END()
 
 EVT_BEGIN(nokonoko_K_talk)
-    IF_INT_EQUAL(GSW(1420), 14)
-        IF_INT_EQUAL(GSWF(5405), 0)
+    IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_HEARTFUL_CAKE_RECIPE)
+        IF_INT_EQUAL(GSWF_TROUBLE_WORK(0), 0)
             CALL(evt_msg_print, 0, STRING("irai_14_00"), 0, 0)
-            SET_VALUE(GSWF(5405), 1)
+            SET_VALUE(GSWF_TROUBLE_WORK(0), 1)
             ELSE
             CALL(evt_msg_print, 0, STRING("irai_14_01"), 0, 0)
         END_IF
@@ -426,7 +426,7 @@ static s32 iri_17_item_tbl[] = {
 };
 
 EVT_BEGIN(boss_noko_talk)
-    IF_INT_EQUAL(GSW(1420), 8)
+    IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_LISTEN_TO_ME)
         CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_HIT)
         BEGIN_INLINE_EVENT
             CALL(evt_party_move_pos2, 1, -250, -320, 40)
@@ -478,17 +478,17 @@ EVT_BEGIN(boss_noko_talk)
             CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
         END_IF
         CALL(evt_msg_print, 0, STRING("irai_08_004"), 0, STRING("me"))
-        SET_VALUE(GSW(1420), 0)
-        SET_VALUE(GSWF(5382), 1)
+        SET_VALUE(GSW_TROUBLE_ACCEPTED, TROUBLE_NONE)
+        SET_VALUE(GSWF_TROUBLE_DONE(TROUBLE_LISTEN_TO_ME), 1)
         CALL(evt_msg_print, 0, STRING("sys_request_finish"), 0, 0)
         RETURN
     END_IF
-    IF_INT_EQUAL(GSW(1420), 17)
-        IF_INT_EQUAL(GSWF(5405), 0)
+    IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_NEWSLETTER)
+        IF_INT_EQUAL(GSWF_TROUBLE_WORK(0), 0)
             ELSE
-            IF_INT_EQUAL(GSWF(5406), 0)
+            IF_INT_EQUAL(GSWF_TROUBLE_WORK(1), 0)
                 ELSE
-                IF_INT_EQUAL(GSWF(5407), 0)
+                IF_INT_EQUAL(GSWF_TROUBLE_WORK(2), 0)
                     CALL(evt_msg_print, 0, STRING("irai_17_00"), 0, 0)
                     CALL(evt_win_item_select, 0, PTR(iri_17_item_tbl), LW(0), 0)
                     IF_INT_NOT_EQUAL(LW(0), -1)
@@ -497,7 +497,7 @@ EVT_BEGIN(boss_noko_talk)
                         CALL(evt_item_entry, STRING("kairanban"), ITEM_ROUTING_SLIP, 0, -1000, 0, ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
                         CALL(evt_item_get_item, STRING("kairanban"))
                         CALL(evt_item_get_item_end_wait, STRING("kairanban"))
-                        SET_VALUE(GSWF(5407), 1)
+                        SET_VALUE(GSWF_TROUBLE_WORK(2), 1)
                     END_IF
                     RETURN
                     ELSE
@@ -1565,7 +1565,7 @@ EVT_BEGIN(nok_01_init_evt)
     END_IF
     CALL(evt_mobj_kururing_floor, STRING("kururin2"), 400, 0, 140, STRING("S_guround"), 125, GSWF(5602))
     CALL(evt_item_entry, STRING("item_00"), ITEM_MEGA_RUSH_P, -180, 70, -425, ITEM_TYPE_STILL, GSWF(1628), 0)
-    IF_INT_EQUAL(GSWF(5382), 1)
+    IF_INT_EQUAL(GSWF_TROUBLE_DONE(TROUBLE_LISTEN_TO_ME), 1)
         CALL(evt_item_entry, STRING("iri_08"), ITEM_TURTLEY_LEAF, -317, 128, -374, ITEM_TYPE_STILL, GSWF(1629), 0)
     END_IF
     IF_INT_EQUAL(LF(0), 0)

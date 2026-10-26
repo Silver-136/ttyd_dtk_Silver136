@@ -1732,7 +1732,7 @@ EVT_END()
 
 EVT_BEGIN(tozokudan2_init)
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_WALL_COLLISION)
-    IF_INT_EQUAL(GSW(1420), 1)
+    IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_NEED_A_KEY)
         CALL(evt_npc_set_position, STRING("me"), 445, 0, 120)
         RETURN
     END_IF
@@ -1862,8 +1862,8 @@ EVT_BEGIN(evt_unlock_mario)
     WAIT_MS(500)
     SPAWN_EVENT(PTR(tozokudan2_house_door))
     CALL(evt_npc_move_position, STRING("盗賊団２"), 445, -85, 0, FLOAT(60.0f), 0)
-    SET_VALUE(GSW(1420), 0)
-    SET_VALUE(GSWF(5375), 1)
+    SET_VALUE(GSW_TROUBLE_ACCEPTED, TROUBLE_NONE)
+    SET_VALUE(GSWF_TROUBLE_DONE(TROUBLE_NEED_A_KEY), 1)
     SET_VALUE(LW(0), PTR(&door_data_06))
     CALL_CHILD(PTR(evt_door_entry))
     CALL(evt_npc_flag_onoff, 0, STRING("盗賊団２"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
@@ -1897,8 +1897,8 @@ EVT_BEGIN(evt_unlock_npc)
     CALL(evt_pouch_remove_item, ITEM_HOUSE_KEY, LW(0))
     SPAWN_EVENT(PTR(tozokudan2_house_door))
     CALL(evt_npc_move_position, STRING("盗賊団２"), 445, -85, 0, FLOAT(60.0f), 0)
-    SET_VALUE(GSW(1420), 0)
-    SET_VALUE(GSWF(5375), 1)
+    SET_VALUE(GSW_TROUBLE_ACCEPTED, TROUBLE_NONE)
+    SET_VALUE(GSWF_TROUBLE_DONE(TROUBLE_NEED_A_KEY), 1)
     SET_VALUE(LW(0), PTR(&door_data_06))
     CALL_CHILD(PTR(evt_door_entry))
     CALL(evt_npc_flag_onoff, 0, STRING("盗賊団２"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
@@ -1907,7 +1907,7 @@ EVT_BEGIN(evt_unlock_npc)
 EVT_END()
 
 EVT_BEGIN(tozokudan2_talk)
-    IF_INT_EQUAL(GSW(1420), 1)
+    IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_NEED_A_KEY)
         CALL(evt_pouch_check_item, ITEM_HOUSE_KEY, LW(0))
         IF_INT_GREATER_OR_EQUAL(LW(0), 1)
             CALL(evt_msg_print, 0, STRING("irai_01_02"), 0, STRING("me"))
@@ -1917,9 +1917,9 @@ EVT_BEGIN(tozokudan2_talk)
             END_IF
             RETURN
             ELSE
-            IF_INT_EQUAL(GSWF(5406), 0)
+            IF_INT_EQUAL(GSWF_TROUBLE_WORK(1), 0)
                 CALL(evt_msg_print, 0, STRING("irai_01_00"), 0, STRING("me"))
-                SET_VALUE(GSWF(5406), 1)
+                SET_VALUE(GSWF_TROUBLE_WORK(1), 1)
                 ELSE
                 CALL(evt_msg_print, 0, STRING("irai_01_01"), 0, STRING("me"))
             END_IF
@@ -2164,8 +2164,8 @@ static s32 item_tbl[] = {
 };
 
 EVT_BEGIN(kuribo4_talk)
-    IF_INT_EQUAL(GSW(1420), 2)
-        IF_INT_EQUAL(GSWF(5405), 1)
+    IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_SAFE_DELIVERY)
+        IF_INT_EQUAL(GSWF_TROUBLE_WORK(0), 1)
             CALL(evt_pouch_check_item, ITEM_BOX, LW(0))
             IF_INT_GREATER_OR_EQUAL(LW(0), 1)
                 CALL(evt_msg_print, 0, STRING("irai_02_03"), 0, STRING("me"))
@@ -2173,18 +2173,18 @@ EVT_BEGIN(kuribo4_talk)
                 IF_INT_NOT_EQUAL(LW(0), -1)
                     CALL(evt_msg_print, 0, STRING("irai_02_04"), 0, STRING("me"))
                     CALL(evt_pouch_remove_item, ITEM_BOX, LW(0))
-                    SET_VALUE(GSWF(5406), 1)
+                    SET_VALUE(GSWF_TROUBLE_WORK(1), 1)
                 END_IF
                 RETURN
             END_IF
         END_IF
     END_IF
-    IF_INT_EQUAL(GSW(1420), 13)
-        IF_INT_EQUAL(GSWF(5406), 1)
+    IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_HELP_WANTED)
+        IF_INT_EQUAL(GSWF_TROUBLE_WORK(1), 1)
             CALL(evt_pouch_check_item, ITEM_BATTLE_TRUNKS, LW(0))
             IF_INT_GREATER(LW(0), 0)
                 CALL(iri_13_make_item_tbl)
-                IF_INT_EQUAL(GSWF(5407), 0)
+                IF_INT_EQUAL(GSWF_TROUBLE_WORK(2), 0)
                     CALL(evt_msg_print, 0, STRING("irai_13_001"), 0, 0)
                     CALL(evt_mario_set_pose, STRING("M_N_5B"))
                     WAIT_MS(500)
@@ -2205,7 +2205,7 @@ EVT_BEGIN(kuribo4_talk)
                         END_IF
                         CALL(evt_msg_print, 0, STRING("irai_13_003"), 0, 0)
                     END_LOOP
-                    SET_VALUE(GSWF(5407), 1)
+                    SET_VALUE(GSWF_TROUBLE_WORK(2), 1)
                     ELSE
                     LOOP(0)
                         CALL(iri_13_update_item_tbl, LW(1), LW(0))
@@ -2289,7 +2289,7 @@ EVT_BEGIN(roten3_init)
 EVT_END()
 
 EVT_BEGIN(roten3_talk)
-    IF_INT_EQUAL(GSW(1420), 3)
+    IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_PRICE_ADJUSTMENT)
         SET_VALUE(LW(1), 0)
         SET_VALUE(LW(2), 0)
         SET_VALUE(LW(3), 0)
@@ -2317,8 +2317,8 @@ EVT_BEGIN(roten3_talk)
         END_IF
         CALL(evt_msg_print_add, 0, STRING("irai_03_05"))
         CALL(evt_sub_get_coin, 20)
-        SET_VALUE(GSW(1420), 0)
-        SET_VALUE(GSWF(5377), 1)
+        SET_VALUE(GSW_TROUBLE_ACCEPTED, TROUBLE_NONE)
+        SET_VALUE(GSWF_TROUBLE_DONE(TROUBLE_PRICE_ADJUSTMENT), 1)
         CALL(evt_msg_print, 0, STRING("sys_request_finish"), 0, 0)
         RETURN
     END_IF
@@ -2397,8 +2397,8 @@ EVT_END()
 
 static EVT_BEGIN(borodo2_init)
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_WALL_COLLISION)
-    IF_INT_EQUAL(GSW(1420), 4)
-        IF_INT_EQUAL(GSWF(5406), 1)
+    IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_FIND_THIS_GUY)
+        IF_INT_EQUAL(GSWF_TROUBLE_WORK(1), 1)
             CALL(evt_npc_set_position, STRING("me"), 0, -1000, 0)
             RETURN
         END_IF
@@ -2425,11 +2425,11 @@ static EVT_BEGIN(borodo2_escape)
 EVT_END()
 
 static EVT_BEGIN(borodo2_talk)
-    IF_INT_EQUAL(GSW(1420), 4)
-        IF_INT_EQUAL(GSWF(5405), 1)
-            IF_INT_EQUAL(GSWF(5406), 0)
+    IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_FIND_THIS_GUY)
+        IF_INT_EQUAL(GSWF_TROUBLE_WORK(0), 1)
+            IF_INT_EQUAL(GSWF_TROUBLE_WORK(1), 0)
                 CALL(evt_msg_print, 0, STRING("irai_04_003"), 0, STRING("me"))
-                SET_VALUE(GSWF(5406), 1)
+                SET_VALUE(GSWF_TROUBLE_WORK(1), 1)
                 SPAWN_EVENT(PTR(borodo2_escape))
                 RETURN
             END_IF
@@ -5683,12 +5683,12 @@ EVT_BEGIN(evt_cloud)
 EVT_END()
 
 EVT_BEGIN(iri_19_init)
-    IF_INT_EQUAL(GSW(1420), 19)
-        IF_INT_EQUAL(GSWF(5405), 1)
+    IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_IMPORTANT_THING)
+        IF_INT_EQUAL(GSWF_TROUBLE_WORK(0), 1)
 #ifdef VERSION_G8ME01
-            CALL(evt_item_entry, STRING("wr"), ITEM_WEDDING_RING, 525, 0, 160, ITEM_TYPE_STILL, GSWF(5406), 0)
+            CALL(evt_item_entry, STRING("wr"), ITEM_WEDDING_RING, 525, 0, 160, ITEM_TYPE_STILL, GSWF_TROUBLE_WORK(1), 0)
 #else
-            CALL(evt_item_entry, STRING("wr"), ITEM_WEDDING_RING, -65, 120, 196, ITEM_TYPE_STILL, GSWF(5406), 0)
+            CALL(evt_item_entry, STRING("wr"), ITEM_WEDDING_RING, -65, 120, 196, ITEM_TYPE_STILL, GSWF_TROUBLE_WORK(1), 0)
 #endif
         END_IF
     END_IF
@@ -5862,7 +5862,7 @@ EVT_BEGIN(gor_02_init_evt)
     SET_VALUE(LW(0), PTR(&door_data_05))
     CALL(evt_door_data_copy, LW(0), GW(11))
     SET_VALUE(LW(0), GW(11))
-    IF_INT_NOT_EQUAL(GSW(1420), 1)
+    IF_INT_NOT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_NEED_A_KEY)
         CALL(evt_door_set_param, GW(11), 0, PTR(&door_data_05_npc))
         ELSE
         CALL(evt_door_set_param, GW(11), 0, PTR(&door_data_05_npc_01))
@@ -5889,7 +5889,7 @@ EVT_BEGIN(gor_02_init_evt)
         SET_VALUE(LW(0), PTR(&door_data_06))
         CALL(evt_door_data_copy, LW(0), LW(1))
         SET_VALUE(LW(0), LW(1))
-        IF_INT_EQUAL(GSWF(5375), 0)
+        IF_INT_EQUAL(GSWF_TROUBLE_DONE(TROUBLE_NEED_A_KEY), 0)
             CALL(evt_door_set_param, LW(0), 0, PTR(&door_data_06_npc))
             ELSE
             CALL(evt_door_set_param, LW(0), 0, PTR(&door_data_06_npc_01))
