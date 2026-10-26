@@ -7,6 +7,12 @@
 #define UNIT_WORK_PART_DEFENSE 1
 
 // Mario (unit_mario, battle_mario, battle_seq)
+#define MARIO_WORK_SPIN_ON 2            // marioAttackEvent_TatsumakiJump: 1 keeps the spin loop running, 0 ends it
+#define MARIO_WORK_SPIN_SPEED_MAX 3     // ... the spin speed the loop ramps up to (30, then 45 / 60 by the action command)
+#define MARIO_WORK_SPIN_SPEED 4         // ... the current spin speed (degrees per frame)
+#define MARIO_WORK_SPIN_PITCH_TARGET 5  // ... the pitch the spin sound moves to (0, 1023, 2046, 3069 by the action command)
+#define MARIO_WORK_SPIN_PITCH 6         // ... the spin sound's current pitch
+#define MARIO_WORK_SPIN_PITCH_STEP 7    // ... its per-frame step toward the target ((target - current) / 10)
 #define MARIO_WORK_PINCH_VOICE 8        // counts the pinch-relief voice lines (odd: RELIEF2); reset once no one is in danger
 #define MARIO_PARTS_WORK_FIRE_BALL 0    // part 3 (the Fire Drive fireball): 0 ends _mario_fire_ball_controll
 

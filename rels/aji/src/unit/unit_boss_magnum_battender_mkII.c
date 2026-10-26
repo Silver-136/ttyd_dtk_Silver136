@@ -35,6 +35,20 @@
 #include "pmario_sound.h"
 #include "battle/battle_damage.h"
 
+// BattleUnit.work slots of the boss (btlevtcmd_Get/Set/AddUnitWork)
+#define UNIT_WORK_ARMS_OUT 0         // 1 while the arms fly as rocket punch units (arm_bunri_event sets it, arm_return_event clears it)
+#define UNIT_WORK_ARM_RETURN_TURNS 1 // set to 2 at launch; once arm_check finds no arm left, attack_event counts it down and at 0 runs arm_return_event
+#define UNIT_WORK_ARMS_LAUNCHED 2    // 1 after the first arm_bunri_event (its line plays only once)
+#define UNIT_WORK_ARM_0_UNUSED 3     // unit id of the rocket punch launched as arm 0; never read
+#define UNIT_WORK_ARM_1_UNUSED 4     // unit id of the rocket punch launched as arm 1; never read
+#define UNIT_WORK_DRILL_TALK_DONE 5  // 1 after the first drill_attack_event showed stg7_aji_41_02; while 0 attack_event always picks the drill
+#define UNIT_WORK_LOW_HP_TALK_DONE 6 // 1 once damage_event showed its low-HP line (dead_event sets it too)
+#define UNIT_WORK_AUD_TALK_DONE 7    // 1 after the first aud_attack_event (stg7_aji_41_04/05); at 35 HP or less with 20 or more audience it goes first while 0
+#define UNIT_WORK_AUD_HIT 8          // 1 once a machine-gun shot of aud_attack_event has hit; the 10th shot then hits without a new check
+// ... and of the rocket punch units it launches (unit_boss_rocket_punch*, the *_r and arm_event* events)
+#define ROCKET_PUNCH_WORK_SIDE 0     // which arm: 0/1, or 2/3 for an arm spawned by arm_return_event (no fly-in); arm_check reads it
+#define ROCKET_PUNCH_WORK_WAIT 1     // turns before it attacks: 1 at launch and after each attack (it attacks every second turn)
+
 typedef struct ArmWork {
     Vec prevPos;
     Vec pos;
@@ -465,11 +479,11 @@ static USER_FUNC(arm_check) {
     for (i = 0; i < 64; i++) {
         unit = wp->units[i];
         if (unit != NULL && (unit->currentKind == UNIT_X_FIST || unit->currentKind == UNIT_X_PUNCH)) {
-            if (side == 0 && (unit->work[0] == 0 || unit->work[0] == 2)) {
+            if (side == 0 && (unit->work[ROCKET_PUNCH_WORK_SIDE] == 0 || unit->work[ROCKET_PUNCH_WORK_SIDE] == 2)) {
                 found = i;
                 break;
             }
-            if (side == 1 && (unit->work[0] == 1 || unit->work[0] == 3)) {
+            if (side == 1 && (unit->work[ROCKET_PUNCH_WORK_SIDE] == 1 || unit->work[ROCKET_PUNCH_WORK_SIDE] == 3)) {
                 found = i;
                 break;
             }
@@ -862,10 +876,10 @@ static EVT_BEGIN(init_event)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 3, STRING("MGN_L_1"))
     SPAWN_EVENT(PTR(waku_event))
     CALL(arm_init)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 0, 0)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 1, 0)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 2, 0)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 5, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ARMS_OUT, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ARM_RETURN_TURNS, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ARMS_LAUNCHED, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_DRILL_TALK_DONE, 0)
     CALL(btlevtcmd_SetHomePos, UNIT_ID_SELF, 125, 0, 0)
     CALL(btlevtcmd_SetPos, UNIT_ID_SELF, 125, 0, 0)
     CALL(btlevtcmd_SetBaseRotate, UNIT_ID_SELF, 0, -55, 0)
@@ -897,12 +911,12 @@ static EVT_BEGIN(damage_event)
     END_IF
     CALL_CHILD(PTR(btldefaultevt_Damage))
     CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 3, kHidden)
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 6, LW(0))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_LOW_HP_TALK_DONE, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_GetHp, UNIT_ID_SELF, LW(0))
         IF_INT_LESS_OR_EQUAL(LW(0), 14)
             CALL(btlevtcmd_WaitAttackEnd)
-            CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 6, 1)
+            CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_LOW_HP_TALK_DONE, 1)
             CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
             CALL(evt_btl_camera_set_prilimit, BTL_CAM_PRI_EVENT)
             CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_EVENT, BTL_CAM_MODE_FREE)
@@ -923,7 +937,7 @@ static EVT_BEGIN(damage_event)
 EVT_END()
 
 static EVT_BEGIN(dead_event)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 6, 1)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_LOW_HP_TALK_DONE, 1)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     ADD(LW(1), 70)
     ADD(LW(2), 10)
@@ -1014,14 +1028,14 @@ static EVT_BEGIN(entry_event)
 EVT_END()
 
 static EVT_BEGIN(attack_event)
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 0, LW(0))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_ARMS_OUT, LW(0))
     IF_INT_EQUAL(LW(0), 1)
         CALL(arm_check, 0, LW(0))
         IF_INT_EQUAL(LW(0), -1)
             CALL(arm_check, 1, LW(0))
             IF_INT_EQUAL(LW(0), -1)
-                CALL(btlevtcmd_AddUnitWork, UNIT_ID_SELF, 1, -1)
-                CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 1, LW(0))
+                CALL(btlevtcmd_AddUnitWork, UNIT_ID_SELF, UNIT_WORK_ARM_RETURN_TURNS, -1)
+                CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_ARM_RETURN_TURNS, LW(0))
                 IF_INT_LESS_OR_EQUAL(LW(0), 0)
                     CALL_CHILD(PTR(arm_return_event))
                 END_IF
@@ -1034,9 +1048,9 @@ static EVT_BEGIN(attack_event)
         CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
         RETURN
     END_IF
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 0, LW(0))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_ARMS_OUT, LW(0))
     IF_INT_EQUAL(LW(0), 0)
-        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 5, LW(0))
+        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_DRILL_TALK_DONE, LW(0))
         IF_INT_EQUAL(LW(0), 0)
             CALL_CHILD(PTR(drill_attack_event))
             GOTO(99)
@@ -1046,7 +1060,7 @@ static EVT_BEGIN(attack_event)
             CALL_CHILD(PTR(drill_attack_event))
             GOTO(99)
             ELSE
-            CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 2, LW(0))
+            CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_ARMS_LAUNCHED, LW(0))
             IF_INT_EQUAL(LW(0), 0)
                 CALL_CHILD(PTR(arm_bunri_event))
                 GOTO(99)
@@ -1067,7 +1081,7 @@ static EVT_BEGIN(attack_event)
                     GOTO(99)
                 END_IF
                 ELSE
-                CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 7, LW(0))
+                CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_AUD_TALK_DONE, LW(0))
                 IF_INT_EQUAL(LW(0), 0)
                     CALL(get_aud_num, LW(0))
                     IF_INT_GREATER_OR_EQUAL(LW(0), 20)
@@ -1109,7 +1123,7 @@ static EVT_BEGIN(attack_event)
             CALL_CHILD(PTR(boomerang_attack_event))
             GOTO(99)
             ELSE
-            CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 7, LW(0))
+            CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_AUD_TALK_DONE, LW(0))
             IF_INT_EQUAL(LW(0), 0)
                 CALL(get_aud_num, LW(0))
                 IF_INT_GREATER_OR_EQUAL(LW(0), 20)
@@ -1156,9 +1170,9 @@ EVT_BEGIN(drill_attack_event)
         END_IF
         RETURN
     END_IF
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 5, LW(0))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_DRILL_TALK_DONE, LW(0))
     IF_INT_EQUAL(LW(0), 0)
-        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 5, 1)
+        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_DRILL_TALK_DONE, 1)
         CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
         CALL(evt_btl_camera_set_prilimit, BTL_CAM_PRI_EVENT)
         CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_EVENT, BTL_CAM_MODE_FREE)
@@ -1376,7 +1390,7 @@ EVT_BEGIN(aud_attack_event)
         END_IF
         RETURN
     END_IF
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 7, LW(0))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_AUD_TALK_DONE, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
         CALL(evt_btl_camera_set_prilimit, BTL_CAM_PRI_EVENT)
@@ -1385,7 +1399,7 @@ EVT_BEGIN(aud_attack_event)
         SUBTRACT(LW(0), 20)
         CALL(evt_btl_camera_set_moveto, 1, LW(0), 160, 600, LW(0), 110, -100, 20, 11)
         WAIT_FRAMES(20)
-        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 0, LW(0))
+        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_ARMS_OUT, LW(0))
         IF_INT_EQUAL(LW(0), 0)
             CALL(btlevtcmd_SetTalkPose, UNIT_ID_SELF, STRING("MGN_T_1"))
             CALL(btlevtcmd_SetStayPose, UNIT_ID_SELF, STRING("MGN_S_1"))
@@ -1414,7 +1428,7 @@ EVT_BEGIN(aud_attack_event)
         WAIT_MS(700)
         CALL(evt_snd_sfxoff, LW(15))
     END_SIBLING_EVENT
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 0, LW(0))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_ARMS_OUT, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("MGN_A2_1"))
     ELSE
@@ -1424,7 +1438,7 @@ EVT_BEGIN(aud_attack_event)
     BEGIN_SIBLING_EVENT
         CALL(drill_jet, UNIT_ID_SELF)
     END_SIBLING_EVENT
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 0, LW(0))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_ARMS_OUT, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("MGN_A2_2"))
     ELSE
@@ -1442,7 +1456,7 @@ EVT_BEGIN(aud_attack_event)
     BEGIN_SIBLING_EVENT
         CALL(aud_jet, UNIT_ID_SELF)
     END_SIBLING_EVENT
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 0, LW(0))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_ARMS_OUT, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("MGN_A2_7"))
     ELSE
@@ -1454,7 +1468,7 @@ EVT_BEGIN(aud_attack_event)
     CALL(btlevtcmd_SetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     ADD(LW(1), 300)
     CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), 25, LW(2), 60, 0, EASING_QUADRATIC_OUT, 0, MOVE_SOUND_FROM_TABLE)
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 0, LW(0))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_ARMS_OUT, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("MGN_A2_3"))
     ELSE
@@ -1466,7 +1480,7 @@ EVT_BEGIN(aud_attack_event)
         CALL(aud_scream_fadeout)
     END_SIBLING_EVENT
     CALL(evt_snd_sfxoff, LW(15))
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 0, LW(0))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_ARMS_OUT, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("MGN_A2_7"))
     ELSE
@@ -1485,7 +1499,7 @@ EVT_BEGIN(aud_attack_event)
     BEGIN_SIBLING_EVENT
         CALL(drill_jet, UNIT_ID_SELF)
     END_SIBLING_EVENT
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 0, LW(0))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_ARMS_OUT, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("MGN_A2_2"))
     ELSE
@@ -1504,16 +1518,16 @@ EVT_BEGIN(aud_attack_event)
         WAIT_MS(400)
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_MBTN_CHEST_OPEN1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     END_SIBLING_EVENT
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 0, LW(0))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_ARMS_OUT, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("MGN_A2_4"))
     ELSE
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("MGN_A5_4"))
     END_IF
     WAIT_MS(1200)
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 7, LW(0))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_AUD_TALK_DONE, LW(0))
     IF_INT_EQUAL(LW(0), 0)
-        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 7, 1)
+        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_AUD_TALK_DONE, 1)
         CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
         CALL(evt_btl_camera_set_prilimit, BTL_CAM_PRI_EVENT)
         CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_EVENT, BTL_CAM_MODE_FREE)
@@ -1521,7 +1535,7 @@ EVT_BEGIN(aud_attack_event)
         SUBTRACT(LW(0), 20)
         CALL(evt_btl_camera_set_moveto, 1, LW(0), 160, 600, LW(0), 110, -100, 20, 11)
         WAIT_FRAMES(20)
-        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 0, LW(0))
+        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_ARMS_OUT, LW(0))
         IF_INT_EQUAL(LW(0), 0)
             CALL(btlevtcmd_SetTalkPose, UNIT_ID_SELF, STRING("MGN_T_3"))
             CALL(btlevtcmd_SetStayPose, UNIT_ID_SELF, STRING("MGN_A2_8"))
@@ -1540,14 +1554,14 @@ EVT_BEGIN(aud_attack_event)
     CALL(btlevtcmd_GetPartsPos, LW(3), LW(4), LW(0), LW(1), LW(2))
     ADD(LW(1), 20)
     CALL(aud_target_mark, LW(0), LW(1), LW(2))
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 0, LW(0))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_ARMS_OUT, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("MGN_A2_5"))
     ELSE
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("MGN_A5_5"))
     END_IF
     SET_VALUE(LW(10), 0)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 8, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_AUD_HIT, 0)
     LOOP(10)
         WAIT_MS(250)
         CALL_CHILD(aud_attack_event_sub)
@@ -1561,7 +1575,7 @@ EVT_BEGIN(aud_attack_event)
     CALL(evt_eff, STRING(""), STRING("machingegun"), 0, LW(0), LW(1), LW(2), 170, FLOAT(8.0f), FLOAT(2.0996094f), 0, 0, 0, 0, 0)
     WAIT_MS(250)
     CALL(evt_eff, STRING(""), STRING("machingegun"), 0, LW(0), LW(1), LW(2), 185, FLOAT(8.0f), FLOAT(2.0996094f), 0, 0, 0, 0, 0)
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 0, LW(0))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_ARMS_OUT, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("MGN_A2_8"))
     ELSE
@@ -1576,7 +1590,7 @@ EVT_BEGIN(aud_attack_event)
         WAIT_MS(300)
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_MBTN_MOVE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     END_SIBLING_EVENT
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 0, LW(0))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_ARMS_OUT, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("MGN_A2_6"))
     ELSE
@@ -1590,7 +1604,7 @@ EVT_END()
 
 EVT_BEGIN(aud_attack_event_sub)
     IF_INT_EQUAL(LW(10), 9)
-        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 8, LW(0))
+        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_AUD_HIT, LW(0))
         IF_INT_EQUAL(LW(0), 1)
             GOTO(91)
         END_IF
@@ -1633,7 +1647,7 @@ EVT_BEGIN(aud_attack_event_sub)
     ELSE
         CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_batten_aud_attack), 0, LW(5))
     END_IF
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 8, 1)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_AUD_HIT, 1)
     GOTO(95)
     LABEL(95)
     ADD(LW(10), 1)
@@ -1641,7 +1655,7 @@ EVT_BEGIN(aud_attack_event_sub)
 EVT_END()
 
 static EVT_BEGIN(arm_bunri_event)
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 2, LW(0))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_ARMS_LAUNCHED, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
         CALL(evt_btl_camera_set_prilimit, BTL_CAM_PRI_EVENT)
@@ -1656,9 +1670,9 @@ static EVT_BEGIN(arm_bunri_event)
         CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_ON)
         WAIT_MS(500)
     END_IF
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 0, 1)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 2, 1)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 1, 2)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ARMS_OUT, 1)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ARMS_LAUNCHED, 1)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ARM_RETURN_TURNS, 2)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_MBTN_PUNCH_ACTIVE1"), EVT_NULLPTR, 0, LW(15))
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("MGN_A1_1"))
     WAIT_MS(600)
@@ -1675,14 +1689,14 @@ static EVT_BEGIN(arm_bunri_event)
     CALL(evt_btl_camera_shake_w, 0, 3, 0, 20, 0)
     WAIT_MS(100)
     CALL(btlevtcmd_SpawnUnit, LW(3), PTR(&entry_rocket_punch), 0)
-    CALL(btlevtcmd_SetUnitWork, LW(3), 0, 0)
-    CALL(btlevtcmd_SetUnitWork, LW(3), 1, 1)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 3, LW(3))
+    CALL(btlevtcmd_SetUnitWork, LW(3), ROCKET_PUNCH_WORK_SIDE, 0)
+    CALL(btlevtcmd_SetUnitWork, LW(3), ROCKET_PUNCH_WORK_WAIT, 1)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ARM_0_UNUSED, LW(3))
     CALL(btlevtcmd_AnimeChangePoseType, LW(3), 1, POSE_TYPE_ACTION)
     CALL(btlevtcmd_SpawnUnit, LW(4), PTR(&entry_rocket_punch), 0)
-    CALL(btlevtcmd_SetUnitWork, LW(4), 0, 1)
-    CALL(btlevtcmd_SetUnitWork, LW(4), 1, 1)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 4, LW(4))
+    CALL(btlevtcmd_SetUnitWork, LW(4), ROCKET_PUNCH_WORK_SIDE, 1)
+    CALL(btlevtcmd_SetUnitWork, LW(4), ROCKET_PUNCH_WORK_WAIT, 1)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ARM_1_UNUSED, LW(4))
     CALL(btlevtcmd_AnimeChangePoseType, LW(4), 1, POSE_TYPE_ACTION)
     CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, 1, PTR(pose_table_no_arm))
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_ACTION)
@@ -1691,16 +1705,16 @@ static EVT_BEGIN(arm_bunri_event)
 EVT_END()
 
 static EVT_BEGIN(arm_return_event)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 0, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ARMS_OUT, 0)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("MGN_A1_6"))
     WAIT_MS(600)
     CALL(btlevtcmd_SpawnUnit, LW(3), PTR(&entry_rocket_punch), 0)
-    CALL(btlevtcmd_SetUnitWork, LW(3), 0, 2)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 3, LW(3))
+    CALL(btlevtcmd_SetUnitWork, LW(3), ROCKET_PUNCH_WORK_SIDE, 2)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ARM_0_UNUSED, LW(3))
     CALL(btlevtcmd_AnimeChangePoseType, LW(3), 1, POSE_TYPE_ACTION)
     CALL(btlevtcmd_SpawnUnit, LW(4), PTR(&entry_rocket_punch), 0)
-    CALL(btlevtcmd_SetUnitWork, LW(4), 0, 3)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 4, LW(4))
+    CALL(btlevtcmd_SetUnitWork, LW(4), ROCKET_PUNCH_WORK_SIDE, 3)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ARM_1_UNUSED, LW(4))
     CALL(btlevtcmd_AnimeChangePoseType, LW(4), 1, POSE_TYPE_ACTION)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_MBTN_PUNCH_FLY1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     BEGIN_SIBLING_EVENT
@@ -1894,7 +1908,7 @@ static EVT_BEGIN(init_event_r)
     CALL(btlevtcmd_SetEventDamage, UNIT_ID_SELF, PTR(damage_event_r))
     CALL(btlevtcmd_SetEventConfusion, UNIT_ID_SELF, PTR(btldefaultevt_Confuse))
     CALL(btlevtcmd_SetBaseRotate, UNIT_ID_SELF, 0, -90, 0)
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 0, LW(0))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, ROCKET_PUNCH_WORK_SIDE, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL(arm_init2, 0)
     END_IF
@@ -1908,7 +1922,7 @@ static EVT_BEGIN(init_event_r)
         CALL(arm_init2, 1)
     END_IF
     SPAWN_EVENT(arm_event)
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 0, LW(0))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, ROCKET_PUNCH_WORK_SIDE, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_SetPos, UNIT_ID_SELF, 30, 100, -40)
         CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, -100, 150, -60, 20, 0, EASING_QUADRATIC_OUT, 0, MOVE_SOUND_FROM_TABLE)
@@ -1938,7 +1952,7 @@ static EVT_BEGIN(arm_event)
         CALL_CHILD(PTR(arm_event_end))
         GOTO(99)
     END_IF
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 0, LW(0))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, ROCKET_PUNCH_WORK_SIDE, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL(arm_main, UNIT_ID_SELF, 0)
     END_IF
@@ -1957,7 +1971,7 @@ static EVT_BEGIN(arm_event)
 EVT_END()
 
 static EVT_BEGIN(arm_event_end)
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 0, LW(0))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, ROCKET_PUNCH_WORK_SIDE, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL(arm_end, 0)
     END_IF
@@ -1988,13 +2002,13 @@ static EVT_BEGIN(damage_event_r)
 EVT_END()
 
 static EVT_BEGIN(attack_event_r)
-    CALL(btlevtcmd_AddUnitWork, UNIT_ID_SELF, 1, -1)
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 1, LW(0))
+    CALL(btlevtcmd_AddUnitWork, UNIT_ID_SELF, ROCKET_PUNCH_WORK_WAIT, -1)
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, ROCKET_PUNCH_WORK_WAIT, LW(0))
     IF_INT_GREATER_OR_EQUAL(LW(0), 1)
         CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
         RETURN
     END_IF
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 1, 1)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, ROCKET_PUNCH_WORK_WAIT, 1)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), PTR(&weapon_batten_rocket_attack))
     CALL(btlevtcmd_ChoiceSamplingEnemy, PTR(&weapon_batten_rocket_attack), LW(3), LW(4))
@@ -2076,7 +2090,7 @@ static EVT_BEGIN(attack_event_r)
     END_IF
     WAIT_MS(250)
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 0, LW(10))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, ROCKET_PUNCH_WORK_SIDE, LW(10))
     IF_INT_EQUAL(LW(10), 0)
         CALL(btlevtcmd_SetPos, UNIT_ID_SELF, 300, LW(1), -100)
     ELSE
