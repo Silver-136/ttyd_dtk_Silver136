@@ -130,13 +130,13 @@ void BattleStageMain(void) {
     batSpotMain();
     for (i = 0; i < 12; i++) {
         l = &s->lights[i];
-        if (l->flags & 1) {
+        if (l->flags & STAGE_LIGHT_ACTIVE) {
             if (l->colorTime > 0) {
                 l->colorTime--;
                 l->color.r = intplGetValue(l->colorMode, l->colorStart.r, l->colorTarget.r, l->colorMax - l->colorTime, l->colorMax);
                 l->color.g = intplGetValue(l->colorMode, l->colorStart.g, l->colorTarget.g, l->colorMax - l->colorTime, l->colorMax);
                 l->color.b = intplGetValue(l->colorMode, l->colorStart.b, l->colorTarget.b, l->colorMax - l->colorTime, l->colorMax);
-                if ((l->flags & 2) && l->color.r == 0 && l->color.g == 0 && l->color.b == 0) {
+                if ((l->flags & STAGE_LIGHT_RELEASING) && l->color.r == 0 && l->color.g == 0 && l->color.b == 0) {
                     l->flags = 0;
                     continue;
                 }
@@ -151,14 +151,14 @@ void BattleStageMain(void) {
                 l->pos.y = intplGetValue(l->posMode, l->posStart.y, l->posTarget.y, l->posMax - l->posTime, l->posMax);
                 l->pos.z = intplGetValue(l->posMode, l->posStart.z, l->posTarget.z, l->posMax - l->posTime, l->posMax);
             }
-            if (l->flags & 4) {
+            if (l->flags & STAGE_LIGHT_SPLINE_UNUSED) {
                 sp = l->data;
                 l->target.x = getSpline(sp->x[0], sp->x[1], sp->x[2], sp->x[3], sp->t, sp->n, l->targetTime);
                 l->target.y = getSpline(sp->y[0], sp->y[1], sp->y[2], sp->y[3], sp->t, sp->n, l->targetTime);
                 l->target.z = getSpline(sp->z[0], sp->z[1], sp->z[2], sp->z[3], sp->t, sp->n, l->targetTime);
                 l->targetTime++;
                 if (l->targetTime >= sp->t[sp->n - 1]) {
-                    if (l->flags & 8) {
+                    if (l->flags & STAGE_LIGHT_SPLINE_LOOP_UNUSED) {
                         l->targetTime -= sp->t[sp->n - 1];
                     } else {
                         l->targetTime = sp->t[sp->n - 1];
@@ -312,7 +312,7 @@ void BattleStageDispLight(CameraId camId, void* param) {
     GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
     GXLoadPosMtxImm(cam->view, GX_PNMTX0);
     for (i = 0; i < 12; i++) {
-        if (s->lights[i].flags & 1) {
+        if (s->lights[i].flags & STAGE_LIGHT_ACTIVE) {
             Mtx m;
             Vec v;
             Vec axis;
@@ -380,7 +380,7 @@ s32 BattleStageGetLightNumberByName(const char* name) {
 
     for (i = 0; i < 12; i++) {
         StageLight* l = &s->lights[i];
-        if ((l->flags & 1) && !strcmp(l->name, name)) {
+        if ((l->flags & STAGE_LIGHT_ACTIVE) && !strcmp(l->name, name)) {
             return i;
         }
     }
@@ -393,13 +393,13 @@ s32 BattleStageSysLightEntry(const char* name) {
 
     for (i = 0; i <= 6; i++) {
         StageLight* l = &s->lights[i];
-        if ((l->flags & 1) && !strcmp(l->name, name)) {
+        if ((l->flags & STAGE_LIGHT_ACTIVE) && !strcmp(l->name, name)) {
         }
     }
     for (i = 0; i < 7; i++) {
         StageLight* l = &s->lights[i];
-        if (!(l->flags & 1)) {
-            l->flags = 1;
+        if (!(l->flags & STAGE_LIGHT_ACTIVE)) {
+            l->flags = STAGE_LIGHT_ACTIVE;
             strcpy(l->name, name);
             break;
         }
@@ -413,11 +413,11 @@ void BattleStageLightRelease(s32 idx, s32 time, u8 mode) {
 
     l = ((BattleStage*)l)->lights + idx;
 
-    if (l->flags & 1) {
+    if (l->flags & STAGE_LIGHT_ACTIVE) {
         if (time == 0) {
             l->flags = 0;
         } else {
-            l->flags |= 2;
+            l->flags |= STAGE_LIGHT_RELEASING;
             l->colorStart = (GXColor){l->color.r, l->color.g, l->color.b};
             { GXColor z = {0, 0, 0}; l->colorTarget = z; }
             l->colorTime = time;
@@ -490,7 +490,7 @@ void BattleStageLightSetTarget(s32 idx, f32 x, f32 y, f32 z, s32 time, u8 mode) 
     l->targetTime = time;
     l->targetMax = time;
     l->targetMode = mode;
-    l->flags &= ~4;
+    l->flags &= ~STAGE_LIGHT_SPLINE_UNUSED;
     if (time == 0) {
         l->target = (Vec){x, y, z};
     }
@@ -657,7 +657,7 @@ void batSpotDisp(CameraId camId, void* param) {
     GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_AND, GX_ALWAYS, 0);
     GXSetNumChans(1);
     for (i = 0, e = wp->entries; i < wp->count; i++, e++) {
-        if ((e->flags & 1) && (e->flags & 2)) {
+        if ((e->flags & SPOT_FLAG_ACTIVE) && (e->flags & SPOT_FLAG_VISIBLE_UNUSED)) {
             GXSetCullMode(GX_CULL_BACK);
             GXSetAlphaUpdate(GX_TRUE);
             GXSetColorUpdate(GX_FALSE);
@@ -728,7 +728,7 @@ BattleSpotEntry* batSpotEntry(void) {
     BattleSpotEntry* entry = wp->entries;
 
     for (i = 0; i < wp->count; i++, entry++) {
-        if (!(entry->flags & 1)) {
+        if (!(entry->flags & SPOT_FLAG_ACTIVE)) {
             break;
         }
     }
@@ -737,7 +737,7 @@ BattleSpotEntry* batSpotEntry(void) {
     entry->scale = (Vec){1.0, 1.0, 1.0};
     entry->rot = (Vec){0.0, 0.0, 0.0};
     entry->color = (GXColor){0, 0, 0, 0};
-    entry->flags |= 1;
+    entry->flags |= SPOT_FLAG_ACTIVE;
 
     return entry;
 }

@@ -4,8 +4,12 @@
 #include "battle/battle_stage_object.h"
 #include "battle/battle_database_common.h"
 
+// BattleSpotEntry.flags
+#define SPOT_FLAG_ACTIVE (1 << 0)
+#define SPOT_FLAG_VISIBLE_UNUSED (1 << 1) // drawn when set; nothing sets it, so no spot cone is drawn
+
 typedef struct BattleSpotEntry {
-    u16 flags; // 0x0
+    u16 flags; // 0x0, SPOT_FLAG_*
     u8 pad_02[0x4 - 0x2]; // 0x2, never accessed
     Vec pos; // 0x4, cone position
     Vec rot; // 0x10, cone rotation, degrees
@@ -40,8 +44,14 @@ typedef struct BattleStageData {
     s8 disableBgBDestroy; //0x1B3
 } BattleStageData;
 
+// StageLight.flags
+#define STAGE_LIGHT_ACTIVE (1 << 0)
+#define STAGE_LIGHT_RELEASING (1 << 1)          // BattleStageLightRelease: freed once faded to black
+#define STAGE_LIGHT_SPLINE_UNUSED (1 << 2)      // target follows a spline (data); nothing sets it
+#define STAGE_LIGHT_SPLINE_LOOP_UNUSED (1 << 3) // the spline loops
+
 typedef struct StageLight {
-    u32 flags;              // 0x0
+    u32 flags;              // 0x0, STAGE_LIGHT_*
     char name[0x20];        // 0x4
     GXColor color;          // 0x24
     GXColor colorStart;     // 0x28
