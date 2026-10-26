@@ -515,7 +515,7 @@ EVT_BEGIN(evt_daijisouna_kami)
     ADD(LW(1), 15)
     CALL(evt_item_entry, STRING("dummy"), ITEM_VITAL_PAPER, LW(0), LW(1), LW(2), ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
     CALL(evt_msg_print, 0, STRING("stg6_rsh_173"), 0, STRING("me"))
-    CALL(evt_eff_fukidashi, 1, STRING("a"), STRING("サラリーマン"), 0, 0, 0, 0, 0, 0, 0, 0)
+    CALL(evt_eff_fukidashi, FUKIDASHI_AT_NPC, STRING("a"), STRING("サラリーマン"), 0, 0, 0, 0, 0, 0, 0, 0)
     WAIT_MS(1200)
     BEGIN_INLINE_EVENT
         WAIT_MS(500)

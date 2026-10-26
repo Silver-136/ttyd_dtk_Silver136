@@ -1930,7 +1930,7 @@ static EVT_BEGIN(evt_key)
     BEGIN_INLINE_EVENT_GET_ID(LW(11))
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         CALL(evt_snd_sfxon_3d, STRING(("SFX_VOICE_MARIO_FIND1_3")), LW(0), LW(1), LW(2), 0)
-        CALL(evt_eff_fukidashi, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+        CALL(evt_eff_fukidashi, FUKIDASHI_AT_MARIO, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
         WAIT_MS(1500)
     END_INLINE_EVENT
     CALL(evt_snd_bgmoff, PSND_PAUSE)

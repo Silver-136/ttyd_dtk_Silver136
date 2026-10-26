@@ -1217,7 +1217,7 @@ EVT_BEGIN(onryo_event)
     BEGIN_INLINE_EVENT
         CALL(evt_npc_get_position, STRING(/*"ガラの悪い水夫"*/"\x83\x4B\x83\x89\x82\xCC\x88\xAB\x82\xA2\x90\x85\x95\x76"), LW(0), LW(1), LW(2))
         CALL(evt_snd_sfxon_3d, STRING("SFX_EVT_NPC_QUESTION_MARK1"), LW(0), LW(1), LW(2), 0)
-        CALL(evt_eff_fukidashi, 2, STRING(""), 0, 1, 0, LW(0), LW(1), LW(2), 30, 0, 90)
+        CALL(evt_eff_fukidashi, FUKIDASHI_AT_POS, STRING(""), 0, 1, 0, LW(0), LW(1), LW(2), 30, 0, 90)
     END_INLINE_EVENT
     WAIT_MS(1000)
     CALL(evt_npc_set_ry, STRING(/*"ガラの悪い水夫"*/"\x83\x4B\x83\x89\x82\xCC\x88\xAB\x82\xA2\x90\x85\x95\x76"), 90)
@@ -1239,7 +1239,7 @@ EVT_BEGIN(onryo_event)
     BEGIN_INLINE_EVENT
         CALL(evt_npc_get_position, STRING(/*"ガラの悪い水夫"*/"\x83\x4B\x83\x89\x82\xCC\x88\xAB\x82\xA2\x90\x85\x95\x76"), LW(0), LW(1), LW(2))
         CALL(evt_snd_sfxon_3d, STRING("SFX_EVT_NPC_BIKKURI_MARK1"), LW(0), LW(1), LW(2), 0)
-        CALL(evt_eff_fukidashi, 2, STRING(""), 0, 0, 0, LW(0), LW(1), LW(2), 30, 0, 60)
+        CALL(evt_eff_fukidashi, FUKIDASHI_AT_POS, STRING(""), 0, 0, 0, LW(0), LW(1), LW(2), 30, 0, 60)
     END_INLINE_EVENT
     WAIT_MS(1000)
     BEGIN_INLINE_EVENT
@@ -1452,7 +1452,7 @@ EVT_BEGIN(onryo_event)
         CALL(evt_npc_get_position, STRING(/*"マルコ"*/"\x83\x7D\x83\x8B\x83\x52"), LW(0), LW(1), LW(2))
         CALL(evt_snd_sfxon_3d, STRING("SFX_EVT_NPC_BIKKURI_MARK1"), LW(0), LW(1), LW(2), 0)
         ADD(LW(1), 20)
-        CALL(evt_eff_fukidashi, 2, STRING(""), 0, 0, 0, LW(0), LW(1), LW(2), 30, 0, 90)
+        CALL(evt_eff_fukidashi, FUKIDASHI_AT_POS, STRING(""), 0, 0, 0, LW(0), LW(1), LW(2), 30, 0, 90)
     END_INLINE_EVENT
     WAIT_MS(1000)
     CALL(evt_msg_print, 0, STRING("stg5_sea_20"), 0, STRING(/*"マルコ"*/"\x83\x7D\x83\x8B\x83\x52"))

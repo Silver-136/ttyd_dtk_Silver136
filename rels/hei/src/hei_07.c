@@ -400,7 +400,7 @@ EVT_BEGIN(a_sekizou_1)
     IF_INT_EQUAL(GW(0), 0)
         BEGIN_INLINE_EVENT
             WAIT_MS(2000)
-            CALL(evt_eff_fukidashi, 0, STRING("fukidashi"), 0, 1, 0, 0, 0, 0, 0, 0, 0)
+            CALL(evt_eff_fukidashi, FUKIDASHI_AT_MARIO, STRING("fukidashi"), 0, 1, 0, 0, 0, 0, 0, 0, 0)
             CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
             CALL(evt_snd_sfxon_3d, STRING("SFX_QUESTION_MARK1"), LW(0), LW(1), LW(2), 0)
         END_INLINE_EVENT

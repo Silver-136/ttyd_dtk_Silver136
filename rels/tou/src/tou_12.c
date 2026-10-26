@@ -82,7 +82,7 @@ static EVT_BEGIN(evt_kinoshikowa)
     END_LOOP
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)
-    CALL(evt_eff_fukidashi, 1, 0, STRING("キノシコワ"), 0, 0, 0, 0, 0, 0, 0, 0)
+    CALL(evt_eff_fukidashi, FUKIDASHI_AT_NPC, 0, STRING("キノシコワ"), 0, 0, 0, 0, 0, 0, 0, 0)
     WAIT_MS(500)
     BEGIN_INLINE_EVENT
         CALL(evt_npc_status_onoff, 1, STRING("キノシコワ"), NPC_STATUS_FACE_MOVE_DIR)

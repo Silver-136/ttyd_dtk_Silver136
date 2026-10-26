@@ -556,7 +556,7 @@ EVT_BEGIN(apper_toge)
         CALL(evt_party_move_pos2, 0, 270, -130, FLOAT(120.0f))
     END_INLINE_EVENT
     WAIT_MS(500)
-    CALL(evt_eff_fukidashi, 1, STRING(""), LW(10), 0, 0, 0, 0, 0, 0, 0, 60)
+    CALL(evt_eff_fukidashi, FUKIDASHI_AT_NPC, STRING(""), LW(10), 0, 0, 0, 0, 0, 0, 0, 60)
     BEGIN_INLINE_EVENT
         CALL(evt_mario_set_dir, 90, 200, 0)
     END_INLINE_EVENT

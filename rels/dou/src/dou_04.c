@@ -465,7 +465,7 @@ EVT_BEGIN(kuribo_talk)
                 WAIT_MS(500)
                 CALL(evt_msg_print, 0, STRING("irai_21_003"), 0, STRING("me"))
                 CALL(evt_msg_print, 0, STRING("irai_21_004"), 0, STRING("party"))
-                CALL(evt_eff_fukidashi, 1, STRING(""), STRING("me"), 0, 0, 0, 0, 0, 0, 0, 30)
+                CALL(evt_eff_fukidashi, FUKIDASHI_AT_NPC, STRING(""), STRING("me"), 0, 0, 0, 0, 0, 0, 0, 30)
                 WAIT_MS(600)
                 CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
                 ADD(LW(0), 5)
@@ -493,7 +493,7 @@ EVT_BEGIN(kuribo_talk)
                 WAIT_MS(800)
                 CALL(evt_msg_print, 0, STRING("irai_21_006"), 0, STRING("party"))
                 WAIT_MS(500)
-                CALL(evt_eff_fukidashi, 3, STRING(""), 0, 0, 0, 0, 0, 0, 0, 0, 30)
+                CALL(evt_eff_fukidashi, FUKIDASHI_AT_PARTNER, STRING(""), 0, 0, 0, 0, 0, 0, 0, 0, 30)
                 WAIT_MS(600)
                 CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
                 SUBTRACT(LW(0), 15)
@@ -510,7 +510,7 @@ EVT_BEGIN(kuribo_talk)
                     CALL(evt_mario_set_pose, STRING("M_S_1"))
                 END_INLINE_EVENT
                 BEGIN_INLINE_EVENT
-                    CALL(evt_eff_fukidashi, 1, STRING(""), STRING("me"), 0, 0, 0, 0, 0, 0, 0, 30)
+                    CALL(evt_eff_fukidashi, FUKIDASHI_AT_NPC, STRING(""), STRING("me"), 0, 0, 0, 0, 0, 0, 0, 30)
                     WAIT_MS(600)
                 END_INLINE_EVENT
                 BEGIN_INLINE_EVENT
@@ -532,8 +532,8 @@ EVT_BEGIN(kuribo_talk)
                 WAIT_MS(1000)
                 BEGIN_INLINE_EVENT
                     WAIT_MS(200)
-                    CALL(evt_eff_fukidashi, 0, STRING(""), 0, 0, 0, 0, 0, 0, 0, 0, 30)
-                    CALL(evt_eff_fukidashi, 3, STRING(""), 0, 0, 0, 0, 0, 0, 0, 0, 30)
+                    CALL(evt_eff_fukidashi, FUKIDASHI_AT_MARIO, STRING(""), 0, 0, 0, 0, 0, 0, 0, 0, 30)
+                    CALL(evt_eff_fukidashi, FUKIDASHI_AT_PARTNER, STRING(""), 0, 0, 0, 0, 0, 0, 0, 0, 30)
                 END_INLINE_EVENT
                 CALL(evt_msg_print, 0, STRING("irai_21_009"), 0, STRING("me"))
                 BEGIN_INLINE_EVENT

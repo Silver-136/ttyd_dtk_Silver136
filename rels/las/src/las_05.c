@@ -1096,7 +1096,7 @@ static EVT_BEGIN(senkaron_event)
         CALL(evt_mario_set_pose, STRING("M_S_1"))
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_FIND1_3"), LW(0), LW(1), LW(2), 0)
-        CALL(evt_eff_fukidashi, 0, STRING("fukidashi"), 0, 0, 0, 0, 0, 0, 0, 0, 0)
+        CALL(evt_eff_fukidashi, FUKIDASHI_AT_MARIO, STRING("fukidashi"), 0, 0, 0, 0, 0, 0, 0, 0, 0)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_DANGER4"))
         WAIT_MS(1000)
         BEGIN_INLINE_EVENT

@@ -233,11 +233,11 @@ EVT_BEGIN(evt_chuchu)
         CALL(evt_mario_set_dir_npc, STRING("チュチュリーナ"))
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_FIND1_2"), LW(0), LW(1), LW(2), 0)
-        CALL(evt_eff_fukidashi, 0, STRING("m"), 0, 0, 0, 0, 0, 0, 0, 0, 0)
+        CALL(evt_eff_fukidashi, FUKIDASHI_AT_MARIO, STRING("m"), 0, 0, 0, 0, 0, 0, 0, 0, 0)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
         CALL(evt_party_set_dir, 0, 270, 300)
-        CALL(evt_eff_fukidashi, 3, STRING("p"), 0, 0, 0, 0, 0, 0, 0, 0, 0)
+        CALL(evt_eff_fukidashi, FUKIDASHI_AT_PARTNER, STRING("p"), 0, 0, 0, 0, 0, 0, 0, 0, 0)
     END_INLINE_EVENT
     CALL(evt_set_dir_to_target, STRING("チュチュリーナ"), STRING("mario"))
     WAIT_MS(500)
@@ -330,7 +330,7 @@ EVT_BEGIN(evt_chuchu)
     BEGIN_INLINE_EVENT_GET_ID(LW(11))
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_FIND1_3"), LW(0), LW(1), LW(2), 0)
-        CALL(evt_eff_fukidashi, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+        CALL(evt_eff_fukidashi, FUKIDASHI_AT_MARIO, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
         WAIT_MS(1500)
     END_INLINE_EVENT
     CALL(evt_snd_bgmoff, PSND_PAUSE)

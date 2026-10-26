@@ -916,34 +916,34 @@ USER_FUNC(evt_eff_fukidashi) {
     f32 y = evtGetFloat(event, args[6]);
     f32 z = evtGetFloat(event, args[7]);
     f32 w = evtGetFloat(event, args[8]);
-    f32 duration = evtGetFloat(event, args[9]);
-    s32 d = evtGetValue(event, args[10]);
+    f32 angle = evtGetFloat(event, args[9]);
+    s32 duration = evtGetValue(event, args[10]);
     EffectEntry* entry = NULL;
     void* p;
     f32 h;
     f32 zz;
 
     switch (mode) {
-        case 0:
+        case FUKIDASHI_AT_MARIO:
             h = marioGetPtr()->wPlayerCollisionBox.y;
             {
                 f32 yy = 2.0f * h / 3.0f;
                 f32 ww = h / 3.0f;
-                entry = effFukidashiEntry(a, number, (NpcEntry*)-1, d, 0.0f, yy, 0.0f, ww, duration);
+                entry = effFukidashiEntry(a, number, (NpcEntry*)-1, duration, 0.0f, yy, 0.0f, ww, angle);
             }
             break;
-        case 1:
+        case FUKIDASHI_AT_NPC:
             p = !strcmp(npcName, "me") ? (void*)event->ownerNPC : (void*)npcNameToPtr(npcName);
             {
                 f32 yy = 2.0f * ((NpcEntry*)p)->height / 3.0f;
                 f32 ww = ((NpcEntry*)p)->height / 3.0f;
-                entry = effFukidashiEntry(a, number, (NpcEntry*)p, d, 0.0f, yy, 0.0f, ww, duration);
+                entry = effFukidashiEntry(a, number, (NpcEntry*)p, duration, 0.0f, yy, 0.0f, ww, angle);
             }
             break;
-        case 2:
-            entry = effFukidashiEntry(a, number, NULL, d, x, y, z, w, duration);
+        case FUKIDASHI_AT_POS:
+            entry = effFukidashiEntry(a, number, NULL, duration, x, y, z, w, angle);
             break;
-        case 3:
+        case FUKIDASHI_AT_PARTNER:
             p = partyGetPtr(marioGetPartyId());
             if (p) {
 #ifdef VERSION_G8ME01
@@ -953,26 +953,26 @@ USER_FUNC(evt_eff_fukidashi) {
                     f32 ww;
                     if (((PartyEntry*)p)->currentMemberId == PARTY_MEMBER_FLURRIE) yy = 30.0f;
                     ww = ((PartyEntry*)p)->height / 3.0f;
-                    entry = effFukidashiEntry(a, number, (NpcEntry*)-2, d, 0.0f, yy, 0.0f, ww, duration);
+                    entry = effFukidashiEntry(a, number, (NpcEntry*)-2, duration, 0.0f, yy, 0.0f, ww, angle);
                 }
 #else
                 h = ((PartyEntry*)p)->height;
                 {
                     f32 yy = 2.0f * h / 3.0f;
                     f32 ww = h / 3.0f;
-                    entry = effFukidashiEntry(a, number, (NpcEntry*)-2, d, 0.0f, yy, 0.0f, ww, duration);
+                    entry = effFukidashiEntry(a, number, (NpcEntry*)-2, duration, 0.0f, yy, 0.0f, ww, angle);
                 }
 #endif
             }
             break;
-        case 4:
+        case FUKIDASHI_AT_FOLLOWER:
             p = partyGetPtr(marioGetExtraPartyId());
             if (p) {
                 h = ((PartyEntry*)p)->height;
                 {
                     f32 yy = 2.0f * h / 3.0f;
                     f32 ww = h / 3.0f;
-                    entry = effFukidashiEntry(a, number, (NpcEntry*)-3, d, 0.0f, yy, 0.0f, ww, duration);
+                    entry = effFukidashiEntry(a, number, (NpcEntry*)-3, duration, 0.0f, yy, 0.0f, ww, angle);
                 }
             }
             break;
