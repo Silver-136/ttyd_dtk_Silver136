@@ -305,9 +305,9 @@ static EVT_BEGIN(counter_damage_event)
     SET_VALUE(LW(11), 1)
     CALL(btlevtcmd_GetDamageCode, LW(10), LW(0))
     CALL_CHILD(PTR(subsetevt_counter_damage))
-    CALL(btlevtcmd_CheckDamageCode, UNIT_ID_SELF, 512, LW(0))
+    CALL(btlevtcmd_CheckDamageCode, UNIT_ID_SELF, DAMAGE_RESULT_ZERO_HP, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
-        CALL(btlevtcmd_CheckDamageCode, UNIT_ID_SELF, 2048, LW(0))
+        CALL(btlevtcmd_CheckDamageCode, UNIT_ID_SELF, DAMAGE_RESULT_REVIVAL, LW(0))
         IF_INT_EQUAL(LW(0), 0)
             RETURN
         END_IF

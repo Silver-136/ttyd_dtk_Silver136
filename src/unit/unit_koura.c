@@ -140,8 +140,8 @@ PoseTableEntry pose_table_crack_lv2[] = {
 };
 
 static BattleUnitKindPart parts[] = {
-    {1, "btl_un_koura", "c_koura", 0.0f, 0.0f, 0.0f, 20.0f, 40.0f, 0.0f, 0.0f, 40.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kUntattleable, 0, pose_table},
-    {2, "btl_un_koura", "c_koura", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kNotTargetable | kHidden | kNoShadow, 0, pose_table},
+    {1, "btl_un_koura", "c_koura", 0.0f, 0.0f, 0.0f, 20.0f, 40.0f, 0.0f, 0.0f, 40.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kPartNoTattle, 0, pose_table},
+    {2, "btl_un_koura", "c_koura", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kPartUntargetable | kHidden | kNoShadow, 0, pose_table},
 };
 
 static EVT_BEGIN(init_event)
@@ -192,7 +192,7 @@ EVT_BEGIN(koura_open)
     END_LOOP
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 1, 1)
     CALL(btlevtcmd_OffAttribute, LW(3), 64)
-    CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 1, kNotTargetable)
+    CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 1, kPartUntargetable)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 2, 1)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_SHELL_SHIELD_OPEN)
     RETURN
@@ -214,7 +214,7 @@ EVT_BEGIN(koura_close)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 1, 0)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 0, LW(3))
     CALL(btlevtcmd_OnAttribute, LW(3), 64)
-    CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, kNotTargetable)
+    CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, kPartUntargetable)
     CALL(btlevtcmd_OnPartsAttribute, LW(3), 1, 16777216)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 2, 0)

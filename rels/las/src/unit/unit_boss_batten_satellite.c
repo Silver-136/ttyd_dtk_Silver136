@@ -121,7 +121,7 @@ BattleUnitKind unit_boss_batten_satellite = {
     "SFX_BTL_DAMAGE_FIRE1", // fireDamageSfxName
     "SFX_BTL_DAMAGE_ICE1", // iceDamageSfxName
     "SFX_BTL_DAMAGE_BIRIBIRI1", // electricDamageSfxName
-    kFloating, // attributeFlags
+    kUnitAirborne, // attributeFlags
     &regist, // statusVulnerability
     1, // numParts
     parts, // mParts
@@ -223,9 +223,9 @@ EVT_BEGIN(dmg_counter_event)
     CALL(btlevtcmd_DivePosition, LW(10), LW(2), LW(3), LW(4), 10, 0, 0, 0, -1)
     WAIT_MS(500)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
-    CALL(btlevtcmd_CheckDamageCode, LW(10), 512, LW(0))
+    CALL(btlevtcmd_CheckDamageCode, LW(10), DAMAGE_RESULT_ZERO_HP, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
-        CALL(btlevtcmd_CheckDamageCode, LW(10), 2048, LW(0))
+        CALL(btlevtcmd_CheckDamageCode, LW(10), DAMAGE_RESULT_REVIVAL, LW(0))
         IF_INT_EQUAL(LW(0), 0)
             RETURN
         END_IF
@@ -245,7 +245,7 @@ EVT_BEGIN(dmg_counter_event)
 EVT_END()
 
 static BattleUnitKindPart parts[] = {
-    {1, "btl_un_batten_satellite", "c_shuryo_p", 0.0f, 0.0f, 0.0f, -4.0f, -2.0f, 0.0f, -6.0f, 1.0f, 0.0f, 14, 14, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kHammerlikeCannotTarget | kShellTosslikeCannotTarget, 0, pose_table},
+    {1, "btl_un_batten_satellite", "c_shuryo_p", 0.0f, 0.0f, 0.0f, -4.0f, -2.0f, 0.0f, -6.0f, 1.0f, 0.0f, 14, 14, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kPartNotHammerTarget | kPartNotShellTossTarget, 0, pose_table},
 };
 
 static EVT_BEGIN(init_event)

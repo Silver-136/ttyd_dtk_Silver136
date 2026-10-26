@@ -150,7 +150,7 @@ BattleUnitKind unit_boss_gundan_zako_group2 = {
     "SFX_BTL_DAMAGE_FIRE1", // fireDamageSfxName
     "SFX_BTL_DAMAGE_ICE1", // iceDamageSfxName
     "SFX_BTL_DAMAGE_BIRIBIRI1", // electricDamageSfxName
-    kCeiling | kUnitNoSpin, // attributeFlags
+    kUnitOnCeiling | kUnitNoSpin, // attributeFlags
     &regist, // statusVulnerability
     1, // numParts
     parts, // mParts
@@ -201,7 +201,7 @@ static BattleDataEntry data_table[] = {
 };
 
 static BattleUnitKindPart parts[] = {
-    {1, "btl_un_gundan_zako_group2", "c_zako_n", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kHammerlikeCannotTarget | kShellTosslikeCannotTarget | kHidden | kNoShadow, 0, pose_table},
+    {1, "btl_un_gundan_zako_group2", "c_zako_n", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kPartNotHammerTarget | kPartNotShellTossTarget | kHidden | kNoShadow, 0, pose_table},
 };
 
 BattleWeapon weapon_gundan_zako_group2_attack = {
@@ -365,7 +365,7 @@ static EVT_BEGIN(dead_event)
     CALL(_add_star_point_disp_offset, UNIT_ID_SELF, 0, 0, 0)
     CALL(evt_eff, STRING(""), STRING("star_point"), 0, 0, 0, 0, LW(0), 0, 0, 0, 0, 0, 0, 0)
     WAIT_FRAMES(60)
-    CALL(btlevtcmd_CheckDamageCode, UNIT_ID_SELF, 1024, LW(0))
+    CALL(btlevtcmd_CheckDamageCode, UNIT_ID_SELF, DAMAGE_RESULT_DEATH, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_KillUnit, UNIT_ID_SELF, 0)
     ELSE

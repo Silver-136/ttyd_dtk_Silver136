@@ -79,7 +79,7 @@ BattleUnitKind unit_purple_teresa = {
     "SFX_BTL_DAMAGE_FIRE1", // fireDamageSfxName
     "SFX_BTL_DAMAGE_ICE1", // iceDamageSfxName
     "SFX_BTL_DAMAGE_BIRIBIRI1", // electricDamageSfxName
-    kFloating, // attributeFlags
+    kUnitAirborne, // attributeFlags
     &regist, // statusVulnerability
     1, // numParts
     parts, // mParts

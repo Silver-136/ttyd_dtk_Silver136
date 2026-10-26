@@ -517,7 +517,7 @@ static PoseSoundTiming pose_sound_timing_table[] = {
 
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_giant_bomb", "c_giant", 0.0f, 0.0f, 0.0f, 15.0f, 50.0f, 0.0f, 0.0f, 65.0f, 0.0f, 65, 70, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table_3},
-    {2, /*"ジャイアントボム"*/"\x83\x57\x83\x83\x83\x43\x83\x41\x83\x93\x83\x67\x83\x7B\x83\x80", "c_giant", 0.0f, 80.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 15, 15, 255, &defence, &defence_attr, kNotTargetable | kNoShadow, 0, pose_table_3},
+    {2, /*"ジャイアントボム"*/"\x83\x57\x83\x83\x83\x43\x83\x41\x83\x93\x83\x67\x83\x7B\x83\x80", "c_giant", 0.0f, 80.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 15, 15, 255, &defence, &defence_attr, kPartUntargetable | kNoShadow, 0, pose_table_3},
 };
 
 static EVT_BEGIN(init_event)
@@ -559,7 +559,7 @@ static EVT_BEGIN(damage_event)
             END_SWITCH
         END_IF
     END_IF
-    CALL(btlevtcmd_CheckDamageCode, LW(10), 256, LW(0))
+    CALL(btlevtcmd_CheckDamageCode, LW(10), DAMAGE_RESULT_FINAL_HIT, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_GetDamageCode, LW(10), LW(0))
         SWITCH(LW(0))

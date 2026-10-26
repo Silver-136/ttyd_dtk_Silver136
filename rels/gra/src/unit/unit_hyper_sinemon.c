@@ -112,7 +112,7 @@ static StatusVulnerability regist = {
 };
 
 static BattleUnitKindPart parts[] = {
-    {1, "btl_un_hyper_sinemon", "c_sinemon_h", 0.0f, 0.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kIsBombFlippable, kCounterTopSpiky, pose_table},
+    {1, "btl_un_hyper_sinemon", "c_sinemon_h", 0.0f, 0.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kPartFlippedByBombs, kCounterTopSpiky, pose_table},
 };
 
 static BattleWeapon weapon_sinemon_attack = {

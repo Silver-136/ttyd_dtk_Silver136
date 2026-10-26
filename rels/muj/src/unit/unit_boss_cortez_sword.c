@@ -82,7 +82,7 @@ BattleUnitKind unit_boss_cortez_sword = {
     "SFX_BTL_DAMAGE_FIRE1", // fireDamageSfxName
     "SFX_BTL_DAMAGE_ICE1", // iceDamageSfxName
     "SFX_BTL_DAMAGE_BIRIBIRI1", // electricDamageSfxName
-    kFloating | kUnitNoHpGauge, // attributeFlags
+    kUnitAirborne | kUnitNoHpGauge, // attributeFlags
     &regist, // statusVulnerability
     1, // numParts
     parts, // mParts
@@ -203,7 +203,7 @@ static BattleDataEntry data_table[] = {
 };
 
 static BattleUnitKindPart parts[] = {
-    {1, "btl_un_cortez_sword", "c_buki2", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kNotTargetable | kHidden | kNoShadow, kCounterTopSpiky | kCounterPreemptiveFrontSpiky | kCounterFrontSpiky, pose_table},
+    {1, "btl_un_cortez_sword", "c_buki2", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kPartUntargetable | kHidden | kNoShadow, kCounterTopSpiky | kCounterPreemptiveFrontSpiky | kCounterFrontSpiky, pose_table},
 };
 
 static EVT_BEGIN(init_event)
@@ -362,7 +362,7 @@ EVT_BEGIN(cortez_weapon_phase_event)
                 CALL(btlevtcmd_GetMaxHp, UNIT_ID_SELF, LW(0))
                 CALL(btlevtcmd_SetHp, UNIT_ID_SELF, LW(0))
                 CALL(btlevtcmd_ClearAllStatus, UNIT_ID_SELF)
-                CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, kNotTargetable)
+                CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, kPartUntargetable)
                 CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, 1, PTR(pose_table))
                 CALL(btlevtcmd_OffAttribute, UNIT_ID_SELF, kUnitNoHpGauge)
                 CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
@@ -711,7 +711,7 @@ EVT_BEGIN(cortez_weapon_dead_event)
     CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 15, -1)
     CALL(btlevtcmd_SetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 1, 2)
-    CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 1, kNotTargetable)
+    CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 1, kPartUntargetable)
     CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, 1, PTR(pose_table_break))
     CALL(btlevtcmd_OnAttribute, UNIT_ID_SELF, kUnitNoHpGauge)
     CALL(btlevtcmd_KillUnit, UNIT_ID_SELF, 1)

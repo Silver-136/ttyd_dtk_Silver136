@@ -442,7 +442,7 @@ static EVT_BEGIN(entry_event)
 EVT_END()
 
 static EVT_BEGIN(damage_event)
-    CALL(btlevtcmd_CheckDamageCode, UNIT_ID_SELF, 1024, LW(0))
+    CALL(btlevtcmd_CheckDamageCode, UNIT_ID_SELF, DAMAGE_RESULT_DEATH, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         SET_VALUE(GW(10), 1)
     END_IF

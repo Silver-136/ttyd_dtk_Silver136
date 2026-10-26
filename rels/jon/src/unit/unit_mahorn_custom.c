@@ -130,7 +130,7 @@ BattleUnitKind unit_mahorn_custom = {
     "SFX_BTL_DAMAGE_FIRE1", // fireDamageSfxName
     "SFX_BTL_DAMAGE_ICE1", // iceDamageSfxName
     "SFX_BTL_DAMAGE_BIRIBIRI1", // electricDamageSfxName
-    kFloating, // attributeFlags
+    kUnitAirborne, // attributeFlags
     &regist, // statusVulnerability
     5, // numParts
     parts, // mParts
@@ -196,7 +196,7 @@ BattleUnitKind unit_mahorn_custom_bunsin = {
     "SFX_BTL_DAMAGE_FIRE1",
     "SFX_BTL_DAMAGE_ICE1",
     "SFX_BTL_DAMAGE_BIRIBIRI1",
-    kFloating | kNoDamageNumber,
+    kUnitAirborne | kNoDamageNumber,
     &regist,
     5,
     parts,
@@ -260,10 +260,10 @@ static StatusVulnerability regist_bunsin = {
 
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_mahorn_custom", "c_maho_w", 0.0f, 0.0f, 0.0f, 0.0f, 30.0f, 0.0f, 0.0f, 40.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table},
-    {2, "btl_un_mahorn_custom", "c_maho_w", 0.0f, 0.0f, 0.0f, 5.0f, 30.0f, 0.0f, 0.0f, 35.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kNotTargetable | kNoShadow, 0, pose_table},
-    {3, "btl_un_mahorn_custom", "c_maho_w", 0.0f, 0.0f, 0.0f, 5.0f, 30.0f, 0.0f, 0.0f, 35.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kNotTargetable | kNoShadow, 0, pose_table},
-    {4, "btl_un_mahorn_custom", "c_maho_w", 0.0f, 0.0f, 0.0f, 5.0f, 30.0f, 0.0f, 0.0f, 35.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kNotTargetable | kNoShadow, 0, pose_table},
-    {5, "btl_un_mahorn_custom", "c_maho_w", 0.0f, 0.0f, 0.0f, 5.0f, 30.0f, 0.0f, 0.0f, 35.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kNotTargetable | kNoShadow, 0, pose_table},
+    {2, "btl_un_mahorn_custom", "c_maho_w", 0.0f, 0.0f, 0.0f, 5.0f, 30.0f, 0.0f, 0.0f, 35.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kPartUntargetable | kNoShadow, 0, pose_table},
+    {3, "btl_un_mahorn_custom", "c_maho_w", 0.0f, 0.0f, 0.0f, 5.0f, 30.0f, 0.0f, 0.0f, 35.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kPartUntargetable | kNoShadow, 0, pose_table},
+    {4, "btl_un_mahorn_custom", "c_maho_w", 0.0f, 0.0f, 0.0f, 5.0f, 30.0f, 0.0f, 0.0f, 35.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kPartUntargetable | kNoShadow, 0, pose_table},
+    {5, "btl_un_mahorn_custom", "c_maho_w", 0.0f, 0.0f, 0.0f, 5.0f, 30.0f, 0.0f, 0.0f, 35.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kPartUntargetable | kNoShadow, 0, pose_table},
 };
 
 static BattleWeapon weapon_mahorn_attack_magic = {
@@ -907,7 +907,7 @@ static EVT_BEGIN(mahorn_subset_dead_event)
     CALL(btlevtcmd_OnAttribute, LW(10), 16777216)
     CALL(btlevtcmd_OnAttribute, LW(10), 536870912)
     CALL_CHILD(mahorn_subset_bunsin_all_kill)
-    CALL(btlevtcmd_CheckDamageCode, LW(10), 1024, LW(0))
+    CALL(btlevtcmd_CheckDamageCode, LW(10), DAMAGE_RESULT_DEATH, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_KillUnit, LW(10), 0)
     ELSE

@@ -299,7 +299,7 @@ static BattleDataEntry data_table_guard[] = {
 };
 
 static BattleUnitKindPart parts[] = {
-    {1, "btl_un_togenoko_ace", "c_togenoko_b", 0.0f, 0.0f, 0.0f, 0.0f, 40.0f, 0.0f, 0.0f, 50.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kIsShelled, kCounterTopSpiky, pose_table},
+    {1, "btl_un_togenoko_ace", "c_togenoko_b", 0.0f, 0.0f, 0.0f, 0.0f, 40.0f, 0.0f, 0.0f, 50.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kPartShelled, kCounterTopSpiky, pose_table},
 };
 
 static BattleWeapon weapon_togenoko_normal_attack = {

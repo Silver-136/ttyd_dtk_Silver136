@@ -1407,7 +1407,7 @@ BattleUnit* BattleAudienceDetectTargetAll(void) {
         unit = wp->units[i];
         if (unit != NULL) {
             part = BattleGetUnitPartsPtr(i, BtlUnit_GetBodyPartsId(unit));
-            if (!(part->attributes & kNotTargetable) && unit->currentHp > 0 &&
+            if (!(part->attributes & kPartUntargetable) && unit->currentHp > 0 &&
                 (unit->currentKind < UNIT_UNUSED_TREE || unit->currentKind >= UNIT_UNUSED_TESTNPC)) {
                 ids[count++] = i;
             }
@@ -1434,7 +1434,7 @@ BattleUnit* BattleAudienceDetectTargetPlayer(void) {
         unit = wp->units[i];
         if (unit != NULL) {
             part = BattleGetUnitPartsPtr(i, BtlUnit_GetBodyPartsId(unit));
-            if (unit->mAlliance == ALLIANCE_PLAYER && unit->currentHp > 0 && !(part->attributes & kNotTargetable)) {
+            if (unit->mAlliance == ALLIANCE_PLAYER && unit->currentHp > 0 && !(part->attributes & kPartUntargetable)) {
                 ids[count++] = i;
             }
         }

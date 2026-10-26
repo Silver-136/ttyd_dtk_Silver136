@@ -112,7 +112,7 @@ static EVT_BEGIN(init_event)
 EVT_END()
 
 static EVT_BEGIN(damage_event)
-    CALL(btlevtcmd_CheckDamageCode, UNIT_ID_SELF, 256, LW(0))
+    CALL(btlevtcmd_CheckDamageCode, UNIT_ID_SELF, DAMAGE_RESULT_FINAL_HIT, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL(_rumble_switch, UNIT_ID_SELF)
         RETURN

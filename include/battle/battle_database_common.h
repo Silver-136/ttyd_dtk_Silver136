@@ -23,7 +23,7 @@
 
 // BattleWeapon.targetPropertyFlags (battle_detect.c BattleSamplingEnemy; 0x4000000 excludes parts with kNoShadow,
 // part attribute 0x2000000)
-#define TARGET_PROP_TATTLE                 0x1 // only parts that can be tattled (tattle data, not kUntattleable)
+#define TARGET_PROP_TATTLE                 0x1 // only parts that can be tattled (tattle data, not kPartNoTattle)
 #define TARGET_PROP_NO_FLOATING2           0x2 // not floating units (same test as 0x8)
 #define TARGET_PROP_NO_CEILING             0x4 // not ceiling units
 #define TARGET_PROP_NO_FLOATING            0x8 // not floating units

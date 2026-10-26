@@ -197,7 +197,7 @@ static BattleDataEntry data_table_nokotarou[] = {
 };
 
 static BattleUnitKindPart parts_nokotarou[] = {
-    {1, "btl_un_nokotarou", "c_pnk", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence_nokotarou, &defence_attr_nokotarou, kMainPart | kGuardTargetPart | kIsShelled, 0, pose_table_nokotarou_stay},
+    {1, "btl_un_nokotarou", "c_pnk", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence_nokotarou, &defence_attr_nokotarou, kMainPart | kGuardTargetPart | kPartShelled, 0, pose_table_nokotarou_stay},
 };
 
 static EVT_BEGIN(dmg_turn_event)
@@ -254,7 +254,7 @@ static EVT_BEGIN(init_event_nokotarou)
 EVT_END()
 
 static EVT_BEGIN(damage_event_nokotarou)
-    CALL(btlevtcmd_CheckDamageCode, UNIT_ID_SELF, 1024, LW(0))
+    CALL(btlevtcmd_CheckDamageCode, UNIT_ID_SELF, DAMAGE_RESULT_DEATH, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         SET_VALUE(GW(20), 1)
     END_IF

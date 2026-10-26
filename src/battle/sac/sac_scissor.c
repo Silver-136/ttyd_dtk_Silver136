@@ -944,7 +944,7 @@ s32 scissor_damage(EventEntry* evt, BOOL first) {
             BattleUnitPart* part = BtlUnit_GetPartsPtr(unit, BtlUnit_GetBodyPartsId(unit));
             s32 res;
             if (BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL) != 1 && !(part->attributes & kClone) && !(part->attributes & kImmuneToDamageAndStatus) &&
-                !(part->attributes & kNotTargetable) && *(s8*)part->defenseAttr != 4 && *(s8*)part->defenseAttr != 2) {
+                !(part->attributes & kPartUntargetable) && *(s8*)part->defenseAttr != 4 && *(s8*)part->defenseAttr != 2) {
                 scissor_damage_sub(unit, &res);
                 w->unitIds[n] = i;
                 w->power[n] = res;
@@ -1008,7 +1008,7 @@ void scissor_damage_sub(BattleUnit* unit, s32* out) {
     f32 hw, hh, w, h, sign;
     f32 ratio;
     hits = 0;
-    if (unit->mAttributeFlags & kCeiling) {
+    if (unit->mAttributeFlags & kUnitOnCeiling) {
         sign = -1.0f;
     } else {
         sign = 1.0f;

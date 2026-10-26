@@ -125,7 +125,7 @@ EVT_BEGIN(btldefaultevt_Damage)
         CALL_CHILD(PTR(subset_ultra_hammer_acrobat_damage_event))
         GOTO(10)
     END_IF
-    CALL(btlevtcmd_CheckDamageCode, LW(10), 262144, LW(1))
+    CALL(btlevtcmd_CheckDamageCode, LW(10), DAMAGE_RESULT_GUARD, LW(1))
     IF_INT_NOT_EQUAL(LW(1), 0)
         CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), POSE_TYPE_DAMAGE_GUARDED)
         WAIT_FRAMES(30)
@@ -400,13 +400,13 @@ EVT_BEGIN(btldefaultevt_Damage)
         CASE_DEFAULT
     END_SWITCH
     LABEL(10)
-    CALL(btlevtcmd_CheckDamageCode, LW(10), 1024, LW(1))
+    CALL(btlevtcmd_CheckDamageCode, LW(10), DAMAGE_RESULT_DEATH, LW(1))
     IF_INT_NOT_EQUAL(LW(1), 0)
         WAIT_FRAMES(30)
         CALL_CHILD(PTR(subsetevt_dead))
         RETURN
         ELSE
-        CALL(btlevtcmd_CheckDamageCode, LW(10), 512, LW(1))
+        CALL(btlevtcmd_CheckDamageCode, LW(10), DAMAGE_RESULT_ZERO_HP, LW(1))
         IF_INT_NOT_EQUAL(LW(1), 0)
             CALL(btlevtcmd_RunDataEventChild, LW(10), UNIT_DATA_FAKE_DEAD_EVENT)
             RETURN
@@ -422,7 +422,7 @@ EVT_BEGIN(btldefaultevt_Damage)
         CALL_CHILD(PTR(btldefaultevt_guard_return))
         RETURN
     END_IF
-    CALL(btlevtcmd_CheckDamageCode, LW(10), 256, LW(1))
+    CALL(btlevtcmd_CheckDamageCode, LW(10), DAMAGE_RESULT_FINAL_HIT, LW(1))
     IF_INT_EQUAL(LW(1), 0)
         CALL(btlevtcmd_WaitAttackEnd)
     END_IF

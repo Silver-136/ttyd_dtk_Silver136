@@ -337,7 +337,7 @@ void btlseqEnd(BattleWork* wp) {
                 BtlUnit_SetStatus(mario, i, 0, 0);
             }
         }
-        if ((u32)mario->mAttributeFlags & kVeiled) {
+        if ((u32)mario->mAttributeFlags & kUnitInVeil) {
             BattleUnit* p2 = BattleGetPartyPtr(wp);
             EventEntry* e;
             if (!p2) break;
@@ -1994,7 +1994,7 @@ USER_FUNC(_check_guard_koura) {
     id = evtGetValue(event, args[0]);
     out = args[1];
     unit = BattleGetUnitPtr(wp, BattleTransID(event, id));
-    if (!(unit->mAttributeFlags & kShellShielded)) {
+    if (!(unit->mAttributeFlags & kUnitUnderShellShield)) {
         evtSetValue(event, out, -1);
         return 2;
     }

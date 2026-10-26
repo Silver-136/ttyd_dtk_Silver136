@@ -177,13 +177,13 @@ EVT_BEGIN(gesso_left_arm_damage_event)
         CALL(btlevtcmd_RunDataEventChild, LW(10), 10)
     END_SIBLING_EVENT
     CALL_CHILD(PTR(subsetevt_damage))
-    CALL(btlevtcmd_CheckDamageCode, LW(10), 1024, LW(1))
+    CALL(btlevtcmd_CheckDamageCode, LW(10), DAMAGE_RESULT_DEATH, LW(1))
     IF_INT_NOT_EQUAL(LW(1), 0)
         WAIT_FRAMES(30)
         CALL_CHILD(PTR(subsetevt_dead))
         GOTO(99)
     END_IF
-    CALL(btlevtcmd_CheckDamageCode, LW(10), 256, LW(1))
+    CALL(btlevtcmd_CheckDamageCode, LW(10), DAMAGE_RESULT_FINAL_HIT, LW(1))
     IF_INT_EQUAL(LW(1), 0)
         CALL(btlevtcmd_WaitAttackEnd)
     END_IF

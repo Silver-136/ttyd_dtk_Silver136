@@ -75,7 +75,7 @@ BattleUnitKind unit_kurokumorn = {
     "SFX_BTL_DAMAGE_FIRE1", // fireDamageSfxName
     "SFX_BTL_DAMAGE_ICE1", // iceDamageSfxName
     "SFX_BTL_DAMAGE_BIRIBIRI1", // electricDamageSfxName
-    kFloating, // attributeFlags
+    kUnitAirborne, // attributeFlags
     &regist, // statusVulnerability
     1, // numParts
     parts, // mParts
@@ -113,7 +113,7 @@ static StatusVulnerability regist = {
 };
 
 static BattleUnitKindPart parts[] = {
-    {1, "btl_un_kurokumorn", "c_kmoon", 0.0f, 0.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 30, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kHammerlikeCannotTarget | kShellTosslikeCannotTarget, 0, pose_table},
+    {1, "btl_un_kurokumorn", "c_kmoon", 0.0f, 0.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 30, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kPartNotHammerTarget | kPartNotShellTossTarget, 0, pose_table},
 };
 
 static BattleWeapon weapon_kurokumorn_attack = {
@@ -457,7 +457,7 @@ static EVT_BEGIN(unison_phase_event)
             SET_VALUE(LW(1), 40)
             CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 60, 10, 4, 0, -1)
             CALL(btlevtcmd_SetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
-            CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 1, kHammerlikeCannotTarget | kShellTosslikeCannotTarget)
+            CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 1, kPartNotHammerTarget | kPartNotShellTossTarget)
             CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 0, 0)
         ELSE
             CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_KUMO_MOVE5"), EVT_NULLPTR, 0, EVT_NULLPTR)
@@ -465,7 +465,7 @@ static EVT_BEGIN(unison_phase_event)
             SET_VALUE(LW(1), 10)
             CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 60, -10, 4, 0, -1)
             CALL(btlevtcmd_SetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
-            CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, kHammerlikeCannotTarget | kShellTosslikeCannotTarget)
+            CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, kPartNotHammerTarget | kPartNotShellTossTarget)
             CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 0, 1)
         END_IF
     END_IF

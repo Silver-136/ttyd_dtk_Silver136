@@ -140,7 +140,7 @@ static BattleDataEntry data_table[] = {
 };
 
 BattleUnitKindPart unitpartsdata_Party_Nokotarou[] = {
-    {1, "btl_un_nokotarou", "c_pnk", 0.0f, 0.0f, 0.0f, 12.0f, 30.0f, 5.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kIsShelled, 0, pose_table_nokotarou_stay},
+    {1, "btl_un_nokotarou", "c_pnk", 0.0f, 0.0f, 0.0f, 12.0f, 30.0f, 5.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kPartShelled, 0, pose_table_nokotarou_stay},
 };
 
 BattleUnitKind unitdata_Party_Nokotarou = {
@@ -1898,7 +1898,7 @@ static USER_FUNC(_check_guard_koura) {
     id = evtGetValue(event, args[0]);
     index = args[1];
     unit = BattleGetUnitPtr(wp, BattleTransID(event, id));
-    if (!(unit->mAttributeFlags & kShellShielded)) {
+    if (!(unit->mAttributeFlags & kUnitUnderShellShield)) {
         evtSetValue(event, index, -1);
         return EVT_RETURN_DONE;
     }

@@ -330,7 +330,7 @@ BattleUnitKind unit_boss_kamec_obaba = {
     "SFX_BTL_DAMAGE_FIRE1", // fireDamageSfxName
     "SFX_BTL_DAMAGE_ICE1", // iceDamageSfxName
     "SFX_BTL_DAMAGE_BIRIBIRI1", // electricDamageSfxName
-    kFloating, // attributeFlags
+    kUnitAirborne, // attributeFlags
     &regist, // statusVulnerability
     2, // numParts
     parts, // mParts
@@ -419,8 +419,8 @@ static BattleDataEntry data_table[] = {
 };
 
 static BattleUnitKindPart parts[] = {
-    {1, "btl_un_kamec_obaba", "c_kamek_bb", 0.0f, 0.0f, 0.0f, 0.0f, 30.0f, 0.0f, 0.0f, 40.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kHammerlikeCannotTarget | kShellTosslikeCannotTarget, 0, pose_table_sky},
-    {2, "btl_un_kamec_obaba", "c_kamek_bb", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table},
+    {1, "btl_un_kamec_obaba", "c_kamek_bb", 0.0f, 0.0f, 0.0f, 0.0f, 30.0f, 0.0f, 0.0f, 40.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kPartNotHammerTarget | kPartNotShellTossTarget, 0, pose_table_sky},
+    {2, "btl_un_kamec_obaba", "c_kamek_bb", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kPartUntargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table},
 };
 
 static EVT_BEGIN(kamec_obaba_zoom)
@@ -458,7 +458,7 @@ static EVT_BEGIN(damage_event)
     IF_INT_EQUAL(LW(0), 1)
         GOTO(99)
     END_IF
-    CALL(btlevtcmd_CheckDamageCode, UNIT_ID_SELF, 256, LW(0))
+    CALL(btlevtcmd_CheckDamageCode, UNIT_ID_SELF, DAMAGE_RESULT_FINAL_HIT, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         GOTO(99)
     END_IF
@@ -482,9 +482,9 @@ EVT_END()
 static EVT_BEGIN(dmg_fall_event)
     SET_VALUE(LW(10), -2)
     SET_VALUE(LW(11), 1)
-    CALL(btlevtcmd_OffAttribute, UNIT_ID_SELF, kFloating)
-    CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, kHammerlikeCannotTarget)
-    CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, kShellTosslikeCannotTarget)
+    CALL(btlevtcmd_OffAttribute, UNIT_ID_SELF, kUnitAirborne)
+    CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, kPartNotHammerTarget)
+    CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, kPartNotShellTossTarget)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("D_2"))
     WAIT_MS(500)
     CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, 1, PTR(pose_table))
@@ -605,9 +605,9 @@ static EVT_BEGIN(phase_event)
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(5.0f))
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, 300, LW(1), LW(2), 0, -1, 0)
     WAIT_FRAMES(60)
-    CALL(btlevtcmd_OnAttribute, UNIT_ID_SELF, kFloating)
-    CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 1, kHammerlikeCannotTarget)
-    CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 1, kShellTosslikeCannotTarget)
+    CALL(btlevtcmd_OnAttribute, UNIT_ID_SELF, kUnitAirborne)
+    CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 1, kPartNotHammerTarget)
+    CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 1, kPartNotShellTossTarget)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_WALK)
     WAIT_MS(500)
     CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, 1, PTR(pose_table_sky))

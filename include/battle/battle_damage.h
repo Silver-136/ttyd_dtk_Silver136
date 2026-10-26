@@ -78,6 +78,11 @@ typedef enum BattleDamageResultFlags {
     DAMAGE_RESULT_GUARD = 0x40000,
     DAMAGE_RESULT_SUPERGUARD = 0x80000,
     DAMAGE_RESULT_NO_EVADE = 0x100000, // BattlePreCheckDamage reports a hit without the evasion checks
+    DAMAGE_RESULT_ATTACK_FX_R = 0x1000000, // an Attack FX badge sound played: R (Hooktail's damage event reacts to it)
+    DAMAGE_RESULT_ATTACK_FX_Y = 0x2000000,
+    DAMAGE_RESULT_ATTACK_FX_B = 0x4000000,
+    DAMAGE_RESULT_ATTACK_FX_G = 0x8000000,
+    DAMAGE_RESULT_ATTACK_FX_P = 0x10000000,
     DAMAGE_RESULT_NO_STATUS = 0x20000000, // BattleSetStatusDamageFromWeapon inflicts nothing
     DAMAGE_RESULT_STATUS_EVERY_HIT = 0x40000000, // status is tried on this hit, not only on the final one
     DAMAGE_RESULT_GULP = (s32)0x80000000, // Yoshi's Gulp: passes DEFENSE_ATTR_IMMUNE_EXCEPT_GULP

@@ -123,7 +123,7 @@ void _btlcmd_MakeActClassTable(BattleWork* wp) {
         cmd->act[0].type = 0;
         cmd->act[0].enabled = 1;
         cmd->act[0].disableReason = 0;
-        if (unit->mAttributeFlags & kVeiled) {
+        if (unit->mAttributeFlags & kUnitInVeil) {
             cmd->act[0].enabled = 0;
             cmd->act[0].disableReason = 3;
         }
@@ -185,7 +185,7 @@ void _btlcmd_MakeActClassTable(BattleWork* wp) {
         cmd->act[num].type = 1;
         cmd->act[num].enabled = 1;
         cmd->act[num].disableReason = 0;
-        if (unit->mAttributeFlags & kVeiled) {
+        if (unit->mAttributeFlags & kUnitInVeil) {
             cmd->act[num].enabled = 0;
             cmd->act[num].disableReason = 3;
         }
@@ -254,7 +254,7 @@ void _btlcmd_MakeActClassTable(BattleWork* wp) {
         cmd->act[num].type = 4;
         cmd->act[num].enabled = 1;
         cmd->act[num].disableReason = 0;
-        if (unit->mAttributeFlags & kVeiled) {
+        if (unit->mAttributeFlags & kUnitInVeil) {
             cmd->act[num].enabled = 0;
             cmd->act[num].disableReason = 3;
         }
@@ -744,7 +744,7 @@ void _btlcmd_MakeOperationTable(BattleWork* wp) {
         BtlUnit_CanActStatus(party);
         cmd->operation[0].icon = _battleGetPartyIcon(party->currentKind);
         cmd->operation[0].help = "btl_hlp_cmd_operation_changeparty";
-        if (unit->mAttributeFlags & kVeiled) {
+        if (unit->mAttributeFlags & kUnitInVeil) {
             cmd->operation[0].enabled = 0;
             cmd->operation[0].disableReason = 3;
         }
@@ -782,7 +782,7 @@ void _btlcmd_MakeOperationTable(BattleWork* wp) {
         cmd->operation[num].name = msgSearch(weapon->name);
         cmd->operation[num].icon = ICON_BTL_CMD_CHARGE;
         cmd->operation[num].help = weapon->description;
-        if (unit->mAttributeFlags & kVeiled) {
+        if (unit->mAttributeFlags & kUnitInVeil) {
             cmd->operation[num].enabled = 0;
             cmd->operation[num].disableReason = 3;
         }
@@ -805,7 +805,7 @@ void _btlcmd_MakeOperationTable(BattleWork* wp) {
         cmd->operation[num].name = msgSearch(weapon->name);
         cmd->operation[num].icon = ICON_BTL_CMD_SUPER_CHARGE;
         cmd->operation[num].help = weapon->description;
-        if (unit->mAttributeFlags & kVeiled) {
+        if (unit->mAttributeFlags & kUnitInVeil) {
             cmd->operation[num].enabled = 0;
             cmd->operation[num].disableReason = 3;
         }
@@ -818,7 +818,7 @@ void _btlcmd_MakeOperationTable(BattleWork* wp) {
     cmd->operation[num].disableReason = 0;
     cmd->operation[num].cost = 0;
     cmd->operation[num].help = "btl_hlp_cmd_operation_defend";
-    if (unit->mAttributeFlags & kVeiled) {
+    if (unit->mAttributeFlags & kUnitInVeil) {
         cmd->operation[num].enabled = 0;
         cmd->operation[num].disableReason = 3;
     }
@@ -834,7 +834,7 @@ void _btlcmd_MakeOperationTable(BattleWork* wp) {
         cmd->operation[idx].disableReason = 1;
     }
     cmd->operation[idx].help = "btl_hlp_cmd_operation_escape";
-    if (unit->mAttributeFlags & kVeiled) {
+    if (unit->mAttributeFlags & kUnitInVeil) {
         cmd->operation[idx].enabled = 0;
         cmd->operation[idx].disableReason = 3;
     }
@@ -1605,7 +1605,7 @@ BOOL BattleCommandCheckChangePositionEnable(BattleWork* wp) {
     }
     unit = BattleGetMarioPtr(wp);
     CHECK_CHANGE_UNIT(unit)
-    if (unit->mAttributeFlags & kVeiled) {
+    if (unit->mAttributeFlags & kUnitInVeil) {
         return FALSE;
     }
     unit = BattleGetPartyPtr(wp);
@@ -2163,7 +2163,7 @@ void BattleCommandDisplay_TargetSelectMenuDisp(CameraId camId, void* param) {
         pos1.x = t->posX;
         pos1.y = t->posY;
         pos1.z = t->posZ;
-        if (!(unit->mAttributeFlags & kCeiling)) {
+        if (!(unit->mAttributeFlags & kUnitOnCeiling)) {
             btlGetScreenPoint(&pos1, &screen1);
             icon.x = screen1.x;
             icon.y = screen1.y;
@@ -2201,7 +2201,7 @@ void BattleCommandDisplay_TargetSelectMenuDisp(CameraId camId, void* param) {
             pos2.x = t2->posX;
             pos2.y = t2->posY;
             pos2.z = t2->posZ;
-            if (!(unit2->mAttributeFlags & kCeiling)) {
+            if (!(unit2->mAttributeFlags & kUnitOnCeiling)) {
                 btlGetScreenPoint(&pos2, &screen2);
                 icon.x = screen2.x;
                 icon.y = screen2.y;
@@ -2811,7 +2811,7 @@ BOOL BattleCommandAttackAudienceCheck(void) {
     s32 id;
 
     if (BattlePadCheckTrigger(PAD_BUTTON_X) && !(wp->flags & BATTLE_FLAG_ZERO_GRAVITY_UNUSED)) {
-        if (BattleGetMarioPtr(wp)->mAttributeFlags & kVeiled) {
+        if (BattleGetMarioPtr(wp)->mAttributeFlags & kUnitInVeil) {
             return FALSE;
         }
         BattleAudience_GetItemOn(&id, NULL, NULL, NULL, NULL);

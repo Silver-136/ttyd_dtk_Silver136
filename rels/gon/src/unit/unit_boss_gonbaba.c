@@ -325,13 +325,13 @@ static BattleDataEntry data_table[] = {
 
 static BattleUnitKindPart parts[] = {
 #ifdef VERSION_G8ME01
-    {1, "btl_un_gonbaba", "c_gonbaba", 0.0f, 0.0f, 0.0f, 230.0f, 36.0f, 60.0f, 230.0f, 36.0f, 60.0f, 20, 30, 255, &defence, &defence_attr, kImportantPart | kWeakToAttackFxR, 0, pose_table},
-    {2, "btl_un_gonbaba", "c_gonbaba", 100.0f, 0.0f, 0.0f, 250.0f, 110.0f, 25.0f, 250.0f, 110.0f, 25.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kWeakToAttackFxR | kHammerlikeCannotTarget | kShellTosslikeCannotTarget | kHidden, 0, pose_table},
+    {1, "btl_un_gonbaba", "c_gonbaba", 0.0f, 0.0f, 0.0f, 230.0f, 36.0f, 60.0f, 230.0f, 36.0f, 60.0f, 20, 30, 255, &defence, &defence_attr, kImportantPart | kHooktailMarker_UNUSED, 0, pose_table},
+    {2, "btl_un_gonbaba", "c_gonbaba", 100.0f, 0.0f, 0.0f, 250.0f, 110.0f, 25.0f, 250.0f, 110.0f, 25.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kHooktailMarker_UNUSED | kPartNotHammerTarget | kPartNotShellTossTarget | kHidden, 0, pose_table},
 #else
     {1, "btl_un_gonbaba", "c_gonbaba", 0.0f, 0.0f, 0.0f, 230.0f, 36.0f, 60.0f, 230.0f, 36.0f, 60.0f, 20, 30, 255, &defence, &defence_attr, 0x22, 0, pose_table},
     {2, "btl_un_gonbaba", "c_gonbaba", 100.0f, 0.0f, 0.0f, 250.0f, 110.0f, 25.0f, 250.0f, 110.0f, 25.0f, 20, 30, 255, &defence, &defence_attr, 0x1600029, 0, pose_table},
 #endif
-    {3, "btl_un_gonbaba", "c_gonbaba4", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kNotTargetable | kHidden, 0, pose_table},
+    {3, "btl_un_gonbaba", "c_gonbaba4", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kPartUntargetable | kHidden, 0, pose_table},
 };
 
 static EVT_BEGIN(battle_entry_event)
@@ -564,7 +564,7 @@ EVT_BEGIN(negotiation_event)
     WAIT_MS(500)
     CALL(btlevtcmd_GetHp, UNIT_ID_MARIO, LW(0))
     IF_INT_LESS_OR_EQUAL(LW(0), 0)
-        CALL(btlevtcmd_CheckDamageCode, UNIT_ID_MARIO, 2048, LW(0))
+        CALL(btlevtcmd_CheckDamageCode, UNIT_ID_MARIO, DAMAGE_RESULT_REVIVAL, LW(0))
         IF_INT_EQUAL(LW(0), 0)
             CALL(evt_btl_camera_set_prilimit, BTL_CAM_PRI_NORMAL)
             RETURN
@@ -1061,7 +1061,7 @@ static EVT_BEGIN(damage_event)
 EVT_END()
 
 EVT_BEGIN(gonbaba_damage_sub_event)
-    CALL(btlevtcmd_CheckDamageCode, UNIT_ID_SELF, 16777216, LW(0))
+    CALL(btlevtcmd_CheckDamageCode, UNIT_ID_SELF, DAMAGE_RESULT_ATTACK_FX_R, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 0, LW(0))
         IF_INT_LESS(LW(0), 20)
@@ -1077,7 +1077,7 @@ EVT_BEGIN(gonbaba_damage_sub_event)
     END_IF
     CALL(btlevtcmd_GetDamage, LW(10), LW(0))
     IF_INT_EQUAL(LW(0), 0)
-        CALL(btlevtcmd_CheckDamageCode, UNIT_ID_SELF, 16777216, LW(0))
+        CALL(btlevtcmd_CheckDamageCode, UNIT_ID_SELF, DAMAGE_RESULT_ATTACK_FX_R, LW(0))
         IF_INT_EQUAL(LW(0), 0)
             GOTO(90)
         END_IF
@@ -1138,11 +1138,11 @@ EVT_BEGIN(gonbaba_damage_sub_event)
         END_IF
     END_IF
     WAIT_FRAMES(30)
-    CALL(btlevtcmd_CheckDamageCode, UNIT_ID_SELF, 256, LW(0))
+    CALL(btlevtcmd_CheckDamageCode, UNIT_ID_SELF, DAMAGE_RESULT_FINAL_HIT, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         RETURN
     END_IF
-    CALL(btlevtcmd_CheckDamageCode, UNIT_ID_SELF, 16777216, LW(0))
+    CALL(btlevtcmd_CheckDamageCode, UNIT_ID_SELF, DAMAGE_RESULT_ATTACK_FX_R, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         RETURN
     END_IF

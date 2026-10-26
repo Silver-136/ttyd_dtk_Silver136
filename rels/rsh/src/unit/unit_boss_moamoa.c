@@ -514,7 +514,7 @@ static EVT_BEGIN(dead_event)
     CALL(moamoa_bomb)
     CALL(evt_moamoa_mainUnitIdClear)
     CALL(btlevtcmd_GetBackItem, LW(10))
-    CALL(btlevtcmd_CheckDamageCode, LW(10), 1024, LW(0))
+    CALL(btlevtcmd_CheckDamageCode, LW(10), DAMAGE_RESULT_DEATH, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_KillUnit, LW(10), 0)
     ELSE

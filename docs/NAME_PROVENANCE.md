@@ -12,6 +12,16 @@ Caveats: the function commit says 3 of its names were taken from reference proje
 they are not identified here. These data names also appear in our earlier US-only config and may predate the
 renaming: `@740`, `__local_PI$366`, `monte_p`, `one$381`, `partyGetTargetDistY`, `texmtx_tbl`, `white`.
 
+## Credits for inherited struct field names
+
+Many struct field names in the battle, pouch and item headers (for example the BattleWeapon status
+chance/time fields, BattleUnitKind offsets such as `bintaHitOffset` / `kissHitOffset` / `cutBaseOffset`, and
+BattleWork / BattleUnit counters) came with the adopted tree and follow the structure notes of jdaster64's
+ttyd-utils project. Credit for those names goes there. The battle flag names that matched those notes were
+renamed in 2026-10 to wording taken from what our code does with each bit.
+
+## Invented function and data names
+
 | Kind | Unit | Name | Replaced placeholder (JP) | JP address | US |
 | --- | --- | --- | --- | --- | --- |
 | function | aji | `kuti_callback` | `unk_aji_00000ed0` | .text:0x00000E0C | yes |

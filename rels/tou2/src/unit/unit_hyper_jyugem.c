@@ -91,7 +91,7 @@ static BattleUnitKind unit_hyper_jyugem = {
     "SFX_BTL_DAMAGE_FIRE1", // fireDamageSfxName
     "SFX_BTL_DAMAGE_ICE1", // iceDamageSfxName
     "SFX_BTL_DAMAGE_BIRIBIRI1", // electricDamageSfxName
-    kFloating, // attributeFlags
+    kUnitAirborne, // attributeFlags
     &regist, // statusVulnerability
     2, // numParts
     parts, // mParts
@@ -187,7 +187,7 @@ static BattleUnitKindPart parts[] = {
         255, // baseAlpha
         &defence, // defense
         &defence_attr, // defenseAttr
-        kMainPart | kGuardTargetPart | kHammerlikeCannotTarget | kShellTosslikeCannotTarget, // attributes
+        kMainPart | kGuardTargetPart | kPartNotHammerTarget | kPartNotShellTossTarget, // attributes
         0, // counterAttributes
         pose_table, // poseTable
     },
@@ -203,7 +203,7 @@ static BattleUnitKindPart parts[] = {
         255, // baseAlpha
         &defence, // defense
         &defence_attr, // defenseAttr
-        kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, // attributes
+        kPartUntargetable | kHidden | kNoShadow | kAbsolutePosition, // attributes
         0, // counterAttributes
         pose_table, // poseTable
     },
@@ -625,7 +625,7 @@ static EVT_BEGIN(normal_attack_event)
     CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_jyugem_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 1, LW(0))
     IF_INT_EQUAL(LW(0), 1)
-        CALL(btlevtcmd_CheckDamageCode, LW(3), 262144, LW(0))
+        CALL(btlevtcmd_CheckDamageCode, LW(3), DAMAGE_RESULT_GUARD, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
             CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
             SET_VALUE(LW(1), 0)

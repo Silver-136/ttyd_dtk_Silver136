@@ -158,15 +158,15 @@ void BattleDamageDirect(s32 unitId, BattleUnit* target, BattleUnitPart* part, s3
     }
 
     if (pattern != 0x13 && pattern != 0x1b) {
-        if (result & 0x1000000) {
+        if (result & DAMAGE_RESULT_ATTACK_FX_R) {
             psndSFXOn_3D("SFX_MARIO_HAMMER_PIKKYO_R1", &pos);
-        } else if (result & 0x2000000) {
+        } else if (result & DAMAGE_RESULT_ATTACK_FX_Y) {
             psndSFXOn_3D("SFX_MARIO_HAMMER_PIKKYO_Y1", &pos);
-        } else if (result & 0x4000000) {
+        } else if (result & DAMAGE_RESULT_ATTACK_FX_B) {
             psndSFXOn_3D("SFX_MARIO_HAMMER_PIKKYO_B1", &pos);
-        } else if (result & 0x8000000) {
+        } else if (result & DAMAGE_RESULT_ATTACK_FX_G) {
             psndSFXOn_3D("SFX_MARIO_HAMMER_PIKKYO_G1", &pos);
-        } else if (result & 0x10000000) {
+        } else if (result & DAMAGE_RESULT_ATTACK_FX_P) {
             psndSFXOn_3D("SFX_MARIO_HAMMER_PIKKYO_P1", &pos);
         } else if (BtlUnit_GetBelong(target) == 0 && (result & 0x40000)) {
             psndSFXOn_3D("SFX_MARIO_GUARD1", &pos);
@@ -354,19 +354,19 @@ u32 BattleCheckPikkyoro(BattleWeapon* weapon, u32* flags) {
         }
         switch (idx) {
             case 0:
-                result |= 0x1000000;
+                result |= DAMAGE_RESULT_ATTACK_FX_R;
                 break;
             case 1:
-                result |= 0x2000000;
+                result |= DAMAGE_RESULT_ATTACK_FX_Y;
                 break;
             case 2:
-                result |= 0x4000000;
+                result |= DAMAGE_RESULT_ATTACK_FX_B;
                 break;
             case 3:
-                result |= 0x8000000;
+                result |= DAMAGE_RESULT_ATTACK_FX_G;
                 break;
             case 4:
-                result |= 0x10000000;
+                result |= DAMAGE_RESULT_ATTACK_FX_P;
                 break;
         }
     }
@@ -444,7 +444,7 @@ s32 BattleCalculateDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPa
                 damage = 0;
             }
         }
-        attacker->mTokenFlags |= kChargeExpended;
+        attacker->mTokenFlags |= kChargeConsumed;
     }
     if ((weapon->special & SPECIAL_STATUS_POWER) && BtlUnit_CheckStatus(attacker, STATUS_HUGE)) {
         BtlUnit_GetStatus(attacker, STATUS_HUGE, &turns, &strength);
@@ -1090,7 +1090,7 @@ s32 BattleSetStatusDamage(u32* result, BattleUnit* unit, BattleUnitPart* part, u
 
     if (ok) {
         BtlUnit_GetPos(unit, &x, &y, &z);
-        if (unit->mAttributeFlags & kCeiling) {
+        if (unit->mAttributeFlags & kUnitOnCeiling) {
             y -= BtlUnit_GetHeight(unit) / 2;
         } else {
             y += BtlUnit_GetHeight(unit) / 2;
@@ -1429,7 +1429,7 @@ s32 BattlePreCheckDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPar
         return 1;
     }
     if (weapon->special & SPECIAL_CHARGEABLE) {
-        attacker->mTokenFlags |= kChargeExpended;
+        attacker->mTokenFlags |= kChargeConsumed;
     }
     if ((part->attributes & kClone) && !(weapon->special & SPECIAL_CONTACTS_CLONES)) {
         return 2;
@@ -1437,10 +1437,10 @@ s32 BattlePreCheckDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPar
     if (weapon->special & SPECIAL_CANNOT_MISS) {
         return 1;
     }
-    if (BtlUnit_CheckStatus(target, STATUS_INVISIBLE) || (target->mAttributeFlags & kPermanentlyInvisible)) {
+    if (BtlUnit_CheckStatus(target, STATUS_INVISIBLE) || (target->mAttributeFlags & kUnitAlwaysInvisible)) {
         return 4;
     }
-    if (target->mAttributeFlags & kVeiled) {
+    if (target->mAttributeFlags & kUnitInVeil) {
         return 4;
     }
     if ((part->counterAttributes & kCounterPreemptiveFrontSpiky) && !(weapon->counterResistFlags & COUNTER_RESIST_PREEMPTIVE_SPIKY) && !attacker->badgesEquipped.SpikeShield) {
@@ -1610,15 +1610,15 @@ s32 BattleCheckDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPart* 
                 BattleAudience_Case_GuardBad();
             }
         }
-        if ((weapon->special & SPECIAL_FLIP_SHELLED) && (part->attributes & kIsShelled)) {
+        if ((weapon->special & SPECIAL_FLIP_SHELLED) && (part->attributes & kPartShelled)) {
             pierce = 1;
             flags |= 0x200000;
         }
-        if ((weapon->special & SPECIAL_FLIP_BOMB_FLIPPABLE) && (part->attributes & kIsBombFlippable)) {
+        if ((weapon->special & SPECIAL_FLIP_BOMB_FLIPPABLE) && (part->attributes & kPartFlippedByBombs)) {
             pierce = 1;
             flags |= 0x200000;
         }
-        if ((weapon->special & SPECIAL_GROUND_WINGED) && (part->attributes & kIsWinged)) {
+        if ((weapon->special & SPECIAL_GROUND_WINGED) && (part->attributes & kPartWinged)) {
             pierce = 1;
             if (flags & DAMAGE_RESULT_FINAL_HIT) {
                 flags |= 0x400000;

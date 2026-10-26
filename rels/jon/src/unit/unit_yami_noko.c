@@ -156,7 +156,7 @@ static StatusVulnerability regist = {
 };
 
 static BattleUnitKindPart parts[] = {
-    {1, "btl_un_yami_noko", "c_yaminoko", 0.0f, 0.0f, 0.0f, 0.0f, 30.0f, 0.0f, 0.0f, 40.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kIsShelled, 0, pose_table},
+    {1, "btl_un_yami_noko", "c_yaminoko", 0.0f, 0.0f, 0.0f, 0.0f, 30.0f, 0.0f, 0.0f, 40.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kPartShelled, 0, pose_table},
 };
 
 static BattleWeapon weapon_nokonoko_attack = {

@@ -314,7 +314,7 @@ static BattleDataEntry data_table_sky_bunsin[] = {
 
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_kamec", "c_kamek", 0.0f, 0.0f, 0.0f, 0.0f, 35.0f, 0.0f, 0.0f, 45.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table},
-    {2, "btl_un_kamec", "c_kamek", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table},
+    {2, "btl_un_kamec", "c_kamek", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kPartUntargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table},
 };
 
 static BattleWeapon weapon_kamec_attack_magic = {
@@ -606,10 +606,10 @@ static EVT_BEGIN(init_event2)
             ELSE
             CALL(btlevtcmd_ChangeDataTable, UNIT_ID_SELF, PTR(data_table_sky_bunsin))
         END_IF
-        CALL(btlevtcmd_OnAttribute, UNIT_ID_SELF, kFloating)
-        CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 1, kHammerlikeCannotTarget)
-        CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 1, kIsWinged)
-        CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 1, kShellTosslikeCannotTarget)
+        CALL(btlevtcmd_OnAttribute, UNIT_ID_SELF, kUnitAirborne)
+        CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 1, kPartNotHammerTarget)
+        CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 1, kPartWinged)
+        CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 1, kPartNotShellTossTarget)
         CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
         CALL(btlevtcmd_SetPos, UNIT_ID_SELF, LW(0), 40, LW(2))
         CALL(btlevtcmd_SetHomePos, UNIT_ID_SELF, LW(0), 40, LW(2))
@@ -757,7 +757,7 @@ static EVT_BEGIN(kamec_subset_dead_event)
     CALL(btlevtcmd_OnAttribute, LW(10), 16777216)
     CALL(btlevtcmd_OnAttribute, LW(10), 536870912)
     CALL_CHILD(kamec_subset_bunsin_all_kill)
-    CALL(btlevtcmd_CheckDamageCode, LW(10), 1024, LW(0))
+    CALL(btlevtcmd_CheckDamageCode, LW(10), DAMAGE_RESULT_DEATH, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_KillUnit, LW(10), 0)
     ELSE
@@ -823,10 +823,10 @@ EVT_END()
 static EVT_BEGIN(dmg_fall_event)
     SET_VALUE(LW(10), -2)
     SET_VALUE(LW(11), 1)
-    CALL(btlevtcmd_OffAttribute, UNIT_ID_SELF, kFloating)
-    CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, kIsWinged)
-    CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, kHammerlikeCannotTarget)
-    CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, kShellTosslikeCannotTarget)
+    CALL(btlevtcmd_OffAttribute, UNIT_ID_SELF, kUnitAirborne)
+    CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, kPartWinged)
+    CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, kPartNotHammerTarget)
+    CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, kPartNotShellTossTarget)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_DAMAGE)
     WAIT_MS(500)
     CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, 1, PTR(pose_table))

@@ -528,7 +528,7 @@ static BattleUnitKindPart parts[] = {
         255, // baseAlpha
         &defence, // defense
         &defence_attr, // defenseAttr
-        kNotTargetable | kNoShadow, // attributes
+        kPartUntargetable | kNoShadow, // attributes
         0, // counterAttributes
         pose_table_3, // poseTable
     },
@@ -573,7 +573,7 @@ static EVT_BEGIN(damage_event)
             END_SWITCH
         END_IF
     END_IF
-    CALL(btlevtcmd_CheckDamageCode, LW(10), 256, LW(0))
+    CALL(btlevtcmd_CheckDamageCode, LW(10), DAMAGE_RESULT_FINAL_HIT, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_GetDamageCode, LW(10), LW(0))
         SWITCH(LW(0))

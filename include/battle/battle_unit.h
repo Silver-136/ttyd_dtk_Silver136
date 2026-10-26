@@ -16,7 +16,7 @@ typedef enum BattleUnitAlliance {
 } BattleUnitAlliance;
 
 typedef enum BattleUnitToken_Flags {
-    kChargeExpended = (1 << 3),     // 0x8
+    kChargeConsumed = (1 << 3),     // 0x8, the attack used up the Charge; cleared with the status when the action ends
     kConfusedAction = (1 << 4),     // 0x10
     kCurrentlyActing = (1 << 12),   // 0x1000
     kHasRallyWinkStatus = (1 << 13) // 0x2000
@@ -29,20 +29,22 @@ typedef enum PartsAttribute_Flags {          // 32-bit size
     kGuardTargetPart = (1 << 3),             // 0x8, the part an attack is redirected to when this unit bodyguards
     kUnknown_0x10 = (1 << 4),                // 0x10
     kUnknown_0x40 = (1 << 6),                // 0x40
-    kWeakToAttackFxR = (1 << 7),             // 0x80
+    // 0x80, set on Hooktail's two body parts; no code reads it (Hooktail's reaction to Attack FX R is in its damage
+    // event, which tests DAMAGE_RESULT_ATTACK_FX_R)
+    kHooktailMarker_UNUSED = (1 << 7),
     kWeakToIcePower = (1 << 8),              // 0x100
-    kIsWinged = (1 << 11),                   // 0x800
-    kIsShelled = (1 << 12),                  // 0x1000
-    kIsBombFlippable = (1 << 13),            // 0x2000
+    kPartWinged = (1 << 11),                   // 0x800, grounded by SPECIAL_GROUND_WINGED
+    kPartShelled = (1 << 12),                  // 0x1000, flipped by SPECIAL_FLIP_SHELLED
+    kPartFlippedByBombs = (1 << 13),            // 0x2000, flipped by SPECIAL_FLIP_BOMB_FLIPPABLE
     kClone = (1 << 14),                      // 0x4000, attacks pass through unless SPECIAL_CONTACTS_CLONES
     kNoTranslucentLook = (1 << 15),          // 0x8000, keeps its normal look while the unit is invisible/dodgy
-    kNotTargetable = (1 << 16),              // 0x10000
+    kPartUntargetable = (1 << 16),              // 0x10000, skipped by target sampling and the audience
     kIgnoreMapObjectOffset = (1 << 17),      // 0x20000, not moved back by its unit's kUnitMapObject
     kNotMainTarget = (1 << 18),              // 0x40000, never chosen as the main/important target part (battle_detect)
-    kUntattleable = (1 << 19),               // 0x80000
-    kJumplikeCannotTarget = (1 << 20),       // 0x100000
-    kHammerlikeCannotTarget = (1 << 21),     // 0x200000
-    kShellTosslikeCannotTarget = (1 << 22),  // 0x400000
+    kPartNoTattle = (1 << 19),               // 0x80000, TARGET_PROP_TATTLE skips it
+    kPartNotJumpTarget = (1 << 20),       // 0x100000, TARGET_PROP_JUMPLIKE attacks skip it
+    kPartNotHammerTarget = (1 << 21),     // 0x200000, TARGET_PROP_HAMMERLIKE attacks skip it (except recoil on itself)
+    kPartNotShellTossTarget = (1 << 22),  // 0x400000, TARGET_PROP_SHELL_TOSSLIKE attacks skip it
     kNoHpLoss = (1 << 23),                   // 0x800000, damage is counted but HP does not go down
     kHidden = (1 << 24),                     // 0x1000000, not drawn
     kNoShadow = (1 << 25),                   // 0x2000000, no shadow
@@ -84,13 +86,13 @@ typedef enum BattleUnit_Flags {
 typedef enum BattleUnitAttribute_Flags { // 32-bit size
     kUnitMapObject = (1 << 0),           // 0x1, map object: target sampling puts it 300 units further back
                                          // (unless the part has kIgnoreMapObjectOffset)
-    kCeiling = (1 << 1),                 // 0x2
-    kFloating = (1 << 2),                // 0x4
-    kPermanentlyInvisible = (1 << 3),    // 0x8, drawn translucent and attacks miss (like STATUS_INVISIBLE)
-    kVeiled = (1 << 4),                  // 0x10
-    kShellShielded = (1 << 5),           // 0x20
+    kUnitOnCeiling = (1 << 1),                 // 0x2, hangs from the ceiling (targeting and damage positions)
+    kUnitAirborne = (1 << 2),                // 0x4, off the ground (targeting height class; zero-gravity bob)
+    kUnitAlwaysInvisible = (1 << 3),    // 0x8, drawn translucent and attacks miss (like STATUS_INVISIBLE)
+    kUnitInVeil = (1 << 4),                  // 0x10, hidden in Vivian's Veil: attacks miss
+    kUnitUnderShellShield = (1 << 5),           // 0x20, under Koops's Shell Shield (TARGET_PROP_NO_SHELL_SHIELDED)
     kUnitNeverTargetable = (1 << 6),     // 0x40, skipped by target sampling (battle_detect)
-    kNoGravityBob = (1 << 12),           // 0x1000, no zero-gravity bob (like kFloating)
+    kNoGravityBob = (1 << 12),           // 0x1000, no zero-gravity bob (like kUnitAirborne)
     kActsInZeroGravity = (1 << 13),      // 0x2000, not stopped by the zero-gravity cannot-act event
     kUnitNoHammerKnockback = (1 << 14),  // 0x4000, Super/Ultra Hammer knock-away damage patterns are dropped
     kUndead = (1 << 16),                 // 0x10000, keeps taking turns while KO'd (STATUS_INSTANT_KILL)

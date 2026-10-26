@@ -396,7 +396,7 @@ static EVT_BEGIN(dead_event)
     CALL(_add_star_point_disp_offset, UNIT_ID_SELF, LW(3), LW(1), LW(2))
     CALL(evt_eff, STRING(""), STRING("star_point"), 0, LW(3), LW(1), LW(2), LW(0), 0, 0, 0, 0, 0, 0, 0)
     WAIT_FRAMES(20)
-    CALL(btlevtcmd_CheckDamageCode, UNIT_ID_SELF, 1024, LW(0))
+    CALL(btlevtcmd_CheckDamageCode, UNIT_ID_SELF, DAMAGE_RESULT_DEATH, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_KillUnit, UNIT_ID_SELF, 0)
     ELSE

@@ -87,7 +87,7 @@ BattleUnitKind unit_hyper_patakuri = {
     "SFX_BTL_DAMAGE_FIRE1", // fireDamageSfxName
     "SFX_BTL_DAMAGE_ICE1", // iceDamageSfxName
     "SFX_BTL_DAMAGE_BIRIBIRI1", // electricDamageSfxName
-    kFloating | kUnitLeader, // attributeFlags
+    kUnitAirborne | kUnitLeader, // attributeFlags
     &regist_patakuri, // statusVulnerability
     1, // numParts
     parts_patakuri, // mParts
@@ -196,7 +196,7 @@ BattleWeapon weapon_patakuri_charge = {
 };
 
 static BattleUnitKindPart parts_patakuri[] = {
-    {1, "btl_un_hyper_patakuri", "c_kuribo_h", 0.0f, 0.0f, 0.0f, 0.0f, 22.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence_patakuri, &defence_patakuri_attr, kMainPart | kGuardTargetPart | kIsWinged | kHammerlikeCannotTarget | kShellTosslikeCannotTarget, 0, pose_table_patakuri},
+    {1, "btl_un_hyper_patakuri", "c_kuribo_h", 0.0f, 0.0f, 0.0f, 0.0f, 22.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence_patakuri, &defence_patakuri_attr, kMainPart | kGuardTargetPart | kPartWinged | kPartNotHammerTarget | kPartNotShellTossTarget, 0, pose_table_patakuri},
 };
 
 static PoseTableEntry pose_table_patakuri[] = {

@@ -746,7 +746,7 @@ void main_enemy_sub(BattleUnit* unit, s32* n) {
         if (xc >= x0 && xc < x0 + step) {
             y = (xc - x0) / step * (m->disp[0][i + 1].y - m->disp[0][i].y) + m->disp[0][i].y;
             if (unit->mPosition.y < y) {
-                if ((unit->mAttributeFlags & kCeiling) && y < 120.0f) {
+                if ((unit->mAttributeFlags & kUnitOnCeiling) && y < 120.0f) {
                     break;
                 }
                 if (m->vel[0][i].y > 0.0f) {

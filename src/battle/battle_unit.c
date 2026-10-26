@@ -2151,7 +2151,7 @@ BOOL BtlUnit_EnemyItemCanUseCheck(s32 item) {
 }
 
 BOOL BtlUnit_CheckShadowGuard(BattleUnit* unit) {
-    if (unit->mAttributeFlags & kVeiled) {
+    if (unit->mAttributeFlags & kUnitInVeil) {
         return TRUE;
     }
     if (unit->currentKind == UNIT_VIVIAN && unit->work[4] > 0) {

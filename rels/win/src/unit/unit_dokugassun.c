@@ -81,7 +81,7 @@ static BattleUnitKind unit_dokugassun = {
     "SFX_BTL_DAMAGE_FIRE1", // fireDamageSfxName
     "SFX_BTL_DAMAGE_ICE1", // iceDamageSfxName
     "SFX_BTL_DAMAGE_BIRIBIRI1", // electricDamageSfxName
-    kFloating, // attributeFlags
+    kUnitAirborne, // attributeFlags
     &regist, // statusVulnerability
     1, // numParts
     parts, // mParts
@@ -131,7 +131,7 @@ static BattleUnitKindPart parts[] = {
         255, // baseAlpha
         &defence, // defense
         &defence_attr, // defenseAttr
-        kMainPart | kGuardTargetPart | kHammerlikeCannotTarget | kShellTosslikeCannotTarget, // attributes
+        kMainPart | kGuardTargetPart | kPartNotHammerTarget | kPartNotShellTossTarget, // attributes
         0, // counterAttributes
         pose_table, // poseTable
     },
@@ -441,7 +441,7 @@ static EVT_BEGIN(unison_phase_event)
             SET_VALUE(LW(1), 40)
             CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 60, 10, 4, 0, -1)
             CALL(btlevtcmd_SetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
-            CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 1, kHammerlikeCannotTarget | kShellTosslikeCannotTarget)
+            CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 1, kPartNotHammerTarget | kPartNotShellTossTarget)
             CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 0, 0)
         ELSE
             CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_KUMO_MOVE5"), EVT_NULLPTR, 0, EVT_NULLPTR)
@@ -449,7 +449,7 @@ static EVT_BEGIN(unison_phase_event)
             SET_VALUE(LW(1), 10)
             CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 60, -10, 4, 0, -1)
             CALL(btlevtcmd_SetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
-            CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, kHammerlikeCannotTarget | kShellTosslikeCannotTarget)
+            CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, kPartNotHammerTarget | kPartNotShellTossTarget)
             CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 0, 1)
         END_IF
     END_IF

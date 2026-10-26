@@ -164,7 +164,7 @@ static EVT_BEGIN(init_event_clauda)
 EVT_END()
 
 EVT_BEGIN(damage_event_clauda)
-    CALL(btlevtcmd_CheckDamageCode, UNIT_ID_SELF, 1024, LW(0))
+    CALL(btlevtcmd_CheckDamageCode, UNIT_ID_SELF, DAMAGE_RESULT_DEATH, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         SET_VALUE(GW(20), 1)
     END_IF

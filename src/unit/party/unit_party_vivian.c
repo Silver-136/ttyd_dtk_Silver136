@@ -224,7 +224,7 @@ BattleUnitKind unitdata_Party_Vivian = {
     "SFX_MARIO_DAMAGE_FIRE1", // fireDamageSfxName
     "SFX_MARIO_DAMAGE_ICE1", // iceDamageSfxName
     "SFX_MARIO_DAMAGE_BIRIBIRI1", // electricDamageSfxName
-    kFloating | kUnitNoHpGauge, // attributeFlags
+    kUnitAirborne | kUnitNoHpGauge, // attributeFlags
     &regist.d, // statusVulnerability
     1, // numParts
     unitpartsdata_Party_Vivian, // mParts
@@ -396,7 +396,7 @@ EVT_BEGIN(vivian_hide_event)
             CALL(btlevtcmd_SetMoveSpeed, LW(3), FLOAT(2.0f))
             CALL(btlevtcmd_MovePosition, LW(3), LW(0), LW(1), LW(2), 0, -1, 0)
         END_INLINE_EVENT
-        CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, kNotTargetable)
+        CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, kPartUntargetable)
         CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, kHidden)
         CALL(battle_evt_majo_disp_on, UNIT_ID_SELF, 1, LW(0), LW(1), LW(2), 1)
         CALL(btlevtcmd_SetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
@@ -847,7 +847,7 @@ EVT_BEGIN(partyVivianAttack_ShadowGuard)
     ADD(LW(1), 1)
     CALL(evt_eff, 0, STRING("ripple"), 1, LW(0), LW(1), LW(2), 0, 0, 0, 0, 0, 0, 0, 0)
     WAIT_MS(333)
-    CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 1, kNotTargetable | kHidden)
+    CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 1, kPartUntargetable | kHidden)
     WAIT_FRAMES(1)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 4, 1)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
