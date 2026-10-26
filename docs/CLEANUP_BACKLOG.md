@@ -41,8 +41,9 @@ data order 10, sound-name integer round trips (`SFX_NAME_WORD`) 9, no-op casts 6
   psndSFX_pit/vol, msgWindow_Entry, hankakuSearch per version), Vec/GXColor by value vs pointer
   (cloudGetBreathPower, mapObjSetColor, mapSetBlend, partyNrmToAngle, marioCreviceWallChk), argument order that
   changes code (intpl_sub, marioSetForceMove, gor_irai's FontDrawString).
-- MayaAnim / MayaAnimData are copied privately in effdrv, eff_damage_star, eff_ice and eff_recovery (shared-struct
-  candidate).
+- MayaAnim / MayaAnimData are copied privately in effdrv, eff_damage_star, eff_ice and eff_recovery. Not a plain
+  merge: the effects read `data->lists` as a count plus MayaPoly array, effdrv as a count plus key lists (two views
+  of the same animation data; needs a look at the data layout first).
 - `itemEntry` has no header prototype because evt_mobj needs a float-first private declaration (FAKES row).
 - Signed-byte casts `(s32)(u8)` on character and party ids, and u8 casts on BOOL audience getters: kept until an
   accessor or prototype explains them.
