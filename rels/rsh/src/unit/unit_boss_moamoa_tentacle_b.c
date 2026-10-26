@@ -318,7 +318,7 @@ static EVT_BEGIN(evt_attack)
         END_IF
         RETURN
     END_IF
-    CALL(evt_btl_camera_set_mode, 0, 8)
+    CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT_TO_UNIT)
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, LW(3))
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
     CALL(evt_btl_camera_set_zoom, 0, 100)
@@ -429,7 +429,7 @@ static EVT_BEGIN(evt_attack)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
     END_SWITCH
     CALL(btlevtcmd_SetUnitWork, LW(6), 0, 1)
-    CALL(evt_btl_camera_set_mode, 0, 0)
+    CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     IF_INT_EQUAL(LW(15), 0)
         LOOP(0)
             READ_INT(LW(2))

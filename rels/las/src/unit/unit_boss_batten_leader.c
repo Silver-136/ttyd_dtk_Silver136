@@ -172,7 +172,7 @@ EvtWord batten_leader_stop_attack_event[328];
 static EvtWord wait_event[16];
 
 EVT_BEGIN(batten_leader_zoom)
-    CALL(evt_btl_camera_set_mode, 0, 3)
+    CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_FREE)
     IF_INT_NOT_EQUAL(LW(0), 2)
         SET_VALUE(LW(1), 30)
         ELSE
@@ -186,7 +186,7 @@ EVT_BEGIN(batten_leader_zoom)
 EVT_END()
 
 static EVT_BEGIN(mario_party_zoom)
-    CALL(evt_btl_camera_set_mode, 0, 3)
+    CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_FREE)
     IF_INT_NOT_EQUAL(LW(0), 2)
         SET_VALUE(LW(1), 30)
         ELSE
@@ -1409,7 +1409,7 @@ static EVT_BEGIN(entry_event)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_ACTION)
     CALL(check_satellite)
     CALL(btlevtcmd_StatusWindowOnOff, 1)
-    CALL(evt_btl_camera_set_mode, 0, 0)
+    CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     RETURN
 EVT_END()
 
@@ -1422,11 +1422,11 @@ static EVT_BEGIN(damage_event)
         SWITCH(LW(0))
             CASE_EQUAL(4)
             WAIT_MS(1500)
-            CALL(evt_btl_camera_set_mode, 0, 0)
+            CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
             WAIT_MS(300)
             CASE_EQUAL(5)
             WAIT_MS(1500)
-            CALL(evt_btl_camera_set_mode, 0, 0)
+            CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
             WAIT_MS(300)
         END_SWITCH
         CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 3, 0)
@@ -1523,7 +1523,7 @@ EVT_BEGIN(monster_before_phase_event)
             CALL(evt_msg_print, 2, STRING("stg8_las_66"), 0, -2)
             WAIT_MS(300)
             CALL(btlevtcmd_StatusWindowOnOff, 1)
-            CALL(evt_btl_camera_set_mode, 0, 0)
+            CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
         END_IF
         CASE_EQUAL(1)
         CALL(btlevtcmd_GetMaxHp, UNIT_ID_SELF, LW(0))
@@ -1539,7 +1539,7 @@ EVT_BEGIN(monster_before_phase_event)
             CALL(evt_msg_print, 2, STRING("stg8_las_67"), 0, -2)
             WAIT_MS(300)
             CALL(btlevtcmd_StatusWindowOnOff, 1)
-            CALL(evt_btl_camera_set_mode, 0, 0)
+            CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
         END_IF
         CASE_EQUAL(2)
         CALL(btlevtcmd_GetMaxHp, UNIT_ID_SELF, LW(0))
@@ -1558,7 +1558,7 @@ EVT_BEGIN(monster_before_phase_event)
             CALL(evt_msg_print, 2, STRING("stg8_las_68"), 0, -2)
             WAIT_MS(300)
             CALL(btlevtcmd_StatusWindowOnOff, 1)
-            CALL(evt_btl_camera_set_mode, 0, 0)
+            CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
         END_IF
     END_SWITCH
     LABEL(0)
@@ -2332,7 +2332,7 @@ EVT_BEGIN(batten_leader_shikaeshi_attack_event)
         END_IF
     END_IF
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, LW(9))
-    CALL(evt_btl_camera_set_mode, 0, 7)
+    CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT)
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, -1)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
     CALL(evt_btl_camera_set_zoom, 0, 400)
@@ -2379,7 +2379,7 @@ EVT_BEGIN(batten_leader_yokeyoke_attack_event)
         END_IF
     END_IF
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, LW(9))
-    CALL(evt_btl_camera_set_mode, 0, 7)
+    CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT)
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, -1)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
     CALL(evt_btl_camera_set_zoom, 0, 400)

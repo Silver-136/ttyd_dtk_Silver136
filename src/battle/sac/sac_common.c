@@ -22,7 +22,7 @@ s32 cheerEnable;
 u8 volPer;
 
 EVT_BEGIN(sac_start_camera_evt)
-    CALL(evt_btl_camera_set_mode, 0, 7)
+    CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT)
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, -1)
     CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_HUGE, LW(0))
     IF_INT_EQUAL(LW(0), 1)

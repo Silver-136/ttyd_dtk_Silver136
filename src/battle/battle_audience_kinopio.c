@@ -955,7 +955,7 @@ void BattleAudienceCtrlProcessKinopioIntrude(s32 index, s32 front) {
             m->velocity.x = 5.0f * (dx / d);
             m->velocity.y = 0.0f;
             m->velocity.z = 5.0f * (dz / d);
-            btl_camera_set_mode(0, 3);
+            btl_camera_set_mode(BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_FREE);
             btl_camera_set_moveto(0, 30, 698.0f * m->counterF, 100.0f, 0.0f, 0.0f, 60.0f, 0.0f, 4);
             intrudeSound = psndSFXOn("SFX_AUDIENCE_HEIHO_MOVE1");
         }
@@ -973,7 +973,7 @@ void BattleAudienceCtrlProcessKinopioIntrude(s32 index, s32 front) {
         if (m->counter <= 0) {
             m->step = 18;
             m->counter = 25;
-            btl_camera_set_mode(0, 0);
+            btl_camera_set_mode(BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT);
             btl_camera_set_moveSpeedLv(0, 2);
             psndSFXOff(intrudeSound);
         }

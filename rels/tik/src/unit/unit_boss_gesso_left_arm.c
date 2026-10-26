@@ -297,7 +297,7 @@ static EVT_BEGIN(attack_event)
     END_IF
     CALL(btlevtcmd_AnimeWaitPlayComplete, UNIT_ID_SELF, 1)
     LABEL(99)
-    CALL(evt_btl_camera_set_mode, 0, 0)
+    CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(btlevtcmd_StartWaitEvent, -2)
     RETURN
 EVT_END()

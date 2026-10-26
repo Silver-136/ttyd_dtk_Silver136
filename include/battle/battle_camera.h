@@ -66,6 +66,39 @@ USER_FUNC(evt_btl_camera_shake_h);
 USER_FUNC(evt_btl_camera_shake_w);
 USER_FUNC(evt_btl_camera_wait_move_end);
 
+// BattleWork.cameraWork.mode (btl_camera_set_mode / evt_btl_camera_set_mode); names from the debug name
+// battleCameraMain copies for each mode and from what the mode does.
+typedef enum BattleCameraMode {
+    BTL_CAM_MODE_DEFAULT = 0, // debug name: default
+    BTL_CAM_MODE_DEFAULT_ZOOM = 1,
+    BTL_CAM_MODE_CURSOR_UP = 2, // no callers; falls through into FREE
+    BTL_CAM_MODE_FREE = 3, // position/target from set_moveto
+    BTL_CAM_MODE_BACKSTAGE = 4, // behind the stage; no callers
+    BTL_CAM_MODE_BACKSTAGE_2 = 5, // no callers
+    BTL_CAM_MODE_AUDIENCE = 6,
+    BTL_CAM_MODE_UNIT = 7, // follows one unit (homing unit)
+    BTL_CAM_MODE_UNIT_TO_UNIT = 8, // between the two homing units
+    BTL_CAM_MODE_UNIT_MIDPOINT = 9, // midpoint of the homing units (shares UNIT's debug name)
+    BTL_CAM_MODE_PART = 10, // follows one part
+    BTL_CAM_MODE_PART_TO_PART = 11, // between two parts
+    BTL_CAM_MODE_AUDIENCE_MEMBER = 12, // follows an audience member
+    BTL_CAM_MODE_UNIT_TO_AUDIENCE = 13, // between a unit and an audience member
+    BTL_CAM_MODE_ENTRY_NORMAL = 14, // battle start, normal (switches to FREE)
+    BTL_CAM_MODE_ENTRY_FIRST_STRIKE = 15, // battle start after Mario's first strike
+    BTL_CAM_MODE_ENTRY_ENEMY_FIRST_STRIKE = 16, // battle start after the enemy's first strike
+    BTL_CAM_MODE_VICTORY = 17,
+    BTL_CAM_MODE_VICTORY_AUDIENCE = 18, // shares VICTORY's debug name
+    BTL_CAM_MODE_DEFEAT = 19,
+    BTL_CAM_MODE_ESCAPE = 20, // running away
+} BattleCameraMode;
+
+// btl_camera_set_mode priority: a request applies only at or above the limit set by evt_btl_camera_set_prilimit
+// (event and boss scripts raise it to 1 to keep normal attack code from moving the camera).
+enum {
+    BTL_CAM_PRI_NORMAL = 0,
+    BTL_CAM_PRI_EVENT = 1,
+};
+
 void battleCameraMain(void);
 void btl_camera_set_mode(s32 pri, s32 mode);
 void btl_camera_set_moveSpeedLv(s32 pri, s32 lv);

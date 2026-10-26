@@ -423,7 +423,7 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, LW(9))
-    CALL(evt_btl_camera_set_mode, 0, 8)
+    CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT_TO_UNIT)
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, LW(3))
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
     CALL(evt_btl_camera_set_zoom, 0, 200)
@@ -469,7 +469,7 @@ static EVT_BEGIN(hit_check_event)
     LABEL(90)
     GOTO(98)
     LABEL(91)
-    CALL(evt_btl_camera_set_mode, 0, 0)
+    CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(btlevtcmd_ResultACDefence, LW(3), LW(9))
     CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), DAMAGE_RESULT_FINAL_HIT, LW(5))
     GOTO(98)
@@ -993,7 +993,7 @@ void zakogun_ext_main1(void) {
                 zako->rot.y = 180.0f;
                 zako->start = zako->pos;
                 unit->mPosition = unit->mHomePosition;
-                btl_camera_set_mode(0, 0);
+                btl_camera_set_mode(BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT);
                 break;
             case 80:
                 zako->rot.z = 0.0f;

@@ -1505,9 +1505,9 @@ s32 BattleCommandDisplay_ActMenuMain(BattleWork* wp) {
         }
         if (BattlePadCheckNow(-1)) {
             cmd->idleTimer = 0;
-            btl_camera_set_mode(0, 0);
+            btl_camera_set_mode(BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT);
         } else if (++cmd->idleTimer >= 900) {
-            btl_camera_set_mode(0, 6);
+            btl_camera_set_mode(BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_AUDIENCE);
             btl_camera_set_moveSpeedLv(0, 5);
         }
         if (wp->commandMenu.attackAudience) {
@@ -2232,7 +2232,7 @@ void BattleCommandDisplay_TargetSelectMenuDisp(CameraId camId, void* param) {
             }
         }
     }
-    btl_camera_set_mode(0, 0);
+    btl_camera_set_mode(BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT);
 }
 
 #pragma dont_inline on
@@ -2241,7 +2241,7 @@ void BattleCommandDisplay_TargetSelectMenuEnd(BattleWork* wp) {
     BattleCursor* cursor;
 
     _btlcmd_GetCursorPtr(cmd, wp->commandMenu.actType, &cursor);
-    btl_camera_set_mode(0, 0);
+    btl_camera_set_mode(BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT);
     cmd->flags &= ~0x10000;
     cmd->flags &= ~0x1000000;
 }

@@ -411,11 +411,11 @@ static USER_FUNC(_get_mario_hammer_lv) {
 #ifdef VERSION_G8ME01
 #endif
 EVT_BEGIN(mario_dead_event)
-    CALL(evt_btl_camera_set_prilimit, 1)
+    CALL(evt_btl_camera_set_prilimit, BTL_CAM_PRI_EVENT)
 #ifdef VERSION_G8ME01
     CALL(evt_btl_camera_nomove_y_onoff, 1, 0)
 #endif
-    CALL(evt_btl_camera_set_mode, 1, 7)
+    CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_EVENT, BTL_CAM_MODE_UNIT)
     CALL(evt_btl_camera_set_homing_unit, 1, LW(10), -1)
     CALL(evt_btl_camera_set_moveSpeedLv, 1, 2)
 #ifdef VERSION_G8ME01
@@ -429,7 +429,7 @@ EVT_BEGIN(mario_dead_event)
     CALL(btlevtcmd_AnimeChangePose, LW(10), LW(11), STRING("M_D_2"))
     WAIT_MS(2000)
     CALL(btlevtcmd_KillUnit, LW(10), 1)
-    CALL(evt_btl_camera_set_prilimit, 0)
+    CALL(evt_btl_camera_set_prilimit, BTL_CAM_PRI_NORMAL)
     RETURN
 EVT_END()
 
@@ -490,7 +490,7 @@ EVT_BEGIN(btlataudevtMarioJump)
     CALL(_get_attack_aud_no, LW(3), LW(0), LW(1), LW(2))
     BEGIN_SIBLING_EVENT
         WAIT_FRAMES(15)
-        CALL(evt_btl_camera_set_mode, 0, 13)
+        CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT_TO_AUDIENCE)
         CALL(evt_btl_camera_set_homing_unit_audience, 0, UNIT_ID_SELF, 1, LW(3))
         CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
         CALL(evt_btl_camera_set_zoom, 0, 200)
@@ -521,7 +521,7 @@ EVT_BEGIN(btlataudevtMarioJump)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_RUN)
     BEGIN_SIBLING_EVENT_GET_ID(LW(15))
         WAIT_MS(500)
-        CALL(evt_btl_camera_set_mode, 0, 0)
+        CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
         WAIT_MS(1000)
     END_SIBLING_EVENT
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(8.0f))
@@ -559,7 +559,7 @@ EVT_BEGIN(btlataudevtMarioHammer)
     MULTIPLY(LW(6), LW(5))
     MULTIPLY(LW(6), -1)
     CALL(btlevtcmd_SetPos, UNIT_ID_SELF, LW(6), LW(1), LW(2))
-    CALL(evt_btl_camera_set_mode, 0, 13)
+    CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT_TO_AUDIENCE)
     CALL(evt_btl_camera_set_homing_unit_audience, 0, UNIT_ID_SELF, 1, LW(3))
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
     CALL(evt_btl_camera_set_zoom, 0, 100)
@@ -615,11 +615,11 @@ EVT_BEGIN(btlataudevtMarioHammer)
         CALL(evt_snd_sfxon, STRING("SFX_MARIO_HAMMER_HIT_GROUND1"), 0)
     END_SWITCH
     CALL(_attack_aud, LW(3), 0)
-    CALL(evt_btl_camera_set_mode, 0, 3)
+    CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_FREE)
     CALL(evt_btl_camera_shake_h, 0, 2, 0, 10, 13)
     BEGIN_SIBLING_EVENT_GET_ID(LW(15))
         WAIT_MS(1500)
-        CALL(evt_btl_camera_set_mode, 0, 0)
+        CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
         WAIT_MS(1000)
     END_SIBLING_EVENT
     WAIT_MS(500)

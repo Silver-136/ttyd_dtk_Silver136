@@ -466,12 +466,12 @@ void BattleBreakSlot_Main(void) {
                     case 2:
                     case 3:
                     case 4:
-                        btl_camera_set_mode(0, 6);
+                        btl_camera_set_mode(BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_AUDIENCE);
                         btl_camera_set_moveSpeedLv(0, 2);
                         break;
                 }
                 if (_battleWorkPointer->flags & BATTLE_FLAG_PARTY_IN_AUDIENCE) {
-                    btl_camera_set_mode(0, 0);
+                    btl_camera_set_mode(BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT);
                 }
             }
             if (slot->phaseTimer == 180) {
@@ -514,7 +514,7 @@ void BattleBreakSlot_Main(void) {
                 }
             }
             if (slot->phaseTimer == 220 && k == 200) {
-                btl_camera_set_mode(0, 0);
+                btl_camera_set_mode(BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT);
                 btl_camera_noshake(0);
             }
             if (slot->phaseTimer == 270) {
@@ -945,7 +945,7 @@ BOOL BattleBreakSlot_CheckReaction(void) {
     if (slot->evt && evtCheckID(slot->evt->eventId)) {
         return TRUE;
     }
-    btl_camera_set_mode(0, 0);
+    btl_camera_set_mode(BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT);
     btl_camera_set_moveSpeedLv(0, 2);
     BattleAudienceNumToTarget();
     slot->evt = NULL;

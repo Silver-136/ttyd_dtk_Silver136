@@ -344,7 +344,7 @@ BattleWeapon weapon_moamoa_tsunami_attack = {
 };
 
 EVT_BEGIN(moamoa_zoom)
-    CALL(evt_btl_camera_set_mode, 0, 3)
+    CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_FREE)
     IF_INT_NOT_EQUAL(LW(0), 2)
         SET_VALUE(LW(1), 30)
         ELSE
@@ -358,7 +358,7 @@ EVT_BEGIN(moamoa_zoom)
 EVT_END()
 
 static EVT_BEGIN(mario_party_zoom)
-    CALL(evt_btl_camera_set_mode, 0, 3)
+    CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_FREE)
     IF_INT_NOT_EQUAL(LW(0), 2)
         SET_VALUE(LW(1), 30)
         ELSE

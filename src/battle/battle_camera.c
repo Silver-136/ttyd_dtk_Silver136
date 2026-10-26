@@ -83,7 +83,7 @@ void battleCameraMain(void) {
     dAtX = 0.0f;
     dAtY = 0.0f;
     dAtZ = 0.0f;
-    if (wp->cameraWork.mode != 3) {
+    if (wp->cameraWork.mode != BTL_CAM_MODE_FREE) {
         wp->cameraWork.moveToTimer = 0;
     }
     cam->cameraPos.x = wp->cameraWork.pos.x;
@@ -99,19 +99,19 @@ void battleCameraMain(void) {
     wp->cameraWork.prevAt.y = cam->cameraAt.y;
     wp->cameraWork.prevAt.z = cam->cameraAt.z;
     switch (wp->cameraWork.mode) {
-    case 0:
+    case BTL_CAM_MODE_DEFAULT:
         battleCameraMoveTo(1, 1, 0.0f, 110.0f, 750.0f, 0.0f, 60.0f, 0.0f, &dX, &dY, &dZ, &dAtX, &dAtY, &dAtZ);
         strcpy(name, "\202\251\202\337\202\347\201\100\202\305\202\323\202\247\202\351\202\306");
         break;
-    case 1:
+    case BTL_CAM_MODE_DEFAULT_ZOOM:
         zz = 0.5f * wp->cameraWork.zoom;
         battleCameraMoveTo(1, 1, 0.0f, 110.0f, 750.0f - zz, 0.0f, 60.0f, -zz, &dX, &dY, &dZ, &dAtX, &dAtY, &dAtZ);
         strcpy(name, "\202\251\202\337\202\347\201\100\202\305\202\323\202\247\202\351\202\306\203\131\201\133\203\200");
         break;
-    case 2:
+    case BTL_CAM_MODE_CURSOR_UP:
         battleCameraMoveTo(1, 1, 0.0f, 160.0f, 750.0f, 0.0f, 110.0f, 0.0f, &dX, &dY, &dZ, &dAtX, &dAtY, &dAtZ);
         strcpy(name, "\202\251\202\337\202\347\201\100\202\251\201\133\202\273\202\351\202\252\202\244\202\246\202\311");
-    case 3:
+    case BTL_CAM_MODE_FREE:
         if (wp->cameraWork.moveToTimer > 0) {
             moveLv3 = wp->cameraWork.moveSpeedLv;
             wp->cameraWork.moveToTimer--;
@@ -128,15 +128,15 @@ void battleCameraMain(void) {
         }
         strcpy(name, "\202\251\202\337\202\347\201\100\202\323\202\350\201\133");
         break;
-    case 4:
+    case BTL_CAM_MODE_BACKSTAGE:
         battleCameraMoveTo(1, 1, 0.0f, 110.0f, -750.0f, 0.0f, 60.0f, 0.0f, &dX, &dY, &dZ, &dAtX, &dAtY, &dAtZ);
         strcpy(name, "\202\251\202\337\202\347\201\100\202\324\202\275\202\242\202\244\202\347");
         break;
-    case 5:
+    case BTL_CAM_MODE_BACKSTAGE_2:
         battleCameraMoveTo(1, 1, 0.0f, 400.0f, -617.0f, 0.0f, 60.0f, 0.0f, &dX, &dY, &dZ, &dAtX, &dAtY, &dAtZ);
         strcpy(name, "\202\251\202\337\202\347\201\100\202\324\202\275\202\242\202\244\202\347\202\121");
         break;
-    case 6:
+    case BTL_CAM_MODE_AUDIENCE:
         switch (pouchGetPtr()->rank) {
         case 0:
             zoomZ = 750.0f;
@@ -154,10 +154,10 @@ void battleCameraMain(void) {
         battleCameraMoveTo(1, 1, 0.0f, 110.0f, zoomZ, 0.0f, 60.0f, 0.0f, &dX, &dY, &dZ, &dAtX, &dAtY, &dAtZ);
         strcpy(name, "\202\251\202\337\202\347\201\100\202\251\202\361\202\253\202\341\202\255");
         break;
-    case 7:
+    case BTL_CAM_MODE_UNIT:
         unit2 = (0, BattleGetUnitPtr(wp, wp->cameraWork.unitId)); // FAKE: comma makes this unit2 web a compiler temp coloured early (target r28)
         if (unit2 == NULL) {
-            btl_camera_set_mode(0, 0);
+            btl_camera_set_mode(BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT);
             break;
         }
         BattleGetUnitPartsPtr(wp->cameraWork.unitId, wp->cameraWork.partsId);
@@ -182,11 +182,11 @@ void battleCameraMain(void) {
         battleCameraMoveTo(1, 1, pos.x, 110.0f + t + ofs, 750.0f - zz, pos.x, 60.0f + t + ofs, -zz, &dX, &dY, &dZ, &dAtX, &dAtY, &dAtZ);
         strcpy(name, "\202\251\202\337\202\347\201\100\202\344\202\311\202\301\202\306\202\302\202\242\202\321");
         break;
-    case 8: {f32 w, w2, d, ofs, t, zz, yy, atX, y;
+    case BTL_CAM_MODE_UNIT_TO_UNIT: {f32 w, w2, d, ofs, t, zz, yy, atX, y;
         unit = BattleGetUnitPtr(wp, wp->cameraWork.unitId);
         unit2 = (0, BattleGetUnitPtr(wp, wp->cameraWork.unitId2)); // FAKE: comma makes this unit2 web a compiler temp coloured early (target r28)
         if (unit == NULL || unit2 == NULL) {
-            btl_camera_set_mode(0, 0);
+            btl_camera_set_mode(BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT);
             break;
         }
         part2 = BattleGetUnitPartsPtr(wp->cameraWork.unitId, wp->cameraWork.partsId);
@@ -230,11 +230,11 @@ void battleCameraMain(void) {
         strcpy(name, "\202\251\202\337\202\347\201\100\202\121\202\344\202\311\202\301\202\306\202\251\202\361\202\302\202\242\202\321");
         break;
     }
-    case 9:
+    case BTL_CAM_MODE_UNIT_MIDPOINT:
         unit = BattleGetUnitPtr(wp, wp->cameraWork.unitId);
         party = BattleGetUnitPtr(wp, wp->cameraWork.unitId2);
         if (unit == NULL || party == NULL) {
-            btl_camera_set_mode(0, 0);
+            btl_camera_set_mode(BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT);
             break;
         }
         BattleGetUnitPartsPtr(wp->cameraWork.unitId, wp->cameraWork.partsId);
@@ -260,15 +260,15 @@ void battleCameraMain(void) {
         battleCameraMoveTo(1, 1, atY, 110.0f + atX + ofs, 750.0f - zz, atY, 60.0f + atX + ofs, -zz, &dX, &dY, &dZ, &dAtX, &dAtY, &dAtZ);
         strcpy(name, "\202\251\202\337\202\347\201\100\202\344\202\311\202\301\202\306\202\302\202\242\202\321");
         break;
-    case 10:
+    case BTL_CAM_MODE_PART:
         unit = BattleGetUnitPtr(wp, wp->cameraWork.unitId);
         if (unit == NULL) {
-            btl_camera_set_mode(0, 0);
+            btl_camera_set_mode(BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT);
             break;
         }
         part = BattleGetUnitPartsPtr(wp->cameraWork.unitId, wp->cameraWork.partsId);
         if (part == NULL) {
-            btl_camera_set_mode(0, 0);
+            btl_camera_set_mode(BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT);
             break;
         }
         BtlUnit_GetHitPos(unit, part, &pos.x, &pos.y, &pos.z);
@@ -292,17 +292,17 @@ void battleCameraMain(void) {
         battleCameraMoveTo(1, 1, pos.x, 110.0f + y + ofs, 750.0f - zz, pos.x, 60.0f + y + ofs, -zz, &dX, &dY, &dZ, &dAtX, &dAtY, &dAtZ);
         strcpy(name, "\202\251\202\337\202\347\201\100\202\317\201\133\202\302\202\302\202\242\202\321");
         break;
-    case 11: {f32 w, w2, t, zz, yy, d, ofs, y, atX;
+    case BTL_CAM_MODE_PART_TO_PART: {f32 w, w2, t, zz, yy, d, ofs, y, atX;
         unit = BattleGetUnitPtr(wp, wp->cameraWork.unitId);
         unit2 = (0, BattleGetUnitPtr(wp, wp->cameraWork.unitId2)); // FAKE: comma makes this unit2 web a compiler temp coloured early (target r28)
         if (unit == NULL || unit2 == NULL) {
-            btl_camera_set_mode(0, 0);
+            btl_camera_set_mode(BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT);
             break;
         }
         party = (BattleUnit*)BattleGetUnitPartsPtr(wp->cameraWork.unitId, wp->cameraWork.partsId); // FAKE: case-11 part held in party (role swap)
         part = BattleGetUnitPartsPtr(wp->cameraWork.unitId2, wp->cameraWork.partsId2);
         if ((BattleUnitPart*)party == NULL || part == NULL) {
-            btl_camera_set_mode(0, 0);
+            btl_camera_set_mode(BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT);
             break;
         }
         BtlUnit_GetPartsWorldPos((BattleUnitPart*)party, &pos.x, &pos.y, &pos.z);
@@ -342,20 +342,20 @@ void battleCameraMain(void) {
         strcpy(name, "\202\251\202\337\202\347\201\100\202\121\202\317\201\133\202\302\202\251\202\361\202\302\202\242\202\321");
         break;
     }
-    case 12: {
+    case BTL_CAM_MODE_AUDIENCE_MEMBER: {
             BattleAudienceMember* m = &aud->members[wp->cameraWork.audienceId];
             battleCameraMoveTo(1, 0, m->position.x, 200.0f, 400.0f + m->position.z, m->position.x, 0.0f, m->position.z, &dX, &dY, &dZ, &dAtX, &dAtY, &dAtZ);
         }
         strcpy(name, "\202\251\202\337\202\347\201\100\202\251\202\361\202\253\202\341\202\255\202\302\202\242\202\321");
         break;
-    case 13:
+    case BTL_CAM_MODE_UNIT_TO_AUDIENCE:
         unit = BattleGetUnitPtr(wp, wp->cameraWork.unitId);
         if (unit == NULL) {
-            btl_camera_set_mode(0, 0);
+            btl_camera_set_mode(BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT);
             break;
         }
         if (BattleGetUnitPartsPtr(wp->cameraWork.unitId, wp->cameraWork.partsId) == NULL) {
-            btl_camera_set_mode(0, 0);
+            btl_camera_set_mode(BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT);
             break;
         }
         wp->cameraWork.audienceId = 10;
@@ -388,7 +388,7 @@ void battleCameraMain(void) {
         battleCameraMoveTo(1, 1, atX, 110.0f + y, 750.0f - zz, atX, 60.0f + y, -zz, &dX, &dY, &dZ, &dAtX, &dAtY, &dAtZ);
         strcpy(name, "\202\251\202\337\202\347\201\100\202\344\202\311\202\301\202\306\202\251\202\361\202\253\202\341\202\255\202\251\202\361\202\302\202\242\202\321");
         break;
-    case 14:
+    case BTL_CAM_MODE_ENTRY_NORMAL:
         wp->cameraWork.modeFrame++;
         if (wp->cameraWork.modeFrame == 1) {
             switch (pouchGetPtr()->rank) {
@@ -411,25 +411,25 @@ void battleCameraMain(void) {
         }
         if (wp->cameraWork.modeFrame == 10) {
             wp->cameraWork.modeFrame = 0;
-            btl_camera_set_mode(0, 3);
+            btl_camera_set_mode(BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_FREE);
             btl_camera_set_moveto(0, 0.0f, 110.0f, 750.0f, 0.0f, 60.0f, 0.0f, 120, 4);
         }
         strcpy(name, "\202\251\202\337\202\347\201\100\202\323\202\302\202\244\202\311\202\315\202\242\202\301\202\275");
         break;
-    case 15:
+    case BTL_CAM_MODE_ENTRY_FIRST_STRIKE:
         wp->cameraWork.moveSpeedLv = 3;
         wp->cameraWork.zoomSpeedLv = 3;
         battleCameraMoveTo(1, 1, 0.0f, 110.0f, 500.0f, 0.0f, 60.0f, 0.0f, &dX, &dY, &dZ, &dAtX, &dAtY, &dAtZ);
         strcpy(name, "\202\251\202\337\202\347\201\100\202\244\202\334\202\255\202\315\202\242\202\301\202\275");
         break;
-    case 16:
+    case BTL_CAM_MODE_ENTRY_ENEMY_FIRST_STRIKE:
         wp->cameraWork.moveSpeedLv = 3;
         wp->cameraWork.zoomSpeedLv = 3;
         battleCameraMoveTo(1, 1, -100.0f, 110.0f, 500.0f, -100.0f, 60.0f, 0.0f, &dX, &dY, &dZ, &dAtX, &dAtY, &dAtZ);
         strcpy(name, "\202\251\202\337\202\347\201\100\202\276\202\337\202\311\202\315\202\242\202\301\202\275");
         break;
-    case 17:
-    case 18:
+    case BTL_CAM_MODE_VICTORY:
+    case BTL_CAM_MODE_VICTORY_AUDIENCE:
         mario = BattleGetMarioPtr(wp);
         part = (BattleUnitPart*)BattleGetPartyPtr(wp); // FAKE: party held in part (role swap)
         if ((BattleUnit*)part != NULL) {
@@ -438,7 +438,7 @@ void battleCameraMain(void) {
             atX = 0.5f * (mx + px);
             atY = 0.5f * (my + py);
             atZ = 0.5f * (mz + pz);
-            if (wp->cameraWork.mode == 18) {
+            if (wp->cameraWork.mode == BTL_CAM_MODE_VICTORY_AUDIENCE) {
                 atY -= 20.0f;
             }
         } else {
@@ -452,10 +452,10 @@ void battleCameraMain(void) {
         battleCameraMoveTo(0, 1, atX, 100.0f + atY, 350.0f + atZ, atX, 50.0f + atY, 0.0f, &dX, &dY, &dZ, &dAtX, &dAtY, &dAtZ);
         strcpy(name, "\202\251\202\337\202\347\201\100\202\265\202\345\202\244\202\350");
         break;
-    case 19:
+    case BTL_CAM_MODE_DEFEAT:
         strcpy(name, "\202\251\202\337\202\347\201\100\202\315\202\242\202\332\202\255");
         break;
-    case 20:
+    case BTL_CAM_MODE_ESCAPE:
         wp->cameraWork.moveSpeedLv = 2;
         wp->cameraWork.zoomSpeedLv = 2;
         battleCameraMoveTo(1, 1, -100.0f, 100.0f, 400.0f, -100.0f, 50.0f, 0.0f, &dX, &dY, &dZ, &dAtX, &dAtY, &dAtZ);

@@ -318,7 +318,7 @@ static EVT_BEGIN(song_event)
         WAIT_FRAMES(1)
     END_LOOP
     CALL(evt_map_blend_off, 0)
-    CALL(evt_btl_camera_set_mode, 0, 0)
+    CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_ACTION)
     WAIT_MS(500)
     LABEL(99)

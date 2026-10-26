@@ -1122,7 +1122,7 @@ EVT_BEGIN(_curtain_close_event)
         END_LOOP
     END_SIBLING_EVENT
     CALL(btlevtcmd_onoff_battleflag, 0, BATTLE_FLAG_PARTY_IN_AUDIENCE)
-    CALL(evt_btl_camera_set_mode, 0, 0)
+    CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
     WAIT_MS(1500)
     BEGIN_SIBLING_EVENT

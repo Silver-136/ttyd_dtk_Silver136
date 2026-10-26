@@ -155,14 +155,14 @@ static BattleUnitKindPart parts_christine[] = {
 };
 
 static EVT_BEGIN(fmario_zoom_christine)
-    CALL(evt_btl_camera_set_mode, 0, 3)
+    CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_FREE)
     CALL(evt_btl_camera_set_moveto, 0, 90, 58, 228, 90, 38, -20, 30, 11)
     WAIT_FRAMES(37)
     RETURN
 EVT_END()
 
 static EVT_BEGIN(gparty_zoom_christine)
-    CALL(evt_btl_camera_set_mode, 0, 3)
+    CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_FREE)
     CALL(evt_btl_camera_set_moveto, 0, 130, 58, 228, 130, 38, -20, 30, 11)
     WAIT_FRAMES(37)
     RETURN
@@ -235,7 +235,7 @@ static EVT_BEGIN(dead_event_christine)
     END_SWITCH
     CALL(btlevtcmd_KillUnit, UNIT_ID_SELF, 1)
     SET_VALUE(GW(20), 2)
-    CALL(evt_btl_camera_set_mode, 0, 0)
+    CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     RETURN
 EVT_END()
 
@@ -259,7 +259,7 @@ static EVT_BEGIN(attack_event_christine)
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, LW(12))
     CALL(btlevtcmd_RunDataEventChild, UNIT_ID_SELF, UNIT_DATA_ATTACK_READY_EVENT)
-    CALL(evt_btl_camera_set_mode, 0, 11)
+    CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_PART_TO_PART)
     CALL(evt_btl_camera_set_homing_unitparts, 0, UNIT_ID_SELF, 1, LW(3), LW(4))
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
     CALL(evt_btl_camera_set_zoom, 0, 200)
@@ -416,7 +416,7 @@ static EVT_BEGIN(attack_event_christine)
     CALL(btlevtcmd_FaceDirectionSub, UNIT_ID_SELF, LW(0), 8)
     CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 8, -1)
     LABEL(95)
-    CALL(evt_btl_camera_set_mode, 0, 0)
+    CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(6.0f))
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_WALK)

@@ -3844,7 +3844,7 @@ s32 _object_fall_attack(EventEntry *event, BOOL isFirstCall) {
                     hit.x = ((e3->unitId % 20) * 25) - 230;
                     hit.y = BattleStageGetPtr()->audienceSizeY;
                     hit.z = (0.1f * (e3->unitId % 20)) + (((e3->unitId / 20) * 30) + 115);
-                    btl_camera_set_mode(0, 6);
+                    btl_camera_set_mode(BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_AUDIENCE);
                     btl_camera_set_moveSpeedLv(0, 2);
                     width = 0.0f;
                     break;

@@ -410,7 +410,7 @@ EVT_BEGIN(fall_attack_event)
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, LW(9))
     CALL(zakogun_set_target_id, LW(3))
-    CALL(evt_btl_camera_set_mode, 0, 7)
+    CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT)
     CALL(evt_btl_camera_set_homing_unit, 0, LW(3), -1)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
     CALL(evt_btl_camera_set_zoom, 0, 200)
@@ -736,7 +736,7 @@ void zakogun_ext_main2(void) {
                 zako->target.y = zako->start.y - 2.0f;
                 zako->state = 55;
                 zako->timer = zako->timerMax = 8;
-                btl_camera_set_mode(0, 0);
+                btl_camera_set_mode(BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT);
             case 55:
                 zako->pos.x = intplGetValue(4, zako->start.x, zako->target.x, zako->timerMax - zako->timer, zako->timerMax);
                 zako->pos.y = intplGetValue(4, zako->start.y, zako->target.y, (zako->timerMax - zako->timer) * 2, zako->timerMax);
@@ -985,7 +985,7 @@ EVT_BEGIN(hit_check_event_sub)
     CALL(btlevtcmd_ResultACDefence, LW(3), LW(9))
     IF_INT_EQUAL(LW(15), 1)
         CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), DAMAGE_RESULT_FINAL_HIT, LW(5))
-        CALL(evt_btl_camera_set_mode, 0, 0)
+        CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
         ELSE
         CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), 0, LW(5))
     END_IF
