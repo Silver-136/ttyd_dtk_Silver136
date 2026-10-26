@@ -20,6 +20,7 @@
 #include "driver/casedrv.h"
 #include "pmario_sound.h"
 #include "driver/itemdrv.h"
+#include "mario/mario.h"
 
 #include "string.h"
 #include "memory.h"
@@ -333,10 +334,10 @@ static EVT_BEGIN(marco_talk)
                     IF_INT_EQUAL(GSWF(3140), 0)
                         RETURN
                     END_IF
-                    CALL(evt_mario_dispflag_onoff, 1, 2)
+                    CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_POSE_LOCK)
                     CALL(evt_mario_set_pose, STRING("M_I_2"))
                     WAIT_MS(1000)
-                    CALL(evt_mario_dispflag_onoff, 0, 2)
+                    CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_POSE_LOCK)
                 END_IF
                 SET_VALUE(GSWF(3142), 1)
                 CALL(evt_msg_print, 0, STRING("stg5_muj_93_03"), 0, STRING("マルコ"))
@@ -594,10 +595,10 @@ EVT_BEGIN(sanders_kyushutsu_sub)
     WAIT_MS(500)
     CALL(evt_msg_print, 0, STRING("stg5_muj_34_01"), 0, STRING("me"))
     WAIT_MS(500)
-    CALL(evt_mario_dispflag_onoff, 1, 2)
+    CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_POSE_LOCK)
     CALL(evt_mario_set_pose, STRING("M_N_5B"))
     WAIT_MS(1000)
-    CALL(evt_mario_dispflag_onoff, 0, 2)
+    CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_POSE_LOCK)
     CALL(evt_msg_print, 0, STRING("stg5_muj_34_02"), 0, STRING("サンダース"))
     CALL(evt_cam3d_evt_off, 500, 11)
     CALL(evt_party_run, 0)

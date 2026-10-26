@@ -52,7 +52,7 @@ USER_FUNC(evt_iwamove_main) {
                 marioKeyOff();
                 partyKeyOff();
                 marioChgPose("M_O_1");
-                mario->dispFlags |= 2;
+                mario->dispFlags |= MARIO_DISP_FLAG_POSE_LOCK;
                 statusWinForceOpen();
             }
             break;
@@ -63,7 +63,7 @@ USER_FUNC(evt_iwamove_main) {
                 }
             } else {
                 wk->state--;
-                mario->dispFlags &= ~2;
+                mario->dispFlags &= ~MARIO_DISP_FLAG_POSE_LOCK;
                 marioChgPose("M_S_1");
                 marioKeyOn();
                 partyKeyOn();

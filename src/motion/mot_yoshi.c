@@ -11,8 +11,8 @@ void mot_yoshi(void) {
     if (mario->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) {
         mario->trigFlags &= ~MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
         mario->flags &= ~(MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING | MARIO_FLAG_IS_STEPPING | MARIO_FLAG_HAS_INPUT_JUMP);
-        mario->dispFlags |= 4;
-        mario->dispFlags |= 0x1000;
+        mario->dispFlags |= MARIO_DISP_FLAG_NO_REAR_POSE;
+        mario->dispFlags |= MARIO_DISP_FLAG_SHADOW_OFF;
         mario->multiTimer = 0;
         mario->airTimer = 0;
         mario->currSubMotionId = 0;
@@ -38,8 +38,8 @@ void mot_yoshi_post(void) {
         party->yoshiPsndSFXId = -1;
     }
     bero_clear_Offset();
-    mario->dispFlags &= ~4;
-    mario->dispFlags &= ~0x1000;
+    mario->dispFlags &= ~MARIO_DISP_FLAG_NO_REAR_POSE;
+    mario->dispFlags &= ~MARIO_DISP_FLAG_SHADOW_OFF;
     mario->dispOfs = (Vec){ 0.0f, 0.0f, 0.0f };
     mario->dispOfs2 = (Vec){ 0.0f, 0.0f, 0.0f };
 }

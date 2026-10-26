@@ -425,7 +425,7 @@ void kpa_fall(void) {
     case 0:
         if (m->position.y <= m->lastGroundPos.y) {
             if (m->position.y <= 75.0f) {
-                if ((m->dispFlags |= 0x20000) != 0) {
+                if ((m->dispFlags |= MARIO_DISP_FLAG_CAM_FOLLOW_Y_OFF) != 0) {
                     camFollowYOn();
                 }
             }
@@ -473,7 +473,7 @@ void kpa_hip(void) {
         m->baseSpeed = 0.0f;
         marioChgPose("KPA2_J_1C");
     }
-    if (m->fallStartPos.y >= m->position.y && ((u32)m->dispFlags & 0x20000)) {
+    if (m->fallStartPos.y >= m->position.y && ((u32)m->dispFlags & MARIO_DISP_FLAG_CAM_FOLLOW_Y_OFF)) {
         camFollowYOn();
     }
     switch ((s32)m->currSubMotionId) {

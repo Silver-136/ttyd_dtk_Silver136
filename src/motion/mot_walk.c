@@ -183,7 +183,7 @@ void mot_walk(void) {
         } else if (!marioBgmodeChk()) {
             marioChgPose("M_W_1");
         }
-        if (!(player->dispFlags & (1 << 24))) {
+        if (!(player->dispFlags & (MARIO_DISP_FLAG_HIDE << 24))) {
             player->currSubMotionId = 0;
         }
         player->multiTimer = 0;

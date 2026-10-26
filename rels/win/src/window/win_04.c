@@ -21,6 +21,7 @@
 #include "driver/casedrv.h"
 #include "pmario_sound.h"
 #include "driver/itemdrv.h"
+#include "mario/mario.h"
 
 #include "driver/dispdrv.h"
 #include "stdlib.h"
@@ -309,7 +310,7 @@ EVT_BEGIN(clouda_irai)
     CALL(evt_eff_fukidashi, 3, STRING(""), 0, 0, 0, 0, 0, 0, 0, 0, 60)
     CALL(evt_eff_fukidashi, 4, STRING(""), 0, 0, 0, 0, 0, 0, 0, 0, 60)
     WAIT_MS(1000)
-    CALL(evt_mario_dispflag_onoff, 1, 256)
+    CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_NO_MAKE_DISP_DIR)
     BEGIN_INLINE_EVENT
         WAIT_MS(300)
         CALL(evt_cam3d_evt_set, 50, 90, 308, 248, 105, 20, 0, 11)
@@ -331,7 +332,7 @@ EVT_BEGIN(clouda_irai)
     CALL(evt_mario_mov_pos2, 240, 0, FLOAT(120.0f))
     WAIT_WHILE(GF(0))
     WAIT_WHILE(GF(1))
-    CALL(evt_mario_dispflag_onoff, 0, 256)
+    CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_NO_MAKE_DISP_DIR)
     CALL(evt_msg_print, 0, STRING("stg2_win_e05_00_04"), 0, STRING("extparty"))
     WAIT_MS(1000)
     CALL(evt_msg_toge, 2, 350, 100, 0)
@@ -533,7 +534,7 @@ EVT_BEGIN(clouda_nakama)
     END_INLINE_EVENT
     CALL(evt_mario_set_pose, STRING("M_N_2"))
     WAIT_MS(500)
-    CALL(evt_mario_dispflag_onoff, 1, 256)
+    CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_NO_MAKE_DISP_DIR)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_mario_mov_pos2, 255, LW(2), FLOAT(120.0f))
     CALL(evt_item_entry, STRING("necklace"), ITEM_NECKLACE, 0, -1000, 0, ITEM_TYPE_STILL, -1, 0)
@@ -550,7 +551,7 @@ EVT_BEGIN(clouda_nakama)
         CALL(evt_party_move_pos2, 1, 210, -25, FLOAT(120.0f))
         CALL(evt_party_set_dir, 1, 90, -1)
     END_INLINE_EVENT
-    CALL(evt_mario_dispflag_onoff, 0, 256)
+    CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_NO_MAKE_DISP_DIR)
     CALL(evt_mario_mov_pos2, 150, 0, FLOAT(120.0f))
     CALL_CHILD(PTR(mario_move_wait))
     CALL(evt_mario_set_dir, 90, 200, 0)

@@ -94,7 +94,7 @@ BOOL marioSetDirEventMain(void) {
     s32 frames;
     f32 target;
 
-    if (!(mp->dispFlags & 0x8000)) {
+    if (!(mp->dispFlags & MARIO_DISP_FLAG_DIR_EVENT)) {
         return TRUE;
     }
     frames = sysMsec2Frame(mp->dirEvtMsec);
@@ -106,7 +106,7 @@ BOOL marioSetDirEventMain(void) {
         mp->directionView = toMovedirSimple(mp->displayDirection);
         mp->moveDirection = mp->directionView;
         if (++mp->dirEvtFrame > frames) {
-            mp->dispFlags &= ~0x8000;
+            mp->dispFlags &= ~MARIO_DISP_FLAG_DIR_EVENT;
             return TRUE;
         }
         return FALSE;
@@ -115,7 +115,7 @@ BOOL marioSetDirEventMain(void) {
         mp->displayDirectionTarget = mp->displayDirection;
         mp->directionView = toMovedirSimple(mp->displayDirection);
         mp->moveDirection = mp->directionView;
-        mp->dispFlags &= ~0x8000;
+        mp->dispFlags &= ~MARIO_DISP_FLAG_DIR_EVENT;
         return TRUE;
     }
 }
@@ -362,7 +362,7 @@ void marioUpdateKeyData(void) {
             mp->buttonRepeat = 0;
             mp->buttonUp = 0;
         }
-        if (!marioGetMotSlitCancel3() && (mp->dispFlags & 0x01000000)) {
+        if (!marioGetMotSlitCancel3() && (mp->dispFlags & MARIO_DISP_FLAG_SLIT)) {
             mp->buttonHold = 0x20;
         }
     }

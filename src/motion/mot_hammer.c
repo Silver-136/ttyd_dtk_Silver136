@@ -57,7 +57,7 @@ inline BOOL chkRevDir(f32 angle) {
         f32 a = mario->displayDirection;                                                                        \
         MarioWork* p = marioGetPtr(); f32 r;                                                                    \
         f32 off = 0.0f;                                                                                         \
-        if (p->dispFlags & 0x80000000) {                                                                        \
+        if (p->dispFlags & MARIO_DISP_FLAG_REAR_POSE) {                                                                        \
             off = chkRevDir(p->displayDirection) ? 30.0f : -30.0f;                                              \
         } if (a >= 90.0f && a <= 270.0f) { r = revise360(180.0f + off); } else { r = revise360(off); } dst = r; \
     }
@@ -136,7 +136,7 @@ void mot_hammer(void) {
         mario->hitobjHammerNew = hit;
         if (hit) {
             f32 a = mario->displayDirection;
-            f32 off = marioGetPtr()->dispFlags & 0x80000000 ? -30.0f : 0.0f;
+            f32 off = marioGetPtr()->dispFlags & MARIO_DISP_FLAG_REAR_POSE ? -30.0f : 0.0f;
             f32 r;
             if (a >= 90.0f && a <= 270.0f) {
                 r = toMovedir2(180.0f, off);
@@ -233,7 +233,7 @@ void mot_hammer(void) {
         px = mario->position.x;
         py = mario->position.y;
         pz = mario->position.z;
-        if (!(mario->dispFlags & 0x80000000)) {
+        if (!(mario->dispFlags & MARIO_DISP_FLAG_REAR_POSE)) {
             efType = -1;
             switch (mario->mot.hammer.hitKind) {
             case 7:
@@ -352,13 +352,13 @@ s32 marioChkHammer2(void) {
 #else
     mario->wMotionTimer++;
 #endif
-    if (mario->controlStickSensitivity && mario->wMotionTimer > 10 && mario->currMotionId == MARIO_MOTION_STAY && !(mario->dispFlags & 0x40000000)) {
+    if (mario->controlStickSensitivity && mario->wMotionTimer > 10 && mario->currMotionId == MARIO_MOTION_STAY && !(mario->dispFlags & MARIO_DISP_FLAG_PAPER)) {
         marioChgPose("M_I_Y");
         marioVoiceGlareOn();
     }
     if (mario->wMotionTimer >= 50) {
         mario->wMotionTimer = 50;
-        if (mario->currMotionId == MARIO_MOTION_STAY && !(mario->dispFlags & 0x40000000)) {
+        if (mario->currMotionId == MARIO_MOTION_STAY && !(mario->dispFlags & MARIO_DISP_FLAG_PAPER)) {
             marioChgPose("M_I_Y");
             marioVoiceGlareOn();
         }
@@ -421,9 +421,9 @@ static inline void mot_ham(f32 a148, f32 a68) {
     marioPaperOff();                                                \
     H2_LIGHT_ON()                                            \
     marioChgPose("M_S_1");                                          \
-    mario->dispFlags &= ~0x4;                                       \
-    mario->dispFlags &= ~0x8;                                       \
-    mario->dispFlags &= ~0x10;
+    mario->dispFlags &= ~MARIO_DISP_FLAG_NO_REAR_POSE;                                       \
+    mario->dispFlags &= ~MARIO_DISP_FLAG_NO_DIR_FLIP;                                       \
+    mario->dispFlags &= ~MARIO_DISP_FLAG_FLIP;
 
 void mot_hammer2(void) {
     MarioWork* mario = marioGetPtr();
@@ -447,7 +447,7 @@ void mot_hammer2(void) {
     switch ((s32)mario->currSubMotionId) {
     case 0:
         mario->flags |= MARIO_FLAG_STOP_AIR_MOVEMENT;
-        mario->dispFlags |= 4;
+        mario->dispFlags |= MARIO_DISP_FLAG_NO_REAR_POSE;
         mario->hammerChargeTimer = 0;
         mario->hammerChargeLv = 0;
         mario->baseSpeed = 0.0f;
@@ -481,10 +481,10 @@ void mot_hammer2(void) {
             break;
         }
         if (180.0f == mario->displayDirectionTarget && mario->hammerDir == 1) {
-            mario->dispFlags |= 8;
+            mario->dispFlags |= MARIO_DISP_FLAG_NO_DIR_FLIP;
         }
         if (0.0f == mario->displayDirectionTarget && mario->hammerDir == 0) {
-            mario->dispFlags |= 0x10;
+            mario->dispFlags |= MARIO_DISP_FLAG_FLIP;
         }
         marioPaperOn("p_kaiten_h");
         marioChgPaper("P_H_1C");
@@ -584,7 +584,7 @@ void mot_hammer2(void) {
     case 20:
         ang = mario->displayDirection;
         mario->mot.hammer2.timer = 10;
-        mario->dispFlags |= 0x100;
+        mario->dispFlags |= MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
         ang2 = revise360(270.0f - mario->displayDirection);
         hit = hammerHitWall(ang2, &s, &co, &len, &hx, &hy, &hz, &nx, &ny, &nz);
         if (hit && (hitGetAttr(hit) & 0x800005)) {
@@ -624,7 +624,7 @@ void mot_hammer2(void) {
             mario->displayDirection = revise360(mario->displayDirection);
             marioAdjustMoveDir();
         }
-        mario->dispFlags &= ~0x100;
+        mario->dispFlags &= ~MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
         mario->currSubMotionId = 23;
         mario->multiTimer = 1;
     case 23:
@@ -636,7 +636,7 @@ void mot_hammer2(void) {
         if (--mario->multiTimer > 0) {
             break;
         }
-        mario->dispFlags &= ~0x4;
+        mario->dispFlags &= ~MARIO_DISP_FLAG_NO_REAR_POSE;
         mario->flags &= ~MARIO_FLAG_STOP_AIR_MOVEMENT;
         marioAdjustMoveDir();
         marioChgMotSub(MARIO_MOTION_STAY, 0);
@@ -659,7 +659,7 @@ f32 marioGetAngleKaitenHammer(void) {
 
 void mot_ham2_post(void) {
     MarioWork* mario = marioGetPtr();
-    if (mario->dispFlags & 0x40000000) {
+    if (mario->dispFlags & MARIO_DISP_FLAG_PAPER) {
         marioPaperOff();
     }
     {
@@ -671,10 +671,10 @@ void mot_ham2_post(void) {
 #ifndef VERSION_G8ME01
     marioPaperLightOn();
 #endif
-    mario->dispFlags &= ~0x100;
-    mario->dispFlags &= ~0x8;
-    mario->dispFlags &= ~0x10;
-    mario->dispFlags &= ~0x4;
+    mario->dispFlags &= ~MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
+    mario->dispFlags &= ~MARIO_DISP_FLAG_NO_DIR_FLIP;
+    mario->dispFlags &= ~MARIO_DISP_FLAG_FLIP;
+    mario->dispFlags &= ~MARIO_DISP_FLAG_NO_REAR_POSE;
     mario->flags &= ~MARIO_FLAG_STOP_AIR_MOVEMENT;
     marioAdjustMoveDir();
 }
@@ -696,7 +696,7 @@ HitEntry *hitEstimate(s32 *out) {
     *out = 0;
     a = mario->displayDirection;
     {
-        f32 off = (marioGetPtr()->dispFlags & 0x80000000) ? (-20.0f) : (0.0f);
+        f32 off = (marioGetPtr()->dispFlags & MARIO_DISP_FLAG_REAR_POSE) ? (-20.0f) : (0.0f);
         if ((a >= 90.0f) && (a <= 270.0f)) {
             a = toMovedir2(180.0f, off);
         } else {
@@ -773,7 +773,7 @@ HitEntry *hitEstimate(s32 *out) {
                     m = 20.0f;
                 } else {
                     d = 34.0f;
-                    if (mario->dispFlags & 0x80000000) {
+                    if (mario->dispFlags & MARIO_DISP_FLAG_REAR_POSE) {
                         m = 37.0f;
                     } else {
                         m = d;

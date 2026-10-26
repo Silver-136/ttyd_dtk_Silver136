@@ -16,6 +16,7 @@
 #include "driver/mapdrv.h"
 #include "system.h"
 #include "pmario_sound.h"
+#include "mario/mario.h"
 
 USER_FUNC(camera_curve_off);
 USER_FUNC(camera_curve_on);
@@ -366,7 +367,7 @@ EVT_BEGIN(evt_gra_05iwa_move_evt)
     END_INLINE_EVENT
     CALL(evt_mario_get_pos, 0, LW(2), LW(3), LW(4))
     CALL(evt_mario_set_pose, STRING("M_O_1"))
-    CALL(evt_mario_dispflag_onoff, 1, 2)
+    CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_POSE_LOCK)
     BEGIN_INLINE_EVENT
         LOOP(10)
             CALL(evt_mapobj_get_position, STRING("S_iwa"), LW(0), LW(1), LW(2))
@@ -399,7 +400,7 @@ EVT_BEGIN(evt_gra_05iwa_move_evt)
         GOTO(0)
     END_IF
     CALL(evt_snd_sfxoff, LW(9))
-    CALL(evt_mario_dispflag_onoff, 0, 2)
+    CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_POSE_LOCK)
     CALL(evt_mario_set_pose, STRING("M_S_1"))
     CALL(evt_hit_bind_update, STRING("A_iwa"))
     CALL(evt_snd_sfxoff, LW(9))

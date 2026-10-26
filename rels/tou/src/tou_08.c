@@ -19,6 +19,7 @@
 #include "system.h"
 #include "driver/casedrv.h"
 #include "pmario_sound.h"
+#include "mario/mario.h"
 
 #include "driver/effdrv.h"
 #include "driver/npcdrv.h"
@@ -745,13 +746,13 @@ EVT_BEGIN(evt_toile_door)
     CALL(evt_hitobj_attr_onoff, 0, 1, STRING("t_door_3"), 8388608)
     CALL(evt_mario_adjust_dir)
     WAIT_FRAMES(1)
-    CALL(evt_mario_dispflag_onoff, 1, 256)
+    CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_NO_MAKE_DISP_DIR)
     BEGIN_INLINE_EVENT
         CALL(evt_party_move_pos2, 0, -200, 110, FLOAT(80.0f))
         CALL(evt_party_stop, 0)
     END_INLINE_EVENT
     CALL(evt_mario_mov_pos2, -200, 130, FLOAT(80.0f))
-    CALL(evt_mario_dispflag_onoff, 0, 256)
+    CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_NO_MAKE_DISP_DIR)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_DOOR_OPEN_WOOD3"), LW(0), LW(1), LW(2), 0)
     CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 0, 80, 500)
@@ -1089,7 +1090,7 @@ static EVT_BEGIN(epilogue_evt)
     CALL(evt_snd_bgmon, 512, STRING("BGM_STG3_URN1"))
     CALL(evt_snd_bgm_scope, 0, 1)
     CALL(evt_mario_key_onoff, 0)
-    CALL(evt_mario_dispflag_onoff, 1, 1)
+    CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_HIDE)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("cake_tukue"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_npc_flag_onoff, 1, STRING("チビヨッシー"), NPC_FLAG_INSTANT_TURN)
     CALL(evt_cam3d_evt_set, 0, 100, 337, 0, 45, -9, 0, 11)

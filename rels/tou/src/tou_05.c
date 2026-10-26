@@ -30,6 +30,7 @@
 #include "driver/seqdrv.h"
 #include "pmario_sound.h"
 #include "driver/itemdrv.h"
+#include "mario/mario.h"
 
 USER_FUNC(evt_mario_dispflag_onoff);
 void gans_msg_callback(s32 type, void** work);
@@ -1180,10 +1181,10 @@ EVT_BEGIN(evt_sensyu_reentry)
     CALL(evt_npc_move_position, STRING("キノシコワ"), 40, -80, 0, FLOAT(70.0f), 0)
     WAIT_FRAMES(1)
     CALL(evt_msg_print, 0, STRING("stg3_tou_re_005_2"), 0, STRING("キノシコワ"))
-    CALL(evt_mario_dispflag_onoff, 1, 2)
+    CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_POSE_LOCK)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_mario_jump_pos, LW(0), LW(1), LW(2), 300, 1, 10)
-    CALL(evt_mario_dispflag_onoff, 0, 2)
+    CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_POSE_LOCK)
     CALL(evt_msg_print, 0, STRING("stg3_tou_re_005_3"), 0, STRING("キノシコワ"))
     CALL(evt_mario_set_pose, STRING("M_N_B"))
     WAIT_MS(600)

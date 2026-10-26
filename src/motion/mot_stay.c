@@ -108,7 +108,7 @@ void mot_stay(void) {
         } else {
             if (mario->flags & MARIO_FLAG_PAPER_MODE) {
                 motSlitContinue();
-            } else if (mario->dispFlags & 0x1000000) {
+            } else if (mario->dispFlags & MARIO_DISP_FLAG_SLIT) {
                 marioChgMot2(MARIO_MOTION_SLIT);
                 motSlitCancel();
             }
@@ -117,7 +117,7 @@ void mot_stay(void) {
                     marioChgPose("M_I_S");
                     psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_FURAFURA1), &mario->position);
                 } else if (lowHP() && marioChkKey()) {
-                    mario->dispFlags |= 4;
+                    mario->dispFlags |= MARIO_DISP_FLAG_NO_REAR_POSE;
                     marioChgPose("M_S_3");
                     mario->idleTimer = 0;
                 } else if (strcmp(mario->animName, "M_I_Y") != 0) {
@@ -153,7 +153,7 @@ void mot_stay(void) {
             if (strcmp(mario->animName, "M_S_3") != 0) {
                 mario->idleTimer = 0;
             }
-            mario->dispFlags |= 4;
+            mario->dispFlags |= MARIO_DISP_FLAG_NO_REAR_POSE;
             marioChgPose("M_S_3");
         } else if ((s32)mario->currSubMotionId == 0 && mario->idleKeyTimer != 0) {
             mario->idleKeyTimer = 0;
@@ -248,7 +248,7 @@ void mot_stay(void) {
             marioChgMot(MARIO_MOTION_WALK);
         }
     }
-    if ((mario->flags & MARIO_FLAG_KEY_OFF) || (mario->dispFlags & 0x40000000)) {
+    if ((mario->flags & MARIO_FLAG_KEY_OFF) || (mario->dispFlags & MARIO_DISP_FLAG_PAPER)) {
         if ((s32)mario->currSubMotionId > 0 && strcmp(mario->animName, "M_S_1") != 0 &&
             strcmp(mario->animName, "M_S_1R") != 0) {
             marioChgPose("M_S_1");

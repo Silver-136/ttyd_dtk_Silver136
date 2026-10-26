@@ -14,6 +14,7 @@
 #include "evt/evt_snd.h"
 #include "driver/seqdrv.h"
 #include "pmario_sound.h"
+#include "mario/mario.h"
 
 USER_FUNC(evt_mario_dispflag_onoff);
 
@@ -49,11 +50,11 @@ static EVT_BEGIN(first_evt_dokan)
         SET_VALUE(LW(0), 0)
         RETURN
     END_IF
-    CALL(evt_mario_dispflag_onoff, 1, 1)
+    CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_HIDE)
     CALL(evt_party_dispflg_onoff, 0, 1, 1)
     SET_VALUE(GF(0), 1)
     WAIT_WHILE(GF(0))
-    CALL(evt_mario_dispflag_onoff, 0, 1)
+    CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_HIDE)
     CALL(evt_party_dispflg_onoff, 0, 1, 0)
     SET_VALUE(LW(0), 0)
     RETURN

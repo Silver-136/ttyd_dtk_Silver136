@@ -310,8 +310,8 @@ void marioForceRollAnime(void) {
     marioPaperOn("p_roll");
     marioChgPose("M_I_U");
     marioChgPaper("PM_R_1B");
-    mario->dispFlags |= 8;
-    mario->dispFlags |= 0x100;
+    mario->dispFlags |= MARIO_DISP_FLAG_NO_DIR_FLIP;
+    mario->dispFlags |= MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
 }
 
 s32 marioRollTryCancel(void) {
@@ -397,8 +397,8 @@ void mot_roll_post(void) {
     mario->rotOfs = (Vec){0.0f, 0.0f, 0.0f};
     mario->dispOfs = (Vec){0.0f, 0.0f, 0.0f};
     mario->rot = (Vec){0.0f, 0.0f, 0.0f};
-    mario->dispFlags &= ~0x100;
-    mario->dispFlags &= ~8;
+    mario->dispFlags &= ~MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
+    mario->dispFlags &= ~MARIO_DISP_FLAG_NO_DIR_FLIP;
     mario->flags &= ~MARIO_FLAG_TUBE_MODE;
     marioPaperOff();
     marioAdjustMoveDir();
@@ -448,8 +448,8 @@ void marioRollForceCancel(void) {
         mario->rotOfs = (Vec){0.0f, 0.0f, 0.0f};
         mario->dispOfs = (Vec){0.0f, 0.0f, 0.0f};
         mario->rot = (Vec){0.0f, 0.0f, 0.0f};
-        mario->dispFlags &= ~0x100;
-        mario->dispFlags &= ~8;
+        mario->dispFlags &= ~MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
+        mario->dispFlags &= ~MARIO_DISP_FLAG_NO_DIR_FLIP;
         mario->flags &= ~MARIO_FLAG_TUBE_MODE;
         marioPaperOff();
         marioAdjustMoveDir();
@@ -504,8 +504,8 @@ void marioReInit_roll(void) {
     marioPaperOn("p_roll");
     marioChgPose("M_I_U");
     marioChgPaper("PM_R_1B");
-    mario->dispFlags |= 8;
-    mario->dispFlags |= 0x100;
+    mario->dispFlags |= MARIO_DISP_FLAG_NO_DIR_FLIP;
+    mario->dispFlags |= MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
     mario->currSubMotionId = 0x1e;
     mario = marioGetPtr();
     z0 = 0.0f;
@@ -601,8 +601,8 @@ void mot_roll(void) {
         marioGetRubInit();
         mario->flags |= MARIO_FLAG_TUBE_MODE;
         mario->rollFlags = 0x10;
-        mario->dispFlags |= 8;
-        mario->dispFlags |= 0x100;
+        mario->dispFlags |= MARIO_DISP_FLAG_NO_DIR_FLIP;
+        mario->dispFlags |= MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
         marioPaperOn("p_roll");
         marioChgPose("M_I_U");
         marioChgPaper("PM_R_1A");
@@ -729,8 +729,8 @@ void mot_roll(void) {
             marioSetSpec();
             mario->rollFlags = 0;
             marioOfsRotReset();
-            mario->dispFlags &= ~0x100;
-            mario->dispFlags &= ~8;
+            mario->dispFlags &= ~MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
+            mario->dispFlags &= ~MARIO_DISP_FLAG_NO_DIR_FLIP;
             mario->flags &= ~MARIO_FLAG_TUBE_MODE;
             marioPaperOff();
             marioAdjustMoveDir();

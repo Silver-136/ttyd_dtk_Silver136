@@ -201,7 +201,7 @@ static EvtWord hikaru_yuka_init[] = {
 
 static EVT_BEGIN(peach_evt_stg1)
     CALL(evt_mario_key_onoff, 0)
-    CALL(evt_mario_dispflag_onoff, 1, 1)
+    CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_HIDE)
     CALL(evt_mario_set_pos, -140, 10, 0)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("no1"), MAP_OBJ_FLAG_HIDDEN)
     CALL_CHILD(PTR(hikaru_off))

@@ -23,6 +23,7 @@
 #include "driver/seqdrv.h"
 #include "pmario_sound.h"
 #include "driver/itemdrv.h"
+#include "mario/mario.h"
 
 USER_FUNC(evt_kagemario_init);
 #ifdef VERSION_G8ME01
@@ -292,7 +293,7 @@ EVT_BEGIN(teresa_oidasare_evt)
     CALL(evt_seq_wait, SEQ_GAME)
 #ifdef VERSION_G8ME01
     CALL(evt_mario_cont_onoff, 1)
-    CALL(evt_mario_dispflag_onoff, 1, 2)
+    CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_POSE_LOCK)
 #endif
     CALL(evt_mario_set_pose, STRING("M_D_1"))
     CALL(evt_mario_get_party, LW(0))
@@ -368,7 +369,7 @@ EVT_BEGIN(teresa_oidasare_evt)
 #endif
     CALL(evt_party_cont_onoff, 0, 1)
 #ifdef VERSION_G8ME01
-    CALL(evt_mario_dispflag_onoff, 0, 2)
+    CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_POSE_LOCK)
 #endif
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_party_run, 0)

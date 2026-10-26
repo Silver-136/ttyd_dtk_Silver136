@@ -54,8 +54,8 @@ static inline void jabaraResetPose(void) {
     m2->wPlayerCollisionBox.x = 20.0f;
     m2->wPlayerCollisionBox.y = 37.0f;
     marioAdjustMoveDir();
-    m2->dispFlags &= ~0x4;
-    m2->dispFlags &= ~0x100;
+    m2->dispFlags &= ~MARIO_DISP_FLAG_NO_REAR_POSE;
+    m2->dispFlags &= ~MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
 }
 
 static inline void* jabaraHitFront(f32 ang) {
@@ -143,12 +143,12 @@ BOOL marioChkJabara(void) {
         return FALSE;
     }
 #ifdef VERSION_G8ME01
-    if ((mario->trigFlags & MARIO_TRIG_FLAG_START_JABARA_SPIN) && (u16)mario->currMotionId == MARIO_MOTION_STAY && !((u32)mario->dispFlags & 0x40000000) &&
+    if ((mario->trigFlags & MARIO_TRIG_FLAG_START_JABARA_SPIN) && (u16)mario->currMotionId == MARIO_MOTION_STAY && !((u32)mario->dispFlags & MARIO_DISP_FLAG_PAPER) &&
         mario->controlStickSensitivity) {
 #else
     mario->wMotionTimer++;
     if (mario->controlStickSensitivity && mario->wMotionTimer > 10 && (u16)mario->currMotionId == MARIO_MOTION_STAY &&
-        !((u32)mario->dispFlags & 0x40000000)) {
+        !((u32)mario->dispFlags & MARIO_DISP_FLAG_PAPER)) {
 #endif
         marioChgPose("M_I_Y");
         marioVoiceGlareOn();
@@ -156,7 +156,7 @@ BOOL marioChkJabara(void) {
 #ifndef VERSION_G8ME01
     if (mario->wMotionTimer >= 0x32) {
         mario->wMotionTimer = 0x32;
-        if ((u16)mario->currMotionId == MARIO_MOTION_STAY && !((u32)mario->dispFlags & 0x40000000)) {
+        if ((u16)mario->currMotionId == MARIO_MOTION_STAY && !((u32)mario->dispFlags & MARIO_DISP_FLAG_PAPER)) {
             marioChgPose("M_I_Y");
             marioVoiceGlareOn();
         }
@@ -237,7 +237,7 @@ void mot_jabara(void) {
         mario->mot.word[4] = 0;
         mario->mot.word[5] = 0;
         mario->mot.word[6] = 0;
-        if (mario->dispFlags & 0x1000000) {
+        if (mario->dispFlags & MARIO_DISP_FLAG_SLIT) {
             mot_slit_post();
         }
         mario->flags &= ~(MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING | MARIO_FLAG_IS_STEPPING | MARIO_FLAG_HAS_INPUT_JUMP);
@@ -248,7 +248,7 @@ void mot_jabara(void) {
     mario->hitobjHead = 0;
     switch (mario->currSubMotionId) {
     case 0:
-        mario->dispFlags |= 0x100;
+        mario->dispFlags |= MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
         mario->hammerChargeTimer = 1;
         mario->hammerChargeLv = 0;
         mario->airTimer = 0;
@@ -415,7 +415,7 @@ void mot_jabara(void) {
             }
             marioPaperOff();
             camFollowYOn();
-            mario->dispFlags |= 4;
+            mario->dispFlags |= MARIO_DISP_FLAG_NO_REAR_POSE;
             marioChgPose("M_J_5A");
             SFX(0x186);
                 jabaraSwingStart(overheadHit);
@@ -692,7 +692,7 @@ void mot_jabara(void) {
     case 0x5a:
         marioChgPose("M_J_1B");
         mario->currSubMotionId = 0x5b;
-        mario->dispFlags |= 4;
+        mario->dispFlags |= MARIO_DISP_FLAG_NO_REAR_POSE;
         marioAdjustMoveDir();
         mario->jumpVelocityY = 4.0f;
         mario->jumpAccelerationY = -0.5f;
@@ -731,7 +731,7 @@ void mot_jabara_post(void) {
     m2 = marioGetPtr();
     m2->camShiftTargetZ = 0.0f;
     m2->camShiftRate.z = 0.01f;
-    if ((u32)mario->dispFlags & 0x40000000) {
+    if ((u32)mario->dispFlags & MARIO_DISP_FLAG_PAPER) {
         marioPaperOff();
     }
     allPartyRideOff();

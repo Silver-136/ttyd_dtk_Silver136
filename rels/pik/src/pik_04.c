@@ -33,6 +33,7 @@
 #include "driver/seqdrv.h"
 #include "pmario_sound.h"
 #include "driver/itemdrv.h"
+#include "mario/mario.h"
 
 USER_FUNC(evt_mario_dispflag_onoff);
 USER_FUNC(evt_pouch_add_coin);
@@ -943,7 +944,7 @@ static EVT_BEGIN(epilogue_evt)
     CALL(evt_snd_bgmon, 512, STRING("BGM_STG6_PIK1"))
     CALL(evt_snd_bgm_scope, 0, 1)
     CALL(evt_mario_key_onoff, 0)
-    CALL(evt_mario_dispflag_onoff, 1, 1)
+    CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_HIDE)
     CALL(evt_cam3d_evt_set, 50, 150, 842, 50, 50, 250, 0, 11)
     CALL(evt_seq_wait, SEQ_GAME)
     SPAWN_EVENT(PTR(epilogue_evt_sub))

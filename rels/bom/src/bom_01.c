@@ -27,6 +27,7 @@
 #include "mario/mario_pouch.h"
 #include "driver/casedrv.h"
 #include "driver/itemdrv.h"
+#include "mario/mario.h"
 
 #include "memory.h"
 #include "string.h"
@@ -1256,7 +1257,7 @@ static EVT_BEGIN(evt_taihou)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING(("S_yuka1")), 1)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING(("S_yuka2")), 1)
     CALL(evt_party_stop, 0)
-    CALL(evt_mario_dispflag_onoff, 1, 2)
+    CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_POSE_LOCK)
     WAIT_FRAMES(1)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING(("SFX_VOICE_MARIO_SURPRISED1")), LW(0), LW(1), LW(2), 0)

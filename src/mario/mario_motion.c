@@ -252,7 +252,7 @@ BOOL marioChkTalkable(void) {
         case MARIO_MOTION_STAY:
         case MARIO_MOTION_WALK:
         case MARIO_MOTION_DASH:
-            if (!(mario->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) && marioBgmodeChk() != TRUE && !(mario->dispFlags & 0x1000000)) {
+            if (!(mario->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) && marioBgmodeChk() != TRUE && !(mario->dispFlags & MARIO_DISP_FLAG_SLIT)) {
                 ret = TRUE;
             }
             break;
@@ -308,11 +308,11 @@ void marioChgMot(MarioMotion id) {
         return;
     }
     if (mario->prevMotionId == MARIO_MOTION_HIP || mario->prevMotionId == MARIO_MOTION_HIP_2) {
-        if (mario->dispFlags & 0x8000000) {
-            mario->dispFlags &= ~0x8000000;
+        if (mario->dispFlags & MARIO_DISP_FLAG_BLUR) {
+            mario->dispFlags &= ~MARIO_DISP_FLAG_BLUR;
         }
-        if (mario->dispFlags & 4) {
-            mario->dispFlags &= ~4;
+        if (mario->dispFlags & MARIO_DISP_FLAG_NO_REAR_POSE) {
+            mario->dispFlags &= ~MARIO_DISP_FLAG_NO_REAR_POSE;
         }
     }
     mario->prevMotionId = mario->currMotionId;
@@ -329,11 +329,11 @@ void marioChgMotSub(MarioMotion id, s32 callPost) {
         return;
     }
     if (mario->prevMotionId == MARIO_MOTION_HIP || mario->prevMotionId == MARIO_MOTION_HIP_2) {
-        if (mario->dispFlags & 0x8000000) {
-            mario->dispFlags &= ~0x8000000;
+        if (mario->dispFlags & MARIO_DISP_FLAG_BLUR) {
+            mario->dispFlags &= ~MARIO_DISP_FLAG_BLUR;
         }
-        if (mario->dispFlags & 4) {
-            mario->dispFlags &= ~4;
+        if (mario->dispFlags & MARIO_DISP_FLAG_NO_REAR_POSE) {
+            mario->dispFlags &= ~MARIO_DISP_FLAG_NO_REAR_POSE;
         }
     }
     mario->prevMotionId = mario->currMotionId;
@@ -705,7 +705,7 @@ void marioLandOn(void) {
             marioSlitReenter();
             return;
         }
-        if ((mario->dispFlags & 0x1000000) && !marioChkSlitEnd()) {
+        if ((mario->dispFlags & MARIO_DISP_FLAG_SLIT) && !marioChkSlitEnd()) {
             motSlitCancel();
         }
         return;
@@ -724,7 +724,7 @@ void marioLandOn(void) {
             quake_kpaLandOn();
             return;
         }
-        if (!(mario->dispFlags & 0x1000000)) {
+        if (!(mario->dispFlags & MARIO_DISP_FLAG_SLIT)) {
 #ifdef VERSION_G8ME01
             if (marioPriCheckJabara()) {
                 if (mario->buttonHold & PAD_BUTTON_A) {
@@ -765,7 +765,7 @@ void marioLandOn(void) {
         marioSlitReenter();
         return;
     }
-    if ((mario->dispFlags & 0x1000000) && !marioChkSlitEnd()) {
+    if ((mario->dispFlags & MARIO_DISP_FLAG_SLIT) && !marioChkSlitEnd()) {
         motSlitCancel();
     }
 }
@@ -989,7 +989,7 @@ void mot_kaze(void) {
     if (mario->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) {
         mario->trigFlags &= ~MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
         mario->flags &= ~(MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING | MARIO_FLAG_IS_STEPPING | MARIO_FLAG_HAS_INPUT_JUMP);
-        mario->dispFlags |= 0x100;
+        mario->dispFlags |= MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
         mario->multiTimer = 0;
         mario->currSubMotionId = 0;
         mario->baseSpeed = 0.0f;
@@ -1014,7 +1014,7 @@ void mot_kaze(void) {
             mario->mot.kaze.spinSpeed -= 6.0f;
             if (mario->mot.kaze.spinSpeed < 0.0f) {
                 mario->mot.kaze.spinSpeed = 0.0f;
-                mario->dispFlags &= ~0x100;
+                mario->dispFlags &= ~MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
                 marioChgMot(MARIO_MOTION_STAY);
             }
             mario->displayDirection = revise360(mario->displayDirection + mario->mot.kaze.spinSpeed);
@@ -1028,7 +1028,7 @@ void mot_shadow(void) {
     if (mario->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) {
         mario->trigFlags &= ~MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
         mario->flags &= ~(MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING | MARIO_FLAG_IS_STEPPING | MARIO_FLAG_HAS_INPUT_JUMP);
-        mario->dispFlags &= ~0x1000000;
+        mario->dispFlags &= ~MARIO_DISP_FLAG_SLIT;
         mario->multiTimer = 0;
         mario->currSubMotionId = 0;
         marioChgPose("M_S_1");

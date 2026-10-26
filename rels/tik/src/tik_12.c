@@ -14,6 +14,7 @@
 #include "system.h"
 #include "driver/casedrv.h"
 #include "pmario_sound.h"
+#include "mario/mario.h"
 
 #include "eff/eff_stardust.h"
 #include "manager/evtmgr_cmd.h"
@@ -162,7 +163,7 @@ EVT_BEGIN(majinaisi_table_talk)
     CALL(evt_map_checkanim, STRING("anm_men"), LW(0), LW(1))
     WAIT_MS(LW(1))
     CALL(evt_npc_set_anim, STRING("me"), STRING("H_1"))
-    CALL(evt_mario_dispflag_onoff, 1, 1)
+    CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_HIDE)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_EVT_INCANT_CUBE3"), LW(0), LW(1), LW(2), 0)
     CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 0, 60, 1000)
@@ -268,7 +269,7 @@ EVT_BEGIN(majinaisi_table_talk)
     IF_INT_EQUAL(LW(1), 1)
         GOTO(3)
     END_IF
-    CALL(evt_mario_dispflag_onoff, 0, 1)
+    CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_HIDE)
     DELETE_EVENT(GW(0))
     CALL(evt_eff_softdelete, STRING("aaax"))
     CALL(evt_snd_sfxoff, GW(1))

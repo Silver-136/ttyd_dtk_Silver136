@@ -20,6 +20,7 @@
 #include "driver/punidrv.h"
 #include "pmario_sound.h"
 #include "driver/itemdrv.h"
+#include "mario/mario.h"
 
 #include "driver/fadedrv.h"
 #include "mario/mariost.h"
@@ -860,10 +861,10 @@ EVT_BEGIN(bigtree_firstbattle)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)
     BEGIN_INLINE_EVENT
-        CALL(evt_mario_dispflag_onoff, 1, 4)
+        CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_NO_REAR_POSE)
         CALL(evt_mario_set_dir, 90, 200, 0)
         CALL(evt_mario_adjust_dir)
-        CALL(evt_mario_dispflag_onoff, 0, 4)
+        CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_NO_REAR_POSE)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
         LOOP(0)
@@ -1905,7 +1906,7 @@ EVT_BEGIN(elder_kaisetsu)
         SET_VALUE(LW(2), 105)
     END_IF
     CALL(evt_mario_mov_pos2, LW(0), LW(2), LW(10))
-    CALL(evt_mario_dispflag_onoff, 1, 2)
+    CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_POSE_LOCK)
     BEGIN_INLINE_EVENT
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_LAND_DAMAGE1"), LW(0), LW(1), LW(2), 0)
@@ -1933,7 +1934,7 @@ EVT_BEGIN(elder_kaisetsu)
     WAIT_MS(1000)
     CALL(evt_msg_print, 0, STRING("stg2_mri_e15_21"), 0, STRING("プニ族長老"))
     CALL(evt_cam3d_evt_off, 500, 11)
-    CALL(evt_mario_dispflag_onoff, 0, 2)
+    CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_POSE_LOCK)
     CALL(evt_party_run, 0)
     CALL(evt_mario_key_onoff, 1)
     SET_VALUE(GSWF(2829), 1)
@@ -2321,7 +2322,7 @@ EVT_BEGIN(boss_battle)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
         CALL(evt_mario_mov_pos2, -150, 30, FLOAT(120.0f))
-        CALL(evt_mario_dispflag_onoff, 1, 2)
+        CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_POSE_LOCK)
         CALL(evt_mario_set_pose, STRING("M_I_Y"))
     END_INLINE_EVENT
     WAIT_MS(1000)
@@ -2475,7 +2476,7 @@ EVT_BEGIN(boss_battle)
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG2_MRI3"))
     DELETE_EVENT(LW(12))
     CALL(evt_mario_key_onoff, 1)
-    CALL(evt_mario_dispflag_onoff, 0, 2)
+    CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_POSE_LOCK)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_cont_onoff, 0)
     CALL(evt_party_cont_onoff, 0, 0)

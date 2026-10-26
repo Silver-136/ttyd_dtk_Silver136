@@ -245,7 +245,7 @@ static USER_FUNC(evt_nomal_cange) {
     if (!marioRollKeyDisable()) {
         return EVT_RETURN_BLOCK;
     }
-    return (mario->dispFlags & 0x1000000) ? EVT_RETURN_BLOCK : EVT_RETURN_DONE;
+    return (mario->dispFlags & MARIO_DISP_FLAG_SLIT) ? EVT_RETURN_BLOCK : EVT_RETURN_DONE;
 }
 
 USER_FUNC(yuuminigame4_opening_on_off) {
@@ -986,7 +986,7 @@ BOOL yuuminigame4_gamerule(EventEntry* event, BOOL isFirstCall, MiniGameWork* wp
             case 2:
             case 3:
             case 4:
-                if (mario->dispFlags & 0x1000000) {
+                if (mario->dispFlags & MARIO_DISP_FLAG_SLIT) {
                     if (mario->flags & MARIO_FLAG_PAPER_MODE) {
                         speed = 0.0f;
                     } else {
@@ -999,7 +999,7 @@ BOOL yuuminigame4_gamerule(EventEntry* event, BOOL isFirstCall, MiniGameWork* wp
             case 6:
             case 7:
             case 8:
-                if (mario->dispFlags & 0x1000000) {
+                if (mario->dispFlags & MARIO_DISP_FLAG_SLIT) {
                     if (mario->flags & MARIO_FLAG_PAPER_MODE) {
                         speed = -0.0f;
                     } else {

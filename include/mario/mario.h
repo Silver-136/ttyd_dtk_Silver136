@@ -270,6 +270,48 @@ typedef struct MarioStayWork {     // US only, MarioWork 0x2AC: mot_stay's count
 #endif
 
 /* MarioWork.characterId: who the player controls (marioSetCharMode) */
+// MarioWork.dispFlags, named from the setters (marioPaperOn/Off, the balloon and camera functions, peach/battle pose
+// code, the JP demo's marioDispLeftOnlyOn/RightOnlyOn, marioBlurOn, marioSetDirEvent, evt_mario_shadow_onoff) and
+// the drawing code. 0x20 (write-only) and 0x20000000 (only blocks the rear pose) are not named.
+typedef enum MarioDispFlags {
+    MARIO_DISP_FLAG_HIDE = (1 << 0),              // 0x1, not drawn
+    MARIO_DISP_FLAG_POSE_LOCK = (1 << 1),         // 0x2, pose and paper changes ignored
+    MARIO_DISP_FLAG_NO_REAR_POSE = (1 << 2),      // 0x4
+    MARIO_DISP_FLAG_NO_DIR_FLIP = (1 << 3),       // 0x8
+    MARIO_DISP_FLAG_FLIP = (1 << 4),              // 0x10
+    MARIO_DISP_FLAG_NO_MAKE_DISP_DIR = (1 << 8),  // 0x100, display direction not recomputed
+    MARIO_DISP_FLAG_DISP_DIR_SNAP = (1 << 9),     // 0x200, turns happen at once
+    MARIO_DISP_FLAG_LEFT_ONLY = (1 << 10),        // 0x400, always drawn facing direction 0
+    MARIO_DISP_FLAG_RIGHT_ONLY = (1 << 11),       // 0x800, always drawn facing direction 180
+    MARIO_DISP_FLAG_SHADOW_OFF = (1 << 12),       // 0x1000
+    MARIO_DISP_FLAG_DIR_EVENT = (1 << 15),        // 0x8000, direction set by an event (marioSetDirEvent)
+    MARIO_DISP_FLAG_NO_UPDATE_CAM_POS = (1 << 16), // 0x10000
+    MARIO_DISP_FLAG_CAM_FOLLOW_Y_OFF = (1 << 17), // 0x20000
+    MARIO_DISP_FLAG_CAM_COLLISION = (1 << 18),    // 0x40000
+    MARIO_DISP_FLAG_ZOOM = (1 << 20),             // 0x100000, zoomed in (zoomOffTimer clears it)
+    MARIO_DISP_FLAG_ZOOM_OFF_REQ = (1 << 21),     // 0x200000
+    MARIO_DISP_FLAG_SLIT = (1 << 24),             // 0x1000000, paper slit mode
+    MARIO_DISP_FLAG_BALLOON = (1 << 25),          // 0x2000000, talk balloon shown
+    MARIO_DISP_FLAG_EVT_BALLOON = (1 << 26),      // 0x4000000, balloon set by evt_mario_balloon_*
+    MARIO_DISP_FLAG_BLUR = (1 << 27),             // 0x8000000, marioBlurOn
+    MARIO_DISP_FLAG_EVT_POSE = (1 << 28),         // 0x10000000, event pose from the e_mario group (marioAnimeId)
+    MARIO_DISP_FLAG_PAPER = (1 << 30),            // 0x40000000, marioPaperOn
+    MARIO_DISP_FLAG_REAR_POSE = (1 << 31),        // 0x80000000, a_mario_r (rear) pose group
+} MarioDispFlags;
+
+// MarioWork.peachFlags: one exclusive status (peachSetSts*, evt_peach_set_condition) and the X-Naut disguise
+typedef enum PeachFlags {
+    PEACH_FLAG_AFTERSHOWER = (1 << 4),  // 0x10
+    PEACH_FLAG_INVISIBLE = (1 << 5),    // 0x20
+    PEACH_FLAG_HAPPY = (1 << 6),        // 0x40
+    PEACH_FLAG_UNEASY = (1 << 7),       // 0x80
+    PEACH_FLAG_ANGRY = (1 << 8),        // 0x100
+    PEACH_FLAG_ORDINARY = (1 << 9),     // 0x200
+    PEACH_FLAG_CARRY = (1 << 10),       // 0x400
+    PEACH_FLAG_STS_MASK = 0x7F0,        // the seven status bits
+    PEACH_FLAG_GUNDAN = (1 << 13),      // 0x2000, peachTransformOn: disguised as an X-Naut
+} PeachFlags;
+
 typedef enum MarioCharacter {
     CHARACTER_MARIO,
     CHARACTER_PEACH,
@@ -278,10 +320,10 @@ typedef enum MarioCharacter {
 
 typedef struct MarioWork {
     u32 flags;                     // 0x0
-    u32 dispFlags;                 // 0x4
+    u32 dispFlags;                 // 0x4, MarioDispFlags
     u32 rollFlags;                 // 0x8, mot_roll: 0x10 while rolling (motion 0x16), 0 when done; evt_mario waits for 0
     u32 trigFlags;                 // 0xC
-    s32 peachFlags;                // 0x10
+    s32 peachFlags;                // 0x10, PeachFlags
     u32 stageFlags;                // 0x14, Bowser stages: bit0 clear = side view (kpaGetStageViewType), bit1 = kpaGetStageType
     const char* animName;          // 0x18
     const char* paperAnimName;     // 0x1C

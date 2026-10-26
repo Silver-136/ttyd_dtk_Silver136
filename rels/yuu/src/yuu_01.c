@@ -739,7 +739,7 @@ BOOL yuuminigame2_gamerule(EventEntry* event, BOOL isFirstCall, MiniGameWork* wp
                     PSVECNormalize(&data->dir, &data->dir);
                     data->timer = 120;
                     data->y = mario->position.y;
-                    mario->dispFlags |= 0x100;
+                    mario->dispFlags |= MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
                     psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_EVT_GAME_BOAT_UZUSIO1), &mario->position);
                     data->result--;
                     break;
@@ -764,7 +764,7 @@ BOOL yuuminigame2_gamerule(EventEntry* event, BOOL isFirstCall, MiniGameWork* wp
                         }
                         data->index = i;
                         marioSetSwirlPower(1000, 8.0f, irand(91) + hoko_tbl[data->index] - 45);
-                        mario->dispFlags |= 0x100;
+                        mario->dispFlags |= MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
                         break;
                     }
                 }
@@ -783,7 +783,7 @@ BOOL yuuminigame2_gamerule(EventEntry* event, BOOL isFirstCall, MiniGameWork* wp
     if (data->index >= 5 && data->index < 13) {
         if (!marioChkSwirlPower()) {
             data->index = 0x15;
-            mario->dispFlags &= ~0x100;
+            mario->dispFlags &= ~MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
             if (mario->displayDirection >= -90.0f && mario->displayDirection < 90.0f) {
                 angle = 0.0f;
             } else {
@@ -808,7 +808,7 @@ BOOL yuuminigame2_gamerule(EventEntry* event, BOOL isFirstCall, MiniGameWork* wp
                     data->state++;
                     angle = 0.0f;
                     data->timer = 30;
-                    mario->dispFlags &= ~0x100;
+                    mario->dispFlags &= ~MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
                     data->x = mario->position.x;
                 }
                 break;

@@ -22,6 +22,7 @@
 #include "system.h"
 #include "driver/casedrv.h"
 #include "driver/itemdrv.h"
+#include "mario/mario.h"
 
 #include "manager/evtmgr.h"
 #include "driver/msgdrv.h"
@@ -633,7 +634,7 @@ EVT_BEGIN(kuizu_sekizou)
                     CALL(evt_npc_move_position, STRING("バリアーン２"), LW(0), LW(2), 1000, 0, 0)
                 END_INLINE_EVENT
                 WAIT_MS(100)
-                CALL(evt_mario_dispflag_onoff, 1, 2)
+                CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_POSE_LOCK)
                 CALL(evt_mario_set_pose, STRING("M_N_7"))
                 WAIT_MS(500)
                 CALL(evt_npc_set_link, STRING("バリアーン１"), STRING("バリアーン２"))
@@ -641,7 +642,7 @@ EVT_BEGIN(kuizu_sekizou)
                 CALL(evt_npc_battle_start, STRING("バリアーン１"))
                 CALL(evt_npc_wait_battle_end)
                 CALL(evt_mario_set_pose, STRING("M_S_1"))
-                CALL(evt_mario_dispflag_onoff, 0, 2)
+                CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_POSE_LOCK)
                 CALL(evt_snd_bgmon_f, 768, STRING("BGM_STG7_DUN2"), 2000)
                 CALL(evt_snd_envon_f, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI1"), 2000)
                 CALL(evt_npc_set_position, STRING("バリアーン１"), 0, -1000, 0)

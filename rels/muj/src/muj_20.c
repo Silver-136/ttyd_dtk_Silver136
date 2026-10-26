@@ -16,6 +16,7 @@
 #include "evt/evt_seq.h"
 #include "evt/evt_snd.h"
 #include "pmario_sound.h"
+#include "mario/mario.h"
 
 #include "driver/npcdrv.h"
 #include "mario/mariost.h"
@@ -2125,7 +2126,7 @@ static EVT_BEGIN(epilogue_evt)
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_END_MUJ3"))
     CALL(evt_mario_cont_onoff, 0)
     CALL(evt_mario_key_onoff, 0)
-    CALL(evt_mario_dispflag_onoff, 1, 1)
+    CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_HIDE)
     CALL(evt_npc_set_position, STRING("サンダース"), FLOAT(-655.0f), FLOAT(90.0f), FLOAT(-50.0f))
     CALL(evt_npc_set_ry, STRING("サンダース"), 90)
     CALL(evt_npc_flag_onoff, 1, STRING("サンダース"), NPC_FLAG_INSTANT_TURN)

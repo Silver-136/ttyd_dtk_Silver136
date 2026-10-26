@@ -84,8 +84,8 @@ void cloudResetAt(void) {
         marioCamZoomOffReq2(600);
     }
 
-    mario->dispFlags &= ~(1 << 8); //kDisableMakeDispDir
-    mario->dispFlags &= ~(1 << 2); //kForceFrontPose
+    mario->dispFlags &= ~(MARIO_DISP_FLAG_HIDE << 8); //kDisableMakeDispDir
+    mario->dispFlags &= ~(MARIO_DISP_FLAG_HIDE << 2); //kForceFrontPose
     marioAdjustMoveDir();
     mario->camShiftRate.x = 0.01f;
     mario->camShiftTargetX = 0.0f;
@@ -355,7 +355,7 @@ void N__cloud_use(PartyEntry* party) {
 
     switch (party->useMotionId) {
     case 0:
-        mario->dispFlags |= 0x100;
+        mario->dispFlags |= MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
         party->moveFrames = 4;
         party->useMotionId = 1;
     case 1:
@@ -387,8 +387,8 @@ void N__cloud_use(PartyEntry* party) {
         partyChgPose(party, "PWD_A_5");
         party->moveFrames = 16;
         party->useMotionId = 11;
-        mario->dispFlags |= 4;
-        mario->dispFlags |= 0x100;
+        mario->dispFlags |= MARIO_DISP_FLAG_NO_REAR_POSE;
+        mario->dispFlags |= MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
         party->flags2 |= 0x10;
         CW(party)->breathDist = 0.0f;
         CW(party)->breathDir = mario->displayDirection;
@@ -506,11 +506,11 @@ void N__cloud_use(PartyEntry* party) {
         party->position = party->moveTarget;
         party->flags2 &= ~0x10;
         if (mario->currMotionId == MARIO_MOTION_CLOUD) {
-            mario->dispFlags &= ~0x100;
-            mario->dispFlags &= ~4;
+            mario->dispFlags &= ~MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
+            mario->dispFlags &= ~MARIO_DISP_FLAG_NO_REAR_POSE;
             marioAdjustMoveDir();
             party->trigFlags |= 0x40000;
-            mario->dispFlags &= ~0x100;
+            mario->dispFlags &= ~MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
             marioChgMot(MARIO_MOTION_STAY);
         }
         party->flags2 |= 0x10;
@@ -546,8 +546,8 @@ void cloud_exit(PartyEntry* party) {
         __memFree(HEAP_DEFAULT, party->useStruct);
         party->useStruct = NULL;
     }
-    mario->dispFlags &= ~0x100;
-    mario->dispFlags &= ~4;
+    mario->dispFlags &= ~MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
+    mario->dispFlags &= ~MARIO_DISP_FLAG_NO_REAR_POSE;
     marioAdjustMoveDir();
     marioChgMot(MARIO_MOTION_STAY);
     mario->camShiftRate.x = 0.01f;
@@ -646,7 +646,7 @@ void cloudGetAt(Vec* position) {
         return;
     }
 
-    if ((mario->dispFlags & (1 << 20)) == 0) {
+    if ((mario->dispFlags & (MARIO_DISP_FLAG_HIDE << 20)) == 0) {
         CameraEntry* camera = camGetPtr(CAMERA_3D);
 
         if(camera->stateA == 0) {

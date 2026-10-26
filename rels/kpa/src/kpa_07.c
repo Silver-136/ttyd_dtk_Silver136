@@ -14,6 +14,7 @@
 #include "evt/evt_sub.h"
 #include "system.h"
 #include "pmario_sound.h"
+#include "mario/mario.h"
 
 #include "driver/npcdrv.h"
 #include "string.h"
@@ -106,7 +107,7 @@ EVT_BEGIN(kpa_07_evt)
     CALL(evt_npc_set_position, STRING("ババ"), -349, 0, 0)
     CALL(evt_mario_set_dir, 90, 0, 0)
     CALL(evt_npc_set_ry, STRING("ババ"), 90)
-    CALL(evt_mario_dispflag_onoff, 1, 1)
+    CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_HIDE)
     CALL(evt_npc_flag_onoff, 1, STRING("ババ"), NPC_FLAG_NO_DRAW)
     CALL(starstone_entry, STRING("nise"), 9, 180, 55, 0, FLOAT(0.75f))
     CALL(set_starstone_ry, STRING("nise"), 270)
@@ -119,7 +120,7 @@ EVT_BEGIN(kpa_07_evt)
         CALL(evt_npc_flag_onoff, 0, STRING("ババ"), NPC_FLAG_NO_DRAW)
         CALL(evt_npc_move_position, STRING("ババ"), -168, 0, 0, FLOAT(60.0f), 0)
     END_INLINE_EVENT
-    CALL(evt_mario_dispflag_onoff, 0, 1)
+    CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_HIDE)
     CALL(evt_mario_mov_pos2, -68, 0, FLOAT(60.0f))
     WAIT_MS(1000)
     CALL(evt_npc_set_tribe, STRING("ババ"), STRING("カメックババ（地上）"))

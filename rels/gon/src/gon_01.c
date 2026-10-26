@@ -21,6 +21,7 @@
 #include "driver/seqdrv.h"
 #include "pmario_sound.h"
 #include "driver/itemdrv.h"
+#include "mario/mario.h"
 
 USER_FUNC(evt_mario_dispflag_onoff);
 
@@ -120,7 +121,7 @@ static BeroEntry bero_entry_data[] = {
 
 EVT_BEGIN(honenoko_oidasare_evt)
     CALL(evt_mario_key_onoff, 0)
-    CALL(evt_mario_dispflag_onoff, 1, 256)
+    CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_NO_MAKE_DISP_DIR)
     CALL(evt_party_set_dir, 0, 270, -1)
     CALL(evt_mario_set_dispdir, 0)
     CALL(evt_mario_set_pos, 500, 0, 0)
@@ -291,7 +292,7 @@ EVT_BEGIN(honenoko_oidasare_evt)
     END_IF
     WAIT_FRAMES(1)
     CALL(evt_party_cont_onoff, 0, 1)
-    CALL(evt_mario_dispflag_onoff, 0, 256)
+    CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_NO_MAKE_DISP_DIR)
     CALL(evt_mario_key_onoff, 1)
     SET_VALUE(GSWF(1476), 0)
     SET_VALUE(LW(0), STRING("e_bero"))

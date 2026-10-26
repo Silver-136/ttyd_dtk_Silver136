@@ -1535,7 +1535,7 @@ static EVT_BEGIN(evt_meet_moamoa)
     WAIT_MS(2000)
     CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_DANGER4"))
     BEGIN_INLINE_EVENT
-        CALL(evt_mario_dispflag_onoff, 1, 2)
+        CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_POSE_LOCK)
         WAIT_MS(1000)
         CALL(evt_mario_set_pose, STRING("M_N_2"))
     END_INLINE_EVENT
@@ -1559,7 +1559,7 @@ static EVT_BEGIN(evt_meet_moamoa)
     CALL(evt_cam3d_evt_off, 500, 11)
     WAIT_MS(500)
     SET_VALUE(GSW_STORY_PROGRESS, 322)
-    CALL(evt_mario_dispflag_onoff, 0, 2)
+    CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_POSE_LOCK)
     CALL(evt_party_run, 0)
     RETURN
 EVT_END()

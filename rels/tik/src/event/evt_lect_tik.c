@@ -778,7 +778,7 @@ static USER_FUNC(evt_nomal_cange) {
     if (!marioRollKeyDisable()) {
         return EVT_RETURN_BLOCK;
     }
-    return (mario->dispFlags & 0x1000000) ? EVT_RETURN_BLOCK : EVT_RETURN_DONE;
+    return (mario->dispFlags & MARIO_DISP_FLAG_SLIT) ? EVT_RETURN_BLOCK : EVT_RETURN_DONE;
 }
 
 

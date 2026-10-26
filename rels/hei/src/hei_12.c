@@ -10,6 +10,7 @@
 #include "mario/mario_pouch.h"
 #include "pmario_sound.h"
 #include "driver/itemdrv.h"
+#include "mario/mario.h"
 
 #include "driver/npcdrv.h"
 #include "evt/evt_bero.h"
@@ -66,7 +67,7 @@ static EVT_BEGIN(evt_chorobon)
     CALL(evt_npc_jump_position, STRING("チョロボン"), 0, 0, 0, 600, 0, FLOAT(30.0f), 0)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_SURPRISED1_2"), LW(0), LW(1), LW(2), 0)
-    CALL(evt_mario_dispflag_onoff, 1, 2)
+    CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_POSE_LOCK)
     CALL(evt_mario_set_pose, STRING("M_N_7"))
     WAIT_MS(500)
     CALL(evt_npc_change_interrupt, STRING("チョロボン"), 1, PTR(chorobon_move_event))
@@ -87,7 +88,7 @@ static EVT_BEGIN(evt_chorobon)
         CALL(evt_npc_change_fbat_mode, 1)
     END_IF
     CALL(evt_mario_set_pose, STRING("M_S_1"))
-    CALL(evt_mario_dispflag_onoff, 0, 2)
+    CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_POSE_LOCK)
     CALL(evt_mario_key_onoff, 1)
     RETURN
 EVT_END()

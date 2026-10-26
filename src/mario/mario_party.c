@@ -63,7 +63,7 @@ s32 marioUseParty(void) {
         wp->trigFlags &= ~MARIO_TRIG_FLAG_USE_PARTNER;
         return 0;
     }
-    if ((wp->dispFlags & 0x1000000) || party->slitOn == 1) {
+    if ((wp->dispFlags & MARIO_DISP_FLAG_SLIT) || party->slitOn == 1) {
         return 0;
     }
     if (partyGetPtr(marioGetPartyId())->flags & 0x100) {

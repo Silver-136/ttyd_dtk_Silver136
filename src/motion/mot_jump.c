@@ -339,7 +339,7 @@ static inline void jumpSfx(MarioWork* mario) {
 #ifdef VERSION_G8ME01
 void N_mot_jumpNpc_post(void) {
     MarioWork* mario = marioGetPtr();
-    if (!strcmp(gp->currentMapName, "gon_10") && (mario->dispFlags & 0x20000)) {
+    if (!strcmp(gp->currentMapName, "gon_10") && (mario->dispFlags & MARIO_DISP_FLAG_CAM_FOLLOW_Y_OFF)) {
         camFollowYOn();
     }
 }
@@ -440,7 +440,7 @@ void mot_upstairs(void) {
             mario->flags &= ~MARIO_FLAG_IS_STEPPING;
             if (mario->flags & MARIO_FLAG_PAPER_MODE) {
                 motSlitContinue();
-            } else if (mario->dispFlags & 0x1000000) {
+            } else if (mario->dispFlags & MARIO_DISP_FLAG_SLIT) {
                 marioChgMot2(MARIO_MOTION_SLIT);
             } else {
                 marioChgMotAuto();

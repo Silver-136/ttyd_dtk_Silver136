@@ -19,6 +19,7 @@
 #include "driver/casedrv.h"
 #include "driver/seqdrv.h"
 #include "pmario_sound.h"
+#include "mario/mario.h"
 
 USER_FUNC(evt_mario_dispflag_onoff);
 
@@ -129,7 +130,7 @@ static EVT_BEGIN(first_evt)
     CALL(evt_cam3d_evt_set, 175, 97, 542, 175, 71, -8, 1000, 11)
     WAIT_MS(1000)
     CALL(evt_cam3d_evt_off, 2000, 11)
-    CALL(evt_mario_dispflag_onoff, 1, 2)
+    CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_POSE_LOCK)
     CALL(evt_mario_set_pose, STRING("M_I_Y"))
     BEGIN_INLINE_EVENT
         CALL(evt_npc_move_position, STRING("手下２"), -160, 0, 0, FLOAT(200.0f), 0)
@@ -139,7 +140,7 @@ static EVT_BEGIN(first_evt)
     CALL(evt_npc_set_battle_info, STRING("手下１"), 6)
     CALL(evt_npc_battle_start, STRING("手下１"))
     CALL(evt_npc_wait_battle_end)
-    CALL(evt_mario_dispflag_onoff, 0, 2)
+    CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_POSE_LOCK)
     CALL(evt_mario_set_pose, STRING("M_S_1"))
     CALL(evt_mario_set_pos, -200, 0, 0)
     CALL(evt_party_set_pos, 0, -240, 0, 0)

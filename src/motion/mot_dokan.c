@@ -95,9 +95,9 @@ void mot_dokan(void) {
 
     if (mario->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) {
         mario->trigFlags &= ~MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
-        mario->dispFlags |= 0x1000;
-        mario->dispFlags |= 8;
-        mario->dispFlags |= 0x100;
+        mario->dispFlags |= MARIO_DISP_FLAG_SHADOW_OFF;
+        mario->dispFlags |= MARIO_DISP_FLAG_NO_DIR_FLIP;
+        mario->dispFlags |= MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
         mario->mot.dokan.reserved_4 = 0.0f;
         mario->mot.dokan.startZ = mario->position.z;
         mario->multiTimer = 0;
@@ -112,8 +112,8 @@ void mot_dokan(void) {
             marioChgPaper("PM_D_1A");
             marioChgPose("M_Z_1");
             marioPaperLightOff();
-            mario->dispFlags |= 8;
-            mario->dispFlags |= 0x100;
+            mario->dispFlags |= MARIO_DISP_FLAG_NO_DIR_FLIP;
+            mario->dispFlags |= MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
             mario->displayDirection = mario->displayDirectionTarget;
             mario->currSubMotionId = 20;
             mario->mot.dokan.rotSpeed = 0.0f;
@@ -127,7 +127,7 @@ void mot_dokan(void) {
             _partyEntry(0);
             mario->currSubMotionId = 30;
         } else if (mario->dokanType == 5) {
-            mario->dispFlags |= 0x1000;
+            mario->dispFlags |= MARIO_DISP_FLAG_SHADOW_OFF;
             party = partyGetPtr(0);
             if (party != NULL) {
                 partyShadowOff(party);
@@ -192,10 +192,10 @@ void mot_dokan(void) {
             if (mario->displayDirectionTarget >= 90.0f && mario->displayDirectionTarget <= 270.0f) {
                 mario->mot.dokan.rotSpeed = 30.0f;
             } else {
-                mario->dispFlags |= 8;
+                mario->dispFlags |= MARIO_DISP_FLAG_NO_DIR_FLIP;
                 mario->mot.dokan.rotSpeed = -30.0f;
             }
-            mario->dispFlags |= 0x100;
+            mario->dispFlags |= MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
             marioPaperLightOff();
             mario->displayDirection = mario->displayDirectionTarget;
 #else
@@ -204,7 +204,7 @@ void mot_dokan(void) {
 #endif
             mario->currSubMotionId = 40;
             _partyEntry(1);
-            mario->dispFlags |= 0x1000;
+            mario->dispFlags |= MARIO_DISP_FLAG_SHADOW_OFF;
             partyShadowOff(partyGetPtr(marioGetPartyId()));
             partyShadowOff(partyGetPtr(marioGetExtraPartyId()));
         }
@@ -345,9 +345,9 @@ void mot_dokan(void) {
             mario->scale = v;
         }
         marioOfsRotReset();
-        mario->dispFlags &= ~8;
-        mario->dispFlags &= ~0x100;
-        mario->dispFlags &= ~0x1000;
+        mario->dispFlags &= ~MARIO_DISP_FLAG_NO_DIR_FLIP;
+        mario->dispFlags &= ~MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
+        mario->dispFlags &= ~MARIO_DISP_FLAG_SHADOW_OFF;
         marioPaperOff();
         marioChgMot(MARIO_MOTION_STAY);
         mario->displayDirection = revise360(mario->displayDirection);
@@ -401,9 +401,9 @@ void mot_dokan(void) {
             mario->scale = v;
         }
         marioOfsRotReset();
-        mario->dispFlags &= ~8;
-        mario->dispFlags &= ~0x100;
-        mario->dispFlags &= ~0x1000;
+        mario->dispFlags &= ~MARIO_DISP_FLAG_NO_DIR_FLIP;
+        mario->dispFlags &= ~MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
+        mario->dispFlags &= ~MARIO_DISP_FLAG_SHADOW_OFF;
         marioPaperOff();
         marioChgMot(MARIO_MOTION_STAY);
         mario->displayDirection = revise360(mario->displayDirection);

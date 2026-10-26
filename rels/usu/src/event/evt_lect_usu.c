@@ -630,7 +630,7 @@ static USER_FUNC(evt_nomal_cange) {
     if (!marioRollKeyDisable()) {
         return EVT_RETURN_BLOCK;
     }
-    return (mario->dispFlags & 0x1000000) ? EVT_RETURN_BLOCK : EVT_RETURN_DONE;
+    return (mario->dispFlags & MARIO_DISP_FLAG_SLIT) ? EVT_RETURN_BLOCK : EVT_RETURN_DONE;
 }
 
 static USER_FUNC(set_dir) {
@@ -771,7 +771,7 @@ EVT_BEGIN(all_party_lecture)
         CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
         CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)
     END_IF
-    CALL(evt_mario_dispflag_onoff, 1, 1)
+    CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_HIDE)
     CALL(evt_mario_set_camid, 7)
     CALL(effitemget_open, STRING("sub_bg"))
     CALL(evt_party_get_pos, 0, LW(0), LW(1), LW(2))
@@ -812,34 +812,34 @@ EVT_BEGIN(all_party_lecture)
     LOOP(6)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         CALL(evt_snd_sfxon_3d, STRING("SFX_EVT_LECTUREN_BLINKING1"), LW(0), LW(1), LW(2), 0)
-        CALL(evt_mario_dispflag_onoff, 0, 1)
+        CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_HIDE)
         WAIT_MS(100)
-        CALL(evt_mario_dispflag_onoff, 1, 1)
+        CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_HIDE)
         WAIT_MS(100)
     END_LOOP
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_EVT_LECTUREN_BLINKING1"), LW(0), LW(1), LW(2), 0)
-    CALL(evt_mario_dispflag_onoff, 0, 1)
+    CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_HIDE)
     SWITCH(LW(9))
         CASE_EQUAL(6)
         CALL_CHILD(PTR(vivian_party_lecture))
     END_SWITCH
     LOOP(6)
-        CALL(evt_mario_dispflag_onoff, 1, 1)
+        CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_HIDE)
         CALL(evt_party_dispflg_onoff, 0, 1, 1)
         WAIT_MS(100)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         CALL(evt_snd_sfxon_3d, STRING("SFX_EVT_LECTUREN_BLINKING1"), LW(0), LW(1), LW(2), 0)
-        CALL(evt_mario_dispflag_onoff, 0, 1)
+        CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_HIDE)
         CALL(evt_party_dispflg_onoff, 0, 1, 0)
         WAIT_MS(100)
     END_LOOP
-    CALL(evt_mario_dispflag_onoff, 1, 1)
+    CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_HIDE)
     CALL(evt_party_dispflg_onoff, 0, 1, 1)
     CALL(evt_mario_init_camid)
     CALL(evt_party_init_camid, 0)
     CALL(lect_cam_load, 0)
-    CALL(evt_mario_dispflag_onoff, 0, 1)
+    CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_HIDE)
     CALL(evt_party_dispflg_onoff, 0, 1, 0)
     CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
     CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)

@@ -247,7 +247,7 @@ void bomhei_use(PartyEntry* party) {
             bomhei_use_cancel();
         } else if (mario->forceMoveTimer != 0) {
             bomhei_use_cancel();
-        } else if (party->useMotionId <= 10 && (mario->dispFlags & 0x1000000)) {
+        } else if (party->useMotionId <= 10 && (mario->dispFlags & MARIO_DISP_FLAG_SLIT)) {
             bomhei_use_cancel();
         }
     }

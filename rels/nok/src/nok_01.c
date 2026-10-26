@@ -20,6 +20,7 @@
 #include "system.h"
 #include "pmario_sound.h"
 #include "driver/itemdrv.h"
+#include "mario/mario.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "dolphin/mtx.h"
@@ -372,7 +373,7 @@ EVT_END()
 
 EVT_BEGIN(boss_noko_open_gate)
     CALL(evt_msg_print, 0, STRING("stg1_nok_37"), 0, STRING("me"))
-    CALL(evt_mario_dispflag_onoff, 1, 2)
+    CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_POSE_LOCK)
     BEGIN_INLINE_EVENT
         CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_HIT)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -417,7 +418,7 @@ EVT_BEGIN(boss_noko_open_gate)
     WAIT_MS(1000)
     CALL(evt_mario_set_pose, STRING("M_S_1"))
     CALL(evt_msg_print, 0, STRING("stg1_nok_46"), 0, STRING("me"))
-    CALL(evt_mario_dispflag_onoff, 0, 2)
+    CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_POSE_LOCK)
     SET_VALUE(GSW_STORY_PROGRESS, 27)
     RETURN
 EVT_END()
@@ -1435,7 +1436,7 @@ static EVT_BEGIN(epilogue_evt)
     CALL(evt_snd_bgmon, 512, STRING("BGM_STG1_NOK1"))
     CALL(evt_snd_bgm_scope, 0, 1)
     CALL(evt_mario_key_onoff, 0)
-    CALL(evt_mario_dispflag_onoff, 1, 1)
+    CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_HIDE)
     CALL(evt_npc_set_position, STRING("ノコタロウ"), 75, 0, -70)
     CALL(evt_npc_set_ry, STRING("ノコタロウ"), 90)
     CALL(evt_npc_flag_onoff, 1, STRING("ノコタロウ"), NPC_FLAG_NO_HIT | NPC_FLAG_INSTANT_TURN)

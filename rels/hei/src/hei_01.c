@@ -22,6 +22,7 @@
 #include "driver/casedrv.h"
 #include "pmario_sound.h"
 #include "driver/itemdrv.h"
+#include "mario/mario.h"
 
 #include "party.h"
 #include "evt/evt_bero.h"
@@ -385,7 +386,7 @@ EVT_BEGIN(nokotaro_nakama)
     END_INLINE_EVENT
     WAIT_MS(2000)
     CALL(evt_msg_print, 0, STRING("stg1_hei_05"), 0, STRING("ノコタロウ"))
-    CALL(evt_mario_dispflag_onoff, 1, 2)
+    CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_POSE_LOCK)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_SURPRISED2"), LW(0), LW(1), LW(2), 0)
     CALL(evt_mario_set_pose, STRING("M_N_H"))
@@ -393,7 +394,7 @@ EVT_BEGIN(nokotaro_nakama)
     CALL(evt_mario_jump_pos, LW(0), 0, LW(2), 200, 1, -1000)
     WAIT_MS(700)
     CALL(evt_mario_set_pose, STRING("M_S_1"))
-    CALL(evt_mario_dispflag_onoff, 0, 2)
+    CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_POSE_LOCK)
     CALL(evt_msg_print, 0, STRING("stg1_hei_05_1"), 0, STRING("ノコタロウ"))
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_THINK1"), LW(0), LW(1), LW(2), 0)

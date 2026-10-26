@@ -20,6 +20,7 @@
 #include "evt/evt_pouch.h"
 #include "driver/npcdrv.h"
 #include "driver/itemdrv.h"
+#include "mario/mario.h"
 
 #include "driver/mobjdrv.h"
 #include "driver/animdrv.h"
@@ -180,12 +181,12 @@ EVT_BEGIN(tsuritenjo_event)
     WAIT_MS(200)
     CALL(evt_msg_print_party, STRING("stg1_gon_18_00"))
     WAIT_MS(300)
-    CALL(evt_mario_dispflag_onoff, 1, 2)
+    CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_POSE_LOCK)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_NOD1_2"), LW(0), LW(1), LW(2), 0)
     CALL(evt_mario_set_pose, STRING("M_N_2"))
     WAIT_MS(500)
-    CALL(evt_mario_dispflag_onoff, 0, 2)
+    CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_POSE_LOCK)
     CALL(evt_mario_set_dir, 270, 300, 0)
     CALL(evt_snd_bgmon_f, 768, STRING("BGM_STG1_GON1"), 3000)
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG1_GON1"))
@@ -368,16 +369,16 @@ static EVT_BEGIN(evt_majin2)
     CALL_CHILD(PTR(slit_majin_lecture_init))
     CALL_CHILD(PTR(slit_majin_lecture))
     LOOP(6)
-        CALL(evt_mario_dispflag_onoff, 1, 1)
+        CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_HIDE)
         WAIT_MS(100)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         CALL(evt_snd_sfxon_3d, STRING("SFX_EVT_PERAMAJIN_BLINKING1"), LW(0), LW(1), LW(2), 0)
-        CALL(evt_mario_dispflag_onoff, 0, 1)
+        CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_HIDE)
         WAIT_MS(100)
     END_LOOP
-    CALL(evt_mario_dispflag_onoff, 1, 1)
+    CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_HIDE)
     CALL(evt_mario_set_pos, LW(10), LW(11), LW(12))
-    CALL(evt_mario_dispflag_onoff, 0, 1)
+    CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_HIDE)
     CALL(evt_mario_init_camid)
     CALL(lect_cam_load, 0)
     CALL(evt_cam3d_evt_off, 500, 11)

@@ -64,7 +64,7 @@ s32 marioSlitButton(void) {
     if (marioBgmodeChk() == 1) {
         return 0;
     }
-    if (!(mario->dispFlags & 0x1000000)) {
+    if (!(mario->dispFlags & MARIO_DISP_FLAG_SLIT)) {
         if (mario->buttonHold & PAD_TRIGGER_R) {
             return 1;
         }
@@ -335,7 +335,7 @@ void marioSlitForceCancel(void) {
         m->dispFlags &= CLR_DISP;
         marioPaperOff();
         mapResetPaperAmbColor();
-        m->dispFlags &= ~4;
+        m->dispFlags &= ~MARIO_DISP_FLAG_NO_REAR_POSE;
         marioAdjustMoveDir();
         {
             MarioWork* p = marioGetPtr();
@@ -362,7 +362,7 @@ void mot_slit_post(void) {
 #endif
     }
     if (!(m->flags & MARIO_FLAG_PAPER_MODE)) {
-        if (m->dispFlags & 0x1000000) {
+        if (m->dispFlags & MARIO_DISP_FLAG_SLIT) {
             m->wPlayerCollisionBox.x = 20.0f;
             if (m->directionView >= 180.0f) {
                 m->displayDirection = 0.0f;
@@ -374,7 +374,7 @@ void mot_slit_post(void) {
             CLR_SLITFLAGS(m)
             marioPaperOff();
             mapResetPaperAmbColor();
-            m->dispFlags &= ~4;
+            m->dispFlags &= ~MARIO_DISP_FLAG_NO_REAR_POSE;
             marioAdjustMoveDir();
             allPartyForceSlitOff();
         }
@@ -394,7 +394,7 @@ void mot_slit_post(void) {
         m->dispFlags &= CLR_DISP;
         marioPaperOff();
         mapResetPaperAmbColor();
-        m->dispFlags &= ~4;
+        m->dispFlags &= ~MARIO_DISP_FLAG_NO_REAR_POSE;
         marioAdjustMoveDir();
 #ifdef VERSION_G8ME01
         if (m->currMotionId != MARIO_MOTION_ROLL) {
@@ -415,7 +415,7 @@ void marioForceSlitAnime(void) {
     marioPaperOn("p_slit");
     marioChgPose("M_S_1");
     marioChgPaper("PM_S_1A");
-    m->dispFlags |= 4;
+    m->dispFlags |= MARIO_DISP_FLAG_NO_REAR_POSE;
 }
 
 static inline void slitInit(void) {
@@ -427,8 +427,8 @@ static inline void slitInit(void) {
     m->mot.slit.side = 0;
     m->trigFlags &= ~MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
     m->flags &= ~(MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING | MARIO_FLAG_IS_STEPPING | MARIO_FLAG_HAS_INPUT_JUMP);
-    m->dispFlags |= 4;
-    m->dispFlags |= 0x1000000;
+    m->dispFlags |= MARIO_DISP_FLAG_NO_REAR_POSE;
+    m->dispFlags |= MARIO_DISP_FLAG_SLIT;
     if (m->paperPoseId == -1) {
         GXColor tmp;
         GXColor col = {0, 0, 0, 255};
@@ -459,7 +459,7 @@ void marioReInit_slit(void) {
     m->mot.slit.count = 0;
     m->wPlayerCollisionBox.x = 6.0f;
     m->flags |= MARIO_FLAG_PAPER_MODE;
-    m->dispFlags |= 0x1000000;
+    m->dispFlags |= MARIO_DISP_FLAG_SLIT;
     allPartySlitOn();
 }
 
@@ -967,7 +967,7 @@ void mot_slit(void) {
         m->dispFlags &= CLR_DISP;
         marioPaperOff();
         mapResetPaperAmbColor();
-        m->dispFlags &= ~4;
+        m->dispFlags &= ~MARIO_DISP_FLAG_NO_REAR_POSE;
         marioAdjustMoveDir();
 #ifndef VERSION_G8ME01
         allPartySlitOff();
@@ -1012,7 +1012,7 @@ void mot_slit(void) {
         m->dispFlags &= CLR_DISP;
         marioPaperOff();
         mapResetPaperAmbColor();
-        m->dispFlags &= ~4;
+        m->dispFlags &= ~MARIO_DISP_FLAG_NO_REAR_POSE;
         marioAdjustMoveDir();
         allPartySlitOff();
         CAMFIX(m)
@@ -1052,7 +1052,7 @@ void mot_slit(void) {
         m->dispFlags &= CLR_DISP;
         marioPaperOff();
         mapResetPaperAmbColor();
-        m->dispFlags &= ~4;
+        m->dispFlags &= ~MARIO_DISP_FLAG_NO_REAR_POSE;
         marioAdjustMoveDir();
         allPartySlitOff();
         CAMFIX(m)

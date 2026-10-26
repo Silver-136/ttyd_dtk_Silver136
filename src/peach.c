@@ -25,8 +25,8 @@ void peachChgPose(const char* name);
 static inline void peachStepSe(s32 d1, s32 d2) {
     MarioWork* mp = marioGetPtr();
     s32 a, b;
-    if (!(mp->peachFlags & 0x2000)) {
-        if ((mp->peachFlags & 0x20) && mp->scale.y == 0.0f) {
+    if (!(mp->peachFlags & PEACH_FLAG_GUNDAN)) {
+        if ((mp->peachFlags & PEACH_FLAG_INVISIBLE) && mp->scale.y == 0.0f) {
             a = 0x80C;
             b = 0x80B;
         } else {
@@ -47,109 +47,109 @@ static inline void peachStepSe(s32 d1, s32 d2) {
 
 void peachSetStsNormal(void) {
     MarioWork* mp = marioGetPtr();
-    if (mp->peachFlags & 0x2000) {
+    if (mp->peachFlags & PEACH_FLAG_GUNDAN) {
         peachTransformOff();
     } else {
-        mp->peachFlags &= ~0x7F0;
+        mp->peachFlags &= ~PEACH_FLAG_STS_MASK;
         peachChgPose("P_S_1");
     }
 }
 
 void peachSetStsAftershower(void) {
     MarioWork* mp = marioGetPtr();
-    mp->peachFlags &= ~0x7F0;
-    mp->peachFlags |= 0x10;
+    mp->peachFlags &= ~PEACH_FLAG_STS_MASK;
+    mp->peachFlags |= PEACH_FLAG_AFTERSHOWER;
     peachChgPose("P_S_1");
 }
 
 void peachSetStsInvisible(void) {
     MarioWork* mp = marioGetPtr();
-    mp->peachFlags &= ~0x7F0;
-    mp->peachFlags |= 0x20;
+    mp->peachFlags &= ~PEACH_FLAG_STS_MASK;
+    mp->peachFlags |= PEACH_FLAG_INVISIBLE;
     peachChgPose("P_S_1");
 }
 
 void peachSetStsHappy(void) {
     MarioWork* mp = marioGetPtr();
-    mp->peachFlags &= ~0x7F0;
-    mp->peachFlags |= 0x40;
+    mp->peachFlags &= ~PEACH_FLAG_STS_MASK;
+    mp->peachFlags |= PEACH_FLAG_HAPPY;
     peachChgPose("P_S_1");
 }
 
 void peachSetStsUneasy(void) {
     MarioWork* mp = marioGetPtr();
-    mp->peachFlags &= ~0x7F0;
-    mp->peachFlags |= 0x80;
+    mp->peachFlags &= ~PEACH_FLAG_STS_MASK;
+    mp->peachFlags |= PEACH_FLAG_UNEASY;
     peachChgPose("P_S_1");
 }
 
 void peachSetStsAngry(void) {
     MarioWork* mp = marioGetPtr();
-    mp->peachFlags &= ~0x7F0;
-    mp->peachFlags |= 0x100;
+    mp->peachFlags &= ~PEACH_FLAG_STS_MASK;
+    mp->peachFlags |= PEACH_FLAG_ANGRY;
     peachChgPose("P_S_1");
 }
 
 void peachSetStsOrdinary(void) {
     MarioWork* mp = marioGetPtr();
-    mp->peachFlags &= ~0x7F0;
-    mp->peachFlags |= 0x200;
+    mp->peachFlags &= ~PEACH_FLAG_STS_MASK;
+    mp->peachFlags |= PEACH_FLAG_ORDINARY;
     peachChgPose("P_S_1");
 }
 
 void peachSetStsCarry(void) {
     MarioWork* mp = marioGetPtr();
-    mp->peachFlags &= ~0x7F0;
-    mp->peachFlags |= 0x400;
+    mp->peachFlags &= ~PEACH_FLAG_STS_MASK;
+    mp->peachFlags |= PEACH_FLAG_CARRY;
     peachChgPose("P_S_1");
 }
 
 void peachChgPose(const char* name) {
     MarioWork* mp = marioGetPtr();
-    if (mp->dispFlags & 2) return;
-    if (mp->peachFlags & 0x2000) {
+    if (mp->dispFlags & MARIO_DISP_FLAG_POSE_LOCK) return;
+    if (mp->peachFlags & PEACH_FLAG_GUNDAN) {
         if (strcmp(name, "P_Z_1") == 0) name = "Z_1";
         else if (strcmp(name, "P_S_1") == 0) name = "S_1";
         else if (strcmp(name, "P_W_1") == 0) name = "W_1";
         else if (strcmp(name, "P_R_1") == 0) name = "R_1";
         else if (strcmp(name, "P_T_1") == 0) name = "T_1";
-    } else if (mp->peachFlags & 0x10) {
+    } else if (mp->peachFlags & PEACH_FLAG_AFTERSHOWER) {
         if (strcmp(name, "P_Z_1") == 0) name = "P_Z_2";
         else if (strcmp(name, "P_S_1") == 0) name = "P_S_2";
         else if (strcmp(name, "P_W_1") == 0) name = "P_W_2";
         else if (strcmp(name, "P_R_1") == 0) name = "P_R_2";
         else if (strcmp(name, "P_T_1") == 0) name = "P_T_2";
-    } else if (mp->peachFlags & 0x20) {
+    } else if (mp->peachFlags & PEACH_FLAG_INVISIBLE) {
         if (strcmp(name, "P_Z_1") == 0) name = "P_Z_3";
         else if (strcmp(name, "P_S_1") == 0) name = "P_S_3";
         else if (strcmp(name, "P_W_1") == 0) name = "P_W_3";
         else if (strcmp(name, "P_R_1") == 0) name = "P_R_3";
         else if (strcmp(name, "P_T_1") == 0) name = "P_T_3";
-    } else if (mp->peachFlags & 0x80) {
+    } else if (mp->peachFlags & PEACH_FLAG_UNEASY) {
         if (strcmp(name, "P_Z_1") == 0) name = "P_Z_4";
         else if (strcmp(name, "P_S_1") == 0) name = "P_S_4";
         else if (strcmp(name, "P_W_1") == 0) name = "P_W_4";
         else if (strcmp(name, "P_R_1") == 0) name = "P_R_4";
         else if (strcmp(name, "P_T_1") == 0) name = "P_T_4";
-    } else if (mp->peachFlags & 0x40) {
+    } else if (mp->peachFlags & PEACH_FLAG_HAPPY) {
         if (strcmp(name, "P_Z_1") == 0) name = "P_Z_5";
         else if (strcmp(name, "P_S_1") == 0) name = "P_S_5";
         else if (strcmp(name, "P_W_1") == 0) name = "P_W_5";
         else if (strcmp(name, "P_R_1") == 0) name = "P_R_5";
         else if (strcmp(name, "P_T_1") == 0) name = "P_T_5";
-    } else if (mp->peachFlags & 0x100) {
+    } else if (mp->peachFlags & PEACH_FLAG_ANGRY) {
         if (strcmp(name, "P_Z_1") == 0) name = "P_Z_6";
         else if (strcmp(name, "P_S_1") == 0) name = "P_S_6";
         else if (strcmp(name, "P_W_1") == 0) name = "P_W_6";
         else if (strcmp(name, "P_R_1") == 0) name = "P_R_6";
         else if (strcmp(name, "P_T_1") == 0) name = "P_T_6";
-    } else if (mp->peachFlags & 0x200) {
+    } else if (mp->peachFlags & PEACH_FLAG_ORDINARY) {
         if (strcmp(name, "P_Z_1") == 0) name = "P_Z_7";
         else if (strcmp(name, "P_S_1") == 0) name = "P_S_7";
         else if (strcmp(name, "P_W_1") == 0) name = "P_W_7";
         else if (strcmp(name, "P_R_1") == 0) name = "P_R_7";
         else if (strcmp(name, "P_T_1") == 0) name = "P_T_13";
-    } else if (mp->peachFlags & 0x400) {
+    } else if (mp->peachFlags & PEACH_FLAG_CARRY) {
         if (strcmp(name, "P_Z_1") == 0) name = "P_Z_8";
         else if (strcmp(name, "P_S_1") == 0) name = "P_S_8";
         else if (strcmp(name, "P_W_1") == 0) name = "P_W_8";
@@ -169,8 +169,8 @@ void peachTransformOn(void) {
     if (mp->characterId != CHARACTER_PEACH) {
         marioSetCharMode(CHARACTER_PEACH);
     }
-    if (!(mp->peachFlags & 0x2000)) {
-        mp->peachFlags |= 0x2000;
+    if (!(mp->peachFlags & PEACH_FLAG_GUNDAN)) {
+        mp->peachFlags |= PEACH_FLAG_GUNDAN;
         if (mp->paperAnimGroupId[0] >= 0) {
             animPoseRelease(mp->paperAnimGroupId[0]);
         }
@@ -186,8 +186,8 @@ void peachTransformOff(void) {
     if (mp->characterId != CHARACTER_PEACH) {
         marioSetCharMode(CHARACTER_PEACH);
     }
-    if (mp->peachFlags & 0x2000) {
-        mp->peachFlags &= ~0x2000;
+    if (mp->peachFlags & PEACH_FLAG_GUNDAN) {
+        mp->peachFlags &= ~PEACH_FLAG_GUNDAN;
         if (mp->paperAnimGroupId[0] >= 0) {
             animPoseRelease(mp->paperAnimGroupId[0]);
         }
@@ -278,8 +278,8 @@ void peach_stay(void) {
         marioChgMot(MARIO_MOTION_WALK);
     }
     if (!(mp->flags & MARIO_FLAG_KEY_OFF)) {
-    switch (mp->dispFlags & 0x40000000) { case 0:
-    { if (!(mp->peachFlags & 0x27F0)) {
+    switch (mp->dispFlags & MARIO_DISP_FLAG_PAPER) { case 0:
+    { if (!(mp->peachFlags & (PEACH_FLAG_STS_MASK | PEACH_FLAG_GUNDAN))) {
         switch (mp->currSubMotionId) {
         case 0:
             if (++MT >= sysMsec2Frame(50000)) {

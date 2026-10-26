@@ -21,6 +21,7 @@
 #include "driver/casedrv.h"
 #include "pmario_sound.h"
 #include "driver/itemdrv.h"
+#include "mario/mario.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "mario/mariost.h"
@@ -1119,7 +1120,7 @@ EVT_BEGIN(hikosenkakari_talk)
             ELSE
             CALL(evt_party_stop, 0)
             CALL(evt_party_stop, 1)
-            CALL(evt_mario_dispflag_onoff, 1, 2)
+            CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_POSE_LOCK)
             CALL(evt_mario_set_pose, STRING("M_C_3"))
             CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
             CALL(evt_mario_get_dispdir, LW(10))
@@ -1136,7 +1137,7 @@ EVT_BEGIN(hikosenkakari_talk)
             WAIT_MS(1000)
             CALL(evt_item_delete, LW(10))
             CALL(evt_mario_set_pose, STRING("M_S_1"))
-            CALL(evt_mario_dispflag_onoff, 0, 2)
+            CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_POSE_LOCK)
             CALL(evt_msg_print, 0, STRING("hikou_02"), 0, STRING("me"))
             CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
             SET_VALUE(GF(0), 1)
@@ -1201,7 +1202,7 @@ EVT_BEGIN(ekiin_talk)
         IF_INT_EQUAL(LW(0), 0)
             CALL(evt_msg_print, 0, STRING("train_05"), 0, STRING("me"))
             ELSE
-            CALL(evt_mario_dispflag_onoff, 1, 2)
+            CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_POSE_LOCK)
             CALL(evt_mario_set_pose, STRING("M_C_3"))
             CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
             CALL(evt_mario_get_dispdir, LW(10))
@@ -1218,7 +1219,7 @@ EVT_BEGIN(ekiin_talk)
             WAIT_MS(1000)
             CALL(evt_item_delete, LW(10))
             CALL(evt_mario_set_pose, STRING("M_S_1"))
-            CALL(evt_mario_dispflag_onoff, 0, 2)
+            CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_POSE_LOCK)
             CALL(evt_msg_print, 0, STRING("train_04"), 0, STRING("me"))
             CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_HIT)
             CALL(evt_npc_status_onoff, 1, STRING("me"), 2)

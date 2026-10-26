@@ -292,11 +292,11 @@ void mot_hip(void) {
             return;
         }
         if (--mario->multiTimer <= 0) {
-            mario->dispFlags &= ~0x08000000;
+            mario->dispFlags &= ~MARIO_DISP_FLAG_BLUR;
             if (!marioBgmodeChk()) {
                 camFollowYOn();
             }
-            mario->dispFlags &= ~4;
+            mario->dispFlags &= ~MARIO_DISP_FLAG_NO_REAR_POSE;
             mario->flags &= ~MARIO_FLAG_STOP_AIR_MOVEMENT;
             marioChgMotSub(MARIO_MOTION_STAY, 0);
             MHPOST();
@@ -338,7 +338,7 @@ s32 U_chkground(void) {
         mario->dispOfs2.y = 0.0f;
         mario->airTimer = 0;
         mario->jumpPeakAirTime = 0;
-        mario->dispFlags &= ~4;
+        mario->dispFlags &= ~MARIO_DISP_FLAG_NO_REAR_POSE;
         mario->flags &= ~MARIO_FLAG_STOP_AIR_MOVEMENT;
         camFollowYOn();
         attr = hitGetAttr(hit);

@@ -82,7 +82,7 @@ void mot_vivian_post(void) {
     MarioWork* mario = marioGetPtr();
 
     if (mario->currMotionId == MARIO_MOTION_DAMAGE_TOGE || mario->currMotionId == MARIO_MOTION_DAMAGE) {
-        mario->dispFlags &= ~0x1000;
+        mario->dispFlags &= ~MARIO_DISP_FLAG_SHADOW_OFF;
         marioPaperOff();
         {
             Vec zero = {0.0f, 0.0f, 0.0f};
@@ -317,12 +317,12 @@ void vivian_use(PartyEntry* party) {
         party->displayDirectionTarget = m->displayDirectionTarget;
         party->moveDir = toMovedirSimple(party->displayDirectionTarget);
         party->trailPos = party->position;
-        m->dispFlags |= 0x1000;
+        m->dispFlags |= MARIO_DISP_FLAG_SHADOW_OFF;
         partyChgPose(party, "PTR_A2_3");
         partyPaperOn((PartyEntry*)party, "p_bibi");
         partyChgPaper(party, "PM_B_1");
         party->dispOfs.y += 1.6f;
-        m->dispFlags |= 0x1000;
+        m->dispFlags |= MARIO_DISP_FLAG_SHADOW_OFF;
         marioPaperOn("p_bibi");
         marioChgPose("M_B_3");
         marioChgPaper("PM_B_1");
@@ -344,7 +344,7 @@ void vivian_use(PartyEntry* party) {
         party->work.vivian.shadowSize += 1.0f;
         if (party->work.vivian.shadowSize >= 20.0f) {
             party->work.vivian.shadowSize = 20.0f;
-            m->dispFlags |= 0x1000;
+            m->dispFlags |= MARIO_DISP_FLAG_SHADOW_OFF;
         }
         if (--party->moveFrames > 0) {
             break;
@@ -485,7 +485,7 @@ void vivian_use(PartyEntry* party) {
             party->useMotionId = 27;
             marioPaperOff();
             m->reserved_20 = NULL;
-            m->dispFlags &= ~0x1000;
+            m->dispFlags &= ~MARIO_DISP_FLAG_SHADOW_OFF;
             m->hitobjJumpFrom = m->hitobjStandOn;
             m->hitobjStandOn = NULL;
             {

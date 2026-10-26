@@ -74,14 +74,14 @@ void marioSetForceMove(s32 frames, f32 dir, f32 spd);
         if (!notFound) {                                   \
             mp->animName = name;                           \
             mp->trigFlags |= MARIO_TRIG_FLAG_CHG_ANIM;                       \
-            mp->dispFlags &= ~0x10000000;                  \
+            mp->dispFlags &= ~MARIO_DISP_FLAG_EVT_POSE;                  \
         } else {                                           \
             mp->animName = name;                           \
             mp->trigFlags |= MARIO_TRIG_FLAG_CHG_ANIM;                       \
-            mp->dispFlags |= 0x10000000;                   \
+            mp->dispFlags |= MARIO_DISP_FLAG_EVT_POSE;                   \
         }                                                  \
     }                                                      \
-    if (mp->dispFlags & 0x1000000) {                       \
+    if (mp->dispFlags & MARIO_DISP_FLAG_SLIT) {                       \
         mp->trigFlags |= 0x8000;                           \
     }                                                      \
     return EVT_RETURN_DONE;
@@ -148,7 +148,7 @@ USER_FUNC(evt_mario_dokan_prepare) {
     type = evtGetValue(event, args[0]);
     if (type == 4) {
         mp->scale = (Vec){0.0f, 0.0f, 0.0f};
-        mp->dispFlags |= 0x1000;
+        mp->dispFlags |= MARIO_DISP_FLAG_SHADOW_OFF;
         party = partyGetPtr(marioGetPartyId());
         if (party) {
             partyShadowOff(party);
@@ -166,7 +166,7 @@ USER_FUNC(evt_mario_dokan_prepare) {
             party->flags |= PARTY_FLAG_FORCE_FALL;
         }
     } else if (type == 5) {
-        mp->dispFlags |= 0x1000;
+        mp->dispFlags |= MARIO_DISP_FLAG_SHADOW_OFF;
         partyShadowOff(partyGetPtr(marioGetPartyId()));
         partyShadowOff(partyGetPtr(marioGetExtraPartyId()));
     }
@@ -238,8 +238,8 @@ USER_FUNC(evt_mario_paper_pose_dokan) {
             marioPaperLightOff();
             marioChgPaper("PM_D_1A");
             marioChgPose("M_Z_1");
-            mp->dispFlags |= 8;
-            mp->dispFlags |= 0x100;
+            mp->dispFlags |= MARIO_DISP_FLAG_NO_DIR_FLIP;
+            mp->dispFlags |= MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
             mp->displayDirection = mp->displayDirectionTarget;
             mp->mot.dokan.rotSpeed = 0.0f;
             mp->dispOfs = (Vec){0.0f, 0.0f, (mp->flags & MARIO_FLAG_BG_MODE) ? -16.0f : 0.0f};
@@ -262,8 +262,8 @@ USER_FUNC(evt_mario_paper_pose_dokan) {
             marioPaperLightOff();
             marioChgPaper("PM_D_1A");
             marioChgPose("M_Z_1");
-            mp->dispFlags |= 8;
-            mp->dispFlags |= 0x100;
+            mp->dispFlags |= MARIO_DISP_FLAG_NO_DIR_FLIP;
+            mp->dispFlags |= MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
             ret = 2;
             mp->scale = (Vec){1.0f, 1.0f, 1.0f};
             mp->mot.dokan.rotSpeed = 30.0f;
@@ -376,27 +376,27 @@ USER_FUNC(evt_mario_paper_pose_off) {
 
 USER_FUNC(evt_mario_balloon_bikkuri) {
     MarioWork* mp = marioGetPtr();
-    if (!(mp->dispFlags & 0x4000000)) {
+    if (!(mp->dispFlags & MARIO_DISP_FLAG_EVT_BALLOON)) {
         marioBalloonOn(0);
-        mp->dispFlags |= 0x4000000;
+        mp->dispFlags |= MARIO_DISP_FLAG_EVT_BALLOON;
     }
     return EVT_RETURN_DONE;
 }
 
 USER_FUNC(evt_mario_balloon_tenten) {
     MarioWork* mp = marioGetPtr();
-    if (!(mp->dispFlags & 0x4000000)) {
+    if (!(mp->dispFlags & MARIO_DISP_FLAG_EVT_BALLOON)) {
         marioBalloonOn(1);
-        mp->dispFlags |= 0x4000000;
+        mp->dispFlags |= MARIO_DISP_FLAG_EVT_BALLOON;
     }
     return EVT_RETURN_DONE;
 }
 
 USER_FUNC(evt_mario_balloon_off) {
     MarioWork* mp = marioGetPtr();
-    if (mp->dispFlags & 0x4000000) {
+    if (mp->dispFlags & MARIO_DISP_FLAG_EVT_BALLOON) {
         marioBalloonOff();
-        mp->dispFlags &= ~0x4000000;
+        mp->dispFlags &= ~MARIO_DISP_FLAG_EVT_BALLOON;
     }
     return EVT_RETURN_DONE;
 }
@@ -708,7 +708,7 @@ USER_FUNC(evt_mario_normalize) {
         }
         event->userdata[0] = 0;
         if (mp->currMotionId != MARIO_MOTION_YOSHI && mp->currMotionId != MARIO_MOTION_ROLL && mp->currMotionId != MARIO_MOTION_VIVIAN &&
-            !(mp->dispFlags & 0x1000000)) {
+            !(mp->dispFlags & MARIO_DISP_FLAG_SLIT)) {
             marioChgMot(MARIO_MOTION_STAY);
             if (partyRideChk(partyGetPtr(marioGetPartyId())) || partyRideChk(partyGetPtr(marioGetExtraPartyId()))) {
                 event->userdata[0] = 2;
@@ -744,7 +744,7 @@ USER_FUNC(evt_mario_normalize) {
                     event->userdata[0] = 5;
                 }
             } else if (mp->currMotionId == MARIO_MOTION_STAY) {
-                if (!(mp->dispFlags & 0x1000000)) {
+                if (!(mp->dispFlags & MARIO_DISP_FLAG_SLIT)) {
                     ret = 2;
                 }
             }
@@ -1370,7 +1370,7 @@ USER_FUNC(evt_mario_jump_jumpstand) {
 
     switch (event->userdata[0]) {
         case 0:
-            mp->dispFlags |= 4;
+            mp->dispFlags |= MARIO_DISP_FLAG_NO_REAR_POSE;
             if (marioChkSts(0x10)) {
                 effKemuriEntry(0, mp->position.x, mp->position.y, mp->position.z, 0.0f);
             }
@@ -1508,7 +1508,7 @@ USER_FUNC(evt_mario_jump_jumpstand) {
         mp->baseSpeed = 0.0f;
         mp->baseSpeed = 0.0f;
         marioChgMot(MARIO_MOTION_STAY);
-        mp->dispFlags &= ~4;
+        mp->dispFlags &= ~MARIO_DISP_FLAG_NO_REAR_POSE;
         marioAdjustMoveDir();
         camFollowYOn();
         gp->systemLevelFlags &= ~0x10;

@@ -657,7 +657,7 @@ EVT_BEGIN(evt_diary_read)
     END_IF
     CALL(evt_msg_continue)
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)
-    CALL(evt_mario_dispflag_onoff, 1, 2)
+    CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_POSE_LOCK)
     CALL(evt_mario_adjust_dir)
     CALL(evt_mario_set_pose, STRING("M_L_2"))
     CALL(evt_msg_print, 0, STRING("stg6_rsh_diary_04"), 0, 0)

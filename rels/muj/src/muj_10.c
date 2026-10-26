@@ -11,6 +11,7 @@
 #include "driver/npcdrv.h"
 #include "driver/mapdrv.h"
 #include "pmario_sound.h"
+#include "mario/mario.h"
 
 #include "driver/effdrv.h"
 #include "manager/evtmgr_cmd.h"
@@ -298,7 +299,7 @@ EVT_BEGIN(oidasare_event)
         CALL(evt_party_jump_pos, 0, 190, 50, -250, 600, 0, 30)
         CALL(evt_party_jump_pos, 0, 210, 50, -250, 300, 0, -1000)
     END_INLINE_EVENT
-    CALL(evt_mario_dispflag_onoff, 1, 2)
+    CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_POSE_LOCK)
     CALL(evt_mario_set_pose, STRING("M_A_1A"))
     CALL(evt_mario_jump_pos, 230, 50, -250, 500, 2, 30)
     CALL(evt_mario_set_pose, STRING("M_D_7B"))
@@ -311,7 +312,7 @@ EVT_BEGIN(oidasare_event)
     END_INLINE_EVENT
     CALL(evt_mario_set_pose, STRING("M_D_8"))
     WAIT_MS(1000)
-    CALL(evt_mario_dispflag_onoff, 0, 2)
+    CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_POSE_LOCK)
     CALL(evt_cam3d_evt_off, 500, 11)
     SET_VALUE(GSW_STORY_PROGRESS, 254)
     CALL(N_evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)

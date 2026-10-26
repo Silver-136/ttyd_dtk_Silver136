@@ -17,6 +17,7 @@
 #include "system.h"
 #include "driver/casedrv.h"
 #include "pmario_sound.h"
+#include "mario/mario.h"
 
 #include "mario/mario_pouch.h"
 #include "party.h"
@@ -527,13 +528,13 @@ EVT_BEGIN(tenkyugi_evt)
     END_IF
     CALL(evt_party_stop, 0)
     CALL(evt_party_set_pos, 0, -25, 400, 80)
-    CALL(evt_mario_dispflag_onoff, 1, 512)
+    CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_DISP_DIR_SNAP)
     CALL(evt_party_dispflg_onoff, 0, 32, 1)
     CALL(evt_mario_set_dispdir, 180)
     CALL(evt_party_set_dispdir, 0, 180)
     CALL(evt_mario_adjust_dir)
     WAIT_FRAMES(1)
-    CALL(evt_mario_dispflag_onoff, 0, 512)
+    CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_DISP_DIR_SNAP)
     CALL(evt_party_dispflg_onoff, 0, 32, 0)
     CALL(evt_cam3d_evt_set, 0, 500, 390, 0, 450, 95, 0, 11)
     WAIT_FRAMES(1)
@@ -575,14 +576,14 @@ EVT_BEGIN(tenkyugi_evt2)
     CALL(evt_snd_sfx_dist, LW(15), 10)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_hoshihoshi"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_map_playanim, STRING("en"), 1, 0)
-    CALL(evt_mario_dispflag_onoff, 1, 512)
+    CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_DISP_DIR_SNAP)
     CALL(evt_party_dispflg_onoff, 0, 32, 1)
     CALL(evt_mario_set_dispdir, 180)
     CALL(evt_party_set_dispdir, 0, 180)
     CALL(evt_party_stop, 0)
     CALL(evt_cam_road_reset)
     WAIT_FRAMES(1)
-    CALL(evt_mario_dispflag_onoff, 0, 512)
+    CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_DISP_DIR_SNAP)
     CALL(evt_party_dispflg_onoff, 0, 32, 0)
     WAIT_FRAMES(1)
     CALL(evt_cam3d_evt_set, 0, 500, 390, 0, 450, 95, 0, 11)

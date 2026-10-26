@@ -15,6 +15,7 @@
 #include "driver/mapdrv.h"
 #include "system.h"
 #include "driver/casedrv.h"
+#include "mario/mario.h"
 
 #include "driver/npcdrv.h"
 #include "eff/eff_stardust.h"
@@ -434,7 +435,7 @@ EVT_BEGIN(powerdownya_mario_level_rtn)
     CALL(evt_mario_set_pose, STRING("M_V_2"))
     WAIT_MS(1500)
     CALL(evt_mario_set_pose, STRING("M_S_1"))
-    CALL(evt_mario_dispflag_onoff, 0, 4)
+    CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_NO_REAR_POSE)
     DELETE_EVENT(GW(1))
     CALL(enzan_lw_load)
     CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
@@ -737,7 +738,7 @@ EVT_BEGIN(powerdownya_party_lank_rtn)
     END_SWITCH
     WAIT_MS(1500)
     CALL(evt_party_set_breed_pose, 0, 1)
-    CALL(evt_mario_dispflag_onoff, 0, 4)
+    CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_NO_REAR_POSE)
     DELETE_EVENT(GW(1))
     CALL(enzan_lw_load)
     CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))

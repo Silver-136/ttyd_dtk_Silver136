@@ -22,6 +22,7 @@
 #include "system.h"
 #include "driver/casedrv.h"
 #include "pmario_sound.h"
+#include "mario/mario.h"
 
 #include "driver/effdrv.h"
 #include "manager/evtmgr_cmd.h"
@@ -784,7 +785,7 @@ EVT_BEGIN(majyorin_evt_main)
     CALL(evt_msg_print, 0, STRING("stg8_las_22"), 0, STRING("マリリン"))
     CALL(evt_msg_print, 0, STRING("stg8_las_23"), 0, STRING("ランペル"))
     CALL(evt_cam3d_evt_set, 700, 193, 760, 700, 57, -12, 1000, 1)
-    CALL(evt_mario_dispflag_onoff, 1, 2)
+    CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_POSE_LOCK)
     CALL(evt_mario_set_pose, STRING("M_I_Y"))
     WAIT_MS(500)
     BEGIN_INLINE_EVENT
@@ -803,7 +804,7 @@ EVT_BEGIN(majyorin_evt_main)
     ADD(LW(0), 80)
     SUBTRACT(LW(2), 10)
     CALL(evt_npc_move_position, STRING("ランペル"), LW(0), LW(2), 0, FLOAT(90.0f), 0)
-    CALL(evt_mario_dispflag_onoff, 0, 2)
+    CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_POSE_LOCK)
     CALL(evt_party_run, 0)
     CALL(evt_npc_set_battle_info, STRING("マジョリン"), 8)
     CALL(evt_npc_battle_start, STRING("マジョリン"))

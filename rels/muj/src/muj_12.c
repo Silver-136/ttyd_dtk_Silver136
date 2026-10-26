@@ -17,6 +17,7 @@
 #include "driver/mapdrv.h"
 #include "mario/mario_pouch.h"
 #include "pmario_sound.h"
+#include "mario/mario.h"
 
 #include "driver/itemdrv.h"
 #include "mario/mariost.h"
@@ -367,8 +368,8 @@ static EVT_BEGIN(korutesu_event)
     CALL(evt_npc_set_ry, STRING("コルテス"), 0)
     CALL(evt_npc_pera_onoff, STRING("コルテス"), 0)
     CALL(evt_bero_exec_wait, 65536)
-    CALL(evt_mario_dispflag_onoff, 1, 2)
-    CALL(evt_mario_dispflag_onoff, 1, 4)
+    CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_POSE_LOCK)
+    CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_NO_REAR_POSE)
     BEGIN_INLINE_EVENT
         CALL(evt_mario_set_pose, STRING("M_N_5B"))
         WAIT_MS(500)
@@ -508,7 +509,7 @@ static EVT_BEGIN(korutesu_event)
     SPAWN_EVENT_GET_ID(PTR(starstone_fuwafuwa), LW(9))
     CALL(muj_item_move_3d_position, LW(10), LW(0), LW(1), LW(2), 3000, 0, GW(1))
     DELETE_EVENT(LW(9))
-    CALL(evt_mario_dispflag_onoff, 0, 4)
+    CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_NO_REAR_POSE)
     SET_VALUE(LW(0), 5)
     SET_VALUE(LW(1), LW(10))
     SET_VALUE(GSW_STORY_PROGRESS, 253)

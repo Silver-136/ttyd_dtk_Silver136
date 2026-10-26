@@ -86,13 +86,13 @@ void marioCamMain(void) {
         }
     }
     mario2->prevCamPosX = camera->cameraPos.x;
-    mario->dispFlags &= ~0x40000;
+    mario->dispFlags &= ~MARIO_DISP_FLAG_CAM_COLLISION;
 }
 
 void marioUpdateCamCollision(Vec collision) {
     MarioWork* mario = marioGetPtr();
     mario->camCollision = collision;
-    mario->dispFlags |= 0x40000;
+    mario->dispFlags |= MARIO_DISP_FLAG_CAM_COLLISION;
 }
 
 #define UPDATE_CAM_SHIFT(cur, target, rate) \
@@ -125,10 +125,10 @@ void marioUpdateCam(void) {
     UPDATE_CAM_SHIFT(mario->camShiftY, mario->camShiftTargetY, mario->camShiftRate.y);
     UPDATE_CAM_SHIFT(mario->camShiftZ, mario->camShiftTargetZ, mario->camShiftRate.z);
 
-    if (!(mario->dispFlags & 0x10000)) {
+    if (!(mario->dispFlags & MARIO_DISP_FLAG_NO_UPDATE_CAM_POS)) {
         camGetPtr(CAMERA_3D);
         sincosf(&sin, &cos, camGetPtr(CAMERA_3D)->viewYaw - 90.0f);
-        if (!(mario->dispFlags & 0x20000)) {
+        if (!(mario->dispFlags & MARIO_DISP_FLAG_CAM_FOLLOW_Y_OFF)) {
             mario->camTarget.x = mario->position.x + sin * mario->camShiftX;
             mario->camTarget.z = mario->position.z + cos * mario->camShiftX;
             mario->camTarget.y = mario->camShiftY + (mario->position.y + mario->dispOfs.y);
@@ -145,28 +145,28 @@ void marioUpdateCam(void) {
 }
 
 void marioUpdateCamPos(void) {
-    marioGetPtr()->dispFlags &= ~0x10000;
+    marioGetPtr()->dispFlags &= ~MARIO_DISP_FLAG_NO_UPDATE_CAM_POS;
 }
 
 void marioNoUpdateCamPos(void) {
-    marioGetPtr()->dispFlags |= 0x10000;
+    marioGetPtr()->dispFlags |= MARIO_DISP_FLAG_NO_UPDATE_CAM_POS;
 }
 
 void camFollowYOn(void) {
     camGetPtr(CAMERA_3D)->flags &= ~CAMERA_FLAG_NO_Y_FOLLOW;
-    marioGetPtr()->dispFlags &= ~0x20000;
+    marioGetPtr()->dispFlags &= ~MARIO_DISP_FLAG_CAM_FOLLOW_Y_OFF;
 }
 
 void camFollowYOff(void) {
     camGetPtr(CAMERA_3D)->flags |= CAMERA_FLAG_NO_Y_FOLLOW;
-    marioGetPtr()->dispFlags |= 0x20000;
+    marioGetPtr()->dispFlags |= MARIO_DISP_FLAG_CAM_FOLLOW_Y_OFF;
 }
 
 void marioCamZoomOffReq(void) {
     MarioWork* mario = marioGetPtr();
 
-    if (mario->dispFlags & 0x100000 && !(mario->dispFlags & 0x200000)) {
-        mario->dispFlags |= 0x200000;
+    if (mario->dispFlags & MARIO_DISP_FLAG_ZOOM && !(mario->dispFlags & MARIO_DISP_FLAG_ZOOM_OFF_REQ)) {
+        mario->dispFlags |= MARIO_DISP_FLAG_ZOOM_OFF_REQ;
         mario->zoomOffTime = 220;
         mario->zoomOffDelay = 32;
     }
@@ -175,8 +175,8 @@ void marioCamZoomOffReq(void) {
 void marioCamZoomOffReq2(s32 value) {
     MarioWork* mario = marioGetPtr();
 
-    if (mario->dispFlags & 0x100000) {
-        mario->dispFlags |= 0x200000;
+    if (mario->dispFlags & MARIO_DISP_FLAG_ZOOM) {
+        mario->dispFlags |= MARIO_DISP_FLAG_ZOOM_OFF_REQ;
         mario->zoomOffTime = value / 10;
         mario->zoomOffDelay = 32;
     }
@@ -188,12 +188,12 @@ BOOL marioCamZoomOff(void) {
     s32 args[10];
     s32 durationMs;
 
-    if (!(mario->dispFlags & 0x100000)) {
-        mario->dispFlags &= ~0x200000;
+    if (!(mario->dispFlags & MARIO_DISP_FLAG_ZOOM)) {
+        mario->dispFlags &= ~MARIO_DISP_FLAG_ZOOM_OFF_REQ;
         return FALSE;
     }
 
-    if (!(mario->dispFlags & 0x200000)) {
+    if (!(mario->dispFlags & MARIO_DISP_FLAG_ZOOM_OFF_REQ)) {
         return FALSE;
     }
 
@@ -203,7 +203,7 @@ BOOL marioCamZoomOff(void) {
 
     mario->zoomOffDelay = 0;
     mario->zoomLevel = 0;
-    mario->dispFlags &= ~0x300000;
+    mario->dispFlags &= ~(MARIO_DISP_FLAG_ZOOM | MARIO_DISP_FLAG_ZOOM_OFF_REQ);
     durationMs = mario->zoomOffTime * 10;
     mario->zoomOffTimer = ((durationMs * 60) / 1000);
     args[0] = durationMs;
@@ -241,17 +241,17 @@ BOOL marioCamZoomUp(void) {
             return FALSE;
         }
 
-        if (mario->dispFlags & 0x100000) {
+        if (mario->dispFlags & MARIO_DISP_FLAG_ZOOM) {
             return TRUE;
         }
     } else {
         camGetPtr(CAMERA_3D);
-        if (camGetPtr(CAMERA_3D)->stateA && mario->dispFlags & 0x100000) {
+        if (camGetPtr(CAMERA_3D)->stateA && mario->dispFlags & MARIO_DISP_FLAG_ZOOM) {
             return TRUE;
         }
     }
 
-    mario->dispFlags |= 0x100000;
+    mario->dispFlags |= MARIO_DISP_FLAG_ZOOM;
     mario->zoomOffTimer = 0;
 
     zoomDistance = (mario->characterId == CHARACTER_BOWSER) ? 750.0f : 450.0f;
@@ -323,7 +323,7 @@ BOOL marioCamZoomUpLevelMain(void) {
         return FALSE;
     }
 
-    mario->dispFlags |= 0x100000;
+    mario->dispFlags |= MARIO_DISP_FLAG_ZOOM;
     mario->zoomOffTimer = 0;
 
     if (mario->zoomLevel == 1) {

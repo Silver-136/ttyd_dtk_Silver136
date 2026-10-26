@@ -75,10 +75,10 @@ static inline void planeReset(void) {
     m->dispOfs = (Vec){0.0f, 0.0f, 0.0f};
     marioPaperOff();
     marioChgPaper(NULL);
-    m->dispFlags &= ~0x8;
+    m->dispFlags &= ~MARIO_DISP_FLAG_NO_DIR_FLIP;
     m->flags |= MARIO_FLAG_STOP_AIR_MOVEMENT;
     marioAdjustMoveDir();
-    m->dispFlags &= ~0x100;
+    m->dispFlags &= ~MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
 }
 
 static inline BOOL planeCancel(void) {
@@ -138,7 +138,7 @@ void marioForcePlaneAnime(void) {
     marioPaperOn(paper_plane[marioGetColor()]);
     marioChgPaper("PM_P_1B");
     marioChgPose("M_Z_1");
-    mp->dispFlags |= 8;
+    mp->dispFlags |= MARIO_DISP_FLAG_NO_DIR_FLIP;
 }
 
 #define DIRF(mp) ((mp->motPlane->flags & 1) ? 1.0f : -1.0f)
@@ -193,7 +193,7 @@ void mot_plane(void) {
         planeSetSpd(0.4f, 0.01f, 2.0f);
         marioPreJump();
         marioChgPose("M_J_1B");
-        mp->dispFlags |= 0x100;
+        mp->dispFlags |= MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
         mp->currSubMotionId = 1;
         mp->airTimer = 0;
         mp->baseSpeed = 0.0f;
@@ -223,7 +223,7 @@ void mot_plane(void) {
             marioPaperOn(paper_plane[marioGetColor()]);
             marioChgPaper("PM_P_1A");
             marioChgPose("M_Z_1");
-            mp->dispFlags |= 8;
+            mp->dispFlags |= MARIO_DISP_FLAG_NO_DIR_FLIP;
             animPoseSetLocalTime(mp->paperPoseId, 0.0f);
             animPoseSetLocalTime(mp->paperAnimGroupId[marioAnimeId()], 0.0f);
             evt = evtEntry(sound_evt, 0, 0);
@@ -346,7 +346,7 @@ void mot_plane(void) {
         mp->jumpJerkY *= 0.5f;
         mp->jumpSnapY *= 0.5f;
         mp->currSubMotionId = 90;
-        mp->dispFlags |= 0x100;
+        mp->dispFlags |= MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
         allPartyRideOff2();
         break;
     case 60:
@@ -380,7 +380,7 @@ void mot_plane(void) {
     case 53:
         planeSfxOff();
         planeReset();
-        mp->dispFlags &= ~0x100;
+        mp->dispFlags &= ~MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
         mp->baseSpeed = 0.0f;
         mp->mot.plane.turnSpeed = 0.0f;
         mp->position.y = 1.0f + mp->mot.plane.groundY;
@@ -403,7 +403,7 @@ void mot_plane(void) {
             mp->jumpJerkY *= 0.5f;
             mp->jumpSnapY *= 0.5f;
             mp->currSubMotionId = 90;
-            mp->dispFlags |= 0x100;
+            mp->dispFlags |= MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
             mp->multiTimer = 20;
         }
         break;
@@ -412,7 +412,7 @@ void mot_plane(void) {
             planeRoll2(mp, 0.3f, 28.0f);
             mp->displayDirection = revise360(mp->displayDirection + mp->mot.plane.turnSpeed);
             if (--mp->multiTimer <= 0) {
-                mp->dispFlags &= ~0x100;
+                mp->dispFlags &= ~MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
             }
         }
         marioMakeJumpPara();

@@ -101,7 +101,7 @@ void mot_damage(void) {
         }
         marioClearSlitFloor();
         marioOfsRotReset();
-        mario->dispFlags &= ~0x100;
+        mario->dispFlags &= ~MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
         marioAdjustMoveDir();
         marioSlitForceCancel();
         bomhei_use_cancel2();
@@ -217,7 +217,7 @@ void mot_damage(void) {
             mario->directionView = angleABf(mario->position.x, mario->position.z, dest.x, dest.z);
             mario->mot.damage.camStepY = (dest.y - mario->mot.damage.rootY) / (f32)(s32)mario->multiTimer;
             mario->currSubMotionId = 12;
-            mario->dispFlags |= 1;
+            mario->dispFlags |= MARIO_DISP_FLAG_HIDE;
             if ((s32)mario->multiTimer == 0) {
                 mario->multiTimer = 10;
                 mario->mot.damage.camStepY = (dest.y - mario->mot.damage.rootY) / (f32)(s32)mario->multiTimer;
@@ -237,7 +237,7 @@ void mot_damage(void) {
         mario->currSubMotionId = 13;
         mario->flags |= MARIO_FLAG_STOP_AIR_MOVEMENT;
         marioSetFallPara();
-        mario->dispFlags &= ~1;
+        mario->dispFlags &= ~MARIO_DISP_FLAG_HIDE;
         mario->multiTimer = 1;
         break;
     case 13:
@@ -255,7 +255,7 @@ void mot_damage(void) {
         }
         mario->flags |= MARIO_FLAG_STOP_AIR_MOVEMENT;
         marioSetFallPara();
-        mario->dispFlags &= ~1;
+        mario->dispFlags &= ~MARIO_DISP_FLAG_HIDE;
         mario->currSubMotionId = 20;
         break;
     case 20: {
@@ -355,7 +355,7 @@ void mot_damageToge(void) {
     if (mario->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) {
         mario->trigFlags &= ~MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
         marioClearSlitFloor();
-        mario->dispFlags &= ~0x100;
+        mario->dispFlags &= ~MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
         marioAdjustMoveDir();
         marioSlitForceCancel();
         marioYoshiForceCancel();

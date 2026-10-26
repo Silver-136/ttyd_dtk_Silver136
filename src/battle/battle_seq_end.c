@@ -820,7 +820,7 @@ void btlseqEnd(BattleWork* wp) {
         wp->seqEndWork = NULL;
         BattleSetSeq(wp, SEQ_UNKNOWN, 4);
         mw = marioGetPtr();
-        mw->dispFlags &= ~1;
+        mw->dispFlags &= ~MARIO_DISP_FLAG_HIDE;
         if (kind) {
             marioPartyEntry((PartyId)id);
         } else {

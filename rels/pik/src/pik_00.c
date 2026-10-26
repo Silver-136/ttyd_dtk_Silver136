@@ -1278,12 +1278,12 @@ static EVT_BEGIN(talk_mama)
                             CALL(evt_party_get_pos, 0, LW(0), LW(1), LW(2))
                             CALL(evt_party_move_pos, 0, LW(0), LW(8), 150)
                         END_INLINE_EVENT
-                        CALL(evt_mario_dispflag_onoff, 1, 256)
-                        CALL(evt_mario_dispflag_onoff, 1, 4)
+                        CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_NO_MAKE_DISP_DIR)
+                        CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_NO_REAR_POSE)
                         CALL(evt_mario_mov_pos, LW(7), LW(8), 150)
                         CALL(evt_mario_adjust_dir)
-                        CALL(evt_mario_dispflag_onoff, 0, 4)
-                        CALL(evt_mario_dispflag_onoff, 0, 256)
+                        CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_NO_REAR_POSE)
+                        CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_NO_MAKE_DISP_DIR)
                     END_IF
                     BEGIN_INLINE_EVENT
                         WAIT_MS(500)

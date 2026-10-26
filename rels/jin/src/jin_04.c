@@ -19,6 +19,7 @@
 #include "driver/casedrv.h"
 #include "pmario_sound.h"
 #include "driver/itemdrv.h"
+#include "mario/mario.h"
 
 #include "mario/mario_pouch.h"
 #include "evt/evt_bero.h"
@@ -224,7 +225,7 @@ EVT_BEGIN(irekawatta_mario)
     WAIT_MS(500)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_DOWN1"), LW(0), LW(1), LW(2), 0)
-    CALL(evt_mario_dispflag_onoff, 1, 2)
+    CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_POSE_LOCK)
     CALL(evt_mario_set_pose, STRING("M_D_2"))
     WAIT_MS(800)
     CALL(evt_cam3d_evt_set, -8, 800, 422, -8, 730, 28, 2000, 11)
@@ -272,7 +273,7 @@ EVT_BEGIN(irekawatta_mario)
     CALL(evt_mario_set_pos, 80, 670, 50)
     CALL(evt_mario_set_dir, 270, 0, 0)
     CALL(evt_cam3d_evt_set_npc_rel, STRING("にせマリオ"), 0, 50, 397, 0, 70, 25, 0, 11)
-    CALL(evt_mario_dispflag_onoff, 1, 2)
+    CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_POSE_LOCK)
     CALL(evt_mario_set_pose, STRING("M_D_2"))
     CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_fade_end_wait)
@@ -336,7 +337,7 @@ EVT_BEGIN(irekawatta_mario)
     CALL(evt_cam3d_evt_off, 1000, 11)
     SET_VALUE(GSW_STORY_PROGRESS, 201)
     SET_VALUE(GSWF(2081), 1)
-    CALL(evt_mario_dispflag_onoff, 0, 2)
+    CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_POSE_LOCK)
     CALL(evt_mario_key_onoff, 1)
     RETURN
 EVT_END()
@@ -826,7 +827,7 @@ EVT_BEGIN(jin_04_jumpstand)
             CASE_END
         END_SWITCH
         CALL(evt_mario_key_onoff, 0)
-        CALL(evt_mario_dispflag_onoff, 1, 4)
+        CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_NO_REAR_POSE)
         CALL(L_evt_party_dokan, 0, LW(0))
         IF_INT_EQUAL(LW(0), 1)
             BEGIN_INLINE_EVENT_GET_ID(LW(10))
@@ -848,10 +849,10 @@ EVT_BEGIN(jin_04_jumpstand)
             WAIT_FRAMES(1)
         END_LOOP
         CALL(evt_mario_key_onoff, 1)
-        CALL(evt_mario_dispflag_onoff, 0, 4)
+        CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_NO_REAR_POSE)
         ELSE
         CALL(evt_mario_key_onoff, 0)
-        CALL(evt_mario_dispflag_onoff, 1, 4)
+        CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_NO_REAR_POSE)
         CALL(L_evt_party_dokan, 0, LW(0))
         IF_INT_EQUAL(LW(0), 1)
             BEGIN_INLINE_EVENT_GET_ID(LW(10))
@@ -868,7 +869,7 @@ EVT_BEGIN(jin_04_jumpstand)
         CALL(evt_mario_jump_pos, -30, 450, 110, 500, 0, -1000)
         CALL(evt_hitobj_onoff, STRING("MOBJ_mobj_jump"), 0, 1)
         CALL(evt_mario_key_onoff, 1)
-        CALL(evt_mario_dispflag_onoff, 0, 4)
+        CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_NO_REAR_POSE)
     END_IF
     RETURN
 EVT_END()

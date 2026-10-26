@@ -386,7 +386,7 @@ EVT_END()
 USER_FUNC(peach_chk_aftershower) {
     EvtWord* args = event->args;
 
-    if (marioGetPtr()->peachFlags & 0x10) {
+    if (marioGetPtr()->peachFlags & PEACH_FLAG_AFTERSHOWER) {
         evtSetValue(event, args[0], 1);
     } else {
         evtSetValue(event, args[0], 0);

@@ -18,6 +18,7 @@
 #include "driver/npcdrv.h"
 #include "system.h"
 #include "driver/itemdrv.h"
+#include "mario/mario.h"
 
 #include "driver/mobjdrv.h"
 #include "driver/animdrv.h"
@@ -288,16 +289,16 @@ EVT_BEGIN(peramajin_after)
     CALL_CHILD(PTR(ship_majin_lecture))
     CALL(evt_party_stop, 0)
     LOOP(6)
-        CALL(evt_mario_dispflag_onoff, 1, 1)
+        CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_HIDE)
         WAIT_MS(100)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         CALL(evt_snd_sfxon_3d, STRING("SFX_EVT_PERAMAJIN_BLINKING1"), LW(0), LW(1), LW(2), 0)
-        CALL(evt_mario_dispflag_onoff, 0, 1)
+        CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_HIDE)
         WAIT_MS(100)
     END_LOOP
-    CALL(evt_mario_dispflag_onoff, 1, 1)
+    CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_HIDE)
     CALL(evt_mario_set_pos, LW(10), LW(11), LW(12))
-    CALL(evt_mario_dispflag_onoff, 0, 1)
+    CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_HIDE)
     CALL(evt_mario_init_camid)
     CALL(lect_cam_load, 0)
     CALL(evt_cam3d_evt_off, 500, 11)

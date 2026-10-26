@@ -471,10 +471,10 @@ EVT_BEGIN(kuribo_talk)
                 CALL(evt_npc_move_position, STRING("me"), LW(0), LW(2), 0, 30, 0)
                 BEGIN_INLINE_EVENT
                     WAIT_MS(250)
-                    CALL(evt_mario_dispflag_onoff, 1, 2)
+                    CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_POSE_LOCK)
                     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
                     CALL(evt_mario_jump_pos, LW(0), LW(1), LW(2), 200, 1, 5)
-                    CALL(evt_mario_dispflag_onoff, 0, 2)
+                    CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_POSE_LOCK)
                 END_INLINE_EVENT
                 BEGIN_INLINE_EVENT
                     WAIT_MS(250)

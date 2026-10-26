@@ -16,6 +16,7 @@
 #include "driver/mapdrv.h"
 #include "pmario_sound.h"
 #include "driver/itemdrv.h"
+#include "mario/mario.h"
 
 #include "driver/dispdrv.h"
 #include "driver/camdrv.h"
@@ -135,7 +136,7 @@ EVT_BEGIN(mony_peton_setup)
             CALL(evt_mario_mov_pos2, LW(0), LW(2), FLOAT(120.0f))
             WAIT_FRAMES(1)
             CALL(evt_mario_set_dir, 270, 200, 0)
-            CALL(evt_mario_dispflag_onoff, 1, 2)
+            CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_POSE_LOCK)
         END_INLINE_EVENT
         BEGIN_INLINE_EVENT
             ADD(LW(0), 75)
@@ -155,7 +156,7 @@ EVT_BEGIN(mony_peton_setup)
             CALL(evt_mario_mov_pos2, LW(0), LW(2), FLOAT(120.0f))
             WAIT_FRAMES(1)
             CALL(evt_mario_set_dir, 90, 200, 0)
-            CALL(evt_mario_dispflag_onoff, 1, 2)
+            CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_POSE_LOCK)
         END_INLINE_EVENT
         BEGIN_INLINE_EVENT
             ADD(LW(0), -75)
@@ -269,7 +270,7 @@ EVT_BEGIN(lost_wedding_ring)
     CALL(evt_npc_flag_onoff, 0, STRING("モニー"), NPC_FLAG_NO_HIT)
     CALL(evt_npc_restart_regular_event, STRING("モニー"))
     CALL(evt_npc_restart_regular_event, STRING("ピートン"))
-    CALL(evt_mario_dispflag_onoff, 0, 2)
+    CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_POSE_LOCK)
     CALL(evt_party_run, 0)
     RETURN
 EVT_END()
@@ -338,7 +339,7 @@ EVT_BEGIN(find_wedding_ring)
     WAIT_WHILE(GF(0))
     WAIT_WHILE(GF(1))
     CALL(evt_party_run, 0)
-    CALL(evt_mario_dispflag_onoff, 0, 2)
+    CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_POSE_LOCK)
     RETURN
 EVT_END()
 

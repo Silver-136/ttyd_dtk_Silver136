@@ -166,7 +166,7 @@ void marioForceShipAnime(void) {
     marioPaperOn(paper_ship[marioGetColor()]);
     marioChgPaper("PM_H_1B");
     marioChgPose("M_Z_1");
-    m->dispFlags |= 8;
+    m->dispFlags |= MARIO_DISP_FLAG_NO_DIR_FLIP;
 }
 
 void marioReInit_ship(void) {
@@ -186,7 +186,7 @@ void marioReInit_ship(void) {
     marioPaperOn(paper_ship[marioGetColor()]);
     marioChgPaper("PM_H_1A");
     marioChgPose("M_Z_1");
-    m->dispFlags |= 8;
+    m->dispFlags |= MARIO_DISP_FLAG_NO_DIR_FLIP;
     m->mot.ship.animTime = 0x58;
     marioSetPaperAnimeLocalTime(m->mot.ship.animTime);
     t = -1;
@@ -217,7 +217,7 @@ void mot_ship_post(void) {
     MarioWork* m = marioGetPtr();
     s32 t;
     allPartyRideOff();
-    if (m->dispFlags & 0x40000000) {
+    if (m->dispFlags & MARIO_DISP_FLAG_PAPER) {
         marioPaperOff();
     }
     m->wPlayerCollisionBox.x = 20.0f;
@@ -230,9 +230,9 @@ void mot_ship_post(void) {
             marioGetPtr()->motShip->sfxId = t;
         }
     }
-    m->dispFlags &= ~4;
-    m->dispFlags &= ~0x100;
-    m->dispFlags &= ~8;
+    m->dispFlags &= ~MARIO_DISP_FLAG_NO_REAR_POSE;
+    m->dispFlags &= ~MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
+    m->dispFlags &= ~MARIO_DISP_FLAG_NO_DIR_FLIP;
     marioOfsRotReset();
     if (marioGetPtr()->motStruct != NULL) {
         __memFree(HEAP_DEFAULT, marioGetPtr()->motStruct);
@@ -328,7 +328,7 @@ void mot_ship(void) {
         marioPreJump();
         marioChgPose("M_J_1B");
         camFollowYOff();
-        m->dispFlags |= 0x100;
+        m->dispFlags |= MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
         m->multiTimer = 0;
         m->currSubMotionId = 1;
         m->airTimer = 0;
@@ -371,7 +371,7 @@ void mot_ship(void) {
             marioChgPaper("PM_H_1A");
             marioChgPose("M_Z_1");
             f30 = 15.0f;
-            m->dispFlags |= 8;
+            m->dispFlags |= MARIO_DISP_FLAG_NO_DIR_FLIP;
             marioGetPtr()->motShip->turnAccel = f30;
             {
                 EventEntry* e = evtEntry(sound_evt, 0, 0);
@@ -453,7 +453,7 @@ void mot_ship(void) {
         f32 fz, fx;
 
         HitEntry* hit;
-        m->dispFlags &= ~0x100;
+        m->dispFlags &= ~MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
         m->displayDirection = revise360(m->displayDirection);
         m->wPlayerCollisionBox.x = 40.0f;
         m->wPlayerCollisionBox.y = 40.0f;
@@ -546,8 +546,8 @@ void mot_ship(void) {
             m->displayDirectionTarget = m->displayDirection;
             m->directionView = toMovedir(m->displayDirection);
             m->moveDirection = m->directionView;
-            m->dispFlags &= ~0x100;
-            m->dispFlags |= 0x1000;
+            m->dispFlags &= ~MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
+            m->dispFlags |= MARIO_DISP_FLAG_SHADOW_OFF;
             psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_SHIP1_2), &m->position);
             marioGetPtr()->motShip->wakeEff = effFunemizuEntry(0, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
             ((EffFunemizuWork*)marioGetPtr()->motShip->wakeEff->userdata)->cam = m->camId;
@@ -594,7 +594,7 @@ void mot_ship(void) {
             }
         }
         camFollowYOff();
-        m->dispFlags &= ~0x1000;
+        m->dispFlags &= ~MARIO_DISP_FLAG_SHADOW_OFF;
         marioGetPtr()->motShip->baseY = marioGetPtr()->motShip->harborPos.y;
         m->baseSpeed = 2.8f;
         ms2 = (MotShipWork*)((u8*)&marioGetPtr()->motShip->harborPos.z - offsetof(MotShipWork, harborPos.z)); // FAKE: same derive trick as case 10
@@ -635,7 +635,7 @@ void mot_ship(void) {
         marioSetPaperAnimeLocalTime(m->mot.ship.animTime);
         f31 = 0.0f;
         marioGetPtr()->motShip->turnSpeed = f31;
-        m->dispFlags |= 0x100;
+        m->dispFlags |= MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
         marioAdjustMoveDir();
         m->currSubMotionId = 0x2b;
         psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_SHIP3), &m->position);
@@ -734,7 +734,7 @@ void mot_ship(void) {
             m->displayDirection = m->displayDirection - 360.0f;
         }
         marioPaperOff();
-        m->dispFlags &= ~8;
+        m->dispFlags &= ~MARIO_DISP_FLAG_NO_DIR_FLIP;
         marioChgPose("M_J_1B");
         m->currSubMotionId = 0x2f;
         f31 = 10.0f;
@@ -764,7 +764,7 @@ void mot_ship(void) {
         m->displayDirectionTarget = m->displayDirection;
         m->moveDirection = toMovedir(m->displayDirection);
         m->directionView = m->moveDirection;
-        m->dispFlags &= ~0x100;
+        m->dispFlags &= ~MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
         m->wPlayerCollisionBox.x = 20.0f;
         m->wPlayerCollisionBox.y = 37.0f;
         f30 = 0.0f;

@@ -1609,7 +1609,7 @@ static EVT_BEGIN(evt_gardman)
             RETURN
         END_IF
         CALL(evt_mario_normalize)
-        CALL(evt_mario_dispflag_onoff, 1, 2)
+        CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_POSE_LOCK)
 #ifdef VERSION_G8ME01
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_SURPRISED1"), LW(0), LW(1), LW(2), 0)
@@ -1621,7 +1621,7 @@ static EVT_BEGIN(evt_gardman)
         CALL(evt_npc_flag_onoff, 0, STRING("ガードマン"), NPC_FLAG_NO_HIT)
         WAIT_MS(500)
         CALL(evt_mario_set_pose, STRING("M_S_1"))
-        CALL(evt_mario_dispflag_onoff, 0, 2)
+        CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_POSE_LOCK)
         CALL(evt_mario_set_dir_npc, STRING("ガードマン"))
     END_INLINE_EVENT
     SET_VALUE(LW(1), 0)

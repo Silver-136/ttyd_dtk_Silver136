@@ -17,8 +17,8 @@ void marioBaloonInit(void) {
 void marioBalloonOn(s32 type) {
     MarioWork* mario = marioGetPtr();
 
-    if (!(mario->dispFlags & 0x02000000)) {
-        mario->dispFlags |= 0x02000000;
+    if (!(mario->dispFlags & MARIO_DISP_FLAG_BALLOON)) {
+        mario->dispFlags |= MARIO_DISP_FLAG_BALLOON;
         mario->balloonEffect = effMarioBalloonEntry(type, NULL);
     }
 }
@@ -26,8 +26,8 @@ void marioBalloonOn(s32 type) {
 static inline void marioBalloonOnNpc(s32 type, NpcEntry* npc) {
     MarioWork* mario = marioGetPtr();
 
-    if (!(mario->dispFlags & 0x02000000)) {
-        mario->dispFlags |= 0x02000000;
+    if (!(mario->dispFlags & MARIO_DISP_FLAG_BALLOON)) {
+        mario->dispFlags |= MARIO_DISP_FLAG_BALLOON;
         mario->balloonEffect = effMarioBalloonEntry(type, npc);
         mario->balloonNpc = npc;
     }
@@ -36,8 +36,8 @@ static inline void marioBalloonOnNpc(s32 type, NpcEntry* npc) {
 void marioBalloonOff(void) {
     MarioWork* mario = marioGetPtr();
 
-    if (mario->dispFlags & 0x02000000) {
-        mario->dispFlags &= ~0x02000000;
+    if (mario->dispFlags & MARIO_DISP_FLAG_BALLOON) {
+        mario->dispFlags &= ~MARIO_DISP_FLAG_BALLOON;
         effDelete(mario->balloonEffect);
         mario->balloonEffect = NULL;
         mario->balloonNpc = NULL;
@@ -156,7 +156,7 @@ void marioBalloonMain(void) {
     BOOL show;
 
     mario = marioGetPtr();
-    if (mario->dispFlags & 0x04000000) {
+    if (mario->dispFlags & MARIO_DISP_FLAG_EVT_BALLOON) {
         return;
     }
     show = FALSE;
@@ -197,7 +197,7 @@ void marioBalloonMain(void) {
         }
     }
 
-    if (mario->airTimer != 0 || (mario->flags & MARIO_FLAG_PAPER_MODE) || (mario->dispFlags & 0x01000000) ||
+    if (mario->airTimer != 0 || (mario->flags & MARIO_FLAG_PAPER_MODE) || (mario->dispFlags & MARIO_DISP_FLAG_SLIT) ||
         (mario->currMotionId != MARIO_MOTION_STAY && (u16)(mario->currMotionId - 1) > 1)) {
         show = FALSE;
     }
