@@ -1410,12 +1410,12 @@ void rsh_window_tev(MapTevCallbackInfo* info) {
     texCoord = info->texCoord;
     indStage = info->indStage;
     flags = p->flags;
-    if (flags & 0x20) {
+    if (flags & MAP_OBJ_FLAG_GROUP_MEMBER) {
         while ((p = p->parent) != NULL) {
             u32 f = p->flags;
-            if (f & 0x10) {
-                if (!(f & 0x20000000)) {
-                    p->flags = f | 0x20000000;
+            if (f & MAP_OBJ_FLAG_GROUP) {
+                if (!(f & MAP_OBJ_FLAG_SCREEN_RECT)) {
+                    p->flags = f | MAP_OBJ_FLAG_SCREEN_RECT;
                     return;
                 }
                 x0 = p->screenRect[0];
@@ -1426,8 +1426,8 @@ void rsh_window_tev(MapTevCallbackInfo* info) {
             }
         }
     } else {
-        if (!(flags & 0x20000000)) {
-            p->flags = flags | 0x20000000;
+        if (!(flags & MAP_OBJ_FLAG_SCREEN_RECT)) {
+            p->flags = flags | MAP_OBJ_FLAG_SCREEN_RECT;
             return;
         }
         x0 = p->screenRect[0];

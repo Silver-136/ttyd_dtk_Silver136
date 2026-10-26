@@ -1837,7 +1837,7 @@ void materialProc(s32 shapeId, s32 xluStage) {
                 { // own pose web for the third ChangeTexture copy (a split web of pose numbers below cd)
                 AnimationPose *pose2;
                 pose2 = wp->mpCurPose;
-                if (pose2->flags & 0x10) {
+                if (pose2->flags & ANIM_POSE_FLAG_CHANGE_TEXTURE) {
                     texObj = wp->mpTexObjs[0];
                     if (texObj) {
                         if (wp->paperMtxPtr[0]) {
@@ -2000,7 +2000,7 @@ void renderProc(s32 shapeId, s32 unused) {
                 {
                 AnimationPose* pose2;
                 pose2 = wp->mpCurPose;
-                if (pose2->flags & 0x10) {
+                if (pose2->flags & ANIM_POSE_FLAG_CHANGE_TEXTURE) {
                     texObj = wp->mpTexObjs[0];
                     if (texObj) {
                         buffer = (f32*)wp->paperMtxPtr[0]; // FAKE: the paper matrix pointer held in buffer (an earlier web) so it is a split @ web, not a named mtx local

@@ -51,6 +51,13 @@ data order 10, sound-name integer round trips (`SFX_NAME_WORD`) 9, no-op casts 6
 
 ## 3. Names
 
+- Battle unit / part work slots (suggested by jdaster64, 2026-10-26): scripts read and write BattleUnit.work[16] and
+  BattleUnitPart.work[16] by number (btlevtcmd_Get/Set/AddUnitWork(Float), btlevtcmd_Get/SetPartsWork: 3,201 calls in
+  171 files). Each unit script gives the slots its own meaning, so the names are per unit: one set of slot macros
+  per unit file (e.g. `#define UNIT_WORK_<MEANING> n` / `PARTS_WORK_<MEANING> n`; not `UW_`, which is the event
+  user-work macro in evt_cmd.h), named from our reading of that unit's scripts; slots shared by
+  common code (battle_event_default, audience, status handling) would go in a shared header. Pilot on one enemy
+  family first, then decide the form.
 - Placeholder struct fields: the remaining `field_0x..` / `unk..` uses (about 60) are all writes; write-only or
   unused fields keep offset names unless their meaning is clear (then `_UNUSED`).
 - Padding arrays (`u8 pad_..[n]`, `u8 field_..[n]`) in struct layouts: 455; many are views that should become the

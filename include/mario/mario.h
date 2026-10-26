@@ -163,10 +163,18 @@ typedef struct MarioMotHammer2 {   // mot_hammer.c mot_hammer2 / mot_ham2_post (
     f32 spinSpeed;                 // 0x08, deg/frame by hammer level 
     u8 pad0C[4];                   // 0x0C
     f32 animTime;                  // 0x10
-    s16 flags;                     // 0x14, 1, 0x10, 0x1000, 0x2000
+    s16 flags;                     // 0x14, MarioMotHammer2Flags
     u8 pad16[2];                   // 0x16
     s32 sfxId;                     // 0x18
 } MarioMotHammer2;
+
+// MarioMotHammer2.flags (mot_hammer2: the spin hammer charge)
+typedef enum MarioMotHammer2Flags {
+    HAMMER2_FLAG_AT_LEVEL = (1 << 0),      // 0x1, the swing reached the current charge level (cleared by stick rubbing)
+    HAMMER2_FLAG_SWAY_BACK = (1 << 4),     // 0x10, at the level: swaying back down
+    HAMMER2_FLAG_LEVEL_UP = (1 << 12),     // 0x1000, a charge level was reached this frame
+    HAMMER2_FLAG_CHARGED_POSE = (1 << 13), // 0x2000, the charged pose (M_H_3A/6A/9A) was set
+} MarioMotHammer2Flags;
 
 // MarioMotRoll.flags (mot_roll)
 #define ROLL_FLAG_SLOPE_DAMP_UNUSED (1 << 4)   // 0x10, damps the speed on flat ground; nothing sets it

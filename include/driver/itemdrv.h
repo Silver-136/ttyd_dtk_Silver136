@@ -38,6 +38,7 @@ typedef enum ItemEntry_Flags2 {
     ITEM_FLAG2_UPGRADE_GET = (1 << 13),         // 0x2000, boots/hammer upgrade get sequence
     ITEM_FLAG2_TIMER_WAIT_LAND = (1 << 14),     // 0x4000, the despawn timer starts once it has landed
     ITEM_FLAG2_NO_Z_MOVE = (1 << 15),           // 0x8000
+    ITEM_FLAG2_RELEASED_UNUSED = (1 << 16),     // 0x10000, thrown out of a full pouch (msg_window_item_release), cleared when taken; nothing reads it
     ITEM_FLAG2_SUNK = (1 << 20),                // 0x100000
     ITEM_FLAG2_CTRL_OFF = (1 << 24),            // 0x1000000
     ITEM_FLAG2_NO_PARTNER = (1 << 25),          // 0x2000000

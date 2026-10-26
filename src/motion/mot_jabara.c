@@ -26,7 +26,7 @@
 BOOL marioGetRub(s32 mask, s32* a, s32* b, s32* c);
 
 typedef struct MotJabaraWork {
-    u32 flags;          // 0x00: 1 = swing input taken (swingMain); 0x10000 / 0x20000 / 0x40000 = one-shot charge-level sounds played
+    u32 flags;          // 0x00: MotJabaraFlags
     f32 swingAccel;     // 0x04: added to the swing angle while the push timer runs (2.4 start, 0.1 walk)
     f32 swingDecel;     // 0x08: added once the push timer hits 0 (-0.4 start, -0.1 walk)
     f32 field_0xC;      // 0x0C: cleared at sub-motion 0x32
@@ -35,6 +35,13 @@ typedef struct MotJabaraWork {
     f32 wobbleDir;      // 0x18: +-0.6, last wobble direction
     s32 headBlockTimer; // 0x1C: frames with a ceiling overhead, > 5 s ends the spring
 } MotJabaraWork;        // size 0x20
+
+typedef enum MotJabaraFlags {
+    JABARA_FLAG_SWING = (1 << 0),     // 0x1, swing input taken (A or B, swingMain)
+    JABARA_FLAG_CHARGE_1 = (1 << 16), // 0x10000, charging started
+    JABARA_FLAG_CHARGE_2 = (1 << 17), // 0x20000, charge level 2 reached (its sound played once)
+    JABARA_FLAG_CHARGE_3 = (1 << 18), // 0x40000, charge level 3 reached (its sound played once)
+} MotJabaraFlags;
 
 
 static inline void jabaraSetSpd(f32 a, f32 b, f32 c) {
@@ -275,8 +282,8 @@ void mot_jabara(void) {
     case 11:
         if (--mario->multiTimer <= 0) {
             mario->currSubMotionId = 12;
-            if (!(marioGetPtr()->motJabara->flags & 0x10000)) {
-                marioGetPtr()->motJabara->flags |= 0x10000;
+            if (!(marioGetPtr()->motJabara->flags & JABARA_FLAG_CHARGE_1)) {
+                marioGetPtr()->motJabara->flags |= JABARA_FLAG_CHARGE_1;
             }
         }
     case 12:
@@ -288,16 +295,16 @@ void mot_jabara(void) {
             }
         }
         if (mario->hammerChargeTimer == 3) {
-            if (!(marioGetPtr()->motJabara->flags & 0x40000)) {
-                marioGetPtr()->motJabara->flags |= 0x40000;
+            if (!(marioGetPtr()->motJabara->flags & JABARA_FLAG_CHARGE_3)) {
+                marioGetPtr()->motJabara->flags |= JABARA_FLAG_CHARGE_3;
                 SFX(0x184);
             }
             marioChgPaper("PM_J_3B");
             mario->hammerChargeLv = 3;
             jabaraSetSpd(0.4f, 0.005f, 1.7f);
         } else if (mario->hammerChargeTimer == 2) {
-            if (!(marioGetPtr()->motJabara->flags & 0x20000)) {
-                marioGetPtr()->motJabara->flags |= 0x20000;
+            if (!(marioGetPtr()->motJabara->flags & JABARA_FLAG_CHARGE_2)) {
+                marioGetPtr()->motJabara->flags |= JABARA_FLAG_CHARGE_2;
                 SFX(0x183);
             }
             marioChgPaper("PM_J_2B");
@@ -780,9 +787,9 @@ void jabaraSwingWalk(void) {
 void swingMain(void) {
     MarioWork* m = marioGetPtr();
     if (marioGetPtr()->motStruct) {
-        if ((s32)m->currSubMotionId < 0x5a && (m->buttonTrg & (PAD_BUTTON_A | PAD_BUTTON_B)) && !(marioGetPtr()->motJabara->flags & 1)) {
+        if ((s32)m->currSubMotionId < 0x5a && (m->buttonTrg & (PAD_BUTTON_A | PAD_BUTTON_B)) && !(marioGetPtr()->motJabara->flags & JABARA_FLAG_SWING)) {
             m->mot.jabara.rotTimer = 0;
-            marioGetPtr()->motJabara->flags |= 1;
+            marioGetPtr()->motJabara->flags |= JABARA_FLAG_SWING;
         }
         switch (m->mot.jabara.state) {
         case 0:
@@ -806,7 +813,7 @@ void swingMain(void) {
                     }
                 }
             }
-            if (marioGetPtr()->motJabara->flags & 1) {
+            if (marioGetPtr()->motJabara->flags & JABARA_FLAG_SWING) {
                 f32 old = m->rot.x;
                 m->rot.x = revise360(old + m->mot.jabara.rotSpeed);
                 if (m->rot.x < old) {
@@ -889,7 +896,7 @@ void swingMain(void) {
                     }
                 }
             }
-            if (marioGetPtr()->motJabara->flags & 1) {
+            if (marioGetPtr()->motJabara->flags & JABARA_FLAG_SWING) {
                 f32 old = m->rot.x;
                 m->rot.x = revise360(old - m->mot.jabara.rotSpeed);
                 if (m->rot.x > old) {

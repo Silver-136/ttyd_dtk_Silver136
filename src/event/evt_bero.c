@@ -40,7 +40,7 @@ Vec BeroPT, BeroAT;
 BOOL BeroMarioGO;
 
 USER_FUNC(bero_get_position_normal);
-extern s32 bero_set_disp_position_pipe();
+USER_FUNC(bero_set_disp_position_pipe);
 
 BeroEntry bero_null[] = {
     {
@@ -258,7 +258,7 @@ USER_FUNC(evt_bero_get_info_length) {
         evtSetFloat(event, args[1], (f32)v5);
         return EVT_RETURN_DONE;
     }
-    switch (bero->type & 0xFFF) {
+    switch (bero->type & BERO_TYPE_KIND_MASK) {
         case 0:
         case 3:
         case 0xF00:
@@ -366,7 +366,7 @@ static inline s32 bero_get_kind(BeroEntry* bero, s32 walk) {
         if (kind == 10000) {
             kind = 10000;
         } else {
-        switch (bero->type & 0xFFF) {
+        switch (bero->type & BERO_TYPE_KIND_MASK) {
             case 0:
             case 1:
                 if (walk) {
@@ -484,7 +484,7 @@ USER_FUNC(evt_bero_get_info_num) {
     event->lwData[9] = BeroSW[id];
     event->lwData[10] = bero->caseType;
     if (bero->caseType == -1) {
-        switch (bero->type & 0xFFF) {
+        switch (bero->type & BERO_TYPE_KIND_MASK) {
             case 0xF00: event->lwData[10] = 0; break;
             case 0: event->lwData[10] = 10; break;
             case 1: event->lwData[10] = 9; break;
@@ -911,12 +911,11 @@ EVT_BEGIN(bero_play_out_anime)
     RETURN
 EVT_END()
 
-typedef struct { u8 pad[0xac]; u32 flags; s32 kind; } BeroPipeInfo;
-
-s32 bero_set_disp_position_pipe(BeroPipeInfo* info) {
-    switch (info->kind) {
+// LW(4): the exit's BeroEntry.type, LW(5): its direction kind
+USER_FUNC(bero_set_disp_position_pipe) {
+    switch (event->lwData[5]) {
         case 2: case 6:
-            if (!(info->flags & 0x1000)) {
+            if (!(event->lwData[4] & BERO_TYPE_BG_MODE)) {
                 marioGetPtr()->dispOfs.y += 3.0f;
                 marioGetPtr()->dispOfs.z -= 15.0f;
             }
@@ -924,14 +923,14 @@ s32 bero_set_disp_position_pipe(BeroPipeInfo* info) {
         case 7: case 10000:
             break;
         case 8: case 9:
-            if (!(info->flags & 0x1000)) {
+            if (!(event->lwData[4] & BERO_TYPE_BG_MODE)) {
                 marioGetPtr()->dispOfs.z -= 13.0f;
             } else {
                 marioGetPtr()->dispOfs.z -= 20.0f;
             }
             break;
     }
-    return 2;
+    return EVT_RETURN_DONE;
 }
 
 USER_FUNC(evt_bero_switch_on) {
@@ -1225,7 +1224,7 @@ EVT_BEGIN(bero_case_init_check)
     CALL(evt_npc_change_fbat_mode, 7)
     CALL(evt_npc_stop_for_event)
     SET_VALUE(LW(0), LW(4))
-    AND_RAW(LW(0), 4095)
+    AND_RAW(LW(0), BERO_TYPE_KIND_MASK)
     SWITCH(LW(0))
         CASE_OR_EQUAL(0)
         CASE_OR_EQUAL(1)
@@ -1349,7 +1348,7 @@ EVT_BEGIN(bero_case_exec_pipe_sub)
     IF_INT_EQUAL(LW(13), 0)
         BEGIN_INLINE_EVENT
             SET_VALUE(LW(0), LW(4))
-            AND_RAW(LW(0), 4096)
+            AND_RAW(LW(0), BERO_TYPE_BG_MODE)
             IF_INT_EQUAL(LW(0), 0)
                 SET_VALUE(LF(0), 0)
                 ELSE
@@ -1359,7 +1358,7 @@ EVT_BEGIN(bero_case_exec_pipe_sub)
             CALL(evt_bero_set_now_number, LW(1))
             CALL(evt_bero_get_info_num, LW(1))
             SET_VALUE(LW(0), LW(4))
-            AND_RAW(LW(0), 4096)
+            AND_RAW(LW(0), BERO_TYPE_BG_MODE)
             IF_INT_EQUAL(LW(0), 0)
                 SET_VALUE(LF(1), 0)
                 ELSE
@@ -1409,7 +1408,7 @@ EVT_BEGIN(bero_case_exec_pipe_sub)
     POKE_INT(1, PTR(&BeroCAM))
     IF_INT_EQUAL(LW(13), 0)
         SET_VALUE(LW(0), LW(4))
-        AND_RAW(LW(0), 4096)
+        AND_RAW(LW(0), BERO_TYPE_BG_MODE)
         IF_INT_EQUAL(LW(0), 0)
             SET_VALUE(LF(0), 0)
             ELSE
@@ -1420,7 +1419,7 @@ EVT_BEGIN(bero_case_exec_pipe_sub)
         CALL(evt_bero_get_info_num, LW(1))
         CALL_CHILD(LW(7))
         SET_VALUE(LW(0), LW(4))
-        AND_RAW(LW(0), 4096)
+        AND_RAW(LW(0), BERO_TYPE_BG_MODE)
         IF_INT_EQUAL(LW(0), 0)
             SET_VALUE(LF(1), 0)
             ELSE
@@ -1463,7 +1462,7 @@ EVT_BEGIN(bero_case_exec_pipe_sub)
         CALL(evt_bero_disppos_load)
         CALL(evt_mario_paper_pose_off)
         SET_VALUE(LW(0), LW(4))
-        AND_RAW(LW(0), 4096)
+        AND_RAW(LW(0), BERO_TYPE_BG_MODE)
         IF_INT_NOT_EQUAL(LW(0), 0)
             CALL(evt_mario_bgmode_on)
             ELSE
@@ -1565,7 +1564,7 @@ EVT_BEGIN(bero_case_entry)
         CALL(evt_bero_get_info_num, LW(1))
         IF_INT_EQUAL(LW(9), -1)
             SET_VALUE(LW(0), LW(4))
-            AND_RAW(LW(0), 4095)
+            AND_RAW(LW(0), BERO_TYPE_KIND_MASK)
             SWITCH(LW(0))
                 CASE_EQUAL(3840)
                 CALL(evt_run_case_evt_bero, LW(10), 1, LW(3), 0, PTR(bero_case_exec_none), LW(15))
@@ -1594,7 +1593,7 @@ EVT_END()
 
 EVT_BEGIN(bero_case_entry_sub)
     SET_VALUE(LW(0), LW(4))
-    AND_RAW(LW(0), 4095)
+    AND_RAW(LW(0), BERO_TYPE_KIND_MASK)
     SWITCH(LW(0))
         CASE_EQUAL(3840)
         CALL(evt_run_case_evt_bero, LW(10), 1, LW(3), 0, PTR(bero_case_exec_none), LW(15))
@@ -1746,7 +1745,7 @@ EVT_BEGIN(evt_bero_info_run)
     CALL(evt_bero_exec_onoff, 0, 1)
     CALL(evt_mario_key_onoff, 0)
     SET_VALUE(LW(0), LW(4))
-    AND_RAW(LW(0), 4096)
+    AND_RAW(LW(0), BERO_TYPE_BG_MODE)
     IF_INT_NOT_EQUAL(LW(0), 0)
         DEBUG_PUT_MSG(STRING("\224w\214i\202\311\223\374\202\351\202\306\202\253\202\314\203}\203\212\203I\202\314\217\211\212\372\217\210\227\235"))
         CALL(evt_mario_bgmode_on)
@@ -1757,7 +1756,7 @@ EVT_BEGIN(evt_bero_info_run)
         DEBUG_PUT_MSG(STRING("\225\201\222\312\202\311\223\374\202\351\202\306\202\253\202\314\203}\203\212\203I\202\314\217\211\212\372\217\210\227\235"))
         CALL(evt_mario_bgmode_off)
         SET_VALUE(LW(0), LW(4))
-        AND_RAW(LW(0), 4095)
+        AND_RAW(LW(0), BERO_TYPE_KIND_MASK)
         IF_INT_EQUAL(LW(0), 2)
             CALL(evt_mario_set_prev_party_dokan, 0)
             CALL(evt_mario_set_prev_party_dokan, 1)
@@ -1767,7 +1766,7 @@ EVT_BEGIN(evt_bero_info_run)
         END_IF
     END_IF
     SET_VALUE(LW(0), LW(4))
-    AND_RAW(LW(0), 4095)
+    AND_RAW(LW(0), BERO_TYPE_KIND_MASK)
     IF_INT_EQUAL(LW(0), 2)
         SWITCH(LW(5))
             CASE_EQUAL(6)
@@ -1783,7 +1782,7 @@ EVT_BEGIN(evt_bero_info_run)
     CALL_CHILD(PTR(evt_bero_initial_pos))
     IF_BITS_CLEAR(LW(4), 8192)
         SET_VALUE(LW(0), LW(4))
-        AND_RAW(LW(0), 4095)
+        AND_RAW(LW(0), BERO_TYPE_KIND_MASK)
         IF_INT_EQUAL(LW(0), 2)
             SWITCH(LW(5))
                 CASE_EQUAL(6)
@@ -1809,7 +1808,7 @@ EVT_END()
 EVT_BEGIN(evt_bero_initial_pos)
     CALL(evt_bero_get_into_info)
     SET_VALUE(LW(0), LW(4))
-    AND_RAW(LW(0), 4095)
+    AND_RAW(LW(0), BERO_TYPE_KIND_MASK)
     SWITCH(LW(0))
         CASE_EQUAL(3840)
         CASE_EQUAL(3)
@@ -1868,7 +1867,7 @@ EVT_BEGIN(evt_bero_mario_enter)
     END_IF
     CALL(evt_bero_get_into_info)
     SET_VALUE(LW(0), LW(4))
-    AND_RAW(LW(0), 4095)
+    AND_RAW(LW(0), BERO_TYPE_KIND_MASK)
     SWITCH(LW(0))
         CASE_EQUAL(3840)
         CALL_CHILD(PTR(evt_bero_info_run_none))

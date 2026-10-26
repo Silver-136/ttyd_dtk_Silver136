@@ -65,17 +65,19 @@ typedef struct FighterData {
     // pad 2 bytes
 } FighterData;
 
-// This includes a bunch of "story markers" for the various important fights
+// FighterData.flags. rankingControll sorts each group by points, puts FIGHT_MAJOR/FIGHT_CHAMPION fighters above
+// FIGHT_MINOR ones, then holds the fighters with bits 8-12 at fixed indexes of the list above Mario (the story
+// fights): those bits each belong to one fighter.
 typedef enum FighterFlags {
-    FIGHT_MAJOR = 1 << 0,
-    FIGHT_MINOR = 1 << 1,
-    FIGHT_CHAMPION = 1 << 2,
-    FIGHT_PLAYER = 1 << 3,
-    FIGHT_BANDITS = 1 << 8,
-    FIGHT_KOOPAS = 1 << 9,
-    FIGHT_GOOMBAS = 1 << 10,
-    FIGHT_CLEFTS = 1 << 11,
-    FIGHT_KOOPATROL = 1 << 12,
+    FIGHT_MAJOR = 1 << 0,      // fighters 1-10
+    FIGHT_MINOR = 1 << 1,      // fighters 11-19, 21 and 22
+    FIGHT_CHAMPION = 1 << 2,   // fighter 0: always first
+    FIGHT_PLAYER = 1 << 3,     // fighter 20, Mario's own entry; nothing tests it
+    FIGHT_BANDITS = 1 << 8,    // held at list index 14
+    FIGHT_KOOPAS = 1 << 9,     // held at list index 18
+    FIGHT_GOOMBAS = 1 << 10,   // held at list index 19
+    FIGHT_CLEFTS = 1 << 11,    // held at list index 10 (below Mario: just above the first FIGHT_MINOR fighter)
+    FIGHT_KOOPATROL = 1 << 12, // held at list index 1
 } FighterFlags;
 
 typedef enum FighterId {
@@ -866,7 +868,7 @@ static void rankingControll(void) {
             for (idx2 = i + 1; idx2 < nAbove; idx2++) {
                 FighterData* fj = &fighterDt[rank_wp->entries[above[idx2]].id];
                 FighterData* fi = &fighterDt[rank_wp->entries[above[i]].id];
-                if ((fj->flags & 5) && (fi->flags & 2)) {
+                if ((fj->flags & (FIGHT_MAJOR | FIGHT_CHAMPION)) && (fi->flags & FIGHT_MINOR)) {
                     tmp = above[i];
                     above[i] = above[idx2];
                     above[idx2] = tmp;
@@ -876,7 +878,7 @@ static void rankingControll(void) {
 
         if (nAbove > 0) {
             for (idx = 0; idx < nAbove; idx++) {
-                if (fighterDt[rank_wp->entries[above[idx]].id].flags & 4) {
+                if (fighterDt[rank_wp->entries[above[idx]].id].flags & FIGHT_CHAMPION) {
                     break;
                 }
             }
@@ -887,7 +889,7 @@ static void rankingControll(void) {
 
         if (nAbove > 1) {
             for (idx = 0; idx < nAbove; idx++) {
-                if (fighterDt[rank_wp->entries[above[idx]].id].flags & 0x1000) {
+                if (fighterDt[rank_wp->entries[above[idx]].id].flags & FIGHT_KOOPATROL) {
                     break;
                 }
             }
@@ -898,7 +900,7 @@ static void rankingControll(void) {
 
         if (nAbove > 10) {
             for (idx = 0; idx < nAbove; idx++) {
-                if (fighterDt[rank_wp->entries[above[idx]].id].flags & 0x800) {
+                if (fighterDt[rank_wp->entries[above[idx]].id].flags & FIGHT_CLEFTS) {
                     break;
                 }
             }
@@ -909,7 +911,7 @@ static void rankingControll(void) {
 
         if (nAbove > 18) {
             for (idx = 0; idx < nAbove; idx++) {
-                if (fighterDt[rank_wp->entries[above[idx]].id].flags & 0x200) {
+                if (fighterDt[rank_wp->entries[above[idx]].id].flags & FIGHT_KOOPAS) {
                     break;
                 }
             }
@@ -920,7 +922,7 @@ static void rankingControll(void) {
 
         if (nAbove > 19) {
             for (idx = 0; idx < nAbove; idx++) {
-                if (fighterDt[rank_wp->entries[above[idx]].id].flags & 0x400) {
+                if (fighterDt[rank_wp->entries[above[idx]].id].flags & FIGHT_GOOMBAS) {
                     break;
                 }
             }
@@ -931,7 +933,7 @@ static void rankingControll(void) {
 
         if (nAbove > 16) {
             for (idx = 0; idx < nAbove; idx++) {
-                if (fighterDt[rank_wp->entries[above[idx]].id].flags & 0x100) {
+                if (fighterDt[rank_wp->entries[above[idx]].id].flags & FIGHT_BANDITS) {
                     break;
                 }
             }
@@ -968,7 +970,7 @@ static void rankingControll(void) {
             for (idx2 = i + 1; idx2 < nBelow; idx2++) {
                 FighterData* fj = &fighterDt[rank_wp->entries[below[idx2]].id];
                 FighterData* fi = &fighterDt[rank_wp->entries[below[i]].id];
-                if ((fj->flags & 5) && (fi->flags & 2)) {
+                if ((fj->flags & (FIGHT_MAJOR | FIGHT_CHAMPION)) && (fi->flags & FIGHT_MINOR)) {
                     tmp = below[i];
                     below[i] = below[idx2];
                     below[idx2] = tmp;
@@ -978,7 +980,7 @@ static void rankingControll(void) {
 
         if (nBelow > 0) {
             for (idx = 0; idx < nBelow; idx++) {
-                if (fighterDt[rank_wp->entries[below[idx]].id].flags & 4) {
+                if (fighterDt[rank_wp->entries[below[idx]].id].flags & FIGHT_CHAMPION) {
                     break;
                 }
             }
@@ -989,13 +991,13 @@ static void rankingControll(void) {
         
         if (nBelow > 0) {
             for (idx = 0; idx < nBelow; idx++) {
-                if (fighterDt[rank_wp->entries[below[idx]].id].flags & 0x800) {
+                if (fighterDt[rank_wp->entries[below[idx]].id].flags & FIGHT_CLEFTS) {
                     break;
                 }
             }
             if (idx < nBelow) {
                 for (tmp = idx, idx = 0; idx < nBelow; idx++) {
-                    if (fighterDt[rank_wp->entries[below[idx]].id].flags & 2) {
+                    if (fighterDt[rank_wp->entries[below[idx]].id].flags & FIGHT_MINOR) {
                         break;
                     }
                 }

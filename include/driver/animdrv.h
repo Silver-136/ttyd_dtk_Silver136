@@ -194,6 +194,7 @@ typedef enum AnimationPoseFlags {
     ANIM_POSE_FLAG_PAPER_GROUP = (1 << 1),          // 0x2, animPoseSetPaperAnimGroup
     ANIM_POSE_FLAG_PAPER_ANIM_CHANGED = (1 << 2),   // 0x4, animPoseSetAnim on a paper pose; consumed by the paper draw
     ANIM_POSE_FLAG_PERA = (1 << 3),                 // 0x8, animPosePaperPeraOn (paper flip)
+    ANIM_POSE_FLAG_CHANGE_TEXTURE = (1 << 4),       // 0x10, materials drawn with texture slot 0 instead (animSetMaterial_ChangeTexture; set by the kururing capture)
     ANIM_POSE_FLAG_VIVIAN = (1 << 5),               // 0x20, animPoseVivianMain
     ANIM_POSE_FLAG_WORLD_POSITION_EVAL = (1 << 6),  // 0x40, animPoseWorldPositionEvalOn
     ANIM_POSE_FLAG_WORLD_MATRIX_EVAL = (1 << 7),    // 0x80, animPoseWorldMatrixEvalOn

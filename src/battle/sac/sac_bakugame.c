@@ -115,14 +115,6 @@ typedef struct BakuWork {
     u8 pad2b4[4];
 } BakuWork;
 
-typedef struct AudM {
-    u32 flags;
-    u8 pad4[0xE8 - 0x4];
-    f32 rot;       // 0xE8
-    u8 padec[0xF8 - 0xEC];
-    u8 buf[0x34];  // 0xF8
-} AudM;
-
 typedef struct GaugeCol {
     u8 r, g, b, a;
     u8 pad;
@@ -341,7 +333,7 @@ USER_FUNC(bakuGameMain) {
     s32 t;
     s32 n;
     BattleUnit* u;
-    AudM* m;
+    BattleAudienceMember* m;
     f32 v200 = -200.0f;
     f32 v100 = -100.0f;
     f32 frames = 40.0f;
@@ -858,8 +850,8 @@ state_end:
                 w->s7c = 22;
             }
             for (i = 0; i < 200; i++) {
-                m = (AudM*)BattleAudienceGetPtr(i);
-                if (bakuGameAudienceCanThrowPos(i) == 1 && GET_EXIST(i) && (m->flags & 0x10)) {
+                m = BattleAudienceGetPtr(i);
+                if (bakuGameAudienceCanThrowPos(i) == 1 && GET_EXIST(i) && (m->flags & AUDIENCE_MEMBER_FLAG_NO_SYS_CTRL)) {
                     BattleAudience_GetHomePosition(i, &x, &y, &z);
                     BattleAudience_SetPosition(i, x, y + w->audY, z);
                     w->pos.y = 20.0f + (y + w->audY);
@@ -1036,8 +1028,8 @@ state_end:
                 w->audY = 0.0f;
             }
             for (i = 0; i < 200; i++) {
-                m = (AudM*)BattleAudienceGetPtr(i);
-                if (bakuGameAudienceCanThrowPos(i) == 1 && GET_EXIST(i) && (m->flags & 0x10)) {
+                m = BattleAudienceGetPtr(i);
+                if (bakuGameAudienceCanThrowPos(i) == 1 && GET_EXIST(i) && (m->flags & AUDIENCE_MEMBER_FLAG_NO_SYS_CTRL)) {
                     BattleAudience_GetHomePosition(i, &x, &y, &z);
                     BattleAudience_SetPosition(i, x, y + w->audY, z);
                 }
@@ -1080,8 +1072,8 @@ state_end:
         }
         w->s7c = 50;
         for (i = 0; i < 200; i++) {
-            m = (AudM*)BattleAudienceGetPtr(i);
-            m->flags &= ~0x10;
+            m = BattleAudienceGetPtr(i);
+            m->flags &= ~AUDIENCE_MEMBER_FLAG_NO_SYS_CTRL;
             if (bakuGameAudienceCanThrowPos(i) == 1) {
                 BattleAudience_GetHomePosition(i, &x, &y, &z);
                 BattleAudience_SetPosition(i, x, y, z);
@@ -1220,14 +1212,14 @@ void bakuGameEnemySurpriseReset(void) {
 
 void bakuGameAudienceSurpriseReset(void) {
     s32 i;
-    AudM* m;
+    BattleAudienceMember* m;
 
     for (i = 0; i < 200; i++) {
         if (GET_EXIST(i)) {
-            m = (AudM*)BattleAudienceGetPtr(i);
-            m->rot = 90.0f;
+            m = BattleAudienceGetPtr(i);
+            m->angle = 90.0f;
             if (!bakuGameAudienceCanThrowPos(i)) {
-                m->flags &= ~0x10;
+                m->flags &= ~AUDIENCE_MEMBER_FLAG_NO_SYS_CTRL;
             }
         }
     }
@@ -1277,19 +1269,19 @@ void bakuGameEnemySurprise(void) {
 
 void bakuGameAudienceSurprise(void) {
     s32 i;
-    AudM* m;
+    BattleAudienceMember* m;
 
     for (i = 0; i < 200; i++) {
-        m = (AudM*)BattleAudienceGetPtr(i);
+        m = BattleAudienceGetPtr(i);
         if (GET_WAITING(i)) {
-            m->flags |= 0x10;
-            memset(m->buf, 0, 0x34);
+            m->flags |= AUDIENCE_MEMBER_FLAG_NO_SYS_CTRL;
+            memset(&m->interpFramesLeft, 0, 0x34); // interpFramesLeft..interpType
             if (!bakuGameAudienceCanThrowPos(i)) {
                 BattleAudience_SetAnim(i, 7, 0);
                 if (irand(2) == 0) {
-                    m->rot = 90.0f;
+                    m->angle = 90.0f;
                 } else {
-                    m->rot = 270.0f;
+                    m->angle = 270.0f;
                 }
             } else {
                 BattleAudience_SetAnim(i, 3, 0);

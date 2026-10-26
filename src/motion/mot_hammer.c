@@ -57,7 +57,7 @@ inline BOOL chkRevDir(f32 angle) {
         f32 a = mario->displayDirection;                                                                        \
         MarioWork* p = marioGetPtr(); f32 r;                                                                    \
         f32 off = 0.0f;                                                                                         \
-        if (p->dispFlags & MARIO_DISP_FLAG_REAR_POSE) {                                                                        \
+        if (p->dispFlags & MARIO_DISP_FLAG_REAR_POSE) {                                                         \
             off = chkRevDir(p->displayDirection) ? 30.0f : -30.0f;                                              \
         } if (a >= 90.0f && a <= 270.0f) { r = revise360(180.0f + off); } else { r = revise360(off); } dst = r; \
     }
@@ -385,30 +385,30 @@ static inline void mot_ham(f32 a148, f32 a68) {
     m->camZoomOfs = (Vec){0.0f, 40.0f, 0.0f};
 }
 
-#define H2_LV(lvl, a148, a68) { mot_ham(a148, a68); mario->mot.hammer2.flags |= 0x1000; }
+#define H2_LV(lvl, a148, a68) { mot_ham(a148, a68); mario->mot.hammer2.flags |= HAMMER2_FLAG_LEVEL_UP; }
 
-#define H2_RAMP(maxv, midv, minv, lvl, a148, a68)                         \
-    marioChgPaper("P_H_1A");                                        \
-    if (!(mario->mot.hammer2.flags & 1)) {                                         \
+#define H2_RAMP(maxv, midv, minv, lvl, a148, a68)                                     \
+    marioChgPaper("P_H_1A");                                                          \
+    if (!(mario->mot.hammer2.flags & HAMMER2_FLAG_AT_LEVEL)) {                        \
         mario->mot.hammer2.animTime += 6.0f;                                          \
         if (mario->mot.hammer2.animTime >= maxv) {                                    \
             mario->mot.hammer2.animTime = maxv;                                       \
-            mario->mot.hammer2.flags |= 1;                                         \
-            mario->hammerChargeLv = lvl;                                       \
-            H2_LV(lvl, a148, a68)                                   \
-        }                                                           \
-    } else if (!(mario->mot.hammer2.flags & 0x10)) {                               \
+            mario->mot.hammer2.flags |= HAMMER2_FLAG_AT_LEVEL;                        \
+            mario->hammerChargeLv = lvl;                                              \
+            H2_LV(lvl, a148, a68)                                                     \
+        }                                                                             \
+    } else if (!(mario->mot.hammer2.flags & HAMMER2_FLAG_SWAY_BACK)) {                \
         mario->mot.hammer2.animTime += 1.0f;                                          \
         if (mario->mot.hammer2.animTime >= midv) {                                    \
             mario->mot.hammer2.animTime = midv;                                       \
-            mario->mot.hammer2.flags |= 0x10;                                      \
-        }                                                           \
-    } else {                                                        \
+            mario->mot.hammer2.flags |= HAMMER2_FLAG_SWAY_BACK;                       \
+        }                                                                             \
+    } else {                                                                          \
         mario->mot.hammer2.animTime -= 1.0f;                                          \
         if (mario->mot.hammer2.animTime <= minv) {                                    \
             mario->mot.hammer2.animTime = minv;                                       \
-            mario->mot.hammer2.flags &= ~0x10;                                     \
-        }                                                           \
+            mario->mot.hammer2.flags &= ~HAMMER2_FLAG_SWAY_BACK;                      \
+        }                                                                             \
     }
 
 #ifdef VERSION_G8ME01
@@ -419,10 +419,10 @@ static inline void mot_ham(f32 a148, f32 a68) {
 
 #define H2_CLR_PAPER()                                              \
     marioPaperOff();                                                \
-    H2_LIGHT_ON()                                            \
+    H2_LIGHT_ON()                                                   \
     marioChgPose("M_S_1");                                          \
-    mario->dispFlags &= ~MARIO_DISP_FLAG_NO_REAR_POSE;                                       \
-    mario->dispFlags &= ~MARIO_DISP_FLAG_NO_DIR_FLIP;                                       \
+    mario->dispFlags &= ~MARIO_DISP_FLAG_NO_REAR_POSE;              \
+    mario->dispFlags &= ~MARIO_DISP_FLAG_NO_DIR_FLIP;               \
     mario->dispFlags &= ~MARIO_DISP_FLAG_FLIP;
 
 void mot_hammer2(void) {
@@ -497,7 +497,7 @@ void mot_hammer2(void) {
         mario->multiTimer = 30;
     case 10:
         if (marioGetRub(0x200, &a, &b, &c) == 1) {
-            mario->mot.hammer2.flags &= ~1;
+            mario->mot.hammer2.flags &= ~HAMMER2_FLAG_AT_LEVEL;
             mario->hammerChargeTimer++;
             if (mario->hammerChargeTimer >= 20) {
                 mario->hammerChargeTimer = 20;
@@ -519,10 +519,10 @@ void mot_hammer2(void) {
         } else {
             H2_RAMP(18.0f, 24.0f, 18.0f, 1, 0.2f, 1.5f)
         }
-        if (mario->mot.hammer2.flags & 0x1000) {
-            mario->mot.hammer2.flags &= ~0x1000;
-            if (!(mario->mot.hammer2.flags & 0x2000)) {
-                mario->mot.hammer2.flags |= 0x2000;
+        if (mario->mot.hammer2.flags & HAMMER2_FLAG_LEVEL_UP) {
+            mario->mot.hammer2.flags &= ~HAMMER2_FLAG_LEVEL_UP;
+            if (!(mario->mot.hammer2.flags & HAMMER2_FLAG_CHARGED_POSE)) {
+                mario->mot.hammer2.flags |= HAMMER2_FLAG_CHARGED_POSE;
                 switch (pouchGetHammerLv()) {
                 case 1:
                     marioChgPose("M_H_3A");

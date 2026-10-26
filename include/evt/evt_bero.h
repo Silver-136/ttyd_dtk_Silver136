@@ -9,9 +9,13 @@ typedef union BeroINFO {
     s32 value;
 } BeroINFO;
 
+#define BERO_TYPE_KIND_MASK 0xFFF // BeroEntry.type: the exit kind
+#define BERO_TYPE_BG_MODE 0x1000  // BeroEntry.type: Mario is in BG mode at this exit (evt_mario_bgmode_on)
+
 typedef struct BeroEntry {
     const char* hitName; //0x0
-    u16 type; //0x4, BeroInfoType | 0x1000 background | 0x2000 no fade; low 12 bits: 0 road, 1 door, 2 pipe, 3 gate, 0xF00 none
+    u16 type; //0x4, BERO_TYPE_KIND_MASK: the exit kind (1 walk-off edge w_/e_/s_bero, 2 pipe dokan, 0xF00 holes
+              //     and some s_bero; 0 and 3 rare) | BERO_TYPE_BG_MODE | 0x2000 (on some pipes)
     u16 sfxId; //0x6
     s32 directionId; //0x8, 45-degree steps from north, 8 up, 9 down
     s32 centerPosition; //0xC, x of centerPosition[3]
