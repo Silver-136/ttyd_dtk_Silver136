@@ -1375,7 +1375,7 @@ s32 BattleCommandInput(BattleWork* work) {
             break;
         case 29:
             _btlcmd_SetAttackEvent(unit, cmd);
-            cmd->flags &= ~0x1000000;
+            cmd->flags &= ~CMD_MENU_ENEMY_HP;
             wp->dispFlags &= ~1;
             BattleStageOffLightInCommand(0, 0);
             return 1;
@@ -1395,25 +1395,25 @@ void BattleCommandDisplay(BattleWork* wp) {
     if (cmd != NULL) {
         SelectedItemCoordinateColorUpDate();
         dispEntry(CAMERA_2D, 902.0f, 0, BattleDrawEnemyHP, wp);
-        if (cmd->flags & 1) {
+        if (cmd->flags & CMD_MENU_ACT) {
             dispEntry(CAMERA_2D, 500.0f, 0, BattleCommandDisplay_ActMenuDisp, wp);
         }
-        if (cmd->flags & 0x10) {
+        if (cmd->flags & CMD_MENU_WEAPON_SELECT) {
             dispEntry(CAMERA_2D, 500.0f, 0, BattleCommandDisplay_WeaponSelectMenuDisp, wp);
         }
-        if (cmd->flags & 0x100) {
+        if (cmd->flags & CMD_MENU_OPERATION) {
             dispEntry(CAMERA_2D, 500.0f, 0, BattleCommandDisplay_OperationMenuDisp, wp);
         }
-        if (cmd->flags & 0x1000) {
+        if (cmd->flags & CMD_MENU_CHANGE_PARTY) {
             dispEntry(CAMERA_2D, 500.0f, 0, BattleCommandDisplay_ChangePartySelectMenuDisp, wp);
         }
-        if (cmd->flags & 0x20) {
+        if (cmd->flags & CMD_MENU_MULTI_ITEM) {
             dispEntry(CAMERA_2D, 500.0f, 0, BattleCommandDisplay_MultiItemMenuDisp, wp);
         }
-        if (cmd->flags & 0x10000) {
+        if (cmd->flags & CMD_MENU_TARGET_SELECT) {
             dispEntry(CAMERA_2D, 500.0f, 0, BattleCommandDisplay_TargetSelectMenuDisp, wp);
         }
-        if (cmd->flags & 0x100000) {
+        if (cmd->flags & CMD_MENU_PROTECT_PARTNER) {
             dispEntry(CAMERA_2D, 500.0f, 0, BattleCommandDisplay_ProtectPartnerSelectMenuDisp, wp);
         }
     }
@@ -1435,7 +1435,7 @@ void BattleCommandDisplay_ActMenuSetup(BattleWork* wp, u32 a) {
     _btlcmd_GetCursorPtr(cmd, 14, &cursor);
     BattleMenuDisp_ActSelect_Init(wp, cursor, cmd->act, a);
     cmd->idleTimer = 0;
-    cmd->flags |= 0x1000001;
+    cmd->flags |= (CMD_MENU_ACT | CMD_MENU_ENEMY_HP);
     if (!a && !cmd->attackAudience) {
         _cursor_init(&cmd->cursor[2]);
         _cursor_init(&cmd->cursor[3]);
@@ -1627,7 +1627,7 @@ void BattleCommandDisplay_ActMenuDisp(CameraId camId, void* param) {
 #pragma dont_inline on
 void BattleCommandDisplay_ActMenuEnd(BattleWork* wp) {
     BattleMenuDisp_ActSelect_End(wp);
-    wp->commandMenu.flags &= ~1;
+    wp->commandMenu.flags &= ~CMD_MENU_ACT;
 }
 #pragma dont_inline reset
 
@@ -1639,7 +1639,7 @@ void BattleCommandDisplay_WeaponSelectMenuSetup(BattleWork* wp, s32 type, s32 a)
     _btlcmd_MakeSelectWeaponTable(wp, type);
     _btlcmd_GetCursorPtr(cmd, type, &cursor);
     BattleMenuDisp_WeaponSelect_Init(wp, cursor, cmd->weapon, a);
-    cmd->flags |= 0x1000010;
+    cmd->flags |= (CMD_MENU_WEAPON_SELECT | CMD_MENU_ENEMY_HP);
 }
 #pragma dont_inline reset
 
@@ -1748,7 +1748,7 @@ void BattleCommandDisplay_WeaponSelectMenuDisp(CameraId camId, void* param) {
 #pragma dont_inline on
 void BattleCommandDisplay_WeaponSelectMenuEnd(BattleWork* wp) {
     BattleMenuDisp_WeaponSelect_End(wp);
-    wp->commandMenu.flags &= ~0x10;
+    wp->commandMenu.flags &= ~CMD_MENU_WEAPON_SELECT;
 }
 #pragma dont_inline reset
 
@@ -1849,7 +1849,7 @@ void BattleCommandDisplay_WeaponMultiItemCancelCheckDisp(CameraId camId, void* p
 void BattleCommandDisplay_OperationMenuSetup(BattleWork* wp, s32 a) {
     _btlcmd_MakeOperationTable(wp);
     BattleMenuDisp_Operation_Init(wp, a);
-    wp->commandMenu.flags |= 0x1000100;
+    wp->commandMenu.flags |= (CMD_MENU_OPERATION | CMD_MENU_ENEMY_HP);
 }
 #pragma dont_inline reset
 
@@ -1952,7 +1952,7 @@ void BattleCommandDisplay_OperationMenuDisp(CameraId camId, void* param) {
 #pragma dont_inline on
 void BattleCommandDisplay_OperationMenuEnd(BattleWork* wp) {
     BattleMenuDisp_Operation_End(wp);
-    wp->commandMenu.flags &= ~0x100;
+    wp->commandMenu.flags &= ~CMD_MENU_OPERATION;
 }
 #pragma dont_inline reset
 
@@ -1960,7 +1960,7 @@ void BattleCommandDisplay_OperationMenuEnd(BattleWork* wp) {
 void BattleCommandDisplay_MultiItemMenuSetup(BattleWork* wp, s32 a) {
     _btlcmd_MakeMultiItemTable(wp);
     BattleMenuDisp_MultiItem_Init(wp, a);
-    wp->commandMenu.flags |= 0x20;
+    wp->commandMenu.flags |= CMD_MENU_MULTI_ITEM;
 }
 #pragma dont_inline reset
 
@@ -2042,13 +2042,13 @@ void BattleCommandDisplay_MultiItemMenuDisp(CameraId camId, void* param) {
 #pragma dont_inline on
 void BattleCommandDisplay_MultiItemMenuEnd(BattleWork* wp) {
     BattleMenuDisp_MultiItem_End(wp);
-    wp->commandMenu.flags &= ~0x20;
+    wp->commandMenu.flags &= ~CMD_MENU_MULTI_ITEM;
 }
 #pragma dont_inline reset
 
 void BattleCommandDisplay_ChangePartySelectMenuSetup(BattleWork* wp) {
     BattleMenuDisp_ChangePartySelect_Init(wp);
-    wp->commandMenu.flags |= 0x1001000;
+    wp->commandMenu.flags |= (CMD_MENU_CHANGE_PARTY | CMD_MENU_ENEMY_HP);
 }
 
 void BattleCommandDisplay_ChangePartySelectMenuEnd(BattleWork* wp);
@@ -2123,7 +2123,7 @@ void BattleCommandDisplay_ChangePartySelectMenuDisp(CameraId camId, void* param)
 #pragma dont_inline on
 void BattleCommandDisplay_ChangePartySelectMenuEnd(BattleWork* wp) {
     BattleMenuDisp_ChangePartySelect_End(wp);
-    wp->commandMenu.flags &= ~0x1000;
+    wp->commandMenu.flags &= ~CMD_MENU_CHANGE_PARTY;
 }
 #pragma dont_inline reset
 
@@ -2131,7 +2131,7 @@ void BattleCommandDisplay_ChangePartySelectMenuEnd(BattleWork* wp) {
 void BattleCommandDisplay_TargetSelectMenuSetup(BattleWork* wp) {
     BattleUnit* unit = BattleGetUnitPtr(wp, wp->activeUnitId);
 
-    wp->commandMenu.flags |= 0x10000;
+    wp->commandMenu.flags |= CMD_MENU_TARGET_SELECT;
     BtlUnit_SetAnimType(BtlUnit_GetPartsPtr(unit, BtlUnit_GetBodyPartsId(unit)), 0x28);
 }
 #pragma dont_inline reset
@@ -2245,8 +2245,8 @@ void BattleCommandDisplay_TargetSelectMenuEnd(BattleWork* wp) {
 
     _btlcmd_GetCursorPtr(cmd, wp->commandMenu.actType, &cursor);
     btl_camera_set_mode(BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT);
-    cmd->flags &= ~0x10000;
-    cmd->flags &= ~0x1000000;
+    cmd->flags &= ~CMD_MENU_TARGET_SELECT;
+    cmd->flags &= ~CMD_MENU_ENEMY_HP;
 }
 #pragma dont_inline reset
 
@@ -2254,8 +2254,8 @@ void BattleCommandDisplay_TargetSelectMenuEnd(BattleWork* wp) {
 void BattleCommandDisplay_ProtectPartnerSelectMenuSetup(BattleWork* wp) {
     BattleUnit* unit = BattleGetUnitPtr(wp, wp->activeUnitId);
     BattleGetPartnerPtr(wp, unit);
-    wp->commandMenu.flags |= 0x100000;
-    wp->commandMenu.flags &= ~0x1000000;
+    wp->commandMenu.flags |= CMD_MENU_PROTECT_PARTNER;
+    wp->commandMenu.flags &= ~CMD_MENU_ENEMY_HP;
 }
 #pragma dont_inline reset
 
@@ -2285,13 +2285,13 @@ void BattleCommandDisplay_ProtectPartnerSelectMenuDisp(CameraId camId, void* par
 
 #pragma dont_inline on
 void BattleCommandDisplay_ProtectPartnerSelectMenuEnd(BattleWork* wp) {
-    wp->commandMenu.flags &= ~0x100000;
+    wp->commandMenu.flags &= ~CMD_MENU_PROTECT_PARTNER;
 }
 #pragma dont_inline reset
 
 #pragma dont_inline on
 void BattleCommandDisplay_AllEnd(BattleWork* wp) {
-    wp->commandMenu.flags &= ~0x111111;
+    wp->commandMenu.flags &= ~(CMD_MENU_ACT | CMD_MENU_WEAPON_SELECT | CMD_MENU_OPERATION | CMD_MENU_CHANGE_PARTY | CMD_MENU_TARGET_SELECT | CMD_MENU_PROTECT_PARTNER);
 }
 #pragma dont_inline reset
 
@@ -2563,7 +2563,7 @@ void BattleDrawEnemyHP(CameraId camId, void* param) {
         if (BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL)) continue;
         if (!battleCheckUnitMonosiriFlag(wp->units[i])) continue;
         if (unit->mAttributeFlags & kUnitNoHpGauge) continue;
-        if (!(wp->commandMenu.flags & 0x1000000) && !(unit->flags & BATTLE_UNIT_FLAG_SHOW_HP)) continue;
+        if (!(wp->commandMenu.flags & CMD_MENU_ENEMY_HP) && !(unit->flags & BATTLE_UNIT_FLAG_SHOW_HP)) continue;
         position.x = unit->mPosition.x;
         position.y = unit->mPosition.y;
         position.z = unit->mPosition.z;

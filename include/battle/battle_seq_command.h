@@ -88,9 +88,21 @@ typedef struct BattleSubMenu {
     f32 partyBtnAngle; // 0x120
 } BattleSubMenu;
 
+// BattleCommand.flags: the menus BattleCommandDisplay draws (set by each *MenuSetup, cleared by its *MenuEnd)
+typedef enum BattleCommandFlags {
+    CMD_MENU_ACT = (1 << 0),               // 0x1
+    CMD_MENU_WEAPON_SELECT = (1 << 4),     // 0x10
+    CMD_MENU_MULTI_ITEM = (1 << 5),        // 0x20
+    CMD_MENU_OPERATION = (1 << 8),         // 0x100
+    CMD_MENU_CHANGE_PARTY = (1 << 12),     // 0x1000
+    CMD_MENU_TARGET_SELECT = (1 << 16),    // 0x10000
+    CMD_MENU_PROTECT_PARTNER = (1 << 20),  // 0x100000
+    CMD_MENU_ENEMY_HP = (1 << 24),         // 0x1000000, BattleDrawEnemyHP draws every enemy's HP
+} BattleCommandFlags;
+
 typedef struct BattleCommand {
     s32 state;                           // 0x0, command menu state (switch in the main loop)
-    s32 flags;                           // 0x4, menu flags (0x1/0x10/0x100/0x1000/... select the shown menus)
+    s32 flags;                           // 0x4, BattleCommandFlags
     BattleCommandAct act[6];             // 0x8
     BattleCommandWeapon weapon[21];      // 0x80
     BattleCommandOperation operation[7]; // 0x2CC
