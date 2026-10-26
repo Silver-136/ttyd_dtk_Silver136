@@ -1849,7 +1849,7 @@ EVT_BEGIN(evt_gardman3)
             END_IF
             WAIT_FRAMES(1)
         END_LOOP
-        CALL(evt_msg_toge, 1, 0, 0, 0)
+        CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
         CALL(evt_msg_print_party, STRING("stg3_tou_408_01"))
         SET_VALUE(GF(0), 1)
     END_INLINE_EVENT

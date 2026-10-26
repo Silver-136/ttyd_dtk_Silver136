@@ -446,7 +446,7 @@ static EVT_BEGIN(sell_evt)
         CASE_DEFAULT
         CALL(evt_msg_fmt_int, 0, LW(14), STRING("badgeshop_08"), LW(3))
         CALL(evt_msg_fmt_str, 1, LW(14), LW(14), LW(2))
-        CALL(evt_msg_print, 1, LW(14), 0, STRING("バッジ店員"))
+        CALL(evt_msg_print, MSG_PRINT_DIRECT_TEXT, LW(14), 0, STRING("バッジ店員"))
     END_SWITCH
 #else
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -511,7 +511,7 @@ EVT_BEGIN(zaiko_buy_evt)
         CASE_DEFAULT
         CALL(evt_msg_fmt_int, 0, LW(14), STRING("badgeshop_00"), LW(3))
         CALL(evt_msg_fmt_str, 1, LW(14), LW(14), LW(2))
-        CALL(evt_msg_print_insert, 1, LW(14), 0, STRING("バッジ店員"), LW(4))
+        CALL(evt_msg_print_insert, MSG_PRINT_DIRECT_TEXT, LW(14), 0, STRING("バッジ店員"), LW(4))
     END_SWITCH
 #else
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -794,7 +794,7 @@ EVT_BEGIN(nancy_init_check)
     END_IF
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG0_LENS_BREAK1"), LW(0), LW(1), LW(2), 0)
-    CALL(evt_msg_toge, 2, LW(0), LW(1), LW(2))
+    CALL(evt_msg_toge, MSG_TOGE_AT_POS, LW(0), LW(1), LW(2))
     CALL(evt_msg_print, 0, STRING("gor_01_004"), 0, 0)
     CALL(evt_npc_get_reglid, STRING("me"), LW(0))
     DELETE_EVENT(LW(0))
@@ -1912,7 +1912,7 @@ EVT_BEGIN(bottakuru_talk)
             CASE_DEFAULT
             CALL(evt_msg_fmt_int, 0, LW(14), STRING("bottakuru_07"), LW(3))
             CALL(evt_msg_fmt_str, 1, LW(14), LW(14), LW(2))
-            CALL(evt_msg_print_insert, 1, LW(14), 0, STRING("me"), LW(4))
+            CALL(evt_msg_print_insert, MSG_PRINT_DIRECT_TEXT, LW(14), 0, STRING("me"), LW(4))
         END_SWITCH
         ELSE
         CALL(evt_sub_get_language, LW(0))
@@ -1922,7 +1922,7 @@ EVT_BEGIN(bottakuru_talk)
             CASE_DEFAULT
             CALL(evt_msg_fmt_int, 0, LW(14), STRING("bottakuru_06"), LW(3))
             CALL(evt_msg_fmt_str, 1, LW(14), LW(14), LW(2))
-            CALL(evt_msg_print, 1, LW(14), 0, STRING("me"))
+            CALL(evt_msg_print, MSG_PRINT_DIRECT_TEXT, LW(14), 0, STRING("me"))
         END_SWITCH
 #else
         IF_INT_NOT_EQUAL(LW(0), 0)
@@ -2797,7 +2797,7 @@ EVT_BEGIN(evt_badge_dummy)
         CASE_DEFAULT
         CALL(evt_msg_fmt_int, 0, LW(15), STRING("badgeshop_00"), LW(13))
         CALL(evt_msg_fmt_str, 1, LW(15), LW(15), LW(11))
-        CALL(evt_msg_print_insert, 1, LW(15), 0, STRING("バッジ店員"), LW(14))
+        CALL(evt_msg_print_insert, MSG_PRINT_DIRECT_TEXT, LW(15), 0, STRING("バッジ店員"), LW(14))
     END_SWITCH
 #else
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -3779,12 +3779,12 @@ EVT_BEGIN(christine_nakama)
         WAIT_MS(500)
         CALL(evt_npc_get_position, STRING("キノじい"), LW(0), LW(1), LW(2))
         ADD(LW(1), 40)
-        CALL(evt_msg_toge, 2, LW(0), LW(1), LW(2))
+        CALL(evt_msg_toge, MSG_TOGE_AT_POS, LW(0), LW(1), LW(2))
         CALL(evt_msg_print, 0, STRING("mac_0_047_02"), 0, STRING("キノじい"))
         WAIT_MS(500)
         CALL(evt_npc_get_position, STRING("キノじい"), LW(0), LW(1), LW(2))
         ADD(LW(1), 40)
-        CALL(evt_msg_toge, 2, LW(0), LW(1), LW(2))
+        CALL(evt_msg_toge, MSG_TOGE_AT_POS, LW(0), LW(1), LW(2))
         CALL(evt_msg_print, 0, STRING("mac_0_047_02"), 0, STRING("キノじい"))
         WAIT_MS(1000)
     END_INLINE_EVENT
@@ -4172,19 +4172,19 @@ EVT_BEGIN(keijiban_omote_joho)
         ELSE
         IF_INT_EQUAL(LW(0), 0)
             CALL(evt_osreport, 0, LW(1))
-            CALL(evt_msg_print, 1, STRING("<plate>\nゆうこうな　データが\n見つかりませんでした\nメッセージを　とうろく　してください\n<key>\n<scrl_auto>\n<once_stop>\n"), 0, 0)
-            CALL(evt_msg_print_add_insert, 1, STRING("げんざいの　イベントばんごうは\n『%s』\nです\n<key>"), LW(1))
+            CALL(evt_msg_print, MSG_PRINT_DIRECT_TEXT, STRING("<plate>\nゆうこうな　データが\n見つかりませんでした\nメッセージを　とうろく　してください\n<key>\n<scrl_auto>\n<once_stop>\n"), 0, 0)
+            CALL(evt_msg_print_add_insert, MSG_PRINT_DIRECT_TEXT, STRING("げんざいの　イベントばんごうは\n『%s』\nです\n<key>"), LW(1))
             ELSE
             CALL(evt_osreport, 0, LW(1))
-            CALL(evt_msg_print, 1, STRING("<plate>\nゆうこうな　データが\nじゅうふくして　みつかりました\nゆうこうな　メッセージは　１つにしてください\n<key>\n<scrl_auto>\n<once_stop>"), 0, 0)
+            CALL(evt_msg_print, MSG_PRINT_DIRECT_TEXT, STRING("<plate>\nゆうこうな　データが\nじゅうふくして　みつかりました\nゆうこうな　メッセージは　１つにしてください\n<key>\n<scrl_auto>\n<once_stop>"), 0, 0)
             SET_VALUE(LW(2), 0)
             SET_VALUE(LW(3), LW(0))
             LOOP(LW(0))
                 CALL(keijiban_joho_makelabel, LW(2), LW(1))
-                CALL(evt_msg_print_add_insert, 1, STRING("『%s』\n<key>\n<scrl_auto>\n<once_stop>\n"), LW(1))
+                CALL(evt_msg_print_add_insert, MSG_PRINT_DIRECT_TEXT, STRING("『%s』\n<key>\n<scrl_auto>\n<once_stop>\n"), LW(1))
                 ADD(LW(2), 1)
             END_LOOP
-            CALL(evt_msg_print_add_insert, 1, STRING("いじょう　%dこが\nじゅうふくしている　メッセージです\n<key>"), LW(3))
+            CALL(evt_msg_print_add_insert, MSG_PRINT_DIRECT_TEXT, STRING("いじょう　%dこが\nじゅうふくしている　メッセージです\n<key>"), LW(3))
         END_IF
     END_IF
     CALL(keijiban_data_free)
@@ -4204,19 +4204,19 @@ EVT_BEGIN(keijiban_ura_joho)
         ELSE
         IF_INT_EQUAL(LW(0), 0)
             CALL(evt_osreport, 0, LW(1))
-            CALL(evt_msg_print, 1, STRING("<plate>\nゆうこうな　データが\n見つかりませんでした\nメッセージを　とうろく　してください\n<key>\n<scrl_auto>\n<once_stop>\n"), 0, 0)
-            CALL(evt_msg_print_add_insert, 1, STRING("げんざいの　イベントばんごうは\n『%s』\nです\n<key>"), LW(1))
+            CALL(evt_msg_print, MSG_PRINT_DIRECT_TEXT, STRING("<plate>\nゆうこうな　データが\n見つかりませんでした\nメッセージを　とうろく　してください\n<key>\n<scrl_auto>\n<once_stop>\n"), 0, 0)
+            CALL(evt_msg_print_add_insert, MSG_PRINT_DIRECT_TEXT, STRING("げんざいの　イベントばんごうは\n『%s』\nです\n<key>"), LW(1))
             ELSE
             CALL(evt_osreport, 0, LW(1))
-            CALL(evt_msg_print, 1, STRING("<plate>\nゆうこうな　データが\nじゅうふくして　みつかりました\nゆうこうな　メッセージは　１つにしてください\n<key>\n<scrl_auto>\n<once_stop>"), 0, 0)
+            CALL(evt_msg_print, MSG_PRINT_DIRECT_TEXT, STRING("<plate>\nゆうこうな　データが\nじゅうふくして　みつかりました\nゆうこうな　メッセージは　１つにしてください\n<key>\n<scrl_auto>\n<once_stop>"), 0, 0)
             SET_VALUE(LW(2), 0)
             SET_VALUE(LW(3), LW(0))
             LOOP(LW(0))
                 CALL(keijiban_joho_makelabel, LW(2), LW(1))
-                CALL(evt_msg_print_add_insert, 1, STRING("『%s』\n<key>\n<scrl_auto>\n<once_stop>\n"), LW(1))
+                CALL(evt_msg_print_add_insert, MSG_PRINT_DIRECT_TEXT, STRING("『%s』\n<key>\n<scrl_auto>\n<once_stop>\n"), LW(1))
                 ADD(LW(2), 1)
             END_LOOP
-            CALL(evt_msg_print_add_insert, 1, STRING("いじょう　%dこが\nじゅうふくしている　メッセージです\n<key>"), LW(3))
+            CALL(evt_msg_print_add_insert, MSG_PRINT_DIRECT_TEXT, STRING("いじょう　%dこが\nじゅうふくしている　メッセージです\n<key>"), LW(3))
         END_IF
     END_IF
     CALL(keijiban_data_free)
@@ -6280,7 +6280,7 @@ EVT_BEGIN(cooking_evt_sub)
     WAIT_FRAMES(1)
     CALL(evt_npc_flag_onoff, 0, STRING("ナンシー"), NPC_FLAG_INSTANT_TURN)
     BEGIN_INLINE_EVENT
-        CALL(evt_msg_toge, 1, 0, 0, 0)
+        CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
         CALL(evt_msg_print, 0, STRING("gor_01_cook_016"), 0, STRING("ナンシー"))
     END_INLINE_EVENT
     WAIT_MS(500)

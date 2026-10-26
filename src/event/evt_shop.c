@@ -129,7 +129,7 @@ static EVT_BEGIN(buy_evt)
         CASE_DEFAULT
         CALL(evt_msg_fmt_int, 0, LW(14), LW(14), LW(13))
         CALL(evt_msg_fmt_str, 1, LW(14), LW(14), LW(11))
-        CALL(evt_msg_print, 1, LW(14), 0, LW(9))
+        CALL(evt_msg_print, MSG_PRINT_DIRECT_TEXT, LW(14), 0, LW(9))
     END_SWITCH
 #else
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -205,7 +205,7 @@ static EVT_BEGIN(buy_evt)
                 CALL(evt_msg_print_insert, 0, LW(14), 0, LW(9), LW(2))
                 CASE_DEFAULT
                 CALL(evt_msg_fmt_str, 0, LW(14), LW(14), LW(2))
-                CALL(evt_msg_print, 1, LW(14), 0, LW(9))
+                CALL(evt_msg_print, MSG_PRINT_DIRECT_TEXT, LW(14), 0, LW(9))
                 CASE_END
             END_SWITCH
 #else
@@ -326,7 +326,7 @@ EVT_BEGIN(shopper_talk_evt)
                 CALL(evt_msg_print, 0, LW(14), 0, 0)
                 ELSE
                 SET_VALUE(LF(10), 0)
-                CALL(evt_msg_print_add, 1, STRING("<scrl_auto><once_stop>"))
+                CALL(evt_msg_print_add, MSG_PRINT_DIRECT_TEXT, STRING("<scrl_auto><once_stop>"))
                 CALL(evt_msg_print_add, 0, LW(14))
             END_IF
             BREAK_LOOP
@@ -338,7 +338,7 @@ EVT_BEGIN(shopper_talk_evt)
                 CALL(evt_msg_print, 0, LW(14), 0, 0)
                 ELSE
                 SET_VALUE(LF(10), 0)
-                CALL(evt_msg_print_add, 1, STRING("<scrl_auto><once_stop>"))
+                CALL(evt_msg_print_add, MSG_PRINT_DIRECT_TEXT, STRING("<scrl_auto><once_stop>"))
                 CALL(evt_msg_print_add, 0, LW(14))
             END_IF
             BREAK_LOOP
@@ -352,14 +352,14 @@ EVT_BEGIN(shopper_talk_evt)
                 CALL(evt_msg_print_insert, 0, LW(14), 0, 0, LW(2))
                 CASE_DEFAULT
                 CALL(evt_msg_fmt_str, 0, LW(14), LW(14), LW(2))
-                CALL(evt_msg_print, 1, LW(14), 0, 0)
+                CALL(evt_msg_print, MSG_PRINT_DIRECT_TEXT, LW(14), 0, 0)
             END_SWITCH
 #else
             CALL(evt_msg_print_insert, 0, LW(14), 0, 0, LW(2))
 #endif
             ELSE
             SET_VALUE(LF(10), 0)
-            CALL(evt_msg_print_add, 1, STRING("<scrl_auto><once_stop>"))
+            CALL(evt_msg_print_add, MSG_PRINT_DIRECT_TEXT, STRING("<scrl_auto><once_stop>"))
 #ifdef VERSION_G8ME01
             CALL(evt_sub_get_language, LW(0))
             SWITCH(LW(0))
@@ -367,7 +367,7 @@ EVT_BEGIN(shopper_talk_evt)
                 CALL(evt_msg_print_insert, 0, LW(14), 0, 0, LW(2))
                 CASE_DEFAULT
                 CALL(evt_msg_fmt_str, 0, LW(14), LW(14), LW(2))
-                CALL(evt_msg_print, 1, LW(14), 0, 0)
+                CALL(evt_msg_print, MSG_PRINT_DIRECT_TEXT, LW(14), 0, 0)
             END_SWITCH
 #else
             CALL(evt_msg_print_add_insert, 0, LW(14), LW(2))
@@ -412,7 +412,7 @@ EVT_BEGIN(first_shopping_evt)
         CALL(evt_msg_print, 0, LW(14), 0, LW(9))
         ELSE
         SET_VALUE(LF(10), 0)
-        CALL(evt_msg_print_add, 1, STRING("<scrl_auto><once_stop>"))
+        CALL(evt_msg_print_add, MSG_PRINT_DIRECT_TEXT, STRING("<scrl_auto><once_stop>"))
         CALL(evt_msg_print_add, 0, LW(14))
     END_IF
     LOOP(0)
@@ -464,7 +464,7 @@ static EVT_BEGIN(sell_evt)
         CASE_DEFAULT
         CALL(evt_msg_fmt_int, 0, LW(14), LW(14), LW(3))
         CALL(evt_msg_fmt_str, 1, LW(14), LW(14), LW(2))
-        CALL(evt_msg_print, 1, LW(14), 0, STRING("me"))
+        CALL(evt_msg_print, MSG_PRINT_DIRECT_TEXT, LW(14), 0, STRING("me"))
     END_SWITCH
 #else
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -526,7 +526,7 @@ EVT_BEGIN(keep_evt)
         CALL(evt_msg_print_add_insert, 0, LW(14), LW(1))
         CASE_DEFAULT
         CALL(evt_msg_fmt_int, 0, LW(14), LW(14), LW(1))
-        CALL(evt_msg_print_add, 1, LW(14))
+        CALL(evt_msg_print_add, MSG_PRINT_DIRECT_TEXT, LW(14))
     END_SWITCH
 #else
     CALL(evt_msg_print_add_insert, 0, LW(14), LW(1))
@@ -627,7 +627,7 @@ EVT_BEGIN(point_evt)
             CALL(evt_msg_print_add_insert, 0, LW(14), LW(1))
         CASE_DEFAULT
             CALL(evt_msg_fmt_int, 0, LW(14), LW(14), LW(1))
-            CALL(evt_msg_print_add, 1, LW(14))
+            CALL(evt_msg_print_add, MSG_PRINT_DIRECT_TEXT, LW(14))
     END_SWITCH
     RETURN
     OPCODE_END_SCRIPT,

@@ -575,13 +575,13 @@ EVT_BEGIN(richard_talk_event)
         RETURN
     END_IF
     CALL(evt_mario_key_onoff, 0)
-    CALL(evt_msg_toge, 1, 0, 0, 0)
+    CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
     CALL(evt_msg_print, 0, STRING("stg1_gon_09_01"), 0, 0)
     CALL(evt_msg_select, 0, STRING("stg1_gon_09_01_yn"))
     CALL(evt_msg_continue)
     IF_INT_EQUAL(LW(0), 0)
         CALL(evt_mario_set_pose, STRING("M_L_2"))
-        CALL(evt_msg_toge, 1, 0, 0, 0)
+        CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
         CALL(evt_msg_print, 0, STRING("stg1_gon_09_02"), 0, 0)
         CALL(evt_mario_set_pose, STRING("M_S_1"))
     END_IF

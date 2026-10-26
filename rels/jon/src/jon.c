@@ -1407,7 +1407,7 @@ EVT_BEGIN(talk_idouya)
             END_IF
         END_IF
     END_IF
-    CALL(evt_msg_print_add, 1, STRING("<scrl_auto><once_stop>"))
+    CALL(evt_msg_print_add, MSG_PRINT_DIRECT_TEXT, STRING("<scrl_auto><once_stop>"))
     CALL(evt_msg_print_add, 0, STRING("msg_jon_mover_2"))
     BEGIN_INLINE_EVENT
         CALL(evt_raster)
@@ -1511,7 +1511,7 @@ EVT_BEGIN(talk_gyousyou)
             CASE_DEFAULT
             CALL(evt_msg_fmt_int, 0, LW(14), STRING("100kai_item_04"), LW(3))
             CALL(evt_msg_fmt_str, 1, LW(14), LW(14), LW(2))
-            CALL(evt_msg_print, 1, LW(14), 0, STRING("me"))
+            CALL(evt_msg_print, MSG_PRINT_DIRECT_TEXT, LW(14), 0, STRING("me"))
         END_SWITCH
 #else
         END_IF

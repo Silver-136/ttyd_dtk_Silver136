@@ -709,7 +709,7 @@ EVT_BEGIN(partyChristineAttack_Monosiri)
         GOTO(10)
     END_IF
     CALL(btlevtcmd_get_monosiri_msg_no, LW(3), LW(4), LW(0))
-    CALL(evt_msg_print, 2, LW(0), 0, -2)
+    CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, LW(0), 0, -2)
     CALL(_monosiri_flag_on, LW(3))
     CALL(btlevtcmd_SetTalkPose, UNIT_ID_SELF, STRING("PKR_T_1"))
     CALL(btlevtcmd_SetStayPose, UNIT_ID_SELF, STRING("PKR_S_1"))

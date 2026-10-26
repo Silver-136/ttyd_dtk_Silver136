@@ -280,7 +280,7 @@ EVT_BEGIN(powerdownya_mario_level_rtn)
 #ifdef VERSION_G8ME01
             CASE_DEFAULT
             CALL(evt_msg_fmt_int, 0, LW(14), STRING("powerdown_06"), 39)
-            CALL(evt_msg_print_insert, 1, LW(14), 0, STRING("me"), LW(2), LW(3))
+            CALL(evt_msg_print_insert, MSG_PRINT_DIRECT_TEXT, LW(14), 0, STRING("me"), LW(2), LW(3))
         END_SWITCH
 #endif
         CALL(evt_msg_select, 0, STRING("powerdown_09"))
@@ -484,7 +484,7 @@ EVT_BEGIN(powerdownya_party_lank_rtn)
 #ifdef VERSION_G8ME01
             CASE_DEFAULT
             CALL(evt_msg_fmt_int, 0, LW(14), STRING("powerdown_08"), 39)
-            CALL(evt_msg_print_insert, 1, LW(14), 0, STRING("me"), LW(3), LW(4))
+            CALL(evt_msg_print_insert, MSG_PRINT_DIRECT_TEXT, LW(14), 0, STRING("me"), LW(3), LW(4))
         END_SWITCH
 #endif
         CALL(evt_msg_select, 0, STRING("powerdown_09"))
@@ -767,7 +767,7 @@ EVT_BEGIN(powerdownya_table_talk)
 #ifdef VERSION_G8ME01
             CASE_DEFAULT
             CALL(evt_msg_fmt_int, 0, LW(14), STRING("powerdown_00"), 39)
-            CALL(evt_msg_print, 1, LW(14), 0, STRING("me"))
+            CALL(evt_msg_print, MSG_PRINT_DIRECT_TEXT, LW(14), 0, STRING("me"))
         END_SWITCH
 #endif
         SET_VALUE(GSWF(1342), 1)

@@ -1552,7 +1552,7 @@ static EVT_BEGIN(minnnanokoe_evt)
             CALL(evt_sub_random, 10, LW(4))
             ADD(LW(4), 25)
             ADD(LW(2), LW(4))
-            CALL(evt_msg_toge, 3, LW(1), LW(2), LW(3))
+            CALL(evt_msg_toge, MSG_TOGE_AT_POS_FAR, LW(1), LW(2), LW(3))
             BEGIN_INLINE_EVENT
                 CALL(evt_msg_print, 0, STRING("stg8_las_148_17"), 0, 0)
             END_INLINE_EVENT

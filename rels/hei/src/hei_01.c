@@ -325,13 +325,13 @@ EVT_END()
 
 EVT_BEGIN(nokotaro_kanyu)
     CALL(evt_msg_select, 0, STRING("stg1_hei_12_yesno1"))
-    CALL(evt_msg_print_add, 1, STRING("<scrl_auto><once_stop>"))
+    CALL(evt_msg_print_add, MSG_PRINT_DIRECT_TEXT, STRING("<scrl_auto><once_stop>"))
     IF_INT_EQUAL(LW(0), 0)
         CALL_CHILD(PTR(nokotaro_get))
         ELSE
         CALL(evt_msg_print_add, 0, STRING("stg1_hei_10"))
         CALL(evt_msg_select, 0, STRING("stg1_hei_12_yesno2"))
-        CALL(evt_msg_print_add, 1, STRING("<scrl_auto><once_stop>"))
+        CALL(evt_msg_print_add, MSG_PRINT_DIRECT_TEXT, STRING("<scrl_auto><once_stop>"))
         IF_INT_EQUAL(LW(0), 0)
             CALL(evt_msg_print_add, 0, STRING("stg1_hei_11"))
             ELSE
@@ -494,7 +494,7 @@ EVT_BEGIN(evt_nokorin)
     ADD(LW(0), -20)
     CALL(evt_party_move_pos2, 0, LW(0), LW(2), FLOAT(40.0f))
     CALL(evt_npc_set_position, STRING("ノコリン"), 700, 0, 0)
-    CALL(evt_msg_toge, 1, 0, 0, 0)
+    CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
     CALL(evt_msg_print, 0, STRING("stg1_hei_12_01"), 0, STRING("ノコリン"))
     CALL(evt_party_set_dir_npc, 0, STRING("ノコリン"))
     WAIT_MS(500)
@@ -589,7 +589,7 @@ EVT_BEGIN(evt_nokorin)
         SET_VALUE(GF(11), 1)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
-        CALL(evt_msg_toge, 1, 0, 0, 0)
+        CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
         CALL(evt_msg_print, 0, STRING("stg1_hei_12_07"), 0, 0)
         SET_VALUE(GF(12), 1)
     END_INLINE_EVENT
@@ -669,7 +669,7 @@ EVT_BEGIN(evt_nokorin)
         SET_VALUE(GF(11), 1)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
-        CALL(evt_msg_toge, 1, 0, 0, 0)
+        CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
         CALL(evt_msg_print, 0, STRING("stg1_hei_12_08"), 0, 0)
         SET_VALUE(GF(12), 1)
     END_INLINE_EVENT

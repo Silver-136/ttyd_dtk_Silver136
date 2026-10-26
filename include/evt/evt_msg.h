@@ -3,6 +3,20 @@
 #include <dolphin/types.h>
 #include "evt/evt_cmd.h"
 
+// First argument of evt_msg_print / _add / _insert / _add_insert (_evt_msg_print)
+typedef enum MsgPrintFlags {
+    MSG_PRINT_DIRECT_TEXT = (1 << 0), // the argument is the text itself, not a message key (window tag "DIRECT")
+    MSG_PRINT_NO_SPEAKER = (1 << 1),  // no speaker: the window takes no position or name from an NPC
+} MsgPrintFlags;
+
+// evt_msg_toge: how the next message window's tail is placed (event->printWindowFlags low bits)
+typedef enum MsgTogeMode {
+    MSG_TOGE_AUTO = 0,       // toward the speaker, chosen from where it is on screen
+    MSG_TOGE_NONE = 1,       // no tail
+    MSG_TOGE_AT_POS = 2,     // at the given point, laid out as for a speaker to Mario's right
+    MSG_TOGE_AT_POS_FAR = 3, // at the given point, laid out as for a speaker far off to the side
+} MsgTogeMode;
+
 void evt_msg_init(void);
 
 USER_FUNC(evt_msg_close);

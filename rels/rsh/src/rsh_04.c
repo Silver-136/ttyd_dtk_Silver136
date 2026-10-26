@@ -721,7 +721,7 @@ EVT_BEGIN(talk_sarary_repeat)
     ADD(LW(0), -5)
     ADD(LW(1), LW(3))
     ADD(LW(1), 10)
-    CALL(evt_msg_toge, 2, LW(0), LW(1), LW(2))
+    CALL(evt_msg_toge, MSG_TOGE_AT_POS, LW(0), LW(1), LW(2))
 #ifdef VERSION_G8ME01
     CALL(evt_msg_print, 0, STRING("stg6_rsh_165_01"), 0, STRING("サラリーマン"))
 #else
@@ -836,7 +836,7 @@ EVT_BEGIN(talk_papa_repeat)
 #endif
     ADD(LW(1), LW(3))
     ADD(LW(1), 15)
-    CALL(evt_msg_toge, 2, LW(0), LW(1), LW(2))
+    CALL(evt_msg_toge, MSG_TOGE_AT_POS, LW(0), LW(1), LW(2))
 #ifdef VERSION_G8ME01
     CALL(evt_msg_print, 0, STRING("stg6_rsh_85_01"), 0, STRING("ナリキンパパ"))
 #else
@@ -894,7 +894,7 @@ EVT_BEGIN(talk_mama_repeat)
 #endif
     ADD(LW(1), LW(3))
     ADD(LW(1), 10)
-    CALL(evt_msg_toge, 2, LW(0), LW(1), LW(2))
+    CALL(evt_msg_toge, MSG_TOGE_AT_POS, LW(0), LW(1), LW(2))
 #ifdef VERSION_G8ME01
     CALL(evt_msg_print, 0, STRING("stg6_rsh_85_02"), 0, STRING("ナリキンママ"))
 #else
@@ -1058,7 +1058,7 @@ EVT_BEGIN(talk_powan_repeat)
     ADD(LW(0), 15)
     ADD(LW(1), LW(3))
     SUBTRACT(LW(1), 4)
-    CALL(evt_msg_toge, 2, LW(0), LW(1), LW(2))
+    CALL(evt_msg_toge, MSG_TOGE_AT_POS, LW(0), LW(1), LW(2))
 #ifdef VERSION_G8ME01
     CALL(evt_msg_print, 0, STRING("stg6_rsh_165_02"), 0, STRING("ポワン探偵"))
 #else

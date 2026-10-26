@@ -221,7 +221,7 @@ EVT_BEGIN(bigdoor_event)
         CALL(evt_cam_shake, 4, FLOAT(0.009765625f), FLOAT(0.0f), 250)
     END_INLINE_EVENT
     WAIT_MS(1500)
-    CALL(evt_msg_toge, 1, 0, 0, 0)
+    CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
     CALL(evt_snd_sfxon, STRING("SFX_STG5_ELMOS_VOICE1"), 0)
     CALL(evt_msg_print, 0, STRING("stg5_dou_10"), 0, 0)
     SET_VALUE(LW(0), STRING("w_bero_3"))

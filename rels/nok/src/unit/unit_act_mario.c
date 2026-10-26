@@ -291,7 +291,7 @@ static EVT_BEGIN(battle_entry_event)
     CALL(btlevtcmd_ChangeFaceDirection, LW(3), 1)
     SPAWN_EVENT(_battle_event)
     WAIT_MS(2000)
-    CALL(evt_msg_print, 2, STRING("ep_39"), 0, -2)
+    CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("ep_39"), 0, -2)
     WAIT_MS(1000)
     CALL(btlevtcmd_onoff_battleflag, 1, BATTLE_FLAG_INTERRUPT_STOP)
     RETURN

@@ -828,7 +828,7 @@ EVT_BEGIN(ukishima_watari)
     WAIT_MS(1000)
     CALL(evt_nannpc_get_position, 99, LW(1), LW(2), LW(3))
     CALL(evt_nannpc_set_dir, 99, 90)
-    CALL(evt_msg_toge, 2, LW(1), LW(2), LW(3))
+    CALL(evt_msg_toge, MSG_TOGE_AT_POS, LW(1), LW(2), LW(3))
     CALL(evt_msg_print, 0, STRING("stg5_dou_14"), 0, 0)
     SET_VALUE(LW(0), 0)
     LOOP(100)
@@ -837,7 +837,7 @@ EVT_BEGIN(ukishima_watari)
     END_LOOP
     CALL(evt_nannpc_get_position, 98, LW(1), LW(2), LW(3))
     CALL(evt_nannpc_set_dir, 98, 90)
-    CALL(evt_msg_toge, 2, LW(1), LW(2), LW(3))
+    CALL(evt_msg_toge, MSG_TOGE_AT_POS, LW(1), LW(2), LW(3))
     CALL(evt_msg_print, 0, STRING("stg5_dou_15"), 0, 0)
     CALL(evt_snd_sfxon, STRING("SFX_STG5_KINOPIO_MOVE1_2"), 0)
     SET_VALUE(LW(5), 0)
@@ -1113,32 +1113,32 @@ EVT_BEGIN(_suifu_sakebu)
     LOOP(0)
         WAIT_MS(700)
         BEGIN_INLINE_EVENT
-            CALL(evt_msg_toge, 2, 115, 130, 0)
+            CALL(evt_msg_toge, MSG_TOGE_AT_POS, 115, 130, 0)
             CALL(evt_msg_print, 0, STRING("stg5_dou_13_01"), 0, 0)
         END_INLINE_EVENT
         WAIT_MS(600)
         BEGIN_INLINE_EVENT
-            CALL(evt_msg_toge, 2, 105, 80, 0)
+            CALL(evt_msg_toge, MSG_TOGE_AT_POS, 105, 80, 0)
             CALL(evt_msg_print, 0, STRING("stg5_dou_13_03"), 0, 0)
         END_INLINE_EVENT
         WAIT_MS(600)
         BEGIN_INLINE_EVENT
-            CALL(evt_msg_toge, 2, 123, 30, 0)
+            CALL(evt_msg_toge, MSG_TOGE_AT_POS, 123, 30, 0)
             CALL(evt_msg_print, 0, STRING("stg5_dou_13_05"), 0, 0)
         END_INLINE_EVENT
         WAIT_MS(500)
         BEGIN_INLINE_EVENT
-            CALL(evt_msg_toge, 2, 210, 135, 0)
+            CALL(evt_msg_toge, MSG_TOGE_AT_POS, 210, 135, 0)
             CALL(evt_msg_print, 0, STRING("stg5_dou_13_02"), 0, 0)
         END_INLINE_EVENT
         WAIT_MS(800)
         BEGIN_INLINE_EVENT
-            CALL(evt_msg_toge, 2, 225, 85, 0)
+            CALL(evt_msg_toge, MSG_TOGE_AT_POS, 225, 85, 0)
             CALL(evt_msg_print, 0, STRING("stg5_dou_13_06"), 0, 0)
         END_INLINE_EVENT
         WAIT_MS(400)
         BEGIN_INLINE_EVENT
-            CALL(evt_msg_toge, 2, 195, 37, 0)
+            CALL(evt_msg_toge, MSG_TOGE_AT_POS, 195, 37, 0)
             CALL(evt_msg_print, 0, STRING("stg5_dou_13_04"), 0, 0)
         END_INLINE_EVENT
     END_LOOP
@@ -1260,43 +1260,43 @@ EVT_BEGIN(torinoko_suifu)
     CALL(evt_npc_set_position, STRING("水夫E"), 0, -1000, 0)
     CALL(evt_seq_wait, SEQ_GAME)
     WAIT_MS(500)
-    CALL(evt_msg_toge, 2, -400, 60, 30)
+    CALL(evt_msg_toge, MSG_TOGE_AT_POS, -400, 60, 30)
     CALL(evt_msg_print, 0, STRING("stg5_dou_11"), 0, 0)
     CALL(evt_cam3d_evt_set, 160, 180, 559, 160, 85, 17, 500, EASING_SINE_IN_OUT)
     BEGIN_INLINE_EVENT
         WAIT_MS(1800)
-        CALL(evt_msg_toge, 2, 115, 130, 0)
+        CALL(evt_msg_toge, MSG_TOGE_AT_POS, 115, 130, 0)
         CALL(evt_msg_print, 0, STRING("small_00"), 0, 0)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
         WAIT_MS(1200)
-        CALL(evt_msg_toge, 2, 105, 80, 0)
+        CALL(evt_msg_toge, MSG_TOGE_AT_POS, 105, 80, 0)
         CALL(evt_msg_print, 0, STRING("small_01"), 0, 0)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
         WAIT_MS(900)
-        CALL(evt_msg_toge, 2, 123, 30, 0)
+        CALL(evt_msg_toge, MSG_TOGE_AT_POS, 123, 30, 0)
         CALL(evt_msg_print, 0, STRING("small_02"), 0, 0)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
         WAIT_MS(600)
-        CALL(evt_msg_toge, 2, 210, 135, 0)
+        CALL(evt_msg_toge, MSG_TOGE_AT_POS, 210, 135, 0)
         CALL(evt_msg_print, 0, STRING("small_03"), 0, 0)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
         WAIT_MS(1500)
-        CALL(evt_msg_toge, 2, 225, 85, 0)
+        CALL(evt_msg_toge, MSG_TOGE_AT_POS, 225, 85, 0)
         CALL(evt_msg_print, 0, STRING("small_04"), 0, 0)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
         WAIT_MS(2100)
-        CALL(evt_msg_toge, 2, 195, 37, 0)
+        CALL(evt_msg_toge, MSG_TOGE_AT_POS, 195, 37, 0)
         CALL(evt_msg_print, 0, STRING("small_05"), 0, 0)
     END_INLINE_EVENT
     WAIT_MS(4000)
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
     WAIT_MS(500)
-    CALL(evt_msg_toge, 2, -400, 60, 30)
+    CALL(evt_msg_toge, MSG_TOGE_AT_POS, -400, 60, 30)
     CALL(evt_msg_print, 0, STRING("stg5_dou_13"), 0, 0)
     CALL(evt_mario_key_onoff, 1)
     SET_VALUE(GSWF(2982), 1)

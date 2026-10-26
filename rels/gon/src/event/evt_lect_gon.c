@@ -551,7 +551,7 @@ EVT_BEGIN(slit_majin_lecture)
     END_SIBLING_EVENT
     CALL(evt_npc_set_anim, STRING("ペラ魔人"), STRING("P_1"))
     WAIT_MS(200)
-    CALL(evt_msg_toge, 1, 0, 0, 0)
+    CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
     CALL(evt_msg_print, 0, STRING("stg1_gon_12_12"), 0, STRING("ペラ魔人"))
     CALL(evt_mario_set_pose, STRING("M_N_H"))
     LOOP(4)
@@ -560,7 +560,7 @@ EVT_BEGIN(slit_majin_lecture)
         CALL(evtflash)
     END_LOOP
     CALL(evt_mario_set_pose, STRING("M_S_1"))
-    CALL(evt_msg_toge, 1, 0, 0, 0)
+    CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
     CALL(evt_msg_print, 0, STRING("stg1_gon_12_13"), 0, STRING("ペラ魔人"))
     CALL(evt_msg_print_add, 0, STRING("stg1_gon_12_14"))
     LOOP(0)
@@ -648,11 +648,11 @@ EVT_BEGIN(slit_majin_lecture)
             IF_INT_EQUAL(LW(11), 1)
                 BREAK_LOOP
                 ELSE
-                CALL(evt_msg_toge, 1, 0, 0, 0)
+                CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
                 CALL(evt_msg_print, 0, STRING("stg1_gon_12_15_1"), 0, STRING("ペラ魔人"))
             END_IF
         END_LOOP
-        CALL(evt_msg_toge, 1, 0, 0, 0)
+        CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
         CALL(evt_msg_print, 0, STRING("stg1_gon_12_15"), 0, STRING("ペラ魔人"))
         CALL(evt_msg_select, 0, STRING("stg1_gon_12_15_yn"))
         IF_INT_EQUAL(LW(0), 0)

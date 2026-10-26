@@ -111,7 +111,7 @@ EVT_BEGIN(chibitoge_nakama)
         ELSE
         CALL(evt_msg_print_party, STRING("stg2_mri_f01_05"))
         CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_TALK_POSE)
-        CALL(evt_msg_toge, 1, 0, 0, 0)
+        CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
         CALL(evt_msg_print, 0, STRING("stg2_mri_f01_06"), 0, 0)
         CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_TALK_POSE)
         CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))

@@ -151,7 +151,7 @@ EVT_BEGIN(name_seikai)
     CALL(evt_mario_set_pose, STRING("M_S_1"))
     SET_VALUE(GF(0), 0)
     BEGIN_INLINE_EVENT
-        CALL(evt_msg_toge, 1, 0, 0, 0)
+        CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
         CALL(evt_msg_print, 0, STRING("stg4_gra_15"), 0, STRING("にせマリオ"))
         CALL(evt_msg_continue)
         SET_VALUE(GF(0), 1)

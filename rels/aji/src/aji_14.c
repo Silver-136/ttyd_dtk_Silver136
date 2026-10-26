@@ -321,7 +321,7 @@ static EVT_BEGIN(evt_boss)
         CALL(evt_npc_set_position, STRING("幹部"), 0, 70, 0)
         CALL(evt_npc_jump_position_nohit, STRING("幹部"), -200, 200, 100, 1000, FLOAT(80.0f))
     END_INLINE_EVENT
-    CALL(evt_msg_toge, 1, 0, 0, 0)
+    CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
     CALL(evt_msg_print, 0, STRING("stg7_aji_42"), 0, STRING("ロボット"))
     CALL(evt_fade_set_mapchange_type, 1, 17, 900, 16, 900)
     BEGIN_INLINE_EVENT

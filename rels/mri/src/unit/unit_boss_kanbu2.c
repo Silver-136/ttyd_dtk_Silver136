@@ -169,7 +169,7 @@ static EVT_BEGIN(damage_event)
 EVT_END()
 
 static EVT_BEGIN(dead_event)
-    CALL(evt_msg_print, 1, STRING("このあと\nまぐなむばってんだーに　のるよてい<key>"), 0, 0)
+    CALL(evt_msg_print, MSG_PRINT_DIRECT_TEXT, STRING("このあと\nまぐなむばってんだーに　のるよてい<key>"), 0, 0)
     CALL(btlevtcmd_JumpSetting, UNIT_ID_SELF, 0, FLOAT(5.0f), FLOAT(0.5f))
     CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, 300, 0, 0, 0, -1)
     CALL(btlevtcmd_KillUnit, UNIT_ID_SELF, 0)

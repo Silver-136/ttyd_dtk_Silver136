@@ -721,7 +721,7 @@ EVT_BEGIN(majyorin_evt_main)
         SET_VALUE(GF(0), 0)
     END_INLINE_EVENT
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_WITCH1"))
-    CALL(evt_msg_toge, 1, 0, 0, 0)
+    CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
     CALL(evt_msg_print, 0, STRING("stg8_las_12"), 0, STRING("マジョリン"))
     CALL(evt_mario_set_dir, 90, 300, 0)
     CALL(evt_cam3d_evt_set, 765, 102, 340, 765, 43, 9, 500, EASING_SINE_IN_OUT)

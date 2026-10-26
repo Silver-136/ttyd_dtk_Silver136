@@ -1041,7 +1041,7 @@ EVT_BEGIN(evt_tougi)
     CALL(evt_cam3d_evt_set, 80, 67, 225, 80, 172, -161, 0, EASING_SINE_IN_OUT)
     WAIT_FRAMES(1)
     WAIT_MS(1000)
-    CALL(evt_msg_toge, 1, 0, 0, 0)
+    CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
     CALL(evt_msg_print_party, PTR("stg3_tou_32"))
     WAIT_MS(300)
     CALL(evt_fade_set_mapchange_type, 0, 2, 500, 1, 500)
@@ -2313,22 +2313,22 @@ EVT_BEGIN(evt_shinemon_opening)
     END_INLINE_EVENT
     WAIT_MS(500)
     BEGIN_INLINE_EVENT
-        CALL(evt_msg_toge, 2, -426, 30, -195)
+        CALL(evt_msg_toge, MSG_TOGE_AT_POS, -426, 30, -195)
         CALL(evt_msg_print, 0, STRING(("stg3_tou_258_01")), 0, 0)
     END_INLINE_EVENT
     WAIT_MS(800)
     BEGIN_INLINE_EVENT
-        CALL(evt_msg_toge, 2, -379, 30, 133)
+        CALL(evt_msg_toge, MSG_TOGE_AT_POS, -379, 30, 133)
         CALL(evt_msg_print, 0, STRING(("stg3_tou_258_02")), 0, 0)
     END_INLINE_EVENT
     WAIT_MS(800)
     BEGIN_INLINE_EVENT
-        CALL(evt_msg_toge, 2, -293, 60, -180)
+        CALL(evt_msg_toge, MSG_TOGE_AT_POS, -293, 60, -180)
         CALL(evt_msg_print, 0, STRING(("stg3_tou_258_03")), 0, 0)
     END_INLINE_EVENT
     WAIT_MS(800)
     BEGIN_INLINE_EVENT
-        CALL(evt_msg_toge, 2, -272, 90, 200)
+        CALL(evt_msg_toge, MSG_TOGE_AT_POS, -272, 90, 200)
         CALL(evt_msg_print, 0, STRING(("stg3_tou_258_04")), 0, 0)
     END_INLINE_EVENT
     WAIT_MS(800)
@@ -2377,17 +2377,17 @@ EVT_BEGIN(evt_shinemon_opening)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
         WAIT_MS(1000)
-        CALL(evt_msg_toge, 2, 426, 30, -195)
+        CALL(evt_msg_toge, MSG_TOGE_AT_POS, 426, 30, -195)
         CALL(evt_msg_print, 0, STRING(("stg3_tou_261_01")), 0, 0)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
         WAIT_MS(3000)
-        CALL(evt_msg_toge, 2, 379, 30, 133)
+        CALL(evt_msg_toge, MSG_TOGE_AT_POS, 379, 30, 133)
         CALL(evt_msg_print, 0, STRING(("stg3_tou_261_02")), 0, 0)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
         WAIT_MS(4000)
-        CALL(evt_msg_toge, 2, 293, 30, -180)
+        CALL(evt_msg_toge, MSG_TOGE_AT_POS, 293, 30, -180)
         CALL(evt_msg_print, 0, STRING(("stg3_tou_261_03")), 0, 0)
     END_INLINE_EVENT
     WAIT_MS(3000)
@@ -2530,27 +2530,27 @@ EVT_BEGIN(evt_champ_opening)
     CALL(evt_cam3d_evt_set, 0, 328, 1219, 0, 130, 145, 3000, EASING_SINE_IN_OUT)
     BEGIN_INLINE_EVENT
         WAIT_MS(2000)
-        CALL(evt_msg_toge, 2, -200, 30, -200)
+        CALL(evt_msg_toge, MSG_TOGE_AT_POS, -200, 30, -200)
         CALL(evt_msg_print, 0, STRING(("stg3_tou_425")), 0, 0)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
         WAIT_MS(3000)
-        CALL(evt_msg_toge, 2, 200, 30, 200)
+        CALL(evt_msg_toge, MSG_TOGE_AT_POS, 200, 30, 200)
         CALL(evt_msg_print, 0, STRING(("stg3_tou_426")), 0, 0)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
         WAIT_MS(4000)
-        CALL(evt_msg_toge, 2, -300, 200, -400)
+        CALL(evt_msg_toge, MSG_TOGE_AT_POS, -300, 200, -400)
         CALL(evt_msg_print, 0, STRING(("stg3_tou_427")), 0, 0)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
         WAIT_MS(4000)
-        CALL(evt_msg_toge, 2, 200, 200, -300)
+        CALL(evt_msg_toge, MSG_TOGE_AT_POS, 200, 200, -300)
         CALL(evt_msg_print, 0, STRING(("stg3_tou_428")), 0, 0)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
         WAIT_MS(5000)
-        CALL(evt_msg_toge, 2, 200, 30, 133)
+        CALL(evt_msg_toge, MSG_TOGE_AT_POS, 200, 30, 133)
         CALL(evt_msg_print, 0, STRING(("stg3_tou_429")), 0, 0)
     END_INLINE_EVENT
     WAIT_MS(7000)
@@ -2592,27 +2592,27 @@ EVT_BEGIN(evt_champ_opening)
         CALL(evt_party_stop, 0)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
-        CALL(evt_msg_toge, 2, -426, 30, -195)
+        CALL(evt_msg_toge, MSG_TOGE_AT_POS, -426, 30, -195)
         CALL(evt_msg_print, 0, STRING(("stg3_tou_430_01")), 0, 0)
     END_INLINE_EVENT
     WAIT_MS(500)
     BEGIN_INLINE_EVENT
-        CALL(evt_msg_toge, 2, -379, 30, 233)
+        CALL(evt_msg_toge, MSG_TOGE_AT_POS, -379, 30, 233)
         CALL(evt_msg_print, 0, STRING(("stg3_tou_430_02")), 0, 0)
     END_INLINE_EVENT
     WAIT_MS(500)
     BEGIN_INLINE_EVENT
-        CALL(evt_msg_toge, 2, -293, 30, -180)
+        CALL(evt_msg_toge, MSG_TOGE_AT_POS, -293, 30, -180)
         CALL(evt_msg_print, 0, STRING(("stg3_tou_430_03")), 0, 0)
     END_INLINE_EVENT
     WAIT_MS(500)
     BEGIN_INLINE_EVENT
-        CALL(evt_msg_toge, 2, -272, 30, 100)
+        CALL(evt_msg_toge, MSG_TOGE_AT_POS, -272, 30, 100)
         CALL(evt_msg_print, 0, STRING(("stg3_tou_430_04")), 0, 0)
     END_INLINE_EVENT
     WAIT_MS(1000)
     BEGIN_INLINE_EVENT
-        CALL(evt_msg_toge, 2, -150, 100, -200)
+        CALL(evt_msg_toge, MSG_TOGE_AT_POS, -150, 100, -200)
         CALL(evt_msg_print, 0, STRING(("stg3_tou_430_04")), 0, 0)
     END_INLINE_EVENT
     WAIT_MS(1000)
@@ -2680,22 +2680,22 @@ EVT_BEGIN(evt_champ_opening_re)
     WAIT_MS(500)
     BEGIN_INLINE_EVENT
         WAIT_MS(1000)
-        CALL(evt_msg_toge, 2, 426, 30, -195)
+        CALL(evt_msg_toge, MSG_TOGE_AT_POS, 426, 30, -195)
         CALL(evt_msg_print, 0, STRING(("stg3_tou_re_089")), 0, 0)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
         WAIT_MS(3000)
-        CALL(evt_msg_toge, 2, 379, 30, 133)
+        CALL(evt_msg_toge, MSG_TOGE_AT_POS, 379, 30, 133)
         CALL(evt_msg_print, 0, STRING(("stg3_tou_re_090")), 0, 0)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
         WAIT_MS(4000)
-        CALL(evt_msg_toge, 2, 293, 30, -180)
+        CALL(evt_msg_toge, MSG_TOGE_AT_POS, 293, 30, -180)
         CALL(evt_msg_print, 0, STRING(("stg3_tou_re_091")), 0, 0)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
         WAIT_MS(5000)
-        CALL(evt_msg_toge, 2, 200, 30, 133)
+        CALL(evt_msg_toge, MSG_TOGE_AT_POS, 200, 30, 133)
         CALL(evt_msg_print, 0, STRING(("stg3_tou_re_092")), 0, 0)
     END_INLINE_EVENT
     WAIT_MS(3000)
@@ -2743,27 +2743,27 @@ EVT_BEGIN(evt_champ_opening_re)
     CALL(evt_cam3d_evt_set, 0, 328, 1219, 0, 130, 145, 3000, EASING_SINE_IN_OUT)
     BEGIN_INLINE_EVENT
         WAIT_MS(2000)
-        CALL(evt_msg_toge, 2, -200, 30, -200)
+        CALL(evt_msg_toge, MSG_TOGE_AT_POS, -200, 30, -200)
         CALL(evt_msg_print, 0, STRING(("stg3_tou_re_098")), 0, 0)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
         WAIT_MS(3000)
-        CALL(evt_msg_toge, 2, 200, 30, 200)
+        CALL(evt_msg_toge, MSG_TOGE_AT_POS, 200, 30, 200)
         CALL(evt_msg_print, 0, STRING(("stg3_tou_re_099")), 0, 0)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
         WAIT_MS(4000)
-        CALL(evt_msg_toge, 2, -300, 200, -400)
+        CALL(evt_msg_toge, MSG_TOGE_AT_POS, -300, 200, -400)
         CALL(evt_msg_print, 0, STRING(("stg3_tou_re_100")), 0, 0)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
         WAIT_MS(4000)
-        CALL(evt_msg_toge, 2, 200, 200, -300)
+        CALL(evt_msg_toge, MSG_TOGE_AT_POS, 200, 200, -300)
         CALL(evt_msg_print, 0, STRING(("stg3_tou_re_101")), 0, 0)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
         WAIT_MS(5000)
-        CALL(evt_msg_toge, 2, 200, 30, 133)
+        CALL(evt_msg_toge, MSG_TOGE_AT_POS, 200, 30, 133)
         CALL(evt_msg_print, 0, STRING(("stg3_tou_re_102")), 0, 0)
     END_INLINE_EVENT
     WAIT_MS(7000)
@@ -2803,27 +2803,27 @@ EVT_BEGIN(evt_champ_opening_re)
         CALL(evt_party_move_pos2, 0, -130, -25, FLOAT(60.0f))
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
-        CALL(evt_msg_toge, 2, -426, 30, -195)
+        CALL(evt_msg_toge, MSG_TOGE_AT_POS, -426, 30, -195)
         CALL(evt_msg_print, 0, STRING(("stg3_tou_re_110")), 0, 0)
     END_INLINE_EVENT
     WAIT_MS(500)
     BEGIN_INLINE_EVENT
-        CALL(evt_msg_toge, 2, -379, 30, 233)
+        CALL(evt_msg_toge, MSG_TOGE_AT_POS, -379, 30, 233)
         CALL(evt_msg_print, 0, STRING(("stg3_tou_re_111")), 0, 0)
     END_INLINE_EVENT
     WAIT_MS(500)
     BEGIN_INLINE_EVENT
-        CALL(evt_msg_toge, 2, -293, 60, -180)
+        CALL(evt_msg_toge, MSG_TOGE_AT_POS, -293, 60, -180)
         CALL(evt_msg_print, 0, STRING(("stg3_tou_re_112")), 0, 0)
     END_INLINE_EVENT
     WAIT_MS(500)
     BEGIN_INLINE_EVENT
-        CALL(evt_msg_toge, 2, -272, 90, 300)
+        CALL(evt_msg_toge, MSG_TOGE_AT_POS, -272, 90, 300)
         CALL(evt_msg_print, 0, STRING(("stg3_tou_re_113")), 0, 0)
     END_INLINE_EVENT
     WAIT_MS(1000)
     BEGIN_INLINE_EVENT
-        CALL(evt_msg_toge, 2, -150, 100, -200)
+        CALL(evt_msg_toge, MSG_TOGE_AT_POS, -150, 100, -200)
         CALL(evt_msg_print, 0, STRING(("stg3_tou_re_114")), 0, 0)
     END_INLINE_EVENT
     WAIT_MS(1000)
@@ -2910,27 +2910,27 @@ EVT_BEGIN(evt_champ_win)
         SET_VALUE(LW(11), STRING(("stg3_tou_re_139")))
     END_IF
     BEGIN_INLINE_EVENT
-        CALL(evt_msg_toge, 2, -300, 300, -195)
+        CALL(evt_msg_toge, MSG_TOGE_AT_POS, -300, 300, -195)
         CALL(evt_msg_print, 0, LW(15), 0, 0)
     END_INLINE_EVENT
     WAIT_MS(800)
     BEGIN_INLINE_EVENT
-        CALL(evt_msg_toge, 2, -150, 100, -133)
+        CALL(evt_msg_toge, MSG_TOGE_AT_POS, -150, 100, -133)
         CALL(evt_msg_print, 0, LW(14), 0, 0)
     END_INLINE_EVENT
     WAIT_MS(800)
     BEGIN_INLINE_EVENT
-        CALL(evt_msg_toge, 2, 0, 300, -180)
+        CALL(evt_msg_toge, MSG_TOGE_AT_POS, 0, 300, -180)
         CALL(evt_msg_print, 0, LW(13), 0, 0)
     END_INLINE_EVENT
     WAIT_MS(800)
     BEGIN_INLINE_EVENT
-        CALL(evt_msg_toge, 2, 150, 30, -200)
+        CALL(evt_msg_toge, MSG_TOGE_AT_POS, 150, 30, -200)
         CALL(evt_msg_print, 0, LW(12), 0, 0)
     END_INLINE_EVENT
     WAIT_MS(800)
     BEGIN_INLINE_EVENT
-        CALL(evt_msg_toge, 2, 300, 200, -200)
+        CALL(evt_msg_toge, MSG_TOGE_AT_POS, 300, 200, -200)
         CALL(evt_msg_print, 0, LW(11), 0, 0)
     END_INLINE_EVENT
     WAIT_MS(1000)
@@ -3479,7 +3479,7 @@ static EVT_BEGIN(evt_champion)
     WAIT_MS(500)
     BEGIN_INLINE_EVENT
         WAIT_MS(1000)
-        CALL(evt_msg_toge, 2, 426, 30, -195)
+        CALL(evt_msg_toge, MSG_TOGE_AT_POS, 426, 30, -195)
 #ifdef VERSION_G8ME01
         CALL(evt_msg_print, 0, STRING("stg3_tou_413_01"), 0, 0)
 #else
@@ -3488,7 +3488,7 @@ static EVT_BEGIN(evt_champion)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
         WAIT_MS(3000)
-        CALL(evt_msg_toge, 2, 379, 30, 133)
+        CALL(evt_msg_toge, MSG_TOGE_AT_POS, 379, 30, 133)
 #ifdef VERSION_G8ME01
         CALL(evt_msg_print, 0, STRING("stg3_tou_413_02"), 0, 0)
 #else
@@ -3497,7 +3497,7 @@ static EVT_BEGIN(evt_champion)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
         WAIT_MS(4000)
-        CALL(evt_msg_toge, 2, 293, 30, -180)
+        CALL(evt_msg_toge, MSG_TOGE_AT_POS, 293, 30, -180)
 #ifdef VERSION_G8ME01
         CALL(evt_msg_print, 0, STRING("stg3_tou_413_03"), 0, 0)
 #else
@@ -3506,7 +3506,7 @@ static EVT_BEGIN(evt_champion)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
         WAIT_MS(5000)
-        CALL(evt_msg_toge, 2, 200, 30, 133)
+        CALL(evt_msg_toge, MSG_TOGE_AT_POS, 200, 30, 133)
 #ifdef VERSION_G8ME01
         CALL(evt_msg_print, 0, STRING("stg3_tou_413_04"), 0, 0)
 #else
@@ -4285,7 +4285,7 @@ static EVT_BEGIN(evt_boss)
     WAIT_MS(1000)
     CALL(evt_cam3d_evt_set, 0, 305, 384, 0, 325, -15, 1000, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
-    CALL(evt_msg_toge, 1, 0, 0, 0)
+    CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
 #ifdef VERSION_G8ME01
     CALL(evt_msg_print_party, STRING("stg3_tou_464"))
 #else

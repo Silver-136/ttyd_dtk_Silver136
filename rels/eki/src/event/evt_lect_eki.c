@@ -487,7 +487,7 @@ EVT_BEGIN(boots_lv3_juyoitem_lecture)
     CALL(evt_msg_print, 0, STRING("lecture_u_boots_04"), 0, STRING("キノピコ"))
     CALL(evt_msg_print_add, 0, STRING("lecture_u_boots_05"))
     LOOP(0)
-        CALL(evt_msg_toge, 1, 0, 0, 0)
+        CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
         CALL(evt_msg_print, 0, STRING("lecture_u_boots_06"), 0, 0)
         CALL(x_flag_set, 1, 1)
         BEGIN_INLINE_EVENT

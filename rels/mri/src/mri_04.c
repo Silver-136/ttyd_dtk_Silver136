@@ -86,7 +86,7 @@ static EVT_BEGIN(chibitoge_init)
 EVT_END()
 
 static EVT_BEGIN(chibitoge_talk)
-    CALL(evt_msg_toge, 1, 0, 0, 0)
+    CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
     SET_VALUE(GF(0), 1)
     BEGIN_INLINE_EVENT

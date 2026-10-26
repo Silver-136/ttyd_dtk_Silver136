@@ -749,7 +749,7 @@ EVT_BEGIN(evt_saisyo_after)
 #ifdef VERSION_G8ME01
             CASE_DEFAULT
             CALL(evt_msg_fmt_int, 0, LW(14), STRING("stg3_tou_91"), 3)
-            CALL(evt_msg_print, 1, LW(14), 0, 0)
+            CALL(evt_msg_print, MSG_PRINT_DIRECT_TEXT, LW(14), 0, 0)
         END_SWITCH
 #endif
         CALL_CHILD(PTR(evt_tou_ranking_msg))
@@ -787,7 +787,7 @@ EVT_BEGIN(evt_saisyo_after)
 #ifdef VERSION_G8ME01
             CASE_DEFAULT
             CALL(evt_msg_fmt_int, 0, LW(14), STRING("stg3_tou_93_3"), 1)
-            CALL(evt_msg_print, 1, LW(14), 0, 0)
+            CALL(evt_msg_print, MSG_PRINT_DIRECT_TEXT, LW(14), 0, 0)
         END_SWITCH
 #endif
         CALL_CHILD(PTR(evt_tou_ranking_msg))
@@ -926,7 +926,7 @@ EVT_BEGIN(evt_saisyo_after_re)
 #ifdef VERSION_G8ME01
             CASE_DEFAULT
             CALL(evt_msg_fmt_int, 0, LW(14), STRING("stg3_tou_re_030"), 3)
-            CALL(evt_msg_print, 1, LW(14), 0, 0)
+            CALL(evt_msg_print, MSG_PRINT_DIRECT_TEXT, LW(14), 0, 0)
         END_SWITCH
 #endif
         CALL_CHILD(PTR(evt_tou_ranking_msg))
@@ -960,7 +960,7 @@ EVT_BEGIN(evt_saisyo_after_re)
 #ifdef VERSION_G8ME01
             CASE_DEFAULT
             CALL(evt_msg_fmt_int, 0, LW(14), STRING("stg3_tou_re_034"), 1)
-            CALL(evt_msg_print, 1, LW(14), 0, 0)
+            CALL(evt_msg_print, MSG_PRINT_DIRECT_TEXT, LW(14), 0, 0)
         END_SWITCH
 #endif
         CALL_CHILD(PTR(evt_tou_ranking_msg))
@@ -1163,7 +1163,7 @@ static EVT_BEGIN(evt_1st_leagu)
 #ifdef VERSION_G8ME01
         CASE_DEFAULT
         CALL(evt_msg_fmt_int, 0, LW(14), STRING("stg3_tou_179_01"), LW(10))
-        CALL(evt_msg_print, 1, LW(14), 0, STRING("キノシコワ"))
+        CALL(evt_msg_print, MSG_PRINT_DIRECT_TEXT, LW(14), 0, STRING("キノシコワ"))
     END_SWITCH
 #endif
     CALL_CHILD(PTR(evt_tou_ranking_msg))
@@ -1237,7 +1237,7 @@ EVT_BEGIN(evt_1st_leagu_re)
 #ifdef VERSION_G8ME01
         CASE_DEFAULT
         CALL(evt_msg_fmt_int, 0, LW(14), STRING("stg3_tou_179_01"), LW(10))
-        CALL(evt_msg_print, 1, LW(14), 0, 0)
+        CALL(evt_msg_print, MSG_PRINT_DIRECT_TEXT, LW(14), 0, 0)
     END_SWITCH
 #endif
     CALL_CHILD(PTR(evt_tou_ranking_msg))
@@ -1458,7 +1458,7 @@ EVT_BEGIN(evt_match_make_sub)
     CALL_CHILD(PTR(evt_tou_monitor_on))
     WAIT_MS(500)
     CALL(evt_mapobj_get_position, STRING("gamen"), LW(0), LW(1), LW(2))
-    CALL(evt_msg_toge, 2, LW(0), LW(1), LW(2))
+    CALL(evt_msg_toge, MSG_TOGE_AT_POS, LW(0), LW(1), LW(2))
     CALL(evt_msg_print, 0, STRING("stg3_tou_69"), 0, STRING("ガンス"))
     WAIT_MS(300)
     SET_VALUE(GSW_GLITZ_PIT_CONDITION, 43)
@@ -1506,7 +1506,7 @@ EVT_BEGIN(evt_match_make)
         IF_INT_EQUAL(GSWF_GLITZ_PIT_MATCH_RESERVED, 1)
             CALL(evt_tou_get_fighter_info, GSW_GLITZ_PIT_OPPONENT, LW(0), LW(1))
             CALL(evt_tou_get_rule_msg2, GSW_GLITZ_PIT_CONDITION, LW(2))
-            CALL(evt_msg_print_add, 1, STRING("<scrl_auto><once_stop>"))
+            CALL(evt_msg_print_add, MSG_PRINT_DIRECT_TEXT, STRING("<scrl_auto><once_stop>"))
             CALL(evt_msg_print_add_insert, 0, STRING("stg3_tou_104_01"), LW(0), LW(2))
             ELSE
             CALL(evt_msg_continue)
