@@ -806,8 +806,8 @@ USER_FUNC(evt_mobj_timerswitch) {
         mobjSetPosition(names[i], x[i], y[i], z[i]);
         mobjs[i]->mainFunc = mobj_timerswitch;
         mobjs[i]->event = val;
-        mobjs[i]->flags |= 0x44;
-        mobjs[i]->flags |= 0xa10000;
+        mobjs[i]->flags |= (MOBJ_FLAG_UPDATE_MTX | MOBJ_FLAG_GRAVITY);
+        mobjs[i]->flags |= (MOBJ_FLAG_HIT_PARTY | MOBJ_FLAG_HIT_STAND | MOBJ_FLAG_HIT_HAMMER);
         mobjs[i]->flagVar = arg;
         mobjs[i]->state = 0;
         mobjs[i]->typeWork = time;
@@ -2943,7 +2943,7 @@ s32 mobj_breaking_floor(MapObjectEntry* mobj) {
                 mobjRunEvent(mobj, (s32*)mobj->event);
             }
             if (mobj->hitObj[0].hitObject) {
-                mobj->hitObj[0].hitObject->flags |= 1;
+                mobj->hitObj[0].hitObject->flags |= HIT_FLAG_OFF;
             }
             mobj->flags |= MOBJ_FLAG_NO_SHADOW;
             evtSetValue(NULL, mobj->flagVar, 1);
@@ -3153,7 +3153,7 @@ s32 mobj_kururing_floor(MapObjectEntry* mobj) {
             psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MOBJ_KURURIN_FLOOR_LEAP1), &mobj->position);
             mobj->state = 1;
             item = itemNameToPtr(mobj->name);
-            if (item == NULL || !(((ItemEntry*)item)->flags & 1)) {
+            if (item == NULL || !(((ItemEntry*)item)->flags & ITEM_FLAG_ACTIVE)) {
                 if (itemEntry(mobj->position.x, 30.0f + mobj->position.y, mobj->position.z, mobj->name, ITEM_STAR_PIECE, ITEM_TYPE_SCATTER_NO_PICKUP, mobj->flagVar, NULL)) {
                     item = itemNameToPtr(mobj->name);
                     itemFlagOn(item, 0x10);
@@ -3194,7 +3194,7 @@ s32 mobj_kururing_floor(MapObjectEntry* mobj) {
         }
         p = partyGetPtr(marioGetPartyId());
 #ifdef VERSION_G8ME01
-        if (p && !(((PartyEntry*)p)->flags & 0x100)) {
+        if (p && !(((PartyEntry*)p)->flags & PARTY_FLAG_IS_BEING_USED)) {
 #else
         if (p) {
 #endif
@@ -3204,7 +3204,7 @@ s32 mobj_kururing_floor(MapObjectEntry* mobj) {
         }
         p = partyGetPtr(marioGetExtraPartyId());
 #ifdef VERSION_G8ME01
-        if (p && !(((PartyEntry*)p)->flags & 0x100)) {
+        if (p && !(((PartyEntry*)p)->flags & PARTY_FLAG_IS_BEING_USED)) {
 #else
         if (p) {
 #endif
@@ -3341,7 +3341,7 @@ s32 mobj_koopa_ojama_blk_evt(MapObjectEntry* mobj) {
                 npcKoopaModeMobjBoundDeadCheck(mobj->hitObj[0].hitObject);
             }
             if (mobj->hitObj[0].hitObject) {
-                mobj->hitObj[0].hitObject->flags |= 1;
+                mobj->hitObj[0].hitObject->flags |= HIT_FLAG_OFF;
             }
             mobj->flags |= MOBJ_FLAG_NO_SHADOW;
             kpaAddScore(kpaMutekiCheck() ? 500 : 400);
@@ -3487,7 +3487,7 @@ s32 mobj_koopa_brickblk(MapObjectEntry* mobj) {
                 npcKoopaModeMobjBoundDeadCheck(mobj->hitObj[0].hitObject);
             }
             if (mobj->hitObj[0].hitObject) {
-                mobj->hitObj[0].hitObject->flags |= 1;
+                mobj->hitObj[0].hitObject->flags |= HIT_FLAG_OFF;
             }
             mobj->flags |= MOBJ_FLAG_NO_SHADOW;
             kpaAddScore(kpaMutekiCheck() ? 500 : 400);
@@ -3658,7 +3658,7 @@ s32 mobj_koopa_badgeblk(MapObjectEntry* mobj) {
                 npcKoopaModeMobjBoundDeadCheck(mobj->hitObj[0].hitObject);
             }
             if (mobj->hitObj[0].hitObject) {
-                mobj->hitObj[0].hitObject->flags |= 1;
+                mobj->hitObj[0].hitObject->flags |= HIT_FLAG_OFF;
             }
             mobj->flags |= MOBJ_FLAG_NO_SHADOW;
             mobj->state++;
@@ -3784,7 +3784,7 @@ s32 mobj_koopa_blk(MapObjectEntry* mobj) {
                 npcKoopaModeMobjBoundDeadCheck(mobj->hitObj[0].hitObject);
             }
             if (mobj->hitObj[0].hitObject) {
-                mobj->hitObj[0].hitObject->flags |= 1;
+                mobj->hitObj[0].hitObject->flags |= HIT_FLAG_OFF;
             }
             mobj->flags |= MOBJ_FLAG_NO_SHADOW;
             mobj->state = 10;
@@ -3859,7 +3859,7 @@ s32 mobj_koopa_dokan_evt(MapObjectEntry* mobj) {
                 npcKoopaModeMobjBoundDeadCheck(mobj->hitObj[0].hitObject);
             }
             if (mobj->hitObj[0].hitObject) {
-                mobj->hitObj[0].hitObject->flags |= 1;
+                mobj->hitObj[0].hitObject->flags |= HIT_FLAG_OFF;
             }
             mobj->flags |= MOBJ_FLAG_NO_SHADOW;
             kpaAddScore(kpaMutekiCheck() ? 500 : 400);
@@ -3991,7 +3991,7 @@ s32 mobj_koopa_sango_evt(MapObjectEntry* mobj) {
                 npcKoopaModeMobjBoundDeadCheck(mobj->hitObj[0].hitObject);
             }
             if (mobj->hitObj[0].hitObject) {
-                mobj->hitObj[0].hitObject->flags |= 1;
+                mobj->hitObj[0].hitObject->flags |= HIT_FLAG_OFF;
             }
             mobj->flags |= MOBJ_FLAG_NO_SHADOW;
             kpaAddScore(kpaMutekiCheck() ? 500 : 400);
@@ -4127,7 +4127,7 @@ s32 mobj_koopa_fireber_dodai_evt(MapObjectEntry* mobj) {
         mobjRunEvent(mobj, (s32*)mobj->event);
         evtSetValue(NULL, mobj->flagVar, 1);
         if (mobj->hitObj[0].hitObject) {
-            mobj->hitObj[0].hitObject->flags |= 1;
+            mobj->hitObj[0].hitObject->flags |= HIT_FLAG_OFF;
         }
         mobj->flags |= MOBJ_FLAG_NO_SHADOW;
         kpaAddScore(kpaMutekiCheck() ? 500 : 400);
@@ -4701,7 +4701,7 @@ USER_FUNC(evt_mobj_koopa_pole) {
     hata->state = 0;
     strcpy(hata->linkedName, name);
     if (hata->hitObj[0].hitObject) {
-        hata->hitObj[0].hitObject->flags |= 1;
+        hata->hitObj[0].hitObject->flags |= HIT_FLAG_OFF;
     }
     return EVT_RETURN_DONE;
 }
