@@ -873,7 +873,7 @@ static EVT_BEGIN(attack_event)
         IF_INT_NOT_EQUAL(LW(3), -1)
             CALL(btlevtcmd_CheckActStatus, LW(3), LW(2))
             IF_INT_NOT_EQUAL(LW(2), 0)
-                CALL(btlevtcmd_CheckStatus, LW(3), 5, LW(2))
+                CALL(btlevtcmd_CheckStatus, LW(3), STATUS_CONFUSE, LW(2))
                 IF_INT_EQUAL(LW(2), 0)
                     ADD(LW(0), 1)
                 END_IF

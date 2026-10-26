@@ -447,7 +447,7 @@ EVT_BEGIN(mario_emergency_revival_event)
         CALL(btlevtcmd_DispItemIcon, LW(0), LW(1), LW(2), 151, 120)
     END_SIBLING_EVENT
     WAIT_FRAMES(120)
-    CALL(btlevtcmd_OnOffStatus, LW(10), 27, 0, 0, 0)
+    CALL(btlevtcmd_OnOffStatus, LW(10), STATUS_INSTANT_KILL, 0, 0, 0)
     CALL(btlevtcmd_SetHp, LW(10), 0)
     CALL(btlevtcmd_RecoverHp, LW(10), LW(11), 10)
     CALL(btlevtcmd_GetPos, LW(10), LW(0), LW(1), LW(2))

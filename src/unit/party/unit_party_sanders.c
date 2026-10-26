@@ -1446,7 +1446,7 @@ static EVT_BEGIN(attack_audience_event)
 EVT_END()
 
 EVT_BEGIN(sanders_battle_end_event)
-    CALL(btlevtcmd_OnOffStatus, UNIT_ID_SELF, 22, 0, 0, 0)
+    CALL(btlevtcmd_OnOffStatus, UNIT_ID_SELF, STATUS_HOLD_FAST, 0, 0, 0)
     CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, 1, PTR(pose_table_sanders_stay))
     RETURN
 EVT_END()

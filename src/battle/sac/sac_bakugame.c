@@ -1463,7 +1463,7 @@ EVT_BEGIN(hitCheck_MarioTeam)
     IF_INT_EQUAL(LW(3), -1)
         GOTO(50)
     END_IF
-    CALL(btlevtcmd_CheckStatus, LW(3), 27, LW(0))
+    CALL(btlevtcmd_CheckStatus, LW(3), STATUS_INSTANT_KILL, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         GOTO(50)
     END_IF
@@ -1476,7 +1476,7 @@ EVT_BEGIN(hitCheck_MarioTeam)
     IF_INT_EQUAL(LW(3), -1)
         GOTO(99)
     END_IF
-    CALL(btlevtcmd_CheckStatus, LW(3), 27, LW(0))
+    CALL(btlevtcmd_CheckStatus, LW(3), STATUS_INSTANT_KILL, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         GOTO(99)
     END_IF

@@ -614,7 +614,7 @@ static EVT_BEGIN(trans_event)
     END_IF
     CALL(teresa_check_teresa, LW(3), LW(0))
     IF_INT_EQUAL(LW(0), 1)
-        CALL(btlevtcmd_CheckStatus, LW(3), 18, LW(0))
+        CALL(btlevtcmd_CheckStatus, LW(3), STATUS_INVISIBLE, LW(0))
         IF_INT_EQUAL(LW(0), 0)
             GOTO(1)
         END_IF

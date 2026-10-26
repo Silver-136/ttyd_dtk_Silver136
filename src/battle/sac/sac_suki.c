@@ -720,7 +720,7 @@ void set_tev(MapTevCallbackInfo* info) {
 EVT_BEGIN(marioAttackEvent_Suki)
     CALL(btlevtcmd_GetUnitId, UNIT_ID_PARTNER, LW(14))
     CALL(btlevtcmd_GetBodyId, LW(14), LW(15))
-    CALL(btlevtcmd_CheckStatus, LW(14), 27, LW(0))
+    CALL(btlevtcmd_CheckStatus, LW(14), STATUS_INSTANT_KILL, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         SET_VALUE(LW(14), -1)
     END_IF

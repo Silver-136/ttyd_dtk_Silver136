@@ -475,7 +475,7 @@ static EVT_BEGIN(friend_event)
     CALL(btlevtcmd_JumpPosition, LW(3), LW(0), 10, LW(2), FLOAT(7.0f), -1)
     CALL(btlevtcmd_SetHomePos, LW(3), LW(0), 10, LW(2))
     IF_INT_EQUAL(LW(12), 1)
-        CALL(btlevtcmd_OnOffStatus, LW(3), 16, 1, 1, 1)
+        CALL(btlevtcmd_OnOffStatus, LW(3), STATUS_CHARGE, 1, 1, 1)
     END_IF
     RETURN
 EVT_END()
@@ -548,7 +548,7 @@ static EVT_BEGIN(friend_event_sky)
     CALL(btlevtcmd_SetPartsRotate, LW(3), LW(4), 0, 0, 0)
     CALL(btlevtcmd_SetHomePos, LW(3), LW(0), 40, LW(2))
     IF_INT_EQUAL(LW(12), 1)
-        CALL(btlevtcmd_OnOffStatus, LW(3), 16, 1, 1, 1)
+        CALL(btlevtcmd_OnOffStatus, LW(3), STATUS_CHARGE, 1, 1, 1)
     END_IF
     CALL(btlevtcmd_OnPartsAttribute, LW(3), LW(4), kPartNotShellTossTarget)
     CALL(btlevtcmd_OnPartsAttribute, LW(3), LW(4), kPartNotHammerTarget)

@@ -828,7 +828,7 @@ static EVT_BEGIN(damage_event_bodylost_blow)
 EVT_END()
 
 static EVT_BEGIN(damage_swallow_body)
-    SET_VALUE(LW(14), 39)
+    SET_VALUE(LW(14), POSE_TYPE_DAMAGE)
     SET_VALUE(LW(15), -1)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 0, LW(0))
     IF_INT_EQUAL(LW(0), 1)

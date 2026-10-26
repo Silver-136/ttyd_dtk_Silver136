@@ -744,7 +744,7 @@ EVT_BEGIN(_borodo_king_emergency_revival_event)
     IF_INT_GREATER(LW(0), 0)
         GOTO(7)
     END_IF
-    CALL(btlevtcmd_OnOffStatus, LW(10), 27, 0, 0, 0)
+    CALL(btlevtcmd_OnOffStatus, LW(10), STATUS_INSTANT_KILL, 0, 0, 0)
     CALL(btlevtcmd_SetHp, LW(10), 0)
     CALL(btlevtcmd_RecoverHp, LW(10), LW(11), 10)
     CALL(btlevtcmd_GetPos, LW(10), LW(0), LW(1), LW(2))

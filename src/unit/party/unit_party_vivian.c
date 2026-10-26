@@ -1188,9 +1188,9 @@ EVT_BEGIN(vivian_counter_damage_event)
     CALL(btlevtcmd_SetScale, UNIT_ID_SELF, FLOAT(1.0f), FLOAT(1.0f), FLOAT(1.0f))
     CALL(btlevtcmd_OnUnitFlag, UNIT_ID_SELF, BATTLE_UNIT_FLAG_SHOW_HP)
     IF_INT_EQUAL(LW(0), 43)
-        SET_VALUE(LW(14), 36)
+        SET_VALUE(LW(14), POSE_TYPE_DAMAGE_TOP_SPIKY)
     ELSE
-        SET_VALUE(LW(14), 39)
+        SET_VALUE(LW(14), POSE_TYPE_DAMAGE)
     END_IF
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, LW(11), LW(14))
     CALL(btlevtcmd_SetFallAccel, UNIT_ID_SELF, FLOAT(1.0f))

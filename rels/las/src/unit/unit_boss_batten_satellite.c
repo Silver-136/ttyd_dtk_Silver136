@@ -202,15 +202,15 @@ EVT_BEGIN(dmg_counter_event)
     SWITCH(LW(0))
         CASE_EQUAL(43)
         CALL(evt_snd_sfxon, STRING("SFX_BTL_ATTACK_MISS3"), 0)
-        SET_VALUE(LW(14), 36)
+        SET_VALUE(LW(14), POSE_TYPE_DAMAGE_TOP_SPIKY)
         CASE_OR_EQUAL(46)
         CASE_OR_EQUAL(49)
         CASE_OR_EQUAL(50)
         CASE_OR_EQUAL(54)
-        SET_VALUE(LW(14), 29)
+        SET_VALUE(LW(14), POSE_TYPE_DAMAGE_FIRE)
         CASE_END
         CASE_DEFAULT
-        SET_VALUE(LW(14), 39)
+        SET_VALUE(LW(14), POSE_TYPE_DAMAGE)
     END_SWITCH
     CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), LW(14))
     BEGIN_SIBLING_EVENT

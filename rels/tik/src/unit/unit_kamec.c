@@ -1428,16 +1428,16 @@ static EVT_BEGIN(support_magic_event)
         GOTO(99)
     END_IF
     IF_INT_EQUAL(LW(15), 10)
-        CALL(btlevtcmd_CheckStatus, LW(3), 10, LW(0))
+        CALL(btlevtcmd_CheckStatus, LW(3), STATUS_HUGE, LW(0))
     END_IF
     IF_INT_EQUAL(LW(15), 14)
-        CALL(btlevtcmd_CheckStatus, LW(3), 14, LW(0))
+        CALL(btlevtcmd_CheckStatus, LW(3), STATUS_DEFENSE_UP, LW(0))
     END_IF
     IF_INT_EQUAL(LW(15), 6)
-        CALL(btlevtcmd_CheckStatus, LW(3), 6, LW(0))
+        CALL(btlevtcmd_CheckStatus, LW(3), STATUS_ELECTRIC, LW(0))
     END_IF
     IF_INT_EQUAL(LW(15), 18)
-        CALL(btlevtcmd_CheckStatus, LW(3), 18, LW(0))
+        CALL(btlevtcmd_CheckStatus, LW(3), STATUS_INVISIBLE, LW(0))
     END_IF
     IF_INT_EQUAL(LW(0), 1)
         SET_VALUE(LW(0), 0)
