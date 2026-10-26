@@ -3,8 +3,19 @@
 #include <dolphin/mtx.h>
 #include "evt/evt_cmd.h"
 
+// BattleCameraWork.flags
+typedef enum BattleCameraFlags {
+    BTL_CAM_FLAG_SHAKE_W = (1 << 0),          // 0x1, btl_camera_shake_w running
+    BTL_CAM_FLAG_SHAKE_H = (1 << 1),          // 0x2, btl_camera_shake_h running
+    BTL_CAM_FLAG_NOMOVE_X = (1 << 2),         // 0x4, btl_camera_nomove_x_onoff
+    BTL_CAM_FLAG_NOMOVE_Y = (1 << 3),         // 0x8
+    BTL_CAM_FLAG_NOMOVE_Z = (1 << 4),         // 0x10
+    BTL_CAM_FLAG_POS_OFFSET = (1 << 5),       // 0x20, btl_camera_set_posoffset
+    BTL_CAM_FLAG_NO_RUMBLE_UNUSED = (1 << 6), // 0x40, shakes without rumble; nothing sets it
+} BattleCameraFlags;
+
 typedef struct {
-    s32 flags; //0x0
+    s32 flags; //0x0, BattleCameraFlags
     s32 modeFrame; //0x4, frames in the current camera mode (1 = first frame)
     s32 priLimit; //0x8
     s32 mode; //0xC

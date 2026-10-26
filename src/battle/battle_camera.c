@@ -468,19 +468,19 @@ void battleCameraMain(void) {
     if (cam->cameraPos.z >= 1000.0f) {
         cam->cameraPos.z = 1000.0f;
     }
-    if (wp->cameraWork.flags & 4) {
+    if (wp->cameraWork.flags & BTL_CAM_FLAG_NOMOVE_X) {
         cam->cameraPos.x = wp->cameraWork.prevPos.x;
         cam->cameraAt.x = wp->cameraWork.prevAt.x;
         dX = 0.0f;
         dAtX = 0.0f;
     }
-    if (wp->cameraWork.flags & 8) {
+    if (wp->cameraWork.flags & BTL_CAM_FLAG_NOMOVE_Y) {
         cam->cameraPos.y = wp->cameraWork.prevPos.y;
         cam->cameraAt.y = wp->cameraWork.prevAt.y;
         dY = 0.0f;
         dAtY = 0.0f;
     }
-    if (wp->cameraWork.flags & 0x10) {
+    if (wp->cameraWork.flags & BTL_CAM_FLAG_NOMOVE_Z) {
         cam->cameraPos.z = wp->cameraWork.prevPos.z;
         cam->cameraAt.z = wp->cameraWork.prevAt.z;
         dZ = 0.0f;
@@ -494,13 +494,13 @@ void battleCameraMain(void) {
     wp->cameraWork.at.z = cam->cameraAt.z;
     wp->cameraWork.moveSpeed = (Vec){dX, dY, dZ};
     wp->cameraWork.moveSpeedAt = (Vec){dAtX, dAtY, dAtZ};
-    if (!(wp->cameraWork.flags & 1) && !(wp->cameraWork.flags & 2)) {
+    if (!(wp->cameraWork.flags & BTL_CAM_FLAG_SHAKE_W) && !(wp->cameraWork.flags & BTL_CAM_FLAG_SHAKE_H)) {
         padRumbleOff(0);
     }
-    if (wp->cameraWork.flags & 0x40) {
+    if (wp->cameraWork.flags & BTL_CAM_FLAG_NO_RUMBLE_UNUSED) {
         padRumbleOff(0);
     }
-    if (wp->cameraWork.flags & 1) {
+    if (wp->cameraWork.flags & BTL_CAM_FLAG_SHAKE_W) {
         moveLv = wp->cameraWork.moveSpeedLv;
         zoomLv = wp->cameraWork.zoomSpeedLv;
         phase = (wp->cameraWork.shakeWFrames - wp->cameraWork.shakeWTimer) & 2;
@@ -514,13 +514,13 @@ void battleCameraMain(void) {
                 battleCameraMoveTo(0, 0, cam->cameraPos.x - wp->cameraWork.shakeWOfs, cam->cameraPos.y, cam->cameraPos.z, cam->cameraAt.x - wp->cameraWork.shakeWOfs, cam->cameraAt.y, cam->cameraAt.z, &dX, &dY, &dZ, &dAtX, &dAtY, &dAtZ);
             }
         } else if (wp->cameraWork.shakeWTimer == 0) {
-            wp->cameraWork.flags &= ~1;
+            wp->cameraWork.flags &= ~BTL_CAM_FLAG_SHAKE_W;
         }
         wp->cameraWork.moveSpeedLv = moveLv;
         wp->cameraWork.zoomSpeedLv = zoomLv;
         wp->cameraWork.shakeWTimer--;
     }
-    if (wp->cameraWork.flags & 2) {
+    if (wp->cameraWork.flags & BTL_CAM_FLAG_SHAKE_H) {
         moveLv2 = wp->cameraWork.moveSpeedLv;
         zoomLv2 = wp->cameraWork.zoomSpeedLv;
         phase2 = (wp->cameraWork.shakeHFrames - wp->cameraWork.shakeHTimer) & 2;
@@ -534,7 +534,7 @@ void battleCameraMain(void) {
                 battleCameraMoveTo(0, 0, cam->cameraPos.x, cam->cameraPos.y - wp->cameraWork.shakeHOfs, cam->cameraPos.z, cam->cameraAt.x, cam->cameraAt.y - wp->cameraWork.shakeHOfs, cam->cameraAt.z, &dX, &dY, &dZ, &dAtX, &dAtY, &dAtZ);
             }
         } else if (wp->cameraWork.shakeHTimer == 0) {
-            wp->cameraWork.flags &= ~2;
+            wp->cameraWork.flags &= ~BTL_CAM_FLAG_SHAKE_H;
         }
         wp->cameraWork.moveSpeedLv = moveLv2;
         wp->cameraWork.zoomSpeedLv = zoomLv2;
@@ -742,7 +742,7 @@ void btl_camera_set_mode(s32 pri, s32 mode) {
         btl_camera_nomove_x_onoff(0, 0);
         btl_camera_nomove_y_onoff(0, 0);
         btl_camera_nomove_z_onoff(0, 0);
-        wp->cameraWork.flags &= ~0x20;
+        wp->cameraWork.flags &= ~BTL_CAM_FLAG_POS_OFFSET;
     }
 }
 
@@ -963,13 +963,13 @@ USER_FUNC(evt_btl_camera_set_moveto) {
 void btl_camera_shake_w(s32 pri, f32 a, f32 b, s32 frames, s32 type) {
     BattleWork* wp = _battleWorkPointer;
     if (pri >= wp->cameraWork.priLimit) {
-        wp->cameraWork.flags |= 1;
+        wp->cameraWork.flags |= BTL_CAM_FLAG_SHAKE_W;
         wp->cameraWork.shakeWAmp[0] = a;
         wp->cameraWork.shakeWAmp[1] = b;
         wp->cameraWork.shakeWType = type;
         wp->cameraWork.shakeWFrames = frames;
         wp->cameraWork.shakeWTimer = frames;
-        if (!(wp->cameraWork.flags & 0x40)) {
+        if (!(wp->cameraWork.flags & BTL_CAM_FLAG_NO_RUMBLE_UNUSED)) {
             padRumbleOn(0);
         }
     }
@@ -988,13 +988,13 @@ USER_FUNC(evt_btl_camera_shake_w) {
 void btl_camera_shake_h(s32 pri, f32 a, f32 b, s32 frames, s32 type) {
     BattleWork* wp = _battleWorkPointer;
     if (pri >= wp->cameraWork.priLimit) {
-        wp->cameraWork.flags |= 2;
+        wp->cameraWork.flags |= BTL_CAM_FLAG_SHAKE_H;
         wp->cameraWork.shakeHAmp[0] = a;
         wp->cameraWork.shakeHAmp[1] = b;
         wp->cameraWork.shakeHType = type;
         wp->cameraWork.shakeHFrames = frames;
         wp->cameraWork.shakeHTimer = frames;
-        if (!(wp->cameraWork.flags & 0x40)) {
+        if (!(wp->cameraWork.flags & BTL_CAM_FLAG_NO_RUMBLE_UNUSED)) {
             padRumbleOn(0);
         }
     }
@@ -1013,8 +1013,8 @@ USER_FUNC(evt_btl_camera_shake_h) {
 void btl_camera_noshake(s32 pri) {
     BattleWork* wp = _battleWorkPointer;
     if (pri >= wp->cameraWork.priLimit) {
-        wp->cameraWork.flags &= ~1;
-        wp->cameraWork.flags &= ~2;
+        wp->cameraWork.flags &= ~BTL_CAM_FLAG_SHAKE_W;
+        wp->cameraWork.flags &= ~BTL_CAM_FLAG_SHAKE_H;
     }
 }
 
@@ -1027,9 +1027,9 @@ void btl_camera_nomove_x_onoff(s32 pri, s32 on) {
     BattleWork* wp = _battleWorkPointer;
     if (pri >= wp->cameraWork.priLimit) {
         if (on == 1) {
-            wp->cameraWork.flags |= 4;
+            wp->cameraWork.flags |= BTL_CAM_FLAG_NOMOVE_X;
         } else {
-            wp->cameraWork.flags &= ~4;
+            wp->cameraWork.flags &= ~BTL_CAM_FLAG_NOMOVE_X;
         }
     }
 }
@@ -1046,9 +1046,9 @@ void btl_camera_nomove_y_onoff(s32 pri, s32 on) {
     BattleWork* wp = _battleWorkPointer;
     if (pri >= wp->cameraWork.priLimit) {
         if (on == 1) {
-            wp->cameraWork.flags |= 8;
+            wp->cameraWork.flags |= BTL_CAM_FLAG_NOMOVE_Y;
         } else {
-            wp->cameraWork.flags &= ~8;
+            wp->cameraWork.flags &= ~BTL_CAM_FLAG_NOMOVE_Y;
         }
     }
 }
@@ -1065,9 +1065,9 @@ void btl_camera_nomove_z_onoff(s32 pri, s32 on) {
     BattleWork* wp = _battleWorkPointer;
     if (pri >= wp->cameraWork.priLimit) {
         if (on == 1) {
-            wp->cameraWork.flags |= 0x10;
+            wp->cameraWork.flags |= BTL_CAM_FLAG_NOMOVE_Z;
         } else {
-            wp->cameraWork.flags &= ~0x10;
+            wp->cameraWork.flags &= ~BTL_CAM_FLAG_NOMOVE_Z;
         }
     }
 }
@@ -1083,7 +1083,7 @@ USER_FUNC(evt_btl_camera_nomove_z_onoff) {
 void btl_camera_set_posoffset(s32 pri, f32 x, f32 y, f32 z) {
     BattleWork* wp = _battleWorkPointer;
     if (pri >= wp->cameraWork.priLimit) {
-        wp->cameraWork.flags |= 0x20;
+        wp->cameraWork.flags |= BTL_CAM_FLAG_POS_OFFSET;
         wp->cameraWork.position.x = x;
         wp->cameraWork.position.y = y;
         wp->cameraWork.position.z = z;
@@ -1103,7 +1103,7 @@ USER_FUNC(evt_btl_camera_set_posoffset) {
 void btl_camera_off_posoffset_manual(s32 pri) {
     BattleWork* wp = _battleWorkPointer;
     if (pri >= wp->cameraWork.priLimit) {
-        wp->cameraWork.flags &= ~0x20;
+        wp->cameraWork.flags &= ~BTL_CAM_FLAG_POS_OFFSET;
         wp->cameraWork.position.x = 0.0f;
         wp->cameraWork.position.y = 0.0f;
         wp->cameraWork.position.z = 0.0f;

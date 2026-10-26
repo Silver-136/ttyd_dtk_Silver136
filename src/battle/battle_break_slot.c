@@ -496,7 +496,7 @@ void BattleBreakSlot_Main(void) {
                 BattleAudienceSoundRun(0);
             }
             if (slot->phaseTimer == 210) {
-                if (!((u32)_battleWorkPointer->cameraWork.flags & 2)) {
+                if (!((u32)_battleWorkPointer->cameraWork.flags & BTL_CAM_FLAG_SHAKE_H)) {
                     btl_camera_shake_h(0, 2.0f, 2.0f, 1000, 0);
                 }
                 for (k = 0; k < 200; k++) {
