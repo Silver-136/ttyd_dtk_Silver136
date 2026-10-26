@@ -16,9 +16,6 @@
 #include "battle/unit_work.h"
 
 // BattleUnit.work slots (btlevtcmd_Get/Set/AddUnitWork)
-#define UNIT_WORK_ROW_POS 4      // row position it stands at (0 home x 55, 1 x 105, 2 x 155); unison_phase_event moves it (marilyn_down/marilyn_up) when slot 5 differs and copies slot 5 here
-#define UNIT_WORK_NEW_ROW_POS 5  // row position majo_unison_phase_event assigns each turn by HP (majo3_sort: highest HP gets 0)
-#define UNIT_WORK_PINCH 7        // 0; set to 1 by the majolyne unit's phase event (majolyne below 66 % HP, or this unit below 50 % with btl_majo3_04/05); attack_event turns 1 into 2 and sets slot 8 to 2; nonzero gives thunder weight 20 in the random draw
 #define UNIT_WORK_ATTACK_PLAN 8  // next attack: 0 kagenuke (then 1), 1 charge (stays 1), 2 thunder (then 4), 4 random draw (kagenuke 50, thunder 20 when slot 7 is set, charge 30 while slot 9 < 2)
 #define UNIT_WORK_CHARGE_COUNT 9 // charges in a row (the charge cases set 1 or add 1; kagenuke and thunder clear it); the random draw offers charge only while it is below 2
 
@@ -377,10 +374,10 @@ static EVT_BEGIN(unison_phase_event)
     CALL(btlevtcmd_CheckPhase, LW(0), 67108867)
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL_CHILD(PTR(majo_unison_phase_event))
-        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_ROW_POS, LW(3))
-        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_NEW_ROW_POS, LW(4))
+        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, MAJO_WORK_LINE_POS, LW(3))
+        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, MAJO_WORK_NEXT_LINE_POS, LW(4))
         IF_INT_NOT_EQUAL(LW(3), LW(4))
-            CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ROW_POS, LW(4))
+            CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, MAJO_WORK_LINE_POS, LW(4))
             CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
             WAIT_MS(200)
             CALL_CHILD(PTR(marilyn_down))
@@ -417,10 +414,10 @@ static EVT_BEGIN(attack_event)
         CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
         RETURN
     END_IF
-    CALL(btlevtcmd_GetUnitWork, GW(9), 7, LW(0))
+    CALL(btlevtcmd_GetUnitWork, GW(9), MAJO_WORK_LOW_HP_ATTACK, LW(0))
     IF_INT_EQUAL(LW(0), 1)
         CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ATTACK_PLAN, 2)
-        CALL(btlevtcmd_SetUnitWork, GW(9), 7, 2)
+        CALL(btlevtcmd_SetUnitWork, GW(9), MAJO_WORK_LOW_HP_ATTACK, 2)
     END_IF
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_ATTACK_PLAN, LW(0))
     SWITCH(LW(0))
@@ -442,7 +439,7 @@ static EVT_BEGIN(attack_event)
         CALL_CHILD(PTR(thunder_attack_event))
         CASE_EQUAL(4)
         SET_VALUE(LW(1), 0)
-        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_PINCH, LW(0))
+        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, MAJO_WORK_LOW_HP_ATTACK, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
             SET_VALUE(LW(1), 20)
         END_IF

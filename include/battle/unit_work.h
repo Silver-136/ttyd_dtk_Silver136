@@ -24,5 +24,25 @@
 #define SHADOW_TAIL_WORK_Z 2
 #define SHADOW_TAIL_WORK_HOLD 3         // 1 keeps the anchor in place (during their attacks)
 
+// The three sisters' line in their boss battles (unit_boss_majolyne / _marilyn / _vivian in win and las, and the las
+// Doopliss when he stands in for one): majo_unison_phase_event orders them by HP each turn
+#define MAJO_WORK_LINE_POS 4            // place in the line it stands at (0, 1, 2 = home x 55, 105, 155)
+#define MAJO_WORK_NEXT_LINE_POS 5       // place majo_unison_phase_event gives it (majo3_sort: 0 = most HP); unison_phase_event
+                                        // moves it when this differs from MAJO_WORK_LINE_POS
+#define MAJO_WORK_LOW_HP_TALK_DONE 6    // 1 once the low-HP lines ran (the leader's phase_event: below 66 % for her, 50 % for
+                                        // the others)
+#define MAJO_WORK_LOW_HP_ATTACK 7       // set to 1 by those lines; the unit's attack choice then weights in its strong attack
+
+// Barriern satellites (unit_barriern*_satellite in aji, mri and moo), set up by the Barriern that spawns them
+#define BARRIERN_SATELLITE_WORK_OWNER 0       // unit id of that Barriern
+#define BARRIERN_SATELLITE_WORK_IDLE_POSE 1   // 1 lets its wait event play the S_4 pose at random times
+#define BARRIERN_SATELLITE_PARTS_WORK_SPLINE 2 // part 1: the spline table of its last move (the Barriern's
+                                               // barriernSatelliteTo_Init stores it; barriernSatelliteToInside reads it)
+
+// Bobbery's bomb (unit_bomzou; spawned by unit_party_sanders)
+#define BOMZOU_WORK_TURNS_LEFT 0        // turns until it explodes (2 at start; phase_event subtracts 1, at 0 explosion_event)
+#define BOMZOU_WORK_FUSE_SFX 1          // id of the SFX_BTL_THUNDERS_BOMB1 sound Bobbery's _shot_bomb_event starts (0 none);
+                                        // explosion_event and end_battle_evt stop it
+
 // Vivian (unit_party_vivian, battle_unit)
 #define VIVIAN_WORK_HIDE_TURNS 4        // turns left hidden in the shadow (Veil); BtlUnit_CheckShadowGuard

@@ -1,6 +1,7 @@
 #include "eff/n64/eff_opuku_jetw_n64.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "unit_boss_gesso.h"
 
 #include "battle/battle.h"
 #include "battle/battle_unit.h"
@@ -19,15 +20,6 @@
 #include "battle/battle_database_common.h"
 #include "manager/evtmgr_cmd.h"
 #include "battle/battle_damage.h"
-
-// BattleUnit.work slots (btlevtcmd_Get/Set/AddUnitWork)
-#define UNIT_WORK_STATE 0         // 0 on the ceiling with both arms; 1 fallen after both arms are gone (gesso_fall_check, skips its attacks); 2 risen from the floor after 2 turns (gesso_ikasumi_attack); back to 0 (arms respawned) after 2 more turns
-#define UNIT_WORK_LEFT_ARM 1      // unit id of the left arm (entry_gesso_left_arm_entry_data); -1 once it dies
-#define UNIT_WORK_RIGHT_ARM 2     // unit id of the right arm (entry_gesso_right_arm_entry_data); -1 once it dies
-#define UNIT_WORK_STATE_TURNS 3   // turns spent in state 1 or 2; at 2 phase_event changes the state and resets it
-#define UNIT_WORK_BUSY 4          // 1 while its damage event runs (3 when the hit kills it), 2 while the arms' gesso_fall_check runs, else 0; the arms restart its wait event only at 0 and wait while it is 1
-#define UNIT_WORK_ARM_TALK_DONE 5 // 1 once the right arm's first attack on Mario showed the tik_02_gs_04 messages
-
 
 #ifdef VERSION_G8ME01
 #else
@@ -256,8 +248,8 @@ static EVT_BEGIN(battle_entry_event)
     CALL(btlevtcmd_SpawnUnit, LW(3), PTR(&entry_gesso_left_arm_entry_data), 0)
     CALL(btlevtcmd_StopWaitEvent, LW(3))
     CALL(btlevtcmd_OnAttribute, LW(3), kUnitHidden)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_LEFT_ARM, LW(3))
-    CALL(btlevtcmd_SetUnitWork, LW(3), 0, LW(10))
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, GESSO_UNIT_WORK_LEFT_ARM, LW(3))
+    CALL(btlevtcmd_SetUnitWork, LW(3), GESSO_ARM_WORK_BODY, LW(10))
     CALL(btlevtcmd_SetPos, LW(3), 320, 6, 53)
     CALL(btlevtcmd_SetHomePos, LW(3), 320, 6, 53)
     BEGIN_INLINE_EVENT_GET_ID(LW(14))
@@ -271,8 +263,8 @@ static EVT_BEGIN(battle_entry_event)
     CALL(btlevtcmd_SpawnUnit, LW(3), PTR(&entry_gesso_right_arm_entry_data), 0)
     CALL(btlevtcmd_StopWaitEvent, LW(3))
     CALL(btlevtcmd_OnAttribute, LW(3), kUnitHidden)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_RIGHT_ARM, LW(3))
-    CALL(btlevtcmd_SetUnitWork, LW(3), 0, LW(10))
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, GESSO_UNIT_WORK_RIGHT_ARM, LW(3))
+    CALL(btlevtcmd_SetUnitWork, LW(3), GESSO_ARM_WORK_BODY, LW(10))
     CALL(btlevtcmd_SetPos, LW(3), 59, 166, -18)
     CALL(btlevtcmd_SetHomePos, LW(3), 59, 166, -18)
     BEGIN_INLINE_EVENT_GET_ID(LW(15))
@@ -312,8 +304,8 @@ static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event))
     CALL(btlevtcmd_SetEventDamage, UNIT_ID_SELF, PTR(damage_event))
     CALL(btlevtcmd_SetEventConfusion, UNIT_ID_SELF, PTR(btldefaultevt_Confuse))
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_BUSY, 0)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ARM_TALK_DONE, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, GESSO_UNIT_WORK_BUSY, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, GESSO_UNIT_WORK_ARM_TALK_DONE, 0)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     SET_VALUE(LW(1), 220)
     CALL(btlevtcmd_SetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
@@ -358,15 +350,15 @@ BattleUnitSetup entry_gesso_right_arm_entry_data = {
 };
 
 static EVT_BEGIN(damage_event)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_BUSY, 1)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, GESSO_UNIT_WORK_BUSY, 1)
     CALL(btlevtcmd_CheckDamageCode, UNIT_ID_SELF, DAMAGE_RESULT_DEATH, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
-        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_BUSY, 3)
+        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, GESSO_UNIT_WORK_BUSY, 3)
     END_IF
     SET_VALUE(LW(10), -2)
     SET_VALUE(LW(11), 1)
     CALL_CHILD(PTR(btldefaultevt_Damage))
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_BUSY, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, GESSO_UNIT_WORK_BUSY, 0)
     RETURN
 EVT_END()
 
@@ -379,11 +371,11 @@ static EVT_BEGIN(phase_event)
 #endif
     CALL(btlevtcmd_CheckPhase, LW(0), 67108865)
     IF_INT_NOT_EQUAL(LW(0), 0)
-        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_STATE, LW(0))
+        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, GESSO_UNIT_WORK_STATE, LW(0))
         IF_INT_EQUAL(LW(0), 1)
-            CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_STATE_TURNS, LW(0))
+            CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, GESSO_UNIT_WORK_STATE_TURNS, LW(0))
             ADD(LW(0), 1)
-            CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_STATE_TURNS, LW(0))
+            CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, GESSO_UNIT_WORK_STATE_TURNS, LW(0))
             IF_INT_GREATER_OR_EQUAL(LW(0), 2)
                 CALL(btlevtcmd_PhaseEventStartDeclare, UNIT_ID_SELF)
                 CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("GSO_U_1"))
@@ -401,8 +393,8 @@ static EVT_BEGIN(phase_event)
                 CALL(btlevtcmd_SetPartsDefenceAttrTable, UNIT_ID_SELF, 1, PTR(&defence_attr))
                 CALL(btlevtcmd_SetRegistStatus, UNIT_ID_SELF, PTR(&regist))
                 CALL(btlevtcmd_SetStatusIconOffset, UNIT_ID_SELF, 55, 113)
-                CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_STATE, 2)
-                CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_STATE_TURNS, 0)
+                CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, GESSO_UNIT_WORK_STATE, 2)
+                CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, GESSO_UNIT_WORK_STATE_TURNS, 0)
                 CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
                 RETURN
             END_IF
@@ -410,15 +402,15 @@ static EVT_BEGIN(phase_event)
     END_IF
     CALL(btlevtcmd_CheckPhase, LW(0), 67108869)
     IF_INT_NOT_EQUAL(LW(0), 0)
-        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_STATE, LW(0))
+        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, GESSO_UNIT_WORK_STATE, LW(0))
         IF_INT_EQUAL(LW(0), 2)
-            CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_STATE_TURNS, LW(0))
+            CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, GESSO_UNIT_WORK_STATE_TURNS, LW(0))
             ADD(LW(0), 1)
-            CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_STATE_TURNS, LW(0))
+            CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, GESSO_UNIT_WORK_STATE_TURNS, LW(0))
             IF_INT_GREATER_OR_EQUAL(LW(0), 2)
-                CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_STATE_TURNS, 0)
+                CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, GESSO_UNIT_WORK_STATE_TURNS, 0)
                 CALL(btlevtcmd_PhaseEventStartDeclare, UNIT_ID_SELF)
-                CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_STATE, 0)
+                CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, GESSO_UNIT_WORK_STATE, 0)
                 CALL(btlevtcmd_OnAttribute, UNIT_ID_SELF, kUnitOnCeiling)
                 CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 1, kPartNotHammerTarget | kPartNotShellTossTarget)
                 CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, 1, PTR(pose_table_ceil))
@@ -464,8 +456,8 @@ static EVT_BEGIN(phase_event)
                 CALL(btlevtcmd_SpawnUnit, LW(3), PTR(&entry_gesso_left_arm_entry_data), 0)
                 CALL(btlevtcmd_StopWaitEvent, LW(3))
                 CALL(btlevtcmd_OnAttribute, LW(3), kUnitHidden)
-                CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_LEFT_ARM, LW(3))
-                CALL(btlevtcmd_SetUnitWork, LW(3), 0, LW(10))
+                CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, GESSO_UNIT_WORK_LEFT_ARM, LW(3))
+                CALL(btlevtcmd_SetUnitWork, LW(3), GESSO_ARM_WORK_BODY, LW(10))
                 CALL(btlevtcmd_SetPos, LW(3), 320, 6, 53)
                 CALL(btlevtcmd_SetHomePos, LW(3), 320, 6, 53)
                 BEGIN_INLINE_EVENT_GET_ID(LW(14))
@@ -479,8 +471,8 @@ static EVT_BEGIN(phase_event)
                 CALL(btlevtcmd_SpawnUnit, LW(3), PTR(&entry_gesso_right_arm_entry_data), 0)
                 CALL(btlevtcmd_StopWaitEvent, LW(3))
                 CALL(btlevtcmd_OnAttribute, LW(3), kUnitHidden)
-                CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_RIGHT_ARM, LW(3))
-                CALL(btlevtcmd_SetUnitWork, LW(3), 0, LW(10))
+                CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, GESSO_UNIT_WORK_RIGHT_ARM, LW(3))
+                CALL(btlevtcmd_SetUnitWork, LW(3), GESSO_ARM_WORK_BODY, LW(10))
                 CALL(btlevtcmd_SetPos, LW(3), 59, 166, -18)
                 CALL(btlevtcmd_SetHomePos, LW(3), 59, 166, -18)
                 BEGIN_INLINE_EVENT_GET_ID(LW(15))
@@ -501,7 +493,7 @@ static EVT_BEGIN(phase_event)
 EVT_END()
 
 static EVT_BEGIN(attack_event)
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_STATE, LW(0))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, GESSO_UNIT_WORK_STATE, LW(0))
     IF_INT_EQUAL(LW(0), 1)
         CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
         RETURN
@@ -512,7 +504,7 @@ static EVT_BEGIN(attack_event)
         CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
         RETURN
     END_IF
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_STATE, LW(0))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, GESSO_UNIT_WORK_STATE, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 2)
         GOTO(99)
     END_IF
@@ -686,10 +678,10 @@ USER_FUNC(_test_rtn) {
             targetId = BattleTransID(event, -2);
             break;
         case 1:
-            targetId = unit->work[UNIT_WORK_LEFT_ARM];
+            targetId = unit->work[GESSO_UNIT_WORK_LEFT_ARM];
             break;
         case 2:
-            targetId = unit->work[UNIT_WORK_RIGHT_ARM];
+            targetId = unit->work[GESSO_UNIT_WORK_RIGHT_ARM];
             break;
     }
     target = BattleGetUnitPtr(wp, targetId);
@@ -718,14 +710,14 @@ static EVT_BEGIN(wait_event)
 EVT_END()
 
 EVT_BEGIN(dead_subevent)
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_LEFT_ARM, LW(3))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, GESSO_UNIT_WORK_LEFT_ARM, LW(3))
     CALL(btlevtcmd_GetUnitId, LW(3), LW(3))
     BEGIN_SIBLING_EVENT_GET_ID(LW(1))
         IF_INT_NOT_EQUAL(LW(3), -1)
             CALL(btlevtcmd_KillUnit, LW(3), 0)
         END_IF
     END_SIBLING_EVENT
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_RIGHT_ARM, LW(3))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, GESSO_UNIT_WORK_RIGHT_ARM, LW(3))
     CALL(btlevtcmd_GetUnitId, LW(3), LW(3))
     BEGIN_SIBLING_EVENT_GET_ID(LW(2))
         IF_INT_NOT_EQUAL(LW(3), -1)

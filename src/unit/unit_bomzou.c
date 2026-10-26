@@ -9,10 +9,7 @@
 #include "party/party_motion.h"
 #include "evt/evt_sub.h"
 #include "battle/battle_sub.h"
-
-// BattleUnit.work slots (btlevtcmd_Get/Set/AddUnitWork)
-#define UNIT_WORK_TURNS_LEFT 0 // turns until it explodes (2 at start, phase_event subtracts 1, at 0 runs explosion_event); picks pose_table_1/2/3; wait_event sweats at 1
-#define UNIT_WORK_FUSE_SFX 1   // sound id of SFX_BTL_THUNDERS_BOMB1 that Bobbery's _shot_bomb_event starts; 0 = none; explosion_event and end_battle_evt stop it
+#include "battle/unit_work.h"
 
 USER_FUNC(btlevtcmd_AfterReactionEntry);
 USER_FUNC(btlevtcmd_SetEventPhase);
@@ -175,10 +172,10 @@ static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event))
     CALL(btlevtcmd_SetEventDamage, UNIT_ID_SELF, PTR(damage_event))
     CALL(btlevtcmd_SetEventConfusion, UNIT_ID_SELF, PTR(btldefaultevt_Confuse))
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_TURNS_LEFT, 2)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_FUSE_SFX, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, BOMZOU_WORK_TURNS_LEFT, 2)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, BOMZOU_WORK_FUSE_SFX, 0)
     CALL(btlevtcmd_SetMaxMoveCount, UNIT_ID_SELF, 0)
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_TURNS_LEFT, LW(0))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, BOMZOU_WORK_TURNS_LEFT, LW(0))
     SWITCH(LW(0))
         CASE_GREATER_OR_EQUAL(3)
         CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, 1, PTR(pose_table_3))
@@ -194,9 +191,9 @@ EVT_END()
 static EVT_BEGIN(phase_event)
     CALL(btlevtcmd_CheckPhase, LW(0), 67108865)
     IF_INT_NOT_EQUAL(LW(0), 0)
-        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_TURNS_LEFT, LW(0))
+        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, BOMZOU_WORK_TURNS_LEFT, LW(0))
         SUBTRACT(LW(0), 1)
-        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_TURNS_LEFT, LW(0))
+        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, BOMZOU_WORK_TURNS_LEFT, LW(0))
         SWITCH(LW(0))
             CASE_GREATER_OR_EQUAL(3)
             CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, 1, PTR(pose_table_3))
@@ -220,7 +217,7 @@ EVT_END()
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     LABEL(0)
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_TURNS_LEFT, LW(0))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, BOMZOU_WORK_TURNS_LEFT, LW(0))
     IF_INT_GREATER(LW(0), 1)
         WAIT_FRAMES(1)
         GOTO(0)
@@ -236,19 +233,19 @@ static EVT_BEGIN(wait_event)
 EVT_END()
 
 EVT_BEGIN(end_battle_evt)
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_FUSE_SFX, LW(0))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, BOMZOU_WORK_FUSE_SFX, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(evt_snd_sfxoff, LW(0))
-        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_FUSE_SFX, 0)
+        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, BOMZOU_WORK_FUSE_SFX, 0)
     END_IF
     RETURN
 EVT_END()
 
 static EVT_BEGIN(explosion_event)
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_FUSE_SFX, LW(0))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, BOMZOU_WORK_FUSE_SFX, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(evt_snd_sfxoff, LW(0))
-        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_FUSE_SFX, 0)
+        CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, BOMZOU_WORK_FUSE_SFX, 0)
     END_IF
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(evt_eff, STRING(""), STRING("hibashira"), 2, LW(0), LW(1), LW(2), LW(0), LW(1), LW(2), 1, FLOAT(1.0f), 60, 0, 0)

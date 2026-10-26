@@ -3,15 +3,13 @@
 #include "battle/battle_event_cmd.h"
 #include "evt/evt_sub.h"
 #include "battle/battle_status_effect.h"
+#include "battle/unit_work.h"
 
 #include "battle/battle.h"
 #include "battle/battle_unit.h"
 #include "battle/battle_sub.h"
 #include "battle/battle_event_default.h"
 #include "manager/evtmgr_cmd.h"
-
-// BattleUnit.work slots (btlevtcmd_Get/Set/AddUnitWork)
-#define UNIT_WORK_IDLE_POSE 1 // 1 lets wait_event play the S_4 pose every 30-150 frames; the owner (unit_barriern_custom) sets it at spawn and in its wait event
 
 USER_FUNC(btlevtcmd_SetEventUnisonPhase);
 static USER_FUNC(battleGetBarriernSatelliteInitPos);
@@ -178,7 +176,7 @@ static EVT_BEGIN(wait_event)
     CALL(evt_sub_random, 120, LW(0))
     ADD(LW(0), 30)
     WAIT_FRAMES(LW(0))
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_IDLE_POSE, LW(0))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, BARRIERN_SATELLITE_WORK_IDLE_POSE, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_CheckActStatus, UNIT_ID_SELF, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)

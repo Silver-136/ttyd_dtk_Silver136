@@ -20,6 +20,7 @@
 #include "unit/unit_bomzou.h"
 #include "evt/evt_snd.h"
 #include "battle/battle_status_effect.h"
+#include "battle/unit_work.h"
 
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
@@ -1338,7 +1339,7 @@ EVT_BEGIN(_shot_bomb_event)
     CALL(btlevtcmd_SetHomePos, LW(3), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_AnimeChangePose, LW(3), 1, STRING("B_2"))
     CALL(evt_snd_sfxon, STRING("SFX_BTL_THUNDERS_BOMB1"), LW(0))
-    CALL(btlevtcmd_SetUnitWork, LW(3), 1, LW(0))
+    CALL(btlevtcmd_SetUnitWork, LW(3), BOMZOU_WORK_FUSE_SFX, LW(0))
     WAIT_MS(400)
     CALL(btlevtcmd_StartWaitEvent, LW(3))
     RETURN

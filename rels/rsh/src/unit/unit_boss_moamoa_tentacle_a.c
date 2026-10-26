@@ -9,9 +9,7 @@
 #include "battle/battle_database_common.h"
 #include "battle/battle_sub.h"
 #include "battle/battle_damage.h"
-
-// BattleUnit.work slots (btlevtcmd_Get/Set/AddUnitWork)
-#define UNIT_WORK_BODY 0 // unit id of the Smorg body (unit_boss_moamoa) that spawned it
+#include "unit_boss_moamoa.h"
 
 extern s32 boss_moamoa_check_zenei_kouei[];
 extern PoseTableEntry moamoa1_weakness_pose_table[];
@@ -193,13 +191,13 @@ static EVT_BEGIN(dead_event)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("R_1A"))
     WAIT_FRAMES(1)
     CALL(btlevtcmd_AnimeWaitPlayComplete, UNIT_ID_SELF, 1)
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_BODY, LW(1))
-    CALL(btlevtcmd_SetUnitWork, LW(1), 5, -1)
-    CALL(btlevtcmd_GetUnitWork, LW(1), 5, LW(0))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, MOAMOA_LIMB_WORK_BODY, LW(1))
+    CALL(btlevtcmd_SetUnitWork, LW(1), MOAMOA_UNIT_WORK_TENTACLE_A, -1)
+    CALL(btlevtcmd_GetUnitWork, LW(1), MOAMOA_UNIT_WORK_TENTACLE_A, LW(0))
     IF_INT_EQUAL(LW(0), -1)
-        CALL(btlevtcmd_GetUnitWork, LW(1), 4, LW(0))
+        CALL(btlevtcmd_GetUnitWork, LW(1), MOAMOA_UNIT_WORK_TENTACLE_B, LW(0))
         IF_INT_EQUAL(LW(0), -1)
-            CALL(btlevtcmd_GetUnitWork, LW(1), 3, LW(0))
+            CALL(btlevtcmd_GetUnitWork, LW(1), MOAMOA_UNIT_WORK_TENTACLE_C, LW(0))
             IF_INT_EQUAL(LW(0), -1)
                 CALL(btlevtcmd_SetPartsDefenceTable, LW(1), 1, PTR(moamoa_defence_no_parts))
                 CALL(btlevtcmd_OffPartsAttribute, LW(1), 1, kImmuneToDamageAndStatus)
@@ -248,7 +246,7 @@ static EVT_BEGIN(evt_attack_other_arm)
     END_LOOP
     CALL(evt_snd_sfxoff, LW(15))
     LOOP(0)
-        CALL(btlevtcmd_GetUnitWork, LW(6), 0, LW(10))
+        CALL(btlevtcmd_GetUnitWork, LW(6), MOAMOA_UNIT_WORK_LIMB_HIT, LW(10))
         IF_INT_NOT_EQUAL(LW(10), 0)
             BREAK_LOOP
         END_IF
@@ -338,17 +336,17 @@ static EVT_BEGIN(evt_attack)
     ELSE
         SET_VALUE(LF(0), 1)
     END_IF
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_BODY, LW(6))
-    CALL(btlevtcmd_SetUnitWork, LW(6), 0, 0)
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, MOAMOA_LIMB_WORK_BODY, LW(6))
+    CALL(btlevtcmd_SetUnitWork, LW(6), MOAMOA_UNIT_WORK_LIMB_HIT, 0)
     CALL(btlevtcmd_AnimeChangePose, LW(6), 1, STRING("S_1_1"))
     SET_VALUE(LW(15), 0)
-    CALL(btlevtcmd_GetUnitWork, LW(6), 4, LW(0))
+    CALL(btlevtcmd_GetUnitWork, LW(6), MOAMOA_UNIT_WORK_TENTACLE_B, LW(0))
     IF_INT_NOT_EQUAL(LW(0), -1)
         SET_VALUE(LW(1), PTR(&B_of_A_Attack))
         SET_VALUE(LW(5), 1)
         SPAWN_EVENT(evt_attack_other_arm)
     END_IF
-    CALL(btlevtcmd_GetUnitWork, LW(6), 3, LW(0))
+    CALL(btlevtcmd_GetUnitWork, LW(6), MOAMOA_UNIT_WORK_TENTACLE_C, LW(0))
     IF_INT_NOT_EQUAL(LW(0), -1)
         SET_VALUE(LW(1), PTR(&C_of_A_Attack))
         SET_VALUE(LW(5), 1)
@@ -434,7 +432,7 @@ static EVT_BEGIN(evt_attack)
         CASE_EQUAL(2)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
     END_SWITCH
-    CALL(btlevtcmd_SetUnitWork, LW(6), 0, 1)
+    CALL(btlevtcmd_SetUnitWork, LW(6), MOAMOA_UNIT_WORK_LIMB_HIT, 1)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     IF_INT_EQUAL(LW(15), 0)
         LOOP(0)
@@ -455,11 +453,11 @@ EVT_END()
 
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
-    CALL(btlevtcmd_GetUnitWork, LW(6), 4, LW(10))
+    CALL(btlevtcmd_GetUnitWork, LW(6), MOAMOA_UNIT_WORK_TENTACLE_B, LW(10))
     IF_INT_NOT_EQUAL(LW(10), -1)
         CALL(btlevtcmd_AnimeChangePoseFromTable, LW(10), 1)
     END_IF
-    CALL(btlevtcmd_GetUnitWork, LW(6), 3, LW(10))
+    CALL(btlevtcmd_GetUnitWork, LW(6), MOAMOA_UNIT_WORK_TENTACLE_C, LW(10))
     IF_INT_NOT_EQUAL(LW(10), -1)
         CALL(btlevtcmd_AnimeChangePoseFromTable, LW(10), 1)
     END_IF

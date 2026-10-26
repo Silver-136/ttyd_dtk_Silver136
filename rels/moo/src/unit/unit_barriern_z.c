@@ -6,6 +6,7 @@
 #include "evt/evt_sub.h"
 #include "eff/n64/eff_glass_n64.h"
 #include "battle/battle_status_effect.h"
+#include "battle/unit_work.h"
 
 #include "battle/battle.h"
 #include "battle/battle_unit.h"
@@ -498,8 +499,8 @@ static EVT_BEGIN(init_event)
         ADD(LW(8), 4)
         CALL(btlevtcmd_SpawnUnit, LW(3), PTR(&entry_barriern_satellite), 0)
         CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, LW(8), LW(3))
-        CALL(btlevtcmd_SetUnitWork, LW(3), 0, LW(5))
-        CALL(btlevtcmd_SetUnitWork, LW(3), 1, 1)
+        CALL(btlevtcmd_SetUnitWork, LW(3), BARRIERN_SATELLITE_WORK_OWNER, LW(5))
+        CALL(btlevtcmd_SetUnitWork, LW(3), BARRIERN_SATELLITE_WORK_IDLE_POSE, 1)
         CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
         CALL(battleGetBarriernSatelliteInitPos, UNIT_ID_SELF, LW(7), LW(6), LW(10), LW(11), LW(12))
         ADD(LW(0), LW(10))
@@ -825,7 +826,7 @@ static EVT_BEGIN(unison_phase_event)
             CALL(btlevtcmd_SpawnUnit, LW(3), PTR(&entry_barriern_satellite), 0)
             CALL(btlevtcmd_AddPos, LW(3), 0, 0, -1)
             CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, LW(1), LW(3))
-            CALL(btlevtcmd_SetUnitWork, LW(3), 0, LW(4))
+            CALL(btlevtcmd_SetUnitWork, LW(3), BARRIERN_SATELLITE_WORK_OWNER, LW(4))
             ADD(LW(0), 1)
             ADD(LW(5), 1)
             IF_INT_GREATER_OR_EQUAL(LW(5), 1)
@@ -1436,7 +1437,7 @@ static EVT_BEGIN(wait_event)
         END_IF
         CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, LW(11), LW(12))
         IF_INT_NOT_EQUAL(LW(12), -1)
-            CALL(btlevtcmd_SetUnitWork, LW(12), 1, 1)
+            CALL(btlevtcmd_SetUnitWork, LW(12), BARRIERN_SATELLITE_WORK_IDLE_POSE, 1)
         END_IF
         ADD(LW(11), 1)
     END_LOOP
@@ -1483,7 +1484,7 @@ static u8 barriernSatelliteTo_Init(BattleUnit* unit, s32 n, Vec* table) {
     sp->table = table;
     sp->count = 0;
     spline_maketable(5, sp->table, sp->ts, sp->tbl);
-    BtlUnit_GetPartsPtr(BattleGetUnitPtr(_battleWorkPointer, unit->work[UNIT_WORK_SATELLITE + n]), 1)->work[2] = (EvtWord)table;
+    BtlUnit_GetPartsPtr(BattleGetUnitPtr(_battleWorkPointer, unit->work[UNIT_WORK_SATELLITE + n]), 1)->work[BARRIERN_SATELLITE_PARTS_WORK_SPLINE] = (EvtWord)table;
     return TRUE;
 }
 
@@ -1532,7 +1533,7 @@ static USER_FUNC(barriernSatelliteToInside) {
     if (isFirstCall) {
         for (i = 0; i < 4; i++) {
             if (unit->work[UNIT_WORK_SATELLITE + i] != -1) {
-                EvtWord table = BtlUnit_GetPartsPtr(BattleGetUnitPtr(_battleWorkPointer, unit->work[UNIT_WORK_SATELLITE + i]), 1)->work[2];
+                EvtWord table = BtlUnit_GetPartsPtr(BattleGetUnitPtr(_battleWorkPointer, unit->work[UNIT_WORK_SATELLITE + i]), 1)->work[BARRIERN_SATELLITE_PARTS_WORK_SPLINE];
 
                 if (table == (EvtWord)splineTableOut1_1) {
                     barriernSatelliteTo_Init(unit, i, splineTableIn1_1);
@@ -1719,7 +1720,7 @@ static USER_FUNC(outSplineTableSet) {
 }
 
 static void outSplineTableSet_Sub(BattleUnit* unit, s32 n, Vec* table) {
-    BtlUnit_GetPartsPtr(BattleGetUnitPtr(_battleWorkPointer, unit->work[UNIT_WORK_SATELLITE + n]), 1)->work[2] = (EvtWord)table;
+    BtlUnit_GetPartsPtr(BattleGetUnitPtr(_battleWorkPointer, unit->work[UNIT_WORK_SATELLITE + n]), 1)->work[BARRIERN_SATELLITE_PARTS_WORK_SPLINE] = (EvtWord)table;
 }
 
 static USER_FUNC(barriern_wawawa_set_target) {

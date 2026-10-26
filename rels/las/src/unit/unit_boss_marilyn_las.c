@@ -16,8 +16,6 @@
 #include "battle/unit_work.h"
 
 // BattleUnit.work slots (btlevtcmd_Get/Set/AddUnitWork)
-#define UNIT_WORK_ROW_POS 4      // row position it stands at (0 home x 55, 1 x 105, 2 x 155); unison_phase_event moves it (marilyn_down/marilyn_up) when slot 5 differs and copies slot 5 here
-#define UNIT_WORK_NEW_ROW_POS 5  // row position majo_unison_phase_event assigns each turn by HP (majo3_sort: highest HP gets 0)
 #define UNIT_WORK_CHARGE_COUNT 9 // charges in a row (charge adds 1; kagenuke and thunder clear it); the draw gives charge weight 25 only while it is below 2
 
 USER_FUNC(btlevtcmd_SetEventPhase);
@@ -379,10 +377,10 @@ static EVT_BEGIN(unison_phase_event)
     CALL(btlevtcmd_CheckPhase, LW(0), 67108867)
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL_CHILD(PTR(majo_unison_phase_event))
-        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_ROW_POS, LW(3))
-        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_NEW_ROW_POS, LW(4))
+        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, MAJO_WORK_LINE_POS, LW(3))
+        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, MAJO_WORK_NEXT_LINE_POS, LW(4))
         IF_INT_NOT_EQUAL(LW(3), LW(4))
-            CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ROW_POS, LW(4))
+            CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, MAJO_WORK_LINE_POS, LW(4))
             CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
             WAIT_MS(200)
             CALL_CHILD(PTR(marilyn_down))

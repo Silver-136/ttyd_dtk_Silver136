@@ -4,6 +4,7 @@
 #include "evt/evt_msg.h"
 #include "party/party_motion.h"
 #include "system.h"
+#include "battle/unit_work.h"
 
 #include "battle/battle.h"
 #include "battle/battle_sub.h"
@@ -661,9 +662,9 @@ static EVT_BEGIN(dead_event_fmario)
         CALL(btlevtcmd_SetHomePos, LW(3), FLOAT(-140.0f), FLOAT(0.0f), FLOAT(5.0f))
         CALL(btlevtcmd_GetPos, LW(3), LW(0), LW(1), LW(2))
         CALL(btlevtcmd_TransStageFloorPosition, LW(0), LW(1), LW(2))
-        CALL(btlevtcmd_SetUnitWork, LW(3), 0, LW(0))
-        CALL(btlevtcmd_SetUnitWork, LW(3), 1, LW(1))
-        CALL(btlevtcmd_SetUnitWork, LW(3), 2, LW(2))
+        CALL(btlevtcmd_SetUnitWork, LW(3), SHADOW_TAIL_WORK_X, LW(0))
+        CALL(btlevtcmd_SetUnitWork, LW(3), SHADOW_TAIL_WORK_Y, LW(1))
+        CALL(btlevtcmd_SetUnitWork, LW(3), SHADOW_TAIL_WORK_Z, LW(2))
         WAIT_FRAMES(1)
     END_IF
     CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
@@ -726,9 +727,9 @@ EVT_BEGIN(phase_event_fmario)
             CALL(btlevtcmd_SetHomePos, LW(3), FLOAT(-140.0f), FLOAT(0.0f), FLOAT(5.0f))
             CALL(btlevtcmd_GetPos, LW(3), LW(0), LW(1), LW(2))
             CALL(btlevtcmd_TransStageFloorPosition, LW(0), LW(1), LW(2))
-            CALL(btlevtcmd_SetUnitWork, LW(3), 0, LW(0))
-            CALL(btlevtcmd_SetUnitWork, LW(3), 1, LW(1))
-            CALL(btlevtcmd_SetUnitWork, LW(3), 2, LW(2))
+            CALL(btlevtcmd_SetUnitWork, LW(3), SHADOW_TAIL_WORK_X, LW(0))
+            CALL(btlevtcmd_SetUnitWork, LW(3), SHADOW_TAIL_WORK_Y, LW(1))
+            CALL(btlevtcmd_SetUnitWork, LW(3), SHADOW_TAIL_WORK_Z, LW(2))
 #ifdef VERSION_G8ME01
             CALL(faker_mario_sync_max_moves, LW(3))
 #endif

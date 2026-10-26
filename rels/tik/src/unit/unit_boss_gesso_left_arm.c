@@ -9,9 +9,7 @@
 #include "battle/battle_database_common.h"
 #include "battle/battle_sub.h"
 #include "battle/battle_damage.h"
-
-// BattleUnit.work slots (btlevtcmd_Get/Set/AddUnitWork)
-#define UNIT_WORK_BODY 0 // unit id of the body (unit_boss_gesso) that spawned it; -1 none
+#include "unit_boss_gesso.h"
 
 extern EvtWord gesso_arm_damage_pose_event[];
 extern EvtWord gesso_arm_dead_event[];
@@ -156,9 +154,9 @@ static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), -2)
     SET_VALUE(LW(11), 1)
     CALL_CHILD(PTR(btldefaultevt_Damage))
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_BODY, LW(3))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, GESSO_ARM_WORK_BODY, LW(3))
     IF_INT_NOT_EQUAL(LW(3), -1)
-        CALL(btlevtcmd_GetUnitWork, LW(3), 4, LW(0))
+        CALL(btlevtcmd_GetUnitWork, LW(3), GESSO_UNIT_WORK_BUSY, LW(0))
         IF_INT_LESS_OR_EQUAL(LW(0), 0)
             CALL(btlevtcmd_StartWaitEvent, LW(3))
         END_IF
@@ -193,9 +191,9 @@ EVT_BEGIN(gesso_left_arm_damage_event)
     CALL(btlevtcmd_ResetFaceDirection, LW(10))
     CALL(btlevtcmd_StartWaitEvent, LW(10))
     LABEL(99)
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_BODY, LW(3))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, GESSO_ARM_WORK_BODY, LW(3))
     IF_INT_NOT_EQUAL(LW(3), -1)
-        CALL(btlevtcmd_GetUnitWork, LW(3), 4, LW(0))
+        CALL(btlevtcmd_GetUnitWork, LW(3), GESSO_UNIT_WORK_BUSY, LW(0))
         IF_INT_LESS_OR_EQUAL(LW(0), 0)
             CALL(btlevtcmd_StartWaitEvent, LW(3))
         END_IF
