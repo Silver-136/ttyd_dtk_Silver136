@@ -18,6 +18,7 @@
 #include "muj.h"
 #include "driver/mapdrv.h"
 #include "system.h"
+#include "driver/casedrv.h"
 
 #include "driver/effdrv.h"
 #include "manager/evtmgr_cmd.h"
@@ -1225,11 +1226,11 @@ EVT_BEGIN(evt_door_entry_custom00)
     CALL(evt_door_param, LW(0), 1, LW(1), LW(2), LW(3))
     IF_INT_NOT_EQUAL(LW(2), 0)
         SET_VALUE(LW(15), 17)
-        CALL(evt_run_case_evt, 8, 1, LW(2), 0, PTR(muj_00_door_close), 0)
+        CALL(evt_run_case_evt, CASE_FRONT, 1, LW(2), 0, PTR(muj_00_door_close), 0)
     END_IF
     IF_INT_NOT_EQUAL(LW(3), 0)
         SET_VALUE(LW(15), 17)
-        CALL(evt_run_case_evt, 8, 1, LW(3), 0, PTR(muj_00_door_open), 0)
+        CALL(evt_run_case_evt, CASE_FRONT, 1, LW(3), 0, PTR(muj_00_door_open), 0)
     END_IF
     RETURN
 EVT_END()
@@ -1238,11 +1239,11 @@ EVT_BEGIN(evt_door_entry_custom01)
     CALL(evt_door_param, LW(0), 1, LW(1), LW(2), LW(3))
     IF_INT_NOT_EQUAL(LW(2), 0)
         SET_VALUE(LW(15), 19)
-        CALL(evt_run_case_evt, 8, 1, LW(2), 0, PTR(muj_00_door_close), 0)
+        CALL(evt_run_case_evt, CASE_FRONT, 1, LW(2), 0, PTR(muj_00_door_close), 0)
     END_IF
     IF_INT_NOT_EQUAL(LW(3), 0)
         SET_VALUE(LW(15), 19)
-        CALL(evt_run_case_evt, 8, 1, LW(3), 0, PTR(muj_00_door_open), 0)
+        CALL(evt_run_case_evt, CASE_FRONT, 1, LW(3), 0, PTR(muj_00_door_open), 0)
     END_IF
     RETURN
 EVT_END()

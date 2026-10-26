@@ -13,6 +13,7 @@
 #include "evt/evt_map.h"
 #include "evt/evt_party.h"
 #include "mario/mario_pouch.h"
+#include "driver/casedrv.h"
 
 #include "driver/mobjdrv.h"
 #include "driver/animdrv.h"
@@ -198,7 +199,7 @@ EVT_BEGIN(las_18_init_evt)
         CALL(evt_mobj_flag_onoff, 1, STRING("box"), MOBJ_FLAG_NO_DISP)
         CALL(evt_mobj_hit_onoff, STRING("box"), 0)
     END_IF
-    CALL(evt_run_case_evt, 9, 1, STRING("A_pure"), 0, PTR(hint_plate), 0)
+    CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_pure"), 0, PTR(hint_plate), 0)
     RETURN
 EVT_END()
 

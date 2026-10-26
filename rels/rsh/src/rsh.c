@@ -16,6 +16,7 @@
 #include "evt/evt_sub.h"
 #include "evt/evt_cam.h"
 #include "evt/evt_hit.h"
+#include "driver/casedrv.h"
 
 #include "stdio.h"
 #include "string.h"
@@ -229,8 +230,8 @@ EVT_BEGIN(evt_rsh_door_entry)
     READ_INT(LW(7))
     CALL(evt_mapobj_flag_onoff, 1, 1, LW(1), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 1, 1, LW(2), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_run_case_evt, 9, 1, LW(4), 0, PTR(evt_rsh_door_open), 0)
-    CALL(evt_run_case_evt, 9, 1, LW(6), 0, PTR(evt_rsh_door_close), 0)
+    CALL(evt_run_case_evt, CASE_FRONT_A, 1, LW(4), 0, PTR(evt_rsh_door_open), 0)
+    CALL(evt_run_case_evt, CASE_FRONT_A, 1, LW(6), 0, PTR(evt_rsh_door_close), 0)
     RETURN
 EVT_END()
 

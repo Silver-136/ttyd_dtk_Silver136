@@ -14,6 +14,7 @@
 #include "evt/evt_sub.h"
 #include "driver/mapdrv.h"
 #include "system.h"
+#include "driver/casedrv.h"
 
 #include "driver/npcdrv.h"
 #include "eff/eff_stardust.h"
@@ -801,7 +802,7 @@ EVT_BEGIN(powerdownya_direct_talk)
 EVT_END()
 
 EVT_BEGIN(powerdownya_init)
-    CALL(evt_run_case_evt, 9, 1, STRING("A_power_down"), 0, PTR(powerdownya_table_talk), 0)
+    CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_power_down"), 0, PTR(powerdownya_table_talk), 0)
     RETURN
 EVT_END()
 

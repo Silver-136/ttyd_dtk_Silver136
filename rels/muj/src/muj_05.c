@@ -17,6 +17,7 @@
 #include "driver/npcdrv.h"
 #include "driver/mapdrv.h"
 #include "system.h"
+#include "driver/casedrv.h"
 
 #include "string.h"
 #include "memory.h"
@@ -376,7 +377,7 @@ EVT_BEGIN(erumosu_a_dead)
     DELETE_EVENT(GW(0))
     DELETE_EVENT(GW(2))
     CALL(evt_npc_set_position, STRING("エルモス１"), 0, -1000, 0)
-    CALL(evt_run_case_evt, 13, 1, STRING("A_ki_02_01"), 0, PTR(sanders_kyushutsu_sub), 0)
+    CALL(evt_run_case_evt, CASE_HAMMER, 1, STRING("A_ki_02_01"), 0, PTR(sanders_kyushutsu_sub), 0)
     RETURN
 EVT_END()
 
@@ -522,7 +523,7 @@ EVT_BEGIN(hammer_sub)
 EVT_END()
 
 EVT_BEGIN(hammer_event)
-    CALL(evt_run_case_evt, 13, 1, STRING("A_ki_02_01"), 0, PTR(hammer_sub), 0)
+    CALL(evt_run_case_evt, CASE_HAMMER, 1, STRING("A_ki_02_01"), 0, PTR(hammer_sub), 0)
     RETURN
 EVT_END()
 
@@ -635,7 +636,7 @@ EVT_BEGIN(sanders_kyushutsu)
         SPAWN_EVENT_GET_ID(PTR(erumosu_guruguru), GW(1))
         SPAWN_EVENT_GET_ID(PTR(erumosu_guruguru_dir), GW(3))
         ELSE
-        CALL(evt_run_case_evt, 13, 1, STRING("A_ki_02_01"), 0, PTR(sanders_kyushutsu_sub), 0)
+        CALL(evt_run_case_evt, CASE_HAMMER, 1, STRING("A_ki_02_01"), 0, PTR(sanders_kyushutsu_sub), 0)
     END_IF
     RETURN
 EVT_END()
@@ -771,11 +772,11 @@ EVT_END()
 
 EVT_BEGIN(case_event_entry)
     SET_VALUE(GF(10), 0)
-    CALL(evt_run_case_evt, 13, 1, STRING("A_iwa01"), 0, PTR(iwa01_hammer), GW(5))
-    CALL(evt_run_case_evt, 4, 1, STRING("A_iwa01"), 0, PTR(iwa01_ride_a), GW(6))
-    CALL(evt_run_case_evt, 0, 1, STRING("A_iwa_atari"), 0, PTR(iwa02_ride), GW(7))
-    CALL(evt_run_case_evt, 13, 1, STRING("A_iwa_atari"), 0, PTR(iwa02_hammer), GW(8))
-    CALL(evt_run_case_evt, 4, 1, STRING("A_iwa_atari"), 0, PTR(iwa02_ride_a), GW(9))
+    CALL(evt_run_case_evt, CASE_HAMMER, 1, STRING("A_iwa01"), 0, PTR(iwa01_hammer), GW(5))
+    CALL(evt_run_case_evt, CASE_JUMP_FROM_A, 1, STRING("A_iwa01"), 0, PTR(iwa01_ride_a), GW(6))
+    CALL(evt_run_case_evt, CASE_STAND_ON, 1, STRING("A_iwa_atari"), 0, PTR(iwa02_ride), GW(7))
+    CALL(evt_run_case_evt, CASE_HAMMER, 1, STRING("A_iwa_atari"), 0, PTR(iwa02_hammer), GW(8))
+    CALL(evt_run_case_evt, CASE_JUMP_FROM_A, 1, STRING("A_iwa_atari"), 0, PTR(iwa02_ride_a), GW(9))
     RETURN
 EVT_END()
 
@@ -1157,18 +1158,18 @@ EVT_BEGIN(dokuroiwa_init)
     SET_VALUE(GW(12), 0)
     SET_VALUE(GW(13), 0)
     IF_INT_EQUAL(GSWF(3139), 0)
-        CALL(evt_run_case_evt, 9, 1, STRING("A_dkr_iwa_01"), 0, PTR(dokuroiwa_touch), 0)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_dkr_iwa_01"), 0, PTR(dokuroiwa_touch), 0)
     END_IF
     IF_INT_EQUAL(GSWF(3149), 0)
         CALL_CHILD(PTR(case_event_entry))
-        CALL(evt_run_case_evt, 1, 1, STRING("A_iwa_atari"), 0, PTR(iwa02_nonride_a), 0)
+        CALL(evt_run_case_evt, CASE_NOT_STAND_ON, 1, STRING("A_iwa_atari"), 0, PTR(iwa02_nonride_a), 0)
         ELSE
         CALL(evt_map_playanim, STRING("S-dkr_iwa"), 2, 0)
         CALL(evt_hitobj_onoff, STRING("A_dkr_iwa_futa"), 1, 0)
         CALL(evt_hitobj_onoff, STRING("A_dkr_iwa_futa02"), 1, 1)
     END_IF
     CALL(evt_paper_entry, STRING("OFF_d_bom_ver2"))
-    CALL(evt_run_case_evt, 15, 1, STRING("A_dkr_iwa_02_oku_01"), 0, PTR(dokuroiwa_bomb), 0)
+    CALL(evt_run_case_evt, CASE_BOBBERY, 1, STRING("A_dkr_iwa_02_oku_01"), 0, PTR(dokuroiwa_bomb), 0)
     RETURN
 EVT_END()
 

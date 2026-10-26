@@ -18,6 +18,7 @@
 #include "evt/evt_snd.h"
 #include "mario/mario_pouch.h"
 #include "system.h"
+#include "driver/casedrv.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "mario/mariost.h"
@@ -2040,7 +2041,7 @@ EVT_BEGIN(gor_04_init_evt)
     CALL(evt_mobj_kururing_floor, STRING("kururin1"), -510, 80, 120, STRING("S_ground"), 125, GSWF(5583))
     CALL(evt_item_entry, STRING("item_00"), ITEM_STAR_PIECE, 475, 0, 100, 16, GSWF(5584), 0)
     SPAWN_EVENT(PTR(evt_wing))
-    CALL(evt_run_case_evt, 5, 1, STRING("A_noriba"), 0, PTR(evt_hikousen), 0)
+    CALL(evt_run_case_evt, CASE_STAND_ON_A, 1, STRING("A_noriba"), 0, PTR(evt_hikousen), 0)
     CALL(evt_bero_get_entername, LW(0))
     IF_STR_EQUAL(LW(0), STRING("hikousen_return"))
         SPAWN_EVENT(PTR(evt_hikousen_return))

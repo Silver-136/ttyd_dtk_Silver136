@@ -20,6 +20,7 @@
 #include "driver/mapdrv.h"
 #include "mario/mario_pouch.h"
 #include "system.h"
+#include "driver/casedrv.h"
 
 #include "manager/evtmgr.h"
 #include "driver/msgdrv.h"
@@ -693,7 +694,7 @@ EVT_BEGIN(sekizou_init)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("dennshoku_2"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_trans, 1, STRING("S_kuizu"), 0, -1000, 0)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_kuizu"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_run_case_evt, 9, 1, STRING("a_sekizou_1_a"), 0, PTR(kuizu_sekizou), 0)
+    CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_sekizou_1_a"), 0, PTR(kuizu_sekizou), 0)
     RETURN
 EVT_END()
 

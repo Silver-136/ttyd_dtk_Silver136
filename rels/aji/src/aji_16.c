@@ -16,6 +16,7 @@
 #include "party/party_motion.h"
 #include "evt/evt_fade.h"
 #include "system.h"
+#include "driver/casedrv.h"
 
 #include "mario/mario.h"
 #include "evt/evt_bero.h"
@@ -445,12 +446,12 @@ EVT_BEGIN(aji_16_init_evt)
     IF_INT_LESS(GSW_STORY_PROGRESS, 58)
         SET_VALUE(LW(0), STRING("e_bero"))
         CALL_CHILD(PTR(bero_case_switch_off))
-        CALL(evt_run_case_evt, 9, 1, STRING("e_bero"), 0, PTR(peach_evt_door_stop), GW(15))
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("e_bero"), 0, PTR(peach_evt_door_stop), GW(15))
     END_IF
     IF_INT_EQUAL(GSW_STORY_PROGRESS, 112)
         SET_VALUE(LW(0), STRING("e_bero"))
         CALL_CHILD(PTR(bero_case_switch_off))
-        CALL(evt_run_case_evt, 9, 1, STRING("e_bero"), 0, PTR(peach_evt_door_stop), GW(15))
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("e_bero"), 0, PTR(peach_evt_door_stop), GW(15))
     END_IF
     IF_INT_LESS(GSW_STORY_PROGRESS, 352)
         CALL(evt_mario_kill_party, 0)

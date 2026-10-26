@@ -20,6 +20,7 @@
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
 #include "mario/mario_party.h"
+#include "driver/casedrv.h"
 
 #include "data/mapdata.h"
 #include "driver/swdrv.h"
@@ -1020,7 +1021,7 @@ EVT_BEGIN(evt_close)
         SET_VALUE(LW(2), LW(7))
         SET_VALUE(LW(3), LW(8))
         SET_VALUE(LW(4), LW(9))
-        CALL(evt_run_case_evt, 9, 1, LW(2), 0, PTR(evt_open), 0)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, LW(2), 0, PTR(evt_open), 0)
         ELSE
         CALL(evt_mario_key_onoff, 0)
         CALL(evt_del_case_evt, 0, LW(11))
@@ -1047,7 +1048,7 @@ EVT_BEGIN(evt_close)
         SET_VALUE(LW(2), LW(7))
         SET_VALUE(LW(3), LW(8))
         SET_VALUE(LW(4), LW(9))
-        CALL(evt_run_case_evt, 10, 1, LW(3), 0, PTR(evt_open), 0)
+        CALL(evt_run_case_evt, CASE_PUSH, 1, LW(3), 0, PTR(evt_open), 0)
     END_IF
     CALL(evt_exit_case_evt)
     RETURN
@@ -1095,14 +1096,14 @@ static EVT_BEGIN(evt_open)
     SET_VALUE(LW(3), LW(8))
     SET_VALUE(LW(4), LW(9))
     SET_VALUE(LW(10), 0)
-    CALL(evt_run_case_evt, 10, 1, LW(2), 0, PTR(evt_close), LW(11))
+    CALL(evt_run_case_evt, CASE_PUSH, 1, LW(2), 0, PTR(evt_close), LW(11))
     SET_VALUE(LW(0), LW(5))
     SET_VALUE(LW(1), LW(6))
     SET_VALUE(LW(2), LW(7))
     SET_VALUE(LW(3), LW(8))
     SET_VALUE(LW(4), LW(9))
     SET_VALUE(LW(10), 1)
-    CALL(evt_run_case_evt, 0, 1, LW(4), 0, PTR(evt_close), LW(12))
+    CALL(evt_run_case_evt, CASE_STAND_ON, 1, LW(4), 0, PTR(evt_close), LW(12))
     CALL(evt_set_case_wrk, LW(11), 11, LW(11))
     CALL(evt_set_case_wrk, LW(11), 12, LW(12))
     CALL(evt_set_case_wrk, LW(12), 11, LW(11))
@@ -1153,7 +1154,7 @@ EVT_BEGIN(evt_tou_locker_init)
         END_IF
         IF_INT_EQUAL(LF(0), 0)
             CALL(evt_hit_bind_mapobj, LW(1), LW(0))
-            CALL(evt_run_case_evt, 9, 1, LW(2), 0, PTR(evt_open), 0)
+            CALL(evt_run_case_evt, CASE_FRONT_A, 1, LW(2), 0, PTR(evt_open), 0)
         END_IF
     END_LOOP
     RETURN
@@ -2066,7 +2067,7 @@ EVT_BEGIN(evt_doku_cake)
     WAIT_MS(300)
     CALL(evt_item_entry, STRING("doku_cake"), ITEM_POISONED_CAKE, 20, 25, -25, 17, -1, 0)
     CALL(evt_item_status_on, STRING("doku_cake"), 33554432)
-    CALL(evt_run_case_evt, 9, 1, STRING("a_cake"), 0, PTR(evt_eat_doku_cake), 0)
+    CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_cake"), 0, PTR(evt_eat_doku_cake), 0)
     WAIT_MS(500)
     CALL(evt_npc_move_position, STRING("キノシコワ"), 0, -130, 0, FLOAT(80.0f), 1)
     SET_VALUE(LW(1), 0)
@@ -2873,7 +2874,7 @@ EVT_BEGIN(evt_cake_init)
 EVT_END()
 
 EVT_BEGIN(evt_cake)
-    CALL(evt_run_case_evt, 9, 1, STRING("a_cake"), 0, PTR(evt_eat_cake), 0)
+    CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_cake"), 0, PTR(evt_eat_cake), 0)
     CALL(evt_cam3d_evt_set, 55, 102, 362, 55, 45, -9, 1000, 11)
     WAIT_MS(1100)
     CALL(evt_msg_print, 0, STRING("stg3_tou_295"), 0, STRING("トゲノコエース"))

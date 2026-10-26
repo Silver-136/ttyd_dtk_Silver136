@@ -21,6 +21,7 @@
 #include "evt/evt_lecture.h"
 #include "evt/evt_pouch.h"
 #include "system.h"
+#include "driver/casedrv.h"
 
 #include "mario/mario.h"
 #include "driver/animdrv.h"
@@ -2705,7 +2706,7 @@ static EVT_BEGIN(lock_item_check)
 EVT_END()
 
 EVT_BEGIN(unlock)
-    CALL(evt_run_case_evt, 9, 1, STRING("A_usu01_ie2_door3"), 0, PTR(evt_ie2_door2_1), 0)
+    CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_usu01_ie2_door3"), 0, PTR(evt_ie2_door2_1), 0)
     SET_VALUE(GSW_STORY_PROGRESS, 185)
     RETURN
 EVT_END()
@@ -3067,7 +3068,7 @@ EVT_BEGIN(usu_01_init_evt)
     IF_INT_LESS(GSW_STORY_PROGRESS, 185)
         CALL(evt_mobj_lock, STRING("usu_00_lock"), 21, FLOAT(-263.5f), FLOAT(10.099609f), FLOAT(-432.0498f), 135, PTR(lock_item_check), PTR(unlock), GSWF(1926))
         ELSE
-        CALL(evt_run_case_evt, 9, 1, STRING("A_usu01_ie2_door3"), 0, PTR(evt_ie2_door2_1), 0)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_usu01_ie2_door3"), 0, PTR(evt_ie2_door2_1), 0)
     END_IF
     SET_VALUE(LW(0), PTR(&door_1))
     CALL_CHILD(PTR(evt_door_entry))
@@ -3075,7 +3076,7 @@ EVT_BEGIN(usu_01_init_evt)
     CALL_CHILD(PTR(evt_door_entry))
     SET_VALUE(LW(0), PTR(&door_3))
     CALL_CHILD(PTR(evt_door_entry))
-    CALL(evt_run_case_evt, 9, 1, STRING("A_usu01_ie2_door3_u"), 0, PTR(evt_ie2_door2_2), 0)
+    CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_usu01_ie2_door3_u"), 0, PTR(evt_ie2_door2_2), 0)
     SPAWN_EVENT(PTR(evt_monban_look))
     IF_INT_EQUAL(GSW_STORY_PROGRESS, 180)
         IF_INT_EQUAL(GSWF(1925), 1)
@@ -3102,7 +3103,7 @@ EVT_BEGIN(usu_01_init_evt)
     SPAWN_EVENT(PTR(usu01_crowHI_talk_event))
     SPAWN_EVENT(PTR(usu01_crowJ_talk_event))
     IF_INT_LESS(GSW_STORY_PROGRESS, 183)
-        CALL(evt_run_case_evt, 9, 1, STRING("A_mon"), 0, PTR(evt_mon_open), 0)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_mon"), 0, PTR(evt_mon_open), 0)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_monato"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_mon02"), 1, 0)
         ELSE

@@ -18,6 +18,7 @@
 #include "driver/mapdrv.h"
 #include "mario/mario_pouch.h"
 #include "system.h"
+#include "driver/casedrv.h"
 
 #include "mario/mario.h"
 #include "mario/mario_motion.h"
@@ -645,13 +646,13 @@ EVT_BEGIN(mri_05_init_evt)
     SET_VALUE(LW(10), STRING("punipuni00"))
     SET_VALUE(LW(11), 0)
     SPAWN_EVENT(PTR(punipuni_ball00_init))
-    CALL(evt_run_case_evt, 9, 1, STRING("A_dai_01_mae"), 0, PTR(punipuni_ball00), 0)
+    CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_dai_01_mae"), 0, PTR(punipuni_ball00), 0)
     SET_VALUE(LW(10), STRING("punipuni01"))
     SET_VALUE(LW(11), 1)
     SPAWN_EVENT(PTR(punipuni_ball01_init))
-    CALL(evt_run_case_evt, 9, 1, STRING("A_dai_mae"), 0, PTR(punipuni_ball01), 0)
+    CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_dai_mae"), 0, PTR(punipuni_ball01), 0)
     SPAWN_EVENT(PTR(door_switch_init))
-    CALL(evt_run_case_evt, 9, 1, STRING("A_sui"), 0, PTR(door_switch), 0)
+    CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_sui"), 0, PTR(door_switch), 0)
     CALL(evt_mobj_powerupblk, STRING("pblk00"), 250, -250, 100, 0, GSWF(5542), 0)
     SPAWN_EVENT(PTR(mario_shabon_check))
     RETURN

@@ -24,6 +24,7 @@
 #include "evt/evt_pouch.h"
 #include "mario/mario_hit.h"
 #include "system.h"
+#include "driver/casedrv.h"
 
 #include "driver/imgdrv.h"
 #include "driver/animdrv.h"
@@ -1899,7 +1900,7 @@ EVT_BEGIN(pik_00_init_evt)
             SET_VALUE(GF(11), 0)
         END_INLINE_EVENT
     END_IF
-    CALL(evt_run_case_evt, 0, 1, STRING("a_ie_1_2_yuka"), 0, PTR(evt_seacret), 0)
+    CALL(evt_run_case_evt, CASE_STAND_ON, 1, STRING("a_ie_1_2_yuka"), 0, PTR(evt_seacret), 0)
     CALL(evt_hitobj_attr_onoff, 0, 1, STRING("se_bero"), 4)
     CALL(evt_hit_damage_return_set, PTR(dmgReturnPt))
     CALL_CHILD(PTR(evt_gazigazi_entry))

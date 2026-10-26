@@ -21,6 +21,7 @@
 #include "evt/evt_sub.h"
 #include "evt/evt_item.h"
 #include "evt/evt_pouch.h"
+#include "driver/casedrv.h"
 
 #include "driver/hitdrv.h"
 #include "string.h"
@@ -973,7 +974,7 @@ EVT_BEGIN(aji_13_init_evt)
     IF_INT_LESS(GSW_STORY_PROGRESS, 372)
         SET_VALUE(LW(0), STRING("e_bero"))
         CALL_CHILD(PTR(bero_case_switch_off))
-        CALL(evt_run_case_evt, 9, 1, STRING("A_kagi1"), 0, PTR(evt_door_msg), 0)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_kagi1"), 0, PTR(evt_door_msg), 0)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_kagi1_mid"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_lights1_m"), MAP_OBJ_FLAG_HIDDEN)
         ELSE

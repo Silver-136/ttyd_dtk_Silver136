@@ -12,6 +12,7 @@
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
 #include "driver/mapdrv.h"
+#include "driver/casedrv.h"
 
 
 static BeroEntry bero_data[3];
@@ -163,7 +164,7 @@ EVT_BEGIN(tou_13_init_evt)
         END_IF
     END_SWITCH
     IF_INT_EQUAL(LF(0), 0)
-        CALL(evt_run_case_evt, 14, 1, STRING("deguti"), 0, PTR(evt_dakuto), 0)
+        CALL(evt_run_case_evt, CASE_HAMMER_2, 1, STRING("deguti"), 0, PTR(evt_dakuto), 0)
         SET_VALUE(LW(0), 1)
         CALL_CHILD(PTR(bero_case_switch_off))
         ELSE

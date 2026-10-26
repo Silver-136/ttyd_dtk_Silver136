@@ -15,6 +15,7 @@
 #include "evt/evt_item.h"
 #include "driver/npcdrv.h"
 #include "mario/mario_pouch.h"
+#include "driver/casedrv.h"
 
 USER_FUNC(evt_mario_get_name_hitobj_ride);
 
@@ -269,7 +270,7 @@ EVT_BEGIN(mri_15_init_evt)
         SPAWN_EVENT(PTR(dai3_battle))
     END_IF
     SPAWN_EVENT(PTR(door_switch_init))
-    CALL(evt_run_case_evt, 9, 1, STRING("A_sui"), 0, PTR(door_switch), 0)
+    CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_sui"), 0, PTR(door_switch), 0)
     RETURN
 EVT_END()
 

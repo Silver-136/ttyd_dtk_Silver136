@@ -15,6 +15,7 @@
 #include "driver/npcdrv.h"
 #include "driver/mapdrv.h"
 #include "system.h"
+#include "driver/casedrv.h"
 
 #include "stdio.h"
 #include "manager/evtmgr_cmd.h"
@@ -1072,9 +1073,9 @@ EVT_END()
 EVT_BEGIN(kpa_01_init_evt)
     CALL(evt_mario_set_mode, 2)
     CALL(evt_npc_setup, PTR(npcEnt))
-    CALL(evt_run_case_evt, 9, 1, STRING("a_zou_1"), 0, PTR(douzou_1_touch_evt), 0)
-    CALL(evt_run_case_evt, 9, 1, STRING("a_zou_2"), 0, PTR(douzou_2_touch_evt), 0)
-    CALL(evt_run_case_evt, 9, 1, STRING("a_zou_3"), 0, PTR(douzou_3_touch_evt), 0)
+    CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_zou_1"), 0, PTR(douzou_1_touch_evt), 0)
+    CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_zou_2"), 0, PTR(douzou_2_touch_evt), 0)
+    CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_zou_3"), 0, PTR(douzou_3_touch_evt), 0)
     CALL_CHILD(shan_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(59)

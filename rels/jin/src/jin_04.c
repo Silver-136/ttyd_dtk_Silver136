@@ -16,6 +16,7 @@
 #include "evt/evt_map.h"
 #include "driver/npcdrv.h"
 #include "system.h"
+#include "driver/casedrv.h"
 
 #include "mario/mario_pouch.h"
 #include "evt/evt_bero.h"
@@ -889,10 +890,10 @@ EVT_BEGIN(jin_04_init_evt)
     CALL(evt_mobj_jumpstand_red, 0, STRING("mobj_jump"), -75, 450, 100, PTR(jin_04_jumpstand), 0)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(200)
-        CALL(evt_run_case_evt, 0, 1, STRING("a_yuka"), 0, PTR(ranperu_toujou), 0)
+        CALL(evt_run_case_evt, CASE_STAND_ON, 1, STRING("a_yuka"), 0, PTR(ranperu_toujou), 0)
         CASE_EQUAL(210)
         CALL_CHILD(PTR(yoshi_color))
-        CALL(evt_run_case_evt, 0, 1, STRING("a_yuka"), 0, PTR(ranperu_lastbattle), 0)
+        CALL(evt_run_case_evt, CASE_STAND_ON, 1, STRING("a_yuka"), 0, PTR(ranperu_lastbattle), 0)
         CASE_EQUAL(200)
         CALL_CHILD(PTR(yoshi_color))
         SET_VALUE(LW(0), 1)

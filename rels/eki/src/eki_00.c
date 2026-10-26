@@ -25,6 +25,7 @@
 #include "evt/evt_offscreen.h"
 #include "evt/evt_paper.h"
 #include "poly_trig.h"
+#include "driver/casedrv.h"
 
 #include "manager/evtmgr.h"
 #include "driver/mapdrv.h"
@@ -1573,7 +1574,7 @@ static EVT_BEGIN(evt_moamoa_escape)
     WAIT_MS(3000)
     CALL(evt_cam3d_evt_off, 500, 11)
     WAIT_MS(500)
-    CALL(evt_run_case_evt, 9, 1, STRING("a_lever"), 0, PTR(evt_origami), GW(10))
+    CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_lever"), 0, PTR(evt_origami), GW(10))
     SET_VALUE(GSW_STORY_PROGRESS, 323)
     CALL(evt_mario_key_onoff, 1)
     RETURN
@@ -1718,7 +1719,7 @@ EVT_BEGIN(evt_elv_down)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(323)
         CASE_EQUAL(323)
-        CALL(evt_run_case_evt, 9, 1, STRING("a_lever"), 0, PTR(evt_origami), GW(10))
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_lever"), 0, PTR(evt_origami), GW(10))
         CASE_DEFAULT
         CALL(evt_mapobj_rotate, 1, STRING("s_lever"), 0, 0, -80)
     END_SWITCH
@@ -1971,23 +1972,23 @@ EVT_BEGIN(eki_00_init_evt)
     CALL(evt_hitobj_onoff, STRING("a_eki_07"), 1, 0)
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 320)
         CALL_CHILD(PTR(evt_elv_init))
-        CALL(evt_run_case_evt, 9, 1, STRING("a_suitti"), 0, PTR(evt_elv), 0)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_suitti"), 0, PTR(evt_elv), 0)
         ELSE
-        CALL(evt_run_case_evt, 9, 1, STRING("a_suitti"), 0, PTR(evt_elv_nomsg), 0)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_suitti"), 0, PTR(evt_elv_nomsg), 0)
     END_IF
     IF_INT_LESS(GSW_STORY_PROGRESS, 323)
         CALL_CHILD(PTR(evt_moamoa_init))
     END_IF
     CALL(evt_item_entry, STRING("item"), ITEM_CLOSE_CALL_P, -260, 130, -60, 17, GSWF(3745), 0)
     IF_INT_EQUAL(GSWF(3745), 0)
-        CALL(evt_run_case_evt, 16, 1, STRING("a_dai_sita"), 0, PTR(evt_head), 0)
+        CALL(evt_run_case_evt, CASE_HEAD, 1, STRING("a_dai_sita"), 0, PTR(evt_head), 0)
     END_IF
     CALL(evt_snd_bgmoff, 512)
     CALL(evt_snd_envon, 272, STRING("ENV_STG6_EKI2"))
     IF_INT_EQUAL(GSWF(3576), 1)
         SPAWN_EVENT(PTR(evt_bridge2))
     END_IF
-    CALL(evt_run_case_evt, 9, 1, STRING("a_kan"), 0, PTR(evt_kanban), 0)
+    CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_kan"), 0, PTR(evt_kanban), 0)
     RETURN
 EVT_END()
 

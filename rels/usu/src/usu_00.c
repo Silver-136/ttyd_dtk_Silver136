@@ -24,6 +24,7 @@
 #include "eff/eff_kemutest.h"
 #include "driver/mapdrv.h"
 #include "system.h"
+#include "driver/casedrv.h"
 
 #include "mario/mario_pouch.h"
 #include "party.h"
@@ -3699,9 +3700,9 @@ EVT_BEGIN(usu_00_init_evt)
         SET_VALUE(LW(0), PTR(&door_3))
         CALL_CHILD(PTR(evt_door_entry))
         ELSE
-        CALL(evt_run_case_evt, 9, 1, STRING("A_ie1door"), 0, PTR(door_ie1_koopa_evt), 0)
-        CALL(evt_run_case_evt, 9, 1, STRING("A_ie2door"), 0, PTR(door_ie2_koopa_evt), 0)
-        CALL(evt_run_case_evt, 9, 1, STRING("A_ie3door"), 0, PTR(door_ie3_koopa_evt), 0)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_ie1door"), 0, PTR(door_ie1_koopa_evt), 0)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_ie2door"), 0, PTR(door_ie2_koopa_evt), 0)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_ie3door"), 0, PTR(door_ie3_koopa_evt), 0)
     END_IF
     IF_INT_EQUAL(GF(1), 0)
         CALL(evt_kinopio_setup, PTR(&kino_dt))
@@ -3733,7 +3734,7 @@ EVT_BEGIN(usu_00_init_evt)
         SPAWN_EVENT(PTR(usu00_vivian_cry_event))
     END_IF
     IF_INT_LESS(GSW_STORY_PROGRESS, 205)
-        CALL(evt_run_case_evt, 9, 1, STRING("A_kusa_07"), 0, PTR(usu_00_touch_ichikorori_ball), 0)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_kusa_07"), 0, PTR(usu_00_touch_ichikorori_ball), 0)
     END_IF
     IF_INT_EQUAL(GSW_STORY_PROGRESS, 213)
         CALL_CHILD(PTR(usu00_3witch_init))

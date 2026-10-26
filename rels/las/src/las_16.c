@@ -16,6 +16,7 @@
 #include "evt/evt_item.h"
 #include "driver/mapdrv.h"
 #include "mario/mario_pouch.h"
+#include "driver/casedrv.h"
 
 
 static EvtWord w_door_close[12];
@@ -147,7 +148,7 @@ EVT_BEGIN(las_16_init_evt)
     IF_INT_EQUAL(GSWF(4348), 0)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ana_after"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_ana_after"), 1, 0)
-        CALL(evt_run_case_evt, 15, 1, STRING("A_ana_ana"), 0, PTR(bomb_wall_evt), 0)
+        CALL(evt_run_case_evt, CASE_BOBBERY, 1, STRING("A_ana_ana"), 0, PTR(bomb_wall_evt), 0)
         ELSE
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ana_ana"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ana_before"), MAP_OBJ_FLAG_HIDDEN)
@@ -155,7 +156,7 @@ EVT_BEGIN(las_16_init_evt)
         CALL(evt_hitobj_onoff, STRING("A_ana_before"), 1, 0)
     END_IF
     CALL(evt_mobj_itembox, STRING("box"), 150, 0, 0, 0, 0, PTR(box_evt), GSWF(4367))
-    CALL(evt_run_case_evt, 9, 1, STRING("A_pure"), 0, PTR(hint_plate), 0)
+    CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_pure"), 0, PTR(hint_plate), 0)
     RETURN
 EVT_END()
 

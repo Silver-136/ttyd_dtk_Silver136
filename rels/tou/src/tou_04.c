@@ -15,6 +15,7 @@
 #include "evt/evt_pouch.h"
 #include "driver/npcdrv.h"
 #include "system.h"
+#include "driver/casedrv.h"
 
 #include "evt/evt_npc.h"
 #include "driver/msgdrv.h"
@@ -2316,8 +2317,8 @@ EVT_BEGIN(tou_04_init_evt)
             CALL_CHILD(PTR(bero_case_switch_off))
             SET_VALUE(LW(0), 8)
             CALL_CHILD(PTR(bero_case_switch_off))
-            CALL(evt_run_case_evt, 9, 1, STRING("w_bero"), 0, PTR(boss_msg), 0)
-            CALL(evt_run_case_evt, 9, 1, STRING("e_bero"), 0, PTR(boss_msg), 0)
+            CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("w_bero"), 0, PTR(boss_msg), 0)
+            CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("e_bero"), 0, PTR(boss_msg), 0)
         END_IF
     END_IF
     IF_INT_EQUAL(GSW_STORY_PROGRESS, 163)
@@ -2328,8 +2329,8 @@ EVT_BEGIN(tou_04_init_evt)
         SET_VALUE(LW(0), 8)
         CALL_CHILD(PTR(bero_case_switch_off))
 #ifndef VERSION_G8ME01
-        CALL(evt_run_case_evt, 9, 1, STRING("w_bero"), 0, PTR(boss_msg), 0)
-        CALL(evt_run_case_evt, 9, 1, STRING("e_bero"), 0, PTR(boss_msg), 0)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("w_bero"), 0, PTR(boss_msg), 0)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("e_bero"), 0, PTR(boss_msg), 0)
 #endif
     END_IF
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 163)

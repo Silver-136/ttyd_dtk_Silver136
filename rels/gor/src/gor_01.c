@@ -24,6 +24,7 @@
 #include "evt/evt_pouch.h"
 #include "driver/mapdrv.h"
 #include "eff/eff_kemuri.h"
+#include "driver/casedrv.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "driver/npcdrv.h"
@@ -5239,7 +5240,7 @@ EVT_BEGIN(gor_01_init_evt)
         CALL(evt_item_flag_on, STRING(/*"ドクロジュエル"*/"\x83\x68\x83\x4E\x83\x8D\x83\x57\x83\x85\x83\x47\x83\x8B"), 2)
         CALL(evt_item_status_on, STRING(/*"ドクロジュエル"*/"\x83\x68\x83\x4E\x83\x8D\x83\x57\x83\x85\x83\x47\x83\x8B"), 33554432)
 #endif
-        CALL(evt_run_case_evt, 9, 1, STRING("A_jewel"), 0, PTR(marco_jewel), GW(8))
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_jewel"), 0, PTR(marco_jewel), GW(8))
     END_IF
     IF_INT_EQUAL(GSWF(1188), 0)
         SET_VALUE(LW(0), PTR(&door_data_01))
@@ -5257,7 +5258,7 @@ EVT_BEGIN(gor_01_init_evt)
     END_IF
     CALL_CHILD(evt_door_entry)
     IF_INT_LESS(GSW_STORY_PROGRESS, 19)
-        CALL(evt_run_case_evt, 9, 1, STRING("A_ie_02_f2_doa01"), 0, PTR(evt_door_02_f2_junbityu), 0)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_ie_02_f2_doa01"), 0, PTR(evt_door_02_f2_junbityu), 0)
     ELSE
         SET_VALUE(LW(0), PTR(&door_data_02_f2))
         CALL_CHILD(evt_door_entry)
@@ -5289,8 +5290,8 @@ EVT_BEGIN(gor_01_init_evt)
             CALL(evt_item_entry, STRING("iri_18"), ITEM_HONEY_SHROOM, -440, 30, -80, 16, GSWF(1202), 0)
         END_IF
     END_IF
-    CALL(evt_run_case_evt, 9, 1, STRING("A_keizi_mae"), 0, PTR(keijiban_omote_joho), 0)
-    CALL(evt_run_case_evt, 9, 1, STRING("A_keizi_ura"), 0, PTR(keijiban_ura_joho), 0)
+    CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_keizi_mae"), 0, PTR(keijiban_omote_joho), 0)
+    CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_keizi_ura"), 0, PTR(keijiban_ura_joho), 0)
     CALL(evt_pouch_check_item, ITEM_ULTRA_HAMMER, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         IF_INT_EQUAL(GSWF(1196), 0)

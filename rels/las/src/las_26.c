@@ -22,6 +22,7 @@
 #include "driver/mapdrv.h"
 #include "mario/mario_pouch.h"
 #include "system.h"
+#include "driver/casedrv.h"
 
 #include "driver/npcdrv.h"
 #include "evt/evt_bero.h"
@@ -447,7 +448,7 @@ EVT_BEGIN(las_26_init_evt)
     IF_INT_EQUAL(GSWF(4360), 0)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ana_after"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_ana_after"), 1, 0)
-        CALL(evt_run_case_evt, 15, 1, STRING("A_ana_before1"), 0, PTR(bomb_wall), 0)
+        CALL(evt_run_case_evt, CASE_BOBBERY, 1, STRING("A_ana_before1"), 0, PTR(bomb_wall), 0)
         ELSE
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ana_before"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_ana_before1"), 1, 0)

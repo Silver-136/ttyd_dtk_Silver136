@@ -19,6 +19,7 @@
 #include "mot/mot_slit.h"
 #include "driver/mapdrv.h"
 #include "system.h"
+#include "driver/casedrv.h"
 
 #include "mario/mario.h"
 #include "mario/mariost.h"
@@ -1299,15 +1300,15 @@ EVT_END()
 static EVT_BEGIN(evt_access_entry)
     IF_INT_LESS(GSW_STORY_PROGRESS, 345)
         SET_VALUE(LW(1), STRING("stg6_rsh_267"))
-        CALL(evt_run_case_evt, 9, 1, STRING("tana_4"), 0, PTR(evt_access), 0)
-        CALL(evt_run_case_evt, 9, 1, STRING("tana_5"), 0, PTR(evt_access2), 0)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("tana_4"), 0, PTR(evt_access), 0)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("tana_5"), 0, PTR(evt_access2), 0)
         ELSE
         SET_VALUE(LW(1), STRING("stg6_rsh_267"))
-        CALL(evt_run_case_evt, 9, 1, STRING("tana_3"), 0, PTR(evt_access), 0)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("tana_3"), 0, PTR(evt_access), 0)
         SET_VALUE(LW(1), STRING("stg6_rsh_267"))
-        CALL(evt_run_case_evt, 9, 1, STRING("tana_4"), 0, PTR(evt_access), 0)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("tana_4"), 0, PTR(evt_access), 0)
         SET_VALUE(LW(1), STRING("stg6_rsh_267"))
-        CALL(evt_run_case_evt, 9, 1, STRING("tana_5"), 0, PTR(evt_access), 0)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("tana_5"), 0, PTR(evt_access), 0)
         SET_VALUE(GSWF(3462), 1)
     END_IF
     RETURN
@@ -1332,10 +1333,10 @@ EVT_BEGIN(rsh_02_init_evt)
     SET_VALUE(LW(0), PTR(&door_5))
     CALL_CHILD(PTR(evt_rsh_door_entry))
     CALL(evt_npc_setup, PTR(npc_data))
-    CALL(evt_run_case_evt, 9, 1, STRING("tana_3"), 0, PTR(evt_nabe), 0)
+    CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("tana_3"), 0, PTR(evt_nabe), 0)
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 283)
         IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, 308)
-            CALL(evt_run_case_evt, 9, 1, STRING("bed"), 0, PTR(evt_bed), GW(11))
+            CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("bed"), 0, PTR(evt_bed), GW(11))
         END_IF
     END_IF
     CALL_CHILD(PTR(evt_access_entry))
@@ -1409,7 +1410,7 @@ EVT_BEGIN(rsh_02_a_init_evt)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("s_yuka_simi"), MAP_OBJ_FLAG_HIDDEN)
         IF_INT_GREATER(GSW_STORY_PROGRESS, 283)
             IF_INT_LESS(GSW_STORY_PROGRESS, 287)
-                CALL(evt_run_case_evt, 5, 1, STRING("a_yuka_simi"), 0, PTR(evt_yuka_simi), GW(10))
+                CALL(evt_run_case_evt, CASE_STAND_ON_A, 1, STRING("a_yuka_simi"), 0, PTR(evt_yuka_simi), GW(10))
             END_IF
         END_IF
         CASE_DEFAULT
@@ -1565,7 +1566,7 @@ EVT_BEGIN(rsh_02_a_init_evt)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("yuka_5_kami_2"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("yuka_5"), MAP_OBJ_FLAG_HIDDEN)
         IF_INT_LESS(GSW_STORY_PROGRESS, 307)
-            CALL(evt_run_case_evt, 5, 1, STRING("a_kami"), 0, PTR(evt_daiji_kami), 0)
+            CALL(evt_run_case_evt, CASE_STAND_ON_A, 1, STRING("a_kami"), 0, PTR(evt_daiji_kami), 0)
         END_IF
         SPAWN_EVENT(PTR(evt_toron_appear))
         CASE_DEFAULT
@@ -1734,7 +1735,7 @@ EVT_BEGIN(rsh_02_init_evt_nidome)
             END_IF
         END_IF
     END_IF
-    CALL(evt_run_case_evt, 9, 1, STRING("bed"), 0, PTR(evt_nidome_bed), 0)
+    CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("bed"), 0, PTR(evt_nidome_bed), 0)
     RETURN
 EVT_END()
 

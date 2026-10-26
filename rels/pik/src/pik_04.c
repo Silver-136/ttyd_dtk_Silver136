@@ -29,6 +29,7 @@
 #include "driver/mapdrv.h"
 #include "mario/mario_pouch.h"
 #include "system.h"
+#include "driver/casedrv.h"
 
 USER_FUNC(evt_mario_dispflag_onoff);
 USER_FUNC(evt_pouch_add_coin);
@@ -980,15 +981,15 @@ EVT_BEGIN(pik_04_init_evt)
     CALL_CHILD(PTR(evt_door_entry))
     SET_VALUE(LW(0), PTR(&door_2))
     CALL_CHILD(PTR(evt_door_entry))
-    CALL(evt_run_case_evt, 9, 1, STRING("a_door_2"), 0, PTR(evt_up), 0)
-    CALL(evt_run_case_evt, 9, 1, STRING("a_door_3"), 0, PTR(evt_down), 0)
+    CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_door_2"), 0, PTR(evt_up), 0)
+    CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_door_3"), 0, PTR(evt_down), 0)
     CALL(evt_hitobj_attr_onoff, 1, 1, STRING("nw_bero"), 4)
     CALL(evt_hitobj_attr_onoff, 1, 1, STRING("se_bero"), 4)
-    CALL(evt_run_case_evt, 9, 1, STRING("a_roten"), 0, PTR(evt_roten), 0)
+    CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_roten"), 0, PTR(evt_roten), 0)
     CALL(evt_item_entry, STRING("item_00"), ITEM_STAR_PIECE, -250, 5, -425, 16, GSWF(5657), 0)
     CALL(evt_item_entry, STRING("item_01"), ITEM_INN_COUPON, -305, 0, 105, 16, GSWF(3279), 0)
     CALL_CHILD(PTR(imginit))
-    CALL(evt_run_case_evt, 9, 1, STRING("front_"), 0, PTR(kinopio_house_talk_evt), 0)
+    CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("front_"), 0, PTR(kinopio_house_talk_evt), 0)
     CALL(evt_kinopio_setup, PTR(&kino_dt))
     IF_INT_EQUAL(GSW_STORY_PROGRESS, 402)
         CALL(evt_mario_kill_party, 0)

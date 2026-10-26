@@ -11,6 +11,7 @@
 #include "evt/evt_item.h"
 #include "driver/mapdrv.h"
 #include "mario/mario_pouch.h"
+#include "driver/casedrv.h"
 
 #include "driver/camdrv.h"
 #include "mario/mariost.h"
@@ -308,7 +309,7 @@ EVT_BEGIN(win_03_init_evt)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
     CALL_CHILD(evt_bero_info_run)
-    CALL(evt_run_case_evt, 5, 1, STRING("n_bero"), 0, PTR(dummy_event), 0)
+    CALL(evt_run_case_evt, CASE_STAND_ON_A, 1, STRING("n_bero"), 0, PTR(dummy_event), 0)
     CALL(evt_snd_bgmon, 512, STRING("BGM_STG2_WIN1"))
     CALL(evt_snd_envon, 272, STRING("ENV_STG2_WIN1"))
     CALL(evt_snd_bgmon, 160, 0)

@@ -13,6 +13,7 @@
 #include "evt/evt_sub.h"
 #include "evt/evt_cam.h"
 #include "system.h"
+#include "driver/casedrv.h"
 
 USER_FUNC(evt_mario_dispflag_onoff);
 
@@ -287,9 +288,9 @@ EVT_BEGIN(tou_09_init_evt)
     CALL_CHILD(PTR(evt_tou_locker_init))
     SET_VALUE(LW(0), 0)
     CALL_CHILD(PTR(bero_case_switch_off))
-    CALL(evt_run_case_evt, 9, 1, STRING("n_bero"), 0, PTR(evt_tojikome_msg), 0)
-    CALL(evt_run_case_evt, 9, 1, STRING("t_door_2"), 0, PTR(evt_toile), 0)
-    CALL(evt_run_case_evt, 9, 1, STRING("t_door_3"), 0, PTR(evt_toile2), 0)
+    CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("n_bero"), 0, PTR(evt_tojikome_msg), 0)
+    CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("t_door_2"), 0, PTR(evt_toile), 0)
+    CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("t_door_3"), 0, PTR(evt_toile2), 0)
     CALL(evt_hitobj_onoff, STRING("a_door_9_ura"), 1, 0)
     RETURN
 EVT_END()

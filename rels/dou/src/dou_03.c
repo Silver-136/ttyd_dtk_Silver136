@@ -19,6 +19,7 @@
 #include "evt/evt_pouch.h"
 #include "driver/mapdrv.h"
 #include "system.h"
+#include "driver/casedrv.h"
 
 USER_FUNC(evt_win_item_select);
 
@@ -431,7 +432,7 @@ EVT_BEGIN(dou_03_init_evt)
     CALL(evt_map_playanim, STRING("moku"), 1, 0)
     CALL(evt_map_playanim, STRING("tubo"), 1, 0)
     CALL(evt_mobj_kururing_floor, STRING("kururin1"), 450, 275, -550, STRING("s03_iwadan2"), 125, GSWF(5645))
-    CALL(evt_run_case_evt, 9, 1, STRING("A_makimaki"), 0, PTR(watergate_handle), 0)
+    CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_makimaki"), 0, PTR(watergate_handle), 0)
     SPAWN_EVENT(PTR(watergate_handle_init))
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 245)
         CALL(evt_mapobj_trans, 0, STRING("tetu"), 1, 100, 0)

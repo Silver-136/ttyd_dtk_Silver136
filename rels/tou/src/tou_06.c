@@ -20,6 +20,7 @@
 #include "driver/npcdrv.h"
 #include "driver/mapdrv.h"
 #include "system.h"
+#include "driver/casedrv.h"
 
 #include "stdio.h"
 #include "memory.h"
@@ -471,7 +472,7 @@ EVT_BEGIN(tou_06_init_evt)
     CALL(evt_bero_get_info)
     CALL_CHILD(PTR(evt_bero_info_run))
     CALL(evt_npc_setup, PTR(npcEnt))
-    CALL(evt_run_case_evt, 0, 1, STRING("ana"), 0, PTR(evt_ana), 0)
+    CALL(evt_run_case_evt, CASE_STAND_ON, 1, STRING("ana"), 0, PTR(evt_ana), 0)
     IF_INT_LESS(GSW_STORY_PROGRESS, 149)
         CALL(evt_cloud_init)
         CALL(evt_cloud_ent, 0, STRING("kontena"), STRING("a_kon_H"), PTR(evt_kontena))

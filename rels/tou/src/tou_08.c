@@ -17,6 +17,7 @@
 #include "evt/evt_pouch.h"
 #include "driver/mapdrv.h"
 #include "system.h"
+#include "driver/casedrv.h"
 
 #include "driver/effdrv.h"
 #include "driver/npcdrv.h"
@@ -919,7 +920,7 @@ USER_FUNC(icon_off) {
 }
 
 static EVT_BEGIN(bed_entry)
-    CALL(evt_run_case_evt, 9, 1, LW(0), 0, PTR(evt_tou_bed), 0)
+    CALL(evt_run_case_evt, CASE_FRONT_A, 1, LW(0), 0, PTR(evt_tou_bed), 0)
     RETURN
 EVT_END()
 
@@ -1178,11 +1179,11 @@ EVT_BEGIN(tou_08_init_evt)
     CALL(evt_npc_change_interrupt, STRING("ハンマーブロス"), 6, PTR(talk_hammerbros))
     CALL_CHILD(PTR(init_togemet))
     CALL(evt_npc_change_interrupt, STRING("トゲメット"), 6, PTR(talk_togemet))
-    CALL(evt_run_case_evt, 9, 1, STRING("M_make"), 0, PTR(evt_tou_match_make_default), 0)
+    CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("M_make"), 0, PTR(evt_tou_match_make_default), 0)
     CALL_CHILD(PTR(evt_tou_monitor_init))
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("isu"), MAP_OBJ_FLAG_CLIP)
-    CALL(evt_run_case_evt, 9, 1, STRING("t_door_2"), 0, PTR(evt_toile_door), 0)
-    CALL(evt_run_case_evt, 9, 1, STRING("t_door_3"), 0, PTR(evt_toile_door2), 0)
+    CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("t_door_2"), 0, PTR(evt_toile_door), 0)
+    CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("t_door_3"), 0, PTR(evt_toile_door2), 0)
     CALL(evt_hitobj_name_callback, STRING("a_b_H"), PTR(bed_entry))
     CALL(evt_sub_animgroup_async, STRING("p_slit"))
     IF_INT_EQUAL(GSWF(2389), 1)

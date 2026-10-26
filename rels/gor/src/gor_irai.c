@@ -9,6 +9,7 @@
 #include "evt/evt_npc.h"
 #include "evt/evt_case.h"
 #include "evt/evt_door.h"
+#include "driver/casedrv.h"
 
 #include "driver/camdrv.h"
 #include "driver/msgdrv.h"
@@ -293,8 +294,8 @@ EvtWord* irai_end_event[] = {
 };
 
 EVT_BEGIN(gor_irai_init)
-    CALL(evt_run_case_evt, 9, 1, STRING("A_i04_keizi"), 0, PTR(gor_irai_main), 0)
-    CALL(evt_run_case_evt, 9, 1, STRING("A_i04_kunter"), 0, PTR(gor_irai_tenshu_main), 0)
+    CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_i04_keizi"), 0, PTR(gor_irai_main), 0)
+    CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_i04_kunter"), 0, PTR(gor_irai_tenshu_main), 0)
     RETURN
 EVT_END()
 

@@ -24,6 +24,7 @@
 #include "evt/evt_pouch.h"
 #include "driver/mobjdrv.h"
 #include "system.h"
+#include "driver/casedrv.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "mario/mario.h"
@@ -1095,7 +1096,7 @@ EVT_BEGIN(uranaisi_direct_talk)
 EVT_END()
 
 EVT_BEGIN(uranaisi_init)
-    CALL(evt_run_case_evt, 9, 1, STRING("uranai"), 0, PTR(uranaisi_table_talk), 0)
+    CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("uranai"), 0, PTR(uranaisi_table_talk), 0)
     RETURN
 EVT_END()
 
@@ -2221,11 +2222,11 @@ static EVT_BEGIN(evt_door_04_entry)
     CALL(evt_door_param, LW(0), 1, LW(1), LW(2), LW(3))
     IF_INT_NOT_EQUAL(LW(2), 0)
         SET_VALUE(LW(15), 0)
-        CALL(evt_run_case_evt, 9, 1, LW(2), 0, PTR(evt_door_stg7_close), 0)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, LW(2), 0, PTR(evt_door_stg7_close), 0)
     END_IF
     IF_INT_NOT_EQUAL(LW(3), 0)
         SET_VALUE(LW(15), 0)
-        CALL(evt_run_case_evt, 9, 1, LW(3), 0, PTR(evt_door_stg7_open), 0)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, LW(3), 0, PTR(evt_door_stg7_open), 0)
     END_IF
     RETURN
 EVT_END()
@@ -2512,7 +2513,7 @@ EVT_BEGIN(tensou_sw_event)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("sui__2"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("wa_pu"), MAP_OBJ_FLAG_HIDDEN)
         SPAWN_EVENT(PTR(tensou_anim_event))
-        CALL(evt_run_case_evt, 0, 1, STRING("tensou"), 0, PTR(tensou_event), 0)
+        CALL(evt_run_case_evt, CASE_STAND_ON, 1, STRING("tensou"), 0, PTR(tensou_event), 0)
         CALL(evt_exit_case_evt)
         ELSE
         IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 403)
@@ -2520,7 +2521,7 @@ EVT_BEGIN(tensou_sw_event)
             CALL(evt_mapobj_flag_onoff, 1, 0, STRING("sui__2"), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_mapobj_flag_onoff, 1, 0, STRING("wa_pu"), MAP_OBJ_FLAG_HIDDEN)
             SPAWN_EVENT(PTR(tensou_anim_event))
-            CALL(evt_run_case_evt, 0, 1, STRING("tensou"), 0, PTR(tensou_event), 0)
+            CALL(evt_run_case_evt, CASE_STAND_ON, 1, STRING("tensou"), 0, PTR(tensou_event), 0)
             CALL(evt_exit_case_evt)
             ELSE
             CALL(evt_mario_key_onoff, 0)
@@ -2632,7 +2633,7 @@ EVT_BEGIN(hashira_bomb)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("bom_go"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_bom_go"), 1, 0)
         CALL(evt_paper_entry, STRING("OFF_d_bom_ver2"))
-        CALL(evt_run_case_evt, 15, 1, STRING("a_bom_mae"), 0, PTR(hashira_bomb_sub), 0)
+        CALL(evt_run_case_evt, CASE_BOBBERY, 1, STRING("a_bom_mae"), 0, PTR(hashira_bomb_sub), 0)
         ELSE
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("bom_mae"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_bom_mae"), 1, 0)
@@ -2730,7 +2731,7 @@ EVT_BEGIN(tik_00_init_evt)
     SET_VALUE(LW(0), PTR(&door_data_04))
     CALL_CHILD(PTR(evt_door_04_entry))
     SPAWN_EVENT(PTR(tensou_init_event))
-    CALL(evt_run_case_evt, 9, 1, STRING("a_sui"), 0, PTR(tensou_sw_event), 0)
+    CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_sui"), 0, PTR(tensou_sw_event), 0)
     CALL(evt_shop_setup, PTR(obj_list), PTR(goods_list), PTR(&shopper_data), PTR(trade_list))
     SET_VALUE(LW(0), STRING("ugo_yuka"))
     SET_VALUE(LW(1), STRING("a_ugo_yuka"))

@@ -19,6 +19,7 @@
 #include "evt/evt_item.h"
 #include "evt/evt_pouch.h"
 #include "system.h"
+#include "driver/casedrv.h"
 
 #include "mario/mario.h"
 #include "manager/evtmgr_cmd.h"
@@ -1407,7 +1408,7 @@ EVT_BEGIN(pik_01_init_evt)
         CALL(set_r)
         SET_VALUE(LW(0), 1)
         CALL_CHILD(PTR(bero_case_switch_off))
-        CALL(evt_run_case_evt, 9, 1, STRING("a_harigami"), 0, PTR(evt_powan), 0)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_harigami"), 0, PTR(evt_powan), 0)
         ELSE
         CALL(evt_mapobj_flag_onoff, 0, 1, STRING("kami"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
@@ -1421,7 +1422,7 @@ EVT_BEGIN(pik_01_init_evt)
         SET_VALUE(LW(0), 1)
         CALL_CHILD(PTR(bero_case_switch_off))
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("polySurface743_q00096"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_run_case_evt, 9, 1, STRING("MOBJ_lock"), 0, PTR(koopa_door_evt), 0)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("MOBJ_lock"), 0, PTR(koopa_door_evt), 0)
     END_IF
     IF_INT_EQUAL(GSW_STORY_PROGRESS, 373)
         CALL(evt_mario_kill_party, 0)

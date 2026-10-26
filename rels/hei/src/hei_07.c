@@ -19,6 +19,7 @@
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
 #include "evt/evt_sub.h"
+#include "driver/casedrv.h"
 
 #include "driver/mapdrv.h"
 #include "pmario_sound.h"
@@ -726,7 +727,7 @@ EVT_BEGIN(hei_07_init_evt)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("hei_07_2"), MAP_OBJ_FLAG_HIDDEN)
     IF_INT_LESS(GSW_STORY_PROGRESS, 31)
         CALL(evt_hitobj_onoff, STRING("a_sekizou_2"), 0, 0)
-        CALL(evt_run_case_evt, 9, 1, STRING("a_sekizou_1_a"), 0, PTR(a_sekizou_1), 0)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_sekizou_1_a"), 0, PTR(a_sekizou_1), 0)
         SET_VALUE(GW(0), 0)
         ELSE
         CALL(evt_hitobj_onoff, STRING("a_sekizou_2"), 0, 1)

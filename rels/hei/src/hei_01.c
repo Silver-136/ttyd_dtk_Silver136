@@ -19,6 +19,7 @@
 #include "driver/mapdrv.h"
 #include "mario/mario_pouch.h"
 #include "system.h"
+#include "driver/casedrv.h"
 
 #include "party.h"
 #include "evt/evt_bero.h"
@@ -878,7 +879,7 @@ EVT_BEGIN(hei_01_init_evt)
     SET_VALUE(LW(0), PTR(kusa_data))
     CALL_CHILD(PTR(evt_sub_kusa_access_entry))
     IF_INT_EQUAL(GSWF(1783), 0)
-        CALL(evt_run_case_evt, 9, 1, STRING("a_kusa_1"), 0, PTR(kusa_dokan), 0)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_kusa_1"), 0, PTR(kusa_dokan), 0)
         ELSE
         CALL(evt_hitobj_onoff, STRING("a_kusa_1"), 0, 0)
         CALL(evt_map_playanim, STRING("anm_kusa_1"), 2, 0)

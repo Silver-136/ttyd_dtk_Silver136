@@ -14,6 +14,7 @@
 #include "evt/evt_item.h"
 #include "driver/mapdrv.h"
 #include "mario/mario_pouch.h"
+#include "driver/casedrv.h"
 
 #ifdef VERSION_G8ME01
 #endif
@@ -141,13 +142,13 @@ EVT_BEGIN(moo_06_init_evt)
     CALL(evt_map_playanim, STRING("hosi_03"), 1, 0)
     CALL(evt_paper_entry, STRING("OFF_d_bom_ver2"))
     IF_INT_EQUAL(GSWF(4032), 0)
-        CALL(evt_run_case_evt, 15, 1, STRING("A_iwa_01"), 0, PTR(rock_evt0), 0)
+        CALL(evt_run_case_evt, CASE_BOBBERY, 1, STRING("A_iwa_01"), 0, PTR(rock_evt0), 0)
         ELSE
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_iwa_01"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_iwa_01"), 1, 0)
     END_IF
     IF_INT_EQUAL(GSWF(4033), 0)
-        CALL(evt_run_case_evt, 15, 1, STRING("A_iwa_09"), 0, PTR(rock_evt1), 0)
+        CALL(evt_run_case_evt, CASE_BOBBERY, 1, STRING("A_iwa_09"), 0, PTR(rock_evt1), 0)
         ELSE
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_iwa_09"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_iwa_09"), 1, 0)

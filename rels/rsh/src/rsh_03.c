@@ -19,6 +19,7 @@
 #include "evt/evt_pouch.h"
 #include "eff/eff_fire.h"
 #include "system.h"
+#include "driver/casedrv.h"
 
 #include "mario/mario_pouch.h"
 #include "mario/mario.h"
@@ -910,7 +911,7 @@ EVT_BEGIN(evt_lanch_missing)
     CALL(evt_npc_set_anim, STRING("ウェイトレス"), STRING("S_1"))
     CALL(evt_cam3d_evt_off, 500, 11)
     SET_VALUE(GSW_STORY_PROGRESS, 284)
-    CALL(evt_run_case_evt, 5, 1, STRING("a_yuka_simi"), 0, PTR(evt_yuka_simi), 0)
+    CALL(evt_run_case_evt, CASE_STAND_ON_A, 1, STRING("a_yuka_simi"), 0, PTR(evt_yuka_simi), 0)
     CALL(evt_snd_envoff, 513)
     CALL(evt_snd_envon, 288, 0)
     CALL(evt_npc_flag_onoff, 0, STRING("ポワン探偵"), NPC_FLAG_NO_HIT)
@@ -1427,8 +1428,8 @@ EVT_BEGIN(evt_shop_door_init)
         CASE_OR_EQUAL(326)
         CASE_END
         CASE_DEFAULT
-        CALL(evt_run_case_evt, 9, 1, STRING("tobira_omise"), 0, PTR(evt_shop_open), 0)
-        CALL(evt_run_case_evt, 9, 1, STRING("tobira_omise_heya"), 0, PTR(evt_shop_close), 0)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("tobira_omise"), 0, PTR(evt_shop_open), 0)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("tobira_omise_heya"), 0, PTR(evt_shop_close), 0)
     END_SWITCH
     CALL(evt_paper_entry, STRING("OFF_d_jaba"))
     RETURN
@@ -1487,7 +1488,7 @@ static EVT_BEGIN(evt_access_entry)
         IF_INT_EQUAL(LW(0), 0)
             BREAK_LOOP
         END_IF
-        CALL(evt_run_case_evt, 9, 1, LW(0), 0, PTR(evt_access), 0)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, LW(0), 0, PTR(evt_access), 0)
     END_LOOP
     RETURN
 EVT_END()
@@ -1591,7 +1592,7 @@ EVT_BEGIN(rsh_03_a_init_evt)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("s_yuka_simi"), MAP_OBJ_FLAG_HIDDEN)
         IF_INT_GREATER(GSW_STORY_PROGRESS, 283)
             IF_INT_LESS(GSW_STORY_PROGRESS, 287)
-                CALL(evt_run_case_evt, 5, 1, STRING("a_yuka_simi"), 0, PTR(evt_yuka_simi), 0)
+                CALL(evt_run_case_evt, CASE_STAND_ON_A, 1, STRING("a_yuka_simi"), 0, PTR(evt_yuka_simi), 0)
             END_IF
         END_IF
         CASE_DEFAULT

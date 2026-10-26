@@ -16,6 +16,7 @@
 #include "evt/evt_snd.h"
 #include "evt/evt_telop.h"
 #include "driver/npcdrv.h"
+#include "driver/casedrv.h"
 
 USER_FUNC(evt_mario_dispflag_onoff);
 
@@ -230,7 +231,7 @@ EVT_BEGIN(aji_00_init_evt)
         CASE_BETWEEN(376, 402)
         SET_VALUE(LW(0), STRING("w_bero"))
         CALL_CHILD(PTR(bero_case_switch_off))
-        CALL(evt_run_case_evt, 9, 1, STRING("w_bero"), 0, PTR(evt_door_msg), 0)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("w_bero"), 0, PTR(evt_door_msg), 0)
     END_SWITCH
     RETURN
 EVT_END()

@@ -11,6 +11,7 @@
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
 #include "driver/npcdrv.h"
+#include "driver/casedrv.h"
 
 
 static BeroEntry bero_entry_data[3];
@@ -245,7 +246,7 @@ EVT_BEGIN(hei_05_init_evt)
             SET_RAW_VALUE(LW(0), STRING("シンエモン1"))
             SET_RAW_VALUE(LW(1), STRING("シンエモン2"))
             SET_VALUE(LW(2), 0)
-            CALL(evt_run_case_evt, 9, 1, STRING("a_hasira_1"), 0, PTR(hashira_evt), GW(0))
+            CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_hasira_1"), 0, PTR(hashira_evt), GW(0))
             SET_VALUE(GF(0), 1)
         END_IF
         IF_INT_EQUAL(GSWF(1793), 0)
@@ -256,7 +257,7 @@ EVT_BEGIN(hei_05_init_evt)
             SET_RAW_VALUE(LW(0), STRING("シンエモン2"))
             SET_RAW_VALUE(LW(1), STRING("シンエモン1"))
             SET_VALUE(LW(2), 1)
-            CALL(evt_run_case_evt, 9, 1, STRING("a_hasira_2"), 0, PTR(hashira_evt), GW(1))
+            CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_hasira_2"), 0, PTR(hashira_evt), GW(1))
             SET_VALUE(GF(1), 1)
         END_IF
         BEGIN_INLINE_EVENT

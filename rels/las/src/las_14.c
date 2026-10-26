@@ -14,6 +14,7 @@
 #include "evt/evt_map.h"
 #include "driver/mobjdrv.h"
 #include "mario/mario_pouch.h"
+#include "driver/casedrv.h"
 
 #include "driver/hitdrv.h"
 #include "driver/camdrv.h"
@@ -279,7 +280,7 @@ EVT_BEGIN(las_14_init_evt)
     IF_INT_EQUAL(GSWF(4344), 0)
         CALL(evt_las_cloud_init)
         CALL(evt_las_cloud_ent, PTR(&capturemap), STRING("A_kura"), PTR(cloud_evt))
-        CALL(evt_run_case_evt, 9, 1, STRING("A_kura"), 0, PTR(touch_evt), 0)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_kura"), 0, PTR(touch_evt), 0)
         ELSE
         CALL(evt_hitobj_onoff, STRING("A_kura"), 1, 0)
     END_IF
@@ -288,7 +289,7 @@ EVT_BEGIN(las_14_init_evt)
         CALL(evt_mobj_flag_onoff, 1, STRING("box"), MOBJ_FLAG_NO_DISP)
         CALL(evt_mobj_hit_onoff, STRING("box"), 0)
     END_IF
-    CALL(evt_run_case_evt, 9, 1, STRING("A_pure"), 0, PTR(hint_plate), 0)
+    CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_pure"), 0, PTR(hint_plate), 0)
     RETURN
 EVT_END()
 

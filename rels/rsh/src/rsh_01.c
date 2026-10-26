@@ -19,6 +19,7 @@
 #include "evt/evt_pouch.h"
 #include "driver/npcdrv.h"
 #include "driver/mapdrv.h"
+#include "driver/casedrv.h"
 
 USER_FUNC(evt_win_item_select);
 
@@ -589,7 +590,7 @@ static EVT_BEGIN(evt_access_entry)
         IF_INT_EQUAL(LW(0), 0)
             BREAK_LOOP
         END_IF
-        CALL(evt_run_case_evt, 9, 1, LW(0), 0, PTR(evt_access), 0)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, LW(0), 0, PTR(evt_access), 0)
     END_LOOP
     RETURN
 EVT_END()
@@ -619,7 +620,7 @@ EVT_BEGIN(rsh_01_init_evt)
         CALL_CHILD(PTR(bero_case_switch_off))
         SET_VALUE(LW(1), STRING("stg6_rsh_261"))
         SET_VALUE(LW(2), STRING("stg6_rsh_261"))
-        CALL(evt_run_case_evt, 9, 1, STRING("s_bero"), 0, PTR(evt_access), 0)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("s_bero"), 0, PTR(evt_access), 0)
     END_SWITCH
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(284, 286)
@@ -677,7 +678,7 @@ EVT_BEGIN(rsh_01_a_init_evt)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, 304)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("yuka_3_kami"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("yuka_3"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_run_case_evt, 5, 1, STRING("a_kami"), 0, PTR(evt_daiji_kami), 0)
+        CALL(evt_run_case_evt, CASE_STAND_ON_A, 1, STRING("a_kami"), 0, PTR(evt_daiji_kami), 0)
         ELSE
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("yuka_3_kami"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("yuka_3"), MAP_OBJ_FLAG_HIDDEN)
@@ -964,7 +965,7 @@ EVT_BEGIN(rsh_01_init_evt_nidome)
                     CALL_CHILD(PTR(bero_case_switch_off))
                     SET_VALUE(LW(1), STRING("stg6_rsh_261"))
                     SET_VALUE(LW(2), STRING("stg6_rsh_261"))
-                    CALL(evt_run_case_evt, 9, 1, STRING("s_bero"), 0, PTR(evt_access), 0)
+                    CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("s_bero"), 0, PTR(evt_access), 0)
                 END_INLINE_EVENT
             END_IF
         END_IF

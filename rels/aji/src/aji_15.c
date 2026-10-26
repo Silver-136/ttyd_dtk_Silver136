@@ -12,6 +12,7 @@
 #include "evt/evt_sub.h"
 #include "driver/mapdrv.h"
 #include "system.h"
+#include "driver/casedrv.h"
 
 #include "mario/mario.h"
 #include "manager/evtmgr_cmd.h"
@@ -351,7 +352,7 @@ EVT_BEGIN(peach_evt_syawa_init)
     CALL(evt_map_playanim, STRING("taoru"), 0, 0)
     CALL(evt_map_checkanim, STRING("taoru"), LW(0), LW(1))
     WAIT_MS(LW(1))
-    CALL(evt_run_case_evt, 9, 1, STRING("A_furo"), 0, PTR(peach_evt_syawa_main), 0)
+    CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_furo"), 0, PTR(peach_evt_syawa_main), 0)
     RETURN
 EVT_END()
 

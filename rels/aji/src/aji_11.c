@@ -12,6 +12,7 @@
 #include "evt/evt_sub.h"
 #include "evt/evt_item.h"
 #include "evt/evt_pouch.h"
+#include "driver/casedrv.h"
 
 #include "driver/mapdrv.h"
 #include "mario/mario.h"
@@ -225,7 +226,7 @@ EVT_BEGIN(peach_evt_disksys)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("monitor_03"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_msg_print, 0, STRING("peach_aji_248"), 0, STRING("mario"))
         SET_VALUE(GSWF(4209), 1)
-        CALL(evt_run_case_evt, 9, 1, STRING("tana"), 0, PTR(peach_evt_tana2), 0)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("tana"), 0, PTR(peach_evt_tana2), 0)
         CALL(evt_exit_case_evt)
     END_IF
     CALL(evt_mario_key_onoff, 1)
@@ -241,7 +242,7 @@ EVT_BEGIN(peach_evt_tana1)
     WAIT_MS(500)
     CALL(evt_msg_print, 0, STRING("peach_aji_246"), 0, STRING("mario"))
     SET_VALUE(GSWF(4208), 1)
-    CALL(evt_run_case_evt, 9, 1, STRING("a_disksys"), 0, PTR(peach_evt_disksys), 0)
+    CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_disksys"), 0, PTR(peach_evt_disksys), 0)
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_exit_case_evt)
     RETURN
@@ -269,13 +270,13 @@ static EVT_BEGIN(peach_evt_stg5)
     CALL(peach_evt_toumei)
     IF_INT_LESS(GSW_STORY_PROGRESS, 264)
         IF_INT_EQUAL(GSWF(4208), 0)
-            CALL(evt_run_case_evt, 9, 1, STRING("tana"), 0, PTR(peach_evt_tana1), 0)
-            CALL(evt_run_case_evt, 9, 1, STRING("a_disksys"), 0, PTR(peach_evt_disksys), 0)
+            CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("tana"), 0, PTR(peach_evt_tana1), 0)
+            CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_disksys"), 0, PTR(peach_evt_disksys), 0)
             ELSE
             IF_INT_EQUAL(GSWF(4209), 0)
-                CALL(evt_run_case_evt, 9, 1, STRING("a_disksys"), 0, PTR(peach_evt_disksys), 0)
+                CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_disksys"), 0, PTR(peach_evt_disksys), 0)
                 ELSE
-                CALL(evt_run_case_evt, 9, 1, STRING("tana"), 0, PTR(peach_evt_tana2), 0)
+                CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("tana"), 0, PTR(peach_evt_tana2), 0)
             END_IF
         END_IF
     END_IF

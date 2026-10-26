@@ -12,6 +12,7 @@
 #include "evt/evt_pouch.h"
 #include "driver/mapdrv.h"
 #include "system.h"
+#include "driver/casedrv.h"
 
 #include "eff/eff_stardust.h"
 #include "manager/evtmgr_cmd.h"
@@ -370,7 +371,7 @@ EVT_BEGIN(majinaisi_direct_talk)
 EVT_END()
 
 EVT_BEGIN(majinaisi_init)
-    CALL(evt_run_case_evt, 9, 1, STRING("a_majinai"), 0, PTR(majinaisi_table_talk), 0)
+    CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_majinai"), 0, PTR(majinaisi_table_talk), 0)
     RETURN
 EVT_END()
 

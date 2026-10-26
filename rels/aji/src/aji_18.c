@@ -13,6 +13,7 @@
 #include "party/party_motion.h"
 #include "evt/evt_sub.h"
 #include "driver/mapdrv.h"
+#include "driver/casedrv.h"
 
 #include "mario/mario_pouch.h"
 #include "mario/mariost.h"
@@ -302,18 +303,18 @@ EVT_BEGIN(aji_18_init_evt)
     ADD(LW(0), LW(1))
     IF_INT_EQUAL(GSWF(4191), 0)
         SET_VALUE(LW(0), 0)
-        CALL(evt_run_case_evt, 9, 1, STRING("A_kagi1"), 0, PTR(evt_machine), 0)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_kagi1"), 0, PTR(evt_machine), 0)
     END_IF
     IF_INT_EQUAL(GSWF(4192), 0)
         SET_VALUE(LW(0), 1)
-        CALL(evt_run_case_evt, 9, 1, STRING("A_kagi2"), 0, PTR(evt_machine), 0)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_kagi2"), 0, PTR(evt_machine), 0)
     END_IF
     IF_INT_EQUAL(GSWF(4193), 0)
         SET_VALUE(LW(0), 2)
-        CALL(evt_run_case_evt, 9, 1, STRING("A_kagi3"), 0, PTR(evt_machine), 0)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_kagi3"), 0, PTR(evt_machine), 0)
     END_IF
     IF_INT_LESS(GSW_STORY_PROGRESS, 369)
-        CALL(evt_run_case_evt, 9, 1, STRING("e_bero"), 0, PTR(key_lock_koujyou), GW(10))
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("e_bero"), 0, PTR(key_lock_koujyou), GW(10))
         SET_VALUE(LW(0), STRING("e_bero"))
         CALL_CHILD(PTR(bero_case_switch_off))
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_lights1_m"), MAP_OBJ_FLAG_HIDDEN)
@@ -324,7 +325,7 @@ EVT_BEGIN(aji_18_init_evt)
     END_IF
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(373, 375)
-        CALL(evt_run_case_evt, 9, 1, STRING("e_bero"), 0, PTR(key_lock_koujyou), 0)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("e_bero"), 0, PTR(key_lock_koujyou), 0)
         SET_VALUE(LW(0), STRING("e_bero"))
         CALL_CHILD(PTR(bero_case_switch_off))
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_lights1_m"), MAP_OBJ_FLAG_HIDDEN)

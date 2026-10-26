@@ -20,6 +20,7 @@
 #include "driver/npcdrv.h"
 #include "driver/mapdrv.h"
 #include "system.h"
+#include "driver/casedrv.h"
 
 #include "driver/effdrv.h"
 #include "manager/evtmgr_cmd.h"
@@ -899,13 +900,13 @@ EVT_BEGIN(las_09_init_evt)
         SPAWN_EVENT(PTR(first_evt))
     END_IF
     IF_INT_EQUAL(GSWF(4326), 0)
-        CALL(evt_run_case_evt, 15, 1, STRING("A_wan1"), 0, PTR(bomb_wanwan1_evt), 0)
+        CALL(evt_run_case_evt, CASE_BOBBERY, 1, STRING("A_wan1"), 0, PTR(bomb_wanwan1_evt), 0)
         ELSE
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("wan3"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_wan1"), 0, 0)
     END_IF
     IF_INT_EQUAL(GSWF(4327), 0)
-        CALL(evt_run_case_evt, 15, 1, STRING("A_wan2"), 0, PTR(bomb_wanwan2_evt), 0)
+        CALL(evt_run_case_evt, CASE_BOBBERY, 1, STRING("A_wan2"), 0, PTR(bomb_wanwan2_evt), 0)
         ELSE
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("wan1"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_wan2"), 0, 0)

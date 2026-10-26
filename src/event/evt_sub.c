@@ -42,6 +42,7 @@
 #include "mario/mario_cam.h"
 #include "poly_trig.h"
 #include "driver/mapdrv.h"
+#include "driver/casedrv.h"
 
 s32 effStageClearEndChk();
 
@@ -199,7 +200,7 @@ EVT_BEGIN(evt_sub_tree_access_entry)
         IF_INT_EQUAL(LW(0), 7)
             BREAK_LOOP
         END_IF
-        CALL(evt_run_case_evt, 13, 1, LW(1), 0, PTR(tree_evt), 0)
+        CALL(evt_run_case_evt, CASE_HAMMER, 1, LW(1), 0, PTR(tree_evt), 0)
     END_LOOP
     RETURN
 EVT_END()
@@ -230,7 +231,7 @@ EVT_BEGIN(evt_sub_kusa_access_entry)
         IF_INT_EQUAL(LW(0), 4)
             BREAK_LOOP
         END_IF
-        CALL(evt_run_case_evt, 9, 1, LW(1), 0, PTR(kusa_evt), 0)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, LW(1), 0, PTR(kusa_evt), 0)
     END_LOOP
     RETURN
 EVT_END()

@@ -26,6 +26,7 @@
 #include "driver/mapdrv.h"
 #include "mario/mario_pouch.h"
 #include "system.h"
+#include "driver/casedrv.h"
 
 USER_FUNC(evt_mario_dispflag_onoff);
 void gans_msg_callback(s32 type, void** work);
@@ -264,7 +265,7 @@ EVT_BEGIN(evt_hiki_close)
     END_LOOP
     SET_VALUE(LW(0), LW(8))
     SET_VALUE(LW(1), LW(9))
-    CALL(evt_run_case_evt, 9, 1, LW(1), 0, PTR(evt_hiki_open), 0)
+    CALL(evt_run_case_evt, CASE_FRONT_A, 1, LW(1), 0, PTR(evt_hiki_open), 0)
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_cam_letter_box_disable, 0)
     CALL(evt_exit_case_evt)
@@ -311,7 +312,7 @@ EVT_BEGIN(evt_hiki_open)
     END_LOOP
     SET_VALUE(LW(0), LW(8))
     SET_VALUE(LW(1), LW(9))
-    CALL(evt_run_case_evt, 10, 1, LW(1), 0, PTR(evt_hiki_close), 0)
+    CALL(evt_run_case_evt, CASE_PUSH, 1, LW(1), 0, PTR(evt_hiki_close), 0)
     IF_STR_EQUAL(LW(0), STRING("hikidasi_H"))
         IF_INT_LESS(GSW_STORY_PROGRESS, 163)
             CALL_CHILD(PTR(evt_takurami))
@@ -756,7 +757,7 @@ EVT_BEGIN(evt_sensyu2)
     CALL(evt_msg_select, 0, STRING("stg3_tou_52_yn"))
     IF_INT_EQUAL(LW(0), 1)
         CALL(evt_msg_print_add, 0, STRING("stg3_tou_53"))
-        CALL(evt_run_case_evt, 9, 1, STRING("a_p_tukue"), 0, PTR(talk_gans), 0)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_p_tukue"), 0, PTR(talk_gans), 0)
         SET_VALUE(GSW_STORY_PROGRESS, 130)
         ELSE
         CALL(evt_msg_continue)
@@ -1243,15 +1244,15 @@ EVT_BEGIN(tou_05_init_evt)
         SET_VALUE(LW(0), STRING("hikidasi_N"))
         SET_VALUE(LW(1), STRING("a_hikidasi_N"))
         CALL(evt_hit_bind_mapobj, LW(1), LW(0))
-        CALL(evt_run_case_evt, 9, 1, LW(1), 0, PTR(evt_hiki_open), 0)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, LW(1), 0, PTR(evt_hiki_open), 0)
         SET_VALUE(LW(0), STRING("hikidasi_H"))
         SET_VALUE(LW(1), STRING("a_hikidasi_H"))
         CALL(evt_hit_bind_mapobj, LW(1), LW(0))
-        CALL(evt_run_case_evt, 9, 1, LW(1), 0, PTR(evt_hiki_open), 0)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, LW(1), 0, PTR(evt_hiki_open), 0)
     END_IF
     CALL(evt_npc_setup, PTR(npcEnt))
     IF_INT_EQUAL(GSW_STORY_PROGRESS, 130)
-        CALL(evt_run_case_evt, 9, 1, STRING("a_p_tukue"), 0, PTR(talk_gans), 0)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_p_tukue"), 0, PTR(talk_gans), 0)
         ELSE
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("kami_1"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
@@ -1261,7 +1262,7 @@ EVT_BEGIN(tou_05_init_evt)
             SPAWN_EVENT_GET_ID(PTR(evt_nozoki_msg), GW(9))
         END_IF
     END_IF
-    CALL(evt_run_case_evt, 5, 1, STRING("a_nozoki"), 0, PTR(evt_nozoki), 0)
+    CALL(evt_run_case_evt, CASE_STAND_ON_A, 1, STRING("a_nozoki"), 0, PTR(evt_nozoki), 0)
     CALL(evt_bero_get_entername, LW(0))
     IF_STR_EQUAL(LW(0), STRING("fall"))
         BEGIN_INLINE_EVENT

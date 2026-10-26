@@ -23,6 +23,7 @@
 #include "driver/mobjdrv.h"
 #include "driver/mapdrv.h"
 #include "system.h"
+#include "driver/casedrv.h"
 
 #include "driver/npcdrv.h"
 #include "manager/evtmgr.h"
@@ -186,7 +187,7 @@ EVT_BEGIN(jon_init_evt)
     IF_INT_GREATER(LW(0), GSW(33))
         SET_VALUE(GSW(33), LW(0))
     END_IF
-    CALL(evt_run_case_evt, 9, 1, STRING("a_kanban"), 0, PTR(evt_kanban), 0)
+    CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_kanban"), 0, PTR(evt_kanban), 0)
     CALL_CHILD(PTR(idouya_setup))
     CALL_CHILD(PTR(gyousyou_setup))
     CALL_CHILD(PTR(enemy_setup))
@@ -256,12 +257,12 @@ EVT_BEGIN(jon_init_evt)
                 END_IF
                 IF_INT_EQUAL(LF(0), 0)
                     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("after"), MAP_OBJ_FLAG_HIDDEN)
-                    CALL(evt_run_case_evt, 9, 1, STRING("a_rakugaki"), 0, PTR(evt_iri_30_touch_rakugaki), LW(0))
+                    CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_rakugaki"), 0, PTR(evt_iri_30_touch_rakugaki), LW(0))
 #ifndef VERSION_G8ME01
                     IF_INT_EQUAL(GSW(1420), 30)
                         IF_INT_EQUAL(GSWF(5405), 1)
 #endif
-                            CALL(evt_run_case_evt, 15, 1, STRING("a_rakugaki"), 0, PTR(evt_iri_30_bomb_rakugaki), LW(1))
+                            CALL(evt_run_case_evt, CASE_BOBBERY, 1, STRING("a_rakugaki"), 0, PTR(evt_iri_30_bomb_rakugaki), LW(1))
                             CALL(evt_set_case_wrk, LW(1), 15, LW(0))
 #ifndef VERSION_G8ME01
                         END_IF

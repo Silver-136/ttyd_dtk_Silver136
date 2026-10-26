@@ -14,6 +14,7 @@
 #include "evt/evt_pouch.h"
 #include "driver/mapdrv.h"
 #include "mario/mario_pouch.h"
+#include "driver/casedrv.h"
 
 #include "driver/dispdrv.h"
 #include "driver/camdrv.h"
@@ -737,7 +738,7 @@ static EVT_BEGIN(evt_sw)
         SET_VALUE(LW(10), STRING("S_hari02"))
         SPAWN_EVENT(PTR(evt_hari))
         WAIT_MS(500)
-        CALL(evt_run_case_evt, 9, 1, STRING("A_sui_01"), 0, PTR(evt_ufo_sousaban), 0)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_sui_01"), 0, PTR(evt_ufo_sousaban), 0)
         CALL(evt_cam3d_evt_off, 500, 11)
         CALL(evt_mario_key_onoff, 1)
     END_IF
@@ -748,15 +749,15 @@ EVT_BEGIN(evt_sw_reinit)
     SET_VALUE(GF(15), 1)
     IF_INT_EQUAL(GSWF(4188), 1)
         SET_VALUE(GSWF(4188), 0)
-        CALL(evt_run_case_evt, 9, 1, STRING("A_sui1"), 0, PTR(evt_sw0), 0)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_sui1"), 0, PTR(evt_sw0), 0)
     END_IF
     IF_INT_EQUAL(GSWF(4189), 1)
         SET_VALUE(GSWF(4189), 0)
-        CALL(evt_run_case_evt, 9, 1, STRING("A_sui2"), 0, PTR(evt_sw1), 0)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_sui2"), 0, PTR(evt_sw1), 0)
     END_IF
     IF_INT_EQUAL(GSWF(4190), 1)
         SET_VALUE(GSWF(4190), 0)
-        CALL(evt_run_case_evt, 9, 1, STRING("A_sui3"), 0, PTR(evt_sw2), 0)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_sui3"), 0, PTR(evt_sw2), 0)
     END_IF
     DELETE_EVENT(GW(13))
     DELETE_EVENT(GW(14))
@@ -885,9 +886,9 @@ static EVT_BEGIN(evt_haguruma)
         SPAWN_EVENT(PTR(evt_zenmai))
         CALL(evt_pouch_remove_item, LW(0), LW(1))
         SET_VALUE(GSWF(4196), 1)
-        CALL(evt_run_case_evt, 9, 1, STRING("A_sui1"), 0, PTR(evt_sw0), 0)
-        CALL(evt_run_case_evt, 9, 1, STRING("A_sui2"), 0, PTR(evt_sw1), 0)
-        CALL(evt_run_case_evt, 9, 1, STRING("A_sui3"), 0, PTR(evt_sw2), 0)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_sui1"), 0, PTR(evt_sw0), 0)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_sui2"), 0, PTR(evt_sw1), 0)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_sui3"), 0, PTR(evt_sw2), 0)
         SET_VALUE(LW(0), STRING("sui__1"))
         SET_VALUE(LW(1), STRING("sui__2"))
         SPAWN_EVENT_GET_ID(PTR(blink_sw), GW(13))
@@ -942,20 +943,20 @@ EVT_BEGIN(aji_03_init_evt)
         SET_VALUE(GSWF(4190), 1)
     END_IF
     IF_INT_EQUAL(GSWF(4196), 0)
-        CALL(evt_run_case_evt, 9, 1, STRING("A_tanadoor_1"), 0, PTR(evt_haguruma), 0)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_tanadoor_1"), 0, PTR(evt_haguruma), 0)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_zenmais_ari"), MAP_OBJ_FLAG_HIDDEN)
         ELSE
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_zenmais_nashi"), MAP_OBJ_FLAG_HIDDEN)
         SPAWN_EVENT(PTR(evt_zenmai))
         IF_INT_EQUAL(GSWF(4197), 1)
-            CALL(evt_run_case_evt, 9, 1, STRING("A_sui_01"), 0, PTR(evt_ufo_sousaban), 0)
+            CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_sui_01"), 0, PTR(evt_ufo_sousaban), 0)
         END_IF
     END_IF
     IF_INT_EQUAL(GSWF(4196), 1)
         IF_INT_EQUAL(GSWF(4197), 0)
-            CALL(evt_run_case_evt, 9, 1, STRING("A_sui1"), 0, PTR(evt_sw0), 0)
-            CALL(evt_run_case_evt, 9, 1, STRING("A_sui2"), 0, PTR(evt_sw1), 0)
-            CALL(evt_run_case_evt, 9, 1, STRING("A_sui3"), 0, PTR(evt_sw2), 0)
+            CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_sui1"), 0, PTR(evt_sw0), 0)
+            CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_sui2"), 0, PTR(evt_sw1), 0)
+            CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_sui3"), 0, PTR(evt_sw2), 0)
             SET_VALUE(LW(0), STRING("sui__1"))
             SET_VALUE(LW(1), STRING("sui__2"))
             SPAWN_EVENT_GET_ID(PTR(blink_sw), GW(13))

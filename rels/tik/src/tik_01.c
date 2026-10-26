@@ -21,6 +21,7 @@
 #include "driver/npcdrv.h"
 #include "driver/mapdrv.h"
 #include "mario/mario_pouch.h"
+#include "driver/casedrv.h"
 
 USER_FUNC(evt_npc_set_damage_anim);
 USER_FUNC(evt_npc_set_run_anim);
@@ -532,7 +533,7 @@ EVT_BEGIN(tik_01_init_evt)
     IF_INT_EQUAL(GSWF(1331), 0)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("bom_kabe_2"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_dom_kabe_2"), 1, 0)
-        CALL(evt_run_case_evt, 15, 1, STRING("a_dom_kabe_1"), 0, PTR(wall_bomb00), 0)
+        CALL(evt_run_case_evt, CASE_BOBBERY, 1, STRING("a_dom_kabe_1"), 0, PTR(wall_bomb00), 0)
         ELSE
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("bom_kabe_1"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_dom_kabe_1"), 1, 0)
@@ -542,7 +543,7 @@ EVT_BEGIN(tik_01_init_evt)
         SET_VALUE(LW(0), STRING("e_bero_2"))
         CALL_CHILD(PTR(bero_case_switch_off))
         CALL(evt_hitobj_attr_onoff, 1, 0, STRING("e_bero_2"), 4)
-        CALL(evt_run_case_evt, 15, 1, STRING("e_bero_2"), 0, PTR(wall_bomb01), 0)
+        CALL(evt_run_case_evt, CASE_BOBBERY, 1, STRING("e_bero_2"), 0, PTR(wall_bomb01), 0)
         ELSE
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("bom_kabe_3"), MAP_OBJ_FLAG_HIDDEN)
     END_IF

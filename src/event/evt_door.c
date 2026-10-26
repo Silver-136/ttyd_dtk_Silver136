@@ -26,6 +26,7 @@
 #include "evt/evt_sub.h"
 #include "evt/evt_party.h"
 #include "system.h"
+#include "driver/casedrv.h"
 
 double atan(double);
 
@@ -1300,11 +1301,11 @@ EVT_BEGIN(evt_door_entry)
     CALL(evt_door_param, LW(0), 1, LW(1), LW(2), LW(3))
     IF_INT_NOT_EQUAL(LW(2), 0)
         SET_VALUE(LW(15), 0)
-        CALL(evt_run_case_evt, 9, 1, LW(2), 0, PTR(evt_door_close), 0)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, LW(2), 0, PTR(evt_door_close), 0)
     END_IF
     IF_INT_NOT_EQUAL(LW(3), 0)
         SET_VALUE(LW(15), 0)
-        CALL(evt_run_case_evt, 9, 1, LW(3), 0, PTR(evt_door_open), 0)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, LW(3), 0, PTR(evt_door_open), 0)
     END_IF
     CALL(evt_door_param, LW(0), 9, LW(1))
     IF_BITS_SET(LW(1), 1)

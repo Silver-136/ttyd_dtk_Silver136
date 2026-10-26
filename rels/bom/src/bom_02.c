@@ -18,6 +18,7 @@
 #include "evt/evt_pouch.h"
 #include "driver/mapdrv.h"
 #include "system.h"
+#include "driver/casedrv.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "dolphin/mtx.h"
@@ -1682,7 +1683,7 @@ EVT_BEGIN(bom_02_init_evt)
     CALL(evt_map_playanim, STRING("yuge"), 1, 0)
     IF_INT_EQUAL(GSWF(3880), 1)
         IF_INT_EQUAL(GSWF(3876), 0)
-            CALL(evt_run_case_evt, 9, 1, STRING("A_w_bed"), 0, PTR(evt_white_bed), 0)
+            CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_w_bed"), 0, PTR(evt_white_bed), 0)
         END_IF
     END_IF
     CALL(evt_map_replace_mapobj, STRING("hi1"), 1)
@@ -1695,7 +1696,7 @@ EVT_BEGIN(bom_02_init_evt)
         IF_INT_EQUAL(GSWF(5409), 1)
             IF_INT_EQUAL(GSWF(5411), 0)
                 IF_INT_EQUAL(GSWF(5410), 0)
-                    CALL(evt_run_case_evt, 9, 1, STRING("A_w_bed"), 0, PTR(iri_25_white_bed), 0)
+                    CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_w_bed"), 0, PTR(iri_25_white_bed), 0)
                 END_IF
             END_IF
         END_IF

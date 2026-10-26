@@ -10,6 +10,7 @@
 #include "driver/npcdrv.h"
 #include "mario/mario_pouch.h"
 #include "system.h"
+#include "driver/casedrv.h"
 
 #include "mario/mario.h"
 #include "driver/hitdrv.h"
@@ -535,7 +536,7 @@ EVT_BEGIN(muj_04_init_evt)
     CALL(evt_map_playanim, STRING("S_mizu_02"), 1, 0)
     SPAWN_EVENT(PTR(mario_hashi_anime))
     SPAWN_EVENT(PTR(yashi_yure_init))
-    CALL(evt_run_case_evt, 13, 1, STRING("A_hai_yasi"), 0, PTR(yashi_yure), 0)
+    CALL(evt_run_case_evt, CASE_HAMMER, 1, STRING("A_hai_yasi"), 0, PTR(yashi_yure), 0)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(233)
         SPAWN_EVENT(PTR(sanders_funto))

@@ -19,6 +19,7 @@
 #include "driver/npcdrv.h"
 #include "driver/mapdrv.h"
 #include "system.h"
+#include "driver/casedrv.h"
 
 USER_FUNC(evt_cloud_ent);
 USER_FUNC(evt_cloud_init);
@@ -289,7 +290,7 @@ EVT_BEGIN(tou_11_init_evt)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("kuro_1"), MAP_OBJ_FLAG_HIDDEN)
     SET_VALUE(LW(0), 0)
     CALL_CHILD(PTR(bero_case_switch_off))
-    CALL(evt_run_case_evt, 9, 1, STRING("n_bero"), 0, PTR(evt_tojikome_msg), 0)
+    CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("n_bero"), 0, PTR(evt_tojikome_msg), 0)
     CALL(evt_bero_get_entername, LW(0))
     IF_STR_EQUAL(LW(0), STRING("nidome"))
         CALL(evt_snd_bgmon, 512, STRING("BGM_STG3_TOU2"))

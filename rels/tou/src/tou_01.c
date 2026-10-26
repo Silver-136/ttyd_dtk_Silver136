@@ -23,6 +23,7 @@
 #include "evt/evt_telop.h"
 #include "evt/evt_lecture.h"
 #include "system.h"
+#include "driver/casedrv.h"
 
 #include "mario/mario.h"
 #include "mario/mario_party.h"
@@ -2376,7 +2377,7 @@ EVT_BEGIN(talk_tamago)
     CALL(evt_npc_flag_onoff, 0, STRING("ホットドッグ"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_GRAVITY)
     CALL(evt_npc_flag_onoff, 1, STRING("ホットドッグ"), NPC_FLAG_NO_SHADOW)
     CALL(evt_npc_set_position, STRING("ホットドッグ"), -400, 20, -125)
-    CALL(evt_run_case_evt, 9, 1, STRING("a_kaunta_"), 0, PTR(evt_hotdog), 0)
+    CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_kaunta_"), 0, PTR(evt_hotdog), 0)
     CALL(evt_npc_get_position, STRING("たまご"), LW(0), LW(1), LW(2))
     CALL(evt_npc_set_position, STRING("たまご"), 0, -1000, 0)
     CALL(evt_mario_set_party_pos, 1, 8, LW(0), LW(1), LW(2))
@@ -3220,7 +3221,7 @@ EVT_BEGIN(tou_01_init_evt)
     SET_VALUE(LW(0), STRING("sati_2"))
     SPAWN_EVENT(PTR(evt_search_light))
     SPAWN_EVENT(PTR(evt_kanban))
-    CALL(evt_run_case_evt, 9, 1, STRING("a_telbox"), 0, PTR(evt_telbox), 0)
+    CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_telbox"), 0, PTR(evt_telbox), 0)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, 145)
         CALL(evt_item_entry, STRING("key"), ITEM_STORAGE_KEY_0x12, -745, 20, 435, 16, -1, PTR(evt_key))
     END_IF
@@ -3247,11 +3248,11 @@ EVT_BEGIN(tou_01_init_evt)
         CALL(evt_tou_get_ranking, LW(0))
         IF_INT_LESS_OR_EQUAL(LW(0), 15)
             ELSE
-            CALL(evt_run_case_evt, 9, 1, STRING("a_kaunta_"), 0, PTR(evt_hotdog), 0)
+            CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_kaunta_"), 0, PTR(evt_hotdog), 0)
         END_IF
     END_IF
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 137)
-        CALL(evt_run_case_evt, 9, 1, STRING("a_kaunta_"), 0, PTR(evt_hotdog), 0)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_kaunta_"), 0, PTR(evt_hotdog), 0)
     END_IF
     CALL(evt_hit_bind_mapobj, STRING("a_gondora"), STRING("gondora"))
     CALL(evt_mapobj_trans, 1, STRING("gondora"), 0, 300, 0)

@@ -18,6 +18,7 @@
 #include "evt/evt_item.h"
 #include "driver/npcdrv.h"
 #include "mario/mario_pouch.h"
+#include "driver/casedrv.h"
 
 #include "string.h"
 #include "dolphin/os.h"
@@ -868,7 +869,7 @@ static EVT_BEGIN(evt_access_entry)
         IF_INT_EQUAL(LW(0), 0)
             BREAK_LOOP
         END_IF
-        CALL(evt_run_case_evt, 9, 1, LW(0), 0, PTR(evt_access), 0)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, LW(0), 0, PTR(evt_access), 0)
     END_LOOP
     RETURN
 EVT_END()

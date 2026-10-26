@@ -17,6 +17,7 @@
 #include "evt/evt_item.h"
 #include "mario/mario_pouch.h"
 #include "system.h"
+#include "driver/casedrv.h"
 
 #include "pmario_sound.h"
 #include "manager/evtmgr_cmd.h"
@@ -400,7 +401,7 @@ EVT_BEGIN(mri_02_init_evt)
     SET_VALUE(LW(10), STRING("punipuni"))
     SET_VALUE(LW(11), 0)
     SPAWN_EVENT(PTR(punipuni_ball00_init))
-    CALL(evt_run_case_evt, 9, 1, STRING("A_dai_mae"), 0, PTR(punipuni_ball00), 0)
+    CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_dai_mae"), 0, PTR(punipuni_ball00), 0)
     SET_VALUE(GW(0), 10)
     SPAWN_EVENT(PTR(yuka_main))
     SPAWN_EVENT(PTR(yuka_move))

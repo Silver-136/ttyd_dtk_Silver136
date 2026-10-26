@@ -15,6 +15,7 @@
 #include "evt/evt_sub.h"
 #include "driver/mapdrv.h"
 #include "system.h"
+#include "driver/casedrv.h"
 
 #include "party.h"
 #include "mario/mario.h"
@@ -298,14 +299,14 @@ EVT_BEGIN(evt_rokka_open)
     SET_VALUE(LW(3), LW(8))
     SET_VALUE(LW(4), LW(9))
     SET_VALUE(LW(10), 0)
-    CALL(evt_run_case_evt, 10, 1, LW(2), 0, PTR(evt_rokka_close), LW(11))
+    CALL(evt_run_case_evt, CASE_PUSH, 1, LW(2), 0, PTR(evt_rokka_close), LW(11))
     SET_VALUE(LW(0), LW(5))
     SET_VALUE(LW(1), LW(6))
     SET_VALUE(LW(2), LW(7))
     SET_VALUE(LW(3), LW(8))
     SET_VALUE(LW(4), LW(9))
     SET_VALUE(LW(10), 1)
-    CALL(evt_run_case_evt, 0, 1, LW(4), 0, PTR(evt_rokka_close), LW(12))
+    CALL(evt_run_case_evt, CASE_STAND_ON, 1, LW(4), 0, PTR(evt_rokka_close), LW(12))
     CALL(evt_set_case_wrk, LW(11), 11, LW(11))
     CALL(evt_set_case_wrk, LW(11), 12, LW(12))
     CALL(evt_set_case_wrk, LW(12), 11, LW(11))
@@ -336,7 +337,7 @@ EVT_BEGIN(evt_rokka_close)
         SET_VALUE(LW(2), LW(7))
         SET_VALUE(LW(3), LW(8))
         SET_VALUE(LW(4), LW(9))
-        CALL(evt_run_case_evt, 9, 1, LW(2), 0, PTR(evt_rokka_open), 0)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, LW(2), 0, PTR(evt_rokka_open), 0)
         ELSE
         CALL(evt_del_case_evt, 0, LW(11))
         CALL(evt_mario_get_pos, 0, LW(13), LW(14), LW(15))
@@ -358,7 +359,7 @@ EVT_BEGIN(evt_rokka_close)
         SET_VALUE(LW(2), LW(7))
         SET_VALUE(LW(3), LW(8))
         SET_VALUE(LW(4), LW(9))
-        CALL(evt_run_case_evt, 10, 1, LW(3), 0, PTR(evt_rokka_open), 0)
+        CALL(evt_run_case_evt, CASE_PUSH, 1, LW(3), 0, PTR(evt_rokka_open), 0)
     END_IF
     CALL(evt_exit_case_evt)
     RETURN
@@ -374,7 +375,7 @@ EVT_BEGIN(evt_rokka_init)
         END_IF
         CALL(evt_hit_bind_mapobj, LW(1), LW(0))
         SET_VALUE(LW(10), 0)
-        CALL(evt_run_case_evt, 9, 1, LW(2), 0, PTR(evt_rokka_open), 0)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, LW(2), 0, PTR(evt_rokka_open), 0)
     END_LOOP
     RETURN
 EVT_END()
@@ -667,7 +668,7 @@ static EVT_BEGIN(peach_evt_stg3)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_fuku2"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 0, 0, STRING("R_fuku_g"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_R_fuku_g"), 1, 1)
-        CALL(evt_run_case_evt, 9, 1, STRING("A_R_fuku_g"), 0, PTR(peach_evt_fuku_g), 0)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_R_fuku_g"), 0, PTR(peach_evt_fuku_g), 0)
         ELSE
         IF_INT_EQUAL(GSWF(4204), 0)
             IF_INT_EQUAL(GSWF(4205), 0)
@@ -693,10 +694,10 @@ static EVT_BEGIN(peach_evt_stg3)
         END_IF
         CALL(evt_mapobj_flag_onoff, 0, 1, STRING("R_fuku_g"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
-    CALL(evt_run_case_evt, 9, 1, STRING("A_kou1_ka_omo"), 0, PTR(peach_evt_kou1_in), 0)
-    CALL(evt_run_case_evt, 9, 1, STRING("A_kou1_ka_ura"), 0, PTR(peach_evt_kou1_out), 0)
-    CALL(evt_run_case_evt, 9, 1, STRING("A_kou2_ka_omo"), 0, PTR(peach_evt_kou2_in), 0)
-    CALL(evt_run_case_evt, 9, 1, STRING("A_kou2_ka_ura"), 0, PTR(peach_evt_kou2_out), 0)
+    CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_kou1_ka_omo"), 0, PTR(peach_evt_kou1_in), 0)
+    CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_kou1_ka_ura"), 0, PTR(peach_evt_kou1_out), 0)
+    CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_kou2_ka_omo"), 0, PTR(peach_evt_kou2_in), 0)
+    CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_kou2_ka_ura"), 0, PTR(peach_evt_kou2_out), 0)
     CALL(evt_seq_wait, 2)
     CALL(evt_bero_exec_wait, 65536)
     IF_INT_LESS(GSW_STORY_PROGRESS, 168)
@@ -708,7 +709,7 @@ static EVT_BEGIN(peach_evt_stg3)
         ELSE
         SET_VALUE(LW(0), 0)
         CALL_CHILD(PTR(bero_case_switch_off))
-        CALL(evt_run_case_evt, 9, 1, STRING("s_bero"), 0, PTR(s_bero_out), 0)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("s_bero"), 0, PTR(s_bero_out), 0)
     END_IF
     IF_INT_EQUAL(GSW_STORY_PROGRESS, 166)
         WAIT_MS(600)
@@ -765,11 +766,11 @@ EVT_BEGIN(aji_09_init_evt)
         SPAWN_EVENT(PTR(peach_evt_stg3))
         ELSE
         SET_VALUE(GF(0), 0)
-        CALL(evt_run_case_evt, 9, 1, STRING("A_kou1_ka_omo"), 0, PTR(evt_kou1), 0)
-        CALL(evt_run_case_evt, 9, 1, STRING("A_kou1_ka_ura"), 0, PTR(evt_kou1), 0)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_kou1_ka_omo"), 0, PTR(evt_kou1), 0)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_kou1_ka_ura"), 0, PTR(evt_kou1), 0)
         SET_VALUE(GF(1), 0)
-        CALL(evt_run_case_evt, 9, 1, STRING("A_kou2_ka_omo"), 0, PTR(evt_kou2), 0)
-        CALL(evt_run_case_evt, 9, 1, STRING("A_kou2_ka_ura"), 0, PTR(evt_kou2), 0)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_kou2_ka_omo"), 0, PTR(evt_kou2), 0)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_kou2_ka_ura"), 0, PTR(evt_kou2), 0)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_fuku1_p"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_fuku2_g"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
@@ -797,8 +798,8 @@ EVT_BEGIN(aji_09_init_evt)
     SPAWN_EVENT(PTR(evt_emergency))
     CALL(evt_mario_get_mode, LW(0))
     IF_INT_EQUAL(LW(0), 0)
-        CALL(evt_run_case_evt, 9, 1, STRING("A_memo1"), 0, PTR(evt_memo1), 0)
-        CALL(evt_run_case_evt, 9, 1, STRING("A_memo2"), 0, PTR(evt_memo2), 0)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_memo1"), 0, PTR(evt_memo1), 0)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_memo2"), 0, PTR(evt_memo2), 0)
         CALL(evt_snd_bgmon, 512, STRING("BGM_STG7_DUN2"))
         CALL(evt_snd_envon, 272, STRING("ENV_STG7_AJI2"))
         ELSE

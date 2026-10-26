@@ -7,6 +7,7 @@
 #include "evt/evt_sub.h"
 #include "evt/evt_bero.h"
 #include "system.h"
+#include "driver/casedrv.h"
 
 #include "data/mapdata.h"
 #include "win.h"
@@ -139,7 +140,7 @@ EVT_BEGIN(win_tree_entry)
         IF_INT_EQUAL(LW(1), 0)
             BREAK_LOOP
         END_IF
-        CALL(evt_run_case_evt, 13, 1, LW(1), 0, PTR(_tree_anime), 0)
+        CALL(evt_run_case_evt, CASE_HAMMER, 1, LW(1), 0, PTR(_tree_anime), 0)
     END_LOOP
     RETURN
 EVT_END()

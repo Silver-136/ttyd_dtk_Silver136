@@ -18,6 +18,7 @@
 #include "evt/evt_snd.h"
 #include "driver/mapdrv.h"
 #include "system.h"
+#include "driver/casedrv.h"
 
 #include "pmario_sound.h"
 #include "mario/mario_pouch.h"
@@ -656,7 +657,7 @@ EVT_BEGIN(evt_tou_bed)
 EVT_END()
 
 static EVT_BEGIN(bed_entry)
-    CALL(evt_run_case_evt, 9, 1, LW(0), 0, PTR(evt_tou_bed), 0)
+    CALL(evt_run_case_evt, CASE_FRONT_A, 1, LW(0), 0, PTR(evt_tou_bed), 0)
     RETURN
 EVT_END()
 
@@ -707,14 +708,14 @@ EVT_BEGIN(tou_07_init_evt)
         END_IF
     END_SWITCH
     IF_INT_EQUAL(LF(0), 0)
-        CALL(evt_run_case_evt, 14, 1, STRING("win_kabe"), 0, PTR(evt_dakuto), 0)
-        CALL(evt_run_case_evt, 13, 1, STRING("win_kabe"), 0, PTR(evt_dakuto2), 0)
-        CALL(evt_run_case_evt, 9, 1, STRING("win_kabe"), 0, PTR(evt_dakuto2), 0)
+        CALL(evt_run_case_evt, CASE_HAMMER_2, 1, STRING("win_kabe"), 0, PTR(evt_dakuto), 0)
+        CALL(evt_run_case_evt, CASE_HAMMER, 1, STRING("win_kabe"), 0, PTR(evt_dakuto2), 0)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("win_kabe"), 0, PTR(evt_dakuto2), 0)
         ELSE
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("kankikuti"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("win_kabe"), 1, 0)
     END_IF
-    CALL(evt_run_case_evt, 9, 1, STRING("M_make"), 0, PTR(evt_tou_match_make_default), 0)
+    CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("M_make"), 0, PTR(evt_tou_match_make_default), 0)
     CALL_CHILD(PTR(evt_tou_monitor_init))
     IF_INT_EQUAL(GSWF(2389), 1)
         SET_VALUE(GSWF(2389), 0)

@@ -15,6 +15,7 @@
 #include "evt/evt_pouch.h"
 #include "driver/npcdrv.h"
 #include "system.h"
+#include "driver/casedrv.h"
 
 #include "memory.h"
 #include "mario/mariost.h"
@@ -785,7 +786,7 @@ EVT_BEGIN(hom_00_init_evt)
     END_IF
     IF_INT_EQUAL(GSW_STORY_PROGRESS, 325)
         CALL(evt_hitobj_attr_onoff, 0, 1, STRING("n_bero_1"), 8388608)
-        CALL(evt_run_case_evt, 8, 1, STRING("n_bero_1"), 0, PTR(evt_train), 0)
+        CALL(evt_run_case_evt, CASE_FRONT, 1, STRING("n_bero_1"), 0, PTR(evt_train), 0)
         CALL(evt_map_playanim, STRING("n_1_door_open"), 2, 0)
     END_IF
     SPAWN_EVENT(PTR(evt_sub_mail_event))

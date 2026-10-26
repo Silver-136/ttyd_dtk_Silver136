@@ -13,6 +13,7 @@
 #include "evt/evt_sub.h"
 #include "evt/evt_pouch.h"
 #include "system.h"
+#include "driver/casedrv.h"
 
 #include "memory.h"
 #include "cam_road.h"
@@ -322,8 +323,8 @@ EVT_BEGIN(dou_05_init_evt)
     CALL_CHILD(PTR(evt_gazigazi_entry))
     CALL(evt_map_entry_airport_harbor, 1, STRING("S_Ship_Change"), STRING("Ship_Change"))
     CALL_CHILD(PTR(waterfall_init))
-    CALL(evt_run_case_evt, 0, 1, STRING("mizu_atari"), 0, PTR(ride_waterfall), 0)
-    CALL(evt_run_case_evt, 1, 1, STRING("mizu_atari"), 0, PTR(nonride_waterfall), 0)
+    CALL(evt_run_case_evt, CASE_STAND_ON, 1, STRING("mizu_atari"), 0, PTR(ride_waterfall), 0)
+    CALL(evt_run_case_evt, CASE_NOT_STAND_ON, 1, STRING("mizu_atari"), 0, PTR(nonride_waterfall), 0)
     CALL(cam_displacement)
     RETURN
 EVT_END()

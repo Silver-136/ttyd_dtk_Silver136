@@ -22,6 +22,7 @@
 #include "win/win_main.h"
 #include "evt/evt_pouch.h"
 #include "statuswindow.h"
+#include "driver/casedrv.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "driver/camdrv.h"
@@ -1266,7 +1267,7 @@ EVT_BEGIN(mapball_init)
 EVT_END()
 
 EVT_BEGIN(powerupya_init)
-    CALL(evt_run_case_evt, 9, 1, STRING("A_power_up"), 0, PTR(powerupya_table_talk), 0)
+    CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_power_up"), 0, PTR(powerupya_table_talk), 0)
     IF_INT_EQUAL(GSWF(1203), 1)
         IF_INT_EQUAL(GSWF(1204), 0)
             CALL(evt_npc_set_position, STRING("パワーアップ屋"), -320, 0, -10)
@@ -3049,11 +3050,11 @@ EVT_BEGIN(evt_door_02_entry)
     CALL(evt_door_param, LW(0), 1, LW(1), LW(2), LW(3))
     IF_INT_NOT_EQUAL(LW(2), 0)
         SET_VALUE(LW(15), 8)
-        CALL(evt_run_case_evt, 9, 1, LW(2), 0, PTR(evt_door_close), 0)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, LW(2), 0, PTR(evt_door_close), 0)
     END_IF
     IF_INT_NOT_EQUAL(LW(3), 0)
         SET_VALUE(LW(15), 0)
-        CALL(evt_run_case_evt, 9, 1, LW(3), 0, PTR(evt_door_open), 0)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, LW(3), 0, PTR(evt_door_open), 0)
     END_IF
     RETURN
 EVT_END()
@@ -3200,11 +3201,11 @@ static EVT_BEGIN(evt_door_03_entry)
     CALL(evt_door_param, LW(0), 1, LW(1), LW(2), LW(3))
     IF_INT_NOT_EQUAL(LW(2), 0)
         SET_VALUE(LW(15), 0)
-        CALL(evt_run_case_evt, 9, 1, LW(2), 0, PTR(evt_door_sanders_close), 0)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, LW(2), 0, PTR(evt_door_sanders_close), 0)
     END_IF
     IF_INT_NOT_EQUAL(LW(3), 0)
         SET_VALUE(LW(15), 0)
-        CALL(evt_run_case_evt, 9, 1, LW(3), 0, PTR(evt_door_sanders_open), 0)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, LW(3), 0, PTR(evt_door_sanders_open), 0)
     END_IF
     RETURN
 EVT_END()
@@ -3272,7 +3273,7 @@ EVT_BEGIN(evt_door_03_roll_open)
     CALL(evt_cam_letter_box_disable, 0)
     CALL(evt_door_param, LW(0), 1, LW(1), LW(2), LW(3))
     SET_VALUE(LW(15), 0)
-    CALL(evt_run_case_evt, 0, 1, LW(3), 0, PTR(evt_door_03_caseopen), 0)
+    CALL(evt_run_case_evt, CASE_STAND_ON, 1, LW(3), 0, PTR(evt_door_03_caseopen), 0)
     RETURN
 EVT_END()
 
@@ -3314,7 +3315,7 @@ static DoorParam door_data_03_roll = {
 EVT_BEGIN(evt_door_03_roll_entry)
     CALL(evt_door_param, LW(0), 1, LW(1), LW(2), LW(3))
     SET_VALUE(LW(15), 0)
-    CALL(evt_run_case_evt, 0, 1, LW(3), 0, PTR(evt_door_03_caseopen), 0)
+    CALL(evt_run_case_evt, CASE_STAND_ON, 1, LW(3), 0, PTR(evt_door_03_caseopen), 0)
     RETURN
 EVT_END()
 
@@ -4211,8 +4212,8 @@ EVT_BEGIN(evt_gor_offscren_door_entry)
     CALL(_door_color_init_func)
     SET_VALUE(LW(4), STRING("A_ie_03_doa_02"))
     SET_VALUE(LW(6), STRING("A_ie_03_doa_04"))
-    CALL(evt_run_case_evt, 9, 1, STRING("A_ie_03_doa_02"), 0, PTR(evt_gor_door_open), 0)
-    CALL(evt_run_case_evt, 9, 1, STRING("A_ie_03_doa_04"), 0, PTR(evt_gor_door_close), 0)
+    CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_ie_03_doa_02"), 0, PTR(evt_gor_door_open), 0)
+    CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_ie_03_doa_04"), 0, PTR(evt_gor_door_close), 0)
     RETURN
 EVT_END()
 
@@ -5668,7 +5669,7 @@ EVT_END()
 EVT_BEGIN(evt_monosiri_follow)
     CALL(monosiri_check, LW(0), LW(1))
     IF_INT_EQUAL(LW(0), 1)
-        CALL(evt_run_case_evt, 9, 1, STRING("A_i02_gomibako"), 0, PTR(evt_monosiri), 0)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_i02_gomibako"), 0, PTR(evt_monosiri), 0)
     END_IF
     RETURN
 EVT_END()
@@ -5852,7 +5853,7 @@ EVT_BEGIN(gor_02_init_evt)
     IF_INT_LESS(GSW_STORY_PROGRESS, 23)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ie_04_naka"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_ie_04C"), 1, 0)
-        CALL(evt_run_case_evt, 9, 1, STRING("A_ie_04_doa01"), 0, PTR(evt_door_04_junbi), 0)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_ie_04_doa01"), 0, PTR(evt_door_04_junbi), 0)
         ELSE
         SET_VALUE(LW(0), PTR(&door_data_04))
         CALL_CHILD(PTR(evt_door_entry))
@@ -5875,11 +5876,11 @@ EVT_BEGIN(gor_02_init_evt)
     CALL(evt_door_param, LW(0), 1, LW(1), LW(2), LW(3))
     IF_INT_NOT_EQUAL(LW(2), 0)
         SET_VALUE(LW(15), 0)
-        CALL(evt_run_case_evt, 9, 1, LW(2), 0, PTR(evt_door_close), 0)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, LW(2), 0, PTR(evt_door_close), 0)
     END_IF
     IF_INT_NOT_EQUAL(LW(3), 0)
         SET_VALUE(LW(15), 4)
-        CALL(evt_run_case_evt, 9, 1, LW(3), 0, PTR(evt_door_open), 0)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, LW(3), 0, PTR(evt_door_open), 0)
     END_IF
     IF_INT_EQUAL(GSWF(1219), 0)
         CALL(evt_mobj_lock, STRING("mobj_lock00"), 49, 446, 18, 50, 0, PTR(evt_chk), PTR(evt_unlock), GSWF(1219))

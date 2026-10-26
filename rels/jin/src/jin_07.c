@@ -15,6 +15,7 @@
 #include "evt/evt_sub.h"
 #include "mario/mario_pouch.h"
 #include "system.h"
+#include "driver/casedrv.h"
 
 #pragma defer_codegen on
 #include "manager/evtmgr_cmd.h"
@@ -617,11 +618,11 @@ EVT_BEGIN(jin_07_init_evt)
         CALL_CHILD(PTR(bero_case_switch_off))
     END_IF
     IF_INT_EQUAL(GSWF(2231), 0)
-        CALL(evt_run_case_evt, 9, 1, STRING("w_bero_1"), 0, PTR(evt_locked), 0)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("w_bero_1"), 0, PTR(evt_locked), 0)
     END_IF
     IF_INT_LESS(GSW_STORY_PROGRESS, 196)
         CALL(evt_mapobj_rotate, 1, STRING("hako_futa"), 95, 0, 0)
-        CALL(evt_run_case_evt, 9, 1, STRING("a_hako"), 0, PTR(evt_teresa_box_open), 0)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_hako"), 0, PTR(evt_teresa_box_open), 0)
         ELSE
         CALL(evt_mapobj_rotate, 1, STRING("hako_futa"), 5, 0, 0)
     END_IF

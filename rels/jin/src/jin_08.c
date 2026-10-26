@@ -17,6 +17,7 @@
 #include "evt/evt_pouch.h"
 #include "driver/npcdrv.h"
 #include "system.h"
+#include "driver/casedrv.h"
 
 USER_FUNC(evt_kagemario_init);
 USER_FUNC(evt_win_item_select);
@@ -336,13 +337,13 @@ EVT_BEGIN(jin_08_init_evt)
     CALL(evt_npc_setup, PTR(npcEnt))
     IF_INT_LESS(GSW_STORY_PROGRESS, 209)
         CALL(evt_mapobj_rotate, 1, STRING("hako_futa"), 90, 0, 0)
-        CALL(evt_run_case_evt, 9, 1, STRING("a_isu"), 0, PTR(evt_open), 0)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_isu"), 0, PTR(evt_open), 0)
         ELSE
         CALL(evt_mapobj_rotate, 1, STRING("hako_futa"), 0, 0, 0)
     END_IF
     IF_INT_EQUAL(GSWF(2230), 0)
         CALL(evt_mapobj_rotate, 1, STRING("hako_futa2"), 0, 0, 0)
-        CALL(evt_run_case_evt, 9, 1, STRING("a_hoko2"), 0, PTR(evt_open_kagi), 0)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_hoko2"), 0, PTR(evt_open_kagi), 0)
         ELSE
         CALL(evt_mapobj_rotate, 1, STRING("hako_futa2"), -90, 0, 0)
     END_IF

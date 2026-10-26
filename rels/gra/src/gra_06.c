@@ -19,6 +19,7 @@
 #include "driver/mapdrv.h"
 #include "mario/mario_pouch.h"
 #include "system.h"
+#include "driver/casedrv.h"
 
 USER_FUNC(evt_kagemario_init);
 #ifdef VERSION_G8ME01
@@ -399,7 +400,7 @@ EVT_BEGIN(gra_06_init_evt)
     CALL_CHILD(PTR(evt_usu_kagemario_party_kill))
     IF_INT_EQUAL(GSWF(2078), 0)
         CALL(evt_hitobj_onoff, STRING("A_Mon"), 1, 0)
-        CALL(evt_run_case_evt, 9, 1, STRING("a_saku01"), 0, PTR(gra_06_saku_open), 0)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_saku01"), 0, PTR(gra_06_saku_open), 0)
         ELSE
         CALL(evt_hit_bind_mapobj, STRING("A_mon_L"), STRING("mon_L"))
         CALL(evt_hit_bind_mapobj, STRING("A_mon_R"), STRING("mon_R"))

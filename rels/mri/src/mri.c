@@ -17,6 +17,7 @@
 #include "evt/evt_pouch.h"
 #include "rels/mri/include/mri.h"
 #include "mario/mario_pouch.h"
+#include "driver/casedrv.h"
 
 #include "data/mapdata.h"
 #include "manager/evtmgr_cmd.h"
@@ -327,8 +328,8 @@ EVT_BEGIN(mri_ueki_entry)
         IF_INT_EQUAL(LW(1), 0)
             BREAK_LOOP
         END_IF
-        CALL(evt_run_case_evt, 9, 1, LW(1), 0, PTR(_ueki_anime), 0)
-        CALL(evt_run_case_evt, 13, 1, LW(1), 0, PTR(_ueki_anime), 0)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, LW(1), 0, PTR(_ueki_anime), 0)
+        CALL(evt_run_case_evt, CASE_HAMMER, 1, LW(1), 0, PTR(_ueki_anime), 0)
     END_LOOP
     RETURN
 EVT_END()

@@ -14,6 +14,7 @@
 #include "driver/mapdrv.h"
 #include "mario/mario_pouch.h"
 #include "system.h"
+#include "driver/casedrv.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "mario/mario.h"
@@ -180,7 +181,7 @@ EVT_BEGIN(tensou_switch)
     CALL(evt_map_checkanim, STRING("anm_saisho"), LW(0), LW(1))
     WAIT_MS(LW(1))
     CALL(evt_map_playanim, STRING("anm_wa-p"), 1, 0)
-    CALL(evt_run_case_evt, 0, 1, STRING("A_tensou"), 0, PTR(tensou_ride), 0)
+    CALL(evt_run_case_evt, CASE_STAND_ON, 1, STRING("A_tensou"), 0, PTR(tensou_ride), 0)
     CALL(evt_exit_case_evt)
     RETURN
 EVT_END()
@@ -259,7 +260,7 @@ EVT_END()
 EVT_BEGIN(tensou_init)
     CALL(evt_mapobj_flag_onoff, 0, 0, STRING("sui__1"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("sui__2"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_run_case_evt, 9, 1, STRING("A__sui"), 0, PTR(tensou_switch), 0)
+    CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A__sui"), 0, PTR(tensou_switch), 0)
     IF_INT_EQUAL(GSWF(1326), 0)
         RETURN
     END_IF

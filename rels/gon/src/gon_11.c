@@ -20,6 +20,7 @@
 #include "evt/evt_item.h"
 #include "mario/mario_pouch.h"
 #include "system.h"
+#include "driver/casedrv.h"
 
 #include "driver/npcdrv.h"
 #include "driver/hitdrv.h"
@@ -944,7 +945,7 @@ static EVT_BEGIN(iri_16_init)
         IF_INT_EQUAL(GSWF(5406), 0)
             CALL(evt_iri_16_cloud_init)
             CALL(evt_iri_16_cloud_ent, PTR(&capturemap), STRING("A_kura"), PTR(iri_16_cloud_evt))
-            CALL(evt_run_case_evt, 9, 1, STRING("A_kura"), 0, PTR(iri_16_touch_evt), 0)
+            CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_kura"), 0, PTR(iri_16_touch_evt), 0)
             ELSE
             CALL(evt_hitobj_onoff, STRING("A_kura"), 1, 0)
             CALL(evt_mobj_itembox, STRING("box"), 0, 0, 0, 0, 0, PTR(iri_16_box_evt), GSWF(5407))

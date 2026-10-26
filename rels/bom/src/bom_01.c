@@ -25,6 +25,7 @@
 #include "eff/eff_kemutest.h"
 #include "driver/mapdrv.h"
 #include "mario/mario_pouch.h"
+#include "driver/casedrv.h"
 
 #include "memory.h"
 #include "string.h"
@@ -2800,7 +2801,7 @@ EVT_BEGIN(bom_01_init_evt)
         CALL_CHILD(PTR(musume_b_entry))
         CALL_CHILD(PTR(musume_c_entry))
     END_SWITCH
-    CALL(evt_run_case_evt, 9, 1, STRING(("A_ie_door")), 0, PTR(evt_door), 0)
+    CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING(("A_ie_door")), 0, PTR(evt_door), 0)
     CALL(evt_item_entry, STRING(("item_00")), ITEM_STAR_PIECE, -180, 5, 450, 16, GSWF(5659), 0)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(349)

@@ -19,6 +19,7 @@
 #include "evt/evt_sub.h"
 #include "driver/mapdrv.h"
 #include "mario/mario_pouch.h"
+#include "driver/casedrv.h"
 
 
 static EvtWord door01_close[12];
@@ -288,7 +289,7 @@ EVT_BEGIN(gon_07_init_evt)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ana_after"), MAP_OBJ_FLAG_HIDDEN)
         SET_VALUE(LW(0), STRING("e_bero"))
         CALL_CHILD(PTR(bero_case_switch_off))
-        CALL(evt_run_case_evt, 15, 1, STRING("san"), 0, PTR(bomb_wall_evt), 0)
+        CALL(evt_run_case_evt, CASE_BOBBERY, 1, STRING("san"), 0, PTR(bomb_wall_evt), 0)
         ELSE
         CALL(evt_hitobj_onoff, STRING("san"), 1, 0)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ana"), MAP_OBJ_FLAG_HIDDEN)

@@ -18,6 +18,7 @@
 #include "driver/npcdrv.h"
 #include "driver/mapdrv.h"
 #include "system.h"
+#include "driver/casedrv.h"
 
 #include "driver/dispdrv.h"
 #include "stdlib.h"
@@ -1340,7 +1341,7 @@ EVT_BEGIN(win_04_init_evt)
     IF_INT_LESS_OR_EQUAL(GSW_STORY_PROGRESS, 86)
         SET_VALUE(LW(0), STRING("e_bero"))
         CALL_CHILD(PTR(bero_case_switch_off))
-        CALL(evt_run_case_evt, 9, 1, STRING("e_bero"), 0, PTR(touch_door), 0)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("e_bero"), 0, PTR(touch_door), 0)
     END_IF
     IF_INT_EQUAL(GSW_STORY_PROGRESS, 76)
         SPAWN_EVENT(PTR(cloud_toujou))

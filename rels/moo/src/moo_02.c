@@ -14,6 +14,7 @@
 #include "evt/evt_item.h"
 #include "driver/mapdrv.h"
 #include "mario/mario_pouch.h"
+#include "driver/casedrv.h"
 
 #ifdef VERSION_G8ME01
 #endif
@@ -273,19 +274,19 @@ EVT_BEGIN(moo_02_init_evt)
     CALL(evt_item_entry, STRING("item00"), ITEM_STAR_PIECE, -55, 0, -135, 16, GSWF(5664), 0)
     CALL(evt_paper_entry, STRING("OFF_d_bom_ver2"))
     IF_INT_LESS(GSW_STORY_PROGRESS, 359)
-        CALL(evt_run_case_evt, 15, 1, STRING("A_iwa_04"), 0, PTR(dokan_evt), 0)
+        CALL(evt_run_case_evt, CASE_BOBBERY, 1, STRING("A_iwa_04"), 0, PTR(dokan_evt), 0)
         ELSE
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_iwa_04"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_iwa_04"), 1, 0)
     END_IF
     IF_INT_EQUAL(GSWF(4029), 0)
-        CALL(evt_run_case_evt, 15, 1, STRING("A_iwa_01"), 0, PTR(rock_evt0), 0)
+        CALL(evt_run_case_evt, CASE_BOBBERY, 1, STRING("A_iwa_01"), 0, PTR(rock_evt0), 0)
         ELSE
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_iwa_01"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_iwa_01"), 1, 0)
     END_IF
     IF_INT_EQUAL(GSWF(4030), 0)
-        CALL(evt_run_case_evt, 15, 1, STRING("A_iwa_07"), 0, PTR(rock_evt1), 0)
+        CALL(evt_run_case_evt, CASE_BOBBERY, 1, STRING("A_iwa_07"), 0, PTR(rock_evt1), 0)
         ELSE
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_iwa_07"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_iwa_07"), 1, 0)

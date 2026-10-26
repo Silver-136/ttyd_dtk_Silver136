@@ -20,6 +20,7 @@
 #include "evt/evt_sub.h"
 #include "evt/evt_mobj.h"
 #include "driver/npcdrv.h"
+#include "driver/casedrv.h"
 
 #include "driver/hitdrv.h"
 #include "string.h"
@@ -1530,7 +1531,7 @@ static EVT_BEGIN(bombwall_init)
         CALL_CHILD(PTR(bero_case_switch_off))
         CALL(evt_hitobj_attr_onoff, 1, 0, STRING("n_bero"), 4)
         CALL(evt_paper_entry, STRING("OFF_d_bom_ver2"))
-        CALL(evt_run_case_evt, 15, 1, STRING("n_bero"), 0, PTR(bombwall_bomb), 0)
+        CALL(evt_run_case_evt, CASE_BOBBERY, 1, STRING("n_bero"), 0, PTR(bombwall_bomb), 0)
         CASE_GREATER_OR_EQUAL(256)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_hibiato"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ana_after"), MAP_OBJ_FLAG_HIDDEN)
@@ -2319,8 +2320,8 @@ EVT_BEGIN(pukapuka_watari_init01)
     CALL_CHILD(PTR(dou_puka_event_init1))
     SPAWN_EVENT(PTR(dou_puka_event_main1))
     SPAWN_EVENT(PTR(dou_puka_event_sub1))
-    CALL(evt_run_case_evt, 0, 1, STRING("A_taru_n01"), 0, PTR(dou_puka_event_1), 0)
-    CALL(evt_run_case_evt, 1, 1, STRING("A_taru_n01"), 0, PTR(dou_puka_event_rev_1), 0)
+    CALL(evt_run_case_evt, CASE_STAND_ON, 1, STRING("A_taru_n01"), 0, PTR(dou_puka_event_1), 0)
+    CALL(evt_run_case_evt, CASE_NOT_STAND_ON, 1, STRING("A_taru_n01"), 0, PTR(dou_puka_event_rev_1), 0)
     SET_VALUE(LW(0), STRING("S_taru_n02"))
     SET_VALUE(LW(1), STRING("A_taru_n02"))
     SET_VALUE(LW(2), STRING("A_taru_n02"))
@@ -2328,8 +2329,8 @@ EVT_BEGIN(pukapuka_watari_init01)
     CALL_CHILD(PTR(dou_puka_event_init2))
     SPAWN_EVENT(PTR(dou_puka_event_main2))
     SPAWN_EVENT(PTR(dou_puka_event_sub2))
-    CALL(evt_run_case_evt, 0, 1, STRING("A_taru_n02"), 0, PTR(dou_puka_event_2), 0)
-    CALL(evt_run_case_evt, 1, 1, STRING("A_taru_n02"), 0, PTR(dou_puka_event_rev_2), 0)
+    CALL(evt_run_case_evt, CASE_STAND_ON, 1, STRING("A_taru_n02"), 0, PTR(dou_puka_event_2), 0)
+    CALL(evt_run_case_evt, CASE_NOT_STAND_ON, 1, STRING("A_taru_n02"), 0, PTR(dou_puka_event_rev_2), 0)
     RETURN
 EVT_END()
 
@@ -2341,8 +2342,8 @@ EVT_BEGIN(pukapuka_watari_init02)
     CALL_CHILD(PTR(dou_puka_event_init3))
     SPAWN_EVENT(PTR(dou_puka_event_main3))
     SPAWN_EVENT(PTR(dou_puka_event_sub3))
-    CALL(evt_run_case_evt, 0, 1, STRING("A_taru_n03"), 0, PTR(dou_puka_event_3), 0)
-    CALL(evt_run_case_evt, 1, 1, STRING("A_taru_n03"), 0, PTR(dou_puka_event_rev_3), 0)
+    CALL(evt_run_case_evt, CASE_STAND_ON, 1, STRING("A_taru_n03"), 0, PTR(dou_puka_event_3), 0)
+    CALL(evt_run_case_evt, CASE_NOT_STAND_ON, 1, STRING("A_taru_n03"), 0, PTR(dou_puka_event_rev_3), 0)
     SET_VALUE(LW(0), STRING("S_taru_n04"))
     SET_VALUE(LW(1), STRING("A_taru_n04"))
     SET_VALUE(LW(2), STRING("A_taru_n04"))
@@ -2350,8 +2351,8 @@ EVT_BEGIN(pukapuka_watari_init02)
     CALL_CHILD(PTR(dou_puka_event_init4))
     SPAWN_EVENT(PTR(dou_puka_event_main4))
     SPAWN_EVENT(PTR(dou_puka_event_sub4))
-    CALL(evt_run_case_evt, 0, 1, STRING("A_taru_n04"), 0, PTR(dou_puka_event_4), 0)
-    CALL(evt_run_case_evt, 1, 1, STRING("A_taru_n04"), 0, PTR(dou_puka_event_rev_4), 0)
+    CALL(evt_run_case_evt, CASE_STAND_ON, 1, STRING("A_taru_n04"), 0, PTR(dou_puka_event_4), 0)
+    CALL(evt_run_case_evt, CASE_NOT_STAND_ON, 1, STRING("A_taru_n04"), 0, PTR(dou_puka_event_rev_4), 0)
     RETURN
 EVT_END()
 

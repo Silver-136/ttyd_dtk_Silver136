@@ -17,6 +17,7 @@
 #include "evt/evt_sub.h"
 #include "poly_trig.h"
 #include "mario/mario_pouch.h"
+#include "driver/casedrv.h"
 #pragma inline_max_total_size(11500)
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
@@ -1922,9 +1923,9 @@ static EVT_BEGIN(evt_access_entry)
         IF_INT_EQUAL(LW(0), 0)
             BREAK_LOOP
         END_IF
-        CALL(evt_run_case_evt, 9, 1, LW(0), 0, PTR(evt_access), 0)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, LW(0), 0, PTR(evt_access), 0)
     END_LOOP
-    CALL(evt_run_case_evt, 9, 1, STRING("bin_2"), 0, PTR(evt_access2), 0)
+    CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("bin_2"), 0, PTR(evt_access2), 0)
     RETURN
 EVT_END()
 

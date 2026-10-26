@@ -13,6 +13,7 @@
 #include "win/win_main.h"
 #include "evt/evt_pouch.h"
 #include "system.h"
+#include "driver/casedrv.h"
 
 #include "mario/mario.h"
 #include "driver/npcdrv.h"
@@ -1270,7 +1271,7 @@ static EVT_BEGIN(evt_access_entry)
         IF_INT_EQUAL(LW(0), 0)
             BREAK_LOOP
         END_IF
-        CALL(evt_run_case_evt, 9, 1, LW(0), 0, PTR(evt_access), 0)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, LW(0), 0, PTR(evt_access), 0)
     END_LOOP
     RETURN
 EVT_END()
@@ -1485,7 +1486,7 @@ EVT_BEGIN(rsh_04_a_init_evt)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, 328)
         SET_VALUE(LW(0), 0)
         CALL_CHILD(PTR(bero_case_switch_off))
-        CALL(evt_run_case_evt, 9, 1, STRING("w_bero"), 0, PTR(evt_door_msg), 0)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("w_bero"), 0, PTR(evt_door_msg), 0)
         CALL(evt_npc_entry, STRING("moa1"), STRING("c_n_moa_a"))
         CALL(evt_npc_entry, STRING("moa2"), STRING("c_n_moa_a"))
         CALL(evt_npc_entry, STRING("moa3"), STRING("c_n_moa_a"))

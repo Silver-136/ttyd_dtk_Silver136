@@ -8,6 +8,7 @@
 #include "evt/evt_snd.h"
 #include "party/party_motion.h"
 #include "evt/evt_mobj.h"
+#include "driver/casedrv.h"
 
 #include "mario/mario.h"
 #include "manager/evtmgr_cmd.h"
@@ -270,7 +271,7 @@ EVT_BEGIN(jin_10_init_evt)
     SET_FLOAT_VALUE(GW(10), FLOAT(0.0f))
     SET_FLOAT_VALUE(GW(11), FLOAT(0.0f))
     CALL(evt_hit_bind_mapobj, STRING("a_saku"), STRING("saku"))
-    CALL(evt_run_case_evt, 10, 1, STRING("a_saku"), 0, PTR(push_evt), 0)
+    CALL(evt_run_case_evt, CASE_PUSH, 1, STRING("a_saku"), 0, PTR(push_evt), 0)
     SPAWN_EVENT(PTR(unpush_evt))
     SPAWN_EVENT(PTR(vivi_chk))
     RETURN

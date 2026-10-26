@@ -19,6 +19,7 @@
 #include "driver/npcdrv.h"
 #include "driver/mapdrv.h"
 #include "mario/mario_pouch.h"
+#include "driver/casedrv.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "driver/imgdrv.h"
@@ -741,7 +742,7 @@ EVT_BEGIN(mri_17_init_evt)
     SET_VALUE(LW(10), STRING("punipuni"))
     SET_VALUE(LW(11), 0)
     SPAWN_EVENT(PTR(punipuni_ball00_init))
-    CALL(evt_run_case_evt, 9, 1, STRING("A_dai_mae"), 0, PTR(punipuni_ball00), 0)
+    CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_dai_mae"), 0, PTR(punipuni_ball00), 0)
     SPAWN_EVENT(PTR(breakyuka_init))
     CALL(evt_mobj_breaking_floor, STRING("mobj_bf00"), 0, 0, -35, 1, PTR(breakyuka_main), GSWF(2871))
     IF_INT_LESS(GSW_STORY_PROGRESS, 103)

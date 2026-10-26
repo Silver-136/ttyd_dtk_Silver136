@@ -26,6 +26,7 @@
 #include "evt/evt_telop.h"
 #include "mot/mot_ship.h"
 #include "evt/evt_pouch.h"
+#include "driver/casedrv.h"
 
 #include "driver/npcdrv.h"
 #include "mario/mario_pouch.h"
@@ -470,7 +471,7 @@ EVT_BEGIN(mony_peton_talk)
     CALL(evt_npc_flag_onoff, 0, STRING("ピートン"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_cam3d_evt_off, 500, 11)
     CALL(evt_party_run, 0)
-    CALL(evt_run_case_evt, 0, 1, STRING("A_oku_yuka_01"), 0, PTR(mony_peton_after), 0)
+    CALL(evt_run_case_evt, CASE_STAND_ON, 1, STRING("A_oku_yuka_01"), 0, PTR(mony_peton_after), 0)
     SET_VALUE(GSW_STORY_PROGRESS, 123)
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_snd_bgmoff_f, 513, 2000)
@@ -5947,7 +5948,7 @@ EVT_BEGIN(gor_00_init_evt)
     END_IF
     IF_INT_EQUAL(GSW_STORY_PROGRESS, 123)
         IF_INT_EQUAL(GSWF(1181), 0)
-            CALL(evt_run_case_evt, 0, 1, STRING("A_oku_yuka_01"), 0, PTR(mony_peton_after), 0)
+            CALL(evt_run_case_evt, CASE_STAND_ON, 1, STRING("A_oku_yuka_01"), 0, PTR(mony_peton_after), 0)
         END_IF
     END_IF
     SWITCH(GSW_STORY_PROGRESS)

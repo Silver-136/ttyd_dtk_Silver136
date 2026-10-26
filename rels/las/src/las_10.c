@@ -15,6 +15,7 @@
 #include "evt/evt_sub.h"
 #include "evt/evt_pouch.h"
 #include "system.h"
+#include "driver/casedrv.h"
 
 #include "mario/mario_pouch.h"
 #include "party.h"
@@ -1026,49 +1027,49 @@ EVT_BEGIN(kagi_8_on)
     CALL(evt_hit_bind_mapobj, STRING("A113_daiza7"), STRING("S_kagi7"))
     CALL(evt_hit_bind_mapobj, STRING("A113_daiza8"), STRING("S_kagi8"))
     IF_INT_EQUAL(GSWF(4331), 0)
-        CALL(evt_run_case_evt, 9, 1, STRING("A_kagi1"), 0, PTR(kagi1_evt), 0)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_kagi1"), 0, PTR(kagi1_evt), 0)
         ELSE
         CALL(evt_mapobj_rotate, 1, STRING("S_kagi1"), 0, 180, 0)
         CALL(evt_hit_bind_update, STRING("A113_daiza1"))
     END_IF
     IF_INT_EQUAL(GSWF(4332), 0)
-        CALL(evt_run_case_evt, 9, 1, STRING("A_kagi2"), 0, PTR(kagi2_evt), 0)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_kagi2"), 0, PTR(kagi2_evt), 0)
         ELSE
         CALL(evt_mapobj_rotate, 1, STRING("S_kagi2"), 0, 180, 0)
         CALL(evt_hit_bind_update, STRING("A113_daiza2"))
     END_IF
     IF_INT_EQUAL(GSWF(4333), 0)
-        CALL(evt_run_case_evt, 9, 1, STRING("A_kagi3"), 0, PTR(kagi3_evt), 0)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_kagi3"), 0, PTR(kagi3_evt), 0)
         ELSE
         CALL(evt_mapobj_rotate, 1, STRING("S_kagi3"), 0, 180, 0)
         CALL(evt_hit_bind_update, STRING("A113_daiza3"))
     END_IF
     IF_INT_EQUAL(GSWF(4334), 0)
-        CALL(evt_run_case_evt, 9, 1, STRING("A_kagi4"), 0, PTR(kagi4_evt), 0)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_kagi4"), 0, PTR(kagi4_evt), 0)
         ELSE
         CALL(evt_mapobj_rotate, 1, STRING("S_kagi4"), 0, 180, 0)
         CALL(evt_hit_bind_update, STRING("A113_daiza4"))
     END_IF
     IF_INT_EQUAL(GSWF(4335), 0)
-        CALL(evt_run_case_evt, 9, 1, STRING("A_kagi5"), 0, PTR(kagi5_evt), 0)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_kagi5"), 0, PTR(kagi5_evt), 0)
         ELSE
         CALL(evt_mapobj_rotate, 1, STRING("S_kagi5"), 0, 180, 0)
         CALL(evt_hit_bind_update, STRING("A113_daiza5"))
     END_IF
     IF_INT_EQUAL(GSWF(4336), 0)
-        CALL(evt_run_case_evt, 9, 1, STRING("A_kagi6"), 0, PTR(kagi6_evt), 0)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_kagi6"), 0, PTR(kagi6_evt), 0)
         ELSE
         CALL(evt_mapobj_rotate, 1, STRING("S_kagi6"), 0, 180, 0)
         CALL(evt_hit_bind_update, STRING("A113_daiza6"))
     END_IF
     IF_INT_EQUAL(GSWF(4337), 0)
-        CALL(evt_run_case_evt, 9, 1, STRING("A_kagi7"), 0, PTR(kagi7_evt), 0)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_kagi7"), 0, PTR(kagi7_evt), 0)
         ELSE
         CALL(evt_mapobj_rotate, 1, STRING("S_kagi7"), 0, 180, 0)
         CALL(evt_hit_bind_update, STRING("A113_daiza7"))
     END_IF
     IF_INT_EQUAL(GSWF(4338), 0)
-        CALL(evt_run_case_evt, 9, 1, STRING("A_kagi8"), 0, PTR(kagi8_evt), 0)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_kagi8"), 0, PTR(kagi8_evt), 0)
         ELSE
         CALL(evt_mapobj_rotate, 1, STRING("S_kagi8"), 0, 180, 0)
         CALL(evt_hit_bind_update, STRING("A113_daiza8"))
@@ -1145,7 +1146,7 @@ EVT_BEGIN(las_10_init_evt)
     END_IF
     IF_INT_LESS(GSW_STORY_PROGRESS, 389)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("hosi_on"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_run_case_evt, 9, 1, STRING("A_daiza1"), 0, PTR(daiza_evt), 0)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_daiza1"), 0, PTR(daiza_evt), 0)
         ELSE
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("hosi_off"), MAP_OBJ_FLAG_HIDDEN)
     END_IF

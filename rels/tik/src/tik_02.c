@@ -20,6 +20,7 @@
 #include "driver/npcdrv.h"
 #include "driver/mapdrv.h"
 #include "system.h"
+#include "driver/casedrv.h"
 
 #include "evt/evt_npc.h"
 #include "party.h"
@@ -769,7 +770,7 @@ EVT_BEGIN(tik_02_init_evt)
         CALL(evt_hitobj_attr_onoff, 1, 0, STRING("w_bwro_2"), 4)
         SET_VALUE(LW(0), STRING("w_bwro_2"))
         CALL_CHILD(PTR(bero_case_switch_off))
-        CALL(evt_run_case_evt, 15, 1, STRING("w_bwro_2"), 0, PTR(wall_bomb), 0)
+        CALL(evt_run_case_evt, CASE_BOBBERY, 1, STRING("w_bwro_2"), 0, PTR(wall_bomb), 0)
         ELSE
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("bom_kabe_3"), MAP_OBJ_FLAG_HIDDEN)
     END_IF

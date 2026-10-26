@@ -1,5 +1,6 @@
 #include "version.h"
 #include "mario/mario_pouch.h"
+#include "driver/casedrv.h"
 #define GXSetTexCoordGen GXSetTexCoordGen_inline_hidden
 #include "eff/n64/eff_pokopi_pcharge_n64.h"
 #include "eff/eff_starstone.h"
@@ -5463,14 +5464,14 @@ EVT_BEGIN(tou_03_init_evt)
 #ifdef VERSION_G8ME01
         CALL(evt_hitobj_onoff, STRING("a_kyaku_A"), 1, 1)
         CALL(evt_hitobj_onoff, STRING("a_kyaku_B"), 1, 1)
-        CALL(evt_run_case_evt, 9, 0, STRING("kyaku1"), 0, PTR(evt_kyaku_1), 0)
-        CALL(evt_run_case_evt, 9, 0, STRING("kyaku2"), 0, PTR(evt_kyaku_2), 0)
-        CALL(evt_run_case_evt, 9, 0, STRING("kyaku3"), 0, PTR(evt_kyaku_3), 0)
-        CALL(evt_run_case_evt, 9, 0, STRING("kyaku4"), 0, PTR(evt_kyaku_4), 0)
-        CALL(evt_run_case_evt, 9, 0, STRING("kyaku5"), 0, PTR(evt_kyaku_5), 0)
-        CALL(evt_run_case_evt, 9, 0, STRING("kyaku6"), 0, PTR(evt_kyaku_6), 0)
-        CALL(evt_run_case_evt, 9, 0, STRING("kyaku7"), 0, PTR(evt_kyaku_7), 0)
-        CALL(evt_run_case_evt, 9, 0, STRING("kyaku8"), 0, PTR(evt_kyaku_8), 0)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 0, STRING("kyaku1"), 0, PTR(evt_kyaku_1), 0)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 0, STRING("kyaku2"), 0, PTR(evt_kyaku_2), 0)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 0, STRING("kyaku3"), 0, PTR(evt_kyaku_3), 0)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 0, STRING("kyaku4"), 0, PTR(evt_kyaku_4), 0)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 0, STRING("kyaku5"), 0, PTR(evt_kyaku_5), 0)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 0, STRING("kyaku6"), 0, PTR(evt_kyaku_6), 0)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 0, STRING("kyaku7"), 0, PTR(evt_kyaku_7), 0)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 0, STRING("kyaku8"), 0, PTR(evt_kyaku_8), 0)
         SPAWN_EVENT(PTR(evt_kyaku_check))
         ELSE
         CALL(evt_hitobj_onoff, STRING("a_kyaku_A"), 1, 0)
@@ -5478,14 +5479,14 @@ EVT_BEGIN(tou_03_init_evt)
 #else
         CALL(evt_hitobj_onoff, STRING(("a_kyaku_A")), 1, 1)
         CALL(evt_hitobj_onoff, STRING(("a_kyaku_B")), 1, 1)
-        CALL(evt_run_case_evt, 9, 1, STRING(("kyaku1")), 0, PTR(evt_kyaku_1), 0)
-        CALL(evt_run_case_evt, 9, 1, STRING(("kyaku2")), 0, PTR(evt_kyaku_2), 0)
-        CALL(evt_run_case_evt, 9, 1, STRING(("kyaku3")), 0, PTR(evt_kyaku_3), 0)
-        CALL(evt_run_case_evt, 9, 1, STRING(("kyaku4")), 0, PTR(evt_kyaku_4), 0)
-        CALL(evt_run_case_evt, 9, 1, STRING(("kyaku5")), 0, PTR(evt_kyaku_5), 0)
-        CALL(evt_run_case_evt, 9, 1, STRING(("kyaku6")), 0, PTR(evt_kyaku_6), 0)
-        CALL(evt_run_case_evt, 9, 1, STRING(("kyaku7")), 0, PTR(evt_kyaku_7), 0)
-        CALL(evt_run_case_evt, 9, 1, STRING(("kyaku8")), 0, PTR(evt_kyaku_8), 0)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING(("kyaku1")), 0, PTR(evt_kyaku_1), 0)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING(("kyaku2")), 0, PTR(evt_kyaku_2), 0)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING(("kyaku3")), 0, PTR(evt_kyaku_3), 0)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING(("kyaku4")), 0, PTR(evt_kyaku_4), 0)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING(("kyaku5")), 0, PTR(evt_kyaku_5), 0)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING(("kyaku6")), 0, PTR(evt_kyaku_6), 0)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING(("kyaku7")), 0, PTR(evt_kyaku_7), 0)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING(("kyaku8")), 0, PTR(evt_kyaku_8), 0)
         ELSE
         CALL(evt_hitobj_onoff, STRING(("a_kyaku_A")), 1, 0)
         CALL(evt_hitobj_onoff, STRING(("a_kyaku_B")), 1, 0)

@@ -17,6 +17,7 @@
 #include "driver/mapdrv.h"
 #include "mario/mario_pouch.h"
 #include "system.h"
+#include "driver/casedrv.h"
 
 #include "driver/hitdrv.h"
 #include "dolphin/mtx.h"
@@ -518,7 +519,7 @@ EVT_BEGIN(mri_13_init_evt)
     SET_VALUE(LW(10), STRING("punipuni"))
     SET_VALUE(LW(11), 0)
     SPAWN_EVENT(PTR(punipuni_ball00_init))
-    CALL(evt_run_case_evt, 9, 1, STRING("A_dai"), 0, PTR(punipuni_ball00), 0)
+    CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_dai"), 0, PTR(punipuni_ball00), 0)
     IF_INT_LESS(GSW_STORY_PROGRESS, 108)
         SET_VALUE(LW(0), STRING("e_bero"))
         CALL_CHILD(PTR(bero_case_switch_off))

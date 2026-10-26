@@ -22,6 +22,7 @@
 #include "driver/npcdrv.h"
 #include "driver/mapdrv.h"
 #include "system.h"
+#include "driver/casedrv.h"
 
 #include "mario/mario.h"
 #include "mario/mario_pouch.h"
@@ -1298,7 +1299,7 @@ EVT_BEGIN(evt_rec)
     CALL(evt_party_set_dir, 0, 90, 0)
     CALL(evt_mario_adjust_dir)
     CALL(evt_cam3d_evt_set, -150, 133, 533, -150, 37, -8, 0, 11)
-    CALL(evt_run_case_evt, 9, 1, STRING("n_bero"), 0, PTR(evt_door), 0)
+    CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("n_bero"), 0, PTR(evt_door), 0)
     CALL(evt_seq_wait, 2)
     CALL(evt_cam3d_evt_off, 3000, 0)
     WAIT_MS(3000)
@@ -1527,7 +1528,7 @@ EVT_BEGIN(evt_match_make)
 EVT_END()
 
 static EVT_BEGIN(bed_entry)
-    CALL(evt_run_case_evt, 9, 1, LW(0), 0, PTR(evt_tou_bed), 0)
+    CALL(evt_run_case_evt, CASE_FRONT_A, 1, LW(0), 0, PTR(evt_tou_bed), 0)
     RETURN
 EVT_END()
 
@@ -1702,9 +1703,9 @@ EVT_BEGIN(tou_10_init_evt)
     CALL(evt_npc_change_interrupt, STRING("オクトール"), 6, PTR(talk_octo))
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("isu"), MAP_OBJ_FLAG_CLIP)
     IF_INT_LESS(GSW_STORY_PROGRESS, 133)
-        CALL(evt_run_case_evt, 9, 1, STRING("M_make"), 0, PTR(evt_match_make), 0)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("M_make"), 0, PTR(evt_match_make), 0)
         ELSE
-        CALL(evt_run_case_evt, 9, 1, STRING("M_make"), 0, PTR(evt_tou_match_make_default), 0)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("M_make"), 0, PTR(evt_tou_match_make_default), 0)
     END_IF
     CALL_CHILD(PTR(evt_tou_monitor_init))
     IF_INT_LESS(GSW_STORY_PROGRESS, 142)

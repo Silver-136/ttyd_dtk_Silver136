@@ -15,6 +15,7 @@
 #include "evt/evt_pouch.h"
 #include "mot/mot_hammer.h"
 #include "driver/mapdrv.h"
+#include "driver/casedrv.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "driver/npcdrv.h"
@@ -2174,8 +2175,8 @@ EVT_BEGIN(jin_00_init_evt)
     CALL(evt_hit_bind_mapobj, STRING("a_oki01"), STRING("oki01"))
     IF_INT_LESS(GSW_STORY_PROGRESS, 195)
         SET_VALUE(GW(10), 0)
-        CALL(evt_run_case_evt, 10, 1, STRING("A_dai"), 0, PTR(push_evt), 0)
-        CALL(evt_run_case_evt, 11, 1, STRING("A_dai"), 0, PTR(nopush_evt), 0)
+        CALL(evt_run_case_evt, CASE_PUSH, 1, STRING("A_dai"), 0, PTR(push_evt), 0)
+        CALL(evt_run_case_evt, CASE_NOT_PUSH, 1, STRING("A_dai"), 0, PTR(nopush_evt), 0)
         ELSE
         CALL(evt_mapobj_trans, 1, STRING("oki01"), FLOAT(50.0f), 0, 0)
         CALL(evt_hit_bind_update, STRING("a_oki01"))

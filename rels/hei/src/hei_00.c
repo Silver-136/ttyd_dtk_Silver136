@@ -21,6 +21,7 @@
 #include "evt/evt_pouch.h"
 #include "driver/mapdrv.h"
 #include "system.h"
+#include "driver/casedrv.h"
 
 #include "mario/mario.h"
 #include "mario/mario_party.h"
@@ -813,7 +814,7 @@ static EVT_BEGIN(switch_evt)
     WAIT_MS(1000)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("s_moji"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_hitobj_onoff, STRING("a_moji"), 1, 1)
-    CALL(evt_run_case_evt, 9, 1, STRING("a_moji"), 0, PTR(moji_msg), 0)
+    CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_moji"), 0, PTR(moji_msg), 0)
     CALL(evt_snd_sfxon, STRING("SFX_STG1ROCK_FONT_APPEAR1"), 0)
     CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 0, 255, 1000)
     LOOP(0)
@@ -1218,14 +1219,14 @@ EVT_BEGIN(hei_00_init_evt)
             IF_INT_EQUAL(GSWF(1777), 1)
                 CALL(evt_mapobj_flag_onoff, 1, 0, STRING("s_moji"), MAP_OBJ_FLAG_HIDDEN)
                 CALL(evt_hitobj_onoff, STRING("a_moji"), 1, 1)
-                CALL(evt_run_case_evt, 9, 1, STRING("a_moji"), 0, PTR(moji_msg), 0)
+                CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_moji"), 0, PTR(moji_msg), 0)
             END_IF
         END_IF
     END_IF
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("taiyounoisi"), MAP_OBJ_FLAG_HIDDEN)
     IF_INT_EQUAL(GSWF(1774), 1)
         IF_INT_EQUAL(GSWF(1776), 0)
-            CALL(evt_run_case_evt, 9, 1, STRING("a_isi_4"), 0, PTR(sun_stone_set_event), 0)
+            CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_isi_4"), 0, PTR(sun_stone_set_event), 0)
             ELSE
             CALL_CHILD(PTR(setting_sun_stone))
         END_IF
@@ -1233,7 +1234,7 @@ EVT_BEGIN(hei_00_init_evt)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("tukinoisi"), MAP_OBJ_FLAG_HIDDEN)
     IF_INT_EQUAL(GSWF(1775), 1)
         IF_INT_EQUAL(GSWF(1777), 0)
-            CALL(evt_run_case_evt, 9, 1, STRING("a_isi_3"), 0, PTR(moon_stone_set_event), 0)
+            CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_isi_3"), 0, PTR(moon_stone_set_event), 0)
             ELSE
             CALL_CHILD(PTR(setting_moon_stone))
         END_IF
