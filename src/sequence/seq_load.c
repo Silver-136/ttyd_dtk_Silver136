@@ -1069,21 +1069,21 @@ void loadDraw(CameraId camera, void* param) {
                 x += 8.0f;
             }
             PSMTXTrans(m, x + (win1[0]->x - w / 2.0f), 1.0f + (win1[0]->y - 22.0f), 0.0f);
-            PSMTXScale(s, 1.5f, 1.5f, 1.5f);
-            PSMTXConcat(m, s, m);
-            iconDispGxCol(m, 0, ICON_COUNTER_COLON, (GXColor){0, 0, 0, 255});
-            for (k = 0; k < 7; k++) {
-                if (stars & (1 << (k + 1))) {
-                    PSMTXTrans(m, (win1[0]->x - 106.0f) + k * 32, *(f32*)((u8*)win1[0] + offsetof(WinDt, y)) /* FAKE: win1->y read through a byte offset (same load) keeps &win1->y a late loop temp, as in the target's numbering */ - 52.0f, 0.0f);
 #else
             FontDrawString(win1->x - w / 2.0f, win1->y, buf2);
             strcpy(buf2, "\203v\203\214\203C\202\266\202\251\202\361\201@");
             strcat(buf2, winZenkakuStrPad(hours, 2));
             x = FontGetMessageWidth(buf2);
             PSMTXTrans(m, 8.0f + (x + (win1->x - w / 2.0f)), 1.0f + (win1->y - 22.0f), 0.0f);
+#endif
             PSMTXScale(s, 1.5f, 1.5f, 1.5f);
             PSMTXConcat(m, s, m);
             iconDispGxCol(m, 0, ICON_COUNTER_COLON, (GXColor){0, 0, 0, 255});
+#ifdef VERSION_G8ME01
+            for (k = 0; k < 7; k++) {
+                if (stars & (1 << (k + 1))) {
+                    PSMTXTrans(m, (win1[0]->x - 106.0f) + k * 32, *(f32*)((u8*)win1[0] + offsetof(WinDt, y)) /* FAKE: win1->y read through a byte offset (same load) keeps &win1->y a late loop temp, as in the target's numbering */ - 52.0f, 0.0f);
+#else
             // FAKE: y read through a byte offset so the loop-invariant &win1->y becomes a hoisted @ temp (target pop order)
             for (k = 0; k < 7; k++) {
                 if (stars & (1 << (k + 1))) {

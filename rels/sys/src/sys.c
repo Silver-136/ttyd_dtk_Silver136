@@ -44,6 +44,7 @@ typedef struct SysChar {
 } SysChar;
 #ifdef VERSION_G8ME01
 // US: room for 64 letters, plus the chapter subtitle rendered once into a texture
+#endif
 typedef struct SysWork {
     s32 state;
     FileEntry* file;
@@ -54,22 +55,13 @@ typedef struct SysWork {
     s32 alpha;
     f32 angle;
     s32 count;
+#ifdef VERSION_G8ME01
     SysChar chars[64];
     smartEntry* msgTex; // 0x724
     u16 msgTexW;        // 0x728
     u16 msgTexH;        // 0x72A
 } SysWork;
 #else
-typedef struct SysWork {
-    s32 state;
-    FileEntry* file;
-    f32 rot;
-    s32 frame;
-    s32 scroll;
-    s32 type;
-    s32 alpha;
-    f32 angle;
-    s32 count;
     SysChar chars[8];
 } SysWork;
 #endif

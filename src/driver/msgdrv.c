@@ -899,10 +899,13 @@ void msgAnalize(smartEntry* smart, char* msg) {
         case '\n':
             entry->glyph = 0xFFFB;
             entry->time = time;
-#ifdef VERSION_G8ME01
+#ifndef VERSION_G8ME01
+            x = 0;
+#endif
             if (0.0f == maxScale) {
                 maxScale = 1.0f;
             }
+#ifdef VERSION_G8ME01
             if (data->flags & MSG_WIN_FLAG_SMALL) {
                 // US: tighter line spacing
                 y -= 0.7f * (32.0f * maxScale);
@@ -912,10 +915,6 @@ void msgAnalize(smartEntry* smart, char* msg) {
                 savedScroll -= 32.0f * maxScale;
             }
 #else
-            x = 0;
-            if (0.0f == maxScale) {
-                maxScale = 1.0f;
-            }
             y -= 32.0f * maxScale;
             savedScroll -= 32.0f * maxScale;
 #endif
