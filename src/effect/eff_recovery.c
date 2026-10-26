@@ -12,10 +12,10 @@
 #include "libc_decls.h"
 #include "pmario_sound.h"
 #include "eff/eff_number.h"
+#include "eff/eff_stardust.h"
 
 double sin(double);
 double cos(double);
-EffectEntry* effStardustEntry(s32, f32, f32, f32, f32, f32, s32, s32);
 u32 strlen(const char* s);
 
 typedef struct MayaPoly {
@@ -445,7 +445,7 @@ void effRecoveryMain(EffectEntry* effect) {
                 work = effect->userdata;
                 if (type != 7 && type != 8) {
                     Vec sfxPos;
-                    effStardustEntry(2, x, y - 20.0f, z, 30.0f, 30.0f, 2, 30);
+                    effStardustEntry(2, 2, 30, x, y - 20.0f, z, 30.0f, 30.0f);
                     {
                     Vec pos = { 0.0f, 0.0f, 0.0f };
                     pos.x = work->position.x;
@@ -528,7 +528,7 @@ void effRecoveryMain2(EffectEntry* effect) {
         work->alpha = work->timer << 3;
     }
     if (work->timer < 0) {
-        effStardustEntry(2, work->position.x, work->position.y, work->position.z, 40.0f, 45.0f, 6, 30);
+        effStardustEntry(2, 6, 30, work->position.x, work->position.y, work->position.z, 40.0f, 45.0f);
         effDelete(effect);
         return;
     }

@@ -26,7 +26,6 @@
 double sqrt(double);
 double fabs(double);
 double __fabs(double);
-void btl_camera_set_moveto(s32 a, s32 b, f32 c, f32 d, f32 e, f32 f, f32 g, f32 h, s32 i);
 u8 BattleAudience_GetEscapeChangeOK();
 
 void BattleAudienceCtrlProcessKinopioWait(s32 index, s32 front);
@@ -956,7 +955,7 @@ void BattleAudienceCtrlProcessKinopioIntrude(s32 index, s32 front) {
             m->velocity.y = 0.0f;
             m->velocity.z = 5.0f * (dz / d);
             btl_camera_set_mode(BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_FREE);
-            btl_camera_set_moveto(0, 30, 698.0f * m->counterF, 100.0f, 0.0f, 0.0f, 60.0f, 0.0f, 4);
+            btl_camera_set_moveto(0, 698.0f * m->counterF, 100.0f, 0.0f, 0.0f, 60.0f, 0.0f, 30, 4);
             intrudeSound = psndSFXOn("SFX_AUDIENCE_HEIHO_MOVE1");
         }
         break;

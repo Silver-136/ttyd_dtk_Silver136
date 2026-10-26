@@ -77,7 +77,6 @@ typedef struct QueenConnect { s32 poseId[3]; u8 field_0xc[0x40 - 0xC]; s32 idx[2
 ExtTexInfo hand_data[32];
 HandWork* hand_wp;
 u8* lightGetPaperCraft(void);
-void btl_camera_shake_w(s32 a, s32 b, s32 c, f32 d, f32 e);
 
 USER_FUNC(btlevtcmd_InterruptStop);
 USER_FUNC(btlevtcmd_SetEventEntry);
@@ -4747,7 +4746,7 @@ USER_FUNC(queen_thunder) {
     ((EffShockN64Work*)eff->userdata)->col1[0] = 255;
     ((EffShockN64Work*)eff->userdata)->col1[1] = 160;
     ((EffShockN64Work*)eff->userdata)->col1[2] = 192;
-    btl_camera_shake_w(0, 8, 0, 1.0f, 1.0f);
+    btl_camera_shake_w(0, 1.0f, 1.0f, 8, 0);
     return EVT_RETURN_DONE;
 }
 

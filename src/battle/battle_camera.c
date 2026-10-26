@@ -13,7 +13,6 @@ double sqrt(double);
 void btl_camera_nomove_x_onoff(s32 pri, s32 on);
 void btl_camera_nomove_y_onoff(s32 pri, s32 on);
 void btl_camera_nomove_z_onoff(s32 pri, s32 on);
-void btl_camera_set_moveto(s32 pri, f32 x, f32 y, f32 z, f32 atX, f32 atY, f32 atZ, s32 frames, s32 type);
 void battleCameraMoveTo(s32 mode, s32 clamp, f32 x, f32 y, f32 z, f32 atX, f32 atY, f32 atZ, f32* dX, f32* dY, f32* dZ, f32* dAtX, f32* dAtY, f32* dAtZ);
 
 // this file uses -O4,s

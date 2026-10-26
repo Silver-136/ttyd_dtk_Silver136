@@ -269,7 +269,7 @@ HitEntry* kpaSearchGround(f32 range, f32* outY, f32* outDepth, f32* outAng) {
     return best;
 }
 
-HitEntry* kpaSearchHead(f32 hgt, f32* outA, f32* outB) {
+HitEntry* kpaSearchHead(f32 hgt, Vec* pos, f32* outB) {
     static s32 _ofs0[] = {3, 12, 16, 1, 0, 16, 0, -9, 16, 0};
     static s32 _ofs1[] = {4, 25, 74, 0, 50, 65, 1, 0, 67, 0, -25, 62, 0};
     static s32 _ofs2[] = {6, 50, 102, 0, 76, 90, 1, 25, 100, 0, 0, 94, 0, -25, 90, 0, -45, 68, 0};
@@ -348,12 +348,12 @@ HitEntry* kpaSearchHead(f32 hgt, f32* outA, f32* outB) {
         if (hit) {
             hy = (s32)(100.0f * hy + 0.5f) / 100.0f;
             if (y + off >= hy) {
-                outA[1] = hy;
+                pos->y = hy;
                 best = hit;
                 *outB = 0.0f;
                 KHEAD(i) = hit;
             } else {
-                *outB = hy - outA[1] - off;
+                *outB = hy - pos->y - off;
             }
         }
     }

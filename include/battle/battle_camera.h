@@ -117,3 +117,5 @@ f32 battleCameraGetPosMoveSpeed(void);
 void btl_camera_noshake(s32 pri);
 void btl_camera_set_posoffset(s32 pri, f32 x, f32 y, f32 z);
 void btl_camera_shake_h(s32 pri, f32 a, f32 b, s32 frames, s32 type);
+void btl_camera_shake_w(s32 pri, f32 a, f32 b, s32 frames, s32 type);
+void btl_camera_set_moveto(s32 pri, f32 x, f32 y, f32 z, f32 atX, f32 atY, f32 atZ, s32 frames, s32 type);

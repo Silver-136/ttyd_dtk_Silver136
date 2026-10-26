@@ -6,6 +6,7 @@
 #include "evt/evt_msg.h"
 #include "battle/battle_status_effect.h"
 #include "system.h"
+#include "eff/eff_stardust.h"
 
 #include "battle/battle.h"
 #include "battle/battle_unit.h"
@@ -20,7 +21,6 @@
 #include "battle/battle_database_common.h"
 #include "battle/battle_damage.h"
 
-EffectEntry* effStardustEntry(s32 type, s32 count, f32 x, f32 y, f32 z, f32 width, f32 height, s32 time);
 EffectEntry* effThunderflareN64Entry(s32 type, f32 x, f32 y, f32 z, f32 scale, s32 lifetime);
 
 USER_FUNC(btlevtcmd_SetEventPhase);
@@ -1116,13 +1116,13 @@ USER_FUNC(eff_magic_support) {
             x += 30.0f * unit->mSizeMultiplier * unit->faceDirection;
             y += 10.0f * unit->mSizeMultiplier;
             z += 5.0f;
-            effStardustEntry(6, 5, x, y, z, 40.0f, 40.0f, 30);
+            effStardustEntry(6, 5, 30, x, y, z, 40.0f, 40.0f);
             break;
         case 1:
             x += 30.0f * unit->mSizeMultiplier * unit->faceDirection;
             y += 50.0f * unit->mSizeMultiplier;
             z += 5.0f;
-            effStardustEntry(6, 5, x, y, z, 40.0f, 40.0f, 30);
+            effStardustEntry(6, 5, 30, x, y, z, 40.0f, 40.0f);
             break;
     }
     return EVT_RETURN_DONE;

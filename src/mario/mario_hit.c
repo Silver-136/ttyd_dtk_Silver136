@@ -32,7 +32,6 @@
 static const Vec zv0 = {0.0f, 0.0f, 0.0f};
 static const Vec zv1 = {0.0f, 0.0f, 0.0f};
 
-extern HitEntry* kpaSearchGround(f32* a, f32* b, f32* c, f32 d);
 extern HitEntry* marioSearchHead(Vec* pos, f32* h, f32 d);
 
 static inline BOOL marioChkBeroSub(s32 attr) {
@@ -483,7 +482,7 @@ void marioChkGnd(void) {
             }
         } else {
             if (w->characterId == CHARACTER_BOWSER) {
-                hit = kpaSearchGround(&y, &b, &c, 11.0f);
+                hit = kpaSearchGround(11.0f, &y, &b, &c);
             } else {
                 hit = marioSearchGround(&y, &b, &c, 11.0f, w->jumpVelocityY);
             }
@@ -606,7 +605,7 @@ void marioChkGnd2(void) {
         if (w->characterId != CHARACTER_BOWSER) {
             hit = marioSearchGround(&y, &b, &c, 0.1f, w->jumpVelocityY);
         } else {
-            hit = kpaSearchGround(&y, &b, &c, 0.1f);
+            hit = kpaSearchGround(0.1f, &y, &b, &c);
         }
         if (hit) {
             d = w->position.y - y;
@@ -1077,7 +1076,7 @@ HitEntry* marioLandonChk_old(f32* outY, f32 spd) {
     pz = w->position.z;
     if (w->characterId == CHARACTER_BOWSER) {
         f32 gy, gb, gc;
-        hit = kpaSearchGround(&gy, &gb, &gc, 11.0f);
+        hit = kpaSearchGround(11.0f, &gy, &gb, &gc);
         *outY = gy;
         return hit;
     }
@@ -1226,7 +1225,6 @@ HitEntry* marioChkLandon2(f32* y, f32 spd, f32 ofs) {
     return NULL;
 }
 
-extern HitEntry* kpaSearchHead(Vec* pos, f32* h, f32 d);
 extern void marioClearJumpPara(void);
 extern void marioChgStayMotion(void);
 
@@ -1296,7 +1294,7 @@ f32 marioChkOverhead(void) {
         h = w->wPlayerCollisionBox.y;
         d = (w->flags & MARIO_FLAG_IS_JUMPING) ? w->jumpVelocityY : 10.0f;
         if (w->characterId == CHARACTER_BOWSER) {
-            w->hitobjHead = kpaSearchHead(&pos, &h, d);
+            w->hitobjHead = kpaSearchHead(d, &pos, &h);
         } else {
             w->hitobjHead = marioSearchHead(&pos, &h, d);
         }

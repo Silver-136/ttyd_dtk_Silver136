@@ -22,3 +22,5 @@ HitEntry* kpaGetHitobjHead2(void);
 HitEntry* kpaGetHitobjRide(s32 i);
 HitEntry* kpaHitCheck(void);
 HitEntry* kpaSearchFrontUnder(void);
+HitEntry* kpaSearchGround(f32 range, f32* outY, f32* outDepth, f32* outAng);
+HitEntry* kpaSearchHead(f32 hgt, Vec* pos, f32* outB);
