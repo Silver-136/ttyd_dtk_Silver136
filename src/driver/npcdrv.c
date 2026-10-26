@@ -2051,7 +2051,7 @@ void fbatBattleMode(void) {
                 data->mode = 1;
                 break;
             }
-            if (gp->systemLevelFlags & 0x10) {
+            if (gp->systemLevelFlags & SYSTEM_LEVEL_NO_FIELD_BATTLE) {
                 data->mode = 1;
                 break;
             }

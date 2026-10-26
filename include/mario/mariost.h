@@ -6,6 +6,17 @@
 #include "evt/evt_lottery.h"
 #include "countdown.h"
 
+// GlobalWork.systemLevelFlags: marioStSystemLevel(n) sets the stop bits of levels below n; a stopped level's
+// timer (systemLv0Time..systemLv3Time) does not advance
+typedef enum SystemLevelFlags {
+    SYSTEM_LEVEL_STOP_LV0 = (1 << 0),     // 0x1
+    SYSTEM_LEVEL_STOP_LV1 = (1 << 1),     // 0x2
+    SYSTEM_LEVEL_STOP_LV2 = (1 << 2),     // 0x4
+    SYSTEM_LEVEL_STOP_LV3 = (1 << 3),     // 0x8
+    SYSTEM_LEVEL_STOP_ALL = 0xF,
+    SYSTEM_LEVEL_NO_FIELD_BATTLE = (1 << 4), // 0x10, no field battle starts (scripted jumps, jump stands)
+} SystemLevelFlags;
+
 typedef struct GlobalWork {
     s32 flags; //0x0
     s32 framerate; //0x4
@@ -13,7 +24,7 @@ typedef struct GlobalWork {
     s32 debugBattle; //0xC
     BOOL dvdError; //0x10
     s32 inBattle; //0x14, verified s32
-    u32 systemLevelFlags; //0x18
+    u32 systemLevelFlags; //0x18, SystemLevelFlags
     u32 retraceCount; //0x1C
     OSTime retraceLocalTime; //0x20
     OSTime retraceDeltaTime; //0x28

@@ -934,7 +934,7 @@ s32 mobj_jumpstand_red(MapObjectEntry* mobj) {
     switch (mobj->state) {
     case 0:
         if (mobj->flags & MOBJ_FLAG_HIT) {
-            gp->systemLevelFlags |= 0x10;
+            gp->systemLevelFlags |= SYSTEM_LEVEL_NO_FIELD_BATTLE;
             ev = mobjRunEvent(mobj, (s32*)mobj->event);
             if (ev) {
                 ev->lwData[0] = mario->fallStartPos.y < mario->position.y ? 0 : (mario->fallStartPos.y < mobj->position.y + mario->wPlayerCollisionBox.y ? 0 : 1);
@@ -981,7 +981,7 @@ s32 mobj_jumpstand_red(MapObjectEntry* mobj) {
         if (evtCheckID(mobj->eventId) == 1) {
             break;
         }
-        gp->systemLevelFlags &= ~0x10;
+        gp->systemLevelFlags &= ~SYSTEM_LEVEL_NO_FIELD_BATTLE;
         if (animPoseGetLoopTimes(mobj->poseId) < 1.0f) {
             break;
         }
@@ -1025,7 +1025,7 @@ s32 mobj_jumpstand_blue(MapObjectEntry* mobj) {
     switch (mobj->state) {
     case 0:
         if (mobj->flags & MOBJ_FLAG_HIT) {
-            gp->systemLevelFlags |= 0x10;
+            gp->systemLevelFlags |= SYSTEM_LEVEL_NO_FIELD_BATTLE;
             mobjRunEvent(mobj, (s32*)mobj->event);
             if (mobj->hitFlag == MOBJ_FLAG_HIT_STAND) {
                 marioChgJumpStandMotion(mobj->typeDataF[3]);
@@ -1072,7 +1072,7 @@ s32 mobj_jumpstand_blue(MapObjectEntry* mobj) {
         if (evtCheckID(mobj->eventId) == 1) {
             break;
         }
-        gp->systemLevelFlags &= ~0x10;
+        gp->systemLevelFlags &= ~SYSTEM_LEVEL_NO_FIELD_BATTLE;
         if (animPoseGetLoopTimes(mobj->poseId) < 1.0f) {
             break;
         }
@@ -2580,7 +2580,7 @@ s32 mobj_powerupblk(MapObjectEntry* mobj) {
         } else if ((!strcmp(gp->currentMapName, "dou_05") || !strcmp(gp->currentMapName, "dou_10")) && mobj->hitFlag == MOBJ_FLAG_HIT_PARTY) {
             marioCtrlOff();
         }
-        gp->systemLevelFlags |= 3;
+        gp->systemLevelFlags |= (SYSTEM_LEVEL_STOP_LV0 | SYSTEM_LEVEL_STOP_LV1);
         psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MOBJ_BLOCK_POWER_SHINE1 | PSND_SFX_BYPASS_MUTE), &mobj->position);
         animPoseSetAnim(mobj->poseId, "A_1", 1);
         itemEntry(mobj->position.x, mobj->position.y, mobj->position.z, "pwrblk1", ITEM_SHINE_SPRITE, ITEM_TYPE_POP, -1, NULL);

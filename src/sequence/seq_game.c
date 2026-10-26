@@ -21,7 +21,7 @@ EVT_END()
 
 void seq_gameInit(SequenceWork* wp) {
     none_key = OSGetTime();
-    gp->systemLevelFlags &= ~0x10;
+    gp->systemLevelFlags &= ~SYSTEM_LEVEL_NO_FIELD_BATTLE;
 }
 
 void seq_gameMain(SequenceWork* wp) {

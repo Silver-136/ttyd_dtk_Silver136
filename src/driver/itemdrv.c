@@ -305,7 +305,7 @@ void itemMain(void) {
             case 10:
                 break;
             default:
-                if (gp->systemLevelFlags & 0xF) {
+                if (gp->systemLevelFlags & SYSTEM_LEVEL_STOP_ALL) {
                     active = FALSE;
                 }
                 break;

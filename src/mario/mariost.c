@@ -350,30 +350,30 @@ void marioStSystemLevel(s32 level) {
     switch (level) {
         case 0:
             _mariostSystemLevel = level;
-            gp->systemLevelFlags &= ~0xF;
+            gp->systemLevelFlags &= ~SYSTEM_LEVEL_STOP_ALL;
             evtStartAll(0xEF);
             break;
         case 1:
             _mariostSystemLevel = level;
-            gp->systemLevelFlags &= ~0xE;
-            gp->systemLevelFlags |= 1;
+            gp->systemLevelFlags &= ~(SYSTEM_LEVEL_STOP_LV1 | SYSTEM_LEVEL_STOP_LV2 | SYSTEM_LEVEL_STOP_LV3);
+            gp->systemLevelFlags |= SYSTEM_LEVEL_STOP_LV0;
             evtStopAll(1);
             break;
         case 2:
             _mariostSystemLevel = level;
-            gp->systemLevelFlags &= ~0xC;
-            gp->systemLevelFlags |= 3;
+            gp->systemLevelFlags &= ~(SYSTEM_LEVEL_STOP_LV2 | SYSTEM_LEVEL_STOP_LV3);
+            gp->systemLevelFlags |= (SYSTEM_LEVEL_STOP_LV0 | SYSTEM_LEVEL_STOP_LV1);
             evtStopAll(2);
             break;
         case 3:
             _mariostSystemLevel = level;
-            gp->systemLevelFlags &= ~8;
-            gp->systemLevelFlags |= 7;
+            gp->systemLevelFlags &= ~SYSTEM_LEVEL_STOP_LV3;
+            gp->systemLevelFlags |= (SYSTEM_LEVEL_STOP_LV0 | SYSTEM_LEVEL_STOP_LV1 | SYSTEM_LEVEL_STOP_LV2);
             evtStopAll(0x10);
             break;
         case 4:
             _mariostSystemLevel = level;
-            gp->systemLevelFlags |= 0xF;
+            gp->systemLevelFlags |= SYSTEM_LEVEL_STOP_ALL;
             evtStopAll(0xEF);
             break;
     }
@@ -395,29 +395,29 @@ void viPostCallback(u32 retraceCount) {
     }
 #ifdef VERSION_G8ME01
     if (!gp->dvdError && !winCheck()) {
-        if (!(gp->systemLevelFlags & 8)) {
+        if (!(gp->systemLevelFlags & SYSTEM_LEVEL_STOP_LV3)) {
             gp->systemLv3Time += gp->retraceDeltaTime;
         }
-        if (!(gp->systemLevelFlags & 4)) {
+        if (!(gp->systemLevelFlags & SYSTEM_LEVEL_STOP_LV2)) {
             gp->systemLv2Time += gp->retraceDeltaTime;
         }
-        if (!(gp->systemLevelFlags & 2)) {
+        if (!(gp->systemLevelFlags & SYSTEM_LEVEL_STOP_LV1)) {
             gp->systemLv1Time += gp->retraceDeltaTime;
         }
-        if (!(gp->systemLevelFlags & 1)) {
+        if (!(gp->systemLevelFlags & SYSTEM_LEVEL_STOP_LV0)) {
             gp->systemLv0Time += gp->retraceDeltaTime;
         }
 #else
-    if (!(gp->systemLevelFlags & 8)) {
+    if (!(gp->systemLevelFlags & SYSTEM_LEVEL_STOP_LV3)) {
         gp->systemLv3Time += gp->retraceDeltaTime;
     }
-    if (!(gp->systemLevelFlags & 4)) {
+    if (!(gp->systemLevelFlags & SYSTEM_LEVEL_STOP_LV2)) {
         gp->systemLv2Time += gp->retraceDeltaTime;
     }
-    if (!(gp->systemLevelFlags & 2)) {
+    if (!(gp->systemLevelFlags & SYSTEM_LEVEL_STOP_LV1)) {
         gp->systemLv1Time += gp->retraceDeltaTime;
     }
-    if (!(gp->systemLevelFlags & 1)) {
+    if (!(gp->systemLevelFlags & SYSTEM_LEVEL_STOP_LV0)) {
         gp->systemLv0Time += gp->retraceDeltaTime;
     }
     if (!gp->dvdError && !winCheck()) {

@@ -1354,7 +1354,7 @@ USER_FUNC(evt_mario_jump_jumpstand) {
         } else {
             event->userdata[3] = 1;
         }
-        gp->systemLevelFlags |= 0x10;
+        gp->systemLevelFlags |= SYSTEM_LEVEL_NO_FIELD_BATTLE;
     }
     if (event->userdata[3] & 1) {
         tx = x1;
@@ -1509,7 +1509,7 @@ USER_FUNC(evt_mario_jump_jumpstand) {
         mp->dispFlags &= ~MARIO_DISP_FLAG_NO_REAR_POSE;
         marioAdjustMoveDir();
         camFollowYOn();
-        gp->systemLevelFlags &= ~0x10;
+        gp->systemLevelFlags &= ~SYSTEM_LEVEL_NO_FIELD_BATTLE;
         return EVT_RETURN_YIELD;
     }
     return EVT_RETURN_BLOCK;
