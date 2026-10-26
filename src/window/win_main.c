@@ -908,7 +908,7 @@ BOOL winGhostDiaryChk(void) {
     if (wp->menuState == WIN_MENU_DIARY_WAIT) {
         return TRUE;
     }
-    return seqGetSeq() == 5;
+    return seqGetSeq() == SEQ_GAME_OVER;
 }
 
 const char* winMainStrippedTpl(void) {

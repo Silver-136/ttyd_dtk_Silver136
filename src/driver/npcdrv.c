@@ -621,7 +621,7 @@ s32 vivianGetStatus(void);
         if (m->flags & (MARIO_FLAG_BG_MODE | MARIO_FLAG_IS_8_BIT)) { ok = 0; break; } \
         if (m->flags & (MARIO_FLAG_CTRL_OFF | MARIO_FLAG_KEY_OFF)) { ok = 0; break; } \
         if (gp->mapEventId != 0) { ok = 0; break; }                                   \
-        if (seqGetSeq() != 2) { ok = 0; break; }                                      \
+        if (seqGetSeq() != SEQ_GAME) { ok = 0; break; }                                      \
         if (m->currMotionId == MARIO_MOTION_SHIP) { ok = 0; break; }                  \
         if (vivianGetStatus() != 0 && vivianGetStatus() != 1) { ok = 0; } else { ok = 1; } } while (0)
 void shadowSetCollision(s32 shadow, s32 val);
@@ -2300,7 +2300,7 @@ static inline BOOL fbat_canHit(NpcEntry* npc) {
     if (m->flags & (MARIO_FLAG_BG_MODE | MARIO_FLAG_IS_8_BIT)) return FALSE;
     if (!(wp->flags & 1) && (m->flags & (MARIO_FLAG_CTRL_OFF | MARIO_FLAG_KEY_OFF))) return FALSE;
     if ((*(s32*)&((GlobalWork*)gp)->mapEventId)) return FALSE;
-    if (seqGetSeq() != 2) return FALSE;
+    if (seqGetSeq() != SEQ_GAME) return FALSE;
     if ((*(u16*)&((MarioWork*)m)->currMotionId) == MARIO_MOTION_SHIP) return FALSE;
     if (vivianGetStatus()) return FALSE;
     if ((*(u16*)&((MarioWork*)m)->currMotionId) == MARIO_MOTION_DAMAGE || (*(u16*)&((MarioWork*)m)->currMotionId) == MARIO_MOTION_DAMAGE_TOGE) return FALSE;

@@ -332,7 +332,7 @@ void marioStMain(void) {
             if (gp->triggerRight[i]) break;
         }
         if (i >= 4) {
-            if (OSTicksToSeconds(OSGetTime() - none_key) > 120 && (seqGetSeq() == 2 || seqGetSeq() == 4)) {
+            if (OSTicksToSeconds(OSGetTime() - none_key) > 120 && (seqGetSeq() == SEQ_GAME || seqGetSeq() == SEQ_BATTLE)) {
                 gp->flags |= 0x2000;
             }
         } else {

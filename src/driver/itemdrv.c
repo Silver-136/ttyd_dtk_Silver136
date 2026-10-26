@@ -200,7 +200,7 @@ BOOL itemGetCheck(ItemEntry* entry) {
         if (mario->flags & (MARIO_FLAG_CTRL_OFF | MARIO_FLAG_KEY_OFF)) return FALSE;
     }
     if (gp->mapEventId) return FALSE;
-    if (seqGetSeq() != 2) return FALSE;
+    if (seqGetSeq() != SEQ_GAME) return FALSE;
     if (mario->currMotionId == MARIO_MOTION_SHIP) return FALSE;
     if (mario->currMotionId == MARIO_MOTION_PLANE) return FALSE;
     if (vivianGetStatus()) return FALSE;
@@ -244,7 +244,7 @@ BOOL itemGetNokoCheck(ItemEntry* entry) {
     if (mario->flags & (MARIO_FLAG_CTRL_OFF | MARIO_FLAG_KEY_OFF)) return FALSE;
     if (entry->flags2 & ITEM_FLAG2_NO_PARTNER) return FALSE;
     if (gp->mapEventId) return FALSE;
-    if (seqGetSeq() != 2) return FALSE;
+    if (seqGetSeq() != SEQ_GAME) return FALSE;
     if (mario->currMotionId == MARIO_MOTION_SHIP) return FALSE;
     if (vivianGetStatus()) return FALSE;
     if (mario->currMotionId == MARIO_MOTION_DAMAGE || mario->currMotionId == MARIO_MOTION_DAMAGE_TOGE) return FALSE;

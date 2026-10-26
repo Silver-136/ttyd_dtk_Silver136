@@ -59,7 +59,7 @@ void seq_battleInit(BattleSeqWork* work) {
     fbat = fbatGetPointer();
     npc = fbat->target;
     if (evtGetValue(NULL, GSW0) < 109 || evtGetValue(NULL, GSW0) >= 111) {
-        if (evtGetValue(NULL, GSW0) != 402) {
+        if (evtGetValue(NULL, GSW0) != STG8_END_AFTER_THE_BATTLE) {
             psndBGMOff(0x400);
             psndBGMOn(PSND_SLOT(1), (char*)npc->battleInfo.bgmName);
         }
@@ -360,7 +360,7 @@ void battle_exit(void) {
     PSMTXMultVec(mtx, &light->position, &light->position);
     if (evtGetValue(NULL, GSW0) >= 109 && evtGetValue(NULL, GSW0) < 111) {
         psndBGMOn_f(PSND_CONTINUE | PSND_FADEIN, 0, 0x2EE, 1);
-    } else if (evtGetValue(NULL, GSW0) != 402 && seqGetNextSeq() != 5) {
+    } else if (evtGetValue(NULL, GSW0) != STG8_END_AFTER_THE_BATTLE && seqGetNextSeq() != SEQ_GAME_OVER) {
         psndBGMOn(PSND_CONTINUE | PSND_FADEIN, NULL);
         psndENVOn(PSND_CONTINUE | PSND_FADEIN, NULL);
     }

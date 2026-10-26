@@ -5347,7 +5347,7 @@ void psndBGMMain(void) {
     if ((psnd.flags & 0x20) && !(psnd.flags & 0x40)) {
         maxv = 0x41;
     }
-    if (seqGetSeq() != 3 && (gp->retraceCount & 1)) {
+    if (seqGetSeq() != SEQ_MAP_CHANGE && (gp->retraceCount & 1)) {
         if (psnd.bgmVolume < maxv) {
             psnd.bgmVolume++;
         }
@@ -5937,7 +5937,7 @@ void psndSFXMain(void) {
     if ((psnd.flags & 0x20) && ( !(psnd.flags & 0x40)) ) {
         tvol = 120;
     }
-    if (( seqGetSeq() != 3 ) && (gp->retraceCount & 1)) {
+    if (( seqGetSeq() != SEQ_MAP_CHANGE ) && (gp->retraceCount & 1)) {
         if (psnd.sfxVolume < tvol) {
             psnd.sfxVolume++;
         }
@@ -6461,7 +6461,7 @@ void psndENVMain(void) {
     s32 rr;
     PaperSoundEnv* ent;
     if ((psnd.flags & 0x20) && !(psnd.flags & 0x40)) lim = 80;
-    if (seqGetSeq() != 3 && (gp->retraceCount & 1)) {
+    if (seqGetSeq() != SEQ_MAP_CHANGE && (gp->retraceCount & 1)) {
         if (psnd.envVolume < lim) psnd.envVolume++;
         if (psnd.envVolume > lim) psnd.envVolume--;
     }

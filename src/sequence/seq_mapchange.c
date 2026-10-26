@@ -62,7 +62,7 @@ static const char mc_jon[4];
 static inline const char* getAreaName(void) {
     const char* area_name = _next_area;
     if (!strcmp(_next_area, mc_tou)) {
-        if (seqGetSeq() == 1) {
+        if (seqGetSeq() == SEQ_TITLE) {
             area_name = mc_tou2;
         } else if (!strcmp(_next_map, mc_tou_03)) {
             area_name = mc_tou2;
@@ -351,7 +351,7 @@ void _unload(const char* prevMap, const char* nextMap, const char* bero) {
     statusWinReInit();
     bgReInit();
     winMgrReInit();
-    if (seqGetPrevSeq() != 6 && seqGetPrevSeq() != 1 && strcmp(prevMap, "sys_00") &&
+    if (seqGetPrevSeq() != SEQ_LOAD && seqGetPrevSeq() != SEQ_TITLE && strcmp(prevMap, "sys_00") &&
         strcmp(prevMap, "sys_01") && strcmp(prevMap, "dig_00")) {
         fadeReset(1);
         gp->flags &= ~0x10;
