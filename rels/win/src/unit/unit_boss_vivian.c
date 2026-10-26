@@ -367,7 +367,7 @@ static EVT_BEGIN(dead_event)
     IF_INT_EQUAL(LW(6), 1)
         CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(6.0f))
         CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_WALK)
-        CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -1, 0)
+        CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
         CALL(btlevtcmd_ResetFaceDirection, -2)
     END_IF
     WAIT_FRAMES(1)

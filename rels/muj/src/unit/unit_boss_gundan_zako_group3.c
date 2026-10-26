@@ -368,7 +368,7 @@ static EVT_BEGIN(attack_event)
             CALL(btlevtcmd_AnimeChangePose, LW(5), 1, STRING("W_1"))
             CALL(btlevtcmd_GetPos, LW(5), LW(0), LW(1), LW(2))
             CALL(btlevtcmd_FaceDirectionSub, LW(5), LW(0), 50)
-            CALL(btlevtcmd_MovePosition, LW(5), LW(0), LW(1), LW(2), 60, -1, 0)
+            CALL(btlevtcmd_MovePosition, LW(5), LW(0), LW(1), LW(2), 60, MOVE_SOUND_FROM_TABLE, 0)
             CALL(btlevtcmd_AnimeChangePose, LW(5), 1, STRING("S_1"))
         END_SIBLING_EVENT
     END_IF
@@ -419,7 +419,7 @@ static EVT_BEGIN(attack_event)
             CALL(btlevtcmd_AnimeChangePose, LW(5), 1, STRING("R_1"))
             CALL(btlevtcmd_GetHomePos, LW(5), LW(0), LW(1), LW(2))
             CALL(btlevtcmd_SetMoveSpeed, LW(5), FLOAT(6.0f))
-            CALL(btlevtcmd_MovePosition, LW(5), LW(0), LW(1), LW(2), 0, -1, 0)
+            CALL(btlevtcmd_MovePosition, LW(5), LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
             CALL(btlevtcmd_AnimeChangePose, LW(5), 1, STRING("S_1"))
             CALL(btlevtcmd_ResetFaceDirection, LW(5))
         END_INLINE_EVENT

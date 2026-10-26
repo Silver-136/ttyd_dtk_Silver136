@@ -1135,7 +1135,7 @@ EVT_BEGIN(gance_attack_attack_event)
         CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.00390625f), FLOAT(0.0f), 1166)
         CALL(x_flag_set, 0, 0)
     END_SIBLING_EVENT
-    CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 70, -1, 1)
+    CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 70, MOVE_SOUND_FROM_TABLE, 1)
     CALL(x_flag_wait, 0, 0)
     WAIT_MS(500)
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
@@ -1143,7 +1143,7 @@ EVT_BEGIN(gance_attack_attack_event)
     BEGIN_SIBLING_EVENT
         CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.00390625f), FLOAT(0.0f), 500)
     END_SIBLING_EVENT
-    CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 30, -1, 0)
+    CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 30, MOVE_SOUND_FROM_TABLE, 0)
     BEGIN_SIBLING_EVENT
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("J_1A"))
         CALL(btlevtcmd_GetPosFloat, UNIT_ID_SELF, LW(5), LW(6), LW(7))
@@ -1229,7 +1229,7 @@ EVT_BEGIN(gance_attack_attack_event)
         CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.00390625f), FLOAT(0.0f), 666)
         CALL(x_flag_set, 0, 0)
     END_SIBLING_EVENT
-    CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 40, -1, 0)
+    CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 40, MOVE_SOUND_FROM_TABLE, 0)
     CALL(btlevtcmd_ResetFaceDirection, -2)
     CALL(x_flag_wait, 0, 0)
     RETURN
@@ -1323,13 +1323,13 @@ EVT_BEGIN(gance_rariat_attack_attack_event)
         ADD(LW(0), LW(7))
         ADD(LW(2), 6)
         IF_INT_EQUAL(LW(11), 0)
-            CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -1, 0)
+            CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
             CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("A_2B"))
             CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(4.0f))
         ELSE
             CALL(x_flag_set, 1, 1)
             BEGIN_SIBLING_EVENT
-                CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -1, 0)
+                CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
                 CALL(x_flag_set, 1, 0)
             END_SIBLING_EVENT
         END_IF
@@ -1382,7 +1382,7 @@ EVT_BEGIN(gance_rariat_attack_attack_event)
     CALL(x_flag_wait, 1, 0)
     SUBTRACT(LW(0), LW(7))
     ADD(LW(2), 6)
-    CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -1, 0)
+    CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
     WAIT_MS(500)
     CALL(x_flag_wait, 0, 0)
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(4.0f))
@@ -1395,7 +1395,7 @@ EVT_BEGIN(gance_rariat_attack_attack_event)
         CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.00390625f), FLOAT(0.0f), 666)
         CALL(x_flag_set, 0, 0)
     END_SIBLING_EVENT
-    CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 40, -1, 0)
+    CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 40, MOVE_SOUND_FROM_TABLE, 0)
     CALL(btlevtcmd_ResetFaceDirection, -2)
     CALL(x_flag_wait, 0, 0)
     RETURN
@@ -1533,7 +1533,7 @@ EVT_BEGIN(gance_body_attack_attack_event)
         CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.00390625f), FLOAT(0.0f), 666)
         CALL(x_flag_set, 0, 0)
     END_SIBLING_EVENT
-    CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 40, -1, 0)
+    CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 40, MOVE_SOUND_FROM_TABLE, 0)
     CALL(btlevtcmd_ResetFaceDirection, -2)
     CALL(x_flag_wait, 0, 0)
     RETURN

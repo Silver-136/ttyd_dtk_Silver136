@@ -1263,7 +1263,7 @@ EVT_BEGIN(drill_attack_event)
     CALL(btlevtcmd_SetPos, UNIT_ID_SELF, 400, LW(1), LW(2))
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_WALK)
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
-    CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 60, -1, 0)
+    CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 60, MOVE_SOUND_FROM_TABLE, 0)
     RETURN
 EVT_END()
 

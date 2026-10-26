@@ -155,7 +155,7 @@ static EVT_BEGIN(entry_event)
     WAIT_MS(900)
     CALL(btlevtcmd_SetPos, UNIT_ID_SELF, -250, 0, -30)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("R_1"))
-    CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, -60, 0, -30, 45, -1, 0)
+    CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, -60, 0, -30, 45, MOVE_SOUND_FROM_TABLE, 0)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("S_1"))
     RETURN
 EVT_END()
