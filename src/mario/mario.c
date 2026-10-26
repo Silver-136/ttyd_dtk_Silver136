@@ -35,6 +35,7 @@
 #include "dolphin/mtx.h"
 #include "party/party_move.h"
 #include "driver/itemdrv.h"
+#include "mario/mario_kemuri.h"
 
 
 
@@ -887,7 +888,6 @@ void marioReInit(void) {
     wp->returnPos = (Vec){0.0f, -10000.0f, 0.0f};
 }
 
-void mario_kemuri(void);
 
 static inline void marioMainBlur(MarioWork* wp) {
     if ((wp->frameCounter & 1) && (mp->dispFlags & MARIO_DISP_FLAG_BLUR)) {

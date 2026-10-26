@@ -14,8 +14,8 @@
 #include "driver/npcdrv.h"
 #include "mario/mario_balloon.h"
 #include "party.h"
+#include "mario/mario_kemuri.h"
 
-void mario_kemuri(void);
 
 void peachChgPose(const char* name);
 

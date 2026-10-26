@@ -20,9 +20,9 @@
 #include "party/party_yoshi.h"
 #include "party/party_nokonoko.h"
 #include "mot/mot_slit.h"
+#include "mario/mario_kemuri.h"
 
 HitEntry* marioChkLandon(f32* outY, f32 y);
-void mario_simple_kemuri(void);
 
 
 static EVT_BEGIN(quake_evt)

@@ -13,6 +13,7 @@
 #include "eff/n64/eff_water_damage_n64.h"
 #include "koopa.h"
 #include "libc_decls.h"
+#include "mario/mario_kemuri.h"
 
 extern EffectEntry* effKemuri2Entry(s32 type, f32 x, f32 y, f32 z, f32 s, f32 c);
 

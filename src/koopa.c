@@ -21,10 +21,10 @@
 #include "mario/mario_balloon.h"
 #include "party.h"
 #include "mario/mario_hit.h"
+#include "mario/mario_kemuri.h"
 
 void kpa2DMain(void);
 void kpa3DMain(void);
-void mario_kemuri(void);
 void kpaFireAttack(void);
 void kpaFireMain(void);
 void kpaFall(void);

@@ -27,6 +27,7 @@
 #include "mario/mario_sbr.h"
 #include "driver/camdrv.h"
 #include "driver/dispdrv.h"
+#include "mario/mario_kemuri.h"
 
 PartyEntry* partyPtrTbl[2];
 PartyData* party_dp;
@@ -868,7 +869,6 @@ void partyMain(void) {
     }
 }
 
-void party_kemuri(PartyEntry* party);
 void vivianShadow(PartyEntry* party);
 void partyPreDisp(PartyEntry* party);
 void partyRideMain(PartyEntry* party);

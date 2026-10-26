@@ -21,6 +21,7 @@
 #include "evt/evt_cam.h"
 #include "mot/mot_stay.h"
 #include "mot/mot_slit.h"
+#include "mario/mario_kemuri.h"
 
 BOOL marioGetRub(s32 mask, s32* a, s32* b, s32* c);
 
@@ -207,7 +208,6 @@ static inline void jabaraLand(f32 y_, void* h_) {
     allPartyRideOff(); \
     JAB_TAIL(MOTSUB_)
 
-void mario_land_kemuri(void);
 void* marioSearchHead(Vec* p, f32* h, f32 r);
 void swingMain(void);
 void* marioChkLandon(f32* outY, f32 y);
