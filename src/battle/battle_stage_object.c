@@ -2659,7 +2659,7 @@ USER_FUNC(_set_mobj_rotate_x) {
                             }
                         }
                         obj->mNumFramesFalling++;
-                        obj->mRotation.x = intpl_sub(2, obj->mShakeAngle, 90.0f, obj->mNumFramesFalling, obj->data->mNumFramesToFall);
+                        obj->mRotation.x = intpl_sub(EASING_CUBIC_IN, obj->mShakeAngle, 90.0f, obj->mNumFramesFalling, obj->data->mNumFramesToFall);
                         if (obj->mNumFramesFalling < obj->data->mNumFramesToFall) {
                             busy = TRUE;
                         }
@@ -2677,7 +2677,7 @@ USER_FUNC(_set_mobj_rotate_x) {
                     psndSFXOn_3D(fall2, &(Vec){0.0f, 0.0f, -100.0f});
                 }
                 event->userWork[3]++;
-                sw->bgRotation.x = (s32)intpl_sub(2, 0.0f, 90.0f, event->userWork[3], event->userWork[2]);
+                sw->bgRotation.x = (s32)intpl_sub(EASING_CUBIC_IN, 0.0f, 90.0f, event->userWork[3], event->userWork[2]);
                 if (event->userWork[3] < event->userWork[2]) {
                     busy = TRUE;
                 }
@@ -2989,7 +2989,7 @@ USER_FUNC(_nozzle_turn) {
     BattleSearchObjectPtr(name);
     if (event->userWork[2] < 30) {
         event->userWork[2]++;
-        rotX = intpl_sub(2, 0.0f, -80.0f, event->userWork[2], 30);
+        rotX = intpl_sub(EASING_CUBIC_IN, 0.0f, -80.0f, event->userWork[2], 30);
     } else {
         rotX = -80.0f;
     }
@@ -3025,7 +3025,7 @@ USER_FUNC(_nozzle_turn) {
                 to = 0.0f;
                 break;
         }
-        rotY = intpl_sub(12, from, to, event->userWork[3], 30);
+        rotY = intpl_sub(EASING_SINE_OUT, from, to, event->userWork[3], 30);
     }
     switch (index) {
         case 0:
@@ -3155,7 +3155,7 @@ USER_FUNC(_fall_frame) {
         event->userWork[3] = body->mPosition.y;
     }
     event->userWork[2]++;
-    body->mPosition.y = intpl_sub(2, event->userWork[3], 0.0f, event->userWork[2] * event->userWork[2] / 60, 60);
+    body->mPosition.y = intpl_sub(EASING_CUBIC_IN, event->userWork[3], 0.0f, event->userWork[2] * event->userWork[2] / 60, 60);
     if (event->userWork[2] < 60) {
         return EVT_RETURN_BLOCK;
     }

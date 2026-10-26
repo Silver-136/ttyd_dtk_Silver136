@@ -438,11 +438,11 @@ static EVT_BEGIN(phase_event)
                         ADD(LW(1), 100)
                     END_SWITCH
                     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_GESSO_UP1"), EVT_NULLPTR, 0, EVT_NULLPTR)
-                    CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 30, 0, 5, 0, -1)
+                    CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 30, 0, EASING_CUBIC_OUT, 0, -1)
                     ADD(LW(5), 1)
                     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
                     SUBTRACT(LW(1), 30)
-                    CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 16, 0, 11, 0, -1)
+                    CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 16, 0, EASING_SINE_IN_OUT, 0, -1)
                 END_LOOP
                 CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
                 SET_VALUE(LW(1), 220)

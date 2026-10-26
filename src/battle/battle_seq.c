@@ -2793,18 +2793,18 @@ USER_FUNC(_set_haikei_entry_scale) {
                 mapObjScale("A1", 1.0f, 1.0f, 1.0f);
                 _mapobj_data_touch_scale(0);
                 if (event->userdata[1] < 25) {
-                    sy = intpl_sub(5, 0.0f, 110.0f, event->userdata[1] - 15, 10);
+                    sy = intpl_sub(EASING_CUBIC_OUT, 0.0f, 110.0f, event->userdata[1] - 15, 10);
                 } else if (event->userdata[1] < 35) {
-                    sy = intpl_sub(11, 110.0f, 90.0f, event->userdata[1] - 25, 10);
+                    sy = intpl_sub(EASING_SINE_IN_OUT, 110.0f, 90.0f, event->userdata[1] - 25, 10);
                 } else if (event->userdata[1] < 40) {
-                    sy = intpl_sub(11, 90.0f, 100.0f, event->userdata[1] - 35, 5);
+                    sy = intpl_sub(EASING_SINE_IN_OUT, 90.0f, 100.0f, event->userdata[1] - 35, 5);
                 }
                 if (event->userdata[1] < 25) {
-                    sx = intpl_sub(5, 100.0f, 90.0f, event->userdata[1] - 15, 10);
+                    sx = intpl_sub(EASING_CUBIC_OUT, 100.0f, 90.0f, event->userdata[1] - 15, 10);
                 } else if (event->userdata[1] < 35) {
-                    sx = intpl_sub(11, 90.0f, 110.0f, event->userdata[1] - 25, 10);
+                    sx = intpl_sub(EASING_SINE_IN_OUT, 90.0f, 110.0f, event->userdata[1] - 25, 10);
                 } else if (event->userdata[1] < 40) {
-                    sx = intpl_sub(11, 110.0f, 100.0f, event->userdata[1] - 35, 5);
+                    sx = intpl_sub(EASING_SINE_IN_OUT, 110.0f, 100.0f, event->userdata[1] - 35, 5);
                 }
                 for (i = 0; i < 32; i++) {
                     obj = &wp->stageObjects[i];
@@ -2829,18 +2829,18 @@ USER_FUNC(_set_haikei_entry_scale) {
                 mapObjScale("A2", 1.0f, 1.0f, 1.0f);
                 _mapobj_data_touch_scale(1);
                 if (event->userdata[1] < 30) {
-                    sy = intpl_sub(5, 0.0f, 110.0f, event->userdata[1] - 20, 10);
+                    sy = intpl_sub(EASING_CUBIC_OUT, 0.0f, 110.0f, event->userdata[1] - 20, 10);
                 } else if (event->userdata[1] < 40) {
-                    sy = intpl_sub(11, 110.0f, 90.0f, event->userdata[1] - 30, 10);
+                    sy = intpl_sub(EASING_SINE_IN_OUT, 110.0f, 90.0f, event->userdata[1] - 30, 10);
                 } else if (event->userdata[1] < 45) {
-                    sy = intpl_sub(11, 90.0f, 100.0f, event->userdata[1] - 40, 5);
+                    sy = intpl_sub(EASING_SINE_IN_OUT, 90.0f, 100.0f, event->userdata[1] - 40, 5);
                 }
                 if (event->userdata[1] < 30) {
-                    sx = intpl_sub(5, 100.0f, 90.0f, event->userdata[1] - 20, 10);
+                    sx = intpl_sub(EASING_CUBIC_OUT, 100.0f, 90.0f, event->userdata[1] - 20, 10);
                 } else if (event->userdata[1] < 40) {
-                    sx = intpl_sub(11, 90.0f, 110.0f, event->userdata[1] - 30, 10);
+                    sx = intpl_sub(EASING_SINE_IN_OUT, 90.0f, 110.0f, event->userdata[1] - 30, 10);
                 } else if (event->userdata[1] < 45) {
-                    sx = intpl_sub(11, 110.0f, 100.0f, event->userdata[1] - 40, 5);
+                    sx = intpl_sub(EASING_SINE_IN_OUT, 110.0f, 100.0f, event->userdata[1] - 40, 5);
                 }
                 for (i = 0; i < 32; i++) {
                     obj = &wp->stageObjects[i];

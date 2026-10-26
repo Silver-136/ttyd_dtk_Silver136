@@ -258,7 +258,7 @@ static EVT_BEGIN(attack_event)
     END_SIBLING_EVENT
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_FaceDirectionAdd, LW(3), LW(0), 35)
-    CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 50, -10, 4, 0, -1)
+    CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 50, -10, EASING_QUADRATIC_OUT, 0, -1)
     WAIT_MS(200)
     BEGIN_SIBLING_EVENT_GET_ID(LW(15))
         CALL(evt_sub_intpl_init, EASING_LINEAR, -135, 60, 10)
@@ -316,7 +316,7 @@ static EVT_BEGIN(attack_event)
                 WAIT_FRAMES(1)
             END_LOOP
         END_SIBLING_EVENT
-        CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 21, 0, 5, 0, -1)
+        CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 21, 0, EASING_CUBIC_OUT, 0, -1)
         BEGIN_SIBLING_EVENT
             CALL(evt_sub_intpl_init, EASING_QUADRATIC_OUT, -30, 0, 20)
             CALL(evt_sub_intpl_get_value)
@@ -327,7 +327,7 @@ static EVT_BEGIN(attack_event)
             END_LOOP
         END_SIBLING_EVENT
         CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
-        CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 40, 0, 4, 0, -1)
+        CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 40, 0, EASING_QUADRATIC_OUT, 0, -1)
         RETURN
     END_IF
     LABEL(95)
@@ -350,7 +350,7 @@ static EVT_BEGIN(attack_event)
         END_LOOP
     END_SIBLING_EVENT
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
-    CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 60, -10, 4, 0, -1)
+    CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 60, -10, EASING_QUADRATIC_OUT, 0, -1)
     LABEL(99)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
