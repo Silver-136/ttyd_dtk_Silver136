@@ -171,7 +171,7 @@ void envCapture2(CameraId camId, void* param) {
         GXInitTexObjLOD(&wp->envBlurObj, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
     }
     if (wp->flags & ENV_FLAG_BLUR) {
-        if ((wp->blurWork & 1) && (wp->flags & ENV_FLAG_BLUR_CAPTURED)) {
+        if ((wp->blur.flags & 1) && (wp->flags & ENV_FLAG_BLUR_CAPTURED)) {
             wp->flags &= ~ENV_FLAG_BLUR_CAPTURE;
         }
         wp->flags |= ENV_FLAG_BLUR_CAPTURED;
@@ -496,17 +496,9 @@ void envDisp_DepthOfField(void) {
 #pragma opt_propagation reset
 #pragma opt_lifetimes reset
 
-typedef struct EnvBlurWork {
-    u16 flags; //0x0
-    u8 pad2[6]; //0x2
-    OSTime time; //0x8
-    s32 msec; //0x10
-    u8 pad14[4]; //0x14
-} EnvBlurWork;
-
 void envDisp_Blur(void) {
     EnvironmentWork* wp = envGetWork();
-    EnvBlurWork* blur = (EnvBlurWork*)&wp->blurWork;
+    EnvBlurWork* blur = &wp->blur;
     CameraEntry* cam;
     s32 msec;
     f32 t;
@@ -562,7 +554,7 @@ void envDisp_Blur(void) {
 
 void envBlurOn(s32 type, s32 msec) {
     EnvironmentWork* wp = envGetWork();
-    EnvBlurWork* blur = (EnvBlurWork*)&wp->blurWork;
+    EnvBlurWork* blur = &wp->blur;
 
     wp->flags |= ENV_FLAG_BLUR;
     wp->flags |= ENV_FLAG_BLUR_CAPTURE;
@@ -1336,7 +1328,7 @@ void envSetWater(MapTevCallbackInfo* info) {
 void envSetYamiView(Mtx view) {
     EnvironmentWork* wp = envGetWork();
 
-    PSMTXCopy(view, (MtxPtr)wp->yamiView);
+    PSMTXCopy(view, wp->yamiView);
 }
 
 void envSetYami(MapTevCallbackInfo* info) {
@@ -1372,12 +1364,12 @@ void envSetYami(MapTevCallbackInfo* info) {
     GXSetTevColorOp(stage - 1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVREG0);
     GXSetTevAlphaOp(stage - 1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVREG0);
     C_MTXLightOrtho(mtx, 72.0f, (-72.0f), (-96.0f), 96.0f, 0.5f, 0.5f, u1, 0.5f);
-    PSMTXConcat(mtx, (MtxPtr)wp->yamiView, mtx);
+    PSMTXConcat(mtx, wp->yamiView, mtx);
     PSMTXConcat(mtx, info->mtx, mtx);
     GXLoadTexMtxImm(mtx, texmtx_tbl[map], GX_MTX3x4);
     GXSetTexCoordGen2(coord, GX_TG_MTX3x4, GX_TG_POS, texmtx_tbl[map], GX_FALSE, GX_PTIDENTITY);
     C_MTXLightOrtho(mtx, 72.0f, (-72.0f), (-96.0f), 96.0f, 0.5f, 0.5f, u2, 0.5f);
-    PSMTXConcat(mtx, (MtxPtr)wp->yamiView, mtx);
+    PSMTXConcat(mtx, wp->yamiView, mtx);
     PSMTXConcat(mtx, info->mtx, mtx);
     GXLoadTexMtxImm(mtx, texmtx_tbl[map + 1], GX_MTX3x4);
     GXSetTexCoordGen2(coord + 1, GX_TG_MTX3x4, GX_TG_POS, texmtx_tbl[map + 1], GX_FALSE, GX_PTIDENTITY);

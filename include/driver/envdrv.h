@@ -66,6 +66,15 @@ typedef struct EnvTexMtxWork {
     f32 rotX;     // 0x14
 } EnvTexMtxWork;
 
+// EnvironmentWork.blur (envBlurOn, envDisp_Blur)
+typedef struct EnvBlurWork {
+    u16 flags;     // 0x0, bit 0: blur on
+    u8 pad_02[6];  // 0x2, never accessed
+    OSTime time;   // 0x8
+    s32 msec;      // 0x10
+    u8 pad_14[4];  // 0x14, never accessed
+} EnvBlurWork;
+
 typedef struct EnvironmentWork {
     s32 flags; //0x0, EnvironmentFlags
     smartEntry* capture; //0x4
@@ -77,10 +86,9 @@ typedef struct EnvironmentWork {
     EnvTexMtxWork texMtxWork; //0x70
     EnvironmentDof dof; //0x88
     u8 pad_94[0x98 - 0x94]; //0x94, never accessed
-    u16 blurWork; //0x98, start of the EnvBlurWork view; bit 1 = blur on
-    u8 blurWorkRest[0xB0 - 0x9A]; //0x9A, rest of the EnvBlurWork view
+    EnvBlurWork blur; //0x98
     EnvironmentGlareFilter filter; //0xB0
-    u8 yamiView[0xF0 - 0xC0]; //0xC0, Mtx set by envSetYamiView
+    Mtx yamiView; //0xC0, set by envSetYamiView
 } EnvironmentWork;
 
 void envInit(void);
