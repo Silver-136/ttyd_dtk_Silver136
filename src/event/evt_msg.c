@@ -54,7 +54,7 @@ s32 _evt_msg_print(EventEntry* event, BOOL isFirstCall, s32 flags, const char* m
         MSGW(win)->tag = msg;
         MSGW(win)->event = event;
         if (!(flags & 2)) {
-            if (event->wNpcEventType == 6) {
+            if (event->wNpcEventType == NPC_EVENT_TALK) {
                 npc = event->ownerNPC;
             }
             if ((const char*)name) {

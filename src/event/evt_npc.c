@@ -145,7 +145,7 @@ USER_FUNC(evt_npc_setup) {
                         evtDeleteID(evtId);
                     }
                     newEvt = evtEntry(setup->initEvent, 0, 0);
-                    newEvt->wNpcEventType = 0;
+                    newEvt->wNpcEventType = NPC_EVENT_INIT;
                     newEvt->ownerNPC = npc;
                     npc->initEvtId = newEvt->eventId;
                 } else {
@@ -197,7 +197,7 @@ USER_FUNC(evt_npc_setup) {
                     evtDeleteID(evtId);
                 }
                 newEvt = evtEntry(npc->moveEvent, 0, EVENT_START_IMMEDIATE);
-                newEvt->wNpcEventType = 1;
+                newEvt->wNpcEventType = NPC_EVENT_MOVE;
                 newEvt->ownerNPC = npc;
                 npc->regularEvtId = newEvt->eventId;
             }
@@ -930,7 +930,7 @@ USER_FUNC(evt_npc_return_interrupt) {
 
     name = (const char*)evtGetValue(event, args[0]);
     npc = evtNpcNameToPtr(event, name);
-    npc->interruptFlags |= 0x10000000;
+    npc->interruptFlags |= NPC_INTERRUPT_MOVE;
     return EVT_RETURN_YIELD;
 }
 
@@ -1215,7 +1215,7 @@ USER_FUNC(evt_npc_set_anim) {
     name = (const char*)evtGetValue(event, args[0]);
     anim = (const char*)evtGetValue(event, args[1]);
     npc = evtNpcNameToPtr(event, name);
-    if (event->wNpcEventType == 1) {
+    if (event->wNpcEventType == NPC_EVENT_MOVE) {
         strcpy(npc->currentAnim, anim);
     }
     animPoseSetAnim(npc->poseId, anim, TRUE);
@@ -1224,7 +1224,7 @@ USER_FUNC(evt_npc_set_anim) {
 
 #define NPC_SET_TRIBE_ANIM(funcName, field)                                      \
     USER_FUNC(funcName) {                                                        \
-        EvtWord* args = event->args;                                                 \
+        EvtWord* args = event->args;                                             \
         const char* name;                                                        \
         NpcEntry* npc;                                                           \
         const char* anim;                                                        \
@@ -1232,7 +1232,7 @@ USER_FUNC(evt_npc_set_anim) {
         name = (const char*)evtGetValue(event, args[0]);                         \
         npc = evtNpcNameToPtr(event, name);                                      \
         anim = npc->tribe->field;                                                \
-        if (event->wNpcEventType == 1) {                                         \
+        if (event->wNpcEventType == NPC_EVENT_MOVE) {                            \
             strcpy(npc->currentAnim, anim);                                      \
         }                                                                        \
         animPoseSetAnim(npc->poseId, anim, TRUE);                                \
@@ -1616,7 +1616,7 @@ USER_FUNC(evt_npc_restart_regular_event) {
 
     name = (const char*)evtGetValue(event, args[0]);
     npc = evtNpcNameToPtr(event, name);
-    npc->interruptFlags |= 0x10000000;
+    npc->interruptFlags |= NPC_INTERRUPT_MOVE;
     npcCheckInterrupt(npc);
     return EVT_RETURN_DONE;
 }

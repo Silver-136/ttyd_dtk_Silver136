@@ -788,11 +788,11 @@ void npcMain(void) {
                     EventEntry* evt = evtGetPtrID(entry->regularEvtId);
                     if (evt && !(evt->flags & EVENT_STOPPED)) {
                         s32 st = evt->wNpcEventType;
-                        if (entry->blowEvent && st != 5 && st != 8) {
+                        if (entry->blowEvent && st != NPC_EVENT_BLOW && st != NPC_EVENT_DEAD) {
                             int trig;
                             trig = npcCheckBlow(entry);
                             if (trig) {
-                                entry->interruptFlags |= 8;
+                                entry->interruptFlags |= NPC_INTERRUPT_BLOW;
                                 goto interrupt;
                             }
                         }
@@ -824,7 +824,7 @@ void npcMain(void) {
                                 }
                             }
                             if (trig) {
-                                entry->interruptFlags |= 4;
+                                entry->interruptFlags |= NPC_INTERRUPT_RETURN;
                                 goto interrupt;
                             }
                         }
@@ -861,7 +861,7 @@ void npcMain(void) {
                                 }
                             }
                             if (trig) {
-                                entry->interruptFlags |= 2;
+                                entry->interruptFlags |= NPC_INTERRUPT_LOST;
                                 goto interrupt;
                             }
                         }
@@ -941,7 +941,7 @@ void npcMain(void) {
                             }
                             done14:
                             if (trig) {
-                                entry->interruptFlags |= 1;
+                                entry->interruptFlags |= NPC_INTERRUPT_FIND;
                             }
                         }
                     }
@@ -1877,7 +1877,7 @@ void fbatEncountCheck(void) {
                     npc->direction = npc->savedDirection;
                     evtStartID(npc->regularEvtId);
                 } else {
-                    npc->interruptFlags |= 0x10000000;
+                    npc->interruptFlags |= NPC_INTERRUPT_MOVE;
                 }
             }
         }
@@ -1945,11 +1945,11 @@ void fbatTalkMode(void) {
             switch (data->mode) {
                 case 3:
                     evt = evtEntry(npc->deadEvent, 0, 0);
-                    evt->wNpcEventType = 6;
+                    evt->wNpcEventType = NPC_EVENT_TALK;
                     break;
                 default:
                     evt = evtEntry(npc->talkEvt, 0, 0);
-                    evt->wNpcEventType = 6;
+                    evt->wNpcEventType = NPC_EVENT_TALK;
                     marioChgTalkMotion();
                     break;
             }
@@ -2059,7 +2059,7 @@ void fbatBattleMode(void) {
                 data->mode = 1;
                 break;
             }
-            data->target->interruptFlags &= 0xF00;
+            data->target->interruptFlags &= NPC_INTERRUPT_KEPT;
             evtStopID(data->target->regularEvtId);
             info = &data->info;
             if (!(cur->battleInfo.battleFlags & NPC_BATTLE_NO_BUMP_ATTACK)) {
@@ -2212,8 +2212,8 @@ void fbatBattleMode(void) {
                         cur->moveAnimState = 0;
                     }
                     cur->wFbatHitCheckRelated = 90;
-                    cur->interruptFlags &= ~0x100;
-                    cur->interruptFlags |= 0x10000000;
+                    cur->interruptFlags &= ~NPC_INTERRUPT_NO_FIND;
+                    cur->interruptFlags |= NPC_INTERRUPT_MOVE;
                     if (cur->flags & NPC_FLAG_TALK_POSE) {
                         animPoseSetAnim(cur->poseId, cur->currentAnim, 1);
                     }
@@ -2222,7 +2222,7 @@ void fbatBattleMode(void) {
                     if (cur->flags & NPC_FLAG_AUTO_MOVE_ANIM) {
                         cur->moveAnimState = 0;
                     }
-                    cur->interruptFlags |= 0x10000000;
+                    cur->interruptFlags |= NPC_INTERRUPT_MOVE;
                     marioSetMutekiTime(3000);
                     mario->coinDropTimer = sysMsec2Frame(3000);
                     if (cur->flags & NPC_FLAG_TALK_POSE) {
@@ -2235,7 +2235,7 @@ void fbatBattleMode(void) {
 }
 
 void _npcDead(NpcEntry* npc, u16 reason) {
-    npc->interruptFlags |= 0x10;
+    npc->interruptFlags |= NPC_INTERRUPT_DEAD;
     npc->statusFlags |= NPC_STATUS_DEAD;
     npc->koopaEncounterType = reason;
     if (npc->flags & NPC_FLAG_RECORD_DEFEAT) {
@@ -2386,7 +2386,7 @@ void* fbatHitCheck(u32 flags, void* result) {
                     if (dist >= res.dist) continue;
                     if (noJump && !((*(u32*)&((NpcEntry*)npc)->statusFlags) & 0x10000) && mario->mutekiTimer <= 0) {
                         if ((*(s32*)&((NpcEntry*)npc)->attackMode) == 0 ||
-                            (evtGetPtrID((*(s32*)&((NpcEntry*)npc)->regularEvtId)) ? evtGetPtrID((*(s32*)&((NpcEntry*)npc)->regularEvtId))->wNpcEventType == 5 : 0)) {
+                            (evtGetPtrID((*(s32*)&((NpcEntry*)npc)->regularEvtId)) ? evtGetPtrID((*(s32*)&((NpcEntry*)npc)->regularEvtId))->wNpcEventType == NPC_EVENT_BLOW : 0)) {
                             if (npc->flags & NPC_FLAG_NO_PLAYER_ATTACK) continue;
                             res.kind = 0x10000;
                             hit = npc;
@@ -2671,47 +2671,47 @@ BOOL npcCheckInterrupt(NpcEntry* npc) {
 
     evtGetPtrID(npc->regularEvtId);
     flags = npc->interruptFlags;
-    if (flags & ~0xF00) {
+    if (flags & ~NPC_INTERRUPT_KEPT) {
         evt = NULL;
-        if ((flags & 0x10) && npc->deadEvent) {
+        if ((flags & NPC_INTERRUPT_DEAD) && npc->deadEvent) {
             evt = evtEntry(npc->deadEvent, 0, EVENT_START_IMMEDIATE);
-            evt->wNpcEventType = 8;
+            evt->wNpcEventType = NPC_EVENT_DEAD;
             evt->ownerNPC = npc;
-        } else if ((flags & 0x10000000) && npc->moveEvent) {
+        } else if ((flags & NPC_INTERRUPT_MOVE) && npc->moveEvent) {
             evt = evtEntry(npc->moveEvent, 0, EVENT_START_IMMEDIATE);
-            evt->wNpcEventType = 1;
+            evt->wNpcEventType = NPC_EVENT_MOVE;
             evt->ownerNPC = npc;
-        } else if ((flags & 8) && npc->blowEvent) {
+        } else if ((flags & NPC_INTERRUPT_BLOW) && npc->blowEvent) {
             evt = evtEntry(npc->blowEvent, 0, EVENT_START_IMMEDIATE);
-            evt->wNpcEventType = 5;
+            evt->wNpcEventType = NPC_EVENT_BLOW;
             evt->ownerNPC = npc;
-        } else if ((flags & 1) && npc->findEvent && !(npc->statusFlags & NPC_STATUS_NO_FIND_ONCE) &&
-                   !(npc->flags & NPC_FLAG_NO_FIND) && !(flags & 0x100)) {
+        } else if ((flags & NPC_INTERRUPT_FIND) && npc->findEvent && !(npc->statusFlags & NPC_STATUS_NO_FIND_ONCE) &&
+                   !(npc->flags & NPC_FLAG_NO_FIND) && !(flags & NPC_INTERRUPT_NO_FIND)) {
             evt = evtEntry(npc->findEvent, 0, EVENT_START_IMMEDIATE);
-            evt->wNpcEventType = 2;
+            evt->wNpcEventType = NPC_EVENT_FIND;
             evt->ownerNPC = npc;
-        } else if ((flags & 2) && npc->lostEvent && !(npc->statusFlags & NPC_STATUS_NO_FIND_ONCE) &&
+        } else if ((flags & NPC_INTERRUPT_LOST) && npc->lostEvent && !(npc->statusFlags & NPC_STATUS_NO_FIND_ONCE) &&
                    !(npc->flags & NPC_FLAG_NO_FIND)) {
             evt = evtEntry(npc->lostEvent, 0, EVENT_START_IMMEDIATE);
-            evt->wNpcEventType = 3;
+            evt->wNpcEventType = NPC_EVENT_LOST;
             evt->ownerNPC = npc;
-        } else if ((flags & 4) && npc->returnEvent && !(npc->statusFlags & NPC_STATUS_NO_FIND_ONCE) &&
+        } else if ((flags & NPC_INTERRUPT_RETURN) && npc->returnEvent && !(npc->statusFlags & NPC_STATUS_NO_FIND_ONCE) &&
                    !(npc->flags & NPC_FLAG_NO_FIND)) {
             evt = evtEntry(npc->returnEvent, 0, EVENT_START_IMMEDIATE);
-            evt->wNpcEventType = 4;
+            evt->wNpcEventType = NPC_EVENT_RETURN;
             evt->ownerNPC = npc;
         }
         if (evt) {
             evtDeleteID(npc->regularEvtId);
             npc->regularEvtId = evt->eventId;
-            npc->interruptFlags &= 0xF00;
+            npc->interruptFlags &= NPC_INTERRUPT_KEPT;
             npc->statusFlags &= ~NPC_STATUS_NO_FIND_ONCE;
             npc->moveTicks = 0;
             npc->moveSpeed = 0.0f;
             return TRUE;
         }
     }
-    npc->interruptFlags &= 0xF00;
+    npc->interruptFlags &= NPC_INTERRUPT_KEPT;
     npc->statusFlags &= ~NPC_STATUS_NO_FIND_ONCE;
     return FALSE;
 }
@@ -2959,7 +2959,7 @@ void npcExecAllInitEvt(void) {
                     evtDeleteID(entry->initEvtId);
                 }
                 evt = evtEntry(entry->initEvent, 0, 0);
-                evt->wNpcEventType = 0;
+                evt->wNpcEventType = NPC_EVENT_INIT;
                 evt->ownerNPC = entry;
                 entry->initEvtId = evt->eventId;
             } else {
@@ -3014,7 +3014,7 @@ void npcExecAllReglEvt(void) {
                 evtDeleteID(entry->regularEvtId);
             }
             evt = evtEntry(entry->moveEvent, 0, EVENT_START_IMMEDIATE);
-            evt->wNpcEventType = 1;
+            evt->wNpcEventType = NPC_EVENT_MOVE;
             evt->ownerNPC = entry;
             entry->regularEvtId = evt->eventId;
         }

@@ -159,6 +159,18 @@ typedef enum EventEntry_Flags {
     EVENT_START_IMMEDIATE = (1 << 5), // run at once when entered while the manager is running events
 } EventEntry_Flags;
 
+// EventEntry.wNpcEventType: which of its owner NPC's events the entry runs
+typedef enum NpcEventType {
+    NPC_EVENT_INIT = 0,
+    NPC_EVENT_MOVE = 1,   // the regular event
+    NPC_EVENT_FIND = 2,
+    NPC_EVENT_LOST = 3,
+    NPC_EVENT_RETURN = 4,
+    NPC_EVENT_BLOW = 5,
+    NPC_EVENT_TALK = 6,   // talk event, or the dead event started from a field-battle result
+    NPC_EVENT_DEAD = 8,
+} NpcEventType;
+
 struct EventEntry {
     OSTime lifetime;                   // 0x0
     u8 flags;                          // 0x8, validated
@@ -169,7 +181,7 @@ struct EventEntry {
     u8 blocked;                        // 0xD
     s8 loopDepth;                      // 0xE, validated
     s8 switchDepth;                    // 0xF, validated
-    u8 wNpcEventType;                  // 0x10
+    u8 wNpcEventType;                  // 0x10, NpcEventType
     u8 pad_11[3];                      // 0x11
     void* nextCommand;                 // 0x14, validated
     EvtWord* args;                     // 0x18, validated

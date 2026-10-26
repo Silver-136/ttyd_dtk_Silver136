@@ -187,6 +187,18 @@ typedef enum NpcStatusFlags {
     NPC_STATUS_TALK_PAUSE = (1 << 29),     // 0x20000000, stopped for the talk-range pause
 } NpcStatusFlags;
 
+// NpcEntry.interruptFlags: requests to replace the regular event, handled by npcCheckInterrupt
+typedef enum NpcInterruptFlags {
+    NPC_INTERRUPT_FIND = (1 << 0),     // 0x1, Mario found
+    NPC_INTERRUPT_LOST = (1 << 1),     // 0x2, Mario lost
+    NPC_INTERRUPT_RETURN = (1 << 2),   // 0x4, outside the territory: go back
+    NPC_INTERRUPT_BLOW = (1 << 3),     // 0x8, npcCheckBlow
+    NPC_INTERRUPT_DEAD = (1 << 4),     // 0x10, _npcDead
+    NPC_INTERRUPT_NO_FIND = (1 << 8),  // 0x100, no find event; set at the end of a field battle
+    NPC_INTERRUPT_KEPT = 0xF00,        // bits kept when the requests are handled
+    NPC_INTERRUPT_MOVE = (1 << 28),    // 0x10000000, restart the regular (move) event
+} NpcInterruptFlags;
+
 typedef struct NpcEntry {
     s32 flags;                      // 0x0, NpcFlags
     u32 reactionFlags;              // 0x4
@@ -216,7 +228,7 @@ typedef struct NpcEntry {
     void* lostEvent;                // 0x134, verified
     void* returnEvent;              // 0x138, verified
     void* blowEvent;                // 0x13C, verified
-    u32 interruptFlags;             // 0x140, why the regular event was interrupted (blow/find/...)
+    u32 interruptFlags;             // 0x140, NpcInterruptFlags
     f32 direction;                  // 0x144, angle we're facing at, verified
     f32 savedDirection;             // 0x148, saved during field battle
     f32 width;                      // 0x14C

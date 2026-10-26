@@ -784,7 +784,7 @@ void btlseqEnd(BattleWork* wp) {
         BattleAudienceSoundSetVolAll(0, 30);
         fb = fbatGetPointer();
         p = fb->target;
-        if (p) p->interruptFlags |= 0x100;
+        if (p) p->interruptFlags |= NPC_INTERRUPT_NO_FIND;
         break;
     }
     case 0x700001D: {
