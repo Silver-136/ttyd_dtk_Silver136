@@ -2426,7 +2426,7 @@ EVT_BEGIN(batten_leader_stop_attack_event)
         END_IF
     END_IF
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_SRYO_STOP1"), EVT_NULLPTR, 0, EVT_NULLPTR)
-    CALL(evt_cam_get_at, 4, LW(0), LW(1), LW(2))
+    CALL(evt_cam_get_at, CAMERA_3D, LW(0), LW(1), LW(2))
     ADD_FLOAT(LW(0), FLOAT(-25.0f))
     SET_FLOAT_VALUE(LW(2), FLOAT(100.0f))
     CALL(evt_eff64, STRING("TIMESTOP_EFF_00"), STRING("timestamp_n64"), 0, LW(0), LW(1), LW(2), FLOAT(1.0f), 150, 0, 0, 0, 0, 0, 0)

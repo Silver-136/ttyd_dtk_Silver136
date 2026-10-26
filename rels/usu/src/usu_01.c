@@ -1578,8 +1578,8 @@ EVT_END()
 
 static EVT_BEGIN(cam_up)
     BEGIN_INLINE_EVENT
-        CALL(evt_cam_get_pos, 4, LW(0), LW(1), LW(2))
-        CALL(evt_cam_get_at, 4, LW(3), LW(4), LW(5))
+        CALL(evt_cam_get_pos, CAMERA_3D, LW(0), LW(1), LW(2))
+        CALL(evt_cam_get_at, CAMERA_3D, LW(3), LW(4), LW(5))
         ADD(LW(1), 85)
         ADD(LW(4), 85)
         CALL(evt_cam3d_evt_set, LW(0), LW(1), LW(2), LW(3), LW(4), LW(5), 500, EASING_SINE_IN_OUT)

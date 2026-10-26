@@ -544,7 +544,7 @@ EVT_BEGIN(mri_countdown)
     BEGIN_INLINE_EVENT
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         ADD(LW(1), 150)
-        CALL(evt_cam_get_pos, 4, LW(10), LW(11), LW(12))
+        CALL(evt_cam_get_pos, CAMERA_3D, LW(10), LW(11), LW(12))
         LOOP(0)
             CALL(evt_eff64, STRING(""), STRING("hokori_n64"), 0, LW(10), LW(1), LW(2), 60, 0, 0, 0, 0, 0, 0, 0)
             WAIT_MS(300)

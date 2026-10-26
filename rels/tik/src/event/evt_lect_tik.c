@@ -535,7 +535,7 @@ EVT_BEGIN(plane_majin_lecture)
     WAIT_FRAMES(1)
     BEGIN_SIBLING_EVENT
         LOOP(0)
-            CALL(evt_cam_get_at, 4, LW(0), LW(1), LW(2))
+            CALL(evt_cam_get_at, CAMERA_3D, LW(0), LW(1), LW(2))
             SUBTRACT(LW(1), 25)
             CALL(evt_npc_set_position, STRING(/*"ペラ魔人"*/"\x83\x79\x83\x89\x96\x82\x90\x6C"), LW(0), LW(1), LW(2))
             WAIT_FRAMES(1)
