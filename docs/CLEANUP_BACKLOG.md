@@ -58,11 +58,10 @@ data order 10, sound-name integer round trips (`SFX_NAME_WORD`) 9, no-op casts 6
   0x16 / 0x1C / 0x1D still raw in battle_damage.c. Dead bits (no reader): weapon special 0x200, target weighting
   0x2000.
 - From the reference-folder survey (2026-10-26), still open (done: Trouble Center names, map-object kinds, stage
-  hazard types, cooking item ids, weapon icon blocks, Station Keys, original Filed/opcode spellings):
+  hazard types, cooking item ids and recipe comments, block items, weapon icon blocks, Station Keys, original
+  Filed/opcode spellings, story progress values):
   - Saved flags: GSWF_STARPIECE_00..99 = GSWF(5567..5666) and GSWF_SHINE_00..41 = GSWF(5525..5566) (game strings);
     about 423 item/block collect flags nameable from the item and room in the scripts.
-  - Story progress: about 1,320 script comparisons against GSW_STORY_PROGRESS use raw numbers; the game's own step
-    labels (evt_johoya.c evtNoLabel, STG0_07 ...) could name them.
   - evt_mobj: the raw item ids in badge block / item calls; kururing's item argument is read and ignored.
   - Placeholder icons left in icon_ids.h have labels in the US icon list (Modding FAQ); two used ones (ICON_1D4 /
     ICON_1D5: white box / small white x).
