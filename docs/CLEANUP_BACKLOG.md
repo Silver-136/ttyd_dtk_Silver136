@@ -11,7 +11,7 @@ retail game through every step; nothing here changes behaviour. Per-function det
 | --- | --- | --- | --- |
 | FAKES.md rows | 195 (173 both, 20 US, 2 JP) | 214 | the count rose for a while because hidden tricks were documented |
 | FAKE comment sites | 306 in 102 files (libs 18) | 320 (libs 94) | |
-| `#pragma opt_*` / `optimize` / `dont_inline` / `auto_inline` lines | 143 / 21 / 144 / 4 | 259 / 71 / 358 / 9 | whole-file settings moved to per-unit flags; the rest are per-function pairs |
+| `#pragma opt_*` / `optimize` / `dont_inline` / `auto_inline` lines | 143 / 4 / 112 / 4 | 259 / 71 / 358 / 9 | whole-file settings moved to per-unit flags (Codex round 14: five more units); the rest are per-function pairs with no whole-unit equivalent |
 | `__declspec(section)` placements | 18 (libs 35) | 434 | template Vecs in .rodata, .sdata2 constants, a few real-storage objects |
 | `#pragma force_active` | 15 lines in 7 files (libs 12) | 776 | |
 | `gap_*` padding objects | 8 (libs 6) | 142 | eff_kemutest's gaps are real storage |
