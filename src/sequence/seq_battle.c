@@ -272,38 +272,38 @@ BOOL battle_init(void) {
         }
     }
     if (fbat->firstAttackFlags & 1) {
-        BattleInformationSetFirstAttack(info, 0);
+        BattleInformationSetFirstAttack(info, FIRST_ATTACK_NONE);
     } else {
         switch (fbat->hitKind) {
             case FBAT_HIT_JUMP:
-                BattleInformationSetFirstAttack(info, 1);
+                BattleInformationSetFirstAttack(info, FIRST_ATTACK_JUMP);
                 break;
             case FBAT_HIT_HIP:
-                BattleInformationSetFirstAttack(info, 2);
+                BattleInformationSetFirstAttack(info, FIRST_ATTACK_SPIN_JUMP);
                 break;
             case FBAT_HIT_JUMP_UNUSED:
-                BattleInformationSetFirstAttack(info, 3);
+                BattleInformationSetFirstAttack(info, FIRST_ATTACK_JUMP_UNUSED);
                 break;
             case FBAT_HIT_HAMMER:
-                BattleInformationSetFirstAttack(info, 4);
+                BattleInformationSetFirstAttack(info, FIRST_ATTACK_HAMMER);
                 break;
             case FBAT_HIT_SPIN_HAMMER:
-                BattleInformationSetFirstAttack(info, 5);
+                BattleInformationSetFirstAttack(info, FIRST_ATTACK_SPIN_HAMMER);
                 break;
             case FBAT_HIT_ULTRA_SPIN_HAMMER:
-                BattleInformationSetFirstAttack(info, 6);
+                BattleInformationSetFirstAttack(info, FIRST_ATTACK_ULTRA_HAMMER);
                 break;
             case FBAT_HIT_SHELL:
-                BattleInformationSetFirstAttack(info, 7);
+                BattleInformationSetFirstAttack(info, FIRST_ATTACK_SHELL);
                 break;
             case FBAT_HIT_BOMB:
-                BattleInformationSetFirstAttack(info, 8);
+                BattleInformationSetFirstAttack(info, FIRST_ATTACK_BOMB);
                 break;
             case FBAT_HIT_ENEMY_FIRST:
                 BattleInformationSetFirstAttack(info, fbat->firstAttackParam);
                 break;
             default:
-                BattleInformationSetFirstAttack(info, 0);
+                BattleInformationSetFirstAttack(info, FIRST_ATTACK_NONE);
                 break;
         }
     }

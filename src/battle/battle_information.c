@@ -15,14 +15,14 @@ void BattleInformationSetParty(FieldBattleInfo* info, BattleUnitType party) {
     info->party = party;
 }
 
-void BattleInformationSetFirstAttack(FieldBattleInfo* info, u32 partyId) {
-    info->partyId = partyId;
+void BattleInformationSetFirstAttack(FieldBattleInfo* info, u32 type) {
+    info->firstAttack = type;
 }
 
 void BattleInformationInit(FieldBattleInfo* info) {
     BattleInformationSetMode(info, 0);
     BattleInformationSetParty(info, UNIT_NULL);
-    BattleInformationSetFirstAttack(info, 0);
+    BattleInformationSetFirstAttack(info, FIRST_ATTACK_NONE);
     BattleInformationSetResult(info, 0);
     info->setup = NULL;
     info->coins = 0;

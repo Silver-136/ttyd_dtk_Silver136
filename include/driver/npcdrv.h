@@ -361,10 +361,24 @@ typedef struct FirstStrikeInfo {
     GXColor color;       // 0x1C
 } FirstStrikeInfo;
 
+// FieldBattleInfo.firstAttack (BattleInformationSetFirstAttack, from the field hit kind in seq_battle)
+typedef enum BattleFirstAttack {
+    FIRST_ATTACK_NONE = 0,
+    FIRST_ATTACK_JUMP = 1,
+    FIRST_ATTACK_SPIN_JUMP = 2,     // marioWeapon_KururinJump (FBAT_HIT_HIP)
+    FIRST_ATTACK_JUMP_UNUSED = 3,   // FBAT_HIT_JUMP_UNUSED
+    FIRST_ATTACK_HAMMER = 4,
+    FIRST_ATTACK_SPIN_HAMMER = 5,
+    FIRST_ATTACK_ULTRA_HAMMER = 6,
+    FIRST_ATTACK_SHELL = 7,         // the partner strikes first (partyWeapon_NokotarouFirstAttack)
+    FIRST_ATTACK_BOMB = 8,          // partyWeapon_SandersFirstAttack
+    FIRST_ATTACK_ENEMY = 9,         // and above: the enemy strikes first
+} BattleFirstAttack;
+
 typedef struct FieldBattleInfo {
     u32 mode; //0x0, unused
     BattleUnitType party; //0x4
-    u32 partyId; //0x8
+    u32 firstAttack; //0x8, BattleFirstAttack
     NpcBattleInfo* setup; //0xC
     u32 result; //0x10
     u32 coins; //0x14, BattleStoreCoin
@@ -381,8 +395,8 @@ typedef struct FieldBattleData {
     NpcEntry* npc;               // 0x4, encounter npc
     NpcEntry* target;            // 0x8
     s32 evtId;                   // 0xC
-    s32 hitKind;                 // 0x10, fbatHitCheck kind (0x10000000 = forced first attack, tou_03)
-    s32 firstAttackParam;        // 0x14, set to 0x10 by tou_03 _firstattack_setting; passed to BattleInformationSetFirstAttack (seq_battle)
+    s32 hitKind;                 // 0x10, FbatHitKind
+    s32 firstAttackParam;        // 0x14, BattleFirstAttack of an enemy first strike (0x10 from tou_03 _firstattack_setting)
     u8 pad_18[0x1C - 0x18];      // 0x18, never accessed
     u32 firstAttackFlags;        // 0x1C, bit 1 cleared by tou_03 _firstattack_setting, not read in C
     FieldBattleInfo info;        // 0x20

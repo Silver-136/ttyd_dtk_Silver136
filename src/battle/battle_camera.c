@@ -24,21 +24,21 @@ void battleCameraInit(void) {
     camera = &wp->cameraWork;
     memset(camera, 0, sizeof(BattleCameraWork));
     camera->flags = 0;
-    switch (wp->fbatInfo->partyId) {
-    case 1:
-    case 2:
-    case 3:
-    case 4:
-    case 5:
-    case 6:
-    case 7:
-    case 8:
+    switch (wp->fbatInfo->firstAttack) {
+    case FIRST_ATTACK_JUMP:
+    case FIRST_ATTACK_SPIN_JUMP:
+    case FIRST_ATTACK_JUMP_UNUSED:
+    case FIRST_ATTACK_HAMMER:
+    case FIRST_ATTACK_SPIN_HAMMER:
+    case FIRST_ATTACK_ULTRA_HAMMER:
+    case FIRST_ATTACK_SHELL:
+    case FIRST_ATTACK_BOMB:
         camera->mode = 15;
         break;
-    case 9:
+    case FIRST_ATTACK_ENEMY:
         camera->mode = 16;
         break;
-    case 0:
+    case FIRST_ATTACK_NONE:
         camera->mode = 14;
         break;
     }

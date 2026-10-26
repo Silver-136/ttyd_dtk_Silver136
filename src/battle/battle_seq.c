@@ -315,23 +315,23 @@ void btlseqInit(BattleWork* wp) {
 
 BattleWeapon* _GetFirstAttackWeapon(s32 type) {
     switch (type) {
-        case 1:
+        case FIRST_ATTACK_JUMP:
             return (BattleWeapon*)marioDefaultWeapon_Jump;
-        case 2:
+        case FIRST_ATTACK_SPIN_JUMP:
             return (BattleWeapon*)marioWeapon_KururinJump;
-        case 3:
+        case FIRST_ATTACK_JUMP_UNUSED:
             return (BattleWeapon*)marioDefaultWeapon_Jump;
-        case 4:
+        case FIRST_ATTACK_HAMMER:
             return (BattleWeapon*)marioDefaultWeapon_Hammer;
-        case 5:
+        case FIRST_ATTACK_SPIN_HAMMER:
             return &marioDefaultWeapon_FirstAttackKaitenHammer;
-        case 6:
+        case FIRST_ATTACK_ULTRA_HAMMER:
             return &marioDefaultWeapon_FirstAttackUltraHammer;
-        case 7:
+        case FIRST_ATTACK_SHELL:
             return &partyWeapon_NokotarouFirstAttack;
-        case 8:
+        case FIRST_ATTACK_BOMB:
             return &partyWeapon_SandersFirstAttack;
-        case 0:
+        case FIRST_ATTACK_NONE:
         default:
             return NULL;
     }
@@ -351,7 +351,7 @@ void btlseqFirstAct(BattleWork* wp) {
     int k;
     FieldBattleInfo* fb = wp->fbatInfo;
     u8* info;
-    type = (s32)fb->partyId;
+    type = (s32)fb->firstAttack;
 
     switch (BattleGetSeq(wp, SEQ_FIRST_ACT)) {
         case 0x2000000:
@@ -382,10 +382,11 @@ void btlseqFirstAct(BattleWork* wp) {
                     }
             }
             switch (type) {
-                case 1: case 2: case 3:
+                case FIRST_ATTACK_JUMP: case FIRST_ATTACK_SPIN_JUMP: case FIRST_ATTACK_JUMP_UNUSED:
                     wp->ruleDispTimer = 10;
                     break;
-                case 4: case 5: case 6: case 7: case 8:
+                case FIRST_ATTACK_HAMMER: case FIRST_ATTACK_SPIN_HAMMER: case FIRST_ATTACK_ULTRA_HAMMER:
+                case FIRST_ATTACK_SHELL: case FIRST_ATTACK_BOMB:
                     wp->ruleDispTimer = 0;
                     break;
                 default:
@@ -403,7 +404,7 @@ void btlseqFirstAct(BattleWork* wp) {
                 b->damageEventId = evt->eventId;
             }
             a->flags |= BATTLE_UNIT_FLAG_ACTING;
-            if (type < 9) {
+            if (type < FIRST_ATTACK_ENEMY) {
                 a->attackEventCode = (void*)_GetFirstAttackWeapon(type)->mAttackEvtScript;
                 a->attackEventFlags = 0;
                 BattleStatusWindowEventOff();

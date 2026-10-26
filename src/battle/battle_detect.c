@@ -627,18 +627,19 @@ void BattleGetFirstAttackUnit(BattleWork* wp, BattleUnit** attacker, BattleUnit*
             break;
         }
     }
-    switch (wp->fbatInfo->partyId) {
-    case 1: case 2: case 3: case 4: case 5: case 6:
+    switch (wp->fbatInfo->firstAttack) {
+    case FIRST_ATTACK_JUMP: case FIRST_ATTACK_SPIN_JUMP: case FIRST_ATTACK_JUMP_UNUSED:
+    case FIRST_ATTACK_HAMMER: case FIRST_ATTACK_SPIN_HAMMER: case FIRST_ATTACK_ULTRA_HAMMER:
         tmp = BattleGetMarioPtr(wp);
         other = found;
         found = tmp;
         break;
-    case 7: case 8:
+    case FIRST_ATTACK_SHELL: case FIRST_ATTACK_BOMB:
         tmp = BattleGetPartnerPtr(wp, BattleGetMarioPtr(wp));
         other = found;
         found = tmp;
         break;
-    case 9:
+    case FIRST_ATTACK_ENEMY:
     default:
         other = BattleGetMarioPtr(wp);
         break;
