@@ -193,7 +193,9 @@ void effShockMain(EffectEntry* effect) {
         w->scale += 0.05f * (8.0f - w->scale);
     }
     w->c14 *= 0.9f;
-    if (life < 5) { w->c18 *= 0.8f; }
+    if (life < 5) {
+        w->c18 *= 0.8f;
+    }
     if (age > 6) {
         w->c10 -= 13;
         if (w->c10 < 0) {

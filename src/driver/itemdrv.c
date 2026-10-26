@@ -719,7 +719,11 @@ ItemEntry* itemHitCheck(f32 x, f32 y, f32 z, f32 range) {
     for (entry = wp->entries, i = 0; i < wp->count; i++, entry++) {
         if (!(entry->flags & ITEM_FLAG_ACTIVE)) continue;
         // FAKE: the empty do-while adds a block before the continue; without it the flag tests are scheduled differently
-        if (entry->flags & ITEM_FLAG_NO_TOUCH_GET) { do { } while (0); continue; }
+        if (entry->flags & ITEM_FLAG_NO_TOUCH_GET) {
+            do {
+            } while (0);
+            continue;
+        }
         if (entry->flags2 & ITEM_FLAG2_CARRIED) continue;
         if (entry->mode == ITEM_MODE_GET) continue;
         dx = x - entry->position.x;

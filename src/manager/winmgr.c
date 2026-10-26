@@ -191,9 +191,17 @@ USER_FUNC(evt_win_party_lankup_chk) {
     for (p = party_id_table; *p != 0; p++) {
         if (partyChkJoin(*p)) {
             if (!evtGetValue(event, GSWF(1186))) {
-                if (pouch->partyData[*p].techLevel < 1) { max = 0; } else { max = 1; }
+                if (pouch->partyData[*p].techLevel < 1) {
+                    max = 0;
+                } else {
+                    max = 1;
+                }
             } else {
-                if (pouch->partyData[*p].techLevel < 2) { max = 0; } else { max = 2; }
+                if (pouch->partyData[*p].techLevel < 2) {
+                    max = 0;
+                } else {
+                    max = 2;
+                }
             }
             if (max == 0) {
                 evtSetValue(event, args[0], 1);
@@ -223,9 +231,17 @@ USER_FUNC(evt_win_party_lankdown_chk) {
                 hasRank = 1;
             }
             if (!evtGetValue(event, GSWF(1186))) {
-                if (pouch->partyData[*p].techLevel < 1) { max = 0; } else { max = 1; }
+                if (pouch->partyData[*p].techLevel < 1) {
+                    max = 0;
+                } else {
+                    max = 1;
+                }
             } else {
-                if (pouch->partyData[*p].techLevel < 2) { max = 0; } else { max = 2; }
+                if (pouch->partyData[*p].techLevel < 2) {
+                    max = 0;
+                } else {
+                    max = 2;
+                }
             }
             if (max == 0) {
                 canRank = 1;

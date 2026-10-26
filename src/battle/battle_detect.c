@@ -369,7 +369,10 @@ void _btlSamplingEnemy(BattleWorkWeaponTargets* d) {
                         }
                     }
                 }
-                if (!ok4) { keep = FALSE; break; }
+                if (!ok4) {
+                    keep = FALSE;
+                    break;
+                }
             }
             keep = TRUE;
             } while (0);

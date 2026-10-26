@@ -369,17 +369,29 @@ s32 collisionCurve(s32 mode, void* curve, Vec pos, CamRoadHit* hit) {
                 if (yy < yA) {
                     if (cross > 0.0) {
                         if (sgn < 0.0f) {
-                            if (d > limA) { d = limA; fl |= 2; }
+                            if (d > limA) {
+                                d = limA;
+                                fl |= 2;
+                            }
                         } else {
-                            if (d > limB) { d = limB; fl |= 2; }
+                            if (d > limB) {
+                                d = limB;
+                                fl |= 2;
+                            }
                             d = -d;
                         }
                     } else {
                         if (sgn < 0.0f) {
-                            if (d > limB) { d = limB; fl |= 2; }
+                            if (d > limB) {
+                                d = limB;
+                                fl |= 2;
+                            }
                             d = -d;
                         } else {
-                            if (d > limA) { d = limA; fl |= 2; }
+                            if (d > limA) {
+                                d = limA;
+                                fl |= 2;
+                            }
                         }
                     }
                     ret = 1;
@@ -398,17 +410,29 @@ s32 collisionCurve(s32 mode, void* curve, Vec pos, CamRoadHit* hit) {
                 if (yy > yB) {
                     if (cross > 0.0) {
                         if (sgn < 0.0f) {
-                            if (d > limA) { d = limA; fl |= 2; }
+                            if (d > limA) {
+                                d = limA;
+                                fl |= 2;
+                            }
                         } else {
-                            if (d > limB) { d = limB; fl |= 2; }
+                            if (d > limB) {
+                                d = limB;
+                                fl |= 2;
+                            }
                             d = -d;
                         }
                     } else {
                         if (sgn < 0.0f) {
-                            if (d > limB) { d = limB; fl |= 2; }
+                            if (d > limB) {
+                                d = limB;
+                                fl |= 2;
+                            }
                             d = -d;
                         } else {
-                            if (d > limA) { d = limA; fl |= 2; }
+                            if (d > limA) {
+                                d = limA;
+                                fl |= 2;
+                            }
                         }
                     }
                     ret = 1;
@@ -547,9 +571,15 @@ s32 collisionCurve(s32 mode, void* curve, Vec pos, CamRoadHit* hit) {
                 if (yy < yA) {
                     cr = dx2 * su1x + dz2 * dx;
                     if (cr < 0.0f) {
-                        if (dist > limA) { dist = limA; fl |= 2; }
+                        if (dist > limA) {
+                            dist = limA;
+                            fl |= 2;
+                        }
                     } else {
-                        if (dist > limB) { dist = limB; fl |= 2; }
+                        if (dist > limB) {
+                            dist = limB;
+                            fl |= 2;
+                        }
                         dist = -dist;
                     }
                     ret = 1;
@@ -568,9 +598,15 @@ s32 collisionCurve(s32 mode, void* curve, Vec pos, CamRoadHit* hit) {
                 if (yy > yB) {
                     cr = dx2 * su1x + dz2 * dx;
                     if (cr < 0.0f) {
-                        if (dist > limA) { dist = limA; fl |= 2; }
+                        if (dist > limA) {
+                            dist = limA;
+                            fl |= 2;
+                        }
                     } else {
-                        if (dist > limB) { dist = limB; fl |= 2; }
+                        if (dist > limB) {
+                            dist = limB;
+                            fl |= 2;
+                        }
                         dist = -dist;
                     }
                     ret = 1;

@@ -2316,19 +2316,27 @@ void puniModeSearch(PuniData* p) {
     k = bx + k;
     k--;
     cl = Punimap->data[k];
-    if (!(cl & 0xFF)) { cl |= 0xFFFF; }
+    if (!(cl & 0xFF)) {
+        cl |= 0xFFFF;
+    }
     m0 = cl;
     cu = Punimap->data[(bz - 1) * Punimap->width + bx];
-    if (!(cu & 0xFF)) { cu |= 0xFFFF; }
+    if (!(cu & 0xFF)) {
+        cu |= 0xFFFF;
+    }
     m1 = cu;
     k = bz * Punimap->width;
     k = bx + k;
     k++;
     cr = Punimap->data[k];
-    if (!(cr & 0xFF)) { cr |= 0xFFFF; }
+    if (!(cr & 0xFF)) {
+        cr |= 0xFFFF;
+    }
     m2 = cr;
     cd = Punimap->data[(bz + 1) * Punimap->width + bx];
-    if (!(cd & 0xFF)) { cd |= 0xFFFF; }
+    if (!(cd & 0xFF)) {
+        cd |= 0xFFFF;
+    }
     h0 = cl & 0xF000;
     h1 = cu & 0xF000;
     h2 = cr & 0xF000;

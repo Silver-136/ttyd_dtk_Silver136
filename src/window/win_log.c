@@ -706,7 +706,9 @@ s32 winLogMain(WindowWork* w) {
             if (w->log.badge.cursor % 7 > 0) w->log.badge.cursor--;
             psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_TABI_MOVE1 | PSND_SFX_BYPASS_MUTE));
         } else if (w->dirRep & DEMO_STICK_UP) {
-            if ((s32)(w->log.badge.cursor - 7) >= 0 && w->log.badge.cursor - 7 < w->log.badge.num) { w->log.badge.cursor -= 7; }
+            if ((s32)(w->log.badge.cursor - 7) >= 0 && w->log.badge.cursor - 7 < w->log.badge.num) {
+                w->log.badge.cursor -= 7;
+            }
             w->log.badge.idx = w->log.badge.cursor / 28;
             psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_TABI_MOVE1 | PSND_SFX_BYPASS_MUTE));
         } else if (w->dirRep & DEMO_STICK_DOWN) {
@@ -763,7 +765,9 @@ s32 winLogMain(WindowWork* w) {
             if (w->log.recipe.cursor % 7 > 0) w->log.recipe.cursor--;
             psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_TABI_MOVE1 | PSND_SFX_BYPASS_MUTE));
         } else if (w->dirRep & DEMO_STICK_UP) {
-            if ((s32)(w->log.recipe.cursor - 7) >= 0 && w->log.recipe.cursor - 7 < w->log.recipe.num) { w->log.recipe.cursor -= 7; }
+            if ((s32)(w->log.recipe.cursor - 7) >= 0 && w->log.recipe.cursor - 7 < w->log.recipe.num) {
+                w->log.recipe.cursor -= 7;
+            }
             w->log.recipe.idx = w->log.recipe.cursor / 28;
             psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_TABI_MOVE1 | PSND_SFX_BYPASS_MUTE));
         } else if (w->dirRep & DEMO_STICK_DOWN) {

@@ -66,7 +66,10 @@ BOOL setupDataCheck(void) {
 }
 static inline MapAttrEntry* findMapAttr(const char* name) {
     MapAttrEntry* p = _map_attr_data;
-    for (;;) { if (!p->name || !strcmp(p->name, name)) break; p++; }
+    for (;;) {
+        if (!p->name || !strcmp(p->name, name)) break;
+        p++;
+    }
     return p;
 }
 

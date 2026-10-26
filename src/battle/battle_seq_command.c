@@ -626,7 +626,10 @@ s32 _btlcmd_MakeSelectWeaponTable(BattleWork* wp, s32 type) {
     if (cursor->absPos >= cursor->count) {
         cursor->absPos = cursor->count - 1;
     }
-    while (cursor->count < cursor->relPos + 6) { if ((top = cursor->relPos) <= 0) break; cursor->relPos--; }
+    while (cursor->count < cursor->relPos + 6) {
+        if ((top = cursor->relPos) <= 0) break;
+        cursor->relPos--;
+    }
     _btlcmd_UpdateSelectWeaponTable(wp, type);
     return num;
 }

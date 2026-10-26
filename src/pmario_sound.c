@@ -5961,7 +5961,10 @@ void psndSFXMain(void) {
             f = e->fxId;
             if (f & 0x80000000) {
                 for (j = 0; j < 3; j++) {
-                    if (!SoundSSCheck(j)) { ch[0] = j; goto ssfound; }
+                    if (!SoundSSCheck(j)) {
+                        ch[0] = j;
+                        goto ssfound;
+                    }
                 }
                 for (j = 0; j < 3; j++) {
                     if (SoundSSCheck(j) & 0x20) {
@@ -5969,7 +5972,10 @@ void psndSFXMain(void) {
                     }
                 }
                 for (j = 0; j < 3; j++) {
-                    if (!SoundSSCheck(j)) { ch[0] = j; goto ssfound; }
+                    if (!SoundSSCheck(j)) {
+                        ch[0] = j;
+                        goto ssfound;
+                    }
                 }
                 ch[0] = none;
 ssfound:
@@ -5981,7 +5987,10 @@ ssfound:
                 }
             } else if (f & 0x40000000) {
                 for (j = 0; j < 4; j++) {
-                    if (!SoundSongCheck(j)) { ch[0] = j; goto sgfound; }
+                    if (!SoundSongCheck(j)) {
+                        ch[0] = j;
+                        goto sgfound;
+                    }
                 }
                 ch[0] = none;
 sgfound:

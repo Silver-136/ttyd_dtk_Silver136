@@ -569,7 +569,9 @@ FileEntry* _fileAlloc(const char* filename, s32 type, void (*callback)(FileEntry
     for (search = afp->firstused; search; search = search->next) {
         if (search->state && !strcmp(search->filename, filename)) {
 #ifdef VERSION_G8ME01
-            while (search->entry) { OSYieldThread(); }
+            while (search->entry) {
+                OSYieldThread();
+            }
 #else
             while (search->entry) {;} // busy-waits until the loader thread clears the entry (US yields instead)
 #endif

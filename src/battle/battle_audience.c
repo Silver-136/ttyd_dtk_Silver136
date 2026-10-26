@@ -628,81 +628,127 @@ u8 BattleAudience_CheckReactionPerPhase(void) {
                 switch (queue[counter]) {
                     case 0:
                         for (i = 0; i <= 59; i++) {
-                            if (check_exe_phase_evt_status(i, 0)) { BattleAudienceAddPhaseEvtList(0); break; }
+                            if (check_exe_phase_evt_status(i, 0)) {
+                                BattleAudienceAddPhaseEvtList(0);
+                                break;
+                            }
                         }
                         break;
                     case 1:
                         for (i = 0; i <= 59; i++) {
-                            if (check_exe_phase_evt_status(i, 8) && BattleAudienceGetPtr(i)->status != AUDIENCE_STATUS_SHELL) { BattleAudienceAddPhaseEvtList(1); break; }
+                            if (check_exe_phase_evt_status(i, 8) && BattleAudienceGetPtr(i)->status != AUDIENCE_STATUS_SHELL) {
+                                BattleAudienceAddPhaseEvtList(1);
+                                break;
+                            }
                         }
                         break;
                     case 2:
                         for (i = 0; i <= 59; i++) {
-                            if (check_exe_phase_evt_status(i, 4)) { BattleAudienceAddPhaseEvtList(2); break; }
+                            if (check_exe_phase_evt_status(i, 4)) {
+                                BattleAudienceAddPhaseEvtList(2);
+                                break;
+                            }
                         }
                         break;
                     case 3:
                         if (pe->typeWeights[7]) {
                             for (i = 0; i < audience->mMaxAudience; ) {
-                                if (!(u8)BattleAudience_GetExist(i)) { BattleAudienceAddPhaseEvtList(3); break; }
-                                if (BattleAudienceGetPtr(i)->flags & 0x80) { i += 2; } else { i++; }
+                                if (!(u8)BattleAudience_GetExist(i)) {
+                                    BattleAudienceAddPhaseEvtList(3);
+                                    break;
+                                }
+                                if (BattleAudienceGetPtr(i)->flags & 0x80) {
+                                    i += 2;
+                                } else {
+                                    i++;
+                                }
                             }
                         }
                         break;
                     case 4:
                         for (i = 0; i <= 59; i++) {
-                            if (check_exe_phase_evt_status(i, 2)) { BattleAudienceAddPhaseEvtList(4); break; }
+                            if (check_exe_phase_evt_status(i, 2)) {
+                                BattleAudienceAddPhaseEvtList(4);
+                                break;
+                            }
                         }
                         break;
                     case 5:
                         for (i = 0; i <= 59; i++) {
-                            if (check_exe_phase_evt_status(i, 1)) { BattleAudienceAddPhaseEvtList(5); break; }
+                            if (check_exe_phase_evt_status(i, 1)) {
+                                BattleAudienceAddPhaseEvtList(5);
+                                break;
+                            }
                         }
                         break;
                     case 6:
                         for (i = 0; i <= 59; i++) {
-                            if (check_exe_phase_evt_status(i, 1)) { BattleAudienceAddPhaseEvtList(6); break; }
+                            if (check_exe_phase_evt_status(i, 1)) {
+                                BattleAudienceAddPhaseEvtList(6);
+                                break;
+                            }
                         }
                         break;
                     case 7:
                         for (i = 0; i <= 59; i++) {
-                            if (check_exe_phase_evt_status(i, 3)) { BattleAudienceAddPhaseEvtList(7); break; }
+                            if (check_exe_phase_evt_status(i, 3)) {
+                                BattleAudienceAddPhaseEvtList(7);
+                                break;
+                            }
                         }
                         break;
                     case 8:
                         for (i = 0; i <= 59; i++) {
-                            if (check_exe_phase_evt_status(i, 5)) { BattleAudienceAddPhaseEvtList(8); break; }
+                            if (check_exe_phase_evt_status(i, 5)) {
+                                BattleAudienceAddPhaseEvtList(8);
+                                break;
+                            }
                         }
                         break;
                     case 9:
                         if (!(audience->flags & AUDIENCE_FLAG_NO_AUDIENCE_EVENTS)) {
                             for (i = 0; i <= 59; i++) {
-                                if (check_exe_phase_evt_status(i, 5)) { BattleAudienceAddPhaseEvtList(9); break; }
+                                if (check_exe_phase_evt_status(i, 5)) {
+                                    BattleAudienceAddPhaseEvtList(9);
+                                    break;
+                                }
                             }
                         }
                         break;
                     case 10:
                         for (i = 0; i <= 59; i++) {
-                            if (check_exe_phase_evt_status(i, 6)) { BattleAudienceAddPhaseEvtList(10); break; }
+                            if (check_exe_phase_evt_status(i, 6)) {
+                                BattleAudienceAddPhaseEvtList(10);
+                                break;
+                            }
                         }
                         break;
                     case 11:
                         if (!(audience->flags & AUDIENCE_FLAG_NO_AUDIENCE_EVENTS)) {
                             for (i = 0; i <= 59; i++) {
-                                if (check_exe_phase_evt_status(i, 9) && BattleAudienceGetPtr(i)->status != AUDIENCE_STATUS_IGNITE) { BattleAudienceAddPhaseEvtList(11); break; }
+                                if (check_exe_phase_evt_status(i, 9) && BattleAudienceGetPtr(i)->status != AUDIENCE_STATUS_IGNITE) {
+                                    BattleAudienceAddPhaseEvtList(11);
+                                    break;
+                                }
                             }
                         }
                         break;
                     case 12:
                         if (!(audience->flags & AUDIENCE_FLAG_NO_AUDIENCE_EVENTS)) {
                             for (i = 0; i <= 59; i++) {
-                                if (check_exe_phase_evt_status(i, 11) && BattleAudienceDetectPakkunEatTarget(i) != -1) { BattleAudienceAddPhaseEvtList(12); break; }
+                                if (check_exe_phase_evt_status(i, 11) && BattleAudienceDetectPakkunEatTarget(i) != -1) {
+                                    BattleAudienceAddPhaseEvtList(12);
+                                    break;
+                                }
                             }
                         }
                         break;
                     case 13:
                         for (i = 0; i <= 59; i++) {
-                            if (check_exe_phase_evt_status(i, 12)) { BattleAudienceAddPhaseEvtList(13); break; }
+                            if (check_exe_phase_evt_status(i, 12)) {
+                                BattleAudienceAddPhaseEvtList(13);
+                                break;
+                            }
                         }
                         break;
                 }
@@ -721,7 +767,12 @@ u8 BattleAudience_CheckReactionPerPhase(void) {
                 switch (pe->phaseList[0]) {
                     case 0: {
                         u32 n = 0;
-                        for (i = 0; i <= 59; i++) { if (check_exe_phase_evt_status(i, 0)) { list[n] = i; n++; } }
+                        for (i = 0; i <= 59; i++) {
+                            if (check_exe_phase_evt_status(i, 0)) {
+                                list[n] = i;
+                                n++;
+                            }
+                        }
                         BattleAudienceItemOn(list[irand(n)], 0, 1);
                         CLR
                         break;
@@ -737,7 +788,9 @@ u8 BattleAudience_CheckReactionPerPhase(void) {
                         break;
                     case 2:
                         for (i = 0; i <= 59; i++) {
-                            if (check_exe_phase_evt_status(i, 4)) { BattleAudienceItemOn(i, 0xee, 100); }
+                            if (check_exe_phase_evt_status(i, 4)) {
+                                BattleAudienceItemOn(i, 0xee, 100);
+                            }
                         }
                         CLR
                         break;
@@ -751,7 +804,9 @@ u8 BattleAudience_CheckReactionPerPhase(void) {
                                 for (i = 0; i < 200; i++) {
                                     if ((u8)BattleAudience_GetSysCtrl(i) && BattleAudienceGetPtr(i)->status == AUDIENCE_STATUS_ENTER) break;
                                 }
-                                if (i == 200) { SUB = 10; }
+                                if (i == 200) {
+                                    SUB = 10;
+                                }
                                 break;
                             case 10:
                                 SUB = 15;
@@ -781,7 +836,9 @@ u8 BattleAudience_CheckReactionPerPhase(void) {
                         break;
                     case 5:
                         for (i = 0; i <= 59; i++) {
-                            if (check_exe_phase_evt_status(i, 1)) { BattleAudienceItemOn(i, 0xed, 100); }
+                            if (check_exe_phase_evt_status(i, 1)) {
+                                BattleAudienceItemOn(i, 0xed, 100);
+                            }
                         }
                         CLR
                         break;
@@ -824,7 +881,9 @@ u8 BattleAudience_CheckReactionPerPhase(void) {
                                 for (i = 0; i <= 59; i++) {
                                     if ((u8)BattleAudience_GetSysCtrl(i) && BattleAudienceGetPtr(i)->status == AUDIENCE_STATUS_SING) break;
                                 }
-                                if (i == 60) { SUB = 10; }
+                                if (i == 60) {
+                                    SUB = 10;
+                                }
                                 break;
                             case 10:
                                 SUB = 15;

@@ -113,7 +113,10 @@ static inline void kpaSetScoreStr(s32 score, Vec* pos) {
             str = ksdp[i].str;
             n = 0;
             for (j = 0; j < 5; j++) {
-                if (n != 0 || d[j] != 0) { *p++ = d[j] + '0'; n++; }
+                if (n != 0 || d[j] != 0) {
+                    *p++ = d[j] + '0';
+                    n++;
+                }
             }
             str[n] = 0;
             ksdp[i].timer = 30;
