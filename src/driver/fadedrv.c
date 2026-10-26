@@ -346,37 +346,37 @@ void fadeEntry(s32 type, s32 duration, GXColor color) {
 }
 
 void fadeTecOn(void) {
-    wp->flags |= 0x1000;
+    wp->flags |= FADE_WORK_TEC;
 }
 
 void fadeTecOff(void) {
-    wp->flags &= ~0x1000;
+    wp->flags &= ~FADE_WORK_TEC;
 }
 
 void fadeTecSoftOn(void) {
-    wp->flags |= 0x1010;
+    wp->flags |= (FADE_WORK_TEC_SOFT_IN | FADE_WORK_TEC);
     wp->softness = 0.0f;
 }
 
 void fadeTecSoftOff(void) {
-    wp->flags |= 0x1020;
+    wp->flags |= (FADE_WORK_TEC_SOFT_OUT | FADE_WORK_TEC);
     wp->softness = 1.0f;
 }
 
 void fadeSoftFocusOn(void) {
-    wp->flags |= 0x2000;
+    wp->flags |= FADE_WORK_SOFT_FOCUS;
 }
 
 void fadeSoftFocusOff(void) {
-    wp->flags &= ~0x2000;
+    wp->flags &= ~FADE_WORK_SOFT_FOCUS;
 }
 
 void fadeWhiteOutOn(void) {
-    wp->flags |= 0x4000;
+    wp->flags |= FADE_WORK_WHITE_OUT;
 }
 
 void fadeWhiteOutOff(void) {
-    wp->flags &= ~0x4000;
+    wp->flags &= ~FADE_WORK_WHITE_OUT;
 }
 
 void fadeSetSpotPos(f32 x, f32 y) {
@@ -482,11 +482,11 @@ void fadeMain(void) {
                     case 0:
                         if ((s32)animGroupBaseAsync(entry->animFile, entry->imageType, NULL) == 0) {
                             if (entry->paperPoseId < 0 && (entry->type == 0x2A || entry->type == 0x2C || entry->type == 0x2E || entry->type == 0x30)) {
-                                wp->flags |= 0x8000;
+                                wp->flags |= FADE_WORK_LOAD_BLACK;
                             }
                             break;
                         }
-                        wp->flags &= ~0x8000;
+                        wp->flags &= ~FADE_WORK_LOAD_BLACK;
                         if (entry->paperPoseId >= 0) {
                             imgRelease(entry->image, entry->imageType);
                             animPaperPoseRelease(entry->paperPoseId);
@@ -827,13 +827,13 @@ void fadeMain(void) {
                 break;
         }
     }
-    if (wp->flags & 0x3000) {
+    if (wp->flags & (FADE_WORK_TEC | FADE_WORK_SOFT_FOCUS)) {
         dispEntry(CAMERA_2D, 999.0f, 0, disp_tec, wp);
     }
-    if (wp->flags & 0x8000) {
+    if (wp->flags & FADE_WORK_LOAD_BLACK) {
         dispEntry(CAMERA_FADE, -100.0f, 0, disp_dummy_black, wp);
     }
-    if (wp->flags & 0x4000) {
+    if (wp->flags & FADE_WORK_WHITE_OUT) {
         dispEntry(CAMERA_3D, 1000.0f, 7, disp_dummy_black, wp);
     }
 }
@@ -862,7 +862,7 @@ void disp_texture(CameraId camId, void* param) {
         case 9:
         case 11:
         case 14:
-            if (work->entries[0].flags & 2) {
+            if (work->entries[0].flags & FADE_FLAG_DONE) {
                 return;
             }
     }
@@ -893,7 +893,7 @@ void disp_texture(CameraId camId, void* param) {
             GXSetCurrentMtx(0);
             TEXGetGXTexObjFromPalette(wp->texture, &obj, 0);
             GXLoadTexObj(&obj, GX_TEXMAP0);
-            if (!(work->entries[0].flags & 2)) {
+            if (!(work->entries[0].flags & FADE_FLAG_DONE)) {
                 p = work->entries[0].progress;
                 scale = p * (p * (p * (100.0f * p * p)));
                 PSMTXTrans(mtx1, 0.5f, 0.5f, 0.0f);
@@ -913,7 +913,7 @@ void disp_texture(CameraId camId, void* param) {
             GXSetCurrentMtx(0);
             TEXGetGXTexObjFromPalette(wp->texture, &obj, 1);
             GXLoadTexObj(&obj, GX_TEXMAP0);
-            if (!(work->entries[0].flags & 2)) {
+            if (!(work->entries[0].flags & FADE_FLAG_DONE)) {
                 p = work->entries[0].progress;
                 scale = p * (p * (p * (100.0f * p * p)));
                 PSMTXTrans(mtx1, 0.5f, 0.5f, 0.0f);
@@ -1137,7 +1137,7 @@ void disp_tec(CameraId camId, void* param) {
     GXSetNumChans(0);
     GXSetNumTexGens(1);
     GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
-    if (wp->flags & 0x1000) {
+    if (wp->flags & FADE_WORK_TEC) {
         TEXGetGXTexObjFromPalette(wp->texture, &obj, 2);
         GXLoadTexObj(&obj, GX_TEXMAP0);
     } else {
@@ -1150,24 +1150,24 @@ void disp_tec(CameraId camId, void* param) {
     GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
     GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_C0);
     GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_A0, GX_CA_ZERO, GX_CA_TEXA, GX_CA_ZERO);
-    if (wp->flags & 0x1000) {
+    if (wp->flags & FADE_WORK_TEC) {
         GXSetTevColor(GX_TEVREG0, (GXColor){0x19, 0x23, 0x2A, 0xFF});
     } else {
         GXSetTevColor(GX_TEVREG0, (GXColor){0xE6, 0xE6, 0xE6, 0xFF});
     }
-    if (wp->flags & 0x30) {
-        if (wp->flags & 0x10) {
+    if (wp->flags & (FADE_WORK_TEC_SOFT_IN | FADE_WORK_TEC_SOFT_OUT)) {
+        if (wp->flags & FADE_WORK_TEC_SOFT_IN) {
             wp->softness += 0.04f;
             if (wp->softness > 1.0f) {
                 wp->softness = 1.0f;
-                wp->flags &= ~0x10;
+                wp->flags &= ~FADE_WORK_TEC_SOFT_IN;
             }
         } else {
             wp->softness -= 0.04f;
             if (wp->softness < 0.0f) {
                 wp->softness = 0.0f;
-                wp->flags &= ~0x20;
-                wp->flags &= ~0x3000;
+                wp->flags &= ~FADE_WORK_TEC_SOFT_OUT;
+                wp->flags &= ~(FADE_WORK_TEC | FADE_WORK_SOFT_FOCUS);
             }
         }
         GXSetTevColor(GX_TEVREG1, fadeTecAlpha(wp->softness));
@@ -1210,7 +1210,7 @@ void disp_dummy_black(CameraId camId, void* param) {
     GXSetZMode(GX_FALSE, GX_ALWAYS, GX_FALSE);
     GXSetNumChans(1);
     GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_REG, GX_LIGHT_NULL, GX_DF_NONE, GX_AF_NONE);
-    if (wp->flags & 0x8000) {
+    if (wp->flags & FADE_WORK_LOAD_BLACK) {
         GXSetChanMatColor(GX_COLOR0A0, (GXColor){0x00, 0x00, 0x00, 0xFF});
     } else {
         GXSetChanMatColor(GX_COLOR0A0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});

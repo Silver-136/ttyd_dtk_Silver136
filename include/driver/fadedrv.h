@@ -70,8 +70,18 @@ typedef struct FadeEntry {
     u32 delayFrames; //0xA4, frames to wait before the fade advances
 } FadeEntry;
 
+// FadeWork.flags
+typedef enum FadeWorkFlags {
+    FADE_WORK_TEC_SOFT_IN = (1 << 4),   // 0x10, fadeTecSoftOn: softness rising to 1
+    FADE_WORK_TEC_SOFT_OUT = (1 << 5),  // 0x20, fadeTecSoftOff: softness falling to 0, then the overlay ends
+    FADE_WORK_TEC = (1 << 12),          // 0x1000, fadeTecOn: the disp_tec overlay
+    FADE_WORK_SOFT_FOCUS = (1 << 13),   // 0x2000, fadeSoftFocusOn
+    FADE_WORK_WHITE_OUT = (1 << 14),    // 0x4000, fadeWhiteOutOn
+    FADE_WORK_LOAD_BLACK = (1 << 15),   // 0x8000, black screen while a paper-animation fade still loads
+} FadeWorkFlags;
+
 typedef struct FadeWork {
-    u16 flags; //0x0
+    u16 flags; //0x0, FadeWorkFlags
     u8 pad_2[2]; //0x2
     u32 pad_04; //0x4, never accessed
     FadeEntry entries[5]; //0x8
