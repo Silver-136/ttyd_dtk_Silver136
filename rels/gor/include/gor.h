@@ -65,3 +65,19 @@ void goryuugijo_init_montemedal(struct EventEntry* event, BOOL isFirstCall);
 void goryuugijo_main_montemedal(struct EventEntry* event, BOOL isFirstCall);
 void goryuugijo_init_slot(struct EventEntry* event, BOOL isFirstCall);
 void goryuugijo_main_slot(struct EventEntry* event, BOOL isFirstCall);
+
+// Area-local saved values (GOR; swReInit clears them on every area change), named from the area's
+// scripts
+// set by cooking_evt (gor_01) after Zess T.'s opening line; while set she starts with the short gor_01_cook_004;
+// nancy_init clears it on each load
+#define LSWF_GOR_01_ZESS_T_GREETED LSWF(1)
+// marco_hitorigoto (gor_01, before STG4_32): 1 while Mario is not in talk range of Flavio (chk_marco_fuki), letting
+// his song bubble mac_4_004 show; 0 closes it
+#define LSWF_GOR_01_FLAVIO_SONG_BUBBLE_ON LSWF(2)
+// set during the Don Pianta scenes and talks (maffiaboss_maffiaboss, maffiaboss_airship_ticket,
+// maffiaboss_talk_common) and peton_talk_common after STG5_65; while set the two goons stop turning to Mario and
+// desk_talk_check skips its check
+#define LSWF_GOR_03_TALK_SCENE_ACTIVE LSWF(3)
+// cleared by gor_00_koopa_evt before kpa_stg4_018; the message callback gor_stg4_018_cb sets it on the second page to
+// start the camera shake and other inline events (dossier names the C use gor_muj_ship_pera)
+#define LSWF_GOR_00_KOOPA_MSG_CUE LSWF(6)

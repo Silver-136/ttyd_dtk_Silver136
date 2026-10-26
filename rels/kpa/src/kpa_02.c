@@ -99,7 +99,7 @@ EVT_BEGIN(kpa_02_init_evt)
     CALL_CHILD(PTR(kpa_read_item))
     SPAWN_EVENT(PTR(kpa_fall))
     CALL(kpa_status_init, 1, GSW_KPA_TRY_COUNT, GSW_KPA_TIME_LEFT)
-    SET_VALUE(LSW(1), 0)
+    SET_VALUE(LSW_KPA_FIELD_BGM, 0)
     SPAWN_EVENT(PTR(kpa_stage_start))
     SPAWN_EVENT(PTR(kpa_time))
     RETURN

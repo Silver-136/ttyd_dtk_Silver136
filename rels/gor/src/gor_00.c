@@ -4441,11 +4441,11 @@ EVT_BEGIN(gor_00_koopa_evt)
     CALL(evt_msg_print, 0, STRING("kpa_stg4_016"), 0, STRING("mario"))
     CALL(evt_npc_set_autotalkpose, STRING("ババ"), STRING("K_2"), STRING("T_12"))
     CALL(evt_msg_print, 0, STRING("kpa_stg4_017"), 0, STRING("ババ"))
-    SET_VALUE(LSWF(6), 0)
+    SET_VALUE(LSWF_GOR_00_KOOPA_MSG_CUE, 0)
     SET_VALUE(GF(0), 0)
     BEGIN_INLINE_EVENT
         LOOP(0)
-            IF_INT_NOT_EQUAL(LSWF(6), 0)
+            IF_INT_NOT_EQUAL(LSWF_GOR_00_KOOPA_MSG_CUE, 0)
                 BREAK_LOOP
             END_IF
             WAIT_FRAMES(1)
@@ -4455,7 +4455,7 @@ EVT_BEGIN(gor_00_koopa_evt)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
         LOOP(0)
-            IF_INT_NOT_EQUAL(LSWF(6), 0)
+            IF_INT_NOT_EQUAL(LSWF_GOR_00_KOOPA_MSG_CUE, 0)
                 BREAK_LOOP
             END_IF
             WAIT_FRAMES(1)
@@ -4505,7 +4505,7 @@ EVT_BEGIN(gor_00_koopa_evt)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
         LOOP(0)
-            IF_INT_NOT_EQUAL(LSWF(6), 0)
+            IF_INT_NOT_EQUAL(LSWF_GOR_00_KOOPA_MSG_CUE, 0)
                 BREAK_LOOP
             END_IF
             WAIT_FRAMES(1)
@@ -4756,7 +4756,7 @@ void gor_stg4_018_cb(s32 type, smartEntry* smart) {
     switch (type) {
         case 3:
             if (info->curPage == 1) {
-                evtSetValue(NULL, LSWF(6), 1);
+                evtSetValue(NULL, LSWF_GOR_00_KOOPA_MSG_CUE, 1);
             }
             break;
     }

@@ -24,6 +24,7 @@
 #include "system.h"
 #include "pmario_sound.h"
 #include "driver/itemdrv.h"
+#include "gon.h"
 typedef struct KemuriPos {
     s32 x;
     s32 z;
@@ -210,13 +211,13 @@ static BeroEntry bero_entry_data[] = {
 
 EVT_BEGIN(evt_gon_04flowblock_updown1_init)
     IF_INT_EQUAL(1, 0)
-        IF_INT_NOT_EQUAL(LSWF(6), 0)
+        IF_INT_NOT_EQUAL(LSWF_GON_04_FLOAT_BLOCK_1_MOVED, 0)
             CALL(evt_mobj_get_y_position, STRING("mobj_fltbl01"), LW(5))
             ADD_FLOAT(LW(5), FLOAT(225.0f))
             CALL(evt_mobj_set_y_position, STRING("mobj_fltbl01"), LW(5))
         END_IF
         ELSE
-        IF_INT_EQUAL(LSWF(6), 0)
+        IF_INT_EQUAL(LSWF_GON_04_FLOAT_BLOCK_1_MOVED, 0)
             CALL(evt_mobj_get_y_position, STRING("mobj_fltbl01"), LW(5))
             ADD_FLOAT(LW(5), FLOAT(225.0f))
             CALL(evt_mobj_set_y_position, STRING("mobj_fltbl01"), LW(5))
@@ -231,13 +232,13 @@ EVT_BEGIN(evt_gon_04flowblock_updown1)
     IF_INT_NOT_EQUAL(1, 0)
         SET_VALUE(LW(10), 0)
         IF_INT_EQUAL(1, 0)
-            IF_INT_EQUAL(LSWF(6), 0)
+            IF_INT_EQUAL(LSWF_GON_04_FLOAT_BLOCK_1_MOVED, 0)
                 SET_VALUE(LW(10), 0)
                 ELSE
                 SET_VALUE(LW(10), 1)
             END_IF
             ELSE
-            IF_INT_EQUAL(LSWF(6), 0)
+            IF_INT_EQUAL(LSWF_GON_04_FLOAT_BLOCK_1_MOVED, 0)
                 SET_VALUE(LW(10), 1)
                 ELSE
                 SET_VALUE(LW(10), 0)
@@ -336,10 +337,10 @@ EVT_BEGIN(evt_gon_04flowblock_updown1)
                 SET_FLOAT_VALUE(LW(9), FLOAT(2.0f))
                 SET_FLOAT_VALUE(LW(8), 0)
                 SET_FLOAT_VALUE(LW(10), 0)
-                IF_INT_EQUAL(LSWF(6), 0)
-                    SET_VALUE(LSWF(6), 1)
+                IF_INT_EQUAL(LSWF_GON_04_FLOAT_BLOCK_1_MOVED, 0)
+                    SET_VALUE(LSWF_GON_04_FLOAT_BLOCK_1_MOVED, 1)
                     ELSE
-                    SET_VALUE(LSWF(6), 0)
+                    SET_VALUE(LSWF_GON_04_FLOAT_BLOCK_1_MOVED, 0)
                 END_IF
                 CALL(evt_mobj_exec_cancel, STRING("mobj_fltsw01"))
             END_IF
@@ -414,10 +415,10 @@ EVT_BEGIN(evt_gon_04flowblock_updown1)
 #endif
             WAIT_MS(1000)
         END_IF
-        IF_INT_EQUAL(LSWF(6), 0)
-            SET_VALUE(LSWF(6), 1)
+        IF_INT_EQUAL(LSWF_GON_04_FLOAT_BLOCK_1_MOVED, 0)
+            SET_VALUE(LSWF_GON_04_FLOAT_BLOCK_1_MOVED, 1)
             ELSE
-            SET_VALUE(LSWF(6), 0)
+            SET_VALUE(LSWF_GON_04_FLOAT_BLOCK_1_MOVED, 0)
         END_IF
         ELSE
         CALL(evt_mobj_exec_cancel, STRING("mobj_fltsw01"))
@@ -438,13 +439,13 @@ EVT_END()
 
 EVT_BEGIN(evt_gon_04flowblock_updown2_init)
     IF_INT_EQUAL(0, 0)
-        IF_INT_NOT_EQUAL(LSWF(7), 0)
+        IF_INT_NOT_EQUAL(LSWF_GON_04_FLOAT_BLOCK_2_MOVED, 0)
             CALL(evt_mobj_get_y_position, STRING("mobj_fltbl02"), LW(5))
             ADD_FLOAT(LW(5), FLOAT(200.0f))
             CALL(evt_mobj_set_y_position, STRING("mobj_fltbl02"), LW(5))
         END_IF
         ELSE
-        IF_INT_EQUAL(LSWF(7), 0)
+        IF_INT_EQUAL(LSWF_GON_04_FLOAT_BLOCK_2_MOVED, 0)
             CALL(evt_mobj_get_y_position, STRING("mobj_fltbl02"), LW(5))
             ADD_FLOAT(LW(5), FLOAT(200.0f))
             CALL(evt_mobj_set_y_position, STRING("mobj_fltbl02"), LW(5))
@@ -459,13 +460,13 @@ EVT_BEGIN(evt_gon_04flowblock_updown2)
     IF_INT_NOT_EQUAL(GSWF_GON_04_LV1_BIG_BLOCK_BROKEN, 0)
         SET_VALUE(LW(10), 0)
         IF_INT_EQUAL(0, 0)
-            IF_INT_EQUAL(LSWF(7), 0)
+            IF_INT_EQUAL(LSWF_GON_04_FLOAT_BLOCK_2_MOVED, 0)
                 SET_VALUE(LW(10), 0)
                 ELSE
                 SET_VALUE(LW(10), 1)
             END_IF
             ELSE
-            IF_INT_EQUAL(LSWF(7), 0)
+            IF_INT_EQUAL(LSWF_GON_04_FLOAT_BLOCK_2_MOVED, 0)
                 SET_VALUE(LW(10), 1)
                 ELSE
                 SET_VALUE(LW(10), 0)
@@ -564,10 +565,10 @@ EVT_BEGIN(evt_gon_04flowblock_updown2)
                 SET_FLOAT_VALUE(LW(9), FLOAT(2.0f))
                 SET_FLOAT_VALUE(LW(8), 0)
                 SET_FLOAT_VALUE(LW(10), 0)
-                IF_INT_EQUAL(LSWF(7), 0)
-                    SET_VALUE(LSWF(7), 1)
+                IF_INT_EQUAL(LSWF_GON_04_FLOAT_BLOCK_2_MOVED, 0)
+                    SET_VALUE(LSWF_GON_04_FLOAT_BLOCK_2_MOVED, 1)
                     ELSE
-                    SET_VALUE(LSWF(7), 0)
+                    SET_VALUE(LSWF_GON_04_FLOAT_BLOCK_2_MOVED, 0)
                 END_IF
                 CALL(evt_mobj_exec_cancel, STRING("mobj_fltsw02"))
             END_IF
@@ -642,10 +643,10 @@ EVT_BEGIN(evt_gon_04flowblock_updown2)
 #endif
             WAIT_MS(1000)
         END_IF
-        IF_INT_EQUAL(LSWF(7), 0)
-            SET_VALUE(LSWF(7), 1)
+        IF_INT_EQUAL(LSWF_GON_04_FLOAT_BLOCK_2_MOVED, 0)
+            SET_VALUE(LSWF_GON_04_FLOAT_BLOCK_2_MOVED, 1)
             ELSE
-            SET_VALUE(LSWF(7), 0)
+            SET_VALUE(LSWF_GON_04_FLOAT_BLOCK_2_MOVED, 0)
         END_IF
         ELSE
         CALL(evt_mobj_exec_cancel, STRING("mobj_fltsw02"))
@@ -998,12 +999,12 @@ EVT_BEGIN(gon_04_init_evt)
     CALL(evt_hitobj_onoff, STRING("a_fuyu_box01"), 1, 0)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("fuyu_box02"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_hitobj_onoff, STRING("a_fuyu_box02"), 1, 0)
-    CALL(evt_mobj_float_blk, STRING("mobj_fltbl01"), FLOAT(582.5f), 150, FLOAT(-137.5f), 1, 0, 0, LSWF(6))
-    CALL(evt_mobj_float_blk, STRING("mobj_fltbl02"), 395, 150, -125, 2, 1, 0, LSWF(7))
+    CALL(evt_mobj_float_blk, STRING("mobj_fltbl01"), FLOAT(582.5f), 150, FLOAT(-137.5f), 1, 0, 0, LSWF_GON_04_FLOAT_BLOCK_1_MOVED)
+    CALL(evt_mobj_float_blk, STRING("mobj_fltbl02"), 395, 150, -125, 2, 1, 0, LSWF_GON_04_FLOAT_BLOCK_2_MOVED)
     CALL_CHILD(PTR(evt_gon_04flowblock_updown1_init))
     CALL_CHILD(PTR(evt_gon_04flowblock_updown2_init))
-    CALL(evt_mobj_switch_float_blk, STRING("mobj_fltsw01"), 550, 75, 137, STRING("mobj_fltbl01"), 1, PTR(evt_gon_04flowblock_updown1), LSWF(6))
-    CALL(evt_mobj_switch_float_blk, STRING("mobj_fltsw02"), 450, 75, 60, STRING("mobj_fltbl02"), 2, PTR(evt_gon_04flowblock_updown2), LSWF(7))
+    CALL(evt_mobj_switch_float_blk, STRING("mobj_fltsw01"), 550, 75, 137, STRING("mobj_fltbl01"), 1, PTR(evt_gon_04flowblock_updown1), LSWF_GON_04_FLOAT_BLOCK_1_MOVED)
+    CALL(evt_mobj_switch_float_blk, STRING("mobj_fltsw02"), 450, 75, 60, STRING("mobj_fltbl02"), 2, PTR(evt_gon_04flowblock_updown2), LSWF_GON_04_FLOAT_BLOCK_2_MOVED)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG1_12_01_KEY)
         CALL(evt_item_entry, STRING("key00"), ITEM_CASTLE_KEY_0x0D, -150, 150, -125, ITEM_TYPE_STILL, -1, PTR(key_get))
     END_IF

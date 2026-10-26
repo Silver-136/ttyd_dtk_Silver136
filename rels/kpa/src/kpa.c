@@ -90,10 +90,10 @@ EVT_BEGIN(kpa_init)
         END_IF
     END_IF
     CALL(evt_cam_type_change, 1, 4)
-    SET_VALUE(LSWF(2), 0)
-    SET_VALUE(LSWF(3), 0)
-    SET_VALUE(LSWF(4), 0)
-    SET_VALUE(LSWF(5), 0)
+    SET_VALUE(LSWF_KPA_TIMER_STARTED, 0)
+    SET_VALUE(LSWF_KPA_STAGE_ENDED, 0)
+    SET_VALUE(LSWF_KPA_BOWSER_DEAD, 0)
+    SET_VALUE(LSWF_KPA_GOAL_WALK_STARTED, 0)
     RETURN
 EVT_END()
 
@@ -153,7 +153,7 @@ EVT_BEGIN(kpa_read_mobj)
             CALL(evt_mobj_koopa_fireber_dodai, 1, LW(2), LW(3), LW(4), 0, LW(5), LW(6), 0, 0)
             CASE_EQUAL(15)
             READ_INT3(LW(3), LW(4), LW(5))
-            CALL(evt_mobj_koopa_pole, STRING("pole"), LW(3), LW(4), 0, LW(5), PTR(kpa_stage_clear), LSWF(3))
+            CALL(evt_mobj_koopa_pole, STRING("pole"), LW(3), LW(4), 0, LW(5), PTR(kpa_stage_clear), LSWF_KPA_STAGE_ENDED)
             CASE_EQUAL(16)
             READ_INT3(LW(3), LW(4), LW(5))
             CALL(evt_mobj_jumpstand_red, 0, LW(2), LW(3), LW(4), 0, LW(5), 0)
@@ -253,10 +253,10 @@ USER_FUNC(kpa_add_coin) {
 }
 
 EVT_BEGIN(kpa_dead)
-    IF_INT_EQUAL(LSWF(3), 1)
+    IF_INT_EQUAL(LSWF_KPA_STAGE_ENDED, 1)
         RETURN
     END_IF
-    SET_VALUE(LSWF(3), 1)
+    SET_VALUE(LSWF_KPA_STAGE_ENDED, 1)
     CALL(evt_cam_letter_box_disable, 1)
     CALL(evt_cam_letter_box_onoff, 0, 0)
     CALL(kpa_fire_off)
@@ -267,7 +267,7 @@ EVT_BEGIN(kpa_dead)
     CALL(evt_cam_ctrl_onoff, 4, 0)
     CALL(evt_mario_set_motion, 0)
     CALL(kpa_chg_pose, STRING("KPA2_D_4"))
-    SET_VALUE(LSWF(4), 1)
+    SET_VALUE(LSWF_KPA_BOWSER_DEAD, 1)
     WAIT_MS(500)
     CALL(evt_mario_get_pos, 0, LW(4), LW(5), LW(6))
     SET_FLOAT_VALUE(LW(3), LW(5))
@@ -373,11 +373,11 @@ EVT_BEGIN(kpa_bgm_change)
     LABEL(10)
     IF_INT_GREATER(GSW_KPA_TIME_LEFT, 30)
         SET_VALUE(LW(3), 0)
-        ADD(LW(3), LSW(1))
+        ADD(LW(3), LSW_KPA_FIELD_BGM)
         ELSE
         IF_INT_EQUAL(LW(2), 0)
             SET_VALUE(LW(3), 3)
-            ADD(LW(3), LSW(1))
+            ADD(LW(3), LSW_KPA_FIELD_BGM)
             ELSE
             SET_VALUE(LW(3), 6)
         END_IF
@@ -387,10 +387,10 @@ EVT_BEGIN(kpa_bgm_change)
         SET_VALUE(LW(3), 7)
         SET_VALUE(LW(2), 0)
     END_IF
-    IF_INT_EQUAL(LSWF(4), 1)
+    IF_INT_EQUAL(LSWF_KPA_BOWSER_DEAD, 1)
         SET_VALUE(LW(3), 8)
     END_IF
-    IF_INT_EQUAL(LSWF(5), 1)
+    IF_INT_EQUAL(LSWF_KPA_GOAL_WALK_STARTED, 1)
         SET_VALUE(LW(3), 9)
     END_IF
     IF_INT_NOT_EQUAL(LW(3), LW(4))
@@ -484,7 +484,7 @@ EVT_BEGIN(kpa_stage_start)
     CALL(evt_cam3d_evt_off, 0, EASING_SINE_IN_OUT)
     WAIT_FRAMES(1)
     CALL(evt_fade_in, 1000)
-    SET_VALUE(LSWF(2), 1)
+    SET_VALUE(LSWF_KPA_TIMER_STARTED, 1)
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_cam_letter_box_disable, 0)
     RETURN
@@ -523,7 +523,7 @@ EVT_BEGIN(kpa_time)
     MULTIPLY(LW(3), 1000)
     SET_VALUE(LF(0), 0)
     LOOP(0)
-        IF_INT_NOT_EQUAL(LSWF(2), 0)
+        IF_INT_NOT_EQUAL(LSWF_KPA_TIMER_STARTED, 0)
             BREAK_LOOP
         END_IF
         WAIT_FRAMES(1)
@@ -531,7 +531,7 @@ EVT_BEGIN(kpa_time)
     LOOP(0)
         SPAWN_EVENT_GET_ID(PTR(evt_sub_stopwatch), LW(0))
         LOOP(0)
-            IF_INT_NOT_EQUAL(LSWF(3), 0)
+            IF_INT_NOT_EQUAL(LSWF_KPA_STAGE_ENDED, 0)
                 RETURN
             END_IF
             CALL(evt_sub_get_stopwatch, LW(0), LW(2))

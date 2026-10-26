@@ -53,6 +53,7 @@
 #include "driver/extdrv.h"
 #include "driver/seqdrv.h"
 #include "moamoa.h"
+#include "rsh.h"
 
 static MoamoaWork* wp;
 static f32 randf(f32 min, f32 max);
@@ -1842,8 +1843,8 @@ static EVT_BEGIN(evt_access)
 EVT_END()
 
 static EVT_BEGIN(evt_access2)
-    IF_INT_EQUAL(LSWF(12), 0)
-        SET_VALUE(LSWF(12), 1)
+    IF_INT_EQUAL(LSWF_RSH_05_BIN_POWER_PUNCH, 0)
+        SET_VALUE(LSWF_RSH_05_BIN_POWER_PUNCH, 1)
         CALL(evt_mario_key_onoff, 0)
         CALL(evt_msg_print, 0, STRING("stg6_rsh_277"), 0, 0)
         CALL(evt_item_entry, STRING("a"), ITEM_POWER_PUNCH, 0, -1000, 0, ITEM_TYPE_STILL_NO_TOUCH, -1, 0)

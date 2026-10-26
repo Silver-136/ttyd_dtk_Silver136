@@ -32,6 +32,7 @@
 #include "evt/evt_sub.h"
 #include "mario/mario_cam.h"
 #include "driver/seqdrv.h"
+#include "pik.h"
 
 
 
@@ -285,11 +286,11 @@ static EVT_BEGIN(talk_powan)
         CASE_LESS(STG6_53_THE_REAL_GARNET_STAR)
         CALL(evt_msg_print, 0, STRING("stg6_pik_19"), 0, STRING("me"))
         CASE_LESS_OR_EQUAL(STG6_54_WELCOME_BACK)
-        IF_INT_EQUAL(LSWF(0), 0)
-            SET_VALUE(LSWF(0), 1)
+        IF_INT_EQUAL(LSWF_PIK_02_PENNINGTON_TALK_TOGGLE, 0)
+            SET_VALUE(LSWF_PIK_02_PENNINGTON_TALK_TOGGLE, 1)
             CALL(evt_msg_print, 0, STRING("stg6_pik_22"), 0, STRING("me"))
             ELSE
-            SET_VALUE(LSWF(0), 0)
+            SET_VALUE(LSWF_PIK_02_PENNINGTON_TALK_TOGGLE, 0)
             CALL(evt_msg_print, 0, STRING("stg6_pik_23"), 0, STRING("me"))
         END_IF
         CASE_LESS_OR_EQUAL(STG8_END_AFTER_THE_BATTLE)

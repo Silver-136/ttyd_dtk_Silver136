@@ -567,7 +567,7 @@ EVT_BEGIN(mri_waterfall_effect)
 EVT_END()
 
 EVT_BEGIN(mri_guide_hagure_check)
-    CALL(evt_puni_get_lsw_index, LSW(0), 0, LW(0), LW(1), LW(2), LW(3))
+    CALL(evt_puni_get_lsw_index, LSW_MRI_PUNI_RECORDS, 0, LW(0), LW(1), LW(2), LW(3))
     CALL(evt_puni_get_trap_index, 1, LW(4))
     SET_VALUE(LW(1), 0)
     IF_INT_NOT_EQUAL(LW(4), 0)
@@ -592,7 +592,7 @@ EVT_BEGIN(mri_guide_goryu)
     IF_INT_EQUAL(LW(1), 0)
         RETURN
     END_IF
-    CALL(evt_puni_set_lsw_index, LSW(0), 0, 0, 0, 0, 0)
+    CALL(evt_puni_set_lsw_index, LSW_MRI_PUNI_RECORDS, 0, 0, 0, 0, 0)
     CALL(evt_puni_set_trap_index, 1, 0)
     CALL(evt_puni_init_puni, 1, 30, 0, -1000, 0, 0)
     CALL(evt_puni_flag_onoff, 1, 1, 65536)

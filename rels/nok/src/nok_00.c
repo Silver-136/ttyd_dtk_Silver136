@@ -37,6 +37,7 @@
 #include "mario/mario_pouch.h"
 #include "manager/evtmgr_cmd.h"
 #include "driver/seqdrv.h"
+#include "nok.h"
 
 typedef struct PosterWork {
     u32 flags;
@@ -103,7 +104,7 @@ void nok_stg2_013_cb(s32 type, void** work) {
     switch (type) {
         case 5:
             if (msg[4] > 0x31) {
-                evtSetValue(NULL, LSWF(2), 1);
+                evtSetValue(NULL, LSWF_NOK_00_KOOPA_MSG_CUE, 1);
             }
             break;
     }
@@ -376,7 +377,7 @@ EVT_END()
 static EVT_BEGIN(kizayarou_talk)
     CALL(evt_mario_get_party, LW(0))
     IF_INT_EQUAL(LW(0), 1)
-        IF_INT_EQUAL(LSWF(1), 0)
+        IF_INT_EQUAL(LSWF_NOK_00_KIZAYAROU_TALKED, 0)
             CALL(evt_msg_print, 0, STRING("stg1_nok_10"), 0, 0)
             CALL(evt_party_set_dir_npc, 0, STRING("me"))
             CALL(evt_party_cont_onoff, 0, 0)
@@ -386,7 +387,7 @@ static EVT_BEGIN(kizayarou_talk)
             CALL(evt_party_cont_onoff, 0, 0)
             CALL(evt_msg_print, 0, STRING("stg1_nok_13"), 0, STRING("party"))
             CALL(evt_party_cont_onoff, 0, 1)
-            SET_VALUE(LSWF(1), 1)
+            SET_VALUE(LSWF_NOK_00_KIZAYAROU_TALKED, 1)
             ELSE
             CALL(evt_msg_print, 0, STRING("stg1_nok_14"), 0, 0)
             CALL(evt_party_set_dir_npc, 0, STRING("me"))
@@ -892,14 +893,14 @@ EVT_BEGIN(nok_00_koopa_evt)
     CALL(evt_npc_kamek_move_position, STRING("ババ"), 150, -35, 20, 0, 60, 0)
     SET_VALUE(GF(0), 1)
     WAIT_FRAMES(1)
-    SET_VALUE(LSWF(2), 0)
+    SET_VALUE(LSWF_NOK_00_KOOPA_MSG_CUE, 0)
     BEGIN_INLINE_EVENT
         WAIT_MS(200)
         CALL(evt_mario_set_dir, 270, 300, 0)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
         LOOP(0)
-            IF_INT_NOT_EQUAL(LSWF(2), 0)
+            IF_INT_NOT_EQUAL(LSWF_NOK_00_KOOPA_MSG_CUE, 0)
                 BREAK_LOOP
             END_IF
             WAIT_FRAMES(1)

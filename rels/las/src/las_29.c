@@ -555,7 +555,7 @@ void map_color_tev(MapTevCallbackInfo* info) {
     GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
     GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_C0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO);
     GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_A0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO);
-    if (evtGetValue(NULL, LSWF(10))) {
+    if (evtGetValue(NULL, LSWF_LAS_29_MAP_LIT_WHITE)) {
         GXColor color = {0xFF, 0xFF, 0xFF, 0xFF};
 
         GXSetTevColor(GX_TEVREG0, color);
@@ -1257,7 +1257,7 @@ EVT_BEGIN(last_evt_2)
     WAIT_MS(2000)
     CALL(evt_eff_delete, STRING("uzu"))
     CALL(evt_snd_sfxon, STRING("SFX_STG8_LIGHT1"), 0)
-    SET_VALUE(LSWF(10), 1)
+    SET_VALUE(LSWF_LAS_29_MAP_LIT_WHITE, 1)
     CALL(evt_map_set_blend, 0, 0, 0, 0, 255)
     CALL(evt_map_set_tevcallback, 1, PTR(map_color_tev))
     CALL_CHILD(PTR(flush_on))
@@ -1312,22 +1312,22 @@ EVT_BEGIN(last_evt_3)
     CALL(evt_mapobj_trans, 0, STRING("S_hakahuta"), 60, -40, 0)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_o_hikari"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_cam3d_evt_set, 33, 47, 226, 133, 57, -2, 0, EASING_SINE_IN_OUT)
-    SET_VALUE(LSWF(10), 1)
+    SET_VALUE(LSWF_LAS_29_MAP_LIT_WHITE, 1)
     CALL(evt_map_set_tevcallback, 1, PTR(map_color_tev))
     CALL(evt_map_set_blend, 0, 0, 0, 0, 255)
     CALL_CHILD(PTR(flush_on))
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_kabekesu"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_seq_wait, SEQ_GAME)
     WAIT_MS(1000)
-    SET_VALUE(LSWF(10), 0)
+    SET_VALUE(LSWF_LAS_29_MAP_LIT_WHITE, 0)
 #ifdef VERSION_G8ME01
     WAIT_MS(300)
 #else
     WAIT_MS(100)
     CALL(evt_snd_sfxon, STRING("SFX_STG8_LIGHT1"), 0)
-    SET_VALUE(LSWF(10), 1)
+    SET_VALUE(LSWF_LAS_29_MAP_LIT_WHITE, 1)
     WAIT_MS(100)
-    SET_VALUE(LSWF(10), 0)
+    SET_VALUE(LSWF_LAS_29_MAP_LIT_WHITE, 0)
     WAIT_MS(100)
 #endif
     CALL(evt_snd_sfxon, STRING("SFX_STG8_LIGHT1"), 0)

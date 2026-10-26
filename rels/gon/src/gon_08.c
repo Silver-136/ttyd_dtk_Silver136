@@ -21,6 +21,7 @@
 #include "system.h"
 #include "pmario_sound.h"
 #include "driver/itemdrv.h"
+#include "gon.h"
 
 USER_FUNC(evt_mario_get_name_hitobj_head);
 USER_FUNC(evt_win_item_select);
@@ -146,13 +147,13 @@ static BeroEntry bero_entry_data[] = {
 
 static EVT_BEGIN(init_0)
     IF_INT_EQUAL(0, 0)
-        IF_INT_NOT_EQUAL(LSWF(3), 0)
+        IF_INT_NOT_EQUAL(LSWF_GON_08_FLOAT_BLOCK_MOVED, 0)
             CALL(evt_mobj_get_y_position, STRING("blk_0"), LW(5))
             ADD_FLOAT(LW(5), FLOAT(600.0f))
             CALL(evt_mobj_set_y_position, STRING("blk_0"), LW(5))
         END_IF
         ELSE
-        IF_INT_EQUAL(LSWF(3), 0)
+        IF_INT_EQUAL(LSWF_GON_08_FLOAT_BLOCK_MOVED, 0)
             CALL(evt_mobj_get_y_position, STRING("blk_0"), LW(5))
             ADD_FLOAT(LW(5), FLOAT(600.0f))
             CALL(evt_mobj_set_y_position, STRING("blk_0"), LW(5))
@@ -167,13 +168,13 @@ static EVT_BEGIN(main_0)
     IF_INT_NOT_EQUAL(1, 0)
         SET_VALUE(LW(10), 0)
         IF_INT_EQUAL(0, 0)
-            IF_INT_EQUAL(LSWF(3), 0)
+            IF_INT_EQUAL(LSWF_GON_08_FLOAT_BLOCK_MOVED, 0)
                 SET_VALUE(LW(10), 0)
                 ELSE
                 SET_VALUE(LW(10), 1)
             END_IF
             ELSE
-            IF_INT_EQUAL(LSWF(3), 0)
+            IF_INT_EQUAL(LSWF_GON_08_FLOAT_BLOCK_MOVED, 0)
                 SET_VALUE(LW(10), 1)
                 ELSE
                 SET_VALUE(LW(10), 0)
@@ -272,10 +273,10 @@ static EVT_BEGIN(main_0)
                 SET_FLOAT_VALUE(LW(9), FLOAT(2.0f))
                 SET_FLOAT_VALUE(LW(8), 0)
                 SET_FLOAT_VALUE(LW(10), 0)
-                IF_INT_EQUAL(LSWF(3), 0)
-                    SET_VALUE(LSWF(3), 1)
+                IF_INT_EQUAL(LSWF_GON_08_FLOAT_BLOCK_MOVED, 0)
+                    SET_VALUE(LSWF_GON_08_FLOAT_BLOCK_MOVED, 1)
                     ELSE
-                    SET_VALUE(LSWF(3), 0)
+                    SET_VALUE(LSWF_GON_08_FLOAT_BLOCK_MOVED, 0)
                 END_IF
                 CALL(evt_mobj_exec_cancel, STRING("sw_0"))
             END_IF
@@ -350,10 +351,10 @@ static EVT_BEGIN(main_0)
 #endif
             WAIT_MS(1000)
         END_IF
-        IF_INT_EQUAL(LSWF(3), 0)
-            SET_VALUE(LSWF(3), 1)
+        IF_INT_EQUAL(LSWF_GON_08_FLOAT_BLOCK_MOVED, 0)
+            SET_VALUE(LSWF_GON_08_FLOAT_BLOCK_MOVED, 1)
             ELSE
-            SET_VALUE(LSWF(3), 0)
+            SET_VALUE(LSWF_GON_08_FLOAT_BLOCK_MOVED, 0)
         END_IF
         ELSE
         CALL(evt_mobj_exec_cancel, STRING("sw_0"))
@@ -543,9 +544,9 @@ EVT_BEGIN(gon_08_init_evt)
     CALL(evt_npc_set_height, STRING("\"カロン02\""), 7)
     CALL(evt_npc_change_fbat_mode, 1)
     CALL(evt_item_entry, STRING("item_00"), ITEM_LIFE_SHROOM, -215, 500, 10, ITEM_TYPE_STILL, GSWF_GON_08_LIFE_SHROOM, 0)
-    CALL(evt_mobj_float_blk, STRING("blk_0"), 0, 0, 0, 0, 2, 0, LSWF(3))
+    CALL(evt_mobj_float_blk, STRING("blk_0"), 0, 0, 0, 0, 2, 0, LSWF_GON_08_FLOAT_BLOCK_MOVED)
     CALL_CHILD(PTR(init_0))
-    CALL(evt_mobj_switch_float_blk, STRING("sw_0"), 0, 100, -185, STRING("blk_0"), 0, PTR(main_0), LSWF(3))
+    CALL(evt_mobj_switch_float_blk, STRING("sw_0"), 0, 100, -185, STRING("blk_0"), 0, PTR(main_0), LSWF_GON_08_FLOAT_BLOCK_MOVED)
     CALL(evt_mobj_flag_onoff, 1, STRING("blk_0"), MOBJ_FLAG_NO_CULL)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("fuyu_boxS"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_hitobj_onoff, STRING("a_fuyu_box"), 1, 0)

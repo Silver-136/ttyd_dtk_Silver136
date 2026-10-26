@@ -112,7 +112,7 @@ static EVT_BEGIN(cam_shake)
 EVT_END()
 
 EVT_BEGIN(evt_kaidan_temae)
-    IF_INT_NOT_EQUAL(LSW(1), 1)
+    IF_INT_NOT_EQUAL(LSW_JIN_STAIRCASE_POS, 1)
         CALL(evt_mario_key_onoff, 0)
         CALL(evt_mario_normalize)
         CALL(evt_party_stop, 0)
@@ -155,7 +155,7 @@ EVT_BEGIN(evt_kaidan_temae)
             DELETE_EVENT(LW(4))
             SET_VALUE(GSWF_JIN_STAIRS_SWITCH_FIRST_USE_SEEN, 1)
         END_IF
-        ADD(LSW(1), 1)
+        ADD(LSW_JIN_STAIRCASE_POS, 1)
         CALL(evt_mario_key_onoff, 1)
         CALL(evt_party_run, 0)
     END_IF

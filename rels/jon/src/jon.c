@@ -182,8 +182,8 @@ EVT_BEGIN(jon_init_evt)
             SET_VALUE(GSW_PIT_FLOOR, 99)
         END_IF
     END_IF
-    SET_VALUE(LSW(0), GSW_PIT_FLOOR)
-    SET_VALUE(LW(0), LSW(0))
+    SET_VALUE(LSW_JON_PIT_FLOOR, GSW_PIT_FLOOR)
+    SET_VALUE(LW(0), LSW_JON_PIT_FLOOR)
     ADD(LW(0), 1)
     IF_INT_GREATER(LW(0), GSW_JON_DEEPEST_LEVEL)
         SET_VALUE(GSW_JON_DEEPEST_LEVEL, LW(0))
@@ -1904,7 +1904,7 @@ EVT_BEGIN(setup_return)
         CASE_EQUAL(100)
         CALL(evt_mobj_itembox, STRING("box"), 270, 0, 200, MOBJ_ITEMBOX_BIG, 0, PTR(evt_open_box), GSWF_PIT_100_RETURN_POSTAGE_CHEST)
     END_SWITCH
-    CALL(evt_mobj_signboard, STRING("board"), 150, 0, -75, PTR(evt_kanban2), LSWF(0))
+    CALL(evt_mobj_signboard, STRING("board"), 150, 0, -75, PTR(evt_kanban2), LSWF_JON_SIGNBOARD_UNUSED)
     RETURN
 EVT_END()
 

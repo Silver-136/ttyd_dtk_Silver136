@@ -27,6 +27,7 @@
 #include "evt/evt_case.h"
 #include "evt/evt_sub.h"
 #include "driver/seqdrv.h"
+#include "kpa.h"
 
 USER_FUNC(evt_npc_set_stay_anim);
 USER_FUNC(evt_npc_set_stop_anim);
@@ -355,10 +356,10 @@ EVT_BEGIN(kpa_01_syuppatu_evt)
         CALL(evt_npc_set_autotalkpose, STRING("mario"), STRING("KPA_S_1"), STRING("KPA_T_1"))
         CALL(evt_msg_print, 0, STRING("kpa_stg1_033_1"), 0, STRING("mario"))
     END_SWITCH
-    SET_VALUE(LSWF(1), 0)
+    SET_VALUE(LSWF_KPA_01_MSG_CUE, 0)
     BEGIN_INLINE_EVENT_GET_ID(LW(0))
         LOOP(0)
-            IF_INT_NOT_EQUAL(LSWF(1), 0)
+            IF_INT_NOT_EQUAL(LSWF_KPA_01_MSG_CUE, 0)
                 BREAK_LOOP
             END_IF
             WAIT_FRAMES(1)
@@ -369,7 +370,7 @@ EVT_BEGIN(kpa_01_syuppatu_evt)
     CALL(evt_msg_print, 0, STRING("kpa_stg1_034"), PTR(kpa_stg1_034_cb), STRING("ババ"))
     CALL(evt_npc_set_autotalkpose, STRING("ババ"), STRING("S_1"), STRING("T_1"))
     DELETE_EVENT(LW(0))
-    SET_VALUE(LSWF(1), 0)
+    SET_VALUE(LSWF_KPA_01_MSG_CUE, 0)
     BEGIN_INLINE_EVENT
         CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0048828125f), FLOAT(0.0048828125f), 800)
     END_INLINE_EVENT
@@ -394,10 +395,10 @@ EVT_BEGIN(kpa_01_syuppatu_evt)
     CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_KOOPA_ANGRY2_1"), LW(0), LW(1), LW(2), 0)
     CALL(evt_npc_set_autotalkpose, STRING("mario"), STRING("KPA_S_4"), STRING("KPA_T_3"))
     CALL(evt_msg_print, 0, STRING("kpa_stg1_035"), 0, STRING("mario"))
-    SET_VALUE(LSWF(1), 0)
+    SET_VALUE(LSWF_KPA_01_MSG_CUE, 0)
     BEGIN_INLINE_EVENT
         LOOP(0)
-            IF_INT_NOT_EQUAL(LSWF(1), 0)
+            IF_INT_NOT_EQUAL(LSWF_KPA_01_MSG_CUE, 0)
                 BREAK_LOOP
             END_IF
             WAIT_FRAMES(1)
@@ -810,10 +811,10 @@ EVT_END()
 
 EVT_BEGIN(douzou_3_touch_evt)
     CALL(evt_mario_key_onoff, 0)
-    SET_VALUE(LSWF(1), 0)
+    SET_VALUE(LSWF_KPA_01_MSG_CUE, 0)
     BEGIN_INLINE_EVENT
         LOOP(0)
-            IF_INT_NOT_EQUAL(LSWF(1), 0)
+            IF_INT_NOT_EQUAL(LSWF_KPA_01_MSG_CUE, 0)
                 BREAK_LOOP
             END_IF
             WAIT_FRAMES(1)
@@ -857,10 +858,10 @@ EVT_BEGIN(hammer_AB_talk_evt)
     IF_INT_EQUAL(GSWF_KPA_01_HAMMER_BROS_FIRST_TALK_DONE, 0)
         CALL(evt_msg_print, 0, STRING("kpa_stg1_006"), 0, STRING("ハンマーＡ"))
         CALL(evt_msg_print, 0, STRING("kpa_stg1_007"), 0, STRING("ハンマーＢ"))
-        SET_VALUE(LSWF(1), 0)
+        SET_VALUE(LSWF_KPA_01_MSG_CUE, 0)
         BEGIN_INLINE_EVENT
             LOOP(0)
-                IF_INT_NOT_EQUAL(LSWF(1), 0)
+                IF_INT_NOT_EQUAL(LSWF_KPA_01_MSG_CUE, 0)
                     BREAK_LOOP
                 END_IF
                 WAIT_FRAMES(1)
@@ -1118,7 +1119,7 @@ void kpa_stg1_008_cb(s32 type, smartEntry* smart) {
     switch (type) {
         case 3:
             if (info->curPage == 1) {
-                evtSetValue(NULL, LSWF(1), 1);
+                evtSetValue(NULL, LSWF_KPA_01_MSG_CUE, 1);
             }
             break;
     }
@@ -1130,7 +1131,7 @@ void kpa_stg1_014_2_cb(s32 type, smartEntry* smart) {
     switch (type) {
         case 3:
             if (info->curPage == 2) {
-                evtSetValue(NULL, LSWF(1), 1);
+                evtSetValue(NULL, LSWF_KPA_01_MSG_CUE, 1);
             }
             break;
     }
@@ -1142,7 +1143,7 @@ void kpa_stg1_036_cb(s32 type, smartEntry* smart) {
     switch (type) {
         case 3:
             if (info->curPage == 2) {
-                evtSetValue(NULL, LSWF(1), 1);
+                evtSetValue(NULL, LSWF_KPA_01_MSG_CUE, 1);
             }
             break;
     }
@@ -1154,7 +1155,7 @@ void kpa_stg1_034_cb(s32 type, smartEntry* smart) {
     switch (type) {
         case 5:
             if (info->nextEntry > 117) {
-                evtSetValue(NULL, LSWF(1), 1);
+                evtSetValue(NULL, LSWF_KPA_01_MSG_CUE, 1);
             }
             break;
     }

@@ -73,3 +73,36 @@ extern s32 move_check_list[];
 USER_FUNC(mobj_color_off);
 USER_FUNC(mobj_set_color);
 USER_FUNC(mobj_set_ry);
+
+// Area-local saved values (LAS; swReInit clears them on every area change), named from the area's
+// scripts
+// star S_hosi_02 lit in las_20, toggled by switch hosi_02_sw (hosi_onoff); hosi_sw_check wants it lit; hosi_init
+// clears it
+#define LSWF_LAS_20_STAR_02_LIT LSWF(1)
+// star S_hosi_03 lit, toggled by hosi_03_sw; hosi_sw_check wants it unlit; hosi_init clears it
+#define LSWF_LAS_20_STAR_03_LIT LSWF(2)
+// star S_hosi_04 lit, toggled by hosi_04_sw; hosi_sw_check wants it lit; hosi_init clears it
+#define LSWF_LAS_20_STAR_04_LIT LSWF(3)
+// star S_hosi_05 lit, toggled by hosi_05_sw; hosi_sw_check wants it lit; hosi_init clears it
+#define LSWF_LAS_20_STAR_05_LIT LSWF(4)
+// star S_hosi_06 lit, toggled by hosi_06_sw; hosi_sw_check wants it unlit; hosi_init clears it
+#define LSWF_LAS_20_STAR_06_LIT LSWF(5)
+// star S_hosi_07 lit, toggled by hosi_07_sw; hosi_sw_check wants it lit; hosi_init clears it
+#define LSWF_LAS_20_STAR_07_LIT LSWF(6)
+// star S_hosi_08 lit, toggled by hosi_08_sw; hosi_sw_check wants it unlit; hosi_init clears it
+#define LSWF_LAS_20_STAR_08_LIT LSWF(7)
+// floating block 21blk1 in las_21: 1 = down at -580, 0 = up at -130; set by las_21_init_evt, toggled by
+// floatblk21_1_evt (switch 21switch1)
+#define LSWF_LAS_21_BLK1_LOWERED LSWF(8)
+// floating block 21blk2 in las_21: 1 = down at -580, 0 = up at -130; set by las_21_init_evt, toggled by
+// floatblk21_2_evt (switch 21switch2)
+#define LSWF_LAS_21_BLK2_LOWERED LSWF(9)
+// set and cleared by last_evt_2 and last_evt_3 (las_29) for the light flashes; map_color_tev (C) draws the map white
+// while set, black otherwise (dossier names the C use hikari_on_evt)
+#define LSWF_LAS_29_MAP_LIT_WHITE LSWF(10)
+// times switch1 was pressed in las_13 (switch1_evt, up to 255); switch_check wants 2; las_13_init_evt resets it until
+// GSWF_LAS_13_SWITCH_PUZZLE_SOLVED
+#define LSW_LAS_13_SWITCH_1_COUNT LSW(1)
+// times switch2 was pressed while switch1 has not been pressed (switch2_evt, up to 255); switch_check wants 3;
+// las_13_init_evt resets it
+#define LSW_LAS_13_SWITCH_2_COUNT LSW(2)

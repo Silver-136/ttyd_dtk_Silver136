@@ -70,3 +70,11 @@ USER_FUNC(shikakeFlag);
 USER_FUNC(wait_landon);
 USER_FUNC(wanwan_set_home_pos);
 USER_FUNC(yattukeFlag);
+
+// Area-local saved values (JON; swReInit clears them on every area change), named from the area's
+// scripts
+// passed to evt_mobj_signboard for board (setup_return); mobj_signboard never sets or reads its flag
+#define LSWF_JON_SIGNBOARD_UNUSED LSWF(0)
+// jon_init_evt copies GSW_PIT_FLOOR into it and reads it straight back into LW(0) to update GSW_JON_DEEPEST_LEVEL;
+// nothing else uses it
+#define LSW_JON_PIT_FLOOR LSW(0)

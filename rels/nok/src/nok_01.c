@@ -37,6 +37,7 @@
 #include "data_tables.h"
 #include "mario/mario_pouch.h"
 #include "driver/seqdrv.h"
+#include "nok.h"
 
 static USER_FUNC(anim_tevcallback);
 USER_FUNC(evt_mario_dispflag_onoff);
@@ -1468,34 +1469,34 @@ static EVT_BEGIN(epilogue_evt)
 EVT_END()
 
 static EVT_BEGIN(evt_kusa_4)
-    IF_INT_NOT_EQUAL(LSW(1), 0)
+    IF_INT_NOT_EQUAL(LSW_NOK_01_LEAF_BUSH, 0)
         RETURN
     END_IF
     CALL(evt_item_delete_check, STRING("item_kusa_4"), LW(0))
     IF_INT_EQUAL(LW(0), 1)
-        CALL(evt_item_entry, STRING("item_kusa_4"), ITEM_TURTLEY_LEAF, -407, 70, -160, ITEM_TYPE_SCATTER_NO_PICKUP, LSWF(4), 0)
+        CALL(evt_item_entry, STRING("item_kusa_4"), ITEM_TURTLEY_LEAF, -407, 70, -160, ITEM_TYPE_SCATTER_NO_PICKUP, LSWF_NOK_01_TURTLEY_LEAF, 0)
     END_IF
     RETURN
 EVT_END()
 
 static EVT_BEGIN(evt_kusa_5)
-    IF_INT_NOT_EQUAL(LSW(1), 1)
+    IF_INT_NOT_EQUAL(LSW_NOK_01_LEAF_BUSH, 1)
         RETURN
     END_IF
     CALL(evt_item_delete_check, STRING("item_kusa_5"), LW(0))
     IF_INT_EQUAL(LW(0), 1)
-        CALL(evt_item_entry, STRING("item_kusa_5"), ITEM_TURTLEY_LEAF, -452, 70, -160, ITEM_TYPE_SCATTER_NO_PICKUP, LSWF(4), 0)
+        CALL(evt_item_entry, STRING("item_kusa_5"), ITEM_TURTLEY_LEAF, -452, 70, -160, ITEM_TYPE_SCATTER_NO_PICKUP, LSWF_NOK_01_TURTLEY_LEAF, 0)
     END_IF
     RETURN
 EVT_END()
 
 static EVT_BEGIN(evt_kusa_6)
-    IF_INT_NOT_EQUAL(LSW(1), 2)
+    IF_INT_NOT_EQUAL(LSW_NOK_01_LEAF_BUSH, 2)
         RETURN
     END_IF
     CALL(evt_item_delete_check, STRING("item_kusa_6"), LW(0))
     IF_INT_EQUAL(LW(0), 1)
-        CALL(evt_item_entry, STRING("item_kusa_6"), ITEM_TURTLEY_LEAF, -362, 70, -160, ITEM_TYPE_SCATTER_NO_PICKUP, LSWF(4), 0)
+        CALL(evt_item_entry, STRING("item_kusa_6"), ITEM_TURTLEY_LEAF, -362, 70, -160, ITEM_TYPE_SCATTER_NO_PICKUP, LSWF_NOK_01_TURTLEY_LEAF, 0)
     END_IF
     RETURN
 EVT_END()
@@ -1557,11 +1558,11 @@ EVT_BEGIN(nok_01_init_evt)
     END_IF
     SET_VALUE(LW(0), PTR(kusa_data))
     CALL_CHILD(PTR(evt_sub_kusa_access_entry))
-    SET_VALUE(LSWF(4), 0)
-    CALL(evt_sub_random, 2, LSW(1))
+    SET_VALUE(LSWF_NOK_01_TURTLEY_LEAF, 0)
+    CALL(evt_sub_random, 2, LSW_NOK_01_LEAF_BUSH)
     CALL(evt_sub_get_system_flag, LW(0))
     IF_BITS_SET(LW(0), GW_FLAG_E3)
-        SET_VALUE(LSWF(4), 1)
+        SET_VALUE(LSWF_NOK_01_TURTLEY_LEAF, 1)
     END_IF
     CALL(evt_mobj_kururing_floor, STRING("kururin2"), 400, 0, 140, STRING("S_guround"), 125, GSWF_STARPIECE_35)
     CALL(evt_item_entry, STRING("item_00"), ITEM_MEGA_RUSH_P, -180, 70, -425, ITEM_TYPE_STILL, GSWF_NOK_01_MEGA_RUSH_P, 0)

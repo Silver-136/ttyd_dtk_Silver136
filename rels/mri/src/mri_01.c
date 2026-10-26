@@ -169,7 +169,7 @@ USER_FUNC(elder_talk_sub_punicheck) {
         if (i == 1 && swGet(0xB14)) { // GSWF_MRI_PUNIO_WAITING_AT_JAIL
             continue;
         }
-        puniswGetindex(LSW(0), i - 1, &puni, c);
+        puniswGetindex(LSW_MRI_PUNI_RECORDS, i - 1, &puni, c);
         puniswTrapGetindex(i, &trap);
         if (trap != 0) {
             traps++;
@@ -282,7 +282,7 @@ EVT_BEGIN(puni_return)
     LOOP(0)
         SET_VALUE(LW(11), LW(10))
         ADD(LW(11), -1)
-        CALL(evt_puni_get_lsw_index, LSW(0), LW(11), LW(0), LW(1), LW(2), LW(3))
+        CALL(evt_puni_get_lsw_index, LSW_MRI_PUNI_RECORDS, LW(11), LW(0), LW(1), LW(2), LW(3))
         CALL(evt_puni_get_flag, LW(10), LW(4))
         CALL(evt_puni_get_trap_index, LW(10), LW(5))
         IF_INT_EQUAL(LW(10), 1)
@@ -305,7 +305,7 @@ EVT_BEGIN(puni_return)
         END_IF
         DEBUG_PUT_MSG(STRING("はぐれから合流しました"))
         READ_INT2(LW(12), LW(13))
-        CALL(evt_puni_set_lsw_index, LSW(0), LW(11), 0, 0, 0, 0)
+        CALL(evt_puni_set_lsw_index, LSW_MRI_PUNI_RECORDS, LW(11), 0, 0, 0, 0)
         CALL(evt_puni_init_puni, LW(10), 1, LW(12), 0, LW(13), 0)
         LABEL(100)
         ADD(LW(10), 1)
@@ -2029,7 +2029,7 @@ void mri_stg3_012_cb(s32 type, void* param) {
     switch (type) {
         case 3:
             if (work[4] == 1) {
-                evtSetValue(NULL, LSWF(2), TRUE);
+                evtSetValue(NULL, LSWF_MRI_01_KOOPA_MSG_CUE, TRUE);
             }
             break;
     }
@@ -3247,10 +3247,10 @@ EVT_BEGIN(mri_01_koopa_second_evt)
         WAIT_MS(50)
         CALL(evt_npc_set_anim, STRING("ババ"), STRING("P_1"))
     END_INLINE_EVENT
-    SET_VALUE(LSWF(2), 0)
+    SET_VALUE(LSWF_MRI_01_KOOPA_MSG_CUE, 0)
     BEGIN_INLINE_EVENT
         LOOP(0)
-            IF_INT_NOT_EQUAL(LSWF(2), 0)
+            IF_INT_NOT_EQUAL(LSWF_MRI_01_KOOPA_MSG_CUE, 0)
                 BREAK_LOOP
             END_IF
             WAIT_FRAMES(1)

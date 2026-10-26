@@ -17,6 +17,7 @@
 #include "mario/mario_pouch.h"
 #include "pmario_sound.h"
 #include "driver/itemdrv.h"
+#include "muj.h"
 
 
 EvtWord muj_03_event_01[22];
@@ -192,7 +193,7 @@ EVT_BEGIN(muj_03_init_evt)
     CALL(evt_mobj_badgeblk, STRING("mobj01"), -50, 9, 0, ITEM_COIN, 0, GSWF_MUJ_03_COIN_BLOCK, 0)
     CALL(evt_mobj_brick, STRING("mobj02"), -50, 94, 0, ITEM_NULL, MOBJ_BRICK_HIDDEN_TEN_COIN, 0, GSWF_MUJ_03_HIDDEN_TEN_COIN_BLOCK)
 #ifdef VERSION_G8ME01
-    CALL(evt_mobj_brick, STRING("bblk00"), -470, 155, -50, ITEM_NULL, MOBJ_BRICK_PLAIN, 0, LSWF(3))
+    CALL(evt_mobj_brick, STRING("bblk00"), -470, 155, -50, ITEM_NULL, MOBJ_BRICK_PLAIN, 0, LSWF_MUJ_03_BRICK_BBLK00)
 #else
     CALL(evt_mobj_brick, STRING("bblk00"), -470, 155, -50, ITEM_NULL, MOBJ_BRICK_PLAIN, 0, GSWF_MUJ_03_BRICK)
 #endif

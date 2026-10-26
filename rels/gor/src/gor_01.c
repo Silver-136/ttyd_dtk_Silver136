@@ -879,7 +879,7 @@ EVT_BEGIN(nancy_init_check)
 EVT_END()
 
 EVT_BEGIN(nancy_init)
-    SET_VALUE(LSWF(1), 0)
+    SET_VALUE(LSWF_GOR_01_ZESS_T_GREETED, 0)
     IF_INT_EQUAL(GSWF_GOR_ZESS_T_GOT_CONTACT_LENS, 0)
         IF_INT_EQUAL(GSWF_GOR_ZESS_T_BLOCKING_WEST_GATE, 0)
             CALL(evt_npc_set_ry, STRING("me"), 270)
@@ -3075,26 +3075,26 @@ EVT_BEGIN(marco_hitorigoto)
         RETURN
     END_IF
     CALL(evt_mario_wait_movable)
-    SET_VALUE(LSWF(2), 0)
+    SET_VALUE(LSWF_GOR_01_FLAVIO_SONG_BUBBLE_ON, 0)
     BEGIN_SIBLING_EVENT
         LOOP(0)
             CALL(chk_marco_fuki, LW(0))
             IF_INT_EQUAL(LW(0), 1)
-                IF_INT_EQUAL(LSWF(2), 1)
+                IF_INT_EQUAL(LSWF_GOR_01_FLAVIO_SONG_BUBBLE_ON, 1)
                     CALL(evt_msg_close, STRING("mac_4_004"))
                 END_IF
-                SET_VALUE(LSWF(2), 0)
+                SET_VALUE(LSWF_GOR_01_FLAVIO_SONG_BUBBLE_ON, 0)
                 ELSE
-                SET_VALUE(LSWF(2), 1)
+                SET_VALUE(LSWF_GOR_01_FLAVIO_SONG_BUBBLE_ON, 1)
             END_IF
             WAIT_FRAMES(1)
         END_LOOP
     END_SIBLING_EVENT
     LOOP(0)
         LOOP(0)
-            IF_INT_EQUAL(LSWF(2), 1)
+            IF_INT_EQUAL(LSWF_GOR_01_FLAVIO_SONG_BUBBLE_ON, 1)
                 WAIT_FRAMES(1)
-                IF_INT_EQUAL(LSWF(2), 1)
+                IF_INT_EQUAL(LSWF_GOR_01_FLAVIO_SONG_BUBBLE_ON, 1)
                     BREAK_LOOP
                 END_IF
             END_IF
@@ -6467,7 +6467,7 @@ EVT_BEGIN(cooking_evt)
         CALL(evt_msg_print_add, 0, STRING("gor_01_cook_001"))
         SET_VALUE(GSWF_GOR_ZESS_T_COOKING_INTRO_DONE, 1)
         ELSE
-        IF_INT_EQUAL(LSWF(1), 0)
+        IF_INT_EQUAL(LSWF_GOR_01_ZESS_T_GREETED, 0)
             SET_VALUE(LF(0), 0)
             IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG4_15_05_PEACH_X_NAUT_PHD_REPORT)
                 IF_INT_NOT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_SEEKING_LEGENDARY_BOOK)
@@ -6493,7 +6493,7 @@ EVT_BEGIN(cooking_evt)
             END_IF
         END_IF
     END_IF
-    SET_VALUE(LSWF(1), 1)
+    SET_VALUE(LSWF_GOR_01_ZESS_T_GREETED, 1)
     CALL(evt_msg_select, 0, STRING("gor_01_select"))
     IF_INT_EQUAL(LW(0), 1)
         GOTO(0)

@@ -992,7 +992,7 @@ EVT_BEGIN(maffiaboss_maffiaboss)
     END_LOOP
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)
-    SET_VALUE(LSWF(3), 1)
+    SET_VALUE(LSWF_GOR_03_TALK_SCENE_ACTIVE, 1)
     CALL(evt_npc_flag_onoff, 1, STRING("マフィア１"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_npc_flag_onoff, 1, STRING("マフィア２"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
     SET_VALUE(GF(0), 1)
@@ -1090,7 +1090,7 @@ EVT_BEGIN(maffiaboss_maffiaboss)
     CALL(evt_npc_flag_onoff, 0, STRING("マフィア１"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_npc_flag_onoff, 0, STRING("マフィア２"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
     SET_VALUE(GSW_STORY_PROGRESS, STG2_44_FINDING_DON_PIANTA)
-    SET_VALUE(LSWF(3), 0)
+    SET_VALUE(LSWF_GOR_03_TALK_SCENE_ACTIVE, 0)
     CALL(evt_party_run, 0)
     CALL(evt_mario_key_onoff, 1)
     RETURN
@@ -1114,7 +1114,7 @@ EVT_BEGIN(maffiaboss_airship_ticket)
     END_LOOP
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)
-    SET_VALUE(LSWF(3), 1)
+    SET_VALUE(LSWF_GOR_03_TALK_SCENE_ACTIVE, 1)
     CALL(evt_npc_flag_onoff, 1, STRING("マフィアボス"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_npc_flag_onoff, 1, STRING("モニー"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_npc_flag_onoff, 1, STRING("ピートン"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
@@ -1258,7 +1258,7 @@ EVT_BEGIN(maffiaboss_airship_ticket)
     SET_VALUE(GSWF_GOR_DON_PIANTA_TICKET_SCENE_DONE, 1)
     SET_VALUE(GF(15), 0)
     SPAWN_EVENT(PTR(maffiaboss_ticket_check))
-    SET_VALUE(LSWF(3), 0)
+    SET_VALUE(LSWF_GOR_03_TALK_SCENE_ACTIVE, 0)
     CALL(evt_mario_key_onoff, 1)
     RETURN
 EVT_END()
@@ -1542,7 +1542,7 @@ EVT_BEGIN(maffiaboss_train_ticket)
 EVT_END()
 
 EVT_BEGIN(maffiaboss_talk_common)
-    SET_VALUE(LSWF(3), 1)
+    SET_VALUE(LSWF_GOR_03_TALK_SCENE_ACTIVE, 1)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS_OR_EQUAL(STG2_40_THOUSAND_YEAR_DOOR)
         CALL(evt_msg_print, 0, STRING("mac_2_044_01"), 0, STRING("マフィアボス"))
@@ -1572,7 +1572,7 @@ EVT_BEGIN(maffiaboss_talk_common)
         CASE_LESS(STG5_00_LOGBOOK)
         CALL(evt_msg_print, 0, STRING("gor_03_01_03"), 0, STRING("マフィアボス"))
     END_SWITCH
-    SET_VALUE(LSWF(3), 0)
+    SET_VALUE(LSWF_GOR_03_TALK_SCENE_ACTIVE, 0)
     RETURN
 EVT_END()
 
@@ -1662,7 +1662,7 @@ EVT_BEGIN(maffia1_init)
     CALL(evt_npc_set_position, STRING("me"), -135, 155, -260)
     BEGIN_INLINE_EVENT
         LOOP(0)
-            IF_INT_EQUAL(LSWF(3), 0)
+            IF_INT_EQUAL(LSWF_GOR_03_TALK_SCENE_ACTIVE, 0)
                 CALL(evt_set_dir_to_target, STRING("me"), STRING("mario"))
             END_IF
             WAIT_FRAMES(1)
@@ -1719,7 +1719,7 @@ EVT_BEGIN(maffia2_init)
     CALL(evt_npc_set_position, STRING("me"), -135, 155, -210)
     BEGIN_INLINE_EVENT
         LOOP(0)
-            IF_INT_EQUAL(LSWF(3), 0)
+            IF_INT_EQUAL(LSWF_GOR_03_TALK_SCENE_ACTIVE, 0)
                 CALL(evt_set_dir_to_target, STRING("me"), STRING("mario"))
             END_IF
             WAIT_FRAMES(1)
@@ -1860,7 +1860,7 @@ s32 iri_19_item_tbl[] = {
 
 EVT_BEGIN(peton_talk_common)
     IF_INT_GREATER(GSW_STORY_PROGRESS, STG5_65_TRAIN_TICKET)
-        SET_VALUE(LSWF(3), 1)
+        SET_VALUE(LSWF_GOR_03_TALK_SCENE_ACTIVE, 1)
     END_IF
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_IMPORTANT_THING)
         IF_INT_EQUAL(GSWF_TROUBLE_WORK(0), 0)
@@ -1921,7 +1921,7 @@ EVT_BEGIN(peton_talk_common)
         CALL(evt_msg_print, 0, STRING("gor_03_05_04"), 0, STRING("ピートン"))
     END_SWITCH
     IF_INT_GREATER(GSW_STORY_PROGRESS, STG5_65_TRAIN_TICKET)
-        SET_VALUE(LSWF(3), 0)
+        SET_VALUE(LSWF_GOR_03_TALK_SCENE_ACTIVE, 0)
     END_IF
     RETURN
 EVT_END()
@@ -3841,7 +3841,7 @@ EVT_BEGIN(desk_talk_check)
         END_SWITCH
         SET_VALUE(LW(0), 0)
         IF_INT_EQUAL(LF(10), 1)
-            IF_INT_EQUAL(LSWF(3), 0)
+            IF_INT_EQUAL(LSWF_GOR_03_TALK_SCENE_ACTIVE, 0)
                 CALL(get_mario_dispReqDir, LW(9))
                 CALL(evt_mario_party_use_check, LW(13))
                 CALL(evt_mario_get_name_hitobj_front, LW(14))

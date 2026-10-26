@@ -47,3 +47,8 @@ extern BattleUnitKind unit_togenoko;
 
 extern EvtWord evt_uranai_cap[];
 USER_FUNC(evt_tik_villager_urouro_check_func);
+
+// Area-local saved values (TIK; swReInit clears them on every area change), named from the area's
+// scripts
+// passed to evt_mobj_signboard for board and board2 (tik_06_init_evt); mobj_signboard never sets or reads its flag
+#define LSWF_TIK_06_SIGNBOARD_UNUSED LSWF(0)

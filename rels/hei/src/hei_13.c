@@ -15,6 +15,7 @@
 #include "driver/casedrv.h"
 #include "pmario_sound.h"
 #include "driver/itemdrv.h"
+#include "hei.h"
 
 
 static BeroEntry bero_entry_data[5];
@@ -126,9 +127,9 @@ EVT_BEGIN(hei_13_init_evt)
     SET_VALUE(GSW_HEI_13_HAMMER_HIT_COUNT, 0)
     CALL(evt_npc_change_fbat_mode, 1)
     CALL(evt_mobj_badgeblk, STRING("m"), -320, 60, -100, ITEM_CLOSE_CALL, 0, GSWF_HEI_13_CLOSE_CALL_BADGE_BLOCK, 1)
-    SET_VALUE(LSWF(3), 0)
-    CALL(evt_mobj_brick, STRING("mm"), 325, 175, -100, ITEM_NULL, MOBJ_BRICK_PLAIN, 0, LSWF(3))
-    IF_INT_EQUAL(LSWF(3), 0)
+    SET_VALUE(LSWF_HEI_13_BRICK_MM, 0)
+    CALL(evt_mobj_brick, STRING("mm"), 325, 175, -100, ITEM_NULL, MOBJ_BRICK_PLAIN, 0, LSWF_HEI_13_BRICK_MM)
+    IF_INT_EQUAL(LSWF_HEI_13_BRICK_MM, 0)
         CALL(evt_mobj_flag_onoff, 1, STRING("mm"), MOBJ_FLAG_NO_SHADOW)
     END_IF
     CALL(evt_sub_get_system_flag, LW(0))

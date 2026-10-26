@@ -48,3 +48,13 @@ void zakogun_ext_main3(void);
 void zakogun_ext_main2(void);
 void zakogun_ext_init123_common(ExtdrvPose* pose, s32 i);
 void zakogun_set_pose(struct ZakoGun* zako, s32 base, s32 num, s32 div);
+
+// Area-local saved values (MUJ; swReInit clears them on every area change), named from the area's
+// scripts
+// koburon_regp (muj_00): 1 while Whacka has popped up because Mario is within 100 units, 0 while it is hidden;
+// koburon_init clears it
+#define LSWF_MUJ_00_WHACKA_OUT LSWF(1)
+// set by koburon_dead each time Whacka is hit (with GSW_MUJ_WHACKA_HIT_COUNT); no code reads it
+#define LSWF_MUJ_00_WHACKA_HIT_UNUSED LSWF(2)
+// US only: plain brick bblk00 in muj_03 (evt_mobj_brick MOBJ_BRICK_PLAIN), set when broken; JP uses GSWF_MUJ_03_BRICK
+#define LSWF_MUJ_03_BRICK_BBLK00 LSWF(3)

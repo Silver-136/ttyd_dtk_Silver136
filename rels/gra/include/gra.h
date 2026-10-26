@@ -23,3 +23,15 @@ extern BattleUnitKind unit_hyper_togekuri;
 extern BattleUnitKind unit_pansy;
 extern BattleUnitKind unit_twinkling_pansy;
 USER_FUNC(evt_gra_vivian_pose_set);
+
+// Area-local saved values (GRA; swReInit clears them on every area change), named from the area's
+// scripts
+// plain brick blk01 in gra_00 (evt_mobj_brick MOBJ_BRICK_PLAIN); mobj_brickblk sets it when broken, evt_mobj_brick
+// leaves the brick out while set
+#define LSWF_GRA_00_BRICK_BLK01 LSWF(1)
+// plain brick blk02 in gra_01 (evt_mobj_brick MOBJ_BRICK_PLAIN), set when broken
+#define LSWF_GRA_01_BRICK_BLK02 LSWF(2)
+// plain brick blk03 in gra_01 (evt_mobj_brick MOBJ_BRICK_PLAIN), set when broken
+#define LSWF_GRA_01_BRICK_BLK03 LSWF(3)
+// plain brick blk04 in gra_01 (evt_mobj_brick MOBJ_BRICK_PLAIN), set when broken
+#define LSWF_GRA_01_BRICK_BLK04 LSWF(4)

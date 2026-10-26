@@ -17,6 +17,7 @@
 #include "system.h"
 #include "pmario_sound.h"
 #include "driver/itemdrv.h"
+#include "gon.h"
 
 USER_FUNC(evt_mario_get_name_hitobj_head);
 USER_FUNC(evt_win_item_select);
@@ -229,13 +230,13 @@ static BeroEntry bero_entry_data[] = {
 
 static EVT_BEGIN(init_0)
     IF_INT_EQUAL(1, 0)
-        IF_INT_NOT_EQUAL(LSWF(4), 0)
+        IF_INT_NOT_EQUAL(LSWF_GON_05_FLOAT_BLOCK_0_MOVED, 0)
             CALL(evt_mobj_get_y_position, STRING("blk_0"), LW(5))
             ADD_FLOAT(LW(5), FLOAT(525.0f))
             CALL(evt_mobj_set_y_position, STRING("blk_0"), LW(5))
         END_IF
         ELSE
-        IF_INT_EQUAL(LSWF(4), 0)
+        IF_INT_EQUAL(LSWF_GON_05_FLOAT_BLOCK_0_MOVED, 0)
             CALL(evt_mobj_get_y_position, STRING("blk_0"), LW(5))
             ADD_FLOAT(LW(5), FLOAT(525.0f))
             CALL(evt_mobj_set_y_position, STRING("blk_0"), LW(5))
@@ -250,13 +251,13 @@ static EVT_BEGIN(main_0)
     IF_INT_NOT_EQUAL(1, 0)
         SET_VALUE(LW(10), 0)
         IF_INT_EQUAL(1, 0)
-            IF_INT_EQUAL(LSWF(4), 0)
+            IF_INT_EQUAL(LSWF_GON_05_FLOAT_BLOCK_0_MOVED, 0)
                 SET_VALUE(LW(10), 0)
                 ELSE
                 SET_VALUE(LW(10), 1)
             END_IF
             ELSE
-            IF_INT_EQUAL(LSWF(4), 0)
+            IF_INT_EQUAL(LSWF_GON_05_FLOAT_BLOCK_0_MOVED, 0)
                 SET_VALUE(LW(10), 1)
                 ELSE
                 SET_VALUE(LW(10), 0)
@@ -355,10 +356,10 @@ static EVT_BEGIN(main_0)
                 SET_FLOAT_VALUE(LW(9), FLOAT(2.0f))
                 SET_FLOAT_VALUE(LW(8), 0)
                 SET_FLOAT_VALUE(LW(10), 0)
-                IF_INT_EQUAL(LSWF(4), 0)
-                    SET_VALUE(LSWF(4), 1)
+                IF_INT_EQUAL(LSWF_GON_05_FLOAT_BLOCK_0_MOVED, 0)
+                    SET_VALUE(LSWF_GON_05_FLOAT_BLOCK_0_MOVED, 1)
                     ELSE
-                    SET_VALUE(LSWF(4), 0)
+                    SET_VALUE(LSWF_GON_05_FLOAT_BLOCK_0_MOVED, 0)
                 END_IF
                 CALL(evt_mobj_exec_cancel, STRING("sw_0"))
             END_IF
@@ -433,10 +434,10 @@ static EVT_BEGIN(main_0)
 #endif
             WAIT_MS(1000)
         END_IF
-        IF_INT_EQUAL(LSWF(4), 0)
-            SET_VALUE(LSWF(4), 1)
+        IF_INT_EQUAL(LSWF_GON_05_FLOAT_BLOCK_0_MOVED, 0)
+            SET_VALUE(LSWF_GON_05_FLOAT_BLOCK_0_MOVED, 1)
             ELSE
-            SET_VALUE(LSWF(4), 0)
+            SET_VALUE(LSWF_GON_05_FLOAT_BLOCK_0_MOVED, 0)
         END_IF
         ELSE
         CALL(evt_mobj_exec_cancel, STRING("sw_0"))
@@ -457,13 +458,13 @@ EVT_END()
 
 EVT_BEGIN(init_1)
     IF_INT_EQUAL(0, 0)
-        IF_INT_NOT_EQUAL(LSWF(5), 0)
+        IF_INT_NOT_EQUAL(LSWF_GON_05_FLOAT_BLOCK_1_MOVED, 0)
             CALL(evt_mobj_get_y_position, STRING("blk_1"), LW(5))
             ADD_FLOAT(LW(5), FLOAT(489.0f))
             CALL(evt_mobj_set_y_position, STRING("blk_1"), LW(5))
         END_IF
         ELSE
-        IF_INT_EQUAL(LSWF(5), 0)
+        IF_INT_EQUAL(LSWF_GON_05_FLOAT_BLOCK_1_MOVED, 0)
             CALL(evt_mobj_get_y_position, STRING("blk_1"), LW(5))
             ADD_FLOAT(LW(5), FLOAT(489.0f))
             CALL(evt_mobj_set_y_position, STRING("blk_1"), LW(5))
@@ -478,13 +479,13 @@ EVT_BEGIN(main_1)
     IF_INT_NOT_EQUAL(1, 0)
         SET_VALUE(LW(10), 0)
         IF_INT_EQUAL(0, 0)
-            IF_INT_EQUAL(LSWF(5), 0)
+            IF_INT_EQUAL(LSWF_GON_05_FLOAT_BLOCK_1_MOVED, 0)
                 SET_VALUE(LW(10), 0)
                 ELSE
                 SET_VALUE(LW(10), 1)
             END_IF
             ELSE
-            IF_INT_EQUAL(LSWF(5), 0)
+            IF_INT_EQUAL(LSWF_GON_05_FLOAT_BLOCK_1_MOVED, 0)
                 SET_VALUE(LW(10), 1)
                 ELSE
                 SET_VALUE(LW(10), 0)
@@ -583,10 +584,10 @@ EVT_BEGIN(main_1)
                 SET_FLOAT_VALUE(LW(9), FLOAT(2.0f))
                 SET_FLOAT_VALUE(LW(8), 0)
                 SET_FLOAT_VALUE(LW(10), 0)
-                IF_INT_EQUAL(LSWF(5), 0)
-                    SET_VALUE(LSWF(5), 1)
+                IF_INT_EQUAL(LSWF_GON_05_FLOAT_BLOCK_1_MOVED, 0)
+                    SET_VALUE(LSWF_GON_05_FLOAT_BLOCK_1_MOVED, 1)
                     ELSE
-                    SET_VALUE(LSWF(5), 0)
+                    SET_VALUE(LSWF_GON_05_FLOAT_BLOCK_1_MOVED, 0)
                 END_IF
                 CALL(evt_mobj_exec_cancel, STRING("sw_1"))
             END_IF
@@ -661,10 +662,10 @@ EVT_BEGIN(main_1)
 #endif
             WAIT_MS(1000)
         END_IF
-        IF_INT_EQUAL(LSWF(5), 0)
-            SET_VALUE(LSWF(5), 1)
+        IF_INT_EQUAL(LSWF_GON_05_FLOAT_BLOCK_1_MOVED, 0)
+            SET_VALUE(LSWF_GON_05_FLOAT_BLOCK_1_MOVED, 1)
             ELSE
-            SET_VALUE(LSWF(5), 0)
+            SET_VALUE(LSWF_GON_05_FLOAT_BLOCK_1_MOVED, 0)
         END_IF
         ELSE
         CALL(evt_mobj_exec_cancel, STRING("sw_1"))
@@ -775,13 +776,13 @@ EVT_BEGIN(gon_05_init_evt)
     CALL(evt_npc_flag_onoff, 1, STRING("\"カロン03\""), NPC_FLAG_NO_VIEW_CORRECTION)
     CALL(evt_npc_set_width, STRING("\"カロン03\""), 30)
     CALL(evt_npc_set_height, STRING("\"カロン03\""), 7)
-    CALL(evt_mobj_float_blk, STRING("blk_0"), 120, 815, 150, 2, 2, 0, LSWF(4))
+    CALL(evt_mobj_float_blk, STRING("blk_0"), 120, 815, 150, 2, 2, 0, LSWF_GON_05_FLOAT_BLOCK_0_MOVED)
     CALL_CHILD(PTR(init_0))
-    CALL(evt_mobj_switch_float_blk, STRING("sw_0"), 20, 1399, 150, STRING("blk_0"), 2, PTR(main_0), LSWF(4))
+    CALL(evt_mobj_switch_float_blk, STRING("sw_0"), 20, 1399, 150, STRING("blk_0"), 2, PTR(main_0), LSWF_GON_05_FLOAT_BLOCK_0_MOVED)
     CALL(evt_mobj_flag_onoff, 1, STRING("blk_0"), MOBJ_FLAG_NO_CULL)
-    CALL(evt_mobj_float_blk, STRING("blk_1"), 200, 0, -150, 0, 2, 0, LSWF(5))
+    CALL(evt_mobj_float_blk, STRING("blk_1"), 200, 0, -150, 0, 2, 0, LSWF_GON_05_FLOAT_BLOCK_1_MOVED)
     CALL_CHILD(PTR(init_1))
-    CALL(evt_mobj_switch_float_blk, STRING("sw_1"), FLOAT(-2.5f), 100, -175, STRING("blk_1"), 0, PTR(main_1), LSWF(5))
+    CALL(evt_mobj_switch_float_blk, STRING("sw_1"), FLOAT(-2.5f), 100, -175, STRING("blk_1"), 0, PTR(main_1), LSWF_GON_05_FLOAT_BLOCK_1_MOVED)
     CALL(evt_mobj_flag_onoff, 1, STRING("blk_1"), MOBJ_FLAG_NO_CULL)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG1_15_03_KEY_4)
         CALL(evt_item_entry, STRING("key00"), ITEM_CASTLE_KEY_0x0E, 200, 1340, 150, ITEM_TYPE_STILL, -1, PTR(key_get))

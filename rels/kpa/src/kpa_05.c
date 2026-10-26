@@ -127,7 +127,7 @@ EVT_BEGIN(kpa_05_init_evt)
     CALL(evt_map_playanim, STRING("anm_magu"), MAP_ANIM_PLAY_LOOP, 0)
     SPAWN_EVENT(PTR(kpa_fall))
     CALL(kpa_status_init, 3, GSW_KPA_TRY_COUNT, GSW_KPA_TIME_LEFT)
-    SET_VALUE(LSW(1), 2)
+    SET_VALUE(LSW_KPA_FIELD_BGM, 2)
     SPAWN_EVENT(PTR(kpa_stage_start))
     SPAWN_EVENT_GET_ID(PTR(kpa_time), GW(15))
     RETURN

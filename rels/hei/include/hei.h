@@ -30,3 +30,9 @@ extern BattleUnitKind unit_patakuri;
 extern BattleUnitKind unit_sinnosuke;
 extern BattleUnitKind unit_togedaruma;
 extern BattleUnitKind unit_togekuri;
+
+// Area-local saved values (HEI; swReInit clears them on every area change), named from the area's
+// scripts
+// plain brick mm in hei_13 (evt_mobj_brick MOBJ_BRICK_PLAIN), set when broken; hei_13_init_evt clears it on every
+// load (the brick returns each visit) and turns its shadow off
+#define LSWF_HEI_13_BRICK_MM LSWF(3)

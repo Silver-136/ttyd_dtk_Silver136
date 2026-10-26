@@ -78,10 +78,10 @@ EVT_END()
 
 EVT_BEGIN(switch_check)
     SET_VALUE(LW(0), 0)
-    IF_INT_EQUAL(LSW(1), 2)
+    IF_INT_EQUAL(LSW_LAS_13_SWITCH_1_COUNT, 2)
         ADD(LW(0), 1)
     END_IF
-    IF_INT_EQUAL(LSW(2), 3)
+    IF_INT_EQUAL(LSW_LAS_13_SWITCH_2_COUNT, 3)
         ADD(LW(0), 1)
     END_IF
     IF_INT_EQUAL(LW(0), 2)
@@ -113,17 +113,17 @@ EVT_BEGIN(switch_check)
 EVT_END()
 
 static EVT_BEGIN(switch1_evt)
-    IF_INT_LESS(LSW(1), 255)
-        ADD(LSW(1), 1)
+    IF_INT_LESS(LSW_LAS_13_SWITCH_1_COUNT, 255)
+        ADD(LSW_LAS_13_SWITCH_1_COUNT, 1)
     END_IF
     CALL_CHILD(PTR(switch_check))
     RETURN
 EVT_END()
 
 static EVT_BEGIN(switch2_evt)
-    IF_INT_EQUAL(LSW(1), 0)
-        IF_INT_LESS(LSW(2), 255)
-            ADD(LSW(2), 1)
+    IF_INT_EQUAL(LSW_LAS_13_SWITCH_1_COUNT, 0)
+        IF_INT_LESS(LSW_LAS_13_SWITCH_2_COUNT, 255)
+            ADD(LSW_LAS_13_SWITCH_2_COUNT, 1)
         END_IF
     END_IF
     CALL_CHILD(PTR(switch_check))
@@ -145,8 +145,8 @@ EVT_BEGIN(las_13_init_evt)
     CALL(evt_bero_get_info)
     CALL_CHILD(PTR(evt_bero_info_run))
     IF_INT_EQUAL(GSWF_LAS_13_SWITCH_PUZZLE_SOLVED, 0)
-        SET_VALUE(LSW(1), 0)
-        SET_VALUE(LSW(2), 0)
+        SET_VALUE(LSW_LAS_13_SWITCH_1_COUNT, 0)
+        SET_VALUE(LSW_LAS_13_SWITCH_2_COUNT, 0)
         CALL(evt_mobj_floatswitch_red, 0, STRING("switch1"), 150, 60, 0, PTR(switch1_evt), GSWF_LAS_13_SWITCH_PUZZLE_SOLVED)
         CALL(evt_mobj_floatswitch_red, 0, STRING("switch2"), -150, 60, 0, PTR(switch2_evt), GSWF_LAS_13_SWITCH_PUZZLE_SOLVED)
     END_IF

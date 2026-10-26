@@ -20,6 +20,7 @@
 #include "dolphin/os.h"
 #include "mario/mario.h"
 #include "evt/evt_bero.h"
+#include "eki.h"
 
 static smartEntry* ind_lp;
 void envGlareFilter(s32 on, s16 x0, s16 y0, s16 x1, s16 y1);
@@ -280,9 +281,9 @@ EVT_BEGIN(eki_03_init_evt)
     CALL(evt_item_entry, STRING("item"), ITEM_HP_PLUS, -550, 220, -50, ITEM_TYPE_STILL, GSWF_EKI_03_HP_PLUS, 0)
     CALL(evt_mobj_powerupblk, STRING("pblk01"), 450, 100, 10, 0, GSWF_SHINE_36, 0)
 #ifdef VERSION_G8ME01
-    CALL(evt_mobj_blk, STRING("blk01"), 250, 300, -100, 0, 0, LSWF(1))
+    CALL(evt_mobj_blk, STRING("blk01"), 250, 300, -100, 0, 0, LSWF_EKI_03_BRICK_BLK01)
 #else
-    CALL(evt_mobj_brick, STRING("blk01"), 250, 300, -100, ITEM_NULL, MOBJ_BRICK_PLAIN, 0, LSWF(1))
+    CALL(evt_mobj_brick, STRING("blk01"), 250, 300, -100, ITEM_NULL, MOBJ_BRICK_PLAIN, 0, LSWF_EKI_03_BRICK_BLK01)
 #endif
     CALL(evt_mobj_brick, STRING("blk02"), 250, 385, -100, ITEM_THUNDER_RAGE, MOBJ_BRICK_HIDDEN_ITEM, 0, GSWF_EKI_03_THUNDER_RAGE_HIDDEN_BLOCK)
     CALL(evt_map_set_tevcallback, 2, PTR(sun_tev))

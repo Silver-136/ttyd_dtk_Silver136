@@ -209,11 +209,11 @@ EVT_BEGIN(jin_03_init_evt)
     CALL(evt_bero_get_info)
     CALL_CHILD(PTR(evt_bero_info_run))
     CALL_CHILD(PTR(evt_usu_kagemario_party_kill))
-    IF_INT_EQUAL(LSW(1), 0)
+    IF_INT_EQUAL(LSW_JIN_STAIRCASE_POS, 0)
         SPAWN_EVENT(PTR(jin_03_kaidan_temae_kesu))
         SPAWN_EVENT(PTR(jin_03_kaidan_oku_kesu))
         ELSE
-        IF_INT_EQUAL(LSW(1), 1)
+        IF_INT_EQUAL(LSW_JIN_STAIRCASE_POS, 1)
             SPAWN_EVENT(PTR(jin_03_kaidan_naka_kesu))
             SPAWN_EVENT(PTR(jin_03_kaidan_oku_kesu))
             ELSE
