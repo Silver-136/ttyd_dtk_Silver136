@@ -63,7 +63,6 @@ static f32 randf(f32 min, f32 max);
 static void moamoa_pose_init(void);
 static void moamoa_pose_main(void);
 static void moamoa_pose_change(Moamoa* moa, const char* model, const char* anim);
-extern const char* g_moamoa_chain_tbl[][2];
 void evalOn(void);
 static void ext_moamoa_main(void);
 #pragma inline_max_total_size(100000)
@@ -607,8 +606,8 @@ void evalOn(void) {
         pos[i] = (Vec){0.0f, -1000.0f, 0.0f};
     }
     for (i = 0; i < g_moamoa_chain_num; i++) {
-        wp->chainIdx[i][0] = animPoseGetGroupIdx(npc->poseId, g_moamoa_chain_tbl[i][0]);
-        wp->chainIdx[i][1] = animPoseGetGroupIdx(npc->poseId, g_moamoa_chain_tbl[i][1]);
+        wp->chainIdx[i][0] = animPoseGetGroupIdx(npc->poseId, g_moamoa_chain_tbl[i].parent);
+        wp->chainIdx[i][1] = animPoseGetGroupIdx(npc->poseId, g_moamoa_chain_tbl[i].child);
     }
     moa = wp->moa;
     for (j = 0; j < wp->count; j++, moa++) {

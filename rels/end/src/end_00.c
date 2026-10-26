@@ -81,7 +81,6 @@ EndMoa* end_moa_tbl;
 extern EndWork* end_wp;
 extern CreditMsg end_staff_roll_msg_tbl[50];
 extern CreditNpc R_credits_npc_info[152];
-extern const char* g_moamoa_chain_tbl[][2];
 static inline f32 tanf(f32 x) { return tan(x); }
 s32 msgWindow_Entry(const char* msg, s32 a, s32 b);
 typedef void (*voidfunctionptr)(void);
@@ -1439,8 +1438,8 @@ USER_FUNC(evt_end_moamoa_init) {
     end_moa_chain_group = _mapAlloc(g_moamoa_chain_num * sizeof(s32[2]));
     memset(end_moa_chain_group, 0, g_moamoa_chain_num * sizeof(s32[2]));
     for (i = 0; i < g_moamoa_chain_num; i++) {
-        end_moa_chain_group[i][0] = animPoseGetGroupIdx(npc->poseId, g_moamoa_chain_tbl[i][0]);
-        end_moa_chain_group[i][1] = animPoseGetGroupIdx(npc->poseId, g_moamoa_chain_tbl[i][1]);
+        end_moa_chain_group[i][0] = animPoseGetGroupIdx(npc->poseId, g_moamoa_chain_tbl[i].parent);
+        end_moa_chain_group[i][1] = animPoseGetGroupIdx(npc->poseId, g_moamoa_chain_tbl[i].child);
     }
     return 2;
 }

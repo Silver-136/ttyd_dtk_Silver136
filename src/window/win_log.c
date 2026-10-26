@@ -1419,12 +1419,6 @@ typedef struct MonoDatFile {
     u32 size;         // 0x4
 } MonoDatFile;
 
-typedef struct MoaChain {
-    const char* a;
-    const char* b;
-} MoaChain;
-
-extern MoaChain g_moamoa_chain_tbl[];
 
 
 
@@ -1529,8 +1523,8 @@ void capture(CameraId camera, void* param) {
         for (i = 0; i < 500; i++) {
             k = i % g_moamoa_chain_num;
             f = (f32)idx[i] / (f32)cnt[k];
-            a = &gpos[animPoseGetGroupIdx(m->pose1, g_moamoa_chain_tbl[k].a)];
-            b = &gpos[animPoseGetGroupIdx(m->pose1, g_moamoa_chain_tbl[k].b)];
+            a = &gpos[animPoseGetGroupIdx(m->pose1, g_moamoa_chain_tbl[k].parent)];
+            b = &gpos[animPoseGetGroupIdx(m->pose1, g_moamoa_chain_tbl[k].child)];
             PSVECScale(a, &v1, f);
             PSVECScale(b, &v2, 1.0f - f);
             PSVECAdd(&v1, &v2, &v1);

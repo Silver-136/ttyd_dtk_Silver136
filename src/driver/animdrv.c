@@ -222,10 +222,6 @@ u8 _vivihimoData[3][0x400] ATTRIBUTE_ALIGN(32) = {
     0x3F, 0x80, 0x00, 0x00, 0x3F, 0x80, 0x00, 0x00, 0x3F, 0x80, 0x00, 0x00, 0x3F, 0x80, 0x00, 0x00,
 };
 
-typedef struct MoaChain {
-    const char* a;
-    const char* b;
-} MoaChain;
 const s32 g_moamoa_chain_num = 0x2F;
 MoaChain g_moamoa_chain_tbl[47] = {
     { "joint_00", "jointdai1_A01" },

@@ -253,7 +253,6 @@ static KusaAccess kusa_tbl[21];
 EvtWord usu_00_kusa_init[7];
 EvtWord evt_ichikorori_ball_get[5];
 EvtWord usu_00_touch_ichikorori_ball[72];
-typedef struct BoobooName { const char* name; u8 field_0x4; u8 field_0x5; u8 pad_0x6[2]; } BoobooName; /* field_0x4/0x5 never read */
 static BoobooName booboo_name[5];
 ExtTexInfo kpaSen_ext_entry_data[39];
 static EvtWord baba_talk[8];

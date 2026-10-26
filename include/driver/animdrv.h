@@ -388,7 +388,13 @@ void animPoseDrawMtx(s32 poseId, Mtx matrix, s32 xluMode, f32 rotY, f32 scale);
 
 extern u32 anim_ext_tex_size;
 
+// Smorg (moamoa) body: pairs of joint groups, each segment linked to the one before it
+typedef struct MoaChain {
+    const char* parent; // joint group the segment hangs from
+    const char* child;
+} MoaChain;
 extern const s32 g_moamoa_chain_num;
+extern MoaChain g_moamoa_chain_tbl[47];
 
 void animPoseAutoRelease(s32 type);
 void L_animPoseWorldPositionEvalOff(s32 poseId);

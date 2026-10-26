@@ -70,7 +70,6 @@ typedef struct MoamoaWork {
 static MoamoaWork* wp;
 void moamoa_mainUnitIdClear(void);
 static f32 randf(f32 min, f32 max);
-extern const char* g_moamoa_chain_tbl[][2];
 USER_FUNC(moamoa1_on);
 void moamoa_pose(Moamoa* elem);
 void moamoa_draw(CameraId cameraId, void* param);
@@ -1030,8 +1029,8 @@ USER_FUNC(moamoa_on) {
         *p = (Vec){0.0f, -1000.0f, 0.0f};
     }
     for (i = 0; i < g_moamoa_chain_num; i++) {
-        wp->chainIdx[i][0] = animPoseGetGroupIdx(wp->poseId[0], g_moamoa_chain_tbl[i][0]);
-        wp->chainIdx[i][1] = animPoseGetGroupIdx(wp->poseId[0], g_moamoa_chain_tbl[i][1]);
+        wp->chainIdx[i][0] = animPoseGetGroupIdx(wp->poseId[0], g_moamoa_chain_tbl[i].parent);
+        wp->chainIdx[i][1] = animPoseGetGroupIdx(wp->poseId[0], g_moamoa_chain_tbl[i].child);
     }
     elem = wp->elems;
     for (i = 0; i < wp->count; i++, elem++) {

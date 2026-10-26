@@ -66,7 +66,7 @@ typedef struct FanAnim {
     char name[16];
     char anim[8];
     s16 loop;
-    f32 rate;
+    f32 frames; // length of the pose in frames
     s32 start;
     s32 count;
 } FanAnim;
@@ -210,7 +210,7 @@ static void pose_init(void) {
         strcpy(fan_wp->anim[fan_wp->animNum].anim, anim);
         fan_wp->anim[fan_wp->animNum].start = start;
         fan_wp->anim[fan_wp->animNum].count = i - start + 1;
-        fan_wp->anim[fan_wp->animNum].rate = d->frame;
+        fan_wp->anim[fan_wp->animNum].frames = d->frame;
         fan_wp->anim[fan_wp->animNum].loop = 1;
         i++;
         d++;
@@ -230,7 +230,7 @@ static void pose_main(void) {
 
     for (i = 0; i < fan_wp->num; i++, fan++, pose++) {
         a = &fan_wp->anim[fan->animIdx];
-        t = 60.0f * OSTicksToMilliseconds((u64)(gp->renderTime - fan->time)) / 1000.0f / a->rate;
+        t = 60.0f * OSTicksToMilliseconds((u64)(gp->renderTime - fan->time)) / 1000.0f / a->frames;
         if (t >= 1.0f) {
             fan->time = gp->renderTime;
             t = 0.0f;

@@ -176,7 +176,6 @@ static ShopDb trade_list[12];
 static ShopperData35 shopper_data;
 EvtWord shopper_talk1[11];
 EvtWord shopper_talk2[11];
-typedef struct BoobooName { const char* name; u8 field_0x4; u8 field_0x5; u8 pad_0x6[2]; } BoobooName; /* field_0x4/0x5 never read */
 static BoobooName booboo_name[8];
 EvtWord evt_roll_get[2];
 static s32 key_tbl[2];

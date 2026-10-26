@@ -83,7 +83,7 @@ typedef struct KyakuAnim {
     char name[16];
     char anim[8];
     s16 loop;
-    f32 rate;
+    f32 frames; // length of the pose in frames
     s32 start;
     s32 count;
 } KyakuAnim;
@@ -401,7 +401,7 @@ static void pose_init(void) {
         strcpy(kyaku_wp->anim[kyaku_wp->animNum].anim, anim);
         kyaku_wp->anim[kyaku_wp->animNum].start = start;
         kyaku_wp->anim[kyaku_wp->animNum].count = i - start + 1;
-        kyaku_wp->anim[kyaku_wp->animNum].rate = d->frame;
+        kyaku_wp->anim[kyaku_wp->animNum].frames = d->frame;
         kyaku_wp->anim[kyaku_wp->animNum].loop = 1;
         i++;
         d++;
@@ -423,7 +423,7 @@ static void pose_main(void) {
 
     for (i = 0; i < kyaku_wp->num; i++, kyaku++, pose++) {
         a = &kyaku_wp->anim[kyaku->animIdx];
-        t = 60.0f * OSTicksToMilliseconds((u64)(gp->renderTime - kyaku->time)) / 1000.0f / a->rate;
+        t = 60.0f * OSTicksToMilliseconds((u64)(gp->renderTime - kyaku->time)) / 1000.0f / a->frames;
         if (t >= 1.0f) {
             kyaku->time = gp->renderTime;
             t = 0.0f;
