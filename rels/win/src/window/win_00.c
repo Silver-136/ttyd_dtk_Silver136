@@ -113,7 +113,7 @@ static EVT_BEGIN(fabio_init)
     IF_INT_EQUAL(GSW(1420), 28)
         CALL(evt_npc_set_position, STRING("me"), -455, 0, -30)
         CALL(evt_npc_set_ry, STRING("me"), 270)
-        CALL(evt_npc_status_onoff, 1, STRING("me"), 2)
+        CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
     END_IF
     RETURN
 EVT_END()

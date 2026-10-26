@@ -19,9 +19,22 @@ typedef struct MsgChar {
     f32 rot; //0x14, animation entries: rotation; dynamic-scale entries: current scale
 } MsgChar;
 
+// MsgWinData.flags (msgdrv, evt_msg). 0x1 (set at creation, never read) is not named.
+typedef enum MsgWinFlags {
+    MSG_WIN_FLAG_START = (1 << 1),       // 0x2
+    MSG_WIN_FLAG_FAST = (1 << 2),        // 0x4
+    MSG_WIN_FLAG_BATTLE_UNIT = (1 << 3), // 0x8, speaker is a battle unit
+    MSG_WIN_FLAG_SMALL = (1 << 4),       // 0x10
+    MSG_WIN_FLAG_SELECT = (1 << 5),      // 0x20
+    MSG_WIN_FLAG_REVIEW = (1 << 6),      // 0x40
+    MSG_WIN_FLAG_NO_SKIP = (1 << 7),     // 0x80, <dkey>
+    MSG_WIN_FLAG_KEY_X = (1 << 8),       // 0x100, <keyxon>: X also advances
+    MSG_WIN_FLAG_NO_PAGE_LOG = (1 << 9), // 0x200
+} MsgWinFlags;
+
 typedef struct MsgWinData {
     const char* tag; //0x0
-    u32 flags; //0x4
+    u32 flags; //0x4, MsgWinFlags
     u16 curPage; //0x8, page being shown (page-break entries carry their page number)
     u16 pageState; //0xA, 1: waiting for the key, 2: advance to the next page
     u16 pageAdvanced; //0xC

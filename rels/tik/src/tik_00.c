@@ -1313,7 +1313,7 @@ EVT_END()
 
 EVT_BEGIN(chusan4_init)
     CALL(evt_npc_set_position, STRING("me"), -175, -19, 235)
-    CALL(evt_npc_status_onoff, 1, STRING("me"), 2)
+    CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
     RETURN
 EVT_END()
 

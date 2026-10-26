@@ -820,7 +820,7 @@ EVT_BEGIN(aunt_talk)
                     ELSE
                     CALL(evt_msg_print_add, 0, STRING("irai_20_012_1"))
                     CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
-                    CALL(evt_npc_status_onoff, 1, STRING("me"), 2)
+                    CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
                     CALL(evt_npc_move_position, STRING("me"), -363, -152, 0, 40, 0)
                     WAIT_MS(300)
                     CALL(evt_item_entry, STRING("iri_20"), ITEM_METEOR_MEAL, -345, 20, -132, ITEM_TYPE_STILL, GSWF(1938), 0)

@@ -216,7 +216,7 @@ static EVT_BEGIN(evt_sensyu)
             BREAK_LOOP
         END_IF
     END_LOOP
-    CALL(evt_npc_status_onoff, 1, STRING("ガンス"), 2)
+    CALL(evt_npc_status_onoff, 1, STRING("ガンス"), NPC_STATUS_FACE_MOVE_DIR)
     CALL(evt_npc_move_position, STRING("ガンス"), 1, -50, 0, FLOAT(80.0f), 1)
     CALL(evt_npc_move_position, STRING("ガンス"), -30, -50, 0, FLOAT(80.0f), 1)
     CALL(evt_set_dir_to_target, STRING("ガンス"), STRING("mario"))
@@ -268,7 +268,7 @@ static EVT_BEGIN(evt_champion)
             BREAK_LOOP
         END_IF
     END_LOOP
-    CALL(evt_npc_status_onoff, 1, STRING("キノシコワ"), 2)
+    CALL(evt_npc_status_onoff, 1, STRING("キノシコワ"), NPC_STATUS_FACE_MOVE_DIR)
     CALL(evt_npc_move_position, STRING("キノシコワ"), 3, -100, 0, FLOAT(80.0f), 1)
     BEGIN_INLINE_EVENT
         CALL(evt_party_stop, 0)
@@ -459,7 +459,7 @@ EVT_BEGIN(evt_champion_re)
     CALL(evt_npc_set_anim, STRING("キノシコワ"), STRING("M_1"))
     WAIT_MS(600)
     CALL(evt_npc_set_anim, STRING("キノシコワ"), STRING("S_1"))
-    CALL(evt_npc_status_onoff, 1, STRING("キノシコワ"), 2)
+    CALL(evt_npc_status_onoff, 1, STRING("キノシコワ"), NPC_STATUS_FACE_MOVE_DIR)
     CALL(evt_npc_move_position, STRING("キノシコワ"), 0, -130, 0, FLOAT(80.0f), 1)
     SET_VALUE(LW(1), 0)
     SPAWN_EVENT(PTR(bero_open_door_play_se))

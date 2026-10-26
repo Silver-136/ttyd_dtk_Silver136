@@ -280,7 +280,7 @@ EVT_BEGIN(seal_bigtree)
     CALL(evt_msg_print, 0, STRING("stg2_mri_e03_04"), 0, STRING("ガイド"))
     WAIT_MS(300)
     CALL(evt_npc_flag_onoff, 1, STRING("ガイド"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_GRAVITY)
-    CALL(evt_npc_status_onoff, 1, STRING("ガイド"), 2)
+    CALL(evt_npc_status_onoff, 1, STRING("ガイド"), NPC_STATUS_FACE_MOVE_DIR)
     CALL(evt_npc_change_interrupt, STRING("ガイド"), 6, 0)
     BEGIN_INLINE_EVENT
         CALL(evt_sub_spline_init, 0, 0, PTR(spline_dt), 8, 50, 0)
@@ -838,7 +838,7 @@ static USER_FUNC(evt_cloud_main) {
             img->animTime = animTimeGetTime(group);
             imgClearVirtualPoint(img);
             imgSetShadow(img, 2);
-            img->flags |= 2;
+            img->flags |= IMAGE_FLAG_HIDE;
             wp->state = 222;
             break;
         case 222:
@@ -850,13 +850,13 @@ static USER_FUNC(evt_cloud_main) {
             break;
         case 223:
             img = imgNameToPtr(wp->imgName, group);
-            img->flags &= ~2;
+            img->flags &= ~IMAGE_FLAG_HIDE;
             wp->state = 3;
         case 3:
             img = imgNameToPtr(wp->imgName, group);
             img->animName = "A_1";
             img->animTime = animTimeGetTime(group);
-            img->flags &= ~2;
+            img->flags &= ~IMAGE_FLAG_HIDE;
             wp->timer = 30;
             wp->lastFrame = 0.0f;
             wp->state++;

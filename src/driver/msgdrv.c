@@ -252,7 +252,7 @@ void msgLoad(const char* filename, s32 index) {
 
 static inline void msgAddPage(smartEntry* smart, s32 y) {
     MsgWinData* d = smart->address;
-    if (!(d->flags & 0x200) && d->pageCount < 110) {
+    if (!(d->flags & MSG_WIN_FLAG_NO_PAGE_LOG) && d->pageCount < 110) {
         if (d->pageCount == 0 || d->pageY[d->pageCount - 1] != y) {
             d->pageY[d->pageCount++] = y;
         }
@@ -261,14 +261,14 @@ static inline void msgAddPage(smartEntry* smart, s32 y) {
 
 static inline void msgCheckSkip(smartEntry* smart, MsgWinData* data) {
     s32 btn, trgv;
-    if (!(data->flags & 0x80)) {
+    if (!(data->flags & MSG_WIN_FLAG_NO_SKIP)) {
         btn = 0x100;
         if (((MsgWinData*)smart->address)->flags & 0x100) {
             btn = 0x500;
         }
         trgv = keyGetButtonTrg(0);
         if (trgv & (btn | 0x200)) {
-            data->flags |= 4;
+            data->flags |= MSG_WIN_FLAG_FAST;
         }
     }
 }
@@ -289,17 +289,17 @@ s32 msgMain(smartEntry* smart) {
     NpcEntry* npc;
 
     msgSEflag = 0;
-    if (data->flags & 2) {
+    if (data->flags & MSG_WIN_FLAG_START) {
         if (MSG_CB(data)) {
             MSG_CB(data)(0, smart);
         }
-        data->flags &= ~2;
+        data->flags &= ~MSG_WIN_FLAG_START;
         msgAddPage(smart, 0);
     }
     if (data->scrollTarget > data->scrollPos) {
         data->scrollPos += 0.36f * OSTicksToMilliseconds(gp->renderTime - data->lastUpdateTime);
         msgCheckSkip(smart, data);
-        if (!(data->flags & 0x10) && (data->flags & 4)) {
+        if (!(data->flags & MSG_WIN_FLAG_SMALL) && (data->flags & MSG_WIN_FLAG_FAST)) {
             data->scrollPos += 0.36f * OSTicksToMilliseconds(gp->renderTime - data->lastUpdateTime);
         }
         if (data->scrollTarget < data->scrollPos) {
@@ -324,7 +324,7 @@ s32 msgMain(smartEntry* smart) {
     default:
         ms = OSTicksToMilliseconds(gp->renderTime - data->lastUpdateTime);
         msgCheckSkip(smart, data);
-        if (!(data->flags & 0x10) && (data->flags & 4)) {
+        if (!(data->flags & MSG_WIN_FLAG_SMALL) && (data->flags & MSG_WIN_FLAG_FAST)) {
             ms *= 100;
         }
         data->playTime += ms;
@@ -347,7 +347,7 @@ s32 msgMain(smartEntry* smart) {
             if (entry->x == data->curPage) {
                 data->pageState = 1;
                 data->playTime = entry->time;
-                data->flags &= ~4;
+                data->flags &= ~MSG_WIN_FLAG_FAST;
                 if (MSG_CB(data)) {
                     MSG_CB(data)(2, smart);
                 }
@@ -361,7 +361,7 @@ s32 msgMain(smartEntry* smart) {
         case 0xFFFC:
             data->nextEntry = i + 1;
             data->playTime = entry->time;
-            data->flags &= ~4;
+            data->flags &= ~MSG_WIN_FLAG_FAST;
             return 1;
         case 0xFFFB:
             if (MSG_CB(data)) {
@@ -376,11 +376,11 @@ s32 msgMain(smartEntry* smart) {
             break;
         case 0xFFF5:
             if (entry->value) {
-                data->flags |= 0x80;
-                data->flags &= ~4;
+                data->flags |= MSG_WIN_FLAG_NO_SKIP;
+                data->flags &= ~MSG_WIN_FLAG_FAST;
                 data->playTime = entry->time;
             } else {
-                data->flags &= ~0x80;
+                data->flags &= ~MSG_WIN_FLAG_NO_SKIP;
             }
             break;
         case 0xFFF3:
@@ -502,7 +502,7 @@ BOOL msgDisp(smartEntry* smart, u8 alpha, f32 x, f32 y) {
                 a = 0xFF;
                 sx = x + c->x;
                 sy = c->y + (y + data->scrollPos);
-                if (data->flags & 0x40) {
+                if (data->flags & MSG_WIN_FLAG_REVIEW) {
                     page = data->page;
                     py = data->pageY[page];
                     if (data->scrollPos == py) {
@@ -904,7 +904,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
             if (0.0f == maxScale) {
                 maxScale = 1.0f;
             }
-            if (data->flags & 0x10) {
+            if (data->flags & MSG_WIN_FLAG_SMALL) {
                 // US: tighter line spacing
                 y -= 0.7f * (32.0f * maxScale);
                 savedScroll -= 0.7f * (32.0f * maxScale);
@@ -925,7 +925,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
             time += step;
             data->charCount++;
             maxScale = 0.0f;
-            if (data->flags & 0x20) {
+            if (data->flags & MSG_WIN_FLAG_SELECT) {
                 flags &= ~0xFF00;
                 flags |= 0x100 << data->numSel;
                 data->numSel++;
@@ -961,7 +961,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
                 data->charCount++;
                 savedPage++;
             } else if (strcmp(tag, "keyxon") == 0) {
-                data->flags |= 0x100;
+                data->flags |= MSG_WIN_FLAG_KEY_X;
             } else if (( strcmp(tag, "p") == 0 ) || ( strcmp(tag, "scrl_auto") == 0) ) {
                 if (savedScroll != 0) {
                     entry->glyph = 0xFFFD;
@@ -1099,7 +1099,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
                 data->parseSpeed = 0;
             } else if (strcmp(tag, "small") == 0) {
                 window->type = 1;
-                data->flags |= 0x10;
+                data->flags |= MSG_WIN_FLAG_SMALL;
             } else if (strcmp(tag, "clear") == 0) {
                 window->type = 11;
             } else if (strcmp(tag, "wpos") == 0) {
@@ -1111,7 +1111,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
                 window->width = winWidth;
             } else if (strcmp(tag, "select") == 0) {
                 window->type = 5;
-                data->flags |= 0x20;
+                data->flags |= MSG_WIN_FLAG_SELECT;
                 sscanf(args, "%hd%hd%hd%hd%hd", &sel0, &sel1, &data->selWidth, &data->selY);
                 flags |= 0x100;
                 data->defSel = sel0;
@@ -1507,7 +1507,7 @@ s32 msgWindow_Entry(const char* msg, s32 callback, u16 priority) {
     data->pageCount = 0;
     msgAnalize(smart, copy);
     if (window->type == 1) {
-        data->flags |= 0x200;
+        data->flags |= MSG_WIN_FLAG_NO_PAGE_LOG;
     }
     __memFree(HEAP_DEFAULT, copy);
     window->userdata = smart;
@@ -1618,7 +1618,7 @@ void msgWindow_ForceClose(const char* name) {
             !strcmp(((MsgWinData*)window->userdata->address)->tag, name)) {
             WIN_STATE(window) = 7;
             data = window->userdata->address;
-            if (data->flags & 8) {
+            if (data->flags & MSG_WIN_FLAG_BATTLE_UNIT) {
                 BtlUnit_ChangeStayAnim(data->unitId);
             } else {
                 npcSetStayPose(data->speakerName);
@@ -1657,7 +1657,7 @@ void msgWindow_Main(WindowEntry* window) {
 
     if (data->talkTimer) {
         if (!data->talkPoseSet) {
-            if (data->flags & 8) {
+            if (data->flags & MSG_WIN_FLAG_BATTLE_UNIT) {
                 BtlUnit_ChangeTalkAnim(data->unitId);
             } else {
                 npcSetTalkPose(data->speakerName);
@@ -1667,7 +1667,7 @@ void msgWindow_Main(WindowEntry* window) {
         data->talkTimer--;
         if (data->talkTimer == 0) {
             MsgWinData* d2 = smart->address;
-            if (d2->flags & 8) {
+            if (d2->flags & MSG_WIN_FLAG_BATTLE_UNIT) {
                 BtlUnit_ChangeStayAnim(d2->unitId);
             } else {
                 npcSetStayPose(d2->speakerName);
@@ -1751,8 +1751,8 @@ void msgWindow_Main(WindowEntry* window) {
             WIN_STATE(window) = 1;
             data->pageState = 2;
             if (keyGetButtonTrg(0) & PAD_BUTTON_B) {
-                if (!(data->flags & 0x80)) {
-                    data->flags |= 4;
+                if (!(data->flags & MSG_WIN_FLAG_NO_SKIP)) {
+                    data->flags |= MSG_WIN_FLAG_FAST;
                 }
             }
         }
@@ -1765,7 +1765,7 @@ void msgWindow_Main(WindowEntry* window) {
                 WIN_STATE(window) = 9;
                 window->timestamp = gp->renderTime;
                 psndSFXOn(SFX_NAME_WORD(PSND_SFX_MESSAGE_Z1 | PSND_SFX_BYPASS_MUTE));
-                data->flags |= 0x40;
+                data->flags |= MSG_WIN_FLAG_REVIEW;
             }
         }
         break;
@@ -1789,7 +1789,7 @@ void msgWindow_Main(WindowEntry* window) {
                 data->scrollPos = target;
                 if (data->page == data->pageCount - 1) {
                     WIN_STATE(window) = 3;
-                    data->flags &= ~0x40;
+                    data->flags &= ~MSG_WIN_FLAG_REVIEW;
                 } else {
                     WIN_STATE(window) = 11;
                 }

@@ -83,7 +83,7 @@ USER_FUNC(evt_tik_villager_urouro_check_func) {
 }
 
 EVT_BEGIN(tik_villager_urouro)
-    CALL(evt_npc_status_onoff, 1, STRING("me"), 2)
+    CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
     CALL(evt_npc_get_position, STRING("me"), LW(6), LW(7), LW(8))
     CALL(evt_sub_random, 1000, LW(0))
     ADD(LW(0), 100)

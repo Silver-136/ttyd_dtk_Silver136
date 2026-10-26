@@ -441,9 +441,9 @@ USER_FUNC(evt_npc_move_position) {
     f32 step;
     s32 sfxFlag;
 
-    npc->jumpFlags |= 0x10;
+    npc->statusFlags |= NPC_STATUS_UPDATE;
     if (moveFlags & 0x2) {
-        npc->jumpFlags |= 0x1000;
+        npc->statusFlags |= NPC_STATUS_NO_FIND_ONCE;
     }
 
     if (isFirstCall) {
@@ -508,19 +508,19 @@ USER_FUNC(evt_npc_move_position) {
     }
 
     // Re-aim at the target each frame unless direction is locked
-    if ((npc->flags & NPC_FLAG_IN_USE) && !(npc->jumpFlags & 0x1)) {
+    if ((npc->flags & NPC_FLAG_IN_USE) && !(npc->statusFlags & NPC_STATUS_AIRBORNE)) {
         npc->moveDir = angleABf(0.0f, 0.0f, diff.x, diff.z);
     }
 
     // Turn the body toward travel (unless mid battle-transition states 5/6)
-    if ((npc->jumpFlags & 0x2) && npc->moveSpeed > 0.1f) {
+    if ((npc->statusFlags & NPC_STATUS_FACE_MOVE_DIR) && npc->moveSpeed > 0.1f) {
         if (npc != fbatGetPointer()->target || (fbatGetPointer()->mode != 5 && fbatGetPointer()->mode != 6)) {
             npcTuningRy(npc, npc->moveDir);
         }
     }
 
     // Integrate move offset along heading (flag 0x10000 freezes it)
-    if (!(npc->jumpFlags & 0x10000)) {
+    if (!(npc->statusFlags & NPC_STATUS_STOPPED)) {
         f32 temp = (f32)sin(npc->moveDir * 6.2831855f / 360.0f);
         npc->moveOffset.x += npc->moveDt * (npc->moveSpeed * temp);
         temp = (f32)cos(npc->moveDir * 6.2831855f / 360.0f);
@@ -578,8 +578,8 @@ USER_FUNC(evt_npc_jump_position) {
     s32 sfxFlag;
     f32 temp;
 
-    npc->jumpFlags |= 0x10;
-    npc->jumpFlags |= 0x1000;
+    npc->statusFlags |= NPC_STATUS_UPDATE;
+    npc->statusFlags |= NPC_STATUS_NO_FIND_ONCE;
 
     if (isFirstCall) {
         npc->moveTicks = 0;
@@ -689,7 +689,7 @@ USER_FUNC(evt_npc_jump_position) {
     }
 
     // ---- per-frame ----
-    if ((npc->jumpFlags & 0x2) && npc->moveSpeed > 0.1f) {
+    if ((npc->statusFlags & NPC_STATUS_FACE_MOVE_DIR) && npc->moveSpeed > 0.1f) {
         if (npc != fbatGetPointer()->target || (fbatGetPointer()->mode != 5 && fbatGetPointer()->mode != 6)) {
             npcTuningRy(npc, npc->moveDir);
         }
@@ -700,7 +700,7 @@ USER_FUNC(evt_npc_jump_position) {
     temp = (f32)cos(npc->moveDir * 6.2831855f / 360.0f);
     npc->moveOffset.z += npc->moveDt * (npc->moveSpeed * -temp);
 
-    if (npc->jumpFlags & 0x1) {
+    if (npc->statusFlags & NPC_STATUS_AIRBORNE) {
         return EVT_RETURN_BLOCK; // still airborne
     }
 
@@ -807,9 +807,9 @@ USER_FUNC(evt_npc_glide_position) {
     BOOL finished;
     s32 sfxFlag;
 
-    npc->jumpFlags |= 0x10;
+    npc->statusFlags |= NPC_STATUS_UPDATE;
     if (!(moveFlags & 0x2)) {
-        npc->jumpFlags |= 0x1000;
+        npc->statusFlags |= NPC_STATUS_NO_FIND_ONCE;
     }
 
     if (isFirstCall) {
@@ -873,7 +873,7 @@ USER_FUNC(evt_npc_glide_position) {
     npc->moveOffset.z += dz * delta;
 
     // Turn the body toward travel (unless mid battle-transition states 5/6)
-    if (npc->jumpFlags & 0x2) {
+    if (npc->statusFlags & NPC_STATUS_FACE_MOVE_DIR) {
         if (dx || dz) {
             if (npc != fbatGetPointer()->target ||
                 (fbatGetPointer()->mode != 5 && fbatGetPointer()->mode != 6)) {
@@ -953,7 +953,7 @@ USER_FUNC(evt_npc_homing_target) {
     BOOL finished;
     s32 sfxFlag;
 
-    npc->jumpFlags |= 0x10;
+    npc->statusFlags |= NPC_STATUS_UPDATE;
 
     if (isFirstCall) {
         npc->moveTicks = 0;
@@ -982,7 +982,7 @@ USER_FUNC(evt_npc_homing_target) {
         npc->moveTime = moveTime;
 
         // Turn the body toward travel (unless mid battle-transition states 5/6)
-        if ((npc->jumpFlags & 0x2) && npc->moveSpeed) {
+        if ((npc->statusFlags & NPC_STATUS_FACE_MOVE_DIR) && npc->moveSpeed) {
             if (npc != fbatGetPointer()->target ||
                 (fbatGetPointer()->mode != 5 && fbatGetPointer()->mode != 6)) {
                 npcTuningRy(npc, npc->moveDir);
@@ -995,7 +995,7 @@ USER_FUNC(evt_npc_homing_target) {
     }
 
     dist = 1000.0f;
-    if (!(npc->jumpFlags & 0x1)) {
+    if (!(npc->statusFlags & NPC_STATUS_AIRBORNE)) {
         // track the target's current position
         if (event->userdata[0] == 0) {
             MarioWork* mario = event->userdatap[1];
@@ -1027,7 +1027,7 @@ USER_FUNC(evt_npc_homing_target) {
             npc->moveDir = reviseAngle(npc->moveDir);
         }
 
-        if ((npc->jumpFlags & 0x2) && npc->moveSpeed) {
+        if ((npc->statusFlags & NPC_STATUS_FACE_MOVE_DIR) && npc->moveSpeed) {
             if (npc != fbatGetPointer()->target ||
                 (fbatGetPointer()->mode != 5 && fbatGetPointer()->mode != 6)) {
                 npcTuningRy(npc, npc->moveDir);
@@ -1399,10 +1399,10 @@ USER_FUNC(evt_npc_status_onoff) {
     npc = evtNpcNameToPtr(event, name);
     switch (type) {
         case 0:
-            npc->jumpFlags &= ~(u32)mask;
+            npc->statusFlags &= ~(u32)mask;
             break;
         case 1:
-            npc->jumpFlags |= mask;
+            npc->statusFlags |= mask;
     }
     return EVT_RETURN_DONE;
 }
@@ -1417,7 +1417,7 @@ USER_FUNC(evt_npc_status_check) {
     name = (const char*)evtGetValue(event, args[0]);
     mask = evtGetValue(event, args[1]);
     npc = evtNpcNameToPtr(event, name);
-    evtSetValue(event, args[2], npc->jumpFlags & mask);
+    evtSetValue(event, args[2], npc->statusFlags & mask);
     return EVT_RETURN_DONE;
 }
 
@@ -2137,7 +2137,7 @@ USER_FUNC(evt_npc_wait_msec) {
 
     s32 temp;
     OSTime lifetime = event->lifetime;
-    npc->jumpFlags |= 0x10;
+    npc->statusFlags |= NPC_STATUS_UPDATE;
 
     if (isFirstCall) {
         event->userdata[0] = evtGetValue(event, args[1]);
@@ -2440,9 +2440,9 @@ USER_FUNC(evt_npc_kamek_move_position) {
     f32 step;
     s32 sfxFlag;
 
-    npc->jumpFlags |= 0x10;
+    npc->statusFlags |= NPC_STATUS_UPDATE;
     if (moveFlags & 0x2) {
-        npc->jumpFlags |= 0x1000;
+        npc->statusFlags |= NPC_STATUS_NO_FIND_ONCE;
     }
 
     if (isFirstCall) {
@@ -2503,12 +2503,12 @@ USER_FUNC(evt_npc_kamek_move_position) {
     }
 
     // Re-aim at the target each frame unless direction is locked
-    if ((moveFlags & 0x1) && !(npc->jumpFlags & 0x1)) {
+    if ((moveFlags & 0x1) && !(npc->statusFlags & NPC_STATUS_AIRBORNE)) {
         npc->moveDir = angleABf(0.0f, 0.0f, diff.x, diff.z);
     }
 
     // Turn the body toward travel (unless mid battle-transition states 5/6)
-    if ((npc->jumpFlags & 0x2) && npc->moveSpeed > 0.1f) {
+    if ((npc->statusFlags & NPC_STATUS_FACE_MOVE_DIR) && npc->moveSpeed > 0.1f) {
         if (npc != fbatGetPointer()->target || (fbatGetPointer()->mode != 5 && fbatGetPointer()->mode != 6)) {
             npcTuningRy(npc, npc->moveDir);
         }

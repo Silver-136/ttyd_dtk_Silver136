@@ -127,7 +127,7 @@ static BeroEntry bero_entry_data[] = {
 };
 
 static EVT_BEGIN(syuryo_init)
-    CALL(evt_npc_status_onoff, 1, STRING("me"), 2)
+    CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 398)
         IF_INT_LESS_OR_EQUAL(GSW_STORY_PROGRESS, 399)
             CALL(evt_npc_set_position, STRING("me"), 410, 25, 0)
@@ -139,7 +139,7 @@ static EVT_BEGIN(syuryo_init)
 EVT_END()
 
 EVT_BEGIN(koopa_init)
-    CALL(evt_npc_status_onoff, 1, STRING("me"), 2)
+    CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
     RETURN
 EVT_END()
 
@@ -149,7 +149,7 @@ EVT_BEGIN(koopa_talk)
 EVT_END()
 
 static EVT_BEGIN(baba_init)
-    CALL(evt_npc_status_onoff, 1, STRING("me"), 2)
+    CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
     RETURN
 EVT_END()
 

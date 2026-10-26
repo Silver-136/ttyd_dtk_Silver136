@@ -453,7 +453,7 @@ EVT_BEGIN(gonbaba_event)
         CALL(evt_npc_set_position, STRING("クリスチーヌ"), -10, 10, 160)
         CALL(evt_npc_flag_onoff, 1, STRING("クリスチーヌ"), NPC_FLAG_INSTANT_TURN)
         CALL(evt_npc_set_ry, STRING("クリスチーヌ"), 90)
-        CALL(evt_npc_status_onoff, 1, STRING("クリスチーヌ"), 2)
+        CALL(evt_npc_status_onoff, 1, STRING("クリスチーヌ"), NPC_STATUS_FACE_MOVE_DIR)
     END_IF
     WAIT_MS(500)
     CALL(evt_msg_print, 0, STRING("stg1_gon_33_05"), 0, STRING("party"))
@@ -757,7 +757,7 @@ static s32 evt_cloud_main(EventEntry *event, BOOL isFirstCall) {
             *(&img->animTime) = animTimeGetTime(inBattle);
             imgClearVirtualPoint(img);
             imgSetShadow(img, 2);
-            img->flags |= 2;
+            img->flags |= IMAGE_FLAG_HIDE;
             wp->state = 222;
             break;
 
@@ -771,14 +771,14 @@ static s32 evt_cloud_main(EventEntry *event, BOOL isFirstCall) {
 
         case 223:
             img = imgNameToPtr(wp->imgName, inBattle);
-            img->flags &= ~2;
+            img->flags &= ~IMAGE_FLAG_HIDE;
             wp->state = 3;
 
         case 3:
             img = imgNameToPtr(wp->imgName, inBattle);
             img->animName = "A_1";
             *(&img->animTime) = animTimeGetTime(inBattle);
-            img->flags &= ~2;
+            img->flags &= ~IMAGE_FLAG_HIDE;
             wp->timer = 30;
             wp->lastFrame = 0.0f;
             wp->state++;

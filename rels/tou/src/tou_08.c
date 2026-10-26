@@ -514,7 +514,7 @@ static EVT_BEGIN(evt_1st_leagu)
             BREAK_LOOP
         END_IF
     END_LOOP
-    CALL(evt_npc_status_onoff, 1, STRING("キノシコワ"), 2)
+    CALL(evt_npc_status_onoff, 1, STRING("キノシコワ"), NPC_STATUS_FACE_MOVE_DIR)
     CALL(evt_npc_move_position, STRING("キノシコワ"), -1, -90, 0, FLOAT(80.0f), 1)
     BEGIN_INLINE_EVENT
         CALL(evt_mario_mov_pos2, -3, -80, FLOAT(120.0f))
@@ -585,7 +585,7 @@ static EVT_BEGIN(evt_1st_leagu)
         CALL(evt_party_move_pos2, 0, -95, -85, FLOAT(60.0f))
         CALL(evt_party_set_dir, 0, 90, 300)
     END_INLINE_EVENT
-    CALL(evt_npc_status_onoff, 1, STRING("チャンピョン"), 2)
+    CALL(evt_npc_status_onoff, 1, STRING("チャンピョン"), NPC_STATUS_FACE_MOVE_DIR)
     CALL(evt_npc_move_position, STRING("チャンピョン"), 0, -85, 0, FLOAT(80.0f), 1)
     SET_VALUE(LW(1), 0)
     SPAWN_EVENT(PTR(bero_close_door_play_se))
@@ -881,7 +881,7 @@ EVT_BEGIN(evt_champion_win)
     WAIT_MS(300)
     CALL(evt_msg_print, 0, STRING("stg3_tou_448"), 0, STRING("キノシコワ"))
     WAIT_MS(300)
-    CALL(evt_npc_status_onoff, 1, STRING("キノシコワ"), 2)
+    CALL(evt_npc_status_onoff, 1, STRING("キノシコワ"), NPC_STATUS_FACE_MOVE_DIR)
     CALL(evt_npc_move_position, STRING("キノシコワ"), 0, -130, 0, FLOAT(80.0f), 1)
     SET_VALUE(LW(1), 0)
     SPAWN_EVENT(PTR(bero_open_door_play_se))

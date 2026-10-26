@@ -25,9 +25,18 @@ typedef struct ImageShadow {
     s32 allocMode;    //0x40, 1/2: smartAlloc heap for the captured copy
 } ImageShadow;
 
+// ImageEntry.flags (imgdrv)
+typedef enum ImageEntryFlags {
+    IMAGE_FLAG_IN_USE = (1 << 0),           // 0x1
+    IMAGE_FLAG_HIDE = (1 << 1),             // 0x2, evt_img_onoff
+    IMAGE_FLAG_OFFSCREEN_RECT = (1 << 2),   // 0x4
+    IMAGE_FLAG_NO_VIRTUAL_POINT = (1 << 3), // 0x8, imgClearVirtualPoint
+    IMAGE_FLAG_NO_CAPTURE = (1 << 28),      // 0x10000000
+} ImageEntryFlags;
+
 typedef struct ImageEntry {
     ImageShadow shadows[3]; //0x0
-    u32 flags; //0xCC
+    u32 flags; //0xCC, ImageEntryFlags
     s32 type; //0xD0
     char name[16]; //0xD4
     u16 width; //0xE4

@@ -352,7 +352,7 @@ static USER_FUNC(evt_cloud_main) {
             img->animTime = animTimeGetTime(group);
             imgClearVirtualPoint(img);
             imgSetShadow(img, 2);
-            img->flags |= 2;
+            img->flags |= IMAGE_FLAG_HIDE;
             wp->state = 222;
             break;
         case 222:
@@ -364,13 +364,13 @@ static USER_FUNC(evt_cloud_main) {
             break;
         case 223:
             img = imgNameToPtr(wp->imgName, group);
-            img->flags &= ~2;
+            img->flags &= ~IMAGE_FLAG_HIDE;
             wp->state = 3;
         case 3:
             img = imgNameToPtr(wp->imgName, group);
             img->animName = "A_1";
             img->animTime = animTimeGetTime(group);
-            img->flags &= ~2;
+            img->flags &= ~IMAGE_FLAG_HIDE;
             wp->timer = 30;
             wp->lastFrame = 0.0f;
             wp->state++;

@@ -1132,7 +1132,7 @@ static EVT_BEGIN(peach_evt_stg6)
     CALL(evt_npc_move_position, STRING("手下１"), 165, -5, 0, FLOAT(95.0f), 0)
     WAIT_MS(1000)
     CALL(evt_msg_print, 0, STRING("peach_aji_276"), 0, STRING("手下１"))
-    CALL(evt_npc_status_onoff, 0, STRING("手下１"), 2)
+    CALL(evt_npc_status_onoff, 0, STRING("手下１"), NPC_STATUS_FACE_MOVE_DIR)
     CALL(evt_npc_move_position, STRING("手下１"), 160, -5, 300, 0, 0)
     WAIT_MS(500)
     CALL(evt_msg_print, 0, STRING("peach_aji_277"), 0, STRING("シュリョー"))
@@ -1161,25 +1161,25 @@ EVT_END()
 
 static EVT_BEGIN(teshita1_init)
     CALL_CHILD(PTR(npc_init_evt))
-    CALL(evt_npc_status_onoff, 1, STRING("me"), 2)
+    CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
     RETURN
 EVT_END()
 
 static EVT_BEGIN(teshita2_init)
     CALL_CHILD(PTR(npc_init_evt))
-    CALL(evt_npc_status_onoff, 1, STRING("me"), 2)
+    CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
     RETURN
 EVT_END()
 
 static EVT_BEGIN(teshita3_init)
     CALL_CHILD(PTR(npc_init_evt))
-    CALL(evt_npc_status_onoff, 1, STRING("me"), 2)
+    CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
     RETURN
 EVT_END()
 
 EVT_BEGIN(kanbu_init)
     CALL_CHILD(PTR(npc_init_evt))
-    CALL(evt_npc_status_onoff, 1, STRING("me"), 2)
+    CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
     RETURN
 EVT_END()
 

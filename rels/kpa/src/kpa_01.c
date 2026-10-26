@@ -841,7 +841,7 @@ EVT_END()
 EVT_BEGIN(togenoko_C_init_evt)
     CALL_CHILD(PTR(npc_init_evt))
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_GRAVITY)
-    CALL(evt_npc_status_onoff, 1, STRING("me"), 2)
+    CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
     RETURN
 EVT_END()
 
@@ -904,7 +904,7 @@ EVT_END()
 
 EVT_BEGIN(hammer_E_init_evt)
     CALL_CHILD(PTR(npc_init_evt))
-    CALL(evt_npc_status_onoff, 1, STRING("me"), 2)
+    CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
     RETURN
 EVT_END()
 
@@ -915,20 +915,20 @@ EVT_END()
 
 EVT_BEGIN(baba_init_evt)
     CALL_CHILD(PTR(npc_init_evt))
-    CALL(evt_npc_status_onoff, 1, STRING("me"), 2)
+    CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
     CALL(evt_npc_set_tribe, STRING("me"), STRING("カメックババ（地上）"))
     RETURN
 EVT_END()
 
 EVT_BEGIN(kamek_init_evt)
     CALL_CHILD(PTR(npc_init_evt))
-    CALL(evt_npc_status_onoff, 1, STRING("me"), 2)
+    CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
     RETURN
 EVT_END()
 
 EVT_BEGIN(hkoopa_init_evt)
     CALL_CHILD(PTR(npc_init_evt))
-    CALL(evt_npc_status_onoff, 1, STRING("me"), 2)
+    CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
     RETURN
 EVT_END()
 

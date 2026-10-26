@@ -635,7 +635,7 @@ EVT_BEGIN(move_waitless)
             RETURN
         END_IF
     END_IF
-    CALL(evt_npc_status_onoff, 1, STRING("me"), 2)
+    CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
     LOOP(0)
         CALL(evt_npc_move_position, STRING("me"), 150, -125, 0, FLOAT(24.0f), 0)
         WAIT_MS(1000)

@@ -330,12 +330,12 @@ EVT_BEGIN(init_ramp)
 EVT_END()
 
 EVT_BEGIN(patakuri_init)
-    CALL(evt_npc_status_onoff, 1, STRING("me"), 2)
+    CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
     RETURN
 EVT_END()
 
 static EVT_BEGIN(baba_init)
-    CALL(evt_npc_status_onoff, 1, STRING("me"), 2)
+    CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
     RETURN
 EVT_END()
 
@@ -567,7 +567,7 @@ EVT_BEGIN(evt_garnet)
     BEGIN_INLINE_EVENT
         CALL(evt_party_move_pos, 0, 30, 580, 1000)
     END_INLINE_EVENT
-    CALL(evt_npc_status_onoff, 1, STRING("ポワン探偵"), 2)
+    CALL(evt_npc_status_onoff, 1, STRING("ポワン探偵"), NPC_STATUS_FACE_MOVE_DIR)
     CALL(evt_npc_move_position, STRING("ポワン探偵"), -30, 600, 1000, 0, 1)
     SET_VALUE(LW(1), 0)
     SPAWN_EVENT(PTR(bero_close_door_play_se))
@@ -625,7 +625,7 @@ EVT_BEGIN(evt_garnet)
     END_LOOP
     CALL(evt_msg_print, 0, STRING("stg6_pik_14"), 0, STRING("ランペル"))
     CALL(evt_cam3d_evt_set, 0, 54, -568, -230, 30, -930, 2900, 11)
-    CALL(evt_npc_status_onoff, 1, STRING("ランペル"), 2)
+    CALL(evt_npc_status_onoff, 1, STRING("ランペル"), NPC_STATUS_FACE_MOVE_DIR)
     CALL(evt_npc_flag_onoff, 1, STRING("ランペル"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_NO_HIT | NPC_FLAG_GRAVITY)
     CALL(evt_npc_move_position, STRING("ランペル"), -105, -845, 0, FLOAT(100.0f), 1)
     CALL(evt_npc_flag_onoff, 0, STRING("ランペル"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_GRAVITY)
@@ -790,7 +790,7 @@ EVT_BEGIN(pik_02_koopa_evt)
     CALL(evt_msg_print, 0, STRING("kpa_stg7_015"), 0, STRING("ババ"))
     CALL(evt_cam3d_evt_set, 19, 143, -268, 19, 74, -914, 800, 11)
     WAIT_MS(800)
-    CALL(evt_npc_status_onoff, 1, STRING("ポワン探偵"), 2)
+    CALL(evt_npc_status_onoff, 1, STRING("ポワン探偵"), NPC_STATUS_FACE_MOVE_DIR)
     CALL(evt_npc_set_position, STRING("ポワン探偵"), -80, 0, -600)
     CALL(evt_npc_set_ry, STRING("ポワン探偵"), 90)
     WAIT_MS(300)

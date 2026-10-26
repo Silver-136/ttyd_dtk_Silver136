@@ -287,7 +287,7 @@ USER_FUNC(kurokaron_move_position) {
     f32 marioDist;
     f32 dist;
 
-    npc->jumpFlags |= 0x10;
+    npc->statusFlags |= NPC_STATUS_UPDATE;
     if (isFirstCall) {
         npc->moveTicks = 0;
         npc->moveAnimState = 0;
@@ -317,7 +317,7 @@ USER_FUNC(kurokaron_move_position) {
     }
     kurokaron_vivian_prev_sts = vivianGetStatus();
     if (kurokaron_stop_cnt != 0) {
-        npc->jumpFlags &= ~0x10;
+        npc->statusFlags &= ~NPC_STATUS_UPDATE;
         kurokaron_stop_cnt--;
         return EVT_RETURN_BLOCK;
     }
@@ -363,7 +363,7 @@ USER_FUNC(kurokaron_move_position) {
         _kurokaron_next_move_index();
         return EVT_RETURN_DONE;
     }
-    if ((npc->jumpFlags & 2) && npc->moveSpeed > 0.1f) {
+    if ((npc->statusFlags & NPC_STATUS_FACE_MOVE_DIR) && npc->moveSpeed > 0.1f) {
         npcTuningRy(npc, npc->moveDir);
     }
     if ((kurokaron_move_flag & 2) && kurokaron_run_cnt != 0) {
@@ -1403,7 +1403,7 @@ EVT_BEGIN(kurokaron_init)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, 382)
         CALL(evt_npc_set_position, STRING("me"), 570, 0, 0)
         CALL(evt_npc_set_ry, STRING("me"), 270)
-        CALL(evt_npc_status_onoff, 1, STRING("me"), 2)
+        CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
         CALL(evt_npc_set_anim, STRING("me"), STRING("KRN_Z_2"))
         CALL(evt_npc_set_balloontype, STRING("me"), 0)
     END_IF

@@ -4332,7 +4332,7 @@ EVT_BEGIN(uraguchi_event)
         CALL(evt_party_set_dir, 0, 270, 200)
     END_INLINE_EVENT
     CALL(evt_npc_flag_onoff, 1, STRING("店員"), NPC_FLAG_AUTO_MOVE_ANIM)
-    CALL(evt_npc_status_onoff, 1, STRING("店員"), 2)
+    CALL(evt_npc_status_onoff, 1, STRING("店員"), NPC_STATUS_FACE_MOVE_DIR)
     CALL(evt_npc_move_position, STRING("店員"), -486, -195, 0, FLOAT(60.0f), 0)
     WAIT_FRAMES(1)
     CALL(evt_npc_set_anim, STRING("店員"), STRING("T_1"))

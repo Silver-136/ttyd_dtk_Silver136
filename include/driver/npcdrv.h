@@ -153,6 +153,21 @@ typedef enum NpcFlags {
     NPC_FLAG_NO_TALK_BALLOON = (1 << 31),      // 0x80000000, Mario's talk balloon not shown
 } NpcFlags;
 
+// NpcEntry.statusFlags (evt_npc_status_onoff / evt_npc_status_check, npcMain, npcMoveG)
+typedef enum NpcStatusFlags {
+    NPC_STATUS_AIRBORNE = (1 << 0),        // 0x1, npcMoveG: in the air (cleared on landing)
+    NPC_STATUS_FACE_MOVE_DIR = (1 << 1),   // 0x2, faces its move direction (scripts)
+    NPC_STATUS_DEAD = (1 << 2),            // 0x4, _npcDead; every hit check skips it
+    NPC_STATUS_UPDATE = (1 << 4),          // 0x10, run the movement step this frame (evt_npc move functions)
+    NPC_STATUS_NO_FIND_ONCE = (1 << 12),   // 0x1000, no find/lost/return interrupt for one frame
+    NPC_STATUS_STOPPED = (1 << 16),        // 0x10000, npcStopForOneEvent .. npcStartForOneEvent
+    NPC_STATUS_IN_WATER = (1 << 20),       // 0x100000
+    NPC_STATUS_WAS_IN_WATER = (1 << 21),   // 0x200000
+    NPC_STATUS_DARKEN = (1 << 22),         // 0x400000, colour halved (2D deaths by fire or magma)
+    NPC_STATUS_NO_WATER_DRAG = (1 << 28),  // 0x10000000
+    NPC_STATUS_TALK_PAUSE = (1 << 29),     // 0x20000000, stopped for the talk-range pause
+} NpcStatusFlags;
+
 typedef struct NpcEntry {
     s32 flags;                      // 0x0, NpcFlags
     u32 reactionFlags;              // 0x4
@@ -207,8 +222,8 @@ typedef struct NpcEntry {
     f32 jumpVelY;                   // 0x1C4
     f32 jumpYScale;                 // 0x1C8
     f32 jumpGravity;                // 0x1CC
-    f32 maxFallSpeed;               // 0x1D0, fall speed limit, 100 in kpa_03 lava
-    u32 jumpFlags;                  // 0x1D4
+    f32 maxFallSpeed;               // 0x1D0, fall speed limit, 100 in kpa_03 water
+    u32 statusFlags;                // 0x1D4, NpcStatusFlags (evt_npc_status_onoff)
     s16 footstepToggle;             // 0x1D8
     f32 footstepAccum;              // 0x1DC
     const char* footstepSfxA;       // 0x1E0
@@ -236,7 +251,7 @@ typedef struct NpcEntry {
     s8 balloonType;                 // 0x317
     u32 fbatHitKind;                // 0x318, kind from fbatHitCheck when this NPC triggered the battle
     u16 koopaEncounterType;         // 0x31C
-    u16 hazardFlags;                // 0x31E, 1 lava (kpa_03), 2/4/8/0x10 hazard deaths already handled
+    u16 hazardFlags;                // 0x31E, 1 water (kpa_03), 2/4/8/0x10 hazard deaths already handled (0x10 magma)
     u16 wFbatHitCheckRelated;       // 0x320
     u8 pad_322[2];                  // 0x322
     struct NpcEntry* prev;          // 0x324

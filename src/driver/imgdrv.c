@@ -116,7 +116,7 @@ void imgDisp(CameraId camId, void* param) {
             texs[i] = NULL;
             datas[i] = NULL;
         } else {
-            if (entry->flags & 4) {
+            if (entry->flags & IMAGE_FLAG_OFFSCREEN_RECT) {
                 fx = sh->rect.left;
                 fy = sh->rect.top;
                 fw = sh->rect.width;
@@ -141,10 +141,10 @@ void imgDisp(CameraId camId, void* param) {
         }
     }
     if (first == -1) {
-        entry->flags |= 0x10000000;
+        entry->flags |= IMAGE_FLAG_NO_CAPTURE;
         return;
     }
-    entry->flags &= ~0x10000000;
+    entry->flags &= ~IMAGE_FLAG_NO_CAPTURE;
     animSetPaperTexMtx(mp[0], mp[1], mp[2]);
     animSetPaperTexObj(texs[0], texs[1], texs[2], datas[0], datas[1], datas[2],
                        entry->shadows[0].offscreenId != -1 ? 1 : 0, entry->shadows[1].offscreenId != -1 ? 1 : 0);
@@ -155,7 +155,7 @@ void imgDisp(CameraId camId, void* param) {
     animPoseMain(entry->poseId);
     animPoseSetMaterialLightFlagOn(entry->poseId, 1);
     entry->loopTimes = animPoseGetLoopTimes(entry->poseId);
-    if (entry->flags & 8) {
+    if (entry->flags & IMAGE_FLAG_NO_VIRTUAL_POINT) {
         zFill();
         scale = 1.0f;
         zoff = 0.0f;
@@ -174,7 +174,7 @@ void imgDisp(CameraId camId, void* param) {
         zoff = d - t;
     }
     {
-        if (entry->flags & 4) {
+        if (entry->flags & IMAGE_FLAG_OFFSCREEN_RECT) {
             fl = entry->shadows[first].rect.left;
             ft = entry->shadows[first].rect.top;
             fr = entry->shadows[first].rect.width;
@@ -200,7 +200,7 @@ void imgDisp(CameraId camId, void* param) {
     animSetPaperTexMtx(NULL, NULL, NULL);
     e2 = wp->entries;
     for (i = 0; i < wp->count; i++, e2++) {
-        if ((e2->flags & 1) && e2->poseId != -1 && !(e2->flags & 2) && strcmp(e2->name, entry->name) != 0 &&
+        if ((e2->flags & IMAGE_FLAG_IN_USE) && e2->poseId != -1 && !(e2->flags & IMAGE_FLAG_HIDE) && strcmp(e2->name, entry->name) != 0 &&
             strcmp(animPoseGetAnimBaseDataPtr(e2->poseId)->fileName, animPoseGetAnimBaseDataPtr(entry->poseId)->fileName) == 0)
             break;
     }
@@ -359,7 +359,7 @@ void imgCapture(CameraId camId, void* param) {
     i = 0;
     count = wp->count;
     for (entry = wp->entries; i < count; i++, entry++) {
-        if (entry->flags & 1 && entry->poseId != -1) {
+        if (entry->flags & IMAGE_FLAG_IN_USE && entry->poseId != -1) {
             if (entry->type == 2 || entry->type == type) {
                 if (entry->dispCamId == camId) {
                     int j;
@@ -385,7 +385,7 @@ void imgAutoRelease(s32 type) {
     i = 0;
     count = wp->count;
     for (entry = wp->entries; i < count; i++, entry++) {
-        if (entry->flags & 1 && entry->type == type) {
+        if (entry->flags & IMAGE_FLAG_IN_USE && entry->type == type) {
             imgRelease(entry, type);
         }
     }
@@ -397,14 +397,14 @@ s32 imgEntry(const char* name, s32 type) {
 
     //check if already created
     for (i = 0, count = wp->count, entry = wp->entries; i < count; i++, entry++) {
-        if (entry->flags & 1 && entry->type == type) {
+        if (entry->flags & IMAGE_FLAG_IN_USE && entry->type == type) {
             if (!strcmp(entry->name, name)) break;
         }
     }
 
     //find new slot
     for (i = 0, entry = wp->entries; i < count; i++, entry++) {
-        if (!(entry->flags & 1)) break;
+        if (!(entry->flags & IMAGE_FLAG_IN_USE)) break;
     }
 
     entry->flags = 9;
@@ -461,7 +461,7 @@ void imgMain(void) {
     i = 0;
     count = wp->count;
     for (entry = wp->entries; i < count; i++, entry++) {
-        if (entry->flags & 1 && entry->poseId != -1 && !(entry->flags & 2)) {
+        if (entry->flags & IMAGE_FLAG_IN_USE && entry->poseId != -1 && !(entry->flags & IMAGE_FLAG_HIDE)) {
             if (entry->type == 2 || entry->type == type) {
                 for (shadow = 0; shadow < 3; shadow++) {
                     if (entry->shadows[shadow].flags & 4) break;
@@ -499,7 +499,7 @@ ImageEntry* imgNameToPtr(const char* name, s32 type) {
     i = 0;
     count = wp->count;
     for (entry = wp->entries; i < count; i++, entry++) {
-        if (entry->flags & 1 && (entry->type == 2 || entry->type == type)) {
+        if (entry->flags & IMAGE_FLAG_IN_USE && (entry->type == 2 || entry->type == type)) {
             if (!strcmp(entry->name, name)) break;
         }
     }
@@ -522,12 +522,12 @@ void imgFreeCapture(ImageEntry* entry, s32 shadowId) {
 }
 
 void imgSetVirtualPoint(ImageEntry* entry, const Vec* point) {
-    entry->flags &= ~8;
+    entry->flags &= ~IMAGE_FLAG_NO_VIRTUAL_POINT;
     entry->point = *point;
 }
 
 void imgClearVirtualPoint(ImageEntry* entry) {
-    entry->flags |= 8;
+    entry->flags |= IMAGE_FLAG_NO_VIRTUAL_POINT;
 }
 
 void imgRelease(ImageEntry* entry, s32 type) {
@@ -567,7 +567,7 @@ void imgShadowDisp(CameraId camId, void* param) {
             datas[i] = NULL;
         } else {
             ImageRect* r = &sh->rect;
-            if (entry->flags & 4) {
+            if (entry->flags & IMAGE_FLAG_OFFSCREEN_RECT) {
                 x0 = r->left;
                 y0 = r->top;
                 w = r->width;
@@ -593,10 +593,10 @@ void imgShadowDisp(CameraId camId, void* param) {
         }
     }
     if (first == -1) {
-        entry->flags |= 0x10000000;
+        entry->flags |= IMAGE_FLAG_NO_CAPTURE;
         return;
     }
-    entry->flags &= ~0x10000000;
+    entry->flags &= ~IMAGE_FLAG_NO_CAPTURE;
     animSetPaperTexMtx((void*)mp[0], (void*)mp[1], (void*)mp[2]);
     animSetPaperTexObj(objs[0], objs[1], objs[2], datas[0], datas[1], datas[2],
                        entry->shadows[0].offscreenId != -1 ? 1 : 0, entry->shadows[1].offscreenId != -1 ? 1 : 0);
@@ -609,14 +609,14 @@ void imgShadowDisp(CameraId camId, void* param) {
         f32 x0, y0, w, h;
         f32 sc, z;
         typedef struct { u16 p, q, w, h; } RM;
-        if (entry->flags & 8) {
+        if (entry->flags & IMAGE_FLAG_NO_VIRTUAL_POINT) {
             sc = 1.0f;
             z = 0.0f;
         } else {
             sc = 1.0f;
             z = 0.0f;
         }
-        if (entry->flags & 4) {
+        if (entry->flags & IMAGE_FLAG_OFFSCREEN_RECT) {
             x0 = entry->shadows[first].rect.left;
             y0 = entry->shadows[first].rect.top;
             w = entry->shadows[first].rect.width;

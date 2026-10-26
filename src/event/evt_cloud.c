@@ -145,7 +145,7 @@ static USER_FUNC(evt_cloud_main) {
             }
             imgEntry(wp->imgName, group);
             img = imgNameToPtr(wp->imgName, group);
-            img->flags |= 2;
+            img->flags |= IMAGE_FLAG_HIDE;
             img->poseId = animPaperPoseGetId(wp->animName, group);
             img->animTime = animTimeGetTime(group);
             evt.args = args;
@@ -165,7 +165,7 @@ static USER_FUNC(evt_cloud_main) {
         }
         case 3:
             img = imgNameToPtr(wp->imgName, group);
-            img->flags &= ~2;
+            img->flags &= ~IMAGE_FLAG_HIDE;
             img->animName = "A_1";
             img->animTime = animTimeGetTime(group);
             mapGrpFlagOn(wp->groupName, 1);

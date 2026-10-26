@@ -162,7 +162,7 @@ EVT_BEGIN(evt_gajigaji_main)
         CALL(evt_sub_random, 180, LW(1))
         CALL(evt_sub_random, 40, LW(2))
         SUBTRACT(LW(2), 20)
-        CALL(evt_npc_status_onoff, 1, LW(10), 2)
+        CALL(evt_npc_status_onoff, 1, LW(10), NPC_STATUS_FACE_MOVE_DIR)
         CALL(evt_npc_glide_position, LW(10), LW(0), LW(1), LW(11), 0, FLOAT(60.0f), LW(2), 11, 0)
     END_LOOP
     RETURN

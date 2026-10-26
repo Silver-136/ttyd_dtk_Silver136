@@ -641,19 +641,19 @@ EVT_END()
 
 EVT_BEGIN(majyorin_init)
     CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_STOP_FOR_EVENT)
-    CALL(evt_npc_status_onoff, 1, STRING("me"), 2)
+    CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
     RETURN
 EVT_END()
 
 static EVT_BEGIN(maririn_init)
     CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_STOP_FOR_EVENT)
-    CALL(evt_npc_status_onoff, 1, STRING("me"), 2)
+    CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
     RETURN
 EVT_END()
 
 EVT_BEGIN(ranpel_init)
     CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_STOP_FOR_EVENT)
-    CALL(evt_npc_status_onoff, 1, STRING("me"), 2)
+    CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
     RETURN
 EVT_END()
 
@@ -695,7 +695,7 @@ EVT_BEGIN(majyorin_evt_npc_entry)
     CALL(evt_npc_entry, STRING("にせ"), STRING("c_kuri_h"))
     CALL(evt_npc_set_tribe, STRING("にせ"), STRING("クリハカセ"))
     CALL(evt_npc_flag_onoff, 1, STRING("にせ"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
-    CALL(evt_npc_status_onoff, 1, STRING("にせ"), 2)
+    CALL(evt_npc_status_onoff, 1, STRING("にせ"), NPC_STATUS_FACE_MOVE_DIR)
     CALL(evt_npc_set_position, STRING("にせ"), 0, -1000, 0)
     RETURN
 EVT_END()

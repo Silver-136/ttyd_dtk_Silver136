@@ -1672,7 +1672,7 @@ static EVT_BEGIN(evt_gardman)
             BREAK_LOOP
         END_IF
     END_LOOP
-    CALL(evt_npc_status_onoff, 0, STRING("ガードマン"), 2)
+    CALL(evt_npc_status_onoff, 0, STRING("ガードマン"), NPC_STATUS_FACE_MOVE_DIR)
     CALL(evt_npc_flag_onoff, 1, STRING("ガードマン"), NPC_FLAG_INSTANT_TURN)
     CALL(evt_set_dir_to_target, STRING("ガードマン"), STRING("mario"))
     CALL(evt_npc_set_position, STRING("ガードマン"), 0, 0, -170)
@@ -1709,7 +1709,7 @@ static EVT_BEGIN(evt_gardman)
     END_IF
     WAIT_MS(300)
     CALL(evt_npc_change_interrupt, STRING("ガードマン"), 6, PTR(talk_gardman))
-    CALL(evt_npc_status_onoff, 1, STRING("ガードマン"), 2)
+    CALL(evt_npc_status_onoff, 1, STRING("ガードマン"), NPC_STATUS_FACE_MOVE_DIR)
     CALL(evt_npc_flag_onoff, 0, STRING("ガードマン"), NPC_FLAG_INSTANT_TURN)
     SET_VALUE(LW(0), 0)
     CALL_CHILD(PTR(bero_case_switch_off))
@@ -2212,12 +2212,12 @@ EVT_BEGIN(evt_michel_3)
     END_LOOP
     BEGIN_INLINE_EVENT
         WAIT_MS(400)
-        CALL(evt_npc_status_onoff, 1, STRING("ブロッツ"), 2)
+        CALL(evt_npc_status_onoff, 1, STRING("ブロッツ"), NPC_STATUS_FACE_MOVE_DIR)
         CALL(evt_npc_move_position, STRING("ブロッツ"), 1, -75, 0, FLOAT(80.0f), 1)
         CALL(evt_npc_move_position, STRING("ブロッツ"), -25, -75, 0, FLOAT(80.0f), 1)
         CALL(evt_set_dir_to_target, STRING("ブロッツ"), STRING("キノシコワ"))
     END_INLINE_EVENT
-    CALL(evt_npc_status_onoff, 1, STRING("キノシコワ"), 2)
+    CALL(evt_npc_status_onoff, 1, STRING("キノシコワ"), NPC_STATUS_FACE_MOVE_DIR)
     CALL(evt_npc_move_position, STRING("キノシコワ"), 1, -75, 0, FLOAT(80.0f), 1)
     CALL(evt_npc_move_position, STRING("キノシコワ"), 25, -75, 0, FLOAT(80.0f), 1)
     CALL(evt_set_dir_to_target, STRING("キノシコワ"), STRING("ブロッツ"))
@@ -3469,7 +3469,7 @@ EVT_BEGIN(evt_tou_match_after_default)
             CALL(evt_npc_set_anim, STRING("キノシコワ"), STRING("S_1"))
         END_IF
     END_IF
-    CALL(evt_npc_status_onoff, 1, STRING("キノシコワ"), 2)
+    CALL(evt_npc_status_onoff, 1, STRING("キノシコワ"), NPC_STATUS_FACE_MOVE_DIR)
     CALL(evt_npc_move_position, STRING("キノシコワ"), 0, -130, 0, FLOAT(80.0f), 1)
     SET_VALUE(LW(1), 0)
     SPAWN_EVENT(PTR(bero_open_door_play_se))

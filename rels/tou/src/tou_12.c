@@ -85,7 +85,7 @@ static EVT_BEGIN(evt_kinoshikowa)
     CALL(evt_eff_fukidashi, 1, 0, STRING("キノシコワ"), 0, 0, 0, 0, 0, 0, 0, 0)
     WAIT_MS(500)
     BEGIN_INLINE_EVENT
-        CALL(evt_npc_status_onoff, 1, STRING("キノシコワ"), 2)
+        CALL(evt_npc_status_onoff, 1, STRING("キノシコワ"), NPC_STATUS_FACE_MOVE_DIR)
         CALL(evt_npc_move_position, STRING("キノシコワ"), -250, 10, 0, FLOAT(80.0f), 1)
     END_INLINE_EVENT
     CALL(evt_mapobj_get_position, STRING("door_1"), LW(0), LW(1), LW(2))

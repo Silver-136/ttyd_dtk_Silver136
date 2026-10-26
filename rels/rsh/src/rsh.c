@@ -1491,7 +1491,7 @@ void rsh_window_tev(MapTevCallbackInfo* info) {
 BOOL img_wait(void) {
     ImageEntry* img = imgNameToPtr("capture_img", gp->inBattle != 0);
 
-    if (!(img->flags & 2) && img->loopTimes < 1.0f) {
+    if (!(img->flags & IMAGE_FLAG_HIDE) && img->loopTimes < 1.0f) {
         return FALSE;
     }
     return TRUE;

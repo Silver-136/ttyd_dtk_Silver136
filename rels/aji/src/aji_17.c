@@ -2783,24 +2783,24 @@ static EVT_BEGIN(peach_evt_stg6)
     WAIT_MS(500)
     BEGIN_INLINE_EVENT
         CALL(evt_npc_flag_onoff, 1, STRING(("\216\350\211\272\202P")), 1073741824)
-        CALL(evt_npc_status_onoff, 0, STRING(("\216\350\211\272\202P")), 2)
+        CALL(evt_npc_status_onoff, 0, STRING(("\216\350\211\272\202P")), NPC_STATUS_FACE_MOVE_DIR)
         WAIT_FRAMES(1)
         CALL(evt_npc_move_position, STRING(("\216\350\211\272\202P")), 105, -100, 100, 0, 0)
         WAIT_MS(100)
         CALL(evt_npc_move_position, STRING(("\216\350\211\272\202P")), 105, -95, 100, 0, 0)
         WAIT_MS(100)
-        CALL(evt_npc_status_onoff, 1, STRING(("\216\350\211\272\202P")), 2)
+        CALL(evt_npc_status_onoff, 1, STRING(("\216\350\211\272\202P")), NPC_STATUS_FACE_MOVE_DIR)
         CALL(evt_npc_flag_onoff, 0, STRING(("\216\350\211\272\202P")), 1073741824)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
         CALL(evt_npc_flag_onoff, 1, STRING(("\216\350\211\272\202Q")), 1073741824)
-        CALL(evt_npc_status_onoff, 0, STRING(("\216\350\211\272\202Q")), 2)
+        CALL(evt_npc_status_onoff, 0, STRING(("\216\350\211\272\202Q")), NPC_STATUS_FACE_MOVE_DIR)
         WAIT_FRAMES(1)
         CALL(evt_npc_move_position, STRING(("\216\350\211\272\202Q")), -105, -100, 100, 0, 0)
         WAIT_MS(100)
         CALL(evt_npc_move_position, STRING(("\216\350\211\272\202Q")), -105, -95, 100, 0, 0)
         WAIT_MS(100)
-        CALL(evt_npc_status_onoff, 1, STRING(("\216\350\211\272\202Q")), 2)
+        CALL(evt_npc_status_onoff, 1, STRING(("\216\350\211\272\202Q")), NPC_STATUS_FACE_MOVE_DIR)
         CALL(evt_npc_flag_onoff, 0, STRING(("\216\350\211\272\202Q")), 1073741824)
     END_INLINE_EVENT
     CALL(evt_mapobj_get_position, STRING(("S_sui2")), LW(0), LW(1), LW(2))
@@ -2888,19 +2888,19 @@ EVT_END()
 
 static EVT_BEGIN(teshita1_init)
     CALL_CHILD(PTR(npc_init_evt))
-    CALL(evt_npc_status_onoff, 1, STRING(("me")), 2)
+    CALL(evt_npc_status_onoff, 1, STRING(("me")), NPC_STATUS_FACE_MOVE_DIR)
     RETURN
 EVT_END()
 
 static EVT_BEGIN(teshita2_init)
     CALL_CHILD(PTR(npc_init_evt))
-    CALL(evt_npc_status_onoff, 1, STRING(("me")), 2)
+    CALL(evt_npc_status_onoff, 1, STRING(("me")), NPC_STATUS_FACE_MOVE_DIR)
     RETURN
 EVT_END()
 
 static EVT_BEGIN(syuryo_init)
     CALL_CHILD(PTR(npc_init_evt))
-    CALL(evt_npc_status_onoff, 1, STRING(("me")), 2)
+    CALL(evt_npc_status_onoff, 1, STRING(("me")), NPC_STATUS_FACE_MOVE_DIR)
     RETURN
 EVT_END()
 

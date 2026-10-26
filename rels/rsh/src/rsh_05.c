@@ -1623,12 +1623,12 @@ static EVT_BEGIN(evt_moamoa_escape)
     CALL(evt_npc_flag_onoff, 1, STRING("\x8e\xd4\x8f\xb6"), NPC_FLAG_NO_HIT)
     CALL(evt_npc_flag_onoff, 1, STRING(("\x83" "E\x83" "F\x83" "C\x83g\x83\x8c\x83X")), 32)
     BEGIN_INLINE_EVENT
-        CALL(evt_npc_status_onoff, 1, STRING("\x8e\xd4\x8f\xb6"), 2)
+        CALL(evt_npc_status_onoff, 1, STRING("\x8e\xd4\x8f\xb6"), NPC_STATUS_FACE_MOVE_DIR)
         CALL(evt_npc_move_position, STRING("\x8e\xd4\x8f\xb6"), -80, 22, 1000, 0, 1)
         CALL(evt_npc_set_ry, STRING("\x8e\xd4\x8f\xb6"), 90)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
-        CALL(evt_npc_status_onoff, 1, STRING(("\x83" "E\x83" "F\x83" "C\x83g\x83\x8c\x83X")), 2)
+        CALL(evt_npc_status_onoff, 1, STRING(("\x83" "E\x83" "F\x83" "C\x83g\x83\x8c\x83X")), NPC_STATUS_FACE_MOVE_DIR)
         CALL(evt_npc_move_position, STRING(("\x83" "E\x83" "F\x83" "C\x83g\x83\x8c\x83X")), 0, 15, 1000, 0, 1)
         CALL(evt_npc_set_ry, STRING(("\x83" "E\x83" "F\x83" "C\x83g\x83\x8c\x83X")), 270)
     END_INLINE_EVENT

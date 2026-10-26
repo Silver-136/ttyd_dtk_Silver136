@@ -1198,7 +1198,7 @@ s32 mobj_lv_blk_evt(MapObjectEntry* mobj) {
         if (img->loopTimes >= 1.0f) {
             mobj->state = 12;
         }
-        if (img->flags & 0x10000000) {
+        if (img->flags & IMAGE_FLAG_NO_CAPTURE) {
             mobj->state = 12;
         }
         mobj->position = (Vec){0.0f, -2000.0f, 0.0f};
@@ -2714,7 +2714,7 @@ s32 mobj_brickblk(MapObjectEntry* mobj) {
         if (img->loopTimes >= 1.0f) {
             mobj->state = 12;
         }
-        if (img->flags & 0x10000000) {
+        if (img->flags & IMAGE_FLAG_NO_CAPTURE) {
             mobj->state = 12;
         }
         mobj->position = (Vec){0.0f, -2000.0f, 0.0f};
@@ -4149,7 +4149,7 @@ s32 mobj_koopa_fireber_dodai_evt(MapObjectEntry* mobj) {
             npc->jumpTargetPos.y = 6.0f - irand(101) / 75.0f;
             npc->jumpTargetPos.z = 4.8f;
             npc->moveTime = 2.0f;
-            npc->jumpFlags |= 4;
+            npc->statusFlags |= NPC_STATUS_DEAD;
         }
         if (psndSFXChk(mobj->typeWork) == 0) {
             psndSFXOff(mobj->typeWork);
@@ -4559,7 +4559,7 @@ s32 mobj_koopa_pole_evt(MapObjectEntry* mobj) {
         for (i = 0, off = 0; i < npcGetWorkPtr()->total; off += 0x340, i++) {
             NpcEntry* npc = (NpcEntry*)((char*)npcGetWorkPtr()->entries + off);
             u32 flags = (u32)npc->flags;
-            if ((flags & 1) && !(npc->jumpFlags & 4) && (flags & 0x8000000) && (flags & 8)) {
+            if ((flags & 1) && !(npc->statusFlags & NPC_STATUS_DEAD) && (flags & 0x8000000) && (flags & 8)) {
                 npcGroupDead(npc, 0x20);
             }
         }

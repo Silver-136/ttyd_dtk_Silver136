@@ -255,7 +255,7 @@ static inline void npcLuigiPoseFlip(NpcEntry* entry) {
 
 static inline void npcDimColor(NpcEntry* entry) {
     GXColor color = entry->color;
-    if (entry->jumpFlags & 0x400000) {
+    if (entry->statusFlags & NPC_STATUS_DARKEN) {
         color.r /= 2;
         color.g /= 2;
         color.b /= 2;
@@ -274,7 +274,7 @@ void npcDisp_xlu(CameraId cameraId, void* param) {
     mtx_setup(entry, mtx, -1);
 
     color = entry->color;
-    if (entry->jumpFlags & 0x400000) {
+    if (entry->statusFlags & NPC_STATUS_DARKEN) {
         color.r /= 2;
         color.g /= 2;
         color.b /= 2;
@@ -301,7 +301,7 @@ void npcDisp(CameraId camId, void* param) {
 #ifdef VERSION_G8ME01
     // US: the dimmed colour is applied for every render mode
     color = entry->color;
-    if (entry->jumpFlags & 0x400000) {
+    if (entry->statusFlags & NPC_STATUS_DARKEN) {
         color.r /= 2;
         color.g /= 2;
         color.b /= 2;
@@ -314,7 +314,7 @@ void npcDisp(CameraId camId, void* param) {
     switch (dispGetCurWork()->renderMode) {
         case 0:
             color = entry->color;
-            if (entry->jumpFlags & 0x400000) {
+            if (entry->statusFlags & NPC_STATUS_DARKEN) {
                 color.r /= 2;
                 color.g /= 2;
                 if (rotY && rotY && rotY) {
@@ -675,17 +675,17 @@ void npcMain(void) {
             }
 
             if (!(entry->flags & NPC_FLAG_UPDATE_BY_EVENT)) {
-                entry->jumpFlags |= 0x10;
+                entry->statusFlags |= NPC_STATUS_UPDATE;
             }
-            if (entry->jumpFlags & 0x10000) {
-                entry->jumpFlags &= ~0x10;
+            if (entry->statusFlags & NPC_STATUS_STOPPED) {
+                entry->statusFlags &= ~NPC_STATUS_UPDATE;
             }
 
             if (entry->wFbatHitCheckRelated) {
                 entry->wFbatHitCheckRelated = entry->wFbatHitCheckRelated - 1;
             }
 
-            if (entry->jumpFlags & 0x10) {
+            if (entry->statusFlags & NPC_STATUS_UPDATE) {
                 entry->dtTicks = gp->renderTime - entry->lastUpdateTicks;
                 if (OSTicksToMilliseconds(entry->dtTicks) > 500) {
                     entry->dtTicks = OSMillisecondsToTicks(16);
@@ -707,34 +707,34 @@ void npcMain(void) {
             }
 
             if (entry->flags & NPC_FLAG_READY) {
-                if (entry->jumpFlags & 0x100000) {
-                    entry->jumpFlags |= 0x200000;
+                if (entry->statusFlags & NPC_STATUS_IN_WATER) {
+                    entry->statusFlags |= NPC_STATUS_WAS_IN_WATER;
                 } else {
-                    entry->jumpFlags &= ~0x200000;
+                    entry->statusFlags &= ~NPC_STATUS_WAS_IN_WATER;
                 }
-                entry->jumpFlags &= ~0x100000;
+                entry->statusFlags &= ~NPC_STATUS_IN_WATER;
                 {
                     f32 f30v;
                     if (!strcmp(gp->currentMapName, "kpa_03") && !(entry->position.y > 365.0f)) {
-                        entry->jumpFlags |= 0x100000;
-                        if (!(entry->jumpFlags & 0x200000) && (entry->jumpFlags & 0x100000)) {
+                        entry->statusFlags |= NPC_STATUS_IN_WATER;
+                        if (!(entry->statusFlags & NPC_STATUS_WAS_IN_WATER) && (entry->statusFlags & NPC_STATUS_IN_WATER)) {
                             psndSFXOn_3D(kpaSfx, &entry->position);
                         }
                     }
-                    if (entry->jumpFlags & 0x100000 && !(entry->jumpFlags & 0x10000000)) {
+                    if (entry->statusFlags & NPC_STATUS_IN_WATER && !(entry->statusFlags & NPC_STATUS_NO_WATER_DRAG)) {
                         entry->maxFallSpeed = 100.0f;
                         f30v = 0.5f;
                     } else {
                         f30v = 1.0f;
                     }
-                    if (entry->jumpFlags & 0x100000) {
+                    if (entry->statusFlags & NPC_STATUS_IN_WATER) {
                         entry->hazardFlags |= 1;
                     }
-                    if (entry->jumpFlags & 0x10) {
+                    if (entry->statusFlags & NPC_STATUS_UPDATE) {
                         if (entry->moveDt > 0.0f) {
                             f32 mx = entry->moveOffset.x;
                             f32 mz = entry->moveOffset.z;
-                            if (entry->jumpFlags & 0x100000 && !(entry->jumpFlags & 0x10000000)) {
+                            if (entry->statusFlags & NPC_STATUS_IN_WATER && !(entry->statusFlags & NPC_STATUS_NO_WATER_DRAG)) {
                                 mx *= 0.5f;
                                 mz *= 0.5f;
                             }
@@ -836,7 +836,7 @@ void npcMain(void) {
                             int trig;
                             PSVECSubtract(&entry->prevPosition, &entry->position, &dv2);
                             dir = entry->direction;
-                            if (entry->jumpFlags & 2) {
+                            if (entry->statusFlags & NPC_STATUS_FACE_MOVE_DIR) {
                                 if (sqrtf(dv2.x * dv2.x + dv2.z * dv2.z) > 0.05f) {
                                     dir = entry->moveDir;
                                 }
@@ -972,7 +972,7 @@ void npcMain(void) {
                         }
                         prio *= -1.0f;
                         if (!(entry->flags & NPC_FLAG_NO_DRAW) &&
-                            (!(entry->wFbatHitCheckRelated & 2) || (entry->jumpFlags & 0x10000))) {
+                            (!(entry->wFbatHitCheckRelated & 2) || (entry->statusFlags & NPC_STATUS_STOPPED))) {
                             if (entry->color.a != 0xFF) {
                                 dispEntry((CameraId)entry->cameraId, prio, 2, npcDisp_xlu, entry);
                             } else {
@@ -1038,7 +1038,7 @@ void npcMain(void) {
                     entry->positionHistory[0] = entry->position;
                 }
             }
-            entry->jumpFlags &= ~0x10;
+            entry->statusFlags &= ~NPC_STATUS_UPDATE;
         }
     }
 
@@ -1266,7 +1266,7 @@ void npcMoveG(NpcEntry* npc) {
 
     dy = npc->moveOffset.y;
     npc->moveOffset.y = 0.0f;
-    if (npc->jumpFlags & 0x100000 && !(npc->jumpFlags & 0x10000000)) {
+    if (npc->statusFlags & NPC_STATUS_IN_WATER && !(npc->statusFlags & NPC_STATUS_NO_WATER_DRAG)) {
         dy *= 0.5f;
     }
     vel = 0.0f;
@@ -1274,14 +1274,14 @@ void npcMoveG(NpcEntry* npc) {
         t = npc->jumpElapsed;
         dt = npc->moveDt;
         tp = t - dt;
-        if (!(npc->jumpFlags & 0x100000) || npc->jumpFlags & 0x10000000) {
+        if (!(npc->statusFlags & NPC_STATUS_IN_WATER) || npc->statusFlags & NPC_STATUS_NO_WATER_DRAG) {
             vel = npc->jumpVelY * dt + (-980.0f * npc->jumpGravity) * (t * t - tp * tp);
         } else {
             vel = 0.4f * (npc->jumpVelY * dt) + (0.15f * (-980.0f * npc->jumpGravity)) * (t * t - tp * tp);
         }
         vel *= npc->jumpYScale;
         if (npc->maxFallSpeed > 0.0f) {
-            if (npc->jumpFlags & 0x100000) {
+            if (npc->statusFlags & NPC_STATUS_IN_WATER) {
                 limit = 0.5f * (-npc->maxFallSpeed * dt);
             } else {
                 limit = -npc->maxFallSpeed * dt;
@@ -1299,7 +1299,7 @@ void npcMoveG(NpcEntry* npc) {
         }
     } else if (dy != 0.0f) {
         if (dy > 0.0f) {
-            npc->jumpFlags |= 1;
+            npc->statusFlags |= NPC_STATUS_AIRBORNE;
             npc->position.y += dy;
         } else {
             f64 ad = __fabs(dy);
@@ -1314,28 +1314,28 @@ void npcMoveG(NpcEntry* npc) {
             if ((npc->groundHit = hitCheckFilter(NULL, &hitX, &hitY, &hitZ, &dist, &hitNX, &hitNY, &hitNZ,
                                               npc->position.x, npc->position.y + hh, npc->position.z, 0.0f,
                                               -1.0f, 0.0f)) == NULL) {
-                npc->jumpFlags |= 1;
+                npc->statusFlags |= NPC_STATUS_AIRBORNE;
                 npc->position.y += dy;
             } else {
 #endif
-                npc->jumpFlags &= ~1;
+                npc->statusFlags &= ~NPC_STATUS_AIRBORNE;
                 npc->position.y = hitY;
                 npc->jumpTicks = 0;
 #ifdef VERSION_G8ME01
             } else if ((npc->groundHit = hitCheckFilter(NULL, &hitX, &hitY, &hitZ, &dist, &hitNX, &hitNY, &hitNZ,
                                               npc->position.x + 0.5f * npc->width, npc->position.y + hh,
                                               npc->position.z, 0.0f, -1.0f, 0.0f)) != NULL) {
-                npc->jumpFlags &= ~1;
+                npc->statusFlags &= ~NPC_STATUS_AIRBORNE;
                 npc->position.y = hitY;
                 npc->jumpTicks = 0;
             } else if ((npc->groundHit = hitCheckFilter(NULL, &hitX, &hitY, &hitZ, &dist, &hitNX, &hitNY, &hitNZ,
                                               npc->position.x - 0.5f * npc->width, npc->position.y + hh,
                                               npc->position.z, 0.0f, -1.0f, 0.0f)) != NULL) {
-                npc->jumpFlags &= ~1;
+                npc->statusFlags &= ~NPC_STATUS_AIRBORNE;
                 npc->position.y = hitY;
                 npc->jumpTicks = 0;
             } else {
-                npc->jumpFlags |= 1;
+                npc->statusFlags |= NPC_STATUS_AIRBORNE;
                 npc->position.y += dy;
             }
 #else
@@ -1861,9 +1861,9 @@ void fbatEncountCheck(void) {
                 }
             }
             if (hit) {
-                if (!(npc->jumpFlags & 0x20000000)) {
+                if (!(npc->statusFlags & NPC_STATUS_TALK_PAUSE)) {
                     MarioWork *m = marioGetPtr();
-                    npc->jumpFlags |= 0x20000000;
+                    npc->statusFlags |= NPC_STATUS_TALK_PAUSE;
                     npc->savedDirection = npc->direction;
                     evtStopID(npc->regularEvtId);
                     if (!(npc->flags & NPC_FLAG_NO_TALK_TURN)) {
@@ -1871,8 +1871,8 @@ void fbatEncountCheck(void) {
                     }
                 }
             } else
-                if (npc->jumpFlags & 0x20000000) {
-                npc->jumpFlags &= ~0x20000000;
+                if (npc->statusFlags & NPC_STATUS_TALK_PAUSE) {
+                npc->statusFlags &= ~NPC_STATUS_TALK_PAUSE;
                 if (npc->flags & NPC_FLAG_RESUME_AFTER_TALK) {
                     npc->direction = npc->savedDirection;
                     evtStartID(npc->regularEvtId);
@@ -1959,7 +1959,7 @@ void fbatTalkMode(void) {
             break;
         case 1:
             if (!evtCheckID(data->evtId)) {
-                if (!(npc->jumpFlags & 0x20000000)) {
+                if (!(npc->statusFlags & NPC_STATUS_TALK_PAUSE)) {
                     evtStartID(data->npc->regularEvtId);
                     npc->direction = npc->savedDirection;
                 }
@@ -2122,7 +2122,7 @@ void fbatBattleMode(void) {
                     num = wp->total;
                     for (result = 0, cur = wp->entries; result < num; result++, cur++) {
                         if (cur && (cur->flags & NPC_FLAG_READY) && (cur->flags & NPC_FLAG_STOP_FOR_EVENT)) {
-                            cur->jumpFlags |= 0x10000;
+                            cur->statusFlags |= NPC_STATUS_STOPPED;
                             evtStopID(cur->regularEvtId);
                             animPoseSetLocalTimeRate(cur->poseId, 0.0f);
                         }
@@ -2143,8 +2143,8 @@ void fbatBattleMode(void) {
                 num = wp->total;
                 for (result = 0, cur = wp->entries; result < num; result++, cur++) {
                     if (cur && (cur->flags & NPC_FLAG_READY) && (cur->flags & NPC_FLAG_STOP_FOR_EVENT) &&
-                (cur->jumpFlags & 0x10000)) {
-                        cur->jumpFlags &= ~0x10000;
+                (cur->statusFlags & NPC_STATUS_STOPPED)) {
+                        cur->statusFlags &= ~NPC_STATUS_STOPPED;
                         evtStartID(cur->regularEvtId);
                         animPoseSetLocalTimeRate(cur->poseId, 1.0f);
                     }
@@ -2236,7 +2236,7 @@ void fbatBattleMode(void) {
 
 void _npcDead(NpcEntry* npc, u16 reason) {
     npc->interruptFlags |= 0x10;
-    npc->jumpFlags |= 4;
+    npc->statusFlags |= NPC_STATUS_DEAD;
     npc->koopaEncounterType = reason;
     if (npc->flags & NPC_FLAG_RECORD_DEFEAT) {
         fbatGetPointer()->deadInfo[0].mask |= 1 << npc->setupIndex;
@@ -2315,7 +2315,7 @@ static inline BOOL fbat_canHit(NpcEntry* npc) {
     if (soft && !((*(u32*)&((NpcEntry*)npc)->reactionFlags) & (bit))) continue;                              \
     if (npc->flags & NPC_FLAG_NO_PLAYER_ATTACK) continue;                                           \
     if (npc->flags & NPC_FLAG_NO_HIT) continue;                                                 \
-    if ((*(u32*)&((NpcEntry*)npc)->jumpFlags) & 4) continue;                                           \
+    if ((*(u32*)&((NpcEntry*)npc)->statusFlags) & 4) continue;                                           \
     if (npc->flags & NPC_FLAG_2D) continue;
 
 #define FH_NPC_FILTER2(f1000, bit)                                                         \
@@ -2326,7 +2326,7 @@ static inline BOOL fbat_canHit(NpcEntry* npc) {
     if (npc->flags & NPC_FLAG_NO_PLAYER_ATTACK) continue;                                                 \
     if (npc->flags & NPC_FLAG_NO_HIT) continue;                                                       \
     if (npc->flags & NPC_FLAG_2D) continue;                                                 \
-    if ((*(u32*)&((NpcEntry*)npc)->jumpFlags) & 4) continue;
+    if ((*(u32*)&((NpcEntry*)npc)->statusFlags) & 4) continue;
 
 typedef struct { s32 v[11]; } SinTbl;
 static const SinTbl sSinTbl = {{0, 0, 0, 0, 45, 60, 90, 100, 101, 101, 101}};
@@ -2375,7 +2375,7 @@ void* fbatHitCheck(u32 flags, void* result) {
                     }
                     if (soft && !(npc->reactionFlags & 1)) continue;
                     if (npc->flags & NPC_FLAG_NO_HIT) continue;
-                    if (npc->jumpFlags & 4) continue;
+                    if (npc->statusFlags & NPC_STATUS_DEAD) continue;
                     if (npc->flags & NPC_FLAG_2D) continue;
                     if (mario->position.y >= (*(f32*)&((NpcEntry*)npc)->position.y) + (*(f32*)&((NpcEntry*)npc)->height)) continue;
                     if (mario->position.y + mario->wPlayerCollisionBox.y <= (*(f32*)&((NpcEntry*)npc)->position.y)) continue;
@@ -2384,7 +2384,7 @@ void* fbatHitCheck(u32 flags, void* result) {
                     dist = sqrtf(dx * dx + dz * dz);
                     if (dist > 0.5f * (mario->wPlayerCollisionBox.x + (*(f32*)&((NpcEntry*)npc)->width))) continue;
                     if (dist >= res.dist) continue;
-                    if (noJump && !((*(u32*)&((NpcEntry*)npc)->jumpFlags) & 0x10000) && mario->mutekiTimer <= 0) {
+                    if (noJump && !((*(u32*)&((NpcEntry*)npc)->statusFlags) & 0x10000) && mario->mutekiTimer <= 0) {
                         if ((*(s32*)&((NpcEntry*)npc)->attackMode) == 0 ||
                             (evtGetPtrID((*(s32*)&((NpcEntry*)npc)->regularEvtId)) ? evtGetPtrID((*(s32*)&((NpcEntry*)npc)->regularEvtId))->wNpcEventType == 5 : 0)) {
                             if (npc->flags & NPC_FLAG_NO_PLAYER_ATTACK) continue;
@@ -2685,17 +2685,17 @@ BOOL npcCheckInterrupt(NpcEntry* npc) {
             evt = evtEntry(npc->blowEvent, 0, EVENT_START_IMMEDIATE);
             evt->wNpcEventType = 5;
             evt->ownerNPC = npc;
-        } else if ((flags & 1) && npc->findEvent && !(npc->jumpFlags & 0x1000) &&
+        } else if ((flags & 1) && npc->findEvent && !(npc->statusFlags & NPC_STATUS_NO_FIND_ONCE) &&
                    !(npc->flags & NPC_FLAG_NO_FIND) && !(flags & 0x100)) {
             evt = evtEntry(npc->findEvent, 0, EVENT_START_IMMEDIATE);
             evt->wNpcEventType = 2;
             evt->ownerNPC = npc;
-        } else if ((flags & 2) && npc->lostEvent && !(npc->jumpFlags & 0x1000) &&
+        } else if ((flags & 2) && npc->lostEvent && !(npc->statusFlags & NPC_STATUS_NO_FIND_ONCE) &&
                    !(npc->flags & NPC_FLAG_NO_FIND)) {
             evt = evtEntry(npc->lostEvent, 0, EVENT_START_IMMEDIATE);
             evt->wNpcEventType = 3;
             evt->ownerNPC = npc;
-        } else if ((flags & 4) && npc->returnEvent && !(npc->jumpFlags & 0x1000) &&
+        } else if ((flags & 4) && npc->returnEvent && !(npc->statusFlags & NPC_STATUS_NO_FIND_ONCE) &&
                    !(npc->flags & NPC_FLAG_NO_FIND)) {
             evt = evtEntry(npc->returnEvent, 0, EVENT_START_IMMEDIATE);
             evt->wNpcEventType = 4;
@@ -2705,14 +2705,14 @@ BOOL npcCheckInterrupt(NpcEntry* npc) {
             evtDeleteID(npc->regularEvtId);
             npc->regularEvtId = evt->eventId;
             npc->interruptFlags &= 0xF00;
-            npc->jumpFlags &= ~0x1000;
+            npc->statusFlags &= ~NPC_STATUS_NO_FIND_ONCE;
             npc->moveTicks = 0;
             npc->moveSpeed = 0.0f;
             return TRUE;
         }
     }
     npc->interruptFlags &= 0xF00;
-    npc->jumpFlags &= ~0x1000;
+    npc->statusFlags &= ~NPC_STATUS_NO_FIND_ONCE;
     return FALSE;
 }
 
@@ -2857,7 +2857,7 @@ void npcStopForEvent(void) {
 
 void npcStopForOneEvent(NpcEntry* npc) {
     if (npc && npc->flags & NPC_FLAG_READY && npc->flags & NPC_FLAG_STOP_FOR_EVENT) {
-        npc->jumpFlags |= 0x10000;
+        npc->statusFlags |= NPC_STATUS_STOPPED;
         evtStopID(npc->regularEvtId);
         animPoseSetLocalTimeRate(npc->poseId, 0.0f);
     }
@@ -2880,8 +2880,8 @@ void npcStartForEvent(void) {
 }
 
 void npcStartForOneEvent(NpcEntry* npc) {
-    if (npc && npc->flags & NPC_FLAG_READY && npc->flags & NPC_FLAG_STOP_FOR_EVENT && npc->jumpFlags & 0x10000) {
-        npc->jumpFlags &= ~0x10000;
+    if (npc && npc->flags & NPC_FLAG_READY && npc->flags & NPC_FLAG_STOP_FOR_EVENT && npc->statusFlags & NPC_STATUS_STOPPED) {
+        npc->statusFlags &= ~NPC_STATUS_STOPPED;
         evtStartID(npc->regularEvtId);
         animPoseSetLocalTimeRate(npc->poseId, 1.0f);
     }
@@ -3172,7 +3172,7 @@ void npcKoopaModeEncountCheck(void) {
     if (data->mode == 1) {
         entry = wp->entries;
         for (i = 0; i < total; i++, entry++) {
-            if (entry && entry->flags & NPC_FLAG_IN_USE && entry->flags & NPC_FLAG_2D && !(entry->jumpFlags & 4)) {
+            if (entry && entry->flags & NPC_FLAG_IN_USE && entry->flags & NPC_FLAG_2D && !(entry->statusFlags & NPC_STATUS_DEAD)) {
                 switch (kpaEnemyHitChk(entry->position.x, entry->position.y, entry->position.z, entry->height,
                                        entry->width)) {
                     case 1:
@@ -3221,7 +3221,7 @@ s32 npcKoopaModeMobjBoundDeadCheck(HitEntry* hit) {
     }
     entry = wp->entries;
     for (i = 0; i < total; i++, entry++) {
-        if (entry && entry->flags & NPC_FLAG_IN_USE && entry->flags & NPC_FLAG_2D && !(entry->jumpFlags & 4) &&
+        if (entry && entry->flags & NPC_FLAG_IN_USE && entry->flags & NPC_FLAG_2D && !(entry->statusFlags & NPC_STATUS_DEAD) &&
             !(entry->hazardFlags & 8) && entry->groundHit == hit) {
             npcGroupDead(entry, 8);
             count++;

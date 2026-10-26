@@ -458,7 +458,7 @@ static inline MapAnim* mapSearchAnmObj_inl(const char* animName) {
     for (i = 0; i < wp->entries[0].count; entry++, i++) {
         anim = (MapAnim*)entry->animData;
         for (j = 0; j < entry->numAnims; j++, anim++) {
-            if ((anim->flags & 1) && !strcmp(anim->anim->name, animName)) {
+            if ((anim->flags & MAP_ANIM_FLAG_ACTIVE) && !strcmp(anim->anim->name, animName)) {
                 return anim;
             }
         }
@@ -477,7 +477,7 @@ MapEntryAnimData* mapSearchAnmObj(const char* animName) {
     for (i = 0; i < wp->entries[0].count; entry++, i++) {
         anim = (MapAnim*)entry->animData;
         for (j = 0; j < entry->numAnims; j++, anim++) {
-            if ((anim->flags & 1) && !strcmp(anim->anim->name, animName)) {
+            if ((anim->flags & MAP_ANIM_FLAG_ACTIVE) && !strcmp(anim->anim->name, animName)) {
                 return (MapEntryAnimData*)anim;
             }
         }
@@ -491,7 +491,7 @@ void mapCheckAnimation(const char* animName, BOOL* valid, f32* remainingMs) {
     *valid = FALSE;
     *remainingMs = 0.0f;
     if (anim) {
-        if (anim->flags & 2) {
+        if (anim->flags & MAP_ANIM_FLAG_END) {
             *valid = TRUE;
         }
         *remainingMs = 1000.0f * (anim->anim->length - anim->time) / gp->framerate;
@@ -529,25 +529,25 @@ void mapPlayAnimationLv(const char* name, s32 mode, s32 level) {
             case 0:
                 break;
             case 1:
-                anim->flags |= 0x100;
+                anim->flags |= MAP_ANIM_FLAG_LV0_TIME;
                 break;
             case 2:
-                anim->flags |= 0x200;
+                anim->flags |= MAP_ANIM_FLAG_LV1_TIME;
                 break;
             case 3:
-                anim->flags |= 0x400;
+                anim->flags |= MAP_ANIM_FLAG_LV2_TIME;
                 break;
             case 4:
-                anim->flags |= 0x800;
+                anim->flags |= MAP_ANIM_FLAG_LV3_TIME;
                 break;
         }
-        if (anim->flags & 0x100) {
+        if (anim->flags & MAP_ANIM_FLAG_LV0_TIME) {
             t = gp->systemLv0Time;
-        } else if (anim->flags & 0x200) {
+        } else if (anim->flags & MAP_ANIM_FLAG_LV1_TIME) {
             t = gp->systemLv1Time;
-        } else if (anim->flags & 0x400) {
+        } else if (anim->flags & MAP_ANIM_FLAG_LV2_TIME) {
             t = gp->systemLv2Time;
-        } else if (anim->flags & 0x800) {
+        } else if (anim->flags & MAP_ANIM_FLAG_LV3_TIME) {
             t = gp->systemLv3Time;
         } else if (gp->inBattle) {
             t = gp->renderTime;
@@ -557,9 +557,9 @@ void mapPlayAnimationLv(const char* name, s32 mode, s32 level) {
         anim->startTime = OSTicksToMilliseconds(t);
         anim->time = 0.0f;
         anim->rate = 1.0f;
-        anim->flags |= 1;
+        anim->flags |= MAP_ANIM_FLAG_ACTIVE;
         if (mode == 1) {
-            anim->flags |= 4;
+            anim->flags |= MAP_ANIM_FLAG_LOOP;
         }
         if (mode == 2) {
             anim->startTime -= (u64)(1000.0f * anim->anim->length / gp->framerate);
@@ -570,14 +570,14 @@ void mapPlayAnimationLv(const char* name, s32 mode, s32 level) {
 void mapPauseAnimation(const char* name) {
     MapAnim* anim = mapSearchAnmObj_inl(name);
     if (anim) {
-        anim->flags |= 0x10;
+        anim->flags |= MAP_ANIM_FLAG_PAUSE;
     }
 }
 
 void mapReStartAnimation(const char* name) {
     MapAnim* anim = mapSearchAnmObj_inl(name);
     if (anim) {
-        anim->flags |= 0x20;
+        anim->flags |= MAP_ANIM_FLAG_RESTART;
     }
 }
 
@@ -591,7 +591,7 @@ void mapPauseAnimationAll(const char* name) {
     for (i = 0; i < wp->entries[0].count; entry++, i++) {
         anim = (MapAnim*)entry->animData;
         for (j = 0; j < entry->numAnims; j++, anim++) {
-            anim->flags |= 0x10;
+            anim->flags |= MAP_ANIM_FLAG_PAUSE;
         }
     }
 }
@@ -606,7 +606,7 @@ void mapReStartAnimationAll(const char* name) {
     for (i = 0; i < wp->entries[0].count; entry++, i++) {
         anim = (MapAnim*)entry->animData;
         for (j = 0; j < entry->numAnims; j++, anim++) {
-            anim->flags |= 0x20;
+            anim->flags |= MAP_ANIM_FLAG_RESTART;
         }
     }
 }
@@ -1483,23 +1483,23 @@ void mapMain(void) {
             MapAnimList* ll = anim->anim->lightAnims;
             MapAnimList* lc = anim->anim->lightColorAnims;
 
-            if (!(anim->flags & 1) || (anim->flags & 2)) {
+            if (!(anim->flags & MAP_ANIM_FLAG_ACTIVE) || (anim->flags & MAP_ANIM_FLAG_END)) {
                 continue;
             }
-            if (anim->flags & 0x100) {
+            if (anim->flags & MAP_ANIM_FLAG_LV0_TIME) {
                 t = gp->systemLv0Time;
-            } else if (anim->flags & 0x200) {
+            } else if (anim->flags & MAP_ANIM_FLAG_LV1_TIME) {
                 t = gp->systemLv1Time;
-            } else if (anim->flags & 0x400) {
+            } else if (anim->flags & MAP_ANIM_FLAG_LV2_TIME) {
                 t = gp->systemLv2Time;
-            } else if (anim->flags & 0x800) {
+            } else if (anim->flags & MAP_ANIM_FLAG_LV3_TIME) {
                 t = gp->systemLv3Time;
             } else if (gp->inBattle) {
                 t = gp->renderTime;
             } else {
                 t = gp->renderFieldTime;
             }
-            if (!(anim->flags & 0x10)) {
+            if (!(anim->flags & MAP_ANIM_FLAG_PAUSE)) {
                 ms = OSTicksToMilliseconds(t);
                 cur = gp->framerate * (f32)(u64)(ms - anim->startTime) / 1000.0f;
                 if (cur < anim->time) {
@@ -1509,14 +1509,14 @@ void mapMain(void) {
                 }
                 anim->startTime = OSTicksToMilliseconds(t);
                 anim->startTime -= (u64)(1000.0f * anim->time / gp->framerate);
-            } else if (anim->flags & 0x20) {
+            } else if (anim->flags & MAP_ANIM_FLAG_RESTART) {
                 anim->startTime = OSTicksToMilliseconds(t);
                 anim->startTime -= (u64)(1000.0f * anim->time / gp->framerate);
-                anim->flags &= ~0x20;
-                anim->flags &= ~0x10;
+                anim->flags &= ~MAP_ANIM_FLAG_RESTART;
+                anim->flags &= ~MAP_ANIM_FLAG_PAUSE;
             }
             if (anim->time >= anim->anim->length) {
-                if (anim->flags & 4) {
+                if (anim->flags & MAP_ANIM_FLAG_LOOP) {
                     f32 t2 = anim->time;
                     while (t2 > anim->anim->length) {
                         t2 -= anim->anim->length;
@@ -1526,7 +1526,7 @@ void mapMain(void) {
                     anim->startTime -= (u64)(1000.0f * anim->time / gp->framerate);
                 } else {
                     anim->time = anim->anim->length;
-                    anim->flags |= 2;
+                    anim->flags |= MAP_ANIM_FLAG_END;
                 }
             }
             if (jl) {

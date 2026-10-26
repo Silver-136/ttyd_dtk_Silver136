@@ -96,7 +96,7 @@ USER_FUNC(evt_img_alloc_capture) {
             sh->copyFmt = 6;
             sh->texFmt = 6;
         }
-        img->flags |= 4;
+        img->flags |= IMAGE_FLAG_OFFSCREEN_RECT;
     } else {
         if (x < 0 || y < 0 || w <= 0 || h <= 0 ||
             x + w > DEMOGetRenderModeObj()->fbWidth || y + h > DEMOGetRenderModeObj()->efbHeight) {
@@ -137,9 +137,9 @@ USER_FUNC(evt_img_onoff) {
     s32 on = evtGetValue(event, args[1]);
     ImageEntry* img = imgNameToPtr(name, gp->inBattle != 0);
     if (on != 0) {
-        img->flags &= ~2;
+        img->flags &= ~IMAGE_FLAG_HIDE;
     } else {
-        img->flags |= 2;
+        img->flags |= IMAGE_FLAG_HIDE;
     }
     return EVT_RETURN_DONE;
 }

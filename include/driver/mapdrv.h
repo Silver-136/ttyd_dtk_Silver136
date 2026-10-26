@@ -239,8 +239,22 @@ typedef struct MapAnimHeader {
     struct MapAnimList* lightColorAnims; // 0x1C
 } MapAnimHeader;
 
+// MapEntryAnimData.flags (map animations)
+typedef enum MapAnimFlags {
+    MAP_ANIM_FLAG_ACTIVE = (1 << 0),       // 0x1
+    MAP_ANIM_FLAG_END = (1 << 1),          // 0x2
+    MAP_ANIM_FLAG_LOOP = (1 << 2),         // 0x4
+    MAP_ANIM_FLAG_PAUSE = (1 << 4),        // 0x10
+    MAP_ANIM_FLAG_RESTART = (1 << 5),      // 0x20
+    MAP_ANIM_FLAG_LV0_TIME = (1 << 8),     // 0x100, which clock it runs on
+    MAP_ANIM_FLAG_LV1_TIME = (1 << 9),     // 0x200
+    MAP_ANIM_FLAG_LV2_TIME = (1 << 10),    // 0x400
+    MAP_ANIM_FLAG_LV3_TIME = (1 << 11),    // 0x800
+    MAP_ANIM_FLAG_HIT_UPDATED = (1 << 12), // 0x1000, hitMain
+} MapAnimFlags;
+
 typedef struct MapEntryAnimData {
-    u16 flags;                // 0x0
+    u16 flags;                // 0x0, MapAnimFlags
     u8 pad_02[0x8 - 0x2];     // 0x2
     OSTime startTime;         // 0x8
     f32 time;                 // 0x10

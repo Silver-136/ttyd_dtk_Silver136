@@ -278,12 +278,12 @@ static EVT_BEGIN(init_michel)
         CASE_LESS(172)
         IF_INT_EQUAL(GSWF(2412), 0)
             CALL(evt_npc_set_position, STRING("me"), 120, 0, -30)
-            CALL(evt_npc_status_onoff, 1, STRING("me"), 2)
+            CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
             CALL(evt_npc_set_ry, STRING("me"), 270)
         END_IF
         CASE_DEFAULT
         CALL(evt_npc_set_position, STRING("me"), 120, 0, -30)
-        CALL(evt_npc_status_onoff, 1, STRING("me"), 2)
+        CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
         CALL(evt_npc_set_ry, STRING("me"), 270)
     END_SWITCH
     RETURN
@@ -322,7 +322,7 @@ EVT_END()
 
 EVT_BEGIN(init_octo)
     CALL(evt_npc_set_position, STRING("オクトール"), 80, 0, 85)
-    CALL(evt_npc_status_onoff, 1, STRING("オクトール"), 2)
+    CALL(evt_npc_status_onoff, 1, STRING("オクトール"), NPC_STATUS_FACE_MOVE_DIR)
     CALL(evt_npc_set_ry, STRING("オクトール"), 270)
     RETURN
 EVT_END()
@@ -380,13 +380,13 @@ static EVT_BEGIN(init_brots)
             ELSE
             IF_INT_EQUAL(GSWF(2406), 0)
                 CALL(evt_npc_set_position, STRING("me"), -160, 0, -50)
-                CALL(evt_npc_status_onoff, 1, STRING("me"), 2)
+                CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
                 CALL(evt_npc_set_ry, STRING("me"), 90)
             END_IF
         END_IF
         ELSE
         CALL(evt_npc_set_position, STRING("me"), -160, 0, -50)
-        CALL(evt_npc_status_onoff, 1, STRING("me"), 2)
+        CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
         CALL(evt_npc_set_ry, STRING("me"), 90)
     END_IF
     RETURN
@@ -411,7 +411,7 @@ EVT_END()
 
 EVT_BEGIN(init_gangan)
     CALL(evt_npc_set_position, STRING("me"), -75, 0, 90)
-    CALL(evt_npc_status_onoff, 1, STRING("me"), 2)
+    CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
     CALL(evt_npc_set_ry, STRING("me"), 90)
     RETURN
 EVT_END()
@@ -463,7 +463,7 @@ EVT_BEGIN(talk_gangan)
 EVT_END()
 
 EVT_BEGIN(init_poku)
-    CALL(evt_npc_status_onoff, 1, STRING("me"), 2)
+    CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(172)
         IF_INT_EQUAL(GSWF(2397), 1)
@@ -474,7 +474,7 @@ EVT_BEGIN(init_poku)
             CALL(evt_npc_set_position, STRING("me"), 120, 0, -30)
         END_IF
     END_SWITCH
-    CALL(evt_npc_status_onoff, 1, STRING("me"), 2)
+    CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
     CALL(evt_npc_set_ry, STRING("me"), 270)
     RETURN
 EVT_END()
@@ -512,7 +512,7 @@ EVT_BEGIN(init_iron)
             CALL(evt_npc_set_position, STRING("me"), 75, 0, -100)
         END_IF
     END_IF
-    CALL(evt_npc_status_onoff, 1, STRING("me"), 2)
+    CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
     CALL(evt_npc_set_ry, STRING("me"), 270)
     CALL(evt_npc_set_scale, STRING("me"), FLOAT(1.5f), FLOAT(1.5f), FLOAT(1.0f))
     RETURN
@@ -542,7 +542,7 @@ EVT_BEGIN(init_iron2)
             CALL(evt_npc_set_position, STRING("me"), 100, 0, -80)
         END_IF
     END_IF
-    CALL(evt_npc_status_onoff, 1, STRING("me"), 2)
+    CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
     CALL(evt_npc_set_ry, STRING("me"), 270)
     CALL(evt_npc_set_scale, STRING("me"), FLOAT(1.5f), FLOAT(1.5f), FLOAT(1.0f))
     RETURN
@@ -699,7 +699,7 @@ EVT_BEGIN(evt_saisyo_after)
         CALL(evt_msg_print, 0, STRING("stg3_tou_93_1"), 0, STRING("ガンス"))
     END_IF
     WAIT_MS(300)
-    CALL(evt_npc_status_onoff, 1, STRING("ガンス"), 2)
+    CALL(evt_npc_status_onoff, 1, STRING("ガンス"), NPC_STATUS_FACE_MOVE_DIR)
     CALL(evt_npc_move_position, STRING("ガンス"), 0, -130, 0, FLOAT(80.0f), 1)
     SET_VALUE(LW(1), 0)
     SPAWN_EVENT(PTR(bero_open_door_play_se))
@@ -727,7 +727,7 @@ EVT_BEGIN(evt_saisyo_after)
         END_IF
     END_LOOP
     CALL(evt_npc_flag_onoff, 1, STRING("キノシコワ"), NPC_FLAG_NO_HIT)
-    CALL(evt_npc_status_onoff, 1, STRING("キノシコワ"), 2)
+    CALL(evt_npc_status_onoff, 1, STRING("キノシコワ"), NPC_STATUS_FACE_MOVE_DIR)
     CALL(evt_npc_move_position, STRING("キノシコワ"), -55, -95, 0, FLOAT(80.0f), 1)
     IF_INT_EQUAL(GSWF(2396), 1)
         CALL(evt_msg_print, 0, STRING("stg3_tou_90"), 0, STRING("キノシコワ"))
@@ -807,7 +807,7 @@ EVT_BEGIN(evt_saisyo_after)
         WAIT_MS(600)
         CALL(evt_npc_set_anim, STRING("キノシコワ"), STRING("S_1"))
     END_IF
-    CALL(evt_npc_status_onoff, 1, STRING("キノシコワ"), 2)
+    CALL(evt_npc_status_onoff, 1, STRING("キノシコワ"), NPC_STATUS_FACE_MOVE_DIR)
     CALL(evt_npc_move_position, STRING("キノシコワ"), 0, -130, 0, FLOAT(80.0f), 1)
     SET_VALUE(LW(1), 0)
     SPAWN_EVENT(PTR(bero_open_door_play_se))
@@ -978,7 +978,7 @@ EVT_BEGIN(evt_saisyo_after_re)
     WAIT_MS(300)
     CALL(evt_npc_set_anim, STRING("キノシコワ"), STRING("M_1"))
     WAIT_MS(300)
-    CALL(evt_npc_status_onoff, 1, STRING("キノシコワ"), 2)
+    CALL(evt_npc_status_onoff, 1, STRING("キノシコワ"), NPC_STATUS_FACE_MOVE_DIR)
     CALL(evt_npc_move_position, STRING("キノシコワ"), 0, -130, 0, FLOAT(80.0f), 1)
     SET_VALUE(LW(1), 0)
     SPAWN_EVENT(PTR(bero_open_door_play_se))
@@ -1176,7 +1176,7 @@ static EVT_BEGIN(evt_1st_leagu)
     CALL(evt_npc_set_anim, STRING("キノシコワ"), STRING("M_1"))
     WAIT_MS(600)
     CALL(evt_npc_set_anim, STRING("キノシコワ"), STRING("S_1"))
-    CALL(evt_npc_status_onoff, 1, STRING("キノシコワ"), 2)
+    CALL(evt_npc_status_onoff, 1, STRING("キノシコワ"), NPC_STATUS_FACE_MOVE_DIR)
     CALL(evt_npc_move_position, STRING("キノシコワ"), 0, -130, 0, FLOAT(80.0f), 1)
     SET_VALUE(LW(1), 0)
     SPAWN_EVENT(PTR(bero_open_door_play_se))
@@ -1250,7 +1250,7 @@ EVT_BEGIN(evt_1st_leagu_re)
     CALL(evt_npc_set_anim, STRING("キノシコワ"), STRING("M_1"))
     WAIT_MS(600)
     CALL(evt_npc_set_anim, STRING("キノシコワ"), STRING("S_1"))
-    CALL(evt_npc_status_onoff, 1, STRING("キノシコワ"), 2)
+    CALL(evt_npc_status_onoff, 1, STRING("キノシコワ"), NPC_STATUS_FACE_MOVE_DIR)
     CALL(evt_npc_move_position, STRING("キノシコワ"), 0, -130, 0, FLOAT(80.0f), 1)
     SET_VALUE(LW(1), 0)
     SPAWN_EVENT(PTR(bero_open_door_play_se))
@@ -1316,7 +1316,7 @@ EVT_BEGIN(evt_rec)
             BREAK_LOOP
         END_IF
     END_LOOP
-    CALL(evt_npc_status_onoff, 1, STRING("キノシコワ"), 2)
+    CALL(evt_npc_status_onoff, 1, STRING("キノシコワ"), NPC_STATUS_FACE_MOVE_DIR)
     CALL(evt_npc_move_position, STRING("キノシコワ"), 1, -120, 0, FLOAT(80.0f), 1)
     BEGIN_INLINE_EVENT
         CALL(evt_party_stop, 0)
@@ -1421,7 +1421,7 @@ static EVT_BEGIN(evt_gardman)
             BREAK_LOOP
         END_IF
     END_LOOP
-    CALL(evt_npc_status_onoff, 0, STRING("ガードマン"), 2)
+    CALL(evt_npc_status_onoff, 0, STRING("ガードマン"), NPC_STATUS_FACE_MOVE_DIR)
     CALL(evt_npc_flag_onoff, 1, STRING("ガードマン"), NPC_FLAG_INSTANT_TURN)
     CALL(evt_set_dir_to_target, STRING("ガードマン"), STRING("mario"))
     CALL(evt_npc_set_position, STRING("ガードマン"), 0, 0, -170)
@@ -1441,7 +1441,7 @@ static EVT_BEGIN(evt_gardman)
     WAIT_MS(300)
     CALL(evt_msg_print, 0, STRING("stg3_tou_75"), 0, STRING("キノシコワ"))
     WAIT_MS(300)
-    CALL(evt_npc_status_onoff, 1, STRING("ガードマン"), 2)
+    CALL(evt_npc_status_onoff, 1, STRING("ガードマン"), NPC_STATUS_FACE_MOVE_DIR)
     CALL(evt_npc_flag_onoff, 0, STRING("ガードマン"), NPC_FLAG_INSTANT_TURN)
     CALL(evt_mario_key_onoff, 1)
     RETURN
@@ -1538,7 +1538,7 @@ EVT_END()
 EVT_BEGIN(evt_okorareru)
     CALL(evt_npc_set_position, STRING("キノシコワ"), 0, 0, -85)
     CALL(evt_set_dir_to_target, STRING("キノシコワ"), STRING("mario"))
-    CALL(evt_npc_status_onoff, 1, STRING("キノシコワ"), 2)
+    CALL(evt_npc_status_onoff, 1, STRING("キノシコワ"), NPC_STATUS_FACE_MOVE_DIR)
     LABEL(0)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     IF_INT_LESS(LW(0), -270)

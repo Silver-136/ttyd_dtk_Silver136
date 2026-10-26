@@ -3415,13 +3415,13 @@ USER_FUNC(btlevtcmd_SamplingEnemy) {
 USER_FUNC(btlevtcmd_ChoiceSamplingEnemy) {
     EvtWord* args = event->args;
     BattleWorkWeaponTargets* targets = &_battleWorkPointer->weaponTargets;
-    u8* weapon;
+    BattleWeapon* weapon;
     s32 a, b, ra, rb;
 
-    weapon = (u8*)evtGetValue(event, args[0]);
+    weapon = (BattleWeapon*)evtGetValue(event, args[0]);
     a = args[1];
     b = args[2];
-    BattleChoiceSamplingEnemy(targets, (s32)((BattleWeapon*)weapon)->targetWeightFlags, &ra, &rb);
+    BattleChoiceSamplingEnemy(targets, weapon->targetWeightFlags, &ra, &rb);
     evtSetValue(event, a, ra);
     evtSetValue(event, b, rb);
     return EVT_RETURN_DONE;

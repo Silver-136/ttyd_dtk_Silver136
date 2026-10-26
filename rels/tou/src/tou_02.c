@@ -739,7 +739,7 @@ EVT_END()
 
 EVT_BEGIN(init_kino4)
     CALL(evt_npc_set_position, STRING(("me")), -350, 0, 75)
-    CALL(evt_npc_status_onoff, 1, STRING(("me")), 2)
+    CALL(evt_npc_status_onoff, 1, STRING(("me")), NPC_STATUS_FACE_MOVE_DIR)
     RETURN
 EVT_END()
 
