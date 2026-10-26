@@ -1,5 +1,6 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "battle/unit_work.h"
 
 #include "battle/battle.h"
 #include "battle/battle_pad.h"
@@ -191,7 +192,7 @@ static EVT_BEGIN(init_event)
     CALL(_battle_set_lecture_unit_id, LW(3))
     CALL(btlevtcmd_ChangeFaceDirection, LW(3), -1)
     CALL(btlevtcmd_GetUnitId, UNIT_ID_SELF, LW(0))
-    CALL(btlevtcmd_SetUnitWork, LW(3), 0, LW(0))
+    CALL(btlevtcmd_SetUnitWork, LW(3), LECTURE_FRANKLI_WORK_CHRISTINE, LW(0))
     CALL(btlevtcmd_onoff_battleflag, 1, BATTLE_FLAG_NO_OBJECT_FALL)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
@@ -223,11 +224,11 @@ EVT_BEGIN(lecture_christine_ac_counter_damage_event)
     CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(2), LW(3), LW(4), 10, MOVE_SOUND_FROM_TABLE)
     WAIT_FRAMES(30)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_LECTURE, 1, LW(0))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_LECTURE, LECTURE_FRANKLI_WORK_STEP, LW(0))
     IF_INT_EQUAL(LW(0), 7)
-        CALL(btlevtcmd_SetUnitWork, UNIT_ID_LECTURE, 1, 8)
+        CALL(btlevtcmd_SetUnitWork, UNIT_ID_LECTURE, LECTURE_FRANKLI_WORK_STEP, 8)
         ELSE
-        CALL(btlevtcmd_SetUnitWork, UNIT_ID_LECTURE, 3, 7)
+        CALL(btlevtcmd_SetUnitWork, UNIT_ID_LECTURE, LECTURE_FRANKLI_WORK_GUARD_RESULT, 7)
     END_IF
     RETURN
 EVT_END()
@@ -243,10 +244,10 @@ EVT_END()
 
 static EVT_BEGIN(attack_event)
     CALL_CHILD(PTR(lecture_zutsuki_attack_event))
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_LECTURE, 1, LW(0))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_LECTURE, LECTURE_FRANKLI_WORK_STEP, LW(0))
     SWITCH(LW(0))
         CASE_EQUAL(3)
-        CALL(btlevtcmd_SetUnitWork, UNIT_ID_LECTURE, 1, 4)
+        CALL(btlevtcmd_SetUnitWork, UNIT_ID_LECTURE, LECTURE_FRANKLI_WORK_STEP, 4)
     END_SWITCH
     RETURN
 EVT_END()
@@ -323,7 +324,7 @@ BattleWeapon lec_weapon_zutsuki_2 = {
 };
 
 EVT_BEGIN(lecture_zutsuki_attack_event)
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_LECTURE, 1, LW(0))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_LECTURE, LECTURE_FRANKLI_WORK_STEP, LW(0))
     IF_INT_EQUAL(LW(0), 3)
         SET_VALUE(LW(12), PTR(&lec_weapon_zutsuki_1))
     ELSE
@@ -380,7 +381,7 @@ EVT_BEGIN(lecture_zutsuki_attack_event)
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
     ADD(LW(2), 5)
     CALL(btlevtcmd_MarioJumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 36, 0, MOVE_SOUND_FROM_TABLE)
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_LECTURE, 1, LW(0))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_LECTURE, LECTURE_FRANKLI_WORK_STEP, LW(0))
     SWITCH(LW(0))
         CASE_EQUAL(3)
         CALL(btlevtcmd_SetTalkPose, UNIT_ID_LECTURE, STRING("T_1"))
@@ -424,7 +425,7 @@ EVT_BEGIN(lecture_zutsuki_attack_event)
         CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
         CALL(evt_btl_camera_set_zoom, 0, 200)
     END_INLINE_EVENT
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_LECTURE, 1, LW(0))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_LECTURE, LECTURE_FRANKLI_WORK_STEP, LW(0))
     SWITCH(LW(0))
         CASE_EQUAL(3)
         CALL(_config_key_record, 256)
@@ -437,11 +438,11 @@ EVT_BEGIN(lecture_zutsuki_attack_event)
     SWITCH(LW(0))
         CASE_EQUAL(0)
         CASE_EQUAL(1)
-        CALL(btlevtcmd_SetUnitWork, UNIT_ID_LECTURE, 3, 4)
+        CALL(btlevtcmd_SetUnitWork, UNIT_ID_LECTURE, LECTURE_FRANKLI_WORK_GUARD_RESULT, 4)
         CASE_EQUAL(2)
-        CALL(btlevtcmd_SetUnitWork, UNIT_ID_LECTURE, 3, 5)
+        CALL(btlevtcmd_SetUnitWork, UNIT_ID_LECTURE, LECTURE_FRANKLI_WORK_GUARD_RESULT, 5)
         CASE_EQUAL(3)
-        CALL(btlevtcmd_SetUnitWork, UNIT_ID_LECTURE, 3, 6)
+        CALL(btlevtcmd_SetUnitWork, UNIT_ID_LECTURE, LECTURE_FRANKLI_WORK_GUARD_RESULT, 6)
     END_SWITCH
     ADD(LW(10), 1)
     BEGIN_SIBLING_EVENT

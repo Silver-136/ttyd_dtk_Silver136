@@ -30,6 +30,7 @@
 #include "eff/eff_starstone.h"
 #include "libc_decls.h"
 #include "battle/battle_sub.h"
+#include "battle/unit_work.h"
 // US battle texture ids are 0x16 higher for these entries.
 #define BTL_TEX(id) ((id) + VERSION_PICK(0, 0x16))
 
@@ -1004,11 +1005,11 @@ EVT_BEGIN(marioAttackEvent_Deka)
             CALL(btlevtcmd_GetUnitKind, UNIT_ID_PARTNER, LW(0))
             IF_INT_EQUAL(LW(0), UNIT_VIVIAN)
                 LOOP(0)
-                    CALL(btlevtcmd_SetUnitWork, LW(14), 3, 1)
+                    CALL(btlevtcmd_SetUnitWork, LW(14), SHADOW_TAIL_WORK_HOLD, 1)
                     CALL(btlevtcmd_GetPos, LW(14), LW(0), LW(1), LW(2))
-                    CALL(btlevtcmd_SetUnitWork, LW(14), 0, LW(0))
-                    CALL(btlevtcmd_SetUnitWork, LW(14), 1, LW(1))
-                    CALL(btlevtcmd_SetUnitWork, LW(14), 2, LW(2))
+                    CALL(btlevtcmd_SetUnitWork, LW(14), SHADOW_TAIL_WORK_X, LW(0))
+                    CALL(btlevtcmd_SetUnitWork, LW(14), SHADOW_TAIL_WORK_Y, LW(1))
+                    CALL(btlevtcmd_SetUnitWork, LW(14), SHADOW_TAIL_WORK_Z, LW(2))
                     WAIT_FRAMES(1)
                 END_LOOP
             END_IF
@@ -1075,7 +1076,7 @@ EVT_BEGIN(marioAttackEvent_Deka)
     IF_INT_NOT_EQUAL(LW(14), -1)
         CALL(btlevtcmd_GetUnitKind, UNIT_ID_PARTNER, LW(0))
         IF_INT_EQUAL(LW(0), UNIT_VIVIAN)
-            CALL(btlevtcmd_SetUnitWork, LW(14), 3, 0)
+            CALL(btlevtcmd_SetUnitWork, LW(14), SHADOW_TAIL_WORK_HOLD, 0)
         END_IF
     END_IF
     CALL(yuka_end)

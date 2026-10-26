@@ -7,6 +7,7 @@
 #include "battle/battle_status_effect.h"
 #include "system.h"
 #include "eff/eff_stardust.h"
+#include "unit_boss_kamec_obaba.h"
 
 #include "battle/battle.h"
 #include "battle/battle_unit.h"
@@ -20,13 +21,6 @@
 #include "evt/evt_sub.h"
 #include "battle/battle_database_common.h"
 #include "battle/battle_damage.h"
-
-// BattleUnit.work slots (btlevtcmd_Get/Set/AddUnitWork)
-#define UNIT_WORK_SKY 0          // 1 while on the broom (airborne, sky poses); dmg_fall_event sets 0; phase_event remounts and sets 1
-#define UNIT_WORK_SKY_DAMAGE 1   // damage taken while on the broom; above 1 she falls (dmg_fall_event)
-#define UNIT_WORK_GROUND_TURNS 2 // turns spent on the ground; phase_event adds 1 and remounts the broom at 3
-#define UNIT_WORK_STAFF_EFFECT 3 // EffectEntry of the staff effect (effThunderflareN64Entry) kept on the wand tip
-#define UNIT_WORK_MAGIC_EFFECT 4 // EffectEntry of the magic shot (effMagic1N64Entry); eff_magic_get_posX reads its x
 
 EffectEntry* effThunderflareN64Entry(s32 type, f32 x, f32 y, f32 z, f32 scale, s32 lifetime);
 
@@ -431,7 +425,7 @@ static BattleUnitKindPart parts[] = {
 };
 
 static EVT_BEGIN(kamec_obaba_zoom)
-    CALL(btlevtcmd_GetUnitWork, GW(9), 0, LW(1))
+    CALL(btlevtcmd_GetUnitWork, GW(9), KAMEC_OBABA_WORK_SKY, LW(1))
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_FREE)
     IF_INT_EQUAL(LW(1), 1)
         CALL(evt_btl_camera_set_moveto, 0, 135, 106, 296, 135, 55, -402, 30, 11)
@@ -448,9 +442,9 @@ static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event))
     CALL(btlevtcmd_SetEventDamage, UNIT_ID_SELF, PTR(damage_event))
     CALL(btlevtcmd_SetEventConfusion, UNIT_ID_SELF, PTR(btldefaultevt_Confuse))
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_SKY, 1)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_SKY_DAMAGE, 0)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_GROUND_TURNS, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, KAMEC_OBABA_WORK_SKY, 1)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, KAMEC_OBABA_WORK_SKY_DAMAGE, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, KAMEC_OBABA_WORK_GROUND_TURNS, 0)
     CALL(btlevtcmd_SetWalkSound, UNIT_ID_SELF, STRING("SFX_BOSS_KAMEBABA_MOVE1L"), STRING("SFX_BOSS_KAMEBABA_MOVE1R"), 0, 15, 15)
     CALL(btlevtcmd_SetRunSound, UNIT_ID_SELF, STRING("SFX_BOSS_KAMEBABA_MOVE1L"), STRING("SFX_BOSS_KAMEBABA_MOVE1R"), 0, 8, 8)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
@@ -469,12 +463,12 @@ static EVT_BEGIN(damage_event)
     IF_INT_EQUAL(LW(0), 0)
         GOTO(99)
     END_IF
-    CALL(btlevtcmd_GetUnitWork, LW(10), UNIT_WORK_SKY, LW(0))
+    CALL(btlevtcmd_GetUnitWork, LW(10), KAMEC_OBABA_WORK_SKY, LW(0))
     IF_INT_EQUAL(LW(0), 1)
         CALL(btlevtcmd_GetTotalDamage, LW(10), LW(1))
-        CALL(btlevtcmd_GetUnitWork, LW(10), UNIT_WORK_SKY_DAMAGE, LW(0))
+        CALL(btlevtcmd_GetUnitWork, LW(10), KAMEC_OBABA_WORK_SKY_DAMAGE, LW(0))
         ADD(LW(0), LW(1))
-        CALL(btlevtcmd_SetUnitWork, LW(10), UNIT_WORK_SKY_DAMAGE, LW(0))
+        CALL(btlevtcmd_SetUnitWork, LW(10), KAMEC_OBABA_WORK_SKY_DAMAGE, LW(0))
         IF_INT_GREATER(LW(0), 1)
             CALL(btlevtcmd_WaitAttackEnd)
             CALL(btlevtcmd_StopWaitEvent, UNIT_ID_SELF)
@@ -520,7 +514,7 @@ static EVT_BEGIN(dmg_fall_event)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_KAMEBABA_DOWN1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_SetHomePos, UNIT_ID_SELF, LW(0), 0, LW(2))
     WAIT_MS(500)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_SKY, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, KAMEC_OBABA_WORK_SKY, 0)
     RETURN
 EVT_END()
 
@@ -530,7 +524,7 @@ static EVT_BEGIN(dead_event)
     WAIT_FRAMES(1)
     CALL(btlevtcmd_WaitAttackEnd)
     DEBUG_PUT_MSG(STRING("カメックオババ　死亡イベント開始"))
-    CALL(btlevtcmd_GetUnitWork, LW(10), UNIT_WORK_SKY, LW(0))
+    CALL(btlevtcmd_GetUnitWork, LW(10), KAMEC_OBABA_WORK_SKY, LW(0))
     IF_INT_EQUAL(LW(0), 1)
         CALL_CHILD(PTR(dmg_fall_event))
     END_IF
@@ -598,12 +592,12 @@ static EVT_BEGIN(phase_event)
     IF_INT_EQUAL(LW(0), 0)
         GOTO(99)
     END_IF
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_SKY, LW(0))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, KAMEC_OBABA_WORK_SKY, LW(0))
     IF_INT_EQUAL(LW(0), 1)
         GOTO(99)
     END_IF
-    CALL(btlevtcmd_AddUnitWork, UNIT_ID_SELF, UNIT_WORK_GROUND_TURNS, 1)
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_GROUND_TURNS, LW(0))
+    CALL(btlevtcmd_AddUnitWork, UNIT_ID_SELF, KAMEC_OBABA_WORK_GROUND_TURNS, 1)
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, KAMEC_OBABA_WORK_GROUND_TURNS, LW(0))
     IF_INT_LESS(LW(0), 3)
         GOTO(99)
     END_IF
@@ -636,9 +630,9 @@ static EVT_BEGIN(phase_event)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_ACTION)
     DELETE_EVENT(LW(15))
     WAIT_MS(500)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_SKY, 1)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_SKY_DAMAGE, 0)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_GROUND_TURNS, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, KAMEC_OBABA_WORK_SKY, 1)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, KAMEC_OBABA_WORK_SKY_DAMAGE, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, KAMEC_OBABA_WORK_GROUND_TURNS, 0)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     LABEL(99)
     RETURN
@@ -866,7 +860,7 @@ static EVT_BEGIN(sky_magic_common_event)
 EVT_END()
 
 static EVT_BEGIN(magic_common_event1)
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_SKY, LW(0))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, KAMEC_OBABA_WORK_SKY, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_GetUnitId, UNIT_ID_SELF, LW(13))
         IF_INT_NOT_EQUAL(LW(3), LW(13))
@@ -881,7 +875,7 @@ static EVT_BEGIN(magic_common_event1)
 EVT_END()
 
 static EVT_BEGIN(magic_common_event2)
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_SKY, LW(0))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, KAMEC_OBABA_WORK_SKY, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL_CHILD(PTR(ground_magic_common_event2))
         ELSE
@@ -1140,7 +1134,7 @@ static USER_FUNC(eff_magic_get_posX) {
     s32 id = BattleTransID(event, evtGetValue(event, args[0]));
     BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, id);
 
-    evtSetFloat(event, args[1], ((EffMagic1N64Work*)((EffectEntry*)unit->work[UNIT_WORK_MAGIC_EFFECT])->userdata)->offset.x);
+    evtSetFloat(event, args[1], ((EffMagic1N64Work*)((EffectEntry*)unit->work[KAMEC_OBABA_WORK_MAGIC_EFFECT])->userdata)->offset.x);
     return EVT_RETURN_DONE;
 }
 
@@ -1163,7 +1157,7 @@ static USER_FUNC(eff_magic) {
     y += 20.0f * unit->mSizeMultiplier;
     z += 5.0f;
     eff = effMagic1N64Entry(0, type, x, y, z, tx, ty, tz);
-    unit->work[UNIT_WORK_MAGIC_EFFECT] = (EvtWord)eff;
+    unit->work[KAMEC_OBABA_WORK_MAGIC_EFFECT] = (EvtWord)eff;
     ((EffMagic1N64Work*)eff->userdata)->scale = unit->mSizeMultiplier;
     return EVT_RETURN_DONE;
 }
@@ -1177,12 +1171,12 @@ static USER_FUNC(eff_staff) {
     f32* wk;
 
     if (isFirstCall) {
-        unit->work[UNIT_WORK_STAFF_EFFECT] = (EvtWord)effThunderflareN64Entry(0, 0.0f, -1000.0f, 0.0f, 1.0f, 60);
+        unit->work[KAMEC_OBABA_WORK_STAFF_EFFECT] = (EvtWord)effThunderflareN64Entry(0, 0.0f, -1000.0f, 0.0f, 1.0f, 60);
     }
-    if (!(((EffectEntry*)unit->work[UNIT_WORK_STAFF_EFFECT])->flags & 1)) {
+    if (!(((EffectEntry*)unit->work[KAMEC_OBABA_WORK_STAFF_EFFECT])->flags & 1)) {
         return EVT_RETURN_DONE;
     }
-    wk = ((EffectEntry*)unit->work[UNIT_WORK_STAFF_EFFECT])->userdata;
+    wk = ((EffectEntry*)unit->work[KAMEC_OBABA_WORK_STAFF_EFFECT])->userdata;
     wk[10] = unit->mSizeMultiplier;
     BtlUnit_GetPos(unit, &x, &y, &z);
     wk[2] = x + 30.0f * unit->mSizeMultiplier * unit->faceDirection;

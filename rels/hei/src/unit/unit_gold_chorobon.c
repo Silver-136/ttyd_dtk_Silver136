@@ -293,16 +293,16 @@ EVT_BEGIN(escape_chorogun_event)
     IF_INT_EQUAL(LW(0), -1)
         RETURN
     END_IF
-    CALL(btlevtcmd_GetUnitWork, LW(4), 1, LW(0))
+    CALL(btlevtcmd_GetUnitWork, LW(4), UNIT_WORK_CHOROGUN_GONE, LW(0))
     IF_INT_EQUAL(LW(0), 1)
         RETURN
     END_IF
-    CALL(btlevtcmd_SetUnitWork, LW(4), 1, 1)
+    CALL(btlevtcmd_SetUnitWork, LW(4), UNIT_WORK_CHOROGUN_GONE, 1)
     CALL(btlevtcmd_GetUnitId, UNIT_ID_SELF, LW(10))
     CALL_CHILD(PTR(chorogun_dead_reward))
     CALL(chorogun_escape_all)
     WAIT_MS(1000)
-    CALL(btlevtcmd_GetUnitWork, LW(4), 2, LW(3))
+    CALL(btlevtcmd_GetUnitWork, LW(4), UNIT_WORK_CHOROGUN, LW(3))
     CALL(btlevtcmd_KillUnit, LW(3), 0)
     RETURN
 EVT_END()

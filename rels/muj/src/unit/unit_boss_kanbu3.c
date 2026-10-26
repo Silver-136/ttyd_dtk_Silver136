@@ -7,6 +7,7 @@
 #include "muj.h"
 #include "battle/battle_status_effect.h"
 #include "battle/battle_sub.h"
+#include "unit_boss_gundan_zako.h"
 
 #include "battle/battle.h"
 #include "battle/battle_event_default.h"
@@ -363,7 +364,7 @@ static EVT_BEGIN(damage_event)
             CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("S_1"))
             CALL(check_exist_group, LW(0))
             IF_INT_NOT_EQUAL(LW(0), -1)
-                CALL(btlevtcmd_GetUnitWork, LW(0), 1, LW(1))
+                CALL(btlevtcmd_GetUnitWork, LW(0), ZAKO_GROUP1_WORK_DYING, LW(1))
                 IF_INT_NOT_EQUAL(LW(1), 0)
                     WAIT_FRAMES(90)
                     GOTO(10)
@@ -441,7 +442,7 @@ static EVT_BEGIN(dead_event)
         CALL(btlevtcmd_WaitAttackEnd)
         CALL(check_exist_group, LW(0))
         IF_INT_NOT_EQUAL(LW(0), -1)
-            CALL(btlevtcmd_GetUnitWork, LW(0), 1, LW(1))
+            CALL(btlevtcmd_GetUnitWork, LW(0), ZAKO_GROUP1_WORK_DYING, LW(1))
             IF_INT_NOT_EQUAL(LW(1), 0)
                 WAIT_FRAMES(180)
             END_IF
@@ -456,7 +457,7 @@ static EVT_BEGIN(dead_event)
         CALL(btlevtcmd_WaitAttackEnd)
         CALL(check_exist_group, LW(0))
         IF_INT_NOT_EQUAL(LW(0), -1)
-            CALL(btlevtcmd_GetUnitWork, LW(0), 2, LW(1))
+            CALL(btlevtcmd_GetUnitWork, LW(0), ZAKO_GROUP2_WORK_DYING, LW(1))
             IF_INT_NOT_EQUAL(LW(1), 0)
                 WAIT_FRAMES(180)
             END_IF

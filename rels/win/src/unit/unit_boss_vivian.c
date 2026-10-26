@@ -15,7 +15,7 @@
 #include "battle/unit_work.h"
 
 // BattleUnit.work slots (btlevtcmd_Get/Set/AddUnitWork)
-#define UNIT_WORK_ATTACK_STEP 8      // attack choice: 0 kagenuke_attack_event, 1 flame_attack_event once (then 2), 2 random (70 kagenuke / 30 flame)
+#define UNIT_WORK_ATTACK_STEP 8 // attack choice: 0 kagenuke_attack_event, 1 flame_attack_event once (then 2), 2 random (70 kagenuke / 30 flame)
 
 USER_FUNC(btlevtcmd_SetEventEntry);
 USER_FUNC(btlevtcmd_SetEventPhase);

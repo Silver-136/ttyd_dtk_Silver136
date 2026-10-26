@@ -26,7 +26,7 @@
 #define UNIT_WORK_SKY 0          // nonzero = the flying version (sky pose/data tables, airborne, y 40); dmg_fall_event clears it; clones copy it
 #define UNIT_WORK_BUNSIN 1       // 1 on a clone (unit_kamec_green_bunsin spawned by spawn_event), 0 on the real one; clones skip attack/wait and die when hit
 #define UNIT_WORK_KILL_BUNSIN 2  // damage_event: 1 if the real one was hit while clones exist; after the damage all clones are killed
-#define UNIT_WORK_FADED_OUT 3    // clone: 1 once bunsin_kill_event has faded it out, so it fades only once
+#define UNIT_WORK_FADING 3       // clone: 1 once bunsin_kill_event has faded it out, so it fades only once
 #define UNIT_WORK_STAFF_EFFECT 4 // EffectEntry of the staff effect (effPokopiPchargeN64Entry / effThunderflareN64Entry) kept on the wand tip
 #define UNIT_WORK_MAGIC_EFFECT 5 // EffectEntry of the magic shot (effMagic1N64Entry); eff_magic_get_posX reads its x
 
@@ -593,7 +593,7 @@ static BattleUnitSetup entry_kamec = {
 
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_BUNSIN, 0)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_FADED_OUT, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_FADING, 0)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_STAFF_EFFECT, 0)
     CALL_CHILD(PTR(init_event2))
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
@@ -812,11 +812,11 @@ static EVT_BEGIN(bunsin_kill_event)
     IF_INT_EQUAL(LW(0), -1)
         RETURN
     END_IF
-    CALL(btlevtcmd_GetUnitWork, LW(0), 3, LW(1))
+    CALL(btlevtcmd_GetUnitWork, LW(0), UNIT_WORK_FADING, LW(1))
     IF_INT_EQUAL(LW(1), 1)
         GOTO(10)
     END_IF
-    CALL(btlevtcmd_SetUnitWork, LW(0), 3, 1)
+    CALL(btlevtcmd_SetUnitWork, LW(0), UNIT_WORK_FADING, 1)
     CALL_CHILD(PTR(alpha_down_event))
     LABEL(10)
     CALL(btlevtcmd_WaitAttackEnd)
@@ -1822,14 +1822,14 @@ static EVT_BEGIN(spawn_event)
     CALL(btlevtcmd_SpawnUnit, LW(3), PTR(&entry_kamec), 0)
     CALL(btlevtcmd_SetAlpha, LW(3), 1, 0)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_SKY, LW(10))
-    CALL(btlevtcmd_SetUnitWork, LW(3), 0, LW(10))
+    CALL(btlevtcmd_SetUnitWork, LW(3), UNIT_WORK_SKY, LW(10))
     WAIT_FRAMES(2)
     CALL(btlevtcmd_SetPos, LW(3), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_SetHomePos, LW(3), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_GetUnitId, UNIT_ID_SELF, LW(13))
     CALL(kamec_copy_status, LW(13), LW(3))
     CALL(btlevtcmd_OffAttribute, LW(3), kUnitNoHpGauge)
-    CALL(btlevtcmd_SetUnitWork, LW(3), 1, 1)
+    CALL(btlevtcmd_SetUnitWork, LW(3), UNIT_WORK_BUNSIN, 1)
     CALL(btlevtcmd_SetEventAttack, LW(3), PTR(attack_event))
     CALL(btlevtcmd_SetRegistStatus, LW(3), PTR(&regist_bunsin))
     CALL(btlevtcmd_OnPartsAttribute, LW(3), 1, kClone)

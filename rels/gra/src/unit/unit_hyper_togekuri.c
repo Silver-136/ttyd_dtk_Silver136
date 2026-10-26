@@ -3,6 +3,7 @@
 #include "evt/evt_msg.h"
 #include "battle/battle_status_effect.h"
 #include "battle/battle_sub.h"
+#include "battle/unit_work.h"
 
 #include "system.h"
 #include "manager/evtmgr_cmd.h"
@@ -248,7 +249,7 @@ static EVT_BEGIN(dmg_avoid_counter_thorn_head_event)
     CALL(evt_eff, STRING(""), STRING("toge_flush"), 0, LW(0), LW(1), LW(2), 60, 0, 0, 0, 0, 0, 0, 0)
     CALL(btlevtcmd_GetUnitId, UNIT_ID_LECTURE, LW(0))
     IF_INT_NOT_EQUAL(LW(0), -1)
-        CALL(btlevtcmd_GetUnitWork, UNIT_ID_LECTURE, 0, LW(0))
+        CALL(btlevtcmd_GetUnitWork, UNIT_ID_LECTURE, LECTURE_KURIBOO_WORK_TOGEKURI_TALK_DONE, LW(0))
         IF_INT_EQUAL(LW(0), 0)
             CALL(get_attacker, LW(0))
             IF_INT_EQUAL(LW(0), 2)
@@ -263,7 +264,7 @@ static EVT_BEGIN(dmg_avoid_counter_thorn_head_event)
                 ELSE
                 CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("mac_0_092_07"), 0, -6)
             END_IF
-            CALL(btlevtcmd_SetUnitWork, UNIT_ID_LECTURE, 0, 1)
+            CALL(btlevtcmd_SetUnitWork, UNIT_ID_LECTURE, LECTURE_KURIBOO_WORK_TOGEKURI_TALK_DONE, 1)
             CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_LECTURE, 1)
             CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_ON)
         END_IF

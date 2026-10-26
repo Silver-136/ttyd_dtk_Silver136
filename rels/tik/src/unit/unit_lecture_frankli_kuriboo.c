@@ -4,6 +4,7 @@
 #include "battle/battle_camera.h"
 #include "evt/evt_msg.h"
 #include "battle/battle_sub.h"
+#include "battle/unit_work.h"
 
 #include "battle/battle.h"
 #include "battle/battle_event_default.h"
@@ -143,7 +144,7 @@ static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventConfusion, UNIT_ID_SELF, PTR(btldefaultevt_Confuse))
     CALL(btlevtcmd_GetUnitId, UNIT_ID_SELF, LW(0))
     CALL(_battle_set_lecture_unit_id, LW(0))
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 0, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, LECTURE_KURIBOO_WORK_TOGEKURI_TALK_DONE, 0)
     CALL(btlevtcmd_SetPos, UNIT_ID_SELF, 0, -1000, 0)
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, 1)
     CALL(btlevtcmd_SetMaxMoveCount, UNIT_ID_SELF, 0)

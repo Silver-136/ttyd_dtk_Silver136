@@ -50,5 +50,16 @@
 #define BOMZOU_WORK_FUSE_SFX 1          // id of the SFX_BTL_THUNDERS_BOMB1 sound Bobbery's _shot_bomb_event starts (0 none);
                                         // explosion_event and end_battle_evt stop it
 
+// Tutorial ("lecture") units, reached as UNIT_ID_LECTURE (BattleWork.lectureUnitId) by the other units in the battle
+// unit_lecture_frankli (gor), spawned by unit_lecture_christine, which keeps its id in her own slot 0
+#define LECTURE_FRANKLI_WORK_CHRISTINE 0     // unit id of the unit_lecture_christine unit that spawned it
+#define LECTURE_FRANKLI_WORK_STEP 1          // lecture step: 0 start; odd steps 1 jump lesson, 3 christine's turn, 5 hammer
+                                             // lesson, 7 christine again, 9 free battle (phase_event)
+#define LECTURE_FRANKLI_WORK_ATTACK_RESULT 2 // Mario's action-command result in the free battle (0 none, 1-3)
+#define LECTURE_FRANKLI_WORK_GUARD_RESULT 3  // Mario's guard result against christine's attack in the free battle
+                                             // (4/5/6 by _get_defence_ac_result, 7 when it was countered)
+// unit_lecture_frankli_kuriboo (tik)
+#define LECTURE_KURIBOO_WORK_TOGEKURI_TALK_DONE 0 // 1 once a togekuri unit showed its mac_0_092_06/07 lines
+
 // Vivian (unit_party_vivian, battle_unit)
 #define VIVIAN_WORK_HIDE_TURNS 4        // turns left hidden in the shadow (Veil); BtlUnit_CheckShadowGuard

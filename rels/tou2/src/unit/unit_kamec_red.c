@@ -23,12 +23,12 @@
 #include "battle/battle_damage.h"
 
 // BattleUnit.work slots (btlevtcmd_Get/Set/AddUnitWork)
-#define UNIT_WORK_FLYING 0          // nonzero: flying form (pose_table_sky, airborne at y 40, sky magic events); setup value (0 in the one tou setup), copied to clones, cleared by dmg_fall_event
-#define UNIT_WORK_CLONE 1           // 1 on a copy made by spawn_event (kClone part, data_table_bunsin, no own attack or wait animation, removed by any hit)
-#define UNIT_WORK_HIT_WITH_CLONES 2 // 1 when the real unit is hit while copies exist; after the damage, kamec_subset_bunsin_all_kill removes the copies
-#define UNIT_WORK_FADING 3          // 1 once bunsin_kill_event has started fading this copy out, so a second call skips the fade
-#define UNIT_WORK_STAFF_EFFECT 4    // EffectEntry* of the wand charge effect (eff_staff1 thunderflare, eff_staff2 pokopi charge) kept on the wand tip
-#define UNIT_WORK_MAGIC_EFFECT 5    // EffectEntry* of the last magic shot (effMagic1N64Entry in eff_magic); eff_magic_get_posX reads its x
+#define UNIT_WORK_SKY 0          // nonzero: flying form (pose_table_sky, airborne at y 40, sky magic events); setup value (0 in the one tou setup), copied to clones, cleared by dmg_fall_event
+#define UNIT_WORK_BUNSIN 1       // 1 on a copy made by spawn_event (kClone part, data_table_bunsin, no own attack or wait animation, removed by any hit)
+#define UNIT_WORK_KILL_BUNSIN 2  // 1 when the real unit is hit while copies exist; after the damage, kamec_subset_bunsin_all_kill removes the copies
+#define UNIT_WORK_FADING 3       // 1 once bunsin_kill_event has started fading this copy out, so a second call skips the fade
+#define UNIT_WORK_STAFF_EFFECT 4 // EffectEntry* of the wand charge effect (eff_staff1 thunderflare, eff_staff2 pokopi charge) kept on the wand tip
+#define UNIT_WORK_MAGIC_EFFECT 5 // EffectEntry* of the last magic shot (effMagic1N64Entry in eff_magic); eff_magic_get_posX reads its x
 
 EffectEntry* effThunderflareN64Entry(s32 type, f32 x, f32 y, f32 z, f32 scale, s32 lifetime);
 
@@ -592,7 +592,7 @@ static BattleUnitSetup entry_kamec = {
 };
 
 static EVT_BEGIN(init_event)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_CLONE, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_BUNSIN, 0)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_FADING, 0)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_STAFF_EFFECT, 0)
     CALL_CHILD(PTR(init_event2))
@@ -605,10 +605,10 @@ static EVT_BEGIN(init_event2)
     CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event))
     CALL(btlevtcmd_SetEventDamage, UNIT_ID_SELF, PTR(damage_event))
     CALL(btlevtcmd_SetEventConfusion, UNIT_ID_SELF, PTR(attack_event))
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_FLYING, LW(0))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_SKY, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, 1, PTR(pose_table_sky))
-        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_CLONE, LW(0))
+        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_BUNSIN, LW(0))
         IF_INT_EQUAL(LW(0), 0)
             CALL(btlevtcmd_ChangeDataTable, UNIT_ID_SELF, PTR(data_table_sky))
             ELSE
@@ -668,12 +668,12 @@ EVT_END()
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), -2)
     SET_VALUE(LW(11), 1)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_HIT_WITH_CLONES, 0)
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_CLONE, LW(0))
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_KILL_BUNSIN, 0)
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_BUNSIN, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL(kamec_get_bunsin, LW(1), LW(2), LW(3), LW(4), LW(0))
         IF_INT_GREATER_OR_EQUAL(LW(0), 1)
-            CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_HIT_WITH_CLONES, 1)
+            CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_KILL_BUNSIN, 1)
         END_IF
         ELSE
         SET_VALUE(LW(0), -2)
@@ -683,7 +683,7 @@ static EVT_BEGIN(damage_event)
     CALL_CHILD(PTR(btldefaultevt_Damage))
     CALL(btlevtcmd_GetUnitId, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), -1)
-        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_HIT_WITH_CLONES, LW(0))
+        CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_KILL_BUNSIN, LW(0))
         IF_INT_EQUAL(LW(0), 1)
             CALL_CHILD(PTR(kamec_subset_bunsin_all_kill))
         END_IF
@@ -692,7 +692,7 @@ static EVT_BEGIN(damage_event)
 EVT_END()
 
 static EVT_BEGIN(kamec_subset_bunsin_all_kill)
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_CLONE, LW(0))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_BUNSIN, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL(kamec_get_bunsin, LW(1), LW(2), LW(3), LW(4), LW(0))
         IF_INT_GREATER_OR_EQUAL(LW(0), 1)
@@ -799,7 +799,7 @@ static EVT_BEGIN(kamec_subset_blow_dead_event)
 EVT_END()
 
 static EVT_BEGIN(avoid_miss_event)
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_CLONE, LW(0))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_BUNSIN, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         SET_VALUE(LW(0), -2)
         CALL_CHILD(PTR(bunsin_kill_event))
@@ -812,11 +812,11 @@ static EVT_BEGIN(bunsin_kill_event)
     IF_INT_EQUAL(LW(0), -1)
         RETURN
     END_IF
-    CALL(btlevtcmd_GetUnitWork, LW(0), 3, LW(1))
+    CALL(btlevtcmd_GetUnitWork, LW(0), UNIT_WORK_FADING, LW(1))
     IF_INT_EQUAL(LW(1), 1)
         GOTO(10)
     END_IF
-    CALL(btlevtcmd_SetUnitWork, LW(0), 3, 1)
+    CALL(btlevtcmd_SetUnitWork, LW(0), UNIT_WORK_FADING, 1)
     CALL_CHILD(PTR(alpha_down_event))
     LABEL(10)
     CALL(btlevtcmd_WaitAttackEnd)
@@ -838,7 +838,7 @@ static EVT_BEGIN(dmg_fall_event)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_DAMAGE)
     WAIT_MS(500)
     CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, 1, PTR(pose_table))
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_CLONE, LW(0))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_BUNSIN, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_ChangeDataTable, UNIT_ID_SELF, PTR(data_table))
     ELSE
@@ -865,7 +865,7 @@ static EVT_BEGIN(dmg_fall_event)
     CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), 0, LW(2), 10, MOVE_SOUND_FROM_TABLE)
     CALL(btlevtcmd_SetHomePos, UNIT_ID_SELF, LW(0), 0, LW(2))
     WAIT_MS(500)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_FLYING, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_SKY, 0)
     CALL_CHILD(init_event2)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_DAMAGE)
     RETURN
@@ -886,7 +886,7 @@ static EVT_BEGIN(attack_event)
         CALL_CHILD(PTR(attack_magic_event))
         GOTO(99)
     END_IF
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_CLONE, LW(0))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_BUNSIN, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         RETURN
     END_IF
@@ -1241,7 +1241,7 @@ static EVT_BEGIN(sky_magic_common_event)
 EVT_END()
 
 static EVT_BEGIN(magic_common_event1)
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_FLYING, LW(0))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_SKY, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_GetUnitId, UNIT_ID_SELF, LW(13))
         IF_INT_NOT_EQUAL(LW(3), LW(13))
@@ -1256,7 +1256,7 @@ static EVT_BEGIN(magic_common_event1)
 EVT_END()
 
 static EVT_BEGIN(magic_common_event2)
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_FLYING, LW(0))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_SKY, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL_CHILD(PTR(ground_magic_common_event2))
         ELSE
@@ -1821,15 +1821,15 @@ static USER_FUNC(kamec_get_live_num) {
 static EVT_BEGIN(spawn_event)
     CALL(btlevtcmd_SpawnUnit, LW(3), PTR(&entry_kamec), 0)
     CALL(btlevtcmd_SetAlpha, LW(3), 1, 0)
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_FLYING, LW(10))
-    CALL(btlevtcmd_SetUnitWork, LW(3), 0, LW(10))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_SKY, LW(10))
+    CALL(btlevtcmd_SetUnitWork, LW(3), UNIT_WORK_SKY, LW(10))
     WAIT_FRAMES(2)
     CALL(btlevtcmd_SetPos, LW(3), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_SetHomePos, LW(3), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_GetUnitId, UNIT_ID_SELF, LW(13))
     CALL(kamec_copy_status, LW(13), LW(3))
     CALL(btlevtcmd_OffAttribute, LW(3), kUnitNoHpGauge)
-    CALL(btlevtcmd_SetUnitWork, LW(3), 1, 1)
+    CALL(btlevtcmd_SetUnitWork, LW(3), UNIT_WORK_BUNSIN, 1)
     CALL(btlevtcmd_SetEventAttack, LW(3), PTR(attack_event))
     CALL(btlevtcmd_SetRegistStatus, LW(3), PTR(&regist_bunsin))
     CALL(btlevtcmd_OnPartsAttribute, LW(3), 1, kClone)
@@ -1837,7 +1837,7 @@ static EVT_BEGIN(spawn_event)
 EVT_END()
 
 static EVT_BEGIN(wait_event)
-    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_CLONE, LW(0))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_BUNSIN, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         RETURN
     END_IF

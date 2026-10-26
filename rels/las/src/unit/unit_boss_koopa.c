@@ -4,6 +4,7 @@
 #include "evt/evt_msg.h"
 #include "evt/evt_sub.h"
 #include "battle/battle_status_effect.h"
+#include "unit_boss_kamec_obaba.h"
 
 #include "driver/icondrv.h"
 #include "driver/camdrv.h"
@@ -388,7 +389,7 @@ static EVT_BEGIN(koopa_zoom)
 EVT_END()
 
 static EVT_BEGIN(kamec_obaba_zoom)
-    CALL(btlevtcmd_GetUnitWork, GW(9), 0, LW(1))
+    CALL(btlevtcmd_GetUnitWork, GW(9), KAMEC_OBABA_WORK_SKY, LW(1))
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_FREE)
     IF_INT_EQUAL(LW(1), 1)
         CALL(evt_btl_camera_set_moveto, 0, 135, 106, 296, 135, 55, -402, 30, 11)

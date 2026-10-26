@@ -2180,7 +2180,7 @@ EVT_BEGIN(queen_last_attack_message_evt)
 EVT_END()
 
 EVT_BEGIN(queen_change_hand_small_evt)
-    CALL(btlevtcmd_GetUnitWork, GW(13), 0, LW(0))
+    CALL(btlevtcmd_GetUnitWork, GW(13), UNIT_WORK_ATTACK_STEP, LW(0))
     IF_INT_EQUAL(LW(0), 2)
         RETURN
     END_IF
@@ -2219,7 +2219,7 @@ EVT_BEGIN(queen_change_hand_small_evt)
 EVT_END()
 
 EVT_BEGIN(queen_change_hand_big_evt)
-    CALL(btlevtcmd_GetUnitWork, GW(13), 0, LW(0))
+    CALL(btlevtcmd_GetUnitWork, GW(13), UNIT_WORK_ATTACK_STEP, LW(0))
     IF_INT_EQUAL(LW(0), 2)
         RETURN
     END_IF
@@ -2258,7 +2258,7 @@ EVT_BEGIN(queen_change_hand_big_evt)
 EVT_END()
 
 EVT_BEGIN(queen_hand_big_life_check_evt)
-    CALL(btlevtcmd_GetUnitWork, GW(13), 0, LW(0))
+    CALL(btlevtcmd_GetUnitWork, GW(13), UNIT_WORK_ATTACK_STEP, LW(0))
     IF_INT_EQUAL(LW(0), 2)
         RETURN
     END_IF
@@ -2288,7 +2288,7 @@ EVT_BEGIN(queen_hand_big_life_check_evt)
 EVT_END()
 
 EVT_BEGIN(queen_hand_small_life_check_evt)
-    CALL(btlevtcmd_GetUnitWork, GW(13), 0, LW(0))
+    CALL(btlevtcmd_GetUnitWork, GW(13), UNIT_WORK_ATTACK_STEP, LW(0))
     IF_INT_EQUAL(LW(0), 2)
         RETURN
     END_IF
@@ -2498,9 +2498,9 @@ EVT_BEGIN(queen_phase_event)
         CALL(btlevtcmd_GetHp, GW(13), LW(1))
         DIVIDE(LW(0), 4)
         IF_INT_LESS(LW(1), LW(0))
-            CALL(btlevtcmd_GetUnitWork, GW(13), 2, LW(0))
+            CALL(btlevtcmd_GetUnitWork, GW(13), UNIT_WORK_HP_MESSAGE, LW(0))
             IF_INT_LESS_OR_EQUAL(LW(0), 1)
-                CALL(btlevtcmd_SetUnitWork, GW(13), 2, 2)
+                CALL(btlevtcmd_SetUnitWork, GW(13), UNIT_WORK_HP_MESSAGE, 2)
                 CALL_CHILD(PTR(queen_4_hp_msg_evt))
             END_IF
         END_IF
@@ -2508,9 +2508,9 @@ EVT_BEGIN(queen_phase_event)
         CALL(btlevtcmd_GetHp, GW(13), LW(1))
         DIVIDE(LW(0), 2)
         IF_INT_LESS(LW(1), LW(0))
-            CALL(btlevtcmd_GetUnitWork, GW(13), 2, LW(0))
+            CALL(btlevtcmd_GetUnitWork, GW(13), UNIT_WORK_HP_MESSAGE, LW(0))
             IF_INT_LESS_OR_EQUAL(LW(0), 0)
-                CALL(btlevtcmd_SetUnitWork, GW(13), 2, 1)
+                CALL(btlevtcmd_SetUnitWork, GW(13), UNIT_WORK_HP_MESSAGE, 1)
                 CALL_CHILD(PTR(queen_2_hp_msg_evt))
             END_IF
         END_IF
@@ -3567,7 +3567,7 @@ EVT_BEGIN(queen_hand_1_drain_attack)
 EVT_END()
 
 EVT_BEGIN(queen_hand_1_attack_event)
-    CALL(btlevtcmd_GetUnitWork, GW(13), 0, LW(0))
+    CALL(btlevtcmd_GetUnitWork, GW(13), UNIT_WORK_ATTACK_STEP, LW(0))
     IF_INT_EQUAL(LW(0), 2)
         GOTO(99)
     END_IF
@@ -3655,7 +3655,7 @@ EVT_BEGIN(queen_hand_2_init_event)
 EVT_END()
 
 EVT_BEGIN(queen_hand_2_attack_event)
-    CALL(btlevtcmd_GetUnitWork, GW(13), 0, LW(0))
+    CALL(btlevtcmd_GetUnitWork, GW(13), UNIT_WORK_ATTACK_STEP, LW(0))
     IF_INT_EQUAL(LW(0), 2)
         GOTO(99)
     END_IF
@@ -3923,7 +3923,7 @@ EVT_BEGIN(queen_hand_small_1000hand_attack)
 EVT_END()
 
 EVT_BEGIN(queen_hand_small_attack_event)
-    CALL(btlevtcmd_GetUnitWork, GW(13), 0, LW(0))
+    CALL(btlevtcmd_GetUnitWork, GW(13), UNIT_WORK_ATTACK_STEP, LW(0))
     IF_INT_EQUAL(LW(0), 2)
         GOTO(99)
     END_IF

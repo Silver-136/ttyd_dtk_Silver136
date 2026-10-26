@@ -9,6 +9,7 @@
 #include "battle/battle_status_effect.h"
 #include "rels/muj/include/muj.h"
 #include "battle/battle_sub.h"
+#include "unit_boss_gundan_zako.h"
 
 #include "battle/battle.h"
 #include "battle/battle_unit.h"
@@ -27,7 +28,6 @@
 // BattleUnit.work slots (btlevtcmd_Get/Set/AddUnitWork)
 #define UNIT_WORK_ALL_LANDED 0 // 1 once all 25 members have landed (zakogun_ext_main2); hit_check_event waits for it before the final hit; the attacks clear it
 #define UNIT_WORK_HIT_LANDED 1 // fall attack: 1 once a hit landed; the final hit then skips the avoid check
-#define UNIT_WORK_DYING 2      // dead_event sets 1; unit_boss_kanbu3 waits longer before its exit while it is set
 
 typedef struct ZakoGun {
     s8 field_0x0;
@@ -337,7 +337,7 @@ static EVT_BEGIN(damage_event)
 EVT_END()
 
 static EVT_BEGIN(dead_event)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_DYING, 1)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, ZAKO_GROUP2_WORK_DYING, 1)
     BEGIN_INLINE_EVENT
         CALL(up_ceil)
     END_INLINE_EVENT

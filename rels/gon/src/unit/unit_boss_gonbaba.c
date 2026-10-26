@@ -543,7 +543,7 @@ EVT_BEGIN(negotiation_event)
     CALL(btlevtcmd_GetGuardKouraId, UNIT_ID_MARIO, LW(3))
     IF_INT_NOT_EQUAL(LW(3), -1)
         CALL(btlevtcmd_RunDataEventChild, LW(3), UNIT_DATA_KOURA_OPEN_EVENT)
-        CALL(btlevtcmd_SetUnitWork, LW(3), 2, 0)
+        CALL(btlevtcmd_SetUnitWork, LW(3), SHELL_SHIELD_WORK_FOLLOW, 0)
     END_IF
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_MARIO, 1, POSE_TYPE_RUN)
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_MARIO, FLOAT(3.0f))
@@ -591,7 +591,7 @@ EVT_BEGIN(negotiation_event)
     END_IF
     CALL(btlevtcmd_GetGuardKouraId, UNIT_ID_MARIO, LW(3))
     IF_INT_NOT_EQUAL(LW(3), -1)
-        CALL(btlevtcmd_SetUnitWork, LW(3), 2, 1)
+        CALL(btlevtcmd_SetUnitWork, LW(3), SHELL_SHIELD_WORK_FOLLOW, 1)
     END_IF
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_EVENT, BTL_CAM_MODE_FREE)
     CALL(evt_btl_camera_set_moveto, 1, -233, 45, 452, 56, 125, 37, 1, 0)

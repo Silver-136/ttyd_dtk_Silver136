@@ -16,8 +16,8 @@
 #include "battle/unit_work.h"
 
 // BattleUnit.work slots (btlevtcmd_Get/Set/AddUnitWork)
-#define UNIT_WORK_ATTACK_STEP 8      // opening attack order: 0 blizzard, 1 powder 4, 2 powder 5, 3 blizzard, 4 random choice from then on
-#define UNIT_WORK_BLIZZARD_WAIT 9    // turns before the blizzard can be rolled again: set to 2 with each blizzard_attack_event, phase_event counts it down
+#define UNIT_WORK_ATTACK_STEP 8   // opening attack order: 0 blizzard, 1 powder 4, 2 powder 5, 3 blizzard, 4 random choice from then on
+#define UNIT_WORK_BLIZZARD_WAIT 9 // turns before the blizzard can be rolled again: set to 2 with each blizzard_attack_event, phase_event counts it down
 
 typedef struct MajoSortEntry { s32 id; s32 value; } MajoSortEntry;
 

@@ -26,7 +26,7 @@
 // BattleUnit.work slots (btlevtcmd_Get/Set/AddUnitWork)
 #define UNIT_WORK_BUNSIN 4       // 1 on a clone (spawned by the bunsin event), 0 on the real one; clones skip attack/wait and die when hit
 #define UNIT_WORK_KILL_BUNSIN 5  // damage_event: 1 if the real one was hit while clones exist; after the damage all clones are killed
-#define UNIT_WORK_FADED_OUT 6    // clone: 1 once bunsin_kill_event has faded it out, so it fades only once
+#define UNIT_WORK_FADING 6       // clone: 1 once bunsin_kill_event has faded it out, so it fades only once
 #define UNIT_WORK_MAGIC_EFFECT 7 // EffectEntry of the magic shot (effMahorn2Entry); eff_magic_get_posX reads its type-3 element's x
 
 double __fabs(double x);
@@ -712,7 +712,7 @@ static EVT_BEGIN(init_event)
     CALL(set_hand_dest, UNIT_ID_SELF, 5, FLOAT(25.0f), FLOAT(10.0f), FLOAT(10.0f))
     SPAWN_EVENT(PTR(hand_ctrl_event))
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_BUNSIN, 0)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_FADED_OUT, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_FADING, 0)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
@@ -937,11 +937,11 @@ static EVT_BEGIN(bunsin_kill_event)
     IF_INT_EQUAL(LW(0), -1)
         RETURN
     END_IF
-    CALL(btlevtcmd_GetUnitWork, LW(0), 6, LW(1))
+    CALL(btlevtcmd_GetUnitWork, LW(0), UNIT_WORK_FADING, LW(1))
     IF_INT_EQUAL(LW(1), 1)
         GOTO(10)
     END_IF
-    CALL(btlevtcmd_SetUnitWork, LW(0), 6, 1)
+    CALL(btlevtcmd_SetUnitWork, LW(0), UNIT_WORK_FADING, 1)
     CALL_CHILD(PTR(alpha_down_event))
     LABEL(10)
     CALL(btlevtcmd_WaitAttackEnd)
@@ -1648,7 +1648,7 @@ static EVT_BEGIN(spawn_event)
     CALL(btlevtcmd_GetUnitId, UNIT_ID_SELF, LW(13))
     CALL(mahorn_copy_status, LW(13), LW(3))
     CALL(btlevtcmd_OffAttribute, LW(3), kUnitNoHpGauge)
-    CALL(btlevtcmd_SetUnitWork, LW(3), 4, 1)
+    CALL(btlevtcmd_SetUnitWork, LW(3), UNIT_WORK_BUNSIN, 1)
     CALL(btlevtcmd_SetEventAttack, LW(3), PTR(attack_event_bunsin))
     CALL(btlevtcmd_SetRegistStatus, LW(3), PTR(&regist_bunsin))
     CALL(btlevtcmd_OnPartsAttribute, LW(3), 1, kClone)
