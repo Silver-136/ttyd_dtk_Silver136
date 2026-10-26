@@ -746,7 +746,7 @@ void main_enemy_sub(BattleUnit* unit, s32* n) {
         if (xc >= x0 && xc < x0 + step) {
             y = (xc - x0) / step * (m->disp[0][i + 1].y - m->disp[0][i].y) + m->disp[0][i].y;
             if (unit->mPosition.y < y) {
-                if ((unit->mAttributeFlags & kUnitOnCeiling) && y < 120.0f) {
+                if ((unit->mAttributeFlags & kCeiling) && y < 120.0f) {
                     break;
                 }
                 if (m->vel[0][i].y > 0.0f) {
@@ -1094,13 +1094,13 @@ EVT_BEGIN(dmg_evt)
         RETURN
     END_IF
     IF_INT_LESS_OR_EQUAL(LW(10), 1)
-        CALL(btlevtcmd_CheckAttribute, LW(3), kUnitOnCeiling, LW(0))
+        CALL(btlevtcmd_CheckAttribute, LW(3), kCeiling, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
             GOTO(30)
         END_IF
-        CALL(btlevtcmd_CheckAttribute, LW(3), kUnitAirborne, LW(0))
+        CALL(btlevtcmd_CheckAttribute, LW(3), kFloating, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
-            CALL(btlevtcmd_CheckPartsAttribute, LW(3), LW(4), kPartNotHammerTarget, LW(0))
+            CALL(btlevtcmd_CheckPartsAttribute, LW(3), LW(4), kHammerlikeCannotTarget, LW(0))
             IF_INT_NOT_EQUAL(LW(0), 0)
                 GOTO(30)
             END_IF
@@ -1108,7 +1108,7 @@ EVT_BEGIN(dmg_evt)
         GOTO(20)
     END_IF
     IF_INT_LESS_OR_EQUAL(LW(10), 3)
-        CALL(btlevtcmd_CheckAttribute, LW(3), kUnitOnCeiling, LW(0))
+        CALL(btlevtcmd_CheckAttribute, LW(3), kCeiling, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
             GOTO(30)
         END_IF

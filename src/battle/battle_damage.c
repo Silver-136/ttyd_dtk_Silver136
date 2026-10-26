@@ -444,7 +444,7 @@ s32 BattleCalculateDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPa
                 damage = 0;
             }
         }
-        attacker->mTokenFlags |= kChargeConsumed;
+        attacker->mTokenFlags |= kChargeExpended;
     }
     if ((weapon->special & SPECIAL_STATUS_POWER) && BtlUnit_CheckStatus(attacker, STATUS_HUGE)) {
         BtlUnit_GetStatus(attacker, STATUS_HUGE, &turns, &strength);
@@ -1088,7 +1088,7 @@ s32 BattleSetStatusDamage(u32* result, BattleUnit* unit, BattleUnitPart* part, u
 
     if (ok) {
         BtlUnit_GetPos(unit, &x, &y, &z);
-        if (unit->mAttributeFlags & kUnitOnCeiling) {
+        if (unit->mAttributeFlags & kCeiling) {
             y -= BtlUnit_GetHeight(unit) / 2;
         } else {
             y += BtlUnit_GetHeight(unit) / 2;
@@ -1427,7 +1427,7 @@ s32 BattlePreCheckDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPar
         return 1;
     }
     if (weapon->special & SPECIAL_CHARGEABLE) {
-        attacker->mTokenFlags |= kChargeConsumed;
+        attacker->mTokenFlags |= kChargeExpended;
     }
     if ((part->attributes & kClone) && !(weapon->special & SPECIAL_CONTACTS_CLONES)) {
         return 2;
@@ -1435,10 +1435,10 @@ s32 BattlePreCheckDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPar
     if (weapon->special & SPECIAL_CANNOT_MISS) {
         return 1;
     }
-    if (BtlUnit_CheckStatus(target, STATUS_INVISIBLE) || (target->mAttributeFlags & kUnitAlwaysInvisible)) {
+    if (BtlUnit_CheckStatus(target, STATUS_INVISIBLE) || (target->mAttributeFlags & kPermanentlyInvisible)) {
         return 4;
     }
-    if (target->mAttributeFlags & kUnitInVeil) {
+    if (target->mAttributeFlags & kVeiled) {
         return 4;
     }
     if ((part->counterAttributes & kCounterPreemptiveFrontSpiky) && !(weapon->counterResistFlags & COUNTER_RESIST_PREEMPTIVE_SPIKY) && !attacker->badgesEquipped.SpikeShield) {
@@ -1608,15 +1608,15 @@ s32 BattleCheckDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPart* 
                 BattleAudience_Case_GuardBad();
             }
         }
-        if ((weapon->special & SPECIAL_FLIP_SHELLED) && (part->attributes & kPartShelled)) {
+        if ((weapon->special & SPECIAL_FLIP_SHELLED) && (part->attributes & kIsShelled)) {
             pierce = 1;
             flags |= DAMAGE_RESULT_FLIPPED;
         }
-        if ((weapon->special & SPECIAL_FLIP_BOMB_FLIPPABLE) && (part->attributes & kPartFlippedByBombs)) {
+        if ((weapon->special & SPECIAL_FLIP_BOMB_FLIPPABLE) && (part->attributes & kIsBombFlippable)) {
             pierce = 1;
             flags |= DAMAGE_RESULT_FLIPPED;
         }
-        if ((weapon->special & SPECIAL_GROUND_WINGED) && (part->attributes & kPartWinged)) {
+        if ((weapon->special & SPECIAL_GROUND_WINGED) && (part->attributes & kIsWinged)) {
             pierce = 1;
             if (flags & DAMAGE_RESULT_FINAL_HIT) {
                 flags |= DAMAGE_RESULT_GROUNDED;

@@ -225,7 +225,7 @@ BattleUnitKind unitdata_Party_Vivian = {
     "SFX_MARIO_DAMAGE_FIRE1", // fireDamageSfxName
     "SFX_MARIO_DAMAGE_ICE1", // iceDamageSfxName
     "SFX_MARIO_DAMAGE_BIRIBIRI1", // electricDamageSfxName
-    kUnitAirborne | kUnitNoHpGauge, // attributeFlags
+    kFloating | kUnitNoHpGauge, // attributeFlags
     &regist.d, // statusVulnerability
     1, // numParts
     unitpartsdata_Party_Vivian, // mParts
@@ -389,7 +389,7 @@ EVT_BEGIN(vivian_hide_event)
         CALL(btlevtcmd_FaceDirectionSub, LW(3), LW(0), 15)
         CALL(btlevtcmd_SetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
         BEGIN_INLINE_EVENT
-            CALL(btlevtcmd_OffAttribute, LW(3), kUnitInVeil)
+            CALL(btlevtcmd_OffAttribute, LW(3), kVeiled)
             CALL(btlevtcmd_OffPartsAttribute, LW(3), 1, (kHidden | kNoShadow))
             CALL(battle_evt_majo_disp_on, LW(3), 1, LW(0), LW(1), LW(2), 1)
             CALL(btlevtcmd_SetPos, LW(3), LW(0), LW(1), LW(2))
@@ -397,7 +397,7 @@ EVT_BEGIN(vivian_hide_event)
             CALL(btlevtcmd_SetMoveSpeed, LW(3), FLOAT(2.0f))
             CALL(btlevtcmd_MovePosition, LW(3), LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
         END_INLINE_EVENT
-        CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, kPartUntargetable)
+        CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, kNotTargetable)
         CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, kHidden)
         CALL(battle_evt_majo_disp_on, UNIT_ID_SELF, 1, LW(0), LW(1), LW(2), 1)
         CALL(btlevtcmd_SetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
@@ -833,7 +833,7 @@ EVT_BEGIN(partyVivianAttack_ShadowGuard)
     BEGIN_SIBLING_EVENT
         CALL(btlevtcmd_AnimeChangePose, LW(3), 1, STRING("M_B_3"))
         CALL(battle_evt_majo_disp_off, LW(3), 1, 1, 0)
-        CALL(btlevtcmd_OnAttribute, LW(3), kUnitInVeil)
+        CALL(btlevtcmd_OnAttribute, LW(3), kVeiled)
         CALL(btlevtcmd_OnPartsAttribute, LW(3), 1, (kHidden | kNoShadow))
         WAIT_FRAMES(1)
         CALL(btlevtcmd_GetHomePos, LW(3), LW(0), LW(1), LW(2))
@@ -848,7 +848,7 @@ EVT_BEGIN(partyVivianAttack_ShadowGuard)
     ADD(LW(1), 1)
     CALL(evt_eff, 0, STRING("ripple"), 1, LW(0), LW(1), LW(2), 0, 0, 0, 0, 0, 0, 0, 0)
     WAIT_MS(333)
-    CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 1, kPartUntargetable | kHidden)
+    CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 1, kNotTargetable | kHidden)
     WAIT_FRAMES(1)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, VIVIAN_WORK_HIDE_TURNS, 1)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))

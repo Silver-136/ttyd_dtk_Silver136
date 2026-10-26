@@ -76,7 +76,7 @@ EVT_BEGIN(subsetevt_dead)
         GOTO(1)
     END_SWITCH
     LABEL(0)
-    CALL(btlevtcmd_CheckAttribute, LW(10), kUnitAirborne, LW(0))
+    CALL(btlevtcmd_CheckAttribute, LW(10), kFloating, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), POSE_TYPE_RUN)
         CALL(btlevtcmd_GetHomePos, LW(10), LW(2), LW(3), LW(4))

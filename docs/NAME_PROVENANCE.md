@@ -17,8 +17,11 @@ renaming: `@740`, `__local_PI$366`, `monte_p`, `one$381`, `partyGetTargetDistY`,
 Many struct field names in the battle, pouch and item headers (for example the BattleWeapon status
 chance/time fields, BattleUnitKind offsets such as `bintaHitOffset` / `kissHitOffset` / `cutBaseOffset`, and
 BattleWork / BattleUnit counters) came with the adopted tree and follow the structure notes of jdaster64's
-ttyd-utils project. Credit for those names goes there. The battle flag names that matched those notes were
-renamed in 2026-10 to wording taken from what our code does with each bit.
+ttyd-utils project and its ttyd_structures_pseudocode.txt. Credit for those names goes there; jdaster64 has agreed
+to their use (2026-10). The battle unit / part / token flag names follow that document (kIsWinged,
+kJumplikeCannotTarget, kCeiling, kChargeExpended ...); our comments say what the code does with each bit. Where the
+code contradicts a name, the code wins: part bit 0x80 (WeakToAttackFxR there) is read by US BattlePreCheckDamage as
+"add unit work slot 1 to the part's defence", so it is kPartUnitWorkDefense here.
 
 ## Invented function and data names
 

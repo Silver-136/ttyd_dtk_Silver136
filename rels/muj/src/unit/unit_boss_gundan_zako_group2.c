@@ -152,7 +152,7 @@ BattleUnitKind unit_boss_gundan_zako_group2 = {
     "SFX_BTL_DAMAGE_FIRE1", // fireDamageSfxName
     "SFX_BTL_DAMAGE_ICE1", // iceDamageSfxName
     "SFX_BTL_DAMAGE_BIRIBIRI1", // electricDamageSfxName
-    kUnitOnCeiling | kUnitNoSpin, // attributeFlags
+    kCeiling | kUnitNoSpin, // attributeFlags
     &regist, // statusVulnerability
     1, // numParts
     parts, // mParts
@@ -203,7 +203,7 @@ static BattleDataEntry data_table[] = {
 };
 
 static BattleUnitKindPart parts[] = {
-    {1, "btl_un_gundan_zako_group2", "c_zako_n", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kPartNotHammerTarget | kPartNotShellTossTarget | kHidden | kNoShadow, 0, pose_table},
+    {1, "btl_un_gundan_zako_group2", "c_zako_n", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kHammerlikeCannotTarget | kShellTosslikeCannotTarget | kHidden | kNoShadow, 0, pose_table},
 };
 
 BattleWeapon weapon_gundan_zako_group2_attack = {

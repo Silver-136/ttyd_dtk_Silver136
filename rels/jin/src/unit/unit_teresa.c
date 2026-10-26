@@ -82,7 +82,7 @@ BattleUnitKind unit_teresa = {
     "SFX_BTL_DAMAGE_FIRE1", // fireDamageSfxName
     "SFX_BTL_DAMAGE_ICE1", // iceDamageSfxName
     "SFX_BTL_DAMAGE_BIRIBIRI1", // electricDamageSfxName
-    kUnitAirborne, // attributeFlags
+    kFloating, // attributeFlags
     &regist, // statusVulnerability
     1, // numParts
     parts, // mParts
@@ -653,7 +653,7 @@ static EVT_BEGIN(move_event_sub)
     END_IF
     WAIT_FRAMES(LW(0))
     CALL(btlevtcmd_SetUnitWork, LW(3), UNIT_WORK_RAISED, 1)
-    CALL(btlevtcmd_OnPartsAttribute, LW(3), 1, (kPartNotHammerTarget | kPartNotShellTossTarget))
+    CALL(btlevtcmd_OnPartsAttribute, LW(3), 1, (kHammerlikeCannotTarget | kShellTosslikeCannotTarget))
     BEGIN_SIBLING_EVENT
         LOOP(60)
             CALL(btlevtcmd_AddRotate, LW(3), 0, LW(1), 0)

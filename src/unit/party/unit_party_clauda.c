@@ -329,7 +329,7 @@ BattleUnitKind unitdata_Party_Clauda = {
     "SFX_MARIO_DAMAGE_FIRE1", // fireDamageSfxName
     "SFX_MARIO_DAMAGE_ICE1", // iceDamageSfxName
     "SFX_MARIO_DAMAGE_BIRIBIRI1", // electricDamageSfxName
-    kUnitAirborne | kUnitNoHpGauge, // attributeFlags
+    kFloating | kUnitNoHpGauge, // attributeFlags
     &regist, // statusVulnerability
     1, // numParts
     unitpartsdata_Party_Clauda, // mParts

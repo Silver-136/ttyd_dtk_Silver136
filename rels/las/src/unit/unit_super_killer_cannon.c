@@ -122,8 +122,8 @@ static StatusVulnerability regist = {
 
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_super_killer_cannon", "c_killtai_g", 0.0f, 0.0f, 0.0f, 0.0f, 30.0f, 0.0f, 0.0f, 35.0f, 0.0f, 35, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table},
-    {2, "btl_un_super_killer_cannon", "c_killtai_g", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0, 0, 255, &defence, &defence_attr, kPartUntargetable, 0, pose_table},
-    {3, "btl_un_super_killer_cannon", "c_killtai_g", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0, 0, 255, &defence, &defence_attr, kPartUntargetable, 0, pose_table},
+    {2, "btl_un_super_killer_cannon", "c_killtai_g", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0, 0, 255, &defence, &defence_attr, kNotTargetable, 0, pose_table},
+    {3, "btl_un_super_killer_cannon", "c_killtai_g", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0, 0, 255, &defence, &defence_attr, kNotTargetable, 0, pose_table},
 };
 
 static BattleUnitSetup entry_killer = {
@@ -550,8 +550,8 @@ static EVT_BEGIN(friend_event_sky)
     IF_INT_EQUAL(LW(12), 1)
         CALL(btlevtcmd_OnOffStatus, LW(3), STATUS_CHARGE, 1, 1, 1)
     END_IF
-    CALL(btlevtcmd_OnPartsAttribute, LW(3), LW(4), kPartNotShellTossTarget)
-    CALL(btlevtcmd_OnPartsAttribute, LW(3), LW(4), kPartNotHammerTarget)
+    CALL(btlevtcmd_OnPartsAttribute, LW(3), LW(4), kShellTosslikeCannotTarget)
+    CALL(btlevtcmd_OnPartsAttribute, LW(3), LW(4), kHammerlikeCannotTarget)
     RETURN
 EVT_END()
 

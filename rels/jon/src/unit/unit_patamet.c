@@ -100,7 +100,7 @@ BattleUnitKind unit_patamet = {
     "SFX_BTL_DAMAGE_FIRE1", // fireDamageSfxName
     "SFX_BTL_DAMAGE_ICE1", // iceDamageSfxName
     "SFX_BTL_DAMAGE_BIRIBIRI1", // electricDamageSfxName
-    kUnitAirborne, // attributeFlags
+    kFloating, // attributeFlags
     &regist, // statusVulnerability
     1, // numParts
     parts_pata, // mParts
@@ -201,7 +201,7 @@ static BattleDataEntry data_table_pata[] = {
 };
 
 static BattleUnitKindPart parts_pata[] = {
-    {1, "btl_un_patamet", "c_met", 0.0f, 0.0f, 0.0f, 0.0f, 20.0f, 0.0f, 0.0f, 25.0f, 0.0f, 20, 30, 255, &defence_pata, &defence_attr_pata, kMainPart | kGuardTargetPart | kPartWinged | kPartNotHammerTarget | kPartNotShellTossTarget, 0, pose_table_pata},
+    {1, "btl_un_patamet", "c_met", 0.0f, 0.0f, 0.0f, 0.0f, 20.0f, 0.0f, 0.0f, 25.0f, 0.0f, 20, 30, 255, &defence_pata, &defence_attr_pata, kMainPart | kGuardTargetPart | kIsWinged | kHammerlikeCannotTarget | kShellTosslikeCannotTarget, 0, pose_table_pata},
 };
 
 static PoseSoundTiming pose_sound_timing_table[] = {
@@ -235,8 +235,8 @@ EVT_END()
 static EVT_BEGIN(dmg_fall_event_pata)
     SET_VALUE(LW(10), -2)
     SET_VALUE(LW(11), 1)
-    CALL(btlevtcmd_OffAttribute, LW(10), kUnitAirborne)
-    CALL(btlevtcmd_OffPartsAttribute, LW(10), LW(11), kPartWinged)
+    CALL(btlevtcmd_OffAttribute, LW(10), kFloating)
+    CALL(btlevtcmd_OffPartsAttribute, LW(10), LW(11), kIsWinged)
     CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), POSE_TYPE_DAMAGE)
     CALL(btlevtcmd_AnimeSetPoseTable, LW(10), LW(11), PTR(pose_table))
     CALL(btlevtcmd_ChangeDataTable, LW(10), PTR(data_table))
@@ -595,12 +595,12 @@ static EVT_BEGIN(init_event2)
         CALL(btlevtcmd_SetEventDamage, UNIT_ID_SELF, PTR(damage_event))
         CALL(btlevtcmd_SetEventConfusion, UNIT_ID_SELF, PTR(attack_event))
         CALL(btlevtcmd_SetEventCeilFall, UNIT_ID_SELF, 0)
-        CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 1, kPartShelled)
+        CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 1, kIsShelled)
         CALL(btlevtcmd_SetHitCursorOffset, UNIT_ID_SELF, 1, 0, 0, 0)
         ELSE
-        CALL(btlevtcmd_OnAttribute, UNIT_ID_SELF, kUnitOnCeiling)
-        CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 1, kPartNotShellTossTarget)
-        CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 1, kPartNotHammerTarget)
+        CALL(btlevtcmd_OnAttribute, UNIT_ID_SELF, kCeiling)
+        CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 1, kShellTosslikeCannotTarget)
+        CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 1, kHammerlikeCannotTarget)
         CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, 1, PTR(pose_table_ceil))
         CALL(btlevtcmd_ChangeDataTable, UNIT_ID_SELF, PTR(data_table_ceil))
         CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
@@ -837,7 +837,7 @@ static EVT_BEGIN(damage_event_ceil)
     IF_INT_EQUAL(LW(12), 0)
         RETURN
     END_IF
-    CALL(btlevtcmd_CheckAttribute, UNIT_ID_SELF, kUnitOnCeiling, LW(0))
+    CALL(btlevtcmd_CheckAttribute, UNIT_ID_SELF, kCeiling, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL_CHILD(PTR(ceil_fall_ready_event))
     END_IF
@@ -845,9 +845,9 @@ static EVT_BEGIN(damage_event_ceil)
 EVT_END()
 
 static EVT_BEGIN(counter_damage_event_ceil)
-    CALL(btlevtcmd_OffAttribute, UNIT_ID_SELF, kUnitOnCeiling)
-    CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, kPartNotShellTossTarget)
-    CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, kPartNotHammerTarget)
+    CALL(btlevtcmd_OffAttribute, UNIT_ID_SELF, kCeiling)
+    CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, kShellTosslikeCannotTarget)
+    CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, kHammerlikeCannotTarget)
     CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, 1, PTR(pose_table))
     CALL(btlevtcmd_ChangeDataTable, UNIT_ID_SELF, PTR(data_table))
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ON_CEILING, 0)
@@ -872,9 +872,9 @@ static EVT_BEGIN(ceil_fall_ready_event)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), 15, LW(2), 15, MOVE_SOUND_FROM_TABLE)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_MET_LANDING1"), EVT_NULLPTR, 0, EVT_NULLPTR)
-    CALL(btlevtcmd_OffAttribute, UNIT_ID_SELF, kUnitOnCeiling)
-    CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, kPartNotShellTossTarget)
-    CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, kPartNotHammerTarget)
+    CALL(btlevtcmd_OffAttribute, UNIT_ID_SELF, kCeiling)
+    CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, kShellTosslikeCannotTarget)
+    CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, kHammerlikeCannotTarget)
     CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, 1, PTR(pose_table_turn))
     CALL(btlevtcmd_ChangeDataTable, UNIT_ID_SELF, PTR(data_table))
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ON_CEILING, 0)
@@ -990,9 +990,9 @@ static EVT_BEGIN(attack_event_ceil)
         WAIT_FRAMES(1)
     END_LOOP
     CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, 0, 0)
-    CALL(btlevtcmd_OffAttribute, UNIT_ID_SELF, kUnitOnCeiling)
-    CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, kPartNotShellTossTarget)
-    CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, kPartNotHammerTarget)
+    CALL(btlevtcmd_OffAttribute, UNIT_ID_SELF, kCeiling)
+    CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, kShellTosslikeCannotTarget)
+    CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, kHammerlikeCannotTarget)
     CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, 1, PTR(pose_table))
     CALL(btlevtcmd_ChangeDataTable, UNIT_ID_SELF, PTR(data_table))
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ON_CEILING, 0)

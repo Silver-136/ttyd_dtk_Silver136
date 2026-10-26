@@ -83,7 +83,7 @@ BattleUnitKind unit_yami_patakuri = {
     "SFX_BTL_DAMAGE_FIRE1", // fireDamageSfxName
     "SFX_BTL_DAMAGE_ICE1", // iceDamageSfxName
     "SFX_BTL_DAMAGE_BIRIBIRI1", // electricDamageSfxName
-    kUnitAirborne | kUnitLeader, // attributeFlags
+    kFloating | kUnitLeader, // attributeFlags
     &regist_patakuri, // statusVulnerability
     1, // numParts
     parts_patakuri, // mParts
@@ -157,7 +157,7 @@ static BattleWeapon weapon_patakuri_attack = {
 };
 
 static BattleUnitKindPart parts_patakuri[] = {
-    {1, "btl_un_yami_patakuri", "c_kuribo_y", 0.0f, 0.0f, 0.0f, 0.0f, 22.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence_patakuri, &defence_patakuri_attr, kMainPart | kGuardTargetPart | kPartWinged | kPartNotHammerTarget | kPartNotShellTossTarget, 0, pose_table_patakuri},
+    {1, "btl_un_yami_patakuri", "c_kuribo_y", 0.0f, 0.0f, 0.0f, 0.0f, 22.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence_patakuri, &defence_patakuri_attr, kMainPart | kGuardTargetPart | kIsWinged | kHammerlikeCannotTarget | kShellTosslikeCannotTarget, 0, pose_table_patakuri},
 };
 
 static PoseTableEntry pose_table_patakuri[] = {
@@ -211,8 +211,8 @@ EVT_END()
 static EVT_BEGIN(dmg_fall_event)
     SET_VALUE(LW(10), -2)
     SET_VALUE(LW(11), 1)
-    CALL(btlevtcmd_OffAttribute, LW(10), kUnitAirborne)
-    CALL(btlevtcmd_OffPartsAttribute, LW(10), LW(11), kPartWinged)
+    CALL(btlevtcmd_OffAttribute, LW(10), kFloating)
+    CALL(btlevtcmd_OffPartsAttribute, LW(10), LW(11), kIsWinged)
     CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), LW(14))
     WAIT_MS(1000)
     CALL(btlevtcmd_AnimeSetPoseTable, LW(10), LW(11), PTR(pose_table))

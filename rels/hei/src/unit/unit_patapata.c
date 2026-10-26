@@ -82,7 +82,7 @@ static BattleUnitKind unit_patapata = {
     "SFX_BTL_DAMAGE_FIRE1", // fireDamageSfxName
     "SFX_BTL_DAMAGE_ICE1", // iceDamageSfxName
     "SFX_BTL_DAMAGE_BIRIBIRI1", // electricDamageSfxName
-    kUnitAirborne | kUnitLeader, // attributeFlags
+    kFloating | kUnitLeader, // attributeFlags
     &regist_patapata, // statusVulnerability
     1, // numParts
     parts_patapata, // mParts
@@ -168,7 +168,7 @@ static BattleUnitKindPart parts_patapata[] = {
         255, // baseAlpha
         &defence_patapata, // defense
         &defence_patapata_attr, // defenseAttr
-        kMainPart | kGuardTargetPart | kPartWinged | kPartNotHammerTarget | kPartNotShellTossTarget, // attributes
+        kMainPart | kGuardTargetPart | kIsWinged | kHammerlikeCannotTarget | kShellTosslikeCannotTarget, // attributes
         0, // counterAttributes
         pose_table_patapata, // poseTable
     },
@@ -225,8 +225,8 @@ EVT_END()
 static EVT_BEGIN(dmg_fall_event)
     SET_VALUE(LW(10), -2)
     SET_VALUE(LW(11), 1)
-    CALL(btlevtcmd_OffAttribute, LW(10), kUnitAirborne)
-    CALL(btlevtcmd_OffPartsAttribute, LW(10), LW(11), kPartWinged)
+    CALL(btlevtcmd_OffAttribute, LW(10), kFloating)
+    CALL(btlevtcmd_OffPartsAttribute, LW(10), LW(11), kIsWinged)
     CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), POSE_TYPE_DAMAGE)
     WAIT_MS(500)
     CALL(btlevtcmd_AnimeSetPoseTable, LW(10), LW(11), PTR(pose_table))
@@ -509,7 +509,7 @@ static BattleUnitKindPart parts[] = {
         255, // baseAlpha
         &defence, // defense
         &defence_attr, // defenseAttr
-        kMainPart | kGuardTargetPart | kPartShelled, // attributes
+        kMainPart | kGuardTargetPart | kIsShelled, // attributes
         0, // counterAttributes
         pose_table, // poseTable
     },

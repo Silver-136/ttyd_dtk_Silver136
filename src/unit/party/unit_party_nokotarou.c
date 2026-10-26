@@ -153,7 +153,7 @@ static BattleDataEntry data_table[] = {
 };
 
 BattleUnitKindPart unitpartsdata_Party_Nokotarou[] = {
-    {1, "btl_un_nokotarou", "c_pnk", 0.0f, 0.0f, 0.0f, 12.0f, 30.0f, 5.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kPartShelled, 0, pose_table_nokotarou_stay},
+    {1, "btl_un_nokotarou", "c_pnk", 0.0f, 0.0f, 0.0f, 12.0f, 30.0f, 5.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kIsShelled, 0, pose_table_nokotarou_stay},
 };
 
 BattleUnitKind unitdata_Party_Nokotarou = {
@@ -1256,7 +1256,7 @@ EVT_BEGIN(partyNokotarouAttack_KouraGuard)
             CALL(btlevtcmd_AudienceDeclareACResult, LW(12), -1)
         END_IF
         WAIT_FRAMES(50)
-        CALL(btlevtcmd_OnAttribute, LW(3), kUnitUnderShellShield)
+        CALL(btlevtcmd_OnAttribute, LW(3), kShellShielded)
         CALL(btlevtcmd_GetUnitId, LW(3), LW(0))
         CALL(btlevtcmd_SetUnitWork, LW(10), SHELL_SHIELD_WORK_TARGET, LW(0))
         CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_NEUTRAL)
@@ -1283,7 +1283,7 @@ EVT_BEGIN(partyNokotarouAttack_KouraGuard)
         CALL(btlevtcmd_RunDataEventChild, LW(10), UNIT_DATA_POSE_TABLE_RESET_EVENT)
         CALL(btlevtcmd_AnimeChangePoseType, LW(10), 1, POSE_TYPE_NEUTRAL)
         CALL(btlevtcmd_OnPartsAttribute, LW(3), 1, kHidden)
-        CALL(btlevtcmd_OnAttribute, LW(3), (kUnitUnderShellShield | kUnitNeverTargetable))
+        CALL(btlevtcmd_OnAttribute, LW(3), (kShellShielded | kUnitNeverTargetable))
         CALL(btlevtcmd_StartWaitEvent, LW(3))
         CALL(_check_mario_move_count, LW(0))
         IF_INT_GREATER_OR_EQUAL(LW(0), 1)
@@ -1911,7 +1911,7 @@ static USER_FUNC(_check_guard_koura) {
     id = evtGetValue(event, args[0]);
     index = args[1];
     unit = BattleGetUnitPtr(wp, BattleTransID(event, id));
-    if (!(unit->mAttributeFlags & kUnitUnderShellShield)) {
+    if (!(unit->mAttributeFlags & kShellShielded)) {
         evtSetValue(event, index, -1);
         return EVT_RETURN_DONE;
     }

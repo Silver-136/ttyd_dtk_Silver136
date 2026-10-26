@@ -256,7 +256,7 @@ static BattleDataEntry data_table_guard[] = {
 };
 
 static BattleUnitKindPart parts[] = {
-    {1, "btl_un_togezo", "c_togezo", 0.0f, 0.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kPartShelled, kCounterTopSpiky | kCounterFrontSpiky, pose_table},
+    {1, "btl_un_togezo", "c_togezo", 0.0f, 0.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kIsShelled, kCounterTopSpiky | kCounterFrontSpiky, pose_table},
 };
 
 static BattleWeapon weapon_togezo_attack = {
@@ -630,7 +630,7 @@ static EVT_BEGIN(normal_attack_event)
     CALL(btlevtcmd_SetRegistStatus, UNIT_ID_SELF, PTR(&regist_guard))
     CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, 1, PTR(pose_table_guard))
     CALL(btlevtcmd_ChangeDataTable, UNIT_ID_SELF, PTR(data_table_guard))
-    CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, kPartShelled)
+    CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, kIsShelled)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_GUARD, 1)
     WAIT_MS(250)
     GOTO(99)
@@ -661,7 +661,7 @@ static EVT_BEGIN(guard_event)
     CALL(btlevtcmd_SetRegistStatus, LW(10), PTR(&regist_guard))
     CALL(btlevtcmd_AnimeSetPoseTable, LW(10), LW(11), PTR(pose_table_guard))
     CALL(btlevtcmd_ChangeDataTable, LW(10), PTR(data_table_guard))
-    CALL(btlevtcmd_OffPartsAttribute, LW(10), LW(11), kPartShelled)
+    CALL(btlevtcmd_OffPartsAttribute, LW(10), LW(11), kIsShelled)
     CALL(btlevtcmd_SetUnitWork, LW(10), UNIT_WORK_GUARD, 1)
     RETURN
 EVT_END()
@@ -687,7 +687,7 @@ static EVT_BEGIN(guard_cancel_event)
     CALL(btlevtcmd_SetRegistStatus, LW(10), PTR(&regist))
     CALL(btlevtcmd_AnimeSetPoseTable, LW(10), LW(11), PTR(pose_table))
     CALL(btlevtcmd_ChangeDataTable, LW(10), PTR(data_table))
-    CALL(btlevtcmd_OnPartsAttribute, LW(10), LW(11), kPartShelled)
+    CALL(btlevtcmd_OnPartsAttribute, LW(10), LW(11), kIsShelled)
     CALL(btlevtcmd_SetUnitWork, LW(10), UNIT_WORK_GUARD, 0)
     RETURN
 EVT_END()

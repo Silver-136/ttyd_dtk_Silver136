@@ -141,8 +141,8 @@ PoseTableEntry pose_table_crack_lv2[] = {
 };
 
 static BattleUnitKindPart parts[] = {
-    {1, "btl_un_koura", "c_koura", 0.0f, 0.0f, 0.0f, 20.0f, 40.0f, 0.0f, 0.0f, 40.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kPartNoTattle, 0, pose_table},
-    {2, "btl_un_koura", "c_koura", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kPartUntargetable | kHidden | kNoShadow, 0, pose_table},
+    {1, "btl_un_koura", "c_koura", 0.0f, 0.0f, 0.0f, 20.0f, 40.0f, 0.0f, 0.0f, 40.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kUntattleable, 0, pose_table},
+    {2, "btl_un_koura", "c_koura", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kNotTargetable | kHidden | kNoShadow, 0, pose_table},
 };
 
 static EVT_BEGIN(init_event)
@@ -193,7 +193,7 @@ EVT_BEGIN(koura_open)
     END_LOOP
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, SHELL_SHIELD_WORK_OPEN, 1)
     CALL(btlevtcmd_OffAttribute, LW(3), kUnitNeverTargetable)
-    CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 1, kPartUntargetable)
+    CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 1, kNotTargetable)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, SHELL_SHIELD_WORK_FOLLOW, 1)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_SHELL_SHIELD_OPEN)
     RETURN
@@ -215,7 +215,7 @@ EVT_BEGIN(koura_close)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, SHELL_SHIELD_WORK_OPEN, 0)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, SHELL_SHIELD_WORK_TARGET, LW(3))
     CALL(btlevtcmd_OnAttribute, LW(3), kUnitNeverTargetable)
-    CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, kPartUntargetable)
+    CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, kNotTargetable)
     CALL(btlevtcmd_OnPartsAttribute, LW(3), 1, kHidden)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, SHELL_SHIELD_WORK_FOLLOW, 0)
@@ -272,7 +272,7 @@ EVT_END()
 
 static EVT_BEGIN(dead_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, SHELL_SHIELD_WORK_TARGET, LW(3))
-    CALL(btlevtcmd_OffAttribute, LW(3), (kUnitUnderShellShield | kUnitNeverTargetable))
+    CALL(btlevtcmd_OffAttribute, LW(3), (kShellShielded | kUnitNeverTargetable))
     CALL(btlevtcmd_OffPartsAttribute, LW(3), 1, kHidden)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BTL_NOKO_GUARD4"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PKO_H_1"))
@@ -342,7 +342,7 @@ EVT_END()
 
 EVT_BEGIN(destroy_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, SHELL_SHIELD_WORK_TARGET, LW(3))
-    CALL(btlevtcmd_OffAttribute, LW(3), (kUnitUnderShellShield | kUnitNeverTargetable))
+    CALL(btlevtcmd_OffAttribute, LW(3), (kShellShielded | kUnitNeverTargetable))
     CALL(btlevtcmd_OffPartsAttribute, LW(3), 1, kHidden)
     CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 1, kHidden)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))

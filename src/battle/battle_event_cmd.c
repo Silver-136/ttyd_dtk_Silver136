@@ -3533,8 +3533,8 @@ USER_FUNC(btlevtcmd_CommandFlyItem) {
         event->userdata[0] = time;
         BtlUnit_GetPos(unit, &pos.x, &pos.y, &pos.z);
         pos.y += 10.0f;
-        if (!(unit->mAttributeFlags & kUnitInVeil)) {
-            if (unit->mAttributeFlags & kUnitOnCeiling) {
+        if (!(unit->mAttributeFlags & kVeiled)) {
+            if (unit->mAttributeFlags & kCeiling) {
                 pos.y -= 5.0f;
             } else {
                 pos.y += unit->mSizeMultiplier * BtlUnit_GetHeight(unit);

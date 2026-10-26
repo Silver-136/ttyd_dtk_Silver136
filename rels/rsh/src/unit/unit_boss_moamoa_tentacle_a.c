@@ -126,7 +126,7 @@ static BattleDataEntry data_table[] = {
 };
 
 static BattleUnitKindPart parts[] = {
-    {1, "btl_un_moamoa_tentacle_a", "c_g_moamoa_b", 0.0f, 0.0f, 0.0f, -74.0f, 77.0f, 30.0f, -76.0f, 92.0f, 30.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kPartNotHammerTarget | kPartNotShellTossTarget, 0, pose_table},
+    {1, "btl_un_moamoa_tentacle_a", "c_g_moamoa_b", 0.0f, 0.0f, 0.0f, -74.0f, 77.0f, 30.0f, -76.0f, 92.0f, 30.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kHammerlikeCannotTarget | kShellTosslikeCannotTarget, 0, pose_table},
 };
 
 static BattleWeapon weapon_moamoa_attack = {

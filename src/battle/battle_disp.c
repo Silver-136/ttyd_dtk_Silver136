@@ -474,7 +474,7 @@ next:
             animPoseMain(part->poseId);
             zpos = (Vec){wx, wy, wz + part->dispZOffset};
             part->dispColor.a = part->mKindPartParams->baseAlpha;
-            if (BtlUnit_CheckStatus(unit, STATUS_INVISIBLE) || (unit->mAttributeFlags & kUnitAlwaysInvisible)) {
+            if (BtlUnit_CheckStatus(unit, STATUS_INVISIBLE) || (unit->mAttributeFlags & kPermanentlyInvisible)) {
                 part->dispColor.a = (part->dispColor.a << 7) / 255;
             }
             part->dispColor.a = part->dispColor.a * part->color.a / 255;
@@ -482,7 +482,7 @@ next:
             part->dispColor.g = part->color.g;
             part->dispColor.b = part->color.b;
             if (!(unit->mAttributeFlags & kUnitHidden) && !(part->attributes & kHidden)) {
-                if (!(part->attributes & kMainPart) || !(unit->mAttributeFlags & kUnitInVeil)) {
+                if (!(part->attributes & kMainPart) || !(unit->mAttributeFlags & kVeiled)) {
                     if (part->dispColor.a < 0xFF || animPoseTestXLU(part->poseId)) {
                         if (!(PART_ANIMFLAGS(part) & PART_ANIM_NO_DISP)) {
                             dispEntry(CAMERA_3D, dispCalcZ(&zpos), 2, (DispCallback)btlUnitPartsDisp, part);
@@ -989,7 +989,7 @@ void gravityOffsetControl(BattleUnitPart* part) {
 
     if (!(wp->flags & BATTLE_FLAG_ZERO_GRAVITY_UNUSED)) {
         active = FALSE;
-    } else if (unit->mAttributeFlags & (kUnitAirborne | kNoGravityBob)) {
+    } else if (unit->mAttributeFlags & (kFloating | kNoGravityBob)) {
         active = FALSE;
     }
     if (active) {

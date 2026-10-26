@@ -140,7 +140,7 @@ void BSE_Sleep(BattleUnit* unit) {
         BtlUnit_GetPartsWorldPos(BtlUnit_GetPartsPtr(unit, BtlUnit_GetBodyPartsId(unit)), &x, &y, &z);
         dx = 0.5f * (unit->mSizeMultiplier * BtlUnit_GetWidth(unit));
         dy = 0.95f * (unit->mSizeMultiplier * BtlUnit_GetHeight(unit));
-        if (unit->mAttributeFlags & kUnitOnCeiling) {
+        if (unit->mAttributeFlags & kCeiling) {
             dy = 0.0f;
         }
         x += dx;
@@ -176,7 +176,7 @@ void BSE_Biribiri(BattleUnit* unit) {
         wk = (f32*)EFF_SPARK(unit)->userdata;
         BtlUnit_GetPartsWorldPos(BtlUnit_GetPartsPtr(unit, BtlUnit_GetBodyPartsId(unit)), &x, &y, &z);
         dy = unit->mSizeMultiplier * (BtlUnit_GetHeight(unit) / 2);
-        if (unit->mAttributeFlags & kUnitOnCeiling) {
+        if (unit->mAttributeFlags & kCeiling) {
             dy = 0.0f;
         }
         y += dy;
@@ -279,7 +279,7 @@ void BSE_Kagegakure(BattleUnit* unit) {
     f32 x, y, z;
     BOOL on = FALSE;
 
-    if ((_battleWorkPointer->dispFlags & 1) && (unit->mAttributeFlags & kUnitInVeil)) {
+    if ((_battleWorkPointer->dispFlags & 1) && (unit->mAttributeFlags & kVeiled)) {
         on = TRUE;
     }
     if (on) {

@@ -759,25 +759,25 @@ static BattleDataEntry data_table[] = {
 };
 
 static BattleUnitKindPart parts[] = {
-    {1, "btl_un_cortez", "c_korutesu1", 0.0f, 0.0f, 0.0f, 145.0f, 90.0f, 30.0f, 145.0f, 90.0f, 30.0f, 20, 30, 255, &defence_honeduka, &defence_honeduka_attr, kMainPart | kGuardTargetPart | kPartNotHammerTarget | kPartNotShellTossTarget, 0, pose_table_mode_1},
-    {2, "btl_un_cortez", NULL, 0.0f, 0.0f, 0.0f, 60.0f, 110.0f, 20.0f, 60.0f, 110.0f, 20.0f, 20, 30, 255, &defence_mode2_upper_rib_close, &defence_attr_mode2_upper_rib_close, kSemiImportantPart | kPartUntargetable | kPartNotJumpTarget | kPartNotHammerTarget | kHidden | kNoShadow, 0, pose_table_mode_1},
-    {3, "btl_un_cortez", "c_otitabuki", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence_mode1, &defence_attr_mode1, kPartUntargetable | kHidden | kNoShadow, 0, pose_table_mode_1},
+    {1, "btl_un_cortez", "c_korutesu1", 0.0f, 0.0f, 0.0f, 145.0f, 90.0f, 30.0f, 145.0f, 90.0f, 30.0f, 20, 30, 255, &defence_honeduka, &defence_honeduka_attr, kMainPart | kGuardTargetPart | kHammerlikeCannotTarget | kShellTosslikeCannotTarget, 0, pose_table_mode_1},
+    {2, "btl_un_cortez", NULL, 0.0f, 0.0f, 0.0f, 60.0f, 110.0f, 20.0f, 60.0f, 110.0f, 20.0f, 20, 30, 255, &defence_mode2_upper_rib_close, &defence_attr_mode2_upper_rib_close, kSemiImportantPart | kNotTargetable | kJumplikeCannotTarget | kHammerlikeCannotTarget | kHidden | kNoShadow, 0, pose_table_mode_1},
+    {3, "btl_un_cortez", "c_otitabuki", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence_mode1, &defence_attr_mode1, kNotTargetable | kHidden | kNoShadow, 0, pose_table_mode_1},
     {4, "btl_un_honeduka", "c_honezuka", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 10.0f, 0.0f, 30.0f, 10.0f, 45, 30, 255, &defence_mode1, &defence_attr_mode1, kImportantPart | kSemiImportantPart | kNoShadow, kCounterTopSpiky, pose_table_honeduka},
-    {5, "btl_un_honeduka", "c_hone2", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence_mode1, &defence_attr_mode1, kPartUntargetable | kHidden | kNoShadow, 0, pose_table_fly_bone},
-    {6, "btl_un_honeduka", "c_hone", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence_mode1, &defence_attr_mode1, kPartUntargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table_fly_bone},
-    {7, "btl_un_honeduka", "c_hone", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence_mode1, &defence_attr_mode1, kPartUntargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table_fly_bone},
-    {8, "btl_un_honeduka", "c_hone", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence_mode1, &defence_attr_mode1, kPartUntargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table_fly_bone},
-    {9, "btl_un_honeduka", "c_hone", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence_mode1, &defence_attr_mode1, kPartUntargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table_fly_bone},
-    {10, "btl_un_honeduka", "c_hone", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence_mode1, &defence_attr_mode1, kPartUntargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table_fly_bone},
-    {11, "btl_un_honeduka", "c_hone", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence_mode1, &defence_attr_mode1, kPartUntargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table_fly_bone},
-    {12, "btl_un_honeduka", "c_hone", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence_mode1, &defence_attr_mode1, kPartUntargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table_fly_bone},
-    {13, "btl_un_honeduka", "c_hone", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence_mode1, &defence_attr_mode1, kPartUntargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table_fly_bone},
-    {14, "btl_un_honeduka", "c_hone", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence_mode1, &defence_attr_mode1, kPartUntargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table_fly_bone},
-    {15, "btl_un_honeduka", "c_hone", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence_mode1, &defence_attr_mode1, kPartUntargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table_fly_bone},
-    {16, "btl_un_honeduka", "c_hone", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence_mode1, &defence_attr_mode1, kPartUntargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table_fly_bone},
-    {17, "btl_un_honeduka", "c_hone", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence_mode1, &defence_attr_mode1, kPartUntargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table_fly_bone},
-    {18, "btl_un_honeduka", "c_hone", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence_mode1, &defence_attr_mode1, kPartUntargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table_fly_bone},
-    {19, "btl_un_honeduka", "c_hone", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence_mode1, &defence_attr_mode1, kPartUntargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table_fly_bone},
+    {5, "btl_un_honeduka", "c_hone2", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence_mode1, &defence_attr_mode1, kNotTargetable | kHidden | kNoShadow, 0, pose_table_fly_bone},
+    {6, "btl_un_honeduka", "c_hone", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence_mode1, &defence_attr_mode1, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table_fly_bone},
+    {7, "btl_un_honeduka", "c_hone", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence_mode1, &defence_attr_mode1, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table_fly_bone},
+    {8, "btl_un_honeduka", "c_hone", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence_mode1, &defence_attr_mode1, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table_fly_bone},
+    {9, "btl_un_honeduka", "c_hone", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence_mode1, &defence_attr_mode1, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table_fly_bone},
+    {10, "btl_un_honeduka", "c_hone", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence_mode1, &defence_attr_mode1, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table_fly_bone},
+    {11, "btl_un_honeduka", "c_hone", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence_mode1, &defence_attr_mode1, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table_fly_bone},
+    {12, "btl_un_honeduka", "c_hone", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence_mode1, &defence_attr_mode1, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table_fly_bone},
+    {13, "btl_un_honeduka", "c_hone", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence_mode1, &defence_attr_mode1, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table_fly_bone},
+    {14, "btl_un_honeduka", "c_hone", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence_mode1, &defence_attr_mode1, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table_fly_bone},
+    {15, "btl_un_honeduka", "c_hone", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence_mode1, &defence_attr_mode1, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table_fly_bone},
+    {16, "btl_un_honeduka", "c_hone", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence_mode1, &defence_attr_mode1, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table_fly_bone},
+    {17, "btl_un_honeduka", "c_hone", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence_mode1, &defence_attr_mode1, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table_fly_bone},
+    {18, "btl_un_honeduka", "c_hone", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence_mode1, &defence_attr_mode1, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table_fly_bone},
+    {19, "btl_un_honeduka", "c_hone", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence_mode1, &defence_attr_mode1, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table_fly_bone},
 };
 
 static EVT_BEGIN(init_event)
@@ -1770,8 +1770,8 @@ EVT_BEGIN(cortez_reset_pose_table)
         END_IF
         CALL(btlevtcmd_SetPartsDefenceTable, UNIT_ID_SELF, 1, PTR(&defence_mode2_upper_head))
         CALL(btlevtcmd_SetPartsDefenceAttrTable, UNIT_ID_SELF, 1, PTR(&defence_attr_mode2_upper_head))
-        CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 1, kPartNotHammerTarget | kPartNotShellTossTarget)
-        CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 2, kPartNotJumpTarget | kPartNotHammerTarget | kPartNotShellTossTarget)
+        CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 1, kHammerlikeCannotTarget | kShellTosslikeCannotTarget)
+        CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 2, kJumplikeCannotTarget | kHammerlikeCannotTarget | kShellTosslikeCannotTarget)
         CALL(btlevtcmd_SetHitOffset, UNIT_ID_SELF, 1, 20, 15, 0)
         CALL(btlevtcmd_SetHitCursorOffset, UNIT_ID_SELF, 1, 20, 15, 0)
         CALL(btlevtcmd_SetHitOffset, UNIT_ID_SELF, 2, 0, 0, 0)
@@ -1800,8 +1800,8 @@ EVT_BEGIN(cortez_reset_pose_table)
         END_IF
         CALL(btlevtcmd_SetPartsDefenceTable, UNIT_ID_SELF, 1, PTR(&defence_mode2_middle_head))
         CALL(btlevtcmd_SetPartsDefenceAttrTable, UNIT_ID_SELF, 1, PTR(&defence_attr_mode2_middle_head))
-        CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 1, kPartNotHammerTarget | kPartNotShellTossTarget)
-        CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 2, kPartNotJumpTarget | kPartNotHammerTarget | kPartNotShellTossTarget)
+        CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 1, kHammerlikeCannotTarget | kShellTosslikeCannotTarget)
+        CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 2, kJumplikeCannotTarget | kHammerlikeCannotTarget | kShellTosslikeCannotTarget)
         CALL(btlevtcmd_SetHitOffset, UNIT_ID_SELF, 1, 10, 10, 0)
         CALL(btlevtcmd_SetHitCursorOffset, UNIT_ID_SELF, 1, 10, 10, 0)
         CALL(btlevtcmd_SetHitOffset, UNIT_ID_SELF, 2, -7, -20, 0)
@@ -1827,13 +1827,13 @@ EVT_BEGIN(cortez_reset_pose_table)
             END_IF
             CALL(btlevtcmd_SetPartsDefenceTable, UNIT_ID_SELF, 2, PTR(&defence_mode2_lower_rib_open))
             CALL(btlevtcmd_SetPartsDefenceAttrTable, UNIT_ID_SELF, 2, PTR(&defence_attr_mode2_lower_rib_open))
-            CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 2, kPartNotHammerTarget | kPartNotShellTossTarget)
+            CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 2, kHammerlikeCannotTarget | kShellTosslikeCannotTarget)
         END_IF
         CALL(btlevtcmd_SetPartsDefenceTable, UNIT_ID_SELF, 1, PTR(&defence_mode2_lower_head))
         CALL(btlevtcmd_SetPartsDefenceAttrTable, UNIT_ID_SELF, 1, PTR(&defence_attr_mode2_lower_head))
-        CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 1, kPartNotHammerTarget | kPartNotShellTossTarget)
-        CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 2, kPartNotHammerTarget | kPartNotShellTossTarget)
-        CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 2, kPartNotJumpTarget)
+        CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 1, kHammerlikeCannotTarget | kShellTosslikeCannotTarget)
+        CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 2, kHammerlikeCannotTarget | kShellTosslikeCannotTarget)
+        CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 2, kJumplikeCannotTarget)
         CALL(btlevtcmd_SetHitOffset, UNIT_ID_SELF, 1, -15, -5, 0)
         CALL(btlevtcmd_SetHitCursorOffset, UNIT_ID_SELF, 1, -15, -5, 0)
         CALL(btlevtcmd_SetHitOffset, UNIT_ID_SELF, 2, -20, -35, 0)
@@ -1843,8 +1843,8 @@ EVT_BEGIN(cortez_reset_pose_table)
         CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, 1, PTR(pose_table_mode_3))
         CALL(btlevtcmd_SetPartsDefenceTable, UNIT_ID_SELF, 1, PTR(&defence_mode3))
         CALL(btlevtcmd_SetPartsDefenceAttrTable, UNIT_ID_SELF, 1, PTR(&defence_attr_mode3))
-        CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 1, kPartNotHammerTarget | kPartNotShellTossTarget)
-        CALL(btlevtcmd_OnAttribute, UNIT_ID_SELF, kUnitAirborne)
+        CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 1, kHammerlikeCannotTarget | kShellTosslikeCannotTarget)
+        CALL(btlevtcmd_OnAttribute, UNIT_ID_SELF, kFloating)
         CALL(btlevtcmd_SetHitOffset, UNIT_ID_SELF, 1, -135, -64, 0)
         CALL(btlevtcmd_SetHitCursorOffset, UNIT_ID_SELF, 1, -135, -65, 0)
     END_SWITCH
@@ -1917,7 +1917,7 @@ static EVT_BEGIN(dead_event)
         CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, CORTEZ_UNIT_WORK_MODE, 1)
         CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event_mode2))
         CALL(btlevtcmd_RecoverHp, UNIT_ID_SELF, 1, 999)
-        CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 4, kPartUntargetable)
+        CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 4, kNotTargetable)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("KRT_D2_1"))
         BEGIN_SIBLING_EVENT
             CALL(btlevtcmd_ftomsec, 125, LW(0))
@@ -2048,27 +2048,27 @@ static EVT_BEGIN(dead_event)
         CALL(btlevtcmd_AnimeWaitPlayComplete, UNIT_ID_SELF, 3)
         CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, CORTEZ_UNIT_WORK_SWORD, LW(3))
         CALL(btlevtcmd_AnimeChangePoseFromTable, LW(3), 1)
-        CALL(btlevtcmd_OffPartsAttribute, LW(3), 1, (kPartUntargetable | kHidden | kNoShadow))
+        CALL(btlevtcmd_OffPartsAttribute, LW(3), 1, (kNotTargetable | kHidden | kNoShadow))
         CALL(btlevtcmd_OffAttribute, LW(3), kUnitNoHpGauge)
         CALL(btlevtcmd_SetMaxMoveCount, LW(3), 1)
         CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, CORTEZ_UNIT_WORK_SABER, LW(3))
         CALL(btlevtcmd_AnimeChangePoseFromTable, LW(3), 1)
-        CALL(btlevtcmd_OffPartsAttribute, LW(3), 1, (kPartUntargetable | kHidden | kNoShadow))
+        CALL(btlevtcmd_OffPartsAttribute, LW(3), 1, (kNotTargetable | kHidden | kNoShadow))
         CALL(btlevtcmd_OffAttribute, LW(3), kUnitNoHpGauge)
         CALL(btlevtcmd_SetMaxMoveCount, LW(3), 1)
         CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, CORTEZ_UNIT_WORK_RAPIER, LW(3))
         CALL(btlevtcmd_AnimeChangePoseFromTable, LW(3), 1)
-        CALL(btlevtcmd_OffPartsAttribute, LW(3), 1, (kPartUntargetable | kHidden | kNoShadow))
+        CALL(btlevtcmd_OffPartsAttribute, LW(3), 1, (kNotTargetable | kHidden | kNoShadow))
         CALL(btlevtcmd_OffAttribute, LW(3), kUnitNoHpGauge)
         CALL(btlevtcmd_SetMaxMoveCount, LW(3), 1)
         CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, CORTEZ_UNIT_WORK_CLAW, LW(3))
         CALL(btlevtcmd_AnimeChangePoseFromTable, LW(3), 1)
-        CALL(btlevtcmd_OffPartsAttribute, LW(3), 1, (kPartUntargetable | kHidden | kNoShadow))
+        CALL(btlevtcmd_OffPartsAttribute, LW(3), 1, (kNotTargetable | kHidden | kNoShadow))
         CALL(btlevtcmd_OffAttribute, LW(3), kUnitNoHpGauge)
         CALL(btlevtcmd_SetMaxMoveCount, LW(3), 1)
         CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 3, kHidden | kNoShadow)
-        CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 4, kPartUntargetable | kHidden | kNoShadow)
-        CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 2, kPartUntargetable)
+        CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 4, kNotTargetable | kHidden | kNoShadow)
+        CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 2, kNotTargetable)
         SET_VALUE(LW(11), 1)
         LOOP(4)
             CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, LW(11), LW(9))
@@ -2180,7 +2180,7 @@ EVT_BEGIN(mode2_rib_open_event)
     END_SWITCH
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_KOR_INHALE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_AnimeWaitPlayComplete, UNIT_ID_SELF, 1)
-    CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 2, kPartUntargetable)
+    CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 2, kNotTargetable)
     CALL_CHILD(cortez_reset_pose_table)
     RETURN
 EVT_END()
@@ -2198,7 +2198,7 @@ EVT_BEGIN(mode2_rib_close_event)
     END_SWITCH
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_KOR_RIB_COUNTER1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_AnimeWaitPlayComplete, UNIT_ID_SELF, 1)
-    CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 2, kPartUntargetable)
+    CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 2, kNotTargetable)
     CALL_CHILD(cortez_reset_pose_table)
     RETURN
 EVT_END()

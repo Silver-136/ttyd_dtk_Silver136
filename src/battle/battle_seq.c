@@ -2226,9 +2226,9 @@ void btlseqAct(BattleWork* wp) {
                 }
                 if (cantMove) {
                     BattleSetSeq(wp, SEQ_ACT, 0x6000003);
-                } else if (unit->mAttributeFlags & kUnitInVeil) {
+                } else if (unit->mAttributeFlags & kVeiled) {
                     BattleSetSeq(wp, SEQ_ACT, 0x6000004);
-                } else if (unit->currentKind == UNIT_VIVIAN && (BattleGetMarioPtr(wp)->mAttributeFlags & kUnitInVeil)) {
+                } else if (unit->currentKind == UNIT_VIVIAN && (BattleGetMarioPtr(wp)->mAttributeFlags & kVeiled)) {
                     BattleSetSeq(wp, SEQ_ACT, 0x6000004);
                 } else if (unit->flippedTurns) {
                     BattleSetSeq(wp, SEQ_ACT, 0x6000005);
@@ -2329,9 +2329,9 @@ void btlseqAct(BattleWork* wp) {
             unit = BattleGetUnitPtr(wp, wp->activeUnitId);
             if (unit) {
                 unit->flags &= ~BATTLE_UNIT_FLAG_ACTING;
-                if (unit->mTokenFlags & kChargeConsumed) {
+                if (unit->mTokenFlags & kChargeExpended) {
                     BtlUnit_SetStatus(unit, STATUS_CHARGE, 1, -99);
-                    unit->mTokenFlags &= ~kChargeConsumed;
+                    unit->mTokenFlags &= ~kChargeExpended;
                 }
                 if (wp->majinaiState == 1) {
                     wp->majinaiState = 0;

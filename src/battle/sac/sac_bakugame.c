@@ -357,7 +357,7 @@ USER_FUNC(bakuGameMain) {
                     flag = 1;
                     break;
                 }
-                if (!(u->mAttributeFlags & kUnitOnCeiling)) {
+                if (!(u->mAttributeFlags & kCeiling)) {
                     flag = 0;
                 }
             }
@@ -801,12 +801,12 @@ state_end:
                         }
                         if (w->s80 == 26) {
                             btlDispPoseAnime(BtlUnit_GetPartsPtr(u, BtlUnit_GetBodyPartsId(u)));
-                            if (!(u->mAttributeFlags & kUnitAirborne) && !(u->mAttributeFlags & kUnitOnCeiling)) {
+                            if (!(u->mAttributeFlags & kFloating) && !(u->mAttributeFlags & kCeiling)) {
                                 BtlUnit_GetHomePos(u, &hx, &hy, &hz);
                                 BtlUnit_SetPos(u, hx, hy, hz);
                             }
                         }
-                        if (w->s80 >= 26 && !(u->mAttributeFlags & kUnitAirborne) && !(u->mAttributeFlags & kUnitOnCeiling)) {
+                        if (w->s80 >= 26 && !(u->mAttributeFlags & kFloating) && !(u->mAttributeFlags & kCeiling)) {
                             BtlUnit_GetHomePos(u, &hx, &hy, &hz);
                             BtlUnit_SetPos(u, hx, hy + w->hpos.y, hz);
                         }
@@ -1002,7 +1002,7 @@ state_end:
                     u = BattleGetUnitPtr(bw, i);
                     if (u != NULL && u->mAlliance == ALLIANCE_ENEMY && BtlUnit_CanActStatus(u) &&
                         !(u->mAttributeFlags & kInactive) && !BtlUnit_CheckStatus(u, STATUS_INSTANT_KILL) &&
-                        !(u->mAttributeFlags & kUnitAirborne) && !(u->mAttributeFlags & kUnitOnCeiling)) {
+                        !(u->mAttributeFlags & kFloating) && !(u->mAttributeFlags & kCeiling)) {
                         BtlUnit_GetHomePos(u, &hx, &hy, &hz);
                         BtlUnit_SetPos(u, hx, hy + w->hpos.y, hz);
                     }

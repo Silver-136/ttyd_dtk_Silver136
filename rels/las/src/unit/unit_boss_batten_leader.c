@@ -591,11 +591,11 @@ static BattleDataEntry data_table[] = {
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_batten_leader", "c_shuryo", 0.0f, 0.0f, 0.0f, 0.0f, 56.0f, 0.0f, -6.0f, 55.0f, 0.0f, 53, 69, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table},
     {2, "btl_un_batten_leader", "c_shuryo", 0.0f, 0.0f, 0.0f, 18.0f, 9.0f, 0.0f, 16.0f, 15.0f, 0.0f, 64, 36, 255, &defence, &defence_attr, kNoHpLoss | kImmuneToStatus, 0, NULL},
-    {3, /*"電源ランプ"*/"\x93\x64\x8C\xB9\x83\x89\x83\x93\x83\x76", "c_shuryo", 0.0f, 80.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 15, 15, 255, &defence, &defence_attr, kPartUntargetable | kNoShadow, 0, pose_table},
-    {4, /*"頭のランプ１"*/"\x93\xAA\x82\xCC\x83\x89\x83\x93\x83\x76\x82\x50", "c_shuryo", 0.0f, 80.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 15, 15, 255, &defence, &defence_attr, kPartUntargetable | kNoShadow, 0, pose_table},
-    {5, /*"頭のランプ２"*/"\x93\xAA\x82\xCC\x83\x89\x83\x93\x83\x76\x82\x51", "c_shuryo", 0.0f, 80.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 15, 15, 255, &defence, &defence_attr, kPartUntargetable | kNoShadow, 0, pose_table},
-    {6, /*"頭のランプ３"*/"\x93\xAA\x82\xCC\x83\x89\x83\x93\x83\x76\x82\x52", "c_shuryo", 0.0f, 80.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 15, 15, 255, &defence, &defence_attr, kPartUntargetable | kNoShadow, 0, pose_table},
-    {7, /*"杖のランプ１"*/"\x8F\xF1\x82\xCC\x83\x89\x83\x93\x83\x76\x82\x50", "c_shuryo", 0.0f, 80.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 15, 15, 255, &defence, &defence_attr, kPartUntargetable | kNoShadow, 0, pose_table},
+    {3, /*"電源ランプ"*/"\x93\x64\x8C\xB9\x83\x89\x83\x93\x83\x76", "c_shuryo", 0.0f, 80.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 15, 15, 255, &defence, &defence_attr, kNotTargetable | kNoShadow, 0, pose_table},
+    {4, /*"頭のランプ１"*/"\x93\xAA\x82\xCC\x83\x89\x83\x93\x83\x76\x82\x50", "c_shuryo", 0.0f, 80.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 15, 15, 255, &defence, &defence_attr, kNotTargetable | kNoShadow, 0, pose_table},
+    {5, /*"頭のランプ２"*/"\x93\xAA\x82\xCC\x83\x89\x83\x93\x83\x76\x82\x51", "c_shuryo", 0.0f, 80.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 15, 15, 255, &defence, &defence_attr, kNotTargetable | kNoShadow, 0, pose_table},
+    {6, /*"頭のランプ３"*/"\x93\xAA\x82\xCC\x83\x89\x83\x93\x83\x76\x82\x52", "c_shuryo", 0.0f, 80.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 15, 15, 255, &defence, &defence_attr, kNotTargetable | kNoShadow, 0, pose_table},
+    {7, /*"杖のランプ１"*/"\x8F\xF1\x82\xCC\x83\x89\x83\x93\x83\x76\x82\x50", "c_shuryo", 0.0f, 80.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 15, 15, 255, &defence, &defence_attr, kNotTargetable | kNoShadow, 0, pose_table},
 };
 
 EVT_BEGIN(hakai_snd_event)

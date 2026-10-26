@@ -2753,7 +2753,7 @@ USER_FUNC(_mobj_destroy) {
             unit = BattleGetUnitPtr(wp, obj->mBattleUnitIdx);
             if (unit) {
                 for (part = unit->mParts; part; part = part->mNextPart) {
-                    part->attributes |= kPartUntargetable;
+                    part->attributes |= kNotTargetable;
                 }
             }
         }

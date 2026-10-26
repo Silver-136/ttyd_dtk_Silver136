@@ -16,7 +16,7 @@ static EvtWord attack_event[2];
 static EvtWord wait_event[2];
 
 static BattleUnitKindPart parts[] = {
-    {1, "btl_un_system", NULL, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kPartUntargetable | kHidden | kNoShadow, 0, NULL},
+    {1, "btl_un_system", NULL, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kNotTargetable | kHidden | kNoShadow, 0, NULL},
 };
 
 BattleUnitKind unit_system = {

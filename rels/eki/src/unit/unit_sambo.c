@@ -517,7 +517,7 @@ static BattleUnitKindPart parts[] = {
         255, // baseAlpha
         &defence, // defense
         &defence_attr, // defenseAttr
-        kPartUntargetable | kHidden | kNoShadow, // attributes
+        kNotTargetable | kHidden | kNoShadow, // attributes
         kCounterTopSpiky | kCounterFrontSpiky, // counterAttributes
         pose_table_body3, // poseTable
     },
@@ -533,7 +533,7 @@ static BattleUnitKindPart parts[] = {
         255, // baseAlpha
         &defence, // defense
         &defence_attr, // defenseAttr
-        kPartUntargetable | kHidden | kNoShadow, // attributes
+        kNotTargetable | kHidden | kNoShadow, // attributes
         kCounterTopSpiky | kCounterFrontSpiky, // counterAttributes
         pose_table_body2, // poseTable
     },
@@ -549,7 +549,7 @@ static BattleUnitKindPart parts[] = {
         255, // baseAlpha
         &defence, // defense
         &defence_attr, // defenseAttr
-        kPartUntargetable | kHidden | kNoShadow, // attributes
+        kNotTargetable | kHidden | kNoShadow, // attributes
         kCounterTopSpiky | kCounterFrontSpiky, // counterAttributes
         pose_table_body1, // poseTable
     },
@@ -565,7 +565,7 @@ static BattleUnitKindPart parts[] = {
         255, // baseAlpha
         &defence, // defense
         &defence_attr, // defenseAttr
-        kPartUntargetable | kHidden | kNoShadow | kAbsolutePosition, // attributes
+        kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, // attributes
         0, // counterAttributes
         pose_table_parts, // poseTable
     },
@@ -662,9 +662,9 @@ static EVT_BEGIN(damage_event_bodylost)
             CALL(btlevtcmd_SetKissHitOffset, UNIT_ID_SELF, 10, 52, 0)
         END_SWITCH
         CALL(btlevtcmd_OffPartsAttribute, LW(10), LW(12), (kMainPart | kGuardTargetPart))
-        CALL(btlevtcmd_OnPartsAttribute, LW(10), LW(12), (kPartUntargetable | kHidden | kNoShadow))
+        CALL(btlevtcmd_OnPartsAttribute, LW(10), LW(12), (kNotTargetable | kHidden | kNoShadow))
         CALL(btlevtcmd_OnPartsAttribute, LW(10), LW(11), (kMainPart | kGuardTargetPart))
-        CALL(btlevtcmd_OffPartsAttribute, LW(10), LW(11), (kPartUntargetable | kHidden))
+        CALL(btlevtcmd_OffPartsAttribute, LW(10), LW(11), (kNotTargetable | kHidden))
         CALL(btlevtcmd_GetPos, LW(10), LW(0), LW(1), LW(2))
         BEGIN_SIBLING_EVENT
             WAIT_FRAMES(4)
@@ -774,9 +774,9 @@ static EVT_BEGIN(damage_event_bodylost_blow)
             CALL(btlevtcmd_SetKissHitOffset, UNIT_ID_SELF, 10, 52, 0)
         END_SWITCH
         CALL(btlevtcmd_OffPartsAttribute, LW(10), LW(12), (kMainPart | kGuardTargetPart))
-        CALL(btlevtcmd_OnPartsAttribute, LW(10), LW(12), (kPartUntargetable | kHidden | kNoShadow))
+        CALL(btlevtcmd_OnPartsAttribute, LW(10), LW(12), (kNotTargetable | kHidden | kNoShadow))
         CALL(btlevtcmd_OnPartsAttribute, LW(10), LW(11), (kMainPart | kGuardTargetPart))
-        CALL(btlevtcmd_OffPartsAttribute, LW(10), LW(11), (kPartUntargetable | kHidden))
+        CALL(btlevtcmd_OffPartsAttribute, LW(10), LW(11), (kNotTargetable | kHidden))
         CALL(btlevtcmd_GetPos, LW(10), LW(0), LW(1), LW(2))
         BEGIN_SIBLING_EVENT
             WAIT_FRAMES(4)
@@ -881,9 +881,9 @@ static EVT_BEGIN(damage_swallow_body)
         BEGIN_SIBLING_EVENT
             WAIT_FRAMES(3)
             CALL(btlevtcmd_OffPartsAttribute, LW(10), LW(12), (kMainPart | kGuardTargetPart))
-            CALL(btlevtcmd_OnPartsAttribute, LW(10), LW(12), (kPartUntargetable | kHidden | kNoShadow))
+            CALL(btlevtcmd_OnPartsAttribute, LW(10), LW(12), (kNotTargetable | kHidden | kNoShadow))
             CALL(btlevtcmd_OnPartsAttribute, LW(10), LW(11), (kMainPart | kGuardTargetPart))
-            CALL(btlevtcmd_OffPartsAttribute, LW(10), LW(11), (kPartUntargetable | kHidden))
+            CALL(btlevtcmd_OffPartsAttribute, LW(10), LW(11), (kNotTargetable | kHidden))
             CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), LW(14))
             WAIT_FRAMES(1)
             CALL_CHILD(PTR(subset_dmg_sambo_fall))
@@ -1391,9 +1391,9 @@ static EVT_BEGIN(attack_spike_event)
         CALL(btlevtcmd_SetKissHitOffset, UNIT_ID_SELF, 10, 16, 0)
     END_SWITCH
     CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, LW(7), (kMainPart | kGuardTargetPart))
-    CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, LW(7), (kPartUntargetable | kHidden | kNoShadow))
+    CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, LW(7), (kNotTargetable | kHidden | kNoShadow))
     CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, LW(6), (kMainPart | kGuardTargetPart))
-    CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, LW(6), (kPartUntargetable | kHidden))
+    CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, LW(6), (kNotTargetable | kHidden))
     CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_TINY, LW(5))
     BEGIN_SIBLING_EVENT
         CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))

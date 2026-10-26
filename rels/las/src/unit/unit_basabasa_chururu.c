@@ -76,7 +76,7 @@ BattleUnitKind unit_basabasa_chururu = {
     "SFX_BTL_DAMAGE_FIRE1", // fireDamageSfxName
     "SFX_BTL_DAMAGE_ICE1", // iceDamageSfxName
     "SFX_BTL_DAMAGE_BIRIBIRI1", // electricDamageSfxName
-    kUnitOnCeiling | kUnitLeader | kUnitFaceCamera, // attributeFlags
+    kCeiling | kUnitLeader | kUnitFaceCamera, // attributeFlags
     &regist, // statusVulnerability
     1, // numParts
     parts, // mParts
@@ -181,7 +181,7 @@ static BattleDataEntry data_table[] = {
 };
 
 static BattleUnitKindPart parts[] = {
-    {1, "btl_un_basabasa_chururu", "c_cyuru", 0.0f, 0.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kPartNotHammerTarget | kPartNotShellTossTarget, 0, pose_table_ceil},
+    {1, "btl_un_basabasa_chururu", "c_cyuru", 0.0f, 0.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kHammerlikeCannotTarget | kShellTosslikeCannotTarget, 0, pose_table_ceil},
 };
 
 static StatusVulnerability regist = {
@@ -258,12 +258,12 @@ static PoseSoundTiming pose_sound_timing_table[] = {
 };
 
 static EVT_BEGIN(ceil_sky_event)
-    CALL(btlevtcmd_CheckAttribute, UNIT_ID_SELF, kUnitOnCeiling, LW(0))
+    CALL(btlevtcmd_CheckAttribute, UNIT_ID_SELF, kCeiling, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         GOTO(99)
     END_IF
-    CALL(btlevtcmd_OffAttribute, UNIT_ID_SELF, kUnitOnCeiling)
-    CALL(btlevtcmd_OnAttribute, UNIT_ID_SELF, kUnitAirborne)
+    CALL(btlevtcmd_OffAttribute, UNIT_ID_SELF, kCeiling)
+    CALL(btlevtcmd_OnAttribute, UNIT_ID_SELF, kFloating)
     CALL(btlevtcmd_SetPossessionItemOffset, UNIT_ID_SELF, 0, 0, 0)
     CALL(btlevtcmd_SetEventCeilFall, UNIT_ID_SELF, 0)
     CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, 1, PTR(pose_table))
@@ -383,7 +383,7 @@ static EVT_BEGIN(attack_event)
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, LW(3))
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
     CALL(evt_btl_camera_set_zoom, 0, 250)
-    CALL(btlevtcmd_CheckAttribute, UNIT_ID_SELF, kUnitOnCeiling, LW(0))
+    CALL(btlevtcmd_CheckAttribute, UNIT_ID_SELF, kCeiling, LW(0))
     IF_INT_EQUAL(LW(0), 1)
         CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_WALK)
         WAIT_FRAMES(1)
@@ -527,13 +527,13 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_RUN)
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(6.0f))
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
-    CALL(btlevtcmd_CheckAttribute, UNIT_ID_SELF, kUnitOnCeiling, LW(7))
+    CALL(btlevtcmd_CheckAttribute, UNIT_ID_SELF, kCeiling, LW(7))
     IF_INT_EQUAL(LW(7), 1)
         SUBTRACT(LW(1), 30)
     END_IF
     CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -10, EASING_LINEAR, 0, MOVE_SOUND_FROM_TABLE)
     LABEL(99)
-    CALL(btlevtcmd_CheckAttribute, UNIT_ID_SELF, kUnitOnCeiling, LW(0))
+    CALL(btlevtcmd_CheckAttribute, UNIT_ID_SELF, kCeiling, LW(0))
     IF_INT_EQUAL(LW(0), 1)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("CYU_S_2"))
         WAIT_FRAMES(1)

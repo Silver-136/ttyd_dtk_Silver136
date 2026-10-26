@@ -2062,7 +2062,7 @@ static BattleUnitKindPart parts_nokotarou[] = {
         255, // baseAlpha
         &defence_nokotarou, // defense
         &defence_attr_nokotarou, // defenseAttr
-        kMainPart | kGuardTargetPart | kPartShelled, // attributes
+        kMainPart | kGuardTargetPart | kIsShelled, // attributes
         0, // counterAttributes
         pose_table_nokotarou_stay, // poseTable
     },
