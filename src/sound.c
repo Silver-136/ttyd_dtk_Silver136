@@ -250,7 +250,7 @@ void SoundMain(void) {
 
     for (i = 0, song = sound.songs; i < 4; i++, song++) {
         if (song->group && song->seqId != -1 && sndSeqGetValid(song->seqId) != TRUE) {
-            song->group->flags |= 2;
+            song->group->flags |= SOUND_GROUP_SONG_ENDED_UNUSED;
             sndSeqStop(song->seqId);
             song->seqId = -1;
         }
@@ -482,7 +482,7 @@ BOOL SoundSLibLoadDVD(const char* path) {
             }
             iter->next = group;
         }
-        group->flags = 1;
+        group->flags = SOUND_GROUP_IN_SLIB;
         group->index = id;
         group->groupId = 0;
         group->songId = 0;
@@ -560,7 +560,7 @@ static inline void _ssDropStop(void) {
         SoundEffect* effect = &sound.effects[i];
         if (effect->flags) {
             sndFXKeyOff(effect->voiceId);
-            if (effect->flags & 0x10) {
+            if (effect->flags & SOUND_EFX_FLAG_EMITTER_UNUSED) {
                 sndRemoveEmitter(&effect->emitter);
             }
             effect->flags = 0;
@@ -626,7 +626,7 @@ BOOL SoundDropData(void) {
         SoundEffect* effect = (0, &sound.effects[i]);
         if (effect->flags) {
             sndFXKeyOff(effect->voiceId);
-            if (effect->flags & 0x10) {
+            if (effect->flags & SOUND_EFX_FLAG_EMITTER_UNUSED) {
                 sndRemoveEmitter(&effect->emitter);
             }
             effect->flags = 0;
@@ -706,7 +706,7 @@ BOOL SoundDropData(void) {
             break;
         }
         temp = group->next;
-        if (!(group->flags & 1)) {
+        if (!(group->flags & SOUND_GROUP_IN_SLIB)) {
             __memFree(HEAP_DEFAULT, group->arrfile);
         }
         __memFree(HEAP_DEFAULT, group);
@@ -857,7 +857,7 @@ inline void SoundEfxMuteCh(s32 chan) {
     SoundEffect* sfx = &sound.effects[chan];
     if (sfx->flags) {
         sndFXKeyOff(sfx->voiceId);
-        if (sfx->flags & 0x10) {
+        if (sfx->flags & SOUND_EFX_FLAG_EMITTER_UNUSED) {
             sndRemoveEmitter(&sfx->emitter);
         }
         sfx->flags = 0;
@@ -883,8 +883,8 @@ inline u32 SoundEfxCheckPlay(s32 chan) {
     if (!sfx->flags) {
         return FALSE;
     }
-    if (!(sfx->flags & 0x10)) {
-        if (sfx->flags & 0x10) {
+    if (!(sfx->flags & SOUND_EFX_FLAG_EMITTER_UNUSED)) {
+        if (sfx->flags & SOUND_EFX_FLAG_EMITTER_UNUSED) {
             vid = sndFXCheck(sndEmitterVoiceID(&sfx->emitter));
         } else {
             vid = sndFXCheck(sfx->voiceId);
@@ -933,7 +933,7 @@ s32 SoundEfxPlayEx(SND_FXID fid, u8 priority, u8 vol, u8 pan) {
     if (sfx->voiceId == -1) {
         return -1;
     }
-    sfx->flags = 1;
+    sfx->flags = SOUND_EFX_FLAG_PLAY;
     sfx->priority = priority;
     sfx->vol = vol;
     sfx->pan = pan;
@@ -954,7 +954,7 @@ void SoundEfxStop(s32 chan) {
     sfx = &sound.effects[chan];
     if (sfx->flags) {
         sndFXKeyOff(sfx->voiceId);
-        if (sfx->flags & 0x10) {
+        if (sfx->flags & SOUND_EFX_FLAG_EMITTER_UNUSED) {
             sndRemoveEmitter(&sfx->emitter);
         }
         sfx->flags = 0;
@@ -966,7 +966,7 @@ void SoundEfxSetPitch(s32 chan, u16 pitch) {
     SND_VOICEID vid;
 
     sfx = &sound.effects[chan];
-    if (sfx->flags & 0x10) {
+    if (sfx->flags & SOUND_EFX_FLAG_EMITTER_UNUSED) {
         vid = sndFXCheck(sndEmitterVoiceID(&sfx->emitter));
     } else {
         vid = sndFXCheck(sfx->voiceId);
@@ -981,7 +981,7 @@ void SoundEfxSetVolume(s32 chan, u8 vol) {
     SND_VOICEID vid;
 
     sfx = &sound.effects[chan];
-    if (sfx->flags & 0x10) {
+    if (sfx->flags & SOUND_EFX_FLAG_EMITTER_UNUSED) {
         vid = sndFXCheck(sndEmitterVoiceID(&sfx->emitter));
     } else {
         vid = sndFXCheck(sfx->voiceId);
@@ -1005,7 +1005,7 @@ void SoundEfxSetAux1(s32 chan, u8 reverb) {
     SND_VOICEID vid;
 
     sfx = &sound.effects[chan];
-    if (sfx->flags & 0x10) {
+    if (sfx->flags & SOUND_EFX_FLAG_EMITTER_UNUSED) {
         vid = sndFXCheck(sndEmitterVoiceID(&sfx->emitter));
     } else {
         vid = sndFXCheck(sfx->voiceId);
@@ -1022,7 +1022,7 @@ void SoundEfxSetPan(s32 chan, u8 pan) {
 
     *(u16*)((u8*)sound.effects + off + offsetof(SoundEffect, pan)) = pan; // FAKE: byte-offset store, then sfx from the same offset (sfx = &sound.effects[chan]; sfx->pan = pan does not match)
     sfx = (SoundEffect*)((u8*)sound.effects + off);
-    if (sfx->flags & 0x10) {
+    if (sfx->flags & SOUND_EFX_FLAG_EMITTER_UNUSED) {
         vid = sndFXCheck(sndEmitterVoiceID(&sfx->emitter));
     } else {
         vid = sndFXCheck(sfx->voiceId);
@@ -1040,7 +1040,7 @@ void SoundEfxSetSrndPan(s32 chan, u8 span) {
 
     *(u16*)((u8*)sound.effects + off + offsetof(SoundEffect, span)) = span; // FAKE: byte-offset store, then sfx from the same offset (sfx = &sound.effects[chan]; sfx->span = span does not match)
     sfx = (SoundEffect*)((u8*)sound.effects + off);
-    vid = (sfx->flags & 0x10) ? sndFXCheck(sndEmitterVoiceID(&sfx->emitter))
+    vid = (sfx->flags & SOUND_EFX_FLAG_EMITTER_UNUSED) ? sndFXCheck(sndEmitterVoiceID(&sfx->emitter))
                               : sndFXCheck(sfx->voiceId);
     if (vid != -1) {
         sndFXSurroundPanning(vid, span);
@@ -1060,7 +1060,7 @@ void SoundEfxSetLPF(s32 chan, s16 freq) {
     u32 voiceId;
 
     sfx = &sound.effects[chan];
-    if (sfx->flags & 0x10) {
+    if (sfx->flags & SOUND_EFX_FLAG_EMITTER_UNUSED) {
         voiceId = sndFXCheck(sndEmitterVoiceID(&sfx->emitter));
     } else {
         voiceId = sndFXCheck(sfx->voiceId);
@@ -1083,9 +1083,9 @@ u32 SoundEfxCheck(s32 chan) {
     if (!sfx->flags) {
         return FALSE;
     }
-    if (!(sfx->flags & 0x10)) {
+    if (!(sfx->flags & SOUND_EFX_FLAG_EMITTER_UNUSED)) {
         SND_VOICEID vid;
-        if (sfx->flags & 0x10) {
+        if (sfx->flags & SOUND_EFX_FLAG_EMITTER_UNUSED) {
             vid = sndFXCheck(sndEmitterVoiceID(&sfx->emitter));
         } else {
             vid = sndFXCheck(sfx->voiceId);
@@ -1106,7 +1106,7 @@ inline void SoundEfxCheckCh(s32 chan) {
     SND_VOICEID vid;
 
     effect = &sound.effects[chan];
-    if (effect->flags & 0x10) {
+    if (effect->flags & SOUND_EFX_FLAG_EMITTER_UNUSED) {
         vid = sndFXCheck(sndEmitterVoiceID(&effect->emitter));
     } else {
         vid = sndFXCheck(effect->voiceId);
@@ -1155,7 +1155,7 @@ void SoundEfxMain(void) {
     effect = sound.effects;
     for (i = 0; i < 40; i++, effect++) {
         if (effect->flags) {
-            if (effect->flags & 0x10) {
+            if (effect->flags & SOUND_EFX_FLAG_EMITTER_UNUSED) {
                 effect->dir.x = effect->pos.x - effect->prevPos.x;
                 effect->dir.y = effect->pos.y - effect->prevPos.y;
                 effect->dir.z = effect->pos.z - effect->prevPos.z;
@@ -1169,7 +1169,7 @@ void SoundEfxMain(void) {
 
     for (effect = sound.effects, i = 0; i < 40; i++, effect++) {
         if (effect->flags) {
-            if (!(effect->flags & 0x10)) {
+            if (!(effect->flags & SOUND_EFX_FLAG_EMITTER_UNUSED)) {
                 SoundEfxCheckCh(i);
             } else {
                 if (!sndCheckEmitter(&effect->emitter)) {
@@ -2091,13 +2091,13 @@ u32 SoundSSCheck(s32 chan) {
 
 void SoundSSMuteOn(s32 chan) {
     if (sound.streams[chan].flags) {
-        sound.streams[chan].flags |= 2;
+        sound.streams[chan].flags |= SOUND_STREAM_FLAG_MUTE;
     }
 }
 
 void SoundSSMuteOff(s32 chan) {
     if (sound.streams[chan].flags) {
-        sound.streams[chan].flags &= ~2;
+        sound.streams[chan].flags &= ~SOUND_STREAM_FLAG_MUTE;
     }
 }
 

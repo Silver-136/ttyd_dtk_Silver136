@@ -37,8 +37,12 @@ typedef struct StreamHeader {
     SND_ADPCMSTREAM_INFO coef1;   // 0xBC, type 2: channel 1 DSP header (at 0xA0) coefficients
 } StreamHeader;
 
+// SoundGroup.flags
+#define SOUND_GROUP_IN_SLIB (1 << 0)          // the .arr data lies in the slib block (not freed on its own)
+#define SOUND_GROUP_SONG_ENDED_UNUSED (1 << 1) // a song of the group ended; never read
+
 typedef struct SoundGroup {
-    u16 flags;               // 0x0
+    u16 flags;               // 0x0, SOUND_GROUP_*
     u16 index;               // 0x2, position in the group list (SoundSongGetGroup lookup key)
     SND_GROUPID groupId;     // 0x4
     SND_SONGID songId;       // 0x6
@@ -53,8 +57,12 @@ typedef struct SoundSong {
     u32 mask;          // 0xC
 } SoundSong;
 
+// SoundEffect.flags
+#define SOUND_EFX_FLAG_PLAY (1 << 0)            // slot in use
+#define SOUND_EFX_FLAG_EMITTER_UNUSED (1 << 4)  // a 3D emitter voice; nothing creates one
+
 typedef struct SoundEffect {
-    u16 flags;              // 0x0
+    u16 flags;              // 0x0, SOUND_EFX_FLAG_*
     u16 priority;           // 0x2, SoundEfxPlayEx priority; a full table steals the first slot with priority <= the new one
     u16 vol;                // 0x4
     u16 pan;                // 0x6
