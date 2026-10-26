@@ -334,7 +334,7 @@ EVT_BEGIN(subsetevt_dead_core_nospin_norotate)
 EVT_END()
 
 EVT_BEGIN(btldefaultevt_avoid_guard)
-    CALL(btlevtcmd_AnimeCmpPoseType, LW(10), LW(11), 42, 40, LW(2))
+    CALL(btlevtcmd_AnimeCmpPoseType, LW(10), LW(11), POSE_TYPE_RUN, 40, LW(2))
     IF_INT_EQUAL(LW(2), 0)
         CALL(btlevtcmd_AnimeSetMotionSpeed, LW(10), LW(11), FLOAT(2.0f))
     END_IF
@@ -369,81 +369,81 @@ EVT_BEGIN(subsetevt_damage)
     END_IF
     CALL(btlevtcmd_CheckDamagePattern, LW(10), ATTACKPATTERN_ROTATE_SHELL_ATTACK, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
-        CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(0), 17)
+        CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(0), UNIT_DATA_DAMAGE_ROTATE_SHELL_ATTACK_EVENT)
         IF_INT_NOT_EQUAL(LW(0), 0)
-            CALL(btlevtcmd_RunDataEventChild, LW(10), 17)
+            CALL(btlevtcmd_RunDataEventChild, LW(10), UNIT_DATA_DAMAGE_ROTATE_SHELL_ATTACK_EVENT)
             RETURN
         END_IF
     END_IF
     CALL(btlevtcmd_CheckDamagePattern, LW(10), ATTACKPATTERN_SHELL_ATTACK, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
-        CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(0), 16)
+        CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(0), UNIT_DATA_DAMAGE_SHELL_ATTACK_EVENT)
         IF_INT_NOT_EQUAL(LW(0), 0)
-            CALL(btlevtcmd_RunDataEventChild, LW(10), 16)
+            CALL(btlevtcmd_RunDataEventChild, LW(10), UNIT_DATA_DAMAGE_SHELL_ATTACK_EVENT)
             RETURN
         END_IF
     END_IF
     CALL(btlevtcmd_CheckDamagePattern, LW(10), ATTACKPATTERN_KAITEN_HAMMER, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
-        CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(0), 18)
+        CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(0), UNIT_DATA_DAMAGE_KAITEN_HAMMER_EVENT)
         IF_INT_NOT_EQUAL(LW(0), 0)
-            CALL(btlevtcmd_RunDataEventChild, LW(10), 18)
+            CALL(btlevtcmd_RunDataEventChild, LW(10), UNIT_DATA_DAMAGE_KAITEN_HAMMER_EVENT)
             RETURN
         END_IF
     END_IF
     CALL(btlevtcmd_CheckDamagePattern, LW(10), ATTACKPATTERN_ULTRA_HAMMER, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
-        CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(0), 18)
+        CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(0), UNIT_DATA_DAMAGE_KAITEN_HAMMER_EVENT)
         IF_INT_NOT_EQUAL(LW(0), 0)
-            CALL(btlevtcmd_RunDataEventChild, LW(10), 18)
+            CALL(btlevtcmd_RunDataEventChild, LW(10), UNIT_DATA_DAMAGE_KAITEN_HAMMER_EVENT)
             RETURN
         END_IF
     END_IF
     CALL(btlevtcmd_CheckDamagePattern, LW(10), ATTACKPATTERN_KAITEN_HAMMER_INVOLVED, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
-        CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(0), 19)
+        CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(0), UNIT_DATA_DAMAGE_KAITEN_HAMMER_INVOLVED_EVENT)
         IF_INT_NOT_EQUAL(LW(0), 0)
-            CALL(btlevtcmd_RunDataEventChild, LW(10), 19)
+            CALL(btlevtcmd_RunDataEventChild, LW(10), UNIT_DATA_DAMAGE_KAITEN_HAMMER_INVOLVED_EVENT)
             RETURN
         END_IF
     END_IF
     CALL(btlevtcmd_CheckDamagePattern, LW(10), ATTACKPATTERN_ULTRA_HAMMER_INVOLVED, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
-        CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(0), 19)
+        CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(0), UNIT_DATA_DAMAGE_KAITEN_HAMMER_INVOLVED_EVENT)
         IF_INT_NOT_EQUAL(LW(0), 0)
-            CALL(btlevtcmd_RunDataEventChild, LW(10), 19)
+            CALL(btlevtcmd_RunDataEventChild, LW(10), UNIT_DATA_DAMAGE_KAITEN_HAMMER_INVOLVED_EVENT)
             RETURN
         END_IF
     END_IF
     CALL(btlevtcmd_CheckDamagePattern, LW(10), ATTACKPATTERN_CHUCHURINA_BINTA_L, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
-        CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(0), 20)
+        CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(0), UNIT_DATA_DAMAGE_BINTA_L_EVENT)
         IF_INT_NOT_EQUAL(LW(0), 0)
-            CALL(btlevtcmd_RunDataEventChild, LW(10), 20)
+            CALL(btlevtcmd_RunDataEventChild, LW(10), UNIT_DATA_DAMAGE_BINTA_L_EVENT)
             RETURN
         END_IF
     END_IF
     CALL(btlevtcmd_CheckDamagePattern, LW(10), ATTACKPATTERN_CHUCHURINA_BINTA_R, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
-        CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(0), 21)
+        CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(0), UNIT_DATA_DAMAGE_BINTA_R_EVENT)
         IF_INT_NOT_EQUAL(LW(0), 0)
-            CALL(btlevtcmd_RunDataEventChild, LW(10), 21)
+            CALL(btlevtcmd_RunDataEventChild, LW(10), UNIT_DATA_DAMAGE_BINTA_R_EVENT)
             RETURN
         END_IF
     END_IF
     CALL(btlevtcmd_CheckDamagePattern, LW(10), ATTACKPATTERN_CHUCHURINA_BINTA_L_LAST, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
-        CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(0), 22)
+        CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(0), UNIT_DATA_DAMAGE_BINTA_L_LAST_EVENT)
         IF_INT_NOT_EQUAL(LW(0), 0)
-            CALL(btlevtcmd_RunDataEventChild, LW(10), 22)
+            CALL(btlevtcmd_RunDataEventChild, LW(10), UNIT_DATA_DAMAGE_BINTA_L_LAST_EVENT)
             RETURN
         END_IF
     END_IF
     CALL(btlevtcmd_CheckDamagePattern, LW(10), ATTACKPATTERN_CHUCHURINA_BINTA_R_LAST, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
-        CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(0), 23)
+        CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(0), UNIT_DATA_DAMAGE_BINTA_R_LAST_EVENT)
         IF_INT_NOT_EQUAL(LW(0), 0)
-            CALL(btlevtcmd_RunDataEventChild, LW(10), 23)
+            CALL(btlevtcmd_RunDataEventChild, LW(10), UNIT_DATA_DAMAGE_BINTA_R_LAST_EVENT)
             RETURN
         END_IF
     END_IF
@@ -455,25 +455,25 @@ EVT_BEGIN(subsetevt_damage)
     END_IF
     CALL(btlevtcmd_CheckDamagePattern, LW(10), ATTACKPATTERN_SWALLOW_FAILED, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
-        CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(0), 55)
+        CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(0), UNIT_DATA_DAMAGE_SWALLOW_FAILED_EVENT)
         IF_INT_NOT_EQUAL(LW(0), 0)
-            CALL(btlevtcmd_RunDataEventChild, LW(10), 55)
+            CALL(btlevtcmd_RunDataEventChild, LW(10), UNIT_DATA_DAMAGE_SWALLOW_FAILED_EVENT)
             RETURN
         END_IF
     END_IF
     CALL(btlevtcmd_CheckDamagePattern, LW(10), ATTACKPATTERN_SWALLOW_SPEW, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
-        CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(0), 56)
+        CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(0), UNIT_DATA_DAMAGE_SWALLOW_SPEW_EVENT)
         IF_INT_NOT_EQUAL(LW(0), 0)
-            CALL(btlevtcmd_RunDataEventChild, LW(10), 56)
+            CALL(btlevtcmd_RunDataEventChild, LW(10), UNIT_DATA_DAMAGE_SWALLOW_SPEW_EVENT)
             RETURN
         END_IF
     END_IF
     CALL(btlevtcmd_CheckDamagePattern, LW(10), ATTACKPATTERN_SWALLOW_SHOT, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
-        CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(0), 57)
+        CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(0), UNIT_DATA_DAMAGE_SWALLOW_SHOT_EVENT)
         IF_INT_NOT_EQUAL(LW(0), 0)
-            CALL(btlevtcmd_RunDataEventChild, LW(10), 57)
+            CALL(btlevtcmd_RunDataEventChild, LW(10), UNIT_DATA_DAMAGE_SWALLOW_SHOT_EVENT)
             RETURN
         END_IF
     END_IF
@@ -625,7 +625,7 @@ EVT_BEGIN(subsetevt_damage)
         END_IF
         CALL(btlevtcmd_GetDamageCode, LW(10), LW(0))
         SWITCH(LW(0))
-            CASE_EQUAL(23)
+            CASE_EQUAL(DAMAGE_CODE_NORMAL)
             CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), LW(14))
             WAIT_MS(1000)
             IF_INT_NOT_EQUAL(LW(15), -1)
@@ -692,11 +692,11 @@ EVT_BEGIN(subsetevt_counter_damage)
     CALL(btlevtcmd_OnUnitFlag, LW(10), BATTLE_UNIT_FLAG_SHOW_HP)
     BEGIN_SIBLING_EVENT
         SWITCH(LW(0))
-            CASE_OR_EQUAL(43)
-            CASE_OR_EQUAL(44)
-            CASE_OR_EQUAL(45)
+            CASE_OR_EQUAL(DAMAGE_CODE_COUNTER_TOP_SPIKY)
+            CASE_OR_EQUAL(DAMAGE_CODE_COUNTER_PREEMPTIVE_SPIKY)
+            CASE_OR_EQUAL(DAMAGE_CODE_COUNTER_FRONT_SPIKY)
             CALL(btlevtcmd_GetUnitKind, LW(10), LW(2))
-            IF_INT_EQUAL(LW(2), 222)
+            IF_INT_EQUAL(LW(2), UNIT_MARIO)
                 CALL(btlevtcmd_GetPos, LW(10), LW(2), LW(3), LW(4))
                 CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_DAMAGED1"), LW(2), LW(3), LW(4), 0)
             END_IF
@@ -704,26 +704,26 @@ EVT_BEGIN(subsetevt_counter_damage)
         END_SWITCH
     END_SIBLING_EVENT
     SWITCH(LW(0))
-        CASE_EQUAL(43)
+        CASE_EQUAL(DAMAGE_CODE_COUNTER_TOP_SPIKY)
         CALL(evt_snd_sfxon, STRING("SFX_BTL_ATTACK_MISS3"), 0)
-        SET_VALUE(LW(14), 36)
-        CASE_EQUAL(46)
+        SET_VALUE(LW(14), POSE_TYPE_DAMAGE_TOP_SPIKY)
+        CASE_EQUAL(DAMAGE_CODE_COUNTER_FIERY)
         CALL(btlevtcmd_GetUnitKind, LW(10), LW(2))
-        IF_INT_EQUAL(LW(2), 222)
+        IF_INT_EQUAL(LW(2), UNIT_MARIO)
             CALL(btlevtcmd_snd_se, LW(10), STRING("SFX_VOICE_MARIO_DAMAGED1"), EVT_NULLPTR, 0, EVT_NULLPTR)
         END_IF
-        SET_VALUE(LW(14), 29)
-        CASE_OR_EQUAL(49)
-        CASE_OR_EQUAL(50)
-        CASE_OR_EQUAL(54)
-        SET_VALUE(LW(14), 29)
+        SET_VALUE(LW(14), POSE_TYPE_DAMAGE_FIRE)
+        CASE_OR_EQUAL(DAMAGE_CODE_COUNTER_EXPLOSIVE)
+        CASE_OR_EQUAL(DAMAGE_CODE_COUNTER_VOLATILE_EXPLOSIVE)
+        CASE_OR_EQUAL(DAMAGE_CODE_COUNTER_HOLD_FAST)
+        SET_VALUE(LW(14), POSE_TYPE_DAMAGE_FIRE)
         CASE_END
         CASE_DEFAULT
-        SET_VALUE(LW(14), 39)
+        SET_VALUE(LW(14), POSE_TYPE_DAMAGE)
     END_SWITCH
     CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), LW(14))
     BEGIN_SIBLING_EVENT
-        CALL(btlevtcmd_RunDataEventChild, LW(10), 10)
+        CALL(btlevtcmd_RunDataEventChild, LW(10), UNIT_DATA_DAMAGE_POSE_EVENT)
     END_SIBLING_EVENT
     CALL(btlevtcmd_SetFallAccel, LW(10), FLOAT(1.0f))
     CALL(btlevtcmd_GetPos, LW(10), LW(2), LW(3), LW(4))
@@ -797,9 +797,9 @@ EVT_END()
 
 EVT_BEGIN(subsetevt_happy_heart)
     CALL(btlevtcmd_GetBodyId, UNIT_ID_SELF, LW(5))
-    CALL(btlevtcmd_CheckDefinePosetype, UNIT_ID_SELF, LW(5), 62, LW(0))
+    CALL(btlevtcmd_CheckDefinePosetype, UNIT_ID_SELF, LW(5), POSE_TYPE_HAPPY_HEART, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
-        CALL(btlevtcmd_CheckStatus, LW(3), 9, LW(0))
+        CALL(btlevtcmd_CheckStatus, LW(3), STATUS_FREEZE, LW(0))
         IF_INT_EQUAL(LW(0), 0)
             CALL(btlevtcmd_CheckStatus, LW(3), 1, LW(0))
             IF_INT_EQUAL(LW(0), 0)
@@ -817,9 +817,9 @@ EVT_END()
 
 EVT_BEGIN(subsetevt_happy_flower)
     CALL(btlevtcmd_GetBodyId, UNIT_ID_SELF, LW(5))
-    CALL(btlevtcmd_CheckDefinePosetype, UNIT_ID_SELF, LW(5), 63, LW(0))
+    CALL(btlevtcmd_CheckDefinePosetype, UNIT_ID_SELF, LW(5), POSE_TYPE_HAPPY_FLOWER, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
-        CALL(btlevtcmd_CheckStatus, LW(3), 9, LW(0))
+        CALL(btlevtcmd_CheckStatus, LW(3), STATUS_FREEZE, LW(0))
         IF_INT_EQUAL(LW(0), 0)
             CALL(btlevtcmd_CheckStatus, LW(3), 1, LW(0))
             IF_INT_EQUAL(LW(0), 0)
@@ -1364,9 +1364,9 @@ EVT_BEGIN(subsetevt_binta_damage_right_last)
 EVT_END()
 
 EVT_BEGIN(subsetevt_status_recovery)
-    CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(0), 8)
+    CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(0), UNIT_DATA_STATUS_RECOVERY_EVENT)
     IF_INT_NOT_EQUAL(LW(0), 0)
-        CALL(btlevtcmd_RunDataEventChild, LW(10), 8)
+        CALL(btlevtcmd_RunDataEventChild, LW(10), UNIT_DATA_STATUS_RECOVERY_EVENT)
         RETURN
     END_IF
     CALL(btlevtcmd_StopWaitEvent, UNIT_ID_SELF)
@@ -1385,7 +1385,7 @@ EVT_BEGIN(subsetevt_check_target_movable)
         SET_VALUE(LW(0), 0)
         RETURN
     END_IF
-    CALL(btlevtcmd_CheckStatus, LW(3), 9, LW(0))
+    CALL(btlevtcmd_CheckStatus, LW(3), STATUS_FREEZE, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         SET_VALUE(LW(0), 0)
         RETURN

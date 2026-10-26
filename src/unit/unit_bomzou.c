@@ -309,7 +309,7 @@ static EVT_BEGIN(attack_event)
 EVT_END()
 
 static EVT_BEGIN(dead_event)
-    CALL(btlevtcmd_AfterReactionEntry, UNIT_ID_SELF, 53)
+    CALL(btlevtcmd_AfterReactionEntry, UNIT_ID_SELF, UNIT_DATA_EXPLOSION_EVENT_BOMZOU)
     RETURN
 EVT_END()
 

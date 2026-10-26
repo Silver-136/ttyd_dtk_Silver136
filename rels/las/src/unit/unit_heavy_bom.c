@@ -605,7 +605,7 @@ static EVT_BEGIN(phase_event)
             CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 1, LW(0))
             IF_INT_EQUAL(LW(0), 0)
                 CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("K_4"))
-                CALL(btlevtcmd_AfterReactionEntry, UNIT_ID_SELF, 52)
+                CALL(btlevtcmd_AfterReactionEntry, UNIT_ID_SELF, UNIT_DATA_EXPLOSION_EVENT)
                 RETURN
             END_IF
             CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_HEAVYB_WAIT2"), EVT_NULLPTR, 0, EVT_NULLPTR)
@@ -719,7 +719,7 @@ static EVT_BEGIN(dead_event)
     CALL_CHILD(PTR(subsetevt_dead_core))
     RETURN
     LABEL(50)
-    CALL(btlevtcmd_AfterReactionEntry, UNIT_ID_SELF, 52)
+    CALL(btlevtcmd_AfterReactionEntry, UNIT_ID_SELF, UNIT_DATA_EXPLOSION_EVENT)
     RETURN
 EVT_END()
 

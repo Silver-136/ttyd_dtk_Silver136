@@ -174,7 +174,7 @@ EVT_BEGIN(gesso_left_arm_damage_event)
         SET_VALUE(LW(14), 38)
     END_IF
     BEGIN_SIBLING_EVENT
-        CALL(btlevtcmd_RunDataEventChild, LW(10), 10)
+        CALL(btlevtcmd_RunDataEventChild, LW(10), UNIT_DATA_DAMAGE_POSE_EVENT)
     END_SIBLING_EVENT
     CALL_CHILD(PTR(subsetevt_damage))
     CALL(btlevtcmd_CheckDamageCode, LW(10), DAMAGE_RESULT_DEATH, LW(1))

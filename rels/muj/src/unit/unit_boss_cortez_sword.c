@@ -669,7 +669,7 @@ EVT_BEGIN(cortez_weapon_counter_damage_event)
     END_SWITCH
     CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), LW(14))
     BEGIN_SIBLING_EVENT
-        CALL(btlevtcmd_RunDataEventChild, LW(10), 10)
+        CALL(btlevtcmd_RunDataEventChild, LW(10), UNIT_DATA_DAMAGE_POSE_EVENT)
     END_SIBLING_EVENT
     CALL(btlevtcmd_SetFallAccel, LW(10), FLOAT(1.0f))
     CALL(btlevtcmd_GetPos, LW(10), LW(2), LW(3), LW(4))

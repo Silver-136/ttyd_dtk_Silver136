@@ -1285,9 +1285,9 @@ EVT_BEGIN(party_change_event)
     CALL(_load_param, UNIT_ID_SELF, LW(9))
     CALL(btlevtcmd_SetPos, LW(9), LW(5), LW(6), LW(7))
     CALL(btlevtcmd_SetFallAccel, LW(9), FLOAT(0.69921875f))
-    CALL(btlevtcmd_CheckDataOfDataTable, LW(9), LW(0), 4)
+    CALL(btlevtcmd_CheckDataOfDataTable, LW(9), LW(0), UNIT_DATA_CHANGE_PARTY_SPAWN_INIT_EVENT)
     IF_INT_NOT_EQUAL(LW(0), 0)
-        CALL(btlevtcmd_RunDataEventChild, LW(9), 4)
+        CALL(btlevtcmd_RunDataEventChild, LW(9), UNIT_DATA_CHANGE_PARTY_SPAWN_INIT_EVENT)
     END_IF
     CALL(evt_snd_sfxon, STRING("SFX_PARTY_CHANGE1"), 0)
     BEGIN_SIBLING_EVENT

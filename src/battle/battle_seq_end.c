@@ -1377,7 +1377,7 @@ EVT_END()
 EVT_BEGIN(_koura_delete_event)
     CALL(_check_guard_koura, UNIT_ID_MARIO, LW(10))
     IF_INT_NOT_EQUAL(LW(10), -1)
-        CALL(btlevtcmd_RunDataEventChild, LW(10), 62)
+        CALL(btlevtcmd_RunDataEventChild, LW(10), UNIT_DATA_DESTROY_EVENT)
     END_IF
     RETURN
 EVT_END()

@@ -168,7 +168,7 @@ void BattleDamageDirect(s32 unitId, BattleUnit* target, BattleUnitPart* part, s3
             psndSFXOn_3D("SFX_MARIO_HAMMER_PIKKYO_G1", &pos);
         } else if (result & DAMAGE_RESULT_ATTACK_FX_P) {
             psndSFXOn_3D("SFX_MARIO_HAMMER_PIKKYO_P1", &pos);
-        } else if (BtlUnit_GetBelong(target) == 0 && (result & 0x40000)) {
+        } else if (BtlUnit_GetBelong(target) == 0 && (result & DAMAGE_RESULT_GUARD)) {
             psndSFXOn_3D("SFX_MARIO_GUARD1", &pos);
         } else {
             if (damage > 0) {
