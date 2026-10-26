@@ -42,8 +42,8 @@ data order 10, sound-name integer round trips (`SFX_NAME_WORD`) 9, no-op casts 6
 
 ## 3. Names
 
-- Placeholder struct fields: `field_0x..` 214 uses, `unk..` 186 uses. Write-only or unused ones keep offset names
-  unless their meaning is clear (then `_UNUSED`).
+- Placeholder struct fields: the remaining `field_0x..` / `unk..` uses (about 60) are all writes; write-only or
+  unused fields keep offset names unless their meaning is clear (then `_UNUSED`).
 - Padding arrays (`u8 pad_..[n]`, `u8 field_..[n]`) in struct layouts: 455; many are views that should become the
   real struct type.
 - Names come only from the game's own data (symbols, strings, labels, message keys, model and event names) or
@@ -55,7 +55,9 @@ data order 10, sound-name integer round trips (`SFX_NAME_WORD`) 9, no-op casts 6
   (StoryProgress, 407 game labels), Trouble Center, Star Pieces and Shine Sprites (game strings). About 280 more
   GSWF are item/block collect flags (most used only in the call that creates the item); the rest need evidence from
   the scripts that set and test them.
-- Names with an address suffix (25) and debug strings by address (`str_8...`, 6 in shadowdrv).
+- Names with an address suffix: 5 unreferenced .sbss words with no name evidence (the JP demo map names the
+  neighbouring objects only), the JP-only party init copies, jumptable_80374848, and the shadowdrv debug strings
+  by address (`str_8...`, 6; open research).
 - Ghidra-style locals left: 14.
 - Battle values still unnamed: pose types 32-34 and 53-55 (no code found selects them; only Mario's pose table
   lists 32). Dead bits (no reader): weapon special 0x200, target weighting 0x2000.
@@ -74,7 +76,6 @@ data order 10, sound-name integer round trips (`SFX_NAME_WORD`) 9, no-op casts 6
   `BoobooName` (2), the Pianta Parlor (Monte) structs (5); private views of BattleActions / BattleACDispParams /
   SequenceWork / MapFileMesh in ac_*.c, seq_battle and mobjdrv.
 - Offset-only field names that the placeholder count misses (sac_bakugame `s7c`, `c0`, `cc`, `dc`, `e0`, `f0` ...).
-- end_00's staff-roll message table is initialized flat, without row braces.
 - Hand-expanded code that a macro or inline probably produced: psndENVMain's `ENVAPPLY` cases and psndENVOn_f_d's
   offset sum, hand-inlined `randf` in several map units, the Smorg hop code's temporaries.
 - Zero/template vector globals placed by hand (part of the 18 placements).

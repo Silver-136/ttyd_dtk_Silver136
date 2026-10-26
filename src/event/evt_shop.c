@@ -95,9 +95,17 @@ static WinMgrDesc window_desc[] = {
 };
 
 ShopPoint shopPointList[] = {
-    10, 148, 20, 131, 30, 149, 50, 129,
-    70, 130, 100, 126, 150, 151, 200, 150,
-    250, 156, 300, 127, -1, -1,
+    {10, ITEM_MUSHROOM},
+    {20, ITEM_ICE_STORM},
+    {30, ITEM_SUPER_SHROOM},
+    {50, ITEM_THUNDER_RAGE},
+    {70, ITEM_SHOOTING_STAR},
+    {100, ITEM_GOLD_BAR},
+    {150, ITEM_LIFE_SHROOM},
+    {200, ITEM_ULTRA_SHROOM},
+    {250, ITEM_JAMMIN_JELLY},
+    {300, ITEM_GOLD_BAR_X3},
+    {-1, -1},
 };
 
 WinMgrDesc list_desc[] = {
