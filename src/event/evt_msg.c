@@ -42,7 +42,7 @@ s32 _evt_msg_print(EventEntry* event, BOOL isFirstCall, s32 flags, const char* m
     WindowEntry* win;
     const char* m;
     if (isFirstCall) {
-        if (!(flags & 1)) {
+        if (!(flags & MSG_PRINT_DIRECT_TEXT)) {
             m = msgSearch(msg);
         } else {
             m = msg;
@@ -53,7 +53,7 @@ s32 _evt_msg_print(EventEntry* event, BOOL isFirstCall, s32 flags, const char* m
         win = windowGetPointer(event->printWindowId);
         MSGW(win)->tag = msg;
         MSGW(win)->event = event;
-        if (!(flags & 2)) {
+        if (!(flags & MSG_PRINT_NO_SPEAKER)) {
             if (event->wNpcEventType == NPC_EVENT_TALK) {
                 npc = event->ownerNPC;
             }
@@ -61,7 +61,7 @@ s32 _evt_msg_print(EventEntry* event, BOOL isFirstCall, s32 flags, const char* m
                 npc = evtNpcNameToPtr(event, (const char*)name);
             }
             if (npc == (NpcEntry*)-1) {
-                if (!(event->printWindowFlags & 0x1EFFFFFF)) {
+                if (!(event->printWindowFlags & MSG_PRINT_WIN_TOGE_MASK)) {
                     PartyEntry* p = partyGetPtr(marioGetPartyId());
                     if (!p) {
                         win->speakerPos = marioGetPtr()->position;
@@ -73,7 +73,7 @@ s32 _evt_msg_print(EventEntry* event, BOOL isFirstCall, s32 flags, const char* m
                 }
                 strcpy(MSGW(win)->speakerName, (const char*)name);
             } else if (npc == (NpcEntry*)-2) {
-                if (!(event->printWindowFlags & 0x1EFFFFFF)) {
+                if (!(event->printWindowFlags & MSG_PRINT_WIN_TOGE_MASK)) {
                     PartyEntry* p = partyGetPtr(marioGetExtraPartyId());
                     if (!p) {
                         win->speakerPos = marioGetPtr()->position;
@@ -85,25 +85,25 @@ s32 _evt_msg_print(EventEntry* event, BOOL isFirstCall, s32 flags, const char* m
                 }
                 strcpy(MSGW(win)->speakerName, (const char*)name);
             } else if (npc == (NpcEntry*)-3) {
-                if (!(event->printWindowFlags & 0x1EFFFFFF)) {
+                if (!(event->printWindowFlags & MSG_PRINT_WIN_TOGE_MASK)) {
                     win->speakerPos = marioGetPtr()->position;
                     win->speakerPos.y += marioGetPtr()->wPlayerCollisionBox.y;
                 }
                 strcpy(MSGW(win)->speakerName, (const char*)name);
             } else if (npc) {
-                if (!(event->printWindowFlags & 0x1EFFFFFF)) {
+                if (!(event->printWindowFlags & MSG_PRINT_WIN_TOGE_MASK)) {
                     win->speakerPos = npc->position;
                     win->speakerPos.y += npc->height;
                 }
                 strcpy(MSGW(win)->speakerName, npc->description);
             }
         } else {
-            MSGW(win)->flags |= 8;
+            MSGW(win)->flags |= MSG_WIN_FLAG_BATTLE_UNIT;
             MSGW(win)->unitId = BattleTransID(event, name);
             BtlUnit_GetTalkTogePos(MSGW(win)->unitId, &win->speakerPos.x, &win->speakerPos.y, &win->speakerPos.z);
             win->tailMode = 3;
         }
-        switch (event->printWindowFlags & 0x1EFFFFFF) {
+        switch (event->printWindowFlags & MSG_PRINT_WIN_TOGE_MASK) {
             case 0:
                 if (npc) {
                     Vec scr, mscr;
@@ -135,16 +135,16 @@ s32 _evt_msg_print(EventEntry* event, BOOL isFirstCall, s32 flags, const char* m
                 win->speakerPos = event->msgPosVec;
                 break;
         }
-        if (event->printWindowFlags & 0x80000000) {
+        if (event->printWindowFlags & MSG_PRINT_WIN_TOGELR) {
             win->tailMode = 3;
-            if (event->printWindowFlags & 0x40000000) {
+            if (event->printWindowFlags & MSG_PRINT_WIN_TOGELR_RIGHT) {
                 win->tailMode |= 4;
             }
-            if (event->printWindowFlags & 0x20000000) {
+            if (event->printWindowFlags & MSG_PRINT_WIN_TOGELR_ABOVE) {
                 win->tailMode |= 8;
             }
         }
-        if (event->printWindowFlags & 0x01000000) {
+        if (event->printWindowFlags & MSG_PRINT_WIN_SCREEN_POS_UNUSED) {
             win->tailMode |= 0x10;
         }
         event->printWindowFlags = 0;
@@ -253,7 +253,7 @@ USER_FUNC(evt_msg_print_insert) {
     }
     if (isFirstCall) {
         const char* m;
-        if (flags & 1) {
+        if (flags & MSG_PRINT_DIRECT_TEXT) {
             m = msg;
         } else {
             m = msgSearch(msg);
@@ -274,7 +274,7 @@ USER_FUNC(evt_msg_print_add) {
     s32 flags = evtGetValue(event, args[0]);
     const char* msg = (const char*)evtGetValue(event, args[1]);
     if (isFirstCall) {
-        if (!(flags & 1)) {
+        if (!(flags & MSG_PRINT_DIRECT_TEXT)) {
             msgWindow_Add(msgSearch(msg), event->printWindowId);
         } else {
             msgWindow_Add(msg, event->printWindowId);
@@ -300,7 +300,7 @@ USER_FUNC(evt_msg_print_add_insert) {
     }
     if (isFirstCall) {
         const char* m;
-        if (flags & 1) {
+        if (flags & MSG_PRINT_DIRECT_TEXT) {
             m = msg;
         } else {
             m = msgSearch(msg);
@@ -353,7 +353,7 @@ USER_FUNC(evt_msg_select) {
     const char* msg = (const char*)evtGetValue(event, args[1]);
     if (isFirstCall) {
         const char* m;
-        if (!(flags & 1)) {
+        if (!(flags & MSG_PRINT_DIRECT_TEXT)) {
             m = msgSearch(msg);
         } else {
             m = msg;
@@ -373,7 +373,7 @@ USER_FUNC(evt_msg_select) {
 USER_FUNC(evt_msg_toge) {
     EvtWord* args = event->args;
     s32 v = evtGetValue(event, args[0]);
-    event->printWindowFlags &= 0xE1000000;
+    event->printWindowFlags &= ~MSG_PRINT_WIN_TOGE_MASK;
     event->printWindowFlags |= v;
     event->msgPos.x = evtGetFloat(event, args[1]);
     event->msgPos.y = evtGetFloat(event, args[2]);
@@ -383,18 +383,18 @@ USER_FUNC(evt_msg_toge) {
 
 USER_FUNC(evt_msg_togelr) {
     s32 v = evtGetValue(event, *event->args);
-    event->printWindowFlags |= 0x80000000;
+    event->printWindowFlags |= MSG_PRINT_WIN_TOGELR;
     switch (v) {
         case 0:
             break;
         case 1:
-            event->printWindowFlags |= 0x40000000;
+            event->printWindowFlags |= MSG_PRINT_WIN_TOGELR_RIGHT;
             break;
         case 2:
-            event->printWindowFlags |= 0x20000000;
+            event->printWindowFlags |= MSG_PRINT_WIN_TOGELR_ABOVE;
             break;
         case 3:
-            event->printWindowFlags |= 0x60000000;
+            event->printWindowFlags |= (MSG_PRINT_WIN_TOGELR_RIGHT | MSG_PRINT_WIN_TOGELR_ABOVE);
             break;
     }
     return EVT_RETURN_DONE;

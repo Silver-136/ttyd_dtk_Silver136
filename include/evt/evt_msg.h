@@ -9,6 +9,13 @@ typedef enum MsgPrintFlags {
     MSG_PRINT_NO_SPEAKER = (1 << 1),  // no speaker: the window takes no position or name from an NPC
 } MsgPrintFlags;
 
+// EventEntry.printWindowFlags: tail settings for the next message window (evt_msg_toge / evt_msg_togelr)
+#define MSG_PRINT_WIN_TOGE_MASK 0x1EFFFFFF          // evt_msg_toge value (MsgTogeMode)
+#define MSG_PRINT_WIN_TOGELR 0x80000000             // evt_msg_togelr was called: tail toward a speaker on the left ...
+#define MSG_PRINT_WIN_TOGELR_RIGHT 0x40000000       // ... or on the right
+#define MSG_PRINT_WIN_TOGELR_ABOVE 0x20000000       // window above the speaker
+#define MSG_PRINT_WIN_SCREEN_POS_UNUSED 0x01000000  // the tail position is on screen already; nothing sets it
+
 // evt_msg_toge: how the next message window's tail is placed (event->printWindowFlags low bits)
 typedef enum MsgTogeMode {
     MSG_TOGE_AUTO = 0,       // toward the speaker, chosen from where it is on screen
