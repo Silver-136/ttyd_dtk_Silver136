@@ -48,7 +48,7 @@ s32 _status_pose_table[] = {
 };
 
 //local prototypes
-const char* searchPoseTbl(BattleDispPose* table, s32 poseId);
+const char* searchPoseTbl(PoseTableEntry* table, s32 type);
 void btlDispGXInit2DSub(void);
 void btlDispTexPlaneInit(void);
 void btlDispTexPlainGX(u32 id, GXColor color0, GXColor color1, GXColor color2, GXColor color3);
@@ -61,12 +61,12 @@ void _pose_two_pattern(BattleUnitPart* part);
 void _btlDispTex4(u32 id, Vec pos, Vec scale, Vec rot, Vec pos2, Vec scale2, GXColor color);
 void _btlStockExpDisp(CameraId camId, void* param);
 
-const char* searchPoseTbl(BattleDispPose* table, s32 poseId) {
+const char* searchPoseTbl(PoseTableEntry* table, s32 type) {
     int i;
 
     if (!table) return NULL;
-    for (i = 0; i < 0x1C; i++, table++) {
-        if ((s32)table->poseId == poseId || (s32)table->poseId == 0x1C) {
+    for (i = 0; i < 0x1C; i++, table++) { // searches at most 28 entries
+        if (table->poseType == type || table->poseType == POSE_TYPE_NORMAL) {
             return table->poseName;
         }
     }
@@ -395,22 +395,22 @@ next:
         for (part = unit->mParts; part; part = part->mNextPart) {
             if (part->poseId == -1) continue;
             poseName = PART_POSENAME(part);
-            if (!(PART_ANIMFLAGS(part) & 2)) {
+            if (!(PART_ANIMFLAGS(part) & PART_ANIM_EVENT_POSE)) {
                 type = _GetStatusPoseType(unit);
                 if (unit->currentKind >= UNIT_GOOMBA && unit->currentKind < UNIT_UNUSED_TREE) {
                     poseName = searchPoseTbl(part->poseTable, type);
                 } else {
-                    if (type == 0x1C && !BtlUnit_CheckStatus(unit, STATUS_HOLD_FAST) && (unit->mStatusFlags & UNIT_STATUS_FLAG_PERIL)) {
-                        poseName = BtlUnit_GetPoseNameFromType(part, 0x39);
-                        if (!poseName) poseName = searchPoseTbl(part->poseTable, 0x1C);
-                    } else if (type == 0x1C && !BtlUnit_CheckStatus(unit, STATUS_HOLD_FAST) && (unit->mStatusFlags & UNIT_STATUS_FLAG_DANGER)) {
-                        poseName = BtlUnit_GetPoseNameFromType(part, 0x38);
-                        if (!poseName) poseName = searchPoseTbl(part->poseTable, 0x1C);
+                    if (type == POSE_TYPE_NORMAL && !BtlUnit_CheckStatus(unit, STATUS_HOLD_FAST) && (unit->mStatusFlags & UNIT_STATUS_FLAG_PERIL)) {
+                        poseName = BtlUnit_GetPoseNameFromType(part, POSE_TYPE_PERIL);
+                        if (!poseName) poseName = searchPoseTbl(part->poseTable, POSE_TYPE_NORMAL);
+                    } else if (type == POSE_TYPE_NORMAL && !BtlUnit_CheckStatus(unit, STATUS_HOLD_FAST) && (unit->mStatusFlags & UNIT_STATUS_FLAG_DANGER)) {
+                        poseName = BtlUnit_GetPoseNameFromType(part, POSE_TYPE_DANGER);
+                        if (!poseName) poseName = searchPoseTbl(part->poseTable, POSE_TYPE_NORMAL);
                     } else {
                         poseName = searchPoseTbl(part->poseTable, type);
                     }
                     if (BtlUnit_CheckStatusFlag(unit, UNIT_STATUS_FLAG_DEFEND) && BtlUnit_CanActStatus(unit)) {
-                        poseName = BtlUnit_GetPoseNameFromType(part, 0x2D);
+                        poseName = BtlUnit_GetPoseNameFromType(part, POSE_TYPE_DEFEND);
                     }
                 }
                 if (BtlUnit_CheckStatus(unit, STATUS_FAST)) {
@@ -423,16 +423,17 @@ next:
             } else {
                 btlDispAnimeSpeed(part, 1.0f);
             }
-            if (PART_ANIMFLAGS(part) & 1) {
+            if (PART_ANIMFLAGS(part) & PART_ANIM_CHANGED) {
                 xlu = 0;
-                PART_ANIMFLAGS(part) &= ~1;
-                if (PART_ANIMFLAGS(part) &= ~0x200) {
+                PART_ANIMFLAGS(part) &= ~PART_ANIM_CHANGED;
+                // BUG: `&=` clears the restart bit and tests the bits left, so any other set bit restarts the animation
+                if (PART_ANIMFLAGS(part) &= ~PART_ANIM_RESTART) {
                     animPoseSetAnim(part->poseId, poseName, TRUE);
                 } else {
                     animPoseSetAnim(part->poseId, poseName, FALSE);
                 }
                 PART_POSESTATE(part) = 0;
-                if (PART_ANIMFLAGS(part) & 4) {
+                if (PART_ANIMFLAGS(part) & PART_ANIM_PERA) {
                     PART_POSETYPE(part) = 0;
                 } else {
                     PART_POSETYPE(part) = 1;
@@ -441,7 +442,7 @@ next:
                         xlu = 1;
                     }
                 }
-                if (!(PART_ANIMFLAGS(part) & 2) || (PART_ANIMFLAGS(part) & 8) || (PART_ANIMFLAGS(part) & 0x80)) {
+                if (!(PART_ANIMFLAGS(part) & PART_ANIM_EVENT_POSE) || (PART_ANIMFLAGS(part) & PART_ANIM_DAMAGE_POSE) || (PART_ANIMFLAGS(part) & PART_ANIM_COMMAND_POSE)) {
                     PART_POSETYPE(part) = 1;
                     if (BtlUnit_CheckStatus(unit, STATUS_INVISIBLE) || part->color.a != 0xFF) {
                         PART_POSETYPE(part) = 7;
@@ -456,11 +457,11 @@ next:
                     xlu = 0;
                     PART_POSETYPE(part) = 0;
                 }
-                if (!(PART_ANIMFLAGS(part) & 4)) {
-                    if (xlu && !(PART_ANIMFLAGS(part) & 0x40)) {
-                        PART_ANIMFLAGS(part) |= 0x40;
-                    } else if (!xlu && (PART_ANIMFLAGS(part) & 0x40)) {
-                        PART_ANIMFLAGS(part) &= ~0x40;
+                if (!(PART_ANIMFLAGS(part) & PART_ANIM_PERA)) {
+                    if (xlu && !(PART_ANIMFLAGS(part) & PART_ANIM_XLU)) {
+                        PART_ANIMFLAGS(part) |= PART_ANIM_XLU;
+                    } else if (!xlu && (PART_ANIMFLAGS(part) & PART_ANIM_XLU)) {
+                        PART_ANIMFLAGS(part) &= ~PART_ANIM_XLU;
                     }
                 }
             }
@@ -481,11 +482,11 @@ next:
             if (!(unit->mAttributeFlags & kUnitHidden) && !(part->attributes & kHidden)) {
                 if (!(part->attributes & kMainPart) || !(unit->mAttributeFlags & kUnitInVeil)) {
                     if (part->dispColor.a < 0xFF || animPoseTestXLU(part->poseId)) {
-                        if (!(PART_ANIMFLAGS(part) & 0x100)) {
+                        if (!(PART_ANIMFLAGS(part) & PART_ANIM_NO_DISP)) {
                             dispEntry(CAMERA_3D, dispCalcZ(&zpos), 2, (DispCallback)btlUnitPartsDisp, part);
                         }
                     } else {
-                        if (!(PART_ANIMFLAGS(part) & 0x100)) {
+                        if (!(PART_ANIMFLAGS(part) & PART_ANIM_NO_DISP)) {
                             dispEntry(CAMERA_3D, dispCalcZ(&zpos), 1, (DispCallback)btlUnitPartsDisp, part);
                         }
                     }
@@ -785,12 +786,12 @@ void btlUnitPartsDisp(CameraId camId, BattleUnitPart* param) {
 
     color = &part->drawColor;
     *color = part->dispColor;
-    if (PART_ANIMFLAGS(part) & 0x10) {
+    if (PART_ANIMFLAGS(part) & PART_ANIM_BURNT) {
         color->r = 0;
         color->g = 0;
         color->b = 0;
     }
-    if (PART_ANIMFLAGS(part) & 0x20) {
+    if (PART_ANIMFLAGS(part) & PART_ANIM_INKED) {
         color->r = 0;
         color->g = 0;
         color->b = 0;
@@ -945,38 +946,38 @@ void btlDispEntAnime(BattleUnit* unit) {
             if (!name) {
                 part->poseId = -1;
             } else {
-                strcpy(PART_POSENAME(part), searchPoseTbl(part->poseTable, 0x1C));
+                strcpy(PART_POSENAME(part), searchPoseTbl(part->poseTable, POSE_TYPE_NORMAL));
                 part->poseId = animPoseEntry(name, 1);
             }
         }
     }
 }
 
-void btlDispChangeAnime(BattleUnitPart* part, const char* name, BOOL flag) {
+void btlDispChangeAnime(BattleUnitPart* part, const char* name, BOOL damagePose) {
     strcpy(PART_POSENAME(part), name);
-    PART_ANIMFLAGS(part) |= 2;
-    PART_ANIMFLAGS(part) |= 1;
-    PART_ANIMFLAGS(part) &= ~0x80;
-    PART_ANIMFLAGS(part) &= ~0x200;
-    PART_ANIMFLAGS(part) &= ~0x10;
-    if (flag) {
-        PART_ANIMFLAGS(part) |= 8;
+    PART_ANIMFLAGS(part) |= PART_ANIM_EVENT_POSE;
+    PART_ANIMFLAGS(part) |= PART_ANIM_CHANGED;
+    PART_ANIMFLAGS(part) &= ~PART_ANIM_COMMAND_POSE;
+    PART_ANIMFLAGS(part) &= ~PART_ANIM_RESTART;
+    PART_ANIMFLAGS(part) &= ~PART_ANIM_BURNT;
+    if (damagePose) {
+        PART_ANIMFLAGS(part) |= PART_ANIM_DAMAGE_POSE;
     } else {
-        PART_ANIMFLAGS(part) &= ~8;
+        PART_ANIMFLAGS(part) &= ~PART_ANIM_DAMAGE_POSE;
     }
 }
 
 void btlDispChangePeraAnime(BattleUnitPart* part, const char* name) {
-    PART_ANIMFLAGS(part) |= 4;
+    PART_ANIMFLAGS(part) |= PART_ANIM_PERA;
     PART_POSETYPE(part) = 0;
     animPoseSetEffectAnim(part->poseId, name, 1);
 }
 
 void btlDispPoseAnime(BattleUnitPart* part) {
-    PART_ANIMFLAGS(part) &= ~0x12;
-    PART_ANIMFLAGS(part) |= 1;
-    PART_ANIMFLAGS(part) &= ~0x80;
-    PART_ANIMFLAGS(part) &= ~0x4;
+    PART_ANIMFLAGS(part) &= ~(PART_ANIM_EVENT_POSE | PART_ANIM_BURNT);
+    PART_ANIMFLAGS(part) |= PART_ANIM_CHANGED;
+    PART_ANIMFLAGS(part) &= ~PART_ANIM_COMMAND_POSE;
+    PART_ANIMFLAGS(part) &= ~PART_ANIM_PERA;
 }
 
 void gravityOffsetControl(BattleUnitPart* part) {

@@ -458,7 +458,7 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_DIZZY, "MAH_X_1"},
     {POSE_TYPE_NORMAL, "MAH_S_1"},
     {POSE_TYPE_DAMAGE_FIRE, "MAH_Q_1"},
-    {30, "MAH_Q_1"},
+    {POSE_TYPE_DAMAGE_FIRE_2_UNUSED, "MAH_Q_1"},
     {POSE_TYPE_DAMAGE_GUARDED, "MAH_A_1"},
     {POSE_TYPE_DAMAGE, "MAH_D_1"},
     {POSE_TYPE_WALK, "MAH_W_1"},
@@ -507,7 +507,7 @@ static EVT_BEGIN(alpha_down_event)
         RETURN
     END_IF
     CALL(btlevtcmd_SetAlpha, LW(0), 1, 254)
-    CALL(btlevtcmd_AnimeFlagOnOff, LW(0), 1, 1, 1)
+    CALL(btlevtcmd_AnimeFlagOnOff, LW(0), 1, PART_ANIM_CHANGED, 1)
     WAIT_FRAMES(1)
     CALL(evt_sub_intpl_init, EASING_LINEAR, 255, 0, 30)
     LOOP(30)
@@ -525,7 +525,7 @@ static EVT_BEGIN(alpha_down_event)
     CALL(btlevtcmd_OnPartsAttribute, LW(0), 4, kNoShadow)
     CALL(btlevtcmd_OnPartsAttribute, LW(0), 5, kNoShadow)
     CALL(btlevtcmd_SetAlpha, LW(0), 1, 0)
-    CALL(btlevtcmd_AnimeFlagOnOff, LW(0), 1, 1, 1)
+    CALL(btlevtcmd_AnimeFlagOnOff, LW(0), 1, PART_ANIM_CHANGED, 1)
     WAIT_FRAMES(1)
     RETURN
 EVT_END()
@@ -540,7 +540,7 @@ static EVT_BEGIN(alpha_up_event)
     CALL(btlevtcmd_OffPartsAttribute, LW(0), 4, kNoShadow)
     CALL(btlevtcmd_OffPartsAttribute, LW(0), 5, kNoShadow)
     CALL(btlevtcmd_SetAlpha, LW(0), 1, 0)
-    CALL(btlevtcmd_AnimeFlagOnOff, LW(0), 1, 1, 1)
+    CALL(btlevtcmd_AnimeFlagOnOff, LW(0), 1, PART_ANIM_CHANGED, 1)
     WAIT_FRAMES(1)
     CALL(evt_sub_intpl_init, EASING_LINEAR, 0, 254, 30)
     LOOP(30)
@@ -557,7 +557,7 @@ static EVT_BEGIN(alpha_up_event)
     CALL(btlevtcmd_SetAlpha, LW(0), 3, 255)
     CALL(btlevtcmd_SetAlpha, LW(0), 4, 255)
     CALL(btlevtcmd_SetAlpha, LW(0), 5, 255)
-    CALL(btlevtcmd_AnimeFlagOnOff, LW(0), 1, 1, 1)
+    CALL(btlevtcmd_AnimeFlagOnOff, LW(0), 1, PART_ANIM_CHANGED, 1)
     WAIT_FRAMES(1)
     RETURN
 EVT_END()

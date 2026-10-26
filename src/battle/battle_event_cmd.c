@@ -5210,8 +5210,8 @@ USER_FUNC(btlevtcmd_AnimeChangePoseDirect) {
     part = BattleGetUnitPartsPtr(id, pno);
     name = (const char*)evtGetValue(event, args[2]);
     strcpy(part->poseName, name);
-    part->animFlags &= ~0x80;
-    part->animFlags &= ~0x10;
+    part->animFlags &= ~PART_ANIM_COMMAND_POSE;
+    part->animFlags &= ~PART_ANIM_BURNT;
     animPoseSetAnim(part->poseId, name, TRUE);
     part->poseType = 1;
     if (BtlUnit_CheckStatus(unit, STATUS_INVISIBLE)) {
@@ -5342,8 +5342,8 @@ USER_FUNC(btlevtcmd_AnimeCmpPoseType) {
     s32 t1, t2;
     BattleUnitPart* part;
     s32 index;
-    char* n1;
-    char* n2;
+    const char* n1;
+    const char* n2;
 
     id = evtGetValue(event, args[0]);
     id = BattleTransID(event, id);
@@ -5380,7 +5380,7 @@ USER_FUNC(btlevtcmd_AnimeSetPoseTable) {
     id = BattleTransID(event, id);
     pno = evtGetValue(event, args[1]);
     part = BattleGetUnitPartsPtr(id, pno);
-    part->poseTable = (void*)args[2];
+    part->poseTable = (PoseTableEntry*)args[2];
     return EVT_RETURN_DONE;
 }
 
@@ -5404,7 +5404,7 @@ USER_FUNC(btlevtcmd_CheckDefinePosetype) {
     BattleUnitPart* part;
     s32 id, pno;
     s32 out;
-    s32* table;
+    PoseTableEntry* table;
     s32 res;
     s32 end;
 
@@ -5414,28 +5414,28 @@ USER_FUNC(btlevtcmd_CheckDefinePosetype) {
     part = BattleGetUnitPartsPtr(id, pno);
     type = evtGetValue(event, args[2]);
     out = args[3];
-    table = (s32*)part->poseTable;
+    table = part->poseTable;
     res = 0;
-    if (type <= 28) {
-        end = 28;
-    } else if (type < 40) {
-        end = 39;
-    } else if (type < 70) {
-        end = 69;
+    if (type <= POSE_TYPE_NORMAL) {
+        end = POSE_TYPE_NORMAL;
+    } else if (type < POSE_TYPE_WALK) {
+        end = POSE_TYPE_DAMAGE;
+    } else if (type < POSE_TYPE_MAX) {
+        end = POSE_TYPE_ACTION;
     } else {
         evtSetValue(event, out, 0);
         return EVT_RETURN_DONE;
     }
-    for (; table; table += 2) {
-        if (table[0] >= 70) {
+    for (; table; table++) {
+        if (table->poseType >= POSE_TYPE_MAX) {
             res = 0;
             break;
         }
-        if (table[0] == type) {
+        if (table->poseType == type) {
             res = 1;
             break;
         }
-        if (table[0] == end) {
+        if (table->poseType == end) {
             res = 0;
             break;
         }

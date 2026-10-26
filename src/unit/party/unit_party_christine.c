@@ -85,7 +85,7 @@ PoseTableEntry pose_table_christine_stay[] = {
     {POSE_TYPE_SLEEP, "PKR_N_1"},
     {POSE_TYPE_KO, "PKR_D_3"},
     {POSE_TYPE_NORMAL, "PKR_S_1"},
-    {37, "PKR_G_2"},
+    {POSE_TYPE_DAMAGE_DRAINED, "PKR_G_2"},
     {POSE_TYPE_DAMAGE_GUARDED, "PKR_G_1"},
     {POSE_TYPE_DAMAGE, "PKR_D_1"},
     {POSE_TYPE_WALK, "PKR_W_1"},

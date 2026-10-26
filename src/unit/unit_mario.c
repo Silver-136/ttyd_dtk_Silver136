@@ -66,7 +66,7 @@ PoseTableEntry pose_table_mario_stay[] = {
     {POSE_TYPE_KO, "M_Z_11"},
     {POSE_TYPE_NORMAL, "M_S_1"},
     {POSE_TYPE_DAMAGE_STATUS, "M_V_2"},
-    {37, "M_B_2"},
+    {POSE_TYPE_DAMAGE_DRAINED, "M_B_2"},
     {POSE_TYPE_DAMAGE_TOP_SPIKY, "M_D_6"},
     {POSE_TYPE_DAMAGE_GUARDED, "M_B_1"},
     {32, "M_V_1"},

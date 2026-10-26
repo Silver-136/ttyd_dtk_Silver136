@@ -255,7 +255,7 @@ PoseTableEntry pose_table_clauda_stay[] = {
     {POSE_TYPE_SLEEP, "PWD_N_1"},
     {POSE_TYPE_KO, "PWD_D_3"},
     {POSE_TYPE_NORMAL, "PWD_S_1"},
-    {37, "PWD_G_2"},
+    {POSE_TYPE_DAMAGE_DRAINED, "PWD_G_2"},
     {POSE_TYPE_DAMAGE_GUARDED, "PWD_G_1"},
     {POSE_TYPE_DAMAGE, "PWD_D_1"},
     {POSE_TYPE_WALK, "PWD_W_1"},

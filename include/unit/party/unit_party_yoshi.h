@@ -12,5 +12,5 @@ extern BattleWeapon partyWeapon_YoshiEggAttack_Minimini;
 extern BattleWeapon partyWeapon_YoshiNomikomi_Involved;
 extern BattleWeapon partyWeapon_YoshiNomikomi_Shot;
 extern BattleWeapon partyWeapon_YoshiNormalAttack;
-extern s32 pose_table_yoshi_stay[];
+extern PoseTableEntry pose_table_yoshi_stay[];
 extern BattleUnitKind unitdata_Party_Yoshi;

@@ -137,7 +137,7 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_DIZZY, "MRR_X_1"},
     {POSE_TYPE_NORMAL, "MRR_S_1"},
     {POSE_TYPE_DAMAGE_FIRE, "MRR_Q_2"},
-    {30, "MRR_Q_2"},
+    {POSE_TYPE_DAMAGE_FIRE_2_UNUSED, "MRR_Q_2"},
     {POSE_TYPE_DAMAGE_GUARDED, "MRR_D_1"},
     {POSE_TYPE_DAMAGE, "MRR_D_1"},
     {POSE_TYPE_ATTACK, "MRR_S_1"},

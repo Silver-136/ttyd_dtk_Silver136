@@ -734,7 +734,7 @@ PoseTableEntry pose_table_mode_3[] = {
     {POSE_TYPE_DIZZY, "KRT_K_1"},
     {POSE_TYPE_NORMAL, "KRT_S_1"},
     {POSE_TYPE_DAMAGE_FIRE, "KRT_D_2"},
-    {30, "KRT_D_2"},
+    {POSE_TYPE_DAMAGE_FIRE_2_UNUSED, "KRT_D_2"},
     {POSE_TYPE_DAMAGE_GUARDED, "KRT_S_1"},
     {POSE_TYPE_DAMAGE, "KRT_D_1"},
     {POSE_TYPE_ACTION, "KRT_S_1"},

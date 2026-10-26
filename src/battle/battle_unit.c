@@ -18,11 +18,6 @@ double pow(double, double);
 void psndSFX_pit(s32 id, s16 pitch);
 void psndSFX_vol(s32 id, u8 vol);
 
-typedef struct BtlPoseEntry {
-    s32 type;
-    char* name;
-} BtlPoseEntry;
-
 
 #define PART_FLAGS(part) ((part)->animFlags)
 #define PART_POSE_SOUND(part) (&(part)->poseSound)
@@ -204,8 +199,8 @@ BattleUnit* BtlUnit_Entry(BattleUnitSetup* setup) {
     part->mNextPart = NULL;
 
     body = BtlUnit_GetPartsPtr(unit, BtlUnit_GetBodyPartsId(unit));
-    unit->talkPose = BtlUnit_GetPoseNameFromType(body, 0x41);
-    unit->stayPose = BtlUnit_GetPoseNameFromType(body, 0x2B);
+    unit->talkPose = BtlUnit_GetPoseNameFromType(body, POSE_TYPE_TALK);
+    unit->stayPose = BtlUnit_GetPoseNameFromType(body, POSE_TYPE_NEUTRAL);
     unit->mMoveColorLv = 0xFF;
     unit->moveColorLvDisp = 0xFF;
     btlDispEntAnime(unit);
@@ -1380,44 +1375,44 @@ void BtlUnit_OffUnitFlag(BattleUnit* unit, s32 flags) {
     unit->flags &= ~flags;
 }
 
-char* BtlUnit_GetPoseNameFromType(BattleUnitPart* part, s32 type) {
-    BtlPoseEntry* pose = (BtlPoseEntry*)part->poseTable;
+const char* BtlUnit_GetPoseNameFromType(BattleUnitPart* part, s32 type) {
+    PoseTableEntry* pose = part->poseTable;
     s32 alt;
 
-    if (type <= 0x1C) {
-        alt = 0x1C;
-    } else if (type < 0x28) {
-        alt = 0x27;
-    } else if (type < 0x46) {
-        alt = 0x45;
+    if (type <= POSE_TYPE_NORMAL) {
+        alt = POSE_TYPE_NORMAL;
+    } else if (type < POSE_TYPE_WALK) {
+        alt = POSE_TYPE_DAMAGE;
+    } else if (type < POSE_TYPE_MAX) {
+        alt = POSE_TYPE_ACTION;
     } else {
         return NULL;
     }
     while (pose) {
-        if (pose->type >= 0x46) {
+        if (pose->poseType >= POSE_TYPE_MAX) {
             return NULL;
         }
-        if (pose->type != type && pose->type != alt) {
+        if (pose->poseType != type && pose->poseType != alt) {
             pose++;
             continue;
         }
-        return pose->name;
+        return pose->poseName;
     }
     return NULL;
 }
 
 void BtlUnit_SetAnimType(BattleUnitPart* part, s32 type) {
-    char* name = BtlUnit_GetPoseNameFromType(part, type);
+    const char* name = BtlUnit_GetPoseNameFromType(part, type);
 
-    if (type >= 0x1D && type < 0x28) {
-        btlDispChangeAnime(part, name, 1);
+    if (type >= POSE_TYPE_DAMAGE_FIRE && type < POSE_TYPE_WALK) {
+        btlDispChangeAnime(part, name, TRUE);
     } else {
-        btlDispChangeAnime(part, name, 0);
+        btlDispChangeAnime(part, name, FALSE);
     }
     switch (type) {
-        case 0x1D:
-        case 0x1E:
-            PART_FLAGS(part) |= 0x10;
+        case POSE_TYPE_DAMAGE_FIRE:
+        case POSE_TYPE_DAMAGE_FIRE_2_UNUSED:
+            PART_FLAGS(part) |= PART_ANIM_BURNT;
             break;
     }
 }
@@ -1951,12 +1946,12 @@ void BtlUnit_SetCommandAnimPose(BattleUnit* unit) {
     BattleUnitPart* part = BtlUnit_GetPartsPtr(unit, BtlUnit_GetBodyPartsId(unit));
     BOOL special = FALSE;
 
-    if (!(unit->mStatusFlags & (UNIT_STATUS_FLAG_DANGER | UNIT_STATUS_FLAG_PERIL)) && _GetStatusPoseType(unit) == 0x1C) {
+    if (!(unit->mStatusFlags & (UNIT_STATUS_FLAG_DANGER | UNIT_STATUS_FLAG_PERIL)) && _GetStatusPoseType(unit) == POSE_TYPE_NORMAL) {
         special = TRUE;
     }
     if (special) {
         BtlUnit_SetAnimType(part, POSE_TYPE_COMMAND);
-        PART_FLAGS(part) |= 0x80;
+        PART_FLAGS(part) |= PART_ANIM_COMMAND_POSE;
     } else {
         btlDispPoseAnime(part);
     }

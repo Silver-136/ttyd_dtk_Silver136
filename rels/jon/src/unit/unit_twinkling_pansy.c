@@ -183,7 +183,7 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_DIZZY, "PAN_X_1"},
     {POSE_TYPE_NORMAL, "PAN_S_1"},
     {POSE_TYPE_DAMAGE_FIRE, "PAN_Q_1"},
-    {30, "PAN_Q_1"},
+    {POSE_TYPE_DAMAGE_FIRE_2_UNUSED, "PAN_Q_1"},
     {POSE_TYPE_DAMAGE_GUARDED, "PAN_S_1"},
     {POSE_TYPE_DAMAGE, "PAN_D_1"},
     {POSE_TYPE_ATTACK, "PAN_A_1"},

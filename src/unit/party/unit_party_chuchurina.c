@@ -99,7 +99,7 @@ PoseTableEntry pose_table_chuchurina_stay[] = {
     {POSE_TYPE_SLEEP, "PCH_N_1"},
     {POSE_TYPE_KO, "PCH_D_3"},
     {POSE_TYPE_NORMAL, "PCH_S_1"},
-    {37, "PCH_G_1"},
+    {POSE_TYPE_DAMAGE_DRAINED, "PCH_G_1"},
     {POSE_TYPE_DAMAGE_GUARDED, "PCH_G_1"},
     {POSE_TYPE_DAMAGE, "PCH_D_1"},
     {POSE_TYPE_WALK, "PCH_W_1"},
@@ -1582,7 +1582,7 @@ EVT_BEGIN(partyChuchurinaAttack_ItemSteal)
     WAIT_FRAMES(20)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PCH_Z_1"))
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_FREE)
-    CALL(btlevtcmd_AnimeFlagOnOff, UNIT_ID_SELF, 1, 256, 1)
+    CALL(btlevtcmd_AnimeFlagOnOff, UNIT_ID_SELF, 1, PART_ANIM_NO_DISP, 1)
     WAIT_FRAMES(1)
     CALL(mono_capture_event)
     SPAWN_EVENT_GET_ID(PTR(main_evt), LW(13))
@@ -2208,7 +2208,7 @@ void mono_capture(CameraId camId, void* param) {
     GXSetTexCopyDst(0x260, 0x1E0, 1, 0);
     GXCopyTex(unit->screenTexBuf->address, 0);
     GXPixModeSync();
-    part->animFlags &= ~0x100;
+    part->animFlags &= ~PART_ANIM_NO_DISP;
 }
 
 void mono_disp(CameraId camId, BattleUnit* unit) {

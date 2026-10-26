@@ -595,10 +595,10 @@ EVT_BEGIN(subsetevt_damage)
         END_IF
         CALL(btlevtcmd_CheckDamagePattern, LW(10), ATTACKPATTERN_IKASUMI, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
-            CALL(btlevtcmd_AnimeFlagOnOff, LW(10), LW(11), 32, 1)
+            CALL(btlevtcmd_AnimeFlagOnOff, LW(10), LW(11), PART_ANIM_INKED, 1)
             CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), LW(14))
             WAIT_MS(2000)
-            CALL(btlevtcmd_AnimeFlagOnOff, LW(10), LW(11), 32, 0)
+            CALL(btlevtcmd_AnimeFlagOnOff, LW(10), LW(11), PART_ANIM_INKED, 0)
             ELSE
             CALL(btlevtcmd_CheckDamagePattern, LW(10), ATTACKPATTERN_BG_FALL_DOWN, LW(0))
             IF_INT_NOT_EQUAL(LW(0), 0)

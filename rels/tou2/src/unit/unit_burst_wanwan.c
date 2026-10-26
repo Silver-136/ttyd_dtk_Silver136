@@ -128,7 +128,7 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_KO, "WAN_Z_1"},
     {POSE_TYPE_NORMAL, "WAN_S_1A"},
     {POSE_TYPE_DAMAGE_FIRE, "WAN_D_1"},
-    {30, "WAN_D_1"},
+    {POSE_TYPE_DAMAGE_FIRE_2_UNUSED, "WAN_D_1"},
     {POSE_TYPE_DAMAGE_GUARDED, "WAN_A_1"},
     {POSE_TYPE_DAMAGE, "WAN_D_1"},
     {POSE_TYPE_ATTACK, "WAN_A_1"},

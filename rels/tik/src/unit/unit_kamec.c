@@ -251,7 +251,7 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_DIZZY, "KMK_X_1"},
     {POSE_TYPE_NORMAL, "KMK_S_1"},
     {POSE_TYPE_DAMAGE_FIRE, "KMK_Q_1"},
-    {30, "KMK_Q_1"},
+    {POSE_TYPE_DAMAGE_FIRE_2_UNUSED, "KMK_Q_1"},
     {POSE_TYPE_DAMAGE_GUARDED, "KMK_S_1"},
     {POSE_TYPE_DAMAGE, "KMK_D_1"},
     {POSE_TYPE_RUN, "KMK_R_1"},
@@ -271,7 +271,7 @@ static PoseTableEntry pose_table_sky[] = {
     {POSE_TYPE_DIZZY, "KMK_X_2"},
     {POSE_TYPE_NORMAL, "KMK_S_2"},
     {POSE_TYPE_DAMAGE_FIRE, "KMK_Q_2"},
-    {30, "KMK_Q_2"},
+    {POSE_TYPE_DAMAGE_FIRE_2_UNUSED, "KMK_Q_2"},
     {POSE_TYPE_DAMAGE_GUARDED, "KMK_S_2"},
     {POSE_TYPE_DAMAGE, "KMK_D_2"},
     {POSE_TYPE_RUN, "KMK_R_2"},
@@ -622,7 +622,7 @@ static EVT_BEGIN(alpha_down_event)
         RETURN
     END_IF
     CALL(btlevtcmd_SetAlpha, LW(0), 1, 254)
-    CALL(btlevtcmd_AnimeFlagOnOff, LW(0), 1, 1, 1)
+    CALL(btlevtcmd_AnimeFlagOnOff, LW(0), 1, PART_ANIM_CHANGED, 1)
     WAIT_FRAMES(1)
     CALL(evt_sub_intpl_init, EASING_LINEAR, 254, 0, 30)
     LOOP(30)
@@ -632,7 +632,7 @@ static EVT_BEGIN(alpha_down_event)
     END_LOOP
     CALL(btlevtcmd_OnPartsAttribute, LW(0), 1, kNoShadow)
     CALL(btlevtcmd_SetAlpha, LW(0), 1, 0)
-    CALL(btlevtcmd_AnimeFlagOnOff, LW(0), 1, 1, 1)
+    CALL(btlevtcmd_AnimeFlagOnOff, LW(0), 1, PART_ANIM_CHANGED, 1)
     WAIT_FRAMES(1)
     RETURN
 EVT_END()
@@ -643,7 +643,7 @@ static EVT_BEGIN(alpha_up_event)
     END_IF
     CALL(btlevtcmd_OffPartsAttribute, LW(0), 1, kNoShadow)
     CALL(btlevtcmd_SetAlpha, LW(0), 1, 0)
-    CALL(btlevtcmd_AnimeFlagOnOff, LW(0), 1, 1, 1)
+    CALL(btlevtcmd_AnimeFlagOnOff, LW(0), 1, PART_ANIM_CHANGED, 1)
     WAIT_FRAMES(1)
     CALL(evt_sub_intpl_init, EASING_LINEAR, 0, 254, 30)
     LOOP(30)
@@ -652,7 +652,7 @@ static EVT_BEGIN(alpha_up_event)
         WAIT_FRAMES(1)
     END_LOOP
     CALL(btlevtcmd_SetAlpha, LW(0), 1, 255)
-    CALL(btlevtcmd_AnimeFlagOnOff, LW(0), 1, 1, 1)
+    CALL(btlevtcmd_AnimeFlagOnOff, LW(0), 1, PART_ANIM_CHANGED, 1)
     WAIT_FRAMES(1)
     RETURN
 EVT_END()

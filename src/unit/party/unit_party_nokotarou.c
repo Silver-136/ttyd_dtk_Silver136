@@ -89,7 +89,7 @@ PoseTableEntry pose_table_nokotarou_stay[] = {
     {POSE_TYPE_SLEEP, "PNK_N_1"},
     {POSE_TYPE_KO, "PNK_D_3"},
     {POSE_TYPE_NORMAL, "PNK_S_1"},
-    {37, "PNK_G_2"},
+    {POSE_TYPE_DAMAGE_DRAINED, "PNK_G_2"},
     {POSE_TYPE_DAMAGE_GUARDED, "PNK_G_1"},
     {POSE_TYPE_DAMAGE, "PNK_D_1"},
     {POSE_TYPE_WALK, "PNK_W_1"},

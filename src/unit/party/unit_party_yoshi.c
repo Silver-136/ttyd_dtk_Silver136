@@ -174,7 +174,7 @@ PoseTableEntry pose_table_yoshi_stay[] = {
     {POSE_TYPE_SLEEP, "PYS_N_1"},
     {POSE_TYPE_KO, "PYS_D_3"},
     {POSE_TYPE_NORMAL, "PYS_S_1"},
-    {37, "PYS_G_2"},
+    {POSE_TYPE_DAMAGE_DRAINED, "PYS_G_2"},
     {POSE_TYPE_DAMAGE_GUARDED, "PYS_G_1"},
     {POSE_TYPE_DAMAGE, "PYS_D_1"},
     {POSE_TYPE_WALK, "PYS_W_1"},

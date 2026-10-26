@@ -192,7 +192,7 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_KO, "KRN_Z_2"},
     {POSE_TYPE_NORMAL, "KRN_S_1"},
     {POSE_TYPE_DAMAGE_FIRE, "KRN_Q_1"},
-    {30, "KRN_Q_1"},
+    {POSE_TYPE_DAMAGE_FIRE_2_UNUSED, "KRN_Q_1"},
     {POSE_TYPE_DAMAGE_GUARDED, "KRN_S_1"},
     {POSE_TYPE_DAMAGE, "KRN_D_1"},
     {POSE_TYPE_ATTACK, "KRN_A_1"},

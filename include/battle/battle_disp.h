@@ -3,11 +3,6 @@
 #include <dolphin/mtx.h>
 #include "battle/battle_unit.h"
 
-typedef struct BattleDispPose { //for BattleWorkUnitPart
-    u32 poseId; //0x0
-    const char* poseName; //0x4
-} BattleDispPose;
-
 void btlDispGXInit2DRasta(void);
 void btlDispGXInit2D(void);
 void btlDispGXPoint2DRasta(f32 x, f32 y, u8 r, u8 g, u8 b, u8 a);
@@ -27,7 +22,7 @@ void btlDispMain(void);
 
 
 void btlDispEntAnime(BattleUnit* unit);
-void btlDispChangeAnime(BattleUnitPart* part, const char* name, BOOL flag);
+void btlDispChangeAnime(BattleUnitPart* part, const char* name, BOOL damagePose);
 void btlDispPoseAnime(BattleUnitPart* part);
 void btlDispTex4(u32 id, Vec pos, Vec scale, Vec rot, GXColor color);
 void btlGetScreenPoint(Vec* in, Vec* out);

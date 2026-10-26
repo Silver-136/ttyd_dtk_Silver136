@@ -494,7 +494,7 @@ typedef struct StatusVulnerability {
 } StatusVulnerability;
 
 // PoseTableEntry.poseType: descriptive names from the code that selects each type (battle_disp, the default
-// events, BtlUnit_SetAnimType); unnamed types (30, 32-34, 37, 41, 47, 51, 53-55) have no proven common role.
+// events, BtlUnit_SetAnimType); unnamed types (32-34, 53-55) are selected by no code found (only Mario's table lists 32).
 typedef enum BattlePoseType {
     POSE_TYPE_ALLERGIC = 0, // 0..27: the StatusEffectType of the unit's priority status (_GetStatusPoseType)
     POSE_TYPE_SLEEP = 1,
@@ -560,6 +560,7 @@ typedef enum BattlePoseType {
     POSE_TYPE_COMMAND = 67, // command selection
     POSE_TYPE_SHELL_SHIELD_OPEN = 68,
     POSE_TYPE_ACTION = 69, // fallback of 40..69
+    POSE_TYPE_MAX = 70,    // types are below this; a larger table entry ends the search
 } BattlePoseType;
 
 typedef struct PoseTableEntry {
@@ -581,7 +582,7 @@ typedef struct BattleUnitKindPart {
     BattleUnitDefenseAttr* defenseAttr;            // 0x3C
     PartsAttribute_Flags attributes;               // 0x40
     PartsCounterAttribute_Flags counterAttributes; // 0x44
-    void* poseTable;                               // 0x48
+    PoseTableEntry* poseTable;                     // 0x48
 } BattleUnitKindPart;
 
 // movement sound loop state (BtlUnit_SetSeMode / _MoveSoundControlCore)
@@ -646,6 +647,20 @@ typedef struct BattleWorkUnitPartBlur {
     BattleWorkUnitPartBlurEntry work[10]; // 0xC
 } BattleWorkUnitPartBlur;
 
+// BattleUnitPart.animFlags (battle_disp's per-frame pose update, btlDispChangeAnime, btlevtcmd_AnimeFlagOnOff)
+typedef enum BattlePartAnimFlags {
+    PART_ANIM_CHANGED = (1 << 0),      // 0x1, pose changed: applied (animPoseSetAnim) on the next display update
+    PART_ANIM_EVENT_POSE = (1 << 1),   // 0x2, pose set by name or type; clear = the pose of the unit's status
+    PART_ANIM_PERA = (1 << 2),         // 0x4, paper effect animation (btlDispChangePeraAnime)
+    PART_ANIM_DAMAGE_POSE = (1 << 3),  // 0x8, damage pose (types 29..39): the Invisible / Dodgy look still applies
+    PART_ANIM_BURNT = (1 << 4),        // 0x10, fire damage pose: drawn black
+    PART_ANIM_INKED = (1 << 5),        // 0x20, hit by ink (ATTACKPATTERN_IKASUMI): drawn black
+    PART_ANIM_XLU = (1 << 6),          // 0x40, drawn translucent
+    PART_ANIM_COMMAND_POSE = (1 << 7), // 0x80, command-selection pose (BtlUnit_SetCommandAnimPose)
+    PART_ANIM_NO_DISP = (1 << 8),      // 0x100, not drawn
+    PART_ANIM_RESTART = (1 << 9),      // 0x200, restart the animation when the pose is applied
+} BattlePartAnimFlags;
+
 typedef struct BattleWorkUnitPart {
     struct BattleWorkUnitPart* mNextPart;                  // 0x0
     BattleUnitKindPart* mKindPartParams;                   // 0x4
@@ -691,10 +706,10 @@ typedef struct BattleWorkUnitPart {
     PartsCounterAttribute_Flags counterAttributes;         // 0x1B0
     BattleUnitDefense* defense;                            // 0x1B4
     BattleUnitDefenseAttr* defenseAttr;                    // 0x1B8
-    void* poseTable;                                       // 0x1BC
+    PoseTableEntry* poseTable;                             // 0x1BC
     s32 poseId;                                            // 0x1C0
     char poseName[0x40];                                   // 0x1C4, current pose name (strcmp'd in unit scripts)
-    u32 animFlags;                                         // 0x204
+    u32 animFlags;                                         // 0x204, BattlePartAnimFlags
     f32 animSpeed;                                         // 0x208, init 1.0
     f32 animSpeed2;                                        // 0x20C, init 1.0
     void (*dispCallback)(struct BattleWorkUnitPart*, s32); // 0x210, called before (0) and after (1) drawing
@@ -940,8 +955,8 @@ typedef struct BattleUnit {
     s32 actEndEventId;                                   // 0x2C8 (US 0x2CC)
     void* hitEventCode;                          // 0x2CC (US 0x2D0), run on the attacker by BattleRunHitEventDirect
     s32 talkPartId;                                  // 0x2D0 (US 0x2D4)
-    const char* talkPose;                        // 0x2D4 (US 0x2D8), pose type 0x41 (btlevtcmd talk anim)
-    const char* stayPose;                        // 0x2D8 (US 0x2DC), pose type 0x2B
+    const char* talkPose;                        // 0x2D4 (US 0x2D8), POSE_TYPE_TALK (btlevtcmd talk anim)
+    const char* stayPose;                        // 0x2D8 (US 0x2DC), POSE_TYPE_NEUTRAL
     union {
         BattleWorkUnitBadgesEquipped badgesEquipped; // 0x2DC
         u8 badgeCounts[sizeof(BattleWorkUnitBadgesEquipped)]; // 0x2DC, the same 40 counters by index
@@ -1104,7 +1119,7 @@ void BtlUnit_OffStatusFlag(BattleUnit* unit, s32 flags);
 s32 BtlUnit_CheckUnitFlag(BattleUnit* unit, s32 flags);
 void BtlUnit_OnUnitFlag(BattleUnit* unit, s32 flags);
 void BtlUnit_OffUnitFlag(BattleUnit* unit, s32 flags);
-char* BtlUnit_GetPoseNameFromType(BattleUnitPart* part, s32 type);
+const char* BtlUnit_GetPoseNameFromType(BattleUnitPart* part, s32 type);
 
 void BtlUnit_CheckPinchStatus(BattleUnit* unit, BOOL noAudience);
 

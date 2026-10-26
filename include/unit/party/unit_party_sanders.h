@@ -9,5 +9,5 @@ extern BattleWeapon partyWeapon_SandersFirstAttack;
 extern BattleWeapon partyWeapon_SandersNormalAttack;
 extern BattleWeapon partyWeapon_SandersSuperBombAttack;
 extern BattleWeapon partyWeapon_SandersTimeBombSet;
-extern s32 pose_table_sanders_stay[];
+extern PoseTableEntry pose_table_sanders_stay[];
 extern BattleUnitKind unitdata_Party_Sanders;

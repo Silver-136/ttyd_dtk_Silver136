@@ -57,9 +57,8 @@ data order 10, sound-name integer round trips (`SFX_NAME_WORD`) 9, no-op casts 6
   the scripts that set and test them.
 - Names with an address suffix (25) and debug strings by address (`str_8...`, 6 in shadowdrv).
 - Ghidra-style locals left: 14.
-- Battle values still unnamed: pose types 30, 32-34, 37, 41, 47, 51, 53-55 (59 direct uses); token bits 0x20,
-  0x40, 0x80, 0x100; unit flag 0x10; unit attribute 0x100000. Dead bits (no reader): weapon special 0x200, target
-  weighting 0x2000.
+- Battle values still unnamed: pose types 32-34 and 53-55 (no code found selects them; only Mario's pose table
+  lists 32). Dead bits (no reader): weapon special 0x200, target weighting 0x2000.
 - JP demo name leads: partyWalkSe (our partyPlaySfxFootstep), partyPrevRunMode (our partyRestoreRunMode).
 - Comments from the game's own data: message paraphrases next to message calls (only 95 of 6,224 have one), place
   comments per room and NPC identities where the game's data (debug story list maps, NPC tribe table, messages)

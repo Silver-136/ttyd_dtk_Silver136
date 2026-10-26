@@ -11,6 +11,6 @@ extern BattleWeapon partyWeapon_VivianCharmKissAttack;
 extern BattleWeapon partyWeapon_VivianMagicalPowder;
 extern BattleWeapon partyWeapon_VivianNormalAttack;
 extern BattleWeapon partyWeapon_VivianShadowGuard;
-extern s32 pose_table_vivian_stay[];
+extern PoseTableEntry pose_table_vivian_stay[];
 extern BattleUnitKind unitdata_Party_Vivian;
 extern EvtWord vivian_shadow_tail_event[];

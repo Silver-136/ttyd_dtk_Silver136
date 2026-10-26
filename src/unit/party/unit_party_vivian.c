@@ -139,7 +139,7 @@ PoseTableEntry pose_table_vivian_stay[] = {
     {POSE_TYPE_SLEEP, "PTR_N_1"},
     {POSE_TYPE_KO, "PTR_D_3"},
     {POSE_TYPE_NORMAL, "PTR_S_1"},
-    {37, "PTR_G_2"},
+    {POSE_TYPE_DAMAGE_DRAINED, "PTR_G_2"},
     {POSE_TYPE_DAMAGE_GUARDED, "PTR_G_1"},
     {POSE_TYPE_DAMAGE, "PTR_D_1"},
     {POSE_TYPE_WALK, "PTR_W_1"},
