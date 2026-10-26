@@ -294,7 +294,7 @@ static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 1, 0)
     CALL_CHILD(PTR(zakogun_entry))
     CALL(zakogun_ext_init1)
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -526,7 +526,7 @@ static EVT_BEGIN(dead_event)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(btlevtcmd_StatusWindowOnOff, 1)
     WAIT_MS(500)
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -652,7 +652,7 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL_CHILD(LW(0))
-        CALL(btlevtcmd_StartWaitEvent, -2)
+        CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
         RETURN
     END_IF
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 0, LW(0))
@@ -704,7 +704,7 @@ static EVT_BEGIN(attack_event)
         GOTO(99)
     END_IF
     LABEL(99)
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -897,7 +897,7 @@ static EVT_BEGIN(normal_attack_event)
         CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), DAMAGE_RESULT_FINAL_HIT, LW(5))
         GOTO(98)
         LABEL(98)
-        CALL(btlevtcmd_JumpContinue, -2)
+        CALL(btlevtcmd_JumpContinue, UNIT_ID_SELF)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("A_1C"))
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_KANBU_HIP_ATTACK1"), EVT_NULLPTR, 0, EVT_NULLPTR)
         CALL(evt_btl_camera_shake_h, 0, 10, 0, 60, 0)

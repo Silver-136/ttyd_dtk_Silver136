@@ -185,7 +185,7 @@ static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetRunSound, UNIT_ID_SELF, STRING("SFX_ENM_KURI_MOVE1"), STRING("SFX_ENM_KURI_MOVE2"), 0, 6, 6)
     CALL(btlevtcmd_SetWalkSound, UNIT_ID_SELF, STRING("SFX_ENM_KURI_MOVE1"), STRING("SFX_ENM_KURI_MOVE2"), 0, 6, 6)
     CALL(btlevtcmd_SetJumpSound, UNIT_ID_SELF, STRING("SFX_ENM_KURI_JUMP1"), STRING("SFX_ENM_KURI_LANDING1"))
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -204,8 +204,8 @@ static EVT_BEGIN(phase_event)
             IF_INT_NOT_EQUAL(LW(0), 0)
                 CALL(btlevtcmd_get_turn, LW(0))
                 IF_INT_EQUAL(LW(0), 1)
-                    CALL(btlevtcmd_PhaseEventStartDeclare, -4)
-                    CALL(btlevtcmd_PhaseEventStartDeclare, -2)
+                    CALL(btlevtcmd_PhaseEventStartDeclare, UNIT_ID_PARTNER)
+                    CALL(btlevtcmd_PhaseEventStartDeclare, UNIT_ID_SELF)
                     SET_VALUE(GSWF(2509), 1)
                     CALL(evt_btl_camera_set_prilimit, BTL_CAM_PRI_EVENT)
                     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_EVENT, BTL_CAM_MODE_FREE)
@@ -225,8 +225,8 @@ static EVT_BEGIN(phase_event)
                     CALL(evt_msg_print, 2, STRING("stg3_tou_84"), 0, -2)
                     CALL(evt_btl_camera_set_prilimit, BTL_CAM_PRI_NORMAL)
                     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
-                    CALL(btlevtcmd_StartWaitEvent, -4)
-                    CALL(btlevtcmd_StartWaitEvent, -2)
+                    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_PARTNER)
+                    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
                 END_IF
             END_IF
         END_IF
@@ -255,7 +255,7 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL_CHILD(LW(0))
-        CALL(btlevtcmd_StartWaitEvent, -2)
+        CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
         RETURN
     END_IF
     CALL(btlevtcmd_JumpSetting, UNIT_ID_SELF, 20, FLOAT(0.0f), FLOAT(0.5996094f))
@@ -324,7 +324,7 @@ static EVT_BEGIN(attack_event)
         CASE_END
     END_SWITCH
     LABEL(90)
-    CALL(btlevtcmd_JumpContinue, -2)
+    CALL(btlevtcmd_JumpContinue, UNIT_ID_SELF)
     CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, 0, 0)
     SET_VALUE(LW(15), 69)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, LW(15))
@@ -363,7 +363,7 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -2, 0)
     LABEL(99)
     CALL(btlevtcmd_ResetFaceDirection, -2)
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 

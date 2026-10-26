@@ -235,7 +235,7 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL_CHILD(LW(0))
-        CALL(btlevtcmd_StartWaitEvent, -2)
+        CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
         RETURN
     END_IF
     CALL(btlevtcmd_GetFp, UNIT_ID_SELF, LW(0))
@@ -275,7 +275,7 @@ static EVT_BEGIN(magic_attack_event)
         GOTO(99)
     END_IF
     CALL(btlevtcmd_WeaponAftereffect, PTR(&weapon_chorobon_magic_attack))
-    CALL(btlevtcmd_AttackDeclareAll, -2)
+    CALL(btlevtcmd_AttackDeclareAll, UNIT_ID_SELF)
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, PTR(&weapon_chorobon_magic_attack))
     SET_VALUE(LW(0), 2)
@@ -468,7 +468,7 @@ static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetJumpSound, UNIT_ID_SELF, STRING("SFX_ENM_CHORO2_MOVE1"), 0)
     CALL(btlevtcmd_SetMaxFp, UNIT_ID_SELF, 3)
     CALL(btlevtcmd_SetFp, UNIT_ID_SELF, 0)
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -747,7 +747,7 @@ static EVT_BEGIN(drain_attack_event)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
     LABEL(99)
     CALL(btlevtcmd_ResetFaceDirection, -2)
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 

@@ -588,7 +588,7 @@ static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 3, 0)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 4, 0)
     CALL_CHILD(PTR(init_event2))
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -995,7 +995,7 @@ static EVT_BEGIN(attack_event)
         END_IF
     END_IF
     LABEL(99)
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -1009,7 +1009,7 @@ static EVT_BEGIN(ground_magic_common_event1)
     CALL(kamec_get_bunsin, LW(11), LW(12), LW(13), LW(14), LW(0))
     IF_INT_EQUAL(LW(15), 0)
         BEGIN_SIBLING_EVENT
-            CALL(eff_staff1, -2)
+            CALL(eff_staff1, UNIT_ID_SELF)
         END_SIBLING_EVENT
         BEGIN_SIBLING_EVENT
             IF_INT_NOT_EQUAL(LW(11), -1)
@@ -1033,7 +1033,7 @@ static EVT_BEGIN(ground_magic_common_event1)
         END_SIBLING_EVENT
     ELSE
         BEGIN_SIBLING_EVENT
-            CALL(eff_staff2, -2)
+            CALL(eff_staff2, UNIT_ID_SELF)
         END_SIBLING_EVENT
     END_IF
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("KMR_A_1A"))
@@ -1121,7 +1121,7 @@ static EVT_BEGIN(ground_magic_common_event2)
         END_LOOP
     END_SIBLING_EVENT
     BEGIN_SIBLING_EVENT
-        CALL(eff_staff1, -2)
+        CALL(eff_staff1, UNIT_ID_SELF)
     END_SIBLING_EVENT
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("KMR_A_1A"))
     WAIT_FRAMES(60)
@@ -1145,7 +1145,7 @@ static EVT_BEGIN(sky_magic_common_event)
     CALL(kamec_get_bunsin, LW(11), LW(12), LW(13), LW(14), LW(0))
     IF_INT_EQUAL(LW(15), 0)
         BEGIN_SIBLING_EVENT
-            CALL(eff_staff1, -2)
+            CALL(eff_staff1, UNIT_ID_SELF)
         END_SIBLING_EVENT
         BEGIN_SIBLING_EVENT
             IF_INT_NOT_EQUAL(LW(11), -1)
@@ -1169,7 +1169,7 @@ static EVT_BEGIN(sky_magic_common_event)
         END_SIBLING_EVENT
     ELSE
         BEGIN_SIBLING_EVENT
-            CALL(eff_staff2, -2)
+            CALL(eff_staff2, UNIT_ID_SELF)
         END_SIBLING_EVENT
     END_IF
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("KMR_A_3A"))
@@ -1625,7 +1625,7 @@ static EVT_BEGIN(bunsin_magic_event)
         END_IF
     END_LOOP
     CALL(kamec_shuffle)
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_KAMEKU_OFFSHOOT2"), EVT_NULLPTR, 0, EVT_NULLPTR)
     SET_VALUE(LW(0), -2)
     SPAWN_EVENT(alpha_up_event)

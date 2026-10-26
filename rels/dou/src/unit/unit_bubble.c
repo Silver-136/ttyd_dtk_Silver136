@@ -273,7 +273,7 @@ static EVT_BEGIN(init_event)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_SetPos, UNIT_ID_SELF, LW(0), 10, LW(2))
     CALL(btlevtcmd_SetHomePos, UNIT_ID_SELF, LW(0), 10, LW(2))
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -377,7 +377,7 @@ static EVT_BEGIN(attack_event)
     CALL_CHILD(PTR(fire_attack_event))
     GOTO(99)
     LABEL(99)
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -563,7 +563,7 @@ static EVT_BEGIN(fire_attack_event)
     CALL(btlevtcmd_FaceDirectionAdd, UNIT_ID_SELF, LW(0), 5)
     CALL(btlevtcmd_SetPartsPos, UNIT_ID_SELF, 2, LW(0), LW(1), LW(2))
     BEGIN_SIBLING_EVENT
-        CALL(eff_fire, -2)
+        CALL(eff_fire, UNIT_ID_SELF)
     END_SIBLING_EVENT
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_FaceDirectionAdd, UNIT_ID_SELF, LW(0), 0)
@@ -678,7 +678,7 @@ static EVT_BEGIN(all_fire_attack_event)
         GOTO(99)
     END_IF
     CALL(btlevtcmd_WeaponAftereffect, LW(9))
-    CALL(btlevtcmd_AttackDeclareAll, -2)
+    CALL(btlevtcmd_AttackDeclareAll, UNIT_ID_SELF)
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, LW(9))
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT)

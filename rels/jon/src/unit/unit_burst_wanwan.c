@@ -217,7 +217,7 @@ static EVT_BEGIN(init_event)
     SPAWN_EVENT(PTR(chain_event))
     CALL(btlevtcmd_SetJumpSound, UNIT_ID_SELF, STRING("0"), STRING("SFX_ENM_WAN_LANDING1"))
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 1, 127)
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -262,7 +262,7 @@ static EVT_BEGIN(counter_damage_event)
             RETURN
         END_IF
     END_IF
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -333,7 +333,7 @@ static EVT_BEGIN(attack_event)
         CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
             CALL_CHILD(LW(0))
-            CALL(btlevtcmd_StartWaitEvent, -2)
+            CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
             RETURN
         END_IF
         CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
@@ -357,7 +357,7 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), 16, LW(15))
     CALL(btlevtcmd_ChangePartsFaceDirection, UNIT_ID_SELF, 1, LW(15))
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 0, 0)
-    CALL(btlevtcmd_StopWaitEvent, -2)
+    CALL(btlevtcmd_StopWaitEvent, UNIT_ID_SELF)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_PART_TO_PART)
     CALL(evt_btl_camera_set_homing_unitparts, 0, UNIT_ID_SELF, 1, LW(3), LW(4))
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
@@ -441,7 +441,7 @@ static EVT_BEGIN(attack_event)
     LABEL(99)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 0, 1)
     CALL(btlevtcmd_ChangePartsFaceDirection, UNIT_ID_SELF, 1, -1)
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 

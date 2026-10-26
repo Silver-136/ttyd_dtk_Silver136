@@ -237,7 +237,7 @@ __declspec(section ".data") static s32 btlataudevtDummyPad[1] = {0};
 EVT_BEGIN(btlataudevtDummy)
     CALL(_get_attack_aud_no, LW(3), LW(0), LW(1), LW(2))
     CALL(_attack_aud, LW(3), 0)
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 EvtWord* btlataudGetAttackEventPtr(s32 unitId) {
@@ -259,7 +259,7 @@ EVT_END()
 
 EVT_BEGIN(btlataudevtPresentItem_Get)
     CALL(_get_present_target_id, LW(3))
-    CALL(btlevtcmd_StopWaitEvent, -2)
+    CALL(btlevtcmd_StopWaitEvent, UNIT_ID_SELF)
     CALL(btlevtcmd_GetUnitId, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), LW(3))
         CALL(btlevtcmd_StopWaitEvent, LW(3))
@@ -273,7 +273,7 @@ EVT_BEGIN(btlataudevtPresentItem_Get)
     IF_INT_NOT_EQUAL(LW(0), LW(3))
         CALL(btlevtcmd_StartWaitEvent, LW(3))
     END_IF
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 

@@ -518,7 +518,7 @@ EVT_BEGIN(btldefaultevt_ChangeParty)
     CALL(btlevtcmd_SortPhaseMoveTable)
     CALL(_check_pose_stay, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
-        CALL(btlevtcmd_StartWaitEvent, -2)
+        CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     END_IF
     RETURN
 EVT_END()
@@ -624,7 +624,7 @@ EVT_BEGIN(btldefaultevt_Appeal)
     WAIT_FRAMES(60)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
-    CALL(btlevtcmd_AudienceAppeal, -2)
+    CALL(btlevtcmd_AudienceAppeal, UNIT_ID_SELF)
     CALL(evt_batstage_light_set_player_off)
     WAIT_FRAMES(60)
     CALL(btlevtcmd_StartWaitEvent, LW(10))
@@ -651,7 +651,7 @@ EVT_BEGIN(_Defence_core)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BTL_MARIO_DEFENCE2"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_ftof, 60, LW(0))
     CALL(btlevtcmd_AnnounceMessage, 0, 0, 0, STRING("btl_msg_defend_command_exec"), LW(0))
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -781,7 +781,7 @@ EVT_BEGIN(btldefaultevt_Escape)
         CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(3.0f))
         CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
         CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -1, 0)
-        CALL(btlevtcmd_StartWaitEvent, -2)
+        CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
         CALL(btlevtcmd_WaitEventEnd, LW(15))
         RETURN
     END_IF
@@ -837,7 +837,7 @@ EVT_BEGIN(btldefaultevt_CantMoveZeroGravity)
     CALL(btlevtcmd_AnnounceMessage, 0, 0, 0, STRING("btl_msg_cant_move_zero_gravity"), 120)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     WAIT_FRAMES(20)
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -900,7 +900,7 @@ EVT_BEGIN(btldefaultevt_Dummy)
 EVT_END()
 
 EVT_BEGIN(btldefaultevt_Wait)
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 

@@ -1407,7 +1407,7 @@ void bakuGameDispStar(CameraId cam, void* param) {
 
 EVT_BEGIN(marioAttackEvent_BakuGame)
     CALL(btlevtcmd_WaitGuardMove)
-    CALL(btlevtcmd_CommandPayWeaponCost, -2)
+    CALL(btlevtcmd_CommandPayWeaponCost, UNIT_ID_SELF)
     CALL(btlevtcmd_CommandGetWeaponAddress, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_WeaponAftereffect, LW(0))
     CALL(btlevtcmd_reset_move_color_lv_all)
@@ -1454,7 +1454,7 @@ EVT_BEGIN(marioAttackEvent_BakuGame)
         CASE_END
     END_SWITCH
     LABEL(99)
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 

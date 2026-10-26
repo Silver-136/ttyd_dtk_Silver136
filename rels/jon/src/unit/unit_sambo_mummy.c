@@ -518,7 +518,7 @@ static EVT_BEGIN(init_event)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 5, POSE_TYPE_ACTION)
     CALL(btlevtcmd_SetRunSound, UNIT_ID_SELF, STRING("SFX_ENM_SAMBO_MOVE1"), STRING("SFX_ENM_SAMBO_MOVE1"), 0, 6, 6)
     CALL(btlevtcmd_SetWalkSound, UNIT_ID_SELF, STRING("SFX_ENM_SAMBO_MOVE1"), STRING("SFX_ENM_SAMBO_MOVE1"), 0, 6, 6)
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -843,7 +843,7 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL_CHILD(LW(0))
-        CALL(btlevtcmd_StartWaitEvent, -2)
+        CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
         RETURN
     END_IF
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 0, LW(10))
@@ -903,7 +903,7 @@ static EVT_BEGIN(attack_event)
     CALL_CHILD(PTR(attack_head_1_event))
     LABEL(99)
     CALL(btlevtcmd_ResetFaceDirection, -2)
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -1089,7 +1089,7 @@ static EVT_BEGIN(attack_head_2_event)
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -1, 0)
     LABEL(99)
     CALL(btlevtcmd_ResetFaceDirection, -2)
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -1251,7 +1251,7 @@ static EVT_BEGIN(attack_head_1_event)
     CALL_CHILD(sambo_rabbit_move)
     LABEL(99)
     CALL(btlevtcmd_ResetFaceDirection, -2)
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -1460,7 +1460,7 @@ static EVT_BEGIN(attack_spike_event)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     LABEL(99)
     CALL(btlevtcmd_ResetFaceDirection, -2)
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 

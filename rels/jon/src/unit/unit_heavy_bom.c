@@ -522,7 +522,7 @@ static EVT_BEGIN(init_event)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 2, STRING("F_1"))
     CALL(btlevtcmd_AnimeSetPoseSoundTable, UNIT_ID_SELF, 1, PTR(pose_sound_timing_table))
     CALL(_set_draw_callback)
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -576,7 +576,7 @@ static EVT_BEGIN(phase_event)
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 0, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
-            CALL(btlevtcmd_PhaseEventStartDeclare, -2)
+            CALL(btlevtcmd_PhaseEventStartDeclare, UNIT_ID_SELF)
             CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 1, LW(0))
             IF_INT_EQUAL(LW(0), 0)
                 CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("K_4"))
@@ -606,7 +606,7 @@ static EVT_BEGIN(phase_event)
                 CASE_EQUAL(0)
                 CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, 1, PTR(pose_table_0_fire))
             END_SWITCH
-            CALL(btlevtcmd_StartWaitEvent, -2)
+            CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
             RETURN
         END_IF
     END_IF
@@ -663,7 +663,7 @@ static EVT_BEGIN(attack_event)
         CALL(btlevtcmd_WeaponAftereffect, LW(12))
         CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, UNIT_ID_SELF, 1, LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
     END_IF
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 

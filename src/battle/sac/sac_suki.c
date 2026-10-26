@@ -731,7 +731,7 @@ EVT_BEGIN(marioAttackEvent_Suki)
     END_IF
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
-    CALL(btlevtcmd_CommandPayWeaponCost, -2)
+    CALL(btlevtcmd_CommandPayWeaponCost, UNIT_ID_SELF)
     CALL(btlevtcmd_CommandGetWeaponAddress, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_WeaponAftereffect, LW(0))
     CALL(btlevtcmd_reset_move_color_lv_all)
@@ -859,7 +859,7 @@ EVT_BEGIN(marioAttackEvent_Suki)
     WAIT_FRAMES(30)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(end_suki)
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 

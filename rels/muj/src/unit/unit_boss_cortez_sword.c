@@ -217,7 +217,7 @@ static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 2, 0)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 1, 0)
     CALL(btlevtcmd_SetMaxMoveCount, UNIT_ID_SELF, 0)
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -322,11 +322,11 @@ EVT_BEGIN(cortez_weapon_unison_phase_event)
                 END_IF
                 CALL_CHILD(PTR(cortez_weapon_get_home_height))
                 IF_INT_NOT_EQUAL(LW(1), LW(5))
-                    CALL(btlevtcmd_PhaseEventStartDeclare, -2)
+                    CALL(btlevtcmd_PhaseEventStartDeclare, UNIT_ID_SELF)
                     CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(5), LW(2), 60, 0, 4, 0, -1)
                     CALL(btlevtcmd_SetHomePos, UNIT_ID_SELF, LW(0), LW(5), LW(2))
                     CALL_CHILD(PTR(cortez_weapon_set_formation_attribute))
-                    CALL(btlevtcmd_StartWaitEvent, -2)
+                    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
                     RETURN
                 END_IF
             END_IF
@@ -343,7 +343,7 @@ EVT_BEGIN(cortez_weapon_phase_event)
             SUBTRACT(LW(0), 1)
             CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 1, LW(0))
             IF_INT_LESS_OR_EQUAL(LW(0), 0)
-                CALL(btlevtcmd_PhaseEventStartDeclare, -2)
+                CALL(btlevtcmd_PhaseEventStartDeclare, UNIT_ID_SELF)
                 BEGIN_SIBLING_EVENT_GET_ID(LW(0))
                     CALL(evt_sub_intpl_init, EASING_CUBIC_OUT, -90, 0, 20)
                     CALL(evt_sub_intpl_get_value)
@@ -361,11 +361,11 @@ EVT_BEGIN(cortez_weapon_phase_event)
                 CALL_CHILD(PTR(cortez_weapon_set_formation_attribute))
                 CALL(btlevtcmd_GetMaxHp, UNIT_ID_SELF, LW(0))
                 CALL(btlevtcmd_SetHp, UNIT_ID_SELF, LW(0))
-                CALL(btlevtcmd_ClearAllStatus, -2)
+                CALL(btlevtcmd_ClearAllStatus, UNIT_ID_SELF)
                 CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, kNotTargetable)
                 CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, 1, PTR(pose_table))
                 CALL(btlevtcmd_OffAttribute, UNIT_ID_SELF, kUnitNoHpGauge)
-                CALL(btlevtcmd_StartWaitEvent, -2)
+                CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
                 RETURN
             END_IF
         END_IF
@@ -376,7 +376,7 @@ EVT_END()
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 1, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
-        CALL(btlevtcmd_StartWaitEvent, -2)
+        CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
         RETURN
     END_IF
     SET_VALUE(LW(12), PTR(&weapon_cortez_sword_float_attack))
@@ -630,7 +630,7 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 40, 0, 4, 0, -1)
     LABEL(99)
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 

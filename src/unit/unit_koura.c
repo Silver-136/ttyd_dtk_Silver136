@@ -154,7 +154,7 @@ static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 1, 0)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 2, 0)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 3, 0)
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -181,7 +181,7 @@ EVT_BEGIN(koura_open)
     IF_INT_EQUAL(LW(0), 1)
         RETURN
     END_IF
-    CALL(btlevtcmd_PhaseEventStartDeclare, -2)
+    CALL(btlevtcmd_PhaseEventStartDeclare, UNIT_ID_SELF)
     CALL(btlevtcmd_SetRotateOffset, UNIT_ID_SELF, -23, 0, 0)
     CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, 0, 0)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 0, LW(3))
@@ -203,7 +203,7 @@ EVT_BEGIN(koura_close)
     IF_INT_EQUAL(LW(0), 0)
         RETURN
     END_IF
-    CALL(btlevtcmd_PhaseEventStartDeclare, -2)
+    CALL(btlevtcmd_PhaseEventStartDeclare, UNIT_ID_SELF)
     CALL(btlevtcmd_SetRotateOffset, UNIT_ID_SELF, -23, 0, 0)
     CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, 0, 60)
     LOOP(30)
@@ -216,9 +216,9 @@ EVT_BEGIN(koura_close)
     CALL(btlevtcmd_OnAttribute, LW(3), 64)
     CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, kNotTargetable)
     CALL(btlevtcmd_OnPartsAttribute, LW(3), 1, 16777216)
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 2, 0)
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -247,7 +247,7 @@ EVT_BEGIN(damage_core)
     END_SWITCH
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_DAMAGE)
     WAIT_MS(500)
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 

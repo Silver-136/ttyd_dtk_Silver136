@@ -255,7 +255,7 @@ static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventConfusion, UNIT_ID_SELF, PTR(btldefaultevt_Confuse))
     CALL(btlevtcmd_SetHpGaugeOffset, UNIT_ID_SELF, -5, -13)
     CALL(btlevtcmd_OnUnitFlag, UNIT_ID_SELF, BATTLE_UNIT_FLAG_FLOAT_CAPABLE | BATTLE_UNIT_FLAG_FLOAT_ACTIVE)
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -281,7 +281,7 @@ EVT_END()
 static EVT_BEGIN(attack_event)
     SET_VALUE(LW(9), PTR(&weapon_batten_satellite_attack))
     CALL_CHILD(PTR(batten_satellite_attack_attack_event))
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 

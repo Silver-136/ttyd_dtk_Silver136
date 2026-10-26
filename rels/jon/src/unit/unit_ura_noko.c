@@ -250,7 +250,7 @@ static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetOverTurnCount, UNIT_ID_SELF, 0)
     CALL(btlevtcmd_SetRunSound, UNIT_ID_SELF, STRING("SFX_ENM_NOKO_MOVE3L"), STRING("SFX_ENM_NOKO_MOVE3R"), 0, 3, 3)
     CALL(btlevtcmd_SetWalkSound, UNIT_ID_SELF, STRING("SFX_ENM_NOKO_MOVE3L"), STRING("SFX_ENM_NOKO_MOVE3L"), 0, 6, 6)
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -299,7 +299,7 @@ static EVT_BEGIN(wakeup_event)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 12, -1)
     CALL(btlevtcmd_SetHitOffset, UNIT_ID_SELF, 1, 0, 0, 0)
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -367,7 +367,7 @@ static EVT_BEGIN(first_attack_event)
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -1, 0)
     LABEL(99)
     CALL(btlevtcmd_ResetFaceDirection, -2)
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -385,7 +385,7 @@ static EVT_BEGIN(attack_event)
         CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
             CALL_CHILD(LW(0))
-            CALL(btlevtcmd_StartWaitEvent, -2)
+            CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
             RETURN
         END_IF
         CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
@@ -513,7 +513,7 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -1, 0)
     LABEL(99)
     CALL(btlevtcmd_ResetFaceDirection, -2)
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -576,7 +576,7 @@ static EVT_BEGIN(ura_attack_event)
         WAIT_MS(200)
         CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
         ADD(LW(2), 10)
-        CALL(eff_aura, -2)
+        CALL(eff_aura, UNIT_ID_SELF)
     END_SIBLING_EVENT
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_URANOKO_MOVE1"), EVT_NULLPTR, 0, LW(15))
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 1, 10)
@@ -669,7 +669,7 @@ static EVT_BEGIN(ura_attack_event)
     WAIT_FRAMES(3)
     LABEL(99)
     CALL(btlevtcmd_ResetFaceDirection, -2)
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 

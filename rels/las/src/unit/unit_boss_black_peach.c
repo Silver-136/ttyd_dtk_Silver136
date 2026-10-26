@@ -1451,7 +1451,7 @@ EVT_BEGIN(peach_init_event)
     CALL(btlevtcmd_SetEventDamage, UNIT_ID_SELF, PTR(peach_damage_event))
     CALL(btlevtcmd_SetEventConfusion, UNIT_ID_SELF, PTR(btldefaultevt_Confuse))
     CALL(btlevtcmd_SetEventEntry, UNIT_ID_SELF, PTR(peach_entry_event))
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -1466,7 +1466,7 @@ EVT_BEGIN(peach_entry_event)
     CALL(evt_btl_camera_set_moveto, 0, -122, 69, 332, -122, 46, 0, 15, 11)
     WAIT_MS(550)
     CALL(evt_msg_print_battle_party, STRING("stg8_las_141"))
-    CALL(btlevtcmd_StartWaitEvent, -4)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_PARTNER)
     WAIT_MS(300)
     CALL(btlevtcmd_StatusWindowOnOff, 1)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
@@ -1479,7 +1479,7 @@ EVT_BEGIN(peach_damage_event)
     SET_VALUE(LW(11), 1)
     CALL_CHILD(PTR(btldefaultevt_Damage))
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -1500,7 +1500,7 @@ EVT_BEGIN(peach_change_evt)
     END_INLINE_EVENT
     CALL(evt_btl_camera_set_moveto, 0, 83, 125, 565, 83, 86, 0, 30, 11)
     WAIT_MS(400)
-    CALL(btlevtcmd_ClearAllStatus, -2)
+    CALL(btlevtcmd_ClearAllStatus, UNIT_ID_SELF)
     WAIT_MS(400)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(evt_eff, STRING("m_q"), STRING("mist2"), 0, LW(0), 15, LW(2), 100, 0, -1, 0, 0, 0, 0, 0)
@@ -1646,7 +1646,7 @@ EVT_END()
 EVT_BEGIN(peach_dead_event)
     CALL(btlevtcmd_WaitAttackEnd)
     CALL_CHILD(PTR(peach_change_evt))
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     CALL(btlevtcmd_reset_turn)
     RETURN
 EVT_END()
@@ -2051,7 +2051,7 @@ EVT_BEGIN(peach_attack_event)
             CALL_CHILD(PTR(peack_attack_dark_drag))
         END_SWITCH
     END_SWITCH
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -2118,7 +2118,7 @@ EVT_BEGIN(queen_init_event)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 3, STRING("KRT_S_1"))
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(evt_eff, STRING("m_q"), STRING("mist2"), 0, LW(0), 15, LW(2), 100, 0, -1, 0, 0, 0, 0, 0)
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -2167,7 +2167,7 @@ EVT_BEGIN(queen_last_attack_message_evt)
     CALL(evt_btl_camera_set_moveto, 0, -113, 69, 332, -113, 46, 0, 15, 11)
     WAIT_MS(550)
     CALL(evt_msg_print_battle_party, STRING("stg8_las_145"))
-    CALL(btlevtcmd_StartWaitEvent, -4)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_PARTNER)
     WAIT_MS(300)
     CALL(btlevtcmd_StatusWindowOnOff, 1)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 1, 3)
@@ -2419,7 +2419,7 @@ EVT_BEGIN(queen_first_damage_evt)
     CALL(evt_btl_camera_set_moveto, 0, -113, 69, 332, -113, 46, 0, 30, 11)
     WAIT_MS(800)
     CALL(evt_msg_print_battle_party, STRING("stg8_las_164"))
-    CALL(btlevtcmd_StartWaitEvent, -4)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_PARTNER)
     WAIT_MS(300)
     CALL(evt_btl_camera_set_moveto, 0, 63, 141, 412, 63, 111, 0, 1, 11)
     WAIT_MS(350)
@@ -2479,7 +2479,7 @@ EVT_BEGIN(queen_dead_hp_msg_evt)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     WAIT_MS(1000)
     CALL(btlevtcmd_StatusWindowOnOff, 1)
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -3164,7 +3164,7 @@ EVT_BEGIN(queen_attack_event)
         END_SWITCH
     END_SWITCH
     LABEL(99)
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -3189,7 +3189,7 @@ EVT_BEGIN(queen_damage_event)
     CALL_CHILD(PTR(btldefaultevt_Damage))
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("KRT_S_1"))
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -3307,7 +3307,7 @@ EVT_BEGIN(queen_entry_event)
     CALL(evt_btl_camera_set_moveto, 0, -113, 69, 332, -113, 46, 0, 15, 11)
     WAIT_MS(550)
     CALL(evt_msg_print_battle_party, STRING("stg8_las_161"))
-    CALL(btlevtcmd_StartWaitEvent, -4)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_PARTNER)
     WAIT_MS(300)
     CALL(evt_btl_camera_set_moveto, 0, 63, 141, 412, 63, 111, 0, 1, 11)
     WAIT_MS(350)
@@ -3344,7 +3344,7 @@ EVT_BEGIN(queen_hand_1_init_event)
     END_IF
     CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, kNotTargetable)
     CALL(btlevtcmd_OffAttribute, UNIT_ID_SELF, kUnitNoHpGauge)
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     SET_VALUE(GF(0), 1)
     RETURN
 EVT_END()
@@ -3584,7 +3584,7 @@ EVT_BEGIN(queen_hand_1_attack_event)
         CALL_CHILD(PTR(queen_hand_1_drain_attack))
     END_SWITCH
     LABEL(99)
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -3648,7 +3648,7 @@ EVT_BEGIN(queen_hand_2_init_event)
     END_IF
     CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, kNotTargetable)
     CALL(btlevtcmd_OffAttribute, UNIT_ID_SELF, kUnitNoHpGauge)
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     SET_VALUE(GF(0), 1)
     RETURN
 EVT_END()
@@ -3672,7 +3672,7 @@ EVT_BEGIN(queen_hand_2_attack_event)
         CALL_CHILD(PTR(queen_hand_1_drain_attack))
     END_SWITCH
     LABEL(99)
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -3725,7 +3725,7 @@ EVT_BEGIN(queen_hand_small_init_event)
         CALL(btlevtcmd_SetPartsDefenceAttrTable, UNIT_ID_SELF, 1, PTR(&queen_muteki_defence_attr))
         CALL(btlevtcmd_SetRegistStatus, UNIT_ID_SELF, PTR(&queen_muteki_regist))
     END_IF
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     SET_VALUE(GF(0), 1)
     RETURN
 EVT_END()
@@ -3938,7 +3938,7 @@ EVT_BEGIN(queen_hand_small_attack_event)
         CALL_CHILD(PTR(queen_hand_small_drag_attack))
     END_SWITCH
     LABEL(99)
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 

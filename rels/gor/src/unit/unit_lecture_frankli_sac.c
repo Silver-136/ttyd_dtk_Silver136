@@ -318,9 +318,9 @@ void spot_square_disp(CameraId cameraId, void* param) {
 }
 
 EVT_BEGIN(stop_wait_event)
-    CALL(btlevtcmd_StopWaitEvent, -3)
+    CALL(btlevtcmd_StopWaitEvent, UNIT_ID_MARIO)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_MARIO, 1)
-    CALL(btlevtcmd_StopWaitEvent, -4)
+    CALL(btlevtcmd_StopWaitEvent, UNIT_ID_PARTNER)
     CALL(btlevtcmd_GetBodyId, UNIT_ID_PARTNER, LW(0))
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_PARTNER, LW(0))
     RETURN
@@ -341,7 +341,7 @@ static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 1, 0)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 2, 0)
     CALL(btlevtcmd_SetMaxMoveCount, UNIT_ID_SELF, 0)
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 

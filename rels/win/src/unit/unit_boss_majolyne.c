@@ -381,7 +381,7 @@ static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 3, 0)
     SPAWN_EVENT(PTR(majo3_shadow_tail_event))
     ALLOCATE_UW(10, GW(15))
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -538,7 +538,7 @@ static EVT_BEGIN(unison_phase_event)
         CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 5, LW(4))
         IF_INT_NOT_EQUAL(LW(3), LW(4))
             CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 4, LW(4))
-            CALL(btlevtcmd_StartWaitEvent, -2)
+            CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
             WAIT_MS(400)
             CALL_CHILD(PTR(majolyne_down))
             WAIT_MS(500)
@@ -557,7 +557,7 @@ static EVT_BEGIN(unison_phase_event)
             CALL(btlevtcmd_SetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
             CALL_CHILD(PTR(majolyne_up))
             CALL(btlevtcmd_SortPhaseMoveTable)
-            CALL(btlevtcmd_StartWaitEvent, -2)
+            CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
         END_IF
     END_IF
     RETURN
@@ -604,7 +604,7 @@ static EVT_BEGIN(phase_event)
                 END_IF
                 CALL(btlevtcmd_StatusWindowOnOff, 1)
                 CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
-                CALL(btlevtcmd_StartWaitEvent, -2)
+                CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
             END_IF
         END_IF
         IF_INT_EQUAL(GW(12), 0)
@@ -633,7 +633,7 @@ static EVT_BEGIN(phase_event)
                     CALL(btlevtcmd_ResetFaceDirection, -2)
                     CALL(btlevtcmd_StatusWindowOnOff, 1)
                     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
-                    CALL(btlevtcmd_StartWaitEvent, -2)
+                    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
                 END_IF
             END_IF
         END_IF
@@ -663,7 +663,7 @@ static EVT_BEGIN(phase_event)
                     CALL(btlevtcmd_ResetFaceDirection, -2)
                     CALL(btlevtcmd_StatusWindowOnOff, 1)
                     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
-                    CALL(btlevtcmd_StartWaitEvent, -2)
+                    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
                 END_IF
             END_IF
         END_IF
@@ -676,7 +676,7 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL_CHILD(LW(0))
-        CALL(btlevtcmd_StartWaitEvent, -2)
+        CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
         RETURN
     END_IF
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 8, LW(0))
@@ -760,7 +760,7 @@ static EVT_BEGIN(attack_event)
     END_SWITCH
     LABEL(90)
     CALL(btlevtcmd_ResetFaceDirection, -2)
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -852,7 +852,7 @@ static EVT_BEGIN(blizzard_attack_event)
         RETURN
     END_IF
     CALL(btlevtcmd_WeaponAftereffect, LW(9))
-    CALL(btlevtcmd_AttackDeclareAll, -2)
+    CALL(btlevtcmd_AttackDeclareAll, UNIT_ID_SELF)
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, LW(9))
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_MAJO_HAND_OPEN1"), EVT_NULLPTR, 0, LW(15))

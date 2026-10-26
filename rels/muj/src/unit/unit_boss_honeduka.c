@@ -115,7 +115,7 @@ static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
     CALL(btlevtcmd_SetEventDamage, UNIT_ID_SELF, PTR(damage_event))
     CALL(btlevtcmd_SetMaxMoveCount, UNIT_ID_SELF, 0)
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -129,7 +129,7 @@ EVT_END()
 EVT_BEGIN(honeduka_damage_sub_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 0, LW(3))
     CALL(btlevtcmd_RunDataEventChild, LW(3), UNIT_DATA_WEAPON_BREAK_EVENT)
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 

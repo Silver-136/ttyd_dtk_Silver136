@@ -579,7 +579,7 @@ static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetUnitWorkFloat, UNIT_ID_SELF, 3, FLOAT(1.0f))
     CALL(btlevtcmd_SetHitOffset, UNIT_ID_SELF, 1, 0, 0, 0)
     CALL(btlevtcmd_SetHitCursorOffset, UNIT_ID_SELF, 1, 0, 0, 0)
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -693,7 +693,7 @@ static EVT_BEGIN(phase_event)
         CALL(btlevtcmd_GetHp, UNIT_ID_SELF, LW(1))
         IF_INT_LESS_OR_EQUAL(LW(1), LW(0))
             CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 1, 1)
-            CALL(btlevtcmd_StopWaitEvent, -2)
+            CALL(btlevtcmd_StopWaitEvent, UNIT_ID_SELF)
             CALL(btlevtcmd_StatusWindowOnOff, 0)
             SET_VALUE(LW(0), 0)
             CALL_CHILD(macho_gance_zoom)
@@ -718,7 +718,7 @@ static EVT_BEGIN(phase_event)
         CALL(btlevtcmd_GetHp, UNIT_ID_SELF, LW(1))
         IF_INT_LESS_OR_EQUAL(LW(1), LW(0))
             CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 1, 2)
-            CALL(btlevtcmd_StopWaitEvent, -2)
+            CALL(btlevtcmd_StopWaitEvent, UNIT_ID_SELF)
             CALL(btlevtcmd_StatusWindowOnOff, 0)
             SET_VALUE(LW(0), 1)
             CALL_CHILD(macho_gance_zoom)
@@ -799,7 +799,7 @@ static EVT_BEGIN(phase_event)
         CALL(btlevtcmd_GetHp, UNIT_ID_SELF, LW(1))
         IF_INT_LESS_OR_EQUAL(LW(1), LW(0))
             CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 1, 3)
-            CALL(btlevtcmd_StopWaitEvent, -2)
+            CALL(btlevtcmd_StopWaitEvent, UNIT_ID_SELF)
             CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, 1, PTR(pose_table_furafura))
             CALL(btlevtcmd_StatusWindowOnOff, 0)
             SET_VALUE(LW(0), 1)
@@ -971,7 +971,7 @@ static EVT_BEGIN(attack_event)
             END_IF
         END_IF
     END_IF
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -1185,7 +1185,7 @@ EVT_BEGIN(gance_attack_attack_event)
         CASE_END
     END_SWITCH
     LABEL(90)
-    CALL(btlevtcmd_JumpContinue, -2)
+    CALL(btlevtcmd_JumpContinue, UNIT_ID_SELF)
     CALL(x_flag_set, 0, 1)
     BEGIN_SIBLING_EVENT
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_GANSU_HIPDROP1"), EVT_NULLPTR, 0, EVT_NULLPTR)
@@ -1300,7 +1300,7 @@ EVT_BEGIN(gance_rariat_attack_attack_event)
         RETURN
     END_IF
     CALL(btlevtcmd_WeaponAftereffect, LW(9))
-    CALL(btlevtcmd_AttackDeclareAll, -2)
+    CALL(btlevtcmd_AttackDeclareAll, UNIT_ID_SELF)
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, LW(9))
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("A_2A"))
@@ -1494,7 +1494,7 @@ EVT_BEGIN(gance_body_attack_attack_event)
         CASE_END
     END_SWITCH
     LABEL(90)
-    CALL(btlevtcmd_JumpContinue, -2)
+    CALL(btlevtcmd_JumpContinue, UNIT_ID_SELF)
     CALL(x_flag_set, 0, 1)
     BEGIN_SIBLING_EVENT
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_GANSU_HIPDROP1"), EVT_NULLPTR, 0, EVT_NULLPTR)
@@ -1514,7 +1514,7 @@ EVT_BEGIN(gance_body_attack_attack_event)
     END_SIBLING_EVENT
     CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), DAMAGE_RESULT_FINAL_HIT, LW(5))
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("A_1D"))
-    CALL(btlevtcmd_JumpContinue, -2)
+    CALL(btlevtcmd_JumpContinue, UNIT_ID_SELF)
     LABEL(98)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_MoveDirectionAdd, UNIT_ID_SELF, LW(0), 30)

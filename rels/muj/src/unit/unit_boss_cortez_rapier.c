@@ -198,7 +198,7 @@ static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 2, 3)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 1, 0)
     CALL(btlevtcmd_SetMaxMoveCount, UNIT_ID_SELF, 0)
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -224,7 +224,7 @@ EVT_END()
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 1, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
-        CALL(btlevtcmd_StartWaitEvent, -2)
+        CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
         RETURN
     END_IF
     SET_VALUE(LW(12), PTR(&weapon_cortez_rapier_float_attack))
@@ -235,7 +235,7 @@ static EVT_BEGIN(attack_event)
         GOTO(99)
     END_IF
     CALL(btlevtcmd_WeaponAftereffect, LW(12))
-    CALL(btlevtcmd_AttackDeclareAll, -2)
+    CALL(btlevtcmd_AttackDeclareAll, UNIT_ID_SELF)
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, LW(12))
     CALL(btlevtcmd_AnimeWaitPlayLoopTiming, UNIT_ID_SELF, 1)
@@ -381,7 +381,7 @@ static EVT_BEGIN(attack_event)
     DELETE_EVENT(LW(13))
     CALL(evt_snd_sfxoff, LW(9))
     LABEL(99)
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 

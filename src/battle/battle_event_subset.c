@@ -149,7 +149,7 @@ EVT_BEGIN(subsetevt_dead)
                 CALL(btlevtcmd_JumpSetting, LW(10), 0, FLOAT(0.0f), FLOAT(0.69921875f))
                 CALL(btlevtcmd_GetPos, LW(10), LW(0), LW(1), LW(2))
                 CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 20, -1)
-                CALL(btlevtcmd_StartWaitEvent, -2)
+                CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
             END_IF
 #ifdef VERSION_G8ME01
             ELSE
@@ -183,7 +183,7 @@ EVT_BEGIN(subsetevt_dead)
             END_IF
             IF_INT_LESS(LW(0), LW(6))
                 WAIT_MS(500)
-                CALL(_check_at_dm_event_wait, -3)
+                CALL(_check_at_dm_event_wait, UNIT_ID_MARIO)
                 CALL(btlevtcmd_GetHp, UNIT_ID_MARIO, LW(0))
                 IF_INT_GREATER(LW(0), 0)
                     CALL_CHILD(btldefaultevt_ChangePosition)
@@ -251,11 +251,11 @@ EVT_BEGIN(subsetevt_dead)
                 CALL(btlevtcmd_OffUnitFlag, LW(10), BATTLE_UNIT_FLAG_HIDE_HELD_ITEM)
 #ifdef VERSION_G8ME01
                 CALL(btlevtcmd_OffUnitFlag, LW(10), BATTLE_UNIT_FLAG_STOLEN_ITEM)
-                CALL(btlevtcmd_StartWaitEvent, -2)
+                CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
             END_IF
             ELSE
 #else
-                CALL(btlevtcmd_StartWaitEvent, -2)
+                CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
             END_IF
         ELSE
 #endif
@@ -380,7 +380,7 @@ EVT_BEGIN(btldefaultevt_avoid_guard)
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(2), LW(3), LW(4))
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(2), LW(3), LW(4), 20, -1, 0)
     CALL(btlevtcmd_AnimeSetMotionSpeed, LW(10), LW(11), FLOAT(1.0f))
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -818,8 +818,8 @@ EVT_BEGIN(btldefaultevt_ChangePosition)
         END_IF
     END_IF
     CALL(btlevtcmd_SortPhaseMoveTable)
-    CALL(btlevtcmd_StartWaitEvent, -3)
-    CALL(btlevtcmd_StartWaitEvent, -4)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_MARIO)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_PARTNER)
     RETURN
 EVT_END()
 
@@ -839,7 +839,7 @@ EVT_BEGIN(subsetevt_happy_heart)
         END_IF
     END_IF
     WAIT_FRAMES(60)
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -859,7 +859,7 @@ EVT_BEGIN(subsetevt_happy_flower)
         END_IF
     END_IF
     WAIT_FRAMES(60)
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -1297,7 +1297,7 @@ EVT_BEGIN(subsetevt_confuse_flustered)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
     WAIT_MS(1000)
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -1397,13 +1397,13 @@ EVT_BEGIN(subsetevt_status_recovery)
         CALL(btlevtcmd_RunDataEventChild, LW(10), 8)
         RETURN
     END_IF
-    CALL(btlevtcmd_StopWaitEvent, -2)
+    CALL(btlevtcmd_StopWaitEvent, UNIT_ID_SELF)
     CALL(btlevtcmd_GetBodyId, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_SetFallAccel, UNIT_ID_SELF, FLOAT(0.39941406f))
     CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 30, -1)
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 

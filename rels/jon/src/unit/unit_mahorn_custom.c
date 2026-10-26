@@ -586,7 +586,7 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL_CHILD(LW(0))
-        CALL(btlevtcmd_StartWaitEvent, -2)
+        CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
         RETURN
     END_IF
     CALL(mahorn_get_live_num, LW(0))
@@ -669,13 +669,13 @@ static EVT_BEGIN(attack_event)
         END_IF
     END_IF
     LABEL(99)
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
 static EVT_BEGIN(attack_event_bunsin)
     LABEL(99)
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -730,7 +730,7 @@ static EVT_BEGIN(init_event)
     SPAWN_EVENT(PTR(hand_ctrl_event))
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 4, 0)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 6, 0)
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -1634,7 +1634,7 @@ static EVT_BEGIN(bunsin_event)
         END_IF
     END_LOOP
     CALL(mahorn_shuffle)
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_MAHO_OFFSHOOT2"), EVT_NULLPTR, 0, EVT_NULLPTR)
     SET_VALUE(LW(0), -2)
     SPAWN_EVENT(alpha_up_event)

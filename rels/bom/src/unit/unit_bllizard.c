@@ -222,7 +222,7 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL_CHILD(LW(0))
-        CALL(btlevtcmd_StartWaitEvent, -2)
+        CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
         RETURN
     END_IF
     CALL(btlevtcmd_CheckPartsCounterAttribute, UNIT_ID_SELF, 1, 64, LW(0))
@@ -244,7 +244,7 @@ static EVT_BEGIN(attack_event)
     CALL_CHILD(PTR(charge_event))
     GOTO(99)
     LABEL(99)
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -265,7 +265,7 @@ static EVT_BEGIN(bllizard_event)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
     CALL(evt_btl_camera_set_zoom, 0, 250)
     CALL(btlevtcmd_WeaponAftereffect, LW(9))
-    CALL(btlevtcmd_AttackDeclareAll, -2)
+    CALL(btlevtcmd_AttackDeclareAll, UNIT_ID_SELF)
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, LW(9))
     CALL(btlevtcmd_OffPartsCounterAttribute, UNIT_ID_SELF, 1, 64)
@@ -386,7 +386,7 @@ static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 0, 0)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 1, 0)
     SPAWN_EVENT(PTR(barrier_event))
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -399,9 +399,9 @@ static EVT_BEGIN(barrier_event)
     END_IF
     CALL(btlevtcmd_CheckPartsCounterAttribute, UNIT_ID_SELF, 1, 64, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
-        CALL(eff_ice_barrier, -2)
+        CALL(eff_ice_barrier, UNIT_ID_SELF)
         ELSE
-        CALL(eff_ice_barrier_end, -2)
+        CALL(eff_ice_barrier_end, UNIT_ID_SELF)
     END_IF
     GOTO(0)
     LABEL(99)
@@ -424,7 +424,7 @@ static EVT_BEGIN(damage_event)
         CALL(btlevtcmd_CheckDamageCode, UNIT_ID_SELF, 2048, LW(0))
         IF_INT_EQUAL(LW(0), 0)
             CALL(btlevtcmd_OffPartsCounterAttribute, UNIT_ID_SELF, 1, 64)
-            CALL(eff_ice_barrier_end, -2)
+            CALL(eff_ice_barrier_end, UNIT_ID_SELF)
         END_IF
     END_IF
     CALL_CHILD(PTR(btldefaultevt_Damage))

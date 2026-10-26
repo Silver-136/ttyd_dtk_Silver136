@@ -213,7 +213,7 @@ static EVT_BEGIN(init_event_sub)
     CALL(btlevtcmd_SetBaseScale, UNIT_ID_SELF, FLOAT(1.5f), FLOAT(1.5f), FLOAT(1.0f))
     CALL(btlevtcmd_SetWalkSound, UNIT_ID_SELF, STRING("SFX_BOSS_ISIN_MOVE1"), STRING("SFX_BOSS_ISIN_MOVE2"), 0, 10, 10)
     CALL(btlevtcmd_SetRunSound, UNIT_ID_SELF, STRING("SFX_BOSS_ISIN_MOVE1"), STRING("SFX_BOSS_ISIN_MOVE2"), 0, 7, 7)
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -271,8 +271,8 @@ static EVT_BEGIN(damage_event)
     SET_VALUE(GSWF(2511), 1)
     CALL(evt_btl_camera_set_prilimit, BTL_CAM_PRI_NORMAL)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
-    CALL(btlevtcmd_StartWaitEvent, -4)
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_PARTNER)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -288,8 +288,8 @@ static EVT_BEGIN(phase_event)
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_get_turn, LW(0))
         IF_INT_EQUAL(LW(0), 1)
-            CALL(btlevtcmd_PhaseEventStartDeclare, -4)
-            CALL(btlevtcmd_PhaseEventStartDeclare, -2)
+            CALL(btlevtcmd_PhaseEventStartDeclare, UNIT_ID_PARTNER)
+            CALL(btlevtcmd_PhaseEventStartDeclare, UNIT_ID_SELF)
             CALL(evt_btl_camera_set_prilimit, BTL_CAM_PRI_EVENT)
             CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_EVENT, BTL_CAM_MODE_FREE)
             CALL(evt_btl_camera_set_moveto, 1, -104, 74, 334, -102, 52, 0, 30, 4)
@@ -328,8 +328,8 @@ static EVT_BEGIN(phase_event)
             END_IF
             CALL(evt_btl_camera_set_prilimit, BTL_CAM_PRI_NORMAL)
             CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
-            CALL(btlevtcmd_StartWaitEvent, -4)
-            CALL(btlevtcmd_StartWaitEvent, -2)
+            CALL(btlevtcmd_StartWaitEvent, UNIT_ID_PARTNER)
+            CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
         END_IF
     END_IF
     RETURN
@@ -339,7 +339,7 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL_CHILD(LW(0))
-        CALL(btlevtcmd_StartWaitEvent, -2)
+        CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
         RETURN
     END_IF
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
@@ -437,7 +437,7 @@ static EVT_BEGIN(attack_event)
     CALL(evt_btl_camera_noshake, 0)
     LABEL(99)
     CALL(btlevtcmd_ResetFaceDirection, -2)
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 

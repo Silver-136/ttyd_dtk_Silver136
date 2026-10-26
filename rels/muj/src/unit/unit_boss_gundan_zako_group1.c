@@ -305,7 +305,7 @@ static EVT_BEGIN(init_event)
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_SetHomePos, UNIT_ID_SELF, LW(0), LW(1), 15)
     CALL(btlevtcmd_SetPos, UNIT_ID_SELF, LW(0), LW(1), 15)
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -432,7 +432,7 @@ static EVT_BEGIN(attack_event)
         CALL_CHILD(PTR(hit_check_event))
     END_SIBLING_EVENT
     CALL(zakogun_attack1)
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 

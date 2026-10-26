@@ -362,7 +362,7 @@ static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 1, LW(0))
     CALL(btlevtcmd_SetWalkSound, UNIT_ID_SELF, STRING("SFX_BOSS_RNPL_MOVE1L"), STRING("SFX_BOSS_RNPL_MOVE1R"), 0, 15, 15)
     CALL(btlevtcmd_SetRunSound, UNIT_ID_SELF, STRING("SFX_BOSS_RNPL_MOVE1L"), STRING("SFX_BOSS_RNPL_MOVE1R"), 0, 8, 8)
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -408,30 +408,30 @@ static EVT_BEGIN(phase_event)
             IF_INT_NOT_EQUAL(LW(0), 2)
                 CALL(btlevtcmd_get_turn, LW(0))
                 IF_INT_GREATER_OR_EQUAL(LW(0), 5)
-                    CALL(btlevtcmd_PhaseEventStartDeclare, -2)
+                    CALL(btlevtcmd_PhaseEventStartDeclare, UNIT_ID_SELF)
                     CALL_CHILD(PTR(to_faker_mario))
-                    CALL(btlevtcmd_StartWaitEvent, -2)
+                    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
                 END_IF
             END_IF
             CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 0, LW(0))
             SWITCH(LW(0))
                 CASE_EQUAL(0)
                 CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 0, 1)
-                CALL(btlevtcmd_PhaseEventStartDeclare, -2)
+                CALL(btlevtcmd_PhaseEventStartDeclare, UNIT_ID_SELF)
                 CALL(btlevtcmd_StatusWindowOnOff, 0)
                 CALL_CHILD(PTR(rampell_zoom))
                 CALL(evt_msg_print, 2, STRING("stg4_jin_08_01"), 0, -2)
                 WAIT_MS(200)
                 CALL(btlevtcmd_StatusWindowOnOff, 1)
                 CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
-                CALL(btlevtcmd_StartWaitEvent, -2)
+                CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
                 CASE_EQUAL(1)
                 CALL(btlevtcmd_GetHp, UNIT_ID_SELF, LW(0))
                 CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 1, LW(1))
                 IF_INT_LESS(LW(0), LW(1))
-                    CALL(btlevtcmd_PhaseEventStartDeclare, -2)
+                    CALL(btlevtcmd_PhaseEventStartDeclare, UNIT_ID_SELF)
                     CALL_CHILD(PTR(to_faker_mario))
-                    CALL(btlevtcmd_StartWaitEvent, -2)
+                    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
                 END_IF
             END_SWITCH
         END_IF
@@ -443,12 +443,12 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL_CHILD(LW(0))
-        CALL(btlevtcmd_StartWaitEvent, -2)
+        CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
         RETURN
     END_IF
     SET_VALUE(LW(9), PTR(&weapon_rampell_attack))
     CALL_CHILD(PTR(ogg_attack_event))
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -538,7 +538,7 @@ static EVT_BEGIN(ogg_attack_event)
         CASE_END
     END_SWITCH
     LABEL(90)
-    CALL(btlevtcmd_JumpContinue, -2)
+    CALL(btlevtcmd_JumpContinue, UNIT_ID_SELF)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_RNPL_DOWN1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, 0, 0)
     CALL(btlevtcmd_AnimeSetMotionSpeed, UNIT_ID_SELF, 1, FLOAT(2.0f))
@@ -844,13 +844,13 @@ static EVT_BEGIN(init_event_fmario)
     CALL(btlevtcmd_SetEventDamage, UNIT_ID_SELF, PTR(damage_event_fmario))
     CALL(btlevtcmd_SetEventConfusion, UNIT_ID_SELF, PTR(btldefaultevt_Confuse))
     CALL(btlevtcmd_OnUnitFlag, UNIT_ID_SELF, BATTLE_UNIT_FLAG_KIND_CHANGED)
-    CALL(btlevtcmd_ClearAllStatus, -2)
+    CALL(btlevtcmd_ClearAllStatus, UNIT_ID_SELF)
     CALL(_mario_makkuro_set)
     SET_VALUE(GW(17), -1)
     CALL(btlevtcmd_SetWalkSound, UNIT_ID_SELF, STRING("SFX_BOSS_NM_MOVE1L"), STRING("SFX_BOSS_NM_MOVE1R"), 0, 20, 20)
     CALL(btlevtcmd_SetRunSound, UNIT_ID_SELF, STRING("SFX_BOSS_NM_MOVE1L"), STRING("SFX_BOSS_NM_MOVE1R"), 0, 10, 10)
     CALL(btlevtcmd_SetJumpSound, UNIT_ID_SELF, STRING("SFX_BOSS_NM_JUMP1"), STRING("SFX_BOSS_NM_LANDING1"))
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -892,7 +892,7 @@ static EVT_BEGIN(attack_event_fmario)
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL_CHILD(LW(0))
-        CALL(btlevtcmd_StartWaitEvent, -2)
+        CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
         RETURN
     END_IF
     CALL(btlevtcmd_DrawLots, LW(0), 2, 50, 50)
@@ -911,7 +911,7 @@ static EVT_BEGIN(attack_event_fmario)
         CALL_CHILD(PTR(marioAttackEvent_KaitenHammer))
     END_SWITCH
     LABEL(90)
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -985,7 +985,7 @@ static EVT_BEGIN(marioAttackEvent_NormalJump)
         CASE_END
     END_SWITCH
     LABEL(90)
-    CALL(btlevtcmd_JumpContinue, -2)
+    CALL(btlevtcmd_JumpContinue, UNIT_ID_SELF)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_NM_DOWN1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("EM_D_2"))
     WAIT_FRAMES(40)
@@ -1012,7 +1012,7 @@ static EVT_BEGIN(marioAttackEvent_NormalJump)
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -1, 0)
     CALL(btlevtcmd_ResetFaceDirection, -2)
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -1073,7 +1073,7 @@ static EVT_BEGIN(marioAttackEvent_KururinJump)
         CASE_END
     END_SWITCH
     LABEL(90)
-    CALL(btlevtcmd_JumpContinue, -2)
+    CALL(btlevtcmd_JumpContinue, UNIT_ID_SELF)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_NM_DOWN1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("EM_D_2"))
     WAIT_FRAMES(40)
@@ -1128,7 +1128,7 @@ static EVT_BEGIN(marioAttackEvent_KururinJump)
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -1, 0)
     CALL(btlevtcmd_ResetFaceDirection, -2)
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -1213,7 +1213,7 @@ static EVT_BEGIN(marioAttackEvent_NormalHammer)
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -1, 0)
     CALL(btlevtcmd_ResetFaceDirection, -2)
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -1298,7 +1298,7 @@ static EVT_BEGIN(marioAttackEvent_KaitenHammer)
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -1, 0)
     CALL(btlevtcmd_ResetFaceDirection, -2)
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 

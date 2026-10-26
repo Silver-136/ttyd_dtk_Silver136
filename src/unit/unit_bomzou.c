@@ -202,12 +202,12 @@ static EVT_BEGIN(phase_event)
             CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, 1, PTR(pose_table_1))
         END_SWITCH
         IF_INT_LESS_OR_EQUAL(LW(0), 0)
-            CALL(btlevtcmd_PhaseEventStartDeclare, -2)
+            CALL(btlevtcmd_PhaseEventStartDeclare, UNIT_ID_SELF)
             CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("B_2"))
             WAIT_FRAMES(36)
             CALL_CHILD(PTR(explosion_event))
             ELSE
-            CALL(btlevtcmd_StartWaitEvent, -2)
+            CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
         END_IF
     END_IF
     RETURN
@@ -304,7 +304,7 @@ static EVT_BEGIN(damage_event)
 EVT_END()
 
 static EVT_BEGIN(attack_event)
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 

@@ -370,7 +370,7 @@ static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 4, 0)
     CALL(btlevtcmd_SetWalkSound, UNIT_ID_SELF, STRING("SFX_BOSS_KOOPA_MOVE1L"), STRING("SFX_BOSS_KOOPA_MOVE1R"), 0, 15, 15)
     CALL(btlevtcmd_SetRunSound, UNIT_ID_SELF, STRING("SFX_BOSS_KOOPA_MOVE1L"), STRING("SFX_BOSS_KOOPA_MOVE1R"), 0, 8, 8)
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -439,9 +439,9 @@ static EVT_BEGIN(phase_event)
     END_IF
     CALL(btlevtcmd_CheckPhase, LW(0), 67108867)
     IF_INT_NOT_EQUAL(LW(0), 0)
-        CALL(btlevtcmd_PhaseEventStartDeclare, -2)
+        CALL(btlevtcmd_PhaseEventStartDeclare, UNIT_ID_SELF)
         CALL_CHILD(PTR(harf_hp_event))
-        CALL(btlevtcmd_StartWaitEvent, -2)
+        CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     END_IF
     LABEL(99)
     RETURN
@@ -472,7 +472,7 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL_CHILD(LW(0))
-        CALL(btlevtcmd_StartWaitEvent, -2)
+        CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
         RETURN
     END_IF
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 4, LW(0))
@@ -508,7 +508,7 @@ static EVT_BEGIN(attack_event)
     END_SWITCH
     LABEL(90)
     CALL(btlevtcmd_ResetFaceDirection, -2)
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -572,7 +572,7 @@ static EVT_BEGIN(hip_attack_event)
         CASE_END
     END_SWITCH
     LABEL(90)
-    CALL(btlevtcmd_JumpContinue, -2)
+    CALL(btlevtcmd_JumpContinue, UNIT_ID_SELF)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("KPA_A_2E"))
     WAIT_MS(500)
     GOTO(98)
@@ -580,7 +580,7 @@ static EVT_BEGIN(hip_attack_event)
     CALL(btlevtcmd_ResultACDefence, LW(3), LW(9))
     CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), DAMAGE_RESULT_FINAL_HIT, LW(5))
     CALL(evt_btl_camera_shake_h, 0, 3, 0, 50, 13)
-    CALL(btlevtcmd_JumpContinue, -2)
+    CALL(btlevtcmd_JumpContinue, UNIT_ID_SELF)
     WAIT_MS(500)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("KPA_A_2E"))
     WAIT_MS(300)
@@ -800,7 +800,7 @@ static EVT_BEGIN(fire_attack_event)
         RETURN
     END_IF
     CALL(btlevtcmd_WeaponAftereffect, LW(9))
-    CALL(btlevtcmd_AttackDeclareAll, -2)
+    CALL(btlevtcmd_AttackDeclareAll, UNIT_ID_SELF)
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, LW(9))
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("KPA_R_1"))

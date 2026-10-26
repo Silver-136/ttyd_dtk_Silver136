@@ -1184,7 +1184,7 @@ EVT_BEGIN(genki_evt_common)
         SET_VALUE(LW(13), -1)
     END_IF
     CALL(btlevtcmd_reset_move_color_lv_all)
-    CALL(btlevtcmd_CommandPayWeaponCost, -2)
+    CALL(btlevtcmd_CommandPayWeaponCost, UNIT_ID_SELF)
     BEGIN_SIBLING_EVENT
         CALL(main_genki, LW(13), LW(15))
     END_SIBLING_EVENT
@@ -1272,7 +1272,7 @@ EVT_BEGIN(genki_evt_common)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     WAIT_MS(1000)
     CALL(end_genki)
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 

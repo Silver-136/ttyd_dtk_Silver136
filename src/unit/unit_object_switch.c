@@ -107,14 +107,14 @@ static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventDamage, UNIT_ID_SELF, PTR(damage_event))
     CALL(btlevtcmd_SetEventConfusion, UNIT_ID_SELF, PTR(btldefaultevt_Confuse))
     CALL(btlevtcmd_SetMaxMoveCount, UNIT_ID_SELF, 0)
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
 static EVT_BEGIN(damage_event)
     CALL(btlevtcmd_CheckDamageCode, UNIT_ID_SELF, 256, LW(0))
     IF_INT_EQUAL(LW(0), 0)
-        CALL(_rumble_switch, -2)
+        CALL(_rumble_switch, UNIT_ID_SELF)
         RETURN
     END_IF
     CALL(evt_map_playanim, STRING("switch_a"), 0, 0)
@@ -123,7 +123,7 @@ static EVT_BEGIN(damage_event)
 EVT_END()
 
 static EVT_BEGIN(attack_event)
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 

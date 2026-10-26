@@ -80,14 +80,14 @@ static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventDamage, UNIT_ID_SELF, PTR(damage_event))
     CALL(btlevtcmd_SetEventConfusion, UNIT_ID_SELF, PTR(btldefaultevt_Confuse))
     CALL(btlevtcmd_SetMaxMoveCount, UNIT_ID_SELF, 0)
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), -2)
     SET_VALUE(LW(11), 1)
-    CALL(_rumble_tree, -2)
+    CALL(_rumble_tree, UNIT_ID_SELF)
     CALL(_turn_tree, -2)
     RETURN
 EVT_END()
@@ -141,7 +141,7 @@ static BattleDataEntry data_table[] = {
 };
 
 static EVT_BEGIN(attack_event)
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 

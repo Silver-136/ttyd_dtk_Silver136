@@ -300,7 +300,7 @@ static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 0, 0)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 2, 0)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 2, STRING("JGM_P_1"))
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -547,7 +547,7 @@ static EVT_BEGIN(attack_event)
         CALL_CHILD(PTR(charge_event))
     END_SWITCH
     LABEL(99)
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 

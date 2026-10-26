@@ -292,7 +292,7 @@ static EVT_BEGIN(battle_entry_event)
     CALL(btlevtcmd_SetTalkPose, UNIT_ID_PARTNER, STRING("PKR_T_1"))
     CALL(btlevtcmd_SetStayPose, UNIT_ID_PARTNER, STRING("PKR_S_1"))
     CALL(evt_msg_print, 2, STRING("tik_02_gs_03_01"), 0, -4)
-    CALL(btlevtcmd_StartWaitEvent, -4)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_PARTNER)
     CALL(btlevtcmd_StatusWindowOnOff, 1)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     RETURN
@@ -323,7 +323,7 @@ static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetStatusIconOffset, UNIT_ID_SELF, 46, -75)
     CALL(btlevtcmd_OnAttribute, UNIT_ID_SELF, kUnitHidden)
     CALL(btlevtcmd_SetEventEntry, UNIT_ID_SELF, PTR(battle_entry_event))
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -377,7 +377,7 @@ static EVT_BEGIN(phase_event)
             ADD(LW(0), 1)
             CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 3, LW(0))
             IF_INT_GREATER_OR_EQUAL(LW(0), 2)
-                CALL(btlevtcmd_PhaseEventStartDeclare, -2)
+                CALL(btlevtcmd_PhaseEventStartDeclare, UNIT_ID_SELF)
                 CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("GSO_U_1"))
                 CALL(btlevtcmd_ftof, 75, LW(0))
                 WAIT_FRAMES(LW(0))
@@ -395,7 +395,7 @@ static EVT_BEGIN(phase_event)
                 CALL(btlevtcmd_SetStatusIconOffset, UNIT_ID_SELF, 55, 113)
                 CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 0, 2)
                 CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 3, 0)
-                CALL(btlevtcmd_StartWaitEvent, -2)
+                CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
                 RETURN
             END_IF
         END_IF
@@ -409,7 +409,7 @@ static EVT_BEGIN(phase_event)
             CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 3, LW(0))
             IF_INT_GREATER_OR_EQUAL(LW(0), 2)
                 CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 3, 0)
-                CALL(btlevtcmd_PhaseEventStartDeclare, -2)
+                CALL(btlevtcmd_PhaseEventStartDeclare, UNIT_ID_SELF)
                 CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 0, 0)
                 CALL(btlevtcmd_OnAttribute, UNIT_ID_SELF, kCeiling)
                 CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 1, kHammerlikeCannotTarget | kShellTosslikeCannotTarget)
@@ -483,7 +483,7 @@ static EVT_BEGIN(phase_event)
                     CALL(btlevtcmd_AnimeWaitPlayComplete, LW(3), 1)
                     CALL(btlevtcmd_StartWaitEvent, LW(3))
                 END_INLINE_EVENT
-                CALL(btlevtcmd_StartWaitEvent, -2)
+                CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
                 CALL(btlevtcmd_WaitEventEnd, LW(14))
                 CALL(btlevtcmd_WaitEventEnd, LW(15))
             END_IF
@@ -495,13 +495,13 @@ EVT_END()
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 0, LW(0))
     IF_INT_EQUAL(LW(0), 1)
-        CALL(btlevtcmd_StartWaitEvent, -2)
+        CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
         RETURN
     END_IF
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL_CHILD(LW(0))
-        CALL(btlevtcmd_StartWaitEvent, -2)
+        CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
         RETURN
     END_IF
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 0, LW(0))
@@ -511,7 +511,7 @@ static EVT_BEGIN(attack_event)
     CALL_CHILD(PTR(gesso_ikasumi_attack))
     RETURN
     LABEL(99)
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -615,7 +615,7 @@ EVT_BEGIN(gesso_ikasumi_attack)
     CALL(btlevtcmd_AnimeWaitPlayComplete, UNIT_ID_SELF, 1)
     LABEL(99)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 

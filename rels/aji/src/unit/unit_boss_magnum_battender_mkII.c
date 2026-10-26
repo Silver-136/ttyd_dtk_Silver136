@@ -872,7 +872,7 @@ static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetBaseRotate, UNIT_ID_SELF, 0, -55, 0)
     CALL(btlevtcmd_SetWalkSound, UNIT_ID_SELF, STRING("SFX_BOSS_MBTN_MOVE1"), STRING("SFX_BOSS_MBTN_MOVE1"), 26, 26, 26)
     CALL(btlevtcmd_SetRunSound, UNIT_ID_SELF, STRING("SFX_BOSS_MBTN_MOVE1"), STRING("SFX_BOSS_MBTN_MOVE1"), 20, 20, 20)
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -1032,7 +1032,7 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL_CHILD(LW(0))
-        CALL(btlevtcmd_StartWaitEvent, -2)
+        CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
         RETURN
     END_IF
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 0, LW(0))
@@ -1142,7 +1142,7 @@ static EVT_BEGIN(attack_event)
     END_IF
     LABEL(99)
     CALL(btlevtcmd_ResetFaceDirection, -2)
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -1183,7 +1183,7 @@ EVT_BEGIN(drill_attack_event)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_MBTN_DRILL_ATTACK2"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("MGN_A3_2"))
     BEGIN_SIBLING_EVENT
-        CALL(drill_jet, -2)
+        CALL(drill_jet, UNIT_ID_SELF)
     END_SIBLING_EVENT
     WAIT_MS(300)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
@@ -1198,7 +1198,7 @@ EVT_BEGIN(drill_attack_event)
         CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, -125, -200, 0, 60, 0, 0, 0, -1)
     END_SIBLING_EVENT
     BEGIN_INLINE_EVENT
-        CALL(drill_tor, -2)
+        CALL(drill_tor, UNIT_ID_SELF)
     END_INLINE_EVENT
     LOOP(0)
         CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
@@ -1423,7 +1423,7 @@ EVT_BEGIN(aud_attack_event)
     END_IF
     WAIT_MS(1600)
     BEGIN_SIBLING_EVENT
-        CALL(drill_jet, -2)
+        CALL(drill_jet, UNIT_ID_SELF)
     END_SIBLING_EVENT
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 0, LW(0))
     IF_INT_EQUAL(LW(0), 0)
@@ -1441,7 +1441,7 @@ EVT_BEGIN(aud_attack_event)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
     CALL(evt_batstage_set_aud_dark, 0, 30, 0)
     BEGIN_SIBLING_EVENT
-        CALL(aud_jet, -2)
+        CALL(aud_jet, UNIT_ID_SELF)
     END_SIBLING_EVENT
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 0, LW(0))
     IF_INT_EQUAL(LW(0), 0)
@@ -1462,7 +1462,7 @@ EVT_BEGIN(aud_attack_event)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("MGN_A5_3"))
     END_IF
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_MBTN_INHALE1"), EVT_NULLPTR, 0, LW(15))
-    CALL(aud_suikomi, -2)
+    CALL(aud_suikomi, UNIT_ID_SELF)
     BEGIN_SIBLING_EVENT
         CALL(aud_scream_fadeout)
     END_SIBLING_EVENT
@@ -1484,7 +1484,7 @@ EVT_BEGIN(aud_attack_event)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
     BEGIN_SIBLING_EVENT
-        CALL(drill_jet, -2)
+        CALL(drill_jet, UNIT_ID_SELF)
     END_SIBLING_EVENT
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 0, LW(0))
     IF_INT_EQUAL(LW(0), 0)
@@ -1917,7 +1917,7 @@ static EVT_BEGIN(init_event_r)
         CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, 350, 110, -80, 30, 50, 0, 0, -1)
         CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, 30, 60, -40, 25, -30, 4, 0, -1)
         CALL(btlevtcmd_SetHomePos, UNIT_ID_SELF, 30, 60, -40)
-        CALL(btlevtcmd_StartWaitEvent, -2)
+        CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     END_IF
     IF_INT_EQUAL(LW(0), 1)
         CALL(btlevtcmd_SetPos, UNIT_ID_SELF, 80, 100, 40)
@@ -1926,7 +1926,7 @@ static EVT_BEGIN(init_event_r)
         CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, 300, 120, 80, 30, 50, 0, 0, -1)
         CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, 80, 60, 40, 30, -30, 4, 0, -1)
         CALL(btlevtcmd_SetHomePos, UNIT_ID_SELF, 80, 60, 40)
-        CALL(btlevtcmd_StartWaitEvent, -2)
+        CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     END_IF
     RETURN
 EVT_END()
@@ -1992,7 +1992,7 @@ static EVT_BEGIN(attack_event_r)
     CALL(btlevtcmd_AddUnitWork, UNIT_ID_SELF, 1, -1)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 1, LW(0))
     IF_INT_GREATER_OR_EQUAL(LW(0), 1)
-        CALL(btlevtcmd_StartWaitEvent, -2)
+        CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
         RETURN
     END_IF
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 1, 1)
@@ -2004,7 +2004,7 @@ static EVT_BEGIN(attack_event_r)
         IF_INT_NOT_EQUAL(LW(0), 0)
             CALL_CHILD(subsetevt_confuse_flustered)
         END_IF
-        CALL(btlevtcmd_StartWaitEvent, -2)
+        CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
         RETURN
     END_IF
     CALL(evt_sub_random, 1, LW(6))
@@ -2088,7 +2088,7 @@ static EVT_BEGIN(attack_event_r)
     CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 30, 0, 4, 0, -1)
     LABEL(99)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 

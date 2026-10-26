@@ -1003,7 +1003,7 @@ EVT_BEGIN(marioAttackEvent_ZubaStar)
         END_LOOP
     END_INLINE_EVENT
     CALL(btlevtcmd_WaitGuardMove)
-    CALL(btlevtcmd_CommandPayWeaponCost, -2)
+    CALL(btlevtcmd_CommandPayWeaponCost, UNIT_ID_SELF)
     CALL(btlevtcmd_CommandGetWeaponAddress, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_WeaponAftereffect, LW(0))
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
@@ -1021,7 +1021,7 @@ EVT_BEGIN(marioAttackEvent_ZubaStar)
     CALL(zubastar_bomb)
     CALL(zubastar_end)
     LABEL(99)
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 

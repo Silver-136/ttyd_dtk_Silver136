@@ -1181,7 +1181,7 @@ EVT_BEGIN(_curtain_close_event)
         END_IF
     END_SIBLING_EVENT
     CALL(btlevtcmd_SetPos, UNIT_ID_MARIO, -200, 0, 90)
-    CALL(btlevtcmd_ClearAllStatus, -3)
+    CALL(btlevtcmd_ClearAllStatus, UNIT_ID_MARIO)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_MARIO, 1, POSE_TYPE_WALK)
     CALL(btlevtcmd_MovePosition, UNIT_ID_MARIO, 0, 0, 90, 75, -1, 0)
     CALL(btlevtcmd_snd_se, UNIT_ID_MARIO, STRING("SFX_VOICE_MARIO_PAUSE2"), EVT_NULLPTR, 0, EVT_NULLPTR)

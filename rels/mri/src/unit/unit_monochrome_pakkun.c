@@ -164,18 +164,18 @@ static EVT_BEGIN(attack_event)
     IF_INT_NOT_EQUAL(LW(0), 0)
         SET_VALUE(LW(9), PTR(&weapon_pakkun_flower_attack))
         CALL_CHILD(PTR(normal_attack_event))
-        CALL(btlevtcmd_StartWaitEvent, -2)
+        CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
         RETURN
     END_IF
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL_CHILD(LW(0))
-        CALL(btlevtcmd_StartWaitEvent, -2)
+        CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
         RETURN
     END_IF
     SET_VALUE(LW(9), PTR(&weapon_pakkun_flower_attack))
     CALL_CHILD(PTR(normal_attack_event))
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -245,8 +245,8 @@ static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventDamage, UNIT_ID_SELF, PTR(damage_event))
     CALL(btlevtcmd_SetEventConfusion, UNIT_ID_SELF, PTR(attack_event))
     CALL(btlevtcmd_SetHitCursorOffset, UNIT_ID_SELF, 1, 0, 50, 0)
-    CALL(shadow_scale_memory, -2)
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(shadow_scale_memory, UNIT_ID_SELF)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -349,7 +349,7 @@ static EVT_BEGIN(ceil_fall_ready_event)
     CALL(btlevtcmd_SetEventCeilFall, UNIT_ID_SELF, 0)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_PAKKUN_MOVE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     BEGIN_SIBLING_EVENT
-        CALL(shadow_scale_small, -2)
+        CALL(shadow_scale_small, UNIT_ID_SELF)
     END_SIBLING_EVENT
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PKF_E_4"))
     WAIT_MS(300)
@@ -361,7 +361,7 @@ static EVT_BEGIN(ceil_fall_ready_event)
     WAIT_MS(500)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_PAKKUN_MOVE2"), EVT_NULLPTR, 0, EVT_NULLPTR)
     BEGIN_SIBLING_EVENT
-        CALL(shadow_scale_return, -2)
+        CALL(shadow_scale_return, UNIT_ID_SELF)
     END_SIBLING_EVENT
     CALL(btlevtcmd_OffAttribute, UNIT_ID_SELF, kUnitHidden)
     CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, kNoShadow)
@@ -389,7 +389,7 @@ static EVT_BEGIN(return_event)
     END_IF
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_PAKKUN_MOVE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     BEGIN_SIBLING_EVENT
-        CALL(shadow_scale_small, -2)
+        CALL(shadow_scale_small, UNIT_ID_SELF)
     END_SIBLING_EVENT
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PKF_E_2"))
     WAIT_MS(300)
@@ -403,7 +403,7 @@ static EVT_BEGIN(return_event)
         WAIT_MS(500)
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_PAKKUN_MOVE2"), EVT_NULLPTR, 0, EVT_NULLPTR)
         BEGIN_SIBLING_EVENT
-            CALL(shadow_scale_return, -2)
+            CALL(shadow_scale_return, UNIT_ID_SELF)
         END_SIBLING_EVENT
         CALL(btlevtcmd_OffAttribute, UNIT_ID_SELF, kUnitHidden)
         CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, kNoShadow)
@@ -426,7 +426,7 @@ static EVT_BEGIN(return_event)
         WAIT_MS(500)
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_PAKKUN_MOVE2"), EVT_NULLPTR, 0, EVT_NULLPTR)
         BEGIN_SIBLING_EVENT
-            CALL(shadow_scale_return, -2)
+            CALL(shadow_scale_return, UNIT_ID_SELF)
         END_SIBLING_EVENT
         CALL(btlevtcmd_OffAttribute, UNIT_ID_SELF, kUnitHidden)
         CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, kNoShadow)
@@ -469,7 +469,7 @@ static EVT_BEGIN(normal_attack_event)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, LW(9))
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_PAKKUN_MOVE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     BEGIN_SIBLING_EVENT
-        CALL(shadow_scale_small, -2)
+        CALL(shadow_scale_small, UNIT_ID_SELF)
     END_SIBLING_EVENT
     CALL(btlevtcmd_CheckAttribute, UNIT_ID_SELF, kCeiling, LW(15))
     IF_INT_EQUAL(LW(15), 0)
@@ -493,7 +493,7 @@ static EVT_BEGIN(normal_attack_event)
     CALL(btlevtcmd_SetHitOffset, UNIT_ID_SELF, 1, 0, 0, 0)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_PAKKUN_MOVE2"), EVT_NULLPTR, 0, EVT_NULLPTR)
     BEGIN_SIBLING_EVENT
-        CALL(shadow_scale_return, -2)
+        CALL(shadow_scale_return, UNIT_ID_SELF)
     END_SIBLING_EVENT
     CALL(btlevtcmd_OffAttribute, UNIT_ID_SELF, kUnitHidden)
     CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, kNoShadow)

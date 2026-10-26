@@ -285,7 +285,7 @@ static BattleUnitKindPart parts[] = {
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 0, LW(15))
     CALL_CHILD(PTR(init_event2))
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -356,7 +356,7 @@ static EVT_BEGIN(wakeup_event)
     SUBTRACT(LW(0), 1)
     CALL(btlevtcmd_SetOverTurnCount, LW(10), LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
-        CALL(btlevtcmd_StartWaitEvent, -2)
+        CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
         RETURN
     END_IF
     CALL(btlevtcmd_SetPartsDefenceTable, LW(10), LW(11), PTR(&defence))
@@ -369,7 +369,7 @@ static EVT_BEGIN(wakeup_event)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), 0, LW(2), 18, -1)
     CALL(btlevtcmd_SetPos, UNIT_ID_SELF, LW(0), 0, LW(2))
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -387,7 +387,7 @@ static EVT_BEGIN(attack_event)
         CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
             CALL_CHILD(LW(0))
-            CALL(btlevtcmd_StartWaitEvent, -2)
+            CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
             RETURN
         END_IF
         CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
@@ -515,7 +515,7 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -1, 0)
     LABEL(99)
     CALL(btlevtcmd_ResetFaceDirection, -2)
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -608,7 +608,7 @@ static EVT_BEGIN(attack_event_ceil)
         CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
             CALL_CHILD(LW(0))
-            CALL(btlevtcmd_StartWaitEvent, -2)
+            CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
             RETURN
         END_IF
         CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
@@ -719,7 +719,7 @@ static EVT_BEGIN(attack_event_ceil)
     CALL_CHILD(init_event2)
     LABEL(99)
     CALL(btlevtcmd_ResetFaceDirection, -2)
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 

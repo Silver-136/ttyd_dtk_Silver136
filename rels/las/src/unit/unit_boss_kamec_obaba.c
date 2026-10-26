@@ -446,7 +446,7 @@ static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 2, 0)
     CALL(btlevtcmd_SetWalkSound, UNIT_ID_SELF, STRING("SFX_BOSS_KAMEBABA_MOVE1L"), STRING("SFX_BOSS_KAMEBABA_MOVE1R"), 0, 15, 15)
     CALL(btlevtcmd_SetRunSound, UNIT_ID_SELF, STRING("SFX_BOSS_KAMEBABA_MOVE1L"), STRING("SFX_BOSS_KAMEBABA_MOVE1R"), 0, 8, 8)
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -470,9 +470,9 @@ static EVT_BEGIN(damage_event)
         CALL(btlevtcmd_SetUnitWork, LW(10), 1, LW(0))
         IF_INT_GREATER(LW(0), 1)
             CALL(btlevtcmd_WaitAttackEnd)
-            CALL(btlevtcmd_StopWaitEvent, -2)
+            CALL(btlevtcmd_StopWaitEvent, UNIT_ID_SELF)
             CALL_CHILD(PTR(dmg_fall_event))
-            CALL(btlevtcmd_StartWaitEvent, -2)
+            CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
         END_IF
     END_IF
     LABEL(99)
@@ -632,7 +632,7 @@ static EVT_BEGIN(phase_event)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 0, 1)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 1, 0)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 2, 0)
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     LABEL(99)
     RETURN
 EVT_END()
@@ -641,7 +641,7 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL_CHILD(LW(0))
-        CALL(btlevtcmd_StartWaitEvent, -2)
+        CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
         RETURN
     END_IF
     CALL(btlevtcmd_get_turn, LW(0))
@@ -771,7 +771,7 @@ static EVT_BEGIN(attack_event)
         GOTO(99)
     END_IF
     LABEL(99)
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -783,7 +783,7 @@ static EVT_BEGIN(ground_magic_common_event1)
         END_LOOP
     END_SIBLING_EVENT
     BEGIN_SIBLING_EVENT
-        CALL(eff_staff, -2)
+        CALL(eff_staff, UNIT_ID_SELF)
     END_SIBLING_EVENT
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("A_1A"))
     WAIT_FRAMES(60)
@@ -814,7 +814,7 @@ static EVT_BEGIN(ground_magic_common_event2)
         END_LOOP
     END_SIBLING_EVENT
     BEGIN_SIBLING_EVENT
-        CALL(eff_staff, -2)
+        CALL(eff_staff, UNIT_ID_SELF)
     END_SIBLING_EVENT
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("A_1A"))
     WAIT_FRAMES(60)
@@ -840,7 +840,7 @@ static EVT_BEGIN(sky_magic_common_event)
         END_LOOP
     END_SIBLING_EVENT
     BEGIN_SIBLING_EVENT
-        CALL(eff_staff, -2)
+        CALL(eff_staff, UNIT_ID_SELF)
     END_SIBLING_EVENT
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("A_3A"))
     WAIT_FRAMES(60)

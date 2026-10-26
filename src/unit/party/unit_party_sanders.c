@@ -226,7 +226,7 @@ static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 2, -1)
     CALL(_sanders_make_extra_work_area)
     CALL(btlevtcmd_SetEventEntry, UNIT_ID_SELF, PTR(battle_entry_event))
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -541,7 +541,7 @@ EVT_BEGIN(partySandersAttack_FirstAttack)
     LABEL(99)
     CALL(btlevtcmd_ResetFaceDirection, -2)
     CALL_CHILD(PTR(btldefaultevt_SuitoruBadgeEffect))
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -555,7 +555,7 @@ EVT_BEGIN(partySandersAttack_NormalAttack)
     CALL(btlevtcmd_WeaponAftereffect, LW(12))
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
-    CALL(btlevtcmd_CommandPayWeaponCost, -2)
+    CALL(btlevtcmd_CommandPayWeaponCost, UNIT_ID_SELF)
     CALL(btlevtcmd_RunDataEventChild, UNIT_ID_SELF, UNIT_DATA_ATTACK_READY_EVENT)
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), 16, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
@@ -824,7 +824,7 @@ EVT_BEGIN(partySandersAttack_NormalAttack)
 #else
     CALL_CHILD(btldefaultevt_SuitoruBadgeEffect)
 #endif
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -835,9 +835,9 @@ EVT_BEGIN(partySandersAttack_SuperBombAttack)
     END_IF
     CALL(btlevtcmd_CommandGetWeaponAddress, UNIT_ID_SELF, LW(12))
     CALL(btlevtcmd_WeaponAftereffect, LW(12))
-    CALL(btlevtcmd_AttackDeclareAll, -2)
+    CALL(btlevtcmd_AttackDeclareAll, UNIT_ID_SELF)
     CALL(btlevtcmd_WaitGuardMove)
-    CALL(btlevtcmd_CommandPayWeaponCost, -2)
+    CALL(btlevtcmd_CommandPayWeaponCost, UNIT_ID_SELF)
     CALL(btlevtcmd_RunDataEventChild, UNIT_ID_SELF, UNIT_DATA_ATTACK_READY_EVENT)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("Y_1"))
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_PART_TO_PART)
@@ -1155,7 +1155,7 @@ EVT_BEGIN(partySandersAttack_SuperBombAttack)
 #else
     CALL_CHILD(btldefaultevt_SuitoruBadgeEffect)
 #endif
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -1234,12 +1234,12 @@ EVT_BEGIN(partySandersAttack_CounterSet)
     LABEL(99)
     CALL(evt_audience_ap_recovery)
     CALL(btlevtcmd_InviteApInfoReport)
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
 EVT_BEGIN(partySandersAttack_TimeBombSet)
-    CALL(btlevtcmd_CommandPayWeaponCost, -2)
+    CALL(btlevtcmd_CommandPayWeaponCost, UNIT_ID_SELF)
     CALL(btlevtcmd_SpawnUnit, LW(3), PTR(&entry_bomzou), 0)
     CALL(btlevtcmd_OnAttribute, LW(3), 16777216)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
@@ -1350,7 +1350,7 @@ EVT_BEGIN(partySandersAttack_TimeBombSet)
     CALL(evt_audience_ap_recovery)
     CALL(btlevtcmd_InviteApInfoReport)
 #endif
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -1401,7 +1401,7 @@ EVT_BEGIN(sanders_appeal_event)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_MARIO_APPEAL1"), LW(0), LW(1), LW(2), 0)
     CALL(btlevtcmd_AnimeWaitPlayComplete, UNIT_ID_SELF, 1)
-    CALL(btlevtcmd_AudienceAppeal, -2)
+    CALL(btlevtcmd_AudienceAppeal, UNIT_ID_SELF)
     CALL(evt_snd_sfxon, STRING("SFX_BTL_THUNDERS_ATTACK3"), 0)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_GetHeight, UNIT_ID_SELF, LW(6))
@@ -1422,7 +1422,7 @@ EVT_BEGIN(sanders_appeal_event)
     CALL(btlevtcmd_SetFallAccel, UNIT_ID_SELF, FLOAT(0.39941406f))
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 90, -1)
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -1492,7 +1492,7 @@ static EVT_BEGIN(attack_audience_event)
         CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 16, -1)
     END_SIBLING_EVENT
     CALL(btlevtcmd_WaitEventEnd, LW(15))
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 

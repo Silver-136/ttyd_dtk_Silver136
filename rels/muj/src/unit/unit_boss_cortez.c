@@ -834,7 +834,7 @@ static EVT_BEGIN(init_event)
     CALL(btlevtcmd_GetUnitId, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SetUnitWork, LW(3), 0, LW(0))
     CALL(btlevtcmd_SetKissHitOffset, UNIT_ID_SELF, 160, 85, 50)
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -941,7 +941,7 @@ static EVT_BEGIN(phase_event)
     IF_INT_NOT_EQUAL(LW(0), 0)
         GOTO(50)
     END_IF
-    CALL(btlevtcmd_StopWaitEvent, -2)
+    CALL(btlevtcmd_StopWaitEvent, UNIT_ID_SELF)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 11, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL_CHILD(mode2_rib_close_event)
@@ -967,7 +967,7 @@ static EVT_BEGIN(phase_event)
     CALL(btlevtcmd_WaitEventEnd, LW(15))
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 5, 1)
     CALL_CHILD(cortez_reset_pose_table)
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
     LABEL(50)
     CALL(btlevtcmd_CheckPhase, LW(0), 67108865)
@@ -983,9 +983,9 @@ static EVT_BEGIN(phase_event)
     IF_INT_NOT_EQUAL(LW(0), 0)
         GOTO(99)
     END_IF
-    CALL(btlevtcmd_StopWaitEvent, -2)
+    CALL(btlevtcmd_StopWaitEvent, UNIT_ID_SELF)
     CALL_CHILD(mode2_rib_close_event)
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
     LABEL(99)
     RETURN
@@ -1104,7 +1104,7 @@ EVT_BEGIN(at2_head_bat_event)
     CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
     CALL(btlevtcmd_AnimeWaitPlayComplete, UNIT_ID_SELF, 1)
     LABEL(99)
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -1144,7 +1144,7 @@ EVT_BEGIN(at2_hone_charge_event)
     CALL(btlevtcmd_AnimeWaitPlayComplete, UNIT_ID_SELF, 1)
     CALL_CHILD(cortez_reset_pose_table)
     CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, UNIT_ID_SELF, 1, PTR(&weapon_cortez_mode2_charge), DAMAGE_RESULT_FINAL_HIT, LW(5))
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -1158,7 +1158,7 @@ EVT_BEGIN(at2_hone_rain_attack_event)
         GOTO(99)
     END_IF
     CALL(btlevtcmd_WeaponAftereffect, LW(12))
-    CALL(btlevtcmd_AttackDeclareAll, -2)
+    CALL(btlevtcmd_AttackDeclareAll, UNIT_ID_SELF)
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, LW(12))
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 5, LW(0))
@@ -1333,7 +1333,7 @@ EVT_BEGIN(at2_hone_rain_attack_event)
     END_IF
     WAIT_FRAMES(84)
     LABEL(99)
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -1452,7 +1452,7 @@ static EVT_BEGIN(attack_audience_event)
     CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 60, -10, 4, 0, -1)
     CALL(btlevtcmd_WaitEventEnd, LW(15))
     CALL(btlevtcmd_StatusWindowOnOff, 1)
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -1526,7 +1526,7 @@ EVT_BEGIN(at3_kamitsuki_attack)
     CALL(btlevtcmd_GetMoveFrame, UNIT_ID_SELF, LW(0), LW(1), LW(2), FLOAT(6.0f), LW(15))
     CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), LW(15), 15, 11, 0, -1)
     LABEL(99)
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -1596,7 +1596,7 @@ EVT_BEGIN(at1_normal_attack)
     CALL(evt_btl_camera_shake_h, 0, 8, 0, 30, 13)
     CALL(btlevtcmd_AnimeWaitPlayComplete, UNIT_ID_SELF, 1)
     LABEL(99)
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -1687,7 +1687,7 @@ EVT_BEGIN(at1_midaregiri_attack)
     END_IF
     LABEL(99)
     CALL(btlevtcmd_AnimeWaitPlayComplete, UNIT_ID_SELF, 1)
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -1908,7 +1908,7 @@ RETURN
 EVT_END()
 
 static EVT_BEGIN(dead_event)
-    CALL(btlevtcmd_ClearAllStatus, -2)
+    CALL(btlevtcmd_ClearAllStatus, UNIT_ID_SELF)
     CALL(btlevtcmd_WaitAttackEnd)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 5, LW(0))
     SWITCH(LW(0))
@@ -2229,7 +2229,7 @@ EVT_BEGIN(mode2_honeduka_damage_event)
         CALL_CHILD(PTR(dead_event))
         RETURN
     END_IF
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 

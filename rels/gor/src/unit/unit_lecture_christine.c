@@ -190,7 +190,7 @@ static EVT_BEGIN(init_event)
     CALL(btlevtcmd_GetUnitId, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SetUnitWork, LW(3), 0, LW(0))
     CALL(btlevtcmd_onoff_battleflag, 1, BATTLE_FLAG_NO_OBJECT_FALL)
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -478,7 +478,7 @@ EVT_BEGIN(lecture_zutsuki_attack_event)
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -1, 0)
     LABEL(99)
     CALL(btlevtcmd_ResetFaceDirection, -2)
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END_PAD()
 

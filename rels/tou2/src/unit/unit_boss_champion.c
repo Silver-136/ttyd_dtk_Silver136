@@ -553,7 +553,7 @@ static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 0, 0)
     CALL(btlevtcmd_SetWalkSound, UNIT_ID_SELF, STRING("SFX_BOSS_BLED_MOVE1L"), STRING("SFX_BOSS_BLED_MOVE1R"), 0, 15, 15)
     CALL(btlevtcmd_SetRunSound, UNIT_ID_SELF, STRING("SFX_BOSS_BLED_MOVE1L"), STRING("SFX_BOSS_BLED_MOVE1R"), 0, 8, 8)
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -677,9 +677,9 @@ static EVT_BEGIN(damage_event)
             SET_VALUE(LW(2), 1)
         END_IF
         IF_INT_NOT_EQUAL(LW(2), 0)
-            CALL(btlevtcmd_StopWaitEvent, -2)
+            CALL(btlevtcmd_StopWaitEvent, UNIT_ID_SELF)
             CALL_CHILD(PTR(to_floor))
-            CALL(btlevtcmd_StartWaitEvent, -2)
+            CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
         END_IF
     END_IF
     RETURN
@@ -746,7 +746,7 @@ static EVT_BEGIN(phase_event)
             CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 0, 1)
             IF_INT_EQUAL(GSWF(2514), 0)
                 SET_VALUE(GSWF(2514), 1)
-                CALL(btlevtcmd_StopWaitEvent, -2)
+                CALL(btlevtcmd_StopWaitEvent, UNIT_ID_SELF)
                 IF_INT_LESS(GSW_STORY_PROGRESS, 158)
                     CALL(btlevtcmd_StatusWindowOnOff, 0)
                     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_FREE)
@@ -834,7 +834,7 @@ static EVT_BEGIN(phase_event)
             IF_INT_LESS(GSW_STORY_PROGRESS, 158)
                 IF_INT_EQUAL(GSWF(2516), 0)
                     SET_VALUE(GSWF(2516), 1)
-                    CALL(btlevtcmd_StopWaitEvent, -2)
+                    CALL(btlevtcmd_StopWaitEvent, UNIT_ID_SELF)
                     CALL(btlevtcmd_StatusWindowOnOff, 0)
                     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_FREE)
                     CALL(btlevtcmd_CheckAttribute, UNIT_ID_SELF, kCeiling, LW(0))
@@ -848,7 +848,7 @@ static EVT_BEGIN(phase_event)
                     WAIT_MS(300)
                     CALL(btlevtcmd_StatusWindowOnOff, 1)
                     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
-                    CALL(btlevtcmd_StartWaitEvent, -2)
+                    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
                 END_IF
             END_IF
         END_IF
@@ -861,7 +861,7 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL_CHILD(LW(0))
-        CALL(btlevtcmd_StartWaitEvent, -2)
+        CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
         RETURN
     END_IF
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 0, LW(0))
@@ -942,7 +942,7 @@ static EVT_BEGIN(attack_event)
         END_IF
     END_SWITCH
     LABEL(90)
-    CALL(btlevtcmd_StartWaitEvent, -2)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -1039,7 +1039,7 @@ EVT_BEGIN(screw_attack_event)
         RETURN
     END_IF
     CALL(btlevtcmd_WeaponAftereffect, LW(9))
-    CALL(btlevtcmd_AttackDeclareAll, -2)
+    CALL(btlevtcmd_AttackDeclareAll, UNIT_ID_SELF)
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, LW(9))
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT_TO_UNIT)
@@ -1079,7 +1079,7 @@ EVT_BEGIN(screw_attack_event)
         CASE_END
     END_SWITCH
     LABEL(90)
-    CALL(btlevtcmd_JumpContinue, -2)
+    CALL(btlevtcmd_JumpContinue, UNIT_ID_SELF)
     WAIT_MS(150)
     GOTO(98)
     LABEL(91)
@@ -1176,7 +1176,7 @@ EVT_BEGIN(flying_chop_attack_event)
     END_SWITCH
     LABEL(90)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("A_1C"))
-    CALL(btlevtcmd_JumpContinue, -2)
+    CALL(btlevtcmd_JumpContinue, UNIT_ID_SELF)
     WAIT_MS(150)
     GOTO(98)
     LABEL(91)
@@ -1265,7 +1265,7 @@ EVT_BEGIN(foot_stamp_attack_event)
         CASE_END
     END_SWITCH
     LABEL(90)
-    CALL(btlevtcmd_JumpContinue, -2)
+    CALL(btlevtcmd_JumpContinue, UNIT_ID_SELF)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("A_3B"))
     WAIT_MS(300)
     GOTO(98)
