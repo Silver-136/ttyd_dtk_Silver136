@@ -22,8 +22,6 @@
 #include "sfx_name_word.h"
 
 
-EffectEntry* effFukidashiEntry(s32 type, s32 number, NpcEntry* npc, f32 x, f32 y, f32 z, f32 size,
-                               f32 angle, s32 duration);
 void effFukidashiMain(EffectEntry* effect);
 void effFukidashiDisp(CameraId cameraId, EffectEntry* effect);
 
@@ -82,10 +80,7 @@ u8 moja_model_dl_0_size_tbl[] = { 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1
     GXPosition3f32(l, b, 0.0f);       \
     GXTexCoord2f32(0.0f, v);
 
-/* The speaker is an NpcEntry* or one of these script ids (signed compare) */
-#define FUKIDASHI_MARIO       -1
-#define FUKIDASHI_PARTY       -2
-#define FUKIDASHI_EXTRA_PARTY -3
+/* The speaker ids are compared signed */
 #define SPEAKER(npc)          ((EvtWord)(npc))
 
 #define SETPOS(src)                                                                \

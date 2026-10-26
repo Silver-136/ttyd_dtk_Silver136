@@ -25,6 +25,7 @@
 #include "pmario_sound.h"
 #include "eff/n64/eff_stamp_n64.h"
 #include "battle/battle_disp.h"
+#include "eff/eff_fukidashi.h"
 
 
 void _getSickStatusParam(BattleUnit* unit, BattleWeapon* weapon, u32 type, s8* outTime, s8* outStrength);
@@ -37,7 +38,6 @@ s32 BattleSetStatusDamageFromWeapon(BattleUnit* attacker, BattleUnit* target, Ba
 s32 _checkDamageCode_EmergencyRevival(BattleUnit* unit, u32* flags);
 void __declare(s32 unitIdx, s32 partIdx, s32* outUnit, s32* outPart);
 
-EffectEntry* effFukidashiEntry(s32 a, s32 b, s32 c, s32 d, f32 x, f32 y, f32 z, f32 scale, f32 e);
 
 void BattleDamageDirect(s32 unitId, BattleUnit* target, BattleUnitPart* part, s32 damage, s32 fpDamage, u32 result, u32 pattern, s32 flag) {
     BattleWork* wp = _battleWorkPointer;
@@ -119,7 +119,7 @@ void BattleDamageDirect(s32 unitId, BattleUnit* target, BattleUnitPart* part, s3
                 attacker->currentHp <= attacker->mKindParams->mPerilHP) {
                 f32 x2, y2, z2;
                 BtlUnit_GetHitPos(target, part, &x2, &y2, &z2);
-                effFukidashiEntry(0, 0, 0, 0x3c, x2, y2, z2, 10.0f, 0.0f);
+                effFukidashiEntry(0, 0, NULL, x2, y2, z2, 10.0f, 0.0f, 0x3c);
             }
         } else {
             f32 x, y, z;
@@ -252,7 +252,7 @@ void BattleDamageDirect(s32 unitId, BattleUnit* target, BattleUnitPart* part, s3
         BtlUnit_CheckRecoveryStatus(target, STATUS_SLEEP);
         BtlUnit_GetPos(target, &x, &y, &z);
         y += BtlUnit_GetHeight(target) / 2;
-        effFukidashiEntry(0, 0, 0, 0x3c, x, y, z, 10.0f, 0.0f);
+        effFukidashiEntry(0, 0, NULL, x, y, z, 10.0f, 0.0f, 0x3c);
     }
     if (target->currentKind == UNIT_MARIO) {
         BattleAudience_Case_MarioBigDamage(target->hpDamageTaken);

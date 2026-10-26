@@ -3616,12 +3616,11 @@ void puniModePrehagure(PuniData* p) {
     }
 }
 
-extern EffectEntry* effFukidashiEntry(s32 a, s32 b, void* c, s32 d, f32 e, f32 f, f32 g, f32 h, f32 i);
 
 void puniModeHagure(PuniData* p) {
     switch (p->modeStep) {
         case 0:
-            p->effect = effFukidashiEntry(4, 0, (u8*)&p->bubblePos - offsetof(NpcEntry, position), -1, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+            p->effect = effFukidashiEntry(4, 0, (NpcEntry*)((u8*)&p->bubblePos - offsetof(NpcEntry, position)), 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, -1);
             p->anim = 6;
             p->flags |= PUNI_FLAG_COLLIDE;
             p->modeStep = 1;

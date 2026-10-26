@@ -16,6 +16,7 @@
 #include "manager/evtmgr_cmd.h"
 #include "sfx_name_word.h"
 #include "evt/evt_msg.h"
+#include "eff/eff_fukidashi.h"
 
 typedef struct ChuchuParty {
     u32 flags;                 // 0x0
@@ -59,7 +60,6 @@ typedef struct ChuchuTreasure {
 
 extern void partyWalkInit(PartyEntry* party, s32 mode);
 extern void partyUpdMoveSpd(PartyEntry* party);
-extern void* effFukidashiEntry(s32 a, s32 b, s32 c, f32 d, f32 e, f32 f, f32 g, f32 h, s32 frames);
 
 
 char* mobj_list[] = {
@@ -149,7 +149,7 @@ USER_FUNC(search_result) {
         }
         if (event->lwData[1] == 1) {
             if (party) {
-                effFukidashiEntry(6, 0, -2, 0.0f, 18.0f, 0.0f, 0.0f, 0.0f, sysMsec2Frame(1500));
+                effFukidashiEntry(6, 0, (NpcEntry*)FUKIDASHI_PARTY, 0.0f, 18.0f, 0.0f, 0.0f, 0.0f, sysMsec2Frame(1500));
             }
             return EVT_RETURN_DONE;
         }
@@ -162,7 +162,7 @@ USER_FUNC(search_result) {
         return EVT_RETURN_BLOCK;
     }
     if (party) {
-        effFukidashiEntry(6, 0, -2, 0.0f, 18.0f, 0.0f, 0.0f, 0.0f, sysMsec2Frame(1500));
+        effFukidashiEntry(6, 0, (NpcEntry*)FUKIDASHI_PARTY, 0.0f, 18.0f, 0.0f, 0.0f, 0.0f, sysMsec2Frame(1500));
     }
     return EVT_RETURN_DONE;
 }
