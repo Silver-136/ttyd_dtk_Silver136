@@ -781,7 +781,7 @@ static EVT_BEGIN(push_evt)
         CALL(evt_snd_bgmoff, PSND_PAUSE)
         CALL(evt_snd_bgmon, PSND_SLOT(1), STRING("BGM_FF_ENV_SUCCESS1"))
         BEGIN_INLINE_EVENT
-            CALL(evt_cam_shake, 4, FLOAT(0.0048828125f), FLOAT(0.0f), 1600)
+            CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0048828125f), FLOAT(0.0f), 1600)
         END_INLINE_EVENT
         CALL(evt_mario_get_pos, 0, LW(2), LW(3), LW(4))
         CALL(evt_snd_sfxon_3d, STRING("SFX_STG4_MOVE_PEDESTAL1"), LW(2), LW(3), LW(4), LW(8))
@@ -2013,7 +2013,7 @@ EVT_BEGIN(senteresa_evt)
     ADD(LW(1), 30)
     ADD(LW(2), 3)
     CALL(evt_npc_glide_position, STRING(/*"アトミックテレサ"*/"\x83\x41\x83\x67\x83\x7E\x83\x62\x83\x4E\x83\x65\x83\x8C\x83\x54"), LW(0), LW(1), LW(2), 0, FLOAT(450.0f), 1, 11, 0)
-    CALL(evt_cam_shake, 4, FLOAT(0.009765625f), FLOAT(0.0f), 1000)
+    CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.009765625f), FLOAT(0.0f), 1000)
     CALL(evt_mario_set_pose, STRING("M_S_1"))
     BEGIN_INLINE_EVENT
         LOOP(100)

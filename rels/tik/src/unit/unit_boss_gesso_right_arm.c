@@ -322,7 +322,7 @@ static EVT_BEGIN(attack_event)
         END_IF
     END_IF
     IF_INT_NOT_EQUAL(LW(11), 0)
-        CALL(btlevtcmd_StatusWindowOnOff, 0)
+        CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
         CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 0, LW(9))
         CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("tik_02_gs_04_1"), 0, LW(9))
         CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("tik_02_gs_04_2"), 0, LW(9))
@@ -331,13 +331,13 @@ static EVT_BEGIN(attack_event)
         IF_INT_EQUAL(LW(0), 0)
             BEGIN_INLINE_EVENT
                 CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("tik_02_gs_04_3_y"), 0, LW(9))
-                CALL(btlevtcmd_StatusWindowOnOff, 1)
+                CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_ON)
             END_INLINE_EVENT
         ELSE
             BEGIN_INLINE_EVENT
                 CALL(evt_msg_toge, MSG_TOGE_AT_POS, 110, 120, 30)
                 CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("tik_02_gs_04_3_n"), 0, LW(9))
-                CALL(btlevtcmd_StatusWindowOnOff, 1)
+                CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_ON)
             END_INLINE_EVENT
         END_IF
     END_IF

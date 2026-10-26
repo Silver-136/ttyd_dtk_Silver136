@@ -541,10 +541,10 @@ static EVT_BEGIN(attack_common_event1)
         ELSE
             SET_VALUE(LW(10), -125)
         END_IF
-        CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(10), 0, 1, LW(14))
+        CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(10), 0, FACE_DIR_TOWARD_X, LW(14))
         CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(14))
     ELSE
-        CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), 16, LW(14))
+        CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(14))
         CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(14))
     END_IF
     BEGIN_SIBLING_EVENT

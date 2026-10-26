@@ -2143,10 +2143,10 @@ EVT_BEGIN(lastdungeon)
     END_INLINE_EVENT
     CALL(evt_snd_sfxon, STRING("SFX_EVT_MAP_KAKAGERU3_3"), 0)
     BEGIN_INLINE_EVENT
-        CALL(evt_cam_shake, 4, FLOAT(0.0009765625f), FLOAT(0.0f), 5000)
-        CALL(evt_cam_shake, 4, FLOAT(0.009765625f), FLOAT(0.0f), 200)
+        CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0009765625f), FLOAT(0.0f), 5000)
+        CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.009765625f), FLOAT(0.0f), 200)
         WAIT_MS(200)
-        CALL(evt_cam_shake, 4, FLOAT(0.009765625f), FLOAT(0.0f), 200)
+        CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.009765625f), FLOAT(0.0f), 200)
     END_INLINE_EVENT
     CALL(evt_sub_intpl_msec_init, EASING_LINEAR, 120, 0, 5000)
     LOOP(0)
@@ -2480,8 +2480,8 @@ EVT_BEGIN(mahojin_event7)
     CALL(evt_cam3d_evt_set, 0, 65, 40, 0, 65, -250, 0, EASING_SINE_IN_OUT)
     CALL(evt_mario_set_pose, STRING("M_S_1"))
     WAIT_MS(1000)
-    CALL(evt_cam_shake, 4, FLOAT(0.0f), FLOAT(0.0146484375f), 130)
-    CALL(evt_cam_shake, 4, FLOAT(0.0f), FLOAT(0.0146484375f), 130)
+    CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), FLOAT(0.0146484375f), 130)
+    CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), FLOAT(0.0146484375f), 130)
     CALL(evt_msg_print_party, STRING("mac_7_010"))
     CALL(evt_cam3d_evt_set, -55, 62, -375, -55, 56, -575, 500, EASING_SINE_IN_OUT)
     WAIT_MS(500)
@@ -2545,7 +2545,7 @@ EVT_BEGIN(mahojin_event7)
     CALL(evt_mario_set_reardir)
     WAIT_MS(1000)
     BEGIN_INLINE_EVENT
-        CALL(evt_cam_shake, 4, FLOAT(0.0f), FLOAT(0.0146484375f), 333)
+        CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), FLOAT(0.0146484375f), 333)
     END_INLINE_EVENT
     CALL(evt_map_playanim, STRING("anm_hibi"), MAP_ANIM_PLAY_ONCE, 0)
     WAIT_MS(1500)
@@ -2613,10 +2613,10 @@ EVT_BEGIN(mahojin_event7)
         END_LOOP
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
-        CALL(evt_cam_shake, 4, FLOAT(0.0009765625f), FLOAT(0.0f), 8000)
-        CALL(evt_cam_shake, 4, FLOAT(0.009765625f), FLOAT(0.0f), 200)
+        CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0009765625f), FLOAT(0.0f), 8000)
+        CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.009765625f), FLOAT(0.0f), 200)
         WAIT_MS(200)
-        CALL(evt_cam_shake, 4, FLOAT(0.009765625f), FLOAT(0.0f), 200)
+        CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.009765625f), FLOAT(0.0f), 200)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
         WAIT_MS(8000)

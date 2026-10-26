@@ -148,7 +148,7 @@ EVT_BEGIN(evt_ori_open)
         WAIT_MS(200)
         CALL(evt_sub_rumble_onoff, 1, 0)
     END_SIBLING_EVENT
-    CALL(evt_cam_shake, 4, FLOAT(0.0048828125f), FLOAT(0.0f), 500)
+    CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0048828125f), FLOAT(0.0f), 500)
     RETURN
 EVT_END()
 

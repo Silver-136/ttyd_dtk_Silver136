@@ -371,7 +371,7 @@ EVT_BEGIN(kpa_01_syuppatu_evt)
     DELETE_EVENT(LW(0))
     SET_VALUE(LSWF(1), 0)
     BEGIN_INLINE_EVENT
-        CALL(evt_cam_shake, 4, FLOAT(0.0048828125f), FLOAT(0.0048828125f), 800)
+        CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0048828125f), FLOAT(0.0048828125f), 800)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
         WAIT_MS(450)
@@ -403,7 +403,7 @@ EVT_BEGIN(kpa_01_syuppatu_evt)
             WAIT_FRAMES(1)
         END_LOOP
         WAIT_MS(150)
-        CALL(evt_cam_shake, 4, FLOAT(0.0f), FLOAT(0.0048828125f), 1000)
+        CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), FLOAT(0.0048828125f), 1000)
     END_INLINE_EVENT
     CALL(evt_msg_print, 0, STRING("kpa_stg1_036"), PTR(kpa_stg1_036_cb), STRING("mario"))
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -421,7 +421,7 @@ EVT_BEGIN(kpa_01_syuppatu_evt)
             IF_INT_NOT_EQUAL(GF(0), 0)
                 BREAK_LOOP
             END_IF
-            CALL(evt_cam_shake, 4, FLOAT(0.0f), FLOAT(0.009765625f), 150)
+            CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), FLOAT(0.009765625f), 150)
             WAIT_MS(150)
         END_LOOP
     END_INLINE_EVENT
@@ -571,10 +571,10 @@ EVT_BEGIN(kpa_01_syuppatu_evt)
         CALL(evt_img_set_paper_anim, STRING("img"), STRING("A_1"))
         CALL(evt_snd_sfxon, STRING("SFX_OFF_KUPPA_WALL_BREAK1"), 0)
         BEGIN_SIBLING_EVENT
-            CALL(evt_cam_shake, 4, FLOAT(0.0f), FLOAT(0.049804688f), 500)
+            CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), FLOAT(0.049804688f), 500)
         END_SIBLING_EVENT
         BEGIN_SIBLING_EVENT
-            CALL(evt_cam_shake, 6, FLOAT(0.0f), FLOAT(0.049804688f), 500)
+            CALL(evt_cam_shake, CAMERA_3D_IMAGE, FLOAT(0.0f), FLOAT(0.049804688f), 500)
         END_SIBLING_EVENT
         WAIT_MS(200)
         BEGIN_SIBLING_EVENT

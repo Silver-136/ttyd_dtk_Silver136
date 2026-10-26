@@ -39,9 +39,9 @@ s32 tex_shadow_us[] = {0xA6, 0xA7, 0xA8, 0xA9, 0xAA, 0xAB, 0xAC, 0xAA, 0xA8, 0xA
 #ifndef VERSION_G8ME01
 static EVT_BEGIN(evt_shake)
     IF_INT_EQUAL(4264967297, 0)
-        CALL(evt_cam_shake, 5, 4064967306, 4064967306, 50)
+        CALL(evt_cam_shake, CAMERA_3D_EFFECTA, 4064967306, 4064967306, 50)
     ELSE
-        CALL(evt_cam_shake, 5, 4064967316, 4064967316, 100)
+        CALL(evt_cam_shake, CAMERA_3D_EFFECTA, 4064967316, 4064967316, 100)
     END_IF
     RETURN
 EVT_END()
@@ -65,9 +65,9 @@ static TexSet texid_tbl[6] = { { tex_jp, tex_shadow_jp, 8 }, { tex_us, tex_shado
 u32 niji_tbl[] = {144, 154, 150, 156, 158, 144};
 static EVT_BEGIN(evt_shake)
     IF_INT_EQUAL(4264967297, 0)
-        CALL(evt_cam_shake, 5, 4064967306, 4064967306, 50)
+        CALL(evt_cam_shake, CAMERA_3D_EFFECTA, 4064967306, 4064967306, 50)
     ELSE
-        CALL(evt_cam_shake, 5, 4064967316, 4064967316, 100)
+        CALL(evt_cam_shake, CAMERA_3D_EFFECTA, 4064967316, 4064967316, 100)
     END_IF
     RETURN
 EVT_END()

@@ -385,7 +385,7 @@ EVT_BEGIN(evt_bridge_down)
     WAIT_FRAMES(1)
     CALL(evt_map_checkanim, STRING("hasi"), LW(0), LW(1))
     WAIT_MS(LW(1))
-    CALL(evt_cam_shake, 4, FLOAT(0.0009765625f), FLOAT(0.0009765625f), 200)
+    CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0009765625f), FLOAT(0.0009765625f), 200)
     WAIT_MS(2000)
     CALL(evt_bero_mapchange, STRING("eki_00"), STRING("s_bero"))
     RETURN

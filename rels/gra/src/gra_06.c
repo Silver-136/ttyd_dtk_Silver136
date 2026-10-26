@@ -322,7 +322,7 @@ EVT_BEGIN(teresa_oidasare_evt)
                 CASE_EQUAL(5)
                 CALL(evt_party_set_pose, 0, STRING("PWD_D_1"))
             END_SWITCH
-            CALL(evt_cam_shake, 4, FLOAT(0.009765625f), FLOAT(0.0f), 50)
+            CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.009765625f), FLOAT(0.0f), 50)
         END_INLINE_EVENT
     END_SWITCH
     CALL(evt_sub_intpl_msec_init, EASING_CUBIC_IN, 360, 60, 800)
@@ -338,7 +338,7 @@ EVT_BEGIN(teresa_oidasare_evt)
     CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_LAND_DAMAGE2"), LW(0), LW(1), LW(2), 0)
     CALL(N_evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
     CALL(evt_mario_set_pose, STRING("M_D_2"))
-    CALL(evt_cam_shake, 4, FLOAT(0.009765625f), FLOAT(0.0f), 50)
+    CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.009765625f), FLOAT(0.0f), 50)
     WAIT_MS(700)
     CALL(evt_mario_get_party, LW(0))
     SWITCH(LW(0))

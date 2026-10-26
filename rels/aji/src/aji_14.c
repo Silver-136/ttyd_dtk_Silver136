@@ -261,7 +261,7 @@ static EVT_BEGIN(evt_boss)
     END_INLINE_EVENT
     CALL(evt_npc_jump_position_nohit, STRING("ロボット"), 0, 0, 0, 500, FLOAT(80.0f))
     BEGIN_INLINE_EVENT
-        CALL(evt_cam_shake, 4, FLOAT(0.009765625f), FLOAT(0.0f), 50)
+        CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.009765625f), FLOAT(0.0f), 50)
     END_INLINE_EVENT
     CALL(evt_npc_set_anim, STRING("ロボット"), STRING("J_3"))
     WAIT_MS(200)

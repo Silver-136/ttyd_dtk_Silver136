@@ -728,7 +728,7 @@ EVT_BEGIN(powerupya_party_lank_rtn)
         END_LOOP
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
-        CALL(evt_cam_shake, 4, FLOAT(0.009765625f), FLOAT(0.0f), 1600)
+        CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.009765625f), FLOAT(0.0f), 1600)
     END_INLINE_EVENT
     CALL(evt_cam3d_evt_set, -362, 193, 686, -362, 37, -200, 1600, EASING_SINE_IN_OUT)
     WAIT_MS(1600)
@@ -1130,7 +1130,7 @@ EVT_BEGIN(powerupya_orb_use)
     WAIT_MS(2000)
     CALL(evt_npc_get_position, STRING("me"), LW(7), LW(8), LW(9))
     CALL(evt_snd_sfxon_3d, STRING("SFX_MOBJ_BREAK_FLOOR1"), LW(7), LW(8), LW(9), 0)
-    CALL(evt_cam_shake, 4, FLOAT(0.009765625f), FLOAT(0.0f), 1000)
+    CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.009765625f), FLOAT(0.0f), 1000)
     WAIT_MS(500)
     CALL(evt_item_entry, STRING("orb"), ITEM_ULTRA_STONE, -365, 150, -110, ITEM_TYPE_FALL, -1, 0)
     WAIT_MS(1000)
@@ -3217,7 +3217,7 @@ static EVT_BEGIN(evt_door_03_caseopen)
     CALL(evt_hitobj_onoff, STRING("A_i03_rol"), 1, 0)
     WAIT_MS(500)
     BEGIN_INLINE_EVENT
-        CALL(evt_cam_shake, 4, FLOAT(0.009765625f), FLOAT(0.009765625f), 1000)
+        CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.009765625f), FLOAT(0.009765625f), 1000)
     END_INLINE_EVENT
     CALL(evt_mario_wait_landon)
     BEGIN_INLINE_EVENT
@@ -4245,7 +4245,7 @@ static EVT_BEGIN(mario_kirimomi_event)
 EVT_END()
 
 EVT_BEGIN(cam_yurasu_event)
-    CALL(evt_cam_shake, 4, FLOAT(0.01953125f), FLOAT(0.0f), 100)
+    CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.01953125f), FLOAT(0.0f), 100)
     RETURN
 EVT_END()
 
@@ -4446,7 +4446,7 @@ EVT_BEGIN(kurihakase_first_talk)
         CALL(evt_snd_sfxon_3d, STRING("SFX_STG0_MARIO_FALL_CRUSH1"), LW(0), LW(1), LW(2), 0)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
-        CALL(evt_cam_shake, 4, FLOAT(0.0f), FLOAT(0.009765625f), 500)
+        CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), FLOAT(0.009765625f), 500)
     END_INLINE_EVENT
     CALL(evt_mario_set_pose, STRING("M_D_8"))
     WAIT_MS(1500)
@@ -5130,7 +5130,7 @@ EVT_BEGIN(epigraphy_map_after_stage2)
     CALL(evt_mario_set_pose, STRING("M_D_8"))
     CALL(evt_party_set_breed_pose, 0, 8)
     BEGIN_INLINE_EVENT
-        CALL(evt_cam_shake, 4, FLOAT(0.0f), FLOAT(0.009765625f), 500)
+        CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), FLOAT(0.009765625f), 500)
     END_INLINE_EVENT
     WAIT_MS(1500)
     CALL(evt_mario_set_pose, STRING("M_U_3"))

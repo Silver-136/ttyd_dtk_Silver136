@@ -907,7 +907,7 @@ EVT_BEGIN(koopa_door_evt)
             IF_INT_NOT_EQUAL(GF(1), 0)
                 BREAK_LOOP
             END_IF
-            CALL(evt_cam_shake, 4, FLOAT(0.0f), FLOAT(0.009765625f), 150)
+            CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), FLOAT(0.009765625f), 150)
             WAIT_MS(150)
         END_LOOP
     END_INLINE_EVENT
@@ -1127,7 +1127,7 @@ EVT_END()
 
 static EVT_BEGIN(sekai_yami_shake)
     LOOP(0)
-        CALL(evt_cam_shake, 4, FLOAT(0.0f), FLOAT(0.009765625f), 500)
+        CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), FLOAT(0.009765625f), 500)
     END_LOOP
     RETURN
 EVT_END()

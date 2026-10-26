@@ -147,7 +147,7 @@ static EVT_BEGIN(gonbaba_standup_shake)
     WAIT_MS(3700)
     CALL(evt_npc_get_position, STRING("ゴンババ"), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG1_GNB_STEP1"), LW(0), LW(1), LW(2), 0)
-    CALL(evt_cam_shake, 4, FLOAT(0.009765625f), FLOAT(0.0f), 800)
+    CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.009765625f), FLOAT(0.0f), 800)
     RETURN
 EVT_END()
 
@@ -203,17 +203,17 @@ static EVT_BEGIN(gonbaba_down_shake)
         END_IF
         CALL(evt_snd_sfxoff, LW(8))
     END_INLINE_EVENT
-    CALL(evt_cam_shake, 4, FLOAT(0.049804688f), FLOAT(0.0f), 500)
+    CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.049804688f), FLOAT(0.0f), 500)
     CALL(evt_sub_intpl_init, EASING_SINE_IN_OUT, 50, 5, 50)
     LOOP(0)
         CALL(evt_sub_intpl_get_value)
         DIVIDE_FLOAT(LW(0), FLOAT(1000.0f))
-        CALL(evt_cam_shake, 4, LW(0), FLOAT(0.0f), 50)
+        CALL(evt_cam_shake, CAMERA_3D, LW(0), FLOAT(0.0f), 50)
         IF_INT_EQUAL(LW(1), 0)
             BREAK_LOOP
         END_IF
     END_LOOP
-    CALL(evt_cam_shake, 4, FLOAT(0.0048828125f), FLOAT(0.0f), 2000)
+    CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0048828125f), FLOAT(0.0f), 2000)
     RETURN
 EVT_END()
 
@@ -243,8 +243,8 @@ EVT_BEGIN(gonbaba_event)
                 BREAK_LOOP
             END_IF
         END_LOOP
-        CALL(evt_cam_shake, 4, FLOAT(0.0146484375f), FLOAT(0.0f), 200)
-        CALL(evt_cam_shake, 4, FLOAT(0.009765625f), FLOAT(0.0f), 100)
+        CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0146484375f), FLOAT(0.0f), 200)
+        CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.009765625f), FLOAT(0.0f), 100)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
         CALL(evt_party_move_pos2, 0, -490, 0, FLOAT(120.0f))

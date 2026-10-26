@@ -2583,7 +2583,7 @@ EVT_END()
 EVT_BEGIN(gundan1000tai_yure)
     LOOP(0)
         BEGIN_INLINE_EVENT
-            CALL(evt_cam_shake, 4, FLOAT(0.009765625f), FLOAT(0.0f), 500)
+            CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.009765625f), FLOAT(0.0f), 500)
         END_INLINE_EVENT
         CALL(evt_sub_random, 4500, LW(0))
         ADD(LW(0), 500)
@@ -2659,7 +2659,7 @@ EVT_BEGIN(gundan1000tai_afterbattle)
     SET_VALUE(GF(10), 0)
     BEGIN_INLINE_EVENT
         LOOP(0)
-            CALL(evt_cam_shake, 4, FLOAT(0.0f), FLOAT(0.0048828125f), 300)
+            CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), FLOAT(0.0048828125f), 300)
             IF_INT_EQUAL(GF(10), 1)
                 BREAK_LOOP
             END_IF
@@ -4313,7 +4313,7 @@ EVT_BEGIN(gor_00_koopa_evt)
     CALL(evt_snd_sfxon_3d, STRING("SFX_KUPPA_WATER_IN1"), LW(0), LW(1), LW(2), 0)
     CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_KOOPA_VEXATIOUS1_2"), LW(0), LW(1), LW(2), 0)
     CALL(kpa_chg_pose, STRING("KPA_D_2"))
-    CALL(evt_cam_shake, 4, FLOAT(0.0048828125f), FLOAT(0.0048828125f), 500)
+    CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0048828125f), FLOAT(0.0048828125f), 500)
     WAIT_MS(1000)
     CALL(evt_mario_cont_onoff, 1)
     WAIT_FRAMES(1)
@@ -4451,7 +4451,7 @@ EVT_BEGIN(gor_00_koopa_evt)
             WAIT_FRAMES(1)
         END_LOOP
         WAIT_MS(100)
-        CALL(evt_cam_shake, 4, FLOAT(0.0048828125f), FLOAT(0.0048828125f), 800)
+        CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0048828125f), FLOAT(0.0048828125f), 800)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
         LOOP(0)

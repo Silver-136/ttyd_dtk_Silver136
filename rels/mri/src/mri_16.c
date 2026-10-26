@@ -177,11 +177,11 @@ static EVT_BEGIN(cam_shake)
     LABEL(0)
     CALL(evt_sub_intpl_msec_get_value)
     DIVIDE_FLOAT(LW(0), FLOAT(1000.0f))
-    CALL(evt_cam_shake, 4, LW(0), FLOAT(0.0f), 100)
+    CALL(evt_cam_shake, CAMERA_3D, LW(0), FLOAT(0.0f), 100)
     IF_INT_EQUAL(LW(1), 1)
         GOTO(0)
     END_IF
-    CALL(evt_cam_shake, 4, FLOAT(0.0068359375f), FLOAT(0.0f), 0)
+    CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0068359375f), FLOAT(0.0f), 0)
     RETURN
 EVT_END()
 
@@ -190,7 +190,7 @@ static EVT_BEGIN(cam_shake2)
     LABEL(0)
     CALL(evt_sub_intpl_msec_get_value)
     DIVIDE_FLOAT(LW(0), FLOAT(1000.0f))
-    CALL(evt_cam_shake, 4, LW(0), FLOAT(0.0f), 100)
+    CALL(evt_cam_shake, CAMERA_3D, LW(0), FLOAT(0.0f), 100)
     IF_INT_EQUAL(LW(1), 1)
         GOTO(0)
     END_IF

@@ -535,11 +535,11 @@ EVT_BEGIN(mri_countdown)
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 500)
     CALL(evt_snd_envoff_f, PSND_FADEOUT, 500)
     CALL(evt_snd_sfxon, STRING("SFX_STG2_QUAKE1"), 0)
-    CALL(evt_cam_shake, 4, FLOAT(0.0048828125f), FLOAT(0.0f), 500)
-    CALL(evt_cam_shake, 4, FLOAT(0.009765625f), FLOAT(0.0f), 500)
-    CALL(evt_cam_shake, 4, FLOAT(0.0146484375f), FLOAT(0.0f), 500)
+    CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0048828125f), FLOAT(0.0f), 500)
+    CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.009765625f), FLOAT(0.0f), 500)
+    CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0146484375f), FLOAT(0.0f), 500)
     BEGIN_INLINE_EVENT
-        CALL(evt_cam_shake, 4, FLOAT(0.01953125f), FLOAT(0.0f), 10000)
+        CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.01953125f), FLOAT(0.0f), 10000)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))

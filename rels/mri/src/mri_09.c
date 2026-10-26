@@ -176,8 +176,8 @@ EVT_BEGIN(wall_roll)
     WAIT_MS(500)
     BEGIN_INLINE_EVENT
         CALL(evt_snd_sfxon, STRING("SFX_STG2_QUAKE2"), LW(10))
-        CALL(evt_cam_shake, 4, FLOAT(0.01953125f), FLOAT(0.0f), 1000)
-        CALL(evt_cam_shake, 4, FLOAT(0.009765625f), FLOAT(0.0f), 500)
+        CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.01953125f), FLOAT(0.0f), 1000)
+        CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.009765625f), FLOAT(0.0f), 500)
         CALL(evt_snd_sfxoff, LW(10))
     END_INLINE_EVENT
     WAIT_MS(1000)

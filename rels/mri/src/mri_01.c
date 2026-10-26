@@ -1910,7 +1910,7 @@ EVT_BEGIN(elder_kaisetsu)
         CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_LAND_DAMAGE1"), LW(0), LW(1), LW(2), 0)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
-        CALL(evt_cam_shake, 4, FLOAT(0.0f), FLOAT(0.009765625f), 500)
+        CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), FLOAT(0.009765625f), 500)
     END_INLINE_EVENT
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_MARIO_FALL_CRUSH1"), LW(0), LW(1), LW(2), 0)
@@ -2290,7 +2290,7 @@ EVT_BEGIN(boss_battle)
     WAIT_MS(500)
     CALL(evt_msg_print, 0, STRING("stg2_mri_e24_04"), 0, STRING(/*"プニ族長老"*/"\x83\x76\x83\x6A\x91\xB0\x92\xB7\x98\x56"))
     BEGIN_INLINE_EVENT
-        CALL(evt_cam_shake, 4, FLOAT(0.0048828125f), FLOAT(0.0f), 50)
+        CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0048828125f), FLOAT(0.0f), 50)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
         CALL(evt_npc_get_position, STRING(/*"プニ族長老"*/"\x83\x76\x83\x6A\x91\xB0\x92\xB7\x98\x56"), LW(0), LW(1), LW(2))
@@ -2451,7 +2451,7 @@ EVT_BEGIN(boss_battle)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
         WAIT_MS(4600)
-        CALL(evt_cam_shake, 4, FLOAT(0.0f), FLOAT(0.029296875f), 500)
+        CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), FLOAT(0.029296875f), 500)
     END_INLINE_EVENT
     WAIT_MS(1500)
     CALL(evt_npc_glide_position, LW(10), 150, 150, 30, 1500, 0, 0, 0, 0)
@@ -2687,7 +2687,7 @@ EVT_BEGIN(boss_battle_win)
     SET_VALUE(GF(0), 0)
     BEGIN_INLINE_EVENT
         LOOP(0)
-            CALL(evt_cam_shake, 4, FLOAT(0.0048828125f), FLOAT(0.0f), 100)
+            CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0048828125f), FLOAT(0.0f), 100)
             IF_INT_EQUAL(GF(0), 1)
                 BREAK_LOOP
             END_IF
@@ -2745,7 +2745,7 @@ EVT_BEGIN(boss_battle_win)
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG2_KANBU_ROUND1"), LW(0), LW(1), LW(2), 0)
     BEGIN_INLINE_EVENT
         WAIT_MS(550)
-        CALL(evt_cam_shake, 4, FLOAT(0.0f), FLOAT(0.009765625f), 500)
+        CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), FLOAT(0.009765625f), 500)
     END_INLINE_EVENT
     CALL(evt_npc_jump_position_nohit, LW(10), -200, 0, 20, 700, 70)
     CALL(evt_npc_get_position, LW(10), LW(0), LW(1), LW(2))
@@ -2900,7 +2900,7 @@ EVT_BEGIN(boss_battle_win)
     CALL(evt_npc_set_anim, LW(10), STRING("D_4"))
     CALL(evt_npc_jump_position_nohit, LW(10), 0, 0, LW(2), 200, 15)
     BEGIN_INLINE_EVENT
-        CALL(evt_cam_shake, 4, FLOAT(0.0f), FLOAT(0.009765625f), 500)
+        CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), FLOAT(0.009765625f), 500)
     END_INLINE_EVENT
     CALL(evt_npc_get_position, LW(10), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG2_3RD1_MISS1"), LW(0), LW(1), LW(2), 0)

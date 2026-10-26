@@ -123,7 +123,7 @@ static EVT_BEGIN(door_open)
     CALL(evt_mario_key_onoff, 0)
     WAIT_MS(800)
     BEGIN_INLINE_EVENT
-        CALL(evt_cam_shake, 4, FLOAT(0.0048828125f), FLOAT(0.0f), 6000)
+        CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0048828125f), FLOAT(0.0f), 6000)
     END_INLINE_EVENT
     CALL(evt_snd_sfxon, STRING("SFX_STG1_QUAKE3"), LW(10))
     WAIT_MS(1000)
@@ -177,7 +177,7 @@ static EVT_BEGIN(hashira_evt_sub)
     END_IF
     CALL(evt_npc_jump_position_nohit, LW(0), LW(10), 0, 100, 700, 30)
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG1_SINNOSUKE_LANDING1"), LW(10), 0, 100, 0)
-    CALL(evt_cam_shake, 4, FLOAT(0.009765625f), FLOAT(0.0f), 100)
+    CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.009765625f), FLOAT(0.0f), 100)
     CALL(evt_npc_pera_onoff, LW(0), 1)
     RETURN
 EVT_END()

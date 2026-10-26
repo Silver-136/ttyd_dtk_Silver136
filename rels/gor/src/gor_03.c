@@ -4854,7 +4854,7 @@ EVT_BEGIN(kuzi_bomb_talk_husei)
             IF_INT_NOT_EQUAL(GF(1), 0)
                 BREAK_LOOP
             END_IF
-            CALL(evt_cam_shake, 4, FLOAT(0.0048828125f), FLOAT(0.0f), 300)
+            CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0048828125f), FLOAT(0.0f), 300)
         END_LOOP
         CALL(evt_snd_sfxoff, GW(5))
     END_INLINE_EVENT

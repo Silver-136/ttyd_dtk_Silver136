@@ -950,7 +950,7 @@ EVT_BEGIN(evt_tougi)
     CALL(evt_snd_sfxon_3d, PTR("SFX_STG3_BLED_ATTACK1"), LW(0), LW(1), LW(2), 0)
     CALL(evt_eff, 0, PTR("hit"), 0, LW(0), LW(1), LW(2), FLOAT(3.0f), 10, 0, 0, 0, 0, 0, 0)
     BEGIN_INLINE_EVENT
-        CALL(evt_cam_shake, 4, FLOAT(0.009765625f), FLOAT(0.0f), 300)
+        CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.009765625f), FLOAT(0.0f), 300)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
         SET_VALUE(LW(0), -30)
@@ -1553,7 +1553,7 @@ EVT_BEGIN(evt_random_battle2)
     CALL(evt_npc_jump_position_nohit, STRING(("\227\220")), 180, 60, 167, 500, 30)
 #endif
     BEGIN_INLINE_EVENT
-        CALL(evt_cam_shake, 4, FLOAT(0.0f), FLOAT(0.029296875f), 500)
+        CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), FLOAT(0.029296875f), 500)
     END_INLINE_EVENT
     CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_POSE_LOCK)
 #ifdef VERSION_G8ME01
@@ -4157,7 +4157,7 @@ static EVT_BEGIN(evt_boss)
     BEGIN_INLINE_EVENT
         CALL(evt_snd_sfxon, STRING(("SFX_STG3_GROUND_SHAKE1")), LW(10))
 #endif
-        CALL(evt_cam_shake, 4, FLOAT(0.0029296875f), FLOAT(0.0029296875f), 13000)
+        CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0029296875f), FLOAT(0.0029296875f), 13000)
         CALL(evt_snd_sfxoff, LW(10))
     END_INLINE_EVENT
     WAIT_MS(1000)

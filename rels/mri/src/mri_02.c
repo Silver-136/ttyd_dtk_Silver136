@@ -205,7 +205,7 @@ EVT_BEGIN(dokan_event)
     CALL(evt_mario_key_onoff, 0)
     WAIT_MS(500)
     BEGIN_INLINE_EVENT
-        CALL(evt_cam_shake, 4, FLOAT(0.0f), FLOAT(0.009765625f), 4500)
+        CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), FLOAT(0.009765625f), 4500)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
         CALL(evt_mapobj_get_position, STRING("S_dokan2"), LW(0), LW(1), LW(2))

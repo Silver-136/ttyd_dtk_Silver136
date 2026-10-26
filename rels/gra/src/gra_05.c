@@ -363,7 +363,7 @@ EVT_BEGIN(evt_gra_05iwa_move_evt)
     CALL(evt_mapobj_get_position, STRING("S_iwa"), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG4_MOVE_ROCK1"), LW(0), LW(1), LW(2), LW(9))
     BEGIN_INLINE_EVENT
-        CALL(evt_cam_shake, 4, FLOAT(0.0048828125f), FLOAT(0.0f), 3000)
+        CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0048828125f), FLOAT(0.0f), 3000)
     END_INLINE_EVENT
     CALL(evt_mario_get_pos, 0, LW(2), LW(3), LW(4))
     CALL(evt_mario_set_pose, STRING("M_O_1"))

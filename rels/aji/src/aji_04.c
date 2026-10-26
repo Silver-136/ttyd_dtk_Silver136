@@ -381,7 +381,7 @@ EVT_BEGIN(kuizu_sekizou)
     CALL(evt_snd_envoff_f, PSND_FADEOUT, 2000)
     CALL(evt_snd_sfxon, STRING("SFX_STG7_QUAKE1"), GW(10))
     BEGIN_INLINE_EVENT
-        CALL(evt_cam_shake, 4, FLOAT(0.0048828125f), FLOAT(0.0f), 2500)
+        CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0048828125f), FLOAT(0.0f), 2500)
     END_INLINE_EVENT
     CALL(evt_cam3d_evt_set, -189, 72, 207, 219, 69, -80, 1500, EASING_SINE_IN_OUT)
     WAIT_MS(2500)
@@ -596,7 +596,7 @@ EVT_BEGIN(kuizu_sekizou)
 #else
                     CALL(evt_npc_jump_position_nohit, STRING("バリアーン１"), 50, 20, -50, 300, 0)
 #endif
-                    CALL(evt_cam_shake, 4, FLOAT(0.0048828125f), FLOAT(0.0f), 200)
+                    CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0048828125f), FLOAT(0.0f), 200)
                 END_INLINE_EVENT
                 WAIT_MS(300)
                 BEGIN_INLINE_EVENT
@@ -613,7 +613,7 @@ EVT_BEGIN(kuizu_sekizou)
 #else
                     CALL(evt_npc_jump_position_nohit, STRING("バリアーン２"), 50, 20, 50, 300, 0)
 #endif
-                    CALL(evt_cam_shake, 4, FLOAT(0.0048828125f), FLOAT(0.0f), 200)
+                    CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0048828125f), FLOAT(0.0f), 200)
                 END_INLINE_EVENT
                 WAIT_MS(300)
                 WAIT_MS(500)
@@ -670,7 +670,7 @@ EVT_BEGIN(kuizu_sekizou)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("dennshoku_2"), MAP_OBJ_FLAG_HIDDEN)
     END_LOOP
     CALL(evt_snd_sfxon, STRING("SFX_STG7_QUAKE1"), LW(10))
-    CALL(evt_cam_shake, 4, FLOAT(0.0048828125f), FLOAT(0.0f), 1500)
+    CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0048828125f), FLOAT(0.0f), 1500)
     CALL(evt_snd_sfxoff, LW(10))
     CALL(evt_item_entry, STRING("dummy"), ITEM_ELEVATOR_KEY_0x1C, 50, 100, 0, ITEM_TYPE_FALL, -1, PTR(evt_item))
     CALL(evt_msg_toge, MSG_TOGE_AT_POS, 95, 65, 0)

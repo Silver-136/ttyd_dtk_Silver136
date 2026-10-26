@@ -232,7 +232,7 @@ EVT_BEGIN(lift_event_00)
         END_LOOP
         CALL(evt_mapobj_get_position, STRING("s04_m_hako_b"), LW(10), LW(11), LW(12))
         CALL(evt_snd_sfxon_3d, STRING("SFX_STG5_STEP_DOWN1"), LW(10), LW(11), LW(12), 0)
-        CALL(evt_cam_shake, 4, FLOAT(0.0f), FLOAT(0.0009765625f), 150)
+        CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), FLOAT(0.0009765625f), 150)
         ELSE
         SET_FLOAT_VALUE(LW(0), LW(3))
         LOOP(0)

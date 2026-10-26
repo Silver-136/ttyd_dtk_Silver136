@@ -40,7 +40,7 @@ u8 y_scale[] = { 0, 13, 40, 69, 98, 126, 149, 166, 175, 165, 136, 100, 67, 50, 7
 
 
 static EVT_BEGIN(evt_shake)
-    CALL(evt_cam_shake, 4, FLOAT(0.001953125f), FLOAT(0.001953125f), 50)
+    CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.001953125f), FLOAT(0.001953125f), 50)
     RETURN
 EVT_END()
 

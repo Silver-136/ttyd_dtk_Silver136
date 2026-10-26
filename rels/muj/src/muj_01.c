@@ -1633,7 +1633,7 @@ EVT_END()
 
 static EVT_BEGIN(sekai_yami_shake)
     LOOP(0)
-        CALL(evt_cam_shake, 4, FLOAT(0.0f), FLOAT(0.009765625f), 500)
+        CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), FLOAT(0.009765625f), 500)
     END_LOOP
     RETURN
 EVT_END()

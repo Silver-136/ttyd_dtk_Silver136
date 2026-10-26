@@ -30,17 +30,17 @@ s32 marioGetRub(s32 mask, s32* a, s32* b, f32* c);
 s32 se_data[] = {315, 357, 316, 359, 317, 358, 318, 360, 319, 361};
 
 EVT_BEGIN(lv1quake_evt)
-CALL(evt_cam_shake, 4, FLOAT(0.0f), FLOAT(0.009765625f), 90)
+CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), FLOAT(0.009765625f), 90)
 RETURN
 EVT_END()
 
 EVT_BEGIN(lv2quake_evt)
-CALL(evt_cam_shake, 4, FLOAT(0.0f), FLOAT(0.01953125f), 110)
+CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), FLOAT(0.01953125f), 110)
 RETURN
 EVT_END()
 
 EVT_BEGIN(lv3quake_evt)
-CALL(evt_cam_shake, 4, FLOAT(0.0f), FLOAT(0.029296875f), 140)
+CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), FLOAT(0.029296875f), 140)
 RETURN
 EVT_END()
 

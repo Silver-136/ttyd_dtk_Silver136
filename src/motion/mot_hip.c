@@ -28,12 +28,12 @@ HitEntry* marioChkLandon(f32* outY, f32 y);
 #endif
 
 static EVT_BEGIN(quake_evt)
-    CALL(evt_cam_shake, 4, FLOAT(0.0f), FLOAT(0.01953125f), 110)
+    CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), FLOAT(0.01953125f), 110)
     RETURN
 EVT_END()
 
 static EVT_BEGIN(quake_bgmode_evt)
-    CALL(evt_cam_shake, 4, FLOAT(0.0f), FLOAT(0.009765625f), 110)
+    CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), FLOAT(0.009765625f), 110)
     RETURN
 EVT_END()
 

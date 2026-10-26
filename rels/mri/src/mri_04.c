@@ -394,7 +394,7 @@ EVT_BEGIN(black_shadow)
     ADD(LW(1), 20)
     CALL(evt_eff, STRING(""), STRING("small_star"), 3, LW(0), LW(1), LW(2), 0, -1, 0, 3, 0, 0, 0, 0)
     BEGIN_INLINE_EVENT
-        CALL(evt_cam_shake, 4, FLOAT(0.0f), FLOAT(0.009765625f), 50)
+        CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), FLOAT(0.009765625f), 50)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
         CALL(mri_npc_buruburu, LW(9), 0, FLOAT(1.0f), 100, 300)

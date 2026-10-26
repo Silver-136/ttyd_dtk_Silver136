@@ -2,6 +2,22 @@
 
 #include "evt/evt_cmd.h"
 #include "system.h" // EasingType for the movement curve arguments
+
+// btlevtcmd_CalculateFaceDirection flags (fifth argument)
+typedef enum FaceDirFlags {
+    FACE_DIR_TOWARD_X = (1 << 0),     // 0x1, the target argument is an x coordinate to face
+    FACE_DIR_ATTACK_DIR = (1 << 2),   // 0x4, the side's attack direction
+    FACE_DIR_MOVE_DIR = (1 << 3),     // 0x8, the unit's (or part's) move direction
+    FACE_DIR_TOWARD_UNIT = (1 << 4),  // 0x10, toward the target unit / part
+    FACE_DIR_REVERSE = (1 << 8),      // 0x100, the result is reversed
+} FaceDirFlags;
+
+// btlevtcmd_StatusWindowOnOff
+typedef enum StatusWindowMode {
+    STATUS_WINDOW_EVENT_OFF = 0,
+    STATUS_WINDOW_EVENT_ON = 1,
+    STATUS_WINDOW_SYSTEM_ON = 2,
+} StatusWindowMode;
 #include <dolphin/types.h>
 
 USER_FUNC(btlevtcmd_WaitEventEnd);

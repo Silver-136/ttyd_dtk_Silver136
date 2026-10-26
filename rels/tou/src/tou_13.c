@@ -55,7 +55,7 @@ static BeroEntry bero_data[] = {
 };
 
 static EVT_BEGIN(evt_dakuto)
-    CALL(evt_cam_shake, 4, FLOAT(0.049804688f), FLOAT(0.0f), 500)
+    CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.049804688f), FLOAT(0.0f), 500)
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG3_DUCT_KOUSHI_HIT1"), 188, 0, 0, 0)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("s_deguti"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_hitobj_onoff, STRING("deguti"), 1, 0)

@@ -1558,7 +1558,7 @@ EVT_BEGIN(tama_shoot)
     END_INLINE_EVENT
     WAIT_MS(1000)
     BEGIN_INLINE_EVENT
-        CALL(evt_cam_shake, 4, FLOAT(0.0068359375f), FLOAT(0.0f), 500)
+        CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0068359375f), FLOAT(0.0f), 500)
     END_INLINE_EVENT
     CALL(evt_snd_sfxon, STRING("SFX_STG5_CANNON_SEA1"), 0)
     CALL(evt_eff, 0, STRING("splash"), 0, LW(0), -20, LW(2), FLOAT(3.0f), 0, 0, 0, 0, 0, 0, 0)
@@ -1683,7 +1683,7 @@ EVT_BEGIN(dai3_shurai_sub)
     CALL(evt_npc_flag_onoff, 1, STRING("水夫E"), NPC_FLAG_TALK_POSE)
     CALL(evt_snd_bgmoff, PSND_FADEOUT)
     CALL(evt_snd_sfxon, STRING("SFX_STG5_CANNON_FIRING1"), 0)
-    CALL(evt_cam_shake, 4, FLOAT(0.009765625f), FLOAT(0.0f), 1000)
+    CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.009765625f), FLOAT(0.0f), 1000)
     CALL(evt_mario_set_dir, 270, 200, 0)
     CALL(evt_party_set_dir, 0, 270, 200)
     CALL(evt_npc_set_ry, STRING("ピートン"), 270)
@@ -2048,7 +2048,7 @@ EVT_END()
 EVT_BEGIN(dai3_kurukuru)
     CALL(evt_snd_sfxon, STRING("SFX_STG5_SHIP_IMPACT1"), 0)
     BEGIN_INLINE_EVENT
-        CALL(evt_cam_shake, 4, FLOAT(0.01953125f), FLOAT(0.0f), 500)
+        CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.01953125f), FLOAT(0.0f), 500)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
         SET_VALUE(LW(0), GW(1))

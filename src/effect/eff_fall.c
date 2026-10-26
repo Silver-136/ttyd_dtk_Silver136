@@ -86,7 +86,7 @@ static u8 shibuki_dl_1_3[] __attribute__((aligned(32))) = { 0x98, 0x00, 0x06, 0x
 
 
 static EVT_BEGIN(evt_shake)
-    CALL(evt_cam_shake, 4, FLOAT(0.009765625f), FLOAT(0.009765625f), 300)
+    CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.009765625f), FLOAT(0.009765625f), 300)
     RETURN
 EVT_END()
 

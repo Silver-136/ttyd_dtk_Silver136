@@ -927,7 +927,7 @@ EVT_BEGIN(pik_02_koopa_evt)
             IF_INT_NOT_EQUAL(GF(0), 0)
                 BREAK_LOOP
             END_IF
-            CALL(evt_cam_shake, 4, FLOAT(0.0f), FLOAT(0.009765625f), 150)
+            CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), FLOAT(0.009765625f), 150)
             WAIT_MS(150)
         END_LOOP
     END_INLINE_EVENT

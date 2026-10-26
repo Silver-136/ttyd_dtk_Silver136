@@ -1544,11 +1544,11 @@ EVT_BEGIN(evt_elv_rumble)
     SUBTRACT(LW(1), 500)
     CALL(evt_mario_get_pos, 0, LW(3), LW(4), LW(5))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG6_ELEVATOR_SHAKE1"), LW(3), LW(4), LW(5), 0)
-    CALL(evt_cam_shake, 4, FLOAT(0.0f), FLOAT(0.0048828125f), 250)
+    CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), FLOAT(0.0048828125f), 250)
     WAIT_MS(LW(1))
     CALL(evt_mario_get_pos, 0, LW(3), LW(4), LW(5))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG6_ELEVATOR_SHAKE1"), LW(3), LW(4), LW(5), 0)
-    CALL(evt_cam_shake, 4, FLOAT(0.0f), FLOAT(0.0048828125f), 250)
+    CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), FLOAT(0.0048828125f), 250)
     RETURN
 EVT_END()
 

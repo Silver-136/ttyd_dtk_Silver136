@@ -408,7 +408,7 @@ static EVT_BEGIN(puni_win)
     WAIT_MS(5000)
     LOOP(5)
         CALL(evt_snd_sfxon_3d, STRING("SFX_STG2_TORIDE_BREAK1"), 400, 0, 0, 0)
-        CALL(evt_cam_shake, 4, FLOAT(0.009765625f), FLOAT(0.0f), 500)
+        CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.009765625f), FLOAT(0.0f), 500)
         WAIT_MS(500)
     END_LOOP
     BEGIN_INLINE_EVENT

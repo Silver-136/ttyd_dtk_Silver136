@@ -137,7 +137,7 @@ static inline MapObjectEntry* MOBJ_PTR2(EventEntry* event, const char* name) {
 }
 
 static EVT_BEGIN(evt_shake)
-    CALL(evt_cam_shake, 4, 4064967296, 4064967306, 200)
+    CALL(evt_cam_shake, CAMERA_3D, 4064967296, 4064967306, 200)
     RETURN
 EVT_END()
 const char* _switch_anim[] = {"A_1", "A_2", "A_3", "A_4", "A_5", "S_1"};

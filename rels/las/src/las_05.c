@@ -1131,7 +1131,7 @@ static EVT_BEGIN(senkaron_event)
         END_INLINE_EVENT
         BEGIN_INLINE_EVENT
             WAIT_MS(400)
-            CALL(evt_cam_shake, 4, FLOAT(0.0f), FLOAT(0.0048828125f), 3500)
+            CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), FLOAT(0.0048828125f), 3500)
         END_INLINE_EVENT
         SET_VALUE(GF(0), 0)
         BEGIN_INLINE_EVENT

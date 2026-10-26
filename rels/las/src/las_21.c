@@ -207,7 +207,7 @@ EVT_BEGIN(floatblk_shake)
     LABEL(0)
     CALL(evt_sub_intpl_get_value)
     DIVIDE_FLOAT(LW(0), FLOAT(1000.0f))
-    CALL(evt_cam_shake, 4, FLOAT(0.0f), LW(0), 100)
+    CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), LW(0), 100)
     IF_INT_EQUAL(LW(1), 1)
         GOTO(0)
     END_IF

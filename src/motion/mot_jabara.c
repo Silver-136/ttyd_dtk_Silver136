@@ -71,7 +71,7 @@ static inline void* jabaraHitFront(f32 ang) {
 
 
 static EVT_BEGIN(quake_evt)
-    CALL(evt_cam_shake, 4, 0xF24A7A80, 0xF24A7A8F, 0xF0)
+    CALL(evt_cam_shake, CAMERA_3D, 0xF24A7A80, 0xF24A7A8F, 0xF0)
     RETURN
 EVT_END()
 

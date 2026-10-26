@@ -33,12 +33,12 @@ s32 _rateTbl2[4] = {0, 0, 0, 0};
 f32 scaleDt[9] = {1.0f, 0.0f, 2.0f, 1.0f, 3.0f, 2.0f, 4.0f, 3.0f, 5.0f};
 
 EVT_BEGIN(quake_kpaLandOn_evt)
-    CALL(evt_cam_shake, 4, FLOAT(0.0f), FLOAT(0.009765625f), 30)
+    CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), FLOAT(0.009765625f), 30)
     RETURN
 EVT_END()
 
 EVT_BEGIN(quake_kpaHipAttack_evt)
-    CALL(evt_cam_shake, 4, FLOAT(0.0f), FLOAT(0.01953125f), 60)
+    CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), FLOAT(0.01953125f), 60)
     RETURN
 EVT_END()
 

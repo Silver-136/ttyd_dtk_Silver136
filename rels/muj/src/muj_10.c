@@ -578,7 +578,7 @@ static EVT_BEGIN(dai3_shurai_after)
         WAIT_MS(LW(10))
         WAIT_MS(1500)
         BEGIN_INLINE_EVENT
-            CALL(evt_cam_shake, 4, FLOAT(0.0048828125f), FLOAT(0.0f), 500)
+            CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0048828125f), FLOAT(0.0f), 500)
         END_INLINE_EVENT
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         ADD(LW(1), 250)

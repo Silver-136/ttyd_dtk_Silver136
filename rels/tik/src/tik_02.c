@@ -637,7 +637,7 @@ EVT_BEGIN(geso_battle)
     CALL(evt_msg_print, 0, STRING("mac_0_126"), 0, STRING("ゲッソー"))
     BEGIN_INLINE_EVENT
         WAIT_MS(500)
-        CALL(evt_cam_shake, 4, FLOAT(0.0f), FLOAT(0.029296875f), 500)
+        CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), FLOAT(0.029296875f), 500)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
         WAIT_MS(200)

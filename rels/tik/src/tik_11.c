@@ -346,7 +346,7 @@ EVT_BEGIN(powerdownya_mario_level_rtn)
         END_LOOP
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
-        CALL(evt_cam_shake, 4, FLOAT(0.009765625f), FLOAT(0.0f), 1600)
+        CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.009765625f), FLOAT(0.0f), 1600)
     END_INLINE_EVENT
     CALL(evt_cam3d_evt_set, -9, 212, 886, -9, 56, 0, 1600, EASING_SINE_IN_OUT)
     WAIT_MS(1600)
@@ -558,7 +558,7 @@ EVT_BEGIN(powerdownya_party_lank_rtn)
         END_LOOP
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
-        CALL(evt_cam_shake, 4, FLOAT(0.009765625f), FLOAT(0.0f), 1600)
+        CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.009765625f), FLOAT(0.0f), 1600)
     END_INLINE_EVENT
     CALL(evt_cam3d_evt_set, -9, 212, 886, -9, 56, 0, 1600, EASING_SINE_IN_OUT)
     WAIT_MS(1600)

@@ -1141,7 +1141,7 @@ EVT_BEGIN(last_evt_1)
         END_IF
     END_LOOP
     BEGIN_INLINE_EVENT
-        CALL(evt_cam_shake, 4, FLOAT(0.0f), FLOAT(0.009765625f), 300)
+        CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), FLOAT(0.009765625f), 300)
     END_INLINE_EVENT
     CALL(evt_mapobj_get_position, STRING("S_hakahuta"), LW(0), LW(1), LW(2))
     ADD(LW(2), 50)
@@ -2356,7 +2356,7 @@ EVT_BEGIN(last_evt_4)
             IF_INT_GREATER_OR_EQUAL(LW(0), 30000)
                 BREAK_LOOP
             END_IF
-            CALL(evt_cam_shake, 4, FLOAT(0.0048828125f), FLOAT(0.0f), 1000)
+            CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0048828125f), FLOAT(0.0f), 1000)
         END_LOOP
         CALL(evt_snd_sfxoff, LW(9))
     END_INLINE_EVENT

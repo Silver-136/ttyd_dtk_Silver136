@@ -42,12 +42,12 @@ extern s32 evt_cam_shake(void* evt, BOOL isFirstCall);
 s32 m_w_7_sync[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 9, 9, 8, 7, 5, 3, 1, 0, 0, 0, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 9, 8, 6, 4, 3, 2, 1, 0, 0, 0, 0, 0};
 
 EVT_BEGIN(longQuake_evt)
-    CALL(evt_cam_shake, 4, PTR(0xF24A7A8F), PTR(0xF24A7A8F), 600)
+    CALL(evt_cam_shake, CAMERA_3D, PTR(0xF24A7A8F), PTR(0xF24A7A8F), 600)
     RETURN
 EVT_END()
 
 static EVT_BEGIN(quake_evt)
-    CALL(evt_cam_shake, 4, PTR(0xF24A7A8F), PTR(0xF24A7A8F), 200)
+    CALL(evt_cam_shake, CAMERA_3D, PTR(0xF24A7A8F), PTR(0xF24A7A8F), 200)
     RETURN
 EVT_END()
 

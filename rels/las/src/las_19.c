@@ -187,7 +187,7 @@ const char* mapgrp_name_2[] = {
 };
 
 static EVT_BEGIN(cam_shake)
-    CALL(evt_cam_shake, 4, FLOAT(0.029296875f), FLOAT(0.029296875f), 200)
+    CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.029296875f), FLOAT(0.029296875f), 200)
     RETURN
 EVT_END()
 

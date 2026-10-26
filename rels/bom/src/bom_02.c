@@ -878,7 +878,7 @@ EvtWord mario_jump[] = {
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG7_WHITE_DAMAGED1"), LW(0), LW(1), LW(2), 0)
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG7_WHITE_NICE1"), LW(0), LW(1), LW(2), 0)
     BEGIN_INLINE_EVENT
-        CALL(evt_cam_shake, 4, FLOAT(0.0f), FLOAT(0.009765625f), 100)
+        CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), FLOAT(0.009765625f), 100)
     END_INLINE_EVENT
     ADD(LW(2), -10)
     CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_FLD_JUMP4"), LW(10), LW(11), LW(12), 0)
@@ -897,7 +897,7 @@ EvtWord mario_jump[] = {
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG7_WHITE_DAMAGED1"), LW(0), LW(1), LW(2), 0)
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG7_WHITE_GOOD1"), LW(0), LW(1), LW(2), 0)
     BEGIN_INLINE_EVENT
-        CALL(evt_cam_shake, 4, FLOAT(0.0f), FLOAT(0.009765625f), 100)
+        CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), FLOAT(0.009765625f), 100)
     END_INLINE_EVENT
     CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_FLD_JUMP2"), LW(10), LW(11), LW(12), 0)
     CALL(evt_mario_jump_pos, 335, 30, -130, 500, 2, -1000)
@@ -1546,7 +1546,7 @@ static EVT_BEGIN(sekai_yami_evt)
     END_INLINE_EVENT
     SET_FLOAT_VALUE(LW(0), FLOAT(0.0068359375f))
     LOOP(5)
-        CALL(evt_cam_shake, 4, FLOAT(0.0f), LW(0), 1000)
+        CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), LW(0), 1000)
         MULTIPLY_FLOAT(LW(0), FLOAT(0.75f))
     END_LOOP
     SET_VALUE(GF(0), 1)

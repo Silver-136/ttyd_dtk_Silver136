@@ -26,12 +26,12 @@ void mario_simple_kemuri(void);
 
 
 static EVT_BEGIN(quake_evt)
-    CALL(evt_cam_shake, 4, PTR(0xF24A7A8A), PTR(0xF24A7A80), 50)
+    CALL(evt_cam_shake, CAMERA_3D, PTR(0xF24A7A8A), PTR(0xF24A7A80), 50)
     RETURN
 EVT_END()
 
 static EVT_BEGIN(quake_bgmode_evt)
-    CALL(evt_cam_shake, 4, PTR(0xF24A7A86), PTR(0xF24A7A80), 30)
+    CALL(evt_cam_shake, CAMERA_3D, PTR(0xF24A7A86), PTR(0xF24A7A80), 30)
     RETURN
 EVT_END()
 

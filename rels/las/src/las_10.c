@@ -487,7 +487,7 @@ EVT_BEGIN(tenkyugi_evt)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 3000)
     CALL(evt_snd_sfxon, STRING("SFX_STG8_CELESTIAL_SHAKE1"), LW(10))
-    CALL(evt_cam_shake, 4, FLOAT(0.009765625f), FLOAT(0.0f), 1200)
+    CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.009765625f), FLOAT(0.0f), 1200)
     CALL(evt_snd_sfxoff, LW(10))
     WAIT_MS(1200)
     CALL(evt_cam3d_evt_set, 0, 425, 787, 0, 530, 95, 0, EASING_SINE_IN_OUT)
@@ -548,7 +548,7 @@ EVT_BEGIN(tenkyugi_evt)
             IF_INT_NOT_EQUAL(GF(0), 0)
                 BREAK_LOOP
             END_IF
-            CALL(evt_cam_shake, 4, FLOAT(0.009765625f), FLOAT(0.0f), 500)
+            CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.009765625f), FLOAT(0.0f), 500)
         END_LOOP
         CALL(evt_snd_sfxoff, LW(10))
     END_INLINE_EVENT
@@ -594,7 +594,7 @@ EVT_BEGIN(tenkyugi_evt2)
     SET_FLOAT_VALUE(LW(0), FLOAT(0.009765625f))
     LOOP(4)
         MULTIPLY_FLOAT(LW(0), FLOAT(0.75f))
-        CALL(evt_cam_shake, 4, LW(0), FLOAT(0.0f), 1000)
+        CALL(evt_cam_shake, CAMERA_3D, LW(0), FLOAT(0.0f), 1000)
     END_LOOP
     CALL(evt_snd_sfxoff, LW(10))
     WAIT_MS(500)
@@ -616,7 +616,7 @@ EVT_BEGIN(kagi_rotate)
     WAIT_MS(500)
     BEGIN_INLINE_EVENT
         CALL(evt_snd_sfxon, STRING("SFX_STG8_KEYSTAND_SHAKE1"), LW(0))
-        CALL(evt_cam_shake, 4, FLOAT(0.009765625f), FLOAT(0.0f), 1000)
+        CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.009765625f), FLOAT(0.0f), 1000)
         CALL(evt_snd_sfxoff, LW(0))
     END_INLINE_EVENT
     CALL(evt_mapobj_get_position, LW(10), LW(0), LW(1), LW(2))
@@ -982,7 +982,7 @@ EVT_BEGIN(kagi_8_on)
                 IF_INT_NOT_EQUAL(GF(0), 0)
                     BREAK_LOOP
                 END_IF
-                CALL(evt_cam_shake, 4, FLOAT(0.0029296875f), FLOAT(0.0f), 300)
+                CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0029296875f), FLOAT(0.0f), 300)
             END_LOOP
             CALL(evt_snd_sfxoff, LW(10))
         END_INLINE_EVENT

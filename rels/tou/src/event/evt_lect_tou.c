@@ -890,7 +890,7 @@ EVT_BEGIN(hammer_lv2_juyoitem_lecture)
         END_LOOP
         CALL(evt_snd_sfxon, STRING("SFX_EVT_LECTURE_BLOCK_DOWN1"), 0)
         CALL(evt_snd_sfxoff, LW(7))
-        CALL(evt_cam_shake, 4, FLOAT(0.0f), FLOAT(0.009765625f), 300)
+        CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), FLOAT(0.009765625f), 300)
     END_INLINE_EVENT
     SET_VALUE(LW(0), FLOAT(0.0f))
     LOOP(0)

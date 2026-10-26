@@ -859,11 +859,11 @@ static EVT_BEGIN(cam_shake)
     LABEL(0)
     CALL(evt_sub_intpl_get_value)
     DIVIDE_FLOAT(LW(0), FLOAT(1000.0f))
-    CALL(evt_cam_shake, 4, LW(0), FLOAT(0.0f), 100)
+    CALL(evt_cam_shake, CAMERA_3D, LW(0), FLOAT(0.0f), 100)
     IF_INT_EQUAL(LW(1), 1)
         GOTO(0)
     END_IF
-    CALL(evt_cam_shake, 4, FLOAT(0.009765625f), FLOAT(0.0f), 0)
+    CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.009765625f), FLOAT(0.0f), 0)
     RETURN
 EVT_END()
 
@@ -872,7 +872,7 @@ static EVT_BEGIN(cam_shake2)
     LABEL(0)
     CALL(evt_sub_intpl_get_value)
     DIVIDE_FLOAT(LW(0), FLOAT(1000.0f))
-    CALL(evt_cam_shake, 4, LW(0), FLOAT(0.0f), 100)
+    CALL(evt_cam_shake, CAMERA_3D, LW(0), FLOAT(0.0f), 100)
     IF_INT_EQUAL(LW(1), 1)
         GOTO(0)
     END_IF
@@ -1074,7 +1074,7 @@ EVT_BEGIN(dokuroiwa_bomb)
         CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
-        CALL(evt_cam_shake, 4, FLOAT(0.029296875f), FLOAT(0.0f), 1000)
+        CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.029296875f), FLOAT(0.0f), 1000)
     END_INLINE_EVENT
     CALL_CHILD(PTR(bombwall_bomb))
     CALL(evt_hitobj_onoff, STRING("A_dkr_iwa_futa02"), 1, 0)

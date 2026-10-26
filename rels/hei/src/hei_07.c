@@ -101,19 +101,19 @@ static EVT_BEGIN(npc_jump)
     CALL(evt_npc_get_position, LW(10), LW(5), LW(6), LW(7))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG1_SINNOSUKE_LANDING2"), LW(5), LW(6), LW(7), 0)
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG1_SINNOSUKE_LANDING3"), LW(5), LW(6), LW(7), 0)
-    CALL(evt_cam_shake, 4, FLOAT(0.0048828125f), FLOAT(0.0f), 200)
+    CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0048828125f), FLOAT(0.0f), 200)
     RETURN
 EVT_END()
 
 EVT_BEGIN(dokan_shake)
-    CALL(evt_cam_shake, 4, FLOAT(0.001953125f), FLOAT(0.0f), 0)
+    CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.001953125f), FLOAT(0.0f), 0)
     RETURN
 EVT_END()
 
 EVT_BEGIN(dokan_shake2)
-    CALL(evt_cam_shake, 4, FLOAT(0.0009765625f), FLOAT(0.0f), 500)
-    CALL(evt_cam_shake, 4, FLOAT(0.0009765625f), FLOAT(0.0f), 500)
-    CALL(evt_cam_shake, 4, FLOAT(0.0f), FLOAT(0.0f), 500)
+    CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0009765625f), FLOAT(0.0f), 500)
+    CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0009765625f), FLOAT(0.0f), 500)
+    CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), FLOAT(0.0f), 500)
     RETURN
 EVT_END()
 
@@ -134,9 +134,9 @@ EVT_BEGIN(sekizou_move)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
         WAIT_MS(4000)
-        CALL(evt_cam_shake, 4, FLOAT(0.0390625f), FLOAT(0.0f), 100)
-        CALL(evt_cam_shake, 4, FLOAT(0.01953125f), FLOAT(0.0f), 100)
-        CALL(evt_cam_shake, 4, FLOAT(0.009765625f), FLOAT(0.0f), 100)
+        CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0390625f), FLOAT(0.0f), 100)
+        CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.01953125f), FLOAT(0.0f), 100)
+        CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.009765625f), FLOAT(0.0f), 100)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
         CALL(evt_mapobj_get_position, STRING("DAIZA1"), LW(0), LW(1), LW(2))
@@ -183,7 +183,7 @@ static EVT_BEGIN(shake_evt)
     LABEL(0)
     CALL(evt_sub_intpl_get_value)
     DIVIDE_FLOAT(LW(0), FLOAT(1000.0f))
-    CALL(evt_cam_shake, 4, LW(0), FLOAT(0.0f), 100)
+    CALL(evt_cam_shake, CAMERA_3D, LW(0), FLOAT(0.0f), 100)
     IF_INT_EQUAL(LW(1), 1)
         GOTO(0)
     END_IF
@@ -191,7 +191,7 @@ static EVT_BEGIN(shake_evt)
     LABEL(1)
     CALL(evt_sub_intpl_get_value)
     DIVIDE_FLOAT(LW(0), FLOAT(1000.0f))
-    CALL(evt_cam_shake, 4, LW(0), FLOAT(0.0f), 100)
+    CALL(evt_cam_shake, CAMERA_3D, LW(0), FLOAT(0.0f), 100)
     IF_INT_EQUAL(LW(1), 1)
         GOTO(1)
     END_IF

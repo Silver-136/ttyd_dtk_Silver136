@@ -183,7 +183,7 @@ static EVT_BEGIN(evt_first)
         ADD(LW(2), 5)
         CALL(evt_eff, 0, STRING("kemuri_test"), 14, LW(0), LW(1), LW(2), FLOAT(1.0f), 0, 0, 0, 0, 0, 0, 0)
         CALL(evt_snd_sfxon_3d, STRING("SFX_STG7_MARIO_MOON_FALL1"), LW(0), LW(1), LW(2), 0)
-        CALL(evt_cam_shake, 4, FLOAT(0.009765625f), FLOAT(0.0f), 300)
+        CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.009765625f), FLOAT(0.0f), 300)
         CALL_CHILD(PTR(party_damage_pose2))
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
@@ -211,7 +211,7 @@ static EVT_BEGIN(evt_first)
     ADD(LW(2), 5)
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG7_MARIO_MOON_FALL1"), LW(0), LW(1), LW(2), 0)
     CALL(evt_eff, 0, STRING("kemuri_test"), 14, LW(0), LW(1), LW(2), FLOAT(1.0f), 0, 0, 0, 0, 0, 0, 0)
-    CALL(evt_cam_shake, 4, FLOAT(0.009765625f), FLOAT(0.0f), 300)
+    CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.009765625f), FLOAT(0.0f), 300)
     CALL(evt_mario_set_pose, STRING("M_N_H"))
     WAIT_MS(2000)
     BEGIN_INLINE_EVENT

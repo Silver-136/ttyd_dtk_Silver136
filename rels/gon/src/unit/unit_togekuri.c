@@ -237,7 +237,7 @@ static EVT_BEGIN(dmg_avoid_counter_thorn_head_event)
                 RETURN
             END_IF
             WAIT_MS(2500)
-            CALL(btlevtcmd_StatusWindowOnOff, 0)
+            CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
             CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_LECTURE, -1)
             CALL(get_attacker, LW(0))
             IF_INT_EQUAL(LW(0), 0)
@@ -247,7 +247,7 @@ static EVT_BEGIN(dmg_avoid_counter_thorn_head_event)
             END_IF
             CALL(btlevtcmd_SetUnitWork, UNIT_ID_LECTURE, 0, 1)
             CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_LECTURE, 1)
-            CALL(btlevtcmd_StatusWindowOnOff, 1)
+            CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_ON)
         END_IF
     END_IF
     RETURN
@@ -358,12 +358,12 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_RUN)
     CALL(btlevtcmd_GetPos, LW(3), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_FaceDirectionAdd, LW(3), LW(0), 80)
-    CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(0), LW(2), 1, LW(15))
+    CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(0), LW(2), FACE_DIR_TOWARD_X, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(4.0f))
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), 0, LW(2), 0, -1, 1)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_NEUTRAL)
-    CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), 16, LW(15))
+    CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
     WAIT_MS(170)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_FREE)

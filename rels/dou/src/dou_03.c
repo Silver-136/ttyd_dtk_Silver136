@@ -270,7 +270,7 @@ EVT_BEGIN(watergate_handle)
         CALL(evt_hitobj_onoff, STRING("A_reba"), 1, 1)
         CALL(evt_pouch_remove_item, ITEM_GATE_HANDLE, LW(0))
         CALL(evt_snd_sfxon, STRING("SFX_STG5_FLOODGATE_SHAKE1"), LW(10))
-        CALL(evt_cam_shake, 4, FLOAT(0.009765625f), FLOAT(0.0f), 500)
+        CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.009765625f), FLOAT(0.0f), 500)
         WAIT_MS(500)
         CALL(evt_snd_sfxoff, LW(10))
         CALL(evt_cam3d_evt_set, 98, 151, 563, 98, 56, 21, 500, EASING_SINE_IN_OUT)
@@ -284,11 +284,11 @@ EVT_BEGIN(watergate_handle)
         SPAWN_EVENT_GET_ID(PTR(watergate_geer_small), LW(11))
         SPAWN_EVENT_GET_ID(PTR(watergate_geer_large), LW(12))
         BEGIN_INLINE_EVENT
-            CALL(evt_cam_shake, 4, FLOAT(0.0009765625f), FLOAT(0.0f), LW(1))
+            CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0009765625f), FLOAT(0.0f), LW(1))
         END_INLINE_EVENT
         WAIT_MS(LW(1))
         BEGIN_INLINE_EVENT
-            CALL(evt_cam_shake, 4, FLOAT(0.009765625f), FLOAT(0.0f), 250)
+            CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.009765625f), FLOAT(0.0f), 250)
         END_INLINE_EVENT
         CALL(evt_map_pauseanim, 0, STRING("mae"))
         DELETE_EVENT(LW(10))

@@ -256,23 +256,23 @@ USER_FUNC(evt_puni_force_pose) {
 
 EVT_BEGIN(yuka_shake)
     LOOP(5)
-        CALL(evt_cam_shake, 4, FLOAT(0.0f), FLOAT(0.009765625f), 1000)
+        CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), FLOAT(0.009765625f), 1000)
     END_LOOP
     RETURN
 EVT_END()
 
 EVT_BEGIN(yuka_shake2)
-    CALL(evt_cam_shake, 4, FLOAT(0.0f), FLOAT(0.009765625f), 500)
-    CALL(evt_cam_shake, 4, FLOAT(0.0f), FLOAT(0.0087890625f), 1000)
-    CALL(evt_cam_shake, 4, FLOAT(0.0f), FLOAT(0.0078125f), 1000)
-    CALL(evt_cam_shake, 4, FLOAT(0.0f), FLOAT(0.0068359375f), 1000)
-    CALL(evt_cam_shake, 4, FLOAT(0.0f), FLOAT(0.005859375f), 1000)
-    CALL(evt_cam_shake, 4, FLOAT(0.0f), FLOAT(0.0048828125f), 1000)
-    CALL(evt_cam_shake, 4, FLOAT(0.0f), FLOAT(0.00390625f), 1000)
-    CALL(evt_cam_shake, 4, FLOAT(0.0f), FLOAT(0.0029296875f), 1000)
-    CALL(evt_cam_shake, 4, FLOAT(0.0f), FLOAT(0.001953125f), 1000)
-    CALL(evt_cam_shake, 4, FLOAT(0.0f), FLOAT(0.0009765625f), 1000)
-    CALL(evt_cam_shake, 4, FLOAT(0.0f), FLOAT(0.0146484375f), 1000)
+    CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), FLOAT(0.009765625f), 500)
+    CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), FLOAT(0.0087890625f), 1000)
+    CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), FLOAT(0.0078125f), 1000)
+    CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), FLOAT(0.0068359375f), 1000)
+    CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), FLOAT(0.005859375f), 1000)
+    CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), FLOAT(0.0048828125f), 1000)
+    CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), FLOAT(0.00390625f), 1000)
+    CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), FLOAT(0.0029296875f), 1000)
+    CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), FLOAT(0.001953125f), 1000)
+    CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), FLOAT(0.0009765625f), 1000)
+    CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), FLOAT(0.0146484375f), 1000)
     RETURN
 EVT_END()
 
