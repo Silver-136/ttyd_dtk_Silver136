@@ -18,6 +18,7 @@
 #include "mario/mario_pouch.h"
 #include "system.h"
 #include "driver/casedrv.h"
+#include "driver/itemdrv.h"
 
 #include "pmario_sound.h"
 #include "manager/evtmgr_cmd.h"
@@ -108,7 +109,7 @@ static BeroEntry bero_entry_data[] = {
 static EVT_BEGIN(evt_ueki_04)
     CALL(evt_item_delete_check, STRING("item_ueki_04"), LW(0))
     IF_INT_EQUAL(LW(0), 1)
-        CALL(evt_item_entry, STRING("item_ueki_04"), ITEM_POWER_PUNCH, 100, 0, -20, 4, GSWF(2831), 0)
+        CALL(evt_item_entry, STRING("item_ueki_04"), ITEM_POWER_PUNCH, 100, 0, -20, ITEM_TYPE_SCATTER_NO_PICKUP, GSWF(2831), 0)
     END_IF
     RETURN
 EVT_END()

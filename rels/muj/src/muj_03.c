@@ -16,6 +16,7 @@
 #include "driver/npcdrv.h"
 #include "mario/mario_pouch.h"
 #include "pmario_sound.h"
+#include "driver/itemdrv.h"
 
 
 EvtWord muj_03_event_01[22];
@@ -149,7 +150,7 @@ EVT_END()
 static EVT_BEGIN(evt_kusa_5)
     CALL(evt_item_delete_check, STRING("item_kusa_5"), LW(0))
     IF_INT_EQUAL(LW(0), 1)
-        CALL(evt_item_entry, STRING("item_kusa_5"), ITEM_MINI_MR_MINI, -250, 10, 95, 4, GSWF(3155), 0)
+        CALL(evt_item_entry, STRING("item_kusa_5"), ITEM_MINI_MR_MINI, -250, 10, 95, ITEM_TYPE_SCATTER_NO_PICKUP, GSWF(3155), 0)
     END_IF
     RETURN
 EVT_END()
@@ -157,7 +158,7 @@ EVT_END()
 static EVT_BEGIN(evt_kusa_7)
     CALL(evt_item_delete_check, STRING("item_kusa_7"), LW(0))
     IF_INT_EQUAL(LW(0), 1)
-        CALL(evt_item_entry, STRING("item_kusa_7"), ITEM_COIN, 175, 210, -50, 4, GSWF(3156), 0)
+        CALL(evt_item_entry, STRING("item_kusa_7"), ITEM_COIN, 175, 210, -50, ITEM_TYPE_SCATTER_NO_PICKUP, GSWF(3156), 0)
     END_IF
     RETURN
 EVT_END()
@@ -198,7 +199,7 @@ EVT_BEGIN(muj_03_init_evt)
     CALL(evt_mobj_powerupblk, STRING("pblk01"), -470, 240, -50, 0, GSWF(5552), 0)
     CALL(evt_mobj_badgeblk, STRING("mobj03"), -50, 270, -100, 129, 0, GSWF(3147), 0)
     CALL(evt_mobj_brick, STRING("mobj_hidden2"), -50, 209, 0, 156, 11, 0, GSWF(3153))
-    CALL(evt_item_entry, STRING("item_00"), ITEM_STAR_PIECE, 275, 10, 100, 16, GSWF(5642), 0)
+    CALL(evt_item_entry, STRING("item_00"), ITEM_STAR_PIECE, 275, 10, 100, ITEM_TYPE_STILL, GSWF(5642), 0)
     CALL(evt_eff64, STRING("sunlight"), STRING("sunlight_n64"), 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
     SET_VALUE(LW(0), PTR(tree_tbl))
     CALL_CHILD(PTR(evt_sub_tree_access_entry))

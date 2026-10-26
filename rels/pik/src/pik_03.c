@@ -19,6 +19,7 @@
 #include "driver/casedrv.h"
 #include "driver/seqdrv.h"
 #include "pmario_sound.h"
+#include "driver/itemdrv.h"
 
 
 EvtWord bero_in[45];
@@ -106,12 +107,12 @@ EVT_BEGIN(pik_03_init_evt)
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG6_PIK3"))
     CALL(evt_snd_set_rev_mode, 2)
     IF_INT_LESS(GSW_STORY_PROGRESS, 338)
-        CALL(evt_item_entry, STRING("star"), ITEM_GARNET_STAR, 0, 45, -950, 17, -1, 0)
+        CALL(evt_item_entry, STRING("star"), ITEM_GARNET_STAR, 0, 45, -950, ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
     END_IF
     IF_INT_LESS(GSW_STORY_PROGRESS, 338)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("dai_a"), 0, PTR(evt_daiza), 0)
     END_IF
-    CALL(evt_item_entry, STRING("item01"), ITEM_L_EMBLEM, -305, 330, -990, 16, GSWF(3277), 0)
+    CALL(evt_item_entry, STRING("item01"), ITEM_L_EMBLEM, -305, 330, -990, ITEM_TYPE_STILL, GSWF(3277), 0)
     CALL(evt_mobj_powerupblk, STRING("pblk00"), -265, 290, 550, 0, GSWF(5564), 0)
     CALL(evt_map_entry_airport_harbor, 0, STRING("hikou"), STRING("a_hi1"))
     CALL(evt_bero_get_entername, LW(0))

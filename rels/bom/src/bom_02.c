@@ -20,6 +20,7 @@
 #include "system.h"
 #include "driver/casedrv.h"
 #include "pmario_sound.h"
+#include "driver/itemdrv.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "dolphin/mtx.h"
@@ -635,7 +636,7 @@ static EVT_BEGIN(talk_murabito_e)
                 END_IF
                 IF_INT_LESS(LW(0), LW(1))
                     CALL(evt_msg_continue)
-                    CALL(evt_item_entry, STRING("sr"), ITEM_SNOW_BUNNY, 0, -1000, 0, 17, -1, 0)
+                    CALL(evt_item_entry, STRING("sr"), ITEM_SNOW_BUNNY, 0, -1000, 0, ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
                     CALL(evt_item_get_item, STRING("sr"))
                     CALL(evt_item_get_item_end_wait, STRING("sr"))
                     SET_VALUE(GSWF(3890), 1)
@@ -644,7 +645,7 @@ static EVT_BEGIN(talk_murabito_e)
                     CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
                     CALL(evt_npc_status_onoff, 1, STRING("me"), 2)
                     CALL(evt_npc_move_position, STRING("me"), 50, 35, 0, 60, 0)
-                    CALL(evt_item_entry, STRING("iri_30"), ITEM_SNOW_BUNNY, 50, 0, 35, 16, GSWF(3890), 0)
+                    CALL(evt_item_entry, STRING("iri_30"), ITEM_SNOW_BUNNY, 50, 0, 35, ITEM_TYPE_STILL, GSWF(3890), 0)
                     WAIT_MS(600)
                     CALL(evt_npc_move_position, STRING("me"), LW(0), LW(2), 0, 60, 0)
                     CALL(evt_npc_status_onoff, 0, STRING("me"), 2)
@@ -1668,8 +1669,8 @@ EVT_BEGIN(bom_02_init_evt)
     SPAWN_EVENT(PTR(evt_bom_01_karakara))
     CALL(evt_mobj_powerupblk, STRING("pblk01"), 425, 0, -45, 0, GSWF(5565), 0)
     CALL(evt_mobj_kururing_floor, STRING("kururin1"), -30, 0, 115, STRING("S_wakuaaa"), 125, GSWF(5661))
-    CALL(evt_item_entry, STRING("item_00"), ITEM_STAR_PIECE, 210, 30, -168, 16, GSWF(5660), 0)
-    CALL(evt_item_entry, STRING("item_01"), ITEM_INN_COUPON, -220, 5, -115, 16, GSWF(3892), 0)
+    CALL(evt_item_entry, STRING("item_00"), ITEM_STAR_PIECE, 210, 30, -168, ITEM_TYPE_STILL, GSWF(5660), 0)
+    CALL(evt_item_entry, STRING("item_01"), ITEM_INN_COUPON, -220, 5, -115, ITEM_TYPE_STILL, GSWF(3892), 0)
     CALL(evt_mobj_save_blk, STRING("mobj_save"), -300, 65, 10, 0, 0)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, 400)
         CALL(evt_bero_get_entername, LW(0))
@@ -1705,7 +1706,7 @@ EVT_BEGIN(bom_02_init_evt)
     END_IF
     IF_INT_EQUAL(LF(0), 0)
         IF_INT_EQUAL(GSWF(5404), 1)
-            CALL(evt_item_entry, STRING("iri_30"), ITEM_SNOW_BUNNY, 50, 0, 35, 16, GSWF(3890), 0)
+            CALL(evt_item_entry, STRING("iri_30"), ITEM_SNOW_BUNNY, 50, 0, 35, ITEM_TYPE_STILL, GSWF(3890), 0)
         END_IF
     END_IF
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ie1_naka"), MAP_OBJ_FLAG_CLIP)

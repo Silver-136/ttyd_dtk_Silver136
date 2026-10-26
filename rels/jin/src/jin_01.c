@@ -16,6 +16,7 @@
 #include "mario/mario_pouch.h"
 #include "system.h"
 #include "pmario_sound.h"
+#include "driver/itemdrv.h"
 
 USER_FUNC(evt_kagemario_init);
 
@@ -170,7 +171,7 @@ EVT_END()
 static EVT_BEGIN(ki_data_evt_01)
     CALL(evt_item_delete_check, STRING("item_ki01"), LW(0))
     IF_INT_EQUAL(LW(0), 1)
-        CALL(evt_item_entry, STRING("item_ki01"), ITEM_GOLDEN_LEAF, 798, 188, -40, 14, LSWF(2), 0)
+        CALL(evt_item_entry, STRING("item_ki01"), ITEM_GOLDEN_LEAF, 798, 188, -40, ITEM_TYPE_FALL_NO_PICKUP, LSWF(2), 0)
     END_IF
     RETURN
 EVT_END()

@@ -23,6 +23,7 @@
 #include "evt/evt_sub.h"
 #include "dolphin/mtx.h"
 #include "evt/evt_item.h"
+#include "driver/itemdrv.h"
 static void piders_draw_yarn_sub(CameraId cameraId, void* param);
 
 double sqrt(double);
@@ -507,29 +508,29 @@ EVT_BEGIN(enemy_common_dead_event)
     CALL(evt_npc_get_drop_coin, STRING("me"), LW(3))
     IF_INT_GREATER(LW(3), 0)
         LOOP(LW(3))
-            CALL(evt_item_entry, 0, ITEM_COIN, LW(0), LW(1), LW(2), 10, -1, 0)
+            CALL(evt_item_entry, 0, ITEM_COIN, LW(0), LW(1), LW(2), ITEM_TYPE_DROP_REPLACEABLE, -1, 0)
         END_LOOP
     END_IF
     CALL(evt_npc_get_drop_heart, STRING("me"), LW(3))
     IF_INT_GREATER(LW(3), 0)
         LOOP(LW(3))
-            CALL(evt_item_entry, 0, ITEM_HEART, LW(0), LW(1), LW(2), 10, -1, 0)
+            CALL(evt_item_entry, 0, ITEM_HEART, LW(0), LW(1), LW(2), ITEM_TYPE_DROP_REPLACEABLE, -1, 0)
         END_LOOP
     END_IF
     CALL(evt_npc_get_drop_flower, STRING("me"), LW(3))
     IF_INT_GREATER(LW(3), 0)
         LOOP(LW(3))
-            CALL(evt_item_entry, 0, ITEM_FLOWER, LW(0), LW(1), LW(2), 10, -1, 0)
+            CALL(evt_item_entry, 0, ITEM_FLOWER, LW(0), LW(1), LW(2), ITEM_TYPE_DROP_REPLACEABLE, -1, 0)
         END_LOOP
     END_IF
     CALL(evt_npc_get_drop_item, STRING("me"), LW(3))
     IF_INT_NOT_EQUAL(LW(3), 0)
-        CALL(evt_item_entry, 0, LW(3), LW(0), LW(1), LW(2), 9, -1, 0)
+        CALL(evt_item_entry, 0, LW(3), LW(0), LW(1), LW(2), ITEM_TYPE_DROP_LOST_BADGE, -1, 0)
     END_IF
     CALL(evt_npc_getback_item_entry, STRING("me"))
     CALL(evt_npc_get_drop_fixitem, STRING("me"), LW(3))
     IF_INT_NOT_EQUAL(LW(3), 0)
-        CALL(evt_item_entry, 0, LW(3), LW(0), LW(1), LW(2), 9, -1, 0)
+        CALL(evt_item_entry, 0, LW(3), LW(0), LW(1), LW(2), ITEM_TYPE_DROP_LOST_BADGE, -1, 0)
     END_IF
     CALL(evt_npc_delete, STRING("me"))
     CALL(evt_npc_return_interrupt, STRING("me"))
@@ -1839,29 +1840,29 @@ EVT_BEGIN(killer_dead_event)
     CALL(evt_npc_get_drop_coin, STRING("me"), LW(3))
     IF_INT_GREATER(LW(3), 0)
         LOOP(LW(3))
-            CALL(evt_item_entry, 0, ITEM_COIN, LW(0), LW(1), LW(2), 8, -1, 0)
+            CALL(evt_item_entry, 0, ITEM_COIN, LW(0), LW(1), LW(2), ITEM_TYPE_DROP, -1, 0)
         END_LOOP
     END_IF
     CALL(evt_npc_get_drop_heart, STRING("me"), LW(3))
     IF_INT_GREATER(LW(3), 0)
         LOOP(LW(3))
-            CALL(evt_item_entry, 0, ITEM_HEART, LW(0), LW(1), LW(2), 8, -1, 0)
+            CALL(evt_item_entry, 0, ITEM_HEART, LW(0), LW(1), LW(2), ITEM_TYPE_DROP, -1, 0)
         END_LOOP
     END_IF
     CALL(evt_npc_get_drop_flower, STRING("me"), LW(3))
     IF_INT_GREATER(LW(3), 0)
         LOOP(LW(3))
-            CALL(evt_item_entry, 0, ITEM_FLOWER, LW(0), LW(1), LW(2), 8, -1, 0)
+            CALL(evt_item_entry, 0, ITEM_FLOWER, LW(0), LW(1), LW(2), ITEM_TYPE_DROP, -1, 0)
         END_LOOP
     END_IF
     CALL(evt_npc_get_drop_item, STRING("me"), LW(3))
     IF_INT_NOT_EQUAL(LW(3), 0)
-        CALL(evt_item_entry, 0, LW(3), LW(0), LW(1), LW(2), 9, -1, 0)
+        CALL(evt_item_entry, 0, LW(3), LW(0), LW(1), LW(2), ITEM_TYPE_DROP_LOST_BADGE, -1, 0)
     END_IF
     CALL(evt_npc_getback_item_entry, STRING("me"))
     CALL(evt_npc_get_drop_fixitem, STRING("me"), LW(3))
     IF_INT_NOT_EQUAL(LW(3), 0)
-        CALL(evt_item_entry, 0, LW(3), LW(0), LW(1), LW(2), 9, -1, 0)
+        CALL(evt_item_entry, 0, LW(3), LW(0), LW(1), LW(2), ITEM_TYPE_DROP_LOST_BADGE, -1, 0)
     END_IF
     CALL(evt_npc_set_position, STRING("me"), 0, -1000, 0)
     RETURN

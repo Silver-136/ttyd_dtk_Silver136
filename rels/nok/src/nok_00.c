@@ -20,6 +20,7 @@
 #include "evt/evt_pouch.h"
 #include "driver/mapdrv.h"
 #include "pmario_sound.h"
+#include "driver/itemdrv.h"
 
 #include "driver/npcdrv.h"
 #include "driver/animdrv.h"
@@ -268,7 +269,7 @@ EVT_BEGIN(nokonoko_F_talk)
                 IF_INT_EQUAL(LW(0), 206)
                     CALL(evt_pouch_remove_item, ITEM_MOUSSE_CAKE, LW(0))
                     CALL(evt_msg_print, 0, STRING("irai_15_005"), 0, 0)
-                    CALL(evt_item_entry, STRING("df"), ITEM_DRIED_BOUQUET, 0, -1000, 0, 17, -1, 0)
+                    CALL(evt_item_entry, STRING("df"), ITEM_DRIED_BOUQUET, 0, -1000, 0, ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
                     CALL(evt_item_get_item, STRING("df"))
                     CALL(evt_item_get_item_end_wait, STRING("df"))
                     CALL(evt_msg_print, 0, STRING("irai_15_007"), 0, 0)
@@ -304,7 +305,7 @@ EVT_BEGIN(nokonoko_F_talk)
             IF_INT_EQUAL(LW(0), 159)
                 CALL(evt_pouch_remove_item, ITEM_HOT_DOG, LW(0))
                 CALL(evt_msg_print, 0, STRING("irai_15_013"), 0, 0)
-                CALL(evt_item_entry, STRING("df"), ITEM_DRIED_BOUQUET, 0, -1000, 0, 17, -1, 0)
+                CALL(evt_item_entry, STRING("df"), ITEM_DRIED_BOUQUET, 0, -1000, 0, ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
                 CALL(evt_item_get_item, STRING("df"))
                 CALL(evt_item_get_item_end_wait, STRING("df"))
                 CALL(evt_msg_print, 0, STRING("irai_15_015"), 0, 0)

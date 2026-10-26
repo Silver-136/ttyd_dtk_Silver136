@@ -15,6 +15,7 @@
 #include "system.h"
 #include "driver/casedrv.h"
 #include "pmario_sound.h"
+#include "driver/itemdrv.h"
 
 #include "mario/mario.h"
 #include "driver/npcdrv.h"
@@ -513,7 +514,7 @@ EVT_BEGIN(evt_daijisouna_kami)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     ADD(LW(0), -20)
     ADD(LW(1), 15)
-    CALL(evt_item_entry, STRING("dummy"), ITEM_VITAL_PAPER, LW(0), LW(1), LW(2), 17, -1, 0)
+    CALL(evt_item_entry, STRING("dummy"), ITEM_VITAL_PAPER, LW(0), LW(1), LW(2), ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
     CALL(evt_msg_print, 0, STRING("stg6_rsh_173"), 0, STRING("me"))
     CALL(evt_eff_fukidashi, 1, STRING("a"), STRING("サラリーマン"), 0, 0, 0, 0, 0, 0, 0, 0)
     WAIT_MS(1200)
@@ -651,14 +652,14 @@ static EVT_BEGIN(talk_syashou)
                 ADD(LW(0), 18)
             END_IF
             ADD(LW(1), 18)
-            CALL(evt_item_entry, STRING("mofu"), ITEM_BLANKET, LW(0), LW(1), LW(2), 17, -1, 0)
+            CALL(evt_item_entry, STRING("mofu"), ITEM_BLANKET, LW(0), LW(1), LW(2), ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
             CALL(evt_mario_set_pose, STRING("M_C_3"))
             WAIT_MS(1000)
             CALL(evt_mario_set_pose, STRING("M_S_1"))
             CALL(evt_item_delete, STRING("mofu"))
 #endif
             CALL(evt_msg_print, 0, STRING("stg6_rsh_143"), 0, 0)
-            CALL(evt_item_entry, STRING("orei"), ITEM_MUSHROOM, 0, 0, 0, 17, -1, 0)
+            CALL(evt_item_entry, STRING("orei"), ITEM_MUSHROOM, 0, 0, 0, ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
             CALL(evt_item_get_item, STRING("orei"))
             CALL(evt_item_get_item_end_wait, STRING("orei"))
             CALL(evt_msg_print, 0, STRING("stg6_rsh_145"), 0, 0)
@@ -1016,14 +1017,14 @@ static EVT_BEGIN(talk_konari)
                         ADD(LW(0), 18)
                     END_IF
                     ADD(LW(1), 18)
-                    CALL(evt_item_entry, STRING("sign"), ITEM_AUTOGRAPH, LW(0), LW(1), LW(2), 17, -1, 0)
+                    CALL(evt_item_entry, STRING("sign"), ITEM_AUTOGRAPH, LW(0), LW(1), LW(2), ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
                     CALL(evt_mario_set_pose, STRING("M_C_3"))
                     WAIT_MS(1000)
                     CALL(evt_mario_set_pose, STRING("M_S_1"))
                     CALL(evt_item_delete, STRING("sign"))
 #endif
                     CALL(evt_msg_print, 0, STRING("stg6_rsh_97"), 0, 0)
-                    CALL(evt_item_entry, STRING("orei"), ITEM_SHINE_SPRITE, 0, 0, 0, 17, -1, 0)
+                    CALL(evt_item_entry, STRING("orei"), ITEM_SHINE_SPRITE, 0, 0, 0, ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
                     CALL(evt_item_get_item, STRING("orei"))
                     CALL(evt_item_get_item_end_wait, STRING("orei"))
                     CALL(evt_msg_print, 0, STRING("stg6_rsh_99"), 0, 0)
@@ -1233,7 +1234,7 @@ EVT_BEGIN(evt_tana_5)
         RETURN
     END_IF
     CALL(evt_mario_key_onoff, 0)
-    CALL(evt_item_entry, STRING("_item00"), ITEM_STAR_PIECE, -260, 0, -240, 16, -1, 0)
+    CALL(evt_item_entry, STRING("_item00"), ITEM_STAR_PIECE, -260, 0, -240, ITEM_TYPE_STILL, -1, 0)
     CALL(evt_item_flag_on, STRING("_item00"), 2)
     CALL(evt_item_get_item, STRING("_item00"))
     SET_VALUE(GSWF(5652), 1)

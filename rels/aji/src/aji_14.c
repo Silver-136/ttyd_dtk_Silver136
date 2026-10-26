@@ -14,6 +14,7 @@
 #include "mario/mario_pouch.h"
 #include "system.h"
 #include "pmario_sound.h"
+#include "driver/itemdrv.h"
 
 #include "driver/npcdrv.h"
 #include "driver/animdrv.h"
@@ -338,7 +339,7 @@ EVT_BEGIN(evt_boss2)
     CALL(evt_party_set_pos, 0, -140, 0, 15)
     CALL(evt_seq_wait, SEQ_GAME)
     WAIT_MS(1000)
-    CALL(evt_item_entry, STRING("dummy"), ITEM_CRYSTAL_STAR, 0, 1000, 0, 17, -1, 0)
+    CALL(evt_item_entry, STRING("dummy"), ITEM_CRYSTAL_STAR, 0, 1000, 0, ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
     CALL(evt_sub_intpl_msec_init, EASING_COS_IN_OUT, 1000, 25, 2000)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)

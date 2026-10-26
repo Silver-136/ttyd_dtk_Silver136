@@ -22,6 +22,7 @@
 #include "driver/casedrv.h"
 #include "driver/seqdrv.h"
 #include "pmario_sound.h"
+#include "driver/itemdrv.h"
 
 
 static EvtWord door01_close[12];
@@ -141,7 +142,7 @@ static EVT_BEGIN(item_evt)
     CALL(evt_snd_bgmoff, PSND_FADEOUT)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mobj_get_position, STRING("gon07treasure"), LW(0), LW(1), LW(2))
-    CALL(evt_item_entry, STRING("k_slit"), ITEM_BLACK_KEY_0x22, LW(0), LW(1), LW(2), 16, -1, 0)
+    CALL(evt_item_entry, STRING("k_slit"), ITEM_BLACK_KEY_0x22, LW(0), LW(1), LW(2), ITEM_TYPE_STILL, -1, 0)
     CALL(evt_item_flag_on, STRING("k_slit"), 2)
     CALL(evt_mobj_wait_animation_end, STRING("gon07treasure"))
     CALL(evt_item_get_item, STRING("k_slit"))

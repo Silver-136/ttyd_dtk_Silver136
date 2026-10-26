@@ -20,6 +20,7 @@
 #include "system.h"
 #include "driver/seqdrv.h"
 #include "pmario_sound.h"
+#include "driver/itemdrv.h"
 
 USER_FUNC(evt_mario_dispflag_onoff);
 
@@ -385,7 +386,7 @@ EVT_BEGIN(gon_01_init_evt)
             SPAWN_EVENT(PTR(gon_01_GATEEVENT_evt))
         END_IF
     END_IF
-    CALL(evt_item_entry, STRING("item00"), ITEM_HP_PLUS, 330, -150, 0, 16, GSWF(1501), 0)
+    CALL(evt_item_entry, STRING("item00"), ITEM_HP_PLUS, 330, -150, 0, ITEM_TYPE_STILL, GSWF(1501), 0)
     CALL(evt_hit_damage_return_set, PTR(hitDmgRetPoints))
     CALL_CHILD(PTR(evt_gazigazi_entry))
     CALL(evt_map_playanim, STRING("m_mizu01"), 1, 0)

@@ -21,6 +21,7 @@
 #include "mario/mario_pouch.h"
 #include "driver/casedrv.h"
 #include "pmario_sound.h"
+#include "driver/itemdrv.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "driver/imgdrv.h"
@@ -749,7 +750,7 @@ EVT_BEGIN(mri_17_init_evt)
     IF_INT_LESS(GSW_STORY_PROGRESS, 103)
         CALL(evt_mobj_switch_blue, 1, STRING("switch"), 60, -309, 53, PTR(switch_event), 0)
     END_IF
-    CALL(evt_item_entry, STRING("item_01"), ITEM_STAR_PIECE, 168, -310, -44, 16, GSWF(5617), 0)
+    CALL(evt_item_entry, STRING("item_01"), ITEM_STAR_PIECE, 168, -310, -44, ITEM_TYPE_STILL, GSWF(5617), 0)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS_OR_EQUAL(101)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_hako"), MAP_OBJ_FLAG_HIDDEN)

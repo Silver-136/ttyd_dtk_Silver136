@@ -3959,7 +3959,7 @@ EVT_END()
 
 EVT_BEGIN(evt_boss_stone)
     SET_VALUE(LW(10), 0)
-    CALL(evt_item_entry, STRING(("stone")), ITEM_GOLD_STAR, 0, 0, 0, 17, -1, 0)
+    CALL(evt_item_entry, STRING(("stone")), ITEM_GOLD_STAR, 0, 0, 0, ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
     LOOP(0)
         CALL(evt_mapobj_get_position, STRING(("kaiten_souti")), LW(0), LW(1), LW(2))
         ADD_FLOAT(LW(1), FLOAT(20.0f))

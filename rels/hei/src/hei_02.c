@@ -11,6 +11,7 @@
 #include "evt/evt_mobj.h"
 #include "mario/mario_pouch.h"
 #include "pmario_sound.h"
+#include "driver/itemdrv.h"
 
 USER_FUNC(evt_cloud_ent);
 USER_FUNC(evt_cloud_init);
@@ -61,7 +62,7 @@ static BeroEntry bero_entry_data[] = {
 EVT_BEGIN(evt_ki_6)
     CALL(evt_item_delete_check, STRING("item_ki_6"), LW(0))
     IF_INT_EQUAL(LW(0), 1)
-        CALL(evt_item_entry, STRING("item_ki_6"), ITEM_COIN, 192, 92, -120, 14, GSWF(1786), 0)
+        CALL(evt_item_entry, STRING("item_ki_6"), ITEM_COIN, 192, 92, -120, ITEM_TYPE_FALL_NO_PICKUP, GSWF(1786), 0)
     END_IF
     RETURN
 EVT_END()
@@ -80,7 +81,7 @@ static TreeAccess ki_data[] = {
 static EVT_BEGIN(evt_kusa_1)
     CALL(evt_item_delete_check, STRING("item_kusa_1"), LW(0))
     IF_INT_EQUAL(LW(0), 1)
-        CALL(evt_item_entry, STRING("item_kusa_1"), ITEM_STAR_PIECE, -645, 50, -70, 4, GSWF(5600), 0)
+        CALL(evt_item_entry, STRING("item_kusa_1"), ITEM_STAR_PIECE, -645, 50, -70, ITEM_TYPE_SCATTER_NO_PICKUP, GSWF(5600), 0)
     END_IF
     RETURN
 EVT_END()

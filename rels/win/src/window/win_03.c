@@ -13,6 +13,7 @@
 #include "mario/mario_pouch.h"
 #include "driver/casedrv.h"
 #include "pmario_sound.h"
+#include "driver/itemdrv.h"
 
 #include "driver/camdrv.h"
 #include "mario/mariost.h"
@@ -289,7 +290,7 @@ EVT_END()
 EVT_BEGIN(tree_evt_01)
     CALL(evt_item_delete_check, STRING("item_tree01"), LW(0))
     IF_INT_EQUAL(LW(0), 1)
-        CALL(evt_item_entry, STRING("item_tree01"), ITEM_STAR_PIECE, -333, 72, -24, 0, GSWF(5609), 0)
+        CALL(evt_item_entry, STRING("item_tree01"), ITEM_STAR_PIECE, -333, 72, -24, ITEM_TYPE_GROUND, GSWF(5609), 0)
     END_IF
     RETURN
 EVT_END()
@@ -318,8 +319,8 @@ EVT_BEGIN(win_03_init_evt)
     SET_VALUE(LW(0), PTR(tree_access_data))
     CALL_CHILD(evt_sub_tree_access_entry)
     CALL(evt_mobj_recovery_blk, STRING("mobj_recover"), 7, 425, 60, 75, 0, 0)
-    CALL(evt_item_entry, STRING("i"), ITEM_VOLT_SHROOM, 475, 0, -60, 16, GSWF(2679), 0)
-    CALL(evt_item_entry, STRING("item_00"), ITEM_STAR_PIECE, -150, 0, -30, 16, GSWF(5610), 0)
+    CALL(evt_item_entry, STRING("i"), ITEM_VOLT_SHROOM, 475, 0, -60, ITEM_TYPE_STILL, GSWF(2679), 0)
+    CALL(evt_item_entry, STRING("item_00"), ITEM_STAR_PIECE, -150, 0, -30, ITEM_TYPE_STILL, GSWF(5610), 0)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ana"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_siro_asu"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_hitobj_onoff, STRING("A_siro_asu"), 1, 0)

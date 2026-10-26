@@ -19,6 +19,7 @@
 #include "evt/evt_pouch.h"
 #include "driver/punidrv.h"
 #include "pmario_sound.h"
+#include "driver/itemdrv.h"
 
 #include "driver/fadedrv.h"
 #include "mario/mariost.h"
@@ -461,7 +462,7 @@ static EVT_BEGIN(elder_talk)
                 IF_INT_NOT_EQUAL(LW(0), -1)
                     CALL(evt_pouch_remove_item, ITEM_ROUTING_SLIP, LW(0))
                     CALL(evt_msg_print, 0, STRING("irai_17_01"), 0, 0)
-                    CALL(evt_item_entry, STRING("kairanban"), ITEM_ROUTING_SLIP, 0, -1000, 0, 17, -1, 0)
+                    CALL(evt_item_entry, STRING("kairanban"), ITEM_ROUTING_SLIP, 0, -1000, 0, ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
                     CALL(evt_item_get_item, STRING("kairanban"))
                     CALL(evt_item_get_item_end_wait, STRING("kairanban"))
                     SET_VALUE(GSWF(5406), 1)
@@ -648,7 +649,7 @@ static EVT_BEGIN(sister_talk)
             CALL(evt_npc_jump_position_nohit, STRING("me"), LW(0), LW(1), LW(2), 200, 18)
             CALL(evt_msg_print, 0, STRING("stg2_mri_re_012"), 0, STRING("me"))
             CALL(evt_msg_print, 0, STRING("stg2_mri_re_014"), 0, STRING("me"))
-            CALL(evt_item_entry, STRING("puniko_item"), ITEM_MYSTIC_EGG, 0, -1000, 0, 16, -1, 0)
+            CALL(evt_item_entry, STRING("puniko_item"), ITEM_MYSTIC_EGG, 0, -1000, 0, ITEM_TYPE_STILL, -1, 0)
             CALL(evt_item_get_item, STRING("puniko_item"))
             CALL(evt_msg_print, 0, STRING("stg2_mri_re_015"), 0, STRING("me"))
             SET_VALUE(GSWF(2827), 1)
@@ -1816,7 +1817,7 @@ EVT_BEGIN(rival_nakama)
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG2_CHOUROU_PUNIDAMA1"), LW(0), LW(1), LW(2), 0)
     ADD(LW(1), 5)
     ADD(LW(2), -2)
-    CALL(evt_item_entry, STRING("item00"), ITEM_PUNI_ORB, LW(0), LW(1), LW(2), 16, -1, 0)
+    CALL(evt_item_entry, STRING("item00"), ITEM_PUNI_ORB, LW(0), LW(1), LW(2), ITEM_TYPE_STILL, -1, 0)
     CALL(evt_item_flag_on, STRING("item00"), 2)
     ADD(LW(1), 8)
     CALL(evt_item_move_3d_position, STRING("item00"), LW(0), LW(1), LW(2), 500, 0)
@@ -2766,7 +2767,7 @@ EVT_BEGIN(boss_battle_win)
         MULTIPLY(LW(13), 9)
         ADD(LW(13), LW(0))
         CALL(evt_npc_set_position, STRING("ダミー"), LW(0), LW(1), LW(2))
-        CALL(evt_item_entry, STRING("item00"), ITEM_EMERALD_STAR, 0, -1000, 0, 16, -1, 0)
+        CALL(evt_item_entry, STRING("item00"), ITEM_EMERALD_STAR, 0, -1000, 0, ITEM_TYPE_STILL, -1, 0)
         SET_VALUE(LW(8), STRING("ダミー"))
         SET_VALUE(LW(9), STRING("item00"))
         SPAWN_EVENT_GET_ID(PTR(starstone_item), LW(15))
@@ -2946,7 +2947,7 @@ EVT_BEGIN(boss_battle_win)
     CALL(evt_item_get_position, STRING("item00"), LW(0), LW(1), LW(2))
     CALL(evt_item_set_position, STRING("item00"), 0, -1000, 0)
     SET_VALUE(LW(10), STRING("item01"))
-    CALL(evt_item_entry, LW(10), ITEM_EMERALD_STAR, LW(0), LW(1), LW(2), 16, -1, 0)
+    CALL(evt_item_entry, LW(10), ITEM_EMERALD_STAR, LW(0), LW(1), LW(2), ITEM_TYPE_STILL, -1, 0)
     CALL(evt_item_flag_on, LW(10), 2)
     SET_VALUE(LW(0), 2)
     SET_VALUE(LW(1), LW(10))
@@ -3025,7 +3026,7 @@ EVT_BEGIN(evt_ueki_03)
         ELSE
         CALL(evt_item_delete_check, STRING("item_ueki_03"), LW(0))
         IF_INT_EQUAL(LW(0), 1)
-            CALL(evt_item_entry, STRING("item_ueki_03"), ITEM_COIN, -240, 0, -20, 4, GSWF(2828), 0)
+            CALL(evt_item_entry, STRING("item_ueki_03"), ITEM_COIN, -240, 0, -20, ITEM_TYPE_SCATTER_NO_PICKUP, GSWF(2828), 0)
         END_IF
     END_IF
     RETURN

@@ -10,6 +10,7 @@
 #include "evt/evt_mobj.h"
 #include "mario/mario_pouch.h"
 #include "pmario_sound.h"
+#include "driver/itemdrv.h"
 
 
 static TreeAccess tree_tbl[4];
@@ -75,7 +76,7 @@ EVT_BEGIN(bom_03_init_evt)
     CALL(evt_snd_bgmon, 512, STRING("BGM_STG7_BOM1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_BOM1"))
     CALL(evt_mobj_powerupblk, STRING("pblk00"), -405, 60, 25, 0, GSWF(5566), 0)
-    CALL(evt_item_entry, STRING("item00"), ITEM_STAR_PIECE, 45, 5, 120, 16, GSWF(5662), 0)
+    CALL(evt_item_entry, STRING("item00"), ITEM_STAR_PIECE, 45, 5, 120, ITEM_TYPE_STILL, GSWF(5662), 0)
     RETURN
 EVT_END()
 

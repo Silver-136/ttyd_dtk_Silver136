@@ -19,6 +19,7 @@
 #include "system.h"
 #include "driver/casedrv.h"
 #include "pmario_sound.h"
+#include "driver/itemdrv.h"
 
 #include "string.h"
 #include "memory.h"
@@ -347,7 +348,7 @@ static EVT_BEGIN(marco_talk)
                     CALL(evt_msg_print_add, 0, STRING("stg5_muj_93_03_02"))
                     CASE_EQUAL(2)
                     CALL(evt_msg_print_add, 0, STRING("stg5_muj_93_03_03"))
-                    CALL(evt_item_entry, STRING("jewel"), ITEM_SKULL_GEM, 0, -1000, 0, 16, -1, 0)
+                    CALL(evt_item_entry, STRING("jewel"), ITEM_SKULL_GEM, 0, -1000, 0, ITEM_TYPE_STILL, -1, 0)
                     CALL(evt_item_flag_on, STRING("jewel"), 2)
                     CALL(evt_item_get_item, STRING("jewel"))
                 END_SWITCH
@@ -1088,7 +1089,7 @@ EVT_BEGIN(dokuroiwa_bomb)
     CALL(evt_npc_jump_position_nohit, STRING("マルコ"), LW(0), LW(1), LW(2), 225, 30)
     CALL(evt_npc_jump_position_nohit, STRING("マルコ"), LW(0), LW(1), LW(2), 225, 30)
     CALL(evt_msg_print, 0, STRING("stg5_muj_93_08"), 0, STRING("マルコ"))
-    CALL(evt_item_entry, STRING("jewel00"), ITEM_SKULL_GEM, 225, 200, -25, 13, -1, 0)
+    CALL(evt_item_entry, STRING("jewel00"), ITEM_SKULL_GEM, 225, 200, -25, ITEM_TYPE_FALL, -1, 0)
     SET_VALUE(LW(8), STRING("jewel00"))
     CALL(evt_item_flag_on, LW(8), 16)
     CALL(evt_item_set_gravity, LW(8), FLOAT(1.0f))
@@ -1273,7 +1274,7 @@ EVT_END()
 static EVT_BEGIN(evt_kusa_1)
     CALL(evt_item_delete_check, STRING("item_kusa_1"), LW(0))
     IF_INT_EQUAL(LW(0), 1)
-        CALL(evt_item_entry, STRING("item_kusa_1"), ITEM_SPITE_POUCH, 235, 0, 90, 4, GSWF(3157), 0)
+        CALL(evt_item_entry, STRING("item_kusa_1"), ITEM_SPITE_POUCH, 235, 0, 90, ITEM_TYPE_SCATTER_NO_PICKUP, GSWF(3157), 0)
     END_IF
     RETURN
 EVT_END()
@@ -1333,11 +1334,11 @@ EVT_BEGIN(muj_05_init_evt)
     END_SWITCH
     SPAWN_EVENT(dokuroiwa_init)
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 274)
-        CALL(evt_item_entry, STRING("item00"), ITEM_WEDDING_RING, -250, 0, -110, 0, GSWF(3143), 0)
+        CALL(evt_item_entry, STRING("item00"), ITEM_WEDDING_RING, -250, 0, -110, ITEM_TYPE_GROUND, GSWF(3143), 0)
     END_IF
     CALL(evt_eff64, STRING("sunlight"), STRING("sunlight_n64"), 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
     CALL(evt_mobj_recovery_blk, STRING("mobj_recover"), 12, 125, 60, -90, 0, 0)
-    CALL(evt_item_entry, STRING("item_01"), ITEM_STAR_PIECE, 395, -15, 120, 16, GSWF(5643), 0)
+    CALL(evt_item_entry, STRING("item_01"), ITEM_STAR_PIECE, 395, -15, 120, ITEM_TYPE_STILL, GSWF(5643), 0)
     SET_VALUE(LW(0), PTR(tree_tbl))
     CALL_CHILD(evt_sub_tree_access_entry)
     SET_VALUE(LW(0), PTR(kusa_tbl))

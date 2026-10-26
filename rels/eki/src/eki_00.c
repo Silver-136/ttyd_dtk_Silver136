@@ -26,6 +26,7 @@
 #include "evt/evt_paper.h"
 #include "poly_trig.h"
 #include "driver/casedrv.h"
+#include "driver/itemdrv.h"
 
 #include "manager/evtmgr.h"
 #include "driver/mapdrv.h"
@@ -1942,7 +1943,7 @@ EVT_END()
 
 static EVT_BEGIN(evt_head)
     CALL(evt_item_delete, STRING("item"))
-    CALL(evt_item_entry, STRING("item"), ITEM_CLOSE_CALL_P, -260, 160, -60, 4, GSWF(3745), 0)
+    CALL(evt_item_entry, STRING("item"), ITEM_CLOSE_CALL_P, -260, 160, -60, ITEM_TYPE_SCATTER_NO_PICKUP, GSWF(3745), 0)
     CALL(evt_item_set_move_dir_speed, STRING("item"), FLOAT(135.0f), FLOAT(90.0f))
     CALL(evt_item_set_gravity, STRING("item"), FLOAT(1.0f))
     CALL(evt_item_set_bound_rate, STRING("item"), FLOAT(0.5996094f))
@@ -1979,7 +1980,7 @@ EVT_BEGIN(eki_00_init_evt)
     IF_INT_LESS(GSW_STORY_PROGRESS, 323)
         CALL_CHILD(PTR(evt_moamoa_init))
     END_IF
-    CALL(evt_item_entry, STRING("item"), ITEM_CLOSE_CALL_P, -260, 130, -60, 17, GSWF(3745), 0)
+    CALL(evt_item_entry, STRING("item"), ITEM_CLOSE_CALL_P, -260, 130, -60, ITEM_TYPE_STILL_NO_TOUCH, GSWF(3745), 0)
     IF_INT_EQUAL(GSWF(3745), 0)
         CALL(evt_run_case_evt, CASE_HEAD, 1, STRING("a_dai_sita"), 0, PTR(evt_head), 0)
     END_IF

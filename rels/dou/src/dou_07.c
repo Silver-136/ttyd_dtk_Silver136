@@ -17,6 +17,7 @@
 #include "evt/evt_pouch.h"
 #include "driver/npcdrv.h"
 #include "system.h"
+#include "driver/itemdrv.h"
 
 #include "driver/mobjdrv.h"
 #include "driver/animdrv.h"
@@ -56,10 +57,10 @@ EVT_BEGIN(erumosu_dead)
 #ifdef VERSION_G8ME01
     WAIT_MS(1000)
     ADD(LW(1), 150)
-    CALL(evt_item_entry, STRING("item_key"), ITEM_BLACK_KEY_0x24, LW(0), LW(1), LW(2), 13, GSWF(2987), 0)
+    CALL(evt_item_entry, STRING("item_key"), ITEM_BLACK_KEY_0x24, LW(0), LW(1), LW(2), ITEM_TYPE_FALL, GSWF(2987), 0)
 #else
     WAIT_MS(500)
-    CALL(evt_item_entry, STRING("item_key"), ITEM_BLACK_KEY_0x24, LW(0), LW(1), LW(2), 4, GSWF(2987), 0)
+    CALL(evt_item_entry, STRING("item_key"), ITEM_BLACK_KEY_0x24, LW(0), LW(1), LW(2), ITEM_TYPE_SCATTER_NO_PICKUP, GSWF(2987), 0)
 #endif
     RETURN
 EVT_END()
@@ -342,14 +343,14 @@ EVT_BEGIN(dou_07_init_evt)
     CALL(evt_map_playanim, STRING("nami"), 1, 0)
     SET_VALUE(GF(0), 0)
     CALL(evt_mobj_itembox, STRING("mobj_box00"), -33, -18, 56, 3, PTR(peramajin_before), PTR(peramajin_after), GSWF(2980))
-    CALL(evt_item_entry, STRING("item_00"), ITEM_P_DOWN_D_UP, -75, -30, -15, 16, GSWF(2985), 0)
+    CALL(evt_item_entry, STRING("item_00"), ITEM_P_DOWN_D_UP, -75, -30, -15, ITEM_TYPE_STILL, GSWF(2985), 0)
     IF_INT_EQUAL(GSWF(2988), 1)
         IF_INT_EQUAL(GSWF(2989), 0)
             SPAWN_EVENT(PTR(apper_elmos))
         END_IF
     END_IF
     IF_INT_EQUAL(GSWF(2989), 1)
-        CALL(evt_item_entry, STRING("item_key"), ITEM_BLACK_KEY_0x24, 100, -6, -37, 14, GSWF(2987), 0)
+        CALL(evt_item_entry, STRING("item_key"), ITEM_BLACK_KEY_0x24, 100, -6, -37, ITEM_TYPE_FALL_NO_PICKUP, GSWF(2987), 0)
     END_IF
     RETURN
 EVT_END()

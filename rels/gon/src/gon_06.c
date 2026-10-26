@@ -19,6 +19,7 @@
 #include "evt/evt_item.h"
 #include "evt/evt_pouch.h"
 #include "driver/npcdrv.h"
+#include "driver/itemdrv.h"
 
 #include "driver/mobjdrv.h"
 #include "driver/animdrv.h"
@@ -473,7 +474,7 @@ EVT_BEGIN(gon_06_init_evt)
     CALL(evt_npc_set_width, STRING("\"カロン05\""), 30)
     CALL(evt_npc_set_height, STRING("\"カロン05\""), 7)
     CALL(evt_mobj_switch_red, 0, STRING("mobj_switch1"), 92, 0, 120, PTR(evt_ori_open), GSWF(1491))
-    CALL(evt_item_entry, STRING("item01"), ITEM_ATTACK_FX_R, -100, 0, -100, 16, GSWF(1504), 0)
+    CALL(evt_item_entry, STRING("item01"), ITEM_ATTACK_FX_R, -100, 0, -100, ITEM_TYPE_STILL, GSWF(1504), 0)
     CALL(evt_sub_rumble_onoff, 1, 0)
     WAIT_FRAMES(1)
     CALL(evt_npc_change_fbat_mode, 1)

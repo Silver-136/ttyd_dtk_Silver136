@@ -19,6 +19,7 @@
 #include "driver/mapdrv.h"
 #include "system.h"
 #include "pmario_sound.h"
+#include "driver/itemdrv.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "dolphin/mtx.h"
@@ -459,7 +460,7 @@ EVT_BEGIN(boss_noko_talk)
         END_IF
         IF_INT_LESS(LW(0), LW(1))
             CALL(evt_msg_continue)
-            CALL(evt_item_entry, STRING("item_irai"), ITEM_TURTLEY_LEAF, 0, -1000, 0, 17, -1, 0)
+            CALL(evt_item_entry, STRING("item_irai"), ITEM_TURTLEY_LEAF, 0, -1000, 0, ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
             CALL(evt_item_get_item, STRING("item_irai"))
             SET_VALUE(GSWF(1629), 1)
             ELSE
@@ -469,7 +470,7 @@ EVT_BEGIN(boss_noko_talk)
             CALL(evt_npc_status_onoff, 1, STRING("me"), 2)
             CALL(evt_npc_move_position, STRING("me"), -317, -350, 0, 40, 0)
             WAIT_MS(300)
-            CALL(evt_item_entry, STRING("iri_08"), ITEM_TURTLEY_LEAF, -317, 128, -374, 16, GSWF(1629), 0)
+            CALL(evt_item_entry, STRING("iri_08"), ITEM_TURTLEY_LEAF, -317, 128, -374, ITEM_TYPE_STILL, GSWF(1629), 0)
             WAIT_MS(300)
             CALL(evt_npc_move_position, STRING("me"), LW(0), LW(2), 0, 40, 0)
             CALL(evt_set_dir_to_target, STRING("me"), STRING("mario"))
@@ -494,7 +495,7 @@ EVT_BEGIN(boss_noko_talk)
                     IF_INT_NOT_EQUAL(LW(0), -1)
                         CALL(evt_pouch_remove_item, ITEM_ROUTING_SLIP, LW(0))
                         CALL(evt_msg_print, 0, STRING("irai_17_01"), 0, 0)
-                        CALL(evt_item_entry, STRING("kairanban"), ITEM_ROUTING_SLIP, 0, -1000, 0, 17, -1, 0)
+                        CALL(evt_item_entry, STRING("kairanban"), ITEM_ROUTING_SLIP, 0, -1000, 0, ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
                         CALL(evt_item_get_item, STRING("kairanban"))
                         CALL(evt_item_get_item_end_wait, STRING("kairanban"))
                         SET_VALUE(GSWF(5407), 1)
@@ -1473,7 +1474,7 @@ static EVT_BEGIN(evt_kusa_4)
     END_IF
     CALL(evt_item_delete_check, STRING("item_kusa_4"), LW(0))
     IF_INT_EQUAL(LW(0), 1)
-        CALL(evt_item_entry, STRING("item_kusa_4"), ITEM_TURTLEY_LEAF, -407, 70, -160, 4, LSWF(4), 0)
+        CALL(evt_item_entry, STRING("item_kusa_4"), ITEM_TURTLEY_LEAF, -407, 70, -160, ITEM_TYPE_SCATTER_NO_PICKUP, LSWF(4), 0)
     END_IF
     RETURN
 EVT_END()
@@ -1484,7 +1485,7 @@ static EVT_BEGIN(evt_kusa_5)
     END_IF
     CALL(evt_item_delete_check, STRING("item_kusa_5"), LW(0))
     IF_INT_EQUAL(LW(0), 1)
-        CALL(evt_item_entry, STRING("item_kusa_5"), ITEM_TURTLEY_LEAF, -452, 70, -160, 4, LSWF(4), 0)
+        CALL(evt_item_entry, STRING("item_kusa_5"), ITEM_TURTLEY_LEAF, -452, 70, -160, ITEM_TYPE_SCATTER_NO_PICKUP, LSWF(4), 0)
     END_IF
     RETURN
 EVT_END()
@@ -1495,7 +1496,7 @@ static EVT_BEGIN(evt_kusa_6)
     END_IF
     CALL(evt_item_delete_check, STRING("item_kusa_6"), LW(0))
     IF_INT_EQUAL(LW(0), 1)
-        CALL(evt_item_entry, STRING("item_kusa_6"), ITEM_TURTLEY_LEAF, -362, 70, -160, 4, LSWF(4), 0)
+        CALL(evt_item_entry, STRING("item_kusa_6"), ITEM_TURTLEY_LEAF, -362, 70, -160, ITEM_TYPE_SCATTER_NO_PICKUP, LSWF(4), 0)
     END_IF
     RETURN
 EVT_END()
@@ -1564,9 +1565,9 @@ EVT_BEGIN(nok_01_init_evt)
         SET_VALUE(LSWF(4), 1)
     END_IF
     CALL(evt_mobj_kururing_floor, STRING("kururin2"), 400, 0, 140, STRING("S_guround"), 125, GSWF(5602))
-    CALL(evt_item_entry, STRING("item_00"), ITEM_MEGA_RUSH_P, -180, 70, -425, 16, GSWF(1628), 0)
+    CALL(evt_item_entry, STRING("item_00"), ITEM_MEGA_RUSH_P, -180, 70, -425, ITEM_TYPE_STILL, GSWF(1628), 0)
     IF_INT_EQUAL(GSWF(5382), 1)
-        CALL(evt_item_entry, STRING("iri_08"), ITEM_TURTLEY_LEAF, -317, 128, -374, 16, GSWF(1629), 0)
+        CALL(evt_item_entry, STRING("iri_08"), ITEM_TURTLEY_LEAF, -317, 128, -374, ITEM_TYPE_STILL, GSWF(1629), 0)
     END_IF
     IF_INT_EQUAL(LF(0), 0)
         LOOP(2)

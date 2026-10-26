@@ -16,6 +16,7 @@
 #include "evt/evt_pouch.h"
 #include "driver/mapdrv.h"
 #include "pmario_sound.h"
+#include "driver/itemdrv.h"
 
 USER_FUNC(evt_mario_get_name_hitobj_ride);
 USER_FUNC(evt_win_item_select);
@@ -375,7 +376,7 @@ EVT_END()
 static EVT_BEGIN(mobj_box00)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mobj_get_position, STRING("mobj_box00"), LW(0), LW(1), LW(2))
-    CALL(evt_item_entry, STRING("item00"), ITEM_SHOOTING_STAR, LW(0), LW(1), LW(2), 16, -1, 0)
+    CALL(evt_item_entry, STRING("item00"), ITEM_SHOOTING_STAR, LW(0), LW(1), LW(2), ITEM_TYPE_STILL, -1, 0)
     CALL(evt_item_flag_on, STRING("item00"), 2)
     CALL(evt_mobj_wait_animation_end, STRING("mobj_box00"))
     CALL(evt_item_get_item, STRING("item00"))
@@ -410,7 +411,7 @@ EVT_BEGIN(las_22_init_evt)
     CALL(evt_mobj_badgeblk, STRING("mobj_hatena_gat"), -150, 220, -100, 151, 0, GSWF(4378), 0)
     CALL(evt_mobj_save_blk, STRING("mobj_save"), -650, 100, -100, 0, 0)
     IF_INT_LESS(GSW_STORY_PROGRESS, 393)
-        CALL(evt_item_entry, STRING("key"), ITEM_PALACE_KEY_0x2F, -25, -80, -100, 16, -1, PTR(key_evt))
+        CALL(evt_item_entry, STRING("key"), ITEM_PALACE_KEY_0x2F, -25, -80, -100, ITEM_TYPE_STILL, -1, PTR(key_evt))
     END_IF
     IF_INT_LESS(GSW_STORY_PROGRESS, 394)
         CALL(evt_mobj_lock, STRING("lock"), 47, -695, 50, 0, 90, PTR(key_check_evt), PTR(unlock_evt), GSWF(4355))

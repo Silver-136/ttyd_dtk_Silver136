@@ -21,6 +21,7 @@
 #include "system.h"
 #include "driver/casedrv.h"
 #include "pmario_sound.h"
+#include "driver/itemdrv.h"
 
 #include "party.h"
 #include "evt/evt_bero.h"
@@ -144,7 +145,7 @@ static BeroEntry bero_entry_data[] = {
 static EVT_BEGIN(evt_kusa_2)
     CALL(evt_item_delete_check, STRING("item_kusa_2"), LW(0))
     IF_INT_EQUAL(LW(0), 1)
-        CALL(evt_item_entry, STRING("item_kusa_2"), ITEM_COIN, -200, 0, 120, 4, GSWF(1802), 0)
+        CALL(evt_item_entry, STRING("item_kusa_2"), ITEM_COIN, -200, 0, 120, ITEM_TYPE_SCATTER_NO_PICKUP, GSWF(1802), 0)
     END_IF
     RETURN
 EVT_END()
@@ -152,7 +153,7 @@ EVT_END()
 static EVT_BEGIN(evt_kusa_4)
     CALL(evt_item_delete_check, STRING("item_kusa_4"), LW(0))
     IF_INT_EQUAL(LW(0), 1)
-        CALL(evt_item_entry, STRING("item_kusa_4"), ITEM_MYSTERY, 190, 0, -70, 4, GSWF(1784), 0)
+        CALL(evt_item_entry, STRING("item_kusa_4"), ITEM_MYSTERY, 190, 0, -70, ITEM_TYPE_SCATTER_NO_PICKUP, GSWF(1784), 0)
     END_IF
     RETURN
 EVT_END()
@@ -160,7 +161,7 @@ EVT_END()
 static EVT_BEGIN(evt_kusa_7)
     CALL(evt_item_delete_check, STRING("item_kusa_7"), LW(0))
     IF_INT_EQUAL(LW(0), 1)
-        CALL(evt_item_entry, STRING("item_kusa_7"), ITEM_COIN, -285, 0, 85, 4, GSWF(1800), 0)
+        CALL(evt_item_entry, STRING("item_kusa_7"), ITEM_COIN, -285, 0, 85, ITEM_TYPE_SCATTER_NO_PICKUP, GSWF(1800), 0)
     END_IF
     RETURN
 EVT_END()
@@ -875,7 +876,7 @@ EVT_BEGIN(hei_01_init_evt)
     CALL(evt_npc_setup, PTR(npcEnt))
     CALL(evt_npc_change_fbat_mode, 1)
     CALL(evt_mobj_badgeblk, STRING("mobj_hatenablk"), 315, 60, -75, 132, 0, GSWF(1785), 0)
-    CALL(evt_item_entry, STRING("item_01"), ITEM_STAR_PIECE, 450, 40, -447, 16, GSWF(5599), 0)
+    CALL(evt_item_entry, STRING("item_01"), ITEM_STAR_PIECE, 450, 40, -447, ITEM_TYPE_STILL, GSWF(5599), 0)
     CALL(evt_item_set_scale, STRING("item_01"), FLOAT(0.5996094f))
     SET_VALUE(LW(0), PTR(kusa_data))
     CALL_CHILD(PTR(evt_sub_kusa_access_entry))

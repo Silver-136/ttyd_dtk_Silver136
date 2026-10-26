@@ -12,6 +12,7 @@
 #include "evt/evt_item.h"
 #include "mario/mario_pouch.h"
 #include "pmario_sound.h"
+#include "driver/itemdrv.h"
 
 
 static BeroEntry bero_entry_data[5];
@@ -92,7 +93,7 @@ static BeroEntry bero_entry_data[] = {
 static EVT_BEGIN(evt_ueki_04)
     CALL(evt_item_delete_check, STRING("item_ueki_04"), LW(0))
     IF_INT_EQUAL(LW(0), 1)
-        CALL(evt_item_entry, STRING("item_ueki_04"), ITEM_COIN, 50, -320, -35, 4, GSWF(2873), 0)
+        CALL(evt_item_entry, STRING("item_ueki_04"), ITEM_COIN, 50, -320, -35, ITEM_TYPE_SCATTER_NO_PICKUP, GSWF(2873), 0)
     END_IF
     RETURN
 EVT_END()

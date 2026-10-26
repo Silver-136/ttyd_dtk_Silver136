@@ -12,6 +12,7 @@
 #include "evt/evt_item.h"
 #include "mario/mario_pouch.h"
 #include "pmario_sound.h"
+#include "driver/itemdrv.h"
 
 
 static BeroEntry bero_entry_data[2];
@@ -45,7 +46,7 @@ static EVT_BEGIN(item_evt)
     CALL(evt_puni_puninum_onoff, 0)
     CALL(evt_mobj_get_position, STRING("mobj_box00"), LW(0), LW(1), LW(2))
     CALL(lect_juyoitem_rel_set, PTR(all_juyoitem_lecture_rel))
-    CALL(evt_item_entry, STRING("item00"), ITEM_SUPER_BOOTS, LW(0), LW(1), LW(2), 17, -1, 0)
+    CALL(evt_item_entry, STRING("item00"), ITEM_SUPER_BOOTS, LW(0), LW(1), LW(2), ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
     CALL(evt_mobj_wait_animation_end, STRING("mobj_box00"))
     CALL(evt_item_get_important_item, STRING("item00"))
     CALL(evt_item_get_item, STRING("item00"))

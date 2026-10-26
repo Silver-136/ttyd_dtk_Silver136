@@ -20,6 +20,7 @@
 #include "mario/mario_pouch.h"
 #include "driver/casedrv.h"
 #include "pmario_sound.h"
+#include "driver/itemdrv.h"
 
 #include "string.h"
 #include "dolphin/os.h"
@@ -783,7 +784,7 @@ static EVT_BEGIN(talk_unten)
         WAIT_MS(2000)
         CALL(evt_npc_set_anim, STRING("me"), STRING("A_3"))
         WAIT_MS(500)
-        CALL(evt_item_entry, STRING("sign"), ITEM_AUTOGRAPH, 0, 0, 0, 17, -1, 0)
+        CALL(evt_item_entry, STRING("sign"), ITEM_AUTOGRAPH, 0, 0, 0, ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
         CALL(evt_item_get_item, STRING("sign"))
         CALL(evt_item_get_item_end_wait, STRING("sign"))
         CALL(evt_npc_set_anim, STRING("me"), STRING("T_1"))

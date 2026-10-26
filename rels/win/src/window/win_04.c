@@ -20,6 +20,7 @@
 #include "system.h"
 #include "driver/casedrv.h"
 #include "pmario_sound.h"
+#include "driver/itemdrv.h"
 
 #include "driver/dispdrv.h"
 #include "stdlib.h"
@@ -535,7 +536,7 @@ EVT_BEGIN(clouda_nakama)
     CALL(evt_mario_dispflag_onoff, 1, 256)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_mario_mov_pos2, 255, LW(2), FLOAT(120.0f))
-    CALL(evt_item_entry, STRING("necklace"), ITEM_NECKLACE, 0, -1000, 0, 16, -1, 0)
+    CALL(evt_item_entry, STRING("necklace"), ITEM_NECKLACE, 0, -1000, 0, ITEM_TYPE_STILL, -1, 0)
     CALL(evt_item_flag_on, STRING("necklace"), 2)
     CALL(evt_item_set_position, STRING("necklace"), 280, 50, 0)
     CALL(evt_mario_dump_item, 63)

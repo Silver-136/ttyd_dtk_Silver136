@@ -17,6 +17,7 @@
 #include "system.h"
 #include "driver/casedrv.h"
 #include "pmario_sound.h"
+#include "driver/itemdrv.h"
 
 #pragma defer_codegen on
 #include "manager/evtmgr_cmd.h"
@@ -556,7 +557,7 @@ EVT_BEGIN(evt_teresa_box_open)
                     CALL(evt_msg_print_add, 0, STRING("stg4_jin_70"))
                     SET_VALUE(LW(0), 150)
                 END_SWITCH
-                CALL(evt_item_entry, STRING("teresa"), LW(0), LW(1), LW(2), LW(3), 4, -1, 0)
+                CALL(evt_item_entry, STRING("teresa"), LW(0), LW(1), LW(2), LW(3), ITEM_TYPE_SCATTER_NO_PICKUP, -1, 0)
                 ADD(LW(2), 5)
                 CALL(evt_item_set_move_dir_speed, STRING("teresa"), 0, FLOAT(0.0f))
                 CALL(evt_item_set_gravity, STRING("teresa"), FLOAT(1.0f))
@@ -595,7 +596,7 @@ EVT_BEGIN(jin_07_init_evt)
     CALL_CHILD(PTR(evt_usu_kagemario_party_kill))
     CALL(evt_npc_setup, PTR(npcEnt))
     SPAWN_EVENT(PTR(jin_07_juyo_oumu_vivian))
-    CALL(evt_item_entry, STRING("item_00"), ITEM_STAR_PIECE, 220, 75, -20, 16, GSWF(5636), 0)
+    CALL(evt_item_entry, STRING("item_00"), ITEM_STAR_PIECE, 220, 75, -20, ITEM_TYPE_STILL, GSWF(5636), 0)
     IF_INT_NOT_EQUAL(GSWF(2079), 0)
         SET_VALUE(GSWF(2079), 0)
         BEGIN_INLINE_EVENT

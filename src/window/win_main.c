@@ -31,6 +31,7 @@
 #include "evt/evt_snd.h"
 #include "evt/evt_sub.h"
 #include "win/win_root.h"
+#include "driver/itemdrv.h"
 #ifdef VERSION_G8ME01
 char* strstr(const char* str, const char* sub);
 #endif
@@ -574,7 +575,7 @@ EVT_BEGIN(evt_item_use)
     IF_INT_EQUAL(LW(11), 0)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         ADD(LW(1), 50)
-        CALL(evt_item_entry, STRING("menu_dummy"), LW(10), LW(0), LW(1), LW(2), 17, -1, 0)
+        CALL(evt_item_entry, STRING("menu_dummy"), LW(10), LW(0), LW(1), LW(2), ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
         ADD(LW(1), 10)
         CALL(evt_eff, 0, STRING("itemget"), 10, LW(0), LW(1), LW(2), 0, 0, 0, 0, 0, 0, 0, 0)
         CALL(evt_snd_sfxon_3d, STRING("SFX_ITEM_MARIO_USE1"), LW(0), LW(1), LW(2), 0)
@@ -596,7 +597,7 @@ EVT_BEGIN(evt_item_use)
     IF_INT_EQUAL(LW(0), LW(11))
         CALL(evt_party_get_pos, 0, LW(0), LW(1), LW(2))
         ADD(LW(1), 50)
-        CALL(evt_item_entry, STRING("menu_dummy"), LW(10), LW(0), LW(1), LW(2), 17, -1, 0)
+        CALL(evt_item_entry, STRING("menu_dummy"), LW(10), LW(0), LW(1), LW(2), ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
         ADD(LW(1), 10)
         CALL(evt_eff, 0, STRING("itemget"), 10, LW(0), LW(1), LW(2), 0, 0, 0, 0, 0, 0, 0, 0)
         CALL(evt_snd_sfxon_3d, STRING("SFX_ITEM_MARIO_USE1"), LW(0), LW(1), LW(2), 0)

@@ -20,6 +20,7 @@
 #include "system.h"
 #include "driver/casedrv.h"
 #include "pmario_sound.h"
+#include "driver/itemdrv.h"
 
 #include "driver/effdrv.h"
 #include "manager/evtmgr_cmd.h"
@@ -360,7 +361,7 @@ static EVT_BEGIN(marco_talk)
             ELSE
             ADD(LW(3), 20)
         END_IF
-        CALL(evt_item_entry, STRING("watasu"), LW(0), LW(3), LW(4), LW(5), 16, -1, 0)
+        CALL(evt_item_entry, STRING("watasu"), LW(0), LW(3), LW(4), LW(5), ITEM_TYPE_STILL, -1, 0)
         CALL(evt_item_flag_on, STRING("watasu"), 2)
         WAIT_MS(500)
         CALL(evt_npc_set_anim, STRING("me"), STRING("I_1"))
@@ -402,7 +403,7 @@ static EVT_BEGIN(marco_talk)
         WAIT_MS(500)
         CALL(evt_npc_set_anim, STRING("me"), STRING("I_2"))
         WAIT_MS(500)
-        CALL(evt_item_entry, STRING("itemwine"), ITEM_CHUCKOLA_COLA, 0, -1000, 0, 16, -1, 0)
+        CALL(evt_item_entry, STRING("itemwine"), ITEM_CHUCKOLA_COLA, 0, -1000, 0, ITEM_TYPE_STILL, -1, 0)
         CALL(evt_item_flag_on, STRING("itemwine"), 2)
         CALL(evt_item_get_item, STRING("itemwine"))
         CALL(evt_msg_print, 0, STRING("stg5_muj_31_03"), 0, STRING("me"))
@@ -2094,8 +2095,8 @@ EVT_BEGIN(muj_01_init_evt)
     CALL(evt_map_playanim, STRING("fuku_hata"), 1, 0)
     SPAWN_EVENT(yakan_anime)
     CALL(evt_mobj_save_blk, STRING("mobj_save"), 100, 60, -25, 0, 0)
-    CALL(evt_item_entry, STRING("item_00"), ITEM_STAR_PIECE, 475, 0, 100, 16, GSWF(5639), 0)
-    CALL(evt_item_entry, STRING("item_01"), ITEM_STAR_PIECE, -200, -16, 485, 16, GSWF(5640), 0)
+    CALL(evt_item_entry, STRING("item_00"), ITEM_STAR_PIECE, 475, 0, 100, ITEM_TYPE_STILL, GSWF(5639), 0)
+    CALL(evt_item_entry, STRING("item_01"), ITEM_STAR_PIECE, -200, -16, 485, ITEM_TYPE_STILL, GSWF(5640), 0)
     SET_VALUE(LW(0), PTR(&mise_data))
     SPAWN_EVENT(evt_door_entry_custom00)
     SET_VALUE(LW(0), PTR(&yado_data))

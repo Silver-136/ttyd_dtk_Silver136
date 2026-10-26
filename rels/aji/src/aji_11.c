@@ -14,6 +14,7 @@
 #include "evt/evt_pouch.h"
 #include "driver/casedrv.h"
 #include "pmario_sound.h"
+#include "driver/itemdrv.h"
 
 #include "driver/mapdrv.h"
 #include "mario/mario.h"
@@ -238,7 +239,7 @@ EVT_END()
 EVT_BEGIN(peach_evt_tana1)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_msg_print, 0, STRING("peach_aji_245"), 0, STRING("mario"))
-    CALL(evt_item_entry, STRING("disk"), ITEM_DATA_DISK, 0, -1000, 0, 17, -1, 0)
+    CALL(evt_item_entry, STRING("disk"), ITEM_DATA_DISK, 0, -1000, 0, ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
     WAIT_FRAMES(1)
     CALL(evt_item_get_item, STRING("disk"))
     WAIT_MS(500)
@@ -319,7 +320,7 @@ EVT_BEGIN(aji_11_init_evt)
     CALL(evt_map_playanim, STRING("mizutama_2"), 1, 0)
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 352)
         IF_INT_EQUAL(GSWF(4180), 0)
-            CALL(evt_item_entry, STRING("dummy"), ITEM_CARD_KEY_0x1F, 50, 25, 25, 16, -1, PTR(key_evt))
+            CALL(evt_item_entry, STRING("dummy"), ITEM_CARD_KEY_0x1F, 50, 25, 25, ITEM_TYPE_STILL, -1, PTR(key_evt))
         END_IF
     END_IF
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("monitor_02"), MAP_OBJ_FLAG_HIDDEN)

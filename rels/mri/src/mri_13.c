@@ -19,6 +19,7 @@
 #include "system.h"
 #include "driver/casedrv.h"
 #include "pmario_sound.h"
+#include "driver/itemdrv.h"
 
 #include "driver/hitdrv.h"
 #include "dolphin/mtx.h"
@@ -455,7 +456,7 @@ EVT_END()
 static EVT_BEGIN(evt_f1_ueki_01)
     CALL(evt_item_delete_check, STRING("item_ueki_01"), LW(0))
     IF_INT_EQUAL(LW(0), 1)
-        CALL(evt_item_entry, STRING("item_ueki_01"), ITEM_MUSHROOM, -190, -309, 115, 4, GSWF(2862), 0)
+        CALL(evt_item_entry, STRING("item_ueki_01"), ITEM_MUSHROOM, -190, -309, 115, ITEM_TYPE_SCATTER_NO_PICKUP, GSWF(2862), 0)
     END_IF
     RETURN
 EVT_END()

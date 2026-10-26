@@ -22,6 +22,7 @@
 #include "driver/casedrv.h"
 #include "driver/seqdrv.h"
 #include "pmario_sound.h"
+#include "driver/itemdrv.h"
 
 USER_FUNC(evt_win_item_select);
 
@@ -520,7 +521,7 @@ static EVT_BEGIN(evt_daiji_kami)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("yuka_3_kami"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("yuka_3"), MAP_OBJ_FLAG_HIDDEN)
     SET_VALUE(GSW_STORY_PROGRESS, 305)
-    CALL(evt_item_entry, STRING("daiji"), ITEM_VITAL_PAPER, 0, 0, 0, 17, -1, 0)
+    CALL(evt_item_entry, STRING("daiji"), ITEM_VITAL_PAPER, 0, 0, 0, ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
     CALL(evt_item_get_item, STRING("daiji"))
     CALL(evt_item_get_item_end_wait, STRING("daiji"))
     CALL(evt_mario_key_onoff, 1)

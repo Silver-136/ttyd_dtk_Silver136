@@ -17,6 +17,7 @@
 #include "system.h"
 #include "driver/casedrv.h"
 #include "pmario_sound.h"
+#include "driver/itemdrv.h"
 
 #include "evt/evt_npc.h"
 #include "driver/msgdrv.h"
@@ -2164,7 +2165,7 @@ EVT_BEGIN(tou_04_init_evt)
     CALL(evt_cam_road_reset)
     SPAWN_EVENT(PTR(evt_drop))
     CALL(evt_npc_setup, PTR(npcEnt))
-    CALL(evt_item_entry, STRING("item_01"), ITEM_LAST_STAND, 515, 15, 125, 16, GSWF(2520), 0)
+    CALL(evt_item_entry, STRING("item_01"), ITEM_LAST_STAND, 515, 15, 125, ITEM_TYPE_STILL, GSWF(2520), 0)
     CALL(evt_mobj_save_blk, STRING("mobj_save1"), -520, 60, -110, 0, 0)
     CALL(evt_mobj_save_blk, STRING("mobj_save3"), 450, 60, -465, 0, 0)
     SET_VALUE(LW(1), 0)

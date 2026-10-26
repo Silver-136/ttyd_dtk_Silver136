@@ -23,6 +23,7 @@
 #include "system.h"
 #include "driver/casedrv.h"
 #include "pmario_sound.h"
+#include "driver/itemdrv.h"
 
 #include "party.h"
 #include "mario/mario.h"
@@ -412,7 +413,7 @@ EVT_BEGIN(moo_00_init_evt)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_iwa_08"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_iwa_08"), 1, 0)
     END_IF
-    CALL(evt_item_entry, STRING("item_01"), ITEM_STOPWATCH, -250, 0, -445, 16, GSWF(4035), 0)
+    CALL(evt_item_entry, STRING("item_01"), ITEM_STOPWATCH, -250, 0, -445, ITEM_TYPE_STILL, GSWF(4035), 0)
     RETURN
 EVT_END()
 

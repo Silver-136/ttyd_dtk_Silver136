@@ -12,6 +12,7 @@
 #include "evt/evt_mobj.h"
 #include "mario/mario_pouch.h"
 #include "pmario_sound.h"
+#include "driver/itemdrv.h"
 
 
 static BeroEntry bero_entry_data[2];
@@ -70,7 +71,7 @@ EVT_BEGIN(tik_20_init_evt)
     SET_VALUE(LW(11), 0)
     SET_VALUE(LW(12), 0)
     SPAWN_EVENT(PTR(moving_floor))
-    CALL(evt_item_entry, STRING("item_01"), ITEM_DEFEND_PLUS, 180, 100, -125, 16, GSWF(1367), 0)
+    CALL(evt_item_entry, STRING("item_01"), ITEM_DEFEND_PLUS, 180, 100, -125, ITEM_TYPE_STILL, GSWF(1367), 0)
     CALL(evt_mobj_powerupblk, STRING("pblk01"), -50, 60, -75, 0, GSWF(5535), 0)
     CALL(evt_mobj_powerupblk, STRING("pblk02"), 0, 100, -25, 0, GSWF(5536), 0)
     CALL(evt_mobj_powerupblk, STRING("pblk03"), 50, 60, -75, 0, GSWF(5537), 0)

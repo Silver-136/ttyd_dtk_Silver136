@@ -17,6 +17,7 @@
 #include "mario/mario_pouch.h"
 #include "system.h"
 #include "pmario_sound.h"
+#include "driver/itemdrv.h"
 
 #include "driver/camdrv.h"
 #include "driver/msgdrv.h"
@@ -600,7 +601,7 @@ EVT_BEGIN(gra_00_init_evt)
     CALL(evt_mobj_brick, STRING("blk01"), 250, 15, 100, 0, 0, 0, LSWF(1))
     CALL(evt_mobj_brick, STRING("blk02"), -265, 60, -85, 0, 3, 0, GSWF(2089))
     IF_INT_EQUAL(GSWF(2091), 0)
-        CALL(evt_item_entry, STRING("majin_key"), ITEM_BLACK_KEY_0x23, -258, 0, -85, 16, -1, PTR(evt_majin_key))
+        CALL(evt_item_entry, STRING("majin_key"), ITEM_BLACK_KEY_0x23, -258, 0, -85, ITEM_TYPE_STILL, -1, PTR(evt_majin_key))
     END_IF
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(202, 209)

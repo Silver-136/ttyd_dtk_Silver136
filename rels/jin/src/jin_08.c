@@ -19,6 +19,7 @@
 #include "system.h"
 #include "driver/casedrv.h"
 #include "pmario_sound.h"
+#include "driver/itemdrv.h"
 
 USER_FUNC(evt_kagemario_init);
 USER_FUNC(evt_win_item_select);
@@ -123,7 +124,7 @@ static EVT_BEGIN(evt_open)
         END_IF
     END_LOOP
     CALL(evt_mapobj_get_position, STRING("hako"), LW(0), LW(1), LW(2))
-    CALL(evt_item_entry, STRING("n_character"), ITEM_THE_LETTER_P, LW(0), LW(1), LW(2), 17, -1, 0)
+    CALL(evt_item_entry, STRING("n_character"), ITEM_THE_LETTER_P, LW(0), LW(1), LW(2), ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
     CALL(evt_item_get_item, STRING("n_character"))
     SET_VALUE(GSW_STORY_PROGRESS, 209)
     CALL(evt_mario_key_onoff, 1)
@@ -146,7 +147,7 @@ EVT_BEGIN(evt_open_kagi)
         END_IF
     END_LOOP
     CALL(evt_mapobj_get_position, STRING("hako2"), LW(0), LW(1), LW(2))
-    CALL(evt_item_entry, STRING("key00"), ITEM_STEEPLE_KEY_0x17, LW(0), LW(1), LW(2), 17, -1, 0)
+    CALL(evt_item_entry, STRING("key00"), ITEM_STEEPLE_KEY_0x17, LW(0), LW(1), LW(2), ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
     CALL(evt_item_get_item, STRING("key00"))
     SET_VALUE(GSWF(2230), 1)
     CALL(evt_mario_key_onoff, 1)
@@ -307,7 +308,7 @@ EVT_END()
 static EVT_BEGIN(mobj_box01)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mobj_get_position, STRING("mobj_box01"), LW(0), LW(1), LW(2))
-    CALL(evt_item_entry, STRING("item01"), ITEM_POWER_PLUS, LW(0), LW(1), LW(2), 16, -1, 0)
+    CALL(evt_item_entry, STRING("item01"), ITEM_POWER_PLUS, LW(0), LW(1), LW(2), ITEM_TYPE_STILL, -1, 0)
     CALL(evt_item_flag_on, STRING("item01"), 258)
     CALL(evt_mobj_wait_animation_end, STRING("mobj_box01"))
     CALL(evt_item_get_item, STRING("item01"))
@@ -318,7 +319,7 @@ EVT_END()
 static EVT_BEGIN(mobj_box02)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mobj_get_position, STRING("mobj_box02"), LW(0), LW(1), LW(2))
-    CALL(evt_item_entry, STRING("item02"), ITEM_MR_SOFTENER, LW(0), LW(1), LW(2), 16, -1, 0)
+    CALL(evt_item_entry, STRING("item02"), ITEM_MR_SOFTENER, LW(0), LW(1), LW(2), ITEM_TYPE_STILL, -1, 0)
     CALL(evt_item_flag_on, STRING("item02"), 2)
     CALL(evt_mobj_wait_animation_end, STRING("mobj_box02"))
     CALL(evt_item_get_item, STRING("item02"))

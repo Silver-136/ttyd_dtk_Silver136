@@ -9,6 +9,7 @@
 #include "party/party_motion.h"
 #include "mario/mario_pouch.h"
 #include "pmario_sound.h"
+#include "driver/itemdrv.h"
 
 USER_FUNC(evt_kagemario_init);
 
@@ -51,7 +52,7 @@ static BeroEntry bero_entry_data[] = {
 EVT_BEGIN(item_box_00)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mobj_get_position, STRING("mobj_box00"), LW(0), LW(1), LW(2))
-    CALL(evt_item_entry, STRING("_item00"), ITEM_COOKBOOK, LW(0), LW(1), LW(2), 16, -1, 0)
+    CALL(evt_item_entry, STRING("_item00"), ITEM_COOKBOOK, LW(0), LW(1), LW(2), ITEM_TYPE_STILL, -1, 0)
     CALL(evt_item_flag_on, STRING("_item00"), 2)
     CALL(evt_mobj_wait_animation_end, STRING("mobj_box00"))
     CALL(evt_item_get_item, STRING("_item00"))
@@ -62,7 +63,7 @@ EVT_END()
 static EVT_BEGIN(mobj_box01)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mobj_get_position, STRING("mobj_box01"), LW(0), LW(1), LW(2))
-    CALL(evt_item_entry, STRING("_item01"), ITEM_ICE_SMASH, LW(0), LW(1), LW(2), 16, -1, 0)
+    CALL(evt_item_entry, STRING("_item01"), ITEM_ICE_SMASH, LW(0), LW(1), LW(2), ITEM_TYPE_STILL, -1, 0)
     CALL(evt_item_flag_on, STRING("_item01"), 258)
     CALL(evt_mobj_wait_animation_end, STRING("mobj_box01"))
     CALL(evt_item_get_item, STRING("_item01"))
@@ -82,7 +83,7 @@ EVT_BEGIN(jin_05_init_evt)
     CALL(evt_mobj_powerupblk, STRING("pblk00"), 65, 60, 35, 0, GSWF(5549), 0)
     CALL(evt_mobj_itembox, STRING("mobj_box00"), 125, 0, 75, 0, 0, PTR(item_box_00), GSWF(2235))
     CALL(evt_mobj_itembox, STRING("mobj_box01"), -55, 0, 55, 0, 0, PTR(mobj_box01), GSWF(2237))
-    CALL(evt_item_entry, STRING("item_00"), ITEM_STAR_PIECE, -10, 0, -40, 16, GSWF(5635), 0)
+    CALL(evt_item_entry, STRING("item_00"), ITEM_STAR_PIECE, -10, 0, -40, ITEM_TYPE_STILL, GSWF(5635), 0)
     RETURN
 EVT_END()
 

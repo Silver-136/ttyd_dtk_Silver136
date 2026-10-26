@@ -21,6 +21,7 @@
 #include "system.h"
 #include "driver/casedrv.h"
 #include "pmario_sound.h"
+#include "driver/itemdrv.h"
 
 #include "mario/mario_pouch.h"
 #include "mario/mario.h"
@@ -339,7 +340,7 @@ EVT_BEGIN(talk_cook_nabe_return)
     CALL(evt_win_item_select, 0, PTR(item_tbl_cook), LW(1), 0)
     IF_INT_NOT_EQUAL(LW(1), -1)
         CALL(evt_msg_print, 0, STRING("stg6_rsh_70_01"), 0, STRING("コック"))
-        CALL(evt_item_entry, STRING("orei"), ITEM_STAR_PIECE, 0, 0, 0, 17, -1, 0)
+        CALL(evt_item_entry, STRING("orei"), ITEM_STAR_PIECE, 0, 0, 0, ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
         CALL(evt_item_get_item, STRING("orei"))
         CALL(evt_item_get_item_end_wait, STRING("orei"))
         SET_VALUE(GSWF(5650), 1)
@@ -500,7 +501,7 @@ EVT_BEGIN(talk_waitless_pias_return)
             ADD(LW(0), 18)
         END_IF
         ADD(LW(1), 18)
-        CALL(evt_item_entry, STRING("yubiwa"), ITEM_SHELL_EARRINGS, LW(0), LW(1), LW(2), 17, -1, 0)
+        CALL(evt_item_entry, STRING("yubiwa"), ITEM_SHELL_EARRINGS, LW(0), LW(1), LW(2), ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
         CALL(evt_mario_set_pose, STRING("M_C_3"))
         WAIT_MS(1000)
         CALL(evt_mario_set_pose, STRING("M_S_1"))
@@ -513,7 +514,7 @@ EVT_BEGIN(talk_waitless_pias_return)
         CALL(evt_npc_set_anim, STRING("ウェイトレス"), STRING("A_1"))
         WAIT_MS(500)
 #endif
-        CALL(evt_item_entry, STRING("orei"), ITEM_STAR_PIECE, 0, 0, 0, 17, -1, 0)
+        CALL(evt_item_entry, STRING("orei"), ITEM_STAR_PIECE, 0, 0, 0, ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
         CALL(evt_item_get_item, STRING("orei"))
         CALL(evt_item_get_item_end_wait, STRING("orei"))
         SET_VALUE(GSWF(5651), 1)

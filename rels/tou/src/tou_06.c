@@ -22,6 +22,7 @@
 #include "system.h"
 #include "driver/casedrv.h"
 #include "pmario_sound.h"
+#include "driver/itemdrv.h"
 
 #include "stdio.h"
 #include "memory.h"
@@ -422,9 +423,9 @@ EVT_BEGIN(iri_13_init)
             END_IF
         END_IF
         IF_INT_EQUAL(LF(0), 1)
-            CALL(evt_item_entry, LW(6), ITEM_BATTLE_TRUNKS, LW(3), LW(4), LW(5), 16, -1, PTR(iri_13_pants_00_evt))
+            CALL(evt_item_entry, LW(6), ITEM_BATTLE_TRUNKS, LW(3), LW(4), LW(5), ITEM_TYPE_STILL, -1, PTR(iri_13_pants_00_evt))
             ELSE
-            CALL(evt_item_entry, LW(6), ITEM_BATTLE_TRUNKS, LW(3), LW(4), LW(5), 16, -1, 0)
+            CALL(evt_item_entry, LW(6), ITEM_BATTLE_TRUNKS, LW(3), LW(4), LW(5), ITEM_TYPE_STILL, -1, 0)
         END_IF
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("gor_hae"), MAP_OBJ_FLAG_HIDDEN)
         ADD(LW(2), 1)
@@ -461,7 +462,7 @@ static NpcSetupInfo npcEnt[] = {
 static EVT_BEGIN(mobj_box00)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mobj_get_position, STRING("mobj_box00"), LW(0), LW(1), LW(2))
-    CALL(evt_item_entry, STRING("item00"), ITEM_CHARGE_P, LW(0), LW(1), LW(2), 16, -1, 0)
+    CALL(evt_item_entry, STRING("item00"), ITEM_CHARGE_P, LW(0), LW(1), LW(2), ITEM_TYPE_STILL, -1, 0)
     CALL(evt_item_flag_on, STRING("item00"), 2)
     CALL(evt_mobj_wait_animation_end, STRING("mobj_box00"))
     CALL(evt_item_get_item, STRING("item00"))
@@ -556,8 +557,8 @@ EVT_BEGIN(tou_06_init_evt)
     CALL(evt_mobj_powerupblk, STRING("pblk00"), -30, 260, -30, 0, GSWF(5547), 0)
     CALL(evt_mobj_kururing_floor, STRING("kururin1"), 50, 0, 0, STRING("tou_6_sita"), 125, GSWF(5626))
     CALL(evt_hitobj_attr_onoff, 0, 1, STRING("MOBJ_kururin1"), 4194304)
-    CALL(evt_item_entry, STRING("item_01"), ITEM_HP_PLUS_P, -450, 250, -25, 16, GSWF(2521), 0)
-    CALL(evt_item_entry, STRING("item_02"), ITEM_CHARGE_P, 175, 0, -125, 16, GSWF(2523), 0)
+    CALL(evt_item_entry, STRING("item_01"), ITEM_HP_PLUS_P, -450, 250, -25, ITEM_TYPE_STILL, GSWF(2521), 0)
+    CALL(evt_item_entry, STRING("item_02"), ITEM_CHARGE_P, 175, 0, -125, ITEM_TYPE_STILL, GSWF(2523), 0)
     CALL(evt_bero_get_entername, LW(0))
     IF_STR_EQUAL(LW(0), STRING("fall"))
         CALL(evt_mario_key_onoff, 0)

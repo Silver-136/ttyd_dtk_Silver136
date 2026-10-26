@@ -16,6 +16,7 @@
 #include "system.h"
 #include "driver/casedrv.h"
 #include "pmario_sound.h"
+#include "driver/itemdrv.h"
 
 
 static BeroEntry bero_entry_data[4];
@@ -307,8 +308,8 @@ EVT_BEGIN(dou_02_init_evt)
     SPAWN_EVENT(PTR(dou_puka_event_sub1))
     CALL(evt_run_case_evt, CASE_STAND_ON, 1, STRING("a02_fune_ata2"), 0, PTR(dou_puka_event_1), 0)
     CALL(evt_run_case_evt, CASE_NOT_STAND_ON, 1, STRING("a02_fune_ata2"), 0, PTR(dou_puka_event_rev_1), 0)
-    CALL(evt_item_entry, STRING("handle"), ITEM_GATE_HANDLE, 147, 42, 101, 0, GSWF(2975), 0)
-    CALL(evt_item_entry, STRING("item_00"), ITEM_STAR_PIECE, -25, 25, 100, 16, GSWF(5644), 0)
+    CALL(evt_item_entry, STRING("handle"), ITEM_GATE_HANDLE, 147, 42, 101, ITEM_TYPE_GROUND, GSWF(2975), 0)
+    CALL(evt_item_entry, STRING("item_00"), ITEM_STAR_PIECE, -25, 25, 100, ITEM_TYPE_STILL, GSWF(5644), 0)
     CALL(evt_mobj_powerupblk, STRING("pblk1"), -300, 145, -130, 0, GSWF(5554), 0)
     CALL(evt_hit_damage_return_set, PTR(hitDmgRetPoints))
     CALL_CHILD(PTR(evt_gazigazi_entry))

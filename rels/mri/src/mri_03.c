@@ -19,6 +19,7 @@
 #include "driver/npcdrv.h"
 #include "system.h"
 #include "pmario_sound.h"
+#include "driver/itemdrv.h"
 
 #include "driver/mapdrv.h"
 #include "dolphin/gx.h"
@@ -864,7 +865,7 @@ EVT_BEGIN(bluejail_event)
     CALL(evt_msg_print, 0, STRING("stg2_mri_e19_00"), 0, STRING("プニ族"))
     CALL(evt_npc_get_position, STRING("ガイド妹"), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG2_PUNIKO_KINOKO1"), LW(0), LW(1), LW(2), 0)
-    CALL(evt_item_entry, STRING("item00"), ITEM_DRIED_SHROOM, LW(0), LW(1), LW(2), 16, -1, 0)
+    CALL(evt_item_entry, STRING("item00"), ITEM_DRIED_SHROOM, LW(0), LW(1), LW(2), ITEM_TYPE_STILL, -1, 0)
     CALL(evt_item_flag_on, STRING("item00"), 2)
     ADD(LW(0), 20)
     CALL(evt_item_move_3d_position, STRING("item00"), LW(0), LW(1), LW(2), 300, 0)
@@ -1187,7 +1188,7 @@ EVT_BEGIN(guide_sister)
     WAIT_MS(200)
     CALL(evt_npc_get_position, LW(11), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG2_PUNIKO_KINOKO1"), LW(0), LW(1), LW(2), 0)
-    CALL(evt_item_entry, STRING("item00"), ITEM_DRIED_SHROOM, LW(0), LW(1), LW(2), 16, -1, 0)
+    CALL(evt_item_entry, STRING("item00"), ITEM_DRIED_SHROOM, LW(0), LW(1), LW(2), ITEM_TYPE_STILL, -1, 0)
     CALL(evt_item_flag_on, STRING("item00"), 2)
     ADD(LW(0), 20)
     CALL(evt_item_move_3d_position, STRING("item00"), LW(0), LW(1), LW(2), 500, 0)

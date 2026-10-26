@@ -15,6 +15,7 @@
 #include "driver/npcdrv.h"
 #include "driver/mapdrv.h"
 #include "pmario_sound.h"
+#include "driver/itemdrv.h"
 
 #include "driver/dispdrv.h"
 #include "driver/camdrv.h"
@@ -493,7 +494,7 @@ EVT_END()
 EVT_BEGIN(evt_treeb_01)
     CALL(evt_item_delete_check, STRING("item_treeb_01"), LW(0))
     IF_INT_EQUAL(LW(0), 1)
-        CALL(evt_item_entry, STRING("item_treeb_01"), ITEM_KEEL_MANGO, -350, 90, -70, 14, GSWF(3152), 0)
+        CALL(evt_item_entry, STRING("item_treeb_01"), ITEM_KEEL_MANGO, -350, 90, -70, ITEM_TYPE_FALL_NO_PICKUP, GSWF(3152), 0)
     END_IF
     RETURN
 EVT_END()
@@ -501,7 +502,7 @@ EVT_END()
 static EVT_BEGIN(evt_kusa_2)
     CALL(evt_item_delete_check, STRING("item_kusa_2"), LW(0))
     IF_INT_EQUAL(LW(0), 1)
-        CALL(evt_item_entry, STRING("item_kusa_2"), ITEM_COIN, 323, 0, 50, 4, GSWF(3154), 0)
+        CALL(evt_item_entry, STRING("item_kusa_2"), ITEM_COIN, 323, 0, 50, ITEM_TYPE_SCATTER_NO_PICKUP, GSWF(3154), 0)
     END_IF
     RETURN
 EVT_END()
@@ -509,7 +510,7 @@ EVT_END()
 static EVT_BEGIN(evt_kusa_6)
     CALL(evt_item_delete_check, STRING("item_kusa_6"), LW(0))
     IF_INT_EQUAL(LW(0), 1)
-        CALL(evt_item_entry, STRING("item_kusa_6"), ITEM_STAR_PIECE, -500, 0, 110, 4, GSWF(5641), 0)
+        CALL(evt_item_entry, STRING("item_kusa_6"), ITEM_STAR_PIECE, -500, 0, 110, ITEM_TYPE_SCATTER_NO_PICKUP, GSWF(5641), 0)
     END_IF
     RETURN
 EVT_END()

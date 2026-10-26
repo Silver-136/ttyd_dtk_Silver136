@@ -16,6 +16,7 @@
 #include "evt/evt_pouch.h"
 #include "mot/mot_hammer.h"
 #include "driver/mapdrv.h"
+#include "driver/itemdrv.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "system.h"
@@ -1385,7 +1386,7 @@ static EVT_BEGIN(senkaron_event)
         CALL(evt_npc_get_position, STRING("黒カロン"), LW(0), LW(1), LW(2))
         CALL(evt_mario_get_pos, 0, LW(3), LW(4), LW(5))
         CALL(evt_sub_get_dir, LW(3), LW(5), LW(0), LW(2), LW(6))
-        CALL(evt_item_entry, STRING("key"), ITEM_PALACE_KEY_0x2E, LW(0), LW(1), LW(2), 4, -1, PTR(key_evt))
+        CALL(evt_item_entry, STRING("key"), ITEM_PALACE_KEY_0x2E, LW(0), LW(1), LW(2), ITEM_TYPE_SCATTER_NO_PICKUP, -1, PTR(key_evt))
         CALL(evt_item_set_move_dir_speed, STRING("key"), LW(6), FLOAT(45.0f))
         CALL(evt_item_set_jump_power, STRING("key"), FLOAT(500.0f))
         CALL(evt_item_set_gravity, STRING("key"), FLOAT(1.0f))
@@ -1603,7 +1604,7 @@ EVT_BEGIN(las_05_init_evt)
         CALL(evt_npc_setup, PTR(npcEnt))
     END_IF
     IF_INT_EQUAL(GSW_STORY_PROGRESS, 383)
-        CALL(evt_item_entry, STRING("key"), ITEM_PALACE_KEY_0x2E, 0, 0, 0, 0, -1, PTR(key_evt))
+        CALL(evt_item_entry, STRING("key"), ITEM_PALACE_KEY_0x2E, 0, 0, 0, ITEM_TYPE_GROUND, -1, PTR(key_evt))
     END_IF
     IF_INT_LESS(GSW_STORY_PROGRESS, 385)
         CALL(evt_mobj_lock, STRING("lock"), 46, 590, 20, 0, -90, PTR(key_check_evt), PTR(unlock_evt), 0)

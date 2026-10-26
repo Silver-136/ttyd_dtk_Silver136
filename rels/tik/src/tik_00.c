@@ -25,6 +25,7 @@
 #include "driver/mobjdrv.h"
 #include "system.h"
 #include "driver/casedrv.h"
+#include "driver/itemdrv.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "mario/mario.h"
@@ -2696,7 +2697,7 @@ EVT_END()
 static EVT_BEGIN(mobj_box01)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mobj_get_position, STRING("mobj_box01"), LW(0), LW(1), LW(2))
-    CALL(evt_item_entry, STRING("item01"), ITEM_SOFT_STOMP, LW(0), LW(1), LW(2), 16, -1, 0)
+    CALL(evt_item_entry, STRING("item01"), ITEM_SOFT_STOMP, LW(0), LW(1), LW(2), ITEM_TYPE_STILL, -1, 0)
     CALL(evt_item_flag_on, STRING("item01"), 258)
     CALL(evt_mobj_wait_animation_end, STRING("mobj_box01"))
     CALL(evt_item_get_item, STRING("item01"))
@@ -2749,9 +2750,9 @@ EVT_BEGIN(tik_00_init_evt)
     CALL(evt_mobj_powerupblk, STRING("pblk1"), 525, 209, -175, 0, GSWF(5530), 0)
     CALL(evt_mobj_itembox, STRING("mobj_box01"), -375, -60, 320, 0, 0, PTR(mobj_box01), GSWF(1354))
     CALL(evt_mobj_kururing_floor, STRING("kururin1"), -220, 95, -360, STRING("ie_3_naka"), 125, GSWF(5588))
-    CALL(evt_item_entry, STRING("item_00"), ITEM_STAR_PIECE, 460, -40, 215, 16, GSWF(5585), 0)
-    CALL(evt_item_entry, STRING("item_01"), ITEM_STAR_PIECE, 530, 20, -220, 16, GSWF(5586), 0)
-    CALL(evt_item_entry, STRING("item_02"), ITEM_STAR_PIECE, -530, 20, -220, 16, GSWF(5587), 0)
+    CALL(evt_item_entry, STRING("item_00"), ITEM_STAR_PIECE, 460, -40, 215, ITEM_TYPE_STILL, GSWF(5585), 0)
+    CALL(evt_item_entry, STRING("item_01"), ITEM_STAR_PIECE, 530, 20, -220, ITEM_TYPE_STILL, GSWF(5586), 0)
+    CALL(evt_item_entry, STRING("item_02"), ITEM_STAR_PIECE, -530, 20, -220, ITEM_TYPE_STILL, GSWF(5587), 0)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, 402)
         CALL(evt_mario_kill_party, 0)
         CALL_CHILD(PTR(epilogue_npc_entry))

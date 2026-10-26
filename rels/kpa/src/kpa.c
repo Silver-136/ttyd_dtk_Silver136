@@ -15,6 +15,7 @@
 #include "evt/evt_mobj.h"
 #include "kpa_act.h"
 #include "pmario_sound.h"
+#include "driver/itemdrv.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "driver/camdrv.h"
@@ -173,7 +174,7 @@ EVT_BEGIN(kpa_read_item)
         END_IF
         CALL(kpa_make_item_name, LW(2))
         READ_INT2(LW(3), LW(4))
-        CALL(evt_item_entry, LW(2), ITEM_COIN, LW(3), LW(4), 0, 16, -1, PTR(kpa_coin_evt))
+        CALL(evt_item_entry, LW(2), ITEM_COIN, LW(3), LW(4), 0, ITEM_TYPE_STILL, -1, PTR(kpa_coin_evt))
         CALL(evt_item_flag_on, LW(2), 4)
     END_LOOP
     RETURN

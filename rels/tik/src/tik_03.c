@@ -19,6 +19,7 @@
 #include "mario/mario_pouch.h"
 #include "driver/seqdrv.h"
 #include "pmario_sound.h"
+#include "driver/itemdrv.h"
 
 
 EvtWord bero_05_custom_in[30];
@@ -488,7 +489,7 @@ EVT_BEGIN(tik_03_init_evt)
     IF_INT_LESS_OR_EQUAL(GSW_STORY_PROGRESS, 68)
         SPAWN_EVENT(PTR(puni_nakama))
     END_IF
-    CALL(evt_item_entry, STRING("item_00"), ITEM_DAMAGE_DODGE, -450, -50, -50, 16, GSWF(1356), 0)
+    CALL(evt_item_entry, STRING("item_00"), ITEM_DAMAGE_DODGE, -450, -50, -50, ITEM_TYPE_STILL, GSWF(1356), 0)
     CALL(evt_mobj_kururing_floor, STRING("kururin1"), 325, -50, 0, STRING("kakoi"), 125, GSWF(5590))
     IF_INT_LESS(GSW_STORY_PROGRESS, 71)
         SET_VALUE(LW(0), STRING("dokan"))

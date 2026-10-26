@@ -21,6 +21,7 @@
 #include "system.h"
 #include "driver/casedrv.h"
 #include "pmario_sound.h"
+#include "driver/itemdrv.h"
 
 #include "mario/mario.h"
 #include "manager/evtmgr_cmd.h"
@@ -370,7 +371,7 @@ EVT_BEGIN(miyageya_talk)
             END_IF
             IF_INT_LESS(LW(3), LW(4))
                 CALL(evt_msg_print, 0, STRING("irai_27_006"), 0, 0)
-                CALL(evt_item_entry, STRING("sc"), ITEM_CHOCO_CAKE, 0, -1000, 0, 17, -1, 0)
+                CALL(evt_item_entry, STRING("sc"), ITEM_CHOCO_CAKE, 0, -1000, 0, ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
                 CALL(evt_item_get_item, STRING("sc"))
                 CALL(evt_item_get_item_end_wait, STRING("sc"))
                 SET_VALUE(GSWF(3278), 1)
@@ -382,7 +383,7 @@ EVT_BEGIN(miyageya_talk)
                 CALL(evt_npc_flag_onoff, 0, STRING("土産屋"), NPC_FLAG_NO_HIT)
                 CALL(evt_msg_print, 0, STRING("irai_27_007_1"), 0, STRING("土産屋"))
                 WAIT_MS(300)
-                CALL(evt_item_entry, STRING("iri_27"), ITEM_CHOCO_CAKE, -246, 15, 246, 16, GSWF(3278), 0)
+                CALL(evt_item_entry, STRING("iri_27"), ITEM_CHOCO_CAKE, -246, 15, 246, ITEM_TYPE_STILL, GSWF(3278), 0)
                 WAIT_MS(300)
                 CALL(evt_msg_print, 0, STRING("irai_27_007_2"), 0, STRING("土産屋"))
             END_IF
@@ -511,7 +512,7 @@ EVT_BEGIN(konarikin_talk)
                         IF_INT_NOT_EQUAL(LW(0), -1)
                             CALL(evt_pouch_remove_item, ITEM_SHROOM_CAKE, LW(0))
                             CALL(evt_msg_print, 0, STRING("irai_29_08"), 0, 0)
-                            CALL(evt_item_entry, STRING("pre"), ITEM_PRESENT, 0, -1000, 0, 17, -1, 0)
+                            CALL(evt_item_entry, STRING("pre"), ITEM_PRESENT, 0, -1000, 0, ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
                             CALL(evt_item_get_item, STRING("pre"))
                             CALL(evt_item_get_item_end_wait, STRING("pre"))
                         END_IF
@@ -526,7 +527,7 @@ EVT_BEGIN(konarikin_talk)
                         IF_INT_NOT_EQUAL(LW(0), -1)
                             CALL(evt_pouch_remove_item, ITEM_KEEL_MANGO, LW(0))
                             CALL(evt_msg_print, 0, STRING("irai_29_09"), 0, 0)
-                            CALL(evt_item_entry, STRING("pre"), ITEM_PRESENT, 0, -1000, 0, 17, -1, 0)
+                            CALL(evt_item_entry, STRING("pre"), ITEM_PRESENT, 0, -1000, 0, ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
                             CALL(evt_item_get_item, STRING("pre"))
                             CALL(evt_item_get_item_end_wait, STRING("pre"))
                         END_IF
@@ -541,7 +542,7 @@ EVT_BEGIN(konarikin_talk)
                         IF_INT_NOT_EQUAL(LW(0), -1)
                             CALL(evt_pouch_remove_item, ITEM_FRIGHT_MASK, LW(0))
                             CALL(evt_msg_print, 0, STRING("irai_29_10"), 0, 0)
-                            CALL(evt_item_entry, STRING("pre"), ITEM_PRESENT, 0, -1000, 0, 17, -1, 0)
+                            CALL(evt_item_entry, STRING("pre"), ITEM_PRESENT, 0, -1000, 0, ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
                             CALL(evt_item_get_item, STRING("pre"))
                             CALL(evt_item_get_item_end_wait, STRING("pre"))
                         END_IF
@@ -1390,7 +1391,7 @@ EVT_BEGIN(pik_01_init_evt)
             CALL_CHILD(PTR(iri_27_npc_entry))
         END_IF
         IF_INT_EQUAL(GSWF(5401), 1)
-            CALL(evt_item_entry, STRING("iri_27"), ITEM_CHOCO_CAKE, -246, 15, 246, 16, GSWF(3278), 0)
+            CALL(evt_item_entry, STRING("iri_27"), ITEM_CHOCO_CAKE, -246, 15, 246, ITEM_TYPE_STILL, GSWF(3278), 0)
         END_IF
     END_IF
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 403)

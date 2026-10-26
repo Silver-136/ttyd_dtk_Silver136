@@ -18,6 +18,7 @@
 #include "rels/mri/include/mri.h"
 #include "mario/mario_pouch.h"
 #include "driver/casedrv.h"
+#include "driver/itemdrv.h"
 
 #include "data/mapdata.h"
 #include "manager/evtmgr_cmd.h"
@@ -346,7 +347,7 @@ s32 mri_itemsel_table[] = {
 };
 
 EVT_BEGIN(mri_punipuni_setup)
-    CALL(evt_item_entry, LW(10), ITEM_PUNI_ORB, 0, -20000, 0, 16, -1, 0)
+    CALL(evt_item_entry, LW(10), ITEM_PUNI_ORB, 0, -20000, 0, ITEM_TYPE_STILL, -1, 0)
     CALL(evt_item_flag_on, LW(10), 2)
     RETURN
 EVT_END()

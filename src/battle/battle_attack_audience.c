@@ -183,7 +183,7 @@ s32 _get_item_announce(EventEntry* event, BOOL isFirstCall) {
 
         BtlUnit_GetPos(unit, &x, &y, &z);
         y = y + (unit->mSizeMultiplier * (f32)BtlUnit_GetHeight(unit) + 8.0f);
-        event->userdatap[1] = itemEntry(NULL, item, 0x11, -1, NULL, x, y, z);
+        event->userdatap[1] = itemEntry(NULL, item, ITEM_TYPE_STILL_NO_TOUCH, -1, NULL, x, y, z);
         event->userdata[2] = 90;
     } else {
         if (event->userdata[2] > 0) {

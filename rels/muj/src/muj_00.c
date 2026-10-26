@@ -16,6 +16,7 @@
 #include "evt/evt_item.h"
 #include "mario/mario_pouch.h"
 #include "pmario_sound.h"
+#include "driver/itemdrv.h"
 
 #include "driver/mapdrv.h"
 #include "dolphin/gx.h"
@@ -1098,7 +1099,7 @@ EVT_BEGIN(koburon_dead)
     WAIT_MS(200)
     ADD(LW(1), 30)
     ADD(LW(2), 10)
-    CALL(evt_item_entry, STRING("item_99"), ITEM_WHACKA_BUMP, LW(0), LW(1), LW(2), 14, -1, 0)
+    CALL(evt_item_entry, STRING("item_99"), ITEM_WHACKA_BUMP, LW(0), LW(1), LW(2), ITEM_TYPE_FALL_NO_PICKUP, -1, 0)
     WAIT_MS(400)
     IF_INT_EQUAL(GSW(721), 7)
         CALL(evt_msg_print, 0, STRING("koburon_14"), 0, STRING("me"))

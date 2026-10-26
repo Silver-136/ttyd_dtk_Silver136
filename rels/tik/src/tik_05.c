@@ -1372,7 +1372,7 @@ EVT_BEGIN(evt_mapwrite)
     END_IF
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     ADD(LW(1), 15)
-    CALL(evt_item_entry, STRING("item00"), ITEM_MAGICAL_MAP_LARGE, LW(0), LW(1), LW(2), 17, -1, 0)
+    CALL(evt_item_entry, STRING("item00"), ITEM_MAGICAL_MAP_LARGE, LW(0), LW(1), LW(2), ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
     CALL(evt_item_set_scale, STRING("item00"), FLOAT(0.0f))
     SET_VALUE(GW(11), 0)
     BEGIN_INLINE_EVENT

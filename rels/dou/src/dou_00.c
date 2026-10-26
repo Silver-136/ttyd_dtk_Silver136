@@ -13,6 +13,7 @@
 #include "mario/mario_pouch.h"
 #include "system.h"
 #include "pmario_sound.h"
+#include "driver/itemdrv.h"
 
 #include "driver/mapdrv.h"
 #include "driver/envdrv.h"
@@ -114,7 +115,7 @@ EVT_BEGIN(dou_00_init_evt)
     WAIT_FRAMES(1)
     CALL(evt_map_playanim, STRING("nami"), 1, 0)
     CALL(evt_mobj_save_blk, STRING("mobj_save"), 30, 85, -75, 0, 0)
-    CALL(evt_item_entry, STRING("item_01"), ITEM_RUIN_POWDER, -245, 0, 85, 16, GSWF(2990), 0)
+    CALL(evt_item_entry, STRING("item_01"), ITEM_RUIN_POWDER, -245, 0, 85, ITEM_TYPE_STILL, GSWF(2990), 0)
     CALL(evt_map_set_tevcallback, 1, PTR(water_tev))
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("s00_suimen"), MAP_OBJ_TEV_CALLBACK(1))
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("s00_suimen"), MAP_OBJ_FLAG_DISPLAY_LIST)

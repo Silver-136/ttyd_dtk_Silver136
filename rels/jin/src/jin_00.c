@@ -16,6 +16,7 @@
 #include "mot/mot_hammer.h"
 #include "driver/mapdrv.h"
 #include "driver/casedrv.h"
+#include "driver/itemdrv.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "driver/npcdrv.h"
@@ -2105,7 +2106,7 @@ EVT_BEGIN(senteresa_evt)
     CALL(evt_npc_battle_start, STRING(/*"アトミックテレサ"*/"\x83\x41\x83\x67\x83\x7E\x83\x62\x83\x4E\x83\x65\x83\x8C\x83\x54"))
     CALL(evt_npc_wait_battle_end)
     ADD(LW(1), 50)
-    CALL(evt_item_entry, STRING("item_99"), ITEM_LUCKY_START, LW(0), LW(1), LW(2), 4, GSWF(2242), 0)
+    CALL(evt_item_entry, STRING("item_99"), ITEM_LUCKY_START, LW(0), LW(1), LW(2), ITEM_TYPE_SCATTER_NO_PICKUP, GSWF(2242), 0)
     CALL(evt_item_flag_on, STRING("item_99"), 256)
     SET_VALUE(GSWF(2242), 1)
     CALL(senteresa_huttobu)
@@ -2143,7 +2144,7 @@ EVT_BEGIN(jin_00_init_evt)
     CALL_CHILD(PTR(evt_usu_kagemario_party_kill))
     CALL(evt_npc_setup, PTR(npcEnt))
     IF_INT_LESS(GSW_STORY_PROGRESS, 198)
-        CALL(evt_item_entry, STRING("key00"), ITEM_STEEPLE_KEY_0x16, -555, 200, 190, 0, -1, PTR(evt_key))
+        CALL(evt_item_entry, STRING("key00"), ITEM_STEEPLE_KEY_0x16, -555, 200, 190, ITEM_TYPE_GROUND, -1, PTR(evt_key))
     END_IF
     IF_INT_LESS(GSW_STORY_PROGRESS, 199)
         CALL(evt_mobj_lock, STRING("mobj_lock00"), 22, -435, 210, -245, 0, PTR(lock_item_check), PTR(evt_unlock), GSWF(2228))

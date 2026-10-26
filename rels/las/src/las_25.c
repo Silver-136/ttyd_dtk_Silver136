@@ -14,6 +14,7 @@
 #include "driver/mobjdrv.h"
 #include "driver/mapdrv.h"
 #include "pmario_sound.h"
+#include "driver/itemdrv.h"
 
 USER_FUNC(evt_win_item_select);
 
@@ -238,8 +239,8 @@ EVT_BEGIN(las_25_init_evt)
     END_IF
     CALL(evt_mobj_jumpstand_blue, 0, STRING("jump"), 720, -675, -600, 75, 0, 0)
     CALL(evt_mobj_flag_onoff, 0, STRING("jump"), MOBJ_FLAG_GRAVITY)
-    CALL(evt_item_entry, STRING("item02"), ITEM_LIFE_SHROOM, 225, -350, 0, 16, GSWF(4379), 0)
-    CALL(evt_item_entry, STRING("item03"), ITEM_SHOOTING_STAR, 375, -450, 0, 16, GSWF(4392), 0)
+    CALL(evt_item_entry, STRING("item02"), ITEM_LIFE_SHROOM, 225, -350, 0, ITEM_TYPE_STILL, GSWF(4379), 0)
+    CALL(evt_item_entry, STRING("item03"), ITEM_SHOOTING_STAR, 375, -450, 0, ITEM_TYPE_STILL, GSWF(4392), 0)
     CALL(evt_mobj_save_blk, STRING("mobj_save"), 600, 60, -75, 0, 0)
     RETURN
 EVT_END()

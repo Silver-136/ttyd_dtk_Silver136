@@ -9,6 +9,7 @@
 #include "driver/mapdrv.h"
 #include "mario/mario_pouch.h"
 #include "pmario_sound.h"
+#include "driver/itemdrv.h"
 
 #include "driver/npcdrv.h"
 #include "evt/evt_bero.h"
@@ -114,7 +115,7 @@ EVT_BEGIN(hei_08_init_evt)
         END_IF
     END_IF
     IF_INT_EQUAL(GSWF(1775), 0)
-        CALL(evt_item_entry, STRING("moon_st"), ITEM_MOON_STONE, 0, 0, 0, 0, -1, PTR(evt_chorobon))
+        CALL(evt_item_entry, STRING("moon_st"), ITEM_MOON_STONE, 0, 0, 0, ITEM_TYPE_GROUND, -1, PTR(evt_chorobon))
     END_IF
     CALL(evt_map_playanim, STRING("mizu"), 1, 0)
     CALL(evt_map_set_tevcallback, 1, PTR(hei_test_water_tev))

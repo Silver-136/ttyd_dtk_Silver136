@@ -2000,13 +2000,13 @@ static inline void fbatRecoverItems(NpcEntry* npc) {
     do {
         if (b->recoveredItems[i]) {
 #ifdef VERSION_G8ME01
-            ItemEntry* item = itemEntry(NULL, b->recoveredItems[i], 11, -1, NULL, npc->position.x, npc->position.y,
+            ItemEntry* item = itemEntry(NULL, b->recoveredItems[i], ITEM_TYPE_DROP_LONG, -1, NULL, npc->position.x, npc->position.y,
                                           npc->position.z);
             if (item) {
                 itemFlagOn(item, 0x100);
             }
 #else
-            itemFlagOn(itemEntry(NULL, b->recoveredItems[i], 11, -1, NULL, npc->position.x, npc->position.y,
+            itemFlagOn(itemEntry(NULL, b->recoveredItems[i], ITEM_TYPE_DROP_LONG, -1, NULL, npc->position.x, npc->position.y,
                                  npc->position.z),
                        0x100);
 #endif
@@ -3106,13 +3106,13 @@ void npcGetBackItemEntry(NpcEntry* npc) {
     for (i = 0; i < 8; i++) {
         if (info->recoveredItems[i]) {
 #ifdef VERSION_G8ME01
-            ItemEntry* item = itemEntry(NULL, info->recoveredItems[i], 11, -1, NULL, npc->position.x,
+            ItemEntry* item = itemEntry(NULL, info->recoveredItems[i], ITEM_TYPE_DROP_LONG, -1, NULL, npc->position.x,
                                           npc->position.y, npc->position.z);
             if (item) {
                 itemFlagOn(item, 0x100);
             }
 #else
-            itemFlagOn(itemEntry(NULL, info->recoveredItems[i], 11, -1, NULL, npc->position.x,
+            itemFlagOn(itemEntry(NULL, info->recoveredItems[i], ITEM_TYPE_DROP_LONG, -1, NULL, npc->position.x,
                                  npc->position.y, npc->position.z),
                        0x100);
 #endif

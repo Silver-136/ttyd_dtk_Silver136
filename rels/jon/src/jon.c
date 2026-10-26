@@ -25,6 +25,7 @@
 #include "system.h"
 #include "driver/casedrv.h"
 #include "pmario_sound.h"
+#include "driver/itemdrv.h"
 
 #include "driver/npcdrv.h"
 #include "manager/evtmgr.h"
@@ -1295,7 +1296,7 @@ EVT_BEGIN(evt_open_box)
         READ_INT(LW(1))
     END_LOOP
     CALL(evt_mobj_get_position, STRING("box"), LW(10), LW(11), LW(12))
-    CALL(evt_item_entry, STRING("item"), LW(1), LW(10), LW(11), LW(12), 17, -1, 0)
+    CALL(evt_item_entry, STRING("item"), LW(1), LW(10), LW(11), LW(12), ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
     CALL(evt_mobj_wait_animation_end, STRING("box"))
     CALL(evt_item_get_item, STRING("item"))
     CALL(evt_mario_key_onoff, 1)

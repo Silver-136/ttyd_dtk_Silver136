@@ -20,6 +20,7 @@
 #include "system.h"
 #include "driver/casedrv.h"
 #include "pmario_sound.h"
+#include "driver/itemdrv.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "mario/mariost.h"
@@ -1130,7 +1131,7 @@ EVT_BEGIN(hikosenkakari_talk)
             ADD(LW(1), 20)
             ADD(LW(2), 10)
             SET_VALUE(LW(10), STRING("airship"))
-            CALL(evt_item_entry, LW(10), ITEM_BLIMP_TICKET, LW(0), LW(1), LW(2), 16, -1, 0)
+            CALL(evt_item_entry, LW(10), ITEM_BLIMP_TICKET, LW(0), LW(1), LW(2), ITEM_TYPE_STILL, -1, 0)
             CALL(evt_item_flag_on, LW(10), 2)
             WAIT_MS(1000)
             CALL(evt_item_delete, LW(10))
@@ -1212,7 +1213,7 @@ EVT_BEGIN(ekiin_talk)
             ADD(LW(1), 20)
             ADD(LW(2), 10)
             SET_VALUE(LW(10), STRING("train"))
-            CALL(evt_item_entry, LW(10), ITEM_TRAIN_TICKET, LW(0), LW(1), LW(2), 16, -1, 0)
+            CALL(evt_item_entry, LW(10), ITEM_TRAIN_TICKET, LW(0), LW(1), LW(2), ITEM_TYPE_STILL, -1, 0)
             CALL(evt_item_flag_on, LW(10), 2)
             WAIT_MS(1000)
             CALL(evt_item_delete, LW(10))
@@ -2041,7 +2042,7 @@ EVT_BEGIN(gor_04_init_evt)
         CALL(evt_mobj_save_blk, STRING("mobj_save"), 140, 60, 85, 0, 0)
     END_IF
     CALL(evt_mobj_kururing_floor, STRING("kururin1"), -510, 80, 120, STRING("S_ground"), 125, GSWF(5583))
-    CALL(evt_item_entry, STRING("item_00"), ITEM_STAR_PIECE, 475, 0, 100, 16, GSWF(5584), 0)
+    CALL(evt_item_entry, STRING("item_00"), ITEM_STAR_PIECE, 475, 0, 100, ITEM_TYPE_STILL, GSWF(5584), 0)
     SPAWN_EVENT(PTR(evt_wing))
     CALL(evt_run_case_evt, CASE_STAND_ON_A, 1, STRING("A_noriba"), 0, PTR(evt_hikousen), 0)
     CALL(evt_bero_get_entername, LW(0))

@@ -16,6 +16,7 @@
 #include "system.h"
 #include "driver/casedrv.h"
 #include "pmario_sound.h"
+#include "driver/itemdrv.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "mario/mario.h"
@@ -297,7 +298,7 @@ EVT_BEGIN(aji_07_init_evt)
     CALL(evt_map_playanim, STRING("anm_terop"), 1, 0)
     CALL(evt_map_playanim, STRING("anm_tiktik"), 1, 0)
     IF_INT_EQUAL(GSWF(4194), 0)
-        CALL(evt_item_entry, STRING("haguruma"), ITEM_COG, -65, 100, -120, 16, -1, PTR(evt_haguruma))
+        CALL(evt_item_entry, STRING("haguruma"), ITEM_COG, -65, 100, -120, ITEM_TYPE_STILL, -1, PTR(evt_haguruma))
     END_IF
     CALL(evt_bero_get_entername, LW(0))
     IF_STR_EQUAL(LW(0), STRING("tenjo"))

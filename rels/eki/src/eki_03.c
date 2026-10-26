@@ -11,6 +11,7 @@
 #include "evt/evt_mobj.h"
 #include "mario/mario_pouch.h"
 #include "pmario_sound.h"
+#include "driver/itemdrv.h"
 
 #include "memory.h"
 #include "mario/mariost.h"
@@ -278,7 +279,7 @@ EVT_BEGIN(eki_03_init_evt)
     CALL(evt_snd_bgmon, 512, STRING("BGM_STG6_HOM1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG6_EKI4"))
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
-    CALL(evt_item_entry, STRING("item"), ITEM_HP_PLUS, -550, 220, -50, 16, GSWF(3746), 0)
+    CALL(evt_item_entry, STRING("item"), ITEM_HP_PLUS, -550, 220, -50, ITEM_TYPE_STILL, GSWF(3746), 0)
     CALL(evt_mobj_powerupblk, STRING("pblk01"), 450, 100, 10, 0, GSWF(5561), 0)
 #ifdef VERSION_G8ME01
     CALL(evt_mobj_blk, STRING("blk01"), 250, 300, -100, 0, 0, LSWF(1))

@@ -23,6 +23,7 @@
 #include "evt/evt_pouch.h"
 #include "driver/casedrv.h"
 #include "pmario_sound.h"
+#include "driver/itemdrv.h"
 
 #include "driver/hitdrv.h"
 #include "string.h"
@@ -965,7 +966,7 @@ EVT_BEGIN(aji_13_init_evt)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("meta_4_2"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     IF_INT_EQUAL(GSWF(4181), 0)
-        CALL(evt_item_entry, STRING("key"), ITEM_CARD_KEY_0x20, -50, 100, 100, 16, -1, PTR(evt_key_get))
+        CALL(evt_item_entry, STRING("key"), ITEM_CARD_KEY_0x20, -50, 100, 100, ITEM_TYPE_STILL, -1, PTR(evt_key_get))
     END_IF
     IF_INT_LESS(GSW_STORY_PROGRESS, 371)
         CALL(evt_mobj_switch_blue, 0, STRING("sw"), 650, 200, 100, PTR(evt_sw), GSWF(4184))
@@ -984,7 +985,7 @@ EVT_BEGIN(aji_13_init_evt)
     END_IF
     CALL(evt_mobj_save_blk, STRING("mobj_save"), 200, 60, 100, 0, 0)
     CALL(evt_mobj_recovery_blk, STRING("mobj_recover"), 10, 300, 60, 100, 0, 0)
-    CALL(evt_item_entry, STRING("item00"), ITEM_ULTRA_SHROOM, -670, 320, -450, 16, GSWF(4215), 0)
+    CALL(evt_item_entry, STRING("item00"), ITEM_ULTRA_SHROOM, -670, 320, -450, ITEM_TYPE_STILL, GSWF(4215), 0)
     CALL(evt_item_set_scale, STRING("item00"), FLOAT(0.5996094f))
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 373)
         CALL(evt_npc_check_delete, STRING("軍団ザコ魔法使い"))

@@ -20,6 +20,7 @@
 #include "driver/mapdrv.h"
 #include "system.h"
 #include "pmario_sound.h"
+#include "driver/itemdrv.h"
 
 USER_FUNC(evt_mario_get_name_hitobj_head);
 USER_FUNC(evt_win_item_select);
@@ -473,7 +474,7 @@ EVT_BEGIN(nokkosu_talk)
     CALL(evt_npc_wait_pera, STRING("me"))
     CALL(evt_party_run, 0)
 #endif
-    CALL(evt_item_entry, STRING("irai_item"), ITEM_SPECIAL_CARD, 0, -1000, 0, 16, -1, 0)
+    CALL(evt_item_entry, STRING("irai_item"), ITEM_SPECIAL_CARD, 0, -1000, 0, ITEM_TYPE_STILL, -1, 0)
     CALL(evt_item_flag_on, STRING("irai_item"), 2)
     CALL(evt_item_get_item, STRING("irai_item"))
     CALL(evt_msg_print, 0, STRING("irai_07_07"), 0, STRING("me"))
@@ -543,7 +544,7 @@ EVT_BEGIN(gon_08_init_evt)
     CALL(evt_npc_set_width, STRING("\"カロン02\""), 30)
     CALL(evt_npc_set_height, STRING("\"カロン02\""), 7)
     CALL(evt_npc_change_fbat_mode, 1)
-    CALL(evt_item_entry, STRING("item_00"), ITEM_LIFE_SHROOM, -215, 500, 10, 16, GSWF(1505), 0)
+    CALL(evt_item_entry, STRING("item_00"), ITEM_LIFE_SHROOM, -215, 500, 10, ITEM_TYPE_STILL, GSWF(1505), 0)
     CALL(evt_mobj_float_blk, STRING("blk_0"), 0, 0, 0, 0, 2, 0, LSWF(3))
     CALL_CHILD(PTR(init_0))
     CALL(evt_mobj_switch_float_blk, STRING("sw_0"), 0, 100, -185, STRING("blk_0"), 0, PTR(main_0), LSWF(3))

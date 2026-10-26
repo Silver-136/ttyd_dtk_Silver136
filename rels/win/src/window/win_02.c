@@ -15,6 +15,7 @@
 #include "mario/mario_pouch.h"
 #include "system.h"
 #include "pmario_sound.h"
+#include "driver/itemdrv.h"
 
 
 static BeroEntry bero_entry_data[5];
@@ -195,7 +196,7 @@ EVT_BEGIN(win_02_init_evt)
     CALL(evt_mobj_powerupblk, STRING("pblk00"), -470, 300, 50, 0, GSWF(5541), 0)
     CALL(evt_mobj_brick, STRING("mobj_box01"), 67, 110, -130, 271, 12, 0, GSWF(2683))
     CALL(evt_mobj_badgeblk, STRING("mobj_badge_gat"), 600, 185, -75, 248, 0, GSWF(2677), 1)
-    CALL(evt_item_entry, STRING("item_00"), ITEM_STAR_PIECE, -472, 50, -134, 16, GSWF(5608), 0)
+    CALL(evt_item_entry, STRING("item_00"), ITEM_STAR_PIECE, -472, 50, -134, ITEM_TYPE_STILL, GSWF(5608), 0)
     IF_INT_EQUAL(GSWF(2678), 1)
         SPAWN_EVENT(PTR(evt_hikou_nobiru_init))
     END_IF

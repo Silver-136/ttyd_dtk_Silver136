@@ -11,6 +11,7 @@
 #include "driver/mapdrv.h"
 #include "mario/mario_pouch.h"
 #include "pmario_sound.h"
+#include "driver/itemdrv.h"
 
 
 static BeroEntry bero_entry_data[3];
@@ -60,7 +61,7 @@ static BeroEntry bero_entry_data[] = {
 static EVT_BEGIN(evt_ki_3)
     CALL(evt_item_delete_check, STRING("item_ki_3"), LW(0))
     IF_INT_EQUAL(LW(0), 1)
-        CALL(evt_item_entry, STRING("item_ki_3"), ITEM_COIN, 17, 90, -122, 14, GSWF(1791), 0)
+        CALL(evt_item_entry, STRING("item_ki_3"), ITEM_COIN, 17, 90, -122, ITEM_TYPE_FALL_NO_PICKUP, GSWF(1791), 0)
     END_IF
     RETURN
 EVT_END()
@@ -75,7 +76,7 @@ static TreeAccess ki_data[] = {
 EVT_BEGIN(evt_kusa_11)
     CALL(evt_item_delete_check, STRING("item_kusa_11"), LW(0))
     IF_INT_EQUAL(LW(0), 1)
-        CALL(evt_item_entry, STRING("item_kusa_11"), ITEM_COIN, 364, 75, -95, 4, GSWF(1790), 0)
+        CALL(evt_item_entry, STRING("item_kusa_11"), ITEM_COIN, 364, 75, -95, ITEM_TYPE_SCATTER_NO_PICKUP, GSWF(1790), 0)
     END_IF
     RETURN
 EVT_END()
@@ -83,7 +84,7 @@ EVT_END()
 EVT_BEGIN(evt_kusa_12)
     CALL(evt_item_delete_check, STRING("item_kusa_12"), LW(0))
     IF_INT_EQUAL(LW(0), 1)
-        CALL(evt_item_entry, STRING("item_kusa_12"), ITEM_POW_BLOCK, 320, 75, -55, 4, GSWF(1801), 0)
+        CALL(evt_item_entry, STRING("item_kusa_12"), ITEM_POW_BLOCK, 320, 75, -55, ITEM_TYPE_SCATTER_NO_PICKUP, GSWF(1801), 0)
     END_IF
     RETURN
 EVT_END()

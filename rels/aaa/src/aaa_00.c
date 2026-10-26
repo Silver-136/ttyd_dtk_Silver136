@@ -17,6 +17,7 @@
 #include "driver/mapdrv.h"
 #include "mario/mario_pouch.h"
 #include "pmario_sound.h"
+#include "driver/itemdrv.h"
 
 #include "driver/camdrv.h"
 #include "win/win_main.h"
@@ -397,7 +398,7 @@ EVT_BEGIN(evt_prologue2)
     ADD(LW(0), -25)
     ADD(LW(1), 15)
     ADD(LW(2), -3)
-    CALL(evt_item_entry, STRING("map"), ITEM_MAGICAL_MAP_LARGE, LW(0), LW(1), LW(2), 17, -1, 0)
+    CALL(evt_item_entry, STRING("map"), ITEM_MAGICAL_MAP_LARGE, LW(0), LW(1), LW(2), ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
     CALL(evt_item_set_scale, STRING("map"), FLOAT(0.5498047f))
     WAIT_MS(1000)
     CALL(evt_item_delete, STRING("map"))

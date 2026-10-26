@@ -16,6 +16,7 @@
 #include "driver/npcdrv.h"
 #include "system.h"
 #include "pmario_sound.h"
+#include "driver/itemdrv.h"
 
 USER_FUNC(evt_mario_get_name_hitobj_head);
 USER_FUNC(evt_win_item_select);
@@ -783,10 +784,10 @@ EVT_BEGIN(gon_05_init_evt)
     CALL(evt_mobj_switch_float_blk, STRING("sw_1"), FLOAT(-2.5f), 100, -175, STRING("blk_1"), 0, PTR(main_1), LSWF(5))
     CALL(evt_mobj_flag_onoff, 1, STRING("blk_1"), MOBJ_FLAG_NO_CULL)
     IF_INT_LESS(GSW_STORY_PROGRESS, 53)
-        CALL(evt_item_entry, STRING("key00"), ITEM_CASTLE_KEY_0x0E, 200, 1340, 150, 16, -1, PTR(key_get))
+        CALL(evt_item_entry, STRING("key00"), ITEM_CASTLE_KEY_0x0E, 200, 1340, 150, ITEM_TYPE_STILL, -1, PTR(key_get))
     END_IF
-    CALL(evt_item_entry, STRING("item00"), ITEM_STAR_PIECE, -200, 240, -150, 16, GSWF(5606), 0)
-    CALL(evt_item_entry, STRING("item01"), ITEM_LAST_STAND_P, 210, 915, 150, 16, GSWF(1503), 0)
+    CALL(evt_item_entry, STRING("item00"), ITEM_STAR_PIECE, -200, 240, -150, ITEM_TYPE_STILL, GSWF(5606), 0)
+    CALL(evt_item_entry, STRING("item01"), ITEM_LAST_STAND_P, 210, 915, 150, ITEM_TYPE_STILL, GSWF(1503), 0)
     IF_INT_LESS(GSW_STORY_PROGRESS, 47)
         CALL(evt_mobj_lock, STRING("mobj_lock00"), 12, -240, 750, 0, 90, PTR(evt_chk00), PTR(evt_unlock00), GSWF(1489))
         SET_VALUE(LW(0), STRING("w_bero_3"))

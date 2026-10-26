@@ -9,6 +9,7 @@
 #include "party/party_motion.h"
 #include "evt/evt_item.h"
 #include "mario/mario_pouch.h"
+#include "driver/itemdrv.h"
 
 #include "stdio.h"
 #include "mario/mario.h"
@@ -136,7 +137,7 @@ EVT_END()
 static EVT_BEGIN(evt_box)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mobj_get_position, STRING("box"), LW(0), LW(1), LW(2))
-    CALL(evt_item_entry, STRING("dummy"), ITEM_ELEVATOR_KEY_0x1B, LW(0), LW(1), LW(2), 17, -1, 0)
+    CALL(evt_item_entry, STRING("dummy"), ITEM_ELEVATOR_KEY_0x1B, LW(0), LW(1), LW(2), ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
     CALL(evt_mobj_wait_animation_end, STRING("box"))
     CALL(evt_item_get_item, STRING("dummy"))
     SET_VALUE(GSW_STORY_PROGRESS, 362)

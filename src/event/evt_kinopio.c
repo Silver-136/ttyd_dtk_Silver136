@@ -220,7 +220,7 @@ USER_FUNC(breakfast) {
     if (item == NULL || !(item->flags & ITEM_FLAG_ACTIVE)) {
         KinopioWork* w = *wp;
         if (w->breakfastItem != 0) {
-            itemEntry("breakfast", w->breakfastItem, 0x10, -1, NULL, w->breakfastPos.x, w->breakfastPos.y,
+            itemEntry("breakfast", w->breakfastItem, ITEM_TYPE_STILL, -1, NULL, w->breakfastPos.x, w->breakfastPos.y,
                       w->breakfastPos.z);
         }
     }

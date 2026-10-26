@@ -9,6 +9,7 @@
 #include "driver/mapdrv.h"
 #include "mario/mario_pouch.h"
 #include "pmario_sound.h"
+#include "driver/itemdrv.h"
 
 #include "driver/npcdrv.h"
 #include "driver/animdrv.h"
@@ -181,12 +182,12 @@ EVT_BEGIN(gra_02_init_evt)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
     CALL_CHILD(PTR(evt_bero_info_run))
-    CALL(evt_item_entry, STRING("item00"), ITEM_STAR_PIECE, -125, 0, -110, 16, GSWF(5631), 0)
-    CALL(evt_item_entry, STRING("item01"), ITEM_STAR_PIECE, 305, 0, -35, 16, GSWF(5632), 0)
+    CALL(evt_item_entry, STRING("item00"), ITEM_STAR_PIECE, -125, 0, -110, ITEM_TYPE_STILL, GSWF(5631), 0)
+    CALL(evt_item_entry, STRING("item01"), ITEM_STAR_PIECE, 305, 0, -35, ITEM_TYPE_STILL, GSWF(5632), 0)
     CALL_CHILD(PTR(evt_usu_kagemario_party_kill))
     CALL(evt_npc_setup, PTR(npcEnt))
     IF_INT_LESS(GSW_STORY_PROGRESS, 184)
-        CALL(evt_item_entry, STRING("key00"), ITEM_SHOP_KEY, -30, 0, 0, 0, -1, PTR(gra02_get_key))
+        CALL(evt_item_entry, STRING("key00"), ITEM_SHOP_KEY, -30, 0, 0, ITEM_TYPE_GROUND, -1, PTR(gra02_get_key))
     END_IF
     IF_INT_LESS(GSW_STORY_PROGRESS, 188)
         CALL(evt_cloud_init)

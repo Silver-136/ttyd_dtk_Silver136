@@ -21,6 +21,7 @@
 #include "mario/mario_pouch.h"
 #include "system.h"
 #include "driver/casedrv.h"
+#include "driver/itemdrv.h"
 
 #include "manager/evtmgr.h"
 #include "driver/msgdrv.h"
@@ -670,7 +671,7 @@ EVT_BEGIN(kuizu_sekizou)
     CALL(evt_snd_sfxon, STRING("SFX_STG7_QUAKE1"), LW(10))
     CALL(evt_cam_shake, 4, FLOAT(0.0048828125f), FLOAT(0.0f), 1500)
     CALL(evt_snd_sfxoff, LW(10))
-    CALL(evt_item_entry, STRING("dummy"), ITEM_ELEVATOR_KEY_0x1C, 50, 100, 0, 13, -1, PTR(evt_item))
+    CALL(evt_item_entry, STRING("dummy"), ITEM_ELEVATOR_KEY_0x1C, 50, 100, 0, ITEM_TYPE_FALL, -1, PTR(evt_item))
     CALL(evt_msg_toge, 2, 95, 65, 0)
     SPAWN_EVENT(PTR(sekizou_talk))
     CALL(evt_msg_print, 0, STRING("stg7_aji_32"), PTR(kuti_callback), 0)
@@ -746,7 +747,7 @@ EVT_BEGIN(aji_04_init_evt)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("me_ato"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     IF_INT_EQUAL(GSW_STORY_PROGRESS, 366)
-        CALL(evt_item_entry, STRING("dummy"), ITEM_ELEVATOR_KEY_0x1C, 50, 0, 0, 16, -1, PTR(evt_item))
+        CALL(evt_item_entry, STRING("dummy"), ITEM_ELEVATOR_KEY_0x1C, 50, 0, 0, ITEM_TYPE_STILL, -1, PTR(evt_item))
     END_IF
     SPAWN_EVENT(PTR(evt_emergency))
     RETURN

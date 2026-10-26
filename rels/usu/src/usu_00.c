@@ -25,6 +25,7 @@
 #include "driver/mapdrv.h"
 #include "system.h"
 #include "driver/casedrv.h"
+#include "driver/itemdrv.h"
 
 #include "mario/mario_pouch.h"
 #include "party.h"
@@ -555,7 +556,7 @@ EVT_BEGIN(village_chief_talk)
     IF_INT_EQUAL(GSW(1420), 17)
         IF_INT_EQUAL(GSWF(5405), 0)
             CALL(evt_msg_print, 0, STRING("irai_17_00"), 0, 0)
-            CALL(evt_item_entry, STRING("kairanban"), ITEM_ROUTING_SLIP, 0, -1000, 0, 17, -1, 0)
+            CALL(evt_item_entry, STRING("kairanban"), ITEM_ROUTING_SLIP, 0, -1000, 0, ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
             CALL(evt_item_get_item, STRING("kairanban"))
             CALL(evt_item_get_item_end_wait, STRING("kairanban"))
             SET_VALUE(GSWF(5405), 1)
@@ -1361,7 +1362,7 @@ EVT_BEGIN(usu00_vivian_joinup_event)
     CALL(evt_mario_set_pose, STRING("M_C_3"))
     CALL(evt_npc_get_position, STRING("ビビアン"), LW(0), LW(1), LW(2))
     ADD(LW(0), -20)
-    CALL(evt_item_entry, STRING("ichikorori"), ITEM_SUPERBOMBOMB, LW(0), 10, LW(2), 17, -1, 0)
+    CALL(evt_item_entry, STRING("ichikorori"), ITEM_SUPERBOMBOMB, LW(0), 10, LW(2), ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
     WAIT_MS(1000)
     CALL(evt_item_delete, STRING("ichikorori"))
     CALL(evt_mario_dump_item, 67)
@@ -1373,7 +1374,7 @@ EVT_BEGIN(usu00_vivian_joinup_event)
     CALL(evt_npc_get_position, STRING("ビビアン"), LW(0), LW(1), LW(2))
     ADD(LW(0), 30)
     ADD(LW(2), -1)
-    CALL(evt_item_entry, STRING("shine"), ITEM_SUPERBOMBOMB, LW(0), LW(1), LW(2), 17, -1, 0)
+    CALL(evt_item_entry, STRING("shine"), ITEM_SUPERBOMBOMB, LW(0), LW(1), LW(2), ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
     WAIT_MS(700)
     CALL(evt_eff_fukidashi, 1, STRING(""), STRING("ビビアン"), 0, 0, 0, 0, 0, 0, 0, 60)
     CALL(evt_npc_get_position, STRING("ビビアン"), LW(0), LW(1), LW(2))
@@ -2242,7 +2243,7 @@ EVT_BEGIN(evt_kusa_04)
     END_IF
     CALL(evt_item_delete_check, STRING("item_kusa_04"), LW(0))
     IF_INT_EQUAL(LW(0), 1)
-        CALL(evt_item_entry, STRING("item_kusa_04"), ITEM_STAR_PIECE, 130, 0, 455, 4, GSWF(5628), 0)
+        CALL(evt_item_entry, STRING("item_kusa_04"), ITEM_STAR_PIECE, 130, 0, 455, ITEM_TYPE_SCATTER_NO_PICKUP, GSWF(5628), 0)
     END_IF
     RETURN
 EVT_END()
@@ -2253,7 +2254,7 @@ EVT_BEGIN(evt_kusa_06)
     END_IF
     CALL(evt_item_delete_check, STRING("item_kusa_06"), LW(0))
     IF_INT_EQUAL(LW(0), 1)
-        CALL(evt_item_entry, STRING("item_kusa_06"), ITEM_COIN, 330, 0, 275, 4, GSWF(1933), 0)
+        CALL(evt_item_entry, STRING("item_kusa_06"), ITEM_COIN, 330, 0, 275, ITEM_TYPE_SCATTER_NO_PICKUP, GSWF(1933), 0)
     END_IF
     RETURN
 EVT_END()
@@ -2305,7 +2306,7 @@ EVT_BEGIN(usu_00_touch_ichikorori_ball)
             ADD(LW(5), -20)
         END_IF
         CALL(evt_sub_get_dir, LW(0), LW(2), LW(3), LW(5), LW(6))
-        CALL(evt_item_entry, STRING("ichikorori_ball"), ITEM_SUPERBOMBOMB, LW(3), LW(4), LW(5), 2, -1, PTR(evt_ichikorori_ball_get))
+        CALL(evt_item_entry, STRING("ichikorori_ball"), ITEM_SUPERBOMBOMB, LW(3), LW(4), LW(5), ITEM_TYPE_SCATTER, -1, PTR(evt_ichikorori_ball_get))
         CALL(evt_item_set_move_dir_speed, STRING("ichikorori_ball"), LW(6), FLOAT(90.0f))
         CALL(evt_item_set_gravity, STRING("ichikorori_ball"), FLOAT(1.0f))
         CALL(evt_item_set_bound_rate, STRING("ichikorori_ball"), FLOAT(0.5996094f))
@@ -2840,7 +2841,7 @@ EVT_BEGIN(usu_00_koopa_second_evt)
     END_IF
     ADD(LW(1), 45)
     ADD(LW(2), 5)
-    CALL(evt_item_entry, STRING("item"), ITEM_SUPERBOMBOMB, LW(0), LW(1), LW(2), 17, -1, 0)
+    CALL(evt_item_entry, STRING("item"), ITEM_SUPERBOMBOMB, LW(0), LW(1), LW(2), ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
     WAIT_MS(800)
     CALL(evt_npc_set_stay_anim, STRING("カンブー"))
     CALL(evt_item_delete, STRING("item"))
@@ -2953,7 +2954,7 @@ EVT_BEGIN(usu_00_koopa_second_evt)
     SET_FLOAT_VALUE(GW(2), LW(4))
     CALL(evt_snd_sfxon_3d, STRING("SFX_KUPPA_ITIKORO_APPEAR1"), LW(2), LW(3), LW(4), 0)
     WAIT_MS(100)
-    CALL(evt_item_entry, STRING("itikoro"), ITEM_SUPERBOMBOMB, LW(2), LW(3), LW(4), 17, -1, 0)
+    CALL(evt_item_entry, STRING("itikoro"), ITEM_SUPERBOMBOMB, LW(2), LW(3), LW(4), ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
     SET_VALUE(LW(8), LW(3))
     ADD(LW(8), 12)
     SET_VALUE(LW(9), LW(4))
@@ -3686,7 +3687,7 @@ EVT_BEGIN(usu_00_init_evt)
         CALL(evt_mobj_save_blk, STRING("mobj_save"), 365, 60, -50, 0, 0)
     END_IF
     IF_INT_EQUAL(GF(1), 0)
-        CALL(evt_item_entry, STRING("item00"), ITEM_STAR_PIECE, -220, 0, -225, 16, GSWF(5629), 0)
+        CALL(evt_item_entry, STRING("item00"), ITEM_STAR_PIECE, -220, 0, -225, ITEM_TYPE_STILL, GSWF(5629), 0)
     END_IF
     CALL_CHILD(PTR(evt_usu_kagemario_party_kill))
     CALL(evt_npc_setup, PTR(npcEnt))

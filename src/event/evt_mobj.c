@@ -2465,7 +2465,7 @@ s32 mobj_badgeblk(MapObjectEntry* mobj) {
             if ((u32)mobj->event != 0) {
                 mobjRunEvent(mobj, (s32*)mobj->event);
             } else if (mobj->typeData[0] != 0x79) {
-                itemEntry(mobj->position.x, 40.0f + mobj->position.y, mobj->position.z, mobj->name, mobj->typeData[0], 4, mobj->flagVar, NULL);
+                itemEntry(mobj->position.x, 40.0f + mobj->position.y, mobj->position.z, mobj->name, mobj->typeData[0], ITEM_TYPE_SCATTER_NO_PICKUP, mobj->flagVar, NULL);
                 item = itemNameToPtr(mobj->name);
                 itemFlagOn(item, 0x10);
                 item->bounceFactor = 0.7f;
@@ -2475,7 +2475,7 @@ s32 mobj_badgeblk(MapObjectEntry* mobj) {
                 psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MOBJ_ITEM_APPEAR1), &mobj->position);
             } else {
                 pouchAddCoin(1);
-                itemEntry(mobj->position.x, mobj->position.y, mobj->position.z, NULL, ITEM_COIN, 0xf, -1, NULL);
+                itemEntry(mobj->position.x, mobj->position.y, mobj->position.z, NULL, ITEM_COIN, ITEM_TYPE_POP, -1, NULL);
                 evtSetValue(NULL, mobj->flagVar, 1);
                 psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_COUNT_COIN1), &mobj->position);
             }
@@ -2583,7 +2583,7 @@ s32 mobj_powerupblk(MapObjectEntry* mobj) {
         gp->systemLevelFlags |= 3;
         psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MOBJ_BLOCK_POWER_SHINE1 | PSND_SFX_BYPASS_MUTE), &mobj->position);
         animPoseSetAnim(mobj->poseId, "A_1", 1);
-        itemEntry(mobj->position.x, mobj->position.y, mobj->position.z, "pwrblk1", ITEM_SHINE_SPRITE, 0xf, -1, NULL);
+        itemEntry(mobj->position.x, mobj->position.y, mobj->position.z, "pwrblk1", ITEM_SHINE_SPRITE, ITEM_TYPE_POP, -1, NULL);
         mobj->state++;
         break;
     case 1:
@@ -2600,7 +2600,7 @@ s32 mobj_powerupblk(MapObjectEntry* mobj) {
             mobj->typeData[1]--;
             break;
         }
-        itemForceGet(itemEntry(mobj->position.x, 40.0f + mobj->position.y, mobj->position.z, "pwrblk2", ITEM_SHINE_SPRITE, 0x11, -1, NULL));
+        itemForceGet(itemEntry(mobj->position.x, 40.0f + mobj->position.y, mobj->position.z, "pwrblk2", ITEM_SHINE_SPRITE, ITEM_TYPE_STILL_NO_TOUCH, -1, NULL));
         evtSetValue(NULL, mobj->flagVar, 1);
         marioKeyOn();
         if (!strcmp(gp->currentMapName, "dou_02")) {
@@ -2753,7 +2753,7 @@ s32 mobj_10countblk(MapObjectEntry* mobj) {
                 mobjRunEvent(mobj, (s32*)mobj->event);
             } else {
                 pouchAddCoin(1);
-                itemEntry(mobj->position.x, mobj->position.y, mobj->position.z, NULL, ITEM_COIN, 0xf, -1, NULL);
+                itemEntry(mobj->position.x, mobj->position.y, mobj->position.z, NULL, ITEM_COIN, ITEM_TYPE_POP, -1, NULL);
                 mobj->timer = 200;
             }
             mobj->state++;
@@ -2773,7 +2773,7 @@ s32 mobj_10countblk(MapObjectEntry* mobj) {
         if (mobj->flags & MOBJ_FLAG_HIT) {
             psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MOBJ_TEN_COUNT_COIN1), &mobj->position);
             pouchAddCoin(1);
-            itemEntry(mobj->position.x, mobj->position.y, mobj->position.z, NULL, ITEM_COIN, 0xf, -1, NULL);
+            itemEntry(mobj->position.x, mobj->position.y, mobj->position.z, NULL, ITEM_COIN, ITEM_TYPE_POP, -1, NULL);
             mobj->flags &= ~MOBJ_FLAG_HIT;
             animPoseSetAnim(mobj->poseId, "A_1", 1);
         }
@@ -3154,7 +3154,7 @@ s32 mobj_kururing_floor(MapObjectEntry* mobj) {
             mobj->state = 1;
             item = itemNameToPtr(mobj->name);
             if (item == NULL || !(((ItemEntry*)item)->flags & 1)) {
-                if (itemEntry(mobj->position.x, 30.0f + mobj->position.y, mobj->position.z, mobj->name, ITEM_STAR_PIECE, 4, mobj->flagVar, NULL)) {
+                if (itemEntry(mobj->position.x, 30.0f + mobj->position.y, mobj->position.z, mobj->name, ITEM_STAR_PIECE, ITEM_TYPE_SCATTER_NO_PICKUP, mobj->flagVar, NULL)) {
                     item = itemNameToPtr(mobj->name);
                     itemFlagOn(item, 0x10);
                     ((ItemEntry*)item)->bounceFactor = 0.6f;
@@ -3351,7 +3351,7 @@ s32 mobj_koopa_ojama_blk_evt(MapObjectEntry* mobj) {
     case 10:
         psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MOBJ_BLOCK_OJAMA1), &mobj->position);
         effMObjBrokenEntry(5, mobj->position.x, 25.0f + mobj->position.y, 25.0f + mobj->position.z);
-        item = itemEntry(mobj->position.x, 25.0f + mobj->position.y, mobj->position.z, mobj->name, ITEM_BOWSER_BROS_MEAT, 4, -1, kpa_powerup_evt);
+        item = itemEntry(mobj->position.x, 25.0f + mobj->position.y, mobj->position.z, mobj->name, ITEM_BOWSER_BROS_MEAT, ITEM_TYPE_SCATTER_NO_PICKUP, -1, kpa_powerup_evt);
         if (item) {
             itemStatusOn(item, 0x10);
             itemFlagOn(item, 0x14);
@@ -3610,7 +3610,7 @@ s32 mobj_koopa_badgeblk(MapObjectEntry* mobj) {
         if ((s32*)mobj->event != NULL) {
             mobjRunEvent(mobj, (s32*)mobj->event);
         } else if (mobj->typeData[0] == 0x59) {
-            itemEntry(mobj->position.x, 12.5f + mobj->position.y, mobj->position.z, mobj->name, mobj->typeData[0], 4, -1, kpa_powerup_evt);
+            itemEntry(mobj->position.x, 12.5f + mobj->position.y, mobj->position.z, mobj->name, mobj->typeData[0], ITEM_TYPE_SCATTER_NO_PICKUP, -1, kpa_powerup_evt);
             item = itemNameToPtr(mobj->name);
             itemStatusOn(item, 0x10);
             itemFlagOn(item, 0x14);
@@ -3624,7 +3624,7 @@ s32 mobj_koopa_badgeblk(MapObjectEntry* mobj) {
             psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_KUPPA_MEAT_APPEAR1), &mobj->position);
         } else {
             kpaAddCoin(1);
-            itemEntry(mobj->position.x, mobj->position.y, mobj->position.z, NULL, ITEM_COIN, 0xf, -1, NULL);
+            itemEntry(mobj->position.x, mobj->position.y, mobj->position.z, NULL, ITEM_COIN, ITEM_TYPE_POP, -1, NULL);
             evtSetValue(NULL, mobj->flagVar, 1);
             psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_COUNT_COIN1), &mobj->position);
         }
