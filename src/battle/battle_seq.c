@@ -37,19 +37,15 @@
 #include "eff/eff_recovery.h"
 #include "eff/n64/eff_freeze_n64.h"
 #include "battle/battle_detect.h"
+#include "battle/battle_damage.h"
+#include "battle/battle_seq_command.h"
+#include "battle/battle_seq_end.h"
 
 
 #define STAGE_WORK(wp) (&(wp)->stageObjectWork)
 
 // external prototypes
 f32 intpl_sub(s32 type, f32 start, f32 end, s32 cur, s32 max);
-void BattleCommandInit(BattleWork* wp);
-BOOL BattleCommandInput(BattleWork* wp);
-void BattleStatusChangeMsgAdjust(BattleWork* wp);
-BOOL BattleStatusChangeMsgMain(BattleWork* wp);
-BOOL BattleStatusChangeAnnouceMain(BattleWork* wp);
-s32 BattleDamageDirect(s32 unitIdx, BattleUnit* unit, BattleUnitPart* part, s32 damage, s32 fpDamage, u32 stopFlags, u32 damageEffect, u32 pattern);
-void BattleSetStatusDamageFromWeapon(BattleUnit* attacker, BattleUnit* target, BattleUnitPart* part, BattleWeapon* weapon, u32 flags);
 extern s32 marioDefaultWeapon_Jump[];
 extern s32 marioWeapon_KururinJump[];
 extern s32 marioDefaultWeapon_Hammer[];
@@ -86,7 +82,6 @@ void BattleCheckAllPinchStatus(BattleWork* wp, BOOL noAudience);
 void btlseqInit(BattleWork* wp);
 void btlseqFirstAct(BattleWork* wp);
 void btlseqTurn(BattleWork* wp);
-void btlseqEnd(BattleWork* wp);
 
 // static data from an inlined header function (see unit_party_sanders.c)
 

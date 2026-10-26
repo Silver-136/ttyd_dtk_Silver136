@@ -8,6 +8,8 @@
 #include "driver/effdrv.h"
 #include "mario/mario_pouch.h"
 
+struct BattleWeapon;
+
 // BattleUnit.mAlliance: the side a unit fights on.
 typedef enum BattleUnitAlliance {
     ALLIANCE_PLAYER,  // Mario and his partners
@@ -1186,3 +1188,6 @@ BOOL BtlUnit_EnemyItemCanUseCheck(s32 item);
 void BtlUnit_SetTotalHitDamage(BattleUnit* unit, s16 damage);
 void BtlUnit_ControlPoseSoundMain(BattleUnitPart* part);
 void BtlUnit_PoseSoundInit(BattleUnitPart* part);
+BOOL BtlUnit_CheckWeaponCost(BattleUnit* unit, struct BattleWeapon* weapon);
+s32 BtlUnit_GetWeaponCost(BattleUnit* unit, struct BattleWeapon* weapon);
+void BtlUnit_PayWeaponCost(BattleUnit* unit, struct BattleWeapon* weapon);

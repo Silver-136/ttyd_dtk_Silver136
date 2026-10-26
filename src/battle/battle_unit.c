@@ -48,7 +48,6 @@ BOOL BtlUnit_Init(void) {
 
 
 void BtlUnit_HpGaugeInit(BattleUnit* unit);
-void BattleStatusEffectDelete(BattleUnit* unit);
 
 BattleUnit* BtlUnit_Entry(BattleUnitSetup* setup) {
     BattleWork* wp = _battleWorkPointer;

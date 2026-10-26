@@ -42,11 +42,6 @@ typedef struct MayaAnim {
     MayaJoint joints[1];
 } MayaAnim;
 
-MayaAnim* effMayaAnimAlloc(MayaAnimData* data);
-void effDeleteMayaAnim(MayaAnim* anim);
-void effPlayMayaAnim(MayaAnim* anim);
-void effCalcMayaAnim(MayaAnim* anim);
-void effDrawMayaPoly(MayaPoly* poly);
 
 typedef struct EffIceWork {
     s32 type;       // 0x0

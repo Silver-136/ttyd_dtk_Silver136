@@ -21,10 +21,9 @@
 #include "evt/evt_audience.h"
 #include "battle/battle_status_effect.h"
 #include "system.h"
+#include "battle/battle_damage.h"
 
 
-s32 BattleDamageDirect(s32 attackerId, BattleUnit* target, BattleUnitPart* part, s32 damage, s32 fpDamage,
-                       u32 flags, s32 code, u32 counter);
 
 static USER_FUNC(_anime_load);
 static USER_FUNC(_anime_load_wait);

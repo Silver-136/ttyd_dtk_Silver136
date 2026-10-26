@@ -3,6 +3,8 @@
 #include <dolphin/types.h>
 #include "evt/evt_word.h"
 
+struct BattleWork;
+
 typedef struct RankUpData {
     s16 startLevel; //0x0, the level you need to reach to be a certain rank
     s16 rankId; //0x2, the index of this rank for lookups
@@ -25,3 +27,4 @@ extern EvtWord _move_to_flower_event[];
 extern EvtWord _move_to_heart_event[];
 extern EvtWord _rank_up_event[];
 const char* BattleGetRankNameLabel(s32 level);
+void btlseqEnd(struct BattleWork* wp);

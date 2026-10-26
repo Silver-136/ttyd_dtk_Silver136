@@ -3306,7 +3306,6 @@ BOOL N_fbatPreventMarioEventChk(void);
 BOOL npcCheckBlow(NpcEntry* npc);
 s32 npcCalcScore(NpcEntry* npc);
 void fbatSandersBombTriggerOn(void);
-s32 npcKoopaModeMobjBoundDeadCheck(HitEntry* hit);
 void npcKoopaModeEncountCheck(void);
 void npcClearDeadInfo(void);
 void npcGetBackItemEntry(NpcEntry* npc);

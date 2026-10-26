@@ -21,6 +21,7 @@
 #include "dolphin/gx.h"
 #include "dolphin/mtx.h"
 #include "driver/shadowdrv.h"
+#include "battle/battle_seq_command.h"
 
 
 extern ItemData itemDataTable[];
@@ -117,7 +118,6 @@ void btlDispGXInit2D(void) {
     GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
 }
 
-void BattleCommandDisplay(BattleWork* wp);
 void BattleStockExpDisp(void);
 void btlDispAnimeSpeed(BattleUnitPart* part, f32 speed);
 void btlUnitPartsBlurControl(BattleUnitPart* part, s32 unused, Mtx orientation, GXColor color, f32 rotation);

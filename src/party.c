@@ -595,7 +595,6 @@ s32 partyEntry2Pos(s32 memberId, f32 x, f32 y, f32 z) {
     return slot;
 }
 
-void vivianUnhold(PartyEntry* party);
 void L_partyVivianTailStart(PartyEntry* party);
 void getRidePos(PartyEntry* party, Vec* pos);
 void driveParty(PartyEntry* party);
@@ -869,7 +868,6 @@ void partyMain(void) {
     }
 }
 
-void vivianShadow(PartyEntry* party);
 void partyPreDisp(PartyEntry* party);
 void partyRideMain(PartyEntry* party);
 s32 partyRideYoshiMain(PartyEntry* party);

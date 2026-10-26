@@ -7,6 +7,8 @@
 #include "evt/evt_word.h"
 #include <dolphin/mtx.h>
 
+struct EventEntry;
+
 typedef struct MapObjectHitEntry {
     HitEntry* hitObject;       // 0x0
     char name[16];             // 0x4
@@ -111,3 +113,4 @@ void mobjKoopaOn(void);
 s32 mobjCheckItemboxOpen(MapObjectEntry* entry);
 BOOL mobjGetHint(MapObjectEntry* entry);
 MapObjectEntry* mobjNearDistCheck2(f32 x, f32 y, f32 z, f32 minMagnitude, char** names);
+struct EventEntry* mobjRunEvent(MapObjectEntry* entry, EvtWord* eventCode);

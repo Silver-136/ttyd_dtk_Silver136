@@ -8,6 +8,7 @@
 #include "party/party_nokonoko.h"
 #include "party/party_move.h"
 #include "party/party_yoshi.h"
+#include "party/party_vivian.h"
 
 #ifdef VERSION_G8ME01
 // US has no local duplicates of these: use the global functions
@@ -19,8 +20,6 @@
 void bomhei_init_800BFBB0(PartyEntry* party);
 void kuribo_init_800C23B4(PartyEntry* party);
 void vivian_init_801809C0(PartyEntry* party);
-void vivian_move(PartyEntry* party);
-void vivian_use(PartyEntry* party);
 
 
 PartyData partyDataTbl[] = {

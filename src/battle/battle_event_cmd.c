@@ -24,6 +24,7 @@
 #include "battle/battle_seq.h"
 #include "eff/eff_itemget.h"
 #include "battle/battle_detect.h"
+#include "battle/battle_seq_command.h"
 #ifdef VERSION_G8ME01
 #include "mario/mariost.h"
 #endif
@@ -3368,16 +3369,10 @@ USER_FUNC(btlevtcmd_PartsFaceDirectionSub) {
 /* half_A begin PRE */
 /* first-half (target order 1..153) functions, generated block */
 s32 BattleEnemyUseItemCheck(BattleUnit* unit);
-void BtlUnit_PayWeaponCost(BattleUnit* unit, BattleWeapon* weapon);
-BattleWeapon* BattleGetSelectWeapon(BattleWork* wp);
 extern ItemData itemDataTable[];
 void btlDispChangePeraAnime(BattleUnitPart* part, s32 anim);
-void BattleAttackDeclareAll(BattleWork* wp);
 void _MoveSoundControlEndCore(BattleUnit* unit, BecSndWork* work);
 void _MoveSoundControlCore(BattleUnit* unit, BecSndWork* work, BattleUnitPart* part, f32 x, f32 y, f32 z);
-void* BattleSetConfuseAct(BattleWork* wp, BattleUnit* unit);
-void BattleDamageDirect(s32 unitId, BattleUnit* target, BattleUnitPart* part, s32 damage, s32 fpDamage, u32 result, u32 pattern, s32 flag);
-s32 BattlePreCheckDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPart* part, BattleWeapon* weapon, u32 flags);
 ItemEntry* itemEntry(const char* name, s32 itemId, u16 type, s32 collectFlag, EvtWord* evtCode, f32 x, f32 y, f32 z);
 static inline void bec_coin(BattleUnit* unit, s32 item) {
     s32 coins;

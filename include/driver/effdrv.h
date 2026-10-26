@@ -4,6 +4,10 @@
 #include "manager/filemgr.h"
 #include "sdk/texPalette.h"
 
+struct MayaAnim;
+struct MayaPoly;
+struct MayaAnimData;
+
 typedef void (*EffectCallback)(struct EffectEntry* effect);
 
 // EffectEntry.flags (effEntry, effMain, effSoftDelete)
@@ -48,3 +52,8 @@ void effDelete(EffectEntry* effect);
 void effSoftDelete(EffectEntry* effect);
 EffectEntry* effNameToPtr(const char* name);
 EffectSet* effGetSet(const char* name);
+void effCalcMayaAnim(struct MayaAnim* anim);
+void effDeleteMayaAnim(struct MayaAnim* anim);
+void effDrawMayaPoly(struct MayaPoly* poly);
+struct MayaAnim* effMayaAnimAlloc(struct MayaAnimData* data);
+void effPlayMayaAnim(struct MayaAnim* anim);

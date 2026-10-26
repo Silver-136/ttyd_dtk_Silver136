@@ -3,6 +3,8 @@
 #include <dolphin/types.h>
 
 struct BattleWeapon;
+struct BattleWork;
+struct BattleUnit;
 
 typedef struct BattleCommandCursor {
     s32 absPos; // 0x0, absolute cursor index
@@ -125,3 +127,9 @@ typedef struct BattleCommand {
     s32 errorEvtId;                      // 0x568, error message event id
     u8 pad_56C[0x574 - 0x56C];           // 0x56C, never accessed
 } BattleCommand;
+BOOL BattleCommandCheckChangePositionEnable(struct BattleWork* wp);
+void BattleCommandDisplay(struct BattleWork* wp);
+void BattleCommandInit(struct BattleWork* wp);
+s32 BattleCommandInput(struct BattleWork* work);
+struct BattleWeapon* BattleGetSelectWeapon(struct BattleWork* wp);
+void* BattleSetConfuseAct(struct BattleWork* wp, struct BattleUnit* unit);

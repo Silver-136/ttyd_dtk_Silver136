@@ -49,10 +49,6 @@ typedef struct MayaAnim {
     MayaJoint joints[1];
 } MayaAnim;
 
-MayaAnim* effMayaAnimAlloc(MayaAnimData* data);
-void effDeleteMayaAnim(MayaAnim* anim);
-void effPlayMayaAnim(MayaAnim* anim);
-void effCalcMayaAnim(MayaAnim* anim);
 
 #define QUAD(l, r, t, b, u) \
     GXBegin(GX_QUADS, GX_VTXFMT0, 4); \

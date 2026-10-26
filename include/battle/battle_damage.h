@@ -2,6 +2,11 @@
 
 #include <dolphin/types.h>
 
+struct BattleWork;
+struct BattleUnit;
+struct BattleWorkUnitPart;
+struct BattleWeapon;
+
 typedef struct BattleVulnerableStatus {
     u8 sleepRate; //0x0
     u8 stopRate; //0x1
@@ -127,3 +132,7 @@ typedef enum StatusDamageResult {
     STATUS_RESULT_SLEEP = (1 << 5),        // 0x20, the damage is applied without the hit reaction
 } StatusDamageResult;
 
+void BattleAttackDeclareAll(struct BattleWork* wp);
+void BattleDamageDirect(s32 unitId, struct BattleUnit* target, struct BattleWorkUnitPart* part, s32 damage, s32 fpDamage, u32 result, u32 pattern, s32 flag);
+s32 BattlePreCheckDamage(struct BattleUnit* attacker, struct BattleUnit* target, struct BattleWorkUnitPart* part, struct BattleWeapon* weapon, u32 flags);
+s32 BattleSetStatusDamageFromWeapon(struct BattleUnit* attacker, struct BattleUnit* target, struct BattleWorkUnitPart* part, struct BattleWeapon* weapon, u32 flags);

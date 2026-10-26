@@ -12,11 +12,11 @@
 #include "driver/icondrv.h"
 #include "driver/camdrv.h"
 #include "driver/effdrv.h"
+#include "battle/battle_damage.h"
 
 #define ST_CHG_MSG(i) ((StChgMsg*)_battleWorkPointer->announce.stChg.msg + (i)) /* cast keeps the 0x18D88 displacement folded into each access */
 
 BOOL BattleStatusChangeAnnouceMain_Unit(BattleUnit* unit);
-void BattleStatusChangeMsgSetAnnouce(BattleUnit* unit, s32 index, s32 changed);
 void _st_chg_msg_disp(void);
 
 typedef struct StChgMsgData {
@@ -311,7 +311,6 @@ void BSE_TurnFirstProcessEffectEntry(BattleUnit* unit, s16 active) {
     unit->mbBurnDamageFlameActive = active;
 }
 
-void BattleDamageDirect(s32 unitId, BattleUnit* target, BattleUnitPart* part, s32 damage, s32 fpDamage, u32 result, u32 pattern, s32 flag);
 BOOL BtlUnit_CheckShadowGuard(BattleUnit* unit);
 f32 sinfd(f32 degrees);
 

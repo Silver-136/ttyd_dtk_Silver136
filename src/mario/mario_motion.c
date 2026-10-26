@@ -64,7 +64,6 @@ void mot_dummy(void);
 
 BOOL marioGetRub(s32 mask, s32* a, s32* b, s32* c);
 BOOL marioCreviceWallChk(Vec pos);
-BOOL marioChkPlanePlace(void* hit);
 void* fbatNpcTalkCheck(void);
 
 MarioMotTblEntry marioMotTbl[] = {

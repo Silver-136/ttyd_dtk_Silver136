@@ -25,12 +25,12 @@
 #include "driver/npcdrv.h"
 #include "mario/mario_hit.h"
 #include "mario/mariost.h"
+#include "party/party_vivian.h"
 
 s32 partyMoveMain(PartyEntry* party, s32 hosei);
 f32 partyUpdMoveSpd(PartyEntry* party, f32 spd);
 extern void party_set_behind_dir(PartyEntry* party);
 static void flyMain(PartyEntry* party);
-extern void vivianShadow(PartyEntry* party);
 extern HitEntry* partySearchHead(PartyEntry* party, Vec* pos, f32* h, f32 a);
 
 static inline void partyModeTail(PartyEntry* party) {

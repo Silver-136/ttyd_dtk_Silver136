@@ -48,10 +48,6 @@ typedef struct MayaAnim {
     MayaJoint joints[1];
 } MayaAnim;
 
-MayaAnim* effMayaAnimAlloc(MayaAnimData* data);
-void effDeleteMayaAnim(MayaAnim* anim);
-void effPlayMayaAnim(MayaAnim* anim);
-void effCalcMayaAnim(MayaAnim* anim);
 
 typedef struct DamageStarWork {
     s32 type;       // 0x0

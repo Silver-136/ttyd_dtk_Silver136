@@ -44,7 +44,6 @@
 // separate ones), but only this order gives the retail call code here
 f32 intpl_sub(s32 type, f32 start, f32 end, s32 cur, s32 max);
 void FontDrawString(f32 x, f32 y, const char* str);
-s32 BattlePreCheckDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPart* part, BattleWeapon* weapon, u32 flags);
 
 //local prototypes
 void BattleObjectConfig(void);

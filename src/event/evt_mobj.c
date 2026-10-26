@@ -126,7 +126,6 @@ USER_FUNC(evt_mobj_get_z_position);
 USER_FUNC(evt_mobj_get_kindname);
 USER_FUNC(evt_mobj_check);
 
-extern EventEntry* mobjRunEvent(MapObjectEntry* mobj, EvtWord* eventCode);
 
 static inline MapObjectEntry* MOBJ_PTR(EventEntry* event, const char* name) {
     return strcmp(name, "me") ? mobjNameToPtr(name) : event->thisMapObj;
@@ -161,7 +160,6 @@ static inline BOOL isAnimA13(const s8* a) {
 extern ItemEntry* itemEntry(f32 x, f32 y, f32 z, const char* name, s32 itemId, u16 type, s32 collectFlag,
                             EvtWord* evtCode);
 
-extern void npcKoopaModeMobjBoundDeadCheck(void* hit);
 
 s32 kpa_powerup(EventEntry* event, BOOL isFirstCall);
 s32 fire_func(EventEntry* event, BOOL isFirstCall);

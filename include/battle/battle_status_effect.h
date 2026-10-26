@@ -2,6 +2,9 @@
 
 #include <dolphin/types.h>
 
+struct BattleWork;
+struct BattleUnit;
+
 //battle_status_effect
 //should be an s8, typecasting for now
 typedef enum StatusEffectType {
@@ -52,3 +55,9 @@ void BattleStatusChangeInfoWorkInit(struct BattleUnit* unit);
 void BattleStatusChangeMsgWorkInit(void);
 
 extern s8 _st_pri_data[];
+BOOL BattleStatusChangeAnnouceMain(struct BattleWork* wp);
+void BattleStatusChangeInfoSetAnnouce(struct BattleUnit* unit, s32 type, s32 strength, s32 changed);
+void BattleStatusChangeMsgAdjust(struct BattleWork* wp);
+BOOL BattleStatusChangeMsgMain(struct BattleWork* wp);
+void BattleStatusChangeMsgSetAnnouce(struct BattleUnit* unit, s32 index, s32 changed);
+void BattleStatusEffectDelete(struct BattleUnit* unit);

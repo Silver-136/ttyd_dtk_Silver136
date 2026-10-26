@@ -14,7 +14,6 @@
 
 void FontDrawString(f32 x, f32 y, const char* msg);
 extern ItemData itemDataTable[];
-s32 BtlUnit_GetWeaponCost(BattleUnit* unit, BattleWeapon* weapon);
 double sin(double);
 
 
@@ -39,7 +38,6 @@ void DrawMenuPinchMark(void);
 void DrawSubIconSub(BattleSubMenu* menu, s32 i, Mtx m, s32 enabled, s32 icon, const char* name, s32 cost, s32 p34, void* party, s32 y);
 void DrawMainIconCircle(BattleSubMenu* menu, BattleCommandAct* act, Mtx m, Vec v, f32 s);
 void DrawMainIconHukidasi(BattleSubMenu* menu, BattleCommandAct* act, Mtx m, f32 s);
-BOOL BattleCommandCheckChangePositionEnable(BattleWork* wp);
 void DrawMenuPartyChangeButton_Sub(u32 id, f32 x, f32 y, f32 angle);
 void DrawMenuPartyChangeButton(void);
 void DrawSubMenuCommonProcessSub1(BattleSubMenu* menu, BattleCursor* cursor, s32 prev, s32 key);

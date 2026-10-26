@@ -107,7 +107,6 @@ static inline BOOL marioChkLanding(void) {
     return FALSE;
 }
 
-void vivianUnhold(PartyEntry* party);
 
 
 

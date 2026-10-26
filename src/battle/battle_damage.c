@@ -31,11 +31,9 @@
 
 void _getSickStatusParam(BattleUnit* unit, BattleWeapon* weapon, u32 type, s8* outTime, s8* outStrength);
 s32 BattleSetStatusDamage(u32* result, BattleUnit* unit, BattleUnitPart* part, u32 special, s32 type, s32 rate, s32 levelDiff, s8 time, s8 strength);
-void BattleDamageDirect(s32 unitId, BattleUnit* target, BattleUnitPart* part, s32 damage, s32 fpDamage, u32 result, u32 pattern, s32 flag);
 u32 BattleCheckPikkyoro(BattleWeapon* weapon, u32* flags);
 s32 BattleCalculateDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPart* part, BattleWeapon* weapon, u32* result, u32 flags);
 s32 BattleCalculateFpDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPart* part, BattleWeapon* weapon, u32* resultFlags, u32 flags);
-s32 BattleSetStatusDamageFromWeapon(BattleUnit* attacker, BattleUnit* target, BattleUnitPart* part, BattleWeapon* weapon, u32 flags);
 s32 _checkDamageCode_EmergencyRevival(BattleUnit* unit, u32* flags);
 void __declare(s32 unitIdx, s32 partIdx, s32* outUnit, s32* outPart);
 
@@ -919,8 +917,6 @@ u8 _getRegistStatus(BattleUnit* unit, s32 type) {
     return 100;
 }
 
-void BattleStatusChangeInfoSetAnnouce(BattleUnit* unit, s32 type, s32 value, s32 flag);
-void BattleStatusChangeMsgSetAnnouce(BattleUnit* unit, s32 type, s32 flag);
 
 #define STAMP_COL(e, r0, g0, b0, r1, g1, b1)                 \
     ((EffStampN64Work*)(e)->userdata)->r = (r0);                  \

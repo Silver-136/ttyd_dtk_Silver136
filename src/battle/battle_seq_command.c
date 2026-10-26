@@ -62,8 +62,6 @@ extern ItemData itemDataTable[];
 extern BattleWeapon marioDefaultWeapon_Jump;
 extern BattleWeapon marioWeapon_KururinJump;
 extern BattleWeapon marioDefaultWeapon_Hammer;
-s32 BtlUnit_GetWeaponCost(BattleUnit* unit, BattleWeapon* weapon);
-s32 BtlUnit_CheckWeaponCost(BattleUnit* unit, BattleWeapon* weapon);
 void BattleDrawEnemyHP(CameraId camId, void* param);
 s32 _btlcmd_CheckWeaponTargetNum(BattleWork* wp, BattleUnit* unit, BattleWeapon* weapon);
 
@@ -1059,7 +1057,6 @@ s32 _btlcmd_SelectWeaponDecide(BattleWork* wp, s32 type, s32 index) {
 }
 #pragma dont_inline reset
 
-void BtlUnit_PayWeaponCost(BattleUnit* unit, BattleWeapon* weapon);
 void BattleCommandDisplay_WeaponSelectMenuSetup(BattleWork* wp, s32 type, s32 a);
 s32 BattleCommandDisplay_WeaponSelectMenuMain(BattleWork* wp, s32 type);
 void BattleCommandDisplay_WeaponMultiItemCancelCheckSetup(BattleWork* wp);
@@ -1465,7 +1462,6 @@ void BattleCommandDisplay_ActMenuSetup(BattleWork* wp, u32 a) {
         return FALSE; \
     }
 
-BOOL BattleCommandCheckChangePositionEnable(BattleWork* wp);
 
 s32 BattleCommandDisplay_ActMenuMain(BattleWork* wp) {
     BattleCommand* cmd = &wp->commandMenu;

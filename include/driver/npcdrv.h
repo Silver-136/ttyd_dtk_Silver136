@@ -7,6 +7,8 @@
 #include "mario/mario_pouch.h"
 #include "evt/evt_word.h"
 
+struct HitEntry;
+
 #define NPC_FIELD_MAX_COUNT 36
 #define NPC_BATTLE_MAX_COUNT 16
 
@@ -489,3 +491,4 @@ NpcEntry* npcNearDistCheck(f32 x, f32 y, f32 z, f32 range);
 void npcSetStayPose(char* name);
 void npcSetTalkPose(char* name);
 NpcEntry* fbatHitCheckAll(void);
+s32 npcKoopaModeMobjBoundDeadCheck(struct HitEntry* hit);
