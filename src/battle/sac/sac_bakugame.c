@@ -1237,25 +1237,25 @@ void bakuGameMarioSurprise(BattleUnit* mario, BattleUnit* party) {
     BtlUnit_SetBodyAnim(mario, "M_N_7");
     if (bakuGamePartyExist(party)) {
         switch (party->initialKind) {
-        case 0xE0:
+        case UNIT_GOOMBELLA:
             BtlUnit_SetBodyAnim(party, "PKR_D_1");
             break;
-        case 0xE1:
+        case UNIT_KOOPS:
             BtlUnit_SetBodyAnim(party, "PNK_T_2");
             break;
-        case 0xE3:
+        case UNIT_FLURRIE:
             BtlUnit_SetBodyAnim(party, "PWD_D_1");
             break;
-        case 0xE2:
+        case UNIT_YOSHI:
             BtlUnit_SetBodyAnim(party, "PYS_D_1");
             break;
-        case 0xE4:
+        case UNIT_VIVIAN:
             BtlUnit_SetBodyAnim(party, "PTR_H_1");
             break;
-        case 0xE5:
+        case UNIT_BOBBERY:
             BtlUnit_SetBodyAnim(party, "PBM_D_1");
             break;
-        case 0xE6:
+        case UNIT_MS_MOWZ:
             BtlUnit_SetBodyAnim(party, "PCH_A2_3");
             break;
         }

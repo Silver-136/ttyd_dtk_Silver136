@@ -1070,16 +1070,16 @@ static void disp_3D(CameraId cam, void* param) {
             case 2:
             case 3:
                 switch (party->currentKind) {
-                case 0xE0:
+                case UNIT_GOOMBELLA:
                     icon = ICON_1A4;
                     break;
-                case 0xE1:
+                case UNIT_KOOPS:
                     icon = ICON_1A5;
                     break;
-                case 0xE3:
+                case UNIT_FLURRIE:
                     icon = ICON_1AE;
                     break;
-                case 0xE2:
+                case UNIT_YOSHI:
                     switch (pouchGetPartyColor(PARTNER_YOSHI)) {
                     case 1:
                         icon = ICON_1A8;
@@ -1104,13 +1104,13 @@ static void disp_3D(CameraId cam, void* param) {
                         break;
                     }
                     break;
-                case 0xE4:
+                case UNIT_VIVIAN:
                     icon = ICON_1AF;
                     break;
-                case 0xE5:
+                case UNIT_BOBBERY:
                     icon = ICON_1A6;
                     break;
-                case 0xE6:
+                case UNIT_MS_MOWZ:
                     icon = ICON_1B0;
                     break;
                 default:

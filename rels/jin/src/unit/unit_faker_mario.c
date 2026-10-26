@@ -104,16 +104,16 @@ static USER_FUNC(_anime_load_wait) {
     s32 anime;
 
     switch (unit->currentKind) {
-        case 0x50:
+        case UNIT_GOOMBELLA_CHAPTER4:
             anime = 0xE0;
             break;
-        case 0x51:
+        case UNIT_KOOPS_CHAPTER4:
             anime = 0xE1;
             break;
-        case 0x53:
+        case UNIT_FLURRIE_CHAPTER4:
             anime = 0xE3;
             break;
-        case 0x52:
+        case UNIT_YOSHI_CHAPTER4:
         default:
             anime = 0xE2;
             break;
@@ -132,16 +132,16 @@ static USER_FUNC(_anime_load) {
     s32 anime;
 
     switch (unit->currentKind) {
-        case 0x50:
+        case UNIT_GOOMBELLA_CHAPTER4:
             anime = 0xE0;
             break;
-        case 0x51:
+        case UNIT_KOOPS_CHAPTER4:
             anime = 0xE1;
             break;
-        case 0x53:
+        case UNIT_FLURRIE_CHAPTER4:
             anime = 0xE3;
             break;
-        case 0x52:
+        case UNIT_YOSHI_CHAPTER4:
         default:
             anime = 0xE2;
             break;
@@ -161,16 +161,16 @@ USER_FUNC(_save_param) {
     FakerParam* p;
 
     switch (party->currentKind) {
-        case 0x50:
+        case UNIT_GOOMBELLA_CHAPTER4:
             p = &params[0];
             break;
-        case 0x51:
+        case UNIT_KOOPS_CHAPTER4:
             p = &params[1];
             break;
-        case 0x53:
+        case UNIT_FLURRIE_CHAPTER4:
             p = &params[2];
             break;
-        case 0x52:
+        case UNIT_YOSHI_CHAPTER4:
             p = &params[3];
             break;
     }
@@ -199,16 +199,16 @@ USER_FUNC(_load_param) {
     FakerParam* p;
 
     switch (party->currentKind) {
-        case 0x50:
+        case UNIT_GOOMBELLA_CHAPTER4:
             p = &params[0];
             break;
-        case 0x51:
+        case UNIT_KOOPS_CHAPTER4:
             p = &params[1];
             break;
-        case 0x53:
+        case UNIT_FLURRIE_CHAPTER4:
             p = &params[2];
             break;
-        case 0x52:
+        case UNIT_YOSHI_CHAPTER4:
             p = &params[3];
             break;
     }

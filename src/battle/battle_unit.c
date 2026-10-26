@@ -212,10 +212,10 @@ BattleUnit* BtlUnit_Entry(BattleUnitSetup* setup) {
     unit->countersetWeapon = NULL;
     unit->deleteFunc = NULL;
     switch (unit->currentKind) {
-        case 0xD0:
+        case UNIT_UNUSED_UFO:
             unit->countersetWeapon = BattleAlloc(0x44);
             break;
-        case 0xDE:
+        case UNIT_MARIO:
             break;
     }
     BtlUnit_SetParamFromPouch(unit);

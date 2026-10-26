@@ -1096,15 +1096,15 @@ s32 BattleSetStatusDamage(u32* result, BattleUnit* unit, BattleUnitPart* part, u
             y += BtlUnit_GetHeight(unit) / 2;
         }
         switch (unit->currentKind) {
-            case 0x17:
-            case 0x84:
-            case 0xab:
+            case UNIT_HOOKTAIL:
+            case UNIT_GLOOMTAIL:
+            case UNIT_BONETAIL:
                 x -= 300.0f;
                 z += 30.0f;
                 break;
 #ifdef VERSION_G8ME01
-            case 0x95:
-            case 0x96:
+            case UNIT_SHADOW_QUEEN_INVINCIBLE:
+            case UNIT_SHADOW_QUEEN_DEMON:
                 z += 40.0f;
                 break;
 #endif
