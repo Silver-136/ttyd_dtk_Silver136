@@ -5,6 +5,8 @@
 #include "driver/npcdrv.h"
 #include "data_tables.h"
 
+struct ZakoGun;
+
 extern EvtWord all_party_lecture[];
 extern EvtWord anm_entotsu[];
 extern EvtWord anm_kaji[];
@@ -45,3 +47,4 @@ BattleUnit* zakogun_get_ptr(void);
 void zakogun_ext_main3(void);
 void zakogun_ext_main2(void);
 void zakogun_ext_init123_common(ExtdrvPose* pose, s32 i);
+void zakogun_set_pose(struct ZakoGun* zako, s32 base, s32 num, s32 div);

@@ -231,11 +231,7 @@ USER_FUNC(yuugijou_montemedal_wait);
 USER_FUNC(yuugijou_set_yupflag);
 USER_FUNC(yuuranking_wait_button);
 void kuji_bomb_055_callback(s32 type, MsgWinData** work);
-void goryuugijo_main_slot(EventEntry* event, BOOL isFirstCall);
-void goryuugijo_init_slot(EventEntry* event, BOOL isFirstCall);
 USER_FUNC(evt_goryuugijo_get_caseid);
-void goryuugijo_main_montemedal(EventEntry* event, BOOL isFirstCall);
-void goryuugijo_init_montemedal(EventEntry* event, BOOL isFirstCall);
 
 EvtWord debug_event[16];
 EvtWord gor_03_down_evt[8];

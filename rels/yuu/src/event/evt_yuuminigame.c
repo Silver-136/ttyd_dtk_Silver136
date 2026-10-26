@@ -13,14 +13,6 @@ static s32 dataadr[32];
 s32 stackt[4];
 s32 stackp;
 void* effMiniGameEntry(s32 type, f32 x, f32 y, f32 z);
-void yuuminigame_init_1hikoki(EventEntry* event, BOOL isFirstCall);
-void yuuminigame_main_1hikoki(EventEntry* event, BOOL isFirstCall);
-void yuuminigame_init_2fune(EventEntry* event, BOOL isFirstCall);
-void yuuminigame_main_2fune(EventEntry* event, BOOL isFirstCall);
-void yuuminigame_init_3roll(EventEntry* event, BOOL isFirstCall);
-void yuuminigame_main_3roll(EventEntry* event, BOOL isFirstCall);
-void yuuminigame_init_4slit(EventEntry* event, BOOL isFirstCall);
-void yuuminigame_main_4slit(EventEntry* event, BOOL isFirstCall);
 void evt_yuuminigame_disp_func(CameraId camera, void* param);
 
 USER_FUNC(evt_yuuminigame_main_func);

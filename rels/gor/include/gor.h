@@ -6,6 +6,8 @@
 #include "evt/evt_word.h"
 #include "evt/evt_cmd.h"
 
+struct EventEntry;
+
 extern EvtWord all_juyoitem_lecture_rel[];
 extern EvtWord all_party_lecture[];
 extern NpcTerritoryInfo btl_gor_setup_no_tbl[];
@@ -55,3 +57,7 @@ USER_FUNC(evt_gor_villager_urouro_check_func);
 void goryuugijo_disp_montemedal(CameraId camera, void* param);
 void goryuugijo_disp_slot(CameraId camera, void* param);
 void tegami_delete(void);
+void goryuugijo_init_montemedal(struct EventEntry* event, BOOL isFirstCall);
+void goryuugijo_main_montemedal(struct EventEntry* event, BOOL isFirstCall);
+void goryuugijo_init_slot(struct EventEntry* event, BOOL isFirstCall);
+void goryuugijo_main_slot(struct EventEntry* event, BOOL isFirstCall);

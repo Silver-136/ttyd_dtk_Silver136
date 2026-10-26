@@ -6,6 +6,7 @@
 #include "battle/battle_database_common.h"
 #include "battle/battle_detect.h"
 #include "mario/mario_pouch.h"
+#include "battle/battle_enemy_item.h"
 
 extern ItemData itemDataTable[];
 

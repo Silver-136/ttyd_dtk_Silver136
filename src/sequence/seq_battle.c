@@ -31,13 +31,7 @@
 #include <dolphin/mtx.h>
 #include "driver/mobjdrv.h"
 #include "driver/mapdrv.h"
-
-typedef struct BattleSeqWork {
-    s32 sequence;   // 0x0
-    s32 state;      // 0x4
-    u8 unk8[8];     // 0x8
-    s32 counter;    // 0x10
-} BattleSeqWork;
+#include "seq/seq_battle.h"
 
 s32 debug_battle_flag;
 s32 seq_battle_unk_8041874c;
@@ -47,7 +41,7 @@ static inline BOOL loadTpl(const char* path) {
     return (u32)fileAsyncf(4, NULL, "%s/%s", getMarioStDvdRoot(), path) != 0;
 }
 
-void seq_battleInit(BattleSeqWork* work) {
+void seq_battleInit(SequenceWork* work) {
     FieldBattleData* fbat;
     NpcEntry* npc;
 
@@ -76,7 +70,7 @@ void seq_battleInit(BattleSeqWork* work) {
     }
 }
 
-void seq_battleExit(BattleSeqWork* work) {
+void seq_battleExit(SequenceWork* work) {
     battle_exit();
 }
 
@@ -86,7 +80,7 @@ static const char bti02[7];
 static const char bti03[7];
 static const char bti04[7];
 
-void seq_battleMain(BattleSeqWork* work) {
+void seq_battleMain(SequenceWork* work) {
     FieldBattleData* fbat;
     BattleStageData* stage;
     PouchData* pouch;

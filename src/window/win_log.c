@@ -27,6 +27,7 @@
 #include "eff/eff_magic1_n64.h"
 #include "driver/msgdrv.h"
 #include "libc_decls.h"
+#include "win/win_log.h"
 
 typedef struct TubuDt {
     s16 x;
@@ -425,11 +426,6 @@ static inline BOOL tubuCheck(u8 type) {
     return FALSE;
 }
 
-MonosiriWork* monosiriInit(s32 id, f32 x, f32 y);
-void monosiriMain(MonosiriWork* m);
-void monosiriClose(MonosiriWork* m);
-BOOL monosiriCloseWait(MonosiriWork* m);
-void monosiriExit(MonosiriWork* m);
 
 s32 winLogMain(WindowWork* w) {
     static char name[0x40];

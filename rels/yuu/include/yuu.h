@@ -5,6 +5,8 @@
 #include "manager/evtmgr.h"
 #include "driver/camdrv.h"
 
+struct EventEntry;
+
 // minigame driver work (evt_yuuminigame); data points at the per-game work (HikokiWork, SlitWork, ...)
 typedef struct MiniGameWork {
     EventEntry* event;
@@ -88,3 +90,11 @@ void yuuminigame_disp_1hikoki(CameraId camera, void* param);
 void ext_yuunpc_minigame4_init_sub(void);
 s32 yuunpc_juni(Vec* pos);
 void yuunpc_wp_flag_off(u16 flag);
+void yuuminigame_init_1hikoki(struct EventEntry* event, BOOL isFirstCall);
+void yuuminigame_main_1hikoki(struct EventEntry* event, BOOL isFirstCall);
+void yuuminigame_init_2fune(struct EventEntry* event, BOOL isFirstCall);
+void yuuminigame_main_2fune(struct EventEntry* event, BOOL isFirstCall);
+void yuuminigame_init_3roll(struct EventEntry* event, BOOL isFirstCall);
+void yuuminigame_main_3roll(struct EventEntry* event, BOOL isFirstCall);
+void yuuminigame_init_4slit(struct EventEntry* event, BOOL isFirstCall);
+void yuuminigame_main_4slit(struct EventEntry* event, BOOL isFirstCall);

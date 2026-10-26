@@ -5,6 +5,7 @@
 #include "memory.h"
 #include <string.h>
 #include "libc_decls.h"
+#include "evt/evt_uranaisi.h"
 
 
 typedef struct {

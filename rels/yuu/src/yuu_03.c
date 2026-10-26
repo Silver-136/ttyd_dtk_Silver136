@@ -86,8 +86,6 @@ USER_FUNC(yuuminigame_set_dataadr);
 USER_FUNC(yuunpc_go);
 USER_FUNC(yuuranking_get_monte);
 USER_FUNC(yuuranking_wait_button);
-void yuuminigame_main_4slit(EventEntry* event, BOOL isFirstCall);
-void yuuminigame_init_4slit(EventEntry* event, BOOL isFirstCall);
 USER_FUNC(evt_ryushi_init);
 static USER_FUNC(evt_nomal_cange);
 USER_FUNC(evt_slit_cancel);

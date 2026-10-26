@@ -25,6 +25,7 @@
 #include "eff/eff_itemget.h"
 #include "battle/battle_detect.h"
 #include "battle/battle_seq_command.h"
+#include "battle/battle_enemy_item.h"
 #ifdef VERSION_G8ME01
 #include "mario/mariost.h"
 #endif
@@ -3368,7 +3369,6 @@ USER_FUNC(btlevtcmd_PartsFaceDirectionSub) {
 
 /* half_A begin PRE */
 /* first-half (target order 1..153) functions, generated block */
-s32 BattleEnemyUseItemCheck(BattleUnit* unit);
 extern ItemData itemDataTable[];
 void _MoveSoundControlEndCore(BattleUnit* unit, BecSndWork* work);
 void _MoveSoundControlCore(BattleUnit* unit, BecSndWork* work, BattleUnitPart* part, f32 x, f32 y, f32 z);
@@ -6305,7 +6305,7 @@ USER_FUNC(btlevtcmd_EnemyItemUseCheck) {
     id = BattleTransID(event, id);
     unit = BattleGetUnitPtr(wp, id);
     index = args[1];
-    evtSetValue(event, index, BattleEnemyUseItemCheck(unit));
+    evtSetValue(event, index, (EvtWord)BattleEnemyUseItemCheck(unit));
     return EVT_RETURN_DONE;
 }
 

@@ -90,8 +90,6 @@ USER_FUNC(yuuminigame_set_dataadr);
 USER_FUNC(yuuranking_get_monte);
 USER_FUNC(yuuranking_wait_button);
 BOOL yuuminigame2_gamerule(EventEntry* event, BOOL isFirstCall, MiniGameWork* wp, FuneWork* data);
-void yuuminigame_main_2fune(EventEntry* event, BOOL isFirstCall);
-void yuuminigame_init_2fune(EventEntry* event, BOOL isFirstCall);
 static BOOL get_monte_check(Vec* a, Vec* b);
 
 const char* s_nametbl[21];

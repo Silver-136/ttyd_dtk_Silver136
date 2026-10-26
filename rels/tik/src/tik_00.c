@@ -26,6 +26,7 @@
 #include "system.h"
 #include "driver/casedrv.h"
 #include "driver/itemdrv.h"
+#include "evt/evt_uranaisi.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "mario/mario.h"
@@ -68,7 +69,6 @@ typedef struct UranaiWork {
 } UranaiWork;
 void uranai_cap(CameraId cameraId, void* param);
 static inline f32 tanf(f32 x) { return tan(x); }
-s32 uranaisi_ryokin_rtn(s32 type);
 static s32 ssf;
 UranaiWork* uranai_wp;
 char* uranaisi_msgp;

@@ -49,7 +49,6 @@ typedef struct ZakoGunWork { s32 flag; s32 targetId;
     s32 state; s32 timer; Vec pos; u8 field_0x1c[0x34 - 0x1c]; f32 radius; f32 angle; f32 speed; u8 field_0x40[0x48 - 0x40]; Vec start; Vec end; s32 timer2; s32 steps; s32 count; s32 sfx; } ZakoGunWork;
 extern ZakoGun* zakogun;
 extern ZakoGunWork* work;
-void zakogun_set_pose(ZakoGun* zako, s32 base, s32 num, s32 div);
 double sqrt(double x);
 
 USER_FUNC(zakogun_damage_pose);

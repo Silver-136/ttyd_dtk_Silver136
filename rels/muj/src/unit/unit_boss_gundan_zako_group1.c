@@ -66,7 +66,6 @@ USER_FUNC(zakogun_ext_init1);
 USER_FUNC(zakogun_get_kanbu_id_evtcmd);
 void zakogun_ext_main(void);
 void zakogun_ext_init(void);
-void zakogun_set_pose(ZakoGun* zako, s32 base, s32 num, s32 div);
 
 BattleUnitKind unit_boss_gundan_zako_group1;
 static BattleUnitDefense defence;

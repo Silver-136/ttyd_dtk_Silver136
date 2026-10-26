@@ -80,8 +80,6 @@ USER_FUNC(yuuminigame_set_dataadr);
 USER_FUNC(yuuranking_get_monte);
 USER_FUNC(yuuranking_wait_button);
 BOOL yuuminigame1_gamerule(EventEntry* event, BOOL isFirstCall, MiniGameWork* wp, HikokiWork* data);
-void yuuminigame_main_1hikoki(EventEntry* event, BOOL isFirstCall);
-void yuuminigame_init_1hikoki(EventEntry* event, BOOL isFirstCall);
 
 static MonteTable montetable[4];
 static EvtWord minigame_view_monte[4];

@@ -91,8 +91,6 @@ USER_FUNC(yuuminigame_set_dataadr);
 USER_FUNC(yuuranking_get_monte);
 USER_FUNC(yuuranking_wait_button);
 BOOL yuuminigame3_gamerule(EventEntry* event, BOOL isFirstCall, MiniGameWork* wp, RollWork* data);
-void yuuminigame_main_3roll(EventEntry* event, BOOL isFirstCall);
-void yuuminigame_init_3roll(EventEntry* event, BOOL isFirstCall);
 USER_FUNC(yuu_02_icon_monte_onoff);
 void yuu_02_icon_monte_off(s32 idx);
 void yuu_02_icon_monte_on(s32 idx);

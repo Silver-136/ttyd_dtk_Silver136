@@ -19,10 +19,6 @@ typedef struct GoryuuWork {
     void (*disp)(CameraId camera, void* param);
     void* data;
 } GoryuuWork;
-void goryuugijo_init_montemedal(EventEntry* event, BOOL isFirstCall);
-void goryuugijo_main_montemedal(EventEntry* event, BOOL isFirstCall);
-void goryuugijo_init_slot(EventEntry* event, BOOL isFirstCall);
-void goryuugijo_main_slot(EventEntry* event, BOOL isFirstCall);
 void evt_goryuugijo_disp_func(CameraId camera, void* param);
 
 USER_FUNC(evt_goryuugijo_main_func);

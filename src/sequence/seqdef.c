@@ -7,10 +7,8 @@
 #include "seq/seq_gameover.h"
 #include "seq/seq_load.h"
 #include "seq/seq_e3.h"
+#include "seq/seq_battle.h"
 
-extern void seq_battleInit(SequenceWork* work);
-extern void seq_battleMain(SequenceWork* work);
-extern void seq_battleExit(SequenceWork* work);
 
 SequenceCallback seq_data[8][3] = {
     {seq_logoInit, seq_logoMain, seq_logoExit},
