@@ -53,15 +53,15 @@ EVT_END()
 
 EVT_BEGIN(erumosu_dead)
     CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
-    SET_VALUE(GSWF(2989), 1)
+    SET_VALUE(GSWF_DOU_07_EMBER_DEFEATED, 1)
     SPAWN_EVENT(PTR(enemy_event_dead_event))
 #ifdef VERSION_G8ME01
     WAIT_MS(1000)
     ADD(LW(1), 150)
-    CALL(evt_item_entry, STRING("item_key"), ITEM_BLACK_KEY_0x24, LW(0), LW(1), LW(2), ITEM_TYPE_FALL, GSWF(2987), 0)
+    CALL(evt_item_entry, STRING("item_key"), ITEM_BLACK_KEY_0x24, LW(0), LW(1), LW(2), ITEM_TYPE_FALL, GSWF_DOU_07_BLACK_KEY, 0)
 #else
     WAIT_MS(500)
-    CALL(evt_item_entry, STRING("item_key"), ITEM_BLACK_KEY_0x24, LW(0), LW(1), LW(2), ITEM_TYPE_SCATTER_NO_PICKUP, GSWF(2987), 0)
+    CALL(evt_item_entry, STRING("item_key"), ITEM_BLACK_KEY_0x24, LW(0), LW(1), LW(2), ITEM_TYPE_SCATTER_NO_PICKUP, GSWF_DOU_07_BLACK_KEY, 0)
 #endif
     RETURN
 EVT_END()
@@ -115,7 +115,7 @@ static s32 key_tbl[] = {
 };
 
 EVT_BEGIN(apper_elmos)
-    SET_VALUE(GSWF(2988), 1)
+    SET_VALUE(GSWF_DOU_07_EMBER_APPEARED, 1)
     CALL(evt_npc_set_position, STRING("エルモス"), 100, -6, -37)
     CALL(evt_npc_set_color, STRING("エルモス"), 255, 255, 255, 0)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, 255, 1000)
@@ -336,22 +336,22 @@ EVT_BEGIN(dou_07_init_evt)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
     CALL_CHILD(PTR(evt_bero_info_run))
-    IF_INT_EQUAL(GSWF(2989), 0)
+    IF_INT_EQUAL(GSWF_DOU_07_EMBER_DEFEATED, 0)
         CALL(evt_npc_setup, PTR(npcEnt))
     END_IF
     CALL(evt_map_entry_airport_harbor, 1, STRING("S_Ship_Change_01"), STRING("Ship_Change_01"))
     CALL(evt_map_playanim, STRING("moku"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_map_playanim, STRING("nami"), MAP_ANIM_PLAY_LOOP, 0)
     SET_VALUE(GF(0), 0)
-    CALL(evt_mobj_itembox, STRING("mobj_box00"), -33, -18, 56, MOBJ_ITEMBOX_BLACK, PTR(peramajin_before), PTR(peramajin_after), GSWF(2980))
-    CALL(evt_item_entry, STRING("item_00"), ITEM_P_DOWN_D_UP, -75, -30, -15, ITEM_TYPE_STILL, GSWF(2985), 0)
-    IF_INT_EQUAL(GSWF(2988), 1)
-        IF_INT_EQUAL(GSWF(2989), 0)
+    CALL(evt_mobj_itembox, STRING("mobj_box00"), -33, -18, 56, MOBJ_ITEMBOX_BLACK, PTR(peramajin_before), PTR(peramajin_after), GSWF_DOU_07_BOAT_CURSE_CHEST)
+    CALL(evt_item_entry, STRING("item_00"), ITEM_P_DOWN_D_UP, -75, -30, -15, ITEM_TYPE_STILL, GSWF_DOU_07_P_DOWN_D_UP, 0)
+    IF_INT_EQUAL(GSWF_DOU_07_EMBER_APPEARED, 1)
+        IF_INT_EQUAL(GSWF_DOU_07_EMBER_DEFEATED, 0)
             SPAWN_EVENT(PTR(apper_elmos))
         END_IF
     END_IF
-    IF_INT_EQUAL(GSWF(2989), 1)
-        CALL(evt_item_entry, STRING("item_key"), ITEM_BLACK_KEY_0x24, 100, -6, -37, ITEM_TYPE_FALL_NO_PICKUP, GSWF(2987), 0)
+    IF_INT_EQUAL(GSWF_DOU_07_EMBER_DEFEATED, 1)
+        CALL(evt_item_entry, STRING("item_key"), ITEM_BLACK_KEY_0x24, 100, -6, -37, ITEM_TYPE_FALL_NO_PICKUP, GSWF_DOU_07_BLACK_KEY, 0)
     END_IF
     RETURN
 EVT_END()

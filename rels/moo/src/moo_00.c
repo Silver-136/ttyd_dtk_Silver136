@@ -343,7 +343,7 @@ EVT_END()
 
 static EVT_BEGIN(rock_evt0)
 #ifdef VERSION_G8ME01
-    SET_VALUE(GSWF(4025), 1)
+    SET_VALUE(GSWF_MOO_00_ROCK_01_BLOWN, 1)
 #else
     CALL(evt_mario_key_onoff, 0)
 #endif
@@ -351,7 +351,7 @@ static EVT_BEGIN(rock_evt0)
     SET_VALUE(LW(11), STRING("A_iwa_01"))
     CALL_CHILD(PTR(rock_main))
 #ifndef VERSION_G8ME01
-    SET_VALUE(GSWF(4025), 1)
+    SET_VALUE(GSWF_MOO_00_ROCK_01_BLOWN, 1)
     CALL(evt_mario_key_onoff, 1)
 #endif
     CALL(evt_exit_case_evt)
@@ -360,7 +360,7 @@ EVT_END()
 
 static EVT_BEGIN(rock_evt1)
 #ifdef VERSION_G8ME01
-    SET_VALUE(GSWF(4026), 1)
+    SET_VALUE(GSWF_MOO_00_ROCK_08_BLOWN, 1)
 #else
     CALL(evt_mario_key_onoff, 0)
 #endif
@@ -368,7 +368,7 @@ static EVT_BEGIN(rock_evt1)
     SET_VALUE(LW(11), STRING("A_iwa_08"))
     CALL_CHILD(PTR(rock_main))
 #ifndef VERSION_G8ME01
-    SET_VALUE(GSWF(4026), 1)
+    SET_VALUE(GSWF_MOO_00_ROCK_08_BLOWN, 1)
     CALL(evt_mario_key_onoff, 1)
 #endif
     CALL(evt_exit_case_evt)
@@ -399,19 +399,19 @@ EVT_BEGIN(moo_00_init_evt)
         WAIT_FRAMES(1)
     END_SWITCH
     CALL(evt_paper_entry, STRING("OFF_d_bom_ver2"))
-    IF_INT_EQUAL(GSWF(4025), 0)
+    IF_INT_EQUAL(GSWF_MOO_00_ROCK_01_BLOWN, 0)
         CALL(evt_run_case_evt, CASE_BOBBERY, 1, STRING("A_iwa_01"), 0, PTR(rock_evt0), 0)
         ELSE
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_iwa_01"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_iwa_01"), 1, 0)
     END_IF
-    IF_INT_EQUAL(GSWF(4026), 0)
+    IF_INT_EQUAL(GSWF_MOO_00_ROCK_08_BLOWN, 0)
         CALL(evt_run_case_evt, CASE_BOBBERY, 1, STRING("A_iwa_08"), 0, PTR(rock_evt1), 0)
         ELSE
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_iwa_08"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_iwa_08"), 1, 0)
     END_IF
-    CALL(evt_item_entry, STRING("item_01"), ITEM_STOPWATCH, -250, 0, -445, ITEM_TYPE_STILL, GSWF(4035), 0)
+    CALL(evt_item_entry, STRING("item_01"), ITEM_STOPWATCH, -250, 0, -445, ITEM_TYPE_STILL, GSWF_MOO_00_STOPWATCH, 0)
     RETURN
 EVT_END()
 

@@ -580,12 +580,12 @@ static TreeAccess tree_tbl[] = {
 };
 
 EVT_BEGIN(evt_majin_key)
-    SET_VALUE(GSWF(2091), 1)
+    SET_VALUE(GSWF_GRA_00_BLACK_KEY, 1)
     RETURN
 EVT_END()
 
 EVT_BEGIN(gra_00_init_evt)
-    SET_VALUE(GSWF(256), 1)
+    SET_VALUE(GSWF_GRA_00_ENTERED, 1)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG4_GRA1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG4_USU1"))
     CALL(evt_kagemario_init)
@@ -597,8 +597,8 @@ EVT_BEGIN(gra_00_init_evt)
     SET_VALUE(LW(0), PTR(tree_tbl))
     CALL_CHILD(PTR(evt_sub_tree_access_entry))
     CALL(evt_mobj_brick, STRING("blk01"), 250, 15, 100, ITEM_NULL, MOBJ_BRICK_PLAIN, 0, LSWF(1))
-    CALL(evt_mobj_brick, STRING("blk02"), -265, 60, -85, ITEM_NULL, MOBJ_BRICK_TEN_COIN, 0, GSWF(2089))
-    IF_INT_EQUAL(GSWF(2091), 0)
+    CALL(evt_mobj_brick, STRING("blk02"), -265, 60, -85, ITEM_NULL, MOBJ_BRICK_TEN_COIN, 0, GSWF_GRA_00_TEN_COIN_BRICK)
+    IF_INT_EQUAL(GSWF_GRA_00_BLACK_KEY, 0)
         CALL(evt_item_entry, STRING("majin_key"), ITEM_BLACK_KEY_0x23, -258, 0, -85, ITEM_TYPE_STILL, -1, PTR(evt_majin_key))
     END_IF
     SWITCH(GSW_STORY_PROGRESS)

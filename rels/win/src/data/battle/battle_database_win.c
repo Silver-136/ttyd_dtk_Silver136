@@ -1147,7 +1147,7 @@ NpcSetupBattleInfo btlsetup_win_tbl[] = {
     {
         /*"win_00ドクガッスン１"*/"\x77\x69\x6E\x5F\x30\x30\x83\x68\x83\x4E\x83\x4B\x83\x62\x83\x58\x83\x93\x82\x50", // name
         NULL, 0, // mapName..fixedItem
-        GSWF(2682), // swFlag
+        GSWF_WIN_FLURRIE_JOINED, // swFlag
         btlgrpsel_win_btlno_win_00_01_on, // altSelect
         btlgrpsel_win_btlno_win_00_01_off, // select
         0, 0, // battleFlags..randomMode
@@ -1157,7 +1157,7 @@ NpcSetupBattleInfo btlsetup_win_tbl[] = {
     {
         /*"win_00モノクロシンエモン"*/"\x77\x69\x6E\x5F\x30\x30\x83\x82\x83\x6D\x83\x4E\x83\x8D\x83\x56\x83\x93\x83\x47\x83\x82\x83\x93", // name
         NULL, 0, // mapName..fixedItem
-        GSWF(2682), // swFlag
+        GSWF_WIN_FLURRIE_JOINED, // swFlag
         btlgrpsel_win_btlno_win_00_02_on, // altSelect
         btlgrpsel_win_btlno_win_00_02_off, // select
         0, 0, // battleFlags..randomMode
@@ -1167,7 +1167,7 @@ NpcSetupBattleInfo btlsetup_win_tbl[] = {
     {
         /*"win_00ドクガッスン３"*/"\x77\x69\x6E\x5F\x30\x30\x83\x68\x83\x4E\x83\x4B\x83\x62\x83\x58\x83\x93\x82\x52", // name
         NULL, 0, // mapName..fixedItem
-        GSWF(2682), // swFlag
+        GSWF_WIN_FLURRIE_JOINED, // swFlag
         btlgrpsel_win_btlno_win_00_03_on, // altSelect
         btlgrpsel_win_btlno_win_00_03_off, // select
         0, 0, // battleFlags..randomMode
@@ -1189,7 +1189,7 @@ NpcSetupBattleInfo btlsetup_win_tbl[] = {
     {
         /*"win_02シンエモン１"*/"\x77\x69\x6E\x5F\x30\x32\x83\x56\x83\x93\x83\x47\x83\x82\x83\x93\x82\x50", // name
         NULL, 0, // mapName..fixedItem
-        GSWF(2680), // swFlag
+        GSWF_WIN_02_ALT_BATTLES_UNUSED, // swFlag
         btlgrpsel_win_btlno_win_02_01_on, // altSelect
         btlgrpsel_win_btlno_win_02_01_off, // select
         0, 0, // battleFlags..randomMode
@@ -1199,7 +1199,7 @@ NpcSetupBattleInfo btlsetup_win_tbl[] = {
     {
         /*"win_02パックンフラワー"*/"\x77\x69\x6E\x5F\x30\x32\x83\x70\x83\x62\x83\x4E\x83\x93\x83\x74\x83\x89\x83\x8F\x81\x5B", // name
         NULL, 0, // mapName..fixedItem
-        GSWF(2680), // swFlag
+        GSWF_WIN_02_ALT_BATTLES_UNUSED, // swFlag
         btlgrpsel_win_btlno_win_02_02_on, // altSelect
         btlgrpsel_win_btlno_win_02_02_off, // select
         0, 0, // battleFlags..randomMode
@@ -1209,7 +1209,7 @@ NpcSetupBattleInfo btlsetup_win_tbl[] = {
     {
         /*"win_03パックン１"*/"\x77\x69\x6E\x5F\x30\x33\x83\x70\x83\x62\x83\x4E\x83\x93\x82\x50", // name
         NULL, 0, // mapName..fixedItem
-        GSWF(2681), // swFlag
+        GSWF_WIN_FLURRIE_REQUEST_ACCEPTED, // swFlag
         btlgrpsel_win_btlno_win_03_01_on, // altSelect
         btlgrpsel_win_btlno_win_03_01_off, // select
         0, 0, // battleFlags..randomMode

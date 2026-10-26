@@ -337,7 +337,7 @@ EVT_BEGIN(irekawatta_mario)
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG4_JIN1"))
     CALL(evt_cam3d_evt_off, 1000, EASING_SINE_IN_OUT)
     SET_VALUE(GSW_STORY_PROGRESS, STG4_10_02_TRADING_PLACES)
-    SET_VALUE(GSWF(2081), 1)
+    SET_VALUE(GSWF_JIN_TRADING_PLACES_ACTIVE, 1)
     CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_POSE_LOCK)
     CALL(evt_mario_key_onoff, 1)
     RETURN

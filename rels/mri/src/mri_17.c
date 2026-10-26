@@ -60,9 +60,9 @@ EvtWord switch_event[41];
 EvtWord mri_17_init_evt[208];
 
 EVT_BEGIN(bero_02_into_event)
-    IF_INT_EQUAL(GSWF(2872), 0)
+    IF_INT_EQUAL(GSWF_MRI_17_PILLAR_SCENE_SEEN, 0)
         SPAWN_EVENT(PTR(strange_statue))
-        SET_VALUE(GSWF(2872), 1)
+        SET_VALUE(GSWF_MRI_17_PILLAR_SCENE_SEEN, 1)
     END_IF
     SET_VALUE(LW(0), 0)
     RETURN
@@ -546,7 +546,7 @@ EVT_BEGIN(trap_check)
             SET_VALUE(LW(14), 0)
         END_IF
         IF_INT_GREATER_OR_EQUAL(LW(8), 10)
-            IF_INT_EQUAL(GSWF(2870), 1)
+            IF_INT_EQUAL(GSWF_MRI_17_PUNI_ORB_PLACED, 1)
                 IF_INT_EQUAL(LW(9), 1)
                     IF_INT_EQUAL(LW(14), 1)
                         BREAK_LOOP
@@ -595,7 +595,7 @@ EVT_END()
 static EVT_BEGIN(punipuni_ball00_init)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_sui_hikari"), MAP_OBJ_FLAG_HIDDEN)
     CALL_CHILD(PTR(mri_punipuni_setup))
-    IF_INT_EQUAL(GSWF(2870), 1)
+    IF_INT_EQUAL(GSWF_MRI_17_PUNI_ORB_PLACED, 1)
         CALL(evt_item_set_position, LW(10), 50, 30, -58)
         CALL(evt_target_flag_onoff, LW(11), 0, 3)
     END_IF
@@ -606,18 +606,18 @@ EVT_END()
 
 static EVT_BEGIN(punipuni_ball00)
     CALL(evt_mario_key_onoff, 0)
-    IF_INT_EQUAL(GSWF(2870), 0)
+    IF_INT_EQUAL(GSWF_MRI_17_PUNI_ORB_PLACED, 0)
         CALL_CHILD(PTR(mri_punipuni_itemselect))
         IF_INT_EQUAL(LW(1), 0)
             GOTO(100)
         END_IF
-        SET_VALUE(GSWF(2870), 1)
+        SET_VALUE(GSWF_MRI_17_PUNI_ORB_PLACED, 1)
         CALL(evt_item_set_position, LW(10), 50, 30, -58)
         SET_VALUE(GF(15), 1)
         CALL_CHILD(PTR(mri_punipuni_itemset))
         SET_VALUE(GF(15), 0)
         ELSE
-        SET_VALUE(GSWF(2870), 0)
+        SET_VALUE(GSWF_MRI_17_PUNI_ORB_PLACED, 0)
         CALL_CHILD(PTR(mri_punipuni_itemremove))
     END_IF
     LABEL(100)
@@ -626,7 +626,7 @@ static EVT_BEGIN(punipuni_ball00)
 EVT_END()
 
 static EVT_BEGIN(breakyuka_init)
-    IF_INT_EQUAL(GSWF(2871), 0)
+    IF_INT_EQUAL(GSWF_MRI_17_BREAKING_FLOOR_BROKEN, 0)
         CALL(evt_hitobj_onoff, STRING("A_f2_rak_01"), 1, 0)
     END_IF
     RETURN
@@ -746,7 +746,7 @@ EVT_BEGIN(mri_17_init_evt)
     SPAWN_EVENT(PTR(punipuni_ball00_init))
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_dai_mae"), 0, PTR(punipuni_ball00), 0)
     SPAWN_EVENT(PTR(breakyuka_init))
-    CALL(evt_mobj_breaking_floor, STRING("mobj_bf00"), 0, 0, -35, 1, PTR(breakyuka_main), GSWF(2871))
+    CALL(evt_mobj_breaking_floor, STRING("mobj_bf00"), 0, 0, -35, 1, PTR(breakyuka_main), GSWF_MRI_17_BREAKING_FLOOR_BROKEN)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG2_21_01_MYSTERY_PILLAR)
         CALL(evt_mobj_switch_blue, 1, STRING("switch"), 60, -309, 53, PTR(switch_event), 0)
     END_IF

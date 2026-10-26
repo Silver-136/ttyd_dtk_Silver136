@@ -190,7 +190,7 @@ USER_FUNC(evt_win_party_lankup_chk) {
     pouch = pouchGetPtr();
     for (p = party_id_table; *p != 0; p++) {
         if (partyChkJoin(*p)) {
-            if (!evtGetValue(event, GSWF(1186))) {
+            if (!evtGetValue(event, GSWF_GOR_UP_ARROW_USED)) {
                 if (pouch->partyData[*p].techLevel < 1) {
                     max = 0;
                 } else {
@@ -230,7 +230,7 @@ USER_FUNC(evt_win_party_lankdown_chk) {
             if (pouch->partyData[*p].techLevel != 0) {
                 hasRank = 1;
             }
-            if (!evtGetValue(event, GSWF(1186))) {
+            if (!evtGetValue(event, GSWF_GOR_UP_ARROW_USED)) {
                 if (pouch->partyData[*p].techLevel < 1) {
                     max = 0;
                 } else {
@@ -710,7 +710,7 @@ WinMgrSelect* winMgrSelectEntry(EvtWord type, s32 newItem, BOOL a3) {
             for (i = 0; party_id_table[i] != 0; i++) {
                 if (partyChkJoin(party_id_table[i])) {
                     sel->items[sel->numItems].id = i;
-                    if (!evtGetValue(NULL, GSWF(1186))) {
+                    if (!evtGetValue(NULL, GSWF_GOR_UP_ARROW_USED)) {
                         if (pouch->partyData[party_id_table[i]].techLevel >= 1) {
                             sel->items[sel->numItems].flags |= (SELECT_ITEM_GRAY | SELECT_ITEM_DISABLED);
                         }

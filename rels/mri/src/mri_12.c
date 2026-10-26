@@ -117,7 +117,7 @@ static BeroEntry bero_entry_data[] = {
 
 static EVT_BEGIN(punipuni_ball00_init)
     CALL_CHILD(PTR(mri_punipuni_setup))
-    IF_INT_EQUAL(GSWF(2859), 1)
+    IF_INT_EQUAL(GSWF_MRI_12_PUNI_ORB_PLACED, 1)
         CALL(evt_item_set_position, LW(10), 5, 30, -95)
         CALL(evt_target_flag_onoff, LW(11), 0, 3)
         ELSE
@@ -129,17 +129,17 @@ EVT_END()
 
 static EVT_BEGIN(punipuni_ball00)
     CALL(evt_mario_key_onoff, 0)
-    IF_INT_EQUAL(GSWF(2859), 0)
+    IF_INT_EQUAL(GSWF_MRI_12_PUNI_ORB_PLACED, 0)
         CALL_CHILD(PTR(mri_punipuni_itemselect))
         IF_INT_EQUAL(LW(1), 0)
             GOTO(100)
         END_IF
-        SET_VALUE(GSWF(2859), 1)
+        SET_VALUE(GSWF_MRI_12_PUNI_ORB_PLACED, 1)
         CALL(evt_item_set_position, LW(10), 5, 30, -95)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_sui_hikari"), MAP_OBJ_FLAG_HIDDEN)
         CALL_CHILD(PTR(mri_punipuni_itemset))
         ELSE
-        SET_VALUE(GSWF(2859), 0)
+        SET_VALUE(GSWF_MRI_12_PUNI_ORB_PLACED, 0)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_sui_hikari"), MAP_OBJ_FLAG_HIDDEN)
         CALL_CHILD(PTR(mri_punipuni_itemremove))
     END_IF
@@ -151,7 +151,7 @@ EVT_END()
 static EVT_BEGIN(evt_f1_ueki_01)
     CALL(evt_item_delete_check, STRING("item_ueki_01"), LW(0))
     IF_INT_EQUAL(LW(0), 1)
-        CALL(evt_item_entry, STRING("item_ueki_01"), ITEM_COIN, -190, -309, 65, ITEM_TYPE_SCATTER_NO_PICKUP, GSWF(2860), 0)
+        CALL(evt_item_entry, STRING("item_ueki_01"), ITEM_COIN, -190, -309, 65, ITEM_TYPE_SCATTER_NO_PICKUP, GSWF_MRI_12_COIN_PLANT, 0)
     END_IF
     RETURN
 EVT_END()
@@ -168,7 +168,7 @@ static KusaAccess ueki_access_data[] = {
 };
 
 static EVT_BEGIN(breakyuka_init)
-    IF_INT_EQUAL(GSWF(2858), 0)
+    IF_INT_EQUAL(GSWF_MRI_12_BREAKING_FLOOR_BROKEN, 0)
         CALL(evt_hitobj_onoff, STRING("A_f2_rak_01"), 1, 0)
     END_IF
     RETURN
@@ -210,7 +210,7 @@ EVT_BEGIN(mri_12_init_evt)
     CALL(evt_map_playanim, STRING("awa_02"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_map_playanim, STRING("sui_hikari"), MAP_ANIM_PLAY_LOOP, 0)
     SPAWN_EVENT(PTR(breakyuka_init))
-    CALL(evt_mobj_breaking_floor, STRING("mobj_bf00"), -45, 0, -64, 1, PTR(breakyuka_main), GSWF(2858))
+    CALL(evt_mobj_breaking_floor, STRING("mobj_bf00"), -45, 0, -64, 1, PTR(breakyuka_main), GSWF_MRI_12_BREAKING_FLOOR_BROKEN)
     SET_VALUE(LW(10), STRING("punipuni"))
     SET_VALUE(LW(11), 0)
     SPAWN_EVENT(PTR(punipuni_ball00_init))

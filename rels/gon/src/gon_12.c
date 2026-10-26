@@ -230,7 +230,7 @@ static EVT_BEGIN(chuchurina_sogu)
     CALL(evt_party_run, 0)
     CALL(evt_mario_get_party, LW(0))
     IF_INT_EQUAL(LW(0), 2)
-        SET_VALUE(GSWF_GON_12_MOWZ_MET_WITH_KOOPS_UNUSED, 1)
+        SET_VALUE(GSWF_GON_12_MOWZ_MET_WITH_KOOPS, 1)
     END_IF
     RETURN
 EVT_END()

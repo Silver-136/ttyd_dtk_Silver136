@@ -134,7 +134,7 @@ static EVT_BEGIN(evt_box)
     CALL(evt_item_entry, STRING("dummy"), ITEM_CARD_KEY_0x1E, LW(0), LW(1), LW(2), ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
     CALL(evt_mobj_wait_animation_end, STRING("box"))
     CALL(evt_item_get_item, STRING("dummy"))
-    SET_VALUE(GSWF(4183), 1)
+    SET_VALUE(GSWF_AJI_12_LIT_FLOOR_DONE, 1)
     WAIT_FRAMES(2)
     CALL(hikaru_off)
     BEGIN_INLINE_EVENT
@@ -161,7 +161,7 @@ static HitDamageReturn dmgReturnPt[] = {
 };
 
 static EVT_BEGIN(hikaru_yuka_init)
-    CALL(evt_mobj_itembox, STRING("box"), -350, 10, -10, MOBJ_ITEMBOX_GRAY, 0, PTR(evt_box), GSWF(4179))
+    CALL(evt_mobj_itembox, STRING("box"), -350, 10, -10, MOBJ_ITEMBOX_GRAY, 0, PTR(evt_box), GSWF_AJI_12_CARD_KEY_CHEST)
     CALL(evt_hit_damage_return_set, PTR(dmgReturnPt))
     BEGIN_INLINE_EVENT
         CALL(thunder_main)
@@ -183,7 +183,7 @@ EVT_BEGIN(aji_12_init_evt)
     CALL(evt_bero_get_info)
     CALL_CHILD(PTR(evt_bero_info_run))
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("no1"), MAP_OBJ_FLAG_HIDDEN)
-    IF_INT_EQUAL(GSWF(4183), 0)
+    IF_INT_EQUAL(GSWF_AJI_12_LIT_FLOOR_DONE, 0)
         CALL_CHILD(PTR(hikaru_yuka_init))
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("ato"), MAP_OBJ_FLAG_HIDDEN)
         ELSE
@@ -192,7 +192,7 @@ EVT_BEGIN(aji_12_init_evt)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("yukayu2"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("ato"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
-    CALL(evt_mobj_badgeblk, STRING("mobj00"), 170, 60, 120, ITEM_HP_DRAIN_ITEM, 0, GSWF(4214), 0)
+    CALL(evt_mobj_badgeblk, STRING("mobj00"), 170, 60, 120, ITEM_HP_DRAIN_ITEM, 0, GSWF_AJI_12_HP_DRAIN_BLOCK, 0)
     SPAWN_EVENT(PTR(evt_emergency))
     RETURN
 EVT_END()
@@ -236,7 +236,7 @@ static USER_FUNC(mario_chk) {
         event->userdata[0] = 0;
         event->userdata[1] = 0;
     }
-    if (evtGetValue(NULL, GSWF(4183))) {
+    if (evtGetValue(NULL, GSWF_AJI_12_LIT_FLOOR_DONE)) {
         return EVT_RETURN_DONE;
     }
     for (i = 1; i <= 44; i++) {

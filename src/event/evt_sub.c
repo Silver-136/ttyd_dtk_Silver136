@@ -874,7 +874,7 @@ EVT_BEGIN(mail_evt_bom_01)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         CALL(evt_sub_check_intersect, LW(0), LW(2), LW(10), LW(12), -230, -2000, -230, 2000, LW(5))
         IF_INT_EQUAL(GSW_STORY_PROGRESS, STG7_02_MAYOR_BOB)
-            IF_INT_EQUAL(GSWF(3874), 1)
+            IF_INT_EQUAL(GSWF_PIK_GOLDBOB_PERMISSION_GIVEN, 1)
                 IF_INT_EQUAL(LW(5), 1)
                     BREAK_LOOP
                 END_IF
@@ -1061,7 +1061,7 @@ EVT_BEGIN(mail_evt_pik_00)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         CALL(evt_sub_check_intersect, LW(0), LW(2), LW(10), LW(12), -60, -2000, -60, 2000, LW(5))
         IF_INT_EQUAL(GSW_STORY_PROGRESS, STG7_02_MAYOR_BOB)
-            IF_INT_EQUAL(GSWF(3874), 1)
+            IF_INT_EQUAL(GSWF_PIK_GOLDBOB_PERMISSION_GIVEN, 1)
                 IF_INT_EQUAL(LW(5), 1)
                     BREAK_LOOP
                 END_IF

@@ -84,7 +84,7 @@ static EVT_BEGIN(evt_box)
     CALL(evt_mobj_wait_animation_end, STRING("box"))
     CALL(evt_item_get_item, STRING("dummy"))
     CALL(evt_hitobj_attr_onoff, 1, 0, STRING("A_no1"), 2048)
-    SET_VALUE(GSWF(4182), 1)
+    SET_VALUE(GSWF_AJI_05_LIT_FLOOR_DONE, 1)
     WAIT_FRAMES(1)
     CALL_CHILD(PTR(hikaru_off))
     BEGIN_INLINE_EVENT
@@ -123,7 +123,7 @@ static HitDamageReturn dmgReturnPt[] = {
 static EvtWord hikaru_yuka_init[] = {
     CALL_CHILD(hikaru_off)
     CALL(evt_hitobj_attr_onoff, 1, 1, STRING("A_no1"), 2048)
-    CALL(evt_mobj_itembox, STRING("box"), -255, 10, -10, MOBJ_ITEMBOX_GRAY, 0, PTR(evt_box), GSWF(4178))
+    CALL(evt_mobj_itembox, STRING("box"), -255, 10, -10, MOBJ_ITEMBOX_GRAY, 0, PTR(evt_box), GSWF_AJI_05_CARD_KEY_CHEST)
     CALL(evt_hit_damage_return_set, PTR(dmgReturnPt))
     BEGIN_INLINE_EVENT
         CALL(ride_chk)
@@ -146,7 +146,7 @@ EVT_BEGIN(aji_05_init_evt)
     CALL(evt_bero_get_info)
     CALL_CHILD(PTR(evt_bero_info_run))
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("no1"), MAP_OBJ_FLAG_HIDDEN)
-    IF_INT_EQUAL(GSWF(4182), 0)
+    IF_INT_EQUAL(GSWF_AJI_05_LIT_FLOOR_DONE, 0)
         CALL_CHILD(PTR(hikaru_yuka_init))
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("ato"), MAP_OBJ_FLAG_HIDDEN)
         ELSE
@@ -156,7 +156,7 @@ EVT_BEGIN(aji_05_init_evt)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("yukayu2"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("ato"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
-    CALL(evt_mobj_badgeblk, STRING("mobj00"), -75, 60, -125, ITEM_SLEEPY_SHEEP, 0, GSWF(4212), 0)
+    CALL(evt_mobj_badgeblk, STRING("mobj00"), -75, 60, -125, ITEM_SLEEPY_SHEEP, 0, GSWF_AJI_05_SLEEPY_SHEEP_BLOCK, 0)
     SPAWN_EVENT(PTR(evt_emergency))
     RETURN
 EVT_END()
@@ -206,7 +206,7 @@ static USER_FUNC(ride_chk) {
             mapGrpFlagOff(name, MAP_OBJ_FLAG_HIDDEN);
         }
     }
-    if (evtGetValue(event, GSWF(4182))) {
+    if (evtGetValue(event, GSWF_AJI_05_LIT_FLOOR_DONE)) {
         return EVT_RETURN_DONE;
     }
     return EVT_RETURN_BLOCK;

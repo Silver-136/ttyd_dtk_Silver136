@@ -286,7 +286,7 @@ EVT_BEGIN(puni_return)
         CALL(evt_puni_get_flag, LW(10), LW(4))
         CALL(evt_puni_get_trap_index, LW(10), LW(5))
         IF_INT_EQUAL(LW(10), 1)
-            IF_INT_EQUAL(GSWF(2836), 1)
+            IF_INT_EQUAL(GSWF_MRI_PUNIO_WAITING_AT_JAIL, 1)
                 DEBUG_PUT_MSG(STRING("牢屋の前に待機しています"))
                 GOTO(100)
             END_IF
@@ -481,7 +481,7 @@ static EVT_BEGIN(elder_talk)
     END_IF
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG2_15_11_PUNIES, STG2_26_PRAISE_FROM_THE_PUNI)
-        IF_INT_EQUAL(GSWF(2829), 0)
+        IF_INT_EQUAL(GSWF_MRI_01_ELDER_TIP_SEEN, 0)
             CALL(evt_msg_print, 0, STRING("stg2_mri_e15_28"), 0, STRING("me"))
             ELSE
             CALL_CHILD(PTR(elder_talk_sub))
@@ -509,11 +509,11 @@ EVT_END()
 EVT_BEGIN(puni_1_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG7_02_MAYOR_BOB, STG7_02_MAYOR_BOB)
-        IF_INT_EQUAL(GSWF(3879), 0)
+        IF_INT_EQUAL(GSWF_TOU_GENERAL_WHITE_HINT_HEARD, 0)
             CALL(evt_msg_print, 0, STRING("stg2_mri_re_000"), 0, STRING("me"))
             ELSE
             CALL(evt_msg_print, 0, STRING("stg2_mri_re_000_1"), 0, STRING("me"))
-            SET_VALUE(GSWF(3889), 1)
+            SET_VALUE(GSWF_MRI_GENERAL_WHITE_HINT_HEARD, 1)
         END_IF
         CASE_LESS_OR_EQUAL(STG8_END_AFTER_THE_BATTLE)
         CALL(evt_msg_print, 0, STRING("stg2_mri_re_000"), 0, STRING("me"))
@@ -1540,7 +1540,7 @@ EVT_BEGIN(meet_rival)
     CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
     CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG2_MRI1"))
-    SET_VALUE(GSWF(2876), 1)
+    SET_VALUE(GSWF_MRI_PUNIO_JOINED, 1)
     CALL(evt_npc_get_position, LW(10), LW(0), LW(1), LW(2))
     CALL(evt_npc_set_position, LW(10), 0, -1000, 0)
     CALL(evt_puni_init_puni, 1, 1, LW(0), LW(1), LW(2), 0)
@@ -1860,8 +1860,8 @@ EVT_BEGIN(rival_nakama)
     WAIT_MS(700)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG2_MRI1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG2_MRI3"))
-    SET_VALUE(GSWF(2879), 1)
-    SET_VALUE(GSW(651), 9)
+    SET_VALUE(GSWF_MRI_PUNIPER_JOINED, 1)
+    SET_VALUE(GSW_MRI_PUNI_FOLLOWER_COUNT, 9)
     CALL(evt_npc_get_position, STRING("ライバル"), LW(0), LW(1), LW(2))
     CALL(evt_npc_set_position, STRING("ライバル"), 0, -1000, 0)
     CALL(evt_puni_init_puni, 4, 1, LW(0), LW(1), LW(2), 0)
@@ -1936,7 +1936,7 @@ EVT_BEGIN(elder_kaisetsu)
     CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_POSE_LOCK)
     CALL(evt_party_run, 0)
     CALL(evt_mario_key_onoff, 1)
-    SET_VALUE(GSWF(2829), 1)
+    SET_VALUE(GSWF_MRI_01_ELDER_TIP_SEEN, 1)
     RETURN
 EVT_END()
 
@@ -2656,7 +2656,7 @@ EVT_BEGIN(boss_battle_win)
             BREAK_LOOP
         END_IF
     END_LOOP
-    IF_INT_EQUAL(GSWF(2878), 1)
+    IF_INT_EQUAL(GSWF_MRI_JABBLE_JOINED, 1)
         CALL(evt_puni_set_mode, 3, 30)
         CALL(evt_puni_set_position, 3, -120, 0, 10)
         CALL(evt_puni_set_anim, 3, 0)
@@ -2957,7 +2957,7 @@ EVT_BEGIN(boss_battle_win)
 EVT_END()
 
 static EVT_BEGIN(door_switch_init)
-    IF_INT_EQUAL(GSWF(2841), 0)
+    IF_INT_EQUAL(GSWF_MRI_05_DOOR_SWITCH_ON, 0)
         SET_VALUE(LW(0), STRING("e_bero"))
         CALL_CHILD(PTR(bero_case_switch_off))
         ELSE
@@ -3014,19 +3014,19 @@ EVT_END()
 
 EVT_BEGIN(evt_ueki_03)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG3_33_05_BOWSER_THE_GREAT_TREE)
-        IF_INT_EQUAL(GSWF(2883), 0)
+        IF_INT_EQUAL(GSWF_MRI_01_BOWSER_PLANT_SCENE_SEEN, 0)
             CALL(evt_mario_key_onoff, 0)
             SET_VALUE(LW(0), -245)
             SET_VALUE(LW(1), -15)
             SET_VALUE(LW(2), STRING("kpa_stg3_006_2"))
             CALL_CHILD(PTR(ueki_puni_nigeru))
-            SET_VALUE(GSWF(2883), 1)
+            SET_VALUE(GSWF_MRI_01_BOWSER_PLANT_SCENE_SEEN, 1)
             CALL(evt_mario_key_onoff, 1)
         END_IF
         ELSE
         CALL(evt_item_delete_check, STRING("item_ueki_03"), LW(0))
         IF_INT_EQUAL(LW(0), 1)
-            CALL(evt_item_entry, STRING("item_ueki_03"), ITEM_COIN, -240, 0, -20, ITEM_TYPE_SCATTER_NO_PICKUP, GSWF(2828), 0)
+            CALL(evt_item_entry, STRING("item_ueki_03"), ITEM_COIN, -240, 0, -20, ITEM_TYPE_SCATTER_NO_PICKUP, GSWF_MRI_01_COIN_PLANT, 0)
         END_IF
     END_IF
     RETURN
@@ -3416,13 +3416,13 @@ EVT_BEGIN(mri_01_init_evt)
         SPAWN_EVENT(PTR(boss_battle_win))
     END_IF
     SPAWN_EVENT(PTR(door_switch_init))
-    IF_INT_EQUAL(GSW(665), 2)
-        IF_INT_EQUAL(GSW(666), 1)
+    IF_INT_EQUAL(GSW_MRI_PUNI_ROOM, 2)
+        IF_INT_EQUAL(GSW_MRI_01_PUNI_WAIT_UNUSED, 1)
             SPAWN_EVENT(PTR(puni_mario_wait))
         END_IF
     END_IF
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG2_15_11_PUNIES)
-        IF_INT_EQUAL(GSWF(2829), 0)
+        IF_INT_EQUAL(GSWF_MRI_01_ELDER_TIP_SEEN, 0)
             SPAWN_EVENT(PTR(elder_kaisetsu))
         END_IF
     END_IF

@@ -270,7 +270,7 @@ static EVT_BEGIN(sanders_talk)
             SPAWN_EVENT(PTR(sanders_talk_sub))
         END_IF
         CASE_EQUAL(STG5_18_BOBBERY_RESCUE_2)
-        IF_INT_EQUAL(GSWF(3138), 0)
+        IF_INT_EQUAL(GSWF_MUJ_05_BOBBERY_FIRST_TALK_DONE, 0)
             CALL(evt_msg_print, 0, STRING("stg5_muj_47"), 0, STRING("me"))
             BEGIN_INLINE_EVENT
                 CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -279,7 +279,7 @@ static EVT_BEGIN(sanders_talk)
             CALL(evt_eff_fukidashi, FUKIDASHI_AT_MARIO, STRING(""), 0, 1, 0, 0, 0, 0, 0, 0, 60)
             CALL(evt_eff_fukidashi, FUKIDASHI_AT_PARTNER, STRING(""), 0, 1, 0, 0, 0, 0, 0, 0, 60)
             WAIT_MS(1000)
-            SET_VALUE(GSWF(3138), 1)
+            SET_VALUE(GSWF_MUJ_05_BOBBERY_FIRST_TALK_DONE, 1)
             ELSE
             CALL(evt_msg_print, 0, STRING("stg5_muj_48"), 0, STRING("me"))
             BEGIN_INLINE_EVENT
@@ -311,7 +311,7 @@ static EVT_BEGIN(marco_init)
         CASE_EQUAL(STG5_18_03_MARCOS_JEWEL)
         CALL(evt_npc_set_position, STRING("me"), 279, 0, -67)
         CALL(evt_npc_set_ry, STRING("me"), 90)
-        IF_INT_EQUAL(GSWF(3141), 0)
+        IF_INT_EQUAL(GSWF_MUJ_05_FLAVIO_HUMMING_STOPPED, 0)
             SPAWN_EVENT_GET_ID(PTR(marco_hanauta), GW(2))
         END_IF
     END_SWITCH
@@ -321,17 +321,17 @@ EVT_END()
 static EVT_BEGIN(marco_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG5_18_03_MARCOS_JEWEL)
-        IF_INT_EQUAL(GSWF(3141), 0)
+        IF_INT_EQUAL(GSWF_MUJ_05_FLAVIO_HUMMING_STOPPED, 0)
             DELETE_EVENT(GW(2))
             CALL(evt_msg_close, STRING("stg5_muj_93_02_00"))
         END_IF
-        SET_VALUE(GSWF(3141), 1)
-        IF_INT_EQUAL(GSWF(3139), 0)
+        SET_VALUE(GSWF_MUJ_05_FLAVIO_HUMMING_STOPPED, 1)
+        IF_INT_EQUAL(GSWF_MUJ_05_SKULL_GEM_PLACED, 0)
             CALL(evt_pouch_check_item, ITEM_SKULL_GEM, LW(0))
             IF_INT_EQUAL(LW(0), 0)
-                IF_INT_EQUAL(GSWF(3142), 0)
+                IF_INT_EQUAL(GSWF_MUJ_05_FLAVIO_FAVOR_ASKED, 0)
                     CALL(evt_msg_print, 0, STRING("stg5_muj_93_02"), 0, STRING("マルコ"))
-                    IF_INT_EQUAL(GSWF(3140), 0)
+                    IF_INT_EQUAL(GSWF_MUJ_05_SKULL_ROCK_EXAMINED, 0)
                         RETURN
                     END_IF
                     CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_POSE_LOCK)
@@ -339,7 +339,7 @@ static EVT_BEGIN(marco_talk)
                     WAIT_MS(1000)
                     CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_POSE_LOCK)
                 END_IF
-                SET_VALUE(GSWF(3142), 1)
+                SET_VALUE(GSWF_MUJ_05_FLAVIO_FAVOR_ASKED, 1)
                 CALL(evt_msg_print, 0, STRING("stg5_muj_93_03"), 0, STRING("マルコ"))
                 CALL(evt_msg_select, 0, STRING("stg5_muj_93_03_select"))
                 SWITCH(LW(0))
@@ -376,7 +376,7 @@ static EVT_BEGIN(erumosu_regl)
 EVT_END()
 
 EVT_BEGIN(erumosu_a_dead)
-    SET_VALUE(GSWF(3137), 1)
+    SET_VALUE(GSWF_MUJ_05_EMBERS_DEFEATED, 1)
     DELETE_EVENT(GW(0))
     DELETE_EVENT(GW(2))
     CALL(evt_npc_set_position, STRING("エルモス１"), 0, -1000, 0)
@@ -626,7 +626,7 @@ EVT_END()
 
 EVT_BEGIN(sanders_kyushutsu)
     CALL(evt_npc_set_position, STRING("サンダース"), -88, 200, -34)
-    IF_INT_EQUAL(GSWF(3137), 0)
+    IF_INT_EQUAL(GSWF_MUJ_05_EMBERS_DEFEATED, 0)
         CALL(evt_npc_set_position, STRING("エルモス１"), -158, 23, 0)
         CALL(evt_npc_set_position, STRING("エルモス２"), -68, 23, 0)
         CALL(evt_npc_set_link, STRING("エルモス１"), STRING("エルモス２"))
@@ -738,7 +738,7 @@ EVT_BEGIN(dokuroiwa_touch)
             CALL(evt_party_stop, 0)
             CALL(evt_msg_print_party, STRING("stg5_muj_93_01_01"))
             CALL(evt_party_run, 0)
-            SET_VALUE(GSWF(3140), 1)
+            SET_VALUE(GSWF_MUJ_05_SKULL_ROCK_EXAMINED, 1)
         END_IF
         CALL(evt_mario_key_onoff, 1)
         ELSE
@@ -767,7 +767,7 @@ EVT_BEGIN(dokuroiwa_touch)
             END_LOOP
         END_INLINE_EVENT
         CALL(evt_mario_dump_item, 71)
-        SET_VALUE(GSWF(3139), 1)
+        SET_VALUE(GSWF_MUJ_05_SKULL_GEM_PLACED, 1)
         CALL(evt_exit_case_evt)
     END_IF
     RETURN
@@ -911,7 +911,7 @@ EVT_BEGIN(answer_event)
     CALL(evt_map_checkanim, STRING("S-dkr_iwa"), LW(0), LW(1))
     WAIT_MS(LW(1))
     WAIT_MS(1000)
-    SET_VALUE(GSWF(3149), 1)
+    SET_VALUE(GSWF_MUJ_05_SKULL_ROCK_OPENED, 1)
     CALL_CHILD(PTR(case_event_delete))
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
     CALL(evt_mario_key_onoff, 1)
@@ -922,7 +922,7 @@ EVT_BEGIN(iwa01_hammer)
     IF_INT_EQUAL(GF(10), 1)
         RETURN
     END_IF
-    IF_INT_EQUAL(GSWF(3139), 0)
+    IF_INT_EQUAL(GSWF_MUJ_05_SKULL_GEM_PLACED, 0)
         RETURN
     END_IF
     CALL(evt_mapobj_get_position, STRING("S_hige_iwa03_me"), LW(0), LW(1), LW(2))
@@ -949,7 +949,7 @@ EVT_BEGIN(iwa01_hammer)
 EVT_END()
 
 EVT_BEGIN(iwa01_ride_a)
-    IF_INT_EQUAL(GSWF(3139), 0)
+    IF_INT_EQUAL(GSWF_MUJ_05_SKULL_GEM_PLACED, 0)
         RETURN
     END_IF
     CALL(evt_mapobj_get_position, STRING("S_hige_iwa03_me"), LW(0), LW(1), LW(2))
@@ -966,7 +966,7 @@ EVT_BEGIN(iwa02_ride)
         RETURN
     END_IF
     SET_VALUE(GW(13), 1)
-    IF_INT_EQUAL(GSWF(3139), 0)
+    IF_INT_EQUAL(GSWF_MUJ_05_SKULL_GEM_PLACED, 0)
         RETURN
     END_IF
     SPAWN_EVENT(PTR(redeye_flush))
@@ -989,7 +989,7 @@ EVT_BEGIN(iwa02_ride)
 EVT_END()
 
 EVT_BEGIN(iwa02_hammer)
-    IF_INT_EQUAL(GSWF(3139), 0)
+    IF_INT_EQUAL(GSWF_MUJ_05_SKULL_GEM_PLACED, 0)
         RETURN
     END_IF
     CALL(evt_mapobj_get_position, STRING("S_hige_iwa02_me"), LW(0), LW(1), LW(2))
@@ -1002,7 +1002,7 @@ EVT_BEGIN(iwa02_ride_a)
     IF_INT_EQUAL(LW(0), 0)
         RETURN
     END_IF
-    IF_INT_EQUAL(GSWF(3139), 0)
+    IF_INT_EQUAL(GSWF_MUJ_05_SKULL_GEM_PLACED, 0)
         RETURN
     END_IF
     CALL(evt_mapobj_get_position, STRING("S_hige_iwa02_me"), LW(0), LW(1), LW(2))
@@ -1078,7 +1078,7 @@ EVT_BEGIN(dokuroiwa_bomb)
     END_INLINE_EVENT
     CALL_CHILD(PTR(bombwall_bomb))
     CALL(evt_hitobj_onoff, STRING("A_dkr_iwa_futa02"), 1, 0)
-    IF_INT_EQUAL(GSWF(3141), 0)
+    IF_INT_EQUAL(GSWF_MUJ_05_FLAVIO_HUMMING_STOPPED, 0)
         DELETE_EVENT(GW(2))
         CALL(evt_msg_close, STRING("stg5_muj_93_02_00"))
     END_IF
@@ -1151,7 +1151,7 @@ EVT_BEGIN(dokuroiwa_init)
         RETURN
     END_IF
     CALL(evt_hitobj_onoff, STRING("e_bero"), 1, 0)
-    IF_INT_EQUAL(GSWF(3139), 0)
+    IF_INT_EQUAL(GSWF_MUJ_05_SKULL_GEM_PLACED, 0)
         CALL(evt_mapobj_scale, 1, STRING("S_hige_iwa02_me"), 1, 0, 1)
         CALL(evt_mapobj_scale, 1, STRING("S_hige_iwa03_me"), 1, 0, 1)
         ELSE
@@ -1160,10 +1160,10 @@ EVT_BEGIN(dokuroiwa_init)
     SET_VALUE(GW(10), 0)
     SET_VALUE(GW(12), 0)
     SET_VALUE(GW(13), 0)
-    IF_INT_EQUAL(GSWF(3139), 0)
+    IF_INT_EQUAL(GSWF_MUJ_05_SKULL_GEM_PLACED, 0)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_dkr_iwa_01"), 0, PTR(dokuroiwa_touch), 0)
     END_IF
-    IF_INT_EQUAL(GSWF(3149), 0)
+    IF_INT_EQUAL(GSWF_MUJ_05_SKULL_ROCK_OPENED, 0)
         CALL_CHILD(PTR(case_event_entry))
         CALL(evt_run_case_evt, CASE_NOT_STAND_ON, 1, STRING("A_iwa_atari"), 0, PTR(iwa02_nonride_a), 0)
         ELSE
@@ -1182,7 +1182,7 @@ EVT_BEGIN(muj_05_first)
     CALL(evt_bero_exec_wait, 65536)
     CALL(evt_mario_normalize)
     CALL(evt_msg_print, 0, STRING("stg5_muj_33"), 0, STRING("サンダース"))
-    SET_VALUE(GSWF(3136), 1)
+    SET_VALUE(GSWF_MUJ_05_BOBBERY_FIRST_SCENE_SEEN, 1)
     CALL(evt_mario_key_onoff, 1)
     RETURN
 EVT_END()
@@ -1275,7 +1275,7 @@ EVT_END()
 static EVT_BEGIN(evt_kusa_1)
     CALL(evt_item_delete_check, STRING("item_kusa_1"), LW(0))
     IF_INT_EQUAL(LW(0), 1)
-        CALL(evt_item_entry, STRING("item_kusa_1"), ITEM_SPITE_POUCH, 235, 0, 90, ITEM_TYPE_SCATTER_NO_PICKUP, GSWF(3157), 0)
+        CALL(evt_item_entry, STRING("item_kusa_1"), ITEM_SPITE_POUCH, 235, 0, 90, ITEM_TYPE_SCATTER_NO_PICKUP, GSWF_MUJ_05_SPITE_POUCH_BUSH, 0)
     END_IF
     RETURN
 EVT_END()
@@ -1315,7 +1315,7 @@ EVT_BEGIN(muj_05_init_evt)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
     CALL_CHILD(evt_bero_info_run)
-    IF_INT_EQUAL(GSWF(3137), 0)
+    IF_INT_EQUAL(GSWF_MUJ_05_EMBERS_DEFEATED, 0)
         CALL(evt_npc_setup, PTR(npcEnt))
     ELSE
         CALL(evt_npc_setup, PTR(npcEnt_after))
@@ -1325,7 +1325,7 @@ EVT_BEGIN(muj_05_init_evt)
     SPAWN_EVENT(hammer_event)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG5_13_BOBBERY_THE_BRIDGE)
-        IF_INT_EQUAL(GSWF(3136), 0)
+        IF_INT_EQUAL(GSWF_MUJ_05_BOBBERY_FIRST_SCENE_SEEN, 0)
             SPAWN_EVENT(muj_05_first)
         END_IF
         SPAWN_EVENT(sanders_kyushutsu)
@@ -1335,7 +1335,7 @@ EVT_BEGIN(muj_05_init_evt)
     END_SWITCH
     SPAWN_EVENT(dokuroiwa_init)
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG5_63_KEELHAUL_ANYTIME)
-        CALL(evt_item_entry, STRING("item00"), ITEM_WEDDING_RING, -250, 0, -110, ITEM_TYPE_GROUND, GSWF(3143), 0)
+        CALL(evt_item_entry, STRING("item00"), ITEM_WEDDING_RING, -250, 0, -110, ITEM_TYPE_GROUND, GSWF_MUJ_05_WEDDING_RING, 0)
     END_IF
     CALL(evt_eff64, STRING("sunlight"), STRING("sunlight_n64"), 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
     CALL(evt_mobj_recovery_blk, STRING("mobj_recover"), 12, 125, 60, -90, 0, 0)

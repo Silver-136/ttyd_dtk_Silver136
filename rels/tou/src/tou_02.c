@@ -243,8 +243,8 @@ static f32 randf(f32 min, f32 max) {
 
 static EVT_BEGIN(s_door_open)
     IF_FLOAT_EQUAL(LW(0), FLOAT((0.0f)))
-        IF_INT_EQUAL(GSWF(2526), 0)
-            SET_VALUE(GSWF(2526), 1)
+        IF_INT_EQUAL(GSWF_TOU_AUTO_DOOR_SFX_PLAYING, 0)
+            SET_VALUE(GSWF_TOU_AUTO_DOOR_SFX_PLAYING, 1)
             BEGIN_INLINE_EVENT
                 CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
                 CALL(evt_snd_sfxon_3d, STRING(("SFX_STG3_AUTO_DOOR1")), LW(0), LW(1), LW(2), GW(13))
@@ -252,7 +252,7 @@ static EVT_BEGIN(s_door_open)
         END_IF
     END_IF
     IF_FLOAT_EQUAL(LW(0), FLOAT(180.0f))
-        SET_VALUE(GSWF(2526), 0)
+        SET_VALUE(GSWF_TOU_AUTO_DOOR_SFX_PLAYING, 0)
         CALL(evt_snd_sfxoff, GW(13))
     END_IF
     MULTIPLY_FLOAT(LW(0), FLOAT(0.3330078f))
@@ -264,8 +264,8 @@ EVT_END()
 
 static EVT_BEGIN(s_door_close)
     IF_FLOAT_EQUAL(LW(0), FLOAT(180.0f))
-        IF_INT_EQUAL(GSWF(2526), 0)
-            SET_VALUE(GSWF(2526), 1)
+        IF_INT_EQUAL(GSWF_TOU_AUTO_DOOR_SFX_PLAYING, 0)
+            SET_VALUE(GSWF_TOU_AUTO_DOOR_SFX_PLAYING, 1)
             BEGIN_INLINE_EVENT
                 CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
                 CALL(evt_snd_sfxon_3d, STRING(("SFX_STG3_AUTO_DOOR1")), LW(0), LW(1), LW(2), GW(13))
@@ -273,7 +273,7 @@ static EVT_BEGIN(s_door_close)
         END_IF
     END_IF
     IF_FLOAT_EQUAL(LW(0), FLOAT((0.0f)))
-        SET_VALUE(GSWF(2526), 0)
+        SET_VALUE(GSWF_TOU_AUTO_DOOR_SFX_PLAYING, 0)
         CALL(evt_snd_sfxoff, GW(13))
     END_IF
     MULTIPLY_FLOAT(LW(0), FLOAT(0.3330078f))
@@ -450,7 +450,7 @@ EVT_BEGIN(evt_move_g)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_02_THE_GUARD_BACKS_OFF)
         SET_VALUE(GSW_STORY_PROGRESS, STG3_02_THE_GUARD_BACKS_OFF)
         ELSE
-        SET_VALUE(GSWF(2497), 1)
+        SET_VALUE(GSWF_TOU_02_GUARD_STEPPED_ASIDE, 1)
     END_IF
     RETURN
 EVT_END()
@@ -462,7 +462,7 @@ EVT_BEGIN(init_gard1)
         CASE_LESS(STG3_33_06_BOWSER_TREASURE)
         CALL(evt_npc_set_position, STRING(("me")), -530, 0, -185)
         CASE_DEFAULT
-        IF_INT_EQUAL(GSWF(2497), 0)
+        IF_INT_EQUAL(GSWF_TOU_02_GUARD_STEPPED_ASIDE, 0)
             CALL(evt_npc_set_position, STRING(("me")), -470, 0, -185)
             ELSE
             CALL(evt_npc_set_position, STRING(("me")), -530, 0, -185)
@@ -483,10 +483,10 @@ EVT_BEGIN(talk_gard1)
         CASE_LESS(STG3_33_06_BOWSER_TREASURE)
         CALL(evt_msg_print, 0, STRING(("stg3_tou_37_02")), 0, 0)
         CASE_DEFAULT
-        IF_INT_EQUAL(GSWF(2496), 0)
+        IF_INT_EQUAL(GSWF_TOU_LEFT_AFTER_CHAPTER, 0)
             CALL(evt_msg_print, 0, STRING(("stg3_tou_re_002_1")), 0, 0)
             ELSE
-            IF_INT_EQUAL(GSWF(2497), 0)
+            IF_INT_EQUAL(GSWF_TOU_02_GUARD_STEPPED_ASIDE, 0)
                 CALL(evt_msg_print, 0, STRING(("stg3_tou_re_001")), 0, 0)
                 CALL_CHILD(PTR(evt_move_g))
                 ELSE
@@ -504,7 +504,7 @@ EVT_BEGIN(init_gard2)
         CASE_LESS(STG3_33_06_BOWSER_TREASURE)
         CALL(evt_npc_set_position, STRING(("me")), 530, 0, -185)
         CASE_DEFAULT
-        IF_INT_EQUAL(GSWF(2497), 0)
+        IF_INT_EQUAL(GSWF_TOU_02_GUARD_STEPPED_ASIDE, 0)
             CALL(evt_npc_set_position, STRING(("me")), 470, 0, -185)
             ELSE
             CALL(evt_npc_set_position, STRING(("me")), 530, 0, -185)
@@ -525,10 +525,10 @@ EVT_BEGIN(talk_gard2)
         CASE_LESS(STG3_33_06_BOWSER_TREASURE)
         CALL(evt_msg_print, 0, STRING(("stg3_tou_37_02")), 0, 0)
         CASE_DEFAULT
-        IF_INT_EQUAL(GSWF(2496), 0)
+        IF_INT_EQUAL(GSWF_TOU_LEFT_AFTER_CHAPTER, 0)
             CALL(evt_msg_print, 0, STRING(("stg3_tou_re_002_1")), 0, 0)
             ELSE
-            IF_INT_EQUAL(GSWF(2497), 0)
+            IF_INT_EQUAL(GSWF_TOU_02_GUARD_STEPPED_ASIDE, 0)
                 CALL(evt_msg_print, 0, STRING(("stg3_tou_re_001")), 0, 0)
                 CALL_CHILD(PTR(evt_move_g))
                 ELSE
@@ -544,7 +544,7 @@ static EVT_BEGIN(init_madam)
         CASE_LESS(STG3_34_RETURN_TO_ROGUEPORT)
         CALL(evt_npc_set_position, STRING(("me")), 525, 0, 0)
         CASE_EQUAL(STG3_34_RETURN_TO_ROGUEPORT)
-        IF_INT_EQUAL(GSWF(2496), 0)
+        IF_INT_EQUAL(GSWF_TOU_LEFT_AFTER_CHAPTER, 0)
             CALL(evt_npc_set_position, STRING(("me")), 525, 0, 0)
             ELSE
             CALL(evt_npc_set_position, STRING(("me")), 0, -1000, 0)
@@ -603,7 +603,7 @@ EVT_BEGIN(talk_repo)
             CALL(evt_msg_print, 0, STRING(("stg3_npc_02_02_06")), 0, 0)
         END_SWITCH
         CASE_DEFAULT
-        IF_INT_EQUAL(GSWF(2500), 0)
+        IF_INT_EQUAL(GSWF_TOU_REMATCH_REGISTERED, 0)
             CALL(evt_msg_print, 0, STRING(("stg3_npc_02_02_07")), 0, 0)
             ELSE
             CALL(evt_tou_get_ranking, LW(0))
@@ -613,7 +613,7 @@ EVT_BEGIN(talk_repo)
                 CASE_LESS_OR_EQUAL(10)
                 CALL(evt_msg_print, 0, STRING(("stg3_npc_re_024_1")), 0, 0)
                 CASE_DEFAULT
-                IF_INT_EQUAL(GSWF(2504), 0)
+                IF_INT_EQUAL(GSWF_TOU_REMATCH_PROMOTED_TO_MAJORS, 0)
                     CALL(evt_msg_print, 0, STRING(("stg3_npc_re_023")), 0, 0)
                     ELSE
                     CALL(evt_msg_print, 0, STRING(("stg3_npc_re_024_1")), 0, 0)
@@ -648,7 +648,7 @@ EVT_BEGIN(talk_cam1)
             CALL(evt_msg_print, 0, STRING(("stg3_npc_02_03_06")), 0, 0)
         END_SWITCH
         CASE_DEFAULT
-        IF_INT_EQUAL(GSWF(2500), 0)
+        IF_INT_EQUAL(GSWF_TOU_REMATCH_REGISTERED, 0)
             CALL(evt_msg_print, 0, STRING(("stg3_npc_02_03_07")), 0, 0)
             ELSE
             CALL(evt_tou_get_ranking, LW(0))
@@ -658,7 +658,7 @@ EVT_BEGIN(talk_cam1)
                 CASE_LESS_OR_EQUAL(10)
                 CALL(evt_msg_print, 0, STRING(("stg3_npc_re_026_1")), 0, 0)
                 CASE_DEFAULT
-                IF_INT_EQUAL(GSWF(2504), 0)
+                IF_INT_EQUAL(GSWF_TOU_REMATCH_PROMOTED_TO_MAJORS, 0)
                     CALL(evt_msg_print, 0, STRING(("stg3_npc_re_025")), 0, 0)
                     ELSE
                     CALL(evt_msg_print, 0, STRING(("stg3_npc_re_026_1")), 0, 0)
@@ -697,7 +697,7 @@ EVT_BEGIN(talk_cam2)
             CALL(evt_msg_print, 0, STRING(("stg3_npc_02_04_06")), 0, 0)
         END_SWITCH
         CASE_DEFAULT
-        IF_INT_EQUAL(GSWF(2500), 0)
+        IF_INT_EQUAL(GSWF_TOU_REMATCH_REGISTERED, 0)
             CALL(evt_msg_print, 0, STRING(("stg3_npc_02_04_07")), 0, 0)
             ELSE
             CALL(evt_tou_get_ranking, LW(0))
@@ -707,7 +707,7 @@ EVT_BEGIN(talk_cam2)
                 CASE_LESS_OR_EQUAL(10)
                 CALL(evt_msg_print, 0, STRING(("stg3_npc_re_028_1")), 0, 0)
                 CASE_DEFAULT
-                IF_INT_EQUAL(GSWF(2504), 0)
+                IF_INT_EQUAL(GSWF_TOU_REMATCH_PROMOTED_TO_MAJORS, 0)
                     CALL(evt_msg_print, 0, STRING(("stg3_npc_re_027")), 0, 0)
                     ELSE
                     CALL(evt_msg_print, 0, STRING(("stg3_npc_re_028_1")), 0, 0)
@@ -755,7 +755,7 @@ EVT_BEGIN(talk_kino4)
             CALL(evt_msg_print, 0, STRING(("stg3_npc_02_05_06")), 0, 0)
         END_SWITCH
         CASE_DEFAULT
-        IF_INT_EQUAL(GSWF(2500), 0)
+        IF_INT_EQUAL(GSWF_TOU_REMATCH_REGISTERED, 0)
             CALL(evt_msg_print, 0, STRING(("stg3_npc_02_05_07")), 0, 0)
             ELSE
             CALL(evt_tou_get_ranking, LW(0))
@@ -765,7 +765,7 @@ EVT_BEGIN(talk_kino4)
                 CASE_LESS_OR_EQUAL(10)
                 CALL(evt_msg_print, 0, STRING(("stg3_npc_re_030_1")), 0, 0)
                 CASE_DEFAULT
-                IF_INT_EQUAL(GSWF(2504), 0)
+                IF_INT_EQUAL(GSWF_TOU_REMATCH_PROMOTED_TO_MAJORS, 0)
                     CALL(evt_msg_print, 0, STRING(("stg3_npc_re_029")), 0, 0)
                     ELSE
                     CALL(evt_msg_print, 0, STRING(("stg3_npc_re_030_1")), 0, 0)
@@ -816,7 +816,7 @@ EVT_BEGIN(talk_kino5)
             END_IF
         END_SWITCH
         CASE_DEFAULT
-        IF_INT_EQUAL(GSWF(2500), 0)
+        IF_INT_EQUAL(GSWF_TOU_REMATCH_REGISTERED, 0)
             CALL(evt_mario_get_party, LW(0))
             IF_INT_EQUAL(LW(0), 4)
                 CALL(evt_msg_print_insert, 0, STRING(("stg3_npc_02_06_07_yos")), 0, 0, LW(10))
@@ -841,7 +841,7 @@ EVT_BEGIN(talk_kino5)
                     CALL(evt_msg_print, 0, STRING(("stg3_npc_re_032_1")), 0, 0)
                 END_IF
                 CASE_DEFAULT
-                IF_INT_EQUAL(GSWF(2504), 0)
+                IF_INT_EQUAL(GSWF_TOU_REMATCH_PROMOTED_TO_MAJORS, 0)
                     CALL(evt_mario_get_party, LW(0))
                     IF_INT_EQUAL(LW(0), 4)
                         CALL(evt_msg_print_insert, 0, STRING(("stg3_npc_re_031_yos")), 0, 0, LW(10))
@@ -886,7 +886,7 @@ EVT_BEGIN(talk_kinopiko)
             CALL(evt_msg_print, 0, STRING(("stg3_npc_02_07_06")), 0, 0)
         END_SWITCH
         CASE_DEFAULT
-        IF_INT_EQUAL(GSWF(2500), 0)
+        IF_INT_EQUAL(GSWF_TOU_REMATCH_REGISTERED, 0)
             CALL(evt_msg_print, 0, STRING(("stg3_npc_02_07_07")), 0, 0)
             ELSE
             CALL(evt_tou_get_ranking, LW(0))
@@ -896,7 +896,7 @@ EVT_BEGIN(talk_kinopiko)
                 CASE_LESS_OR_EQUAL(10)
                 CALL(evt_msg_print, 0, STRING(("stg3_npc_re_034_1")), 0, 0)
                 CASE_DEFAULT
-                IF_INT_EQUAL(GSWF(2504), 0)
+                IF_INT_EQUAL(GSWF_TOU_REMATCH_PROMOTED_TO_MAJORS, 0)
                     CALL(evt_msg_print, 0, STRING(("stg3_npc_re_033")), 0, 0)
                     ELSE
                     CALL(evt_msg_print, 0, STRING(("stg3_npc_re_034_1")), 0, 0)
@@ -931,7 +931,7 @@ EVT_BEGIN(talk_kinopio_f)
             CALL(evt_msg_print, 0, STRING(("stg3_npc_02_08_06")), 0, 0)
         END_SWITCH
         CASE_DEFAULT
-        IF_INT_EQUAL(GSWF(2500), 0)
+        IF_INT_EQUAL(GSWF_TOU_REMATCH_REGISTERED, 0)
             CALL(evt_msg_print, 0, STRING(("stg3_npc_02_08_07")), 0, 0)
             ELSE
             CALL(evt_tou_get_ranking, LW(0))
@@ -941,7 +941,7 @@ EVT_BEGIN(talk_kinopio_f)
                 CASE_LESS_OR_EQUAL(10)
                 CALL(evt_msg_print, 0, STRING(("stg3_npc_re_036_1")), 0, 0)
                 CASE_DEFAULT
-                IF_INT_EQUAL(GSWF(2504), 0)
+                IF_INT_EQUAL(GSWF_TOU_REMATCH_PROMOTED_TO_MAJORS, 0)
                     CALL(evt_msg_print, 0, STRING(("stg3_npc_re_035")), 0, 0)
                     ELSE
                     CALL(evt_msg_print, 0, STRING(("stg3_npc_re_036_1")), 0, 0)
@@ -989,7 +989,7 @@ EVT_END()
 static EVT_BEGIN(init_champ)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG3_33_06_BOWSER_TREASURE)
-        IF_INT_EQUAL(GSWF(2496), 0)
+        IF_INT_EQUAL(GSWF_TOU_LEFT_AFTER_CHAPTER, 0)
             CALL(evt_npc_set_position, STRING(("me")), -15, 0, 25)
             CALL(evt_npc_flag_onoff, 1, STRING(("me")), 32768)
             BEGIN_INLINE_EVENT
@@ -1079,7 +1079,7 @@ EVT_END()
 EVT_BEGIN(init_shikowa)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG3_33_06_BOWSER_TREASURE)
-        IF_INT_EQUAL(GSWF(2496), 0)
+        IF_INT_EQUAL(GSWF_TOU_LEFT_AFTER_CHAPTER, 0)
             CALL(evt_npc_set_position, STRING(("me")), -25, 0, 75)
             CALL(evt_npc_flag_onoff, 1, STRING(("me")), 32768)
             BEGIN_INLINE_EVENT
@@ -1102,7 +1102,7 @@ EVT_END()
 static EVT_BEGIN(init_uranoko)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG3_33_06_BOWSER_TREASURE)
-        IF_INT_EQUAL(GSWF(2496), 0)
+        IF_INT_EQUAL(GSWF_TOU_LEFT_AFTER_CHAPTER, 0)
             CALL(evt_npc_set_position, STRING(("me")), -75, 0, 50)
             CALL(evt_npc_flag_onoff, 1, STRING(("me")), 32768)
             BEGIN_INLINE_EVENT
@@ -1126,7 +1126,7 @@ EVT_BEGIN(init_ironA)
     CALL(evt_npc_set_scale, STRING(("me")), FLOAT(1.5f), FLOAT(1.5f), FLOAT((1.0f)))
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG3_33_06_BOWSER_TREASURE)
-        IF_INT_EQUAL(GSWF(2496), 0)
+        IF_INT_EQUAL(GSWF_TOU_LEFT_AFTER_CHAPTER, 0)
             CALL(evt_npc_set_position, STRING(("me")), -30, 0, -50)
             CALL(evt_npc_flag_onoff, 1, STRING(("me")), 32768)
             BEGIN_INLINE_EVENT
@@ -1150,7 +1150,7 @@ EVT_BEGIN(init_ironB)
     CALL(evt_npc_set_scale, STRING(("me")), FLOAT(1.5f), FLOAT(1.5f), FLOAT((1.0f)))
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG3_33_06_BOWSER_TREASURE)
-        IF_INT_EQUAL(GSWF(2496), 0)
+        IF_INT_EQUAL(GSWF_TOU_LEFT_AFTER_CHAPTER, 0)
             CALL(evt_npc_set_position, STRING(("me")), -60, 0, -25)
             CALL(evt_npc_flag_onoff, 1, STRING(("me")), 32768)
             BEGIN_INLINE_EVENT
@@ -1173,7 +1173,7 @@ EVT_END()
 EVT_BEGIN(init_borodo)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG3_33_06_BOWSER_TREASURE)
-        IF_INT_EQUAL(GSWF(2496), 0)
+        IF_INT_EQUAL(GSWF_TOU_LEFT_AFTER_CHAPTER, 0)
             CALL(evt_npc_set_position, STRING(("me")), -100, 0, 100)
             CALL(evt_npc_flag_onoff, 1, STRING(("me")), 32768)
             BEGIN_INLINE_EVENT
@@ -1482,7 +1482,7 @@ EVT_BEGIN(evt_tougi2)
     CALL(evt_msg_print_party, STRING(("stg3_tou_36")))
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
     WAIT_MS(500)
-    SET_VALUE(GSWF(2374), 0)
+    SET_VALUE(GSWF_TOU_02_ARENA_TOUR_RETURN, 0)
     SET_VALUE(GSW_STORY_PROGRESS, STG3_01_ARENA_INTRO_1F)
     CALL(N_evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
     CALL(evt_party_run, 0)
@@ -1865,16 +1865,16 @@ EVT_BEGIN(evt_momikucha)
     SET_VALUE(LF(0), 0)
     SET_VALUE(GF(10), 0)
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG3_06_1ST_MATCH)
-        IF_INT_EQUAL(GSWF(2402), 0)
-            SET_VALUE(GSWF(2402), 1)
+        IF_INT_EQUAL(GSWF_TOU_02_FANS_MOB_RAWK_HAWK_SEEN, 0)
+            SET_VALUE(GSWF_TOU_02_FANS_MOB_RAWK_HAWK_SEEN, 1)
             SET_VALUE(LF(0), 1)
             SET_VALUE(GF(10), 0)
         END_IF
     END_IF
     CALL(evt_tou_get_ranking, LW(0))
     IF_INT_EQUAL(LW(0), 0)
-        IF_INT_EQUAL(GSWF(2403), 0)
-            SET_VALUE(GSWF(2403), 1)
+        IF_INT_EQUAL(GSWF_TOU_02_FANS_MOB_MARIO_SEEN, 0)
+            SET_VALUE(GSWF_TOU_02_FANS_MOB_MARIO_SEEN, 1)
             SET_VALUE(LF(0), 1)
             SET_VALUE(GF(10), 1)
         END_IF
@@ -2011,42 +2011,42 @@ s32 evt_end_count(EventEntry* event, BOOL isFirstCall) {
 }
 
 static EVT_BEGIN(evt_poster_1)
-    SET_VALUE(GSWF(2456), 1)
+    SET_VALUE(GSWF_TOU_02_POSTER_1_REMOVED, 1)
     RETURN
 EVT_END()
 
 static EVT_BEGIN(evt_poster_2)
-    SET_VALUE(GSWF(2457), 1)
+    SET_VALUE(GSWF_TOU_02_POSTER_2_REMOVED, 1)
     RETURN
 EVT_END()
 
 static EVT_BEGIN(evt_poster_3)
-    SET_VALUE(GSWF(2458), 1)
+    SET_VALUE(GSWF_TOU_02_POSTER_3_REMOVED, 1)
     RETURN
 EVT_END()
 
 static EVT_BEGIN(evt_poster_4)
-    SET_VALUE(GSWF(2459), 1)
+    SET_VALUE(GSWF_TOU_02_POSTER_4_REMOVED, 1)
     RETURN
 EVT_END()
 
 static EVT_BEGIN(evt_poster_5)
-    SET_VALUE(GSWF(2460), 1)
+    SET_VALUE(GSWF_TOU_02_POSTER_5_REMOVED, 1)
     RETURN
 EVT_END()
 
 static EVT_BEGIN(evt_poster_6)
-    SET_VALUE(GSWF(2461), 1)
+    SET_VALUE(GSWF_TOU_02_POSTER_6_REMOVED, 1)
     RETURN
 EVT_END()
 
 static EVT_BEGIN(evt_poster_7)
-    SET_VALUE(GSWF(2462), 1)
+    SET_VALUE(GSWF_TOU_02_POSTER_7_REMOVED, 1)
     RETURN
 EVT_END()
 
 static EVT_BEGIN(evt_poster_8)
-    SET_VALUE(GSWF(2463), 1)
+    SET_VALUE(GSWF_TOU_02_POSTER_8_REMOVED, 1)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG3_20_13_MAJORS_1ST_PL)
 #ifdef VERSION_G8ME01
         CALL(evt_sub_get_language, LW(0))
@@ -2075,7 +2075,7 @@ static EVT_BEGIN(evt_poster_8)
 EVT_END()
 
 static EVT_BEGIN(evt_poster_9)
-    SET_VALUE(GSWF(2464), 1)
+    SET_VALUE(GSWF_TOU_02_POSTER_9_REMOVED, 1)
     RETURN
 EVT_END()
 
@@ -2155,7 +2155,7 @@ EVT_BEGIN(tou_02_init_evt)
     END_SWITCH
     SET_VALUE(LW(0), PTR(bero_data))
     CALL(evt_bero_get_info)
-    IF_INT_EQUAL(GSWF(2374), 1)
+    IF_INT_EQUAL(GSWF_TOU_02_ARENA_TOUR_RETURN, 1)
 #ifdef VERSION_G8ME01
         CALL_CHILD(bero_case_entry)
         SPAWN_EVENT(PTR(evt_tougi2))
@@ -2189,7 +2189,7 @@ EVT_BEGIN(tou_02_init_evt)
 #endif
     END_IF
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
-        IF_INT_EQUAL(GSWF(2497), 0)
+        IF_INT_EQUAL(GSWF_TOU_02_GUARD_STEPPED_ASIDE, 0)
             SET_VALUE(LW(0), 3)
 #ifdef VERSION_G8ME01
             CALL_CHILD(bero_case_switch_off)
@@ -2203,7 +2203,7 @@ EVT_BEGIN(tou_02_init_evt)
         END_IF
     END_IF
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG3_33_06_BOWSER_TREASURE)
-        IF_INT_EQUAL(GSWF(2496), 0)
+        IF_INT_EQUAL(GSWF_TOU_LEFT_AFTER_CHAPTER, 0)
 #ifdef VERSION_G8ME01
             CALL(evt_npc_set_position, STRING("キノピオ女"), 0, -1000, 0)
             CALL(evt_npc_set_position, STRING("キノピオ４"), 0, -1000, 0)
@@ -2230,8 +2230,8 @@ EVT_BEGIN(tou_02_init_evt)
 #endif
         CALL(evt_pouch_remove_item, ITEM_CHAMPS_BELT, LW(0))
         SPAWN_EVENT(PTR(evt_after_peach))
-        SET_VALUE(GSWF(2402), 1)
-        SET_VALUE(GSWF(2403), 1)
+        SET_VALUE(GSWF_TOU_02_FANS_MOB_RAWK_HAWK_SEEN, 1)
+        SET_VALUE(GSWF_TOU_02_FANS_MOB_MARIO_SEEN, 1)
     END_IF
 #ifdef VERSION_G8ME01
     CALL(evt_map_playanim, STRING("anm_paneru"), MAP_ANIM_PLAY_LOOP, 0)
@@ -2305,49 +2305,49 @@ EVT_BEGIN(tou_02_init_evt)
             CALL(evt_hitobj_onoff, STRING("a_p_p_2"), 1, 0)
             CALL(evt_hitobj_onoff, STRING("a_p_p_3"), 1, 1)
             CALL(evt_cloud_init)
-            IF_INT_EQUAL(GSWF(2457), 0)
+            IF_INT_EQUAL(GSWF_TOU_02_POSTER_2_REMOVED, 0)
                 CALL(evt_cloud_ent, 0, STRING("p_m_2"), STRING("a_p_m_2"), PTR(evt_poster_2))
                 ELSE
                 CALL(evt_mapobj_flag_onoff, 0, 1, STRING("p_m_2"), MAP_OBJ_FLAG_HIDDEN)
                 CALL(evt_hitobj_onoff, STRING("a_p_m_2"), 1, 0)
             END_IF
-            IF_INT_EQUAL(GSWF(2458), 0)
+            IF_INT_EQUAL(GSWF_TOU_02_POSTER_3_REMOVED, 0)
                 CALL(evt_cloud_ent, 0, STRING("p_m_3"), STRING("a_p_m_3"), PTR(evt_poster_3))
                 ELSE
                 CALL(evt_mapobj_flag_onoff, 0, 1, STRING("p_m_3"), MAP_OBJ_FLAG_HIDDEN)
                 CALL(evt_hitobj_onoff, STRING("a_p_m_3"), 1, 0)
             END_IF
-            IF_INT_EQUAL(GSWF(2459), 0)
+            IF_INT_EQUAL(GSWF_TOU_02_POSTER_4_REMOVED, 0)
                 CALL(evt_cloud_ent, 0, STRING("p_m_4"), STRING("a_p_m_4"), PTR(evt_poster_4))
                 ELSE
                 CALL(evt_mapobj_flag_onoff, 0, 1, STRING("p_m_4"), MAP_OBJ_FLAG_HIDDEN)
                 CALL(evt_hitobj_onoff, STRING("a_p_m_4"), 1, 0)
             END_IF
-            IF_INT_EQUAL(GSWF(2460), 0)
+            IF_INT_EQUAL(GSWF_TOU_02_POSTER_5_REMOVED, 0)
                 CALL(evt_cloud_ent, 0, STRING("p_m_5"), STRING("a_p_m_5"), PTR(evt_poster_5))
                 ELSE
                 CALL(evt_mapobj_flag_onoff, 0, 1, STRING("p_m_5"), MAP_OBJ_FLAG_HIDDEN)
                 CALL(evt_hitobj_onoff, STRING("a_p_m_5"), 1, 0)
             END_IF
-            IF_INT_EQUAL(GSWF(2461), 0)
+            IF_INT_EQUAL(GSWF_TOU_02_POSTER_6_REMOVED, 0)
                 CALL(evt_cloud_ent, 0, STRING("p_m_6"), STRING("a_p_m_6"), PTR(evt_poster_6))
                 ELSE
                 CALL(evt_mapobj_flag_onoff, 0, 1, STRING("p_m_6"), MAP_OBJ_FLAG_HIDDEN)
                 CALL(evt_hitobj_onoff, STRING("a_p_m_6"), 1, 0)
             END_IF
-            IF_INT_EQUAL(GSWF(2462), 0)
+            IF_INT_EQUAL(GSWF_TOU_02_POSTER_7_REMOVED, 0)
                 CALL(evt_cloud_ent, 0, STRING("p_m_7"), STRING("a_p_m_7"), PTR(evt_poster_7))
                 ELSE
                 CALL(evt_mapobj_flag_onoff, 0, 1, STRING("p_m_7"), MAP_OBJ_FLAG_HIDDEN)
                 CALL(evt_hitobj_onoff, STRING("a_p_m_7"), 1, 0)
             END_IF
-            IF_INT_EQUAL(GSWF(2463), 0)
+            IF_INT_EQUAL(GSWF_TOU_02_POSTER_8_REMOVED, 0)
                 CALL(evt_cloud_ent, 0, STRING("p_m_8"), STRING("a_p_m_8"), PTR(evt_poster_8))
                 ELSE
                 CALL(evt_mapobj_flag_onoff, 0, 1, STRING("p_m_8"), MAP_OBJ_FLAG_HIDDEN)
                 CALL(evt_hitobj_onoff, STRING("a_p_m_8"), 1, 0)
             END_IF
-            IF_INT_EQUAL(GSWF(2464), 0)
+            IF_INT_EQUAL(GSWF_TOU_02_POSTER_9_REMOVED, 0)
                 CALL(evt_cloud_ent, 0, STRING("p_m_9"), STRING("a_p_m_9"), PTR(evt_poster_9))
                 ELSE
                 CALL(evt_mapobj_flag_onoff, 0, 1, STRING("p_m_9"), MAP_OBJ_FLAG_HIDDEN)
@@ -2360,7 +2360,7 @@ EVT_BEGIN(tou_02_init_evt)
             CALL(evt_hitobj_onoff, STRING("a_p_p_2"), 1, 1)
             CALL(evt_hitobj_onoff, STRING("a_p_p_3"), 1, 0)
             CALL(evt_cloud_init)
-            IF_INT_EQUAL(GSWF(2456), 0)
+            IF_INT_EQUAL(GSWF_TOU_02_POSTER_1_REMOVED, 0)
                 CALL(evt_cloud_ent, 0, STRING("p_m_1"), STRING("a_p_m_1"), PTR(evt_poster_1))
                 ELSE
                 CALL(evt_mapobj_flag_onoff, 0, 1, STRING("p_m_1"), MAP_OBJ_FLAG_HIDDEN)
@@ -2386,49 +2386,49 @@ EVT_BEGIN(tou_02_init_evt)
             CALL(evt_hitobj_onoff, STRING("a_p_p_2"), 1, 0)
             CALL(evt_hitobj_onoff, STRING("a_p_p_3"), 1, 1)
             CALL(evt_cloud_init)
-            IF_INT_EQUAL(GSWF(2457), 0)
+            IF_INT_EQUAL(GSWF_TOU_02_POSTER_2_REMOVED, 0)
                 CALL(evt_cloud_ent, 0, STRING("p_m_2_e"), STRING("a_p_m_2"), PTR(evt_poster_2))
                 ELSE
                 CALL(evt_mapobj_flag_onoff, 0, 1, STRING("p_m_2_e"), MAP_OBJ_FLAG_HIDDEN)
                 CALL(evt_hitobj_onoff, STRING("a_p_m_2"), 1, 0)
             END_IF
-            IF_INT_EQUAL(GSWF(2458), 0)
+            IF_INT_EQUAL(GSWF_TOU_02_POSTER_3_REMOVED, 0)
                 CALL(evt_cloud_ent, 0, STRING("p_m_3_e"), STRING("a_p_m_3"), PTR(evt_poster_3))
                 ELSE
                 CALL(evt_mapobj_flag_onoff, 0, 1, STRING("p_m_3_e"), MAP_OBJ_FLAG_HIDDEN)
                 CALL(evt_hitobj_onoff, STRING("a_p_m_3"), 1, 0)
             END_IF
-            IF_INT_EQUAL(GSWF(2459), 0)
+            IF_INT_EQUAL(GSWF_TOU_02_POSTER_4_REMOVED, 0)
                 CALL(evt_cloud_ent, 0, STRING("p_m_4_e"), STRING("a_p_m_4"), PTR(evt_poster_4))
                 ELSE
                 CALL(evt_mapobj_flag_onoff, 0, 1, STRING("p_m_4_e"), MAP_OBJ_FLAG_HIDDEN)
                 CALL(evt_hitobj_onoff, STRING("a_p_m_4"), 1, 0)
             END_IF
-            IF_INT_EQUAL(GSWF(2460), 0)
+            IF_INT_EQUAL(GSWF_TOU_02_POSTER_5_REMOVED, 0)
                 CALL(evt_cloud_ent, 0, STRING("p_m_5_e"), STRING("a_p_m_5"), PTR(evt_poster_5))
                 ELSE
                 CALL(evt_mapobj_flag_onoff, 0, 1, STRING("p_m_5_e"), MAP_OBJ_FLAG_HIDDEN)
                 CALL(evt_hitobj_onoff, STRING("a_p_m_5"), 1, 0)
             END_IF
-            IF_INT_EQUAL(GSWF(2461), 0)
+            IF_INT_EQUAL(GSWF_TOU_02_POSTER_6_REMOVED, 0)
                 CALL(evt_cloud_ent, 0, STRING("p_m_6_e"), STRING("a_p_m_6"), PTR(evt_poster_6))
                 ELSE
                 CALL(evt_mapobj_flag_onoff, 0, 1, STRING("p_m_6_e"), MAP_OBJ_FLAG_HIDDEN)
                 CALL(evt_hitobj_onoff, STRING("a_p_m_6"), 1, 0)
             END_IF
-            IF_INT_EQUAL(GSWF(2462), 0)
+            IF_INT_EQUAL(GSWF_TOU_02_POSTER_7_REMOVED, 0)
                 CALL(evt_cloud_ent, 0, STRING("p_m_7_e"), STRING("a_p_m_7"), PTR(evt_poster_7))
                 ELSE
                 CALL(evt_mapobj_flag_onoff, 0, 1, STRING("p_m_7_e"), MAP_OBJ_FLAG_HIDDEN)
                 CALL(evt_hitobj_onoff, STRING("a_p_m_7"), 1, 0)
             END_IF
-            IF_INT_EQUAL(GSWF(2463), 0)
+            IF_INT_EQUAL(GSWF_TOU_02_POSTER_8_REMOVED, 0)
                 CALL(evt_cloud_ent, 0, STRING("p_m_8_e"), STRING("a_p_m_8"), PTR(evt_poster_8))
                 ELSE
                 CALL(evt_mapobj_flag_onoff, 0, 1, STRING("p_m_8_e"), MAP_OBJ_FLAG_HIDDEN)
                 CALL(evt_hitobj_onoff, STRING("a_p_m_8"), 1, 0)
             END_IF
-            IF_INT_EQUAL(GSWF(2464), 0)
+            IF_INT_EQUAL(GSWF_TOU_02_POSTER_9_REMOVED, 0)
                 CALL(evt_cloud_ent, 0, STRING("p_m_9_e"), STRING("a_p_m_9"), PTR(evt_poster_9))
                 ELSE
                 CALL(evt_mapobj_flag_onoff, 0, 1, STRING("p_m_9_e"), MAP_OBJ_FLAG_HIDDEN)
@@ -2441,7 +2441,7 @@ EVT_BEGIN(tou_02_init_evt)
             CALL(evt_hitobj_onoff, STRING("a_p_p_2"), 1, 1)
             CALL(evt_hitobj_onoff, STRING("a_p_p_3"), 1, 0)
             CALL(evt_cloud_init)
-            IF_INT_EQUAL(GSWF(2456), 0)
+            IF_INT_EQUAL(GSWF_TOU_02_POSTER_1_REMOVED, 0)
                 CALL(evt_cloud_ent, 0, STRING("p_m_1_e"), STRING("a_p_m_1"), PTR(evt_poster_1))
                 ELSE
                 CALL(evt_mapobj_flag_onoff, 0, 1, STRING("p_m_1_e"), MAP_OBJ_FLAG_HIDDEN)
@@ -2455,7 +2455,7 @@ EVT_BEGIN(tou_02_init_evt)
             CALL(evt_hitobj_onoff, STRING("a_p_p_3"), 1, 0)
         END_SWITCH
     END_IF
-    IF_INT_EQUAL(GSWF(2463), 1)
+    IF_INT_EQUAL(GSWF_TOU_02_POSTER_8_REMOVED, 1)
         IF_INT_EQUAL(GSW_STORY_PROGRESS, STG3_20_13_MAJORS_1ST_PL)
             CALL(evt_item_entry, STRING("key"), ITEM_STORAGE_KEY_0x13, -110, 200, -180, ITEM_TYPE_STILL, -1, PTR(evt_key))
         END_IF
@@ -2471,49 +2471,49 @@ EVT_BEGIN(tou_02_init_evt)
         CALL(evt_hitobj_onoff, STRING(("a_p_p_2")), 1, 0)
         CALL(evt_hitobj_onoff, STRING(("a_p_p_3")), 1, 1)
         CALL(evt_cloud_init)
-        IF_INT_EQUAL(GSWF(2457), 0)
+        IF_INT_EQUAL(GSWF_TOU_02_POSTER_2_REMOVED, 0)
             CALL(evt_cloud_ent, 0, STRING(("p_m_2")), STRING(("a_p_m_2")), PTR(evt_poster_2))
             ELSE
             CALL(evt_mapobj_flag_onoff, 0, 1, STRING(("p_m_2")), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_hitobj_onoff, STRING(("a_p_m_2")), 1, 0)
         END_IF
-        IF_INT_EQUAL(GSWF(2458), 0)
+        IF_INT_EQUAL(GSWF_TOU_02_POSTER_3_REMOVED, 0)
             CALL(evt_cloud_ent, 0, STRING(("p_m_3")), STRING(("a_p_m_3")), PTR(evt_poster_3))
             ELSE
             CALL(evt_mapobj_flag_onoff, 0, 1, STRING(("p_m_3")), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_hitobj_onoff, STRING(("a_p_m_3")), 1, 0)
         END_IF
-        IF_INT_EQUAL(GSWF(2459), 0)
+        IF_INT_EQUAL(GSWF_TOU_02_POSTER_4_REMOVED, 0)
             CALL(evt_cloud_ent, 0, STRING(("p_m_4")), STRING(("a_p_m_4")), PTR(evt_poster_4))
             ELSE
             CALL(evt_mapobj_flag_onoff, 0, 1, STRING(("p_m_4")), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_hitobj_onoff, STRING(("a_p_m_4")), 1, 0)
         END_IF
-        IF_INT_EQUAL(GSWF(2460), 0)
+        IF_INT_EQUAL(GSWF_TOU_02_POSTER_5_REMOVED, 0)
             CALL(evt_cloud_ent, 0, STRING(("p_m_5")), STRING(("a_p_m_5")), PTR(evt_poster_5))
             ELSE
             CALL(evt_mapobj_flag_onoff, 0, 1, STRING(("p_m_5")), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_hitobj_onoff, STRING(("a_p_m_5")), 1, 0)
         END_IF
-        IF_INT_EQUAL(GSWF(2461), 0)
+        IF_INT_EQUAL(GSWF_TOU_02_POSTER_6_REMOVED, 0)
             CALL(evt_cloud_ent, 0, STRING(("p_m_6")), STRING(("a_p_m_6")), PTR(evt_poster_6))
             ELSE
             CALL(evt_mapobj_flag_onoff, 0, 1, STRING(("p_m_6")), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_hitobj_onoff, STRING(("a_p_m_6")), 1, 0)
         END_IF
-        IF_INT_EQUAL(GSWF(2462), 0)
+        IF_INT_EQUAL(GSWF_TOU_02_POSTER_7_REMOVED, 0)
             CALL(evt_cloud_ent, 0, STRING(("p_m_7")), STRING(("a_p_m_7")), PTR(evt_poster_7))
             ELSE
             CALL(evt_mapobj_flag_onoff, 0, 1, STRING(("p_m_7")), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_hitobj_onoff, STRING(("a_p_m_7")), 1, 0)
         END_IF
-        IF_INT_EQUAL(GSWF(2463), 0)
+        IF_INT_EQUAL(GSWF_TOU_02_POSTER_8_REMOVED, 0)
             CALL(evt_cloud_ent, 0, STRING(("p_m_8")), STRING(("a_p_m_8")), PTR(evt_poster_8))
             ELSE
             CALL(evt_mapobj_flag_onoff, 0, 1, STRING(("p_m_8")), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_hitobj_onoff, STRING(("a_p_m_8")), 1, 0)
         END_IF
-        IF_INT_EQUAL(GSWF(2464), 0)
+        IF_INT_EQUAL(GSWF_TOU_02_POSTER_9_REMOVED, 0)
             CALL(evt_cloud_ent, 0, STRING(("p_m_9")), STRING(("a_p_m_9")), PTR(evt_poster_9))
             ELSE
             CALL(evt_mapobj_flag_onoff, 0, 1, STRING(("p_m_9")), MAP_OBJ_FLAG_HIDDEN)
@@ -2526,7 +2526,7 @@ EVT_BEGIN(tou_02_init_evt)
         CALL(evt_hitobj_onoff, STRING(("a_p_p_2")), 1, 1)
         CALL(evt_hitobj_onoff, STRING(("a_p_p_3")), 1, 0)
         CALL(evt_cloud_init)
-        IF_INT_EQUAL(GSWF(2456), 0)
+        IF_INT_EQUAL(GSWF_TOU_02_POSTER_1_REMOVED, 0)
             CALL(evt_cloud_ent, 0, STRING(("p_m_1")), STRING(("a_p_m_1")), PTR(evt_poster_1))
             ELSE
             CALL(evt_mapobj_flag_onoff, 0, 1, STRING(("p_m_1")), MAP_OBJ_FLAG_HIDDEN)
@@ -2539,7 +2539,7 @@ EVT_BEGIN(tou_02_init_evt)
         CALL(evt_hitobj_onoff, STRING(("a_p_p_2")), 1, 0)
         CALL(evt_hitobj_onoff, STRING(("a_p_p_3")), 1, 0)
     END_SWITCH
-    IF_INT_EQUAL(GSWF(2463), 1)
+    IF_INT_EQUAL(GSWF_TOU_02_POSTER_8_REMOVED, 1)
         IF_INT_EQUAL(GSW_STORY_PROGRESS, STG3_20_13_MAJORS_1ST_PL)
             CALL(evt_item_entry, STRING(("key")), ITEM_STORAGE_KEY_0x13, -110, 200, -180, ITEM_TYPE_STILL, -1, PTR(evt_key))
         END_IF

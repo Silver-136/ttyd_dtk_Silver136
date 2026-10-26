@@ -861,7 +861,7 @@ USER_FUNC(evt_yuuranking_alloc) {
                             YURANK(yuwp->recordParam)[wp->type][i] = yuu_kesan(wp->type, wp->score, wp->bonus, wp->mul, wp->max);
                             wp->rank = i;
                             if (i == 0) {
-                                evtSetValue(NULL, GSWF(1240), TRUE);
+                                evtSetValue(NULL, GSWF_GOR_PLANE_GAME_TOP_SCORE, TRUE);
                             }
                             break;
                         }
@@ -908,9 +908,9 @@ USER_FUNC(evt_yuuranking_alloc) {
                             wp->rank = i;
                             if (i == 0) {
                                 if (wp->type == 3) {
-                                    evtSetValue(NULL, GSWF(1241), TRUE);
+                                    evtSetValue(NULL, GSWF_GOR_BOAT_GAME_TOP_SCORE, TRUE);
                                 } else {
-                                    evtSetValue(NULL, GSWF(1242), TRUE);
+                                    evtSetValue(NULL, GSWF_GOR_TUBE_GAME_TOP_SCORE, TRUE);
                                 }
                             }
                             break;
@@ -957,7 +957,7 @@ USER_FUNC(evt_yuuranking_alloc) {
                             YURANK(yuwp->recordParam)[wp->type][i] = yuu_kesan(wp->type, wp->score, wp->bonus, wp->mul, wp->max);
                             wp->rank = i;
                             if (i == 0) {
-                                evtSetValue(NULL, GSWF(1243), TRUE);
+                                evtSetValue(NULL, GSWF_GOR_PAPER_GAME_TOP_SCORE, TRUE);
                             }
                             break;
                         }

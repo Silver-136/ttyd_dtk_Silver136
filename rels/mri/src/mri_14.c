@@ -104,8 +104,8 @@ static USER_FUNC(evtflash) {
 
 static EVT_BEGIN(first_time_w_bero)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG2_22_LORD_CRUMP_APPEARS)
-        IF_INT_EQUAL(GSWF(2864), 1)
-            SET_VALUE(GSWF(2864), 0)
+        IF_INT_EQUAL(GSWF_MRI_14_CRUMP_REENTRY_PENDING, 1)
+            SET_VALUE(GSWF_MRI_14_CRUMP_REENTRY_PENDING, 0)
             CALL(evt_mario_set_pos, -450, 0, 0)
             CALL(evt_party_set_pos, 0, -480, 0, 0)
             WAIT_MS(1000)
@@ -248,7 +248,7 @@ EVT_BEGIN(dai3_kanbu)
         CALL(evt_npc_move_position, LW(10), 200, -215, 0, FLOAT(120.0f), 0)
     END_INLINE_EVENT
     WAIT_MS(1000)
-    SET_VALUE(GSWF(2864), 1)
+    SET_VALUE(GSWF_MRI_14_CRUMP_REENTRY_PENDING, 1)
     SET_VALUE(GSW_STORY_PROGRESS, STG2_22_LORD_CRUMP_APPEARS)
     CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
     CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)
@@ -760,7 +760,7 @@ static KusaAccess ueki_access_data[] = {
 
 static EVT_BEGIN(punipuni_ball00_init)
     CALL_CHILD(PTR(mri_punipuni_setup))
-    IF_INT_EQUAL(GSWF(2863), 1)
+    IF_INT_EQUAL(GSWF_MRI_14_PUNI_ORB_PLACED, 1)
         CALL(evt_item_set_position, LW(10), 0, 30, -100)
         CALL(evt_target_flag_onoff, LW(11), 0, 3)
         ELSE
@@ -773,19 +773,19 @@ EVT_END()
 
 static EVT_BEGIN(punipuni_ball00)
     CALL(evt_mario_key_onoff, 0)
-    IF_INT_EQUAL(GSWF(2863), 0)
+    IF_INT_EQUAL(GSWF_MRI_14_PUNI_ORB_PLACED, 0)
         CALL_CHILD(PTR(mri_punipuni_itemselect))
         IF_INT_EQUAL(LW(1), 0)
             GOTO(100)
         END_IF
-        SET_VALUE(GSWF(2863), 1)
+        SET_VALUE(GSWF_MRI_14_PUNI_ORB_PLACED, 1)
         CALL(evt_item_set_position, LW(10), 0, 30, -100)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_sui_hikari"), MAP_OBJ_FLAG_HIDDEN)
         SET_VALUE(GF(15), 1)
         CALL_CHILD(PTR(mri_punipuni_itemset))
         SET_VALUE(GF(15), 0)
         ELSE
-        SET_VALUE(GSWF(2863), 0)
+        SET_VALUE(GSWF_MRI_14_PUNI_ORB_PLACED, 0)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_sui_hikari"), MAP_OBJ_FLAG_HIDDEN)
         CALL_CHILD(PTR(mri_punipuni_itemremove))
     END_IF

@@ -30,9 +30,9 @@ EvtWord muj_03_init_evt[112];
 
 EVT_BEGIN(muj_03_event_01)
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG5_13_BOBBERY_THE_BRIDGE)
-        IF_INT_EQUAL(GSWF(3131), 0)
+        IF_INT_EQUAL(GSWF_MUJ_03_FLEEING_SAILORS_SEEN, 0)
             SPAWN_EVENT(PTR(nigeru_suifu01))
-            SET_VALUE(GSWF(3131), 1)
+            SET_VALUE(GSWF_MUJ_03_FLEEING_SAILORS_SEEN, 1)
             SET_VALUE(LW(0), 1)
             RETURN
         END_IF
@@ -150,7 +150,7 @@ EVT_END()
 static EVT_BEGIN(evt_kusa_5)
     CALL(evt_item_delete_check, STRING("item_kusa_5"), LW(0))
     IF_INT_EQUAL(LW(0), 1)
-        CALL(evt_item_entry, STRING("item_kusa_5"), ITEM_MINI_MR_MINI, -250, 10, 95, ITEM_TYPE_SCATTER_NO_PICKUP, GSWF(3155), 0)
+        CALL(evt_item_entry, STRING("item_kusa_5"), ITEM_MINI_MR_MINI, -250, 10, 95, ITEM_TYPE_SCATTER_NO_PICKUP, GSWF_MUJ_03_MINI_MR_MINI_BUSH, 0)
     END_IF
     RETURN
 EVT_END()
@@ -158,7 +158,7 @@ EVT_END()
 static EVT_BEGIN(evt_kusa_7)
     CALL(evt_item_delete_check, STRING("item_kusa_7"), LW(0))
     IF_INT_EQUAL(LW(0), 1)
-        CALL(evt_item_entry, STRING("item_kusa_7"), ITEM_COIN, 175, 210, -50, ITEM_TYPE_SCATTER_NO_PICKUP, GSWF(3156), 0)
+        CALL(evt_item_entry, STRING("item_kusa_7"), ITEM_COIN, 175, 210, -50, ITEM_TYPE_SCATTER_NO_PICKUP, GSWF_MUJ_03_COIN_BUSH, 0)
     END_IF
     RETURN
 EVT_END()
@@ -189,16 +189,16 @@ EVT_BEGIN(muj_03_init_evt)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
     CALL_CHILD(PTR(evt_bero_info_run))
-    CALL(evt_mobj_badgeblk, STRING("mobj01"), -50, 9, 0, ITEM_COIN, 0, GSWF(3133), 0)
-    CALL(evt_mobj_brick, STRING("mobj02"), -50, 94, 0, ITEM_NULL, MOBJ_BRICK_HIDDEN_TEN_COIN, 0, GSWF(3134))
+    CALL(evt_mobj_badgeblk, STRING("mobj01"), -50, 9, 0, ITEM_COIN, 0, GSWF_MUJ_03_COIN_BLOCK, 0)
+    CALL(evt_mobj_brick, STRING("mobj02"), -50, 94, 0, ITEM_NULL, MOBJ_BRICK_HIDDEN_TEN_COIN, 0, GSWF_MUJ_03_HIDDEN_TEN_COIN_BLOCK)
 #ifdef VERSION_G8ME01
     CALL(evt_mobj_brick, STRING("bblk00"), -470, 155, -50, ITEM_NULL, MOBJ_BRICK_PLAIN, 0, LSWF(3))
 #else
-    CALL(evt_mobj_brick, STRING("bblk00"), -470, 155, -50, ITEM_NULL, MOBJ_BRICK_PLAIN, 0, GSWF(3145))
+    CALL(evt_mobj_brick, STRING("bblk00"), -470, 155, -50, ITEM_NULL, MOBJ_BRICK_PLAIN, 0, GSWF_MUJ_03_BRICK)
 #endif
     CALL(evt_mobj_powerupblk, STRING("pblk01"), -470, 240, -50, 0, GSWF_SHINE_27, 0)
-    CALL(evt_mobj_badgeblk, STRING("mobj03"), -50, 270, -100, ITEM_THUNDER_RAGE, 0, GSWF(3147), 0)
-    CALL(evt_mobj_brick, STRING("mobj_hidden2"), -50, 209, 0, ITEM_JAMMIN_JELLY, MOBJ_BRICK_HIDDEN_ITEM, 0, GSWF(3153))
+    CALL(evt_mobj_badgeblk, STRING("mobj03"), -50, 270, -100, ITEM_THUNDER_RAGE, 0, GSWF_MUJ_03_THUNDER_RAGE_BLOCK, 0)
+    CALL(evt_mobj_brick, STRING("mobj_hidden2"), -50, 209, 0, ITEM_JAMMIN_JELLY, MOBJ_BRICK_HIDDEN_ITEM, 0, GSWF_MUJ_03_JAMMIN_JELLY_HIDDEN_BLOCK)
     CALL(evt_item_entry, STRING("item_00"), ITEM_STAR_PIECE, 275, 10, 100, ITEM_TYPE_STILL, GSWF_STARPIECE_75, 0)
     CALL(evt_eff64, STRING("sunlight"), STRING("sunlight_n64"), 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
     SET_VALUE(LW(0), PTR(tree_tbl))

@@ -18,7 +18,7 @@ EvtWord evt_yuka[5];
 EvtWord jin_11_init_evt[54];
 
 EVT_BEGIN(jin_11_ana)
-    SET_VALUE(GSWF(2079), 1)
+    SET_VALUE(GSWF_JIN_SCRIPTED_ENTRY_PENDING, 1)
     CALL(evt_bero_mapchange, STRING("jin_07"), 0)
     SET_VALUE(LW(0), 1)
     RETURN
@@ -91,7 +91,7 @@ EVT_BEGIN(jin_11_init_evt)
     CALL(evt_mobj_save_blk, STRING("mobj_save"), -50, 60, -40, 0, 0)
     CALL(evt_mobj_powerupblk, STRING("pblk00"), 40, 60, -40, 0, GSWF_SHINE_26, 0)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG4_13_03_BREAKING_THE_FLOOR)
-        CALL(evt_mobj_breaking_floor, STRING("mobj_bf00"), 845, 115, 5, 0, PTR(evt_yuka), GSWF(2233))
+        CALL(evt_mobj_breaking_floor, STRING("mobj_bf00"), 845, 115, 5, 0, PTR(evt_yuka), GSWF_JIN_11_BREAKING_FLOOR_BROKEN)
     END_IF
     RETURN
 EVT_END()

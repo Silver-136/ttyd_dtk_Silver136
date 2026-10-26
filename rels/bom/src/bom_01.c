@@ -746,7 +746,7 @@ static EVT_BEGIN(first_evt)
     CALL(evt_mario_set_dir, 270, 300, 0)
     CALL(evt_party_stop, 0)
     WAIT_MS(200)
-    IF_INT_EQUAL(GSWF(3885), 1)
+    IF_INT_EQUAL(GSWF_BOM_01_EARLY_VISIT, 1)
         CALL(evt_msg_print_party, STRING(("stg7_bom_01__2_00")))
         ELSE
         CALL(evt_msg_print_party, STRING(("stg7_bom_01__2")))
@@ -2077,7 +2077,7 @@ static EVT_BEGIN(init_white)
         END_IF
     END_IF
 END_IF
-IF_INT_EQUAL(GSWF(3876), 1)
+IF_INT_EQUAL(GSWF_BOM_GENERAL_WHITE_AGREED, 1)
     CALL(evt_npc_set_position, STRING(("me")), 50, 0, -100)
 END_IF
 RETURN
@@ -2086,7 +2086,7 @@ EVT_END()
 static EVT_BEGIN(talk_white)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG7_05_THE_CANNON)
-        IF_INT_EQUAL(GSWF(3874), 0)
+        IF_INT_EQUAL(GSWF_PIK_GOLDBOB_PERMISSION_GIVEN, 0)
             CALL(evt_msg_print, 0, STRING(("stg7_bom_59_02")), 0, 0)
             ELSE
             CALL(evt_msg_print, 0, STRING(("stg7_bom_59_03")), 0, 0)
@@ -2806,7 +2806,7 @@ EVT_BEGIN(bom_01_init_evt)
     CALL(evt_item_entry, STRING(("item_00")), ITEM_STAR_PIECE, -180, 5, 450, ITEM_TYPE_STILL, GSWF_STARPIECE_92, 0)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG6_71_01)
-        SET_VALUE(GSWF(3885), 1)
+        SET_VALUE(GSWF_BOM_01_EARLY_VISIT, 1)
         CASE_LESS(STG7_01_FAHR_OUTPOST_1ST_VISIT)
         SPAWN_EVENT(PTR(first_evt))
     END_SWITCH

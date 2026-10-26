@@ -14,7 +14,7 @@
 #include "battle/battle_damage.h"
 
 // BattleUnit.work slots (btlevtcmd_Get/Set/AddUnitWork)
-#define UNIT_WORK_INTRO_TALK 0 // 1 (from the battle setup) marks the unit that shows stg3_tou_83_* / stg3_tou_84 on turn 1 (once, GSWF(2509))
+#define UNIT_WORK_INTRO_TALK 0 // 1 (from the battle setup) marks the unit that shows stg3_tou_83_* / stg3_tou_84 on turn 1 (once, GSWF_TOU_GOOMBA_BROS_AMBUSH_TALK_SEEN)
 
 USER_FUNC(btlevtcmd_SetEventPhase);
 USER_FUNC(btlevtcmd_SetJumpSound);
@@ -202,14 +202,14 @@ EVT_END()
 static EVT_BEGIN(phase_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_INTRO_TALK, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
-        IF_INT_EQUAL(GSWF(2509), 0)
+        IF_INT_EQUAL(GSWF_TOU_GOOMBA_BROS_AMBUSH_TALK_SEEN, 0)
             CALL(btlevtcmd_CheckPhase, LW(0), 67108865)
             IF_INT_NOT_EQUAL(LW(0), 0)
                 CALL(btlevtcmd_get_turn, LW(0))
                 IF_INT_EQUAL(LW(0), 1)
                     CALL(btlevtcmd_PhaseEventStartDeclare, UNIT_ID_PARTNER)
                     CALL(btlevtcmd_PhaseEventStartDeclare, UNIT_ID_SELF)
-                    SET_VALUE(GSWF(2509), 1)
+                    SET_VALUE(GSWF_TOU_GOOMBA_BROS_AMBUSH_TALK_SEEN, 1)
                     CALL(evt_btl_camera_set_prilimit, BTL_CAM_PRI_EVENT)
                     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_EVENT, BTL_CAM_MODE_FREE)
                     CALL(evt_btl_camera_set_moveto, 1, -104, 74, 334, -102, 52, 0, 30, 4)

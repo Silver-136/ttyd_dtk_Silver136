@@ -170,7 +170,7 @@ static HitDamageReturn dmgReturnPt[] = {
 static EvtWord hikaru_yuka_init[] = {
     CALL_CHILD(hikaru_off)
     CALL(evt_hitobj_attr_onoff, 1, 1, STRING("A_no01"), 2048)
-    CALL(evt_mobj_itembox, STRING("box"), 160, 10, -10, MOBJ_ITEMBOX_GRAY, 0, PTR(evt_box), GSWF(4176))
+    CALL(evt_mobj_itembox, STRING("box"), 160, 10, -10, MOBJ_ITEMBOX_GRAY, 0, PTR(evt_box), GSWF_AJI_02_ELEVATOR_KEY_CHEST)
     CALL(evt_hit_damage_return_set, PTR(dmgReturnPt))
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("yukayu1"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("yukayu2"), MAP_OBJ_FLAG_HIDDEN)
@@ -251,7 +251,7 @@ EVT_BEGIN(aji_02_init_evt)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("yukayu2"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("ato"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
-    CALL(evt_mobj_badgeblk, STRING("mobj00"), -125, 60, -125, ITEM_SUPER_SHROOM, 0, GSWF(4211), 0)
+    CALL(evt_mobj_badgeblk, STRING("mobj00"), -125, 60, -125, ITEM_SUPER_SHROOM, 0, GSWF_AJI_02_SUPER_SHROOM_BLOCK, 0)
     SPAWN_EVENT(PTR(evt_emergency))
     RETURN
 EVT_END()

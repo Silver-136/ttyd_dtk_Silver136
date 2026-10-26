@@ -256,7 +256,7 @@ static EVT_BEGIN(damage_event)
     IF_INT_EQUAL(LW(0), 1)
         RETURN
     END_IF
-    IF_INT_EQUAL(GSWF(2511), 1)
+    IF_INT_EQUAL(GSWF_TOU_ARMORED_HARRIERS_WEAK_POINT, 1)
         RETURN
     END_IF
     CALL(btlevtcmd_GetTotalDamage, UNIT_ID_SELF, LW(0))
@@ -272,7 +272,7 @@ static EVT_BEGIN(damage_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_OTHER_ID, LW(0))
     CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg3_tou_273"), 0, LW(0))
     CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_ON)
-    SET_VALUE(GSWF(2511), 1)
+    SET_VALUE(GSWF_TOU_ARMORED_HARRIERS_WEAK_POINT, 1)
     CALL(evt_btl_camera_set_prilimit, BTL_CAM_PRI_NORMAL)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_PARTNER)
@@ -285,7 +285,7 @@ static EVT_BEGIN(phase_event)
     IF_INT_EQUAL(LW(0), 1)
         RETURN
     END_IF
-    IF_INT_EQUAL(GSWF(2512), 1)
+    IF_INT_EQUAL(GSWF_TOU_ARMORED_HARRIERS_BEATEN, 1)
         RETURN
     END_IF
     CALL(btlevtcmd_CheckPhase, LW(0), 67108865)
@@ -299,7 +299,7 @@ static EVT_BEGIN(phase_event)
             CALL(evt_btl_camera_set_moveto, 1, -104, 74, 334, -102, 52, 0, 30, 4)
             WAIT_FRAMES(30)
             CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
-            IF_INT_EQUAL(GSWF(2510), 0)
+            IF_INT_EQUAL(GSWF_TOU_ARMORED_HARRIERS_INTRO_SEEN, 0)
                 CALL(evt_msg_print_battle_party, STRING("stg3_tou_266"))
                 ELSE
                 CALL(evt_msg_print_battle_party, STRING("stg3_tou_267"))
@@ -327,8 +327,8 @@ static EVT_BEGIN(phase_event)
                 CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg3_tou_271"), 0, LW(0))
             END_IF
             CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_ON)
-            IF_INT_EQUAL(GSWF(2510), 0)
-                SET_VALUE(GSWF(2510), 1)
+            IF_INT_EQUAL(GSWF_TOU_ARMORED_HARRIERS_INTRO_SEEN, 0)
+                SET_VALUE(GSWF_TOU_ARMORED_HARRIERS_INTRO_SEEN, 1)
             END_IF
             CALL(evt_btl_camera_set_prilimit, BTL_CAM_PRI_NORMAL)
             CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)

@@ -2324,7 +2324,7 @@ NpcSetupBattleInfo btlsetup_tik_tbl[] = {
     {
         /*"tik04ヒンニャー1"*/"\x74\x69\x6B\x30\x34\x83\x71\x83\x93\x83\x6A\x83\x83\x81\x5B\x31", // name
         NULL, 0, // mapName..fixedItem
-        GSWF(1246), // swFlag
+        GSWF_GOR_FRANKLY_FIRST_MAP_READ, // swFlag
         btlgrpsel_tik_btlno_tik_04_01_on, // altSelect
         btlgrpsel_tik_btlno_tik_04_01_off, // select
         0, 0, // battleFlags..randomMode
@@ -2334,7 +2334,7 @@ NpcSetupBattleInfo btlsetup_tik_tbl[] = {
     {
         /*"tik04ヒンニャー2"*/"\x74\x69\x6B\x30\x34\x83\x71\x83\x93\x83\x6A\x83\x83\x81\x5B\x32", // name
         NULL, 0, // mapName..fixedItem
-        GSWF(1246), // swFlag
+        GSWF_GOR_FRANKLY_FIRST_MAP_READ, // swFlag
         btlgrpsel_tik_btlno_tik_04_02_on, // altSelect
         btlgrpsel_tik_btlno_tik_04_02_off, // select
         0, 0, // battleFlags..randomMode

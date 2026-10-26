@@ -65,7 +65,7 @@ static BeroEntry bero_entry_data[] = {
 };
 
 EVT_BEGIN(jin_06_wall_open_evt)
-    SET_VALUE(GSWF(2229), 1)
+    SET_VALUE(GSWF_JIN_06_WALL_PANEL_BLOWN_AWAY, 1)
     RETURN
 EVT_END()
 
@@ -109,10 +109,10 @@ EVT_BEGIN(jin_06_init_evt)
     CALL(evt_bero_get_info)
     CALL_CHILD(PTR(evt_bero_info_run))
     CALL_CHILD(PTR(evt_usu_kagemario_party_kill))
-    CALL(evt_mobj_itembox, STRING("mobj_box00"), 650, 0, -150, MOBJ_ITEMBOX_NORMAL, 0, PTR(mobj_box00), GSWF(2238))
+    CALL(evt_mobj_itembox, STRING("mobj_box00"), 650, 0, -150, MOBJ_ITEMBOX_NORMAL, 0, PTR(mobj_box00), GSWF_JIN_06_FLOWER_SAVER_CHEST)
     CALL(evt_mobj_jumpstand_red, 0, STRING("mobj_jump"), 0, 0, 0, PTR(jin_06_jumpstand), 0)
-    IF_INT_NOT_EQUAL(GSWF(2079), 0)
-        SET_VALUE(GSWF(2079), 0)
+    IF_INT_NOT_EQUAL(GSWF_JIN_SCRIPTED_ENTRY_PENDING, 0)
+        SET_VALUE(GSWF_JIN_SCRIPTED_ENTRY_PENDING, 0)
         BEGIN_INLINE_EVENT
             CALL(evt_cam_letter_box_disable, 1)
             CALL(evt_mario_key_onoff, 0)
@@ -148,7 +148,7 @@ EVT_BEGIN(jin_06_init_evt)
         END_LOOP
         CALL(evt_bero_mapchange, STRING("jin_00"), STRING("ana"))
     END_INLINE_EVENT
-    IF_INT_EQUAL(GSWF(2229), 0)
+    IF_INT_EQUAL(GSWF_JIN_06_WALL_PANEL_BLOWN_AWAY, 0)
         CALL(evt_cloud_init)
         CALL(evt_cloud_ent, 0, STRING("mekure"), STRING("a_mekure"), PTR(jin_06_wall_open_evt))
         ELSE

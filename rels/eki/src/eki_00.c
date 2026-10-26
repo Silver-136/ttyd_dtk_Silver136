@@ -1321,7 +1321,7 @@ static BeroEntry bero_data[] = {
 EVT_BEGIN(evt_bridge)
     CALL(evt_mario_key_onoff, 0)
     WAIT_MS(500)
-    SET_VALUE(GSWF(3576), 1)
+    SET_VALUE(GSWF_EKI_BRIDGE_LOWERING_IN_PROGRESS, 1)
     CALL(evt_bero_mapchange, STRING("hom_00"), STRING("n_bero_2"))
     RETURN
 EVT_END()
@@ -1350,7 +1350,7 @@ EVT_BEGIN(evt_bridge2)
     CALL(evt_mapobj_rotate, 1, STRING("s_lever"), 0, 0, -80)
     SET_VALUE(GF(0), 1)
     SET_VALUE(GSW_STORY_PROGRESS, STG6_42_DRAWBRIDGE_DOWN)
-    SET_VALUE(GSWF(3576), 0)
+    SET_VALUE(GSWF_EKI_BRIDGE_LOWERING_IN_PROGRESS, 0)
     RETURN
 EVT_END()
 
@@ -1885,7 +1885,7 @@ EVT_END()
 EVT_BEGIN(eki_00_init_evt)
     SET_VALUE(LW(0), PTR(bero_data))
     CALL(evt_bero_get_info)
-    IF_INT_EQUAL(GSWF(3576), 0)
+    IF_INT_EQUAL(GSWF_EKI_BRIDGE_LOWERING_IN_PROGRESS, 0)
         CALL_CHILD(PTR(evt_bero_info_run))
         ELSE
         CALL_CHILD(PTR(bero_case_entry))
@@ -1907,7 +1907,7 @@ EVT_BEGIN(eki_00_init_evt)
     END_IF
     CALL(evt_snd_bgmoff, PSND_FADEOUT)
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG6_EKI2"))
-    IF_INT_EQUAL(GSWF(3576), 1)
+    IF_INT_EQUAL(GSWF_EKI_BRIDGE_LOWERING_IN_PROGRESS, 1)
         SPAWN_EVENT(PTR(evt_bridge2))
     END_IF
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_kan"), 0, PTR(evt_kanban), 0)

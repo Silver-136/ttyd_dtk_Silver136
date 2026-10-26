@@ -182,7 +182,7 @@ USER_FUNC(setYoshiColor) {
 }
 
 EVT_BEGIN(room_out)
-    SET_VALUE(GSWF(2390), 1)
+    SET_VALUE(GSWF_TOU_10_ENTERED_UNUSED, 1)
     SET_VALUE(LW(0), 0)
     RETURN
 EVT_END()
@@ -274,7 +274,7 @@ EVT_END()
 static EVT_BEGIN(init_michel)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG3_34_RETURN_TO_ROGUEPORT)
-        IF_INT_EQUAL(GSWF(2412), 0)
+        IF_INT_EQUAL(GSWF_GLITZ_PIT_KP_KOOPAS_RETIRED, 0)
             CALL(evt_npc_set_position, STRING("me"), 120, 0, -30)
             CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
             CALL(evt_npc_set_ry, STRING("me"), 270)
@@ -309,7 +309,7 @@ static EVT_BEGIN(talk_michel)
             CALL(evt_msg_print, 0, STRING("stg3_npc_10_01_11"), 0, 0)
         END_SWITCH
         ELSE
-        IF_INT_EQUAL(GSWF(2505), 0)
+        IF_INT_EQUAL(GSWF_TOU_REMATCH_DEMOTED_TO_MINORS, 0)
             CALL(evt_msg_print, 0, STRING("stg3_npc_re_060"), 0, 0)
             ELSE
             CALL(evt_msg_print, 0, STRING("stg3_npc_re_061"), 0, 0)
@@ -352,7 +352,7 @@ EVT_BEGIN(talk_octo)
             CASE_DEFAULT
             SWITCH(GSW_STORY_PROGRESS)
                 CASE_BETWEEN(STG3_20_02_BACK_TO_THE_MINORS, STG3_20_04_CONFISCATED)
-                IF_INT_EQUAL(GSWF(2517), 0)
+                IF_INT_EQUAL(GSWF_TOU_04_CONFISCATED_EXIT_SEEN, 0)
                     CALL(evt_msg_print, 0, STRING("stg3_npc_10_02_15"), 0, 0)
                     ELSE
                     CALL(evt_msg_print, 0, STRING("stg3_npc_10_02_14"), 0, 0)
@@ -362,7 +362,7 @@ EVT_BEGIN(talk_octo)
             END_SWITCH
         END_SWITCH
         ELSE
-        IF_INT_EQUAL(GSWF(2505), 0)
+        IF_INT_EQUAL(GSWF_TOU_REMATCH_DEMOTED_TO_MINORS, 0)
             CALL(evt_msg_print, 0, STRING("stg3_npc_re_065"), 0, 0)
             ELSE
             CALL(evt_msg_print, 0, STRING("stg3_npc_re_066"), 0, 0)
@@ -376,7 +376,7 @@ static EVT_BEGIN(init_brots)
         CALL(evt_tou_get_ranking, LW(0))
         IF_INT_LESS(LW(0), 19)
             ELSE
-            IF_INT_EQUAL(GSWF(2406), 0)
+            IF_INT_EQUAL(GSWF_TOU_RANK_18_KING_K_TALK_DONE, 0)
                 CALL(evt_npc_set_position, STRING("me"), -160, 0, -50)
                 CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
                 CALL(evt_npc_set_ry, STRING("me"), 90)
@@ -398,7 +398,7 @@ static EVT_BEGIN(talk_brots)
             CALL(evt_msg_print, 0, STRING("stg3_npc_10_04_04"), 0, 0)
         END_SWITCH
         ELSE
-        IF_INT_EQUAL(GSWF(2505), 0)
+        IF_INT_EQUAL(GSWF_TOU_REMATCH_DEMOTED_TO_MINORS, 0)
             CALL(evt_msg_print, 0, STRING("stg3_npc_re_075"), 0, 0)
             ELSE
             CALL(evt_msg_print, 0, STRING("stg3_npc_re_076"), 0, 0)
@@ -441,7 +441,7 @@ EVT_BEGIN(talk_gangan)
             CASE_DEFAULT
             SWITCH(GSW_STORY_PROGRESS)
                 CASE_BETWEEN(STG3_20_02_BACK_TO_THE_MINORS, STG3_20_04_CONFISCATED)
-                IF_INT_EQUAL(GSWF(2517), 0)
+                IF_INT_EQUAL(GSWF_TOU_04_CONFISCATED_EXIT_SEEN, 0)
                     CALL(evt_msg_print, 0, STRING("stg3_npc_10_03_15"), 0, 0)
                     ELSE
                     CALL(evt_msg_print, 0, STRING("stg3_npc_10_03_14"), 0, 0)
@@ -451,7 +451,7 @@ EVT_BEGIN(talk_gangan)
             END_SWITCH
         END_SWITCH
         ELSE
-        IF_INT_EQUAL(GSWF(2505), 0)
+        IF_INT_EQUAL(GSWF_TOU_REMATCH_DEMOTED_TO_MINORS, 0)
             CALL(evt_msg_print, 0, STRING("stg3_npc_re_070"), 0, 0)
             ELSE
             CALL(evt_msg_print, 0, STRING("stg3_npc_re_071"), 0, 0)
@@ -464,11 +464,11 @@ EVT_BEGIN(init_poku)
     CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG3_34_RETURN_TO_ROGUEPORT)
-        IF_INT_EQUAL(GSWF(2397), 1)
+        IF_INT_EQUAL(GSWF_TOU_ARMORED_HARRIERS_OPENING_SEEN, 1)
             CALL(evt_npc_set_position, STRING("me"), 120, 0, -30)
         END_IF
         CASE_EQUAL(STG3_34_RETURN_TO_ROGUEPORT)
-        IF_INT_EQUAL(GSWF(2496), 0)
+        IF_INT_EQUAL(GSWF_TOU_LEFT_AFTER_CHAPTER, 0)
             CALL(evt_npc_set_position, STRING("me"), 120, 0, -30)
         END_IF
     END_SWITCH
@@ -487,7 +487,7 @@ EVT_BEGIN(talk_poku)
         CASE_DEFAULT
         SWITCH(GSW_STORY_PROGRESS)
             CASE_BETWEEN(STG3_20_02_BACK_TO_THE_MINORS, STG3_20_04_CONFISCATED)
-            IF_INT_EQUAL(GSWF(2517), 0)
+            IF_INT_EQUAL(GSWF_TOU_04_CONFISCATED_EXIT_SEEN, 0)
                 CALL(evt_msg_print, 0, STRING("stg3_npc_10_05_15"), 0, 0)
                 ELSE
                 CALL(evt_msg_print, 0, STRING("stg3_npc_10_05_14"), 0, 0)
@@ -506,7 +506,7 @@ EVT_BEGIN(init_iron)
             CALL(evt_npc_set_position, STRING("me"), 75, 0, -100)
         END_IF
         ELSE
-        IF_INT_EQUAL(GSWF(2496), 0)
+        IF_INT_EQUAL(GSWF_TOU_LEFT_AFTER_CHAPTER, 0)
             CALL(evt_npc_set_position, STRING("me"), 75, 0, -100)
         END_IF
     END_IF
@@ -520,7 +520,7 @@ EVT_BEGIN(talk_iron)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
         CALL(evt_msg_print, 0, STRING("stg3_npc_10_06_07"), 0, 0)
         ELSE
-        IF_INT_EQUAL(GSWF(2505), 0)
+        IF_INT_EQUAL(GSWF_TOU_REMATCH_DEMOTED_TO_MINORS, 0)
             CALL(evt_msg_print, 0, STRING("stg3_npc_re_080"), 0, 0)
             ELSE
             CALL(evt_msg_print, 0, STRING("stg3_npc_re_081"), 0, 0)
@@ -536,7 +536,7 @@ EVT_BEGIN(init_iron2)
             CALL(evt_npc_set_position, STRING("me"), 100, 0, -80)
         END_IF
         ELSE
-        IF_INT_EQUAL(GSWF(2496), 0)
+        IF_INT_EQUAL(GSWF_TOU_LEFT_AFTER_CHAPTER, 0)
             CALL(evt_npc_set_position, STRING("me"), 100, 0, -80)
         END_IF
     END_IF
@@ -550,7 +550,7 @@ EVT_BEGIN(talk_iron2)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
         CALL(evt_msg_print, 0, STRING("stg3_npc_10_06_08"), 0, 0)
         ELSE
-        IF_INT_EQUAL(GSWF(2505), 0)
+        IF_INT_EQUAL(GSWF_TOU_REMATCH_DEMOTED_TO_MINORS, 0)
             CALL(evt_msg_print, 0, STRING("stg3_npc_re_080"), 0, 0)
             ELSE
             CALL(evt_msg_print, 0, STRING("stg3_npc_re_081"), 0, 0)
@@ -727,7 +727,7 @@ EVT_BEGIN(evt_saisyo_after)
     CALL(evt_npc_flag_onoff, 1, STRING("キノシコワ"), NPC_FLAG_NO_HIT)
     CALL(evt_npc_status_onoff, 1, STRING("キノシコワ"), NPC_STATUS_FACE_MOVE_DIR)
     CALL(evt_npc_move_position, STRING("キノシコワ"), -55, -95, 0, FLOAT(80.0f), 1)
-    IF_INT_EQUAL(GSWF(2396), 1)
+    IF_INT_EQUAL(GSWF_TOU_GOOMBA_BROS_FIRST_WIN, 1)
         CALL(evt_msg_print, 0, STRING("stg3_tou_90"), 0, STRING("キノシコワ"))
         WAIT_MS(300)
         CALL(evt_npc_set_anim, STRING("キノシコワ"), STRING("A_1"))
@@ -1137,7 +1137,7 @@ static EVT_BEGIN(evt_1st_leagu)
     CALL(evt_party_set_dir, 0, 90, 0)
     CALL(evt_seq_wait, SEQ_GAME)
     WAIT_MS(1000)
-    IF_INT_EQUAL(GSWF(2442), 1)
+    IF_INT_EQUAL(GSWF_GLITZ_PIT_BEAT_LAST_OPPONENT, 1)
         SET_VALUE(LW(10), 7)
         ELSE
         SET_VALUE(LW(10), 1)
@@ -1195,7 +1195,7 @@ static EVT_BEGIN(evt_1st_leagu)
     BEGIN_INLINE_EVENT
         CALL(evt_mario_mov_pos2, 0, -200, FLOAT(60.0f))
     END_INLINE_EVENT
-    SET_VALUE(GSWF(2393), 1)
+    SET_VALUE(GSWF_TOU_PROMOTION_TO_MAJORS_PENDING, 1)
     CALL(evt_bero_mapchange, STRING("tou_05"), 0)
     RETURN
 EVT_END()
@@ -1211,7 +1211,7 @@ EVT_BEGIN(evt_1st_leagu_re)
     CALL(evt_party_set_dir, 0, 90, 0)
     CALL(evt_seq_wait, SEQ_GAME)
     WAIT_MS(1000)
-    IF_INT_EQUAL(GSWF(2442), 1)
+    IF_INT_EQUAL(GSWF_GLITZ_PIT_BEAT_LAST_OPPONENT, 1)
         SET_VALUE(LW(10), 6)
         ELSE
         SET_VALUE(LW(10), 1)
@@ -1275,7 +1275,7 @@ EVT_BEGIN(evt_1st_leagu_re)
             BREAK_LOOP
         END_IF
     END_LOOP
-    SET_VALUE(GSWF(2504), 1)
+    SET_VALUE(GSWF_TOU_REMATCH_PROMOTED_TO_MAJORS, 1)
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
     CALL(evt_mario_key_onoff, 1)
     RETURN
@@ -1462,8 +1462,8 @@ EVT_BEGIN(evt_match_make_sub)
     CALL(evt_msg_print, 0, STRING("stg3_tou_69"), 0, STRING("ガンス"))
     WAIT_MS(300)
     SET_VALUE(GSW_GLITZ_PIT_CONDITION, 43)
-    SET_VALUE(GSW(503), 1)
-    SET_VALUE(GSW(504), 1)
+    SET_VALUE(GSW_GLITZ_PIT_CONDITION_PARAM, 1)
+    SET_VALUE(GSW_GLITZ_PIT_CONDITION_PARAM2, 1)
     CALL_CHILD(PTR(evt_tou_monitor_off))
     CALL(evt_cam3d_evt_set, -40, 91, 188, -40, 57, -1, 500, EASING_SINE_IN_OUT)
     WAIT_MS(500)
@@ -1689,7 +1689,7 @@ EVT_BEGIN(tou_10_init_evt)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU1"))
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU6"))
     END_SWITCH
-    IF_INT_EQUAL(GSWF(2391), 1)
+    IF_INT_EQUAL(GSWF_TOU_10_JUMP_STORY_TO_EGG, 1)
         IF_INT_LESS(GSW_STORY_PROGRESS, STG3_12_THE_MINI_YOSHI_EGG)
             SET_VALUE(GSW_STORY_PROGRESS, STG3_12_THE_MINI_YOSHI_EGG)
         END_IF
@@ -1710,7 +1710,7 @@ EVT_BEGIN(tou_10_init_evt)
     END_IF
     CALL_CHILD(PTR(evt_tou_monitor_init))
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_20_03_THE_YELLOW_BLOCK)
-        CALL(evt_mobj_lv_blk, STRING("blk"), -280, 0, 100, PTR(evt_block), GSWF(2440), STRING("MOBJ_Lv1BigBigBlock"))
+        CALL(evt_mobj_lv_blk, STRING("blk"), -280, 0, 100, PTR(evt_block), GSWF_TOU_10_BIG_BIG_BLOCK_BROKEN, STRING("MOBJ_Lv1BigBigBlock"))
         CALL(evt_mobj_flag_onoff, 1, STRING("blk"), MOBJ_FLAG_NO_CULL)
     END_IF
     SWITCH(GSW_STORY_PROGRESS)
@@ -1720,9 +1720,9 @@ EVT_BEGIN(tou_10_init_evt)
         CALL_CHILD(PTR(bero_case_switch_off))
         RETURN
     END_SWITCH
-    IF_INT_EQUAL(GSWF(2389), 1)
-        IF_INT_EQUAL(GSWF(2450), 1)
-            IF_INT_EQUAL(GSWF(2451), 0)
+    IF_INT_EQUAL(GSWF_GLITZ_PIT_MATCH_JUST_ENDED, 1)
+        IF_INT_EQUAL(GSWF_TOU_POISON_CAKE_EATEN, 1)
+            IF_INT_EQUAL(GSWF_TOU_POISON_CAKE_RECOVERED, 0)
                 CALL(evt_pouch_party_join, 1)
                 CALL(evt_pouch_party_join, 2)
                 CALL(evt_pouch_party_join, 5)
@@ -1730,12 +1730,12 @@ EVT_BEGIN(tou_10_init_evt)
             END_IF
         END_IF
     END_IF
-    IF_INT_EQUAL(GSWF(2389), 1)
-        SET_VALUE(GSWF(2389), 0)
+    IF_INT_EQUAL(GSWF_GLITZ_PIT_MATCH_JUST_ENDED, 1)
+        SET_VALUE(GSWF_GLITZ_PIT_MATCH_JUST_ENDED, 0)
         SWITCH(GSW_GLITZ_PIT_OPPONENT)
             CASE_EQUAL(19)
-            IF_INT_EQUAL(GSWF(2392), 0)
-                SET_VALUE(GSWF(2392), 1)
+            IF_INT_EQUAL(GSWF_TOU_GOOMBA_BROS_AFTER_MATCH_SEEN, 0)
+                SET_VALUE(GSWF_TOU_GOOMBA_BROS_AFTER_MATCH_SEEN, 1)
                 IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
                     SPAWN_EVENT(PTR(evt_saisyo_after))
                     ELSE
@@ -1765,12 +1765,12 @@ EVT_BEGIN(tou_10_init_evt)
         CALL(evt_item_entry, STRING("syorui"), ITEM_DUBIOUS_PAPER, -475, 90, 75, ITEM_TYPE_STILL, -1, PTR(evt_syorui))
     END_IF
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG3_12_THE_MINI_YOSHI_EGG)
-        IF_INT_EQUAL(GSWF(2446), 0)
-            IF_INT_GREATER_OR_EQUAL(GSW(505), 2)
+        IF_INT_EQUAL(GSWF_TOU_10_HARRIERS_PEP_TALK_CHECKED, 0)
+            IF_INT_GREATER_OR_EQUAL(GSW_TOU_ARMORED_HARRIERS_LOSS_COUNT, 2)
                 SPAWN_EVENT(PTR(first_tamago))
             END_IF
         END_IF
-        SET_VALUE(GSWF(2446), 1)
+        SET_VALUE(GSWF_TOU_10_HARRIERS_PEP_TALK_CHECKED, 1)
     END_IF
     RETURN
 EVT_END()

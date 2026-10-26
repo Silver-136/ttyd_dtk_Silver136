@@ -490,7 +490,7 @@ EVT_BEGIN(evt_champion_re)
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
-    SET_VALUE(GSWF(2503), 1)
+    SET_VALUE(GSWF_TOU_CHAMPION_TITLE_REGAINED, 1)
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
     CALL(evt_mario_key_onoff, 1)
     RETURN
@@ -504,7 +504,7 @@ static EVT_BEGIN(evt_dakuto)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_30_01_AIR_DUCT_ENTRANCE)
         SET_VALUE(GSW_STORY_PROGRESS, STG3_30_01_AIR_DUCT_ENTRANCE)
         ELSE
-        SET_VALUE(GSWF(2502), 1)
+        SET_VALUE(GSWF_TOU_07_VENT_REOPENED, 1)
     END_IF
     CALL(evt_exit_case_evt)
     RETURN
@@ -680,7 +680,7 @@ EVT_BEGIN(tou_07_init_evt)
     CALL(evt_hitobj_name_callback, STRING("a_bed"), PTR(bed_entry))
     CALL(evt_sub_animgroup_async, STRING("p_slit"))
     CALL(evt_npc_setup, PTR(npcEnt))
-    IF_INT_EQUAL(GSWF(2389), 0)
+    IF_INT_EQUAL(GSWF_GLITZ_PIT_MATCH_JUST_ENDED, 0)
         CALL(evt_tou_get_ranking, LW(0))
         IF_INT_EQUAL(LW(0), 0)
             IF_INT_LESS(GSW_STORY_PROGRESS, STG3_30_A_NEW_CHAMPION)
@@ -702,7 +702,7 @@ EVT_BEGIN(tou_07_init_evt)
         CASE_LESS(STG3_34_RETURN_TO_ROGUEPORT)
         SET_VALUE(LF(0), 1)
         CASE_DEFAULT
-        IF_INT_EQUAL(GSWF(2502), 0)
+        IF_INT_EQUAL(GSWF_TOU_07_VENT_REOPENED, 0)
             SET_VALUE(LF(0), 0)
             ELSE
             SET_VALUE(LF(0), 1)
@@ -718,8 +718,8 @@ EVT_BEGIN(tou_07_init_evt)
     END_IF
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("M_make"), 0, PTR(evt_tou_match_make_default), 0)
     CALL_CHILD(PTR(evt_tou_monitor_init))
-    IF_INT_EQUAL(GSWF(2389), 1)
-        SET_VALUE(GSWF(2389), 0)
+    IF_INT_EQUAL(GSWF_GLITZ_PIT_MATCH_JUST_ENDED, 1)
+        SET_VALUE(GSWF_GLITZ_PIT_MATCH_JUST_ENDED, 0)
         SWITCH(GSW_STORY_PROGRESS)
             CASE_BETWEEN(STG3_00_WELCOME_TO_GLITZVILLE, STG3_12_THE_MINI_YOSHI_EGG)
             CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
@@ -741,14 +741,14 @@ EVT_BEGIN(tou_07_init_evt)
             SPAWN_EVENT(PTR(evt_tou_match_after_default))
             RETURN
         END_IF
-        IF_INT_EQUAL(GSWF(2503), 0)
+        IF_INT_EQUAL(GSWF_TOU_CHAMPION_TITLE_REGAINED, 0)
             SPAWN_EVENT(PTR(evt_champion_re))
             ELSE
             SPAWN_EVENT(PTR(evt_tou_match_after_default))
         END_IF
         RETURN
     END_IF
-    IF_INT_EQUAL(GSWF(2375), 1)
+    IF_INT_EQUAL(GSWF_TOU_GRUBBA_WALK_TALK_PENDING, 1)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_STG3_GANCE1"))
         CALL(evt_snd_envoff, PSND_FADEOUT)
         SPAWN_EVENT(PTR(evt_sensyu))

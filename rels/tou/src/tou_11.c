@@ -117,10 +117,10 @@ static NpcSetupInfo npcEnt[] = {
 };
 
 EVT_BEGIN(evt_tojikome)
-    IF_INT_EQUAL(GSWF(2386), 1)
+    IF_INT_EQUAL(GSWF_TOU_11_LOCKED_IN_SEEN, 1)
         RETURN
     END_IF
-    SET_VALUE(GSWF(2386), 1)
+    SET_VALUE(GSWF_TOU_11_LOCKED_IN_SEEN, 1)
     CALL(evt_snd_bgm_scope, 0, 0)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
@@ -272,7 +272,7 @@ EVT_BEGIN(evt_postar)
         CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
         CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)
     END_INLINE_EVENT
-    SET_VALUE(GSWF(2387), 1)
+    SET_VALUE(GSWF_TOU_11_POSTER_BLOWN_AWAY, 1)
     RETURN
 EVT_END()
 
@@ -282,7 +282,7 @@ EVT_BEGIN(tou_11_init_evt)
     CALL_CHILD(PTR(evt_bero_info_run))
     CALL_CHILD(PTR(evt_tou_locker_init))
     CALL(evt_npc_setup, PTR(npcEnt))
-    IF_INT_EQUAL(GSWF(2387), 0)
+    IF_INT_EQUAL(GSWF_TOU_11_POSTER_BLOWN_AWAY, 0)
         CALL(evt_cloud_init)
         CALL(evt_cloud_ent, 0, STRING("pos_1"), STRING("a_pos_1"), PTR(evt_postar))
         ELSE
@@ -314,7 +314,7 @@ EVT_BEGIN(tou_11_init_evt)
         CALL(evt_cam_road_reset)
         RETURN
     END_IF
-    IF_INT_EQUAL(GSWF(2383), 1)
+    IF_INT_EQUAL(GSWF_GLITZ_PIT_TITLE_MATCH_BOOKED, 1)
         CALL(evt_snd_bgmoff, PSND_FADEOUT)
         CALL(evt_snd_envoff, PSND_FADEOUT)
         SPAWN_EVENT(PTR(evt_tojikome))

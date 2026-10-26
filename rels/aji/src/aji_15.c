@@ -105,7 +105,7 @@ EVT_BEGIN(peach_evt_syawa_main)
         ELSE
         CALL(evt_npc_set_autotalkpose, STRING("mario"), STRING("P_S_2"), STRING("P_T_2"))
     END_IF
-    IF_INT_EQUAL(GSWF(4220), 0)
+    IF_INT_EQUAL(GSWF_AJI_15_PEACH_SHOWER_EXAMINED, 0)
         CALL(evt_msg_print, 0, STRING("peach_aji_35"), 0, STRING("mario"))
         ELSE
         CALL(evt_msg_print, 0, STRING("peach_aji_35_1"), 0, STRING("mario"))
@@ -333,7 +333,7 @@ EVT_BEGIN(peach_evt_syawa_main)
     CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
     CALL(evt_snd_envoff, PSND_FADEOUT | PSND_SLOT(1))
     CALL(evt_snd_envon, PSND_CONTINUE | PSND_FADEIN, 0)
-    SET_VALUE(GSWF(4220), 1)
+    SET_VALUE(GSWF_AJI_15_PEACH_SHOWER_EXAMINED, 1)
     CALL(evt_cam3d_evt_off, 800, EASING_SINE_IN_OUT)
     CALL(evt_mario_key_onoff, 1)
     RETURN
@@ -376,8 +376,8 @@ EVT_BEGIN(aji_15_init_evt)
     END_IF
     CALL(evt_snd_set_rev_mode, 1)
     CALL_CHILD(PTR(peach_evt_syawa_init))
-    IF_INT_EQUAL(GSWF(4199), 0)
-        SET_VALUE(GSWF(4199), 1)
+    IF_INT_EQUAL(GSWF_AJI_15_VISITED, 0)
+        SET_VALUE(GSWF_AJI_15_VISITED, 1)
     END_IF
     SPAWN_EVENT(PTR(evt_emergency))
     RETURN

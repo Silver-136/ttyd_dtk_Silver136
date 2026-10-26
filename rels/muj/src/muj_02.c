@@ -493,7 +493,7 @@ EVT_END()
 EVT_BEGIN(evt_treeb_01)
     CALL(evt_item_delete_check, STRING("item_treeb_01"), LW(0))
     IF_INT_EQUAL(LW(0), 1)
-        CALL(evt_item_entry, STRING("item_treeb_01"), ITEM_KEEL_MANGO, -350, 90, -70, ITEM_TYPE_FALL_NO_PICKUP, GSWF(3152), 0)
+        CALL(evt_item_entry, STRING("item_treeb_01"), ITEM_KEEL_MANGO, -350, 90, -70, ITEM_TYPE_FALL_NO_PICKUP, GSWF_MUJ_02_KEEL_MANGO_TREE, 0)
     END_IF
     RETURN
 EVT_END()
@@ -501,7 +501,7 @@ EVT_END()
 static EVT_BEGIN(evt_kusa_2)
     CALL(evt_item_delete_check, STRING("item_kusa_2"), LW(0))
     IF_INT_EQUAL(LW(0), 1)
-        CALL(evt_item_entry, STRING("item_kusa_2"), ITEM_COIN, 323, 0, 50, ITEM_TYPE_SCATTER_NO_PICKUP, GSWF(3154), 0)
+        CALL(evt_item_entry, STRING("item_kusa_2"), ITEM_COIN, 323, 0, 50, ITEM_TYPE_SCATTER_NO_PICKUP, GSWF_MUJ_02_COIN_BUSH, 0)
     END_IF
     RETURN
 EVT_END()
@@ -549,7 +549,7 @@ static KusaAccess kusa_tbl[] = {
 EVT_BEGIN(muj_02_init_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG5_MUJ1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG5_MUJ4"))
-    SET_VALUE(GSWF(3152), 0)
+    SET_VALUE(GSWF_MUJ_02_KEEL_MANGO_TREE, 0)
     CALL_CHILD(PTR(evt_switch_init))
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
@@ -570,8 +570,8 @@ EVT_BEGIN(muj_02_init_evt)
     CALL(evt_hit_damage_return_set, PTR(hitDmgRetPoints))
     CALL_CHILD(PTR(evt_gazigazi_entry))
     CALL(evt_eff64, STRING("sunlight"), STRING("sunlight_n64"), 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
-    CALL(evt_mobj_badgeblk, STRING("mobj_badge_gat"), -200, 60, -90, ITEM_HEAD_RATTLE, 0, GSWF(3146), 1)
-    CALL(evt_mobj_badgeblk, STRING("mobj_hatena"), -135, 0, 135, ITEM_COURAGE_SHELL, 0, GSWF(3150), 0)
+    CALL(evt_mobj_badgeblk, STRING("mobj_badge_gat"), -200, 60, -90, ITEM_HEAD_RATTLE, 0, GSWF_MUJ_02_HEAD_RATTLE_BADGE_BLOCK, 1)
+    CALL(evt_mobj_badgeblk, STRING("mobj_hatena"), -135, 0, 135, ITEM_COURAGE_SHELL, 0, GSWF_MUJ_02_COURAGE_SHELL_BLOCK, 0)
 #ifdef VERSION_G8ME01
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG5_43_X_NAUTS_RETREAT)
         SET_VALUE(LW(0), PTR(tree_tbl_treeb_evt))
@@ -579,7 +579,7 @@ EVT_BEGIN(muj_02_init_evt)
 #endif
     SET_VALUE(LW(0), PTR(tree_tbl))
 #ifdef VERSION_G8ME01
-        SET_VALUE(GSWF(3152), 1)
+        SET_VALUE(GSWF_MUJ_02_KEEL_MANGO_TREE, 1)
     END_IF
 #endif
     CALL_CHILD(PTR(evt_sub_tree_access_entry))

@@ -874,14 +874,14 @@ EVT_BEGIN(nancy_init_check)
     CALL(evt_party_run, 1)
 #endif
     CALL(evt_mario_key_onoff, 1)
-    SET_VALUE(GSWF(1187), 1)
+    SET_VALUE(GSWF_GOR_ZESS_T_BLOCKING_WEST_GATE, 1)
     RETURN
 EVT_END()
 
 EVT_BEGIN(nancy_init)
     SET_VALUE(LSWF(1), 0)
-    IF_INT_EQUAL(GSWF(1188), 0)
-        IF_INT_EQUAL(GSWF(1187), 0)
+    IF_INT_EQUAL(GSWF_GOR_ZESS_T_GOT_CONTACT_LENS, 0)
+        IF_INT_EQUAL(GSWF_GOR_ZESS_T_BLOCKING_WEST_GATE, 0)
             CALL(evt_npc_set_ry, STRING("me"), 270)
             CALL(evt_npc_set_position, STRING("me"), -500, 0, 75)
             SPAWN_EVENT(PTR(nancy_init_check))
@@ -930,13 +930,13 @@ EVT_BEGIN(nancy_door_anime)
 EVT_END()
 
 EVT_BEGIN(nancy_regl)
-    IF_INT_EQUAL(GSWF(1187), 0)
-        IF_INT_EQUAL(GSWF(1188), 0)
+    IF_INT_EQUAL(GSWF_GOR_ZESS_T_BLOCKING_WEST_GATE, 0)
+        IF_INT_EQUAL(GSWF_GOR_ZESS_T_GOT_CONTACT_LENS, 0)
             CALL(urouro_init_func, STRING("me"), -500, 75, FLOAT(50.0f), FLOAT(45.0f), 0)
             CALL(urouro_main_func, STRING("me"))
         END_IF
         ELSE
-        IF_INT_EQUAL(GSWF(1188), 0)
+        IF_INT_EQUAL(GSWF_GOR_ZESS_T_GOT_CONTACT_LENS, 0)
             CALL(nancy_block_init_func)
             LOOP(0)
                 CALL(nancy_block_func)
@@ -952,7 +952,7 @@ s32 item_tbl_nancy[] = {
 };
 
 EVT_BEGIN(nancy_talk)
-    IF_INT_EQUAL(GSWF(1188), 0)
+    IF_INT_EQUAL(GSWF_GOR_ZESS_T_GOT_CONTACT_LENS, 0)
         CALL(evt_pouch_check_item, ITEM_CONTACT_LENS, LW(0))
         IF_INT_GREATER_OR_EQUAL(LW(0), 1)
             CALL(evt_msg_print, 0, STRING("gor_01_008"), 0, STRING("me"))
@@ -1004,7 +1004,7 @@ EVT_BEGIN(nancy_talk)
             CALL_CHILD(PTR(bero_case_switch_on))
 #endif
             CALL(evt_hitobj_attr_onoff, 1, 1, STRING("w_bero"), 8388612)
-            SET_VALUE(GSWF(1188), 1)
+            SET_VALUE(GSWF_GOR_ZESS_T_GOT_CONTACT_LENS, 1)
             CALL(evt_door_set_param, GW(6), 0, PTR(&door_data_01_npc))
         END_IF
         ELSE
@@ -1027,7 +1027,7 @@ static EVT_BEGIN(marco_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG4_31_FRANKLYS_HOUSE_STG_4)
         CALL(evt_msg_print, 0, STRING("mac_4_005"), 0, STRING("me"))
-        SET_VALUE(GSWF(1192), 1)
+        SET_VALUE(GSWF_GOR_FLAVIO_FIRST_TALK_DONE, 1)
         SPAWN_EVENT_GET_ID(PTR(marco_hitorigoto), GW(0))
         CASE_EQUAL(STG4_31_FRANKLYS_HOUSE_STG_4)
         CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_POSE_LOCK)
@@ -1038,7 +1038,7 @@ static EVT_BEGIN(marco_talk)
         DIVIDE(LW(0), 2)
         CALL(evt_cam3d_evt_set, LW(0), 92, 128, LW(0), 40, -168, 500, EASING_SINE_IN_OUT)
         WAIT_MS(500)
-        IF_INT_EQUAL(GSWF(1192), 0)
+        IF_INT_EQUAL(GSWF_GOR_FLAVIO_FIRST_TALK_DONE, 0)
             CALL(evt_msg_print, 0, STRING("mac_4_007"), 0, STRING("me"))
             ELSE
             CALL(evt_msg_print, 0, STRING("mac_4_008"), 0, STRING("me"))
@@ -1222,7 +1222,7 @@ EVT_BEGIN(master_talk)
         CALL(evt_msg_print, 0, STRING("gor_01_016"), 0, STRING("me"))
         CASE_LESS_OR_EQUAL(STG4_33_MEET_BOBBERY)
         CALL(evt_msg_print, 0, STRING("mac_4_047"), 0, STRING("me"))
-        SET_VALUE(GSWF(1214), 1)
+        SET_VALUE(GSWF_GOR_BOBBERY_HOME_LEARNED, 1)
         CASE_EQUAL(STG4_34_BOBBERY_DECLINES)
         SET_VALUE(GF(5), 0)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -1244,12 +1244,12 @@ EVT_BEGIN(master_talk)
             CALL(evt_mario_mov_pos2, 345, -270, FLOAT(150.0f))
             CALL(evt_mario_set_dir, 270, 0, 0)
         END_IF
-        IF_INT_EQUAL(GSWF(1194), 1)
+        IF_INT_EQUAL(GSWF_GOR_PODLEY_BOBBERY_STORY_TOLD, 1)
             CALL(evt_snd_bgmoff_f, PSND_PAUSE, 2000)
             CALL(evt_msg_print, 0, STRING("mac_4_071"), 0, STRING("me"))
             GOTO(100)
         END_IF
-        IF_INT_EQUAL(GSWF(1193), 0)
+        IF_INT_EQUAL(GSWF_GOR_PODLEY_BOBBERY_TALK_DONE, 0)
             CALL(evt_msg_print, 0, STRING("mac_4_061"), 0, STRING("me"))
             CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
             CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_NOD1_5"), LW(0), LW(1), LW(2), 0)
@@ -1261,7 +1261,7 @@ EVT_BEGIN(master_talk)
             CALL(evt_mario_set_pose, STRING("M_S_1"))
             WAIT_MS(2000)
             CALL(evt_msg_print, 0, STRING("mac_4_063"), 0, STRING("me"))
-            SET_VALUE(GSWF(1193), 1)
+            SET_VALUE(GSWF_GOR_PODLEY_BOBBERY_TALK_DONE, 1)
         ELSE
             CALL(evt_msg_print, 0, STRING("mac_4_064"), 0, STRING("me"))
         END_IF
@@ -1282,7 +1282,7 @@ EVT_BEGIN(master_talk)
         CALL(evt_npc_reverse_ry, STRING("me"))
         WAIT_MS(1000)
         CALL(evt_msg_print_party, STRING("mac_4_069"))
-        SET_VALUE(GSWF(1194), 1)
+        SET_VALUE(GSWF_GOR_PODLEY_BOBBERY_STORY_TOLD, 1)
         CALL(evt_cam3d_evt_off, 0, EASING_SINE_IN_OUT)
         CALL(evt_msg_print, 0, STRING("mac_4_070"), 0, STRING("me"))
         LABEL(100)
@@ -1361,7 +1361,7 @@ EVT_END()
 
 EVT_BEGIN(shoptender_init)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG4_32_CHATTING_WITH_FLAVIO)
-        IF_INT_EQUAL(GSWF(1191), 1)
+        IF_INT_EQUAL(GSWF_GOR_CONTACT_LENS_ARRIVED, 1)
             CALL(evt_npc_set_position, STRING("me"), -75, 0, -30)
             CALL(evt_npc_set_ry, STRING("me"), 90)
         END_IF
@@ -1373,9 +1373,9 @@ EVT_END()
 
 EVT_BEGIN(shoptender_talk)
     DEBUG_PUT_MSG(STRING("店員TALK"))
-    IF_INT_EQUAL(GSWF(1188), 0)
+    IF_INT_EQUAL(GSWF_GOR_ZESS_T_GOT_CONTACT_LENS, 0)
         DEBUG_PUT_MSG(STRING("店員TALK２"))
-        IF_INT_EQUAL(GSWF(1191), 1)
+        IF_INT_EQUAL(GSWF_GOR_CONTACT_LENS_ARRIVED, 1)
             CALL(evt_pouch_check_item, ITEM_CONTACT_LENS, LW(0))
             IF_INT_LESS(LW(0), 1)
                 CALL(evt_msg_print, 0, STRING("gor_01_015"), 0, STRING("me"))
@@ -1384,14 +1384,14 @@ EVT_BEGIN(shoptender_talk)
             END_IF
             RETURN
         END_IF
-        SET_VALUE(LW(0), GSWF(1189))
-        ADD(LW(0), GSWF(1190))
+        SET_VALUE(LW(0), GSWF_GOR_CONTACT_LENS_ORDERED_EARLY)
+        ADD(LW(0), GSWF_GOR_CONTACT_LENS_ORDERED_LATE)
         IF_INT_NOT_EQUAL(LW(0), 0)
             CALL(evt_msg_print, 0, STRING("gor_01_014"), 0, STRING("me"))
             RETURN
         END_IF
         CALL(evt_msg_print, 0, STRING("gor_01_012"), 0, STRING("me"))
-        IF_INT_EQUAL(GSWF(1187), 1)
+        IF_INT_EQUAL(GSWF_GOR_ZESS_T_BLOCKING_WEST_GATE, 1)
             CALL(evt_mario_set_pose, STRING("M_I_2"))
             WAIT_MS(700)
             CALL(evt_mario_set_pose, STRING("M_S_1"))
@@ -1419,11 +1419,11 @@ EVT_BEGIN(shoptender_talk)
             WAIT_MS(500)
             CALL(evt_msg_print, 0, STRING("gor_01_013_01"), 0, STRING("me"))
             IF_INT_LESS(GSW_STORY_PROGRESS, STG1_17_FATHER_SON_REUNITED)
-                SET_VALUE(GSWF(1189), 1)
+                SET_VALUE(GSWF_GOR_CONTACT_LENS_ORDERED_EARLY, 1)
                 ELSE
-                SET_VALUE(GSWF(1190), 1)
+                SET_VALUE(GSWF_GOR_CONTACT_LENS_ORDERED_LATE, 1)
             END_IF
-            CALL(evt_sub_save_playtime, GSW(108))
+            CALL(evt_sub_save_playtime, GSW_GOR_CONTACT_LENS_ORDER_TIME)
         END_IF
         ELSE
         DEBUG_PUT_MSG(STRING("店員TALK３"))
@@ -1857,7 +1857,7 @@ EVT_BEGIN(bottakuru_init)
     END_IF
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_npc_set_ry, STRING("me"), 90)
-    SET_VALUE(GSWF(1206), 0)
+    SET_VALUE(GSWF_GOR_CHARLIETON_BOUGHT_THIS_VISIT, 0)
     RETURN
 EVT_END()
 
@@ -1873,11 +1873,11 @@ EVT_BEGIN(bottakuru_talk)
             RETURN
         END_IF
     END_IF
-    IF_INT_EQUAL(GSWF(1205), 0)
+    IF_INT_EQUAL(GSWF_GOR_CHARLIETON_FIRST_TALK_DONE, 0)
         CALL(evt_msg_print, 0, STRING("bottakuru_00"), 0, STRING("me"))
-        SET_VALUE(GSWF(1205), 1)
+        SET_VALUE(GSWF_GOR_CHARLIETON_FIRST_TALK_DONE, 1)
         ELSE
-        IF_INT_EQUAL(GSWF(1206), 0)
+        IF_INT_EQUAL(GSWF_GOR_CHARLIETON_BOUGHT_THIS_VISIT, 0)
             CALL(evt_msg_print, 0, STRING("bottakuru_01"), 0, STRING("me"))
             ELSE
             CALL(evt_msg_print, 0, STRING("bottakuru_02"), 0, STRING("me"))
@@ -1961,7 +1961,7 @@ EVT_BEGIN(bottakuru_talk)
     CALL(evt_win_coin_wait, LW(12))
     WAIT_MS(500)
     CALL(evt_win_coin_off, LW(12))
-    SET_VALUE(GSWF(1206), 1)
+    SET_VALUE(GSWF_GOR_CHARLIETON_BOUGHT_THIS_VISIT, 1)
     CALL(U_evt_badgeShop_get_special_zaiko, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL(evt_msg_print_add, 0, STRING("bottakuru_15"))
@@ -2211,10 +2211,10 @@ EVT_END()
 EVT_BEGIN(thief_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG0_08_STOLEN_COINS, STG0_END_TO_STAGE_1)
-        IF_INT_EQUAL(GSWF(1198), 0)
+        IF_INT_EQUAL(GSWF_GOR_THIEF_FOUND_IN_HIDEOUT, 0)
             SET_VALUE(LF(0), 0)
-            IF_INT_EQUAL(GSW(2), 0)
-                IF_INT_EQUAL(GSW(3), 0)
+            IF_INT_EQUAL(GSW_GOR_STOLEN_COINS_LOW, 0)
+                IF_INT_EQUAL(GSW_GOR_STOLEN_COINS_HIGH, 0)
                     SET_VALUE(LF(0), 1)
                 END_IF
             END_IF
@@ -2224,8 +2224,8 @@ EVT_BEGIN(thief_talk)
                     CALL(evt_StatusOpen)
                     WAIT_MS(1000)
                     CALL(evt_pouch_get_coin, LW(0))
-                    ADD(LW(0), GSW(2))
-                    SET_VALUE(LW(1), GSW(3))
+                    ADD(LW(0), GSW_GOR_STOLEN_COINS_LOW)
+                    SET_VALUE(LW(1), GSW_GOR_STOLEN_COINS_HIGH)
                     MULTIPLY(LW(1), 256)
                     ADD(LW(0), LW(1))
                     CALL(evt_pouch_set_coin, LW(0))
@@ -2235,9 +2235,9 @@ EVT_BEGIN(thief_talk)
                 ELSE
                 CALL(evt_msg_print, 0, STRING("mac_0_065_02"), 0, STRING("me"))
             END_IF
-            SET_VALUE(GSWF(1198), 1)
+            SET_VALUE(GSWF_GOR_THIEF_FOUND_IN_HIDEOUT, 1)
             ELSE
-            IF_INT_EQUAL(GSWF(1199), 0)
+            IF_INT_EQUAL(GSWF_GOR_THIEF_HIDEOUT_LEFT, 0)
                 CALL(evt_msg_print, 0, STRING("mac_0_065_03"), 0, STRING("me"))
                 ELSE
                 CALL(evt_msg_print, 0, STRING("mac_0_065_04"), 0, STRING("me"))
@@ -3332,8 +3332,8 @@ static EVT_BEGIN(evt_door_04_close)
     CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
     CALL(evt_snd_envon, PSND_CONTINUE | PSND_UNSILENT, 0)
     CALL(evt_snd_env_lpf, 0, 0)
-    IF_INT_EQUAL(GSWF(1198), 1)
-        SET_VALUE(GSWF(1199), 1)
+    IF_INT_EQUAL(GSWF_GOR_THIEF_FOUND_IN_HIDEOUT, 1)
+        SET_VALUE(GSWF_GOR_THIEF_HIDEOUT_LEFT, 1)
     END_IF
     RETURN
 EVT_END()
@@ -3496,8 +3496,8 @@ static ShopperData35 shopper_data = {
 };
 
 EVT_BEGIN(gor_01_shop_setup)
-    IF_INT_EQUAL(GSWF(1188), 0)
-        IF_INT_EQUAL(GSWF(1191), 0)
+    IF_INT_EQUAL(GSWF_GOR_ZESS_T_GOT_CONTACT_LENS, 0)
+        IF_INT_EQUAL(GSWF_GOR_CONTACT_LENS_ARRIVED, 0)
             CALL(evt_shop_setup, PTR(obj_list), PTR(goods_list), PTR(&shopper_data), PTR(trade_list))
             ELSE
             CALL(evt_shop_setup, PTR(obj_list), PTR(goods_list2), PTR(&shopper_data), PTR(trade_list))
@@ -4055,7 +4055,7 @@ EVT_BEGIN(christine_nakama_after)
         RETURN
     END_IF
     LOOP(0)
-        IF_INT_EQUAL(GSWF(236), 1)
+        IF_INT_EQUAL(GSWF_MAIN_SAVED_SINCE_GOOMBELLA_JOINED, 1)
             RETURN
         END_IF
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -4076,7 +4076,7 @@ EVT_BEGIN(christine_nakama_after)
         CALL(evt_mario_set_dir, 270, 200, 0)
     END_INLINE_EVENT
     CALL(evt_msg_print, 0, STRING("mac_0_061_01"), 0, STRING("party"))
-    SET_VALUE(GSWF(1200), 1)
+    SET_VALUE(GSWF_GOR_01_SAVE_REMINDER_DONE, 1)
     CALL(evt_party_run, 0)
     CALL(evt_mario_key_onoff, 1)
     RETURN
@@ -4144,7 +4144,7 @@ EVT_BEGIN(ultrahammer_check)
     CALL(evt_mobj_get_position, STRING("mobj_box00"), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxoff, LW(10))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG6_TBOX_FALL2"), LW(0), LW(1), LW(2), 0)
-    SET_VALUE(GSWF(1196), 1)
+    SET_VALUE(GSWF_GOR_01_ULTRA_HAMMER_CHEST_FELL, 1)
     RETURN
 EVT_END()
 
@@ -4842,7 +4842,7 @@ EVT_BEGIN(iri_16_tyutyu_talk)
                         CALL(evt_item_entry, STRING("mb"), ITEM_ATTACK_FX_B, 0, -1000, 0, ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
                         CALL(evt_item_get_item, STRING("mb"))
                         CALL(evt_item_get_item_end_wait, STRING("mb"))
-                        SET_VALUE(GSWF(1201), 1)
+                        SET_VALUE(GSWF_GOR_01_MS_MOWZ_ATTACK_FX_B, 1)
                         ELSE
                         CALL(evt_msg_print_add, 0, STRING("irai_16_05_1"))
                         BEGIN_INLINE_EVENT
@@ -4883,7 +4883,7 @@ EVT_BEGIN(iri_16_tyutyu_talk)
                         CALL(evt_npc_wait_pera, STRING("チュチュリーナ"))
                         CALL(evt_npc_flag_onoff, 0, STRING("チュチュリーナ"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
                         CALL(evt_msg_print, 0, STRING("irai_16_05_2"), 0, STRING("チュチュリーナ"))
-                        CALL(evt_item_entry, STRING("iri_16"), ITEM_ATTACK_FX_B, -150, 153, -120, ITEM_TYPE_STILL, GSWF(1201), 0)
+                        CALL(evt_item_entry, STRING("iri_16"), ITEM_ATTACK_FX_B, -150, 153, -120, ITEM_TYPE_STILL, GSWF_GOR_01_MS_MOWZ_ATTACK_FX_B, 0)
                     END_IF
                     CALL(evt_msg_print, 0, STRING("irai_16_06"), 0, STRING("チュチュリーナ"))
                     CALL(evt_npc_flag_onoff, 1, STRING("チュチュリーナ"), NPC_FLAG_NO_HIT)
@@ -5188,25 +5188,25 @@ EVT_BEGIN(gor_01_init_evt)
         CALL_CHILD(christine_nakama_init)
     END_IF
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG0_07_GOOMBELLA_JOINS)
-        IF_INT_EQUAL(GSWF(1200), 0)
+        IF_INT_EQUAL(GSWF_GOR_01_SAVE_REMINDER_DONE, 0)
             SPAWN_EVENT(christine_nakama_after)
         END_IF
     END_IF
-    IF_INT_EQUAL(GSWF(1191), 0)
-        IF_INT_EQUAL(GSWF(1189), 1)
+    IF_INT_EQUAL(GSWF_GOR_CONTACT_LENS_ARRIVED, 0)
+        IF_INT_EQUAL(GSWF_GOR_CONTACT_LENS_ORDERED_EARLY, 1)
             IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG1_17_FATHER_SON_REUNITED)
-                SET_VALUE(GSWF(1191), 1)
+                SET_VALUE(GSWF_GOR_CONTACT_LENS_ARRIVED, 1)
             END_IF
         END_IF
     END_IF
-    IF_INT_EQUAL(GSWF(1191), 0)
+    IF_INT_EQUAL(GSWF_GOR_CONTACT_LENS_ARRIVED, 0)
         IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG1_17_FATHER_SON_REUNITED)
-            SET_VALUE(LW(0), GSWF(1189))
-            ADD(LW(0), GSWF(1190))
+            SET_VALUE(LW(0), GSWF_GOR_CONTACT_LENS_ORDERED_EARLY)
+            ADD(LW(0), GSWF_GOR_CONTACT_LENS_ORDERED_LATE)
             IF_INT_NOT_EQUAL(LW(0), 0)
-                CALL(evt_sub_load_progresstime, GSW(108), LW(0))
+                CALL(evt_sub_load_progresstime, GSW_GOR_CONTACT_LENS_ORDER_TIME, LW(0))
                 IF_INT_GREATER_OR_EQUAL(LW(0), 90000)
-                    SET_VALUE(GSWF(1191), 1)
+                    SET_VALUE(GSWF_GOR_CONTACT_LENS_ARRIVED, 1)
                 END_IF
             END_IF
         END_IF
@@ -5241,7 +5241,7 @@ EVT_BEGIN(gor_01_init_evt)
 #endif
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_jewel"), 0, PTR(marco_jewel), GW(8))
     END_IF
-    IF_INT_EQUAL(GSWF(1188), 0)
+    IF_INT_EQUAL(GSWF_GOR_ZESS_T_GOT_CONTACT_LENS, 0)
         SET_VALUE(LW(0), PTR(&door_data_01))
     ELSE
         SET_VALUE(LW(0), PTR(&door_data_01_01))
@@ -5251,7 +5251,7 @@ EVT_BEGIN(gor_01_init_evt)
     CALL_CHILD(evt_door_entry)
     SET_VALUE(LW(0), PTR(&door_data_02_f1))
     IF_INT_LESS(GSW_STORY_PROGRESS, STG4_32_CHATTING_WITH_FLAVIO)
-        IF_INT_EQUAL(GSWF(1191), 1)
+        IF_INT_EQUAL(GSWF_GOR_CONTACT_LENS_ARRIVED, 1)
             SET_VALUE(LW(0), PTR(&door_data_02_f1_01))
         END_IF
     END_IF
@@ -5283,21 +5283,21 @@ EVT_BEGIN(gor_01_init_evt)
         SPAWN_EVENT(iri_09_init)
         SPAWN_EVENT(iri_16_init)
         IF_INT_EQUAL(GSWF_TROUBLE_DONE(TROUBLE_ELUSIVE_BADGE), 1)
-            CALL(evt_item_entry, STRING("iri_16"), ITEM_ATTACK_FX_B, -150, 153, -120, ITEM_TYPE_STILL, GSWF(1201), 0)
+            CALL(evt_item_entry, STRING("iri_16"), ITEM_ATTACK_FX_B, -150, 153, -120, ITEM_TYPE_STILL, GSWF_GOR_01_MS_MOWZ_ATTACK_FX_B, 0)
         END_IF
         IF_INT_EQUAL(GSWF_TROUBLE_DONE(TROUBLE_SEEKING_LEGENDARY_BOOK), 1)
-            CALL(evt_item_entry, STRING("iri_18"), ITEM_HONEY_SHROOM, -440, 30, -80, ITEM_TYPE_STILL, GSWF(1202), 0)
+            CALL(evt_item_entry, STRING("iri_18"), ITEM_HONEY_SHROOM, -440, 30, -80, ITEM_TYPE_STILL, GSWF_GOR_01_ZESS_T_HONEY_SHROOM, 0)
         END_IF
     END_IF
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_keizi_mae"), 0, PTR(keijiban_omote_joho), 0)
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_keizi_ura"), 0, PTR(keijiban_ura_joho), 0)
     CALL(evt_pouch_check_item, ITEM_ULTRA_HAMMER, LW(0))
     IF_INT_EQUAL(LW(0), 0)
-        IF_INT_EQUAL(GSWF(1196), 0)
-            CALL(evt_mobj_itembox, STRING("mobj_box00"), 340, 110, -20, MOBJ_ITEMBOX_BIG, 0, PTR(ultrahammer_get), GSWF(1195))
+        IF_INT_EQUAL(GSWF_GOR_01_ULTRA_HAMMER_CHEST_FELL, 0)
+            CALL(evt_mobj_itembox, STRING("mobj_box00"), 340, 110, -20, MOBJ_ITEMBOX_BIG, 0, PTR(ultrahammer_get), GSWF_GOR_01_ULTRA_HAMMER_CHEST)
             SPAWN_EVENT(ultrahammer_check)
         ELSE
-            CALL(evt_mobj_itembox, STRING("mobj_box00"), 275, 0, 75, MOBJ_ITEMBOX_BIG, 0, PTR(ultrahammer_get), GSWF(1195))
+            CALL(evt_mobj_itembox, STRING("mobj_box00"), 275, 0, 75, MOBJ_ITEMBOX_BIG, 0, PTR(ultrahammer_get), GSWF_GOR_01_ULTRA_HAMMER_CHEST)
         END_IF
     END_IF
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_saku"), MAP_OBJ_FLAG_CLIP)
@@ -6429,14 +6429,14 @@ EVT_BEGIN(cooking_evt)
                     CALL(evt_item_entry, STRING("hk"), ITEM_HONEY_SHROOM, 0, -1000, 0, ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
                     CALL(evt_item_get_item, STRING("hk"))
                     CALL(evt_item_get_item_end_wait, STRING("hk"))
-                    SET_VALUE(GSWF(1202), 1)
+                    SET_VALUE(GSWF_GOR_01_ZESS_T_HONEY_SHROOM, 1)
                     ELSE
                     CALL(evt_msg_print_add, 0, STRING("irai_18_006_1"))
                     CALL(evt_npc_set_ry, STRING("ナンシー"), 270)
                     WAIT_FRAMES(1)
                     CALL(evt_npc_wait_pera, STRING("ナンシー"))
                     WAIT_MS(300)
-                    CALL(evt_item_entry, STRING("iri_18"), ITEM_HONEY_SHROOM, -440, 30, -80, ITEM_TYPE_STILL, GSWF(1202), 0)
+                    CALL(evt_item_entry, STRING("iri_18"), ITEM_HONEY_SHROOM, -440, 30, -80, ITEM_TYPE_STILL, GSWF_GOR_01_ZESS_T_HONEY_SHROOM, 0)
                     WAIT_MS(300)
                     CALL(evt_npc_set_ry, STRING("ナンシー"), 90)
                     WAIT_FRAMES(1)
@@ -6458,14 +6458,14 @@ EVT_BEGIN(cooking_evt)
             END_IF
         END_IF
     END_IF
-    IF_INT_EQUAL(GSWF(1197), 0)
+    IF_INT_EQUAL(GSWF_GOR_ZESS_T_COOKING_INTRO_DONE, 0)
         IF_INT_NOT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_SEEKING_LEGENDARY_BOOK)
             IF_INT_EQUAL(GSWF_TROUBLE_DONE(TROUBLE_SEEKING_LEGENDARY_BOOK), 0)
                 CALL(evt_msg_print, 0, STRING("gor_01_cook_000"), 0, STRING("ナンシー"))
             END_IF
         END_IF
         CALL(evt_msg_print_add, 0, STRING("gor_01_cook_001"))
-        SET_VALUE(GSWF(1197), 1)
+        SET_VALUE(GSWF_GOR_ZESS_T_COOKING_INTRO_DONE, 1)
         ELSE
         IF_INT_EQUAL(LSWF(1), 0)
             SET_VALUE(LF(0), 0)
@@ -6607,7 +6607,7 @@ EVT_BEGIN(cooking_evt)
     CALL(evt_msg_print_add, 0, STRING("gor_01_cook_022"))
     CALL(evt_item_entry, STRING("cook"), LW(2), 0, -1000, 0, ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
     CALL(evt_item_get_item, STRING("cook"))
-    SET_VALUE(GSWF(64), 1)
+    SET_VALUE(GSWF_GOR_ZESS_T_DISH_RECEIVED, 1)
     CALL(cooking_flag, LW(2))
     CALL(evt_msg_print, 0, STRING("gor_01_cook_023"), 0, STRING("ナンシー"))
     GOTO(5)

@@ -426,7 +426,7 @@ static const char* fukitobashi_tbl[] = {
 EVT_BEGIN(gra_05_init_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG4_GRA1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG4_GRA1"))
-    CALL(evt_mobj_brick, STRING("blk00"), -475, 60, 25, ITEM_NULL, MOBJ_BRICK_HIDDEN_TEN_COIN, 0, GSWF(2085))
+    CALL(evt_mobj_brick, STRING("blk00"), -475, 60, 25, ITEM_NULL, MOBJ_BRICK_HIDDEN_TEN_COIN, 0, GSWF_GRA_05_HIDDEN_TEN_COIN_BRICK)
     CALL(evt_mobj_powerupblk, STRING("blk01"), 630, 60, 40, 0, GSWF_SHINE_23, 0)
     CALL(evt_kagemario_init)
     SET_VALUE(LW(0), PTR(bero_entry_data))
@@ -446,7 +446,7 @@ EVT_BEGIN(gra_05_init_evt)
     END_IF
     IF_INT_LESS(GSW_STORY_PROGRESS, STG4_06_02_THROUGH_THE_HOLE)
         CALL(camera_curve_off)
-        CALL(evt_mobj_breaking_floor, STRING("breaking_floor"), -250, -7, 0, 0, PTR(evt_break_floor), GSWF(2080))
+        CALL(evt_mobj_breaking_floor, STRING("breaking_floor"), -250, -7, 0, 0, PTR(evt_break_floor), GSWF_GRA_05_BREAKING_FLOOR_BROKEN)
     END_IF
     SPAWN_EVENT(PTR(evt_gra_05iwa_move_init))
     IF_INT_LESS(GSW_STORY_PROGRESS, STG4_07_TRICK_ROCK)

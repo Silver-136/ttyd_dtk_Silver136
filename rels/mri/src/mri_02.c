@@ -109,7 +109,7 @@ static BeroEntry bero_entry_data[] = {
 static EVT_BEGIN(evt_ueki_04)
     CALL(evt_item_delete_check, STRING("item_ueki_04"), LW(0))
     IF_INT_EQUAL(LW(0), 1)
-        CALL(evt_item_entry, STRING("item_ueki_04"), ITEM_POWER_PUNCH, 100, 0, -20, ITEM_TYPE_SCATTER_NO_PICKUP, GSWF(2831), 0)
+        CALL(evt_item_entry, STRING("item_ueki_04"), ITEM_POWER_PUNCH, 100, 0, -20, ITEM_TYPE_SCATTER_NO_PICKUP, GSWF_MRI_02_POWER_PUNCH_PLANT, 0)
     END_IF
     RETURN
 EVT_END()
@@ -250,7 +250,7 @@ EVT_BEGIN(dokan_init)
     LOOP(0)
         CALL(getSwitch, LW(0))
         IF_INT_EQUAL(LW(0), 1)
-            IF_INT_EQUAL(GSWF(2830), 1)
+            IF_INT_EQUAL(GSWF_MRI_02_PUNI_ORB_PLACED, 1)
                 CALL_CHILD(PTR(dokan_event))
                 BREAK_LOOP
             END_IF
@@ -316,7 +316,7 @@ static EVT_BEGIN(yuka_move)
         END_IF
         SET_FLOAT_VALUE(LW(0), FLOAT(0.0f))
         SUBTRACT_FLOAT(LW(0), LW(11))
-        IF_INT_EQUAL(GSWF(2830), 1)
+        IF_INT_EQUAL(GSWF_MRI_02_PUNI_ORB_PLACED, 1)
             CALL(setPuniWeight, LW(0))
             ELSE
             CALL(setPuniWeight, 0)
@@ -332,7 +332,7 @@ EVT_END()
 
 static EVT_BEGIN(punipuni_ball00_init)
     CALL_CHILD(PTR(mri_punipuni_setup))
-    IF_INT_EQUAL(GSWF(2830), 1)
+    IF_INT_EQUAL(GSWF_MRI_02_PUNI_ORB_PLACED, 1)
         CALL(evt_item_set_position, LW(10), 0, 30, -68)
         CALL(evt_target_flag_onoff, LW(11), 0, 3)
         ELSE
@@ -345,7 +345,7 @@ EVT_END()
 
 static EVT_BEGIN(punipuni_ball00)
     CALL(evt_mario_key_onoff, 0)
-    IF_INT_EQUAL(GSWF(2830), 0)
+    IF_INT_EQUAL(GSWF_MRI_02_PUNI_ORB_PLACED, 0)
         CALL_CHILD(PTR(mri_punipuni_itemselect))
         IF_INT_EQUAL(LW(1), 0)
             GOTO(100)
@@ -354,11 +354,11 @@ static EVT_BEGIN(punipuni_ball00)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_sui_hikari"), MAP_OBJ_FLAG_HIDDEN)
         SET_VALUE(GF(15), 1)
         CALL_CHILD(PTR(mri_punipuni_itemset))
-        SET_VALUE(GSWF(2830), 1)
+        SET_VALUE(GSWF_MRI_02_PUNI_ORB_PLACED, 1)
         WAIT_MS(500)
         SET_VALUE(GF(15), 0)
         ELSE
-        SET_VALUE(GSWF(2830), 0)
+        SET_VALUE(GSWF_MRI_02_PUNI_ORB_PLACED, 0)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_sui_hikari"), MAP_OBJ_FLAG_HIDDEN)
         CALL_CHILD(PTR(mri_punipuni_itemremove))
     END_IF

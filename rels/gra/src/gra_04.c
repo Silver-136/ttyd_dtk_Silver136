@@ -242,7 +242,7 @@ EVT_BEGIN(gra_04_init_evt)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_futa"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_futa"), 0, 0)
     END_IF
-    CALL(evt_mobj_badgeblk, STRING("m"), 250, 60, -20, ITEM_HAMMER_THROW, 0, GSWF(2086), 1)
+    CALL(evt_mobj_badgeblk, STRING("m"), 250, 60, -20, ITEM_HAMMER_THROW, 0, GSWF_GRA_04_HAMMER_THROW_BADGE_BLOCK, 1)
     RETURN
 EVT_END()
 

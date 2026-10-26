@@ -64,7 +64,7 @@ static EVT_BEGIN(evt_dakuto)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_30_04_AIR_DUCT_EXIT)
         SET_VALUE(GSW_STORY_PROGRESS, STG3_30_04_AIR_DUCT_EXIT)
         ELSE
-        SET_VALUE(GSWF(2501), 1)
+        SET_VALUE(GSWF_TOU_13_DUCT_EXIT_REOPENED, 1)
     END_IF
     CALL(evt_exit_case_evt)
     RETURN
@@ -158,7 +158,7 @@ EVT_BEGIN(tou_13_init_evt)
         CASE_LESS(STG3_34_RETURN_TO_ROGUEPORT)
         SET_VALUE(LF(0), 1)
         CASE_DEFAULT
-        IF_INT_EQUAL(GSWF(2501), 0)
+        IF_INT_EQUAL(GSWF_TOU_13_DUCT_EXIT_REOPENED, 0)
             SET_VALUE(LF(0), 0)
             ELSE
             SET_VALUE(LF(0), 1)

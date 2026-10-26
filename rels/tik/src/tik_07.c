@@ -189,10 +189,10 @@ static BeroEntry bero_entry_data2[] = {
 };
 
 EVT_BEGIN(tik_07_down_evt)
-    IF_INT_EQUAL(GSWF(1223), 0)
+    IF_INT_EQUAL(GSWF_GOR_03_DROP_TO_TIK_07_PENDING, 0)
         RETURN
     END_IF
-    SET_VALUE(GSWF(1223), 0)
+    SET_VALUE(GSWF_GOR_03_DROP_TO_TIK_07_PENDING, 0)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_cont_onoff, 0)
     CALL(evt_party_cont_onoff, 0, 0)

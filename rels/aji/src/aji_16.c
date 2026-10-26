@@ -313,7 +313,7 @@ static EVT_BEGIN(peach_evt_stg2)
     CALL(evt_cam3d_evt_off, 1000, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
     SPAWN_EVENT(PTR(peach_evt_stg2_1))
-    SET_VALUE(GSWF(4202), 1)
+    SET_VALUE(GSWF_AJI_16_PEACH_STG2_SCENE_SEEN, 1)
     CALL(evt_mario_key_onoff, 1)
     RETURN
 EVT_END()
@@ -417,12 +417,12 @@ EVT_BEGIN(aji_16_init_evt)
         SPAWN_EVENT(PTR(peach_evt_stg1))
     END_IF
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG1_18_PEACH_CAUGHT)
-        IF_INT_EQUAL(GSWF(4199), 1)
+        IF_INT_EQUAL(GSWF_AJI_15_VISITED, 1)
             SPAWN_EVENT(PTR(peach_evt_stg1_1))
         END_IF
     END_IF
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG2_25_AFTER_THE_BOSS_BATTLE)
-        IF_INT_EQUAL(GSWF(4202), 0)
+        IF_INT_EQUAL(GSWF_AJI_16_PEACH_STG2_SCENE_SEEN, 0)
             SPAWN_EVENT(PTR(peach_evt_stg2))
             ELSE
             SPAWN_EVENT(PTR(peach_evt_stg2_1))

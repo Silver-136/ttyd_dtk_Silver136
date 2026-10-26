@@ -112,7 +112,7 @@ EVT_BEGIN(pik_03_init_evt)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG6_53_THE_REAL_GARNET_STAR)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("dai_a"), 0, PTR(evt_daiza), 0)
     END_IF
-    CALL(evt_item_entry, STRING("item01"), ITEM_L_EMBLEM, -305, 330, -990, ITEM_TYPE_STILL, GSWF(3277), 0)
+    CALL(evt_item_entry, STRING("item01"), ITEM_L_EMBLEM, -305, 330, -990, ITEM_TYPE_STILL, GSWF_PIK_03_L_EMBLEM, 0)
     CALL(evt_mobj_powerupblk, STRING("pblk00"), -265, 290, 550, 0, GSWF_SHINE_39, 0)
     CALL(evt_map_entry_airport_harbor, 0, STRING("hikou"), STRING("a_hi1"))
     CALL(evt_bero_get_entername, LW(0))

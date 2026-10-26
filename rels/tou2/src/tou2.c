@@ -771,7 +771,7 @@ USER_FUNC(evt_tou_get_fighter_info) {
 
 static USER_FUNC(evt_tou_get_next_match) {
     EvtWord* args = event->args;
-    BOOL reverse = evtGetValue(event, GSWF_GLITZ_PIT_WON_LAST_MATCH);
+    BOOL reverse = evtGetValue(event, GSWF_GLITZ_PIT_CONDITION_KEPT);
     s32 list[32];
     s32 i;
     s32 rank;
@@ -1152,29 +1152,29 @@ static void rankingInit(void) {
         rank_wp->entries[FIGHTER_SPINIA].flags |= RANK_HIDDEN;
 
         // If we're past this point in the story, hide King K
-        if (evtGetValue(NULL, GSWF(2412))) {
+        if (evtGetValue(NULL, GSWF_GLITZ_PIT_KP_KOOPAS_RETIRED)) {
             rank_wp->entries[FIGHTER_KP_KOOPAS].flags |= RANK_HIDDEN;
         }
 
         // If we're past this story, Sir Swoop has been introduced
-        if (evtGetValue(NULL, GSWF(2413))) {
+        if (evtGetValue(NULL, GSWF_GLITZ_PIT_SIR_SWOOP_JOINED)) {
             rank_wp->entries[FIGHTER_SWOOPS].flags &= ~RANK_HIDDEN;
 
-            if (!evtGetValue(NULL, GSWF(2530))) {
+            if (!evtGetValue(NULL, GSWF_GLITZ_PIT_WINGS_OF_NIGHT_PLACED)) {
                 rank_wp->entries[FIGHTER_SWOOPS].flags |= RANK_BELOW;
             }
-            evtSetValue(NULL, GSWF(2530), TRUE);
+            evtSetValue(NULL, GSWF_GLITZ_PIT_WINGS_OF_NIGHT_PLACED, TRUE);
         }
 
         // If we're past this point in the story, Bandy Andy got "retired" and The Destructors were added.
-        if (evtGetValue(NULL, GSWF(2421))) {
+        if (evtGetValue(NULL, GSWF_GLITZ_PIT_DESTRUCTORS_JOINED)) {
             rank_wp->entries[FIGHTER_BANDITS].flags |= RANK_HIDDEN;
             rank_wp->entries[FIGHTER_SPINIA].flags &= ~RANK_HIDDEN;
 
-            if (!evtGetValue(NULL, GSWF(2531))) {
+            if (!evtGetValue(NULL, GSWF_GLITZ_PIT_DESTRUCTORS_PLACED)) {
                 rank_wp->entries[FIGHTER_SPINIA].flags |= RANK_BELOW;
             }
-            evtSetValue(NULL, GSWF(2531), TRUE);
+            evtSetValue(NULL, GSWF_GLITZ_PIT_DESTRUCTORS_PLACED, TRUE);
         }
     }
     rankingControll();

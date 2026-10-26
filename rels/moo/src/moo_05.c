@@ -91,7 +91,7 @@ EVT_END()
 
 static EVT_BEGIN(rock_evt0)
 #ifdef VERSION_G8ME01
-    SET_VALUE(GSWF(4031), 1)
+    SET_VALUE(GSWF_MOO_05_ROCK_07_BLOWN, 1)
 #else
     CALL(evt_mario_key_onoff, 0)
 #endif
@@ -99,7 +99,7 @@ static EVT_BEGIN(rock_evt0)
     SET_VALUE(LW(11), STRING("A_iwa_07"))
     CALL_CHILD(PTR(rock_main))
 #ifndef VERSION_G8ME01
-    SET_VALUE(GSWF(4031), 1)
+    SET_VALUE(GSWF_MOO_05_ROCK_07_BLOWN, 1)
     CALL(evt_mario_key_onoff, 1)
 #endif
     CALL(evt_exit_case_evt)
@@ -116,7 +116,7 @@ EVT_BEGIN(moo_05_init_evt)
     CALL(evt_map_playanim, STRING("hosi_02"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_map_playanim, STRING("hosi_03"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_paper_entry, STRING("OFF_d_bom_ver2"))
-    IF_INT_EQUAL(GSWF(4031), 0)
+    IF_INT_EQUAL(GSWF_MOO_05_ROCK_07_BLOWN, 0)
         CALL(evt_run_case_evt, CASE_BOBBERY, 1, STRING("A_iwa_07"), 0, PTR(rock_evt0), 0)
         ELSE
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_iwa_07"), MAP_OBJ_FLAG_HIDDEN)

@@ -597,8 +597,8 @@ EVT_BEGIN(jin_07_init_evt)
     CALL(evt_npc_setup, PTR(npcEnt))
     SPAWN_EVENT(PTR(jin_07_juyo_oumu_vivian))
     CALL(evt_item_entry, STRING("item_00"), ITEM_STAR_PIECE, 220, 75, -20, ITEM_TYPE_STILL, GSWF_STARPIECE_69, 0)
-    IF_INT_NOT_EQUAL(GSWF(2079), 0)
-        SET_VALUE(GSWF(2079), 0)
+    IF_INT_NOT_EQUAL(GSWF_JIN_SCRIPTED_ENTRY_PENDING, 0)
+        SET_VALUE(GSWF_JIN_SCRIPTED_ENTRY_PENDING, 0)
         BEGIN_INLINE_EVENT
             CALL(evt_mario_key_onoff, 0)
             CALL(evt_mario_set_pos, 0, 365, -50)
@@ -613,14 +613,14 @@ EVT_BEGIN(jin_07_init_evt)
             CALL(evt_mario_key_onoff, 1)
         END_INLINE_EVENT
     END_IF
-    IF_INT_EQUAL(GSWF(2231), 1)
+    IF_INT_EQUAL(GSWF_JIN_08_DOOR_UNLOCKED, 1)
         SET_VALUE(LW(0), STRING("w_bero_1"))
         CALL_CHILD(PTR(bero_case_switch_on))
         ELSE
         SET_VALUE(LW(0), STRING("w_bero_1"))
         CALL_CHILD(PTR(bero_case_switch_off))
     END_IF
-    IF_INT_EQUAL(GSWF(2231), 0)
+    IF_INT_EQUAL(GSWF_JIN_08_DOOR_UNLOCKED, 0)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("w_bero_1"), 0, PTR(evt_locked), 0)
     END_IF
     IF_INT_LESS(GSW_STORY_PROGRESS, STG4_09_02_BOO_BOX)

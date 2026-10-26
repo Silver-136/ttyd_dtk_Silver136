@@ -375,7 +375,7 @@ EVT_BEGIN(miyageya_talk)
                 CALL(evt_item_entry, STRING("sc"), ITEM_CHOCO_CAKE, 0, -1000, 0, ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
                 CALL(evt_item_get_item, STRING("sc"))
                 CALL(evt_item_get_item_end_wait, STRING("sc"))
-                SET_VALUE(GSWF(3278), 1)
+                SET_VALUE(GSWF_PIK_01_CHOCO_CAKE, 1)
                 CALL(evt_npc_move_position, STRING("土産屋"), LW(0), LW(2), 0, 50, 0)
                 CALL(evt_npc_flag_onoff, 0, STRING("土産屋"), NPC_FLAG_NO_HIT)
                 ELSE
@@ -384,7 +384,7 @@ EVT_BEGIN(miyageya_talk)
                 CALL(evt_npc_flag_onoff, 0, STRING("土産屋"), NPC_FLAG_NO_HIT)
                 CALL(evt_msg_print, 0, STRING("irai_27_007_1"), 0, STRING("土産屋"))
                 WAIT_MS(300)
-                CALL(evt_item_entry, STRING("iri_27"), ITEM_CHOCO_CAKE, -246, 15, 246, ITEM_TYPE_STILL, GSWF(3278), 0)
+                CALL(evt_item_entry, STRING("iri_27"), ITEM_CHOCO_CAKE, -246, 15, 246, ITEM_TYPE_STILL, GSWF_PIK_01_CHOCO_CAKE, 0)
                 WAIT_MS(300)
                 CALL(evt_msg_print, 0, STRING("irai_27_007_2"), 0, STRING("土産屋"))
             END_IF
@@ -1390,7 +1390,7 @@ EVT_BEGIN(pik_01_init_evt)
             CALL_CHILD(PTR(iri_27_npc_entry))
         END_IF
         IF_INT_EQUAL(GSWF_TROUBLE_DONE(TROUBLE_I_WANNA_MEET_LUIGI), 1)
-            CALL(evt_item_entry, STRING("iri_27"), ITEM_CHOCO_CAKE, -246, 15, 246, ITEM_TYPE_STILL, GSWF(3278), 0)
+            CALL(evt_item_entry, STRING("iri_27"), ITEM_CHOCO_CAKE, -246, 15, 246, ITEM_TYPE_STILL, GSWF_PIK_01_CHOCO_CAKE, 0)
         END_IF
     END_IF
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG9_00_EPILOGUE)

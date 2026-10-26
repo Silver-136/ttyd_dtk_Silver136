@@ -325,7 +325,7 @@ static EVT_BEGIN(chuchurina_sogu)
     SET_VALUE(LW(10), STRING("第三勢力部下"))
     SPAWN_EVENT(PTR(enemy_event_dead_event_sub))
     WAIT_MS(500)
-    CALL(evt_item_entry, STRING("item_key"), ITEM_RED_KEY, 60, 0, 0, ITEM_TYPE_SCATTER_NO_PICKUP, GSWF(2839), 0)
+    CALL(evt_item_entry, STRING("item_key"), ITEM_RED_KEY, 60, 0, 0, ITEM_TYPE_SCATTER_NO_PICKUP, GSWF_MRI_04_RED_KEY, 0)
     CALL(evt_puni_set_mode, 1, 1)
     SET_VALUE(GSW_STORY_PROGRESS, STG2_13_MS_MOWZ)
     CALL(N_evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
@@ -417,7 +417,7 @@ EVT_END()
 static EVT_BEGIN(evt_ueki_02)
     CALL(evt_item_delete_check, STRING("item_ueki_02"), LW(0))
     IF_INT_EQUAL(LW(0), 1)
-        CALL(evt_item_entry, STRING("item_ueki_02"), ITEM_COIN, 85, 0, 85, ITEM_TYPE_SCATTER_NO_PICKUP, GSWF(2838), 0)
+        CALL(evt_item_entry, STRING("item_ueki_02"), ITEM_COIN, 85, 0, 85, ITEM_TYPE_SCATTER_NO_PICKUP, GSWF_MRI_04_COIN_PLANT, 0)
     END_IF
     RETURN
 EVT_END()
@@ -469,7 +469,7 @@ EVT_BEGIN(mri_04_init_evt)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG2_MRI1"))
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG2_MRI5"))
     END_SWITCH
-    CALL(evt_mobj_itembox, STRING("mobj_box00"), -155, 0, 35, MOBJ_ITEMBOX_NORMAL, 0, PTR(item_mri_04), GSWF(2837))
+    CALL(evt_mobj_itembox, STRING("mobj_box00"), -155, 0, 35, MOBJ_ITEMBOX_NORMAL, 0, PTR(item_mri_04), GSWF_MRI_04_ULTRA_SHROOM_CHEST)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG2_12_RIVAL_ARRIVAL)
         CALL(evt_mobj_itembox, STRING("mobj_box01"), -105, 0, 70, MOBJ_ITEMBOX_NORMAL, 0, 0, 0)
         ELSE
@@ -487,7 +487,7 @@ EVT_BEGIN(mri_04_init_evt)
         SPAWN_EVENT(PTR(chuchurina_sogu))
     END_IF
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG2_13_MS_MOWZ)
-        CALL(evt_item_entry, STRING("item_key"), ITEM_RED_KEY, 60, 0, 0, ITEM_TYPE_FALL_NO_PICKUP, GSWF(2839), 0)
+        CALL(evt_item_entry, STRING("item_key"), ITEM_RED_KEY, 60, 0, 0, ITEM_TYPE_FALL_NO_PICKUP, GSWF_MRI_04_RED_KEY, 0)
     END_IF
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S"), MAP_OBJ_FLAG_CLIP)
     RETURN

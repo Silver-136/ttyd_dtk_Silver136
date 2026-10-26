@@ -2937,9 +2937,9 @@ static NpcSetupInfo npcEnt[] = {
 EVT_BEGIN(tec_talk)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_map_replayanim, 0, STRING(("moza")))
-    IF_INT_EQUAL(GSWF(4219), 0)
+    IF_INT_EQUAL(GSWF_AJI_17_TEC_FIRST_TALK_DONE, 0)
         CALL(evt_msg_print, 0, STRING(("stg7_aji_tec_00")), 0, 0)
-        SET_VALUE(GSWF(4219), 1)
+        SET_VALUE(GSWF_AJI_17_TEC_FIRST_TALK_DONE, 1)
         ELSE
         CALL(evt_msg_print, 0, STRING(("stg7_aji_tec_01")), 0, 0)
     END_IF
@@ -3011,7 +3011,7 @@ EVT_BEGIN(aji_17_init_evt)
         SPAWN_EVENT(PTR(peach_evt_stg6))
     END_IF
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG7_25_00_1_BOWSER_POSHLEY_SANCTUM)
-        IF_INT_EQUAL(GSWF(4186), 0)
+        IF_INT_EQUAL(GSWF_AJI_17_LAST_SCENE_SEEN, 0)
             CALL(evt_mario_get_party, LW(15))
             IF_INT_EQUAL(LW(15), 0)
                 CALL(evt_mario_set_party, 0, 1)
@@ -3026,7 +3026,7 @@ EVT_BEGIN(aji_17_init_evt)
                 CALL(evt_pouch_all_party_recovery)
             END_IF
 #endif
-            SET_VALUE(GSWF(4186), 1)
+            SET_VALUE(GSWF_AJI_17_LAST_SCENE_SEEN, 1)
             SPAWN_EVENT(PTR(evt_last))
             ELSE
             SPAWN_EVENT(PTR(evt_last2))

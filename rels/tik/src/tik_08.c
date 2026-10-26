@@ -32,7 +32,7 @@ EVT_END()
 
 static EVT_BEGIN(oshimodo_event)
     SPAWN_EVENT(PTR(oshimodo_event_sub))
-    SET_VALUE(GSWF(1341), 1)
+    SET_VALUE(GSWF_TIK_08_PIPE_REJECTED, 1)
     SET_VALUE(LW(0), 0)
     RETURN
 EVT_END()

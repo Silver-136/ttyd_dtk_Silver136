@@ -85,7 +85,7 @@ static EVT_BEGIN(evt_toile)
         CALL(evt_party_set_dir, 0, 90, 200)
         WAIT_MS(300)
         CALL(evt_msg_print_party, STRING("stg3_tou_422"))
-        SET_VALUE(GSWF(2383), 0)
+        SET_VALUE(GSWF_GLITZ_PIT_TITLE_MATCH_BOOKED, 0)
         SET_VALUE(GSW_STORY_PROGRESS, STG3_21_1ST_MATCH_WITH_RAWK_HAWK)
         CALL(evt_party_run, 0)
         CALL(evt_mario_key_onoff, 1)
@@ -106,8 +106,8 @@ static EVT_BEGIN(n_door_close)
 EVT_END()
 
 static EVT_BEGIN(toile_in)
-    SET_VALUE(GSWF(2384), 0)
-    SET_VALUE(GSWF(2385), 0)
+    SET_VALUE(GSWF_TOU_09_TOILET_WARP_PENDING, 0)
+    SET_VALUE(GSWF_TOU_08_TOILET_WARP_PENDING, 0)
     SPAWN_EVENT(PTR(evt_toile))
     SET_VALUE(LW(0), 0)
     RETURN
@@ -121,7 +121,7 @@ static EVT_BEGIN(toile_out)
     END_INLINE_EVENT
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG3_TOILET1"), LW(0), LW(1), LW(2), 0)
-    SET_VALUE(GSWF(2385), 1)
+    SET_VALUE(GSWF_TOU_08_TOILET_WARP_PENDING, 1)
     SET_VALUE(LW(0), 0)
     RETURN
 EVT_END()
@@ -174,7 +174,7 @@ EVT_END()
 EVT_BEGIN(talk_togenoko)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
         IF_INT_EQUAL(GSW_STORY_PROGRESS, STG3_21_1ST_MATCH_WITH_RAWK_HAWK)
-            IF_INT_EQUAL(GSWF(2399), 0)
+            IF_INT_EQUAL(GSWF_TOU_RAWK_HAWK_OPENING_SEEN, 0)
                 CALL(evt_msg_print, 0, STRING("stg3_npc_08_01_13_01"), 0, 0)
                 RETURN
             END_IF
@@ -203,8 +203,8 @@ EVT_BEGIN(talk_togenoko)
             CALL(evt_msg_print, 0, STRING("stg3_npc_08_01_13"), 0, 0)
         END_SWITCH
         ELSE
-        IF_INT_EQUAL(GSWF(2505), 0)
-            IF_INT_EQUAL(GSWF(2503), 0)
+        IF_INT_EQUAL(GSWF_TOU_REMATCH_DEMOTED_TO_MINORS, 0)
+            IF_INT_EQUAL(GSWF_TOU_CHAMPION_TITLE_REGAINED, 0)
                 CALL(evt_msg_print, 0, STRING("stg3_npc_re_040"), 0, 0)
                 ELSE
                 CALL(evt_msg_print, 0, STRING("stg3_npc_re_041_1"), 0, 0)
@@ -225,7 +225,7 @@ EVT_END()
 EVT_BEGIN(talk_togemet)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
         IF_INT_EQUAL(GSW_STORY_PROGRESS, STG3_21_1ST_MATCH_WITH_RAWK_HAWK)
-            IF_INT_EQUAL(GSWF(2399), 0)
+            IF_INT_EQUAL(GSWF_TOU_RAWK_HAWK_OPENING_SEEN, 0)
                 CALL(evt_msg_print, 0, STRING("stg3_npc_08_02_13_01"), 0, 0)
                 RETURN
             END_IF
@@ -254,8 +254,8 @@ EVT_BEGIN(talk_togemet)
             CALL(evt_msg_print, 0, STRING("stg3_npc_08_02_13"), 0, 0)
         END_SWITCH
         ELSE
-        IF_INT_EQUAL(GSWF(2505), 0)
-            IF_INT_EQUAL(GSWF(2503), 0)
+        IF_INT_EQUAL(GSWF_TOU_REMATCH_DEMOTED_TO_MINORS, 0)
+            IF_INT_EQUAL(GSWF_TOU_CHAMPION_TITLE_REGAINED, 0)
                 CALL(evt_msg_print, 0, STRING("stg3_npc_re_045"), 0, 0)
                 ELSE
                 CALL(evt_msg_print, 0, STRING("stg3_npc_re_046_1"), 0, 0)
@@ -276,7 +276,7 @@ EVT_END()
 EVT_BEGIN(talk_hammerbros)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
         IF_INT_EQUAL(GSW_STORY_PROGRESS, STG3_21_1ST_MATCH_WITH_RAWK_HAWK)
-            IF_INT_EQUAL(GSWF(2399), 0)
+            IF_INT_EQUAL(GSWF_TOU_RAWK_HAWK_OPENING_SEEN, 0)
                 CALL(evt_msg_print, 0, STRING("stg3_npc_08_03_13_01"), 0, 0)
                 RETURN
             END_IF
@@ -305,8 +305,8 @@ EVT_BEGIN(talk_hammerbros)
             CALL(evt_msg_print, 0, STRING("stg3_npc_08_03_13"), 0, 0)
         END_SWITCH
         ELSE
-        IF_INT_EQUAL(GSWF(2505), 0)
-            IF_INT_EQUAL(GSWF(2503), 0)
+        IF_INT_EQUAL(GSWF_TOU_REMATCH_DEMOTED_TO_MINORS, 0)
+            IF_INT_EQUAL(GSWF_TOU_CHAMPION_TITLE_REGAINED, 0)
                 CALL(evt_msg_print, 0, STRING("stg3_npc_re_050"), 0, 0)
                 ELSE
                 CALL(evt_msg_print, 0, STRING("stg3_npc_re_051_1"), 0, 0)
@@ -327,7 +327,7 @@ EVT_END()
 static EVT_BEGIN(talk_uranoko)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
         IF_INT_EQUAL(GSW_STORY_PROGRESS, STG3_21_1ST_MATCH_WITH_RAWK_HAWK)
-            IF_INT_EQUAL(GSWF(2399), 0)
+            IF_INT_EQUAL(GSWF_TOU_RAWK_HAWK_OPENING_SEEN, 0)
                 CALL(evt_msg_print, 0, STRING("stg3_npc_08_04_13_01"), 0, 0)
                 RETURN
             END_IF
@@ -356,8 +356,8 @@ static EVT_BEGIN(talk_uranoko)
             CALL(evt_msg_print, 0, STRING("stg3_npc_08_04_12"), 0, 0)
         END_SWITCH
         ELSE
-        IF_INT_EQUAL(GSWF(2505), 0)
-            IF_INT_EQUAL(GSWF(2503), 0)
+        IF_INT_EQUAL(GSWF_TOU_REMATCH_DEMOTED_TO_MINORS, 0)
+            IF_INT_EQUAL(GSWF_TOU_CHAMPION_TITLE_REGAINED, 0)
                 CALL(evt_msg_print, 0, STRING("stg3_npc_re_055"), 0, 0)
                 ELSE
                 CALL(evt_msg_print, 0, STRING("stg3_npc_re_056_1"), 0, 0)
@@ -711,7 +711,7 @@ static EVT_BEGIN(evt_1st_leagu)
 EVT_END()
 
 EVT_BEGIN(evt_toile_door)
-    IF_INT_EQUAL(GSWF(2383), 0)
+    IF_INT_EQUAL(GSWF_GLITZ_PIT_TITLE_MATCH_BOOKED, 0)
         IF_INT_EQUAL(GSWF_GLITZ_PIT_MATCH_RESERVED, 1)
             CALL(evt_mario_key_onoff, 0)
             CALL(evt_msg_print, 0, STRING("stg3_tou_t_00"), 0, 0)
@@ -731,7 +731,7 @@ EVT_BEGIN(evt_toile_door)
         CALL(evt_mario_key_onoff, 1)
         RETURN
     END_IF
-    IF_INT_EQUAL(GSWF(2399), 1)
+    IF_INT_EQUAL(GSWF_TOU_RAWK_HAWK_OPENING_SEEN, 1)
         CALL(evt_mario_key_onoff, 0)
         CALL(evt_msg_print, 0, STRING("stg3_tou_t_00"), 0, 0)
         CALL(evt_mario_key_onoff, 1)
@@ -900,7 +900,7 @@ EVT_BEGIN(evt_champion_win)
     BEGIN_INLINE_EVENT
         CALL(evt_mario_mov_pos2, -5, -200, FLOAT(60.0f))
     END_INLINE_EVENT
-    SET_VALUE(GSWF(2378), 1)
+    SET_VALUE(GSWF_TOU_JOLENE_ESCORT_TO_CHAMP_ROOM, 1)
     CALL(evt_bero_mapchange, STRING("tou_04"), 0)
     RETURN
 EVT_END()
@@ -940,7 +940,7 @@ EVT_BEGIN(evt_tou_08_cake)
     CALL(evt_msg_print, 0, STRING("stg3_tou_297_2"), 0, STRING("ウラノコ"))
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
     CALL(evt_mario_key_onoff, 1)
-    SET_VALUE(GSWF(2447), 0)
+    SET_VALUE(GSWF_TOU_CAKE_ON_TABLE, 0)
     RETURN
 EVT_END()
 
@@ -1157,22 +1157,22 @@ EVT_BEGIN(tou_08_init_evt)
             SET_VALUE(GSW_STORY_PROGRESS, STG3_20_MAJORS_10TH_PLACE)
         END_IF
     END_SWITCH
-    IF_INT_EQUAL(GSWF(2452), 1)
-        SET_VALUE(GSWF(2452), 0)
+    IF_INT_EQUAL(GSWF_TOU_08_JUMP_STORY_CONFISCATED, 1)
+        SET_VALUE(GSWF_TOU_08_JUMP_STORY_CONFISCATED, 0)
         SET_VALUE(GSW_STORY_PROGRESS, STG3_20_04_CONFISCATED)
     END_IF
-    IF_INT_EQUAL(GSWF(2453), 1)
-        SET_VALUE(GSWF(2453), 0)
+    IF_INT_EQUAL(GSWF_TOU_08_JUMP_STORY_MAJORS_4TH, 1)
+        SET_VALUE(GSWF_TOU_08_JUMP_STORY_MAJORS_4TH, 0)
         SET_VALUE(GSW_STORY_PROGRESS, STG3_20_05_MAJORS_4TH_PL)
     END_IF
-    IF_INT_EQUAL(GSWF(2454), 1)
-        SET_VALUE(GSWF(2454), 0)
+    IF_INT_EQUAL(GSWF_TOU_08_JUMP_STORY_MAJORS_1ST, 1)
+        SET_VALUE(GSWF_TOU_08_JUMP_STORY_MAJORS_1ST, 0)
         SET_VALUE(GSW_STORY_PROGRESS, STG3_20_13_MAJORS_1ST_PL)
     END_IF
     SET_VALUE(LW(0), PTR(bero_data))
     CALL(evt_bero_get_info)
     CALL_CHILD(PTR(evt_bero_info_run))
-    CALL(evt_item_entry, STRING("item_01"), ITEM_ICE_STORM, -240, 0, -90, ITEM_TYPE_STILL, GSWF(2524), 0)
+    CALL(evt_item_entry, STRING("item_01"), ITEM_ICE_STORM, -240, 0, -90, ITEM_TYPE_STILL, GSWF_TOU_08_ICE_STORM, 0)
     CALL_CHILD(PTR(evt_tou_locker_init))
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("fuku_M"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_npc_setup, PTR(npcEnt))
@@ -1187,14 +1187,14 @@ EVT_BEGIN(tou_08_init_evt)
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("t_door_3"), 0, PTR(evt_toile_door2), 0)
     CALL(evt_hitobj_name_callback, STRING("a_b_H"), PTR(bed_entry))
     CALL(evt_sub_animgroup_async, STRING("p_slit"))
-    IF_INT_EQUAL(GSWF(2389), 1)
-        SET_VALUE(GSWF(2389), 0)
+    IF_INT_EQUAL(GSWF_GLITZ_PIT_MATCH_JUST_ENDED, 1)
+        SET_VALUE(GSWF_GLITZ_PIT_MATCH_JUST_ENDED, 0)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU1"))
         CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU6"))
         CALL(evt_tou_get_ranking, LW(0))
         IF_INT_EQUAL(LW(0), 0)
-            SET_VALUE(GSWF(2389), 1)
+            SET_VALUE(GSWF_GLITZ_PIT_MATCH_JUST_ENDED, 1)
             SPAWN_EVENT(PTR(evt_champion_win))
             ELSE
 #ifdef VERSION_G8ME01
@@ -1223,7 +1223,7 @@ EVT_BEGIN(tou_08_init_evt)
                 CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
             END_IF
             CASE_DEFAULT
-            IF_INT_NOT_EQUAL(GSWF(2393), 1)
+            IF_INT_NOT_EQUAL(GSWF_TOU_PROMOTION_TO_MAJORS_PENDING, 1)
                 CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU1"))
                 CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU6"))
                 ELSE
@@ -1233,11 +1233,11 @@ EVT_BEGIN(tou_08_init_evt)
             END_IF
         END_SWITCH
     END_SWITCH
-    IF_INT_EQUAL(GSWF(2393), 1)
-        SET_VALUE(GSWF(2393), 0)
+    IF_INT_EQUAL(GSWF_TOU_PROMOTION_TO_MAJORS_PENDING, 1)
+        SET_VALUE(GSWF_TOU_PROMOTION_TO_MAJORS_PENDING, 0)
         SPAWN_EVENT(PTR(evt_1st_leagu))
     END_IF
-    IF_INT_EQUAL(GSWF(2447), 1)
+    IF_INT_EQUAL(GSWF_TOU_CAKE_ON_TABLE, 1)
         SPAWN_EVENT(PTR(evt_tou_08_cake))
     END_IF
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_END_AFTER_THE_BATTLE)

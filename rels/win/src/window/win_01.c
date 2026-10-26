@@ -312,7 +312,7 @@ EVT_END()
 EVT_BEGIN(ki_data_evt_03)
     CALL(evt_item_delete_check, STRING("item_ki03"), LW(0))
     IF_INT_EQUAL(LW(0), 1)
-        CALL(evt_item_entry, STRING("item_ki03"), ITEM_COIN, 312, 106, -122, ITEM_TYPE_FALL_NO_PICKUP, GSWF(2686), 0)
+        CALL(evt_item_entry, STRING("item_ki03"), ITEM_COIN, 312, 106, -122, ITEM_TYPE_FALL_NO_PICKUP, GSWF_WIN_01_COIN_TREE, 0)
     END_IF
     RETURN
 EVT_END()
@@ -340,7 +340,7 @@ EVT_BEGIN(win_01_init_evt)
         SPAWN_EVENT(PTR(peach_mail))
     END_IF
     SPAWN_EVENT(PTR(evt_sub_mail_event))
-    CALL(evt_item_entry, STRING("item_00"), ITEM_INN_COUPON, 165, 0, -58, ITEM_TYPE_STILL, GSWF(2687), 0)
+    CALL(evt_item_entry, STRING("item_00"), ITEM_INN_COUPON, 165, 0, -58, ITEM_TYPE_STILL, GSWF_WIN_01_INN_COUPON, 0)
     RETURN
 EVT_END()
 

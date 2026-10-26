@@ -261,7 +261,7 @@
 #define GSWF_SAVE_BLOCK_TUTORIAL_SEEN GSWF(233)
 #define GSWF_ITEM_TUTORIAL_SEEN GSWF(235)
 #define GSWF_GLITZ_PIT_MATCH_RESERVED GSWF(2388)
-#define GSWF_GLITZ_PIT_WON_LAST_MATCH GSWF(2443)
+#define GSWF_GLITZ_PIT_CONDITION_KEPT GSWF(2443) /* Glitz Pit: the last match's special condition was kept (rule result 6) */
 
 /* Trouble Center (gor_irai.c). Trouble ids are the game's own: each reward script prints irai_NN messages and sets
  * GSWF_TROUBLE_DONE(NN). Names are the US trouble titles. */

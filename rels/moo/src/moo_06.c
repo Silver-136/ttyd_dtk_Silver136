@@ -99,7 +99,7 @@ EVT_END()
 
 static EVT_BEGIN(rock_evt0)
 #ifdef VERSION_G8ME01
-    SET_VALUE(GSWF(4032), 1)
+    SET_VALUE(GSWF_MOO_06_ROCK_01_BLOWN, 1)
 #else
     CALL(evt_mario_key_onoff, 0)
 #endif
@@ -107,7 +107,7 @@ static EVT_BEGIN(rock_evt0)
     SET_VALUE(LW(11), STRING("A_iwa_01"))
     CALL_CHILD(PTR(rock_main))
 #ifndef VERSION_G8ME01
-    SET_VALUE(GSWF(4032), 1)
+    SET_VALUE(GSWF_MOO_06_ROCK_01_BLOWN, 1)
     CALL(evt_mario_key_onoff, 1)
 #endif
     CALL(evt_exit_case_evt)
@@ -116,7 +116,7 @@ EVT_END()
 
 static EVT_BEGIN(rock_evt1)
 #ifdef VERSION_G8ME01
-    SET_VALUE(GSWF(4033), 1)
+    SET_VALUE(GSWF_MOO_06_ROCK_09_BLOWN, 1)
 #else
     CALL(evt_mario_key_onoff, 0)
 #endif
@@ -124,7 +124,7 @@ static EVT_BEGIN(rock_evt1)
     SET_VALUE(LW(11), STRING("A_iwa_09"))
     CALL_CHILD(PTR(rock_main))
 #ifndef VERSION_G8ME01
-    SET_VALUE(GSWF(4033), 1)
+    SET_VALUE(GSWF_MOO_06_ROCK_09_BLOWN, 1)
     CALL(evt_mario_key_onoff, 1)
 #endif
     CALL(evt_exit_case_evt)
@@ -141,19 +141,19 @@ EVT_BEGIN(moo_06_init_evt)
     CALL(evt_map_playanim, STRING("hosi_02"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_map_playanim, STRING("hosi_03"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_paper_entry, STRING("OFF_d_bom_ver2"))
-    IF_INT_EQUAL(GSWF(4032), 0)
+    IF_INT_EQUAL(GSWF_MOO_06_ROCK_01_BLOWN, 0)
         CALL(evt_run_case_evt, CASE_BOBBERY, 1, STRING("A_iwa_01"), 0, PTR(rock_evt0), 0)
         ELSE
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_iwa_01"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_iwa_01"), 1, 0)
     END_IF
-    IF_INT_EQUAL(GSWF(4033), 0)
+    IF_INT_EQUAL(GSWF_MOO_06_ROCK_09_BLOWN, 0)
         CALL(evt_run_case_evt, CASE_BOBBERY, 1, STRING("A_iwa_09"), 0, PTR(rock_evt1), 0)
         ELSE
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_iwa_09"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_iwa_09"), 1, 0)
     END_IF
-    CALL(evt_item_entry, STRING("item_01"), ITEM_RUIN_POWDER, 410, 0, -50, ITEM_TYPE_STILL, GSWF(4038), 0)
+    CALL(evt_item_entry, STRING("item_01"), ITEM_RUIN_POWDER, 410, 0, -50, ITEM_TYPE_STILL, GSWF_MOO_06_RUIN_POWDER, 0)
     RETURN
 EVT_END()
 

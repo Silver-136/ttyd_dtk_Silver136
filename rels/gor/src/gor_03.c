@@ -518,10 +518,10 @@ USER_FUNC(minigameselect_msg_set) {
     s32 j;
     s32 count;
 
-    flags[0] = evtGetValue(event, GSWF(1232));
-    flags[1] = evtGetValue(event, GSWF(1235));
-    flags[2] = evtGetValue(event, GSWF(1234));
-    flags[3] = evtGetValue(event, GSWF(1233));
+    flags[0] = evtGetValue(event, GSWF_GOR_PLANE_GAME_UNLOCKED);
+    flags[1] = evtGetValue(event, GSWF_GOR_PAPER_GAME_UNLOCKED);
+    flags[2] = evtGetValue(event, GSWF_GOR_TUBE_GAME_UNLOCKED);
+    flags[3] = evtGetValue(event, GSWF_GOR_BOAT_GAME_UNLOCKED);
     j = 0;
     i = 0;
     while (msg[i] != '\n') {
@@ -609,7 +609,7 @@ USER_FUNC(goryuugijo_set_dataadr) {
 }
 
 void goryuugijo_init_montemedal(EventEntry* event, BOOL isFirstCall) {
-    if (!evtGetValue(event, GSWF(1229))) {
+    if (!evtGetValue(event, GSWF_GOR_RETURNING_FROM_MINIGAME)) {
         yuugijou_montemedal_keep(event, isFirstCall);
     }
 }
@@ -675,7 +675,7 @@ EVT_BEGIN(debug_event)
 EVT_END()
 
 EVT_BEGIN(gor_03_down_evt)
-    SET_VALUE(GSWF(1223), 1)
+    SET_VALUE(GSWF_GOR_03_DROP_TO_TIK_07_PENDING, 1)
     SET_VALUE(LW(0), 0)
     RETURN
 EVT_END()
@@ -950,7 +950,7 @@ EVT_BEGIN(maffiaboss_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG2_45_DAUGHTER_LOCATED)
         CALL(evt_npc_set_position, STRING("me"), -198, 155, -80)
-        IF_INT_EQUAL(GSWF(1236), 1)
+        IF_INT_EQUAL(GSWF_GOR_DON_PIANTA_TICKET_SCENE_DONE, 1)
             SET_VALUE(GF(15), 0)
             SPAWN_EVENT(PTR(maffiaboss_ticket_check))
         END_IF
@@ -1250,7 +1250,7 @@ EVT_BEGIN(maffiaboss_airship_ticket)
     CALL(evt_npc_flag_onoff, 0, STRING("ピートン"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_npc_flag_onoff, 0, STRING("マフィア１"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_npc_flag_onoff, 0, STRING("マフィア２"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
-    SET_VALUE(GSWF(1236), 1)
+    SET_VALUE(GSWF_GOR_DON_PIANTA_TICKET_SCENE_DONE, 1)
     SET_VALUE(GF(15), 0)
     SPAWN_EVENT(PTR(maffiaboss_ticket_check))
     SET_VALUE(LSWF(3), 0)
@@ -1671,7 +1671,7 @@ EVT_BEGIN(maffia1_talk)
         CASE_LESS_OR_EQUAL(STG2_40_THOUSAND_YEAR_DOOR)
         CALL(evt_msg_print, 0, STRING("mac_2_044_02"), 0, STRING("me"))
         CASE_BETWEEN(STG2_44_FINDING_DON_PIANTA, STG2_45_DAUGHTER_LOCATED)
-        IF_INT_EQUAL(GSWF(1236), 0)
+        IF_INT_EQUAL(GSWF_GOR_DON_PIANTA_TICKET_SCENE_DONE, 0)
             CALL(evt_msg_print, 0, STRING("mac_2_070"), 0, STRING("me"))
             ELSE
 #ifdef VERSION_G8ME01
@@ -1728,7 +1728,7 @@ EVT_BEGIN(maffia2_talk)
         CASE_LESS_OR_EQUAL(STG2_40_THOUSAND_YEAR_DOOR)
         CALL(evt_msg_print, 0, STRING("mac_2_044_03"), 0, STRING("me"))
         CASE_BETWEEN(STG2_44_FINDING_DON_PIANTA, STG2_45_DAUGHTER_LOCATED)
-        IF_INT_EQUAL(GSWF(1236), 0)
+        IF_INT_EQUAL(GSWF_GOR_DON_PIANTA_TICKET_SCENE_DONE, 0)
             CALL(evt_msg_print, 0, STRING("mac_2_071"), 0, STRING("me"))
             ELSE
             CALL(evt_msg_print, 0, STRING("mac_2_116_buka2"), 0, STRING("me"))
@@ -2144,7 +2144,7 @@ EVT_END()
 
 EVT_BEGIN(gor_03_dokan_init_evt)
     CALL(evt_hit_bind_mapobj, STRING("A_dokan_l_02"), STRING("S_dokan_1"))
-    IF_INT_NOT_EQUAL(GSWF(1229), 0)
+    IF_INT_NOT_EQUAL(GSWF_GOR_RETURNING_FROM_MINIGAME, 0)
         CALL(evt_mapobj_trans, 1, STRING("S_dokan_1"), 0, 0, 0)
         ELSE
         CALL(evt_mapobj_trans, 1, STRING("S_dokan_1"), 0, -31, 0)
@@ -2299,9 +2299,9 @@ EVT_BEGIN(bteresa_talk_sub_keihin)
         CALL(evt_msg_print_add, 0, STRING("bunny_teresa_64"))
         GOTO(0)
     END_IF
-    IF_INT_EQUAL(GSWF(1228), 0)
+    IF_INT_EQUAL(GSWF_GOR_PARLOR_PRIZE_INTRO_DONE, 0)
         CALL(evt_msg_print_add, 0, STRING("bunny_teresa_60"))
-        SET_VALUE(GSWF(1228), 1)
+        SET_VALUE(GSWF_GOR_PARLOR_PRIZE_INTRO_DONE, 1)
         ELSE
         CALL(evt_msg_continue)
     END_IF
@@ -2430,25 +2430,25 @@ EVT_BEGIN(bteresa_table_talk)
         END_IF
     END_IF
     SET_VALUE(LW(1), 0)
-    IF_INT_EQUAL(GSWF(1232), 0)
+    IF_INT_EQUAL(GSWF_GOR_PLANE_GAME_UNLOCKED, 0)
         CALL(evt_pouch_check_item, ITEM_SPECIAL_CARD, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
             ADD(LW(1), 1)
         END_IF
     END_IF
-    IF_INT_EQUAL(GSWF(1233), 0)
+    IF_INT_EQUAL(GSWF_GOR_BOAT_GAME_UNLOCKED, 0)
         CALL(evt_pouch_check_item, ITEM_PLATINUM_CARD, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
             ADD(LW(1), 1)
         END_IF
     END_IF
-    IF_INT_EQUAL(GSWF(1234), 0)
+    IF_INT_EQUAL(GSWF_GOR_TUBE_GAME_UNLOCKED, 0)
         CALL(evt_pouch_check_item, ITEM_GOLD_CARD, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
             ADD(LW(1), 1)
         END_IF
     END_IF
-    IF_INT_EQUAL(GSWF(1235), 0)
+    IF_INT_EQUAL(GSWF_GOR_PAPER_GAME_UNLOCKED, 0)
         CALL(evt_pouch_check_item, ITEM_SILVER_CARD, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
             ADD(LW(1), 1)
@@ -2456,63 +2456,63 @@ EVT_BEGIN(bteresa_table_talk)
     END_IF
     IF_INT_NOT_EQUAL(LW(1), 0)
         CALL(evt_msg_print, 0, STRING("bunny_teresa_42"), 0, STRING("me"))
-        IF_INT_EQUAL(GSWF(1232), 0)
+        IF_INT_EQUAL(GSWF_GOR_PLANE_GAME_UNLOCKED, 0)
             CALL(evt_pouch_check_item, ITEM_SPECIAL_CARD, LW(0))
             IF_INT_NOT_EQUAL(LW(0), 0)
-                SET_VALUE(GSWF(1232), 1)
+                SET_VALUE(GSWF_GOR_PLANE_GAME_UNLOCKED, 1)
                 CALL(evt_msg_print, 0, STRING("bunny_teresa_43"), 0, 0)
             END_IF
         END_IF
-        IF_INT_EQUAL(GSWF(1235), 0)
+        IF_INT_EQUAL(GSWF_GOR_PAPER_GAME_UNLOCKED, 0)
             CALL(evt_pouch_check_item, ITEM_SILVER_CARD, LW(0))
             IF_INT_NOT_EQUAL(LW(0), 0)
-                SET_VALUE(GSWF(1235), 1)
+                SET_VALUE(GSWF_GOR_PAPER_GAME_UNLOCKED, 1)
                 CALL(evt_msg_print, 0, STRING("bunny_teresa_44"), 0, 0)
             END_IF
         END_IF
-        IF_INT_EQUAL(GSWF(1234), 0)
+        IF_INT_EQUAL(GSWF_GOR_TUBE_GAME_UNLOCKED, 0)
             CALL(evt_pouch_check_item, ITEM_GOLD_CARD, LW(0))
             IF_INT_NOT_EQUAL(LW(0), 0)
-                SET_VALUE(GSWF(1234), 1)
+                SET_VALUE(GSWF_GOR_TUBE_GAME_UNLOCKED, 1)
                 CALL(evt_msg_print, 0, STRING("bunny_teresa_45"), 0, 0)
             END_IF
         END_IF
-        IF_INT_EQUAL(GSWF(1233), 0)
+        IF_INT_EQUAL(GSWF_GOR_BOAT_GAME_UNLOCKED, 0)
             CALL(evt_pouch_check_item, ITEM_PLATINUM_CARD, LW(0))
             IF_INT_NOT_EQUAL(LW(0), 0)
-                SET_VALUE(GSWF(1233), 1)
+                SET_VALUE(GSWF_GOR_BOAT_GAME_UNLOCKED, 1)
                 CALL(evt_msg_print, 0, STRING("bunny_teresa_46"), 0, 0)
             END_IF
         END_IF
-        SET_VALUE(GSWF(1227), 1)
+        SET_VALUE(GSWF_GOR_PARLOR_GREETED_THIS_VISIT, 1)
         SET_VALUE(LW(14), 1)
         ELSE
         SET_VALUE(LW(14), 0)
-        IF_INT_NOT_EQUAL(GSWF(1232), 0)
+        IF_INT_NOT_EQUAL(GSWF_GOR_PLANE_GAME_UNLOCKED, 0)
             SET_VALUE(LW(14), 1)
         END_IF
-        IF_INT_NOT_EQUAL(GSWF(1235), 0)
+        IF_INT_NOT_EQUAL(GSWF_GOR_PAPER_GAME_UNLOCKED, 0)
             SET_VALUE(LW(14), 1)
         END_IF
-        IF_INT_NOT_EQUAL(GSWF(1234), 0)
+        IF_INT_NOT_EQUAL(GSWF_GOR_TUBE_GAME_UNLOCKED, 0)
             SET_VALUE(LW(14), 1)
         END_IF
-        IF_INT_NOT_EQUAL(GSWF(1233), 0)
+        IF_INT_NOT_EQUAL(GSWF_GOR_BOAT_GAME_UNLOCKED, 0)
             SET_VALUE(LW(14), 1)
         END_IF
     END_IF
-    IF_INT_EQUAL(GSWF(1227), 0)
+    IF_INT_EQUAL(GSWF_GOR_PARLOR_GREETED_THIS_VISIT, 0)
         IF_INT_LESS(GSW_STORY_PROGRESS, STG9_00_EPILOGUE)
-            IF_INT_EQUAL(GSWF(1226), 0)
+            IF_INT_EQUAL(GSWF_GOR_PARLOR_ATTENDANT_FIRST_TALK, 0)
                 CALL(evt_msg_print, 0, STRING("bunny_teresa_00"), 0, STRING("me"))
-                SET_VALUE(GSWF(1226), 1)
+                SET_VALUE(GSWF_GOR_PARLOR_ATTENDANT_FIRST_TALK, 1)
                 ELSE
                 CALL(evt_msg_print, 0, STRING("bunny_teresa_01"), 0, STRING("me"))
             END_IF
             ELSE
             CALL(evt_msg_print, 0, STRING("bunny_teresa_01_1"), 0, STRING("me"))
         END_IF
-        SET_VALUE(GSWF(1227), 1)
+        SET_VALUE(GSWF_GOR_PARLOR_GREETED_THIS_VISIT, 1)
         ELSE
         CALL(evt_msg_print, 0, STRING("bunny_teresa_02"), 0, STRING("me"))
     END_IF
@@ -2521,28 +2521,28 @@ EVT_BEGIN(bteresa_table_talk)
     CALL(evt_msg_select, 1, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 5)
         LOOP(0)
-            IF_INT_NOT_EQUAL(GSWF(1232), 0)
+            IF_INT_NOT_EQUAL(GSWF_GOR_PLANE_GAME_UNLOCKED, 0)
                 IF_INT_EQUAL(LW(0), 0)
                     BREAK_LOOP
                 END_IF
                 ELSE
                 ADD(LW(0), 1)
             END_IF
-            IF_INT_NOT_EQUAL(GSWF(1235), 0)
+            IF_INT_NOT_EQUAL(GSWF_GOR_PAPER_GAME_UNLOCKED, 0)
                 IF_INT_EQUAL(LW(0), 1)
                     BREAK_LOOP
                 END_IF
                 ELSE
                 ADD(LW(0), 1)
             END_IF
-            IF_INT_NOT_EQUAL(GSWF(1234), 0)
+            IF_INT_NOT_EQUAL(GSWF_GOR_TUBE_GAME_UNLOCKED, 0)
                 IF_INT_EQUAL(LW(0), 2)
                     BREAK_LOOP
                 END_IF
                 ELSE
                 ADD(LW(0), 1)
             END_IF
-            IF_INT_NOT_EQUAL(GSWF(1233), 0)
+            IF_INT_NOT_EQUAL(GSWF_GOR_BOAT_GAME_UNLOCKED, 0)
                 IF_INT_EQUAL(LW(0), 3)
                     BREAK_LOOP
                 END_IF
@@ -2574,12 +2574,12 @@ EVT_BEGIN(bteresa_init)
 EVT_END()
 
 EVT_BEGIN(bteresa_talk)
-    SET_VALUE(LW(1), GSW(117))
+    SET_VALUE(LW(1), GSW_GOR_PARLOR_ATTENDANT_TALK_STAGE)
     SET_VALUE(LW(0), 0)
-    ADD(LW(0), GSWF(1240))
-    ADD(LW(0), GSWF(1241))
-    ADD(LW(0), GSWF(1242))
-    ADD(LW(0), GSWF(1243))
+    ADD(LW(0), GSWF_GOR_PLANE_GAME_TOP_SCORE)
+    ADD(LW(0), GSWF_GOR_BOAT_GAME_TOP_SCORE)
+    ADD(LW(0), GSWF_GOR_TUBE_GAME_TOP_SCORE)
+    ADD(LW(0), GSWF_GOR_PAPER_GAME_TOP_SCORE)
     IF_INT_LESS_OR_EQUAL(LW(1), LW(0))
         ADD(LW(1), 1)
     END_IF
@@ -2597,7 +2597,7 @@ EVT_BEGIN(bteresa_talk)
         CASE_EQUAL(5)
         CALL(evt_msg_print, 0, STRING("bunny_teresa_11_4"), 0, STRING("me"))
     END_SWITCH
-    SET_VALUE(GSW(117), LW(1))
+    SET_VALUE(GSW_GOR_PARLOR_ATTENDANT_TALK_STAGE, LW(1))
     RETURN
 EVT_END()
 
@@ -2869,7 +2869,7 @@ EVT_BEGIN(exchange_set)
         WAIT_MS(600)
     END_IF
     CALL(evt_msg_toge, MSG_TOGE_AT_POS, FLOAT(-147.0f), FLOAT(82.19922f), FLOAT(-307.8994f))
-    IF_INT_EQUAL(GSWF(1225), 0)
+    IF_INT_EQUAL(GSWF_GOR_PIANTA_CHANGER_FIRST_USE_DONE, 0)
         CALL(exchange_ryokin_medal, 0, LW(1), LW(2))
 #ifdef VERSION_G8ME01
         CALL(evt_sub_get_language, LW(0))
@@ -2882,7 +2882,7 @@ EVT_BEGIN(exchange_set)
 #else
         CALL(evt_msg_print_insert, 0, STRING("exchange_mess_00"), 0, 0, LW(1), LW(2))
 #endif
-        SET_VALUE(GSWF(1225), 1)
+        SET_VALUE(GSWF_GOR_PIANTA_CHANGER_FIRST_USE_DONE, 1)
         ELSE
         CALL(evt_msg_print, 0, STRING("exchange_mess_01"), 0, 0)
     END_IF
@@ -3692,7 +3692,7 @@ EVT_END()
 EVT_BEGIN(door_data_02_0_open)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_i02_soto_kai"), MAP_OBJ_FLAG_HIDDEN)
     SPAWN_EVENT(PTR(door_data_02_0_open_sub))
-    SET_VALUE(GSWF(1227), 0)
+    SET_VALUE(GSWF_GOR_PARLOR_GREETED_THIS_VISIT, 0)
     CALL(yuugijou_set_yupflag, 0)
     CALL(teresa_badge_item_list_init)
     CALL(evt_snd_bgmoff, PSND_PAUSE)
@@ -4201,7 +4201,7 @@ EVT_BEGIN(wall_bomb_init)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ana_before1"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ana_before"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ana_after_01"), MAP_OBJ_FLAG_HIDDEN)
-    IF_INT_EQUAL(GSWF(1224), 0)
+    IF_INT_EQUAL(GSWF_GOR_03_WALL_BOMBED, 0)
         CALL(evt_paper_entry, STRING("OFF_d_bom_ver2"))
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ana_before1"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ana_before"), MAP_OBJ_FLAG_HIDDEN)
@@ -4219,7 +4219,7 @@ static EVT_BEGIN(wall_bomb)
         CALL(evt_snd_sfxon_3d, STRING("SFX_OFF_WALL_BREAK1"), LW(0), LW(1), LW(2), 0)
     END_INLINE_EVENT
     CALL(evt_hitobj_onoff, STRING("A_ana_ana"), 1, 0)
-    SET_VALUE(GSWF(1224), 1)
+    SET_VALUE(GSWF_GOR_03_WALL_BOMBED, 1)
     CALL(evt_img_entry, STRING("capture_img"))
     CALL(evt_img_set_paper, STRING("capture_img"), STRING("OFF_d_bom_ver2"))
     CALL(evt_offscreen_entry, STRING("offscreen"))
@@ -4342,7 +4342,7 @@ EVT_BEGIN(uraguchi_event)
     CALL(evt_msg_print, 0, STRING("mac_2_043_01"), 0, STRING("店員"))
     SET_VALUE(LW(0), PTR(&door_data_01_1))
     CALL_CHILD(PTR(evt_door_01_entry))
-    SET_VALUE(GSWF(1230), 1)
+    SET_VALUE(GSWF_GOR_03_BACK_DOOR_PASSWORD_DONE, 1)
     CALL(evt_npc_flag_onoff, 0, STRING("店員"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_npc_flag_onoff, 1, STRING("店員"), NPC_FLAG_RESUME_AFTER_TALK)
     CALL(evt_npc_get_reglid, STRING("店員"), LW(0))
@@ -4357,7 +4357,7 @@ EVT_BEGIN(uraguchi_event)
 EVT_END()
 
 EVT_BEGIN(uraguchi_check)
-    IF_INT_EQUAL(GSWF(1230), 1)
+    IF_INT_EQUAL(GSWF_GOR_03_BACK_DOOR_PASSWORD_DONE, 1)
         RETURN
     END_IF
     IF_INT_EQUAL(GW(10), 0)
@@ -4618,8 +4618,8 @@ EVT_BEGIN(kuzi_bomb_talk_normal)
     CALL(evt_unitwin_alloc, 0)
     CALL(evt_cam3d_evt_set, -150, 120, 890, -150, 50, 470, 800, EASING_SINE_IN_OUT)
     WAIT_MS(800)
-    IF_INT_EQUAL(GSWF(1237), 0)
-        SET_VALUE(GSWF(1237), 1)
+    IF_INT_EQUAL(GSWF_GOR_LOTTERY_FIRST_TALK_DONE, 0)
+        SET_VALUE(GSWF_GOR_LOTTERY_FIRST_TALK_DONE, 1)
         CALL(evt_msg_print, 0, STRING("kuji_bomb_000"), 0, STRING("グルメボム兵"))
         CALL(evt_msg_select, 0, STRING("kuji_bomb_001"))
         IF_INT_EQUAL(LW(0), 0)
@@ -4737,10 +4737,10 @@ EVT_BEGIN(kuzi_bomb_talk_husei)
         ELSE
         SET_VALUE(LW(0), 1)
     END_IF
-    IF_INT_EQUAL(GSWF(257), 1)
+    IF_INT_EQUAL(GSWF_GOR_LOTTERY_RESET_EXPLAINED, 1)
         SET_VALUE(LW(0), 1)
         ELSE
-        SET_VALUE(GSWF(257), 1)
+        SET_VALUE(GSWF_GOR_LOTTERY_RESET_EXPLAINED, 1)
     END_IF
     CALL(evt_cam3d_evt_set, -150, 120, 890, -150, 50, 470, 800, EASING_SINE_IN_OUT)
     WAIT_MS(800)
@@ -4805,7 +4805,7 @@ EVT_BEGIN(kuzi_bomb_talk_husei)
                             CALL(evt_msg_print_add, 0, STRING("kuji_bomb_051"))
                             CALL(evt_pouch_remove_item, ITEM_LOTTERY_PICK, LW(0))
                             CALL(evt_lottery_buy, LW(0))
-                            SET_VALUE(GSWF(257), 0)
+                            SET_VALUE(GSWF_GOR_LOTTERY_RESET_EXPLAINED, 0)
                             CALL(evt_item_entry, STRING("kuzi"), ITEM_LOTTERY_PICK, 0, -1000, 0, ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
                             CALL(evt_item_get_item, STRING("kuzi"))
                             CALL(evt_item_get_item_end_wait, STRING("kuzi"))
@@ -5227,14 +5227,14 @@ EVT_BEGIN(monte_evt_door_entry)
 EVT_END()
 
 EVT_BEGIN(gor_03_init_evt)
-    IF_INT_EQUAL(GSWF(1229), 0)
+    IF_INT_EQUAL(GSWF_GOR_RETURNING_FROM_MINIGAME, 0)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_GOR1"))
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR4"))
         ELSE
         CALL(evt_snd_bgmoff, PSND_FADEOUT)
         CALL(evt_snd_envoff, PSND_FADEOUT)
     END_IF
-    IF_INT_NOT_EQUAL(GSWF(1229), 0)
+    IF_INT_NOT_EQUAL(GSWF_GOR_RETURNING_FROM_MINIGAME, 0)
         CALL(evt_mario_normalize)
     END_IF
     CALL_CHILD(PTR(gor_03_dokan_init_evt))
@@ -5262,12 +5262,12 @@ EVT_BEGIN(gor_03_init_evt)
     SET_VALUE(LW(0), PTR(&door_data_01_0))
 #ifdef VERSION_G8ME01
     CALL_CHILD(evt_door_entry)
-    IF_INT_EQUAL(GSWF(1230), 1)
+    IF_INT_EQUAL(GSWF_GOR_03_BACK_DOOR_PASSWORD_DONE, 1)
         SET_VALUE(LW(0), PTR(&door_data_01_1))
         CALL_CHILD(evt_door_entry)
 #else
     CALL_CHILD(PTR(evt_door_entry))
-    IF_INT_EQUAL(GSWF(1230), 1)
+    IF_INT_EQUAL(GSWF_GOR_03_BACK_DOOR_PASSWORD_DONE, 1)
         SET_VALUE(LW(0), PTR(&door_data_01_1))
         CALL_CHILD(PTR(evt_door_entry))
 #endif
@@ -5340,8 +5340,8 @@ EVT_BEGIN(gor_03_init_evt)
     CALL(evt_goryuugijo_set_caseid, LW(0), 1, LW(1))
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_gb_a"), 0, PTR(ranking_set), 0)
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_mot_a"), 0, PTR(exchange_set), 0)
-    IF_INT_NOT_EQUAL(GSWF(1229), 0)
-        SET_VALUE(GSWF(1229), 0)
+    IF_INT_NOT_EQUAL(GSWF_GOR_RETURNING_FROM_MINIGAME, 0)
+        SET_VALUE(GSWF_GOR_RETURNING_FROM_MINIGAME, 0)
         SPAWN_EVENT(PTR(yuureturn_rtn))
     END_IF
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
@@ -5408,7 +5408,7 @@ EVT_BEGIN(gor_03_init_evt)
         SPAWN_EVENT(PTR(maffiaboss_maffiaboss))
     END_IF
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG2_45_DAUGHTER_LOCATED)
-        IF_INT_EQUAL(GSWF(1236), 0)
+        IF_INT_EQUAL(GSWF_GOR_DON_PIANTA_TICKET_SCENE_DONE, 0)
             SPAWN_EVENT(PTR(maffiaboss_airship_ticket))
         END_IF
     END_IF
@@ -6253,17 +6253,17 @@ USER_FUNC(kuzi_get_keihin) {
 
     switch (evtGetValue(event, args[0])) {
         case 0:
-            if (!evtGetValue(NULL, GSWF(1238))) {
+            if (!evtGetValue(NULL, GSWF_GOR_LOTTERY_NUMBER_1_PRIZE_GIVEN)) {
                 item = 0x104;
-                evtSetValue(NULL, GSWF(1238), 1);
+                evtSetValue(NULL, GSWF_GOR_LOTTERY_NUMBER_1_PRIZE_GIVEN, 1);
             } else {
                 item = 0xC4;
             }
             break;
         case 1:
-            if (!evtGetValue(NULL, GSWF(1239))) {
+            if (!evtGetValue(NULL, GSWF_GOR_LOTTERY_NUMBER_2_PRIZE_GIVEN)) {
                 item = 0x12F;
-                evtSetValue(NULL, GSWF(1239), 1);
+                evtSetValue(NULL, GSWF_GOR_LOTTERY_NUMBER_2_PRIZE_GIVEN, 1);
             } else {
                 item = 0xC2;
             }

@@ -80,8 +80,8 @@ EVT_BEGIN(jin_09_init_evt)
         END_LOOP
     END_INLINE_EVENT
     CALL(evt_mobj_jumpstand_red, 0, STRING("jumpstand"), 0, 0, 0, PTR(jin_09_jumpstand), 0)
-    IF_INT_NOT_EQUAL(GSWF(2079), 0)
-        SET_VALUE(GSWF(2079), 0)
+    IF_INT_NOT_EQUAL(GSWF_JIN_SCRIPTED_ENTRY_PENDING, 0)
+        SET_VALUE(GSWF_JIN_SCRIPTED_ENTRY_PENDING, 0)
         BEGIN_INLINE_EVENT
             CALL(evt_mario_key_onoff, 0)
             CALL(evt_mario_cont_onoff, 0)

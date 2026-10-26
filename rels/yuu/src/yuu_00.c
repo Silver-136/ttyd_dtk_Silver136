@@ -962,7 +962,7 @@ EVT_BEGIN(minigame01_end)
         CALL(evt_msg_select, 0, STRING("sysyuu_00_00"))
     END_IF
     IF_INT_NOT_EQUAL(LW(0), 0)
-        SET_VALUE(GSWF(1229), 1)
+        SET_VALUE(GSWF_GOR_RETURNING_FROM_MINIGAME, 1)
         CALL(evt_mario_set_prev_party_pos, 0, 0, -1000, 0)
         CALL(evt_mario_set_prev_party_pos, 1, 0, -1000, 0)
         CALL(evt_snd_bgmoff, PSND_FADEOUT)

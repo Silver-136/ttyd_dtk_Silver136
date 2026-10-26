@@ -382,13 +382,13 @@ EVT_BEGIN(evt_rsh_door_open)
     END_IF
     IF_INT_EQUAL(LF(0), 1)
         IF_STR_EQUAL(LW(1), STRING("heya_4"))
-            IF_INT_EQUAL(GSWF(3434), 1)
-                SET_VALUE(GSWF(3435), 1)
+            IF_INT_EQUAL(GSWF_RSH_GOURMET_NOISE_TALK_DONE, 1)
+                SET_VALUE(GSWF_RSH_NOISY_ROOM_CHECKED, 1)
             END_IF
-            IF_INT_EQUAL(GSWF(3445), 1)
+            IF_INT_EQUAL(GSWF_RSH_GHOST_APPEARED, 1)
                 CALL(evt_snd_bgmoff, PSND_SILENT)
             END_IF
-            SET_VALUE(GSWF(3459), 1)
+            SET_VALUE(GSWF_RSH_02_IN_ROOM_4, 1)
         END_IF
     END_IF
     SET_VALUE(LF(0), 0)
@@ -404,10 +404,10 @@ EVT_BEGIN(evt_rsh_door_open)
     END_IF
     IF_INT_EQUAL(LF(0), 1)
         IF_STR_EQUAL(LW(1), STRING("heya_5"))
-            SET_VALUE(GSWF(3446), 1)
+            SET_VALUE(GSWF_RSH_04_IN_ROOM_5, 1)
         END_IF
         IF_STR_EQUAL(LW(1), STRING("heya_3"))
-            SET_VALUE(GSWF(3447), 1)
+            SET_VALUE(GSWF_RSH_04_IN_ROOM_3, 1)
         END_IF
     END_IF
     RETURN
@@ -432,7 +432,7 @@ EVT_BEGIN(evt_rsh_door_close)
             CALL(evt_sub_get_mapname, LW(0))
             IF_STR_EQUAL(LW(0), STRING("rsh_04_a"))
                 WAIT_MS(1000)
-                SET_VALUE(GSWF(3444), 1)
+                SET_VALUE(GSWF_RSH_EVENT_ENTRY_PENDING, 1)
                 CALL(evt_bero_mapchange, STRING("rsh_04_b"), STRING("e_bero"))
             END_IF
         END_IF
@@ -442,7 +442,7 @@ EVT_BEGIN(evt_rsh_door_close)
             CALL(evt_sub_get_mapname, LW(0))
             IF_STR_EQUAL(LW(0), STRING("rsh_04_b"))
                 WAIT_MS(1000)
-                SET_VALUE(GSWF(3444), 1)
+                SET_VALUE(GSWF_RSH_EVENT_ENTRY_PENDING, 1)
                 CALL(evt_bero_mapchange, STRING("rsh_04_c"), STRING("e_bero"))
             END_IF
         END_IF
@@ -450,8 +450,8 @@ EVT_BEGIN(evt_rsh_door_close)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG6_15_GHOST_REQUEST)
         CALL(evt_sub_get_mapname, LW(10))
         IF_STR_EQUAL(LW(10), STRING("rsh_02_c"))
-            IF_INT_EQUAL(GSWF(3439), 0)
-                SET_VALUE(GSWF(3439), 1)
+            IF_INT_EQUAL(GSWF_RSH_GHOST_DIARY_WARNING_SEEN, 0)
+                SET_VALUE(GSWF_RSH_GHOST_DIARY_WARNING_SEEN, 1)
                 CALL(evt_msg_print, 0, STRING("stg6_rsh_123"), 0, STRING("ゆうれい"))
             END_IF
         END_IF
@@ -481,15 +481,15 @@ EVT_BEGIN(evt_rsh_door_close)
         END_IF
         IF_INT_EQUAL(LF(0), 1)
             IF_STR_EQUAL(LW(1), STRING("heya_4"))
-                IF_INT_EQUAL(GSWF(3445), 1)
+                IF_INT_EQUAL(GSWF_RSH_GHOST_APPEARED, 1)
                     CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
                 END_IF
             END_IF
         END_IF
     END_INLINE_EVENT
-    SET_VALUE(GSWF(3446), 0)
-    SET_VALUE(GSWF(3447), 0)
-    SET_VALUE(GSWF(3459), 0)
+    SET_VALUE(GSWF_RSH_04_IN_ROOM_5, 0)
+    SET_VALUE(GSWF_RSH_04_IN_ROOM_3, 0)
+    SET_VALUE(GSWF_RSH_02_IN_ROOM_4, 0)
     CALL(evt_map_playanim, LW(5), MAP_ANIM_PLAY_AT_END, 0)
     CALL(evt_img_free_capture, STRING("capture_img"), 0)
     CALL(evt_img_free_capture, STRING("capture_img"), 1)
@@ -783,12 +783,12 @@ EVT_BEGIN(evt_rsh_rnd_npc_4_7_talk)
 EVT_END()
 
 EVT_BEGIN(evt_rsh_rnd_npc_4_8_talk)
-    IF_INT_EQUAL(GSWF(3457), 0)
+    IF_INT_EQUAL(GSWF_RSH_TRAVELER_SECRETS_HEARD, 0)
         CALL(evt_msg_print, 0, STRING("stg6_rsh_c_42"), 0, STRING("me"))
         CALL(evt_msg_select, 0, STRING("stg6_rsh_c_42_sel"))
         IF_INT_EQUAL(LW(0), 0)
             CALL(evt_msg_print_add, 0, STRING("stg6_rsh_c_42_01"))
-            SET_VALUE(GSWF(3457), 1)
+            SET_VALUE(GSWF_RSH_TRAVELER_SECRETS_HEARD, 1)
             ELSE
             CALL(evt_msg_print_add, 0, STRING("stg6_rsh_c_42_02"))
         END_IF
@@ -819,7 +819,7 @@ EVT_BEGIN(evt_rsh_rnd_npc_5_2_talk)
 EVT_END()
 
 EVT_BEGIN(evt_rsh_rnd_npc_5_3_talk)
-    IF_INT_EQUAL(GSWF(3458), 0)
+    IF_INT_EQUAL(GSWF_RSH_QUIZ_PASSENGER_DONE, 0)
         CALL(evt_msg_print, 0, STRING("stg6_rsh_c_47"), 0, STRING("me"))
         CALL(evt_msg_select, 0, STRING("stg6_rsh_c_47_sel"))
         SWITCH(LW(0))
@@ -830,7 +830,7 @@ EVT_BEGIN(evt_rsh_rnd_npc_5_3_talk)
             CASE_EQUAL(2)
             CALL(evt_msg_print_add, 0, STRING("stg6_rsh_c_47_03"))
         END_SWITCH
-        SET_VALUE(GSWF(3458), 1)
+        SET_VALUE(GSWF_RSH_QUIZ_PASSENGER_DONE, 1)
         ELSE
         CALL(evt_msg_print, 0, STRING("stg6_rsh_c_47_04"), 0, STRING("me"))
     END_IF
@@ -970,9 +970,9 @@ typedef struct RshDebugStr {
 static const RshDebugStr rsh_debug_str_init = {0};
 
 EVT_BEGIN(evt_rsh_rnd_npc_init)
-    SET_VALUE(GSW(821), 0)
-    SET_VALUE(GSW(822), 0)
-    SET_VALUE(GSW(823), 0)
+    SET_VALUE(GSW_RSH_01_RANDOM_NPCS, 0)
+    SET_VALUE(GSW_RSH_03_RANDOM_NPCS, 0)
+    SET_VALUE(GSW_RSH_04_RANDOM_NPCS, 0)
     CALL(evt_sub_random, 4, LW(0))
     CALL(evt_rsh_set_rnd_npc, 0, 0, LW(0))
     CALL(evt_sub_random, 2, LW(0))
@@ -1277,7 +1277,7 @@ USER_FUNC(evt_rsh_set_rnd_npc) {
 
     switch (room) {
     case 0:
-        value = evtGetValue(NULL, GSW(821));
+        value = evtGetValue(NULL, GSW_RSH_01_RANDOM_NPCS);
         switch (group) {
         case 0:
             value |= index & 7;
@@ -1289,10 +1289,10 @@ USER_FUNC(evt_rsh_set_rnd_npc) {
             value |= (index & 1) << 5;
             break;
         }
-        evtSetValue(NULL, GSW(821), value);
+        evtSetValue(NULL, GSW_RSH_01_RANDOM_NPCS, value);
         break;
     case 1:
-        value = evtGetValue(NULL, GSW(822));
+        value = evtGetValue(NULL, GSW_RSH_03_RANDOM_NPCS);
         switch (group) {
         case 0:
             value |= index & 0xF;
@@ -1301,10 +1301,10 @@ USER_FUNC(evt_rsh_set_rnd_npc) {
             value |= (index & 7) << 4;
             break;
         }
-        evtSetValue(NULL, GSW(822), value);
+        evtSetValue(NULL, GSW_RSH_03_RANDOM_NPCS, value);
         break;
     case 2:
-        value = evtGetValue(NULL, GSW(823));
+        value = evtGetValue(NULL, GSW_RSH_04_RANDOM_NPCS);
         switch (group) {
         case 0:
             value |= index & 1;
@@ -1319,7 +1319,7 @@ USER_FUNC(evt_rsh_set_rnd_npc) {
             value |= (index & 3) << 3;
             break;
         }
-        evtSetValue(NULL, GSW(823), value);
+        evtSetValue(NULL, GSW_RSH_04_RANDOM_NPCS, value);
         break;
     }
     return EVT_RETURN_DONE;
@@ -1334,7 +1334,7 @@ USER_FUNC(evt_rsh_get_rnd_npc) {
 
     switch (room) {
     case 0:
-        value = evtGetValue(NULL, GSW(821));
+        value = evtGetValue(NULL, GSW_RSH_01_RANDOM_NPCS);
         switch (group) {
         case 0:
             index = value & 7;
@@ -1351,7 +1351,7 @@ USER_FUNC(evt_rsh_get_rnd_npc) {
         }
         break;
     case 1:
-        value = evtGetValue(NULL, GSW(822));
+        value = evtGetValue(NULL, GSW_RSH_03_RANDOM_NPCS);
         switch (group) {
         case 0:
             index = value & 0xF;
@@ -1365,7 +1365,7 @@ USER_FUNC(evt_rsh_get_rnd_npc) {
         }
         break;
     case 2:
-        value = evtGetValue(NULL, GSW(823));
+        value = evtGetValue(NULL, GSW_RSH_04_RANDOM_NPCS);
         switch (group) {
         case 0:
             index = value & 1;

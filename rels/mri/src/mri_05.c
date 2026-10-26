@@ -244,7 +244,7 @@ static BeroEntry bero_entry_data[] = {
 };
 
 static EVT_BEGIN(door_switch_init)
-    IF_INT_EQUAL(GSWF(2841), 0)
+    IF_INT_EQUAL(GSWF_MRI_05_DOOR_SWITCH_ON, 0)
         SET_VALUE(LW(0), STRING("w_bero"))
         CALL_CHILD(PTR(bero_case_switch_off))
         ELSE
@@ -258,13 +258,13 @@ static EVT_BEGIN(door_switch)
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG2_DOOR_UNLOCK"), LW(0), LW(1), LW(2), 0)
     WAIT_MS(500)
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG2_DOOR_LAMP"), LW(0), LW(1), LW(2), 0)
-    IF_INT_EQUAL(GSWF(2841), 0)
-        SET_VALUE(GSWF(2841), 1)
+    IF_INT_EQUAL(GSWF_MRI_05_DOOR_SWITCH_ON, 0)
+        SET_VALUE(GSWF_MRI_05_DOOR_SWITCH_ON, 1)
         SET_VALUE(LW(0), STRING("w_bero"))
         CALL_CHILD(PTR(bero_case_switch_on))
         CALL(evt_map_playanim, STRING("doalight"), MAP_ANIM_PLAY_ONCE, 0)
         ELSE
-        SET_VALUE(GSWF(2841), 0)
+        SET_VALUE(GSWF_MRI_05_DOOR_SWITCH_ON, 0)
         SET_VALUE(LW(0), STRING("w_bero"))
         CALL_CHILD(PTR(bero_case_switch_off))
         CALL(evt_map_playanim, STRING("doalight"), MAP_ANIM_PLAY_ONCE, 0)
@@ -276,7 +276,7 @@ EVT_END()
 static EVT_BEGIN(evt_ueki_04)
     CALL(evt_item_delete_check, STRING("item_ueki_04"), LW(0))
     IF_INT_EQUAL(LW(0), 1)
-        CALL(evt_item_entry, STRING("item_ueki_04"), ITEM_THUNDER_RAGE, 225, -309, -40, ITEM_TYPE_SCATTER_NO_PICKUP, GSWF(2844), 0)
+        CALL(evt_item_entry, STRING("item_ueki_04"), ITEM_THUNDER_RAGE, 225, -309, -40, ITEM_TYPE_SCATTER_NO_PICKUP, GSWF_MRI_05_THUNDER_RAGE_PLANT, 0)
     END_IF
     RETURN
 EVT_END()
@@ -292,7 +292,7 @@ static KusaAccess ueki_access_data[] = {
 
 static EVT_BEGIN(punipuni_ball00_init)
     CALL_CHILD(PTR(mri_punipuni_setup))
-    IF_INT_EQUAL(GSWF(2842), 1)
+    IF_INT_EQUAL(GSWF_MRI_05_PUNI_ORB_PLACED_1, 1)
         CALL(evt_item_set_position, LW(10), -150, -109, -37)
         CALL(evt_target_flag_onoff, LW(11), 0, 3)
         ELSE
@@ -306,17 +306,17 @@ EVT_END()
 
 static EVT_BEGIN(punipuni_ball00)
     CALL(evt_mario_key_onoff, 0)
-    IF_INT_EQUAL(GSWF(2842), 0)
+    IF_INT_EQUAL(GSWF_MRI_05_PUNI_ORB_PLACED_1, 0)
         CALL_CHILD(PTR(mri_punipuni_itemselect))
         IF_INT_EQUAL(LW(1), 0)
             GOTO(100)
         END_IF
-        SET_VALUE(GSWF(2842), 1)
+        SET_VALUE(GSWF_MRI_05_PUNI_ORB_PLACED_1, 1)
         CALL(evt_item_set_position, LW(10), -150, -109, -37)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_sui_hikari_01"), MAP_OBJ_FLAG_HIDDEN)
         CALL_CHILD(PTR(mri_punipuni_itemset))
         ELSE
-        SET_VALUE(GSWF(2842), 0)
+        SET_VALUE(GSWF_MRI_05_PUNI_ORB_PLACED_1, 0)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_sui_hikari_01"), MAP_OBJ_FLAG_HIDDEN)
         CALL_CHILD(PTR(mri_punipuni_itemremove))
     END_IF
@@ -327,7 +327,7 @@ EVT_END()
 
 EVT_BEGIN(punipuni_ball01_init)
     CALL_CHILD(PTR(mri_punipuni_setup))
-    IF_INT_EQUAL(GSWF(2843), 1)
+    IF_INT_EQUAL(GSWF_MRI_05_PUNI_ORB_PLACED_2, 1)
         CALL(evt_item_set_position, LW(10), 150, -109, -37)
         CALL(evt_target_flag_onoff, LW(11), 0, 3)
         ELSE
@@ -368,17 +368,17 @@ USER_FUNC(mario_shabon_effdel) {
 
 EVT_BEGIN(punipuni_ball01)
     CALL(evt_mario_key_onoff, 0)
-    IF_INT_EQUAL(GSWF(2843), 0)
+    IF_INT_EQUAL(GSWF_MRI_05_PUNI_ORB_PLACED_2, 0)
         CALL_CHILD(PTR(mri_punipuni_itemselect))
         IF_INT_EQUAL(LW(1), 0)
             GOTO(100)
         END_IF
-        SET_VALUE(GSWF(2843), 1)
+        SET_VALUE(GSWF_MRI_05_PUNI_ORB_PLACED_2, 1)
         CALL(evt_item_set_position, LW(10), 150, -109, -37)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_sui_hikari_02"), MAP_OBJ_FLAG_HIDDEN)
         CALL_CHILD(PTR(mri_punipuni_itemset))
         ELSE
-        SET_VALUE(GSWF(2843), 0)
+        SET_VALUE(GSWF_MRI_05_PUNI_ORB_PLACED_2, 0)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_sui_hikari_02"), MAP_OBJ_FLAG_HIDDEN)
         CALL_CHILD(PTR(mri_punipuni_itemremove))
     END_IF

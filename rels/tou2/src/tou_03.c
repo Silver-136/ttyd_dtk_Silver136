@@ -1045,7 +1045,7 @@ EVT_BEGIN(evt_tougi)
     CALL(evt_msg_print_party, PTR("stg3_tou_32"))
     WAIT_MS(300)
     CALL(evt_fade_set_mapchange_type, 0, 2, 500, 1, 500)
-    SET_VALUE(GSWF(2374), 1)
+    SET_VALUE(GSWF_TOU_02_ARENA_TOUR_RETURN, 1)
     IF_INT_EQUAL(LF(0), 0)
         CALL(evt_bero_mapchange, PTR("tou_02"), PTR("n_bero_1"))
     ELSE
@@ -1860,22 +1860,22 @@ EVT_BEGIN(evt_match)
 #endif
     SWITCH(GSW_GLITZ_PIT_OPPONENT)
         CASE_EQUAL(19)
-        IF_INT_EQUAL(GSWF(2395), 0)
-            SET_VALUE(GSWF(2395), 1)
+        IF_INT_EQUAL(GSWF_TOU_GOOMBA_BROS_OPENING_SEEN, 0)
+            SET_VALUE(GSWF_TOU_GOOMBA_BROS_OPENING_SEEN, 1)
             CALL_CHILD(PTR(evt_kurikuri_opening))
             ELSE
             CALL_CHILD(PTR(evt_default_opening))
         END_IF
         CASE_EQUAL(10)
-        IF_INT_EQUAL(GSWF(2397), 0)
-            SET_VALUE(GSWF(2397), 1)
+        IF_INT_EQUAL(GSWF_TOU_ARMORED_HARRIERS_OPENING_SEEN, 0)
+            SET_VALUE(GSWF_TOU_ARMORED_HARRIERS_OPENING_SEEN, 1)
             CALL_CHILD(PTR(evt_shinemon_opening))
             ELSE
             CALL_CHILD(PTR(evt_default_opening))
         END_IF
         CASE_EQUAL(0)
-        IF_INT_EQUAL(GSWF(2399), 0)
-            SET_VALUE(GSWF(2399), 1)
+        IF_INT_EQUAL(GSWF_TOU_RAWK_HAWK_OPENING_SEEN, 0)
+            SET_VALUE(GSWF_TOU_RAWK_HAWK_OPENING_SEEN, 1)
             IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
                 CALL_CHILD(PTR(evt_champ_opening))
                 ELSE
@@ -1888,13 +1888,13 @@ EVT_BEGIN(evt_match)
         CALL_CHILD(PTR(evt_default_opening))
     END_SWITCH
     CALL(evt_tou_get_fighter_info, GSW_GLITZ_PIT_OPPONENT, LW(0), LW(1))
-    IF_INT_EQUAL(GSWF(2509), 0)
+    IF_INT_EQUAL(GSWF_TOU_GOOMBA_BROS_AMBUSH_TALK_SEEN, 0)
 #ifdef VERSION_G8ME01
         CALL(evt_npc_set_attack_mode, STRING("敵１"), 16)
         CALL(_firstattack_setting)
     END_IF
     CALL(evt_npc_set_battle_info, STRING("敵１"), LW(1))
-    CALL(evt_npc_set_battle_rule, STRING("敵１"), GSW_GLITZ_PIT_CONDITION, GSW(503), GSW(504))
+    CALL(evt_npc_set_battle_rule, STRING("敵１"), GSW_GLITZ_PIT_CONDITION, GSW_GLITZ_PIT_CONDITION_PARAM, GSW_GLITZ_PIT_CONDITION_PARAM2)
     CALL(evt_npc_battle_start, STRING("敵１"))
     CALL(evt_npc_wait_battle_end)
     CALL(evt_mario_kill_party, 1)
@@ -1903,14 +1903,14 @@ EVT_BEGIN(evt_match)
         CALL(_firstattack_setting)
     END_IF
     CALL(evt_npc_set_battle_info, STRING(("\223G\202P")), LW(1))
-    CALL(evt_npc_set_battle_rule, STRING(("\223G\202P")), GSW_GLITZ_PIT_CONDITION, GSW(503), GSW(504))
+    CALL(evt_npc_set_battle_rule, STRING(("\223G\202P")), GSW_GLITZ_PIT_CONDITION, GSW_GLITZ_PIT_CONDITION_PARAM, GSW_GLITZ_PIT_CONDITION_PARAM2)
     CALL(evt_npc_battle_start, STRING(("\223G\202P")))
     CALL(evt_npc_wait_battle_end)
 #endif
     CALL(evt_npc_get_battle_rule_keep_result, LW(0))
     CALL(evt_tou_set_rule_result, LW(0))
     SET_VALUE(GSWF_GLITZ_PIT_MATCH_RESERVED, 0)
-    SET_VALUE(GSWF(2389), 1)
+    SET_VALUE(GSWF_GLITZ_PIT_MATCH_JUST_ENDED, 1)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     ADD(LW(0), -50)
     ADD(LW(2), -20)
@@ -1941,8 +1941,8 @@ EVT_BEGIN(evt_match)
 #else
             CALL(evt_snd_bgmon, PSND_FADEOUT, STRING(("BGM_FF_ENV_TOU2")))
 #endif
-            IF_INT_EQUAL(GSWF(2396), 0)
-                SET_VALUE(GSWF(2396), 1)
+            IF_INT_EQUAL(GSWF_TOU_GOOMBA_BROS_FIRST_WIN, 0)
+                SET_VALUE(GSWF_TOU_GOOMBA_BROS_FIRST_WIN, 1)
                 CALL_CHILD(PTR(evt_kurikuri_win))
                 ELSE
                 CALL_CHILD(PTR(evt_default_win))
@@ -1953,8 +1953,8 @@ EVT_BEGIN(evt_match)
 #else
             CALL(evt_snd_bgmon, PSND_FADEOUT, STRING(("BGM_FF_ENV_TOU2")))
 #endif
-            IF_INT_EQUAL(GSWF(2398), 0)
-                SET_VALUE(GSWF(2398), 1)
+            IF_INT_EQUAL(GSWF_TOU_ARMORED_HARRIERS_FIRST_WIN, 0)
+                SET_VALUE(GSWF_TOU_ARMORED_HARRIERS_FIRST_WIN, 1)
                 CALL_CHILD(PTR(evt_shinemon_win))
                 ELSE
                 CALL_CHILD(PTR(evt_default_win))
@@ -1965,8 +1965,8 @@ EVT_BEGIN(evt_match)
 #else
             CALL(evt_snd_bgmon, PSND_FADEOUT, STRING(("BGM_FF_ENV_TOU3")))
 #endif
-            IF_INT_EQUAL(GSWF(2400), 0)
-                SET_VALUE(GSWF(2400), 1)
+            IF_INT_EQUAL(GSWF_TOU_RAWK_HAWK_FIRST_WIN, 0)
+                SET_VALUE(GSWF_TOU_RAWK_HAWK_FIRST_WIN, 1)
                 CALL_CHILD(PTR(evt_champ_win))
                 ELSE
                 CALL_CHILD(PTR(evt_default_win))
@@ -1994,11 +1994,11 @@ EVT_BEGIN(evt_match)
             CALL(evt_tou_get_ranking, LW(0))
             SWITCH(LW(0))
                 CASE_EQUAL(7)
-                IF_INT_EQUAL(GSWF(2417), 0)
+                IF_INT_EQUAL(GSWF_TOU_RANK_7_MAIL_DONE, 0)
                     CALL_CHILD(PTR(evt_random_battle))
                 END_IF
                 CASE_EQUAL(5)
-                IF_INT_EQUAL(GSWF(2419), 0)
+                IF_INT_EQUAL(GSWF_TOU_RANK_5_BOWSER_EVENT_DONE, 0)
                     CALL_CHILD(PTR(evt_random_battle2))
                 END_IF
             END_SWITCH
@@ -2026,8 +2026,8 @@ EVT_BEGIN(evt_match)
             CALL_CHILD(PTR(evt_default_lose))
         END_SWITCH
         IF_INT_EQUAL(GSW_GLITZ_PIT_OPPONENT, 10)
-            IF_INT_LESS(GSW(505), 100)
-                ADD(GSW(505), 1)
+            IF_INT_LESS(GSW_TOU_ARMORED_HARRIERS_LOSS_COUNT, 100)
+                ADD(GSW_TOU_ARMORED_HARRIERS_LOSS_COUNT, 1)
             END_IF
         END_IF
         CALL(evt_tou_set_ranking_win_lose, 1, GSW_GLITZ_PIT_OPPONENT)
@@ -2037,7 +2037,7 @@ EVT_BEGIN(evt_match)
         SET_VALUE(GSW_STORY_PROGRESS, STG3_06_1ST_MATCH)
     END_IF
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
-        SET_VALUE(GSWF(2383), 0)
+        SET_VALUE(GSWF_GLITZ_PIT_TITLE_MATCH_BOOKED, 0)
     END_IF
     CALL(evt_fade_set_mapchange_type, 0, 2, 300, 1, 300)
     CALL(evt_snd_envoff, PSND_FADEOUT)
@@ -2418,7 +2418,7 @@ EVT_BEGIN(evt_shinemon_opening)
 EVT_END()
 
 EVT_BEGIN(evt_shinemon_win)
-    SET_VALUE(GSWF(2512), 1)
+    SET_VALUE(GSWF_TOU_ARMORED_HARRIERS_BEATEN, 1)
     CALL(evt_cam3d_evt_set, 60, 143, 263, 60, 95, -8, 0, EASING_LINEAR)
     WAIT_FRAMES(1)
     CALL(evt_npc_set_position, STRING(("\223G\202P")), 55, 60, 0)
@@ -2955,7 +2955,7 @@ EVT_BEGIN(evt_champ_lose)
     WAIT_FRAMES(1)
     CALL(evt_tou_get_ranking, LW(1))
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
-        IF_INT_EQUAL(GSWF(2383), 1)
+        IF_INT_EQUAL(GSWF_GLITZ_PIT_TITLE_MATCH_BOOKED, 1)
             SET_VALUE(LW(0), STRING(("stg3_tou_437")))
             ELSE
             IF_INT_EQUAL(LW(1), 0)
@@ -2965,7 +2965,7 @@ EVT_BEGIN(evt_champ_lose)
             END_IF
         END_IF
         ELSE
-        IF_INT_EQUAL(GSWF(2383), 1)
+        IF_INT_EQUAL(GSWF_GLITZ_PIT_TITLE_MATCH_BOOKED, 1)
             SET_VALUE(LW(0), STRING(("stg3_tou_re_132")))
             ELSE
             IF_INT_EQUAL(LW(1), 0)
@@ -3543,7 +3543,7 @@ static EVT_BEGIN(evt_champion)
 #endif
     WAIT_MS(300)
     WAIT_MS(1000)
-    SET_VALUE(GSWF(2455), 1)
+    SET_VALUE(GSWF_TOU_03_TITLE_MATCH_INTRO_SEEN, 1)
     CALL(evt_fade_set_mapchange_type, 0, 2, 300, 1, 300)
 #ifdef VERSION_G8ME01
     CALL(evt_bero_mapchange, STRING("tou_11"), STRING("nidome"))
@@ -5407,16 +5407,16 @@ EVT_BEGIN(tou_03_init_evt)
 #endif
         SPAWN_EVENT(PTR(evt_boss))
     END_SWITCH
-    IF_INT_EQUAL(GSWF(2450), 1)
-        IF_INT_EQUAL(GSWF(2451), 0)
+    IF_INT_EQUAL(GSWF_TOU_POISON_CAKE_EATEN, 1)
+        IF_INT_EQUAL(GSWF_TOU_POISON_CAKE_RECOVERED, 0)
             CALL(evt_mario_kill_party, 0)
             CALL(evt_mario_kill_party, 1)
         END_IF
     END_IF
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
         IF_INT_EQUAL(GSW_GLITZ_PIT_OPPONENT, 0)
-            IF_INT_EQUAL(GSWF(2383), 1)
-                IF_INT_EQUAL(GSWF(2455), 0)
+            IF_INT_EQUAL(GSWF_GLITZ_PIT_TITLE_MATCH_BOOKED, 1)
+                IF_INT_EQUAL(GSWF_TOU_03_TITLE_MATCH_INTRO_SEEN, 0)
                     CALL(evt_snd_bgmoff, PSND_FADEOUT)
                     SPAWN_EVENT(PTR(evt_champion))
                     ELSE
@@ -5439,7 +5439,7 @@ EVT_BEGIN(tou_03_init_evt)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING(("door_2_b")), MAP_OBJ_FLAG_HIDDEN)
 #endif
         CALL(evt_tou_get_ranking, LW(0))
-        SET_VALUE(GSW(506), LW(0))
+        SET_VALUE(GSW_GLITZ_PIT_RANK_BEFORE_MATCH, LW(0))
         SPAWN_EVENT(PTR(evt_match))
         ELSE
         SWITCH(GSW_STORY_PROGRESS)

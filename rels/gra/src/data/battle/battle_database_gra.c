@@ -1553,7 +1553,7 @@ NpcSetupBattleInfo btlsetup_gra_tbl[] = {
     {
         /*"GRA01ハイパークリボー"*/"\x47\x52\x41\x30\x31\x83\x6E\x83\x43\x83\x70\x81\x5B\x83\x4E\x83\x8A\x83\x7B\x81\x5B", // name
         NULL, 0, // mapName..fixedItem
-        GSWF(2081), // swFlag
+        GSWF_JIN_TRADING_PLACES_ACTIVE, // swFlag
         btlgrpsel_gra_btlno_gra_01_01_on, // altSelect
         btlgrpsel_gra_btlno_gra_01_01_off, // select
         0, 0, // battleFlags..randomMode
@@ -1563,7 +1563,7 @@ NpcSetupBattleInfo btlsetup_gra_tbl[] = {
     {
         /*"GRA01ハイパーパタクリ"*/"\x47\x52\x41\x30\x31\x83\x6E\x83\x43\x83\x70\x81\x5B\x83\x70\x83\x5E\x83\x4E\x83\x8A", // name
         NULL, 0, // mapName..fixedItem
-        GSWF(2081), // swFlag
+        GSWF_JIN_TRADING_PLACES_ACTIVE, // swFlag
         btlgrpsel_gra_btlno_gra_01_03_on, // altSelect
         btlgrpsel_gra_btlno_gra_01_03_off, // select
         0, 0, // battleFlags..randomMode
@@ -1573,7 +1573,7 @@ NpcSetupBattleInfo btlsetup_gra_tbl[] = {
     {
         /*"GRA01ハイパートゲクリ"*/"\x47\x52\x41\x30\x31\x83\x6E\x83\x43\x83\x70\x81\x5B\x83\x67\x83\x51\x83\x4E\x83\x8A", // name
         NULL, 0, // mapName..fixedItem
-        GSWF(2081), // swFlag
+        GSWF_JIN_TRADING_PLACES_ACTIVE, // swFlag
         btlgrpsel_gra_btlno_gra_01_04_on, // altSelect
         btlgrpsel_gra_btlno_gra_01_04_off, // select
         0, 0, // battleFlags..randomMode

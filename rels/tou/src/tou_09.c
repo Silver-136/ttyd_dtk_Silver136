@@ -45,8 +45,8 @@ static EVT_BEGIN(n_door_close)
 EVT_END()
 
 static EVT_BEGIN(toile_in)
-    SET_VALUE(GSWF(2384), 0)
-    SET_VALUE(GSWF(2385), 0)
+    SET_VALUE(GSWF_TOU_09_TOILET_WARP_PENDING, 0)
+    SET_VALUE(GSWF_TOU_08_TOILET_WARP_PENDING, 0)
     SET_VALUE(LW(0), 0)
     RETURN
 EVT_END()
@@ -59,7 +59,7 @@ static EVT_BEGIN(toile_out)
     END_INLINE_EVENT
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG3_TOILET1"), LW(0), LW(1), LW(2), 0)
-    SET_VALUE(GSWF(2384), 1)
+    SET_VALUE(GSWF_TOU_09_TOILET_WARP_PENDING, 1)
     SET_VALUE(LW(0), 0)
     RETURN
 EVT_END()

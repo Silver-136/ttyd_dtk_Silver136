@@ -1261,7 +1261,7 @@ USER_FUNC(evt_shop_main_func) {
     }
     if (!strncmp(gp->currentMapName, "rsh_03", strlen("rsh_03")) &&
         evtGetValue(event, GSW_STORY_PROGRESS) >= STG6_45_DAY_3_STARTS && evtGetValue(event, GSW_STORY_PROGRESS) < STG6_48_SMORG_MIASMA &&
-        !evtGetValue(event, GSWF(3442))) {
+        !evtGetValue(event, GSWF_RSH_03_SHOP_CLERK_REVIVED)) {
         return EVT_RETURN_BLOCK;
     }
     if (party && (party->flags & PARTY_FLAG_IS_BEING_USED)) {

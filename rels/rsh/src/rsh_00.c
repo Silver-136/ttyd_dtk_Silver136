@@ -687,13 +687,13 @@ EVT_BEGIN(regu_unten)
             END_IF
         END_IF
         IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG6_57_A_MAIL_FROM_PEACH)
-            IF_INT_EQUAL(GSWF(3579), 1)
+            IF_INT_EQUAL(GSWF_HOM_TRAIN_STOPPED_AT_RIVERSIDE, 1)
                 RETURN
             END_IF
-            IF_INT_EQUAL(GSWF(3581), 1)
+            IF_INT_EQUAL(GSWF_HOM_TRAIN_AT_ROGUEPORT, 1)
                 RETURN
             END_IF
-            IF_INT_EQUAL(GSWF(3580), 1)
+            IF_INT_EQUAL(GSWF_HOM_TRAIN_AT_POSHLEY, 1)
                 RETURN
             END_IF
         END_IF
@@ -816,14 +816,14 @@ static EVT_BEGIN(talk_unten)
         CASE_LESS(STG6_57_A_MAIL_FROM_PEACH)
         CALL(evt_msg_print, 0, STRING("stg6_rsh_253"), 0, 0)
         CASE_DEFAULT
-        IF_INT_EQUAL(GSWF(3580), 1)
+        IF_INT_EQUAL(GSWF_HOM_TRAIN_AT_POSHLEY, 1)
             CALL(evt_msg_print, 0, STRING("stg6_rsh_c_08_1"), 0, 0)
             RETURN
         END_IF
-        IF_INT_EQUAL(GSWF(3578), 0)
+        IF_INT_EQUAL(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 0)
             CALL(evt_msg_print, 0, STRING("stg6_rsh_c_07"), 0, 0)
             ELSE
-            IF_INT_EQUAL(GSWF(3581), 0)
+            IF_INT_EQUAL(GSWF_HOM_TRAIN_AT_ROGUEPORT, 0)
                 CALL(evt_msg_print, 0, STRING("stg6_rsh_c_08"), 0, 0)
                 ELSE
                 CALL(evt_msg_print, 0, STRING("stg6_rsh_c_08_1"), 0, 0)
@@ -983,11 +983,11 @@ EVT_BEGIN(rsh_00_c_init_evt)
 EVT_END()
 
 EVT_BEGIN(rsh_00_init_evt_nidome)
-    IF_INT_EQUAL(GSWF(3579), 0)
-        IF_INT_EQUAL(GSWF(3580), 0)
-            IF_INT_EQUAL(GSWF(3581), 0)
+    IF_INT_EQUAL(GSWF_HOM_TRAIN_STOPPED_AT_RIVERSIDE, 0)
+        IF_INT_EQUAL(GSWF_HOM_TRAIN_AT_POSHLEY, 0)
+            IF_INT_EQUAL(GSWF_HOM_TRAIN_AT_ROGUEPORT, 0)
                 CALL(evt_map_playanim, STRING("yure"), MAP_ANIM_PLAY_LOOP, 0)
-                IF_INT_EQUAL(GSWF(3578), 0)
+                IF_INT_EQUAL(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 0)
                     CALL(evt_map_playanim, STRING("hai_sora"), MAP_ANIM_PLAY_LOOP, 0)
                     CALL(evt_map_playanim, STRING("hai_yama"), MAP_ANIM_PLAY_LOOP, 0)
                     CALL(evt_map_playanim, STRING("hai_iwayama"), MAP_ANIM_PLAY_LOOP, 0)
@@ -1010,12 +1010,12 @@ EVT_BEGIN(rsh_00_init_evt_nidome)
         CALL(evt_mobj_kururing_floor, STRING("kururin1"), -132, 0, -95, STRING("s_yuka1"), 125, GSWF_STARPIECE_81)
     END_IF
     CALL_CHILD(PTR(evt_access_entry))
-    IF_INT_EQUAL(GSWF(3460), 1)
+    IF_INT_EQUAL(GSWF_RSH_TRAIN_AT_POSHLEY, 1)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG6_PIK1"))
         CALL(evt_snd_envoff, PSND_FADEOUT)
         CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
         ELSE
-        IF_INT_EQUAL(GSWF(3461), 1)
+        IF_INT_EQUAL(GSWF_RSH_TRAIN_AT_ROGUEPORT, 1)
             CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_GOR1"))
             CALL(evt_snd_envoff, PSND_FADEOUT)
             CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))

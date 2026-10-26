@@ -224,7 +224,7 @@ EVT_BEGIN(gonbaba_event)
     CALL(evt_map_fog_onoff, 1)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)
-    IF_INT_EQUAL(GSWF_GON_11_HOOKTAIL_INTRO_SKIP_UNUSED, 1)
+    IF_INT_EQUAL(GSWF_GON_11_HOOKTAIL_INTRO_SKIP, 1)
         GOTO(100)
     END_IF
     CALL(evt_cam3d_evt_set, -480, 150, 459, -480, 67, -13, 0, EASING_SINE_IN_OUT)

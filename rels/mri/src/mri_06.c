@@ -438,7 +438,7 @@ static BeroEntry bero_entry_data[] = {
 };
 
 static EVT_BEGIN(door_switch_init)
-    IF_INT_EQUAL(GSWF(2865), 0)
+    IF_INT_EQUAL(GSWF_MRI_15_DOOR_SWITCH_ON, 0)
         SET_VALUE(LW(0), STRING("e_bero"))
         CALL_CHILD(PTR(bero_case_switch_off))
         ELSE
@@ -513,15 +513,15 @@ EVT_BEGIN(paiders_b)
 EVT_END()
 
 static EVT_BEGIN(puni_lose)
-    SET_VALUE(LW(0), GSWF(2848))
-    ADD(LW(0), GSWF(2856))
+    SET_VALUE(LW(0), GSWF_MRI_08_JABBI_BATTLE_LOST)
+    ADD(LW(0), GSWF_MRI_11_JABBI_BATTLE_LOST)
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(evt_mario_key_onoff, 0)
         CALL(evt_bero_exec_wait, 65536)
         CALL(evt_puni_flag_onoff, 1, 0, PUNI_FLAG_SCRIPT_ANIM)
         CALL(evt_npc_flag_onoff, 1, STRING("ガイドsp"), NPC_FLAG_TALK_POSE)
         CALL(evt_puni_count, 0, LW(0))
-        IF_INT_EQUAL(GSWF(2856), 0)
+        IF_INT_EQUAL(GSWF_MRI_11_JABBI_BATTLE_LOST, 0)
             CALL(evt_msg_print, 0, STRING("stg2_mri_e17_03"), 0, STRING("ガイドsp"))
             ELSE
             IF_INT_LESS_OR_EQUAL(LW(0), 11)
@@ -531,11 +531,11 @@ static EVT_BEGIN(puni_lose)
             END_IF
         END_IF
         CALL(evt_puni_flag_onoff, 1, 1, PUNI_FLAG_SCRIPT_ANIM)
-        IF_INT_EQUAL(GSWF(2848), 1)
-            SET_VALUE(GSWF(2848), 0)
+        IF_INT_EQUAL(GSWF_MRI_08_JABBI_BATTLE_LOST, 1)
+            SET_VALUE(GSWF_MRI_08_JABBI_BATTLE_LOST, 0)
         END_IF
-        IF_INT_EQUAL(GSWF(2856), 1)
-            SET_VALUE(GSWF(2856), 0)
+        IF_INT_EQUAL(GSWF_MRI_11_JABBI_BATTLE_LOST, 1)
+            SET_VALUE(GSWF_MRI_11_JABBI_BATTLE_LOST, 0)
         END_IF
         CALL(evt_mario_key_onoff, 1)
     END_IF
@@ -604,7 +604,7 @@ EVT_BEGIN(apper_toge)
 EVT_END()
 
 static EVT_BEGIN(cloud_wind_event)
-    SET_VALUE(GSWF(2846), 1)
+    SET_VALUE(GSWF_MRI_06_FAKE_WALL_BLOWN_AWAY, 1)
     RETURN
 EVT_END()
 
@@ -654,9 +654,9 @@ EVT_BEGIN(mri_06_init_evt)
         SPAWN_EVENT(PTR(apper_toge))
     END_IF
     SPAWN_EVENT(PTR(puni_piders_check))
-    CALL(evt_mobj_badgeblk, STRING("mobj_badge_gat"), -150, 85, -138, ITEM_DAMAGE_DODGE_P, 0, GSWF(2845), 1)
+    CALL(evt_mobj_badgeblk, STRING("mobj_badge_gat"), -150, 85, -138, ITEM_DAMAGE_DODGE_P, 0, GSWF_MRI_06_DAMAGE_DODGE_P_BADGE_BLOCK, 1)
     CALL(evt_mobj_brick, STRING("mobj_hidden1"), -150, 0, -138, ITEM_COIN, MOBJ_BRICK_HIDDEN_ITEM, 0, LSWF(1))
-    IF_INT_EQUAL(GSWF(2846), 0)
+    IF_INT_EQUAL(GSWF_MRI_06_FAKE_WALL_BLOWN_AWAY, 0)
         CALL(evt_cloud_init)
         CALL(evt_cloud_ent, 0, STRING("S_nisekabe"), STRING("A_nisekabe"), PTR(cloud_wind_event))
         ELSE

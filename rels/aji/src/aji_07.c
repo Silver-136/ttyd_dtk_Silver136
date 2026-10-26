@@ -282,7 +282,7 @@ EVT_BEGIN(tensou_init)
 EVT_END()
 
 static EVT_BEGIN(evt_haguruma)
-    SET_VALUE(GSWF(4194), 1)
+    SET_VALUE(GSWF_AJI_07_COG, 1)
     RETURN
 EVT_END()
 
@@ -297,7 +297,7 @@ EVT_BEGIN(aji_07_init_evt)
     CALL(evt_map_playanim, STRING("anm_PC"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_map_playanim, STRING("anm_terop"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_map_playanim, STRING("anm_tiktik"), MAP_ANIM_PLAY_LOOP, 0)
-    IF_INT_EQUAL(GSWF(4194), 0)
+    IF_INT_EQUAL(GSWF_AJI_07_COG, 0)
         CALL(evt_item_entry, STRING("haguruma"), ITEM_COG, -65, 100, -120, ITEM_TYPE_STILL, -1, PTR(evt_haguruma))
     END_IF
     CALL(evt_bero_get_entername, LW(0))

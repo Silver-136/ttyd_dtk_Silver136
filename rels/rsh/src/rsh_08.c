@@ -79,12 +79,12 @@ BeroEntry bero_data_c_nidome[] = {
 };
 
 EVT_BEGIN(rsh_08_a_init_evt)
-    IF_INT_EQUAL(GSWF(3460), 1)
+    IF_INT_EQUAL(GSWF_RSH_TRAIN_AT_POSHLEY, 1)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG6_PIK1"))
         CALL(evt_snd_envoff, PSND_FADEOUT)
         CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
         ELSE
-        IF_INT_EQUAL(GSWF(3461), 1)
+        IF_INT_EQUAL(GSWF_RSH_TRAIN_AT_ROGUEPORT, 1)
             CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_GOR1"))
             CALL(evt_snd_envoff, PSND_FADEOUT)
             CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
@@ -94,13 +94,13 @@ EVT_BEGIN(rsh_08_a_init_evt)
         END_IF
     END_IF
     SET_VALUE(LW(0), PTR(bero_data_a_nidome))
-    IF_INT_EQUAL(GSWF(3453), 1)
+    IF_INT_EQUAL(GSWF_RSH_REVISIT_MAP_A, 1)
         SET_VALUE(LW(0), PTR(bero_data_a_nidome))
     END_IF
-    IF_INT_EQUAL(GSWF(3454), 1)
+    IF_INT_EQUAL(GSWF_RSH_REVISIT_MAP_B, 1)
         SET_VALUE(LW(0), PTR(bero_data_b_nidome))
     END_IF
-    IF_INT_EQUAL(GSWF(3455), 1)
+    IF_INT_EQUAL(GSWF_RSH_REVISIT_MAP_C, 1)
         SET_VALUE(LW(0), PTR(bero_data_c_nidome))
     END_IF
     CALL(evt_bero_get_info)

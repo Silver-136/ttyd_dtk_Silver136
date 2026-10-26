@@ -83,9 +83,9 @@ static BeroEntry bero_entry_data[] = {
 };
 
 EVT_BEGIN(peach_evt_bero)
-    IF_INT_EQUAL(GSWF(4208), 1)
+    IF_INT_EQUAL(GSWF_AJI_11_DATA_DISK_TAKEN, 1)
         IF_INT_LESS(GSW_STORY_PROGRESS, STG5_46_PEACH_DISK_SEARCH)
-            IF_INT_EQUAL(GSWF(4209), 0)
+            IF_INT_EQUAL(GSWF_AJI_11_DATA_DISK_PLAYED, 0)
                 CALL(evt_mario_key_onoff, 0)
                 CALL(evt_msg_print, 0, STRING("peach_aji_249_01"), 0, 0)
                 CALL(evt_mario_key_onoff, 1)
@@ -127,7 +127,7 @@ static BeroEntry bero_peach_data[] = {
 };
 
 static EVT_BEGIN(key_evt)
-    SET_VALUE(GSWF(4180), 1)
+    SET_VALUE(GSWF_AJI_11_CARD_KEY, 1)
     RETURN
 EVT_END()
 
@@ -196,7 +196,7 @@ static s32 item_list[] = {
 
 EVT_BEGIN(peach_evt_disksys)
     CALL(evt_mario_key_onoff, 0)
-    IF_INT_EQUAL(GSWF(4208), 0)
+    IF_INT_EQUAL(GSWF_AJI_11_DATA_DISK_TAKEN, 0)
         CALL(evt_msg_print, 0, STRING("peach_aji_244_01"), 0, STRING("mario"))
         CALL(evt_mario_key_onoff, 1)
         RETURN
@@ -228,7 +228,7 @@ EVT_BEGIN(peach_evt_disksys)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("monitor_02"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("monitor_03"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_msg_print, 0, STRING("peach_aji_248"), 0, STRING("mario"))
-        SET_VALUE(GSWF(4209), 1)
+        SET_VALUE(GSWF_AJI_11_DATA_DISK_PLAYED, 1)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("tana"), 0, PTR(peach_evt_tana2), 0)
         CALL(evt_exit_case_evt)
     END_IF
@@ -244,7 +244,7 @@ EVT_BEGIN(peach_evt_tana1)
     CALL(evt_item_get_item, STRING("disk"))
     WAIT_MS(500)
     CALL(evt_msg_print, 0, STRING("peach_aji_246"), 0, STRING("mario"))
-    SET_VALUE(GSWF(4208), 1)
+    SET_VALUE(GSWF_AJI_11_DATA_DISK_TAKEN, 1)
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_disksys"), 0, PTR(peach_evt_disksys), 0)
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_exit_case_evt)
@@ -272,11 +272,11 @@ static EVT_BEGIN(peach_evt_stg5)
     END_IF
     CALL(peach_evt_toumei)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG5_46_PEACH_DISK_SEARCH)
-        IF_INT_EQUAL(GSWF(4208), 0)
+        IF_INT_EQUAL(GSWF_AJI_11_DATA_DISK_TAKEN, 0)
             CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("tana"), 0, PTR(peach_evt_tana1), 0)
             CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_disksys"), 0, PTR(peach_evt_disksys), 0)
             ELSE
-            IF_INT_EQUAL(GSWF(4209), 0)
+            IF_INT_EQUAL(GSWF_AJI_11_DATA_DISK_PLAYED, 0)
                 CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_disksys"), 0, PTR(peach_evt_disksys), 0)
                 ELSE
                 CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("tana"), 0, PTR(peach_evt_tana2), 0)
@@ -290,12 +290,12 @@ static EVT_BEGIN(peach_evt_stg5)
     CALL(evt_bero_overwrite, STRING("w_bero"), PTR(bero_peach_data))
     SET_VALUE(LW(0), STRING("w_bero"))
     CALL_CHILD(PTR(bero_case_switch_on))
-    IF_INT_EQUAL(GSWF(4207), 0)
+    IF_INT_EQUAL(GSWF_AJI_11_PEACH_ENTRY_LINE_SEEN, 0)
         CALL(evt_mario_key_onoff, 0)
         WAIT_MS(500)
         CALL(evt_msg_print, 0, STRING("peach_aji_244"), 0, STRING("mario"))
         CALL(evt_mario_key_onoff, 1)
-        SET_VALUE(GSWF(4207), 1)
+        SET_VALUE(GSWF_AJI_11_PEACH_ENTRY_LINE_SEEN, 1)
     END_IF
     RETURN
 EVT_END()
@@ -319,7 +319,7 @@ EVT_BEGIN(aji_11_init_evt)
     CALL(evt_map_playanim, STRING("mizutama_1"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_map_playanim, STRING("mizutama_2"), MAP_ANIM_PLAY_LOOP, 0)
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG7_00_START)
-        IF_INT_EQUAL(GSWF(4180), 0)
+        IF_INT_EQUAL(GSWF_AJI_11_CARD_KEY, 0)
             CALL(evt_item_entry, STRING("dummy"), ITEM_CARD_KEY_0x1F, 50, 25, 25, ITEM_TYPE_STILL, -1, PTR(key_evt))
         END_IF
     END_IF
