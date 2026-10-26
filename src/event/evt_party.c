@@ -19,7 +19,6 @@
 #define GETPARTY(args) partyGetPtr((args)[0] == 0 ? partyCtrlNo : 1)
 #define PARTY_ID(args) ((args)[0] == 0 ? partyCtrlNo : 1)
 
-extern void partyChgPose();
 extern s32 bomheiGetStatus(void);
 extern void vivianUnhold(PartyEntry* party);
 extern void L_partyVivianTailStart();
@@ -572,7 +571,7 @@ USER_FUNC(evt_party_set_pose) {
         return EVT_RETURN_DONE;
     }
     v = evtGetValue(event, args[1]);
-    partyChgPose(p, v);
+    partyChgPose(p, (const char*)v);
     return EVT_RETURN_DONE;
 }
 

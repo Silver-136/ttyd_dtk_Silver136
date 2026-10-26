@@ -98,11 +98,11 @@ static inline BOOL partyIsPinch(PartyEntry* party) {
 // FAKE: same behaviour as partyChgPoseId (inlined), but with the pinch check written out in place instead of
 // partyIsPinch(). Only partyReInit's first call uses it: that call needs this form while its other
 // two calls need the partyIsPinch() form (see docs/FAKES.md).
-static inline char* partyChgPoseIdNoPinch_inl(PartyEntry* party, s32 index) {
+static inline const char* partyChgPoseIdNoPinch_inl(PartyEntry* party, s32 index) {
     BOOL v5;
     s32 poseIdx = index;
-    char* v6;
-    char* v8;
+    const char* v6;
+    const char* v8;
 
     if ((party->flags2 & PARTY_DISP_FLAG_POSE_LOCK) != 0) {
         return party->animName;
@@ -137,9 +137,9 @@ static inline char* partyChgPoseIdNoPinch_inl(PartyEntry* party, s32 index) {
     return v6;
 }
 
-char* partyChgPoseId(PartyEntry* party, s32 index) {
-    char* v6;
-    char* v8;
+const char* partyChgPoseId(PartyEntry* party, s32 index) {
+    const char* v6;
+    const char* v8;
     s32 poseIdx = index;
 
     if ((party->flags2 & PARTY_DISP_FLAG_POSE_LOCK) != 0) {
@@ -171,7 +171,7 @@ char* partyChgPoseId(PartyEntry* party, s32 index) {
     return v6;
 }
 
-void partyChgPose(PartyEntry* party, char* pose) {
+void partyChgPose(PartyEntry* party, const char* pose) {
     if (!(party->flags2 & PARTY_DISP_FLAG_POSE_LOCK)) {
         if (party->animName == NULL || strcmp(party->animName, pose)) {
             if (!(party->flags2 & PARTY_DISP_FLAG_FAMICOM)) {
@@ -583,7 +583,7 @@ s32 partyEntry2Pos(s32 memberId, f32 x, f32 y, f32 z) {
     partyPoseEntry(party);
     animPosePeraOff(party->paperAnimGroup);
     setAnimPoseMaterialFlag(party);
-    { char* id = partyChgPoseId(party, 1); partyChgPose(party, id); }
+    { const char* id = partyChgPoseId(party, 1); partyChgPose(party, id); }
     party->paperAnimName = 0;
     party_dp->init_func(party);
     partyChgRunMode(party, 2);
@@ -623,7 +623,7 @@ void partyReInit(void) {
     s32 poseId;
     s32 dotted;
     PartyEntry* party;
-    char* pose;
+    const char* pose;
 
     party = partyGetPtr(marioGetExtraPartyId());
     if (party) {

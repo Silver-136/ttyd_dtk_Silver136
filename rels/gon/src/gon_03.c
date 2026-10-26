@@ -35,7 +35,6 @@
 #include "data_tables.h"
 #include "driver/extdrv.h"
 
-void partyChgPose(PartyEntry* party, const char* pose);
 typedef struct Senkaron {
     s8 state;
     s32 timer;

@@ -212,7 +212,6 @@ void vivian_move(PartyEntry* party) {
 }
 
 
-extern void partyChgPose(PartyEntry* party, const char* name);
 
 static inline void vivianFollow(PartyEntry* party) {
     HitEntry* hit;

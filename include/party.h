@@ -187,7 +187,7 @@ typedef struct PartyEntry {
     s32 paperAnimGroup;                 // 0xC
     s32 reserved_10;                    // 0x10, only set to -1 at entry
     s32 paperPoseId;                    // 0x14
-    char* animName;                     // 0x18, current pose name (strcmp'd with "PYS_S_2" etc.)
+    const char* animName;               // 0x18, current pose name (strcmp'd with "PYS_S_2" etc.)
     const char* paperAnimName;          // 0x1C, partyChgPaper anim name, as MarioWork.paperAnimName
     u16 poseTime;                       // 0x20, cleared on every pose/paper change (MarioWork.poseTime)
     u8 pad_22[0x24 - 0x22];             // 0x22, never accessed
@@ -333,7 +333,8 @@ void party_ride_yoshi_force_move(void);
 
 extern char* yoshigroup[7];
 
-char* partyChgPoseId(PartyEntry* party, s32 index);
+const char* partyChgPoseId(PartyEntry* party, s32 index);
+void partyChgPose(PartyEntry* party, const char* pose);
 void partyUsePost(PartyEntry* party);
 void L_allPartyRideOn(void);
 void allPartyForceRideOn(void);

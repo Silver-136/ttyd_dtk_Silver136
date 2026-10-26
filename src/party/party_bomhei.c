@@ -258,7 +258,6 @@ typedef struct BomheiWork {
     s32 timer;  // 0x4
 } BomheiWork;
 
-extern void partyChgPose(PartyEntry* party, const char* pose);
 extern void marioSetSplash(s32 kind, Vec pos);
 
 static inline f32 bomheiNeg(f32 x) {

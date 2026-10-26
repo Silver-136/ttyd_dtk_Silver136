@@ -33,7 +33,6 @@ Vec cloud_at;
 #include "eff/n64/eff_kumokumo_n64.h"
 void N__cloud_use(PartyEntry* party);
 void getHitBreatheout2(PartyEntry* party, f32 angle);
-void partyChgPose(PartyEntry* party, const char* pose);
 
 #define CW(p) ((PartyCloud*)(p)->useStruct)
 #define KUMO(p) ((EffKumokumoN64Particle*)(p)->work.cloud.breathEffect->userdata)

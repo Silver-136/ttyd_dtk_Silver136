@@ -32,7 +32,6 @@ typedef struct YoshiWork {
 } YoshiWork;
 
 
-extern void partyChgPose(PartyEntry* party, const char* pose);
 extern f32 marioGetMoveRate(void);
 extern HitEntry* dou10_yoko_yari2(void* out);
 extern void psndSFXOff(s32 id);
