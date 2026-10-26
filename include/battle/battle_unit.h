@@ -944,7 +944,7 @@ typedef struct BattleUnit {
     void* attackEventCode;                       // 0x29C, btlevtcmd_SetEventAttack / BtlUnit_GetData(unit, 2/3)
     void* confusionEventCode;                    // 0x2A0, btlevtcmd_SetEventConfusion
     s32 attackEventId;                           // 0x2A4
-    s32 attackEventFlags;                        // 0x2A8, selects/controls the act event in battle_seq (0 by SetEventAttack)
+    s32 attackEventFlags;                        // 0x2A8, ActEventFlags (0 by SetEventAttack)
     void* damageEventCode;                       // 0x2AC
     s32 damageEventId;                           // 0x2B0
     void* entryEventCode;                        // 0x2B4 (US 0x2B8), btlevtcmd_SetEventEntry
@@ -1143,6 +1143,15 @@ void BtlUnit_SetParamFromPouch(BattleUnit* unit);
 s32 BtlUnit_snd_se(BattleUnit* unit, const char* sfxName, s32 volume, s32 pan);
 s32 BtlUnit_snd_se_pos(BattleUnit* unit, const char* sfxName, s32 volume, s16 pitch, Vec* pos);
 BattleUnit* BtlUnit_GetGuardKouraPtr(BattleUnit* unit);
+
+// BattleUnit.attackEventFlags: how battle_seq starts the unit's act event (attackEventCode)
+typedef enum ActEventFlags {
+    ACT_EVENT_KEEP_STATUS_WINDOW = (1 << 0),  // 0x1, the status window stays on
+    ACT_EVENT_IGNORE_STATUS = (1 << 1),       // 0x2, run the event whatever the unit's status
+    ACT_EVENT_SHELL_FOLLOWS = (1 << 2),       // 0x4, a shell shield keeps following its unit (position swap)
+    ACT_EVENT_IN_ZERO_GRAVITY = (1 << 3),     // 0x8, runs in zero gravity too
+    ACT_EVENT_ALWAYS = (1 << 4),              // 0x10, run the event, if any, before every other check (hide event)
+} ActEventFlags;
 
 BOOL BtlUnit_CanActStatus(BattleUnit* unit);
 void BtlUnit_SetAnim(BattleUnitPart* part, const char* name);

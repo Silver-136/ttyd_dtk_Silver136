@@ -323,7 +323,7 @@ void btlDispMain(void) {
             target = BattleGetUnitPtr(wp, unit->work[0]);
             if (target) {
                 if (target->attackEventId && evtCheckID(target->attackEventId)) {
-                    if (!((u32)target->attackEventFlags & 4)) goto next;
+                    if (!((u32)target->attackEventFlags & ACT_EVENT_SHELL_FOLLOWS)) goto next;
                 }
                 if (target->damageEventId && evtCheckID(target->damageEventId)) goto next;
                 BtlUnit_GetPos(unit, &pos.x, &pos.y, &pos.z);

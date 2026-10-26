@@ -2257,41 +2257,42 @@ void btlseqAct(BattleWork* wp) {
         case 0x6000005:
             unit = BattleGetUnitPtr(wp, wp->activeUnitId);
             unit->attackEventCode = BtlUnit_GetData(unit, UNIT_DATA_WAKEUP_EVENT);
-            unit->attackEventFlags = 1;
+            unit->attackEventFlags = ACT_EVENT_KEEP_STATUS_WINDOW;
             BattleSetSeq(wp, SEQ_ACT, 0x6000006);
             break;
         case 0x6000003:
             unit = BattleGetUnitPtr(wp, wp->activeUnitId);
-            unit->attackEventFlags = 1;
+            unit->attackEventFlags = ACT_EVENT_KEEP_STATUS_WINDOW;
             unit->flags |= BATTLE_UNIT_FLAG_ACTING;
             BattleSetSeq(wp, SEQ_ACT, 0x6000006);
             break;
         case 0x6000004:
             unit = BattleGetUnitPtr(wp, wp->activeUnitId);
             unit->attackEventCode = BtlUnit_GetData(unit, UNIT_DATA_HIDE_EVENT);
-            unit->attackEventFlags = 0x1B;
+            unit->attackEventFlags = ACT_EVENT_KEEP_STATUS_WINDOW | ACT_EVENT_IGNORE_STATUS | ACT_EVENT_IN_ZERO_GRAVITY | ACT_EVENT_ALWAYS;
             BattleSetSeq(wp, SEQ_ACT, 0x6000006);
             break;
         case 0x6000006:
             unit = BattleGetUnitPtr(wp, wp->activeUnitId);
-            if (!(unit->attackEventFlags & 1)) {
+            if (!(unit->attackEventFlags & ACT_EVENT_KEEP_STATUS_WINDOW)) {
                 BattleStatusWindowSystemOff();
             }
             unit = BattleGetUnitPtr(wp, wp->activeUnitId);
             evt = NULL;
             if ((wp->flags & BATTLE_FLAG_ZERO_GRAVITY_UNUSED) && !(unit->mAttributeFlags & kActsInZeroGravity) &&
-                !(unit->attackEventFlags & 8) && !(unit->attackEventFlags & 0x10)) {
+                !(unit->attackEventFlags & ACT_EVENT_IN_ZERO_GRAVITY) && !(unit->attackEventFlags & ACT_EVENT_ALWAYS)) {
                 evt = evtEntry(btldefaultevt_CantMoveZeroGravity, 10, 0);
-            } else if (unit->attackEventFlags & 0x10) {
+            } else if (unit->attackEventFlags & ACT_EVENT_ALWAYS) {
                 if (unit->attackEventCode) {
                     evt = evtEntry(unit->attackEventCode, 10, 0);
                 }
-            } else if (unit->attackEventFlags & 2) {
+            } else if (unit->attackEventFlags & ACT_EVENT_IGNORE_STATUS) {
                 evt = evtEntry(unit->attackEventCode, 10, 0);
             } else if (!BtlUnit_CheckStatus(unit, STATUS_SLEEP) &&
                 !BtlUnit_CheckStatus(unit, STATUS_STOP) &&
                 !BtlUnit_CheckStatus(unit, STATUS_FREEZE) &&
                 (!BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL) || (unit->mAttributeFlags & kUndead))) {
+                // BUG: irand(100) < 0 never holds, so an electrified unit never runs btldefaultevt_BiribiriMove
                 if (BtlUnit_CheckStatus(unit, STATUS_ELECTRIC) && irand(100) < 0) {
                     evt = evtEntry(btldefaultevt_BiribiriMove, 10, 0);
                 } else if (BtlUnit_CheckStatus(unit, STATUS_CONFUSE) && irand(100) < 50) {

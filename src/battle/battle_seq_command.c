@@ -2309,14 +2309,14 @@ void _btlcmd_SetAttackEvent(BattleUnit* unit, BattleCommand* cmd) {
     if (cmd->cancelled) {
         unit->moveState = 0;
         UEVT(unit) = btldefaultevt_Wait;
-        unit->attackEventFlags = 1;
+        unit->attackEventFlags = ACT_EVENT_KEEP_STATUS_WINDOW;
         return;
     }
     switch (type) {
     case 5:
         switch ((u32)cmd->operationType) {
         case 6:
-            unit->attackEventFlags = 1;
+            unit->attackEventFlags = ACT_EVENT_KEEP_STATUS_WINDOW;
             if (unit->currentKind == UNIT_MARIO) {
                 UEVT(unit) = btldefaultevt_Defend;
             } else {
@@ -2325,7 +2325,7 @@ void _btlcmd_SetAttackEvent(BattleUnit* unit, BattleCommand* cmd) {
             break;
         case 5:
             UEVT(unit) = btldefaultevt_Appeal;
-            unit->attackEventFlags = 1;
+            unit->attackEventFlags = ACT_EVENT_KEEP_STATUS_WINDOW;
             if (unit->currentKind == UNIT_MARIO) {
                 BtlActRec_AddCount(&wp->actRecord.marioAppeals);
             } else {
@@ -2334,7 +2334,7 @@ void _btlcmd_SetAttackEvent(BattleUnit* unit, BattleCommand* cmd) {
             break;
         case 7:
             UEVT(unit) = btldefaultevt_Wait;
-            unit->attackEventFlags = 1;
+            unit->attackEventFlags = ACT_EVENT_KEEP_STATUS_WINDOW;
             if (unit->currentKind == UNIT_MARIO) {
                 BtlActRec_AddCount(&wp->actRecord.marioAppeals);
             } else {
@@ -2343,7 +2343,7 @@ void _btlcmd_SetAttackEvent(BattleUnit* unit, BattleCommand* cmd) {
             break;
         case 3:
             UEVT(unit) = btldefaultevt_Escape;
-            unit->attackEventFlags = 1;
+            unit->attackEventFlags = ACT_EVENT_KEEP_STATUS_WINDOW;
             if (unit->currentKind == UNIT_MARIO) {
                 BtlActRec_AddCount(&wp->actRecord.marioEscapes);
             } else {
@@ -2372,7 +2372,7 @@ void _btlcmd_SetAttackEvent(BattleUnit* unit, BattleCommand* cmd) {
             break;
         case 0:
             UEVT(unit) = btldefaultevt_ChangeParty;
-            unit->attackEventFlags = 1;
+            unit->attackEventFlags = ACT_EVENT_KEEP_STATUS_WINDOW;
             cmd->cursor[1].absPos = 0;
             if (wp->badgeEquippedFlags & 1) {
                 unit->moveState = 3;
@@ -2385,15 +2385,15 @@ void _btlcmd_SetAttackEvent(BattleUnit* unit, BattleCommand* cmd) {
             break;
         case 4:
             UEVT(unit) = btldefaultevt_ProtectPartner;
-            unit->attackEventFlags = 1;
+            unit->attackEventFlags = ACT_EVENT_KEEP_STATUS_WINDOW;
             break;
         case 8:
             UEVT(unit) = BtlUnit_GetData(unit, UNIT_DATA_WAKEUP_EVENT);
-            unit->attackEventFlags = 3;
+            unit->attackEventFlags = ACT_EVENT_KEEP_STATUS_WINDOW | ACT_EVENT_IGNORE_STATUS;
             break;
         default:
             UEVT(unit) = btldefaultevt_Wait;
-            unit->attackEventFlags = 1;
+            unit->attackEventFlags = ACT_EVENT_KEEP_STATUS_WINDOW;
             break;
         }
         break;
@@ -2451,7 +2451,7 @@ void _btlcmd_SetAttackEvent(BattleUnit* unit, BattleCommand* cmd) {
     case 9:
         unit->moveState = 1;
         UEVT(unit) = btldefaultevt_ChangePosition;
-        unit->attackEventFlags = 7;
+        unit->attackEventFlags = ACT_EVENT_KEEP_STATUS_WINDOW | ACT_EVENT_IGNORE_STATUS | ACT_EVENT_SHELL_FOLLOWS;
         break;
     case 11:
         switch (unit->moveState) {
@@ -2461,7 +2461,7 @@ void _btlcmd_SetAttackEvent(BattleUnit* unit, BattleCommand* cmd) {
         default: unit->moveState = 4; break;
         }
         UEVT(unit) = btlataudGetAttackEventPtr(unit->unitId);
-        unit->attackEventFlags = 3;
+        unit->attackEventFlags = ACT_EVENT_KEEP_STATUS_WINDOW | ACT_EVENT_IGNORE_STATUS;
         if (unit->currentKind == UNIT_MARIO) {
             BtlActRec_AddCount(&wp->actRecord.marioAudienceAttacks);
         } else {
@@ -2479,11 +2479,11 @@ void _btlcmd_SetAttackEvent(BattleUnit* unit, BattleCommand* cmd) {
         default: unit->moveState = 4; break;
         }
         UEVT(unit) = btlataudGetMoveEventPtr(unit->unitId);
-        unit->attackEventFlags = 3;
+        unit->attackEventFlags = ACT_EVENT_KEEP_STATUS_WINDOW | ACT_EVENT_IGNORE_STATUS;
         break;
     case 13:
         UEVT(unit) = btldefaultevt_LectureEnd;
-        unit->attackEventFlags = 3;
+        unit->attackEventFlags = ACT_EVENT_KEEP_STATUS_WINDOW | ACT_EVENT_IGNORE_STATUS;
         break;
     default:
         UEVT(unit) = btldefaultevt_Wait;
