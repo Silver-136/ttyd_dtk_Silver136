@@ -73,6 +73,15 @@ typedef struct SeqEndObj {
     GXColor color;              // 0x30
 } SeqEndObj;
 
+// SeqEndWork.flags: the result-screen displays btlseqEnd_DispMain adds (0x1 is only ever cleared)
+typedef enum SeqEndDispFlags {
+    SEQEND_DISP_EXP_ICON = (1 << 1),            // 0x2, star point icons
+    SEQEND_DISP_MARIO_EXP_UNUSED = (1 << 2),    // 0x4, _MarioExpDisp; nothing sets it
+    SEQEND_DISP_LVUP_SELECT = (1 << 3),         // 0x8, the level-up choice objects
+    SEQEND_DISP_LVUP_CONFIRM_UNUSED = (1 << 4), // 0x10, _LvupParamConfirmDisp; nothing sets it
+    SEQEND_DISP_LVUP_HELP = (1 << 5),           // 0x20, level-up help message (_lvup_disp_flag_onoff)
+} SeqEndDispFlags;
+
 typedef struct SeqEndWork {
     s32 state;                     // 0x0
     s32 timer;                     // 0x4
@@ -238,15 +247,15 @@ void btlseqEnd(BattleWork* wp) {
         marioBelong = mu->mAlliance;
         enemyBelong = BtlUnit_GetEnemyBelong(mu);
         flags = wp->flags;
-        if (flags & 0x40) {
+        if (flags & BATTLE_FLAG_DEMO_TIMEOUT) {
             BattleInformationSetResult(info, 4);
-        } else if (flags & 0x20) {
+        } else if (flags & BATTLE_FLAG_INTERRUPT_STOP) {
             BattleInformationSetResult(info, 5);
         } else if (wp->alliances[marioBelong].clearConditionMet) {
             BattleInformationSetResult(info, 3);
         } else if (wp->alliances[enemyBelong].clearConditionMet) {
             BattleInformationSetResult(info, 1);
-        } else if (flags & 0x10) {
+        } else if (flags & BATTLE_FLAG_ESCAPED) {
             BattleInformationSetResult(info, 4);
         }
         switch (BattleInformationGetResult(info)) {
@@ -583,7 +592,7 @@ void btlseqEnd(BattleWork* wp) {
                 break;
             }
 #ifdef VERSION_G8ME01
-            work->flags &= ~0x20;
+            work->flags &= ~SEQEND_DISP_LVUP_HELP;
 #endif
             if (e) {
                 work->evtId = e->eventId;
@@ -607,7 +616,7 @@ void btlseqEnd(BattleWork* wp) {
                 work->cursor = 0;
                 work->unk28 = 0;
                 work->cursorCount = 2;
-                work->flags &= ~0x20;
+                work->flags &= ~SEQEND_DISP_LVUP_HELP;
                 BattleSetSeq(wp, SEQ_END, 0x7000014);
                 e = evtEntry(_jump_event, 10, 0);
                 work->evtId = e->eventId;
@@ -629,16 +638,16 @@ void btlseqEnd(BattleWork* wp) {
             }
         }
         if (BattlePadCheckTrigger(PAD_BUTTON_B)) {
-            work->flags &= ~0x10;
+            work->flags &= ~SEQEND_DISP_LVUP_CONFIRM_UNUSED;
             BattleSetSeq(wp, SEQ_END, 0x7000012);
         }
         if (BattlePadCheckTrigger(PAD_BUTTON_A)) {
             if (work->cursor == 0) {
-                work->flags &= ~0x18;
+                work->flags &= ~(SEQEND_DISP_LVUP_SELECT | SEQEND_DISP_LVUP_CONFIRM_UNUSED);
                 BattleSetSeq(wp, SEQ_END, 0x7000015);
                 break;
             }
-            work->flags &= ~0x10;
+            work->flags &= ~SEQEND_DISP_LVUP_CONFIRM_UNUSED;
             BattleSetSeq(wp, SEQ_END, 0x7000012);
         }
         break;
@@ -866,21 +875,21 @@ void btlseqEnd_DispMain(CameraId camId, void* param) {
 
 
     if (work) {
-        if (work->flags & 2) {
+        if (work->flags & SEQEND_DISP_EXP_ICON) {
             _GetExpIcon_Main(wp);
             dispEntry(camId, 900.0f, 1, _GetExpIcon_Disp, wp);
         }
-        if (work->flags & 4) {
+        if (work->flags & SEQEND_DISP_MARIO_EXP_UNUSED) {
             dispEntry(camId, 900.0f, 1, _MarioExpDisp, wp);
         }
-        if (work->flags & 8) {
+        if (work->flags & SEQEND_DISP_LVUP_SELECT) {
             Vec pos = {0.0f, 0.0f, 0.0f};
             dispEntry(CAMERA_3D, dispCalcZ(&pos), 2, _lvup_select_object_disp, wp);
         }
-        if (work->flags & 0x10) {
+        if (work->flags & SEQEND_DISP_LVUP_CONFIRM_UNUSED) {
             dispEntry(camId, 900.0f, 1, _LvupParamConfirmDisp, wp);
         }
-        if (work->flags & 0x20) {
+        if (work->flags & SEQEND_DISP_LVUP_HELP) {
             dispEntry(camId, 900.0f, 1, L__LvupParamHelpMsgDisp, wp);
         }
     }
@@ -997,7 +1006,7 @@ void _GetExpIcon_Init(SeqEndWork* work) {
         work->iconPos[i].z = 0.0f;
         iconSetPos(name, work->iconPos[i].x, work->iconPos[i].y, work->iconPos[i].z);
     }
-    work->flags |= 2;
+    work->flags |= SEQEND_DISP_EXP_ICON;
 }
 
 void _GetExpIcon_Main(BattleWork* wp) {
@@ -1058,7 +1067,7 @@ void _GetExpIcon_Disp(CameraId camId, void* param) {
 void _GetExpIcon_End(SeqEndWork* work) {
     s32 i;
 
-    work->flags &= ~2;
+    work->flags &= ~SEQEND_DISP_EXP_ICON;
     for (i = 0; i < 19; i++) {
         iconDelete(work->icons[i]->name);
     }
@@ -1235,7 +1244,7 @@ EVT_BEGIN(_curtain_close_event)
                 WAIT_FRAMES(1)
             END_LOOP
             CALL(_lvup_obj_set_color, 2, 255, 255, 255, 255)
-            CALL(_lvup_disp_flag_onoff, 2, 32)
+            CALL(_lvup_disp_flag_onoff, 2, SEQEND_DISP_LVUP_HELP)
             CALL(_lvup_select_obj_disp_on)
         END_SIBLING_EVENT
         CALL(btlevtcmd_WaitEventEnd, LW(0))
@@ -1255,7 +1264,7 @@ EVT_BEGIN(_curtain_close_event)
                 WAIT_FRAMES(1)
             END_LOOP
             CALL(_lvup_obj_set_color, 0, 255, 255, 255, 255)
-            CALL(_lvup_disp_flag_onoff, 0, 32)
+            CALL(_lvup_disp_flag_onoff, 0, SEQEND_DISP_LVUP_HELP)
             CALL(_lvup_select_obj_disp_on)
         END_SIBLING_EVENT
         CALL(btlevtcmd_WaitEventEnd, LW(0))
@@ -1267,13 +1276,13 @@ EVT_BEGIN(_curtain_close_event)
     DELETE_EVENT(LW(10))
     CALL(btlevtcmd_BtlStageObjFlagOnOff, STRING("spotlight"), 1, 0)
     CALL(_lvup_select_obj_lvup_param_disp)
-    CALL(_lvup_disp_flag_onoff, 1, 32)
+    CALL(_lvup_disp_flag_onoff, 1, SEQEND_DISP_LVUP_HELP)
 #else
     END_SIBLING_EVENT
     WAIT_MS(1000)
     BEGIN_SIBLING_EVENT_GET_ID(LW(0))
         CALL(_lvup_obj_set_color, 1, 255, 255, 255, 255)
-        CALL(_lvup_disp_flag_onoff, 1, 32)
+        CALL(_lvup_disp_flag_onoff, 1, SEQEND_DISP_LVUP_HELP)
         CALL(_lvup_select_obj_disp_on)
     END_SIBLING_EVENT
     CALL(btlevtcmd_WaitEventEnd, LW(0))
@@ -1324,7 +1333,7 @@ EVT_BEGIN(_move_to_heart_event)
     CALL(_lvup_obj_set_color, 0, 100, 128, 128, 255)
     CALL(_lvup_obj_set_color, 1, 100, 128, 128, 255)
     CALL(_lvup_obj_set_color, 2, 100, 128, 128, 255)
-    CALL(_lvup_disp_flag_onoff, 0, 32)
+    CALL(_lvup_disp_flag_onoff, 0, SEQEND_DISP_LVUP_HELP)
     CALL(evt_sub_intpl_init, EASING_CUBIC_OUT, 0, -30, 10)
     LOOP(11)
         CALL(evt_sub_intpl_get_value)
@@ -1333,7 +1342,7 @@ EVT_BEGIN(_move_to_heart_event)
     END_LOOP
     CALL(btlevtcmd_BtlStageObjSetRotate, STRING("spotlight"), 0, 0, -30)
     CALL(_lvup_obj_set_color, 0, 255, 255, 255, 255)
-    CALL(_lvup_disp_flag_onoff, 1, 32)
+    CALL(_lvup_disp_flag_onoff, 1, SEQEND_DISP_LVUP_HELP)
     RETURN
 EVT_END()
 
@@ -1342,7 +1351,7 @@ EVT_BEGIN(_move_to_flower_event)
     CALL(_lvup_obj_set_color, 0, 100, 128, 128, 255)
     CALL(_lvup_obj_set_color, 1, 100, 128, 128, 255)
     CALL(_lvup_obj_set_color, 2, 100, 128, 128, 255)
-    CALL(_lvup_disp_flag_onoff, 0, 32)
+    CALL(_lvup_disp_flag_onoff, 0, SEQEND_DISP_LVUP_HELP)
     CALL(btlevtcmd_BtlStageObjGetRotate, STRING("spotlight"), EVT_NULLPTR, EVT_NULLPTR, LW(5))
     CALL(evt_sub_intpl_init, EASING_CUBIC_OUT, LW(5), 0, 10)
     LOOP(11)
@@ -1352,7 +1361,7 @@ EVT_BEGIN(_move_to_flower_event)
     END_LOOP
     CALL(btlevtcmd_BtlStageObjSetRotate, STRING("spotlight"), 0, 0, 0)
     CALL(_lvup_obj_set_color, 1, 255, 255, 255, 255)
-    CALL(_lvup_disp_flag_onoff, 1, 32)
+    CALL(_lvup_disp_flag_onoff, 1, SEQEND_DISP_LVUP_HELP)
     RETURN
 EVT_END()
 
@@ -1361,7 +1370,7 @@ EVT_BEGIN(_move_to_badge_point_event)
     CALL(_lvup_obj_set_color, 0, 100, 128, 128, 255)
     CALL(_lvup_obj_set_color, 1, 100, 128, 128, 255)
     CALL(_lvup_obj_set_color, 2, 100, 128, 128, 255)
-    CALL(_lvup_disp_flag_onoff, 0, 32)
+    CALL(_lvup_disp_flag_onoff, 0, SEQEND_DISP_LVUP_HELP)
     CALL(evt_sub_intpl_init, EASING_CUBIC_OUT, 0, 30, 10)
     LOOP(11)
         CALL(evt_sub_intpl_get_value)
@@ -1370,7 +1379,7 @@ EVT_BEGIN(_move_to_badge_point_event)
     END_LOOP
     CALL(btlevtcmd_BtlStageObjSetRotate, STRING("spotlight"), 0, 0, 30)
     CALL(_lvup_obj_set_color, 2, 255, 255, 255, 255)
-    CALL(_lvup_disp_flag_onoff, 1, 32)
+    CALL(_lvup_disp_flag_onoff, 1, SEQEND_DISP_LVUP_HELP)
     RETURN
 EVT_END()
 
@@ -1481,7 +1490,7 @@ USER_FUNC(_set_confetti_control_evtid) {
 USER_FUNC(_lvup_select_obj_disp_on) {
     SeqEndWork* work = SEW(_battleWorkPointer);
 
-    work->flags |= 8;
+    work->flags |= SEQEND_DISP_LVUP_SELECT;
     return 2;
 }
 
@@ -1788,7 +1797,7 @@ USER_FUNC(_lvup_select_object_init) {
         work->objs[2].nextValue = work->objs[2].value + 3;
     }
 
-    work->flags |= 8;
+    work->flags |= SEQEND_DISP_LVUP_SELECT;
     return 2;
 }
 
