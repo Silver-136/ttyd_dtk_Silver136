@@ -23,7 +23,7 @@ void BattleInformationInit(FieldBattleInfo* info) {
     BattleInformationSetMode(info, 0);
     BattleInformationSetParty(info, UNIT_NULL);
     BattleInformationSetFirstAttack(info, FIRST_ATTACK_NONE);
-    BattleInformationSetResult(info, 0);
+    BattleInformationSetResult(info, BATTLE_RESULT_NONE);
     info->setup = NULL;
     info->coins = 0;
     info->ruleType = 0;

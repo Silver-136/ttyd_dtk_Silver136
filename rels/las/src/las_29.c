@@ -1623,7 +1623,7 @@ EVT_BEGIN(last_evt_3)
     CALL(evt_npc_wait_battle_end)
     CALL(rou_hikari_front_onoff, 0, 1)
     CALL(evt_npc_get_battle_result, LW(0))
-    IF_INT_EQUAL(LW(0), 5)
+    IF_INT_EQUAL(LW(0), BATTLE_RESULT_STOPPED)
         SPAWN_EVENT(PTR(last_evt_3_1))
         ELSE
         SET_VALUE(GSW_STORY_PROGRESS, STG8_16_THE_RETURN_OF_THE_QUEEN)

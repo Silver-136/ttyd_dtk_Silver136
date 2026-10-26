@@ -248,18 +248,18 @@ void btlseqEnd(BattleWork* wp) {
         enemyBelong = BtlUnit_GetEnemyBelong(mu);
         flags = wp->flags;
         if (flags & BATTLE_FLAG_DEMO_TIMEOUT) {
-            BattleInformationSetResult(info, 4);
+            BattleInformationSetResult(info, BATTLE_RESULT_ESCAPE);
         } else if (flags & BATTLE_FLAG_INTERRUPT_STOP) {
-            BattleInformationSetResult(info, 5);
+            BattleInformationSetResult(info, BATTLE_RESULT_STOPPED);
         } else if (wp->alliances[marioBelong].clearConditionMet) {
-            BattleInformationSetResult(info, 3);
+            BattleInformationSetResult(info, BATTLE_RESULT_LOSE);
         } else if (wp->alliances[enemyBelong].clearConditionMet) {
-            BattleInformationSetResult(info, 1);
+            BattleInformationSetResult(info, BATTLE_RESULT_WIN);
         } else if (flags & BATTLE_FLAG_ESCAPED) {
-            BattleInformationSetResult(info, 4);
+            BattleInformationSetResult(info, BATTLE_RESULT_ESCAPE);
         }
         switch (BattleInformationGetResult(info)) {
-        case 1:
+        case BATTLE_RESULT_WIN:
             if (fbatGetPointer()->postBattleEvent != NULL) {
                 BattleSetSeq(wp, SEQ_END, 0x7000003);
                 return;
@@ -268,10 +268,10 @@ void btlseqEnd(BattleWork* wp) {
             BattleSetSeq(wp, SEQ_END, 0x7000005);
             _BattleMarioKouraDelete();
             break;
-        case 3:
+        case BATTLE_RESULT_LOSE:
             BattleSetSeq(wp, SEQ_END, 0x7000001);
             break;
-        case 4:
+        case BATTLE_RESULT_ESCAPE:
         default:
             _ExecAllUnitBattleEndEvent();
             BattleSetSeq(wp, SEQ_END, 0x700001D);

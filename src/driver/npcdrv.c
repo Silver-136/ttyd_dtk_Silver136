@@ -2095,9 +2095,9 @@ void fbatBattleMode(void) {
                 data->subState = 1;
             } else {
                 if (win) {
-                    BattleInformationSetResult(info, 2);
+                    BattleInformationSetResult(info, BATTLE_RESULT_WIN_FIELD);
                 } else {
-                    BattleInformationSetResult(info, 5);
+                    BattleInformationSetResult(info, BATTLE_RESULT_STOPPED);
                 }
                 data->subState = 4;
             }
@@ -2111,7 +2111,7 @@ void fbatBattleMode(void) {
             if (!gp->inBattle) {
                 data->merleeCoinBonus = 0;
                 result = BattleInformationGetResult(&data->info);
-                if (pouch->mMerleeNextCurseType == 4 && result == 1) {
+                if (pouch->mMerleeNextCurseType == 4 && result == BATTLE_RESULT_WIN) {
                     data->subState = 3;
                     data->merleeCoinBonus = 1;
                     evt = evtEntry(_evt_majinai_coin_up_effect, 0, 0);
@@ -2182,11 +2182,11 @@ void fbatBattleMode(void) {
                     }
                 }
                 data->mode = 1;
-                if (res == 1 || res == 2) {
+                if (res == BATTLE_RESULT_WIN || res == BATTLE_RESULT_WIN_FIELD) {
                     mult = 1;
-                    if (BattleInformationGetResult(info4) == 1) {
+                    if (BattleInformationGetResult(info4) == BATTLE_RESULT_WIN) {
                         cur->btlCoinDropCount = info4->coins;
-                    } else if (res == 1) {
+                    } else if (res == BATTLE_RESULT_WIN) {
                         cur->btlCoinDropCount = cur->baseCoinCount;
                     } else {
                         cur->btlCoinDropCount = 0;

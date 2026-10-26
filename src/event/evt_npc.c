@@ -1887,7 +1887,7 @@ USER_FUNC(evt_npc_battle_start) {
         if (party) {
             partyCtrlOff();
         }
-        BattleInformationSetResult(info, 0);
+        BattleInformationSetResult(info, BATTLE_RESULT_NONE);
         psndSetFlag(PSND_FLAG_BATTLE_START);
         seqSetSeq(SEQ_BATTLE, NULL, NULL);
         return EVT_RETURN_BLOCK;
@@ -1902,7 +1902,7 @@ USER_FUNC(evt_npc_wait_battle_end) {
     if (seqGetSeq() != SEQ_GAME) {
         return EVT_RETURN_BLOCK;
     }
-    if (BattleInformationGetResult(info) == 0) {
+    if (BattleInformationGetResult(info) == BATTLE_RESULT_NONE) {
         return EVT_RETURN_BLOCK;
     }
     marioCtrlOn();

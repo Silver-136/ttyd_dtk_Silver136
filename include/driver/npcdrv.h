@@ -368,6 +368,16 @@ typedef struct FirstStrikeInfo {
     GXColor color;       // 0x1C
 } FirstStrikeInfo;
 
+// FieldBattleInfo.result (BattleInformationSetResult; evt_npc_get_battle_result)
+typedef enum BattleResult {
+    BATTLE_RESULT_NONE = 0,
+    BATTLE_RESULT_WIN = 1,        // the enemy side was defeated
+    BATTLE_RESULT_WIN_FIELD = 2,  // won without a battle (Bump Attack, battle skip)
+    BATTLE_RESULT_LOSE = 3,
+    BATTLE_RESULT_ESCAPE = 4,     // ran away (also the demo timeout)
+    BATTLE_RESULT_STOPPED = 5,    // ended by btlevtcmd_InterruptStop, or no battle and no win in the field
+} BattleResult;
+
 // FieldBattleInfo.firstAttack (BattleInformationSetFirstAttack, from the field hit kind in seq_battle)
 typedef enum BattleFirstAttack {
     FIRST_ATTACK_NONE = 0,
@@ -387,7 +397,7 @@ typedef struct FieldBattleInfo {
     BattleUnitType party; //0x4
     u32 firstAttack; //0x8, BattleFirstAttack
     NpcBattleInfo* setup; //0xC
-    u32 result; //0x10
+    u32 result; //0x10, BattleResult
     u32 coins; //0x14, BattleStoreCoin
     u8 ruleType; //0x18, NpcBattleInfo.battleRule[0], index into the _rule_msg tables
     u8 ruleKeepResult; //0x19
