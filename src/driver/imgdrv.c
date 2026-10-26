@@ -186,10 +186,10 @@ void imgDisp(CameraId camId, void* param) {
             fb = entry->height;
         }
     }
-    PSMTXTrans(m3, 64.0f * ((entry->offsetX + fl) / (f32)((GXRenderModeObj*)DEMOGetRenderModeObj())->fbWidth), 48.0f * (-(entry->offsetY + ft) / (f32)((GXRenderModeObj*)DEMOGetRenderModeObj())->efbHeight), zoff);
+    PSMTXTrans(m3, 64.0f * ((entry->offsetX + fl) / (f32)(DEMOGetRenderModeObj())->fbWidth), 48.0f * (-(entry->offsetY + ft) / (f32)(DEMOGetRenderModeObj())->efbHeight), zoff);
     PSMTXTrans(m4, -32.0f, 24.0f, 0.0f);
     PSMTXConcat(m3, m4, m3);
-    PSMTXScale(m4, fr / (f32)((GXRenderModeObj*)DEMOGetRenderModeObj())->fbWidth, fb / (f32)((GXRenderModeObj*)DEMOGetRenderModeObj())->efbHeight, fr / (f32)((GXRenderModeObj*)DEMOGetRenderModeObj())->fbWidth);
+    PSMTXScale(m4, fr / (f32)(DEMOGetRenderModeObj())->fbWidth, fb / (f32)(DEMOGetRenderModeObj())->efbHeight, fr / (f32)(DEMOGetRenderModeObj())->fbWidth);
     PSMTXConcat(m3, m4, m3);
     PSMTXTrans(m4, 32.0f, -24.0f, 0.0f);
     PSMTXConcat(m3, m4, m3);

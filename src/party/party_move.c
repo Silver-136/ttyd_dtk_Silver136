@@ -1985,7 +1985,7 @@ BOOL partyGetAppearPos5(PartyEntry* party, HitEntry* hit, Vec* out) {
     if (!(hitGetAttr(hit) & HIT_ATTR_MOBJ)) {
         return FALSE;
     }
-    mobj = &((MapObjectEntry*)mobjHitObjPtrToPtr(hit))->position;
+    mobj = &(mobjHitObjPtrToPtr(hit))->position;
     pos.x = mobj->x;
     pos.z = mobj->z;
     pos.y = 50.0f + mobj->y;

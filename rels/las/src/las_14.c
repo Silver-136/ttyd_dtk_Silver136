@@ -314,10 +314,10 @@ static USER_FUNC(evt_cloud_main) {
     if (party->currentMemberId != PARTY_MEMBER_FLURRIE) {
         return EVT_RETURN_BLOCK;
     }
-    hit0 = (HitEntry*)cloudGetHitBreathout(0);
-    hit1 = (HitEntry*)cloudGetHitBreathout(1);
-    hit2 = (HitEntry*)cloudGetHitBreathout(2);
-    hit3 = (HitEntry*)cloudGetHitBreathout(3);
+    hit0 = cloudGetHitBreathout(0);
+    hit1 = cloudGetHitBreathout(1);
+    hit2 = cloudGetHitBreathout(2);
+    hit3 = cloudGetHitBreathout(3);
     switch (wp->state) {
         case 0:
             if ((s32)cloud_once_flag == 1) {

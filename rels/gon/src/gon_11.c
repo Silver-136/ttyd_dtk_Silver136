@@ -714,10 +714,10 @@ static s32 evt_cloud_main(EventEntry *event, BOOL isFirstCall) {
     if (ptmp == NULL) {
         return 0;
     }
-    hit0 = (HitEntry*)cloudGetHitBreathout(0);
-    hit1 = (HitEntry*)cloudGetHitBreathout(1);
-    hit2 = (HitEntry*)cloudGetHitBreathout(2);
-    hit3 = (HitEntry*)cloudGetHitBreathout(3);
+    hit0 = cloudGetHitBreathout(0);
+    hit1 = cloudGetHitBreathout(1);
+    hit2 = cloudGetHitBreathout(2);
+    hit3 = cloudGetHitBreathout(3);
     switch (wp->state) {
         case 0:
             if (((s32) (cloud_once_flag & 0xFFFFFFFFFFFFFFFFu)) == 1) // FAKE: no-op 64-bit mask; needed for 100% (plain cloud_once_flag == 1 gives 97.9-98.1)
