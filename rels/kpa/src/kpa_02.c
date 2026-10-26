@@ -69,7 +69,7 @@ EVT_END()
 
 static EVT_BEGIN(kpa_goal)
     CALL(evt_mario_key_onoff, 0)
-    SET_VALUE(GSW_STORY_PROGRESS, 116)
+    SET_VALUE(GSW_STORY_PROGRESS, STG2_25_04_BOWSER_ACTION_STAGE)
     CALL(evt_sub_get_system_flag, LW(0))
     IF_BITS_SET(LW(0), 4096)
         CALL(evt_cam_letter_box_disable, 0)

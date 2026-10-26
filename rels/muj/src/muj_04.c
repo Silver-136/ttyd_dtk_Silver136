@@ -419,7 +419,7 @@ EVT_BEGIN(sanders_funto)
         CALL(evt_party_move_pos2, 0, -300, -20, FLOAT(180.0f))
     END_INLINE_EVENT
     WAIT_MS(2000)
-    SET_VALUE(GSW_STORY_PROGRESS, 234)
+    SET_VALUE(GSW_STORY_PROGRESS, STG5_13_BOBBERY_THE_BRIDGE)
     CALL(evt_fade_set_mapchange_type, 0, 2, 500, 1, 500)
     CALL(evt_bero_mapchange, STRING("muj_03"), STRING("e_bero"))
     RETURN
@@ -540,7 +540,7 @@ EVT_BEGIN(muj_04_init_evt)
     SPAWN_EVENT(PTR(yashi_yure_init))
     CALL(evt_run_case_evt, CASE_HAMMER, 1, STRING("A_hai_yasi"), 0, PTR(yashi_yure), 0)
     SWITCH(GSW_STORY_PROGRESS)
-        CASE_EQUAL(233)
+        CASE_EQUAL(STG5_12_FLAVIO_PA_PATCH)
         SPAWN_EVENT(PTR(sanders_funto))
     END_SWITCH
     CALL(evt_hit_damage_return_set, PTR(hitDmgRetPoints))

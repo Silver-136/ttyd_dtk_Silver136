@@ -75,7 +75,7 @@ static BeroEntry bero_entry_data[] = {
 };
 
 EVT_BEGIN(evt_yuka)
-    SET_VALUE(GSW_STORY_PROGRESS, 208)
+    SET_VALUE(GSW_STORY_PROGRESS, STG4_13_03_BREAKING_THE_FLOOR)
     RETURN
 EVT_END()
 
@@ -90,7 +90,7 @@ EVT_BEGIN(jin_11_init_evt)
     CALL_CHILD(PTR(evt_usu_kagemario_party_kill))
     CALL(evt_mobj_save_blk, STRING("mobj_save"), -50, 60, -40, 0, 0)
     CALL(evt_mobj_powerupblk, STRING("pblk00"), 40, 60, -40, 0, GSWF(5551), 0)
-    IF_INT_LESS(GSW_STORY_PROGRESS, 208)
+    IF_INT_LESS(GSW_STORY_PROGRESS, STG4_13_03_BREAKING_THE_FLOOR)
         CALL(evt_mobj_breaking_floor, STRING("mobj_bf00"), 845, 115, 5, 0, PTR(evt_yuka), GSWF(2233))
     END_IF
     RETURN

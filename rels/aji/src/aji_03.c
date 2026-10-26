@@ -534,7 +534,7 @@ EVT_END()
 EVT_BEGIN(evt_zenmai)
     CALL(evt_snd_sfxon, STRING("SFX_STG7_AMB_GEAR1"), 0)
     LOOP(0)
-        IF_INT_LESS(GSW_STORY_PROGRESS, 372)
+        IF_INT_LESS(GSW_STORY_PROGRESS, STG7_19_THE_DOOR_TO_LORD_CRUMP)
             CALL(evt_sub_intpl_msec_init, EASING_LINEAR, 0, 36000, 2000)
             ELSE
             CALL(evt_sub_intpl_msec_init, EASING_LINEAR, 0, 36000, 1000)

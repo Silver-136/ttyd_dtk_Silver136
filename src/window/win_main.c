@@ -201,11 +201,11 @@ void winMain(void) {
                         if (strcmp(gp->currentAreaName, "yuu") == 0) {
                             break;
                         }
-                        if ((wp->buttonTrg & PAD_BUTTON_LEFT) && (swByteGet(0) >= 7 || partyChkJoin(PARTNER_GOOMBELLA))) {
+                        if ((wp->buttonTrg & PAD_BUTTON_LEFT) && (swByteGet(0) >= STG0_07_GOOMBELLA_JOINS || partyChkJoin(PARTNER_GOOMBELLA))) {
                             wp->menuSel = 1;
                         } else if (wp->buttonTrg & PAD_BUTTON_UP) {
                             wp->menuSel = 2;
-                        } else if ((wp->buttonTrg & PAD_BUTTON_RIGHT) && (swByteGet(0) >= 20 || pouchGetHaveBadgeCnt())) {
+                        } else if ((wp->buttonTrg & PAD_BUTTON_RIGHT) && (swByteGet(0) >= STG0_17_BADGE_TUTORIAL || pouchGetHaveBadgeCnt())) {
                             wp->menuSel = 3;
                         } else if (wp->buttonTrg & PAD_BUTTON_DOWN) {
                             wp->menuSel = 4;
@@ -753,7 +753,7 @@ EVT_BEGIN(evt_lecture_msg)
     CALL(evt_msg_continue)
 #ifdef VERSION_G8ME01
     LOOP(0)
-        IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 20)
+        IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG0_17_BADGE_TUTORIAL)
             BREAK_LOOP
         END_IF
         WAIT_FRAMES(1)

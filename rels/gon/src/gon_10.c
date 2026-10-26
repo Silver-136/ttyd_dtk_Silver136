@@ -97,7 +97,7 @@ EVT_BEGIN(gon_10_init_evt)
     CALL(evt_npc_change_fbat_mode, 1)
     CALL(evt_mobj_save_blk, STRING("mobj_save"), -460, 1010, -145, 0, 0)
     CALL(evt_mobj_recovery_blk, STRING("mobj_recover"), 6, -400, 1010, -146, 0, 0)
-    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 55)
+    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG1_16_HOOKTAIL)
         CALL(evt_mapobj_flag_onoff, 0, 1, STRING("en"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     RETURN

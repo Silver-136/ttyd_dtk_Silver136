@@ -104,7 +104,7 @@ static EVT_BEGIN(cloud_toujou)
     CALL(evt_msg_toge, 2, LW(0), LW(1), LW(2))
     CALL(evt_msg_print, 0, STRING("stg2_win_e04_00_04"), 0, STRING("クラウダ"))
     WAIT_MS(1000)
-    SET_VALUE(GSW_STORY_PROGRESS, 77)
+    SET_VALUE(GSW_STORY_PROGRESS, STG2_03_03_FLURRIE_INTRO)
     CALL(evt_fade_set_mapchange_type, 0, 10, 100, 9, 100)
     CALL(evt_bero_mapchange, STRING("win_03"), STRING(""))
     RETURN
@@ -118,7 +118,7 @@ EVT_BEGIN(win_05_init_evt)
     CALL(evt_mobj_kururing_floor, STRING("kururin1"), 64, 0, 118, STRING("S_yukaA"), 125, GSWF(5611))
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG2_WIN1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG2_WIN2"))
-    IF_INT_EQUAL(GSW_STORY_PROGRESS, 76)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG2_03_02_SEALED_ENTRANCE_2)
         SPAWN_EVENT(PTR(cloud_toujou))
     END_IF
     RETURN

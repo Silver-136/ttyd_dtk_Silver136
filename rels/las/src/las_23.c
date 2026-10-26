@@ -196,7 +196,7 @@ static HitDamageReturn dmgRetPoint[] = {
 };
 
 EVT_BEGIN(las_23_init_evt)
-    IF_INT_LESS(GSW_STORY_PROGRESS, 390)
+    IF_INT_LESS(GSW_STORY_PROGRESS, STG8_06_MOVING_PLANETS)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG8_LST1"))
         ELSE
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG8_LST3"))
@@ -206,7 +206,7 @@ EVT_BEGIN(las_23_init_evt)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
     CALL_CHILD(PTR(evt_bero_info_run))
-    IF_INT_LESS(GSW_STORY_PROGRESS, 390)
+    IF_INT_LESS(GSW_STORY_PROGRESS, STG8_06_MOVING_PLANETS)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_under"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_under"), 1, 0)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_paipu"), MAP_OBJ_FLAG_HIDDEN)

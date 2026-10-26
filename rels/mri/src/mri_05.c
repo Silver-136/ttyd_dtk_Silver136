@@ -75,7 +75,7 @@ USER_FUNC(mario_shabon_init) {
 
 EVT_BEGIN(puni_4_init)
     SWITCH(GSW_STORY_PROGRESS)
-        CASE_GREATER_OR_EQUAL(118)
+        CASE_GREATER_OR_EQUAL(STG2_26_PRAISE_FROM_THE_PUNI)
         IF_INT_EQUAL(GSWF(2884), 1)
             CALL(evt_npc_set_position, STRING("me"), -130, -309, 90)
         END_IF
@@ -85,7 +85,7 @@ EVT_END()
 
 EVT_BEGIN(puni_4_talk)
     SWITCH(GSW_STORY_PROGRESS)
-        CASE_LESS_OR_EQUAL(402)
+        CASE_LESS_OR_EQUAL(STG8_END_AFTER_THE_BATTLE)
         CALL(evt_msg_print, 0, STRING("stg2_mri_re_019_1"), 0, STRING("me"))
         CASE_DEFAULT
         CALL(evt_msg_print, 0, STRING("stg2_mri_re_019_1_1"), 0, STRING("me"))
@@ -95,7 +95,7 @@ EVT_END()
 
 EVT_BEGIN(puni_5_init)
     SWITCH(GSW_STORY_PROGRESS)
-        CASE_GREATER_OR_EQUAL(118)
+        CASE_GREATER_OR_EQUAL(STG2_26_PRAISE_FROM_THE_PUNI)
         IF_INT_EQUAL(GSWF(2884), 1)
             CALL(evt_npc_set_position, STRING("me"), 130, -309, 90)
         END_IF
@@ -105,7 +105,7 @@ EVT_END()
 
 EVT_BEGIN(puni_5_talk)
     SWITCH(GSW_STORY_PROGRESS)
-        CASE_LESS_OR_EQUAL(402)
+        CASE_LESS_OR_EQUAL(STG8_END_AFTER_THE_BATTLE)
         CALL(evt_msg_print, 0, STRING("stg2_mri_re_020"), 0, STRING("me"))
         CASE_DEFAULT
         CALL(evt_msg_print, 0, STRING("stg2_mri_re_020_1"), 0, STRING("me"))
@@ -623,14 +623,14 @@ EVT_BEGIN(mri_05_init_evt)
     CALL(evt_npc_setup, PTR(npcEnt))
     SPAWN_EVENT(PTR(puni_disp_info))
     SPAWN_EVENT(PTR(mri_countdown))
-    IF_INT_GREATER(GSW_STORY_PROGRESS, 113)
+    IF_INT_GREATER(GSW_STORY_PROGRESS, STG2_25_01_PEACH_CRUMP_X_NAUTS)
         CALL(evt_npc_check_delete, STRING("軍団ザコ"))
     END_IF
     CALL(evt_npc_change_fbat_mode, 1)
     SET_VALUE(LW(0), PTR(ueki_access_data))
     CALL_CHILD(PTR(evt_sub_kusa_access_entry))
     SWITCH(GSW_STORY_PROGRESS)
-        CASE_BETWEEN(109, 110)
+        CASE_BETWEEN(STG2_23_TIME_BOMB_ACTIVATED, STG2_23_01_X_NAUT_BATTLE)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_DANGER4"))
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG2_MRI9"))
         CASE_DEFAULT

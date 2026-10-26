@@ -119,7 +119,7 @@ static EVT_BEGIN(first_evt)
     WAIT_MS(200)
     CALL(evt_msg_print_party, STRING("stg7_bom_01"))
     CALL(evt_cam3d_evt_off, 500, 11)
-    SET_VALUE(GSW_STORY_PROGRESS, 352)
+    SET_VALUE(GSW_STORY_PROGRESS, STG7_00_START)
     SET_VALUE(GSWF(3884), 1)
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_party_run, 0)
@@ -166,15 +166,15 @@ EVT_BEGIN(bom_00_init_evt)
     CALL(evt_mobj_kururing_floor, STRING("kururin1"), -300, 5, 0, STRING("S_gra02_dai"), 125, GSWF(5658))
     IF_INT_EQUAL(GSWF(3884), 0)
         SWITCH(GSW_STORY_PROGRESS)
-            CASE_LESS(349)
+            CASE_LESS(STG6_71_01)
             SPAWN_EVENT(PTR(first_evt2))
             CASE_DEFAULT
             SPAWN_EVENT(PTR(first_evt))
         END_SWITCH
         ELSE
-        IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 349)
-            IF_INT_LESS(GSW_STORY_PROGRESS, 352)
-                SET_VALUE(GSW_STORY_PROGRESS, 352)
+        IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG6_71_01)
+            IF_INT_LESS(GSW_STORY_PROGRESS, STG7_00_START)
+                SET_VALUE(GSW_STORY_PROGRESS, STG7_00_START)
             END_IF
         END_IF
     END_IF

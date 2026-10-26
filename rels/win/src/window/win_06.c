@@ -48,7 +48,7 @@ EvtWord welcome_wonderforest[260];
 EvtWord win_06_init_evt[82];
 
 static EVT_BEGIN(first_evt_dokan)
-    IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, 70)
+    IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, STG1_END_TO_STAGE_2)
         SET_VALUE(LW(0), 0)
         RETURN
     END_IF
@@ -169,7 +169,7 @@ EVT_BEGIN(welcome_wonderforest)
     CALL(evt_msg_print, 0, STRING("stg2_win_e00_00"), 0, STRING("extparty"))
     CALL(evt_cam3d_evt_off, 500, 11)
     WAIT_MS(500)
-    SET_VALUE(GSW_STORY_PROGRESS, 71)
+    SET_VALUE(GSW_STORY_PROGRESS, STG2_00_BOGGLY_WOODS)
     CALL(evt_snd_bgm_scope, 0, 0)
     CALL(evt_party_run, 0)
     CALL(evt_party_run, 1)
@@ -179,7 +179,7 @@ EVT_BEGIN(welcome_wonderforest)
 EVT_END()
 
 EVT_BEGIN(win_06_init_evt)
-    IF_INT_LESS(GSW_STORY_PROGRESS, 71)
+    IF_INT_LESS(GSW_STORY_PROGRESS, STG2_00_BOGGLY_WOODS)
         BEGIN_INLINE_EVENT
             CALL(evt_snd_bgmoff, PSND_FADEOUT)
             CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG2_WIN1"))
@@ -198,7 +198,7 @@ EVT_BEGIN(win_06_init_evt)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_kusa"), MAP_OBJ_FLAG_CLIP)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("group22"), MAP_OBJ_FLAG_CLIP)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_oku_01H081"), MAP_OBJ_FLAG_CLIP)
-    IF_INT_EQUAL(GSW_STORY_PROGRESS, 70)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG1_END_TO_STAGE_2)
         CALL_CHILD(PTR(welcome_wonderforest_init))
         SPAWN_EVENT(PTR(welcome_wonderforest))
     END_IF

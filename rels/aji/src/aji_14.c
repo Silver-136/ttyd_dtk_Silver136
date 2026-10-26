@@ -374,7 +374,7 @@ EVT_BEGIN(evt_boss2)
         CALL(evt_party_move_pos2, 0, -40, 15, FLOAT(80.0f))
     END_INLINE_EVENT
     CALL(evt_mario_mov_pos2, 0, 0, FLOAT(80.0f))
-    SET_VALUE(GSW_STORY_PROGRESS, 373)
+    SET_VALUE(GSW_STORY_PROGRESS, STG7_20_LORD_CRUMP_DEFEATED)
     DELETE_EVENT(LW(10))
     SET_VALUE(LW(0), 7)
     SET_VALUE(LW(1), STRING("dummy"))
@@ -423,7 +423,7 @@ EVT_BEGIN(aji_14_init_evt)
         SPAWN_EVENT(PTR(evt_boss2))
         RETURN
     END_IF
-    IF_INT_LESS(GSW_STORY_PROGRESS, 373)
+    IF_INT_LESS(GSW_STORY_PROGRESS, STG7_20_LORD_CRUMP_DEFEATED)
         CALL(evt_npc_entry, STRING("ロボット２"), STRING("c_mb_robo_2b"))
         CALL(evt_npc_set_anim, STRING("ロボット２"), STRING("MGN_Q_1"))
         CALL(evt_npc_set_position, STRING("ロボット２"), 0, -1000, 0)

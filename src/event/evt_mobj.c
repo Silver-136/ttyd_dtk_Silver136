@@ -2260,7 +2260,7 @@ EVT_BEGIN(mobj_save_blk_sysevt)
         CALL(evt_msg_print, 0, STRING("save_first_hit"), 0, 0)
         SET_VALUE(LF(10), 1)
     END_IF
-    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 7)
+    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG0_07_GOOMBELLA_JOINS)
         SET_VALUE(GSWF(236), 1)
     END_IF
     SET_VALUE(LW(0), 0)

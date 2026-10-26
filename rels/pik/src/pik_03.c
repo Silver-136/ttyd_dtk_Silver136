@@ -88,7 +88,7 @@ static BeroEntry bero_data[] = {
 
 static EVT_BEGIN(evt_daiza)
     CALL(evt_mario_key_onoff, 0)
-    SET_VALUE(GSW_STORY_PROGRESS, 338)
+    SET_VALUE(GSW_STORY_PROGRESS, STG6_53_THE_REAL_GARNET_STAR)
     CALL(evt_npc_stop_for_event)
     SET_VALUE(LW(0), 6)
     SET_VALUE(LW(1), STRING("star"))
@@ -106,10 +106,10 @@ EVT_BEGIN(pik_03_init_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG6_PIK2"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG6_PIK3"))
     CALL(evt_snd_set_rev_mode, 2)
-    IF_INT_LESS(GSW_STORY_PROGRESS, 338)
+    IF_INT_LESS(GSW_STORY_PROGRESS, STG6_53_THE_REAL_GARNET_STAR)
         CALL(evt_item_entry, STRING("star"), ITEM_GARNET_STAR, 0, 45, -950, ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
     END_IF
-    IF_INT_LESS(GSW_STORY_PROGRESS, 338)
+    IF_INT_LESS(GSW_STORY_PROGRESS, STG6_53_THE_REAL_GARNET_STAR)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("dai_a"), 0, PTR(evt_daiza), 0)
     END_IF
     CALL(evt_item_entry, STRING("item01"), ITEM_L_EMBLEM, -305, 330, -990, ITEM_TYPE_STILL, GSWF(3277), 0)

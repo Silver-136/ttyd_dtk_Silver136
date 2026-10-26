@@ -236,7 +236,7 @@ EVT_BEGIN(wall_roll)
     CALL(evt_mobj_delete, STRING("slot02"))
     CALL(evt_mobj_delete, STRING("slot03"))
     WAIT_MS(500)
-    SET_VALUE(GSW_STORY_PROGRESS, 104)
+    SET_VALUE(GSW_STORY_PROGRESS, STG2_21_02_MATCHING_THE_PATTERNS)
 #ifdef VERSION_G8ME01
     CALL(N_evt_party_cloud_lock_animations_on_off, 0, 0)
 #endif
@@ -269,7 +269,7 @@ static KusaAccess ueki_access_data[] = {
 };
 
 EVT_BEGIN(slot00_event)
-    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 104)
+    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG2_21_02_MATCHING_THE_PATTERNS)
         RETURN
     END_IF
     CALL(evt_mobj_hitevt_onoff, STRING("me"), 0)
@@ -293,7 +293,7 @@ EVT_BEGIN(slot00_event)
 EVT_END()
 
 EVT_BEGIN(slot01_event)
-    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 104)
+    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG2_21_02_MATCHING_THE_PATTERNS)
         RETURN
     END_IF
     CALL(evt_mobj_hitevt_onoff, STRING("me"), 0)
@@ -317,7 +317,7 @@ EVT_BEGIN(slot01_event)
 EVT_END()
 
 EVT_BEGIN(slot02_event)
-    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 104)
+    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG2_21_02_MATCHING_THE_PATTERNS)
         RETURN
     END_IF
     CALL(evt_mobj_hitevt_onoff, STRING("me"), 0)
@@ -341,7 +341,7 @@ EVT_BEGIN(slot02_event)
 EVT_END()
 
 EVT_BEGIN(slot03_event)
-    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 104)
+    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG2_21_02_MATCHING_THE_PATTERNS)
         RETURN
     END_IF
     CALL(evt_mobj_hitevt_onoff, STRING("me"), 0)
@@ -425,7 +425,7 @@ EVT_BEGIN(get_blue_jail_key)
     CALL(evt_msg_print, 0, STRING("stg2_mri_e18_00"), 0, STRING("ガイドsp"))
     CALL(evt_puni_flag_onoff, 1, 1, PUNI_FLAG_SCRIPT_CONTROL)
     CALL(evt_puni_set_mode, 1, 1)
-    SET_VALUE(GSW_STORY_PROGRESS, 98)
+    SET_VALUE(GSW_STORY_PROGRESS, STG2_18_JABBLE)
     CALL(evt_fade_set_mapchange_type, 0, 2, 500, 1, 500)
     SET_VALUE(LW(0), STRING("w_bero"))
     CALL_CHILD(PTR(bero_case_switch_off))
@@ -453,7 +453,7 @@ EVT_BEGIN(mri_09_init_evt)
     SET_VALUE(LW(0), PTR(ueki_access_data))
     CALL_CHILD(PTR(evt_sub_kusa_access_entry))
     SWITCH(GSW_STORY_PROGRESS)
-        CASE_BETWEEN(109, 110)
+        CASE_BETWEEN(STG2_23_TIME_BOMB_ACTIVATED, STG2_23_01_X_NAUT_BATTLE)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_DANGER4"))
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG2_MRI9"))
         CASE_DEFAULT
@@ -466,12 +466,12 @@ EVT_BEGIN(mri_09_init_evt)
     CALL(evt_map_playanim, STRING("awa_01"), 1, 0)
     CALL(evt_map_playanim, STRING("awa_02"), 1, 0)
     SWITCH(GSW_STORY_PROGRESS)
-        CASE_LESS(103)
+        CASE_LESS(STG2_21_01_MYSTERY_PILLAR)
         CALL(evt_hitobj_onoff, STRING("A_f2_rak03"), 1, 0)
 #ifdef VERSION_G8ME01
         SPAWN_EVENT(slot_event)
 #endif
-        CASE_EQUAL(103)
+        CASE_EQUAL(STG2_21_01_MYSTERY_PILLAR)
         CALL(evt_hitobj_onoff, STRING("A_f2_rak03"), 1, 0)
         SPAWN_EVENT(PTR(slot_event))
         CALL(evt_mobj_switch_red, 1, STRING("slot00"), -80, 0, 135, PTR(slot00_event), 0)
@@ -482,7 +482,7 @@ EVT_BEGIN(mri_09_init_evt)
         CALL(evt_paper_entry, STRING("OFF_d_roll_up"))
         CALL(evt_paper_entry, STRING("OFF_d_roll_left"))
         CALL(evt_paper_entry, STRING("OFF_d_roll_right"))
-        CASE_GREATER_OR_EQUAL(104)
+        CASE_GREATER_OR_EQUAL(STG2_21_02_MATCHING_THE_PATTERNS)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_isk_01A"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_isk_01A"), 1, 0)
         CALL(evt_hitobj_onoff, STRING("A_f2_rak03"), 1, 1)

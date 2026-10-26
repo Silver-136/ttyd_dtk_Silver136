@@ -114,7 +114,7 @@ EVT_BEGIN(evt_hajimete)
     WAIT_MS(200)
     CALL(evt_msg_print_party, STRING("stg7_aji_00_00_01"))
     CALL(evt_party_run, 0)
-    SET_VALUE(GSW_STORY_PROGRESS, 360)
+    SET_VALUE(GSW_STORY_PROGRESS, STG7_07_01_INSIDE_THE_BUILDING)
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_telop_entry, 15)
     RETURN
@@ -134,7 +134,7 @@ EVT_BEGIN(aji_19_init_evt)
     BEGIN_INLINE_EVENT
         CALL(mario_chk)
     END_INLINE_EVENT
-    IF_INT_LESS(GSW_STORY_PROGRESS, 360)
+    IF_INT_LESS(GSW_STORY_PROGRESS, STG7_07_01_INSIDE_THE_BUILDING)
         SPAWN_EVENT(PTR(evt_hajimete))
     END_IF
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("kanaami2"), MAP_OBJ_FLAG_CLIP)

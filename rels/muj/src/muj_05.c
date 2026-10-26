@@ -208,7 +208,7 @@ EVT_BEGIN(sanders_nakama)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG5_MUJ1"))
     CALL(evt_cam3d_evt_off, 500, 11)
     WAIT_MS(500)
-    SET_VALUE(GSW_STORY_PROGRESS, 239)
+    SET_VALUE(GSW_STORY_PROGRESS, STG5_18_01_BOBBERY_JOINS)
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_npc_return_interrupt, STRING("me"))
     RETURN
@@ -216,12 +216,12 @@ EVT_END()
 
 static EVT_BEGIN(sanders_init)
     SWITCH(GSW_STORY_PROGRESS)
-        CASE_LESS(235)
+        CASE_LESS(STG5_15_RUNAWAY_SAILORS)
         CALL(evt_npc_set_tribe, STRING("me"), STRING("サンダースへろへろ"))
-        CASE_BETWEEN(235, 237)
+        CASE_BETWEEN(STG5_15_RUNAWAY_SAILORS, STG5_17_WINE_OBTAINED)
         CALL(evt_npc_set_position, STRING("me"), -114, 22, 22)
         CALL(evt_npc_set_tribe, STRING("me"), STRING("サンダースへろへろ"))
-        CASE_EQUAL(238)
+        CASE_EQUAL(STG5_18_BOBBERY_RESCUE_2)
         CALL(evt_npc_reaction_flag_onoff, 1, STRING("me"), 2)
         CALL(evt_npc_change_interrupt, STRING("me"), 8, PTR(sanders_nakama))
         CALL(evt_npc_set_position, STRING("me"), -114, 22, 22)
@@ -250,14 +250,14 @@ EVT_BEGIN(sanders_talk_sub)
     CALL(evt_npc_flag_onoff, 0, STRING("サンダース"), NPC_FLAG_TALK_POSE)
     CALL(evt_npc_reaction_flag_onoff, 1, STRING("me"), 2)
     CALL(evt_npc_change_interrupt, STRING("me"), 8, PTR(sanders_nakama))
-    SET_VALUE(GSW_STORY_PROGRESS, 238)
+    SET_VALUE(GSW_STORY_PROGRESS, STG5_18_BOBBERY_RESCUE_2)
     CALL(evt_mario_key_onoff, 1)
     RETURN
 EVT_END()
 
 static EVT_BEGIN(sanders_talk)
     SWITCH(GSW_STORY_PROGRESS)
-        CASE_BETWEEN(235, 237)
+        CASE_BETWEEN(STG5_15_RUNAWAY_SAILORS, STG5_17_WINE_OBTAINED)
         CALL(evt_pouch_check_item, ITEM_CHUCKOLA_COLA, LW(0))
         IF_INT_EQUAL(LW(0), 0)
             CALL(evt_msg_print, 0, STRING("stg5_muj_34_03"), 0, STRING("me"))
@@ -269,7 +269,7 @@ static EVT_BEGIN(sanders_talk)
             CALL(evt_pouch_remove_item, ITEM_CHUCKOLA_COLA, LW(0))
             SPAWN_EVENT(PTR(sanders_talk_sub))
         END_IF
-        CASE_EQUAL(238)
+        CASE_EQUAL(STG5_18_BOBBERY_RESCUE_2)
         IF_INT_EQUAL(GSWF(3138), 0)
             CALL(evt_msg_print, 0, STRING("stg5_muj_47"), 0, STRING("me"))
             BEGIN_INLINE_EVENT
@@ -308,7 +308,7 @@ EVT_END()
 
 static EVT_BEGIN(marco_init)
     SWITCH(GSW_STORY_PROGRESS)
-        CASE_EQUAL(241)
+        CASE_EQUAL(STG5_18_03_MARCOS_JEWEL)
         CALL(evt_npc_set_position, STRING("me"), 279, 0, -67)
         CALL(evt_npc_set_ry, STRING("me"), 90)
         IF_INT_EQUAL(GSWF(3141), 0)
@@ -320,7 +320,7 @@ EVT_END()
 
 static EVT_BEGIN(marco_talk)
     SWITCH(GSW_STORY_PROGRESS)
-        CASE_EQUAL(241)
+        CASE_EQUAL(STG5_18_03_MARCOS_JEWEL)
         IF_INT_EQUAL(GSWF(3141), 0)
             DELETE_EVENT(GW(2))
             CALL(evt_msg_close, STRING("stg5_muj_93_02_00"))
@@ -364,7 +364,7 @@ static EVT_BEGIN(marco_talk)
                 SET_VALUE(GW(12), 0)
             END_IF
         END_IF
-        CASE_EQUAL(242)
+        CASE_EQUAL(STG5_19_GEMS_AND_JINGLES)
         CALL(evt_msg_print, 0, STRING("stg5_muj_93_09"), 0, STRING("マルコ"))
     END_SWITCH
     RETURN
@@ -533,7 +533,7 @@ EVT_END()
 EVT_BEGIN(sanders_kyushutsu_sub)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
-    SET_VALUE(GSW_STORY_PROGRESS, 235)
+    SET_VALUE(GSW_STORY_PROGRESS, STG5_15_RUNAWAY_SAILORS)
     CALL(evt_msg_print, 0, STRING("stg5_muj_33_01"), 0, STRING("サンダース"))
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -670,7 +670,7 @@ EVT_BEGIN(marco_and_jewel)
     CALL(evt_npc_set_ry, STRING("マルコ"), 90)
     SPAWN_EVENT_GET_ID(PTR(marco_hanauta), GW(2))
     CALL(evt_mario_clear_party, 1)
-    SET_VALUE(GSW_STORY_PROGRESS, 241)
+    SET_VALUE(GSW_STORY_PROGRESS, STG5_18_03_MARCOS_JEWEL)
     CALL(evt_mario_key_onoff, 1)
     RETURN
 EVT_END()
@@ -734,7 +734,7 @@ EVT_BEGIN(dokuroiwa_touch)
         CALL(evt_mario_key_onoff, 0)
         CALL(evt_msg_toge, 1, 0, 0, 0)
         CALL(evt_msg_print, 0, STRING("stg5_muj_93_01"), 0, 0)
-        IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 240)
+        IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG5_18_02_FLAVIOS_FAVOR_2)
             CALL(evt_party_stop, 0)
             CALL(evt_msg_print_party, STRING("stg5_muj_93_01_01"))
             CALL(evt_party_run, 0)
@@ -1136,7 +1136,7 @@ EVT_BEGIN(dokuroiwa_bomb)
     CALL(evt_npc_set_position, STRING("マルコ"), 0, -1000, 0)
     CALL(evt_cam3d_evt_off, 500, 11)
     WAIT_MS(500)
-    SET_VALUE(GSW_STORY_PROGRESS, 242)
+    SET_VALUE(GSW_STORY_PROGRESS, STG5_19_GEMS_AND_JINGLES)
     CALL(evt_mario_key_onoff, 1)
     RETURN
 EVT_END()
@@ -1145,7 +1145,7 @@ EVT_BEGIN(dokuroiwa_init)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_jel"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_hitobj_onoff, STRING("A_dkr_iwa_futa02"), 1, 0)
     CALL(evt_dokuroiwa_command_init)
-    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 242)
+    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG5_19_GEMS_AND_JINGLES)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_dokuro_iwa"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_dokuro_iwa"), 1, 0)
         RETURN
@@ -1207,7 +1207,7 @@ EVT_BEGIN(yure_yashi_ha1)
         IF_INT_EQUAL(LW(1), 0)
             BREAK_LOOP
         END_IF
-        IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 235)
+        IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG5_15_RUNAWAY_SAILORS)
             RETURN
         END_IF
     END_LOOP
@@ -1230,7 +1230,7 @@ EVT_BEGIN(yure_yashi_ha1)
         IF_INT_EQUAL(LW(1), 0)
             BREAK_LOOP
         END_IF
-        IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 235)
+        IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG5_15_RUNAWAY_SAILORS)
             RETURN
         END_IF
     END_LOOP
@@ -1251,7 +1251,7 @@ EVT_BEGIN(yure_yashi)
             IF_INT_EQUAL(LW(1), 0)
                 BREAK_LOOP
             END_IF
-            IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 235)
+            IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG5_15_RUNAWAY_SAILORS)
                 RETURN
             END_IF
         END_LOOP
@@ -1263,7 +1263,7 @@ EVT_BEGIN(yure_yashi)
             IF_INT_EQUAL(LW(1), 0)
                 BREAK_LOOP
             END_IF
-            IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 235)
+            IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG5_15_RUNAWAY_SAILORS)
                 RETURN
             END_IF
         END_LOOP
@@ -1302,10 +1302,10 @@ static KusaAccess kusa_tbl[] = {
 
 EVT_BEGIN(muj_05_init_evt)
     SWITCH(GSW_STORY_PROGRESS)
-        CASE_EQUAL(234)
+        CASE_EQUAL(STG5_13_BOBBERY_THE_BRIDGE)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_DANGER4"))
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG5_MUJ7"))
-        CASE_EQUAL(238)
+        CASE_EQUAL(STG5_18_BOBBERY_RESCUE_2)
         CALL(evt_snd_bgmoff, PSND_FADEOUT)
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG5_MUJ7"))
         CASE_DEFAULT
@@ -1324,17 +1324,17 @@ EVT_BEGIN(muj_05_init_evt)
     CALL(evt_map_playanim, STRING("S_mizu"), 1, 0)
     SPAWN_EVENT(hammer_event)
     SWITCH(GSW_STORY_PROGRESS)
-        CASE_EQUAL(234)
+        CASE_EQUAL(STG5_13_BOBBERY_THE_BRIDGE)
         IF_INT_EQUAL(GSWF(3136), 0)
             SPAWN_EVENT(muj_05_first)
         END_IF
         SPAWN_EVENT(sanders_kyushutsu)
         SPAWN_EVENT(yure_yashi)
-        CASE_EQUAL(240)
+        CASE_EQUAL(STG5_18_02_FLAVIOS_FAVOR_2)
         SPAWN_EVENT(marco_and_jewel)
     END_SWITCH
     SPAWN_EVENT(dokuroiwa_init)
-    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 274)
+    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG5_63_KEELHAUL_ANYTIME)
         CALL(evt_item_entry, STRING("item00"), ITEM_WEDDING_RING, -250, 0, -110, ITEM_TYPE_GROUND, GSWF(3143), 0)
     END_IF
     CALL(evt_eff64, STRING("sunlight"), STRING("sunlight_n64"), 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)

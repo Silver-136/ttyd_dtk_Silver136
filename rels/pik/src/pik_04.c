@@ -596,7 +596,7 @@ EVT_END()
 
 EVT_BEGIN(init_musume1)
     SWITCH(GSW_STORY_PROGRESS)
-        CASE_GREATER(347)
+        CASE_GREATER(STG6_70_THOUSAND_YEAR_DOOR)
         CALL(evt_npc_set_position, STRING("３人娘１"), 0, -1000, 0)
     END_SWITCH
     RETURN
@@ -609,7 +609,7 @@ EVT_END()
 
 EVT_BEGIN(init_musume2)
     SWITCH(GSW_STORY_PROGRESS)
-        CASE_GREATER(347)
+        CASE_GREATER(STG6_70_THOUSAND_YEAR_DOOR)
         CALL(evt_npc_set_position, STRING("３人娘２"), 0, -1000, 0)
     END_SWITCH
     RETURN
@@ -622,7 +622,7 @@ EVT_END()
 
 EVT_BEGIN(init_musume3)
     SWITCH(GSW_STORY_PROGRESS)
-        CASE_GREATER(347)
+        CASE_GREATER(STG6_70_THOUSAND_YEAR_DOOR)
         CALL(evt_npc_set_position, STRING("３人娘３"), 0, -1000, 0)
     END_SWITCH
     RETURN
@@ -639,9 +639,9 @@ EVT_END()
 
 EVT_BEGIN(talk_takun1)
     SWITCH(GSW_STORY_PROGRESS)
-        CASE_LESS(347)
+        CASE_LESS(STG6_70_THOUSAND_YEAR_DOOR)
         CALL(evt_msg_print, 0, STRING("stg7_pik_clear_13"), 0, STRING("me"))
-        CASE_LESS_OR_EQUAL(402)
+        CASE_LESS_OR_EQUAL(STG8_END_AFTER_THE_BATTLE)
         CALL(evt_msg_print, 0, STRING("stg7_pik_clear_14"), 0, STRING("me"))
         CASE_DEFAULT
         CALL(evt_msg_print, 0, STRING("stg7_pik_clear_14_1"), 0, STRING("me"))
@@ -655,9 +655,9 @@ EVT_END()
 
 EVT_BEGIN(talk_takun2)
     SWITCH(GSW_STORY_PROGRESS)
-        CASE_LESS(347)
+        CASE_LESS(STG6_70_THOUSAND_YEAR_DOOR)
         CALL(evt_msg_print, 0, STRING("stg7_pik_clear_15"), 0, STRING("me"))
-        CASE_LESS_OR_EQUAL(402)
+        CASE_LESS_OR_EQUAL(STG8_END_AFTER_THE_BATTLE)
         CALL(evt_msg_print, 0, STRING("stg7_pik_clear_16"), 0, STRING("me"))
         CASE_DEFAULT
         CALL(evt_msg_print, 0, STRING("stg7_pik_clear_16_1"), 0, STRING("me"))
@@ -672,9 +672,9 @@ EVT_END()
 
 EVT_BEGIN(talk_takun3)
     SWITCH(GSW_STORY_PROGRESS)
-        CASE_LESS(347)
+        CASE_LESS(STG6_70_THOUSAND_YEAR_DOOR)
         CALL(evt_msg_print, 0, STRING("stg7_pik_clear_17"), 0, STRING("me"))
-        CASE_LESS_OR_EQUAL(402)
+        CASE_LESS_OR_EQUAL(STG8_END_AFTER_THE_BATTLE)
         CALL(evt_msg_print, 0, STRING("stg7_pik_clear_18"), 0, STRING("me"))
         CASE_DEFAULT
         CALL(evt_msg_print, 0, STRING("stg7_pik_clear_18_1"), 0, STRING("me"))
@@ -684,7 +684,7 @@ EVT_END()
 
 static EVT_BEGIN(init_kiza)
     SWITCH(GSW_STORY_PROGRESS)
-        CASE_GREATER_OR_EQUAL(347)
+        CASE_GREATER_OR_EQUAL(STG6_70_THOUSAND_YEAR_DOOR)
         CALL(evt_npc_set_position, STRING("me"), 0, -1000, 0)
     END_SWITCH
     RETURN
@@ -964,7 +964,7 @@ EVT_BEGIN(pik_04_init_evt)
     CALL(evt_bero_get_info)
     CALL_CHILD(PTR(evt_bero_info_run))
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG6_PIK1"))
-    IF_INT_EQUAL(GSW_STORY_PROGRESS, 402)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_END_AFTER_THE_BATTLE)
         CALL(evt_snd_bgm_scope, 0, 1)
     END_IF
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG6_PIK1_2"))
@@ -995,7 +995,7 @@ EVT_BEGIN(pik_04_init_evt)
     CALL_CHILD(PTR(imginit))
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("front_"), 0, PTR(kinopio_house_talk_evt), 0)
     CALL(evt_kinopio_setup, PTR(&kino_dt))
-    IF_INT_EQUAL(GSW_STORY_PROGRESS, 402)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_END_AFTER_THE_BATTLE)
         CALL(evt_mario_kill_party, 0)
         CALL_CHILD(PTR(epilogue_npc_entry))
         SPAWN_EVENT(PTR(epilogue_evt))

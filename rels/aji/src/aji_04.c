@@ -151,7 +151,7 @@ EVT_BEGIN(sekizou_talk)
 EVT_END()
 
 EVT_BEGIN(evt_item)
-    SET_VALUE(GSW_STORY_PROGRESS, 367)
+    SET_VALUE(GSW_STORY_PROGRESS, STG7_14_ELEVATOR_KEY_B)
     RETURN
 EVT_END()
 
@@ -682,7 +682,7 @@ EVT_BEGIN(kuizu_sekizou)
     CALL_CHILD(PTR(sekizou_kaiten2))
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("me_mae"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("me_ato"), MAP_OBJ_FLAG_HIDDEN)
-    SET_VALUE(GSW_STORY_PROGRESS, 366)
+    SET_VALUE(GSW_STORY_PROGRESS, STG7_13_QUIZ_CLEARED)
     CALL(evt_cam3d_evt_off, 500, 11)
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_exit_case_evt)
@@ -741,13 +741,13 @@ EVT_BEGIN(aji_04_init_evt)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
     CALL_CHILD(PTR(evt_bero_info_run))
-    IF_INT_LESS(GSW_STORY_PROGRESS, 366)
+    IF_INT_LESS(GSW_STORY_PROGRESS, STG7_13_QUIZ_CLEARED)
         CALL_CHILD(PTR(sekizou_init))
         ELSE
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("me_mae"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("me_ato"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
-    IF_INT_EQUAL(GSW_STORY_PROGRESS, 366)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG7_13_QUIZ_CLEARED)
         CALL(evt_item_entry, STRING("dummy"), ITEM_ELEVATOR_KEY_0x1C, 50, 0, 0, ITEM_TYPE_STILL, -1, PTR(evt_item))
     END_IF
     SPAWN_EVENT(PTR(evt_emergency))

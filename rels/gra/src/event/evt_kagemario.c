@@ -101,7 +101,7 @@ EVT_END()
 
 EVT_BEGIN(evt_usu_kagemario_party_kill)
     SWITCH(GSW_STORY_PROGRESS)
-        CASE_BETWEEN(201, 205)
+        CASE_BETWEEN(STG4_10_02_TRADING_PLACES, STG4_12_01_SUPERBOMBBOMB_FOUND)
         CALL(evt_party_stop, 0)
         CALL(evt_party_set_pos, 0, 0, -1000, 0)
         CALL(evt_party_cont_onoff, 0, 0)

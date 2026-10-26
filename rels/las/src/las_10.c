@@ -599,7 +599,7 @@ EVT_BEGIN(tenkyugi_evt2)
     CALL(evt_snd_sfxoff, LW(10))
     WAIT_MS(500)
     CALL(evt_msg_print_party, STRING("stg8_las_35"))
-    SET_VALUE(GSW_STORY_PROGRESS, 390)
+    SET_VALUE(GSW_STORY_PROGRESS, STG8_06_MOVING_PLANETS)
     BEGIN_INLINE_EVENT
         WAIT_MS(1000)
         CALL(evt_snd_bgmon_f, PSND_FADEIN | PSND_FADEOUT, STRING("BGM_STG8_LST2"), 2000)
@@ -973,7 +973,7 @@ const char* daiza_name[] = {
 };
 
 EVT_BEGIN(kagi_8_on)
-    IF_INT_LESS(GSW_STORY_PROGRESS, 389)
+    IF_INT_LESS(GSW_STORY_PROGRESS, STG8_05_STAR_KEY_SLOT)
         WAIT_MS(500)
         SET_VALUE(GF(0), 0)
         BEGIN_INLINE_EVENT
@@ -1081,7 +1081,7 @@ EVT_BEGIN(kagi_8_on)
 EVT_END()
 
 EVT_BEGIN(kagi_8_init)
-    IF_INT_LESS(GSW_STORY_PROGRESS, 389)
+    IF_INT_LESS(GSW_STORY_PROGRESS, STG8_05_STAR_KEY_SLOT)
         CALL_CHILD(PTR(kagi_8_off))
         ELSE
         CALL_CHILD(PTR(kagi_8_on))
@@ -1117,14 +1117,14 @@ EVT_BEGIN(daiza_evt)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("hosi_off"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("hosi_on"), MAP_OBJ_FLAG_HIDDEN)
     CALL_CHILD(PTR(kagi_8_syutugen))
-    SET_VALUE(GSW_STORY_PROGRESS, 389)
+    SET_VALUE(GSW_STORY_PROGRESS, STG8_05_STAR_KEY_SLOT)
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_exit_case_evt)
     RETURN
 EVT_END()
 
 EVT_BEGIN(las_10_init_evt)
-    IF_INT_EQUAL(GSW_STORY_PROGRESS, 389)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_05_STAR_KEY_SLOT)
         CALL(evt_bero_get_entername, LW(0))
         IF_STR_EQUAL(LW(0), STRING("ret_chgmap_evt"))
             CALL(evt_snd_bgmoff, PSND_FADEOUT)
@@ -1147,14 +1147,14 @@ EVT_BEGIN(las_10_init_evt)
     IF_INT_EQUAL(GSWF(4330), 0)
         SPAWN_EVENT(PTR(first_evt))
     END_IF
-    IF_INT_LESS(GSW_STORY_PROGRESS, 389)
+    IF_INT_LESS(GSW_STORY_PROGRESS, STG8_05_STAR_KEY_SLOT)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("hosi_on"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_daiza1"), 0, PTR(daiza_evt), 0)
         ELSE
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("hosi_off"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     SPAWN_EVENT(PTR(kagi_8_init))
-    IF_INT_EQUAL(GSW_STORY_PROGRESS, 389)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_05_STAR_KEY_SLOT)
         CALL(evt_bero_get_entername, LW(0))
         IF_STR_EQUAL(LW(0), STRING("tenkyugi_evt"))
             BEGIN_INLINE_EVENT
@@ -1170,7 +1170,7 @@ EVT_BEGIN(las_10_init_evt)
             SPAWN_EVENT(PTR(tenkyugi_evt2))
         END_IF
     END_IF
-    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 390)
+    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG8_06_MOVING_PLANETS)
         CALL(evt_snd_sfxon_3d, STRING("SFX_STG8_CELESTIAL_MOVE2"), 0, 400, -150, LW(10))
         CALL(evt_snd_sfx_dist, LW(10), 10)
         CALL(evt_map_playanim, STRING("en"), 1, 0)

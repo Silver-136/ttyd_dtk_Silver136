@@ -290,7 +290,7 @@ EVT_BEGIN(bridge_evt)
     END_INLINE_EVENT
     CALL_CHILD(PTR(bridge_evt_02))
     CALL(evt_hitobj_onoff, STRING("a_hasi"), 1, 1)
-    SET_VALUE(GSW_STORY_PROGRESS, 25)
+    SET_VALUE(GSW_STORY_PROGRESS, STG1_01_THE_FLIP_BRIDGE)
     CALL(evt_npc_change_fbat_mode, 1)
     CALL(evt_npc_start_for_event)
     RETURN
@@ -319,7 +319,7 @@ EVT_BEGIN(nokotaro_get)
     CALL(evt_party_set_dir, 0, 90, 200)
 #endif
     CALL(evt_msg_print, 0, STRING("stg1_hei_09"), 0, STRING("party"))
-    SET_VALUE(GSW_STORY_PROGRESS, 33)
+    SET_VALUE(GSW_STORY_PROGRESS, STG1_07_KOOPS_JOINS)
     RETURN
 EVT_END()
 
@@ -348,7 +348,7 @@ EVT_BEGIN(nokotaro_nakama)
     IF_INT_EQUAL(GSWF(1775), 0)
         RETURN
     END_IF
-    IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, 32)
+    IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, STG1_06_01_GOLD_FUZZY)
         RETURN
     END_IF
     IF_INT_NOT_EQUAL(GSWF(1781), 0)
@@ -438,7 +438,7 @@ EVT_BEGIN(nokotarou_talk_2)
     CALL(evt_msg_print, 0, STRING("stg1_hei_12"), 0, STRING("ノコタロウ"))
     CALL_CHILD(PTR(nokotaro_kanyu))
     CALL(evt_npc_start_for_event)
-    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 33)
+    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG1_07_KOOPS_JOINS)
         CALL(evt_npc_change_fbat_mode, 1)
         ELSE
         CALL(evt_party_run, 0)
@@ -480,7 +480,7 @@ EVT_BEGIN(evt_nokorin)
     END_IF
     LABEL(0)
     WAIT_FRAMES(1)
-    IF_INT_LESS(GSW_STORY_PROGRESS, 33)
+    IF_INT_LESS(GSW_STORY_PROGRESS, STG1_07_KOOPS_JOINS)
         GOTO(0)
     END_IF
     CALL(evt_mario_key_onoff, 0)
@@ -840,7 +840,7 @@ static EVT_BEGIN(peach_mail)
     CALL(evt_party_run, 0)
     CALL(evt_cam_shift_reset)
     CALL(evt_cam3d_evt_off, 500, 11)
-    SET_VALUE(GSW_STORY_PROGRESS, 63)
+    SET_VALUE(GSW_STORY_PROGRESS, STG1_21_A_MAIL_FROM_PEACH)
     CALL(evt_pouch_receive_mail, 0)
     CALL(evt_pouch_open_mail, 0)
     RETURN
@@ -888,7 +888,7 @@ EVT_BEGIN(hei_01_init_evt)
         CALL_CHILD(PTR(bero_case_switch_on))
     END_IF
     CALL(evt_map_playanim, STRING("anm_mizu"), 1, 0)
-    IF_INT_LESS(GSW_STORY_PROGRESS, 25)
+    IF_INT_LESS(GSW_STORY_PROGRESS, STG1_01_THE_FLIP_BRIDGE)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("hasi"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_hasi"), 1, 0)
         SET_VALUE(GW(0), 0)
@@ -898,13 +898,13 @@ EVT_BEGIN(hei_01_init_evt)
     SPAWN_EVENT(PTR(evt_nokorin))
     CALL(evt_hit_damage_return_set, PTR(hitDmgRetPoints))
     CALL_CHILD(PTR(evt_gazigazi_entry))
-    IF_INT_EQUAL(GSW_STORY_PROGRESS, 62)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG1_20_KOOPS_LEAVES)
         SPAWN_EVENT(PTR(peach_mail))
     END_IF
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG1_HEI1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG1_HEI2"))
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("USIROKUSA"), MAP_OBJ_FLAG_CLIP)
-    IF_INT_LESS(GSW_STORY_PROGRESS, 25)
+    IF_INT_LESS(GSW_STORY_PROGRESS, STG1_01_THE_FLIP_BRIDGE)
         IF_INT_EQUAL(GSWF(1805), 0)
             SPAWN_EVENT(PTR(christine_hei_01))
         END_IF

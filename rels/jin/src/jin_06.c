@@ -155,8 +155,8 @@ EVT_BEGIN(jin_06_init_evt)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("mekure"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_mekure"), 0, 0)
     END_IF
-    IF_INT_LESS(GSW_STORY_PROGRESS, 195)
-        SET_VALUE(GSW_STORY_PROGRESS, 195)
+    IF_INT_LESS(GSW_STORY_PROGRESS, STG4_09_01_PUSH_THE_STATUE)
+        SET_VALUE(GSW_STORY_PROGRESS, STG4_09_01_PUSH_THE_STATUE)
     END_IF
     RETURN
 EVT_END()

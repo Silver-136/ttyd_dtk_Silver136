@@ -249,6 +249,7 @@
 #define UF(id) ((id) - EVTDAT_UF_BASE)
 
 /* Saved variables with a known meaning */
+#include "evt/evt_story.h"
 #define GSW_STORY_PROGRESS GSW(0)             /* how far the story has advanced; GSW 0 alone is stored as s32 */
 #define GSW_GLITZ_PIT_OPPONENT GSW(501)       /* Glitz Pit: the opponent of the current match */
 #define GSW_GLITZ_PIT_CONDITION GSW(502)      /* Glitz Pit: the special condition of the current match */

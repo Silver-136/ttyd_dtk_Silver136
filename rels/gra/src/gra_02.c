@@ -37,7 +37,7 @@ EvtWord gra_02_init_evt[86];
 
 EVT_BEGIN(shopmaster_pig_init)
     SWITCH(GSW_STORY_PROGRESS)
-        CASE_LESS(200)
+        CASE_LESS(STG4_10_DOOPLISS_BATTLE)
         CASE_DEFAULT
         CALL(evt_npc_set_position, STRING("ブタお店の主人"), 0, -2000, 0)
     END_SWITCH
@@ -46,7 +46,7 @@ EVT_END()
 
 EVT_BEGIN(shopmaster_talk)
     SWITCH(GSW_STORY_PROGRESS)
-        CASE_LESS(200)
+        CASE_LESS(STG4_10_DOOPLISS_BATTLE)
         CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
         CALL(evt_snd_sfxon_3d, STRING("SFX_STG4_VOICE_PIG1"), LW(0), LW(1), LW(2), 0)
         CALL(evt_msg_print, 0, STRING("stg4_gra_17"), 0, STRING("me"))
@@ -155,7 +155,7 @@ static BeroEntry bero_entry_data[] = {
 };
 
 EVT_BEGIN(gra02_get_key)
-    SET_VALUE(GSW_STORY_PROGRESS, 184)
+    SET_VALUE(GSW_STORY_PROGRESS, STG4_03_SHOP_KEY)
     RETURN
 EVT_END()
 
@@ -167,7 +167,7 @@ EVT_BEGIN(gra02_straw_blow_evt)
         CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
         CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)
     END_INLINE_EVENT
-    SET_VALUE(GSW_STORY_PROGRESS, 188)
+    SET_VALUE(GSW_STORY_PROGRESS, STG4_05_STRAW_TEPEE)
     RETURN
 EVT_END()
 
@@ -186,10 +186,10 @@ EVT_BEGIN(gra_02_init_evt)
     CALL(evt_item_entry, STRING("item01"), ITEM_STAR_PIECE, 305, 0, -35, ITEM_TYPE_STILL, GSWF(5632), 0)
     CALL_CHILD(PTR(evt_usu_kagemario_party_kill))
     CALL(evt_npc_setup, PTR(npcEnt))
-    IF_INT_LESS(GSW_STORY_PROGRESS, 184)
+    IF_INT_LESS(GSW_STORY_PROGRESS, STG4_03_SHOP_KEY)
         CALL(evt_item_entry, STRING("key00"), ITEM_SHOP_KEY, -30, 0, 0, ITEM_TYPE_GROUND, -1, PTR(gra02_get_key))
     END_IF
-    IF_INT_LESS(GSW_STORY_PROGRESS, 188)
+    IF_INT_LESS(GSW_STORY_PROGRESS, STG4_05_STRAW_TEPEE)
         CALL(evt_cloud_init)
         CALL(evt_cloud_ent, 0, STRING("S_wara"), STRING("polySurface981_q023"), PTR(gra02_straw_blow_evt))
         ELSE

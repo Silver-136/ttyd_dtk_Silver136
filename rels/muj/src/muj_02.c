@@ -344,7 +344,7 @@ EVT_END()
 static EVT_BEGIN(mony_init)
     CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
     SWITCH(GSW_STORY_PROGRESS)
-        CASE_BETWEEN(274, 275)
+        CASE_BETWEEN(STG5_63_KEELHAUL_ANYTIME, STG5_64_LOST_WEDDING_RING)
         CALL(evt_npc_set_position, STRING("me"), 500, 0, -40)
     END_SWITCH
     RETURN
@@ -392,12 +392,12 @@ EVT_END()
 
 static EVT_BEGIN(mony_talk)
     SWITCH(GSW_STORY_PROGRESS)
-        CASE_EQUAL(274)
+        CASE_EQUAL(STG5_63_KEELHAUL_ANYTIME)
         CALL(evt_msg_print, 0, STRING("stg5_muj_169"), 0, STRING("me"))
         SET_VALUE(LW(10), 0)
         CALL_CHILD(PTR(lost_wedding_ring))
-        SET_VALUE(GSW_STORY_PROGRESS, 275)
-        CASE_EQUAL(275)
+        SET_VALUE(GSW_STORY_PROGRESS, STG5_64_LOST_WEDDING_RING)
+        CASE_EQUAL(STG5_64_LOST_WEDDING_RING)
         CALL_CHILD(PTR(wedding_ring_consign))
         IF_INT_EQUAL(LW(0), 0)
             CALL(evt_msg_print, 0, STRING("stg5_muj_192"), 0, STRING("me"))
@@ -405,7 +405,7 @@ static EVT_BEGIN(mony_talk)
             CALL(evt_msg_print, 0, STRING("stg5_muj_194"), 0, STRING("me"))
             SET_VALUE(LW(10), 0)
             CALL_CHILD(PTR(find_wedding_ring))
-            SET_VALUE(GSW_STORY_PROGRESS, 276)
+            SET_VALUE(GSW_STORY_PROGRESS, STG5_64_01_WEDDING_RING_DELIVERY)
         END_IF
     END_SWITCH
     RETURN
@@ -414,7 +414,7 @@ EVT_END()
 static EVT_BEGIN(peton_init)
     CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
     SWITCH(GSW_STORY_PROGRESS)
-        CASE_BETWEEN(274, 275)
+        CASE_BETWEEN(STG5_63_KEELHAUL_ANYTIME, STG5_64_LOST_WEDDING_RING)
         CALL(evt_npc_set_position, STRING("me"), 400, 0, -40)
     END_SWITCH
     RETURN
@@ -430,12 +430,12 @@ EVT_END()
 
 static EVT_BEGIN(peton_talk)
     SWITCH(GSW_STORY_PROGRESS)
-        CASE_EQUAL(274)
+        CASE_EQUAL(STG5_63_KEELHAUL_ANYTIME)
         CALL(evt_msg_print, 0, STRING("stg5_muj_170"), 0, STRING("me"))
         SET_VALUE(LW(10), 1)
         CALL_CHILD(PTR(lost_wedding_ring))
-        SET_VALUE(GSW_STORY_PROGRESS, 275)
-        CASE_EQUAL(275)
+        SET_VALUE(GSW_STORY_PROGRESS, STG5_64_LOST_WEDDING_RING)
+        CASE_EQUAL(STG5_64_LOST_WEDDING_RING)
         CALL_CHILD(PTR(wedding_ring_consign))
         IF_INT_EQUAL(LW(0), 0)
             CALL(evt_msg_print, 0, STRING("stg5_muj_193"), 0, STRING("me"))
@@ -443,7 +443,7 @@ static EVT_BEGIN(peton_talk)
             CALL(evt_msg_print, 0, STRING("stg5_muj_195"), 0, STRING("me"))
             SET_VALUE(LW(10), 1)
             CALL_CHILD(PTR(find_wedding_ring))
-            SET_VALUE(GSW_STORY_PROGRESS, 276)
+            SET_VALUE(GSW_STORY_PROGRESS, STG5_64_01_WEDDING_RING_DELIVERY)
         END_IF
     END_SWITCH
     RETURN
@@ -559,7 +559,7 @@ EVT_BEGIN(muj_02_init_evt)
 #ifdef VERSION_G8ME01
     CALL(evt_npc_check_delete, STRING("チョロボン２"))
 #endif
-    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 269)
+    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG5_59_ROGUEPORT_DOCK)
         CALL(evt_npc_check_delete, STRING("チョロボン１"))
 #ifndef VERSION_G8ME01
         CALL(evt_npc_check_delete, STRING("チョロボン２"))
@@ -573,7 +573,7 @@ EVT_BEGIN(muj_02_init_evt)
     CALL(evt_mobj_badgeblk, STRING("mobj_badge_gat"), -200, 60, -90, ITEM_HEAD_RATTLE, 0, GSWF(3146), 1)
     CALL(evt_mobj_badgeblk, STRING("mobj_hatena"), -135, 0, 135, ITEM_COURAGE_SHELL, 0, GSWF(3150), 0)
 #ifdef VERSION_G8ME01
-    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 261)
+    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG5_43_X_NAUTS_RETREAT)
         SET_VALUE(LW(0), PTR(tree_tbl_treeb_evt))
         ELSE
 #endif

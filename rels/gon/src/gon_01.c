@@ -382,8 +382,8 @@ EVT_BEGIN(gon_01_init_evt)
         SET_VALUE(LW(0), PTR(bero_entry_data))
         CALL(evt_bero_get_info)
         CALL_CHILD(PTR(evt_bero_info_run))
-        IF_INT_LESS(GSW_STORY_PROGRESS, 35)
-            SET_VALUE(GSW_STORY_PROGRESS, 35)
+        IF_INT_LESS(GSW_STORY_PROGRESS, STG1_09_HOOKTAIL_CASTLE)
+            SET_VALUE(GSW_STORY_PROGRESS, STG1_09_HOOKTAIL_CASTLE)
             SPAWN_EVENT(PTR(gon_01_GATEEVENT_evt))
         END_IF
     END_IF
@@ -396,8 +396,8 @@ EVT_BEGIN(gon_01_init_evt)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_hasj"), MAP_OBJ_FLAG_CLIP)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("kabe_l"), MAP_OBJ_FLAG_CLIP)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("kabe_r"), MAP_OBJ_FLAG_CLIP)
-    IF_INT_LESS(GSW_STORY_PROGRESS, 37)
-        SET_VALUE(GSW_STORY_PROGRESS, 37)
+    IF_INT_LESS(GSW_STORY_PROGRESS, STG1_09_02_LOCK)
+        SET_VALUE(GSW_STORY_PROGRESS, STG1_09_02_LOCK)
     END_IF
     RETURN
 EVT_END()

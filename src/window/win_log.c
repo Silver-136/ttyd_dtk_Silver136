@@ -194,7 +194,7 @@ void winLogInit(WindowWork* w) {
     w->log.count = 0;
     winLogAddMenu(w, 0);
     if (swByteGet(0) >= 0x13) winLogAddMenu(w, 1);
-    if (swByteGet(0) >= 7) winLogAddMenu(w, 4);
+    if (swByteGet(0) >= STG0_07_GOOMBELLA_JOINS) winLogAddMenu(w, 4);
     if (swByteGet(0) >= 0x14) winLogAddMenu(w, 2);
     if (swGet(0x40)) winLogAddMenu(w, 3);
 

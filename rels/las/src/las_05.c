@@ -1074,7 +1074,7 @@ static void senkaron_ext_shadow_disp(CameraId camera, void* param) {
 }
 
 static EVT_BEGIN(senkaron_event)
-    IF_INT_EQUAL(GSW_STORY_PROGRESS, 382)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_00_START)
         CALL(evt_mario_key_onoff, 0)
         BEGIN_INLINE_EVENT
             LOOP(10)
@@ -1380,7 +1380,7 @@ static EVT_BEGIN(senkaron_event)
         CALL(evt_npc_wait_battle_end)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG8_LST1"))
         CALL(senkaronToEscape)
-        SET_VALUE(GSW_STORY_PROGRESS, 383)
+        SET_VALUE(GSW_STORY_PROGRESS, STG8_01_1000_DRY_BONES)
         SET_VALUE(LW(0), STRING("w_bero"))
         CALL_CHILD(PTR(bero_case_switch_on))
         CALL(evt_npc_get_position, STRING("黒カロン"), LW(0), LW(1), LW(2))
@@ -1400,7 +1400,7 @@ static EVT_BEGIN(senkaron_event)
 EVT_END()
 
 EVT_BEGIN(kurokaron_init)
-    IF_INT_EQUAL(GSW_STORY_PROGRESS, 382)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_00_START)
         CALL(evt_npc_set_position, STRING("me"), 570, 0, 0)
         CALL(evt_npc_set_ry, STRING("me"), 270)
         CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
@@ -1513,7 +1513,7 @@ USER_FUNC(party_hit) {
 
 EVT_BEGIN(kurokaron_talk)
     SPAWN_EVENT(PTR(senkaron_event))
-    IF_INT_EQUAL(GSW_STORY_PROGRESS, 382)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_00_START)
         CALL(evt_npc_change_interrupt, STRING("me"), 6, 0)
     END_IF
     RETURN
@@ -1544,7 +1544,7 @@ static NpcSetupInfo npcEnt[] = {
 };
 
 static EVT_BEGIN(key_evt)
-    SET_VALUE(GSW_STORY_PROGRESS, 384)
+    SET_VALUE(GSW_STORY_PROGRESS, STG8_01_01_KEY)
     RETURN
 EVT_END()
 
@@ -1564,7 +1564,7 @@ static EVT_BEGIN(key_check_evt)
 EVT_END()
 
 static EVT_BEGIN(unlock_evt)
-    SET_VALUE(GSW_STORY_PROGRESS, 385)
+    SET_VALUE(GSW_STORY_PROGRESS, STG8_01_02_LOCK)
     SET_VALUE(LW(0), STRING("e_bero_1"))
     CALL_CHILD(PTR(bero_case_switch_on))
     RETURN
@@ -1600,13 +1600,13 @@ EVT_BEGIN(las_05_init_evt)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
     CALL_CHILD(PTR(evt_bero_info_run))
-    IF_INT_EQUAL(GSW_STORY_PROGRESS, 382)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_00_START)
         CALL(evt_npc_setup, PTR(npcEnt))
     END_IF
-    IF_INT_EQUAL(GSW_STORY_PROGRESS, 383)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_01_1000_DRY_BONES)
         CALL(evt_item_entry, STRING("key"), ITEM_PALACE_KEY_0x2E, 0, 0, 0, ITEM_TYPE_GROUND, -1, PTR(key_evt))
     END_IF
-    IF_INT_LESS(GSW_STORY_PROGRESS, 385)
+    IF_INT_LESS(GSW_STORY_PROGRESS, STG8_01_02_LOCK)
         CALL(evt_mobj_lock, STRING("lock"), 46, 590, 20, 0, -90, PTR(key_check_evt), PTR(unlock_evt), 0)
         SET_VALUE(LW(0), STRING("e_bero_1"))
         CALL_CHILD(PTR(bero_case_switch_off))

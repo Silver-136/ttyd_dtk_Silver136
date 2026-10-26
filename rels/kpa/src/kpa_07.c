@@ -390,7 +390,7 @@ EVT_BEGIN(kpa_07_evt)
         END_LOOP
     END_INLINE_EVENT
     WAIT_MS(2000)
-    SET_VALUE(GSW_STORY_PROGRESS, 344)
+    SET_VALUE(GSW_STORY_PROGRESS, STG6_55_04_BOWSER_RAWK_HAWK)
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 1000)
     CALL(evt_fade_entry, 6, 300, 0, 0, 0)
     CALL(evt_fade_end_wait)
@@ -421,7 +421,7 @@ EVT_BEGIN(kpa_07_init_evt)
     CALL(evt_npc_set_anim, STRING("belt"), STRING("C_1"))
     CALL(evt_npc_set_ry, STRING("belt"), 80)
     CALL(evt_npc_set_position, STRING("belt"), 190, 52, 0)
-    IF_INT_EQUAL(GSW_STORY_PROGRESS, 343)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG6_55_03_BOWSER_ACTION_STAGE)
         SPAWN_EVENT(PTR(kpa_07_evt))
     END_IF
     RETURN

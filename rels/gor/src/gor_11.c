@@ -47,7 +47,7 @@ EVT_BEGIN(gor_11_init_evt)
     IF_BITS_SET(LW(0), 2)
         RETURN
     END_IF
-    IF_INT_EQUAL(GSW_STORY_PROGRESS, 402)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_END_AFTER_THE_BATTLE)
         CALL(evt_mario_kill_party, 0)
         SPAWN_EVENT(PTR(epilogue_evt))
     END_IF

@@ -432,7 +432,7 @@ EVT_BEGIN(elder_rescue)
     SET_VALUE(GF(2), 0)
     CALL(evt_cam3d_evt_off, 500, 11)
     WAIT_MS(500)
-    SET_VALUE(GSW_STORY_PROGRESS, 94)
+    SET_VALUE(GSW_STORY_PROGRESS, STG2_14_PUNI_ELDER_FREED)
     CALL(evt_party_run, 0)
     CALL(evt_mario_key_onoff, 1)
     RETURN
@@ -440,7 +440,7 @@ EVT_END()
 
 static EVT_BEGIN(elder_init)
     SWITCH(GSW_STORY_PROGRESS)
-        CASE_LESS(94)
+        CASE_LESS(STG2_14_PUNI_ELDER_FREED)
         CALL(evt_npc_set_position, STRING("me"), 132, 0, -153)
     END_SWITCH
     RETURN
@@ -456,17 +456,17 @@ EVT_END()
 
 static EVT_BEGIN(sister_init)
     SWITCH(GSW_STORY_PROGRESS)
-        CASE_LESS(101)
+        CASE_LESS(STG2_20_PUNIO_PETUNI)
         CALL(evt_npc_set_position, STRING("me"), -192, 0, -142)
     END_SWITCH
     RETURN
 EVT_END()
 
 EVT_BEGIN(sister_regl)
-    IF_INT_EQUAL(GSW_STORY_PROGRESS, 91)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG2_12_01_A_DARK_FIGURE)
         RETURN
     END_IF
-    IF_INT_EQUAL(GSW_STORY_PROGRESS, 98)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG2_18_JABBLE)
         RETURN
     END_IF
     LOOP(0)
@@ -496,7 +496,7 @@ EVT_END()
 
 EVT_BEGIN(puni_3_init)
     SWITCH(GSW_STORY_PROGRESS)
-        CASE_GREATER_OR_EQUAL(118)
+        CASE_GREATER_OR_EQUAL(STG2_26_PRAISE_FROM_THE_PUNI)
         IF_INT_EQUAL(GSWF(2884), 1)
             CALL(evt_npc_set_position, STRING("me"), 50, 0, 30)
         END_IF
@@ -506,7 +506,7 @@ EVT_END()
 
 EVT_BEGIN(puni_3_talk)
     SWITCH(GSW_STORY_PROGRESS)
-        CASE_LESS_OR_EQUAL(402)
+        CASE_LESS_OR_EQUAL(STG8_END_AFTER_THE_BATTLE)
         CALL(evt_msg_print, 0, STRING("stg2_mri_re_018"), 0, STRING("me"))
         CASE_DEFAULT
         CALL(evt_msg_print, 0, STRING("stg2_mri_re_018_1"), 0, STRING("me"))
@@ -568,7 +568,7 @@ static NpcSetupInfo npcEnt[] = {
 
 EVT_BEGIN(bero_custom_00)
     SET_VALUE(GF(0), 1)
-    IF_INT_EQUAL(GSW_STORY_PROGRESS, 91)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG2_12_01_A_DARK_FIGURE)
         CALL(evt_bero_exec_onoff, 0, 4)
         BEGIN_INLINE_EVENT
             WAIT_MS(2000)
@@ -880,7 +880,7 @@ EVT_BEGIN(bluejail_event)
     WAIT_MS(500)
     CALL(evt_msg_print, 0, STRING("stg2_mri_e19_04"), 0, STRING("プニ族"))
     WAIT_MS(1500)
-    SET_VALUE(GSW_STORY_PROGRESS, 99)
+    SET_VALUE(GSW_STORY_PROGRESS, STG2_19_INSIDE_THE_BLUE_CELL)
     CALL(evt_fade_set_mapchange_type, 0, 2, 500, 1, 500)
     CALL(evt_bero_mapchange, STRING("mri_08"), STRING("e_bero"))
     RETURN
@@ -1272,7 +1272,7 @@ EVT_BEGIN(guide_sister)
         ELSE
         CALL(evt_msg_print, 0, STRING("stg2_mri_e20_16_1"), 0, 0)
     END_IF
-    SET_VALUE(GSW_STORY_PROGRESS, 101)
+    SET_VALUE(GSW_STORY_PROGRESS, STG2_20_PUNIO_PETUNI)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG2_MRI1"))
 #ifndef VERSION_G8ME01
     CALL(evt_mario_key_onoff, 1)
@@ -1394,7 +1394,7 @@ EVT_BEGIN(toraware_elder)
     CALL(evt_puni_set_position, 1, LW(0), LW(1), LW(2))
     CALL(evt_cam3d_evt_off, 500, 11)
     WAIT_MS(500)
-    SET_VALUE(GSW_STORY_PROGRESS, 92)
+    SET_VALUE(GSW_STORY_PROGRESS, STG2_12_02_PUNI_ELDER_IMPRISONED)
     CALL(evt_npc_restart_regular_event, STRING("ガイド妹"))
     CALL(evt_party_run, 0)
     CALL(evt_mario_key_onoff, 1)
@@ -1431,7 +1431,7 @@ EVT_BEGIN(guide_sister_before)
         CALL(evt_npc_flag_onoff, 0, STRING("ガイド"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
         CALL(evt_npc_change_interrupt, STRING("ガイド"), 6, PTR(guide_talk))
     END_INLINE_EVENT
-    SET_VALUE(GSW_STORY_PROGRESS, 100)
+    SET_VALUE(GSW_STORY_PROGRESS, STG2_19_01_PUNIO_PETUNI_BEFORE)
     CALL(evt_party_run, 0)
     CALL(evt_mario_key_onoff, 1)
     RETURN
@@ -1462,11 +1462,11 @@ EVT_BEGIN(mri_03_init_evt)
     SET_VALUE(LW(0), PTR(ueki_access_data))
     CALL_CHILD(PTR(evt_sub_kusa_access_entry))
     SWITCH(GSW_STORY_PROGRESS)
-        CASE_BETWEEN(109, 110)
+        CASE_BETWEEN(STG2_23_TIME_BOMB_ACTIVATED, STG2_23_01_X_NAUT_BATTLE)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_DANGER4"))
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG2_MRI9"))
-        CASE_EQUAL(98)
-        CASE_GREATER_OR_EQUAL(101)
+        CASE_EQUAL(STG2_18_JABBLE)
+        CASE_GREATER_OR_EQUAL(STG2_20_PUNIO_PETUNI)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_STG2_PUNI2"))
         CALL(evt_snd_envoff, PSND_FADEOUT)
         CASE_DEFAULT
@@ -1482,7 +1482,7 @@ EVT_BEGIN(mri_03_init_evt)
     CALL(evt_map_playanim, STRING("awa_02"), 1, 0)
     CALL(evt_map_playanim, STRING("hikari_01"), 1, 0)
     SWITCH(GSW_STORY_PROGRESS)
-        CASE_BETWEEN(90, 100)
+        CASE_BETWEEN(STG2_12_RIVAL_ARRIVAL, STG2_19_01_PUNIO_PETUNI_BEFORE)
         SPAWN_EVENT(PTR(jail_init_00))
     END_SWITCH
     CALL(evt_mobj_lock, STRING("mobj_lock00"), 16, 65, 10, -70, 0, PTR(evt_check00), PTR(evt_unlock00), GSWF(2832))
@@ -1502,13 +1502,13 @@ EVT_BEGIN(mri_03_init_evt)
         END_IF
     END_IF
     SPAWN_EVENT_GET_ID(PTR(jail_alpha), GW(0))
-    IF_INT_EQUAL(GSW_STORY_PROGRESS, 98)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG2_18_JABBLE)
         SPAWN_EVENT(PTR(bluejail_event))
     END_IF
-    IF_INT_EQUAL(GSW_STORY_PROGRESS, 91)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG2_12_01_A_DARK_FIGURE)
         SPAWN_EVENT(PTR(toraware_elder))
     END_IF
-    IF_INT_EQUAL(GSW_STORY_PROGRESS, 99)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG2_19_INSIDE_THE_BLUE_CELL)
         SPAWN_EVENT(PTR(guide_sister_before))
     END_IF
     RETURN

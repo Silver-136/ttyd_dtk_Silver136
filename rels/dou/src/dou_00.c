@@ -29,7 +29,7 @@ EvtWord totsunyu_event[46];
 EvtWord dou_00_init_evt[61];
 
 static EVT_BEGIN(bero_in_event)
-    IF_INT_EQUAL(GSW_STORY_PROGRESS, 242)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG5_19_GEMS_AND_JINGLES)
         CALL_CHILD(PTR(totsunyu_event))
     END_IF
     SET_VALUE(LW(0), 0)
@@ -97,7 +97,7 @@ EVT_BEGIN(totsunyu_event)
     CALL(evt_msg_print, 0, STRING("stg5_dou_00"), 0, 0)
     SPAWN_EVENT(PTR(back_light))
     WAIT_MS(200)
-    SET_VALUE(GSW_STORY_PROGRESS, 243)
+    SET_VALUE(GSW_STORY_PROGRESS, STG5_19_01_ENTERING_THE_GROTTO)
     CALL(evt_mario_key_onoff, 1)
     BEGIN_INLINE_EVENT
         CALL(evt_telop_entry, 10)

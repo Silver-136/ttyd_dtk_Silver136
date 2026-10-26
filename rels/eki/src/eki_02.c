@@ -104,7 +104,7 @@ USER_FUNC(hit_move) {
 }
 
 static EVT_BEGIN(evt_key)
-    SET_VALUE(GSW_STORY_PROGRESS, 314)
+    SET_VALUE(GSW_STORY_PROGRESS, STG6_31_KEY)
     RETURN
 EVT_END()
 
@@ -121,7 +121,7 @@ EVT_BEGIN(eki_02_init_evt)
     CALL(evt_map_playanim, STRING("anm_sikake_1"), 1, 0)
     CALL(evt_map_playanim, STRING("anm_sikake_2"), 1, 0)
 #endif
-    IF_INT_LESS(GSW_STORY_PROGRESS, 314)
+    IF_INT_LESS(GSW_STORY_PROGRESS, STG6_31_KEY)
         CALL(evt_item_entry, STRING("key"), ITEM_STATION_KEY_0x19, 525, 220, 29, ITEM_TYPE_STILL, -1, PTR(evt_key))
     END_IF
     BEGIN_INLINE_EVENT

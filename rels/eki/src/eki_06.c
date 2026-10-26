@@ -87,7 +87,7 @@ static BeroEntry bero_data[] = {
 };
 
 EVT_BEGIN(evt_box_open)
-    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 317)
+    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG6_34_3_BLUE_BLOCKS)
         RETURN
     END_IF
     LABEL(0)
@@ -115,7 +115,7 @@ EVT_BEGIN(evt_box_open)
     CALL(evt_hitobj_onoff, STRING("a_hako"), 1, 0)
     CALL(evt_cam3d_evt_off, 500, 11)
     WAIT_MS(500)
-    SET_VALUE(GSW_STORY_PROGRESS, 317)
+    SET_VALUE(GSW_STORY_PROGRESS, STG6_34_3_BLUE_BLOCKS)
     CALL(evt_mario_key_onoff, 1)
     RETURN
 EVT_END()
@@ -193,7 +193,7 @@ EVT_BEGIN(evt_sw_complete)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_FF_ENV_SUCCESS1"))
     CALL(evt_cam3d_evt_off, 500, 11)
     WAIT_MS(500)
-    SET_VALUE(GSW_STORY_PROGRESS, 318)
+    SET_VALUE(GSW_STORY_PROGRESS, STG6_35_ORIGAMI_STAIRS)
     CALL(evt_mario_key_onoff, 1)
     RETURN
 EVT_END()
@@ -377,9 +377,9 @@ EVT_BEGIN(eki_06_init_evt)
     CALL(evt_npc_change_fbat_mode, 1)
     SPAWN_EVENT(PTR(evt_box_open))
     SWITCH(GSW_STORY_PROGRESS)
-        CASE_LESS(317)
+        CASE_LESS(STG6_34_3_BLUE_BLOCKS)
         CALL(evt_hitobj_onoff, STRING("a_ori"), 1, 0)
-        CASE_EQUAL(317)
+        CASE_EQUAL(STG6_34_3_BLUE_BLOCKS)
         SET_VALUE(GW(0), 0)
         SET_VALUE(GW(1), 0)
         SET_VALUE(GW(2), 0)
@@ -395,7 +395,7 @@ EVT_BEGIN(eki_06_init_evt)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("oku_2"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("oku_3"), MAP_OBJ_FLAG_HIDDEN)
     END_SWITCH
-    IF_INT_LESS(GSW_STORY_PROGRESS, 317)
+    IF_INT_LESS(GSW_STORY_PROGRESS, STG6_34_3_BLUE_BLOCKS)
         ELSE
         CALL(evt_map_playanim, STRING("anm_hako"), 2, 0)
         CALL(evt_hitobj_onoff, STRING("a_hako"), 1, 0)

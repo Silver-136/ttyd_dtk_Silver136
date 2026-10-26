@@ -830,7 +830,7 @@ EVT_BEGIN(end_return_title_evt)
     WAIT_MS(1500)
     SET_VALUE(GF(10), 1)
     CALL(evt_end_font_restore)
-    SET_VALUE(GSW_STORY_PROGRESS, 404)
+    SET_VALUE(GSW_STORY_PROGRESS, STG9_01_END_CREDITS)
     SET_VALUE(LF(10), 0)
     SET_VALUE(LW(0), 21)
 #ifdef VERSION_G8ME01
@@ -861,7 +861,7 @@ EVT_BEGIN(end_00_init_evt)
         CALL(evt_end_staff_roll_msg_main)
     END_INLINE_EVENT
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STAFF_ROLL1"))
-    SET_VALUE(GSW_STORY_PROGRESS, 404)
+    SET_VALUE(GSW_STORY_PROGRESS, STG9_01_END_CREDITS)
     RETURN
 EVT_END()
 
