@@ -56,6 +56,16 @@ typedef enum EnvironmentFlags {
 } EnvironmentFlags;
 #define ENV_FLAG_DOF_UNUSED 0x80000000 // envDisp_DepthOfField draws; nothing sets it
 
+// EnvironmentWork.texMtxWork: matrices and parameters envTevLoadTexMtxImm reads while setting up texture matrices
+typedef struct EnvTexMtxWork {
+    MtxPtr view;  // 0x0
+    MtxPtr mtx;   // 0x4
+    MtxPtr model; // 0x8
+    f32 scale;    // 0xC
+    f32 rotY;     // 0x10
+    f32 rotX;     // 0x14
+} EnvTexMtxWork;
+
 typedef struct EnvironmentWork {
     s32 flags; //0x0, EnvironmentFlags
     smartEntry* capture; //0x4
@@ -64,7 +74,7 @@ typedef struct EnvironmentWork {
     GXTexObj captureObj2; //0x2C
     void* envBlur; //0x4C, see envBlurOn
     GXTexObj envBlurObj; //0x50
-    u8 texMtxWork[0x88 - 0x70]; //0x70, EnvTexMtxWork view (view, mtx, model, scale, rotY, rotX)
+    EnvTexMtxWork texMtxWork; //0x70
     EnvironmentDof dof; //0x88
     u8 pad_94[0x98 - 0x94]; //0x94, never accessed
     u16 blurWork; //0x98, start of the EnvBlurWork view; bit 1 = blur on

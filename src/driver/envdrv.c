@@ -824,15 +824,6 @@ void envDisp_FF(void) {
 #pragma opt_propagation reset
 #pragma opt_lifetimes reset
 
-typedef struct EnvTexMtxWork {
-    MtxPtr view; //0x70
-    MtxPtr mtx; //0x74
-    MtxPtr model; //0x78
-    f32 scale; //0x7C
-    f32 rotY; //0x80
-    f32 rotX; //0x84
-} EnvTexMtxWork;
-#define tw ((EnvTexMtxWork*)wp->texMtxWork)
 
 double acos(double);
 
@@ -846,8 +837,8 @@ void envTevLoadTexMtxImm(s32 type, GXTexMtx id, GXTexMtx id2, GXTexMtxType mtxTy
 
     switch (type) {
         case 0:
-            PSMTXRotRad(m0, 'Y', 0.017453292f * tw->rotY);
-            PSMTXRotRad(m1, 'Z', 0.017453292f * -tw->rotX);
+            PSMTXRotRad(m0, 'Y', 0.017453292f * wp->texMtxWork.rotY);
+            PSMTXRotRad(m1, 'Z', 0.017453292f * -wp->texMtxWork.rotX);
             PSMTXConcat(m0, m1, m0);
             PSMTXInvXpose(m0, m0);
             PSVECNormalize((Vec*)m0[0], (Vec*)m0[0]);
@@ -861,12 +852,12 @@ void envTevLoadTexMtxImm(s32 type, GXTexMtx id, GXTexMtx id2, GXTexMtxType mtxTy
             break;
         case 1:
             PSMTXRotRad(m0, 'Y', (-1.5707964f));
-            PSMTXConcat(m0, tw->model, m0);
+            PSMTXConcat(m0, wp->texMtxWork.model, m0);
             PSMTXInvXpose(m0, m0);
             PSVECNormalize((Vec*)m0[0], (Vec*)m0[0]);
             PSVECNormalize((Vec*)m0[1], (Vec*)m0[1]);
             PSVECNormalize((Vec*)m0[2], (Vec*)m0[2]);
-            PSMTXScale(m3, 0.5f - 0.25f * tw->scale, 0.5f, 1.0f);
+            PSMTXScale(m3, 0.5f - 0.25f * wp->texMtxWork.scale, 0.5f, 1.0f);
             PSMTXConcat(m3, m0, m0);
             PSMTXTrans(m3, 0.5f, 0.5f, 0.0f);
             PSMTXConcat(m3, m0, m0);
@@ -878,14 +869,14 @@ void envTevLoadTexMtxImm(s32 type, GXTexMtx id, GXTexMtx id2, GXTexMtxType mtxTy
                 Vec half;
                 f32 ry2, rx2, s2;
 
-                ry2 = 3.1415927f * tw->rotY / 180.0f;
-                rx2 = 3.1415927f * tw->rotX / 180.0f;
+                ry2 = 3.1415927f * wp->texMtxWork.rotY / 180.0f;
+                rx2 = 3.1415927f * wp->texMtxWork.rotX / 180.0f;
                 light.x = -(f32)cos(rx2) * (f32)sin(ry2);
                 light.y = -(f32)sin(rx2);
                 light.z = -(f32)cos(rx2) * (f32)cos(ry2);
-                PSMTXMultVecSR(tw->view, &light, &light);
+                PSMTXMultVecSR(wp->texMtxWork.view, &light, &light);
                 C_VECHalfAngle(&light, &v, &half);
-                PSMTXInvXpose(tw->model, m0);
+                PSMTXInvXpose(wp->texMtxWork.model, m0);
                 PSVECNormalize((Vec*)m0[0], (Vec*)m0[0]);
                 PSVECNormalize((Vec*)m0[1], (Vec*)m0[1]);
                 PSVECNormalize((Vec*)m0[2], (Vec*)m0[2]);
@@ -894,7 +885,7 @@ void envTevLoadTexMtxImm(s32 type, GXTexMtx id, GXTexMtx id2, GXTexMtxType mtxTy
                 m4[0][1] = half.y;
                 m4[0][2] = half.z;
                 PSMTXConcat(m4, m0, m0);
-                s2 = 20.0f * tw->scale;
+                s2 = 20.0f * wp->texMtxWork.scale;
                 PSMTXScale(m4, s2, 1.0f, 1.0f);
                 PSMTXConcat(m4, m0, m0);
                 PSMTXTrans(m4, 1.0f - s2, 0.0f, 0.0f);
@@ -909,12 +900,12 @@ void envTevLoadTexMtxImm(s32 type, GXTexMtx id, GXTexMtx id2, GXTexMtxType mtxTy
                 Vec v2 = {0.0f, 0.0f, 1.0f};
                 f32 ry, rx;
 
-                ry = 3.1415927f * tw->rotY / 180.0f;
-                rx = 3.1415927f * tw->rotX / 180.0f;
+                ry = 3.1415927f * wp->texMtxWork.rotY / 180.0f;
+                rx = 3.1415927f * wp->texMtxWork.rotX / 180.0f;
                 light2.x = (f32)cos(rx) * (f32)sin(ry);
                 light2.y = (f32)sin(rx);
                 light2.z = (f32)cos(rx) * (f32)cos(ry);
-                PSMTXMultVecSR(tw->view, &light2, &light2);
+                PSMTXMultVecSR(wp->texMtxWork.view, &light2, &light2);
                 dot = PSVECDotProduct(&light2, &v2);
                 if (dot == (-1.0f)) {
                     PSMTXScale(m0, 0.0f, 0.0f, 0.0f);
@@ -925,7 +916,7 @@ void envTevLoadTexMtxImm(s32 type, GXTexMtx id, GXTexMtx id2, GXTexMtxType mtxTy
                 h.x = -h.x;
                 h.y = -h.y;
                 h.z = -h.z;
-                PSMTXInvXpose(tw->model, m5);
+                PSMTXInvXpose(wp->texMtxWork.model, m5);
                 PSVECNormalize((Vec*)m5[0], (Vec*)m5[0]);
                 PSVECNormalize((Vec*)m5[1], (Vec*)m5[1]);
                 PSVECNormalize((Vec*)m5[2], (Vec*)m5[2]);
@@ -936,7 +927,7 @@ void envTevLoadTexMtxImm(s32 type, GXTexMtx id, GXTexMtx id2, GXTexMtxType mtxTy
                     PSMTXRotAxisRad(m6, &axis, (f32)acos(PSVECDotProduct(&v2, &h)));
                 }
                 PSMTXConcat(m6, m5, m0);
-                PSMTXScale(m6, 2.0f * tw->scale, 2.0f * tw->scale, 1.0f);
+                PSMTXScale(m6, 2.0f * wp->texMtxWork.scale, 2.0f * wp->texMtxWork.scale, 1.0f);
                 PSMTXConcat(m6, m0, m0);
                 PSMTXTrans(m6, 0.5f, 0.5f, 0.0f);
                 PSMTXConcat(m6, m0, m0);
@@ -944,7 +935,7 @@ void envTevLoadTexMtxImm(s32 type, GXTexMtx id, GXTexMtx id2, GXTexMtxType mtxTy
                 break;
         }
         case 4:
-            PSMTXInvXpose(tw->model, m0);
+            PSMTXInvXpose(wp->texMtxWork.model, m0);
             PSVECNormalize((Vec*)m0[0], (Vec*)m0[0]);
             PSVECNormalize((Vec*)m0[1], (Vec*)m0[1]);
             PSVECNormalize((Vec*)m0[2], (Vec*)m0[2]);
@@ -965,7 +956,7 @@ void envTevLoadTexMtxImm(s32 type, GXTexMtx id, GXTexMtx id2, GXTexMtxType mtxTy
                 up = (Vec){0.0f, 0.0f, (-1.0f)};
                 C_MTXLookAt(m8, &camPos, &up, &target);
                 C_MTXLightFrustum((MtxPtr)m9, (-32.0f), 32.0f, (-32.0f), 32.0f, 300.0f, 0.5f, 0.5f, 0.5f, 0.5f);
-                PSMTXInverse(tw->view, m10);
+                PSMTXInverse(wp->texMtxWork.view, m10);
                 PSMTXConcat(m8, m10, m11);
                 PSMTXConcat((MtxPtr)m9, m11, m0);
                 GXLoadTexMtxImm(m0, id2, mtxType);
@@ -1039,9 +1030,9 @@ void envAddTev(s32 type, MapTevCallbackInfo* info) {
         return;
     }
     PSMTXConcat(camGetCurPtr()->view, info->mtx, mtx);
-    ((EnvTexMtxWork*)wp->texMtxWork)->view = camGetCurPtr()->view;
-    ((EnvTexMtxWork*)wp->texMtxWork)->mtx = info->mtx;
-    ((EnvTexMtxWork*)wp->texMtxWork)->model = mtx;
+    wp->texMtxWork.view = camGetCurPtr()->view;
+    wp->texMtxWork.mtx = info->mtx;
+    wp->texMtxWork.model = mtx;
     GXSetTevOrder((GXTevStageID) stage,  coord, (GXTexMapID) map, GX_COLOR_NULL);
     GXSetTevColorOp((GXTevStageID) stage, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
     GXSetTevAlphaOp((GXTevStageID) stage, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
@@ -1053,9 +1044,9 @@ void envAddTev(s32 type, MapTevCallbackInfo* info) {
         case 1:
             GXSetTevColorIn((GXTevStageID) stage, GX_CC_ZERO, GX_CC_CPREV, GX_CC_TEXC, GX_CC_ZERO);
             GXSetTevAlphaIn((GXTevStageID) stage, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_APREV);
-            ((EnvTexMtxWork*)wp->texMtxWork)->rotY = 10.0f;
-            ((EnvTexMtxWork*)wp->texMtxWork)->rotX = gp->retraceCount + 45;
-            ((EnvTexMtxWork*)wp->texMtxWork)->scale = 0.5f;
+            wp->texMtxWork.rotY = 10.0f;
+            wp->texMtxWork.rotX = gp->retraceCount + 45;
+            wp->texMtxWork.scale = 0.5f;
             envLoadTex(6, map);
             GXSetTexCoordGen2((GXTexCoordID) coord, GX_TG_MTX2x4, GX_TG_NRM, texmtx_tbl[map], GX_FALSE, GX_PTIDENTITY);
             envTevLoadTexMtxImm(0, (GXTexMtx) texmtx_tbl[map], GX_PTTEXMTX0, GX_MTX2x4);
@@ -1067,9 +1058,9 @@ void envAddTev(s32 type, MapTevCallbackInfo* info) {
         case 2:
             GXSetTevColorIn((GXTevStageID) stage, GX_CC_ZERO, GX_CC_CPREV, GX_CC_TEXC, GX_CC_TEXA);
             GXSetTevAlphaIn((GXTevStageID) stage, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_APREV);
-            ((EnvTexMtxWork*)wp->texMtxWork)->rotY = 10.0f;
-            ((EnvTexMtxWork*)wp->texMtxWork)->rotX = gp->retraceCount + 45;
-            ((EnvTexMtxWork*)wp->texMtxWork)->scale = 0.5f;
+            wp->texMtxWork.rotY = 10.0f;
+            wp->texMtxWork.rotX = gp->retraceCount + 45;
+            wp->texMtxWork.scale = 0.5f;
             envLoadTex(8, map);
             GXSetTexCoordGen2((GXTexCoordID) coord, GX_TG_MTX2x4, GX_TG_NRM, texmtx_tbl[map], GX_FALSE, GX_PTIDENTITY);
             envTevLoadTexMtxImm(0, (GXTexMtx) texmtx_tbl[map], GX_PTTEXMTX0, GX_MTX2x4);
@@ -1081,7 +1072,7 @@ void envAddTev(s32 type, MapTevCallbackInfo* info) {
         case 3:
             GXSetTevColorIn((GXTevStageID) stage, GX_CC_CPREV, GX_CC_ZERO, GX_CC_TEXC, GX_CC_ZERO);
             GXSetTevAlphaIn((GXTevStageID)stage, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_APREV);
-            ((EnvTexMtxWork*)wp->texMtxWork)->scale = 0.5f;
+            wp->texMtxWork.scale = 0.5f;
             envLoadTex(0, map);
             GXSetTexCoordGen2((GXTexCoordID) coord, GX_TG_MTX2x4, GX_TG_NRM, texmtx_tbl[map], GX_FALSE, GX_PTIDENTITY);
             envTevLoadTexMtxImm(1, (GXTexMtx) texmtx_tbl[map], GX_PTTEXMTX0, GX_MTX2x4);
@@ -1093,9 +1084,9 @@ void envAddTev(s32 type, MapTevCallbackInfo* info) {
         case 4:
             GXSetTevColorIn((GXTevStageID) stage, GX_CC_CPREV, GX_CC_ZERO, GX_CC_ZERO, GX_CC_TEXC);
             GXSetTevAlphaIn((GXTevStageID) stage, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_APREV);
-            ((EnvTexMtxWork*)wp->texMtxWork)->scale = 0.5f;
-            ((EnvTexMtxWork*)wp->texMtxWork)->rotY = 45.0f;
-            ((EnvTexMtxWork*)wp->texMtxWork)->rotX = 45.0f;
+            wp->texMtxWork.scale = 0.5f;
+            wp->texMtxWork.rotY = 45.0f;
+            wp->texMtxWork.rotX = 45.0f;
             envLoadTex(1, map);
             GXSetTexCoordGen2((GXTexCoordID) coord, GX_TG_MTX2x4, GX_TG_NRM, texmtx_tbl[map], GX_FALSE, GX_PTIDENTITY);
             envTevLoadTexMtxImm(2, (GXTexMtx) texmtx_tbl[map], GX_PTTEXMTX0, GX_MTX2x4);
@@ -1107,9 +1098,9 @@ void envAddTev(s32 type, MapTevCallbackInfo* info) {
         case 5:
             GXSetTevColorIn((GXTevStageID) stage, GX_CC_CPREV, GX_CC_ZERO, GX_CC_ZERO, GX_CC_TEXC);
             GXSetTevAlphaIn((GXTevStageID) stage, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_APREV);
-            ((EnvTexMtxWork*)wp->texMtxWork)->scale = 0.5f;
-            ((EnvTexMtxWork*)wp->texMtxWork)->rotY = 45.0f;
-            ((EnvTexMtxWork*)wp->texMtxWork)->rotX = 45.0f;
+            wp->texMtxWork.scale = 0.5f;
+            wp->texMtxWork.rotY = 45.0f;
+            wp->texMtxWork.rotX = 45.0f;
             envLoadTex(2, map);
             GXSetTexCoordGen2((GXTexCoordID) coord, GX_TG_MTX2x4, GX_TG_NRM, texmtx_tbl[map], GX_FALSE, GX_PTIDENTITY);
             envTevLoadTexMtxImm(3, (GXTexMtx) texmtx_tbl[map], GX_PTTEXMTX0, GX_MTX2x4);
@@ -1121,9 +1112,9 @@ void envAddTev(s32 type, MapTevCallbackInfo* info) {
         case 6:
             GXSetTevColorIn((GXTevStageID) stage, GX_CC_CPREV, GX_CC_ZERO, GX_CC_ZERO, GX_CC_TEXC);
             GXSetTevAlphaIn((GXTevStageID) stage, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_APREV);
-            ((EnvTexMtxWork*)wp->texMtxWork)->scale = 0.15f;
-            ((EnvTexMtxWork*)wp->texMtxWork)->rotY = 0.0f;
-            ((EnvTexMtxWork*)wp->texMtxWork)->rotX = 90.0f;
+            wp->texMtxWork.scale = 0.15f;
+            wp->texMtxWork.rotY = 0.0f;
+            wp->texMtxWork.rotX = 90.0f;
             envLoadTex(4, map);
             GXSetTexCoordGen2((GXTexCoordID) coord, GX_TG_MTX2x4, GX_TG_NRM, texmtx_tbl[map], GX_FALSE, GX_PTIDENTITY);
             envTevLoadTexMtxImm(2, (GXTexMtx) texmtx_tbl[map], GX_PTTEXMTX0, GX_MTX2x4);
@@ -1135,9 +1126,9 @@ void envAddTev(s32 type, MapTevCallbackInfo* info) {
         case 7:
             GXSetTevColorIn((GXTevStageID) stage, GX_CC_CPREV, GX_CC_ZERO, GX_CC_ZERO, GX_CC_TEXC);
             GXSetTevAlphaIn((GXTevStageID) stage, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_APREV);
-            ((EnvTexMtxWork*)wp->texMtxWork)->scale = 0.3f;
-            ((EnvTexMtxWork*)wp->texMtxWork)->rotY = 0.0f;
-            ((EnvTexMtxWork*)wp->texMtxWork)->rotX = 90.0f;
+            wp->texMtxWork.scale = 0.3f;
+            wp->texMtxWork.rotY = 0.0f;
+            wp->texMtxWork.rotX = 90.0f;
             envLoadTex(5, map);
             GXSetTexCoordGen2((GXTexCoordID) coord, GX_TG_MTX2x4, GX_TG_NRM, texmtx_tbl[map], GX_FALSE, GX_PTIDENTITY);
             envTevLoadTexMtxImm(3, (GXTexMtx) texmtx_tbl[map], GX_PTTEXMTX0, GX_MTX2x4);
@@ -1149,9 +1140,9 @@ void envAddTev(s32 type, MapTevCallbackInfo* info) {
         case 8:
             GXSetTevColorIn((GXTevStageID) stage, GX_CC_ZERO, GX_CC_CPREV, GX_CC_TEXC, GX_CC_ZERO);
             GXSetTevAlphaIn((GXTevStageID) stage, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_APREV);
-            ((EnvTexMtxWork*)wp->texMtxWork)->scale = 0.5f;
-            ((EnvTexMtxWork*)wp->texMtxWork)->rotY = 10.0f;
-            ((EnvTexMtxWork*)wp->texMtxWork)->rotX = 45.0f;
+            wp->texMtxWork.scale = 0.5f;
+            wp->texMtxWork.rotY = 10.0f;
+            wp->texMtxWork.rotX = 45.0f;
             envLoadTex(10, map);
             GXSetTexCoordGen2((GXTexCoordID) coord, GX_TG_MTX2x4, GX_TG_NRM, texmtx_tbl[map], GX_FALSE, GX_PTIDENTITY);
             envTevLoadTexMtxImm(0, (GXTexMtx) texmtx_tbl[map], GX_PTTEXMTX0, GX_MTX2x4);
@@ -1186,7 +1177,6 @@ void envAddTev(s32 type, MapTevCallbackInfo* info) {
 
 #undef ENV_TEX_TAIL
 
-#undef tw
 
 static inline MapObject* envWaterObj(MapTevCallbackInfo* info) {
     return info->mapObj;
