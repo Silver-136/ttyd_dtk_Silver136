@@ -1,6 +1,3 @@
-#ifndef VERSION_G8ME01
-#define MEMORY_C_DEFS
-#endif
 #include "memory.h"
 #include "system.h"
 #include <dolphin/os.h>

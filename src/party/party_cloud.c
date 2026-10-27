@@ -19,11 +19,6 @@ double fabs(double x);
 
 Vec cloud_at;
 
-#ifdef VERSION_G8ME01
-#define MW_US 4 // US MarioWork has 4 more bytes before these raw offsets
-#else
-#define MW_US 0
-#endif
 
 #include "driver/hitdrv.h"
 #include "driver/effdrv.h"

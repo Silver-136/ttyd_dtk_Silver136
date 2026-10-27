@@ -19,12 +19,6 @@
 #define kuribo_init_800C23B4 kuribo_init
 #endif
 
-// US MarioWork has 4 more bytes before these raw offsets
-#ifdef VERSION_G8ME01
-#define MW_US 4
-#else
-#define MW_US 0
-#endif
 
 
 //.sbss

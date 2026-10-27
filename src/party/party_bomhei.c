@@ -27,12 +27,6 @@
 #define bomhei_init_800BFBB0 bomhei_init
 #endif
 
-// US MarioWork has 4 more bytes before these raw offsets
-#ifdef VERSION_G8ME01
-#define MW_US 4
-#else
-#define MW_US 0
-#endif
 
 
 extern u8* caseCheckHitObj2(void* hit);

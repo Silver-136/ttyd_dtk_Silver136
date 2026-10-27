@@ -39,7 +39,7 @@ void memInit(void);
 void memClear(HEAP_TYPE heap);
 void* __memAlloc(HEAP_TYPE heap, u32 size);
 void __memFree(HEAP_TYPE heap, void* ptr);
-#if defined(VERSION_G8ME01) && !defined(MEMORY_C_DEFS)
+#ifdef VERSION_G8ME01 // US: the map heap functions take the heap base; these macros pass mapalloc_base_ptr
 extern void* mapalloc_base_ptr;
 void* _mapAlloc(void* base, u32 size);
 void* _mapAllocTail(void* base, u32 size);

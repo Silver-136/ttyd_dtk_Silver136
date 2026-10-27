@@ -23,10 +23,8 @@
 #endif
 
 #ifdef VERSION_G8ME01
-#define MW_US 4 // US MarioWork has 4 more bytes before these raw offsets
 #define VIVIAN_FOLLOW_DIST 30.0f
 #else
-#define MW_US 0
 #define VIVIAN_FOLLOW_DIST 22.0f
 #endif
 
