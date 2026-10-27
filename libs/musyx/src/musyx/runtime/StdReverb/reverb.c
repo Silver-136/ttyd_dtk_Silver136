@@ -127,7 +127,7 @@ static const float value0_6 = 0.6f;
 static const double i2fMagic = 4.503601774854144E15;
 
 /* clang-format off */
-/* Hand-written assembly kernel (Codex round 16: whether the original was assembly is not established) */
+/* Hand-written assembly kernel (whether the original source was assembly is not established) */
 static asm void DoCrossTalk(s32* a, s32* b, f32 start, f32 end) {
   nofralloc
   stwu r1, -0x30(r1)
