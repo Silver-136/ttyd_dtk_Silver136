@@ -18,12 +18,14 @@
 #include "mot/mot_hip.h"
 
 
+// Ids of the two hip-drop sounds (the drop sound and Mario's voice): US keeps them in MarioWork.soundId[3..4],
+// JP in the hip motion work.
 #ifdef VERSION_G8ME01
-#define SND1 (mario->soundId[3])
-#define SND2 (mario->soundId[4])
+#define HIP_SFX_DROP (mario->soundId[3])
+#define HIP_SFX_VOICE (mario->soundId[4])
 #else
-#define SND1 (mario->mot.hip.sfxId[0])
-#define SND2 (mario->mot.hip.sfxId[1])
+#define HIP_SFX_DROP (mario->mot.hip.sfxId[0])
+#define HIP_SFX_VOICE (mario->mot.hip.sfxId[1])
 #endif
 
 static EVT_BEGIN(quake_evt)
@@ -37,11 +39,6 @@ static EVT_BEGIN(quake_bgmode_evt)
 EVT_END()
 
 s32 U_chkground(void);
-#ifdef VERSION_G8ME01
-#define MHPOST() hip_post_inl()
-#else
-#define MHPOST() mot_hip_post()
-#endif
 
 BOOL marioChkHipAttack(void) {
     BOOL ret;
@@ -64,49 +61,42 @@ BOOL marioChkHipBump(void) {
     return ret;
 }
 
+// US: the sounds are handled by small helpers that fetch MarioWork themselves (the extra marioGetPtr calls are in
+// the US code); US also starts each sound only when it is not already playing.
 #ifdef VERSION_G8ME01
 static inline void hip_snd_reset(void) {
     MarioWork* mario = marioGetPtr();
 
-    SND1 = -1;
-    SND2 = -1;
+    HIP_SFX_DROP = -1;
+    HIP_SFX_VOICE = -1;
 }
 
 static inline void hip_snd_on(void) {
     MarioWork* mario = marioGetPtr();
 
-    if ((u32)SND1 == 0xFFFFFFFFU) {
-        SND1 = psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_HIP_DROP1), &mario->position);
+    if ((u32)HIP_SFX_DROP == 0xFFFFFFFFU) {
+        HIP_SFX_DROP = psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_HIP_DROP1), &mario->position);
     }
-    if ((u32)SND2 == 0xFFFFFFFFU) {
-        SND2 = psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_VOICE_MARIO_POWER1), &mario->position);
+    if ((u32)HIP_SFX_VOICE == 0xFFFFFFFFU) {
+        HIP_SFX_VOICE = psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_VOICE_MARIO_POWER1), &mario->position);
     }
 }
 
 static inline void hip_snd_off(void) {
     MarioWork* mario = marioGetPtr();
 
-    if ((u32)SND1 != 0xFFFFFFFFU) {
-        psndSFXOff(SND1);
-        SND1 = -1;
+    if ((u32)HIP_SFX_DROP != 0xFFFFFFFFU) {
+        psndSFXOff(HIP_SFX_DROP);
+        HIP_SFX_DROP = -1;
     }
-    if ((u32)SND2 != 0xFFFFFFFFU) {
-        psndSFXOff(SND2);
-        SND2 = -1;
+    if ((u32)HIP_SFX_VOICE != 0xFFFFFFFFU) {
+        psndSFXOff(HIP_SFX_VOICE);
+        HIP_SFX_VOICE = -1;
     }
-}
-
-static inline void hip_post_inl(void) {
-    MarioWork* mario;
-
-    mario = marioGetPtr();
-    marioOfsRotReset();
-    mario->airTimer = 0;
-    mario->jumpPeakAirTime = 0;
-    hip_snd_off();
 }
 
 #endif
+
 void mot_hip(void) {
     MarioWork* mario;
     HitEntry* hit;
@@ -150,8 +140,8 @@ void mot_hip(void) {
 #ifdef VERSION_G8ME01
         hip_snd_reset();
 #else
-        SND1 = -1;
-        SND2 = -1;
+        HIP_SFX_DROP = -1;
+        HIP_SFX_VOICE = -1;
 #endif
     }
     switch (mario->currSubMotionId) {
@@ -159,8 +149,8 @@ void mot_hip(void) {
 #ifdef VERSION_G8ME01
         hip_snd_on();
 #else
-        SND1 = psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_HIP_DROP1), &mario->position);
-        SND2 = psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_VOICE_MARIO_POWER1), &mario->position);
+        HIP_SFX_DROP = psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_HIP_DROP1), &mario->position);
+        HIP_SFX_VOICE = psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_VOICE_MARIO_POWER1), &mario->position);
 #endif
         mario->mot.hip.angle = 0.0f;
         mario->baseSpeed = 0.0f;
@@ -183,7 +173,7 @@ void mot_hip(void) {
             return;
         case 2:
             marioChgMotSub(MARIO_MOTION_STAY, 0);
-            MHPOST();
+            mot_hip_post();
             return;
         }
         break;
@@ -202,7 +192,7 @@ void mot_hip(void) {
             return;
         case 2:
             marioChgMotSub(MARIO_MOTION_STAY, 0);
-            MHPOST();
+            mot_hip_post();
             return;
         }
         break;
@@ -223,7 +213,7 @@ void mot_hip(void) {
             return;
         case 2:
             marioChgMotSub(MARIO_MOTION_STAY, 0);
-            MHPOST();
+            mot_hip_post();
             return;
         }
         break;
@@ -298,7 +288,7 @@ void mot_hip(void) {
             mario->dispFlags &= ~MARIO_DISP_FLAG_NO_REAR_POSE;
             mario->flags &= ~MARIO_FLAG_STOP_AIR_MOVEMENT;
             marioChgMotSub(MARIO_MOTION_STAY, 0);
-            MHPOST();
+            mot_hip_post();
         }
         break;
     case 50:
@@ -364,22 +354,22 @@ s32 U_chkground(void) {
 #pragma dont_inline reset
 
 void mot_hip_post(void) {
-#ifdef VERSION_G8ME01
-    hip_post_inl();
-#else
     MarioWork* mario;
 
     mario = marioGetPtr();
     marioOfsRotReset();
     mario->airTimer = 0;
     mario->jumpPeakAirTime = 0;
-    if ((u32)SND1 != 0xFFFFFFFFU) {
-        psndSFXOff(SND1);
-        SND1 = -1;
+#ifdef VERSION_G8ME01
+    hip_snd_off();
+#else
+    if ((u32)HIP_SFX_DROP != 0xFFFFFFFFU) {
+        psndSFXOff(HIP_SFX_DROP);
+        HIP_SFX_DROP = -1;
     }
-    if ((u32)SND2 != 0xFFFFFFFFU) {
-        psndSFXOff(SND2);
-        SND2 = -1;
+    if ((u32)HIP_SFX_VOICE != 0xFFFFFFFFU) {
+        psndSFXOff(HIP_SFX_VOICE);
+        HIP_SFX_VOICE = -1;
     }
 #endif
 }
