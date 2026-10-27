@@ -158,3 +158,7 @@ never copied in). What the raw counts above mean for the libraries:
   row stays.
 - **dont_inline:** OSLink's pair became the unit flag `-inline noauto` (round 16, both versions identical). VI's three
   pairs (getTiming, latch0/latch1) stay: a whole-unit flag changes other helpers.
+- **Sources no build uses:** 107 of the 313 library sources are compiled in neither version (AX, AXART, AXFX,
+  GD, SYN, GXSave/GXVerif*, perf, demo, MCC, extra OS/CARD/SI/VI files, a MusyX test main, ...). They
+  came with the SDK reconstruction the tree imported; their "needed to match" lines were never checked
+  against our game. Keep or delete is open (user).
