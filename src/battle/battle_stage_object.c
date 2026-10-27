@@ -44,7 +44,7 @@
 f32 intpl_sub(s32 type, f32 start, f32 end, s32 cur, s32 max);
 void FontDrawString(f32 x, f32 y, const char* str);
 
-//local prototypes
+// local prototypes
 void BattleObjectConfig(void);
 void _mobj_shake_main(BattleStageObject* obj);
 void _Nozzle_Change_Check(u8 index, u8* rate);
@@ -65,13 +65,11 @@ USER_FUNC(_fall_frame_delete);
 USER_FUNC(_fall_frame);
 USER_FUNC(_fall_frame_wait_unit_ready);
 USER_FUNC(_fall_frame_wait);
-#ifdef VERSION_G8ME01
-#else
+#ifndef VERSION_G8ME01
 USER_FUNC(_announce_wall_message);
 #endif
 USER_FUNC(_nozzle_turn);
 USER_FUNC(_set_mobj_shake);
-USER_FUNC(_bgset_audience_bgset_access);
 USER_FUNC(_bgset_audience_bgset_access);
 USER_FUNC(_bgset_kemuri_effect);
 USER_FUNC(_get_bgset_attack_data);
@@ -81,8 +79,6 @@ USER_FUNC(_set_mobj_rotate_x);
 
 USER_FUNC(btlevtcmd_GetACPossibility);
 
-extern BattleWeaponData _nozzle_at_base_mario;
-extern BattleWeaponData _nozzle_at_base_monster;
 extern BattleStageNozzleData battle_stage_nozzle_data[];
 extern BattleStageFallObjectData battle_stage_fall_object_data[];
 
@@ -153,7 +149,7 @@ void BattleStageObjectInit(void) {
     sw->nozzleType = -1;
     sw->fogTimer = 0;
     sw->fogEffect = NULL;
-    mapGrpFlagOff(mapGetWork()->entries[0].rootMapObj->joints->name, 2);
+    mapGrpFlagOff(mapGetWork()->entries[0].rootMapObj->joints->name, MAP_OBJ_FLAG_CLIP);
     if (mapGetMapObj("A1")) {
         mapGrpFlagOn("A1", MAP_OBJ_FLAG_HIDDEN);
         mapGrpFlagOff("A1", MAP_OBJ_FLAG_CLIP);
@@ -451,7 +447,7 @@ void BattleStageObjectMain(void) {
 }
 
 void BattleObjectConfig(void) {
-    //stubbed in retail
+    // does nothing
 }
 
 void BattleStage_DestroyA1(void) {
@@ -2616,6 +2612,7 @@ USER_FUNC(_set_mobj_rotate_x) {
 
     EvtWord* args = event->args;
     busy = FALSE;
+    // FAKE: wp is assigned inside the expression; the two plain statements change the object
     sw = (&(wp = _battleWorkPointer)->stageObjectWork);
     layer = evtGetValue(event, *args++);
     if (isFirstCall) {
@@ -2807,12 +2804,14 @@ USER_FUNC(_bgset_kemuri_effect) {
     int i;
     BattleStageObject* obj;
     f32 x, y, z;
+
     wp = _battleWorkPointer;
     layer = evtGetValue(event, args[0]);
     sfxA1 = "SFX_BTL_STAGE_SET_DOWN1";
     sfxA2 = "SFX_BTL_STAGE_SET_DOWN3";
     sfxB = "SFX_BTL_STAGE_SET_DOWN2";
     for (i = 0; i < 32; i++) {
+        // FAKE: args++/args-- cancel out; removing them changes the object
         args++;
         args--;
         obj = &wp->stageObjects[i];
@@ -3072,6 +3071,7 @@ void _disp_escape_wall_message(CameraId camera, void* param) {
     const char* msg = msgSearch("btl_msg_escape_wall_close2");
     s32 width = FontGetMessageWidth(msg);
     f32 x;
+    // FAKE: spare temporary for 0.0f; writing 0.0f in place changes the object
     f32 zero = 0.0f;
 
     x = zero - width / 2;
@@ -3302,6 +3302,7 @@ USER_FUNC(_nozzle_work_effect) {
                     } else {
                         event->userWork[5] = -1;
                     }
+                    // FAKE: the sum goes through rot first; rot = reviseAngle(90.0f + angle1) changes the object
                     rot = 90.0f + angle1;
                     rot = reviseAngle(rot);
                     z = 10.0f * sinfd(angle1) + obj->mPosition.z;
@@ -3347,6 +3348,7 @@ USER_FUNC(_nozzle_work_effect) {
                     } else {
                         event->userWork[7] = -1;
                     }
+                    // FAKE: z and rot swap roles here (z holds the angle); the left/centre nozzle form changes the object
                     z = reviseAngle(90.0f + angle3);
                     rot = 10.0f * sinfd(angle3) + obj->mPosition.z;
                     event->userWork[3] = (EvtWord)effNozleEntry(effType, obj->mPosition.x - 10.0f * cosfd(angle3), 12.0f + obj->mPosition.y, rot, -80.0f, z, 90);
@@ -3387,6 +3389,7 @@ USER_FUNC(_nozzle_work_effect) {
     if (event->userWork[0] > 0) {
         event->userWork[0]--;
         if (event->userWork[0] <= 0) {
+            // FAKE: (u32) casts compared with 0xFFFFFFFF; the plain != -1 changes the object
             if ((u32)event->userWork[5] != 0xFFFFFFFF) {
                 psndSFXOff(event->userWork[5]);
             }
@@ -3539,25 +3542,27 @@ void _combine_nozzle_weapon(BOOL copy, BattleWeapon* dst, BattleWeapon* src) {
     dst->element = src->element;
     s = (s8*)&src->sleepChance; // status chance/time block from 0x80, indexed below
     d = (s8*)&dst->sleepChance;
-    _rate_mix(&d[0x0], &d[0x1], &s[0x0], &s[0x1]);
-    _rate_mix(&d[0x2], &d[0x3], &s[0x2], &s[0x3]);
-    _rate_mix(&d[0x4], &d[0x5], &s[0x4], &s[0x5]);
-    _rate_mix(&d[0x6], &d[0x7], &s[0x6], &s[0x8]);
-    _rate_mix(&d[0x9], &d[0xA], &s[0x9], &s[0xA]);
-    _rate_mix(&d[0xB], &d[0xC], &s[0xB], &s[0xC]);
-    _rate_mix(&d[0xD], &d[0xE], &s[0xD], &s[0xE]);
-    _rate_mix(&d[0xF], &d[0x10], &s[0xF], &s[0x10]);
-    _rate_mix(&d[0x11], &d[0x12], &s[0x11], &s[0x12]);
-    _rate_mix_3(&d[0x13], &d[0x14], &d[0x15], &s[0x13], &s[0x14], &s[0x15]);
-    _rate_mix_3(&d[0x19], &d[0x1A], &d[0x1B], &s[0x19], &s[0x1A], &s[0x1B]);
-    _rate_mix(&d[0x1C], &d[0x1D], &s[0x1C], &s[0x1D]);
-    d[0x1F] += s[0x1F];
-    _rate_mix(&d[0x20], &d[0x21], &s[0x20], &s[0x21]);
-    _rate_mix(&d[0x22], &d[0x23], &s[0x22], &s[0x23]);
-    d[0x2A] += s[0x2A];
-    d[0x2B] += s[0x2B];
-    d[0x2C] += s[0x2C];
-    d[0x2D] += s[0x2D];
+    _rate_mix(&d[0x0], &d[0x1], &s[0x0], &s[0x1]); // sleep
+    _rate_mix(&d[0x2], &d[0x3], &s[0x2], &s[0x3]); // stop
+    _rate_mix(&d[0x4], &d[0x5], &s[0x4], &s[0x5]); // dizzy
+    // BUG: adds the source's poisonStrength (s[0x8]) to poisonTime instead of its poisonTime (s[0x7]);
+    // poisonStrength itself is not combined
+    _rate_mix(&d[0x6], &d[0x7], &s[0x6], &s[0x8]); // poison
+    _rate_mix(&d[0x9], &d[0xA], &s[0x9], &s[0xA]); // confuse
+    _rate_mix(&d[0xB], &d[0xC], &s[0xB], &s[0xC]); // electric
+    _rate_mix(&d[0xD], &d[0xE], &s[0xD], &s[0xE]); // dodgy
+    _rate_mix(&d[0xF], &d[0x10], &s[0xF], &s[0x10]); // burn
+    _rate_mix(&d[0x11], &d[0x12], &s[0x11], &s[0x12]); // freeze
+    _rate_mix_3(&d[0x13], &d[0x14], &d[0x15], &s[0x13], &s[0x14], &s[0x15]); // size change
+    _rate_mix_3(&d[0x19], &d[0x1A], &d[0x1B], &s[0x19], &s[0x1A], &s[0x1B]); // defense change (attack change 0x16..0x18 is not combined)
+    _rate_mix(&d[0x1C], &d[0x1D], &s[0x1C], &s[0x1D]); // allergic
+    d[0x1F] += s[0x1F]; // chargeStrength
+    _rate_mix(&d[0x20], &d[0x21], &s[0x20], &s[0x21]); // fast
+    _rate_mix(&d[0x22], &d[0x23], &s[0x22], &s[0x23]); // slow
+    d[0x2A] += s[0x2A]; // hpRegenTime
+    d[0x2B] += s[0x2B]; // hpRegenStrength
+    d[0x2C] += s[0x2C]; // fpRegenTime
+    d[0x2D] += s[0x2D]; // fpRegenStrength
 }
 
 USER_FUNC(_nozzle_work_get_weapon_address) {
@@ -3614,7 +3619,7 @@ USER_FUNC(_object_fall_wait) {
 typedef struct FallObjectEntry {
     s8 index; //0x0
     s8 type; //0x1
-    u8 field_0x2[0x4 - 0x2]; //0x2
+    u8 pad_02[0x4 - 0x2]; //0x2, never accessed
     s32 kind; //0x4, 0 = unit, 1 = audience
     s32 unitId; //0x8
     s32 partId; //0xC
@@ -3622,7 +3627,7 @@ typedef struct FallObjectEntry {
     s16 field_0x12; //0x12
     u8 noAc; //0x14
     u8 forceHit; //0x15, set on earlier entries for the same unit once a hit is scheduled; damage then skips the evasion rolls
-    u8 field_0x16[0x1C - 0x16]; //0x16
+    u8 pad_16[0x1C - 0x16]; //0x16, never accessed
     s32 preCheck; //0x1C
     s32 sfxId; //0x20
     EffectEntry* effect; //0x24
@@ -3634,53 +3639,31 @@ typedef struct FallObjectWork {
     s8 prevTypes[3]; //0x1
     FallObjectEntry entries[1]; //0x4
 } FallObjectWork;
-s32 _object_fall_attack(EventEntry *event, BOOL isFirstCall);
-USER_FUNC(_object_fall_wait);
-USER_FUNC(_nozzle_work_get_weapon_address);
-USER_FUNC(_nozzle_work_attack_set);
-USER_FUNC(_nozzle_work_effect);
-USER_FUNC(_nozzle_work_wait);
-USER_FUNC(_fall_frame_delete);
-USER_FUNC(_fall_frame);
-USER_FUNC(_fall_frame_wait_unit_ready);
-USER_FUNC(_fall_frame_wait);
-#ifdef VERSION_G8ME01
-#else
-USER_FUNC(_announce_wall_message);
-#endif
-USER_FUNC(_nozzle_turn);
-USER_FUNC(_set_mobj_shake);
-USER_FUNC(_bgset_audience_bgset_access);
-USER_FUNC(_bgset_kemuri_effect);
-USER_FUNC(_get_bgset_attack_data);
-USER_FUNC(_mobj_destroy);
-USER_FUNC(_mobj_set_alpha);
-USER_FUNC(_set_mobj_rotate_x);
 
-s32 _object_fall_attack(EventEntry *event, BOOL isFirstCall) {
-    BattleWork *wp = _battleWorkPointer;
-    BattleStageFallObjectData *fd = wp->stageObjectWork.fallObjectData;
-    const char *sfxNormal;
+USER_FUNC(_object_fall_attack) {
+    BattleWork* wp = _battleWorkPointer;
+    BattleStageFallObjectData* fd = wp->stageObjectWork.fallObjectData;
+    const char* sfxNormal;
     BOOL done;
     s32 acCount;
-    EvtWord *args = event->args;
+    EvtWord* args = event->args;
     s32 outArg = *(args++);
-    FallObjectEntry *e3;
-    BattleUnit *unit;
-    BattleUnitPart *part;
+    FallObjectEntry* e3;
+    BattleUnit* unit;
+    BattleUnitPart* part;
     s16 delay;
-    BattleWeapon *weapon3;
+    BattleWeapon* weapon3;
     s32 j;
-    BattleWeapon *weapon;
-    BOOL found = 0;
+    BattleWeapon* weapon;
+    BOOL found = FALSE;
     s32 k2;
-    FallObjectWork *w;
-    FallObjectEntry *e;
-    FallObjectEntry *o;
+    FallObjectWork* w;
+    FallObjectEntry* e;
+    FallObjectEntry* o;
     s32 k;
-    const char *sfxTub2;
-    FallObjectEntry *o2;
-    const char *sfxRest;
+    const char* sfxTub2;
+    FallObjectEntry* o2;
+    const char* sfxRest;
     s32 i;
     s32 sum;
     s32 r;
@@ -3695,6 +3678,7 @@ s32 _object_fall_attack(EventEntry *event, BOOL isFirstCall) {
     Vec p;
     s32 unitId;
     s32 partId;
+
     if (isFirstCall) {
         w = BattleAlloc(sizeof(FallObjectWork));
         event->userdatap[0] = w;
@@ -3707,14 +3691,14 @@ s32 _object_fall_attack(EventEntry *event, BOOL isFirstCall) {
 
         if (BattleCheckConcluded(wp)) {
             evtSetValue(event, outArg, event->userdata[1]);
-            return 2;
+            return EVT_RETURN_DONE;
         }
         w->count = 1;
         for (i = 0; i < w->count; i++) {
             e = &w->entries[i];
             e->index = i;
             for (j = 0; j < 3; j++) {
-                if (w->prevTypes[j] == (-1)) {
+                if (w->prevTypes[j] == -1) {
                     break;
                 }
             }
@@ -3748,12 +3732,12 @@ s32 _object_fall_attack(EventEntry *event, BOOL isFirstCall) {
             }
             weapon = &e->weapon.weapon;
             e->kind = 0;
-            if (((pouchGetPtr()->mStarPowersObtained && (!(BattleAudienceBaseGetPtr()->flags & AUDIENCE_FLAG_NO_AUDIENCE_EVENTS))) && (e->type != STAGE_FALL_BOWSER_STATUE)) && (e->type != STAGE_FALL_METEOR)) {
-                if (((u32)wp->debug.flags & BATTLE_DEBUG_FORCE_FALL_ON_AUDIENCE) || (irand(100) < 10)) {
+            if (pouchGetPtr()->mStarPowersObtained && !(BattleAudienceBaseGetPtr()->flags & AUDIENCE_FLAG_NO_AUDIENCE_EVENTS) && e->type != STAGE_FALL_BOWSER_STATUE && e->type != STAGE_FALL_METEOR) {
+                if ((wp->debug.flags & BATTLE_DEBUG_FORCE_FALL_ON_AUDIENCE) || irand(100) < 10) {
                     e->kind = 1;
                     e->partId = -1;
                     e->unitId = BattleAudience_HaitiRandForFallObject();
-                    found = 1;
+                    found = TRUE;
                     event->userdata[1] = 1;
                 }
             }
@@ -3761,16 +3745,16 @@ s32 _object_fall_attack(EventEntry *event, BOOL isFirstCall) {
                 BattleSamplingEnemy(&targets, weapon, BattleGetSystemPtr(wp)->unitId, 1, weapon->targetClassFlags, weapon->targetPropertyFlags, -wp->alliances[1].attackDirection);
                 if (targets.numTargets <= 0) {
                     evtSetValue(event, outArg, event->userdata[1]);
-                    return 2;
+                    return EVT_RETURN_DONE;
                 }
-                found = 1;
+                found = TRUE;
                 BattleChoiceSamplingEnemy(&targets, weapon->targetWeightFlags, &unitId, &partId);
                 e->unitId = unitId;
                 e->partId = partId;
                 e->noAc = 1;
                 for (k = i; k >= 0; k--) {
                     o = &w->entries[k];
-                    if (((e != o) && (o->kind == 0)) && (e->unitId == o->unitId)) {
+                    if (e != o && o->kind == 0 && e->unitId == o->unitId) {
                         o->noAc = 0;
                     }
                 }
@@ -3780,7 +3764,7 @@ s32 _object_fall_attack(EventEntry *event, BOOL isFirstCall) {
 
         if (!found) {
             evtSetValue(event, outArg, event->userdata[1]);
-            return 2;
+            return EVT_RETURN_DONE;
         }
         for (i = 0; i < w->count; i++) {
             e = &w->entries[i];
@@ -3788,13 +3772,13 @@ s32 _object_fall_attack(EventEntry *event, BOOL isFirstCall) {
             if (e->kind == 0) {
                 flags = 0;
                 if (e->noAc) {
-                    flags |= 0x100;
+                    flags |= DAMAGE_RESULT_FINAL_HIT;
                 }
                 if (e->forceHit) {
-                    flags |= 0x100000;
+                    flags |= DAMAGE_RESULT_NO_EVADE;
                 }
                 e->preCheck = BattlePreCheckDamage(BattleGetSystemPtr(wp), BattleGetUnitPtr(wp, e->unitId), BattleGetUnitPartsPtr(e->unitId, e->partId), weapon, flags);
-                if ((e->preCheck == 1) && (!e->noAc)) {
+                if (e->preCheck == 1 && !e->noAc) {
                     delay = irand(0);
                     for (k2 = 0; k2 < i; k2++) {
                         o2 = &w->entries[k2];
@@ -3816,19 +3800,19 @@ s32 _object_fall_attack(EventEntry *event, BOOL isFirstCall) {
     sfxNormal = "SFX_BTL_STAGE_DAMAGE_NORMAL1";
     sfxRest = "SFX_REST_CONDITION1";
     w = event->userdatap[0];
-    done = 1;
+    done = TRUE;
     for (i = 0; i < w->count; i++) {
         e3 = &w->entries[i];
-        if (e3->index == (-1)) {
+        if (e3->index == -1) {
             continue;
         }
         acCount = 0;
-        done = 0;
+        done = FALSE;
         if (e3->kind == 0) {
             unit = BattleGetUnitPtr(wp, e3->unitId);
             part = BattleGetUnitPartsPtr(e3->unitId, e3->partId);
         }
-        if ((e3->effect == NULL) || (e3->delay > 0)) {
+        if (e3->effect == NULL || e3->delay > 0) {
             e3->delay--;
             if (e3->delay > 0) {
                 continue;
@@ -3864,15 +3848,11 @@ s32 _object_fall_attack(EventEntry *event, BOOL isFirstCall) {
             }
             switch (e3->preCheck) {
                 case 2:
-
                 case 3:
-
                 case 4:
-
                 case 6:
                     hit.y = pos.y;
                     break;
-
             }
 
             e3->sfxId = -1;
@@ -3908,10 +3888,10 @@ s32 _object_fall_attack(EventEntry *event, BOOL isFirstCall) {
 
                 case STAGE_FALL_BOWSER_STATUE:
                     if (BtlUnit_GetBelong(unit) == 0) {
-                    e3->effect = effFallEntry(6, -300.0f, pos.y, 15.0f + pos.z, 0.0f, 0.0f, dir, 1, 180);
-                } else {
-                    e3->effect = effFallEntry(6, 300.0f, pos.y, 15.0f + pos.z, 0.0f, 0.0f, dir, 1, 180);
-                }
+                        e3->effect = effFallEntry(6, -300.0f, pos.y, 15.0f + pos.z, 0.0f, 0.0f, dir, 1, 180);
+                    } else {
+                        e3->effect = effFallEntry(6, 300.0f, pos.y, 15.0f + pos.z, 0.0f, 0.0f, dir, 1, 180);
+                    }
                     break;
 
                 case STAGE_FALL_METEOR:
@@ -3921,7 +3901,7 @@ s32 _object_fall_attack(EventEntry *event, BOOL isFirstCall) {
             }
 
         } else {
-            if ((e3->effect != NULL) && (!effFallCheckHit(e3->effect))) {
+            if (e3->effect != NULL && !effFallCheckHit(e3->effect)) {
                 continue;
             }
             weapon3 = &e3->weapon.weapon;
@@ -3934,7 +3914,6 @@ s32 _object_fall_attack(EventEntry *event, BOOL isFirstCall) {
                         break;
 
                     case STAGE_FALL_BASIN:
-
                     case STAGE_FALL_BUCKET:
                         psndSFXOn_3D(SFX_NAME_WORD("SFX_BTL_STAGE_DAMAGE_TUB1"), &sfxPos); // FAKE: integer cast makes the literal a hoisted @ temp (same pointer)
                         break;
@@ -3951,55 +3930,41 @@ s32 _object_fall_attack(EventEntry *event, BOOL isFirstCall) {
                     BtlUnit_GetHitPos(unit, part, &sfxPos.x, &sfxPos.y, &sfxPos.z);
                     flags = 0;
                     if (e3->noAc) {
-                        flags |= 0x100;
+                        flags |= DAMAGE_RESULT_FINAL_HIT;
                     }
                     psndSFXOff(e3->sfxId);
                     switch (e3->preCheck) {
                         case 2:
-
                         case 3:
-
                         case 4:
-
                         case 6:
                             switch (e3->type) {
-                            case STAGE_FALL_WATER:
-                                break;
-
-                            case STAGE_FALL_BASIN:
-
-                            case STAGE_FALL_BUCKET:
-                                psndSFXOn_3D(sfxTub2, &sfxPos);
-                                break;
-
-                        }
-
+                                case STAGE_FALL_WATER:
+                                    break;
+                                case STAGE_FALL_BASIN:
+                                case STAGE_FALL_BUCKET:
+                                    psndSFXOn_3D(sfxTub2, &sfxPos);
+                                    break;
+                            }
                             break;
-
                         case 1:
                             switch (e3->type) {
-                            case STAGE_FALL_BASIN:
-
-                            case STAGE_FALL_BUCKET:
-                                psndSFXOn_3D(SFX_NAME_WORD("SFX_BTL_STAGE_DAMAGE_TUB1"), &sfxPos); // FAKE: integer cast makes the literal a hoisted @ temp (same pointer)
-                                break;
-
-                            case STAGE_FALL_WATER:
-                                psndSFXOn_3D(sfxRest, &sfxPos);
-                                break;
-
-                            default:
-                                psndSFXOn_3D(sfxNormal, &sfxPos);
-                                break;
-
-                        }
-
+                                case STAGE_FALL_BASIN:
+                                case STAGE_FALL_BUCKET:
+                                    psndSFXOn_3D(SFX_NAME_WORD("SFX_BTL_STAGE_DAMAGE_TUB1"), &sfxPos); // FAKE: integer cast makes the literal a hoisted @ temp (same pointer)
+                                    break;
+                                case STAGE_FALL_WATER:
+                                    psndSFXOn_3D(sfxRest, &sfxPos);
+                                    break;
+                                default:
+                                    psndSFXOn_3D(sfxNormal, &sfxPos);
+                                    break;
+                            }
                             if (BtlUnit_GetACPossibility(unit)) {
-                            BattleActionCommandCheckDefence(unit, weapon3);
-                        }
+                                BattleActionCommandCheckDefence(unit, weapon3);
+                            }
                             BattleCheckDamage(BattleGetSystemPtr(wp), unit, part, weapon3, flags);
                             break;
-
                     }
 
                 } else {
@@ -4007,21 +3972,20 @@ s32 _object_fall_attack(EventEntry *event, BOOL isFirstCall) {
                     BattleSamplingEnemy(&targets2, weapon3, BattleGetSystemPtr(wp)->unitId, 1, weapon3->targetClassFlags, weapon3->targetPropertyFlags, -wp->alliances[1].attackDirection);
                     if (targets2.numTargets > 0) {
                         for (;;) {
-                            BattleWorkTarget *tg;
-                            BattleUnit *unit2;
+                            BattleWorkTarget* tg;
+                            BattleUnit* unit2;
                             if (targets2.currentTarget >= targets2.numTargets) {
                                 break;
                             }
                             tg = &targets2.targets[targets2.targetIndices[targets2.currentTarget]];
                             unit2 = BattleGetUnitPtr(wp, tg->unitIdx);
-                            switch (BattlePreCheckDamage(BattleGetSystemPtr(wp), unit2, BattleGetUnitPartsPtr(tg->unitIdx, tg->partIdx), weapon3, 0x100)) {
+                            switch (BattlePreCheckDamage(BattleGetSystemPtr(wp), unit2, BattleGetUnitPartsPtr(tg->unitIdx, tg->partIdx), weapon3, DAMAGE_RESULT_FINAL_HIT)) {
                                 case 2:
-
                                 case 4:
                                     break;
 
                                 case 3: {
-                                    EffectEntry *eff;
+                                    EffectEntry* eff;
                                     BtlUnit_GetPos(unit2, &p.x, &p.y, &p.z);
                                     if (p.y < 85.0f) {
                                         p.y += 50.0f;
@@ -4032,21 +3996,21 @@ s32 _object_fall_attack(EventEntry *event, BOOL isFirstCall) {
                                     eff = effNiceEntry(6, p.x, p.y, p.z);
                                     ((NiceEffectWork*)eff->userdata)->overallScale = 0.75f;
                                     unit2->damagePattern = 0;
-                                    BattleRunHitEvent(unit2, 0x126);
+                                    BattleRunHitEvent(unit2, DAMAGE_RESULT_FINAL_HIT | DAMAGE_CODE_LUCKY);
                                     break;
                                 }
 
                                 case 6:
                                     unit2->damagePattern = 0;
-                                    BattleRunHitEvent(unit2, 0x127);
+                                    BattleRunHitEvent(unit2, DAMAGE_RESULT_FINAL_HIT | DAMAGE_CODE_DODGY);
                                     break;
 
                                 case 1:
-                                    if (BtlUnit_GetACPossibility(unit2) && (acCount <= 0)) {
-                                    BattleActionCommandCheckDefence(unit2, weapon3);
-                                    acCount++;
-                                }
-                                    BattleCheckDamage(BattleGetSystemPtr(wp), unit2, BattleGetUnitPartsPtr(tg->unitIdx, tg->partIdx), weapon3, 0x100);
+                                    if (BtlUnit_GetACPossibility(unit2) && acCount <= 0) {
+                                        BattleActionCommandCheckDefence(unit2, weapon3);
+                                        acCount++;
+                                    }
+                                    BattleCheckDamage(BattleGetSystemPtr(wp), unit2, BattleGetUnitPartsPtr(tg->unitIdx, tg->partIdx), weapon3, DAMAGE_RESULT_FINAL_HIT);
                                     break;
 
                             }
@@ -4059,13 +4023,13 @@ s32 _object_fall_attack(EventEntry *event, BOOL isFirstCall) {
             }
             e3->index = -1;
         }
-    w->entries[0].weapon.weapon.reserved_14 = w->entries[0].weapon.weapon.reserved_14; // FAKE: no-op self-assign (no code) raises w spill cost
+        w->entries[0].weapon.weapon.reserved_14 = w->entries[0].weapon.weapon.reserved_14; // FAKE: no-op self-assign (no code) raises w spill cost
     }
 
     if (!done) {
-        return 0;
+        return EVT_RETURN_BLOCK;
     }
     BattleFree(event->userdatap[0]);
     evtSetValue(event, outArg, event->userdata[1]);
-    return 2;
+    return EVT_RETURN_DONE;
 }

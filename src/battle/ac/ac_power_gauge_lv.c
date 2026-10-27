@@ -28,7 +28,7 @@ s32 battleAcMain_PowerGaugeLv(BattleWork* work) {
         case 99:
             break;
         case 0:
-            memset(disp, 0, 0x2C);
+            memset(disp, 0, sizeof(BattleACDispParams));
             disp->iconX = -300.0f;
             disp->iconY = 0.0f;
             disp->slideTimer = 20;
@@ -63,10 +63,10 @@ s32 battleAcMain_PowerGaugeLv(BattleWork* work) {
                 return 0;
             }
             tw->gauge = intplGetValue(EASING_CUBIC_IN, 0.0f, 100.0f, tw->counter, tw->limit);
-            if (BattlePadGetNow() == 0x60) {
+            if (BattlePadGetNow() == (PAD_TRIGGER_L | PAD_TRIGGER_R)) {
                 if (tw->gauge < (f32)ac->params[2]) {
                     work->actionCommands.result = 0;
-                    work->actionCommands.result &= ~2;
+                    work->actionCommands.result &= ~AC_RESULT_SUCCESS;
                 } else {
                     work->actionCommands.result = AC_RESULT_SUCCESS;
                     work->actionCommands.mResultCount++;
@@ -94,7 +94,7 @@ s32 battleAcMain_PowerGaugeLv(BattleWork* work) {
         case 1001:
             work->actionCommands.setupParam--;
             if (work->actionCommands.setupParam < 0) {
-                if ((s32)work->actionCommands.outputParams[0] > 0) {
+                if (work->actionCommands.outputParams[0] > 0) {
                     work->actionCommands.result = AC_RESULT_SUCCESS;
                     work->actionCommands.mResultCount++;
                 } else {
@@ -205,39 +205,39 @@ static void actionCommandDisp(f32 x, f32 y) {
             pos.y = y;
             iconDispGx(&pos, 0x10, ICON_TRIGGER_L, 1.0f);
             {
-Vec pos2 = {0.0f, 0.0f, 0.0f};
-            pos2.x = 56.0f + x;
-            pos2.y = y;
-            iconDispGx(&pos2, 0x10, ICON_TRIGGER_R, 1.0f);
+                Vec pos2 = {0.0f, 0.0f, 0.0f};
+                pos2.x = 56.0f + x;
+                pos2.y = y;
+                iconDispGx(&pos2, 0x10, ICON_TRIGGER_R, 1.0f);
             }
             break;
         }
         case 1000:
-            if (tw->gauge >= (f32)work->actionCommands.params[2 + 0] && tw->gauge <= 100.0f) {
+            if (tw->gauge >= (f32)work->actionCommands.params[2] && tw->gauge <= 100.0f) {
                 Vec pos = {0.0f, 0.0f, 0.0f};
-                    x = -220.0f + x;
+                x = -220.0f + x;
                 y = 70.0f + y;
                 pos.x = x;
                 pos.y = y;
                 iconDispGx(&pos, 0x10, ICON_TRIGGER_L_PRESSED, 1.0f);
                 {
-Vec pos2 = {0.0f, 0.0f, 0.0f};
-                pos2.x = 56.0f + x;
-                pos2.y = y;
-                iconDispGx(&pos2, 0x10, ICON_TRIGGER_R_PRESSED, 1.0f);
+                    Vec pos2 = {0.0f, 0.0f, 0.0f};
+                    pos2.x = 56.0f + x;
+                    pos2.y = y;
+                    iconDispGx(&pos2, 0x10, ICON_TRIGGER_R_PRESSED, 1.0f);
                 }
             } else {
                 Vec pos = {0.0f, 0.0f, 0.0f};
-                    x = -220.0f + x;
+                x = -220.0f + x;
                 y = 70.0f + y;
                 pos.x = x;
                 pos.y = y;
                 iconDispGx(&pos, 0x10, ICON_TRIGGER_L, 1.0f);
                 {
-Vec pos2 = {0.0f, 0.0f, 0.0f};
-                pos2.x = 56.0f + x;
-                pos2.y = y;
-                iconDispGx(&pos2, 0x10, ICON_TRIGGER_R, 1.0f);
+                    Vec pos2 = {0.0f, 0.0f, 0.0f};
+                    pos2.x = 56.0f + x;
+                    pos2.y = y;
+                    iconDispGx(&pos2, 0x10, ICON_TRIGGER_R, 1.0f);
                 }
             }
             break;

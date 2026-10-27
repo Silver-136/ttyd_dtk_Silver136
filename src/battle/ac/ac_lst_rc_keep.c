@@ -10,11 +10,11 @@
 #include "icon_ids.h"
 
 typedef struct LstRcWork {
-    s32 timer;  // 0x2BC
-    s32 count;  // 0x2C0
-    s16 held0;  // 0x2C4
-    s16 held1;  // 0x2C6
-    s32 endTimer; // 0x2C8
+    s32 timer;    // 0x0
+    s32 count;    // 0x4, steps elapsed (0..5)
+    s16 held0;    // 0x8, control stick left: frames held (state 1000), then frames since release (1001)
+    s16 held1;    // 0xA, C-stick right: frames held (state 1000), then frames since release (1001)
+    s32 endTimer; // 0xC
 } LstRcWork;
 
 
@@ -25,7 +25,7 @@ static void actionCommandDisp(f32 x, f32 y, s32 n);
 
 s32 battleAcMain_LstRcKeep(BattleWork* work) {
     BattleActions* ac = &work->actionCommands;
-    LstRcWork* lw = ((LstRcWork*)(ac)->work);
+    LstRcWork* lw = (LstRcWork*)ac->work;
     BattleACDispParams* disp = &ac->disp;
     s32 loop;
     s32 off;
@@ -42,7 +42,7 @@ s32 battleAcMain_LstRcKeep(BattleWork* work) {
         loop = 0;
         switch (ac->mAcState) {
             case 0:
-                ac->result = 1;
+                ac->result = AC_RESULT_RUNNING;
                 lw->count = 0;
                 memset(disp, 0, sizeof(BattleACDispParams));
                 disp->iconX = -300.0f;
@@ -68,7 +68,7 @@ s32 battleAcMain_LstRcKeep(BattleWork* work) {
                     if (irand(100) >= 0) {
                         ac->result = 0;
                     } else {
-                        ac->result = 2;
+                        ac->result = AC_RESULT_SUCCESS;
                         ac->mResultCount++;
                     }
                     return 0;
@@ -96,7 +96,7 @@ s32 battleAcMain_LstRcKeep(BattleWork* work) {
                 if ((lw->held0 != 0 && lw->held1 != 0) || ac->countdown > 0 || autoCmd) {
                     ac->mAcState = 1001;
                     lw->timer = ac->params[0];
-                    lw->held1 = (lw->held0 = (lw->count = 0));
+                    lw->held1 = lw->held0 = lw->count = 0;
                     break;
                 }
                 lw->timer--;
@@ -109,7 +109,7 @@ s32 battleAcMain_LstRcKeep(BattleWork* work) {
             case 1001:
                 if (ac->countdown > 0) {
                     ac->countdown--;
-                    ac->result = 2;
+                    ac->result = AC_RESULT_SUCCESS;
                     loop = 1;
                     ac->mAcState = 1003;
                 }
@@ -126,7 +126,7 @@ s32 battleAcMain_LstRcKeep(BattleWork* work) {
                 }
                 if (!autoCmd) {
                     if (lw->held0 > 5 || lw->held1 > 5) {
-                        ac->result &= ~1;
+                        ac->result &= ~AC_RESULT_RUNNING;
                         loop = 1;
                         ac->mAcState = 1003;
                         break;
@@ -136,7 +136,7 @@ s32 battleAcMain_LstRcKeep(BattleWork* work) {
                 if (tm < 0) {
                     lw->count++;
                     if (lw->count >= 5) {
-                        ac->result &= ~1;
+                        ac->result &= ~AC_RESULT_RUNNING;
                         loop = 1;
                         ac->mAcState = 1003;
                         break;
@@ -158,27 +158,32 @@ s32 battleAcMain_LstRcKeep(BattleWork* work) {
                     if (!ok) {
                         break;
                     }
-                    ac->result |= 2;
-                    ac->result &= ~1;
+                    ac->result |= AC_RESULT_SUCCESS;
+                    ac->result &= ~AC_RESULT_RUNNING;
                     loop = 1;
                     ac->mAcState = 1003;
                     break;
                 }
                 if (ok) {
-                    ac->result |= 2;
-                    ac->result &= ~1;
+                    ac->result |= AC_RESULT_SUCCESS;
+                    ac->result &= ~AC_RESULT_RUNNING;
                     loop = 1;
                     ac->mAcState = 1003;
                     break;
                 }
-                ac->result &= ~1;
+                ac->result &= ~AC_RESULT_RUNNING;
                 loop = 1;
                 ac->mAcState = 1003;
                 break;
             case 1003:
-                n = lw->count - 1; if (n >= 0) {
-                for (i = 0, off = 0; i <= n; i++, off += 4) { iconDelete(ac_lstrckeep_iconname[off >> 2]);
-                } }
+                // FAKE: byte-offset index (off >> 2) and the n >= 0 guard; the plain loop over
+                // ac_lstrckeep_iconname[i] changes the object
+                n = lw->count - 1;
+                if (n >= 0) {
+                    for (i = 0, off = 0; i <= n; i++, off += 4) {
+                        iconDelete(ac_lstrckeep_iconname[off >> 2]);
+                    }
+                }
                 ac->mAcState = 1004;
             case 1004:
             case 1005:

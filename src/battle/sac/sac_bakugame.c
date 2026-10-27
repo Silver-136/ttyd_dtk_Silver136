@@ -112,15 +112,6 @@ typedef struct GaugeCol {
 } GaugeCol;
 
 
-BakuWork* GetBakuGamePtr(void);
-static USER_FUNC(star_stone_appear);
-static USER_FUNC(main_star);
-USER_FUNC(init_bakugame);
-USER_FUNC(end_bakugame);
-USER_FUNC(bakuGameDecideWeapon);
-USER_FUNC(bakuGameBombEntry);
-USER_FUNC(bakuGameMain);
-USER_FUNC(bakuGameHeihoReturn);
 void bakuGameDecideButton(s32 first);
 BOOL bakuGamePartyExist(BattleUnit* unit);
 BOOL bakuGameAudienceCanThrowPos(s32 idx);
@@ -182,7 +173,7 @@ BakuWork* GetBakuGamePtr(void) {
 static USER_FUNC(star_stone_appear) {
     BakuWork* w = GetBakuGamePtr();
     w->star.state = 1;
-    return 2;
+    return EVT_RETURN_DONE;
 }
 
 static USER_FUNC(main_star) {
@@ -236,7 +227,7 @@ static USER_FUNC(main_star) {
         break;
     }
     if (w->star.eff) {
-        EffStarStoneWork* e = (EffStarStoneWork*)w->star.eff->userdata;
+        EffStarStoneWork* e = w->star.eff->userdata;
         e->position.x = w->star.pos.x;
         e->position.y = w->star.pos.y;
         e->position.z = w->star.pos.z;
@@ -246,37 +237,37 @@ static USER_FUNC(main_star) {
         e->scale = 1.5f * w->star.scale.x;
     }
     dispEntry(CAMERA_3D, 0.0f, 2, bakuGameDispStar, NULL);
-    return 0;
+    return EVT_RETURN_BLOCK;
 }
 
 USER_FUNC(init_bakugame) {
-    memset(GetBakuGamePtr(), 0, 0x2B8);
-    return 2;
+    memset(GetBakuGamePtr(), 0, sizeof(BakuWork));
+    return EVT_RETURN_DONE;
 }
 
 USER_FUNC(end_bakugame) {
     BakuWork* w = GetBakuGamePtr();
     effDelete(((EffStarStoneWork*)w->star.eff->userdata)->dust);
     effDelete(w->star.eff);
-    return 2;
+    return EVT_RETURN_DONE;
 }
 
-s32 bakuGameDecideWeapon(EventEntry *event, BOOL isFirstCall) {
-    EvtWord *args = event->args;
+USER_FUNC(bakuGameDecideWeapon) {
+    EvtWord* args = event->args;
     s32 v;
-    BakuWork *w;
-    u8 *q;
-    BattleWeapon *wp;
+    BakuWork* w;
+    u8* q;
+    BattleWeapon* wp;
     evtGetFloat(event, args[0]);
     v = evtGetValue(event, args[1]);
     w = GetBakuGamePtr();
 
     wp = (BattleWeapon*)w->weapon;
     q = &wp->sleepChance;
-    memcpy(w->weapon, &weapon, 0xC0);
+    memcpy(w->weapon, &weapon, sizeof(BattleWeapon));
 
     q[2] = 100;
-    if (v != (-1)) {
+    if (v != -1) {
         if (w->gauge >= 100.0f) {
             q[2] = 127;
             // FAKE: same-value second def of q (q == &wp->sleepChance already). It keeps q a named multi-def
@@ -291,18 +282,18 @@ s32 bakuGameDecideWeapon(EventEntry *event, BOOL isFirstCall) {
         q[2] = 0;
         q[3] = 0;
     }
-    evtSetValue(event, args[2], (EvtWord) w->weapon);
-    return 2;
+    evtSetValue(event, args[2], (EvtWord)w->weapon);
+    return EVT_RETURN_DONE;
 }
 
 USER_FUNC(bakuGameBombEntry) {
     BakuWork* w = GetBakuGamePtr();
     if (!animGroupBaseAsync("c_star_bom", 2, NULL)) {
-        return 0;
+        return EVT_RETURN_BLOCK;
     }
     w->poseId = animPoseEntry("c_star_bom", 2);
     animPoseSetAnim(w->poseId, "Z_1", 1);
-    return 2;
+    return EVT_RETURN_DONE;
 }
 
 USER_FUNC(bakuGameMain) {
@@ -314,7 +305,7 @@ USER_FUNC(bakuGameMain) {
     BattleUnit* party = BattleGetUnitPtr(bw, BattleTransID(event, -4));
     f32 x = 0.0f, y = 0.0f, z = 0.0f;
     f32 hx = 0.0f, hy = 0.0f, hz = 0.0f;
-    s32 btns[3] = {0x100, 0x200, 0x400};
+    s32 btns[3] = {PAD_BUTTON_A, PAD_BUTTON_B, PAD_BUTTON_X};
     BakuBtn* b;
     f32 accel;
     f32 k;
@@ -338,7 +329,7 @@ USER_FUNC(bakuGameMain) {
             b->hp = 100.0f;
             b->scale = 0.0f;
         }
-        memcpy(w->weapon, &weapon, 0xC0);
+        memcpy(w->weapon, &weapon, sizeof(BattleWeapon));
         flag = 1;
         for (i = 0; i < 64; i++) {
             u = BattleGetUnitPtr(bw, i);
@@ -469,7 +460,7 @@ USER_FUNC(bakuGameMain) {
             n = t;
         }
         evtSetValue(event, args[2], n);
-        return 2;
+        return EVT_RETURN_DONE;
     }
 state_end:
 
@@ -787,7 +778,7 @@ state_end:
                     if (u != NULL && !(u->mAttributeFlags & kInactive) && !BtlUnit_CheckStatus(u, STATUS_INSTANT_KILL) &&
                         u->mAlliance == ALLIANCE_ENEMY && BtlUnit_CanActStatus(u)) {
                         if (w->frame == 0) {
-                            BtlUnit_SetBodyAnimType(u, 0x41);
+                            BtlUnit_SetBodyAnimType(u, POSE_TYPE_TALK);
                         }
                         if (w->frame == 26) {
                             btlDispPoseAnime(BtlUnit_GetPartsPtr(u, BtlUnit_GetBodyPartsId(u)));
@@ -808,6 +799,8 @@ state_end:
                     w->hvy = -v200 / 20.0f;
                     accel = -2.0f;
                 }
+                // BUG: accel is set only on frame 26; on the later frames (later calls of this function) it is read
+                // uninitialized.
                 if (w->frame >= 26) {
                     w->hpos.y += w->hvy;
                     w->hvy += accel;
@@ -1079,14 +1072,14 @@ main_end:
     }
     dispEntry(CAMERA_2D, 900.0f, 1, bakuGameDisp2D, NULL);
     dispEntry(CAMERA_3D, 0.0f, 1, bakuGameDisp3D, NULL);
-    return 0;
+    return EVT_RETURN_BLOCK;
 }
 
 USER_FUNC(bakuGameHeihoReturn) {
     BakuWork* w = GetBakuGamePtr();
 
     if (!(w->flags & 1)) {
-        return 2;
+        return EVT_RETURN_DONE;
     }
     if (isFirstCall) {
         w->hstate = 0;
@@ -1129,12 +1122,12 @@ USER_FUNC(bakuGameHeihoReturn) {
         }
         w->htimer++;
         if (w->htimer > w->hsteps) {
-            return 2;
+            return EVT_RETURN_DONE;
         }
         break;
     }
     dispEntry(CAMERA_3D, 0.0f, 1, bakuGameDisp3D, NULL);
-    return 0;
+    return EVT_RETURN_BLOCK;
 }
 
 void bakuGameDecideButton(s32 first) {
@@ -1252,7 +1245,7 @@ void bakuGameEnemySurprise(void) {
     for (i = 0; i < 64; i++) {
         u = BattleGetUnitPtr(wp, i);
         if (u != NULL && u->mAlliance == ALLIANCE_ENEMY && !(u->mAttributeFlags & kInactive) && !BtlUnit_CheckStatus(u, STATUS_INSTANT_KILL)) {
-            BtlUnit_SetBodyAnimType(u, 0x27);
+            BtlUnit_SetBodyAnimType(u, POSE_TYPE_DAMAGE);
         }
     }
 }
@@ -1292,13 +1285,13 @@ void bakuGameDisp2D(CameraId cam, void* param) {
     for (i = 0; i < 3; i++) {
         b = &w->btn[i];
         switch (b->button) {
-        case 0x100:
+        case PAD_BUTTON_A:
             icon = ICON_BUTTON_A;
             break;
-        case 0x200:
+        case PAD_BUTTON_B:
             icon = ICON_BUTTON_B;
             break;
-        case 0x400:
+        case PAD_BUTTON_X:
             icon = ICON_BUTTON_X;
             break;
         default:
@@ -1307,7 +1300,7 @@ void bakuGameDisp2D(CameraId cam, void* param) {
         }
         if (icon) {
             btlGetScreenPoint(&b->pos, &scr);
-            iconDispGx(&scr, 0x10, icon, b->scale);
+            iconDispGx(&scr, ICON_FLAG_2D, icon, b->scale);
         }
     }
     full = 0;
@@ -1324,7 +1317,7 @@ void bakuGameDisp2D(CameraId cam, void* param) {
             col->dg = col->db = -0x10;
         }
     }
-    BattleAcDrawGauge(w->gaugeX, w->gaugeY, 0xB1, w->rate, 3, 0x21, 0x42, 0x64, full);
+    BattleAcDrawGauge(w->gaugeX, w->gaugeY, 0xB1, w->rate, 3, 33, 66, 100, full);
 }
 
 void bakuGameDisp3D(CameraId cam, void* param) {
@@ -1350,7 +1343,7 @@ void bakuGameDisp3D(CameraId cam, void* param) {
         GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
         GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
         GXSetNumChans(1);
-        GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_VTX, GX_SRC_REG, 0, GX_DF_CLAMP, GX_AF_NONE);
+        GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_VTX, GX_SRC_REG, GX_LIGHT_NULL, GX_DF_CLAMP, GX_AF_NONE);
         GXSetChanMatColor(GX_COLOR0A0, (GXColor){0, 0, 0, 0xFF});
         GXSetNumTexGens(1);
         GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
@@ -1366,20 +1359,20 @@ void bakuGameDisp3D(CameraId cam, void* param) {
         PSMTXConcat(camera->view, trans, mtx);
         GXLoadPosMtxImm(mtx, GX_PNMTX0);
         {
-        f32 uv[16] = {
-            0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f,
-            1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f,
-        };
-        o = (w->hflag == 1) ? 4 : 0;
-        GXBegin(GX_QUADS, GX_VTXFMT0, 4);
-        GXPosition3f32(-20.0f, 40.0f, 0.0f);
-        GXTexCoord2f32(uv[o * 2], uv[o * 2 + 1]);
-        GXPosition3f32(20.0f, 40.0f, 0.0f);
-        GXTexCoord2f32(uv[(o + 1) * 2], uv[(o + 1) * 2 + 1]);
-        GXPosition3f32(20.0f, 0.0f, 0.0f);
-        GXTexCoord2f32(uv[(o + 2) * 2], uv[(o + 2) * 2 + 1]);
-        GXPosition3f32(-20.0f, 0.0f, 0.0f);
-        GXTexCoord2f32(uv[(o + 3) * 2], uv[(o + 3) * 2 + 1]);
+            f32 uv[16] = {
+                0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+                1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f,
+            };
+            o = (w->hflag == 1) ? 4 : 0;
+            GXBegin(GX_QUADS, GX_VTXFMT0, 4);
+            GXPosition3f32(-20.0f, 40.0f, 0.0f);
+            GXTexCoord2f32(uv[o * 2], uv[o * 2 + 1]);
+            GXPosition3f32(20.0f, 40.0f, 0.0f);
+            GXTexCoord2f32(uv[(o + 1) * 2], uv[(o + 1) * 2 + 1]);
+            GXPosition3f32(20.0f, 0.0f, 0.0f);
+            GXTexCoord2f32(uv[(o + 2) * 2], uv[(o + 2) * 2 + 1]);
+            GXPosition3f32(-20.0f, 0.0f, 0.0f);
+            GXTexCoord2f32(uv[(o + 3) * 2], uv[(o + 3) * 2 + 1]);
         }
     }
 }

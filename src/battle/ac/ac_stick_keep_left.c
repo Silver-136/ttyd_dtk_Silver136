@@ -35,7 +35,7 @@ s32 battleAcMain_StickKeepLeft(BattleWork* work) {
     s32 j;
 
     autoCommand = 0;
-    cw = ((SklWork*)(work)->actionCommands.work);
+    cw = (SklWork*)work->actionCommands.work;
     disp = &work->actionCommands.disp;
     if (work->actionCommands.mAcUnit->badgesEquipped.AutoCommand) {
         autoCommand = 1;
@@ -87,6 +87,7 @@ s32 battleAcMain_StickKeepLeft(BattleWork* work) {
                             break;
                         }
                     }
+                    // irand(100) is never negative: a confused auto-play always fails
                     if (irand(100) >= 0) {
                         work->actionCommands.result = 0;
                     } else {
@@ -95,7 +96,7 @@ s32 battleAcMain_StickKeepLeft(BattleWork* work) {
                     }
                     return 0;
                 }
-                if (!BattlePadCheckNow(BATTLE_PAD_STICK_LEFT) && (&(work)->actionCommands)->countdown <= 0 && autoCommand == 0) {
+                if (!BattlePadCheckNow(BATTLE_PAD_STICK_LEFT) && work->actionCommands.countdown <= 0 && autoCommand == 0) {
                     if (--cw->timer <= 0) {
                         work->actionCommands.result = 0;
                         loop = 1;
@@ -110,8 +111,8 @@ s32 battleAcMain_StickKeepLeft(BattleWork* work) {
                 }
                 break;
             case 1001:
-                if ((&(work)->actionCommands)->countdown > 0) {
-                    (&(work)->actionCommands)->countdown--;
+                if (work->actionCommands.countdown > 0) {
+                    work->actionCommands.countdown--;
                     loop = 1;
                     work->actionCommands.result = AC_RESULT_SUCCESS;
                     work->actionCommands.mAcState = 1003;
@@ -121,12 +122,12 @@ s32 battleAcMain_StickKeepLeft(BattleWork* work) {
                     cw->idx++;
                     work->actionCommands.outputParams[1]++;
                     if (cw->idx >= work->actionCommands.params[0] + 2) {
-                        work->actionCommands.result &= ~1;
+                        work->actionCommands.result &= ~AC_RESULT_RUNNING;
                         work->actionCommands.mAcState = 1003;
                         work->actionCommands.outputParams[2] = 2;
                         if (work->actionCommands.acFlags & AC_STICK_KEEP_LEFT_FLAG_NO_EARLY_RELEASE_FAIL) {
                             work->actionCommands.result |= AC_RESULT_SUCCESS;
-                            work->actionCommands.result &= ~1;
+                            work->actionCommands.result &= ~AC_RESULT_RUNNING;
                         }
                         loop = 1;
                         break;
@@ -168,26 +169,30 @@ s32 battleAcMain_StickKeepLeft(BattleWork* work) {
                             break;
                         }
                         work->actionCommands.result |= AC_RESULT_SUCCESS;
-                        work->actionCommands.result &= ~1;
+                        work->actionCommands.result &= ~AC_RESULT_RUNNING;
                         loop = 1;
                         work->actionCommands.mAcState = 1003;
                     } else if (ok) {
                         work->actionCommands.result |= AC_RESULT_SUCCESS;
-                        work->actionCommands.result &= ~1;
+                        work->actionCommands.result &= ~AC_RESULT_RUNNING;
                         loop = 1;
                         work->actionCommands.mAcState = 1003;
                     } else if (!(work->actionCommands.acFlags & AC_STICK_KEEP_LEFT_FLAG_NO_EARLY_RELEASE_FAIL)) {
-                        work->actionCommands.result &= ~1;
+                        work->actionCommands.result &= ~AC_RESULT_RUNNING;
                         loop = 1;
                         work->actionCommands.mAcState = 1003;
                     }
                 }
                 break;
             case 1003: {
-                    s32 k;
-                    j = cw->idx - 2; if (j >= 0) for (k = 0; k <= j; k++) {
+                s32 k;
+                // FAKE: empty loop (no body) over the signal sound slots 0..idx-2; removing it changes the object
+                j = cw->idx - 2;
+                if (j >= 0) {
+                    for (k = 0; k <= j; k++) {
                     }
                 }
+            }
                 work->actionCommands.mAcState = 1004;
                 break;
             case 1005:
@@ -222,9 +227,9 @@ void battleAcDisp_StickKeepLeft(CameraId camId, void* param) {
     BattleACDispParams* disp = &ac->disp;
 
     switch (work->actionCommands.mAcState) {
-        case 0x63:
-        case 0x64:
-        case 0x3E8:
+        case 99:
+        case 100:
+        case 1000:
             disp->iconStep = -1;
             disp->iconX = intplGetValue(EASING_QUADRATIC_OUT, -300.0f, 30.0f, 20 - disp->slideTimer, 20);
             actionCommandDisp(disp->iconX, disp->iconY, disp->iconStep);
@@ -232,7 +237,7 @@ void battleAcDisp_StickKeepLeft(CameraId camId, void* param) {
                 disp->slideTimer--;
             }
             break;
-        case 0x3E9:
+        case 1001:
             disp->iconStep = cw->idx - 1;
             disp->iconX = intplGetValue(EASING_QUADRATIC_OUT, -300.0f, 30.0f, 20 - disp->slideTimer, 20);
             actionCommandDisp(disp->iconX, disp->iconY, disp->iconStep);
@@ -240,13 +245,13 @@ void battleAcDisp_StickKeepLeft(CameraId camId, void* param) {
                 disp->slideTimer--;
             }
             break;
-        case 0x3EA:
-        case 0x3EB:
-        case 0x3EC:
+        case 1002:
+        case 1003:
+        case 1004:
             actionCommandDisp(30.0f, 0.0f, disp->iconStep);
             break;
-        case 0x3ED:
-        case 0x3EE:
+        case 1005:
+        case 1006:
             if (disp->slideTimer >= 40) {
                 disp->iconX = intplGetValue(EASING_QUADRATIC_OUT, 30.0f, -300.0f, disp->slideTimer - 40, 20);
             } else {
@@ -261,7 +266,7 @@ void battleAcDisp_StickKeepLeft(CameraId camId, void* param) {
 }
 
 void battleAcDelete_StickKeepLeft(BattleWork* work) {
-    work->actionCommands.mAcState = 0x3ED;
+    work->actionCommands.mAcState = 1005;
 }
 
 static void actionCommandDisp(f32 x, f32 y, s32 unused) {
@@ -287,25 +292,25 @@ static void actionCommandDisp(f32 x, f32 y, s32 unused) {
     idx = ((SklWork*)ac->work)->idx - 1;
     switch (ac->mAcState) {
         case 0:
-        case 0x63:
-        case 0x64: {
+        case 99:
+        case 100: {
             Vec p = {0.0f, 0.0f, 0.0f};
             p.x = -200.0f + x;
             p.y = 70.0f + y;
-            iconDispGx(&p, 0x10, ICON_STICK_NEUTRAL, 1.0f);
+            iconDispGx(&p, ICON_FLAG_2D, ICON_STICK_NEUTRAL, 1.0f);
             break;
         }
-        case 0x3E8:
+        case 1000:
             if (gp->retraceCount & 8) {
                 Vec p = {0.0f, 0.0f, 0.0f};
                 p.x = -200.0f + x;
                 p.y = 70.0f + y;
-                iconDispGx(&p, 0x10, ICON_STICK_LEFT, 1.0f);
+                iconDispGx(&p, ICON_FLAG_2D, ICON_STICK_LEFT, 1.0f);
             } else {
                 Vec p = {0.0f, 0.0f, 0.0f};
                 p.x = -200.0f + x;
                 p.y = 70.0f + y;
-                iconDispGx(&p, 0x10, ICON_STICK_NEUTRAL, 1.0f);
+                iconDispGx(&p, ICON_FLAG_2D, ICON_STICK_NEUTRAL, 1.0f);
             }
             break;
         default:
@@ -313,12 +318,12 @@ static void actionCommandDisp(f32 x, f32 y, s32 unused) {
                 Vec p = {0.0f, 0.0f, 0.0f};
                 p.x = -200.0f + x;
                 p.y = 70.0f + y;
-                iconDispGx(&p, 0x10, ICON_STICK_LEFT, 1.0f);
+                iconDispGx(&p, ICON_FLAG_2D, ICON_STICK_LEFT, 1.0f);
             } else {
                 Vec p = {0.0f, 0.0f, 0.0f};
                 p.x = -200.0f + x;
                 p.y = 70.0f + y;
-                iconDispGx(&p, 0x10, ICON_STICK_NEUTRAL, 1.0f);
+                iconDispGx(&p, ICON_FLAG_2D, ICON_STICK_NEUTRAL, 1.0f);
             }
             break;
     }
@@ -339,19 +344,19 @@ static void actionCommandDisp(f32 x, f32 y, s32 unused) {
         p.x = -288.0f + x;
         yy = 25.0f + y;
         p.y = yy;
-        iconDispGx(&p, 0x10, ICON_AC_BAR_LEFT, 1.0f);
+        iconDispGx(&p, ICON_FLAG_2D, ICON_AC_BAR_LEFT, 1.0f);
     }
     for (i = 1; i < n; i++) {
         Vec p = {0.0f, 0.0f, 0.0f};
         p.x = x + (spacing * (f32)i + -288.0f);
         p.y = yy;
-        iconDispGx(&p, 0x10, ICON_AC_BAR_MIDDLE, 1.0f);
+        iconDispGx(&p, ICON_FLAG_2D, ICON_AC_BAR_MIDDLE, 1.0f);
     }
     {
         Vec p = {0.0f, 0.0f, 0.0f};
         p.x = x + (spacing * (f32)i + -288.0f);
         p.y = yy;
-        iconDispGx(&p, 0x10, ICON_AC_BAR_RIGHT, 1.0f);
+        iconDispGx(&p, ICON_FLAG_2D, ICON_AC_BAR_RIGHT, 1.0f);
     }
     stepX = 33.0f;
     if (ac->acFlags & AC_STICK_KEEP_LEFT_FLAG_COMPACT_GAUGE) {
@@ -364,29 +369,29 @@ static void actionCommandDisp(f32 x, f32 y, s32 unused) {
                 Vec p = {0.0f, 0.0f, 0.0f};
                 p.x = x + (stepX * (f32)j + -258.0f);
                 p.y = yy;
-                iconDispGx(&p, 0x10, (u16)(ICON_AC_LAMP_1 + j), 1.0f);
+                iconDispGx(&p, ICON_FLAG_2D, (u16)(ICON_AC_LAMP_1 + j), 1.0f);
             } else {
                 Vec p = {0.0f, 0.0f, 0.0f};
                 p.x = x + (stepX * (f32)j + -258.0f);
                 p.y = yy;
-                iconDispGx(&p, 0x10, ICON_AC_LAMP_3, 1.0f);
+                iconDispGx(&p, ICON_FLAG_2D, ICON_AC_LAMP_3, 1.0f);
             }
         } else {
             Vec p = {0.0f, 0.0f, 0.0f};
             p.x = x + (stepX * (f32)j + -258.0f);
             p.y = yy;
-            iconDispGx(&p, 0x10, ICON_AC_OFF, 0.5f);
+            iconDispGx(&p, ICON_FLAG_2D, ICON_AC_OFF, 0.5f);
         }
     }
     if (idx < count) {
         Vec p = {0.0f, 0.0f, 0.0f};
         p.x = x + (stepX * (f32)m + -250.0f);
         p.y = yy;
-        iconDispGx(&p, 0x10, ICON_AC_OFF, 1.0f);
+        iconDispGx(&p, ICON_FLAG_2D, ICON_AC_OFF, 1.0f);
     } else {
         Vec p = {0.0f, 0.0f, 0.0f};
         p.x = x + (stepX * (f32)m + -250.0f);
         p.y = yy;
-        iconDispGx(&p, 0x10, ICON_AC_ON, 1.0f);
+        iconDispGx(&p, ICON_FLAG_2D, ICON_AC_ON, 1.0f);
     }
 }

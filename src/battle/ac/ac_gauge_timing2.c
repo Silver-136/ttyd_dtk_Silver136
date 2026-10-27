@@ -55,7 +55,7 @@ s32 battleAcMain_GaugeTiming2(BattleWork *work) {
     }
     switch (work->actionCommands.mAcState) {
         case 0:
-            memset(disp, 0, 0x2C);
+            memset(disp, 0, sizeof(BattleACDispParams));
             disp->iconX = -300.0f;
             disp->iconY = 0.0f;
             disp->slideTimer = 20;
@@ -78,7 +78,7 @@ s32 battleAcMain_GaugeTiming2(BattleWork *work) {
                 gw->sfx[i] = -1;
             }
 
-            gw->button = 0x100;
+            gw->button = PAD_BUTTON_A;
             work->actionCommands.outputParams[1] = 0;
             break;
 
@@ -114,7 +114,7 @@ s32 battleAcMain_GaugeTiming2(BattleWork *work) {
             }
 
             if ((gw->frame > gw->totalFrames) && allDone) {
-                if (((s32) work->actionCommands.outputParams[0]) > 0) {
+                if (work->actionCommands.outputParams[0] > 0) {
                     work->actionCommands.result = AC_RESULT_SUCCESS;
                     work->actionCommands.mResultCount++;
                 } else {
@@ -181,8 +181,7 @@ s32 battleAcMain_GaugeTiming2(BattleWork *work) {
                                 psndSFXOn(sfxOk);
                                 found = 1;
                             }
-                        } else
-                          if (d < __fabs(gw->targets[1] - gw->targets[0])) {
+                        } else if (d < __fabs(gw->targets[1] - gw->targets[0])) {
                             gw->flag[i4] = 1;
                             if (i4 == (work->actionCommands.params[2] - 1)) {
                                 gw->state[i4] = -1;
@@ -354,15 +353,16 @@ static void actionCommandDisp(f32 x, f32 y) {
             id = ICON_AC_OFF;
         }
         pos = (Vec){0.0f, 0.0f, 0.0f};
+        // FAKE: d0 and d1 are never read; removing them changes the object
         d0 = (Vec){0.0f, 0.0f, 0.0f};
         d1 = (Vec){0.0f, 0.0f, 0.0f};
-        pos.x = (- 288.0f + x) + ((f32)gw->width) * target / 100.0f;
+        pos.x = (-288.0f + x) + ((f32)gw->width) * target / 100.0f;
         pos.y = y3;
         ICON(&pos, 0x10, id, 0.75f);
     }
 
-    pressedIcon = BattleACGetButtonIcon(0x100, 1);
-    icon = BattleACGetButtonIcon(0x100, 0);
+    pressedIcon = BattleACGetButtonIcon(PAD_BUTTON_A, 1);
+    icon = BattleACGetButtonIcon(PAD_BUTTON_A, 0);
     switch (ac->mAcState) {
         case 99:
         case 100:
@@ -370,6 +370,7 @@ static void actionCommandDisp(f32 x, f32 y) {
         case 1003:
         case 1004: {
                 Vec p = {0.0f, 0.0f, 0.0f};
+                // FAKE: e0 and e1 are never used; removing them changes the object
                 Vec e0 = {0.0f, 0.0f, 0.0f};
                 Vec e1 = {0.0f, 0.0f, 0.0f};
                 p.x = 28.0f + (-225.0f + x);
@@ -380,6 +381,7 @@ static void actionCommandDisp(f32 x, f32 y) {
         case 1000:
             if (gw->hit) {
                 Vec p = {0.0f, 0.0f, 0.0f};
+                // FAKE: e0 and e1 are never used; removing them changes the object
                 Vec e0 = {0.0f, 0.0f, 0.0f};
                 Vec e1 = {0.0f, 0.0f, 0.0f};
                 p.x = 28.0f + (-225.0f + x);
@@ -410,7 +412,7 @@ static void actionCommandDisp(f32 x, f32 y) {
                     break;
             }
             if ((u16)id != BTL_TEX(0x45)) {
-                btlDispTexPlane(- 288.0f + x + (((f32)gw->width) * gw->targets[i]) / 100.0f, y4, 0.0f, 1.0f, 1.0f, (u16)id, (GXColor){255, 255, 255, 255}, 0);
+                btlDispTexPlane(-288.0f + x + (((f32)gw->width) * gw->targets[i]) / 100.0f, y4, 0.0f, 1.0f, 1.0f, (u16)id, (GXColor){255, 255, 255, 255}, 0);
             }
         }
     }

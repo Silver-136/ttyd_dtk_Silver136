@@ -33,15 +33,8 @@
 
 
 
-static USER_FUNC(star_stone_appear);
-static USER_FUNC(wait_game_end);
-static USER_FUNC(start_game);
-static USER_FUNC(set_weapon);
-USER_FUNC(end_muki);
-USER_FUNC(main_muki);
-
 typedef struct MukiObj { // 0x38
-    s32 kind;          // 0x
+    s32 kind;          // 0x0
     s32 timer;         // 0x4
     s32 type;          // 0x8
     Vec pos;           // 0xc
@@ -53,7 +46,7 @@ typedef struct MukiObj { // 0x38
 } MukiObj;
 
 typedef struct Muki3D { // 0x24
-    s32 kind;          // 0x
+    s32 kind;          // 0x0
     s32 timer;         // 0x4
     Vec pos;           // 0x8
     Vec scale;         // 0x14
@@ -61,12 +54,12 @@ typedef struct Muki3D { // 0x24
 } Muki3D;
 
 typedef struct MukiWork {
-    u32 flags;             // 0x
+    u32 flags;             // 0x0
     s32 state;             // 0x4
     s32 timer;             // 0x8
     s32 timeLeft;          // 0xc
     s32 unitId;            // 0x10
-    f32 atkBoost;          // 0x14, attack gain 0..9 (+0.25 US / +0.2 JP per type-0 object hit); wait_game_end returns it, set_weapon puts it in atkChangeStrength
+    f32 atkBoost;          // 0x14, attack gain 0..9 (+0.25 JP / +0.2 US per type-0 object hit); wait_game_end returns it, set_weapon puts it in atkChangeStrength
     f32 atkDisp;           // 0x18, shown attack value; eases toward atkBoost each frame, drives the red gauge fill and number
     f32 defBoost;          // 0x1c, defense gain 0..9 (type-1 object hits); wait_game_end returns it, set_weapon puts it in defChangeStrength
     f32 defDisp;           // 0x20, shown defense value; eases toward defBoost, drives the blue gauge fill and number
@@ -85,7 +78,7 @@ typedef struct MukiWork {
     GXColor col74;         // 0x74
     Muki3D o3d[9];         // 0x78
     MukiObj obj[9];        // 0x1bc
-    SacStarStone star;  // 0x3b4
+    SacStarStone star;     // 0x3b4
     u8 weapon[0xc0];       // 0x408
 } MukiWork;
 
@@ -100,8 +93,6 @@ void main_point(s32 idx);
 void main_cursor(void);
 
 
-static BattleWeapon weapon;
-EvtWord nice_event_pow[8];
 EvtWord marioAttackEvent_Muki[254];
 
 static BattleWeapon weapon = {
@@ -154,7 +145,7 @@ USER_FUNC(main_muki) {
     s32 i;
 
     if (isFirstCall) {
-        memset(w, 0, 0x4C8);
+        memset(w, 0, sizeof(MukiWork));
         w->unitId = evtGetValue(event, args[0]);
         for (i = 0; i < 9; i++) {
             w->obj[i].eff = effStarStoneEntry(9, 0.0f, -1000.0f, 0.0f, 1.0f);
@@ -169,9 +160,9 @@ USER_FUNC(main_muki) {
         main_icon(i);
     }
     main_star();
-    dispEntry(CAMERA_2D, 901.0f, 1, disp_2D, 0);
-    dispEntry(CAMERA_3D, 0.0f, 1, disp_3D, 0);
-    dispEntry(CAMERA_3D, 0.0f, 2, disp_3D_alpha, 0);
+    dispEntry(CAMERA_2D, 901.0f, 1, disp_2D, NULL);
+    dispEntry(CAMERA_3D, 0.0f, 1, disp_3D, NULL);
+    dispEntry(CAMERA_3D, 0.0f, 2, disp_3D_alpha, NULL);
     return 0;
 }
 
@@ -501,10 +492,10 @@ void main_point(s32 idx) {
         o->kind = 2;
         o->timer = irand(30) + 30;
         {
-        Vec p = {0.0f, 0.0f, 20.0f};
-        p.x = (f32)((idx % 3) * 48 - 48);
-        p.y = (f32)(125 - (idx / 3) * 48);
-        o->pos = p;
+            Vec p = {0.0f, 0.0f, 20.0f};
+            p.x = (f32)((idx % 3) * 48 - 48);
+            p.y = (f32)(125 - (idx / 3) * 48);
+            o->pos = p;
         }
         o->scale = (Vec){0.0f, 0.0f, 1.0f};
         o->link = NULL;
@@ -711,7 +702,9 @@ USER_FUNC(end_muki) {
     return 2;
 }
 
+// FAKE: addf() for x + 32.0f in disp_2D; the plain sum changes the object
 static inline f32 addf(f32 a, f32 b) { return a + b; }
+// FAKE: mulf() for c * 3.141592f in disp_3D_alpha; the plain product changes the object
 static inline f32 mulf(f32 x, f32 y) { return x * y; }
 static void disp_2D(CameraId cam, void* param) {
     MukiWork* w = get_ptr();
@@ -737,7 +730,8 @@ static void disp_2D(CameraId cam, void* param) {
         btlGetScreenPoint(&s, &s);
         y = s.y;
         c = (GXColor){0xFF, 0xFF, 0xFF, 0xFF};
-        PSMTXTrans(m, (x = s.x) - 32.0f - 8.0f, y, 0.0f);
+        x = s.x;
+        PSMTXTrans(m, x - 32.0f - 8.0f, y, 0.0f);
         btlDispTexPlane2(m, BTL_TEX(0x43), c, 0);
         PSMTXScale(m, 16.0f, 1.0f, 1.0f);
         PSMTXTransApply(m, m, x, y, 0.0f);
@@ -761,6 +755,7 @@ static void disp_2D(CameraId cam, void* param) {
             b = 0xA0;
             a = 0xFF;
         }
+        // FAKE: frac *= 80.0f inside the argument; plain frac * 80.0f changes the object
         btlDispGXQuads2DRasta(x, 8.0f + y, x + (frac *= 80.0f), y - 8.0f, r, g, b, a);
         t = w->t24 % 12;
         if (t >= 0 && t <= 5) {
@@ -771,7 +766,7 @@ static void disp_2D(CameraId cam, void* param) {
             btlDispTexPlane3(m, BTL_TEX(0x45), col[0], col[1], col[2], col[3], 0);
             PSMTXScale(m, 0.7f, 0.7f, 0.7f);
             PSMTXTransApply(m, m, x - 35.0f, y - 14.0f, 0.0f);
-            iconDispGx2(m, 0x10, ICON_PLUS);
+            iconDispGx2(m, ICON_FLAG_2D, ICON_PLUS);
             PSMTXScale(m, 0.7f, 0.7f, 0.7f);
             PSMTXTransApply(m, m, x - 25.0f, y - 14.0f, 0.0f);
             iconNumberDispGx(m, (s32)w->atkDisp, 0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
@@ -803,6 +798,7 @@ static void disp_2D(CameraId cam, void* param) {
         frac = w->defDisp - (f32)(s32)w->defDisp;
         btlDispGXInit2DRasta();
         GXLoadPosMtxImm(camGetPtr(CAMERA_2D)->view, GX_PNMTX0);
+        // BUG: d still holds the attack gauge's difference (atkBoost - atkDisp); the defense gauge never computes its own.
         if (d != 0.0f) {
             r = 0xB4;
             g = 0xB4;
@@ -814,6 +810,7 @@ static void disp_2D(CameraId cam, void* param) {
             b = 0xF0;
             a = 0xFF;
         }
+        // FAKE: frac *= 80.0f inside the argument; plain frac * 80.0f changes the object
         btlDispGXQuads2DRasta(x, 8.0f + y, x + (frac *= 80.0f), y - 8.0f, r, g, b, a);
         t = w->t28 % 12;
         if (t >= 0 && t <= 5) {
@@ -824,7 +821,7 @@ static void disp_2D(CameraId cam, void* param) {
             btlDispTexPlane3(m, BTL_TEX(0x45), col[0], col[1], col[2], col[3], 0);
             PSMTXScale(m, 0.7f, 0.7f, 0.7f);
             PSMTXTransApply(m, m, x - 35.0f, y - 14.0f, 0.0f);
-            iconDispGx2(m, 0x10, ICON_PLUS);
+            iconDispGx2(m, ICON_FLAG_2D, ICON_PLUS);
             PSMTXScale(m, 0.7f, 0.7f, 0.7f);
             PSMTXTransApply(m, m, x - 25.0f, y - 14.0f, 0.0f);
             iconNumberDispGx(m, (s32)w->defDisp, 0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
@@ -888,7 +885,6 @@ static void disp_3D_alpha(CameraId cam, void* param) {
                 }
                 break;
             case 1: {
-
                 PSMTXRotRad(m, 'y', 0.017453292f * o->rot.y);
                 PSMTXScaleApply(m, m, 2.0f * o->scale.x, 2.0f * o->scale.y, o->scale.z);
                 PSMTXTransApply(m, m, o->pos.x, o->pos.y, o->pos.z);
@@ -901,10 +897,9 @@ static void disp_3D_alpha(CameraId cam, void* param) {
                 col[2] = col[3] = (GXColor){0x74, 0xC9, 0xFF, o->alpha};
                 btlDispTexPlane3(m, BTL_TEX(0x45), col[0], col[1], col[2], col[3], 0);
                 }
-                }
-break;
+                break;
+            }
             case 2: {
-
                 PSMTXRotRad(m, 'y', 0.017453292f * o->rot.y);
                 PSMTXScaleApply(m, m, o->scale.x, o->scale.y, o->scale.z);
                 PSMTXTransApply(m, m, o->pos.x, o->pos.y, o->pos.z);
@@ -916,8 +911,8 @@ break;
                 col[0] = (GXColor){0xFF, 0xFF, 0xFF, o->alpha};
                 btlDispTexPlane2(m, BTL_TEX(0x31), col[0], 0);
                 }
-                }
-break;
+                break;
+            }
             }
         }
     }
@@ -933,7 +928,7 @@ static USER_FUNC(set_weapon) {
     s32 type = evtGetValue(event, args[0]);
     s32 power = evtGetValue(event, args[1]);
     MukiWork* w = get_ptr();
-    memcpy(w->weapon, &weapon, 0xc0);
+    memcpy(w->weapon, &weapon, sizeof(BattleWeapon));
     switch (type) {
     case 0:
         w->weapon[0x96] = 100;

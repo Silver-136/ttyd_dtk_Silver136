@@ -9,19 +9,11 @@
 #include "driver/camdrv.h"
 #include "battle/battle_sub.h"
 #include "battle/battle_disp.h"
-
-#ifdef VERSION_G8ME01
-#define AC_ICON_OFS 8
-#define AC_TEX_OFS 0x16
-#else
-#define AC_ICON_OFS 0
-#define AC_TEX_OFS 0
-#endif
-
+#include "icon_ids.h"
 
 typedef struct ShotWork {
     s32 timer;        // 0x0
-    s32 field_0x4;
+    s32 pad_04;       // 0x4, never accessed
     s32 idx;          // 0x8
     f32 minV;         // 0xC
     f32 maxV;         // 0x10
@@ -84,7 +76,7 @@ s32 battleAcMain_Shot(BattleWork* work) {
                 BattleUnit* unit;
                 s32 i;
                 _ac_disp_init(work);
-                ac->result = 1;
+                ac->result = AC_RESULT_RUNNING;
                 sw->minV = ac->params[SHOT_PARAM_MIN_VALUE];
                 sw->maxV = ac->params[SHOT_PARAM_MAX_VALUE];
                 sw->left = ac->params[SHOT_PARAM_LEFT];
@@ -137,7 +129,7 @@ s32 battleAcMain_Shot(BattleWork* work) {
                     }
                     shotRecord(ac, sw);
                     if (sw->idx >= ac->params[SHOT_PARAM_COUNT]) {
-                        ac->result = 2;
+                        ac->result = AC_RESULT_SUCCESS;
                         return 0;
                     }
                     if (ac->setupFlags & 2) {
@@ -186,7 +178,7 @@ s32 battleAcMain_Shot(BattleWork* work) {
                     shotRecord(ac, sw);
                     if (sw->idx >= ac->params[SHOT_PARAM_COUNT]) {
                         ac->countdown--;
-                        ac->result = 2;
+                        ac->result = AC_RESULT_SUCCESS;
                         ac->mAcState = 1002;
                     } else {
                         ac->mAcState = 1000;
@@ -202,7 +194,7 @@ s32 battleAcMain_Shot(BattleWork* work) {
                     shotRecord(ac, sw);
                     if (sw->idx >= ac->params[SHOT_PARAM_COUNT]) {
                         ac->mAcState = 1002;
-                        ac->result = 2;
+                        ac->result = AC_RESULT_SUCCESS;
                     } else {
                         ac->mAcState = 1000;
                     }
@@ -213,7 +205,7 @@ s32 battleAcMain_Shot(BattleWork* work) {
                     }
                     shotRecord(ac, sw);
                     if (sw->idx >= ac->params[SHOT_PARAM_COUNT]) {
-                        ac->result = 2;
+                        ac->result = AC_RESULT_SUCCESS;
                         ac->mAcState = 1002;
                     } else {
                         ac->mAcState = 1000;
@@ -237,10 +229,10 @@ s32 battleAcMain_Shot(BattleWork* work) {
                 }
                 break;
             case 1006:
-                ac->maincb = 0;
-                ac->dispcb = 0;
-                ac->resultcb = 0;
-                ac->deletecb = 0;
+                ac->maincb = NULL;
+                ac->dispcb = NULL;
+                ac->resultcb = NULL;
+                ac->deletecb = NULL;
                 break;
         }
     } while (loop);
@@ -294,8 +286,8 @@ void battleAcDelete_Shot(BattleWork* work) {
 }
 
 static void _ac_disp_init(BattleWork* work) {
-    BattleACDispParams* disp = (&(&work->actionCommands)->disp);
-    memset(disp, 0, 0x2C);
+    BattleACDispParams* disp = &work->actionCommands.disp;
+    memset(disp, 0, sizeof(BattleACDispParams));
     disp->iconX = -200.0f;
     disp->iconY = 0.0f;
     disp->slideTimer = 20;
@@ -321,7 +313,7 @@ static void actionCommandDisp(f32 x, f32 y) {
         f32 px = -200.0f + x;
         pos.x = px;
         pos.y = 25.0f + y;
-        iconDispGx(&pos, 0x10, 0x8c + AC_ICON_OFS, 1.0f);
+        iconDispGx(&pos, ICON_FLAG_2D, ICON_AC_GAUGE_FRAME, 1.0f);
         limit = sw->speed / 100.0f;
         if (disp->gaugeRatio <= limit) {
             disp->gaugeRatio += 0.01f;
@@ -347,7 +339,7 @@ static void actionCommandDisp(f32 x, f32 y) {
         MTXTrans(m1, px - 88.0f * (1.0f - disp->gaugeRatio), 33.0f + y, 0.0f);
         MTXScale(m2, disp->gaugeRatio, 1.0f, 1.0f);
         MTXConcat(m1, m2, m3);
-        iconDispGxCol(m3, 0x10, 0x8d + AC_ICON_OFS, (GXColor){disp->color.r, disp->color.g, disp->color.b, disp->color.a});
+        iconDispGxCol(m3, ICON_FLAG_2D, ICON_08D, (GXColor){disp->color.r, disp->color.g, disp->color.b, disp->color.a});
     }
 }
 
@@ -356,8 +348,8 @@ static void _draw_target_mark(GXColor color, f32 x, f32 y, f32 z, f32 angle) {
     pos.x = x;
     pos.y = y;
     pos.z = z;
-    btlDispTex4(0x42 + AC_TEX_OFS, pos, (Vec){0.5f, 0.5f, 1.0f}, (Vec){0.0f, 0.0f, reviseAngle(-angle)}, color);
-    btlDispTex4(0x41 + AC_TEX_OFS, pos, (Vec){0.5f, 0.5f, 1.0f}, (Vec){0.0f, 0.0f, reviseAngle(angle)}, color);
+    btlDispTex4(BTL_TEX(0x42), pos, (Vec){0.5f, 0.5f, 1.0f}, (Vec){0.0f, 0.0f, reviseAngle(-angle)}, color);
+    btlDispTex4(BTL_TEX(0x41), pos, (Vec){0.5f, 0.5f, 1.0f}, (Vec){0.0f, 0.0f, reviseAngle(angle)}, color);
 }
 
 static void _disp_target_mark(CameraId cameraId, void* param) {

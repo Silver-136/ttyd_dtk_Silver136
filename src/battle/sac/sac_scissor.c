@@ -32,8 +32,8 @@
 #include "battle/battle_sub.h"
 
 double sqrt(double);
-double fabs(double);
 double __fabs(double);
+// FAKE: my_fabsf() wraps __fabs for scissor_intersection; direct __fabs calls change the object
 static inline double my_fabsf(float x) { return __fabs(x); }
 void scissor_disp_control(CameraId camera, void* param);
 
@@ -76,7 +76,7 @@ typedef struct ScissorWork {
     /* 0x10C */ f32 timerDispY;
     /* 0x110 */ u8 pad110[4];
     /* 0x114 */ void* points; // cursor path as Pt pairs (0x1000 bytes, up to 0x200 points)
-    /* 0x118 */ struct ScissorTri* tris; // triangle list (0x3000 bytes), drawn by scissor_ofscreen_ok
+    /* 0x118 */ struct ScissorTri* tris; // triangle list (0x3000 bytes), drawn by scissor_disp_region
     /* 0x11C */ s32 phase;
     /* 0x120 */ s32 phaseStep;
     /* 0x124 */ Vec pos;
@@ -100,23 +100,6 @@ void star_disp2D_sub(s32 idx, s32 alpha);
 s32 scissor_damage_sub2(Vec pt);
 void scissor_damage_sub(BattleUnit* unit, s32* out);
 s32 scissor_intersection(f32 x1, f32 y1, f32 x2, f32 y2, f32 x3, f32 y3, f32 x4, f32 y4, f32* ox, f32* oy);
-
-static s32 star_stone_appear(void);
-s32 wait_star_standby(void);
-s32 scissor_end(void);
-s32 scissor_init(void);
-s32 scissor_offscreen(void);
-s32 scissor_ofscreen_ok(EventEntry* evt);
-s32 scissor_damage(EventEntry* evt, BOOL first);
-s32 scissor_control(EventEntry* evt, BOOL first);
-s32 scissor_timer_main(void);
-s32 scissor_timer_get(EventEntry* evt);
-s32 star_control(EventEntry* evt, BOOL first);
-s32 scissor_tess(void);
-
-BattleWeapon weapon_scissor;
-BattleWeapon weapon_scissor_finish;
-EvtWord marioAttackEvent_Scissor[300];
 
 BattleWeapon weapon_scissor = {
     "btl_wn_sac_scissor", // name
@@ -479,6 +462,7 @@ s32 scissor_cross(Pt* a, Pt* b, Pt* pts, s32 n) {
                 }
             }
             if (found == 1) {
+                // BUG: searches n entries (the polygon's point count), not the cnt entries filled in xs/ys so far.
                 for (k = 0; k < n; k++) {
                     if (ox == xs[k] && oy == ys[k]) {
                         break;
@@ -542,8 +526,8 @@ s32 scissor_cross(Pt* a, Pt* b, Pt* pts, s32 n) {
 
 s32 scissor_tess(void) {
     ScissorWork* w = GetScissorPtr();
-    void* p = BattleAlloc(w->stars.count * 8);
-    memcpy(p, w->points, w->stars.count * 8);
+    void* p = BattleAlloc(w->stars.count * sizeof(Pt));
+    memcpy(p, w->points, w->stars.count * sizeof(Pt));
     w->triCount = 0;
     tess(p, w->stars.count);
     DCFlushRange(w->tris, 0x3000);
@@ -570,12 +554,12 @@ void tess(Pt* pts, s32 n) {
         for (j = 2; j < n - 1; j++) {
             if (scissor_cross(&pts[i], &pts[(i + j) % n], pts, n) == 1) {
                 n1 = j + 1;
-                a = BattleAlloc(n1 * 8);
+                a = BattleAlloc(n1 * sizeof(Pt));
                 for (k = 0; k < n1; k++) {
                     a[k] = pts[(i + k) % n];
                 }
                 n2 = n - j + 1;
-                b = BattleAlloc(n2 * 8);
+                b = BattleAlloc(n2 * sizeof(Pt));
                 b[0] = pts[i];
                 for (k = 0; k < n2 - 1; k++) {
                     b[k + 1] = pts[(i + j + k) % n];
@@ -628,17 +612,17 @@ void star_disp2D(CameraId camera, void* param);
 
 s32 star_control(EventEntry* evt, BOOL first) {
     ScissorWork* w = GetScissorPtr();
-    StarTrail* t = (StarTrail*)&w->stars.count;
+    struct ScissorStars* s = &w->stars;
     BattleUnit* mario = BattleGetMarioPtr(_battleWorkPointer);
     s32 i;
 
     if (!(gp->retraceCount & 3)) {
         for (i = 3; i > 0; i--) {
-            t->tx[i] = t->tx[i - 1];
-            t->ty[i] = t->ty[i - 1];
+            s->starX[i] = s->starX[i - 1];
+            s->starY[i] = s->starY[i - 1];
         }
-        t->tx[0] = t->x;
-        t->ty[0] = t->y;
+        s->starX[0] = s->cursorX;
+        s->starY[0] = s->cursorY;
     }
     switch (w->phase) {
     case 1:
@@ -685,19 +669,19 @@ s32 star_control(EventEntry* evt, BOOL first) {
             w->rot = (Vec){0.0f, 0.0f, 0.0f};
             w->from.y = w->pos.y;
             w->to.y = 0.0f;
-            t->x = w->pos.x;
-            t->y = w->pos.y;
+            s->cursorX = w->pos.x;
+            s->cursorY = w->pos.y;
             for (i = 0; i < 4; i++) {
-                t->tx[i] = 0.0f;
-                t->ty[i] = -1000.0f;
+                s->starX[i] = 0.0f;
+                s->starY[i] = -1000.0f;
             }
         }
         break;
     case 4:
         w->phaseStep++;
         w->pos.y = intplGetValue(EASING_QUADRATIC_OUT, w->from.y, w->to.y, w->phaseStep, 60);
-        t->x = w->pos.x;
-        t->y = w->pos.y;
+        s->cursorX = w->pos.x;
+        s->cursorY = w->pos.y;
         if (w->phaseStep >= 60) {
             w->phase = 5;
             w->phaseStep = 0;
@@ -771,14 +755,14 @@ void star_disp2D_sub(s32 idx, s32 alpha) {
     }
     PSMTXTrans(transMtx, x, y - 20.0f, z);
     PSMTXScale(scaleMtx, w->scale.x, w->scale.y, w->scale.z);
-    PSMTXRotRad(rotX, 0x78, 0.017453292f * w->rot.x);
-    PSMTXRotRad(rotY, 0x79, 0.017453292f * w->rot.y);
-    PSMTXRotRad(rotZ, 0x7A, 0.017453292f * w->rot.z);
+    PSMTXRotRad(rotX, 'x', 0.017453292f * w->rot.x);
+    PSMTXRotRad(rotY, 'y', 0.017453292f * w->rot.y);
+    PSMTXRotRad(rotZ, 'z', 0.017453292f * w->rot.z);
     PSMTXConcat(rotZ, rotY, rotMtx);
     PSMTXConcat(rotX, rotMtx, rotMtx);
     PSMTXConcat(scaleMtx, rotMtx, rotMtx);
     PSMTXConcat(transMtx, rotMtx, rotMtx);
-    iconDispGxCol(rotMtx, 0x10, ICON_SAC_SCISSOR, col);
+    iconDispGxCol(rotMtx, ICON_FLAG_2D, ICON_SAC_SCISSOR, col);
 }
 
 s32 scissor_timer_get(EventEntry* evt) {
@@ -910,13 +894,13 @@ s32 scissor_control(EventEntry* evt, BOOL first) {
                     smartFree(w->smart);
                     w->smart = NULL;
                 }
-                w->smart = smartAlloc(GXGetTexBufferSize(0x260, 0x1E0, 4, 0, 0), 1);
-                dispEntry(CAMERA_2D, 0, 0.0f, scissor_capture, NULL);
+                w->smart = smartAlloc(GXGetTexBufferSize(0x260, 0x1E0, GX_TF_RGB565, GX_FALSE, 0), 1);
+                dispEntry(CAMERA_2D, 0.0f, 0, scissor_capture, NULL);
                 return 2;
             }
         }
     }
-    dispEntry(CAMERA_2D, 0, 0.0f, scissor_disp_control, NULL);
+    dispEntry(CAMERA_2D, 0.0f, 0, scissor_disp_control, NULL);
     return 0;
 }
 
@@ -940,11 +924,12 @@ s32 scissor_damage(EventEntry* evt, BOOL first) {
     hit = 0;
     for (i = 0; i < 64; i++) {
         unit = BattleGetUnitPtr(wp, i);
-        if (unit != NULL && BtlUnit_GetBelong(unit) == 1) {
+        if (unit != NULL && BtlUnit_GetBelong(unit) == ALLIANCE_ENEMY) {
             BattleUnitPart* part = BtlUnit_GetPartsPtr(unit, BtlUnit_GetBodyPartsId(unit));
             s32 res;
             if (BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL) != 1 && !(part->attributes & kClone) && !(part->attributes & kImmuneToDamageAndStatus) &&
-                !(part->attributes & kNotTargetable) && *(s8*)part->defenseAttr != 4 && *(s8*)part->defenseAttr != 2) {
+                !(part->attributes & kNotTargetable) && part->defenseAttr->defenseAttrs[ELEMENT_NORMAL] != DEFENSE_ATTR_IMMUNE_EXCEPT_GULP &&
+                part->defenseAttr->defenseAttrs[ELEMENT_NORMAL] != DEFENSE_ATTR_IMMUNE) {
                 scissor_damage_sub(unit, &res);
                 w->unitIds[n] = i;
                 w->power[n] = res;
@@ -961,7 +946,7 @@ s32 scissor_damage(EventEntry* evt, BOOL first) {
     for (i = 0; i < n; i++) {
         if (w->unitIds[i] != -1 && w->power[i] >= 1) {
             unit = BattleGetUnitPtr(wp, w->unitIds[i]);
-            BattleCheckDamage(mario, unit, BtlUnit_GetPartsPtr(unit, BtlUnit_GetBodyPartsId(unit)), (void*)&weapon_scissor, 0);
+            BattleCheckDamage(mario, unit, BtlUnit_GetPartsPtr(unit, BtlUnit_GetBodyPartsId(unit)), &weapon_scissor, 0);
             hit = 1;
         }
     }
@@ -1055,7 +1040,7 @@ s32 scissor_damage_sub2(Vec pt) {
         ScissorTri* t = &w->tris[i];
         for (j = 0; j < 3; j++) {
             s32 k = (j + 1) % 3;
-            // FAKE: y[j] read through q = &x[j] (index = the x-to-y distance in floats) keeps the target register order (t->y[j] / t->x[j]: 99.65%)
+            // FAKE: y[j] is read through q = &x[j] (index = the x-to-y distance in floats); plain t->y[j] / t->x[j] changes the object
             q = &t->x[j];
             y0 = q[(offsetof(ScissorTri, y) - offsetof(ScissorTri, x)) / sizeof(f32)];
             x0 = q[0];
@@ -1082,8 +1067,8 @@ s32 scissor_ofscreen_ok(EventEntry* evt) {
 void scissor_capture(CameraId camera, void* param) {
     ScissorWork* w = GetScissorPtr();
     GXSetTexCopySrc(0, 0, 0x260, 0x1E0);
-    GXSetTexCopyDst(0x260, 0x1E0, 4, GX_FALSE);
-    GXCopyTex(*(void**)w->smart, GX_FALSE);
+    GXSetTexCopyDst(0x260, 0x1E0, GX_TF_RGB565, GX_FALSE);
+    GXCopyTex(w->smart->address, GX_FALSE);
     GXPixModeSync();
 }
 
@@ -1144,7 +1129,7 @@ void scissor_disp_region(CameraId camera, void* param) {
     GXClearVtxDesc();
     GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
-    GXInitTexObj(&texObj, *(void**)w->smart, 0x260, 0x1E0, 4, GX_CLAMP, GX_CLAMP, 0);
+    GXInitTexObj(&texObj, w->smart->address, 0x260, 0x1E0, GX_TF_RGB565, GX_CLAMP, GX_CLAMP, GX_FALSE);
     GXInitTexObjLOD(&texObj, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
     GXLoadTexObj(&texObj, GX_TEXMAP0);
     GXSetNumChans(1);
@@ -1184,8 +1169,8 @@ void scissor_disp_region(CameraId camera, void* param) {
 
 s32 scissor_init(void) {
     ScissorWork* w = GetScissorPtr();
-    memset(w, 0, 0x174);
-    w->timer = 0x3BF;
+    memset(w, 0, sizeof(ScissorWork));
+    w->timer = 959;
     w->points = BattleAlloc(0x1000);
     w->tris = BattleAlloc(0x3000);
     w->stars.cursorX = 0.0f;

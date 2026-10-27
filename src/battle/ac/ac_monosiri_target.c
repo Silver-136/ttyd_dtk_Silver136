@@ -11,7 +11,6 @@
 
 
 s32 BattleACGetButtonIcon(s32 button, s32 pressed);
-s32 _getmaxcount(void);
 
 typedef struct MonosiriTargetWork {
     s32 frame;      // 0x0
@@ -179,8 +178,8 @@ static void actionCommandDisp(f32 x, f32 y) {
     btlDispTex4(BTL_TEX(0x41), screen2, (Vec){1.0f, 1.0f, 1.0f}, (Vec){0.0f, 0.0f, cw->angle}, (GXColor){128, 128, 128, 255});
     cw->angle += 2.0f;
 
-    pressedIcon = BattleACGetButtonIcon(0x100, 1);
-    icon = BattleACGetButtonIcon(0x100, 0);
+    pressedIcon = BattleACGetButtonIcon(PAD_BUTTON_A, 1);
+    icon = BattleACGetButtonIcon(PAD_BUTTON_A, 0);
     if (__fabs(cw->pos.x - cw->targetPos.x) < 15.0) {
         icon = pressedIcon;
     }

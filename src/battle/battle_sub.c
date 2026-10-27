@@ -118,12 +118,12 @@ s32 BattleTransID(EventEntry* evt, s32 type) {
 
     if (type < 0) {
         switch (type) {
-            case -2:
+            case UNIT_ID_SELF:
                 return evt->unitId;
-            case -3:
+            case UNIT_ID_MARIO:
                 unit = BattleGetMarioPtr(work);
                 return unit->unitId;
-            case -4:
+            case UNIT_ID_PARTNER:
                 unit = BattleGetPartyPtr(work);
                 if (unit) {
                     return unit->unitId;
@@ -131,10 +131,10 @@ s32 BattleTransID(EventEntry* evt, s32 type) {
                 return -1;
             case -1:
                 return -1;
-            case -5:
+            case UNIT_ID_SYSTEM:
                 unit = BattleGetSystemPtr(work);
                 return unit->unitId;
-            case -6:
+            case UNIT_ID_LECTURE:
                 return work->lectureUnitId;
         }
     }
@@ -142,6 +142,7 @@ s32 BattleTransID(EventEntry* evt, s32 type) {
 }
 
 void btlsubResetMoveColorLvAll(BattleWork* work) {
+    // FAKE: spare copies w and w2 of work and c of 0xFF; the plain loop changes the object
     BattleWork* w = work;
     BattleUnit* unit;
     int i;

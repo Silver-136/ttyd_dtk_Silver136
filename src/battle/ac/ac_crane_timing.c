@@ -55,7 +55,7 @@ s32 battleAcMain_CraneTiming(BattleWork* work) {
             cw->frame = 0;
             cw->delay = work->actionCommands.params[CRANE_PARAM_START_DELAY];
             cw->range = irand(work->actionCommands.params[CRANE_PARAM_RANDOM_RANGE]);
-            cw->button = 0x100;
+            cw->button = PAD_BUTTON_A;
             work->actionCommands.outputParams[0] = 0;
             work->actionCommands.mAcState = 99;
             work->actionCommands.result = AC_RESULT_RUNNING;

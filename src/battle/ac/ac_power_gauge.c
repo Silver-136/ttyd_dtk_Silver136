@@ -16,7 +16,7 @@ typedef struct PowerGaugeWork {
     f32 gauge;     // 0x4
     s32 frame2;    // 0x8
     s32 maxFrames; // 0xC
-    s8 autoFail;   // 0x10
+    s8 autoSuccess; // 0x10, result of the confused auto-play (1 = success)
     s8 phase;      // 0x11
     s8 mode;       // 0x12
     u8 pad13;      // 0x13
@@ -42,7 +42,7 @@ s32 battleAcMain_PowerGauge(BattleWork* work) {
 
     switch (ac->mAcState) {
         case 0:
-            memset(disp, 0, 0x2C);
+            memset(disp, 0, sizeof(BattleACDispParams));
             disp->iconX = -300.0f;
             disp->iconY = 0.0f;
             disp->slideTimer = 20;
@@ -52,35 +52,35 @@ s32 battleAcMain_PowerGauge(BattleWork* work) {
             pw->frame2 = 0;
             ac->outputParams[0] = 0;
             ac->mAcState = 99;
-            ac->result = 1;
+            ac->result = AC_RESULT_RUNNING;
             pw->maxFrames = ac->params[1] + ac->params[2];
             pw->gauge = 0.0f;
             switch (ac->params[0]) {
                 case 0:
                     pw->mode = 1;
-                    pw->button = 0x60;
+                    pw->button = PAD_TRIGGER_L | PAD_TRIGGER_R;
                     pw->phase = 1;
                     ac->outputParams[0] = 1;
                     break;
                 case 1:
                     pw->mode = 1;
-                    pw->button = 0x100;
+                    pw->button = PAD_BUTTON_A;
                     pw->phase = 1;
                     ac->outputParams[0] = 1;
                     break;
                 case 2:
                     pw->mode = 0;
-                    pw->button = 0x100;
+                    pw->button = PAD_BUTTON_A;
                     pw->phase = 0;
                     break;
                 case 3:
                     pw->mode = 0;
-                    pw->button = 0x20;
+                    pw->button = PAD_TRIGGER_R;
                     pw->phase = 0;
                     break;
                 default:
                     pw->mode = 1;
-                    pw->button = 0x100;
+                    pw->button = PAD_BUTTON_A;
                     pw->phase = 1;
                     ac->outputParams[0] = 1;
                     break;
@@ -92,9 +92,9 @@ s32 battleAcMain_PowerGauge(BattleWork* work) {
             if ((ac->setupFlags & 1) && (ac->mAcUnit->mTokenFlags & kConfusedAction)) {
                 if (irand(100) >= 0) {
                     ac->setupParam = 30;
-                    pw->autoFail = 0;
+                    pw->autoSuccess = 0;
                 } else {
-                    pw->autoFail = 1;
+                    pw->autoSuccess = 1;
                     ac->setupParam = 30;
                 }
                 ac->outputParams[0] = 1;
@@ -182,9 +182,9 @@ s32 battleAcMain_PowerGauge(BattleWork* work) {
             if (pw->phase == 2) {
                 if (pw->gauge < (f32)ac->params[4]) {
                     ac->result = 0;
-                    ac->result &= ~2;
+                    ac->result &= ~AC_RESULT_SUCCESS;
                 } else {
-                    ac->result = 2;
+                    ac->result = AC_RESULT_SUCCESS;
                     ac->mResultCount++;
                 }
                 ac->mAcState = 1003;
@@ -193,8 +193,8 @@ s32 battleAcMain_PowerGauge(BattleWork* work) {
         case 1002:
             ac->setupParam--;
             if (ac->setupParam < 0) {
-                if (pw->autoFail) {
-                    ac->result = 2;
+                if (pw->autoSuccess) {
+                    ac->result = AC_RESULT_SUCCESS;
                     ac->mResultCount++;
                 } else {
                     ac->result = 0;
@@ -326,20 +326,20 @@ static void actionCommandDisp(f32 x, f32 y) {
             d = ICON_TRIGGER_R;
             break;
         case 1:
-            a = BattleACGetButtonIcon(0x100, 1);
-            b = BattleACGetButtonIcon(0x100, 0);
+            a = BattleACGetButtonIcon(PAD_BUTTON_A, 1);
+            b = BattleACGetButtonIcon(PAD_BUTTON_A, 0);
             c = 0;
             d = 0;
             break;
         case 2:
-            a = BattleACGetButtonIcon(0x100, 1);
-            b = BattleACGetButtonIcon(0x100, 0);
+            a = BattleACGetButtonIcon(PAD_BUTTON_A, 1);
+            b = BattleACGetButtonIcon(PAD_BUTTON_A, 0);
             c = 0;
             d = 0;
             break;
         case 3:
-            a = BattleACGetButtonIcon(0x20, 1);
-            b = BattleACGetButtonIcon(0x20, 0);
+            a = BattleACGetButtonIcon(PAD_TRIGGER_R, 1);
+            b = BattleACGetButtonIcon(PAD_TRIGGER_R, 0);
             c = 0;
             d = 0;
             break;
@@ -416,7 +416,7 @@ static void actionCommandDisp(f32 x, f32 y) {
                     }
                 }
             } else {
-                if ((pw->gauge >= (f32)ac->params[4] && pw->gauge <= 100.0f) || (s32)ac->outputParams[0] == 0) {
+                if ((pw->gauge >= (f32)ac->params[4] && pw->gauge <= 100.0f) || ac->outputParams[0] == 0) {
                     if ((u16)c) {
                         Vec pos = {0.0f, 0.0f, 0.0f};
                         f32 px = -225.0f + x;

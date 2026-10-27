@@ -13,8 +13,6 @@
 #include "battle/battle_status_effect.h"
 #include "battle/battle_sub.h"
 
-
-
 static s32 count;
 s32 count2;
 s32 handBeatEnable;
@@ -94,8 +92,6 @@ EVT_BEGIN(enemy_slide_return_evt)
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_NONE, 1)
     RETURN
 EVT_END()
-
-// functions are emitted in reverse definition order (-inline deferred)
 
 USER_FUNC(sac_wao) {
     s32 num = BattleAudience_GetAudienceNum();

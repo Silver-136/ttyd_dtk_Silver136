@@ -44,7 +44,7 @@ s32 battleAcMain_PowerGaugeLv2(BattleWork* work) {
     }
     switch (ac->mAcState) {
         case 0:
-            memset(disp, 0, 0x2C);
+            memset(disp, 0, sizeof(BattleACDispParams));
             disp->iconX = -300.0f;
             disp->iconY = 0.0f;
             disp->slideTimer = 20;
@@ -57,14 +57,14 @@ s32 battleAcMain_PowerGaugeLv2(BattleWork* work) {
             g->timer = 0;
             ac->outputParams[0] = 0;
             ac->mAcState = 99;
-            ac->result = 1;
+            ac->result = AC_RESULT_RUNNING;
             g->maxFrames = sysMsec2Frame(7000);
             g->gauge = 0.0f;
             g->rate = 0.01f * ac->params[1];
             g->dec = 0.01f * ac->params[2];
             g->full = 0;
             g->inZone = 0;
-            g->button = 0x100;
+            g->button = PAD_BUTTON_A;
             sysMsec2Frame(1000);
             for (i = 0; i < 3; i++) {
                 g->zones[i] = irand(sysMsec2Frame(250)) + (i * 2 + 1) * sysMsec2Frame(1000);
@@ -73,7 +73,7 @@ s32 battleAcMain_PowerGaugeLv2(BattleWork* work) {
         case 99:
             break;
         case 100:
-            if ((ac->setupFlags & 1) && ((u32)ac->mAcUnit->mTokenFlags & kConfusedAction)) {
+            if ((ac->setupFlags & 1) && (ac->mAcUnit->mTokenFlags & kConfusedAction)) {
                 if (irand(100) >= 0) {
                     ac->setupParam = 30;
                     ac->outputParams[0] = 0;
@@ -89,11 +89,11 @@ s32 battleAcMain_PowerGaugeLv2(BattleWork* work) {
         case 1000:
             g->timer++;
             if (g->timer > g->maxFrames) {
-                if ((s32)ac->outputParams[0] < ac->params[4]) {
+                if (ac->outputParams[0] < ac->params[4]) {
                     ac->result = 0;
-                    ac->result &= ~2;
+                    ac->result &= ~AC_RESULT_SUCCESS;
                 } else {
-                    ac->result = 2;
+                    ac->result = AC_RESULT_SUCCESS;
                     ac->mResultCount++;
                 }
                 ac->mAcState = 1002;
@@ -138,10 +138,10 @@ s32 battleAcMain_PowerGaugeLv2(BattleWork* work) {
             }
             BattleAcGaugeSeUpdate(g->gauge);
             ac->outputParams[0] = (s32)(g->gauge * (f32)ac->params[3] / 100.0f);
-            if ((s32)ac->outputParams[0] >= ac->params[3]) {
+            if (ac->outputParams[0] >= ac->params[3]) {
                 ac->outputParams[0] = ac->params[3] - 1;
             }
-            if (!((s32)ac->acFlags & AC_POWER_GAUGE_LV2_FLAG_NO_FULL_BONUS_UNUSED)) {
+            if (!(ac->acFlags & AC_POWER_GAUGE_LV2_FLAG_NO_FULL_BONUS_UNUSED)) {
                 if (g->gauge >= 100.0f) {
                     ac->outputParams[0]++;
                 }
@@ -150,8 +150,8 @@ s32 battleAcMain_PowerGaugeLv2(BattleWork* work) {
         case 1001:
             ac->setupParam--;
             if (ac->setupParam < 0) {
-                if ((s32)ac->outputParams[0] >= ac->params[4]) {
-                    ac->result = 2;
+                if (ac->outputParams[0] >= ac->params[4]) {
+                    ac->result = AC_RESULT_SUCCESS;
                     ac->mResultCount++;
                 } else {
                     ac->result = 0;
@@ -311,6 +311,7 @@ static void actionCommandDisp(f32 x, f32 y) {
         if (g->inZone) {
             id = ICON_AC_ON;
         }
+        // FAKE: pos zeroed through a copied inner temporary; initializing pos directly changes the object
         {
             Vec zero = {0.0f, 0.0f, 0.0f};
             pos = zero;

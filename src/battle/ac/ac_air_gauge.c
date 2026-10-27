@@ -15,11 +15,13 @@ typedef struct AirGaugeWork {
     f32 gauge;      // 0x4, 0..100, drained by _GetGaugeDecValue
     u32 presses;    // 0x8, A presses (1 = success when auto)
     s32 holdFrames; // 0xC, frames A held since the last press
-    s32 unk10;      // 0x10
+    s32 showPressed; // 0x10, A icon drawn pressed (set by _GetGaugeDecValue, AirPw.flag)
     s32 endWait;    // 0x14, frames before the result
 } AirGaugeWork;
 
-// static data from inlined header functions
+// Hold keys for _GetGaugeDecValue, one table per params[7] level (the seven tables are identical): frame = frames
+// A has been held, value = amount taken off the base drain (interpolated between keys), flag = A icon drawn
+// pressed; frame -1 ends the table.
 
 typedef struct GaugeKey {
     s32 frame;
@@ -27,14 +29,13 @@ typedef struct GaugeKey {
     s32 flag;
 } GaugeKey;
 
-#define GAUGE_TABLE {{0, 0.0f, 1}, {20, 1.0f, 1}, {40, 1.0f, 1}, {80, 0.0f, 0}, {-1, -1.0f, 0}}
-GaugeKey _table_0[5] = GAUGE_TABLE;
-GaugeKey _table_1[5] = GAUGE_TABLE;
-GaugeKey _table_2[5] = GAUGE_TABLE;
-GaugeKey _table_3[5] = GAUGE_TABLE;
-GaugeKey _table_4[5] = GAUGE_TABLE;
-GaugeKey _table_5[5] = GAUGE_TABLE;
-GaugeKey _table_6[5] = GAUGE_TABLE;
+GaugeKey _table_0[5] = {{0, 0.0f, 1}, {20, 1.0f, 1}, {40, 1.0f, 1}, {80, 0.0f, 0}, {-1, -1.0f, 0}};
+GaugeKey _table_1[5] = {{0, 0.0f, 1}, {20, 1.0f, 1}, {40, 1.0f, 1}, {80, 0.0f, 0}, {-1, -1.0f, 0}};
+GaugeKey _table_2[5] = {{0, 0.0f, 1}, {20, 1.0f, 1}, {40, 1.0f, 1}, {80, 0.0f, 0}, {-1, -1.0f, 0}};
+GaugeKey _table_3[5] = {{0, 0.0f, 1}, {20, 1.0f, 1}, {40, 1.0f, 1}, {80, 0.0f, 0}, {-1, -1.0f, 0}};
+GaugeKey _table_4[5] = {{0, 0.0f, 1}, {20, 1.0f, 1}, {40, 1.0f, 1}, {80, 0.0f, 0}, {-1, -1.0f, 0}};
+GaugeKey _table_5[5] = {{0, 0.0f, 1}, {20, 1.0f, 1}, {40, 1.0f, 1}, {80, 0.0f, 0}, {-1, -1.0f, 0}};
+GaugeKey _table_6[5] = {{0, 0.0f, 1}, {20, 1.0f, 1}, {40, 1.0f, 1}, {80, 0.0f, 0}, {-1, -1.0f, 0}};
 
 typedef struct AirPw {
     s32 frame;
@@ -54,7 +55,7 @@ s32 battleAcMain_AirGauge(BattleWork* work) {
 
     switch (ac->mAcState) {
         case 0:
-            memset(disp, 0, 0x2C);
+            memset(disp, 0, sizeof(BattleACDispParams));
             disp->iconX = -300.0f;
             disp->iconY = 0.0f;
             disp->slideTimer = 20;
@@ -65,11 +66,11 @@ s32 battleAcMain_AirGauge(BattleWork* work) {
             ac->outputParams[2] = 0;
             ac->outputParams[1] = 0;
             ac->mAcState = 99;
-            ac->result = 1;
+            ac->result = AC_RESULT_RUNNING;
             pw->gauge = 0.0f;
             pw->presses = 0;
             pw->holdFrames = 0;
-            pw->unk10 = 0;
+            pw->showPressed = 0;
             break;
         case 99:
             break;
@@ -141,7 +142,7 @@ s32 battleAcMain_AirGauge(BattleWork* work) {
                     BattleAcGaugeSeDelete();
                     return 0;
                 }
-                ac->result = 2;
+                ac->result = AC_RESULT_SUCCESS;
                 ac->mResultCount++;
                 if (pw->gauge < (f32)ac->params[3]) {
                     ac->outputParams[0] = 1;
@@ -167,8 +168,8 @@ s32 battleAcMain_AirGauge(BattleWork* work) {
         case 1001:
             ac->setupParam--;
             if (ac->setupParam < 0) {
-                if ((s32)ac->outputParams[0] > 0) {
-                    ac->result = 2;
+                if (ac->outputParams[0] > 0) {
+                    ac->result = AC_RESULT_SUCCESS;
                     ac->mResultCount++;
                 } else {
                     ac->result = 0;

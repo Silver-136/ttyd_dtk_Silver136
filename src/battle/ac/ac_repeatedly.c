@@ -27,10 +27,10 @@ typedef struct RepeatWork {
     s16 power;        // 0x24
     s16 graceStart;   // 0x26, initial grace, never read
     s16 grace;        // 0x28
-    u8 iconParam;     // 0x2A
+    u8 iconParam;     // 0x2A, gauge width: the third int argument of BattleAcDrawGauge (x, y, width, ...)
     s8 done;          // 0x2B
     u8 resetFlag;     // 0x2C
-    u8 field_0x2D[3]; // 0x2D
+    u8 pad_2D[3];     // 0x2D, never accessed
     s32 endTimer;     // 0x30
 } RepeatWork;
 
@@ -52,37 +52,37 @@ static void _init_param(BattleWork* work) {
             work->flags |= BATTLE_FLAG_DISABLE_HRESET;
             break;
         case 8:
-            r->holdMask = 0x100;
+            r->holdMask = PAD_BUTTON_A;
         case 6:
-            r->btn0 = r->btn1 = r->btn2 = 0x40000;
+            r->btn0 = r->btn1 = r->btn2 = BATTLE_PAD_STICK_LEFT;
             break;
         case 2:
-            r->btn0 = r->btn1 = r->btn2 = 0x200;
+            r->btn0 = r->btn1 = r->btn2 = PAD_BUTTON_B;
             break;
         case 3:
-            r->btn0 = r->btn1 = r->btn2 = 0x400;
+            r->btn0 = r->btn1 = r->btn2 = PAD_BUTTON_X;
             break;
         case 4:
-            r->btn0 = r->btn1 = r->btn2 = 0x800;
+            r->btn0 = r->btn1 = r->btn2 = PAD_BUTTON_Y;
             break;
         case 5:
-            r->btn0 = r->btn1 = r->btn2 = 0x20;
+            r->btn0 = r->btn1 = r->btn2 = PAD_TRIGGER_R;
             break;
         case 11:
-            r->btn0 = r->btn1 = 0x100;
-            r->btn2 = 0x200;
+            r->btn0 = r->btn1 = PAD_BUTTON_A;
+            r->btn2 = PAD_BUTTON_B;
             break;
         case 16:
-            r->btn0 = r->btn1 = 0x100;
-            r->btn2 = 0x200;
+            r->btn0 = r->btn1 = PAD_BUTTON_A;
+            r->btn2 = PAD_BUTTON_B;
             r->timer = irand(30) + 60;
             break;
         case 12:
-            r->btn0 = r->btn1 = 0x400;
-            r->btn2 = 0x800;
+            r->btn0 = r->btn1 = PAD_BUTTON_X;
+            r->btn2 = PAD_BUTTON_Y;
             break;
         default:
-            r->btn0 = r->btn1 = r->btn2 = 0x100;
+            r->btn0 = r->btn1 = r->btn2 = PAD_BUTTON_A;
             break;
     }
     r->graceStart = r->grace = work->actionCommands.params[1];
@@ -167,13 +167,13 @@ s32 battleAcMain_Repeatedly(BattleWork* work) {
                     break;
                 case 9:
                     if (r->resetFlag) {
-                        if (SIProbe(0) == 8) {
+                        if (SIProbe(0) == SI_ERROR_NO_RESPONSE) {
                             r->resetFlag = 0;
                             pressed = 1;
                             r->count++;
                         }
                     } else {
-                        if (SIProbe(0) != 8 && SIProbe(0) != 0x80) {
+                        if (SIProbe(0) != SI_ERROR_NO_RESPONSE && SIProbe(0) != SI_ERROR_BUSY) {
                             r->resetFlag = 1;
                             pressed = 1;
                             r->count++;
@@ -247,7 +247,7 @@ s32 battleAcMain_Repeatedly(BattleWork* work) {
                 r->grace--;
                 break;
             }
-            work->actionCommands.result &= ~1;
+            work->actionCommands.result &= ~AC_RESULT_RUNNING;
             if (r->gauge >= r->pos || r->done) {
                 work->actionCommands.result |= AC_RESULT_SUCCESS;
             }
@@ -357,12 +357,12 @@ static void actionCommandDisp(f32 x, f32 y) {
             Vec pos = {0.0f, 0.0f, 0.0f};
             pos.x = -200.0f + x;
             pos.y = 70.0f + y;
-            iconDispGx(&pos, 0x10, icon2, 1.0f);
+            iconDispGx(&pos, ICON_FLAG_2D, icon2, 1.0f);
         } else {
             Vec pos = {0.0f, 0.0f, 0.0f};
             pos.x = -200.0f + x;
             pos.y = 70.0f + y;
-            iconDispGx(&pos, 0x10, icon1, 1.0f);
+            iconDispGx(&pos, ICON_FLAG_2D, icon1, 1.0f);
         }
     } else {
         odd = (d->blinkTimer / 7) & 1;
@@ -395,13 +395,13 @@ static void actionCommandDisp(f32 x, f32 y) {
                     Vec pos = {0.0f, 0.0f, 0.0f};
                     pos.x = (-200.0f + x) + (f32)(i * 40);
                     pos.y = 70.0f + y;
-                    iconDispGx(&pos, 0x10, icon, 1.0f);
+                    iconDispGx(&pos, ICON_FLAG_2D, icon, 1.0f);
                 }
             } else {
                 Vec pos = {0.0f, 0.0f, 0.0f};
                 pos.x = (-200.0f + x) + (f32)(i * 40);
                 pos.y = 70.0f + y;
-                iconDispGx(&pos, 0x10, b, 0.5f);
+                iconDispGx(&pos, ICON_FLAG_2D, b, 0.5f);
             }
         }
     }
@@ -438,7 +438,7 @@ static void actionCommandDisp(f32 x, f32 y) {
         Vec pos = {0.0f, 0.0f, 0.0f};
         pos.x = (-288.0f + x) + (176.0f * r->pos) / 100.0f;
         pos.y = 45.0f + y;
-        iconDispGx(&pos, 0x10, ICON_AC_GAUGE_MARKER, 1.0f);
+        iconDispGx(&pos, ICON_FLAG_2D, ICON_AC_GAUGE_MARKER, 1.0f);
     }
     d->blinkTimer++;
     d->frame2++;

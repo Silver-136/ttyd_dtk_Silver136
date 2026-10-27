@@ -17,7 +17,6 @@
 #include <dolphin/gx.h>
 #include <dolphin/mtx.h>
 #include <string.h>
-#include "version.h"
 #include "battle/battle_event_cmd.h"
 #include "battle/battle_camera.h"
 #include "battle/sac/sac_common.h"
@@ -64,7 +63,7 @@ typedef struct GenkiObject {
 typedef struct GenkiStar {
     s32 state;        // 0x00
     s32 timer;        // 0x04
-    s32 isStone;         // 0x08
+    s32 isStone;      // 0x08
     Vec pos;          // 0x0C
     Vec start;        // 0x18
     Vec end;          // 0x24
@@ -787,6 +786,7 @@ void main_star0(s32 idx) {
         if (s->timer >= 60) {
             s->state = 4;
             s->timer = 0;
+            // BUG: the leftward speed set here is always overwritten by the statement after the if.
             if (irand(2) == 0) {
                 s->vel.x = -2.0f - 0.05f * idx;
             }
@@ -880,6 +880,7 @@ void main_star1(void) {
         if (w->star[0].timer >= 60) {
             w->star[0].state = 4;
             w->star[0].timer = 0;
+            // BUG: the leftward speed set here is always overwritten by the statement after the if.
             if (irand(2) == 0) {
                 w->star[0].vel.x = -2.0f;
             }
@@ -972,7 +973,7 @@ static void disp_3D(CameraId cam, void* param) {
     Vec p1;
     Mtx m;
     Mtx m2;
-    EffStarStoneWork* ew;
+    RecoveryWork* ew;
     f32 s;
 
     w = get_ptr();
@@ -1060,7 +1061,7 @@ static void disp_3D(CameraId cam, void* param) {
                 if (o->kind == 1) {
                     s = 2.0f;
                     if (genki_blink(o->timer)) {
-                        flags |= 0x20;
+                        flags |= ICON_FLAG_GRAY;
                     }
                 }
                 break;
@@ -1117,7 +1118,7 @@ static void disp_3D(CameraId cam, void* param) {
                 if (o->kind == 3) {
                     s = 2.0f;
                     if (genki_blink(o->timer)) {
-                        flags |= 0x20;
+                        flags |= ICON_FLAG_GRAY;
                     }
                 }
                 break;
@@ -1127,7 +1128,7 @@ static void disp_3D(CameraId cam, void* param) {
                 if (o->kind == 5) {
                     s = 2.0f;
                     if (genki_blink(o->timer)) {
-                        flags |= 0x20;
+                        flags |= ICON_FLAG_GRAY;
                     }
                 }
                 break;
@@ -1355,6 +1356,7 @@ void object_entry(void) {
     GenkiWork* w = get_ptr();
     s32 i;
     for (i = 0; i < 10; i++) {
+        // FAKE: pointer to the state field; plain w->object[i].state changes the object
         s32* p = &w->object[i].state;
         if (*p == 0) {
             *p = 1;

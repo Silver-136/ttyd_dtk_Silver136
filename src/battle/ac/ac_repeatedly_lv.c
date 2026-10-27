@@ -10,7 +10,7 @@
 
 s32 BattleACGetButtonIcon(s32 button, s32 pressed);
 // float first here: the retail call loads the ratio before the other arguments (battle_ac.c defines x, y, width, ratio, ...)
-void BattleAcDrawGauge(f32 anim, s32 x, s32 y, u8 a, s32 n, s32 v0, s32 v1, s32 v2, s32 flags);
+void BattleAcDrawGauge(f32 ratio, s32 x, s32 y, u8 width, s32 level, s32 a, s32 b, s32 c, s32 flags);
 
 typedef struct RepeatedlyLvWork {
     u32 mask;    // 0x0
@@ -22,7 +22,7 @@ typedef struct RepeatedlyLvWork {
     s16 level;   // 0x18, gauge levels reached (gauge / levelStep, +1 when full); output in outputParams[2]
     s16 pressGain; // 0x1A, params[3]; each counted press adds 0.4 * pressGain to the gauge
     s16 pressCount; // 0x1C, counted presses; odd/even picks maskB/maskA for the alternating commands (params[0] 11-15)
-    s16 s1e;     // 0x1E
+    s16 s1e;     // 0x1E, initial timeLeft (params[1]); never read
     s16 timeLeft; // 0x20, frames left (params[1]), counted down; cleared when the maxMask button is let go; the command ends at 0
     s16 unheldFrames; // 0x22, frames the maxMask button is not held before the start; the command fails at 150
     u8 gaugeWidth; // 0x24, params[2]; the width argument of BattleAcDrawGauge (third int, see the float-first prototype)
@@ -45,46 +45,46 @@ static void _init_param(BattleWork* work) {
     p->countOnPress = 1;
     switch (ac->params[0]) {
         case 2:
-            p->mask = p->maskA = p->maskB = 0x200;
+            p->mask = p->maskA = p->maskB = PAD_BUTTON_B;
             break;
         case 3:
-            p->mask = p->maskA = p->maskB = 0x400;
+            p->mask = p->maskA = p->maskB = PAD_BUTTON_X;
             break;
         case 4:
-            p->mask = p->maskA = p->maskB = 0x800;
+            p->mask = p->maskA = p->maskB = PAD_BUTTON_Y;
             break;
         case 5:
-            p->mask = p->maskA = p->maskB = 0x20;
+            p->mask = p->maskA = p->maskB = PAD_TRIGGER_R;
             break;
         case 8:
-            p->maxMask = 0x100;
+            p->maxMask = PAD_BUTTON_A;
         case 7:
             p->countOnPress = 0;
         case 6:
-            p->mask = p->maskA = p->maskB = 0x40000;
+            p->mask = p->maskA = p->maskB = BATTLE_PAD_STICK_LEFT;
             break;
         case 11:
-            p->mask = p->maskA = 0x100;
-            p->maskB = 0x200;
+            p->mask = p->maskA = PAD_BUTTON_A;
+            p->maskB = PAD_BUTTON_B;
             break;
         case 12:
-            p->mask = p->maskA = 0x400;
-            p->maskB = 0x800;
+            p->mask = p->maskA = PAD_BUTTON_X;
+            p->maskB = PAD_BUTTON_Y;
             break;
         case 13:
-            p->mask = p->maskA = 0x10000;
-            p->maskB = 0x20000;
+            p->mask = p->maskA = BATTLE_PAD_STICK_UP;
+            p->maskB = BATTLE_PAD_STICK_DOWN;
             break;
         case 14:
-            p->mask = p->maskA = 0x40000;
-            p->maskB = 0x80000;
+            p->mask = p->maskA = BATTLE_PAD_STICK_LEFT;
+            p->maskB = BATTLE_PAD_STICK_RIGHT;
             break;
         case 15:
-            p->mask = p->maskA = 0x40;
-            p->maskB = 0x20;
+            p->mask = p->maskA = PAD_TRIGGER_L;
+            p->maskB = PAD_TRIGGER_R;
             break;
         default:
-            p->mask = p->maskA = p->maskB = 0x100;
+            p->mask = p->maskA = p->maskB = PAD_BUTTON_A;
             break;
     }
     p->unheldFrames = 0;
@@ -96,9 +96,8 @@ static void _init_param(BattleWork* work) {
     p->pressGain = ac->params[3];
     p->rate = 0.01f * (f32)ac->params[4];
     p->levelStep = ac->params[5];
-    v = work->actionCommands.countdown;
-    if (v > 0) {
-        work->actionCommands.countdown = v - 1;
+    if (ac->countdown > 0) {
+        ac->countdown--;
         p->state = 1;
     } else {
         p->state = 0;
@@ -134,7 +133,7 @@ s32 battleAcMain_RepeatedlyLv(BattleWork* work) {
             disp->colorStep[2] = -16;
             disp->colorStep[3] = 0;
             disp->gaugeRatio = 0.0f;
-            ac->result = 1;
+            ac->result = AC_RESULT_RUNNING;
             _init_param(work);
             ac->mAcState = 99;
             break;
@@ -148,8 +147,8 @@ s32 battleAcMain_RepeatedlyLv(BattleWork* work) {
                         break;
                     }
                     ac->outputParams[2] = 0;
-                    ac->result &= ~1;
-                    ac->result |= 2;
+                    ac->result &= ~AC_RESULT_RUNNING;
+                    ac->result |= AC_RESULT_SUCCESS;
                     ac->mAcState = 1002;
                     break;
                 }
@@ -165,10 +164,11 @@ s32 battleAcMain_RepeatedlyLv(BattleWork* work) {
                         break;
                     }
                 }
-                ac->result &= ~1;
-                ac->result |= 2;
+                ac->result &= ~AC_RESULT_RUNNING;
+                ac->result |= AC_RESULT_SUCCESS;
                 r = irand(100);
                 p->level = 0;
+                // BUG: irand(100) is never negative, so this loop never runs and a confused auto-play always gives level 0
                 while (r < 0) {
                     r -= p->levelStep;
                     if (r < 0) {
@@ -267,11 +267,11 @@ s32 battleAcMain_RepeatedlyLv(BattleWork* work) {
                 p->timeLeft--;
                 break;
             }
-            ac->result &= ~1;
+            ac->result &= ~AC_RESULT_RUNNING;
             if (p->gauge >= (f32)ac->params[6]) {
-                ac->result |= 2;
+                ac->result |= AC_RESULT_SUCCESS;
             } else {
-                ac->result &= ~2;
+                ac->result &= ~AC_RESULT_SUCCESS;
             }
             battleAcDelete_RepeatedlyLv(work);
             ac->mAcState = 1002;
@@ -384,35 +384,35 @@ static void actionCommandDisp(f32 x, f32 y) {
             Vec pos = {0.0f, 0.0f, 0.0f};
             pos.x = -200.0f + x;
             pos.y = 70.0f + y;
-            RL_IconDisp(&pos, 0x10, idleA, 1.0f);
+            RL_IconDisp(&pos, ICON_FLAG_2D, idleA, 1.0f);
         } else {
             Vec pos = {0.0f, 0.0f, 0.0f};
             pos.x = -200.0f + x;
             pos.y = 70.0f + y;
-            RL_IconDisp(&pos, 0x10, pressedA, 1.0f);
+            RL_IconDisp(&pos, ICON_FLAG_2D, pressedA, 1.0f);
         }
     } else {
         if ((phase & 1) == 1) {
             Vec pos = {0.0f, 0.0f, 0.0f};
             pos.x = -225.0f + x + off0;
             pos.y = 70.0f + y;
-            RL_IconDisp(&pos, 0x10, idleA, 1.0f);
+            RL_IconDisp(&pos, ICON_FLAG_2D, idleA, 1.0f);
             {
                 Vec pos2 = {0.0f, 0.0f, 0.0f};
                 pos2.x = -175.0f + x + off1;
                 pos2.y = 70.0f + y;
-                RL_IconDisp(&pos2, 0x10, pressedB, 1.0f);
+                RL_IconDisp(&pos2, ICON_FLAG_2D, pressedB, 1.0f);
             }
         } else {
             Vec pos = {0.0f, 0.0f, 0.0f};
             pos.x = -225.0f + x + off0;
             pos.y = 70.0f + y;
-            RL_IconDisp(&pos, 0x10, pressedA, 1.0f);
+            RL_IconDisp(&pos, ICON_FLAG_2D, pressedA, 1.0f);
             {
                 Vec pos2 = {0.0f, 0.0f, 0.0f};
                 pos2.x = -175.0f + x + off1;
                 pos2.y = 70.0f + y;
-                RL_IconDisp(&pos2, 0x10, idleB, 1.0f);
+                RL_IconDisp(&pos2, ICON_FLAG_2D, idleB, 1.0f);
             }
         }
     }
@@ -456,7 +456,7 @@ static void actionCommandDisp(f32 x, f32 y) {
             disp->colorStep[1] = disp->colorStep[2] = -0x10;
         }
     }
-    if ((s8)p->state == -1) {
+    if (p->state == -1) {
         flags |= 2;
     }
     for (i = 0; i < 4; i++) {
@@ -471,14 +471,18 @@ static void actionCommandDisp(f32 x, f32 y) {
     BattleAcDrawGauge(disp->gaugeRatio, (s32)x, (s32)y, p->gaugeWidth, count, arr[0], arr[1], arr[2], flags);
     if (ac->acFlags & AC_REPEATEDLY_LV_FLAG_SHOW_TARGET_MARK_UNUSED) {
         Vec pos = {0.0f, 0.0f, 0.0f};
-        pos.x = -288.0f + x + (f32)(ac->params[6] * 0xB0) / 100.0f;
+        pos.x = -288.0f + x + (f32)(ac->params[6] * 176) / 100.0f;
         pos.y = 45.0f + y;
-        RL_IconDisp(&pos, 0x10, ICON_AC_GAUGE_MARKER, 1.0f);
+        RL_IconDisp(&pos, ICON_FLAG_2D, ICON_AC_GAUGE_MARKER, 1.0f);
     }
     if (ac->acFlags & AC_REPEATEDLY_LV_FLAG_SHOW_LEVEL_NUMBER_UNUSED) {
         Mtx m3, m1, m2;
         s32 number = (s32)ac->outputParams[2] + ac->params[7];
-        { f32 w = 108.0f; PSMTXTrans(m1, -200.0f + x + w, 25.0f + y, 0.0f); }
+        // FAKE: spare temporary w for the 108.0f offset; the plain constant changes the object
+        {
+            f32 w = 108.0f;
+            PSMTXTrans(m1, -200.0f + x + w, 25.0f + y, 0.0f);
+        }
         PSMTXScale(m2, 1.0f, 1.0f, 1.0f);
         PSMTXConcat(m1, m2, m3);
         iconNumberDispGx(m3, number, FALSE, (GXColor){255, 255, 255, 255});

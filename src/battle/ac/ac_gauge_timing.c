@@ -33,7 +33,7 @@ typedef struct GaugeWork {
     s8 passed;     // 0x14
     s8 phase;      // 0x15
     s8 hold;       // 0x16
-    u8 field_0x17;
+    u8 pad17;      // 0x17
     u32 button;   // 0x18
     s32 timer;    // 0x1C
     s32 hits;     // 0x20
@@ -77,19 +77,19 @@ s32 battleAcMain_GaugeTiming(BattleWork* work) {
             switch (work->actionCommands.params[GAUGE_PARAM_TYPE]) {
                 case 0:
                     cw->hold = 1;
-                    cw->button = 0x20;
+                    cw->button = PAD_TRIGGER_R;
                     cw->phase = 1;
                     work->actionCommands.outputParams[0] = 1;
                     break;
                 case 2:
                     cw->hold = 0;
-                    cw->button = 0x40000;
+                    cw->button = BATTLE_PAD_STICK_LEFT;
                     cw->phase = 0;
                     break;
                 case 1:
                 default:
                     cw->hold = 1;
-                    cw->button = 0x100;
+                    cw->button = PAD_BUTTON_A;
                     cw->phase = 1;
                     work->actionCommands.outputParams[0] = 1;
                     break;
@@ -107,7 +107,7 @@ s32 battleAcMain_GaugeTiming(BattleWork* work) {
         case 99:
             break;
         case 100:
-            if ((work->actionCommands.setupFlags & 1) && ((u32)work->actionCommands.mAcUnit->mTokenFlags & kConfusedAction)) {
+            if ((work->actionCommands.setupFlags & 1) && (work->actionCommands.mAcUnit->mTokenFlags & kConfusedAction)) {
                 if (irand(100) >= 0) {
                     work->actionCommands.setupParam = 30;
                     cw->passed = 0;
@@ -188,8 +188,8 @@ s32 battleAcMain_GaugeTiming(BattleWork* work) {
                         goto done;
                     }
                 } else if ((work->actionCommands.acFlags & AC_GAUGE_TIMING_FLAG_CYCLE_PAUSE) || (work->actionCommands.acFlags & AC_GAUGE_TIMING_FLAG_CYCLE_PAUSE)) {
-                    // BUG: the same bit is tested twice (retail code), so the 30-frame else branch below never runs;
-                    // a second bit for a longer pause was probably intended. Same at the wrap test below.
+                    // BUG: the same bit is tested twice, so the 30-frame else branch below can never run. Same at the
+                    // wrap test below.
                     if ((s32)cw->gauge <= 0) {
                         cw->hits++;
                         cw->gauge = 0.0f;
@@ -256,7 +256,7 @@ s32 battleAcMain_GaugeTiming(BattleWork* work) {
                     work->actionCommands.mResultCount++;
                 } else {
                     work->actionCommands.result = 0;
-                    work->actionCommands.result &= ~2;
+                    work->actionCommands.result &= ~AC_RESULT_SUCCESS;
                 }
                 work->actionCommands.mAcState = 1003;
             }
@@ -383,10 +383,10 @@ static void actionCommandDisp(f32 x, f32 y) {
             icon = ICON_AC_OFF;
         }
         {
-        Vec pos = {0.0f, 0.0f, 0.0f};
-        pos.x = 16.0f + (176.0f + (-288.0f + x));
-        pos.y = 18.0f + y;
-        iconDispGx(&pos, 0x10, icon, 1.0f);
+            Vec pos = {0.0f, 0.0f, 0.0f};
+            pos.x = 16.0f + (176.0f + (-288.0f + x));
+            pos.y = 18.0f + y;
+            iconDispGx(&pos, 0x10, icon, 1.0f);
         }
         break;
     }
@@ -423,21 +423,21 @@ static void actionCommandDisp(f32 x, f32 y) {
 
     switch (ac->params[GAUGE_PARAM_TYPE]) {
         case 0:
-            pressed = BattleACGetButtonIcon(0x20, 1);
-            unpressed = BattleACGetButtonIcon(0x20, 0);
+            pressed = BattleACGetButtonIcon(PAD_TRIGGER_R, 1);
+            unpressed = BattleACGetButtonIcon(PAD_TRIGGER_R, 0);
             pressed2 = 0;
             unpressed2 = 0;
             break;
         case 2:
-            pressed = BattleACGetButtonIcon(0x40000, 1);
-            unpressed = BattleACGetButtonIcon(0x40000, 0);
+            pressed = BattleACGetButtonIcon(BATTLE_PAD_STICK_LEFT, 1);
+            unpressed = BattleACGetButtonIcon(BATTLE_PAD_STICK_LEFT, 0);
             pressed2 = 0;
             unpressed2 = 0;
             break;
         case 1:
         default:
-            pressed = BattleACGetButtonIcon(0x100, 1);
-            unpressed = BattleACGetButtonIcon(0x100, 0);
+            pressed = BattleACGetButtonIcon(PAD_BUTTON_A, 1);
+            unpressed = BattleACGetButtonIcon(PAD_BUTTON_A, 0);
             pressed2 = 0;
             unpressed2 = 0;
             break;

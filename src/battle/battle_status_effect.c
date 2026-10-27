@@ -14,7 +14,8 @@
 #include "driver/effdrv.h"
 #include "battle/battle_damage.h"
 
-#define ST_CHG_MSG(i) ((StChgMsg*)_battleWorkPointer->announce.stChg.msg + (i)) /* cast keeps the 0x18D88 displacement folded into each access */
+// FAKE: no-op cast of the msg array to StChgMsg*; &_battleWorkPointer->announce.stChg.msg[i] changes the object
+#define ST_CHG_MSG(i) ((StChgMsg*)_battleWorkPointer->announce.stChg.msg + (i))
 
 BOOL BattleStatusChangeAnnouceMain_Unit(BattleUnit* unit);
 void _st_chg_msg_disp(void);
@@ -95,7 +96,6 @@ void BSE_Freeze(BattleUnit* unit);
 void BSE_FreezeDelete(BattleUnit* unit);
 void BSE_Kagegakure(BattleUnit* unit);
 void BSE_KagegakureDelete(BattleUnit* unit);
-s32 _get_pri(s8 type);
 
 void BattleStatusEffectInit(BattleUnit* unit) {
     ; //stubbed in retail
@@ -230,7 +230,7 @@ void BSE_FireDelete(BattleUnit* unit) {
 void BSE_Freeze(BattleUnit* unit) {
     f32 x, y, z;
     f32* wk;
-    f32 a, b, sc;
+    f32 widthScale, heightScale, scale;
     BOOL on = FALSE;
 
     if (BtlUnit_CheckStatus(unit, STATUS_FREEZE)) {
@@ -243,15 +243,15 @@ void BSE_Freeze(BattleUnit* unit) {
         wk = (f32*)unit->iceEff->userdata;
         {
             BattleUnitPart* parts = BtlUnit_GetPartsPtr(unit, BtlUnit_GetBodyPartsId(unit));
-            a = unit->mWidth / 20.0f;
-            b = unit->mHeight / 36.0f;
-            sc = a <= b ? a : b;
-            sc *= unit->mSizeMultiplier;
-            wk[4] = sc;
+            widthScale = unit->mWidth / 20.0f;
+            heightScale = unit->mHeight / 36.0f;
+            scale = widthScale <= heightScale ? widthScale : heightScale;
+            scale *= unit->mSizeMultiplier;
+            wk[4] = scale;
             BtlUnit_GetPartsWorldPos(parts, &x, &y, &z);
         }
         wk[1] = x;
-        wk[2] = 20.0f * sc + y;
+        wk[2] = 20.0f * scale + y;
         wk[3] = 10.0f + z;
     } else {
         BSE_FreezeDelete(unit);
@@ -276,7 +276,7 @@ void BSE_Kagegakure(BattleUnit* unit) {
     }
     if (on) {
         if (unit->kageIcon == NULL) {
-            sprintf(name, "_biK_%02x", *(s32*)unit);
+            sprintf(name, "_biK_%02x", unit->unitId);
 #ifdef VERSION_G8ME01
             iconEntry(name, 0xA1);
 #else
@@ -303,57 +303,57 @@ void BSE_TurnFirstProcessEffectEntry(BattleUnit* unit, s16 active) {
     unit->mbBurnDamageFlameActive = active;
 }
 
-BOOL BtlUnit_CheckShadowGuard(BattleUnit* unit);
 f32 sinfd(f32 degrees);
 
 BOOL BSE_TurnFirstProcessEffectMain(BattleUnit* unit) {
     BattleUnitPart* part;
     f32 x, y, z;
     f32* work;
-    u16 ac;
-    u16 st;
+    u16 active;
+    u16 state;
 
     part = BtlUnit_GetPartsPtr(unit, BtlUnit_GetBodyPartsId(unit));
-    st = unit->mBurnDamageFlameState;
-    if (st == 0) {
+    state = unit->mBurnDamageFlameState;
+    if (state == 0) {
         return FALSE;
     }
-    ac = unit->mbBurnDamageFlameActive;
-    if (ac == 0) {
+    active = unit->mbBurnDamageFlameActive;
+    if (active == 0) {
         return FALSE;
     }
-    switch (ac) {
+    switch (active) {
     case 1:
-    switch (st) {
-    case 1:
-        unit->mBurnDamageFlameState = st + 1;
-        unit->mBurnDamageFlameScale = 1.0f;
-        BtlUnit_GetPartsWorldPos(part, &x, &y, &z);
-        z += 5.0f;
-        unit->mBurnDamageFlameEff = effFireEntry(0, 0, x, y, z, unit->mBurnDamageFlameScale);
-        unit->mBurnDamageFlameAnimTimer = 0;
-        break;
-    case 2:
-        work = (f32*)unit->mBurnDamageFlameEff->userdata;
-        unit->mBurnDamageFlameAnimTimer++;
-        unit->mBurnDamageFlameScale = 1.6f * sinfd(unit->mBurnDamageFlameAnimTimer * 3) + 0.4f;
-        work[9] = unit->mBurnDamageFlameScale;
-        if (unit->mBurnDamageFlameAnimTimer >= 60) {
-            unit->mBurnDamageFlameState++;
+        switch (state) {
+        case 1:
+            unit->mBurnDamageFlameState = state + 1;
+            unit->mBurnDamageFlameScale = 1.0f;
+            BtlUnit_GetPartsWorldPos(part, &x, &y, &z);
+            z += 5.0f;
+            unit->mBurnDamageFlameEff = effFireEntry(0, 0, x, y, z, unit->mBurnDamageFlameScale);
+            unit->mBurnDamageFlameAnimTimer = 0;
+            break;
+        case 2:
+            work = (f32*)unit->mBurnDamageFlameEff->userdata;
+            unit->mBurnDamageFlameAnimTimer++;
+            unit->mBurnDamageFlameScale = 1.6f * sinfd(unit->mBurnDamageFlameAnimTimer * 3) + 0.4f;
+            work[9] = unit->mBurnDamageFlameScale;
+            if (unit->mBurnDamageFlameAnimTimer >= 60) {
+                unit->mBurnDamageFlameState++;
+            }
+            break;
+        case 3:
+            effDelete(unit->mBurnDamageFlameEff);
+            unit->mBurnDamageFlameEff = NULL;
+            unit->mBurnDamageFlameState = 0;
+            if (!BtlUnit_CheckShadowGuard(unit)) {
+                BattleDamageDirect(-5, unit, NULL, 1, 0, DAMAGE_RESULT_FINAL_HIT | DAMAGE_CODE_FIRE, 0, 1);
+            }
+            // fall through
+        case 0:
+        default:
+            return FALSE;
         }
         break;
-    case 3:
-        effDelete(unit->mBurnDamageFlameEff);
-        unit->mBurnDamageFlameEff = NULL;
-        unit->mBurnDamageFlameState = 0;
-        if (!BtlUnit_CheckShadowGuard(unit)) {
-            BattleDamageDirect(-5, unit, NULL, 1, 0, 0x118, 0, 1);
-        }
-    case 0:
-    default:
-        return FALSE;
-    }
-    break;
     default:
         return FALSE;
     }
@@ -398,9 +398,13 @@ void BattleStatusChangeInfoSetAnnouce(BattleUnit* unit, s32 type, s32 strength, 
 
     for (i = 0; i < 6; i++) {
         n = _get_pri((s8)(u8)e[i].type); // FAKE: no-op (s8)(u8) round trip on the s8 type (lbz, extsb at the call), as in the target
-        if (pri >= (s8)n) break;
+        if (pri >= (s8)n) {
+            break;
+        }
     }
-    if (i >= 6) return;
+    if (i >= 6) {
+        return;
+    }
     tmp.type = type;
     tmp.strength = strength;
     tmp.changed = changed;
@@ -414,16 +418,19 @@ void BattleStatusChangeInfoSetAnnouce(BattleUnit* unit, s32 type, s32 strength, 
         }
     }
     j = 0;
-    n = j;
+    n = 0;
     t = 0;
     for (i = 0; i < 6; i++) {
-        if (e[i].type == -1) break;
+        if (e[i].type == -1) {
+            break;
+        }
         e[i].stagger = t;
         e[i].reserved_04 = j;
         t += 10;
         n++;
     }
-if (t == 0) goto L3;
+    // FAKE: goto chain for a plain if/else; if (t != 0) { u = 0x50; } else { u = 0x3C; } changes the object
+    if (t == 0) goto L3;
     u = 0x50;
     goto Ld;
 L3:
@@ -457,10 +464,10 @@ BOOL BattleStatusChangeAnnouceMain_Unit(BattleUnit* unit) {
 }
 
 void BattleStatusChangeMsgWorkInit(void) {
-    StChgMsg* msg = ST_CHG_MSG(0);
+    StChgMsg* msg = &_battleWorkPointer->announce.stChg.msg[0];
     s32 i;
 
-    memset(msg, 0, 0x258);
+    memset(msg, 0, sizeof(StChgWork));
     for (i = 0; i < 28; i++) {
         msg[i].type = -1;
     }
@@ -475,7 +482,7 @@ void BattleStatusChangeMsgSetAnnouce(BattleUnit* unit, s32 index, s32 changed) {
     msg->timer = 0;
     msg->changed = changed;
     id = unit->currentKind;
-    if (id == 0xDE) {
+    if (id == UNIT_MARIO) {
         msg->flags |= 1;
     } else if (id >= TYPE_PARTNER_MIN && id < TYPE_PARTNER_MAX && unit->mAlliance == ALLIANCE_PLAYER) {
         msg->flags |= 2;
@@ -568,7 +575,9 @@ BOOL BattleStatusChangeMsgMain(BattleWork* wp) {
     if (ret) {
         for (i = 0; i < 64; i++) {
             BattleUnit* unit = BattleGetUnitPtr(wp, i);
-            if (unit) BattleStatusChangeInfoWorkInit(unit);
+            if (unit) {
+                BattleStatusChangeInfoWorkInit(unit);
+            }
         }
     }
     return ret;
@@ -586,14 +595,13 @@ void _st_chg_msg_disp(void) {
     width = FontGetMessageWidthLine((const char*)st->text, &lines);
     lines++;
     col0 = (GXColor){0xFF, 0xFF, 0xFF, 0xFF};
+    // FAKE: y doubles as a 0.0f temporary; x = 0.0f - (width / 2) changes the object
     y = 0.0f;
     x = y - (width / 2);
     y = -120.0f;
-    // the color is passed by address here (same ABI as by-value GXColor)
+    // FAKE: called through a cast prototype with the color's address (no caller copy); passing col0 by value changes the object
     ((WakuColByRefFunc)windowDispGX_Waku_col)(0, &col0, x - 20.0f, ((lines - 1) * 29) + -117.0f, (f32)(width + 40), (f32)(lines * 29 + 1), 10.0f);
     FontDrawStart();
     FontDrawMessage(x, (s32)y + (lines - 1) * 29, (const char*)st->text);
 }
 
-#pragma explicit_zero_data on
-#pragma explicit_zero_data reset

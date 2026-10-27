@@ -331,3 +331,25 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/system.c | reviseAngle | spare temporary temp; result = (f32)fmod(angle, 360.0) changes the object | see comment |
 | Both | src/system.c | fsort | two complementary ifs; if (t != 0) ... else ... changes the object | see comment |
 | Both | src/system.c | qqsort | assignment inside the argument; cur = dst; memcpy(buf, cur, size) changes the object | see comment |
+| Both | src/battle/ac/ac_gauge_timing2.c | actionCommandDisp | d0 and d1 are never read; removing them changes the object | see comment |
+| Both | src/battle/ac/ac_lst_rc_keep.c | battleAcMain_LstRcKeep | byte-offset index (off >> 2) and the n >= 0 guard; the plain loop over ac_lstrckeep_iconname[i] changes the object | see comment |
+| Both | src/battle/ac/ac_power_gauge_lv2.c | actionCommandDisp | pos zeroed through a copied inner temporary; initializing pos directly changes the object | see comment |
+| Both | src/battle/ac/ac_repeatedly_lv.c | actionCommandDisp | spare temporary w for the 108.0f offset; the plain constant changes the object | see comment |
+| Both | src/battle/ac/ac_shot_target.c | battleAcMain_ShotTarget | sfxId compared as u32 with 0xFFFFFFFF; the plain cw->sfxId != -1 changes the object | see comment |
+| Both | src/battle/ac/ac_stick_keep_left.c | battleAcMain_StickKeepLeft | empty loop (no body) over the signal sound slots 0..idx-2; removing it changes the object | see comment |
+| Both | src/battle/ac/ac_stick_rotate.c | battleAcMain_StickRotate | GUIDED tested a second time (always true here); without the second test the object changes | see comment |
+| Both | src/battle/ac/ac_timing_a.c | battleAcMain_TimingA | flags reached through a second cast of the work buffer instead of tw; tw->flags changes the object | see comment |
+| Both | src/battle/battle_stage_object.c | _set_mobj_rotate_x | wp is assigned inside the expression; the two plain statements change the object | see comment |
+| Both | src/battle/battle_stage_object.c | _bgset_kemuri_effect | args++/args-- cancel out; removing them changes the object | see comment |
+| JP | src/battle/battle_stage_object.c | _disp_escape_wall_message | spare temporary for 0.0f; writing 0.0f in place changes the object | see comment |
+| Both | src/battle/battle_stage_object.c | _nozzle_work_effect | the sum goes through rot first; rot = reviseAngle(90.0f + angle1) changes the object | see comment |
+| Both | src/battle/battle_status_effect.c | BattleStatusChangeAnnouceMain_Unit | no-op cast of the msg array to StChgMsg*; &_battleWorkPointer->announce.stChg.msg[i] changes the object | see comment |
+| Both | src/battle/battle_status_effect.c | _st_chg_msg_disp | y doubles as a 0.0f temporary; x = 0.0f - (width / 2) changes the object | see comment |
+| Both | src/battle/battle_sub.c | btlsubResetMoveColorLvAll | spare copies w and w2 of work and c of 0xFF; the plain loop changes the object | see comment |
+| Both | src/battle/battle_unit.c | BtlUnit_ControlPoseSoundMain | spare temporary assigned inside the multiplication; vol = dv * 0.7 changes the object | see comment |
+| Both | src/battle/sac/sac_deka.c | main_base | spare temporary t2; assigning t directly changes the object | see comment |
+| Both | src/battle/sac/sac_genki.c | object_entry | pointer to the state field; plain w->object[i].state changes the object | see comment |
+| Both | src/battle/sac/sac_muki.c | addf | addf() for x + 32.0f in disp_2D; the plain sum changes the object | see comment |
+| Both | src/battle/sac/sac_muki.c | mulf | mulf() for c * 3.141592f in disp_3D_alpha; the plain product changes the object | see comment |
+| Both | src/battle/sac/sac_muki.c | disp_2D | frac *= 80.0f inside the argument; plain frac * 80.0f changes the object | see comment |
+| Both | src/battle/sac/sac_scissor.c | my_fabsf | my_fabsf() wraps __fabs for scissor_intersection; direct __fabs calls change the object | see comment |

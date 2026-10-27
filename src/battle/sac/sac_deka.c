@@ -122,17 +122,14 @@ void yuka_capture(CameraId cam, void* param);
 static void disp_3D_alpha(CameraId cam, void* param);
 static void disp_3D(CameraId cam, void* param);
 static void disp_2D(CameraId cam, void* param);
-USER_FUNC(end_deka);
 void main_enemy_sub(BattleUnit* unit, s32* n);
 void main_enemy(void);
 static void main_star(void);
 void main_timing(s32 idx);
 void main_gauge(void);
 static void main_base(void);
-USER_FUNC(yuka_end);
 static void yuka_main(void);
 static void yuka_init(void);
-USER_FUNC(main_deka);
 
 
 static EVT_BEGIN(nice_event)
@@ -147,15 +144,15 @@ USER_FUNC(main_deka) {
 
     args = event->args;
     if (isFirstCall) {
-        memset(w, 0, 0x580);
+        memset(w, 0, sizeof(DekaWork));
         w->unitId = evtGetValue(event, args[0]);
         yuka_init();
     }
     if (w->tex->address == NULL) {
-        return 2;
+        return EVT_RETURN_DONE;
     }
     if (w->mesh->address == NULL) {
-        return 2;
+        return EVT_RETURN_DONE;
     }
     main_base();
     main_gauge();
@@ -165,11 +162,11 @@ USER_FUNC(main_deka) {
     main_star();
     main_enemy();
     yuka_main();
-    dispEntry(CAMERA_2D, 901.0f, 1, disp_2D, 0);
-    dispEntry(CAMERA_3D, 0.0f, 1, disp_3D, 0);
-    dispEntry(CAMERA_3D, 0.0f, 2, disp_3D_alpha, 0);
-    dispEntry(CAMERA_3D, 0.0f, 0, yuka_disp, 0);
-    return 0;
+    dispEntry(CAMERA_2D, 901.0f, 1, disp_2D, NULL);
+    dispEntry(CAMERA_3D, 0.0f, 1, disp_3D, NULL);
+    dispEntry(CAMERA_3D, 0.0f, 2, disp_3D_alpha, NULL);
+    dispEntry(CAMERA_3D, 0.0f, 0, yuka_disp, NULL);
+    return EVT_RETURN_BLOCK;
 }
 
 static void yuka_init(void) {
@@ -194,8 +191,8 @@ static void yuka_init(void) {
     if (w->texH > 0x1E0) {
         w->texH = 0x1E0;
     }
-    w->tex = smartAlloc(GXGetTexBufferSize(w->texW, w->texH, 4, 0, 0), 2);
-    w->mesh = smartAlloc(0x3870, 2);
+    w->tex = smartAlloc(GXGetTexBufferSize(w->texW, w->texH, GX_TF_RGB565, GX_FALSE, 0), 2);
+    w->mesh = smartAlloc(sizeof(YukaMesh), 2);
     m = w->mesh->address;
     for (r = 0; r < 2; r++) {
         for (i = 0; i < 129; i++) {
@@ -218,7 +215,7 @@ static void yuka_init(void) {
             m->v[r][i] = r;
         }
     }
-    dispEntry(CAMERA_SHADOW, 0.0f, 0, yuka_capture, 0);
+    dispEntry(CAMERA_SHADOW, 0.0f, 0, yuka_capture, NULL);
 }
 
 static void yuka_main(void) {
@@ -260,6 +257,8 @@ static void yuka_main(void) {
             Vec n;
             Vec t;
 
+            // BUG: at j == 128 and j == 0 the neighbours prev[r][j + 1] and prev[r][j - 1] lie outside the row
+            // (the other row, or the arrays before and after prev).
             PSVECSubtract(&m->prev[r][j], &m->prev[r][j + 1], &d);
             PSVECNormalize(&d, &n);
             PSVECScale(&n, &n, 1.0f - PSVECMag(&d));
@@ -304,7 +303,7 @@ USER_FUNC(yuka_end) {
     smartFree(w->mesh);
     w->mesh->address = NULL;
     mapGrpFlagOff("stg_b_yuka", (MAP_OBJ_FLAG_HIDDEN | MAP_OBJ_FLAG_KURURING));
-    return 2;
+    return EVT_RETURN_DONE;
 }
 
 static void main_base(void) {
@@ -401,6 +400,7 @@ static void main_base(void) {
             if (i == 8) {
                 found = 0;
                 for (j = 0; j < 8; j++) {
+                    // FAKE: spare temporary t2; assigning t directly changes the object
                     DekaTiming* t2 = &w->timing[idx[j]];
                     t = t2;
                     if (t->state == 2 && t->type == 1) {
@@ -542,17 +542,17 @@ static void main_star(void) {
     case 2:
         w->starTimer++;
         if (w->starTimer <= 100) {
-            w->starPos.x = (intplGetValue(EASING_LINEAR, w->from.x, w->to.x, w->starTimer, 100));
-            w->starPos.y = (intplGetValue(EASING_LINEAR, w->from.y, w->to.y, w->starTimer, 100));
-            w->starPos.z = (intplGetValue(EASING_LINEAR, w->from.z, w->to.z, w->starTimer, 100));
-            w->scale.x = w->scale.y = w->scale.z = (intplGetValue(EASING_LINEAR, 0.0f, 2.0f, w->starTimer, 100));
+            w->starPos.x = intplGetValue(EASING_LINEAR, w->from.x, w->to.x, w->starTimer, 100);
+            w->starPos.y = intplGetValue(EASING_LINEAR, w->from.y, w->to.y, w->starTimer, 100);
+            w->starPos.z = intplGetValue(EASING_LINEAR, w->from.z, w->to.z, w->starTimer, 100);
+            w->scale.x = w->scale.y = w->scale.z = intplGetValue(EASING_LINEAR, 0.0f, 2.0f, w->starTimer, 100);
         } else {
             w->starPos.x = w->to.x;
             w->starPos.y = w->to.y;
             w->starPos.z = w->to.z;
             w->scale.x = w->scale.y = w->scale.z = 2.0f;
         }
-        w->rot.y = (intplGetValue(EASING_QUADRATIC_OUT, 0.0f, 2160.0f, w->starTimer, 120));
+        w->rot.y = intplGetValue(EASING_QUADRATIC_OUT, 0.0f, 2160.0f, w->starTimer, 120);
         if (w->starTimer >= 120) {
             w->starState = 3;
             w->starTimer = 0;
@@ -564,9 +564,9 @@ static void main_star(void) {
         break;
     case 3:
         w->starTimer++;
-        w->starPos.x = (intplGetValue(EASING_QUADRATIC_OUT, w->from.x, w->to.x, w->starTimer, 60));
-        w->starPos.y = (intplGetValue(EASING_QUADRATIC_OUT, w->from.y, w->to.y, w->starTimer, 60));
-        w->starPos.z = (intplGetValue(EASING_QUADRATIC_OUT, w->from.z, w->to.z, w->starTimer, 60));
+        w->starPos.x = intplGetValue(EASING_QUADRATIC_OUT, w->from.x, w->to.x, w->starTimer, 60);
+        w->starPos.y = intplGetValue(EASING_QUADRATIC_OUT, w->from.y, w->to.y, w->starTimer, 60);
+        w->starPos.z = intplGetValue(EASING_QUADRATIC_OUT, w->from.z, w->to.z, w->starTimer, 60);
         if (w->starTimer >= 60) {
             w->starState = 4;
             w->starTimer = 0;
@@ -596,7 +596,7 @@ static void main_star(void) {
     case 7: {
         s32 tbl[11] = {1, 2, 0, 2, 3, 1, 3, 4, 2, 4, 5};
         w->starTimer++;
-        w->scale.x = w->scale.y = w->scale.z = (intplGetValue(EASING_QUADRATIC_OUT, w->sclFrom, w->sclTo, tbl[w->starTimer / 4], 5));
+        w->scale.x = w->scale.y = w->scale.z = intplGetValue(EASING_QUADRATIC_OUT, w->sclFrom, w->sclTo, tbl[w->starTimer / 4], 5);
         w->starPos.y = 12.5f * (w->scale.y - 2.0f) + 30.0f;
         if (w->starTimer >= 43) {
             w->starState = 5;
@@ -613,7 +613,7 @@ static void main_star(void) {
     case 9: {
         s32 tbl[11] = {1, 2, 0, 2, 3, 1, 3, 4, 2, 4, 5};
         w->starTimer++;
-        w->scale.x = w->scale.y = w->scale.z = (intplGetValue(EASING_QUADRATIC_OUT, w->sclFrom, w->sclTo, tbl[w->starTimer / 4], 5));
+        w->scale.x = w->scale.y = w->scale.z = intplGetValue(EASING_QUADRATIC_OUT, w->sclFrom, w->sclTo, tbl[w->starTimer / 4], 5);
         w->starPos.y = 12.5f * (w->scale.y - 2.0f) + 30.0f;
         if (w->starTimer >= 43) {
             w->starState = 5;
@@ -671,7 +671,7 @@ static void main_star(void) {
         break;
     case 12:
         w->starTimer--;
-        w->starPos.y = (intplGetValue(EASING_QUADRATIC_OUT, w->from.y, w->to.y, 30 - w->starTimer, 30));
+        w->starPos.y = intplGetValue(EASING_QUADRATIC_OUT, w->from.y, w->to.y, 30 - w->starTimer, 30);
         if (w->starTimer <= 0) {
             w->starState = 13;
             w->starTimer = 0;
@@ -682,7 +682,7 @@ static void main_star(void) {
         if (w->starTimer > 30) {
             w->starTimer = 30;
         }
-        alpha = (intplGetValue(EASING_LINEAR, 255.0f, 0.0f, w->starTimer, 30));
+        alpha = intplGetValue(EASING_LINEAR, 255.0f, 0.0f, w->starTimer, 30);
         break;
     }
     if (w->eff) {
@@ -807,7 +807,7 @@ USER_FUNC(end_deka) {
 
     effDelete(((EffStarStoneWork*)w->eff->userdata)->dust);
     effDelete(w->eff);
-    return 2;
+    return EVT_RETURN_DONE;
 }
 
 static void disp_2D(CameraId cam, void* param) {
@@ -859,7 +859,7 @@ static void disp_2D(CameraId cam, void* param) {
                 PSMTXScale(sc, 0.75f, 0.75f, 0.75f);
                 PSMTXTrans(tr, x, 40.0f + (w->offsetY + (w->gaugePos.y - 18.0f + t->off.y)), w->gaugePos.z + t->off.z);
                 PSMTXConcat(tr, sc, m);
-                iconDispGxCol(m, 0x10, ICON_AC_ON, col);
+                iconDispGxCol(m, ICON_FLAG_2D, ICON_AC_ON, col);
             } else if (t->type == 2) {
                 PSMTXScale(sc, 1.0f, 1.0f, 1.0f);
                 PSMTXTrans(tr, x, 40.0f + (w->offsetY + (w->gaugePos.y + t->off.y)), w->gaugePos.z + t->off.z);
@@ -885,7 +885,7 @@ static void disp_2D(CameraId cam, void* param) {
                         } else {
                             id = ICON_AC_OFF;
                         }
-                        iconDispGxCol(m, 0x10, id, col);
+                        iconDispGxCol(m, ICON_FLAG_2D, id, col);
                     }
                 } else {
                     PSMTXScale(sc, 1.0f, 1.0f, 1.0f);
@@ -933,19 +933,18 @@ void yuka_capture(CameraId cam, void* param) {
     camera->cameraAt = camera->cameraPos;
     {
         f32 t = tan(0.21816616f);
-        f32 h = w->h0;
         camera->cameraPos.y += (f32)w->h0 / 2 / t;
     }
     C_MTXLookAt(camera->view, &camera->cameraPos, &camera->cameraUp, &camera->cameraAt);
     C_MTXPerspective(camera->projection, 25.0f, (f32)w->w0 / (f32)w->h0, 1.0f, 32767.0f);
-    camera->projType = 0;
+    camera->projType = GX_PERSPECTIVE;
     GXSetProjection(camera->projection, camera->projType);
     GXSetViewport(0.0f, 0.0f, w->texW, w->texH, 0.0f, 1.0f);
     GXSetScissor(0, 0, w->texW, w->texH);
     test_kururing_mapdisp(cam);
     sysWaitDrawSync();
     GXSetTexCopySrc(0, 0, w->texW, w->texH);
-    GXSetTexCopyDst(w->texW, w->texH, 4, GX_FALSE);
+    GXSetTexCopyDst(w->texW, w->texH, GX_TF_RGB565, GX_FALSE);
     GXSetZMode(GX_TRUE, GX_LEQUAL, GX_TRUE);
     GXCopyTex(w->tex->address, GX_TRUE);
     GXPixModeSync();
@@ -1124,9 +1123,8 @@ EVT_BEGIN(dmg_evt)
     RETURN
 EVT_END()
 
-// Position writes go through a local FIFO pointer (keeps lis 0xcc01 ahead of the loop counters);
-// components are read z, y, x like GXPosition3f32's argument evaluation.
-// A macro, not an inline function: as a function the float registers in yuka_disp change.
+// Writes one vertex position through the local FIFO pointer, reading the components z, y, x first.
+// A macro, not an inline function: as a function the object changes.
 #define YUKA_POSITION(fifo, v) \
     {                          \
         f32 _x, _y, _z;        \
@@ -1163,7 +1161,7 @@ void yuka_disp(CameraId cam, void* param) {
             GXSetNumTevStages(1);
             GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
             GXSetTevOp(GX_TEVSTAGE0, GX_REPLACE);
-            GXInitTexObj(&obj, w->tex->address, w->texW, w->texH, 4, GX_CLAMP, GX_CLAMP, 0);
+            GXInitTexObj(&obj, w->tex->address, w->texW, w->texH, GX_TF_RGB565, GX_CLAMP, GX_CLAMP, GX_FALSE);
             GXLoadTexObj(&obj, GX_TEXMAP0);
             GXLoadPosMtxImm(camera->view, GX_PNMTX0);
             GXSetCurrentMtx(GX_PNMTX0);
@@ -1280,23 +1278,23 @@ s32 weaponGetPower_Deka(void) {
 }
 
 USER_FUNC(wait_star_stone_take_on) {
-    return get_ptr()->starState == 4 ? 2 : 0;
+    return get_ptr()->starState == 4 ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
 }
 
 static USER_FUNC(start_game) {
     DekaWork* w = get_ptr();
     w->state = 1;
-    return 2;
+    return EVT_RETURN_DONE;
 }
 
 static USER_FUNC(wait_game_end) {
-    return get_ptr()->state == 5 ? 2 : 0;
+    return get_ptr()->state == 5 ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
 }
 
 static USER_FUNC(star_stone_appear) {
     DekaWork* w = get_ptr();
     w->starState = 1;
-    return 2;
+    return EVT_RETURN_DONE;
 }
 
 USER_FUNC(get_ride_pos) {
@@ -1310,7 +1308,7 @@ USER_FUNC(get_ride_pos) {
     }
     evtSetFloat(event, *args++, 0.25f * (0.25f * (w->scale.y * k)) + w->starPos.y);
     evtSetFloat(event, *args++, 5.0f + w->starPos.z + 4.0f * w->scale.z);
-    return 2;
+    return EVT_RETURN_DONE;
 }
 
 static USER_FUNC(star_stone_attack) {
@@ -1319,14 +1317,14 @@ static USER_FUNC(star_stone_attack) {
         w->starState = 10;
     }
     if (w->starState == 13) {
-        return 2;
+        return EVT_RETURN_DONE;
     } else {
-        return 0;
+        return EVT_RETURN_BLOCK;
     }
 }
 
 USER_FUNC(get_result) {
     DekaWork* w = get_ptr();
     evtSetValue(event, event->args[0], w->result);
-    return 2;
+    return EVT_RETURN_DONE;
 }

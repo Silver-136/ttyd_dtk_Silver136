@@ -84,7 +84,7 @@ s32 battleAcMain_PendulumCraneTiming(BattleWork* work) {
             cw->vel = 0;
             cw->force = 3.0f;
             cw->zone = -1;
-            cw->button = 0x100;
+            cw->button = PAD_BUTTON_A;
             work->actionCommands.outputParams[0] = 0;
             work->actionCommands.outputParams[1] = _get_angle_hp(50);
             work->actionCommands.outputParams[2] = _get_angle_hp(0);
@@ -170,7 +170,7 @@ s32 battleAcMain_PendulumCraneTiming(BattleWork* work) {
                 cw->zone = zone;
             }
             inRange = FALSE;
-            if (autoCommand && (s32)work->actionCommands.outputParams[1] >= _get_angle_hp(50)) {
+            if (autoCommand && work->actionCommands.outputParams[1] >= _get_angle_hp(50)) {
                 inRange = TRUE;
             }
             if (BattlePadCheckTrigger(cw->button) || inRange) {
@@ -246,7 +246,7 @@ void battleAcDisp_PendulumCraneTiming(CameraId cameraId, void* param) {
 }
 
 void battleAcDelete_PendulumCraneTiming(BattleWork* work) {
-    if ((u32)work->actionCommands.doneFlags & 1) {
+    if (work->actionCommands.doneFlags & 1) {
         return;
     }
     work->actionCommands.mAcState = 1002;

@@ -98,9 +98,9 @@ s32 _CalcRollDir(void) {
     return d;
 }
 
-// Ends the command as failed (result bit 0 cleared) and moves to the end state 1002
+// Ends the command: clears AC_RESULT_RUNNING (AC_RESULT_SUCCESS stays as it is) and moves to the end state 1002
 static inline void stickRotateFail(BattleWork* work) {
-    work->actionCommands.result &= ~1;
+    work->actionCommands.result &= ~AC_RESULT_RUNNING;
     work->actionCommands.mAcState = 1002;
 }
 
@@ -109,14 +109,14 @@ s32 battleAcMain_StickRotate(BattleWork* work) {
     BattleACDispParams* disp;
     BattleActions* ac = &work->actionCommands;
     BOOL restart;
-    sw = ((StickRotateWork*)ac->work);
+    sw = (StickRotateWork*)ac->work;
     disp = &work->actionCommands.disp;
 
     do {
         restart = FALSE;
         switch (ac->mAcState) {
             case 0:
-                ac->result = 1;
+                ac->result = AC_RESULT_RUNNING;
                 memset(disp, 0, sizeof(BattleACDispParams));
                 disp->iconX = -300.0f;
                 disp->iconY = 0.0f;
@@ -149,10 +149,11 @@ s32 battleAcMain_StickRotate(BattleWork* work) {
                             break;
                         }
                     }
+                    // irand(100) is never negative: a confused auto-play always fails
                     if (irand(100) >= 0) {
                         ac->result = 0;
                     } else {
-                        ac->result = 2;
+                        ac->result = AC_RESULT_SUCCESS;
                         ac->mResultCount++;
                     }
                     return 0;
@@ -181,8 +182,8 @@ s32 battleAcMain_StickRotate(BattleWork* work) {
             case 1001: {
                 s32 r;
                 if (ac->countdown > 0) {
-                    (ac->countdown)--;
-                    ac->result = 2;
+                    ac->countdown--;
+                    ac->result = AC_RESULT_SUCCESS;
                     restart = TRUE;
                     ac->mAcState = 1002;
                     ac->outputParams[0] = work->actionCommands.params[STICK_ROTATE_PARAM_MAX_COUNT];
@@ -194,9 +195,9 @@ s32 battleAcMain_StickRotate(BattleWork* work) {
                 }
                 if (sw->timer < 0) {
                     if ((s32)ac->outputParams[0] >= work->actionCommands.params[STICK_ROTATE_PARAM_NEED_COUNT] && !BattlePadCheckNow(work->actionCommands.params[STICK_ROTATE_PARAM_BUTTON])) {
-                        ac->result |= 2;
+                        ac->result |= AC_RESULT_SUCCESS;
                     }
-                    ac->result &= ~1;
+                    ac->result &= ~AC_RESULT_RUNNING;
                     restart = TRUE;
                     ac->mAcState = 1002;
                     break;
@@ -204,9 +205,9 @@ s32 battleAcMain_StickRotate(BattleWork* work) {
                 sw->dir = _GetInputDir();
                 if (sw->dir == -1) {
                     if ((s32)ac->outputParams[0] >= work->actionCommands.params[STICK_ROTATE_PARAM_NEED_COUNT]) {
-                        ac->result |= 2;
+                        ac->result |= AC_RESULT_SUCCESS;
                     }
-                    ac->result &= ~1;
+                    ac->result &= ~AC_RESULT_RUNNING;
                     restart = TRUE;
                     ac->mAcState = 1002;
                     break;
@@ -282,7 +283,7 @@ s32 battleAcMain_StickRotate(BattleWork* work) {
                                     sw->iconA = sw->iconB;
                                     sw->iconB = t;
                                     if (sw->count >= work->actionCommands.params[STICK_ROTATE_PARAM_NEED_COUNT] * 8) {
-                                        ac->result |= 2;
+                                        ac->result |= AC_RESULT_SUCCESS;
                                         stickRotateFail(work);
                                         restart = TRUE;
                                         break;
@@ -292,6 +293,7 @@ s32 battleAcMain_StickRotate(BattleWork* work) {
                         }
                     } else if (work->actionCommands.acFlags & AC_STICK_ROTATE_FLAG_GUIDED_UNUSED) {
                         sw->roll = 0;
+                        // FAKE: GUIDED tested a second time (always true here); without the second test the object changes
                         if (work->actionCommands.acFlags & AC_STICK_ROTATE_FLAG_GUIDED_UNUSED) {
                             stickRotateFail(work);
                             restart = TRUE;
@@ -410,7 +412,7 @@ u16 _get_icon_id(s8 dir) {
     (v) = (Vec){0.0f, 0.0f, 0.0f}; \
     (v).x = -200.0f + x;           \
     (v).y = 70.0f + y;             \
-    iconDispGx(&(v), 0x10, (id), 1.0f)
+    iconDispGx(&(v), ICON_FLAG_2D, (id), 1.0f)
 
 static void actionCommandDisp(f32 x, f32 y) {
     BattleWork* work = _battleWorkPointer;
@@ -462,7 +464,7 @@ void actionCommandDisp2(f32 x, f32 y) {
         case 1001:
             sw->iconTimer++;
             if (sw->iconTimer >= (ac->params[STICK_ROTATE_PARAM_STEPS_A] + ac->params[STICK_ROTATE_PARAM_STEPS_B]) / 2) {
-                int step;
+                s32 step;
                 sw->iconTimer = 0;
                 step = sw->roll;
                 if (step == 0) {

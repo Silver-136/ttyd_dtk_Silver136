@@ -53,12 +53,12 @@ static void actionCommandDisp(f32 x, f32 y) {
         Vec pos = {0.0f, 0.0f, 0.0f};
         pos.x = -200.0f + x;
         pos.y = 50.0f + y;
-        iconDispGx(&pos, 0x10, ICON_BUTTON_A_PRESSED, 1.0f);
+        iconDispGx(&pos, ICON_FLAG_2D, ICON_BUTTON_A_PRESSED, 1.0f);
     } else {
         Vec pos = {0.0f, 0.0f, 0.0f};
         pos.x = -200.0f + x;
         pos.y = 50.0f + y;
-        iconDispGx(&pos, 0x10, ICON_BUTTON_A, 1.0f);
+        iconDispGx(&pos, ICON_FLAG_2D, ICON_BUTTON_A, 1.0f);
     }
     (*blinkTimer)++;
 }
@@ -74,6 +74,7 @@ void battleAcDisp_TimingA(CameraId cameraId, void* param) {
     switch (work->actionCommands.mAcState) {
         case 99:
             disp->iconX = intplGetValue(EASING_QUADRATIC_OUT, -300.0f, 30.0f, 20 - disp->slideTimer, 20);
+            // no break: case 100 sets iconX to 30.0f, so the icon does not slide in
         case 100:
             disp->iconX = 30.0f;
             actionCommandDisp(disp->iconX, disp->iconY);
@@ -103,6 +104,7 @@ s32 battleAcResult_TimingA(BattleWork* work) {
     s32 count = 0;
     s32 i;
     if ((work->actionCommands.setupFlags & 1) && (work->actionCommands.mAcUnit->mTokenFlags & kConfusedAction)) {
+        // irand(100) is never negative: a confused auto-play always fails
         if (irand(100) >= 0) {
             work->actionCommands.result = 0;
         } else {
@@ -183,6 +185,7 @@ s32 battleAcMain_TimingA(BattleWork* work) {
             disp->iconY = 0.0f;
             disp->slideTimer = 20;
             work->actionCommands.mAcState = 99;
+            // FAKE: flags reached through a second cast of the work buffer instead of tw; tw->flags changes the object
             ((TimingAWork*)work->actionCommands.work)->flags &= ~1;
             work->actionCommands.outputParams[0] = 0;
             break;

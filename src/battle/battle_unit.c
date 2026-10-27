@@ -19,10 +19,6 @@ double pow(double, double);
 void psndSFX_pit(s32 id, s16 pitch);
 void psndSFX_vol(s32 id, u8 vol);
 
-
-
-
-
 s32 _enemy_can_use_item_table[] = {
     ITEM_THUNDER_BOLT, ITEM_FIRE_FLOWER, ITEM_POW_BLOCK, ITEM_THUNDER_RAGE, ITEM_SHOOTING_STAR, ITEM_ICE_STORM,
     ITEM_EARTH_QUAKE, ITEM_HP_DRAIN_ITEM, ITEM_SLEEPY_SHEEP, ITEM_STOPWATCH, ITEM_DIZZY_DIAL, ITEM_MINI_MR_MINI,
@@ -44,7 +40,6 @@ BOOL BtlUnit_Init(void) {
     }
     return TRUE;
 }
-
 
 void BtlUnit_HpGaugeInit(BattleUnit* unit);
 
@@ -267,7 +262,7 @@ BOOL BtlUnit_Delete(BattleUnit* unit) {
             BattleFree(unit->countersetWeapon);
         }
     }
-    if ((void*)unit->screenTexBuf) {
+    if (unit->screenTexBuf) {
         smartFree(unit->screenTexBuf);
         unit->screenTexBuf = NULL;
     }
@@ -1207,7 +1202,7 @@ BOOL BtlUnit_SetStatus(BattleUnit* unit, s8 type, s8 turns, s8 strength) {
 
 // the 0x1E bytes from mSleepTurns are every status's turns and strength
 void BtlUnit_ClearStatus(BattleUnit* unit) {
-    memset(&unit->mSleepTurns, 0, 0x1Eu);
+    memset(&unit->mSleepTurns, 0, sizeof(BtlStatusCopy));
     BtlUnit_SetStatus(unit, STATUS_CHARGE, 1, -99);
     BattleStatusChangeInfoWorkInit(unit);
 }
@@ -1648,7 +1643,7 @@ s32 BtlUnit_GetExp(BattleUnit* unit) {
     if (level > unitLevel) {
         return 0;
     }
-    switch (*(s32*)fbat->setup->groupSetup) {
+    switch (fbat->setup->groupSetup->numEnemies) {
         case 0:
         case 1:
         case 2:
@@ -1928,12 +1923,12 @@ void BtlUnit_LoadSeMode(s32 mode, s32 kind, BtlPoseSoundTable* table, BecSndWork
     work->timer = work->delay;
 }
 
-void BtlUnit_SetSeMode(BecSndWork* work, const char* name0, const char* name1, s16 c, s16 e, s16 unused, s16 a, s16 b) {
+void BtlUnit_SetSeMode(BecSndWork* work, const char* name0, const char* name1, s16 delay, s16 period, s16 unused, s16 a, s16 b) {
     work->name0 = name0;
     work->name1 = name1;
-    work->delay = c;
-    work->period0 = e;
-    work->period1 = e;
+    work->delay = delay;
+    work->period0 = period;
+    work->period1 = period;
     work->count = 0;
     work->reserved_08 = a;
     work->reserved_0A = b;
@@ -2014,7 +2009,7 @@ void BtlUnit_ControlPoseSoundMain(BattleUnitPart* part) {
     }
     anim = animPoseGetCurrentAnim(part->poseId);
     for (; entry->animName; entry++) {
-        if (strcmp(entry->animName, (const char*)anim)) {
+        if (strcmp(entry->animName, anim->name)) {
             continue;
         }
         if (entry->time <= state->time && entry->time > state->prevTime) {
@@ -2024,10 +2019,11 @@ void BtlUnit_ControlPoseSoundMain(BattleUnitPart* part) {
                 } else {
                     id = BtlUnit_snd_se(part->mOwner, entry->sfxName, EVT_NULLPTR, entry->pitch);
                 }
-                psndSFX_vol(id, vol = 0x7F);
+                vol = 0x7F;
+                psndSFX_vol(id, vol);
                 state->count++;
                 if (part->mOwner->attackPhase != BattleGetSeq(wp, SEQ_PHASE)) {
-                    f64 k;
+                    f64 k; // FAKE: spare temporary assigned inside the multiplication; vol = dv * 0.7 changes the object
                     dv = (f64)(u32)vol;
                     vol = dv * (k = 0.7);
                     psndSFX_vol(id, vol);
@@ -2131,7 +2127,7 @@ void BtlUnit_HpGaugeMain(BattleUnit* unit) {
 BOOL BtlUnit_EnemyItemCanUseCheck(s32 item) {
     s32* table = _enemy_can_use_item_table;
 
-    if (item >= 0xF0 && item < 0x153) {
+    if (item >= BADGE_MIN && item < BADGE_MAX) {
         return item;
     }
     while (*table) {

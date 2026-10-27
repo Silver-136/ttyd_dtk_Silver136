@@ -43,22 +43,22 @@ s32 battleAcMain_ButtonDown(BattleWork *work) {
         allDone = 0;
         switch (ac->mAcState) {
             case 0: {
-                    ac->result = 1;
-                    memset(disp, 0, 0x2c);
+                    ac->result = AC_RESULT_RUNNING;
+                    memset(disp, 0, sizeof(BattleACDispParams));
                     disp->iconX = -300.0f;
                     disp->iconY = 0.0f;
                     disp->slideTimer = 20;
-                    memset(p->button, 0, 0x34);
-                    memset(p->pressed, 1, 0x34);
+                    memset(p->button, 0, sizeof(p->button));
+                    memset(p->pressed, 1, sizeof(p->pressed));
                     for (i = 0; i < (work->actionCommands.params[2]); i++) {
                         switch (work->actionCommands.params[3]) {
                             case -2:
-                                p->button[(u32)i] = (irand(100) < 50) ? (0x100) : (0x200);
+                                p->button[(u32)i] = (irand(100) < 50) ? PAD_BUTTON_A : PAD_BUTTON_B;
                                 p->pressed[(u32)i] = 0;
                                 break;
 
                             case -4:
-                                p->button[(u32)i] = (irand(100) < 50) ? (0x200) : (0x400);
+                                p->button[(u32)i] = (irand(100) < 50) ? PAD_BUTTON_B : PAD_BUTTON_X;
                                 p->pressed[(u32)i] = 0;
                                 break;
 
@@ -131,7 +131,7 @@ s32 battleAcMain_ButtonDown(BattleWork *work) {
                 p->timer = work->actionCommands.params[0];
 
             case 1000:
-                if ((ac->setupFlags & 1) && (((u32)ac->mAcUnit->mTokenFlags) & kConfusedAction)) {
+                if ((ac->setupFlags & 1) && (ac->mAcUnit->mTokenFlags & kConfusedAction)) {
                     if (ac->setupFlags & 2) {
                         ac->setupParam--;
                         if (ac->setupParam >= 0) {
@@ -141,42 +141,40 @@ s32 battleAcMain_ButtonDown(BattleWork *work) {
                     if (irand(100) >= 0) {
                         ac->result = 0;
                     } else {
-                        ac->result = 2;
+                        ac->result = AC_RESULT_SUCCESS;
                         ac->mResultCount++;
                     }
                     return 0;
                 }
                 if ((work->actionCommands.countdown) > 0) {
                     (work->actionCommands.countdown)--;
-                    ac->result = 2;
+                    ac->result = AC_RESULT_SUCCESS;
                     allDone = 1;
                     ac->mAcState = 1001;
                     break;
                 }
-                *((s32*)(&ac->outputParams[0])) = 0;
+                ac->outputParams[0] = 0;
                 done = 1;
                 for (i = 0; i < (work->actionCommands.params[2]); i++) {
                     if (p->button[(u32)i]) {
                         if (p->pressed[(u32)i]) {
-                            (*((s32*)(&ac->outputParams[0])))++;
-                        } else
-                            if (((p->button[(u32)i]) == BattlePadGetTrigger()) || flag) {
+                            ac->outputParams[0]++;
+                        } else if (p->button[(u32)i] == BattlePadGetTrigger() || flag) {
                             p->pressed[(u32)i] = 1;
-                            (*((s32*)(&ac->outputParams[0])))++;
+                            ac->outputParams[0]++;
                             if ((work->actionCommands.params[1]) == 1) {
                                 if ((i + 1) < (work->actionCommands.params[2])) {
                                     done = 0;
                                 }
                                 break;
                             }
-                        } else
-                            if (BattlePadGetTrigger()) {
+                        } else if (BattlePadGetTrigger()) {
                             ac->result = 0;
                             ac->mAcState = 1001;
-                            if (((work->actionCommands.acFlags) & AC_BUTTON_DOWN_FLAG_PARTIAL_SUCCESS) && ((*((s32*)(&ac->outputParams[0]))) > 0)) {
+                            if ((work->actionCommands.acFlags & AC_BUTTON_DOWN_FLAG_PARTIAL_SUCCESS) && ac->outputParams[0] > 0) {
                                 allDone = 1;
-                                ac->result |= 2;
-                                ac->result &= ~1;
+                                ac->result |= AC_RESULT_SUCCESS;
+                                ac->result &= ~AC_RESULT_RUNNING;
                                 ac->mAcState = 1001;
                                 break;
                             }
@@ -190,14 +188,14 @@ s32 battleAcMain_ButtonDown(BattleWork *work) {
                     }
                 }
 
-                if (p->sndCount != (*((s32*)(&ac->outputParams[0])))) {
+                if (p->sndCount != ac->outputParams[0]) {
                     psndSFXOn(sfx);
-                    p->sndCount = *((s32*)(&ac->outputParams[0]));
+                    p->sndCount = ac->outputParams[0];
                 }
                 if (done) {
-                    ac->result |= 2;
+                    ac->result |= AC_RESULT_SUCCESS;
                     allDone = 1;
-                    ac->result &= ~1;
+                    ac->result &= ~AC_RESULT_RUNNING;
                     ac->mAcState = 1001;
                     break;
                 }
@@ -206,9 +204,9 @@ s32 battleAcMain_ButtonDown(BattleWork *work) {
                     ac->result = 0;
                     allDone = 1;
                     ac->mAcState = 1001;
-                    if (((work->actionCommands.acFlags) & AC_BUTTON_DOWN_FLAG_PARTIAL_SUCCESS) && ((*((s32*)(&ac->outputParams[0]))) > 0)) {
-                        ac->result |= 2;
-                        ac->result &= ~1;
+                    if ((work->actionCommands.acFlags & AC_BUTTON_DOWN_FLAG_PARTIAL_SUCCESS) && ac->outputParams[0] > 0) {
+                        ac->result |= AC_RESULT_SUCCESS;
+                        ac->result &= ~AC_RESULT_RUNNING;
                         ac->mAcState = 1001;
                     }
                 }
@@ -240,9 +238,7 @@ s32 battleAcMain_ButtonDown(BattleWork *work) {
                 break;
 
         }
-
-    }
-    while (allDone);
+    } while (allDone);
     return 1;
 }
 
@@ -329,7 +325,7 @@ static void actionCommandDisp(s32 unused, f32 x, f32 y) {
         if (p->button[j >> 2] == 0U) {
             continue;
         }
-        switch (p->button[(j >> 1) >> 1]) {
+        switch (p->button[j >> 2]) {
             case PAD_BUTTON_A:
                 a = ICON_BUTTON_A_PRESSED;
                 b = ICON_BUTTON_A;
@@ -386,7 +382,6 @@ static void actionCommandDisp(s32 unused, f32 x, f32 y) {
             ((void (*)(Vec *, s32, s32, f32)) iconDispGx)(&pos5, size, b, 1.0f);
         }
     }
-
 }
 
 

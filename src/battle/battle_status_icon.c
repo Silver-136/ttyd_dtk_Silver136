@@ -25,104 +25,104 @@ BOOL _bsi_regeneration(BattleUnit* unit, IconDispTableEntry* disp, BattleWorkSta
 
 IconDispTableEntry _disp_table[0x17] = {
 #ifdef VERSION_G8ME01
-        {1, _bsi_default_turn, 22, 1},
-        {4, _bsi_default_turn, 20, 1},
-        {21, _bsi_default_turn, 21, 1},
-        {2, _bsi_default_turn, 23, 1},
-        {8, _bsi_default_turn, 24, 1},
-        {9, _bsi_default_turn, 25, 1},
-        {19, _bsi_default_turn, 26, 1},
-        {20, _bsi_default_turn, 27, 1},
-        {14, _bsi_default_turn, 28, 1},
-        {15, _bsi_default_turn, 29, 1},
-        {7, _bsi_default_turn, 41, 1},
-        {10, _bsi_default_turn, 42, 1},
-        {11, _bsi_default_turn, 43, 1},
-        {5, _bsi_default_turn, 44, 1},
-        {12, _bsi_default_turn, 45, 1},
-        {13, _bsi_default_turn, 46, 1},
-        {18, _bsi_default_turn, 47, 1},
-        {3, _bsi_guruguru, 39, 0},
-        {6, _bsi_biribiri, 38, 0},
-        {0, _bsi_allergy, 40, 0},
-        {23, _bsi_regeneration, 30, 0},
-        {24, _bsi_regeneration, 31, 0},
-        {-1, NULL, 0, 0},
+    {1, _bsi_default_turn, 22, 1},
+    {4, _bsi_default_turn, 20, 1},
+    {21, _bsi_default_turn, 21, 1},
+    {2, _bsi_default_turn, 23, 1},
+    {8, _bsi_default_turn, 24, 1},
+    {9, _bsi_default_turn, 25, 1},
+    {19, _bsi_default_turn, 26, 1},
+    {20, _bsi_default_turn, 27, 1},
+    {14, _bsi_default_turn, 28, 1},
+    {15, _bsi_default_turn, 29, 1},
+    {7, _bsi_default_turn, 41, 1},
+    {10, _bsi_default_turn, 42, 1},
+    {11, _bsi_default_turn, 43, 1},
+    {5, _bsi_default_turn, 44, 1},
+    {12, _bsi_default_turn, 45, 1},
+    {13, _bsi_default_turn, 46, 1},
+    {18, _bsi_default_turn, 47, 1},
+    {3, _bsi_guruguru, 39, 0},
+    {6, _bsi_biribiri, 38, 0},
+    {0, _bsi_allergy, 40, 0},
+    {23, _bsi_regeneration, 30, 0},
+    {24, _bsi_regeneration, 31, 0},
+    {-1, NULL, 0, 0},
 };
 IconDispTableEntry _disp_table_1[0x17] = {
-        {1, _bsi_default_turn, 22, 1},
-        {4, _bsi_default_turn, 20, 1},
-        {21, _bsi_default_turn, 21, 1},
-        {2, _bsi_default_turn, 23, 1},
-        {8, _bsi_default_turn, 24, 1},
-        {9, _bsi_default_turn, 25, 1},
-        {19, _bsi_default_turn, 26, 1},
-        {20, _bsi_default_turn, 27, 1},
-        {14, _bsi_default_turn, 28, 1},
-        {15, _bsi_default_turn, 29, 1},
-        {7, _bsi_default_turn, 41, 1},
-        {10, _bsi_default_turn, 42, 1},
-        {11, _bsi_default_turn, 43, 1},
-        {5, _bsi_default_turn, 44, 1},
-        {12, _bsi_default_turn, 45, 1},
-        {13, _bsi_default_turn, 46, 1},
-        {18, _bsi_default_turn, 47, 1},
-        {3, _bsi_guruguru, 39, 0},
-        {6, _bsi_biribiri, 38, 0},
-        {0, _bsi_allergy, 40, 0},
-        {23, _bsi_regeneration, 32, 0},
-        {24, _bsi_regeneration, 33, 0},
-        {-1, NULL, 0, 0},
+    {1, _bsi_default_turn, 22, 1},
+    {4, _bsi_default_turn, 20, 1},
+    {21, _bsi_default_turn, 21, 1},
+    {2, _bsi_default_turn, 23, 1},
+    {8, _bsi_default_turn, 24, 1},
+    {9, _bsi_default_turn, 25, 1},
+    {19, _bsi_default_turn, 26, 1},
+    {20, _bsi_default_turn, 27, 1},
+    {14, _bsi_default_turn, 28, 1},
+    {15, _bsi_default_turn, 29, 1},
+    {7, _bsi_default_turn, 41, 1},
+    {10, _bsi_default_turn, 42, 1},
+    {11, _bsi_default_turn, 43, 1},
+    {5, _bsi_default_turn, 44, 1},
+    {12, _bsi_default_turn, 45, 1},
+    {13, _bsi_default_turn, 46, 1},
+    {18, _bsi_default_turn, 47, 1},
+    {3, _bsi_guruguru, 39, 0},
+    {6, _bsi_biribiri, 38, 0},
+    {0, _bsi_allergy, 40, 0},
+    {23, _bsi_regeneration, 32, 0},
+    {24, _bsi_regeneration, 33, 0},
+    {-1, NULL, 0, 0},
 };
 IconDispTableEntry _disp_table_2[0x17] = {
-        {1, _bsi_default_turn, 22, 1},
-        {4, _bsi_default_turn, 20, 1},
-        {21, _bsi_default_turn, 21, 1},
-        {2, _bsi_default_turn, 23, 1},
-        {8, _bsi_default_turn, 24, 1},
-        {9, _bsi_default_turn, 25, 1},
-        {19, _bsi_default_turn, 26, 1},
-        {20, _bsi_default_turn, 27, 1},
-        {14, _bsi_default_turn, 28, 1},
-        {15, _bsi_default_turn, 29, 1},
-        {7, _bsi_default_turn, 41, 1},
-        {10, _bsi_default_turn, 42, 1},
-        {11, _bsi_default_turn, 43, 1},
-        {5, _bsi_default_turn, 44, 1},
-        {12, _bsi_default_turn, 45, 1},
-        {13, _bsi_default_turn, 46, 1},
-        {18, _bsi_default_turn, 47, 1},
-        {3, _bsi_guruguru, 39, 0},
-        {6, _bsi_biribiri, 38, 0},
-        {0, _bsi_allergy, 40, 0},
-        {23, _bsi_regeneration, 34, 0},
-        {24, _bsi_regeneration, 35, 0},
-        {-1, NULL, 0, 0},
+    {1, _bsi_default_turn, 22, 1},
+    {4, _bsi_default_turn, 20, 1},
+    {21, _bsi_default_turn, 21, 1},
+    {2, _bsi_default_turn, 23, 1},
+    {8, _bsi_default_turn, 24, 1},
+    {9, _bsi_default_turn, 25, 1},
+    {19, _bsi_default_turn, 26, 1},
+    {20, _bsi_default_turn, 27, 1},
+    {14, _bsi_default_turn, 28, 1},
+    {15, _bsi_default_turn, 29, 1},
+    {7, _bsi_default_turn, 41, 1},
+    {10, _bsi_default_turn, 42, 1},
+    {11, _bsi_default_turn, 43, 1},
+    {5, _bsi_default_turn, 44, 1},
+    {12, _bsi_default_turn, 45, 1},
+    {13, _bsi_default_turn, 46, 1},
+    {18, _bsi_default_turn, 47, 1},
+    {3, _bsi_guruguru, 39, 0},
+    {6, _bsi_biribiri, 38, 0},
+    {0, _bsi_allergy, 40, 0},
+    {23, _bsi_regeneration, 34, 0},
+    {24, _bsi_regeneration, 35, 0},
+    {-1, NULL, 0, 0},
 };
 IconDispTableEntry _disp_table_3[0x17] = {
-        {1, _bsi_default_turn, 22, 1},
-        {4, _bsi_default_turn, 20, 1},
-        {21, _bsi_default_turn, 21, 1},
-        {2, _bsi_default_turn, 23, 1},
-        {8, _bsi_default_turn, 24, 1},
-        {9, _bsi_default_turn, 25, 1},
-        {19, _bsi_default_turn, 26, 1},
-        {20, _bsi_default_turn, 27, 1},
-        {14, _bsi_default_turn, 28, 1},
-        {15, _bsi_default_turn, 29, 1},
-        {7, _bsi_default_turn, 41, 1},
-        {10, _bsi_default_turn, 42, 1},
-        {11, _bsi_default_turn, 43, 1},
-        {5, _bsi_default_turn, 44, 1},
-        {12, _bsi_default_turn, 45, 1},
-        {13, _bsi_default_turn, 46, 1},
-        {18, _bsi_default_turn, 47, 1},
-        {3, _bsi_guruguru, 39, 0},
-        {6, _bsi_biribiri, 38, 0},
-        {0, _bsi_allergy, 40, 0},
-        {23, _bsi_regeneration, 36, 0},
-        {24, _bsi_regeneration, 37, 0},
-        {-1, NULL, 0, 0},
+    {1, _bsi_default_turn, 22, 1},
+    {4, _bsi_default_turn, 20, 1},
+    {21, _bsi_default_turn, 21, 1},
+    {2, _bsi_default_turn, 23, 1},
+    {8, _bsi_default_turn, 24, 1},
+    {9, _bsi_default_turn, 25, 1},
+    {19, _bsi_default_turn, 26, 1},
+    {20, _bsi_default_turn, 27, 1},
+    {14, _bsi_default_turn, 28, 1},
+    {15, _bsi_default_turn, 29, 1},
+    {7, _bsi_default_turn, 41, 1},
+    {10, _bsi_default_turn, 42, 1},
+    {11, _bsi_default_turn, 43, 1},
+    {5, _bsi_default_turn, 44, 1},
+    {12, _bsi_default_turn, 45, 1},
+    {13, _bsi_default_turn, 46, 1},
+    {18, _bsi_default_turn, 47, 1},
+    {3, _bsi_guruguru, 39, 0},
+    {6, _bsi_biribiri, 38, 0},
+    {0, _bsi_allergy, 40, 0},
+    {23, _bsi_regeneration, 36, 0},
+    {24, _bsi_regeneration, 37, 0},
+    {-1, NULL, 0, 0},
 #else
     {1, _bsi_default_turn, 15, 1},
     {4, _bsi_default_turn, 13, 1},
@@ -183,14 +183,14 @@ void BattleStatusIconMain(BattleUnit* unit) {
             IconDispTableEntry* d;
             BattleWorkStatusIconEntry* e;
             switch (gp->language) {
-                case 2:
+                case LANGUAGE_GE:
                     d = &_disp_table_1[i];
                     break;
-                case 3:
-                case 4:
+                case LANGUAGE_FR:
+                case LANGUAGE_SP:
                     d = &_disp_table_2[i];
                     break;
-                case 5:
+                case LANGUAGE_IT:
                     d = &_disp_table_3[i];
                     break;
                 default:
@@ -198,7 +198,7 @@ void BattleStatusIconMain(BattleUnit* unit) {
                     break;
             }
 #else
-            IconDispTableEntry* d = (IconDispTableEntry*)((u8*)_disp_table + i * 16);
+            IconDispTableEntry* d = &_disp_table[i];
 #endif
 #ifdef VERSION_G8ME01
             e = &icon->mIcons[icon->mNumStatusIcons];
@@ -219,9 +219,6 @@ void BattleStatusIconMain(BattleUnit* unit) {
 void BattleStatusIconDelete(BattleUnit* unit) {
     ; //stubbed in retail
 }
-
-
-
 
 void BattleStatusIconDisp(CameraId camId, void* param) {
     BattleWorkStatusIcon* icon = &((BattleUnit*)param)->mStatusIconWork;
@@ -247,7 +244,9 @@ void BattleStatusIconDisp(CameraId camId, void* param) {
                 btlDispTexPlane(p.x, p.y, p.z, 0.8f, -0.8f, VERSION_PICK(0x23, 0x30), col, 0);
             }
         }
-        if (e->icon == 0) continue;
+        if (e->icon == 0) {
+            continue;
+        }
         if (!(e->flags & 2)) {
             PSMTXTrans(trans, p.x + e->trans.x, p.y + e->trans.y, p.z + e->trans.z);
             PSMTXScale(scale, 0.8f * e->scale.x, 0.8f * e->scale.y, e->scale.z);
@@ -264,7 +263,7 @@ void BattleStatusIconDisp(CameraId camId, void* param) {
             PSMTXConcat(rx, m, m);
             PSMTXConcat(pivot, m, m);
             PSMTXConcat(trans, m, m);
-            btlDispTexPlane2(m, (u32)e->icon, e->color, 0);
+            btlDispTexPlane2(m, e->icon, e->color, 0);
         }
         if (e->turns != 0) {
             n = p;
@@ -283,8 +282,10 @@ BOOL _bsi_default_turn(BattleUnit* unit, IconDispTableEntry* disp, BattleWorkSta
     s8 turns, strength;
     s32 kind;
     if (_battleWorkPointer->flags & BATTLE_FLAG_FORCE_STATUS_ICONS_UNUSED) {
-        if (type != 1 && !BtlUnit_CheckStatus(unit, disp->id)) return FALSE;
-        kind = (s32)unit->currentKind;
+        if (type != STATUS_SLEEP && !BtlUnit_CheckStatus(unit, disp->id)) {
+            return FALSE;
+        }
+        kind = unit->currentKind;
         if (!((kind >= UNIT_GOOMBA && kind < UNIT_UNUSED_TREE) || (kind >= UNIT_MARIO && kind < TYPE_PARTNER_MIN) || (kind >= TYPE_PARTNER_MIN && kind < TYPE_PARTNER_MAX))) return FALSE;
     } else if (!BtlUnit_CheckStatus(unit, disp->id)) {
         return FALSE;
@@ -344,7 +345,9 @@ BOOL _bsi_allergy(BattleUnit* unit, IconDispTableEntry* disp, BattleWorkStatusIc
     entry->flags = disp->something2;
     entry->trans = (Vec){0.0f,0.0f,0.0f};
     unit->mStatusIconWork.allergyBlinkTimer++;
-    if (unit->mStatusIconWork.allergyBlinkTimer & 0x10) entry->flags |= 2;
+    if (unit->mStatusIconWork.allergyBlinkTimer & 0x10) {
+        entry->flags |= 2;
+    }
     return TRUE;
 }
 
@@ -396,11 +399,11 @@ BOOL _bsi_regeneration(BattleUnit* unit, IconDispTableEntry* disp, BattleWorkSta
     GXColor c0, c1, col;
     s32 t;
     s8 turns, strength;
-    if (type == 0x17) {
+    if (type == STATUS_HP_REGEN) {
         ctr = &unit->mStatusIconWork.hpRegenTimer;
         c0 = (GXColor){0xED, 0x14, 0x5B, 0xFF};
         c1 = (GXColor){0xFF, 0xEA, 0x05, 0xFF};
-    } else if (type == 0x18) {
+    } else if (type == STATUS_FP_REGEN) {
         ctr = &unit->mStatusIconWork.fpRegenTimer;
         c0 = (GXColor){0x3D, 0xD1, 0x09, 0xFF};
         c1 = (GXColor){0x61, 0xE9, 0xE7, 0xFF};
@@ -413,7 +416,9 @@ BOOL _bsi_regeneration(BattleUnit* unit, IconDispTableEntry* disp, BattleWorkSta
     }
     (*ctr)++;
     t = (*ctr * 12) % 720;
-    if (t >= 360) t = 720 - t;
+    if (t >= 360) {
+        t = 720 - t;
+    }
     BtlUnit_GetStatus(unit, type, &turns, &strength);
     entry->type = type;
     entry->turns = turns >= 0 ? turns : -turns;

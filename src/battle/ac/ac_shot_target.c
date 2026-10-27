@@ -57,7 +57,7 @@ s32 battleAcMain_ShotTarget(BattleWork* work) {
         switch (ac->mAcState) {
             case 0:
                 _ac_disp_init(work);
-                ac->result = 1;
+                ac->result = AC_RESULT_RUNNING;
                 unit = BattleGetUnitPtr(work, work->actionCommands.params[0]);
                 parts = BtlUnit_GetPartsPtr(unit, work->actionCommands.params[1]);
                 BtlUnit_GetHitPos(unit, parts, &hit.x, &hit.y, &hit.z);
@@ -81,8 +81,8 @@ s32 battleAcMain_ShotTarget(BattleWork* work) {
                 cw->sfxId = psndSFXOn(sfxName);
             case 1000:
                 if (work->actionCommands.countdown > 0) {
-                    (work->actionCommands.countdown)--;
-                    ac->result = 2;
+                    work->actionCommands.countdown--;
+                    ac->result = AC_RESULT_SUCCESS;
                     repeat = TRUE;
                     ac->mResultCount++;
                     ac->mAcState = 1001;
@@ -128,11 +128,12 @@ s32 battleAcMain_ShotTarget(BattleWork* work) {
                     cw->inRange = 0;
                 }
                 cw->frame--;
-                if ((ac->setupFlags & 1) && ((u32)ac->mAcUnit->mTokenFlags & kConfusedAction)) {
+                if ((ac->setupFlags & 1) && (ac->mAcUnit->mTokenFlags & kConfusedAction)) {
+                    // irand(100) is never negative: a confused auto-play always fails
                     if (irand(100) >= 0) {
                         ac->result = 0;
                     } else {
-                        ac->result = 2;
+                        ac->result = AC_RESULT_SUCCESS;
                         ac->mResultCount++;
                     }
                     ac->mAcState = 1001;
@@ -140,7 +141,7 @@ s32 battleAcMain_ShotTarget(BattleWork* work) {
                 }
                 if (cw->frame < 0) {
                     if (cw->inRange) {
-                        ac->result = 2;
+                        ac->result = AC_RESULT_SUCCESS;
                         ac->mResultCount++;
                     } else {
                         ac->result = 0;
@@ -156,6 +157,7 @@ s32 battleAcMain_ShotTarget(BattleWork* work) {
             case 1003:
                 cw->endTimer = 60;
                 ac->mAcState = 1004;
+                // FAKE: sfxId compared as u32 with 0xFFFFFFFF; the plain cw->sfxId != -1 changes the object
                 if ((u32)cw->sfxId != 0xFFFFFFFF) {
                     psndSFXOff(cw->sfxId);
                 }
@@ -251,8 +253,8 @@ void battleAcDelete_ShotTarget(BattleWork* work) {
 }
 
 static void _ac_disp_init(BattleWork* work) {
-    BattleACDispParams* d = (&(&work->actionCommands)->disp);
-    memset(d, 0, 0x2C);
+    BattleACDispParams* d = &work->actionCommands.disp;
+    memset(d, 0, sizeof(BattleACDispParams));
     d->iconX = -200.0f;
     d->iconY = 0.0f;
     d->slideTimer = 20;
