@@ -2268,12 +2268,12 @@ USER_FUNC(logo) {
         event->userdatap[0] = wp;
     }
     wp = event->userdatap[0];
-    if ((u32)fileAsyncf(4, NULL, "%s/mariost.tpl", getMarioStDvdRoot()) == 0) {
+    if ((u32)fileAsyncf(FILE_TYPE_TPL, NULL, "%s/mariost.tpl", getMarioStDvdRoot()) == 0) {
         return EVT_RETURN_BLOCK;
     }
     switch (wp->state) {
         case 0:
-            wp->tpl = fileAllocf(4, "%s/mariost.tpl", getMarioStDvdRoot());
+            wp->tpl = fileAllocf(FILE_TYPE_TPL, "%s/mariost.tpl", getMarioStDvdRoot());
             wp->alpha = 0;
             wp->y = 0.0f;
             wp->counter = 0;

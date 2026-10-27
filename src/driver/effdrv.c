@@ -258,9 +258,9 @@ void effMain(void) {
         }
         prefix = prefix_tbl[gp->language];
         dvdroot = getMarioStDvdRoot();
-        if (fileAsyncf(4, 0, "%s/e/%s/effect_%s.tpl", dvdroot, prefix, prefix) != 0U) {
+        if (fileAsyncf(FILE_TYPE_TPL, 0, "%s/e/%s/effect_%s.tpl", dvdroot, prefix, prefix) != 0U) {
             prefix = prefix_tbl[gp->language];
-            wp->handle = fileAllocf(4, "%s/e/%s/effect_%s.tpl", getMarioStDvdRoot(), prefix, prefix);
+            wp->handle = fileAllocf(FILE_TYPE_TPL, "%s/e/%s/effect_%s.tpl", getMarioStDvdRoot(), prefix, prefix);
             wp->language = gp->language;
         }
     }

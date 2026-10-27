@@ -144,7 +144,7 @@ void seq_mapChangeMain(SequenceWork* work) {
         }
         if (strcmp(_next_map, mc_tou_03)) {
             area_name = getAreaName();
-            fileAsyncf(0, 0, mc_rel_fmt, getMarioStDvdRoot(), area_name);
+            fileAsyncf(FILE_TYPE_RAW, 0, mc_rel_fmt, getMarioStDvdRoot(), area_name);
         }
         work->state++;
         break;
@@ -173,7 +173,7 @@ void seq_mapChangeMain(SequenceWork* work) {
             seqSetSeq(SEQ_TITLE, 0, 0);
         } else {
             area_name = getAreaName();
-            fres = fileAsyncf(0, 0, mc_rel_fmt, getMarioStDvdRoot(), area_name);
+            fres = fileAsyncf(FILE_TYPE_RAW, 0, mc_rel_fmt, getMarioStDvdRoot(), area_name);
             if (fres == 0) {
                 fok = FALSE;
             } else if ((s32)fres == -1) {
@@ -185,7 +185,7 @@ void seq_mapChangeMain(SequenceWork* work) {
                 if (mapPreLoad(_next_map)) {
                     FileEntry* file;
                     area_name = getAreaName();
-                    file = fileAllocf(0, mc_rel_fmt, getMarioStDvdRoot(), area_name);
+                    file = fileAllocf(FILE_TYPE_RAW, mc_rel_fmt, getMarioStDvdRoot(), area_name);
                     if (file) {
                         if (!strncmp(area_name, mc_tst, 3)) {
                             gp->relocationBase = _mapAlloc(((smartEntry*)file->data)->size);
@@ -262,9 +262,9 @@ void seq_mapChangeMain(SequenceWork* work) {
             {
             LangTbl lang = lang_tbl;
 #ifdef VERSION_G8ME01
-            fileAsyncf(4, 0, "%s/w/%s/win.tpl", getMarioStDvdRoot(), lang.s[gp->language]);
+            fileAsyncf(FILE_TYPE_TPL, 0, "%s/w/%s/win.tpl", getMarioStDvdRoot(), lang.s[gp->language]);
 #else
-            fileAsyncf(4, 0, "%s/window/%s/win.tpl", getMarioStDvdRoot(), lang.s[gp->language]);
+            fileAsyncf(FILE_TYPE_TPL, 0, "%s/window/%s/win.tpl", getMarioStDvdRoot(), lang.s[gp->language]);
 #endif
             }
 #ifdef VERSION_G8ME01
@@ -276,9 +276,9 @@ void seq_mapChangeMain(SequenceWork* work) {
             animGroupBaseAsync("p_b_st", 0, 0);
             animGroupBaseAsync("OFF_d_maku_up_down", 0, 0);
             effNiceAsync(0);
-            fileAsyncf(4, 0, "%s/battle/common/battle_common.tpl", getMarioStDvdRoot());
-            fileAsyncf(4, 0, "%s/battle/audience/audience_normal.tpl", getMarioStDvdRoot());
-            fileAsyncf(4, 0, "%s/battle/audience/audience_luigi.tpl", getMarioStDvdRoot());
+            fileAsyncf(FILE_TYPE_TPL, 0, "%s/battle/common/battle_common.tpl", getMarioStDvdRoot());
+            fileAsyncf(FILE_TYPE_TPL, 0, "%s/battle/audience/audience_normal.tpl", getMarioStDvdRoot());
+            fileAsyncf(FILE_TYPE_TPL, 0, "%s/battle/audience/audience_luigi.tpl", getMarioStDvdRoot());
         }
         if (gp->flags & GW_FLAG_SAVE_LOADED) {
             mario = marioGetPtr();

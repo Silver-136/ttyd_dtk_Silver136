@@ -152,8 +152,8 @@ static inline BOOL loadStart(void);
 
 #else
 static inline BOOL loadStart(void) {
-    if (fileAsyncf(4, NULL, "%s/w/jp/name.tpl", getMarioStDvdRoot()) != 0U) {
-        wp->file = fileAllocf(4, "%s/w/jp/name.tpl", getMarioStDvdRoot());
+    if (fileAsyncf(FILE_TYPE_TPL, NULL, "%s/w/jp/name.tpl", getMarioStDvdRoot()) != 0U) {
+        wp->file = fileAllocf(FILE_TYPE_TPL, "%s/w/jp/name.tpl", getMarioStDvdRoot());
         return TRUE;
     }
     return FALSE;
@@ -227,8 +227,8 @@ void seq_loadMain(SequenceWork* seq) {
 #ifdef VERSION_G8ME01
 static inline BOOL loadStart(void) {
     const char* lang[] = {"jp", "us", "ge", "fr", "sp", "it"};
-    if (fileAsyncf(4, NULL, "%s/w/%s/name.tpl", getMarioStDvdRoot(), lang[gp->language]) != 0U) {
-        wp->file = fileAllocf(4, "%s/w/%s/name.tpl", getMarioStDvdRoot(), lang[gp->language]);
+    if (fileAsyncf(FILE_TYPE_TPL, NULL, "%s/w/%s/name.tpl", getMarioStDvdRoot(), lang[gp->language]) != 0U) {
+        wp->file = fileAllocf(FILE_TYPE_TPL, "%s/w/%s/name.tpl", getMarioStDvdRoot(), lang[gp->language]);
         return TRUE;
     }
     return FALSE;

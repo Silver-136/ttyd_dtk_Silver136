@@ -735,7 +735,7 @@ USER_FUNC(mapdraw) {
     if (isFirstCall) {
         wp = _mapAlloc(sizeof(AaaWork));
         memset(wp, 0, sizeof(AaaWork));
-        wp->tpl = fileAllocf(4, "%s/mariost.tpl", getMarioStDvdRoot());
+        wp->tpl = fileAllocf(FILE_TYPE_TPL, "%s/mariost.tpl", getMarioStDvdRoot());
         wp->alpha = 0;
     }
     wp->alpha += 2;

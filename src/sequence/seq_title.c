@@ -72,7 +72,7 @@ s32 N_getDebugMode(void) {
 
 void L_titleInit(SequenceWork* work) {
     memset(wp2, 0, sizeof(TitleWork));
-    wp2->texture = fileAllocf(4, "%s/mariost.tpl", getMarioStDvdRoot());
+    wp2->texture = fileAllocf(FILE_TYPE_TPL, "%s/mariost.tpl", getMarioStDvdRoot());
     wp2->topPosX = 0.0f;
     wp2->topPosY = 1000.0f;
     wp2->bottomPosX = 0.0f;
@@ -438,7 +438,7 @@ PSTATIC void pressStartGX(s32 alpha, f32 x, f32 y) {
 }
 
 static void titleLoadDemo(void) {
-    fileAsyncf(4, 0, "%s/demo.tpl", getMarioStDvdRoot());
+    fileAsyncf(FILE_TYPE_TPL, 0, "%s/demo.tpl", getMarioStDvdRoot());
     animGroupBaseAsync("c_peach", 0, 0);
     animGroupBaseAsync("c_nazo", 0, 0);
     animGroupBaseAsync("MOBJ_GoldenTreasureBox", 0, 0);

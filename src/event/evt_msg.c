@@ -33,7 +33,7 @@ extern float __fabsf(float);
 
 s32 msgWindow_Entry(const char* msg, s32 callback, s32 priority);
 
-// the message window's MsgWinData lives in its userdata block
+// A message window's MsgWinData lives in its userdata block. A macro, not an inline function: as a function the object changes (2026-10-27).
 #define MSG_WIN_DATA(w) ((MsgWinData*)(w)->userdata->address)
 
 s32 _evt_msg_print(EventEntry* event, BOOL isFirstCall, s32 flags, const char* msg, s32 callback, EvtWord name) {

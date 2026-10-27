@@ -175,9 +175,9 @@ void winItemInit(WindowWork* w) {
     winMgrSetPriority(w->useWin[0], -200);
     winMgrSetPriority(w->useWin[1], -100);
 #ifdef VERSION_G8ME01
-    fileAsyncf(4, 0, "%s/w/%s/mail.tpl", getMarioStDvdRoot(), (u32)gp->language == LANGUAGE_JP ? "jp" : "us");
+    fileAsyncf(FILE_TYPE_TPL, 0, "%s/w/%s/mail.tpl", getMarioStDvdRoot(), (u32)gp->language == LANGUAGE_JP ? "jp" : "us");
 #else
-    fileAsyncf(4, 0, "%s/w/jp/mail.tpl", getMarioStDvdRoot());
+    fileAsyncf(FILE_TYPE_TPL, 0, "%s/w/jp/mail.tpl", getMarioStDvdRoot());
 #endif
 }
 
@@ -478,15 +478,15 @@ s32 winItemMain(WindowWork* w) {
         mail = mailGetPtr(w->item.mail[w->item.mailSel].id);
         if (mail->flags & 0x1000) {
 #ifdef VERSION_G8ME01
-            w->mailRes = (FileEntry*)fileAsyncf(4, 0, "%s/w/%s/mail.tpl", getMarioStDvdRoot(), (u32)gp->language == LANGUAGE_JP ? "jp" : "us");
+            w->mailRes = (FileEntry*)fileAsyncf(FILE_TYPE_TPL, 0, "%s/w/%s/mail.tpl", getMarioStDvdRoot(), (u32)gp->language == LANGUAGE_JP ? "jp" : "us");
 #else
-            w->mailRes = (FileEntry*)fileAsyncf(4, 0, "%s/w/jp/mail.tpl", getMarioStDvdRoot());
+            w->mailRes = (FileEntry*)fileAsyncf(FILE_TYPE_TPL, 0, "%s/w/jp/mail.tpl", getMarioStDvdRoot());
 #endif
             if (w->mailRes) {
 #ifdef VERSION_G8ME01
-                w->mailRes = fileAllocf(4, "%s/w/%s/mail.tpl", getMarioStDvdRoot(), (u32)gp->language == LANGUAGE_JP ? "jp" : "us");
+                w->mailRes = fileAllocf(FILE_TYPE_TPL, "%s/w/%s/mail.tpl", getMarioStDvdRoot(), (u32)gp->language == LANGUAGE_JP ? "jp" : "us");
 #else
-                w->mailRes = fileAllocf(4, "%s/w/jp/mail.tpl", getMarioStDvdRoot());
+                w->mailRes = fileAllocf(FILE_TYPE_TPL, "%s/w/jp/mail.tpl", getMarioStDvdRoot());
 #endif
                 w->item.state++;
             }

@@ -27,6 +27,7 @@ Vec cloud_at;
 void N__cloud_use(PartyEntry* party);
 void getHitBreatheout2(PartyEntry* party, f32 angle);
 
+// Flurrie's work (PartyEntry.useStruct). A macro, not an inline function: as a function the object changes (2026-10-27).
 #define CLOUD_WORK(p) ((PartyCloud*)(p)->useStruct)
 #define BREATH_PARTICLES(p) ((EffKumokumoN64Particle*)(p)->work.cloud.breathEffect->userdata)
 

@@ -259,16 +259,16 @@ void winMain(void) {
                     padRumbleHardOff(i);
                 }
 #ifdef VERSION_G8ME01
-                fileAsyncf(4, 0, "%s/w/%s/mail.tpl", getMarioStDvdRoot(), (u32)gp->language == LANGUAGE_JP ? "jp" : "us");
+                fileAsyncf(FILE_TYPE_TPL, 0, "%s/w/%s/mail.tpl", getMarioStDvdRoot(), (u32)gp->language == LANGUAGE_JP ? "jp" : "us");
 #else
-                fileAsyncf(4, 0, "%s/w/jp/mail.tpl", getMarioStDvdRoot());
+                fileAsyncf(FILE_TYPE_TPL, 0, "%s/w/jp/mail.tpl", getMarioStDvdRoot());
 #endif
                 {
 #ifdef VERSION_G8ME01
-                    fileAsyncf(4, 0, "%s/w/%s/%s", getMarioStDvdRoot(), (u32)gp->language == LANGUAGE_JP ? "jp" : "us", winGetMapTplName());
+                    fileAsyncf(FILE_TYPE_TPL, 0, "%s/w/%s/%s", getMarioStDvdRoot(), (u32)gp->language == LANGUAGE_JP ? "jp" : "us", winGetMapTplName());
 #else
                     const char* name = winGetMapTplName();
-                    fileAsyncf(4, 0, "%s/w/jp/%s", getMarioStDvdRoot(), name);
+                    fileAsyncf(FILE_TYPE_TPL, 0, "%s/w/jp/%s", getMarioStDvdRoot(), name);
 #endif
                 }
                 wp->active = 0;
@@ -283,10 +283,10 @@ void winMain(void) {
                 WinLangTbl lang = winLangTbl;
                 BOOL ok;
 
-                if (fileAsyncf(4, 0, "%s/w/%s/win.tpl", getMarioStDvdRoot(), lang.s[gp->language]) == 0U) {
+                if (fileAsyncf(FILE_TYPE_TPL, 0, "%s/w/%s/win.tpl", getMarioStDvdRoot(), lang.s[gp->language]) == 0U) {
                     ok = FALSE;
                 } else {
-                    wp->res = fileAllocf(4, "%s/w/%s/win.tpl", getMarioStDvdRoot(), lang.s[gp->language]);
+                    wp->res = fileAllocf(FILE_TYPE_TPL, "%s/w/%s/win.tpl", getMarioStDvdRoot(), lang.s[gp->language]);
                     ok = TRUE;
                 }
                 if (ok) {

@@ -5,9 +5,20 @@
 
 typedef void (*FileCallback)(struct FileEntry* file);
 
+// FileEntry.type, the fileAlloc/fileAsync type: which pointers fileGarbageDataAdrSet relocates after loading
+// (types 3 and 6..10 relocate one to three pointers of a file layout with no other use in the code)
+typedef enum FileType {
+    FILE_TYPE_RAW = 0,              // nothing to relocate (rel, .bin, .dat files)
+    FILE_TYPE_POSE_UNUSED = 1,      // AnimationPoseData without its animation table; no caller asks for it
+    FILE_TYPE_ANIM_DATA_UNUSED = 2, // one AnimData; no caller asks for it
+    FILE_TYPE_TPL = 4,              // texture palette (TEXPalette)
+    FILE_TYPE_ANIM = 5,             // animation model in a/: AnimationPoseData and its AnimData table
+    FILE_TYPE_CANCELED = 11,        // the DVD read was canceled (dvdReadDoneCallBack)
+} FileType;
+
 typedef struct FileEntry {
     u8 state; //0x0
-    s8 type; //0x1, fileAlloc(name, type); passed to fileGarbageDataAdrSet
+    s8 type; //0x1, FileType
     s16 references; //0x2
     void* dataSlot; //0x4, data points here unless the data is in a smart block
     u8 pad_8[0x20 - 0x8]; //0x8

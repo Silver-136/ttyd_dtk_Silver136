@@ -38,7 +38,9 @@ const char R_no_messages_US[] = "<col ff0000ff>No messages.<col>\n<key>";
 #define WIN_STATE(w) (*(u16*)(w)->state)
 
 
+// MsgWinData.callback holds a function pointer in an s32 (msgWindow_Entry takes the callback as s32)
 #define MSG_CB(d) (*(void (**)(s32, smartEntry*))&(d)->callback)
+// A message window's MsgWinData lives in its userdata block. A macro, not an inline function: as a function the object changes (2026-10-27).
 #define WIN_DATA(w) ((MsgWinData*)(w)->userdata->address)
 void msgWindow_Disp(CameraId camId, void* param);
 void msgWindow_Main(WindowEntry* window);

@@ -499,10 +499,10 @@ s32 sight(EventEntry* event, BOOL isFirstCall) {
         sight_wp->dir = 5;
     }
     if (sight_wp->tpl == NULL) {
-        if (fileAsyncf(4, NULL, "%s/%s", getMarioStDvdRoot(), "taihou.tpl") == 0U) {
+        if (fileAsyncf(FILE_TYPE_TPL, NULL, "%s/%s", getMarioStDvdRoot(), "taihou.tpl") == 0U) {
             return EVT_RETURN_BLOCK;
         }
-        sight_wp->tpl = fileAllocf(4, "%s/%s", getMarioStDvdRoot(), "taihou.tpl");
+        sight_wp->tpl = fileAllocf(FILE_TYPE_TPL, "%s/%s", getMarioStDvdRoot(), "taihou.tpl");
     }
     if (sight_wp->dir == 6) {
         fileFree(sight_wp->tpl);

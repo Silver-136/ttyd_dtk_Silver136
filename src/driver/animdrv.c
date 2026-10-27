@@ -382,14 +382,14 @@ void animInit(void) {
     for (i = 0; i < 0xB2; i++) {
         tanfTbl[i] = (f32)tan((i - 0x59) * 0.017453289f);
     }
-    file = fileAllocf(0, "a/vivian.bin");
+    file = fileAllocf(FILE_TYPE_RAW, "a/vivian.bin");
     if (file) {
         memcpy_as4(vivihimoData[1], *file->data, sizeof(_vivihimoData));
         memcpy_as4(vivihimoTailGroupNo, (u8*)*file->data + sizeof(_vivihimoData), sizeof(vivihimoTailGroupNo));
         fileFree(file);
     }
     fileSetCurrentArchiveType(0);
-    wp->mp_ag2tg = fileAllocf(0, "a/ag2tg.bin");
+    wp->mp_ag2tg = fileAllocf(FILE_TYPE_RAW, "a/ag2tg.bin");
 }
 
 void animMain(void) {
@@ -521,7 +521,7 @@ s32 animPoseEntry(const char *animName, s32 type) {
     file->active = 1;
 
     file->references++;
-    file->handle = fileAllocf(5, "%s/%s", "a", animName);
+    file->handle = fileAllocf(FILE_TYPE_ANIM, "%s/%s", "a", animName);
     handle = file->handle;
     if (!file->handle) {
         fileId[0] = -2;
@@ -565,7 +565,7 @@ s32 animPoseEntry(const char *animName, s32 type) {
             tex[0]->active = 1;
 
             tex[0]->references++;
-            tex[0]->handle = fileAlloc(textureName, 4);
+            tex[0]->handle = fileAlloc(textureName, FILE_TYPE_TPL);
             label_4:
             file->textureId = pc[0];
         }
@@ -661,8 +661,8 @@ BOOL animEffectAsync(const char* animName, u32 group) {
             fileSetCurrentArchiveType(0);
             break;
     }
-    model = fileAsyncf(5, NULL, "%s/%s", "a", animName);
-    anim = fileAsyncf(4, NULL, "%s/%s-", "a", animGetTexName(animName));
+    model = fileAsyncf(FILE_TYPE_ANIM, NULL, "%s/%s", "a", animName);
+    anim = fileAsyncf(FILE_TYPE_TPL, NULL, "%s/%s-", "a", animGetTexName(animName));
     if (model == -1) {
         ret = TRUE;
     } else if ((u32)model == 0) {
@@ -2872,8 +2872,8 @@ BOOL animGroupBaseAsync(const char* name, s32 group, void* callback) {
             fileSetCurrentArchiveType(0);
             break;
     }
-    model = fileAsyncf(5, callback, "%s/%s", "a", name);
-    anim = fileAsyncf(4, NULL, "%s/%s-", "a", animGetTexName(name));
+    model = fileAsyncf(FILE_TYPE_ANIM, callback, "%s/%s", "a", name);
+    anim = fileAsyncf(FILE_TYPE_TPL, NULL, "%s/%s-", "a", animGetTexName(name));
     if (model == -1) {
         return TRUE;
     }

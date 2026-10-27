@@ -38,7 +38,7 @@ s32 seq_battle_unk_8041874c;
 
 
 static inline BOOL loadTpl(const char* path) {
-    return (u32)fileAsyncf(4, NULL, "%s/%s", getMarioStDvdRoot(), path) != 0;
+    return (u32)fileAsyncf(FILE_TYPE_TPL, NULL, "%s/%s", getMarioStDvdRoot(), path) != 0;
 }
 
 void seq_battleInit(SequenceWork* work) {

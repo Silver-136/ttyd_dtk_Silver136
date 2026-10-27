@@ -270,7 +270,7 @@ s32 haiti_data_front_narrow[][10] = {
 #endif
 
 FileEntry* tplRead(const char* path) {
-    return fileAllocf(4, "%s/%s", getMarioStDvdRoot(), path);
+    return fileAllocf(FILE_TYPE_TPL, "%s/%s", getMarioStDvdRoot(), path);
 }
 
 BattleAudience* BattleAudienceBaseGetPtr(void) {

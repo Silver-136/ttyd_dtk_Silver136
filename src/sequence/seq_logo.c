@@ -46,7 +46,7 @@ void seq_logoInit(SequenceWork* work) {
 #ifdef VERSION_G8ME01
     wp->page = -1;
 #endif
-    wp->texture = fileAllocf(4, "%s/mariost.tpl", getMarioStDvdRoot());
+    wp->texture = fileAllocf(FILE_TYPE_TPL, "%s/mariost.tpl", getMarioStDvdRoot());
     if (!OSIsRestart() || OSGetResetCode() & OS_RESET_SHUTDOWN) {
         if (VIGetDTVStatus()) {
             if (OSGetProgressiveMode() == 1) {
@@ -328,7 +328,7 @@ void seq_logoMain(SequenceWork* work) {
             if (!ok) {
                 break;
             }
-            first = fileAllocf(0, "%s/b/first", getMarioStDvdRoot());
+            first = fileAllocf(FILE_TYPE_RAW, "%s/b/first", getMarioStDvdRoot());
             if (first) {
                 decode = *first->data;
                 size = *(u32*)decode;
@@ -651,7 +651,7 @@ void logoDisp(CameraId camId, void* param) {
 #ifndef VERSION_G8ME01
 //param is unused
 static s32 logoAsyncFirst(void) {
-    return fileAsyncf(0, 0, "%s/b/first", getMarioStDvdRoot());
+    return fileAsyncf(FILE_TYPE_RAW, 0, "%s/b/first", getMarioStDvdRoot());
 }
 #endif
 void dummy_draw(CameraId camId, void* param) {

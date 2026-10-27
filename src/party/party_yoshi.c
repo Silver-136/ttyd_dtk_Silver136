@@ -46,6 +46,7 @@ static f32 marioJumpStandData[10] = {1.52f, -0.188f, 2.925f, -0.847f, -0.1f, -0.
 f32 ofs_PYS_R_2[10] = {0.0f, 0.0f, 0.366f, 0.555f, 0.38f, 0.0f, 0.0f, 0.366f, 0.555f, 0.38f};
 f32 ofs_PYS_F_1[10] = {0.0f, 0.0f, 0.433f, 0.557f, 0.512f, 0.0f, 0.0f, 0.433f, 0.557f, 0.512f};
 
+// Yoshi's work (PartyEntry.useStruct). A macro, not an inline function: as a function the object changes (2026-10-27).
 #define YOSHI_WORK(party) ((YoshiWork*)(party)->useStruct)
 
 static inline void yoshiAddFloorMove(PartyEntry* party) {

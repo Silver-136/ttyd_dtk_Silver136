@@ -1358,11 +1358,11 @@ USER_FUNC(evt_end_staff_roll_init) {
         JUTFontSetup(1);
 #endif
     }
-    if ((u32)fileAsyncf(4, NULL, "%s/ending.tpl", getMarioStDvdRoot()) == 0) {
+    if ((u32)fileAsyncf(FILE_TYPE_TPL, NULL, "%s/ending.tpl", getMarioStDvdRoot()) == 0) {
         return 0;
     }
     if (end_wp->tpl == NULL) {
-        end_wp->tpl = fileAllocf(4, "%s/ending.tpl", getMarioStDvdRoot());
+        end_wp->tpl = fileAllocf(FILE_TYPE_TPL, "%s/ending.tpl", getMarioStDvdRoot());
     }
     for (i = 0; i < 5; i++) {
         if (!animGroupBaseAsync(R_credits_npc_info[i].agb, inBattle, NULL)) {

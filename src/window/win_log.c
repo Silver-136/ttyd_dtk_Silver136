@@ -505,15 +505,15 @@ s32 winLogMain(WindowWork* w) {
         break;
     case 10:
 #ifdef VERSION_G8ME01
-        if (fileAsyncf(4, NULL, "%s/w/%s/%s", getMarioStDvdRoot(), (u32)gp->language == LANGUAGE_JP ? "jp" : "us", winGetMapTplName()) == 0U) break;
+        if (fileAsyncf(FILE_TYPE_TPL, NULL, "%s/w/%s/%s", getMarioStDvdRoot(), (u32)gp->language == LANGUAGE_JP ? "jp" : "us", winGetMapTplName()) == 0U) break;
 #else
-        if (fileAsyncf(4, NULL, "%s/w/jp/%s", getMarioStDvdRoot(), winGetMapTplName()) == 0U) break;
+        if (fileAsyncf(FILE_TYPE_TPL, NULL, "%s/w/jp/%s", getMarioStDvdRoot(), winGetMapTplName()) == 0U) break;
 #endif
         if (!w->mapRes) {
 #ifdef VERSION_G8ME01
-            w->mapRes = fileAllocf(4, "%s/w/%s/%s", getMarioStDvdRoot(), (u32)gp->language == LANGUAGE_JP ? "jp" : "us", winGetMapTplName());
+            w->mapRes = fileAllocf(FILE_TYPE_TPL, "%s/w/%s/%s", getMarioStDvdRoot(), (u32)gp->language == LANGUAGE_JP ? "jp" : "us", winGetMapTplName());
 #else
-            w->mapRes = fileAllocf(4, "%s/w/jp/%s", getMarioStDvdRoot(), winGetMapTplName());
+            w->mapRes = fileAllocf(FILE_TYPE_TPL, "%s/w/jp/%s", getMarioStDvdRoot(), winGetMapTplName());
 #endif
         }
         if (w->log.pose == -1) {
@@ -1317,17 +1317,17 @@ void monosiriMain(MonosiriWork* m) {
     if (!m) return;
     switch (m->state) {
     case 0:
-        if (fileAsyncf(4, NULL, "%s/w/%s/win.tpl", getMarioStDvdRoot(), lang[gp->language]) == 0U) break;
+        if (fileAsyncf(FILE_TYPE_TPL, NULL, "%s/w/%s/win.tpl", getMarioStDvdRoot(), lang[gp->language]) == 0U) break;
 #ifdef VERSION_G8ME01
-        if (fileAsyncf(0, NULL, "%s/w/%s/mono.dat", getMarioStDvdRoot(), (u32)gp->language == LANGUAGE_JP ? "jp" : "us") == 0U) break;
+        if (fileAsyncf(FILE_TYPE_RAW, NULL, "%s/w/%s/mono.dat", getMarioStDvdRoot(), (u32)gp->language == LANGUAGE_JP ? "jp" : "us") == 0U) break;
 #else
-        if (fileAsyncf(0, NULL, "%s/w/jp/mono.dat", getMarioStDvdRoot()) == 0U) break;
+        if (fileAsyncf(FILE_TYPE_RAW, NULL, "%s/w/jp/mono.dat", getMarioStDvdRoot()) == 0U) break;
 #endif
-        m->file1 = fileAllocf(4, "%s/w/%s/win.tpl", getMarioStDvdRoot(), lang[gp->language]);
+        m->file1 = fileAllocf(FILE_TYPE_TPL, "%s/w/%s/win.tpl", getMarioStDvdRoot(), lang[gp->language]);
 #ifdef VERSION_G8ME01
-        m->file2 = fileAllocf(0, "%s/w/%s/mono.dat", getMarioStDvdRoot(), (u32)gp->language == LANGUAGE_JP ? "jp" : "us");
+        m->file2 = fileAllocf(FILE_TYPE_RAW, "%s/w/%s/mono.dat", getMarioStDvdRoot(), (u32)gp->language == LANGUAGE_JP ? "jp" : "us");
 #else
-        m->file2 = fileAllocf(0, "%s/w/jp/mono.dat", getMarioStDvdRoot());
+        m->file2 = fileAllocf(FILE_TYPE_RAW, "%s/w/jp/mono.dat", getMarioStDvdRoot());
 #endif
         m->state++;
         TEXGetGXTexObjFromPalette(*(TEXPalette**)m->file1->data, &tex, 0x37);
