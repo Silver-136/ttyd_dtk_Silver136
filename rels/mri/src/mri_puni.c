@@ -82,7 +82,6 @@ PuniWork* Punigp;
 PuniTexInfo* Punitex;
 PuniMap* Punimap;
 
-
 static inline s32 puni_bero_id_filter(s32 id) {
     return bero_id_filter(id);
 }
@@ -268,8 +267,6 @@ void puniAnimationInit2(void) {
     strcpy(n[8], "J_1B");
     strcpy(n[9], "B_1");
 }
-
-
 
 void puniAnimation(PuniData* p, PunidrvPose* t) {
     NpcEntry* npc;
@@ -620,7 +617,6 @@ u8 puniMapdata_MRI_09_01[] = {
 u8 puniMapdata_MRI_16[] = {
     0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x20, 0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x20, 0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0x20, 0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x20, 0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0x20, 0x00, 0x03, 0x00, 0x03, 0x00, 0x03, 0x00, 0x03, 0x00, 0x03, 0x00, 0x03, 0x00, 0x03, 0x00, 0x20, 0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0x20, 0x00, 0x10, 0x00, 0x10, 0x00, 0x10, 0x00, 0x10, 0x00, 0x10, 0x00, 0x10, 0x00, 0x10, 0x00, 0x20, 0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0x20, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x20, 0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0x20, 0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x20, 0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0x20, 0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x20, 0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x00, 0x00,
 };
-
 
 void puniMapdata_MRI_06_getidx(f32 x, f32 z, s32* bx, s32* bz) {
     if (x <= -420.0) {
@@ -1300,7 +1296,6 @@ void puniPositionRecover(PuniData* p) {
     p->prevPos = p->pos;
 }
 
-
 static const Vec puni_fall_dir;
 int puniMoveAtari(PuniData* p, Vec start, Vec dir, int reflect, f32 dist) {
     Vec hit;
@@ -1638,7 +1633,6 @@ void puniMoveCustom(PuniData* p) {
         p->moveFunc(p);
     }
 }
-
 
 void puniParaAttack(PuniData* a, PuniData* b) {
     s16 x, y, r;
@@ -2551,7 +2545,6 @@ void puniModeAwayjump(PuniData* p) {
     }
 }
 
-
 static const Vec puni_away_zero0 = {0.0f, 0.0f, 0.0f};
 #pragma dont_inline on
 int puniModeAway_sub(PuniData* p) {
@@ -2741,7 +2734,6 @@ void puniModeDamage(PuniData* p) {
     }
 }
 
-
 void puniModePiyori(PuniData* p) {
     if (p->breathPower > 10.0f) {
         p->prevMode = p->mode;
@@ -2796,7 +2788,6 @@ void puniModePiyori(PuniData* p) {
             break;
     }
 }
-
 
 void puniModeEscape(PuniData* p) {
     Vec d;
@@ -2854,7 +2845,6 @@ void puniModeEscape(PuniData* p) {
     PSVECSubtract(&p->vel, &d, &p->vel);
     p->maxSpeed = 2.4f;
 }
-
 
 void puniModeRecover(PuniData* p) {
     switch (p->modeStep) {
@@ -2983,8 +2973,6 @@ void puniModeWind_kaiten(PuniData* p) {
         }
     }
 }
-
-
 
 void puniModeWind(PuniData *p);
 static const Vec puni_fall_dir;
@@ -3247,7 +3235,6 @@ void puniModePreupdraft(PuniData* p) {
             break;
     }
 }
-
 
 static const Vec puni_fall_dir;
 void puniModeUpdraft(PuniData *p) {
@@ -3616,7 +3603,6 @@ void puniModePrehagure(PuniData* p) {
     }
 }
 
-
 void puniModeHagure(PuniData* p) {
     switch (p->modeStep) {
         case 0:
@@ -3779,7 +3765,6 @@ void puniModeTrap_sub(PuniData* p) {
         n->position.y = -1000.0f;             \
         n->position.z = 0.0f;                 \
     }
-
 
 void puniModeTrap(PuniData* p) {
     NpcEntry* n;
@@ -4167,8 +4152,6 @@ void puni_puni_init(void) {
     memset(Punimap, 0, 0x24);
 }
 
-
-
 void puniModeMain(PuniData* p);
 static const Vec puni_fall_dir;
 static inline void puniModeCheckPos(PuniData* p) {
@@ -4336,7 +4319,6 @@ void puniModeMain(PuniData* p) {
             break;
     }
 }
-
 
 void puniMoveMain(PuniData* p);
 static const Vec puni_fall_dir;
@@ -4673,7 +4655,6 @@ void puniCollideAll(void) {
     }
 }
 
-
 void puniSound(void) {
     int i;
     PuniData *p;
@@ -4825,7 +4806,6 @@ void puniSound(void) {
     Punigp->fightSfxCount1 = 0;
     Punigp->fightSfxCount2 = 0;
 }
-
 
 f32 cloudGetBreathPower(Vec pos, f32 r);
 extern double fabs(double);
@@ -5944,8 +5924,6 @@ USER_FUNC(evt_puni_set_position) {
     return EVT_RETURN_DONE;
 }
 
-
-
 USER_FUNC(evt_puni_get_dir) {
     EvtWord* args = event->args;
     evtSetValue(event, args[1], (s32)Punidat[evtGetValue(event, args[0])].dir);
@@ -6494,12 +6472,6 @@ const char* npcGetTribeName(const char** name) {
     return *name;
 }
 
-#define PIDERS_Y(n)                              \
-    if (50.0 >= __fabs(v.y - Punigp->posY[n])) { \
-        found = TRUE;                            \
-        v.y = Punigp->posY[n];                   \
-    }
-
 static const Vec puni_fall_dir;
 s32 puni_piders_check_func(EventEntry *event, BOOL isFirstCall) {
     s32 k;
@@ -6641,7 +6613,6 @@ USER_FUNC(puni_disp_info_sub) {
     }
     return EVT_RETURN_DONE;
 }
-
 
 EVT_BEGIN(puni_piders_check)
     CALL(evt_seq_wait, SEQ_GAME)
@@ -6841,12 +6812,4 @@ EVT_BEGIN(mri_puni_init_none)
     CALL(evt_puni_set_maze)
     RETURN
 EVT_END()
-
-
-
-
-
-
-
-
 

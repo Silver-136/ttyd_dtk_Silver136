@@ -28,14 +28,10 @@
 #define VIVIAN_FOLLOW_DIST 22.0f
 #endif
 
-
 typedef struct VivianTail {
     u8 pad : 7;
     u8 off : 1;
 } VivianTail;
-
-#define TAIL_OFF(p) (((VivianTail*)&(p)->field_4F)->off)
-
 
 s32 vivian_cancel_req;
 
@@ -71,7 +67,6 @@ void mot_vivian(void) {
         mario->hitobjWall = NULL;
     }
 }
-
 
 void L_partyVivianTailStart(PartyEntry* party);
 
@@ -208,8 +203,6 @@ void vivian_move(PartyEntry* party) {
     partyFlyMain(party);
     vivianShadow(party);
 }
-
-
 
 static inline void vivianFollow(PartyEntry* party) {
     HitEntry* hit;
@@ -511,9 +504,6 @@ void vivian_use(PartyEntry* party) {
 }
 
 #pragma explicit_zero_data reset
-
-
-
 
 #pragma explicit_zero_data on
 #pragma explicit_zero_data reset

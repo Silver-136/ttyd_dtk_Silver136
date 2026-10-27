@@ -13,7 +13,6 @@
 // US battle texture ids are 0x16 higher for these entries.
 #define BTL_TEX(id) ((id) + VERSION_PICK(0, 0x16))
 
-
 s32 BattleACGetButtonIcon(s32 button, s32 pressed);
 
 typedef struct GT2Work {
@@ -33,9 +32,6 @@ typedef struct GT2Work {
     s32 endTimer; // 0x6C
 } GT2Work;
 
-#define GT_PARAMS(work) (&(work)->actionCommands) // params: 1 total frames, 2 target count, 3 bonus
-#define GT_DISP(w) (&(w)->actionCommands.disp)
-#define GT_WORK(w) ((GT2Work*)(w)->actionCommands.work)
 #define ICON ((void (*)(Vec*, s16, s32, f32))iconDispGx)
 
 static void actionCommandDisp(f32 x, f32 y);

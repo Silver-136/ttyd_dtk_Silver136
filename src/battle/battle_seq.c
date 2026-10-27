@@ -42,7 +42,6 @@
 #include "battle/battle_seq_end.h"
 #include "battle/unit_work.h"
 
-
 #define STAGE_WORK(wp) (&(wp)->stageObjectWork)
 
 // external prototypes
@@ -332,8 +331,6 @@ BattleWeapon* _GetFirstAttackWeapon(s32 type) {
             return NULL;
     }
 }
-
-
 
 void btlseqFirstAct(BattleWork* wp) {
     s32 type;
@@ -682,76 +679,6 @@ USER_FUNC(_set_effect_luck) {
     BattleIncSeq(wp, SEQ_TURN); \
     BattleIncSeq(wp, SEQ_TURN); \
     btlseqTurn(wp)
-
-#define TURN_WAIT_CASE(wp) \
-    if (!BattleWaitAllActiveEvtEnd(wp)) { \
-        break; \
-} \
-    if (BattleCheckConcluded(wp)) { \
-        BattleSetSeq(wp, SEQ_UNKNOWN, 3); \
-        BattleSetSeq(wp, SEQ_END, 0x7000000); \
-} \
-    else { \
-        BattleIncSeq(wp, SEQ_TURN); \
-} \
-    break
-
-#define TURN_RECOVERY_CASE(wp, status) \
-    for (i = 0; i < 64; i++) { \
-        unit = BattleGetUnitPtr(wp, i); \
-        ret = BtlUnit_CheckRecoveryStatus(unit, status); \
-        sfx |= ret; \
-        if (ret) { \
-            evt = evtEntry(subsetevt_status_recovery, 10, 0); \
-            if (evt) { \
-                unit->attackEventId = evt->eventId; \
-                evt->unitId = unit->unitId; \
-        } \
-        found = TRUE; \
-    } \
-} \
-    if (sfx) { \
-        psndSFXOn("SFX_REST_CONDITION1"); \
-} \
-    if (!found) { \
-        TURN_SKIP(wp); \
-        break; \
-} \
-    TURN_NEXT(wp); \
-    break
-
-#define TURN_RECOVERY_CASE2(wp, status) \
-    for (i = 0; i < 64; i++) { \
-        unit = BattleGetUnitPtr(wp, i); \
-        if (unit) { \
-            ret = BtlUnit_CheckRecoveryStatus(unit, status); \
-            sfx |= ret; \
-            if (ret) { \
-                evt = evtEntry(subsetevt_status_recovery, 10, 0); \
-                if (evt) { \
-                    unit->attackEventId = evt->eventId; \
-                    evt->unitId = unit->unitId; \
-            } \
-            found = TRUE; \
-        } \
-    } \
-} \
-    if (sfx) { \
-        psndSFXOn("SFX_REST_CONDITION1"); \
-} \
-    if (!found) { \
-        TURN_SKIP(wp); \
-        break; \
-} \
-    TURN_NEXT(wp); \
-    break
-
-#define TURN_COMMAND_DISABLED_CASE(wp, n) \
-    if (wp->commandDisabled[n]) { \
-        wp->commandDisabled[n]--; \
-} \
-    TURN_SKIP(wp); \
-    break
 
 void btlseqTurn(BattleWork *wp) {
     Vec pos;

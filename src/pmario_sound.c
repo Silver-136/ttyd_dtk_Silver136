@@ -4948,8 +4948,6 @@ BOOL _psndPushGroup_trg = 0;
 
 //local definitions
 void stub_fn(void);
-#define STUB_BODY stub_fn();
-
 
 void psndBGMMain(void);
 void psndENVMain(void);
@@ -5825,7 +5823,6 @@ BOOL psndBGMOff_f_d(s32 flags, u32 fadetime, u32 someswitch) {
     return TRUE;
 }
 
-
 s32 psndBGMChk(s32 id) {
     return psbgm[id & 0xF].listId == 0xFFFFFFFF ? -1 : 0;
 }
@@ -5880,7 +5877,6 @@ static inline s32 sfxvol(PaperSoundEffect* s) {
     if (v > 127) v = 127;
     return v;
 }
-
 
 void psndSFXMain(void) {
     SoundEffectEntry* e;
@@ -6118,7 +6114,6 @@ sgfound:
     psnd.sfxDelay = 0;
 }
 
-
 s32 __psndSFXOn(const char *name, u8 vol, u8 pan, u16 pitch, Vec *pos, u32 r8, u16 dist, s32 r10) {
     s32 sid;
     s32 k;
@@ -6234,7 +6229,6 @@ s32 __psndSFXOn(const char *name, u8 vol, u8 pan, u16 pitch, Vec *pos, u32 r8, u
     idx |= (*((u16*)(&psnd.sfxSerial))) << 8;
     return idx;
 }
-
 
 s32 psndSFXOn_(const char* name) {
     return __psndSFXOn(name, 0xFF, 0xFF, 0, NULL, 0, 0x10, 1);
@@ -6802,7 +6796,6 @@ BOOL psndENVOff_f_d(u32 flags, u32 fadetime, s32 r5) {
     }
     return TRUE;
 }
-
 
 BOOL psndENV_LPF(s32 id, u16 freq) {
     if (psnd.envId[id & 0xF] == 0) {

@@ -36,7 +36,6 @@ extern ItemData itemDataTable[];
 
 void FontDrawString(f32 x, f32 y, const char* str);
 
-
 // UnitWinWork.flags
 typedef enum UnitWinFlags {
     UNITWIN_FLAG_SELECTED = (1 << 0),             // 0x1, an entry is under the cursor
@@ -469,7 +468,6 @@ static inline s32 unitwin_party_icon(s32 icon) {
     return icon;
 }
 
-#define ICONGX ((void (*)(Vec*, u16, u16, f32))iconDispGx)
 #define ICONGX2 ((void (*)(Vec*, u16, f32, u16))iconDispGx)
 
 static inline const char* unitwin_party_name(s32 i) {
@@ -1407,12 +1405,6 @@ void evt_unitwin_disp_func(CameraId cameraId, void* param) {
         iconFlagOn("yubicursor_2", ICON_FLAG_HIDDEN);
     }
 }
-
-
-
-
-
-
 
 USER_FUNC(set_new_goods_list) {
     EvtWord* args = event->args;

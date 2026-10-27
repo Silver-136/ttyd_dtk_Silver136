@@ -15,10 +15,6 @@
 // US effect texture ids are 0x1C lower for these entries.
 #define EFF_TEX(id) ((id) - VERSION_PICK(0, 0x1C))
 
-
-#define PI 3.1415927f
-#define HALF_PI 1.5707964f
-
 static GXColor col_normal[] = {
     {0xF2, 0x65, 0x22, 0xFF}, {0xF6, 0x86, 0x1E, 0xFF}, {0xF6, 0xAC, 0x1E, 0xFF}, {0xFF, 0xF5, 0x68, 0xFF}, {0x96, 0x5E, 0x1A, 0xFF},
 };
@@ -48,8 +44,6 @@ u32 gap_07_8041E0A4_sdata[7] = {0,0,0,0,0,0,0};
 u32 gap_07_80417E8C_sdata[5] = {0,0,0,0,0};
 #endif
 #pragma force_active reset
-
-// cheap polynomial approximations, valid for x in [0, 2pi]
 
 
 void effGonbabaBreathMain(EffectEntry* effect);

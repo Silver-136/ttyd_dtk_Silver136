@@ -37,7 +37,6 @@
 #include "battle/battle_database_common.h"
 #include "battle/battle_detect.h"
 
-
 void BattleMenuDisp_ChangePartySelect_Init(BattleWork* wp);
 void BattleCommandDisplay_ActMenuEnd(BattleWork* wp);
 void _btlcmd_MakeMultiItemTable(BattleWork* wp);
@@ -55,7 +54,6 @@ void BattleCommandDisplay_ChangePartySelectMenuDisp(CameraId camId, void* param)
 void BattleCommandDisplay_MultiItemMenuDisp(CameraId camId, void* param);
 void BattleCommandDisplay_TargetSelectMenuDisp(CameraId camId, void* param);
 void BattleCommandDisplay_ProtectPartnerSelectMenuDisp(CameraId camId, void* param);
-
 
 //local prototypes
 extern ItemData itemDataTable[];
@@ -1077,7 +1075,6 @@ void _commandRestoreRec(void);
 s32 _check_present_item(void);
 void _btlcmd_SetAttackEvent(BattleUnit* unit, BattleCommand* cmd);
 
-
 s32 BattleCommandInput(BattleWork* work) {
     const char* sfxA;
     const char* sfxB;
@@ -1385,7 +1382,6 @@ s32 BattleCommandInput(BattleWork* work) {
     return 0;
 }
 
-
 void BattleCommandDisplay(BattleWork* wp) {
     BattleCommand* cmd = &wp->commandMenu;
 
@@ -1461,7 +1457,6 @@ void BattleCommandDisplay_ActMenuSetup(BattleWork* wp, u32 a) {
         BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL)) { \
         return FALSE; \
     }
-
 
 s32 BattleCommandDisplay_ActMenuMain(BattleWork* wp) {
     BattleCommand* cmd = &wp->commandMenu;
@@ -2132,7 +2127,6 @@ void BattleCommandDisplay_TargetSelectMenuSetup(BattleWork* wp) {
 }
 #pragma dont_inline reset
 
-
 void BattleCommandDisplay_TargetSelectMenuDisp(CameraId camId, void* param) {
     BattleWork* wp = param;
     Vec icon;
@@ -2293,7 +2287,6 @@ void BattleCommandDisplay_AllEnd(BattleWork* wp) {
 
 s32 _check_weapon_type_attack(BattleWeapon* weapon);
 #define UEVT(u) ((u)->attackEventCode)
-#define UEVTMODE(u) ((u)->attackEventFlags)
 #define WEVT(w) ((w)->mAttackEvtScript)
 
 void _btlcmd_SetAttackEvent(BattleUnit* unit, BattleCommand* cmd) {
@@ -2496,7 +2489,6 @@ BattleWeapon* BattleGetSelectWeapon(BattleWork* wp) {
     return cmd->weapon[cursor->absPos].weapon;
 }
 
-
 s32 _check_present_item(void) {
     BattleWork* wp = _battleWorkPointer;
     s32 item = BattleAudience_GetPresentItemNo();
@@ -2585,7 +2577,6 @@ void BattleDrawEnemyHP(CameraId camId, void* param) {
         BattleDrawEnemyHPBar(screen, unit, color);
     }
 }
-
 
 #pragma dont_inline on
 void BattleDrawEnemyHPBar(Vec pos, BattleUnit* unit, GXColor color) {
@@ -2802,7 +2793,6 @@ void _commandRestoreRec(void) {
     }
 }
 #pragma dont_inline reset
-
 
 #pragma dont_inline on
 BOOL BattleCommandAttackAudienceCheck(void) {

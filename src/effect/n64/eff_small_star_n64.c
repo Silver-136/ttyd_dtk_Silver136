@@ -11,9 +11,6 @@
 #include <math.h>
 #include "poly_trig.h"
 
-#define PI 3.1415927f
-#define HALF_PI 1.5707964f
-
 typedef struct EffSmallStarN64Work {
     s32 type;     // 0x0
     Vec position; // 0x4

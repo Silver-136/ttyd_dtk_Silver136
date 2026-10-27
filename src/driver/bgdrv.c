@@ -12,7 +12,6 @@
 #include "eff/eff_magic1_n64.h"
 #include "libc_decls.h"
 
-#define PI 3.14159265358979323846264338327950288419716939937510
 #define TWO_PI 6.2831855f
 
 //.bss

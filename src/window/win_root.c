@@ -921,16 +921,6 @@ void winKirinukiGX(WindowWork* wp, s32 type, f32 x, f32 y, f32 w, f32 h) {
 
 static inline double fabs_d(double x) { return __fabs(x); }
 static inline float fabsf_(float x) { return (float)fabs_d((double)x); }
-#define NAME_QUAD(x0, y0, x1, y1)              \
-    GXBegin(GX_QUADS, GX_VTXFMT0, 4);          \
-    GXPosition3f32(x0, y0, 0.0f);              \
-    GXTexCoord2f32(0.0f, 0.0f);                \
-    GXPosition3f32(x0, y1, 0.0f);              \
-    GXTexCoord2f32(0.0f, 1.0f);                \
-    GXPosition3f32(x1, y1, 0.0f);              \
-    GXTexCoord2f32(1.0f, 1.0f);                \
-    GXPosition3f32(x1, y0, 0.0f);              \
-    GXTexCoord2f32(1.0f, 0.0f)
 
 #define NAME_TEX(obj, id, mtx, tw, th)                                                        \
     TEXGetGXTexObjFromPalette((TEXPalette*)*wp->res->data, &obj, id);                                   \

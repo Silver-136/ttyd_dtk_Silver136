@@ -14,10 +14,6 @@
 #include "eff/eff_mobj_broken.h"
 #include "driver/mapdrv.h"
 
-
-#define PI 3.1415927f
-#define HALF_PI 1.5707964f
-
 typedef struct EffMObjBrokenWork {
     s32 type;     // 0x0
     Vec position; // 0x4
@@ -35,8 +31,6 @@ static void effMObjBrokenMain(EffectEntry* effect);
 static void effMObjBrokenDisp(CameraId cameraId, EffectEntry* effect);
 static void effMObjBrokenDisp2(CameraId cameraId, EffectEntry* effect);
 static void rendermodeFunc(s32 arg);
-
-
 
 EffectEntry* effMObjBrokenEntry(s32 type, f32 x, f32 y, f32 z) {
     EffectEntry* effect;

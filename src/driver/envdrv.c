@@ -230,8 +230,6 @@ void envMain(void) {
     dispEntry(CAMERA_3D, 5000.0f, 8, envDisp2, NULL);
 }
 
-#define PI 3.141592653589793f
-#define TWO_PI 6.283185307179586f
 static const s32 texmtx_tbl[] = {30, 33, 36, 39, 42, 45, 48, 51, 54, 57};
 
 static inline f32
@@ -307,8 +305,6 @@ env_cos(f32 x) {
     }
     return a;
 }
-
-#define WGPIPE_F32(x) (*(volatile f32*)0xCC008000 = (x))
 
 // FAKE: the first vertex's y goes through an inline return temp, so in envDisp_DepthOfField (opt_propagation off)
 // it is numbered after the x product and x keeps f0 as in the target. Same value; envDisp_Blur is unaffected.
@@ -589,8 +585,6 @@ void envGlare(EnvironmentGlare* glare) {
     s32 width;
     s32 y1v;
 
-
-
     s32 x1v;
     s32 glareCount;
     u32 texMtxId;
@@ -764,7 +758,6 @@ void envGlareFilterZ(f32 zscale) {
     f->flags |= ENV_GLARE_FILTER_Z;
 }
 
-
 #pragma opt_propagation off
 #pragma opt_lifetimes off
 void envDisp_FF(void) {
@@ -815,7 +808,6 @@ void envDisp_FF(void) {
 
 #pragma opt_propagation reset
 #pragma opt_lifetimes reset
-
 
 double acos(double);
 
@@ -1003,10 +995,6 @@ envLoadTex(u32 id, s32 map) {
     }
 }
 
-#define ENV_TEX_TAIL(t, mtxType, gentype, mtxsrc) \
-    GXSetTexCoordGen2((GXTexCoordID)coord, gentype, GX_TG_NRM, texmtx_tbl[map], GX_FALSE, mtxsrc); \
-    envTevLoadTexMtxImm(t, (GXTexMtx)texmtx_tbl[map], GX_PTTEXMTX0, mtxType)
-
 void envAddTev(s32 type, MapTevCallbackInfo* info) {
     s32 stage;
     int map;
@@ -1168,7 +1156,6 @@ void envAddTev(s32 type, MapTevCallbackInfo* info) {
 }
 
 #undef ENV_TEX_TAIL
-
 
 static inline MapObject* envWaterObj(MapTevCallbackInfo* info) {
     return info->mapObj;
@@ -1407,5 +1394,4 @@ void envSetYami(MapTevCallbackInfo* info) {
     info->indStage = unk18;
     info->texMap = map;
 }
-
 

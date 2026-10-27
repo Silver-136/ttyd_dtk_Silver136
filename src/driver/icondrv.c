@@ -18,7 +18,6 @@
 #include <stdio.h>
 #include "icon_ids.h"
 
-
 //.sbss
 static IconWork work[2];
 BOOL icon_bin_ok;
@@ -40,25 +39,6 @@ typedef struct IconBinData {
     u16 numIcons;        // 0x6
     IconFrame frames[1]; // 0x8
 } IconBinData;
-
-
-#define ICON_ANIM_TPL(data, dst)                                   \
-    if ((data)->numIcons > 1) {                                    \
-        s32 total = 0;                                             \
-        s32 i;                                                     \
-        s32 t;                                                     \
-        for (i = 0; i < (data)->numIcons; i++) {                   \
-            total += (data)->frames[i].delay;                      \
-        }                                                          \
-        t = gp->retraceCount % total;                              \
-        for (i = 0; i < (data)->numIcons; i++) {                   \
-            if (t < (data)->frames[i].delay) {                     \
-                dst = (data)->frames[i].tplId;                     \
-                break;                                             \
-            }                                                      \
-            t -= (data)->frames[i].delay;                          \
-        }                                                          \
-    }
 
 #define ICON_ANIM_TPL_S(data, dst)                                   \
     if ((data)->numIcons > 1) {                                    \
@@ -116,7 +96,6 @@ void iconDisp(CameraId camId, void* param);
 void iconGX(Mtx mtx, IconEntry* entry);
 
 #define iconGetWork() (gp->inBattle ? &work[1] : &work[0])
-
 
 inline IconEntry* iconFindIn(IconWork* wp, const char* name) {
     int i;
@@ -201,7 +180,6 @@ void iconReInit(void) {
     IconWork* wp = iconGetWork();
     memset(wp->entries, 0, sizeof(IconEntry) * wp->count);
 }
-
 
 void iconMain(void) {
     IconWork* wp;

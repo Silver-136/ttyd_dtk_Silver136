@@ -24,7 +24,6 @@
 #include "sdk/DEMOInit.h"
 
 #define TESTHEAP_SIZE (u32)(1.5 * 1024 * 1024)
-#define PI 3.14159265358979323846264338327950288419716939937510f
 
 //.data
 u8 _vivihimoData[3][0x400] ATTRIBUTE_ALIGN(32) = {
@@ -729,7 +728,6 @@ void animPoseSetStartTime(s32 poseId, OSTime startTime) {
  * an s32) or an anim index (non-negative). */
 #define ANIM_NAME_INDEX(name) ((s32)(AddrWord)(name))
 #define ANIM_INDEX_NAME(idx) ((const char*)(AddrWord)(idx))
-#define animPoseGetBaseDataId(id) (*(AnimationPoseData**)(wp->files[wp->poses[id].fileId].handle->data))
 
 inline s32 animPoseGetAnimIdx(AnimationPoseData* data, const char* name) {
     s32 i = ANIM_NAME_INDEX(name);
@@ -1868,7 +1866,6 @@ void renderProc(s32 shapeId, s32 unused) {
 
     BOOL texChange1, check1, texChange2, check2;
     Vec *posVtxPtr, *nrmVtxPtr;
-
 
     int j, k, l, k2, jj;
 

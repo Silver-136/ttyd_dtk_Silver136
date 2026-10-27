@@ -12,9 +12,6 @@
 #include "poly_trig.h"
 #include "eff/eff_number.h"
 
-#define PI 3.1415927f
-#define HALF_PI 1.5707964f
-
 u32 strlen(const char* s);
 
 typedef struct DamageStarWork {

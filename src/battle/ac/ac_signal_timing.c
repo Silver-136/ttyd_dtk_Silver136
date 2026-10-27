@@ -14,9 +14,7 @@
 // US battle texture ids are 0x16 higher for these entries.
 #define BTL_TEX(id) ((id) + VERSION_PICK(0, 0x16))
 
-
 u16 BattleACGetButtonIcon(s32 button, s32 pressed);
-
 
 typedef struct SignalTimingWork {
     s32 hits;       // 0x0
@@ -51,7 +49,6 @@ typedef struct SignalTimingWork {
 #define ST_OUT_HITS(w) ((w)->actionCommands.outputParams[0])
 #define ST_OUT_RESULT(w) ((w)->actionCommands.outputParams[1])
 #define ST_COUNTDOWN(w) ((w)->actionCommands.countdown)
-#define ST_CONF(work) ((work->actionCommands.setupFlags & 1) && (work->actionCommands.mAcUnit->mTokenFlags & kConfusedAction))
 
 u32 _button_table_4dir[4] = {0x10000, 0x20000, 0x40000, 0x80000};
 u32 _button_table_abxy[4] = {PAD_BUTTON_A, PAD_BUTTON_B, PAD_BUTTON_X, PAD_BUTTON_Y};
