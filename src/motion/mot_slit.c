@@ -304,7 +304,7 @@ static inline void slitClearFlags(MarioWork* m) {
     m->flags &= ~MARIO_FLAG_PARTY_WALK_DISABLED;
     m->flags &= ~MARIO_FLAG_GONE_THROUGH_BARS;
     m->dispFlags &= CLR_DISP;
-    m->dispFlags &= CLR_DISP;
+    m->dispFlags &= CLR_DISP; // the game clears these bits twice (both stores are in the retail code)
 }
 
 static inline void slitSetDir(MarioWork* m, f32 a) {

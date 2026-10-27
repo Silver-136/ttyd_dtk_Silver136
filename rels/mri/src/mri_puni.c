@@ -5087,6 +5087,8 @@ static inline void puniMapDataSetI(s32 w, s32 h, u8* src, f32 x, f32 z) {
         Punimap->inRange = 0;
         Punimap->size = h * (w * 4);
         Punimap->data = _mapAlloc(Punimap->size);
+        // copies src onto itself (Punimap->src is src), a no-op; puniMapFindbuff fills Punimap->data from src
+        // before it reads it
         memcpy(Punimap->src, src, Punimap->size);
     }
 }

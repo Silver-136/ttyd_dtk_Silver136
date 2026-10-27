@@ -6278,7 +6278,7 @@ void psndSFX_pit(s32 id, u16 pitch) {
     } else {
         SoundEffectEntry* entry = &pssfxlist[sfx->listId & PSND_SFX_INDEX_MASK];
         if (!(entry->fxId & SFX_FLAG_STREAM)) {
-            if (!(entry->fxId & SFX_FLAG_STREAM)) {
+            if (!(entry->fxId & SFX_FLAG_STREAM)) { // the same test twice, as in the game code
                 SoundEfxSetPitch(sfx->channel, pitch);
             }
         }
