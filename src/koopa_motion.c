@@ -406,7 +406,7 @@ void kpa_fall(void) {
         m->flags |= MARIO_FLAG_IS_FALLING;
         m->currSubMotionId = 0;
         if (m->currMotionId != MARIO_MOTION_FALL_2) {
-            if ((s32)(u8)m->characterId == CHARACTER_BOWSER) {
+            if (m->characterId == CHARACTER_BOWSER) {
                 if (!kpaFireAttackCheck()) {
                     kpaChgPose("KPA_J_1B", "KPA2_J_1B");
                 }

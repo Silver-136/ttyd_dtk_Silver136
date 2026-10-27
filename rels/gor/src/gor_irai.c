@@ -43,7 +43,7 @@ typedef struct IraiWork {
     f32 scroll;
     char client[30][21];
     char contents[30][31];
-    u8 field_0x6B4[0x416C - 0x6B4];
+    u8 pad_6B4[0x416C - 0x6B4]; // 0x6B4, never accessed (irai_init_func allocates and clears the whole 0x416C bytes)
 } IraiWork;
 void FontDrawString(const char* message, f32 x, f32 y);
 void irai_window_disp(CameraId camera, void* param);

@@ -235,7 +235,7 @@ BOOL marioChkTalkable(void) {
     MarioWork* mario = marioGetPtr();
     BOOL ret = FALSE;
     PartyEntry* party = partyGetPtr(marioGetPartyId());
-    if (party != NULL && (s32)(u8)party->currentMemberId == PARTY_MEMBER_YOSHI && (party->flags & PARTY_FLAG_IS_BEING_USED)) {
+    if (party != NULL && party->currentMemberId == PARTY_MEMBER_YOSHI && (party->flags & PARTY_FLAG_IS_BEING_USED)) {
         return FALSE;
     }
     switch (mario->currMotionId) {

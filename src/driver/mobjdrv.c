@@ -716,7 +716,7 @@ void mobjMain(void) {
         if (!(entry->flags & MOBJ_FLAG_HIT)) {
             hit = 0;
             hitPtr = entry->hitObj[0].hitObject;
-            if ((s32)(u8)mario->characterId != CHARACTER_BOWSER) {
+            if (mario->characterId != CHARACTER_BOWSER) {
                 if ((entry->flags & MOBJ_FLAG_HIT_HAMMER) && mario->hitobjHammer == hitPtr) {
                     if (marioGetPtr()->position.y <= 5.0f + entry->position.y) {
                         entry->hitFlag = MOBJ_FLAG_HIT_HAMMER;
@@ -750,7 +750,7 @@ void mobjMain(void) {
                         entry->hitFlag = MOBJ_FLAG_HIT_PARTY;
                         hit = 1;
                         goto hitDone;
-                    } else if (party->hitobjAction != NULL && (s32)(u8)party->currentMemberId == PARTY_MEMBER_BOBBERY) {
+                    } else if (party->hitobjAction != NULL && party->currentMemberId == PARTY_MEMBER_BOBBERY) {
                         if (PSVECDistance(&party->position, &entry->position) <
                             entry->hitObj[0].hitObject->radius + party->width) {
                             entry->hitFlag = MOBJ_FLAG_HIT_PARTY;
@@ -759,7 +759,7 @@ void mobjMain(void) {
                         }
                     }
                 }
-                if ((entry->flags & MOBJ_FLAG_HIT_BOBBERY) && party != NULL && (s32)(u8)party->currentMemberId == PARTY_MEMBER_BOBBERY) {
+                if ((entry->flags & MOBJ_FLAG_HIT_BOBBERY) && party != NULL && party->currentMemberId == PARTY_MEMBER_BOBBERY) {
                     if (party->hitobjAction == hitPtr) {
                         entry->hitFlag = MOBJ_FLAG_HIT_BOBBERY;
                         hit = 1;

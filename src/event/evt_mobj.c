@@ -936,7 +936,7 @@ s32 mobj_jumpstand_red(MapObjectEntry* mobj) {
             if (ev) {
                 ev->lwData[0] = mario->fallStartPos.y < mario->position.y ? 0 : (mario->fallStartPos.y < mobj->position.y + mario->wPlayerCollisionBox.y ? 0 : 1);
             }
-            if ((s32)(u8)mario->characterId != CHARACTER_BOWSER) {
+            if (mario->characterId != CHARACTER_BOWSER) {
                 if (!strcmp(mobj->animName, "MOBJ_RedJumpStand")) {
                     psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MOBJ_JUMP_STAND1), &mobj->position);
                 } else {

@@ -396,7 +396,7 @@ BOOL marioCheckMenuDisable(void) {
     if (wp->currMotionId == MARIO_MOTION_DAMAGE || wp->currMotionId == MARIO_MOTION_DAMAGE_TOGE) {
         return TRUE;
     }
-    if ((s32)(u8)wp->characterId != CHARACTER_BOWSER && !marioGetPlaneStatus() && !wp->hitobjStandOn) {
+    if (wp->characterId != CHARACTER_BOWSER && !marioGetPlaneStatus() && !wp->hitobjStandOn) {
         return TRUE;
     }
     if (!mario_bomhei_keychk()) {

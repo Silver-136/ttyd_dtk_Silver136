@@ -354,7 +354,7 @@ void mot_dokan(void) {
         mario->displayDirectionTarget = mario->displayDirection;
         mario->directionView = toMovedirSimple(mario->displayDirection);
         mario->moveDirection = mario->directionView;
-        if ((s32)(u8)mario->dokanType == 4) {
+        if (mario->dokanType == 4) {
             camFollowYOn();
             mario->camTarget.y = mario->position.y;
         }

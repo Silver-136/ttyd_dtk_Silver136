@@ -44,8 +44,10 @@ data order 10, sound-name integer round trips (`SFX_NAME_WORD`) 9, no-op casts 6
   (cloudGetBreathPower, mapObjSetColor, mapSetBlend, partyNrmToAngle, marioCreviceWallChk), argument order that
   changes code (intpl_sub, marioSetForceMove, gor_irai's FontDrawString).
 - `itemEntry` has no header prototype because evt_mobj needs a float-first private declaration (FAKES row).
-- Signed-byte casts `(s32)(u8)` on character and party ids, and u8 casts on BOOL audience getters: kept until an
-  accessor or prototype explains them.
+- Double casts `(s32)(u8)x` / `(s32)(s8)x`: the 11 in equality tests against small constants were removed
+  (2026-10-27, no byte change). Left: evt_mobj's four `(s32)(s8)linkedName[0]` truth tests (char is unsigned
+  here; the plain test compiles differently), and the value conversions (damageCode, attackDirection, Mario's
+  stick directions). u8 casts on BOOL audience getters: kept until an accessor or prototype explains them.
 - Data declared through private views of another unit's struct (a few effect and map work structs).
 
 ## 3. Names
