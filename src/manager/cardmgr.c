@@ -35,24 +35,24 @@ static CardWork* wp;
 const char* version = VERSION_PICK("009", "010");
 
 //local prototypes
-static inline void check_sum(CardSaveSlot* save);
-static inline void make_header(void);
-static inline void make_data(void);
+static void check_sum(CardSaveSlot* save);
+static void make_header(void);
+static void make_data(void);
 
-static inline void memcard_probe(void);
-static inline void memcard_mount(void);
-static inline void memcard_unmount(void);
-static inline void memcard_check(void);
-static inline void memcard_format(void);
-static inline void memcard_delete(void);
-static inline void memcard_create(void);
-static inline void memcard_write(void* addr, s32 length, s32 offset);
-static inline void memcard_read(void* addr, s32 length, s32 offset);
-static inline void memcard_set_stat(void);
-static inline void memcard_get_stat(void);
-static inline void memcard_get_serial(void);
+static void memcard_probe(void);
+static void memcard_mount(void);
+static void memcard_unmount(void);
+static void memcard_check(void);
+static void memcard_format(void);
+static void memcard_delete(void);
+static void memcard_create(void);
+static void memcard_write(void* addr, s32 length, s32 offset);
+static void memcard_read(void* addr, s32 length, s32 offset);
+static void memcard_set_stat(void);
+static void memcard_get_stat(void);
+static void memcard_get_serial(void);
 void memcard_open(void);
-static inline void memcard_close(void);
+static void memcard_close(void);
 
 void mountDetachCallback(s32 chan, s32 result);
 void mountAttachCallback(s32 chan, s32 result);
@@ -68,12 +68,12 @@ void write_header_main(void);
 void read_main(void);
 void read_all_main(void);
 void create_main(void);
-static inline void format_main(void);
-static inline void delete_main(void);
+static void format_main(void);
+static void delete_main(void);
 
-static inline BOOL headerCheck(void);
+static BOOL headerCheck(void);
 static inline BOOL headerCheck2(void);
-static inline BOOL dataCheck(void);
+static BOOL dataCheck(void);
 
 CardData* cardGetFilePtr(void) {
     return wp->data;
@@ -428,7 +428,7 @@ void cardWrite(s32 slot) {
     }
 }
 
-static inline void memcard_probe(void) {
+static void memcard_probe(void) {
     s32 memSize, sectorSize;
     s32 result;
     s32 i;
@@ -891,7 +891,7 @@ void cardFormat(void) {
     }
 }
 
-static inline void format_main(void) {
+static void format_main(void) {
     if (wp->result != CARD_RESULT_READY) {
         wp->op = 8;
         wp->flags |= CARD_FLAG_FAILED;
@@ -928,7 +928,7 @@ static inline void format_main(void) {
     }
 }
 
-static inline void delete_main(void) {
+static void delete_main(void) {
     if (wp->result != CARD_RESULT_READY) {
         wp->op = 8;
         wp->flags |= CARD_FLAG_FAILED;
@@ -969,7 +969,7 @@ static inline void delete_main(void) {
     }
 }
 
-static inline void check_sum(CardSaveSlot* save) {
+static void check_sum(CardSaveSlot* save) {
     s32 i;
     u8* temp;
     u32 checksum;
@@ -987,7 +987,7 @@ static inline void check_sum(CardSaveSlot* save) {
     save->checksum2 = ~save->checksum1;
 }
 
-static inline BOOL headerCheck(void) {
+static BOOL headerCheck(void) {
     s32 i;
     s32 checksum;
     u8* temp;
@@ -1033,7 +1033,7 @@ static inline BOOL headerCheck2(void) {
     }
 }
 
-static inline BOOL dataCheck(void) {
+static BOOL dataCheck(void) {
     s32 i;
     u32 checksum;
     u8* temp;
@@ -1060,7 +1060,7 @@ static inline BOOL dataCheck(void) {
     }
 }
 
-static inline void make_header(void) {
+static void make_header(void) {
     CardMetadata* metadata;
     s32 i;
     u8* temp;
@@ -1088,7 +1088,7 @@ static inline void make_header(void) {
     metadata->checksum2 = ~metadata->checksum1;
 }
 
-static inline void make_data(void) {
+static void make_data(void) {
     CardSaveSlot* save;
     s32 i;
     
@@ -1117,13 +1117,13 @@ void mountAttachCallback(s32 chan, s32 result) {
     wp->flags &= ~CARD_FLAG_BUSY;
 }
 
-static inline void memcard_mount(void) {
+static void memcard_mount(void) {
     CARDSetFastMode(TRUE);
     wp->flags |= CARD_FLAG_BUSY;
     CARDMountAsync(wp->chan, wp->workArea, mountDetachCallback, mountAttachCallback);
 }
 
-static inline void memcard_unmount(void) {
+static void memcard_unmount(void) {
     s32 result;
     s32 i;
     
@@ -1144,7 +1144,7 @@ void checkCallback(s32 chan, s32 result) {
     wp->flags &= ~CARD_FLAG_BUSY;
 }
 
-static inline void memcard_check(void) {
+static void memcard_check(void) {
     wp->flags |= CARD_FLAG_BUSY;
     CARDCheckAsync(wp->chan, checkCallback);
 }
@@ -1154,12 +1154,12 @@ void formatCallback(s32 chan, s32 result) {
     wp->flags &= ~CARD_FLAG_BUSY;
 }
 
-static inline void memcard_format(void) {
+static void memcard_format(void) {
     wp->flags |= CARD_FLAG_BUSY;
     CARDFormatAsync(wp->chan, formatCallback);
 }
 
-static inline void memcard_delete(void) {
+static void memcard_delete(void) {
     s32 result;
     s32 i;
     
@@ -1185,7 +1185,7 @@ void createCallback(s32 chan, s32 result) {
     wp->flags &= ~CARD_FLAG_BUSY;
 }
 
-static inline void memcard_create(void) {
+static void memcard_create(void) {
     wp->flags |= CARD_FLAG_BUSY;
     CARDCreateAsync(wp->chan, cardFileName, sizeof(CardData) + (sizeof(CardSaveSlot) * 4), &wp->info, createCallback);
 }
@@ -1195,7 +1195,7 @@ void writeCallback(s32 chan, s32 result) {
     wp->flags &= ~CARD_FLAG_BUSY;
 }
 
-static inline void memcard_write(void* addr, s32 length, s32 offset) {
+static void memcard_write(void* addr, s32 length, s32 offset) {
     wp->flags |= CARD_FLAG_BUSY;
     CARDWriteAsync(&wp->info, addr, length, offset, writeCallback);
 }
@@ -1205,7 +1205,7 @@ void readCallback(s32 chan, s32 result) {
     wp->flags &= ~CARD_FLAG_BUSY;
 }
 
-static inline void memcard_read(void* addr, s32 length, s32 offset) {
+static void memcard_read(void* addr, s32 length, s32 offset) {
     wp->flags |= CARD_FLAG_BUSY;
     CARDReadAsync(&wp->info, addr, length, offset, readCallback);
 }
@@ -1215,12 +1215,12 @@ void statusCallback(s32 chan, s32 result) {
     wp->flags &= ~CARD_FLAG_BUSY;
 }
 
-static inline void memcard_set_stat(void) {
+static void memcard_set_stat(void) {
     wp->flags |= CARD_FLAG_BUSY;
     CARDSetStatusAsync(wp->chan, wp->info.fileNo, &wp->status, statusCallback);
 }
 
-static inline void memcard_get_stat(void) {
+static void memcard_get_stat(void) {
     s32 result;
     s32 i;
     
@@ -1237,7 +1237,7 @@ static inline void memcard_get_stat(void) {
     wp->flags &= ~CARD_FLAG_BUSY;
 }
 
-static inline void memcard_get_serial(void) {
+static void memcard_get_serial(void) {
     s32 result;
     s32 i;
 
@@ -1353,7 +1353,7 @@ void memcard_open(void) {
     wp->flags &= ~CARD_FLAG_BUSY;
 }
 
-static inline void memcard_close(void) {
+static void memcard_close(void) {
     s32 result;
     s32 i;
 

@@ -863,7 +863,7 @@ inline void SoundEfxMuteCh(s32 chan) {
     }
 }
 
-inline s32 SoundEfxStopAll(u8 maxPriority) {
+static s32 SoundEfxStopAll(u8 maxPriority) {
     s32 chan;
     SoundEffect* sfx = sound.effects;
 
@@ -1185,7 +1185,7 @@ void SoundEfxMain(void) {
 }
 #pragma opt_strength_reduction reset
 
-inline void SoundDVDStopCh(s32 chan) {
+static void SoundDVDStopCh(s32 chan) {
     SoundDVD* dvd = &sound.dvds[chan];
     if (dvd->flags & (SOUND_DVD_FLAG_PLAY | SOUND_DVD_FLAG_MUTE)) {
         AISetStreamPlayState(0);
@@ -1196,7 +1196,7 @@ inline void SoundDVDStopCh(s32 chan) {
     }
 }
 
-inline void SoundDVDSetPanCh(s32 chan, u8 pan) { // I think this is the correct func name
+static void SoundDVDSetPanCh(s32 chan, u8 pan) { // I think this is the correct func name
     f32 left, right;
     SoundDVD* dvd;
 

@@ -398,7 +398,7 @@ static inline s32 partyGetFreeSlot(s32 start) {
     return -1;
 }
 
-static inline void partyPoseEntry(PartyEntry* party) {
+static void partyPoseEntry(PartyEntry* party) {
     char* animName;
 
     if (party->currentMemberId != PARTY_MEMBER_YOSHI) {
@@ -419,7 +419,7 @@ static inline void partyPoseEntry(PartyEntry* party) {
     party->paperAnimGroup = animPoseEntry(animName, 2);
 }
 
-static inline void setAnimPoseMaterialFlag(PartyEntry* party) {
+static void setAnimPoseMaterialFlag(PartyEntry* party) {
     MarioWork* player = party->playerPtr;
 
     animPoseSetMaterialFlagOn(party->paperAnimGroup, animPoseGetMaterialFlag(player->paperAnimGroupId[marioAnimeId()]));
@@ -599,7 +599,7 @@ void L_partyVivianTailStart(PartyEntry* party);
 void getRidePos(PartyEntry* party, Vec* pos);
 void driveParty(PartyEntry* party);
 s32 partyHelloMain(PartyEntry* party);
-static inline void partyShadowOn(PartyEntry* party) {
+static void partyShadowOn(PartyEntry* party) {
     if (party) {
         party->flags2 &= ~PARTY_DISP_FLAG_SHADOW_OFF;
     }

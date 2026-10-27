@@ -69,7 +69,7 @@ void make_pri_table(void) {
 #pragma dont_inline reset
 
 #pragma warn_no_side_effect off
-inline void make_jump_table(EventEntry* entry) {
+static void make_jump_table(EventEntry* entry) {
     s32 params, opcode;
     s32 label;
     int i, n;

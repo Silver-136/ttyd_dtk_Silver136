@@ -96,7 +96,7 @@ static inline void kpaFireEntry2(Vec pos) {
     }
 }
 
-static inline void kpaFireEntry(Vec pos) {
+static void kpaFireEntry(Vec pos) {
     MarioWork* mp = marioGetPtr();
     kpaFireEntry2(pos);
 }

@@ -61,7 +61,7 @@ BOOL ARCOpen(ARCHandle* handle, const char* filename, ARCFileInfo* info) {
     return TRUE;
 }
 
-static inline BOOL isSame(const char* path, const char* string) {
+static BOOL isSame(const char* path, const char* string) {
     while (*string != '\0') {
         if (tolower(*path++) != tolower(*string++)) {
             return FALSE;

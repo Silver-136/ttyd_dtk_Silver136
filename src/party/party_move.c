@@ -105,7 +105,7 @@ s32 partyGetFootmarkId(PartyEntry* party) {
     return (party->flags >> 2) & 1;
 }
 
-static inline void getTargetPos(s32 id, Vec* pos) {
+static void getTargetPos(s32 id, Vec* pos) {
     MarioWork* mario = marioGetPtr();
     BOOL far = FALSE;
     MarioWork* mario2 = marioGetPtr();

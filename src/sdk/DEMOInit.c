@@ -28,18 +28,18 @@ static const char demo_file[] = "DEMOInit.c";
 static const char demo_msg[] = "DEMOInit: invalid TV format\n";
 
 //internal, inline
-static inline void __DEMOInitRenderMode(GXRenderModeObj* mode);
-static inline void __DEMOInitMem(void);
-static inline void __DEMOInitGX(void);
-static inline void __DEMOInitVI(void);
+static void __DEMOInitRenderMode(GXRenderModeObj* mode);
+static void __DEMOInitMem(void);
+static void __DEMOInitGX(void);
+static void __DEMOInitVI(void);
 static void __NoHangRetraceCallback(u32 count);
 static void __NoHangDoneRender(void);
 static void __DEMODiagnoseHang(void);
-static inline void DEMOSwapBuffers(void);
-static inline void DEMOSetGPHangMetric(GXBool enable);
+static void DEMOSwapBuffers(void);
+void DEMOSetGPHangMetric(GXBool enable);
 void DEMOReInit(GXRenderModeObj* mode);
 
-static inline void __DEMOInitMem(void) {
+static void __DEMOInitMem(void) {
     void *arenaLo, *arenaHi;
     u32 fbSize;
 
@@ -56,7 +56,7 @@ static inline void __DEMOInitMem(void) {
     // (later SDK versions do more setup here)
 }
 
-static inline void __DEMOInitVI(void) {
+static void __DEMOInitVI(void) {
     VISetNextFrameBuffer(DemoFrameBuffer1);
     DemoCurrentBuffer = DemoFrameBuffer2;
     VIFlush();
@@ -65,7 +65,7 @@ static inline void __DEMOInitVI(void) {
         VIWaitForRetrace();
 }
 
-static inline void __DEMOInitGX(void) {
+static void __DEMOInitGX(void) {
     u16 xfbHeight;
     f32 yScale;
 
@@ -87,7 +87,7 @@ static inline void __DEMOInitGX(void) {
     GXSetDispCopyGamma(GX_GM_1_0);
 }
 
-static inline void __DEMOInitRenderMode(GXRenderModeObj* mode) {
+static void __DEMOInitRenderMode(GXRenderModeObj* mode) {
     if (mode != NULL) {
         rmodeobj = *mode; //inline copy
         rmode = &rmodeobj;
@@ -168,7 +168,7 @@ void DEMODoneRender(void) {
     DEMOSwapBuffers();
 }
 
-static inline void DEMOSwapBuffers(void) {
+static void DEMOSwapBuffers(void) {
     VISetNextFrameBuffer(DemoCurrentBuffer);
     if (DemoFirstFrame) {
         VISetBlack(FALSE);
@@ -286,7 +286,7 @@ static void __DEMODiagnoseHang(void) {
     strcpy(__GXErrorMessage, newmsg);
 }
 
-static inline void DEMOSetGPHangMetric(GXBool enable) {
+void DEMOSetGPHangMetric(GXBool enable) {
     if (enable) {
         GXSetGPMetric(GX_PERF0_NONE, GX_PERF1_NONE);
 

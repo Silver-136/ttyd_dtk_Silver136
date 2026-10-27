@@ -182,7 +182,7 @@ typedef struct HitAnimJointList {
     void* joints[1];
 } HitAnimJointList;
 
-inline void hitPreCheck(void) {
+static void hitPreCheck(void) {
     MapEntry* entry;
     s32 i;
     s32 j;

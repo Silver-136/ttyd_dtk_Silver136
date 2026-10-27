@@ -294,7 +294,7 @@ static MapObjectWork work[MAX_MOBJ_WORK];
 
 #define mobjGetWorkFlag(flag) (flag ? &work[1] : &work[0])
 
-static inline int mobjCheckKururingFloorItem(MapObjectEntry* entry);
+static int mobjCheckKururingFloorItem(MapObjectEntry* entry);
 
 void mobjKoopaOn(void) {
     if (!koopaRunFlag) {
@@ -307,7 +307,7 @@ void mobjKoopaOn(void) {
     }
 }
 
-inline MapObjectWork* mobjGetWork(void) {
+static MapObjectWork* mobjGetWork(void) {
     if (koopaRunFlag) {
         return &work[2];
     } else {
@@ -955,7 +955,7 @@ EventEntry* mobjRunEvent(MapObjectEntry* entry, EvtWord* eventCode) {
     return event;
 }
 
-static inline void calcMtx(Mtx mtx, Vec* pos, Vec* sc, Vec* rot) {
+static void calcMtx(Mtx mtx, Vec* pos, Vec* sc, Vec* rot) {
     Mtx trans;
     Mtx scale;
     Mtx xrot;
@@ -1035,7 +1035,7 @@ BOOL mobjCheckExec(void) {
     return FALSE;
 }
 
-static inline int mobjCheckKururingFloorItem(MapObjectEntry* entry) { // was always inlined in retail but not in demo
+static int mobjCheckKururingFloorItem(MapObjectEntry* entry) { // was always inlined in retail but not in demo
     if (!strcmp(entry->animName, kururinName)) {
         ItemEntry* item = itemNameToPtr(entry->name);
         if ((item != NULL && (item->flags & ITEM_FLAG_ACTIVE) && evtGetValue(0, entry->flagVar) == 0))

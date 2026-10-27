@@ -1545,7 +1545,7 @@ void marioSetPaperAnimeLocalTime(s32 frames) {
     animPoseSetLocalTime(wp->paperAnimGroupId[marioAnimeId()], frames);
 }
 
-inline void marioPaperRelease(void) {
+static void marioPaperRelease(void) {
     MarioWork* wp = mp;
     s32 poseId = wp->paperPoseId;
 

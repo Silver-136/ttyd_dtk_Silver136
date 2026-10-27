@@ -378,7 +378,7 @@ f32 (*shadowGetCharShadowProjTexMtx(void))[4];
 f32 (*shadowGetDepthShadowDepthMtx(void))[4];
 f32 (*shadowGetDepthShadowProjTexMtx(void))[4];
 f32 (*shadowGetProjShadowProjTexMtx(void))[4];
-static inline void mapResetPaperCraftAmbColor(void);
+static void mapResetPaperCraftAmbColor(void);
 
 void makeDisplayList(BOOL group) {
     static const GXCullMode culling[4] = {GX_CULL_FRONT, GX_CULL_BACK, GX_CULL_ALL, GX_CULL_NONE};
@@ -3024,7 +3024,7 @@ void mapResetPaperAmbColor(void) {
     paper_ambient = (GXColor){0x70, 0x70, 0x70, 0xFF};
 }
 
-static inline void mapResetPaperCraftAmbColor(void) {
+static void mapResetPaperCraftAmbColor(void) {
     paperCraft_ambient = (GXColor){0x70, 0x70, 0x70, 0xFF};
 }
 

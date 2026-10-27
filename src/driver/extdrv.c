@@ -208,7 +208,7 @@ void extReset(void) {
     memset(wp, 0, sizeof(ExtdrvWork));
 }
 
-static inline f32 camGetRy(void) {
+static f32 camGetRy(void) {
     CameraEntry* cam = camGetPtr(CAMERA_3D);
     f32 ry = 57.29579f * (f32)atan2(-(cam->cameraAt.x - cam->cameraPos.x), -(cam->cameraAt.z - cam->cameraPos.z));
 

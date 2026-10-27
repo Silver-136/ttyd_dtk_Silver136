@@ -131,7 +131,7 @@ f32 marioGetMoveRate(f32 dir) {
     return 1.0f + (1.19f - 1.0f) * __fabsf(c);
 }
 
-static inline void marioSetGravity(f32 g) {
+static void marioSetGravity(f32 g) {
     marioGetPtr()->playerGravity = g;
 }
 

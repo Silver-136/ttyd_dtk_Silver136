@@ -209,7 +209,7 @@ void FontDrawCodeMtx(Mtx mtx, u16 code) {
     fontDrawCodeEdge(code);
 }
 
-static inline void FontDrawStringVec(Vec pos, const s8* str) {
+static void FontDrawStringVec(Vec pos, const s8* str) {
     CameraEntry* camera;
     Mtx trans, scale;
     u8 width;

@@ -421,7 +421,7 @@ void winRootStrippedPool(f32* f) {
     f[1] = 1000.0f;
 }
 
-static inline void winTabDisp(WindowWork* wp);
+static void winTabDisp(WindowWork* wp);
 
 void winRootDisp(s32 camId, WindowWork* wp) {
     GXColor white = {0xFF, 0xFF, 0xFF, 0xFF};
@@ -470,7 +470,7 @@ void winRootDisp(s32 camId, WindowWork* wp) {
     }
 }
 
-static inline void winTabDisp(WindowWork* wp) {
+static void winTabDisp(WindowWork* wp) {
     s32 i;
 
     for (i = 0; i < wp->tabNum; i++) {
