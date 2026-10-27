@@ -576,7 +576,7 @@ static void sal_update_hostplayinfo(DSPvoice* dsp_vptr) {
   }
 }
 
-static inline void AddDpop(s32* sum, s16 delta) {
+static void AddDpop(s32* sum, s16 delta) {
   *sum += (int)delta;
   *sum = (*sum > 0x7fffff) ? 0x7fffff : (*sum < -0x7fffff ? -0x7fffff : *sum);
 }

@@ -27,7 +27,7 @@ void vsInit() {
   vs.callback = NULL;
 }
 
-static inline u16 vsNewInstanceID() {
+static u16 vsNewInstanceID() {
   u8 i;       // r31
   u16 instID; // r29
   do {
@@ -42,7 +42,7 @@ static inline u16 vsNewInstanceID() {
   return instID;
 }
 
-static inline u8 vsAllocateBuffer() {
+static u8 vsAllocateBuffer() {
   u8 i;
 
   for (i = 0; i < vs.numBuffers; ++i) {
@@ -57,7 +57,7 @@ static inline u8 vsAllocateBuffer() {
   return 0xFF;
 }
 
-static inline void vsFreeBuffer(u8 bufferIndex) {
+static void vsFreeBuffer(u8 bufferIndex) {
   vs.streamBuffer[bufferIndex].state = 0;
   vs.voices[vs.streamBuffer[bufferIndex].voice] = 0xFF;
 }

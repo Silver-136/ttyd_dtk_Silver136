@@ -5,7 +5,7 @@ char* strncpy(char* dst, const char* src, size_t n);
 
 static int is_utf8_complete(const char* s, size_t n);
 
-static inline int unicode_to_UTF8(char* s, wchar_t wchar) {
+static int unicode_to_UTF8(char* s, wchar_t wchar) {
     int number_of_bytes;
     wchar_t wide_char;
     char* target_ptr;

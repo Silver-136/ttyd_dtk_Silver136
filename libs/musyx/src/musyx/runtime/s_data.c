@@ -36,7 +36,7 @@ void dataInitStack(unsigned long aramBase, unsigned long aramSize) {
 
 ARAMInfo* dataARAMDefaultGetInfo() { return &gsDefault.aramInfo; }
 
-static inline MEM_DATA* GetPoolAddr(u16 id, MEM_DATA* m) {
+static MEM_DATA* GetPoolAddr(u16 id, MEM_DATA* m) {
   while (m->nextOff != 0xFFFFFFFF) {
     if (m->id == id) {
       return m;
@@ -47,17 +47,17 @@ static inline MEM_DATA* GetPoolAddr(u16 id, MEM_DATA* m) {
   return NULL;
 }
 
-static inline MEM_DATA* GetMacroAddr(u16 id, POOL_DATA* pool) {
+static MEM_DATA* GetMacroAddr(u16 id, POOL_DATA* pool) {
   return pool == NULL ? NULL : GetPoolAddr(id, (MEM_DATA*)((u8*)pool + pool->macroOff));
 }
 
-static inline MEM_DATA* GetCurveAddr(u16 id, POOL_DATA* pool) {
+static MEM_DATA* GetCurveAddr(u16 id, POOL_DATA* pool) {
   return pool == NULL ? NULL : GetPoolAddr(id, (MEM_DATA*)((u8*)pool + pool->curveOff));
 }
-static inline MEM_DATA* GetKeymapAddr(u16 id, POOL_DATA* pool) {
+static MEM_DATA* GetKeymapAddr(u16 id, POOL_DATA* pool) {
   return pool == NULL ? NULL : GetPoolAddr(id, (MEM_DATA*)((u8*)pool + pool->keymapOff));
 }
-static inline MEM_DATA* GetLayerAddr(u16 id, POOL_DATA* pool) {
+static MEM_DATA* GetLayerAddr(u16 id, POOL_DATA* pool) {
   return pool == NULL ? NULL : GetPoolAddr(id, (MEM_DATA*)((u8*)pool + pool->layerOff));
 }
 
@@ -122,7 +122,7 @@ void InsertData(u16 id, void* data, u8 dataType, u32 remove) {
   }
 }
 
-static inline void ScanIDList(u16* ref, void* data, u8 dataType, u32 remove) {
+static void ScanIDList(u16* ref, void* data, u8 dataType, u32 remove) {
   u16 id; // r30
 
   while (*ref != 0xFFFF) {
@@ -140,7 +140,7 @@ static inline void ScanIDList(u16* ref, void* data, u8 dataType, u32 remove) {
   }
 }
 
-static inline void ScanIDListReverse(u16* refBase, void* data, u8 dataType, u32 remove) {
+static void ScanIDListReverse(u16* refBase, void* data, u8 dataType, u32 remove) {
   s16 id;
   u16* ref;
 
@@ -172,37 +172,37 @@ static inline void ScanIDListReverse(u16* refBase, void* data, u8 dataType, u32 
   }
 }
 
-static inline void InsertMacros(unsigned short* ref, void* pool) { ScanIDList(ref, pool, 0, 0); }
+static void InsertMacros(unsigned short* ref, void* pool) { ScanIDList(ref, pool, 0, 0); }
 
-static inline void InsertCurves(unsigned short* ref, void* pool) { ScanIDList(ref, pool, 4, 0); }
+static void InsertCurves(unsigned short* ref, void* pool) { ScanIDList(ref, pool, 4, 0); }
 
-static inline void InsertKeymaps(unsigned short* ref, void* pool) { ScanIDList(ref, pool, 2, 0); }
+static void InsertKeymaps(unsigned short* ref, void* pool) { ScanIDList(ref, pool, 2, 0); }
 
-static inline void InsertLayers(unsigned short* ref, void* pool) { ScanIDList(ref, pool, 3, 0); }
+static void InsertLayers(unsigned short* ref, void* pool) { ScanIDList(ref, pool, 3, 0); }
 
-static inline void RemoveMacros(unsigned short* ref) { ScanIDList(ref, NULL, 0, 1); }
+static void RemoveMacros(unsigned short* ref) { ScanIDList(ref, NULL, 0, 1); }
 
-static inline void RemoveCurves(unsigned short* ref) { ScanIDList(ref, NULL, 4, 1); }
+static void RemoveCurves(unsigned short* ref) { ScanIDList(ref, NULL, 4, 1); }
 
-static inline void RemoveKeymaps(unsigned short* ref) { ScanIDList(ref, NULL, 2, 1); }
+static void RemoveKeymaps(unsigned short* ref) { ScanIDList(ref, NULL, 2, 1); }
 
-static inline void RemoveLayers(unsigned short* ref) { ScanIDList(ref, NULL, 3, 1); }
+static void RemoveLayers(unsigned short* ref) { ScanIDList(ref, NULL, 3, 1); }
 
-static inline void InsertSamples(u16* ref, void* samples, void* sdir) {
+static void InsertSamples(u16* ref, void* samples, void* sdir) {
   samples = hwTransAddr(samples);
   if (dataInsertSDir((SDIR_DATA*)sdir, samples)) {
     ScanIDList(ref, sdir, 1, 0);
   }
 }
 
-static inline void RemoveSamples(unsigned short* ref, void* sdir) {
+static void RemoveSamples(unsigned short* ref, void* sdir) {
   ScanIDListReverse(ref, NULL, 1, 1);
   dataRemoveSDir(sdir);
 }
 
-static inline void InsertFXTab(unsigned short gid, FX_DATA* fd) { dataInsertFX(gid, fd->fx, fd->num); }
+static void InsertFXTab(unsigned short gid, FX_DATA* fd) { dataInsertFX(gid, fd->fx, fd->num); }
 
-static inline void RemoveFXTab(unsigned short gid) { dataRemoveFX(gid); }
+static void RemoveFXTab(unsigned short gid) { dataRemoveFX(gid); }
 
 void sndSetSampleDataUploadCallback(void* (*callback)(u32, u32), u32 chunckSize) {
   hwSetSaveSampleCallback(callback, chunckSize);

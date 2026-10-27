@@ -78,7 +78,7 @@ static inline void SubBlock_set_free(SubBlock* ths) {
     if (SubBlock_is_free((ths)))                                           \
         *(mem_size*)((char*)(ths) + (sz) - sizeof(mem_size)) = (sz)
 
-static inline SubBlock* SubBlock_merge_prev(SubBlock* ths, SubBlock** start) {
+static SubBlock* SubBlock_merge_prev(SubBlock* ths, SubBlock** start) {
     mem_size prevsz;
     SubBlock* p;
 
@@ -97,7 +97,7 @@ static inline SubBlock* SubBlock_merge_prev(SubBlock* ths, SubBlock** start) {
     return ths;
 }
 
-static inline void SubBlock_merge_next(SubBlock* ths, SubBlock** start) {
+static void SubBlock_merge_next(SubBlock* ths, SubBlock** start) {
     SubBlock* next_sub;
     mem_size this_size;
 
@@ -225,7 +225,7 @@ void __pool_free(__mem_pool_obj* pool_obj, void* ptr) {
         deallocate_from_var_pools(pool_obj, ptr);
 }
 
-static inline __mem_pool_obj* get_malloc_pool(void) {
+static __mem_pool_obj* get_malloc_pool(void) {
     static __mem_pool_obj protopool;
     static unsigned char init = 0;
 

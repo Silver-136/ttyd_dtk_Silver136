@@ -17,7 +17,7 @@ enum { __read = 1, __write = 2, __read_write = 3 };
         (file)->buffer_len = 0;  \
     } while (0)
 
-static inline long _ftell(FILE* file) {
+long _ftell(FILE* file) {
     int charsInUndoBuffer = 0;
     unsigned long position;
     unsigned char* p;

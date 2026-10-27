@@ -40,7 +40,7 @@ void vidInit() {
   lvl->next = NULL;
 }
 
-static inline VID_LIST* get_vidlist(u32 vid) {
+static VID_LIST* get_vidlist(u32 vid) {
   VID_LIST* vl = vidRoot;
   while (vl != NULL) {
     if (vl->vid == vid) {
@@ -55,7 +55,7 @@ static inline VID_LIST* get_vidlist(u32 vid) {
   return NULL;
 }
 
-static inline u32 get_newvid() {
+static u32 get_newvid() {
   u32 vid; // r31
   do {
     vid = vidCurrentId++;
@@ -64,7 +64,7 @@ static inline u32 get_newvid() {
   return vid;
 }
 
-static inline void vidRemove(VID_LIST** vidList) {
+static void vidRemove(VID_LIST** vidList) {
   if ((*vidList)->prev != NULL) {
     (*vidList)->prev->next = (*vidList)->next;
   } else {
@@ -208,7 +208,7 @@ u32 vidGetPublicId(u32 vid) {
   return 0xFFFFFFFF;
 }
 
-static inline void voiceInitPrioSort() {
+static void voiceInitPrioSort() {
   u32 i;
 
   for (i = 0; i < synthInfo.voiceNum; ++i) {
@@ -222,7 +222,7 @@ static inline void voiceInitPrioSort() {
   voicePrioSortRootListRoot = 0xffff;
 }
 
-inline void voiceRemovePriority(SYNTH_VOICE* svoice) {
+void voiceRemovePriority(SYNTH_VOICE* svoice) {
   SYNTH_VOICELIST* vps; // r31
   SYNTH_ROOTLIST* rps;  // r30
 
@@ -510,7 +510,7 @@ void voiceFree(SYNTH_VOICE* svoice) {
   svoice->id = 0xFFFFFFFF;
 }
 
-static inline void voiceInitFreeList() {
+static void voiceInitFreeList() {
   u32 i; // r31
 
   for (i = 0; i < synthInfo.voiceNum; ++i) {
