@@ -71,6 +71,7 @@ void effLaserMain(EffectEntry* effect) {
     switch (work->state) {
         case 0:
             if (work->poseId == -1) {
+                // FAKE: no-op (u32) cast on the BOOL argument; without it the object changes
                 work->poseId = animPoseEntry("MOBJ_EFF_laser", (u32)inBattle);
                 animPoseSetAnim(work->poseId, "S_1", TRUE);
                 animPoseSetLocalTimeRate(work->poseId, 0.5f);

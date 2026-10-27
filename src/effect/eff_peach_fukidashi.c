@@ -9,7 +9,6 @@
 #include "eff/eff_magic1_n64.h"
 #include "libc_decls.h"
 
-
 typedef struct EffPeachFukidashiWork {
     u32 flags;      // 0x0, bits 0-1: icon, 0x80: show a cross
     Vec position;   // 0x4

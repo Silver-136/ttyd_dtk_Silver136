@@ -46,7 +46,7 @@ EffectEntry* effSandarsEntry(s32 type, f32 x, f32 y, f32 z, f32 radius) {
     work->state = 0;
     work->frame = 0;
     work->poseId = -1;
-    work->camId = 4;
+    work->camId = CAMERA_3D;
     switch (type) {
     case 0:
     case 4:
@@ -104,14 +104,14 @@ void effSandarsMain(EffectEntry* effect) {
     Vec pos2;
     f32 bx, by, bz;
     s32 camId;
-    s32 camera;
+    s32 inBattle;
     s32 type;
     s32 i;
 
     pos2 = effSandarsMakeVec(bx = work->position.x, by = work->position.y, bz = work->position.z);
     type = work->type;
     camId = work->camId;
-    camera = gp->inBattle != 0;
+    inBattle = gp->inBattle != 0;
     if (effect->flags & EFFECT_FLAG_SOFT_DELETE) {
         effect->flags &= ~EFFECT_FLAG_SOFT_DELETE;
         if (work->poseId != -1) {
@@ -157,8 +157,8 @@ void effSandarsMain(EffectEntry* effect) {
         }
         if (work->frame != 0) {
             work->frame--;
-        } else if (animGroupBaseAsync("EFF_bakuhatu", camera, NULL)) {
-            work->poseId = animPoseEntry("EFF_bakuhatu", camera);
+        } else if (animGroupBaseAsync("EFF_bakuhatu", inBattle, NULL)) {
+            work->poseId = animPoseEntry("EFF_bakuhatu", inBattle);
             animPoseSetAnim(work->poseId, "Z_1", TRUE);
             work->state++;
         }

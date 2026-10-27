@@ -31,9 +31,6 @@ typedef struct EffFireFlowerN64Work {
     s32 flip;     // 0x50
 } EffFireFlowerN64Work;
 
-#ifdef __MWERKS__
-#endif
-
 effN64Vtx size4x4_tex4x4_vtx[] = {
     {-2, -2, 0, 0, 0, 255, 0, 0, 255},
     {2, -2, 0, 512, 0, 255, 0, 0, 255},
@@ -94,7 +91,7 @@ EffectEntry* effFireFlowerN64Entry(s32 type, f32 x, f32 y, f32 z, s32 lifetime) 
     work->rotX = 0.0f;
     work->offsetY = -10.0f;
     p = work + 1;
-    for (i = 1; i < 31;) {
+    for (i = 1; i < 31; i++, p++) {
         p->type = 1;
         p->position.x = 0.0f;
         p->position.y = 0.0f;
@@ -105,13 +102,12 @@ EffectEntry* effFireFlowerN64Entry(s32 type, f32 x, f32 y, f32 z, s32 lifetime) 
         p->accelY = 0.05f * (f32)(rand() % 10 - 5);
         p->rotY = (f32)(rand() % 80 + 5);
         p->alpha = 255;
-        p->delay = i++ - 1;
+        p->delay = i - 1;
         p->timer = 10;
         p->velX /= 1.5f;
         p->velY /= 1.5f;
         p->velZ /= 1.5f;
         p->delay <<= 1;
-        p++;
     }
     return effect;
 }
@@ -203,9 +199,9 @@ void effFireFlowerMain(EffectEntry* effect) {
         }
         break;
     }
-    timer = work->state;
+    state = work->state;
     work++;
-    if (timer >= 4 && timer <= 6) {
+    if (state >= 4 && state <= 6) {
         for (i = 1; i < effect->count; i++, work++) {
             if (work->delay > 0) {
                 work->delay--;
@@ -217,7 +213,7 @@ void effFireFlowerMain(EffectEntry* effect) {
             work->position.x += work->velX;
             work->position.y += work->velY;
             work->position.z += work->velZ;
-            if (timer == 4 && work->position.x > 200.0f) {
+            if (state == 4 && work->position.x > 200.0f) {
                 work->position.x = 0.0f;
                 work->position.y = 0.0f;
                 work->velY = 0.0f;

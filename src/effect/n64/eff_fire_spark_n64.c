@@ -1,4 +1,5 @@
 #include "eff/eff_n64.h"
+#include "eff/n64/eff_fire_spark_n64.h"
 #include "driver/camdrv.h"
 #include "driver/dispdrv.h"
 #include "driver/effdrv.h"
@@ -6,7 +7,6 @@
 #include <dolphin/gx.h>
 #include <dolphin/mtx.h>
 #include "libc_decls.h"
-
 
 typedef struct EffFireSparkN64Work {
     s32 type;           // 0x0
@@ -31,7 +31,9 @@ void effFireSparkMain(EffectEntry* effect);
 void effFireSparkDisp(CameraId cameraId, EffectEntry* effect);
 
 static f32 scale_data[30] = {
-    0.01f, 0.05f, 0.1f, 0.2f, 0.35f, 0.5f, 0.65f, 0.8f, 0.95f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.95f, 0.8f, 0.65f, 0.5f, 0.35f, 0.2f, 0.1f, 0.05f, 0.01f,
+    0.01f, 0.05f, 0.1f, 0.2f, 0.35f, 0.5f, 0.65f, 0.8f, 0.95f, 1.0f,
+    1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+    1.0f, 0.95f, 0.8f, 0.65f, 0.5f, 0.35f, 0.2f, 0.1f, 0.05f, 0.01f,
 };
 
 effN64Vtx size4x4_tex32x32_vtx[] = {
@@ -45,6 +47,7 @@ EffectEntry* effFireSparkN64Entry(s32 type, s32 count, s32 lifetime, f32 x, f32 
                                   f32 scale, f32 speedY, f32 speedZ) {
     EffectEntry* effect;
     EffFireSparkN64Work* work;
+    // FAKE: spare temporary for 0.5f; step * 0.5f changes the object
     f32 h = 0.5f;
     f32 step;
     s32 i;
@@ -203,8 +206,8 @@ void effFireSparkDisp(CameraId cameraId, EffectEntry* effect) {
     GXSetTevAlphaIn(GX_TEVSTAGE1, GX_CA_ZERO, GX_CA_TEXA, GX_CA_A0, GX_CA_ZERO);
     GXSetTevKColorSel(GX_TEVSTAGE1, GX_TEV_KCSEL_K0);
     GXSetNumTexGens(2);
-    GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX0 + 0, GX_FALSE, GX_PTIDENTITY + 0x0);
-    GXSetTexCoordGen2(GX_TEXCOORD1, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX0 + 3, GX_FALSE, GX_PTIDENTITY + 0x0);
+    GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX0, GX_FALSE, GX_PTIDENTITY);
+    GXSetTexCoordGen2(GX_TEXCOORD1, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX1, GX_FALSE, GX_PTIDENTITY);
     GXSetTevKColor(GX_KCOLOR0, (GXColor){0x7F, 0x7F, 0x7F, 0});
     effGetTexObjN64(0x8b, &texObj);
     GXLoadTexObj(&texObj, GX_TEXMAP0);
@@ -224,11 +227,11 @@ void effFireSparkDisp(CameraId cameraId, EffectEntry* effect) {
         PSMTXScale(scale, 0.03125f, 0.0078125f, 0.0f);
         PSMTXTrans(mtx, 0.0f, (f32)((i % 4) * 32), 0.0f);
         PSMTXConcat(scale, mtx, scale);
-        GXLoadTexMtxImm(scale, GX_TEXMTX0 + 0, GX_MTX2x4);
+        GXLoadTexMtxImm(scale, GX_TEXMTX0, GX_MTX2x4);
         PSMTXScale(scale, 0.03125f, 0.03125f, 0.0f);
         PSMTXTrans(mtx, work->uv[0], work->uv[1], 0.0f);
         PSMTXConcat(scale, mtx, scale);
-        GXLoadTexMtxImm(scale, GX_TEXMTX0 + 3, GX_MTX2x4);
+        GXLoadTexMtxImm(scale, GX_TEXMTX1, GX_MTX2x4);
         GXBegin(GX_TRIANGLES, GX_VTXFMT0, 6);
         tri2(0, 1, 2, 0, 0, 2, 3, 0);
     }

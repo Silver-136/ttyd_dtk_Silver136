@@ -8,6 +8,7 @@
 #include <dolphin/gx.h>
 #include <dolphin/mtx.h>
 #include "libc_decls.h"
+#include "eff/n64/eff_fire_spark_n64.h"
 
 typedef struct EffFireSmokeWork {
     s32 type;       // 0x0
@@ -41,8 +42,14 @@ static GXColor col_tbl[3][8] = {
       { 0xDE, 0xF6, 0x18, 0xFF }, { 0xA0, 0xF6, 0x06, 0xFF }, { 0xA0, 0xF6, 0x06, 0xFF }, { 0x92, 0xE4, 0x00, 0xFF } },
 };
 
+// smoke (x, y) scale per frame, in 1/128 units
 static u8 scale_dt[] = {
-    128, 128, 129, 127, 130, 127, 131, 126, 132, 126, 132, 126, 133, 125, 134, 125, 135, 124, 136, 124, 137, 124, 138, 123, 138, 123, 139, 123, 140, 123, 141, 122, 141, 122, 142, 122, 143, 121, 143, 121, 144, 121, 145, 121, 146, 120, 146, 120, 147, 120, 148, 119, 149, 119, 149, 119, 150, 118, 151, 118, 152, 118, 152, 118, 153, 117, 154, 117, 155, 116, 156, 116, 157, 116, 158, 115, 159, 115, 160, 115, 161, 114, 162, 114, 163, 113, 165, 113, 166, 112, 167, 112, 169, 111, 170, 111, 171, 110, 173, 109, 174, 109, 176, 108, 178, 107, 180, 107, 181, 106, 183, 105, 185, 104, 187, 104, 189, 103, 192, 102,
+    128, 128, 129, 127, 130, 127, 131, 126, 132, 126, 132, 126, 133, 125, 134, 125, 135, 124, 136, 124,
+    137, 124, 138, 123, 138, 123, 139, 123, 140, 123, 141, 122, 141, 122, 142, 122, 143, 121, 143, 121,
+    144, 121, 145, 121, 146, 120, 146, 120, 147, 120, 148, 119, 149, 119, 149, 119, 150, 118, 151, 118,
+    152, 118, 152, 118, 153, 117, 154, 117, 155, 116, 156, 116, 157, 116, 158, 115, 159, 115, 160, 115,
+    161, 114, 162, 114, 163, 113, 165, 113, 166, 112, 167, 112, 169, 111, 170, 111, 171, 110, 173, 109,
+    174, 109, 176, 108, 178, 107, 180, 107, 181, 106, 183, 105, 185, 104, 187, 104, 189, 103, 192, 102,
 };
 
 void effFireMain(EffectEntry* effect);
@@ -67,8 +74,6 @@ static inline void effFireQuad(s32 iw, s32 ih) {
 void effFireDisp(CameraId cameraId, EffectEntry* effect);
 void effFireDisp2(CameraId cameraId, EffectEntry* effect);
 void effFireDisp3(CameraId cameraId, EffectEntry* effect);
-EffectEntry* effFireSparkN64Entry(s32 type, s32 count, s32 lifetime, f32 x, f32 y, f32 z, f32 rangeX,
-                                  f32 rangeY, f32 a, f32 b, f32 c);
 
 FireScaleKey scale2[] = {
     { 0, 1.0f },
@@ -80,7 +85,6 @@ FireScaleKey scale2[] = {
 void effFireSmokeDisp(CameraId cameraId, EffectEntry* effect);
 void effFireSmokeMain(EffectEntry* effect);
 
-
 static void effFireSmokeEntry(f32 x, f32 y, f32 z, f32 scale);
 
 EffectEntry* effFireEntry(s32 type, s32 duration, f32 x, f32 y, f32 z, f32 scale) {
@@ -90,7 +94,7 @@ EffectEntry* effFireEntry(s32 type, s32 duration, f32 x, f32 y, f32 z, f32 scale
     effect = effEntry();
     effect->type = "Fire";
     effect->count = 1;
-    work = __memAlloc(HEAP_EFFECT, 0x8c);
+    work = __memAlloc(HEAP_EFFECT, sizeof(EffFireWork));
     effect->userdata = work;
     effect->callback = effFireMain;
     effect->flags |= EFFECT_FLAG_SOFT_DELETABLE;
@@ -255,12 +259,8 @@ void effFireMain(EffectEntry* effect) {
             work->sparkTimer++;
             if (work->sparkTimer > work->range) {
                 u8 offs[4] = { 5, 10, 10, 10 };
-                f32 px, py, pz, sc;
-                pz = work->position.z - 5.0f;
-                py = work->position.y + (f32)offs[type];
-                sc = work->scale;
-                px = work->position.x;
-                effFireSmokeEntry(px, py, pz, sc);
+                effFireSmokeEntry(work->position.x, work->position.y + (f32)offs[type], work->position.z - 5.0f,
+                                  work->scale);
                 work->sparkTimer = 0;
                 work->range = rand() % 30 + 30;
             }
@@ -292,7 +292,7 @@ void effFireDisp(CameraId cameraId, EffectEntry* effect) {
     s32 n;
     s32 frame;
     GXTexObj texObj;
-    Mtx trans, scaleMtx, rot, m6c, m3c;
+    Mtx trans, scaleMtx, rot, mtx, offsetMtx;
 
     work = effect->userdata;
     camera = camGetPtr(cameraId);
@@ -331,8 +331,8 @@ void effFireDisp(CameraId cameraId, EffectEntry* effect) {
     frame = (work->delay >> 1) % n;
     PSMTXScale(scaleMtx, 1.0f / n, 1.0f, 1.0f);
     PSMTXTrans(trans, frame, 0.0f, 0.0f);
-    PSMTXConcat(scaleMtx, trans, m6c);
-    GXLoadTexMtxImm(m6c, GX_TEXMTX0, GX_MTX2x4);
+    PSMTXConcat(scaleMtx, trans, mtx);
+    GXLoadTexMtxImm(mtx, GX_TEXMTX0, GX_MTX2x4);
     PSMTXTrans(trans, work->position.x, work->position.y, work->position.z);
     PSMTXRotRad(rot, 'y', MTXDegToRad(-camGetPtr(cameraId)->viewYaw));
     {
@@ -340,9 +340,9 @@ void effFireDisp(CameraId cameraId, EffectEntry* effect) {
         s *= 0.03125f;
         PSMTXScale(scaleMtx, s * work->scaleX, s * work->scaleY, s);
     }
-    PSMTXConcat(trans, rot, m6c);
-    PSMTXConcat(m6c, scaleMtx, m6c);
-    PSMTXConcat(camera->view, m6c, m6c);
+    PSMTXConcat(trans, rot, mtx);
+    PSMTXConcat(mtx, scaleMtx, mtx);
+    PSMTXConcat(camera->view, mtx, mtx);
     GXSetCurrentMtx(GX_PNMTX0);
     GXClearVtxDesc();
     GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
@@ -351,9 +351,9 @@ void effFireDisp(CameraId cameraId, EffectEntry* effect) {
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
-    PSMTXTrans(m3c, 0.01f, -0.01f, 0.0f);
-    PSMTXConcat(m6c, m3c, m3c);
-    GXLoadPosMtxImm(m3c, GX_PNMTX0);
+    PSMTXTrans(offsetMtx, 0.01f, -0.01f, 0.0f);
+    PSMTXConcat(mtx, offsetMtx, offsetMtx);
+    GXLoadPosMtxImm(offsetMtx, GX_PNMTX0);
     GXSetNumTevStages(1);
     GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
     GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
@@ -365,7 +365,7 @@ void effFireDisp(CameraId cameraId, EffectEntry* effect) {
     GXSetTevKColor(GX_KCOLOR0, (GXColor){ 0xFF, 0x00, 0x00, 0xFF });
     GXSetTevColor(GX_TEVREG0, (GXColor){ 0x00, 0x00, 0x00, 0x64 });
     effFireQuad(w, h);
-    GXLoadPosMtxImm(m6c, GX_PNMTX0);
+    GXLoadPosMtxImm(mtx, GX_PNMTX0);
     GXSetNumTevStages(4);
     GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR0A0);
     GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVREG0);
@@ -401,7 +401,7 @@ void effFireDisp2(CameraId cameraId, EffectEntry* effect) {
     EffFireWork* work;
     s32 type;
     GXTexObj texObj;
-    Mtx trans, scaleMtx, rot, m54;
+    Mtx trans, scaleMtx, rot, modelView;
 
     work = effect->userdata;
     camera = camGetPtr(cameraId);
@@ -424,10 +424,10 @@ void effFireDisp2(CameraId cameraId, EffectEntry* effect) {
     PSMTXTrans(trans, work->position.x, work->position.y, work->position.z);
     PSMTXRotRad(rot, 'y', MTXDegToRad(-camGetPtr(cameraId)->viewYaw));
     PSMTXScale(scaleMtx, work->scale * work->scaleX, work->scale * work->scaleY, work->scale);
-    PSMTXConcat(trans, rot, m54);
-    PSMTXConcat(m54, scaleMtx, m54);
-    PSMTXConcat(camera->view, m54, m54);
-    GXLoadPosMtxImm(m54, GX_PNMTX0);
+    PSMTXConcat(trans, rot, modelView);
+    PSMTXConcat(modelView, scaleMtx, modelView);
+    PSMTXConcat(camera->view, modelView, modelView);
+    GXLoadPosMtxImm(modelView, GX_PNMTX0);
     GXSetCurrentMtx(GX_PNMTX0);
     GXClearVtxDesc();
     GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
@@ -498,7 +498,7 @@ void effFireDisp2(CameraId cameraId, EffectEntry* effect) {
         PSMTXRotRad(rot, 'z', 0.7853982f);
         PSMTXConcat(trans, rot, trans);
     }
-    PSMTXConcat(m54, trans, trans);
+    PSMTXConcat(modelView, trans, trans);
     GXLoadPosMtxImm(trans, GX_PNMTX0);
     GXSetCurrentMtx(GX_PNMTX0);
     GXSetNumChans(1);
@@ -612,7 +612,7 @@ void effFireDisp3(CameraId cameraId, EffectEntry* effect) {
     GXSetTevAlphaOp(GX_TEVSTAGE2, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
     GXSetTevColorIn(GX_TEVSTAGE2, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_CPREV);
     GXSetTevAlphaIn(GX_TEVSTAGE2, GX_CA_ZERO, GX_CA_APREV, GX_CA_A0, GX_CA_ZERO);
-    if (work->useMapBlend && (mapGetWork()->entries[0].flags & 2)) {
+    if (work->useMapBlend && (mapGetWork()->entries[0].flags & MAP_ENTRY_BLEND)) {
         GXColor blend;
         mapGetBlend(&blend);
         GXSetNumTevStages(4);
@@ -767,18 +767,12 @@ void effFireDisp3(CameraId cameraId, EffectEntry* effect) {
     work->bboxValid = 1;
 }
 
-
-
-
-
-
-
 static void effFireSmokeEntry(f32 x, f32 y, f32 z, f32 scale) {
     EffectEntry* smoke = effEntry();
     EffFireSmokeWork* sw;
     smoke->type = "FireSmoke";
     smoke->count = 1;
-    sw = __memAlloc(HEAP_EFFECT, 0x40);
+    sw = __memAlloc(HEAP_EFFECT, sizeof(EffFireSmokeWork));
     smoke->userdata = sw;
     smoke->callback = effFireSmokeMain;
     smoke->flags |= EFFECT_FLAG_SOFT_DELETABLE;

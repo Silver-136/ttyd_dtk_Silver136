@@ -10,10 +10,9 @@
 void effScanningMain(EffectEntry* effect);
 void effScanningDisp(CameraId camId, void* param);
 
-EffectEntry* effScanningEntry(s32 int2, f32 float3, f32 float4, f32 float5) {
+EffectEntry* effScanningEntry(s32 type, f32 x, f32 y, f32 z) {
     EffectEntry* entry;
     effScanningData* data;
-
 
     entry = effEntry();
     entry->type = "Scanning";
@@ -23,10 +22,10 @@ EffectEntry* effScanningEntry(s32 int2, f32 float3, f32 float4, f32 float5) {
     entry->callback = effScanningMain;
     entry->flags |= EFFECT_FLAG_SOFT_DELETABLE;
 
-    data->type = int2;
-    data->position.x = float3;
-    data->position.y = float4;
-    data->position.z = float5;
+    data->type = type;
+    data->position.x = x;
+    data->position.y = y;
+    data->position.z = z;
     data->scale = 1.0f;
     data->animId = -1;
     data->state = 0;
@@ -44,7 +43,8 @@ void effScanningMain(EffectEntry* effect) {
     position = (Vec){ data->position.x, data->position.y, data->position.z };
     inBattle = gp->inBattle != 0;
 
-    if (effect->flags & EFFECT_FLAG_SOFT_DELETE) { //soft delete
+    // soft delete
+    if (effect->flags & EFFECT_FLAG_SOFT_DELETE) {
         effect->flags &= ~EFFECT_FLAG_SOFT_DELETE;
         if (data->animId != -1) {
             animPoseRelease(data->animId);
@@ -57,6 +57,7 @@ void effScanningMain(EffectEntry* effect) {
             if (!animGroupBaseAsync("EFF_Scan", inBattle, NULL)) {
                 return;
             }
+            // FAKE: no-op (u32) cast (animPoseEntry takes s32); removing it changes the object
             data->animId = animPoseEntry("EFF_Scan", (u32)inBattle);
             animPoseSetAnim(data->animId, "Z_1", TRUE);
             data->state++;

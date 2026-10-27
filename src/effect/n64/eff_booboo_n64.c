@@ -8,7 +8,6 @@
 #include <dolphin/mtx.h>
 #include "eff/eff_magic1_n64.h"
 
-
 typedef struct EffBoobooN64Work {
     s32 unk0;         // 0x0
     s32 time;         // 0x4
@@ -24,9 +23,6 @@ typedef struct EffBoobooN64Work {
     f32 yoff[11];     // 0x110
     s8 frame[11];     // 0x13C
 } EffBoobooN64Work;
-
-#ifdef __MWERKS__
-#endif
 
 s16 boo_vertex_tbl[] __attribute__((aligned(32))) = {
     6474, 32221, -10223, 6474, 32221, 8093,
@@ -248,7 +244,6 @@ static inline void booSetArrays(void) {
     GXSetArray(GX_VA_TEX0, boo_texcoord0_tbl, 4);
 }
 
-#define DL4(a, b, c, d) GXCallDisplayList(a, 0x40); GXCallDisplayList(b, 0x40); GXCallDisplayList(c, 0x40); GXCallDisplayList(d, 0x40);
 #define DLS(p, a) GXCallDisplayList(p##a, 0x20);
 #define DLS_ALL(p)                                                                                     \
     DLS(p, 4) DLS(p, 5) DLS(p, 6) DLS(p, 7) DLS(p, 8) DLS(p, 9) DLS(p, 10) DLS(p, 11) DLS(p, 12)       \
@@ -258,19 +253,28 @@ static inline void booSetArrays(void) {
 
 void boo_polygon_0(void) {
     booSetArrays();
-    DL4(boo_dl_0_0, boo_dl_0_1, boo_dl_0_2, boo_dl_0_3)
+    GXCallDisplayList(boo_dl_0_0, 0x40);
+    GXCallDisplayList(boo_dl_0_1, 0x40);
+    GXCallDisplayList(boo_dl_0_2, 0x40);
+    GXCallDisplayList(boo_dl_0_3, 0x40);
     DLS_ALL(boo_dl_0_)
 }
 
 void boo_polygon_1(void) {
     booSetArrays();
-    DL4(boo_dl_1_0, boo_dl_1_1, boo_dl_1_2, boo_dl_1_3)
+    GXCallDisplayList(boo_dl_1_0, 0x40);
+    GXCallDisplayList(boo_dl_1_1, 0x40);
+    GXCallDisplayList(boo_dl_1_2, 0x40);
+    GXCallDisplayList(boo_dl_1_3, 0x40);
     DLS_ALL(boo_dl_1_)
 }
 
 void boo_polygon_2(void) {
     booSetArrays();
-    DL4(boo_dl_2_0, boo_dl_2_1, boo_dl_2_2, boo_dl_2_3)
+    GXCallDisplayList(boo_dl_2_0, 0x40);
+    GXCallDisplayList(boo_dl_2_1, 0x40);
+    GXCallDisplayList(boo_dl_2_2, 0x40);
+    GXCallDisplayList(boo_dl_2_3, 0x40);
     DLS_ALL(boo_dl_2_)
 }
 
@@ -434,7 +438,7 @@ BOOL texture_dl(EffectEntry* effect, s32 idx, u32 type) {
         booTexCommon(0x40, GX_CC_C0, &texObj);
         break;
     }
-    if ((mapGetWork()->entries[0].flags & 2) && (work->flags[idx] & 8)) {
+    if ((mapGetWork()->entries[0].flags & MAP_ENTRY_BLEND) && (work->flags[idx] & 8)) {
         mapGetBlend(&blend);
         if (!blend.r && !blend.g && !blend.b) {
             return TRUE;

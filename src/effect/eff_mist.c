@@ -151,41 +151,41 @@ void effMistMain(EffectEntry* effect) {
     work++;
     for (i = 1; i < effect->count; i++, work++) {
         switch (type) {
-        case 4:
-            work->position.x += work->velocity.x;
-            work->position.y += work->velocity.y;
-            work->position.z += work->velocity.z;
-            work->velocity.x *= 0.9f;
-            work->velocity.y *= 0.88f;
-            work->velocity.z *= 0.9f;
-            work->position.y += work->accel.x;
-            work->accel.x += work->accel.y;
-            work->accel.y *= work->accel.z;
-            work->scale.x *= 1.02f;
-            work->scale.y *= 1.02f;
-            work->scale.z *= 1.02f;
-            work->alpha -= 2.0f;
-            if (work->alpha < 0.0f) {
-                work->alpha = 0.0f;
-            }
-            break;
-        default:
-            if (work->timer < 255) {
-                work->timer += irand(5);
-                work->alpha = work->timer;
-                if (work->alpha > 255.0f) {
-                    work->alpha = 255.0f;
-                }
-            } else {
-                work->alpha -= irand(5);
+            case 4:
+                work->position.x += work->velocity.x;
+                work->position.y += work->velocity.y;
+                work->position.z += work->velocity.z;
+                work->velocity.x *= 0.9f;
+                work->velocity.y *= 0.88f;
+                work->velocity.z *= 0.9f;
+                work->position.y += work->accel.x;
+                work->accel.x += work->accel.y;
+                work->accel.y *= work->accel.z;
+                work->scale.x *= 1.02f;
+                work->scale.y *= 1.02f;
+                work->scale.z *= 1.02f;
+                work->alpha -= 2.0f;
                 if (work->alpha < 0.0f) {
-                    work->timer = 0;
                     work->alpha = 0.0f;
                 }
-            }
-            work->position.x += work->velocity.x;
-            work->position.y += work->velocity.y;
-            work->position.z += work->velocity.z;
+                break;
+            default:
+                if (work->timer < 255) {
+                    work->timer += irand(5);
+                    work->alpha = work->timer;
+                    if (work->alpha > 255.0f) {
+                        work->alpha = 255.0f;
+                    }
+                } else {
+                    work->alpha -= irand(5);
+                    if (work->alpha < 0.0f) {
+                        work->timer = 0;
+                        work->alpha = 0.0f;
+                    }
+                }
+                work->position.x += work->velocity.x;
+                work->position.y += work->velocity.y;
+                work->position.z += work->velocity.z;
         }
     }
     dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effMistDisp, effect);
@@ -206,7 +206,7 @@ void effMistDisp(CameraId cameraId, EffectEntry* effect) {
 
     cam = camGetPtr(cameraId);
     alpha = work->alpha;
-    if (work->type == 4 && (mapGetWork()->entries[0].flags & 2)) {
+    if (work->type == 4 && (mapGetWork()->entries[0].flags & MAP_ENTRY_BLEND)) {
         return;
     }
     effGetTexObj(0x44, &texObj);

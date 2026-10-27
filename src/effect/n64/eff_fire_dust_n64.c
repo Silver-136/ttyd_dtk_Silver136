@@ -1,4 +1,5 @@
 #include "eff/eff_n64.h"
+#include "eff/n64/eff_fire_dust_n64.h"
 #include "driver/camdrv.h"
 #include "driver/dispdrv.h"
 #include "driver/effdrv.h"
@@ -8,7 +9,6 @@
 #include <stdlib.h>
 #include "libc_decls.h"
 #include "eff/eff_magic1_n64.h"
-
 
 typedef struct EffFireDustWork {
     s32 type;       // 0x0
@@ -74,7 +74,7 @@ void effFireDustMain(EffectEntry* effect);
 void effFireDustDisp(CameraId cameraId, EffectEntry* effect);
 static void main_dl(EffectEntry* effect, Mtx mtx);
 
-EffectEntry* effFireDustN64Entry(s32 type, s32 count, s32 lifetime, f32 x, f32 y, f32 z, f32 a, f32 b) {
+EffectEntry* effFireDustN64Entry(s32 type, s32 count, s32 lifetime, f32 x, f32 y, f32 z, f32 range, f32 height) {
     EffectEntry* effect;
     EffFireDustWork* work;
     EffFireDustWork* p;
@@ -100,8 +100,8 @@ EffectEntry* effFireDustN64Entry(s32 type, s32 count, s32 lifetime, f32 x, f32 y
     work->position.y = y;
     work->position.z = z;
     work->scale = 1.0f;
-    work->range = a;
-    work->height = b;
+    work->range = range;
+    work->height = height;
     work->cr = 255;
     work->cg = 255;
     work->cb = 255;
@@ -215,7 +215,7 @@ void effFireDustDisp(CameraId cameraId, EffectEntry* effect) {
     GXLoadTexObj(&texObj, GX_TEXMAP0);
     GXSetNumChans(0);
     GXSetNumTexGens(1);
-    GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX0 + 0, GX_FALSE, GX_PTIDENTITY + 0x0);
+    GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX0, GX_FALSE, GX_PTIDENTITY);
     PSMTXScale(scaleMtx, 0.0056818184f, 0.045454547f, 0.0f);
     GXLoadTexMtxImm(scaleMtx, GX_TEXMTX0, GX_MTX2x4);
     GXSetNumTevStages(1);
@@ -267,14 +267,30 @@ static void main_dl(EffectEntry* effect, Mtx cam) {
         GXSetCurrentMtx(GX_PNMTX0);
         GXSetTevColor(GX_TEVREG0, (GXColor){r, g, b, (s32)((f32)p->alpha * a)});
         switch (i & 7) {
-            case 0: vtx = &size8x8_tex22x22_vtx[12]; break;
-            case 1: vtx = &size8x8_tex22x22_vtx[16]; break;
-            case 2: vtx = &size8x8_tex22x22_vtx[20]; break;
-            case 3: vtx = &size8x8_tex22x22_vtx[24]; break;
-            case 4: vtx = &size8x8_tex22x22_vtx[28]; break;
-            case 5: vtx = &size8x8_tex22x22_vtx[0]; break;
-            case 6: vtx = &size8x8_tex22x22_vtx[4]; break;
-            case 7: vtx = &size8x8_tex22x22_vtx[8]; break;
+            case 0:
+                vtx = &size8x8_tex22x22_vtx[12];
+                break;
+            case 1:
+                vtx = &size8x8_tex22x22_vtx[16];
+                break;
+            case 2:
+                vtx = &size8x8_tex22x22_vtx[20];
+                break;
+            case 3:
+                vtx = &size8x8_tex22x22_vtx[24];
+                break;
+            case 4:
+                vtx = &size8x8_tex22x22_vtx[28];
+                break;
+            case 5:
+                vtx = &size8x8_tex22x22_vtx[0];
+                break;
+            case 6:
+                vtx = &size8x8_tex22x22_vtx[4];
+                break;
+            case 7:
+                vtx = &size8x8_tex22x22_vtx[8];
+                break;
         }
         effSetVtxDescN64(vtx);
         GXBegin(GX_TRIANGLES, GX_VTXFMT0, 6);

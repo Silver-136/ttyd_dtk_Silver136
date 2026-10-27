@@ -1,4 +1,5 @@
 #include "eff/eff_n64.h"
+#include "eff/n64/eff_fire_ring_n64.h"
 #include "driver/camdrv.h"
 #include "driver/dispdrv.h"
 #include "driver/effdrv.h"
@@ -158,14 +159,30 @@ void effFireRingMain(EffectEntry* effect) {
         work->uv[1] += work->uvVel[1];
         work->uv[2] += work->uvVel[2];
         work->uv[3] += work->uvVel[3];
-        if (work->uv[0] > 128.0f) work->uv[0] -= 128.0f;
-        if (work->uv[1] > 128.0f) work->uv[1] -= 128.0f;
-        if (work->uv[2] > 128.0f) work->uv[2] -= 128.0f;
-        if (work->uv[3] > 128.0f) work->uv[3] -= 128.0f;
-        if (work->uv[0] < 0.0f) work->uv[0] += 128.0f;
-        if (work->uv[1] < 0.0f) work->uv[1] += 128.0f;
-        if (work->uv[2] < 0.0f) work->uv[2] += 128.0f;
-        if (work->uv[3] < 0.0f) work->uv[3] += 128.0f;
+        if (work->uv[0] > 128.0f) {
+            work->uv[0] -= 128.0f;
+        }
+        if (work->uv[1] > 128.0f) {
+            work->uv[1] -= 128.0f;
+        }
+        if (work->uv[2] > 128.0f) {
+            work->uv[2] -= 128.0f;
+        }
+        if (work->uv[3] > 128.0f) {
+            work->uv[3] -= 128.0f;
+        }
+        if (work->uv[0] < 0.0f) {
+            work->uv[0] += 128.0f;
+        }
+        if (work->uv[1] < 0.0f) {
+            work->uv[1] += 128.0f;
+        }
+        if (work->uv[2] < 0.0f) {
+            work->uv[2] += 128.0f;
+        }
+        if (work->uv[3] < 0.0f) {
+            work->uv[3] += 128.0f;
+        }
         dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effFireRingDisp, effect);
     }
 }
@@ -182,11 +199,11 @@ void effFireRingDisp(CameraId cameraId, EffectEntry* effect) {
     PSMTXScale(scale, 1.0f / 63.0f, 1.0f / 63.0f, 0.0f);
     PSMTXTrans(mtx, work->uv[0], work->uv[1], 0.0f);
     PSMTXConcat(scale, mtx, mtx);
-    GXLoadTexMtxImm(mtx, GX_TEXMTX0 + 0, GX_MTX2x4);
+    GXLoadTexMtxImm(mtx, GX_TEXMTX0, GX_MTX2x4);
     PSMTXScale(scale, 1.0f / 31.0f, 1.0f / 31.0f, 0.0f);
     PSMTXTrans(mtx, work->uv[2], work->uv[3], 0.0f);
     PSMTXConcat(scale, mtx, mtx);
-    GXLoadTexMtxImm(mtx, GX_TEXMTX0 + 3, GX_MTX2x4);
+    GXLoadTexMtxImm(mtx, GX_TEXMTX1, GX_MTX2x4);
     PSMTXTrans(mtx, work->position.x, work->position.y, work->position.z);
     PSMTXScale(scale, work->scale, work->scale, work->scale);
     PSMTXConcat(mtx, scale, mtx);
@@ -201,8 +218,8 @@ void effFireRingDisp(CameraId cameraId, EffectEntry* effect) {
     GXSetTevColor(GX_TEVREG1, (GXColor){work->r, work->g, work->b, 0x80});
     GXSetNumChans(0);
     GXSetNumTexGens(2);
-    GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX0 + 0, GX_FALSE, GX_PTIDENTITY + 0x0);
-    GXSetTexCoordGen2(GX_TEXCOORD1, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX0 + 3, GX_FALSE, GX_PTIDENTITY + 0x0);
+    GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX0, GX_FALSE, GX_PTIDENTITY);
+    GXSetTexCoordGen2(GX_TEXCOORD1, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX1, GX_FALSE, GX_PTIDENTITY);
     GXSetNumTevStages(3);
     GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
     GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);

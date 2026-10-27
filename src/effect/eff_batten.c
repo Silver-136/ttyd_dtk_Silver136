@@ -70,7 +70,7 @@ void effBattenMain(EffectEntry* effect) {
     EffBattenWork* work;
     s32 done;
     s32 type;
-    s32 lang;
+    s32 group;
     s32 i;
     Vec tmp;
     Vec pos = { 0.0f, 0.0f, 0.0f };
@@ -82,32 +82,32 @@ void effBattenMain(EffectEntry* effect) {
     pos.z = work->position.z;
     tmp = pos;
     type = work->type;
-    lang = gp->inBattle != 0;
+    group = gp->inBattle != 0;
     switch (type) {
     case 1:
-        if (!animGroupBaseAsync("EFF_batten_x", lang, NULL)) {
+        if (!animGroupBaseAsync("EFF_batten_x", group, NULL)) {
             return;
         }
         if (work->poseId == -1) {
-            work->poseId = animPoseEntry("EFF_batten_x", lang);
+            work->poseId = animPoseEntry("EFF_batten_x", group);
             animPoseSetAnim(work->poseId, "A_1", 1);
         }
         break;
     case 2:
-        if (!animGroupBaseAsync("EFF_batten_x", lang, NULL)) {
+        if (!animGroupBaseAsync("EFF_batten_x", group, NULL)) {
             return;
         }
         if (work->poseId == -1) {
-            work->poseId = animPoseEntry("EFF_batten_x", lang);
+            work->poseId = animPoseEntry("EFF_batten_x", group);
             animPoseSetAnim(work->poseId, "A_2", 1);
         }
         break;
     case 3:
-        if (!animGroupBaseAsync("EFF_batten_rocket", lang, NULL)) {
+        if (!animGroupBaseAsync("EFF_batten_rocket", group, NULL)) {
             return;
         }
         if (work->poseId == -1) {
-            work->poseId = animPoseEntry("EFF_batten_rocket", lang);
+            work->poseId = animPoseEntry("EFF_batten_rocket", group);
             animPoseSetAnim(work->poseId, "A_1", 1);
         }
         break;

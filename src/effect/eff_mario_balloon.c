@@ -26,7 +26,7 @@ EffectEntry* effMarioBalloonEntry(s32 type, NpcEntry* npc) {
     work->type = type;
     work->rotation = 0.0f;
     work->npc = npc;
-    work->camera = 4;
+    work->camera = CAMERA_3D;
     switch (type) {
     case 0:
         work->scale = 0.4f;

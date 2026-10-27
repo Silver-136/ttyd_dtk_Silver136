@@ -8,7 +8,6 @@
 #include "eff/eff_mist.h"
 #include "driver/effdrv.h"
 
-
 typedef struct EffToikiWork {
     s32 type;         // 0x0
     Vec position;     // 0x4
@@ -20,7 +19,6 @@ typedef struct EffToikiWork {
     s32 counter;      // 0x2C
     s32 timer;        // 0x30
 } EffToikiWork;
-
 
 static s16 queen_toiki_vertex_tbl[] __attribute__((aligned(32))) = {
     -20614, -6729, 0, -20385, -6698, 0, -19918, -6319,
@@ -269,9 +267,7 @@ void effToikiDisp(CameraId cameraId, EffectEntry* effect) {
     GXSetVtxDesc(GX_VA_TEX0, GX_INDEX8);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S16, 14);
     GXSetArray(GX_VA_TEX0, queen_toiki_texcoord0_tbl, 4);
-    {
-        for (i = 0, sz = queen_toiki_dl_0_size_tbl, dl = queen_toiki_dl_0_tbl; i < 14; i++, sz++, dl++) {
-            GXCallDisplayList(*dl, *sz << 5);
-        }
+    for (i = 0, sz = queen_toiki_dl_0_size_tbl, dl = queen_toiki_dl_0_tbl; i < 14; i++, sz++, dl++) {
+        GXCallDisplayList(*dl, *sz << 5);
     }
 }

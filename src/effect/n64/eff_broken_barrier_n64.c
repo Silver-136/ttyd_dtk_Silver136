@@ -77,7 +77,6 @@ static effN64Vtx size8x8_tex22x22_vtx[] = {
     {-8, 8, 0, 4928, 704, 0, 0, 0, 255},
 };
 
-
 EffectEntry* effBrokenBarrierN64Entry(s32 type, s32 life, f32 x, f32 y, f32 z, f32 scale) {
     EffectEntry* effect;
     EffBrokenBarrierN64Work* work;
@@ -192,9 +191,8 @@ void effBrokenBarrierMain(EffectEntry* effect) {
             case 2: {
                     f32 lat = 6.2831855f * t / 360.0f;
                     f32 lon;
-                    f32 c;
-                    work->position.x = width * (f32)sin(lon = 6.2831855f * a / 360.0f) * (c = (f32)cos(lat));
-                    work->position.y = height * (f32)cos(lon) * (c = (f32)cos(lat));
+                    work->position.x = width * (f32)sin(lon = 6.2831855f * a / 360.0f) * (f32)cos(lat);
+                    work->position.y = height * (f32)cos(lon) * (f32)cos(lat);
                     work->position.z = width * (f32)sin(lat);
                 }
                 work->velocity.x = 0.4f * work->position.x;
@@ -234,8 +232,8 @@ void effBrokenBarrierMain(EffectEntry* effect) {
                 a = (f32)(rand() % 360);
                 t = (f32)(rand() % 360);
                 b = 6.2831855f * t / 360.0f;
-                work->position.x = width * (f32)sin(a = 6.2831855f * a / 360.0f) * (ca = (f32)cos(b));
-                work->position.y = height * (f32)cos(a) * (ca = (f32)cos(b));
+                work->position.x = width * (f32)sin(a = 6.2831855f * a / 360.0f) * (f32)cos(b);
+                work->position.y = height * (f32)cos(a) * (f32)cos(b);
                 work->position.z = width * (f32)sin(b);
             }
             break;
@@ -251,7 +249,6 @@ void effBrokenBarrierMain(EffectEntry* effect) {
     }
     dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effBrokenBarrierDisp, effect);
 }
-
 
 void effBrokenBarrierDisp(CameraId cameraId, EffectEntry* effect) {
     Mtx trans;
@@ -286,15 +283,16 @@ void effBrokenBarrierDisp(CameraId cameraId, EffectEntry* effect) {
     PSMTXConcat(camera->view, mtx, mtx2);
     main_dl(effect, mtx2);
     {
-    Vec axis = {0.4f, 0.0f, 0.8f};
-    PSMTXRotAxisRad(rotMtx, &axis, 2.0943952f);
-    PSMTXConcat(mtx, rotMtx, mtx2);
-    PSMTXConcat(camera->view, mtx2, mtx2);
-    main_dl(effect, mtx2);
-    PSMTXRotAxisRad(rotMtx, &axis, -2.0943952f);
-    PSMTXConcat(mtx, rotMtx, mtx2);
-    PSMTXConcat(camera->view, mtx2, mtx2);
-    main_dl(effect, mtx2);
+        Vec axis = {0.4f, 0.0f, 0.8f};
+
+        PSMTXRotAxisRad(rotMtx, &axis, 2.0943952f);
+        PSMTXConcat(mtx, rotMtx, mtx2);
+        PSMTXConcat(camera->view, mtx2, mtx2);
+        main_dl(effect, mtx2);
+        PSMTXRotAxisRad(rotMtx, &axis, -2.0943952f);
+        PSMTXConcat(mtx, rotMtx, mtx2);
+        PSMTXConcat(camera->view, mtx2, mtx2);
+        main_dl(effect, mtx2);
     }
 }
 

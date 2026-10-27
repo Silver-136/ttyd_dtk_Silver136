@@ -6,9 +6,8 @@
 #include <dolphin/mtx.h>
 #include <dolphin/os/OSFastCast.h>
 #include <string.h>
+#include "eff/n64/eff_flame_n64.h"
 #include "eff/eff_n64.h"
-
-
 
 typedef struct EffFlameN64Work {
     s32 type;         // 0x0
@@ -36,7 +35,6 @@ typedef struct EffFlameN64Work {
     u8 c0r, c0g, c0b; // 0x68
     u8 c1r, c1g, c1b; // 0x6b
     u8 c1a;           // 0x6e
-    u8 pad6f;
     effN64Vtx vtx[8]; // 0x70
 } EffFlameN64Work;
 
@@ -56,8 +54,6 @@ static inline void xf(Mtx m, effN64Vtx* dst, effN64Vtx* src) {
     OSf32tos16(&v.y, &dst->y);
     OSf32tos16(&v.z, &dst->z);
 }
-
-
 
 static effN64Vtx stg_flame_v[] = {
     {-50, -20, 2, 0, 0, 255, 255, 255, 255},
@@ -91,7 +87,6 @@ static effN64Vtx stg_flame_3_v[] = {
     {50, 50, -2, 1024, 1024, 255, 255, 255, 255},
     {-50, 50, -2, 0, 1024, 255, 255, 255, 255},
 };
-
 
 EffectEntry* effFlameN64Entry(s32 type, f32 x, f32 y, f32 z, f32 scale) {
     EffectEntry* effect;
@@ -232,65 +227,66 @@ void effFlameMain(EffectEntry* effect) {
     if (life < 0) {
         effDelete(effect);
     } else {
-    type = work->type;
-    frame = work->frame;
-    if (type <= 1) {
-        if (frame <= 10) {
-            work->alpha = (s32)(0.5f * (f32)(128 - work->alpha) + (f32)work->alpha);
+        type = work->type;
+        frame = work->frame;
+        if (type <= 1) {
+            if (frame <= 10) {
+                work->alpha = (s32)(0.5f * (f32)(128 - work->alpha) + (f32)work->alpha);
+            }
+        } else {
+            if (frame <= 10) {
+                work->alpha = frame * 255 / 10;
+            }
         }
-    } else {
-        if (frame <= 10) {
-            work->alpha = frame * 255 / 10;
+        if (life < 16) {
+            work->alpha = life * 16;
         }
-    }
-    if (life < 16) {
-        work->alpha = life * 16;
-    }
-    if (type == 0) {
-        work->u0vel += 0.02f * (work->u0target - work->u0vel);
-        work->v0vel += 0.02f * (work->v0target - work->v0vel);
-        work->sx += 0.04f * (work->sz - work->sx);
-        work->sy += 0.04f * (work->sz - work->sy);
-    } else {
-        work->u0vel += 0.02f * (work->u0target - work->u0vel);
-        work->v0vel += 0.02f * (work->v0target - work->v0vel);
-        work->u1vel += 0.02f * (work->u1target - work->u1vel);
-        work->v1vel += 0.02f * (work->v1target - work->v1vel);
-    }
-    work->u0 += work->u0vel;
-    if (work->u0 < 0.0f) {
-        work->u0 += 64.0f;
-    } else if (work->u0 > 64.0f) {
-        work->u0 -= 64.0f;
-    }
-    work->v0 += work->v0vel;
-    if (work->v0 < 0.0f) {
-        work->v0 += 128.0f;
-    } else if (work->v0 > 128.0f) {
-        work->v0 -= 128.0f;
-    }
-    work->u1 += work->u1vel;
-    if (work->u1 < 0.0f) {
-        work->u1 += 64.0f;
-    } else if (work->u1 > 64.0f) {
-        work->u1 -= 64.0f;
-    }
-    work->v1 += work->v1vel;
-    if (work->v1 < 0.0f) {
-        work->v1 += 128.0f;
-    } else if (work->v1 > 128.0f) {
-        work->v1 -= 128.0f;
-    }
-    work->smoothed.x += 0.1f * (work->position.x - work->smoothed.x);
-    work->smoothed.y += 0.1f * (work->position.y - work->smoothed.y);
-    work->smoothed.z += 0.1f * (work->position.z - work->smoothed.z);
-    dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effFlameDisp, effect);
+        if (type == 0) {
+            work->u0vel += 0.02f * (work->u0target - work->u0vel);
+            work->v0vel += 0.02f * (work->v0target - work->v0vel);
+            work->sx += 0.04f * (work->sz - work->sx);
+            work->sy += 0.04f * (work->sz - work->sy);
+        } else {
+            work->u0vel += 0.02f * (work->u0target - work->u0vel);
+            work->v0vel += 0.02f * (work->v0target - work->v0vel);
+            work->u1vel += 0.02f * (work->u1target - work->u1vel);
+            work->v1vel += 0.02f * (work->v1target - work->v1vel);
+        }
+        work->u0 += work->u0vel;
+        if (work->u0 < 0.0f) {
+            work->u0 += 64.0f;
+        } else if (work->u0 > 64.0f) {
+            work->u0 -= 64.0f;
+        }
+        work->v0 += work->v0vel;
+        if (work->v0 < 0.0f) {
+            work->v0 += 128.0f;
+        } else if (work->v0 > 128.0f) {
+            work->v0 -= 128.0f;
+        }
+        work->u1 += work->u1vel;
+        if (work->u1 < 0.0f) {
+            work->u1 += 64.0f;
+        } else if (work->u1 > 64.0f) {
+            work->u1 -= 64.0f;
+        }
+        work->v1 += work->v1vel;
+        if (work->v1 < 0.0f) {
+            work->v1 += 128.0f;
+        } else if (work->v1 > 128.0f) {
+            work->v1 -= 128.0f;
+        }
+        work->smoothed.x += 0.1f * (work->position.x - work->smoothed.x);
+        work->smoothed.y += 0.1f * (work->position.y - work->smoothed.y);
+        work->smoothed.z += 0.1f * (work->position.z - work->smoothed.z);
+        dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effFlameDisp, effect);
     }
 }
 
 void effFlameDisp(CameraId cameraId, EffectEntry* effect) {
     s32 alpha;
     s32 type;
+    // FAKE: one-element pointer array; a plain EffFlameN64Work* work changes the object
     EffFlameN64Work* work[1];
     CameraEntry* camera;
     Mtx rot;

@@ -1,5 +1,5 @@
-/* "seqdrv" - Sequence Driver
- * Proper names for seqdrv_work used for swapping between game states (logo, game, battle, demo/e3).
+/* seqdrv: sequence driver. Switches between the top-level game sequences (SequenceType: logo, title, game, map
+ * change, battle, game over, load, E3 demo); seq_data holds each sequence's Init, Main and Exit callbacks.
  */
 #include "driver/seqdrv.h"
 #include "system.h"

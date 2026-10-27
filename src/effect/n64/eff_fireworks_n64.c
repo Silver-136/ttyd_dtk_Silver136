@@ -1,4 +1,5 @@
 #include "eff/eff_n64.h"
+#include "eff/n64/eff_fireworks_n64.h"
 #include "driver/camdrv.h"
 #include "driver/dispdrv.h"
 #include "driver/effdrv.h"
@@ -8,7 +9,6 @@
 #include <dolphin/mtx.h>
 #include "eff/eff_magic1_n64.h"
 #include "libc_decls.h"
-
 
 typedef struct EffFireworksN64Work {
     s32 type;        // 0x0
@@ -73,7 +73,6 @@ struct {
     s8* v;
     s32 n;
 } vtx_data[3] = {{vtx, 95}, {vtx2, 66}, {vtx3, 56}};
-
 
 void effFireworksMain(EffectEntry* effect);
 void effFireworksDisp(CameraId cameraId, EffectEntry* effect);
@@ -141,19 +140,17 @@ EffectEntry* effFireworksN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f
 
 void effFireworksMain(EffectEntry* effect) {
     EffFireworksN64Work* work = effect->userdata;
-    Vec position2;
-    Vec position = {0.0f, 0.0f, 0.0f};
+    Vec position;
+    Vec tmp = {0.0f, 0.0f, 0.0f};
     s32 frame;
     s32 i;
     s32 idx;
     f32 s;
 
-
-
-    position.x = work->position.x;
-    position.y = work->position.y;
-    position.z = work->position.z;
-    position2 = position;
+    tmp.x = work->position.x;
+    tmp.y = work->position.y;
+    tmp.z = work->position.z;
+    position = tmp;
     if (effect->flags & EFFECT_FLAG_SOFT_DELETE) {
         effect->flags &= ~EFFECT_FLAG_SOFT_DELETE;
         work->lifetime = 16;
@@ -202,7 +199,7 @@ void effFireworksMain(EffectEntry* effect) {
             work->frame = 1;
         }
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position2), 2, (DispCallback)effFireworksDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effFireworksDisp, effect);
 }
 
 void effFireworksDisp(CameraId cameraId, EffectEntry* effect) {
@@ -279,7 +276,7 @@ void effFireworksDisp(CameraId cameraId, EffectEntry* effect) {
         v = vtx_data[type].v;
         count = vtx_data[type].n;
     } else {
-        v = 0;
+        v = NULL;
         count = 4;
     }
     for (i = 0; i < count; i++, v += 3) {
@@ -305,7 +302,6 @@ void effFireworksDisp(CameraId cameraId, EffectEntry* effect) {
             PSMTX44MultVec(camera->projection, &t, &t);
             sx = t.x * gp->fbWidth / 2.0f;
             sy = t.y * gp->efbHeight / 2.0f;
-            {
             target = (Vec){0.0f, 0.0f, 0.0f};
             pos = (Vec){0.0f, 0.0f, 1000.0f};
             up = (Vec){0.0f, 1.0f, 0.0f};
@@ -325,15 +321,6 @@ void effFireworksDisp(CameraId cameraId, EffectEntry* effect) {
             GXPosition3f32(sx, sy - 8.0f, 0.0f);
             GXTexCoord2s16(0, 0);
             GXSetProjectionv(proj);
-            }
         }
     }
 }
-
-
-
-
-
-
-
-

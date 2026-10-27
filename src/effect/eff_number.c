@@ -7,9 +7,6 @@
 #include "version.h"
 #include "eff/eff_number.h"
 
-
-static const f32 padz = 0.0f;
-
 void effNumberGX(Mtx mtx, s32 type, s32 number, u8 alpha, s32 extra) {
     CameraEntry* cam;
     GXColor cols[2];

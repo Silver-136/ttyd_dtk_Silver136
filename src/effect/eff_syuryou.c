@@ -34,7 +34,6 @@ EffectEntry* effSyuryouEntry(s32 type, s32 duration, f32 x, f32 y, f32 z) {
     return effect;
 }
 
-#pragma push
 void effSyuryouMain(EffectEntry* effect) {
     EffSyuryouWork* work = effect->userdata;
     Vec position;
@@ -94,7 +93,6 @@ void effSyuryouMain(EffectEntry* effect) {
     }
     dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effSyuryouDisp, effect);
 }
-#pragma pop
 
 void effSyuryouDisp(CameraId cameraId, EffectEntry* effect) {
     EffSyuryouWork* work = effect->userdata;

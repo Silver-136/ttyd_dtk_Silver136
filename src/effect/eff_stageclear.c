@@ -18,7 +18,7 @@ EffectEntry* effMiniGameEntry(s32);
 
 typedef struct StageClearWork {
     s32 type;     // 0x0
-    Vec position; // 0xC
+    Vec position; // 0x4
     f32 pad10;    // 0x10
     f32 scale;    // 0x14
     s32 delay;    // 0x18
@@ -38,10 +38,10 @@ s32 tex_shadow_us[] = {0xA6, 0xA7, 0xA8, 0xA9, 0xAA, 0xAB, 0xAC, 0xAA, 0xA8, 0xA
 #endif
 #ifndef VERSION_G8ME01
 static EVT_BEGIN(evt_shake)
-    IF_INT_EQUAL(4264967297, 0)
-        CALL(evt_cam_shake, CAMERA_3D_EFFECTA, 4064967306, 4064967306, 50)
+    IF_INT_EQUAL(LW(1), 0)
+        CALL(evt_cam_shake, CAMERA_3D_EFFECTA, FLOAT(0.009765625f), FLOAT(0.009765625f), 50)
     ELSE
-        CALL(evt_cam_shake, CAMERA_3D_EFFECTA, 4064967316, 4064967316, 100)
+        CALL(evt_cam_shake, CAMERA_3D_EFFECTA, FLOAT(0.01953125f), FLOAT(0.01953125f), 100)
     END_IF
     RETURN
 EVT_END()
@@ -68,10 +68,10 @@ typedef struct TexSet {
 static TexSet texid_tbl[6] = { { tex_jp, tex_shadow_jp, 8 }, { tex_us, tex_shadow_us, 14 }, { tex_lang3, tex_shadow_lang3, 12 }, { tex_lang4, tex_shadow_lang4, 16 }, { tex_lang5, tex_shadow_lang5, 12 }, { tex_lang6, tex_shadow_lang6, 8 } };
 u32 niji_tbl[] = {144, 154, 150, 156, 158, 144};
 static EVT_BEGIN(evt_shake)
-    IF_INT_EQUAL(4264967297, 0)
-        CALL(evt_cam_shake, CAMERA_3D_EFFECTA, 4064967306, 4064967306, 50)
+    IF_INT_EQUAL(LW(1), 0)
+        CALL(evt_cam_shake, CAMERA_3D_EFFECTA, FLOAT(0.009765625f), FLOAT(0.009765625f), 50)
     ELSE
-        CALL(evt_cam_shake, CAMERA_3D_EFFECTA, 4064967316, 4064967316, 100)
+        CALL(evt_cam_shake, CAMERA_3D_EFFECTA, FLOAT(0.01953125f), FLOAT(0.01953125f), 100)
     END_IF
     RETURN
 EVT_END()
@@ -84,7 +84,7 @@ static u32 niji_tbl[] = {0xAC, 0xB0};
 s32 shake_dt[] = {2, 6, 2, 0, -1};
 s32 shake_dt2[] = {12, 36, 12, 0, -1};
 #ifdef VERSION_G8ME01
-static u8 scale_dt[] = {0x00, 0x00, 0x16, 0x2E, 0x47, 0x5D, 0x6E, 0x78, 0x77, 0x6E, 0x66}; /* US: trailing pad byte kept in the table */
+static u8 scale_dt[] = {0x00, 0x00, 0x16, 0x2E, 0x47, 0x5D, 0x6E, 0x78, 0x77, 0x6E, 0x66};
 #else
 static u8 scale_dt[] = {0x00, 0x00, 0x16, 0x2E, 0x47, 0x5D, 0x6E, 0x78, 0x77, 0x6E, 0x66};
 #endif
@@ -129,7 +129,7 @@ EffectEntry* effStageClearEntry(s32 type, f32 x, f32 y, f32 z) {
     effect->count = n;
     work = __memAlloc(HEAP_EFFECT, effect->count * sizeof(StageClearWork));
     effect->userdata = work;
-    effect->callback = (EffectCallback)effStageClearMain;
+    effect->callback = effStageClearMain;
     work->type = type;
     work->position.x = x;
     work->position.y = y;
@@ -177,7 +177,7 @@ EffectEntry* effStageClearEntry(s32 type, f32 x, f32 y, f32 z) {
         p->delay = (s32)((f32)gp->framerate * (96.0f * (f32)i / (f32)texid_tbl[gp->language].count) / 60.0f);
 #endif
         p->frame = 0;
-        p->shake = 0;
+        p->shake = NULL;
     }
     return effect;
 }
@@ -189,7 +189,6 @@ void effStageClearMain(EffectEntry* effect) {
     s32 i;
     s32 type;
     s32 n;
-    StageClearWork* p;
 
     tmp = (Vec){0.0f, 0.0f, 0.0f};
     tmp.x = work->position.x;
@@ -200,27 +199,26 @@ void effStageClearMain(EffectEntry* effect) {
     n = 0;
     work->frame++;
     for (i = 1, work++; i < effect->count; i++, work++) {
-        p = work;
-        if (p->delay != 0) {
-            p->delay--;
-            if (p->delay == 0) {
+        if (work->delay != 0) {
+            work->delay--;
+            if (work->delay == 0) {
                 psndSFXOn(SFX_NAME_WORD(type == 0 ? PSND_SFX_EVT_STAGE_CLEAR1 : PSND_SFX_KUPPA_GOALIN1));
             }
         } else {
-            if ((u32)p->frame < 11) {
-                p->scale = (f32)scale_dt[p->frame] / 100.0f;
+            if ((u32)work->frame < 11) {
+                work->scale = (f32)scale_dt[work->frame] / 100.0f;
             }
-            p->frame++;
-            if (p->scale > 0.9f) {
-                if (p->shake == NULL) {
+            work->frame++;
+            if (work->scale > 0.9f) {
+                if (work->shake == NULL) {
                     s32* d;
-                    p->shake = evtEntry(evt_shake, 0, 0);
+                    work->shake = evtEntry(evt_shake, 0, 0);
                     d = shake_dt;
                     if (i == effect->count - 1) {
                         d = shake_dt2;
                     }
-                    p->shake->lwData[0] = (EvtWord)d;
-                    p->shake->lwData[1] = (effect->count - 1 - i) == 0;
+                    work->shake->lwData[0] = (EvtWord)d;
+                    work->shake->lwData[1] = (effect->count - 1 - i) == 0;
                 }
                 n++;
             }
@@ -232,11 +230,12 @@ void effStageClearMain(EffectEntry* effect) {
     if (type % 10 == 1 && n >= effect->count - 1 && gp->retraceCount % 60 == 0) {
         work = effect->userdata;
         if (work->confetti > 0) {
-            f32 b;
-            f32 a;
-            a = pos.y + (f32)(100 - irand(200));
-            b = pos.x + (f32)(200 - irand(400));
-            effConfettiEntry(rand() % 3 + 24, 60, b, a, pos.z);
+            f32 x;
+            f32 y;
+
+            y = pos.y + (f32)(100 - irand(200));
+            x = pos.x + (f32)(200 - irand(400));
+            effConfettiEntry(rand() % 3 + 24, 60, x, y, pos.z);
             psndSFXOn(SFX_NAME_WORD(PSND_SFX_KUPPA_FIREWORKS1));
             work->confetti--;
         }
@@ -364,7 +363,7 @@ void effStageClearDisp(CameraId cameraId, EffectEntry* effect) {
                 GXSetTevAlphaIn(GX_TEVSTAGE2, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_TEXA);
                 GXSetTevColor(GX_TEVREG0, (GXColor){0x36, 0x36, 0x36, 0xFF});
             } else {
-                effGetTexObj(i + 0x49 - 1 + 1, &tex);
+                effGetTexObj(i + 0x49, &tex);
                 GXLoadTexObj(&tex, GX_TEXMAP0);
                 GXSetNumTevStages(1);
                 GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);

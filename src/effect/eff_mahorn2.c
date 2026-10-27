@@ -13,11 +13,8 @@
 #include "eff/eff_magic1_n64.h"
 #include "libc_decls.h"
 
-
 void effMahorn2Main(EffectEntry *effect);
 void effMahorn2Disp(CameraId cameraId, EffectEntry *effect);
-
-#define TWO_PI 6.283184f
 
 EffectEntry *effMahorn2Entry(BOOL unused, f32 posX, f32 posY, f32 posZ, f32 dstX, f32 dstY, f32 dstZ, f32 scale, f32 radius) {
     EffectEntry *effect;
@@ -86,7 +83,7 @@ EffectEntry *effMahorn2Entry(BOOL unused, f32 posX, f32 posY, f32 posZ, f32 dstX
         data->position.x = dstX - posX;
         data->position.y = dstY - posY;
         data->position.z = dstZ - posZ;
-        temp = TWO_PI * (f32)(i - 6);
+        temp = 6.283184f * (f32)(i - 6);
         data->target.x = 6.0f * (f32)sin(temp / (f32)(effect->count - 6));
         data->target.y = 6.0f * (f32)cos(temp / (f32)(effect->count - 6));
         data->target.z = 0.0f;
@@ -139,8 +136,7 @@ void effMahorn2Main(EffectEntry *effect) {
                     data->position.x += hitDistance * (f32)sin(rad);
                     data->position.y += hitDistance * (f32)cos(rad);
                     data->scale += (4.0f - data->scale) / 8.0f;
-                }
-                else {
+                } else {
                     data->scale += -data->scale / 8.0f;
                     if (!((effMahorn2Data*)effect->userdata)->hasHit) {
                         ((effMahorn2Data*)effect->userdata)->hasHit = TRUE;
@@ -265,22 +261,22 @@ void effMahorn2Disp(CameraId cameraId, EffectEntry *effect) {
             GXTexCoord2f32(u, v);
             GXPosition3f32(-w / 2.0f, -h / 2.0f, 0.0f);
             GXTexCoord2f32(0.0f, v);
-        }
-        else {
+        } else {
             s32 j;
             for (j = 0; j < 3; j++) {
                 GXBegin(GX_QUADS, GX_VTXFMT0, 4);
                 {
-                f32 xs[3][2] = { { 0.0f, 2.0f }, { 2.0f, 12.0f }, { 12.0f, 14.0f } };
-                f32 us[3][2] = { { 0.0f, 0.5f }, { 0.5f, 0.5f }, { 0.5f, 1.0f } };
-                GXPosition3f32(xs[j][0], h / 2.0f, 0.0f);
-                GXTexCoord2f32(2.0f * us[j][0], 0.0f);
-                GXPosition3f32(xs[j][1], h / 2.0f, 0.0f);
-                GXTexCoord2f32(2.0f * us[j][1], 0.0f);
-                GXPosition3f32(xs[j][1], -h / 2.0f, 0.0f);
-                GXTexCoord2f32(2.0f * us[j][1], v);
-                GXPosition3f32(xs[j][0], -h / 2.0f, 0.0f);
-                GXTexCoord2f32(2.0f * us[j][0], v);
+                    f32 xs[3][2] = { { 0.0f, 2.0f }, { 2.0f, 12.0f }, { 12.0f, 14.0f } };
+                    f32 us[3][2] = { { 0.0f, 0.5f }, { 0.5f, 0.5f }, { 0.5f, 1.0f } };
+
+                    GXPosition3f32(xs[j][0], h / 2.0f, 0.0f);
+                    GXTexCoord2f32(2.0f * us[j][0], 0.0f);
+                    GXPosition3f32(xs[j][1], h / 2.0f, 0.0f);
+                    GXTexCoord2f32(2.0f * us[j][1], 0.0f);
+                    GXPosition3f32(xs[j][1], -h / 2.0f, 0.0f);
+                    GXTexCoord2f32(2.0f * us[j][1], v);
+                    GXPosition3f32(xs[j][0], -h / 2.0f, 0.0f);
+                    GXTexCoord2f32(2.0f * us[j][0], v);
                 }
             }
         }

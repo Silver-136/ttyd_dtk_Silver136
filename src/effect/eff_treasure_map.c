@@ -43,6 +43,7 @@ void effTreasureMapMain(EffectEntry* effect) {
         if (!animGroupBaseAsync("EFF_treasure_map", inBattle, NULL)) {
             return;
         }
+        // FAKE: no-op cast (animPoseEntry takes s32); the plain argument changes the object
         work->poseId = animPoseEntry("EFF_treasure_map", (u32)inBattle);
         animPoseSetAnim(work->poseId, "Z_1", TRUE);
     }

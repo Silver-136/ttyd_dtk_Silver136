@@ -82,6 +82,7 @@ void effUpdownMain(EffectEntry* effect) {
             f32 arg = (s32)(work->frame - 15);
             f32 sv;
             work->scaleX = 1.0f;
+            // FAKE: compound assignment inside the call; sin(arg * 0.25f) changes the object
             sv = (f32)sin(arg *= 0.25f);
             work->scaleY = 1.0f - 0.1f * sv;
         }
@@ -89,15 +90,17 @@ void effUpdownMain(EffectEntry* effect) {
     work->frame++;
     mode = 1;
     {
-    Vec position = { 0.0f, 0.0f, 0.0f };
-    Vec* p = &position;
-    p->x = work->position.x;
-    p->y = work->position.y;
-    p->z = work->position.z;
-    if (work->alpha != 0xFF) {
-        mode = 2;
-    }
-    dispEntry(CAMERA_3D, dispCalcZ(p), mode, (DispCallback)effUpdownDisp, effect);
+        Vec position = { 0.0f, 0.0f, 0.0f };
+        // FAKE: spare pointer to position; writing position directly changes the object
+        Vec* p = &position;
+
+        p->x = work->position.x;
+        p->y = work->position.y;
+        p->z = work->position.z;
+        if (work->alpha != 0xFF) {
+            mode = 2;
+        }
+        dispEntry(CAMERA_3D, dispCalcZ(p), mode, (DispCallback)effUpdownDisp, effect);
     }
 }
 
@@ -156,7 +159,6 @@ void effUpdownDisp(CameraId cameraId, EffectEntry* effect) {
     s32 alpha = work->alpha;
     GXTexObj texObj;
     Mtx m5, m4, m3, m2, m1, m0;
-
 
     effGetTexObj(0x1D, &texObj);
     GXLoadTexObj(&texObj, GX_TEXMAP0);

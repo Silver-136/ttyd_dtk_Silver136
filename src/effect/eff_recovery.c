@@ -15,7 +15,6 @@
 #include "eff/eff_stardust.h"
 
 double sin(double);
-double cos(double);
 u32 strlen(const char* s);
 
 // One textured rectangle (left, right, top, bottom) with horizontal texture repeat u.
@@ -218,40 +217,40 @@ EffectEntry* effRecoveryEntry(s32 type, s32 amount, f32 x, f32 y, f32 z) {
     work->alpha = 255;
     work->baseY = -30.0f;
     {
-    Vec sfxPos;
-    Vec pos = { 0.0f, 0.0f, 0.0f };
-    pos.x = work->position.x;
-    pos.y = work->position.y;
-    pos.z = work->position.z;
-    sfxPos = pos;
-    switch (work->type) {
-    case 0:
-    case 7:
-        if (work->amount <= 5) {
-            psndSFXOn_3D("SFX_HP_RECOVER_SMALL1", &sfxPos);
-        } else if (work->amount <= 10) {
-            psndSFXOn_3D("SFX_HP_RECOVER_MID1", &sfxPos);
-        } else {
+        Vec sfxPos;
+        Vec pos = { 0.0f, 0.0f, 0.0f };
+        pos.x = work->position.x;
+        pos.y = work->position.y;
+        pos.z = work->position.z;
+        sfxPos = pos;
+        switch (work->type) {
+        case 0:
+        case 7:
+            if (work->amount <= 5) {
+                psndSFXOn_3D("SFX_HP_RECOVER_SMALL1", &sfxPos);
+            } else if (work->amount <= 10) {
+                psndSFXOn_3D("SFX_HP_RECOVER_MID1", &sfxPos);
+            } else {
+                psndSFXOn_3D("SFX_HP_RECOVER_BIG1", &sfxPos);
+            }
+            break;
+        case 1:
+        case 8:
+            if (work->amount <= 5) {
+                psndSFXOn_3D("SFX_FP_RECOVER_SMALL1", &sfxPos);
+            } else if (work->amount <= 10) {
+                psndSFXOn_3D("SFX_FP_RECOVER_MID1", &sfxPos);
+            } else {
+                psndSFXOn_3D("SFX_FP_RECOVER_BIG1", &sfxPos);
+            }
+            break;
+        case 4:
             psndSFXOn_3D("SFX_HP_RECOVER_BIG1", &sfxPos);
-        }
-        break;
-    case 1:
-    case 8:
-        if (work->amount <= 5) {
-            psndSFXOn_3D("SFX_FP_RECOVER_SMALL1", &sfxPos);
-        } else if (work->amount <= 10) {
-            psndSFXOn_3D("SFX_FP_RECOVER_MID1", &sfxPos);
-        } else {
+            break;
+        case 5:
             psndSFXOn_3D("SFX_FP_RECOVER_BIG1", &sfxPos);
+            break;
         }
-        break;
-    case 4:
-        psndSFXOn_3D("SFX_HP_RECOVER_BIG1", &sfxPos);
-        break;
-    case 5:
-        psndSFXOn_3D("SFX_FP_RECOVER_BIG1", &sfxPos);
-        break;
-    }
     }
     switch (type) {
     case 6:
@@ -317,8 +316,6 @@ void effRecoveryMain(EffectEntry* effect) {
     f32 baseY = work->baseY;
     f32 a, d;
 
-    work = effect->userdata;
-    type = work->type;
     effCalcMayaAnim(work->anim);
     if (gp->retraceCount > work->tick) {
         n = gp->retraceCount - work->tick;
@@ -416,37 +413,37 @@ void effRecoveryMain(EffectEntry* effect) {
                     Vec sfxPos;
                     effStardustEntry(2, 2, 30, x, y - 20.0f, z, 30.0f, 30.0f);
                     {
-                    Vec pos = { 0.0f, 0.0f, 0.0f };
-                    pos.x = work->position.x;
-                    pos.y = work->position.y;
-                    pos.z = work->position.z;
-                    sfxPos = pos;
-                    switch (work->type) {
-                    case 0:
-                        if (work->amount <= 5) {
-                            psndSFXOn_3D("SFX_HP_RECOVER_SHINE1", &sfxPos);
-                        } else if (work->amount <= 10) {
-                            psndSFXOn_3D("SFX_HP_RECOVER_SHINE2", &sfxPos);
-                        } else {
+                        Vec pos = { 0.0f, 0.0f, 0.0f };
+                        pos.x = work->position.x;
+                        pos.y = work->position.y;
+                        pos.z = work->position.z;
+                        sfxPos = pos;
+                        switch (work->type) {
+                        case 0:
+                            if (work->amount <= 5) {
+                                psndSFXOn_3D("SFX_HP_RECOVER_SHINE1", &sfxPos);
+                            } else if (work->amount <= 10) {
+                                psndSFXOn_3D("SFX_HP_RECOVER_SHINE2", &sfxPos);
+                            } else {
+                                psndSFXOn_3D("SFX_HP_RECOVER_SHINE3", &sfxPos);
+                            }
+                            break;
+                        case 1:
+                            if (work->amount <= 5) {
+                                psndSFXOn_3D("SFX_FP_RECOVER_SHINE1", &sfxPos);
+                            } else if (work->amount <= 10) {
+                                psndSFXOn_3D("SFX_FP_RECOVER_SHINE2", &sfxPos);
+                            } else {
+                                psndSFXOn_3D("SFX_FP_RECOVER_SHINE3", &sfxPos);
+                            }
+                            break;
+                        case 4:
                             psndSFXOn_3D("SFX_HP_RECOVER_SHINE3", &sfxPos);
-                        }
-                        break;
-                    case 1:
-                        if (work->amount <= 5) {
-                            psndSFXOn_3D("SFX_FP_RECOVER_SHINE1", &sfxPos);
-                        } else if (work->amount <= 10) {
-                            psndSFXOn_3D("SFX_FP_RECOVER_SHINE2", &sfxPos);
-                        } else {
+                            break;
+                        case 5:
                             psndSFXOn_3D("SFX_FP_RECOVER_SHINE3", &sfxPos);
+                            break;
                         }
-                        break;
-                    case 4:
-                        psndSFXOn_3D("SFX_HP_RECOVER_SHINE3", &sfxPos);
-                        break;
-                    case 5:
-                        psndSFXOn_3D("SFX_FP_RECOVER_SHINE3", &sfxPos);
-                        break;
-                    }
                     }
                 }
                 effDeleteMayaAnim(work->anim);
@@ -458,11 +455,11 @@ void effRecoveryMain(EffectEntry* effect) {
     work = effect->userdata;
     work->tick = gp->retraceCount;
     {
-    Vec calc = { 0.0f, 0.0f, 0.0f };
-    calc.x = work->position.x;
-    calc.y = work->position.y;
-    calc.z = work->position.z;
-    dispEntry(CAMERA_3D, dispCalcZ(&calc), 1, (DispCallback)effRecoveryDisp, effect);
+        Vec calc = { 0.0f, 0.0f, 0.0f };
+        calc.x = work->position.x;
+        calc.y = work->position.y;
+        calc.z = work->position.z;
+        dispEntry(CAMERA_3D, dispCalcZ(&calc), 1, (DispCallback)effRecoveryDisp, effect);
     }
     if (type <= 1u || type == 7 || type == 8) {
         Vec calc = { 0.0f, 0.0f, 0.0f };
@@ -550,7 +547,7 @@ void effRecoveryDisp(CameraId cameraId, EffectEntry* effect) {
     cam = camGetPtr(cameraId);
     type = work->type;
     PSMTXTrans(transMtx, work->position.x, work->position.y, work->position.z);
-    PSMTXRotRad(rotMtx, 'y', 0.017453292f * -camGetPtr(cameraId)->viewYaw);
+    PSMTXRotRad(rotMtx, 'y', MTXDegToRad(-camGetPtr(cameraId)->viewYaw));
     PSMTXConcat(transMtx, rotMtx, base);
     GXSetNumTexGens(2);
     GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
@@ -584,13 +581,13 @@ void effRecoveryDisp(CameraId cameraId, EffectEntry* effect) {
     }
     p = effect->userdata;
     PSMTXTrans(transMtx, p->position.x, p->position.y, p->position.z);
-    PSMTXRotRad(rotMtx, 'y', 0.017453292f * -camGetPtr(cameraId)->viewYaw);
+    PSMTXRotRad(rotMtx, 'y', MTXDegToRad(-camGetPtr(cameraId)->viewYaw));
     PSMTXConcat(transMtx, rotMtx, transMtx);
     PSMTXScale(scaleMtx, 10.0f, 10.0f, 10.0f);
     PSMTXConcat(transMtx, scaleMtx, transMtx);
     PSMTXTrans(scaleMtx, 0.0f, 2.0f, 0.0f);
     PSMTXConcat(transMtx, scaleMtx, transMtx);
-    if (type <= 1u || (u32)(type - 7) <= 1u || type == 4 || type == 5) {
+    if (type <= 1u || type == 7 || type == 8 || type == 4 || type == 5) {
         PSMTXConcat(transMtx, p->anim->joints[0].mtx, transMtx);
     }
     PSMTXConcat(cam->view, transMtx, transMtx);
@@ -608,37 +605,34 @@ void effRecoveryDisp(CameraId cameraId, EffectEntry* effect) {
     if (type == 2 || type == 3) {
         return;
     }
-    {
-        p++;
-        GXSetBlendMode(GX_BM_NONE, GX_BL_ONE, GX_BL_ZERO, GX_LO_CLEAR);
-        GXSetZCompLoc(GX_FALSE);
-        GXSetAlphaCompare(GX_GEQUAL, 0x80, GX_AOP_OR, GX_NEVER, 0);
-        GXSetZMode(GX_TRUE, GX_LEQUAL, GX_TRUE);
-        GXSetNumTevStages(1);
-        GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP1, GX_COLOR_NULL);
-        GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-        GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-        GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_C0, GX_CC_TEXC, GX_CC_ZERO);
-        GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_A0, GX_CA_TEXA, GX_CA_ZERO);
-        for (i = 1; i < effect->count; i++, p++) {
-            c = &color_rotation_data[((i + gp->retraceCount) % 12) * 3];
-            color = (GXColor){ c[0], c[1], c[2], p->alpha };
-            GXSetTevColor(GX_TEVREG0, color);
-            PSMTXTrans(transMtx, p->position.x, p->position.y, p->position.z);
-            PSMTXScale(scaleMtx, p->scale.x, p->scale.y, p->scale.z);
-            PSMTXConcat(transMtx, scaleMtx, transMtx);
-            PSMTXConcat(base, transMtx, transMtx);
-            PSMTXConcat(camGetPtr(cameraId)->view, transMtx, transMtx);
-            GXLoadPosMtxImm(transMtx, GX_PNMTX0);
-            GXSetCurrentMtx(GX_PNMTX0);
-            recoveryQuad(-6.0f, 6.0f, 6.0f, -6.0f, 2.0f);
-        }
+    p++;
+    GXSetBlendMode(GX_BM_NONE, GX_BL_ONE, GX_BL_ZERO, GX_LO_CLEAR);
+    GXSetZCompLoc(GX_FALSE);
+    GXSetAlphaCompare(GX_GEQUAL, 0x80, GX_AOP_OR, GX_NEVER, 0);
+    GXSetZMode(GX_TRUE, GX_LEQUAL, GX_TRUE);
+    GXSetNumTevStages(1);
+    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP1, GX_COLOR_NULL);
+    GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_C0, GX_CC_TEXC, GX_CC_ZERO);
+    GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_A0, GX_CA_TEXA, GX_CA_ZERO);
+    for (i = 1; i < effect->count; i++, p++) {
+        c = &color_rotation_data[((i + gp->retraceCount) % 12) * 3];
+        color = (GXColor){ c[0], c[1], c[2], p->alpha };
+        GXSetTevColor(GX_TEVREG0, color);
+        PSMTXTrans(transMtx, p->position.x, p->position.y, p->position.z);
+        PSMTXScale(scaleMtx, p->scale.x, p->scale.y, p->scale.z);
+        PSMTXConcat(transMtx, scaleMtx, transMtx);
+        PSMTXConcat(base, transMtx, transMtx);
+        PSMTXConcat(camGetPtr(cameraId)->view, transMtx, transMtx);
+        GXLoadPosMtxImm(transMtx, GX_PNMTX0);
+        GXSetCurrentMtx(GX_PNMTX0);
+        recoveryQuad(-6.0f, 6.0f, 6.0f, -6.0f, 2.0f);
     }
 }
 
 void effRecoveryDisp2(CameraId cameraId, EffectEntry* effect) {
     RecoveryWork* work = effect->userdata;
-    CameraEntry* cam;
     s32 type;
     s32 amount;
     s32 len;
@@ -648,13 +642,13 @@ void effRecoveryDisp2(CameraId cameraId, EffectEntry* effect) {
     Mtx tmp;
     f32 off;
 
-    cam = camGetPtr(cameraId);
+    camGetPtr(cameraId);
     amount = work->amount;
     type = work->type;
     sprintf(buf, "%d", amount);
     len = strlen(buf);
     PSMTXTrans(mtx, work->position.x, work->position.y, work->position.z);
-    PSMTXRotRad(rot, 'y', 0.017453292f * -camGetPtr(cameraId)->viewYaw);
+    PSMTXRotRad(rot, 'y', MTXDegToRad(-camGetPtr(cameraId)->viewYaw));
     PSMTXConcat(mtx, rot, mtx);
     PSMTXTrans(tmp, 0.0f, 0.0f, 1.0f);
     PSMTXConcat(mtx, tmp, mtx);
@@ -702,7 +696,7 @@ void effRecoveryDisp3(CameraId cameraId, EffectEntry* effect) {
     cam = camGetPtr(cameraId);
     type = work->type;
     PSMTXTrans(mtx, work->position.x, work->position.y, work->position.z);
-    PSMTXRotRad(rot, 'y', 0.017453292f * -camGetPtr(cameraId)->viewYaw);
+    PSMTXRotRad(rot, 'y', MTXDegToRad(-camGetPtr(cameraId)->viewYaw));
     PSMTXConcat(mtx, rot, mtx);
     PSMTXTrans(tmp, 0.0f, 0.0f, 1.0f);
     PSMTXConcat(mtx, tmp, mtx);
@@ -717,7 +711,7 @@ void effRecoveryDisp3(CameraId cameraId, EffectEntry* effect) {
     GXSetNumTexGens(1);
     GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
     GXSetNumChans(1);
-    GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_REG, 0, GX_DF_NONE, GX_AF_NONE);
+    GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_REG, GX_LIGHT_NULL, GX_DF_NONE, GX_AF_NONE);
     GXSetNumTevStages(1);
     GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
     GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
@@ -797,12 +791,12 @@ void effRecoveryDisp4(CameraId cameraId, EffectEntry* effect) {
     cam = camGetPtr(cameraId);
     alpha = work->alpha;
     PSMTXTrans(mtx, work->position.x, work->position.y, work->position.z);
-    PSMTXRotRad(rotMtx, 'y', 0.017453292f * -camGetPtr(cameraId)->viewYaw);
+    PSMTXRotRad(rotMtx, 'y', MTXDegToRad(-camGetPtr(cameraId)->viewYaw));
     PSMTXConcat(mtx, rotMtx, base);
     GXSetNumTexGens(1);
     GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
     GXSetNumChans(1);
-    GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_REG, 0, GX_DF_NONE, GX_AF_NONE);
+    GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_REG, GX_LIGHT_NULL, GX_DF_NONE, GX_AF_NONE);
     GXSetNumTevStages(1);
     GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
     GXSetTevOp(GX_TEVSTAGE0, GX_MODULATE);
@@ -831,7 +825,7 @@ void effRecoveryDisp4(CameraId cameraId, EffectEntry* effect) {
             PSMTXTrans(mtx, work->position.x, work->position.y, work->position.z);
             PSMTXScale(scaleMtx, work->scale.x, work->scale.y, work->scale.z);
             if (i != 1) {
-                PSMTXRotRad(rotMtx, 'z', 0.017453292f * (work->angle - 90.0f));
+                PSMTXRotRad(rotMtx, 'z', MTXDegToRad(work->angle - 90.0f));
             } else {
                 PSMTXRotRad(rotMtx, 'z', 0.0f);
             }

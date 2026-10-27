@@ -15,8 +15,6 @@
 #include "driver/shadowdrv.h"
 #include "eff/n64/eff_stardust_n64.h"
 
-extern double __fabs(double);
-
 void effStarStoneDisp_2(CameraId cameraId, EffectEntry* effect);
 void effStarStoneDisp_1(CameraId cameraId, EffectEntry* effect);
 void effStarStoneMain(EffectEntry* effect);
@@ -316,7 +314,7 @@ EffectEntry* effStarStoneEntry(s32 type, f32 x, f32 y, f32 z, f32 scale) {
     work->scale = 1.5f * scale;
     work->texScrollX = 0.0f;
     work->texScrollY = 0.0f;
-    work->cam = 4;
+    work->cam = CAMERA_3D;
     work->state = 0;
     work->half0OffsetZ = 0.0f;
     work->half0OffsetX = 0.0f;
@@ -345,12 +343,12 @@ EffectEntry* effStarStoneEntry(s32 type, f32 x, f32 y, f32 z, f32 scale) {
         ((EffSnowDustN64Work*)work->dust->userdata)->kg = c[1];
         ((EffSnowDustN64Work*)work->dust->userdata)->kb = c[2];
     }
-    ((EffStarStoneWork*)effect->userdata)->flags |= 4;
+    ((EffStarStoneWork*)effect->userdata)->flags |= STAR_STONE_FLAG_SHINE_SFX;
     if (type >= 7) {
-        ((EffStarStoneWork*)effect->userdata)->flags &= ~4;
+        ((EffStarStoneWork*)effect->userdata)->flags &= ~STAR_STONE_FLAG_SHINE_SFX;
     }
     if (gp->inBattle != 0) {
-        ((EffStarStoneWork*)effect->userdata)->flags &= ~4;
+        ((EffStarStoneWork*)effect->userdata)->flags &= ~STAR_STONE_FLAG_SHINE_SFX;
     }
     return effect;
 }
@@ -436,7 +434,7 @@ void effStarStoneMain(EffectEntry* effect) {
                 if (w->flags & STAR_STONE_FLAG_SHINE_SFX_ON) {
                     w->flags &= ~STAR_STONE_FLAG_SHINE_SFX_ON;
                     psndSFXOff(w->sfx);
-                    ((EffStarStoneWork*)effect->userdata)->flags &= ~4;
+                    ((EffStarStoneWork*)effect->userdata)->flags &= ~STAR_STONE_FLAG_SHINE_SFX;
                 }
                 if (!(w->flags & STAR_STONE_FLAG_NO_JUMP_SFX)) {
                     psndSFXOn_3D("SFX_EVT_STARSTONE_JUMP1", &pos);
@@ -488,7 +486,7 @@ void effStarStoneMain(EffectEntry* effect) {
             ((EffSnowDustN64Work*)w->dust->userdata)->position.y = -1000.0f;
             ((EffSnowDustN64Work*)w->dust->userdata)->position.z = 0.0f;
         }
-        if (w->state < 3 && cam == 4) {
+        if (w->state < 3 && cam == CAMERA_3D) {
             U_shadowSetMode(shadowEntry(w->position.x, w->position.y, w->position.z, 8.0f * w->scale), w->a);
         }
     }
@@ -600,13 +598,13 @@ void effStarStoneDisp_1(CameraId cameraId, EffectEntry* effect) {
     }
 }
 
-void effStarStoneDisp_2(CameraId cameraId, EffectEntry *effect) {
+void effStarStoneDisp_2(CameraId cameraId, EffectEntry* effect) {
     Mtx m;
     Mtx s;
     Mtx r;
     GXTexObj tex;
-    EffStarStoneWork *w = effect->userdata;
-    CameraEntry *cam = camGetPtr(cameraId);
+    EffStarStoneWork* w = effect->userdata;
+    CameraEntry* cam = camGetPtr(cameraId);
     s32 type = w->type;
     int dlIdx[4]; // FAKE: four loop counters as one register-promoted array; one counter / four scalars differ
     mapSetMaterialFog();
@@ -776,7 +774,6 @@ void effStarStoneDisp_2(CameraId cameraId, EffectEntry *effect) {
             GXCallDisplayList(diamond_2_2_dl_1_tbl[dlIdx[3]], diamond_2_2_dl_1_size_tbl[dlIdx[3]] << 5);
         }
     }
-
 }
 
 void effStarStoneDraw(CameraId cameraId, EffectEntry* effect) {

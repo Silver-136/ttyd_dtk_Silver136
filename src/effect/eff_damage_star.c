@@ -1,3 +1,4 @@
+#include "eff/eff_damage_star.h"
 #include "driver/camdrv.h"
 #include "driver/dispdrv.h"
 #include "driver/effdrv.h"
@@ -431,7 +432,7 @@ void effDamageStarDisp(CameraId cameraId, EffectEntry* effect) {
     GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX0, GX_FALSE, GX_PTIDENTITY);
     GXSetTexCoordGen2(GX_TEXCOORD1, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
     GXSetNumChans(1);
-    GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_REG, 0, GX_DF_NONE, GX_AF_NONE);
+    GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_REG, GX_LIGHT_NULL, GX_DF_NONE, GX_AF_NONE);
     GXSetChanAmbColor(GX_COLOR0A0, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
     GXSetCullMode(GX_CULL_NONE);
     GXClearVtxDesc();
@@ -456,9 +457,9 @@ void effDamageStarDisp(CameraId cameraId, EffectEntry* effect) {
     }
     for (i = 2; i < effect->count; i++, part++) {
         color = (GXColor){ color_rotation_data[((i + frame) % 12) * 3],
-                                                  color_rotation_data[((i + frame) % 12) * 3 + 1],
-                                                  color_rotation_data[((i + frame) % 12) * 3 + 2],
-                                                  part->alpha };
+                           color_rotation_data[((i + frame) % 12) * 3 + 1],
+                           color_rotation_data[((i + frame) % 12) * 3 + 2],
+                           part->alpha };
         GXSetChanMatColor(GX_COLOR0A0, color);
         PSMTXIdentity(partMtx);
         PSMTXScaleApply(partMtx, partMtx, part->scale.x, part->scale.y, part->scale.z);

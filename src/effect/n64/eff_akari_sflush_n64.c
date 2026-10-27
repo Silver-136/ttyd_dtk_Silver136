@@ -7,7 +7,6 @@
 #include <dolphin/mtx.h>
 #include "libc_decls.h"
 
-
 typedef struct EffAkariSflushN64Work {
     s32 type;     // 0x0
     Vec position; // 0x4
@@ -131,7 +130,7 @@ void effAkariSflushDisp(CameraId cameraId, EffectEntry* effect) {
     PSMTXConcat(mtx, scale, mtx);
     PSMTXConcat(camera->view, mtx, viewMtx);
     GXSetNumChans(1);
-    GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_VTX, 0, GX_DF_NONE, GX_AF_NONE);
+    GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_VTX, GX_LIGHT_NULL, GX_DF_NONE, GX_AF_NONE);
     GXSetNumTevStages(2);
     GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR0A0);
     GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);

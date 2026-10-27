@@ -84,11 +84,12 @@ void effTogeFlushMain(EffectEntry* effect) {
     work->scale2 = 0.5f * s + 0.9f;
     work->alpha2 = 64.0f * (f32)sin((6.2831855f * (life * 40)) / 360.0f) + 144.0f;
     {
-    Vec position = { 0.0f, 0.0f, 0.0f };
-    position.x = work->position.x;
-    position.y = work->position.y;
-    position.z = work->position.z;
-    dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effTogeFlushDisp, effect);
+        Vec position = { 0.0f, 0.0f, 0.0f };
+
+        position.x = work->position.x;
+        position.y = work->position.y;
+        position.z = work->position.z;
+        dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effTogeFlushDisp, effect);
     }
 }
 

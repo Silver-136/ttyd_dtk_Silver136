@@ -10,7 +10,6 @@
 #include "eff/eff_magic1_n64.h"
 #include "libc_decls.h"
 
-
 void effKemuriDisp(CameraId camId, void* param);
 static void effKemuri2Main(EffectEntry* entry);
 static void effKemuri2Disp(CameraId camId, void* param);
@@ -30,7 +29,6 @@ u8 heavy_scale[30][2] = {
     {0xE2, 0x93}, {0xE6, 0x94}, {0xEB, 0x95}, {0xEF, 0x96}, {0xF2, 0x96}, {0xF6, 0x97},
     {0xF9, 0x98}, {0xFB, 0x98}, {0xFD, 0x99}, {0xFE, 0x99}, {0xFF, 0x99}, {0xFF, 0x99},
 };
-
 
 EffectEntry* effKemuriEntry(s32 type, f32 x, f32 y, f32 z, f32 dir) {
     effKemuriData* d;
@@ -392,15 +390,14 @@ static void effKemuri2Disp(CameraId camId, void* param) {
                 GXSetTevColor(GX_TEVREG0, (GXColor){0xFF, 0xFF, 0xFF, data->alpha});
             }
             GXBegin(GX_QUADS, GX_VTXFMT0, 4);
-            { f32 nw = -w / 2.0f; f32 nh = -h / 2.0f;
-            GXPosition3f32(nw, h * 0.5f, 0.0f);
+            GXPosition3f32(-w / 2.0f, h * 0.5f, 0.0f);
             GXTexCoord2f32(0.0f, 0.0f);
             GXPosition3f32(w * 0.5f, h * 0.5f, 0.0f);
             GXTexCoord2f32(1.0f, 0.0f);
-            GXPosition3f32(w * 0.5f, nh, 0.0f);
+            GXPosition3f32(w * 0.5f, -h / 2.0f, 0.0f);
             GXTexCoord2f32(1.0f, 1.0f);
-            GXPosition3f32(nw, nh, 0.0f);
-            GXTexCoord2f32(0.0f, 1.0f); }
+            GXPosition3f32(-w / 2.0f, -h / 2.0f, 0.0f);
+            GXTexCoord2f32(0.0f, 1.0f);
         }
         off = 1 - i;
         PSMTXTrans(t, data->x + off, data->y - off, data->z);

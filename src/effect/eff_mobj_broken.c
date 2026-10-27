@@ -30,7 +30,6 @@ typedef struct EffMObjBrokenWork {
 static void effMObjBrokenMain(EffectEntry* effect);
 static void effMObjBrokenDisp(CameraId cameraId, EffectEntry* effect);
 static void effMObjBrokenDisp2(CameraId cameraId, EffectEntry* effect);
-static void rendermodeFunc(s32 arg);
 
 EffectEntry* effMObjBrokenEntry(s32 type, f32 x, f32 y, f32 z) {
     EffectEntry* effect;
@@ -124,6 +123,7 @@ EffectEntry* effMObjBrokenEntry(s32 type, f32 x, f32 y, f32 z) {
     if (type != 7) {
         effKemuTestEntry(2, x, y + (work - 1)->position.y, z, type < 3 ? 0.5f : 1.0f);
     } else {
+        // BUG: work points one past the last element here (the loop leaves it at userdata + count); the other branch reads work - 1
         effKemuTestEntry(16, x, y + work->position.y, z, 1.0f);
     }
     return effect;
@@ -150,6 +150,7 @@ static void effMObjBrokenMain(EffectEntry* effect) {
     type = work->type;
     if (effect->flags & EFFECT_FLAG_SOFT_DELETE) {
         w = work;
+        // FAKE: the counter done is reused as the loop index; a loop over i changes the object
         for (done = 0; done < effect->count; done++, w++) {
             if (w->poseId != -1) {
                 animPoseRelease(w->poseId);
@@ -190,6 +191,7 @@ static void effMObjBrokenMain(EffectEntry* effect) {
     }
     if (done >= effect->count - 1) {
         w2 = effect->userdata;
+        // FAKE: type is reused as the loop index; a loop over i changes the object
         for (type = 0; type < effect->count; type++, w2++) {
             if (w2->poseId != -1) {
                 animPoseRelease(w2->poseId);
@@ -295,8 +297,8 @@ static void effMObjBrokenDisp(CameraId cameraId, EffectEntry* effect) {
     }
 }
 
-static void rendermodeFunc(s32 arg) {
-    animGetPtr()->currDispMode = arg;
+static void rendermodeFunc(s32 wXluStage) {
+    animGetPtr()->currDispMode = wXluStage;
     GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_CLEAR);
     GXSetZCompLoc(GX_TRUE);
     GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_AND, GX_ALWAYS, 0);
@@ -340,7 +342,7 @@ static void effMObjBrokenDisp2(CameraId cameraId, EffectEntry* effect) {
             PSMTXScale(mS, work->scale, work->scale, work->scale);
             PSMTXConcat(mBase, mT, mT);
             PSMTXConcat(mT, mS, mT);
-            animPoseSetGXFunc(work->poseId, (void (*)(s32))rendermodeFunc, FALSE);
+            animPoseSetGXFunc(work->poseId, rendermodeFunc, FALSE);
             animPoseMain(work->poseId);
             animPoseDrawMtx(work->poseId, mT, 1, 0.0f, 0.8f);
             animPoseDrawMtx(work->poseId, mT, 2, 0.0f, 0.8f);

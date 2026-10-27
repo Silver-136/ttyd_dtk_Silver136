@@ -19,7 +19,7 @@ typedef struct EffSparkParticle {
     s32 seq;    // 0x20
     f32 angle;  // 0x24
     s32 life;   // 0x28
-    s32 counter;// 0x2C
+    s32 counter; // 0x2C
     s32 alpha;  // 0x30
     f32 scale;  // 0x34
 } EffSparkParticle;
@@ -61,7 +61,7 @@ EffectEntry* effSparkEntry(s32 type, f32 x, f32 y, f32 z) {
     effect = effEntry();
     effect->type = "Spark";
     effect->count = 6;
-    work = __memAlloc(HEAP_EFFECT, 0x150);
+    work = __memAlloc(HEAP_EFFECT, sizeof(EffSparkWork));
     effect->userdata = work;
     effect->callback = effSparkMain;
     effect->flags |= EFFECT_FLAG_SOFT_DELETABLE;
@@ -74,17 +74,16 @@ EffectEntry* effSparkEntry(s32 type, f32 x, f32 y, f32 z) {
     work->z = z;
     work->scale = 0.9f;
     {
-    EffSparkParticle* p = work->part;
-    f = max_seq_num[type] / 2.0f;
-    for (i = 1; i < 6; i++, p++) {
-        p->seq = -1.0f - f * (i & 1);
-    }
+        EffSparkParticle* p = work->part;
+        f = max_seq_num[type] / 2.0f;
+        for (i = 1; i < 6; i++, p++) {
+            p->seq = -1.0f - f * (i & 1);
+        }
     }
     return effect;
 }
 
 void effSparkMain(EffectEntry* effect) {
-    s32 parity;
     EffSparkParticle* p = effect->userdata;
     s32 i;
     s32 type;
@@ -124,7 +123,7 @@ void effSparkMain(EffectEntry* effect) {
         b = a;
         break;
     }
-    for (i = 1, parity; i < effect->count; i++, p++) {
+    for (i = 1; i < effect->count; i++, p++) {
         p->seq++;
         if (p->seq >= max_seq_num[type]) {
             p->seq = 0;
@@ -207,7 +206,6 @@ void effSparkDisp(CameraId cameraId, EffectEntry* effect) {
     PSMTXRotRad(rot, 'y', MTXDegToRad(-camGetPtr(cameraId)->viewYaw));
     PSMTXConcat(mtx, rot, base);
     PSMTXConcat(base, scale, base);
-
 
     size = 16.0f;
 

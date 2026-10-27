@@ -5,7 +5,6 @@
 #include <dolphin/mtx.h>
 #include "version.h"
 
-
 typedef struct EffMahornWork {
     s32 type;     // 0x0
     Vec position; // 0x4

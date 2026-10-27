@@ -8,13 +8,10 @@
 #include <string.h>
 #include "libc_decls.h"
 #include "eff/eff_magic1_n64.h"
-
-
 #include "driver/animdrv.h"
 #include "driver/effdrv.h"
 #include "mario/mariost.h"
 #include "mario/mario.h"
-
 
 typedef struct effMugiKemuriData {
     s32 flag; //0x0
@@ -96,8 +93,10 @@ EffectEntry* effMugiKemuri2Entry(s32 type, f32 x, f32 y, f32 z, f32 angle, f32 d
     EffectEntry* effect;
     effMugiKemuriData* data;
     s32 i;
+    // FAKE: unused zero vector; deleting it changes the object
     Vec unused = {0.0f, 0.0f, 0.0f};
 
+    // FAKE: discarded __fabs(x * 0.005); deleting it changes the object
     __fabs(x * 0.005);
     effect = effEntry();
 
@@ -176,7 +175,7 @@ void effMugiKemuriMain(EffectEntry* effect) {
                 return;
             }
             p->poseId = animPoseEntry(name, group);
-            animPoseSetAnim(p->poseId, "Z_1", 1);
+            animPoseSetAnim(p->poseId, "Z_1", TRUE);
         }
     }
     data = effect->userdata;
@@ -218,7 +217,6 @@ void effMugiKemuriMain(EffectEntry* effect) {
     dispEntry(CAMERA_3D, dispCalcZ(&pos2), 2, effMugiKemuriDisp, effect);
 }
 
-
 void effMugiKemuri2Main(EffectEntry* effect) {
     s32 i;
     effMugiKemuriData* data;
@@ -256,7 +254,7 @@ void effMugiKemuri2Main(EffectEntry* effect) {
                 return;
             }
             p->poseId = animPoseEntry(name, group);
-            animPoseSetAnim(p->poseId, "Z_1", 1);
+            animPoseSetAnim(p->poseId, "Z_1", TRUE);
         }
     }
     data = effect->userdata;

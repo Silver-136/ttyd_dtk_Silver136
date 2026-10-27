@@ -51,6 +51,7 @@ EffectEntry* effBlowN64Entry(s32 type, s32 count, f32 x, f32 y, f32 z, f32 dx, f
     Vec axis;
 
     effect = effEntry();
+    // FAKE: zr holds 0.0f for the comparisons below; comparing with 0.0f directly changes the object
     zr = 0.0f;
     if (count == 0) {
         return NULL;

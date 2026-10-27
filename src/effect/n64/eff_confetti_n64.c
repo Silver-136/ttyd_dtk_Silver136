@@ -132,7 +132,7 @@ EffectEntry* effConfettiN64Entry(s32 type, s32 life, f32 x, f32 y, f32 z, f32 sc
     w[0].type = type;
     w[0].count = n;
     w[0].alpha = 0xFF;
-    w[0].camId = 4;
+    w[0].camId = CAMERA_3D;
     w++;
     base = rand() % 360;
     half = 0.5f * speed;
@@ -181,7 +181,6 @@ void effConfettiMain(EffectEntry* effect) {
     s32 count;
     s32 camId;
     Vec position;
-    s32 anm;
 
     w = effect->userdata;
     {
@@ -209,7 +208,6 @@ void effConfettiMain(EffectEntry* effect) {
     }
     mod = type % 10;
     w++;
-    anm = (frame >> 1) % 6;
     for (i = 0; i < count; i++, w++) {
         switch (mod) {
         case 3:

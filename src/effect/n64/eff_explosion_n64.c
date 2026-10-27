@@ -1,4 +1,5 @@
 #include "eff/eff_n64.h"
+#include "eff/n64/eff_explosion_n64.h"
 #include "driver/camdrv.h"
 #include "driver/dispdrv.h"
 #include "driver/effdrv.h"
@@ -8,7 +9,6 @@
 
 typedef struct EffExplosionN64Work {
     u16 type;     // 0x0
-    u8 pad_2[2];  // 0x2
     Vec position; // 0x4
     f32 scale;    // 0x10
     s32 lifetime; // 0x14
@@ -93,8 +93,8 @@ void effExplosionDisp(CameraId cameraId, EffectEntry* effect) {
     Mtx scale;
     Mtx rot;
     Mtx world;
-    f32 f;
-    f32 g;
+    f32 progress;
+    f32 fade;
 
     camera = camGetPtr(cameraId);
     work = effect->userdata;
@@ -114,18 +114,18 @@ void effExplosionDisp(CameraId cameraId, EffectEntry* effect) {
     GXLoadTexObj(&texObj, GX_TEXMAP0);
     GXLoadTexObj(&texObj, GX_TEXMAP1);
     if (type == 0) {
-        f = work->progress;
-        if (f > 5.0f) {
-            g = 1.0f - (f - 5.0f);
-            if (g < 0.0f) {
-                g = 0.0f;
+        progress = work->progress;
+        if (progress > 5.0f) {
+            fade = 1.0f - (progress - 5.0f);
+            if (fade < 0.0f) {
+                fade = 0.0f;
             }
         } else {
-            g = 1.0f;
+            fade = 1.0f;
         }
-        GXSetTevColor(GX_TEVREG0, (GXColor){255.0f * g, 18.0f * g, 59.0f * g, 0});
-        GXSetTevColor(GX_TEVREG1, (GXColor){255.0f * g, 53.0f * g, 24.0f * g, alpha});
-        GXSetTevKColor(GX_KCOLOR0, (GXColor){211.0f * g, 255.0f * g, 216.0f * g, 0});
+        GXSetTevColor(GX_TEVREG0, (GXColor){255.0f * fade, 18.0f * fade, 59.0f * fade, 0});
+        GXSetTevColor(GX_TEVREG1, (GXColor){255.0f * fade, 53.0f * fade, 24.0f * fade, alpha});
+        GXSetTevKColor(GX_KCOLOR0, (GXColor){211.0f * fade, 255.0f * fade, 216.0f * fade, 0});
         GXSetNumTevStages(4);
         GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
         GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);

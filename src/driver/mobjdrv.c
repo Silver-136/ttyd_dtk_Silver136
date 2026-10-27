@@ -24,15 +24,13 @@
 #include "koopa_hit.h"
 #include "mot/mot_hip.h"
 
-
-
 /* static map-file joint data for the mobj cube models (same layout as a loaded map file) */
 typedef struct CubeDrawMode {
     MapJointDrawMode mode;
     u32 field_0x10;
 } CubeDrawMode;
 typedef struct CubeMesh {
-    u8 reserved_00;              // 0x0
+    u8 reserved_00;       // 0x0
     u8 padding[2];        // 0x1
     u8 isPackedDisplay;   // 0x3
     s32 displayListCount; // 0x4
@@ -49,7 +47,7 @@ CubeDrawMode cubeMSJ = {{0, 1, 0, 0, 0, (s32)0x80000000}, 0};
 
 CubeDrawMode front2MSJ = {{0, 1, 0, 0, 0, 0}, 0};
 
-// static data from inlined header functions
+// cube vertex positions (cubeDVP) and normals (cubeDVN), listed in cubeDDT
 
 typedef struct CubeVtxData34 {
     s32 count;
@@ -86,10 +84,10 @@ CubeVtxData18 cubeDVN = {
 };
 
 void* cubeDDT[26] = {
-    &cubeDVP, &cubeDVN, (void*)0x00000000, (void*)0x00000000, (void*)0x00000000, (void*)0x00000000, (void*)0x00000000, (void*)0x00000000,
-    (void*)0x00000000, (void*)0x00000000, (void*)0x00000000, (void*)0x00000000, (void*)0x00000000, (void*)0x00000000, (void*)0x00000000, (void*)0x00000000,
-    (void*)0x00000000, (void*)0x00000000, (void*)0x00000000, (void*)0x00000000, (void*)0x00000000, (void*)0x00000000, (void*)0x00000000, (void*)0x00000000,
-    (void*)0x00000000, (void*)0x00000000
+    &cubeDVP, &cubeDVN, NULL, NULL, NULL, NULL, NULL, NULL,
+    NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+    NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+    NULL, NULL
 };
 
 /* GX display list data: six unpacked index lists of 205 words (count, then one index record per vertex) */
@@ -282,8 +280,6 @@ CubeJoint front2DJ = {
     {NULL, (MapFileMesh*)&front2DP},
 };
 
-
-
 #define MAX_MOBJ_WORK 3
 
 //.sbss
@@ -292,9 +288,9 @@ BOOL koopaRunFlag;
 //.bss
 static MapObjectWork work[MAX_MOBJ_WORK];
 
-#define mobjGetWorkFlag(flag) (flag ? &work[1] : &work[0])
-
-static int mobjCheckKururingFloorItem(MapObjectEntry* entry);
+static inline MapObjectWork* mobjGetWorkFlag(BOOL inBattle) {
+    return inBattle ? &work[1] : &work[0];
+}
 
 void mobjKoopaOn(void) {
     if (!koopaRunFlag) {
@@ -315,12 +311,8 @@ static MapObjectWork* mobjGetWork(void) {
     }
 }
 
-
-
-
-
 void mobjDispXLU(CameraId camId, void* param) {
-    MapObjectEntry* entry = param; // cast to correct type
+    MapObjectEntry* entry = param;
 
     if (entry->flags & MOBJ_FLAG_PAPER_TEX) {
         animSetPaperTexMtx(entry->paperTexMtx, NULL, NULL);
@@ -339,7 +331,7 @@ void mobjDispXLU(CameraId camId, void* param) {
 }
 
 void mobjDisp(CameraId camId, void* param) {
-    MapObjectEntry* entry = param; // cast to correct type
+    MapObjectEntry* entry = param;
     DispEntry* disp;
 
     if (entry->flags & MOBJ_FLAG_PAPER_TEX) {
@@ -369,7 +361,7 @@ void mobjDisp(CameraId camId, void* param) {
 }
 
 void mobjDisp_OffscreenXLU(CameraId camId, void* param) {
-    MapObjectEntry* entry = param; // cast to correct type
+    MapObjectEntry* entry = param;
     u16 left, top, right, bottom;
 
     sysWaitDrawSync();
@@ -426,13 +418,15 @@ void mobjHitEntry(MapObjectEntry* entry, s32 type) {
     min = (Vec){pose->bboxMin.x, pose->bboxMin.y, pose->bboxMin.z};
     max = (Vec){pose->bboxMax.x, pose->bboxMax.y, pose->bboxMax.z};
     for (i = 0; i < 2; i++) {
-        if (entry->hitObj[i].hitObject != NULL)
+        if (entry->hitObj[i].hitObject != NULL) {
             hitDelete(entry->hitObj[i].name);
+        }
     }
     PSVECAdd(&max, &min, &entry->translation);
     PSVECScale(&entry->translation, &entry->translation, 0.5f);
     PSVECScale(&entry->translation, &entry->translation, 10.0f);
     entry->translation.y = 0.0f;
+    // FAKE: (0, x) comma expressions around the x and z __fabs calls; the plain __fabs changes the object
     entry->scale2.x = 10.0f * (entry->scale.x * (f32)(0, __fabs(max.x - min.x)));
     entry->scale2.y = 10.0f * (entry->scale.y * (f32)__fabs(max.y));
     entry->scale2.z = 10.0f * (entry->scale.z * (f32)(0, __fabs(max.z - min.z)));
@@ -521,14 +515,16 @@ s32 mobjEntry(const char* name, const char* animPoseName) {
 
     entryCount = wp->count;
     for (idx = 0, entry = wp->entries; idx < entryCount; idx++, entry++) {
-        if ((entry->flags & MOBJ_FLAG_ACTIVE) && (strcmp(entry->name, name) == 0))
+        if ((entry->flags & MOBJ_FLAG_ACTIVE) && (strcmp(entry->name, name) == 0)) {
             break;
+        }
     }
-    // SPM uses this to assert the name isn't duplicate, here it's just pointless
+    // the search for an active entry with the same name has no effect: its result is not used
 
     for (idx = 0, entry = wp->entries; idx < entryCount; idx++, entry++) {
-        if ((entry->flags & MOBJ_FLAG_ACTIVE) == 0)
+        if ((entry->flags & MOBJ_FLAG_ACTIVE) == 0) {
             break;
+        }
     }
 
     memset(entry, 0, sizeof(*entry));
@@ -621,6 +617,7 @@ void mobjMain(void) {
     Vec camPos;
     f32 nz, ny, nx, dist, hz, hy, hx;
 
+    // FAKE: the work pointer goes through the block-local w; `wp = (MobjWorkHit*)mobjGetWork();` changes the object
     {
         MapObjectWork* w = mobjGetWork();
         wp = (MobjWorkHit*)w;
@@ -629,7 +626,7 @@ void mobjMain(void) {
     entry = wp->entries;
     mario = marioGetPtr();
     party = partyGetPtr(marioGetPartyId());
-    fbat = *(s16*)fbatGetPointer();
+    fbat = fbatGetPointer()->mode;
     hitJump = NULL;
     partyFlag = 0;
     if (party != NULL && (party->flags & PARTY_FLAG_IS_BEING_USED)) {
@@ -637,30 +634,30 @@ void mobjMain(void) {
     }
 
     if (gp->inBattle == 0) {
-        if (((HitEntry*)mario->hitobjHammer) != NULL) {
-            if (wp->hit[0] == NULL || strcmp(hitGetName(wp->hit[0]), hitGetName(((HitEntry*)mario->hitobjHammer))) != 0) {
-                wp->hit[0] = ((HitEntry*)mario->hitobjHammer);
+        if (mario->hitobjHammer != NULL) {
+            if (wp->hit[0] == NULL || strcmp(hitGetName(wp->hit[0]), hitGetName(mario->hitobjHammer)) != 0) {
+                wp->hit[0] = mario->hitobjHammer;
             }
         } else {
             wp->hit[0] = NULL;
         }
-        if (((HitEntry*)mario->hitobjHead) != NULL) {
-            if (wp->hit[1] == NULL || strcmp(hitGetName(wp->hit[1]), hitGetName(((HitEntry*)mario->hitobjHead))) != 0) {
-                hitJump = wp->hit[1] = ((HitEntry*)mario->hitobjHead);
+        if (mario->hitobjHead != NULL) {
+            if (wp->hit[1] == NULL || strcmp(hitGetName(wp->hit[1]), hitGetName(mario->hitobjHead)) != 0) {
+                hitJump = wp->hit[1] = mario->hitobjHead;
             }
         } else {
             wp->hit[1] = NULL;
         }
-        if (((HitEntry*)mario->hitobjStandOn) != NULL) {
-            if (wp->hit[2] == NULL || strcmp(hitGetName(wp->hit[2]), hitGetName(((HitEntry*)mario->hitobjStandOn))) != 0) {
-                wp->hit[2] = ((HitEntry*)mario->hitobjStandOn);
+        if (mario->hitobjStandOn != NULL) {
+            if (wp->hit[2] == NULL || strcmp(hitGetName(wp->hit[2]), hitGetName(mario->hitobjStandOn)) != 0) {
+                wp->hit[2] = mario->hitobjStandOn;
             }
         } else {
             wp->hit[2] = NULL;
         }
-        if (((HitEntry*)mario->hitobjFront) != NULL) {
-            if (wp->hit[3] == NULL || strcmp(hitGetName(wp->hit[3]), hitGetName(((HitEntry*)mario->hitobjFront))) != 0) {
-                wp->hit[3] = ((HitEntry*)mario->hitobjFront);
+        if (mario->hitobjFront != NULL) {
+            if (wp->hit[3] == NULL || strcmp(hitGetName(wp->hit[3]), hitGetName(mario->hitobjFront)) != 0) {
+                wp->hit[3] = mario->hitobjFront;
             }
         } else {
             wp->hit[3] = NULL;
@@ -678,6 +675,7 @@ void mobjMain(void) {
         if (!(entry->flags & MOBJ_FLAG_ACTIVE)) {
             continue;
         }
+        // FAKE: `gp->inBattle != 0 ||` is always false here; without it the object changes
 #ifdef VERSION_G8ME01
         if (gp->inBattle == 0 && (gp->inBattle != 0 || ((u32)fbat > 1 && fbat != 8)) && !(entry->flags & MOBJ_FLAG_PAPER_TEX)) {
 #else
@@ -825,7 +823,7 @@ void mobjMain(void) {
         }
         {
             MarioMotion motion = marioGetPtr()->currMotionId;
-            if (motion == 0x1f || motion == 0x20) {
+            if (motion == MARIO_MOTION_DAMAGE || motion == MARIO_MOTION_DAMAGE_TOGE) {
                 entry->flags &= ~MOBJ_FLAG_HIT;
             }
         }
@@ -843,8 +841,8 @@ void mobjMain(void) {
             s32 shadowId;
             mapGetBlend(&blend1);
             mapGetBlend2(&blend2);
-            if ((mw->entries[0].flags & 2) && !(animPoseGetMaterialFlag(entry->poseId) & MAP_OBJ_FLAG_NO_MAP_BLEND) && blend1.a != 0xff) {
-            } else if ((mw->entries[0].flags & 4) && !(animPoseGetMaterialFlag(entry->poseId) & MAP_OBJ_FLAG_NO_MAP_BLEND2) &&
+            if ((mw->entries[0].flags & MAP_ENTRY_BLEND) && !(animPoseGetMaterialFlag(entry->poseId) & MAP_OBJ_FLAG_NO_MAP_BLEND) && blend1.a != 0xff) {
+            } else if ((mw->entries[0].flags & MAP_ENTRY_BLEND2) && !(animPoseGetMaterialFlag(entry->poseId) & MAP_OBJ_FLAG_NO_MAP_BLEND2) &&
                        blend2.a != 0xff) {
             } else {
                 shadowId = shadowEntry(entry->position.x, entry->position.y, entry->position.z,
@@ -984,9 +982,9 @@ void mobjCalcMtx(MapObjectEntry* entry) {
     pose = animPoseGetAnimBaseDataPtr(entry->poseId);
     min = (Vec){pose->bboxMin.x, pose->bboxMin.y, pose->bboxMin.z};
     max = (Vec){pose->bboxMax.x, pose->bboxMax.y, pose->bboxMax.z};
-    entry->scale2.x = 10.0f * (entry->scale.x * (f32)(0, __fabs(max.x - min.x)));
+    entry->scale2.x = 10.0f * (entry->scale.x * (f32)__fabs(max.x - min.x));
     entry->scale2.y = 10.0f * (entry->scale.y * (f32)__fabs(max.y));
-    entry->scale2.z = 10.0f * (entry->scale.z * (f32)(0, __fabs(max.z - min.z)));
+    entry->scale2.z = 10.0f * (entry->scale.z * (f32)__fabs(max.z - min.z));
     if (strncmp(pose->fileName, "HOBJ_", strlen("HOBJ_")) == 0) {
         entry->translation.z = 0.0f;
         entry->scale2.z = 10.0f * (2.5f * entry->scale.z);
@@ -994,8 +992,6 @@ void mobjCalcMtx(MapObjectEntry* entry) {
     calcMtx(mtx, &position, &entry->scale2, &entry->rotation);
     for (i = 0; i < 2; i++) {
         if (entry->hitObj[i].hitObject != NULL) {
-            {
-            }
             hitReCalcMatrix(entry->hitObj[i].hitObject, mtx);
         }
     }
@@ -1011,14 +1007,15 @@ void mobjCalcMtx2(MapObjectEntry* entry) {
     calcMtx(mtx, &position, &entry->scale2, &entry->rotation);
 
     for (i = 0; i < 2; i++) {
-        if (entry->hitObj[i].hitObject != 0)
+        if (entry->hitObj[i].hitObject != NULL) {
             hitReCalcMatrix(entry->hitObj[i].hitObject, mtx);
+        }
     }
 }
 
 BOOL mobjGetHint(MapObjectEntry* entry) {
     if (entry == NULL) {
-        return 0;
+        return FALSE;
     }
     return (entry->flags >> 5) & 1;
 }
@@ -1029,8 +1026,9 @@ BOOL mobjCheckExec(void) {
     MapObjectEntry* entry;
 
     for (i = 0, entry = wp->entries; i < wp->count; entry++, i++) {
-        if (entry->flags & (MOBJ_FLAG_ACTIVE << 9))
+        if (entry->flags & 0x200) {
             return TRUE;
+        }
     }
     return FALSE;
 }
@@ -1038,12 +1036,13 @@ BOOL mobjCheckExec(void) {
 static int mobjCheckKururingFloorItem(MapObjectEntry* entry) { // was always inlined in retail but not in demo
     if (!strcmp(entry->animName, kururinName)) {
         ItemEntry* item = itemNameToPtr(entry->name);
-        if ((item != NULL && (item->flags & ITEM_FLAG_ACTIVE) && evtGetValue(0, entry->flagVar) == 0))
+        if (item != NULL && (item->flags & ITEM_FLAG_ACTIVE) && evtGetValue(0, entry->flagVar) == 0) {
             return 1;
-        else if ((evtGetValue(0, entry->flagVar) != 0))
+        } else if (evtGetValue(0, entry->flagVar) != 0) {
             return 1;
-        else
+        } else {
             return 2;
+        }
     } else {
         return 0;
     }
@@ -1052,10 +1051,11 @@ static int mobjCheckKururingFloorItem(MapObjectEntry* entry) { // was always inl
 s32 mobjCheckItemboxOpen(MapObjectEntry* entry) {
     if (strcmp(entry->animName, "MOBJ_TreasureBox") == 0 || strcmp(entry->animName, "MOBJ_BigTreasureBox") == 0 ||
         strcmp(entry->animName, "MOBJ_GrayTreasureBox") == 0 || strcmp(entry->animName, "MOBJ_BlackTreasureBox") == 0) {
-        if (entry->state == 99)
+        if (entry->state == 99) {
             return 2;
-        else
+        } else {
             return 1;
+        }
     } else {
         return 0;
     }
@@ -1079,6 +1079,7 @@ MapObjectEntry* mobjNearDistCheck2(f32 x, f32 y, f32 z, f32 minMagnitude, char**
     entry = wp->entries;
     ret = NULL;
 
+    // FAKE: unusedVec is never read and the position goes through the zeroed copy _pos; setting pos.x/y/z directly changes the object
     unusedVec = (Vec){ 0.0f, 0.0f, 0.0f };
     _pos = (Vec){ 0.0f, 0.0f, 0.0f };
     _pos.x = x;
@@ -1087,8 +1088,9 @@ MapObjectEntry* mobjNearDistCheck2(f32 x, f32 y, f32 z, f32 minMagnitude, char**
     pos = _pos;
 
     for (i = 0; i < entryCount; i++, entry++) {
-        if ((entry->flags & MOBJ_FLAG_ACTIVE) == 0)
+        if ((entry->flags & MOBJ_FLAG_ACTIVE) == 0) {
             continue;
+        }
 
         animName = names;
         while (*animName != NULL) {
@@ -1113,7 +1115,6 @@ MapObjectEntry* mobjNearDistCheck2(f32 x, f32 y, f32 z, f32 minMagnitude, char**
                 if (mag < minMagnitude) {
                     minMagnitude = mag;
                     ret = entry;
-                    break;
                 }
                 break;
             }
@@ -1126,6 +1127,7 @@ MapObjectEntry* mobjNearDistCheck2(f32 x, f32 y, f32 z, f32 minMagnitude, char**
 
 const char kururinName[] = "MOBJ_KururinFloor";
 
+// FAKE: stand-in, never called (in neither symbol map; the linker strips it); it only places its literals in the .sdata2 pool
 void mobjStrippedFallPool(MapObjectEntry* entry) {
     entry->velocity.y = 0.0f;
     entry->position.y = 10.0f;

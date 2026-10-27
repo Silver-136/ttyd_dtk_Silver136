@@ -48,11 +48,11 @@ void effNanigaDisp2(CameraId cameraId, EffectEntry* effect);
 void effNanigaDisp3(CameraId cameraId, EffectEntry* effect);
 
 static EVT_BEGIN(sound_evt)
-    CALL(evt_snd_sfxon_3d, STRING("SFX_ITEM_WHAT3"), 4264967296, 4264967297, 4264967298, 0)
+    CALL(evt_snd_sfxon_3d, STRING("SFX_ITEM_WHAT3"), LW(0), LW(1), LW(2), 0)
     WAIT_MS(833)
-    CALL(evt_snd_sfxon_3d, STRING("SFX_ITEM_WHAT4"), 4264967296, 4264967297, 4264967298, 0)
+    CALL(evt_snd_sfxon_3d, STRING("SFX_ITEM_WHAT4"), LW(0), LW(1), LW(2), 0)
     WAIT_MS(833)
-    CALL(evt_snd_sfxon_3d, STRING("SFX_ITEM_WHAT5"), 4264967296, 4264967297, 4264967298, 0)
+    CALL(evt_snd_sfxon_3d, STRING("SFX_ITEM_WHAT5"), LW(0), LW(1), LW(2), 0)
     RETURN
 EVT_END()
 
@@ -144,6 +144,7 @@ void effNanigaMain(EffectEntry* effect) {
     case 0:
         work->state++;
         work->timer = 30;
+        // fall through
     case 1:
         if (work->timer == 30) {
             for (i = 0; i < 4; i++) {

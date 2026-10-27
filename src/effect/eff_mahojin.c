@@ -12,7 +12,6 @@
 void effMahojinMain(EffectEntry* effect);
 void effMahojinDisp(CameraId cameraId, EffectEntry* effect);
 
-
 s32 mahojin_rate;
 
 static const char* name_tbl[] = {
@@ -29,8 +28,6 @@ Vec pos_tbl[7] = {
     { -13.8747f, 0.0f, 3.0951f },
     { -11.1931f, 0.0f, -9.0435f },
 };
-
-
 
 static void callback(MapTevCallbackInfo* info) {
     s32 tevStage = info->tevStage;
@@ -141,6 +138,7 @@ void effMahojinMain(EffectEntry* effect) {
         work[1].poseId[1] = animPoseEntry("MOBJ_EFF_mahojin_ura", inBattle);
         animPoseSetAnim(work[1].poseId[0], "A_4", TRUE);
         animPoseSetAnim(work[1].poseId[1], "A_4", TRUE);
+        // FAKE: work re-loaded from effect->userdata (it already holds it); without it the object changes
         work = effect->userdata;
     }
 
@@ -281,8 +279,6 @@ void effMahojinDisp(CameraId cameraId, EffectEntry* effect) {
     zp = z;
     flags = map->entries[0].flags;
 
-
-
     for (pass = 0; pass < 2; pass++) {
         n = 0;
         if (pass == 0) {
@@ -314,7 +310,7 @@ void effMahojinDisp(CameraId cameraId, EffectEntry* effect) {
                 }
             }
         }
-        map->entries[0].flags &= ~1;
+        map->entries[0].flags &= ~MAP_ENTRY_FOG;
         PSMTXTrans(mtx, work->position.x, work->position.y, work->position.z);
         for (k = 0; k < effect->count; k++) {
             EffMahojinWork* p = &work[idxList[k]];

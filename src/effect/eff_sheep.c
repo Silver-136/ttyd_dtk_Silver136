@@ -13,16 +13,15 @@ typedef struct EffSheepWork {
     s32 type;       // 0x0
     Vec position;   // 0x4
     f32 scale;      // 0x10
-    s32 hopFrames; // 0x14
-    f32 velY; // 0x18
-    f32 gravity; // 0x1C
+    s32 hopFrames;  // 0x14
+    f32 velY;       // 0x18
+    f32 gravity;    // 0x1C
     s32 poseId;     // 0x20
     s32 state;      // 0x24
     s32 timer;      // 0x28
     f32 speed;      // 0x2C
     s32 sfxId;      // 0x30
 } EffSheepWork;
-
 
 void effSheepDisp(CameraId cameraId, EffectEntry* effect);
 void effSheepMain(EffectEntry* effect);

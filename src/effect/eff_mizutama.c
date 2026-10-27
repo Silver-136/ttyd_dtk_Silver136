@@ -49,6 +49,7 @@ EffectEntry* effMizutamaEntry(s32 type, f32 x, f32 y, f32 z, f32 angle) {
     work = __memAlloc(HEAP_EFFECT, sizeof(EffMizutamaWork) * effect->count);
     effect->userdata = work;
     effect->callback = effMizutamaMain;
+    // FAKE: split computation; `radius = (type + 1) * 10;` changes the object
     radius = type + 1;
     radius *= 10;
     work->type = type;
@@ -75,6 +76,7 @@ EffectEntry* effMizutamaEntry(s32 type, f32 x, f32 y, f32 z, f32 angle) {
             work->delay = i * 2;
         } else {
             // scattered along a line, splashing outwards
+            // FAKE: parameter z reused as the half-width; the local dist (as in the circle branch) changes the object
             z = radius;
             irand(360);
             work->position.x = irand((s32)z * 2) - z;

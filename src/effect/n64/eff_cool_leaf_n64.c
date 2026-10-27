@@ -1,4 +1,5 @@
 #include "eff/eff_n64.h"
+#include "eff/n64/eff_cool_leaf_n64.h"
 #include "driver/camdrv.h"
 #include "driver/dispdrv.h"
 #include "driver/effdrv.h"
@@ -9,7 +10,6 @@
 #include <stdlib.h>
 #include "eff/eff_magic1_n64.h"
 #include "libc_decls.h"
-
 
 typedef struct EffCoolLeafN64Work {
     s32 type;      // 0x0

@@ -184,8 +184,12 @@ EffectEntry* effSplashEntry(s32 type, f32 x, f32 y, f32 z, f32 size) {
         r = 6.2831855f * camGetPtr(CAMERA_3D)->viewYaw / 360.0f;
         s = (f32)sin(r);
         c = (f32)cos(r);
-        { f32 dx = size * (-30.0f * s); f32 dz = size * (30.0f * c);
-        effKemuTestEntry(6, x + dx, y + 5.0f * size, z + dz, size); }
+        {
+            f32 dx = size * (-30.0f * s);
+            f32 dz = size * (30.0f * c);
+
+            effKemuTestEntry(6, x + dx, y + 5.0f * size, z + dz, size);
+        }
     }
     return effect;
 }
@@ -251,7 +255,6 @@ void effSplashMain(EffectEntry* effect) {
                     work->sy = (f32)geso_scale_dt[t] / 96.0f;
                 }
                 if (t < 71) {
-
                     work->position.x = 10.0f * ((f32)(geso_trans_dt[t * 2] + 40) / 8.0f);
                     work->position.y = 10.0f * ((f32)(geso_trans_dt[t * 2 + 1] - 12) / 8.0f);
                 }
@@ -325,7 +328,6 @@ void effSplashDisp(CameraId cameraId, EffectEntry* effect) {
     Mtx mtx;
     GXTexObj texObj;
     GXColor color;
-
     s32 i;
     s32 k;
     s32 type;
@@ -335,12 +337,10 @@ void effSplashDisp(CameraId cameraId, EffectEntry* effect) {
     f32 r0, g0, b0, r1, g1, b1;
     f32 ang, sn, cs;
     f32 w;
-
     u32 k2;
     u8* sz;
     u8** dl;
     s32 kb;
-
 
     cam = camGetPtr(cameraId);
     type = work->type;
@@ -502,11 +502,8 @@ void effSplashDisp(CameraId cameraId, EffectEntry* effect) {
             GXSetVtxDesc(GX_VA_TEX0, GX_INDEX8);
             GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S16, 14);
             GXSetArray(GX_VA_TEX0, geso_shibuki_texcoord0_tbl, 4);
-            {
-
-                for (k2 = 0, sz = geso_shibuki_dl_0_size_tbl, dl = geso_shibuki_dl_0_tbl; k2 < 5; k2++, sz++, dl++) {
-                    GXCallDisplayList(*dl, *sz << 5);
-                }
+            for (k2 = 0, sz = geso_shibuki_dl_0_size_tbl, dl = geso_shibuki_dl_0_tbl; k2 < 5; k2++, sz++, dl++) {
+                GXCallDisplayList(*dl, *sz << 5);
             }
             break;
         }
@@ -520,7 +517,6 @@ void effSplashDisp(CameraId cameraId, EffectEntry* effect) {
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
     w = 8.0f;
-
     for (i = n + 1; i < effect->count; i++, work++) {
         if (work->delay != 0) {
             continue;
@@ -538,15 +534,16 @@ void effSplashDisp(CameraId cameraId, EffectEntry* effect) {
         PSMTXIdentity(trans);
         GXLoadTexMtxImm(trans, GX_TEXMTX0, GX_MTX2x4);
         switch (type) {
-            case 2:
-                r0 = 1.0f;
-                g0 = 0.869f;
-                b0 = 0.0f;
-                break;
-            default:
-                r0 = (1.0f + color.r / 255.0f) / 2;
-                g0 = (1.0f + color.g / 255.0f) / 2;
-                b0 = (1.0f + color.b / 255.0f) / 2;
+        case 2:
+            r0 = 1.0f;
+            g0 = 0.869f;
+            b0 = 0.0f;
+            break;
+        default:
+            r0 = (1.0f + color.r / 255.0f) / 2;
+            g0 = (1.0f + color.g / 255.0f) / 2;
+            b0 = (1.0f + color.b / 255.0f) / 2;
+            break;
         }
         GXBegin(GX_QUADS, GX_VTXFMT0, 4);
         GXPosition3f32(-w / 2, (w / 2), 0.0f);

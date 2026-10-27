@@ -6,7 +6,6 @@
 #include "version.h"
 #include "driver/effdrv.h"
 
-
 typedef struct EffEnergyWork {
     s32 type;        // 0x0, index into color_tbl
     Vec position;    // 0x4

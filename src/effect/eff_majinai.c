@@ -63,7 +63,7 @@ void effMajinaiMain(EffectEntry* effect) {
             if (!animGroupBaseAsync("MOBJ_EFF_majinai", inBattle, NULL)) {
                 return;
             }
-            work->poseId = animPoseEntry("MOBJ_EFF_majinai", (u32)inBattle);
+            work->poseId = animPoseEntry("MOBJ_EFF_majinai", inBattle);
             animPoseSetAnim(work->poseId, "A_1", TRUE);
             work->state++;
             break;
@@ -83,7 +83,7 @@ void effMajinaiMain(EffectEntry* effect) {
                 }
             } else {
                 unit = BattleGetMarioPtr(_battleWorkPointer);
-                animPoseSetMaterialFlagOn(BtlUnit_GetPartsPtr(unit, BtlUnit_GetBodyPartsId(unit))->poseId, 0x800);
+                animPoseSetMaterialFlagOn(BtlUnit_GetPartsPtr(unit, BtlUnit_GetBodyPartsId(unit))->poseId, MAP_OBJ_FLAG_NO_MAP_BLEND);
             }
             if (animPoseGetLoopTimes(work->poseId) >= 0.93f) {
                 effStardustEntry(0, 16, 60, work->position.x, 55.0f * work->scale + work->position.y,
@@ -112,7 +112,7 @@ void effMajinaiMain(EffectEntry* effect) {
                 }
             } else {
                 unit = BattleGetMarioPtr(_battleWorkPointer);
-                animPoseSetMaterialFlagOff(BtlUnit_GetPartsPtr(unit, BtlUnit_GetBodyPartsId(unit))->poseId, 0x800);
+                animPoseSetMaterialFlagOff(BtlUnit_GetPartsPtr(unit, BtlUnit_GetBodyPartsId(unit))->poseId, MAP_OBJ_FLAG_NO_MAP_BLEND);
             }
             work->alpha -= 5;
             if (work->alpha < 0) {
@@ -140,7 +140,7 @@ void effMajinaiDisp(CameraId cameraId, EffectEntry* effect) {
         PSMTXRotRad(rot, 'y', MTXDegToRad(-camGetPtr(cameraId)->viewYaw));
         PSMTXConcat(mtx, rot, mtx);
         PSMTXConcat(mtx, scale, mtx);
-        animPoseSetMaterialFlagOn(work->poseId, (MAP_OBJ_FLAG_COLOR | MAP_OBJ_FLAG_NO_MAP_BLEND));
+        animPoseSetMaterialFlagOn(work->poseId, MAP_OBJ_FLAG_COLOR | MAP_OBJ_FLAG_NO_MAP_BLEND);
         animPoseSetMaterialEvtColor(work->poseId, (GXColor){ 0xFF, 0xFF, 0xFF, work->alpha });
         animPoseMain(work->poseId);
         animPoseDrawMtx(work->poseId, mtx, 1, 0.0f, 10.0f);

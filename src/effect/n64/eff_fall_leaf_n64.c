@@ -12,8 +12,6 @@
 #include "libc_decls.h"
 #include "eff/n64/eff_fall_leaf_n64.h"
 
-
-
 typedef struct EffFallLeafN64Work {
     s32 type;      // 0x0
     Vec position;  // 0x4
@@ -37,7 +35,6 @@ static effN64Vtx size12x12_tex64x64_vtx[] = {
     {6, 6, 0, 2048, 4096, 0x30, 0x6C, 0x25, 0xFF},
     {-6, 6, 0, 0, 4096, 0x30, 0x6C, 0x25, 0xFF},
 };
-
 
 void effFallLeafMain(EffectEntry* effect);
 void effFallLeafDisp(CameraId cameraId, EffectEntry* effect);

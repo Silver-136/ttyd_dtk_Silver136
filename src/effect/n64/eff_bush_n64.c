@@ -10,7 +10,6 @@
 #include "eff/eff_magic1_n64.h"
 #include "libc_decls.h"
 
-
 typedef struct EffBushN64Work {
     s32 type;      // 0x0
     Vec position;  // 0x4
@@ -62,6 +61,7 @@ EffectEntry* effBushN64Entry(s32 type, f32 x, f32 y, f32 z) {
         work->position.x = rand() % 30 - 15;
         work->position.y = 0.0f;
         work->position.z = (rand() & 0x1E) - 15;
+        // BUG: `& 360` masks with 0x168 instead of taking `% 360`, so only 16 start angles (0, 8, 32, 40, ... 360) occur.
         work->angleZ = rand() & 360;
         work->angleY = rand() & 360;
         work->spin = rand() % 100 / 10;
@@ -92,7 +92,7 @@ void effBushMain(EffectEntry* effect) {
             case 1:
                 break;
             case 0:
-                if (marioGetPtr()->currMotionId == 0U) {
+                if (marioGetPtr()->currMotionId == MARIO_MOTION_STAY) {
                     return;
                 }
                 break;

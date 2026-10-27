@@ -33,22 +33,17 @@ const char R_no_messages_DU[] = "<col ff0000ff>No messages.[Dutch]<col>\012<key>
 const char R_no_messages_US[] = "<col ff0000ff>No messages.<col>\n<key>";
 #endif
 
-// target .bss/.sbss pad (uninitialised objects are emitted in reverse order, so this sits last)
-
 #define WIN_STATE(w) (*(u16*)(w)->state)
-
 
 // MsgWinData.callback holds a function pointer in an s32 (msgWindow_Entry takes the callback as s32)
 #define MSG_CB(d) (*(void (**)(s32, smartEntry*))&(d)->callback)
-// A message window's MsgWinData lives in its userdata block. A macro, not an inline function: as a function the object changes (2026-10-27).
+// A message window's MsgWinData lives in its userdata block. A macro, not an inline function: as a function the object changes.
 #define WIN_DATA(w) ((MsgWinData*)(w)->userdata->address)
 void msgWindow_Disp(CameraId camId, void* param);
 void msgWindow_Main(WindowEntry* window);
 void msgWindow_Clear_Main(WindowEntry* window);
 void msgWindow_Delete(WindowEntry* window);
 void selectWindow_Main(WindowEntry* window);
-
-s32 msgMain(smartEntry* smart);
 void selectWindow_Disp(CameraId camId, void* param);
 
 
@@ -94,7 +89,6 @@ s32 msgWindowOpen_SE_Data[] = {
 MessageWork msgWork;
 BOOL msgSEflag; //msgSEInit and related functions are unused
 void* msgSortDvdData;
-u16 g5_active_s772;
 
 //.sdata
 MessageWork* msgw = &msgWork;
@@ -263,12 +257,12 @@ static inline void msgAddPage(smartEntry* smart, s32 y) {
 static inline void msgCheckSkip(smartEntry* smart, MsgWinData* data) {
     s32 btn, trgv;
     if (!(data->flags & MSG_WIN_FLAG_NO_SKIP)) {
-        btn = 0x100;
+        btn = PAD_BUTTON_A;
         if (((MsgWinData*)smart->address)->flags & MSG_WIN_FLAG_KEY_X) {
-            btn = 0x500;
+            btn = PAD_BUTTON_A | PAD_BUTTON_X;
         }
         trgv = keyGetButtonTrg(0);
-        if (trgv & (btn | 0x200)) {
+        if (trgv & (btn | PAD_BUTTON_B)) {
             data->flags |= MSG_WIN_FLAG_FAST;
         }
     }
@@ -276,7 +270,7 @@ static inline void msgCheckSkip(smartEntry* smart, MsgWinData* data) {
 
 static inline void msgVoiceSE(smartEntry* smart) {
     MsgWinData* d = smart->address;
-    if (d->window->type != 1 && !msgSEflag) {
+    if (d->window->type != WINDOW_TYPE_SMALL && !msgSEflag) {
         psndSFXOnVol(SFX_NAME_WORD(PSND_SFX_MESSAGE1_1 | PSND_SFX_BYPASS_MUTE), d->talkVolume);
         msgSEflag = 1;
     }
@@ -414,7 +408,7 @@ s32 msgMain(smartEntry* smart) {
             if (entry->value & MSG_CHAR_VOICE) {
                 msgVoiceSE(smart);
             } else if (entry->value & MSG_CHAR_TALK) {
-                if (((MsgWinData*)smart->address)->window->type != 3) {
+                if (((MsgWinData*)smart->address)->window->type != WINDOW_TYPE_SYSTEM) {
                     ((MsgWinData*)smart->address)->talkTimer = 15;
                 }
                 msgVoiceSE(smart);
@@ -442,7 +436,6 @@ s32 msgMain(smartEntry* smart) {
     }
 #endif
 
-BOOL msgDisp(smartEntry* smart, u8 alpha, f32 x, f32 y);
 BOOL msgDisp(smartEntry* smart, u8 alpha, f32 x, f32 y) {
     s32 al;
     s32 hide;
@@ -564,7 +557,7 @@ BOOL msgDisp(smartEntry* smart, u8 alpha, f32 x, f32 y) {
                     pos.x = 20.0f + (x + c->x);
                     pos.y = c->iconY + (c->y + (y + data->scrollPos) - 40.0f);
                     pos.z = 0.0f;
-                    iconDispGxAlpha(&pos, 0x10, (u16)c->value, a * al / 255, c->scale);
+                    iconDispGxAlpha(&pos, ICON_FLAG_2D, (u16)c->value, a * al / 255, c->scale);
                     FontDrawStart_alpha(alpha);
                     FontDrawColor(col4);
                     break;
@@ -575,9 +568,9 @@ BOOL msgDisp(smartEntry* smart, u8 alpha, f32 x, f32 y) {
                 if (hide) {
                     GXColor gray = {0x50, 0x50, 0x50, 0xFF};
                     switch (data->window->type) {
-                        case 3:
-                        case 8:
-                        case 9: {
+                        case WINDOW_TYPE_SYSTEM:
+                        case WINDOW_TYPE_TEC:
+                        case WINDOW_TYPE_MAJO: {
                             GXColor gray2 = {0x6E, 0x6E, 0x6E, 0xFF};
                             gray = gray2;
                             break;
@@ -611,7 +604,7 @@ BOOL msgDisp(smartEntry* smart, u8 alpha, f32 x, f32 y) {
 #endif
                     PSMTXTrans(m2, -w, 12.0f, 0.0f);
                     PSMTXScaleApply(m2, m2, c->rot, c->rot, c->rot);
-                    PSMTXTransApply(m2, m2, (u32)w, (-12.0f), 0.0f);
+                    PSMTXTransApply(m2, m2, (u32)w, -12.0f, 0.0f);
                     PSMTXScaleApply(m2, m2, c->scale, c->scale, c->scale);
                     PSMTXTransApply(m2, m2, hx, hy, 0.0f);
                     FontDrawCodeMtx(m2, c->glyph);
@@ -623,6 +616,7 @@ BOOL msgDisp(smartEntry* smart, u8 alpha, f32 x, f32 y) {
                     MSG_DRAW_SCALE(c);
                     FontDrawCode(sx, sy, c->glyph);
 #else
+                    // FAKE: hy holds the x position and hx the y position; swapping the names changes the object
                     hy = sx + irand(10000) % 3;
                     hx = sy + irand(10000) % 3;
                     FontDrawScale(c->scale);
@@ -801,7 +795,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
     scale = 1.0f;
 #endif
     if (window->type < 0) {
-        window->type = 0;
+        window->type = WINDOW_TYPE_NORMAL;
     }
     time = data->parseTime;
     topY = 0;
@@ -811,17 +805,17 @@ void msgAnalize(smartEntry* smart, char* msg) {
     y = data->parseY;
     step = data->parseSpeed;
     switch (window->type) {
-    case 3:
-    case 8:
+    case WINDOW_TYPE_SYSTEM:
+    case WINDOW_TYPE_TEC:
         switch (window->type) {
-        case 3: {
+        case WINDOW_TYPE_SYSTEM: {
             static const GXColor c = {0xDC, 0xC8, 0xDC, 0xFF};
-            entry->value = *(( u32*)(&c) );
+            entry->value = *(u32*)&c;
             break;
         }
-        case 8: {
+        case WINDOW_TYPE_TEC: {
             static const GXColor c = {0x00, 0xD9, 0x14, 0xFF};
-            entry->value = *(( u32*)(&c) );
+            entry->value = *(u32*)&c;
             break;
         }
         }
@@ -835,33 +829,36 @@ void msgAnalize(smartEntry* smart, char* msg) {
     }
 
     while (TRUE) {
-        check = *(( u8*)msg) ;
+        check = *(u8*)msg;
 #ifdef VERSION_G8ME01
         if (_ismbblead((s8)check)) {
 #else
         if (_ismbblead((u8)check)) {
 #endif
-            glyph = kanjiSearch(*(( u16*)msg) );
+            glyph = kanjiSearch(*(u16*)msg);
 #ifdef VERSION_G8ME01
-            ww = scale.x * (( f32)(kanjiGetWidth((u16)(glyph + 0)) + 4) );
+            // FAKE: (u16)(glyph + 0) re-truncates the argument; kanjiGetWidth(glyph) changes the object
+            ww = scale.x * (f32)(kanjiGetWidth((u16)(glyph + 0)) + 4);
             entry->glyph = glyph;
             entry->x = x;
             entry->y = y - (s16)(10.0f * scale.y);
             entry->scale = scale.x;
 #else
-            ww = scale * (( f32)(kanjiGetWidth((u16)(glyph + 0)) + 4) );
+            // FAKE: (u16)(glyph + 0) re-truncates the argument; kanjiGetWidth(glyph) changes the object
+            ww = scale * (f32)(kanjiGetWidth((u16)(glyph + 0)) + 4);
             entry->glyph = glyph;
             entry->x = x;
             entry->y = y - (s16)(10.0f * scale);
             entry->scale = scale;
 #endif
             entry->value = flags;
-            if (( *( (u16*)msg )) == 0x8145) {
+            // Shift-JIS 0x8145 is the middle dot, 0x8140 the full-width space, 0x8151 the full-width low line
+            if (*(u16*)msg == 0x8145) {
                 entry->value |= MSG_CHAR_VOICE;
-            } else if ((( *( (u16*)msg )) != 0x8140 ) && (( *( (u16*)msg )) != 0x8151) ) {
+            } else if (*(u16*)msg != 0x8140 && *(u16*)msg != 0x8151) {
                 entry->value |= MSG_CHAR_TALK;
             }
-            if (( flags & MSG_CHAR_DYNAMIC) != 0 ) {
+            if (flags & MSG_CHAR_DYNAMIC) {
                 entry->rot = fv;
             }
 #ifdef VERSION_G8ME01
@@ -953,7 +950,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
                     msg++;
                 }
             }
-            if (( strcmp(tag, "k") == 0 ) || ( strcmp(tag, "key") == 0) ) {
+            if (strcmp(tag, "k") == 0 || strcmp(tag, "key") == 0) {
                 entry->glyph = 0xFFFE;
                 entry->x = savedPage;
                 entry->time = time;
@@ -963,7 +960,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
                 savedPage++;
             } else if (strcmp(tag, "keyxon") == 0) {
                 data->flags |= MSG_WIN_FLAG_KEY_X;
-            } else if (( strcmp(tag, "p") == 0 ) || ( strcmp(tag, "scrl_auto") == 0) ) {
+            } else if (strcmp(tag, "p") == 0 || strcmp(tag, "scrl_auto") == 0) {
                 if (savedScroll != 0) {
                     entry->glyph = 0xFFFD;
                     entry->y = savedScroll - 3;
@@ -975,7 +972,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
                     savedScroll = 0;
                     data->charCount++;
                 }
-            } else if (( strcmp(tag, "o") == 0 ) || ( strcmp(tag, "once_stop") == 0) ) {
+            } else if (strcmp(tag, "o") == 0 || strcmp(tag, "once_stop") == 0) {
                 entry->glyph = 0xFFFC;
                 entry->time = time;
                 time += 0x32;
@@ -1067,42 +1064,42 @@ void msgAnalize(smartEntry* smart, char* msg) {
                 entry++;
                 data->charCount++;
             } else if (strcmp(tag, "plate") == 0) {
-                window->type = 2;
+                window->type = WINDOW_TYPE_PLATE;
                 step = 0;
                 data->parseSpeed = 0;
             } else if (strcmp(tag, "system") == 0) {
                 static const GXColor c = {0xDC, 0xC8, 0xDC, 0xFF};
-                window->type = 3;
-                entry->value = *(( u32*)(&c) );
+                window->type = WINDOW_TYPE_SYSTEM;
+                entry->value = *(u32*)&c;
                 entry->glyph = 0xFFF7;
                 entry->time = time;
                 entry++;
                 data->charCount++;
             } else if (strcmp(tag, "tec") == 0) {
                 static const GXColor c = {0x00, 0xD9, 0x14, 0xFF};
-                window->type = 8;
-                entry->value = *(( u32*)(&c) );
+                window->type = WINDOW_TYPE_TEC;
+                entry->value = *(u32*)&c;
                 entry->glyph = 0xFFF7;
                 entry->time = time;
                 entry++;
                 data->charCount++;
             } else if (strcmp(tag, "majo") == 0) {
-                window->type = 9;
+                window->type = WINDOW_TYPE_MAJO;
             } else if (strcmp(tag, "diary") == 0) {
-                window->type = 7;
+                window->type = WINDOW_TYPE_DIARY;
             } else if (strcmp(tag, "housou") == 0) {
-                window->type = 10;
+                window->type = WINDOW_TYPE_HOUSOU;
             } else if (strcmp(tag, "boss") == 0) {
-                window->type = 6;
+                window->type = WINDOW_TYPE_BOSS;
             } else if (strcmp(tag, "kanban") == 0) {
-                window->type = 4;
+                window->type = WINDOW_TYPE_KANBAN;
                 step = 0;
                 data->parseSpeed = 0;
             } else if (strcmp(tag, "small") == 0) {
-                window->type = 1;
+                window->type = WINDOW_TYPE_SMALL;
                 data->flags |= MSG_WIN_FLAG_SMALL;
             } else if (strcmp(tag, "clear") == 0) {
-                window->type = 11;
+                window->type = WINDOW_TYPE_CLEAR;
             } else if (strcmp(tag, "wpos") == 0) {
                 sscanf(args, "%hd%hd%hd%hd", &winX, &winY, &winHeight, &winWidth);
                 window->flags |= WINDOW_FLAG_WPOS;
@@ -1111,7 +1108,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
                 window->height = winHeight;
                 window->width = winWidth;
             } else if (strcmp(tag, "select") == 0) {
-                window->type = 5;
+                window->type = WINDOW_TYPE_SELECT;
                 data->flags |= MSG_WIN_FLAG_SELECT;
                 sscanf(args, "%hd%hd%hd%hd%hd", &sel0, &sel1, &data->selWidth, &data->selY);
                 flags |= MSG_CHAR_SEL_ROW(0);
@@ -1133,7 +1130,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
                 window->flags |= WINDOW_FLAG_NOWINSE;
             } else if (strcmp(tag, "icon") == 0) {
                 isHM = FALSE;
-                if ((( (s8) args [0] ) >= '0') && (((s8) args [0]) <= '9') ) {
+                if ((s8)args[0] >= '0' && (s8)args[0] <= '9') {
                     sscanf(args, "%d%f%d%d%d", &iconId, &iconScale, &iconOffX, &iconY, &iconAdvance);
                 } else {
                     sscanf(args, "%s%f%d%d%d", name, &iconScale, &iconOffX, &iconY, &iconAdvance);
@@ -1149,11 +1146,11 @@ void msgAnalize(smartEntry* smart, char* msg) {
                     entry->value = iconId;
                     iconGetWidthHight(&iw, &ih, (u16)iconId);
                     entry->glyph = 0xFFF8;
-                    entry->x = (x + (( 0.5f * iw ) * iconScale) ) + iconOffX;
+                    entry->x = (x + 0.5f * iw * iconScale) + iconOffX;
 #ifndef VERSION_G8ME01
                     x += 0x28;
 #endif
-                    entry->y = y - ( ih * iconScale) ;
+                    entry->y = y - ih * iconScale;
                     entry->iconY = iconY;
                     entry->scale = iconScale;
                     entry->time = time;
@@ -1170,14 +1167,16 @@ void msgAnalize(smartEntry* smart, char* msg) {
                     } else {
                         glyph = hankakuSearch(-48);
                     }
-                    iw = scale.x * (( f32)(kanjiGetWidth((u16)(glyph + 0)) + 4) );
+                    // FAKE: (u16)(glyph + 0) re-truncates the argument; kanjiGetWidth(glyph) changes the object
+                    iw = scale.x * (f32)(kanjiGetWidth((u16)(glyph + 0)) + 4);
                     entry->glyph = glyph;
                     entry->x = x;
                     entry->y = y - (s16)(10.0f * scale.y);
                     entry->scale = scale.x;
 #else
                     glyph = kanjiSearch(0x94B5);
-                    iw = scale * (( f32)(kanjiGetWidth((u16)(glyph + 0)) + 4) );
+                    // FAKE: (u16)(glyph + 0) re-truncates the argument; kanjiGetWidth(glyph) changes the object
+                    iw = scale * (f32)(kanjiGetWidth((u16)(glyph + 0)) + 4);
                     entry->glyph = glyph;
                     entry->x = x;
                     entry->y = y - (s16)(10.0f * scale);
@@ -1186,7 +1185,6 @@ void msgAnalize(smartEntry* smart, char* msg) {
                     entry->value = flags;
                     entry->value |= MSG_CHAR_TALK;
                     if (flags & MSG_CHAR_DYNAMIC) {
-
                         entry->rot = fv;
                     }
 #ifdef VERSION_G8ME01
@@ -1218,7 +1216,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
                 entry->x = animX;
                 entry->y = topY - animY;
                 entry->scale = animScale;
-                entry->rot = (animFlip == 0) ? ( 0.0f ) : ( 180.0f) ;
+                entry->rot = (animFlip == 0) ? 0.0f : 180.0f;
                 entry++;
                 time += step;
                 data->charCount++;
@@ -1236,15 +1234,17 @@ void msgAnalize(smartEntry* smart, char* msg) {
                 entry++;
                 data->charCount++;
             } else if (strcmp(tag, "r") == 0) {
-                data2 = data;
-                if (data2->window->type != 1) {
+                if (data->window->type != WINDOW_TYPE_SMALL) {
                     rubyX = x;
                 }
-            } else if (((( s8*)tag)[0] == 'R' ) || ( (((s8*)tag)[0] == '/' ) && (( (u32)((s8*)tag)[0] ) == 0x2F72) )) {
+            } else if (((s8*)tag)[0] == 'R' || (((s8*)tag)[0] == '/' && (u32)((s8*)tag)[0] == 0x2F72)) {
+                // BUG: the second test compares one byte with 0x2F72 ("/r" as a halfword), so it is never true:
+                // only R tags get here and i is always 1
                 i = 1;
-                if (((s8*)tag)[0] != 'R') { i = 2;
+                if (((s8*)tag)[0] != 'R') {
+                    i = 2;
                 }
-                if (data->window->type == 1) {  // data2 is only set by the "r" tag branch
+                if (data->window->type == WINDOW_TYPE_SMALL) { // no ruby text in small windows
                     continue;
                 }
                 half = ((s32)strlen(tag + i)) / 2;
@@ -1255,17 +1255,19 @@ void msgAnalize(smartEntry* smart, char* msg) {
                 for (k = 0; k < half; k++) {
                     glyph = kanjiSearch(*(u16*)&tag[(u32)j]);
 #ifdef VERSION_G8ME01
-                    total += (s32)(0.55f * (scale.y * (( f32)(kanjiGetWidth((u16)(glyph + 0)) + 4) )));
+                    // FAKE: (u16)(glyph + 0) re-truncates the argument; kanjiGetWidth(glyph) changes the object
+                    total += (s32)(0.55f * (scale.y * (f32)(kanjiGetWidth((u16)(glyph + 0)) + 4)));
 #else
-                    total += (s32)(0.55f * (scale * (( f32)(kanjiGetWidth((u16)(glyph + 0)) + 4) )));
+                    // FAKE: (u16)(glyph + 0) re-truncates the argument; kanjiGetWidth(glyph) changes the object
+                    total += (s32)(0.55f * (scale * (f32)(kanjiGetWidth((u16)(glyph + 0)) + 4)));
 #endif
                     j += 2;
                 }
 #ifdef VERSION_G8ME01
-                total = (u16)total - ( 0.55f * (4.0f * scale.x));
+                total = (u16)total - 0.55f * (4.0f * scale.x);
                 rubyX = ((rubyX + x) - 4.0f * scale.x - (u16)total) / 2;
 #else
-                total = (u16)total - ( 0.55f * (4.0f * scale));
+                total = (u16)total - 0.55f * (4.0f * scale);
                 rubyX = ((rubyX + x) - 4.0f * scale - (u16)total) / 2;
 #endif
                 /* second loop open-coded: kR is its counter and glyph its glyph (split webs, numbered as in the target) */
@@ -1287,9 +1289,11 @@ void msgAnalize(smartEntry* smart, char* msg) {
                     }
                     glyph = kanjiSearch(*(u16*)&tag[(u32)nn[0]]);
 #ifdef VERSION_G8ME01
-                    wwR = 0.55f * (scale.x * (( f32)(kanjiGetWidth((u16)(glyph + 0)) + 4) ));
+                    // FAKE: (u16)(glyph + 0) re-truncates the argument; kanjiGetWidth(glyph) changes the object
+                    wwR = 0.55f * (scale.x * (f32)(kanjiGetWidth((u16)(glyph + 0)) + 4));
 #else
-                    wwR = 0.55f * (scale * (( f32)(kanjiGetWidth((u16)(glyph + 0)) + 4) ));
+                    // FAKE: (u16)(glyph + 0) re-truncates the argument; kanjiGetWidth(glyph) changes the object
+                    wwR = 0.55f * (scale * (f32)(kanjiGetWidth((u16)(glyph + 0)) + 4));
 #endif
                     entry->glyph = glyph;
                     entry->x = rubyX;
@@ -1313,31 +1317,34 @@ void msgAnalize(smartEntry* smart, char* msg) {
                 }
                 continue;
             }
-            if (( *( (s8*)next )) == '\n') {
+            if (*(s8*)next == '\n') {
                 msg++;
             }
             continue;
         default:
-            if (((( (u32)gp->language ) == 0 ) && (( (s8)check ) >= '0' )) && (( (s8)check ) <= '9') ) {
+            if ((u32)gp->language == LANGUAGE_JP && (s8)check >= '0' && (s8)check <= '9') {
+                // full-width digit: '0' + 0x821F is Shift-JIS 0x824F, the full-width zero
                 glyphD = kanjiSearch((u16)(check + 0x821F));
             } else {
                 glyphD = hankakuSearch(check);
             }
 #ifdef VERSION_G8ME01
-            wwD = scale.x * (( f32)(kanjiGetWidth((u16)(glyphD + 0)) + 2) );
+            // FAKE: (u16)(glyphD + 0) re-truncates the argument; kanjiGetWidth(glyphD) changes the object
+            wwD = scale.x * (f32)(kanjiGetWidth((u16)(glyphD + 0)) + 2);
             entry->glyph = glyphD;
             entry->x = x;
             entry->y = y - (s16)(10.0f * scale.y);
             entry->scale = scale.x;
 #else
-            wwD = scale * (( f32)(kanjiGetWidth((u16)(glyphD + 0)) + 2) );
+            // FAKE: (u16)(glyphD + 0) re-truncates the argument; kanjiGetWidth(glyphD) changes the object
+            wwD = scale * (f32)(kanjiGetWidth((u16)(glyphD + 0)) + 2);
             entry->glyph = glyphD;
             entry->x = x;
             entry->y = y - (s16)(10.0f * scale);
             entry->scale = scale;
 #endif
             entry->value = flags;
-            if (( *( (s8*)msg )) != ' ') {
+            if (*(s8*)msg != ' ') {
                 entry->value |= MSG_CHAR_TALK;
             }
             if (flags & MSG_CHAR_DYNAMIC) {
@@ -1357,7 +1364,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
             msg++;
             time += step;
             entry++;
-            data->charCount++;  // data2 is only set on one branch (otherwise this writes through NULL + 0x38, as in the game)
+            data->charCount++;
             continue;
         }
     }
@@ -1383,18 +1390,19 @@ const char* msgSearch(const char* tag) {
     MessageEntry* entry;
     MsgLookupEntry* lookup;
     smartEntry* smart;
-    s32 i, max, j, index;
+    s32 i, high, low, index;
     s32 result;
 
-    for (i = 0; i < 2; i++) { //check both entries
+    for (i = 0; i < 2; i++) { // map messages (entry 0), then the global ones (entry 1)
         entry = &msgw->entries[i];
         smart = entry->lookup;
         if (smart) {
+            // binary search of the lookup table, sorted by tag in msgLoad
             lookup = smart->address;
-            j = 0;
-            max = entry->count;
-            while (max >= j) {
-                index = (j + max) / 2; //tag, message
+            low = 0;
+            high = entry->count;
+            while (high >= low) {
+                index = (low + high) / 2;
                 if (index >= entry->count) {
                     break;
                 }
@@ -1403,9 +1411,9 @@ const char* msgSearch(const char* tag) {
                     return (const char*)entry->address + lookup[index].endaddr;
                 }
                 if (result < 0) {
-                    max = index - 1;
+                    high = index - 1;
                 } else {
-                    j = index + 1;
+                    low = index + 1;
                 }
             }
         }
@@ -1465,7 +1473,7 @@ char* msgGetCommand(char* msg, char* cmd, char* arg) {
 s32 msgIconStr2ID(const char* str) {
     u32 i;
 
-    for (i = 0; i < 18; i++) {
+    for (i = 0; i < sizeof(msgIcon) / sizeof(msgIcon[0]); i++) {
         if (!strcmp(msgIcon[i].name, str)) {
             return msgIcon[i].value;
         }
@@ -1487,13 +1495,14 @@ s32 msgWindow_Entry(const char* msg, s32 callback, u16 priority) {
     WIN_STATE(window) = 5;
     window->type = -1;
     window->flags |= WINDOW_FLAG_BUSY;
+    // BUG: the copy gets strlen(msg) bytes, so strcpy writes the terminator one byte past the requested size
     copy = __memAlloc(HEAP_DEFAULT, strlen(msg));
     strcpy(copy, msg);
     smart = smartAlloc(sizeof(MsgWinData), 1);
     data = smart->address;
     memset(data, 0, sizeof(MsgWinData));
     data->window = window;
-    data->flags = 3;
+    data->flags = 0x1 | MSG_WIN_FLAG_START;
     data->callback = callback;
     data->lastUpdateTime = gp->renderTime;
     data->openTime = gp->renderTime;
@@ -1507,7 +1516,7 @@ s32 msgWindow_Entry(const char* msg, s32 callback, u16 priority) {
     data->parseSpeed = 25;
     data->pageCount = 0;
     msgAnalize(smart, copy);
-    if (window->type == 1) {
+    if (window->type == WINDOW_TYPE_SMALL) {
         data->flags |= MSG_WIN_FLAG_NO_PAGE_LOG;
     }
     __memFree(HEAP_DEFAULT, copy);
@@ -1516,17 +1525,18 @@ s32 msgWindow_Entry(const char* msg, s32 callback, u16 priority) {
     data->talkTimer = 0;
     data->talkPoseSet = 0;
     switch (window->type) {
-    case 11:
+    case WINDOW_TYPE_CLEAR:
         window->main = msgWindow_Clear_Main;
-    case 0:
-    case 2:
-    case 3:
-    case 4:
-    case 6:
-    case 7:
-    case 8:
-    case 9:
-    case 10:
+        // fall through
+    case WINDOW_TYPE_NORMAL:
+    case WINDOW_TYPE_PLATE:
+    case WINDOW_TYPE_SYSTEM:
+    case WINDOW_TYPE_KANBAN:
+    case WINDOW_TYPE_BOSS:
+    case WINDOW_TYPE_DIARY:
+    case WINDOW_TYPE_TEC:
+    case WINDOW_TYPE_MAJO:
+    case WINDOW_TYPE_HOUSOU:
         if (!(window->flags & WINDOW_FLAG_WPOS)) {
             window->x = -280.0f;
             window->y = 225.0f;
@@ -1534,7 +1544,7 @@ s32 msgWindow_Entry(const char* msg, s32 callback, u16 priority) {
             window->width = 176.0f;
         }
         break;
-    case 5:
+    case WINDOW_TYPE_SELECT:
         window->main = selectWindow_Main;
         window->x = (s16)(-WIN_DATA(window)->selWidth / 2);
         window->y = WIN_DATA(window)->selY;
@@ -1543,7 +1553,7 @@ s32 msgWindow_Entry(const char* msg, s32 callback, u16 priority) {
         WIN_DATA(window)->sel = WIN_DATA(window)->defSel;
         data->cursorY = window->y - (data->sel * 31 + 58);
         break;
-    case 1:
+    case WINDOW_TYPE_SMALL:
 #ifdef VERSION_G8ME01
         window->priority = priority + 10;
 #else
@@ -1667,6 +1677,7 @@ void msgWindow_Main(WindowEntry* window) {
         }
         data->talkTimer--;
         if (data->talkTimer == 0) {
+            // FAKE: d2 re-reads smart->address (data holds the same pointer); using data changes the object
             MsgWinData* d2 = smart->address;
             if (d2->flags & MSG_WIN_FLAG_BATTLE_UNIT) {
                 BtlUnit_ChangeStayAnim(d2->unitId);
@@ -1687,6 +1698,7 @@ void msgWindow_Main(WindowEntry* window) {
         }
         window->timestamp = gp->renderTime;
         WIN_STATE(window) = 6;
+        // fall through
     case 6:
         window->flags |= WINDOW_FLAG_BUSY;
         window->alpha = OSTicksToMilliseconds(gp->renderTime - window->timestamp) * 255 / 200;
@@ -1706,6 +1718,7 @@ void msgWindow_Main(WindowEntry* window) {
         }
         window->timestamp = gp->renderTime;
         WIN_STATE(window) = 8;
+        // fall through
     case 8:
         if (window->alpha == 0) {
             windowDelete(window);
@@ -1743,12 +1756,12 @@ void msgWindow_Main(WindowEntry* window) {
         }
         break;
     case 3:
-        target = 0x100;
+        target = PAD_BUTTON_A;
         if (WIN_DATA(window)->flags & MSG_WIN_FLAG_KEY_X) {
-            target = 0x500;
+            target = PAD_BUTTON_A | PAD_BUTTON_X;
         }
         trg = keyGetButtonTrg(0);
-        if (trg & (target | 0x200)) {
+        if (trg & (target | PAD_BUTTON_B)) {
             WIN_STATE(window) = 1;
             data->pageState = 2;
             if (keyGetButtonTrg(0) & PAD_BUTTON_B) {
@@ -1762,6 +1775,7 @@ void msgWindow_Main(WindowEntry* window) {
 #endif
         if (keyGetButtonTrg(0) & PAD_TRIGGER_Z) {
             data->page = data->pageCount - 1;
+            // FAKE: unsigned compare of the BOOL result; `if (msgWinPrevPage(window))` changes the object
             if (msgWinPrevPage(window) != 0U) {
                 WIN_STATE(window) = 9;
                 window->timestamp = gp->renderTime;
@@ -1798,9 +1812,9 @@ void msgWindow_Main(WindowEntry* window) {
         }
         break;
     case 11:
-        target = 0x100;
+        target = PAD_BUTTON_A;
         if (WIN_DATA(window)->flags & MSG_WIN_FLAG_KEY_X) {
-            target = 0x500;
+            target = PAD_BUTTON_A | PAD_BUTTON_X;
         }
         trg = keyGetButtonTrg(0);
         if (trg & target) {
@@ -1824,6 +1838,7 @@ void msgWindow_Main(WindowEntry* window) {
         if (keyGetButtonTrg(0) & PAD_TRIGGER_Z) {
             WIN_STATE(window) = 9;
             window->timestamp = gp->renderTime;
+            // FAKE: unsigned compare of the BOOL result; `if (msgWinPrevPage(window))` changes the object
             if (msgWinPrevPage(window) != 0U) {
                 psndSFXOn(SFX_NAME_WORD(PSND_SFX_MESSAGE_Z1 | PSND_SFX_BYPASS_MUTE));
             }
@@ -1843,6 +1858,7 @@ void msgWindow_Clear_Main(WindowEntry* window) {
         window->timestamp = gp->renderTime;
         data->openTime = gp->renderTime;
         data->lastUpdateTime = gp->renderTime;
+        // fall through
     case 1:
     case 6:
         window->flags |= WINDOW_FLAG_BUSY;
@@ -1909,11 +1925,11 @@ void msgWindow_Disp(CameraId camId, void* param) {
     GXSetFog(GX_FOG_NONE, 0.0f, 0.0f, 0.0f, 0.0f, (GXColor){0, 0, 0, 0});
 
     switch (window->type) {
-    case 0:
-    case 1:
-    case 6:
-    case 8:
-    case 9:
+    case WINDOW_TYPE_NORMAL:
+    case WINDOW_TYPE_SMALL:
+    case WINDOW_TYPE_BOSS:
+    case WINDOW_TYPE_TEC:
+    case WINDOW_TYPE_MAJO:
         if (window->tailMode != 0) {
             if (window->tailMode & 0x10) {
                 pos = window->speakerPos;
@@ -1921,37 +1937,39 @@ void msgWindow_Disp(CameraId camId, void* param) {
                 getScreenPoint(&window->speakerPos, &pos);
             }
             switch (window->type) {
-            case 0:
-            case 6:
-            case 8:
-            case 9:
-                ex = intplGetValue(EASING_LINEAR, pos.x, ( window->height / 2.0f ) + window->x, window->alpha, 255);
-                ey = intplGetValue(EASING_LINEAR, pos.y, window->y - ( window->width / 2.0f ), window->alpha, 255);
+            case WINDOW_TYPE_NORMAL:
+            case WINDOW_TYPE_BOSS:
+            case WINDOW_TYPE_TEC:
+            case WINDOW_TYPE_MAJO:
+                ex = intplGetValue(EASING_LINEAR, pos.x, (window->height / 2.0f) + window->x, window->alpha, 255);
+                ey = intplGetValue(EASING_LINEAR, pos.y, window->y - (window->width / 2.0f), window->alpha, 255);
                 w = intplGetValue(EASING_LINEAR, 10.0f, window->height, window->alpha, 255);
                 h = intplGetValue(EASING_LINEAR, 10.0f, window->width, window->alpha, 255);
-                windowDispGX_Message(window->type, window->tailMode, window->alpha, ex - ( w / 2.0f ), ey + ( h / 2.0f ), w, h, pos.x, pos.y);
+                windowDispGX_Message(window->type, window->tailMode, window->alpha, ex - (w / 2.0f), ey + (h / 2.0f), w, h, pos.x, pos.y);
                 if (window->alpha == 255) {
                     GXSetScissor(camera->scissor[0], 240.0f - (window->y - 36.0f), camera->scissor[2], 100);
                     ret = msgDisp(window->userdata, window->alpha, 62.0f + window->x, window->y - 36.0f);
                 }
                 break;
-            case 1:
-                window->x = pos.x - ( window->height / 2.0f) ;
+            case WINDOW_TYPE_SMALL:
+                window->x = pos.x - (window->height / 2.0f);
                 if (window->tailMode & 8) {
                     window->y = pos.y - 80.0f;
                 } else {
                     window->y = 60.0f + pos.y;
                 }
-                ex = intplGetValue(EASING_LINEAR, pos.x, ( window->height / 2.0f ) + window->x, window->alpha, 255);
-                ey = intplGetValue(EASING_LINEAR, pos.y, window->y - ( window->width / 2.0f ), window->alpha, 255);
+                ex = intplGetValue(EASING_LINEAR, pos.x, (window->height / 2.0f) + window->x, window->alpha, 255);
+                ey = intplGetValue(EASING_LINEAR, pos.y, window->y - (window->width / 2.0f), window->alpha, 255);
                 w = intplGetValue(EASING_LINEAR, 10.0f, window->height, window->alpha, 255);
                 h = intplGetValue(EASING_LINEAR, 10.0f, window->width, window->alpha, 255);
-                windowDispGX_Message(window->type, window->tailMode, window->alpha, ex - ( w / 2.0f ), ey + ( h / 2.0f ), w, h, pos.x, pos.y);
+                windowDispGX_Message(window->type, window->tailMode, window->alpha, ex - (w / 2.0f), ey + (h / 2.0f), w, h, pos.x, pos.y);
                 if (window->alpha == 255) {
-                    sy = 240 - ((( s32)window->y ) - 10);
-                    if (sy < 0) { sy = 0;
+                    sy = 240 - ((s32)window->y - 10);
+                    if (sy < 0) {
+                        sy = 0;
                     }
-                    if (sy > 480) { sy = 480;
+                    if (sy > 480) {
+                        sy = 480;
                     }
                     GXSetScissor(camera->scissor[0], sy, camera->scissor[2], 0x7E);
                     msgDisp(window->userdata, window->alpha, VERSION_PICK(20.0f, 28.0f) + window->x, window->y - VERSION_PICK(7.0f, 6.0f));
@@ -1960,41 +1978,42 @@ void msgWindow_Disp(CameraId camId, void* param) {
             }
         } else {
             windowDispGX_Message(window->type, 0, window->alpha, window->x, window->y, window->height, window->width, 0.0f, 0.0f);
-            GXSetScissor(camera->scissor[0], ( 240.0f - (window->y - 36.0f) ) - 8.0f, camera->scissor[2], 0x7E);
+            GXSetScissor(camera->scissor[0], (240.0f - (window->y - 36.0f)) - 8.0f, camera->scissor[2], 0x7E);
             ret = msgDisp(window->userdata, window->alpha, 62.0f + window->x, window->y - 36.0f);
         }
         break;
-    case 2:
-    case 4:
-    case 10:
+    case WINDOW_TYPE_PLATE:
+    case WINDOW_TYPE_KANBAN:
+    case WINDOW_TYPE_HOUSOU:
         windowDispGX_Kanban(window->type, window->alpha, window->x, window->y, window->height, window->width);
-        GXSetScissor(camera->scissor[0], ( 240.0f - (window->y - 36.0f) ) - 2.0f, camera->scissor[2], 0x68);
+        GXSetScissor(camera->scissor[0], (240.0f - (window->y - 36.0f)) - 2.0f, camera->scissor[2], 0x68);
         ret = msgDisp(window->userdata, window->alpha, 62.0f + window->x, window->y - 36.0f);
         break;
-    case 7:
+    case WINDOW_TYPE_DIARY:
         windowDispGX_Kanban(window->type, window->alpha, window->x, window->y, window->height, window->width);
-        GXSetScissor(camera->scissor[0], ( 240.0f - (window->y - 36.0f) ) - 8.0f, camera->scissor[2], 0x7E);
+        GXSetScissor(camera->scissor[0], (240.0f - (window->y - 36.0f)) - 8.0f, camera->scissor[2], 0x7E);
         ret = msgDisp(window->userdata, window->alpha, 62.0f + window->x, window->y - 36.0f);
         break;
-    case 3:
+    case WINDOW_TYPE_SYSTEM:
         windowDispGX_System(window->type, window->alpha, window->x, window->y, window->height, window->width);
-        GXSetScissor(camera->scissor[0], ( 240.0f - (window->y - 36.0f) ) - 8.0f, camera->scissor[2], window->width - 50.0f);
+        GXSetScissor(camera->scissor[0], (240.0f - (window->y - 36.0f)) - 8.0f, camera->scissor[2], window->width - 50.0f);
         ret = msgDisp(window->userdata, window->alpha, 62.0f + window->x, window->y - 36.0f);
         break;
-    case 11:
-        GXSetScissor(camera->scissor[0], ( 240.0f - (window->y - 36.0f) ) - 8.0f, camera->scissor[2], window->width - 50.0f);
+    case WINDOW_TYPE_CLEAR:
+        GXSetScissor(camera->scissor[0], (240.0f - (window->y - 36.0f)) - 8.0f, camera->scissor[2], window->width - 50.0f);
         ret = msgDisp(window->userdata, window->alpha, 62.0f + window->x, window->y - 36.0f);
         break;
-    case 5:
+    case WINDOW_TYPE_SELECT:
         break;
     }
 
     GXSetScissor(camera->scissor[0], camera->scissor[1], camera->scissor[2], camera->scissor[3]);
     if (ret) {
-        if (active == 0) { active = 1;
+        if (active == 0) {
+            active = 1;
         }
         animPoseMain(msgw->poseId);
-        animPoseDraw(msgw->poseId, ( window->x + window->height ) - 52.0f, 31.0f + (window->y - window->width), 0.0f, 180.0f, 5.0f, 2);
+        animPoseDraw(msgw->poseId, (window->x + window->height) - 52.0f, 31.0f + (window->y - window->width), 0.0f, 180.0f, 5.0f, 2);
     }
 }
 
@@ -2074,7 +2093,7 @@ void selectWindow_Main(WindowEntry* window) {
 }
 
 void selectWindow_Disp(CameraId camId, void* param) {
-    WindowEntry* window = param; //cast to correct type
+    WindowEntry* window = param;
     MsgWinData* data = window->userdata->address;
     Vec pos;
 
@@ -2085,6 +2104,6 @@ void selectWindow_Disp(CameraId camId, void* param) {
     data->cursorY += 0.3f * (window->y - (f32)(data->sel * 31 + 58) - data->cursorY);
     pos.y = data->cursorY;
     pos.z = 0.0f;
-    iconDispGxAlpha(&pos, 0x14, ICON_YUBI_CURSOR, window->alpha, 1.0f);
+    iconDispGxAlpha(&pos, ICON_FLAG_2D | ICON_FLAG_FLIP_X, ICON_YUBI_CURSOR, window->alpha, 1.0f);
 }
 

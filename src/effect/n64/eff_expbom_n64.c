@@ -10,20 +10,19 @@
 #include "libc_decls.h"
 
 typedef struct effExpBomData {
-    s16 age; //0x0, frames shown
-    s16 lifeLeft; //0x2, counts down from lifetime; <0 = done
-    s16 lifetime; //0x4, rand 16..21
-    s16 slowDelay; //0x6, frames before velocity starts decaying (/1.25)
-    s32 startDelay; //0x8
-    Vec position; //0xC
-    f32 offsetX; //0x18
-    f32 offsetY; //0x1C
-    f32 velX; //0x20, from bom_dir/bom_spd
-    f32 velY; //0x24
-    u8 field_0x28[0x2C - 0x28]; //0x28
+    s16 age;        // 0x0, frames shown
+    s16 lifeLeft;   // 0x2, counts down from lifetime; <0 = done
+    s16 lifetime;   // 0x4, rand 16..21
+    s16 slowDelay;  // 0x6, frames before velocity starts decaying (/1.25)
+    s32 startDelay; // 0x8
+    Vec position;   // 0xC
+    f32 offsetX;    // 0x18
+    f32 offsetY;    // 0x1C
+    f32 velX;       // 0x20, from bom_dir/bom_spd
+    f32 velY;       // 0x24
+    u8 field_0x28[0x2C - 0x28]; // 0x28
 } effExpBomData;
 
-//.sdata
 static f32 bom_dir[10] = {
     10.0f, 40.0f, 80.0f, 170.0f, 140.0f,
     100.0f, 25.0f, 155.0f, 60.0f, 120.0f
@@ -44,7 +43,6 @@ f32 bom_ry[10] = {
     1260.0f, 1404.0f, 1638.0f, 1902.0f, 1976.0f
 };
 
-//local prototypes
 void effExpBomMain(EffectEntry* effect);
 void effExpBomDisp(CameraId camId, void* param);
 
@@ -147,9 +145,13 @@ void effExpBomDisp(CameraId camId, void* param) {
     PSMTXConcat(mtx, rot, base);
     PSMTXConcat(camera->view, base, base);
     for (i = 0, scl = bom_scale, ry = bom_ry; i < ((EffectEntry*)param)->count; scl++, ry++, i++, data++) {
-        if (data->lifeLeft < 0 || data->startDelay >= 0) continue;
+        if (data->lifeLeft < 0 || data->startDelay >= 0) {
+            continue;
+        }
         n = data->lifeLeft;
-        if (n > 16) n = 16;
+        if (n > 16) {
+            n = 16;
+        }
         PSMTXTrans(mtx, data->offsetX, data->offsetY, 0.0f);
         PSMTXScale(scale, *scl, *scl, *scl);
         PSMTXRotRad(rot, 'z', 0.017453292f * *ry);

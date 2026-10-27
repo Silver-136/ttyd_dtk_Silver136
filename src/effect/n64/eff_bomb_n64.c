@@ -35,7 +35,6 @@ typedef struct EffBombN64Work {
     u8 pad_c4[8];    // 0xC4
 } EffBombN64Work;
 
-
 static effN64Vtx size8x8_tex32x32_vtx[] = {
     {-4, -4, 0, 0, 0, 255, 255, 255, 255},
     {4, -4, 0, 1024, 0, 255, 255, 255, 255},
@@ -73,7 +72,7 @@ EffectEntry* effBombN64Entry(s32 type, f32 x, f32 y, f32 z) {
     work->lifetime = 60;
     work->type = type;
     work->flag = flag;
-    work->camId = 4;
+    work->camId = CAMERA_3D;
     work->texId = type != 0 ? type : -1;
     work->alpha = 0;
     work->flashScale = type == 1 ? 1.0f : 3.0f;
@@ -158,7 +157,6 @@ static void effBombMain(EffectEntry* effect) {
 static void effBombDisp(CameraId cameraId, EffectEntry* effect) {
     CameraEntry* camera;
     EffBombN64Work* work;
-
     Mtx mtx;
     Mtx scale;
     Mtx rot;

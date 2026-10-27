@@ -59,7 +59,6 @@ void effTeresaMain(EffectEntry* effect) {
     tmp.z = work->position.z;
     position = tmp;
 
-
     if (work->type == 0) {
         if (!work->vanished) {
             // shrink, then puff into smoke

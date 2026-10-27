@@ -8,7 +8,6 @@
 #include <dolphin/mtx.h>
 #include "eff/eff_magic1_n64.h"
 
-
 void effCrystalMain(EffectEntry* effect);
 void effCrystalDisp(CameraId cameraId, EffectEntry* effect);
 
@@ -25,7 +24,7 @@ EffectEntry* effCrystalN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32
     effect->flags |= EFFECT_FLAG_SOFT_DELETABLE;
     work->type = type;
     work->frame = 0;
-    work->camera = 4;
+    work->camera = CAMERA_3D;
     if (lifetime <= 0) {
         work->lifetime = 100;
     } else {

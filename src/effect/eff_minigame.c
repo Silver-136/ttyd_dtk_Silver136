@@ -98,7 +98,7 @@ EffectEntry* effMiniGameEntry(s32 type, f32 x, f32 y, f32 z) {
     effect->count = n;
     work = __memAlloc(HEAP_EFFECT, effect->count * sizeof(MiniGameWork));
     effect->userdata = work;
-    effect->callback = (EffectCallback)effMiniGameMain;
+    effect->callback = effMiniGameMain;
     effect->flags |= EFFECT_FLAG_SOFT_DELETABLE;
     work->type = type;
     work->x = x;
@@ -144,8 +144,7 @@ EffectEntry* effMiniGameEntry(s32 type, f32 x, f32 y, f32 z) {
                 work->state = 50;
             } else {
                 work->x = 0.0f;
-                st = i - 1;
-                work->delay = st * gp->framerate;
+                work->delay = (i - 1) * gp->framerate;
             }
             work->y = 500.0f;
             work->z = 0.0f;
@@ -438,21 +437,21 @@ void effMiniGameDisp(CameraId cameraId, EffectEntry* effect) {
     f32 yoff;
     f32 size;
     f32 half;
-    Mtx mc8;
-    Mtx m98;
-    Mtx m68;
-    Mtx m38;
+    Mtx mtx;
+    Mtx scale;
+    Mtx rot;
+    Mtx base;
     GXTexObj tex;
-    f32 rad;
+    f32 degToRad;
 
     cam = camGetPtr(cameraId);
     type = work->type;
     GXSetZMode(GX_FALSE, GX_LEQUAL, GX_FALSE);
-    PSMTXTrans(mc8, work->x, work->y, work->z);
-    PSMTXRotRad(m68, 'y', 0.017453292f * -camGetPtr(cameraId)->viewYaw);
-    PSMTXScale(m98, work->scaleX, work->scaleY, 1.0f);
-    PSMTXConcat(mc8, m68, m38);
-    PSMTXConcat(m38, m98, m38);
+    PSMTXTrans(mtx, work->x, work->y, work->z);
+    PSMTXRotRad(rot, 'y', 0.017453292f * -camGetPtr(cameraId)->viewYaw);
+    PSMTXScale(scale, work->scaleX, work->scaleY, 1.0f);
+    PSMTXConcat(mtx, rot, base);
+    PSMTXConcat(base, scale, base);
     GXSetNumChans(1);
     GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_REG, GX_LIGHT_NULL, GX_DF_NONE, GX_AF_NONE);
     GXSetNumTexGens(1);
@@ -469,29 +468,29 @@ void effMiniGameDisp(CameraId cameraId, EffectEntry* effect) {
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
     size = 40.0f;
-    rad = 0.017453292f;
+    degToRad = 0.017453292f;
     half = 20.0f;
     for (s = 0; s < 2; s++) {
         p = effect->userdata;
         for (i = 1, p++; i < effect->count; i++, p++) {
-            PSMTXTrans(mc8, 0.0f, 20.0f, 0.0f);
-            PSMTXRotRad(m68, 'z', rad * p->rotB);
-            PSMTXConcat(mc8, m68, m68);
-            PSMTXTrans(mc8, 0.0f, -20.0f, 0.0f);
-            PSMTXConcat(m68, mc8, m68);
-            PSMTXTrans(mc8, p->x, p->y, p->z);
-            PSMTXConcat(mc8, m68, mc8);
-            PSMTXScale(m98, p->scaleX, p->scaleY, 1.0f);
-            PSMTXRotRad(m68, 'z', rad * p->rotA);
-            PSMTXConcat(mc8, m68, mc8);
-            PSMTXConcat(mc8, m98, mc8);
-            PSMTXConcat(m38, mc8, mc8);
+            PSMTXTrans(mtx, 0.0f, 20.0f, 0.0f);
+            PSMTXRotRad(rot, 'z', degToRad * p->rotB);
+            PSMTXConcat(mtx, rot, rot);
+            PSMTXTrans(mtx, 0.0f, -20.0f, 0.0f);
+            PSMTXConcat(rot, mtx, rot);
+            PSMTXTrans(mtx, p->x, p->y, p->z);
+            PSMTXConcat(mtx, rot, mtx);
+            PSMTXScale(scale, p->scaleX, p->scaleY, 1.0f);
+            PSMTXRotRad(rot, 'z', degToRad * p->rotA);
+            PSMTXConcat(mtx, rot, mtx);
+            PSMTXConcat(mtx, scale, mtx);
+            PSMTXConcat(base, mtx, mtx);
             if (s == 0) {
-                PSMTXTrans(m98, 3.0f, -3.0f, 0.0f);
-                PSMTXConcat(mc8, m98, mc8);
+                PSMTXTrans(scale, 3.0f, -3.0f, 0.0f);
+                PSMTXConcat(mtx, scale, mtx);
             }
-            PSMTXConcat(cam->view, mc8, mc8);
-            GXLoadPosMtxImm(mc8, GX_PNMTX0);
+            PSMTXConcat(cam->view, mtx, mtx);
+            GXLoadPosMtxImm(mtx, GX_PNMTX0);
             GXSetCurrentMtx(GX_PNMTX0);
 #ifdef VERSION_G8ME01
             texId = type_tbl[type][gp->language].tbl[(i - 1) * 2 + (1 - s)];

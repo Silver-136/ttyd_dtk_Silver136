@@ -1,4 +1,5 @@
 #include "eff/eff_n64.h"
+#include "eff/n64/eff_dogabon_attack_n64.h"
 #include "eff/n64/eff_stone_smoke_n64.h"
 #include "driver/camdrv.h"
 #include "driver/dispdrv.h"
@@ -8,7 +9,6 @@
 #include <dolphin/mtx.h>
 #include "eff/eff_magic1_n64.h"
 #include "libc_decls.h"
-
 
 #define PIECES 25
 
@@ -96,7 +96,7 @@ EffectEntry* effDogabonAttackN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 
     work->g = 180;
     work->b = 120;
     for (i = 0; i < PIECES; i++) {
-        ang = 6.2831855f * (f32)(i * 1080 / 25) / 360.0f;
+        ang = 6.2831855f * (f32)(i * 1080 / PIECES) / 360.0f;
         sn = sin(ang);
         cs = cos(ang);
         work->rotZ[i] = rand() % 360 - 180;
@@ -128,7 +128,7 @@ void effDogabonAttackMain(EffectEntry* effect) {
     f32 sn;
     f32 ang;
     f32 c1;
-    f32 f28;
+    f32 moveScale;
     Mtx trans;
     Mtx rot;
     EffectEntry* smoke;
@@ -218,7 +218,7 @@ void effDogabonAttackMain(EffectEntry* effect) {
             }
             break;
         case 3:
-            if (i == 24) {
+            if (i == PIECES - 1) {
                 work->state[0] = 4;
                 work->state[1] = 4;
                 work->state[2] = 4;
@@ -247,12 +247,12 @@ void effDogabonAttackMain(EffectEntry* effect) {
             }
             break;
         case 4:
-            f28 = 0.01f * move_data_2[work->timer[i]];
-            c1 = cos(6.2831855f * (f32)(i * 180 / 25) / 360.0f);
-            ang = 6.2831855f * ((f32)(i * 1080 / 25) + 0.5f * (1080.0f * (1.0f - f28)) * c1) / 360.0f;
+            moveScale = 0.01f * move_data_2[work->timer[i]];
+            c1 = cos(6.2831855f * (f32)(i * 180 / PIECES) / 360.0f);
+            ang = 6.2831855f * ((f32)(i * 1080 / PIECES) + 0.5f * (1080.0f * (1.0f - moveScale)) * c1) / 360.0f;
             sn = sin(ang);
             cn = cos(ang);
-            t = 15.0f / f28 / f28;
+            t = 15.0f / moveScale / moveScale;
             work->x[i] = sn * t;
             work->y[i] = y_data[i] + 10;
             work->z[i] = cn * t;
@@ -337,6 +337,7 @@ void effDogabonAttackDisp(CameraId cameraId, EffectEntry* effect) {
             PSMTXTrans(trans, work->x[i], work->y[i], work->z[i]);
             PSMTXConcat(rot, trans, trans);
             PSMTXRotRad(rot, 'y', 0.017453292f * -work->rotY[i]);
+            // BUG: rot is not used here; trans is multiplied by itself
             PSMTXConcat(trans, trans, trans);
             PSMTXRotRad(rot, 'z', 0.017453292f * work->rotZ[i]);
             PSMTXConcat(trans, rot, trans);

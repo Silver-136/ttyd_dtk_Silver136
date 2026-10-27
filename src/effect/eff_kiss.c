@@ -12,9 +12,6 @@
 #include "eff/n64/eff_stardust_n64.h"
 #include "eff/eff_kiss.h"
 
-double fabs(double);
-
-
 typedef struct KissWork {
     s32 type;     // 0x0
     Vec position; // 0x4
@@ -65,7 +62,6 @@ EffectEntry* effKissEntry(s32 type, f32 x, f32 y, f32 z, f32 angle) {
     s32 i;
     s32 n;
     f32 rad;
-    f32 zero;
     f32 deg;
 
     effect = effEntry();
@@ -88,16 +84,15 @@ EffectEntry* effKissEntry(s32 type, f32 x, f32 y, f32 z, f32 angle) {
     work->life = (type != 4) ? 0x28 : 0x3C;
     work->frame = 0;
     deg = 6.2831855f * angle;
-    zero = 0.0f;
     work->alpha = 0xFF;
     work->angle = angle;
-    work->rotation = zero;
+    work->rotation = 0.0f;
     p = work + 1;
     for (i = 1; i < effect->count; i++, p++) {
-        p->position.x = zero;
-        p->position.y = zero;
-        p->position.z = zero;
-        p->rotation = zero;
+        p->position.x = 0.0f;
+        p->position.y = 0.0f;
+        p->position.z = 0.0f;
+        p->rotation = 0.0f;
         p->life = 0;
         p->frame = 0;
         switch (type) {
@@ -111,8 +106,8 @@ EffectEntry* effKissEntry(s32 type, f32 x, f32 y, f32 z, f32 angle) {
             break;
         case 1:
         case 2:
-            p->scaleY = zero;
-            p->scaleX = zero;
+            p->scaleY = 0.0f;
+            p->scaleX = 0.0f;
             rad = deg / 360.0f;
             p->vx = 3.0f * (f32)sin(rad);
             p->vy = 3.0f * (f32)cos(rad);
@@ -210,7 +205,12 @@ void effKissMain(EffectEntry* effect) {
         break;
     case 4:
         work->position.x += 0.2f;
-        { f32 s = sin(9.424778f * (f32)work->frame / 60.0f); work->position.y = 2.0f * __fabsf(s); }
+        {
+            // FAKE: spare local s for the sine; __fabsf((f32)sin(...)) in place changes the object
+            f32 s = sin(9.424778f * (f32)work->frame / 60.0f);
+
+            work->position.y = 2.0f * __fabsf(s);
+        }
         work->rotation = 12.0f * (f32)sin(9.424778f * (f32)work->frame / 60.0f);
         work->frame++;
         break;

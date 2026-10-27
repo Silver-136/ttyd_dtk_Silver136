@@ -20,6 +20,7 @@
 #include "eff/eff_fall.h"
 #include "driver/mapdrv.h"
 
+// View of the first two EffFallElem entries: type and position from element 0, the rest from element 1 (0x68 on)
 typedef struct EffFallWork {
     s32 type;       // 0x0
     Vec position;   // 0x4
@@ -85,7 +86,6 @@ static u8 shibuki_dl_1_1[] __attribute__((aligned(32))) = { 0x98, 0x00, 0x06, 0x
 static u8 shibuki_dl_1_2[] __attribute__((aligned(32))) = { 0x98, 0x00, 0x06, 0x22, 0x00, 0x04, 0x22, 0x21, 0x00, 0x07, 0x23, 0x23, 0x00, 0x04, 0x1D, 0x1E, 0x00, 0x07, 0x18, 0x24, 0x00, 0x06, 0x1F, 0x1B, 0x00, 0x07, 0x1E, 0x00, 0x00, 0x00, 0x00, 0x00 };
 static u8 shibuki_dl_1_3[] __attribute__((aligned(32))) = { 0x98, 0x00, 0x06, 0x25, 0x00, 0x04, 0x20, 0x20, 0x00, 0x04, 0x21, 0x26, 0x00, 0x04, 0x19, 0x1D, 0x00, 0x05, 0x1A, 0x27, 0x00, 0x06, 0x1C, 0x1A, 0x00, 0x06, 0x1B, 0x00, 0x00, 0x00, 0x00, 0x00 };
 
-
 static EVT_BEGIN(evt_shake)
     CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.009765625f), FLOAT(0.009765625f), 300)
     RETURN
@@ -95,8 +95,6 @@ void effFallMain(EffectEntry* effect);
 void effFallDisp(CameraId cameraId, EffectEntry* effect);
 void effFallDispInseki(CameraId cameraId, EffectEntry* effect);
 void effFallDispWater(CameraId cameraId, EffectEntry* effect);
-
-
 
 EffectEntry* effFallEntry(s32 type, f32 x, f32 y, f32 z, f32 width, f32 drop, f32 dir, s32 num, s32 duration) {
     const char* sfxName;
@@ -260,7 +258,7 @@ static inline void effFallRelease(EffectEntry* effect) {
     }
 }
 // FAKE: the seven sfx names are spelled SFX_NAME_WORD("lit") at each call (no locals) so each becomes a hoisted
-// loop-invariant @ temp (UNBLOCK.log lever); plain literals in calls are not hoisted. Same string addresses.
+// loop-invariant temporary; plain literals in calls are not hoisted. Same string addresses.
 void effFallMain(EffectEntry* effect) {
     Vec sndPos;
     EffFallElem* e;
@@ -347,7 +345,11 @@ void effFallMain(EffectEntry* effect) {
                             a = angle / 360.0f;
                         }
                         e->pos.x += 0.5f * (f32)sin(a);
-                        { f32 c = (f32)cos(a); e->pos.z += 0.5f * -c; }
+                        // FAKE: block temporary for the cosine; plain `e->pos.z += 0.5f * -(f32)cos(a);` changes the object
+                        {
+                            f32 c = (f32)cos(a);
+                            e->pos.z += 0.5f * -c;
+                        }
                         if (e->pos.y < y) {
                             e->pos.y = y;
                             e->timer = 0;
@@ -371,7 +373,7 @@ void effFallMain(EffectEntry* effect) {
                         done++;
                         break;
                 }
-                if (((gp->retraceCount >> 1) >> 1) & 1) {
+                if ((gp->retraceCount >> 2) & 1) {
                     e->scroll++;
                 }
                 if (e->scroll >= 3) {
@@ -392,14 +394,14 @@ void effFallMain(EffectEntry* effect) {
                         }
                         break;
                     case 1: {
-                            f32 s = (f32)sin((62.831856f * e->timer) / 60.0f);
-                            e->sway = ((60.0f - e->timer) * s) / 60.0f;
-                        }
+                        f32 s = (f32)sin((62.831856f * e->timer) / 60.0f);
+                        e->sway = ((60.0f - e->timer) * s) / 60.0f;
                         e->timer++;
                         if (e->timer > 60) {
                             e->state++;
                         }
                         break;
+                    }
                     case 2:
                         e->timer++;
                         if (e->timer > 30) {
@@ -417,7 +419,7 @@ void effFallMain(EffectEntry* effect) {
                         done++;
                         break;
                 }
-                e->vtx = (EffFallVtx**)smartAlloc(0x280, 3);
+                e->vtx = (EffFallVtx**)smartAlloc(32 * sizeof(EffFallVtx), 3);
                 {
                     EffFallVtx* v = *e->vtx;
                     for (j = 0; j < 32; j++, v++) {
@@ -430,11 +432,12 @@ void effFallMain(EffectEntry* effect) {
                 }
                 {
                     EffFallVtx* v = *e->vtx;
+                    // BUG: reuses the outer loop counter i; harmless only because a type 2 effect has one element
                     for (i = 0; i < 32; i++, v++) {
                         v->x += e->sway * ((v->y * v->y) / 600.0f);
                     }
                 }
-                DCFlushRange(*e->vtx, 0x280);
+                DCFlushRange(*e->vtx, 32 * sizeof(EffFallVtx));
                 break;
             case 3:
                 switch (e->state) {
@@ -473,7 +476,7 @@ void effFallMain(EffectEntry* effect) {
                 switch (e->state) {
                     case 0:
                         if (type == 5) {
-                            if (!animGroupBaseAsync("EFF_Baketu", group, 0)) {
+                            if (!animGroupBaseAsync("EFF_Baketu", group, NULL)) {
                                 break;
                             }
                             if (e->pose0 == -1) {
@@ -481,7 +484,7 @@ void effFallMain(EffectEntry* effect) {
                                 animPoseSetAnim(e->pose0, "Z_1", 1);
                             }
                         } else {
-                            if (!animGroupBaseAsync("EFF_Tarai", group, 0)) {
+                            if (!animGroupBaseAsync("EFF_Tarai", group, NULL)) {
                                 break;
                             }
                             if (e->pose0 == -1) {
@@ -519,7 +522,11 @@ void effFallMain(EffectEntry* effect) {
                             a = angle / 360.0f;
                         }
                         e->pos.x += 2.0f * (f32)sin(a);
-                        { f32 c = (f32)cos(a); e->pos.z += 2.0f * -c; }
+                        // FAKE: block temporary for the cosine; plain `e->pos.z += 2.0f * -(f32)cos(a);` changes the object
+                        {
+                            f32 c = (f32)cos(a);
+                            e->pos.z += 2.0f * -c;
+                        }
                         if (e->pos.y < y) {
                             e->pos.y = y;
                             e->speedY *= -0.5f;
@@ -568,7 +575,7 @@ void effFallMain(EffectEntry* effect) {
             case 6:
                 switch (e->state) {
                     case 0:
-                        if (!animGroupBaseAsync("EFF_koopa", group, 0)) {
+                        if (!animGroupBaseAsync("EFF_koopa", group, NULL)) {
                             break;
                         }
                         if (e->pose0 == -1) {
@@ -626,7 +633,7 @@ void effFallMain(EffectEntry* effect) {
             case 7:
                 switch (e->state) {
                     case 0:
-                        if (!animGroupBaseAsync("EFF_inseki", group, 0)) {
+                        if (!animGroupBaseAsync("EFF_inseki", group, NULL)) {
                             break;
                         }
                         psndSFXOn_3D(SFX_NAME_WORD("SFX_BTL_STAGE_FALL_METEOR1"), &sndPos);
@@ -638,18 +645,19 @@ void effFallMain(EffectEntry* effect) {
                             e->pose1 = animPoseEntry("EFF_inseki", group);
                             animPoseSetAnim(e->pose1, "Z_2", 1);
                         }
+                        // fall through: once the poses exist, state 0 sets up the first jump like states 2, 4 and 6
                     case 2:
                     case 4:
                     case 6: {
-                        f32 tbl[4][3] = {
+                        f32 targets[4][3] = {
                             { 140.0f, 40.0f, -10.0f },
                             { 0.0f, 40.0f, -40.0f },
                             { -140.0f, 40.0f, -10.0f },
                             { -400.0f, 40.0f, -40.0f }
                         };
-                        e->vel.x = tbl[e->state / 2][0];
-                        e->vel.y = tbl[e->state / 2][1];
-                        e->vel.z = tbl[e->state / 2][2];
+                        e->vel.x = targets[e->state / 2][0];
+                        e->vel.y = targets[e->state / 2][1];
+                        e->vel.z = targets[e->state / 2][2];
                         e->gravity = 0.4f;
                         e->timer = distABf(e->vel.x, e->vel.z, e->pos.x, e->pos.z) / 5.0f;
                         e->speedY = ((e->vel.y - e->pos.y) / e->timer) + (e->gravity * e->timer) / 2.0f;
@@ -703,7 +711,7 @@ void effFallMain(EffectEntry* effect) {
             case 8:
                 switch (e->state) {
                     case 0:
-                        if (!animGroupBaseAsync("EFF_light", group, 0)) {
+                        if (!animGroupBaseAsync("EFF_light", group, NULL)) {
                             break;
                         }
                         e->pose0 = animPoseEntry("EFF_light", group);
@@ -719,7 +727,7 @@ void effFallMain(EffectEntry* effect) {
                             e->timer = 0;
                             e->state++;
                         }
-                        if (1 == e->state && e->pos.y < top) {
+                        if (e->state == 1 && e->pos.y < top) {
                             effKemuri1N64Entry(4, sndPos.x + e->pos.x, sndPos.y + y, sndPos.z + e->pos.z, 0.0f);
                             evtEntry(evt_shake, 0, 0);
                             animPoseSetAnim(e->pose0, "A_1", 1);
@@ -802,7 +810,7 @@ void effFallDisp(CameraId cameraId, EffectEntry* effect) {
     type = e->type;
     angle = e->rotY;
     PSMTXTrans(trans, e->pos.x, e->pos.y, e->pos.z);
-    PSMTXRotRad(rot, 'y', -camGetPtr(cameraId)->viewYaw * 0.017453292f);
+    PSMTXRotRad(rot, 'y', MTXDegToRad(-camGetPtr(cameraId)->viewYaw));
     PSMTXConcat(trans, rot, mtx);
     GXSetNumChans(1);
     GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_REG, GX_LIGHT_NULL, GX_DF_NONE, GX_AF_NONE);
@@ -839,11 +847,11 @@ void effFallDisp(CameraId cameraId, EffectEntry* effect) {
                 hw /= 2.0f;
                 hh /= 2.0f;
                 PSMTXTrans(trans, e->pos.x, e->pos.y, e->pos.z);
-                PSMTXRotRad(rot, 'y', e->rotY * 0.017453292f);
+                PSMTXRotRad(rot, 'y', MTXDegToRad(e->rotY));
                 PSMTXConcat(trans, rot, trans);
                 PSMTXTrans(rot, 0.0f, hh / 2.0f * e->scale, 0.0f);
                 PSMTXConcat(trans, rot, trans);
-                PSMTXRotRad(rot, 'z', e->rot2 * 0.017453292f);
+                PSMTXRotRad(rot, 'z', MTXDegToRad(e->rot2));
                 PSMTXConcat(trans, rot, trans);
                 PSMTXTrans(rot, 0.0f, -hh / 2.0f * e->scale, 0.0f);
                 PSMTXConcat(trans, rot, trans);
@@ -903,7 +911,7 @@ void effFallDisp(CameraId cameraId, EffectEntry* effect) {
                 PSMTXConcat(trans, scl, trans);
                 PSMTXTrans(scl, 0.0f, (f32)(type == 4 ? 8 : 16), 0.0f);
                 PSMTXConcat(trans, scl, trans);
-                PSMTXRotAxisRad(rot, &axis, -e->rot2 * 0.017453292f);
+                PSMTXRotAxisRad(rot, &axis, MTXDegToRad(-e->rot2));
                 PSMTXConcat(trans, rot, trans);
                 PSMTXTrans(scl, 0.0f, (f32)-(type == 4 ? 8 : 16), 0.0f);
                 PSMTXConcat(trans, scl, trans);
@@ -927,12 +935,12 @@ void effFallDisp(CameraId cameraId, EffectEntry* effect) {
                 }
                 PSMTXConcat(trans, scl, trans);
                 if (e->rot2) {
-                    PSMTXRotRad(rot, 'z', -e->rot2 * 0.017453292f);
+                    PSMTXRotRad(rot, 'z', MTXDegToRad(-e->rot2));
                     PSMTXConcat(trans, rot, trans);
                 } else {
                     PSMTXTrans(scl, -200.0f, 0.0f, 0.0f);
                     PSMTXConcat(trans, scl, trans);
-                    PSMTXRotRad(rot, 'z', -e->rot3 * 0.017453292f);
+                    PSMTXRotRad(rot, 'z', MTXDegToRad(-e->rot3));
                     PSMTXConcat(trans, rot, trans);
                     PSMTXTrans(scl, 200.0f, 0.0f, 0.0f);
                     PSMTXConcat(trans, scl, trans);
@@ -985,7 +993,7 @@ void effFallDispInseki(CameraId cameraId, EffectEntry* effect) {
     w = effect->userdata;
     camGetPtr(cameraId);
     PSMTXTrans(trans, w->position.x, w->position.y, w->position.z);
-    PSMTXRotRad(rot, 'y', -camGetPtr(cameraId)->viewYaw * 0.017453292f);
+    PSMTXRotRad(rot, 'y', MTXDegToRad(-camGetPtr(cameraId)->viewYaw));
     PSMTXConcat(trans, rot, mtx);
     if (w->pose0 != -1 && w->pose1 != -1) {
         Vec v = { 0.0f, 0.0f, 0.0f };
@@ -995,7 +1003,7 @@ void effFallDispInseki(CameraId cameraId, EffectEntry* effect) {
         for (i = 0; i < 2; i++) {
             if (i == 0) {
                 PSMTXTrans(trans, w->pos2.x, w->pos2.y, w->pos2.z);
-                PSMTXRotAxisRad(rot, &axis, -w->rotation * 0.017453292f);
+                PSMTXRotAxisRad(rot, &axis, MTXDegToRad(-w->rotation));
                 PSMTXScale(scl, 2.05f * w->scale, 2.05f * w->scale, 2.05f * w->scale);
                 PSMTXConcat(mtx, trans, trans);
                 PSMTXConcat(trans, rot, trans);
@@ -1004,7 +1012,7 @@ void effFallDispInseki(CameraId cameraId, EffectEntry* effect) {
                 animPoseSetMaterialEvtColor(w->pose0, (GXColor){ 0, 0, 0, 255 });
             } else {
                 PSMTXTrans(trans, w->pos2.x, w->pos2.y, w->pos2.z);
-                PSMTXRotAxisRad(rot, &axis, -w->rotation * 0.017453292f);
+                PSMTXRotAxisRad(rot, &axis, MTXDegToRad(-w->rotation));
                 PSMTXScale(scl, 2.0f * w->scale, 2.0f * w->scale, 2.0f * w->scale);
                 PSMTXConcat(mtx, trans, trans);
                 PSMTXConcat(trans, rot, trans);
@@ -1027,21 +1035,22 @@ void effFallDispInseki(CameraId cameraId, EffectEntry* effect) {
 }
 
 static const GXColor white255 = { 255, 255, 255, 255 };
-void effFallDispWater(CameraId cameraId, EffectEntry *effect) {
+void effFallDispWater(CameraId cameraId, EffectEntry* effect) {
     Mtx trans;
     Mtx scl;
     Mtx rot;
     Mtx mtx;
     GXTexObj tex;
-    CameraEntry *cam;
-    EffFallWork *w;
+    CameraEntry* cam;
+    EffFallWork* w;
     f32 hw;
     f32 hh;
     f32 s;
+
     w = effect->userdata;
     cam = camGetPtr(cameraId);
     PSMTXTrans(trans, w->position.x, w->position.y, w->position.z);
-    PSMTXRotRad(rot, 'y', (-camGetPtr(cameraId)->viewYaw) * 0.017453292f);
+    PSMTXRotRad(rot, 'y', MTXDegToRad(-camGetPtr(cameraId)->viewYaw));
     PSMTXConcat(trans, rot, mtx);
     PSMTXConcat(cam->view, mtx, mtx);
     GXSetNumTevStages(2);
@@ -1073,7 +1082,7 @@ void effFallDispWater(CameraId cameraId, EffectEntry *effect) {
     hw /= 2.0f;
     hh /= 2.0f;
     PSMTXTrans(trans, w->pos3.x, w->pos3.y, w->pos3.z);
-    PSMTXScale(scl, 1.0f, hh / ((f32) GXGetTexObjHeight(&tex)), 1.0f);
+    PSMTXScale(scl, 1.0f, hh / (f32)GXGetTexObjHeight(&tex), 1.0f);
     PSMTXConcat(trans, scl, trans);
     GXLoadTexMtxImm(trans, GX_TEXMTX0, GX_MTX2x4);
     PSMTXTrans(trans, w->pos2.x, w->pos2.y, w->pos2.z);
@@ -1095,72 +1104,68 @@ void effFallDispWater(CameraId cameraId, EffectEntry *effect) {
     GXPosition3f32((-hw) / 2.0f, 0.0f, 0.0f);
     GXColor4u8(255, 255, 255, 0);
     GXTexCoord2f32(0.0f, 1.0f);
-    {
-        EffFallWork *w2;
-        w = effect->userdata;
-        w2 = w;
-        if (w2->state > 0) {
-            PSMTXTrans(trans, w2->pos2.x, w2->pos2.y, w2->pos2.z);
-            PSMTXScale(scl, 0.56f, 0.4f, 0.8f);
-            PSMTXConcat(mtx, trans, trans);
-            PSMTXConcat(trans, scl, trans);
-            GXLoadPosMtxImm(trans, GX_PNMTX0);
-            PSMTXTrans(trans, w2->pos3.y / 8.0f, 0.0f, 0.0f);
-            GXLoadTexMtxImm(trans, GX_TEXMTX0, GX_MTX2x4);
-            GXSetTevColor(GX_TEVREG0, (GXColor){255, 255, 255, w2->alpha});
-            effGetTexObj(0x37, &tex);
-            GXLoadTexObj(&tex, GX_TEXMAP0);
-            GXClearVtxDesc();
-            GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
-            GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 8);
-            GXSetArray(GX_VA_POS, shibuki_vertex_tbl, 6);
-            GXSetVtxDesc(GX_VA_NRM, GX_INDEX8);
-            GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_S8, 6);
-            GXSetArray(GX_VA_NRM, shibuki_normal_tbl, 3);
-            GXSetVtxDesc(GX_VA_CLR0, GX_INDEX8);
-            GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
-            GXSetArray(GX_VA_CLR0, shibuki_color0_tbl, 4);
-            GXSetVtxDesc(GX_VA_TEX0, GX_INDEX8);
-            GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S16, 14);
-            GXSetArray(GX_VA_TEX0, shibuki_texcoord0_tbl, 4);
-            GXCallDisplayList(shibuki_dl_1_0, 0x20);
-            GXCallDisplayList(shibuki_dl_1_1, 0x20);
-            GXCallDisplayList(shibuki_dl_1_2, 0x20);
-            GXCallDisplayList(shibuki_dl_1_3, 0x20);
-            PSMTXTrans(trans, w2->pos2.x, w2->pos2.y, w2->pos2.z);
-            // FAKE: constant parked in s first; target loads scale before 0.8f (natural `s = w2->scale * 0.8f` swaps the loads)
-            s = 0.8f;
-            s = w2->scale * s;
-            PSMTXScale(scl, 0.7f * s, 0.5f * s, s);
-            PSMTXConcat(mtx, trans, trans);
-            PSMTXConcat(trans, scl, trans);
-            GXLoadPosMtxImm(trans, GX_PNMTX0);
-            PSMTXTrans(trans, 0.0f, (-w2->pos3.y) / 4.0f, 0.0f);
-            GXLoadTexMtxImm(trans, GX_TEXMTX0, GX_MTX2x4);
-            {
-                static const GXColor white255b = {255, 255, 255, 255};
-                GXSetTevColor(GX_TEVREG0, white255b);
-            }
-            effGetTexObj(0x36, &tex);
-            GXLoadTexObj(&tex, GX_TEXMAP0);
-            GXClearVtxDesc();
-            GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
-            GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 8);
-            GXSetArray(GX_VA_POS, shibuki_vertex_tbl, 6);
-            GXSetVtxDesc(GX_VA_NRM, GX_INDEX8);
-            GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_S8, 6);
-            GXSetArray(GX_VA_NRM, shibuki_normal_tbl, 3);
-            GXSetVtxDesc(GX_VA_CLR0, GX_INDEX8);
-            GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
-            GXSetArray(GX_VA_CLR0, shibuki_color0_tbl, 4);
-            GXSetVtxDesc(GX_VA_TEX0, GX_INDEX8);
-            GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S16, 14);
-            GXSetArray(GX_VA_TEX0, shibuki_texcoord0_tbl, 4);
-            GXCallDisplayList(shibuki_dl_0_0, 0x40);
-            GXCallDisplayList(shibuki_dl_0_1, 0x40);
-            GXCallDisplayList(shibuki_dl_0_2, 0x40);
-            GXCallDisplayList(shibuki_dl_0_3, 0x40);
+    w = effect->userdata;
+    if (w->state > 0) {
+        PSMTXTrans(trans, w->pos2.x, w->pos2.y, w->pos2.z);
+        PSMTXScale(scl, 0.56f, 0.4f, 0.8f);
+        PSMTXConcat(mtx, trans, trans);
+        PSMTXConcat(trans, scl, trans);
+        GXLoadPosMtxImm(trans, GX_PNMTX0);
+        PSMTXTrans(trans, w->pos3.y / 8.0f, 0.0f, 0.0f);
+        GXLoadTexMtxImm(trans, GX_TEXMTX0, GX_MTX2x4);
+        GXSetTevColor(GX_TEVREG0, (GXColor){ 255, 255, 255, w->alpha });
+        effGetTexObj(0x37, &tex);
+        GXLoadTexObj(&tex, GX_TEXMAP0);
+        GXClearVtxDesc();
+        GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
+        GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 8);
+        GXSetArray(GX_VA_POS, shibuki_vertex_tbl, 6);
+        GXSetVtxDesc(GX_VA_NRM, GX_INDEX8);
+        GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_S8, 6);
+        GXSetArray(GX_VA_NRM, shibuki_normal_tbl, 3);
+        GXSetVtxDesc(GX_VA_CLR0, GX_INDEX8);
+        GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
+        GXSetArray(GX_VA_CLR0, shibuki_color0_tbl, 4);
+        GXSetVtxDesc(GX_VA_TEX0, GX_INDEX8);
+        GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S16, 14);
+        GXSetArray(GX_VA_TEX0, shibuki_texcoord0_tbl, 4);
+        GXCallDisplayList(shibuki_dl_1_0, 0x20);
+        GXCallDisplayList(shibuki_dl_1_1, 0x20);
+        GXCallDisplayList(shibuki_dl_1_2, 0x20);
+        GXCallDisplayList(shibuki_dl_1_3, 0x20);
+        PSMTXTrans(trans, w->pos2.x, w->pos2.y, w->pos2.z);
+        // FAKE: constant parked in s first; target loads scale before 0.8f (natural `s = w->scale * 0.8f` swaps the loads)
+        s = 0.8f;
+        s = w->scale * s;
+        PSMTXScale(scl, 0.7f * s, 0.5f * s, s);
+        PSMTXConcat(mtx, trans, trans);
+        PSMTXConcat(trans, scl, trans);
+        GXLoadPosMtxImm(trans, GX_PNMTX0);
+        PSMTXTrans(trans, 0.0f, (-w->pos3.y) / 4.0f, 0.0f);
+        GXLoadTexMtxImm(trans, GX_TEXMTX0, GX_MTX2x4);
+        {
+            static const GXColor white255b = {255, 255, 255, 255};
+            GXSetTevColor(GX_TEVREG0, white255b);
         }
+        effGetTexObj(0x36, &tex);
+        GXLoadTexObj(&tex, GX_TEXMAP0);
+        GXClearVtxDesc();
+        GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
+        GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 8);
+        GXSetArray(GX_VA_POS, shibuki_vertex_tbl, 6);
+        GXSetVtxDesc(GX_VA_NRM, GX_INDEX8);
+        GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_S8, 6);
+        GXSetArray(GX_VA_NRM, shibuki_normal_tbl, 3);
+        GXSetVtxDesc(GX_VA_CLR0, GX_INDEX8);
+        GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
+        GXSetArray(GX_VA_CLR0, shibuki_color0_tbl, 4);
+        GXSetVtxDesc(GX_VA_TEX0, GX_INDEX8);
+        GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S16, 14);
+        GXSetArray(GX_VA_TEX0, shibuki_texcoord0_tbl, 4);
+        GXCallDisplayList(shibuki_dl_0_0, 0x40);
+        GXCallDisplayList(shibuki_dl_0_1, 0x40);
+        GXCallDisplayList(shibuki_dl_0_2, 0x40);
+        GXCallDisplayList(shibuki_dl_0_3, 0x40);
     }
 }
 
@@ -1171,20 +1176,30 @@ s32 effFallCheckHit(EffectEntry* effect) {
         case 1:
         case 4:
         case 5:
-            if (w->state >= 2) return 1;
+            if (w->state >= 2) {
+                return 1;
+            }
             break;
         case 2:
         case 3:
-            if (w->state >= 1) return 1;
+            if (w->state >= 1) {
+                return 1;
+            }
             break;
         case 6:
-            if (w->state >= 2 || (w->state == 1 && w->timer > 90)) return 1;
+            if (w->state >= 2 || (w->state == 1 && w->timer > 90)) {
+                return 1;
+            }
             break;
         case 7:
-            if (w->state >= 4) return 1;
+            if (w->state >= 4) {
+                return 1;
+            }
             break;
         case 8:
-            if (w->state >= 3) return 1;
+            if (w->state >= 3) {
+                return 1;
+            }
             break;
     }
     return 0;

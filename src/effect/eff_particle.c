@@ -92,8 +92,6 @@ static inline f32 pt_frand(void) {
 
 void effParticleDisp(CameraId cameraId, EffectEntry* effect);
 void effParticleMain(EffectEntry* effect);
-void EmitterEmit(EffectEntry* effect, ParticleEmitter* emitter);
-void ParticleEmit(EffectEntry* effect, ParticleItem* p, ParticleEmitter* emitter);
 
 static inline f32 pt_gauss(void) {
     static f32 y2;
@@ -206,6 +204,7 @@ EffectEntry* effParticleEntry(s32 type, f32 x, f32 y, f32 z, f32 dx, f32 dy, f32
     work->count = count;
     work->items = (ParticleItem*)((u8*)work + effect->count * sizeof(ParticleWork));
     work->speed = 4.0f;
+    // FAKE: w2 re-reads effect->userdata (the same pointer as work); using work for the free list changes the object
     w2 = effect->userdata;
     for (i = 1; i < w2->count + 2; i++) {
         w2->items[i - 1].next = i;
@@ -230,8 +229,8 @@ EffectEntry* effParticleEntry(s32 type, f32 x, f32 y, f32 z, f32 dx, f32 dy, f32
         PSVECNormalize(&d, &d);
         work->angX = -angleABf(0.0f, 0.0f, 1000.0f * d.z, 1000.0f * d.y);
         work->angY = -angleABf(0.0f, 0.0f, 1000.0f * d.x, 1000.0f * d.y);
-        PSMTXRotRad(mx, 'x', 0.017453292f * work->angX);
-        PSMTXRotRad(mz, 'z', 0.017453292f * work->angY);
+        PSMTXRotRad(mx, 'x', MTXDegToRad(work->angX));
+        PSMTXRotRad(mz, 'z', MTXDegToRad(work->angY));
         PSMTXConcat(mx, mz, work->emit.mtx);
     }
     return effect;
@@ -268,6 +267,7 @@ void effParticleMain(EffectEntry* effect) {
     }
     work->frame++;
     EmitterEmit(effect, &work->emit);
+    // FAKE: w re-reads effect->userdata (the same pointer as work); using work in the update loop changes the object
     w = effect->userdata;
     prev = &w->items[w->count];
     idx = prev->next;

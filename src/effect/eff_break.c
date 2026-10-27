@@ -6,13 +6,12 @@
 #include <dolphin/mtx.h>
 #include "eff/n64/eff_stardust_n64.h"
 
-
 typedef struct EffBreakWork {
     s32 type;      // 0x0
     Vec position;  // 0x4
     s32 timer;     // 0x10
     f32 offsetY;   // 0x14
-    s32 field_0x18;
+    s32 field_0x18; // 0x18, only set to 0
     s32 state;     // 0x1C
     f32 scale;     // 0x20
 } EffBreakWork;
@@ -37,8 +36,18 @@ static s32 tex_us[] = { 0xB1, 0xB2, 0xB3, 0xB4, 0xB5, 0xB6 };
 static s32* texid_tbl[] = { tex_jp, tex_us };
 #endif
 
-static f32 ty_data[] = { 3.0f, 3.0f, 2.7857144f, 2.5714285f, 2.357143f, 2.142857f, 1.9285715f, 1.7142857f, 1.5f, 1.2857143f, 1.0714285f, 0.85714287f, 0.64285713f, 0.42857143f, 0.21428572f, 0.0f, 0.083333336f, 0.16666667f, 0.25f, 0.125f, 0.0f };
-static f32 ty_data2[] = { 0.0f, 0.15f, 0.3f, 0.45f, 0.6f, 0.75f, 0.9f, 1.05f, 1.2f, 1.35f, 1.5f, 1.65f, 1.8f, 1.95f, 2.1f, 2.25f, 2.4f, 2.55f, 2.7f, 2.85f, 3.0f };
+// texture offset (t) per frame: ty_data slides a letter in (3 -> 0, then a small bounce), ty_data2 slides it
+// out (0 -> 3, negated for every second letter)
+static f32 ty_data[] = {
+    3.0f, 3.0f, 2.7857144f, 2.5714285f, 2.357143f, 2.142857f, 1.9285715f,
+    1.7142857f, 1.5f, 1.2857143f, 1.0714285f, 0.85714287f, 0.64285713f, 0.42857143f,
+    0.21428572f, 0.0f, 0.083333336f, 0.16666667f, 0.25f, 0.125f, 0.0f,
+};
+static f32 ty_data2[] = {
+    0.0f, 0.15f, 0.3f, 0.45f, 0.6f, 0.75f, 0.9f,
+    1.05f, 1.2f, 1.35f, 1.5f, 1.65f, 1.8f, 1.95f,
+    2.1f, 2.25f, 2.4f, 2.55f, 2.7f, 2.85f, 3.0f,
+};
 
 EffectEntry* effBreakEntry(s32 type, s32 duration, f32 x, f32 y, f32 z) {
     EffectEntry* effect;
@@ -58,6 +67,7 @@ EffectEntry* effBreakEntry(s32 type, s32 duration, f32 x, f32 y, f32 z) {
     effect->type = "Break";
 #else
     effect = effEntry();
+    // FAKE: dead language test (both languages use 7 entries); plain `count = 7;` changes the object
     count = 7;
     if ((u32)gp->language != LANGUAGE_JP) {
         count = 7;
@@ -77,6 +87,8 @@ EffectEntry* effBreakEntry(s32 type, s32 duration, f32 x, f32 y, f32 z) {
     w = work + 1;
     for (i = 1; i < effect->count; i++, w++) {
 #ifdef VERSION_G8ME01
+        // a: centre of this letter (letters 72 apart), b: half the word width; the texture objects fetched in
+        // these loops are not used
         a = 0.0f;
         b = a;
         for (j = 0; j < i - 1; j++) {

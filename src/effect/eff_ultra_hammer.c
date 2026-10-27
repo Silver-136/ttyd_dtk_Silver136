@@ -10,7 +10,6 @@
 #include <string.h>
 #include "version.h"
 
-
 u8 wakka_dl_0_0[];
 u8 wakka_dl_0_1[];
 u8 wakka_dl_0_2[];
@@ -153,6 +152,7 @@ void* wakka_dl_0_tbl[] = {
     wakka_dl_0_19, // 19
 };
 
+// Texture scroll offsets: -3.5 / 24 * i for i = 0..24
 f32 scroll_tbl[] = {
     0.0f, -0.14583334f, -0.29166669f, -0.43750003f, -0.58333337f,
     -0.72916669f, -0.87500006f, -1.0208334f, -1.1666667f, -1.3125f,
@@ -160,7 +160,6 @@ f32 scroll_tbl[] = {
     -2.1875f, -2.3333333f, -2.4791667f, -2.625f, -2.7708333f,
     -2.9166667f, -3.0625f, -3.2083333f, -3.3541667f, -3.5f
 };
-
 
 s8 wakka_normal_tbl[] ATTRIBUTE_ALIGN(32) = {
     0, 64, 0, // 0
@@ -414,13 +413,10 @@ u8 wakka_dl_0_size_tbl[] = {
     1, // 19
 };
 
-
 #endif
 
-//-3.5 / 24 * i (up to 25) with some imprecision
-
 void effUltraHammerMain(EffectEntry* effect);
-void effUltraHammerDisp(enum CameraId camId, void *param);
+void effUltraHammerDisp(CameraId camId, void* param);
 
 EffectEntry* effUltraHammerEntry(f32 x, f32 y, f32 z, f32 scale, BOOL mode, s32 counter) {
     EffectEntry* effect;
@@ -494,7 +490,7 @@ void effUltraHammerMain(EffectEntry* effect) {
     dispEntry(CAMERA_3D, dispCalcZ(&position), 2, effUltraHammerDisp, effect);
 }
 
-// unknown function, is used for many functions to "initialize"/copy some value into the local stack, with an extra vec
+// Returns a copy of *input, built in a zero-initialized temporary
 inline Vec initializeVec(Vec* input) {
     Vec temp = (Vec){ 0.0f, 0.0f, 0.0f };
     temp.x = input->x;
@@ -503,19 +499,19 @@ inline Vec initializeVec(Vec* input) {
     return temp;
 }
 
-
-void effUltraHammerDisp(enum CameraId camId, void *param) {
+void effUltraHammerDisp(CameraId camId, void* param) {
     u32 fmtLoop[2]; // FAKE: register-promoted array (vtx fmt + loop counter); separate scalars differ
-    CameraEntry *cam;
-    EffUltraHammerData *data;
+    CameraEntry* cam;
+    EffUltraHammerData* data;
     s32 i;
     s32 mode;
-    EffectEntry *effect;
+    EffectEntry* effect;
     Mtx mtx;
     Mtx yawMtx;
     Mtx scaleMtx;
     Mtx baseMtx;
     GXTexObj texObj;
+
     effect = param;
     data = effect->userdata;
     cam = camGetPtr(camId);
@@ -562,23 +558,21 @@ void effUltraHammerDisp(enum CameraId camId, void *param) {
             GXLoadTexMtxImm(mtx, GX_TEXMTX0, GX_MTX2x4);
             GXClearVtxDesc();
             GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
-            GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_TEX_ST, GX_RGBA4, 10);
+            GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 10);
             GXSetArray(GX_VA_POS, &wakka_vertex_tbl, 6);
             GXSetVtxDesc(GX_VA_NRM, GX_INDEX8);
             fmtLoop[0] = GX_VTXFMT0;
-            GXSetVtxAttrFmt(fmtLoop[0], GX_VA_NRM, GX_TEX_S, GX_RGB8, 6);
+            GXSetVtxAttrFmt(fmtLoop[0], GX_VA_NRM, GX_NRM_XYZ, GX_S8, 6);
             GXSetArray(GX_VA_NRM, &wakka_normal_tbl, 3);
             GXSetVtxDesc(GX_VA_CLR0, GX_INDEX8);
-            GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_TEX_ST, GX_RGBA8, 0);
+            GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
             GXSetArray(GX_VA_CLR0, &wakka_color0_tbl, 4);
             GXSetVtxDesc(GX_VA_TEX0, GX_INDEX8);
-            GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_RGBA4, 13);
+            GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S16, 13);
             GXSetArray(GX_VA_TEX0, &wakka_texcoord0_tbl, 4);
             for (fmtLoop[1] = 0; fmtLoop[1] < 20; fmtLoop[1]++) {
                 GXCallDisplayList(wakka_dl_0_tbl[fmtLoop[1]], wakka_dl_0_size_tbl[fmtLoop[1]] << 5);
             }
-
         }
     }
-
 }

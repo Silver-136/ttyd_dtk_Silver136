@@ -10,13 +10,12 @@
 #include "libc_decls.h"
 #include "driver/effdrv.h"
 
-
-//local prototypes
+// local prototypes
 void effSleepDisp(CameraId camId, EffectEntry* effect);
 
 EffectEntry* effSleepEntry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32 scale, f32 rotation) {
     EffectEntry* effect;
-    s32 smth;
+    s32 delay;
     effSleepData* data;
     f32 radians;
     int i;
@@ -43,13 +42,13 @@ EffectEntry* effSleepEntry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32 scal
     data->age = 0;
 
     radians = (6.2831855f * rotation) / 360.0f;
-    for (data++, i = 1, smth = 16; i < effect->count; i++, smth += 16, data++) {
+    for (data++, i = 1, delay = 16; i < effect->count; i++, delay += 16, data++) {
         data->position.x = (r = 16.0f * (f32)i) * (f32)cos(radians);
         data->position.y = r * (f32)sin(radians);
         data->position.z = 0.0f;
         data->scale = (0.2f * (f32)i) + 1.0f;
         data->alpha = 0;
-        data->delay = smth;
+        data->delay = delay;
     }
     return effect;
 }
@@ -90,8 +89,6 @@ void effSleepMain(EffectEntry* effect) {
     }
     dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effSleepDisp, effect);
 }
-
-#pragma push
 
 // FAKE: same values as the plain form, written so the code generator sees the target's shapes:
 // - sin argument via `(t = tau * x, t *= 0.015625f)`: a compound assignment skips the front end's
@@ -182,9 +179,4 @@ void effSleepDisp(CameraId camId, EffectEntry* effect) {
         }
     }
 }
-
-
-
-
-#pragma pop
 

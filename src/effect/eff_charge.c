@@ -1,4 +1,5 @@
 #pragma defer_codegen off
+#include "eff/eff_charge.h"
 #include "driver/camdrv.h"
 #include "driver/dispdrv.h"
 #include "driver/effdrv.h"
@@ -9,7 +10,6 @@
 #include <dolphin/mtx.h>
 #include "eff/eff_magic1_n64.h"
 #include "libc_decls.h"
-
 
 typedef struct EffChargeWork {
     s32 state;    // 0x0
@@ -30,9 +30,6 @@ typedef struct EffChargeWork {
     s32 b1;       // 0x44
 } EffChargeWork;
 
-void effChargeDisp(CameraId cameraId, EffectEntry* effect);
-void effChargeMain(EffectEntry* effect);
-
 void effChargeDisp(CameraId cameraId, EffectEntry* effect) {
     EffChargeWork* work = effect->userdata;
     s32 i;
@@ -46,13 +43,11 @@ void effChargeDisp(CameraId cameraId, EffectEntry* effect) {
 
     PSMTXScale(mtx, work->scale, work->scale, 1.0f);
     PSMTXTransApply(mtx, mtx, work->position.x, work->position.y, work->position.z);
-    PSMTXRotRad(rot, 'y', -camGetPtr(cameraId)->viewYaw * 0.017453292f);
+    PSMTXRotRad(rot, 'y', MTXDegToRad(-camGetPtr(cameraId)->viewYaw));
     PSMTXConcat(mtx, rot, mtx);
     effGetTexObj(30, &texObj);
     GXLoadTexObj(&texObj, GX_TEXMAP0);
-    {
-        GXSetTevColor(GX_TEVREG1, (GXColor){ work->r1, work->g1, work->b1, 0 });
-    }
+    GXSetTevColor(GX_TEVREG1, (GXColor){ work->r1, work->g1, work->b1, 0 });
     GXSetNumChans(0);
     GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_REG, GX_LIGHT_NULL, GX_DF_NONE, GX_AF_NONE);
     GXSetNumTexGens(1);
@@ -78,9 +73,7 @@ void effChargeDisp(CameraId cameraId, EffectEntry* effect) {
     for (i = 1; i < effect->count; i++, work++) {
         f32 ps = work->scale;
         if (ps) {
-            {
-                GXSetTevColor(GX_TEVREG0, (GXColor){ s0, s1, s2, work->alpha });
-            }
+            GXSetTevColor(GX_TEVREG0, (GXColor){ s0, s1, s2, work->alpha });
             PSMTXTrans(pmtx, work->position.x, work->position.y, work->position.z);
             PSMTXScale(smtx, ps, ps, ps);
             PSMTXConcat(pmtx, smtx, pmtx);
@@ -185,7 +178,7 @@ EffectEntry* effChargeEntry(s32 type, s32 duration, f32 x, f32 y, f32 z, f32 sca
     effect = effEntry();
     effect->type = "Charge";
     effect->count = 31;
-    work = __memAlloc(HEAP_EFFECT, 0x8b8);
+    work = __memAlloc(HEAP_EFFECT, 31 * sizeof(EffChargeWork));
     effect->userdata = work;
     effect->callback = effChargeMain;
     work->type = type;

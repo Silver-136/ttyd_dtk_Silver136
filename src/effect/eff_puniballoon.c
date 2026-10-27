@@ -10,7 +10,6 @@
 #include "eff/eff_magic1_n64.h"
 #include "libc_decls.h"
 
-
 void effPuniBalloonMain(EffectEntry* effect);
 void effPuniBalloonDisp(CameraId cameraId, EffectEntry* effect);
 static void balloon_1(CameraId cameraId, EffectEntry* effect);
@@ -92,6 +91,7 @@ void effPuniBalloonMain(EffectEntry* effect) {
     }
     work->scale += (1.0f - work->scale) / 10.0f;
     work->rotation = 20.0f * (f32)sin(work->frame / 20.0f);
+    // FAKE: p is a per-iteration copy of the advancing work pointer; iterating p directly changes the object
     for (i = 1, work++; i < effect->count; i++, work++) {
         p = work;
         p->position.x += p->velocity.x;
@@ -128,10 +128,10 @@ static void balloon_0(CameraId cameraId, EffectEntry* effect) {
     scale += 0.1f * sv;
     scale *= work->baseScale;
     PSMTXTrans(mT, work->position.x, work->position.y, work->position.z);
-    PSMTXRotRad(mR, 'y', 0.017453292f * -camGetPtr(cameraId)->viewYaw);
+    PSMTXRotRad(mR, 'y', MTXDegToRad(-camGetPtr(cameraId)->viewYaw));
     PSMTXConcat(mT, mR, mX);
     PSMTXConcat(cam->view, mX, mT);
-    PSMTXRotRad(mR, 'z', 0.017453292f * work->rotation);
+    PSMTXRotRad(mR, 'z', MTXDegToRad(work->rotation));
     PSMTXScale(mS, scale, scale, scale);
     PSMTXConcat(mT, mR, mT);
     PSMTXConcat(mT, mS, mT);
@@ -168,7 +168,6 @@ static void balloon_0(CameraId cameraId, EffectEntry* effect) {
     GXSetTevDirect(GX_TEVSTAGE0);
 }
 
-
 static void balloon_1(CameraId cameraId, EffectEntry* effect) {
     PuniBalloonWork* work = effect->userdata;
     PuniBalloonWork* p;
@@ -178,7 +177,7 @@ static void balloon_1(CameraId cameraId, EffectEntry* effect) {
     GXTexObj texObj;
 
     PSMTXTrans(mA, work->position.x, work->position.y, work->position.z);
-    PSMTXRotRad(mB, 'y', 0.017453292f * -camGetPtr(cameraId)->viewYaw);
+    PSMTXRotRad(mB, 'y', MTXDegToRad(-camGetPtr(cameraId)->viewYaw));
     PSMTXConcat(mA, mB, mC);
     PSMTXConcat(cam->view, mC, mC);
     GXSetNumChans(0);
@@ -199,6 +198,7 @@ static void balloon_1(CameraId cameraId, EffectEntry* effect) {
     GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 0);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S16, 0);
+    // FAKE: p is a per-iteration copy of the advancing work pointer; iterating p directly changes the object
     for (i = 1, work++; i < effect->count; i++, work++) {
         p = work;
         PSMTXTrans(mA, p->position.x, p->position.y, p->position.z);

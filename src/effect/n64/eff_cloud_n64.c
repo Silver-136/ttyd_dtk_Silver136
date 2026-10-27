@@ -12,7 +12,6 @@
 #include "libc_decls.h"
 #include <math.h>
 
-
 void effCloudMain(EffectEntry* effect);
 void effCloudDisp(CameraId cameraId, EffectEntry* effect);
 
@@ -116,7 +115,7 @@ EffectEntry* effCloudN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32 s
     work->active[0] = 1;
     work->age[0] = 0;
     work->len[0] = 0.0f;
-    work->vel.x = (f32)(s32)(rand() % 30 + 10);
+    work->vel.x = (f32)(rand() % 30 + 10);
     work->vel.y = 0.0f;
     work->vel.z = 0.0f;
     return effect;
@@ -154,8 +153,8 @@ void effCloudMain(EffectEntry* effect) {
         work->fade = work->lifetime * 16;
     }
     if (type == 3) {
-        work->vel.x += (f32)(s32)(rand() % 10 - 5);
-        work->vel.y += (f32)(s32)(rand() % 10 - 5);
+        work->vel.x += (f32)(rand() % 10 - 5);
+        work->vel.y += (f32)(rand() % 10 - 5);
         work->pos.x += work->vel.x;
         work->pos.y += work->vel.y;
         work->pos.z += work->vel.z;
@@ -219,8 +218,6 @@ void effCloudDisp(CameraId cameraId, EffectEntry* effect) {
     s32 idx;
     f32 zero, ang, a1, a2, x, y, z, w, sn, cs;
 
-
-
     camera = camGetPtr(cameraId);
     work = effect->userdata;
     frame = work->frame;
@@ -228,7 +225,7 @@ void effCloudDisp(CameraId cameraId, EffectEntry* effect) {
     type = work->type;
     scale = work->scale;
     GXSetNumChans(1);
-    GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_VTX, 0, GX_DF_NONE, GX_AF_NONE);
+    GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_VTX, GX_LIGHT_NULL, GX_DF_NONE, GX_AF_NONE);
     if (type >= 2) {
         GXSetNumTevStages(2);
         GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
@@ -270,6 +267,7 @@ void effCloudDisp(CameraId cameraId, EffectEntry* effect) {
     effSetVtxDescN64(vtx);
     uo = (frame & 0x3F) << 5;
     first = -1;
+    // FAKE: zero is added to z when the vertices are written; (s16)z changes the object
     zero = 0.0f;
     count = 0;
     for (i = 0; i < 30; i++) {
@@ -278,7 +276,6 @@ void effCloudDisp(CameraId cameraId, EffectEntry* effect) {
         }
     }
     if (count - 1 > 0) {
-
         n = 0;
         for (i = 0; i < 30; i++) {
             v = &vtx[i * 2];
@@ -322,6 +319,7 @@ void effCloudDisp(CameraId cameraId, EffectEntry* effect) {
                 sn = (f32)sin(6.2831855f * (f32)((frame - work->age[idx] * 80) * 4) / 360.0f);
                 w = (f32)k + (3.0f * sn + 16.0f);
                 w *= scale;
+                // FAKE: both branches assign the same value; a single assignment changes the object
                 if (type == 0) {
                     u = (s32)(24.0f * work->len[idx]) + uo;
                 } else {

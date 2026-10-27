@@ -11,8 +11,6 @@
 #include "driver/effdrv.h"
 #include "driver/mapdrv.h"
 
-
-//.sdata
 const char* anim_jp[] = {
     "EFF_nice",
     "EFF_good",
@@ -83,13 +81,10 @@ AcrobatSet acrobat_tbl[6] = { { acrobat_jp, 7 }, { acrobat_us, 8 }, { acrobat_la
 #else
 static const char** anim_tbl[2] = { anim_jp, anim_us };
 s32 acrobat_jp[] = {179, 180, 181, 182, 183, 184, 185};
-s32 acrobat_us[] = {183, 184, 185, 186, 187, 188}; //includes nonexistant textures
+s32 acrobat_us[] = {183, 184, 185, 186, 187, 188}; // includes nonexistent textures
 s32* acrobat_tbl[2] = { acrobat_jp, acrobat_us };
 #endif
- // unreferenced zero word in target
 
-//forward declarations
-static void rendermodeFunc(s32 wXluStage);
 void effNiceMain(EffectEntry* effect);
 
 BOOL effNiceAsync(s32 group) {
@@ -124,8 +119,9 @@ EffectEntry* effNiceEntry(s32 type, f32 x, f32 y, f32 z) {
     int i;
 
     effect = effEntry();
-    if (type == 5) { //guard for unused slot
-        type = 0 & 0xFFu;
+    // slot 5 of the animation tables is NULL: use type 0 instead
+    if (type == 5) {
+        type = 0;
     }
     switch (type) {
         case 7:
@@ -175,6 +171,7 @@ EffectEntry* effNiceEntry(s32 type, f32 x, f32 y, f32 z) {
         }
         break;
     default:
+        // FAKE: size reused for the in-battle flag; passing gp->inBattle != 0 directly changes the object
         size = gp->inBattle != 0;
         userdata->poseId = animPoseEntry(anim_tbl[gp->language][type], size);
         animPoseSetAnim(userdata->poseId, "A_1", TRUE);
@@ -246,7 +243,9 @@ void effNiceMain(EffectEntry* effect) {
 #endif
             if (pose->localFrame > start) {
                 t = 1.0f - (pose->localFrame - start) / (len - start);
-                if (t < 0.0f) t = 0.0f;
+                if (t < 0.0f) {
+                    t = 0.0f;
+                }
                 animPoseSetMaterialFlagOn(wp->poseId, MAP_OBJ_FLAG_COLOR);
                 animPoseSetMaterialEvtColor(wp->poseId, (GXColor){0xFF, 0xFF, 0xFF, 255.0f * t});
             }
@@ -260,7 +259,9 @@ void effNiceMain(EffectEntry* effect) {
             start = ((u32)gp->language == LANGUAGE_JP) ? 35.0f : 37.0f;
             if (pose->localFrame > start) {
                 t = 1.0f - (pose->localFrame - start) / (len - start);
-                if (t < 0.0f) t = 0.0f;
+                if (t < 0.0f) {
+                    t = 0.0f;
+                }
                 animPoseSetMaterialFlagOn(wp->poseId, MAP_OBJ_FLAG_COLOR);
                 animPoseSetMaterialEvtColor(wp->poseId, (GXColor){0xFF, 0xFF, 0xFF, 255.0f * t});
             }
@@ -271,7 +272,9 @@ void effNiceMain(EffectEntry* effect) {
             start = ((u32)gp->language == LANGUAGE_JP) ? 45.0f : 40.0f;
             if (pose->localFrame > start) {
                 t = 1.0f - (pose->localFrame - start) / (len - start);
-                if (t < 0.0f) t = 0.0f;
+                if (t < 0.0f) {
+                    t = 0.0f;
+                }
                 animPoseSetMaterialFlagOn(wp->poseId, MAP_OBJ_FLAG_COLOR);
                 animPoseSetMaterialEvtColor(wp->poseId, (GXColor){0xFF, 0xFF, 0xFF, 255.0f * t});
             }
@@ -282,7 +285,9 @@ void effNiceMain(EffectEntry* effect) {
             start = ((u32)gp->language == LANGUAGE_JP) ? 48.0f : 40.0f;
             if (pose->localFrame > start) {
                 t = 1.0f - (pose->localFrame - start) / (len - start);
-                if (t < 0.0f) t = 0.0f;
+                if (t < 0.0f) {
+                    t = 0.0f;
+                }
                 animPoseSetMaterialFlagOn(wp->poseId, MAP_OBJ_FLAG_COLOR);
                 animPoseSetMaterialEvtColor(wp->poseId, (GXColor){0xFF, 0xFF, 0xFF, 255.0f * t});
             }
@@ -342,14 +347,14 @@ void acrobatMain(EffectEntry* effect) {
     tmp.z = wp->position.z;
     pos = tmp;
     for (i = 1, wp++; i < effect->count; i++, wp++) {
-        // FAKE: integer cast makes the literal a CSE/loop-invariant @ temp (numbers below the SR temps)
-        const char* sfx2 = SFX_NAME_WORD("SFX_SYSTEM_ACROBAT1");
+        // FAKE: the sound name is read into a loop-local through SFX_NAME_WORD; psndSFXOn("SFX_SYSTEM_ACROBAT1") in case 0 changes the object
+        const char* sfxName = SFX_NAME_WORD("SFX_SYSTEM_ACROBAT1");
         switch (wp->state) {
         case 0:
             wp->timer = i * 4;
             wp->state++;
             if (i == 1) {
-                psndSFXOn(sfx2);
+                psndSFXOn(sfxName);
             }
             break;
         case 1:

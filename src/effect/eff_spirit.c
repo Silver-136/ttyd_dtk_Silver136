@@ -8,7 +8,6 @@
 #include "eff/eff_magic1_n64.h"
 #include "driver/effdrv.h"
 
-
 typedef struct EffSpiritWork {
     s32 type;       // 0x0
     s32 state;      // 0x4

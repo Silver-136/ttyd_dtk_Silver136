@@ -65,7 +65,6 @@ static effN64Vtx balloon_vtx[] = {
 void effBalloonMain(EffectEntry* effect);
 void effBalloonDisp(CameraId cameraId, EffectEntry* effect);
 
-
 EffectEntry* effBalloonN64Entry(s32 type, f32 x, f32 y, f32 z, f32 targetScale, f32 rotation) {
     EffectEntry* effect;
     EffBalloonN64Work* work;
@@ -112,8 +111,8 @@ void effBalloonMain(EffectEntry* effect) {
         work->lifetime--;
     }
     work->frame++;
-    if (work->frame > 0x50000 - 0xE60) {
-        work->frame = 0x100;
+    if (work->frame > 324000) {
+        work->frame = 256;
     }
     lifetime = work->lifetime;
     if (lifetime < 0) {
@@ -218,6 +217,7 @@ void effBalloonDisp(CameraId cameraId, EffectEntry* effect) {
         OSs16tof32(&vtx[i + 2].z, &v2.z);
         PSMTXMultVec(mtx, &v2, &v2);
         OSInitFastCast();
+        // FAKE: element pointer cast instead of &vtx[i + 2].x; the plain form changes the object
         OSf32tos16(&v2.x, (s16*)&vtx[i + 2]);
         OSf32tos16(&v2.y, &vtx[i + 2].y);
         OSf32tos16(&v2.z, &vtx[i + 2].z);

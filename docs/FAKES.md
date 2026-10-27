@@ -403,3 +403,41 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/effect/eff_ibuki.c | effIbukiDisp | (u32) cast for an unsigned compare; `i < 4` changes the object | see comment |
 | US | src/effect/eff_irekaeru.c | effIrekaeruMain | no-op (u32) cast (animPoseEntry takes s32); the plain argument changes the object | see comment |
 | Both | src/effect/eff_itemget.c | effItemGetEntry | spare temporary cv; `5.0f * -(f32)cos(elem->angle)` changes the object | see comment |
+| Both | src/driver/mobjdrv.c | mobjHitEntry | (0, x) comma expressions around the x and z __fabs calls; the plain __fabs changes the object | see comment |
+| Both | src/driver/mobjdrv.c | mobjMain | the work pointer goes through the block-local w; `wp = (MobjWorkHit*)mobjGetWork();` changes the object | see comment |
+| Both | src/driver/mobjdrv.c | mobjNearDistCheck2 | unusedVec is never read and the position goes through the zeroed copy _pos; setting pos.x/y/z directly changes the object | see comment |
+| Both | src/driver/mobjdrv.c | mobjStrippedFallPool | stand-in, never called (in neither symbol map; the linker strips it); it only places its literals in the .sdata2 pool | see comment |
+| JP | src/driver/msgdrv.c | msgDisp | hy holds the x position and hx the y position; swapping the names changes the object | see comment |
+| Both | src/driver/msgdrv.c | msgWindow_Main | d2 re-reads smart->address (data holds the same pointer); using data changes the object | see comment |
+| JP | src/driver/npcdrv.c | npcMain | discarded sqrtf call; removing it changes the object | see comment |
+| Both | src/driver/npcdrv.c | npcSetTalkPose | the first character is read through an s8 cast; name[0] changes the object | see comment |
+| Both | src/driver/npcdrv.c | npcSetStayPose | the first character is read through an s8 cast; name[0] changes the object | see comment |
+| Both | src/driver/npcdrv.c | npcCheckHitMarioSide | the height goes through the spare dz; passing mario->wPlayerCollisionBox.y directly changes the object | see comment |
+| Both | src/driver/npcdrv.c | npcNearDistCheck | the 3D distance is computed and discarded; removing it changes the object | see comment |
+| US | src/driver/npcdrv.c | _fbatFirstAttackAnnouceDisp | the products go through the mulf() inline; plain multiplications change the object | see comment |
+| JP | src/effect/eff_break.c | effBreakEntry | dead language test (both languages use 7 entries); plain `count = 7;` changes the object | see comment |
+| Both | src/effect/eff_kemutest.c | effKemuTestEntry | count (already equal to effect->count) is re-assigned in the loop test; `i < effect->count` changes the object | see comment |
+| Both | src/effect/eff_kemutest.c | __declspec | zero filler objects with no known owner (4 bytes of .rodata; 28 bytes of .data in JP); without them the object changes | see comment |
+| Both | src/effect/eff_kiss.c | effKissMain | spare local s for the sine; __fabsf((f32)sin(...)) in place changes the object | see comment |
+| Both | src/effect/eff_laser.c | effLaserMain | no-op (u32) cast on the BOOL argument; without it the object changes | see comment |
+| JP | src/effect/eff_levelup.c | getX | (gp->language ? 0 : 1) == 0 stands for gp->language != LANGUAGE_JP; the plain test changes the object | see comment |
+| Both | src/effect/eff_mahojin.c | effMahojinMain | work re-loaded from effect->userdata (it already holds it); without it the object changes | see comment |
+| Both | src/effect/eff_miss_star.c | effMissStarEntry | endless loop with a break; `while (index > 5) { index -= 5; }` changes the object | see comment |
+| Both | src/effect/eff_mizutama.c | effMizutamaEntry | split computation; `radius = (type + 1) * 10;` changes the object | see comment |
+| Both | src/effect/eff_mobj_broken.c | effMObjBrokenMain | the counter done is reused as the loop index; a loop over i changes the object | see comment |
+| Both | src/effect/eff_mugi.c | effMugiKemuri2Entry | unused zero vector; deleting it changes the object | see comment |
+| Both | src/effect/eff_nice.c | effNiceEntry | size reused for the in-battle flag; passing gp->inBattle != 0 directly changes the object | see comment |
+| Both | src/effect/eff_particle.c | effParticleEntry | w2 re-reads effect->userdata (the same pointer as work); using work for the free list changes the object | see comment |
+| Both | src/effect/eff_particle.c | effParticleMain | w re-reads effect->userdata (the same pointer as work); using work in the update loop changes the object | see comment |
+| Both | src/effect/eff_puniballoon.c | effPuniBalloonMain | p is a per-iteration copy of the advancing work pointer; iterating p directly changes the object | see comment |
+| Both | src/effect/eff_puniballoon.c | balloon_1 | p is a per-iteration copy of the advancing work pointer; iterating p directly changes the object | see comment |
+| US | src/effect/eff_rankup.c | effRankupMain | no-op (u32) cast (animPoseEntry takes s32); removing it changes the object | see comment |
+| Both | src/effect/eff_scanning.c | effScanningMain | no-op (u32) cast (animPoseEntry takes s32); removing it changes the object | see comment |
+| Both | src/effect/eff_starpoint.c | _cosf | dead guard (gz is always 0, emits no code); without it the caller's 2.0f constant is loaded at a different point and the object changes | see comment |
+| Both | src/effect/eff_treasure_map.c | effTreasureMapMain | no-op cast (animPoseEntry takes s32); the plain argument changes the object | see comment |
+| Both | src/effect/eff_updown.c | effUpdownMain | compound assignment inside the call; sin(arg * 0.25f) changes the object | see comment |
+| Both | src/effect/n64/eff_balloon_n64.c | effBalloonDisp | element pointer cast instead of &vtx[i + 2].x; the plain form changes the object | see comment |
+| Both | src/effect/n64/eff_blow_n64.c | effBlowN64Entry | zr holds 0.0f for the comparisons below; comparing with 0.0f directly changes the object | see comment |
+| Both | src/effect/n64/eff_cloud_n64.c | effCloudDisp | zero is added to z when the vertices are written; (s16)z changes the object | see comment |
+| Both | src/effect/n64/eff_fire_spark_n64.c | effFireSparkN64Entry | spare temporary for 0.5f; step * 0.5f changes the object | see comment |
+| Both | src/effect/n64/eff_flame_n64.c | effFlameDisp | one-element pointer array; a plain EffFlameN64Work* work changes the object | see comment |

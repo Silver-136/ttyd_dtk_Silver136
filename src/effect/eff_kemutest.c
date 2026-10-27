@@ -14,9 +14,6 @@
 #include "libc_decls.h"
 #include "eff/eff_kemutest.h"
 
-
-
-
 typedef struct KemuTestWork {
     s32 type;       // 0x0
     Vec pos;        // 0x4
@@ -74,7 +71,6 @@ void effKemuTestDrawCam(EffectEntry* effect, s32 camera) {
     ((KemuTestWork*)effect->userdata)->camera = camera;
 }
 
-
 #pragma opt_loop_invariants off
 void effKemuTestDisp(CameraId cameraId, void* param) {
     EffectEntry* effect = param;
@@ -109,7 +105,7 @@ void effKemuTestDisp(CameraId cameraId, void* param) {
     effGetTexObj(0x28, &tex);
     GXLoadTexObj(&tex, GX_TEXMAP0);
     GXSetNumChans(1);
-    GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_REG, 0, GX_DF_NONE, GX_AF_NONE);
+    GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_REG, GX_LIGHT_NULL, GX_DF_NONE, GX_AF_NONE);
     GXSetNumTexGens(2);
     GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX0, GX_FALSE, GX_PTIDENTITY);
     GXSetTexCoordGen2(GX_TEXCOORD1, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX1, GX_FALSE, GX_PTIDENTITY);
@@ -169,25 +165,25 @@ void effKemuTestDisp(CameraId cameraId, void* param) {
                 if (pass == 0) {
                     GXSetChanMatColor(GX_COLOR0A0, (GXColor){ 0, 0, 0, 0x60 });
                     PSMTXTrans(trans, 2.0f + work->pos.x, work->pos.y - 2.0f, work->pos.z);
-                PSMTXScale(scl, work->scale, work->scale, work->scale);
-                PSMTXConcat(view, trans, trans);
-                if (type == 11) {
-                    PSMTXRotRad(rot, 'y', 0.017453292f * -camGetPtr(cameraId)->viewYaw);
-                    PSMTXConcat(trans, rot, trans);
-                }
-                PSMTXConcat(trans, scl, trans);
-                GXLoadPosMtxImm(trans, GX_PNMTX0);
+                    PSMTXScale(scl, work->scale, work->scale, work->scale);
+                    PSMTXConcat(view, trans, trans);
+                    if (type == 11) {
+                        PSMTXRotRad(rot, 'y', 0.017453292f * -camGetPtr(cameraId)->viewYaw);
+                        PSMTXConcat(trans, rot, trans);
+                    }
+                    PSMTXConcat(trans, scl, trans);
+                    GXLoadPosMtxImm(trans, GX_PNMTX0);
                 } else {
                     GXSetChanMatColor(GX_COLOR0A0, (GXColor){ work->r, work->g, work->b, alpha });
                     PSMTXTrans(trans, work->pos.x, work->pos.y, work->pos.z);
-                PSMTXScale(scl, work->scale, work->scale, work->scale);
-                PSMTXConcat(view, trans, trans);
-                if (type == 11) {
-                    PSMTXRotRad(rot, 'y', 0.017453292f * -camGetPtr(cameraId)->viewYaw);
-                    PSMTXConcat(trans, rot, trans);
-                }
-                PSMTXConcat(trans, scl, trans);
-                GXLoadPosMtxImm(trans, GX_PNMTX0);
+                    PSMTXScale(scl, work->scale, work->scale, work->scale);
+                    PSMTXConcat(view, trans, trans);
+                    if (type == 11) {
+                        PSMTXRotRad(rot, 'y', 0.017453292f * -camGetPtr(cameraId)->viewYaw);
+                        PSMTXConcat(trans, rot, trans);
+                    }
+                    PSMTXConcat(trans, scl, trans);
+                    GXLoadPosMtxImm(trans, GX_PNMTX0);
                 }
                 half = neg / 2.0f;
                 GXBegin(GX_QUADS, GX_VTXFMT0, 4);
@@ -364,7 +360,6 @@ static void effKemuTestMain(EffectEntry* effect) {
     }
 }
 
-
 EffectEntry* effKemuTestEntry(s32 type, f32 x, f32 y, f32 z, f32 scale) {
     static f32 bom_dir[10] = { 10.0f, 40.0f, 80.0f, 170.0f, 140.0f, 100.0f, 25.0f, 155.0f, 60.0f, 120.0f };
     static f32 bom_spd[10] = { 2.2f, 2.7f, 3.0f, 2.2f, 2.7f, 3.0f, 1.9f, 1.9f, 1.5f, 1.5f };
@@ -452,10 +447,11 @@ EffectEntry* effKemuTestEntry(s32 type, f32 x, f32 y, f32 z, f32 scale) {
     work->frame = 0;
     work->delay = 0;
     work->scale = scale;
-    work->camera = 4;
+    work->camera = CAMERA_3D;
     work->rx = 0.0f;
     work->rz = 0.0f;
     work++;
+    // FAKE: count (already equal to effect->count) is re-assigned in the loop test; `i < effect->count` changes the object
     for (i = 1; i < (count = effect->count); i++, work++) {
         switch (type) {
         case 0:
@@ -563,6 +559,7 @@ EffectEntry* effKemuTestEntry(s32 type, f32 x, f32 y, f32 z, f32 scale) {
                 f32 d;
                 d = bom_dir[i - 1];
                 spd = 2.0f * bom_spd[i - 1];
+                // FAKE: d copied through ang; `ang = 6.2831855f * (90.0f + d) / 360.0f` changes the object
                 ang = d;
                 ang = 6.2831855f * (90.0f + ang) / 360.0f;
                 work->vel.x = spd * (f32)sin(ang);
@@ -598,7 +595,6 @@ EffectEntry* effKemuTestEntry(s32 type, f32 x, f32 y, f32 z, f32 scale) {
                 f32 ang = (f32)irand(0x168);
                 f32 a2;
                 f32 spd;
-                f32 d;
                 if (i < (effect->count - 1) / 2 + 1) {
                     spd = 4.5f;
                 } else {
@@ -759,7 +755,8 @@ EffectEntry* effKemuTestEntry(s32 type, f32 x, f32 y, f32 z, f32 scale) {
     return effect;
 }
 
-
+// FAKE: zero filler objects with no known owner (4 bytes of .rodata; 28 bytes of .data in JP); without them
+// the object changes
 static __declspec(section ".rodata") const u32 gap_04_802FDD34_rodata[1] = {0};
 #ifndef VERSION_G8ME01
 __declspec(section ".data") u8 gap_05_803AC064_data[28] = {0};

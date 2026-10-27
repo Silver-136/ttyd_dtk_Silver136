@@ -193,7 +193,6 @@ void effPointGetDisp(CameraId cameraId, EffectEntry* effect) {
         scale *= 200.0f / total;
     }
 #else
-
     sprintf(buf, "%d", work->number);
     width = 32.0f * (f32)strlen(buf);
 #endif
@@ -241,7 +240,7 @@ void effPointGetDisp(CameraId cameraId, EffectEntry* effect) {
                         GXLoadPosMtxImm(mtx, GX_PNMTX0);
                         GXSetCurrentMtx(GX_PNMTX0);
                         PSMTXScale(scaleMtx, 0.1f, 1.0f, 1.0f);
-                        PSMTXTrans(mtx, (f32)((s8)buf[j] - 0x30), 0.0f, 0.0f);
+                        PSMTXTrans(mtx, (f32)((s8)buf[j] - '0'), 0.0f, 0.0f);
                         PSMTXConcat(scaleMtx, mtx, mtx);
                         GXLoadTexMtxImm(mtx, GX_TEXMTX0, GX_MTX2x4);
                         GXBegin(GX_QUADS, GX_VTXFMT0, 4);
@@ -312,7 +311,7 @@ void effPointGetDisp(CameraId cameraId, EffectEntry* effect) {
             GXLoadPosMtxImm(mtx, GX_PNMTX0);
             GXSetCurrentMtx(GX_PNMTX0);
             PSMTXScale(scaleMtx, 0.1f, 1.0f, 1.0f);
-            PSMTXTrans(mtx, (f32)((s8)buf[i] - 0x30), 0.0f, 0.0f);
+            PSMTXTrans(mtx, (f32)((s8)buf[i] - '0'), 0.0f, 0.0f);
             PSMTXConcat(scaleMtx, mtx, mtx);
             GXLoadTexMtxImm(mtx, GX_TEXMTX0, GX_MTX2x4);
             GXBegin(GX_QUADS, GX_VTXFMT0, 4);

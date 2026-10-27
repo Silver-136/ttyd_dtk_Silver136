@@ -1,6 +1,3 @@
-#ifdef VERSION_G8ME01
-#include "mario/mariost.h"
-#endif
 #include "eff/eff_rankup.h"
 #include "driver/animdrv.h"
 #include "driver/dispdrv.h"
@@ -77,8 +74,10 @@ void effRankupMain(EffectEntry* effect) {
                 return;
             }
 #ifdef VERSION_G8ME01
+            // FAKE: no-op (u32) cast (animPoseEntry takes s32); removing it changes the object
             work->poseId = animPoseEntry(eff_rankup_str_tbl[gp->language], (u32)inBattle);
 #else
+            // FAKE: no-op (u32) cast (animPoseEntry takes s32); removing it changes the object
             work->poseId = animPoseEntry("EFF_TekiKyouka", (u32)inBattle);
 #endif
             animPoseSetAnim(work->poseId, "Z_1", TRUE);
