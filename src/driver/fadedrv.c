@@ -503,28 +503,28 @@ void fadeMain(void) {
                         fadeCapture("fImg_dokan", NULL, 0);
                         switch (entry->type) {
                             case 0x2D:
-                                entry->sfxId = psndSFXOn(SFX_NAME_WORD(0x403AB));
+                                entry->sfxId = psndSFXOn(SFX_NAME_WORD(PSND_SFX_OFF_CHANGE_MAP_DOKAN1 | PSND_SFX_KEEP));
                                 break;
                             case 0x2F:
-                                entry->sfxId = psndSFXOn(SFX_NAME_WORD(0x403AC));
+                                entry->sfxId = psndSFXOn(SFX_NAME_WORD(PSND_SFX_OFF_CHANGE_MAP_DOKAN2 | PSND_SFX_KEEP));
                                 break;
                             case 0x29:
-                                entry->sfxId = psndSFXOn(SFX_NAME_WORD(0x403AD));
+                                entry->sfxId = psndSFXOn(SFX_NAME_WORD(PSND_SFX_OFF_CHANGE_MAP_DOKAN3 | PSND_SFX_KEEP));
                                 break;
                             case 0x2B:
-                                entry->sfxId = psndSFXOn(SFX_NAME_WORD(0x403AE));
+                                entry->sfxId = psndSFXOn(SFX_NAME_WORD(PSND_SFX_OFF_CHANGE_MAP_DOKAN4 | PSND_SFX_KEEP));
                                 break;
                             case 0x2E:
-                                entry->sfxId = psndSFXOn(SFX_NAME_WORD(0x403AF));
+                                entry->sfxId = psndSFXOn(SFX_NAME_WORD(PSND_SFX_OFF_CHANGE_MAP_DOKAN5 | PSND_SFX_KEEP));
                                 break;
                             case 0x30:
-                                entry->sfxId = psndSFXOn(SFX_NAME_WORD(0x403B0));
+                                entry->sfxId = psndSFXOn(SFX_NAME_WORD(PSND_SFX_OFF_CHANGE_MAP_DOKAN6 | PSND_SFX_KEEP));
                                 break;
                             case 0x2A:
-                                entry->sfxId = psndSFXOn(SFX_NAME_WORD(0x403B1));
+                                entry->sfxId = psndSFXOn(SFX_NAME_WORD(PSND_SFX_OFF_CHANGE_MAP_DOKAN7 | PSND_SFX_KEEP));
                                 break;
                             case 0x2C:
-                                entry->sfxId = psndSFXOn(SFX_NAME_WORD(0x403B2));
+                                entry->sfxId = psndSFXOn(SFX_NAME_WORD(PSND_SFX_OFF_CHANGE_MAP_DOKAN8 | PSND_SFX_KEEP));
                                 break;
                         }
                         entry->state++;
@@ -574,7 +574,7 @@ void fadeMain(void) {
                                 fadeCapture("fImg_peron", NULL, 2);
                                 entry->image->camId = 10;
                                 entry->image->dispCamId = 10;
-                                psndSFXOn(SFX_NAME_WORD(0x403B4));
+                                psndSFXOn(SFX_NAME_WORD(PSND_SFX_OFF_CHANGE_STORY1 | PSND_SFX_KEEP));
                                 break;
                             case 0x3C: case 0x3D: case 0x3E:
                                 fadeCapture("fImg_peron", NULL, 2);
@@ -619,10 +619,10 @@ void fadeMain(void) {
                         imgClearVirtualPoint(entry->image);
                         switch (entry->type) {
                             case 0x36: case 0x38: case 0x3A:
-                                psndSFXOn(SFX_NAME_WORD(0x403B5));
+                                psndSFXOn(SFX_NAME_WORD(PSND_SFX_OFF_CHANGE_STORY2 | PSND_SFX_KEEP));
                                 break;
                             case 0x32: case 0x35:
-                                psndSFXOn(SFX_NAME_WORD(0x40365));
+                                psndSFXOn(SFX_NAME_WORD(PSND_SFX_OFF3_MAP_CHANGE1 | PSND_SFX_KEEP));
                                 break;
                         }
                         entry->state++;
@@ -711,16 +711,16 @@ void fadeMain(void) {
                         }
                         switch (entry->type) {
                             case 0x18: case 0x1B: case 0x3F:
-                                entry->sfxId = psndSFXOn(SFX_NAME_WORD(0x40325));
+                                entry->sfxId = psndSFXOn(SFX_NAME_WORD(PSND_SFX_OFF_BTL_KORTESS_CHANGE1 | PSND_SFX_KEEP));
                                 break;
                             case 0x19: case 0x1C: case 0x40:
-                                entry->sfxId = psndSFXOn(SFX_NAME_WORD(0x40326));
+                                entry->sfxId = psndSFXOn(SFX_NAME_WORD(PSND_SFX_OFF_BTL_KORTESS_CHANGE2 | PSND_SFX_KEEP));
                                 break;
                             case 0x1D: case 0x23:
-                                entry->sfxId = psndSFXOn(SFX_NAME_WORD(0x40321));
+                                entry->sfxId = psndSFXOn(SFX_NAME_WORD(PSND_SFX_OFF_STG_START_CURTAIN_UP1 | PSND_SFX_KEEP));
                                 break;
                             case 0x1E: case 0x24:
-                                entry->sfxId = psndSFXOn(SFX_NAME_WORD(0x40322));
+                                entry->sfxId = psndSFXOn(SFX_NAME_WORD(PSND_SFX_OFF_STG_START_CURTAIN_DOWN1 | PSND_SFX_KEEP));
                                 break;
                         }
                         if (entry->poseId >= 0) {
