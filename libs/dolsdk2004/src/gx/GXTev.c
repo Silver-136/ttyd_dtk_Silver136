@@ -336,7 +336,7 @@ void GXSetTevSwapMode(GXTevStageID stage, GXTevSwapSel ras_sel, GXTevSwapSel tex
 void GXSetTevSwapModeTable(GXTevSwapSel table, GXTevColorChan red, GXTevColorChan green, GXTevColorChan blue, GXTevColorChan alpha) {
     u32* Kreg;
 #if !DEBUG
-    // not a real variable, but needed to match release
+    // FAKE: spare temporary for the Kreg index; `&__GXData->tevKsel[table * 2]` changes the object in both versions
     int index = table * 2;
 #endif
 

@@ -6125,6 +6125,8 @@ s32 itemNameToID(const char* name) {
 }
 
 USER_FUNC(cook_chk) {
+    // FAKE: `(volatile u32)args[n]` index casts on the evtSetValue calls below (plain args[n] changes
+    // the object in both versions)
     EvtWord* args = event->args;
     s32 item = evtGetValue(event, args[0]);
     ItemData* data = &itemDataTable[item];
@@ -6149,6 +6151,8 @@ USER_FUNC(cook_chk) {
 }
 
 USER_FUNC(cook_chk2) {
+    // FAKE: `(volatile u32)args[n]` index casts on the evtSetValue calls below (plain args[n] changes
+    // the object in both versions)
     EvtWord* args = event->args;
     s32 item1 = evtGetValue(event, args[0]);
     s32 item2 = evtGetValue(event, args[1]);

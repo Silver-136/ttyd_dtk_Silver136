@@ -1465,6 +1465,8 @@ BOOL winLectureCheck(void) {
 }
 
 
+// FAKE: the global 0.5f (a real .sdata2 object) is `volatile` so each HALF_F use loads it; a plain const changes
+// the object in both versions
 const volatile f32 float_0p5_8041dc98 __attribute__((aligned(8))) = 0.5f;
 
 void winMainStrippedPool(f32* f, s32 i) {

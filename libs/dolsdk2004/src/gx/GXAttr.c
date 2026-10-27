@@ -509,7 +509,6 @@ void GXSetArray(GXAttr attr, void* base_ptr, u8 stride) {
     GXAttr cpAttr;
     u32 phyAddr;
 
-    attr;  // needed to match
 
     CHECK_GXBEGIN(963, "GXSetArray");
     if (attr == GX_VA_NBT) {

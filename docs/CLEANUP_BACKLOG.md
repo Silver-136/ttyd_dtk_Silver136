@@ -9,7 +9,7 @@ retail game through every step; nothing here changes behaviour. Per-function det
 
 | Item | Now | At adoption | Notes |
 | --- | --- | --- | --- |
-| FAKES.md rows | 212 (189 both, 20 US, 3 JP) | 214 | the count rises when hidden tricks are found and documented (2026-10-26 readability sweep: 15 unmarked one-use inline/macro devices) |
+| FAKES.md rows | 218 (195 both, 20 US, 3 JP) | 214 | the count rises when hidden tricks are found and documented (2026-10-27: six unmarked `volatile` / dead-statement / spare-temporary devices; 2026-10-26 readability sweep: 15 unmarked one-use inline/macro devices) |
 | FAKE comment sites | 306 in 102 files (libs 18) | 320 (libs 94) | |
 | `#pragma opt_*` / `optimize` / `dont_inline` / `auto_inline` lines | 143 / 4 / 112 / 4 (libs: `dont_inline` 6, VI's three pairs) | 259 / 71 / 358 / 9 | whole-file settings moved to per-unit flags (Codex round 14: five more units; round 16: OSLink); the rest are per-function pairs with no whole-unit equivalent |
 | `__declspec(section)` placements | 18 (libs 35) | 434 | template Vecs in .rodata, .sdata2 constants, a few real-storage objects; the library sites are mostly genuine (see section 7) |

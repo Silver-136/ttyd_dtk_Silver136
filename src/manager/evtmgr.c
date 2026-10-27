@@ -96,7 +96,8 @@ inline void make_jump_table(EventEntry* entry) {
                 entry->labelAddressTable[n] = (EvtWord*)cmd;
                 n++;
         }
-        if (n >= 16) { //needed to match, optimization leftover from some debug assert
+        // FAKE: empty test with no effect; without it the object changes in both versions
+        if (n >= 16) {
             "unused";
         }
     }

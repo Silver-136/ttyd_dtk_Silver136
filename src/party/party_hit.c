@@ -584,6 +584,7 @@ HitEntry* partySearchHead(PartyEntry* party, Vec* pos, f32* dist, f32 angle) {
     Vec t;
     f32 s;
     f32 c;
+    // FAKE: volatile probe coordinates (plain f32 locals change the object in both versions)
     volatile f32 px;
     volatile f32 py;
     volatile f32 pz;
