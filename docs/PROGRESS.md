@@ -77,14 +77,17 @@ unit). Counts are game code (`src/`, `rels/`) from `cleanup_tools/debt_inventory
 | `__declspec(section ...)` placements | 434 | 18 |
 | Padding objects (`gap_*`) | 142 | 8 |
 | Whole-file optimizer/inline pragmas | 50 size + 16 inline settings | 0: per-unit flags in `configure.py` |
-| Per-function optimizer and inline pragma pairs replaced by one per-unit flag (`-inline noauto`, `-opt noprop`, ...) | | 59 units |
-| Other optimizer and inline pragmas | 697 | 312 |
-| `FAKE:` comment sites (each listed in FAKES.md) | 320 | 306 (FAKES.md rows 214 -> 195; rows were added for existing tricks found without a FAKE note: no-op statements, a float-first private declaration) |
+| Per-function optimizer and inline pragma pairs replaced by one per-unit flag (`-inline noauto`, `-opt noprop`, ...) | | 60 units (one SDK unit, OSLink) |
+| Other optimizer and inline pragmas | 697 | 263 |
+| `FAKE:` comment sites (each listed in FAKES.md) | 320 | 323 (FAKES.md rows 214 -> 212). Many fakes are gone, but rows and markers were added for existing tricks that had no FAKE note: no-op statements, a float-first private declaration, one-use inline functions and macros that only steer code generation |
 | Inline asm in game code | 19 | 6 |
 | Private copies of prototypes in `.c` files | ~20,000 | ~1,000 left (event functions, owner-header and SDK prototypes now come from headers) |
 | Raw numbers given names | | unit kinds and sides, items (also about 590 item ids in event scripts), sounds (182 ids), saved variables, targeting flags, characters, menu states, party/battle/item/event flags, weapon elements, counter resistances, special and target-property flags, unit and part attributes (also in about 1,200 event-script calls and the unit/part data tables), statuses, partner ids; the special unit ids of battle scripts (about 34,000 arguments); the flag words of map objects, NPCs (and their status word), effects, cameras, animation poses, battles, fades, the memory card and window managers, map drawing objects and animations, items, Mario's display and Peach, partners, ext poses, sound streams, the audience, the status window, images, message windows, the pause menu and file select, the puni module and the map hit objects (about 13,000 code, script and table masks); item and unit-kind case labels; defense attributes, damage codes and damage-check flags, battle camera modes, interpolation curves, case-event conditions, sequence ids and BGM/ENV play words |
-| Calls through function-pointer casts (wrong or private prototypes) | ~385 | 47 (one typed declaration per function; open families listed in `cleanup_notes`) |
+| Calls through function-pointer casts (wrong or private prototypes) | ~385 | 40 (one typed declaration per function; open families listed in `docs/CLEANUP_BACKLOG.md`) |
 | SDK call arguments and enum casts as numbers | | 2,282 GX arguments, 54 camera ids, 85 pad masks, 50 clock conversions (`OSTicksTo*`, `OSDiffTick`) and other enum casts named |
 | Formatting | | Ghidra-style braces joined (2,360), 2-space and irregular indentation re-indented (33 files), casts spaced as `(T*)x`, `(void*)0` as `NULL`, 45 TODO notes removed or turned into facts |
 | Copies of shared code and types | | one polynomial sin/cos inline replaces 30 private copies; private views of effect and message work structs replaced by the real types; one `ExtTexInfo` replaces 10 private copies of the pose-table type; data read through cast macros is declared with its real type |
 | Data tables written out | | battle unit kind tables (241) and status vulnerability tables (313) list one field per line with its name |
+| Saved-game values | | 805 saved flags and words (`GSWF`/`GSW`) named from the scripts that set and test them; the story progress value (`GSW(0)`) has one name per step (407 values) from the game's own step labels and debug story list; area-local flags and words per area |
+| Macros | | alias macros written out; 37 statement macros became `static inline` functions; 43 unused macros removed; the macros that must stay (code generators, or the bytes change as functions) are laid out over several lines with a comment saying why |
+| Battle unit work slots | | the per-unit work slots of battle units and parts (about 3,200 script calls) named per unit from what each script stores in them (183 numeric slot arguments left) |
