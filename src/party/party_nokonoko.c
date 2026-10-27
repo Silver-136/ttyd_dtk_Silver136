@@ -203,7 +203,7 @@ static inline void noko_star(PartyEntry* party, s32 n) {
     effSmallStarN64Entry(3, n, party->position.x, party->position.y + party->height, party->position.z, s, (-1.0f), -c);
 }
 
-#define NOKO_PICK_UP_NEAR_ITEM(party, body)                                                                                     \
+#define NOKO_PICK_UP_NEAR_ITEM(party, body)                                                                        \
     if (party->work.nokonoko.heldItem == NULL) {                                                                   \
         party->work.nokonoko.heldItem = itemNearDistCheck(party->position.x, party->position.y, party->position.z, \
         0.5f * party->width + 12.0f);                                                                              \

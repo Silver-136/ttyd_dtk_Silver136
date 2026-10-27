@@ -921,12 +921,12 @@ u8 _getRegistStatus(BattleUnit* unit, s32 type) {
 
 
 // A macro, not an inline function: as a function BattleSetStatusDamage changes size.
-#define STAMP_COL(e, r0, g0, b0, r1, g1, b1)                 \
-    ((EffStampN64Work*)(e)->userdata)->r = (r0);                  \
-    ((EffStampN64Work*)(e)->userdata)->g = (g0);                  \
-    ((EffStampN64Work*)(e)->userdata)->b = (b0);                  \
-    ((EffStampN64Work*)(e)->userdata)->r2 = (r1);                  \
-    ((EffStampN64Work*)(e)->userdata)->g2 = (g1);                  \
+#define STAMP_COL(e, r0, g0, b0, r1, g1, b1)      \
+    ((EffStampN64Work*)(e)->userdata)->r = (r0);  \
+    ((EffStampN64Work*)(e)->userdata)->g = (g0);  \
+    ((EffStampN64Work*)(e)->userdata)->b = (b0);  \
+    ((EffStampN64Work*)(e)->userdata)->r2 = (r1); \
+    ((EffStampN64Work*)(e)->userdata)->g2 = (g1); \
     ((EffStampN64Work*)(e)->userdata)->b2 = (b1)
 
 s32 BattleSetStatusDamage(u32* result, BattleUnit* unit, BattleUnitPart* part, u32 special, s32 type, s32 rate, s32 levelDiff, s8 time, s8 strength) {

@@ -260,7 +260,7 @@ void battleAcDelete_TimingWide(BattleWork* work) {
     work->actionCommands.mAcState = 0x3EC;
 }
 
-#define DRAW_BUTTON_ICON(id)                            \
+#define DRAW_BUTTON_ICON(id)                \
     {                                       \
         Vec pos = {0.0f, 0.0f, 0.0f};       \
         pos.x = -200.0f + x;                \

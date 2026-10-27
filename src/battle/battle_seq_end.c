@@ -1827,8 +1827,8 @@ s32 _keta_get(s32 n) {
 #define LVOBJ_ICON 0x163
 #define LVOBJ_TEX(n, tbl) (0x27 + (n))
 #endif
-#define LVOBJ_PLANE(o, n, tbl)                                                            \
-    if ((o)->blinkOn) {                                                             \
+#define LVOBJ_PLANE(o, n, tbl)                                                         \
+    if ((o)->blinkOn) {                                                                \
         PSMTXIdentity(m);                                                              \
         PSMTXTrans(trans, (o)->pos.x, (o)->pos.y, (o)->pos.z);                         \
         PSMTXScale(scale, (o)->scale.x, (o)->scale.y, (o)->scale.z);                   \
@@ -1840,8 +1840,8 @@ s32 _keta_get(s32 n) {
         PSMTXConcat(rotX, m, m);                                                       \
         PSMTXConcat(rotY, m, m);                                                       \
         PSMTXConcat(trans, m, m);                                                      \
-        btlDispTexPlane2(m, LVOBJ_TEX2 + n, (o)->color, 0); \
-        btlDispTexPlane((o)->pos.x - 16.0f, 20.0f + (o)->pos.y, 2.0f + (o)->pos.z,  \
+        btlDispTexPlane2(m, LVOBJ_TEX2 + n, (o)->color, 0);                            \
+        btlDispTexPlane((o)->pos.x - 16.0f, 20.0f + (o)->pos.y, 2.0f + (o)->pos.z,     \
                         (o)->scale.x, (o)->scale.y, LVOBJ_TEX(n, tbl), (o)->color, 0); \
     }
 

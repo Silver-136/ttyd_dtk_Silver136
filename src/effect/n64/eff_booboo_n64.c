@@ -250,10 +250,10 @@ static inline void booSetArrays(void) {
 
 #define DL4(a, b, c, d) GXCallDisplayList(a, 0x40); GXCallDisplayList(b, 0x40); GXCallDisplayList(c, 0x40); GXCallDisplayList(d, 0x40);
 #define DLS(p, a) GXCallDisplayList(p##a, 0x20);
-#define DLS_ALL(p)                                                                                         \
-    DLS(p, 4) DLS(p, 5) DLS(p, 6) DLS(p, 7) DLS(p, 8) DLS(p, 9) DLS(p, 10) DLS(p, 11) DLS(p, 12)          \
-    DLS(p, 13) DLS(p, 14) DLS(p, 15) DLS(p, 16) DLS(p, 17) DLS(p, 18) DLS(p, 19) DLS(p, 20) DLS(p, 21)    \
-    DLS(p, 22) DLS(p, 23) DLS(p, 24) DLS(p, 25) DLS(p, 26) DLS(p, 27) DLS(p, 28) DLS(p, 29) DLS(p, 30)    \
+#define DLS_ALL(p)                                                                                     \
+    DLS(p, 4) DLS(p, 5) DLS(p, 6) DLS(p, 7) DLS(p, 8) DLS(p, 9) DLS(p, 10) DLS(p, 11) DLS(p, 12)       \
+    DLS(p, 13) DLS(p, 14) DLS(p, 15) DLS(p, 16) DLS(p, 17) DLS(p, 18) DLS(p, 19) DLS(p, 20) DLS(p, 21) \
+    DLS(p, 22) DLS(p, 23) DLS(p, 24) DLS(p, 25) DLS(p, 26) DLS(p, 27) DLS(p, 28) DLS(p, 29) DLS(p, 30) \
     DLS(p, 31)
 
 void boo_polygon_0(void) {
@@ -375,17 +375,18 @@ void effBoobooMain(EffectEntry* effect) {
     dispEntry(CAMERA_3D, 0.0f, 0, (DispCallback)effBoobooDisp, effect);
 }
 
-#define TEX_COMMON(id, cin_d)                                                                              \
-    effGetTexObjN64(id, &texObj);                                                                          \
-    GXLoadTexObj(&texObj, GX_TEXMAP0);                                                                     \
-    GXSetNumTexGens(1);                                                                                    \
-    GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);       \
-    GXSetNumTevStages(1);                                                                                  \
-    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);                                    \
-    GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);             \
-    GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);             \
-    GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_TEXC, GX_CC_RASC, cin_d);                              \
+static inline void booTexCommon(s32 id, GXTevColorArg d, GXTexObj* texObj) {
+    effGetTexObjN64(id, texObj);
+    GXLoadTexObj(texObj, GX_TEXMAP0);
+    GXSetNumTexGens(1);
+    GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
+    GXSetNumTevStages(1);
+    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
+    GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_TEXC, GX_CC_RASC, d);
     GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_RASA);
+}
 
 BOOL texture_dl(EffectEntry* effect, s32 idx, u32 type) {
     EffBoobooN64Work* work = effect->userdata;
@@ -397,7 +398,7 @@ BOOL texture_dl(EffectEntry* effect, s32 idx, u32 type) {
     GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_VTX, GX_LIGHT_NULL, GX_DF_NONE, GX_AF_NONE);
     switch (type) {
     case 0:
-        TEX_COMMON(0x38, GX_CC_ZERO)
+        booTexCommon(0x38, GX_CC_ZERO, &texObj);
         break;
     case 1:
         GXSetNumTexGens(0);
@@ -409,28 +410,28 @@ BOOL texture_dl(EffectEntry* effect, s32 idx, u32 type) {
         GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_RASA);
         break;
     case 2:
-        TEX_COMMON(0x39, GX_CC_ZERO)
+        booTexCommon(0x39, GX_CC_ZERO, &texObj);
         break;
     case 3:
-        TEX_COMMON(0x3A, GX_CC_ZERO)
+        booTexCommon(0x3A, GX_CC_ZERO, &texObj);
         break;
     case 4:
-        TEX_COMMON(0x3B, GX_CC_ZERO)
+        booTexCommon(0x3B, GX_CC_ZERO, &texObj);
         break;
     case 5:
-        TEX_COMMON(0x3C, GX_CC_ZERO)
+        booTexCommon(0x3C, GX_CC_ZERO, &texObj);
         break;
     case 6:
-        TEX_COMMON(0x3D, GX_CC_ZERO)
+        booTexCommon(0x3D, GX_CC_ZERO, &texObj);
         break;
     case 7:
-        TEX_COMMON(0x3E, GX_CC_ZERO)
+        booTexCommon(0x3E, GX_CC_ZERO, &texObj);
         break;
     case 8:
-        TEX_COMMON(0x3F, GX_CC_C0)
+        booTexCommon(0x3F, GX_CC_C0, &texObj);
         break;
     case 9:
-        TEX_COMMON(0x40, GX_CC_C0)
+        booTexCommon(0x40, GX_CC_C0, &texObj);
         break;
     }
     if ((mapGetWork()->entries[0].flags & 2) && (work->flags[idx] & 8)) {

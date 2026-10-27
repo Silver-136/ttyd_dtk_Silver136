@@ -309,14 +309,14 @@ env_cos(f32 x) {
 // FAKE: the first vertex's y goes through an inline return temp, so in envDisp_DepthOfField (opt_propagation off)
 // it is numbered after the x product and x keeps f0 as in the target. Same value; envDisp_Blur is unaffected.
 static inline f32 dofDiv(f32 a, f32 b) { return a / b; }
-#define DOF_QUAD(g, half)                                                               \
-    GXPosition3f32(-(s32)(g)->fbWidth / (half), dofDiv((g)->efbHeight, (half)), 0.0f);         \
-    GXTexCoord2f32(0.0f, 0.0f);                                                         \
-    GXPosition3f32((g)->fbWidth / (half), (g)->efbHeight / (half), 0.0f);               \
-    GXTexCoord2f32(1.0f, 0.0f);                                                         \
-    GXPosition3f32((g)->fbWidth / (half), -(s32)(g)->efbHeight / (half), 0.0f);         \
-    GXTexCoord2f32(1.0f, 1.0f);                                                         \
-    GXPosition3f32(-(s32)(g)->fbWidth / (half), -(s32)(g)->efbHeight / (half), 0.0f);   \
+#define DOF_QUAD(g, half)                                                              \
+    GXPosition3f32(-(s32)(g)->fbWidth / (half), dofDiv((g)->efbHeight, (half)), 0.0f); \
+    GXTexCoord2f32(0.0f, 0.0f);                                                        \
+    GXPosition3f32((g)->fbWidth / (half), (g)->efbHeight / (half), 0.0f);              \
+    GXTexCoord2f32(1.0f, 0.0f);                                                        \
+    GXPosition3f32((g)->fbWidth / (half), -(s32)(g)->efbHeight / (half), 0.0f);        \
+    GXTexCoord2f32(1.0f, 1.0f);                                                        \
+    GXPosition3f32(-(s32)(g)->fbWidth / (half), -(s32)(g)->efbHeight / (half), 0.0f);  \
     GXTexCoord2f32(0.0f, 1.0f)
 
 static const GXColor white = {0xFF, 0xFF, 0xFF, 0xFF};

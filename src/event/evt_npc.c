@@ -1221,21 +1221,21 @@ USER_FUNC(evt_npc_set_anim) {
     return EVT_RETURN_DONE;
 }
 
-#define NPC_SET_TRIBE_ANIM(funcName, field)                                      \
-    USER_FUNC(funcName) {                                                        \
-        EvtWord* args = event->args;                                             \
-        const char* name;                                                        \
-        NpcEntry* npc;                                                           \
-        const char* anim;                                                        \
-                                                                                 \
-        name = (const char*)evtGetValue(event, args[0]);                         \
-        npc = evtNpcNameToPtr(event, name);                                      \
-        anim = npc->tribe->field;                                                \
-        if (event->wNpcEventType == NPC_EVENT_MOVE) {                            \
-            strcpy(npc->currentAnim, anim);                                      \
-        }                                                                        \
-        animPoseSetAnim(npc->poseId, anim, TRUE);                                \
-        return EVT_RETURN_DONE;                                                  \
+#define NPC_SET_TRIBE_ANIM(funcName, field)              \
+    USER_FUNC(funcName) {                                \
+        EvtWord* args = event->args;                     \
+        const char* name;                                \
+        NpcEntry* npc;                                   \
+        const char* anim;                                \
+                                                         \
+        name = (const char*)evtGetValue(event, args[0]); \
+        npc = evtNpcNameToPtr(event, name);              \
+        anim = npc->tribe->field;                        \
+        if (event->wNpcEventType == NPC_EVENT_MOVE) {    \
+            strcpy(npc->currentAnim, anim);              \
+        }                                                \
+        animPoseSetAnim(npc->poseId, anim, TRUE);        \
+        return EVT_RETURN_DONE;                          \
     }
 
 // const char* lookupName

@@ -189,44 +189,44 @@ s32 uranaisi_data_make_supercoin(const char* prefix, s32 type);
 s32 uranaisi_data_make_starpiece(const char* prefix, s32 type);
 s32 uranaisi_data_make_next(const char* prefix, s32 type);
 
-#define URANAI_PARSE_TAG() \
-    tagNum = 0; \
-    mbbpos = 0; \
-    tagdone = FALSE; \
-    while (!tagdone) { \
-        if (_ismbblead(*tagdata)) { \
-            if (tagNum == 0) { \
-                tag[mbbpos++] = tagdata[0]; \
-                tag[mbbpos++] = tagdata[1]; \
-                tagdata += 2; \
-            } else { \
-                mbbpos += 2; \
-                tagdata += 2; \
-            } \
-        } else { \
-            switch (tagdata[0]) { \
-                case '>': \
-                    tagdone = TRUE; \
-                case ',': \
-                    tagdata++; \
-                    if (tagNum == 0) { \
-                        tag[mbbpos] = '\0'; \
-                        initEndPos = (u8*)tagdata; \
-                    } else { \
-                        tagEndPos = (s16)mbbpos; \
-                    } \
-                    mbbpos = 0; \
-                    tagNum++; \
-                    break; \
-                default: \
-                    if (tagNum == 0) { \
+#define URANAI_PARSE_TAG()                          \
+    tagNum = 0;                                     \
+    mbbpos = 0;                                     \
+    tagdone = FALSE;                                \
+    while (!tagdone) {                              \
+        if (_ismbblead(*tagdata)) {                 \
+            if (tagNum == 0) {                      \
+                tag[mbbpos++] = tagdata[0];         \
+                tag[mbbpos++] = tagdata[1];         \
+                tagdata += 2;                       \
+            } else {                                \
+                mbbpos += 2;                        \
+                tagdata += 2;                       \
+            }                                       \
+        } else {                                    \
+            switch (tagdata[0]) {                   \
+                case '>':                           \
+                    tagdone = TRUE;                 \
+                case ',':                           \
+                    tagdata++;                      \
+                    if (tagNum == 0) {              \
+                        tag[mbbpos] = '\0';         \
+                        initEndPos = (u8*)tagdata;  \
+                    } else {                        \
+                        tagEndPos = (s16)mbbpos;    \
+                    }                               \
+                    mbbpos = 0;                     \
+                    tagNum++;                       \
+                    break;                          \
+                default:                            \
+                    if (tagNum == 0) {              \
                         tag[mbbpos++] = *tagdata++; \
-                    } else { \
-                        mbbpos++; \
-                        tagdata++; \
-                    } \
-            } \
-        } \
+                    } else {                        \
+                        mbbpos++;                   \
+                        tagdata++;                  \
+                    }                               \
+            }                                       \
+        }                                           \
     }
 
 static inline s32 uranaiCount(UranaiWork* w) {

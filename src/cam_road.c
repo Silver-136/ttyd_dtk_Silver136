@@ -1190,22 +1190,22 @@ void calcHokanCamRoad(s32 type, CamRoadState* from, CamRoadState* to, CamRoadSta
     out->shiftXRate = r * (to->shiftXRate - from->shiftXRate) + from->shiftXRate;
 }
 // A macro, not an inline function: as a function camRoadMain changes.
-#define CAMROAD_HOKAN_START(src, flags)                                                                     \
-    {                                                                                                         \
-        wp->cmpFlags = flags;                                                                                 \
-        wp->f_c8 = 1;                                                                                         \
-        wp->time = gp->renderFieldTime;                                                                       \
-        wp->hokanT = 0.0f;                                                                                    \
-        wp->start = src;                                                                                      \
-        wp->prev = wp->next;                                                                                  \
-        if (wp->prev.f_08 || wp->start.f_08 ||                                                                \
-            (wp->state == 0x65 &&                                                                             \
-             ((wp->prev.cam && wp->prev.cam->f_20) || (wp->start.cam && wp->start.cam->f_20))) ||             \
-            (wp->prev.cam && wp->prev.cam->f_7c) || (wp->start.cam && wp->start.cam->f_7c)) {                 \
-            wp->hokanType = 1;                                                                                \
-        } else {                                                                                              \
-            wp->hokanType = 0;                                                                                \
-        }                                                                                                     \
+#define CAMROAD_HOKAN_START(src, flags)                                                           \
+    {                                                                                             \
+        wp->cmpFlags = flags;                                                                     \
+        wp->f_c8 = 1;                                                                             \
+        wp->time = gp->renderFieldTime;                                                           \
+        wp->hokanT = 0.0f;                                                                        \
+        wp->start = src;                                                                          \
+        wp->prev = wp->next;                                                                      \
+        if (wp->prev.f_08 || wp->start.f_08 ||                                                    \
+            (wp->state == 0x65 &&                                                                 \
+             ((wp->prev.cam && wp->prev.cam->f_20) || (wp->start.cam && wp->start.cam->f_20))) || \
+            (wp->prev.cam && wp->prev.cam->f_7c) || (wp->start.cam && wp->start.cam->f_7c)) {     \
+            wp->hokanType = 1;                                                                    \
+        } else {                                                                                  \
+            wp->hokanType = 0;                                                                    \
+        }                                                                                         \
     }
 void camRoadMain(CameraParams* out, f32 a, f32 b, f32 c, f32 d, f32 e, f32 f, f32 g) {
     u32 flags;

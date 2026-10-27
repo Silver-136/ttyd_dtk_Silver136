@@ -88,14 +88,14 @@ void winRootBgDrawDisp(s32 unused, WindowWork* bg);
 void winRootBgCaptureDisp(s32 unused, WindowWork* bg);
 double fabs(double);
 
-#define WIN_ROOT_ADD_TAB(n)                       \
-    {                                             \
-        WinTab* t = &w->tab[w->tabNum];       \
-        t->id = n;                                \
-        t->state = 0;                             \
-        t->x = t->y = 1000.0f;                    \
-        t->msg = msg_help[n];                     \
-        w->tabNum++;                              \
+#define WIN_ROOT_ADD_TAB(n)             \
+    {                                   \
+        WinTab* t = &w->tab[w->tabNum]; \
+        t->id = n;                      \
+        t->state = 0;                   \
+        t->x = t->y = 1000.0f;          \
+        t->msg = msg_help[n];           \
+        w->tabNum++;                    \
     }
 
 void winBgMain(WindowWork* wp);
@@ -922,12 +922,12 @@ void winKirinukiGX(WindowWork* wp, s32 type, f32 x, f32 y, f32 w, f32 h) {
 static inline double fabs_d(double x) { return __fabs(x); }
 static inline float fabsf_(float x) { return (float)fabs_d((double)x); }
 
-#define NAME_TEX(obj, id, mtx, tw, th)                                                        \
-    TEXGetGXTexObjFromPalette((TEXPalette*)*wp->res->data, &obj, id);                                   \
-    GXInitTexObjLOD(&obj, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1); \
-    GXLoadTexObj(&obj, GX_TEXMAP0);                                                           \
-    GXSetNumTexGens(1);                                                                       \
-    GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX0, GX_FALSE, GX_PTIDENTITY); \
+#define NAME_TEX(obj, id, mtx, tw, th)                                                                        \
+    TEXGetGXTexObjFromPalette((TEXPalette*)*wp->res->data, &obj, id);                                         \
+    GXInitTexObjLOD(&obj, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);            \
+    GXLoadTexObj(&obj, GX_TEXMAP0);                                                                           \
+    GXSetNumTexGens(1);                                                                                       \
+    GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX0, GX_FALSE, GX_PTIDENTITY);           \
     MTXScale(mtx, fabsf_(tw) / (f32)GXGetTexObjWidth(&obj), fabsf_(th) / (f32)GXGetTexObjHeight(&obj), 1.0f); \
     GXLoadTexMtxImm(mtx, GX_TEXMTX0, GX_MTX2x4)
 

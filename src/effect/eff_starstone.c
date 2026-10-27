@@ -228,55 +228,58 @@ static u8* color_tbl[] = { diamond_1_color0_tbl, diamond_2_color0_tbl, diamond_3
 #define CLR_ARRAY(c) GXSetArray(GX_VA_CLR0, c, 4);
 #define CLR_NONE(c)
 
-#define VTX_SETUP(posT, nrmT, clrMac, clrT, texT, texFrac) \
-    GXClearVtxDesc();                                      \
-    GXSetVtxDesc(GX_VA_POS, GX_INDEX8);                                    \
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 11);                       \
-    GXSetArray(GX_VA_POS, posT, 6);                                \
-    GXSetVtxDesc(GX_VA_NRM, GX_INDEX8);                                   \
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_S8, 6);                       \
-    GXSetArray(GX_VA_NRM, nrmT, 3);                               \
-    GXSetVtxDesc(GX_VA_CLR0, GX_INDEX8);                                   \
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);                       \
-    clrMac(clrT) GXSetVtxDesc(GX_VA_TEX0, GX_INDEX8);                      \
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S16, texFrac);                 \
+// Vertex format and arrays of a star stone mesh; clrMac is CLR_ARRAY (set the colour array) or CLR_NONE.
+// A macro, not an inline function: as a function (colour array NULL = skip) the object changes.
+#define VTX_SETUP(posT, nrmT, clrMac, clrT, texT, texFrac)               \
+    GXClearVtxDesc();                                                    \
+    GXSetVtxDesc(GX_VA_POS, GX_INDEX8);                                  \
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 11);      \
+    GXSetArray(GX_VA_POS, posT, 6);                                      \
+    GXSetVtxDesc(GX_VA_NRM, GX_INDEX8);                                  \
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_S8, 6);        \
+    GXSetArray(GX_VA_NRM, nrmT, 3);                                      \
+    GXSetVtxDesc(GX_VA_CLR0, GX_INDEX8);                                 \
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);   \
+    clrMac(clrT)                                                         \
+    GXSetVtxDesc(GX_VA_TEX0, GX_INDEX8);                                 \
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S16, texFrac); \
     GXSetArray(GX_VA_TEX0, texT, 4);
 
 // A macro, not an inline function: as a function the GXColor temporaries move on the stack.
-#define DISP_START(w)                                  \
-    mapSetMaterialFog();                               \
-    GXSetArray(GX_VA_CLR0, color_tbl[(w)->type], 4);           \
-    GXSetNumChans(1);                                  \
-    GXSetChanCtrl(GX_COLOR0A0, 0, GX_SRC_REG, GX_SRC_REG, 0, GX_DF_NONE, GX_AF_NONE);                \
-    GXSetChanMatColor(GX_COLOR0A0, (w)->color);                  \
-    GXSetNumTexGens(0);                                \
-    GXSetNumTevStages(2);                              \
-    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR0A0);                     \
-    GXSetTevOp(GX_TEVSTAGE0, GX_PASSCLR);                                  \
-    GXSetTevOrder(GX_TEVSTAGE1, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR_NULL);                   \
-    GXSetTevColorOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, 1, GX_TEVPREV);                 \
-    GXSetTevAlphaOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, 1, GX_TEVPREV);                 \
-    GXSetTevColorIn(GX_TEVSTAGE1, GX_CC_ZERO, GX_CC_C0, GX_CC_CPREV, GX_CC_ZERO);                  \
-    GXSetTevAlphaIn(GX_TEVSTAGE1, GX_CA_ZERO, GX_CA_A0, GX_CA_APREV, GX_CA_ZERO);                    \
+#define DISP_START(w)                                                                    \
+    mapSetMaterialFog();                                                                 \
+    GXSetArray(GX_VA_CLR0, color_tbl[(w)->type], 4);                                     \
+    GXSetNumChans(1);                                                                    \
+    GXSetChanCtrl(GX_COLOR0A0, 0, GX_SRC_REG, GX_SRC_REG, 0, GX_DF_NONE, GX_AF_NONE);    \
+    GXSetChanMatColor(GX_COLOR0A0, (w)->color);                                          \
+    GXSetNumTexGens(0);                                                                  \
+    GXSetNumTevStages(2);                                                                \
+    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR0A0);          \
+    GXSetTevOp(GX_TEVSTAGE0, GX_PASSCLR);                                                \
+    GXSetTevOrder(GX_TEVSTAGE1, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR_NULL);        \
+    GXSetTevColorOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, 1, GX_TEVPREV); \
+    GXSetTevAlphaOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, 1, GX_TEVPREV); \
+    GXSetTevColorIn(GX_TEVSTAGE1, GX_CC_ZERO, GX_CC_C0, GX_CC_CPREV, GX_CC_ZERO);        \
+    GXSetTevAlphaIn(GX_TEVSTAGE1, GX_CA_ZERO, GX_CA_A0, GX_CA_APREV, GX_CA_ZERO);        \
     GXSetTevColor(GX_TEVREG0, (GXColor){(w)->r, (w)->g, (w)->b, (w)->a});
 
-#define DISP_MID(w)                                   \
-    GXSetNumChans(1);                                  \
-    GXSetChanCtrl(GX_COLOR0A0, 0, GX_SRC_REG, GX_SRC_VTX, 0, GX_DF_NONE, GX_AF_NONE);                \
-    GXSetNumTexGens(1);                                \
-    GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, 30, 0, 125);            \
-    PSMTXTrans(m, (w)->texScrollX, (w)->texScrollY, 0.0f);           \
-    GXLoadTexMtxImm(m, 30, GX_MTX2x4);                         \
-    GXSetNumTevStages(2);                              \
-    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);                         \
-    GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, 1, GX_TEVPREV);                 \
-    GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, 1, GX_TEVPREV);                 \
-    GXSetTevOp(GX_TEVSTAGE0, GX_MODULATE);                                  \
-    GXSetTevOrder(GX_TEVSTAGE1, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR_NULL);                   \
-    GXSetTevColorOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, 1, GX_TEVPREV);                 \
-    GXSetTevAlphaOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, 1, GX_TEVPREV);                 \
-    GXSetTevColorIn(GX_TEVSTAGE1, GX_CC_ZERO, GX_CC_C0, GX_CC_CPREV, GX_CC_ZERO);                  \
-    GXSetTevAlphaIn(GX_TEVSTAGE1, GX_CA_ZERO, GX_CA_A0, GX_CA_APREV, GX_CA_ZERO);                    \
+#define DISP_MID(w)                                                                      \
+    GXSetNumChans(1);                                                                    \
+    GXSetChanCtrl(GX_COLOR0A0, 0, GX_SRC_REG, GX_SRC_VTX, 0, GX_DF_NONE, GX_AF_NONE);    \
+    GXSetNumTexGens(1);                                                                  \
+    GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, 30, 0, 125);               \
+    PSMTXTrans(m, (w)->texScrollX, (w)->texScrollY, 0.0f);                               \
+    GXLoadTexMtxImm(m, 30, GX_MTX2x4);                                                   \
+    GXSetNumTevStages(2);                                                                \
+    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);                  \
+    GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, 1, GX_TEVPREV); \
+    GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, 1, GX_TEVPREV); \
+    GXSetTevOp(GX_TEVSTAGE0, GX_MODULATE);                                               \
+    GXSetTevOrder(GX_TEVSTAGE1, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR_NULL);        \
+    GXSetTevColorOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, 1, GX_TEVPREV); \
+    GXSetTevAlphaOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, 1, GX_TEVPREV); \
+    GXSetTevColorIn(GX_TEVSTAGE1, GX_CC_ZERO, GX_CC_C0, GX_CC_CPREV, GX_CC_ZERO);        \
+    GXSetTevAlphaIn(GX_TEVSTAGE1, GX_CA_ZERO, GX_CA_A0, GX_CA_APREV, GX_CA_ZERO);        \
     GXSetTevColor(GX_TEVREG0, (GXColor){(w)->r, (w)->g, (w)->b, (w)->a});
 
 static inline void starStoneBlendState(void) {
@@ -286,10 +289,10 @@ static inline void starStoneBlendState(void) {
     GXSetZMode(1, GX_LEQUAL, 0);
 }
 
-#define CALL_DL_TABLE(tbl, sz, n)                          \
-    i = 0; dp = tbl; sp = sz; \
-    for (; i < n##U; i++, sp++, dp++) {       \
-        GXCallDisplayList(*dp, *sp << 5);          \
+#define CALL_DL_TABLE(tbl, sz, n)         \
+    i = 0; dp = tbl; sp = sz;             \
+    for (; i < n##U; i++, sp++, dp++) {   \
+        GXCallDisplayList(*dp, *sp << 5); \
     }
 
 EffectEntry* effStarStoneEntry(s32 type, f32 x, f32 y, f32 z, f32 scale) {
@@ -504,25 +507,25 @@ void effStarStoneMain(EffectEntry* effect) {
 
 // Call a table of n display lists (sizes in 32-byte units). Macros, not inline functions: written as functions,
 // the loops change the object.
-#define LOOPK2(tbl, sz, n)                          \
-    {                                               \
-        u8* s2;                                     \
-        u8** d2;                                    \
-        s32 kk;                                     \
-        kk = 0;                                     \
-        d2 = tbl;                                   \
-        s2 = sz;                                    \
-        for (; kk < n##U; kk++, s2++, d2++) {       \
-            GXCallDisplayList(*d2, *s2 << 5);       \
-        }                                           \
+#define LOOPK2(tbl, sz, n)                    \
+    {                                         \
+        u8* s2;                               \
+        u8** d2;                              \
+        s32 kk;                               \
+        kk = 0;                               \
+        d2 = tbl;                             \
+        s2 = sz;                              \
+        for (; kk < n##U; kk++, s2++, d2++) { \
+            GXCallDisplayList(*d2, *s2 << 5); \
+        }                                     \
     }
 // The same loop with the caller's k, dq and sq
-#define LOOPK(tbl, sz, n)                           \
-    k = 0;                                          \
-    dq = tbl;                                       \
-    sq = sz;                                        \
-    for (; k < n##U; k++, sq++, dq++) {             \
-        GXCallDisplayList(*dq, *sq << 5);           \
+#define LOOPK(tbl, sz, n)                 \
+    k = 0;                                \
+    dq = tbl;                             \
+    sq = sz;                              \
+    for (; k < n##U; k++, sq++, dq++) {   \
+        GXCallDisplayList(*dq, *sq << 5); \
     }
 void effStarStoneDisp_1(CameraId cameraId, EffectEntry* effect) {
     Mtx m;

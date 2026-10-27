@@ -195,24 +195,25 @@ static inline void jabaraLand(f32 y_, void* h_) {
 }
 
 #define ANIM_STEP() animPoseSetLocalTime(mario->paperAnimGroupId[marioAnimeId()], (f32)(s32)mario->mot.jabara.animFrame)
-#define JAB_TAIL(MOTSUB) \
-    { \
-        jabaraResetPose(); \
-        MOTSUB \
-        if (marioGetPtr()->motStruct) { \
-            __memFree(HEAP_DEFAULT, marioGetPtr()->motStruct); \
-            marioGetPtr()->motStruct = NULL; \
-        } \
+// End of the spring jump: reset the pose, optionally return to standing, free the motion work
+static inline void jabTail(BOOL stay) {
+    jabaraResetPose();
+    if (stay) {
+        marioChgMotSub(MARIO_MOTION_STAY, 0);
     }
-#define MOTSUB_ marioChgMotSub(MARIO_MOTION_STAY, 0);
+    if (marioGetPtr()->motStruct) {
+        __memFree(HEAP_DEFAULT, marioGetPtr()->motStruct);
+        marioGetPtr()->motStruct = NULL;
+    }
+}
 // A macro, not an inline function: as a function the instruction order in mot_jabara changes.
-#define JAB_LAND(HIT, Y) \
-    marioPaperOff(); \
+#define JAB_LAND(HIT, Y)    \
+    marioPaperOff();        \
     jabaraLand((Y), (HIT)); \
-    camFollowYOn(); \
-    marioGetPtr(); \
-    allPartyRideOff(); \
-    JAB_TAIL(MOTSUB_)
+    camFollowYOn();         \
+    marioGetPtr();          \
+    allPartyRideOff();      \
+    jabTail(TRUE);
 
 void swingMain(void);
 void jabaraSwingStart(s32 s);
@@ -398,7 +399,7 @@ void mot_jabara(void) {
             camFollowYOn();
             marioGetPtr();
             allPartyRideOff();
-            JAB_TAIL(MOTSUB_)
+            jabTail(TRUE);
             return;
         }
         mario->position.y = hitY;
@@ -546,7 +547,7 @@ void mot_jabara(void) {
                     marioPaperOff();
                     marioGetPtr();
                     allPartyRideOff();
-                    JAB_TAIL(MOTSUB_)
+                    jabTail(TRUE);
                     return;
                 }
             } else {
@@ -575,7 +576,7 @@ void mot_jabara(void) {
         mario->hitobjStandOn = 0;
         mario->baseSpeed = 0.0f;
         mario->flags &= ~MARIO_FLAG_WALLS_DISABLED;
-        JAB_TAIL()
+        jabTail(FALSE);
         marioPaperOff();
         camFollowYOff();
         marioChgSmallJumpMotion();
@@ -625,7 +626,7 @@ void mot_jabara(void) {
             mario->flags |= MARIO_FLAG_STOP_AIR_MOVEMENT;
             marioGetPtr();
             allPartyRideOff();
-            JAB_TAIL(MOTSUB_)
+            jabTail(TRUE);
             return;
         } else {
             ANIM_STEP();

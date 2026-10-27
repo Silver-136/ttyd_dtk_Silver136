@@ -26,7 +26,7 @@
     ;
 
 // EVT_END plus one trailing zero pad word
-#define EVT_END_PAD() \
+#define EVT_END_PAD()  \
     OPCODE_END_SCRIPT, \
     0                  \
     }                  \

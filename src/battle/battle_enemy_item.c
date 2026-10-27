@@ -19,7 +19,7 @@ void* _check_hp_recover_item(BattleUnit* self);
 
 
 
-#define ENEMY_ITEM_SAMPLE_TARGETS()                                                                      \
+#define ENEMY_ITEM_SAMPLE_TARGETS()                                                  \
     BattleWork* wp;                                                                  \
     s32 itemId;                                                                      \
     BattleWorkWeaponTargets* targets;                                                \

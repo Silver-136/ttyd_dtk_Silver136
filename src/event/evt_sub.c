@@ -54,12 +54,12 @@ s32 effStageClearEndChk();
 #include <dolphin/os.h>
 
 
-#define KEYFN(name, fn)                                       \
-    USER_FUNC(name) {                                         \
-        EvtWord* args = event->args;                              \
-        s32 chan = evtGetValue(event, args[0]);               \
-        evtSetValue(event, args[1], fn(chan));                \
-        return EVT_RETURN_DONE;                               \
+#define KEYFN(name, fn)                         \
+    USER_FUNC(name) {                           \
+        EvtWord* args = event->args;            \
+        s32 chan = evtGetValue(event, args[0]); \
+        evtSetValue(event, args[1], fn(chan));  \
+        return EVT_RETURN_DONE;                 \
     }
 
 s32 stop;
@@ -1908,18 +1908,18 @@ USER_FUNC(evt_sub_check_intersect) {
     return EVT_RETURN_DONE;
 }
 
-#define IRAI_CHECK(flag, done, base, mail)                                    \
-    if (swGet(flag) && !swGet(done)) {                                        \
-        for (i = 0; i < 8; i++) {                                             \
-            u.b[i] = swByteGet(base + i);                                     \
-        }                                                                     \
-        if (OSTicksToSeconds(gp->retraceLocalTime - u.t) > 7200) {           \
-            ret = 1;                                                          \
-            if (arg) {                                                        \
-                swSet(done);                                                  \
-                pouchReceiveMail(mail);                                       \
-            }                                                                 \
-        }                                                                     \
+#define IRAI_CHECK(flag, done, base, mail)                         \
+    if (swGet(flag) && !swGet(done)) {                             \
+        for (i = 0; i < 8; i++) {                                  \
+            u.b[i] = swByteGet(base + i);                          \
+        }                                                          \
+        if (OSTicksToSeconds(gp->retraceLocalTime - u.t) > 7200) { \
+            ret = 1;                                               \
+            if (arg) {                                             \
+                swSet(done);                                       \
+                pouchReceiveMail(mail);                            \
+            }                                                      \
+        }                                                          \
     }
 USER_FUNC(irai_mail_check) {
     EvtWord* args = event->args;

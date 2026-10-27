@@ -98,7 +98,7 @@ s32 _CalcRollDir(void) {
     return d;
 }
 
-#define AC_FINISH_AND_RESTART(w)                            \
+#define AC_FINISH_AND_RESTART(w)             \
     do {                                     \
         (w)->actionCommands.result &= ~1;    \
         (w)->actionCommands.mAcState = 1002; \
@@ -396,10 +396,10 @@ u16 _get_icon_id(s8 dir) {
     }
 }
 
-#define DRAW_STICK_ICON(v, id)                  \
-    (v) = (Vec){0.0f, 0.0f, 0.0f};   \
-    (v).x = -200.0f + x;             \
-    (v).y = 70.0f + y;               \
+#define DRAW_STICK_ICON(v, id)     \
+    (v) = (Vec){0.0f, 0.0f, 0.0f}; \
+    (v).x = -200.0f + x;           \
+    (v).y = 70.0f + y;             \
     iconDispGx(&(v), 0x10, (id), 1.0f)
 
 static void actionCommandDisp(f32 x, f32 y) {

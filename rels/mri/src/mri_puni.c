@@ -415,16 +415,16 @@ BOOL _areacheck(f32 x, f32 z, f32 r, f32 px, f32 pz) {
     return ret;
 }
 
-#define STAIR_Y_BY_Z(thr, base)                          \
-    if (p->pos.z <= (thr)) {                      \
-        f32 t = ((thr) - p->pos.z) / 20.0f;       \
-        f32 u;                                    \
-        if (t > 0.5f) {                           \
-            u = (t - 0.5f) / 0.5f;                \
-        } else {                                  \
-            u = floorY;                           \
-        }                                         \
-        p->pos.y = 10.0f * u + (base);            \
+#define STAIR_Y_BY_Z(thr, base)             \
+    if (p->pos.z <= (thr)) {                \
+        f32 t = ((thr) - p->pos.z) / 20.0f; \
+        f32 u;                              \
+        if (t > 0.5f) {                     \
+            u = (t - 0.5f) / 0.5f;          \
+        } else {                            \
+            u = floorY;                     \
+        }                                   \
+        p->pos.y = 10.0f * u + (base);      \
     }
 
 void _ymode_mri_09(PuniData* p) {
@@ -452,7 +452,7 @@ void _ymode_mri_09(PuniData* p) {
     }
 }
 
-#define STAIR_Y_BY_X(thr, base)                   \
+#define STAIR_Y_BY_X(thr, base)             \
     if (p->pos.x <= (thr)) {                \
         f32 t = ((thr) - p->pos.x) / 20.0f; \
         f32 u;                              \
@@ -2227,7 +2227,7 @@ void puniModeParent(PuniData* p) {
     }
 }
 
-#define PUNI_MAPDATA_GETPOS(a, b)                                                                  \
+#define PUNI_MAPDATA_GETPOS(a, b)                                                          \
     { s32 _pa = (b); s32 _pb = (a); switch (Punigp->mapKind) {                             \
             case 0: break; case 1: puniMapdata_MRI_06_getpos(_pa, _pb, &tgx, &tgz); break; \
             case 2: puniMapdata_MRI_09_getpos(_pa, _pb, &tgx, &tgz); break;                \
@@ -3741,25 +3741,25 @@ void puniModeTrap_sub(PuniData* p) {
     }
 }
 
-#define TRAP_NPC(name, setpos)                \
-    {                                         \
-        n = npcNameToPtr(name);               \
-        p->flags |= PUNI_FLAG_HIDDEN;         \
-        n->position.x = p->pos.x;             \
-        n->position.y = p->pos.y;             \
-        n->position.z = p->pos.z;             \
-        n->direction = p->dir;                \
-        n->flags |= NPC_FLAG_NO_HIT;          \
+#define TRAP_NPC(name, setpos)        \
+    {                                 \
+        n = npcNameToPtr(name);       \
+        p->flags |= PUNI_FLAG_HIDDEN; \
+        n->position.x = p->pos.x;     \
+        n->position.y = p->pos.y;     \
+        n->position.z = p->pos.z;     \
+        n->direction = p->dir;        \
+        n->flags |= NPC_FLAG_NO_HIT;  \
     }
-#define TRAP_HIDE(name)                       \
-    {                                         \
-        n = npcNameToPtr(name);               \
-        p->flags &= ~PUNI_FLAG_HIDDEN;        \
-        p->flags |= PUNI_FLAG_COLLIDE;        \
-        n->flags &= ~NPC_FLAG_NO_HIT;         \
-        n->position.x = 0.0f;                 \
-        n->position.y = -1000.0f;             \
-        n->position.z = 0.0f;                 \
+#define TRAP_HIDE(name)                \
+    {                                  \
+        n = npcNameToPtr(name);        \
+        p->flags &= ~PUNI_FLAG_HIDDEN; \
+        p->flags |= PUNI_FLAG_COLLIDE; \
+        n->flags &= ~NPC_FLAG_NO_HIT;  \
+        n->position.x = 0.0f;          \
+        n->position.y = -1000.0f;      \
+        n->position.z = 0.0f;          \
     }
 
 void puniModeTrap(PuniData* p) {

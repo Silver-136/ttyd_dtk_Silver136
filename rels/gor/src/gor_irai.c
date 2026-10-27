@@ -766,26 +766,26 @@ USER_FUNC(irai_end_func) {
 // US: text centered in a boxW-wide box at x, x-squeezed to maxW; w is the width variable of the caller.
 // A macro, not an inline function: as a function the US float registers change.
 #define iraiDrawCentered(msg, x, y, boxW, maxW, scale, trans, w) { \
-    w = FontGetMessageWidth(msg);                                    \
-    if (w > (maxW)) {                                                \
-        PSMTXScale(scale, (maxW) / w, 1.0f, 1.0f);                   \
-        w = (maxW);                                                  \
-    } else {                                                         \
-        PSMTXScale(scale, 1.0f, 1.0f, 1.0f);                         \
-    }                                                                \
-    PSMTXTrans(trans, (x) + ((boxW) - w) / 2, y, 0.0f);              \
-    PSMTXConcat(trans, scale, trans);                                \
-    FontDrawStringMtx(trans, msg);                                   \
+    w = FontGetMessageWidth(msg);                                  \
+    if (w > (maxW)) {                                              \
+        PSMTXScale(scale, (maxW) / w, 1.0f, 1.0f);                 \
+        w = (maxW);                                                \
+    } else {                                                       \
+        PSMTXScale(scale, 1.0f, 1.0f, 1.0f);                       \
+    }                                                              \
+    PSMTXTrans(trans, (x) + ((boxW) - w) / 2, y, 0.0f);            \
+    PSMTXConcat(trans, scale, trans);                              \
+    FontDrawStringMtx(trans, msg);                                 \
 }
 
 // US: one row cell, x-squeezed to fit maxW. "y" is stored in the caller's float var v (the
 // original reuses one float local for these; this keeps the MWCC float register choice).
-#define iraiDrawFit(msg, x, y, maxW, v) {                                              \
-    f32 w_;                                                                            \
-    v = (y);                                                                           \
-    w_ = FontGetMessageWidth(msg);                                                     \
+#define iraiDrawFit(msg, x, y, maxW, v) {                                               \
+    f32 w_;                                                                             \
+    v = (y);                                                                            \
+    w_ = FontGetMessageWidth(msg);                                                      \
     FontDrawScaleVec((Vec){w_ > (maxW) ? 0.85f * ((maxW) / w_) : 0.85f, 0.85f, 0.85f}); \
-    FontDrawString(msg, x, v);                                                         \
+    FontDrawString(msg, x, v);                                                          \
 }
 
 void irai_window_disp(CameraId camera, void* param) {

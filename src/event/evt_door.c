@@ -1380,50 +1380,50 @@ USER_FUNC(animation) {
     return EVT_RETURN_DONE;
 }
 
-#define NPC_LIGHT_BODY(FN, ICONFN)                                              \
-    HouseWork* w = (HouseWork*)evtGetValue(event, *event->args);                \
-    MarioWork* mario = marioGetPtr();                                           \
-    PartyEntry* party = partyGetPtr(0);                                         \
-    PartyEntry* follower = partyGetPtr(1);                                      \
-    const char** list;                                                          \
-    if (mario) {                                                                \
-        FN(marioGetPtr()->paperAnimGroupId[0], 0x1800);                         \
-        FN(marioGetPtr()->paperAnimGroupId[1], 0x1800);                         \
-        FN(marioGetPtr()->paperAnimGroupId[2], 0x1800);                         \
-    }                                                                           \
-    if (party) {                                                                \
-        FN(party->paperAnimGroup, 0x1800);                                      \
-    }                                                                           \
-    if (follower) {                                                             \
-        FN(follower->paperAnimGroup, 0x1800);                                   \
-    }                                                                           \
-    list = w->data->npcs;                                                       \
-    if (list) {                                                                 \
-        for (; *list; list++) {                                                 \
-            NpcEntry* npc = npcNameToPtr_NoAssert(*list);                       \
-            if (npc) {                                                          \
-                FN(npc->poseId, 0x1800);                                        \
-            }                                                                   \
-        }                                                                       \
-    }                                                                           \
-    list = w->data->mobjs;                                                      \
-    if (list) {                                                                 \
-        for (; *list; list++) {                                                 \
-            MapObjectEntry* mobj = mobjNameToPtrNoAssert(*list);                \
-            if (mobj) {                                                         \
-                FN(mobj->poseId, 0x1800);                                       \
-            }                                                                   \
-        }                                                                       \
-    }                                                                           \
-    list = w->data->items;                                                      \
-    if (list) {                                                                 \
-        for (; *list; list++) {                                                 \
-            ItemEntry* item = itemNameToPtr((char*)*list);                      \
-            if (item) {                                                         \
-                ICONFN(item->name, 0x40);                                       \
-            }                                                                   \
-        }                                                                       \
-    }                                                                           \
+#define NPC_LIGHT_BODY(FN, ICONFN)                               \
+    HouseWork* w = (HouseWork*)evtGetValue(event, *event->args); \
+    MarioWork* mario = marioGetPtr();                            \
+    PartyEntry* party = partyGetPtr(0);                          \
+    PartyEntry* follower = partyGetPtr(1);                       \
+    const char** list;                                           \
+    if (mario) {                                                 \
+        FN(marioGetPtr()->paperAnimGroupId[0], 0x1800);          \
+        FN(marioGetPtr()->paperAnimGroupId[1], 0x1800);          \
+        FN(marioGetPtr()->paperAnimGroupId[2], 0x1800);          \
+    }                                                            \
+    if (party) {                                                 \
+        FN(party->paperAnimGroup, 0x1800);                       \
+    }                                                            \
+    if (follower) {                                              \
+        FN(follower->paperAnimGroup, 0x1800);                    \
+    }                                                            \
+    list = w->data->npcs;                                        \
+    if (list) {                                                  \
+        for (; *list; list++) {                                  \
+            NpcEntry* npc = npcNameToPtr_NoAssert(*list);        \
+            if (npc) {                                           \
+                FN(npc->poseId, 0x1800);                         \
+            }                                                    \
+        }                                                        \
+    }                                                            \
+    list = w->data->mobjs;                                       \
+    if (list) {                                                  \
+        for (; *list; list++) {                                  \
+            MapObjectEntry* mobj = mobjNameToPtrNoAssert(*list); \
+            if (mobj) {                                          \
+                FN(mobj->poseId, 0x1800);                        \
+            }                                                    \
+        }                                                        \
+    }                                                            \
+    list = w->data->items;                                       \
+    if (list) {                                                  \
+        for (; *list; list++) {                                  \
+            ItemEntry* item = itemNameToPtr((char*)*list);       \
+            if (item) {                                          \
+                ICONFN(item->name, 0x40);                        \
+            }                                                    \
+        }                                                        \
+    }                                                            \
     return EVT_RETURN_DONE;
 
 USER_FUNC(npc_dark) {
@@ -1448,12 +1448,12 @@ USER_FUNC(get_noclip_map) {
     return EVT_RETURN_DONE;
 }
 
-#define DOOR_POS_GET(HIT)                       \
-    if (!mario) {                               \
-        hitObjGetPos(HIT, &pos);                \
-    } else {                                    \
-        pos = marioGetPtr()->position;          \
-    }                                           \
+#define DOOR_POS_GET(HIT)              \
+    if (!mario) {                      \
+        hitObjGetPos(HIT, &pos);       \
+    } else {                           \
+        pos = marioGetPtr()->position; \
+    }                                  \
     hitObjGetNormal(HIT, &nrm);
 
 void door_position_sub(s32 type, const char* map, const char* hitIn, const char* hitOut, Vec* in, Vec* out, BOOL mario) {
@@ -1544,41 +1544,41 @@ void door_position_sub(s32 type, const char* map, const char* hitIn, const char*
     }
 }
 
-#define DARK_SUB_BODY(FN, ICONFN)                                   \
-    if (mario) {                                                    \
-        FN(mario->paperAnimGroupId[0], 0x1800);                     \
-        FN(mario->paperAnimGroupId[1], 0x1800);                     \
-        FN(mario->paperAnimGroupId[2], 0x1800);                     \
-    }                                                               \
-    if (party) {                                                    \
-        FN(party->paperAnimGroup, 0x1800);                          \
-    }                                                               \
-    if (follower) {                                                 \
-        FN(follower->paperAnimGroup, 0x1800);                       \
-    }                                                               \
-    if (npcs) {                                                     \
-        for (list = npcs; *list; list++) {                          \
-            NpcEntry* npc = npcNameToPtr_NoAssert(*list);           \
-            if (npc) {                                              \
-                FN(npc->poseId, 0x1800);                            \
-            }                                                       \
-        }                                                           \
-    }                                                               \
-    if (mobjs) {                                                    \
-        for (list = mobjs; *list; list++) {                         \
-            MapObjectEntry* mobj = mobjNameToPtrNoAssert(*list);    \
-            if (mobj) {                                             \
-                FN(mobj->poseId, 0x1800);                           \
-            }                                                       \
-        }                                                           \
-    }                                                               \
-    if (items) {                                                    \
-        for (list = items; *list; list++) {                         \
-            ItemEntry* item = itemNameToPtr((char*)*list);          \
-            if (item) {                                             \
-                ICONFN(item->name, 0x40);                           \
-            }                                                       \
-        }                                                           \
+#define DARK_SUB_BODY(FN, ICONFN)                                \
+    if (mario) {                                                 \
+        FN(mario->paperAnimGroupId[0], 0x1800);                  \
+        FN(mario->paperAnimGroupId[1], 0x1800);                  \
+        FN(mario->paperAnimGroupId[2], 0x1800);                  \
+    }                                                            \
+    if (party) {                                                 \
+        FN(party->paperAnimGroup, 0x1800);                       \
+    }                                                            \
+    if (follower) {                                              \
+        FN(follower->paperAnimGroup, 0x1800);                    \
+    }                                                            \
+    if (npcs) {                                                  \
+        for (list = npcs; *list; list++) {                       \
+            NpcEntry* npc = npcNameToPtr_NoAssert(*list);        \
+            if (npc) {                                           \
+                FN(npc->poseId, 0x1800);                         \
+            }                                                    \
+        }                                                        \
+    }                                                            \
+    if (mobjs) {                                                 \
+        for (list = mobjs; *list; list++) {                      \
+            MapObjectEntry* mobj = mobjNameToPtrNoAssert(*list); \
+            if (mobj) {                                          \
+                FN(mobj->poseId, 0x1800);                        \
+            }                                                    \
+        }                                                        \
+    }                                                            \
+    if (items) {                                                 \
+        for (list = items; *list; list++) {                      \
+            ItemEntry* item = itemNameToPtr((char*)*list);       \
+            if (item) {                                          \
+                ICONFN(item->name, 0x40);                        \
+            }                                                    \
+        }                                                        \
     }
 
 void door_dark_flag_sub(BOOL on, const char** npcs, const char** mobjs, const char** items) {
@@ -1602,10 +1602,10 @@ USER_FUNC(door_dark_flag) {
     return EVT_RETURN_DONE;
 }
 
-#define DOOR_PARAM_POS(V, M)                                                        \
-    door_position_sub(d->type, d->mapobj, d->hitIn, d->hitOut, &in, &out, M);       \
-    evtSetValue(event, args[2], V.x);                                               \
-    evtSetValue(event, args[3], V.y);                                               \
+#define DOOR_PARAM_POS(V, M)                                                  \
+    door_position_sub(d->type, d->mapobj, d->hitIn, d->hitOut, &in, &out, M); \
+    evtSetValue(event, args[2], V.x);                                         \
+    evtSetValue(event, args[3], V.y);                                         \
     evtSetValue(event, args[4], V.z);
 
 USER_FUNC(evt_door_param) {

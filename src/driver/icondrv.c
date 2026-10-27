@@ -41,22 +41,22 @@ typedef struct IconBinData {
 } IconBinData;
 
 // A macro, not an inline function: as a function the code and stack frames change.
-#define ICON_ANIM_TPL_S(data, dst)                                   \
-    if ((data)->numIcons > 1) {                                    \
-        s32 i;                                                     \
-        s32 t;                                                     \
-        s32 total = 0;                                             \
-        for (i = 0; i < (data)->numIcons; i++) {                   \
-            total += (data)->frames[i].delay;                      \
-        }                                                          \
-        t = (s32)gp->retraceCount % total;                              \
-        for (i = 0; i < (data)->numIcons; i++) {                   \
-            if (t < (data)->frames[i].delay) {                     \
-                dst = (data)->frames[i].tplId;                     \
-                break;                                             \
-            }                                                      \
-            t -= (data)->frames[i].delay;                          \
-        }                                                          \
+#define ICON_ANIM_TPL_S(data, dst)               \
+    if ((data)->numIcons > 1) {                  \
+        s32 i;                                   \
+        s32 t;                                   \
+        s32 total = 0;                           \
+        for (i = 0; i < (data)->numIcons; i++) { \
+            total += (data)->frames[i].delay;    \
+        }                                        \
+        t = (s32)gp->retraceCount % total;       \
+        for (i = 0; i < (data)->numIcons; i++) { \
+            if (t < (data)->frames[i].delay) {   \
+                dst = (data)->frames[i].tplId;   \
+                break;                           \
+            }                                    \
+            t -= (data)->frames[i].delay;        \
+        }                                        \
     }
 
 #ifdef VERSION_G8ME01

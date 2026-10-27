@@ -458,12 +458,12 @@ void kpa3DMain(void) {
     mp->floorMove.z = 0.0f;
 }
 
-#define SETPV(m, v, a, b, c, d)                             \
-    do {                                                    \
-        JUMP_PARAM(m, v) = (a);                             \
-        JUMP_PARAM(m, 1) = (b);                             \
-        JUMP_PARAM(m, 2) = (c);                             \
-        JUMP_PARAM(m, 3) = (d);                             \
+#define SETPV(m, v, a, b, c, d) \
+    do {                        \
+        JUMP_PARAM(m, v) = (a); \
+        JUMP_PARAM(m, 1) = (b); \
+        JUMP_PARAM(m, 2) = (c); \
+        JUMP_PARAM(m, 3) = (d); \
     } while (v)
 f32 kpaSetJumpPara(void) {
     int slot;

@@ -134,35 +134,35 @@ void winMarioExit(WindowWork* w) {
 }
 
 // A macro, not an inline function: as a function the function-local static names renumber (code identical; needs config renames).
-#define COLOR_ANIM(var, base)                         \
-    if (strcmp(base, "S_1") == 0) {                   \
-        switch (marioGetColor()) {                    \
-            case 0: var = "S_1"; break;               \
-            case 1: var = "S_2"; break;               \
-            case 2: var = "S_3"; break;               \
-            case 3: var = "S_4"; break;               \
-        }                                             \
-    } else {                                          \
-        switch (marioGetColor()) {                    \
-            case 0: var = "R_1"; break;               \
-            case 1: var = "R_15"; break;              \
-            case 2: var = "R_17"; break;              \
-            case 3: var = "R_18"; break;              \
-        }                                             \
+#define COLOR_ANIM(var, base)            \
+    if (strcmp(base, "S_1") == 0) {      \
+        switch (marioGetColor()) {       \
+            case 0: var = "S_1"; break;  \
+            case 1: var = "S_2"; break;  \
+            case 2: var = "S_3"; break;  \
+            case 3: var = "S_4"; break;  \
+        }                                \
+    } else {                             \
+        switch (marioGetColor()) {       \
+            case 0: var = "R_1"; break;  \
+            case 1: var = "R_15"; break; \
+            case 2: var = "R_17"; break; \
+            case 3: var = "R_18"; break; \
+        }                                \
     }
 
-#define MOVE_MARIO_CURSOR(n)                                                        \
-    w->marioSel = linkDt[w->marioSel].links[n];                                 \
-    p = &linkDt[w->marioSel];                                              \
-    while (1) {                                                       \
-        if (w->marioSel == 11 || w->marioSel == 12) {                           \
-            if (w->mario.specialCount != 0) break;                                  \
-        } else if (p->item == 0 || pouchCheckItem(p->item) != 0) {    \
-            break;                                                    \
-        }                                                             \
-        w->marioSel = p->links[n];                                         \
-        p = &linkDt[w->marioSel];                                          \
-    }                                                                 \
+#define MOVE_MARIO_CURSOR(n)                                       \
+    w->marioSel = linkDt[w->marioSel].links[n];                    \
+    p = &linkDt[w->marioSel];                                      \
+    while (1) {                                                    \
+        if (w->marioSel == 11 || w->marioSel == 12) {              \
+            if (w->mario.specialCount != 0) break;                 \
+        } else if (p->item == 0 || pouchCheckItem(p->item) != 0) { \
+            break;                                                 \
+        }                                                          \
+        w->marioSel = p->links[n];                                 \
+        p = &linkDt[w->marioSel];                                  \
+    }                                                              \
     psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_MOVE1 | PSND_SFX_BYPASS_MUTE));
 
 s32 winMarioMain(WindowWork* w) {

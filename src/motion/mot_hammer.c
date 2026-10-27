@@ -391,28 +391,28 @@ static inline void mot_ham(f32 a148, f32 a68) {
         mario->mot.hammer2.flags |= HAMMER2_FLAG_LEVEL_UP; \
     }
 
-#define H2_RAMP(maxv, midv, minv, lvl, a148, a68)                                     \
-    marioChgPaper("P_H_1A");                                                          \
-    if (!(mario->mot.hammer2.flags & HAMMER2_FLAG_AT_LEVEL)) {                        \
-        mario->mot.hammer2.animTime += 6.0f;                                          \
-        if (mario->mot.hammer2.animTime >= maxv) {                                    \
-            mario->mot.hammer2.animTime = maxv;                                       \
-            mario->mot.hammer2.flags |= HAMMER2_FLAG_AT_LEVEL;                        \
-            mario->hammerChargeLv = lvl;                                              \
-            H2_LEVEL_UP(lvl, a148, a68)                                                     \
-        }                                                                             \
-    } else if (!(mario->mot.hammer2.flags & HAMMER2_FLAG_SWAY_BACK)) {                \
-        mario->mot.hammer2.animTime += 1.0f;                                          \
-        if (mario->mot.hammer2.animTime >= midv) {                                    \
-            mario->mot.hammer2.animTime = midv;                                       \
-            mario->mot.hammer2.flags |= HAMMER2_FLAG_SWAY_BACK;                       \
-        }                                                                             \
-    } else {                                                                          \
-        mario->mot.hammer2.animTime -= 1.0f;                                          \
-        if (mario->mot.hammer2.animTime <= minv) {                                    \
-            mario->mot.hammer2.animTime = minv;                                       \
-            mario->mot.hammer2.flags &= ~HAMMER2_FLAG_SWAY_BACK;                      \
-        }                                                                             \
+#define H2_RAMP(maxv, midv, minv, lvl, a148, a68)                      \
+    marioChgPaper("P_H_1A");                                           \
+    if (!(mario->mot.hammer2.flags & HAMMER2_FLAG_AT_LEVEL)) {         \
+        mario->mot.hammer2.animTime += 6.0f;                           \
+        if (mario->mot.hammer2.animTime >= maxv) {                     \
+            mario->mot.hammer2.animTime = maxv;                        \
+            mario->mot.hammer2.flags |= HAMMER2_FLAG_AT_LEVEL;         \
+            mario->hammerChargeLv = lvl;                               \
+            H2_LEVEL_UP(lvl, a148, a68)                                \
+        }                                                              \
+    } else if (!(mario->mot.hammer2.flags & HAMMER2_FLAG_SWAY_BACK)) { \
+        mario->mot.hammer2.animTime += 1.0f;                           \
+        if (mario->mot.hammer2.animTime >= midv) {                     \
+            mario->mot.hammer2.animTime = midv;                        \
+            mario->mot.hammer2.flags |= HAMMER2_FLAG_SWAY_BACK;        \
+        }                                                              \
+    } else {                                                           \
+        mario->mot.hammer2.animTime -= 1.0f;                           \
+        if (mario->mot.hammer2.animTime <= minv) {                     \
+            mario->mot.hammer2.animTime = minv;                        \
+            mario->mot.hammer2.flags &= ~HAMMER2_FLAG_SWAY_BACK;       \
+        }                                                              \
     }
 
 static inline void h2LightOn(void) {
@@ -421,12 +421,12 @@ static inline void h2LightOn(void) {
 #endif
 }
 
-#define H2_CLR_PAPER()                                              \
-    marioPaperOff();                                                \
-    h2LightOn();                                                    \
-    marioChgPose("M_S_1");                                          \
-    mario->dispFlags &= ~MARIO_DISP_FLAG_NO_REAR_POSE;              \
-    mario->dispFlags &= ~MARIO_DISP_FLAG_NO_DIR_FLIP;               \
+#define H2_CLR_PAPER()                                 \
+    marioPaperOff();                                   \
+    h2LightOn();                                       \
+    marioChgPose("M_S_1");                             \
+    mario->dispFlags &= ~MARIO_DISP_FLAG_NO_REAR_POSE; \
+    mario->dispFlags &= ~MARIO_DISP_FLAG_NO_DIR_FLIP;  \
     mario->dispFlags &= ~MARIO_DISP_FLAG_FLIP;
 
 void mot_hammer2(void) {

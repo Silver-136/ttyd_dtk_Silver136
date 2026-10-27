@@ -31,59 +31,59 @@
 
 void marioSetForceMove(s32 frames, f32 dir, f32 spd);
 
-#define HITOBJ(n, field)                                   \
-    USER_FUNC(evt_mario_get_name_hitobj_##n) {             \
-        EvtWord id = event->args[0];                       \
-        const char* name = NULL;                           \
-        MarioWork* mp = marioGetPtr();                     \
-        if (mp->field) {                                   \
-            name = hitGetName(mp->field);                  \
-        }                                                  \
-        evtSetValue(event, id, (EvtWord)name);             \
-        return EVT_RETURN_DONE;                            \
+#define HITOBJ(n, field)                       \
+    USER_FUNC(evt_mario_get_name_hitobj_##n) { \
+        EvtWord id = event->args[0];           \
+        const char* name = NULL;               \
+        MarioWork* mp = marioGetPtr();         \
+        if (mp->field) {                       \
+            name = hitGetName(mp->field);      \
+        }                                      \
+        evtSetValue(event, id, (EvtWord)name); \
+        return EVT_RETURN_DONE;                \
     }
 
-#define FLAGONOFF(n, field)                                \
-    USER_FUNC(evt_mario_##n##_onoff) {                     \
-        EvtWord* args = event->args;                           \
-        MarioWork* mp = marioGetPtr();                     \
-        if (evtGetValue(event, args[0])) {                 \
-            mp->field |= evtGetValue(event, args[1]);      \
-        } else {                                           \
-            mp->field &= ~evtGetValue(event, args[1]);     \
-        }                                                  \
-        return EVT_RETURN_DONE;                            \
+#define FLAGONOFF(n, field)                            \
+    USER_FUNC(evt_mario_##n##_onoff) {                 \
+        EvtWord* args = event->args;                   \
+        MarioWork* mp = marioGetPtr();                 \
+        if (evtGetValue(event, args[0])) {             \
+            mp->field |= evtGetValue(event, args[1]);  \
+        } else {                                       \
+            mp->field &= ~evtGetValue(event, args[1]); \
+        }                                              \
+        return EVT_RETURN_DONE;                        \
     }
 
-#define SETPOSE_BODY                                       \
-    if (mp->flags & MARIO_FLAG_IS_8_BIT) {                          \
-        name = toDotMarioPose(name);                       \
-        if (!name) {                                       \
-            return EVT_RETURN_DONE;                        \
-        }                                                  \
-        mp->animName = name;                               \
-        mp->trigFlags |= MARIO_TRIG_FLAG_CHG_ANIM;                           \
-    } else {                                               \
-        notFound = TRUE;                                   \
-        for (i = 0; a_mario_group[i]; i++) {               \
-            if (!strcmp(name, a_mario_group[i])) {         \
-                notFound = FALSE;                          \
-                break;                                     \
-            }                                              \
-        }                                                  \
-        if (!notFound) {                                   \
-            mp->animName = name;                           \
-            mp->trigFlags |= MARIO_TRIG_FLAG_CHG_ANIM;                       \
-            mp->dispFlags &= ~MARIO_DISP_FLAG_EVT_POSE;                  \
-        } else {                                           \
-            mp->animName = name;                           \
-            mp->trigFlags |= MARIO_TRIG_FLAG_CHG_ANIM;                       \
-            mp->dispFlags |= MARIO_DISP_FLAG_EVT_POSE;                   \
-        }                                                  \
-    }                                                      \
-    if (mp->dispFlags & MARIO_DISP_FLAG_SLIT) {                       \
-        mp->trigFlags |= 0x8000;                           \
-    }                                                      \
+#define SETPOSE_BODY                                    \
+    if (mp->flags & MARIO_FLAG_IS_8_BIT) {              \
+        name = toDotMarioPose(name);                    \
+        if (!name) {                                    \
+            return EVT_RETURN_DONE;                     \
+        }                                               \
+        mp->animName = name;                            \
+        mp->trigFlags |= MARIO_TRIG_FLAG_CHG_ANIM;      \
+    } else {                                            \
+        notFound = TRUE;                                \
+        for (i = 0; a_mario_group[i]; i++) {            \
+            if (!strcmp(name, a_mario_group[i])) {      \
+                notFound = FALSE;                       \
+                break;                                  \
+            }                                           \
+        }                                               \
+        if (!notFound) {                                \
+            mp->animName = name;                        \
+            mp->trigFlags |= MARIO_TRIG_FLAG_CHG_ANIM;  \
+            mp->dispFlags &= ~MARIO_DISP_FLAG_EVT_POSE; \
+        } else {                                        \
+            mp->animName = name;                        \
+            mp->trigFlags |= MARIO_TRIG_FLAG_CHG_ANIM;  \
+            mp->dispFlags |= MARIO_DISP_FLAG_EVT_POSE;  \
+        }                                               \
+    }                                                   \
+    if (mp->dispFlags & MARIO_DISP_FLAG_SLIT) {         \
+        mp->trigFlags |= 0x8000;                        \
+    }                                                   \
     return EVT_RETURN_DONE;
 
 static inline BOOL marioChkLanding(void) {

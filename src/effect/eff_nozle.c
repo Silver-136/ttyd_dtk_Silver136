@@ -500,11 +500,11 @@ static inline void nozleVtxSetup(GXAttrType type, u8 posFrac, u8 texFrac, void* 
 }
 
 // Call a table of n display lists through the caller's k and the given size/list pointers
-#define CALLDL(n, tbl, sz_, S, D)                           \
-    {                                                       \
-        for (k = 0, S = sz_, D = tbl; k < n; k++, S++, D++) {\
-            GXCallDisplayList(*D, *S * 32);                 \
-        }                                                   \
+#define CALLDL(n, tbl, sz_, S, D)                             \
+    {                                                         \
+        for (k = 0, S = sz_, D = tbl; k < n; k++, S++, D++) { \
+            GXCallDisplayList(*D, *S * 32);                   \
+        }                                                     \
     }
 
 void effNozleDisp(CameraId cameraId, EffectEntry* effect) {

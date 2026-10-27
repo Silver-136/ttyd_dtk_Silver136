@@ -5,17 +5,17 @@
 
 #define GET_ARG0 evtGetValue(event, event->args[0])
 
-#define SETTER(name, fn) \
-    USER_FUNC(name) { \
-        fn(GET_ARG0); \
+#define SETTER(name, fn)        \
+    USER_FUNC(name) {           \
+        fn(GET_ARG0);           \
         return EVT_RETURN_DONE; \
     }
 
-#define GETTER(name, fn) \
-    USER_FUNC(name) { \
-        EvtWord* args = event->args; \
+#define GETTER(name, fn)                   \
+    USER_FUNC(name) {                      \
+        EvtWord* args = event->args;       \
         evtSetValue(event, args[0], fn()); \
-        return EVT_RETURN_DONE; \
+        return EVT_RETURN_DONE;            \
     }
 
 GETTER(evt_pouch_get_coin, pouchGetCoin)

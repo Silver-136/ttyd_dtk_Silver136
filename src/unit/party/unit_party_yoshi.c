@@ -2017,12 +2017,12 @@ USER_FUNC(yoshi_original_color_anim_set) {
     name--;
 }
 
-#define ADD_WEAPON(w)                                                                              \
-    command->weapon[*count].index = -1;                                                     \
-    command->weapon[*count].itemId = 0;                                                       \
-    command->weapon[*count].weapon = (BattleWeapon*)(w);                              \
-    command->weapon[*count].enabled = 0;                                                   \
-    command->weapon[*count].icon = command->weapon[*count].weapon->icon;       \
+#define ADD_WEAPON(w)                                                               \
+    command->weapon[*count].index = -1;                                             \
+    command->weapon[*count].itemId = 0;                                             \
+    command->weapon[*count].weapon = (BattleWeapon*)(w);                            \
+    command->weapon[*count].enabled = 0;                                            \
+    command->weapon[*count].icon = command->weapon[*count].weapon->icon;            \
     command->weapon[*count].name = msgSearch(command->weapon[*count].weapon->name); \
     (*count)++;
 

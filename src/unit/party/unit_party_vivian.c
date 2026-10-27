@@ -1399,12 +1399,12 @@ static void __makeTechMenuFunc(BattleCommand* command, s32* count) {
 
     techLv = partyGetTechLv(BattleTransPartyId(BattleGetPartyPtr(_battleWorkPointer)->currentKind));
 
-#define ADD_WEAPON(w)                                                                                   \
-    command->weapon[*count].index = -1;                                                     \
-    command->weapon[*count].itemId = 0;                                                       \
-    command->weapon[*count].weapon = (BattleWeapon*)(w);                              \
-    command->weapon[*count].enabled = 0;                                                   \
-    command->weapon[*count].icon = command->weapon[*count].weapon->icon;       \
+#define ADD_WEAPON(w)                                                               \
+    command->weapon[*count].index = -1;                                             \
+    command->weapon[*count].itemId = 0;                                             \
+    command->weapon[*count].weapon = (BattleWeapon*)(w);                            \
+    command->weapon[*count].enabled = 0;                                            \
+    command->weapon[*count].icon = command->weapon[*count].weapon->icon;            \
     command->weapon[*count].name = msgSearch(command->weapon[*count].weapon->name); \
     (*count)++;
     ADD_WEAPON(&partyWeapon_VivianNormalAttack)

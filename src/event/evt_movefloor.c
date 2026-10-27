@@ -109,12 +109,14 @@ static f32 sintbl[450] = {
 
 
 #define MOVING_FLOOR_ARG() ((MovingFloor*)evtGetValue(event, event->args[0]))
-#define WOBBLE(w)                                                                                  \
-    if ((w)->kind == 1) {                                                                          \
-        (w)->yoff = 3.0f * sintbl[(s32)(5.625f * (f32)((gp->retraceCount + event->eventId * 39) & 63))]; \
-    } else {                                                                                       \
-        (w)->yoff = 0.0f;                                                                          \
+// Kind 1 floors bob up and down (3 units, phase from the frame counter and the event id)
+static inline void movingFloorWobble(MovingFloor* w, EventEntry* event) {
+    if (w->kind == 1) {
+        w->yoff = 3.0f * sintbl[(s32)(5.625f * (f32)((gp->retraceCount + event->eventId * 39) & 63))];
+    } else {
+        w->yoff = 0.0f;
     }
+}
 
 USER_FUNC(evt_moving_floor_alloc) {
     EvtWord* args = event->args;
@@ -193,7 +195,7 @@ USER_FUNC(evt_moving_floor_alloc) {
     w->prev[1] = w->pos3[1];
     w->prev[2] = w->pos3[2];
     w->prevYoff = w->yoff;
-    WOBBLE(w)
+    movingFloorWobble(w, event);
     evtSetValue(event, args[0], (EvtWord)w);
     return EVT_RETURN_DONE;
 }
@@ -366,7 +368,7 @@ USER_FUNC(evt_moving_floor_main) {
     w->prev[1] = w->pos3[1];
     w->prev[2] = w->pos3[2];
     w->prevYoff = w->yoff;
-    WOBBLE(w)
+    movingFloorWobble(w, event);
     w->pos3[w->idx] = w->pos;
     evtSetFloat(event, args[1], w->pos3[0]);
     evtSetFloat(event, args[2], w->pos3[1] + w->yoff);
@@ -436,7 +438,7 @@ USER_FUNC(moving_floor_getf_pos) {
     EvtWord* args = event->args;
     MovingFloor* w = MOVING_FLOOR_ARG();
     w->prevYoff = w->yoff;
-    WOBBLE(w)
+    movingFloorWobble(w, event);
     evtSetFloat(event, args[1], w->pos3[0]);
     evtSetFloat(event, args[2], w->pos3[1] + w->yoff);
     evtSetFloat(event, args[3], w->pos3[2]);
