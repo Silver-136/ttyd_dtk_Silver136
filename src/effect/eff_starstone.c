@@ -259,7 +259,7 @@ static u8* color_tbl[] = { diamond_1_color0_tbl, diamond_2_color0_tbl, diamond_3
     GXSetTevAlphaIn(GX_TEVSTAGE1, GX_CA_ZERO, GX_CA_A0, GX_CA_APREV, GX_CA_ZERO);                    \
     GXSetTevColor(GX_TEVREG0, (GXColor){(w)->r, (w)->g, (w)->b, (w)->a});
 
-#define DISP_MID(w)                                    \
+#define DISP_MID(w)                                   \
     GXSetNumChans(1);                                  \
     GXSetChanCtrl(GX_COLOR0A0, 0, GX_SRC_REG, GX_SRC_VTX, 0, GX_DF_NONE, GX_AF_NONE);                \
     GXSetNumTexGens(1);                                \
@@ -278,11 +278,12 @@ static u8* color_tbl[] = { diamond_1_color0_tbl, diamond_2_color0_tbl, diamond_3
     GXSetTevAlphaIn(GX_TEVSTAGE1, GX_CA_ZERO, GX_CA_A0, GX_CA_APREV, GX_CA_ZERO);                    \
     GXSetTevColor(GX_TEVREG0, (GXColor){(w)->r, (w)->g, (w)->b, (w)->a});
 
-#define BLEND_STATE()                                  \
-    GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_CLEAR);                        \
-    GXSetZCompLoc(1);                                  \
-    GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_AND, GX_ALWAYS, 0);                  \
+static inline void starStoneBlendState(void) {
+    GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_CLEAR);
+    GXSetZCompLoc(1);
+    GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_AND, GX_ALWAYS, 0);
     GXSetZMode(1, GX_LEQUAL, 0);
+}
 
 #define CALL_DL_TABLE(tbl, sz, n)                          \
     i = 0; dp = tbl; sp = sz; \
@@ -546,7 +547,7 @@ void effStarStoneDisp_1(CameraId cameraId, EffectEntry* effect) {
     PSMTXConcat(cam->view, m, m);
     GXLoadPosMtxImm(m, 0);
     GXSetCurrentMtx(0);
-    BLEND_STATE()
+    starStoneBlendState();
     GXSetCullMode(GX_CULL_BACK);
     if (type == 0) {
         VTX_SETUP(diamond_1_vertex_tbl, diamond_1_normal_tbl, CLR_ARRAY, diamond_1_color0_tbl, diamond_1_texcoord0_tbl, 13)
@@ -575,7 +576,7 @@ void effStarStoneDisp_1(CameraId cameraId, EffectEntry* effect) {
         effGetTexObj(0x2f, &tex);
         GXLoadTexObj(&tex, GX_TEXMAP0);
     }
-    BLEND_STATE()
+    starStoneBlendState();
     if (type == 0) {
         VTX_SETUP(diamond_1_vertex_tbl, diamond_1_normal_tbl, CLR_ARRAY, diamond_1_color0_tbl, diamond_1_texcoord0_tbl, 13)
         LOOPK(diamond_1_dl_0_tbl, diamond_1_dl_0_size_tbl, 34)
@@ -585,7 +586,7 @@ void effStarStoneDisp_1(CameraId cameraId, EffectEntry* effect) {
     }
     effGetTexObj(0x2d, &tex);
     GXLoadTexObj(&tex, GX_TEXMAP0);
-    BLEND_STATE()
+    starStoneBlendState();
     if (type == 0) {
         VTX_SETUP(diamond_1_vertex_tbl, diamond_1_normal_tbl, CLR_NONE, diamond_1_color0_tbl, diamond_1_texcoord0_tbl, 13)
         LOOPK2(diamond_1_dl_1_tbl, diamond_1_dl_1_size_tbl, 34)

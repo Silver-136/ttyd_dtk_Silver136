@@ -69,16 +69,18 @@ u8 moja_model_dl_0_19[] ATTRIBUTE_ALIGN(32) = { 0x98, 0x00, 0x04, 0x3B, 0x14, 0x
 u8 moja_model_dl_0_20[] ATTRIBUTE_ALIGN(32) = { 0x98, 0x00, 0x04, 0x3C, 0x16, 0x00, 0x3B, 0x14, 0x00, 0x41, 0x16, 0x00, 0x40, 0x14, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
 u8 moja_model_dl_0_size_tbl[] = { 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
 
-#define QUAD(l, t, r, b, u, v)        \
-    GXBegin(GX_QUADS, GX_VTXFMT0, 4); \
-    GXPosition3f32(l, t, 0.0f);       \
-    GXTexCoord2f32(0.0f, 0.0f);       \
-    GXPosition3f32(r, t, 0.0f);       \
-    GXTexCoord2f32(u, 0.0f);          \
-    GXPosition3f32(r, b, 0.0f);       \
-    GXTexCoord2f32(u, v);             \
-    GXPosition3f32(l, b, 0.0f);       \
+// One textured rectangle (left, top, right, bottom) with texture repeats u, v.
+static inline void fukidashiQuad(f32 l, f32 t, f32 r, f32 b, f32 u, f32 v) {
+    GXBegin(GX_QUADS, GX_VTXFMT0, 4);
+    GXPosition3f32(l, t, 0.0f);
+    GXTexCoord2f32(0.0f, 0.0f);
+    GXPosition3f32(r, t, 0.0f);
+    GXTexCoord2f32(u, 0.0f);
+    GXPosition3f32(r, b, 0.0f);
+    GXTexCoord2f32(u, v);
+    GXPosition3f32(l, b, 0.0f);
     GXTexCoord2f32(0.0f, v);
+}
 
 /* The speaker ids are compared signed */
 
@@ -432,9 +434,9 @@ void effFukidashiDisp(CameraId cameraId, EffectEntry* effect) {
                 PSMTXTransApply(mF, mH, 1.0f, -1.0f, 0.0f);
                 GXLoadPosMtxImm(mH, GX_PNMTX0);
                 if (work->type == 0) {
-                    QUAD(-4.0f, 8.0f, 4.0f, -8.0f, 1.0f, 1.0f)
+                    fukidashiQuad(-4.0f, 8.0f, 4.0f, -8.0f, 1.0f, 1.0f);
                 } else {
-                    QUAD(-8.0f, 16.0f, 8.0f, -8.0f, 1.0f, 1.0f)
+                    fukidashiQuad(-8.0f, 16.0f, 8.0f, -8.0f, 1.0f, 1.0f);
                 }
                 if (pass == 0) {
                     GXSetTevColor(GX_TEVREG0, (GXColor){ 0xFF, 0, 0, alphaB });
@@ -443,9 +445,9 @@ void effFukidashiDisp(CameraId cameraId, EffectEntry* effect) {
                 }
                 GXLoadPosMtxImm(mF, GX_PNMTX0);
                 if (work->type == 0) {
-                    QUAD(-4.0f, 8.0f, 4.0f, -8.0f, 1.0f, 1.0f)
+                    fukidashiQuad(-4.0f, 8.0f, 4.0f, -8.0f, 1.0f, 1.0f);
                 } else {
-                    QUAD(-8.0f, 16.0f, 8.0f, -8.0f, 1.0f, 1.0f)
+                    fukidashiQuad(-8.0f, 16.0f, 8.0f, -8.0f, 1.0f, 1.0f);
                 }
                 break;
             case 2:
@@ -538,7 +540,7 @@ void effFukidashiDisp(CameraId cameraId, EffectEntry* effect) {
                 for (i = 0; i < work->animVal; i++) {
                     PSMTXTransApply(mF, mH, 5.0f * i + -5.0f, 0.0f, 0.0f);
                     GXLoadPosMtxImm(mH, GX_PNMTX0);
-                    QUAD(-3.0f, 3.0f, 3.0f, -3.0f, 1.0f, 1.0f)
+                    fukidashiQuad(-3.0f, 3.0f, 3.0f, -3.0f, 1.0f, 1.0f);
                 }
                 break;
             case 5:
@@ -556,7 +558,7 @@ void effFukidashiDisp(CameraId cameraId, EffectEntry* effect) {
                 GXLoadTexMtxImm(mD, GX_TEXMTX0, GX_MTX2x4);
                 GXSetTevColor(GX_TEVREG0, (GXColor){ 0, 0, 0, alphaB });
                 GXLoadPosMtxImm(mF, GX_PNMTX0);
-                QUAD(-7.0f, 7.0f, 7.0f, -7.0f, 1.0f, 1.0f)
+                fukidashiQuad(-7.0f, 7.0f, 7.0f, -7.0f, 1.0f, 1.0f);
                 break;
             case 6: {
                 f32* p;
@@ -582,7 +584,7 @@ void effFukidashiDisp(CameraId cameraId, EffectEntry* effect) {
                     PSMTXTransApply(mF, mH, 1.0f, -1.0f, 0.0f);
                     PSMTXConcat(mH, mA, mH);
                     GXLoadPosMtxImm(mH, GX_PNMTX0);
-                    QUAD(-8.0f, 16.0f, 8.0f, -8.0f, 2.0f, 2.0f)
+                    fukidashiQuad(-8.0f, 16.0f, 8.0f, -8.0f, 2.0f, 2.0f);
                     if (pass == 0) {
                         GXSetTevColor(GX_TEVREG0, (GXColor){ 0xFF, 0xCD, 0x28, alphaB });
                     } else {
@@ -590,7 +592,7 @@ void effFukidashiDisp(CameraId cameraId, EffectEntry* effect) {
                     }
                     PSMTXConcat(mF, mA, mH);
                     GXLoadPosMtxImm(mH, GX_PNMTX0);
-                    QUAD(-8.0f, 16.0f, 8.0f, -8.0f, 2.0f, 2.0f)
+                    fukidashiQuad(-8.0f, 16.0f, 8.0f, -8.0f, 2.0f, 2.0f);
                 }
                 break;
             }

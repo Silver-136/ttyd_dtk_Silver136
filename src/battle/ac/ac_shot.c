@@ -59,14 +59,16 @@ static void _disp_target_mark(CameraId cameraId, void* param);
 static void _disp_target_mark_afterimage(CameraId cameraId, void* param);
 static void _ac_disp_init(BattleWork* work);
 
-#define SH_RECORD(ac, sw)                \
-    SH_OUT(ac)[2] = (s32)(sw)->pos;      \
-    SH_OUT(ac)[0] = 1;                   \
-    (sw)->ang[(sw)->idx] = (sw)->pos;    \
-    (sw)->spin[(sw)->idx] = (sw)->angle; \
-    (sw)->life[(sw)->idx] = 70.0f;       \
-    (sw)->idx++;                         \
-    SH_OUT(ac)[3]++
+// Records one shot: its position becomes the result, and an afterimage starts at it.
+static inline void shotRecord(BattleActions* ac, ShotWork* sw) {
+    SH_OUT(ac)[2] = (s32)sw->pos;
+    SH_OUT(ac)[0] = 1;
+    sw->ang[sw->idx] = sw->pos;
+    sw->spin[sw->idx] = sw->angle;
+    sw->life[sw->idx] = 70.0f;
+    sw->idx++;
+    SH_OUT(ac)[3]++;
+}
 
 s32 battleAcMain_Shot(BattleWork* work) {
     const char* sfx;
@@ -135,7 +137,7 @@ s32 battleAcMain_Shot(BattleWork* work) {
                     if ((f32)SH_OUT(ac)[1] < sw->minV) {
                         SH_OUT(ac)[1] = (s32)sw->minV;
                     }
-                    SH_RECORD(ac, sw);
+                    shotRecord(ac, sw);
                     if (sw->idx >= SH_PARAMS(ac)->count) {
                         ac->result = 2;
                         return 0;
@@ -151,7 +153,7 @@ s32 battleAcMain_Shot(BattleWork* work) {
                         if ((f32)SH_OUT(ac)[1] < sw->minV) {
                             SH_OUT(ac)[1] = (s32)sw->minV;
                         }
-                        SH_RECORD(ac, sw);
+                        shotRecord(ac, sw);
                         if (sw->idx >= SH_PARAMS(ac)->count) {
                             ac->result = 0;
                             ac->mAcState = 1002;
@@ -183,7 +185,7 @@ s32 battleAcMain_Shot(BattleWork* work) {
                     if ((f32)SH_OUT(ac)[1] < sw->minV) {
                         SH_OUT(ac)[1] = (s32)sw->minV;
                     }
-                    SH_RECORD(ac, sw);
+                    shotRecord(ac, sw);
                     if (sw->idx >= SH_PARAMS(ac)->count) {
                         ac->countdown--;
                         ac->result = 2;
@@ -199,7 +201,7 @@ s32 battleAcMain_Shot(BattleWork* work) {
                 }
                 if (ac->acFlags & AC_SHOT_FLAG_NO_CHARGE) {
                     SH_OUT(ac)[1] = (s32)((sw->minV + sw->maxV) / 2.0f);
-                    SH_RECORD(ac, sw);
+                    shotRecord(ac, sw);
                     if (sw->idx >= SH_PARAMS(ac)->count) {
                         ac->mAcState = 1002;
                         ac->result = 2;
@@ -211,7 +213,7 @@ s32 battleAcMain_Shot(BattleWork* work) {
                     if ((f32)SH_OUT(ac)[1] < sw->minV) {
                         SH_OUT(ac)[1] = (s32)sw->minV;
                     }
-                    SH_RECORD(ac, sw);
+                    shotRecord(ac, sw);
                     if (sw->idx >= SH_PARAMS(ac)->count) {
                         ac->result = 2;
                         ac->mAcState = 1002;

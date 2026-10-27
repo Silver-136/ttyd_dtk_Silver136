@@ -52,15 +52,22 @@ inline BOOL chkRevDir(f32 angle) {
     return ret;
 }
 
-#define HAM_DIR(mario, dst)                                                                                     \
-    {                                                                                                           \
-        f32 a = mario->displayDirection;                                                                        \
-        MarioWork* p = marioGetPtr(); f32 r;                                                                    \
-        f32 off = 0.0f;                                                                                         \
-        if (p->dispFlags & MARIO_DISP_FLAG_REAR_POSE) {                                                         \
-            off = chkRevDir(p->displayDirection) ? 30.0f : -30.0f;                                              \
-        } if (a >= 90.0f && a <= 270.0f) { r = revise360(180.0f + off); } else { r = revise360(off); } dst = r; \
+// The hammer swing direction: straight left or right, turned 30 degrees when Mario faces away from the camera.
+static inline f32 hamDir(MarioWork* mario) {
+    f32 a = mario->displayDirection;
+    MarioWork* p = marioGetPtr();
+    f32 r;
+    f32 off = 0.0f;
+    if (p->dispFlags & MARIO_DISP_FLAG_REAR_POSE) {
+        off = chkRevDir(p->displayDirection) ? 30.0f : -30.0f;
     }
+    if (a >= 90.0f && a <= 270.0f) {
+        r = revise360(180.0f + off);
+    } else {
+        r = revise360(off);
+    }
+    return r;
+}
 
 
 typedef struct {
@@ -119,7 +126,7 @@ void mot_hammer(void) {
         mario->trigFlags &= ~MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
         mario->flags &= ~(MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING | MARIO_FLAG_IS_STEPPING | MARIO_FLAG_HAS_INPUT_JUMP);
         mario->flags |= MARIO_FLAG_STOP_AIR_MOVEMENT;
-        HAM_DIR(mario, mario->mot.hammer.dir);
+        mario->mot.hammer.dir = hamDir(mario);
         mario->multiTimer = 0;
         mario->airTimer = 0;
         mario->currSubMotionId = 0;
@@ -137,7 +144,7 @@ void mot_hammer(void) {
                 r = toMovedir2(0.0f, off);
             }
             mario->directionView = r;
-            HAM_DIR(mario, mario->mot.hammer.dir);
+            mario->mot.hammer.dir = hamDir(mario);
         }
         if (hitGetAttr(hit) & HIT_ATTR_MOBJ) {
             s32 ok = chkBlock((HamMobj*)mobjHitObjPtrToPtr(hit));
@@ -408,15 +415,15 @@ static inline void mot_ham(f32 a148, f32 a68) {
         }                                                                             \
     }
 
-#ifdef VERSION_G8ME01
-#define H2_LIGHT_ON()
-#else
-#define H2_LIGHT_ON() marioPaperLightOn();
+static inline void h2LightOn(void) {
+#ifndef VERSION_G8ME01
+    marioPaperLightOn();
 #endif
+}
 
 #define H2_CLR_PAPER()                                              \
     marioPaperOff();                                                \
-    H2_LIGHT_ON()                                                   \
+    h2LightOn();                                                    \
     marioChgPose("M_S_1");                                          \
     mario->dispFlags &= ~MARIO_DISP_FLAG_NO_REAR_POSE;              \
     mario->dispFlags &= ~MARIO_DISP_FLAG_NO_DIR_FLIP;               \

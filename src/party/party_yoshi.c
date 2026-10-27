@@ -47,19 +47,25 @@ f32 ofs_PYS_R_2[10] = {0.0f, 0.0f, 0.366f, 0.555f, 0.38f, 0.0f, 0.0f, 0.366f, 0.
 f32 ofs_PYS_F_1[10] = {0.0f, 0.0f, 0.433f, 0.557f, 0.512f, 0.0f, 0.0f, 0.433f, 0.557f, 0.512f};
 
 #define YOSHI_WORK(party) ((YoshiWork*)(party)->useStruct)
-#define ADD_FLOOR_MOVE(party)                                              \
-    if ((party)->hitobjStandOn) {                                       \
-        (party)->position.x += (party)->floorMove.x;                  \
-        (party)->position.y += (party)->floorMove.y;                  \
-        (party)->position.z += (party)->floorMove.z;                  \
+
+static inline void yoshiAddFloorMove(PartyEntry* party) {
+    if (party->hitobjStandOn) {
+        party->position.x += party->floorMove.x;
+        party->position.y += party->floorMove.y;
+        party->position.z += party->floorMove.z;
     }
-#define SYNC_MARIO(mario, party)                                    \
-    (mario)->camTarget.x = (party)->position.x;                       \
-    (mario)->camTarget.z = (party)->position.z;                       \
-    (mario)->position.x = (party)->position.x;                       \
-    (mario)->position.z = (party)->position.z;                       \
-    (mario)->displayDirection = (party)->displayDirection;                       \
-    (mario)->displayDirectionTarget = (party)->displayDirectionTarget;
+}
+
+// Mario rides Yoshi: he follows Yoshi's position and direction.
+static inline void yoshiSyncMario(MarioWork* mario, PartyEntry* party) {
+    mario->camTarget.x = party->position.x;
+    mario->camTarget.z = party->position.z;
+    mario->position.x = party->position.x;
+    mario->position.z = party->position.z;
+    mario->displayDirection = party->displayDirection;
+    mario->displayDirectionTarget = party->displayDirectionTarget;
+}
+
 void yoshi_damageToge(PartyEntry* party);
 
 
@@ -415,7 +421,7 @@ void yoshi_use(PartyEntry* party) {
             party->position.z += (party->moveTarget.z - party->position.z) / party->moveFrames;
             if (--party->moveFrames != 0) {
                 searchGround(party);
-                ADD_FLOOR_MOVE(party);
+                yoshiAddFloorMove(party);
                 return;
             }
             mario->trigFlags |= MARIO_TRIG_FLAG_DISABLE_JUMP_KEMURI;
@@ -427,7 +433,7 @@ void yoshi_use(PartyEntry* party) {
             party->displayDirection = mario->displayDirection;
             party->moveSpeed = 0.0f;
             party->useMotionId = 7;
-            ADD_FLOOR_MOVE(party);
+            yoshiAddFloorMove(party);
             partyChkGnd(party);
             return;
         case 7:
@@ -442,7 +448,7 @@ void yoshi_use(PartyEntry* party) {
                 }
             }
             if (mario->hitobjStandOn == NULL) {
-                ADD_FLOOR_MOVE(party);
+                yoshiAddFloorMove(party);
                 partyChkGnd(party);
                 return;
             }
@@ -491,7 +497,7 @@ void yoshi_use(PartyEntry* party) {
                 spd = mario->baseSpeed;
                 L_searchHead(party);
                 checkWall(party, spd, dir);
-                SYNC_MARIO(mario, party);
+                yoshiSyncMario(mario, party);
                 party_ride_yoshi_force_move();
                 mario->lastGroundPos = party->position;
                 searchGround(party);
@@ -560,7 +566,7 @@ void yoshi_use(PartyEntry* party) {
             spd = party->moveSpeed;
             L_searchHead(party);
             checkWall(party, spd, dir);
-            SYNC_MARIO(mario, party);
+            yoshiSyncMario(mario, party);
             if (party->buttonTrg & (PAD_BUTTON_B | PAD_BUTTON_X)) {
                 party->useMotionId = 100;
             }
@@ -577,12 +583,12 @@ void yoshi_use(PartyEntry* party) {
             partyChgPose(party, "PYS_H_2");
             party->moveSpeed = 0.0f;
             party->useMotionId = 101;
-            ADD_FLOOR_MOVE(party);
+            yoshiAddFloorMove(party);
             partyChkGnd(party);
             return;
         case 101:
             if (mario->hitobjStandOn == NULL) {
-                ADD_FLOOR_MOVE(party);
+                yoshiAddFloorMove(party);
                 partyChkGnd(party);
                 return;
             }
@@ -591,7 +597,7 @@ void yoshi_use(PartyEntry* party) {
                 partyChgRunMode(party, 2);
                 party->moveMode = 0;
             }
-            ADD_FLOOR_MOVE(party);
+            yoshiAddFloorMove(party);
             partyChkGnd(party);
 #ifdef VERSION_G8ME01
             movePos(&party->position.x, &party->position.z, mario->hitobjFront ? -0.1f : 0.1f, toMovedir(mario->displayDirection));
@@ -722,7 +728,7 @@ void yoshi_use(PartyEntry* party) {
                 }
                 YOSHI_WORK(party)->dir = 0;
             }
-            SYNC_MARIO(mario, party);
+            yoshiSyncMario(mario, party);
             mario->airTimer++;
             if (mario->airTimer > 14) {
                 if (party->flags & PARTY_FLAG_IS_EVT_USE) {
@@ -940,7 +946,7 @@ void yoshi_use(PartyEntry* party) {
         L_resetOfs(party);
         return;
     }
-    ADD_FLOOR_MOVE(party);
+    yoshiAddFloorMove(party);
     mario->camTarget.x = party->position.x;
     mario->camTarget.z = party->position.z;
     mario->displayDirection = party->displayDirection;

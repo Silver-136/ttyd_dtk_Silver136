@@ -329,12 +329,13 @@ USER_FUNC(unitwin_set_bought) {
     return EVT_RETURN_DONE;
 }
 
-#define UNITWIN_CLOSE(wp)                \
-    if ((wp)->selected != -1) {          \
-        (wp)->selected = -1;             \
-        winMgrClose((wp)->winId[0]);     \
-        winMgrClose((wp)->winId[1]);     \
+static inline void unitWinClose(UnitWinWork* wp) {
+    if (wp->selected != -1) {
+        wp->selected = -1;
+        winMgrClose(wp->winId[0]);
+        winMgrClose(wp->winId[1]);
     }
+}
 
 USER_FUNC(evt_unitwin_select_func) {
     UnitWinWork* wp = (UnitWinWork*)event->lwData[0];
@@ -356,11 +357,11 @@ USER_FUNC(evt_unitwin_select_func) {
         btn = 0;
     }
     if (party != NULL && (party->flags & PARTY_FLAG_IS_BEING_USED)) {
-        UNITWIN_CLOSE(wp);
+        unitWinClose(wp);
         return EVT_RETURN_BLOCK;
     }
     if (winGhostDiaryChk() || N_itemPickUpFromFieldCheck()) {
-        UNITWIN_CLOSE(wp);
+        unitWinClose(wp);
         return EVT_RETURN_BLOCK;
     }
     if (!(wp->flags & UNITWIN_FLAG_BUYING)) {
@@ -385,7 +386,7 @@ USER_FUNC(evt_unitwin_select_func) {
             }
         }
         if (!found) {
-            UNITWIN_CLOSE(wp);
+            unitWinClose(wp);
         }
         if (wp->selected != -1) {
             wp->flags |= UNITWIN_FLAG_SELECTED;

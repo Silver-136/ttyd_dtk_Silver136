@@ -6410,39 +6410,51 @@ void psndENV_stop(u32 id) {
     }
 }
 
-#define ENVVOL(e, p, out)                                                                                   \
-    {                                                                                                       \
-        PaperSoundFade* f = NULL;                                                                           \
-        s16 v;                                                                                              \
-        if ((p)->envId[0] == (e)->id) f = &(p)->fade[0];                                                    \
-        if ((p)->envId[1] == (e)->id) f = &(p)->fade[1];                                                    \
-        if (f == NULL) out = (e)->volume * (p)->envVolume / 100;                                            \
-        else {                                                                                              \
-            if (f->dipState == 0) v = 0x7f; else v = f->dipTime * 0x7f / f->dipTimeMax;                     \
-            if (f->state == 0) out = (p)->envVolume * ((e)->volume * v / 127) / 100;                        \
-            else {                                                                                          \
-                { s16 w = f->timeMax * ((e)->volume * v / 127) / f->time; out = w * (p)->envVolume / 100; } \
-            }                                                                                               \
-        }                                                                                                   \
+// Volume of an environment sound: its base volume scaled by the environment volume and any dip or fade on it.
+static inline u8 psndEnvVolume(PaperSoundEnv* e, PaperSoundWork* p) {
+    PaperSoundFade* f = NULL;
+    s16 v;
+    s16 w;
+    if (p->envId[0] == e->id) {
+        f = &p->fade[0];
     }
-#define ENVDONE(e)                                                                                                   \
-    {                                                                                                                \
-        (e)->sfx = -1;                                                                                               \
-        (e)->state = 0;                                                                                              \
-        (e)->timer = 0;                                                                                              \
-        switch ((e)->type) {                                                                                         \
-            case 0:                                                                                                  \
-                (e)->timer = (e)->interval * PSND_FPS;                                                               \
-                (e)->timer += irand((e)->intervalRand) * PSND_FPS;                                                   \
-                break;                                                                                               \
-            case 2:                                                                                                  \
-                (e)->timer = (e)->interval * PSND_FPS;                                                               \
-                (e)->timer += irand((e)->intervalRand) * PSND_FPS;                                                   \
-                break;                                                                                               \
-            case 3:                                                                                                  \
-                break;                                                                                               \
-        }                                                                                                            \
+    if (p->envId[1] == e->id) {
+        f = &p->fade[1];
     }
+    if (f == NULL) {
+        return e->volume * p->envVolume / 100;
+    }
+    if (f->dipState == 0) {
+        v = 0x7f;
+    } else {
+        v = f->dipTime * 0x7f / f->dipTimeMax;
+    }
+    if (f->state == 0) {
+        return p->envVolume * (e->volume * v / 127) / 100;
+    }
+    w = f->timeMax * (e->volume * v / 127) / f->time;
+    return w * p->envVolume / 100;
+}
+
+// An environment sound has finished: schedule its next play.
+static inline void psndEnvDone(PaperSoundEnv* e) {
+    e->sfx = -1;
+    e->state = 0;
+    e->timer = 0;
+    switch (e->type) {
+        case 0:
+            e->timer = e->interval * PSND_FPS;
+            e->timer += irand(e->intervalRand) * PSND_FPS;
+            break;
+        case 2:
+            e->timer = e->interval * PSND_FPS;
+            e->timer += irand(e->intervalRand) * PSND_FPS;
+            break;
+        case 3:
+            break;
+    }
+}
+
 void psndENVMain(void) {
     char* B = (char*)_buf;
     char* base = B;
@@ -6477,7 +6489,7 @@ void psndENVMain(void) {
                 r = rr;
                 e->position.x += r * (f32)sin(a2);
                 e->position.z -= r * (f32)cos(a2);
-                { u8 vv; ENVVOL(e, &psnd, vv) e->sfx = __psndSFXOn(SFX_NAME_WORD(e->sfxId | 0x5000000), vv, 0xff, 0, &e->position, 0, e->dist, 0); }
+                { u8 vv = psndEnvVolume(e, &psnd); e->sfx = __psndSFXOn(SFX_NAME_WORD(e->sfxId | 0x5000000), vv, 0xff, 0, &e->position, 0, e->dist, 0); }
                 e->state++;
                 break;
             case 2:
@@ -6485,14 +6497,14 @@ void psndENVMain(void) {
                     PaperSoundEffect* s = &(pssfx)[e->sfx & 0xff];
                     if ((u32)s->channel != -1 || (s->flags & PSFX_FLAG_START)) break;
                 }
-                ENVDONE(e)
+                psndEnvDone(e);
                 break;
             }
             break;
         case 1:
             switch (e->state) {
             case 0:
-                { u8 vv; ENVVOL(e, &psnd, vv) e->sfx = __psndSFXOn(SFX_NAME_WORD(e->sfxId | PSND_SFX_ENV), vv, 0xff, 0, &e->position, 0, e->dist, 0); }
+                { u8 vv = psndEnvVolume(e, &psnd); e->sfx = __psndSFXOn(SFX_NAME_WORD(e->sfxId | PSND_SFX_ENV), vv, 0xff, 0, &e->position, 0, e->dist, 0); }
                 e->state++;
                 break;
             case 1:
@@ -6500,7 +6512,7 @@ void psndENVMain(void) {
                     PaperSoundEffect* s = &(pssfx)[e->sfx & 0xff];
                     if ((u32)s->channel != -1 || (s->flags & PSFX_FLAG_START)) break;
                 }
-                ENVDONE(e)
+                psndEnvDone(e);
                 break;
             }
             break;
@@ -6511,7 +6523,7 @@ void psndENVMain(void) {
                 if (e->timer == 0) e->state++;
                 break;
             case 1:
-                { u8 vv; ENVVOL(e, &psnd, vv) e->sfx = __psndSFXOn(SFX_NAME_WORD(e->sfxId | PSND_SFX_ENV), vv, 0xff, 0, &e->position, 0, e->dist, 0); }
+                { u8 vv = psndEnvVolume(e, &psnd); e->sfx = __psndSFXOn(SFX_NAME_WORD(e->sfxId | PSND_SFX_ENV), vv, 0xff, 0, &e->position, 0, e->dist, 0); }
                 e->state++;
                 break;
             case 2:
@@ -6519,14 +6531,14 @@ void psndENVMain(void) {
                     PaperSoundEffect* s = &(pssfx)[e->sfx & 0xff];
                     if ((u32)s->channel != -1 || (s->flags & PSFX_FLAG_START)) break;
                 }
-                ENVDONE(e)
+                psndEnvDone(e);
                 break;
             }
             break;
         case 3:
             switch (e->state) {
             case 0:
-                { u8 vv; ENVVOL(e, &psnd, vv) e->sfx = __psndSFXOn(SFX_NAME_WORD(e->sfxId | 0x6000000), vv, 0xff, 0, &e->position, 0, e->dist, 0); }
+                { u8 vv = psndEnvVolume(e, &psnd); e->sfx = __psndSFXOn(SFX_NAME_WORD(e->sfxId | 0x6000000), vv, 0xff, 0, &e->position, 0, e->dist, 0); }
                 e->state++;
                 break;
             case 1:
@@ -6534,7 +6546,7 @@ void psndENVMain(void) {
                     PaperSoundEffect* s = &(pssfx)[e->sfx & 0xff];
                     if ((u32)s->channel != -1 || (s->flags & PSFX_FLAG_START)) break;
                 }
-                ENVDONE(e)
+                psndEnvDone(e);
                 break;
             }
             break;
@@ -6544,7 +6556,7 @@ void psndENVMain(void) {
     {                                                                                        \
         u8 vol;                                                                              \
         u16 lpf;                                                                             \
-        ENVVOL(ent, &psnd, vol)                                                              \
+        vol = psndEnvVolume(ent, &psnd);                                                     \
         {                                                                                    \
             s32 id = *(s32*)&ent->sfx;                                                       \
             PaperSoundEffect* sfx;                                                           \

@@ -232,24 +232,24 @@ u32 boo_dl_2_30[] __attribute__((aligned(32))) = {0x9800038C, 0x2504116D, 0x1301
 u32 boo_dl_2_31[] __attribute__((aligned(32))) = {0x98000389, 0x2504118A, 0x2601046E, 0x16010400, 0x00000000, 0x00000000, 0x00000000, 0x00000000};
 u8 anime_data_walk[] = {1, 1, 2, 2, 1, 1, 0, 0};
 
-#define BOO_ARRAYS()                                                                                       \
-    GXClearVtxDesc();                                                                                      \
-    GXSetVtxDesc(GX_VA_POS, GX_INDEX8);                                                                    \
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 14);                                        \
-    GXSetArray(GX_VA_POS, boo_vertex_tbl, 6);                                                              \
-    GXSetVtxDesc(GX_VA_NRM, GX_INDEX8);                                                                    \
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_S8, 6);                                          \
-    GXSetArray(GX_VA_NRM, boo_normal_tbl, 3);                                                              \
-    GXSetVtxDesc(GX_VA_CLR0, GX_INDEX8);                                                                   \
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);                                     \
-    GXSetArray(GX_VA_CLR0, boo_color0_tbl, 4);                                                             \
-    GXSetVtxDesc(GX_VA_TEX0, GX_INDEX8);                                                                   \
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S16, 14);                                        \
+static inline void booSetArrays(void) {
+    GXClearVtxDesc();
+    GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 14);
+    GXSetArray(GX_VA_POS, boo_vertex_tbl, 6);
+    GXSetVtxDesc(GX_VA_NRM, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_S8, 6);
+    GXSetArray(GX_VA_NRM, boo_normal_tbl, 3);
+    GXSetVtxDesc(GX_VA_CLR0, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
+    GXSetArray(GX_VA_CLR0, boo_color0_tbl, 4);
+    GXSetVtxDesc(GX_VA_TEX0, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S16, 14);
     GXSetArray(GX_VA_TEX0, boo_texcoord0_tbl, 4);
+}
 
-#define DL(n, sz) GXCallDisplayList(n, sz);
-#define DL4(a, b, c, d) DL(a, 0x40) DL(b, 0x40) DL(c, 0x40) DL(d, 0x40)
-#define DLS(p, a) DL(p##a, 0x20)
+#define DL4(a, b, c, d) GXCallDisplayList(a, 0x40); GXCallDisplayList(b, 0x40); GXCallDisplayList(c, 0x40); GXCallDisplayList(d, 0x40);
+#define DLS(p, a) GXCallDisplayList(p##a, 0x20);
 #define DLS_ALL(p)                                                                                         \
     DLS(p, 4) DLS(p, 5) DLS(p, 6) DLS(p, 7) DLS(p, 8) DLS(p, 9) DLS(p, 10) DLS(p, 11) DLS(p, 12)          \
     DLS(p, 13) DLS(p, 14) DLS(p, 15) DLS(p, 16) DLS(p, 17) DLS(p, 18) DLS(p, 19) DLS(p, 20) DLS(p, 21)    \
@@ -257,19 +257,19 @@ u8 anime_data_walk[] = {1, 1, 2, 2, 1, 1, 0, 0};
     DLS(p, 31)
 
 void boo_polygon_0(void) {
-    BOO_ARRAYS()
+    booSetArrays();
     DL4(boo_dl_0_0, boo_dl_0_1, boo_dl_0_2, boo_dl_0_3)
     DLS_ALL(boo_dl_0_)
 }
 
 void boo_polygon_1(void) {
-    BOO_ARRAYS()
+    booSetArrays();
     DL4(boo_dl_1_0, boo_dl_1_1, boo_dl_1_2, boo_dl_1_3)
     DLS_ALL(boo_dl_1_)
 }
 
 void boo_polygon_2(void) {
-    BOO_ARRAYS()
+    booSetArrays();
     DL4(boo_dl_2_0, boo_dl_2_1, boo_dl_2_2, boo_dl_2_3)
     DLS_ALL(boo_dl_2_)
 }

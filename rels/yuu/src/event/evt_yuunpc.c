@@ -36,7 +36,7 @@ typedef struct YuuNpcPose {
     u16 flags;
     f32 walkAnimSpeed;
 } YuuNpcPose;
-// motion: 0 stand, 1 walk, 2 run (YUU_STOP/WALK/RUN), 3 fall, 4 jump (YUU_JUMP); turnTimer counts the 30-frame turn
+// motion: 0 stand, 1 walk, 2 run (yuunpc_stop/walk/run), 3 fall, 4 jump (YUU_JUMP); turnTimer counts the 30-frame turn
 // that starts from turnBaseDir; errper (set by errper_set_rtn) is the random spread of the goal position
 typedef struct YuuNpc {
     u16 id;
@@ -1341,12 +1341,11 @@ static inline f32 yuunpc_rnd10(YuuNpc* npc) /* */ {
     return 10.0f * ((npc->id % 101 - 50) / 50.0f);
 }
 
-#define YUU_STOP(npc)                                                              \
-    do {                                                                           \
-        (npc)->motion = 0;                                                         \
-        yuunpc_pose_change((npc), (npc)->poses[0], 1.0f, rand() / 32767.0f);       \
-        (npc)->speed = 0.0f;                                                       \
-    } while (0)
+static inline void yuunpc_stop(YuuNpc* npc) {
+    npc->motion = 0;
+    yuunpc_pose_change(npc, npc->poses[0], 1.0f, rand() / 32767.0f);
+    npc->speed = 0.0f;
+}
 
 #define YUU_JUMP(npc)                                                                                                                      \
     do {                                                                                                                                   \
@@ -1361,27 +1360,25 @@ static inline f32 yuunpc_rnd10(YuuNpc* npc) /* */ {
         c26++;                                                                                                                             \
     } while (0)
 
-#define YUU_RUN(npc)                                                               \
-    do {                                                                           \
-        (npc)->motion = 2;                                                         \
-        yuunpc_pose_change((npc), (npc)->poses[2], 1.0f, rand() / 32767.0f);       \
-        if ((npc)->flags & YUUNPC_TURN_MASK) {                                     \
-            (npc)->speed = 1.0f;                                                   \
-        } else {                                                                   \
-            (npc)->speed = 2.25f;                                                  \
-        }                                                                          \
-    } while (0)
+static inline void yuunpc_run(YuuNpc* npc) {
+    npc->motion = 2;
+    yuunpc_pose_change(npc, npc->poses[2], 1.0f, rand() / 32767.0f);
+    if (npc->flags & YUUNPC_TURN_MASK) {
+        npc->speed = 1.0f;
+    } else {
+        npc->speed = 2.25f;
+    }
+}
 
-#define YUU_WALK(npc)                                                                                                  \
-    do {                                                                                                               \
-        (npc)->motion = 1;                                                                                             \
-        yuunpc_pose_change((npc), (npc)->poses[1], yuunpc_wp->pose[(npc)->poses[1]].walkAnimSpeed, rand() / 32767.0f); \
-        if ((npc)->flags & YUUNPC_TURN_MASK) {                                                                         \
-            (npc)->speed = 0.5f;                                                                                       \
-        } else {                                                                                                       \
-            (npc)->speed = 1.0f;                                                                                       \
-        }                                                                                                              \
-    } while (0)
+static inline void yuunpc_walk(YuuNpc* npc) {
+    npc->motion = 1;
+    yuunpc_pose_change(npc, npc->poses[1], yuunpc_wp->pose[npc->poses[1]].walkAnimSpeed, rand() / 32767.0f);
+    if (npc->flags & YUUNPC_TURN_MASK) {
+        npc->speed = 0.5f;
+    } else {
+        npc->speed = 1.0f;
+    }
+}
 
 void yuunpc_pose_minigame4_main(void) {
     s32 i;
@@ -1872,18 +1869,18 @@ void yuunpc_pose_minigame4_main(void) {
                         ha = YUUNPC_HIT_AT(75.0f + px, &npc->pos.z);
                         if (npc->state <= 3 && irand(2)) {
                             if (hb >= npc->pos.y) {
-                                YUU_WALK(npc);
+                                yuunpc_walk(npc);
                                 kind = 1;
                             }
                         } else if (!(npc->flags & YUUNPC_TURN_MASK) || ((npc->flags & YUUNPC_TURN_MASK) && (hb >= npc->pos.y || (hb < npc->pos.y && ha < npc->pos.y)))) {
-                            YUU_RUN(npc);
+                            yuunpc_run(npc);
                             kind = 1;
                         }
                     }
                     break;
                 case 1:
                     if (goalincheck(npc) == -1) {
-                        YUU_STOP(npc);
+                        yuunpc_stop(npc);
                         break;
                     }
                     if (npc->flags & YUUNPC_TURN_MASK) {
@@ -1900,12 +1897,12 @@ void yuunpc_pose_minigame4_main(void) {
                         if (ha > npc->pos.y) {
                             YUU_JUMP(npc);
                         } else if (hb < npc->pos.y && hc == npc->pos.y) {
-                            YUU_STOP(npc);
+                            yuunpc_stop(npc);
                         } else if (irand(60) == 0) {
                             if (npc->state <= 1 && irand(3) == 0) {
-                                YUU_STOP(npc);
+                                yuunpc_stop(npc);
                             } else if (hb >= npc->pos.y) {
-                                YUU_RUN(npc);
+                                yuunpc_run(npc);
                             }
                         }
                     } else {
@@ -1923,13 +1920,13 @@ void yuunpc_pose_minigame4_main(void) {
                             if (mg->state == 0) {
                                 YUU_JUMP(npc);
                             } else {
-                                YUU_STOP(npc);
+                                yuunpc_stop(npc);
                             }
                         } else if ((hb < npc->pos.y && hc == npc->pos.y) || (npc->state <= 3 && irand(60) == 0)) {
                             if (npc->state <= 1 && irand(3) == 0) {
-                                YUU_STOP(npc);
+                                yuunpc_stop(npc);
                             } else {
-                                YUU_RUN(npc);
+                                yuunpc_run(npc);
                             }
                         }
                     }
@@ -1947,7 +1944,7 @@ void yuunpc_pose_minigame4_main(void) {
                     break;
                 case 2:
                     if (goalincheck(npc) == -1) {
-                        YUU_STOP(npc);
+                        yuunpc_stop(npc);
                         break;
                     }
                     if (npc->flags & YUUNPC_TURN_MASK) {
@@ -1964,12 +1961,12 @@ void yuunpc_pose_minigame4_main(void) {
                         if (ha > npc->pos.y) {
                             YUU_JUMP(npc);
                         } else if (hb < npc->pos.y && hc == npc->pos.y) {
-                            YUU_STOP(npc);
+                            yuunpc_stop(npc);
                         } else if (npc->state <= 3 && irand(60) == 0) {
                             if (npc->state <= 1 && irand(3) == 0) {
-                                YUU_STOP(npc);
+                                yuunpc_stop(npc);
                             } else if (hb >= npc->pos.y) {
-                                YUU_WALK(npc);
+                                yuunpc_walk(npc);
                             }
                         }
                     } else {
@@ -1987,13 +1984,13 @@ void yuunpc_pose_minigame4_main(void) {
                             if (mg->state == 0) {
                                 YUU_JUMP(npc);
                             } else {
-                                YUU_STOP(npc);
+                                yuunpc_stop(npc);
                             }
                         } else if (npc->state <= 3 && irand(60) == 0) {
                             if (npc->state <= 1 && irand(3) == 0) {
-                                YUU_STOP(npc);
+                                yuunpc_stop(npc);
                             } else if (yuunpc_hit_get(25.0f + npc->pos.x, &npc->pos.z) >= npc->pos.y) {
-                                YUU_WALK(npc);
+                                yuunpc_walk(npc);
                             }
                         }
                     }

@@ -124,56 +124,7 @@ static inline s32 makeVec(f32 half) {
     return r;
 }
 
-#define DISPDIR_BODY(a, b, m2)                                                                    \
-    if (angOut(b, 135.0f, a) == 1) {                                                              \
-        b = revise360(180.0f + b);                                                                \
-    }                                                                                             \
-    {                                                                                             \
-        f32 ty_ = trunc10((m2)->targetYaw); f32 dd = revise360(-(ty_ - trunc10(b))); \
-        s32 sgn = (dd < 180.0f) ? 0 : 1;                                                          \
-        if (sgn == 0) {                                                                           \
-            if (__fabsf(b - a) > 90.0f) {                                                            \
-                if (a > b) {                                                                      \
-                    b += 360.0f;                                                                  \
-                }                                                                                 \
-            }                                                                                     \
-        } else {                                                                                  \
-            if (__fabsf(b - a) > 90.0f) {                                                            \
-                if (a < b) {                                                                      \
-                    a += 360.0f;                                                                  \
-                }                                                                                 \
-            }                                                                                     \
-        }                                                                                         \
-    }                                                                                             \
-    if (angOut(b, 90.0f, a) == 0) {                                                               \
-        if (__fabsf(b - a) > 180.0f) {                                                               \
-            if (b > a) {                                                                          \
-                b -= 360.0f;                                                                      \
-            } else {                                                                              \
-                a -= 360.0f;                                                                      \
-            }                                                                                     \
-        }                                                                                         \
-    }                                                                                             \
-    b = 1.2f * (a - b) + b;                                                                       \
-    b = revise360(b);                                                                             \
-    {                                                                                             \
-        f32 md = toMovedir(mario->displayDirection);                                                            \
-        if (mario->hammerDir) {                                                                           \
-            md = revise360(180.0f + md);                                                          \
-        }                                                                                         \
-        if (angOut(b, 135.0f, md) == 1) {                                                         \
-            mario->hammerDir = (mario->hammerDir + 1) & 1;                                                        \
-        }                                                                                         \
-    }                                                                                             \
-    { f32 t_ = 270.0f + mario->targetYaw - b; mario->displayDirection = revise360(t_ + (mario->hammerDir ? -180.0f : 0.0f)); } \
-    if (mario->displayDirection >= 200.0f) {                                                                    \
-        mario->displayDirection = revise360(270.0f + mario->targetYaw - b + (mario->hammerDir ? -180.0f : 0.0f));              \
-    }                                                                                             \
-    if (mario->displayDirection < 170.0f) {                                                                     \
-        mario->displayDirection = revise360(270.0f + mario->targetYaw - b + (mario->hammerDir ? -180.0f : 0.0f));              \
-    }
-
-// FAKE: marioSetRollDispDir copy of DISPDIR_BODY: dd = tb_ - ty_ (was -(ty_ - tb_); differs only in the sign of zero, and dd is
+// FAKE: marioSetRollDispDir body: dd = tb_ - ty_ (the plain form is -(ty_ - tb_); differs only in the sign of zero, and dd is
 // only compared with 180) and a dead int-guarded re-def of ty_ (COLOURING M) keep ty_ as a named value created before tb_, as the target fsubs f1,f0,f1
 #define DISPDIR_BODY2(a, b, m2)                                                                    \
     if (angOut(b, 135.0f, a) == 1) {                                                              \

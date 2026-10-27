@@ -135,24 +135,6 @@ void* batten_dl_0_tbl[] = {batten_dl_0_0, batten_dl_0_1, batten_dl_0_2, batten_d
 u8 batten_dl_0_size_tbl[] = {0x03, 0x03, 0x03, 0x03};
 u8 rz_tbl[] = {0x00, 0x09, 0x12, 0x1C, 0x25, 0x2F, 0x39, 0x43, 0x4D, 0x57, 0x61, 0x6B, 0x74, 0x7D, 0x86, 0x8F, 0x97, 0x9F, 0xA6, 0xAD, 0xB4, 0xB8, 0xB9, 0xB9, 0xB6, 0xB4, 0xB1, 0xAE, 0xAE, 0xAF, 0xB4};
 
-#define KK_ARRAYS(vtx, tex0, tex1, norm, clr)                                                              \
-    GXClearVtxDesc();                                                                                      \
-    GXSetVtxDesc(GX_VA_POS, GX_INDEX8);                                                                    \
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 6);                                         \
-    GXSetArray(GX_VA_POS, vtx, 6);                                                                         \
-    GXSetVtxDesc(GX_VA_NRM, GX_INDEX8);                                                                    \
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_S8, 6);                                          \
-    GXSetArray(GX_VA_NRM, norm, 3);                                                                        \
-    GXSetVtxDesc(GX_VA_CLR0, GX_INDEX8);                                                                   \
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);                                     \
-    GXSetArray(GX_VA_CLR0, clr, 4);                                                                        \
-    GXSetVtxDesc(GX_VA_TEX0, GX_INDEX8);                                                                   \
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S16, 14);                                        \
-    GXSetArray(GX_VA_TEX0, tex0, 4);                                                                       \
-    GXSetVtxDesc(GX_VA_TEX1, GX_INDEX8);                                                                   \
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX1, GX_TEX_ST, GX_S16, 14);                                        \
-    GXSetArray(GX_VA_TEX1, tex1, 4);
-
 void effKumokumoMain(EffectEntry* effect);
 void effKumokumoDisp(CameraId cameraId, EffectEntry* effect);
 
@@ -429,7 +411,22 @@ void effKumokumoMain(EffectEntry* effect) {
 
 static inline void kkDraw(void* vtx, void* tex0, void* tex1, void* norm, void* clr, void** dl, u8* sz) {
     u32 i;
-    KK_ARRAYS(vtx, tex0, tex1, norm, clr)
+    GXClearVtxDesc();
+    GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 6);
+    GXSetArray(GX_VA_POS, vtx, 6);
+    GXSetVtxDesc(GX_VA_NRM, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_S8, 6);
+    GXSetArray(GX_VA_NRM, norm, 3);
+    GXSetVtxDesc(GX_VA_CLR0, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
+    GXSetArray(GX_VA_CLR0, clr, 4);
+    GXSetVtxDesc(GX_VA_TEX0, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S16, 14);
+    GXSetArray(GX_VA_TEX0, tex0, 4);
+    GXSetVtxDesc(GX_VA_TEX1, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX1, GX_TEX_ST, GX_S16, 14);
+    GXSetArray(GX_VA_TEX1, tex1, 4);
     for (i = 0; i < 4; i++) {
         GXCallDisplayList(dl[i], sz[i] << 5);
     }

@@ -300,11 +300,12 @@ BOOL marioGetMotSlitCancel3(void) {
 }
 
 #define CLR_DISP 0xFEFFF3FF
-#define CLR_SLITFLAGS(m)                           \
-    (m)->flags &= ~MARIO_FLAG_PARTY_WALK_DISABLED; \
-    (m)->flags &= ~MARIO_FLAG_GONE_THROUGH_BARS;   \
-    (m)->dispFlags &= CLR_DISP;                    \
-    (m)->dispFlags &= CLR_DISP;
+static inline void slitClearFlags(MarioWork* m) {
+    m->flags &= ~MARIO_FLAG_PARTY_WALK_DISABLED;
+    m->flags &= ~MARIO_FLAG_GONE_THROUGH_BARS;
+    m->dispFlags &= CLR_DISP;
+    m->dispFlags &= CLR_DISP;
+}
 
 static inline void slitSetDir(MarioWork* m, f32 a) {
     if (revise360(m->directionView - m->targetYaw) <= 180.0f) {
@@ -368,7 +369,7 @@ void mot_slit_post(void) {
                 m->displayDirection = 180.0f;
                 m->displayDirectionTarget = m->displayDirection;
             }
-            CLR_SLITFLAGS(m)
+            slitClearFlags(m);
             marioPaperOff();
             mapResetPaperAmbColor();
             m->dispFlags &= ~MARIO_DISP_FLAG_NO_REAR_POSE;
@@ -481,16 +482,15 @@ static inline BOOL slitContinueChk(void) {
 #else
 #define SPEEDCHK_COND(m) ((m)->baseSpeed >= (m)->mBaseDashSpeed)
 #endif
-#define SPEEDCHK(m) SPEEDCHK_IF(m, (m)->baseSpeed >= (m)->mBaseDashSpeed)
-#define SPEEDCHK_US(m) SPEEDCHK_IF(m, SPEEDCHK_COND(m))
-#define SPEEDCHK_IF(m, c)                     \
-    if (c) {                                  \
-        (m)->baseSpeed = (m)->mBaseWalkSpeed; \
-        if (!((m)->trigFlags & 0x8000)) {     \
-            marioChgPose("M_R_1");            \
-        }                                     \
-        m->mot.slit.flags |= 1;               \
+
+// Back from dashing to walking speed.
+static inline void slitSpeedDown(MarioWork* m) {
+    m->baseSpeed = m->mBaseWalkSpeed;
+    if (!(m->trigFlags & 0x8000)) {
+        marioChgPose("M_R_1");
     }
+    m->mot.slit.flags |= 1;
+}
 
 static inline f32 slitWalkSpeed(void) {
     MarioWork* p = marioGetPtr();
@@ -514,21 +514,21 @@ static inline void slitSetDisplayDir(MarioWork* m) {
     m->displayDirection = (revise360(m->directionView - m->targetYaw) <= 180.0f) ? 260.0f : 280.0f;
 }
 
-#define SLITDIR2(m)                                                 \
-    if (revise360((m)->directionView - (m)->targetYaw) <= 180.0f) { \
-        m->mot.slit.side = 1;                                       \
-        (m)->displayDirection = 260.0f;                             \
-    } else {                                                        \
-        m->mot.slit.side = 2;                                       \
-        (m)->displayDirection = 280.0f;                             \
+static inline void slitSetSide(MarioWork* m) {
+    if (revise360(m->directionView - m->targetYaw) <= 180.0f) {
+        m->mot.slit.side = 1;
+        m->displayDirection = 260.0f;
+    } else {
+        m->mot.slit.side = 2;
+        m->displayDirection = 280.0f;
     }
+}
 
-#define CAMFIX(m)                     \
-    {                                 \
-        MarioWork* p = marioGetPtr(); \
-        p->camShiftTargetZ = 0.0f;    \
-        p->camShiftRate.z = 0.004f;   \
-    }
+static inline void slitCamFix(void) {
+    MarioWork* p = marioGetPtr();
+    p->camShiftTargetZ = 0.0f;
+    p->camShiftRate.z = 0.004f;
+}
 
 #ifdef VERSION_G8ME01
 #define SLITSTOP(m)               \
@@ -588,7 +588,9 @@ void mot_slit(void) {
         m->mot.slit.counter = 0;
         m->slitState = 2;
         m->mot.slit.lastY = m->position.y;
-        SPEEDCHK_US(m)
+        if (SPEEDCHK_COND(m)) {
+            slitSpeedDown(m);
+        }
         marioGetPtr();
         psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_CHANGE_SLIT1), &m->position);
         break;
@@ -598,7 +600,9 @@ void mot_slit(void) {
             marioChgPose("M_S_1");
 #ifdef VERSION_G8ME01
         } else {
-            SPEEDCHK_US(m)
+            if (SPEEDCHK_COND(m)) {
+                slitSpeedDown(m);
+            }
             m->directionView = m->controlStickAngle;
 #endif
         }
@@ -619,7 +623,9 @@ void mot_slit(void) {
             }
             m->directionView = toMovedirSimple(m->displayDirection);
         }
-        SPEEDCHK(m)
+        if (m->baseSpeed >= m->mBaseDashSpeed) {
+            slitSpeedDown(m);
+        }
         m->displayDirection = 270.0f;
         m->displayDirectionTarget = m->displayDirection;
         if (!m->controlStickSensitivity) {
@@ -630,7 +636,7 @@ void mot_slit(void) {
         m->mot.slit.count = 0;
     case 10:
         if (m->position.y != m->mot.slit.lastY) {
-            CAMFIX(m)
+            slitCamFix();
         }
         m->mot.slit.lastY = m->position.y;
         if (m->forceMoveTimer != 0) {
@@ -647,7 +653,9 @@ void mot_slit(void) {
             }
             break;
         }
-        SPEEDCHK(m)
+        if (m->baseSpeed >= m->mBaseDashSpeed) {
+            slitSpeedDown(m);
+        }
         if (marioChkKey()) {
             if (slitContinueChk() != TRUE) {
                 m->directionView = m->controlStickAngle;
@@ -670,10 +678,10 @@ void mot_slit(void) {
             marioChgPose("M_W_1");
         }
         if (!(m->mot.slit.flags & 1)) {
-            CAMFIX(m)
+            slitCamFix();
         } else {
             m->mot.slit.flags &= ~1;
-            CAMFIX(m)
+            slitCamFix();
         }
         m->baseSpeed = slitWalkSpeed();
         m->directionView = m->controlStickAngle;
@@ -685,7 +693,7 @@ void mot_slit(void) {
             marioChgPaper("PM_S_1E");
         } else {
             marioChgPaper("PM_S_1D");
-            SLITDIR2(m)
+            slitSetSide(m);
         }
         m->slitState = 0x14;
         break;
@@ -842,7 +850,7 @@ void mot_slit(void) {
     switch (m->slitState) {
     case 0x50:
         camGetPtr(CAMERA_2D)->flags |= CAMERA_FLAG_LETTER_BOX_OFF;
-        CAMFIX(m)
+        slitCamFix();
         m->flags |= MARIO_FLAG_CHG_MOT_DISABLED;
         if (0.0f == m->mot.slit.pushDir) {
             marioChgPaper("PM_S_1F");
@@ -870,7 +878,7 @@ void mot_slit(void) {
     switch (m->slitState) {
     case 0x5a:
         camGetPtr(CAMERA_2D)->flags |= CAMERA_FLAG_LETTER_BOX_OFF;
-        CAMFIX(m)
+        slitCamFix();
         m->flags |= MARIO_FLAG_CHG_MOT_DISABLED;
         marioChgPaper("PM_S_1H");
         m->slitTimer = sysMsec2Frame(500);
@@ -915,7 +923,9 @@ void mot_slit(void) {
         m->flags &= ~MARIO_FLAG_PAPER_MODE;
         m->wPlayerCollisionBox.x = 20.0f;
 #ifdef VERSION_G8ME01
-        SPEEDCHK_IF(m, m->controlStickSensitivity)
+        if (m->controlStickSensitivity) {
+            slitSpeedDown(m);
+        }
 #endif
         if (m->baseSpeed == 0.0f) {
             marioChgPose("M_S_1");
@@ -943,7 +953,7 @@ void mot_slit(void) {
             marioChgPose("M_S_1");
 #ifdef VERSION_G8ME01
         } else {
-            SPEEDCHK_IF(m, 1)
+            slitSpeedDown(m);
             m->directionView = m->controlStickAngle;
 #endif
         }
@@ -958,7 +968,7 @@ void mot_slit(void) {
             marioChgPose("M_S_1");
 #ifdef VERSION_G8ME01
         } else {
-            SPEEDCHK_IF(m, 1)
+            slitSpeedDown(m);
 #endif
         }
         m->flags &= ~MARIO_FLAG_PARTY_WALK_DISABLED;
@@ -971,7 +981,7 @@ void mot_slit(void) {
 #ifndef VERSION_G8ME01
         allPartySlitOff();
 #endif
-        CAMFIX(m)
+        slitCamFix();
         marioChgMotSub(MARIO_MOTION_STAY, 0);
         break;
     case 0x6e:
@@ -1014,7 +1024,7 @@ void mot_slit(void) {
         m->dispFlags &= ~MARIO_DISP_FLAG_NO_REAR_POSE;
         marioAdjustMoveDir();
         allPartySlitOff();
-        CAMFIX(m)
+        slitCamFix();
         marioChgMot(MARIO_MOTION_STAY);
         break;
     case 0x78:
@@ -1054,7 +1064,7 @@ void mot_slit(void) {
         m->dispFlags &= ~MARIO_DISP_FLAG_NO_REAR_POSE;
         marioAdjustMoveDir();
         allPartySlitOff();
-        CAMFIX(m)
+        slitCamFix();
         marioChgMot(MARIO_MOTION_STAY);
         break;
     }

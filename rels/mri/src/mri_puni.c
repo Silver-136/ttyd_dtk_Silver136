@@ -5074,25 +5074,22 @@ USER_FUNC(evt_puni_set_hamari) {
     return EVT_RETURN_DONE;
 }
 
-#define puniMapDataSetI(w_, h_, src_, x_, z_)            \
-    do {                                                 \
-        s32 w = (w_);                                    \
-        s32 h = (h_);                                    \
-        Punimap->x = (x_);                               \
-        Punimap->z = (z_);                               \
-        if ((src_) == NULL) {                            \
-            Punimap->enabled = 0;                        \
-        } else {                                         \
-            Punimap->width = w;                          \
-            Punimap->height = h;                         \
-            Punimap->enabled = 1;                        \
-            Punimap->src = (src_);                       \
-            Punimap->inRange = 0;                        \
-            Punimap->size = h * (w * 4);                 \
-            Punimap->data = _mapAlloc(Punimap->size);    \
-            memcpy(Punimap->src, (src_), Punimap->size); \
-        }                                                \
-    } while (0)
+static inline void puniMapDataSetI(s32 w, s32 h, u8* src, f32 x, f32 z) {
+    Punimap->x = x;
+    Punimap->z = z;
+    if (src == NULL) {
+        Punimap->enabled = 0;
+    } else {
+        Punimap->width = w;
+        Punimap->height = h;
+        Punimap->enabled = 1;
+        Punimap->src = src;
+        Punimap->inRange = 0;
+        Punimap->size = h * (w * 4);
+        Punimap->data = _mapAlloc(Punimap->size);
+        memcpy(Punimap->src, src, Punimap->size);
+    }
+}
 
 USER_FUNC(evt_puni_set_maze) {
     switch (Punigp->mapKind) {
@@ -5605,13 +5602,15 @@ BOOL _puniVAtari(PuniData* p, Vec* from, Vec* to) {
 }
 
 static const Vec puni_fall_dir;
-#define HAGURE_FLOOR(dst, v) \
-    do {                     \
-        (dst) = (s32)(v);    \
-        if ((v) < 0.0f) {    \
-            (dst)--;         \
-        }                    \
-    } while (0)
+// Integer part of v, one lower for negative v (so not a true floor for negative whole numbers).
+static inline s32 puniFloor(f32 v) {
+    s32 i = v;
+    if (v < 0.0f) {
+        i--;
+    }
+    return i;
+}
+
 void puniHagurePos(PuniData* p) {
     Vec cur;
     Vec a;
@@ -5637,9 +5636,9 @@ void puniHagurePos(PuniData* p) {
             break;
     }
     cur = p->pos;
-    HAGURE_FLOOR(ix, cur.x);
+    ix = puniFloor(cur.x);
     ix1 = ix + 1;
-    HAGURE_FLOOR(iz, cur.z);
+    iz = puniFloor(cur.z);
     iz1 = iz + 1;
     a.x = ix;
     a.y = cur.y;

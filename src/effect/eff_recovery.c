@@ -18,12 +18,18 @@ double sin(double);
 double cos(double);
 u32 strlen(const char* s);
 
-#define QUAD(l, r, t, b, u) \
-    GXBegin(GX_QUADS, GX_VTXFMT0, 4); \
-    GXPosition3f32((l), (t), 0.0f); GXTexCoord2f32(0.0f, 0.0f); \
-    GXPosition3f32((r), (t), 0.0f); GXTexCoord2f32((u), 0.0f); \
-    GXPosition3f32((r), (b), 0.0f); GXTexCoord2f32((u), 1.0f); \
-    GXPosition3f32((l), (b), 0.0f); GXTexCoord2f32(0.0f, 1.0f);
+// One textured rectangle (left, right, top, bottom) with horizontal texture repeat u.
+static inline void recoveryQuad(f32 l, f32 r, f32 t, f32 b, f32 u) {
+    GXBegin(GX_QUADS, GX_VTXFMT0, 4);
+    GXPosition3f32(l, t, 0.0f);
+    GXTexCoord2f32(0.0f, 0.0f);
+    GXPosition3f32(r, t, 0.0f);
+    GXTexCoord2f32(u, 0.0f);
+    GXPosition3f32(r, b, 0.0f);
+    GXTexCoord2f32(u, 1.0f);
+    GXPosition3f32(l, b, 0.0f);
+    GXTexCoord2f32(0.0f, 1.0f);
+}
 
 MayaHermitKey recovery_effHermit_0[] = {
     {
@@ -598,7 +604,7 @@ void effRecoveryDisp(CameraId cameraId, EffectEntry* effect) {
     GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
     GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_TEXC);
     GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_TEXA);
-    QUAD(-16.0f, 16.0f, 16.0f, -16.0f, 1.0f)
+    recoveryQuad(-16.0f, 16.0f, 16.0f, -16.0f, 1.0f);
     if (type == 2 || type == 3) {
         return;
     }
@@ -625,7 +631,7 @@ void effRecoveryDisp(CameraId cameraId, EffectEntry* effect) {
             PSMTXConcat(camGetPtr(cameraId)->view, transMtx, transMtx);
             GXLoadPosMtxImm(transMtx, GX_PNMTX0);
             GXSetCurrentMtx(GX_PNMTX0);
-            QUAD(-6.0f, 6.0f, 6.0f, -6.0f, 2.0f)
+            recoveryQuad(-6.0f, 6.0f, 6.0f, -6.0f, 2.0f);
         }
     }
 }
@@ -764,7 +770,7 @@ void effRecoveryDisp3(CameraId cameraId, EffectEntry* effect) {
         left = -w;
         left *= 0.5f;
         right = left + w;
-        QUAD(left, right, top, bot, 1.0f)
+        recoveryQuad(left, right, top, bot, 1.0f);
     }
 }
 

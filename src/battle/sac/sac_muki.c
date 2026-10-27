@@ -320,21 +320,23 @@ static void main_base(void) {
     }
 }
 
-#define AUD_CALL(num)                         \
-    if ((num) >= 1 && (num) <= 49) {          \
-        BattleAudienceSoundCallKind(1);       \
-    }                                         \
-    if ((num) >= 50 && (num) <= 99) {         \
-        BattleAudienceSoundCallKind(1);       \
-        BattleAudienceSoundHandBeat();        \
-    }                                         \
-    if ((num) >= 100 && (num) <= 149) {       \
-        BattleAudienceSoundCallKind(2);       \
-    }                                         \
-    if ((num) >= 150) {                       \
-        BattleAudienceSoundCallKind(2);       \
-        BattleAudienceSoundHandBeat();        \
+// Audience reaction to a power-up, by the number of spectators.
+static inline void sacMukiAudienceCall(s32 num) {
+    if (num >= 1 && num <= 49) {
+        BattleAudienceSoundCallKind(1);
     }
+    if (num >= 50 && num <= 99) {
+        BattleAudienceSoundCallKind(1);
+        BattleAudienceSoundHandBeat();
+    }
+    if (num >= 100 && num <= 149) {
+        BattleAudienceSoundCallKind(2);
+    }
+    if (num >= 150) {
+        BattleAudienceSoundCallKind(2);
+        BattleAudienceSoundHandBeat();
+    }
+}
 
 void main_cursor(void) {
     MukiWork* w = get_ptr();
@@ -380,7 +382,7 @@ void main_cursor(void) {
                     if ((s32)w->atkBoost > (s32)prev) {
                         w->t24 = 60;
                         psndSFXOn("SFX_BTL_SAC_BODY6");
-                        AUD_CALL(num)
+                        sacMukiAudienceCall(num);
                     }
                     psndSFXOn("SFX_BTL_SAC_BODY4");
                     break;
@@ -393,7 +395,7 @@ void main_cursor(void) {
                     if ((s32)w->defBoost > (s32)prev) {
                         w->t28 = 60;
                         psndSFXOn("SFX_BTL_SAC_BODY6");
-                        AUD_CALL(num)
+                        sacMukiAudienceCall(num);
                     }
                     psndSFXOn("SFX_BTL_SAC_BODY4");
                     break;

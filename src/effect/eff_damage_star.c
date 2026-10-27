@@ -367,12 +367,18 @@ void effDamageStarMain(EffectEntry* effect) {
     dispEntry(CAMERA_3D, dispCalcZ(&calcPos), 8, (DispCallback)effDamageStarDisp, effect);
 }
 
-#define QUAD(h, u) \
-    GXBegin(GX_QUADS, GX_VTXFMT0, 4); \
-    GXPosition3f32(-(h), (h), 0.0f); GXTexCoord2f32(0.0f, 0.0f); \
-    GXPosition3f32((h), (h), 0.0f); GXTexCoord2f32((u), 0.0f); \
-    GXPosition3f32((h), -(h), 0.0f); GXTexCoord2f32((u), 1.0f); \
-    GXPosition3f32(-(h), -(h), 0.0f); GXTexCoord2f32(0.0f, 1.0f);
+// One textured square of half-size h, u = horizontal texture repeat.
+static inline void damageStarQuad(f32 h, f32 u) {
+    GXBegin(GX_QUADS, GX_VTXFMT0, 4);
+    GXPosition3f32(-h, h, 0.0f);
+    GXTexCoord2f32(0.0f, 0.0f);
+    GXPosition3f32(h, h, 0.0f);
+    GXTexCoord2f32(u, 0.0f);
+    GXPosition3f32(h, -h, 0.0f);
+    GXTexCoord2f32(u, 1.0f);
+    GXPosition3f32(-h, -h, 0.0f);
+    GXTexCoord2f32(0.0f, 1.0f);
+}
 
 void effDamageStarDisp(CameraId cameraId, EffectEntry* effect) {
     CameraEntry* cam;
@@ -467,10 +473,10 @@ void effDamageStarDisp(CameraId cameraId, EffectEntry* effect) {
         GXSetCurrentMtx(GX_PNMTX0);
         GXSetCullMode(GX_CULL_BACK);
         GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-        QUAD(8.0f, 2.0f)
+        damageStarQuad(8.0f, 2.0f);
         GXSetCullMode(GX_CULL_FRONT);
         GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_DIVIDE_2, GX_TRUE, GX_TEVPREV);
-        QUAD(8.0f, 2.0f)
+        damageStarQuad(8.0f, 2.0f);
     }
     work = effect->userdata;
     PSMTXRotRad(numRot, 'y', 0.017453292f * -camGetPtr(cameraId)->viewYaw);
@@ -505,9 +511,9 @@ void effDamageStarDisp(CameraId cameraId, EffectEntry* effect) {
     if (type == 1) {
         effGetTexObj(39, &texObj);
         GXLoadTexObj(&texObj, GX_TEXMAP3);
-        QUAD(2.0f, 2.0f)
+        damageStarQuad(2.0f, 2.0f);
     } else {
-        QUAD(2.0f, 2.0f)
+        damageStarQuad(2.0f, 2.0f);
     }
     PSMTXConcat(cam->view, numMtx, finalMtx);
     GXLoadPosMtxImm(finalMtx, GX_PNMTX0);
@@ -522,9 +528,9 @@ void effDamageStarDisp(CameraId cameraId, EffectEntry* effect) {
         effGetTexObj(19, &texObj);
         GXLoadTexObj(&texObj, GX_TEXMAP2);
         GXSetTevOp(GX_TEVSTAGE0, GX_REPLACE);
-        QUAD(2.0f, 1.0f)
+        damageStarQuad(2.0f, 1.0f);
     } else {
-        QUAD(2.0f, 2.0f)
+        damageStarQuad(2.0f, 2.0f);
     }
     mtxGetRotationElement(numMtx, invMtx, 'y', 'x');
     PSMTXInverse(invMtx, invMtx);

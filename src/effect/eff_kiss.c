@@ -230,23 +230,24 @@ void effKissMain(EffectEntry* effect) {
     }
 }
 
-#define GX_SETUP() \
-    GXSetNumChans(1); \
-    GXSetChanCtrl(GX_COLOR0A0, GX_DISABLE, GX_SRC_REG, GX_SRC_REG, GX_LIGHT_NULL, GX_DF_NONE, GX_AF_NONE); \
-    GXSetNumTexGens(1); \
-    GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY); \
-    GXSetNumTevStages(1); \
-    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0); \
-    GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV); \
-    GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV); \
-    GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_RASC); \
-    GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_TEXA, GX_CA_RASA, GX_CA_ZERO); \
-    GXSetCullMode(GX_CULL_NONE); \
-    GXClearVtxDesc(); \
-    GXSetVtxDesc(GX_VA_POS, GX_DIRECT); \
-    GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT); \
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0); \
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0)
+static inline void effKissGXSetup(void) {
+    GXSetNumChans(1);
+    GXSetChanCtrl(GX_COLOR0A0, GX_DISABLE, GX_SRC_REG, GX_SRC_REG, GX_LIGHT_NULL, GX_DF_NONE, GX_AF_NONE);
+    GXSetNumTexGens(1);
+    GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
+    GXSetNumTevStages(1);
+    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
+    GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_RASC);
+    GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_TEXA, GX_CA_RASA, GX_CA_ZERO);
+    GXSetCullMode(GX_CULL_NONE);
+    GXClearVtxDesc();
+    GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
+    GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
+}
 
 void effKissDisp(CameraId cameraId, EffectEntry* effect) {
     KissWork* work = effect->userdata;
@@ -275,7 +276,7 @@ void effKissDisp(CameraId cameraId, EffectEntry* effect) {
     PSMTXRotRad(mR, 'y', 0.017453292f * -camGetPtr(CAMERA_3D)->viewYaw);
     PSMTXConcat(mT, mR, mT);
     PSMTXConcat(mT, mS, mBase);
-    GX_SETUP();
+    effKissGXSetup();
 
     deg2rad = 0.017453292f;
     angN = deg2rad * -ang;
@@ -447,7 +448,7 @@ void effKissDisp2(CameraId cameraId, EffectEntry* effect) {
     PSMTXRotRad(mR, 'y', 0.017453292f * -camGetPtr(CAMERA_3D)->viewYaw);
     PSMTXConcat(mT, mR, mT);
     PSMTXConcat(mT, mS, mBase);
-    GX_SETUP();
+    effKissGXSetup();
     effGetTexObj(20, &texObj);
     GXLoadTexObj(&texObj, GX_TEXMAP0);
     GXSetChanMatColor(GX_COLOR0A0, (GXColor){0xFF, 0xB5, 0xDA, alpha});

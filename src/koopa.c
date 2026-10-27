@@ -203,13 +203,13 @@ s32 kpaGetStageType(void) {
 }
 
 #define JUMP_PARAM(m, i) ((&(m)->jumpVelocityY)[i]) // jumpVelocityY..jumpSnapY as f32[4]
-#define SETP(m, a, b, c, d)                                 \
-    do {                                                    \
-        JUMP_PARAM(m, 0) = (a);                             \
-        JUMP_PARAM(m, 1) = (b);                             \
-        JUMP_PARAM(m, 2) = (c);                             \
-        JUMP_PARAM(m, 3) = (d);                             \
-    } while (0)
+
+static inline void kpaSetJumpParams(MarioWork* mp, f32 velocityY, f32 accelerationY, f32 jerkY, f32 snapY) {
+    mp->jumpVelocityY = velocityY;
+    mp->jumpAccelerationY = accelerationY;
+    mp->jumpJerkY = jerkY;
+    mp->jumpSnapY = snapY;
+}
 
 s32 kpaGetStageViewType(void) {
     return !(marioGetPtr()->stageFlags & 1);
@@ -493,9 +493,9 @@ f32 kpaSetJumpPara(void) {
 f32 kpaSetFallPara(void) {
     MarioWork* mp = marioGetPtr();
     if ((mp->buttonHold & PAD_BUTTON_A)) {
-        SETP(mp, -0.05f, -0.08f, -0.006f, -0.002f);
+        kpaSetJumpParams(mp, -0.05f, -0.08f, -0.006f, -0.002f);
     } else {
-        SETP(mp, -0.1f, -0.2f, -0.024f, -0.01f);
+        kpaSetJumpParams(mp, -0.1f, -0.2f, -0.024f, -0.01f);
     }
 }
 
@@ -507,7 +507,7 @@ void kpa_jumpNpc(void) {
         mp->flags &= ~MARIO_FLAG_STOP_AIR_MOVEMENT;
         camFollowYOff();
         marioPreJump();
-        SETP(mp, 2.6f, -0.06f, -0.01f, -0.002f);
+        kpaSetJumpParams(mp, 2.6f, -0.06f, -0.01f, -0.002f);
         if (!(mp->flags & MARIO_FLAG_IS_CARRYING_BOBBERY) && mp->characterId == CHARACTER_MARIO) {
             marioChgPose("M_J_1B");
         }
