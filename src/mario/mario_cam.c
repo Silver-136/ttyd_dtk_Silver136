@@ -95,6 +95,7 @@ void marioUpdateCamCollision(Vec collision) {
     mario->dispFlags |= MARIO_DISP_FLAG_CAM_COLLISION;
 }
 
+// A macro, not an inline function: as a function the load order in marioUpdateCam changes.
 #define UPDATE_CAM_SHIFT(cur, target, rate) \
     {                                       \
         f32 c_ = cur;                       \

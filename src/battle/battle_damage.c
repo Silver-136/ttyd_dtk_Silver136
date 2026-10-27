@@ -920,6 +920,7 @@ u8 _getRegistStatus(BattleUnit* unit, s32 type) {
 }
 
 
+// A macro, not an inline function: as a function BattleSetStatusDamage changes size.
 #define STAMP_COL(e, r0, g0, b0, r1, g1, b1)                 \
     ((EffStampN64Work*)(e)->userdata)->r = (r0);                  \
     ((EffStampN64Work*)(e)->userdata)->g = (g0);                  \

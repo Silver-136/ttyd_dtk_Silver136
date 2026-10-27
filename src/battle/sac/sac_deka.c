@@ -1128,6 +1128,7 @@ EVT_END()
 
 // Position writes go through a local FIFO pointer (keeps lis 0xcc01 ahead of the loop counters);
 // components are read z, y, x like GXPosition3f32's argument evaluation.
+// A macro, not an inline function: as a function the float registers in yuka_disp change.
 #define YUKA_POSITION(fifo, v)        \
     {                                 \
         f32 _x, _y, _z;               \

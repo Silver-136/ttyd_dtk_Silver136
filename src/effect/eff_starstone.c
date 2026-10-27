@@ -242,6 +242,7 @@ static u8* color_tbl[] = { diamond_1_color0_tbl, diamond_2_color0_tbl, diamond_3
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S16, texFrac);                 \
     GXSetArray(GX_VA_TEX0, texT, 4);
 
+// A macro, not an inline function: as a function the GXColor temporaries move on the stack.
 #define DISP_START(w)                                  \
     mapSetMaterialFog();                               \
     GXSetArray(GX_VA_CLR0, color_tbl[(w)->type], 4);           \

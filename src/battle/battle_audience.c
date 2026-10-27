@@ -57,6 +57,7 @@ const AudWArr R_num_audience_type_weights = {{20,40,20,5,3,2,1,1,1,1,1}};
 #define AUD_SOUND_FLAG_PLAYING (1 << 0) // BattleAudienceSound.flags
 
 
+// A macro, not an inline function: as a function the registers in the callers change.
 #define AUD_SOUND_START(sound, dur, fade)                                                           \
     if ((sound)->sfxId != -1) {                                                                     \
         (sound)->flags |= AUD_SOUND_FLAG_PLAYING;                                                   \
@@ -2123,6 +2124,7 @@ void BattleAudienceAnimProcess(void) {
     }
 }
 
+// A macro, not an inline function: as a function GXPosition3f32 changes BattleAudienceDispAudience (AUD_POS / AUD_POSS differ only by temporaries).
 #define AUD_POS(x, y, z)   \
     do {                   \
         f32 _x = (x);      \
@@ -2138,6 +2140,7 @@ void BattleAudienceAnimProcess(void) {
         GXWGFifo.f32 = (y); \
         GXWGFifo.f32 = (z); \
     } while (0)
+// A macro, not an inline function: as a function GXTexCoord2f32 changes BattleAudienceDispAudience.
 #define AUD_TEX(s, t)      \
     do {                   \
         f32 _s = (s);      \

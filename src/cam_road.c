@@ -1189,6 +1189,7 @@ void calcHokanCamRoad(s32 type, CamRoadState* from, CamRoadState* to, CamRoadSta
     out->rot = r * (to->rot - from->rot) + from->rot;
     out->shiftXRate = r * (to->shiftXRate - from->shiftXRate) + from->shiftXRate;
 }
+// A macro, not an inline function: as a function camRoadMain changes.
 #define CAMROAD_HOKAN_START(src, flags)                                                                     \
     {                                                                                                         \
         wp->cmpFlags = flags;                                                                                 \

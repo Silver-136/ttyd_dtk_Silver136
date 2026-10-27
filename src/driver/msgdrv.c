@@ -430,6 +430,7 @@ s32 msgMain(smartEntry* smart) {
 #ifdef VERSION_G8ME01
 
 // US: <scaleX> letters (MSG_CHAR_SCALE_X) are stretched on x only
+// A macro, not an inline function: as a function the US constant order changes.
 #define MSG_DRAW_SCALE(c)                                   \
     if ((c)->value & MSG_CHAR_SCALE_X) {                    \
         FontDrawScaleVec((Vec){(c)->scale, 1.0f, 1.0f});      \

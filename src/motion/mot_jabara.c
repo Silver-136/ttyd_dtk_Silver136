@@ -205,6 +205,7 @@ static inline void jabaraLand(f32 y_, void* h_) {
         } \
     }
 #define MOTSUB_ marioChgMotSub(MARIO_MOTION_STAY, 0);
+// A macro, not an inline function: as a function the instruction order in mot_jabara changes.
 #define JAB_LAND(HIT, Y) \
     marioPaperOff(); \
     jabaraLand((Y), (HIT)); \

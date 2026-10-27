@@ -133,6 +133,7 @@ void winMarioExit(WindowWork* w) {
     animPoseRelease(w->mario.poseId);
 }
 
+// A macro, not an inline function: as a function the function-local static names renumber (code identical; needs config renames).
 #define COLOR_ANIM(var, base)                         \
     if (strcmp(base, "S_1") == 0) {                   \
         switch (marioGetColor()) {                    \

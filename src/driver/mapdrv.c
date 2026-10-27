@@ -1448,6 +1448,7 @@ static inline u8* mapMainFindTbl_(const char* nm_) {
     return NULL;
 }
 
+// A macro, not an inline function: as a function mapMain changes (together with mapMainAlpha).
 #define mapMainMat(a_, i_, b_, x_) \
 { \
     u8* obj; \

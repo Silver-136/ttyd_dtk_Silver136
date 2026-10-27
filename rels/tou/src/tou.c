@@ -103,6 +103,7 @@ static DispWork* dwp;
 static FighterData fighterDt[23];
 static FighterData fighterDt_re[21];
 static void rankingControll(void);
+// A macro, not an inline function: as a function the registers at the call sites change.
 #define GET_RANK(rank, i)                                       \
     rank = 0;                                                   \
     for (i = 0; i < rank_wp->num; i++) {                        \
@@ -135,6 +136,7 @@ static void insert(s32* list, s32 num, s32 from, s32 to);
             }                                                                                  \
         }                                                                                      \
     }
+// A macro, not an inline function: as a function rankingControll's registers and local statics change.
 #define FIND_FLAG(k, list, n, flag)                                                            \
     for (k = 0; k < n; k++) {                                                                  \
         if (fighterDt[rank_wp->entries[list[k]].id].flags & flag) {                            \

@@ -40,6 +40,7 @@ typedef struct IconBinData {
     IconFrame frames[1]; // 0x8
 } IconBinData;
 
+// A macro, not an inline function: as a function the code and stack frames change.
 #define ICON_ANIM_TPL_S(data, dst)                                   \
     if ((data)->numIcons > 1) {                                    \
         s32 i;                                                     \
