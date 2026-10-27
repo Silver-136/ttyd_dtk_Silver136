@@ -5880,7 +5880,6 @@ static inline s32 sfxvol(PaperSoundEffect* s) {
     if (v > 127) v = 127;
     return v;
 }
-#define SFX_VOL(s) sfxvol(s)
 
 
 void psndSFXMain(void) {
@@ -5982,7 +5981,7 @@ ssfound:
                 if (sfx[0]->channel != none) {
                     SoundSSPlayCh(sfx[0]->channel, e->streamName);
                     SoundSSSetPanCh(sfx[0]->channel, sfx[0]->pan);
-                    SoundSSSetVolCh(sfx[0]->channel, SFX_VOL(sfx[0]));
+                    SoundSSSetVolCh(sfx[0]->channel, sfxvol(sfx[0]));
                 }
             } else if (f & SFX_FLAG_SONG) {
                 for (j = 0; j < 4; j++) {
@@ -5996,11 +5995,11 @@ sgfound:
                 sfx[0]->channel = ch[0];
                 if (sfx[0]->channel != none) {
                     SoundSongPlayCh(sfx[0]->channel, e->fxId & 0xFFFFFFF);
-                    SoundSongSetVolCh(sfx[0]->channel, SFX_VOL(sfx[0]));
+                    SoundSongSetVolCh(sfx[0]->channel, sfxvol(sfx[0]));
                 }
             } else {
                 if (sfx[0]->flags & PSFX_FLAG_3D) {
-                    *((u32*)b) = calc3D(sfx[0]->listId, &sfx[0]->position, SFX_VOL(sfx[0]), sfx[0]->dist);
+                    *((u32*)b) = calc3D(sfx[0]->listId, &sfx[0]->position, sfxvol(sfx[0]), sfx[0]->dist);
                     sfx[0]->channel = SoundEfxPlayEx(e->fxId & 0xFFFF, 0, b[0], b[1]);
                     if (sfx[0]->channel != ( -1) ) {
                         SoundEfxSetVolume(sfx[0]->channel, b[0]);
@@ -6008,7 +6007,7 @@ sgfound:
                         ((void(*)(s32,s16))SoundEfxSetPitch)(sfx[0]->channel, sfx[0]->pitch);
                     }
                 } else {
-                    sfx[0]->channel = SoundEfxPlayEx((u16)f, 0, SFX_VOL(sfx[0]), sfx[0]->pan);
+                    sfx[0]->channel = SoundEfxPlayEx((u16)f, 0, sfxvol(sfx[0]), sfx[0]->pan);
                     if (sfx[0]->channel != none) {
                         ((void(*)(s32,s16))SoundEfxSetPitch)(sfx[0]->channel, sfx[0]->pitch);
                     }
@@ -6032,7 +6031,7 @@ sgfound:
             sfx[0]->flags &= ~PSFX_FLAG_START;
         }
         if (sfx[0]->flags & PSFX_FLAG_3D) {
-            *((u32*)b) = calc3D(sfx[0]->listId, &sfx[0]->position, SFX_VOL(sfx[0]), sfx[0]->dist);
+            *((u32*)b) = calc3D(sfx[0]->listId, &sfx[0]->position, sfxvol(sfx[0]), sfx[0]->dist);
             f = e->fxId;
             if (f & SFX_FLAG_STREAM) {
                 SoundSSSetPanCh(sfx[0]->channel, b[1]);
@@ -6058,12 +6057,12 @@ sgfound:
             f = e->fxId;
             if (f & SFX_FLAG_STREAM) {
                 SoundSSSetPanCh(sfx[0]->channel, sfx[0]->pan);
-                SoundSSSetVolCh(sfx[0]->channel, SFX_VOL(sfx[0]));
+                SoundSSSetVolCh(sfx[0]->channel, sfxvol(sfx[0]));
             } else if (f & SFX_FLAG_SONG) {
-                SoundSongSetVolCh(sfx[0]->channel, SFX_VOL(sfx[0]));
+                SoundSongSetVolCh(sfx[0]->channel, sfxvol(sfx[0]));
             } else {
                 SoundEfxSetPan(sfx[0]->channel, sfx[0]->pan);
-                SoundEfxSetVolume(sfx[0]->channel, SFX_VOL(sfx[0]));
+                SoundEfxSetVolume(sfx[0]->channel, sfxvol(sfx[0]));
             }
         }
         if (( !(sfx[0]->flags & (PSFX_FLAG_BATTLE_START | PSFX_FLAG_ENV | PSFX_FLAG_NO_MUTE | PSFX_FLAG_BYPASS_MUTE)) ) && (psnd.flags & PSND_FLAG_MUTE_SFX)) {
