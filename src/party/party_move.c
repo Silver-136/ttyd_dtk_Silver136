@@ -1498,6 +1498,7 @@ static inline BOOL partyAppearChkFloor(HitEntry* hit) {
     return TRUE;
 }
 
+// FAKE: one-use inline helper; writing the call out changes the object in both versions
 static inline f32 partyAppearNrmAngle(Vec n) {
     return partyNrmToAngle(&n);
 }

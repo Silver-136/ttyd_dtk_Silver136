@@ -1900,6 +1900,7 @@ HitEntry* marioChkFront(f32* out, const Vec* pos, f32 angle, f32 dist) {
     return NULL;
 }
 
+// FAKE: one-use inline helper; writing the call out changes the object in both versions
 static inline void sfwVecSet(Vec* d, Vec v) {
     *d = v;
 }

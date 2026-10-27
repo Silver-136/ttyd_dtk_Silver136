@@ -82,6 +82,7 @@ PuniWork* Punigp;
 PuniTexInfo* Punitex;
 PuniMap* Punimap;
 
+// FAKE: one-use inline helper; writing the call out changes the object in both versions
 static inline s32 puni_bero_id_filter(s32 id) {
     return bero_id_filter(id);
 }

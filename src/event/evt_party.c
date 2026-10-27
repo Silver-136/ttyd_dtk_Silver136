@@ -206,7 +206,8 @@ USER_FUNC(evt_party_get_pos) {
     return EVT_RETURN_DONE;
 }
 
-inline float inline_fn(f32 a, f32 b, f32 c, s32 n) {
+// FAKE: one-use inline helper; writing the call out changes the object in both versions
+inline float partyStepSize(f32 a, f32 b, f32 c, s32 n) {
     return (a - b) * (c / (f32)n);
 }
 
@@ -241,7 +242,7 @@ USER_FUNC(evt_party_set_dir) {
     if (fr > 0) {
         t = revise360(270.0f - ang);
         st = event->userdataf[1];
-        p->displayDirection = revise360(st + inline_fn(t, st, (f32)event->userdata[2], fr));
+        p->displayDirection = revise360(st + partyStepSize(t, st, (f32)event->userdata[2], fr));
         p->displayDirectionTarget = p->displayDirection;
         p->targetDir = toMovedirSimple(p->displayDirectionTarget);
         c = event->userdata[2] + 1;

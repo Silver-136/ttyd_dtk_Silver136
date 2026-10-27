@@ -278,6 +278,7 @@ static USER_FUNC(cam_kaiten_set_direct) {
     return EVT_RETURN_DONE;
 }
 
+// FAKE: one-use inline helper; writing the call out changes the object in both versions
 static inline f32 fid(f32 x) {
     return x;
 }

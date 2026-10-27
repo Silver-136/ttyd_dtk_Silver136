@@ -41,7 +41,8 @@ typedef struct effMugiKemuriData {
 void effMugiKemuriMain(EffectEntry* effect);
 void effMugiKemuriDisp(CameraId camId, void* param);
 
-inline f32 inline_fn(effMugiKemuriData *data) {
+// FAKE: one-use inline helper; writing the call out changes the object in both versions
+inline f32 mugiKemuriAngle(effMugiKemuriData *data) {
     return 6.2831855f * reviseAngle(data->rot.y);
 }
 
@@ -80,7 +81,7 @@ EffectEntry* effMugiKemuriEntry(f32 x, f32 y, f32 z, f32 angle) {
         data->jy = 0.0f;
         data->ky = 0.0f;
         data->speed = -3.9f;
-        rad = inline_fn(data) / 360.0f;
+        rad = mugiKemuriAngle(data) / 360.0f;
         data->dirX = (f32)sin(rad);
         data->dirZ = (f32)cos(rad);
         data->poseId = -1;

@@ -267,6 +267,7 @@ static f32 computePos(f32 a, f32 b, f32 t) {
     return (1.0f - t) * a + t * b;
 }
 
+// FAKE: one-use inline helper; writing the call out changes the object in both versions
 inline f32 jin07HermiteMul3(f32 a, f32 b, f32 c) {
     return (a * b) * c;
 }

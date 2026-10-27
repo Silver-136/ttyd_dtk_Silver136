@@ -352,6 +352,7 @@ static USER_FUNC(barriern_zanzou3) {
     return barriern_zanzou_sub(isFirstCall, unit, scales, 2);
 }
 
+// FAKE: one-use inline helper; writing the call out changes the object in both versions
 static inline f32 intpl_ff(f32 start, f32 end, s32 mode, s32 cur, s32 total) {
     return intplGetValue(mode, start, end, cur, total);
 }

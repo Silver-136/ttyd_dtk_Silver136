@@ -1157,6 +1157,7 @@ void envAddTev(s32 type, MapTevCallbackInfo* info) {
 
 #undef ENV_TEX_TAIL
 
+// FAKE: one-use inline helper; writing the call out changes the object in both versions
 static inline MapObject* envWaterObj(MapTevCallbackInfo* info) {
     return info->mapObj;
 }
