@@ -14,7 +14,11 @@
 double sin(double);
 double cos(double);
 
-#define Vec2Vtx(v, o) do { OSf32tos16(&(v)->x, &(o)[0]); OSf32tos16(&(v)->y, &(o)[1]); OSf32tos16(&(v)->z, &(o)[2]); } while (0)
+static inline void Vec2Vtx(Vec* v, s16* o) {
+    OSf32tos16(&v->x, &o[0]);
+    OSf32tos16(&v->y, &o[1]);
+    OSf32tos16(&v->z, &o[2]);
+}
 
 
 

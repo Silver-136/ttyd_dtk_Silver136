@@ -58,7 +58,17 @@ typedef struct OrbitData {
     f32 dist;
 } OrbitData;
 OrbitData* _op;
-#define ORBIT(i, p) op[i].angle += d; t = op[i].angle; rad = orbit_update(t); r = op[i].dist; x = r * sinf_l(rad) + cx; t = r * cosf_l(rad) + cz; p.x = x; p.z = t; (void)0
+// Advance orbiting actor i by d degrees and place position p on its circle around (cx, cz). A macro, not an inline:
+// it uses the caller's t, rad, r and x (an inline function with its own locals changes the object).
+#define ORBIT(i, p)                     \
+    op[i].angle += d;                   \
+    t = op[i].angle;                    \
+    rad = orbit_update(t);              \
+    r = op[i].dist;                     \
+    x = r * sinf_l(rad) + cx;           \
+    t = r * cosf_l(rad) + cz;           \
+    p.x = x;                            \
+    p.z = t
 NanNPC* random_choice_target(s32 type);
 TobiWork* Tobidat;
 void tobikakari_seq00(NanNPC* npc);

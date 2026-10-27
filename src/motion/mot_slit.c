@@ -510,7 +510,9 @@ static inline f32 slitWalkSpeed(void) {
     return spd;
 }
 
-#define SLITDIR(m) 	(m)->displayDirection = (revise360((m)->directionView - (m)->targetYaw) <= 180.0f) ? 260.0f : 280.0f;
+static inline void slitSetDisplayDir(MarioWork* m) {
+    m->displayDirection = (revise360(m->directionView - m->targetYaw) <= 180.0f) ? 260.0f : 280.0f;
+}
 
 #define SLITDIR2(m)                                                 \
     if (revise360((m)->directionView - (m)->targetYaw) <= 180.0f) { \
@@ -693,7 +695,7 @@ void mot_slit(void) {
         if (m->mot.slit.timer > 0) {
             m->mot.slit.timer = 0;
             marioChgPaper("PM_S_1D");
-            SLITDIR(m)
+            slitSetDisplayDir(m);
             SLITSTOP(m)
         }
         if (marioChkKey()) {
@@ -734,7 +736,7 @@ void mot_slit(void) {
             marioChgPaper("PM_S_1E");
             m->mot.slit.count = 6;
             m->mot.slit.side = 0;
-            SLITDIR(m)
+            slitSetDisplayDir(m);
             break;
         } else {
             marioChgPaper("PM_S_1D");
@@ -888,7 +890,7 @@ void mot_slit(void) {
         m->flags &= ~MARIO_FLAG_IS_JUMPING;
         m->flags |= (MARIO_FLAG_IS_FALLING | MARIO_FLAG_HAS_INPUT_JUMP);
     case 0x5c:
-        SLITDIR(m)
+        slitSetDisplayDir(m);
         if (--m->slitTimer > 0) {
             break;
         }

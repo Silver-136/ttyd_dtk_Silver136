@@ -500,8 +500,28 @@ void effStarStoneMain(EffectEntry* effect) {
     }
 }
 
-#define LOOPK2(tbl, sz, n) { u8* s2; u8** d2; s32 kk; kk = 0; d2 = tbl; s2 = sz; for (; kk < n##U; kk++, s2++, d2++) { GXCallDisplayList(*d2, *s2 << 5); } }
-#define LOOPK(tbl, sz, n) k = 0; dq = tbl; sq = sz; for (; k < n##U; k++, sq++, dq++) { GXCallDisplayList(*dq, *sq << 5); }
+// Call a table of n display lists (sizes in 32-byte units). Macros, not inline functions: written as functions,
+// the loops change the object.
+#define LOOPK2(tbl, sz, n)                          \
+    {                                               \
+        u8* s2;                                     \
+        u8** d2;                                    \
+        s32 kk;                                     \
+        kk = 0;                                     \
+        d2 = tbl;                                   \
+        s2 = sz;                                    \
+        for (; kk < n##U; kk++, s2++, d2++) {       \
+            GXCallDisplayList(*d2, *s2 << 5);       \
+        }                                           \
+    }
+// The same loop with the caller's k, dq and sq
+#define LOOPK(tbl, sz, n)                           \
+    k = 0;                                          \
+    dq = tbl;                                       \
+    sq = sz;                                        \
+    for (; k < n##U; k++, sq++, dq++) {             \
+        GXCallDisplayList(*dq, *sq << 5);           \
+    }
 void effStarStoneDisp_1(CameraId cameraId, EffectEntry* effect) {
     Mtx m;
     Mtx s;

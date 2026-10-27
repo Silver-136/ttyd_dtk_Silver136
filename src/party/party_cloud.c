@@ -49,7 +49,17 @@ static inline void cloudSweep(PartyEntry* party, f32 sign, s32 i) {
     }
 }
 
-#define cloudCalcPos(party) { MarioWork* m_ = (party)->playerPtr; f32 dir_; (party)->moveTarget = m_->position; dir_ = m_->displayDirectionTarget; dir_ = toMovedir(dir_ + ((dir_ < 90.0f || dir_ >= 270.0f) ? -90.0f : 90.0f)); movePos(&(party)->moveTarget.x, &(party)->moveTarget.z, 3.3f, dir_); (party)->moveTarget.y += 10.0f; }
+// Flurrie's move target: beside Mario (3.3 units to his left or right of the facing direction), 10 units up
+static inline void cloudCalcPos(PartyEntry* party) {
+    MarioWork* mario = party->playerPtr;
+    f32 dir;
+
+    party->moveTarget = mario->position;
+    dir = mario->displayDirectionTarget;
+    dir = toMovedir(dir + ((dir < 90.0f || dir >= 270.0f) ? -90.0f : 90.0f));
+    movePos(&party->moveTarget.x, &party->moveTarget.z, 3.3f, dir);
+    party->moveTarget.y += 10.0f;
+}
 
 void mot_cloud() {
     MarioWork* mario = marioGetPtr();

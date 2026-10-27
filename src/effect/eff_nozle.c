@@ -497,7 +497,13 @@ void effNozleMain(EffectEntry* effect) {
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX1, GX_TEX_ST, GX_S16, tf);           \
     GXSetArray(GX_VA_TEX1, t1, 4)
 
-#define CALLDL(n, tbl, sz_, S, D) { for (k = 0, S = sz_, D = tbl; k < n; k++, S++, D++) { GXCallDisplayList(*D, *S * 32); } }
+// Call a table of n display lists through the caller's k and the given size/list pointers
+#define CALLDL(n, tbl, sz_, S, D)                           \
+    {                                                       \
+        for (k = 0, S = sz_, D = tbl; k < n; k++, S++, D++) {\
+            GXCallDisplayList(*D, *S * 32);                 \
+        }                                                   \
+    }
 
 void effNozleDisp(CameraId cameraId, EffectEntry* effect) {
     void** dl5;
