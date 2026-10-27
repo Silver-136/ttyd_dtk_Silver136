@@ -57,8 +57,8 @@ USER_FUNC(post_msg);
 EVT_BEGIN(msg_evt)
     CALL(set_msg)
     CALL(search_result)
-    IF_INT_NOT_EQUAL(4264967296, 0)
-        CALL(evt_msg_print, 0, 4264967296, 0, STRING("party"))
+    IF_INT_NOT_EQUAL(LW(0), 0)
+        CALL(evt_msg_print, 0, LW(0), 0, STRING("party"))
     END_IF
     CALL(post_msg)
     RETURN
@@ -104,7 +104,8 @@ ChuchuTreasure chuchu_treasure_tbl[] = {
     {"rsh_04_a", 0xF8407194, -265, 0, -250},
     {"rsh_04_b", 0xF8407194, -265, 0, -250},
     {"rsh_04_c", 0xF8407194, -265, 0, -250},
-    {"tou_05", 0xF8407179, 100, 0, -28},};
+    {"tou_05", 0xF8407179, 100, 0, -28},
+};
 
 static const Vec vecB = {0.0f, 0.0f, 0.0f};
 
@@ -176,21 +177,17 @@ USER_FUNC(set_msg) {
     int pass;
     int type;
     PartyEntry* cp = partyGetPtr(marioGetPartyId());
-    PartyEntry* party = (PartyEntry*)cp;
     f32 range;
     f32 minDist;
     f32 angle;
-    f32 d;
     Vec bestPos;
     Vec tmp;
     Vec ip;
-    Vec p;
-    Vec pos;
 
     player = cp->playerPtr;
     event->lwData[0] = 0;
     event->lwData[1] = 0;
-    if (!party) {
+    if (!cp) {
         return EVT_RETURN_DONE;
     }
 
@@ -246,7 +243,7 @@ USER_FUNC(set_msg) {
             event->lwData[1] = 1;
         }
         cp->displayDirectionTarget = (angle <= 180.0f) ? 180.0f : 0.0f;
-        cp->moveDir = partyToMovedir(party, cp->displayDirectionTarget);
+        cp->moveDir = partyToMovedir(cp, cp->displayDirectionTarget);
         cp->targetDir = cp->moveDir;
     } else {
         event->lwData[0] = (EvtWord)"map_no_exist";
@@ -309,12 +306,10 @@ BOOL chuchu_searchObject(void) {
 }
 
 void chuchu_init(PartyEntry* party) {
-    PartyEntry* cp = party;
-
-    cp->memberKind = 7;
-    cp->moveKind = 0;
-    cp->height = 20.0f;
-    cp->width = 24.0f;
+    party->memberKind = 7;
+    party->moveKind = 0;
+    party->height = 20.0f;
+    party->width = 24.0f;
 }
 
 void chuchu_reinit(PartyEntry* party) {
@@ -339,8 +334,8 @@ void chuchu_use(PartyEntry* party) {
     Vec pos;
     Vec pos1;
 
-    if (cp->trigFlags & 8) {
-        cp->trigFlags &= ~8;
+    if (cp->trigFlags & PARTY_TRIG_CHG_RUN_MODE) {
+        cp->trigFlags &= ~PARTY_TRIG_CHG_RUN_MODE;
         cp->useMotionId = 0;
         marioStSystemLevel(1);
     }
@@ -402,7 +397,7 @@ void chuchu_use(PartyEntry* party) {
 
     switch (cp->useMotionId) {
     case 80:
-        cp->flags &= ~0x100;
+        cp->flags &= ~PARTY_FLAG_IS_BEING_USED;
         partyChgRunMode(party, 2);
         cp->moveMode = 0;
         marioChgMot(MARIO_MOTION_STAY);

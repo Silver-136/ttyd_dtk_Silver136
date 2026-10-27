@@ -73,7 +73,6 @@ USER_FUNC(urouro_main_func) {
     f32 dist;
     f32 step;
     f32 lim;
-    f32 temp;
     s32 sfxFlag;
 
     switch (work->state) {
@@ -127,8 +126,7 @@ USER_FUNC(urouro_main_func) {
                 step = lim;
             }
             npc->moveOffset.x = step * (f32)sin(npc->moveDir * 6.2831855f / 360.0f);
-            temp = (f32)cos(npc->moveDir * 6.2831855f / 360.0f);
-            npc->moveOffset.z = step * -temp;
+            npc->moveOffset.z = step * -(f32)cos(npc->moveDir * 6.2831855f / 360.0f);
             sfxFlag = 0;
             if (psndGetFlag() & PSND_FLAG_DOOR_IN) {
                 if (!(animPoseGetMaterialFlag(npc->poseId) & (MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2))) {

@@ -31,12 +31,13 @@ void FontDrawString(f32 x, f32 y, const char* msg);
 TitleWork work2;
 TitleWork* wp2 = &work2;
 
-//local prototypes
 #ifdef VERSION_G8ME01
 #define TITLE_FRAMES_PER_SEC (gp->framerate)
 #else
 #define TITLE_FRAMES_PER_SEC 60
 #endif
+
+// local prototypes
 void L_titleInit(SequenceWork* work);
 void titleMain(SequenceWork* work);
 void disp1(CameraId cameraId, void* param);
@@ -92,7 +93,7 @@ void L_titleInit(SequenceWork* work) {
     }
     if (seqGetPrevSeq() != SEQ_LOAD) {
         if (seqGetPrevSeq() == SEQ_GAME_OVER) {
-            if (OSGetSoundMode() == 0) {
+            if (OSGetSoundMode() == OS_SOUND_MODE_MONO) {
                 SoundSetOutputMode(SND_OUTPUTMODE_MONO);
             } else {
                 SoundSetOutputMode(SND_OUTPUTMODE_STEREO);
@@ -300,8 +301,8 @@ void titleMain(SequenceWork* work) {
 void disp1(CameraId cameraId, void* param) {
     CameraEntry* cam = camGetPtr(CAMERA_2D);
     CameraEntry saved;
-    f32 proj[7];
-    f32 vp[6];
+    f32 proj[GX_PROJECTION_SZ];
+    f32 vp[GX_VIEWPORT_SZ];
 
     saved = *camGetPtr(cameraId);
     *camGetPtr(cameraId) = *cam;
@@ -324,12 +325,12 @@ void disp1(CameraId cameraId, void* param) {
 void disp2(CameraId cameraId, void* param) {
     CameraEntry* cam = camGetPtr(CAMERA_2D);
     CameraEntry saved;
-    f32 proj[7];
-    f32 vp[6];
+    f32 proj[GX_PROJECTION_SZ];
+    f32 vp[GX_VIEWPORT_SZ];
     s32 alpha;
     f32 s;
 #ifdef VERSION_G8ME01
-    s32 tbl[6] = { 21, 21, 22, 23, 24, 25 };
+    s32 tbl[6] = {21, 21, 22, 23, 24, 25};
 #endif
 
     saved = *camGetPtr(cameraId);
@@ -377,7 +378,7 @@ void disp2(CameraId cameraId, void* param) {
 PSTATIC void pressStartGX(s32 alpha, f32 x, f32 y) {
     CameraEntry* camera = camGetCurPtr();
     GXTexObj startText, gradient;
-    Mtx v17, v16;
+    Mtx mtx, scaleMtx;
 
 #ifdef VERSION_G8ME01
     TEXGetGXTexObjFromPalette(*wp2->texture->data, &startText, gp->language + 15);
@@ -400,15 +401,15 @@ PSTATIC void pressStartGX(s32 alpha, f32 x, f32 y) {
     GXSetTevAlphaOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
     GXSetTevColorIn(GX_TEVSTAGE1, GX_CC_ZERO, GX_CC_CPREV, GX_CC_TEXC, GX_CC_ZERO);
     GXSetTevAlphaIn(GX_TEVSTAGE1, GX_CA_ZERO, GX_CA_APREV, GX_CA_A0, GX_CA_ZERO);
-    GXSetTevColor(GX_TEVREG0, (GXColor){ 0x00, 0x00, 0x00, alpha });
+    GXSetTevColor(GX_TEVREG0, (GXColor){0x00, 0x00, 0x00, alpha});
     GXSetNumChans(0);
     GXSetNumTexGens(2);
-    GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, 60);
-    GXSetTexCoordGen(GX_TEXCOORD1, GX_TG_MTX2x4, GX_TG_TEX0, 30);
-    MTXScale(v16, 1.0f, 1.0f, 1.0f);
-    MTXTrans(v17, (f32)wp2->frame / -200.0f, 0.0f, 0.0f);
-    MTXConcat(v16, v17, v17);
-    GXLoadTexMtxImm(v17, GX_TEXMTX0, GX_MTX2x4);
+    GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
+    GXSetTexCoordGen(GX_TEXCOORD1, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX0);
+    MTXScale(scaleMtx, 1.0f, 1.0f, 1.0f);
+    MTXTrans(mtx, (f32)wp2->frame / -200.0f, 0.0f, 0.0f);
+    MTXConcat(scaleMtx, mtx, mtx);
+    GXLoadTexMtxImm(mtx, GX_TEXMTX0, GX_MTX2x4);
     GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_CLEAR);
     GXSetZCompLoc(GX_TRUE);
     GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_AND, GX_ALWAYS, 0);
@@ -419,11 +420,11 @@ PSTATIC void pressStartGX(s32 alpha, f32 x, f32 y) {
     GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
-    MTXTrans(v17, x, y, 0.0f);
-    MTXScale(v16, (f32)GXGetTexObjWidth(&startText), (f32)GXGetTexObjHeight(&startText), 1.0f);
-    MTXConcat(v17, v16, v17);
-    MTXConcat(camera->view, v17, v17);
-    GXLoadPosMtxImm(v17, GX_PNMTX0);
+    MTXTrans(mtx, x, y, 0.0f);
+    MTXScale(scaleMtx, (f32)GXGetTexObjWidth(&startText), (f32)GXGetTexObjHeight(&startText), 1.0f);
+    MTXConcat(mtx, scaleMtx, mtx);
+    MTXConcat(camera->view, mtx, mtx);
+    GXLoadPosMtxImm(mtx, GX_PNMTX0);
     GXSetCurrentMtx(GX_PNMTX0);
     GXBegin(GX_QUADS, GX_VTXFMT0, 4);
     GXPosition3f32(-0.5f, -0.5f, 0.0f);

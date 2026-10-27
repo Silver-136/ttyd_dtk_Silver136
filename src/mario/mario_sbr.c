@@ -210,12 +210,17 @@ f32 toMovedir(f32 angle) {
 #else
     angle = (s32)(100.0f * (0.05f + (270.0f - angle + mp->targetYaw))) / 100.0f;
 #endif
-    REVISE360(angle);
+    while (angle < 0.0f) {
+        angle += 360.0f;
+    }
+    while (angle >= 360.0f) {
+        angle -= 360.0f;
+    }
     return angle;
 }
 
 f32 partyToMovedir(PartyEntry* party, f32 angle) {
-    void* cam = party->playerPtr;
+    MarioWork* player = party->playerPtr;
 
     if (party->flags & PARTY_FLAG_PAPER_MODE) {
         if (party->displayDirection == 280.0f || party->displayDirection == 460.0f) {
@@ -229,11 +234,16 @@ f32 partyToMovedir(PartyEntry* party, f32 angle) {
         }
     }
 #ifdef VERSION_G8ME01
-    angle = (s32)(1000.0f * (270.0f - angle + ((MarioWork*)cam)->targetYaw) + ((270.0f - angle + ((MarioWork*)cam)->targetYaw) >= 0.0f ? 0.5f : -0.5f)) / 1000.0f;
+    angle = (s32)(1000.0f * (270.0f - angle + player->targetYaw) + ((270.0f - angle + player->targetYaw) >= 0.0f ? 0.5f : -0.5f)) / 1000.0f;
 #else
-    angle = (s32)(100.0f * (0.05f + (270.0f - angle + ((MarioWork*)cam)->targetYaw))) / 100.0f;
+    angle = (s32)(100.0f * (0.05f + (270.0f - angle + player->targetYaw))) / 100.0f;
 #endif
-    REVISE360(angle);
+    while (angle < 0.0f) {
+        angle += 360.0f;
+    }
+    while (angle >= 360.0f) {
+        angle -= 360.0f;
+    }
     return angle;
 }
 
@@ -272,7 +282,12 @@ f32 toMovedir2(f32 angle, f32 ofs) {
 #else
     angle = (s32)(100.0f * (0.05f + (270.0f - angle + mp->targetYaw))) / 100.0f;
 #endif
-    REVISE360(angle);
+    while (angle < 0.0f) {
+        angle += 360.0f;
+    }
+    while (angle >= 360.0f) {
+        angle -= 360.0f;
+    }
     angle += revise360(angle - mp->targetYaw) >= 180.0f ? -ofs : ofs;
     return revise360(angle);
 }
@@ -306,20 +321,20 @@ void marioSetForceMove(f32 dir, s32 time, f32 speed) {
         return;
     } else {
 #ifdef VERSION_G8ME01
-            marioChgMot(speed >= mp->mBaseDashSpeed ? MARIO_MOTION_DASH : MARIO_MOTION_WALK);
+        marioChgMot(speed >= mp->mBaseDashSpeed ? MARIO_MOTION_DASH : MARIO_MOTION_WALK);
 #else
-            marioChgMot(speed > mp->mBaseWalkSpeed ? MARIO_MOTION_DASH : MARIO_MOTION_WALK);
+        marioChgMot(speed > mp->mBaseWalkSpeed ? MARIO_MOTION_DASH : MARIO_MOTION_WALK);
 #endif
-            mp->moveDirection = dir;
-            mp->directionView = dir;
-            mp->forceMoveTimer = time;
-            mp->baseSpeed = speed;
+        mp->moveDirection = dir;
+        mp->directionView = dir;
+        mp->forceMoveTimer = time;
+        mp->baseSpeed = speed;
     }
 }
 
 void marioUpdateKeyData(void) {
     MarioWork* mp = marioGetPtr();
-    u32 mask = 0xFFFFFFFF;
+    u32 mask;
     u16 btn;
 
     mp->wStickDir1 = gp->stickX[0];
@@ -369,7 +384,7 @@ void marioUpdateKeyData(void) {
             mp->buttonUp = 0;
         }
         if (!marioGetMotSlitCancel3() && (mp->dispFlags & MARIO_DISP_FLAG_SLIT)) {
-            mp->buttonHold = 0x20;
+            mp->buttonHold = PAD_TRIGGER_R;
         }
     }
     btn = DemoPad[0].dirs;
@@ -499,6 +514,7 @@ s32 checkOneRevolution(s32 dir) {
     start = rw->start;
     cur = rw->hist[rw->idx];
     for (i = 1; i <= 20; i++) {
+        // FAKE: rubwork read directly instead of through rw; the plain form changes the object
         j = rubwork.idx - i;
         while (j < 0) {
             j += 20;
@@ -576,6 +592,7 @@ s32 marioGetRub(u32 btn, s32* dirOut, s32* countOut, f32* magOut) {
     }
     rw->idleTimer = 0;
     rw->hist[rw->idx] = a;
+    // FAKE: rubwork read directly instead of through rw; the plain form changes the object
     j = rubwork.idx;
     j++;
     while (j < 0) {

@@ -1,5 +1,5 @@
-// NOTE: seq_gameOverExit/seq_gameOverInit and N_evt_snd_bgm_unpause live in the
-// event/evt_snd.c split (0x80077EC4..0x80077F88), which is really the tail of this TU.
+// seq_gameOverInit, seq_gameOverExit and N_evt_snd_bgm_unpause are in src/event/evt_snd.c
+// (0x80077EC4..0x80077F88); in the original that code is the tail of this file.
 #include "driver/camdrv.h"
 #include "driver/fadedrv.h"
 #include "driver/seqdrv.h"
@@ -32,8 +32,6 @@
 typedef struct GameOverWork {
     EventEntry* evt; // 0x0
 } GameOverWork;
-
-
 
 USER_FUNC(evt_mario_dispflag_onoff);
 
@@ -203,7 +201,7 @@ EVT_BEGIN(evt_gameover)
     CALL(evt_mario_adjust_dir)
 #ifdef VERSION_G8ME01
     CALL(evt_sub_get_language, LW(0))
-    IF_INT_EQUAL(LW(0), 4)
+    IF_INT_EQUAL(LW(0), LANGUAGE_SP)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("g"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("a"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("m"), MAP_OBJ_FLAG_HIDDEN)
@@ -253,7 +251,7 @@ EVT_BEGIN(evt_gameover)
     CALL(evt_map_playanim, STRING("anm_hokori"), MAP_ANIM_PLAY_LOOP, 0)
 #ifdef VERSION_G8ME01
     CALL(evt_sub_get_language, LW(0))
-    IF_INT_EQUAL(LW(0), 4)
+    IF_INT_EQUAL(LW(0), LANGUAGE_SP)
         CALL_CHILD(fall_gameover_es)
         ELSE
 #endif
@@ -315,16 +313,14 @@ void seq_gameOverMain(SequenceWork* work) {
             mapLoad("sys_00");
             camera = camGetPtr(CAMERA_3D);
             mario = marioGetPtr();
-            {
-                camera->marioPos.x = 0.0f;
-                camera->marioPos.y = 0.01f;
-                camera->marioPos.z = 0.0f;
-                camera->marioAt.x = camera->marioPos.x;
-                camera->marioAt.y = camera->marioPos.y;
-                camera->marioAt.z = camera->marioPos.z;
-                mario->position = (Vec){0.0f, 0.0f, 0.0f};
-                mario->camTarget = mario->position;
-            }
+            camera->marioPos.x = 0.0f;
+            camera->marioPos.y = 0.01f;
+            camera->marioPos.z = 0.0f;
+            camera->marioAt.x = camera->marioPos.x;
+            camera->marioAt.y = camera->marioPos.y;
+            camera->marioAt.z = camera->marioPos.z;
+            mario->position = (Vec){0.0f, 0.0f, 0.0f};
+            mario->camTarget = mario->position;
             camRoadReset();
             camShiftReset();
             work->state++;
@@ -346,7 +342,7 @@ void seq_gameOverMain(SequenceWork* work) {
             marioEntry();
             psndBGMOn(PSND_FADEOUT, (char*)PSND_BGM_BATTLE_LOSE1);
             if ((u32)psbgm[0].streamId != 0xFFFFFFFFU) {
-                sound.streams[psbgm[0].streamId].flags |= 0x8000;
+                sound.streams[psbgm[0].streamId].flags |= SOUND_STREAM_FLAG_PAUSE;
             }
             wp->evt = evtEntryType(evt_gameover, 0, 0, 0);
             work->state++;

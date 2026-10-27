@@ -28,15 +28,11 @@
 #define VIVIAN_FOLLOW_DIST 22.0f
 #endif
 
-typedef struct VivianTail {
-    u8 pad : 7;
-    u8 off : 1;
-} VivianTail;
-
 s32 vivian_cancel_req;
 
 #pragma explicit_zero_data on
 void N_marioForceVivianAnime(void) {
+    // FAKE: padding constant kept in .sdata2 by explicit_zero_data and the (void)& use; removing it changes the section layout
     static const u32 gap_09_8041DF6C_sdata2 = 0;
     MarioWork* mario = marioGetPtr();
     (void)&gap_09_8041DF6C_sdata2;
@@ -46,11 +42,10 @@ void N_marioForceVivianAnime(void) {
     marioPaperOn("p_bibi");
     marioChgPose("M_B_3");
     marioChgPaper("PM_B_1");
-    mario->poseTime = 0x18;
+    mario->poseTime = 24;
     animPoseSetLocalTime(mario->paperAnimGroupId[marioAnimeId()], mario->poseTime);
 }
 
-#pragma explicit_zero_data reset
 void mot_vivian(void) {
     MarioWork* mario = marioGetPtr();
 
@@ -98,6 +93,7 @@ void mot_vivian_post(void) {
             L_partyVivianTailStart(party);
         }
     } else if (party && party->currentMemberId == PARTY_MEMBER_VIVIAN && (party->flags & PARTY_FLAG_IS_BEING_USED)) {
+        // FAKE: the store is reached by a goto past the return; writing it here changes the object
         goto cancel;
     }
     return;
@@ -208,17 +204,17 @@ static inline void vivianFollow(PartyEntry* party) {
     HitEntry* hit;
     u8 id;
     MarioWork* m = party->playerPtr;
-    f32 gx, gy, gz;
+    f32 groundY, gy, gz;
     f32 sx, sy, sz;
     f32 ofs;
 
     marioGetScreenPos(m->position, &sx, &sy, &sz);
-    hit = marioSearchGround(&gx, &gy, &gz, 37.0f, -37.0f);
+    hit = marioSearchGround(&groundY, &gy, &gz, 37.0f, -37.0f);
     if (hit && !(hitGetAttr(hit) & (HIT_ATTR_WATER_HAZARD | HIT_ATTR_TOGE))) {
         m->hitobjStandOn = hit;
-        m->position.y = gx;
+        m->position.y = groundY;
         if (m->floorMove.y < 0.0f) {
-            gx += 0.2f;
+            groundY += 0.2f;
         }
     }
     id = party->useMotionId;
@@ -254,7 +250,7 @@ static inline void vivianFollow(PartyEntry* party) {
     }
     if (strcmp(gp->currentMapName, "eki_02") == 0) {
 #ifdef VERSION_G8ME01
-        partyChkWallAround((PartyEntry*)party, &m->position, 0.0f, m->directionView, m->wPlayerCollisionBox.z, 0.5f);
+        partyChkWallAround(party, &m->position, 0.0f, m->directionView, m->wPlayerCollisionBox.z, 0.5f);
 #else
         marioChkWallAround(&m->position, 1, 0.0f, m->directionView, m->wPlayerCollisionBox.z, 0.5f);
 #endif
@@ -265,7 +261,7 @@ static inline void vivianFollow(PartyEntry* party) {
 #pragma explicit_zero_data on
 void vivian_use(PartyEntry* party) {
     Vec s;
-    void* rip;
+    EffectEntry* rip;
     f32 d;
     MarioWork* m = party->playerPtr;
     if (party->trigFlags & PARTY_TRIG_CHG_RUN_MODE) {
@@ -307,7 +303,7 @@ void vivian_use(PartyEntry* party) {
         party->trailPos = party->position;
         m->dispFlags |= MARIO_DISP_FLAG_SHADOW_OFF;
         partyChgPose(party, "PTR_A2_3");
-        partyPaperOn((PartyEntry*)party, "p_bibi");
+        partyPaperOn(party, "p_bibi");
         partyChgPaper(party, "PM_B_1");
         party->dispOfs.y += 1.6f;
         m->dispFlags |= MARIO_DISP_FLAG_SHADOW_OFF;
@@ -339,7 +335,7 @@ void vivian_use(PartyEntry* party) {
         }
         rip = effRippleEntry(1, party->playerPtr->position.x, 1.5f + party->playerPtr->position.y, party->playerPtr->position.z);
         party->work.vivian.rippleEffect = rip;
-        if (party->camId != 4) {
+        if (party->camId != CAMERA_3D) {
             effRippleSetCamId(rip, party->camId);
         }
         psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_VIVIAN_SHADOW1_2), &party->position);
@@ -380,6 +376,7 @@ void vivian_use(PartyEntry* party) {
         party->trailPos.y += d;
     }
     s = party->trailPos;
+    // FAKE: stores NULL into an already NULL rippleEffect; dropping the store changes the object
     if (party->work.vivian.rippleEffect == NULL) {
         party->work.vivian.rippleEffect = NULL;
     } else if (party->work.vivian.rippleEffect->flags == 0) {
@@ -503,7 +500,4 @@ void vivian_use(PartyEntry* party) {
     }
 }
 
-#pragma explicit_zero_data reset
-
-#pragma explicit_zero_data on
 #pragma explicit_zero_data reset

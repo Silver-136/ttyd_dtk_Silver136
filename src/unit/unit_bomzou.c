@@ -150,7 +150,7 @@ BattleWeapon weapon_bomzou_explosion = {
     NULL, // acHelpMsg
     SPECIAL_FREEZE_CRUSH | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
-    4, // targetWeightFlags
+    TARGET_WEIGHT_FRONT, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
@@ -292,7 +292,7 @@ EVT_END_PAD()
 
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DEAD_EVENT, dead_event},
-    {53, explosion_event},
+    {UNIT_DATA_EXPLOSION_EVENT_BOMZOU, explosion_event},
     {UNIT_DATA_BATTLE_END_EVENT, end_battle_evt},
     {0, NULL},
 };

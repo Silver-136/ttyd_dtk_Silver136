@@ -59,7 +59,7 @@ static inline BOOL chkBalloonStand(HitEntry* hit) {
             }
         } else {
             entry = caseCheckHitObj(hit);
-            if (entry != NULL && (entry->flags & 4) && entry->conditionId == 9) {
+            if (entry != NULL && (entry->flags & 4) && entry->conditionId == CASE_FRONT_A) {
                 ret = TRUE;
             }
         }
@@ -80,7 +80,7 @@ static inline BOOL chkBalloonJump(HitEntry* hit) {
             entry = caseCheckHitObj(hit);
             if (entry != NULL) {
                 if (entry->flags & 4) {
-                    if (entry->conditionId == 9 || entry->conditionId == 12) {
+                    if (entry->conditionId == CASE_FRONT_A || entry->conditionId == CASE_PUSH_A) {
                         ret = TRUE;
                     }
                 }
@@ -113,7 +113,7 @@ static inline BOOL chkBalloonPush(HitEntry* hit) {
                 entry = caseCheckHitObj(hit);
                 if (entry != NULL) {
                     if (entry->flags & 4) {
-                        if (entry->conditionId == 12 || entry->conditionId == 5) {
+                        if (entry->conditionId == CASE_PUSH_A || entry->conditionId == CASE_STAND_ON_A) {
                             ret = TRUE;
                         }
                     }
@@ -160,6 +160,7 @@ void marioBalloonMain(void) {
         return;
     }
     show = FALSE;
+    // FAKE: switch on !marioChkKey() (empty case 0, default turns the balloon off); the plain if changes the object
     switch (!marioChkKey()) {
         case 0:
             break;
@@ -168,11 +169,11 @@ void marioBalloonMain(void) {
             return;
     }
 
-    if (chkBalloonStand((HitEntry*)mario->hitobjFrontA)) {
+    if (chkBalloonStand(mario->hitobjFrontA)) {
         type = 0;
         show = TRUE;
     }
-    if (chkBalloonJump((HitEntry*)mario->hitobjFront)) {
+    if (chkBalloonJump(mario->hitobjFront)) {
         type = 0;
         show = TRUE;
     }
@@ -180,9 +181,9 @@ void marioBalloonMain(void) {
         type = 0;
         show = TRUE;
     }
-    if ((HitEntry*)mario->hitobjFront != NULL) {
-        if (chkItemBox((HitEntry*)mario->hitobjFront) >= 0) {
-            show = chkItemBox((HitEntry*)mario->hitobjFront);
+    if (mario->hitobjFront != NULL) {
+        if (chkItemBox(mario->hitobjFront) >= 0) {
+            show = chkItemBox(mario->hitobjFront);
         }
     }
 
@@ -197,6 +198,7 @@ void marioBalloonMain(void) {
         }
     }
 
+    // FAKE: (u16)(currMotionId - 1) > 1 tests 'not MARIO_MOTION_WALK and not MARIO_MOTION_DASH'; the two plain compares change the object
     if (mario->airTimer != 0 || (mario->flags & MARIO_FLAG_PAPER_MODE) || (mario->dispFlags & MARIO_DISP_FLAG_SLIT) ||
         (mario->currMotionId != MARIO_MOTION_STAY && (u16)(mario->currMotionId - 1) > 1)) {
         show = FALSE;
@@ -229,7 +231,8 @@ BOOL chkBalloon(HitEntry* hit) {
             entry = caseCheckHitObj(hit);
             if (entry != NULL) {
                 if (entry->flags & 4) {
-                    if (entry->conditionId == 9 || entry->conditionId == 4 || entry->conditionId == 12 || entry->conditionId == 5) {
+                    if (entry->conditionId == CASE_FRONT_A || entry->conditionId == CASE_JUMP_FROM_A ||
+                        entry->conditionId == CASE_PUSH_A || entry->conditionId == CASE_STAND_ON_A) {
                         ret = TRUE;
                     }
                 }

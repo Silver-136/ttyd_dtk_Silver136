@@ -21,7 +21,6 @@
 
 #ifdef VERSION_G8ME01
 static inline s32* logoStoryTime(void);
-extern u32 seq_logo_zero_color;
 #endif
 //.sbss
 static LogoWork work;
@@ -72,6 +71,7 @@ void seq_logoInit(SequenceWork* work) {
     logoAsyncFirst();
     if (!OSIsRestart() || OSGetResetCode() & OS_RESET_SHUTDOWN) {
         VIConfigure(&sRMObjHReso);
+        // FAKE: empty if with dead tests of wp; removing it changes the object
         if (!wp && !wp && !wp) {
         }
 #endif
@@ -113,7 +113,7 @@ void seq_logoMain(SequenceWork* work) {
 #ifdef VERSION_G8ME01
     static OSTime time;
 #else
-    static OSTime time; //time instance 1
+    static OSTime time;
     u32 size;
     u8* decode;
     FileEntry* first;
@@ -388,14 +388,12 @@ void seq_logoMain(SequenceWork* work) {
 void logoDisp(CameraId camId, void* param) {
     GXRenderModeObj* rmode;
     f32 width, height, x, y;
-
-    //stack variables
-    Mtx44 ortho; //stack + 0xAC
-    Mtx position; //stack + 0x7C
-    f32 projection[GX_PROJECTION_SZ]; //stack + 0x60
-    f32 viewport[GX_VIEWPORT_SZ]; //stack + 0x48
-    GXTexObj texObj; //stack + 0x28
-    u32 sciLeft, sciTop, sciWidth, sciHeight; //tack + 0x24
+    Mtx44 ortho;
+    Mtx position;
+    f32 projection[GX_PROJECTION_SZ];
+    f32 viewport[GX_VIEWPORT_SZ];
+    GXTexObj texObj;
+    u32 sciLeft, sciTop, sciWidth, sciHeight;
 
     if (wp->texture) {
         GXGetProjectionv(projection);
@@ -428,7 +426,7 @@ void logoDisp(CameraId camId, void* param) {
                 GXSetTevColor(GX_TEVREG0, (GXColor){0, 0, 0, 0xFF});
                 GXSetTevColor(GX_TEVREG1, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
                 GXSetNumTexGens(1);
-                GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, 0x3C);
+                GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
                 GXSetNumTevStages(1);
                 GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
                 GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
@@ -502,13 +500,13 @@ void logoDisp(CameraId camId, void* param) {
                 GXLoadTexObj(&texObj, GX_TEXMAP0);
                 GXSetNumChans(0);
                 GXSetTevColor(GX_TEVREG0, (GXColor){0, 0, 0, 0xFF});
-                if ((u32)gp->language == LANGUAGE_JP) { //blue for JP
+                if ((u32)gp->language == LANGUAGE_JP) { // blue for Japanese
                     GXSetTevColor(GX_TEVREG1, (GXColor){0, 0x46, 0xFF, 0xFF});
-                } else { //red for US
+                } else { // red for every other language
                     GXSetTevColor(GX_TEVREG1, (GXColor){0xDC, 0, 0, 0xFF});
                 }
                 GXSetNumTexGens(1);
-                GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, 0x3C);
+                GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
                 GXSetNumTevStages(1);
                 GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
                 GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
@@ -554,7 +552,7 @@ void logoDisp(CameraId camId, void* param) {
                 GXLoadTexObj(&texObj, GX_TEXMAP0);
                 GXSetNumChans(0);
                 GXSetNumTexGens(1);
-                GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, 0x3C);
+                GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
                 GXSetNumTevStages(1);
                 GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
                 GXSetTevOp(GX_TEVSTAGE0, GX_REPLACE);
@@ -601,10 +599,10 @@ void logoDisp(CameraId camId, void* param) {
                 TEXGetGXTexObjFromPalette(*wp->texture->data, &texObj, 2);
                 GXLoadTexObj(&texObj, GX_TEXMAP0);
                 GXSetNumChans(1u);
-                GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_REG, 0, GX_DF_NONE, GX_AF_NONE);
+                GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_REG, GX_LIGHT_NULL, GX_DF_NONE, GX_AF_NONE);
                 GXSetChanMatColor(GX_COLOR0A0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
                 GXSetNumTexGens(1);
-                GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, 0x3C);
+                GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
                 GXSetNumTevStages(1);
                 GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
                 GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
@@ -649,7 +647,6 @@ void logoDisp(CameraId camId, void* param) {
 
 
 #ifndef VERSION_G8ME01
-//param is unused
 static s32 logoAsyncFirst(void) {
     return fileAsyncf(FILE_TYPE_RAW, 0, "%s/b/first", getMarioStDvdRoot());
 }
@@ -676,7 +673,7 @@ void dummy_draw(CameraId camId, void* param) {
 #ifndef VERSION_G8ME01
 //param is unused
 void progDisp(CameraId camId, void* param) {
-    static OSTime time; //time instance 2
+    static OSTime time;
     const char* msg;
     f32 width;
     u32 button;
@@ -703,7 +700,7 @@ void progDisp(CameraId camId, void* param) {
                     wp->lastInputTime = OSGetTime();
                 } else {
                     if (OSTicksToSeconds(OSGetTime() - wp->lastInputTime) > 10) {
-                        button = 0x100;
+                        button = PAD_BUTTON_A;
                     }
                 }
                 if (button & (PAD_BUTTON_LEFT | PAD_BUTTON_RIGHT) || keyGetDirTrg(0) & (DEMO_STICK_LEFT | DEMO_STICK_RIGHT)) {
@@ -752,7 +749,7 @@ void progDisp(CameraId camId, void* param) {
                 msg = romFontGetMessage(type);
                 width = (f32)romFontGetWidth(msg);
                 romFontPrintGX(
-                    -(0.7f * (f32)width) / 2.0f,
+                    -(0.7f * width) / 2.0f,
                     -145.0f,
                     0.7f,
                     &(GXColor){0xFF, 0xFF, 0xFF, 0xFF},
@@ -761,7 +758,7 @@ void progDisp(CameraId camId, void* param) {
 
             case 3:
                 if (!wp->toggle) {
-                    VISetBlack(1);
+                    VISetBlack(TRUE);
                     OSSetProgressiveMode(1);
                     VIConfigure(&sRMObjHReso_prog);
                     VIFlush();
@@ -816,7 +813,7 @@ void progDisp(CameraId camId, void* param) {
                     wp->lastInput = OSGetTime();
                 } else {
                     if (OSTicksToSeconds(OSGetTime() - wp->lastInput) > 10) {
-                        button = 0x100;
+                        button = PAD_BUTTON_A;
                     }
                 }
                 if (button & (PAD_BUTTON_LEFT | PAD_BUTTON_RIGHT) || keyGetDirTrg(0) & (DEMO_STICK_LEFT | DEMO_STICK_RIGHT)) {
@@ -855,7 +852,7 @@ void progDisp(CameraId camId, void* param) {
 
             case 2:
                 if (!wp->toggle) {
-                    VISetBlack(1);
+                    VISetBlack(TRUE);
                     OSSetProgressiveMode(1);
                     VIConfigure(&sRMObjHReso_prog);
                     VIFlush();

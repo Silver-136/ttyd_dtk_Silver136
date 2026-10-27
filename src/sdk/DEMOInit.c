@@ -23,20 +23,13 @@ static u32 FrameMissThreshold;
 static BOOL GPHangWorkaround = FALSE;
 static GXBool DemoFirstFrame = GX_TRUE;
 
-
 static const char demo_file[] = "DEMOInit.c";
 static const char demo_msg[] = "DEMOInit: invalid TV format\n";
 
-//internal, inline
-static void __DEMOInitRenderMode(GXRenderModeObj* mode);
-static void __DEMOInitMem(void);
-static void __DEMOInitGX(void);
-static void __DEMOInitVI(void);
 static void __NoHangRetraceCallback(u32 count);
 static void __NoHangDoneRender(void);
 static void __DEMODiagnoseHang(void);
 static void DEMOSwapBuffers(void);
-void DEMOSetGPHangMetric(GXBool enable);
 void DEMOReInit(GXRenderModeObj* mode);
 
 static void __DEMOInitMem(void) {
@@ -82,14 +75,14 @@ static void __DEMOInitGX(void) {
     else
         GXSetPixelFmt(GX_PF_RGBA6_Z24, GX_ZC_LINEAR);
 
-    GXSetCopyClear((GXColor) { 0, 0, 0, 0 }, 0xFFFFFF); //not in latest
+    GXSetCopyClear((GXColor){ 0, 0, 0, 0 }, GX_MAX_Z24);
     GXCopyDisp(DemoCurrentBuffer, GX_TRUE);
     GXSetDispCopyGamma(GX_GM_1_0);
 }
 
 static void __DEMOInitRenderMode(GXRenderModeObj* mode) {
     if (mode != NULL) {
-        rmodeobj = *mode; //inline copy
+        rmodeobj = *mode;
         rmode = &rmodeobj;
     } else {
         switch (VIGetTvFormat()) {
@@ -113,7 +106,6 @@ static void __DEMOInitRenderMode(GXRenderModeObj* mode) {
         rmode = &rmodeobj;
     }
 }
-
 
 void DEMOInit(GXRenderModeObj* mode) {
     OSInit();

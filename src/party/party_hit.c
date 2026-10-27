@@ -88,8 +88,6 @@ BOOL chkfilterNokotaro(HitCheckQuery* query, HitEntry* entry) {
     return TRUE;
 }
 
-static inline f32 party_sumsq(f32 x, f32 z) { return x * x + z * z; }
-
 static inline HitEntry* partyHitCheckInl(PartyEntry* party, Vec* pos, Vec* dir, Vec* outPos, Vec* outNrm, f32* dist) {
     HitCheckQuery query;
     Vec d = *dir;
@@ -154,7 +152,7 @@ f32 partyNrmToAngle(Vec n) {
 void partyChkGnd(PartyEntry* party) {
     s32 attr;
     HitEntry* hit;
-    f32 a, b, c;
+    f32 stepY, stepDrop, stepAngle;
 
     if (!(party->flags & PARTY_FLAG_FORCE_FALL)) {
         attr = 0;
@@ -181,9 +179,9 @@ void partyChkGnd(PartyEntry* party) {
         }
         party->position.y = party->groundY;
         if (!(party->flags & (PARTY_FLAG_IS_JUMPING | PARTY_FLAG_IS_FALLING))) {
-            partyChkFrontStep(party, 11.0f, &a, &b, &c);
-            if (a - party->position.y >= 5.0f && party->groundSlope <= 30.0f) {
-                party->stepY = a;
+            partyChkFrontStep(party, 11.0f, &stepY, &stepDrop, &stepAngle);
+            if (stepY - party->position.y >= 5.0f && party->groundSlope <= 30.0f) {
+                party->stepY = stepY;
                 if (party->moveSpeed) {
                     partyChgMot(party, 6);
                 }
@@ -242,7 +240,9 @@ HitEntry* partySearchGround(PartyEntry* party, f32 range, f32 depth) {
     probeY = baseY + d;
     len = d + range;
     {
-    {Vec d0 = {0.0f, -1.0f, 0.0f}; dir = d0;}
+        Vec d0 = {0.0f, -1.0f, 0.0f};
+        dir = d0;
+    }
     best = NULL;
     px = party->position.x;
     pz = party->position.z;
@@ -291,7 +291,6 @@ HitEntry* partySearchGround(PartyEntry* party, f32 range, f32 depth) {
                 }
             }
         }
-    }
     }
     if (best) {
         party->groundY = bestY;
@@ -364,6 +363,7 @@ HitEntry* partyChkFrontStep(PartyEntry* party, f32 range, f32* outY, f32* outDis
 }
 
 static inline void partyWallSlide(Vec* out, Vec n, f32 d, f32 sn, f32 cs) {
+    // FAKE: unused zero Vec local; without it the object changes
     Vec unused = {0.0f, 0.0f, 0.0f};
     f32 mx = sn * d;
     f32 mz = cs * d;
@@ -411,13 +411,12 @@ HitEntry* partySearchWallFront(PartyEntry* party, Vec* pos, f32 dist, f32 ang) {
     best = NULL;
     maxD = rd + dist;
     bestD = maxD;
-    do {
     qpos = *pos;
     {
-    Vec dir1 = {0.0f, 0.0f, 0.0f};
-    dir1.x = sn;
-    dir1.z = cs;
-    qdir = dir1;
+        Vec dir1 = {0.0f, 0.0f, 0.0f};
+        dir1.x = sn;
+        dir1.z = cs;
+        qdir = dir1;
     }
 #ifdef VERSION_G8ME01
     for (i = 0; i < count; i++) {
@@ -461,10 +460,10 @@ HitEntry* partySearchWallFront(PartyEntry* party, Vec* pos, f32 dist, f32 ang) {
     bestD = rd;
     qpos = *pos;
     {
-    Vec dir2 = {0.0f, 0.0f, 0.0f};
-    dir2.x = sn2;
-    dir2.z = cs2;
-    qdir = dir2;
+        Vec dir2 = {0.0f, 0.0f, 0.0f};
+        dir2.x = sn2;
+        dir2.z = cs2;
+        qdir = dir2;
     }
 #ifdef VERSION_G8ME01
     for (i = 0; i < count; i++) {
@@ -490,10 +489,10 @@ HitEntry* partySearchWallFront(PartyEntry* party, Vec* pos, f32 dist, f32 ang) {
             bestD = rd;
             qpos.y = pos->y + arr[i];
             {
-            Vec dd = {0.0f, 0.0f, 0.0f};
-            dd.x = sn2;
-            dd.z = cs2;
-            qdir = dd;
+                Vec dd = {0.0f, 0.0f, 0.0f};
+                dd.x = sn2;
+                dd.z = cs2;
+                qdir = dd;
             }
             hit = marioHitCheckVec(&qpos, &qdir, NULL, NULL, &bestD);
         }
@@ -510,7 +509,6 @@ HitEntry* partySearchWallFront(PartyEntry* party, Vec* pos, f32 dist, f32 ang) {
         pos->z += dist * cs;
     }
     return NULL;
-    } while (0);
 }
 
 
@@ -537,35 +535,35 @@ HitEntry* partySearchFrontWall(PartyEntry* party, Vec* pos, f32 dist, f32 ang) {
     p = party->position;
     p.y += hh;
     {
-    Vec dir = {0.0f, 0.0f, 0.0f};
-    Vec outPos = {0.0f, 0.0f, 0.0f};
-    dir.x = sn;
-    dir.z = cs;
-    hit = partyHitCheckInl(party, &p, &dir, &outPos, &nrm, &d);
-    if (hit) {
-        party->frontWallDist = d;
-        partyWallSlide(pos, nrm, dist, sn, cs);
-        return hit;
-    }
-    dy = 11.0f;
-    if (party->currentMemberId == PARTY_MEMBER_BOBBERY && (party->flags & PARTY_FLAG_IS_BEING_USED)) {
-        dy = 1.0f;
-    }
-    p = party->position;
-#ifdef VERSION_G8ME01
-    d = maxD;
-#else
-    d = 0.5f * party->width + dist;
-#endif
-    p.y += dy;
-    hit = partyHitCheckInl(party, &p, &dir, &outPos, &nrm, &d);
-    if (hit) {
-        if (partyNrmTo(&nrm) >= 45.0f) {
+        Vec dir = {0.0f, 0.0f, 0.0f};
+        Vec outPos = {0.0f, 0.0f, 0.0f};
+        dir.x = sn;
+        dir.z = cs;
+        hit = partyHitCheckInl(party, &p, &dir, &outPos, &nrm, &d);
+        if (hit) {
             party->frontWallDist = d;
             partyWallSlide(pos, nrm, dist, sn, cs);
             return hit;
         }
-    }
+        dy = 11.0f;
+        if (party->currentMemberId == PARTY_MEMBER_BOBBERY && (party->flags & PARTY_FLAG_IS_BEING_USED)) {
+            dy = 1.0f;
+        }
+        p = party->position;
+#ifdef VERSION_G8ME01
+        d = maxD;
+#else
+        d = 0.5f * party->width + dist;
+#endif
+        p.y += dy;
+        hit = partyHitCheckInl(party, &p, &dir, &outPos, &nrm, &d);
+        if (hit) {
+            if (partyNrmTo(&nrm) >= 45.0f) {
+                party->frontWallDist = d;
+                partyWallSlide(pos, nrm, dist, sn, cs);
+                return hit;
+            }
+        }
     }
     party->frontWallDist = -1.0f;
     pos->x += dist * sn;
@@ -592,7 +590,7 @@ HitEntry* partySearchHead(PartyEntry* party, Vec* pos, f32* dist, f32 angle) {
     f32 nz0;
     f32 ny0;
     f32 nx0;
-    float probeHeight;
+    f32 probeHeight;
     // FAKE: t.y read into a reused local right after each t store, so the load numbers below the 10.0f
     // (the add is written probeHeight + ty, as in the target operand order)
     f32 ty;
@@ -620,7 +618,7 @@ HitEntry* partySearchHead(PartyEntry* party, Vec* pos, f32* dist, f32 angle) {
     f32 hz3;
     f32 hy3;
     f32 hx3;
-    HitEntry *hit;
+    HitEntry* hit;
     f32 zero = 0.0f;
     f32 one = 1.0f;
     oz = party->width * 0.3f;
@@ -704,6 +702,8 @@ HitEntry* partySearchHead(PartyEntry* party, Vec* pos, f32* dist, f32 angle) {
     return hit;
 }
 
+// FAKE: stand-in that nothing calls; it only places these literals and the int-to-float conversion constant in
+// this object's constant pool
 void partyHitStrippedPool(f32* f, s32 i) {
     f[0] = 10.0f;
     f[1] = 0.0f;

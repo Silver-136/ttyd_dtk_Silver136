@@ -45,11 +45,11 @@ WinMgrDesc coin_desc = {
 
 USER_FUNC(evt_win_item_select) {
     EvtWord* args = event->args;
-    s32 flag = evtGetValue(event, args[0]);
+    s32 getCursor = evtGetValue(event, args[0]);
     s32 type = evtGetValue(event, args[1]);
     WinMgrSelect* sel;
     s32 result;
-    s32 extra;
+    s32 cursor;
     if (isFirstCall) {
         event->userdatap[0] = winMgrSelectEntry(type, 0, 1);
         marioKeyOff();
@@ -59,12 +59,12 @@ USER_FUNC(evt_win_item_select) {
     if (result == 0) {
         return EVT_RETURN_BLOCK;
     }
-    extra = winMgrSelectGetCursor(sel);
+    cursor = winMgrSelectGetCursor(sel);
     winMgrSelectDelete(sel);
     marioKeyOn();
     evtSetValue(event, args[2], result);
-    if (flag != 0) {
-        evtSetValue(event, args[3], extra);
+    if (getCursor != 0) {
+        evtSetValue(event, args[3], cursor);
     }
     return EVT_RETURN_DONE;
 }
@@ -94,17 +94,17 @@ USER_FUNC(evt_win_other_select) {
 }
 
 USER_FUNC(evt_win_item_maketable) {
-    s32* src;
+    s32* dst;
     s32* item;
-    s32* t;
+    s32* list;
     EvtWord* args = event->args;
     s32* table;
     s32 count;
     s32 i;
     s32 n;
-    t = (s32*)evtGetValue(event, args[0]);
+    list = (s32*)evtGetValue(event, args[0]);
     count = 0;
-    item = t;
+    item = list;
     for (;;) {
         if (*item == -1) {
             break;
@@ -117,14 +117,14 @@ USER_FUNC(evt_win_item_maketable) {
         return EVT_RETURN_DONE;
     }
     table = _mapAlloc((count + 1) * 4);
-    item = t;
+    item = list;
     i = 0;
     n = 0;
-    src = table;
+    dst = table;
     for (; i < count; i++) {
         s32 has = pouchCheckItem(*item);
         if (has) {
-            *src++ = *item;
+            *dst++ = *item;
             n++;
         }
         item++;
@@ -266,13 +266,13 @@ static void coin_disp(WinMgrEntry* entry) {
         icon = ICON_ITEM_STAR_PIECE;
         break;
     }
-    PSMTXTrans(pos, -220.f, -113.f, 0.f);
+    PSMTXTrans(pos, -220.0f, -113.0f, 0.0f);
     PSMTXScale(scale, 0.7f, 0.7f, 0.7f);
     PSMTXConcat(pos, scale, pos);
-    iconDispGx2(pos, 0x10, icon);
-    PSMTXTrans(pos, -192.f, -113.f, 0.f);
-    iconDispGx2(pos, 0x10, ICON_TIMES);
-    PSMTXTrans(pos, -126.f, -113.f, 0.f);
+    iconDispGx2(pos, ICON_FLAG_2D, icon);
+    PSMTXTrans(pos, -192.0f, -113.0f, 0.0f);
+    iconDispGx2(pos, ICON_FLAG_2D, ICON_TIMES);
+    PSMTXTrans(pos, -126.0f, -113.0f, 0.0f);
     {
         GXColor white = {0xFF, 0xFF, 0xFF, 0xFF};
         iconNumberDispGx(pos, w->coins, 0, white);

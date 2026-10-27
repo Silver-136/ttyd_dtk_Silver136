@@ -3,7 +3,6 @@
 #include "battle/battle_event_cmd.h"
 #include "battle/battle_sub.h"
 
-
 static BattleUnitKindPart parts[1];
 BattleUnitKind unit_system;
 static EvtWord init_event[21];

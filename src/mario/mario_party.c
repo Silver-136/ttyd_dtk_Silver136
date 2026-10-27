@@ -1,5 +1,3 @@
-// the best Mario Party, partners with actual abilities in Paper Mario,
-// something Nintendo's forgotten about
 #include "mario/mario_party.h"
 #include "mario/mario.h"
 #include "party.h"
@@ -66,7 +64,7 @@ s32 marioUseParty(void) {
     if ((wp->dispFlags & MARIO_DISP_FLAG_SLIT) || party->slitOn == 1) {
         return 0;
     }
-    if (partyGetPtr(marioGetPartyId())->flags & 0x100) {
+    if (partyGetPtr(marioGetPartyId())->flags & PARTY_FLAG_IS_BEING_USED) {
         return 0;
     }
     party = partyGetPtr(marioGetPartyId());
@@ -228,20 +226,21 @@ s32 marioGetExtraPartyId(void) {
 }
 
 void partyJoin(PartyId partnerId) {
-    if (partnerId < 8) {
+    if (partnerId < PARTNER_COUNT) {
         pouchGetPtr()->partyData[partnerId].flags |= 1; // obtained
     }
 }
 
 void partyLeft(PartyId partnerId) {
-    if (partnerId < 8) {
+    if (partnerId < PARTNER_COUNT) {
         pouchGetPtr()->partyData[partnerId].flags &= ~1;
     }
 }
 
 BOOL partyChkJoin(PartyId partnerId) {
     BOOL ret = FALSE;
-    if (partnerId < 8) {
+    if (partnerId < PARTNER_COUNT) {
+        // FAKE: spare u32 temporary; assigning ret directly changes the object
         u32 joined = pouchGetPtr()->partyData[partnerId].flags & 1;
         ret = joined;
     }
@@ -250,7 +249,7 @@ BOOL partyChkJoin(PartyId partnerId) {
 
 s32 partyGetHp(PartyId partnerId) {
     s32 ret = 0;
-    if (partnerId < 8) {
+    if (partnerId < PARTNER_COUNT) {
         ret = pouchGetPtr()->partyData[partnerId].currentHP;
     }
     return ret;
@@ -258,7 +257,7 @@ s32 partyGetHp(PartyId partnerId) {
 
 s32 partyGetTechLv(PartyId partnerId) {
     s32 ret = 0;
-    if (partnerId < 8) {
+    if (partnerId < PARTNER_COUNT) {
         ret = pouchGetPtr()->partyData[partnerId].techLevel;
     }
     return ret;

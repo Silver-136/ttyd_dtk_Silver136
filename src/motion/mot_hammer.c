@@ -27,7 +27,13 @@ s32 marioGetRub(s32 mask, s32* a, s32* b, f32* c);
 
 
 
-s32 se_data[] = {315, 357, 316, 359, 317, 358, 318, 360, 319, 361};
+s32 se_data[] = {
+    ITEM_ATTACK_FX_R, 357,
+    ITEM_ATTACK_FX_B, 359,
+    ITEM_ATTACK_FX_G, 358,
+    ITEM_ATTACK_FX_Y, 360,
+    ITEM_ATTACK_FX_P, 361,
+};
 
 EVT_BEGIN(lv1quake_evt)
 CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), FLOAT(0.009765625f), 90)
@@ -82,22 +88,17 @@ static const char isB2_str[17];
 static const char isS3_str[14];
 static const char isB3_str[17];
 
-
-
-
-
-
-static inline s32 chkBlock(HamMobj* obj) {
+static inline s32 chkBlock(MapObjectEntry* obj) {
     s32 ok = 0;
-    if (((strcmp((obj->name), isS1_str) == 0) || (strcmp((obj->name), isB1_str) == 0))) {
+    if (strcmp(obj->animName, isS1_str) == 0 || strcmp(obj->animName, isB1_str) == 0) {
         if (pouchGetPtr()->hammerLevel >= 1) {
             ok = 1;
         }
-    } else if (((strcmp((obj->name), isS2_str) == 0) || (strcmp((obj->name), isB2_str) == 0))) {
+    } else if (strcmp(obj->animName, isS2_str) == 0 || strcmp(obj->animName, isB2_str) == 0) {
         if (pouchGetPtr()->hammerLevel >= 2) {
             ok = 1;
         }
-    } else if (((strcmp((obj->name), isS3_str) == 0) || (strcmp((obj->name), isB3_str) == 0))) {
+    } else if (strcmp(obj->animName, isS3_str) == 0 || strcmp(obj->animName, isB3_str) == 0) {
         if (pouchGetPtr()->hammerLevel >= 3) {
             ok = 1;
         }
@@ -147,7 +148,7 @@ void mot_hammer(void) {
             mario->mot.hammer.dir = hamDir(mario);
         }
         if (hitGetAttr(hit) & HIT_ATTR_MOBJ) {
-            s32 ok = chkBlock((HamMobj*)mobjHitObjPtrToPtr(hit));
+            s32 ok = chkBlock(mobjHitObjPtrToPtr(hit));
             if (ok) {
                 kind = 0;
             }
@@ -165,6 +166,7 @@ void mot_hammer(void) {
         }
         if (kind != 0) {
             {
+                // FAKE: spare copy of kind in its own block; using kind directly changes the object
                 s32 k = kind;
                 mario->mot.hammer.hitFrames = k == 7 ? 3 : k;
             }
@@ -301,6 +303,7 @@ void mot_hammer(void) {
                 psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_HAMMER_DON3), &m->position);
                 break;
             }
+            // FAKE: unsigned compare of the s32 loop counter; i < 10 changes the object
             for (i = 0; (u32)i < 10; i++) {
                 if (pouchEquipCheckBadge(se_data[m->hammerSfxIdx])) {
                     snd = se_data[m->hammerSfxIdx + 1];
@@ -328,8 +331,8 @@ void mot_hammer(void) {
 
 s32 marioChkHammer2(void) {
     MarioWork* mario = marioGetPtr();
-    s32 b, a;
-    f32 c;
+    s32 rubCount, rubDir;
+    f32 rubMag;
     if (pouchGetPtr()->hammerLevel < 2) {
         return 0;
     }
@@ -363,35 +366,35 @@ s32 marioChkHammer2(void) {
             marioVoiceGlareOn();
         }
     }
-    if (marioGetRub(0x200, &a, &b, &c) != 1) {
+    if (marioGetRub(PAD_BUTTON_B, &rubDir, &rubCount, &rubMag) != 1) {
         return 0;
     }
     mario->baseSpeed = 0.0f;
-    if (b < 1) {
+    if (rubCount < 1) {
         return 0;
     }
-    mario->hammerDir = a;
+    mario->hammerDir = rubDir;
     return 1;
 }
 
 
 
 
-static inline void mot_ham(f32 a148, f32 a68) {
+static inline void mot_ham(f32 shiftZ, f32 zoom) {
     MarioWork* m = marioGetPtr();
-    m->camShiftTargetZ = a148;
+    m->camShiftTargetZ = shiftZ;
     m->camShiftRate.z = 0.005f;
-    m->camZoom = a68;
+    m->camZoom = zoom;
     m->camZoomOfs = (Vec){0.0f, 40.0f, 0.0f};
 }
 
-#define H2_LEVEL_UP(lvl, a148, a68)                        \
+#define H2_LEVEL_UP(lvl, shiftZ, zoom)                     \
     {                                                      \
-        mot_ham(a148, a68);                                \
+        mot_ham(shiftZ, zoom);                             \
         mario->mot.hammer2.flags |= HAMMER2_FLAG_LEVEL_UP; \
     }
 
-#define H2_RAMP(maxv, midv, minv, lvl, a148, a68)                      \
+#define H2_RAMP(maxv, midv, minv, lvl, shiftZ, zoom)                   \
     marioChgPaper("P_H_1A");                                           \
     if (!(mario->mot.hammer2.flags & HAMMER2_FLAG_AT_LEVEL)) {         \
         mario->mot.hammer2.animTime += 6.0f;                           \
@@ -399,7 +402,7 @@ static inline void mot_ham(f32 a148, f32 a68) {
             mario->mot.hammer2.animTime = maxv;                        \
             mario->mot.hammer2.flags |= HAMMER2_FLAG_AT_LEVEL;         \
             mario->hammerChargeLv = lvl;                               \
-            H2_LEVEL_UP(lvl, a148, a68)                                \
+            H2_LEVEL_UP(lvl, shiftZ, zoom)                             \
         }                                                              \
     } else if (!(mario->mot.hammer2.flags & HAMMER2_FLAG_SWAY_BACK)) { \
         mario->mot.hammer2.animTime += 1.0f;                           \
@@ -438,7 +441,7 @@ void mot_hammer2(void) {
     f32 nz, ny, nx, len, hz, hy, hx;
     f32 co, s;
 
-    if ((s32)mario->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) {
+    if (mario->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) {
         mario->trigFlags &= ~MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
         mario->flags &= ~(MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING | MARIO_FLAG_IS_STEPPING | MARIO_FLAG_HAS_INPUT_JUMP);
         mario->mot.hammer2.flags = 0;
@@ -448,7 +451,7 @@ void mot_hammer2(void) {
         mario->savedDisplayDirection = mario->displayDirection;
 #endif
     }
-    switch ((s32)mario->currSubMotionId) {
+    switch (mario->currSubMotionId) {
     case 0:
         mario->flags |= MARIO_FLAG_STOP_AIR_MOVEMENT;
         mario->dispFlags |= MARIO_DISP_FLAG_NO_REAR_POSE;
@@ -493,14 +496,14 @@ void mot_hammer2(void) {
         marioPaperOn("p_kaiten_h");
         marioChgPaper("P_H_1C");
         marioPaperLightOff();
-        mario->mot.hammer2.sfxId = psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_HAMMER_KAITEN1), (Vec*)&mario->position.x);
+        mario->mot.hammer2.sfxId = psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_HAMMER_KAITEN1), &mario->position);
         mario->mot.hammer2.animTime = 0.0f;
         mario->poseTime = 0;
         animPoseSetLocalTime(mario->paperAnimGroupId[marioAnimeId()], mario->mot.hammer2.animTime);
         mario->currSubMotionId = 10;
         mario->multiTimer = 30;
     case 10:
-        if (marioGetRub(0x200, &a, &b, &c) == 1) {
+        if (marioGetRub(PAD_BUTTON_B, &a, &b, &c) == 1) {
             mario->mot.hammer2.flags &= ~HAMMER2_FLAG_AT_LEVEL;
             mario->hammerChargeTimer++;
             if (mario->hammerChargeTimer >= 20) {
@@ -582,7 +585,7 @@ void mot_hammer2(void) {
             } else if (mario->hammerChargeLv <= 1) {
                 mario->mot.hammer2.spinSpeed = 15.0f;
             }
-            effUltraHammerEntry(mario->position.x, 20.0f + mario->position.y, mario->position.z, 1.0f, mario->hammerDir != 0, (s32)mario->multiTimer);
+            effUltraHammerEntry(mario->position.x, 20.0f + mario->position.y, mario->position.z, 1.0f, mario->hammerDir != 0, mario->multiTimer);
         }
         break;
     case 20:
@@ -599,16 +602,16 @@ void mot_hammer2(void) {
         }
         mario->displayDirection = mario->mot.hammer2.spinSpeed * (mario->hammerDir ? -1.0f : 1.0f) + mario->displayDirection;
         if ((s32)ang / 360 != (s32)mario->displayDirection / 360) {
-            psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_HAMMER_KAITEN2), (Vec*)&mario->position.x);
+            psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_HAMMER_KAITEN2), &mario->position);
         }
         if (mario->mot.hammer2.timer == 1) {
-            psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_HAMMER_KAITEN2), (Vec*)&mario->position.x);
+            psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_HAMMER_KAITEN2), &mario->position);
         }
         mario->multiTimer--;
-        if (mario->hammerChargeLv > 2 && (s32)mario->multiTimer == 10) {
+        if (mario->hammerChargeLv > 2 && mario->multiTimer == 10) {
             H2_CLR_PAPER()
         }
-        if ((s32)mario->multiTimer > 0) {
+        if (mario->multiTimer > 0) {
             break;
         }
         if (mario->hammerChargeLv <= 2) {
@@ -654,7 +657,7 @@ f32 marioGetAngleKaitenHammer(void) {
     if (mario->currMotionId != MARIO_MOTION_HAMMER_2) {
         return -1.0f;
     }
-    if ((s32)mario->currSubMotionId != 0x14) {
+    if (mario->currSubMotionId != 20) {
         return -2.0f;
     }
     return revise360(270.0f - mario->displayDirection);
@@ -683,11 +686,11 @@ void mot_ham2_post(void) {
     marioAdjustMoveDir();
 }
 
-HitEntry *hitEstimate(s32 *out) {
-    MarioWork *mario;
+HitEntry* hitEstimate(s32* out) {
+    MarioWork* mario;
     HitCheckQuery q;
     Vec pos;
-    HitEntry *hit;
+    HitEntry* hit;
     f32 s;
     f32 c;
     f32 cy;
@@ -700,8 +703,8 @@ HitEntry *hitEstimate(s32 *out) {
     *out = 0;
     a = mario->displayDirection;
     {
-        f32 off = (marioGetPtr()->dispFlags & MARIO_DISP_FLAG_REAR_POSE) ? (-20.0f) : (0.0f);
-        if ((a >= 90.0f) && (a <= 270.0f)) {
+        f32 off = (marioGetPtr()->dispFlags & MARIO_DISP_FLAG_REAR_POSE) ? -20.0f : 0.0f;
+        if (a >= 90.0f && a <= 270.0f) {
             a = toMovedir2(180.0f, off);
         } else {
             a = toMovedir2(0.0f, off);
@@ -709,7 +712,7 @@ HitEntry *hitEstimate(s32 *out) {
     }
     sincosf(&s, &c, a);
     h = mario->wPlayerCollisionBox.y;
-    cy = (f32) cos(3.14159265f);
+    cy = (f32)cos(3.14159265f);
     pos = mario->position;
     {
         Vec dir1 = {0.0f, 0.0f, 0.0f};
@@ -726,7 +729,7 @@ HitEntry *hitEstimate(s32 *out) {
             return hit;
         }
     }
-    cy = (f32) cos(1.2217306f);
+    cy = (f32)cos(1.2217306f);
     {
         Vec dir2 = {0.0f, 0.0f, 0.0f};
         pos.x = (s * k5) + mario->position.x;
@@ -740,11 +743,11 @@ HitEntry *hitEstimate(s32 *out) {
         q.targetDistance = 26.0f;
         hit = hitCheckVecFilter(&q, NULL);
         if (hit && (!(hitGetAttr(hit) & (HIT_ATTR_SHELL_THROUGH | HIT_ATTR_NPC_ONLY | HIT_ATTR_BERO)))) {
-            *out = ((q.hitPos.y - mario->position.y) > 30.0f) ? (4) : (5);
+            *out = (q.hitPos.y - mario->position.y > 30.0f) ? 4 : 5;
             return hit;
         }
     }
-    cy = (f32) cos(0.78539816f);
+    cy = (f32)cos(0.78539816f);
     {
         Vec dir3 = {0.0f, 0.0f, 0.0f};
         pos.x = (s * k5) + mario->position.x;
@@ -762,7 +765,7 @@ HitEntry *hitEstimate(s32 *out) {
             return hit;
         }
     }
-    cy = (f32) cos(0.0f);
+    cy = (f32)cos(0.0f);
     {
         Vec dir4 = {0.0f, 0.0f, 0.0f};
         dir4.y = -cy;
@@ -791,7 +794,7 @@ HitEntry *hitEstimate(s32 *out) {
                 q.targetDistance = d;
                 hit = hitCheckVecFilter(&q, NULL);
                 if (hit && (!(hitGetAttr(hit) & (HIT_ATTR_SHELL_THROUGH | HIT_ATTR_NPC_ONLY | HIT_ATTR_BERO)))) {
-                    *out = ((q.hitPos.y - mario->position.y) > 13.0f) ? (5) : (6);
+                    *out = (q.hitPos.y - mario->position.y > 13.0f) ? 5 : 6;
                     return hit;
                 }
             }
@@ -812,5 +815,5 @@ static HitEntry* hammerHitWall(f32 ang, f32* s, f32* co, f32* len, f32* hx, f32*
     MarioWork* m = marioGetPtr();
     sincosf(s, co, ang);
     *len = 2.0f * m->wPlayerCollisionBox.x;
-    return hitCheckFilter(0, hx, hy, hz, len, nx, ny, nz, m->position.x, 0.5f * m->wPlayerCollisionBox.y + m->position.y, m->position.z, *s, 0.0f, *co);
+    return hitCheckFilter(NULL, hx, hy, hz, len, nx, ny, nz, m->position.x, 0.5f * m->wPlayerCollisionBox.y + m->position.y, m->position.z, *s, 0.0f, *co);
 }

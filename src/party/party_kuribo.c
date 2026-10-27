@@ -22,7 +22,7 @@
 
 
 //.sbss
-u32 msg_ep; //unknown since it only gets written to once and never used
+u32 msg_ep; // cleared by kuribo_init; nothing reads it
 
 BOOL christineGetStatus(void) {
     PartyEntry* party = partyGetPtr(marioGetPartyId());
@@ -35,7 +35,7 @@ BOOL christineGetStatus(void) {
 USER_FUNC(pre_kurio_use) {
     void* hit;
     char* msg;
-    void* mario;
+    MarioWork* mario;
     PartyEntry* party = partyGetPtr(marioGetPartyId());
 
     if (!party) {
@@ -57,11 +57,11 @@ USER_FUNC(pre_kurio_use) {
     }
     {
         MapObjectEntry* mobj;
-        hit = ((MarioWork*)mario)->hitobjPush;
+        hit = mario->hitobjPush;
         if (!hit || !(hitGetAttr(hit) & HIT_ATTR_MOBJ)) {
-            hit = ((MarioWork*)mario)->hitobjFront;
+            hit = mario->hitobjFront;
             if (!hit || !(hitGetAttr(hit) & HIT_ATTR_MOBJ)) {
-                hit = ((MarioWork*)mario)->hitobjStandOn;
+                hit = mario->hitobjStandOn;
                 if (!hit || !(hitGetAttr(hit) & HIT_ATTR_MOBJ)) {
                     event->lwData[0] = (EvtWord)"msg_kuri_map";
                     return EVT_RETURN_DONE;
@@ -82,17 +82,29 @@ USER_FUNC(pre_kurio_use) {
                 msg = "obj_hlp_block_y_1";
             }
         } else if (!strcmp(mobj->animName, "MOBJ_Lv1BigBigBlock")) {
-            if (pouchGetHammerLv() < 1) msg = "obj_hlp_block_y_0";
-            else if (pouchGetHammerLv() < 2) msg = "obj_hlp_block_y_2";
-            else msg = "obj_hlp_block_y_3";
+            if (pouchGetHammerLv() < 1) {
+                msg = "obj_hlp_block_y_0";
+            } else if (pouchGetHammerLv() < 2) {
+                msg = "obj_hlp_block_y_2";
+            } else {
+                msg = "obj_hlp_block_y_3";
+            }
         } else if (!strcmp(mobj->animName, "MOBJ_Lv2Block") || !strcmp(mobj->animName, "MOBJ_Lv2BigBlock")) {
-            if (pouchGetHammerLv() < 1) msg = "obj_hlp_block_s_0";
-            else if (pouchGetHammerLv() < 3) msg = "obj_hlp_block_s_1";
-            else msg = "obj_hlp_block_s_2";
+            if (pouchGetHammerLv() < 1) {
+                msg = "obj_hlp_block_s_0";
+            } else if (pouchGetHammerLv() < 3) {
+                msg = "obj_hlp_block_s_1";
+            } else {
+                msg = "obj_hlp_block_s_2";
+            }
         } else if (!strcmp(mobj->animName, "MOBJ_Lv2BigBigBlock")) {
-            if (pouchGetHammerLv() < 1) msg = "obj_hlp_block_s_0";
-            else if (pouchGetHammerLv() < 3) msg = "obj_hlp_block_s_1";
-            else msg = "obj_hlp_block_s_3";
+            if (pouchGetHammerLv() < 1) {
+                msg = "obj_hlp_block_s_0";
+            } else if (pouchGetHammerLv() < 3) {
+                msg = "obj_hlp_block_s_1";
+            } else {
+                msg = "obj_hlp_block_s_3";
+            }
         } else if (!strcmp(mobj->animName, "MOBJ_Lv3BigBigBlock") || !strcmp(mobj->animName, "MOBJ_Lv3BigBlock") || !strcmp(mobj->animName, "MOBJ_Lv3Block")) {
             msg = "obj_hlp_redyellow_block";
         } else if (!strcmp(mobj->animName, "MOBJ_Block") || !strcmp(mobj->animName, "MOBJ_PinkBlock")) {
@@ -116,9 +128,9 @@ USER_FUNC(pre_kurio_use) {
             msg = pouchGetJumpLv() < 2 ? "obj_hlp_big_switch_1" : "obj_hlp_big_switch_2";
         } else if (!strcmp(mobj->animName, "MOBJ_TreasureBox") || !strcmp(mobj->animName, "MOBJ_GrayTreasureBox") ||
                    !strcmp(mobj->animName, "MOBJ_BigTreasureBox")) {
-            msg = mobjCheckItemboxOpen((void*)mobj) == 2 ? "obj_hlp_takara_1" : "obj_hlp_takara_0";
+            msg = mobjCheckItemboxOpen(mobj) == 2 ? "obj_hlp_takara_1" : "obj_hlp_takara_0";
         } else if (!strcmp(mobj->animName, "MOBJ_BlackTreasureBox")) {
-            msg = mobjCheckItemboxOpen((void*)mobj) == 2 ? "obj_hlp_blackbox_1" : "obj_hlp_blackbox_0";
+            msg = mobjCheckItemboxOpen(mobj) == 2 ? "obj_hlp_blackbox_1" : "obj_hlp_blackbox_0";
         } else if (!strcmp(mobj->animName, "MOBJ_RedJumpStand") || !strcmp(mobj->animName, "MOBJ_RedJumpStand2") ||
                    !strcmp(mobj->animName, "MOBJ_BlueJumpStand") || !strcmp(mobj->animName, "MOBJ_BlueJumpStand2") ||
                    !strcmp(mobj->animName, "MOBJ_MapJumpStand")) {
@@ -133,7 +145,9 @@ USER_FUNC(pre_kurio_use) {
             msg = "obj_hlp_yuka_switch";
         } else if (!strcmp(mobj->animName, "MOBJ_BreakingFloor") || !strcmp(mobj->animName, "MOBJ_BlackBreakingFloor")) {
             msg = "obj_hlp_hip_attack";
-            if (pouchGetJumpLv() >= 2) msg = "obj_hlp_hip_attack_1";
+            if (pouchGetJumpLv() >= 2) {
+                msg = "obj_hlp_hip_attack_1";
+            }
         } else if (!strcmp(mobj->animName, "MOBJ_BombRock")) {
             msg = "obj_hlp_bomb_rock";
         } else if (!strcmp(mobj->animName, "MOBJ_Signboard")) {
@@ -147,6 +161,7 @@ USER_FUNC(pre_kurio_use) {
         } else {
             msg = "msg_kuri_map";
         }
+        // FAKE: msg is always set by the chain above; dropping the test changes the object
         if (msg) {
             event->lwData[0] = (EvtWord)msg;
             partyChgPoseId(party, 7);
@@ -171,7 +186,7 @@ USER_FUNC(post_kurio_use) {
 }
 
 void kuribo_init_800C23B4(PartyEntry* party) {
-    party->memberKind = 1;
+    party->memberKind = PARTY_MEMBER_GOOMBELLA;
     party->moveKind = 0;
     party->height = 24.0f;
     party->width = 26.0f;
@@ -180,11 +195,11 @@ void kuribo_init_800C23B4(PartyEntry* party) {
 
 EVT_BEGIN(kurio_msg_evt)
     CALL(pre_kurio_use)
-    IF_INT_EQUAL(4264967296, 0)
+    IF_INT_EQUAL(LW(0), 0)
         CALL(post_kurio_use)
         RETURN
     END_IF
-    CALL(evt_msg_print, 0, 4264967296, 0, STRING("party"))
+    CALL(evt_msg_print, 0, LW(0), 0, STRING("party"))
     CALL(post_kurio_use)
     RETURN
 EVT_END()
@@ -198,7 +213,7 @@ void kuribo_use_post(PartyEntry* party) {
 
 void kuribo_use(PartyEntry* party) {
     MarioWork* player = party->playerPtr;
-    void* wall;
+    HitEntry* wall;
     Vec pos;
     EventEntry* evt;
 
@@ -266,6 +281,7 @@ void kuribo_use(PartyEntry* party) {
     case 20:
         party->moveFrames = 5;
         party->useMotionId = 21;
+        // fall through
     case 21:
         if (--party->moveFrames > 0) {
             break;

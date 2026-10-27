@@ -17,13 +17,13 @@ void mot_yoshi(void) {
         mario->airTimer = 0;
         mario->currSubMotionId = 0;
         mario->baseSpeed = 0.0f;
-        mario->hitobjFrontA = 0;
-        mario->hitobjFront = 0;
+        mario->hitobjFrontA = NULL;
+        mario->hitobjFront = NULL;
         mario->hitobjStandOn = NULL;
         mario->hitobjPush = NULL;
-        mario->hitobjWall = 0;
-        mario->hitobjHead = 0;
-        mario->hitobjUnder = 0;
+        mario->hitobjWall = NULL;
+        mario->hitobjHead = NULL;
+        mario->hitobjUnder = NULL;
     }
 }
 

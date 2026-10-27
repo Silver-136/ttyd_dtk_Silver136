@@ -11,9 +11,6 @@
 #include "sound.h"
 #include "demo/DEMOPad.h"
 
-#ifdef VERSION_G8ME01
-// US version: all functions exact (loadDraw needs the two FAKE spellings marked inside it).
-#endif
 #include "countdown.h"
 #include "driver/fadedrv.h"
 #include "driver/seqdrv.h"
@@ -86,12 +83,10 @@ typedef struct WinDt {
 } WinDt;
 
 double sin(double);
-double fmod(double, double);
 void FontDrawString(f32 x, f32 y, const char* str);
 void loadMain(SequenceWork* seq);
 void loadDraw(CameraId camera, void* param);
 void continueGame(void);
-
 
 WinDt win_dt[9] = {
     {-140.0f, 75.0f, -120.0f, 60.0f, 13, 0, {7, 2, 1, 1}},
@@ -133,7 +128,7 @@ static EvtWord evt_shake[12];
 s32 evt_seq_load_keep_msg_window(EventEntry* evt, BOOL isFirstCall) {
     fadeReset(4);
     wp->printWindowId = evt->printWindowId;
-    return 2;
+    return EVT_RETURN_DONE;
 }
 
 void seq_loadInit(SequenceWork* seq) {
@@ -159,11 +154,6 @@ static inline BOOL loadStart(void) {
     return FALSE;
 }
 
-void GXInitTexObjLOD(GXTexObj* obj, GXTexFilter min_filt, GXTexFilter mag_filt,
-    f32 min_lod, f32 max_lod, f32 lod_bias, GXBool bias_clamp,
-    GXBool do_edge_lod, GXAnisotropy max_aniso);
-int __div2i();
-int __mod2u();
 #endif
 void seq_loadMain(SequenceWork* seq) {
     switch (seq->state) {
@@ -183,7 +173,7 @@ void seq_loadMain(SequenceWork* seq) {
             break;
         case 2:
             if (evtCheckID(wp->evt->eventId) == 0) {
-                if (evtGetValue(NULL, (s32)0xFAA2B580) != 1) {
+                if (evtGetValue(NULL, GF(0)) != 1) {
                     seqSetSeq(SEQ_TITLE, NULL, NULL);
                 } else {
                     wp->evt = NULL;
@@ -191,7 +181,7 @@ void seq_loadMain(SequenceWork* seq) {
                     wp->state = 0;
                     wp->cardCode = cardGetCode();
                     wp->flags &= ~LOAD_FLAG_HIDE_CURSOR;
-                    if (OSGetSoundMode() == 0) {
+                    if (OSGetSoundMode() == OS_SOUND_MODE_MONO) {
                         SoundSetOutputMode(SND_OUTPUTMODE_MONO);
                         gp->soundMode = 0;
                         wp->soundMode = 0;
@@ -260,7 +250,7 @@ void loadMain(SequenceWork* seq) {
     }
     wp->cardCode = code;
     for (i = 0; i < 4; i++) {
-        flags = cardGetFilePtr()->saves[(i)].data.flags;
+        flags = cardGetFilePtr()->saves[i].data.flags;
         if (!(flags & 1) || (flags & 2)) {
             break;
         }
@@ -272,7 +262,7 @@ void loadMain(SequenceWork* seq) {
     }
     wp->flags &= ~LOAD_FLAG_NO_COPY;
     for (i = 0; i < 4; i++) {
-        flags = cardGetFilePtr()->saves[(i)].data.flags;
+        flags = cardGetFilePtr()->saves[i].data.flags;
         if (!(flags & 1) && !(flags & 2)) {
             break;
         }
@@ -296,79 +286,79 @@ void loadMain(SequenceWork* seq) {
             } else if (dir & DEMO_STICK_RIGHT) {
                 wp->slot = win_dt[prev].next[3];
             } else if (trg & PAD_BUTTON_A) {
-                flags = cardGetFilePtr()->saves[(wp->slot)].data.flags;
+                flags = cardGetFilePtr()->saves[wp->slot].data.flags;
                 switch (wp->slot) {
                     case 0:
                     case 1:
                     case 2:
                     case 3:
                         if (flags & 2) {
-                            SFX(0x13);
+                            SFX(PSND_SFX_CURSOR_CANCEL1);
                         } else if (flags & 1) {
                             wp->state = 0x1e;
-                            SFX(0x12);
+                            SFX(PSND_SFX_CURSOR_OK1);
                         } else {
                             wp->state = 0x14;
-                            SFX(0x12);
+                            SFX(PSND_SFX_CURSOR_OK1);
                         }
                         break;
                     case 4:
                         if (!(wp->flags & LOAD_FLAG_NO_DELETE)) {
                             for (i = 0; i < 4; i++) {
-                                flags = cardGetFilePtr()->saves[(i)].data.flags;
+                                flags = cardGetFilePtr()->saves[i].data.flags;
                                 if (!(flags & 1) || (flags & 2)) {
                                     break;
                                 }
                             }
                             if (i < 4) {
-                                SFX(0x12);
+                                SFX(PSND_SFX_CURSOR_OK1);
                                 wp->slot = 0;
                                 wp->state = 0x28;
                             } else {
-                                SFX(0x13);
+                                SFX(PSND_SFX_CURSOR_CANCEL1);
                             }
                         }
                         break;
                     case 5:
                         if (!(wp->flags & LOAD_FLAG_NO_COPY)) {
                             for (i = 0; i < 4; i++) {
-                                flags = cardGetFilePtr()->saves[(i)].data.flags;
+                                flags = cardGetFilePtr()->saves[i].data.flags;
                                 if (!(flags & 2) && !(flags & 1)) {
                                     break;
                                 }
                             }
                             if (i < 4) {
-                                SFX(0x12);
+                                SFX(PSND_SFX_CURSOR_OK1);
                                 wp->slot = 0;
                                 wp->state = 0x32;
                             } else {
-                                SFX(0x13);
+                                SFX(PSND_SFX_CURSOR_CANCEL1);
                             }
                         }
                         break;
                     case 6:
-                        SFX(0x13);
+                        SFX(PSND_SFX_CURSOR_CANCEL1);
                         wp->state = 0xa;
                         break;
                     case 7:
-                        SFX(0x12);
-                        psndBGMOff(0x800);
+                        SFX(PSND_SFX_CURSOR_OK1);
+                        psndBGMOff(PSND_SILENT);
                         wp->state = 0x64;
                         break;
                     case 8:
-                        SFX(0x12);
+                        SFX(PSND_SFX_CURSOR_OK1);
                         wp->state = 0xc8;
                         break;
                 }
             } else if (trg & PAD_BUTTON_B) {
-                SFX(0x13);
+                SFX(PSND_SFX_CURSOR_CANCEL1);
                 wp->state = 0xa;
             }
             if (prev != wp->slot) {
                 if (wp->slot < 4) {
                     SFX(9);
                 } else {
-                    SFX(5);
+                    SFX(PSND_SFX_CURSOR_MOVE1);
                 }
             }
             wp->tx = win_dt[wp->slot].x + win_dt[wp->slot].ofsX;
@@ -392,7 +382,7 @@ void loadMain(SequenceWork* seq) {
         case 0x15:
             if (!evtCheckID(wp->evt->eventId)) {
                 wp->flags &= ~LOAD_FLAG_HIDE_CURSOR;
-                if (evtGetValue(NULL, (s32)0xFD050F80) == 1) {
+                if (evtGetValue(NULL, GW(0)) == 1) {
                     wp->state++;
                 } else {
                     wp->state = 1;
@@ -496,22 +486,22 @@ void loadMain(SequenceWork* seq) {
                 wp->slot = win_dt2[prev].next[3];
             } else if (trg & PAD_BUTTON_A) {
                 if (prev < 4) {
-                    flags = cardGetFilePtr()->saves[(wp->slot)].data.flags;
+                    flags = cardGetFilePtr()->saves[wp->slot].data.flags;
                     if ((flags & 2) || !(flags & 1)) {
-                        SFX(0x12);
+                        SFX(PSND_SFX_CURSOR_OK1);
                         wp->state++;
                     } else {
-                        SFX(0x13);
+                        SFX(PSND_SFX_CURSOR_CANCEL1);
                     }
                 } else {
                     wp->slot = 4;
                     wp->state = 1;
-                    SFX(0x13);
+                    SFX(PSND_SFX_CURSOR_CANCEL1);
                 }
             } else if (trg & PAD_BUTTON_B) {
                 wp->slot = 4;
                 wp->state = 1;
-                SFX(0x13);
+                SFX(PSND_SFX_CURSOR_CANCEL1);
             }
             if (prev != wp->slot && wp->slot < 4) {
                 SFX(9);
@@ -527,7 +517,7 @@ void loadMain(SequenceWork* seq) {
             break;
         case 0x2a:
             if (!evtCheckID(wp->evt->eventId)) {
-                if (evtGetValue(NULL, (s32)0xFAA2B580) == 0) {
+                if (evtGetValue(NULL, GF(0)) == 0) {
                     wp->flags &= ~LOAD_FLAG_HIDE_CURSOR;
                     wp->slot = 4;
                     wp->state = 1;
@@ -551,23 +541,23 @@ void loadMain(SequenceWork* seq) {
                 wp->slot = win_dt2[prev].next[3];
             } else if (trg & PAD_BUTTON_A) {
                 if (prev < 4) {
-                    flags = cardGetFilePtr()->saves[(wp->slot)].data.flags;
+                    flags = cardGetFilePtr()->saves[wp->slot].data.flags;
                     if (!(flags & 2) && !(flags & 1)) {
                         wp->state = 0x33;
                         wp->copyFrom = wp->slot;
                         wp->copyTo = (wp->copyFrom + 1) % 4;
                         wp->slot = wp->copyTo;
-                        SFX(0x12);
+                        SFX(PSND_SFX_CURSOR_OK1);
                     }
                 } else {
                     wp->slot = 5;
                     wp->state = 1;
-                    SFX(0x13);
+                    SFX(PSND_SFX_CURSOR_CANCEL1);
                 }
             } else if (trg & PAD_BUTTON_B) {
                 wp->slot = 5;
                 wp->state = 1;
-                SFX(0x13);
+                SFX(PSND_SFX_CURSOR_CANCEL1);
             }
             if (prev != wp->slot && wp->slot < 4) {
                 SFX(9);
@@ -597,11 +587,11 @@ void loadMain(SequenceWork* seq) {
             } else if (trg & PAD_BUTTON_A) {
                 wp->state = 0x34;
                 wp->copyTo = wp->slot;
-                SFX(0x12);
+                SFX(PSND_SFX_CURSOR_OK1);
             } else if (trg & PAD_BUTTON_B) {
                 wp->slot = wp->copyFrom;
                 wp->state = 0x32;
-                SFX(0x13);
+                SFX(PSND_SFX_CURSOR_CANCEL1);
             }
             if (prev != wp->slot && wp->slot < 4) {
                 SFX(9);
@@ -619,7 +609,7 @@ void loadMain(SequenceWork* seq) {
             break;
         case 0x35:
             if (!evtCheckID(wp->evt->eventId)) {
-                if (evtGetValue(NULL, (s32)0xFAA2B580) == 0) {
+                if (evtGetValue(NULL, GF(0)) == 0) {
                     wp->flags &= ~LOAD_FLAG_HIDE_CURSOR;
                     wp->slot = 5;
                     wp->state = 1;
@@ -635,43 +625,43 @@ void loadMain(SequenceWork* seq) {
             sound = wp->soundModeSel;
             if (dir & DEMO_STICK_UP) {
                 wp->soundModeSel = wp->soundModeSel - 1;
-                SFX(5);
+                SFX(PSND_SFX_CURSOR_MOVE1);
             } else if (dir & DEMO_STICK_DOWN) {
                 wp->soundModeSel = wp->soundModeSel + 1;
-                SFX(5);
+                SFX(PSND_SFX_CURSOR_MOVE1);
             } else if (trg & PAD_BUTTON_A) {
                 switch (sound) {
                     case 0:
-                        OSSetSoundMode(0);
+                        OSSetSoundMode(OS_SOUND_MODE_MONO);
                         gp->soundMode = 0;
                         break;
                     case 1:
-                        OSSetSoundMode(1);
+                        OSSetSoundMode(OS_SOUND_MODE_STEREO);
                         gp->soundMode = 0;
                         break;
                     case 2:
-                        OSSetSoundMode(1);
+                        OSSetSoundMode(OS_SOUND_MODE_STEREO);
                         gp->soundMode = 1;
                         break;
                 }
-                if (OSGetSoundMode() == 0) {
+                if (OSGetSoundMode() == OS_SOUND_MODE_MONO) {
                     SoundSetOutputMode(SND_OUTPUTMODE_MONO);
                 } else {
                     SoundSetOutputMode(SND_OUTPUTMODE_STEREO);
                 }
-                SFX(0x12);
+                SFX(PSND_SFX_CURSOR_OK1);
                 psndBGMOn(PSND_CONTINUE | PSND_UNSILENT, NULL);
-                psndENVOff(0x200);
+                psndENVOff(PSND_FADEOUT);
                 wp->soundMode = wp->soundModeSel;
                 wp->flags &= ~LOAD_FLAG_DIM;
                 wp->state = 1;
                 break;
             } else if (trg & PAD_BUTTON_B) {
-                SFX(0x13);
+                SFX(PSND_SFX_CURSOR_CANCEL1);
                 psndBGMOn(PSND_CONTINUE | PSND_UNSILENT, NULL);
-                psndENVOff(0x200);
+                psndENVOff(PSND_FADEOUT);
                 wp->soundModeSel = wp->soundMode;
-                if (OSGetSoundMode() == 0) {
+                if (OSGetSoundMode() == OS_SOUND_MODE_MONO) {
                     SoundSetOutputMode(SND_OUTPUTMODE_MONO);
                 } else {
                     SoundSetOutputMode(SND_OUTPUTMODE_STEREO);
@@ -704,7 +694,7 @@ void loadMain(SequenceWork* seq) {
             wp->tx = -74.0f;
             wp->ty = 4.0f + (50.0f - 50.0f * wp->soundModeSel);
 #else
-            wp->tx = (-74.0f);
+            wp->tx = -74.0f;
             wp->ty = 4.0f + (50.0f - 50.0f * wp->soundModeSel);
 #endif
             break;
@@ -712,13 +702,13 @@ void loadMain(SequenceWork* seq) {
             wp->flags |= LOAD_FLAG_DIM;
             if (dir & DEMO_STICK_UP) {
                 wp->rumbleOffSel--;
-                SFX(5);
+                SFX(PSND_SFX_CURSOR_MOVE1);
             } else if (dir & DEMO_STICK_DOWN) {
                 wp->rumbleOffSel++;
-                SFX(5);
+                SFX(PSND_SFX_CURSOR_MOVE1);
             } else if (trg & PAD_BUTTON_A) {
                 gp->rumbleEnabled = wp->rumbleOffSel == 0;
-                SFX(0x12);
+                SFX(PSND_SFX_CURSOR_OK1);
                 wp->rumbleOff = wp->rumbleOffSel;
                 wp->flags &= ~LOAD_FLAG_DIM;
                 wp->state = 1;
@@ -726,7 +716,7 @@ void loadMain(SequenceWork* seq) {
                     evtEntryType(evt_shake, 0, 0, 0);
                 }
             } else if (trg & PAD_BUTTON_B) {
-                SFX(0x13);
+                SFX(PSND_SFX_CURSOR_CANCEL1);
                 wp->rumbleOffSel = wp->rumbleOff;
                 wp->flags &= ~LOAD_FLAG_DIM;
                 wp->state = 1;
@@ -740,18 +730,19 @@ void loadMain(SequenceWork* seq) {
 #ifdef VERSION_G8ME01
             wp->tx = -74.0f;
 #else
-            wp->tx = (-74.0f);
+            wp->tx = -74.0f;
 #endif
             wp->ty = 4.0f + (30.0f - 50.0f * wp->rumbleOffSel);
             break;
     }
     wp->x += (wp->tx - wp->x) / 4.0f;
     wp->y += (wp->ty - wp->y) / 4.0f;
-    { f32 s = 2.0f * (f32)sin(gp->retraceCount / 8.0f); wp->x += __fabsf(s); }
+    {
+        f32 s = 2.0f * (f32)sin(gp->retraceCount / 8.0f);
+        wp->x += __fabsf(s);
+    }
     dispEntry(CAMERA_3D, 1000.0f, 0, loadDraw, NULL);
 }
-
-#define GXFIFO_F32 (*(volatile f32*)0xCC008000)
 
 static inline void loadDrawBg(u32 id, f32 x0, f32 y0, f32 x1, f32 y1) {
     GXTexObj obj;
@@ -769,26 +760,14 @@ static inline void loadDrawBg(u32 id, f32 x0, f32 y0, f32 x1, f32 y1) {
     PSMTXScale(m, (f32)w / GXGetTexObjWidth(&obj), (f32)h / GXGetTexObjHeight(&obj), 1.0f);
     GXLoadTexMtxImm(m, GX_TEXMTX0, GX_MTX2x4);
     GXBegin(GX_QUADS, GX_VTXFMT0, 4);
-    GXFIFO_F32 = x0;
-    GXFIFO_F32 = y0;
-    GXFIFO_F32 = 0.0f;
-    GXFIFO_F32 = 0.0f;
-    GXFIFO_F32 = 0.0f;
-    GXFIFO_F32 = x0;
-    GXFIFO_F32 = y1;
-    GXFIFO_F32 = 0.0f;
-    GXFIFO_F32 = 0.0f;
-    GXFIFO_F32 = 1.0f;
-    GXFIFO_F32 = x1;
-    GXFIFO_F32 = y1;
-    GXFIFO_F32 = 0.0f;
-    GXFIFO_F32 = 1.0f;
-    GXFIFO_F32 = 1.0f;
-    GXFIFO_F32 = x1;
-    GXFIFO_F32 = y0;
-    GXFIFO_F32 = 0.0f;
-    GXFIFO_F32 = 1.0f;
-    GXFIFO_F32 = 0.0f;
+    GXPosition3f32(x0, y0, 0.0f);
+    GXTexCoord2f32(0.0f, 0.0f);
+    GXPosition3f32(x0, y1, 0.0f);
+    GXTexCoord2f32(0.0f, 1.0f);
+    GXPosition3f32(x1, y1, 0.0f);
+    GXTexCoord2f32(1.0f, 1.0f);
+    GXPosition3f32(x1, y0, 0.0f);
+    GXTexCoord2f32(1.0f, 0.0f);
 }
 
 void loadDraw(CameraId camera, void* param) {
@@ -796,8 +775,8 @@ void loadDraw(CameraId camera, void* param) {
     GXColor white = {255, 255, 255, 255};
     GXColor gray = {160, 160, 160, 255};
     GXColor dark = {128, 128, 128, 128};
-    f32 vp[6];
-    f32 proj[7];
+    f32 vp[GX_VIEWPORT_SZ];
+    f32 proj[GX_PROJECTION_SZ];
     CameraEntry saved;
     char buf[0x20];
     char buf2[0x100];
@@ -855,9 +834,9 @@ void loadDraw(CameraId camera, void* param) {
     win1 = (WinDt*)cam;
     GXLoadPosMtxImm(((CameraEntry*)win1)->view, GX_PNMTX0);
     GXSetCurrentMtx(GX_PNMTX0);
-    loadDrawBg(0x35, (-304.0f), 240.0f, (-272.0f), (-240.0f));
-    loadDrawBg(0x34, (-272.0f), 240.0f, 272.0f, (-240.0f));
-    loadDrawBg(0x36, 272.0f, 240.0f, 304.0f, (-240.0f));
+    loadDrawBg(0x35, -304.0f, 240.0f, -272.0f, -240.0f);
+    loadDrawBg(0x34, -272.0f, 240.0f, 272.0f, -240.0f);
+    loadDrawBg(0x36, 272.0f, 240.0f, 304.0f, -240.0f);
 
     win1 = win_dt;
 #endif
@@ -912,7 +891,7 @@ void loadDraw(CameraId camera, void* param) {
 #ifdef VERSION_G8ME01
     windowDispGX_Waku_col(0, (GXColor){255, 255, 255, 255}, -250.0f, 200.0f, 500.0f, 40.0f, 20.0f);
 #else
-    windowDispGX_Waku_col(0, (GXColor){255, 255, 255, 255}, (-250.0f), 200.0f, 500.0f, 40.0f, 20.0f);
+    windowDispGX_Waku_col(0, (GXColor){255, 255, 255, 255}, -250.0f, 200.0f, 500.0f, 40.0f, 20.0f);
 #endif
     FontDrawStart();
     {
@@ -959,7 +938,7 @@ void loadDraw(CameraId camera, void* param) {
         FontDrawScale(0.6f);
         FontDrawEdge();
 #ifdef VERSION_G8ME01
-        if (((u32)gp->language) == 0) {
+        if ((u32)gp->language == LANGUAGE_JP) {
             str = "\x83\x66\x81\x5B\x83\x5E";
         } else {
             str = msgSearch("msg_mcard_file");
@@ -978,7 +957,7 @@ void loadDraw(CameraId camera, void* param) {
         }
         if (flags & 2) {
 #ifdef VERSION_G8ME01
-            if (((u32)gp->language) == 0) {
+            if ((u32)gp->language == LANGUAGE_JP) {
                 str = "\x82\xB1\x82\xED\x82\xEA\x82\xC4\x82\xA2\x82\xDC\x82\xB7";
             } else {
                 str = msgSearch("msg_mcard_kowareteru");
@@ -989,14 +968,14 @@ void loadDraw(CameraId camera, void* param) {
             str = msgSearch("msg_mcard_kowaretitle");
             FontDrawString(win1[0]->x - FontGetMessageWidth(str) / 2, 70.0f + win1[0]->y, str);
         } else if (flags & 1) {
-            if (((u32)gp->language) == 0) {
+            if ((u32)gp->language == LANGUAGE_JP) {
                 str = "\x83\x6A\x83\x85\x81\x5B\x83\x51\x81\x5B\x83\x80";
             } else {
                 str = msgSearch("msg_mcard_new_game");
             }
             FontDrawString(win1[0]->x - FontGetMessageWidth(str) / 2.0f, 12.0f + win1[0]->y, str);
         } else if (gsw0 == 0) {
-            if (((u32)gp->language) == 0) {
+            if ((u32)gp->language == LANGUAGE_JP) {
                 str = "\x82\xCD\x82\xB6\x82\xDF\x82\xA9\x82\xE7";
             } else {
                 str = msgSearch("msg_mcard_hajimekara");
@@ -1006,7 +985,7 @@ void loadDraw(CameraId camera, void* param) {
                 FontDrawString(win1[0]->x - FontGetMessageWidth(name) / 2, 70.0f + win1[0]->y, name);
             }
         } else {
-            FontGetMessageWidth(((u32)gp->language) != 0 ? "88" : "\x82\x57\x82\x57");
+            FontGetMessageWidth((u32)gp->language != LANGUAGE_JP ? "88" : "\x82\x57\x82\x57");
 #else
             str = "\202\261\202\355\202\352\202\304\202\242\202\334\202\267";
             FontDrawString(win1->x - FontGetMessageWidth(str) / 2.0f, 12.0f + win1->y, str);
@@ -1034,9 +1013,9 @@ void loadDraw(CameraId camera, void* param) {
 #ifdef VERSION_G8ME01
                 FontDrawString(win1[0]->x - FontGetMessageWidth(name) / 2, 70.0f + win1[0]->y, name);
             }
-            sprintf(buf2, ((u32)gp->language) != 0 ? "%s %s" : "%s\x81\x40%s", msgSearch("msg_menu_mario_level"), winZenkakuStr(level));
+            sprintf(buf2, (u32)gp->language != LANGUAGE_JP ? "%s %s" : "%s\x81\x40%s", msgSearch("msg_menu_mario_level"), winZenkakuStr(level));
             FontDrawString(win1[0]->x - FontGetMessageWidth(buf2) / 2.0f, 30.0f + win1[0]->y, buf2);
-            sprintf(buf2, ((u32)gp->language) != 0 ? "%s " : "%s\x81\x40", msgSearch("msg_menu_mario_num_playtime"));
+            sprintf(buf2, (u32)gp->language != LANGUAGE_JP ? "%s " : "%s\x81\x40", msgSearch("msg_menu_mario_num_playtime"));
 #else
                 FontDrawString(win1->x - FontGetMessageWidth(name) / 2, 70.0f + win1->y, name);
             }
@@ -1056,7 +1035,7 @@ void loadDraw(CameraId camera, void* param) {
             FontDrawString(win1[0]->x - w / 2.0f, win1[0]->y, buf2);
             FontDrawScaleVec((Vec){1.0f, 1.0f, 1.0f});
             w = FontGetMessageWidth(buf2);
-            sprintf(buf2, ((u32)gp->language) != 0 ? "%s " : "%s\x81\x40", msgSearch("msg_menu_mario_num_playtime"));
+            sprintf(buf2, (u32)gp->language != LANGUAGE_JP ? "%s " : "%s\x81\x40", msgSearch("msg_menu_mario_num_playtime"));
             strcat(buf2, winZenkakuStrPad(hours, 2));
             x = FontGetMessageWidth(buf2);
             if (w > 200.0f) {
@@ -1362,8 +1341,8 @@ void continueGame(void) {
             seqSetSeq(SEQ_MAP_CHANGE, "aaa_00", "prologue");
             break;
         case 24:
-            gp->areaFadeInType = 0x3d;
-            gp->areaFadeOutType = 0x38;
+            gp->areaFadeInType = 61;
+            gp->areaFadeOutType = 56;
             seqSetSeq(SEQ_MAP_CHANGE, "aji_10", 0);
             break;
     }

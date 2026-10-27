@@ -148,7 +148,7 @@ void mot_walk(void) {
             pushCaseActive = FALSE;
         } else {
             caseEntry = caseCheckHitObj(player->hitobjPush);
-            if (caseEntry != NULL && caseEntry->conditionId == 0xA) {
+            if (caseEntry != NULL && caseEntry->conditionId == CASE_PUSH) {
                 pushCaseActive = TRUE;
             } else {
                 pushCaseActive = FALSE;
@@ -183,7 +183,7 @@ void mot_walk(void) {
         } else if (!marioBgmodeChk()) {
             marioChgPose("M_W_1");
         }
-        if (!(player->dispFlags & (MARIO_DISP_FLAG_HIDE << 24))) {
+        if (!(player->dispFlags & MARIO_DISP_FLAG_SLIT)) {
             player->currSubMotionId = 0;
         }
         player->multiTimer = 0;
@@ -215,7 +215,7 @@ void mot_walk(void) {
                 }
             }
             player->directionView = player->controlStickAngle;
-            if (player->hitobjStandOn != 0) {
+            if (player->hitobjStandOn != NULL) {
                 // both branches pass 0x28: the gravity check is in the retail code
                 if (player->playerGravity == 1.0f) {
                     seInterval = 0x28;
@@ -259,7 +259,7 @@ void mot_dash(void) {
         pushCaseActive = FALSE;
     } else {
         caseEntry = caseCheckHitObj(player->hitobjPush);
-        if (caseEntry != NULL && caseEntry->conditionId == 0xA) {
+        if (caseEntry != NULL && caseEntry->conditionId == CASE_PUSH) {
             pushCaseActive = TRUE;
         } else {
             pushCaseActive = FALSE;

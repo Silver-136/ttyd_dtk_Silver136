@@ -119,8 +119,8 @@ void marioUpdateCamCollision(Vec collision) {
 
 void marioUpdateCam(void) {
     MarioWork* mario = marioGetPtr();
-    f32 sin;
-    f32 cos;
+    f32 sinYaw;
+    f32 cosYaw;
 
     UPDATE_CAM_SHIFT(mario->camShiftX, mario->camShiftTargetX, mario->camShiftRate.x);
     UPDATE_CAM_SHIFT(mario->camShiftY, mario->camShiftTargetY, mario->camShiftRate.y);
@@ -128,18 +128,18 @@ void marioUpdateCam(void) {
 
     if (!(mario->dispFlags & MARIO_DISP_FLAG_NO_UPDATE_CAM_POS)) {
         camGetPtr(CAMERA_3D);
-        sincosf(&sin, &cos, camGetPtr(CAMERA_3D)->viewYaw - 90.0f);
+        sincosf(&sinYaw, &cosYaw, camGetPtr(CAMERA_3D)->viewYaw - 90.0f);
         if (!(mario->dispFlags & MARIO_DISP_FLAG_CAM_FOLLOW_Y_OFF)) {
-            mario->camTarget.x = mario->position.x + sin * mario->camShiftX;
-            mario->camTarget.z = mario->position.z + cos * mario->camShiftX;
+            mario->camTarget.x = mario->position.x + sinYaw * mario->camShiftX;
+            mario->camTarget.z = mario->position.z + cosYaw * mario->camShiftX;
             mario->camTarget.y = mario->camShiftY + (mario->position.y + mario->dispOfs.y);
             if (mario->currMotionId == MARIO_MOTION_SHIP) {
                 mario->camTarget.y += 10.0f;
             }
             mario->camZoomWeight = mario->camShiftZ;
         } else {
-            mario->camTarget.x = mario->position.x + sin * mario->camShiftX + sin * mario->camShiftZ;
-            mario->camTarget.z = mario->position.z + cos * mario->camShiftX + cos * mario->camShiftZ;
+            mario->camTarget.x = mario->position.x + sinYaw * mario->camShiftX + sinYaw * mario->camShiftZ;
+            mario->camTarget.z = mario->position.z + cosYaw * mario->camShiftX + cosYaw * mario->camShiftZ;
             mario->camZoomWeight = mario->camShiftZ;
         }
     }
@@ -208,7 +208,7 @@ BOOL marioCamZoomOff(void) {
     durationMs = mario->zoomOffTime * 10;
     mario->zoomOffTimer = ((durationMs * 60) / 1000);
     args[0] = durationMs;
-    args[1] = 11;
+    args[1] = EASING_SINE_IN_OUT;
     event.args = args;
     evt_cam3d_evt_off(&event, TRUE);
     return TRUE;
@@ -294,7 +294,7 @@ BOOL marioCamZoomUp(void) {
     args[4] = (s16)(s32)cloudPos.y;
     args[5] = (s16)(s32)cloudPos.z;
     args[6] = 1500;
-    args[7] = 3;
+    args[7] = EASING_QUARTIC_IN;
 
     event.args = args;
     evt_cam3d_evt_set(&event, TRUE);
@@ -365,7 +365,7 @@ BOOL marioCamZoomUpLevelMain(void) {
     args[4] = (s16)(s32)cloudPos.y;
     args[5] = (s16)(s32)cloudPos.z;
     args[6] = 1500;
-    args[7] = 3;
+    args[7] = EASING_QUARTIC_IN;
 
     event.args = args;
     evt_cam3d_evt_set(&event, TRUE);

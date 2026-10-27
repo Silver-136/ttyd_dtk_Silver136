@@ -229,10 +229,6 @@ s32 uranaisi_data_make_next(const char* prefix, s32 type);
         }                                           \
     }
 
-static inline s32 uranaiCount(UranaiWork* w) {
-    return w->count;
-}
-
 USER_FUNC(uranaisi_data_alloc) {
     const char* prefix;
     UranaiWork* wp = &_udt;
@@ -256,10 +252,10 @@ USER_FUNC(uranaisi_data_alloc) {
             break;
     }
     wp->count = count;
-    wp->info = _mapAlloc(uranaiCount(wp) * sizeof(UranaiInfo) + 0x40);
-    memset(wp->info, 0, uranaiCount(wp) * sizeof(UranaiInfo) + 0x40);
+    wp->info = _mapAlloc(wp->count * sizeof(UranaiInfo) + 0x40);
+    memset(wp->info, 0, wp->count * sizeof(UranaiInfo) + 0x40);
     prefix = wp->prefix;
-    wp->buf = (char*)&wp->info[uranaiCount(wp)];
+    wp->buf = (char*)&wp->info[wp->count];
     switch (wp->mode) {
         case 0:
             uranaisi_data_make_next(prefix, 1);
@@ -271,14 +267,14 @@ USER_FUNC(uranaisi_data_alloc) {
             uranaisi_data_make_supercoin(prefix, 1);
             break;
     }
-    return 2;
+    return EVT_RETURN_DONE;
 }
 
 USER_FUNC(uranaisi_data_free) {
     UranaiWork* wp = &_udt;
 
     if (wp->info == NULL) {
-        return 2;
+        return EVT_RETURN_DONE;
     }
     _mapFree(wp->info);
     wp->info = NULL;
@@ -286,18 +282,18 @@ USER_FUNC(uranaisi_data_free) {
     wp->prefix = NULL;
     wp->buf = NULL;
     wp->cur = 0;
-    return 2;
+    return EVT_RETURN_DONE;
 }
 
 USER_FUNC(uranaisi_table_clear) {
-    memset(_udt.starpiece, 0, 0xD);
+    memset(_udt.starpiece, 0, sizeof(_udt.starpiece));
     memset(_udt.supercoin, 0, 6);
-    return 2;
+    return EVT_RETURN_DONE;
 }
 
 USER_FUNC(uranaisi_next_check) {
     evtSetValue(event, *event->args, _udt.count);
-    return 2;
+    return EVT_RETURN_DONE;
 }
 
 USER_FUNC(uranaisi_next_makelabel) {
@@ -307,7 +303,7 @@ USER_FUNC(uranaisi_next_makelabel) {
 
     sprintf(wp->buf, "%s_%04d", wp->prefix, wp->info[n].idx);
     evtSetValue(event, args[1], (EvtWord)wp->buf);
-    return 2;
+    return EVT_RETURN_DONE;
 }
 
 USER_FUNC(uranaisi_starpiece_check) {
@@ -322,7 +318,7 @@ USER_FUNC(uranaisi_starpiece_check) {
         }
     }
     evtSetValue(event, args[0], count);
-    return 2;
+    return EVT_RETURN_DONE;
 }
 
 USER_FUNC(uranaisi_starpiece_makelabel) {
@@ -343,21 +339,22 @@ USER_FUNC(uranaisi_starpiece_makelabel) {
                 sprintf(wp->buf, "%s_%04d", wp->prefix, wp->info[i].idx);
                 evtSetValue(event, args[1], (EvtWord)wp->buf);
                 wp->cur = i;
-                return 2;
+                return EVT_RETURN_DONE;
             }
             n++;
         }
     }
     *wp->buf = 0;
     evtSetValue(event, args[1], (EvtWord)wp->buf);
-    return 2;
+    return EVT_RETURN_DONE;
 }
 
 USER_FUNC(uranaisi_starpiece_setreadflag) {
     UranaiWork* wp = &_udt;
     johoya_set(wp->starpiece, wp->info[wp->cur].idx, 1);
-    return 2;
+    return EVT_RETURN_DONE;
 }
+
 USER_FUNC(uranaisi_supercoin_check) {
     UranaiWork* wp = &_udt;
     EvtWord* args = event->args;
@@ -370,7 +367,7 @@ USER_FUNC(uranaisi_supercoin_check) {
         }
     }
     evtSetValue(event, args[0], count);
-    return 2;
+    return EVT_RETURN_DONE;
 }
 
 USER_FUNC(uranaisi_supercoin_makelabel) {
@@ -391,20 +388,20 @@ USER_FUNC(uranaisi_supercoin_makelabel) {
                 sprintf(wp->buf, "%s_%04d", wp->prefix, wp->info[i].idx);
                 evtSetValue(event, args[1], (EvtWord)wp->buf);
                 wp->cur = i;
-                return 2;
+                return EVT_RETURN_DONE;
             }
             n++;
         }
     }
     *wp->buf = 0;
     evtSetValue(event, args[1], (EvtWord)wp->buf);
-    return 2;
+    return EVT_RETURN_DONE;
 }
 
 USER_FUNC(uranaisi_supercoin_setreadflag) {
     UranaiWork* wp = &_udt;
     johoya_set(wp->supercoin, wp->info[wp->cur].idx, 1);
-    return 2;
+    return EVT_RETURN_DONE;
 }
 
 s32 uranaisi_data_make_next(const char* prefix, s32 type) {
@@ -423,7 +420,7 @@ s32 uranaisi_data_make_next(const char* prefix, s32 type) {
     const s8* msg;
     s32 labelId;
 
-    maxLabel = evtGetValue(0, -170000000);
+    maxLabel = evtGetValue(NULL, GSW_STORY_PROGRESS);
 
     if (type & 1) {
         if (wp->next == -1) {
@@ -503,7 +500,7 @@ s32 uranaisi_data_make_starpiece(const char* prefix, s32 type) {
     s32 flagId;
     u8 saved;
 
-    maxLabel = evtGetValue(0, -170000000);
+    maxLabel = evtGetValue(NULL, GSW_STORY_PROGRESS);
 
     count = 0;
     storyId = 0;
@@ -531,7 +528,7 @@ s32 uranaisi_data_make_starpiece(const char* prefix, s32 type) {
                 initEndPos[tagEndPos] = 0;
                 flagId = starpiece_search((const char*)initEndPos);
                 initEndPos[tagEndPos] = saved;
-                if (flagId != -1 && evtGetValue(0, flagId) == 0) {
+                if (flagId != -1 && evtGetValue(NULL, flagId) == 0) {
                     if (type & 1) {
                         wp->info[infoId].labelId = (s16)labelId;
                         wp->info[infoId].idx = (s16)storyId;
@@ -545,6 +542,7 @@ s32 uranaisi_data_make_starpiece(const char* prefix, s32 type) {
     }
     return count;
 }
+
 static inline s32 supercoin_search(const char* name) {
     s32 i;
     for (i = 0; uranai_table_supercoin[i].name != NULL; i++) {
@@ -574,7 +572,7 @@ s32 uranaisi_data_make_supercoin(const char* prefix, s32 type) {
     s32 flagId;
     u8 saved;
 
-    maxLabel = evtGetValue(0, -170000000);
+    maxLabel = evtGetValue(NULL, GSW_STORY_PROGRESS);
 
     count = 0;
     storyId = 0;
@@ -602,7 +600,7 @@ s32 uranaisi_data_make_supercoin(const char* prefix, s32 type) {
                 initEndPos[tagEndPos] = 0;
                 flagId = supercoin_search((const char*)initEndPos);
                 initEndPos[tagEndPos] = saved;
-                if (flagId != -1 && evtGetValue(0, flagId) == 0) {
+                if (flagId != -1 && evtGetValue(NULL, flagId) == 0) {
                     if (type & 1) {
                         wp->info[infoId].labelId = (s16)labelId;
                         wp->info[infoId].idx = (s16)storyId;
@@ -635,5 +633,5 @@ USER_FUNC(uranaisi_ryokin) {
         price = pouchGetPtr()->level * 2;
     }
     evtSetValue(event, args[1], price);
-    return 2;
+    return EVT_RETURN_DONE;
 }

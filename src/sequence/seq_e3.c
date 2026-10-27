@@ -87,7 +87,6 @@ void e3DispOffscreen(CameraId cameraId, void* param);
 #ifdef VERSION_G8ME01
 static
 #endif
-
 void alarm_handler(OSAlarm* alarm, OSContext* context) {
     gp->flags |= GW_FLAG_E3_TIMEOUT;
 }
@@ -213,7 +212,7 @@ void seq_e3Main(SequenceWork* seq) {
 
 #endif
             if (prev != wp->scenario) {
-                psndSFXOn((void*)5);
+                psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_MOVE1));
             } else if (keyGetButtonTrg(0) & PAD_BUTTON_B || OSTicksToSeconds(OSGetTime() - none_key) > 120) {
                 psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_CANCEL1));
                 fadeEntry(MARIO_HEAD_FADE_IN, 0, (GXColor){ 0x00, 0x00, 0x00, 0xFF });
@@ -278,10 +277,11 @@ void seq_e3Main(SequenceWork* seq) {
 
             found = eventStgDtPtr(stageId)->data;
             {
-                s32 i;
-                for (i = 0; i <= foundIdx; i++) {
-                    if (found[i].initEvent) {
-                        found[i].initEvent();
+                // FAKE: a second loop counter; reusing the function's i changes the object
+                s32 j;
+                for (j = 0; j <= foundIdx; j++) {
+                    if (found[j].initEvent) {
+                        found[j].initEvent();
                     }
                 }
             }
@@ -354,12 +354,10 @@ void seq_e3Main(SequenceWork* seq) {
         } break;
     }
 
-    {
-        wp->dstX = e3_tbl[wp->scenario].x;
-        wp->dstY = e3_tbl[wp->scenario].y;
-        wp->curX += (wp->dstX - wp->curX) / 4;
-        wp->curY += (wp->dstY - wp->curY) / 4;
-    }
+    wp->dstX = e3_tbl[wp->scenario].x;
+    wp->dstY = e3_tbl[wp->scenario].y;
+    wp->curX += (wp->dstX - wp->curX) / 4;
+    wp->curY += (wp->dstY - wp->curY) / 4;
     dispEntry(CAMERA_3D, 0.0f, 0, e3Disp, seq);
 }
 
@@ -370,15 +368,11 @@ void e3Disp(CameraId cameraId, void* param) {
     f32 projBackup[GX_PROJECTION_SZ];
     f32 viewportBackup[GX_VIEWPORT_SZ];
     CameraEntry camBackup;
-#ifdef VERSION_G8ME01
-#else
-    char* keys[3];
-#endif
     s32 active;
     s32 alpha;
     s32 i;
-    s32 px, py;
-    s32 row, col;
+    s32 dy, x;
+    s32 col, row;
     s32 inset, pass, step;
 
     active = wp->curScreen;
@@ -386,7 +380,7 @@ void e3Disp(CameraId cameraId, void* param) {
         active = 1 - wp->curScreen;
     }
 
-    // Backup camera and GX params so we can use them in calculating all this
+    // Draw with the 2D camera: save the current camera and the GX projection/viewport (restored at the end)
     camBackup = *camGetPtr(cameraId);
     *camGetPtr(cameraId) = *camera;
 
@@ -414,11 +408,11 @@ void e3Disp(CameraId cameraId, void* param) {
 #endif
         pressStartGX(alpha, 0.0f, -110.0f);
     } else {
-        // Tiled background fill (40 x 32 quads)
+        // Tiled background: 40 columns x 32 rows of 16-unit tiles, from x = -304 and down from y = 240
         winTexInit(*wp->handle->data);
-        for (row = 0, py = -304; row < 40; row++, py += 16) {
-            for (col = 0, px = 0; col < 32; col++, px += 16) {
-                winTexSet(5, (Vec){ (f32)py, (f32)(240 - px), 0.0f }, (Vec){ 1.0f, 1.0f, 1.0f },
+        for (col = 0, x = -304; col < 40; col++, x += 16) {
+            for (row = 0, dy = 0; row < 32; row++, dy += 16) {
+                winTexSet(5, (Vec){ (f32)x, (f32)(240 - dy), 0.0f }, (Vec){ 1.0f, 1.0f, 1.0f },
                           (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
             }
         }
@@ -431,6 +425,7 @@ void e3Disp(CameraId cameraId, void* param) {
             winTexInit(*wp->handle->data);
 
             if (i == wp->scenario) {
+                // FAKE: the (u32) cast on the 8; plain i + 8 changes the object
                 // Shadow Box
                 winTexSet(i + (u32)8, (Vec){ 10.0f + e3_tbl[i].x, e3_tbl[i].y - 10.0f, 0.0f },
                           (Vec){ 0.35f, 0.35f, 0.35f }, (GXColor){ 0x00, 0x00, 0x00, 0x40 });
@@ -497,7 +492,7 @@ void e3Disp(CameraId cameraId, void* param) {
                   viewportBackup[5]);
 }
 
-// JP and US both pool 30.0f via this dead-stripped stand-in
+// FAKE: stand-in that nothing calls (the linker strips it); it only places 30.0f in the constant pool (JP and US); removing it changes the object
 f32 forceSdata(void) {
     return 30.0f;
 }
@@ -520,7 +515,7 @@ static
 void pressStartGX(s32 alpha, f32 x, f32 y) {
     CameraEntry* camera = camGetCurPtr();
     GXTexObj startText, gradient;
-    Mtx v17, v16;
+    Mtx mtx, scale;
 
     TEXGetGXTexObjFromPalette(*wp->handle->data, &startText, 3);
     GXLoadTexObj(&startText, GX_TEXMAP0);
@@ -540,12 +535,12 @@ void pressStartGX(s32 alpha, f32 x, f32 y) {
     GXSetTevColor(GX_TEVREG0, (GXColor){ 0x00, 0x00, 0x00, alpha });
     GXSetNumChans(0);
     GXSetNumTexGens(2);
-    GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, 60);
-    GXSetTexCoordGen(GX_TEXCOORD1, GX_TG_MTX2x4, GX_TG_TEX0, 30);
-    MTXScale(v16, 1.0f, 1.0f, 1.0f);
-    MTXTrans(v17, (f32)gp->retraceCount / -200.0f, 0.0f, 0.0f);
-    MTXConcat(v16, v17, v17);
-    GXLoadTexMtxImm(v17, GX_TEXMTX0, GX_MTX2x4);
+    GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
+    GXSetTexCoordGen(GX_TEXCOORD1, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX0);
+    MTXScale(scale, 1.0f, 1.0f, 1.0f);
+    MTXTrans(mtx, (f32)gp->retraceCount / -200.0f, 0.0f, 0.0f);
+    MTXConcat(scale, mtx, mtx);
+    GXLoadTexMtxImm(mtx, GX_TEXMTX0, GX_MTX2x4);
     GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_CLEAR);
     GXSetZCompLoc(GX_TRUE);
     GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_AND, GX_ALWAYS, 0);
@@ -556,11 +551,11 @@ void pressStartGX(s32 alpha, f32 x, f32 y) {
     GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
-    MTXTrans(v17, x, y, 0.0f);
-    MTXScale(v16, (f32)GXGetTexObjWidth(&startText), (f32)GXGetTexObjHeight(&startText), 1.0f);
-    MTXConcat(v17, v16, v17);
-    MTXConcat(camera->view, v17, v17);
-    GXLoadPosMtxImm(v17, GX_PNMTX0);
+    MTXTrans(mtx, x, y, 0.0f);
+    MTXScale(scale, (f32)GXGetTexObjWidth(&startText), (f32)GXGetTexObjHeight(&startText), 1.0f);
+    MTXConcat(mtx, scale, mtx);
+    MTXConcat(camera->view, mtx, mtx);
+    GXLoadPosMtxImm(mtx, GX_PNMTX0);
     GXSetCurrentMtx(GX_PNMTX0);
     GXBegin(GX_QUADS, GX_VTXFMT0, 4);
     GXPosition3f32(-0.5f, -0.5f, 0.0f);

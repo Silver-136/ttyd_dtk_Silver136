@@ -16,7 +16,6 @@
 #include "driver/mapdrv.h"
 
 
-double fabs(double);
 BOOL marioCreviceWallChk(const Vec* p);
 
 int __abs(int);
@@ -250,10 +249,8 @@ BOOL marioChkSlitThrouhEnd(void) {
 }
 
 void motSlitContinue(void) {
-    s16 v;
-    v = 0x14;
     marioChgMot2(MARIO_MOTION_SLIT);
-    marioGetPtr()->slitState = v;
+    marioGetPtr()->slitState = 0x14;
 }
 
 BOOL marioChkSlitEnd(void) {
@@ -303,16 +300,8 @@ BOOL marioGetMotSlitCancel3(void) {
 static inline void slitClearFlags(MarioWork* m) {
     m->flags &= ~MARIO_FLAG_PARTY_WALK_DISABLED;
     m->flags &= ~MARIO_FLAG_GONE_THROUGH_BARS;
-    m->dispFlags &= CLR_DISP;
-    m->dispFlags &= CLR_DISP; // the game clears these bits twice (both stores are in the retail code)
-}
-
-static inline void slitSetDir(MarioWork* m, f32 a) {
-    if (revise360(m->directionView - m->targetYaw) <= 180.0f) {
-        m->displayDirection = 260.0f;
-    } else {
-        m->displayDirection = 280.0f;
-    }
+    m->dispFlags &= ~(MARIO_DISP_FLAG_LEFT_ONLY | MARIO_DISP_FLAG_RIGHT_ONLY | MARIO_DISP_FLAG_SLIT);
+    m->dispFlags &= ~(MARIO_DISP_FLAG_LEFT_ONLY | MARIO_DISP_FLAG_RIGHT_ONLY | MARIO_DISP_FLAG_SLIT); // the game clears these bits twice (both stores are in the retail code)
 }
 
 void marioSlitForceCancel(void) {
@@ -326,11 +315,11 @@ void marioSlitForceCancel(void) {
             m->displayDirection = 180.0f;
             m->displayDirectionTarget = m->displayDirection;
         }
-        m->dispFlags &= CLR_DISP;
+        m->dispFlags &= ~(MARIO_DISP_FLAG_LEFT_ONLY | MARIO_DISP_FLAG_RIGHT_ONLY | MARIO_DISP_FLAG_SLIT);
         m->flags &= ~MARIO_FLAG_PARTY_WALK_DISABLED;
         m->flags &= ~MARIO_FLAG_GONE_THROUGH_BARS;
         m->wPlayerCollisionBox.x = 10.0f;
-        m->dispFlags &= CLR_DISP;
+        m->dispFlags &= ~(MARIO_DISP_FLAG_LEFT_ONLY | MARIO_DISP_FLAG_RIGHT_ONLY | MARIO_DISP_FLAG_SLIT);
         marioPaperOff();
         mapResetPaperAmbColor();
         m->dispFlags &= ~MARIO_DISP_FLAG_NO_REAR_POSE;
@@ -350,12 +339,16 @@ void mot_slit_post(void) {
     u16 id;
     if (m->slitState >= 10) {
         id = m->currMotionId;
-        if (id == 0x15 || (u16)(id - 0xb) <= 1 || m->currMotionId <= 7 || m->currMotionId == MARIO_MOTION_JUMP_3) {
+        // FAKE: (u16)(id - MARIO_MOTION_FALL_2) <= 1 is the range test FALL_2..UPSTAIRS; the plain range test changes the object
+        if (id == MARIO_MOTION_SLIT || (u16)(id - MARIO_MOTION_FALL_2) <= 1 || m->currMotionId <= MARIO_MOTION_JUMP_2 ||
+            m->currMotionId == MARIO_MOTION_JUMP_3) {
             return;
         }
 #else
     u16 id = m->currMotionId;
-    if (id == 0x15 || (u16)(id - 0xb) <= 1 || m->currMotionId <= 7 || m->currMotionId == MARIO_MOTION_JUMP_3) {
+    // FAKE: (u16)(id - MARIO_MOTION_FALL_2) <= 1 is the range test FALL_2..UPSTAIRS; the plain range test changes the object
+    if (id == MARIO_MOTION_SLIT || (u16)(id - MARIO_MOTION_FALL_2) <= 1 || m->currMotionId <= MARIO_MOTION_JUMP_2 ||
+        m->currMotionId == MARIO_MOTION_JUMP_3) {
         return;
 #endif
     }
@@ -389,7 +382,7 @@ void mot_slit_post(void) {
         m->flags &= ~MARIO_FLAG_PARTY_WALK_DISABLED;
         m->flags &= ~MARIO_FLAG_GONE_THROUGH_BARS;
         m->dispFlags &= ~(MARIO_DISP_FLAG_LEFT_ONLY | MARIO_DISP_FLAG_RIGHT_ONLY | MARIO_DISP_FLAG_SLIT);
-        m->dispFlags &= CLR_DISP;
+        m->dispFlags &= ~(MARIO_DISP_FLAG_LEFT_ONLY | MARIO_DISP_FLAG_RIGHT_ONLY | MARIO_DISP_FLAG_SLIT);
         marioPaperOff();
         mapResetPaperAmbColor();
         m->dispFlags &= ~MARIO_DISP_FLAG_NO_REAR_POSE;
@@ -496,7 +489,10 @@ static inline f32 slitWalkSpeed(void) {
     MarioWork* p = marioGetPtr();
     f32 spd = p->mBaseWalkSpeed;
     if (p->flags & MARIO_FLAG_PAPER_MODE) {
-        if (p->mot.slit.timer != 0) return spd; {
+        if (p->mot.slit.timer != 0) {
+            return spd;
+        }
+        {
             int a = p->wStickDir1;
             int b = p->wStickDir2;
             if (a * a + b * b <= 0xbd1) {
@@ -577,7 +573,7 @@ void mot_slit(void) {
         }
         m->flags &= ~MARIO_FLAG_PARTY_WALK_DISABLED;
         m->flags &= ~MARIO_FLAG_GONE_THROUGH_BARS;
-        m->dispFlags &= CLR_DISP;
+        m->dispFlags &= ~(MARIO_DISP_FLAG_LEFT_ONLY | MARIO_DISP_FLAG_RIGHT_ONLY | MARIO_DISP_FLAG_SLIT);
         marioPaperOff();
         m->flags &= ~MARIO_FLAG_PAPER_MODE;
         return;
@@ -729,7 +725,7 @@ void mot_slit(void) {
             } else {
                 s32 sum;
                 m->mot.slit.count = 0;
-                sum = __abs((s8)m->wStickDir1) + __abs((s8)m->wStickDir2);
+                sum = __abs(m->wStickDir1) + __abs(m->wStickDir2);
                 if (!(m->trigFlags & 0x8000)) {
                     marioChgPose((sum < 0x44) ? "M_W_1" : "M_R_1");
                 }
@@ -803,13 +799,15 @@ void mot_slit(void) {
                         m->directionView = revise360(m->mot.slit.pushDir + m->targetYaw);
                         m->mot.slit.counter = 0;
                         sincosf(&sn, &cs, m->directionView);
-                        { Vec tmp = {0, 0, 0};
-                        q.targetPos.x = m->position.x;
-                        q.targetPos.y = 11.0f + m->position.y;
-                        q.targetPos.z = m->position.z;
-                        tmp.x = sn;
-                        tmp.z = cs;
-                        q.targetDir = tmp; }
+                        {
+                            Vec tmp = {0, 0, 0};
+                            q.targetPos.x = m->position.x;
+                            q.targetPos.y = 11.0f + m->position.y;
+                            q.targetPos.z = m->position.z;
+                            tmp.x = sn;
+                            tmp.z = cs;
+                            q.targetDir = tmp;
+                        }
                         q.targetDistance = 20.0f;
                         if (hitCheckVecHitObjXZ(qp, m->hitobjPush)) {
                             q.targetPos.x = m->position.x;
@@ -887,7 +885,6 @@ void mot_slit(void) {
         {
             MarioWork* p = marioGetPtr();
             p->slitPosSet = 1;
-            // copy
             p->slitPos = p->position;
         }
     case 0x5b:
@@ -973,7 +970,7 @@ void mot_slit(void) {
         }
         m->flags &= ~MARIO_FLAG_PARTY_WALK_DISABLED;
         m->flags &= ~MARIO_FLAG_GONE_THROUGH_BARS;
-        m->dispFlags &= CLR_DISP;
+        m->dispFlags &= ~(MARIO_DISP_FLAG_LEFT_ONLY | MARIO_DISP_FLAG_RIGHT_ONLY | MARIO_DISP_FLAG_SLIT);
         marioPaperOff();
         mapResetPaperAmbColor();
         m->dispFlags &= ~MARIO_DISP_FLAG_NO_REAR_POSE;
@@ -1018,7 +1015,7 @@ void mot_slit(void) {
     case 0x70:
         m->flags &= ~MARIO_FLAG_PARTY_WALK_DISABLED;
         m->flags &= ~MARIO_FLAG_GONE_THROUGH_BARS;
-        m->dispFlags &= CLR_DISP;
+        m->dispFlags &= ~(MARIO_DISP_FLAG_LEFT_ONLY | MARIO_DISP_FLAG_RIGHT_ONLY | MARIO_DISP_FLAG_SLIT);
         marioPaperOff();
         mapResetPaperAmbColor();
         m->dispFlags &= ~MARIO_DISP_FLAG_NO_REAR_POSE;
@@ -1058,7 +1055,7 @@ void mot_slit(void) {
         m->flags &= ~MARIO_FLAG_PARTY_WALK_DISABLED;
         m->flags &= ~MARIO_FLAG_GONE_THROUGH_BARS;
         m->flags &= ~MARIO_FLAG_WALLS_DISABLED;
-        m->dispFlags &= CLR_DISP;
+        m->dispFlags &= ~(MARIO_DISP_FLAG_LEFT_ONLY | MARIO_DISP_FLAG_RIGHT_ONLY | MARIO_DISP_FLAG_SLIT);
         marioPaperOff();
         mapResetPaperAmbColor();
         m->dispFlags &= ~MARIO_DISP_FLAG_NO_REAR_POSE;

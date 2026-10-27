@@ -33,17 +33,6 @@ static const Vec zv0 = {0.0f, 0.0f, 0.0f};
 static const Vec zv1 = {0.0f, 0.0f, 0.0f};
 
 
-static inline BOOL marioChkBeroSub(s32 attr) {
-    BOOL r = TRUE;
-    if (attr & HIT_ATTR_SHIP_ONLY) {
-        r = FALSE;
-        if (marioGetPtr()->currMotionId == MARIO_MOTION_SHIP) {
-            r = TRUE;
-        }
-    }
-    return r;
-}
-
 static inline BOOL marioChkBeroInl(HitEntry* hit) {
     s32 attr = hitGetAttr(hit);
     MarioWork* w = marioGetPtr();
@@ -54,37 +43,6 @@ static inline BOOL marioChkBeroInl(HitEntry* hit) {
         return (attr & HIT_ATTR_BERO) ? 1 : 0;
     }
     return w->currMotionId == MARIO_MOTION_SHIP;
-}
-
-static inline BOOL marioChkBeroSub2(s32 attr) {
-    if (!(attr & HIT_ATTR_SHIP_ONLY)) {
-        return TRUE;
-    }
-    return marioGetPtr()->currMotionId == MARIO_MOTION_SHIP;
-}
-
-static inline BOOL marioChkBeroSub4(s32 attr) {
-    BOOL r = TRUE;
-    if (attr & HIT_ATTR_SHIP_ONLY) {
-        r = marioGetPtr()->currMotionId == MARIO_MOTION_SHIP;
-    }
-    return r;
-}
-
-static inline BOOL marioChkBeroSub5(HitEntry* hit) {
-    s32 attr = hitGetAttr(hit);
-    if (!(attr & HIT_ATTR_SHIP_ONLY)) {
-        return TRUE;
-    }
-    return marioGetPtr()->currMotionId == MARIO_MOTION_SHIP;
-}
-
-static inline BOOL marioChkBeroSub6(s32 attr) {
-    if (attr & HIT_ATTR_SHIP_ONLY) {
-        return marioGetPtr()->currMotionId == MARIO_MOTION_SHIP;
-    } else {
-        return TRUE;
-    }
 }
 
 static inline f32 marioHitNrmAngle(Vec* nrm) {
@@ -137,10 +95,10 @@ void marioHitCheckWidth(void) {
 }
 
 BOOL chkFilterAttr2(HitCheckQuery* query, HitEntry* entry) {
-    s32 ret = 0;
+    BOOL ret = FALSE;
     s32 attr = entry->attributes;
     if ((attr & query->user0) == 0 || (attr & query->user1) != 0) {
-        ret = 1;
+        ret = TRUE;
     }
     return ret;
 }
@@ -290,8 +248,8 @@ static inline HitEntry* marioHitCheckAttr2Inl(Vec* pos, Vec* dir, Vec* outPos, V
     query.targetPos = *pos;
     query.targetDir = *dir;
     query.targetDistance = *dist;
-    query.user0 = 4;
-    query.user1 = 0x800000;
+    query.user0 = HIT_ATTR_NPC_ONLY;
+    query.user1 = HIT_ATTR_BERO;
     hit = hitCheckVecFilter(&query, chkFilterAttr2);
     if (!hit) {
         return NULL;
@@ -370,27 +328,27 @@ BOOL marioChkBero(HitEntry* hit) {
 
 #pragma inline_max_size(1000)
 static inline void marioChkGndRoll(MarioWork* w) {
-            HitEntry* hit;
-            f32 gz, gx;
-            Vec pos, outPos, outNrm;
-            f32 dist = 47.0f;
-            w->baseHeight = w->basePos.y - w->position.y;
-            pos = w->position;
-            pos.y += 10.0f;
-            {
-            Vec dir = {0.0f, -1.0f, 0.0f};
-            hit = marioHitCheckVecInl(&pos, &dir, &outPos, &outNrm, &dist);
-            }
-            if (hit) {
-                gx = (s32)(100.0f * (angleABf(0.0f, 0.0f, 100.0f * outNrm.z, 100.0f * outNrm.y) - 180.0f) + 0.5f) / 100.0f;
-                gz = (s32)(100.0f * (angleABf(0.0f, 0.0f, 100.0f * outNrm.x, 100.0f * outNrm.y) - 180.0f) + 0.5f) / 100.0f;
-                angleABf(0.0f, 0.0f, sqrtf(outNrm.x * outNrm.x + outNrm.z * outNrm.z), -outNrm.y);
-            }
-            if (hit) {
-                roll_grx = gx;
-                roll_grz = gz;
-            }
-        }
+    HitEntry* hit;
+    f32 gz, gx;
+    Vec pos, outPos, outNrm;
+    f32 dist = 47.0f;
+    w->baseHeight = w->basePos.y - w->position.y;
+    pos = w->position;
+    pos.y += 10.0f;
+    {
+        Vec dir = {0.0f, -1.0f, 0.0f};
+        hit = marioHitCheckVecInl(&pos, &dir, &outPos, &outNrm, &dist);
+    }
+    if (hit) {
+        gx = (s32)(100.0f * (angleABf(0.0f, 0.0f, 100.0f * outNrm.z, 100.0f * outNrm.y) - 180.0f) + 0.5f) / 100.0f;
+        gz = (s32)(100.0f * (angleABf(0.0f, 0.0f, 100.0f * outNrm.x, 100.0f * outNrm.y) - 180.0f) + 0.5f) / 100.0f;
+        angleABf(0.0f, 0.0f, sqrtf(outNrm.x * outNrm.x + outNrm.z * outNrm.z), -outNrm.y);
+    }
+    if (hit) {
+        roll_grx = gx;
+        roll_grz = gz;
+    }
+}
 
 HitEntry* marioSearchUnder(void) {
     Vec pos, outPos, outNrm;
@@ -405,8 +363,8 @@ HitEntry* marioSearchUnder(void) {
     pos = w->position;
     pos.y += h;
     {
-    Vec dir = {0.0f, -1.0f, 0.0f};
-    hit = marioHitCheckVecInl(&pos, &dir, &outPos, &outNrm, &d);
+        Vec dir = {0.0f, -1.0f, 0.0f};
+        hit = marioHitCheckVecInl(&pos, &dir, &outPos, &outNrm, &d);
     }
     w->groundY = hit ? outPos.y : -3000.0f;
     return hit;
@@ -422,11 +380,9 @@ HitEntry* searchUnder2(f32* out, f32 x, f32 y, f32 z) {
     pos.z = z;
     pos2 = pos;
     pos2.y += 37.0f;
-    if (x) {
-    }
     {
-    Vec dir = {0.0f, -1.0f, 0.0f};
-    hit = marioHitCheckVecInl(&pos2, &dir, &outPos, &outNrm, &d);
+        Vec dir = {0.0f, -1.0f, 0.0f};
+        hit = marioHitCheckVecInl(&pos2, &dir, &outPos, &outNrm, &d);
     }
     *out = hit ? outPos.y : -1.0f;
     return hit;
@@ -534,7 +490,7 @@ void marioChkGnd(void) {
             if (hit && d <= 11.0f && d >= 5.0f && w->groundSlope <= 30.0f) {
                 w->stepUpY = sy;
                 if (w->baseSpeed) {
-                    if (!((u32)w->dispFlags & MARIO_DISP_FLAG_SLIT)) {
+                    if (!(w->dispFlags & MARIO_DISP_FLAG_SLIT)) {
                         marioChgMot(MARIO_MOTION_UPSTAIRS);
                     } else {
                         marioChgMotSub(MARIO_MOTION_UPSTAIRS, 0);
@@ -612,6 +568,7 @@ void marioChkGnd2(void) {
                 w->jumpPeakAirTime = 0;
                 if (w->characterId == CHARACTER_BOWSER) {
                     if (w->controlStickSensitivity || !kpaFireAttackCheck()) {
+                        // FAKE: no-op (s8) casts of the s8 stick fields; the plain fields change the object
                         s32 sx = (s8)w->wStickDir1;
                         s32 sy = (s8)w->wStickDir2;
                         if (sx * sx + sy * sy > 0xbd1) {
@@ -657,8 +614,6 @@ HitEntry* marioSearchGround(f32* y, f32* b, f32* c, f32 spd, f32 h) {
     if (w->flags & MARIO_FLAG_FORCE_WALL) {
         *y = w->position.y;
         return NULL;
-        if (b) {
-        }
     }
     if (w->flags & MARIO_FLAG_FLOORS_DISABLED) {
         *y = w->position.y;
@@ -733,7 +688,7 @@ HitEntry* marioSearchGround(f32* y, f32* b, f32* c, f32 spd, f32 h) {
             hit = marioHitCheckVecInl(&v, &dir, &outPos, &outNrm, &dist);
         }
         if (hit) {
-            if ((u32)w->dispFlags & MARIO_DISP_FLAG_SLIT) {
+            if (w->dispFlags & MARIO_DISP_FLAG_SLIT) {
                 lim = 75.0f;
             } else if (w->currMotionId == MARIO_MOTION_HIP) {
                 lim = 75.0f;
@@ -790,8 +745,6 @@ HitEntry* marioSearchGroundRoll(f32* y, f32* b, f32* c, f32 spd, f32 h) {
     if (w->flags & MARIO_FLAG_FORCE_WALL) {
         *y = w->position.y;
         return NULL;
-        if (b) {
-        }
     }
     if (w->flags & MARIO_FLAG_FLOORS_DISABLED) {
         *y = w->position.y;
@@ -1149,19 +1102,17 @@ HitEntry* marioChkLandon2(f32* y, f32 spd, f32 ofs) {
     f32 x, z;
     s32 i;
     HitEntry* hit;
-    void* vp;
     MarioWork* w = marioGetPtr();
-    vp = (void*)y;
     w->groundRot.x = 0.0f;
     w->groundRot.y = 0.0f;
     w->groundRot.z = 0.0f;
     w->groundSlope = 0.0f;
     if (w->flags & MARIO_FLAG_FORCE_WALL) {
-        *((f32*)vp) = w->position.y;
+        *y = w->position.y;
         return NULL;
     }
     if (w->flags & MARIO_FLAG_FLOORS_DISABLED) {
-        *((f32*)vp) = w->position.y;
+        *y = w->position.y;
         return NULL;
     }
     d0 = 0.1f + __fabsf(spd);
@@ -1211,7 +1162,7 @@ HitEntry* marioChkLandon2(f32* y, f32 spd, f32 ofs) {
         if (hit) {
             w->groundSlope = marioHitNrmAnglePtr(&outNrm);
             if (__fabsf((s32)(100.0f * ((pyl - outPos.y) - dist) + 0.5f) / 100.0f) < 0.1f) {
-                *((f32*)vp) = outPos.y;
+                *y = outPos.y;
                 return hit;
             }
         }
@@ -1223,23 +1174,17 @@ HitEntry* marioChkLandon2(f32* y, f32 spd, f32 ofs) {
 extern void marioClearJumpPara(void);
 extern void marioChgStayMotion(void);
 
-typedef struct {
-    u8 pad[0x15];
-    char name[16];
-} MobjNameView;
-
 static inline BOOL marioChkHeadBlock(HitEntry* hit) {
-    MobjNameView* mobj;
-    char* name;
+    MapObjectEntry* mobj;
     if (!hit) {
         return FALSE;
     }
     if (!(hitGetAttr(hit) & HIT_ATTR_MOBJ)) {
         return FALSE;
     }
-    mobj = (MobjNameView*)mobjHitObjPtrToPtr(hit);
-    if (!strcmp(mobj->name, "MOBJ_PowerUpBlock") || !strcmp(mobj->name, "MOBJ_SaveBlock") ||
-        !strcmp(mobj->name, "MOBJ_RecoveryBlock") || !strcmp(mobj->name, "MOBJ_CoinTakenRecoveryBlock")) {
+    mobj = mobjHitObjPtrToPtr(hit);
+    if (!strcmp(mobj->animName, "MOBJ_PowerUpBlock") || !strcmp(mobj->animName, "MOBJ_SaveBlock") ||
+        !strcmp(mobj->animName, "MOBJ_RecoveryBlock") || !strcmp(mobj->animName, "MOBJ_CoinTakenRecoveryBlock")) {
         return TRUE;
     }
     return FALSE;
@@ -1257,11 +1202,13 @@ static inline f32 marioGetHeightInl(void) {
     return ph;
 }
 
+// FAKE: stand-in that nothing calls (the linker strips it); it only places 18.0f in this object's constant pool
 void marioHitStrippedPool2(f32* f) {
     f[0] = 18.0f;
 }
 
 f32 marioChkOverhead(void) {
+    // FAKE: pa..pd are never used; removing them changes the object
     Vec pa = {0.0f, 0.0f, 0.0f};
     Vec pb = {0.0f, -1.0f, 0.0f};
     Vec pc = {0.0f, 0.0f, 0.0f};
@@ -1418,19 +1365,17 @@ HitEntry* marioSearchHead(Vec* pos, f32* h, f32 dd) {
     f32 x, z;
     HitEntry* hit;
     s32 i;
-    void* vp;
     MarioWork* w = marioGetPtr();
-    vp = (void*)h;
     if (w->baseSpeed) {
         hh = w->directionView;
     } else {
         hh = toMovedir(w->displayDirection);
     }
     marioSearchHeadOfs(w, hh, &sx, &sz);
-    a = *((f32*)vp);
+    a = *h;
     hh = 0.5f * a;
     top = a + dd;
-    *((f32*)vp) = -1.0f;
+    *h = -1.0f;
     for (i = 0; i < 5; i++) {
         if (i == 0) {
             z = x = 0.0f;
@@ -1473,10 +1418,10 @@ HitEntry* marioSearchHead(Vec* pos, f32* h, f32 dd) {
                 outPos.y = outPos.y - 0.05f * a;
                 if (pos->y + a >= outPos.y) {
                     pos->y = outPos.y;
-                    *((f32*)vp) = 0.0f;
+                    *h = 0.0f;
                     return hit;
                 }
-                *((f32*)vp) = outPos.y - pos->y - a;
+                *h = outPos.y - pos->y - a;
                 return NULL;
             }
         } else {
@@ -1484,16 +1429,16 @@ HitEntry* marioSearchHead(Vec* pos, f32* h, f32 dd) {
                 outPos.y = (s32)(100.0f * outPos.y + hh) / 100.0f;
 #ifdef VERSION_G8ME01
                 if (w->jumpVelocityY < -10.0f) {
-                    *((f32*)vp) = outPos.y - pos->y - a;
+                    *h = outPos.y - pos->y - a;
                     return NULL;
                 }
 #endif
                 if (pos->y + a >= outPos.y) {
                     pos->y = outPos.y;
-                    *((f32*)vp) = 0.0f;
+                    *h = 0.0f;
                     return hit;
                 }
-                *((f32*)vp) = outPos.y - pos->y - a;
+                *h = outPos.y - pos->y - a;
                 return NULL;
             }
         }
@@ -1553,6 +1498,7 @@ HitEntry* marioSearchHead_roll(Vec* pos, f32* h, f32 d) {
             Vec v = {0.0f, 0.0f, 0.0f};
             Vec dir = {0.0f, 1.0f, 0.0f};
             v.x = pos->x + x;
+            // FAKE: spare pointer to dir; passing &dir directly changes the object
             pdir = &dir;
             v.y = 1.0f + pos->y;
             v.z = pos->z + z;
@@ -1828,7 +1774,7 @@ void marioCheckWall_roll(f32 dx, f32 dz) {
     w->position.z = pos.z;
 }
 
-// marioHitCheckVecInl with the direction built after the position copy (the target schedules the pos loads first)
+// marioHitCheckVecInl for a horizontal ray: the direction is (s, 0, c)
 static inline HitEntry* marioChkFrontInl(const Vec* pos, f32 s, f32 c, Vec* outPos, Vec* outNrm, f32* dist) {
     HitCheckQuery query;
     HitEntry* hit;
@@ -2017,18 +1963,18 @@ HitEntry* searchFrontWall(Vec* pos, f32* h, f32 dx, f32 dz, f32 w) {
     hit2 = NULL;
     sincosf(&s2, &c2, dz + 45.0f);
     {
-    Vec dir2;
-    p = *pos;
-    sfwVecSetNested(&dir2, (Vec){s2, 0.0f, c2});
-    dist = half;
-    for (i = 0; i < count; i++) {
-        p.y = pos->y + heights[i];
+        Vec dir2;
+        p = *pos;
+        sfwVecSetNested(&dir2, (Vec){s2, 0.0f, c2});
         dist = half;
-        hit2 = marioHitCheckVecInl(&p, &dir2, NULL, NULL, &dist);
-        if (hit2) {
-            break;
+        for (i = 0; i < count; i++) {
+            p.y = pos->y + heights[i];
+            dist = half;
+            hit2 = marioHitCheckVecInl(&p, &dir2, NULL, NULL, &dist);
+            if (hit2) {
+                break;
+            }
         }
-    }
     }
     if (hit2) {
         hit2 = NULL;
@@ -2101,8 +2047,6 @@ HitEntry* dou10_yoko_yari(f32* out) {
         if (hit && (hitGetAttr(hit) & HIT_ATTR_TOGE)) {
             w->hitobjFront = hit;
             *out = 0.8f;
-        }
-        if ((!w->flags) && (!w->flags)) {
         }
         pos = w->position;
         movePos(&pos.x, &pos.z, step, 90.0f);
@@ -2261,11 +2205,14 @@ HitEntry* marioChkFrontStep(f32* y, f32* h, f32* ang) {
     } else {
         r = 0.265f * w->wPlayerCollisionBox.x;
     }
-    {f32 c; f32 rad = (3.1415927f * a) / 180.0f;
-    s = (f32)sin(rad);
-    c = (f32)cos(rad);
-    s = r * s;
-    a = r * -c;}
+    {
+        f32 c;
+        f32 rad = (3.1415927f * a) / 180.0f;
+        s = (f32)sin(rad);
+        c = (f32)cos(rad);
+        s = r * s;
+        a = r * -c;
+    }
     y0 = w->position.y;
     x0 = w->position.x;
     z0 = w->position.z;
@@ -2293,6 +2240,7 @@ HitEntry* marioChkFrontStep(f32* y, f32* h, f32* ang) {
     return NULL;
 }
 
+// FAKE: stand-in that nothing calls (the linker strips it); it only places its five literals in this object's constant pool
 void marioHitStrippedPool(f32* f) {
     f[0] = 0.75f;
     f[1] = -1.0f;
@@ -2462,7 +2410,11 @@ BOOL marioSlitChkWallAround(void) {
             flags[i] = 1;
         }
     }
-    { f32 k = 5.0f; pos.y = w->position.y + k; }
+    // FAKE: spare temporary k; the plain `pos.y = w->position.y + 5.0f;` changes the object
+    {
+        f32 k = 5.0f;
+        pos.y = w->position.y + k;
+    }
     for (i = 0, a = 0.0f; i < 8; i++, a += 45.0f) {
         if (flags[i] != 1) {
             Vec dir;
@@ -2541,6 +2493,7 @@ void marioCheckWallShip(f32 dx, f32 dz) {
                 w->hitobjWall = hit;
             }
             movePos(&w->position.x, &w->position.z, dx, dz);
+            // FAKE: dead store to the local pos before the return; removing it changes the object
             pos = w->position;
             return;
         }
@@ -2555,14 +2508,15 @@ void marioCheckWallShip(f32 dx, f32 dz) {
                 w->wallPushTimer = 20;
                 attr = hitGetAttr(hit);
                 r = !(attr & HIT_ATTR_SHIP_ONLY) ? TRUE : marioGetPtr()->currMotionId == MARIO_MOTION_SHIP;
-                if (r) w->hitobjPush = hit;
+                if (r) {
+                    w->hitobjPush = hit;
+                }
             }
         }
         w->position = pos;
     }
     old = pos;
     w->position = pos;
-    tmp = pos;
     marioChkWallAround(&w->position, 0, dx, dz, w->wPlayerCollisionBox.z, 4.0f);
     max = w->mBaseDashSpeed;
     PSVECSubtract(&w->position, &old, &diff);
@@ -2573,4 +2527,3 @@ void marioCheckWallShip(f32 dx, f32 dz) {
     }
 }
 
-// forward declarations: these functions are defined further down

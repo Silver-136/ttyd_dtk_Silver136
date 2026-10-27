@@ -30,7 +30,7 @@
 #define UNIT_WORK_DICTIONARY_STATE 0 // _dictionary state: 0 idle, 1 open (monosiriInit), 2/3 shown, 4 close requested, 5 closing, 6 closed (the event resets it to 0)
 #define UNIT_WORK_DICTIONARY_WORK 1  // pointer to the monosiriInit work that _dictionary keeps between frames
 #define UNIT_WORK_JUMP_FRAMES_LEFT 2 // frames left in the jump (counted down by a sibling loop); the stylish AC window starts when more than 15 are left
-#define UNIT_WORK_FLIP_ANGLE 3       // extra z rotation added to the jump's travel angle; a stylish success adds 24 per frame for 15 frames
+#define UNIT_WORK_FLIP_ANGLE 3       // extra z rotation added to the jump's travel angle; a stylish success changes it by 24 per frame for 15 frames (-24 when FACE_DIR_TOWARD_UNIT gives >= 0, else +24)
 
 USER_FUNC(_dictionary);
 USER_FUNC(btlevtcmd_SetEventEntry);
@@ -69,14 +69,6 @@ static BattleUnitDefenseAttr defence_attr;
 static StatusVulnerability regist;
 static EvtWord attack_event[2];
 static EvtWord wait_event[6];
-
-
-
-
-
-
-
-
 
 PoseTableEntry pose_table_christine_stay[] = {
     {POSE_TYPE_FREEZE, "PKR_D_5"},
@@ -601,7 +593,7 @@ EVT_BEGIN(partyChristineAttack_NormalAttack)
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
     LABEL(99)
-    CALL(btlevtcmd_ResetFaceDirection, -2)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     CALL_CHILD(btldefaultevt_SuitoruBadgeEffect)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
@@ -897,6 +889,7 @@ EVT_BEGIN(partyChristineAttack_RenzokuAttack)
             ADD(LW(2), 5)
             CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_PARTY_BATTLE_JUMP1"), EVT_NULLPTR, 0, EVT_NULLPTR)
             CALL(btlevtcmd_MarioJumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), LW(8), 0, MOVE_SOUND_NONE)
+            // BUG: deletes the event with id 15, not the sibling event whose id was stored in LW(15)
             DELETE_EVENT(15)
             ELSE
             BEGIN_SIBLING_EVENT
@@ -1022,7 +1015,7 @@ EVT_BEGIN(partyChristineAttack_RenzokuAttack)
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
     LABEL(99)
-    CALL(btlevtcmd_ResetFaceDirection, -2)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     CALL_CHILD(btldefaultevt_SuitoruBadgeEffect)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
@@ -1046,7 +1039,7 @@ EVT_BEGIN(partyChristineAttack_Kiss)
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
     CALL_CHILD(subsetevt_check_target_movable)
     IF_INT_NOT_EQUAL(LW(0), 0)
-        CALL(btlevtcmd_CalculateFaceDirection, LW(3), LW(4), -2, -1, FACE_DIR_TOWARD_UNIT, LW(15))
+        CALL(btlevtcmd_CalculateFaceDirection, LW(3), LW(4), UNIT_ID_SELF, -1, FACE_DIR_TOWARD_UNIT, LW(15))
         CALL(btlevtcmd_ChangeFaceDirection, LW(3), LW(15))
     END_IF
     CALL(btlevtcmd_CommandGetWeaponActionLv, LW(0))
@@ -1115,7 +1108,7 @@ EVT_BEGIN(partyChristineAttack_Kiss)
     MULTIPLY(LW(14), 45)
     CALL(evt_eff, STRING(""), STRING("kiss"), 1, LW(0), LW(1), LW(2), LW(14), 0, 0, 0, 0, 0, 0, 0)
     BEGIN_INLINE_EVENT_GET_ID(LW(15))
-        IF_BITS_SET(LW(6), 2)
+        IF_BITS_SET(LW(6), AC_RESULT_SUCCESS)
             CALL_CHILD(subsetevt_check_target_movable)
             IF_INT_NOT_EQUAL(LW(0), 0)
                 CALL(btlevtcmd_AnimeChangePoseType, LW(3), LW(4), POSE_TYPE_KISSED_CHRISTINE)
@@ -1154,7 +1147,7 @@ EVT_BEGIN(partyChristineAttack_Kiss)
         CALL(evt_audience_acrobat_notry)
         WAIT_FRAMES(20)
     END_IF
-    IF_BITS_SET(LW(6), 2)
+    IF_BITS_SET(LW(6), AC_RESULT_SUCCESS)
         CALL(btlevtcmd_AnnounceMessage, 0, 0, 0, STRING("msg_st_chg_mario_quick"), 60)
         ELSE
         WAIT_MS(500)
@@ -1162,7 +1155,7 @@ EVT_BEGIN(partyChristineAttack_Kiss)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
     CALL(btlevtcmd_WaitEventEnd, LW(15))
-    CALL(btlevtcmd_ResetFaceDirection, -2)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     CALL(evt_audience_ap_recovery)
     CALL(btlevtcmd_InviteApInfoReport)
     CALL_CHILD(subsetevt_check_target_movable)
@@ -1430,7 +1423,7 @@ USER_FUNC(_dictionary) {
     s32 targetId;
     void* work;
 
-    selfId = BattleTransID(event, -2);
+    selfId = BattleTransID(event, UNIT_ID_SELF);
     targetId = evtGetValue(event, args[0]);
     targetId = BattleTransID(event, targetId);
     evtGetValue(event, args[1]);

@@ -179,7 +179,7 @@ void marioStInit(void) {
     DEMOEnableGPHangWorkaround(5);
     N_setupErrorHandler();
     DEMOPadInit();
-    GXSetCopyClear((GXColor){0, 0, 0, 0}, 0xFFFFFF);
+    GXSetCopyClear((GXColor){0, 0, 0, 0}, GX_MAX_Z24);
     __GXSetIndirectMask(0);
     memset(gp, 0, sizeof(GlobalWork));
     gp->fbWidth = DEMOGetRenderModeObj()->fbWidth;
@@ -208,16 +208,18 @@ void marioStInit(void) {
     gp->areaFadeInType = FADE_OUT_BLACK;
     gp->areaFadeInDuration = 300;
 #ifdef VERSION_G8ME01
-    if (VIGetTvFormat() == 0)
+    if (VIGetTvFormat() == VI_NTSC) {
         gp->framerate = 60;
-    else
+    } else {
         gp->framerate = 50;
-    gp->language = 1;
+    }
+    gp->language = LANGUAGE_US;
 #else
-    if ((OSGetFontEncode() == OS_FONT_ENCODE_SJIS) && !(gp->flags & GW_FLAG_E3))
-        gp->language = 0;
-    else
-        gp->language = 1;
+    if (OSGetFontEncode() == OS_FONT_ENCODE_SJIS && !(gp->flags & GW_FLAG_E3)) {
+        gp->language = LANGUAGE_JP;
+    } else {
+        gp->language = LANGUAGE_US;
+    }
     gp->framerate = 60;
 #endif
     gp->systemLevelFlags = 0;
@@ -322,14 +324,30 @@ void marioStMain(void) {
     L_gcResetCheck();
     if (gp->flags & GW_FLAG_E3) {
         for (i = 0; i < 4; i++) {
-            if (gp->dirs[i]) break;
-            if (gp->button[i]) break;
-            if (gp->stickX[i]) break;
-            if (gp->stickY[i]) break;
-            if (gp->substickX[i]) break;
-            if (gp->substickY[i]) break;
-            if (gp->triggerLeft[i]) break;
-            if (gp->triggerRight[i]) break;
+            if (gp->dirs[i]) {
+                break;
+            }
+            if (gp->button[i]) {
+                break;
+            }
+            if (gp->stickX[i]) {
+                break;
+            }
+            if (gp->stickY[i]) {
+                break;
+            }
+            if (gp->substickX[i]) {
+                break;
+            }
+            if (gp->substickY[i]) {
+                break;
+            }
+            if (gp->triggerLeft[i]) {
+                break;
+            }
+            if (gp->triggerRight[i]) {
+                break;
+            }
         }
         if (i >= 4) {
             if (OSTicksToSeconds(OSGetTime() - none_key) > 120 && (seqGetSeq() == SEQ_GAME || seqGetSeq() == SEQ_BATTLE)) {
@@ -461,7 +479,7 @@ void viPostCallback(u32 retraceCount) {
             } else {
                 gp->softResetWait = FALSE;
             }
-            if (DVDGetDriveStatus() == -1) {
+            if (DVDGetDriveStatus() == DVD_STATE_FATAL_ERROR) {
                 gp->resetType = 0;
             }
         }
@@ -518,7 +536,7 @@ void* gcDvdCheckThread(void* param) {
 #endif
                 gp->dvdError = TRUE;
                 break;
-            case DVD_RESULT_FATAL_ERROR:
+            case DVD_STATE_FATAL_ERROR:
 #ifdef VERSION_G8ME01
                 msgId = 13;
 #else
@@ -562,6 +580,7 @@ void* gcDvdCheckThread(void* param) {
             DEMOBeforeRender();
             if (msgId) {
                 message = romFontGetMessage(msgId);
+                // FAKE: s32 -> f32 -> s32 round trip; the plain assignment changes the object
                 width = (f32)romFontGetWidth(message);
                 MTXPerspective(mtx, 25.0f, 1.2666667f, 1.0f, 10000.0f);
                 GXSetProjection(mtx, GX_PERSPECTIVE);
@@ -587,12 +606,12 @@ void gcRumbleCheck(void) {
     now = OSGetTime();
     for (i = 0; i < 4; i++) {
         if (!gp->rumbleForcedOff[i]) {
-            if (padGetRumbleStatus(i) == 1) {
+            if (padGetRumbleStatus(i) == PAD_MOTOR_RUMBLE) {
                 if (!gp->rumbleStart[i]) {
                     gp->rumbleStart[i] = TRUE;
                     gp->rumbleStartTime[i] = now;
                 }
-diff = (s32)now - (s32)gp->rumbleStartTime[i];
+                diff = (s32)now - (s32)gp->rumbleStartTime[i];
                 if (OSTicksToMilliseconds(diff) > 30000) {
                     if (!gp->rumbleForcedOffLatch[i]) {
                         gp->rumbleForcedOffLatch[i] = TRUE;
@@ -607,7 +626,7 @@ diff = (s32)now - (s32)gp->rumbleStartTime[i];
                     off_time[i] = now;
                 }
                 if (off_trg[i]) {
-diff = (s32)now - (s32)off_time[i];
+                    diff = (s32)now - (s32)off_time[i];
                     if (OSTicksToMilliseconds(diff) > 100) {
                         off_trg[i] = FALSE;
                         gp->rumbleStart[i] = FALSE;
@@ -615,7 +634,7 @@ diff = (s32)now - (s32)off_time[i];
                 }
             }
         } else {
-diff = (s32)now - (s32)gp->rumbleForcedOffTime[i];
+            diff = (s32)now - (s32)gp->rumbleForcedOffTime[i];
             if (OSTicksToMilliseconds(diff) > 30000) {
                 gp->rumbleForcedOffLatch[i] = FALSE;
                 gp->rumbleForcedOff[i] = FALSE;
@@ -680,12 +699,3 @@ void L_gcResetCheck(void) {
         while (1) {}
     }
 }
-
-// forward declarations: these functions are defined further down
-void L_gcResetCheck(void);
-void gcRumbleCheck(void);
-void* gcDvdCheckThread(void* param);
-void viPostCallback(u32 retraceCount);
-void marioStSystemLevel(s32 level);
-void marioStDisp(void);
-void marioStMain(void);

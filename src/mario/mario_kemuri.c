@@ -32,44 +32,42 @@ void mario_kemuri(void) {
     attr = 0;
 
     if (marioStGetSystemLevel() == 0) {
-      if (!(mario->flags & MARIO_FLAG_TUBE_MODE)) {
-        if (mario->currMotionId == MARIO_MOTION_DOKAN) {
-            // FAKE: no-op self-assignment as the then-branch; without it the branch is laid out differently
-            s = s;
-        } else {
-        if (mario->currMotionId != MARIO_MOTION_JUMP) {
-            if (mario->hitobjStandOn != NULL) {
-                attr = hitGetAttr(mario->hitobjStandOn);
-            }
-        } else if (mario->hitobjJumpFrom != NULL) {
-            attr = hitGetAttr(mario->hitobjJumpFrom);
-        }
-        {
-            if (attr & HIT_ATTR_GRASS) {
-                kemuri_mugi();
-            } else if (attr & HIT_ATTR_SHALLOW_WATER) {
-                mario_kemuri_landon();
-            } else if (attr & HIT_ATTR_SNOW) {
-                mario = marioGetPtr();
-                if (mario->currMotionId != MARIO_MOTION_DASH && mario->currMotionId != MARIO_MOTION_WALK) {
-                    ct = 8;
-                } else if (ct++ > 8) {
-                    ct = 0;
-                    sincosf(&s, &c, 6.2831855f * reviseAngle(-mario->directionView) / 360.0f);
-                    effKemuri7N64Entry(mario->position.x + 0.2f * (mario->wPlayerCollisionBox.x * s),
-                                       0.5f + mario->position.y,
-                                       mario->position.z + 0.2f * (mario->wPlayerCollisionBox.x * c),
-                                       -mario->directionView, (f32)left_or_right);
-                    left_or_right = left_or_right == 0;
+        if (!(mario->flags & MARIO_FLAG_TUBE_MODE)) {
+            if (mario->currMotionId == MARIO_MOTION_DOKAN) {
+                // FAKE: no-op self-assignment as the then-branch; without it the branch is laid out differently
+                s = s;
+            } else {
+                if (mario->currMotionId != MARIO_MOTION_JUMP) {
+                    if (mario->hitobjStandOn != NULL) {
+                        attr = hitGetAttr(mario->hitobjStandOn);
+                    }
+                } else if (mario->hitobjJumpFrom != NULL) {
+                    attr = hitGetAttr(mario->hitobjJumpFrom);
                 }
-            } else if (!(mario->flags & MARIO_FLAG_TUBE_MODE)) {
-                if (kpaGetBodyStatus() <= 0 && mario->characterId != CHARACTER_PEACH) {
-                    kemuri();
+                if (attr & HIT_ATTR_GRASS) {
+                    kemuri_mugi();
+                } else if (attr & HIT_ATTR_SHALLOW_WATER) {
+                    mario_kemuri_landon();
+                } else if (attr & HIT_ATTR_SNOW) {
+                    mario = marioGetPtr();
+                    if (mario->currMotionId != MARIO_MOTION_DASH && mario->currMotionId != MARIO_MOTION_WALK) {
+                        ct = 8;
+                    } else if (ct++ > 8) {
+                        ct = 0;
+                        sincosf(&s, &c, 6.2831855f * reviseAngle(-mario->directionView) / 360.0f);
+                        effKemuri7N64Entry(mario->position.x + 0.2f * (mario->wPlayerCollisionBox.x * s),
+                                           0.5f + mario->position.y,
+                                           mario->position.z + 0.2f * (mario->wPlayerCollisionBox.x * c),
+                                           -mario->directionView, (f32)left_or_right);
+                        left_or_right = left_or_right == 0;
+                    }
+                } else if (!(mario->flags & MARIO_FLAG_TUBE_MODE)) {
+                    if (kpaGetBodyStatus() <= 0 && mario->characterId != CHARACTER_PEACH) {
+                        kemuri();
+                    }
                 }
             }
         }
-        }
-      }
     }
     out:;
 }
@@ -262,8 +260,8 @@ void party_kemuri(PartyEntry* party) {
         if (party->runMode != 10) {
             if (party->moveKind != 1) {
                 if (party->runMode == 3 && party->currentMemberId == PARTY_MEMBER_YOSHI) {
-                    if ((void*)party->hitobjStandOn != NULL) {
-                        if (!(hitGetAttr((void*)party->hitobjStandOn) & HIT_ATTR_SHALLOW_WATER)) {
+                    if (party->hitobjStandOn != NULL) {
+                        if (!(hitGetAttr(party->hitobjStandOn) & HIT_ATTR_SHALLOW_WATER)) {
                             if (party->moveSpeed < 2.0f) {
                             } else if (party->kemuriTimer++ > 6) {
                                 {
@@ -278,8 +276,8 @@ void party_kemuri(PartyEntry* party) {
                         party->kemuriTimer = 4;
                     }
                 } else if (party->motionId == 1) {
-                    if ((void*)party->hitobjStandOn != NULL) {
-                        if (!(hitGetAttr((void*)party->hitobjStandOn) & HIT_ATTR_SHALLOW_WATER)) {
+                    if (party->hitobjStandOn != NULL) {
+                        if (!(hitGetAttr(party->hitobjStandOn) & HIT_ATTR_SHALLOW_WATER)) {
                             if (party->moveSpeed < 2.0f) {
                             } else if (party->kemuriTimer++ > 6) {
                                 {
@@ -297,12 +295,11 @@ void party_kemuri(PartyEntry* party) {
 #else
     if (party->moveKind != 1) {
         if (party->runMode == 3 && party->currentMemberId == PARTY_MEMBER_YOSHI) {
-            if ((void*)party->hitobjStandOn != NULL) {
+            if (party->hitobjStandOn != NULL) {
                 if (party->moveSpeed < 2.0f) {
                     party->kemuriTimer = 7;
                 } else if (party->kemuriTimer++ > 6) {
                     f32 c, s;
-                    f32 x, y, z;
                     party->kemuriTimer = 0;
                     sincosf(&s, &c, 6.2831855f * reviseAngle(-party->targetDir) / 360.0f);
                     effKemuri2Entry(0, party->position.x + 0.2f * (party->width * s), 1.5f + party->position.y, party->position.z + 0.2f * (party->width * c), s, c);
@@ -311,12 +308,11 @@ void party_kemuri(PartyEntry* party) {
                 party->kemuriTimer = 4;
             }
         } else if (party->motionId == 1) {
-            if ((void*)party->hitobjStandOn != NULL) {
+            if (party->hitobjStandOn != NULL) {
                 if (party->moveSpeed < 2.0f) {
                     party->kemuriTimer = 7;
                 } else if (party->kemuriTimer++ > 6) {
                     f32 c, s;
-                    f32 x, y, z;
                     party->kemuriTimer = 0;
                     sincosf(&s, &c, 6.2831855f * reviseAngle(-party->targetDir) / 360.0f);
                     effKemuri2Entry(0, party->position.x + 0.2f * (party->width * s), 1.5f + party->position.y, party->position.z + 0.2f * (party->width * c), s, c);

@@ -55,7 +55,7 @@ BattleUnitKind unit_object_switch = {
     "SFX_BTL_DAMAGE_FIRE1", // fireDamageSfxName
     "SFX_BTL_DAMAGE_ICE1",  // iceDamageSfxName
     "SFX_BTL_DAMAGE_BIRIBIRI1", // electricDamageSfxName
-    kUnitMapObject | kNoGravityBob | kActsInZeroGravity | kUnitNoHpGauge | kUnitNoncombatant,             // attributeFlags
+    kUnitMapObject | kNoGravityBob | kActsInZeroGravity | kUnitNoHpGauge | kUnitNoncombatant, // attributeFlags
     &regist,                // statusVulnerability
     1,                      // numParts
     parts,                  // mParts
@@ -87,7 +87,7 @@ static BattleUnitKindPart parts[] = {
         255,                  // baseAlpha
         &defence,             // defense
         &defence_attr,        // defenseAttr
-        kMainPart | kGuardTargetPart | kHidden | kNoShadow,           // attributes
+        kMainPart | kGuardTargetPart | kHidden | kNoShadow, // attributes
         0,                    // counterAttributes
         pose_table,           // poseTable
     },

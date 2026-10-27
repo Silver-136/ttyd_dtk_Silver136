@@ -10,7 +10,9 @@ typedef struct FSTEntry {
     u32 entrySizeOrNext; //file = size, dir = next entry
 } FSTEntry;
 
-static inline int tolower(int c) { return (c == -1) ? -1 : (int)__lower_map[c & 0xFF]; }
+static inline int tolower(int c) {
+    return (c == -1) ? -1 : (int)__lower_map[c & 0xFF];
+}
 
 #define entryIsDir(i) (((FstStart[i].entryInfo & 0xff000000) == 0) ? FALSE : TRUE)
 #define stringOff(i) (FstStart[i].entryInfo & ~0xff000000)
@@ -21,7 +23,7 @@ static inline int tolower(int c) { return (c == -1) ? -1 : (int)__lower_map[c & 
 
 BOOL ARCGetCurrentDir(ARCHandle* handle, char* path, u32 maxlen);
 
-// NOTE: functions are emitted in reverse source order (target starts with ARCClose)
+// The functions are emitted in reverse source order: ARCClose comes first in the object.
 
 BOOL ARCInitHandle(void* arcStart, ARCHandle* handle) {
     FSTEntry* entry;

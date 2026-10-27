@@ -542,3 +542,59 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/manager/winmgr.c | select_disp | white copied through a spare tmp; iconcol = white changes the object | see comment |
 | Both | src/manager/winmgr.c | select_disp_party | white copied through a spare tmp; iconcol = white changes the object | see comment |
 | Both | src/manager/winmgr.c | select_disp_mario | white copied through a spare tmp; iconcol = white changes the object | see comment |
+| Both | src/event/evt_win.c | evt_unitwin_select_func | `x ? FALSE : TRUE` in place of `!x`; !marioChkCtrl() // !marioChkKey() changes the object | see comment |
+| Both | src/mario/mario.c | N_marioChkUseParty | (u16) cast on the u32 buttonNew (all tested bits are in the low half); the plain test changes the object | see comment |
+| Both | src/mario/mario.c | marioReInit | spare copy t of paperPoseId; testing poseId directly changes the object | see comment |
+| Both | src/mario/mario.c | marioMain | spare copy drop of pos; passing &pos changes the object | see comment |
+| Both | src/mario/mario.c | marioChgDamagePose | switch with a single case 0 for the slit test; the plain if changes the object | see comment |
+| Both | src/mario/mario.c | marioChkInScreen | redundant compare with FALSE; return valid changes the object | see comment |
+| Both | src/mario/mario.c | marioMakeDispDir | c30 and c20 hold 30.0f and 20.0f for the negated uses below; the literals -30.0f and -20.0f change the object | see comment |
+| Both | src/mario/mario_balloon.c | marioBalloonMain | switch on !marioChkKey() (empty case 0, default turns the balloon off); the plain if changes the object | see comment |
+| Both | src/mario/mario_hit.c | marioChkGnd2 | no-op (s8) casts of the s8 stick fields; the plain fields change the object | see comment |
+| Both | src/mario/mario_hit.c | marioHitStrippedPool2 | stand-in that nothing calls (the linker strips it); it only places 18.0f in this object's constant pool | see comment |
+| Both | src/mario/mario_hit.c | marioSearchHead_roll | spare pointer to dir; passing &dir directly changes the object | see comment |
+| Both | src/mario/mario_hit.c | marioHitStrippedPool | stand-in that nothing calls (the linker strips it); it only places its five literals in this object's constant pool | see comment |
+| Both | src/mario/mario_hit.c | marioSlitChkWallAround | spare temporary k; the plain `pos.y = w->position.y + 5.0f;` changes the object | see comment |
+| Both | src/mario/mario_hit.c | marioCheckWallShip | dead store to the local pos before the return; removing it changes the object | see comment |
+| Both | src/mario/mario_kemuri.c | mario_kemuri | no-op self-assignment as the then-branch; without it the branch is laid out differently | see comment |
+| Both | src/mario/mario_motion.c | marioChkItemMotion | repeated test of trig (already known nonzero); removing it changes the object | see comment |
+| Both | src/mario/mario_party.c | partyChkJoin | spare u32 temporary; assigning ret directly changes the object | see comment |
+| Both | src/mario/mario_sbr.c | checkOneRevolution | rubwork read directly instead of through rw; the plain form changes the object | see comment |
+| Both | src/mario/mario_sbr.c | marioGetRub | rubwork read directly instead of through rw; the plain form changes the object | see comment |
+| Both | src/mario/mariost.c | gcDvdCheckThread | s32 -> f32 -> s32 round trip; the plain assignment changes the object | see comment |
+| Both | src/motion/mot_hammer.c | mot_hammer | spare copy of kind in its own block; using kind directly changes the object | see comment |
+| Both | src/motion/mot_jabara.c | mot_jabara | spare copy of hitobjStandOn in its own block; passing the field directly changes the object | see comment |
+| Both | src/motion/mot_jump.c | mot_jumpNpc | one Vec holds the front distance (x) and the sin/cos pair (z, y); an f32 out with the s, c locals (as in mot_jumpSw) changes the object | see comment |
+| Both | src/motion/mot_plane.c | planeDead270 | stand-in that nothing calls; it only places its 270.0f literal in this object's constant pool | see comment |
+| Both | src/motion/mot_plane.c | planeDead4 | stand-in that nothing calls; it only places its 4.0f literal in this object's constant pool | see comment |
+| Both | src/motion/mot_roll.c | marioRollStrippedPool | stand-in that nothing calls; it only places these literals in this object's constant pool | see comment |
+| Both | src/motion/mot_ship.c | shipMove | 64-bit index variable that always holds 3 for shipData[3]; indexing with the constant changes the object | see comment |
+| Both | src/motion/mot_ship.c | shipStrippedPool | stand-in that nothing calls; it only places these literals in this object's constant pool | see comment |
+| US | src/motion/mot_slit.c | mot_slit_post | (u16)(id - MARIO_MOTION_FALL_2) <= 1 is the range test FALL_2..UPSTAIRS; the plain range test changes the object | see comment |
+| Both | src/motion/mot_stay.c | lowHP | the result goes through a spare temporary; return pouchGetHP() <= 5 changes the object | see comment |
+| Both | src/party/party_bomhei.c | bomhei_use_main | the acceleration is negated from a spare temporary; party->accelY = -0.8333333f changes the object | see comment |
+| Both | src/party/party_cloud.c | N__cloud_use | re-reads the player pointer mario already holds; dropping the reload changes the object | see comment |
+| Both | src/party/party_cloud.c | partyCloudStrippedPool | stand-in that nothing calls; it only puts 0.0f, 70.0f, 180.0f and the int-to-float conversion constant in this object's constant pool | see comment |
+| Both | src/party/party_hit.c | partyWallSlide | unused zero Vec local; without it the object changes | see comment |
+| Both | src/party/party_hit.c | partyHitStrippedPool | stand-in that nothing calls; it only places these literals and the int-to-float conversion constant in this object's constant pool | see comment |
+| Both | src/party/party_kuribo.c | pre_kurio_use | msg is always set by the chain above; dropping the test changes the object | see comment |
+| Both | src/party/party_motion.c | party_motion_stay | hand-inlined copy of partyStayDist; the call changes the object | see comment |
+| Both | src/party/party_motion.c | party_motion_homing_walk | no-op function-pointer cast; the plain call changes the object | see comment |
+| Both | src/party/party_motion.c | party_motion_homing_fly | no-op function-pointer cast; the plain call changes the object | see comment |
+| Both | src/party/party_motion.c | party_motion_behind_mario | hand-inlined copy of partyGetGndY(x, ty, z); the call changes the object | see comment |
+| Both | src/party/party_motion.c | party_motion_behind_mario_continue | hand-inlined copy of partyGetGndY(x, y, z); the call changes the object | see comment |
+| Both | src/party/party_move.c | partyRecordFootmark | call through a no-op function-pointer cast; the plain call changes the object | see comment |
+| Both | src/party/party_move.c | partyUpdSpd2 | copy of partyUpdSpd with its locals declared in another order; using partyUpdSpd in partyChkUpdSpd changes the object | see comment |
+| Both | src/party/party_move.c | partyChgMoveMode | the copy p and its self-assignment in case 4/5 keep the empty case 4/5 arm; the plain switch changes the object | see comment |
+| Both | src/party/party_nokonoko.c | nokonoko_use | moveDistance is accessed through this byte pointer in the cases below; party->moveDistance changes the object | see comment |
+| Both | src/party/party_nokonoko.c | ccwall | assignment inside the expression and the spare copy k of 30.0f; the plain statements change the object | see comment |
+| Both | src/party/party_nokonoko.c | lookupSafetyPos3 | the (f32) casts on the w * dx and w * -dz products keep them separate multiplies (no fused multiply-add); without them the object changes | see comment |
+| Both | src/party/party_vivian.c | N_marioForceVivianAnime | padding constant kept in .sdata2 by explicit_zero_data and the (void)& use; removing it changes the section layout | see comment |
+| Both | src/party/party_vivian.c | mot_vivian_post | the store is reached by a goto past the return; writing it here changes the object | see comment |
+| Both | src/party/party_vivian.c | vivian_use | stores NULL into an already NULL rippleEffect; dropping the store changes the object | see comment |
+| Both | src/sequence/seq_battle.c | loadTpl | unreferenced word in neither symbol map; removing it changes the object | see comment |
+| Both | src/sequence/seq_battle.c | seq_battleMain | wait flag and goto check; a plain break while still waiting changes the object | see comment |
+| Both | src/sequence/seq_e3.c | seq_e3Main | a second loop counter; reusing the function's i changes the object | see comment |
+| Both | src/sequence/seq_e3.c | e3Disp | the (u32) cast on the 8; plain i + 8 changes the object Shadow Box | see comment |
+| Both | src/sequence/seq_e3.c | forceSdata | stand-in that nothing calls (the linker strips it); it only places 30.0f in the constant pool (JP and US); removing it changes the object | see comment |
+| JP | src/sequence/seq_logo.c | seq_logoInit | empty if with dead tests of wp; removing it changes the object | see comment |

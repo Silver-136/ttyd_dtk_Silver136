@@ -23,10 +23,10 @@ PiantaParlorWork* yuwp;
 EvtWord* yuu_window_evt;
 
 EVT_BEGIN(minigame_end)
-    SET_VALUE(4244967296, 2)
-    SET_VALUE(4164968525, 1)
-    CALL(evt_mario_set_prev_party_pos, 0, 0, 4294966296, 0)
-    CALL(evt_mario_set_prev_party_pos, 1, 0, 4294966296, 0)
+    SET_VALUE(GW(0), 2)
+    SET_VALUE(GSWF_GOR_RETURNING_FROM_MINIGAME, 1)
+    CALL(evt_mario_set_prev_party_pos, 0, 0, -1000, 0)
+    CALL(evt_mario_set_prev_party_pos, 1, 0, -1000, 0)
     CALL(evt_mario_set_enable_key, 0)
     CALL(evt_bero_mapchange, STRING("gor_03"), STRING("A_dokan_02"))
     RETURN
@@ -35,18 +35,18 @@ EVT_END()
 EVT_BEGIN(window_open)
     CALL(evt_mario_cont_onoff, 0)
     BEGIN_SIBLING_EVENT
-        CALL(evt_mario_get_pos, 0, 4264967297, 4264967298, 4264967299)
+        CALL(evt_mario_get_pos, 0, LW(1), LW(2), LW(3))
         LOOP(0)
             WAIT_FRAMES(1)
-            CALL(evt_mario_set_pos, 4264967297, 4264967298, 4264967299)
+            CALL(evt_mario_set_pos, LW(1), LW(2), LW(3))
         END_LOOP
     END_SIBLING_EVENT
-    CALL(yuuminigame_get_window_evt, 4264967296)
-    CALL_CHILD(4264967296)
+    CALL(yuuminigame_get_window_evt, LW(0))
+    CALL_CHILD(LW(0))
     CALL(evt_msg_print, 0, STRING("sysyuu_all_01"), 0, 0)
     CALL(evt_msg_select, 0, STRING("sysyuu_all_02"))
     CALL(evt_msg_continue)
-    IF_INT_EQUAL(4264967296, 0)
+    IF_INT_EQUAL(LW(0), 0)
         CALL(yuuminigame_end)
     END_IF
     CALL(yuuminigame_window_end)
@@ -250,58 +250,62 @@ void monteCountDisp(void) {
     u32 flags = yuwp->flags;
     Mtx mtx;
     GXColor c1, c2, c3, c4;
-    if (flags & 4) y = -0x78;
-    if (!(flags & 1) || !(flags & 2)) return;
-    {
-        {
-        c1 = (GXColor){255, 255, 255, 153};
-        windowDispGX_Waku_col(0, c1, -288.0f, (f32)(y + 0x2C), 200.0f, 44.0f, 16.0f);
-        PSMTXTrans(mtx, -260.0f, (f32)(y + 2), 0.0f);
-        c2 = (GXColor){255, 255, 255, 255};
-        iconDispGxCol(mtx, 0x10, ICON_ITEM_PIANTA_TOKEN, c2);
-        PSMTXTrans(mtx, -230.0f, (f32)(y + 2), 0.0f);
-        c3 = (GXColor){255, 255, 255, 255};
-        iconDispGxCol(mtx, 0x10, ICON_TIMES, c3);
-        PSMTXTrans(mtx, -128.0f, (f32)(y + 2), 0.0f);
-        c4 = (GXColor){255, 255, 255, 255};
-        iconNumberDispGx(mtx, yuwp->dispTokens, 0, c4);
-        yuwp->dispTick++;
-        if ((yuwp->dispTick & 3) == 0) {
-            y = yuwp->tokens - yuwp->dispTokens;
-            yuwp->dispTick = 0;
-            if (monte_snd_flag == 0 && y != 0) {
-                psndSFXOn(SFX_NAME_WORD(PSND_SFX_EVT_GAME_MONTE_COUNT1));
-                monte_snd_flag = 8;
-            }
-            if (y != 0) {
-                y = y / 10;
-                if (y == 0) {
-                    s32 sg;
-                    if ((s32)yuwp->tokens > (s32)yuwp->dispTokens) {
-                        sg = 1;
-                    } else {
-                        sg = -1;
-                    }
-                    y = sg;
+    if (flags & 4) {
+        y = -0x78;
+    }
+    if (!(flags & 1) || !(flags & 2)) {
+        return;
+    }
+    c1 = (GXColor){255, 255, 255, 153};
+    windowDispGX_Waku_col(0, c1, -288.0f, (f32)(y + 0x2C), 200.0f, 44.0f, 16.0f);
+    PSMTXTrans(mtx, -260.0f, (f32)(y + 2), 0.0f);
+    c2 = (GXColor){255, 255, 255, 255};
+    iconDispGxCol(mtx, ICON_FLAG_2D, ICON_ITEM_PIANTA_TOKEN, c2);
+    PSMTXTrans(mtx, -230.0f, (f32)(y + 2), 0.0f);
+    c3 = (GXColor){255, 255, 255, 255};
+    iconDispGxCol(mtx, ICON_FLAG_2D, ICON_TIMES, c3);
+    PSMTXTrans(mtx, -128.0f, (f32)(y + 2), 0.0f);
+    c4 = (GXColor){255, 255, 255, 255};
+    iconNumberDispGx(mtx, yuwp->dispTokens, 0, c4);
+    yuwp->dispTick++;
+    if ((yuwp->dispTick & 3) == 0) {
+        y = yuwp->tokens - yuwp->dispTokens;
+        yuwp->dispTick = 0;
+        if (monte_snd_flag == 0 && y != 0) {
+            psndSFXOn(SFX_NAME_WORD(PSND_SFX_EVT_GAME_MONTE_COUNT1));
+            monte_snd_flag = 8;
+        }
+        if (y != 0) {
+            y = y / 10;
+            if (y == 0) {
+                s32 sg;
+                if ((s32)yuwp->tokens > (s32)yuwp->dispTokens) {
+                    sg = 1;
+                } else {
+                    sg = -1;
                 }
-                yuwp->dispTokens += y;
+                y = sg;
             }
+            yuwp->dispTokens += y;
         }
-        if (monte_snd_flag != 0) monte_snd_flag--;
-        }
+    }
+    if (monte_snd_flag != 0) {
+        monte_snd_flag--;
     }
 }
 
 USER_FUNC(yuugijou_add_montemedal) {
     EvtWord* args = event->args;
-    s32 a = evtGetValue(event, args[0]);
+    s32 immediate = evtGetValue(event, args[0]);
     s32 sum = yuwp->tokens + evtGetValue(event, args[1]);
-    if (sum < 0x1869F) {
+    if (sum < 99999) {
         yuwp->tokens = sum;
     } else {
-        yuwp->tokens = 0x1869F;
+        yuwp->tokens = 99999;
     }
-    if (a != 0) yuwp->dispTokens = yuwp->tokens;
+    if (immediate != 0) {
+        yuwp->dispTokens = yuwp->tokens;
+    }
     return EVT_RETURN_DONE;
 }
 
@@ -340,7 +344,9 @@ USER_FUNC(yuugijou_montemedal_disp_onoff) {
 }
 
 USER_FUNC(yuugijou_montemedal_wait) {
-    if ((s32)yuwp->dispTokens != yuwp->tokens) return EVT_RETURN_BLOCK;
+    if ((s32)yuwp->dispTokens != yuwp->tokens) {
+        return EVT_RETURN_BLOCK;
+    }
     return EVT_RETURN_DONE;
 }
 

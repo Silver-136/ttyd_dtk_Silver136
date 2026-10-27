@@ -81,8 +81,8 @@ static BattleDataEntry data_table[] = {
     {UNIT_DATA_KOURA_OPEN_EVENT, koura_open},
     {UNIT_DATA_KOURA_CLOSE_EVENT, koura_close},
     {UNIT_DATA_DAMAGE_SUB_EVENT, damage_core},
-    {61, pose_tbl_reset},
-    {62, destroy_event},
+    {UNIT_DATA_POSE_TABLE_RESET_EVENT, pose_tbl_reset},
+    {UNIT_DATA_DESTROY_EVENT, destroy_event},
     {UNIT_DATA_DEAD_EVENT, dead_event},
     {0, NULL},
 };

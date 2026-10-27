@@ -88,7 +88,7 @@ static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), -2)
     SET_VALUE(LW(11), 1)
     CALL(_rumble_tree, UNIT_ID_SELF)
-    CALL(_turn_tree, -2)
+    CALL(_turn_tree, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -177,7 +177,7 @@ USER_FUNC(_turn_tree) {
     BattleStageObject* object;
     s32 id;
 
-    id = BattleTransID(event, -2);
+    id = BattleTransID(event, UNIT_ID_SELF);
     unit = BattleGetUnitPtr(_battleWorkPointer, id);
     object = BattleGetObjectPtr(unit->stageObjectId);
     if (isFirstCall) {

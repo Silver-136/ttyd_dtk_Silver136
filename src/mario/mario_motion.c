@@ -491,7 +491,7 @@ void marioJump(void) {
         case MARIO_MOTION_JUMP_3:
             return;
     }
-    if ((s32)mario->currSubMotionId < 10) {
+    if (mario->currSubMotionId < 10) {
         return;
     }
     prev = mario->jumpVelocityY;
@@ -575,13 +575,13 @@ void marioFall(void) {
     }
 #ifdef VERSION_G8ME01
     if (!(mario->trigFlags & MARIO_TRIG_FLAG_JABARA_MOVE_CHK) && (mario->trigFlags & MARIO_TRIG_FLAG_JABARA_CHK)) {
-        rub = marioGetRub(0x100, &a, &b, &c);
+        rub = marioGetRub(PAD_BUTTON_A, &a, &b, &c);
         if (mario->buttonHold & PAD_BUTTON_A) {
             mario->trigFlags |= MARIO_TRIG_FLAG_START_JABARA_SPIN;
         }
     }
 #else
-    rub = marioGetRub(0x100, &a, &b, &c);
+    rub = marioGetRub(PAD_BUTTON_A, &a, &b, &c);
 #endif
     spd = marioGetFallSpd();
     hit = marioChkLandon(&y, spd);
@@ -762,10 +762,10 @@ void marioLandOn(void) {
 
 void mot_talk(void) {
     MarioWork* mario = marioGetPtr();
-    void* npc;
+    NpcEntry* npc;
     f32 camYaw;
     f32 angle;
-    void* fbat;
+    NpcEntry* fbat;
 
     if (mario->characterId == CHARACTER_PEACH) {
         peach_talk();
@@ -807,7 +807,7 @@ void mot_talk(void) {
             mario->currSubMotionId = 10;
         }
     }
-    switch ((s32)mario->currSubMotionId) {
+    switch (mario->currSubMotionId) {
         case 0:
             return;
         case 10:
@@ -887,11 +887,11 @@ BOOL marioChkTransform(void) {
     if (mario->currMotionId == MARIO_MOTION_YOSHI) {
         return FALSE;
     }
-    if (pouchCheckItem(5) > 0 && marioChkShipPlace(mario->hitobjStandOn)) {
+    if (pouchCheckItem(ITEM_BOAT_CURSE) > 0 && marioChkShipPlace(mario->hitobjStandOn)) {
         marioChgMot(MARIO_MOTION_SHIP);
         return FALSE;
     }
-    if (pouchCheckItem(4) > 0 && marioChkPlanePlace(mario->hitobjStandOn)) {
+    if (pouchCheckItem(ITEM_PLANE_CURSE) > 0 && marioChkPlanePlace(mario->hitobjStandOn)) {
         marioChgMot(MARIO_MOTION_PLANE);
         return FALSE;
     }
@@ -918,6 +918,7 @@ BOOL marioChkItemMotion(void) {
     if (mario->flags & (MARIO_FLAG_PAPER_MODE | MARIO_FLAG_TUBE_MODE)) {
         return FALSE;
     }
+    // FAKE: repeated test of trig (already known nonzero); removing it changes the object
     if (!trig) {
         return FALSE;
     }
@@ -940,13 +941,13 @@ s32 marioRollChgChk(void) {
     if (!(mario->buttonHold & PAD_TRIGGER_R)) {
         return 0;
     }
-    if (marioGetRub(0x20, &a, &b, &c) != TRUE) {
+    if (marioGetRub(PAD_TRIGGER_R, &a, &b, &c) != TRUE) {
         return 0;
     }
     if (b < 3) {
         return 0;
     }
-    if (!pouchCheckItem(3)) {
+    if (!pouchCheckItem(ITEM_TUBE_CURSE)) {
         return 0;
     }
     if (marioSlitChkWallAround() || marioCreviceWallChk(mario->position)) {
@@ -986,7 +987,7 @@ void mot_kaze(void) {
         mario->mot.kaze.spinSpeed = 0.0f;
         marioChgPose("M_P_2");
     }
-    switch ((s32)mario->currSubMotionId) {
+    switch (mario->currSubMotionId) {
         case 0:
             mario->mot.kaze.spinSpeed += 5.0f;
             if (mario->mot.kaze.spinSpeed > 60.0f) {
@@ -1026,7 +1027,7 @@ void mot_shadow(void) {
         mario->rot.y = 0.0f;
         mario->rot.z = 0.0f;
     }
-    switch ((s32)mario->currSubMotionId) {
+    switch (mario->currSubMotionId) {
         case 0:
             if (mario->buttonTrg & PAD_BUTTON_B) {
                 mario->rot.x = 0.0f;
@@ -1094,7 +1095,7 @@ void mot_bottomless(void) {
         mario->multiTimer = (s16)(distABf(x, z, mario->position.x, mario->position.z) / mario->mot.bottomless.speed);
         mario->mot.bottomless.angle = angleABf(mario->position.x, mario->position.z, x, z);
     }
-    switch ((s32)mario->currSubMotionId) {
+    switch (mario->currSubMotionId) {
         case 0:
             movePos(&mario->position.x, &mario->position.z, mario->mot.bottomless.speed, mario->mot.bottomless.angle);
             mario->camTarget.x = mario->position.x;
@@ -1160,7 +1161,7 @@ void mot_forceReset(void) {
         mario->trigFlags &= ~MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
         mario->currSubMotionId = 0;
     }
-    switch ((s32)mario->currSubMotionId) {
+    switch (mario->currSubMotionId) {
         case 0:
             marioSlitForceCancel();
             marioChgMot(MARIO_MOTION_STAY);

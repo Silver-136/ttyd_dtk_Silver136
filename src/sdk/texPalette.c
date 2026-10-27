@@ -26,7 +26,7 @@ void UnpackTexPalette(TEXPalettePtr pal) {
             }
             if (pal->descriptorArray[i].CLUTHeader) {
                 pal->descriptorArray[i].CLUTHeader =
-                    (CLUTHeaderPtr)((u8*)pal + (u32)pal->descriptorArray[i].CLUTHeader);
+                    (CLUTHeaderPtr)((Ptr)pal + (u32)pal->descriptorArray[i].CLUTHeader);
                 if (!pal->descriptorArray[i].CLUTHeader->unpacked) {
                     pal->descriptorArray[i].CLUTHeader->data = (Ptr)pal + (u32)pal->descriptorArray[i].CLUTHeader->data;
                     pal->descriptorArray[i].CLUTHeader->unpacked = TRUE;

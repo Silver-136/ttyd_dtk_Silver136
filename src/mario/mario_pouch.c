@@ -17,8 +17,6 @@ extern ItemData itemDataTable[];
 PouchData* mpp_gap;
 static PouchData* mpp;
 extern void qqsort(void* array, s32 num, s32 size, void* compare);
-s32 comp_aiueo(const void* a, const void* b);
-s32 comp_kind(s16* a, s16* b);
 
 s16 _party_max_hp_table[8][4] = {
     {0, 0, 0, 0},
@@ -30,8 +28,6 @@ s16 _party_max_hp_table[8][4] = {
     {15, 20, 30, 200},
     {15, 20, 25, 200}
 };
-s32 comp_aiueo_r(const void* a, const void* b);
-s32 comp_kind_r(s16* a, s16* b);
 
 PouchData* pouchGetPtr(void) {
     return mpp;
@@ -181,22 +177,28 @@ s32 pouchGetEmptyKeepItemCnt(void) {
     return count;
 }
 
-//we have obtained an item, update the appropriate data
+// Puts type at the front of list t1 if it has an empty slot: the entries above the last empty slot move down
+// one place (t2, if given, moves in step and gets 0 at the front). Returns 1, or 0 when the list is full.
 static inline BOOL pouchAdd(s16 *t1, s16 *t2, s32 size, ItemType type) {
     s32 j;
     for (size--; size >= 0; size--) {
         if (t1[size] == 0) {
             for (j = size; j > 0; j--) {
                 t1[j] = t1[j - 1];
-                if (t2) t2[j] = t2[j - 1];
+                if (t2) {
+                    t2[j] = t2[j - 1];
+                }
             }
             t1[0] = type;
-            if (t2) t2[0] = 0;
+            if (t2) {
+                t2[0] = 0;
+            }
             return 1;
         }
     }
     return 0;
 }
+
 BOOL pouchGetItem(ItemType type) {
     s16 *itemLists[2];
     s32 size;
@@ -225,7 +227,7 @@ BOOL pouchGetItem(ItemType type) {
         }
         return 1;
     }
-    if (type == 0x7C) {
+    if (type == ITEM_FLOWER) {
         if (mpp->currentFP < mpp->maximumFP) {
             mpp->currentFP++;
             // FAKE: dead store (function returns right after); steers register allocation
@@ -233,70 +235,57 @@ BOOL pouchGetItem(ItemType type) {
         }
         return 1;
     }
-    if (type == 0x7D) {
+    if (type == ITEM_STAR_PIECE) {
         mpp->mStarPieceCount++;
         return 1;
     }
-    if (type == 0x57) {
+    if (type == ITEM_SHINE_SPRITE) {
         mpp->mShineSpriteCount++;
         return 1;
     }
-    if (((type == 6) || (type == 7)) || (type == 8)) {
+    if (type == ITEM_BOOTS || type == ITEM_SUPER_BOOTS || type == ITEM_ULTRA_BOOTS) {
         switch (type) {
-            case 6:
+            case ITEM_BOOTS:
                 mpp->jumpLevel = 1;
                 break;
-
-            case 7:
+            case ITEM_SUPER_BOOTS:
                 mpp->jumpLevel = 2;
                 break;
-
-            case 8:
+            case ITEM_ULTRA_BOOTS:
                 mpp->jumpLevel = 3;
                 break;
-
         }
-
-    } else
-        if (((type == 9) || (type == 10)) || (type == 11)) {
+    } else if (type == ITEM_HAMMER || type == ITEM_SUPER_HAMMER || type == ITEM_ULTRA_HAMMER) {
         switch (type) {
-            case 9:
+            case ITEM_HAMMER:
                 mpp->hammerLevel = 1;
                 break;
-
-            case 10:
+            case ITEM_SUPER_HAMMER:
                 mpp->hammerLevel = 2;
                 break;
-
-            case 11:
+            case ITEM_ULTRA_HAMMER:
                 mpp->hammerLevel = 3;
                 break;
-
         }
-
-    } else
-        if (type == 0x59) {
+    } else if (type == ITEM_BOWSER_BROS_MEAT) {
         return 1;
-    } else
-        if ((type >= 0xF0) && (type < 0x153)) {
+    } else if (type >= BADGE_MIN && type < BADGE_MAX) {
         swSet(type - 0x70);
     }
     size = 0;
     itemLists[0] = NULL;
     itemLists[1] = NULL;
-    if ((type >= 0x79) && (type < 0xEC)) {
+    if (type >= ITEM_MIN && type < ITEM_MAX) {
         itemLists[0] = mpp->heldItems;
-        size = pouchCheckItem(ITEM_STRANGE_SACK) ? (20) : (10);
+        size = pouchCheckItem(ITEM_STRANGE_SACK) ? MAX_HELD_ITEMS : HELD_ITEM_COUNT_BASE;
         ok = 1;
-    } else
-        if ((type >= 1) && (type < 0x79)) {
+    } else if (type >= KEY_ITEM_MIN && type < KEY_ITEM_MAX) {
         itemLists[1] = NULL;
-        size = 0x79;
+        size = MAX_KEY_ITEMS;
         ok = 1;
         itemLists[0] = mpp->keyItems;
-    } else
-        if ((type >= 0xF0) && (type < 0x153)) {
-        size = 200;
+    } else if (type >= BADGE_MIN && type < BADGE_MAX) {
+        size = MAX_BADGES;
         ok = 1;
         itemLists[0] = mpp->badges;
         itemLists[1] = mpp->equippedBadges;
@@ -347,11 +336,13 @@ s32 pouchCheckItem(u32 itemId) {
 
 static inline void pouchShift(s16 *table1, s16 *table2, int i, s32 maximum) {
     table1[i] = ITEM_NULL;
-    if (table2 != 0) table2[i] = ITEM_NULL;
+    if (table2 != NULL) {
+        table2[i] = ITEM_NULL;
+    }
     for (; i < maximum - 1; i++) {
         table1[i] = table1[i + 1];
         table1[i + 1] = ITEM_NULL;
-        if (table2 != 0) {
+        if (table2 != NULL) {
             table2[i] = table2[i + 1];
             table2[i + 1] = ITEM_NULL;
         }
@@ -367,22 +358,20 @@ BOOL pouchRemoveItem(ItemType type) {
     maximum = 0;
     table1 = NULL;
     table2 = NULL;
-    if ((type >= ITEM_COIN) && (type < (ITEM_FRESH_JUICE + 1))) {
+    if (type >= ITEM_MIN && type < ITEM_MAX) {
         table1 = mpp->heldItems;
         table2 = NULL;
-        maximum = pouchCheckItem(ITEM_STRANGE_SACK) ? (20) : (10);
+        maximum = pouchCheckItem(ITEM_STRANGE_SACK) ? MAX_HELD_ITEMS : HELD_ITEM_COUNT_BASE;
         valid = 1;
-    } else
-        if ((type >= ITEM_STRANGE_SACK) && (type < (ITEM_CRYSTAL_STAR + 1))) {
+    } else if (type >= KEY_ITEM_MIN && type < KEY_ITEM_MAX) {
         table1 = mpp->keyItems;
         table2 = NULL;
-        maximum = 121;
+        maximum = MAX_KEY_ITEMS;
         valid = 1;
-    } else
-        if ((type >= ITEM_POWER_JUMP) && (type < (ITEM_SUPER_CHARGE_P + 1))) {
+    } else if (type >= BADGE_MIN && type < BADGE_MAX) {
         table1 = mpp->badges;
         table2 = mpp->equippedBadges;
-        maximum = 200;
+        maximum = MAX_BADGES;
         valid = 1;
     } else {
         valid = 0;
@@ -417,12 +406,12 @@ BOOL pouchRemoveItemIndex(ItemType type, s32 index) {
     } else if (type >= KEY_ITEM_MIN && type < KEY_ITEM_MAX) {
         table1 = mpp->keyItems;
         table2 = NULL;
-        maximum = 121;
+        maximum = MAX_KEY_ITEMS;
         valid = TRUE;
     } else if (type >= BADGE_MIN && type < BADGE_MAX) {
         table1 = mpp->badges;
         table2 = mpp->equippedBadges;
-        maximum = 200;
+        maximum = MAX_BADGES;
         valid = TRUE;
     } else {
         valid = FALSE;
@@ -547,7 +536,9 @@ s32 comp_aiueo(const void* a, const void* b) {
 s32 comp_kind(s16* a, s16* b) {
     s16 x = itemDataTable[*a].type_sort_order;
     s16 y = itemDataTable[*b].type_sort_order;
-    if (x > y) return 1;
+    if (x > y) {
+        return 1;
+    }
     return -(x < y);
 }
 
@@ -565,16 +556,18 @@ s32 comp_aiueo_r(const void* a, const void* b) {
 s32 comp_kind_r(s16* a, s16* b) {
     s16 x = itemDataTable[*a].type_sort_order;
     s16 y = itemDataTable[*b].type_sort_order;
-    if (x < y) return 1;
+    if (x < y) {
+        return 1;
+    }
     return -(x > y);
 }
 
 void pouchSortItem(s32 mode) {
     s32 k;
-    s16 items[20];
-    s16 keys[121];
-    s16 badges[200];
-    s16 equipped[200];
+    s16 items[MAX_HELD_ITEMS];
+    s16 keys[MAX_KEY_ITEMS];
+    s16 badges[MAX_BADGES];
+    s16 equipped[MAX_BADGES];
     s32 n, i, j;
     BOOL swap;
     s16 t2, t1;
@@ -590,34 +583,44 @@ void pouchSortItem(s32 mode) {
     pp[0] = mpp;
     if ((u32)mode <= 1 || mode == 7 || mode == 8) {
         n = 0;
-        for (j = 0; j < 20; j++) {
+        for (j = 0; j < MAX_HELD_ITEMS; j++) {
             if (pp[0]->heldItems[j] != 0) {
                 items[n++] = pp[0]->heldItems[j];
             }
         }
-        for (k = n; k < 20; k++) {
+        for (k = n; k < MAX_HELD_ITEMS; k++) {
             items[k] = 0;
         }
-        if (mode == 0) qqsort(items, n, 2, comp_aiueo);
-        else if (mode == 1) qqsort(items, n, 2, comp_kind);
-        else if (mode == 7) qqsort(items, n, 2, comp_aiueo_r);
-        else if (mode == 8) qqsort(items, n, 2, comp_kind_r);
+        if (mode == 0) {
+            qqsort(items, n, sizeof(s16), comp_aiueo);
+        } else if (mode == 1) {
+            qqsort(items, n, sizeof(s16), comp_kind);
+        } else if (mode == 7) {
+            qqsort(items, n, sizeof(s16), comp_aiueo_r);
+        } else if (mode == 8) {
+            qqsort(items, n, sizeof(s16), comp_kind_r);
+        }
         memcpy(pp[0]->heldItems, items, sizeof(items));
     }
     if ((u32)(mode - 2) <= 1 || mode == 9 || mode == 10) {
         n = 0;
-        for (j = 0; j < 121; j++) {
+        for (j = 0; j < MAX_KEY_ITEMS; j++) {
             if (pp[0]->keyItems[j] != 0) {
                 keys[n++] = pp[0]->keyItems[j];
             }
         }
-        for (k = n; k < 121; k++) {
+        for (k = n; k < MAX_KEY_ITEMS; k++) {
             keys[k] = 0;
         }
-        if (mode == 2) qqsort(keys, n, 2, comp_aiueo);
-        else if (mode == 3) qqsort(keys, n, 2, comp_kind);
-        else if (mode == 9) qqsort(keys, n, 2, comp_aiueo_r);
-        else if (mode == 10) qqsort(keys, n, 2, comp_kind_r);
+        if (mode == 2) {
+            qqsort(keys, n, sizeof(s16), comp_aiueo);
+        } else if (mode == 3) {
+            qqsort(keys, n, sizeof(s16), comp_kind);
+        } else if (mode == 9) {
+            qqsort(keys, n, sizeof(s16), comp_aiueo_r);
+        } else if (mode == 10) {
+            qqsort(keys, n, sizeof(s16), comp_kind_r);
+        }
         memcpy(pp[0]->keyItems, keys, sizeof(keys));
     }
     if ((u32)(mode - 4) <= 2 || (u32)(mode - 11) <= 1 || mode == 13) {
@@ -632,14 +635,14 @@ void pouchSortItem(s32 mode) {
 
 #endif
         i = 0;
-        for (n = 0; n < 200; n++) {
+        for (n = 0; n < MAX_BADGES; n++) {
             if (pp[0]->badges[n] != 0) {
                 badges[i] = pp[0]->badges[n];
                 i++;
                 equipped[i - 1] = pp[0]->equippedBadges[n];
             }
         }
-        for (n = i; n < 200; n++) {
+        for (n = i; n < MAX_BADGES; n++) {
             badges[n] = 0;
             equipped[n] = 0;
         }
@@ -667,19 +670,33 @@ void pouchSortItem(s32 mode) {
 #endif
                 swap = FALSE;
                 if (mode == 4) {
-                    if (strcmp(ida, idb) > 0) swap = TRUE;
+                    if (strcmp(ida, idb) > 0) {
+                        swap = TRUE;
+                    }
                 } else if (mode == 11) {
-                    if (strcmp(ida, idb) < 0) swap = TRUE;
+                    if (strcmp(ida, idb) < 0) {
+                        swap = TRUE;
+                    }
                 } else if (mode == 5) {
-                    if (a->type_sort_order > b->type_sort_order) swap = TRUE;
+                    if (a->type_sort_order > b->type_sort_order) {
+                        swap = TRUE;
+                    }
                 } else if (mode == 12) {
-                    if (a->type_sort_order < b->type_sort_order) swap = TRUE;
+                    if (a->type_sort_order < b->type_sort_order) {
+                        swap = TRUE;
+                    }
                 } else if (mode == 6) {
-                    if (ca > cb) swap = TRUE;
-                    else if (ca == cb && a->type_sort_order > b->type_sort_order) swap = TRUE;
+                    if (ca > cb) {
+                        swap = TRUE;
+                    } else if (ca == cb && a->type_sort_order > b->type_sort_order) {
+                        swap = TRUE;
+                    }
                 } else if (mode == 13) {
-                    if (ca < cb) swap = TRUE;
-                    else if (ca == cb && a->type_sort_order < b->type_sort_order) swap = TRUE;
+                    if (ca < cb) {
+                        swap = TRUE;
+                    } else if (ca == cb && a->type_sort_order < b->type_sort_order) {
+                        swap = TRUE;
+                    }
                 }
                 if (swap) {
 #ifdef VERSION_G8ME01
@@ -921,8 +938,10 @@ void pouchReviseMarioParam(void) {
     mpp->maximumHP = mpp->baseMaxHP;
     mpp->maximumFP = mpp->baseMaxFP;
 
-    for (i = 0; i < 200; i++) {
-        if (!mpp->equippedBadges[i]) continue;
+    for (i = 0; i < MAX_BADGES; i++) {
+        if (!mpp->equippedBadges[i]) {
+            continue;
+        }
         switch (mpp->equippedBadges[i]) {
             case ITEM_HP_PLUS:
                 mpp->maximumHP += 5;
@@ -940,12 +959,11 @@ void pouchReviseMarioParam(void) {
     }
     mpp->availableBP = mpp->maximumBP;
 
-    for (i = 0; i < 200; i++) {
+    for (i = 0; i < MAX_BADGES; i++) {
         mpp->availableBP -= itemDataTable[mpp->equippedBadges[i]].bp_cost;
     }
 }
 
-#pragma push
 void pouchRevisePartyParam(void) {
     PouchPartyData* party;
     int count, i;
@@ -963,7 +981,6 @@ void pouchRevisePartyParam(void) {
         }
     }
 }
-#pragma pop
 
 s16 pouchGetStarPoint(void) {
     return mpp->mStarPoints;
@@ -989,7 +1006,7 @@ s32 pouchEquipCheckBadge(s32 badgeId) {
     int i, count;
 
     count = 0;
-    for (i = 0; i < 200; i++) {
+    for (i = 0; i < MAX_BADGES; i++) {
         if (badgeId == mpp->equippedBadges[i]) {
             count++;
         }
@@ -1004,7 +1021,7 @@ BOOL pouchEquipCheckBadgeIndex(s32 index) {
 BOOL pouchEquipBadgeID(s32 badgeId) {
     int i;
 
-    for (i = 0; i < 200; i++) {
+    for (i = 0; i < MAX_BADGES; i++) {
         if (mpp->badges[i] == badgeId) {
             if (mpp->badges[i]) {
                 mpp->equippedBadges[i] = mpp->badges[i];
@@ -1018,7 +1035,7 @@ BOOL pouchEquipBadgeID(s32 badgeId) {
 BOOL N_pouchUnEquipBadgeID(s32 badgeId) {
     int i;
 
-    for (i = 0; i < 200; i++) {
+    for (i = 0; i < MAX_BADGES; i++) {
         if (mpp->equippedBadges[i] == badgeId) {
             if (mpp->equippedBadges[i]) {
                 mpp->equippedBadges[i] = 0;
@@ -1067,8 +1084,7 @@ void pouchAddKpaScore(u32 score) {
 }
 
 void pouchGetStarStone(u32 id) {
-    u16* sp = &mpp->mStarPowersObtained;
-    if (!*sp) {
+    if (!mpp->mStarPowersObtained) {
         mpp->audienceCount = 2.0f;
     }
     mpp->mStarPowersObtained |= 1 << id;

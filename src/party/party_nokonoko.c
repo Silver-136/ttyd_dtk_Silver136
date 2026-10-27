@@ -21,7 +21,6 @@
 extern void partyUpdMoveSpd(PartyEntry* party);
 extern void partyWalkInit(PartyEntry* party, s32 mode);
 
-
 static s32 nokoSe;
 #include "driver/hitdrv.h"
 #include "mario/mario_sbr.h"
@@ -29,10 +28,6 @@ static s32 nokoSe;
 #include "eff/eff_kemu_test.h"
 #include "eff/n64/eff_small_star_n64.h"
 #include "mario/mariost.h"
-EffectEntry* effSmallStarN64Entry(s32 type, s32 count, f32 x, f32 y, f32 z, f32 dx, f32 dy,
-                                  f32 dz);
-HitEntry* hitCheckFilter(HitFilterCallback callback, f32* hitX, f32* hitY, f32* hitZ, f32* distance, f32* hitNX,
-                         f32* hitNY, f32* hitNZ, f32 x, f32 y, f32 z, f32 nx, f32 ny, f32 nz);
 double sqrt(double);
 HitEntry* ccwall(PartyEntry* party, s32 mode);
 void lookupSafetyPosSub(Vec pos, f32 height, f32 angle, Vec* out);
@@ -149,7 +144,7 @@ void nokonoko_use_cancel(void) {
             party->work.nokonoko.word17C = 0;
             party->work.nokonoko.word180 = 0;
         }
-        if (party->runMode != 8 && party->runMode != 0xd) {
+        if (party->runMode != 8 && party->runMode != 13) {
             partyChgRunMode(party, 2);
             party->moveMode = 0;
         }
@@ -177,7 +172,6 @@ void nokonoko_use_post(PartyEntry* party) {
     party->work.nokonoko.word17C = 0;
     party->work.nokonoko.word180 = 0;
 }
-
 
 static inline void noko_se_off(void) {
     marioGetPtr();
@@ -354,7 +348,17 @@ void nokonoko_use(PartyEntry* party) {
                                party->camId);
         }
         party->moveDistance += party->moveSpeed;
-        NOKO_PICK_UP_NEAR_ITEM(party, party->useMotionId = 50; psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_PNK_KOURA_WALL1), &party->position); noko_star(party, 1); break;)
+        if (party->work.nokonoko.heldItem == NULL) {
+            party->work.nokonoko.heldItem = itemNearDistCheck(party->position.x, party->position.y, party->position.z,
+                                                              0.5f * party->width + 12.0f);
+            if (party->work.nokonoko.heldItem != NULL) {
+                itemPickUp(party->work.nokonoko.heldItem);
+                party->useMotionId = 50;
+                psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_PNK_KOURA_WALL1), &party->position);
+                noko_star(party, 1);
+                break;
+            }
+        }
         if (ccwall(party, 0) != NULL) {
             party->useMotionId = 50;
             psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_PNK_KOURA_WALL1), &party->position);
@@ -408,9 +412,20 @@ void nokonoko_use(PartyEntry* party) {
             noko_se_off();
             break;
         }
-        NOKO_PICK_UP_NEAR_ITEM(party, party->useMotionId = 50; psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_PNK_KOURA_WALL1), &party->position); noko_star(party, 1); noko_se_off(); break;)
+        if (party->work.nokonoko.heldItem == NULL) {
+            party->work.nokonoko.heldItem = itemNearDistCheck(party->position.x, party->position.y, party->position.z,
+                                                              0.5f * party->width + 12.0f);
+            if (party->work.nokonoko.heldItem != NULL) {
+                itemPickUp(party->work.nokonoko.heldItem);
+                party->useMotionId = 50;
+                psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_PNK_KOURA_WALL1), &party->position);
+                noko_star(party, 1);
+                noko_se_off();
+                break;
+            }
+        }
         if (!(party->flags & PARTY_FLAG_IS_EVT_USE)) {
-            if (mario->currMotionId == MARIO_MOTION_SHIP || mario->currMotionId == MARIO_MOTION_JABARA || mario->currMotionId == MARIO_MOTION_PLANE || mario->currMotionId == MARIO_MOTION_ROLL || (u16)(mario->currMotionId - 0x1f) <= 1 ||
+            if (mario->currMotionId == MARIO_MOTION_SHIP || mario->currMotionId == MARIO_MOTION_JABARA || mario->currMotionId == MARIO_MOTION_PLANE || mario->currMotionId == MARIO_MOTION_ROLL || (u16)(mario->currMotionId - MARIO_MOTION_DAMAGE) <= 1 ||
                 (mario->flags & MARIO_FLAG_FORCED_MOVEMENT) || !marioChkKey()) {
                 nokonoko_finish(party);
                 noko_se_off();
@@ -439,6 +454,7 @@ void nokonoko_use(PartyEntry* party) {
         break;
     }
 
+    // FAKE: moveDistance is accessed through this byte pointer in the cases below; party->moveDistance changes the object
     moveDistPtr = (u8*)&party->moveDistance;
     switch (party->useMotionId) {
     case 50:
@@ -453,7 +469,7 @@ void nokonoko_use(PartyEntry* party) {
         party->moveSpeed += 0.3f * (lim - party->moveSpeed);
         if (party->moveSpeed >= lim) {
             party->moveSpeed = lim;
-            if ((*(f32*)moveDistPtr) < 10.0f) {
+            if (party->moveDistance < 10.0f) {
                 party->useMotionId = 52;
             }
         }
@@ -473,12 +489,12 @@ void nokonoko_use(PartyEntry* party) {
         }
         noko_spin(party);
         party->moveSpeed += 0.1f * ((-1.0f) - party->moveSpeed);
-        (*(f32*)moveDistPtr) -= party->moveSpeed;
-        if ((*(f32*)moveDistPtr) <= 0.0f) {
-            (*(f32*)moveDistPtr) = 0.0f;
+        party->moveDistance -= party->moveSpeed;
+        if (party->moveDistance <= 0.0f) {
+            party->moveDistance = 0.0f;
             party->useMotionId = 53;
             party->moveSpeed += 0.1f * ((-1.0f) - party->moveSpeed);
-            party->work.yoshi.gravityAccel = 50.0f;
+            party->work.nokonoko.shellSpin = 50.0f;
         }
         break;
     case 53:
@@ -486,13 +502,13 @@ void nokonoko_use(PartyEntry* party) {
             party->useMotionId = 70;
             return;
         }
-        party->work.yoshi.gravityAccel -= 2.2f;
-        if (party->work.yoshi.gravityAccel <= 0.0f) {
-            party->work.yoshi.gravityAccel = 0.0f;
+        party->work.nokonoko.shellSpin -= 2.2f;
+        if (party->work.nokonoko.shellSpin <= 0.0f) {
+            party->work.nokonoko.shellSpin = 0.0f;
         }
         noko_spin(party);
         party->moveSpeed += ((-2.0f) - party->moveSpeed) * (party->work.nokonoko.dashed != 0 ? 0.2f : 0.1f);
-        (*(f32*)moveDistPtr) -= party->moveSpeed;
+        party->moveDistance -= party->moveSpeed;
         if (party->moveSpeed <= 0.0f) {
             party->moveSpeed = 0.0f;
             flags = lookupSafetyPos(party->moveTarget, party->height, &out);
@@ -530,7 +546,7 @@ void nokonoko_use(PartyEntry* party) {
             }
             party->useMotionId = 54;
             party->moveTarget = out;
-            (*(f32*)moveDistPtr) = distABf(party->position.x, party->position.z, party->moveTarget.x, party->moveTarget.z);
+            party->moveDistance = distABf(party->position.x, party->position.z, party->moveTarget.x, party->moveTarget.z);
             party->targetDir = angleABf(party->position.x, party->position.z, party->moveTarget.x, party->moveTarget.z);
         }
         break;
@@ -540,8 +556,8 @@ void nokonoko_use(PartyEntry* party) {
         if (party->moveSpeed >= 4.0f) {
             party->moveSpeed = 4.0f;
         }
-        (*(f32*)moveDistPtr) -= party->moveSpeed;
-        if ((*(f32*)moveDistPtr) <= 10.0f) {
+        party->moveDistance -= party->moveSpeed;
+        if (party->moveDistance <= 10.0f) {
             party->useMotionId = 70;
             party->moveSpeed = 0.0f;
             return;
@@ -553,9 +569,9 @@ void nokonoko_use(PartyEntry* party) {
             return;
         }
         noko_spin(party);
-        party->work.yoshi.gravityAccel -= 2.2f;
-        if (party->work.yoshi.gravityAccel <= 0.0f) {
-            party->work.yoshi.gravityAccel = 0.0f;
+        party->work.nokonoko.shellSpin -= 2.2f;
+        if (party->work.nokonoko.shellSpin <= 0.0f) {
+            party->work.nokonoko.shellSpin = 0.0f;
         }
         party->moveSpeed += ((-2.0f) - party->moveSpeed) * (party->work.nokonoko.dashed != 0 ? 0.2f : 0.1f);
         if (party->moveSpeed <= 0.0f) {
@@ -596,7 +612,7 @@ void nokonoko_use(PartyEntry* party) {
         party->useMotionId = 81;
         party->moveSpeed = 0.0f;
         party->targetDir = angleABf(party->position.x, party->position.z, party->moveTarget.x, party->moveTarget.z);
-        (*(f32*)moveDistPtr) += 75.0f;
+        party->moveDistance += 75.0f;
         psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_PNK_KOURA_BACK1), &party->position);
     case 81:
         noko_spin(party);
@@ -604,7 +620,15 @@ void nokonoko_use(PartyEntry* party) {
         if (party->moveSpeed >= 18.0f) {
             party->moveSpeed = 18.0f;
         }
-        NOKO_PICK_UP_NEAR_ITEM(party, psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_PNK_KOURA_WALL1), &party->position); noko_star(party, 1);)
+        if (party->work.nokonoko.heldItem == NULL) {
+            party->work.nokonoko.heldItem = itemNearDistCheck(party->position.x, party->position.y, party->position.z,
+                                                              0.5f * party->width + 12.0f);
+            if (party->work.nokonoko.heldItem != NULL) {
+                itemPickUp(party->work.nokonoko.heldItem);
+                psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_PNK_KOURA_WALL1), &party->position);
+                noko_star(party, 1);
+            }
+        }
         hit = ccwall(party, 1);
         if (hit != NULL) {
             if (!(hitGetAttr(hit) & HIT_ATTR_MOBJ)) {
@@ -615,24 +639,32 @@ void nokonoko_use(PartyEntry* party) {
             party->useMotionId = 110;
             return;
         }
-        (*(f32*)moveDistPtr) -= party->moveSpeed;
-        if ((*(f32*)moveDistPtr) <= 20.0f) {
+        party->moveDistance -= party->moveSpeed;
+        if (party->moveDistance <= 20.0f) {
             party->useMotionId = 82;
         }
         break;
     case 82:
         noko_spin(party);
         party->moveSpeed += 0.35f * ((-1.0f) - party->moveSpeed);
-        NOKO_PICK_UP_NEAR_ITEM(party, psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_PNK_KOURA_WALL1), &party->position); noko_star(party, 1);)
+        if (party->work.nokonoko.heldItem == NULL) {
+            party->work.nokonoko.heldItem = itemNearDistCheck(party->position.x, party->position.y, party->position.z,
+                                                              0.5f * party->width + 12.0f);
+            if (party->work.nokonoko.heldItem != NULL) {
+                itemPickUp(party->work.nokonoko.heldItem);
+                psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_PNK_KOURA_WALL1), &party->position);
+                noko_star(party, 1);
+            }
+        }
         if (ccwall(party, 1) != NULL) {
             party->useMotionId = 100;
             break;
         }
-        (*(f32*)moveDistPtr) -= party->moveSpeed;
-        if ((*(f32*)moveDistPtr) <= 0.0f) {
-            (*(f32*)moveDistPtr) = distABf(party->moveTarget.x, party->moveTarget.z, party->position.x, party->position.z);
+        party->moveDistance -= party->moveSpeed;
+        if (party->moveDistance <= 0.0f) {
+            party->moveDistance = distABf(party->moveTarget.x, party->moveTarget.z, party->position.x, party->position.z);
             party->useMotionId = 84;
-            party->work.yoshi.gravityAccel = 50.0f;
+            party->work.nokonoko.shellSpin = 50.0f;
             party->targetDir = angleABf(party->position.x, party->position.z, party->moveTarget.x, party->moveTarget.z);
         }
         break;
@@ -642,8 +674,8 @@ void nokonoko_use(PartyEntry* party) {
             party->useMotionId = 100;
             break;
         }
-        (*(f32*)moveDistPtr) -= party->moveSpeed;
-        if ((*(f32*)moveDistPtr) <= 30.0f) {
+        party->moveDistance -= party->moveSpeed;
+        if (party->moveDistance <= 30.0f) {
             party->useMotionId = 86;
             party->moveSpeed = 0.0f;
             party->moveFrames = sysMsec2Frame(500);
@@ -660,6 +692,7 @@ void nokonoko_use(PartyEntry* party) {
         break;
     case 100:
         ccwall(party, 1);
+        // FAKE: dy holds the x difference and dx the y difference here; swapping them changes the object
         dy = party->position.x - mario->position.x;
         dx = party->position.y - mario->position.y;
         dz = party->position.z - mario->position.z;
@@ -725,9 +758,9 @@ void nokonoko_use(PartyEntry* party) {
         }
         party->useMotionId = 90;
         party->moveTarget = out2;
-        (*(f32*)moveDistPtr) = distABf(party->position.x, party->position.z, party->moveTarget.x, party->moveTarget.z);
+        party->moveDistance = distABf(party->position.x, party->position.z, party->moveTarget.x, party->moveTarget.z);
         party->targetDir = angleABf(party->position.x, party->position.z, party->moveTarget.x, party->moveTarget.z);
-        party->work.yoshi.gravityAccel = 50.0f;
+        party->work.nokonoko.shellSpin = 50.0f;
         break;
     case 90:
         noko_spin(party);
@@ -735,8 +768,8 @@ void nokonoko_use(PartyEntry* party) {
         if (party->moveSpeed >= 4.0f) {
             party->moveSpeed = 4.0f;
         }
-        (*(f32*)moveDistPtr) -= party->moveSpeed;
-        if ((*(f32*)moveDistPtr) <= 10.0f) {
+        party->moveDistance -= party->moveSpeed;
+        if (party->moveDistance <= 10.0f) {
             party->useMotionId = 70;
             party->moveSpeed = 0.0f;
         }
@@ -827,7 +860,7 @@ void nokonoko_finish(PartyEntry* party) {
                 partyChgRunMode(party, 2);
                 party->moveMode = 0;
             } else {
-                party->flags &= 0x7FFFFFFF;
+                party->flags &= ~PARTY_FLAG_IS_EVT_USE;
                 partyChgRunMode(party, 0);
             }
         }
@@ -870,6 +903,7 @@ HitEntry* ccwall(PartyEntry* party, s32 mode) {
     yofs = 10.0f;
     x = party->position.x;
     z = party->position.z;
+    // FAKE: assignment inside the expression and the spare copy k of 30.0f; the plain statements change the object
     y0 = party->position.y + (w = party->height);
     k = 30.0f;
     dist = w + k;
@@ -884,7 +918,6 @@ HitEntry* ccwall(PartyEntry* party, s32 mode) {
         hy = (f32)(s32)(100.0f * hy + 0.5f) / 100.0f;
         py = (f32)(s32)(100.0f * party->position.y + 0.5f) / 100.0f;
         if (__fabsf(py - hy) <= 11.0f) {
-
             if (py <= hy) {
                 if (mode == 0) {
                     party->position.y = hy;
@@ -958,6 +991,7 @@ HitEntry* ccwall(PartyEntry* party, s32 mode) {
     z = w * (f32)cos(3.1415927f * (90.0f + party->targetDir) / 180.0f) + party->position.z;
     x = w * (f32)sin(3.1415927f * (90.0f + party->targetDir) / 180.0f) + party->position.x;
     y = party->position.y + yofs;
+    // FAKE: the same assignment twice; dropping one changes the object
     dist = 0.4f * party->width + party->moveSpeed;
     dist = 0.4f * party->width + party->moveSpeed;
     sincosf(&s, &c, party->targetDir);
@@ -983,7 +1017,14 @@ HitEntry* ccwall(PartyEntry* party, s32 mode) {
     return NULL;
 }
 
-void nokoStrippedPool(f32* p) { p[0] = 10.0f; p[1] = 30.0f; p[2] = 100.0f; p[3] = 11.0f; p[4] = 6.0f; }
+void nokoStrippedPool(f32* p) {
+    p[0] = 10.0f;
+    p[1] = 30.0f;
+    p[2] = 100.0f;
+    p[3] = 11.0f;
+    p[4] = 6.0f;
+}
+
 u32 lookupSafetyPos(Vec pos, f32 height, Vec* out) {
     Vec p[4];
     f32 dist;
@@ -1050,48 +1091,56 @@ u32 lookupSafetyPos(Vec pos, f32 height, Vec* out) {
     dist = 0.1f + height;
     h3 = hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, x, y + height, z, 0.0f, (-1.0f), 0.0f);
     flags = 0;
-    if (h2) flags |= 4;
-    if (h3) flags |= 8;
-    if (h0) flags |= 1;
-    if (h1) flags |= 2;
+    if (h2) {
+        flags |= 4;
+    }
+    if (h3) {
+        flags |= 8;
+    }
+    if (h0) {
+        flags |= 1;
+    }
+    if (h1) {
+        flags |= 2;
+    }
     if (h0) {
         if (h1 && h2 && h3) {
-        out->x = 0.5f * (p[3].x + p[1].x);
-        out->z = 0.5f * (p[3].z + p[1].z);
-        out->y = p[3].y;
-        return flags;
+            out->x = 0.5f * (p[3].x + p[1].x);
+            out->z = 0.5f * (p[3].z + p[1].z);
+            out->y = p[3].y;
+            return flags;
         }
         if (h1) {
-        out->x = 0.5f * (p[3].x + p[2].x);
-        out->z = 0.5f * (p[3].z + p[2].z);
-        out->y = pos.y;
-        return flags;
+            out->x = 0.5f * (p[3].x + p[2].x);
+            out->z = 0.5f * (p[3].z + p[2].z);
+            out->y = pos.y;
+            return flags;
         }
         if (h2) {
-        out->x = 0.5f * (p[3].x + p[1].x);
-        out->z = 0.5f * (p[3].z + p[1].z);
-        out->y = p[3].y;
-        return flags;
+            out->x = 0.5f * (p[3].x + p[1].x);
+            out->z = 0.5f * (p[3].z + p[1].z);
+            out->y = p[3].y;
+            return flags;
         }
         if (h3) {
-        out->x = 0.5f * (p[3].x + p[0].x);
-        out->z = 0.5f * (p[3].z + p[0].z);
-        out->y = p[3].y;
-        return flags;
+            out->x = 0.5f * (p[3].x + p[0].x);
+            out->z = 0.5f * (p[3].z + p[0].z);
+            out->y = p[3].y;
+            return flags;
         }
         *out = p[3];
     } else if (h3) {
         if (h1) {
-        out->x = 0.5f * (p[0].x + p[2].x);
-        out->z = 0.5f * (p[0].z + p[2].z);
-        out->y = p[0].y;
-        return flags;
+            out->x = 0.5f * (p[0].x + p[2].x);
+            out->z = 0.5f * (p[0].z + p[2].z);
+            out->y = p[0].y;
+            return flags;
         }
         if (h2) {
-        out->x = 0.5f * (p[1].x + p[2].x);
-        out->z = 0.5f * (p[1].z + p[2].z);
-        out->y = p[1].y;
-        return flags;
+            out->x = 0.5f * (p[1].x + p[2].x);
+            out->z = 0.5f * (p[1].z + p[2].z);
+            out->y = p[1].y;
+            return flags;
         }
         *out = p[0];
     } else {
@@ -1131,7 +1180,7 @@ void lookupSafetyPos2(Vec pos, f32 height, Vec* out) {
     MarioWork* player = marioGetPtr();
 
     w = player->wPlayerCollisionBox.x;
-    // (f32)(w * d) keeps the product a separate fmuls (no fmadds), as in the target
+    // FAKE: the (f32) casts on the w * dx and w * -dz products keep them separate multiplies (no fused multiply-add); without them the object changes
     rad = (3.1415927f * 90.0f) / 180.0f;
     dx = nokoSin(rad);
     dz = (f32)cos(rad);
@@ -1208,7 +1257,7 @@ void lookupSafetyPos3(Vec pos, f32 height, Vec* out) {
     MarioWork* player = marioGetPtr();
 
     w = player->wPlayerCollisionBox.x;
-    // (f32)(w * d) keeps the product a separate fmuls (no fmadds), as in the target
+    // FAKE: the (f32) casts on the w * dx and w * -dz products keep them separate multiplies (no fused multiply-add); without them the object changes
     rad = (3.1415927f * 90.0f) / 180.0f;
     dx = (f32)sin(rad);
     dz = (f32)cos(rad);
@@ -1252,11 +1301,12 @@ void lookupSafetyPosSub(Vec pos, f32 height, f32 angle, Vec* out) {
     f32 ny;
     f32 nz;
     Vec* p;
+    f32 w;
     MarioWork* player = marioGetPtr();
     rad = (3.1415927f * angle) / 180.0f;
-    angle = player->wPlayerCollisionBox.x;
-    x = angle * (f32)sin(rad) + pos.x;
-    z = angle * -(f32)cos(rad) + pos.z;
+    w = player->wPlayerCollisionBox.x;
+    x = w * (f32)sin(rad) + pos.x;
+    z = w * -(f32)cos(rad) + pos.z;
     y = pos.y + height;
     dist = 0.1f + height;
     if (hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, x, y, z, 0.0f, (-1.0f), 0.0f) != NULL) {

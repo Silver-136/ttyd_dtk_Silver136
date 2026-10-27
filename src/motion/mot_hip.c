@@ -334,7 +334,7 @@ s32 U_chkground(void) {
             marioChgMot(MARIO_MOTION_DAMAGE);
             return 1;
         }
-        if (attr & 0xC00) {
+        if (attr & (HIT_ATTR_TOGE | 0x400)) {
             set_damage_root_ypos(mario->position.y);
             marioChgMot(MARIO_MOTION_DAMAGE_TOGE);
             return 1;

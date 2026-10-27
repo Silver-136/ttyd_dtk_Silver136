@@ -26,12 +26,12 @@
 
 
 static EVT_BEGIN(quake_evt)
-    CALL(evt_cam_shake, CAMERA_3D, PTR(0xF24A7A8A), PTR(0xF24A7A80), 50)
+    CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.009765625f), FLOAT(0.0f), 50)
     RETURN
 EVT_END()
 
 static EVT_BEGIN(quake_bgmode_evt)
-    CALL(evt_cam_shake, CAMERA_3D, PTR(0xF24A7A86), PTR(0xF24A7A80), 30)
+    CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.005859375f), FLOAT(0.0f), 30)
     RETURN
 EVT_END()
 
@@ -70,12 +70,12 @@ s32 gazigazi(EventEntry* evt, BOOL isFirstCall) {
     evt->lwData[0] = (s32)mario->position.x;
     evt->lwData[1] = (s32)mario->mot.damage.rootY;
     evt->lwData[2] = (s32)mario->position.z;
-    return 2;
+    return EVT_RETURN_DONE;
 }
 
 BOOL marioChkDamageSink(void) {
     MarioWork* mario = marioGetPtr();
-    if (mario->currMotionId == MARIO_MOTION_DAMAGE && (s32)mario->currSubMotionId >= 0 && (s32)mario->currSubMotionId < 10) {
+    if (mario->currMotionId == MARIO_MOTION_DAMAGE && mario->currSubMotionId >= 0 && mario->currSubMotionId < 10) {
         return TRUE;
     }
     return FALSE;
@@ -215,12 +215,12 @@ void mot_damage(void) {
             d = distABf(dest.x, dest.z, mario->position.x, mario->position.z);
             mario->multiTimer = (s16)(d / 8);
             mario->directionView = angleABf(mario->position.x, mario->position.z, dest.x, dest.z);
-            mario->mot.damage.camStepY = (dest.y - mario->mot.damage.rootY) / (f32)(s32)mario->multiTimer;
+            mario->mot.damage.camStepY = (dest.y - mario->mot.damage.rootY) / (f32)mario->multiTimer;
             mario->currSubMotionId = 12;
             mario->dispFlags |= MARIO_DISP_FLAG_HIDE;
-            if ((s32)mario->multiTimer == 0) {
+            if (mario->multiTimer == 0) {
                 mario->multiTimer = 10;
-                mario->mot.damage.camStepY = (dest.y - mario->mot.damage.rootY) / (f32)(s32)mario->multiTimer;
+                mario->mot.damage.camStepY = (dest.y - mario->mot.damage.rootY) / (f32)mario->multiTimer;
                 mario->currSubMotionId = 14;
             }
         }
@@ -336,7 +336,7 @@ BOOL marioWaitDamageReturnFall(void) {
     if (mario->currMotionId != MARIO_MOTION_DAMAGE) {
         return -1;
     }
-    if ((s32)mario->currSubMotionId >= 20) {
+    if (mario->currSubMotionId >= 20) {
         f32 x, y, z;
         Vec pos = mario->position;
         marioGetScreenPos(pos, &x, &y, &z);
@@ -410,7 +410,7 @@ void mot_damageToge(void) {
             d = distABf(dest.x, dest.z, mario->position.x, mario->position.z);
             mario->multiTimer = (s16)(d / 8);
             mario->directionView = angleABf(mario->position.x, mario->position.z, dest.x, dest.z);
-            mario->mot.damage.camStepY = (dest.y - mario->mot.damage.rootY) / (f32)(s32)mario->multiTimer;
+            mario->mot.damage.camStepY = (dest.y - mario->mot.damage.rootY) / (f32)mario->multiTimer;
             mario->currSubMotionId = 12;
         }
         break;
@@ -490,7 +490,7 @@ BOOL marioWaitDamageTogeReturnFall(void) {
     if (mario->currMotionId != MARIO_MOTION_DAMAGE_TOGE) {
         return -1;
     }
-    if ((s32)mario->currSubMotionId >= 20) {
+    if (mario->currSubMotionId >= 20) {
         f32 x, y, z;
         Vec pos = mario->position;
         marioGetScreenPos(pos, &x, &y, &z);

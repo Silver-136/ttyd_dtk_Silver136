@@ -1,5 +1,3 @@
-#ifdef VERSION_G8ME01
-#endif
 #include "battle/battle.h"
 #include "battle/battle_information.h"
 #include "driver/animdrv.h"
@@ -34,10 +32,12 @@
 #include "seq/seq_battle.h"
 
 s32 debug_battle_flag;
+// FAKE: unreferenced word in neither symbol map; removing it changes the object
 s32 seq_battle_unk_8041874c;
 
 
 static inline BOOL loadTpl(const char* path) {
+    // FAKE: the (u32) cast; comparing the s32 result directly changes the object
     return (u32)fileAsyncf(FILE_TYPE_TPL, NULL, "%s/%s", getMarioStDvdRoot(), path) != 0;
 }
 
@@ -50,11 +50,11 @@ void seq_battleInit(SequenceWork* work) {
     npc = fbat->target;
     if (evtGetValue(NULL, GSW_STORY_PROGRESS) < STG2_23_TIME_BOMB_ACTIVATED || evtGetValue(NULL, GSW_STORY_PROGRESS) >= STG2_24_BOSS_BATTLE) {
         if (evtGetValue(NULL, GSW_STORY_PROGRESS) != STG8_END_AFTER_THE_BATTLE) {
-            psndBGMOff(0x400);
+            psndBGMOff(PSND_PAUSE);
             psndBGMOn(PSND_SLOT(1), (char*)npc->battleInfo.bgmName);
         }
     }
-    psndENVOff(0x400);
+    psndENVOff(PSND_PAUSE);
     padRumbleOff(0);
     evtStopAll(4);
     psndSetFlag(PSND_FLAG_MUTE_SFX);
@@ -127,6 +127,7 @@ void seq_battleMain(SequenceWork* work) {
             fbat->battleWait = 0;
             work->state++;
         case 3: {
+            // FAKE: wait flag and goto check; a plain break while still waiting changes the object
             BOOL wait;
             fbat = fbatGetPointer();
             stage = fbat->target->battleInfo.stageData;
@@ -345,7 +346,10 @@ void battle_exit(void) {
     L_psndBGM_stop();
     psndClearFlag(PSND_FLAG_MUTE_SFX);
     light = lightGetPaperCraft();
-    { Vec v = {-200.0f, 100.0f, 100.0f}; light->position = v; }
+    {
+        Vec v = {-200.0f, 100.0f, 100.0f};
+        light->position = v;
+    }
     PSMTXScale(mtx, 3.0f, 3.0f, 3.0f);
     PSMTXMultVec(mtx, &light->position, &light->position);
     if (evtGetValue(NULL, GSW_STORY_PROGRESS) >= STG2_23_TIME_BOMB_ACTIVATED && evtGetValue(NULL, GSW_STORY_PROGRESS) < STG2_24_BOSS_BATTLE) {

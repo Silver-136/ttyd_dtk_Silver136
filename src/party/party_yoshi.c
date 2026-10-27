@@ -31,7 +31,6 @@ typedef struct YoshiWork {
     EffectEntry* effect;  // 0x14
 } YoshiWork;
 
-
 extern f32 marioGetMoveRate(void);
 extern HitEntry* dou10_yoko_yari2(void* out);
 double sin(double);
@@ -46,7 +45,7 @@ static f32 marioJumpStandData[10] = {1.52f, -0.188f, 2.925f, -0.847f, -0.1f, -0.
 f32 ofs_PYS_R_2[10] = {0.0f, 0.0f, 0.366f, 0.555f, 0.38f, 0.0f, 0.0f, 0.366f, 0.555f, 0.38f};
 f32 ofs_PYS_F_1[10] = {0.0f, 0.0f, 0.433f, 0.557f, 0.512f, 0.0f, 0.0f, 0.433f, 0.557f, 0.512f};
 
-// Yoshi's work (PartyEntry.useStruct). A macro, not an inline function: as a function the object changes (2026-10-27).
+// Yoshi's work (PartyEntry.useStruct). A macro, not an inline function: as a function the object changes.
 #define YOSHI_WORK(party) ((YoshiWork*)(party)->useStruct)
 
 static inline void yoshiAddFloorMove(PartyEntry* party) {
@@ -66,9 +65,6 @@ static inline void yoshiSyncMario(MarioWork* mario, PartyEntry* party) {
     mario->displayDirection = party->displayDirection;
     mario->displayDirectionTarget = party->displayDirectionTarget;
 }
-
-void yoshi_damageToge(PartyEntry* party);
-
 
 f32 evt_yoshi_spd;
 s32 evt_yoshi_frm;
@@ -95,22 +91,22 @@ s32 evt_get_yoshi_frm(void) {
 
 void L_sweatEntry(PartyEntry* party, void* hit) {
     party->hitobjStandOn = hit;
-    if (yoshiGetStatus() == 1 && !(party->playerPtr->flags & 0xF0000)) {
+    if (yoshiGetStatus() == 1 && !(party->playerPtr->flags & (MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING | MARIO_FLAG_IS_STEPPING | MARIO_FLAG_HAS_INPUT_JUMP))) {
         party->playerPtr->hitobjStandOn = hit;
     }
 }
 
 void L_sweatMain(PartyEntry* party) {
-    if (party->useStruct && ((YoshiWork*)party->useStruct)->effect) {
+    if (party->useStruct && YOSHI_WORK(party)->effect) {
         f32 x = party->position.x;
         f32 y = party->position.y + 18.0f;
         f32 z = party->position.z;
-        ((EffSweatN64Work*)((YoshiWork*)party->useStruct)->effect->userdata)->position.x = x;
-        ((EffSweatN64Work*)((YoshiWork*)party->useStruct)->effect->userdata)->position.y = y;
-        ((EffSweatN64Work*)((YoshiWork*)party->useStruct)->effect->userdata)->position.z = z;
-        if (--((YoshiWork*)party->useStruct)->timer <= 0) {
-            effDelete(((YoshiWork*)party->useStruct)->effect);
-            ((YoshiWork*)party->useStruct)->effect = NULL;
+        ((EffSweatN64Work*)YOSHI_WORK(party)->effect->userdata)->position.x = x;
+        ((EffSweatN64Work*)YOSHI_WORK(party)->effect->userdata)->position.y = y;
+        ((EffSweatN64Work*)YOSHI_WORK(party)->effect->userdata)->position.z = z;
+        if (--YOSHI_WORK(party)->timer <= 0) {
+            effDelete(YOSHI_WORK(party)->effect);
+            YOSHI_WORK(party)->effect = NULL;
         }
     }
 }
@@ -151,7 +147,7 @@ void marioRideYoshi(void) {
     if (party->useStruct == NULL) {
         party->useStruct = __memAlloc(HEAP_DEFAULT, sizeof(YoshiWork));
         memset(party->useStruct, 0, sizeof(YoshiWork));
-        ((YoshiWork*)party->useStruct)->effect = NULL;
+        YOSHI_WORK(party)->effect = NULL;
     }
     extra = partyGetPtr(marioGetExtraPartyId());
     if (extra) {
@@ -256,7 +252,7 @@ void yoshi_bye(PartyEntry* party) {
 }
 
 void yoshi_exit(PartyEntry* party) {
-    party->playerPtr->flags &= ~0x10000000;
+    party->playerPtr->flags &= ~MARIO_FLAG_CHG_MOT_DISABLED;
     marioYoshiForceCancel();
     marioChgMot(MARIO_MOTION_STAY);
 }
@@ -268,8 +264,8 @@ void yoshi_jumpStand(void) {
         return;
     }
     if (!(party->useMotionId >= 60 && party->useMotionId <= 66)) {
-            party->useMotionId = 60;
-        }
+        party->useMotionId = 60;
+    }
 }
 
 void yoshi_damageToge(PartyEntry* party) {
@@ -315,7 +311,7 @@ void yoshiAnimeCtrl(PartyEntry* party) {
 }
 
 void yoshi_init(PartyEntry* party) {
-    party->memberKind = 4;
+    party->memberKind = PARTY_MEMBER_YOSHI;
     party->moveKind = 0;
     party->height = 26.0f;
     party->width = 20.0f;
@@ -1002,8 +998,6 @@ void inertia(PartyEntry* party) {
         } else {
             k = -0.07f;
             if (mario->hitobjWall) {
-                if (lim) {
-                }
                 k = -0.5f;
             }
             vx = vx * k + vx;
@@ -1018,8 +1012,6 @@ void inertia(PartyEntry* party) {
 #else
         k = -0.07f;
         if (mario->hitobjWall) {
-            if (lim) {
-            }
             k = -0.5f;
         }
         vx = vx * k + vx;
@@ -1032,7 +1024,7 @@ void inertia(PartyEntry* party) {
         }
 #endif
     } else if (vx * vx + vz * vz <= 256.0f) {
-        dir = ((YoshiWork*)party->useStruct)->dir;
+        dir = YOSHI_WORK(party)->dir;
         vx += sx * acc;
         if (dir > 0 && vx <= 0.0f) {
             vx = 0.0f;
@@ -1072,7 +1064,7 @@ void searchGround(PartyEntry* party) {
     f32 stepA;
     f32 stepB;
     f32 diff;
-    void* step;
+    HitEntry* step;
 
     mario = party->playerPtr;
     hit = NULL;
@@ -1265,8 +1257,8 @@ void checkWall(PartyEntry* party, f32 spd, f32 dir) {
                 party->hitobjAction = hit;
                 mario->hitobjFrontA = hit;
             } else {
-                party->hitobjAction = (void*)party->hitobjFront;
-                mario->hitobjFrontA = (void*)party->hitobjFront;
+                party->hitobjAction = party->hitobjFront;
+                mario->hitobjFrontA = party->hitobjFront;
             }
         }
         hit = dou10_yoko_yari2(&work1);

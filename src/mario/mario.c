@@ -73,7 +73,6 @@ Vec R_last_position;
 s32 blurPosId;
 
 //local prototypes
-void marioDispBlurSub(Mtx mtx, s32 blurId);
 const char* toRearPose(const char* name);
 const char* toFrontPose(const char* name);
 
@@ -102,14 +101,14 @@ static inline void marioCharPoseRelease(MarioWork* wp) {
 }
 
 static inline s32 marioBadgeColor(void) {
-    s32 a = pouchEquipCheckBadge(ITEM_L_EMBLEM);
-    s32 b = pouchEquipCheckBadge(ITEM_W_EMBLEM);
+    s32 lEmblem = pouchEquipCheckBadge(ITEM_L_EMBLEM);
+    s32 wEmblem = pouchEquipCheckBadge(ITEM_W_EMBLEM);
 
-    if (a && !b) {
+    if (lEmblem && !wEmblem) {
         return 1;
-    } else if (!a && b) {
+    } else if (!lEmblem && wEmblem) {
         return 2;
-    } else if (a && b) {
+    } else if (lEmblem && wEmblem) {
         return 3;
     }
     return 0;
@@ -251,8 +250,8 @@ void marioSetSpec(void) {
     MarioWork* wp = mp;
 
     if (wp->characterId == CHARACTER_PEACH) {
-        (wp->wPlayerCollisionBox).x = 20.0f;
-        (wp->wPlayerCollisionBox).y = 47.0f;
+        wp->wPlayerCollisionBox.x = 20.0f;
+        wp->wPlayerCollisionBox.y = 47.0f;
         wp->mBaseWalkSpeed = 1.0f;
         wp->mBaseDashSpeed = 2.0f;
     } else if (wp->characterId == CHARACTER_BOWSER) {
@@ -260,11 +259,11 @@ void marioSetSpec(void) {
         wp->mBaseDashSpeed = 2.25f;
     } else {
         if (!(wp->flags & MARIO_FLAG_BG_MODE)) {
-            (wp->wPlayerCollisionBox).x = 20.0f;
-            (wp->wPlayerCollisionBox).y = 37.0f;
+            wp->wPlayerCollisionBox.x = 20.0f;
+            wp->wPlayerCollisionBox.y = 37.0f;
         } else {
-            (wp->wPlayerCollisionBox).x = 10.0f;
-            (wp->wPlayerCollisionBox).y = 25.9f;
+            wp->wPlayerCollisionBox.x = 10.0f;
+            wp->wPlayerCollisionBox.y = 25.9f;
         }
         wp->mBaseWalkSpeed = 1.0f;
         wp->mBaseDashSpeed = 2.25f;
@@ -298,20 +297,20 @@ void marioEntry(void) {
 void marioItemGetDisable(void) {
     MarioWork* wp = mp;
     wp->flags |= MARIO_FLAG_ITEM_GET_DISABLED;
-    wp->itemGetDisableTimer = 0x14;
+    wp->itemGetDisableTimer = 20;
 }
 
 void marioItemGetChk(void) {
-    MarioWork* work;
-    s32 var;
+    MarioWork* wp;
+    s32 timer;
 
-    work = mp;
-    var = mp->itemGetDisableTimer;
-    if (var > 0) {
-        var--;
-        work->itemGetDisableTimer = (s16)var;
-        if ((s16)var <= 0) {
-            work->itemGetDisableTimer = 0;
+    wp = mp;
+    timer = mp->itemGetDisableTimer;
+    if (timer > 0) {
+        timer--;
+        wp->itemGetDisableTimer = (s16)timer;
+        if ((s16)timer <= 0) {
+            wp->itemGetDisableTimer = 0;
             mp->flags &= ~MARIO_FLAG_ITEM_GET_DISABLED;
         }
     }
@@ -336,7 +335,9 @@ BOOL marioFrontActionValidChk(void) {
     return TRUE;
 }
 
-static inline s32 marioChkCtrl2(void) { return mp->ctrlOffCount ? 0 : 1; }
+static inline s32 marioChkCtrl2(void) {
+    return mp->ctrlOffCount ? 0 : 1;
+}
 static inline BOOL marioCtrlDisable(void) {
     return marioChkCtrl2() ? 0 : 1;
 }
@@ -472,6 +473,7 @@ BOOL marioChkCtrl(void) {
 }
 
 BOOL N_marioChkUseParty(void) {
+    // FAKE: (u16) cast on the u32 buttonNew (all tested bits are in the low half); the plain test changes the object
     if ((u16)gp->buttonNew[0] & (PAD_BUTTON_LEFT | PAD_BUTTON_RIGHT | PAD_BUTTON_DOWN | PAD_BUTTON_UP | PAD_BUTTON_START)) {
         return TRUE;
     }
@@ -636,11 +638,11 @@ BOOL marioChkSts(s32 flags) {
 void marioResetHitObj(const char* name) {
     MarioWork* wp = mp;
 
-    if (wp->hitobjFrontA && !strcmp(hitGetName((HitEntry*)wp->hitobjFrontA), name)) {
-        wp->hitobjFrontA = 0;
+    if (wp->hitobjFrontA && !strcmp(hitGetName(wp->hitobjFrontA), name)) {
+        wp->hitobjFrontA = NULL;
     }
-    if (wp->hitobjFront && !strcmp(hitGetName((HitEntry*)wp->hitobjFront), name)) {
-        wp->hitobjFront = 0;
+    if (wp->hitobjFront && !strcmp(hitGetName(wp->hitobjFront), name)) {
+        wp->hitobjFront = NULL;
     }
     if (wp->hitobjStandOn && !strcmp(hitGetName(wp->hitobjStandOn), name)) {
         wp->hitobjStandOn = NULL;
@@ -651,17 +653,17 @@ void marioResetHitObj(const char* name) {
     if (wp->hitobjPush && !strcmp(hitGetName(wp->hitobjPush), name)) {
         wp->hitobjPush = NULL;
     }
-    if (wp->hitobjWall && !strcmp(hitGetName((HitEntry*)wp->hitobjWall), name)) {
-        wp->hitobjWall = 0;
+    if (wp->hitobjWall && !strcmp(hitGetName(wp->hitobjWall), name)) {
+        wp->hitobjWall = NULL;
     }
-    if (wp->hitobjHead && !strcmp(hitGetName((HitEntry*)wp->hitobjHead), name)) {
-        wp->hitobjHead = 0;
+    if (wp->hitobjHead && !strcmp(hitGetName(wp->hitobjHead), name)) {
+        wp->hitobjHead = NULL;
     }
-    if (wp->hitobjUnder && !strcmp(hitGetName((HitEntry*)wp->hitobjUnder), name)) {
-        wp->hitobjUnder = 0;
+    if (wp->hitobjUnder && !strcmp(hitGetName(wp->hitobjUnder), name)) {
+        wp->hitobjUnder = NULL;
     }
-    if (wp->hitobjHammer && !strcmp(hitGetName((HitEntry*)wp->hitobjHammer), name)) {
-        wp->hitobjHammer = 0;
+    if (wp->hitobjHammer && !strcmp(hitGetName(wp->hitobjHammer), name)) {
+        wp->hitobjHammer = NULL;
     }
 }
 
@@ -780,10 +782,10 @@ void marioReInit(void) {
     s8 prev0;
     s8 prev1;
     struct KpaWork* kpaWork;
-    f32 f1A8;
-    f32 f1AC;
-    f32 f1A0;
-    f32 f19C;
+    f32 dispDir;
+    f32 dispDirTarget;
+    f32 dirView;
+    f32 moveDir;
 
     dotFlag = (wp = mp)->flags & MARIO_FLAG_IS_8_BIT;
     camId = marioGetCamId();
@@ -794,10 +796,11 @@ void marioReInit(void) {
     kpaWork = wp->kpaWork;
     trigFlags = wp->trigFlags;
     motion = wp->currMotionId;
-    f1A8 = wp->displayDirection;
-    f1AC = wp->displayDirectionTarget;
-    f1A0 = wp->directionView;
-    f19C = wp->moveDirection;
+    dispDir = wp->displayDirection;
+    dispDirTarget = wp->displayDirectionTarget;
+    dirView = wp->directionView;
+    moveDir = wp->moveDirection;
+    // FAKE: spare copy t of paperPoseId; testing poseId directly changes the object
     t = wp->paperPoseId;
     poseId = t;
     prev0 = wp->prevPartyMemberId[0];
@@ -822,10 +825,10 @@ void marioReInit(void) {
     wp->characterId = charId;
     wp->trigFlags = trigFlags;
     wp->currMotionId = motion;
-    wp->displayDirection = f1A8;
-    wp->displayDirectionTarget = f1AC;
-    wp->directionView = f1A0;
-    wp->moveDirection = f19C;
+    wp->displayDirection = dispDir;
+    wp->displayDirectionTarget = dispDirTarget;
+    wp->directionView = dirView;
+    wp->moveDirection = moveDir;
     wp->prevPartyMemberId[0] = prev0;
     wp->prevPartyMemberId[1] = prev1;
     wp->currPartySlotId[0] = slot0;
@@ -977,6 +980,7 @@ void marioMain(void) {
             pos.x = wp->position.x;
             pos.y = 30.0f + wp->position.y;
             pos.z = wp->position.z;
+            // FAKE: spare copy drop of pos; passing &pos changes the object
             drop = pos;
             itemCoinDrop(&drop);
         }
@@ -1144,8 +1148,12 @@ void marioCtrlOff2Main(void) {
     MarioMotion mot = wp->currMotionId;
     f32 y;
 
-    if (mot == MARIO_MOTION_PLANE) return;
-    if (mot == MARIO_MOTION_SHIP) return;
+    if (mot == MARIO_MOTION_PLANE) {
+        return;
+    }
+    if (mot == MARIO_MOTION_SHIP) {
+        return;
+    }
     if (mot == MARIO_MOTION_DAMAGE || mot == MARIO_MOTION_DAMAGE_TOGE || mot == MARIO_MOTION_BOTTOMLESS ||
         mot == MARIO_MOTION_JABARA || mot == MARIO_MOTION_YOSHI ||
         mot == MARIO_MOTION_JUMP_3 || mot == MARIO_MOTION_JUMP_STAND) {
@@ -1239,7 +1247,7 @@ void marioMove(void) {
                     marioChgPose("M_R_1");
                 }
             } else {
-                stick = (s8)wp->wStickDir1;
+                stick = wp->wStickDir1;
                 stick = stick * stick;
                 if (stick < 25) {
                     marioChgPose("M_Z_1");
@@ -1316,7 +1324,7 @@ void marioMoveMain(void) {
         spd = wp->controlStickSensitivity * wp->playerGravity;
         if (wp->flags & MARIO_FLAG_PAPER_MODE) {
             if (wp->currMotionId != MARIO_MOTION_JUMP_STAND) {
-                spd = vx;
+                spd = 0.0f;
             } else {
                 spd *= 0.015f;
             }
@@ -1440,6 +1448,7 @@ void marioChgDamagePose(void) {
     MarioMotion mot = wp->currMotionId;
 
     if (mot != MARIO_MOTION_SHIP && mot != MARIO_MOTION_ROLL && mot != MARIO_MOTION_PLANE && mot != MARIO_MOTION_JABARA && mot != MARIO_MOTION_YOSHI) {
+        // FAKE: switch with a single case 0 for the slit test; the plain if changes the object
         switch (wp->dispFlags & MARIO_DISP_FLAG_SLIT) {
         case 0:
             marioChgPose("M_D_1");
@@ -1492,14 +1501,14 @@ void marioChgPose(const char* name) {
             if (!(wp->flags & MARIO_FLAG_IS_8_BIT)) {
                 wp->animName = name;
                 wp->poseTime = 0;
-                wp->dispFlags &= ~0x30000000;
+                wp->dispFlags &= ~(MARIO_DISP_FLAG_EVT_POSE | 0x20000000);
                 wp->trigFlags |= MARIO_TRIG_FLAG_CHG_ANIM;
             } else {
                 dot = toDotMarioPose(name);
                 if (dot) {
                     wp->animName = dot;
                     wp->poseTime = 0;
-                    wp->dispFlags &= ~0x30000000;
+                    wp->dispFlags &= ~(MARIO_DISP_FLAG_EVT_POSE | 0x20000000);
                     wp->trigFlags |= MARIO_TRIG_FLAG_CHG_ANIM;
                 }
             }
@@ -1516,7 +1525,7 @@ void marioChgPoseTime(const char* name, s16 frames) {
         if (!animName || strcmp(animName, name)) {
             wp->animName = name;
             wp->poseTime = frames;
-            wp->dispFlags &= ~0x30000000;
+            wp->dispFlags &= ~(MARIO_DISP_FLAG_EVT_POSE | 0x20000000);
             wp->trigFlags |= MARIO_TRIG_FLAG_CHG_ANIM;
         }
     }
@@ -1563,7 +1572,7 @@ BOOL marioPaperOn(const char* name) {
         animPaperPoseRelease(wp->paperPoseId);
         wp->paperPoseId = -1;
     }
-    wp->dispFlags |= MARIO_DISP_FLAG_PAPER; //paper on
+    wp->dispFlags |= MARIO_DISP_FLAG_PAPER;
     wp->paperPoseId = animPaperPoseEntry(name, 2);
     flag = (!strcmp(name, "p_roll")
         || !strcmp(name, "p_plane")
@@ -1581,7 +1590,7 @@ void marioPaperOff(void) {
     if (wp->dispFlags & MARIO_DISP_FLAG_PAPER) {
         if (wp->paperAnimName) {
             animPoseSetPaperAnimGroup(mp->paperAnimGroupId[0], NULL, FALSE);
-            wp->paperAnimName = 0;
+            wp->paperAnimName = NULL;
             wp->dispFlags &= ~MARIO_DISP_FLAG_PAPER;
             marioPaperRelease();
         }
@@ -1613,7 +1622,8 @@ BOOL marioChkInScreen(s32 x, s32 y) {
     if (x >= 0 && x <= 600 && y >= 0 && y <= 535) {
         valid = TRUE;
     }
-    return valid != FALSE; //why
+    // FAKE: redundant compare with FALSE; return valid changes the object
+    return valid != FALSE;
 }
 
 f32 marioGetScale(void) {
@@ -1625,6 +1635,7 @@ void marioMakeDispDir(void) {
     f32 diff;
     f32 tgt;
     f32 step;
+    // FAKE: c30 and c20 hold 30.0f and 20.0f for the negated uses below; the literals -30.0f and -20.0f change the object
     f32 c30 = 30.0f;
     f32 c20 = 20.0f;
 
@@ -1770,7 +1781,8 @@ void marioRearAnime(void) {
     const char* name;
     f32 diff;
 
-    if (!(wp->dispFlags & 0x70000004) && !(wp->flags & MARIO_FLAG_IS_CARRYING_BOBBERY)) {
+    if (!(wp->dispFlags & (MARIO_DISP_FLAG_PAPER | 0x20000000 | MARIO_DISP_FLAG_EVT_POSE | MARIO_DISP_FLAG_NO_REAR_POSE)) &&
+        !(wp->flags & MARIO_FLAG_IS_CARRYING_BOBBERY)) {
         diff = revise360(wp->moveDirection - wp->targetYaw);
         if (diff >= 290.0f || diff <= 70.0f) {
             name = toRearPose(wp->animName);
@@ -1892,7 +1904,10 @@ void marioPreDisp(void) {
         } else {
             sz = size;
         }
-        t = 2; if (bit) { t = 0; }
+        t = 2;
+        if (bit) {
+            t = 0;
+        }
         shadowEntryMode(t, wp->position.x + xo, wp->position.y, wp->position.z + zo, sz);
     } else {
         dy = wp->position.y - wp->groundY;

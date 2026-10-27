@@ -20,6 +20,7 @@
 #include "mario/mario_sbr.h"
 
 static inline BOOL lowHP(void) {
+    // FAKE: the result goes through a spare temporary; return pouchGetHP() <= 5 changes the object
     BOOL r = pouchGetHP() <= 5;
     return r;
 }
@@ -133,7 +134,7 @@ void mot_stay(void) {
     if (mario->flags & MARIO_FLAG_IS_8_BIT) {
         marioChkJump();
         if (mario->controlStickSensitivity > 0.0f) {
-            if ((s8)mario->wStickDir1 * (s8)mario->wStickDir1 + (s8)mario->wStickDir2 * (s8)mario->wStickDir2 > 0xBD1) {
+            if (mario->wStickDir1 * mario->wStickDir1 + mario->wStickDir2 * mario->wStickDir2 > 0xBD1) {
                 if (pouchEquipCheckBadge(ITEM_SLOW_GO) == 0) {
                     marioChgMot(MARIO_MOTION_DASH);
                 } else {
@@ -173,13 +174,13 @@ void mot_stay(void) {
         }
         if (m->idleTimer == gp->framerate * 2) {
 #else
-        if (m->idleTimer > 0xF0) {
+        if (m->idleTimer > 240) {
             m->idleTimer = 0;
         }
-        if (m->idleTimer == 0xF) {
+        if (m->idleTimer == 15) {
             m->soundId[0] = psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_VOICE_MARIO_RELIEF1), &m->position);
         }
-        if (m->idleTimer == 0x87) {
+        if (m->idleTimer == 135) {
 #endif
             m->soundId[0] = psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_VOICE_MARIO_RELIEF2), &m->position);
         }
@@ -236,7 +237,7 @@ void mot_stay(void) {
     }
     if (mario->wMotionTimer == 0 && mario->controlStickSensitivity > 0.0f && held == FALSE) {
 #endif
-        if ((s8)mario->wStickDir1 * (s8)mario->wStickDir1 + (s8)mario->wStickDir2 * (s8)mario->wStickDir2 > 0xBD1) {
+        if (mario->wStickDir1 * mario->wStickDir1 + mario->wStickDir2 * mario->wStickDir2 > 0xBD1) {
             if (pouchEquipCheckBadge(ITEM_SLOW_GO) == 0) {
                 marioChgMot(MARIO_MOTION_DASH);
             } else {
@@ -297,7 +298,7 @@ void mot_stay(void) {
 #ifdef VERSION_G8ME01
             if ((s32)++mario->multiTimer >= gp->framerate * 2) {
 #else
-            if ((s32)++mario->multiTimer >= 0x8C) {
+            if ((s32)++mario->multiTimer >= 140) {
 #endif
                 mario->multiTimer = 0;
                 m = marioGetPtr();
@@ -313,10 +314,9 @@ void mot_stay(void) {
 
 void marioChgMotAuto(void) {
     MarioWork* mario = marioGetPtr();
-    s32 a = (u8)mario->wStickDir1;
-    if ((s8)a == 0 && (s8)mario->wStickDir2 == 0) {
+    if (mario->wStickDir1 == 0 && mario->wStickDir2 == 0) {
         marioChgMot(MARIO_MOTION_STAY);
-    } else if ((s8)a * (s8)a + (s8)mario->wStickDir2 * (s8)mario->wStickDir2 > 0xBD1) {
+    } else if (mario->wStickDir1 * mario->wStickDir1 + mario->wStickDir2 * mario->wStickDir2 > 0xBD1) {
         if (pouchEquipCheckBadge(ITEM_SLOW_GO) == 0) {
             marioChgMot(MARIO_MOTION_DASH);
         } else {

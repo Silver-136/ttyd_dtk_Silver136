@@ -38,7 +38,7 @@ static void _partyEntry(s32 flag) {
             x = mario->position.x;
             y = mario->position.y;
             z = mario->position.z;
-            if (prev == 0) {
+            if (prev == PARTY_MEMBER_NONE) {
                 continue;
             }
             if (i == 0) {

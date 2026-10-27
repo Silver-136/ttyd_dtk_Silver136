@@ -26,8 +26,6 @@ static USER_FUNC(_mario_makkuro_set);
 USER_FUNC(_mario_super_emblem_anim_set);
 USER_FUNC(btlevtcmd_SetEventEntry);
 USER_FUNC(btlevtcmd_SetJumpSound);
-static USER_FUNC(_get_mario_hammer_lv);
-static void callback(MapTevCallbackInfo* info);
 s32 mario_pinch_pose_sound_callback(BattleUnit* unit);
 
 PoseTableEntry pose_table_mario_stay[34];
@@ -280,7 +278,7 @@ USER_FUNC(_get_local_frame) {
     BattleUnitPart* part;
     AnimationPose* pose;
 
-    part = BattleGetUnitPartsPtr(BattleTransID(event, -2), 1);
+    part = BattleGetUnitPartsPtr(BattleTransID(event, UNIT_ID_SELF), 1);
     pose = animPoseGetAnimPosePtr(part->poseId);
     evtSetValue(event, index, pose->localFrame);
     return EVT_RETURN_DONE;
@@ -407,8 +405,6 @@ static USER_FUNC(_get_mario_hammer_lv) {
     return EVT_RETURN_DONE;
 }
 
-#ifdef VERSION_G8ME01
-#endif
 EVT_BEGIN(mario_dead_event)
     CALL(evt_btl_camera_set_prilimit, BTL_CAM_PRI_EVENT)
 #ifdef VERSION_G8ME01
@@ -440,12 +436,12 @@ EVT_BEGIN(mario_emergency_revival_event)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_CONDITION_DOWN1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_AnimeChangePose, LW(10), LW(11), STRING("M_D_2"))
     WAIT_MS(1000)
-    CALL(btlevtcmd_ConsumeItemReserve, LW(10), 151)
+    CALL(btlevtcmd_ConsumeItemReserve, LW(10), ITEM_LIFE_SHROOM)
     WAIT_MS(1000)
     BEGIN_SIBLING_EVENT
         CALL(btlevtcmd_GetPos, LW(10), LW(0), LW(1), LW(2))
         ADD(LW(1), 40)
-        CALL(btlevtcmd_DispItemIcon, LW(0), LW(1), LW(2), 151, 120)
+        CALL(btlevtcmd_DispItemIcon, LW(0), LW(1), LW(2), ITEM_LIFE_SHROOM, 120)
     END_SIBLING_EVENT
     WAIT_FRAMES(120)
     CALL(btlevtcmd_OnOffStatus, LW(10), STATUS_INSTANT_KILL, 0, 0, 0)

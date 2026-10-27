@@ -392,8 +392,8 @@ void __THPSimpleDVDCallback(s32 result, DVDFileInfo* fileInfo) {
         SimpleControl.totalReadFrame++;
         SimpleControl.readBuffer[SimpleControl.readIndex].isValid = TRUE;
         SimpleControl.curOffset += SimpleControl.readSize;
-        SimpleControl.readSize = (s32) * (u32*)(SimpleControl.readBuffer[SimpleControl.readIndex].ptr);
-        SimpleControl.readIndex = SimpleControl.readIndex + 1 >= 10 ? 0 : SimpleControl.readIndex + 1;
+        SimpleControl.readSize = (s32)*(u32*)SimpleControl.readBuffer[SimpleControl.readIndex].ptr;
+        SimpleControl.readIndex = SimpleControl.readIndex + 1 >= READ_BUFFER_NUM ? 0 : SimpleControl.readIndex + 1;
         if (!SimpleControl.readBuffer[SimpleControl.readIndex].isValid) {
             ReadFrameAsync();
         }
@@ -428,10 +428,10 @@ BOOL THPSimplePreLoad(s32 loop) {
             }
 
             SimpleControl.curOffset += SimpleControl.readSize;
-            SimpleControl.readSize = (s32) * (u32*)SimpleControl.readBuffer[SimpleControl.readIndex].ptr;
+            SimpleControl.readSize = (s32)*(u32*)SimpleControl.readBuffer[SimpleControl.readIndex].ptr;
             SimpleControl.readBuffer[SimpleControl.readIndex].isValid = TRUE;
             SimpleControl.readBuffer[SimpleControl.readIndex].frameNumber = SimpleControl.totalReadFrame;
-            SimpleControl.readIndex = SimpleControl.readIndex + 1 >= 10 ? 0 : SimpleControl.readIndex + 1;
+            SimpleControl.readIndex = SimpleControl.readIndex + 1 >= READ_BUFFER_NUM ? 0 : SimpleControl.readIndex + 1;
             SimpleControl.totalReadFrame++;
 
             if (SimpleControl.totalReadFrame > SimpleControl.header.numFrames - 1) {
@@ -471,7 +471,7 @@ BOOL THPSimpleLoadStop(void) {
         }
 
         for (i = 0; i < READ_BUFFER_NUM; i++) {
-            SimpleControl.readBuffer[i].isValid = 0;
+            SimpleControl.readBuffer[i].isValid = FALSE;
         }
 
         for (i = 0; i < AUDIO_BUFFER_NUM; i++) {
@@ -497,15 +497,13 @@ BOOL THPSimpleLoadStop(void) {
 }
 
 s32 THPSimpleDecode(s32 audioTrack) {
-    BOOL old;
     u32 i;
     u8* ptr;
     u32 *compSizePtr, sample;
 
     if (SimpleControl.readBuffer[SimpleControl.nextDecodeIndex].isValid) {
         compSizePtr = (u32*)(SimpleControl.readBuffer[SimpleControl.nextDecodeIndex].ptr + 8);
-        ptr =
-            SimpleControl.readBuffer[SimpleControl.nextDecodeIndex].ptr + SimpleControl.compInfo.numComponents * 4 + 8;
+        ptr = SimpleControl.readBuffer[SimpleControl.nextDecodeIndex].ptr + SimpleControl.compInfo.numComponents * 4 + 8;
 
         if (SimpleControl.audioExist) {
             if (audioTrack < 0 || audioTrack >= SimpleControl.audioInfo.sndNumTracks) {
@@ -560,7 +558,7 @@ s32 THPSimpleDecode(s32 audioTrack) {
         }
 
         SimpleControl.readBuffer[SimpleControl.nextDecodeIndex].isValid = FALSE;
-        SimpleControl.nextDecodeIndex = SimpleControl.nextDecodeIndex + 1 >= 10 ? 0 : SimpleControl.nextDecodeIndex + 1;
+        SimpleControl.nextDecodeIndex = SimpleControl.nextDecodeIndex + 1 >= READ_BUFFER_NUM ? 0 : SimpleControl.nextDecodeIndex + 1;
 
         CheckPrefetch();
         return 0;
@@ -815,7 +813,6 @@ void THPAudioMixCallback(void) {
 }
 
 BOOL THPSimpleSetVolume(s32 vol, s32 time) {
-    BOOL old;
     s32 samplePerMs;
 
     if (SimpleControl.open && SimpleControl.audioExist) {
@@ -905,8 +902,8 @@ void THPGXYuv2RgbSetup(GXRenderModeObj* rmode) {
     GXSetBlendMode(GX_BM_NONE, GX_BL_ONE, GX_BL_ZERO, GX_LO_CLEAR);
     GXSetNumChans(0);
     GXSetNumTexGens(2u);
-    GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, 60);
-    GXSetTexCoordGen(GX_TEXCOORD1, GX_TG_MTX2x4, GX_TG_TEX0, 60);
+    GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
+    GXSetTexCoordGen(GX_TEXCOORD1, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
     GXInvalidateTexAll();
     GXClearVtxDesc();
     GXSetVtxDesc(GX_VA_POS, GX_DIRECT);

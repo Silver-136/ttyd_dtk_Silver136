@@ -41,10 +41,10 @@ char _next_map[0x20];
 char _next_bero[0x20];
 
 EVT_BEGIN(key_off)
-CALL(evt_seq_wait, SEQ_GAME)
-CALL(evt_fade_end_wait)
-CALL(evt_mario_key_onoff, 1)
-RETURN
+    CALL(evt_seq_wait, SEQ_GAME)
+    CALL(evt_fade_end_wait)
+    CALL(evt_mario_key_onoff, 1)
+    RETURN
 EVT_END()
 
 u8 rel_bss[0xF10];
@@ -82,19 +82,19 @@ void seq_mapChangeInit(SequenceWork* work) {
     if (work->beroName) {
         strncpy(_next_bero, work->beroName, 0x20);
     }
-    psndENVOff(0x200);
-    psndENVOff(0x201);
+    psndENVOff(PSND_FADEOUT);
+    psndENVOff(PSND_FADEOUT | PSND_SLOT(1));
     {
-    int c0 = strcmp(gp->currentMapName, "");
-    int c1 = strcmp(gp->currentMapName, "gor_01");
-    int c2 = strcmp(_next_map, "gor_01");
-    if (c0 && c1 && c2) {
-        bdsw->restockFlags |= 1;
-    } else if (!c2 && bdsw->restockFlags & 1) {
-        badgeShop_bargainGeneration();
-        badgeShop_bottakuruGeneration();
-        bdsw->restockFlags &= 0xFFFE;
-    }
+        int c0 = strcmp(gp->currentMapName, "");
+        int c1 = strcmp(gp->currentMapName, "gor_01");
+        int c2 = strcmp(_next_map, "gor_01");
+        if (c0 && c1 && c2) {
+            bdsw->restockFlags |= 1;
+        } else if (!c2 && bdsw->restockFlags & 1) {
+            badgeShop_bargainGeneration();
+            badgeShop_bottakuruGeneration();
+            bdsw->restockFlags &= 0xFFFE;
+        }
     }
 }
 
@@ -154,7 +154,7 @@ void seq_mapChangeMain(SequenceWork* work) {
             _relUnLoad();
             _unload(gp->currentMapName, _next_map, _next_bero);
             if (strcmp(_next_map, "dmo_00") && strcmp(_next_map, "title")) {
-                if (OSGetSoundMode() == 0) {
+                if (OSGetSoundMode() == OS_SOUND_MODE_MONO) {
                     SoundSetOutputMode(0);
                 } else if (gp->soundMode == 0) {
                     SoundSetOutputMode(1);
@@ -211,11 +211,15 @@ void seq_mapChangeMain(SequenceWork* work) {
     case 3:
         if (setupDataCheck()) {
             if (psndGetFlag() & PSND_FLAG_BGM_WAIT_0) {
-                if (psndBGMPlayTime(0) < 3000) break;
+                if (psndBGMPlayTime(0) < 3000) {
+                    break;
+                }
                 psndClearFlag(PSND_FLAG_BGM_WAIT_0);
             }
             if (psndGetFlag() & PSND_FLAG_BGM_WAIT_1) {
-                if (psndBGMPlayTime(1) < 3000) break;
+                if (psndBGMPlayTime(1) < 3000) {
+                    break;
+                }
                 psndClearFlag(PSND_FLAG_BGM_WAIT_1);
             }
             setupDataBase(_next_area, _next_map);
@@ -260,11 +264,11 @@ void seq_mapChangeMain(SequenceWork* work) {
         if (strncmp(_next_map, "dmo", 3) && strncmp(_next_map, "dig", 3) && strncmp(_next_map, "end", 3) &&
             strncmp(_next_map, "sys", 3) && strncmp(_next_map, "gor_10", 6)) {
             {
-            LangTbl lang = lang_tbl;
+                LangTbl lang = lang_tbl;
 #ifdef VERSION_G8ME01
-            fileAsyncf(FILE_TYPE_TPL, 0, "%s/w/%s/win.tpl", getMarioStDvdRoot(), lang.s[gp->language]);
+                fileAsyncf(FILE_TYPE_TPL, 0, "%s/w/%s/win.tpl", getMarioStDvdRoot(), lang.s[gp->language]);
 #else
-            fileAsyncf(FILE_TYPE_TPL, 0, "%s/window/%s/win.tpl", getMarioStDvdRoot(), lang.s[gp->language]);
+                fileAsyncf(FILE_TYPE_TPL, 0, "%s/window/%s/win.tpl", getMarioStDvdRoot(), lang.s[gp->language]);
 #endif
             }
 #ifdef VERSION_G8ME01

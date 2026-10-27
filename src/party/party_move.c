@@ -48,9 +48,9 @@ static inline void partyModeTail(PartyEntry* party) {
     if (party->runMode != 13) {
         if (party->hitobjStandOn && (hitGetAttr(party->hitobjStandOn) & HIT_ATTR_TOGE)) {
             partyChgRunMode(party, 13);
-        } else if ((void*)party->hitobjFront && (hitGetAttr((void*)party->hitobjFront) & HIT_ATTR_TOGE)) {
+        } else if (party->hitobjFront && (hitGetAttr(party->hitobjFront) & HIT_ATTR_TOGE)) {
             partyChgRunMode(party, 13);
-        } else if ((void*)party->hitobjHead && (hitGetAttr((void*)party->hitobjHead) & HIT_ATTR_TOGE)) {
+        } else if (party->hitobjHead && (hitGetAttr(party->hitobjHead) & HIT_ATTR_TOGE)) {
             partyChgRunMode(party, 13);
         }
     }
@@ -302,7 +302,7 @@ f32 partyGetTargetMovespd2(PartyEntry* party) {
         }
     }
     if (other && !far) {
-        do { return other->moveSpeed; } while (0);
+        return other->moveSpeed;
     }
     if (mario->baseSpeed > 0.0f) {
         return mario->baseSpeed;
@@ -453,13 +453,14 @@ void partyRecordFootmark(PartyEntry* party) {
         } else {
             if (party->footmarkMode == 1) {
                 party->footmarkMode = 0;
+                // FAKE: call through a no-op function-pointer cast; the plain call changes the object
                 ((void (*)(void))partyClearFootmark2)();
             }
             if (partyChkMarioJumpFlag()) {
-                flags |= 1;
+                flags |= FOOTMARK_FLAG_JUMP;
             }
             if (marioChkSlitThrouh()) {
-                flags |= 4;
+                flags |= FOOTMARK_FLAG_SLIT;
             }
             partyPutFootmark(partyGetFootmarkId(party), mario->position, flags);
         }
@@ -505,6 +506,7 @@ static inline f32 partyUpdSpd(PartyEntry* party) {
     return f;
 }
 
+// FAKE: copy of partyUpdSpd with its locals declared in another order; using partyUpdSpd in partyChkUpdSpd changes the object
 static inline f32 partyUpdSpd2(PartyEntry* party) {
     MarioWork* mario = party->playerPtr;
     f32 f;
@@ -547,8 +549,6 @@ f32 partySetTargetSpd(PartyEntry* party, f32 spd) {
         return spd;
     }
     party->targetSpeed = 0.0f;
-    if (spd) {
-    }
     return spd;
 }
 
@@ -571,22 +571,22 @@ void N_partyPlaySfxPartyLanding1(PartyEntry* party) {
 }
 
 void partyWalkSe(PartyEntry* party, s32 arg) {
-    s32 a;
-    s32 b;
+    s32 leftStepFrame;
+    s32 stepFrames;
 
     party->footstepTimer++;
     if (party->currentMemberId == PARTY_MEMBER_FLAVIO) {
         if (arg == 0) {
-            a = 20;
-            b = 40;
+            leftStepFrame = 20;
+            stepFrames = 40;
         } else {
-            a = 10;
-            b = 20;
+            leftStepFrame = 10;
+            stepFrames = 20;
         }
-        if (party->footstepTimer >= b) {
+        if (party->footstepTimer >= stepFrames) {
             party->footstepTimer = 0;
             psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_STG5_MARCO_MOVE1R), &party->position);
-        } else if (party->footstepTimer == a) {
+        } else if (party->footstepTimer == leftStepFrame) {
             psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_STG5_MARCO_MOVE1L), &party->position);
         }
     } else if (party->currentMemberId == PARTY_MEMBER_EGG) {
@@ -596,16 +596,16 @@ void partyWalkSe(PartyEntry* party, s32 arg) {
         }
     } else if (party->currentMemberId == PARTY_MEMBER_PUNIO) {
         if (arg == 0) {
-            a = 5;
-            b = 10;
+            leftStepFrame = 5;
+            stepFrames = 10;
         } else {
-            a = 5;
-            b = 10;
+            leftStepFrame = 5;
+            stepFrames = 10;
         }
-        if (party->footstepTimer >= b) {
+        if (party->footstepTimer >= stepFrames) {
             party->footstepTimer = 0;
             psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_STG0_PUNI_MOVE1), &party->position);
-        } else if (party->footstepTimer == a) {
+        } else if (party->footstepTimer == leftStepFrame) {
             psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_STG0_PUNI_MOVE1), &party->position);
         }
     } else if (party->moveKind == 1) {
@@ -615,16 +615,16 @@ void partyWalkSe(PartyEntry* party, s32 arg) {
         }
     } else {
         if (arg == 0) {
-            a = 20;
-            b = 40;
+            leftStepFrame = 20;
+            stepFrames = 40;
         } else {
-            a = 10;
-            b = 20;
+            leftStepFrame = 10;
+            stepFrames = 20;
         }
-        if (party->footstepTimer >= b) {
+        if (party->footstepTimer >= stepFrames) {
             party->footstepTimer = 0;
             psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_MOVE1R), &party->position);
-        } else if (party->footstepTimer == a) {
+        } else if (party->footstepTimer == leftStepFrame) {
             psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_MOVE1L), &party->position);
         }
     }
@@ -765,7 +765,7 @@ s32 partyMoveMain(PartyEntry* party, s32 hosei) {
     }
     if (party->flags & PARTY_FLAG_IS_JUMPING) {
         dir = toMovedirSimple(party->displayDirectionTarget);
-        if (!(void*)party->hitobjHead) {
+        if (!party->hitobjHead) {
             party->position.y += party->velY;
         }
         party->velY += party->accelY;
@@ -826,8 +826,7 @@ s32 partyMoveMain(PartyEntry* party, s32 hosei) {
 }
 
 void partyChgMoveMode(PartyEntry* party, s32 mode) {
-    // The self-copy in case 4/5 keeps the arm alive through switch lowering
-    // (the target's cmpwi 4; bge range check) and then coalesces to nothing.
+    // FAKE: the copy p and its self-assignment in case 4/5 keep the empty case 4/5 arm; the plain switch changes the object
     PartyEntry* p = party;
     switch (p->moveMode) {
         case 6:
@@ -984,8 +983,6 @@ s32 partyMarioHosei(PartyEntry* party) {
         kz = 0.15f;
         ky = kx;
     }
-    if (&party->position) {
-    }
     if (mario->flags & MARIO_FLAG_IS_PUSHING) {
         kx = 0.2f;
         kz = 0.15f;
@@ -1081,7 +1078,6 @@ void party_move_mode_wait(PartyEntry* party) {
 }
 
 void partyWalkInit(PartyEntry* party) {
-    u8* p114;
     MarioWork* mario = party->playerPtr;
 
     party->flags |= PARTY_FLAG_IS_GROUNDED;
@@ -1093,10 +1089,9 @@ void partyWalkInit(PartyEntry* party) {
     party->moveArg = 0;
     party->reserved_44 = 0x10;
     party->homingDist = 50.0f;
-    p114 = (u8*)&party->velY;
     party->reserved_3E = 0;
     party->accelY = 1.8f;
-    *(f32*)p114 = 0.0f;
+    party->velY = 0.0f;
     if (!(mario->flags & MARIO_FLAG_PARTY_WALK_DISABLED)) {
         partyChgPoseId(party, 1);
         partyChgMoveMode(party, 1);
@@ -1110,30 +1105,7 @@ void partyMoveWalk(PartyEntry* party) {
         party->flags &= ~PARTY_FLAG_IS_BEING_USED;
         partyWalkInit(party);
     }
-    if (party->forceMoveFrames == 0 && party->motionId != 2 && party->motionId != 3 && party->motionId != 6) {
-        f32 f;
-        f32 target;
-        MarioWork* mario = party->playerPtr;
-        f32 cur = party->moveSpeed;
-        if (mario->flags & MARIO_FLAG_IS_PUSHING) {
-            target = mario->baseSpeed;
-        } else {
-            target = party->targetSpeed * mario->playerGravity * partySpdRate(party);
-        }
-        if (target > 0.0f) {
-            f = cur + 0.05f * ((0.5f + target) - cur);
-            if (f >= target) {
-                f = target;
-            }
-            party->moveSpeed = f;
-        } else {
-            f = cur + 0.1f * (-1.0f - cur);
-            if (f <= 0.0f) {
-                f = 0.0f;
-            }
-            party->moveSpeed = f;
-        }
-    }
+    partyChkUpdSpd(party);
     partyWalkMain(party);
 }
 
@@ -1144,10 +1116,10 @@ void partyWalkMain(PartyEntry* party) {
 
     if (party->currentSlotId == 0) {
         if (partyChkMarioJumpFlag()) {
-            flags |= 1;
+            flags |= FOOTMARK_FLAG_JUMP;
         }
         if (marioChkSlitThrouh()) {
-            flags |= 4;
+            flags |= FOOTMARK_FLAG_SLIT;
         }
         partyPutFootmark(0, mario->position, flags);
     } else {
@@ -1325,14 +1297,14 @@ void partyForceWalk(PartyEntry* party) {
             party->flags &= ~PARTY_FLAG_IN_SHALLOW_WATER;
             hit = partySearchGround(party, 10.0f, 10.0f);
             attr = 0;
-            if (hit && ((attr = hitGetAttr(hit)) & 0x200)) {
+            if (hit && ((attr = hitGetAttr(hit)) & HIT_ATTR_WATER_HAZARD)) {
                 hit = NULL;
             }
             party->hitobjStandOn = hit;
             if (!hit) {
                 partyChgMot(party, 3);
                 party->accelY = -1.0f;
-            } else if (attr & 0x100) {
+            } else if (attr & HIT_ATTR_SHALLOW_WATER) {
                 party->flags |= PARTY_FLAG_IN_SHALLOW_WATER;
             } else {
                 party->flags &= ~PARTY_FLAG_IN_SHALLOW_WATER;
@@ -1506,7 +1478,6 @@ static inline f32 partyAppearNrmAngle(Vec n) {
 static inline void partyAppearMoveBack(Vec* out, f32 d, f32 ang) {
     movePos(&out->x, &out->z, -d, ang);
 }
-
 
 BOOL partyGetAppearPos(PartyEntry* party, Vec* out) {
     HitCheckQuery query;
@@ -1707,7 +1678,6 @@ BOOL partyGetAppearPos2(PartyEntry* party, Vec* out) {
     f32 dist;
     f32 back;
     f32 ofs = 30.0f;
-    f32 a90 = 90.0f;
 
     mario = party->playerPtr;
     dist = 30.0f + party->width;
@@ -1905,6 +1875,7 @@ BOOL partyGetAppearPos4(PartyEntry* party, Vec* out) {
     }
     n = (party->trigFlags & PARTY_TRIG_DOOR_MOVE) ? 13 : 11;
 
+    // BUG: i runs up to n inclusive, so the last pass reads one element past the end of the angle table
     for (i = 0; i <= n; i++) {
         if (i == 0) {
             query.targetDistance = dist;
@@ -1912,18 +1883,18 @@ BOOL partyGetAppearPos4(PartyEntry* party, Vec* out) {
         } else {
             query.targetDistance = dist;
             if (party->trigFlags & PARTY_TRIG_DOOR_MOVE) {
-            if (strcmp(gp->currentMapName, "usu_00") == 0) {
-                ang = toMovedir2(party->homeDir, angE[i]);
+                if (strcmp(gp->currentMapName, "usu_00") == 0) {
+                    ang = toMovedir2(party->homeDir, angE[i]);
+                } else {
+                    ang = toMovedir2(party->homeDir, angD[i]);
+                }
+            } else if (!other) {
+                ang = toMovedir2(back, angA[i]);
+            } else if (!(party->flags & PARTY_FLAG_IS_PARTNER)) {
+                ang = toMovedir2(back, angB[i]);
             } else {
-                ang = toMovedir2(party->homeDir, angD[i]);
+                ang = toMovedir2(back, angC[i]);
             }
-        } else if (!other) {
-            ang = toMovedir2(back, angA[i]);
-        } else if (!(party->flags & PARTY_FLAG_IS_PARTNER)) {
-            ang = toMovedir2(back, angB[i]);
-        } else {
-            ang = toMovedir2(back, angC[i]);
-        }
         }
         sincosf(&s, &c, ang);
         query.targetPos = (Vec){out->x, 37.0f + out->y, out->z};
