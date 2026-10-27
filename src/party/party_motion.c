@@ -2998,6 +2998,7 @@ found:
     return hitGetAttr(hit);
 }
 
+/* unused; its zero Vec template still lands in the constant pool / .rodata (removing it changes the object) */
 static inline void partyDownDirX(HitCheckQuery* q) {
     q->targetDir = (Vec){0.0f, -1.0f, 0.0f};
 }

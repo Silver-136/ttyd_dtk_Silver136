@@ -62,10 +62,6 @@ inline BOOL chkRevDir(f32 angle) {
         } if (a >= 90.0f && a <= 270.0f) { r = revise360(180.0f + off); } else { r = revise360(off); } dst = r; \
     }
 
-static inline s32 hamLv(void) {
-    return pouchGetHammerLv();
-}
-
 
 typedef struct {
     u8 pad[0x15];

@@ -373,10 +373,6 @@ u16 BattleACGetButtonIcon(s32 button, s32 pressed) {
     return icon;
 }
 
-static inline s32 gaugeMax(void) {
-    return 100;
-}
-
 static inline void gaugeQuad(CameraEntry* cam, f32 x0, f32 y0, f32 x1, f32 y1, u8 r, u8 g, u8 b, u8 a) {
     f32 ty1, tx1, ty0, tx0;
     tx0 = x0;

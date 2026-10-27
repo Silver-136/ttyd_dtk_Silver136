@@ -83,10 +83,6 @@ EffectEntry* effFreezeN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32 
     return effect;
 }
 
-static inline f32 freezeY(EffFreezeN64Work* a, EffFreezeN64Work* b) {
-    return a->scale * (f32)(rand() % 40) + b->position.y;
-}
-
 void effFreezeMain(EffectEntry* effect) {
     s32 lifetime;
     EffFreezeN64Work* work = effect->userdata;

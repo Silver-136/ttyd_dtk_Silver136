@@ -925,10 +925,6 @@ static inline void marioColorChk(void) {
     }
 }
 
-static inline void marioCoinDropSub(Vec pos) {
-    itemCoinDrop(&pos);
-}
-
 static inline BOOL marioChkRollMot2(void) {
     BOOL ret = FALSE;
     if (mp->currMotionId == MARIO_MOTION_ROLL) {

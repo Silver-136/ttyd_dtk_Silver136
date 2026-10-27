@@ -774,6 +774,7 @@ void camLetterBox(void) {
     dispEntry(camera->letterBoxCamId, 0.0f, 3, &camLetterBoxDraw, NULL);
 }
 
+/* unused; its zero Vec template still lands in the constant pool / .rodata (removing it changes the object) */
 inline Vec unknownVec0(void) {
     return (Vec){ 0.0f, 0.0f, 0.0f };
 }

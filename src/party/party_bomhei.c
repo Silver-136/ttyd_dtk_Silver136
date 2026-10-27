@@ -254,14 +254,6 @@ typedef struct BomheiWork {
 
 extern void marioSetSplash(s32 kind, Vec pos);
 
-static inline f32 bomheiNeg(f32 x) {
-    return -x;
-}
-
-static inline s16 bomheiToS16(f32 x) {
-    return x;
-}
-
 #define BOMHEI_WORK(p) ((BomheiWork*)(p)->useStruct)
 
 static inline BOOL bomheiChkHitAttr(PartyEntry* party) {

@@ -63,10 +63,6 @@ static inline BOOL marioChkBeroSub2(s32 attr) {
     return marioGetPtr()->currMotionId == MARIO_MOTION_SHIP;
 }
 
-static inline BOOL marioChkBeroSub3(s32 attr) {
-    return (attr & HIT_ATTR_SHIP_ONLY) ? (marioGetPtr()->currMotionId == MARIO_MOTION_SHIP) : TRUE;
-}
-
 static inline BOOL marioChkBeroSub4(s32 attr) {
     BOOL r = TRUE;
     if (attr & HIT_ATTR_SHIP_ONLY) {
@@ -1399,10 +1395,6 @@ f32 marioChkOverheadJabara(s32* sideOut, f32* distOut) {
         w->flags &= ~MARIO_FLAG_IS_TOUCHING_CEILING;
     }
     return pos.y;
-}
-
-static inline HitEntry* marioHitCheck2Val(Vec p, Vec d, Vec* op, Vec* on, f32* dist) {
-    return marioHitCheck2(&p, &d, op, on, dist);
 }
 
 static inline void marioSearchHeadOfs(MarioWork* w, f32 deg, f32* px, f32* pz) {

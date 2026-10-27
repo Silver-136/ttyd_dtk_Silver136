@@ -140,10 +140,6 @@ void marioForcePlaneAnime(void) {
 
 #define DIRF(mp) ((mp->motPlane->flags & MOT_PLANE_FLAG_RIGHT) ? 1.0f : -1.0f)
 
-static inline f32 planeDir(MarioWork* mp) {
-    return DIRF(mp);
-}
-
 static inline void
 planeRoll1(MarioWork* mp, f32 rate, f32 max) {
     f32* p = &mp->mot.plane.turnSpeed;
