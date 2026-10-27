@@ -1,3 +1,4 @@
+#include "eff/n64/eff_kumokumo_chip_n64.h"
 #include "eff/eff_n64.h"
 #include "driver/camdrv.h"
 #include "driver/dispdrv.h"
@@ -213,4 +214,3 @@ void effKumokumoChipDisp(CameraId cameraId, EffectEntry* effect) {
     GXBegin(GX_TRIANGLES, GX_VTXFMT0, 6);
     tri2(0, 1, 2, 0, 0, 2, 3, 0);
 }
-

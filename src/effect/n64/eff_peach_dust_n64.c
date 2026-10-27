@@ -8,7 +8,7 @@
 #include <stdlib.h>
 #include "libc_decls.h"
 #include "eff/eff_magic1_n64.h"
-
+#include "eff/n64/eff_peach_dust_n64.h"
 
 typedef struct EffPeachDustParticle {
     s32 pad0;     // 0x0
@@ -84,8 +84,7 @@ static u8 color_rotation_data[] = {
 void effPeachDustMain(EffectEntry* effect);
 void effPeachDustDisp(CameraId cameraId, EffectEntry* effect);
 
-
-EffectEntry* effPeachDustN64Entry(s32 type, f32 x, f32 y, f32 z, f32 unused, f32 scale) {
+EffectEntry* effPeachDustN64Entry(s32 type, f32 x, f32 y, f32 z, f32 unused, f32 rotY) {
     char* base;
     EffectEntry* effect;
     EffPeachDustParticle* p;
@@ -105,7 +104,7 @@ EffectEntry* effPeachDustN64Entry(s32 type, f32 x, f32 y, f32 z, f32 unused, f32
     work->position.x = x;
     work->position.y = y;
     work->position.z = z;
-    x = 6.2831855f * scale;
+    x = 6.2831855f * rotY;
     work->frame = 0;
     work->type = type;
     work->lifetime = 80;
@@ -115,11 +114,13 @@ EffectEntry* effPeachDustN64Entry(s32 type, f32 x, f32 y, f32 z, f32 unused, f32
 
     for (i = 0; i < 16; i++) {
         for (j = 0; j < 16; j++) {
+            // FAKE: (s32) cast on the char; without it the object changes
             if ((s32)base[(15 - i) * 16 + j] == '.') {
                 continue;
             }
             r = 0.1f * (rand() % 20 - 10) + (f32)((j - 8) * 2);
-            p->position.x = r * (f32)cos(ang = x / 360.0f);
+            ang = x / 360.0f;
+            p->position.x = r * (f32)cos(ang);
             p->position.y = 0.1f * (rand() % 20 - 10) + (f32)(i * 2);
             p->position.z = r * (f32)sin(ang);
             p->velocity.x = 0.04f * p->position.x;
@@ -252,9 +253,15 @@ void effPeachDustDisp(CameraId cameraId, EffectEntry* effect) {
         if (off >= 36) {
             off = 0;
         }
-        { f32 k = 1.4f; f32 h = 0.7f; r = color_rotation_data[off++] * k;
-        g = color_rotation_data[off++] * h;
-        b = color_rotation_data[off++] * h; }
+        // FAKE: k and h hold the 1.4f/0.7f factors in a block of their own; the literal factors change the object
+        {
+            f32 k = 1.4f;
+            f32 h = 0.7f;
+
+            r = color_rotation_data[off++] * k;
+            g = color_rotation_data[off++] * h;
+            b = color_rotation_data[off++] * h;
+        }
         if (r > 255) {
             r = 255;
         }

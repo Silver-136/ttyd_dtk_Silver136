@@ -7,7 +7,6 @@
 #include <dolphin/mtx.h>
 #include "eff/eff_magic1_n64.h"
 
-
 typedef struct EffStarPowerN64Work {
     s16 unk0;      // 0x0
     s16 id;        // 0x2
@@ -200,7 +199,7 @@ void effStarPowerDisp(CameraId cameraId, EffectEntry* effect) {
     CameraEntry* camera;
     s32 half;
     EffStarPowerN64Work* work;
-    s32 c18, c1c, c20, c24, c28, c2c, c30, c34;
+    s32 r, g, b, alpha, r2, g2, b2, trailAlpha;
     Mtx mtx;
     Mtx scale;
     Mtx rot;
@@ -209,61 +208,61 @@ void effStarPowerDisp(CameraId cameraId, EffectEntry* effect) {
 
     camera = camGetPtr(cameraId);
     work = effect->userdata;
-    c18 = work->r;
-    c1c = work->g;
-    c20 = work->b;
-    c24 = work->alpha;
-    c28 = work->r2;
-    c2c = work->g2;
-    c30 = work->b2;
-    c34 = work->trailAlpha;
-    if (c18 > 255) {
-        c18 = 255;
+    r = work->r;
+    g = work->g;
+    b = work->b;
+    alpha = work->alpha;
+    r2 = work->r2;
+    g2 = work->g2;
+    b2 = work->b2;
+    trailAlpha = work->trailAlpha;
+    if (r > 255) {
+        r = 255;
     }
-    if (c1c > 255) {
-        c1c = 255;
+    if (g > 255) {
+        g = 255;
     }
-    if (c20 > 255) {
-        c20 = 255;
+    if (b > 255) {
+        b = 255;
     }
-    if (c24 > 255) {
-        c24 = 255;
+    if (alpha > 255) {
+        alpha = 255;
     }
-    if (c28 > 255) {
-        c28 = 255;
+    if (r2 > 255) {
+        r2 = 255;
     }
-    if (c2c > 255) {
-        c2c = 255;
+    if (g2 > 255) {
+        g2 = 255;
     }
-    if (c30 > 255) {
-        c30 = 255;
+    if (b2 > 255) {
+        b2 = 255;
     }
-    if (c34 > 255) {
-        c34 = 255;
+    if (trailAlpha > 255) {
+        trailAlpha = 255;
     }
-    if (c18 < 0) {
-        c18 = 0;
+    if (r < 0) {
+        r = 0;
     }
-    if (c1c < 0) {
-        c1c = 0;
+    if (g < 0) {
+        g = 0;
     }
-    if (c20 < 0) {
-        c20 = 0;
+    if (b < 0) {
+        b = 0;
     }
-    if (c24 < 0) {
-        c24 = 0;
+    if (alpha < 0) {
+        alpha = 0;
     }
-    if (c28 < 0) {
-        c28 = 0;
+    if (r2 < 0) {
+        r2 = 0;
     }
-    if (c2c < 0) {
-        c2c = 0;
+    if (g2 < 0) {
+        g2 = 0;
     }
-    if (c30 < 0) {
-        c30 = 0;
+    if (b2 < 0) {
+        b2 = 0;
     }
-    if (c34 < 0) {
-        c34 = 0;
+    if (trailAlpha < 0) {
+        trailAlpha = 0;
     }
     GXSetNumChans(0);
     GXSetNumTexGens(1);
@@ -273,7 +272,7 @@ void effStarPowerDisp(CameraId cameraId, EffectEntry* effect) {
     effGetTexObjN64(0x49, &texObj);
     GXLoadTexObj(&texObj, GX_TEXMAP0);
     GXSetCullMode(GX_CULL_NONE);
-    if (c34 != 0) {
+    if (trailAlpha != 0) {
         PSMTXTrans(mtx, work->position.x, work->position.y, work->position.z);
         PSMTXRotRad(rot, 'y', 0.017453292f * -camGetPtr(CAMERA_3D)->viewYaw);
         PSMTXScale(scale, 0.4f * work->prevScale, 0.4f * work->prevScale, 0.4f * work->prevScale);
@@ -288,11 +287,11 @@ void effStarPowerDisp(CameraId cameraId, EffectEntry* effect) {
         PSMTXConcat(camera->view, mtx, tmp);
         GXLoadPosMtxImm(tmp, GX_PNMTX0);
         GXSetCurrentMtx(GX_PNMTX0);
-        half = c34 >> 1;
-        GXSetTevColor(GX_TEVREG0, (GXColor){c18, c1c, c20, half});
-        GXSetTevColor(GX_TEVREG1, (GXColor){c28, c2c, c30, half});
+        half = trailAlpha >> 1;
+        GXSetTevColor(GX_TEVREG0, (GXColor){r, g, b, half});
+        GXSetTevColor(GX_TEVREG1, (GXColor){r2, g2, b2, half});
         GXSetNumChans(1);
-        GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_VTX, 0, GX_DF_NONE, GX_AF_NONE);
+        GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_VTX, GX_LIGHT_NULL, GX_DF_NONE, GX_AF_NONE);
         GXSetNumTevStages(1);
         GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
         GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
@@ -326,7 +325,7 @@ void effStarPowerDisp(CameraId cameraId, EffectEntry* effect) {
     PSMTXConcat(camera->view, mtx, tmp);
     GXLoadPosMtxImm(tmp, GX_PNMTX0);
     GXSetCurrentMtx(GX_PNMTX0);
-    if (c34 != 0) {
+    if (trailAlpha != 0) {
         GXBegin(GX_TRIANGLES, GX_VTXFMT0, 60);
         tri2(0, 1, 2, 0, 0, 2, 3, 0);
         tri2(4, 0, 3, 0, 4, 3, 5, 0);
@@ -339,10 +338,10 @@ void effStarPowerDisp(CameraId cameraId, EffectEntry* effect) {
         tri2(16, 18, 19, 0, 16, 19, 17, 0);
         tri2(18, 14, 15, 0, 18, 15, 19, 0);
     }
-    GXSetTevColor(GX_TEVREG0, (GXColor){c18, c1c, c20, c24});
-    GXSetTevColor(GX_TEVREG1, (GXColor){c28, c2c, c30, c24});
+    GXSetTevColor(GX_TEVREG0, (GXColor){r, g, b, alpha});
+    GXSetTevColor(GX_TEVREG1, (GXColor){r2, g2, b2, alpha});
     GXSetNumChans(1);
-    GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_VTX, 0, GX_DF_NONE, GX_AF_NONE);
+    GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_VTX, GX_LIGHT_NULL, GX_DF_NONE, GX_AF_NONE);
     GXSetNumTevStages(1);
     GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
     GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);

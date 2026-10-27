@@ -101,7 +101,6 @@ void effMagic1Main(EffectEntry* effect) {
 
 static void main_dl(EffectEntry* effect, Mtx base) {
     u8* a;
-
     EffMagic1N64Work* w = effect->userdata;
     s32 type = w->type;
     f32 scale = w->scale;
@@ -159,15 +158,16 @@ static void main_dl(EffectEntry* effect, Mtx base) {
         if (i > 0) {
             switch (type) {
                 case 0:
-                ang -= 70.0f;
-                ox -= 2.0f * w->velocity.x;
-                oy -= 2.0f * w->velocity.y;
-                oz -= 2.0f * w->velocity.z;
-                break;
+                    ang -= 70.0f;
+                    ox -= 2.0f * w->velocity.x;
+                    oy -= 2.0f * w->velocity.y;
+                    oz -= 2.0f * w->velocity.z;
+                    break;
                 default:
-                ang -= 50.0f;
-                ox -= 2.0f * (1.2048193f * w->velocity.x);
-                break;
+                    ang -= 50.0f;
+                    // 1.2048193f = 1 / 0.83f: the velocity before this frame's decay in effMagic1Main
+                    ox -= 2.0f * (1.2048193f * w->velocity.x);
+                    break;
             }
             alpha = (s32)(100.0f * (f32)w->alpha / 255.0f);
         }
@@ -223,10 +223,10 @@ void effMagic1Disp(CameraId cameraId, EffectEntry* effect) {
     f32 yaw;
     s32 type;
     s32 i;
-    Mtx m98;
-    Mtx m68;
-    Mtx m38;
-    Mtx m8;
+    Mtx trans;
+    Mtx rotY;
+    Mtx base;
+    Mtx ring;
 
     camera = camGetPtr(cameraId);
     w = effect->userdata;
@@ -239,19 +239,19 @@ void effMagic1Disp(CameraId cameraId, EffectEntry* effect) {
             yaw = -camGetPtr(CAMERA_3D)->viewYaw;
             break;
     }
-    PSMTXTrans(m98, w->position.x, w->position.y, w->position.z);
-    PSMTXRotRad(m68, 'y', yaw * 0.017453292f);
-    PSMTXConcat(m98, m68, m38);
-    PSMTXConcat(camera->view, m38, m38);
+    PSMTXTrans(trans, w->position.x, w->position.y, w->position.z);
+    PSMTXRotRad(rotY, 'y', yaw * 0.017453292f);
+    PSMTXConcat(trans, rotY, base);
+    PSMTXConcat(camera->view, base, base);
     switch (type) {
         case 0:
-            main_dl(effect, m38);
+            main_dl(effect, base);
             break;
         case 1:
             for (i = 0; i < 12; i++) {
-                PSMTXRotRad(m8, 'z', 0.017453292f * (f32)(i * 30));
-                PSMTXConcat(m38, m8, m8);
-                main_dl(effect, m8);
+                PSMTXRotRad(ring, 'z', 0.017453292f * (f32)(i * 30));
+                PSMTXConcat(base, ring, ring);
+                main_dl(effect, ring);
             }
             break;
     }

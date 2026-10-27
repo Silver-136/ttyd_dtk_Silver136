@@ -9,7 +9,6 @@
 #include "libc_decls.h"
 #include "eff/eff_magic1_n64.h"
 
-
 typedef struct EffStardustN64Work {
     s32 type;     // 0x0
     Vec position; // 0x4
@@ -131,8 +130,9 @@ EffectEntry* effStardustN64Entry(s32 type, f32 x, f32 y, f32 z, f32 a) {
     work->cr = 1.0f;
     work->cg = 1.0f;
     work->cb = 1.0f;
-    work->camera = 4;
+    work->camera = CAMERA_3D;
     work->scale = 1.0f;
+    // FAKE: i set before the loop setup; for (i = 1; ...) changes the object
     i = 1;
     randA = (s32)(a * 1000.0f);
     randB = (s32)(radius * 1000.0f);
@@ -161,6 +161,7 @@ EffectEntry* effStardustN64Entry(s32 type, f32 x, f32 y, f32 z, f32 a) {
         case 2:
             angle = 360.0f / (f32)count * (f32)i + (f32)(rand() % 360);
             if (i & 1) {
+                // BUG: rand() % 50 / 1000 is an integer division and always 0, so ay is always -0.05
                 ay = -(0.05f + (f32)(rand() % 50 / 1000));
             } else {
                 ay = 0.0f;
@@ -181,7 +182,9 @@ EffectEntry* effStardustN64Entry(s32 type, f32 x, f32 y, f32 z, f32 a) {
         case 4:
         default:
             angle = 360.0f / (f32)count * (f32)i + (f32)(rand() % 360);
-            p->ay = -(0.05f + (f32)(rand() % 50 / 1000)), angle = 6.2831855f * angle / 360.0f;
+            // BUG: rand() % 50 / 1000 is an integer division and always 0, so ay is always -0.05
+            p->ay = -(0.05f + (f32)(rand() % 50 / 1000));
+            angle = 6.2831855f * angle / 360.0f;
             p->vx = 0.0f;
             p->vy = 0.0f;
             p->position.x = (f32)sin(angle) * fa;
@@ -238,7 +241,7 @@ void effStardustMain(EffectEntry* effect) {
                 work->position.y = 0.01f * (work->vy * (f32)speed_data[idx]) + work->ay;
                 work->scale = 0.01f * (f32)scale_data[idx];
             } else {
-                angle = (f32)(s32)effTblRandN64(0x168, i + 0xb1);
+                angle = (f32)(s32)effTblRandN64(360, i + 177);
                 mag = 1.0f + 0.5f * (f32)(i & 3);
                 angle = 6.2831855f * angle / 360.0f;
                 work->type = 10;
@@ -318,7 +321,7 @@ void effStardustDisp(CameraId cameraId, EffectEntry* effect) {
     work++;
     GXSetNumChans(0);
     GXSetNumTexGens(1);
-    GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX0 + 0, GX_FALSE, GX_PTIDENTITY + 0x0);
+    GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX0, GX_FALSE, GX_PTIDENTITY);
     PSMTXScale(scaleMtx, 0.0056818184f, 0.045454547f, 0.0f);
     GXLoadTexMtxImm(scaleMtx, GX_TEXMTX0, GX_MTX2x4);
     effGetTexObjN64(0x20, &texObj);
@@ -358,14 +361,30 @@ void effStardustDisp(CameraId cameraId, EffectEntry* effect) {
         }
         GXSetTevColor(GX_TEVREG0, (GXColor){r, g, b, 255});
         switch (variant & 7) {
-            case 0: vtx = &size8x8_tex22x22_vtx[12]; break;
-            case 1: vtx = &size8x8_tex22x22_vtx[16]; break;
-            case 2: vtx = &size8x8_tex22x22_vtx[20]; break;
-            case 3: vtx = &size8x8_tex22x22_vtx[24]; break;
-            case 4: vtx = &size8x8_tex22x22_vtx[28]; break;
-            case 5: vtx = &size8x8_tex22x22_vtx[0]; break;
-            case 6: vtx = &size8x8_tex22x22_vtx[4]; break;
-            case 7: vtx = &size8x8_tex22x22_vtx[8]; break;
+        case 0:
+            vtx = &size8x8_tex22x22_vtx[12];
+            break;
+        case 1:
+            vtx = &size8x8_tex22x22_vtx[16];
+            break;
+        case 2:
+            vtx = &size8x8_tex22x22_vtx[20];
+            break;
+        case 3:
+            vtx = &size8x8_tex22x22_vtx[24];
+            break;
+        case 4:
+            vtx = &size8x8_tex22x22_vtx[28];
+            break;
+        case 5:
+            vtx = &size8x8_tex22x22_vtx[0];
+            break;
+        case 6:
+            vtx = &size8x8_tex22x22_vtx[4];
+            break;
+        case 7:
+            vtx = &size8x8_tex22x22_vtx[8];
+            break;
         }
         effSetVtxDescN64(vtx);
         GXBegin(GX_TRIANGLES, GX_VTXFMT0, 6);

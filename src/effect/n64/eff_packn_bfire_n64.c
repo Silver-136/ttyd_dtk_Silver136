@@ -9,7 +9,7 @@
 #include <stdlib.h>
 #include "libc_decls.h"
 #include "eff/eff_magic1_n64.h"
-
+#include "eff/n64/eff_packn_bfire_n64.h"
 
 typedef struct EffPacknBfireWork {
     s32 type;     // 0x0
@@ -32,8 +32,6 @@ typedef struct EffPacknBfireWork {
     f32 drot;     // 0x78
 } EffPacknBfireWork;
 
-EffectEntry* effPacknBfireN64Entry(s32 type, s32 frames, s32 life, f32 x, f32 y, f32 z, f32 tx, f32 ty, f32 tz,
-                                   f32 scale);
 void effPacknBfireMain(EffectEntry* effect);
 void effPacknBfireDisp(CameraId cameraId, EffectEntry* effect);
 

@@ -13,7 +13,6 @@ typedef struct JetwEnt {
     u8 alpha, pad;
 } JetwEnt;
 
-
 static JetwEnt adata[] = {
     {0, 0, 30, 140, 0, 255, 0},
     {0, 6, 30, 120, 0, 250, 0},
@@ -130,9 +129,7 @@ effN64Vtx size6x22_tex32x32_vtx[] = {
     {-3, 22, 0, 0, 1024, 255, 255, 255, 255},
 };
 
-
 static s32 jetw_ry_tbl[] = {0, 40, 55, 190, 20, 130, 270, 300};
-
 
 void effOpukuJetwMain(EffectEntry* effect);
 void effOpukuJetwDisp(CameraId cameraId, EffectEntry* effect);
@@ -211,6 +208,7 @@ void effOpukuJetwDisp(CameraId cameraId, EffectEntry* effect) {
     s32 frame, alpha, r, g, b;
     s32 n, m;
     JetwEnt* tbl;
+
     camera = camGetPtr(cameraId);
     work = effect->userdata;
     frame = work->frame;

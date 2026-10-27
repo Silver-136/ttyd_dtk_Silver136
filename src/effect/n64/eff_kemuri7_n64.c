@@ -21,13 +21,13 @@ typedef struct EffKemuri7N64Work {
     Vec rotation;     // 0x24
     Mtx mtx;          // 0x30
     f32 side;         // 0x60
-    f32 hSpeedScale;   // 0x64
-    f32 rising;   // 0x68
+    f32 hSpeedScale;  // 0x64
+    f32 rising;       // 0x68
     f32 field_0x6C;   // 0x6C
-    f32 vSpeed;   // 0x70
-    f32 vAccel;   // 0x74
-    f32 vJerk;   // 0x78
-    f32 vSnap;   // 0x7C
+    f32 vSpeed;       // 0x70
+    f32 vAccel;       // 0x74
+    f32 vJerk;        // 0x78
+    f32 vSnap;        // 0x7C
     f32 sinAngle;     // 0x80
     f32 cosAngle;     // 0x84
 } EffKemuri7N64Work;

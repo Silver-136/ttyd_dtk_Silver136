@@ -30,11 +30,9 @@ typedef struct EffKemuri1Work {
     s32 duration;       // 0x4C, header: frames for the 16 texture frames
 } EffKemuri1Work;
 
-//local prototypes
 void effKemuri1Main(EffectEntry* effect);
 
 EffectEntry* effKemuri1N64Entry(s32 type, f32 x, f32 y, f32 z, f32 angleOfs) {
-
     EffectEntry* effect;
     EffKemuri1Work* data;
     s32 effCount;
@@ -214,27 +212,27 @@ void effKemuri1Main(EffectEntry* effect) {
     EffKemuri1Work* work = effect->userdata;
     Vec pos2;
     Vec pos = {0.0f, 0.0f, 0.0f};
-    s32 type, i, t, b, a;
+    s32 type, i, frame, animFrame, nextAnimFrame;
 
     pos.x = work->position.x;
     pos.y = work->position.y;
     pos.z = work->position.z;
     pos2 = pos;
 
-    t = work->frame;
+    frame = work->frame;
     type = work->type;
-    b = 16.0f * t / work->duration;
-    a = 16.0f * (t + 1) / work->duration;
-    work->frame = t + 1;
-    if (a > 15) {
-        a = 15;
+    animFrame = 16.0f * frame / work->duration;
+    nextAnimFrame = 16.0f * (frame + 1) / work->duration;
+    work->frame = frame + 1;
+    if (nextAnimFrame > 15) {
+        nextAnimFrame = 15;
     }
-    if (b > 15) {
+    if (animFrame > 15) {
         effDelete(effect);
         return;
     }
-    work->animFrame = b;
-    work->nextAnimFrame = a;
+    work->animFrame = animFrame;
+    work->nextAnimFrame = nextAnimFrame;
     for (i = 1, work++; i < effect->count; i++, work++) {
         switch (type) {
             case 0:
@@ -283,13 +281,13 @@ void effKemuri1Disp(CameraId cameraId, EffectEntry* effect) {
     s32 type;
     s32 i, j;
     f32 s, ofsS, ofsT;
-    s32 a, b;
+    s32 animFrame, nextAnimFrame;
 
     work = effect->userdata;
     camera = camGetPtr(cameraId);
     type = work->type;
-    a = work->animFrame;
-    b = work->nextAnimFrame;
+    animFrame = work->animFrame;
+    nextAnimFrame = work->nextAnimFrame;
     s = 1.0f;
     switch (type) {
         case 5:
@@ -334,8 +332,8 @@ void effKemuri1Disp(CameraId cameraId, EffectEntry* effect) {
     GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
-    ofsS = 0.0625f * a;
-    ofsT = 0.0625f * b;
+    ofsS = 0.0625f * animFrame;
+    ofsT = 0.0625f * nextAnimFrame;
     for (i = 1, work++; i < effect->count; i++, work++) {
         f32 h;
         f32 w;
@@ -358,6 +356,7 @@ void effKemuri1Disp(CameraId cameraId, EffectEntry* effect) {
                 PSMTXConcat(view, mtx, mtx);
                 GXLoadPosMtxImm(mtx, GX_PNMTX0);
             } else {
+                // FAKE: colour filled in through a pointer to a zeroed compound literal; (GXColor){work->r, work->g, work->b, 0xFF} changes the object
                 { GXColor* c; GXSetChanMatColor(GX_COLOR0A0, *(c = &(GXColor){0, 0, 0, 0}, c->r = work->r, c->g = work->g, c->b = work->b, c->a = 0xFF, c)); }
                 PSMTXTrans(mtx, work->position.x, work->position.y, work->position.z);
                 PSMTXConcat(view, mtx, mtx);
@@ -386,4 +385,3 @@ void effKemuri1Disp(CameraId cameraId, EffectEntry* effect) {
         }
     }
 }
-

@@ -21,8 +21,8 @@ typedef struct EffKemuri3N64Work {
     Vec rotation;     // 0x24
     Mtx mtx;          // 0x30
     f32 speed;        // 0x60
-    f32 hSpeedScale;   // 0x64
-    f32 rising;   // 0x68
+    f32 hSpeedScale;  // 0x64
+    f32 rising;       // 0x68
     f32 field_0x6C;   // 0x6C
     f32 vSpeed;       // 0x70, vertical: vSnap adds to vJerk, vJerk to vAccel, vAccel to vSpeed
     f32 vAccel;       // 0x74

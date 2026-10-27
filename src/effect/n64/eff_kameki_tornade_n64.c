@@ -20,8 +20,6 @@ static inline void Vec2Vtx(Vec* v, s16* o) {
     OSf32tos16(&v->z, &o[2]);
 }
 
-
-
 void effKamekiTornadeMain(EffectEntry* effect);
 void effKamekiTornadeDisp(CameraId cameraId, EffectEntry* effect);
 
@@ -195,7 +193,6 @@ void effKamekiTornadeDisp(CameraId cameraId, EffectEntry* effect) {
     GXSetTevColor(GX_TEVREG1, (GXColor){work->c1r, work->c1g, work->c1b, 32});
     GXSetCullMode(GX_CULL_NONE);
     tmpl = (effN64Vtx*)smartAlloc(sizeof(effN64Vtx) * 32, 3)->address;
-    p = tmpl;
     for (i = 0, k = 0; i < 16; i++, k += 128) {
         p = &tmpl[i];
         r = (6.2831855f * (f32)(i * 360 / 15)) / 360.0f;
@@ -208,7 +205,7 @@ void effKamekiTornadeDisp(CameraId cameraId, EffectEntry* effect) {
         q->x = 100.0f * (f32)cos(r);
         q->y = 0.0f;
         q->z = 100.0f * (f32)sin(r);
-        // FAKE: (u32)(i * 128) * 4 == i * 512 for i in 0..15; the unsigned multiply leaves this IV to the back-end loop pass, so its init copies the i*360 IV (target mr r20,r27)
+        // FAKE: (u32)(i * 128) * 4 is i * 512 for i in 0..15; the plain i * 512 changes the object
         q->s = (u32)(i * 128) * 4;
         q->t = 1024;
     }
@@ -291,5 +288,3 @@ void effKamekiTornadeDisp(CameraId cameraId, EffectEntry* effect) {
         }
     }
 }
-
-

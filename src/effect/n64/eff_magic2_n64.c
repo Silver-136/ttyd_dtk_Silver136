@@ -7,6 +7,7 @@
 #include <dolphin/gx.h>
 #include <dolphin/mtx.h>
 #include "eff/eff_magic1_n64.h"
+#include "eff/n64/eff_magic2_n64.h"
 #include "libc_decls.h"
 
 typedef struct EffMagic2N64Work {
@@ -31,7 +32,6 @@ typedef struct EffMagic2N64Work {
     f32 f58;
     f32 f5c;
 } EffMagic2N64Work;
-
 
 static u8 color_rotation_data[24] = {0xFF, 0xC5, 0x9C, 0xFF, 0x9C, 0xFF, 0xFF, 0x73, 0xD6, 0xFF, 0x9C, 0xFF,
                                      0xFF, 0xC5, 0x7B, 0xFF, 0xB4, 0xFF, 0xDE, 0x73, 0xFF, 0xFF, 0x94, 0x9C};
@@ -167,24 +167,21 @@ void effMagic2Main(EffectEntry* effect) {
         w->scale *= 0.7f;
     }
     if (w->type == 1) {
-        {
-            f32 sn = (f32)sin(6.2831855f * (f32)(life * 10) / 360.0f);
-            f32 st = w->scaleTarget;
-            w->scale = 0.4f * ((st * (0.1f * sn) + st) - w->scale) + w->scale;
-        }
+        f32 sn = (f32)sin(6.2831855f * (f32)(life * 10) / 360.0f);
+        f32 st = w->scaleTarget;
+        w->scale = 0.4f * ((st * (0.1f * sn) + st) - w->scale) + w->scale;
     } else {
-        {
-            f32 sn = (f32)sin(6.2831855f * (f32)(life * 10) / 360.0f);
-            f32 st = w->scaleTarget;
-            w->scale = 0.3f * ((st * (0.1f * sn) + st) - w->scale) + w->scale;
-        }
+        f32 sn = (f32)sin(6.2831855f * (f32)(life * 10) / 360.0f);
+        f32 st = w->scaleTarget;
+        w->scale = 0.3f * ((st * (0.1f * sn) + st) - w->scale) + w->scale;
     }
     {
-    Vec tmp2 = {0.0f, 0.0f, 0.0f};
-    tmp2.x = w->position.x;
-    tmp2.y = w->position.y;
-    tmp2.z = w->position.z;
-    pos2 = tmp2;
+        Vec tmp2 = {0.0f, 0.0f, 0.0f};
+
+        tmp2.x = w->position.x;
+        tmp2.y = w->position.y;
+        tmp2.z = w->position.z;
+        pos2 = tmp2;
     }
     PSMTXMultVec(camGetPtr(CAMERA_3D)->view, &pos2, &pos2);
     PSMTX44MultVec(camGetPtr(CAMERA_3D)->projection, &pos2, &pos2);
@@ -216,11 +213,11 @@ void effMagic2Disp(CameraId cameraId, EffectEntry* effect) {
     s32 idx;
     s32 alpha;
     s32 type;
-    Mtx m13c;
-    Mtx m10c;
-    Mtx44 mcc;
-    Mtx44 m8c;
-    Mtx44 m4c;
+    Mtx mtx;
+    Mtx texScale;
+    Mtx44 persp;
+    Mtx44 model;
+    Mtx44 modelScale;
     f32 proj[7];
     f32 vp[6];
 
@@ -229,59 +226,60 @@ void effMagic2Disp(CameraId cameraId, EffectEntry* effect) {
     type = w->type;
     GXGetProjectionv(proj);
     GXGetViewportv(vp);
-    PSMTX44Trans(m8c, w->offset.x, w->offset.y, w->offset.z);
-    PSMTX44Scale(m4c, w->scale, w->scale, 1.0f);
-    PSMTX44Concat(m8c, m4c, m8c);
+    PSMTX44Trans(model, w->offset.x, w->offset.y, w->offset.z);
+    PSMTX44Scale(modelScale, w->scale, w->scale, 1.0f);
+    PSMTX44Concat(model, modelScale, model);
     fov = (type == 1) ? 130 : 30;
-    C_MTXPerspective(mcc, fov, 1.2666667f, 1.0f, 32768.0f);
-    PSMTX44Concat(mcc, m8c, mcc);
-    GXSetProjection(mcc, GX_PERSPECTIVE);
+    C_MTXPerspective(persp, fov, 1.2666667f, 1.0f, 32768.0f);
+    PSMTX44Concat(persp, model, persp);
+    GXSetProjection(persp, GX_PERSPECTIVE);
     switch (type) {
         case 1:
-            PSMTXTrans(m13c, 0.0f, 0.0f, -70.0f);
+            PSMTXTrans(mtx, 0.0f, 0.0f, -70.0f);
             break;
         case 0:
-            PSMTXTrans(m13c, 0.0f, 0.0f, -80.0f);
+            PSMTXTrans(mtx, 0.0f, 0.0f, -80.0f);
             break;
     }
-    GXLoadPosMtxImm(m13c, GX_PNMTX0);
+    GXLoadPosMtxImm(mtx, GX_PNMTX0);
     GXSetCurrentMtx(GX_PNMTX0);
     alpha = w->alpha;
     idx = w->age * 3;
     half = alpha / 2;
     for (i = 0; i < effect->count; i++, w++) {
         u8* d;
-        s32 b30;
-        s32 b40;
-        s32 b38;
-        s32 b48;
+        s32 tex0X;
+        s32 tex0Y;
+        s32 tex1X;
+        s32 tex1Y;
+
         idx += 30;
         idx = idx % 24;
         d = color_rotation_data + idx;
         GXSetTevColor(GX_TEVREG0, (GXColor){d[0], 0, d[2], alpha});
         GXSetTevColor(GX_TEVREG1, (GXColor){0, 0, 0, half});
-        b30 = w->tex0ScrollX;
-        b40 = w->tex0ScrollY;
-        b38 = w->tex1ScrollX;
-        b48 = w->tex1ScrollY;
+        tex0X = w->tex0ScrollX;
+        tex0Y = w->tex0ScrollY;
+        tex1X = w->tex1ScrollX;
+        tex1Y = w->tex1ScrollY;
         if (type == 0) {
-            PSMTXScale(m10c, 0.015625f, 0.015625f, 1.0f);
-            PSMTXTrans(m13c, (f32)(b30 / 4), (f32)(b40 / 4), 0.0f);
-            PSMTXConcat(m10c, m13c, m13c);
-            GXLoadTexMtxImm(m13c, GX_TEXMTX0, GX_MTX2x4);
-            PSMTXScale(m10c, 0.015625f, 0.015625f, 1.0f);
-            PSMTXTrans(m13c, (f32)(b38 / 4), (f32)(b48 / 4), 0.0f);
-            PSMTXConcat(m10c, m13c, m13c);
-            GXLoadTexMtxImm(m13c, GX_TEXMTX1, GX_MTX2x4);
+            PSMTXScale(texScale, 0.015625f, 0.015625f, 1.0f);
+            PSMTXTrans(mtx, (f32)(tex0X / 4), (f32)(tex0Y / 4), 0.0f);
+            PSMTXConcat(texScale, mtx, mtx);
+            GXLoadTexMtxImm(mtx, GX_TEXMTX0, GX_MTX2x4);
+            PSMTXScale(texScale, 0.015625f, 0.015625f, 1.0f);
+            PSMTXTrans(mtx, (f32)(tex1X / 4), (f32)(tex1Y / 4), 0.0f);
+            PSMTXConcat(texScale, mtx, mtx);
+            GXLoadTexMtxImm(mtx, GX_TEXMTX1, GX_MTX2x4);
         } else {
-            PSMTXScale(m10c, 0.015625f, 0.0625f, 0.0f);
-            PSMTXTrans(m13c, (f32)(b30 / 4), (f32)(b40 / 4), 0.0f);
-            PSMTXConcat(m10c, m13c, m13c);
-            GXLoadTexMtxImm(m13c, GX_TEXMTX0, GX_MTX2x4);
-            PSMTXScale(m10c, 0.015625f, 0.0625f, 1.0f);
-            PSMTXTrans(m13c, (f32)(b38 / 4), (f32)(b48 / 4), 0.0f);
-            PSMTXConcat(m10c, m13c, m13c);
-            GXLoadTexMtxImm(m13c, GX_TEXMTX1, GX_MTX2x4);
+            PSMTXScale(texScale, 0.015625f, 0.0625f, 0.0f);
+            PSMTXTrans(mtx, (f32)(tex0X / 4), (f32)(tex0Y / 4), 0.0f);
+            PSMTXConcat(texScale, mtx, mtx);
+            GXLoadTexMtxImm(mtx, GX_TEXMTX0, GX_MTX2x4);
+            PSMTXScale(texScale, 0.015625f, 0.0625f, 1.0f);
+            PSMTXTrans(mtx, (f32)(tex1X / 4), (f32)(tex1Y / 4), 0.0f);
+            PSMTXConcat(texScale, mtx, mtx);
+            GXLoadTexMtxImm(mtx, GX_TEXMTX1, GX_MTX2x4);
         }
         switch (type) {
             case 0:

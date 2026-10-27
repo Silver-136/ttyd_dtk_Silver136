@@ -36,14 +36,12 @@ s32 r_data[] = {
     -10, 20, 337, 1, 1,
 };
 
-/* 0x2C bytes in the original: not a whole number of 14-byte effN64Vtx records, so kept as halfwords */
+/* Three effN64Vtx records (0x2A bytes) written as halfwords: the last two halfwords of each record hold its r,g and b,a bytes. effRadiationDisp casts it to effN64Vtx*. */
 s16 size300x40_tex32x32[] = {
     0, 0, 0, 16, 0, -1, -1,
     300, 20, 0, 0, 1024, -5121, -2816,
     300, -20, 0, 1024, 1024, -5121, -2816,
 };
-
-
 
 EffectEntry* effRadiationN64Entry(s32 type, f32 x, f32 y, f32 z, f32 scale) {
     EffectEntry* effect;
@@ -63,7 +61,7 @@ EffectEntry* effRadiationN64Entry(s32 type, f32 x, f32 y, f32 z, f32 scale) {
         flag = 1;
         type = type % 10;
     }
-    count = 0x11;
+    count = 17;
     if (type <= 1) {
         count = 9;
     }
@@ -82,8 +80,7 @@ EffectEntry* effRadiationN64Entry(s32 type, f32 x, f32 y, f32 z, f32 scale) {
     work->scale20 = scale;
     work->scale1c = scale;
     work->flag = flag;
-    camera = 4;
-    work->camera = camera;
+    work->camera = CAMERA_3D;
     p = work;
     switch (type) {
     case 0:
@@ -268,6 +265,7 @@ void effRadiationMain(EffectEntry* effect) {
                 p->rotVelZ = 0.1f * (f32)r_data[k++];
                 p->delay = 0;
             }
+            // FAKE: comma expression for the decrement test; --p->delay <= 0 changes the object
             if (p->delay <= 0 || (--p->delay, p->delay <= 0)) {
                 p->rotX += p->rotVelX;
                 p->rotY += p->rotVelY;
@@ -311,7 +309,7 @@ void effRadiationDisp(CameraId cameraId, EffectEntry* effect) {
         GXSetZMode(GX_FALSE, GX_LEQUAL, GX_FALSE);
     }
     GXSetNumChans(1);
-    GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_VTX, 0, GX_DF_NONE, GX_AF_NONE);
+    GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_VTX, GX_LIGHT_NULL, GX_DF_NONE, GX_AF_NONE);
     switch (type) {
     case 0:
     case 1:
@@ -404,6 +402,5 @@ void effRadiationDisp(CameraId cameraId, EffectEntry* effect) {
             tri1(0, 1, 2, 0);
             break;
         }
-
     }
 }

@@ -9,7 +9,6 @@
 #include "eff/eff_magic1_n64.h"
 #include "libc_decls.h"
 
-
 typedef struct EffIceN64Piece {
     s32 unk0;     // 0x0
     f32 x;        // 0x4
@@ -41,6 +40,7 @@ effN64Vtx ice_vtx[] = {
     {16, 16, 0, 2048, 2048, 0, 0, 0, 255},
     {-16, 16, 0, 0, 2048, 0, 0, 0, 255},
 };
+
 effN64Vtx ice_s_vtx[] = {
     {-4, -4, 0, 0, 0, 0, 0, 0, 255},
     {4, -4, 0, 2048, 0, 0, 0, 0, 255},
@@ -70,7 +70,7 @@ EffectEntry* effIceN64Entry(s32 type, f32 x, f32 y, f32 z) {
     work->lifetime = 30;
     work->frame = 0;
     work->alpha = 0;
-    p = (EffIceN64Piece*)work + 1;
+    p = work->pieces;
     for (i = 1; i < 9; i++, p++) {
         p->x = rand() % 10 - 5;
         p->y = rand() % 10 + 5;
@@ -87,7 +87,7 @@ EffectEntry* effIceN64Entry(s32 type, f32 x, f32 y, f32 z) {
 static void effIceMain(EffectEntry* effect) {
     EffIceN64Work* work = effect->userdata;
     Vec calcPos;
-    Vec pos = { 0.0f, 0.0f, 0.0f };
+    Vec pos = {0.0f, 0.0f, 0.0f};
     f32 t;
     f32 u;
     f32 s;
@@ -135,7 +135,6 @@ static void effIceMain(EffectEntry* effect) {
 }
 
 static void effIceDisp(CameraId cameraId, EffectEntry* effect) {
-
     EffIceN64Work* work;
     CameraEntry* cam;
     Mtx trans;
@@ -162,9 +161,7 @@ static void effIceDisp(CameraId cameraId, EffectEntry* effect) {
     PSMTXRotRad(rot, 'y', 0.017453292f * -camGetPtr(CAMERA_3D)->viewYaw);
     PSMTXConcat(trans, rot, mtx);
     PSMTXConcat(cam->view, mtx, mtx);
-    {
-        GXSetTevColor(GX_TEVREG0, (GXColor){ 0x14, 0x64, 0x14, work->alpha });
-    }
+    GXSetTevColor(GX_TEVREG0, (GXColor){0x14, 0x64, 0x14, work->alpha});
     work = (EffIceN64Work*)((EffIceN64Piece*)work + 1);
     for (i = 1; i < effect->count; i++, work = (EffIceN64Work*)((EffIceN64Piece*)work + 1)) {
         if (i & 1) {

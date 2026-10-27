@@ -5,11 +5,8 @@
 #include "mario/mariost.h"
 #include "evt/evt_msg.h"
 
-// cardmgr.c helpers (named cardE80/cardEAC/cardED0 in cardmgr.h)
-
 USER_FUNC(evt_seq_load_keep_msg_window);
 
-// Functions are emitted in reverse source order (deferred inlining)
 USER_FUNC(memcard_code) {
     EvtWord* args = event->args;
     s32 code = cardGetCode();

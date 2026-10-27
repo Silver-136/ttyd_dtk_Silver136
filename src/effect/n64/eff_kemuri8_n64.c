@@ -1,3 +1,4 @@
+#include "eff/n64/eff_kemuri8_n64.h"
 #include "driver/camdrv.h"
 #include "driver/dispdrv.h"
 #include "driver/effdrv.h"
@@ -13,19 +14,19 @@ typedef struct EffKemuri8N64Work {
     u16 type;       // 0x0
     s16 pad_2;      // 0x2
     Vec position;   // 0x4
-    f32 speed; // 0x10, along (sinAngle, cosAngle)
-    f32 accel; // 0x14, added to speed each frame
-    f32 accelStep; // 0x18, added to accel
+    f32 speed;      // 0x10, along (sinAngle, cosAngle)
+    f32 accel;      // 0x14, added to speed each frame
+    f32 accelStep;  // 0x18, added to accel
     f32 accelStep2; // 0x1C, added to accelStep
-    f32 vSpeed; // 0x20
-    f32 vAccel; // 0x24
+    f32 vSpeed;     // 0x20
+    f32 vAccel;     // 0x24
     f32 vAccelStep; // 0x28
     f32 vAccelStep2; // 0x2C
     f32 sinAngle;   // 0x30
     f32 cosAngle;   // 0x34
     s32 field_0x38; // 0x38
     s32 timer;      // 0x3C
-    s32 texFrame; // 0x40, current of 16 texture frames; >15 = done
+    s32 texFrame;   // 0x40, current of 16 texture frames; >15 = done
     u8 r;           // 0x44
     u8 g;           // 0x45
     u8 b;           // 0x46
@@ -90,7 +91,7 @@ EffectEntry* effKemuri8N64Entry(s32 type, f32 x, f32 y, f32 z) {
     work->texFrame = 0;
     work->texFrameNext = 0;
     work->limit = 17;
-    work->camId = 4;
+    work->camId = CAMERA_3D;
     work++;
     for (i = 1; i < count; i++, work++) {
         work->speed = -3.0f;
@@ -102,6 +103,7 @@ EffectEntry* effKemuri8N64Entry(s32 type, f32 x, f32 y, f32 z) {
         work->vAccelStep = 0.0f;
         work->vAccelStep2 = 0.0f;
         rad = 6.2831855f * (f32)(((i - 1) * 360) / (count - 1)) / 360.0f;
+        // FAKE: one-use inline inline_fn computes radius * -sin; writing it out changes the object
         work->position.x = inline_fn(radius, (f32)sin(rad));
         work->position.y = radius * -(f32)cos(rad);
         work->position.z = 0.0f;
@@ -249,26 +251,27 @@ void effKemuri8Disp(CameraId cameraId, EffectEntry* effect) {
                 GXLoadPosMtxImm(mtx, GX_PNMTX0);
             } else {
                 if (work->flag) {
-                    s32 c5;
-                    s32 c6;
-                    s32 c7;
-                    c6 = 255;
-                    c5 = 255;
-                    c7 = 255 - work->counter * 60;
-                    if (c7 < 0) {
-                        c6 = 255 + (s32)(0.8f * (f32)c7);
-                        c7 = 0;
-                        if (c6 < 0) {
-                            c5 = 255 + (s32)(0.4f * (f32)c6);
-                            c6 = 0;
-                            if (c5 < 0) {
-                                c5 = 0;
+                    s32 red;
+                    s32 green;
+                    s32 blue;
+
+                    green = 255;
+                    red = 255;
+                    blue = 255 - work->counter * 60;
+                    if (blue < 0) {
+                        green = 255 + (s32)(0.8f * (f32)blue);
+                        blue = 0;
+                        if (green < 0) {
+                            red = 255 + (s32)(0.4f * (f32)green);
+                            green = 0;
+                            if (red < 0) {
+                                red = 0;
                             }
                         }
                     }
-                    work->r = c5;
-                    work->g = c6;
-                    work->b = c7;
+                    work->r = red;
+                    work->g = green;
+                    work->b = blue;
                     work->counter++;
                 }
                 GXSetChanMatColor(GX_COLOR0A0, (GXColor){work->r, work->g, work->b, work->a});

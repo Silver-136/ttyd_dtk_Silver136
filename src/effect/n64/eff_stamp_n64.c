@@ -8,7 +8,6 @@
 #include "eff/eff_magic1_n64.h"
 #include "libc_decls.h"
 
-
 static effN64Vtx size16x16_tex64x32_vtx[] = {
     {-8, 0, 0, 0, 0, 0, 0, 0, 0},
     {8, 0, 0, 2048, 0, 0, 0, 0, 0},
@@ -25,7 +24,7 @@ EffectEntry* effStampN64Entry(s32 type, f32 x, f32 y, f32 z) {
     s32 i;
     f32 rad;
     f32 angle;
-    f32 one = 1.0f;
+    f32 radius = 1.0f;
 
     effect = effEntry();
     effect->type = "StampN64";
@@ -70,15 +69,15 @@ EffectEntry* effStampN64Entry(s32 type, f32 x, f32 y, f32 z) {
     for (i = 1; i < 8; i++, work++) {
         angle = (f32)((i - 1) * 360 / 7);
         rad = 6.2831855f * (90.0f + angle) / 360.0f;
-        work->position.x = one * (f32)cos(rad);
-        work->position.y = one * (f32)sin(rad);
+        work->position.x = radius * (f32)cos(rad);
+        work->position.y = radius * (f32)sin(rad);
         work->position.z = 0.0f;
         work->velocity.x = 0.0f;
         work->velocity.y = 0.0f;
         work->velocity.z = 0.0f;
         work->scaleY = 0.1f;
         work->scaleX = 0.1f;
-        work->radius = one;
+        work->radius = radius;
         work->angle = angle;
     }
     return effect;

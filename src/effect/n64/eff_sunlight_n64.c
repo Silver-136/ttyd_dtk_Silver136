@@ -9,7 +9,6 @@
 #include "eff/n64/eff_sunlight_n64.h"
 #include "eff/eff_magic1_n64.h"
 
-
 typedef struct EffSunlightN64Work {
     s32 type;      // 0x0
     Vec position;  // 0x4
@@ -85,7 +84,7 @@ void effSunlightMain(EffectEntry* effect) {
         work->lifetime--;
     }
     work->frame++;
-    if (work->frame > 0x50000 - 0xE60) {
+    if (work->frame > 324000) {
         work->frame = 256;
     }
     if (work->lifetime < 0) {
@@ -251,4 +250,5 @@ effN64Vtx testsrc__s_v[] = {
     {483, -973, 2, -559, 68, 255, 255, 255, 126},
     {811, -1148, 2, -47, 68, 255, 255, 255, 126},
     {2078, 1236, 2, -47, 2116, 255, 255, 255, 126},
-    {1750, 1411, 2, -559, 2116, 255, 255, 255, 126},};
+    {1750, 1411, 2, -559, 2116, 255, 255, 255, 126},
+};

@@ -7,6 +7,7 @@
 #include <dolphin/gx.h>
 #include <dolphin/mtx.h>
 
+// FAKE: sin/cos declared with float parameters; the library's double prototypes change the object
 double sin(float);
 double cos(float);
 
@@ -180,9 +181,7 @@ void effSweatDisp(CameraId cameraId, EffectEntry* effect) {
         if (work->delay != 0) {
             continue;
         }
-        {
-            GXSetChanMatColor(GX_COLOR0A0, (GXColor){255, 255, 255, work->alpha});
-        }
+        GXSetChanMatColor(GX_COLOR0A0, (GXColor){255, 255, 255, work->alpha});
         PSMTXTrans(trans, work->position.x, work->position.y, work->position.z);
         PSMTXRotRad(rot, 'z', 0.017453292f * work->rot);
         PSMTXConcat(trans, rot, trans);

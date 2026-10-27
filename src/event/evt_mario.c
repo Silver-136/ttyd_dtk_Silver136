@@ -28,7 +28,6 @@
 #include "mot/mot_plane.h"
 #include "eff/eff_kemuri.h"
 
-
 void marioSetForceMove(s32 frames, f32 dir, f32 spd);
 
 #define HITOBJ(n, field)                       \
@@ -89,33 +88,30 @@ void marioSetForceMove(s32 frames, f32 dir, f32 spd);
 static inline BOOL marioChkLanding(void) {
     MarioWork* mp = marioGetPtr();
     s32 m = mp->currMotionId;
-    if (m == 0 || m == 1 || m == 2) {
+    if (m == MARIO_MOTION_STAY || m == MARIO_MOTION_WALK || m == MARIO_MOTION_DASH) {
         return TRUE;
     }
-    if (m == 0x16 && mp->airTimer == 0) {
+    if (m == MARIO_MOTION_ROLL && mp->airTimer == 0) {
         return TRUE;
     }
-    if (m == 0x15 && mp->airTimer == 0) {
+    if (m == MARIO_MOTION_SLIT && mp->airTimer == 0) {
         return TRUE;
     }
-    if (m == 0x19 && mp->airTimer == 0) {
+    if (m == MARIO_MOTION_SHIP && mp->airTimer == 0) {
         return TRUE;
     }
-    if (m == 0x1a) {
+    if (m == MARIO_MOTION_YOSHI) {
         return TRUE;
     }
     return FALSE;
 }
-
-
-
 
 static inline BOOL marioLandChk(f32 vy) {
     MarioWork* mp = marioGetPtr();
     f32 a;
     f32 y;
     f32 b;
-    void* hit;
+    HitEntry* hit;
     if (mp->flags & MARIO_FLAG_TUBE_MODE) {
         hit = marioSearchGroundRoll(&y, &a, &b, 11.0f, mp->jumpVelocityY);
     } else {
@@ -171,8 +167,6 @@ USER_FUNC(evt_mario_dokan_prepare) {
     }
     return EVT_RETURN_DONE;
 }
-
-
 
 USER_FUNC(evt_mario_paper_pose_dokan) {
     EvtWord* args = event->args;
@@ -671,7 +665,6 @@ USER_FUNC(evt_mario_set_pose) {
     SETPOSE_BODY
 }
 
-
 USER_FUNC(evt_mario_normalize) {
     s32 ret = 0;
     MarioWork* mp = marioGetPtr();
@@ -826,6 +819,7 @@ USER_FUNC(evt_mario_get_motion) {
 }
 
 USER_FUNC(evt_mario_set_motion) {
+    // FAKE: function-pointer cast passes the s32 without narrowing to MarioMotion; marioChgMot(evtGetValue(...)) changes the object
     ((void (*)(s32))marioChgMot)(evtGetValue(event, event->args[0]));
     return EVT_RETURN_DONE;
 }
@@ -935,10 +929,15 @@ USER_FUNC(N_evt_mario_party_door_halve_hitbox) {
 }
 
 static inline f32 doorAngle(f32 cam) {
-    if (cam > 60.0f && cam < 120.0f) return 180.0f;
-    if (cam > 240.0f && cam < 300.0f) return 180.0f;
+    if (cam > 60.0f && cam < 120.0f) {
+        return 180.0f;
+    }
+    if (cam > 240.0f && cam < 300.0f) {
+        return 180.0f;
+    }
     return 270.0f;
 }
+
 USER_FUNC(evt_mario_party_door_move) {
     EvtWord* args = event->args;
     MarioWork* mp = marioGetPtr();
@@ -1309,7 +1308,7 @@ USER_FUNC(evt_mario_jump_pos) {
             mp->jumpJerkY = 0.0f;
             mp->jumpSnapY = 0.0f;
             mp->baseSpeed = 0.0f;
-            mp->baseSpeed = 0.0f;
+            mp->baseSpeed = 0.0f; // the retail code stores baseSpeed twice
             camFollowYOn();
             if (!(mp->flags & MARIO_FLAG_TUBE_MODE)) {
                 marioChgMot(MARIO_MOTION_STAY);
@@ -1503,7 +1502,7 @@ USER_FUNC(evt_mario_jump_jumpstand) {
         mp->jumpJerkY = 0.0f;
         mp->jumpSnapY = 0.0f;
         mp->baseSpeed = 0.0f;
-        mp->baseSpeed = 0.0f;
+        mp->baseSpeed = 0.0f; // the retail code stores baseSpeed twice
         marioChgMot(MARIO_MOTION_STAY);
         mp->dispFlags &= ~MARIO_DISP_FLAG_NO_REAR_POSE;
         marioAdjustMoveDir();
@@ -1617,6 +1616,7 @@ USER_FUNC(evt_koopa_fire) {
     MarioWork* mp = marioGetPtr();
     if (isFirstCall) {
         event->userdata[0] = 0;
+        // FAKE: s32 -> f32 -> s32 round trip; assigning sysMsec2Frame directly changes the object
         event->userdata[2] = (f32)sysMsec2Frame(evtGetValue(event, args[0]));
         kpaAttackStart();
         marioChgMot(MARIO_MOTION_STAY);
@@ -1635,7 +1635,7 @@ USER_FUNC(evt_koopa_fire) {
 USER_FUNC(evt_koopa_chk_dead) {
     EvtWord* args = event->args;
     MarioWork* mp = marioGetPtr();
-    evtSetValue(event, args[0], (mp->kpaWork->flags >> 28) & 1);
+    evtSetValue(event, args[0], (mp->kpaWork->flags & KPA_WORK_FLAG_DEAD) != 0);
     return EVT_RETURN_DONE;
 }
 
@@ -1643,9 +1643,9 @@ USER_FUNC(evt_koopa_weary) {
     EvtWord* args = event->args;
     MarioWork* mp = marioGetPtr();
     if (args[0]) {
-        mp->kpaWork->flags |= 0x1000000;
+        mp->kpaWork->flags |= KPA_WORK_FLAG_WEARY;
     } else {
-        mp->kpaWork->flags &= ~0x1000000;
+        mp->kpaWork->flags &= ~KPA_WORK_FLAG_WEARY;
     }
     return EVT_RETURN_DONE;
 }
@@ -1663,7 +1663,7 @@ USER_FUNC(evt_mario_get_state) {
     EvtWord* args = event->args;
     MarioWork* mp = marioGetPtr();
     s32 v;
-    id = *args;
+    id = args[0];
     if (marioChkSlitThrouhEnd()) {
         evtSetValue(event, id, 2);
         return EVT_RETURN_DONE;
@@ -1710,14 +1710,30 @@ USER_FUNC(evt_peach_transform_gundan_off) {
 
 USER_FUNC(evt_peach_set_condition) {
     switch (evtGetValue(event, event->args[0])) {
-        case 0: peachSetStsNormal(); break;
-        case 1: peachSetStsAftershower(); break;
-        case 2: peachSetStsInvisible(); break;
-        case 3: peachSetStsHappy(); break;
-        case 4: peachSetStsUneasy(); break;
-        case 5: peachSetStsAngry(); break;
-        case 6: peachSetStsOrdinary(); break;
-        case 7: peachSetStsCarry(); break;
+        case 0:
+            peachSetStsNormal();
+            break;
+        case 1:
+            peachSetStsAftershower();
+            break;
+        case 2:
+            peachSetStsInvisible();
+            break;
+        case 3:
+            peachSetStsHappy();
+            break;
+        case 4:
+            peachSetStsUneasy();
+            break;
+        case 5:
+            peachSetStsAngry();
+            break;
+        case 6:
+            peachSetStsOrdinary();
+            break;
+        case 7:
+            peachSetStsCarry();
+            break;
     }
     return EVT_RETURN_DONE;
 }

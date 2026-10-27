@@ -1,3 +1,4 @@
+#include "eff/n64/eff_kemuri2_n64.h"
 #include "driver/camdrv.h"
 #include "driver/dispdrv.h"
 #include "driver/effdrv.h"
@@ -153,7 +154,7 @@ static void effKemuri2Disp(CameraId cameraId, EffectEntry* effect) {
     s32 i;
     s32 wf = work->frame;
     s32 type = work->type;
-    s32 flag = 0;
+    s32 lastFrame = 0;
     s32 frame;
 
     f32 texW;
@@ -169,7 +170,7 @@ static void effKemuri2Disp(CameraId cameraId, EffectEntry* effect) {
     GXColor c2;
 
     if ((work->kind == 0 && wf == 6) || (work->kind == 1 && wf == 7)) {
-        flag = 1;
+        lastFrame = 1;
     }
     c1 = (GXColor){0xE6, 0xDE, 0xDE, 0x6E};
     GXSetTevColor(GX_TEVREG0, c1);
@@ -202,7 +203,7 @@ static void effKemuri2Disp(CameraId cameraId, EffectEntry* effect) {
     PSMTXTrans(trans, (f32)frame / texW, ty, 0.0f);
     PSMTXConcat(trans, scaleMtx, trans);
     GXLoadTexMtxImm(trans, GX_TEXMTX0, GX_MTX2x4);
-    if (flag) {
+    if (lastFrame) {
         PSMTXScale(scaleMtx, sx, 0.0f, 1.0f);
         PSMTXTrans(trans, (f32)(frame + cell) / texW, ty, 0.0f);
         PSMTXConcat(trans, scaleMtx, trans);

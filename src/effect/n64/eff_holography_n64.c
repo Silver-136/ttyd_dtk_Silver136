@@ -1344,7 +1344,6 @@ effN64Vtx ach_01_v[55][22] = {
 
 u8 xlu_data[16] = {255, 255, 220, 190, 160, 120, 80, 40, 0, 0, 40, 80, 120, 160, 190, 220};
 
-
 void effHolographyMain(EffectEntry* effect);
 void effHolographyDisp(CameraId cameraId, EffectEntry* effect);
 

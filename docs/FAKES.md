@@ -441,3 +441,42 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/effect/n64/eff_cloud_n64.c | effCloudDisp | zero is added to z when the vertices are written; (s16)z changes the object | see comment |
 | Both | src/effect/n64/eff_fire_spark_n64.c | effFireSparkN64Entry | spare temporary for 0.5f; step * 0.5f changes the object | see comment |
 | Both | src/effect/n64/eff_flame_n64.c | effFlameDisp | one-element pointer array; a plain EffFlameN64Work* work changes the object | see comment |
+| Both | src/effect/n64/eff_horao_spell_n64.c | effHoraoSpellDisp | p[1] is q; writing y and z through q changes the object | see comment |
+| Both | src/effect/n64/eff_kemuri10_n64.c | effKemuri10Main | the timer goes through a temporary for the decrement; `work->timer--;` changes the object | see comment |
+| Both | src/effect/n64/eff_kemuri1_n64.c | effKemuri1Disp | colour filled in through a pointer to a zeroed compound literal; (GXColor){work->r, work->g, work->b, 0xFF} changes the object | see comment |
+| Both | src/effect/n64/eff_kemuri5_n64.c | effKemuri5Main | sin result in a block-scoped temporary; writing it into the assignment changes the object | see comment |
+| Both | src/effect/n64/eff_kemuri5_n64.c | effKemuri5Disp | one-use inline mkc builds the colour; the compound literal (GXColor){0x70, 0x60, 0x18, work->alpha} changes the object | see comment |
+| Both | src/effect/n64/eff_kemuri8_n64.c | effKemuri8N64Entry | one-use inline inline_fn computes radius * -sin; writing it out changes the object | see comment |
+| Both | src/effect/n64/eff_kemuri9_n64.c | effKemuri9Disp | no-op cast of type to s32; the plain comparison changes the object | see comment |
+| Both | src/effect/n64/eff_magic3_n64.c | effMagic3N64Entry | nx * nx + ny * ny + nz * nz with ny * ny written as 1.0f and nz * nz as nz (exact for ny = -1, nz = 0); the plain sum changes the object | see comment |
+| Both | src/effect/n64/eff_magic3_n64.c | effMagic3Main | magic3_scale(a, b) is 3.0f * a + b; the written-out sum changes the object | see comment |
+| Both | src/effect/n64/eff_magic_horao_n64.c | effMagicHoraoDisp | ang is assigned in a comma expression inside the initializer; assigning it in its own statement changes the object | see comment |
+| Both | src/effect/n64/eff_opuku_jetwrain_n64.c | effOpukuJetwrainN64Entry | inline_fn(j) is j < 13; the plain loop condition changes the object | see comment |
+| Both | src/effect/n64/eff_opuku_jetwrain_n64.c | effOpukuJetwrainMain | inline_fn2(j) is j < 12; the plain loop condition changes the object | see comment |
+| Both | src/effect/n64/eff_opuku_wprotect_n64.c | effOpukuWprotectDisp | (f32) casts on f32 products; without them the object changes | see comment |
+| Both | src/effect/n64/eff_peach_dust_n64.c | effPeachDustN64Entry | (s32) cast on the char; without it the object changes | see comment |
+| Both | src/effect/n64/eff_peach_dust_n64.c | effPeachDustDisp | k and h hold the 1.4f/0.7f factors in a block of their own; the literal factors change the object | see comment |
+| Both | src/effect/n64/eff_pokopi_pcharge_n64.c | effPokopiPchargeN64Entry | p is set between the position stores; setting it right before the loop changes the object | see comment |
+| Both | src/effect/n64/eff_pokopi_thunder_n64.c | effPokopiThunderN64Entry | spare local holding 0.0f for the length test; comparing with 0.0f directly changes the object | see comment |
+| Both | src/effect/n64/eff_pokopi_thunder_n64.c | effPokopiThunderMain | inline_fn(alpha, 0.5f) is (f32)alpha * 0.5f through an inline helper; the plain expression changes the object | see comment |
+| Both | src/effect/n64/eff_pokopi_thunder_n64.c | effPokopiThunderDisp | pt_dy(work, work) is end.y - start.y through an inline helper; the plain expression changes the object | see comment |
+| Both | src/effect/n64/eff_pturn_n64.c | effPturnMain | spare flag local for the condition; testing it directly changes the object | see comment |
+| Both | src/effect/n64/eff_radiation_n64.c | effRadiationMain | comma expression for the decrement test; --p->delay <= 0 changes the object | see comment |
+| Both | src/effect/n64/eff_rappa_n64.c | effRappaN64Entry | block-local temporary for cos(rad); the plain expression changes the object | see comment |
+| Both | src/effect/n64/eff_recover_heart_n64.c | effRecoverHeartDisp | tex first holds the type test, then the texture id; testing the condition directly changes the object | see comment |
+| Both | src/effect/n64/eff_ripple_n64.c | effRippleDisp | type is read through a cast of userdata before work is set; reading work->type changes the object | see comment |
+| Both | src/effect/n64/eff_rothammer_fail_n64.c | effRotHammerFailN64Entry | child = work + 1 through a pointer step and back; the plain assignment changes the object | see comment |
+| Both | src/effect/n64/eff_small_star_n64.c | effSmallStarN64Entry | zero kept in a local for the comparisons; comparing with 0.0f literals changes the object | see comment |
+| Both | src/effect/n64/eff_small_star_n64.c | alphaf | alpha scaling through an inline helper; (s32)(w->alpha * 0.6f) written out changes the object | see comment |
+| Both | src/effect/n64/eff_snowfall_n64.c | effSnowfallMain | the height goes through a float local (converted at run time); h = 166 changes the object | see comment |
+| Both | src/effect/n64/eff_snowfall_n64.c | effSnowfallDisp | discarded compound literal with no effect; removing it changes the object | see comment |
+| Both | src/effect/n64/eff_sstar_n64.c | effSstarDisp | vertex fields addressed through s16* casts; &w->vtx[i * 2 + 1].x/.y/.z change the object | see comment |
+| Both | src/effect/n64/eff_stardust2_n64.c | effStardust2Main | (u32)type > 1 tests type other than 0 and 1; type != 0 && type != 1 changes the object | see comment |
+| Both | src/effect/n64/eff_stardust_n64.c | effStardustN64Entry | i set before the loop setup; for (i = 1; ...) changes the object | see comment |
+| Both | src/effect/n64/eff_sweat_n64.c | sin | sin/cos declared with float parameters; the library's double prototypes change the object | see comment |
+| Both | src/effect/n64/eff_thunder_n64.c | effThunderN64Entry | second test of type instead of else; else changes the object | see comment |
+| Both | src/effect/n64/eff_timestamp_n64.c | effTimestampMain | comma expression; --work->delay[i] == 0 changes the object | see comment |
+| Both | src/effect/n64/eff_vapor_n64.c | effVaporDisp | rows indexed as (table + type * 30)[n]; table[type * 30 + n] changes the object | see comment |
+| Both | src/effect/n64/eff_whirlwind_n64.c | effWhirlwindN64Entry | spare temporary for 0.25f; the plain literal changes the object | see comment |
+| Both | src/event/evt_mario.c | evt_mario_set_motion | function-pointer cast passes the s32 without narrowing to MarioMotion; marioChgMot(evtGetValue(...)) changes the object | see comment |
+| Both | src/event/evt_mario.c | evt_koopa_fire | s32 -> f32 -> s32 round trip; assigning sysMsec2Frame directly changes the object | see comment |

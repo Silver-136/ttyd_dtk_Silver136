@@ -1,3 +1,4 @@
+#include "eff/n64/eff_pokopi_pipo_n64.h"
 #include "eff/eff_n64.h"
 #include "driver/camdrv.h"
 #include "driver/dispdrv.h"
@@ -30,7 +31,6 @@ typedef struct EffPokopiPipoN64Work {
     s32 falling;   // 0x64
     s32 duration;  // 0x68
 } EffPokopiPipoN64Work;
-
 
 static effN64Vtx size32x32_tex32x32_vtx[] = {
     {-16, -16, 0, 0, 0, 0, 0, 0, 255},

@@ -12,7 +12,6 @@
 #include "eff/eff_magic1_n64.h"
 #include "libc_decls.h"
 
-
 typedef struct EffWaterDamageN64Work {
     s32 type;     // 0x0
     Vec position; // 0x4
@@ -28,9 +27,6 @@ typedef struct EffWaterDamageN64Work {
     f32 scale;    // 0x34
     s32 variant;  // 0x38
 } EffWaterDamageN64Work;
-
-#ifdef __MWERKS__
-#endif
 
 effN64Vtx size8x8_tex16x16_0_vtx[] = {
     {-4, -4, 0, 0, 0, 0, 0, 0, 255},
@@ -307,7 +303,7 @@ void effWaterDamageDisp(CameraId cameraId, EffectEntry* effect) {
         GXSetCurrentMtx(GX_PNMTX0);
         GXSetTevColor(GX_TEVREG0, (GXColor){ 0xC8, 0xFF, 0xFF, alpha * work->alpha / 255 });
         GXSetTevColor(GX_TEVREG1, (GXColor){ 0x00, 0x20, 0x20, 0x00 });
-        switch (i + (gp->retraceCount >> 1) & 3) {
+        switch ((i + (gp->retraceCount >> 1)) & 3) {
         case 0:
         case 2:
             effSetVtxDescN64(size8x8_tex16x16_0_vtx);
@@ -376,7 +372,7 @@ void effWaterDamageDisp2(CameraId cameraId, EffectEntry* effect) {
         PSMTXConcat(trans, scale, trans);
         PSMTXConcat(mtx, trans, trans);
         GXLoadPosMtxImm(trans, GX_PNMTX0);
-        switch (i + (gp->retraceCount >> 1) & 3) {
+        switch ((i + (gp->retraceCount >> 1)) & 3) {
         case 0:
         case 2:
             effSetVtxDescN64(size8x8_tex16x16_0_vtx);

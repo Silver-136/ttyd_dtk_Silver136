@@ -10,9 +10,6 @@
 
 double sin(double);
 
-
-
-
 typedef struct EffOpukuJetwrainWork {
     s32 type;      // 0x0
     Vec position;  // 0x4
@@ -25,7 +22,6 @@ typedef struct EffOpukuJetwrainWork {
     s8 h[19][13];  // 0x23
     s16 v[19][13]; // 0x11A
 } EffOpukuJetwrainWork;
-
 
 static effN64Vtx opuku_jetwrain_vtx[16] = {
     {-160, -120, -320, 0, 0, 0, 0, 0, 255},
@@ -86,6 +82,7 @@ EffectEntry* effOpukuJetwrainN64Entry(s32 type, f32 x, f32 y, f32 z, f32 scale, 
     work->col2[1] = 220;
     work->col2[2] = 255;
     for (i = 0; i < 19; i++) {
+        // FAKE: inline_fn(j) is j < 13; the plain loop condition changes the object
         for (j = 0; inline_fn(j); j++) {
             work->h[i][j] = 0;
             work->v[i][j] = 0;
@@ -150,6 +147,7 @@ void effOpukuJetwrainMain(EffectEntry* effect) {
         }
     }
     for (i = 1; i < 18; i++) {
+        // FAKE: inline_fn2(j) is j < 12; the plain loop condition changes the object
         for (j = 1; inline_fn2(j); j++) {
             work->h[i][j] += 0.02f * work->v[i][j];
         }

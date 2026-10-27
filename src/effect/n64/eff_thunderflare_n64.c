@@ -8,7 +8,6 @@
 #include "eff/eff_magic1_n64.h"
 #include "libc_decls.h"
 
-
 typedef struct EffThunderflareN64Elem {
     s32 unk0;     // 0x0
     s32 type;     // 0x4
@@ -33,7 +32,6 @@ static effN64Vtx size16x16_tex32x32_vtx[] = {
     {12, 12, 0, 1536, 512, 250, 0, 0, 255},
     {-12, 12, 0, 512, 1536, 250, 0, 0, 255},
 };
-
 
 void effThunderflareMain(EffectEntry* effect);
 void effThunderflareDisp(CameraId cameraId, EffectEntry* effect);

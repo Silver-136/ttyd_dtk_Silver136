@@ -42,6 +42,7 @@ EffectEntry* effMagic3N64Entry(s32 type, f32 x, f32 y, f32 z, s32 life) {
     nz = 0.0f;
     ny = -1.0f;
     nx = 0.0f;
+    // FAKE: nx * nx + ny * ny + nz * nz with ny * ny written as 1.0f and nz * nz as nz (exact for ny = -1, nz = 0); the plain sum changes the object
     inv = nz + (nx * nx + 1.0f);
     if (!inv) {
         return NULL;
@@ -139,6 +140,7 @@ void effMagic3Main(EffectEntry* effect) {
             work->velocity.x *= 0.7f;
             work->velocity.y *= 0.7f;
             work->velocity.z *= 0.7f;
+            // FAKE: magic3_scale(a, b) is 3.0f * a + b; the written-out sum changes the object
             work->scale = (f32)(255 - work->alpha) / 30.0f +
                           magic3_scale((f32)sin(6.2831855f * (f32)(work->alpha / 2) / 360.0f), (f32)sin(t / 360.0f));
         }

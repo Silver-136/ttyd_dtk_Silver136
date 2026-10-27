@@ -7,9 +7,7 @@
 #include <dolphin/os/OSFastCast.h>
 #include <stdlib.h>
 #include "eff/eff_n64.h"
-
-
-
+#include "eff/n64/eff_opuku_wcurtain_n64.h"
 
 typedef struct EffOpukuWcurtainN64Work {
     s32 type;       // 0x0

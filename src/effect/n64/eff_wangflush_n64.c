@@ -8,17 +8,17 @@
 #include "eff/eff_magic1_n64.h"
 
 typedef struct EffWangFlushN64Work {
-    s32 type;      // 0x0
-    Vec position;  // 0x4
-    f32 rotation;  // 0x10
-    f32 rotSpeed;  // 0x14
-    f32 scale;     // 0x18
-    f32 scaleAdd;  // 0x1C
+    s32 type;       // 0x0
+    Vec position;   // 0x4
+    f32 rotation;   // 0x10
+    f32 rotSpeed;   // 0x14
+    f32 scale;      // 0x18
+    f32 scaleAdd;   // 0x1C
     f32 flashScale; // 0x20
-    s32 alpha;     // 0x24
+    s32 alpha;      // 0x24
     s32 flashAlpha; // 0x28
-    s32 timer;     // 0x2C
-    s32 frame;     // 0x30
+    s32 timer;      // 0x2C
+    s32 frame;      // 0x30
 } EffWangFlushN64Work;
 
 static effN64Vtx size16x16_tex64x64_vtx[] = {

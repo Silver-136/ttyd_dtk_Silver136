@@ -627,6 +627,7 @@ EffectEntry* effThunderN64Entry(s32 type, f32 x, f32 y, f32 z, f32 a, f32 b) {
         if (type == 1) {
             work->flare = effThunderflareN64Entry(0, -1, -118.0f, 184.0f, 79.0f, 1.0f);
         }
+        // FAKE: second test of type instead of else; else changes the object
         if (type != 1) {
             work->charge = effAkariChargeN64Entry(0, 0, -120.0f, 189.0f, 72.0f, 1.0f);
             ((EffAkariChargeN64Elem*)work->charge->userdata)->r2 = 255;
@@ -753,7 +754,7 @@ void effThunderDisp(CameraId cameraId, EffectEntry* effect) {
     if (type < 3) {
         GXSetTevColor(GX_TEVREG1, (GXColor){0, 0, 0, 255});
         GXSetNumChans(1);
-        GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_VTX, 0, GX_DF_NONE, GX_AF_NONE);
+        GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_VTX, GX_LIGHT_NULL, GX_DF_NONE, GX_AF_NONE);
         GXSetNumTevStages(2);
         GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
         GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
@@ -808,26 +809,26 @@ void effThunderDisp(CameraId cameraId, EffectEntry* effect) {
         case 0:
         case 1:
         case 2:
-        PSMTXTrans(mtx, work->position.x, work->position.y, work->position.z);
-        PSMTXRotRad(rot, 'y', 0.017453292f * -camGetPtr(CAMERA_3D)->viewYaw);
-        PSMTXConcat(mtx, rot, view);
-        PSMTXTrans(mtx, 0.0f, 0.0f, 1.0f);
-        PSMTXConcat(view, mtx, view);
-        PSMTXConcat(camera->view, view, view);
-        GXLoadPosMtxImm(view, GX_PNMTX0);
-        GXSetCurrentMtx(GX_PNMTX0);
-        GXSetTevColor(GX_TEVREG0, (GXColor){255, 47, 198, 255});
+            PSMTXTrans(mtx, work->position.x, work->position.y, work->position.z);
+            PSMTXRotRad(rot, 'y', 0.017453292f * -camGetPtr(CAMERA_3D)->viewYaw);
+            PSMTXConcat(mtx, rot, view);
+            PSMTXTrans(mtx, 0.0f, 0.0f, 1.0f);
+            PSMTXConcat(view, mtx, view);
+            PSMTXConcat(camera->view, view, view);
+            GXLoadPosMtxImm(view, GX_PNMTX0);
+            GXSetCurrentMtx(GX_PNMTX0);
+            GXSetTevColor(GX_TEVREG0, (GXColor){255, 47, 198, 255});
             break;
         default:
-        PSMTXTrans(mtx, work->position.x, work->position.y, work->position.z);
-        PSMTXRotRad(rot, 'y', 0.017453292f * -camGetPtr(CAMERA_3D)->viewYaw);
-        PSMTXConcat(mtx, rot, view);
-        PSMTXTrans(mtx, 0.0f, 0.0f, 1.0f);
-        PSMTXConcat(view, mtx, view);
-        PSMTXConcat(camera->view, view, view);
-        GXLoadPosMtxImm(view, GX_PNMTX0);
-        GXSetCurrentMtx(GX_PNMTX0);
-        GXSetTevColor(GX_TEVREG0, (GXColor){255, 255, 0, work->alpha});
+            PSMTXTrans(mtx, work->position.x, work->position.y, work->position.z);
+            PSMTXRotRad(rot, 'y', 0.017453292f * -camGetPtr(CAMERA_3D)->viewYaw);
+            PSMTXConcat(mtx, rot, view);
+            PSMTXTrans(mtx, 0.0f, 0.0f, 1.0f);
+            PSMTXConcat(view, mtx, view);
+            PSMTXConcat(camera->view, view, view);
+            GXLoadPosMtxImm(view, GX_PNMTX0);
+            GXSetCurrentMtx(GX_PNMTX0);
+            GXSetTevColor(GX_TEVREG0, (GXColor){255, 255, 0, work->alpha});
             break;
     }
     effGetTexObjN64(84, &tex);

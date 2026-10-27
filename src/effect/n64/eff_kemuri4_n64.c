@@ -1,3 +1,4 @@
+#include "eff/n64/eff_kemuri4_n64.h"
 #include "driver/camdrv.h"
 #include "driver/dispdrv.h"
 #include "driver/effdrv.h"
@@ -97,31 +98,31 @@ EffectEntry* effKemuri4N64Entry(s32 type, f32 x, f32 y, f32 z, f32 angle, f32 fl
     effect->callback = effKemuri4Main;
 
     for (i = 0; i < 1; i++, work++) {
-    work->active = 1;
-    work->type = type;
-    work->field_6C = 0.0f;
-    work->position.x = x;
-    work->position.y = y;
-    work->position.z = z;
-    work->scale.x = 1.0f;
-    work->scale.y = 1.0f;
-    work->scale.z = 1.0f;
-    work->alpha = 255;
-    work->holdOnStay = 1.0f;
-    work->moveScale = 5.4f;
-    work->rotSpeed = (f32)(flip != zero ? -10 : 10);
-    work->velocity = 0.5f;
-    work->accel = -0.07f;
-    work->accel2 = 0.003f;
-    work->accel3 = 0.0f;
-    work->timer = 15;
-    work->rotation.y = angle;
-    work->rotation.x = 0.0f;
-    work->rotation.z = 0.0f;
-    work->texFlag = (rand() % 100 >> 4) & 1;
-    rad = 6.2831855f * reviseAngle(angle + (f32)(flip != zero ? -90 : 90)) / 360.0f;
-    work->dirX = (f32)sin(rad);
-    work->dirZ = (f32)cos(rad);
+        work->active = 1;
+        work->type = type;
+        work->field_6C = 0.0f;
+        work->position.x = x;
+        work->position.y = y;
+        work->position.z = z;
+        work->scale.x = 1.0f;
+        work->scale.y = 1.0f;
+        work->scale.z = 1.0f;
+        work->alpha = 255;
+        work->holdOnStay = 1.0f;
+        work->moveScale = 5.4f;
+        work->rotSpeed = (f32)(flip != zero ? -10 : 10);
+        work->velocity = 0.5f;
+        work->accel = -0.07f;
+        work->accel2 = 0.003f;
+        work->accel3 = 0.0f;
+        work->timer = 15;
+        work->rotation.y = angle;
+        work->rotation.x = 0.0f;
+        work->rotation.z = 0.0f;
+        work->texFlag = (rand() % 100 >> 4) & 1;
+        rad = 6.2831855f * reviseAngle(angle + (f32)(flip != zero ? -90 : 90)) / 360.0f;
+        work->dirX = (f32)sin(rad);
+        work->dirZ = (f32)cos(rad);
     }
     return effect;
 }
@@ -151,15 +152,15 @@ void effKemuri4Main(EffectEntry* effect) {
             continue;
         }
         anyActive = 1;
-        if (work->type == 0 && work->holdOnStay && marioGetPtr()->currMotionId == 0U) {
+        if (work->type == 0 && work->holdOnStay && marioGetPtr()->currMotionId == MARIO_MOTION_STAY) {
             work->timer++;
         } else {
-            work->accel2 = work->accel2 + work->accel3;
-            work->accel = work->accel + work->accel2;
-            work->velocity = work->velocity + work->accel;
-            work->rotation.z = work->rotation.z + work->velocity * work->rotSpeed;
-            work->position.x = work->position.x - work->dirX * (work->velocity * work->moveScale);
-            work->position.z = work->position.z - work->dirZ * (work->velocity * work->moveScale);
+            work->accel2 += work->accel3;
+            work->accel += work->accel2;
+            work->velocity += work->accel;
+            work->rotation.z += work->velocity * work->rotSpeed;
+            work->position.x -= work->dirX * (work->velocity * work->moveScale);
+            work->position.z -= work->dirZ * (work->velocity * work->moveScale);
             work->alpha -= 12;
             if (work->velocity < 0.0f) {
                 work->holdOnStay = 0.0f;

@@ -9,8 +9,6 @@
 
 double sin(double);
 
-
-
 typedef struct EffTimestampN64Work {
     s32 type;           // 0x0
     Vec position;       // 0x4
@@ -32,7 +30,6 @@ typedef struct EffTimestampN64Work {
     s32 digitAlpha[10]; // 0x124
     s32 delay[10];      // 0x14C
 } EffTimestampN64Work;
-
 
 static s32 pos_data[30] = {
     -50, -70, 5,  80, -90, 20, 20, -50, 45,  -80, 30,  10,  30,  0,   35,
@@ -77,17 +74,15 @@ EffectEntry* effTimestampN64Entry(s32 type, f32 x, f32 y, f32 z, f32 scale, s32 
     work->b = 120;
     work->alpha = 0;
     work->scale2 = 1.0f;
-    p = pos_data;
     for (i = 0; i < 10; i++) {
-        work->posX[i] = pos_data[i*3];
-        work->posY[i] = pos_data[i*3+1];
+        work->posX[i] = pos_data[i * 3];
+        work->posY[i] = pos_data[i * 3 + 1];
         work->posZ[i] = 0.0f;
         work->rotX[i] = 0.0f;
         work->rotY[i] = 0.0f;
         work->rotZ[i] = 0.0f;
         work->digitAlpha[i] = 0;
-        work->delay[i] = pos_data[i*3+2];
-        p += 3;
+        work->delay[i] = pos_data[i * 3 + 2];
     }
     return effect;
 }
@@ -138,6 +133,7 @@ void effTimestampMain(EffectEntry* effect) {
         work->bright = (frame << 4) + 15;
     }
     for (i = 0; i < 10; i++) {
+        // FAKE: comma expression; --work->delay[i] == 0 changes the object
         if (work->delay[i] == 0 || (work->delay[i] -= 1, work->delay[i] == 0)) {
             work->digitAlpha[i] += 8;
             if (work->digitAlpha[i] > 255) {

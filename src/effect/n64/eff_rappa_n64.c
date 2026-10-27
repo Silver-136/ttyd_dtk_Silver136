@@ -9,7 +9,6 @@
 #include "eff/eff_magic1_n64.h"
 #include "libc_decls.h"
 
-
 typedef struct EffRappaN64Work {
     s32 type;     // 0x0
     Vec position; // 0x4
@@ -35,8 +34,6 @@ static u8 color_rotation_data[] = {
     0xB4, 0xB4, 0xFE, 0xB4, 0xDD, 0xFE, 0xB4, 0xFE, 0xFE, 0xB4, 0xFE, 0xD5,
     0xB4, 0xFE, 0xB4, 0xD5, 0xFE, 0xB4, 0xFE, 0xFE, 0xB4, 0xFE, 0xD5, 0xAC,
 };
-
-
 
 void effRappaMain(EffectEntry* effect);
 void effRappaDisp(CameraId cameraId, EffectEntry* effect);
@@ -77,7 +74,11 @@ EffectEntry* effRappaN64Entry(s32 type, s32 num, f32 x, f32 y, f32 z, f32 pitch,
         radP = 6.2831855f * pitch / 360.0f;
         sinA = sin(radP);
         rad = 6.2831855f * (yaw + (f32)((i & 2) * (i / 2) * 4)) / 360.0f;
-        { f32 c = cos(rad); work->velocity.x = c * sinA; }
+        // FAKE: block-local temporary for cos(rad); the plain expression changes the object
+        {
+            f32 c = cos(rad);
+            work->velocity.x = c * sinA;
+        }
         work->velocity.y = (f32)sin(rad);
         work->velocity.z = (f32)cos(rad) * (f32)cos(radP);
         work->speed = speed;
@@ -166,10 +167,10 @@ void effRappaDisp(CameraId cameraId, EffectEntry* effect) {
     j1 = idx + 4;
     j2 = idx + 5;
     for (i = 1; i < effect->count; j0 += 3, j1 += 3, j2 += 3, i++, work++) {
-        do { GXSetTevColor(GX_TEVREG0, mkcol(color_rotation_data[j0 % 36], color_rotation_data[j1 % 36], color_rotation_data[j2 % 36], alpha));
+        GXSetTevColor(GX_TEVREG0, mkcol(color_rotation_data[j0 % 36], color_rotation_data[j1 % 36], color_rotation_data[j2 % 36], alpha));
         PSMTXTrans(mtx, work->position.x, work->position.y, work->position.z);
         PSMTXRotRad(rot, 'y', 0.017453292f * -camGetPtr(CAMERA_3D)->viewYaw);
-        PSMTXScale(scale, work->scaleOfs, work->scaleOfs, 1.0f); } while (0);
+        PSMTXScale(scale, work->scaleOfs, work->scaleOfs, 1.0f);
         PSMTXConcat(mtx, rot, mtx);
         PSMTXConcat(mtx, scale, mtx);
         PSMTXConcat(camera->view, mtx, mtx);

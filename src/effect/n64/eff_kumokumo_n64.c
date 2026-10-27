@@ -9,13 +9,7 @@
 #include "eff/eff_magic1_n64.h"
 #include "libc_decls.h"
 #include "system.h"
-
-
-
 #include "eff/n64/eff_kumokumo_n64.h"
-
-#ifdef __MWERKS__
-#endif
 
 s16 cloud_vertex_tbl[] __attribute__((aligned(32))) = {
     25023, 2076, 0, 27200, 6605, 0,
@@ -171,7 +165,7 @@ EffectEntry* effKumokumoN64Entry(s32 type, s32 time, f32 x, f32 y, f32 z, f32 ro
     work->scale = scale;
     work->a2 = 255;
     work->rot = rot;
-    work->camera = 4;
+    work->camera = CAMERA_3D;
     work->s1 = 0.0f;
     work->t1 = 0.0f;
     work->s2 = 0.0f;
@@ -594,6 +588,4 @@ void effKumokumoDisp(CameraId cameraId, EffectEntry* effect) {
         }
     }
 }
-
-
 

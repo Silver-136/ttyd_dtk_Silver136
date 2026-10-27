@@ -1,3 +1,4 @@
+#include "eff/n64/eff_rubble_n64.h"
 #include "eff/eff_n64.h"
 #include "driver/camdrv.h"
 #include "driver/dispdrv.h"
@@ -28,7 +29,6 @@ typedef struct EffRubbleN64Work {
     s32 lifetime; // 0x48
     s32 frame;    // 0x4C
 } EffRubbleN64Work;
-
 
 effN64Vtx stg_hahen_v[58] = {
     {3, 3, -3, 0, 0, 50, 50, 50, 255},

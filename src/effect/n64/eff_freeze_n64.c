@@ -23,8 +23,6 @@ typedef struct EffFreezeN64Work {
     EffectEntry* dust;  // 0x28
 } EffFreezeN64Work;
 
-
-
 static effN64Vtx size32x64_tex32x64_vtx[] = {
     {-16, 0, 3, 0, 0, 0, 0, 0, 255},
     {16, 0, 3, 1024, 0, 0, 0, 0, 255},
@@ -138,9 +136,9 @@ void effFreezeMain(EffectEntry* effect) {
         effVaporN64Entry(2, 30, work->position.x, work->position.y + 40.0f * work->scale, work->position.z,
                          work->scale);
     }
-    ((EffFreezeN64Work*)work->dust->userdata)->position.x = work->position.x;
-    ((EffFreezeN64Work*)work->dust->userdata)->position.y = 10.0f + work->position.y;
-    ((EffFreezeN64Work*)work->dust->userdata)->position.z = work->position.z;
+    ((EffSnowDustN64Work*)work->dust->userdata)->position.x = work->position.x;
+    ((EffSnowDustN64Work*)work->dust->userdata)->position.y = 10.0f + work->position.y;
+    ((EffSnowDustN64Work*)work->dust->userdata)->position.z = work->position.z;
     dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effFreezeDisp, effect);
 }
 

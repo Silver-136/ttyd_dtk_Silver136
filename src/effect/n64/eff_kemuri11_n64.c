@@ -1,3 +1,4 @@
+#include "eff/n64/eff_kemuri11_n64.h"
 #include "eff/n64/eff_kemuri1_n64.h"
 #include "eff/eff_n64.h"
 #include "driver/camdrv.h"
@@ -56,7 +57,7 @@ static effN64Vtx stg_thruhammer_v[] = {
 
 void effKemuri11Main(EffectEntry* effect);
 void effKemuri11Disp(CameraId cameraId, EffectEntry* effect);
-static void main_dl(EffectEntry* effect, Mtx mtx);
+static void main_dl(EffectEntry* effect, Mtx camMtx);
 
 EffectEntry* effKemuri11N64Entry(s32 type, f32 x, f32 y, f32 z) {
     EffectEntry* effect;
@@ -420,7 +421,6 @@ static void main_dl(EffectEntry* effect, Mtx camMtx) {
     Mtx m;
     Mtx rot;
     Mtx scale;
-    f32 t;
 
     for (i = 1, work++; i < effect->count; i++, work++) {
         if (work->delay < 0) {
@@ -437,8 +437,7 @@ static void main_dl(EffectEntry* effect, Mtx camMtx) {
         GXLoadPosMtxImm(m, GX_PNMTX0);
         GXSetCurrentMtx(GX_PNMTX0);
         PSMTXScale(scale, 0.015625f, 0.03125f, 1.0f);
-        t = work->texS;
-        PSMTXTrans(m, 0.0f, -t / 4.0f, 0.0f);
+        PSMTXTrans(m, 0.0f, -work->texS / 4.0f, 0.0f);
         PSMTXConcat(scale, m, scale);
         GXLoadTexMtxImm(scale, GX_TEXMTX0, GX_MTX2x4);
         PSMTXScale(scale, 0.125f, 0.125f, 1.0f);

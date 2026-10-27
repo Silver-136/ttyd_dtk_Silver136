@@ -133,7 +133,7 @@ void effPikkyoloMain(EffectEntry* effect) {
             work->position.y = 0.0f;
             work->velocity.y *= -0.7f;
         }
-        work->rot += (s32)((i & 1) * 2 - 1) * 14;
+        work->rot += ((i & 1) * 2 - 1) * 14;
     }
     dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effPikkyoloDisp, effect);
 }

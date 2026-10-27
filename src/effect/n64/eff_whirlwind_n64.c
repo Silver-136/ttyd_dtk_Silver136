@@ -9,7 +9,6 @@
 #include <dolphin/mtx.h>
 #include <stdlib.h>
 
-
 u8 col_r[3] = {0xFF, 0xFF, 0x40};
 u8 col_g[3] = {0xFF, 0x40, 0x40};
 u8 col_b[3] = {0xFF, 0x40, 0xFF};
@@ -110,6 +109,7 @@ EffectEntry* effWhirlwindN64Entry(s32 type, MarioWork* target, f32 scale, s32 li
                 work->vel.x = (rand() % 2 * 2 - 1) * 4;
                 work->vel.y = 0.0f;
                 work->vel.z = (rand() % 2 * 2 - 1) * 4;
+                // FAKE: spare temporary for 0.25f; the plain literal changes the object
                 quarter = 0.25f;
                 work->scale = 0.5f + 0.5f * ((f32)(i - 1) * quarter);
                 work->rot.x = 25 * i;
@@ -163,22 +163,22 @@ void effWhirlwindMain(EffectEntry* effect) {
     type = work->type;
     switch (type) {
         case 8:
-        if (life > 5) {
-            work->alpha = work->alpha + 0.05f * (255 - work->alpha);
-        }
-        work->scale = work->baseScale * life / work->duration;
-        if (life < 10) {
-            work->alpha = life * 25;
-        }
+            if (life > 5) {
+                work->alpha = work->alpha + 0.05f * (255 - work->alpha);
+            }
+            work->scale = work->baseScale * life / work->duration;
+            if (life < 10) {
+                work->alpha = life * 25;
+            }
             break;
         default:
-        if (life > 5) {
-            work->alpha = work->alpha + 0.3f * (100 - work->alpha);
-        }
-        if (life < 10) {
-            work->alpha *= 0.8f;
-            work->scale += 0.1f * (2.0f * work->baseScale - work->scale);
-        }
+            if (life > 5) {
+                work->alpha = work->alpha + 0.3f * (100 - work->alpha);
+            }
+            if (life < 10) {
+                work->alpha *= 0.8f;
+                work->scale += 0.1f * (2.0f * work->baseScale - work->scale);
+            }
     }
     if (work->target != NULL) {
         Vec* p = &work->target->position;

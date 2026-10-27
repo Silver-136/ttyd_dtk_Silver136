@@ -7,8 +7,6 @@
 #include <dolphin/mtx.h>
 #include "libc_decls.h"
 
-double cos(double);
-
 // One element per flare: element 0 is the head (type, position, fade and timers),
 // elements 1-5 are the rings (angle, scale, distance along the flare axis, speed).
 typedef struct EffLensflareN64Elem {

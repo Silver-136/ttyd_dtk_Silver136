@@ -45,6 +45,7 @@ EffectEntry* effSmallStarN64Entry(s32 type, s32 count, f32 x, f32 y, f32 z, f32 
         return NULL;
     }
     len = dx * dx + dy * dy + dz * dz;
+    // FAKE: zero kept in a local for the comparisons; comparing with 0.0f literals changes the object
     zr = 0.0f;
     if (len == zr) {
         return NULL;
@@ -91,7 +92,7 @@ EffectEntry* effSmallStarN64Entry(s32 type, s32 count, f32 x, f32 y, f32 z, f32 
         w->position.x = x;
         w->position.y = y;
         w->position.z = z;
-        w->camera = 4;
+        w->camera = CAMERA_3D;
         switch (type) {
         case 0:
         case 1:
@@ -172,7 +173,11 @@ EffectEntry* effSmallStarN64Entry(s32 type, s32 count, f32 x, f32 y, f32 z, f32 
 #pragma opt_propagation off
 #pragma opt_lifetimes off
 
-inline f32 alphaf(f32 m, s32 x) { return x * m; }
+// FAKE: alpha scaling through an inline helper; (s32)(w->alpha * 0.6f) written out changes the object
+inline f32 alphaf(f32 m, s32 x) {
+    return x * m;
+}
+
 void effSmallStarMain(EffectEntry* effect) {
     EffSmallStarN64Work* w = effect->userdata;
     Vec position;
@@ -246,10 +251,6 @@ static u8 color_rotation_data[] = {
     0xB4, 0xFE, 0xB4, 0xD5, 0xFE, 0xB4, 0xFE, 0xFE, 0xB4, 0xFE, 0xD5, 0xAC,
 };
 
-static inline u8 color_rot_get(s32 idx) {
-    return color_rotation_data[idx % 36];
-}
-
 void effSmallStarDisp(CameraId cameraId, EffectEntry* effect) {
     CameraEntry* camera;
     s32 a, b, c;
@@ -285,7 +286,7 @@ void effSmallStarDisp(CameraId cameraId, EffectEntry* effect) {
     c = t + 2;
     for (i = 0; i < effect->count; a += 3, b += 3, c += 3, i++, w++) {
         color = (GXColor){0, 0, 0, 0};
-        color.r = color_rot_get(a);
+        color.r = color_rotation_data[a % 36];
         color.g = color_rotation_data[b % 36];
         color.b = color_rotation_data[c % 36];
         color.a = w->alpha;

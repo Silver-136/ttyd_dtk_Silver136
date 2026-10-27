@@ -185,7 +185,6 @@ void effGarekiDisp(CameraId cameraId, EffectEntry* effect) {
     EffGarekiN64Work* work;
     s32 i;
     s32 alpha;
-    f32 rad;
     Mtx trans;
     Mtx scale;
     Mtx rot;
@@ -234,7 +233,6 @@ void effGarekiDisp(CameraId cameraId, EffectEntry* effect) {
         PSMTXConcat(trans, scale, mtx);
         PSMTXConcat(mtx, rot, mtx);
         PSMTXRotRad(rotX, 'x', 0.017453292f * work->rotX);
-        rad = 0.017453292f;
         i = 1;
         work++;
         for (; i < effect->count; i++, work++) {
@@ -242,9 +240,9 @@ void effGarekiDisp(CameraId cameraId, EffectEntry* effect) {
             PSMTXConcat(trans, rotX, pieceMtx);
             PSMTXTrans(trans, work->offsetX, work->offsetY, 0.0f);
             PSMTXConcat(pieceMtx, trans, pieceMtx);
-            PSMTXRotRad(rot, 'x', rad * work->rotX);
+            PSMTXRotRad(rot, 'x', 0.017453292f * work->rotX);
             PSMTXConcat(pieceMtx, rot, pieceMtx);
-            PSMTXRotRad(rot, 'z', rad * work->rotZ);
+            PSMTXRotRad(rot, 'z', 0.017453292f * work->rotZ);
             PSMTXConcat(pieceMtx, rot, pieceMtx);
             PSMTXConcat(mtx, pieceMtx, pieceMtx);
             PSMTXConcat(camera->view, pieceMtx, pieceMtx);

@@ -8,7 +8,6 @@
 #include <dolphin/mtx.h>
 #include <stdlib.h>
 
-
 static effN64Vtx size16x16_tex32x32_vtx[] = {
     {-8, -8, 0, 0, 0, 0, 0, 0, 255},
     {8, -8, 0, 1024, 0, 0, 0, 0, 255},
@@ -135,8 +134,8 @@ void effGlassDisp(CameraId cameraId, EffectEntry* effect) {
     s32 texU;
     s32 texV;
     s32 alpha2;
-    s32 whole;
     f32 t4;
+
     cam = camGetPtr(cameraId);
     work = effect->userdata;
     alpha = work->alpha;
@@ -178,8 +177,7 @@ void effGlassDisp(CameraId cameraId, EffectEntry* effect) {
     type = type % 2;
     texU = type * 32;
     t4 = 4.0f * work->texV;
-    whole = (s32)t4;
-    texV = whole * 32;
+    texV = (s32)t4 * 32;
     alpha2 = (s32)(256.0f * (t4 - (f32)((s32)work->texV * 4)));
     PSMTXScale(scaleMtx, 0.015625f, 0.0078125f, 0.0f);
     PSMTXTrans(mtx, texU, texV, 0.0f);

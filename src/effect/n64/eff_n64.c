@@ -159,9 +159,6 @@ static eff_n64_work work;
 //.sdata
 static eff_n64_work* wp = &work;
 
-//local prototypes
-static void _callback_tpl(s32 error, DVDFileInfo* info);
-
 static void _callback_tpl(s32 error, DVDFileInfo* info) {
     DVDEntry* entry;
 
@@ -228,7 +225,9 @@ eff_set* effGetSetN64(const char* name) {
 
 u32 effTblRandN64(u32 rand, s32 index) {
     s32 val = _rand_table[index % 128];
-    if (val < 0) val = -val;
+    if (val < 0) {
+        val = -val;
+    }
     return val % (s32)(rand + 1);
 }
 

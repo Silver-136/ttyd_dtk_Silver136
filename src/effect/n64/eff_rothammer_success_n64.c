@@ -9,7 +9,6 @@
 #include "eff/eff_magic1_n64.h"
 #include "libc_decls.h"
 
-
 typedef struct EffRotHammerSuccessWork {
     s16 type;     // 0x0
     Vec position; // 0x4

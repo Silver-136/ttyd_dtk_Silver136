@@ -8,8 +8,6 @@
 #include "eff/eff_magic1_n64.h"
 #include "libc_decls.h"
 
-
-
 typedef struct EffRotHammerFailN64Work {
     s16 type;      // 0x0
     Vec position;  // 0x4
@@ -38,7 +36,6 @@ EffectEntry* effRotHammerFailN64Entry(s32 type, s32 time, f32 x, f32 y, f32 z) {
     f32 zero;
     EffRotHammerFailN64Work* work;
 
-
     effect = effEntry();
     effect->type = "RotHammerFailN64";
     effect->count = 2;
@@ -46,6 +43,7 @@ EffectEntry* effRotHammerFailN64Entry(s32 type, s32 time, f32 x, f32 y, f32 z) {
     zero = 0.0f;
     effect->callback = effRotHammerFailMain;
     work->lifetime = time;
+    // FAKE: child = work + 1 through a pointer step and back; the plain assignment changes the object
     child = work++;
     child = work;
     work--;

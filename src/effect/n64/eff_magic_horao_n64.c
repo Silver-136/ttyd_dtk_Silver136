@@ -11,25 +11,23 @@
 
 double sin(double);
 
-
-
 typedef struct EffMagicHoraoN64Work {
-    s32 type;      // 0x0
-    Vec position;  // 0x4
-    f32 vy;        // 0x10
-    f32 startSize;     // 0x14
-    f32 endSize;     // 0x18
-    s32 startAlpha;     // 0x1C
-    s32 endAlpha;     // 0x20
-    f32 size;     // 0x24
-    f32 blendRate;     // 0x28
-    s32 state;     // 0x2C
-    s32 timer;     // 0x30
-    f32 scale;     // 0x34
-    s32 angle;     // 0x38
-    s32 alpha;     // 0x3C
-    s32 lifetime;  // 0x40
-    s32 frame;     // 0x44
+    s32 type;       // 0x0
+    Vec position;   // 0x4
+    f32 vy;         // 0x10
+    f32 startSize;  // 0x14
+    f32 endSize;    // 0x18
+    s32 startAlpha; // 0x1C
+    s32 endAlpha;   // 0x20
+    f32 size;       // 0x24
+    f32 blendRate;  // 0x28
+    s32 state;      // 0x2C
+    s32 timer;      // 0x30
+    f32 scale;      // 0x34
+    s32 angle;      // 0x38
+    s32 alpha;      // 0x3C
+    s32 lifetime;   // 0x40
+    s32 frame;      // 0x44
 } EffMagicHoraoN64Work;
 
 static effN64Vtx size64x64_tex64x64_vtx[] = {
@@ -38,7 +36,6 @@ static effN64Vtx size64x64_tex64x64_vtx[] = {
     {3200, 6400, 0, 2048, 2048, 0, 0, 0, 0xFF},
     {-3200, 6400, 0, 0, 2048, 0, 0, 0, 0xFF},
 };
-
 
 void effMagicHoraoMain(EffectEntry* effect);
 void effMagicHoraoDisp(CameraId cameraId, EffectEntry* effect);
@@ -173,6 +170,7 @@ void effMagicHoraoDisp(CameraId cameraId, EffectEntry* effect) {
     PSMTXConcat(camera->view, mtx, mtx);
     GXLoadPosMtxImm(mtx, GX_PNMTX0);
     GXSetCurrentMtx(GX_PNMTX0);
+    // FAKE: ang is assigned in a comma expression inside the initializer; assigning it in its own statement changes the object
     GXSetTevColor(GX_TEVREG0, (GXColor){(ang = 6.2831855f * (f32)(frame * 30) / 360.0f, 225.0f + 25.0f * (f32)sin(ang)), 225.0f + 25.0f * (f32)sin(ang), 0xFF, alpha});
     GXSetNumChans(0);
     GXSetNumTexGens(1);

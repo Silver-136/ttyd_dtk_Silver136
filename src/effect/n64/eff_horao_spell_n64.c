@@ -10,8 +10,6 @@
 
 double sin(double);
 
-
-
 typedef struct EffHoraoSpellN64Work {
     s32 type;     // 0x0
     Vec position; // 0x4
@@ -107,6 +105,7 @@ void effHoraoSpellMain(EffectEntry* effect) {
     EffHoraoSpellN64Work* work = effect->userdata;
     Vec position;
     Vec tmp = {0.0f, 0.0f, 0.0f};
+    s32 frame;
 
     tmp.x = work->position.x;
     tmp.y = work->position.y;
@@ -124,15 +123,12 @@ void effHoraoSpellMain(EffectEntry* effect) {
         effDelete(effect);
         return;
     }
-    {
-    int frame;
     frame = work->frame;
     if (work->lifetime < 16) {
         work->alpha = work->lifetime * 16;
     }
     if (frame < 16) {
         work->alpha = frame * 16 + 15;
-    }
     }
     dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effHoraoSpellDisp, effect);
 }
@@ -156,9 +152,8 @@ void effHoraoSpellDisp(CameraId cameraId, EffectEntry* effect) {
     s32 j;
     effN64Vtx* vtx;
     CameraEntry* camera;
-
-
     f32 s;
+
     camera = camGetPtr(cameraId);
     work = effect->userdata;
     frame = work->frame;
@@ -245,6 +240,7 @@ void effHoraoSpellDisp(CameraId cameraId, EffectEntry* effect) {
             PSMTXMultVec(mtx2, &v2, &v2);
             OSInitFastCast();
             OSf32tos16(&v2.x, &q->x);
+            // FAKE: p[1] is q; writing y and z through q changes the object
             OSf32tos16(&v2.y, &p[1].y);
             OSf32tos16(&v2.z, &p[1].z);
         }
@@ -255,7 +251,6 @@ void effHoraoSpellDisp(CameraId cameraId, EffectEntry* effect) {
             GXBegin(GX_TRIANGLES, GX_VTXFMT0, 6);
             tri2(k, k + 2, k + 1, k, k + 1, k + 2, k + 3, k);
         }
-
     }
 }
 

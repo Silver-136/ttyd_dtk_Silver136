@@ -8,7 +8,6 @@
 #include "libc_decls.h"
 #include "eff/eff_magic1_n64.h"
 
-
 typedef struct EffStardust2N64Work {
     s16 flag;     // 0x0
     s16 type;     // 0x2
@@ -57,7 +56,6 @@ static effN64Vtx size8x8_tex22x22_vtx[] = {
     {8, -8, 0, 5632, 0, 0, 0, 0, 0xFF},
     {8, 8, 0, 5632, 704, 0, 0, 0, 0xFF},
     {-8, 8, 0, 4928, 704, 0, 0, 0, 0xFF},
-
 };
 
 static u8 color_rotation_data[] = {
@@ -70,7 +68,7 @@ static u8 speed_data[] = {0x1E, 0x3C, 0x5A, 0x64, 0x68, 0x6A, 0x6C, 0x6E, 0x70, 
 
 static u8 scale_data[] = {0x1E, 0x3C, 0x5A, 0x64, 0x68, 0x6A, 0x6C, 0x6E, 0x70, 0x71, 0x71, 0x6E, 0x6B, 0x67};
 
-EffectEntry* effStardust2N64Entry(s32 type, s32 count, s32 camera, f32 x, f32 y, f32 z, f32 vx, f32 vy) {
+EffectEntry* effStardust2N64Entry(s32 type, s32 count, s32 lifetime, f32 x, f32 y, f32 z, f32 vx, f32 vy) {
     s32 n;
     EffectEntry* effect;
     EffStardust2N64Work* w;
@@ -100,8 +98,8 @@ EffectEntry* effStardust2N64Entry(s32 type, s32 count, s32 camera, f32 x, f32 y,
     w->position.z = z;
     w->frame = 0;
     w->type = type;
-    w->life = camera;
-    w->camera = 4;
+    w->life = lifetime;
+    w->camera = CAMERA_3D;
     nm = (f32)n - 1.0f;
     bx = 0.1f * vx;
     by = 0.1f * vy;
@@ -184,7 +182,7 @@ void effStardust2Main(EffectEntry* effect) {
     w->frame++;
     type = w->type;
     frame = w->frame;
-    if (((u32)type <= 1 || type == 3 || type >= 10) && w->life < 0) {
+    if ((type == 0 || type == 1 || type == 3 || type >= 10) && w->life < 0) {
         effDelete(effect);
         return;
     }
@@ -202,15 +200,15 @@ void effStardust2Main(EffectEntry* effect) {
                 w->position.y = w->velocity.y * s + w->velocity.z;
                 w->scale = 0.01f * (f32)scale_data[idx];
             } else {
-                f32 one = 1.0f;
+                f32 speed = 1.0f;
                 f32 base = 360.0f / (f32)(effect->count - 1) * (f32)i + 60.0f;
                 if (i & 1) {
                     base -= 120.0f;
                 }
                 w->type = 10;
                 ang = 6.2831855f * base / 360.0f;
-                w->velocity.x = one * (f32)sin(ang);
-                w->velocity.y = one * (f32)cos(ang);
+                w->velocity.x = speed * (f32)sin(ang);
+                w->velocity.y = speed * (f32)cos(ang);
                 w->velocity.z = -0.05f;
             }
             break;
@@ -271,6 +269,7 @@ void effStardust2Main(EffectEntry* effect) {
             break;
         }
     }
+    // FAKE: (u32)type > 1 tests type other than 0 and 1; type != 0 && type != 1 changes the object
     if ((u32)type > 1 && type != 3 && type < 10 && done >= effect->count - 1) {
         effDelete(effect);
         return;
@@ -283,7 +282,7 @@ void effStardust2Disp(CameraId cameraId, EffectEntry* effect) {
     EffStardust2N64Work* w;
     s32 type;
     s32 i;
-    s32 camera;
+    s32 variant;
     s32 idx;
     effN64Vtx* vtx;
     Mtx mtx2;
@@ -344,8 +343,8 @@ void effStardust2Disp(CameraId cameraId, EffectEntry* effect) {
         break;
     }
     for (i = 0; i < effect->count - 1; i++, w++) {
-        camera = w->color;
-        if (camera < 0) {
+        variant = w->color;
+        if (variant < 0) {
             continue;
         }
         PSMTXTrans(mtx2, w->position.x, w->position.y, w->position.z);
@@ -371,7 +370,7 @@ void effStardust2Disp(CameraId cameraId, EffectEntry* effect) {
             b = 255;
         }
         GXSetTevColor(GX_TEVREG0, (GXColor){r, g, b, 255});
-        switch (camera & 7) {
+        switch (variant & 7) {
         case 0:
             vtx = size8x8_tex22x22_vtx + 12;
             break;

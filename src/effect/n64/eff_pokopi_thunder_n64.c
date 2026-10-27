@@ -13,35 +13,33 @@
 #include "eff/eff_n64.h"
 
 u8 yuragi_data[11][24] = {
-5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 10, 9, 3, 1, 0, 0, 0, 0, 0, 0, 0, 0,
-5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 8, 7, 6, 5, 4, 3, 2, 1, 0, 0, 0, 0,
-35, 5, 25, 5, 0, 25, 35, 5, 15, 0, 0, 0, 10, 13, 15, 12, 11, 13, 10, 12, 5, 1, 0, 0,
-45, 15, 35, 15, 0, 35, 45, 55, 25, 5, 2, 0, 13, 10, 12, 10, 13, 10, 13, 10, 12, 9, 5, 1,
-15, 15, 15, 15, 15, 15, 0, 15, 15, 5, 2, 0, 14, 10, 15, 10, 13, 30, 32, 30, 24, 50, 40, 60,
-1, 5, 15, 15, 35, 45, 40, 35, 25, 5, 2, 0, 4, 6, 10, 5, 8, 14, 6, 10, 14, 35, 50, 50,
-1, 15, 25, 15, 25, 35, 45, 40, 35, 15, 5, 0, 2, 2, 23, 12, 8, 15, 15, 5, 6, 18, 38, 60,
-30, 25, 15, 5, 15, 15, 25, 30, 35, 25, 5, 0, 3, 3, 3, 11, 3, 12, 4, 5, 2, 12, 42, 50,
-33, 33, 20, 12, 25, 17, 15, 20, 22, 20, 5, 0, 3, 3, 3, 2, 10, 2, 2, 12, 2, 2, 2, 20,
-30, 30, 25, 25, 35, 20, 15, 10, 15, 15, 5, 0, 2, 2, 2, 2, 2, 2, 6, 2, 2, 2, 6, 5,
-27, 27, 22, 22, 32, 17, 12, 7, 12, 12, 2, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0
+    {5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 10, 9, 3, 1, 0, 0, 0, 0, 0, 0, 0, 0},
+    {5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 8, 7, 6, 5, 4, 3, 2, 1, 0, 0, 0, 0},
+    {35, 5, 25, 5, 0, 25, 35, 5, 15, 0, 0, 0, 10, 13, 15, 12, 11, 13, 10, 12, 5, 1, 0, 0},
+    {45, 15, 35, 15, 0, 35, 45, 55, 25, 5, 2, 0, 13, 10, 12, 10, 13, 10, 13, 10, 12, 9, 5, 1},
+    {15, 15, 15, 15, 15, 15, 0, 15, 15, 5, 2, 0, 14, 10, 15, 10, 13, 30, 32, 30, 24, 50, 40, 60},
+    {1, 5, 15, 15, 35, 45, 40, 35, 25, 5, 2, 0, 4, 6, 10, 5, 8, 14, 6, 10, 14, 35, 50, 50},
+    {1, 15, 25, 15, 25, 35, 45, 40, 35, 15, 5, 0, 2, 2, 23, 12, 8, 15, 15, 5, 6, 18, 38, 60},
+    {30, 25, 15, 5, 15, 15, 25, 30, 35, 25, 5, 0, 3, 3, 3, 11, 3, 12, 4, 5, 2, 12, 42, 50},
+    {33, 33, 20, 12, 25, 17, 15, 20, 22, 20, 5, 0, 3, 3, 3, 2, 10, 2, 2, 12, 2, 2, 2, 20},
+    {30, 30, 25, 25, 35, 20, 15, 10, 15, 15, 5, 0, 2, 2, 2, 2, 2, 2, 6, 2, 2, 2, 6, 5},
+    {27, 27, 22, 22, 32, 17, 12, 7, 12, 12, 2, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0},
 };
 u8 yuragi_data2[11][24] = {
-25, 25, 25, 5, 25, 5, 25, 25, 5, 25, 25, 25, 4, 3, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0,
-15, 15, 15, 25, 15, 15, 5, 25, 25, 15, 25, 25, 4, 4, 4, 4, 4, 3, 2, 1, 0, 0, 0, 0,
-25, 25, 25, 5, 15, 25, 5, 5, 15, 5, 5, 0, 4, 4, 4, 4, 4, 4, 6, 4, 4, 4, 0, 0,
-25, 25, 25, 5, 25, 5, 25, 25, 5, 15, 5, 0, 4, 4, 4, 4, 4, 4, 6, 4, 4, 4, 6, 5,
-15, 15, 15, 45, 35, 45, 35, 35, 25, 35, 15, 0, 4, 4, 4, 4, 4, 4, 6, 4, 4, 4, 6, 5,
-45, 55, 35, 25, 55, 15, 45, 25, 45, 35, 15, 0, 4, 4, 4, 4, 4, 4, 6, 4, 4, 4, 6, 5,
-85, 25, 15, 75, 25, 65, 35, 45, 75, 85, 15, 0, 4, 4, 4, 4, 4, 4, 6, 4, 4, 4, 6, 5,
-85, 15, 35, 55, 65, 45, 25, 75, 35, 45, 35, 40, 4, 4, 4, 4, 4, 4, 6, 4, 4, 4, 6, 5,
-85, 15, 35, 55, 65, 45, 25, 75, 35, 45, 35, 40, 4, 4, 4, 4, 4, 4, 6, 4, 4, 4, 6, 5,
-85, 15, 35, 55, 65, 45, 25, 75, 35, 45, 35, 40, 4, 4, 4, 4, 4, 4, 6, 4, 4, 4, 6, 5,
-30, 30, 25, 25, 35, 20, 15, 10, 15, 15, 5, 0, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 2, 0
+    {25, 25, 25, 5, 25, 5, 25, 25, 5, 25, 25, 25, 4, 3, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0},
+    {15, 15, 15, 25, 15, 15, 5, 25, 25, 15, 25, 25, 4, 4, 4, 4, 4, 3, 2, 1, 0, 0, 0, 0},
+    {25, 25, 25, 5, 15, 25, 5, 5, 15, 5, 5, 0, 4, 4, 4, 4, 4, 4, 6, 4, 4, 4, 0, 0},
+    {25, 25, 25, 5, 25, 5, 25, 25, 5, 15, 5, 0, 4, 4, 4, 4, 4, 4, 6, 4, 4, 4, 6, 5},
+    {15, 15, 15, 45, 35, 45, 35, 35, 25, 35, 15, 0, 4, 4, 4, 4, 4, 4, 6, 4, 4, 4, 6, 5},
+    {45, 55, 35, 25, 55, 15, 45, 25, 45, 35, 15, 0, 4, 4, 4, 4, 4, 4, 6, 4, 4, 4, 6, 5},
+    {85, 25, 15, 75, 25, 65, 35, 45, 75, 85, 15, 0, 4, 4, 4, 4, 4, 4, 6, 4, 4, 4, 6, 5},
+    {85, 15, 35, 55, 65, 45, 25, 75, 35, 45, 35, 40, 4, 4, 4, 4, 4, 4, 6, 4, 4, 4, 6, 5},
+    {85, 15, 35, 55, 65, 45, 25, 75, 35, 45, 35, 40, 4, 4, 4, 4, 4, 4, 6, 4, 4, 4, 6, 5},
+    {85, 15, 35, 55, 65, 45, 25, 75, 35, 45, 35, 40, 4, 4, 4, 4, 4, 4, 6, 4, 4, 4, 6, 5},
+    {30, 30, 25, 25, 35, 20, 15, 10, 15, 15, 5, 0, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 2, 0},
 };
 
 static u8 (*yuragi_data_table[2])[24] = {yuragi_data, yuragi_data2};
-
-
 
 void effPokopiThunderMain(EffectEntry* effect);
 void effPokopiThunderDisp(CameraId cameraId, EffectEntry* effect);
@@ -57,9 +55,9 @@ EffectEntry* effPokopiThunderN64Entry(s32 type, s32 duration, f32 x, f32 y, f32 
     f32 dz;
 
     effect = effEntry();
-    cam = 4;
+    cam = CAMERA_3D;
     if (type >= 10) {
-        cam = 8;
+        cam = CAMERA_2D;
     }
     type = type % 10;
     effect->type = "PokopiThunderN64";
@@ -89,6 +87,7 @@ EffectEntry* effPokopiThunderN64Entry(s32 type, s32 duration, f32 x, f32 y, f32 
     work->position.x = x;
     work->position.y = y;
     work->position.z = z;
+    // FAKE: spare local holding 0.0f for the length test; comparing with 0.0f directly changes the object
     nv = 0.0f;
     work->scale = scale;
     work->cameraId = cam;
@@ -135,6 +134,7 @@ void effPokopiThunderMain(EffectEntry* effect) {
         return;
     }
     frame = work->frame;
+    // FAKE: inline_fn(alpha, 0.5f) is (f32)alpha * 0.5f through an inline helper; the plain expression changes the object
     if (type == 2) {
         if (frame >= 40) {
             work->alpha = (s32)inline_fn(work->alpha, 0.5f);
@@ -162,7 +162,6 @@ void effPokopiThunderDisp(CameraId cameraId, EffectEntry* effect) {
     effN64Vtx* v;
     u8* data;
     s32 u;
-
     GXTexObj texObj;
     Mtx mtx;
     f32 proj[7];
@@ -175,7 +174,7 @@ void effPokopiThunderDisp(CameraId cameraId, EffectEntry* effect) {
     alpha = work->alpha;
     type = work->type;
     scale = work->scale;
-    if (work->cameraId != 4) {
+    if (work->cameraId != CAMERA_3D) {
         camera = camGetPtr(CAMERA_3D);
         GXGetProjectionv(proj);
         GXGetViewportv(vp);
@@ -237,6 +236,7 @@ void effPokopiThunderDisp(CameraId cameraId, EffectEntry* effect) {
         f32 w, dx, dy, a, s, c, off;
         w = (f32)data[i];
         dx = 0.09090909f * (work->end.x - work->start.x);
+        // FAKE: pt_dy(work, work) is end.y - start.y through an inline helper; the plain expression changes the object
         dy = 0.09090909f * pt_dy(work, work);
         a = 6.2831855f * (f32)((work->seed + (i - frame) * 10) % 120 - 60) / 360.0f;
         s = (f32)sin(a);
@@ -296,7 +296,7 @@ void effPokopiThunderDisp(CameraId cameraId, EffectEntry* effect) {
         v[1].b = i * 30;
         v += 2;
     }
-    DCFlushRange(vtx, 0x2a0);
+    DCFlushRange(vtx, sizeof(effN64Vtx) * 48);
     GXInvalidateVtxCache();
     effSetVtxDescN64(vtx);
     for (idx = 0; idx < i - 1; idx++) {
@@ -304,9 +304,8 @@ void effPokopiThunderDisp(CameraId cameraId, EffectEntry* effect) {
         GXBegin(GX_TRIANGLES, GX_VTXFMT0, 6);
         tri2(n, n + 2, n + 1, 2, n + 1, n + 2, n + 3, 0);
     }
-    if (work->cameraId != 4) {
+    if (work->cameraId != CAMERA_3D) {
         GXSetProjectionv(proj);
         GXSetViewport(vp[0], vp[1], vp[2], vp[3], vp[4], vp[5]);
     }
 }
-

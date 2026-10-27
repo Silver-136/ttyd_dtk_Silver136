@@ -15,9 +15,6 @@
 #include <math.h>
 #include "eff/eff_n64.h"
 
-
-
-
 typedef struct EffSstarN64Work {
     s32 type;          // 0x0
     Vec position;      // 0x4
@@ -235,7 +232,7 @@ void effSstarDisp(CameraId cameraId, EffectEntry* effect) {
     GXSetTevColor(GX_TEVREG1, (GXColor){127, 127, 127, 127});
     GXSetTevColor(GX_TEVREG2, (GXColor){80, 80, 80, 80});
     GXSetNumChans(1);
-    GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_VTX, 0, GX_DF_NONE, GX_AF_NONE);
+    GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_VTX, GX_LIGHT_NULL, GX_DF_NONE, GX_AF_NONE);
     GXSetNumTexGens(1);
     GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX0, GX_FALSE, GX_PTIDENTITY);
     PSMTXScale(sc, 0.015625f, 0.015625f, 0.0f);
@@ -316,17 +313,19 @@ void effSstarDisp(CameraId cameraId, EffectEntry* effect) {
             OSf32tos16(&v0.z, &w->vtx[i * 2].z);
             memcpy(&w->vtx[i * 2 + 1], &shooting_dust_vtx[i * 2 + 1], sizeof(effN64Vtx));
             OSInitFastCast();
+            // FAKE: vertex fields addressed through s16* casts; &w->vtx[i * 2 + 1].x/.y/.z change the object
             OSs16tof32((s16*)&w->vtx[i * 2 + 1], &v1.x);
             OSs16tof32((s16*)&w->vtx[i * 2 + 1] + 1, &v1.y);
             OSs16tof32((s16*)&w->vtx[i * 2 + 1] + 2, &v1.z);
             PSMTXMultVec(w->mtx[(k - i + 8) % 8], &v1, &v1);
             OSInitFastCast();
+            // FAKE: x stored through an s16* cast of the vertex; &w->vtx[i * 2 + 1].x changes the object
             OSf32tos16(&v1.x, (s16*)&w->vtx[i * 2 + 1]);
             OSf32tos16(&v1.y, &w->vtx[i * 2 + 1].y);
             OSf32tos16(&v1.z, &w->vtx[i * 2 + 1].z);
         }
         GXInvalidateVtxCache();
-        DCFlushRange(w->vtx, 0x8C);
+        DCFlushRange(w->vtx, sizeof(w->vtx));
         effSetVtxDescN64(w->vtx);
         GXLoadPosMtxImm(camera->view, GX_PNMTX0);
         for (c1 = 0; c1 < 4; c1++) {

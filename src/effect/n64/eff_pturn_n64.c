@@ -1,3 +1,4 @@
+#include "eff/n64/eff_pturn_n64.h"
 #include "driver/camdrv.h"
 #include "driver/dispdrv.h"
 #include "driver/effdrv.h"
@@ -5,9 +6,7 @@
 #include <dolphin/gx.h>
 #include <dolphin/mtx.h>
 #include "eff/eff_n64.h"
-
-double cos(double);
-
+#include "libc_decls.h"
 
 typedef struct PturnElem {
     s32 type;   // 0x0
@@ -25,7 +24,6 @@ typedef struct PturnElem {
     f32 rot;    // 0x40
     s32 delay;  // 0x44
 } PturnElem;
-
 
 effN64Vtx size48x48_tex32x32_pturn_vtx[] = {
     {-24, -24, 0, -512, 512, 255, 255, 255, 255},
@@ -185,6 +183,7 @@ void effPturnMain(EffectEntry* effect) {
         f32 y;
         work->scale = (age >= 9 || type == 10) ? 1.0f : scale_dat[age];
         work->scale = work->scale * scl;
+        // FAKE: spare flag local for the condition; testing it directly changes the object
         f2 = (type == 0 || type == 1);
         if (f2) {
             c = (f32)cos(a / 360.0f);

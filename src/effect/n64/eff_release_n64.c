@@ -1,3 +1,4 @@
+#include "eff/n64/eff_release_n64.h"
 #include "eff/eff_n64.h"
 #include "driver/camdrv.h"
 #include "driver/dispdrv.h"
@@ -7,7 +8,6 @@
 #include <dolphin/mtx.h>
 #include "eff/eff_magic1_n64.h"
 #include "libc_decls.h"
-
 
 typedef struct EffReleaseN64Work {
     s32 type;      // 0x0
@@ -36,10 +36,8 @@ typedef struct AnimeEntry {
     u16 value;
 } AnimeEntry;
 
-
 void effReleaseMain(EffectEntry* effect);
 void effReleaseDisp(CameraId cameraId, EffectEntry* effect);
-
 
 static AnimeEntry anime_data[30] = {
     {0x0064, 0x00FF},
@@ -426,11 +424,7 @@ void effReleaseDisp(CameraId cameraId, EffectEntry* effect) {
     GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_A0, GX_CA_TEXA, GX_CA_ZERO);
     GXSetNumTexGens(1);
     GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX0, GX_FALSE, GX_PTIDENTITY);
-    {
-
-
-        GXSetTevColor(GX_TEVREG1, (GXColor){work->r2, work->g2, work->b2, work->a2});
-    }
+    GXSetTevColor(GX_TEVREG1, (GXColor){work->r2, work->g2, work->b2, work->a2});
     GXSetCullMode(GX_CULL_NONE);
     for (i = 0; i < 4; i++) {
         if (variant == 1 && i == 2) {
@@ -444,11 +438,7 @@ void effReleaseDisp(CameraId cameraId, EffectEntry* effect) {
         PSMTXConcat(camera->view, scale, scale);
         GXLoadPosMtxImm(scale, GX_PNMTX0);
         GXSetCurrentMtx(GX_PNMTX0);
-        {
-
-
-            GXSetTevColor(GX_TEVREG0, (GXColor){work->r, work->g, work->b, work->alpha[i]});
-        }
+        GXSetTevColor(GX_TEVREG0, (GXColor){work->r, work->g, work->b, work->alpha[i]});
         switch (i) {
         case 0:
             effGetTexObjN64(0x44, &texObj);
@@ -532,9 +522,7 @@ void effReleaseDisp(CameraId cameraId, EffectEntry* effect) {
             GXSetProjection(proj, GX_ORTHOGRAPHIC);
             GXSetNumChans(1);
             GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_REG, GX_LIGHT_NULL, GX_DF_NONE, GX_AF_NONE);
-            {
-                GXSetChanMatColor(GX_COLOR0A0, (GXColor){0xD0, 0xD0, 0xD0, alpha});
-            }
+            GXSetChanMatColor(GX_COLOR0A0, (GXColor){0xD0, 0xD0, 0xD0, alpha});
             GXSetNumTevStages(1);
             GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR0A0);
             GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);

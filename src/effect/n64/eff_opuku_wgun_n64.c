@@ -8,13 +8,14 @@
 #include <dolphin/os/OSFastCast.h>
 #include <stdlib.h>
 #include "eff/eff_n64.h"
+#include "eff/n64/eff_opuku_wgun_n64.h"
 #include "dolphin/os.h"
-
 
 double sin(double);
 double cos(double);
 
 static inline f32 dsin(f32 a) { return sin(6.2831855f * a / 360.0f); }
+
 typedef struct EffOpukuWgunN64Work {
     s32 type;        // 0x0
     Vec position;    // 0x4
@@ -160,7 +161,6 @@ void effOpukuWgunMain(EffectEntry* effect) {
             work->z[i] = work->start.z + t * (work->end.z - work->start.z);
         } else {
             work->x[i] = work->start.x + t * (work->end.x - work->start.x);
-
             work->y[i] = 120.0f * dsin(180.0f * t) + (work->start.y + t * (work->end.y - work->start.y));
             work->z[i] = work->start.z + t * (work->end.z - work->start.z);
             work->alphas[i] = (u8)(255.0f - 255.0f * t);
@@ -170,6 +170,7 @@ void effOpukuWgunMain(EffectEntry* effect) {
 }
 
 static u8 a_data[12] = {255, 255, 255, 255, 255, 255, 255, 255, 255, 200, 128, 32};
+
 void effOpukuWgunDisp(CameraId cameraId, EffectEntry* effect) {
     CameraEntry* camera;
     EffOpukuWgunN64Work* work;
@@ -203,6 +204,7 @@ void effOpukuWgunDisp(CameraId cameraId, EffectEntry* effect) {
     p = (effN64Vtx*)smartAlloc(sizeof(effN64Vtx) * 48, 3)->address;
     vtx = p;
     for (i = 0; i < 12; i++) {
+        // FAKE: the duplicated i == 0 test; the single test changes the object
         if (i == 0 || i == 0) {
             ang = -angleABf(work->y[i + 1], -work->x[i + 1], work->y[i], -work->x[i]);
         } else if (i != 11 && work->delay[i] == 0) {
@@ -311,6 +313,7 @@ void effOpukuWgunDisp(CameraId cameraId, EffectEntry* effect) {
     a = i - 1;
     j = 0;
     n = j;
+    // FAKE: j >= 0 always holds here; the loop without the test changes the object
     for (; j < a; j++) {
         if (j >= 0) {
             GXBegin(GX_TRIANGLES, GX_VTXFMT0, 6);

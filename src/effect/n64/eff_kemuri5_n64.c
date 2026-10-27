@@ -1,3 +1,4 @@
+#include "eff/n64/eff_kemuri5_n64.h"
 #include "driver/camdrv.h"
 #include "driver/dispdrv.h"
 #include "driver/effdrv.h"
@@ -55,7 +56,6 @@ EffectEntry* effKemuri5N64Entry(f32 x, f32 y, f32 z, f32 angle) {
     f32 angF;
     s32 i;
     f32 rad;
-    f32 a = angle;
 
     effect = effEntry();
     effect->type = "Kemuri5N64";
@@ -83,7 +83,7 @@ EffectEntry* effKemuri5N64Entry(f32 x, f32 y, f32 z, f32 angle) {
         work->accelY = -0.02f;
         work->accelY2 = 0.00005f;
         work->speed = -3.9f;
-        rad = 6.2831855f * reviseAngle(a + angF) / 360.0f;
+        rad = 6.2831855f * reviseAngle(angle + angF) / 360.0f;
         work->dirX = (f32)sin(rad);
         work->dirZ = (f32)cos(rad);
         ang += 45;
@@ -112,8 +112,12 @@ void effKemuri5Main(EffectEntry* effect) {
         }
         anyActive = 1;
         work->angle = reviseAngle(12.0f + work->angle);
-        { f32 sv = (f32)sin(6.2831855f * work->angle / 360.0f); work->scale.x = 0.1f * sv + work->baseScaleX; }
-        { f32 cv = (f32)cos(6.2831855f * work->angle / 360.0f); work->scale.y = 0.1f * cv + work->baseScaleY; }
+        // FAKE: sin result in a block-scoped temporary; writing it into the assignment changes the object
+        {
+            f32 sv = (f32)sin(6.2831855f * work->angle / 360.0f);
+            work->scale.x = 0.1f * sv + work->baseScaleX;
+        }
+        work->scale.y = 0.1f * (f32)cos(6.2831855f * work->angle / 360.0f) + work->baseScaleY;
         work->speed *= 0.83f;
         work->position.x = work->speed * work->dirX + work->position.x;
         work->position.z = work->speed * work->dirZ + work->position.z;
@@ -166,6 +170,7 @@ void effKemuri5Disp(CameraId cameraId, EffectEntry* effect) {
         if (work->active == 0) {
             continue;
         }
+        // FAKE: one-use inline mkc builds the colour; the compound literal (GXColor){0x70, 0x60, 0x18, work->alpha} changes the object
         GXSetTevColor(GX_TEVREG0, mkc(work->alpha));
         PSMTXTrans(mtx, work->position.x, work->position.y, work->position.z);
         PSMTXRotRad(rot, 'y', 0.017453292f * -camGetPtr(CAMERA_3D)->viewYaw);

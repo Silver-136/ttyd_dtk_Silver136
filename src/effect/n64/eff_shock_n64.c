@@ -225,7 +225,7 @@ void effShockDisp(CameraId cameraId, EffectEntry* effect) {
     GXSetTevColor(GX_TEVREG0, (GXColor){w->col0[0], w->col0[1], w->col0[2], w->alpha});
     GXSetTevColor(GX_TEVREG1, (GXColor){w->col1[0], w->col1[1], w->col1[2], 0});
     GXSetCullMode(GX_CULL_NONE);
-    if (type - 1 <= 1U || type == 3) {
+    if (type == 1 || type == 2 || type == 3) {
         if (type == 1) {
             GXSetTevColor(GX_TEVREG0, (GXColor){0xFF, 0xFF, 0, w->flashAlpha});
         }
@@ -308,4 +308,3 @@ void effShockDisp(CameraId cameraId, EffectEntry* effect) {
         tri2(0x26, 0x25, 0x2f, 0x0, 0x26, 0x2f, 0x2c, 0x0);
     }
 }
-

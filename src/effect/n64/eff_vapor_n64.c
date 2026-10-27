@@ -7,7 +7,6 @@
 #include <dolphin/gx.h>
 #include <dolphin/mtx.h>
 
-
 f32 vaporUnused[16] = {-1.0f, 1.0f, -1.0f, 1.0f, 1.0f, -1.0f, 1.0f, -1.0f, -1.0f, 1.0f, -1.0f, 1.0f, 1.0f, -1.0f, 1.0f, -1.0f};
 static s8 dx_data[] = {
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -8, -15, -21, -26, -30, -34, -37, -39, -40, -41, -42, -43, -44, -45, -46, -47, -48, -49, -50, -51, -52, -53, -54, -55, -56, -57, -58, -59, -60, -61, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
@@ -44,8 +43,6 @@ static effN64Vtx size64x64_tex32x32_vtx[] = {
     {32, 64, 2, 1024, 4096, 120, 120, 0, 255},
     {-32, 64, 2, 0, 4096, 120, 120, 0, 255},
 };
-
-
 
 static const GXColor kColor1;
 static const GXColor kColor2;
@@ -121,12 +118,12 @@ void effVaporMain(EffectEntry* effect) {
         break;
     }
     work->position.y += work->vel;
-        if (work->vel > 0.5f) {
-            work->vel = 0.5f;
-        }
-        if (work->vel < -1.5f) {
-            work->vel = -1.5f;
-        }
+    if (work->vel > 0.5f) {
+        work->vel = 0.5f;
+    }
+    if (work->vel < -1.5f) {
+        work->vel = -1.5f;
+    }
     work->anim += 1.0f;
     dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effVaporDisp, effect);
 }
@@ -219,7 +216,8 @@ void effVaporDisp(CameraId cameraId, EffectEntry* effect) {
     if (n >= 30) {
         n = 29;
     }
-        s = 0.01f * (scale_data + type * 30)[n];
+    // FAKE: rows indexed as (table + type * 30)[n]; table[type * 30 + n] changes the object
+    s = 0.01f * (scale_data + type * 30)[n];
     f = -(f32)rz_data[type][n];
     PSMTXTrans(mtx, (f32)(dx_data + type * 30)[n], 0.0f, 0.0f);
     PSMTXRotRad(rot, 'z', 0.017453292f * f);
@@ -229,6 +227,7 @@ void effVaporDisp(CameraId cameraId, EffectEntry* effect) {
     PSMTXConcat(viewMtx, mtx, mtx);
     GXLoadPosMtxImm(mtx, GX_PNMTX0);
     GXSetCurrentMtx(GX_PNMTX0);
+    // FAKE: row indexed as (seq_data + type * 30)[n]; seq_data[type * 30 + n] changes the object
     f = 5.0f * (seq_data + type * 30)[n];
     f *= 0.00390625f;
     sub = (s32)f;

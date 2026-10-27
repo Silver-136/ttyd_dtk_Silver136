@@ -137,7 +137,7 @@ EffectEntry* effKemuri10N64Entry(s32 type, f32 x, f32 y, f32 z, f32 dx, f32 dy, 
     work->rot[1][3] = zr;
     work->rot[2][3] = zr;
     work->scale = 0.1f * scale;
-    work->camera = 4;
+    work->camera = CAMERA_3D;
     return effect;
 }
 
@@ -154,6 +154,7 @@ void effKemuri10Main(EffectEntry* effect) {
     tmp.y = work->position.y;
     tmp.z = work->position.z;
     position = tmp;
+    // FAKE: the timer goes through a temporary for the decrement; `work->timer--;` changes the object
     timer = work->timer;
     camera = work->camera;
     work->timer = timer - 1;
@@ -165,13 +166,13 @@ void effKemuri10Main(EffectEntry* effect) {
     }
     for (i = 0; i < effect->count; i++) {
         if (timer > 5) {
-            work->alpha = (s32)((f32)work->alpha + 0.3f * (f32)(255 - work->alpha));
+            work->alpha += 0.3f * (255 - work->alpha);
             work->velocity.x *= 0.8f;
             work->velocity.y *= 0.8f;
             work->velocity.z *= 0.8f;
         }
         if (timer < 5) {
-            { f32 fa = work->alpha; work->alpha = (fa *= 0.6f); }
+            work->alpha *= 0.6f;
             work->velocity.x *= 0.7f;
             work->velocity.y *= 0.7f;
             work->velocity.z *= 0.7f;

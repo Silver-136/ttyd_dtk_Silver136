@@ -22,7 +22,6 @@ typedef struct EffHitN64Work {
     s32 frame;    // 0x34
     f32 progress; // 0x38
     u8 color[6];  // 0x3C
-    u8 pad_42[2]; // 0x42
 } EffHitN64Work;
 
 static effN64Vtx size32x32_tex32x32_vtx[] = {

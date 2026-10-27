@@ -9,7 +9,6 @@
 #include "eff/eff_magic1_n64.h"
 #include "libc_decls.h"
 
-
 typedef struct EffThruHammerN64Work {
     s16 type;         // 0x0
     Vec position;     // 0x4
@@ -27,9 +26,7 @@ typedef struct EffThruHammerN64Work {
     s32 delay;        // 0x4C
     u8 r1, g1, b1;    // 0x50
     u8 r2, g2, b2;    // 0x53
-    u8 pad[2];        // 0x56
 } EffThruHammerN64Work;
-
 
 static effN64Vtx stg_thruhammer_v[] = {
     {-34, -2, 20, 4267, 1024, 255, 255, 255, 255},
@@ -214,7 +211,6 @@ static void main_dl(EffectEntry* effect, Mtx camMtx) {
     Mtx m;
     Mtx scale;
     Mtx rot;
-    f32 t;
 
     for (i = 1, work++; i < effect->count; i++, work++) {
         if (work->delay < 0) {
@@ -231,13 +227,11 @@ static void main_dl(EffectEntry* effect, Mtx camMtx) {
         GXLoadPosMtxImm(m, GX_PNMTX0);
         GXSetCurrentMtx(GX_PNMTX0);
         PSMTXScale(scale, 0.015873017f, 0.032258064f, 0.0f);
-        t = work->texS;
-        PSMTXTrans(m, 0.0f, t / 4.0f, 0.0f);
+        PSMTXTrans(m, 0.0f, work->texS / 4.0f, 0.0f);
         PSMTXConcat(scale, m, scale);
         GXLoadTexMtxImm(scale, GX_TEXMTX0, GX_MTX2x4);
         PSMTXScale(scale, 0.12903225f, 0.12903225f, 0.0f);
-        t = work->texT;
-        PSMTXTrans(m, 0.0f, t / 4.0f, 0.0f);
+        PSMTXTrans(m, 0.0f, work->texT / 4.0f, 0.0f);
         PSMTXConcat(scale, m, scale);
         GXLoadTexMtxImm(scale, GX_TEXMTX1, GX_MTX2x4);
         GXBegin(GX_TRIANGLES, GX_VTXFMT0, 54);

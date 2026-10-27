@@ -27,7 +27,6 @@ typedef struct EffSnowmanN64Work {
     s32 phase;     // 0x5C
 } EffSnowmanN64Work;
 
-
 static s8 jump_hscale_data[] = {100, 90, 82, 76, 72, 70, 74, 89, 103, 116, 118, 120, 120, 120, 120, 118, 114, 110};
 static u8 land_hscale_data[] = "dZRLHFJYdlnlf`_`ceddddddddd";
 

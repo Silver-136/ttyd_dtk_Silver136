@@ -16,7 +16,6 @@ static effN64Vtx size16x16_tex32x32_vtx[] = {
     {-8, 8, 0, 0, 32, 0, 0, 0, 255},
 };
 
-
 void effGuruguruMain(EffectEntry* effect);
 void effGuruguruDisp(CameraId cameraId, EffectEntry* effect);
 
@@ -136,4 +135,3 @@ void effGuruguruDisp(CameraId cameraId, EffectEntry* effect) {
         }
     }
 }
-

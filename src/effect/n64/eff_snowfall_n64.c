@@ -38,7 +38,6 @@ typedef struct EffSnowfallWork {
 
 void effSnowfallMain(EffectEntry* effect);
 void effSnowfallDisp(CameraId cameraId, EffectEntry* effect);
-void cam_clip_chk(EffSnowfallParticle* p, s32 w, s32 h, s32 life);
 
 static effN64Vtx eff_snowfall_v[] = {
     {-78, 3, -38, 0, 2048, 0xFF, 0xFF, 0xFF, 0xFF},
@@ -72,7 +71,8 @@ static effN64Vtx eff_snowfall_v[] = {
     {27, -53, -57, 0, 2048, 0xFF, 0xFF, 0xFF, 0xFF},
     {37, -53, -57, 2048, 2048, 0xFF, 0xFF, 0xFF, 0xFF},
     {37, -44, -57, 2048, 0, 0xFF, 0xFF, 0xFF, 0xFF},
-    {27, -44, -57, 0, 0, 0xFF, 0xFF, 0xFF, 0xFF},};
+    {27, -44, -57, 0, 0, 0xFF, 0xFF, 0xFF, 0xFF},
+};
 
 void cam_clip_chk(EffSnowfallParticle* p, s32 w, s32 h, s32 life) {
     CameraEntry* cam = camGetPtr(CAMERA_3D);
@@ -118,7 +118,6 @@ void cam_clip_chk(EffSnowfallParticle* p, s32 w, s32 h, s32 life) {
     }
 }
 
-
 EffectEntry* effSnowfallN64Entry(s32 arg, s32 count) {
     EffectEntry* effect;
     EffSnowfallWork* work;
@@ -130,7 +129,7 @@ EffectEntry* effSnowfallN64Entry(s32 arg, s32 count) {
     n = count + 1;
     effect->type = "SnowfallN64";
     effect->count = n;
-    work = __memAlloc(HEAP_EFFECT, n * 0x34);
+    work = __memAlloc(HEAP_EFFECT, n * sizeof(EffSnowfallParticle));
     effect->userdata = work;
     effect->callback = effSnowfallMain;
     work->frame = 0;
@@ -157,6 +156,7 @@ EffectEntry* effSnowfallN64Entry(s32 arg, s32 count) {
     return effect;
 }
 
+// The first userdata entry holds the EffSnowfallWork header; the particles follow it.
 #define SNOWFALL_WORK ((EffSnowfallWork*)p)
 void effSnowfallMain(EffectEntry* effect) {
     s32 i, life, count, h;
@@ -185,6 +185,7 @@ void effSnowfallMain(EffectEntry* effect) {
     if (life < 10) {
         SNOWFALL_WORK->alpha = life * 25;
     }
+    // FAKE: the height goes through a float local (converted at run time); h = 166 changes the object
     hf = 166.0f;
     h = hf;
     p++;
@@ -211,8 +212,6 @@ void effSnowfallMain(EffectEntry* effect) {
 #endif
 }
 
-#undef SNOWFALL_WORK
-#define SNOWFALL_WORK ((EffSnowfallWork*)p)
 void effSnowfallDisp(CameraId cameraId, EffectEntry* effect) {
     CameraEntry* cam;
     EffSnowfallParticle* p;
@@ -251,25 +250,25 @@ void effSnowfallDisp(CameraId cameraId, EffectEntry* effect) {
     effGetTexObjN64(100, &texB);
     dataA = (u8*)GXGetTexObjData(&texA) + OS_BASE_CACHED; // physical -> cached
     dataB = (u8*)GXGetTexObjData(&texB) + OS_BASE_CACHED;
-    dataA += GXGetTexBufferSize(64, 64, 0, 1, 2);
-    memcpy(dataA, dataB, GXGetTexBufferSize(16, 16, 0, 0, 0));
-    DCFlushRange(dataA, GXGetTexBufferSize(64, 64, 0, 1, 3));
+    dataA += GXGetTexBufferSize(64, 64, GX_TF_I4, GX_TRUE, 2);
+    memcpy(dataA, dataB, GXGetTexBufferSize(16, 16, GX_TF_I4, GX_FALSE, 0));
+    DCFlushRange(dataA, GXGetTexBufferSize(64, 64, GX_TF_I4, GX_TRUE, 3));
     GXInitTexObjLOD(&texA, GX_LIN_MIP_LIN, GX_LINEAR, 0.0f, 2.0f, 0.0f, GX_TRUE, GX_TRUE, GX_ANISO_1);
     GXLoadTexObj(&texA, GX_TEXMAP0);
-    if (mapGetWork()->entries[0].flags & 2) {
+    if (mapGetWork()->entries[0].flags & MAP_ENTRY_BLEND) {
         mapGetBlend(&blend);
         GXSetTevColor(GX_TEVREG0, (GXColor){blend.r * 0xFF, blend.g * 0xFF, blend.b * 0xFF, alpha * blend.a});
     } else {
         GXSetTevColor(GX_TEVREG0, (GXColor){0xFF, 0xFF, 0xFF, alpha});
     }
     GXSetCullMode(GX_CULL_NONE);
+    // FAKE: discarded compound literal with no effect; removing it changes the object
     (void)(GXColor){0, 0, 0, alpha};
     effSetVtxDescN64(eff_snowfall_v);
     PSMTXRotRad(rot, 'y', 0.017453292f * -camGetPtr(CAMERA_3D)->viewYaw);
     PSMTXConcat(cam->view, rot, rot);
-    i = 0;
     p++;
-    for (; i < count; i++, p++) {
+    for (i = 0; i < count; i++, p++) {
         if (p->timer > 0 || p->alpha == 0) {
             continue;
         }

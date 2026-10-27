@@ -9,7 +9,6 @@
 #include <stdlib.h>
 #include "eff/eff_magic1_n64.h"
 
-
 static effN64Vtx size10x10_tex32x32_vtx[] = {
     {0, -5, 0, 0, 0, 0, 0, 0, 255},
     {10, -5, 0, 1024, 0, 0, 0, 0, 255},
@@ -116,6 +115,7 @@ EffectEntry* effPokopiPchargeN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 
     }
     work->alpha = 0;
     work->position.x = x;
+    // FAKE: p is set between the position stores; setting it right before the loop changes the object
     p = work + 1;
     work->position.y = y;
     work->position.z = z;

@@ -1,3 +1,4 @@
+#include "eff/n64/eff_recover_heart_n64.h"
 #include "eff/eff_n64.h"
 #include "driver/camdrv.h"
 #include "driver/dispdrv.h"
@@ -7,7 +8,6 @@
 #include <dolphin/mtx.h>
 #include "eff/eff_magic1_n64.h"
 #include "libc_decls.h"
-
 
 typedef struct EffRecoverHeartN64Work {
     s32 type;     // 0x0
@@ -20,20 +20,13 @@ typedef struct EffRecoverHeartN64Work {
     f32 offX;     // 0x24
     s32 alpha;    // 0x28
     s32 frame;    // 0x2C
-    s32 elapsed;    // 0x30
+    s32 elapsed;  // 0x30
     s32 delay;    // 0x34
     f32 scaleW;   // 0x38
     f32 scaleH;   // 0x3C
     s32 count;    // 0x40
     s32 flag;     // 0x44
 } EffRecoverHeartN64Work;
-
-
-#ifdef __MWERKS__
-#endif
-
-#ifdef __MWERKS__
-#endif
 
 effN64Vtx size32x32_tex32x32_heart_vtx[] = {
     {-16, -16, 0, 0, 0, 255, 255, 255, 255},
@@ -104,7 +97,6 @@ EffectEntry* effRecoverHeartN64Entry(s32 type, s32 count, f32 x, f32 y, f32 z) {
     s32 i;
     s32 k;
 
-
     effect = effEntry();
     effect->type = "RecoverHeartN64";
     effect->count = 2;
@@ -125,9 +117,7 @@ EffectEntry* effRecoverHeartN64Entry(s32 type, s32 count, f32 x, f32 y, f32 z) {
     }
     work->count = count;
     k = 0;
-
     for (i = 1; i < 2; i++) {
-
         p = &work[i];
         p->position.x = 0.0f;
         p->position.y = 0.0f;
@@ -264,6 +254,7 @@ void effRecoverHeartDisp(CameraId cameraId, EffectEntry* effect) {
             GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_TEXC, GX_CC_RASC, GX_CC_ZERO);
             GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_TEXA, GX_CA_A0, GX_CA_ZERO);
         }
+        // FAKE: tex first holds the type test, then the texture id; testing the condition directly changes the object
         tex = (type == 0 || type == 2);
         if (tex) {
             tex = 0x51;
@@ -354,4 +345,3 @@ void effRecoverHeartDisp(CameraId cameraId, EffectEntry* effect) {
         }
     }
 }
-

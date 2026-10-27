@@ -10,11 +10,9 @@
 #include "libc_decls.h"
 
 double sin(double);
-double cos(double);
 
 void effSnowDustMain(EffectEntry* effect);
 void effSnowDustDisp(CameraId cameraId, EffectEntry* effect);
-
 
 effN64Vtx size8x8_tex64x64_vtx[] = {
     {-4, -4, 0, 0, 0, 0, 0, 0, 255},
@@ -93,7 +91,7 @@ EffectEntry* effSnowDustN64Entry(s32 type, s32 count, s32 lifetime, f32 x, f32 y
     work->scale = scale;
     work->width = w;
     work->height = h;
-    work->camId = 4;
+    work->camId = CAMERA_3D;
     work->r = 255;
     work->g = 255;
     work->b = 255;
@@ -482,7 +480,7 @@ void effSnowDustDisp(CameraId cameraId, EffectEntry* effect) {
                 GXBegin(GX_TRIANGLES, GX_VTXFMT0, 6);
                 tri2(0, 1, 2, 0, 0, 2, 3, 0);
                 GXSetNumChans(1);
-                GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_VTX, 0, GX_DF_NONE, GX_AF_NONE);
+                GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_VTX, GX_LIGHT_NULL, GX_DF_NONE, GX_AF_NONE);
                 GXSetNumTevStages(1);
                 GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR0A0);
                 GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);

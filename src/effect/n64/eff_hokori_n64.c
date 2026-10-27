@@ -8,10 +8,6 @@
 #include <dolphin/mtx.h>
 #include <stdlib.h>
 
-
-#ifdef __MWERKS__
-#endif
-
 effN64Vtx size16x32_tex32x64_vtx[] = {
     {-8, -32, 0, 0, 1024, 0, 0, 0, 255},
     {8, -32, 0, 1024, 1024, 0, 0, 0, 255},
@@ -141,7 +137,7 @@ void effHokoriDisp(CameraId cameraId, EffectEntry* effect) {
     Mtx scale;
     Mtx rot;
     Mtx base;
-    void* vtx;
+    effN64Vtx* vtx;
 
     camera = camGetPtr(cameraId);
     work = effect->userdata;
@@ -153,25 +149,26 @@ void effHokoriDisp(CameraId cameraId, EffectEntry* effect) {
     GXSetTevColor(GX_TEVREG0, (GXColor){work->r, work->g, work->b, work->alpha});
     GXSetTevColor(GX_TEVREG1, (GXColor){work->r2, work->g2, work->b2, 0});
     switch (work->type) {
-    case 0:
-        GXSetNumTevStages(1);
-        GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
-        GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-        GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-        GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_C0);
-        GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_A0, GX_CA_TEXA, GX_CA_ZERO);
-        effGetTexObjN64(21, &tex);
-        GXLoadTexObj(&tex, GX_TEXMAP0);
-        break;
-    default:
-        GXSetNumTevStages(1);
-        GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
-        GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-        GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-        GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_C1, GX_CC_C0, GX_CC_TEXC, GX_CC_ZERO);
-        GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_A0, GX_CA_TEXA, GX_CA_ZERO);
-        effGetTexObjN64(22, &tex);
-        GXLoadTexObj(&tex, GX_TEXMAP0);
+        case 0:
+            GXSetNumTevStages(1);
+            GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
+            GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+            GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+            GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_C0);
+            GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_A0, GX_CA_TEXA, GX_CA_ZERO);
+            effGetTexObjN64(21, &tex);
+            GXLoadTexObj(&tex, GX_TEXMAP0);
+            break;
+        default:
+            GXSetNumTevStages(1);
+            GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
+            GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+            GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+            GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_C1, GX_CC_C0, GX_CC_TEXC, GX_CC_ZERO);
+            GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_A0, GX_CA_TEXA, GX_CA_ZERO);
+            effGetTexObjN64(22, &tex);
+            GXLoadTexObj(&tex, GX_TEXMAP0);
+            break;
     }
     PSMTXTrans(mtx, work->position.x, work->position.y, work->position.z);
     PSMTXRotRad(rot, 'y', 0.017453292f * -camGetPtr(CAMERA_3D)->viewYaw);
@@ -188,10 +185,15 @@ void effHokoriDisp(CameraId cameraId, EffectEntry* effect) {
         GXLoadPosMtxImm(mtx, GX_PNMTX0);
         GXSetCurrentMtx(GX_PNMTX0);
         if (type <= 1) {
-            if (i & 1) vtx = size16x32_tex32x64_vtx;
-            else vtx = size16x16_tex32x32_vtx;
-        } else vtx = size8x8_tex32x32_vtx;
- effSetVtxDescN64(vtx);
+            if (i & 1) {
+                vtx = size16x32_tex32x64_vtx;
+            } else {
+                vtx = size16x16_tex32x32_vtx;
+            }
+        } else {
+            vtx = size8x8_tex32x32_vtx;
+        }
+        effSetVtxDescN64(vtx);
         GXBegin(GX_TRIANGLES, GX_VTXFMT0, 6);
         tri2(0, 1, 2, 0, 0, 2, 3, 0);
     }

@@ -1,3 +1,4 @@
+#include "eff/n64/eff_kemuri9_n64.h"
 #include "driver/camdrv.h"
 #include "driver/dispdrv.h"
 #include "driver/effdrv.h"
@@ -21,7 +22,7 @@ typedef struct EffKemuri9N64Work {
     f32 radiusEnd;   // 0x20
     s32 timer;       // 0x24
     s32 counter;     // 0x28
-    s32 pad_2c;      // 0x2C
+    s32 life;        // 0x2C
     s32 texU;        // 0x30
     s32 texV;        // 0x34
     s32 frame;       // 0x38
@@ -50,7 +51,7 @@ EffectEntry* effKemuri9N64Entry(s32 type, s32 count, s32 life, f32 x, f32 y, f32
     twoPi = 6.2831855f;
     work->timer = life;
     work->counter = 0;
-    work->pad_2c = life;
+    work->life = life;
     work->texU = 0;
     work->type = type;
     work->position.x = x;
@@ -81,7 +82,6 @@ void effKemuri9Main(EffectEntry* effect) {
     EffKemuri9N64Work* work = effect->userdata;
     s32 i;
     s32 ir;
-
     Vec position;
     Vec tmp = {0.0f, 0.0f, 0.0f};
 
@@ -90,16 +90,16 @@ void effKemuri9Main(EffectEntry* effect) {
     tmp.z = work->position.z;
     position = tmp;
     {
-        s32 v = (s32)(16.0f * (f32)work->frame / (f32)work->frameMax);
-        s32 u = (s32)(16.0f * (f32)++work->frame / (f32)work->frameMax);
-        if (u > 15) {
-            u = 15;
+        s32 cur = (s32)(16.0f * (f32)work->frame / (f32)work->frameMax);
+        s32 next = (s32)(16.0f * (f32)++work->frame / (f32)work->frameMax);
+        if (next > 15) {
+            next = 15;
         }
-        if (v > 15) {
-            v = 15;
+        if (cur > 15) {
+            cur = 15;
         }
-        work->texU = v;
-        work->texV = u;
+        work->texU = cur;
+        work->texV = next;
     }
     work->counter++;
     work->timer--;
@@ -192,6 +192,7 @@ void effKemuri9Disp(CameraId cameraId, EffectEntry* effect) {
         GXLoadPosMtxImm(mtx, GX_PNMTX0);
         GXSetCurrentMtx(GX_PNMTX0);
         GXBegin(GX_QUADS, GX_VTXFMT0, 4);
+        // FAKE: no-op cast of type to s32; the plain comparison changes the object
         if ((s32)type != 0) {
             h = 16.0f;
             w = h;
