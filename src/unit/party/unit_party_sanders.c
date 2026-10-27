@@ -78,14 +78,6 @@ static EvtWord attack_event[2];
 BattleUnitSetup entry_bomzou;
 static EvtWord party_win_reaction[9];
 
-
-
-
-
-
-
-
-
 PoseTableEntry pose_table_sanders_stay[] = {
     {POSE_TYPE_FREEZE, "D_4"},
     {POSE_TYPE_STOP, "D_4"},
@@ -244,7 +236,7 @@ static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_HOLD_FAST, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, 1, PTR(pose_table_counter_sanders))
-        ELSE
+    ELSE
         CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, 1, PTR(pose_table_sanders_stay))
     END_IF
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
@@ -521,7 +513,7 @@ EVT_BEGIN(partySandersAttack_FirstAttack)
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
     LABEL(99)
-    CALL(btlevtcmd_ResetFaceDirection, -2)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     CALL_CHILD(PTR(btldefaultevt_SuitoruBadgeEffect))
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
@@ -582,7 +574,7 @@ EVT_BEGIN(partySandersAttack_NormalAttack)
             CALL(btlevtcmd_AcGetOutputParam, 0, LW(1))
             IF_INT_EQUAL(LW(1), 0)
                 SET_VALUE(LW(0), 5)
-                ELSE
+            ELSE
                 BREAK_LOOP
             END_IF
             WAIT_FRAMES(1)
@@ -656,7 +648,7 @@ EVT_BEGIN(partySandersAttack_NormalAttack)
     CALL(btlevtcmd_GetResultAC, LW(6))
     IF_BITS_SET(LW(6), AC_RESULT_SUCCESS)
         CALL(evt_eff64, STRING(""), STRING("bomb_n64"), 1, LW(0), LW(1), LW(2), 0, 0, 0, 0, 0, 0, 0, 0)
-        ELSE
+    ELSE
         CALL(evt_eff64, STRING(""), STRING("bomb_n64"), 0, LW(0), LW(1), LW(2), 0, 0, 0, 0, 0, 0, 0, 0)
     END_IF
     CALL(evt_btl_camera_shake_h, 0, 5, 0, 10, 13)
@@ -680,7 +672,7 @@ EVT_BEGIN(partySandersAttack_NormalAttack)
         CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
         CALL(btlevtcmd_ACSuccessEffect, LW(6), LW(0), LW(1), LW(2))
         CALL(btlevtcmd_AudienceDeclareACResult, LW(12), LW(6))
-        ELSE
+    ELSE
         CALL(btlevtcmd_CommandCheckDamage, UNIT_ID_SELF, LW(3), LW(4), DAMAGE_RESULT_FINAL_HIT, LW(5))
         CALL(btlevtcmd_AudienceDeclareACResult, LW(12), -1)
     END_IF
@@ -768,7 +760,7 @@ EVT_BEGIN(partySandersAttack_NormalAttack)
         END_SIBLING_EVENT
         CALL(btlevtcmd_WaitEventEnd, LW(15))
         WAIT_FRAMES(40)
-        ELSE
+    ELSE
         CALL(evt_audience_acrobat_notry)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("F_1"))
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BTL_THUNDERS_DOWN1"), EVT_NULLPTR, 0, EVT_NULLPTR)
@@ -784,7 +776,7 @@ EVT_BEGIN(partySandersAttack_NormalAttack)
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
     LABEL(99)
-    CALL(btlevtcmd_ResetFaceDirection, -2)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
 #ifdef VERSION_G8ME01
     CALL_CHILD(PTR(btldefaultevt_SuitoruBadgeEffect))
 #else
@@ -986,12 +978,12 @@ EVT_BEGIN(partySandersAttack_SuperBombAttack)
             CALL(btlevtcmd_ACSuccessEffect, LW(6), LW(0), LW(1), LW(2))
             CALL(btlevtcmd_CommandGetWeaponAddress, UNIT_ID_SELF, LW(0))
             CALL(btlevtcmd_AudienceDeclareACResult, LW(0), LW(6))
-            ELSE
+        ELSE
             CALL(btlevtcmd_CommandCheckDamage, UNIT_ID_SELF, LW(3), LW(4), DAMAGE_RESULT_FINAL_HIT, LW(5))
             CALL(btlevtcmd_CommandGetWeaponAddress, UNIT_ID_SELF, LW(0))
             CALL(btlevtcmd_AudienceDeclareACResult, LW(0), -1)
         END_IF
-        ELSE
+    ELSE
         CALL(btlevtcmd_CommandCheckDamage, UNIT_ID_SELF, LW(3), LW(4), DAMAGE_RESULT_FINAL_HIT, LW(5))
         CALL(btlevtcmd_CommandGetWeaponAddress, UNIT_ID_SELF, LW(0))
         CALL(btlevtcmd_AudienceDeclareACResult, LW(0), -1)
@@ -1087,7 +1079,7 @@ EVT_BEGIN(partySandersAttack_SuperBombAttack)
         END_SIBLING_EVENT
         CALL(btlevtcmd_WaitEventEnd, LW(15))
         WAIT_FRAMES(40)
-        ELSE
+    ELSE
         CALL(evt_audience_acrobat_notry)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("F_1"))
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BTL_THUNDERS_DOWN1"), EVT_NULLPTR, 0, EVT_NULLPTR)
@@ -1103,7 +1095,7 @@ EVT_BEGIN(partySandersAttack_SuperBombAttack)
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
     LABEL(99)
-    CALL(btlevtcmd_ResetFaceDirection, -2)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
 #ifdef VERSION_G8ME01
     CALL_CHILD(PTR(btldefaultevt_SuitoruBadgeEffect))
 #else
@@ -1145,7 +1137,7 @@ EVT_BEGIN(partySandersAttack_CounterSet)
     CALL(btlevtcmd_StopAC)
     IF_BITS_CLEAR(LW(0), AC_RESULT_SUCCESS)
         CALL(btlevtcmd_AudienceDeclareACResult, LW(12), -1)
-        ELSE
+    ELSE
         CALL(btlevtcmd_AcGetOutputParam, 0, LW(0))
         SUBTRACT(LW(0), 1)
         CALL(btlevtcmd_GetResultPrizeLv, -1, LW(0), LW(6))
@@ -1507,7 +1499,7 @@ USER_FUNC(_sanders_make_extra_work_area) {
     BattleUnit* unit;
     s32 id;
 
-    id = BattleTransID(event, -2);
+    id = BattleTransID(event, UNIT_ID_SELF);
     unit = BattleGetUnitPtr(wp, id);
     unit->countersetWeapon = BattleAlloc(sizeof(BattleWeapon));
     return EVT_RETURN_DONE;
@@ -1563,14 +1555,13 @@ USER_FUNC(_get_bomb_hit_position) {
     s32 id, targetId, dir;
     s32 outZ, outX, outY;
 
-
     id = evtGetValue(event, args[0]);
     targetId = evtGetValue(event, args[1]);
-    evtGetValue(event, args[2]);
+    evtGetValue(event, args[2]); // the target's part number: read but not used
     outX = args[3];
     outY = args[4];
     outZ = args[5];
-    BattleGetUnitPtr(wp, BattleTransID(event, id));
+    BattleGetUnitPtr(wp, BattleTransID(event, id)); // the attacker: looked up but not used
     unit = BattleGetUnitPtr(wp, BattleTransID(event, targetId));
     dir = unit->faceDirection;
     BtlUnit_GetPos(unit, &pos.x, &pos.y, &pos.z);
@@ -1592,7 +1583,7 @@ USER_FUNC(_make_counterset_weapon) {
     void* src;
     s32 id, value;
 
-    id = BattleTransID(event, -2);
+    id = BattleTransID(event, UNIT_ID_SELF);
     unit = BattleGetUnitPtr(wp, id);
     index = args[0];
     weapon = unit->countersetWeapon;

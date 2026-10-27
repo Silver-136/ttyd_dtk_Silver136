@@ -129,7 +129,7 @@ void winMakeSkipList(WindowWork* w) {
     u32 j;
     u16 id;
     w->item.skipCount = 0;
-    for (i = 0; i < 0x79; i++) {
+    for (i = 0; i < MAX_KEY_ITEMS; i++) {
         id = pouchKeyItem(i);
         if (id) {
             for (j = 0; j < 0x12; j++) {
@@ -202,7 +202,6 @@ void winItemExit(WindowWork* w) {
 
 s32 winItemMain(WindowWork* w) {
     s32 cnt;
-
     s32 mode;
     s32 pages;
     s32 id;
@@ -281,24 +280,24 @@ s32 winItemMain(WindowWork* w) {
                 }
             } else {
                 c = w->item.skip[w->item.cursor[mode]];
-                if ((u32)(c - 0x37) <= 3 || c == 0x3B) {
+                if ((u32)(c - ITEM_SUPER_LUIGI1) <= ITEM_SUPER_LUIGI4 - ITEM_SUPER_LUIGI1 || c == ITEM_SUPER_LUIGI5) {
                     w->item.state = 100;
                     w->item.bookTgtX = -170.0f;
                     w->item.bookTgtY = 160.0f;
                     w->flags |= WINDOW_FLAG_BOOK_OPEN;
-                    book = luigi_book_list[c - 0x37];
-                    w->item.bookIdx = c - 0x37;
+                    book = luigi_book_list[c - ITEM_SUPER_LUIGI1];
+                    w->item.bookIdx = c - ITEM_SUPER_LUIGI1;
                     w->item.bookPage = 0;
                     for (w->item.bookPages = 0; book[w->item.bookPages] != NULL; w->item.bookPages++) {
                     }
                     w->item.bookPages = (w->item.bookPages + 1) / 2;
                     psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1 | PSND_SFX_BYPASS_MUTE));
-                } else if (c == 0x36 && pouchReceiveMailCount()) {
+                } else if (c == ITEM_MAILBOX_SP && pouchReceiveMailCount()) {
                     w->item.state = 200;
                     w->item.mailTgtX = -144.0f;
                     w->item.mailTgtY = 180.0f;
                     psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1 | PSND_SFX_BYPASS_MUTE));
-                } else if (c == 0x4E) {
+                } else if (c == ITEM_RAGGED_DIARY) {
                     w->item.useItem = c;
                     psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1 | PSND_SFX_BYPASS_MUTE));
                     return -2;
@@ -400,6 +399,7 @@ s32 winItemMain(WindowWork* w) {
         break;
     case 200:
         if (w->buttonTrg & PAD_BUTTON_A) {
+            // FAKE: the (s32) cast makes the == 1 compare signed; without it the object changes
             if ((s32)pouchCheckMail(w->item.mail[w->item.mailSel].id) == 1) {
                 pouchOpenMail(w->item.mail[w->item.mailSel].id);
             }
@@ -410,7 +410,7 @@ s32 winItemMain(WindowWork* w) {
             FontGetMessageWidthLine(msgSearch(mail->body), &w->item.mailLines);
             w->item.mailLines++;
             w->item.mailLine = 0;
-            if (mail->flags & 0x1000) {
+            if (mail->flags & MAIL_FLAG_PICTURE) {
                 w->item.mailLines += 10;
             }
         } else if (w->buttonTrg & PAD_BUTTON_B) {
@@ -476,7 +476,7 @@ s32 winItemMain(WindowWork* w) {
         break;
     case 201:
         mail = mailGetPtr(w->item.mail[w->item.mailSel].id);
-        if (mail->flags & 0x1000) {
+        if (mail->flags & MAIL_FLAG_PICTURE) {
 #ifdef VERSION_G8ME01
             w->mailRes = (FileEntry*)fileAsyncf(FILE_TYPE_TPL, 0, "%s/w/%s/mail.tpl", getMarioStDvdRoot(), (u32)gp->language == LANGUAGE_JP ? "jp" : "us");
 #else
@@ -700,15 +700,16 @@ void item_disp(WindowWork* w, f32 xo, f32 yo) {
     s32 cx;
     f32 y;
     s32 i;
-    s32 ok;
+    s32 grayed;
     s32 id;
     s32 cnt;
     f32 scroll;
-    f32 width;
-    f32 w2;
-    f32 w3;
-    f32 w4;
+    f32 leftArrowX;
+    f32 sortWidth;
+    f32 rightArrowX;
+    f32 sortX;
 
+    // FAKE: white is copied through white4 into white2 and white3; using white for all of them changes the object
     white4 = white;
     white2 = white4;
     white3 = white2;
@@ -729,7 +730,7 @@ void item_disp(WindowWork* w, f32 xo, f32 yo) {
             id = p->item.skip[0];
         }
         scroll = w->item.scroll[w->item.mode];
-        ok = (w->item.mode != 0 || (itemDataTable[id].usable_locations & 4)) == 0;
+        grayed = (w->item.mode != 0 || (itemDataTable[id].usable_locations & 4)) == 0;
         y = scroll + (20.0f + ((yBase = (100.0f + yo) - row * 38) - 10.0f));
         if (y > 240.0f) {
             continue;
@@ -737,7 +738,7 @@ void item_disp(WindowWork* w, f32 xo, f32 yo) {
         if (y < -240.0f) {
             break;
         }
-        if (ok) {
+        if (grayed) {
             winIconGrayInit();
         } else {
             winIconInit();
@@ -745,32 +746,32 @@ void item_disp(WindowWork* w, f32 xo, f32 yo) {
         winIconSet(itemDataTable[id].icon_id, (Vec){(xo - 125.0f) + (cx = col * 204), y, 0.0f}, w->item.mode == 0 ? (Vec){0.8f, 0.8f, 0.8f} : (Vec){0.6666667f, 0.6666667f, 0.6666667f}, white3);
         winFontInit();
 #ifdef VERSION_G8ME01
-        winFontSetWidth((Vec){(xo - 105.0f) + cx, scroll + (20.0f + yBase), 0.0f}, (Vec){0.9f, 0.9f, 0.9f}, ok ? grayc : black, 155.0f, msgSearch(itemDataTable[id].name));
+        winFontSetWidth((Vec){(xo - 105.0f) + cx, scroll + (20.0f + yBase), 0.0f}, (Vec){0.9f, 0.9f, 0.9f}, grayed ? grayc : black, 155.0f, msgSearch(itemDataTable[id].name));
 #else
-        winFontSetPitch(20.0f, (Vec){(xo - 105.0f) + cx, scroll + (20.0f + yBase), 0.0f}, (Vec){0.9f, 0.9f, 0.9f}, ok ? grayc : black, msgSearch(itemDataTable[id].name));
+        winFontSetPitch(20.0f, (Vec){(xo - 105.0f) + cx, scroll + (20.0f + yBase), 0.0f}, (Vec){0.9f, 0.9f, 0.9f}, grayed ? grayc : black, msgSearch(itemDataTable[id].name));
 #endif
     }
     GXSetScissor(0, 0, 0x260, 0x1E0);
     if (w->item.page[w->item.mode] > 0) {
         winTexInit(*w->res->data);
-        width = 250.0f + xo;
-        winTexSet(0x17, (Vec){width, 20.0f + (18.0f + (110.0f + yo)), 0.0f}, (Vec){-1.0f, -1.0f, -1.0f}, white2);
+        leftArrowX = 250.0f + xo;
+        winTexSet(0x17, (Vec){leftArrowX, 20.0f + (18.0f + (110.0f + yo)), 0.0f}, (Vec){-1.0f, -1.0f, -1.0f}, white2);
         winIconInit();
-        winIconSet(ICON_TRIGGER_L, (Vec){width, 20.0f + (113.0f + yo), 0.0f}, (Vec){0.6f, 0.6f, 0.6f}, white2);
+        winIconSet(ICON_TRIGGER_L, (Vec){leftArrowX, 20.0f + (113.0f + yo), 0.0f}, (Vec){0.6f, 0.6f, 0.6f}, white2);
     }
     if (cnt > w->item.page[w->item.mode] * 10 + 10) {
         winTexInit(*w->res->data);
-        w3 = 250.0f + xo;
-        winTexSet(0x17, (Vec){w3, 20.0f + ((yo - 90.0f) - 15.0f), 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white2);
+        rightArrowX = 250.0f + xo;
+        winTexSet(0x17, (Vec){rightArrowX, 20.0f + ((yo - 90.0f) - 15.0f), 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white2);
         winIconInit();
-        winIconSet(ICON_TRIGGER_R, (Vec){w3, 20.0f + (yo - 90.0f), 0.0f}, (Vec){0.6f, 0.6f, 0.6f}, white2);
+        winIconSet(ICON_TRIGGER_R, (Vec){rightArrowX, 20.0f + (yo - 90.0f), 0.0f}, (Vec){0.6f, 0.6f, 0.6f}, white2);
     }
-    w2 = 0.7f * (f32)(u32)FontGetMessageWidth(msgSearch("msg_menu_sort_narabikae"));
+    sortWidth = 0.7f * (f32)(u32)FontGetMessageWidth(msgSearch("msg_menu_sort_narabikae"));
     winFontInit();
-    w4 = xo + (220.0f - w2);
-    winFontSet((Vec){w4, 20.0f + ((yo - 92.0f) - 10.0f), 0.0f}, (Vec){0.7f, 0.7f, 0.7f}, black, msgSearch("msg_menu_sort_narabikae"));
+    sortX = xo + (220.0f - sortWidth);
+    winFontSet((Vec){sortX, 20.0f + ((yo - 92.0f) - 10.0f), 0.0f}, (Vec){0.7f, 0.7f, 0.7f}, black, msgSearch("msg_menu_sort_narabikae"));
     winIconInit();
-    winIconSet(ICON_TRIGGER_Z_ALT, (Vec){w4 - 30.0f, 20.0f + ((yo - 100.0f) - 10.0f), 0.0f}, (Vec){0.6f, 0.6f, 0.6f}, white2);
+    winIconSet(ICON_TRIGGER_Z_ALT, (Vec){sortX - 30.0f, 20.0f + ((yo - 100.0f) - 10.0f), 0.0f}, (Vec){0.6f, 0.6f, 0.6f}, white2);
     if (w->item.bookX < 320.0f && w->item.bookY > -240.0f) {
         winBookGX(w, 0, w->item.bookX, w->item.bookY);
     }
@@ -809,6 +810,7 @@ void itemUseDisp(WinMgrEntry* entry) {
     s32 gray;
     f32 yoff;
 
+    // FAKE: white is copied through the spare white2 into white3; white3 = white changes the object
     white2 = white;
     white3 = white2;
     if (!winMgrAction(w->useWin[0])) {
@@ -855,8 +857,8 @@ void itemUseDisp(WinMgrEntry* entry) {
                 winTexInit(*w->res->data);
                 GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_C0);
                 GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_A0, GX_CA_TEXA, GX_CA_ZERO);
-                winTexSet(0xAF, (Vec){entry->x + 220 + 0.9f * FontGetMessageWidth(WI_HP_NAME)  / 2, entry->y - 19 - off, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0xCB, 0x8C, 0xA2, 0xFE});
-                winTexSet(0xAF, (Vec){entry->x + 220 + 0.9f * FontGetMessageWidth(WI_HP_NAME)  / 2, entry->y - 19 - (off3 = (i + 1) * 22), 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0xCB, 0xBE, 0x89, 0xFE});
+                winTexSet(0xAF, (Vec){entry->x + 220 + 0.9f * FontGetMessageWidth(WI_HP_NAME) / 2, entry->y - 19 - off, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0xCB, 0x8C, 0xA2, 0xFE});
+                winTexSet(0xAF, (Vec){entry->x + 220 + 0.9f * FontGetMessageWidth(WI_HP_NAME) / 2, entry->y - 19 - (off3 = (i + 1) * 22), 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0xCB, 0xBE, 0x89, 0xFE});
                 winFontInit();
                 winFontSet((Vec){entry->x + 50, entry->y - 8 - off, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, black, msgSearch("name_mario"));
                 winFontSet((Vec){entry->x + 220, entry->y - 8 - off, 0.0f}, (Vec){0.9f, 0.9f, 0.9f}, black, WI_HP_NAME);
@@ -875,14 +877,14 @@ void itemUseDisp(WinMgrEntry* entry) {
                 winFontSetR((Vec){entry->x + 267, entry->y - 8 - off3, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, black, WI_SLASH);
                 winFontSet((Vec){entry->x + 310, entry->y - 10 - off3, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, black, "%d", pouchGetMaxFP());
             } else {
-                name = list[i - 1]->partyId != 4 ? msgSearch(list[i - 1]->name) : pouchGetYoshiName();
+                name = list[i - 1]->partyId != PARTNER_YOSHI ? msgSearch(list[i - 1]->name) : pouchGetYoshiName();
                 if (w->item.blink % 20 > 15 && i == w->item.useTarget) {
                     continue;
                 }
                 winTexInit(*w->res->data);
                 GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_C0);
                 GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_A0, GX_CA_TEXA, GX_CA_ZERO);
-                winTexSet(0xAF, (Vec){entry->x + 220 + 0.9f * FontGetMessageWidth(WI_HP_NAME)  / 2, (yoff + (entry->y - 8 - i * 28)) - 14.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0xCB, 0x8C, 0xA2, 0xF4});
+                winTexSet(0xAF, (Vec){entry->x + 220 + 0.9f * FontGetMessageWidth(WI_HP_NAME) / 2, (yoff + (entry->y - 8 - i * 28)) - 14.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0xCB, 0x8C, 0xA2, 0xF4});
                 if (gray) {
                     winIconGrayInit();
                 } else {
@@ -931,478 +933,6 @@ void itemUseDisp2(WinMgrEntry* entry) {
 #endif
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

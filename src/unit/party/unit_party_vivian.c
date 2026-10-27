@@ -29,45 +29,8 @@
 
 USER_FUNC(_vivian_make_extra_work_area);
 USER_FUNC(battle_evt_majo_disp_on);
-USER_FUNC(btlevtcmd_ACRGetResult);
-USER_FUNC(btlevtcmd_ACRStart);
-USER_FUNC(btlevtcmd_AnimeChangePose);
-USER_FUNC(btlevtcmd_AnimeChangePoseFromTable);
-USER_FUNC(btlevtcmd_AnimeChangePoseType);
-USER_FUNC(btlevtcmd_AnimeWaitPlayComplete);
-USER_FUNC(btlevtcmd_AudienceAppeal);
-USER_FUNC(btlevtcmd_AudienceDeclareAcrobatResult);
-USER_FUNC(btlevtcmd_FaceDirectionAdd);
-USER_FUNC(btlevtcmd_FaceDirectionSub);
-USER_FUNC(btlevtcmd_GetFaceDirection);
-USER_FUNC(btlevtcmd_GetHomePos);
-USER_FUNC(btlevtcmd_GetMoveFrame);
-USER_FUNC(btlevtcmd_GetPos);
-USER_FUNC(btlevtcmd_GetUnitId);
-USER_FUNC(btlevtcmd_GetUnitWork);
-USER_FUNC(btlevtcmd_InviteApInfoReport);
-USER_FUNC(btlevtcmd_MovePosition);
-USER_FUNC(btlevtcmd_OffAttribute);
-USER_FUNC(btlevtcmd_OffPartsAttribute);
-USER_FUNC(btlevtcmd_PhaseEventStartDeclare);
-USER_FUNC(btlevtcmd_RunDataEventChild);
-USER_FUNC(btlevtcmd_SetDiveSound);
-USER_FUNC(btlevtcmd_SetEventAttack);
-USER_FUNC(btlevtcmd_SetEventConfusion);
-USER_FUNC(btlevtcmd_SetEventDamage);
 USER_FUNC(btlevtcmd_SetEventEntry);
-USER_FUNC(btlevtcmd_SetEventWait);
 USER_FUNC(btlevtcmd_SetJumpSound);
-USER_FUNC(btlevtcmd_SetMoveSoundDataWork);
-USER_FUNC(btlevtcmd_SetMoveSpeed);
-USER_FUNC(btlevtcmd_SetPos);
-USER_FUNC(btlevtcmd_SetRotate);
-USER_FUNC(btlevtcmd_SetRunSound);
-USER_FUNC(btlevtcmd_SetUnitWork);
-USER_FUNC(btlevtcmd_SetWalkSound);
-USER_FUNC(btlevtcmd_StartWaitEvent);
-USER_FUNC(btlevtcmd_TransStageFloorPosition);
-USER_FUNC(btlevtcmd_WaitEventEnd);
 USER_FUNC(evt_audience_acrobat_notry);
 USER_FUNC(evt_audience_ap_recovery);
 USER_FUNC(evt_eff);
@@ -120,25 +83,6 @@ EvtWord vivian_counter_damage_event[177];
 EvtWord vivian_appeal_event[80];
 static EvtWord party_win_reaction[18];
 static EvtWord attack_audience_event[189];
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 PoseTableEntry pose_table_vivian_stay[] = {
     {POSE_TYPE_FREEZE, "PTR_D_4"},
@@ -257,7 +201,6 @@ static EVT_BEGIN(wait_event)
     RETURN
 EVT_END()
 
-
 USER_FUNC(battle_evt_majo_disp_on) {
     EvtWord* args = event->args;
     BattleUnit* unit;
@@ -344,7 +287,6 @@ USER_FUNC(battle_evt_majo_disp_on) {
     return EVT_RETURN_BLOCK;
 }
 
-
 static EVT_BEGIN(battle_entry_event)
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_FaceDirectionSub, UNIT_ID_SELF, LW(0), 250)
@@ -379,7 +321,7 @@ EVT_END()
 
 static EVT_BEGIN(damage_event)
     CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, 0, 0)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL_CHILD(PTR(btldefaultevt_Damage))
     RETURN
@@ -392,7 +334,7 @@ EVT_BEGIN(vivian_hide_event)
     END_IF
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, VIVIAN_WORK_HIDE_TURNS, LW(0))
     IF_INT_LESS_OR_EQUAL(LW(0), 0)
-        SET_VALUE(LW(3), -3)
+        SET_VALUE(LW(3), UNIT_ID_MARIO)
         CALL(btlevtcmd_PhaseEventStartDeclare, LW(3))
         CALL(btlevtcmd_GetPos, LW(3), LW(0), LW(1), LW(2))
         CALL(btlevtcmd_FaceDirectionSub, LW(3), LW(0), 15)
@@ -763,14 +705,14 @@ EVT_BEGIN(partyVivianAttack_NormalAttack)
     LABEL(99)
     CALL(evt_audience_ap_recovery)
     CALL(btlevtcmd_InviteApInfoReport)
-    CALL(btlevtcmd_ResetFaceDirection, -2)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     CALL_CHILD(btldefaultevt_SuitoruBadgeEffect)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
 EVT_BEGIN(partyVivianAttack_ShadowGuard)
-    SET_VALUE(LW(3), -3)
+    SET_VALUE(LW(3), UNIT_ID_MARIO)
     CALL(btlevtcmd_GetBodyId, LW(3), LW(4))
     CALL(btlevtcmd_CommandPayWeaponCost, UNIT_ID_SELF)
     CALL(btlevtcmd_CommandGetWeaponAddress, UNIT_ID_SELF, LW(12))
@@ -1014,7 +956,7 @@ EVT_BEGIN(partyVivianAttack_MagicalPowder)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PTR_A1_1"))
     WAIT_MS(800)
     LABEL(99)
-    CALL(btlevtcmd_ResetFaceDirection, -2)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     CALL_CHILD(btldefaultevt_SuitoruBadgeEffect)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
@@ -1118,13 +1060,13 @@ EVT_BEGIN(partyVivianAttack_CharmKissAttack)
         END_IF
         GOTO(50)
     END_IF
-    IF_BITS_SET(LW(7), 2)
+    IF_BITS_SET(LW(7), AC_RESULT_SUCCESS)
         CALL(btlevtcmd_CommandCheckDamage, UNIT_ID_SELF, LW(3), LW(4), DAMAGE_RESULT_FINAL_HIT | DAMAGE_RESULT_AC_SUCCESS, LW(5))
     ELSE
         CALL(btlevtcmd_CommandCheckDamage, UNIT_ID_SELF, LW(3), LW(4), DAMAGE_RESULT_FINAL_HIT | DAMAGE_RESULT_NO_STATUS, LW(5))
     END_IF
     IF_INT_EQUAL(LW(5), 18)
-        IF_BITS_SET(LW(7), 2)
+        IF_BITS_SET(LW(7), AC_RESULT_SUCCESS)
             CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
             ADD(LW(2), 10)
             CALL(evt_eff, 0, STRING("kiss"), 5, LW(0), LW(1), LW(2), 0, 0, 0, 0, 0, 0, 0, 0)
@@ -1164,7 +1106,7 @@ EVT_BEGIN(partyVivianAttack_CharmKissAttack)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PTR_A1_1"))
     WAIT_FRAMES(48)
     LABEL(99)
-    CALL(btlevtcmd_ResetFaceDirection, -2)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     CALL_CHILD(btldefaultevt_SuitoruBadgeEffect)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
@@ -1197,7 +1139,7 @@ EVT_END()
 EVT_BEGIN(vivian_counter_damage_event)
     CALL(btlevtcmd_SetScale, UNIT_ID_SELF, FLOAT(1.0f), FLOAT(1.0f), FLOAT(1.0f))
     CALL(btlevtcmd_OnUnitFlag, UNIT_ID_SELF, BATTLE_UNIT_FLAG_SHOW_HP)
-    IF_INT_EQUAL(LW(0), 43)
+    IF_INT_EQUAL(LW(0), DAMAGE_CODE_COUNTER_TOP_SPIKY)
         SET_VALUE(LW(14), POSE_TYPE_DAMAGE_TOP_SPIKY)
     ELSE
         SET_VALUE(LW(14), POSE_TYPE_DAMAGE)
@@ -1228,7 +1170,7 @@ EVT_BEGIN(vivian_counter_damage_event)
         CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(2), LW(3), LW(4))
         CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(2), LW(3), LW(4), 5, 0, EASING_LINEAR, 0, MOVE_SOUND_FROM_TABLE)
     END_IF
-    CALL(btlevtcmd_ResetFaceDirection, -2)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
@@ -1309,8 +1251,6 @@ static EVT_BEGIN(attack_audience_event)
     RETURN
 EVT_END()
 
-
-
 USER_FUNC(battle_evt_majo_disp_off) {
     EvtWord* args = event->args;
     BattleUnit* unit;
@@ -1388,7 +1328,7 @@ USER_FUNC(_vivian_make_extra_work_area) {
     BattleUnit* unit;
     s32 id;
 
-    id = BattleTransID(event, -2);
+    id = BattleTransID(event, UNIT_ID_SELF);
     unit = BattleGetUnitPtr(wp, id);
     unit->countersetWeapon = BattleAlloc(sizeof(BattleWeapon));
     return EVT_RETURN_DONE;
@@ -1399,23 +1339,40 @@ static void __makeTechMenuFunc(BattleCommand* command, s32* count) {
 
     techLv = partyGetTechLv(BattleTransPartyId(BattleGetPartyPtr(_battleWorkPointer)->currentKind));
 
-#define ADD_WEAPON(w)                                                               \
-    command->weapon[*count].index = -1;                                             \
-    command->weapon[*count].itemId = 0;                                             \
-    command->weapon[*count].weapon = (BattleWeapon*)(w);                            \
-    command->weapon[*count].enabled = 0;                                            \
-    command->weapon[*count].icon = command->weapon[*count].weapon->icon;            \
-    command->weapon[*count].name = msgSearch(command->weapon[*count].weapon->name); \
+    command->weapon[*count].index = -1;
+    command->weapon[*count].itemId = 0;
+    command->weapon[*count].weapon = &partyWeapon_VivianNormalAttack;
+    command->weapon[*count].enabled = 0;
+    command->weapon[*count].icon = command->weapon[*count].weapon->icon;
+    command->weapon[*count].name = msgSearch(command->weapon[*count].weapon->name);
     (*count)++;
-    ADD_WEAPON(&partyWeapon_VivianNormalAttack)
+
     if (techLv >= 0) {
-        ADD_WEAPON(&partyWeapon_VivianShadowGuard)
+        command->weapon[*count].index = -1;
+        command->weapon[*count].itemId = 0;
+        command->weapon[*count].weapon = &partyWeapon_VivianShadowGuard;
+        command->weapon[*count].enabled = 0;
+        command->weapon[*count].icon = command->weapon[*count].weapon->icon;
+        command->weapon[*count].name = msgSearch(command->weapon[*count].weapon->name);
+        (*count)++;
     }
     if (techLv >= 1) {
-        ADD_WEAPON(&partyWeapon_VivianMagicalPowder)
+        command->weapon[*count].index = -1;
+        command->weapon[*count].itemId = 0;
+        command->weapon[*count].weapon = &partyWeapon_VivianMagicalPowder;
+        command->weapon[*count].enabled = 0;
+        command->weapon[*count].icon = command->weapon[*count].weapon->icon;
+        command->weapon[*count].name = msgSearch(command->weapon[*count].weapon->name);
+        (*count)++;
     }
     if (techLv >= 2) {
-        ADD_WEAPON(&partyWeapon_VivianCharmKissAttack)
+        command->weapon[*count].index = -1;
+        command->weapon[*count].itemId = 0;
+        command->weapon[*count].weapon = &partyWeapon_VivianCharmKissAttack;
+        command->weapon[*count].enabled = 0;
+        command->weapon[*count].icon = command->weapon[*count].weapon->icon;
+        command->weapon[*count].name = msgSearch(command->weapon[*count].weapon->name);
+        (*count)++;
     }
 }
 
@@ -1444,7 +1401,6 @@ USER_FUNC(_get_move_frame) {
     return EVT_RETURN_DONE;
 }
 
-
 USER_FUNC(_get_vivian_attack_position) {
     BattleWork* wp = _battleWorkPointer;
     EvtWord* args = event->args;
@@ -1463,16 +1419,14 @@ USER_FUNC(_get_vivian_attack_position) {
     y = evtGetValue(event, i2);
     i3 = args[3];
     z = evtGetValue(event, i3);
-    self = BattleGetUnitPtr(wp, BattleTransID(event, -2));
+    self = BattleGetUnitPtr(wp, BattleTransID(event, UNIT_ID_SELF));
     target = BattleGetUnitPtr(wp, BattleTransID(event, targetId));
     BtlUnit_GetScale(target, &sx, &sy, &sz);
     ix = (s32)((f32)target->faceDirection * (target->mKindParams->vivianOffsetX * sx));
     iy = (s32)(target->mKindParams->vivianOffsetZ * sz);
-    {
-        x += -30.0f * self->mSizeMultiplier * (f32)self->faceDirection + ix;
-        z = z + iy;
-        y -= 20.0f * self->mSizeMultiplier;
-    }
+    x += -30.0f * self->mSizeMultiplier * (f32)self->faceDirection + ix;
+    z = z + iy;
+    y -= 20.0f * self->mSizeMultiplier;
     floor = BattleGetFloorHeight(wp, x, y, z);
     if (floor > y) {
         y = (s32)floor;
@@ -1487,23 +1441,22 @@ USER_FUNC(_make_kagenuke_weapon) {
     BattleWork* wp = _battleWorkPointer;
     EvtWord* args = event->args;
     BattleUnit* unit;
-    s32 index;
+    s32 weaponArg;
     BattleWeapon* weapon;
     void* src;
-    s32 id, value;
+    s32 id, burnTime;
 
-    id = BattleTransID(event, -2);
+    id = BattleTransID(event, UNIT_ID_SELF);
     unit = BattleGetUnitPtr(wp, id);
-    index = args[0];
+    weaponArg = args[0];
     weapon = unit->countersetWeapon;
-    src = (void*)evtGetValue(event, index);
-    value = evtGetValue(event, args[1]);
+    src = (void*)evtGetValue(event, weaponArg);
+    burnTime = evtGetValue(event, args[1]);
     memcpy(weapon, src, sizeof(BattleWeapon));
-    weapon->burnTime = value;
-    evtSetValue(event, index, (EvtWord)weapon);
+    weapon->burnTime = burnTime;
+    evtSetValue(event, weaponArg, (EvtWord)weapon);
     return EVT_RETURN_DONE;
 }
-
 
 USER_FUNC(_disp_heart_entry) {
     BattleWork* wp = _battleWorkPointer;
@@ -1511,7 +1464,7 @@ USER_FUNC(_disp_heart_entry) {
     BattleUnit* unit;
     s32 id;
 
-    id = BattleTransID(event, -2);
+    id = BattleTransID(event, UNIT_ID_SELF);
     unit = BattleGetUnitPtr(wp, id);
     if (isFirstCall) {
         event->heart.unit = unit;
@@ -1527,7 +1480,7 @@ USER_FUNC(_disp_heart_entry) {
         return EVT_RETURN_DONE;
     }
     event->heart.cur++;
-    dispEntry(CAMERA_3D, 0.0f, 1, (DispCallback)_disp_heart, event);
+    dispEntry(CAMERA_3D, 0.0f, 1, _disp_heart, event);
     return event->heart.cur < event->heart.total ? EVT_RETURN_BLOCK : EVT_RETURN_DONE;
 }
 
@@ -1546,7 +1499,7 @@ void _disp_heart(CameraId camera, void* param) {
             if (w->heart.cur <= w->heart.start) {
                 scale = intplGetValue(EASING_CUBIC_OUT, 0.0f, 1.2f, w->heart.cur, w->heart.start);
             } else if (w->heart.cur <= w->heart.end) {
-                scale = intplGetValue(0xb, 1.2f, 1.0f, w->heart.cur - w->heart.start, w->heart.end - w->heart.start);
+                scale = intplGetValue(EASING_SINE_IN_OUT, 1.2f, 1.0f, w->heart.cur - w->heart.start, w->heart.end - w->heart.start);
             } else {
                 scale = 1.0f;
             }
@@ -1574,5 +1527,3 @@ USER_FUNC(_disp_heart_entry_stop_check) {
     evtSetValue(event, *event->args, event->heart.stop);
     return EVT_RETURN_DONE;
 }
-
-

@@ -195,9 +195,9 @@ void winLogInit(WindowWork* w) {
     w->log.cursor = 0;
     w->log.count = 0;
     winLogAddMenu(w, 0);
-    if (swByteGet(0) >= 0x13) winLogAddMenu(w, 1); // GSW_STORY_PROGRESS
+    if (swByteGet(0) >= STG0_16_FRANKLYS_HOUSE) winLogAddMenu(w, 1); // GSW_STORY_PROGRESS
     if (swByteGet(0) >= STG0_07_GOOMBELLA_JOINS) winLogAddMenu(w, 4); // GSW_STORY_PROGRESS
-    if (swByteGet(0) >= 0x14) winLogAddMenu(w, 2); // GSW_STORY_PROGRESS
+    if (swByteGet(0) >= STG0_17_BADGE_TUTORIAL) winLogAddMenu(w, 2); // GSW_STORY_PROGRESS
     if (swGet(0x40)) winLogAddMenu(w, 3); // GSWF_GOR_ZESS_T_DISH_RECEIVED
 
     w->log.stoneNum = 0;
@@ -217,9 +217,9 @@ void winLogInit(WindowWork* w) {
             ((EffStarStoneWork*)e->userdata)->g = 0x20;
             ((EffStarStoneWork*)e->userdata)->b = 0x20;
         }
-        ((EffStarStoneWork*)e->userdata)->cam = 8;
-        ((EffStarStoneWork*)e->userdata)->flags &= ~4;
-        ((EffStarStoneWork*)e->userdata)->flags |= 0x20;
+        ((EffStarStoneWork*)e->userdata)->cam = CAMERA_2D;
+        ((EffStarStoneWork*)e->userdata)->flags &= ~STAR_STONE_FLAG_SHINE_SFX;
+        ((EffStarStoneWork*)e->userdata)->flags |= STAR_STONE_FLAG_EXTERNAL_DRAW;
     }
 
     w->mapRes = NULL;
@@ -235,9 +235,9 @@ void winLogInit(WindowWork* w) {
     if (!strcmp(gp->currentMapName, "pik_02") || !strcmp(gp->currentMapName, "pik_03")) area = "sin";
     if (!strcmp(gp->currentMapName, "win_04") || !strcmp(gp->currentMapName, "win_05")) area = "hou";
     if (!strncmp(gp->currentMapName, "rsh", 3)) {
-        if (swByteGet(0) < 0x136) { // GSW_STORY_PROGRESS
+        if (swByteGet(0) < STG6_27_RIVERSIDE_STATION) { // GSW_STORY_PROGRESS
             area = "gor";
-        } else if (swByteGet(0) < 0x14E || swGet(0xDFB)) { // GSW_STORY_PROGRESS, GSWF_HOM_TRAIN_STOPPED_AT_RIVERSIDE
+        } else if (swByteGet(0) < STG6_49_POSHLEY_HEIGHTS || swGet(0xDFB)) { // GSW_STORY_PROGRESS, GSWF_HOM_TRAIN_STOPPED_AT_RIVERSIDE
             area = "eki";
         } else if (swGet(0xDFC)) { // GSWF_HOM_TRAIN_AT_POSHLEY
             area = "pik";
@@ -263,12 +263,10 @@ void winLogInit(WindowWork* w) {
     if (!strcmp(gp->currentMapName, "gra_06")) area = "jin";
     if (!strcmp(gp->currentMapName, "muj_10") || !strcmp(gp->currentMapName, "muj_11") || !strcmp(gp->currentMapName, "muj_12")) area = "dou";
 
-    {
-        for (k = 0; k < 93; k++) {
-            if (!area || !strcmp(area, tubuDt[k].map)) break;
-        }
-        if (k < 93) w->log.mapIdx = k;
+    for (k = 0; k < sizeof(tubuDt) / sizeof(TubuDt); k++) {
+        if (!area || !strcmp(area, tubuDt[k].map)) break;
     }
+    if (k < sizeof(tubuDt) / sizeof(TubuDt)) w->log.mapIdx = k;
     w->log.mapX = 304.0f + tubuDt[w->log.mapIdx].x;
     w->log.mapY = 240.0f + tubuDt[w->log.mapIdx].y;
     {
@@ -292,11 +290,11 @@ void winLogInit(WindowWork* w) {
 #ifdef VERSION_G8ME01
     w->log.badge.page = 0;
 #endif
-    for (i = 0xF0; i < 0x153; i++) {
+    for (i = BADGE_MIN; i < BADGE_MAX; i++) {
         if (itemDataTable[i].type_sort_order != -1) {
-            w->log.badgeIds[w->log.badge.num++] = i - 0xF0;
+            w->log.badgeIds[w->log.badge.num++] = i - BADGE_MIN;
 #ifdef VERSION_G8ME01
-            if (swGet(i - 0xF0 + 0x80)) {
+            if (swGet(i - BADGE_MIN + 0x80)) {
                 w->log.badge.page++;
             }
 #endif
@@ -315,11 +313,11 @@ void winLogInit(WindowWork* w) {
 #ifdef VERSION_G8ME01
     w->log.recipe.page = 0;
 #endif
-    for (i = 0xB3; i < 0xEC; i++) {
+    for (i = ITEM_SHROOM_FRY; i < ITEM_MAX; i++) {
         if (itemDataTable[i].type_sort_order != -1) {
-            w->log.recipeIds[w->log.recipe.num++] = i - 0xB3;
+            w->log.recipeIds[w->log.recipe.num++] = i - ITEM_SHROOM_FRY;
 #ifdef VERSION_G8ME01
-            if (swGet(i - 0xB3 + 0x41)) {
+            if (swGet(i - ITEM_SHROOM_FRY + 0x41)) {
                 w->log.recipe.page++;
             }
 #endif
@@ -338,15 +336,15 @@ void winLogInit(WindowWork* w) {
     for (i = 1; i < 0xD8; i++) {
         t = battleGetUnitMonosiriPtr(i);
         if (!t->tattleLogTag) continue;
-        if (evtGetValue(NULL, 0xF5DE0180) < 0x187) {
-            if (i == 0x85 || i == 0x86 || i == 0x87) continue;
+        if (evtGetValue(NULL, GSW_STORY_PROGRESS) < STG8_07_BELDAM_CONFRONTATION) {
+            if (i == UNIT_BELDAM_CHAPTER8 || i == UNIT_MARILYN_CHAPTER8 || i == UNIT_DOOPLISS_CHAPTER8) continue;
         } else {
-            if (i == 0x1F || i == 0x20 || i == 0x4D) continue;
+            if (i == UNIT_BELDAM_CHAPTER2 || i == UNIT_MARILYN_CHAPTER2 || i == UNIT_DOOPLISS_CHAPTER4_FIGHT1) continue;
         }
-        if (evtGetValue(NULL, 0xF5DE0180) < 0x190) {
-            if (i == 0x90) continue;
+        if (evtGetValue(NULL, GSW_STORY_PROGRESS) < STG8_15_GRODUS) {
+            if (i == UNIT_BOWSER_CHAPTER8) continue;
         } else {
-            if (i == 0x3F) continue;
+            if (i == UNIT_BOWSER_CHAPTER3) continue;
         }
         w->log.enemy[w->log.enemyNum].kind = enemy_monoshiri_sort_table[i];
         w->log.enemy[w->log.enemyNum++].id = i;
@@ -369,7 +367,7 @@ void winLogInit(WindowWork* w) {
     for (i = 1; i < 0xD8; i++) {
         t = battleGetUnitMonosiriPtr(i);
         if (!t->tattleLogTag) continue;
-        if (i == 0x1F || i == 0x20 || i == 0x4D || i == 0x3F) continue;
+        if (i == UNIT_BELDAM_CHAPTER2 || i == UNIT_MARILYN_CHAPTER2 || i == UNIT_DOOPLISS_CHAPTER4_FIGHT1 || i == UNIT_BOWSER_CHAPTER3) continue;
         if (swGet(i + 0x117A)) {
             w->log.enemyKnown++;
         }
@@ -576,7 +574,7 @@ s32 winLogMain(WindowWork* w) {
         y = -120.0f + w->log.scrollY + w->log.mapY;
         bx = 74.0f + w->log.scrollX;
         by = 120.0f + w->log.scrollY;
-        for (k = 0; k < 0x5D; k++) {
+        for (k = 0; k < sizeof(tubuDt) / sizeof(TubuDt); k++) {
             t = &tubuDt[k];
             if (swByteGet(0) >= t->id || tubuCheck(t->type)) { // GSW_STORY_PROGRESS
                 if (t->big) {
@@ -727,7 +725,7 @@ s32 winLogMain(WindowWork* w) {
         w->helpTgtX = w->log.badge.cursor % 28 % 7 * 56 - 140;
         w->helpTgtY = 90 - w->log.badge.cursor % 28 / 7 * 56;
         if (swGet(w->log.badgeIds[w->log.badge.cursor] + 0x80)) {
-            winMsgEntry(w, -2, itemDataTable[w->log.badgeIds[w->log.badge.cursor] + 0xF0].menu_description, itemDataTable[w->log.badgeIds[w->log.badge.cursor] + 0xF0].name);
+            winMsgEntry(w, -2, itemDataTable[w->log.badgeIds[w->log.badge.cursor] + BADGE_MIN].menu_description, itemDataTable[w->log.badgeIds[w->log.badge.cursor] + BADGE_MIN].name);
         } else {
             winMsgEntry(w, -2, "msg_menu_stone_none_help", "msg_menu_stone_none_name");
         }
@@ -786,7 +784,7 @@ s32 winLogMain(WindowWork* w) {
         w->helpTgtX = w->log.recipe.cursor % 28 % 7 * 56 - 140;
         w->helpTgtY = 90 - w->log.recipe.cursor % 28 / 7 * 56;
         if (swGet(w->log.recipeIds[w->log.recipe.cursor] + 0x41)) {
-            winMsgEntry(w, -2, itemDataTable[w->log.recipeIds[w->log.recipe.cursor] + 0xB3].menu_description, itemDataTable[w->log.recipeIds[w->log.recipe.cursor] + 0xB3].name);
+            winMsgEntry(w, -2, itemDataTable[w->log.recipeIds[w->log.recipe.cursor] + ITEM_SHROOM_FRY].menu_description, itemDataTable[w->log.recipeIds[w->log.recipe.cursor] + ITEM_SHROOM_FRY].name);
         } else {
             winMsgEntry(w, -2, "msg_menu_stone_none_help", "msg_menu_stone_none_name");
         }
@@ -974,7 +972,6 @@ void monoshiriGX(WindowWork* w, f32 x, f32 y);
 void winLogDisp(CameraId cam, void* param, s32 idx) {
     static const GXColor kW = {0xFF, 0xFF, 0xFF, 0xFF};
     WindowWork* w = param;
-    GXColor c1;
     GXColor c3;
     GXColor c2;
     Mtx m1;
@@ -984,7 +981,6 @@ void winLogDisp(CameraId cam, void* param, s32 idx) {
     s32 i;
     EffStarStoneWork* wk;
 
-    c1 = kW;
     c2 = kW;
     c3 = kW;
     x = w->menu[idx].x;
@@ -1004,6 +1000,7 @@ void winLogDisp(CameraId cam, void* param, s32 idx) {
             PSMTXMultVec(m2, &v, &v);
             PSMTXMultVec(m1, &v, &v);
             winKageGX(w, v.x + (x + w->log.stoneWinX), (v.y + (y + w->log.stoneWinY)) - 30.0f, v.z, 1.0f, (GXColor){0x00, 0x00, 0x00, 0x80});
+            // FAKE: wk is reloaded before each position store; one load changes the object
             wk = w->log.eff[i]->userdata;
             wk->position.x = v.x + (x + w->log.stoneWinX);
             wk = w->log.eff[i]->userdata;
@@ -1036,7 +1033,7 @@ void winLogDisp(CameraId cam, void* param, s32 idx) {
         winTexSet(0x95, (Vec){x + w->log.badge.iconX, y + w->log.badge.iconY, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, c2);
         if (swGet(w->log.badgeIds[w->log.badge.cursor] + 0x80)) {
             winIconInit();
-            winIconSet(itemDataTable[w->log.badgeIds[w->log.badge.cursor] + 0xF0].icon_id, (Vec){x + w->log.badge.iconX, (y + w->log.badge.iconY) - 4.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, c2);
+            winIconSet(itemDataTable[w->log.badgeIds[w->log.badge.cursor] + BADGE_MIN].icon_id, (Vec){x + w->log.badge.iconX, (y + w->log.badge.iconY) - 4.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, c2);
         }
     }
     if (w->log.recipe.x < 320.0f && w->log.recipe.y > -240.0f) {
@@ -1060,7 +1057,7 @@ void winLogDisp(CameraId cam, void* param, s32 idx) {
         winTexSet(0x96, (Vec){x + w->log.recipe.iconX, y + w->log.recipe.iconY, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, c2);
         if (swGet(w->log.recipeIds[w->log.recipe.cursor] + 0x41)) {
             winIconInit();
-            winIconSet(itemDataTable[w->log.recipeIds[w->log.recipe.cursor] + 0xB3].icon_id, (Vec){x + w->log.recipe.iconX, (y + w->log.recipe.iconY) - 10.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, c2);
+            winIconSet(itemDataTable[w->log.recipeIds[w->log.recipe.cursor] + ITEM_SHROOM_FRY].icon_id, (Vec){x + w->log.recipe.iconX, (y + w->log.recipe.iconY) - 10.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, c2);
         }
     }
     if (w->log.state == 14 || (u32)(w->log.state - 20) <= 2 || w->log.state == 1001) {
@@ -1080,13 +1077,13 @@ void winLogDisp(CameraId cam, void* param, s32 idx) {
 }
 
 const char* winGetMapTplName(void) {
-    if (swByteGet(0) < 0x13) return "map0.tpl"; // GSW_STORY_PROGRESS
-    if (swByteGet(0) < 0x41) return "map1.tpl"; // GSW_STORY_PROGRESS
-    if (swByteGet(0) < 0x79) return "map2.tpl"; // GSW_STORY_PROGRESS
-    if (swByteGet(0) < 0xAF) return "map3.tpl"; // GSW_STORY_PROGRESS
-    if (swByteGet(0) < 0xDE) return "map4.tpl"; // GSW_STORY_PROGRESS
-    if (swByteGet(0) < 0x110) return "map5.tpl"; // GSW_STORY_PROGRESS
-    if (swByteGet(0) < 0x15C) return "map6.tpl"; // GSW_STORY_PROGRESS
+    if (swByteGet(0) < STG0_16_FRANKLYS_HOUSE) return "map0.tpl"; // GSW_STORY_PROGRESS
+    if (swByteGet(0) < STG1_31_FRANKLYS_HOUSE_STG_1) return "map1.tpl"; // GSW_STORY_PROGRESS
+    if (swByteGet(0) < STG2_41_FRANKLYS_HOUSE_STG_2) return "map2.tpl"; // GSW_STORY_PROGRESS
+    if (swByteGet(0) < STG3_51_FRANKLYS_HOUSE_STG_3) return "map3.tpl"; // GSW_STORY_PROGRESS
+    if (swByteGet(0) < STG4_31_FRANKLYS_HOUSE_STG_4) return "map4.tpl"; // GSW_STORY_PROGRESS
+    if (swByteGet(0) < STG5_61_FRANKLYS_HOUSE_STG_5) return "map5.tpl"; // GSW_STORY_PROGRESS
+    if (swByteGet(0) < STG6_71_FRANKLYS_HOUSE_STG_6) return "map6.tpl"; // GSW_STORY_PROGRESS
     return "map7.tpl";
 }
 
@@ -1101,6 +1098,7 @@ void mapGX(WindowWork* w, f32 x, f32 y) {
     };
     GXColor c2;
     GXColor c0;
+    // FAKE: c2 and c0 are never read; GXColor white = {0xFF, 0xFF, 0xFF, 0xFF} alone changes the object
     GXColor white = (c2 = (c0 = (GXColor){0xFF, 0xFF, 0xFF, 0xFF}));
     s32 tex;
     Mtx m;
@@ -1129,6 +1127,7 @@ void mapGX(WindowWork* w, f32 x, f32 y) {
             t = &tubuDt[i];
             if (swByteGet(0) >= t->id || tubuCheck(t->type)) { // GSW_STORY_PROGRESS
                 if (w->log.mapSel == i) {
+                    // FAKE: the texture id goes through a spare temporary tex in a comma expression; ((gp->retraceCount >> 4) & 1) ? 0xB9 : 0xBA changes the object
                     winTexSet((tex = 0xBA, ((gp->retraceCount >> 4) & 1) ? tex = 0xB9 : 0, tex), (Vec){mx + t->x, my + t->y, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white);
                 } else {
                     winTexSet(t->big ? 0xBA : 0xB8, (Vec){mx + t->x, my + t->y, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white);
@@ -1137,25 +1136,25 @@ void mapGX(WindowWork* w, f32 x, f32 y) {
         }
         sw = swByteGet(0); // GSW_STORY_PROGRESS
         id = -1;
-        if (sw >= 0x13 && sw < 0x37) {
+        if (sw >= STG0_16_FRANKLYS_HOUSE && sw < STG1_16_HOOKTAIL) {
             id = ICON_SAC_DEKA;
             k = 0;
-        } else if (sw >= 0x41 && sw < 0x70) {
+        } else if (sw >= STG1_31_FRANKLYS_HOUSE_STG_1 && sw < STG2_25_AFTER_THE_BOSS_BATTLE) {
             id = ICON_SAC_BAKUGAME;
             k = 1;
-        } else if (sw >= 0x79 && sw < 0xA4) {
+        } else if (sw >= STG2_41_FRANKLYS_HOUSE_STG_2 && sw < STG3_32_BOSS_BATTLE) {
             id = ICON_SAC_MUKI;
             k = 2;
-        } else if (sw >= 0xAF && sw < 0xD5) {
+        } else if (sw >= STG3_51_FRANKLYS_HOUSE_STG_3 && sw < STG4_15_03_THE_RUBY_STAR) {
             id = ICON_SAC_SCISSOR;
             k = 3;
-        } else if (sw >= 0xDE && sw < 0x105) {
+        } else if (sw >= STG4_31_FRANKLYS_HOUSE_STG_4 && sw < STG5_43_X_NAUTS_RETREAT) {
             id = ICON_SAC_GENKI1;
             k = 4;
-        } else if (sw >= 0x110 && sw < 0x152) {
+        } else if (sw >= STG5_61_FRANKLYS_HOUSE_STG_5 && sw < STG6_53_THE_REAL_GARNET_STAR) {
             id = ICON_SAC_SUKI;
             k = 5;
-        } else if (sw >= 0x15C && sw < 0x175) {
+        } else if (sw >= STG6_71_FRANKLYS_HOUSE_STG_6 && sw < STG7_20_LORD_CRUMP_DEFEATED) {
             id = ICON_SAC_ZUBASTAR;
             k = 6;
         }
@@ -1242,7 +1241,7 @@ void monoshiriGX(WindowWork* w, f32 x, f32 y) {
         te = battleGetUnitMonosiriPtr(id);
         if (w->log.enemyPage * 16 + i >= w->log.enemyNum) break;
         if (swGet(id + 0x117A)) {
-            if (id == 0x4D || id == 0x87) {
+            if (id == UNIT_DOOPLISS_CHAPTER4_FIGHT1 || id == UNIT_DOOPLISS_CHAPTER8) {
                 if (evtGetValue(NULL, GSW_STORY_PROGRESS) < STG4_14_NAME_GUESSING) {
                     name = msgSearch("btl_un_hatena");
                 } else {
@@ -1331,16 +1330,16 @@ void monosiriMain(MonosiriWork* m) {
 #endif
         m->state++;
         TEXGetGXTexObjFromPalette(*(TEXPalette**)m->file1->data, &tex, 0x37);
-        m->smart = smartAlloc(GXGetTexBufferSize(GXGetTexObjWidth(&tex), GXGetTexObjHeight(&tex), 5, 0, 0), 0);
+        m->smart = smartAlloc(GXGetTexBufferSize(GXGetTexObjWidth(&tex), GXGetTexObjHeight(&tex), GX_TF_RGB5A3, GX_FALSE, 0), 0);
         break;
     case 1:
         t = battleGetUnitMonosiriPtr(m->id);
         if (!animGroupBaseAsync(t->modelName, group, NULL)) break;
-        if (m->id == 0x6B && !animGroupBaseAsync("c_n_moa_a", group, NULL)) break;
+        if (m->id == UNIT_SMORG && !animGroupBaseAsync("c_n_moa_a", group, NULL)) break;
         m->alpha += 20;
         if (m->alpha > 255) m->alpha = 255;
         if (m->pose1 == -1) {
-            if (m->id == 0x6B) {
+            if (m->id == UNIT_SMORG) {
                 m->pose1 = animPoseEntry(t->modelName, group);
                 animPoseSetAnim(m->pose1, t->poseName, 1);
                 animPoseWorldPositionEvalOn(m->pose1);
@@ -1418,10 +1417,6 @@ typedef struct MonoDatFile {
     MonoDat* entries; // 0x0
     u32 size;         // 0x4
 } MonoDatFile;
-
-
-
-
 
 void capture(CameraId camera, void* param) {
     MonosiriWork* m = param;
@@ -1510,11 +1505,12 @@ void capture(CameraId camera, void* param) {
     animPoseDrawMtx(m->pose1, t, 2, 0.0f, 1.0f);
     animPoseDrawMtx(m->pose1, t, 3, 0.0f, 1.0f);
     animPosePeraOn(m->pose1);
-    if (m->id == 0x6B) {
+    if (m->id == UNIT_SMORG) {
         gpos = *animPoseGetAnimPosePtr(m->pose1)->worldPositions;
         cnt = smartAlloc(g_moamoa_chain_num * 4, 3)->address;
         idx = smartAlloc(2000, 3)->address;
         memset(cnt, 0, g_moamoa_chain_num * 4);
+        // FAKE: reversed loop compare; i < 500 changes the object
         for (i = 0; 500 > i; i++) {
             idx[i] = cnt[i % g_moamoa_chain_num]++;
         }
@@ -1642,7 +1638,7 @@ void monosiri_disp(CameraId camera, void* param) {
         }
         id = m->id;
         te = battleGetUnitMonosiriPtr(id);
-        if (id == 0x4D || id == 0x87) {
+        if (id == UNIT_DOOPLISS_CHAPTER4_FIGHT1 || id == UNIT_DOOPLISS_CHAPTER8) {
             if (evtGetValue(NULL, GSW_STORY_PROGRESS) < STG4_14_NAME_GUESSING) {
 #ifdef VERSION_G8ME01
                 sprintf(buf, (u32)gp->language != LANGUAGE_JP ? "%d. %s" : "%d\201D%s", enemy_monoshiri_sort_table[id], msgSearch("btl_un_hatena"));

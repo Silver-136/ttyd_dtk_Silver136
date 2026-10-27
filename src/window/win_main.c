@@ -56,8 +56,6 @@ EvtWord evt_lecture_msg[];
 EvtWord evt_item_use[];
 EvtWord evt_diary_read[];
 
-//.data
-
 //.sbss
 static s32 cnt;
 TEXPalette* winTexTpl;
@@ -108,7 +106,7 @@ BOOL winCheck(void) {
     }
 
     state = wp->menuState;
-    if (state != 0 && state < 200) {
+    if (state != WIN_MENU_IDLE && state < WIN_MENU_ITEM_USE) {
         return TRUE;
     }
     return FALSE;
@@ -259,16 +257,16 @@ void winMain(void) {
                     padRumbleHardOff(i);
                 }
 #ifdef VERSION_G8ME01
-                fileAsyncf(FILE_TYPE_TPL, 0, "%s/w/%s/mail.tpl", getMarioStDvdRoot(), (u32)gp->language == LANGUAGE_JP ? "jp" : "us");
+                fileAsyncf(FILE_TYPE_TPL, NULL, "%s/w/%s/mail.tpl", getMarioStDvdRoot(), (u32)gp->language == LANGUAGE_JP ? "jp" : "us");
 #else
-                fileAsyncf(FILE_TYPE_TPL, 0, "%s/w/jp/mail.tpl", getMarioStDvdRoot());
+                fileAsyncf(FILE_TYPE_TPL, NULL, "%s/w/jp/mail.tpl", getMarioStDvdRoot());
 #endif
                 {
 #ifdef VERSION_G8ME01
-                    fileAsyncf(FILE_TYPE_TPL, 0, "%s/w/%s/%s", getMarioStDvdRoot(), (u32)gp->language == LANGUAGE_JP ? "jp" : "us", winGetMapTplName());
+                    fileAsyncf(FILE_TYPE_TPL, NULL, "%s/w/%s/%s", getMarioStDvdRoot(), (u32)gp->language == LANGUAGE_JP ? "jp" : "us", winGetMapTplName());
 #else
                     const char* name = winGetMapTplName();
-                    fileAsyncf(FILE_TYPE_TPL, 0, "%s/w/jp/%s", getMarioStDvdRoot(), name);
+                    fileAsyncf(FILE_TYPE_TPL, NULL, "%s/w/jp/%s", getMarioStDvdRoot(), name);
 #endif
                 }
                 wp->active = 0;
@@ -283,7 +281,7 @@ void winMain(void) {
                 WinLangTbl lang = winLangTbl;
                 BOOL ok;
 
-                if (fileAsyncf(FILE_TYPE_TPL, 0, "%s/w/%s/win.tpl", getMarioStDvdRoot(), lang.s[gp->language]) == 0U) {
+                if (fileAsyncf(FILE_TYPE_TPL, NULL, "%s/w/%s/win.tpl", getMarioStDvdRoot(), lang.s[gp->language]) == 0U) {
                     ok = FALSE;
                 } else {
                     wp->res = fileAllocf(FILE_TYPE_TPL, "%s/w/%s/win.tpl", getMarioStDvdRoot(), lang.s[gp->language]);
@@ -296,7 +294,7 @@ void winMain(void) {
             }
 
             case WIN_MENU_ROOT:
-                if (!marioGetPtr()->characterId) {
+                if (marioGetPtr()->characterId == CHARACTER_MARIO) {
                     switch (winRootMain(wp)) {
                         case -1:
                             wp->menuState++;
@@ -305,7 +303,7 @@ void winMain(void) {
                             wp->menuState = WIN_MENU_PARTY_LOAD;
                             break;
                         case -3:
-                            if (wp->item.useItem == 0x4E) {
+                            if (wp->item.useItem == ITEM_RAGGED_DIARY) {
                                 wp->menuState = WIN_MENU_DIARY;
                             } else {
                                 wp->menuState = WIN_MENU_ITEM_USE;
@@ -351,7 +349,7 @@ void winMain(void) {
                     MarioWork* m = marioGetPtr();
                     m->prevPartyMemberId[0] = wp->party.partyIds[wp->party.cursor];
                     wp->menuState = WIN_MENU_CLOSE;
-                } else if (animGroupBaseAsync(partyDataTbl[wp->party.partyIds[wp->party.cursor]].name, 2, 0)) {
+                } else if (animGroupBaseAsync(partyDataTbl[wp->party.partyIds[wp->party.cursor]].name, 2, NULL)) {
                     wp->menuState++;
                 }
                 break;
@@ -432,14 +430,14 @@ void winMain(void) {
 
         if (wp->menuState == WIN_MENU_ROOT) {
             switch (marioGetPtr()->characterId) {
-                case 0:
+                case CHARACTER_MARIO:
                     if (!(wp->flags & WINDOW_FLAG_LECTURE)) {
                         dispEntry(CAMERA_2D, 250.0f, 0, winDisp, NULL);
                     } else {
                         dispEntry(CAMERA_2D, 500.0f, 0, winDisp, NULL);
                     }
                     break;
-                case 2:
+                case CHARACTER_BOWSER:
                     dispEntry(CAMERA_2D, 250.0f, 0, winDispKoopa, NULL);
                     break;
             }
@@ -606,7 +604,7 @@ EVT_BEGIN(evt_item_use)
         CALL(famicom_check, LW(0))
         IF_INT_EQUAL(LW(0), 0)
             CALL_CHILD(PTR(kime_pose))
-            ELSE
+        ELSE
             CALL_CHILD(PTR(kime_pose_famicom))
         END_IF
         WAIT_MS(1000)
@@ -618,7 +616,7 @@ EVT_BEGIN(evt_item_use)
         CALL(famicom_check, LW(0))
         IF_INT_EQUAL(LW(0), 0)
             CALL_CHILD(PTR(kime_pose2))
-            ELSE
+        ELSE
             CALL_CHILD(PTR(kime_pose_famicom))
         END_IF
         CALL(itemUseFunc)
@@ -765,9 +763,7 @@ EVT_BEGIN(evt_lecture_msg)
     CALL(lecture_key_mask_off)
     RETURN
 #ifdef VERSION_G8ME01
-    OPCODE_END_SCRIPT,
-    0 // US: the object is 0x1E4 bytes (trailing zero word, the JP gap_05 data word)
-};
+EVT_END_PAD() // US: the script ends with one zero word (object 0x1E4 bytes)
 #else
 EVT_END()
 #endif
@@ -823,6 +819,7 @@ USER_FUNC(itemUseFunc) {
                 break;
             }
             effRecoveryEntry(1, item->fp_restored, mario->position.x, mario->position.y + mario->wPlayerCollisionBox.y, mario->position.z);
+            // falls through: unlike the other effect cases, the count jumps straight to 999
         case 130:
             cnt = 999;
             break;
@@ -994,12 +991,17 @@ void winFontSetR(Vec pos, Vec scale, GXColor color, const char* fmt, ...) {
     } else {
         ref = FontGetMessageWidth("９９９");
     }
-    { s32 w = ref - FontGetMessageWidth(msg); PSMTXTrans(trans, pos.x + scale.x * w, pos.y, pos.z); }
+    {
+        s32 w = ref - FontGetMessageWidth(msg);
+        PSMTXTrans(trans, pos.x + scale.x * w, pos.y, pos.z);
+    }
 #else
-
     va_start(args, fmt);
-    do { vsprintf(buf, fmt, args); } while (0);
-    { s32 w = FontGetMessageWidth("９９９") - FontGetMessageWidth(buf); PSMTXTrans(trans, pos.x + scale.x * w, pos.y, pos.z); }
+    vsprintf(buf, fmt, args);
+    {
+        s32 w = FontGetMessageWidth("９９９") - FontGetMessageWidth(buf);
+        PSMTXTrans(trans, pos.x + scale.x * w, pos.y, pos.z);
+    }
 #endif
     PSMTXScale(scl, scale.x, scale.y, scale.z);
     PSMTXConcat(trans, scl, trans);
@@ -1095,7 +1097,7 @@ void winTexInit(TEXPalette* texture) {
     GXSetCullMode(GX_CULL_NONE);
     GXSetFog(GX_FOG_NONE, 0.0f, 0.0f, 0.0f, 0.0f, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
     GXSetNumChans(0);
-    GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_REG, 0, GX_DF_NONE, GX_AF_NONE);
+    GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_REG, GX_LIGHT_NULL, GX_DF_NONE, GX_AF_NONE);
     GXSetNumTevStages(1);
     GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
     GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
@@ -1103,8 +1105,8 @@ void winTexInit(TEXPalette* texture) {
     GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_C0, GX_CC_TEXC, GX_CC_ZERO);
     GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_A0, GX_CA_TEXA, GX_CA_ZERO);
     GXSetTevSwapMode(GX_TEVSTAGE0, GX_TEV_SWAP0, GX_TEV_SWAP0);
-    GXSetNumTexGens(1u);
-    GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, 0x3C);
+    GXSetNumTexGens(1);
+    GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
     GXClearVtxDesc();
     GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
     GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
@@ -1231,8 +1233,8 @@ void winTexSetRot(u32 textureId, Vec translate, Vec scale, GXColor color, f32 ro
 void winTexInit_x2(TEXPalette* texture) {
     winTexInit(texture);
     GXSetNumTexGens(2);
-    GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, 0x3C);
-    GXSetTexCoordGen(GX_TEXCOORD1, GX_TG_MTX2x4, GX_TG_TEX0, 0x3C);
+    GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
+    GXSetTexCoordGen(GX_TEXCOORD1, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
     GXSetNumTevStages(2);
     GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
     GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
@@ -1285,7 +1287,8 @@ void winTexSet_x2(u32 textureId1, u32 textureId2, Vec translate, Vec scale, GXCo
 }
 
 void winIconInit(void) {
-    winTexInit(NULL);}
+    winTexInit(NULL);
+}
 
 void winIconGrayInit(void) {
     winTexInit(NULL);
@@ -1306,8 +1309,6 @@ void winIconGrayInit(void) {
     GXSetTevColorIn(GX_TEVSTAGE1, GX_CC_ZERO, GX_CC_C1, GX_CC_TEXC, GX_CC_CPREV);
     GXSetTevAlphaIn(GX_TEVSTAGE1, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_TEXA);
     GXSetTevSwapMode(GX_TEVSTAGE1, GX_TEV_SWAP0, GX_TEV_SWAP2);
-    if (!GX_TEVSTAGE2 && !GX_TEVSTAGE2 && !GX_TEVSTAGE2) {
-    }
     GXSetTevOrder(GX_TEVSTAGE2, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
     GXSetTevColorOp(GX_TEVSTAGE2, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
     GXSetTevAlphaOp(GX_TEVSTAGE2, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
@@ -1417,8 +1418,8 @@ void winLectureKeyMask(void) {
             case 4:
                 wp->buttonTrg = 0;
                 wp->buttonRep = 0;
-                wp->dirTrg &= 0x8000;
-                wp->dirRep &= 0x8000;
+                wp->dirTrg &= DEMO_STICK_RIGHT;
+                wp->dirRep &= DEMO_STICK_RIGHT;
                 if (wp->dirTrg || wp->dirRep) {
                     wp->lectureStep++;
                 }
@@ -1456,7 +1457,6 @@ void winLectureOn(void) {
 }
 
 BOOL winLectureCheck(void) {
-
     if ((wp->flags & WINDOW_FLAG_LECTURE) && evtCheckID(wp->lectureEvent->eventId)) {
         return TRUE;
     }

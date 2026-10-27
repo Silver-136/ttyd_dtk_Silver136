@@ -35,7 +35,7 @@
 #define UNIT_WORK_SFX_PITCH_BASE 4     // base pitch (3410) of the charge sound; evt_snd_sfx_pit gets base * slot 5 / 100
 #define UNIT_WORK_SFX_PITCH_RATE 5     // percentage 0-100 of the base pitch (ramps while the shell is held, or the AC output in Tsuranuki); 0 after the shot
 // BattleUnitPart.work slots (btlevtcmd_Get/SetPartsWork)
-#define PARTS_WORK_SPIN_DUST 0    // part 1: 1 makes the shell spin raise kemuri_test dust each turn (Tsuranuki charge)
+#define PARTS_WORK_SPIN_DUST 0    // part 1: 1 makes the shell spin raise kemuri_test dust once per revolution (Tsuranuki charge)
 #define PARTS_WORK_CHARGE_LEVEL 1 // part 1: Tsuranuki charge level 0-3 from the AC; _tsuranuki_effect_control sizes the effNokotarou effect by it
 #define PARTS_WORK_EFFECT_END 2   // part 1: 1 makes _tsuranuki_effect_control delete the charge effect and finish (it clears the flag)
 
@@ -85,14 +85,6 @@ static EvtWord attack_event[2];
 static EvtWord wait_event[6];
 BattleUnitSetup entry_koura;
 
-
-
-
-
-
-
-
-
 PoseTableEntry pose_table_nokotarou_stay[] = {
     {POSE_TYPE_FREEZE, "PNK_D_5"},
     {POSE_TYPE_STOP, "PNK_D_5"},
@@ -140,7 +132,7 @@ PoseTableEntry pose_table_nokotarou_turn[] = {
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_APPEAL_EVENT, nokotarou_appeal_event},
     {UNIT_DATA_ATTACK_AUDIENCE, attack_audience_event},
-    {4, change_party_spawn_init_event},
+    {UNIT_DATA_CHANGE_PARTY_SPAWN_INIT_EVENT, change_party_spawn_init_event},
     {UNIT_DATA_DAMAGE_TURN_EVENT, dmg_turn_event},
     {UNIT_DATA_TECH_MENU_FUNC, __makeTechMenuFunc},
     {UNIT_DATA_WAKEUP_EVENT, wakeup_event},
@@ -663,7 +655,7 @@ EVT_BEGIN(partyNokotarouAttack_FirstAttack)
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
     LABEL(99)
-    CALL(btlevtcmd_ResetFaceDirection, -2)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     CALL_CHILD(PTR(btldefaultevt_SuitoruBadgeEffect))
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
@@ -898,7 +890,7 @@ EVT_BEGIN(partyNokotarouAttack_NormalAttack)
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
     LABEL(99)
-    CALL(btlevtcmd_ResetFaceDirection, -2)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     CALL_CHILD(btldefaultevt_SuitoruBadgeEffect)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
@@ -1107,7 +1099,7 @@ EVT_BEGIN(partyNokotarouAttack_SyubibinKoura)
     LABEL(99)
     CALL(evt_audience_ap_recovery)
     CALL(btlevtcmd_InviteApInfoReport)
-    CALL(btlevtcmd_ResetFaceDirection, -2)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     CALL_CHILD(btldefaultevt_SuitoruBadgeEffect)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
@@ -1179,6 +1171,7 @@ EVT_BEGIN(partyNokotarouAttack_KouraGuard)
     CALL(btlevtcmd_StartAC, 1)
     CALL(btlevtcmd_ResultAC)
     CALL(btlevtcmd_GetResultAC, LW(6))
+    // Always true: the script between this block's END_IF and LABEL(99) is never reached.
     IF_INT_EQUAL(0, 0)
         BEGIN_SIBLING_EVENT
             WAIT_FRAMES(10)
@@ -1232,7 +1225,7 @@ EVT_BEGIN(partyNokotarouAttack_KouraGuard)
                 WAIT_FRAMES(1)
             END_LOOP
         END_SIBLING_EVENT
-        IF_BITS_SET(LW(6), 2)
+        IF_BITS_SET(LW(6), AC_RESULT_SUCCESS)
             CALL(btlevtcmd_AcGetOutputParam, 1, LW(0))
             SWITCH(LW(0))
                 CASE_GREATER_OR_EQUAL(8)
@@ -1264,6 +1257,8 @@ EVT_BEGIN(partyNokotarouAttack_KouraGuard)
         BEGIN_SIBLING_EVENT_GET_ID(LW(15))
             SET_VALUE(LW(5), 5)
             LOOP(LW(5))
+                // BUG: stores the follow state in LW(10) but tests LW(0), which still holds the target's unit id, so the
+                // loop does not wait for the slide (state 3) to end unless that id is 3.
                 CALL(btlevtcmd_GetUnitWork, LW(10), SHELL_SHIELD_WORK_FOLLOW, LW(10))
                 IF_INT_NOT_EQUAL(LW(0), 3)
                     BREAK_LOOP
@@ -1274,7 +1269,7 @@ EVT_BEGIN(partyNokotarouAttack_KouraGuard)
         END_SIBLING_EVENT
         CALL(btlevtcmd_WaitEventEnd, LW(15))
         CALL(btlevtcmd_SetUnitWork, LW(10), SHELL_SHIELD_WORK_FOLLOW, 0)
-        IF_BITS_SET(LW(6), 2)
+        IF_BITS_SET(LW(6), AC_RESULT_SUCCESS)
             CALL(btlevtcmd_AcGetOutputParam, 1, LW(0))
         ELSE
             CALL(btlevtcmd_AcGetOutputParam, 2, LW(0))
@@ -1283,7 +1278,7 @@ EVT_BEGIN(partyNokotarouAttack_KouraGuard)
         CALL(btlevtcmd_RunDataEventChild, LW(10), UNIT_DATA_POSE_TABLE_RESET_EVENT)
         CALL(btlevtcmd_AnimeChangePoseType, LW(10), 1, POSE_TYPE_NEUTRAL)
         CALL(btlevtcmd_OnPartsAttribute, LW(3), 1, kHidden)
-        CALL(btlevtcmd_OnAttribute, LW(3), (kShellShielded | kUnitNeverTargetable))
+        CALL(btlevtcmd_OnAttribute, LW(3), kShellShielded | kUnitNeverTargetable)
         CALL(btlevtcmd_StartWaitEvent, LW(3))
         CALL(_check_mario_move_count, LW(0))
         IF_INT_GREATER_OR_EQUAL(LW(0), 1)
@@ -1294,7 +1289,7 @@ EVT_BEGIN(partyNokotarouAttack_KouraGuard)
             CALL(btlevtcmd_RunDataEventChild, LW(10), UNIT_DATA_KOURA_OPEN_EVENT)
             WAIT_FRAMES(60)
         END_IF
-        CALL(btlevtcmd_ResetFaceDirection, -2)
+        CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
         CALL(evt_audience_ap_recovery)
         CALL(btlevtcmd_InviteApInfoReport)
         CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
@@ -1351,7 +1346,7 @@ EVT_BEGIN(partyNokotarouAttack_KouraGuard)
     CALL(_color_lv_set, UNIT_ID_MARIO, 1, LW(14))
     CALL(evt_audience_ap_recovery)
     CALL(btlevtcmd_InviteApInfoReport)
-    CALL(btlevtcmd_ResetFaceDirection, -2)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
@@ -1627,7 +1622,7 @@ EVT_BEGIN(partyNokotarouAttack_TsuranukiKoura)
     LABEL(99)
     CALL(evt_audience_ap_recovery)
     CALL(btlevtcmd_InviteApInfoReport)
-    CALL(btlevtcmd_ResetFaceDirection, -2)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     CALL_CHILD(btldefaultevt_SuitoruBadgeEffect)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
@@ -1884,7 +1879,7 @@ USER_FUNC(_tsuranuki_effect_control) {
         }
     }
     {
-        f32 size = (2.0f + 0.006f * event->userdata[1]);
+        f32 size = 2.0f + 0.006f * event->userdata[1];
 
         size *= unit->mSizeMultiplier;
         effect = event->userdatap[0];

@@ -86,7 +86,6 @@ void winMarioMain2();
 void winBadgeExit();
 void winRootBgDrawDisp(s32 unused, WindowWork* bg);
 void winRootBgCaptureDisp(s32 unused, WindowWork* bg);
-double fabs(double);
 
 #define WIN_ROOT_ADD_TAB(n)             \
     {                                   \
@@ -147,7 +146,7 @@ static inline void winRootTabMain(WindowWork* w) {
         case 13:
             break;
         }
-        }
+    }
 }
 
 s32 winRootMain(WindowWork* w) {
@@ -186,7 +185,7 @@ s32 winRootMain(WindowWork* w) {
         w->msgState = 0;
         w->msgOfsX = w->msgOfsY = 1000.0f;
         w->msg = NULL;
-        w->msgName = 0;
+        w->msgName = NULL;
         w->lastMsg = NULL;
         winMarioInit(w);
         winPartyInit(w);
@@ -198,7 +197,7 @@ s32 winRootMain(WindowWork* w) {
         w->helpTgtY = 185.0f;
         w->sortPosX = w->sortTgtX = -1000.0f;
         w->sortPosY = w->sortTgtY = -1000.0f;
-        winMsgEntry(w, 0, w->tab[w->tabSel].msg, 0);
+        winMsgEntry(w, 0, w->tab[w->tabSel].msg, NULL);
         w->active = 10;
         switch (w->menuSel) {
         case 1:
@@ -279,7 +278,7 @@ s32 winRootMain(WindowWork* w) {
             w->menu[0].state = 30;
             w->menu[0].id = w->tab[w->tabSel].id;
             w->helpTgtX = w->tabSel * 105 - 270;
-            winMsgEntry(w, 0, w->tab[w->tabSel].msg, 0);
+            winMsgEntry(w, 0, w->tab[w->tabSel].msg, NULL);
 #ifdef VERSION_G8ME01
         } else if (w->dirRep & DEMO_STICK_RIGHT && w->menu[0].state == 100) {
 #else
@@ -298,7 +297,7 @@ s32 winRootMain(WindowWork* w) {
             w->menu[0].state = 20;
             w->menu[0].id = w->tab[w->tabSel].id;
             w->helpTgtX = w->tabSel * 105 - 270;
-            winMsgEntry(w, 0, w->tab[w->tabSel].msg, 0);
+            winMsgEntry(w, 0, w->tab[w->tabSel].msg, NULL);
         }
         break;
     case 100:
@@ -339,7 +338,7 @@ s32 winRootMain(WindowWork* w) {
             w->helpTgtX = w->tabSel * 105 - 270;
             w->helpTgtY = 185.0f;
             w->active = 10;
-            winMsgEntry(w, 0, w->tab[w->tabSel].msg, 0);
+            winMsgEntry(w, 0, w->tab[w->tabSel].msg, NULL);
             w->flags &= ~WINDOW_FLAG_DIRECT_OPEN;
         } else if (ret == -2) {
             w->active = 20;
@@ -416,6 +415,8 @@ s32 winRootMain(WindowWork* w) {
     return 0;
 }
 
+// FAKE: stand-in that nothing calls; it only places 185.0f and 1000.0f in this object's constant pool.
+// Removing it changes the object.
 void winRootStrippedPool(f32* f) {
     f[0] = 185.0f;
     f[1] = 1000.0f;
@@ -437,6 +438,8 @@ void winRootDisp(s32 camId, WindowWork* wp) {
             if (i > 0 && wp->menu[i - 1].state == 100) {
                 continue;
             }
+            // FAKE: hand-written unsigned range test for the closing states 10 and 11;
+            // state == 10 || state == 11 changes the object
             if (i > 0 && (u32)(state - 10) <= 1) {
                 continue;
             }
@@ -486,7 +489,6 @@ static void winTabDisp(WindowWork* wp) {
 }
 
 void winBgMain(WindowWork* wp) {
-
     s32 i;
 
     for (i = 0; i < 5; i++) {
@@ -717,9 +719,6 @@ void winMsgMain(WindowWork* wp) {
 }
 
 void windowDispGX_Waku_col(u16 gxTexMapID, GXColor color, f32 x, f32 y, f32 width, f32 height, f32 curve);
-void winIconInit(void);
-void winFontInit(void);
-
 void winMsgDisp(WindowWork* wp, f32 x, f32 y) {
     GXColor white = { 0xFF, 0xFF, 0xFF, 0xFF };
     GXColor black = { 0x00, 0x00, 0x00, 0xFF };
@@ -737,6 +736,7 @@ void winMsgDisp(WindowWork* wp, f32 x, f32 y) {
     bx = (10.0f + (x - 250.0f)) - 10.0f;
     by = 40.0f + y;
     windowDispGX_Waku_col(0, waku, bx, by, 500.0f, 80.0f, 20.0f);
+    // FAKE: the != 0 test is redundant; wp->msgItem > 0 alone changes the object
     if (wp->msgItem != 0 && wp->msgItem > 0) {
         winTexInit((TEXPalette*)*wp->res->data);
         winTexSet(0x25, (Vec){ bx, by, 0.0f }, (Vec){ 1.0f, 1.0f, 1.0f }, white);
@@ -890,7 +890,6 @@ void winKirinukiGX(WindowWork* wp, s32 type, f32 x, f32 y, f32 w, f32 h) {
 #ifdef VERSION_G8ME01
         // US: the tab under the frame is sized to the "remaining" label
         f32 nk = 0.5f * FontGetMessageWidth(msgSearch("msg_menu_badge_nokori")) + 60.0f;
-
 #endif
         winRootTexQuad(wp, 0xB, x, y, 8, 8);
         winRootTexQuad(wp, 0x9, x + 8, y, w - 8 - 8, 8);
@@ -997,8 +996,7 @@ void winNameGX(WindowWork* wp, s32 type, f32 x, f32 y, f32 w, f32 h) {
     }
 }
 
-void winFontInit(void);
-void* L_msgGetWork(void);
+MessageWork* L_msgGetWork(void);
 
 static inline void winBookTex(WindowWork* w, s32 id, f32 x, f32 y, f32 width, f32 height) {
     GXTexObj obj;
@@ -1132,7 +1130,7 @@ void winHalfBookGX(TEXPalette* tpl, s32 a, f32 x, f32 y) {
 
     GXSetFog(GX_FOG_NONE, 0.0f, 0.0f, 0.0f, 0.0f, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
     GXSetNumChans(1);
-    GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_REG, 0, GX_DF_NONE, GX_AF_NONE);
+    GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_REG, GX_LIGHT_NULL, GX_DF_NONE, GX_AF_NONE);
     GXSetNumTevStages(1);
     GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
     GXSetTevOp(GX_TEVSTAGE0, GX_MODULATE);
@@ -1223,9 +1221,6 @@ void winMailGX(WindowWork* wp, f32 x, f32 y) {
     GXSetScissor(x + 304 + 32, 240 - y + 32 + 1, 344, 200);
 }
 
-void winIconInit(void);
-BOOL swGet(s32 id);
-
 void winHakoGX(WindowWork* w, s32 a, f32 x, f32 y) {
     u32 c0;
     u32 c1;
@@ -1277,6 +1272,8 @@ void winHakoGX(WindowWork* w, s32 a, f32 x, f32 y) {
     ofs = a * 13;
     for (p = 0; p < (num + 27) / 28; p++) {
         py = p * 232;
+        // BUG: j is read before any loop sets it: uninitialized on the first page, afterwards whatever
+        // the tile loop below left (4).
         if (scroll + (y - j * 56) - py > 400.0f || scroll + (y - j * 56) - py < -400.0f) {
             continue;
         }
@@ -1375,7 +1372,7 @@ void winHakoGX(WindowWork* w, s32 a, f32 x, f32 y) {
                     if (!swGet(w->log.badgeIds[n] + 0x80)) {
                         continue;
                     }
-                    icon = itemDataTable[w->log.badgeIds[n] + 0xF0].icon_id;
+                    icon = itemDataTable[w->log.badgeIds[n] + BADGE_MIN].icon_id;
                 } else {
                     if (!swGet(w->log.recipeIds[n] + 0x41)) {
                         continue;
@@ -1448,7 +1445,7 @@ void winWazaGX(WindowWork* wp, s32 a, f32 x, f32 y, f32 w, f32 h) {
     GXSetZMode(GX_FALSE, GX_ALWAYS, GX_FALSE);
     GXSetFog(GX_FOG_NONE, 0.0f, 0.0f, 0.0f, 0.0f, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
     GXSetNumChans(0);
-    GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_REG, 0, GX_DF_NONE, GX_AF_NONE);
+    GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_REG, GX_LIGHT_NULL, GX_DF_NONE, GX_AF_NONE);
     GXSetNumTevStages(1);
     GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
     GXSetTevOp(GX_TEVSTAGE0, GX_REPLACE);
@@ -1651,9 +1648,9 @@ s32 N_compare_func4_2_r(const void* a, const void* b) {
 
 void sort_4_1_func(WindowWork* wp) {
     if (!wp->sortRev) {
-        qqsort(wp->badge.list, wp->badge.count, 12, N_compare_func4_1);
+        qqsort(wp->badge.list, wp->badge.count, sizeof(WinBadgeEnt), N_compare_func4_1);
     } else {
-        qqsort(wp->badge.list, wp->badge.count, 12, N_compare_func4_1_r);
+        qqsort(wp->badge.list, wp->badge.count, sizeof(WinBadgeEnt), N_compare_func4_1_r);
     }
     wp->sortRev = 1 - wp->sortRev;
     wp->badge.sel[1] = 0;
@@ -1662,9 +1659,9 @@ void sort_4_1_func(WindowWork* wp) {
 
 void sort_4_2_func(WindowWork* wp) {
     if (!wp->sortRev) {
-        qqsort(wp->badge.list, wp->badge.count, 12, N_compare_func4_2);
+        qqsort(wp->badge.list, wp->badge.count, sizeof(WinBadgeEnt), N_compare_func4_2);
     } else {
-        qqsort(wp->badge.list, wp->badge.count, 12, N_compare_func4_2_r);
+        qqsort(wp->badge.list, wp->badge.count, sizeof(WinBadgeEnt), N_compare_func4_2_r);
     }
     wp->sortRev = 1 - wp->sortRev;
     wp->badge.sel[1] = 0;
@@ -1707,6 +1704,7 @@ void sort_4_3_func(WindowWork* wp) {
                 db = &itemDataTable[(s16)wp->badge.list[j].id];
                 swap = FALSE;
 
+                // FAKE: re-indexes itemDataTable instead of using db (same pointer); db->... changes the object
                 if (da->bp_cost < (&itemDataTable[(s16)wp->badge.list[j].id])->bp_cost) {
                     swap = TRUE;
                 } else if (da->bp_cost == (&itemDataTable[(s16)wp->badge.list[j].id])->bp_cost) {
@@ -1730,8 +1728,8 @@ void sort_4_3_func(WindowWork* wp) {
 s32 compare_func5_1(const void* a, const void* b) {
     char buf1[128];
     char buf2[128];
-    s16 ia = *(s16*)a + 0xF0;
-    s16 ib = *(s16*)b + 0xF0;
+    s16 ia = *(s16*)a + BADGE_MIN;
+    s16 ib = *(s16*)b + BADGE_MIN;
 
     pouchHiraToKata(msgSearch(itemDataTable[ia].name), buf1);
     pouchHiraToKata(msgSearch(itemDataTable[ib].name), buf2);
@@ -1741,8 +1739,8 @@ s32 compare_func5_1(const void* a, const void* b) {
 s32 compare_func5_1_r(const void* a, const void* b) {
     char buf1[128];
     char buf2[128];
-    s16 ia = *(s16*)a + 0xF0;
-    s16 ib = *(s16*)b + 0xF0;
+    s16 ia = *(s16*)a + BADGE_MIN;
+    s16 ib = *(s16*)b + BADGE_MIN;
 
     pouchHiraToKata(msgSearch(itemDataTable[ia].name), buf1);
     pouchHiraToKata(msgSearch(itemDataTable[ib].name), buf2);
@@ -1750,8 +1748,8 @@ s32 compare_func5_1_r(const void* a, const void* b) {
 }
 
 s32 compare_func5_2(const void* a, const void* b) {
-    s16 ia = itemDataTable[(s16)(*(s16*)a + 0xF0)].type_sort_order;
-    s16 ib = itemDataTable[(s16)(*(s16*)b + 0xF0)].type_sort_order;
+    s16 ia = itemDataTable[(s16)(*(s16*)a + BADGE_MIN)].type_sort_order;
+    s16 ib = itemDataTable[(s16)(*(s16*)b + BADGE_MIN)].type_sort_order;
 
     if (ia > ib) {
         return 1;
@@ -1762,8 +1760,8 @@ s32 compare_func5_2(const void* a, const void* b) {
 }
 
 s32 compare_func5_2_r(const void* a, const void* b) {
-    s16 ia = itemDataTable[(s16)(*(s16*)a + 0xF0)].type_sort_order;
-    s16 ib = itemDataTable[(s16)(*(s16*)b + 0xF0)].type_sort_order;
+    s16 ia = itemDataTable[(s16)(*(s16*)a + BADGE_MIN)].type_sort_order;
+    s16 ib = itemDataTable[(s16)(*(s16*)b + BADGE_MIN)].type_sort_order;
 
     if (ia < ib) {
         return 1;
@@ -1775,9 +1773,9 @@ s32 compare_func5_2_r(const void* a, const void* b) {
 
 void sort_5_1_func(WindowWork* wp) {
     if (!wp->sortRev) {
-        qqsort(wp->log.badgeIds, wp->log.badge.num, 2, compare_func5_1);
+        qqsort(wp->log.badgeIds, wp->log.badge.num, sizeof(s16), compare_func5_1);
     } else {
-        qqsort(wp->log.badgeIds, wp->log.badge.num, 2, compare_func5_1_r);
+        qqsort(wp->log.badgeIds, wp->log.badge.num, sizeof(s16), compare_func5_1_r);
     }
     wp->sortRev = 1 - wp->sortRev;
     wp->log.badge.cursor = 0;
@@ -1786,9 +1784,9 @@ void sort_5_1_func(WindowWork* wp) {
 
 void sort_5_2_func(WindowWork* wp) {
     if (!wp->sortRev) {
-        qqsort(wp->log.badgeIds, wp->log.badge.num, 2, compare_func5_2);
+        qqsort(wp->log.badgeIds, wp->log.badge.num, sizeof(s16), compare_func5_2);
     } else {
-        qqsort(wp->log.badgeIds, wp->log.badge.num, 2, compare_func5_2_r);
+        qqsort(wp->log.badgeIds, wp->log.badge.num, sizeof(s16), compare_func5_2_r);
     }
     wp->sortRev = 1 - wp->sortRev;
     wp->log.badge.cursor = 0;
@@ -1796,7 +1794,6 @@ void sort_5_2_func(WindowWork* wp) {
 }
 
 void sort_5_3_func(WindowWork* wp) {
-
     if (!wp->sortRev) {
         ItemData* db;
         ItemData* da;
@@ -1809,8 +1806,8 @@ void sort_5_3_func(WindowWork* wp) {
             for (j = i + 1; j < wp->log.badge.num; ++j) {
                 a = wp->log.badgeIds[i];
                 b = wp->log.badgeIds[j];
-                da = &itemDataTable[(s16)(a + 0xF0)];
-                db = &itemDataTable[(s16)(b + 0xF0)];
+                da = &itemDataTable[(s16)(a + BADGE_MIN)];
+                db = &itemDataTable[(s16)(b + BADGE_MIN)];
                 swap = FALSE;
 
                 if (da->bp_cost > db->bp_cost) {
@@ -1838,8 +1835,8 @@ void sort_5_3_func(WindowWork* wp) {
             for (j = i + 1; j < wp->log.badge.num; ++j) {
                 a = wp->log.badgeIds[i];
                 b = wp->log.badgeIds[j];
-                da = &itemDataTable[(s16)(a + 0xF0)];
-                db = &itemDataTable[(s16)(b + 0xF0)];
+                da = &itemDataTable[(s16)(a + BADGE_MIN)];
+                db = &itemDataTable[(s16)(b + BADGE_MIN)];
                 swap = FALSE;
 
                 if (da->bp_cost < db->bp_cost) {
@@ -1909,9 +1906,9 @@ s32 compare_func6_2_r(const void* a, const void* b) {
 
 void sort_6_1_func(WindowWork* wp) {
     if (!wp->sortRev) {
-        qqsort(wp->log.recipeIds, wp->log.recipe.num, 2, compare_func6_1);
+        qqsort(wp->log.recipeIds, wp->log.recipe.num, sizeof(s16), compare_func6_1);
     } else {
-        qqsort(wp->log.recipeIds, wp->log.recipe.num, 2, compare_func6_1_r);
+        qqsort(wp->log.recipeIds, wp->log.recipe.num, sizeof(s16), compare_func6_1_r);
     }
     wp->sortRev = 1 - wp->sortRev;
     wp->log.recipe.cursor = 0;
@@ -1920,9 +1917,9 @@ void sort_6_1_func(WindowWork* wp) {
 
 void sort_6_2_func(WindowWork* wp) {
     if (!wp->sortRev) {
-        qqsort(wp->log.recipeIds, wp->log.recipe.num, 2, compare_func6_2);
+        qqsort(wp->log.recipeIds, wp->log.recipe.num, sizeof(s16), compare_func6_2);
     } else {
-        qqsort(wp->log.recipeIds, wp->log.recipe.num, 2, compare_func6_2_r);
+        qqsort(wp->log.recipeIds, wp->log.recipe.num, sizeof(s16), compare_func6_2_r);
     }
     wp->sortRev = 1 - wp->sortRev;
     wp->log.recipe.cursor = 0;
@@ -1949,9 +1946,9 @@ s32 compare_func1_r(const void* a, const void* b) {
 
 void sort_7_1_func(WindowWork* wp) {
     if (!wp->sortRev) {
-        qqsort(wp->log.enemy, wp->log.enemyNum, 2, compare_func1);
+        qqsort(wp->log.enemy, wp->log.enemyNum, sizeof(WinSortEnt), compare_func1);
     } else {
-        qqsort(wp->log.enemy, wp->log.enemyNum, 2, compare_func1_r);
+        qqsort(wp->log.enemy, wp->log.enemyNum, sizeof(WinSortEnt), compare_func1_r);
     }
     wp->sortRev = 1 - wp->sortRev;
     wp->log.enemySel = 0;
@@ -2008,11 +2005,11 @@ s32 compare_func2_r(const void* a, const void* b) {
 
 void sort_7_2_func(WindowWork* wp) {
     if (!wp->sortRev) {
-        qqsort(wp->log.enemy, wp->log.enemyNum, 2, compare_func1);
-        qqsort(wp->log.enemy, wp->log.enemyNum, 2, compare_func2);
+        qqsort(wp->log.enemy, wp->log.enemyNum, sizeof(WinSortEnt), compare_func1);
+        qqsort(wp->log.enemy, wp->log.enemyNum, sizeof(WinSortEnt), compare_func2);
     } else {
-        qqsort(wp->log.enemy, wp->log.enemyNum, 2, compare_func1_r);
-        qqsort(wp->log.enemy, wp->log.enemyNum, 2, compare_func2_r);
+        qqsort(wp->log.enemy, wp->log.enemyNum, sizeof(WinSortEnt), compare_func1_r);
+        qqsort(wp->log.enemy, wp->log.enemyNum, sizeof(WinSortEnt), compare_func2_r);
     }
     wp->sortRev = 1 - wp->sortRev;
     wp->log.enemySel = 0;
@@ -2027,14 +2024,14 @@ s32 compare_func3(const void* a, const void* b) {
 
     pouchHiraToKata(msgSearch(ta->enemyTag), buf1);
     pouchHiraToKata(msgSearch(tb->enemyTag), buf2);
-    if (((WinSortEnt*)a)->id == 0x4D || ((WinSortEnt*)a)->id == 0x87) {
+    if (((WinSortEnt*)a)->id == UNIT_DOOPLISS_CHAPTER4_FIGHT1 || ((WinSortEnt*)a)->id == UNIT_DOOPLISS_CHAPTER8) {
         if (evtGetValue(NULL, GSW_STORY_PROGRESS) < STG4_14_NAME_GUESSING) {
             pouchHiraToKata(msgSearch("btl_un_hatena"), buf1);
         } else {
             pouchHiraToKata(msgSearch("btl_un_rampell"), buf1);
         }
     }
-    if (((WinSortEnt*)b)->id == 0x4D || ((WinSortEnt*)b)->id == 0x87) {
+    if (((WinSortEnt*)b)->id == UNIT_DOOPLISS_CHAPTER4_FIGHT1 || ((WinSortEnt*)b)->id == UNIT_DOOPLISS_CHAPTER8) {
         if (evtGetValue(NULL, GSW_STORY_PROGRESS) < STG4_14_NAME_GUESSING) {
             pouchHiraToKata(msgSearch("btl_un_hatena"), buf2);
         } else {
@@ -2052,14 +2049,14 @@ s32 compare_func3_r(const void* a, const void* b) {
 
     pouchHiraToKata(msgSearch(ta->enemyTag), buf1);
     pouchHiraToKata(msgSearch(tb->enemyTag), buf2);
-    if (((WinSortEnt*)a)->id == 0x4D || ((WinSortEnt*)a)->id == 0x87) {
+    if (((WinSortEnt*)a)->id == UNIT_DOOPLISS_CHAPTER4_FIGHT1 || ((WinSortEnt*)a)->id == UNIT_DOOPLISS_CHAPTER8) {
         if (evtGetValue(NULL, GSW_STORY_PROGRESS) < STG4_14_NAME_GUESSING) {
             pouchHiraToKata(msgSearch("btl_un_hatena"), buf1);
         } else {
             pouchHiraToKata(msgSearch("btl_un_rampell"), buf1);
         }
     }
-    if (((WinSortEnt*)b)->id == 0x4D || ((WinSortEnt*)b)->id == 0x87) {
+    if (((WinSortEnt*)b)->id == UNIT_DOOPLISS_CHAPTER4_FIGHT1 || ((WinSortEnt*)b)->id == UNIT_DOOPLISS_CHAPTER8) {
         if (evtGetValue(NULL, GSW_STORY_PROGRESS) < STG4_14_NAME_GUESSING) {
             pouchHiraToKata(msgSearch("btl_un_hatena"), buf2);
         } else {
@@ -2071,11 +2068,11 @@ s32 compare_func3_r(const void* a, const void* b) {
 
 void sort_7_3_func(WindowWork* wp) {
     if (!wp->sortRev) {
-        qqsort(wp->log.enemy, wp->log.enemyNum, 2, compare_func1);
-        qqsort(wp->log.enemy, wp->log.enemyNum, 2, compare_func3);
+        qqsort(wp->log.enemy, wp->log.enemyNum, sizeof(WinSortEnt), compare_func1);
+        qqsort(wp->log.enemy, wp->log.enemyNum, sizeof(WinSortEnt), compare_func3);
     } else {
-        qqsort(wp->log.enemy, wp->log.enemyNum, 2, compare_func1_r);
-        qqsort(wp->log.enemy, wp->log.enemyNum, 2, compare_func3_r);
+        qqsort(wp->log.enemy, wp->log.enemyNum, sizeof(WinSortEnt), compare_func1_r);
+        qqsort(wp->log.enemy, wp->log.enemyNum, sizeof(WinSortEnt), compare_func3_r);
     }
     wp->sortRev = 1 - wp->sortRev;
     wp->log.enemySel = 0;
@@ -2102,9 +2099,9 @@ s32 compare_func4_r(const void* a, const void* b) {
 
 void sort_8_1_func(WindowWork* wp) {
     if (!wp->sortRev) {
-        qqsort(wp->item.mail, wp->item.mailNum, 2, compare_func4);
+        qqsort(wp->item.mail, wp->item.mailNum, sizeof(WinSortEnt), compare_func4);
     } else {
-        qqsort(wp->item.mail, wp->item.mailNum, 2, compare_func4_r);
+        qqsort(wp->item.mail, wp->item.mailNum, sizeof(WinSortEnt), compare_func4_r);
     }
     wp->sortRev = 1 - wp->sortRev;
     wp->item.mailSel = 0;
@@ -2131,9 +2128,9 @@ s32 compare_func5_r(const void* a, const void* b) {
 
 void sort_8_2_func(WindowWork* wp) {
     if (!wp->sortRev) {
-        qqsort(wp->item.mail, wp->item.mailNum, 2, compare_func5);
+        qqsort(wp->item.mail, wp->item.mailNum, sizeof(WinSortEnt), compare_func5);
     } else {
-        qqsort(wp->item.mail, wp->item.mailNum, 2, compare_func5_r);
+        qqsort(wp->item.mail, wp->item.mailNum, sizeof(WinSortEnt), compare_func5_r);
     }
     wp->sortRev = 1 - wp->sortRev;
     wp->item.mailSel = 0;
@@ -2149,7 +2146,7 @@ void winSortMain(WindowWork* wp) {
         rep = 0;
     }
 #ifdef VERSION_G8ME01
-    // US: the 0x1000 button closes the sort menu first, without a sound
+    // US: Start is checked before B, the stick and A, so it closes the sort menu even when one of them is pressed too
     if (trg & PAD_BUTTON_START) {
         wp->sortActive = 0;
         wp->sortTgtX = -600.0f;
@@ -2184,14 +2181,10 @@ void winSortMain(WindowWork* wp) {
     if (wp->sortActive) {
         wp->helpTgtX = 30.0f + wp->sortTgtX;
         wp->helpTgtY = (wp->sortTgtY - 40.0f) - (f32)(wp->sortSel * 40);
-        winMsgEntry(wp, 0, sort_data[wp->sortType][wp->sortSel].name, 0);
+        winMsgEntry(wp, 0, sort_data[wp->sortType][wp->sortSel].name, NULL);
     }
     wp->sortPosX += (wp->sortTgtX - wp->sortPosX) / 8.0f;
     wp->sortPosY += (wp->sortTgtY - wp->sortPosY) / 8.0f;
-}
-
-static inline double winSortFabs(double x) {
-    return __fabs(x);
 }
 
 static inline void winSortTex(WindowWork* wp, s32 id, f32 x, f32 y, f32 w, f32 h) {
@@ -2203,7 +2196,7 @@ static inline void winSortTex(WindowWork* wp, s32 id, f32 x, f32 y, f32 w, f32 h
     GXLoadTexObj(&obj, GX_TEXMAP0);
     GXSetNumTexGens(1);
     GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX0, GX_FALSE, GX_PTIDENTITY);
-    PSMTXScale(m, (f32)winSortFabs(w) / (f32)GXGetTexObjWidth(&obj), (f32)winSortFabs(h) / (f32)GXGetTexObjHeight(&obj),
+    PSMTXScale(m, (f32)fabs_d(w) / (f32)GXGetTexObjWidth(&obj), (f32)fabs_d(h) / (f32)GXGetTexObjHeight(&obj),
                1.0f);
     GXLoadTexMtxImm(m, GX_TEXMTX0, GX_MTX2x4);
     GXBegin(GX_QUADS, GX_VTXFMT0, 4);
@@ -2413,7 +2406,7 @@ void winMailDisp(WindowWork* wp) {
 
     if (wp->item.mailX < 320.0f && wp->item.mailY > -240.0f) {
         winMailGX(wp, wp->item.mailX, wp->item.mailY);
-        if (wp->item.state != 0xCA) {
+        if (wp->item.state != 202) {
             for (i = 0; i < wp->item.mailNum; i++) {
                 GXColor white;
 
@@ -2434,6 +2427,7 @@ void winMailDisp(WindowWork* wp) {
                 winTexInit((TEXPalette*)*wp->res->data);
                 winTexSet(0x77, (Vec){ 4.0f + (208.0f + wp->item.mailX), wp->item.mailScroll + ((wp->item.mailY - 56.0f) - (f32)(i * 40)), 0.0f }, (Vec){ 1.0f, 1.0f, 1.0f }, col);
                 white = (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF };
+                // FAKE: the texture id goes through void* casts; pouchCheckMail(id) == 2 ? 0x5E : 0x5D changes the object
                 winTexSet((u32)((s32)pouchCheckMail(id) == 2 ? (void*)0x5E : (void*)0x5D), (Vec){ 72.0f + wp->item.mailX, wp->item.mailScroll + (((wp->item.mailY - 56.0f) - (f32)(i * 40)) - 3.0f), 0.0f }, (Vec){ 1.0f, 1.0f, 1.0f }, white);
                 winTexSet(0x65 + (kind + 1) / 10, (Vec){ 2.0f + (88.0f + wp->item.mailX), wp->item.mailScroll + (((wp->item.mailY - 56.0f) - (f32)(i * 40)) - 3.0f), 0.0f }, (Vec){ 1.0f, 1.0f, 1.0f }, white);
                 winTexSet(0x65 + (kind + 1) % 10, (Vec){ 2.0f + (104.0f + wp->item.mailX), wp->item.mailScroll + (((wp->item.mailY - 56.0f) - (f32)(i * 40)) - 3.0f), 0.0f }, (Vec){ 1.0f, 1.0f, 1.0f }, white);

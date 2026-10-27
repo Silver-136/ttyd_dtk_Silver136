@@ -26,9 +26,6 @@
 #include "evt/evt_sub.h"
 #include "battle/battle_damage.h"
 
-
-
-
 typedef struct YoshiGundanPart YoshiGundanPart;
 void _btlYoshiDisp(CameraId camera, YoshiGundanPart* p);
 void _yoshi_slide_move_sound(BattleUnit* unit, PoseSoundTiming* s);
@@ -70,61 +67,13 @@ typedef struct YoshiGundanWork {
 #define PARTS_WORK_LAST_AT_TARGET 6 // -1 while sorting; 1 the last egg aimed at its target (CheckDamage with the final-hit flag), 0 an earlier egg at the same target (no final-hit flag), 2 the last egg after an earlier one already hit (pre-checked without evasion)
 #define PARTS_WORK_EVENT 7          // id of the egg's _egg_attack_event sibling event (0 none); the end of the attack waits for it and clears it
 
-
 USER_FUNC(_attack_aud);
 USER_FUNC(_get_attack_aud_no);
-USER_FUNC(btlevtcmd_AddPartsRotate);
-USER_FUNC(btlevtcmd_AnimeChangePose);
-USER_FUNC(btlevtcmd_AnimeChangePoseFromTable);
-USER_FUNC(btlevtcmd_AnimeChangePoseType);
-USER_FUNC(btlevtcmd_AnimeSetPoseTable);
-USER_FUNC(btlevtcmd_AnimeWaitPlayComplete);
-USER_FUNC(btlevtcmd_AudienceAppeal);
-USER_FUNC(btlevtcmd_CalculateFaceDirection);
-USER_FUNC(btlevtcmd_ChangeFaceDirection);
-USER_FUNC(btlevtcmd_CheckDamage);
-USER_FUNC(btlevtcmd_DivePartsPosition);
-USER_FUNC(btlevtcmd_FaceDirectionSub);
-USER_FUNC(btlevtcmd_GetHitPos);
-USER_FUNC(btlevtcmd_GetHomePos);
-USER_FUNC(btlevtcmd_GetMoveFrame);
-USER_FUNC(btlevtcmd_GetPartsWork);
-USER_FUNC(btlevtcmd_GetPos);
-USER_FUNC(btlevtcmd_GetStatusMg);
-USER_FUNC(btlevtcmd_MovePosition);
-USER_FUNC(btlevtcmd_OffPartsAttribute);
-USER_FUNC(btlevtcmd_OnPartsAttribute);
-USER_FUNC(btlevtcmd_ResetFaceDirection);
-USER_FUNC(btlevtcmd_RunDataEventChild);
-USER_FUNC(btlevtcmd_SetEventAttack);
-USER_FUNC(btlevtcmd_SetEventConfusion);
-USER_FUNC(btlevtcmd_SetEventDamage);
 USER_FUNC(btlevtcmd_SetEventEntry);
-USER_FUNC(btlevtcmd_SetEventWait);
 USER_FUNC(btlevtcmd_SetJumpSound);
-USER_FUNC(btlevtcmd_SetMoveSoundDataWork);
-USER_FUNC(btlevtcmd_SetMoveSpeed);
-USER_FUNC(btlevtcmd_SetPartsFallAccel);
-USER_FUNC(btlevtcmd_SetPartsMoveSpeed);
-USER_FUNC(btlevtcmd_SetPartsPos);
-USER_FUNC(btlevtcmd_SetPartsRotateOffset);
-USER_FUNC(btlevtcmd_SetPartsWork);
-USER_FUNC(btlevtcmd_SetPos);
-USER_FUNC(btlevtcmd_SetRotate);
-USER_FUNC(btlevtcmd_SetRunSound);
-USER_FUNC(btlevtcmd_SetUnitWork);
-USER_FUNC(btlevtcmd_SetWalkSound);
-USER_FUNC(btlevtcmd_StartAvoid);
-USER_FUNC(btlevtcmd_StartWaitEvent);
-USER_FUNC(btlevtcmd_WaitEventEnd);
-USER_FUNC(evt_btl_camera_set_homing_unit_audience);
-USER_FUNC(evt_btl_camera_set_mode);
-USER_FUNC(evt_btl_camera_set_moveSpeedLv);
-USER_FUNC(evt_btl_camera_set_zoom);
 USER_FUNC(evt_eff);
 USER_FUNC(evt_snd_sfxon);
 USER_FUNC(evt_snd_sfxon_3d);
-USER_FUNC(evt_sub_random);
 USER_FUNC(yoshi_original_color_anim_set);
 USER_FUNC(_gundan_yoshi_run_effect);
 USER_FUNC(_wait_yoshig_complete);
@@ -168,15 +117,6 @@ static EvtWord attack_audience_event[290];
 static EvtWord attack_event[2];
 static EvtWord wait_event[6];
 u8 _yoshig_tpl_no_tbl[8] __attribute__((aligned(4)));
-
-
-
-
-
-
-
-
-
 
 PoseTableEntry pose_table_yoshi_stay[] = {
     {POSE_TYPE_FREEZE, "PYS_D_5"},
@@ -356,7 +296,7 @@ EVT_END()
 
 static EVT_BEGIN(damage_event)
     CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, 0, 0)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL_CHILD(PTR(btldefaultevt_Damage))
     RETURN
@@ -584,7 +524,7 @@ BattleWeapon partyWeapon_YoshiNomikomi_Involved = {
     NULL, // acHelpMsg
     SPECIAL_PIERCE_DEFENSE | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
-    4, // targetWeightFlags
+    TARGET_WEIGHT_FRONT, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
@@ -992,7 +932,7 @@ EVT_BEGIN(partyYoshiAttack_NormalAttack)
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
     LABEL(99)
-    CALL(btlevtcmd_ResetFaceDirection, -2)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     CALL_CHILD(btldefaultevt_SuitoruBadgeEffect)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
@@ -1271,7 +1211,7 @@ EVT_BEGIN(partyYoshiAttack_Nomikomi)
         END_LOOP
     END_IF
     LABEL(99)
-    CALL(btlevtcmd_ResetFaceDirection, -2)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     CALL_CHILD(btldefaultevt_SuitoruBadgeEffect)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
@@ -1611,7 +1551,7 @@ EVT_BEGIN(partyYoshiAttack_EggAttack)
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
     LABEL(99)
-    CALL(btlevtcmd_ResetFaceDirection, -2)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     CALL_CHILD(btldefaultevt_SuitoruBadgeEffect)
     WAIT_MS(2000)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
@@ -1660,7 +1600,7 @@ EVT_BEGIN(_egg_attack_event)
     CALL(btlevtcmd_GetPartsWork, UNIT_ID_SELF, LW(12), PARTS_WORK_LAST_AT_TARGET, LW(1))
     IF_INT_EQUAL(LW(1), 0)
         CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(0), DAMAGE_RESULT_AC_SUCCESS | DAMAGE_RESULT_STATUS_EVERY_HIT, LW(5))
-        ELSE
+    ELSE
         CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(0), DAMAGE_RESULT_FINAL_HIT | DAMAGE_RESULT_AC_SUCCESS | DAMAGE_RESULT_STATUS_EVERY_HIT, LW(5))
     END_IF
     LABEL(89)
@@ -1838,7 +1778,7 @@ EVT_BEGIN(partyYoshiAttack_CallGuard)
     WAIT_MS(500)
     CALL(evt_audience_ap_recovery)
     CALL(btlevtcmd_InviteApInfoReport)
-    CALL(btlevtcmd_ResetFaceDirection, -2)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     CALL_CHILD(btldefaultevt_SuitoruBadgeEffect)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
@@ -1935,7 +1875,7 @@ static EVT_BEGIN(attack_audience_event)
     CALL(evt_eff, STRING(""), STRING("bomb"), 0, LW(0), LW(1), LW(2), FLOAT(0.5996094f), 0, 0, 0, 0, 0, 0, 0)
     CALL(_attack_aud, LW(3), 0)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_FREE)
-    CALL(btlevtcmd_ResetFaceDirection, -2)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     BEGIN_SIBLING_EVENT_GET_ID(LW(15))
         WAIT_MS(1500)
         CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
@@ -2013,32 +1953,47 @@ USER_FUNC(yoshi_original_color_anim_set) {
         return EVT_RETURN_DONE;
     }
     return EVT_RETURN_BLOCK;
-    name++;
-    name--;
 }
-
-#define ADD_WEAPON(w)                                                               \
-    command->weapon[*count].index = -1;                                             \
-    command->weapon[*count].itemId = 0;                                             \
-    command->weapon[*count].weapon = (BattleWeapon*)(w);                            \
-    command->weapon[*count].enabled = 0;                                            \
-    command->weapon[*count].icon = command->weapon[*count].weapon->icon;            \
-    command->weapon[*count].name = msgSearch(command->weapon[*count].weapon->name); \
-    (*count)++;
 
 static void __makeTechMenuFunc(BattleCommand* command, s32* count) {
     s32 techLv;
 
     techLv = partyGetTechLv(BattleTransPartyId(BattleGetPartyPtr(_battleWorkPointer)->currentKind));
-    ADD_WEAPON(&partyWeapon_YoshiNormalAttack)
+
+    command->weapon[*count].index = -1;
+    command->weapon[*count].itemId = 0;
+    command->weapon[*count].weapon = &partyWeapon_YoshiNormalAttack;
+    command->weapon[*count].enabled = 0;
+    command->weapon[*count].icon = command->weapon[*count].weapon->icon;
+    command->weapon[*count].name = msgSearch(command->weapon[*count].weapon->name);
+    (*count)++;
+
     if (techLv >= 0) {
-        ADD_WEAPON(&partyWeapon_YoshiNomikomi_Shot)
+        command->weapon[*count].index = -1;
+        command->weapon[*count].itemId = 0;
+        command->weapon[*count].weapon = &partyWeapon_YoshiNomikomi_Shot;
+        command->weapon[*count].enabled = 0;
+        command->weapon[*count].icon = command->weapon[*count].weapon->icon;
+        command->weapon[*count].name = msgSearch(command->weapon[*count].weapon->name);
+        (*count)++;
     }
     if (techLv >= 1) {
-        ADD_WEAPON(&partyWeapon_YoshiEggAttack_Minimini)
+        command->weapon[*count].index = -1;
+        command->weapon[*count].itemId = 0;
+        command->weapon[*count].weapon = &partyWeapon_YoshiEggAttack_Minimini;
+        command->weapon[*count].enabled = 0;
+        command->weapon[*count].icon = command->weapon[*count].weapon->icon;
+        command->weapon[*count].name = msgSearch(command->weapon[*count].weapon->name);
+        (*count)++;
     }
     if (techLv >= 2) {
-        ADD_WEAPON(&partyWeapon_YoshiCallGuard)
+        command->weapon[*count].index = -1;
+        command->weapon[*count].itemId = 0;
+        command->weapon[*count].weapon = &partyWeapon_YoshiCallGuard;
+        command->weapon[*count].enabled = 0;
+        command->weapon[*count].icon = command->weapon[*count].weapon->icon;
+        command->weapon[*count].name = msgSearch(command->weapon[*count].weapon->name);
+        (*count)++;
     }
 }
 
@@ -2110,8 +2065,6 @@ USER_FUNC(btl_yoshi_yoroyoro_jump_move) {
     if (unit->mMoveCurrentPos.x != unit->mMoveTargetPos.x) {
         if (__fabs(unit->mMoveTargetPos.x - unit->mMoveCurrentPos.x) < unit->mMoveSpeedXZ) {
             unit->mMoveCurrentPos.x = unit->mMoveTargetPos.x;
-            if (!unit->mMoveCurrentPos.z) {
-            }
         } else {
             unit->mMoveCurrentPos.x += unit->mMoveSpeedXZ * unit->moveDirection;
         }
@@ -2255,7 +2208,6 @@ USER_FUNC(_wait_yoshig_complete) {
     return EVT_RETURN_DONE;
 }
 
-
 static inline s32 _gundan_part_update(YoshiGundanPart* p, s32 i) {
     switch (p->state) {
     case 0:
@@ -2317,7 +2269,6 @@ USER_FUNC(_gundan_yoshi_run_effect) {
         w->state = 0;
         w->timer = 0.0f;
         event->userdata[0] = 0;
-        { Vec tmp; tmp.x = (f32)id; }
         event->userdata[1] = psndSFXOn("SFX_BTL_YOSHI_TAIGUN1");
     } else {
         w = (YoshiGundanWork*)unit->countersetWeapon;
@@ -2372,12 +2323,15 @@ USER_FUNC(_gundan_yoshi_run_effect) {
     } while (0);
     return EVT_RETURN_BLOCK;
 }
+
 void _btlYoshiDisp(CameraId camera, YoshiGundanPart* p) {
     f32 s;
     s = (p->vx < 0.0f) ? 0.4f : -0.4f;
     btlDispTexPlane(p->x, p->y + 20.0f, p->z, s, 0.4f, _yoshig_tpl_no_tbl[p->frame], (GXColor){255,255,255,255}, 0);
 }
 
+// FAKE: stand-in that nothing calls; its s32-to-f32 conversion likely shapes the constant pool (as
+// kpaStrippedPool does in koopa.c); removing it changes the object
 void yoshiStrippedPool(f32* f, s32 i) {
     *f = (f32)i;
 }

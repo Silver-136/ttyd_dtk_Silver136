@@ -65,23 +65,6 @@ static EvtWord attack_event[2];
 static EvtWord wait_event[6];
 static EvtWord party_win_reaction[11];
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 BattleWeapon partyWeapon_ClaudaNormalAttack = {
     "btl_wn_pwd_normal", // name
     ICON_PARTNER_MOVE_NORMAL, // icon
@@ -562,7 +545,7 @@ EVT_BEGIN(partyClaudaAttack_NormalAttack)
     LABEL(99)
     CALL(evt_audience_ap_recovery)
     CALL(btlevtcmd_InviteApInfoReport)
-    CALL(btlevtcmd_ResetFaceDirection, -2)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     CALL_CHILD(btldefaultevt_SuitoruBadgeEffect)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
@@ -684,7 +667,7 @@ EVT_BEGIN(partyClaudaAttack_BreathAttack)
     IF_BITS_SET(LW(0), AC_RESULT_SUCCESS)
         CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(12), DAMAGE_RESULT_FINAL_HIT | DAMAGE_RESULT_AC_SUCCESS, LW(5))
         CALL(btlevtcmd_GetDamageCode, LW(3), LW(0))
-        IF_INT_EQUAL(LW(0), 29)
+        IF_INT_EQUAL(LW(0), DAMAGE_CODE_GALE_FORCE)
             CALL(btlevtcmd_GetResultPrizeLv, LW(3), 0, LW(6))
             CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
             CALL(btlevtcmd_ACSuccessEffect, LW(6), LW(0), LW(1), LW(2))
@@ -727,7 +710,7 @@ EVT_BEGIN(partyClaudaAttack_BreathAttack)
     LABEL(99)
     CALL(evt_audience_ap_recovery)
     CALL(btlevtcmd_InviteApInfoReport)
-    CALL(btlevtcmd_ResetFaceDirection, -2)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     CALL_CHILD(btldefaultevt_SuitoruBadgeEffect)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
@@ -938,7 +921,7 @@ EVT_BEGIN(partyClaudaAttack_PredationAttack)
     CALL(btlevtcmd_SetRGB, LW(3), LW(4), 255, 255, 255)
     CALL(btlevtcmd_AcGetOutputParam, 0, LW(0))
     CALL(_make_kiss_weapon, LW(12), LW(0))
-    IF_BITS_SET(LW(9), 2)
+    IF_BITS_SET(LW(9), AC_RESULT_SUCCESS)
         CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(12), DAMAGE_RESULT_FINAL_HIT | DAMAGE_RESULT_AC_SUCCESS, LW(5))
     ELSE
         CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
@@ -979,7 +962,7 @@ EVT_BEGIN(partyClaudaAttack_PredationAttack)
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 40, 0, EASING_CUBIC_OUT, 0, MOVE_SOUND_FROM_TABLE)
     LABEL(99)
-    CALL(btlevtcmd_ResetFaceDirection, -2)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     CALL_CHILD(btldefaultevt_SuitoruBadgeEffect)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
@@ -1056,7 +1039,7 @@ EVT_BEGIN(partyClaudaAttack_KumoGuard)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
     CALL(evt_audience_ap_recovery)
     CALL(btlevtcmd_InviteApInfoReport)
-    CALL(btlevtcmd_ResetFaceDirection, -2)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
@@ -1270,14 +1253,12 @@ static EVT_BEGIN(party_win_reaction)
     RETURN
 EVT_END()
 
-
-
 USER_FUNC(_clauda_make_extra_work_area) {
     BattleWork* wp = _battleWorkPointer;
     BattleUnit* unit;
     s32 id;
 
-    id = BattleTransID(event, -2);
+    id = BattleTransID(event, UNIT_ID_SELF);
     unit = BattleGetUnitPtr(wp, id);
     unit->countersetWeapon = BattleAlloc(sizeof(BattleWeapon));
     return EVT_RETURN_DONE;
@@ -1345,7 +1326,7 @@ static USER_FUNC(_clauda_breath_effect_ready) {
     Vec pos;
     EffectEntry* eff;
 
-    id = BattleTransID(event, -2);
+    id = BattleTransID(event, UNIT_ID_SELF);
     unit = BattleGetUnitPtr(wp, id);
     BtlUnit_GetPos(unit, &pos.x, &pos.y, &pos.z);
     pos.x += unit->mSizeMultiplier * (unit->faceDirection * 20);
@@ -1373,7 +1354,7 @@ static USER_FUNC(_clauda_breath_effect_fire) {
     Vec pos;
     EffectEntry* eff;
 
-    id = BattleTransID(event, -2);
+    id = BattleTransID(event, UNIT_ID_SELF);
     unit = BattleGetUnitPtr(wp, id);
     var = args[0];
     BtlUnit_GetPos(unit, &pos.x, &pos.y, &pos.z);
@@ -1404,7 +1385,7 @@ USER_FUNC(_make_breath_weapon) {
     void* src;
     s32 id, value;
 
-    id = BattleTransID(event, -2);
+    id = BattleTransID(event, UNIT_ID_SELF);
     unit = BattleGetUnitPtr(wp, id);
     index = args[0];
     weapon = unit->countersetWeapon;
@@ -1425,7 +1406,7 @@ USER_FUNC(_make_kiss_weapon) {
     void* src;
     s32 id;
 
-    id = BattleTransID(event, -2);
+    id = BattleTransID(event, UNIT_ID_SELF);
     unit = BattleGetUnitPtr(wp, id);
     index = args[0];
     weapon = unit->countersetWeapon;
@@ -1438,7 +1419,7 @@ USER_FUNC(_make_kiss_weapon) {
 
 USER_FUNC(_get_clauda_kiss_hit_position) {
     EvtWord* args = event->args;
-    Vec pos, tmp;
+    Vec pos, floorPos;
     s32 dir;
     BattleUnit* target;
     BattleWork* wp = _battleWorkPointer;
@@ -1463,10 +1444,10 @@ USER_FUNC(_get_clauda_kiss_hit_position) {
     pos.y += target->kissHitOffset.y * target->mSizeMultiplier;
     pos.z += target->kissHitOffset.z * target->mSizeMultiplier;
     pos.y -= 30.0f * unit->mSizeMultiplier;
-    tmp = pos;
-    tmp.y = BattleGetFloorHeight(wp, tmp.x, tmp.y, tmp.z);
-    if (tmp.y > pos.y) {
-        pos.y = tmp.y;
+    floorPos = pos;
+    floorPos.y = BattleGetFloorHeight(wp, floorPos.x, floorPos.y, floorPos.z);
+    if (floorPos.y > pos.y) {
+        pos.y = floorPos.y;
     }
     evtSetFloat(event, outX, pos.x);
     evtSetFloat(event, outY, pos.y);
@@ -1483,7 +1464,7 @@ USER_FUNC(_make_kumoguard_weapon) {
     void* src;
     s32 id, value;
 
-    id = BattleTransID(event, -2);
+    id = BattleTransID(event, UNIT_ID_SELF);
     unit = BattleGetUnitPtr(wp, id);
     index = args[0];
     weapon = unit->countersetWeapon;

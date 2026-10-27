@@ -79,15 +79,6 @@ USER_FUNC(_chuchu_item_steal);
 USER_FUNC(_get_itemsteal_param);
 USER_FUNC(_make_madowase_weapon);
 USER_FUNC(_get_binta_hit_position);
-USER_FUNC(mono_off);
-USER_FUNC(mono_on);
-USER_FUNC(mono_capture_event);
-USER_FUNC(mono_main);
-USER_FUNC(_chuchu_item_steal);
-USER_FUNC(_get_itemsteal_param);
-USER_FUNC(_make_madowase_weapon);
-USER_FUNC(_get_binta_hit_position);
-USER_FUNC(_chuchu_make_extra_work_area);
 static void __makeTechMenuFunc(BattleCommand* command, s32* count);
 
 
@@ -781,6 +772,7 @@ EVT_BEGIN(partyChuchurinaAttack_NormalAttack)
         BEGIN_SIBLING_EVENT_GET_ID(LW(15))
             SET_VALUE(LW(7), LW(13))
             CALL(btlevtcmd_GetRotate, UNIT_ID_SELF, EVT_NULLPTR, LW(0), EVT_NULLPTR)
+            // BUG: this IF never gets an END_IF (END_SIBLING_EVENT comes first); the rest of the script is indented one level deeper because of it
             IF_INT_GREATER_OR_EQUAL(LW(0), 180)
                 SUBTRACT(LW(0), 360)
                 CALL(evt_sub_intpl_init, EASING_SINE_IN_OUT, LW(0), 0, 4)
@@ -808,7 +800,7 @@ EVT_BEGIN(partyChuchurinaAttack_NormalAttack)
         CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_MAX_SLAPS, LW(0))
         IF_INT_GREATER_OR_EQUAL(LW(10), LW(0))
             CALL(evt_snd_sfxon, STRING("SFX_BTL_CHUCHURINA_ATTACK3"), 0)
-            IF_BITS_SET(LW(6), 2)
+            IF_BITS_SET(LW(6), AC_RESULT_SUCCESS)
                 CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(12), DAMAGE_RESULT_FINAL_HIT | DAMAGE_RESULT_AC_SUCCESS, LW(5))
             ELSE
                 CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
@@ -821,7 +813,7 @@ EVT_BEGIN(partyChuchurinaAttack_NormalAttack)
             ELSE
                 CALL(evt_snd_sfxon, STRING("SFX_BTL_CHUCHURINA_ATTACK1"), 0)
             END_IF
-            IF_BITS_SET(LW(6), 2)
+            IF_BITS_SET(LW(6), AC_RESULT_SUCCESS)
                 CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(12), DAMAGE_RESULT_AC_SUCCESS, LW(5))
             ELSE
                 CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
@@ -842,7 +834,7 @@ EVT_BEGIN(partyChuchurinaAttack_NormalAttack)
         ELSE
             CALL(btlevtcmd_AudienceDeclareACResult, LW(12), -1)
         END_IF
-        IF_BITS_SET(LW(6), 2)
+        IF_BITS_SET(LW(6), AC_RESULT_SUCCESS)
             SWITCH(LW(10))
                 CASE_LESS_OR_EQUAL(2)
                 BEGIN_SIBLING_EVENT_GET_ID(LW(15))
@@ -998,7 +990,7 @@ EVT_BEGIN(partyChuchurinaAttack_NormalAttack)
         IF_INT_GREATER(LW(14), LW(11))
             SET_VALUE(LW(13), LW(14))
             SUBTRACT(LW(13), 10)
-            IF_BITS_SET(LW(6), 2)
+            IF_BITS_SET(LW(6), AC_RESULT_SUCCESS)
                 CALL(btlevtcmd_ACRStart, UNIT_ID_SELF, 0, LW(13), LW(14), 0)
                 CALL(btlevtcmd_ACRGetResult, LW(6), LW(7))
                 IF_INT_GREATER_OR_EQUAL(LW(6), 2)
@@ -1024,7 +1016,7 @@ EVT_BEGIN(partyChuchurinaAttack_NormalAttack)
             CALL(btlevtcmd_WaitEventEnd, LW(15))
         END_IF
         LABEL(99)
-        CALL(btlevtcmd_ResetFaceDirection, -2)
+        CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
         CALL_CHILD(btldefaultevt_SuitoruBadgeEffect)
         CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
         RETURN
@@ -1383,7 +1375,7 @@ EVT_BEGIN(partyChuchurinaAttack_MadowaseAttack)
     LABEL(80)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
-    CALL(btlevtcmd_ResetFaceDirection, -2)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PCH_B_1"))
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_FaceDirectionSub, UNIT_ID_SELF, LW(0), 80)
@@ -1443,7 +1435,7 @@ EVT_BEGIN(partyChuchurinaAttack_MadowaseAttack)
         CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, 0, 0)
     END_SWITCH
     LABEL(99)
-    CALL(btlevtcmd_ResetFaceDirection, -2)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     CALL_CHILD(btldefaultevt_SuitoruBadgeEffect)
     CALL(btlevtcmd_SetWalkSound, UNIT_ID_SELF, STRING("SFX_PARTY_BATTLE_MOVE1L"), STRING("SFX_PARTY_BATTLE_MOVE1R"), 0, 15, 13)
     CALL(btlevtcmd_SetRunSound, UNIT_ID_SELF, STRING("SFX_PARTY_BATTLE_MOVE1L"), STRING("SFX_PARTY_BATTLE_MOVE1R"), 0, 7, 7)
@@ -1719,7 +1711,7 @@ EVT_BEGIN(partyChuchurinaAttack_ItemSteal)
     LABEL(99)
     CALL(evt_audience_ap_recovery)
     CALL(btlevtcmd_InviteApInfoReport)
-    CALL(btlevtcmd_ResetFaceDirection, -2)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
@@ -1744,7 +1736,7 @@ EVT_BEGIN(partyChuchurinaAttack_Kiss)
     END_IF
     CALL_CHILD(subsetevt_check_target_movable)
     IF_INT_NOT_EQUAL(LW(0), 0)
-        CALL(btlevtcmd_CalculateFaceDirection, LW(3), LW(4), -2, -1, FACE_DIR_TOWARD_UNIT, LW(15))
+        CALL(btlevtcmd_CalculateFaceDirection, LW(3), LW(4), UNIT_ID_SELF, -1, FACE_DIR_TOWARD_UNIT, LW(15))
         CALL(btlevtcmd_ChangeFaceDirection, LW(3), LW(15))
     END_IF
     CALL(btlevtcmd_CommandGetWeaponActionLv, LW(0))
@@ -1882,7 +1874,7 @@ EVT_BEGIN(partyChuchurinaAttack_Kiss)
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(4.0f))
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
-    CALL(btlevtcmd_ResetFaceDirection, -2)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
@@ -2014,7 +2006,6 @@ static EVT_BEGIN(main_evt)
     RETURN
 EVT_END()
 
-
 s32 mono_alpha;
 
 USER_FUNC(_chuchu_make_extra_work_area) {
@@ -2022,7 +2013,7 @@ USER_FUNC(_chuchu_make_extra_work_area) {
     BattleUnit* unit;
     s32 id;
 
-    id = BattleTransID(event, -2);
+    id = BattleTransID(event, UNIT_ID_SELF);
     unit = BattleGetUnitPtr(wp, id);
     unit->countersetWeapon = BattleAlloc(sizeof(BattleWeapon));
     return EVT_RETURN_DONE;
@@ -2041,22 +2032,48 @@ static void __makeTechMenuFunc(BattleCommand* command, s32* count) {
     s32 techLv;
 
     techLv = partyGetTechLv(BattleTransPartyId(BattleGetPartyPtr(_battleWorkPointer)->currentKind));
-    ADD_WEAPON(&partyWeapon_ChuchurinaNormalAttackLeftLast)
+
+    command->weapon[*count].index = -1;
+    command->weapon[*count].itemId = 0;
+    command->weapon[*count].weapon = &partyWeapon_ChuchurinaNormalAttackLeftLast;
+    command->weapon[*count].enabled = 0;
+    command->weapon[*count].icon = command->weapon[*count].weapon->icon;
+    command->weapon[*count].name = msgSearch(command->weapon[*count].weapon->name);
+    (*count)++;
+
     if (techLv >= 0) {
-        ADD_WEAPON(&partyWeapon_ChuchurinaItemSteal)
+        command->weapon[*count].index = -1;
+        command->weapon[*count].itemId = 0;
+        command->weapon[*count].weapon = &partyWeapon_ChuchurinaItemSteal;
+        command->weapon[*count].enabled = 0;
+        command->weapon[*count].icon = command->weapon[*count].weapon->icon;
+        command->weapon[*count].name = msgSearch(command->weapon[*count].weapon->name);
+        (*count)++;
     }
     if (techLv >= 1) {
-        ADD_WEAPON(&partyWeapon_ChuchurinaMadowaseAttack)
+        command->weapon[*count].index = -1;
+        command->weapon[*count].itemId = 0;
+        command->weapon[*count].weapon = &partyWeapon_ChuchurinaMadowaseAttack;
+        command->weapon[*count].enabled = 0;
+        command->weapon[*count].icon = command->weapon[*count].weapon->icon;
+        command->weapon[*count].name = msgSearch(command->weapon[*count].weapon->name);
+        (*count)++;
     }
     if (techLv >= 2) {
-        ADD_WEAPON(&partyWeapon_ChuchurinaKiss)
+        command->weapon[*count].index = -1;
+        command->weapon[*count].itemId = 0;
+        command->weapon[*count].weapon = &partyWeapon_ChuchurinaKiss;
+        command->weapon[*count].enabled = 0;
+        command->weapon[*count].icon = command->weapon[*count].weapon->icon;
+        command->weapon[*count].name = msgSearch(command->weapon[*count].weapon->name);
+        (*count)++;
     }
 }
 
 USER_FUNC(_get_binta_hit_position) {
     BattleWork* wp = _battleWorkPointer;
     EvtWord* args = event->args;
-    BattleUnit* unit;
+    BattleUnit* target;
     Vec pos;
     s32 id, targetId, dir;
     s32 outZ, outX, outY;
@@ -2068,12 +2085,12 @@ USER_FUNC(_get_binta_hit_position) {
     outY = args[4];
     outZ = args[5];
     BattleGetUnitPtr(wp, BattleTransID(event, id));
-    unit = BattleGetUnitPtr(wp, BattleTransID(event, targetId));
-    dir = unit->faceDirection;
-    BtlUnit_GetPos(unit, &pos.x, &pos.y, &pos.z);
-    pos.x += dir * (unit->bintaHitOffset.x * unit->mSizeMultiplier);
-    pos.y += unit->bintaHitOffset.y * unit->mSizeMultiplier;
-    pos.z += unit->bintaHitOffset.z * unit->mSizeMultiplier;
+    target = BattleGetUnitPtr(wp, BattleTransID(event, targetId));
+    dir = target->faceDirection;
+    BtlUnit_GetPos(target, &pos.x, &pos.y, &pos.z);
+    pos.x += dir * (target->bintaHitOffset.x * target->mSizeMultiplier);
+    pos.y += target->bintaHitOffset.y * target->mSizeMultiplier;
+    pos.z += target->bintaHitOffset.z * target->mSizeMultiplier;
     evtSetFloat(event, outX, pos.x);
     evtSetFloat(event, outY, pos.y);
     evtSetFloat(event, outZ, pos.z);
@@ -2089,7 +2106,7 @@ USER_FUNC(_make_madowase_weapon) {
     void* src;
     s32 id, value;
 
-    id = BattleTransID(event, -2);
+    id = BattleTransID(event, UNIT_ID_SELF);
     unit = BattleGetUnitPtr(wp, id);
     index = args[0];
     weapon = unit->countersetWeapon;
@@ -2112,7 +2129,7 @@ USER_FUNC(_get_itemsteal_param) {
     wp = _battleWorkPointer;
     out2 = args[2];
     unit = BattleGetUnitPtr(wp, BattleTransID(event, id));
-    rate = 80 - ((u8)wp->actionCommands.mAcDifficulty - 3) * 20;
+    rate = 80 - (wp->actionCommands.mAcDifficulty - 3) * 20;
     if (rate <= 5) {
         rate = 5;
     }
@@ -2139,9 +2156,10 @@ USER_FUNC(_chuchu_item_steal) {
     flag = evtGetValue(event, args[2]);
     unit = BattleGetUnitPtr(_battleWorkPointer, BattleTransID(event, id));
     item = unit->heldItem;
-    if (item == 0) {
+    if (item == ITEM_NULL) {
         s32 total, r;
         u32 pick;
+        // the result of this roll is not used
         if (unit->dropTable != NULL) {
             irand(100);
         }
@@ -2149,7 +2167,7 @@ USER_FUNC(_chuchu_item_steal) {
         if (table == NULL) {
             pick = 0;
         } else {
-            ItemDropData* p;
+            // FAKE: dead re-test (table is non-NULL in this branch); without it the object changes
             if (table != NULL) {
                 s32 i;
                 total = 0;
@@ -2171,31 +2189,32 @@ USER_FUNC(_chuchu_item_steal) {
         }
     done:
         item = pick;
-        if (item == 0) {
-            item = 0x79;
+        if (item == ITEM_NULL) {
+            item = ITEM_COIN;
         }
     }
-    if (!(flag & 2)) {
+    if (!(flag & AC_RESULT_SUCCESS)) {
         evtSetValue(event, out, 0);
         return EVT_RETURN_DONE;
     }
+    // FAKE: no-op (u16) cast (item is u16); the plain call changes the object
     if (pouchGetItem((u16)item) == 0) {
         evtSetValue(event, out, 0);
         return EVT_RETURN_DONE;
     }
     unit->heldItem = ITEM_NULL;
-    if (BtlUnit_CheckUnitFlag(unit, 0x40000000)) {
-        BtlUnit_OffUnitFlag(unit, 0x40000000);
+    if (BtlUnit_CheckUnitFlag(unit, BATTLE_UNIT_FLAG_STOLEN_ITEM)) {
+        BtlUnit_OffUnitFlag(unit, BATTLE_UNIT_FLAG_STOLEN_ITEM);
         if (unit->groupSetupId >= 0) {
-            s32* arr = (s32*)wp->fbatInfo->setup;
-            arr[unit->groupSetupId + 7] = 0;
-            arr[unit->groupSetupId + 0x17] = 0;
+            NpcBattleInfo* setup = wp->fbatInfo->setup;
+            setup->heldItems[unit->groupSetupId] = ITEM_NULL;
+            setup->stolenItems[unit->groupSetupId] = ITEM_NULL;
         }
     } else if (unit->groupSetupId >= 0) {
-        s32* arr = (s32*)wp->fbatInfo->setup;
-        arr[unit->groupSetupId + 7] = 0;
+        NpcBattleInfo* setup = wp->fbatInfo->setup;
+        setup->heldItems[unit->groupSetupId] = ITEM_NULL;
     }
-    if ((u16)(s32)item >= 0xF0 && (u16)(s32)item < 0x153) {
+    if (item >= BADGE_MIN && item < BADGE_MAX) {
         if (unit->currentKind == UNIT_MARIO) {
             BtlUnit_EquipItem(unit, 3, 0);
         } else if (unit->currentKind >= TYPE_PARTNER_MIN && unit->currentKind < TYPE_PARTNER_MAX) {
@@ -2204,6 +2223,7 @@ USER_FUNC(_chuchu_item_steal) {
             BtlUnit_EquipItem(unit, 1, 0);
         }
     }
+    // FAKE: no-op (u16) cast (item is u16); the plain call changes the object
     evtSetValue(event, out, (u16)item);
     return EVT_RETURN_DONE;
 }
@@ -2211,9 +2231,9 @@ USER_FUNC(_chuchu_item_steal) {
 void mono_capture(CameraId camId, void* param) {
     BattleUnit* unit = param;
     BattleUnitPart* part = BtlUnit_GetPartsPtr(unit, 1);
-    unit->screenTexBuf = smartAlloc(GXGetTexBufferSize(0x260, 0x1E0, 1, 0, 0), 1);
+    unit->screenTexBuf = smartAlloc(GXGetTexBufferSize(0x260, 0x1E0, GX_TF_I8, GX_FALSE, 0), 1);
     GXSetTexCopySrc(0, 0, 0x260, 0x1E0);
-    GXSetTexCopyDst(0x260, 0x1E0, 1, GX_FALSE);
+    GXSetTexCopyDst(0x260, 0x1E0, GX_TF_I8, GX_FALSE);
     GXCopyTex(unit->screenTexBuf->address, GX_FALSE);
     GXPixModeSync();
     part->animFlags &= ~PART_ANIM_NO_DISP;
@@ -2221,11 +2241,11 @@ void mono_capture(CameraId camId, void* param) {
 
 void mono_disp(CameraId camId, BattleUnit* unit) {
     CameraEntry* cam = camGetPtr(camId);
-    smartEntry* e = unit->screenTexBuf;
+    smartEntry* texBuf = unit->screenTexBuf;
     void* buf = NULL;
     GXTexObj tex;
-    if (e != NULL) {
-        buf = e->address;
+    if (texBuf != NULL) {
+        buf = texBuf->address;
     }
     if (buf != NULL) {
         GXInitTexObj(&tex, buf, 0x260, 0x1E0, GX_TF_I8, GX_CLAMP, GX_CLAMP, GX_FALSE);
@@ -2265,11 +2285,11 @@ void mono_disp(CameraId camId, BattleUnit* unit) {
         {
             BattleUnit* party = BattleGetPartyPtr(_battleWorkPointer);
             if (party != NULL) {
-                BattleUnitPart* p = BtlUnit_GetPartsPtr(party, 1);
-                CameraId cur = camGetCurNo();
+                BattleUnitPart* part = BtlUnit_GetPartsPtr(party, 1);
+                CameraId prevCamId = camGetCurNo();
                 camSetCurNo(CAMERA_3D);
-                btlUnitPartsDisp(CAMERA_3D, p);
-                camSetCurNo(cur);
+                btlUnitPartsDisp(CAMERA_3D, part);
+                camSetCurNo(prevCamId);
             }
         }
     }
@@ -2279,7 +2299,7 @@ USER_FUNC(mono_main) {
     BattleUnit* unit;
     s32 id;
 
-    id = BattleTransID(event, -2);
+    id = BattleTransID(event, UNIT_ID_SELF);
     unit = BattleGetUnitPtr(_battleWorkPointer, id);
     dispEntry(CAMERA_2D, 910.0f, 0, (DispCallback)mono_disp, unit);
     return EVT_RETURN_BLOCK;
@@ -2289,7 +2309,7 @@ USER_FUNC(mono_capture_event) {
     BattleUnit* unit;
     s32 id;
 
-    id = BattleTransID(event, -2);
+    id = BattleTransID(event, UNIT_ID_SELF);
     unit = BattleGetUnitPtr(_battleWorkPointer, id);
     BtlUnit_GetPartsPtr(unit, 1);
     dispEntry(CAMERA_2D, 910.0f, 0, (DispCallback)mono_capture, unit);
@@ -2312,7 +2332,7 @@ USER_FUNC(mono_off) {
     BattleUnit* unit;
     s32 id;
 
-    id = BattleTransID(event, -2);
+    id = BattleTransID(event, UNIT_ID_SELF);
     unit = BattleGetUnitPtr(_battleWorkPointer, id);
     mono_alpha -= 10;
     if (mono_alpha < 0) {

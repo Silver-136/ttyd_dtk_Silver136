@@ -598,3 +598,19 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/sequence/seq_e3.c | e3Disp | the (u32) cast on the 8; plain i + 8 changes the object Shadow Box | see comment |
 | Both | src/sequence/seq_e3.c | forceSdata | stand-in that nothing calls (the linker strips it); it only places 30.0f in the constant pool (JP and US); removing it changes the object | see comment |
 | JP | src/sequence/seq_logo.c | seq_logoInit | empty if with dead tests of wp; removing it changes the object | see comment |
+| Both | src/unit/party/unit_party_chuchurina.c | _chuchu_item_steal | dead re-test (table is non-NULL in this branch); without it the object changes | see comment |
+| Both | src/unit/party/unit_party_yoshi.c | yoshiStrippedPool | stand-in that nothing calls; its s32-to-f32 conversion likely shapes the constant pool (as kpaStrippedPool does in koopa.c); removing it changes the object | see comment |
+| Both | src/window/win_item.c | winItemMain | the (s32) cast makes the == 1 compare signed; without it the object changes | see comment |
+| Both | src/window/win_item.c | itemUseDisp | white is copied through the spare white2 into white3; white3 = white changes the object | see comment |
+| Both | src/window/win_log.c | winLogDisp | wk is reloaded before each position store; one load changes the object | see comment |
+| Both | src/window/win_log.c | mapGX | c2 and c0 are never read; GXColor white = {0xFF, 0xFF, 0xFF, 0xFF} alone changes the object | see comment |
+| Both | src/window/win_log.c | capture | reversed loop compare; i < 500 changes the object | see comment |
+| Both | src/window/win_mario.c | winMarioInit2 | each target field is assigned twice in one chain; the single assignment changes the object | see comment |
+| JP | src/window/win_mario.c | winZenkakuStr | (s8) cast on a digit character; without it the object changes | see comment |
+| JP | src/window/win_mario.c | winZenkakuStrPad | (s8) cast on a digit character; without it the object changes | see comment |
+| Both | src/window/win_party.c | winPartyDisp | the FP cost (s8 baseFpCost, never negative) is read through a (u8) cast; the plain field read changes the object | see comment |
+| Both | src/window/win_root.c | winRootStrippedPool | stand-in that nothing calls; it only places 185.0f and 1000.0f in this object's constant pool. Removing it changes the object. | see comment |
+| Both | src/window/win_root.c | winRootDisp | hand-written unsigned range test for the closing states 10 and 11; state == 10 // state == 11 changes the object | see comment |
+| Both | src/window/win_root.c | winMsgDisp | the != 0 test is redundant; wp->msgItem > 0 alone changes the object | see comment |
+| Both | src/window/win_root.c | sort_4_3_func | re-indexes itemDataTable instead of using db (same pointer); db->... changes the object | see comment |
+| Both | src/window/win_root.c | winMailDisp | the texture id goes through void* casts; pouchCheckMail(id) == 2 ? 0x5E : 0x5D changes the object | see comment |

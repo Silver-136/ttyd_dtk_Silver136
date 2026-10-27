@@ -24,7 +24,7 @@ void winMakeEquipList(WindowWork* w) {
     s32 i;
     PouchData* pouch = pouchGetPtr();
 
-    for (i = 0; i < 200; i++) {
+    for (i = 0; i < MAX_BADGES; i++) {
         if (pouch->equippedBadges[i] != 0) {
             w->badge.list[n].equipped = 1;
             w->badge.list[n].idx = i;
@@ -279,8 +279,6 @@ void winBadgeMain2(WindowWork* w) {
 
 void badge_disp(WindowWork* w, f32 xo, f32 yo);
 
-#define BP_TENS ((pouch->maximumBP + 9) / 10)
-
 void winBadgeDisp(s32 camId, void* param, s32 n) {
     WindowWork* w = param;
     GXColor white = {255, 255, 255, 255};
@@ -316,7 +314,7 @@ void winBadgeDisp(s32 camId, void* param, s32 n) {
             winTexSet_x2(i + 0x1A, 0xB4, (Vec){x - 190.0f, VERSION_PICK(20.0f, 25.0f) + (a - off), 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0x80, 0x80, 0x80, 0xFF});
         }
     }
-    winKirinukiGX(w, 1, x - 260.0f, yy = 20.0f + (40.0f + y), 150.0f, 158 - (10 - BP_TENS) * 13);
+    winKirinukiGX(w, 1, x - 260.0f, yy = 20.0f + (40.0f + y), 150.0f, 158 - (10 - (pouch->maximumBP + 9) / 10) * 13);
     winFontInit();
 #ifdef VERSION_G8ME01
     {
@@ -330,11 +328,11 @@ void winBadgeDisp(s32 camId, void* param, s32 n) {
     winFontSetR((Vec){(x - 175.0f) - 18.0f, yy, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, black, "%s", winZenkakuStr(pouch->maximumBP));
 #ifdef VERSION_G8ME01
     tw = FontGetMessageWidth(msgSearch("msg_menu_badge_nokori")) * 0.5f + 60.0f;
-    winFontSet((Vec){4.0f + (16.0f + ((x - 260.0f) + (150.0f - tw))), ((20.0f + (y - 108.0f)) - 18.0f) + (10 - BP_TENS) * 13, 0.0f}, (Vec){0.5f, 0.5f, 0.5f}, black, msgSearch("msg_menu_badge_nokori"));
+    winFontSet((Vec){4.0f + (16.0f + ((x - 260.0f) + (150.0f - tw))), ((20.0f + (y - 108.0f)) - 18.0f) + (10 - (pouch->maximumBP + 9) / 10) * 13, 0.0f}, (Vec){0.5f, 0.5f, 0.5f}, black, msgSearch("msg_menu_badge_nokori"));
 #else
-    winFontSet((Vec){x - 180.0f, ((20.0f + (y - 108.0f)) - 18.0f) + (10 - BP_TENS) * 13, 0.0f}, (Vec){0.5f, 0.5f, 0.5f}, black, msgSearch("msg_menu_badge_nokori"));
+    winFontSet((Vec){x - 180.0f, ((20.0f + (y - 108.0f)) - 18.0f) + (10 - (pouch->maximumBP + 9) / 10) * 13, 0.0f}, (Vec){0.5f, 0.5f, 0.5f}, black, msgSearch("msg_menu_badge_nokori"));
 #endif
-    winFontSetR((Vec){VERSION_PICK((x - 145.0f) - 16.0f, 4.0f + ((x - 145.0f) - 16.0f)), ((20.0f + (y - 102.0f)) - 18.0f) + (10 - BP_TENS) * 13, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, black, "%s", winZenkakuStr(pouch->availableBP));
+    winFontSetR((Vec){VERSION_PICK((x - 145.0f) - 16.0f, 4.0f + ((x - 145.0f) - 16.0f)), ((20.0f + (y - 102.0f)) - 18.0f) + (10 - (pouch->maximumBP + 9) / 10) * 13, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, black, "%s", winZenkakuStr(pouch->availableBP));
     winTexInit((TEXPalette*)*w->res->data);
     d = 28.0f + y;
     for (i = 0; i < pouch->availableBP; i++) {
@@ -346,8 +344,6 @@ void winBadgeDisp(s32 camId, void* param, s32 n) {
     badge_disp(w, x, y);
 }
 
-static inline s32 badgeTexA(s32 e) { s32 t = 0x1D; if (e) t = 0x1C; return t; }
-static inline s32 badgeTexB(s32 e) { if (e) return 0x1C; return 0x1D; }
 void badge_disp(WindowWork* w, f32 xo, f32 yo) {
     WindowWork* p0;
     ItemData* item;
@@ -374,7 +370,7 @@ void badge_disp(WindowWork* w, f32 xo, f32 yo) {
     }
     GXSetScissor(0, 0x77, 0x260, 0xB8);
     p0 = w;
-    // FAKE: p0 is a WindowWork* stepped one WinBadgeEnt at a time, so list[0] reads w->badge.list[i] with the 0x404 kept in the load displacement (w->badge.list[i] or a WinBadgeEnt* walk: 99.95-99.96%, induction order / base differ)
+    // FAKE: p0 is a WindowWork* stepped one WinBadgeEnt at a time, so list[0] reads w->badge.list[i] with the 0x404 kept in the load displacement (w->badge.list[i] or a WinBadgeEnt* walk changes the induction order and the base register)
     for (i = 0, rowOff = 0; i < cnt; p0 = (WindowWork*)((WinBadgeEnt*)p0 + 1), rowOff += 23, i++) {
         if (w->badge.tab == 0) {
             badge = pouchHaveBadge(i);
@@ -422,6 +418,7 @@ void badge_disp(WindowWork* w, f32 xo, f32 yo) {
         winFontSet((Vec){(142.0f + xo) - (f32)(FontGetMessageWidth(buf) / 2), scroll + (12.0f + ((yo + 110.0f) - (f32)rowOff)), 0.0f}, (Vec){0.9f, 0.9f, 0.9f}, colB, buf);
         winTexInit((TEXPalette*)*w->res->data);
         for (j = 0; j < *cost; j++) {
+            // FAKE: the texture id goes through a spare temporary t in a comma expression; equipped ? 0x1C : 0x1D changes the object
             { s32 t; winTexSet((t = 0x1D, equipped ? t = 0x1C : 0, t), (Vec){(160.0f + xo) + j * 13, (scroll + ((yo + 110.0f) - (f32)rowOff)), 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, colA); }
         }
     }

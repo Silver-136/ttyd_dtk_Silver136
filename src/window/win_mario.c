@@ -36,28 +36,28 @@ typedef struct LinkDt {
 
 
 LinkDt linkDt[18] = {
-    {-268, 142, ("M_S_1"), NULL, ("S_1"), 0, 0, ("msg_menu_mario_lv"), {6, 1, 11, 9}},
-    {-268, 118, ("M_S_1"), NULL, ("S_1"), 0, 0, ("msg_menu_mario_star_r"), {0, 2, 11, 7}},
-    {-272, 68, ("M_H_1"), NULL, ("R_1"), 9, 0, NULL, {1, 3, 11, 7}},
-    {-242, 24, ("M_R_1"), NULL, ("R_1"), 6, 0, NULL, {2, 4, 11, 8}},
-    {-270, -34, ("M_S_1"), NULL, ("S_1"), 0, 0, ("msg_menu_mario_hp"), {3, 5, 13, 13}},
-    {-270, -68, ("M_S_1"), NULL, ("S_1"), 0, 0, ("msg_menu_mario_fp"), {4, 6, 13, 13}},
-    {-270, -102, ("M_S_1"), NULL, ("S_1"), 0, 0, ("msg_menu_mario_bp"), {5, 0, 13, 13}},
-    {-100, 90, ("M_S_1"), ("M_S_1"), ("S_1"), 2, 0, ("msg_slit"), {9, 10, 2, 9}},
-    {-100, 20, ("M_S_1"), ("M_S_1"), ("S_1"), 4, 0, ("msg_plane"), {10, 4, 3, 10}},
-    {-50, 130, ("M_S_1"), ("M_S_1"), ("S_1"), 5, 0, ("msg_ship"), {0, 7, 0, 11}},
-    {-50, 60, ("M_S_1"), ("M_S_1"), ("S_1"), 3, 0, ("msg_roll"), {7, 8, 8, 12}},
-    {20, 106, ("M_S_1"), NULL, ("S_1"), 0, 0, ("msg_menu_star_power"), {17, 12, 9, 0}},
-    {20, 70, ("M_S_1"), NULL, ("S_1"), 0, 0, ("msg_menu_mario_waza"), {11, 13, 10, 0}},
-    {3, 10, ("M_S_1"), NULL, ("S_1"), 0, 0, ("msg_menu_mario_star_p"), {12, 14, 4, 4}},
-    {3, -18, ("M_S_1"), NULL, ("S_1"), 0, 0, ("msg_menu_mario_coin"), {13, 15, 4, 4}},
-    {3, -46, ("M_S_1"), NULL, ("S_1"), 0, 0, ("msg_menu_mario_kakera"), {14, 16, 4, 4}},
-    {3, -74, ("M_S_1"), NULL, ("S_1"), 0, 0, ("msg_menu_mario_scoin"), {15, 17, 4, 4}},
-    {3, -102, ("M_S_1"), NULL, ("S_1"), 0, 0, ("msg_menu_mario_time"), {16, 11, 4, 4}},
+    {-268, 142, "M_S_1", NULL, "S_1", 0, 0, "msg_menu_mario_lv", {6, 1, 11, 9}},
+    {-268, 118, "M_S_1", NULL, "S_1", 0, 0, "msg_menu_mario_star_r", {0, 2, 11, 7}},
+    {-272, 68, "M_H_1", NULL, "R_1", 9, 0, NULL, {1, 3, 11, 7}},
+    {-242, 24, "M_R_1", NULL, "R_1", 6, 0, NULL, {2, 4, 11, 8}},
+    {-270, -34, "M_S_1", NULL, "S_1", 0, 0, "msg_menu_mario_hp", {3, 5, 13, 13}},
+    {-270, -68, "M_S_1", NULL, "S_1", 0, 0, "msg_menu_mario_fp", {4, 6, 13, 13}},
+    {-270, -102, "M_S_1", NULL, "S_1", 0, 0, "msg_menu_mario_bp", {5, 0, 13, 13}},
+    {-100, 90, "M_S_1", "M_S_1", "S_1", 2, 0, "msg_slit", {9, 10, 2, 9}},
+    {-100, 20, "M_S_1", "M_S_1", "S_1", 4, 0, "msg_plane", {10, 4, 3, 10}},
+    {-50, 130, "M_S_1", "M_S_1", "S_1", 5, 0, "msg_ship", {0, 7, 0, 11}},
+    {-50, 60, "M_S_1", "M_S_1", "S_1", 3, 0, "msg_roll", {7, 8, 8, 12}},
+    {20, 106, "M_S_1", NULL, "S_1", 0, 0, "msg_menu_star_power", {17, 12, 9, 0}},
+    {20, 70, "M_S_1", NULL, "S_1", 0, 0, "msg_menu_mario_waza", {11, 13, 10, 0}},
+    {3, 10, "M_S_1", NULL, "S_1", 0, 0, "msg_menu_mario_star_p", {12, 14, 4, 4}},
+    {3, -18, "M_S_1", NULL, "S_1", 0, 0, "msg_menu_mario_coin", {13, 15, 4, 4}},
+    {3, -46, "M_S_1", NULL, "S_1", 0, 0, "msg_menu_mario_kakera", {14, 16, 4, 4}},
+    {3, -74, "M_S_1", NULL, "S_1", 0, 0, "msg_menu_mario_scoin", {15, 17, 4, 4}},
+    {3, -102, "M_S_1", NULL, "S_1", 0, 0, "msg_menu_mario_time", {16, 11, 4, 4}},
 };
-const char* hammer_help[] = {NULL, ("msg_hammer_1"), ("msg_hammer_2"), ("msg_hammer_3")};
-const char* boots_help[] = {NULL, ("msg_boots_1"), ("msg_boots_2"), ("msg_boots_3")};
-const char* hammer_pose[] = {NULL, ("M_H_1"), ("M_H_4"), ("M_H_7")};
+const char* hammer_help[] = {NULL, "msg_hammer_1", "msg_hammer_2", "msg_hammer_3"};
+const char* boots_help[] = {NULL, "msg_boots_1", "msg_boots_2", "msg_boots_3"};
+const char* hammer_pose[] = {NULL, "M_H_1", "M_H_4", "M_H_7"};
 
 void winMarioInit(WindowWork* w) {
     PouchData* pouch;
@@ -86,10 +86,18 @@ void winMarioInit(WindowWork* w) {
     } else {
         name = "a_mario";
         switch (marioGetColor()) {
-            case 0: name = "a_mario"; break;
-            case 1: name = "a_mario_l"; break;
-            case 2: name = "a_mario_w"; break;
-            case 3: name = "a_mario_wl"; break;
+            case 0:
+                name = "a_mario";
+                break;
+            case 1:
+                name = "a_mario_l";
+                break;
+            case 2:
+                name = "a_mario_w";
+                break;
+            case 3:
+                name = "a_mario_wl";
+                break;
         }
         w->mario.poseId = animPoseEntry(name, 0);
         animPoseSetAnim(w->mario.poseId, "M_S_1", 1);
@@ -111,18 +119,19 @@ void winMarioInit(WindowWork* w) {
 
 void winMarioInit2(WindowWork* w) {
     w->marioSel = 0;
+    // FAKE: each target field is assigned twice in one chain; the single assignment changes the object
     w->helpTgtX = w->helpTgtX = linkDt[w->marioSel].x;
     w->helpTgtY = w->helpTgtY = linkDt[w->marioSel].y;
     switch (w->marioSel) {
-    case 2:
-        winMsgEntry(w, 0, hammer_help[pouchGetHammerLv()], 0);
-        break;
-    case 3:
-        winMsgEntry(w, 0, boots_help[pouchGetJumpLv()], 0);
-        break;
-    default:
-        winMsgEntry(w, 0, linkDt[w->marioSel].msg, 0);
-        break;
+        case 2:
+            winMsgEntry(w, 0, hammer_help[pouchGetHammerLv()], 0);
+            break;
+        case 3:
+            winMsgEntry(w, 0, boots_help[pouchGetJumpLv()], 0);
+            break;
+        default:
+            winMsgEntry(w, 0, linkDt[w->marioSel].msg, 0);
+            break;
     }
     w->mario.hammerHold = 0;
     w->mario.mode = 0;
@@ -202,33 +211,33 @@ s32 winMarioMain(WindowWork* w) {
             w->helpTgtX = lp->x;
             w->helpTgtY = lp->y;
             switch (w->marioSel) {
-            case 2:
-                if (w->flags & WINDOW_FLAG_8BIT) {
-                    COLOR_ANIM(anims[0], lp->pose2)
-                } else {
-                    anims[0] = hammer_pose[pouchGetHammerLv()];
-                }
-                animPoseSetAnim(w->mario.poseId, anims[0], 0);
-                if (w->mario.hammerHold == 0) {
-                    if (animPoseGetLoopTimes(w->mario.poseId) >= 0.89f) {
-                        w->mario.hammerHold = 30;
+                case 2:
+                    if (w->flags & WINDOW_FLAG_8BIT) {
+                        COLOR_ANIM(anims[0], lp->pose2)
+                    } else {
+                        anims[0] = hammer_pose[pouchGetHammerLv()];
                     }
-                } else {
-                    w->mario.hammerHold--;
-                }
-                if (w->flags & WINDOW_FLAG_8BIT) {
+                    animPoseSetAnim(w->mario.poseId, anims[0], 0);
+                    if (w->mario.hammerHold == 0) {
+                        if (animPoseGetLoopTimes(w->mario.poseId) >= 0.89f) {
+                            w->mario.hammerHold = 30;
+                        }
+                    } else {
+                        w->mario.hammerHold--;
+                    }
+                    if (w->flags & WINDOW_FLAG_8BIT) {
+                        w->mario.hammerHold = 0;
+                    }
+                    break;
+                default:
                     w->mario.hammerHold = 0;
-                }
-                break;
-            default:
-                w->mario.hammerHold = 0;
-                if (w->flags & WINDOW_FLAG_8BIT) {
-                    COLOR_ANIM(anims[0], lp->pose2)
-                } else {
-                    anims[0] = lp->pose0;
-                }
-                animPoseSetAnim(w->mario.poseId, anims[0], 0);
-                break;
+                    if (w->flags & WINDOW_FLAG_8BIT) {
+                        COLOR_ANIM(anims[0], lp->pose2)
+                    } else {
+                        anims[0] = lp->pose0;
+                    }
+                    animPoseSetAnim(w->mario.poseId, anims[0], 0);
+                    break;
             }
             switch (w->marioSel) {
                 case 2:
@@ -292,6 +301,7 @@ const char* winZenkakuStr(s32 n) {
     }
     sprintf(buf, "%d", n);
     for (i = 0; i < strlen(buf); i++) {
+        // FAKE: (s8) cast on a digit character; without it the object changes
         strcat(tmp2, tbl[(s8)buf[i] - '0']);
     }
 #endif
@@ -327,6 +337,7 @@ char* winZenkakuStrPad(s32 n, s32 digits) {
         if ((u32)i < (u32)(digits - strlen(buf))) {
             strcat(winZenkakuStrPad_tmp, "\x82\x4f");
         } else {
+            // FAKE: (s8) cast on a digit character; without it the object changes
             strcat(winZenkakuStrPad_tmp, tbl[(s8)buf[i - (digits - strlen(buf))] - '0']);
         }
     }
@@ -358,32 +369,32 @@ void fukidashi(WindowWork* w, u32 idx, f32 x, f32 y) {
     switch (idx) {
         case 2:
             if (pouchGetHammerLv() > 0) {
-                fukiTool(w, itemDataTable[pouchGetHammerLv() + 8].icon_id, x - 230.0f, y + 72.0f);
+                fukiTool(w, itemDataTable[pouchGetHammerLv() + (ITEM_HAMMER - 1)].icon_id, x - 230.0f, y + 72.0f);
             }
             break;
         case 3:
             if (pouchGetJumpLv() > 0) {
-                fukiTool(w, itemDataTable[pouchGetJumpLv() + 5].icon_id, x - 210.0f, y + 20.0f);
+                fukiTool(w, itemDataTable[pouchGetJumpLv() + (ITEM_BOOTS - 1)].icon_id, x - 210.0f, y + 20.0f);
             }
             break;
         case 7:
             if (pouchCheckItem(ITEM_PAPER_CURSE)) {
-                fukiKey(w, itemDataTable[2].icon_id, x - 80.0f, y + 90.0f);
+                fukiKey(w, itemDataTable[ITEM_PAPER_CURSE].icon_id, x - 80.0f, y + 90.0f);
             }
             break;
         case 8:
             if (pouchCheckItem(ITEM_PLANE_CURSE)) {
-                fukiKey(w, itemDataTable[4].icon_id, x - 80.0f, y + 20.0f);
+                fukiKey(w, itemDataTable[ITEM_PLANE_CURSE].icon_id, x - 80.0f, y + 20.0f);
             }
             break;
         case 9:
             if (pouchCheckItem(ITEM_BOAT_CURSE)) {
-                fukiKey(w, itemDataTable[5].icon_id, x - 30.0f, y + 130.0f);
+                fukiKey(w, itemDataTable[ITEM_BOAT_CURSE].icon_id, x - 30.0f, y + 130.0f);
             }
             break;
         case 10:
             if (pouchCheckItem(ITEM_TUBE_CURSE)) {
-                fukiKey(w, itemDataTable[3].icon_id, x - 30.0f, y + 60.0f);
+                fukiKey(w, itemDataTable[ITEM_TUBE_CURSE].icon_id, x - 30.0f, y + 60.0f);
             }
             break;
     }
