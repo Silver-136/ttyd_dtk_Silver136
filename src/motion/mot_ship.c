@@ -92,7 +92,7 @@ double __fabs(double);
 #define SHIP_DIR (marioGetPtr()->motShip->flags & 1)
 
 void shipMove(void);
-#define EFFP() ((EffFunemizuWork*)marioGetPtr()->motShip->wakeEff->userdata)
+#define WAKE_WORK() ((EffFunemizuWork*)marioGetPtr()->motShip->wakeEff->userdata)
 s32 N_marioShipGetDir(void) {
     marioGetPtr();
     if (marioGetPtr()->motStruct != NULL) {
@@ -254,11 +254,11 @@ static inline void shipEff(f32 s) {
         shipLerpWake(s, 0.1f);
         s = marioGetPtr()->motShip->wakeScale;
     }
-    EFFP()->position.x = mm->position.x;
-    EFFP()->position.y = mm->position.y + zz;
-    EFFP()->position.z = mm->position.z;
-    EFFP()->size = s;
-    EFFP()->yaw = mm->displayDirection;
+    WAKE_WORK()->position.x = mm->position.x;
+    WAKE_WORK()->position.y = mm->position.y + zz;
+    WAKE_WORK()->position.z = mm->position.z;
+    WAKE_WORK()->size = s;
+    WAKE_WORK()->yaw = mm->displayDirection;
 }
 
 // FAKE: case-0 block as an inline helper so hit/attr/r are inline temps numbered

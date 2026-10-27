@@ -157,7 +157,7 @@ EffectEntry* effSnowfallN64Entry(s32 arg, s32 count) {
     return effect;
 }
 
-#define W ((EffSnowfallWork*)p)
+#define SNOWFALL_WORK ((EffSnowfallWork*)p)
 void effSnowfallMain(EffectEntry* effect) {
     s32 i, life, count, h;
     f32 hf;
@@ -167,23 +167,23 @@ void effSnowfallMain(EffectEntry* effect) {
 
     p = effect->userdata;
 
-    tmp.x = W->position.x;
-    tmp.y = W->position.y;
-    tmp.z = W->position.z;
+    tmp.x = SNOWFALL_WORK->position.x;
+    tmp.y = SNOWFALL_WORK->position.y;
+    tmp.z = SNOWFALL_WORK->position.z;
     position = tmp;
     camGetPtr(CAMERA_3D);
-    if (W->life < 100) {
-        W->life--;
+    if (SNOWFALL_WORK->life < 100) {
+        SNOWFALL_WORK->life--;
     }
-    if (W->life < 0) {
+    if (SNOWFALL_WORK->life < 0) {
         effDelete(effect);
         return;
     }
-    W->frame++;
-    life = W->life;
-    count = W->count;
+    SNOWFALL_WORK->frame++;
+    life = SNOWFALL_WORK->life;
+    count = SNOWFALL_WORK->count;
     if (life < 10) {
-        W->alpha = life * 25;
+        SNOWFALL_WORK->alpha = life * 25;
     }
     hf = 166.0f;
     h = hf;
@@ -211,8 +211,8 @@ void effSnowfallMain(EffectEntry* effect) {
 #endif
 }
 
-#undef W
-#define W ((EffSnowfallWork*)p)
+#undef SNOWFALL_WORK
+#define SNOWFALL_WORK ((EffSnowfallWork*)p)
 void effSnowfallDisp(CameraId cameraId, EffectEntry* effect) {
     CameraEntry* cam;
     EffSnowfallParticle* p;
@@ -231,11 +231,11 @@ void effSnowfallDisp(CameraId cameraId, EffectEntry* effect) {
 
     cam = camGetPtr(cameraId);
     p = effect->userdata;
-    if (W->active == 0) {
+    if (SNOWFALL_WORK->active == 0) {
         return;
     }
-    count = W->count;
-    alpha = W->alpha;
+    count = SNOWFALL_WORK->count;
+    alpha = SNOWFALL_WORK->alpha;
     GXSetNumChans(0);
     GXSetNumTexGens(1);
     GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX0, GX_FALSE, 0x7D);
@@ -285,4 +285,4 @@ void effSnowfallDisp(CameraId cameraId, EffectEntry* effect) {
         }
     }
 }
-#undef W
+#undef SNOWFALL_WORK

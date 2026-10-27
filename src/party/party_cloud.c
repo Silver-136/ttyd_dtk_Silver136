@@ -29,24 +29,24 @@ Vec cloud_at;
 void N__cloud_use(PartyEntry* party);
 void getHitBreatheout2(PartyEntry* party, f32 angle);
 
-#define CW(p) ((PartyCloud*)(p)->useStruct)
-#define KUMO(p) ((EffKumokumoN64Particle*)(p)->work.cloud.breathEffect->userdata)
+#define CLOUD_WORK(p) ((PartyCloud*)(p)->useStruct)
+#define BREATH_PARTICLES(p) ((EffKumokumoN64Particle*)(p)->work.cloud.breathEffect->userdata)
 
 static inline void cloudSweep(PartyEntry* party, f32 sign, s32 i) {
-    PartyCloud* cl = CW(party);
+    PartyCloud* cl = CLOUD_WORK(party);
     if (cl->sweep[i].reverse == 0) {
         cl->sweep[i].angle += 1.0f;
-        cl = CW(party);
+        cl = CLOUD_WORK(party);
         if (cl->sweep[i].angle >= 20.0f) {
             cl->sweep[i].angle = 20.0f;
-            CW(party)->sweep[i].reverse = 1;
+            CLOUD_WORK(party)->sweep[i].reverse = 1;
         }
     } else {
         cl->sweep[i].angle -= 1.0f;
-        cl = CW(party);
+        cl = CLOUD_WORK(party);
         if (cl->sweep[i].angle <= -20.0f) {
             cl->sweep[i].angle = -20.0f;
-            CW(party)->sweep[i].reverse = 0;
+            CLOUD_WORK(party)->sweep[i].reverse = 0;
         }
     }
 }
@@ -289,9 +289,9 @@ void cloud_use(PartyEntry* party) {
         return;
     }
     party->flags &= ~PARTY_FLAG_IS_BEING_USED;
-    if (CW(party) != NULL && (u32)CW(party)->sfxId != 0xFFFFFFFF) {
-        psndSFXOff(CW(party)->sfxId);
-        CW(party)->sfxId = -1;
+    if (CLOUD_WORK(party) != NULL && (u32)CLOUD_WORK(party)->sfxId != 0xFFFFFFFF) {
+        psndSFXOff(CLOUD_WORK(party)->sfxId);
+        CLOUD_WORK(party)->sfxId = -1;
     }
     if (party->work.cloud.breathEffect != NULL) {
         effSoftDelete(party->work.cloud.breathEffect);
@@ -332,18 +332,18 @@ void N__cloud_use(PartyEntry* party) {
         party->useMotionId = 0;
         party->useStruct = __memAlloc(HEAP_DEFAULT, sizeof(PartyCloud));
         memset(party->useStruct, 0, sizeof(PartyCloud));
-        CW(party)->reserved_0 = 100.0f;
-        CW(party)->breathDistMax = 120.0f;
-        CW(party)->sweep[0].angle = 0.0f;
-        CW(party)->sweep[0].reverse = 0;
-        CW(party)->sweep[1].angle = 0.0f;
-        CW(party)->sweep[1].reverse = 1;
+        CLOUD_WORK(party)->reserved_0 = 100.0f;
+        CLOUD_WORK(party)->breathDistMax = 120.0f;
+        CLOUD_WORK(party)->sweep[0].angle = 0.0f;
+        CLOUD_WORK(party)->sweep[0].reverse = 0;
+        CLOUD_WORK(party)->sweep[1].angle = 0.0f;
+        CLOUD_WORK(party)->sweep[1].reverse = 1;
         party->work.cloud.breathEffect = NULL;
-        if (CW(party) != NULL) {
-            CW(party)->sfxId = -1;
+        if (CLOUD_WORK(party) != NULL) {
+            CLOUD_WORK(party)->sfxId = -1;
         }
         if (party->flags & PARTY_FLAG_IS_EVT_USE) {
-            CW(party)->autoTimer = sysMsec2Frame(party->actionTime);
+            CLOUD_WORK(party)->autoTimer = sysMsec2Frame(party->actionTime);
         }
     }
 
@@ -368,13 +368,13 @@ void N__cloud_use(PartyEntry* party) {
         party->position = party->moveTarget;
         if (party->work.cloud.breathEffect == NULL) {
             party->work.cloud.breathEffect = effKumokumoN64Entry(0, 0, 0.0f, 0.0f, 0.0f, 0.0f, -2.0f, 0.0f);
-            KUMO(party)->camera = party->camId;
-            KUMO(party)->r1 = 0x4C;
-            KUMO(party)->g1 = 0xA7;
-            KUMO(party)->b1 = 0xCA;
-            KUMO(party)->r2 = 0x7D;
-            KUMO(party)->g2 = 0x1B;
-            KUMO(party)->b2 = 0xF5;
+            BREATH_PARTICLES(party)->camera = party->camId;
+            BREATH_PARTICLES(party)->r1 = 0x4C;
+            BREATH_PARTICLES(party)->g1 = 0xA7;
+            BREATH_PARTICLES(party)->b1 = 0xCA;
+            BREATH_PARTICLES(party)->r2 = 0x7D;
+            BREATH_PARTICLES(party)->g2 = 0x1B;
+            BREATH_PARTICLES(party)->b2 = 0xF5;
         }
         marioChgMot(MARIO_MOTION_CLOUD);
         marioChgPose("M_A_2A");
@@ -384,14 +384,14 @@ void N__cloud_use(PartyEntry* party) {
         mario->dispFlags |= MARIO_DISP_FLAG_NO_REAR_POSE;
         mario->dispFlags |= MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
         party->flags2 |= PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
-        CW(party)->breathDist = 0.0f;
-        CW(party)->breathDir = mario->displayDirection;
+        CLOUD_WORK(party)->breathDist = 0.0f;
+        CLOUD_WORK(party)->breathDir = mario->displayDirection;
         if (!(party->flags & PARTY_FLAG_IS_EVT_USE)) {
             mario->camShiftRate.x = 0.03f;
             mario->camShiftTargetX = 70.0f * (revise360(270.0f - mario->displayDirectionTarget) <= 180.0f ? -1.0f : 1.0f);
         }
-        if (CW(party) != NULL && (u32)CW(party)->sfxId == 0xFFFFFFFF) {
-            CW(party)->sfxId = psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_CLAUD_WIND1), &party->playerPtr->position);
+        if (CLOUD_WORK(party) != NULL && (u32)CLOUD_WORK(party)->sfxId == 0xFFFFFFFF) {
+            CLOUD_WORK(party)->sfxId = psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_CLAUD_WIND1), &party->playerPtr->position);
         }
     case 11:
         cloudCalcPos(party);
@@ -409,10 +409,10 @@ void N__cloud_use(PartyEntry* party) {
         cloudCalcPos(party);
         party->position = party->moveTarget;
         partyUpdateKeyData(party);
-        mario->displayDirection = CW(party)->breathDir;
-        mario->displayDirectionTarget = CW(party)->breathDir;
-        party->displayDirection = CW(party)->breathDir;
-        party->displayDirectionTarget = CW(party)->breathDir;
+        mario->displayDirection = CLOUD_WORK(party)->breathDir;
+        mario->displayDirectionTarget = CLOUD_WORK(party)->breathDir;
+        party->displayDirection = CLOUD_WORK(party)->breathDir;
+        party->displayDirectionTarget = CLOUD_WORK(party)->breathDir;
         ofsX = mario->position.x;
         ofsZ = mario->position.z;
         flag = 0;
@@ -428,25 +428,25 @@ void N__cloud_use(PartyEntry* party) {
             Vec zero = {0.0f, 0.0f, 0.0f};
             party->dispOfs = zero;
         }
-        CW(party)->breathDist += 2.0f;
-        cl = CW(party);
+        CLOUD_WORK(party)->breathDist += 2.0f;
+        cl = CLOUD_WORK(party);
         mario = party->playerPtr;
         if (cl->breathDist >= cl->breathDistMax) {
             cl->breathDist = cl->breathDistMax;
         }
-        sincosf(&dirSin, &dirCos, toMovedir(CW(party)->breathDir));
+        sincosf(&dirSin, &dirCos, toMovedir(CLOUD_WORK(party)->breathDir));
         sincosf(&ys, &yc, -45.0f);
-        dist = CW(party)->breathDist;
+        dist = CLOUD_WORK(party)->breathDist;
         hit = hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz,
                              party->position.x, 18.0f + mario->position.y, party->position.z,
                              dirSin, ys, dirCos);
         if (hit != NULL && (hitGetAttr(hit) & HIT_ATTR_NPC_ONLY)) {
             hit = NULL;
         }
-        CW(party)->hitDown = hit;
+        CLOUD_WORK(party)->hitDown = hit;
         getHitBreatheout2(party, 0.0f);
-        if (++CW(party)->breathLevel > 2) {
-            CW(party)->breathLevel = 0;
+        if (++CLOUD_WORK(party)->breathLevel > 2) {
+            CLOUD_WORK(party)->breathLevel = 0;
         }
         if (!(party->flags & PARTY_FLAG_IS_EVT_USE)) {
             if (party->buttonHold & PAD_BUTTON_X) {
@@ -454,21 +454,21 @@ void N__cloud_use(PartyEntry* party) {
                     break;
                 }
             }
-        } else if (--CW(party)->autoTimer > 0) {
+        } else if (--CLOUD_WORK(party)->autoTimer > 0) {
             break;
         }
-        CW(party)->hitFront = NULL;
-        CW(party)->hitDown = NULL;
-        CW(party)->hitSweep[0] = NULL;
-        CW(party)->hitSweep[1] = NULL;
+        CLOUD_WORK(party)->hitFront = NULL;
+        CLOUD_WORK(party)->hitDown = NULL;
+        CLOUD_WORK(party)->hitSweep[0] = NULL;
+        CLOUD_WORK(party)->hitSweep[1] = NULL;
         party->moveFrames = sysMsec2Frame(200);
         party->useMotionId = 13;
         if (party->flags & PARTY_FLAG_IS_EVT_USE) {
             party->useMotionId = 20;
         }
-        if (CW(party) != NULL && (u32)CW(party)->sfxId != 0xFFFFFFFF) {
-            psndSFXOff(CW(party)->sfxId);
-            CW(party)->sfxId = -1;
+        if (CLOUD_WORK(party) != NULL && (u32)CLOUD_WORK(party)->sfxId != 0xFFFFFFFF) {
+            psndSFXOff(CLOUD_WORK(party)->sfxId);
+            CLOUD_WORK(party)->sfxId = -1;
         }
         break;
     case 13:
@@ -488,9 +488,9 @@ void N__cloud_use(PartyEntry* party) {
         party->useMotionId = 20;
     case 20:
         party->flags &= ~PARTY_FLAG_IS_BEING_USED;
-        if (CW(party) != NULL && (u32)CW(party)->sfxId != 0xFFFFFFFF) {
-            psndSFXOff(CW(party)->sfxId);
-            CW(party)->sfxId = -1;
+        if (CLOUD_WORK(party) != NULL && (u32)CLOUD_WORK(party)->sfxId != 0xFFFFFFFF) {
+            psndSFXOff(CLOUD_WORK(party)->sfxId);
+            CLOUD_WORK(party)->sfxId = -1;
         }
         if (party->work.cloud.breathEffect != NULL) {
             effSoftDelete(party->work.cloud.breathEffect);
@@ -528,9 +528,9 @@ void N__cloud_use(PartyEntry* party) {
 void cloud_exit(PartyEntry* party) {
     MarioWork* mario = party->playerPtr;
 
-    if (CW(party) != NULL && (u32)CW(party)->sfxId != 0xFFFFFFFF) {
-        psndSFXOff(CW(party)->sfxId);
-        CW(party)->sfxId = -1;
+    if (CLOUD_WORK(party) != NULL && (u32)CLOUD_WORK(party)->sfxId != 0xFFFFFFFF) {
+        psndSFXOff(CLOUD_WORK(party)->sfxId);
+        CLOUD_WORK(party)->sfxId = -1;
     }
     if (party->work.cloud.breathEffect != NULL) {
         effSoftDelete(party->work.cloud.breathEffect);
@@ -555,7 +555,7 @@ void getHitBreatheout2(PartyEntry* party, f32 angle) {
     f32 dir, sign, height;
     s16 kind;
     HitEntry* hit;
-    PartyCloud* cl = CW(party);
+    PartyCloud* cl = CLOUD_WORK(party);
     MarioWork* mario = party->playerPtr;
 
     kind = cl->breathLevel;
@@ -573,33 +573,33 @@ void getHitBreatheout2(PartyEntry* party, f32 angle) {
         cl->breathDist = cl->breathDistMax;
     }
     sincosf(&ys, &yc, angle);
-    dir = toMovedir(CW(party)->breathDir);
+    dir = toMovedir(CLOUD_WORK(party)->breathDir);
     sincosf(&dirSin, &dirCos, dir);
-    dist = CW(party)->breathDist;
+    dist = CLOUD_WORK(party)->breathDist;
     hit = hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz,
                          party->position.x, mario->position.y + height, party->position.z,
                          dirSin, ys, dirCos);
     if (hit != NULL && (hitGetAttr(hit) & HIT_ATTR_NPC_ONLY)) {
         hit = NULL;
     }
-    CW(party)->hitFront = hit;
+    CLOUD_WORK(party)->hitFront = hit;
     ofsX = 0.0f;
     ofsZ = 0.0f;
     if (party->work.cloud.breathEffect != NULL) {
         movePos(&ofsX, &ofsZ, 24.0f, dir);
-        KUMO(party)->x = party->position.x + ofsX;
-        KUMO(party)->y = 18.0f + party->position.y;
-        KUMO(party)->z = party->position.z + ofsZ;
-        cl = CW(party);
-        KUMO(party)->scale = 0.6f * (cl->breathDist / cl->breathDistMax);
-        cl = CW(party);
+        BREATH_PARTICLES(party)->x = party->position.x + ofsX;
+        BREATH_PARTICLES(party)->y = 18.0f + party->position.y;
+        BREATH_PARTICLES(party)->z = party->position.z + ofsZ;
+        cl = CLOUD_WORK(party);
+        BREATH_PARTICLES(party)->scale = 0.6f * (cl->breathDist / cl->breathDistMax);
+        cl = CLOUD_WORK(party);
         if (cl->breathDir >= 90.0f && cl->breathDir <= 270.0f) {
-            KUMO(party)->rot = -25.0f;
+            BREATH_PARTICLES(party)->rot = -25.0f;
         } else {
-            KUMO(party)->rot = 205.0f;
+            BREATH_PARTICLES(party)->rot = 205.0f;
         }
     }
-    cl = CW(party);
+    cl = CLOUD_WORK(party);
     if (cl->breathDir >= 90.0f && cl->breathDir <= 270.0f) {
         sign = 1.0f;
     } else {
@@ -607,28 +607,28 @@ void getHitBreatheout2(PartyEntry* party, f32 angle) {
     }
 
     cloudSweep(party, sign, 0);
-    cl = CW(party);
+    cl = CLOUD_WORK(party);
     sincosf(&dirSin, &dirCos, toMovedir(cl->sweep[0].angle * sign + cl->breathDir));
-    dist = CW(party)->breathDist;
+    dist = CLOUD_WORK(party)->breathDist;
     hit = hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz,
                          party->position.x, mario->position.y + height, party->position.z,
                          dirSin, ys, dirCos);
     if (hit != NULL && (hitGetAttr(hit) & HIT_ATTR_NPC_ONLY)) {
         hit = NULL;
     }
-    CW(party)->hitSweep[0] = hit;
+    CLOUD_WORK(party)->hitSweep[0] = hit;
 
     cloudSweep(party, sign, 1);
-    cl = CW(party);
+    cl = CLOUD_WORK(party);
     sincosf(&dirSin, &dirCos, toMovedir(cl->sweep[1].angle * sign + cl->breathDir));
-    dist = CW(party)->breathDist;
+    dist = CLOUD_WORK(party)->breathDist;
     hit = hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz,
                          party->position.x, mario->position.y + height, party->position.z,
                          dirSin, ys, dirCos);
     if (hit != NULL && (hitGetAttr(hit) & HIT_ATTR_NPC_ONLY)) {
         hit = NULL;
     }
-    CW(party)->hitSweep[1] = hit;
+    CLOUD_WORK(party)->hitSweep[1] = hit;
 }
 
 void cloudGetAt(Vec* position) {

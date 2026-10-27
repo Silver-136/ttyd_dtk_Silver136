@@ -46,7 +46,7 @@ static f32 marioJumpStandData[10] = {1.52f, -0.188f, 2.925f, -0.847f, -0.1f, -0.
 f32 ofs_PYS_R_2[10] = {0.0f, 0.0f, 0.366f, 0.555f, 0.38f, 0.0f, 0.0f, 0.366f, 0.555f, 0.38f};
 f32 ofs_PYS_F_1[10] = {0.0f, 0.0f, 0.433f, 0.557f, 0.512f, 0.0f, 0.0f, 0.433f, 0.557f, 0.512f};
 
-#define YW(party) ((YoshiWork*)(party)->useStruct)
+#define YOSHI_WORK(party) ((YoshiWork*)(party)->useStruct)
 #define ADD_OFS(party)                                              \
     if ((party)->hitobjStandOn) {                                       \
         (party)->position.x += (party)->floorMove.x;                  \
@@ -354,7 +354,7 @@ void yoshi_use(PartyEntry* party) {
         party->flags &= ~PARTY_FLAG_DISABLE_FLOORS;
         party->useStruct = __memAlloc(HEAP_DEFAULT, sizeof(YoshiWork));
         memset(party->useStruct, 0, sizeof(YoshiWork));
-        YW(party)->effect = NULL;
+        YOSHI_WORK(party)->effect = NULL;
         if (party->flags & PARTY_FLAG_IS_EVT_USE) {
             evt_yoshi_spd = 1.0f;
         } else {
@@ -372,7 +372,7 @@ void yoshi_use(PartyEntry* party) {
         mario->mot.yoshi.bobSpeed = 0.0f;
         mario->mot.yoshi.velX = 0.0f;
         mario->mot.yoshi.velZ = 0.0f;
-        YW(party)->dir = 0;
+        YOSHI_WORK(party)->dir = 0;
     }
 
     switch (party->useMotionId) {
@@ -499,8 +499,8 @@ void yoshi_use(PartyEntry* party) {
                     mario->forceMoveTimer = 0;
                     mario->flags &= ~MARIO_FLAG_FORCED_MOVEMENT;
                 }
-                YW(party)->count++;
-                if (YW(party)->count % 10 == 0) {
+                YOSHI_WORK(party)->count++;
+                if (YOSHI_WORK(party)->count % 10 == 0) {
                     psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_YOSH_MOVE1), &party->position);
                 }
                 break;
@@ -536,8 +536,8 @@ void yoshi_use(PartyEntry* party) {
                 party->moveDir = angle;
                 marioChgPose("M_Y_2");
                 partyChgPose(party, "PYS_R_2");
-                YW(party)->count++;
-                if (YW(party)->count % 10 == 0) {
+                YOSHI_WORK(party)->count++;
+                if (YOSHI_WORK(party)->count % 10 == 0) {
                     psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_YOSH_MOVE1), &party->position);
                 }
             } else {
@@ -546,7 +546,7 @@ void yoshi_use(PartyEntry* party) {
                 }
                 partyChgPose(party, "PYS_S_2");
                 party->moveSpeed = 0.0f;
-                YW(party)->count = 0;
+                YOSHI_WORK(party)->count = 0;
             }
             inertia(party);
             party->position.x = mario->position.x;
@@ -624,9 +624,9 @@ void yoshi_use(PartyEntry* party) {
     switch (party->useMotionId) {
         case 20:
 #ifdef VERSION_G8ME01
-            YW(party)->dir = (party->displayDirectionTarget >= 90.0f && party->displayDirectionTarget <= 270.0f) ? 1 : -1;
+            YOSHI_WORK(party)->dir = (party->displayDirectionTarget >= 90.0f && party->displayDirectionTarget <= 270.0f) ? 1 : -1;
 #else
-            YW(party)->dir = (mario->displayDirection >= 90.0f && mario->displayDirection <= 270.0f) ? 1 : -1;
+            YOSHI_WORK(party)->dir = (mario->displayDirection >= 90.0f && mario->displayDirection <= 270.0f) ? 1 : -1;
 #endif
             mario->hitobjJumpFrom = mario->hitobjStandOn;
             mario->hitobjStandOn = NULL;
@@ -639,28 +639,28 @@ void yoshi_use(PartyEntry* party) {
             if (party->moveSpeed <= 0.0f) {
                 party->moveSpeed = 0.0f;
             }
-            YW(party)->angle = 1.0f;
-            mario->mot.yoshi.bobSpeed = sin(3.141592653589793f * YW(party)->angle / 180.0f);
+            YOSHI_WORK(party)->angle = 1.0f;
+            mario->mot.yoshi.bobSpeed = sin(3.141592653589793f * YOSHI_WORK(party)->angle / 180.0f);
             mario->mot.yoshi.bobOfs = 0.0f;
             mario->mot.yoshi.baseY = party->position.y;
             party->yoshiPsndSFXId = psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_YOSH_JUMP1), &party->position);
         case 21: {
-                f32 s = sin(3.141592653589793f * YW(party)->angle / 180.0f);
-                mario->mot.yoshi.bobSpeed = s * (YW(party)->angle <= 180.0f ? 0.5f : 0.37f);
+                f32 s = sin(3.141592653589793f * YOSHI_WORK(party)->angle / 180.0f);
+                mario->mot.yoshi.bobSpeed = s * (YOSHI_WORK(party)->angle <= 180.0f ? 0.5f : 0.37f);
             }
             mario->mot.yoshi.bobOfs += mario->mot.yoshi.bobSpeed;
-            YW(party)->angle += 7.0f;
-            if (YW(party)->angle >= 360.0f) {
-                YW(party)->angle = 360.0f;
+            YOSHI_WORK(party)->angle += 7.0f;
+            if (YOSHI_WORK(party)->angle >= 360.0f) {
+                YOSHI_WORK(party)->angle = 360.0f;
                 party->useMotionId = 22;
             }
         case 22: {
                 f32 y = 18.0f + party->position.y;
                 f32 x = party->position.x;
                 f32 z = party->position.z;
-                if (YW(party)->effect == NULL) {
-                    YW(party)->effect = effSweatN64Entry(1, x, y, z, 1.0f, 70.0f * (party->displayDirectionTarget == 180.0f ? -1.0f : 1.0f), 0x16);
-                    YW(party)->timer = 20;
+                if (YOSHI_WORK(party)->effect == NULL) {
+                    YOSHI_WORK(party)->effect = effSweatN64Entry(1, x, y, z, 1.0f, 70.0f * (party->displayDirectionTarget == 180.0f ? -1.0f : 1.0f), 0x16);
+                    YOSHI_WORK(party)->timer = 20;
                 }
             }
             hit = partySearchGround(party, 11.0f, 11.0f);
@@ -720,7 +720,7 @@ void yoshi_use(PartyEntry* party) {
                     }
                     break;
                 }
-                YW(party)->dir = 0;
+                YOSHI_WORK(party)->dir = 0;
             }
             SYNC_MARIO(mario, party);
             mario->airTimer++;
@@ -889,7 +889,7 @@ void yoshi_use(PartyEntry* party) {
                 marioChgPose("M_Y_2");
                 mario->mot.yoshi.velX = 0.0f;
                 mario->mot.yoshi.velZ = 0.0f;
-                YW(party)->dir = 0;
+                YOSHI_WORK(party)->dir = 0;
                 if (party->flags & PARTY_FLAG_IS_EVT_USE) {
                     evt_yoshi_spd = 0.0f;
                     evt_yoshi_frm = -1;

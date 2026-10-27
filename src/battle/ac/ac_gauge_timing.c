@@ -56,7 +56,7 @@ typedef struct GaugeWork {
     s32 endTimer; // 0x28
 } GaugeWork;
 
-#define GAC(work) ((GaugeAC*)&(work)->actionCommands)
+#define GAUGE_AC(work) ((GaugeAC*)&(work)->actionCommands)
 
 s32 battleAcMain_GaugeTiming(BattleWork* work) {
     GaugeWork* cw;
@@ -82,20 +82,20 @@ s32 battleAcMain_GaugeTiming(BattleWork* work) {
             disp->color = (GXColor){255, 255, 255, 255};
             cw->frame = 0;
             cw->cnt = 0;
-            GAC(work)->out0 = 0;
+            GAUGE_AC(work)->out0 = 0;
             work->actionCommands.mAcState = 99;
             work->actionCommands.result = AC_RESULT_RUNNING;
-            cw->maxFrames = GAC(work)->maxFrames;
+            cw->maxFrames = GAUGE_AC(work)->maxFrames;
             cw->inRange = 0;
             cw->timer = 0;
             cw->hits = 0;
             cw->sfxId = -1;
-            switch (GAC(work)->type) {
+            switch (GAUGE_AC(work)->type) {
                 case 0:
                     cw->hold = 1;
                     cw->button = 0x20;
                     cw->phase = 1;
-                    GAC(work)->out0 = 1;
+                    GAUGE_AC(work)->out0 = 1;
                     break;
                 case 2:
                     cw->hold = 0;
@@ -107,13 +107,13 @@ s32 battleAcMain_GaugeTiming(BattleWork* work) {
                     cw->hold = 1;
                     cw->button = 0x100;
                     cw->phase = 1;
-                    GAC(work)->out0 = 1;
+                    GAUGE_AC(work)->out0 = 1;
                     break;
             }
-            switch (GAC(work)->mode) {
+            switch (GAUGE_AC(work)->mode) {
                 case 1:
                     cw->gauge = 0.0f;
-                    GAC(work)->period &= ~1;
+                    GAUGE_AC(work)->period &= ~1;
                     break;
                 default:
                     cw->gauge = 50.0f;
@@ -123,13 +123,13 @@ s32 battleAcMain_GaugeTiming(BattleWork* work) {
         case 99:
             break;
         case 100:
-            if ((GAC(work)->setupFlags & 1) && ((u32)work->actionCommands.mAcUnit->mTokenFlags & kConfusedAction)) {
+            if ((GAUGE_AC(work)->setupFlags & 1) && ((u32)work->actionCommands.mAcUnit->mTokenFlags & kConfusedAction)) {
                 if (irand(100) >= 0) {
-                    GAC(work)->setupParam = 30;
+                    GAUGE_AC(work)->setupParam = 30;
                     cw->passed = 0;
                 } else {
                     cw->passed = 1;
-                    GAC(work)->setupParam = 30;
+                    GAUGE_AC(work)->setupParam = 30;
                 }
                 work->actionCommands.mAcState = 1002;
                 break;
@@ -148,7 +148,7 @@ s32 battleAcMain_GaugeTiming(BattleWork* work) {
                         cw->phase = 1;
                         work->actionCommands.mAcState = 1001;
                         cw->frame = 0;
-                        GAC(work)->out0 = 1;
+                        GAUGE_AC(work)->out0 = 1;
                     }
                     break;
                 case 1:
@@ -168,7 +168,7 @@ s32 battleAcMain_GaugeTiming(BattleWork* work) {
                     work->actionCommands.result = 0;
                     cw->gauge = 0.0f;
                     work->actionCommands.mAcState = 1003;
-                    GAC(work)->out0 = 2;
+                    GAUGE_AC(work)->out0 = 2;
                     break;
                 }
             } else {
@@ -184,9 +184,9 @@ s32 battleAcMain_GaugeTiming(BattleWork* work) {
             if (cw->timer <= 0) {
                 cw->cnt++;
             }
-            switch (GAC(work)->mode) {
+            switch (GAUGE_AC(work)->mode) {
             case 1: {
-                f32 angle = reviseAngle((f32)(cw->cnt * 360 / GAC(work)->period));
+                f32 angle = reviseAngle((f32)(cw->cnt * 360 / GAUGE_AC(work)->period));
                 if (angle <= 90.0f) {
                     cw->gauge = intplGetValue(EASING_CUBIC_OUT, 0.0f, 100.0f, (s32)angle, 90);
                 } else if (angle <= 180.0f) {
@@ -203,14 +203,14 @@ s32 battleAcMain_GaugeTiming(BattleWork* work) {
                         cw->inRange = 0;
                         goto done;
                     }
-                } else if ((GAC(work)->opts & AC_GAUGE_TIMING_FLAG_CYCLE_PAUSE) || (GAC(work)->opts & AC_GAUGE_TIMING_FLAG_CYCLE_PAUSE)) {
+                } else if ((GAUGE_AC(work)->opts & AC_GAUGE_TIMING_FLAG_CYCLE_PAUSE) || (GAUGE_AC(work)->opts & AC_GAUGE_TIMING_FLAG_CYCLE_PAUSE)) {
                     // BUG: the same bit is tested twice (retail code), so the 30-frame else branch below never runs;
                     // a second bit for a longer pause was probably intended. Same at the wrap test below.
                     if ((s32)cw->gauge <= 0) {
                         cw->hits++;
                         cw->gauge = 0.0f;
                         cw->inRange = 0;
-                        if (GAC(work)->opts & AC_GAUGE_TIMING_FLAG_CYCLE_PAUSE) {
+                        if (GAUGE_AC(work)->opts & AC_GAUGE_TIMING_FLAG_CYCLE_PAUSE) {
                             cw->timer = 15;
                         } else {
                             cw->timer = 30;
@@ -218,7 +218,7 @@ s32 battleAcMain_GaugeTiming(BattleWork* work) {
                         goto done;
                     }
                 }
-                if (cw->gauge >= (f32)GAC(work)->target) {
+                if (cw->gauge >= (f32)GAUGE_AC(work)->target) {
                     cw->inRange = 1;
                 } else {
                     cw->inRange = 0;
@@ -234,16 +234,16 @@ s32 battleAcMain_GaugeTiming(BattleWork* work) {
                         goto done;
                     }
                 }
-                cw->gauge = (f32)GAC(work)->period / 100.0f * (f32)cw->cnt + 50.0f;
-                if (GAC(work)->opts & AC_GAUGE_TIMING_FLAG_WRAP) {
+                cw->gauge = (f32)GAUGE_AC(work)->period / 100.0f * (f32)cw->cnt + 50.0f;
+                if (GAUGE_AC(work)->opts & AC_GAUGE_TIMING_FLAG_WRAP) {
                     s32 g = (s32)cw->gauge;
-                    if ((GAC(work)->opts & AC_GAUGE_TIMING_FLAG_CYCLE_PAUSE) || (GAC(work)->opts & AC_GAUGE_TIMING_FLAG_CYCLE_PAUSE)) {
+                    if ((GAUGE_AC(work)->opts & AC_GAUGE_TIMING_FLAG_CYCLE_PAUSE) || (GAUGE_AC(work)->opts & AC_GAUGE_TIMING_FLAG_CYCLE_PAUSE)) {
                         s32 q = g / 100;
                         if (q > cw->hits) {
                             cw->hits = q;
                             cw->gauge = 0.0f;
                             cw->inRange = 0;
-                            if (GAC(work)->opts & AC_GAUGE_TIMING_FLAG_CYCLE_PAUSE) {
+                            if (GAUGE_AC(work)->opts & AC_GAUGE_TIMING_FLAG_CYCLE_PAUSE) {
                                 cw->timer = 15;
                             } else {
                                 cw->timer = 30;
@@ -278,22 +278,22 @@ s32 battleAcMain_GaugeTiming(BattleWork* work) {
             }
             break;
         case 1002:
-            GAC(work)->setupParam--;
-            if (GAC(work)->setupParam < 0) {
+            GAUGE_AC(work)->setupParam--;
+            if (GAUGE_AC(work)->setupParam < 0) {
                 if (cw->passed) {
                     work->actionCommands.result = AC_RESULT_SUCCESS;
                     work->actionCommands.mResultCount++;
                 } else {
                     work->actionCommands.result = 0;
                 }
-                GAC(work)->flags |= 1;
+                GAUGE_AC(work)->flags |= 1;
                 return 0;
             }
             break;
         case 1003:
             work->actionCommands.mAcState = 1004;
         case 1004:
-            GAC(work)->flags |= 1;
+            GAUGE_AC(work)->flags |= 1;
             cw->endTimer = 60;
             work->actionCommands.mAcState = 1005;
             if (cw->sfxId != -1) {
@@ -351,7 +351,7 @@ void battleAcDisp_GaugeTiming(CameraId cameraId, void* param) {
 }
 
 void battleAcDelete_GaugeTiming(BattleWork* work) {
-    if (!(GAC(work)->flags & 1)) {
+    if (!(GAUGE_AC(work)->flags & 1)) {
         work->actionCommands.mAcState = 1004;
     }
 }

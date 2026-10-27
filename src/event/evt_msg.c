@@ -34,7 +34,7 @@ extern float __fabsf(float);
 s32 msgWindow_Entry(const char* msg, s32 callback, s32 priority);
 
 // the message window's MsgWinData lives in its userdata block
-#define MSGW(w) ((MsgWinData*)(w)->userdata->address)
+#define MSG_WIN_DATA(w) ((MsgWinData*)(w)->userdata->address)
 
 s32 _evt_msg_print(EventEntry* event, BOOL isFirstCall, s32 flags, const char* msg, s32 callback, EvtWord name) {
     NpcEntry* npc = NULL;
@@ -50,8 +50,8 @@ s32 _evt_msg_print(EventEntry* event, BOOL isFirstCall, s32 flags, const char* m
         event->printWindowId = msgWindow_Entry(m, callback, (s16)event->msgPriority);
         event->msgPriority = 0;
         win = windowGetPointer(event->printWindowId);
-        MSGW(win)->tag = msg;
-        MSGW(win)->event = event;
+        MSG_WIN_DATA(win)->tag = msg;
+        MSG_WIN_DATA(win)->event = event;
         if (!(flags & MSG_PRINT_NO_SPEAKER)) {
             if (event->wNpcEventType == NPC_EVENT_TALK) {
                 npc = event->ownerNPC;
@@ -70,7 +70,7 @@ s32 _evt_msg_print(EventEntry* event, BOOL isFirstCall, s32 flags, const char* m
                         win->speakerPos.y += p->height;
                     }
                 }
-                strcpy(MSGW(win)->speakerName, (const char*)name);
+                strcpy(MSG_WIN_DATA(win)->speakerName, (const char*)name);
             } else if (npc == (NpcEntry*)-2) {
                 if (!(event->printWindowFlags & MSG_PRINT_WIN_TOGE_MASK)) {
                     PartyEntry* p = partyGetPtr(marioGetExtraPartyId());
@@ -82,24 +82,24 @@ s32 _evt_msg_print(EventEntry* event, BOOL isFirstCall, s32 flags, const char* m
                         win->speakerPos.y += p->height;
                     }
                 }
-                strcpy(MSGW(win)->speakerName, (const char*)name);
+                strcpy(MSG_WIN_DATA(win)->speakerName, (const char*)name);
             } else if (npc == (NpcEntry*)-3) {
                 if (!(event->printWindowFlags & MSG_PRINT_WIN_TOGE_MASK)) {
                     win->speakerPos = marioGetPtr()->position;
                     win->speakerPos.y += marioGetPtr()->wPlayerCollisionBox.y;
                 }
-                strcpy(MSGW(win)->speakerName, (const char*)name);
+                strcpy(MSG_WIN_DATA(win)->speakerName, (const char*)name);
             } else if (npc) {
                 if (!(event->printWindowFlags & MSG_PRINT_WIN_TOGE_MASK)) {
                     win->speakerPos = npc->position;
                     win->speakerPos.y += npc->height;
                 }
-                strcpy(MSGW(win)->speakerName, npc->description);
+                strcpy(MSG_WIN_DATA(win)->speakerName, npc->description);
             }
         } else {
-            MSGW(win)->flags |= MSG_WIN_FLAG_BATTLE_UNIT;
-            MSGW(win)->unitId = BattleTransID(event, name);
-            BtlUnit_GetTalkTogePos(MSGW(win)->unitId, &win->speakerPos.x, &win->speakerPos.y, &win->speakerPos.z);
+            MSG_WIN_DATA(win)->flags |= MSG_WIN_FLAG_BATTLE_UNIT;
+            MSG_WIN_DATA(win)->unitId = BattleTransID(event, name);
+            BtlUnit_GetTalkTogePos(MSG_WIN_DATA(win)->unitId, &win->speakerPos.x, &win->speakerPos.y, &win->speakerPos.z);
             win->tailMode = 3;
         }
         switch (event->printWindowFlags & MSG_PRINT_WIN_TOGE_MASK) {
@@ -358,12 +358,12 @@ USER_FUNC(evt_msg_select) {
             msg = "DIRECT";
         }
         event->selectWindowId = msgWindow_Entry(m, 0, 0x14);
-        MSGW(windowGetPointer(event->selectWindowId))->tag = msg;
+        MSG_WIN_DATA(windowGetPointer(event->selectWindowId))->tag = msg;
     }
     if (windowCheckID(event->selectWindowId)) {
         return EVT_RETURN_BLOCK;
     }
-    event->lwData[0] = MSGW(windowGetPointer(event->selectWindowId))->sel;
+    event->lwData[0] = MSG_WIN_DATA(windowGetPointer(event->selectWindowId))->sel;
     windowDeleteID(event->selectWindowId);
     return EVT_RETURN_DONE;
 }
@@ -405,7 +405,7 @@ USER_FUNC(evt_msg_pri) {
 
 USER_FUNC(evt_msg_npc) {
     const char* name = (const char*)evtGetValue(event, *event->args);
-    strcpy(MSGW(windowGetPointer(event->printWindowId))->speakerName, name);
+    strcpy(MSG_WIN_DATA(windowGetPointer(event->printWindowId))->speakerName, name);
     return EVT_RETURN_DONE;
 }
 
