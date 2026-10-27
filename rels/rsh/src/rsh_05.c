@@ -39,7 +39,6 @@
 #include "driver/offscreendrv.h"
 #include "system.h"
 #define _MATH_H_
-#define fabs(x) __fabs(x)
 #include "mario/mario.h"
 #include "mario/mario_motion.h"
 #include "party.h"
@@ -632,7 +631,7 @@ static void moamoa_jump(ExtdrvPose* pose, Moamoa* moa, s32 next, s32 checkGround
         hitX = hitY = hitZ = 0.0f;
         dist = 1000000.0f;
         if (hitCheckFilter(NULL, &hitX, &hitY, &hitZ, &dist, &nx, &ny, &nz, x, 100.0f + y, z, 0.0f, -1.0f, 0.0f)) {
-            if (fabs(y - hitY) > 30.0) {
+            if (__fabs(y - hitY) > 30.0) {
                 speed -= 0.1f;
                 gravity += 0.1f;
             }

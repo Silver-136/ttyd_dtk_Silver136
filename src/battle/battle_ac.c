@@ -13,9 +13,6 @@
 
 void psndSFX_pit(s32 id, s32 pitch);
 
-#define AC_SE_ID(wp) ((wp)->actionCommands.seId)
-#define AC_SE_VAL(wp) ((wp)->actionCommands.seValue)
-#define AC_GUARD_TIMER(wp) ((wp)->actionCommands.countdown)
 
 //local prototypes
 s32 BattleACPadCheckRecordTrigger(s32 chan, s32 mask);
@@ -142,8 +139,8 @@ s32 BattleActionCommandCheckDefence(BattleUnit* unit, BattleWeapon* weapon) {
     normal = normal_frames[diff];
 
     if (weapon->superguardsAllowed && unit->currentHp > 0) {
-        if (AC_GUARD_TIMER(wp) > 0) {
-            AC_GUARD_TIMER(wp)--;
+        if (wp->actionCommands.countdown > 0) {
+            wp->actionCommands.countdown--;
             done = 1;
             wp->actionCommands.mDefenseResult = 5;
         } else if (unit->badgesEquipped.AutoCommand) {
@@ -174,8 +171,8 @@ s32 BattleActionCommandCheckDefence(BattleUnit* unit, BattleWeapon* weapon) {
     }
 
     if (!done) {
-        if (AC_GUARD_TIMER(wp) > 0) {
-            AC_GUARD_TIMER(wp)--;
+        if (wp->actionCommands.countdown > 0) {
+            wp->actionCommands.countdown--;
             wp->actionCommands.mDefenseResult = 4;
         } else {
             count = 0;
@@ -526,8 +523,8 @@ void BattleAcDrawGauge(s32 x, s32 y, s32 width, f32 ratio, s32 level, s32 a, s32
 void BattleAcGaugeSeInit(void) {
     BattleWork* wp = _battleWorkPointer;
 
-    AC_SE_ID(wp) = psndSFXOn("SFX_AC_POWER_GAUGE1");
-    AC_SE_VAL(wp) = 0.0f;
+    wp->actionCommands.seId = psndSFXOn("SFX_AC_POWER_GAUGE1");
+    wp->actionCommands.seValue = 0.0f;
 }
 
 void BattleAcGaugeSeUpdate(f32 value) {
@@ -539,17 +536,17 @@ void BattleAcGaugeSeUpdate(f32 value) {
     if (value > 100.0f) {
         value = 100.0f;
     }
-    AC_SE_VAL(wp) = value;
-    if (AC_SE_ID(wp) != -1) {
-        psndSFX_pit(AC_SE_ID(wp), 0.01f * (4092.0f * AC_SE_VAL(wp)));
+    wp->actionCommands.seValue = value;
+    if (wp->actionCommands.seId != -1) {
+        psndSFX_pit(wp->actionCommands.seId, 0.01f * (4092.0f * wp->actionCommands.seValue));
     }
 }
 
 void BattleAcGaugeSeDelete(void) {
     BattleWork* wp = _battleWorkPointer;
 
-    if (AC_SE_ID(wp) != -1) {
-        psndSFXOff(AC_SE_ID(wp));
-        AC_SE_ID(wp) = -1;
+    if (wp->actionCommands.seId != -1) {
+        psndSFXOff(wp->actionCommands.seId);
+        wp->actionCommands.seId = -1;
     }
 }

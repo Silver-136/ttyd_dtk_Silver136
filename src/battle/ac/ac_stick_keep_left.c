@@ -17,9 +17,6 @@ typedef struct SklWork {
     u32 sfx[12];  // 0xC
 } SklWork;
 
-#define SKL_P(work) (&(work)->actionCommands) // params: 0 count, 1 frames, 2 confused, 3 end flag, 4 sfx played
-#define SKL_W(w) ((SklWork*)(w)->actionCommands.work)
-#define SKL_D(w) (&(w)->actionCommands.disp)
 
 
 s32 ac_stickkeepleft_ok_frame[7] = {80, 70, 60, 40, 20, 10, 5};
@@ -38,24 +35,24 @@ s32 battleAcMain_StickKeepLeft(BattleWork* work) {
     s32 j;
 
     autoCommand = 0;
-    cw = SKL_W(work);
-    disp = SKL_D(work);
+    cw = ((SklWork*)(work)->actionCommands.work);
+    disp = &work->actionCommands.disp;
     if (work->actionCommands.mAcUnit->badgesEquipped.AutoCommand) {
         autoCommand = 1;
     }
-    SKL_P(work)->params[3] = 0;
+    work->actionCommands.params[3] = 0;
     if (work->actionCommands.mAcState != 0) {
-        if (SKL_P(work)->params[2] != 0) {
-            SKL_P(work)->params[3] = 1;
+        if (work->actionCommands.params[2] != 0) {
+            work->actionCommands.params[3] = 1;
         } else {
-            SKL_P(work)->params[3] = 0;
+            work->actionCommands.params[3] = 0;
         }
     }
     sfx[0] = "SFX_AC_PI1";
     sfx[1] = "SFX_AC_PONE1";
     do {
         loop = 0;
-        if (SKL_P(work)->params[3] != 0) {
+        if (work->actionCommands.params[3] != 0) {
             break;
         }
         switch (work->actionCommands.mAcState) {
@@ -67,9 +64,9 @@ s32 battleAcMain_StickKeepLeft(BattleWork* work) {
                 disp->iconY = 0.0f;
                 disp->slideTimer = 20;
                 work->actionCommands.outputParams[0] = 0;
-                SKL_P(work)->params[2] = 0;
-                SKL_P(work)->params[3] = 0;
-                SKL_P(work)->params[4] = 0;
+                work->actionCommands.params[2] = 0;
+                work->actionCommands.params[3] = 0;
+                work->actionCommands.params[4] = 0;
                 work->actionCommands.outputParams[2] = 0;
                 for (i = 0; i < 12; i++) {
                     cw->sfx[i] = -1;
@@ -123,11 +120,11 @@ s32 battleAcMain_StickKeepLeft(BattleWork* work) {
                 if (cw->timer < 0) {
                     cw->idx++;
                     work->actionCommands.outputParams[1]++;
-                    if (cw->idx >= SKL_P(work)->params[0] + 2) {
+                    if (cw->idx >= work->actionCommands.params[0] + 2) {
                         work->actionCommands.result &= ~1;
                         work->actionCommands.mAcState = 1003;
                         work->actionCommands.outputParams[2] = 2;
-                        if (SKL_P(work)->acFlags & AC_STICK_KEEP_LEFT_FLAG_NO_EARLY_RELEASE_FAIL) {
+                        if (work->actionCommands.acFlags & AC_STICK_KEEP_LEFT_FLAG_NO_EARLY_RELEASE_FAIL) {
                             work->actionCommands.result |= AC_RESULT_SUCCESS;
                             work->actionCommands.result &= ~1;
                         }
@@ -135,30 +132,30 @@ s32 battleAcMain_StickKeepLeft(BattleWork* work) {
                         break;
                     }
                     j = cw->idx - 2;
-                    if (j < SKL_P(work)->params[0] - 1) {
+                    if (j < work->actionCommands.params[0] - 1) {
                         if (cw->sfx[j] == -1) {
                             cw->sfx[j] = psndSFXOn(sfx[0]);
                         }
                     } else {
                         if (cw->sfx[j] == -1) {
                             cw->sfx[j] = psndSFXOn(sfx[1]);
-                            SKL_P(work)->params[4] = 1;
+                            work->actionCommands.params[4] = 1;
                         }
                     }
-                    cw->timer = SKL_P(work)->params[1];
+                    cw->timer = work->actionCommands.params[1];
                 } else {
                     if (BattlePadCheckNow(BATTLE_PAD_STICK_LEFT) && autoCommand == 0) {
                         break;
                     }
                     ok = 0;
-                    if (cw->idx != SKL_P(work)->params[0] + 1) {
-                        if (!(SKL_P(work)->acFlags & AC_STICK_KEEP_LEFT_FLAG_NO_EARLY_RELEASE_FAIL)) {
+                    if (cw->idx != work->actionCommands.params[0] + 1) {
+                        if (!(work->actionCommands.acFlags & AC_STICK_KEEP_LEFT_FLAG_NO_EARLY_RELEASE_FAIL)) {
                             work->actionCommands.outputParams[2] = 1;
                         }
                     } else {
-                        diff = SKL_P(work)->params[1] - cw->timer;
+                        diff = work->actionCommands.params[1] - cw->timer;
                         if (diff > ac_stickkeepleft_ok_frame[BattleActionCommandGetDifficulty(work)]) {
-                            if (!(SKL_P(work)->acFlags & AC_STICK_KEEP_LEFT_FLAG_NO_EARLY_RELEASE_FAIL)) {
+                            if (!(work->actionCommands.acFlags & AC_STICK_KEEP_LEFT_FLAG_NO_EARLY_RELEASE_FAIL)) {
                                 work->actionCommands.outputParams[2] = 1;
                             }
                         } else {
@@ -179,7 +176,7 @@ s32 battleAcMain_StickKeepLeft(BattleWork* work) {
                         work->actionCommands.result &= ~1;
                         loop = 1;
                         work->actionCommands.mAcState = 1003;
-                    } else if (!(SKL_P(work)->acFlags & AC_STICK_KEEP_LEFT_FLAG_NO_EARLY_RELEASE_FAIL)) {
+                    } else if (!(work->actionCommands.acFlags & AC_STICK_KEEP_LEFT_FLAG_NO_EARLY_RELEASE_FAIL)) {
                         work->actionCommands.result &= ~1;
                         loop = 1;
                         work->actionCommands.mAcState = 1003;
@@ -231,7 +228,7 @@ void battleAcDisp_StickKeepLeft(CameraId camId, void* param) {
             disp->iconStep = -1;
             disp->iconX = intplGetValue(EASING_QUADRATIC_OUT, -300.0f, 30.0f, 20 - disp->slideTimer, 20);
             actionCommandDisp(disp->iconX, disp->iconY, disp->iconStep);
-            if (SKL_P(work)->params[3] == 0 && disp->slideTimer > 0) {
+            if (work->actionCommands.params[3] == 0 && disp->slideTimer > 0) {
                 disp->slideTimer--;
             }
             break;
@@ -239,7 +236,7 @@ void battleAcDisp_StickKeepLeft(CameraId camId, void* param) {
             disp->iconStep = cw->idx - 1;
             disp->iconX = intplGetValue(EASING_QUADRATIC_OUT, -300.0f, 30.0f, 20 - disp->slideTimer, 20);
             actionCommandDisp(disp->iconX, disp->iconY, disp->iconStep);
-            if (SKL_P(work)->params[3] == 0 && disp->slideTimer > 0) {
+            if (work->actionCommands.params[3] == 0 && disp->slideTimer > 0) {
                 disp->slideTimer--;
             }
             break;
@@ -256,7 +253,7 @@ void battleAcDisp_StickKeepLeft(CameraId camId, void* param) {
                 disp->iconX = 30.0f;
             }
             actionCommandDisp(disp->iconX, disp->iconY, disp->iconStep);
-            if (SKL_P(work)->params[3] == 0 && disp->slideTimer < 60) {
+            if (work->actionCommands.params[3] == 0 && disp->slideTimer < 60) {
                 disp->slideTimer++;
             }
             break;
@@ -284,7 +281,7 @@ static void actionCommandDisp(f32 x, f32 y, s32 unused) {
     char n4[8] = "_AcSkl4";
     char n5[8] = "_AcSkl5";
 
-    ac = SKL_P(_battleWorkPointer);
+    ac = &_battleWorkPointer->actionCommands;
     camGetPtr(CAMERA_2D);
     count = ac->params[0];
     idx = ((SklWork*)ac->work)->idx - 1;

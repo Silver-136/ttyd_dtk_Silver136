@@ -203,7 +203,7 @@ static inline void noko_star(PartyEntry* party, s32 n) {
     effSmallStarN64Entry(3, n, party->position.x, party->position.y + party->height, party->position.z, s, (-1.0f), -c);
 }
 
-#define NOKO_ITEM(party, body)                                                                                     \
+#define NOKO_PICK_UP_NEAR_ITEM(party, body)                                                                                     \
     if (party->work.nokonoko.heldItem == NULL) {                                                                   \
         party->work.nokonoko.heldItem = itemNearDistCheck(party->position.x, party->position.y, party->position.z, \
         0.5f * party->width + 12.0f);                                                                              \
@@ -354,7 +354,7 @@ void nokonoko_use(PartyEntry* party) {
                                party->camId);
         }
         party->moveDistance += party->moveSpeed;
-        NOKO_ITEM(party, party->useMotionId = 50; psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_PNK_KOURA_WALL1), &party->position); noko_star(party, 1); break;)
+        NOKO_PICK_UP_NEAR_ITEM(party, party->useMotionId = 50; psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_PNK_KOURA_WALL1), &party->position); noko_star(party, 1); break;)
         if (ccwall(party, 0) != NULL) {
             party->useMotionId = 50;
             psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_PNK_KOURA_WALL1), &party->position);
@@ -408,7 +408,7 @@ void nokonoko_use(PartyEntry* party) {
             noko_se_off();
             break;
         }
-        NOKO_ITEM(party, party->useMotionId = 50; psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_PNK_KOURA_WALL1), &party->position); noko_star(party, 1); noko_se_off(); break;)
+        NOKO_PICK_UP_NEAR_ITEM(party, party->useMotionId = 50; psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_PNK_KOURA_WALL1), &party->position); noko_star(party, 1); noko_se_off(); break;)
         if (!(party->flags & PARTY_FLAG_IS_EVT_USE)) {
             if (mario->currMotionId == MARIO_MOTION_SHIP || mario->currMotionId == MARIO_MOTION_JABARA || mario->currMotionId == MARIO_MOTION_PLANE || mario->currMotionId == MARIO_MOTION_ROLL || (u16)(mario->currMotionId - 0x1f) <= 1 ||
                 (mario->flags & MARIO_FLAG_FORCED_MOVEMENT) || !marioChkKey()) {
@@ -604,7 +604,7 @@ void nokonoko_use(PartyEntry* party) {
         if (party->moveSpeed >= 18.0f) {
             party->moveSpeed = 18.0f;
         }
-        NOKO_ITEM(party, psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_PNK_KOURA_WALL1), &party->position); noko_star(party, 1);)
+        NOKO_PICK_UP_NEAR_ITEM(party, psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_PNK_KOURA_WALL1), &party->position); noko_star(party, 1);)
         hit = ccwall(party, 1);
         if (hit != NULL) {
             if (!(hitGetAttr(hit) & HIT_ATTR_MOBJ)) {
@@ -623,7 +623,7 @@ void nokonoko_use(PartyEntry* party) {
     case 82:
         noko_spin(party);
         party->moveSpeed += 0.35f * ((-1.0f) - party->moveSpeed);
-        NOKO_ITEM(party, psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_PNK_KOURA_WALL1), &party->position); noko_star(party, 1);)
+        NOKO_PICK_UP_NEAR_ITEM(party, psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_PNK_KOURA_WALL1), &party->position); noko_star(party, 1);)
         if (ccwall(party, 1) != NULL) {
             party->useMotionId = 100;
             break;

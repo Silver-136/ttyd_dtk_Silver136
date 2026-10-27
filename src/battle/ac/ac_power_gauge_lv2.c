@@ -25,7 +25,6 @@ typedef struct PGLv2Work {
     s32 endTimer;  // 0x28
 } PGLv2Work;
 
-#define AC_DISP(ac) (&(ac)->disp)
 #define AC_WORK(ac) ((PGLv2Work*)(ac)->work)
 
 static s32 _power_table[] = {300, 200, 150, 100, 80, 60, 40};
@@ -36,7 +35,7 @@ static void actionCommandDisp(f32 x, f32 y);
 s32 battleAcMain_PowerGaugeLv2(BattleWork* work) {
     BattleActions* ac = &work->actionCommands;
     PGLv2Work* g = AC_WORK(ac);
-    BattleACDispParams* disp = AC_DISP(ac);
+    BattleACDispParams* disp = &ac->disp;
     s32 diff = BattleActionCommandGetDifficulty(work);
     s32 flag = 0;
     s32 pressed;
@@ -191,7 +190,7 @@ s32 battleAcResult_PowerGaugeLv2(BattleWork* work) {
 void battleAcDisp_PowerGaugeLv2(CameraId cameraId, void* param) {
     BattleWork* work = (BattleWork*)param;
     BattleActions* ac = &work->actionCommands;
-    BattleACDispParams* disp = AC_DISP(ac);
+    BattleACDispParams* disp = &ac->disp;
     switch (ac->mAcState) {
         case 99:
             disp->iconX = intplGetValue(EASING_QUADRATIC_OUT, -300.0f, 30.0f, 20 - disp->slideTimer, 20);

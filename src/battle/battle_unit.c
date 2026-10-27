@@ -20,8 +20,6 @@ void psndSFX_pit(s32 id, s16 pitch);
 void psndSFX_vol(s32 id, u8 vol);
 
 
-#define PART_FLAGS(part) ((part)->animFlags)
-#define PART_POSE_SOUND(part) (&(part)->poseSound)
 
 
 
@@ -1412,7 +1410,7 @@ void BtlUnit_SetAnimType(BattleUnitPart* part, s32 type) {
     switch (type) {
         case POSE_TYPE_DAMAGE_FIRE:
         case POSE_TYPE_DAMAGE_FIRE_2_UNUSED:
-            PART_FLAGS(part) |= PART_ANIM_BURNT;
+            part->animFlags |= PART_ANIM_BURNT;
             break;
     }
 }
@@ -1951,16 +1949,16 @@ void BtlUnit_SetCommandAnimPose(BattleUnit* unit) {
     }
     if (special) {
         BtlUnit_SetAnimType(part, POSE_TYPE_COMMAND);
-        PART_FLAGS(part) |= PART_ANIM_COMMAND_POSE;
+        part->animFlags |= PART_ANIM_COMMAND_POSE;
     } else {
         btlDispPoseAnime(part);
     }
 }
 
 void BtlUnit_PoseSoundInit(BattleUnitPart* part) {
-    PART_POSE_SOUND(part)->loopCount = 0;
-    PART_POSE_SOUND(part)->time = 0.0f;
-    PART_POSE_SOUND(part)->prevTime = 0.0f;
+    part->poseSound.loopCount = 0;
+    part->poseSound.time = 0.0f;
+    part->poseSound.prevTime = 0.0f;
 }
 
 #pragma push
@@ -1979,7 +1977,7 @@ void BtlUnit_ControlPoseSoundMain(BattleUnitPart* part) {
     if (!part) {
         return;
     }
-    state = PART_POSE_SOUND(part);
+    state = &part->poseSound;
     entry = state->table;
     if (!entry) {
         return;

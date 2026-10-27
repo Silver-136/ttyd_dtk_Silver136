@@ -234,10 +234,8 @@ static inline BOOL loadStart(void) {
     return FALSE;
 }
 
-#define LANG ((u32)gp->language)
 #endif
 #define SFX(id) psndSFXOn((const char*)(id))
-#define SLOTFLAGS(i) (cardGetFilePtr()->saves[(i)].data.flags)
 
 void loadMain(SequenceWork* seq) {
     u32 trg;
@@ -262,7 +260,7 @@ void loadMain(SequenceWork* seq) {
     }
     wp->cardCode = code;
     for (i = 0; i < 4; i++) {
-        flags = SLOTFLAGS(i);
+        flags = cardGetFilePtr()->saves[(i)].data.flags;
         if (!(flags & 1) || (flags & 2)) {
             break;
         }
@@ -274,7 +272,7 @@ void loadMain(SequenceWork* seq) {
     }
     wp->flags &= ~LOAD_FLAG_NO_COPY;
     for (i = 0; i < 4; i++) {
-        flags = SLOTFLAGS(i);
+        flags = cardGetFilePtr()->saves[(i)].data.flags;
         if (!(flags & 1) && !(flags & 2)) {
             break;
         }
@@ -298,7 +296,7 @@ void loadMain(SequenceWork* seq) {
             } else if (dir & DEMO_STICK_RIGHT) {
                 wp->slot = win_dt[prev].next[3];
             } else if (trg & PAD_BUTTON_A) {
-                flags = SLOTFLAGS(wp->slot);
+                flags = cardGetFilePtr()->saves[(wp->slot)].data.flags;
                 switch (wp->slot) {
                     case 0:
                     case 1:
@@ -317,7 +315,7 @@ void loadMain(SequenceWork* seq) {
                     case 4:
                         if (!(wp->flags & LOAD_FLAG_NO_DELETE)) {
                             for (i = 0; i < 4; i++) {
-                                flags = SLOTFLAGS(i);
+                                flags = cardGetFilePtr()->saves[(i)].data.flags;
                                 if (!(flags & 1) || (flags & 2)) {
                                     break;
                                 }
@@ -334,7 +332,7 @@ void loadMain(SequenceWork* seq) {
                     case 5:
                         if (!(wp->flags & LOAD_FLAG_NO_COPY)) {
                             for (i = 0; i < 4; i++) {
-                                flags = SLOTFLAGS(i);
+                                flags = cardGetFilePtr()->saves[(i)].data.flags;
                                 if (!(flags & 2) && !(flags & 1)) {
                                     break;
                                 }
@@ -498,7 +496,7 @@ void loadMain(SequenceWork* seq) {
                 wp->slot = win_dt2[prev].next[3];
             } else if (trg & PAD_BUTTON_A) {
                 if (prev < 4) {
-                    flags = SLOTFLAGS(wp->slot);
+                    flags = cardGetFilePtr()->saves[(wp->slot)].data.flags;
                     if ((flags & 2) || !(flags & 1)) {
                         SFX(0x12);
                         wp->state++;
@@ -553,7 +551,7 @@ void loadMain(SequenceWork* seq) {
                 wp->slot = win_dt2[prev].next[3];
             } else if (trg & PAD_BUTTON_A) {
                 if (prev < 4) {
-                    flags = SLOTFLAGS(wp->slot);
+                    flags = cardGetFilePtr()->saves[(wp->slot)].data.flags;
                     if (!(flags & 2) && !(flags & 1)) {
                         wp->state = 0x33;
                         wp->copyFrom = wp->slot;
@@ -961,7 +959,7 @@ void loadDraw(CameraId camera, void* param) {
         FontDrawScale(0.6f);
         FontDrawEdge();
 #ifdef VERSION_G8ME01
-        if (LANG == 0) {
+        if (((u32)gp->language) == 0) {
             str = "\x83\x66\x81\x5B\x83\x5E";
         } else {
             str = msgSearch("msg_mcard_file");
@@ -980,7 +978,7 @@ void loadDraw(CameraId camera, void* param) {
         }
         if (flags & 2) {
 #ifdef VERSION_G8ME01
-            if (LANG == 0) {
+            if (((u32)gp->language) == 0) {
                 str = "\x82\xB1\x82\xED\x82\xEA\x82\xC4\x82\xA2\x82\xDC\x82\xB7";
             } else {
                 str = msgSearch("msg_mcard_kowareteru");
@@ -991,14 +989,14 @@ void loadDraw(CameraId camera, void* param) {
             str = msgSearch("msg_mcard_kowaretitle");
             FontDrawString(win1[0]->x - FontGetMessageWidth(str) / 2, 70.0f + win1[0]->y, str);
         } else if (flags & 1) {
-            if (LANG == 0) {
+            if (((u32)gp->language) == 0) {
                 str = "\x83\x6A\x83\x85\x81\x5B\x83\x51\x81\x5B\x83\x80";
             } else {
                 str = msgSearch("msg_mcard_new_game");
             }
             FontDrawString(win1[0]->x - FontGetMessageWidth(str) / 2.0f, 12.0f + win1[0]->y, str);
         } else if (gsw0 == 0) {
-            if (LANG == 0) {
+            if (((u32)gp->language) == 0) {
                 str = "\x82\xCD\x82\xB6\x82\xDF\x82\xA9\x82\xE7";
             } else {
                 str = msgSearch("msg_mcard_hajimekara");
@@ -1008,7 +1006,7 @@ void loadDraw(CameraId camera, void* param) {
                 FontDrawString(win1[0]->x - FontGetMessageWidth(name) / 2, 70.0f + win1[0]->y, name);
             }
         } else {
-            FontGetMessageWidth(LANG != 0 ? "88" : "\x82\x57\x82\x57");
+            FontGetMessageWidth(((u32)gp->language) != 0 ? "88" : "\x82\x57\x82\x57");
 #else
             str = "\202\261\202\355\202\352\202\304\202\242\202\334\202\267";
             FontDrawString(win1->x - FontGetMessageWidth(str) / 2.0f, 12.0f + win1->y, str);
@@ -1036,9 +1034,9 @@ void loadDraw(CameraId camera, void* param) {
 #ifdef VERSION_G8ME01
                 FontDrawString(win1[0]->x - FontGetMessageWidth(name) / 2, 70.0f + win1[0]->y, name);
             }
-            sprintf(buf2, LANG != 0 ? "%s %s" : "%s\x81\x40%s", msgSearch("msg_menu_mario_level"), winZenkakuStr(level));
+            sprintf(buf2, ((u32)gp->language) != 0 ? "%s %s" : "%s\x81\x40%s", msgSearch("msg_menu_mario_level"), winZenkakuStr(level));
             FontDrawString(win1[0]->x - FontGetMessageWidth(buf2) / 2.0f, 30.0f + win1[0]->y, buf2);
-            sprintf(buf2, LANG != 0 ? "%s " : "%s\x81\x40", msgSearch("msg_menu_mario_num_playtime"));
+            sprintf(buf2, ((u32)gp->language) != 0 ? "%s " : "%s\x81\x40", msgSearch("msg_menu_mario_num_playtime"));
 #else
                 FontDrawString(win1->x - FontGetMessageWidth(name) / 2, 70.0f + win1->y, name);
             }
@@ -1058,7 +1056,7 @@ void loadDraw(CameraId camera, void* param) {
             FontDrawString(win1[0]->x - w / 2.0f, win1[0]->y, buf2);
             FontDrawScaleVec((Vec){1.0f, 1.0f, 1.0f});
             w = FontGetMessageWidth(buf2);
-            sprintf(buf2, LANG != 0 ? "%s " : "%s\x81\x40", msgSearch("msg_menu_mario_num_playtime"));
+            sprintf(buf2, ((u32)gp->language) != 0 ? "%s " : "%s\x81\x40", msgSearch("msg_menu_mario_num_playtime"));
             strcat(buf2, winZenkakuStrPad(hours, 2));
             x = FontGetMessageWidth(buf2);
             if (w > 200.0f) {

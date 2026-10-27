@@ -279,7 +279,7 @@ void winBadgeMain2(WindowWork* w) {
 
 void badge_disp(WindowWork* w, f32 xo, f32 yo);
 
-#define Q ((pouch->maximumBP + 9) / 10)
+#define BP_TENS ((pouch->maximumBP + 9) / 10)
 
 void winBadgeDisp(s32 camId, void* param, s32 n) {
     WindowWork* w = param;
@@ -316,7 +316,7 @@ void winBadgeDisp(s32 camId, void* param, s32 n) {
             winTexSet_x2(i + 0x1A, 0xB4, (Vec){x - 190.0f, VERSION_PICK(20.0f, 25.0f) + (a - off), 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0x80, 0x80, 0x80, 0xFF});
         }
     }
-    winKirinukiGX(w, 1, x - 260.0f, yy = 20.0f + (40.0f + y), 150.0f, 158 - (10 - Q) * 13);
+    winKirinukiGX(w, 1, x - 260.0f, yy = 20.0f + (40.0f + y), 150.0f, 158 - (10 - BP_TENS) * 13);
     winFontInit();
 #ifdef VERSION_G8ME01
     {
@@ -330,11 +330,11 @@ void winBadgeDisp(s32 camId, void* param, s32 n) {
     winFontSetR((Vec){(x - 175.0f) - 18.0f, yy, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, black, "%s", winZenkakuStr(pouch->maximumBP));
 #ifdef VERSION_G8ME01
     tw = FontGetMessageWidth(msgSearch("msg_menu_badge_nokori")) * 0.5f + 60.0f;
-    winFontSet((Vec){4.0f + (16.0f + ((x - 260.0f) + (150.0f - tw))), ((20.0f + (y - 108.0f)) - 18.0f) + (10 - Q) * 13, 0.0f}, (Vec){0.5f, 0.5f, 0.5f}, black, msgSearch("msg_menu_badge_nokori"));
+    winFontSet((Vec){4.0f + (16.0f + ((x - 260.0f) + (150.0f - tw))), ((20.0f + (y - 108.0f)) - 18.0f) + (10 - BP_TENS) * 13, 0.0f}, (Vec){0.5f, 0.5f, 0.5f}, black, msgSearch("msg_menu_badge_nokori"));
 #else
-    winFontSet((Vec){x - 180.0f, ((20.0f + (y - 108.0f)) - 18.0f) + (10 - Q) * 13, 0.0f}, (Vec){0.5f, 0.5f, 0.5f}, black, msgSearch("msg_menu_badge_nokori"));
+    winFontSet((Vec){x - 180.0f, ((20.0f + (y - 108.0f)) - 18.0f) + (10 - BP_TENS) * 13, 0.0f}, (Vec){0.5f, 0.5f, 0.5f}, black, msgSearch("msg_menu_badge_nokori"));
 #endif
-    winFontSetR((Vec){VERSION_PICK((x - 145.0f) - 16.0f, 4.0f + ((x - 145.0f) - 16.0f)), ((20.0f + (y - 102.0f)) - 18.0f) + (10 - Q) * 13, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, black, "%s", winZenkakuStr(pouch->availableBP));
+    winFontSetR((Vec){VERSION_PICK((x - 145.0f) - 16.0f, 4.0f + ((x - 145.0f) - 16.0f)), ((20.0f + (y - 102.0f)) - 18.0f) + (10 - BP_TENS) * 13, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, black, "%s", winZenkakuStr(pouch->availableBP));
     winTexInit((TEXPalette*)*w->res->data);
     d = 28.0f + y;
     for (i = 0; i < pouch->availableBP; i++) {

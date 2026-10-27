@@ -1,7 +1,5 @@
 #define _MATH_H_
 double fabs(double x);
-#define fabs(x) __fabs(x)
-#define fabsf(x) __fabsf(x)
 #include "party/party_cloud.h"
 #include "dolphin/types.h"
 #include "musyx/musyx.h"
@@ -138,7 +136,7 @@ f32 cloudGetBreathPower(f32 size, Vec* pos) {
         party->currentMemberId == PARTY_MEMBER_FLURRIE 
         && (party->flags & PARTY_FLAG_IS_BEING_USED) != 0 
         && party->useMotionId >= MARIO_MOTION_FALL
-        && ((fabs(party->position.y - pos->y - 18.0f)) <= val)
+        && ((__fabs(party->position.y - pos->y - 18.0f)) <= val)
     ) {
         PartyCloud* cloud = (PartyCloud*)party->useStruct;
         reach = cloud->breathDist;
@@ -151,7 +149,7 @@ f32 cloudGetBreathPower(f32 size, Vec* pos) {
             if (dist <= 30.0f || dist >= 330.0f) {
                 breathPower = cos((3.1415927f * dist) / 180.0f);
                 val = 100.0f;
-                breathPower = val * fabsf(breathPower);
+                breathPower = val * __fabsf(breathPower);
             }
         }
     }

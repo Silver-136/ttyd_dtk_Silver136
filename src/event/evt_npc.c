@@ -24,8 +24,6 @@
 
 
 #ifdef __MWERKS__
-#define fabs(x) __fabs(x)
-#define fabsf(x) __fabsf(x)
 #else
 #endif
 
@@ -1017,7 +1015,7 @@ USER_FUNC(evt_npc_homing_target) {
 
         // turn toward the target, limited by turnRate
         delta = compAngle(npc->moveDir, angle);
-        if (fabsf(delta) <= 60.0f * turnRate * npc->moveDt) {
+        if (__fabsf(delta) <= 60.0f * turnRate * npc->moveDt) {
             npc->moveDir = angle;
         } else {
             if (delta > 0.0f) {

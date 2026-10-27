@@ -119,8 +119,6 @@ void BattleStatusEffectDelete(BattleUnit* unit) {
 
 EffectEntry* effSparkEntry(s32, s32, f32, f32, f32, f32);
 EffectEntry* effSleepEntry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32 scale, f32 rotation);
-#define EFF_SLEEP(u) ((u)->sleepEff)
-#define EFF_SPARK(u) ((u)->sparkEff)
 
 void BSE_Sleep(BattleUnit* unit) {
     f32 x, y, z;
@@ -132,10 +130,10 @@ void BSE_Sleep(BattleUnit* unit) {
         on = TRUE;
     }
     if (on) {
-        if (EFF_SLEEP(unit) == NULL) {
-            EFF_SLEEP(unit) = effSleepEntry(0, 0, -1000.0f, -1000.0f, -1000.0f, 1.0f, 60.0f);
+        if (unit->sleepEff == NULL) {
+            unit->sleepEff = effSleepEntry(0, 0, -1000.0f, -1000.0f, -1000.0f, 1.0f, 60.0f);
         }
-        wk = (f32*)EFF_SLEEP(unit)->userdata;
+        wk = (f32*)unit->sleepEff->userdata;
         BtlUnit_GetPartsWorldPos(BtlUnit_GetPartsPtr(unit, BtlUnit_GetBodyPartsId(unit)), &x, &y, &z);
         dx = 0.5f * (unit->mSizeMultiplier * BtlUnit_GetWidth(unit));
         dy = 0.95f * (unit->mSizeMultiplier * BtlUnit_GetHeight(unit));
@@ -153,9 +151,9 @@ void BSE_Sleep(BattleUnit* unit) {
 }
 
 void BSE_SleepDelete(BattleUnit* unit) {
-    if (EFF_SLEEP(unit) != NULL) {
-        effDelete(EFF_SLEEP(unit));
-        EFF_SLEEP(unit) = NULL;
+    if (unit->sleepEff != NULL) {
+        effDelete(unit->sleepEff);
+        unit->sleepEff = NULL;
     }
 }
 
@@ -169,10 +167,10 @@ void BSE_Biribiri(BattleUnit* unit) {
         on = TRUE;
     }
     if (on) {
-        if (EFF_SPARK(unit) == NULL) {
-            EFF_SPARK(unit) = effSparkEntry(0, 10, -1000.0f, -1000.0f, -1000.0f, BtlUnit_GetWidth(unit) / 2);
+        if (unit->sparkEff == NULL) {
+            unit->sparkEff = effSparkEntry(0, 10, -1000.0f, -1000.0f, -1000.0f, BtlUnit_GetWidth(unit) / 2);
         }
-        wk = (f32*)EFF_SPARK(unit)->userdata;
+        wk = (f32*)unit->sparkEff->userdata;
         BtlUnit_GetPartsWorldPos(BtlUnit_GetPartsPtr(unit, BtlUnit_GetBodyPartsId(unit)), &x, &y, &z);
         dy = unit->mSizeMultiplier * (BtlUnit_GetHeight(unit) / 2);
         if (unit->mAttributeFlags & kCeiling) {
@@ -188,16 +186,14 @@ void BSE_Biribiri(BattleUnit* unit) {
 }
 
 void BSE_BiribiriDelete(BattleUnit* unit) {
-    if (EFF_SPARK(unit) != NULL) {
-        effDelete(EFF_SPARK(unit));
-        EFF_SPARK(unit) = NULL;
+    if (unit->sparkEff != NULL) {
+        effDelete(unit->sparkEff);
+        unit->sparkEff = NULL;
     }
 }
 
 EffectEntry* effFireEntry(s32 type, s32 duration, f32 x, f32 y, f32 z, f32 scale);
 EffectEntry* effIceEntry(s32 type, s32 duration, f32 x, f32 y, f32 z, f32 scale);
-#define EFF_FIRE(u) ((u)->fireEff)
-#define EFF_ICE(u) ((u)->iceEff)
 
 void BSE_Fire(BattleUnit* unit) {
     f32 x, y, z;
@@ -208,10 +204,10 @@ void BSE_Fire(BattleUnit* unit) {
         on = TRUE;
     }
     if (on) {
-        if (EFF_FIRE(unit) == NULL) {
-            EFF_FIRE(unit) = effFireEntry(0, 0, -1000.0f, -1000.0f, -1000.0f, 1.0f);
+        if (unit->fireEff == NULL) {
+            unit->fireEff = effFireEntry(0, 0, -1000.0f, -1000.0f, -1000.0f, 1.0f);
         }
-        wk = (f32*)EFF_FIRE(unit)->userdata;
+        wk = (f32*)unit->fireEff->userdata;
         BtlUnit_GetPartsWorldPos(BtlUnit_GetPartsPtr(unit, BtlUnit_GetBodyPartsId(unit)), &x, &y, &z);
         x += unit->mSizeMultiplier * (unit->mKindParams->burnFlameOffset.x * (unit->faceDirection >= 0 ? 1.0f : -1.0f));
         y += unit->mKindParams->burnFlameOffset.y * unit->mSizeMultiplier;
@@ -225,9 +221,9 @@ void BSE_Fire(BattleUnit* unit) {
 }
 
 void BSE_FireDelete(BattleUnit* unit) {
-    if (EFF_FIRE(unit) != NULL) {
-        effDelete(EFF_FIRE(unit));
-        EFF_FIRE(unit) = NULL;
+    if (unit->fireEff != NULL) {
+        effDelete(unit->fireEff);
+        unit->fireEff = NULL;
     }
 }
 
@@ -241,10 +237,10 @@ void BSE_Freeze(BattleUnit* unit) {
         on = TRUE;
     }
     if (on) {
-        if (EFF_ICE(unit) == NULL) {
-            EFF_ICE(unit) = effIceEntry(0, -1, -1000.0f, -1000.0f, -1000.0f, 1.0f);
+        if (unit->iceEff == NULL) {
+            unit->iceEff = effIceEntry(0, -1, -1000.0f, -1000.0f, -1000.0f, 1.0f);
         }
-        wk = (f32*)EFF_ICE(unit)->userdata;
+        wk = (f32*)unit->iceEff->userdata;
         {
             BattleUnitPart* parts = BtlUnit_GetPartsPtr(unit, BtlUnit_GetBodyPartsId(unit));
             a = unit->mWidth / 20.0f;
@@ -263,9 +259,9 @@ void BSE_Freeze(BattleUnit* unit) {
 }
 
 void BSE_FreezeDelete(BattleUnit* unit) {
-    if (EFF_ICE(unit) != NULL) {
-        effSoftDelete(EFF_ICE(unit));
-        EFF_ICE(unit) = NULL;
+    if (unit->iceEff != NULL) {
+        effSoftDelete(unit->iceEff);
+        unit->iceEff = NULL;
     }
 }
 

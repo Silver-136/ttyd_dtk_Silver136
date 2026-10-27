@@ -30,7 +30,6 @@ typedef struct ShotTargetWork {
 } ShotTargetWork;
 
 #define ST_WORK(ac) ((ShotTargetWork*)(ac)->work)
-#define ST_DISP(ac) (&(ac)->disp)
 
 
 static void _ac_disp_init(BattleWork* work);
@@ -221,7 +220,7 @@ s32 battleAcResult_ShotTarget(BattleWork* work) {
 void battleAcDisp_ShotTarget(CameraId cameraId, void* param) {
     BattleWork* work = param;
     BattleActions* ac = &work->actionCommands;
-    BattleACDispParams* d = ST_DISP(ac);
+    BattleACDispParams* d = &ac->disp;
 
     switch (ac->mAcState) {
         case 99:
@@ -255,7 +254,7 @@ void battleAcDelete_ShotTarget(BattleWork* work) {
 }
 
 static void _ac_disp_init(BattleWork* work) {
-    BattleACDispParams* d = ST_DISP(&work->actionCommands);
+    BattleACDispParams* d = (&(&work->actionCommands)->disp);
     memset(d, 0, 0x2C);
     d->iconX = -200.0f;
     d->iconY = 0.0f;

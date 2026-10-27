@@ -47,7 +47,7 @@ f32 ofs_PYS_R_2[10] = {0.0f, 0.0f, 0.366f, 0.555f, 0.38f, 0.0f, 0.0f, 0.366f, 0.
 f32 ofs_PYS_F_1[10] = {0.0f, 0.0f, 0.433f, 0.557f, 0.512f, 0.0f, 0.0f, 0.433f, 0.557f, 0.512f};
 
 #define YOSHI_WORK(party) ((YoshiWork*)(party)->useStruct)
-#define ADD_OFS(party)                                              \
+#define ADD_FLOOR_MOVE(party)                                              \
     if ((party)->hitobjStandOn) {                                       \
         (party)->position.x += (party)->floorMove.x;                  \
         (party)->position.y += (party)->floorMove.y;                  \
@@ -415,7 +415,7 @@ void yoshi_use(PartyEntry* party) {
             party->position.z += (party->moveTarget.z - party->position.z) / party->moveFrames;
             if (--party->moveFrames != 0) {
                 searchGround(party);
-                ADD_OFS(party);
+                ADD_FLOOR_MOVE(party);
                 return;
             }
             mario->trigFlags |= MARIO_TRIG_FLAG_DISABLE_JUMP_KEMURI;
@@ -427,7 +427,7 @@ void yoshi_use(PartyEntry* party) {
             party->displayDirection = mario->displayDirection;
             party->moveSpeed = 0.0f;
             party->useMotionId = 7;
-            ADD_OFS(party);
+            ADD_FLOOR_MOVE(party);
             partyChkGnd(party);
             return;
         case 7:
@@ -442,7 +442,7 @@ void yoshi_use(PartyEntry* party) {
                 }
             }
             if (mario->hitobjStandOn == NULL) {
-                ADD_OFS(party);
+                ADD_FLOOR_MOVE(party);
                 partyChkGnd(party);
                 return;
             }
@@ -577,12 +577,12 @@ void yoshi_use(PartyEntry* party) {
             partyChgPose(party, "PYS_H_2");
             party->moveSpeed = 0.0f;
             party->useMotionId = 101;
-            ADD_OFS(party);
+            ADD_FLOOR_MOVE(party);
             partyChkGnd(party);
             return;
         case 101:
             if (mario->hitobjStandOn == NULL) {
-                ADD_OFS(party);
+                ADD_FLOOR_MOVE(party);
                 partyChkGnd(party);
                 return;
             }
@@ -591,7 +591,7 @@ void yoshi_use(PartyEntry* party) {
                 partyChgRunMode(party, 2);
                 party->moveMode = 0;
             }
-            ADD_OFS(party);
+            ADD_FLOOR_MOVE(party);
             partyChkGnd(party);
 #ifdef VERSION_G8ME01
             movePos(&party->position.x, &party->position.z, mario->hitobjFront ? -0.1f : 0.1f, toMovedir(mario->displayDirection));
@@ -940,7 +940,7 @@ void yoshi_use(PartyEntry* party) {
         L_resetOfs(party);
         return;
     }
-    ADD_OFS(party);
+    ADD_FLOOR_MOVE(party);
     mario->camTarget.x = party->position.x;
     mario->camTarget.z = party->position.z;
     mario->displayDirection = party->displayDirection;

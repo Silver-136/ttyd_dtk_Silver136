@@ -483,7 +483,6 @@ void mot_plane(void) {
 double sin(double);
 
 #define PI 3.1415927f
-#define STICK (mp->wStickDir1)
 
 static inline BOOL planeChkUnder(void) {
     BOOL ret = FALSE;
@@ -560,18 +559,18 @@ static void flyMain(void) {
         flag = TRUE;
     }
     mp->displayDirection = revise360(flag ? -t - 90.0f : 270.0f - t);
-    if (STICK != 0) {
+    if (mp->wStickDir1 != 0) {
         if (mp->baseSpeed) {
-            a = __fabsf((f32)STICK);
+            a = __fabsf((f32)mp->wStickDir1);
             if (mp->motPlane->flags & MOT_PLANE_FLAG_RIGHT) {
-                if (STICK < 0) {
+                if (mp->wStickDir1 < 0) {
                     if (mp->motPlane->pitch >= planeData[3]) {
                         mp->motPlane->pitch += 0.1f * (planeData[3] - mp->motPlane->pitch);
                     } else {
                         mp->motPlane->pitch += 0.1f * (a * planeData[5]);
                     }
                 }
-                if (STICK > 0) {
+                if (mp->wStickDir1 > 0) {
                     if (mp->motPlane->pitch <= planeData[4]) {
                         mp->motPlane->pitch = planeData[4];
                     } else {
@@ -579,14 +578,14 @@ static void flyMain(void) {
                     }
                 }
             } else {
-                if (STICK > 0) {
+                if (mp->wStickDir1 > 0) {
                     if (mp->motPlane->pitch >= planeData[3]) {
                         mp->motPlane->pitch += 0.1f * (planeData[3] - mp->motPlane->pitch);
                     } else {
                         mp->motPlane->pitch += 0.1f * (a * planeData[5]);
                     }
                 }
-                if (STICK < 0) {
+                if (mp->wStickDir1 < 0) {
                     if (mp->motPlane->pitch <= planeData[4]) {
                         mp->motPlane->pitch = planeData[4];
                     } else {
@@ -633,14 +632,14 @@ static void flyMain(void) {
         a = (f32)sin(PI * (mp->motPlane->pitch * planeData[7]) / 180.0f);
         a = mp->baseSpeed * (planeData[8] * a);
         mp->baseSpeed = mp->baseSpeed + a;
-        if (STICK != 0 && mp->motPlane->pitch >= planeData[3]) {
+        if (mp->wStickDir1 != 0 && mp->motPlane->pitch >= planeData[3]) {
             mp->baseSpeed += planeData[2];
         }
         if (mp->baseSpeed <= 0.0f) {
             mp->baseSpeed = 0.0f;
         }
         t = 0.0f;
-        if (STICK == 0) {
+        if (mp->wStickDir1 == 0) {
             if (mp->baseSpeed < planeData[20]) {
                 t = planeData[0] - mp->baseSpeed;
                 t *= planeData[21] * (f32)sin(PI * mp->motPlane->pitch / 180.0f);
@@ -666,7 +665,7 @@ static void flyMain(void) {
             }
             mp->motPlane->pitch += mp->motPlane->pitchRecover;
         }
-        if (STICK != 0) {
+        if (mp->wStickDir1 != 0) {
             v = planeData[18] * (f32)sin(PI * (planeData[0] - mp->baseSpeed) / 180.0f);
             mp->motPlane->sinkSpeed += v;
             if (mp->motPlane->sinkSpeed <= planeData[19]) {
@@ -687,13 +686,13 @@ static void flyMain(void) {
         t = (f32)sin(PI * (planeData[12] * a) / 180.0f);
         { f32 s = (f32)sin(PI * (mp->baseSpeed * planeData[11]) / 180.0f); a = planeData[13] * (s * t); }
         mp->motPlane->pitchSpeed = mp->motPlane->pitchSpeed + a;
-        if (STICK != 0) {
+        if (mp->wStickDir1 != 0) {
             if (mp->motPlane->flags & MOT_PLANE_FLAG_RIGHT) {
-                if (STICK > 0 && mp->motPlane->pitchSpeed >= 1.0f) {
+                if (mp->wStickDir1 > 0 && mp->motPlane->pitchSpeed >= 1.0f) {
                     mp->motPlane->pitchSpeed = 1.0f;
                 }
             } else {
-                if (STICK < 0 && mp->motPlane->pitchSpeed >= 1.0f) {
+                if (mp->wStickDir1 < 0 && mp->motPlane->pitchSpeed >= 1.0f) {
                     mp->motPlane->pitchSpeed = 1.0f;
                 }
             }
@@ -730,7 +729,7 @@ static void flyMain(void) {
     if (mp->baseSpeed <= planeData[16]) {
         n = sysMsec2Frame(1000.0f * planeData[17]);
         if (mp->motPlane->flags & MOT_PLANE_FLAG_RIGHT) {
-            if ((f32)STICK < 0.0f) {
+            if ((f32)mp->wStickDir1 < 0.0f) {
                 if (++mp->motPlane->stallTimer >= n) {
                     mp->mot.plane.groundY = mp->position.y;
                     mp->currSubMotionId = 60;
@@ -738,7 +737,7 @@ static void flyMain(void) {
                 }
             }
         } else {
-            if ((f32)STICK > 0.0f) {
+            if ((f32)mp->wStickDir1 > 0.0f) {
                 if (++mp->motPlane->stallTimer >= n) {
                     mp->mot.plane.groundY = mp->position.y;
                     mp->currSubMotionId = 60;

@@ -1332,7 +1332,7 @@ static inline s32 yuunpc_hitY_get(f32 x) {
     return yuunpc_wp->hitY[(s32)((x - -1800.0f) / 50.0f)];
 }
 
-#define HG(x, zp) (((x) < -1800.0f || (x) >= 1800.0f || *(zp) < -150.0f || *(zp) >= 150.0f) ? -500 : yuunpc_wp->hit[(s32)((*(zp) - -150.0f) / 50.0f) * 72 + (s32)(((x) - -1800.0f) / 50.0f)])
+#define YUUNPC_HIT_AT(x, zp) (((x) < -1800.0f || (x) >= 1800.0f || *(zp) < -150.0f || *(zp) >= 150.0f) ? -500 : yuunpc_wp->hit[(s32)((*(zp) - -150.0f) / 50.0f) * 72 + (s32)(((x) - -1800.0f) / 50.0f)])
 #define yuunpc_hit_ofs(npc, ofs) ((((npc)->pos.x + (ofs)->x) < -1800.0f || ((npc)->pos.x + (ofs)->x) >= 1800.0f || ((npc)->pos.z + (ofs)->z) < -150.0f || ((npc)->pos.z + (ofs)->z) >= 150.0f) ? -500 : yuunpc_wp->hit[(s32)((((npc)->pos.z + (ofs)->z) - -150.0f) / 50.0f) * 72 + (s32)((((npc)->pos.x + (ofs)->x) - -1800.0f) / 50.0f)])
 
 #define yuunpc_snap(v) (((s32)((3600.0f + (v)) / 50.0f) + 1) * 50.0f - 3600.0f)
@@ -1868,8 +1868,8 @@ void yuunpc_pose_minigame4_main(void) {
                     }
                     if (npc->state >= 2 || (npc->state <= 1 && irand(36) == 0)) {
                         px = npc->pos.x;
-                        hb = HG(25.0f + px, &npc->pos.z);
-                        ha = HG(75.0f + px, &npc->pos.z);
+                        hb = YUUNPC_HIT_AT(25.0f + px, &npc->pos.z);
+                        ha = YUUNPC_HIT_AT(75.0f + px, &npc->pos.z);
                         if (npc->state <= 3 && irand(2)) {
                             if (hb >= npc->pos.y) {
                                 YUU_WALK(npc);

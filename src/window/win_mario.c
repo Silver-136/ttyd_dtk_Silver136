@@ -150,7 +150,7 @@ void winMarioExit(WindowWork* w) {
         }                                             \
     }
 
-#define NAV(n)                                                        \
+#define MOVE_MARIO_CURSOR(n)                                                        \
     w->marioSel = linkDt[w->marioSel].links[n];                                 \
     p = &linkDt[w->marioSel];                                              \
     while (1) {                                                       \
@@ -189,13 +189,13 @@ s32 winMarioMain(WindowWork* w) {
             } else if (w->buttonTrg & PAD_BUTTON_START) {
                 return -2;
             } else if (w->dirRep & DEMO_STICK_UP) {
-                NAV(0)
+                MOVE_MARIO_CURSOR(0)
             } else if (w->dirRep & DEMO_STICK_DOWN) {
-                NAV(1)
+                MOVE_MARIO_CURSOR(1)
             } else if (w->dirRep & DEMO_STICK_LEFT) {
-                NAV(2)
+                MOVE_MARIO_CURSOR(2)
             } else if (w->dirRep & DEMO_STICK_RIGHT) {
-                NAV(3)
+                MOVE_MARIO_CURSOR(3)
             }
             lp = &linkDt[w->marioSel];
             w->helpTgtX = lp->x;

@@ -19,7 +19,7 @@ void* _check_hp_recover_item(BattleUnit* self);
 
 
 
-#define SETUP()                                                                      \
+#define ENEMY_ITEM_SAMPLE_TARGETS()                                                                      \
     BattleWork* wp;                                                                  \
     s32 itemId;                                                                      \
     BattleWorkWeaponTargets* targets;                                                \
@@ -80,7 +80,7 @@ void* BattleEnemyUseItemCheck(BattleUnit* self) {
 }
 
 void* _check_hp_recover_item(BattleUnit* self) {
-    SETUP()
+    ENEMY_ITEM_SAMPLE_TARGETS()
     for (i = 0; i < targets->numTargets; i++) {
         unit = BattleGetUnitPtr(wp, targets->targets[targets->targetIndices[i]].unitIdx);
         if (!(self->mAttributeFlags & kInactive)) {
@@ -93,7 +93,7 @@ void* _check_hp_recover_item(BattleUnit* self) {
 }
 
 void* _check_fp_recover_item(BattleUnit* self) {
-    SETUP()
+    ENEMY_ITEM_SAMPLE_TARGETS()
     for (i = 0; i < targets->numTargets; i++) {
         s32 max;
         unit = BattleGetUnitPtr(wp, targets->targets[targets->targetIndices[i]].unitIdx);
@@ -108,7 +108,7 @@ void* _check_fp_recover_item(BattleUnit* self) {
 }
 
 void* _check_attack_item(BattleUnit* self) {
-    SETUP()
+    ENEMY_ITEM_SAMPLE_TARGETS()
     if (targets->numTargets <= 0) {
         return NULL;
     }
@@ -127,7 +127,7 @@ void* _check_attack_item(BattleUnit* self) {
 }
 
 void* _check_status_attack_item(BattleUnit* self) {
-    SETUP()
+    ENEMY_ITEM_SAMPLE_TARGETS()
     if (targets->numTargets <= 0) {
         return NULL;
     }
@@ -167,7 +167,7 @@ void* _check_status_attack_item(BattleUnit* self) {
 }
 
 void* _check_status_support_item(BattleUnit* self) {
-    SETUP()
+    ENEMY_ITEM_SAMPLE_TARGETS()
     if (targets->numTargets <= 0) {
         return NULL;
     }
@@ -207,7 +207,7 @@ void* _check_status_support_item(BattleUnit* self) {
 }
 
 void* _check_status_recover_item(BattleUnit* self) {
-    SETUP()
+    ENEMY_ITEM_SAMPLE_TARGETS()
     if (targets->numTargets <= 0) {
         return NULL;
     }

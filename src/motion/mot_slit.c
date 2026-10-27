@@ -20,7 +20,6 @@ double fabs(double);
 BOOL marioCreviceWallChk(const Vec* p);
 
 int __abs(int);
-#define abs __abs
 
 
 
@@ -720,7 +719,7 @@ void mot_slit(void) {
             } else {
                 s32 sum;
                 m->mot.slit.count = 0;
-                sum = abs((s8)m->wStickDir1) + abs((s8)m->wStickDir2);
+                sum = __abs((s8)m->wStickDir1) + __abs((s8)m->wStickDir2);
                 if (!(m->trigFlags & 0x8000)) {
                     marioChgPose((sum < 0x44) ? "M_W_1" : "M_R_1");
                 }

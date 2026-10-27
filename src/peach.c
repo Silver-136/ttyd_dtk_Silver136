@@ -259,12 +259,11 @@ s32 peachMain(void) {
 
 void peach_stay(void) {
     MarioWork* mp = marioGetPtr();
-#define MT (mp->multiTimer)
     if (mp->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) {
         mp->trigFlags &= ~MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
         mp->flags &= ~(MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING | MARIO_FLAG_IS_STEPPING | MARIO_FLAG_HAS_INPUT_JUMP);
         mp->airTimer = 0;
-        MT = 0;
+        mp->multiTimer = 0;
         mp->currSubMotionId = 0;
         peachChgPose("P_S_1");
         if (!(mp->flags & MARIO_FLAG_FORCED_MOVEMENT)) {
@@ -280,25 +279,25 @@ void peach_stay(void) {
                 if (!(mp->peachFlags & (PEACH_FLAG_STS_MASK | PEACH_FLAG_GUNDAN))) {
                     switch (mp->currSubMotionId) {
                         case 0:
-                            if (++MT >= sysMsec2Frame(50000)) {
+                            if (++mp->multiTimer >= sysMsec2Frame(50000)) {
                                 marioChgPose("P_U_1");
-                                MT = 80;
+                                mp->multiTimer = 80;
                                 mp->currSubMotionId = 1;
                                 mp->soundId[0] = psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_VOICE_PEACH_SAD1_1), &mp->position);
                                 marioAdjustMoveDir();
                             }
                             break;
                         case 1:
-                            if (--MT < 0) {
+                            if (--mp->multiTimer < 0) {
                                 marioChgPose("P_S_1");
-                                MT = 100;
+                                mp->multiTimer = 100;
                                 mp->currSubMotionId = 2;
                             }
                             break;
                         case 2:
-                            if (--MT < 0) {
+                            if (--mp->multiTimer < 0) {
                                 marioChgPose("P_N_1");
-                                MT = 0;
+                                mp->multiTimer = 0;
                                 mp->currSubMotionId = 20;
                                 mp->mot.peach.sleepTimer = 0;
                             }
@@ -307,8 +306,8 @@ void peach_stay(void) {
                             if (++mp->mot.peach.sleepTimer >= sysMsec2Frame(10000)) {
                                 mp->mot.peach.sleepTimer = sysMsec2Frame(10000);
                             }
-                            if (++MT >= 100) {
-                                MT = 0;
+                            if (++mp->multiTimer >= 100) {
+                                mp->multiTimer = 0;
                             }
                             if (mp->flags & MARIO_FLAG_KEY_OFF) {
                                 marioChgPose("P_S_1");
@@ -320,7 +319,6 @@ void peach_stay(void) {
                 break;
         }
     }
-#undef MT
 }
 
 void peach_walk(void) {

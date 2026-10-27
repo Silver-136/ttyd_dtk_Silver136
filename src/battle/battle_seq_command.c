@@ -1443,20 +1443,6 @@ void BattleCommandDisplay_ActMenuSetup(BattleWork* wp, u32 a) {
 }
 #pragma dont_inline reset
 
-#define CHECK_CHANGE_UNIT(unit) \
-    if (!unit) { \
-        return FALSE; \
-    } \
-    if (unit->moveState) { \
-        return FALSE; \
-    } \
-    if (unit->maxMovesThisTurn <= 0 || unit->maxMovesThisTurn != unit->movesRemaining) { \
-        return FALSE; \
-    } \
-    if (BtlUnit_CheckStatus(unit, STATUS_SLEEP) || BtlUnit_CheckStatus(unit, STATUS_STOP) || BtlUnit_CheckStatus(unit, STATUS_FREEZE) || \
-        BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL)) { \
-        return FALSE; \
-    }
 
 s32 BattleCommandDisplay_ActMenuMain(BattleWork* wp) {
     BattleCommand* cmd = &wp->commandMenu;
@@ -1598,12 +1584,12 @@ BOOL BattleCommandCheckChangePositionEnable(BattleWork* wp) {
         return FALSE;
     }
     unit = BattleGetMarioPtr(wp);
-    CHECK_CHANGE_UNIT(unit)
+    if (!unit) { return FALSE; } if (unit->moveState) { return FALSE; } if (unit->maxMovesThisTurn <= 0 || unit->maxMovesThisTurn != unit->movesRemaining) { return FALSE; } if (BtlUnit_CheckStatus(unit, STATUS_SLEEP) || BtlUnit_CheckStatus(unit, STATUS_STOP) || BtlUnit_CheckStatus(unit, STATUS_FREEZE) || BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL)) { return FALSE; }
     if (unit->mAttributeFlags & kVeiled) {
         return FALSE;
     }
     unit = BattleGetPartyPtr(wp);
-    CHECK_CHANGE_UNIT(unit)
+    if (!unit) { return FALSE; } if (unit->moveState) { return FALSE; } if (unit->maxMovesThisTurn <= 0 || unit->maxMovesThisTurn != unit->movesRemaining) { return FALSE; } if (BtlUnit_CheckStatus(unit, STATUS_SLEEP) || BtlUnit_CheckStatus(unit, STATUS_STOP) || BtlUnit_CheckStatus(unit, STATUS_FREEZE) || BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL)) { return FALSE; }
     return unit->flippedTurns <= 0;
 }
 

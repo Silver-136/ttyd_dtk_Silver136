@@ -284,7 +284,7 @@ static u8* color_tbl[] = { diamond_1_color0_tbl, diamond_2_color0_tbl, diamond_3
     GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_AND, GX_ALWAYS, 0);                  \
     GXSetZMode(1, GX_LEQUAL, 0);
 
-#define LOOP1(tbl, sz, n)                          \
+#define CALL_DL_TABLE(tbl, sz, n)                          \
     i = 0; dp = tbl; sp = sz; \
     for (; i < n##U; i++, sp++, dp++) {       \
         GXCallDisplayList(*dp, *sp << 5);          \
@@ -530,14 +530,14 @@ void effStarStoneDisp_1(CameraId cameraId, EffectEntry* effect) {
     GXSetCullMode(GX_CULL_BACK);
     if (type == 0) {
         VTX_SETUP(diamond_1_vertex_tbl, diamond_1_normal_tbl, CLR_ARRAY, diamond_1_color0_tbl, diamond_1_texcoord0_tbl, 13)
-        LOOP1(diamond_1_dl_0_tbl, diamond_1_dl_0_size_tbl, 34)
+        CALL_DL_TABLE(diamond_1_dl_0_tbl, diamond_1_dl_0_size_tbl, 34)
         VTX_SETUP(diamond_1_vertex_tbl, diamond_1_normal_tbl, CLR_NONE, diamond_1_color0_tbl, diamond_1_texcoord0_tbl, 13)
-        LOOP1(diamond_1_dl_1_tbl, diamond_1_dl_1_size_tbl, 34)
+        CALL_DL_TABLE(diamond_1_dl_1_tbl, diamond_1_dl_1_size_tbl, 34)
     } else {
         VTX_SETUP(diamond_7_vertex_tbl, diamond_7_normal_tbl, CLR_ARRAY, diamond_7_color0_tbl, diamond_7_texcoord0_tbl, 13)
-        LOOP1(diamond_7_dl_0_tbl, diamond_7_dl_0_size_tbl, 34)
+        CALL_DL_TABLE(diamond_7_dl_0_tbl, diamond_7_dl_0_size_tbl, 34)
         VTX_SETUP(diamond_7_vertex_tbl, diamond_7_normal_tbl, CLR_ARRAY, diamond_7_color0_tbl, diamond_7_texcoord0_tbl, 13)
-        LOOP1(diamond_7_dl_1_tbl, diamond_7_dl_1_size_tbl, 33)
+        CALL_DL_TABLE(diamond_7_dl_1_tbl, diamond_7_dl_1_size_tbl, 33)
     }
     DISP_MID(w)
     PSMTXTrans(m, w->position.x, w->position.y, w->position.z);

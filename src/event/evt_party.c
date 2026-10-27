@@ -17,7 +17,6 @@
 #include "party/party_hit.h"
 
 #define GETPARTY(args) partyGetPtr((args)[0] == 0 ? partyCtrlNo : 1)
-#define PARTY_ID(args) ((args)[0] == 0 ? partyCtrlNo : 1)
 
 extern s32 bomheiGetStatus(void);
 extern void L_partyVivianTailStart();
@@ -349,7 +348,7 @@ USER_FUNC(evt_party_move_pos) {
     if (isFirstCall) {
         event->userdata[2] = 0;
     }
-    event->userdata[0] = PARTY_ID(args);
+    event->userdata[0] = (args[0] == 0 ? partyCtrlNo : 1);
     p = partyGetPtr(event->userdata[0]);
     if (p == NULL) {
         return EVT_RETURN_DONE;
@@ -385,7 +384,7 @@ USER_FUNC(evt_party_move_pos2) {
     if (isFirstCall) {
         event->userdata[2] = 0;
     }
-    event->userdata[0] = PARTY_ID(args);
+    event->userdata[0] = (args[0] == 0 ? partyCtrlNo : 1);
     p = partyGetPtr(event->userdata[0]);
     if (p == NULL) {
         return EVT_RETURN_DONE;

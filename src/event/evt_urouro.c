@@ -13,8 +13,6 @@
 #include "driver/mapdrv.h"
 #include "sfx_name_word.h"
 
-#define fabs(x) __fabs(x)
-#define fabsf(x) __fabsf(x)
 
 
 typedef struct UrouroWork {
@@ -104,8 +102,8 @@ USER_FUNC(urouro_main_func) {
             }
         }
         if (animPoseGetPeraEnd(npc->poseId) && npc == marioGetTouchNpcPtr()
-            && fabsf(compAngle(npc->moveDir, mario->directionView)) < 90.0f
-            && fabsf(compAngle(angleABf(npc->position.x, npc->position.z, mario->position.x, mario->position.z),
+            && __fabsf(compAngle(npc->moveDir, mario->directionView)) < 90.0f
+            && __fabsf(compAngle(angleABf(npc->position.x, npc->position.z, mario->position.x, mario->position.z),
                               mario->directionView)) < 90.0f
             && dist < work->radius) {
             npc->direction = reviseAngle(npc->moveDir - 180.0f);

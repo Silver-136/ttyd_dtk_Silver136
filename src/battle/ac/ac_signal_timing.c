@@ -36,8 +36,6 @@ typedef struct SignalTimingWork {
     s32 endTimer;   // 0x54
 } SignalTimingWork;
 
-#define ST_FIELD30(w) ((w)->actionCommands.doneFlags)
-#define ST_FLAGS(w) ((w)->actionCommands.acFlags)
 #define ST_COUNT(w) ((w)->actionCommands.params[0])    /* number of signals */
 #define ST_MODE(w) ((w)->actionCommands.params[1])     /* 1: use the wider ok-frame table */
 #define ST_STEP(w) ((w)->actionCommands.params[2])     /* frames per signal */
@@ -48,7 +46,6 @@ typedef struct SignalTimingWork {
 #define ST_OKBASE(w) ((w)->actionCommands.params[7])   /* base ok frame range */
 #define ST_OUT_HITS(w) ((w)->actionCommands.outputParams[0])
 #define ST_OUT_RESULT(w) ((w)->actionCommands.outputParams[1])
-#define ST_COUNTDOWN(w) ((w)->actionCommands.countdown)
 
 u32 _button_table_4dir[4] = {0x10000, 0x20000, 0x40000, 0x80000};
 u32 _button_table_abxy[4] = {PAD_BUTTON_A, PAD_BUTTON_B, PAD_BUTTON_X, PAD_BUTTON_Y};
@@ -162,8 +159,8 @@ s32 battleAcMain_SignalTiming(BattleWork *work) {
                 break;
 
             case 100:
-                if (ST_COUNTDOWN(work) > 0) {
-                    ST_COUNTDOWN(work)--;
+                if (work->actionCommands.countdown > 0) {
+                    work->actionCommands.countdown--;
                     ac->result = 2;
                     loop = 1;
                     ac->mAcState = 1002;
@@ -242,7 +239,7 @@ s32 battleAcMain_SignalTiming(BattleWork *work) {
                                 psndSFXOn(sfxOk);
                             }
                         }
-                        if (ST_FLAGS(work) & AC_SIGNAL_TIMING_FLAG_END_ON_HIT) {
+                        if (work->actionCommands.acFlags & AC_SIGNAL_TIMING_FLAG_END_ON_HIT) {
                             ST_OUT_HITS(work) = w->hits;
                             ac->result &= ~1;
                             if (w->hits >= ST_NEEDED(work)) {
@@ -313,7 +310,7 @@ s32 battleAcMain_SignalTiming(BattleWork *work) {
                 break;
 
             case 1004:
-                ST_FIELD30(work) |= 1;
+                work->actionCommands.doneFlags |= 1;
                 w->okFlag = 0;
                 w->endTimer = 60;
                 ac->mAcState = 1005;
@@ -405,7 +402,7 @@ static void actionCommandDisp(f32 x, f32 y) {
     w = (SignalTimingWork*)ac->work;
     count = ST_COUNT(work);
     next = w->next;
-    if (!(ST_FLAGS(work) & AC_SIGNAL_TIMING_FLAG_SHOW_BUTTONS)) {
+    if (!(work->actionCommands.acFlags & AC_SIGNAL_TIMING_FLAG_SHOW_BUTTONS)) {
         if (w->okFlag) {
             Vec pos = {0.0f, 0.0f, 0.0f};
             pos.x = -200.0f + x;
@@ -456,12 +453,12 @@ static void actionCommandDisp(f32 x, f32 y) {
         iconDispGx(&pos, 0x10, ICON_AC_BAR_RIGHT, 1.0f);
     }
 
-    if (!(ST_FLAGS(work) & AC_SIGNAL_TIMING_FLAG_HIDE_HIT_COUNT)) {
+    if (!(work->actionCommands.acFlags & AC_SIGNAL_TIMING_FLAG_HIDE_HIT_COUNT)) {
         fx = -200.0f + x;
         num = w->hits + ST_EXTRA(work);
         // Both arms of the SHOW_BUTTONS test are the same (retail code): the counter's position does not depend on it.
-        PSMTXTrans(mTrans, fx + (f32)((ST_FLAGS(work) & AC_SIGNAL_TIMING_FLAG_SHOW_BUTTONS) ? count * 0x30 - 26 + ST_LEAD(work) * 32 : count * 0x30 - 26 + ST_LEAD(work) * 32), yb, 0.0f);
-        if (ST_FLAGS(work) & AC_SIGNAL_TIMING_FLAG_LARGE_HIT_COUNT) {
+        PSMTXTrans(mTrans, fx + (f32)((work->actionCommands.acFlags & AC_SIGNAL_TIMING_FLAG_SHOW_BUTTONS) ? count * 0x30 - 26 + ST_LEAD(work) * 32 : count * 0x30 - 26 + ST_LEAD(work) * 32), yb, 0.0f);
+        if (work->actionCommands.acFlags & AC_SIGNAL_TIMING_FLAG_LARGE_HIT_COUNT) {
             PSMTXScale(mScale, 1.5f, 1.5f, 1.5f);
         } else {
             PSMTXScale(mScale, 1.0f, 1.0f, 1.0f);
@@ -491,7 +488,7 @@ static void actionCommandDisp(f32 x, f32 y) {
         }
     }
 
-    if (!(ST_FLAGS(work) & AC_SIGNAL_TIMING_FLAG_SHOW_BUTTONS)) {
+    if (!(work->actionCommands.acFlags & AC_SIGNAL_TIMING_FLAG_SHOW_BUTTONS)) {
         for (i = 0; i < count; i++) {
             if (i + ST_LEAD(work) < next) {
                 Vec pos = {0.0f, 0.0f, 0.0f};
@@ -505,7 +502,7 @@ static void actionCommandDisp(f32 x, f32 y) {
                 iconDispGx(&pos, 0x10, ICON_AC_OFF, 1.0f);
             }
         }
-    } else if (!(ST_FLAGS(work) & AC_SIGNAL_TIMING_FLAG_HIDE_UPCOMING_BUTTONS)) {
+    } else if (!(work->actionCommands.acFlags & AC_SIGNAL_TIMING_FLAG_HIDE_UPCOMING_BUTTONS)) {
         yc = 15.0f + y;
         for (i = 0; i < count; i++) {
             f32 scale = 0.8f;

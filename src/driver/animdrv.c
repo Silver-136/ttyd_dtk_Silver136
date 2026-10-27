@@ -723,7 +723,6 @@ void animPoseSetStartTime(s32 poseId, OSTime startTime) {
     pose->localTime = startTime;
 }
 
-#define animPosePaperAnimId(pose) ((pose)->paperAnimIdx)
 /* An anim name parameter holds a name (an address in main memory, negative as
  * an s32) or an anim index (non-negative). */
 #define ANIM_NAME_INDEX(name) ((s32)(AddrWord)(name))
@@ -793,7 +792,7 @@ void animPoseSetPaperAnimGroup(s32 poseId, const char* animName, BOOL someflag) 
     if (pose->paperId < 0) {
         pose->paperId = animPaperPoseGetId(animName, 2);
     }
-    animPosePaperAnimId(pose) = -1;
+    pose->paperAnimIdx = -1;
     pose->mLocalTimeInit = animTimeGetTime(pose->type);
     if (someflag) {
         pose->flags |= ANIM_POSE_FLAG_PAPER_GROUP;
@@ -813,7 +812,7 @@ void animPoseSetPaperAnim(s32 poseId, const char* animName, BOOL reset) {
 
     data = animPoseGetAnimBaseDataPtr(pose->paperId);
     idx = animPoseGetAnimIdx(data, animName);
-    animPosePaperAnimId(pose) = idx;
+    pose->paperAnimIdx = idx;
     pose->mLocalTimeInit = animTimeGetTime(pose->type);
     id = pose->paperId;
     if (id != -1 && !(*(u32*)((u8*)wp->poses + id * sizeof(AnimationPose) + offsetof(AnimationPose, typeFlags)) & ANIM_POSE_TYPE_PAPER)) { // FAKE: byte-offset load so the typeFlags offset folds into the index (mulli/addi/lwzx), as in the target
@@ -860,7 +859,7 @@ void animPoseSetEffect(s32 poseId, const char* animName, BOOL someflag) {
         return;
     }
     pose->paperId = animEffectPoseEntry(animName, pose->type);
-    animPosePaperAnimId(pose) = -1;
+    pose->paperAnimIdx = -1;
     pose->mLocalTimeInit = animTimeGetTime(pose->type);
     if (someflag) {
         pose->flags |= ANIM_POSE_FLAG_PAPER_GROUP;
@@ -2425,7 +2424,7 @@ void animPoseDrawMtx(s32 poseId, Mtx matrix, s32 xluMode, f32 rotY, f32 scale) {
             name = ANIM_INDEX_NAME(pose->paperAnimIdx);
             if (ANIM_NAME_INDEX(name) != -1) {
                 // FAKE: the inlined animPoseSetAnim (its animName param re-reads the paper anim id) adds the coalesced param copy the target has (p2 r29 / xluMode r28)
-                animPoseSetAnim(pose->paperId, ANIM_INDEX_NAME(animPosePaperAnimId(pose)), FALSE);
+                animPoseSetAnim(pose->paperId, ANIM_INDEX_NAME(pose->paperAnimIdx), FALSE);
             }
             paper->localTime = animTimeGetTime(paper->type);
             paper->lastFrameZero = -1;

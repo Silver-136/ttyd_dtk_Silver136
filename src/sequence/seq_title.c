@@ -33,9 +33,9 @@ TitleWork* wp2 = &work2;
 
 //local prototypes
 #ifdef VERSION_G8ME01
-#define TFR (gp->framerate)
+#define TITLE_FRAMES_PER_SEC (gp->framerate)
 #else
-#define TFR 60
+#define TITLE_FRAMES_PER_SEC 60
 #endif
 void L_titleInit(SequenceWork* work);
 void titleMain(SequenceWork* work);
@@ -162,7 +162,7 @@ void titleMain(SequenceWork* work) {
             break;
         case 2:
             wp2->topPosX = 0.0f;
-            wp2->topPosY = intplGetValue(EASING_BOUNCE_SHRINKING, 300.0f, 120.0f, wp2->counter, TFR);
+            wp2->topPosY = intplGetValue(EASING_BOUNCE_SHRINKING, 300.0f, 120.0f, wp2->counter, TITLE_FRAMES_PER_SEC);
             wp2->timer--;
             if (wp2->timer == 0) {
                 if ((u32)psbgm[0].streamId != 0xFFFFFFFFU) {
@@ -173,9 +173,9 @@ void titleMain(SequenceWork* work) {
                 }
             }
             wp2->bottomPosX = 0.0f;
-            wp2->bottomPosY = intplGetValue(EASING_SINE_IN_OUT, -300.0f, -170.0f, wp2->counter, TFR);
+            wp2->bottomPosY = intplGetValue(EASING_SINE_IN_OUT, -300.0f, -170.0f, wp2->counter, TITLE_FRAMES_PER_SEC);
             wp2->counter++;
-            if (wp2->counter > TFR) {
+            if (wp2->counter > TITLE_FRAMES_PER_SEC) {
                 titleLoadDemo();
 #ifdef VERSION_G8ME01
                 wp2->counter = 0;
@@ -187,7 +187,7 @@ void titleMain(SequenceWork* work) {
         case 3:
 #ifdef VERSION_G8ME01
             wp2->counter++;
-            if (wp2->counter > TFR) {
+            if (wp2->counter > TITLE_FRAMES_PER_SEC) {
 #endif
             wp2->fadeAlpha += 0.1f;
             if (wp2->fadeAlpha > 1.0f) {
@@ -196,7 +196,7 @@ void titleMain(SequenceWork* work) {
             if (keyGetButtonTrg(0) & (PAD_BUTTON_A | PAD_BUTTON_START)) {
                 psndSFXOn(SFX_NAME_WORD(PSND_SFX_PRESS_START1));
                 wp2->state = 10;
-            } else if (++wp2->idle > TFR * 20 - TFR) {
+            } else if (++wp2->idle > TITLE_FRAMES_PER_SEC * 20 - TITLE_FRAMES_PER_SEC) {
                 wp2->state = 20;
             }
 #ifdef VERSION_G8ME01
@@ -226,11 +226,11 @@ void titleMain(SequenceWork* work) {
             wp2->state++;
             break;
         case 21:
-            wp2->topPosY = intplGetValue(EASING_SINE_IN_OUT, 120.0f, 400.0f, wp2->counter, TFR);
-            wp2->bottomPosY = intplGetValue(EASING_SINE_IN_OUT, -170.0f, -400.0f, wp2->counter, TFR);
+            wp2->topPosY = intplGetValue(EASING_SINE_IN_OUT, 120.0f, 400.0f, wp2->counter, TITLE_FRAMES_PER_SEC);
+            wp2->bottomPosY = intplGetValue(EASING_SINE_IN_OUT, -170.0f, -400.0f, wp2->counter, TITLE_FRAMES_PER_SEC);
             wp2->counter++;
-            if (wp2->counter > TFR) {
-                wp2->counter = TFR;
+            if (wp2->counter > TITLE_FRAMES_PER_SEC) {
+                wp2->counter = TITLE_FRAMES_PER_SEC;
             }
             wp2->fadeAlpha -= 0.1f;
             if (wp2->fadeAlpha < 0.0f) {

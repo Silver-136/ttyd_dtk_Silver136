@@ -19,7 +19,6 @@
 #include "party.h"
 
 
-#define CAMF() (camGetPtr(CAMERA_2D)->flags)
 
 typedef struct MotRollWork {
     f32 spdX;           // 0x00: roll velocity x (marioResetRollSpd clears it)
@@ -32,7 +31,6 @@ typedef struct MotRollWork {
 #endif
 } MotRollWork;          // size 0x14 JP, 0x18 US
 
-#define RW() (marioGetPtr()->motRoll)
 
 f32 roll_grx;
 f32 roll_grz;
@@ -292,9 +290,9 @@ void marioResetRollSpd(void) {
         if (marioGetPtr()->motStruct) {
             f32 a = 0.0f;
             f32 b;
-            RW()->spdX = a;
+            marioGetPtr()->motRoll->spdX = a;
             b = 0.0f;
-            RW()->spdZ = b;
+            marioGetPtr()->motRoll->spdZ = b;
         }
         mario->baseSpeed = 0.0f;
     }
@@ -339,7 +337,7 @@ s32 marioRollTryCancel(void) {
         if (!r) {
             ret = 1;
             mario->currSubMotionId = 0x14;
-            CAMF() |= CAMERA_FLAG_LETTER_BOX_OFF;
+            camGetPtr(CAMERA_2D)->flags |= CAMERA_FLAG_LETTER_BOX_OFF;
         }
     }
     return ret;
@@ -354,7 +352,7 @@ s32 marioRollCancel(void) {
         return 0;
     }
     mario->currSubMotionId = 0x14;
-    CAMF() |= CAMERA_FLAG_LETTER_BOX_OFF;
+    camGetPtr(CAMERA_2D)->flags |= CAMERA_FLAG_LETTER_BOX_OFF;
     return 1;
 }
 
@@ -362,9 +360,9 @@ void mot_roll_post(void) {
     MarioWork* mario = marioGetPtr();
     MarioWork* m = marioGetPtr();
 #ifdef VERSION_G8ME01
-    if (marioGetPtr()->motStruct && (u32)RW()->sfxId != (u32)-1) {
-        psndSFXOff(RW()->sfxId);
-        RW()->sfxId = -1;
+    if (marioGetPtr()->motStruct && (u32)marioGetPtr()->motRoll->sfxId != (u32)-1) {
+        psndSFXOff(marioGetPtr()->motRoll->sfxId);
+        marioGetPtr()->motRoll->sfxId = -1;
     }
 #else
     if ((u32)m->mot.roll.sfxId != (u32)-1) {
@@ -415,9 +413,9 @@ void marioRollForceCancel(void) {
     if (mario->currMotionId == MARIO_MOTION_ROLL) {
         MarioWork* m = marioGetPtr();
 #ifdef VERSION_G8ME01
-        if (marioGetPtr()->motStruct && (u32)RW()->sfxId != (u32)-1) {
-            psndSFXOff(RW()->sfxId);
-            RW()->sfxId = -1;
+        if (marioGetPtr()->motStruct && (u32)marioGetPtr()->motRoll->sfxId != (u32)-1) {
+            psndSFXOff(marioGetPtr()->motRoll->sfxId);
+            marioGetPtr()->motRoll->sfxId = -1;
         }
 #else
         if ((u32)m->mot.roll.sfxId != (u32)-1) {
@@ -491,7 +489,7 @@ void marioReInit_roll(void) {
     {
         MarioWork* t = marioGetPtr();
 #ifdef VERSION_G8ME01
-        if (marioGetPtr()->motStruct) RW()->sfxId = -1;
+        if (marioGetPtr()->motStruct) marioGetPtr()->motRoll->sfxId = -1;
 #else
         t->mot.roll.sfxId = -1;
 #endif
@@ -511,9 +509,9 @@ void marioReInit_roll(void) {
     mario->wPlayerCollisionBox.x = 14.8f;
     mario->wPlayerCollisionBox.y = 14.8f;
     mario->mBaseDashSpeed = rollData[0];
-    RW()->spdX = z0;
+    marioGetPtr()->motRoll->spdX = z0;
     z1 = 0.0f;
-    RW()->spdZ = z1;
+    marioGetPtr()->motRoll->spdZ = z1;
     mario->rotOfs.x = -6.0f;
     mario->rotOfs.y = 6.0f;
     mario->dispOfs.x = 6.0f;
@@ -573,7 +571,7 @@ void mot_roll(void) {
         {
             MarioWork* t = marioGetPtr();
 #ifdef VERSION_G8ME01
-            if (marioGetPtr()->motStruct) RW()->sfxId = -1;
+            if (marioGetPtr()->motStruct) marioGetPtr()->motRoll->sfxId = -1;
 #else
             t->mot.roll.sfxId = -1;
 #endif
@@ -585,7 +583,7 @@ void mot_roll(void) {
         MarioWork* m;
         s32 z0 = 0;
         s32 z1;
-        CAMF() |= CAMERA_FLAG_LETTER_BOX_OFF;
+        camGetPtr(CAMERA_2D)->flags |= CAMERA_FLAG_LETTER_BOX_OFF;
         marioAdjustMoveDir();
         v31 = mario->displayDirection;
         if (v31 < 90.0f || v31 > 270.0f) {
@@ -611,9 +609,9 @@ void mot_roll(void) {
         m->wPlayerCollisionBox.x = 14.8f;
         m->wPlayerCollisionBox.y = 14.8f;
         m->mBaseDashSpeed = rollData[0];
-        RW()->spdX = v28;
+        marioGetPtr()->motRoll->spdX = v28;
         v27 = 0.0f;
-        RW()->spdZ = v27;
+        marioGetPtr()->motRoll->spdZ = v27;
         m->rotOfs.x = -6.0f;
         m->rotOfs.y = 6.0f;
         m->dispOfs.x = 6.0f;
@@ -631,9 +629,9 @@ void mot_roll(void) {
         m->camShiftRate.z = 0.01f;
         m->camZoom = 2.0f;
         m->camZoomOfs = rollOfs;
-        RW()->squashTrigger = z0;
+        marioGetPtr()->motRoll->squashTrigger = z0;
         z1 = 0;
-        RW()->squashState = z1;
+        marioGetPtr()->motRoll->squashState = z1;
         psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_CHANGE_ROLL1), &mario->position);
         psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_VOICE_MARIO_FLD_JUMP3), &mario->position);
         mario->currSubMotionId = 1;
@@ -651,7 +649,7 @@ void mot_roll(void) {
             mario->currSubMotionId = 0x1e;
             marioChgPose("M_I_U");
             marioChgPaper("PM_R_1B");
-            CAMF() &= ~CAMERA_FLAG_LETTER_BOX_OFF;
+            camGetPtr(CAMERA_2D)->flags &= ~CAMERA_FLAG_LETTER_BOX_OFF;
         }
         break;
     case 0x14:
@@ -669,9 +667,9 @@ void mot_roll(void) {
         {
             MarioWork* m = marioGetPtr();
 #ifdef VERSION_G8ME01
-            if (marioGetPtr()->motStruct && (u32)RW()->sfxId != (u32)-1) {
-                psndSFXOff(RW()->sfxId);
-                RW()->sfxId = -1;
+            if (marioGetPtr()->motStruct && (u32)marioGetPtr()->motRoll->sfxId != (u32)-1) {
+                psndSFXOff(marioGetPtr()->motRoll->sfxId);
+                marioGetPtr()->motRoll->sfxId = -1;
             }
 #else
             if ((u32)m->mot.roll.sfxId != (u32)-1) {
@@ -741,7 +739,7 @@ void mot_roll(void) {
                 marioGetPtr()->motStruct = z;
             }
             allPartyRideOff();
-            CAMF() &= ~CAMERA_FLAG_LETTER_BOX_OFF;
+            camGetPtr(CAMERA_2D)->flags &= ~CAMERA_FLAG_LETTER_BOX_OFF;
             mario->currSubMotionId = 0x16;
         }
         break;
@@ -759,21 +757,21 @@ void mot_roll(void) {
     if (mario->buttonTrg & PAD_BUTTON_B) {
         if (!rollChk()) {
             mario->currSubMotionId = 0x14;
-            CAMF() |= CAMERA_FLAG_LETTER_BOX_OFF;
+            camGetPtr(CAMERA_2D)->flags |= CAMERA_FLAG_LETTER_BOX_OFF;
         } else {
             mario->buttonTrg |= PAD_BUTTON_A;
         }
     }
     v26 = mario->tubeScaleY;
-    if (RW()->squashTrigger) {
+    if (marioGetPtr()->motRoll->squashTrigger) {
         s32 z = 0;
         s32 one;
-        RW()->squashTrigger = z;
+        marioGetPtr()->motRoll->squashTrigger = z;
         one = 1;
-        RW()->squashState = one;
+        marioGetPtr()->motRoll->squashState = one;
         v26 = 1.0f;
     }
-    switch (RW()->squashState) {
+    switch (marioGetPtr()->motRoll->squashState) {
     case 1:
         if (v26 < 1.4f) {
             { f32 k = 1.0f; v26 = k * (1.4499999f - v26) + v26; }
@@ -783,7 +781,7 @@ void mot_roll(void) {
         }
         if (mario->airTimer == 0) {
             s32 t = 2;
-            RW()->squashState = t;
+            marioGetPtr()->motRoll->squashState = t;
         }
         break;
     case 2:
@@ -792,7 +790,7 @@ void mot_roll(void) {
             if (v26 <= 0.4f) {
                 s32 t = 3;
                 v26 = 0.4f;
-                RW()->squashState = t;
+                marioGetPtr()->motRoll->squashState = t;
             }
         }
         break;
@@ -801,7 +799,7 @@ void mot_roll(void) {
             v26 = 0.5f * (1.05f - v26) + v26;
             if (v26 >= 1.0f) {
                 s32 t = 0;
-                RW()->squashState = t;
+                marioGetPtr()->motRoll->squashState = t;
                 v26 = 1.0f;
             }
         }
@@ -809,8 +807,8 @@ void mot_roll(void) {
     }
     mario->tubeScaleY = v26;
     if (!mario->hitobjStandOn && mario->hitobjFront && !marioChkBero(mario->hitobjFront)) {
-        v26 = RW()->spdX;
-        v27 = RW()->spdZ;
+        v26 = marioGetPtr()->motRoll->spdX;
+        v27 = marioGetPtr()->motRoll->spdZ;
         v26 += 0.2f * -v26;
         v27 += 0.2f * -v27;
         if (__fabsf(v26) < 1.0f) {
@@ -819,8 +817,8 @@ void mot_roll(void) {
         if (__fabsf(v27) < 1.0f) {
             v27 = 0.0f;
         }
-        RW()->spdX = v26;
-        RW()->spdZ = v27;
+        marioGetPtr()->motRoll->spdX = v26;
+        marioGetPtr()->motRoll->spdZ = v27;
     }
     if (mario->hitobjStandOn) {
         if (!(hitGetAttr(mario->hitobjStandOn) & (HIT_ATTR_WATER_HAZARD | HIT_ATTR_TOGE)) && mario->airTimer == 0 && (mario->buttonTrg & PAD_BUTTON_A)) {
@@ -863,8 +861,8 @@ void mot_roll(void) {
         }
         mario->airTimer++;
     }
-    v29 = RW()->spdX;
-    v28 = RW()->spdZ;
+    v29 = marioGetPtr()->motRoll->spdX;
+    v28 = marioGetPtr()->motRoll->spdZ;
     nx = 0.0f;
     nz = nx;
     if (!(mario->flags & (MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING))) {
@@ -1076,8 +1074,8 @@ void mot_roll(void) {
             }
         }
     }
-    RW()->spdX = v29;
-    RW()->spdZ = v28;
+    marioGetPtr()->motRoll->spdX = v29;
+    marioGetPtr()->motRoll->spdZ = v28;
     v31 = -v28;
     v30 = angleABf(0.0f, 0.0f, v29, v31);
     v27 = 3.1415927f * v30 / 180.0f;
@@ -1100,8 +1098,8 @@ void mot_roll(void) {
     if (mario->baseSpeed) {
         MarioWork* m = marioGetPtr();
 #ifdef VERSION_G8ME01
-        if (marioGetPtr()->motStruct && (u32)RW()->sfxId == (u32)-1) {
-            RW()->sfxId = (s32)psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_ROLL_MOVE1), &m->position);
+        if (marioGetPtr()->motStruct && (u32)marioGetPtr()->motRoll->sfxId == (u32)-1) {
+            marioGetPtr()->motRoll->sfxId = (s32)psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_ROLL_MOVE1), &m->position);
 #else
         if ((u32)m->mot.roll.sfxId == (u32)-1) {
             m->mot.roll.sfxId = (s32)psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_ROLL_MOVE1), &m->position);
@@ -1111,9 +1109,9 @@ void mot_roll(void) {
     } else {
         MarioWork* m = marioGetPtr();
 #ifdef VERSION_G8ME01
-        if (marioGetPtr()->motStruct && (u32)RW()->sfxId != (u32)-1) {
-            psndSFXOff(RW()->sfxId);
-            RW()->sfxId = -1;
+        if (marioGetPtr()->motStruct && (u32)marioGetPtr()->motRoll->sfxId != (u32)-1) {
+            psndSFXOff(marioGetPtr()->motRoll->sfxId);
+            marioGetPtr()->motRoll->sfxId = -1;
         }
 #else
         if ((u32)m->mot.roll.sfxId != (u32)-1) {

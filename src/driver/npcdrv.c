@@ -616,15 +616,6 @@ void npcMoveG(NpcEntry* npc);
 BOOL npcCheckHitMarioSide(NpcEntry* npc);
 HitEntry* npcHitCheckSide(NpcEntry* npc, f32* outX, f32* outZ, f32* angle, f32 dx, f32 dz);
 s32 vivianGetStatus(void);
-#define NPC_CHKMARIO(ok)                                                              \
-    do {                                                                              \
-        m = marioGetPtr();                                                            \
-        if (m->flags & (MARIO_FLAG_BG_MODE | MARIO_FLAG_IS_8_BIT)) { ok = 0; break; } \
-        if (m->flags & (MARIO_FLAG_CTRL_OFF | MARIO_FLAG_KEY_OFF)) { ok = 0; break; } \
-        if (gp->mapEventId != 0) { ok = 0; break; }                                   \
-        if (seqGetSeq() != SEQ_GAME) { ok = 0; break; }                                      \
-        if (m->currMotionId == MARIO_MOTION_SHIP) { ok = 0; break; }                  \
-        if (vivianGetStatus() != 0 && vivianGetStatus() != 1) { ok = 0; } else { ok = 1; } } while (0)
 void shadowSetCollision(s32 shadow, s32 val);
 s32 shadowEntry(f32 x, f32 y, f32 z, f32 size);
 f32 sinfd(f32 degrees);
@@ -843,7 +834,7 @@ void npcMain(void) {
                                 }
                             }
                             trig = 0;
-                            { s32 ok_; NPC_CHKMARIO(ok_); if (!ok_) {
+                            { s32 ok_; do { m = marioGetPtr(); if (m->flags & (MARIO_FLAG_BG_MODE | MARIO_FLAG_IS_8_BIT)) { ok_ = 0; break; } if (m->flags & (MARIO_FLAG_CTRL_OFF | MARIO_FLAG_KEY_OFF)) { ok_ = 0; break; } if (gp->mapEventId != 0) { ok_ = 0; break; } if (seqGetSeq() != SEQ_GAME) { ok_ = 0; break; } if (m->currMotionId == MARIO_MOTION_SHIP) { ok_ = 0; break; } if (vivianGetStatus() != 0 && vivianGetStatus() != 1) { ok_ = 0; } else { ok_ = 1; } } while (0); if (!ok_) {
                                     trig = 1;
                                 } else {
                                     dist = sqrtf(dx * dx + dz * dz);
@@ -895,7 +886,7 @@ void npcMain(void) {
                             PSVECSubtract(&entry->prevPosition, &entry->position, &dv);
                             dir = reviseAngle(entry->direction) < 180.0f ? 90.0f : 270.0f;
                             trig = 1;
-                            { s32 ok_; NPC_CHKMARIO(ok_); if (!ok_) {
+                            { s32 ok_; do { m = marioGetPtr(); if (m->flags & (MARIO_FLAG_BG_MODE | MARIO_FLAG_IS_8_BIT)) { ok_ = 0; break; } if (m->flags & (MARIO_FLAG_CTRL_OFF | MARIO_FLAG_KEY_OFF)) { ok_ = 0; break; } if (gp->mapEventId != 0) { ok_ = 0; break; } if (seqGetSeq() != SEQ_GAME) { ok_ = 0; break; } if (m->currMotionId == MARIO_MOTION_SHIP) { ok_ = 0; break; } if (vivianGetStatus() != 0 && vivianGetStatus() != 1) { ok_ = 0; } else { ok_ = 1; } } while (0); if (!ok_) {
                                     trig = 0;
                                 } else {
                                     f32 a14;
@@ -2309,7 +2300,7 @@ static inline BOOL fbat_canHit(NpcEntry* npc) {
     return TRUE;
 }
 
-#define FH_NPC_FILTER(f1000, bit)                                                    \
+#define CONTINUE_IF_NPC_NOT_HITTABLE(f1000, bit)                                                    \
     if (npc == NULL) continue;                                                       \
     if (!(npc->flags & NPC_FLAG_READY)) continue;                                                 \
     if (f1000) { if (!(npc->flags & NPC_FLAG_ENEMY)) continue; } else { if (npc->flags & NPC_FLAG_ENEMY) continue; } \
@@ -2319,15 +2310,6 @@ static inline BOOL fbat_canHit(NpcEntry* npc) {
     if ((*(u32*)&((NpcEntry*)npc)->statusFlags) & 4) continue;                                           \
     if (npc->flags & NPC_FLAG_2D) continue;
 
-#define FH_NPC_FILTER2(f1000, bit)                                                         \
-    if (npc == NULL) continue;                                                             \
-    if (!(npc->flags & NPC_FLAG_READY)) continue;                                                       \
-    if (f1000) { if (!(npc->flags & NPC_FLAG_ENEMY)) continue; } else { if (npc->flags & NPC_FLAG_ENEMY) continue; } \
-    if (soft && !((*(u32*)&npc->reactionFlags) & (bit))) continue;            \
-    if (npc->flags & NPC_FLAG_NO_PLAYER_ATTACK) continue;                                                 \
-    if (npc->flags & NPC_FLAG_NO_HIT) continue;                                                       \
-    if (npc->flags & NPC_FLAG_2D) continue;                                                 \
-    if ((*(u32*)&((NpcEntry*)npc)->statusFlags) & 4) continue;
 
 typedef struct {
     s32 v[11];
@@ -2468,7 +2450,7 @@ void* fbatHitCheck(u32 flags, void* result) {
                 y = m->position.y + r * c2;
                 npc = wp->entries;
                 for (i = 0; i < total; i++, npc++) {
-                    FH_NPC_FILTER2(flags & FBAT_CHECK_ENEMY, 2)
+                    if (npc == NULL) continue; if (!(npc->flags & NPC_FLAG_READY)) continue; if (flags & FBAT_CHECK_ENEMY) { if (!(npc->flags & NPC_FLAG_ENEMY)) continue; } else { if (npc->flags & NPC_FLAG_ENEMY) continue; } if (soft && !((*(u32*)&npc->reactionFlags) & (2))) continue; if (npc->flags & NPC_FLAG_NO_PLAYER_ATTACK) continue; if (npc->flags & NPC_FLAG_NO_HIT) continue; if (npc->flags & NPC_FLAG_2D) continue; if ((*(u32*)&((NpcEntry*)npc)->statusFlags) & 4) continue;
                     if (!_npcHitCheckSphere(npc, &dist, x, y, z, 12.0f)) continue;
                     if (dist >= res.dist) continue;
                     res.dist = dist;
@@ -2482,7 +2464,7 @@ void* fbatHitCheck(u32 flags, void* result) {
                 angle = reviseAngle(mario->displayDirection - 90.0f + (*(f32*)&((CameraEntry*)camGetPtr(CAMERA_3D))->viewYaw));
                 npc = wp->entries;
                 for (i = 0; i < total; i++, npc++) {
-                    FH_NPC_FILTER(flags & FBAT_CHECK_ENEMY, 2)
+                    CONTINUE_IF_NPC_NOT_HITTABLE(flags & FBAT_CHECK_ENEMY, 2)
                     if (!_npcHitCheckHammerAllMotion(npc, &dist, r, angle)) continue;
                     if (dist >= res.dist) continue;
                     res.dist = dist;
@@ -2515,7 +2497,7 @@ void* fbatHitCheck(u32 flags, void* result) {
                 y = 15.0f + m->position.y;
                 npc = wp->entries;
                 for (i = 0; i < total; i++, npc++) {
-                    FH_NPC_FILTER(flags & FBAT_CHECK_ENEMY, 2)
+                    CONTINUE_IF_NPC_NOT_HITTABLE(flags & FBAT_CHECK_ENEMY, 2)
                     if (!_npcHitCheckSphere(npc, &dist, x, y, z, 12.0f)) continue;
                     if (dist >= res.dist) continue;
                     res.dist = dist;
@@ -2529,7 +2511,7 @@ void* fbatHitCheck(u32 flags, void* result) {
                 angle2 = reviseAngle(mario->displayDirection - 90.0f + (*(f32*)&((CameraEntry*)camGetPtr(CAMERA_3D))->viewYaw));
                 npc = wp->entries;
                 for (i = 0; i < total; i++, npc++) {
-                    FH_NPC_FILTER(flags & FBAT_CHECK_ENEMY, 2)
+                    CONTINUE_IF_NPC_NOT_HITTABLE(flags & FBAT_CHECK_ENEMY, 2)
                     if (!_npcHitCheckHammerAllMotion(npc, &dist, r2, angle2)) continue;
                     if (dist >= res.dist) continue;
                     res.dist = dist;
@@ -2566,7 +2548,7 @@ void* fbatHitCheck(u32 flags, void* result) {
             z = party->position.z;
             npc = wp->entries;
             for (i = 0; i < total; i++, npc++) {
-                FH_NPC_FILTER(flags & FBAT_CHECK_ENEMY, 4)
+                CONTINUE_IF_NPC_NOT_HITTABLE(flags & FBAT_CHECK_ENEMY, 4)
                 if (!_npcHitCheckSphere(npc, &dist, x, y, z, r)) continue;
                 if (dist >= res.dist) continue;
                 res.dist = dist;
@@ -2591,7 +2573,7 @@ void* fbatHitCheck(u32 flags, void* result) {
             npc = wp->entries;
             flags &= FBAT_CHECK_ENEMY;
             for (i = 0; i < total; i++, npc++) {
-                FH_NPC_FILTER(flags, 8)
+                CONTINUE_IF_NPC_NOT_HITTABLE(flags, 8)
                 if (!_npcHitCheckSphere(npc, &dist, party->position.x, 0.5f * party->height + party->position.y,
                                         party->position.z, 30.0f)) continue;
                 if (dist >= res.dist) continue;

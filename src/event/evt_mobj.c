@@ -3086,7 +3086,6 @@ static inline BOOL kururing_in_box(f32 x, f32 z, f32 px, f32 pz, f32 r) {
     return FALSE;
 }
 
-#define KURU_POSE_FLAGS(m) animGetPtr()->poses[(m)->poseId].flags
 
 s32 mobj_kururing_floor(MapObjectEntry* mobj) {
     PartyEntry* party;
@@ -3161,16 +3160,16 @@ s32 mobj_kururing_floor(MapObjectEntry* mobj) {
                 }
             }
         }
-        KURU_POSE_FLAGS(mobj) |= ANIM_POSE_FLAG_CHANGE_TEXTURE;
+        animGetPtr()->poses[mobj->poseId].flags |= ANIM_POSE_FLAG_CHANGE_TEXTURE;
         mobj->flags |= MOBJ_FLAG_PAPER_TEX;
         dispEntry(CAMERA_SHADOW, 0.0f, 0, (DispCallback)kururing_capture, mobj);
         break;
     case 1:
-        KURU_POSE_FLAGS(mobj) |= ANIM_POSE_FLAG_CHANGE_TEXTURE;
+        animGetPtr()->poses[mobj->poseId].flags |= ANIM_POSE_FLAG_CHANGE_TEXTURE;
         mobj->flags |= MOBJ_FLAG_PAPER_TEX;
         dispEntry(CAMERA_SHADOW, 0.0f, 0, (DispCallback)kururing_capture, mobj);
         if (!(animPoseGetLoopTimes(mobj->poseId) < 1.0f)) {
-            KURU_POSE_FLAGS(mobj) &= ~ANIM_POSE_FLAG_CHANGE_TEXTURE;
+            animGetPtr()->poses[mobj->poseId].flags &= ~ANIM_POSE_FLAG_CHANGE_TEXTURE;
             mobj->flags &= ~MOBJ_FLAG_PAPER_TEX;
             mobj->flags &= ~MOBJ_FLAG_HIT;
             animPoseSetAnim(mobj->poseId, "S_1", 1);
@@ -3180,7 +3179,7 @@ s32 mobj_kururing_floor(MapObjectEntry* mobj) {
         break;
     case 10: {
         void* joint;
-        KURU_POSE_FLAGS(mobj) |= ANIM_POSE_FLAG_CHANGE_TEXTURE;
+        animGetPtr()->poses[mobj->poseId].flags |= ANIM_POSE_FLAG_CHANGE_TEXTURE;
         mobj->flags |= MOBJ_FLAG_PAPER_TEX;
         dispEntry(CAMERA_SHADOW, 0.0f, 0, (DispCallback)kururing_capture, mobj);
         // FAKE: joint points at worldPositions[0][1].y (the y read below) so its web is the unnamed add temp, not a named load (colours before mario's call temp)
@@ -3228,7 +3227,7 @@ s32 mobj_kururing_floor(MapObjectEntry* mobj) {
         if (animPoseGetLoopTimes(mobj->poseId) < 2.0f) {
             break;
         }
-        KURU_POSE_FLAGS(mobj) &= ~ANIM_POSE_FLAG_CHANGE_TEXTURE;
+        animGetPtr()->poses[mobj->poseId].flags &= ~ANIM_POSE_FLAG_CHANGE_TEXTURE;
         mobj->flags &= ~MOBJ_FLAG_PAPER_TEX;
         animPoseSetAnim(mobj->poseId, "S_1", 1);
         psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MOBJ_KURURIN_FLOOR_CLOSE1), &mobj->position);

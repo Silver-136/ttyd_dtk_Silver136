@@ -74,29 +74,23 @@ static const char isS2_str[14];
 static const char isB2_str[17];
 static const char isS3_str[14];
 static const char isB3_str[17];
-#define isB3(n) (strcmp((n), isB3_str) == 0)
 
-#define isS3(n) (strcmp((n), isS3_str) == 0)
 
-#define isB2(n) (strcmp((n), isB2_str) == 0)
 
-#define isS2(n) (strcmp((n), isS2_str) == 0)
 
-#define isB1(n) (strcmp((n), isB1_str) == 0)
 
-#define isS1(n) (strcmp((n), isS1_str) == 0)
 
 static inline s32 chkBlock(HamMobj* obj) {
     s32 ok = 0;
-    if ((isS1(obj->name) || isB1(obj->name))) {
+    if (((strcmp((obj->name), isS1_str) == 0) || (strcmp((obj->name), isB1_str) == 0))) {
         if (pouchGetPtr()->hammerLevel >= 1) {
             ok = 1;
         }
-    } else if ((isS2(obj->name) || isB2(obj->name))) {
+    } else if (((strcmp((obj->name), isS2_str) == 0) || (strcmp((obj->name), isB2_str) == 0))) {
         if (pouchGetPtr()->hammerLevel >= 2) {
             ok = 1;
         }
-    } else if ((isS3(obj->name) || isB3(obj->name))) {
+    } else if (((strcmp((obj->name), isS3_str) == 0) || (strcmp((obj->name), isB3_str) == 0))) {
         if (pouchGetPtr()->hammerLevel >= 3) {
             ok = 1;
         }
@@ -384,7 +378,7 @@ static inline void mot_ham(f32 a148, f32 a68) {
     m->camZoomOfs = (Vec){0.0f, 40.0f, 0.0f};
 }
 
-#define H2_LV(lvl, a148, a68) { mot_ham(a148, a68); mario->mot.hammer2.flags |= HAMMER2_FLAG_LEVEL_UP; }
+#define H2_LEVEL_UP(lvl, a148, a68) { mot_ham(a148, a68); mario->mot.hammer2.flags |= HAMMER2_FLAG_LEVEL_UP; }
 
 #define H2_RAMP(maxv, midv, minv, lvl, a148, a68)                                     \
     marioChgPaper("P_H_1A");                                                          \
@@ -394,7 +388,7 @@ static inline void mot_ham(f32 a148, f32 a68) {
             mario->mot.hammer2.animTime = maxv;                                       \
             mario->mot.hammer2.flags |= HAMMER2_FLAG_AT_LEVEL;                        \
             mario->hammerChargeLv = lvl;                                              \
-            H2_LV(lvl, a148, a68)                                                     \
+            H2_LEVEL_UP(lvl, a148, a68)                                                     \
         }                                                                             \
     } else if (!(mario->mot.hammer2.flags & HAMMER2_FLAG_SWAY_BACK)) {                \
         mario->mot.hammer2.animTime += 1.0f;                                          \
@@ -510,7 +504,7 @@ void mot_hammer2(void) {
             mario->currSubMotionId = 11;
             marioChgPaper("P_H_1B");
             mario->hammerChargeLv = 3;
-            H2_LV(3, 0.4f, 1.7f)
+            H2_LEVEL_UP(3, 0.4f, 1.7f)
         } else if (mario->hammerChargeTimer >= 3) {
             H2_RAMP(54.0f, 54.0f, 42.0f, 3, 0.4f, 1.7f)
         } else if (mario->hammerChargeTimer >= 2) {

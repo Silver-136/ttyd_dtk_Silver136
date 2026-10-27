@@ -66,10 +66,10 @@ typedef struct FileReloc9 {
     u8 reserved_00[0x58];       // 0x0
     void* ptrs[4];                // 0x58
 } FileReloc9;
-#define FT48(d) ((FileReloc48*)(d))
-#define FT7(d) ((FileReloc7*)(d))
-#define FT8(d) ((FileReloc8*)(d))
-#define FT9(d) ((FileReloc9*)(d))
+#define FILE_RELOC48(d) ((FileReloc48*)(d))
+#define FILE_RELOC7(d) ((FileReloc7*)(d))
+#define FILE_RELOC8(d) ((FileReloc8*)(d))
+#define FILE_RELOC9(d) ((FileReloc9*)(d))
 #define POSE(d) ((AnimationPoseData*)(d))
 #define ANIM(d) ((AnimData*)(d))
 
@@ -126,8 +126,8 @@ void fileGarbageDataAdrClear(FileEntry* entry) {
             }
             break;
         case 3:
-            if (FT48(data)->ptrs[0] >= data) {
-                ADDR_WORD(FT48(data)->ptrs[0]) -= (AddrWord)data;
+            if (FILE_RELOC48(data)->ptrs[0] >= data) {
+                ADDR_WORD(FILE_RELOC48(data)->ptrs[0]) -= (AddrWord)data;
             }
             break;
         case 4:
@@ -206,55 +206,55 @@ void fileGarbageDataAdrClear(FileEntry* entry) {
             }
             break;
         case 6:
-            if (FT48(data)->ptrs[0] >= data) {
-                ADDR_WORD(FT48(data)->ptrs[0]) -= (AddrWord)data;
+            if (FILE_RELOC48(data)->ptrs[0] >= data) {
+                ADDR_WORD(FILE_RELOC48(data)->ptrs[0]) -= (AddrWord)data;
             }
             break;
         case 7:
-            if (FT7(data)->ptrs[0] >= data) {
-                ADDR_WORD(FT7(data)->ptrs[0]) -= (AddrWord)data;
-                ADDR_WORD(FT7(data)->ptrs[1]) -= (AddrWord)data;
-                ADDR_WORD(FT7(data)->ptrs[2]) -= (AddrWord)data;
+            if (FILE_RELOC7(data)->ptrs[0] >= data) {
+                ADDR_WORD(FILE_RELOC7(data)->ptrs[0]) -= (AddrWord)data;
+                ADDR_WORD(FILE_RELOC7(data)->ptrs[1]) -= (AddrWord)data;
+                ADDR_WORD(FILE_RELOC7(data)->ptrs[2]) -= (AddrWord)data;
             }
             break;
         case 8:
-            if (FT8(data)->ptrs[0] >= data) {
-                ADDR_WORD(FT8(data)->ptrs[0]) -= (AddrWord)data;
-                ADDR_WORD(FT8(data)->ptrs[1]) -= (AddrWord)data;
-                ADDR_WORD(FT8(data)->ptrs[2]) -= (AddrWord)data;
-                ADDR_WORD(FT8(data)->ptrs[3]) -= (AddrWord)data;
-                ADDR_WORD(FT8(data)->ptrs[4]) -= (AddrWord)data;
-                ADDR_WORD(FT8(data)->ptrs[5]) -= (AddrWord)data;
-                ADDR_WORD(FT8(data)->ptrs[6]) -= (AddrWord)data;
-                ADDR_WORD(FT8(data)->ptrs[7]) -= (AddrWord)data;
-                ADDR_WORD(FT8(data)->ptrs[8]) -= (AddrWord)data;
-                ADDR_WORD(FT8(data)->ptrs[9]) -= (AddrWord)data;
-                ADDR_WORD(FT8(data)->ptrs[10]) -= (AddrWord)data;
-                ADDR_WORD(FT8(data)->ptrs[11]) -= (AddrWord)data;
-                ADDR_WORD(FT8(data)->ptrs[12]) -= (AddrWord)data;
-                ADDR_WORD(FT8(data)->ptrs[13]) -= (AddrWord)data;
-                ADDR_WORD(FT8(data)->ptrs[14]) -= (AddrWord)data;
-                ADDR_WORD(FT8(data)->ptrs[15]) -= (AddrWord)data;
-                ADDR_WORD(FT8(data)->ptrs[16]) -= (AddrWord)data;
-                ADDR_WORD(FT8(data)->ptrs[17]) -= (AddrWord)data;
-                ADDR_WORD(FT8(data)->ptrs[18]) -= (AddrWord)data;
-                ADDR_WORD(FT8(data)->ptrs[19]) -= (AddrWord)data;
-                ADDR_WORD(FT8(data)->ptrs[20]) -= (AddrWord)data;
-                ADDR_WORD(FT8(data)->ptrs[21]) -= (AddrWord)data;
-                ADDR_WORD(FT8(data)->ptrs[22]) -= (AddrWord)data;
+            if (FILE_RELOC8(data)->ptrs[0] >= data) {
+                ADDR_WORD(FILE_RELOC8(data)->ptrs[0]) -= (AddrWord)data;
+                ADDR_WORD(FILE_RELOC8(data)->ptrs[1]) -= (AddrWord)data;
+                ADDR_WORD(FILE_RELOC8(data)->ptrs[2]) -= (AddrWord)data;
+                ADDR_WORD(FILE_RELOC8(data)->ptrs[3]) -= (AddrWord)data;
+                ADDR_WORD(FILE_RELOC8(data)->ptrs[4]) -= (AddrWord)data;
+                ADDR_WORD(FILE_RELOC8(data)->ptrs[5]) -= (AddrWord)data;
+                ADDR_WORD(FILE_RELOC8(data)->ptrs[6]) -= (AddrWord)data;
+                ADDR_WORD(FILE_RELOC8(data)->ptrs[7]) -= (AddrWord)data;
+                ADDR_WORD(FILE_RELOC8(data)->ptrs[8]) -= (AddrWord)data;
+                ADDR_WORD(FILE_RELOC8(data)->ptrs[9]) -= (AddrWord)data;
+                ADDR_WORD(FILE_RELOC8(data)->ptrs[10]) -= (AddrWord)data;
+                ADDR_WORD(FILE_RELOC8(data)->ptrs[11]) -= (AddrWord)data;
+                ADDR_WORD(FILE_RELOC8(data)->ptrs[12]) -= (AddrWord)data;
+                ADDR_WORD(FILE_RELOC8(data)->ptrs[13]) -= (AddrWord)data;
+                ADDR_WORD(FILE_RELOC8(data)->ptrs[14]) -= (AddrWord)data;
+                ADDR_WORD(FILE_RELOC8(data)->ptrs[15]) -= (AddrWord)data;
+                ADDR_WORD(FILE_RELOC8(data)->ptrs[16]) -= (AddrWord)data;
+                ADDR_WORD(FILE_RELOC8(data)->ptrs[17]) -= (AddrWord)data;
+                ADDR_WORD(FILE_RELOC8(data)->ptrs[18]) -= (AddrWord)data;
+                ADDR_WORD(FILE_RELOC8(data)->ptrs[19]) -= (AddrWord)data;
+                ADDR_WORD(FILE_RELOC8(data)->ptrs[20]) -= (AddrWord)data;
+                ADDR_WORD(FILE_RELOC8(data)->ptrs[21]) -= (AddrWord)data;
+                ADDR_WORD(FILE_RELOC8(data)->ptrs[22]) -= (AddrWord)data;
             }
             break;
         case 9:
-            if (FT9(data)->ptrs[0] >= data) {
-                ADDR_WORD(FT9(data)->ptrs[0]) -= (AddrWord)data;
-                ADDR_WORD(FT9(data)->ptrs[1]) -= (AddrWord)data;
-                ADDR_WORD(FT9(data)->ptrs[2]) -= (AddrWord)data;
-                ADDR_WORD(FT9(data)->ptrs[3]) -= (AddrWord)data;
+            if (FILE_RELOC9(data)->ptrs[0] >= data) {
+                ADDR_WORD(FILE_RELOC9(data)->ptrs[0]) -= (AddrWord)data;
+                ADDR_WORD(FILE_RELOC9(data)->ptrs[1]) -= (AddrWord)data;
+                ADDR_WORD(FILE_RELOC9(data)->ptrs[2]) -= (AddrWord)data;
+                ADDR_WORD(FILE_RELOC9(data)->ptrs[3]) -= (AddrWord)data;
             }
             break;
         case 10:
-            if (FT48(data)->ptrs[0] >= data) {
-                ADDR_WORD(FT48(data)->ptrs[0]) -= (AddrWord)data;
+            if (FILE_RELOC48(data)->ptrs[0] >= data) {
+                ADDR_WORD(FILE_RELOC48(data)->ptrs[0]) -= (AddrWord)data;
             }
             break;
         case 0:
@@ -317,8 +317,8 @@ void fileGarbageDataAdrSet(void* data, s32 type) {
             }
             break;
         case 3:
-            if (FT48(data)->ptrs[0] < data) {
-                ADDR_WORD(FT48(data)->ptrs[0]) += (AddrWord)data;
+            if (FILE_RELOC48(data)->ptrs[0] < data) {
+                ADDR_WORD(FILE_RELOC48(data)->ptrs[0]) += (AddrWord)data;
             }
             break;
         case 4:
@@ -397,55 +397,55 @@ void fileGarbageDataAdrSet(void* data, s32 type) {
             }
             break;
         case 6:
-            if (FT48(data)->ptrs[0] < data) {
-                ADDR_WORD(FT48(data)->ptrs[0]) += (AddrWord)data;
+            if (FILE_RELOC48(data)->ptrs[0] < data) {
+                ADDR_WORD(FILE_RELOC48(data)->ptrs[0]) += (AddrWord)data;
             }
             break;
         case 7:
-            if (FT7(data)->ptrs[0] < data) {
-                ADDR_WORD(FT7(data)->ptrs[0]) += (AddrWord)data;
-                ADDR_WORD(FT7(data)->ptrs[1]) += (AddrWord)data;
-                ADDR_WORD(FT7(data)->ptrs[2]) += (AddrWord)data;
+            if (FILE_RELOC7(data)->ptrs[0] < data) {
+                ADDR_WORD(FILE_RELOC7(data)->ptrs[0]) += (AddrWord)data;
+                ADDR_WORD(FILE_RELOC7(data)->ptrs[1]) += (AddrWord)data;
+                ADDR_WORD(FILE_RELOC7(data)->ptrs[2]) += (AddrWord)data;
             }
             break;
         case 8:
-            if (FT8(data)->ptrs[0] < data) {
-                ADDR_WORD(FT8(data)->ptrs[0]) += (AddrWord)data;
-                ADDR_WORD(FT8(data)->ptrs[1]) += (AddrWord)data;
-                ADDR_WORD(FT8(data)->ptrs[2]) += (AddrWord)data;
-                ADDR_WORD(FT8(data)->ptrs[3]) += (AddrWord)data;
-                ADDR_WORD(FT8(data)->ptrs[4]) += (AddrWord)data;
-                ADDR_WORD(FT8(data)->ptrs[5]) += (AddrWord)data;
-                ADDR_WORD(FT8(data)->ptrs[6]) += (AddrWord)data;
-                ADDR_WORD(FT8(data)->ptrs[7]) += (AddrWord)data;
-                ADDR_WORD(FT8(data)->ptrs[8]) += (AddrWord)data;
-                ADDR_WORD(FT8(data)->ptrs[9]) += (AddrWord)data;
-                ADDR_WORD(FT8(data)->ptrs[10]) += (AddrWord)data;
-                ADDR_WORD(FT8(data)->ptrs[11]) += (AddrWord)data;
-                ADDR_WORD(FT8(data)->ptrs[12]) += (AddrWord)data;
-                ADDR_WORD(FT8(data)->ptrs[13]) += (AddrWord)data;
-                ADDR_WORD(FT8(data)->ptrs[14]) += (AddrWord)data;
-                ADDR_WORD(FT8(data)->ptrs[15]) += (AddrWord)data;
-                ADDR_WORD(FT8(data)->ptrs[16]) += (AddrWord)data;
-                ADDR_WORD(FT8(data)->ptrs[17]) += (AddrWord)data;
-                ADDR_WORD(FT8(data)->ptrs[18]) += (AddrWord)data;
-                ADDR_WORD(FT8(data)->ptrs[19]) += (AddrWord)data;
-                ADDR_WORD(FT8(data)->ptrs[20]) += (AddrWord)data;
-                ADDR_WORD(FT8(data)->ptrs[21]) += (AddrWord)data;
-                ADDR_WORD(FT8(data)->ptrs[22]) += (AddrWord)data;
+            if (FILE_RELOC8(data)->ptrs[0] < data) {
+                ADDR_WORD(FILE_RELOC8(data)->ptrs[0]) += (AddrWord)data;
+                ADDR_WORD(FILE_RELOC8(data)->ptrs[1]) += (AddrWord)data;
+                ADDR_WORD(FILE_RELOC8(data)->ptrs[2]) += (AddrWord)data;
+                ADDR_WORD(FILE_RELOC8(data)->ptrs[3]) += (AddrWord)data;
+                ADDR_WORD(FILE_RELOC8(data)->ptrs[4]) += (AddrWord)data;
+                ADDR_WORD(FILE_RELOC8(data)->ptrs[5]) += (AddrWord)data;
+                ADDR_WORD(FILE_RELOC8(data)->ptrs[6]) += (AddrWord)data;
+                ADDR_WORD(FILE_RELOC8(data)->ptrs[7]) += (AddrWord)data;
+                ADDR_WORD(FILE_RELOC8(data)->ptrs[8]) += (AddrWord)data;
+                ADDR_WORD(FILE_RELOC8(data)->ptrs[9]) += (AddrWord)data;
+                ADDR_WORD(FILE_RELOC8(data)->ptrs[10]) += (AddrWord)data;
+                ADDR_WORD(FILE_RELOC8(data)->ptrs[11]) += (AddrWord)data;
+                ADDR_WORD(FILE_RELOC8(data)->ptrs[12]) += (AddrWord)data;
+                ADDR_WORD(FILE_RELOC8(data)->ptrs[13]) += (AddrWord)data;
+                ADDR_WORD(FILE_RELOC8(data)->ptrs[14]) += (AddrWord)data;
+                ADDR_WORD(FILE_RELOC8(data)->ptrs[15]) += (AddrWord)data;
+                ADDR_WORD(FILE_RELOC8(data)->ptrs[16]) += (AddrWord)data;
+                ADDR_WORD(FILE_RELOC8(data)->ptrs[17]) += (AddrWord)data;
+                ADDR_WORD(FILE_RELOC8(data)->ptrs[18]) += (AddrWord)data;
+                ADDR_WORD(FILE_RELOC8(data)->ptrs[19]) += (AddrWord)data;
+                ADDR_WORD(FILE_RELOC8(data)->ptrs[20]) += (AddrWord)data;
+                ADDR_WORD(FILE_RELOC8(data)->ptrs[21]) += (AddrWord)data;
+                ADDR_WORD(FILE_RELOC8(data)->ptrs[22]) += (AddrWord)data;
             }
             break;
         case 9:
-            if (FT9(data)->ptrs[0] < data) {
-                ADDR_WORD(FT9(data)->ptrs[0]) += (AddrWord)data;
-                ADDR_WORD(FT9(data)->ptrs[1]) += (AddrWord)data;
-                ADDR_WORD(FT9(data)->ptrs[2]) += (AddrWord)data;
-                ADDR_WORD(FT9(data)->ptrs[3]) += (AddrWord)data;
+            if (FILE_RELOC9(data)->ptrs[0] < data) {
+                ADDR_WORD(FILE_RELOC9(data)->ptrs[0]) += (AddrWord)data;
+                ADDR_WORD(FILE_RELOC9(data)->ptrs[1]) += (AddrWord)data;
+                ADDR_WORD(FILE_RELOC9(data)->ptrs[2]) += (AddrWord)data;
+                ADDR_WORD(FILE_RELOC9(data)->ptrs[3]) += (AddrWord)data;
             }
             break;
         case 10:
-            if (FT48(data)->ptrs[0] < data) {
-                ADDR_WORD(FT48(data)->ptrs[0]) += (AddrWord)data;
+            if (FILE_RELOC48(data)->ptrs[0] < data) {
+                ADDR_WORD(FILE_RELOC48(data)->ptrs[0]) += (AddrWord)data;
             }
             break;
         case 0:

@@ -479,7 +479,7 @@ void effNozleMain(EffectEntry* effect) {
     }
 }
 
-#define SETUP(d, pf, tf, vtx, nrm, col, t0, t1) \
+#define NOZLE_VTX_SETUP(d, pf, tf, vtx, nrm, col, t0, t1) \
     GXClearVtxDesc();                           \
     GXSetVtxDesc(GX_VA_POS, d);                         \
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, pf);            \
@@ -578,15 +578,15 @@ void effNozleDisp(CameraId cameraId, EffectEntry* effect) {
     GXSetCullMode(GX_CULL_NONE);
     switch (work->type) {
         case 0:
-            SETUP(2, 7, 14, nozle_1_vertex_tbl, nozle_1_normal_tbl, nozle_1_color0_tbl, nozle_1_texcoord0_tbl, nozle_1_texcoord1_tbl);
+            NOZLE_VTX_SETUP(2, 7, 14, nozle_1_vertex_tbl, nozle_1_normal_tbl, nozle_1_color0_tbl, nozle_1_texcoord0_tbl, nozle_1_texcoord1_tbl);
             { for (k = 0, sz = nozle_1_dl_0_size_tbl, dl = nozle_1_dl_0_tbl; k < 10; k++, sz++, dl++) { GXCallDisplayList(*dl, *sz * 32); } }
-            SETUP(2, 7, 14, nozle_1_vertex_tbl, nozle_1_normal_tbl, nozle_1_color0_tbl, nozle_1_texcoord0_tbl, nozle_1_texcoord1_tbl);
+            NOZLE_VTX_SETUP(2, 7, 14, nozle_1_vertex_tbl, nozle_1_normal_tbl, nozle_1_color0_tbl, nozle_1_texcoord0_tbl, nozle_1_texcoord1_tbl);
             { for (k = 0, sz2 = nozle_1_dl_1_size_tbl, dl2 = nozle_1_dl_1_tbl; k < 10; k++, sz2++, dl2++) { GXCallDisplayList(*dl2, *sz2 * 32); } }
             break;
         case 2:
-            SETUP(3, 7, 14, nozle_3_vertex_tbl, nozle_3_normal_tbl, nozle_3_color0_tbl, nozle_3_texcoord0_tbl, nozle_3_texcoord1_tbl);
+            NOZLE_VTX_SETUP(3, 7, 14, nozle_3_vertex_tbl, nozle_3_normal_tbl, nozle_3_color0_tbl, nozle_3_texcoord0_tbl, nozle_3_texcoord1_tbl);
             CALLDL(17, nozle_3_dl_1_tbl, nozle_3_dl_1_size_tbl, sz5, dl5);
-            SETUP(3, 7, 14, nozle_3_vertex_tbl, nozle_3_normal_tbl, nozle_3_color0_tbl, nozle_3_texcoord0_tbl, nozle_3_texcoord1_tbl);
+            NOZLE_VTX_SETUP(3, 7, 14, nozle_3_vertex_tbl, nozle_3_normal_tbl, nozle_3_color0_tbl, nozle_3_texcoord0_tbl, nozle_3_texcoord1_tbl);
             CALLDL(17, nozle_3_dl_0_tbl, nozle_3_dl_0_size_tbl, sz3, dl3);
             break;
         case 3:
@@ -603,7 +603,7 @@ void effNozleDisp(CameraId cameraId, EffectEntry* effect) {
                 PSMTXConcat(a, c, c);
                 PSMTXConcat(d, c, c);
                 GXLoadPosMtxImm(c, 0);
-                SETUP(2, 6, 13, nozle_4_vertex_tbl, nozle_4_normal_tbl, nozle_4_color0_tbl, nozle_4_texcoord0_tbl, nozle_4_texcoord1_tbl);
+                NOZLE_VTX_SETUP(2, 6, 13, nozle_4_vertex_tbl, nozle_4_normal_tbl, nozle_4_color0_tbl, nozle_4_texcoord0_tbl, nozle_4_texcoord1_tbl);
                 CALLDL(8, nozle_4_dl_0_tbl, nozle_4_dl_0_size_tbl, sz4, dl4);
             }
             break;

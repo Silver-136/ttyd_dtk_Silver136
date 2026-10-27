@@ -1310,7 +1310,6 @@ static EVT_BEGIN(attack_audience_event)
 EVT_END()
 
 
-#define intplGetValue(mode, a, b, cur, steps) intplGetValue(mode, a, b, cur, steps)
 
 USER_FUNC(battle_evt_majo_disp_off) {
     EvtWord* args = event->args;
@@ -1400,7 +1399,7 @@ static void __makeTechMenuFunc(BattleCommand* command, s32* count) {
 
     techLv = partyGetTechLv(BattleTransPartyId(BattleGetPartyPtr(_battleWorkPointer)->currentKind));
 
-#define ADD_W(w)                                                                                   \
+#define ADD_WEAPON(w)                                                                                   \
     command->weapon[*count].index = -1;                                                     \
     command->weapon[*count].itemId = 0;                                                       \
     command->weapon[*count].weapon = (BattleWeapon*)(w);                              \
@@ -1408,15 +1407,15 @@ static void __makeTechMenuFunc(BattleCommand* command, s32* count) {
     command->weapon[*count].icon = command->weapon[*count].weapon->icon;       \
     command->weapon[*count].name = msgSearch(command->weapon[*count].weapon->name); \
     (*count)++;
-    ADD_W(&partyWeapon_VivianNormalAttack)
+    ADD_WEAPON(&partyWeapon_VivianNormalAttack)
     if (techLv >= 0) {
-        ADD_W(&partyWeapon_VivianShadowGuard)
+        ADD_WEAPON(&partyWeapon_VivianShadowGuard)
     }
     if (techLv >= 1) {
-        ADD_W(&partyWeapon_VivianMagicalPowder)
+        ADD_WEAPON(&partyWeapon_VivianMagicalPowder)
     }
     if (techLv >= 2) {
-        ADD_W(&partyWeapon_VivianCharmKissAttack)
+        ADD_WEAPON(&partyWeapon_VivianCharmKissAttack)
     }
 }
 

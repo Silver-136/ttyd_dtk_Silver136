@@ -42,7 +42,6 @@
 #include "battle/battle_seq_end.h"
 #include "battle/unit_work.h"
 
-#define STAGE_WORK(wp) (&(wp)->stageObjectWork)
 
 // external prototypes
 f32 intpl_sub(s32 type, f32 start, f32 end, s32 cur, s32 max);
@@ -671,14 +670,7 @@ USER_FUNC(_set_effect_luck) {
     return EVT_RETURN_DONE;
 }
 
-#define TURN_NEXT(wp) \
-    BattleIncSeq(wp, SEQ_TURN); \
-    btlseqTurn(wp)
 
-#define TURN_SKIP(wp) \
-    BattleIncSeq(wp, SEQ_TURN); \
-    BattleIncSeq(wp, SEQ_TURN); \
-    btlseqTurn(wp)
 
 void btlseqTurn(BattleWork *wp) {
     Vec pos;
@@ -2516,7 +2508,7 @@ void battleMakePhaseEvtTable(BattleWork* wp) {
 }
 
 BOOL BattleWaitAllActiveEvtEnd(BattleWork* wp) {
-    BattleStageObjectWork* stage = STAGE_WORK(wp);
+    BattleStageObjectWork* stage = &wp->stageObjectWork;
     BOOL ret = BattleWaitAllActiveEvtEnd_NoBgSetEndWait(wp);
 
     if (!ret) {

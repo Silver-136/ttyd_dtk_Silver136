@@ -28,7 +28,6 @@ static void piders_draw_yarn_sub(CameraId cameraId, void* param);
 
 double sqrt(double);
 double __fabs(double);
-#define fabs(x) __fabs(x)
 
 
 // functions are defined in reverse of target order (deferred inlining)
@@ -116,7 +115,7 @@ USER_FUNC(_2d_dead_jump) {
         }
         npc->moveDir = angleABf(0.0f, 0.0f, d.x, d.z);
         if (t > 0.0f) {
-            npc->moveSpeed = fabs(tx - npc->position.x) / t;
+            npc->moveSpeed = __fabs(tx - npc->position.x) / t;
         } else {
             npc->moveSpeed = spd;
         }

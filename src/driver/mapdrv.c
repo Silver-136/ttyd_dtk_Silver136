@@ -845,16 +845,16 @@ void _mapLoad(MapWork* wp, BOOL group, const char* map) {
             Vec mn;
             Vec mx;
             mapGetBoundingBox(&mn, &mx);
-#define BBOX(idx, X, Y, Z) { Vec v = {0.0f, 0.0f, 0.0f}; v.x = X; v.y = Y; v.z = Z; wp->entries[group].bbox[idx] = v; }
-            BBOX(0, mx.x, mx.y, mx.z)
-            BBOX(1, mn.x, mx.y, mx.z)
-            BBOX(2, mx.x, mn.y, mx.z)
-            BBOX(3, mx.x, mx.y, mn.z)
-            BBOX(4, mn.x, mn.y, mx.z)
-            BBOX(5, mx.x, mn.y, mn.z)
-            BBOX(6, mn.x, mx.y, mn.z)
-            BBOX(7, mn.x, mn.y, mn.z)
-#undef BBOX
+#define SET_BBOX_CORNER(idx, X, Y, Z) { Vec v = {0.0f, 0.0f, 0.0f}; v.x = X; v.y = Y; v.z = Z; wp->entries[group].bbox[idx] = v; }
+            SET_BBOX_CORNER(0, mx.x, mx.y, mx.z)
+            SET_BBOX_CORNER(1, mn.x, mx.y, mx.z)
+            SET_BBOX_CORNER(2, mx.x, mn.y, mx.z)
+            SET_BBOX_CORNER(3, mx.x, mx.y, mn.z)
+            SET_BBOX_CORNER(4, mn.x, mn.y, mx.z)
+            SET_BBOX_CORNER(5, mx.x, mn.y, mn.z)
+            SET_BBOX_CORNER(6, mn.x, mx.y, mn.z)
+            SET_BBOX_CORNER(7, mn.x, mn.y, mn.z)
+#undef SET_BBOX_CORNER
         }
         mapLoadAnim_(group);
     }

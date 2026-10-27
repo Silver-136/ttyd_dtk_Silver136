@@ -42,9 +42,9 @@ typedef struct YuuRankingWork {
 } YuuRankingWork;
 #ifdef VERSION_G8ME01
 // US keeps separate rankings for 60Hz (record rows 0-3) and 50Hz (rows 4-7) play.
-#define YURANK(f) ((f) + (gp->framerate == 50 ? 1 : 0) * 4)
+#define RANKING_ROW(f) ((f) + (gp->framerate == 50 ? 1 : 0) * 4)
 #else
-#define YURANK(f) (f)
+#define RANKING_ROW(f) (f)
 #endif
 static s32 snd_id; // was a function-local static; file scope (declared before _wp: .bss is emitted reversed) keeps order _wp, snd_id
 static YuuRankingWork* _wp;
@@ -478,7 +478,7 @@ static void evt_yuuranking_disp_func(CameraId camera, void* param) {
         }
 #endif
         for (i = 0; i < 6; i++) {
-            if (YURANK(yuwp->recordOn)[wp->type][i] == 0) {
+            if (RANKING_ROW(yuwp->recordOn)[wp->type][i] == 0) {
                 continue;
             }
             ofs = 2.0f + i;
@@ -521,15 +521,15 @@ static void evt_yuuranking_disp_func(CameraId camera, void* param) {
             switch (wp->type) {
                 case 0:
 #ifdef VERSION_G8ME01
-                    if (YURANK(yuwp->recordScore)[wp->type][i] >= 0) {
-                        sprintf(buf, "%3d%s%02d", YURANK(yuwp->recordScore)[wp->type][i] / 1000, msgSearch("menu_decimal_point"), (YURANK(yuwp->recordScore)[wp->type][i] % 1000) / 10);
+                    if (RANKING_ROW(yuwp->recordScore)[wp->type][i] >= 0) {
+                        sprintf(buf, "%3d%s%02d", RANKING_ROW(yuwp->recordScore)[wp->type][i] / 1000, msgSearch("menu_decimal_point"), (RANKING_ROW(yuwp->recordScore)[wp->type][i] % 1000) / 10);
 #else
-                    rscore = YURANK(yuwp->recordScore)[wp->type][i];
+                    rscore = RANKING_ROW(yuwp->recordScore)[wp->type][i];
                     if (rscore >= 0) {
-                        sprintf(buf, "%3d%s%02d", YURANK(yuwp->recordScore)[wp->type][i] / 1000, msgSearch("menu_decimal_point"), (rscore % 1000) / 10);
+                        sprintf(buf, "%3d%s%02d", RANKING_ROW(yuwp->recordScore)[wp->type][i] / 1000, msgSearch("menu_decimal_point"), (rscore % 1000) / 10);
 #endif
                         FontDrawStringPitch(-75.200005f + wp->x, wp->y + (104.0f - 24.0f * ofs), 18.0f, buf);
-                        sprintf(buf, "%4d", YURANK(yuwp->recordParam)[wp->type][i]);
+                        sprintf(buf, "%4d", RANKING_ROW(yuwp->recordParam)[wp->type][i]);
                         FontDrawStringPitch(75.19998f + wp->x, wp->y + (104.0f - 24.0f * ofs), 18.0f, buf);
                     } else {
 #ifdef VERSION_G8ME01
@@ -543,11 +543,11 @@ static void evt_yuuranking_disp_func(CameraId camera, void* param) {
                 case 3:
                 case 2:
 #ifdef VERSION_G8ME01
-                    if (YURANK(yuwp->recordScore)[wp->type][i] >= 0) {
-                        rsec = YURANK(yuwp->recordScore)[wp->type][i] / 1000;
+                    if (RANKING_ROW(yuwp->recordScore)[wp->type][i] >= 0) {
+                        rsec = RANKING_ROW(yuwp->recordScore)[wp->type][i] / 1000;
                         fr = gp->framerate == 50 ? 1 : 0;
 #else
-                    rscore = YURANK(yuwp->recordScore)[wp->type][i];
+                    rscore = RANKING_ROW(yuwp->recordScore)[wp->type][i];
                     if (rscore >= 0) {
                         rsec = rscore / 1000;
 #endif
@@ -559,7 +559,7 @@ static void evt_yuuranking_disp_func(CameraId camera, void* param) {
                         sprintf(buf, "%1d%s%02d%s%02d", rmin, msgSearch("menu_colon"), rsec, msgSearch("menu_colon"), (rscore % 1000) / 10);
 #endif
                         FontDrawStringPitch(-75.200005f + wp->x, wp->y + (104.0f - 24.0f * ofs), 18.0f, buf);
-                        sprintf(buf, "%4d", YURANK(yuwp->recordParam)[wp->type][i]);
+                        sprintf(buf, "%4d", RANKING_ROW(yuwp->recordParam)[wp->type][i]);
                         FontDrawStringPitch(75.19998f + wp->x, wp->y + (104.0f - 24.0f * ofs), 18.0f, buf);
                     } else {
                         if (wp->type == 3) {
@@ -575,14 +575,14 @@ static void evt_yuuranking_disp_func(CameraId camera, void* param) {
                     }
                     break;
                 case 1:
-                    if (YURANK(yuwp->recordScore)[wp->type][i] < wp->max) {
-                        sprintf(buf, "%4d", YURANK(yuwp->recordScore)[wp->type][i] + 1);
+                    if (RANKING_ROW(yuwp->recordScore)[wp->type][i] < wp->max) {
+                        sprintf(buf, "%4d", RANKING_ROW(yuwp->recordScore)[wp->type][i] + 1);
 #ifdef VERSION_G8ME01
                         FontDrawStringPitch(-75.200005f + wp->x, wp->y + (104.0f - 24.0f * ofs), 18.0f, buf);
 #else
                         FontDrawStringPitch(-37.600006f + wp->x, wp->y + (104.0f - 24.0f * ofs), 18.0f, buf);
 #endif
-                        sprintf(buf, "%4d", YURANK(yuwp->recordParam)[wp->type][i]);
+                        sprintf(buf, "%4d", RANKING_ROW(yuwp->recordParam)[wp->type][i]);
                         FontDrawStringPitch(75.19998f + wp->x, wp->y + (104.0f - 24.0f * ofs), 18.0f, buf);
                     } else {
 #ifdef VERSION_G8ME01
@@ -833,30 +833,30 @@ USER_FUNC(evt_yuuranking_alloc) {
     wp->mul = evtGetValue(event, args[6]);
     switch (wp->type) {
         case 0:
-            YURANK(yuwp->recordOn)[wp->type][5] = 0;
-            YURANK(yuwp->recordScore)[wp->type][5] = 0;
-            YURANK(yuwp->recordParam)[wp->type][5] = 0;
+            RANKING_ROW(yuwp->recordOn)[wp->type][5] = 0;
+            RANKING_ROW(yuwp->recordScore)[wp->type][5] = 0;
+            RANKING_ROW(yuwp->recordParam)[wp->type][5] = 0;
             wp->rank = -1;
             if (wp->mode == 1) {
                 score = wp->score;
                 if (score >= 0) {
                     for (i = 0; i < 6; i++) {
-                        if (YURANK(yuwp->recordOn)[wp->type][i] == 0) {
-                            YURANK(yuwp->recordOn)[wp->type][i] = 1;
-                            YURANK(yuwp->recordScore)[wp->type][i] = wp->score;
-                            YURANK(yuwp->recordParam)[wp->type][i] = yuu_kesan(wp->type, wp->score, wp->bonus, wp->mul, wp->max);
+                        if (RANKING_ROW(yuwp->recordOn)[wp->type][i] == 0) {
+                            RANKING_ROW(yuwp->recordOn)[wp->type][i] = 1;
+                            RANKING_ROW(yuwp->recordScore)[wp->type][i] = wp->score;
+                            RANKING_ROW(yuwp->recordParam)[wp->type][i] = yuu_kesan(wp->type, wp->score, wp->bonus, wp->mul, wp->max);
                             wp->rank = i;
                             break;
                         }
-                        if (score >= YURANK(yuwp->recordScore)[wp->type][i]) {
+                        if (score >= RANKING_ROW(yuwp->recordScore)[wp->type][i]) {
                             for (j = 4; j > i; j--) {
-                                YURANK(yuwp->recordOn)[wp->type][j] = YURANK(yuwp->recordOn)[wp->type][j - 1];
-                                YURANK(yuwp->recordScore)[wp->type][j] = YURANK(yuwp->recordScore)[wp->type][j - 1];
-                                YURANK(yuwp->recordParam)[wp->type][j] = YURANK(yuwp->recordParam)[wp->type][j - 1];
+                                RANKING_ROW(yuwp->recordOn)[wp->type][j] = RANKING_ROW(yuwp->recordOn)[wp->type][j - 1];
+                                RANKING_ROW(yuwp->recordScore)[wp->type][j] = RANKING_ROW(yuwp->recordScore)[wp->type][j - 1];
+                                RANKING_ROW(yuwp->recordParam)[wp->type][j] = RANKING_ROW(yuwp->recordParam)[wp->type][j - 1];
                             }
-                            YURANK(yuwp->recordOn)[wp->type][i] = 1;
-                            YURANK(yuwp->recordScore)[wp->type][i] = wp->score;
-                            YURANK(yuwp->recordParam)[wp->type][i] = yuu_kesan(wp->type, wp->score, wp->bonus, wp->mul, wp->max);
+                            RANKING_ROW(yuwp->recordOn)[wp->type][i] = 1;
+                            RANKING_ROW(yuwp->recordScore)[wp->type][i] = wp->score;
+                            RANKING_ROW(yuwp->recordParam)[wp->type][i] = yuu_kesan(wp->type, wp->score, wp->bonus, wp->mul, wp->max);
                             wp->rank = i;
                             if (i == 0) {
                                 evtSetValue(NULL, GSWF_GOR_PLANE_GAME_TOP_SCORE, TRUE);
@@ -865,9 +865,9 @@ USER_FUNC(evt_yuuranking_alloc) {
                         }
                     }
                 } else {
-                    YURANK(yuwp->recordOn)[wp->type][5] = 1;
-                    YURANK(yuwp->recordScore)[wp->type][5] = wp->score;
-                    YURANK(yuwp->recordParam)[wp->type][5] = 0;
+                    RANKING_ROW(yuwp->recordOn)[wp->type][5] = 1;
+                    RANKING_ROW(yuwp->recordScore)[wp->type][5] = wp->score;
+                    RANKING_ROW(yuwp->recordParam)[wp->type][5] = 0;
                     wp->rank = 5;
                 }
             } else if (wp->mode == 0) {
@@ -879,30 +879,30 @@ USER_FUNC(evt_yuuranking_alloc) {
             break;
         case 3:
         case 2:
-            YURANK(yuwp->recordOn)[wp->type][5] = 0;
-            YURANK(yuwp->recordScore)[wp->type][5] = 0;
-            YURANK(yuwp->recordParam)[wp->type][5] = 0;
+            RANKING_ROW(yuwp->recordOn)[wp->type][5] = 0;
+            RANKING_ROW(yuwp->recordScore)[wp->type][5] = 0;
+            RANKING_ROW(yuwp->recordParam)[wp->type][5] = 0;
             wp->rank = -1;
             if (wp->mode == 1) {
                 score = wp->score;
                 if (score >= 0) {
                     for (i = 0; i < 6; i++) {
-                        if (YURANK(yuwp->recordOn)[wp->type][i] == 0) {
-                            YURANK(yuwp->recordOn)[wp->type][i] = 1;
-                            YURANK(yuwp->recordScore)[wp->type][i] = wp->score;
-                            YURANK(yuwp->recordParam)[wp->type][i] = yuu_kesan(wp->type, wp->score, wp->bonus, wp->mul, wp->max);
+                        if (RANKING_ROW(yuwp->recordOn)[wp->type][i] == 0) {
+                            RANKING_ROW(yuwp->recordOn)[wp->type][i] = 1;
+                            RANKING_ROW(yuwp->recordScore)[wp->type][i] = wp->score;
+                            RANKING_ROW(yuwp->recordParam)[wp->type][i] = yuu_kesan(wp->type, wp->score, wp->bonus, wp->mul, wp->max);
                             wp->rank = i;
                             break;
                         }
-                        if (score >= YURANK(yuwp->recordScore)[wp->type][i]) {
+                        if (score >= RANKING_ROW(yuwp->recordScore)[wp->type][i]) {
                             for (j = 4; j > i; j--) {
-                                YURANK(yuwp->recordOn)[wp->type][j] = YURANK(yuwp->recordOn)[wp->type][j - 1];
-                                YURANK(yuwp->recordScore)[wp->type][j] = YURANK(yuwp->recordScore)[wp->type][j - 1];
-                                YURANK(yuwp->recordParam)[wp->type][j] = YURANK(yuwp->recordParam)[wp->type][j - 1];
+                                RANKING_ROW(yuwp->recordOn)[wp->type][j] = RANKING_ROW(yuwp->recordOn)[wp->type][j - 1];
+                                RANKING_ROW(yuwp->recordScore)[wp->type][j] = RANKING_ROW(yuwp->recordScore)[wp->type][j - 1];
+                                RANKING_ROW(yuwp->recordParam)[wp->type][j] = RANKING_ROW(yuwp->recordParam)[wp->type][j - 1];
                             }
-                            YURANK(yuwp->recordOn)[wp->type][i] = 1;
-                            YURANK(yuwp->recordScore)[wp->type][i] = wp->score;
-                            YURANK(yuwp->recordParam)[wp->type][i] = yuu_kesan(wp->type, wp->score, wp->bonus, wp->mul, wp->max);
+                            RANKING_ROW(yuwp->recordOn)[wp->type][i] = 1;
+                            RANKING_ROW(yuwp->recordScore)[wp->type][i] = wp->score;
+                            RANKING_ROW(yuwp->recordParam)[wp->type][i] = yuu_kesan(wp->type, wp->score, wp->bonus, wp->mul, wp->max);
                             wp->rank = i;
                             if (i == 0) {
                                 if (wp->type == 3) {
@@ -915,9 +915,9 @@ USER_FUNC(evt_yuuranking_alloc) {
                         }
                     }
                 } else {
-                    YURANK(yuwp->recordOn)[wp->type][5] = 1;
-                    YURANK(yuwp->recordScore)[wp->type][5] = wp->score;
-                    YURANK(yuwp->recordParam)[wp->type][5] = 0;
+                    RANKING_ROW(yuwp->recordOn)[wp->type][5] = 1;
+                    RANKING_ROW(yuwp->recordScore)[wp->type][5] = wp->score;
+                    RANKING_ROW(yuwp->recordParam)[wp->type][5] = 0;
                     wp->rank = 5;
                 }
             } else if (wp->mode == 0) {
@@ -929,30 +929,30 @@ USER_FUNC(evt_yuuranking_alloc) {
             break;
         case 1:
             wp->max = evtGetValue(event, args[7]);
-            YURANK(yuwp->recordOn)[wp->type][5] = 0;
-            YURANK(yuwp->recordScore)[wp->type][5] = 0;
-            YURANK(yuwp->recordParam)[wp->type][5] = 0;
+            RANKING_ROW(yuwp->recordOn)[wp->type][5] = 0;
+            RANKING_ROW(yuwp->recordScore)[wp->type][5] = 0;
+            RANKING_ROW(yuwp->recordParam)[wp->type][5] = 0;
             wp->rank = -1;
             if (wp->mode == 1) {
                 score = wp->score;
                 if (score < wp->max) {
                     for (i = 0; i < 6; i++) {
-                        if (YURANK(yuwp->recordOn)[wp->type][i] == 0) {
-                            YURANK(yuwp->recordOn)[wp->type][i] = 1;
-                            YURANK(yuwp->recordScore)[wp->type][i] = wp->score;
-                            YURANK(yuwp->recordParam)[wp->type][i] = yuu_kesan(wp->type, wp->score, wp->bonus, wp->mul, wp->max);
+                        if (RANKING_ROW(yuwp->recordOn)[wp->type][i] == 0) {
+                            RANKING_ROW(yuwp->recordOn)[wp->type][i] = 1;
+                            RANKING_ROW(yuwp->recordScore)[wp->type][i] = wp->score;
+                            RANKING_ROW(yuwp->recordParam)[wp->type][i] = yuu_kesan(wp->type, wp->score, wp->bonus, wp->mul, wp->max);
                             wp->rank = i;
                             break;
                         }
-                        if (score <= YURANK(yuwp->recordScore)[wp->type][i]) {
+                        if (score <= RANKING_ROW(yuwp->recordScore)[wp->type][i]) {
                             for (j = 4; j > i; j--) {
-                                YURANK(yuwp->recordOn)[wp->type][j] = YURANK(yuwp->recordOn)[wp->type][j - 1];
-                                YURANK(yuwp->recordScore)[wp->type][j] = YURANK(yuwp->recordScore)[wp->type][j - 1];
-                                YURANK(yuwp->recordParam)[wp->type][j] = YURANK(yuwp->recordParam)[wp->type][j - 1];
+                                RANKING_ROW(yuwp->recordOn)[wp->type][j] = RANKING_ROW(yuwp->recordOn)[wp->type][j - 1];
+                                RANKING_ROW(yuwp->recordScore)[wp->type][j] = RANKING_ROW(yuwp->recordScore)[wp->type][j - 1];
+                                RANKING_ROW(yuwp->recordParam)[wp->type][j] = RANKING_ROW(yuwp->recordParam)[wp->type][j - 1];
                             }
-                            YURANK(yuwp->recordOn)[wp->type][i] = 1;
-                            YURANK(yuwp->recordScore)[wp->type][i] = wp->score;
-                            YURANK(yuwp->recordParam)[wp->type][i] = yuu_kesan(wp->type, wp->score, wp->bonus, wp->mul, wp->max);
+                            RANKING_ROW(yuwp->recordOn)[wp->type][i] = 1;
+                            RANKING_ROW(yuwp->recordScore)[wp->type][i] = wp->score;
+                            RANKING_ROW(yuwp->recordParam)[wp->type][i] = yuu_kesan(wp->type, wp->score, wp->bonus, wp->mul, wp->max);
                             wp->rank = i;
                             if (i == 0) {
                                 evtSetValue(NULL, GSWF_GOR_PAPER_GAME_TOP_SCORE, TRUE);
@@ -961,9 +961,9 @@ USER_FUNC(evt_yuuranking_alloc) {
                         }
                     }
                 } else {
-                    YURANK(yuwp->recordOn)[wp->type][5] = 1;
-                    YURANK(yuwp->recordScore)[wp->type][5] = wp->score;
-                    YURANK(yuwp->recordParam)[wp->type][5] = 0;
+                    RANKING_ROW(yuwp->recordOn)[wp->type][5] = 1;
+                    RANKING_ROW(yuwp->recordScore)[wp->type][5] = wp->score;
+                    RANKING_ROW(yuwp->recordParam)[wp->type][5] = 0;
                     wp->rank = 5;
                 }
             } else {

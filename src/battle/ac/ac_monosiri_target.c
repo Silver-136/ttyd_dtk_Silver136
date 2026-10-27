@@ -28,7 +28,6 @@ typedef struct MonosiriTargetWork {
     s32 endTimer;   // 0x3C
 } MonosiriTargetWork;
 
-#define MT_PARAMS(work) (&(work)->actionCommands) // params: 0 unit id, 1 parts id
 
 static void actionCommandDisp(f32 x, f32 y);
 
@@ -53,8 +52,8 @@ s32 battleAcMain_MonosiriTarget(BattleWork* work) {
     if (work->actionCommands.mAcUnit->badgesEquipped.AutoCommand) {
         autoCommand = TRUE;
     }
-    unit = BattleGetUnitPtr(work, MT_PARAMS(work)->params[0]);
-    parts = BtlUnit_GetPartsPtr(unit, MT_PARAMS(work)->params[1]);
+    unit = BattleGetUnitPtr(work, work->actionCommands.params[0]);
+    parts = BtlUnit_GetPartsPtr(unit, work->actionCommands.params[1]);
 
     switch (work->actionCommands.mAcState) {
         case 0:

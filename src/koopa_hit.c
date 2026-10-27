@@ -21,10 +21,6 @@ BOOL kpaFlameHitFilter(HitCheckQuery* query, HitEntry* entry);
 
 
 
-#define KHEAD(i) (marioGetPtr()->kpaWork->headHit[i])
-#define KHEADD(i) (marioGetPtr()->kpaWork->headDist[i])
-#define KRIDE(i) (marioGetPtr()->kpaWork->rideHit[i])
-#define KRIDED(i) (marioGetPtr()->kpaWork->rideDist[i])
 
 static inline f32 kpa_nrmToAngle(f32 x, f32 y, f32 z) {
     return angleABf(0.0f, 0.0f, sqrtf(x * x + z * z), -y);
@@ -136,8 +132,8 @@ s32 kpaEnemyHitChk(f32 x, f32 y, f32 z, f32 h, f32 w) {
 static inline void kpa_headClear(void) {
     s32 i;
     for (i = 0; i < 10; i++) {
-        KHEAD(i) = NULL;
-        KHEADD(i) = 1000.0f;
+        marioGetPtr()->kpaWork->headHit[i] = NULL;
+        marioGetPtr()->kpaWork->headDist[i] = 1000.0f;
     }
 }
 
@@ -178,8 +174,8 @@ HitEntry* kpaSearchGround(f32 range, f32* outY, f32* outDepth, f32* outAng) {
     py = m->position.y;
     pz = m->position.z;
     for (i = 0; i < 10; i++) {
-        KRIDE(i) = NULL;
-        KRIDED(i) = 1000.0f;
+        marioGetPtr()->kpaWork->rideHit[i] = NULL;
+        marioGetPtr()->kpaWork->rideDist[i] = 1000.0f;
     }
     switch (kpaGetLevel()) {
     case 0:
@@ -262,8 +258,8 @@ HitEntry* kpaSearchGround(f32 range, f32* outY, f32* outDepth, f32* outAng) {
                 best = hit;
             }
         }
-        KRIDE(i) = hit;
-        KRIDED(i) = ox;
+        marioGetPtr()->kpaWork->rideHit[i] = hit;
+        marioGetPtr()->kpaWork->rideDist[i] = ox;
     }
     return best;
 }
@@ -350,7 +346,7 @@ HitEntry* kpaSearchHead(f32 hgt, Vec* pos, f32* outB) {
                 pos->y = hy;
                 best = hit;
                 *outB = 0.0f;
-                KHEAD(i) = hit;
+                marioGetPtr()->kpaWork->headHit[i] = hit;
             } else {
                 *outB = hy - pos->y - off;
             }
@@ -374,7 +370,7 @@ HitEntry* kpaGetHitobjHead2(void) {
     HitEntry* hit;
     HitEntry* ret;
     for (i = 0; i < 10; i++) {
-        hit = KHEAD(i);
+        hit = marioGetPtr()->kpaWork->headHit[i];
         ret = hit;
         if (hit) {
             break;
@@ -557,7 +553,7 @@ HitEntry* kpaHitCheck(void) {
         }
         hit = hitCheckSphereFilter(NULL, x, y, z, r);
         if ((m->flags & MARIO_FLAG_IS_JUMPING) && (hitGetAttr(hit) & HIT_ATTR_MOBJ) && mobjHitObjPtrToPtr(hit)->position.y > y) {
-            KHEAD(j) = hit;
+            marioGetPtr()->kpaWork->headHit[j] = hit;
         }
         if (hit) {
             {

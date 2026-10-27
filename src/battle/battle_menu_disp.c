@@ -18,7 +18,6 @@ double sin(double);
 
 
 
-#define WP_SUBMENU(wp) ((wp)->commandMenu.subMenu)
 
 void DrawMultiItemWin(void);
 void DrawSubMenuCommonProcess(f32* x, f32* y, Mtx* a, Vec* b, f32* c, Mtx* d);
@@ -97,7 +96,7 @@ void SelectedItemCoordinateColorUpDate(void) {
 }
 
 BOOL BattleMenuKeyOKInACT(BattleWork* wp) {
-    if (!wp->commandMenu.attackAudience && !WP_SUBMENU(wp)->shown) {
+    if (!wp->commandMenu.attackAudience && !wp->commandMenu.subMenu->shown) {
         return FALSE;
     }
     return TRUE;
@@ -629,7 +628,7 @@ void DrawMenuPartyChangeButton(void) {
     f32 y;
 
     wp = _battleWorkPointer;
-    menu = WP_SUBMENU(wp);
+    menu = wp->commandMenu.subMenu;
     camGetPtr(CAMERA_2D);
     mario = BattleGetMarioPtr(wp);
     party = BattleGetPartyPtr(wp);
@@ -927,7 +926,7 @@ void DrawMenuHelpWin(const char* msg, f32 x, f32 y) {
 void DrawMenuCursorAndScrollArrow(const Vec* v) {
     Vec pos;
     BattleWork* wp = _battleWorkPointer;
-    BattleSubMenu* menu = WP_SUBMENU(wp);
+    BattleSubMenu* menu = wp->commandMenu.subMenu;
     BattleCursor* cursor = menu->cursor;
     f32 bob;
     s32 n;
@@ -970,11 +969,11 @@ void InitSubMenuCommonProcess(BattleSubMenu** out, BattleCursor** mainCursor, Ba
     BattleWork* wp = _battleWorkPointer;
     s32 i;
 
-    if (WP_SUBMENU(wp)) {
-        BattleFree(WP_SUBMENU(wp));
+    if (wp->commandMenu.subMenu) {
+        BattleFree(wp->commandMenu.subMenu);
     }
-    WP_SUBMENU(wp) = BattleAlloc(sizeof(BattleSubMenu));
-    *out = WP_SUBMENU(wp);
+    wp->commandMenu.subMenu = BattleAlloc(sizeof(BattleSubMenu));
+    *out = wp->commandMenu.subMenu;
     (*out)->cursor = cursor;
     (*out)->scrollState = 0;
     (*out)->reserved_10 = 0;
@@ -1082,7 +1081,7 @@ void DrawSubMenuCommonProcess(f32* x, f32* y, Mtx* a, Vec* b, f32* c, Mtx* d) {
     f32 ox;
     f32 oy;
     BattleWork* wp = _battleWorkPointer;
-    BattleSubMenu* menu = WP_SUBMENU(wp);
+    BattleSubMenu* menu = wp->commandMenu.subMenu;
     BattleCursor* cursor = menu->cursor;
     BattleCursor* mainCursor;
     s32 steps;
@@ -1275,12 +1274,12 @@ void BattleMenuDisp_ActSelect_Init(BattleWork* wp, BattleCursor* cursor, BattleC
     s32 idx;
     BattleSubMenu* menu;
 
-    if (WP_SUBMENU(wp)) {
-        BattleFree(WP_SUBMENU(wp));
+    if (wp->commandMenu.subMenu) {
+        BattleFree(wp->commandMenu.subMenu);
     }
-    WP_SUBMENU(wp) = BattleAlloc(sizeof(BattleSubMenu));
+    wp->commandMenu.subMenu = BattleAlloc(sizeof(BattleSubMenu));
     if (flag & 1) {
-        menu = WP_SUBMENU(wp);
+        menu = wp->commandMenu.subMenu;
         menu->cursor = cursor;
         menu->acts = acts;
         menu->scrollState = 10;
@@ -1304,7 +1303,7 @@ void BattleMenuDisp_ActSelect_Init(BattleWork* wp, BattleCursor* cursor, BattleC
             }
         }
     } else {
-        menu = WP_SUBMENU(wp);
+        menu = wp->commandMenu.subMenu;
         menu->cursor = cursor;
         menu->acts = acts;
         menu->scrollState = 0;
@@ -1335,9 +1334,9 @@ void BattleMenuDisp_ActSelect_Disp(BattleWork* wp) {
 }
 
 void BattleMenuDisp_ActSelect_End(BattleWork* wp) {
-    if (WP_SUBMENU(wp)) {
-        BattleFree(WP_SUBMENU(wp));
-        WP_SUBMENU(wp) = NULL;
+    if (wp->commandMenu.subMenu) {
+        BattleFree(wp->commandMenu.subMenu);
+        wp->commandMenu.subMenu = NULL;
     }
 }
 
@@ -1351,7 +1350,7 @@ void DrawMainMenu(BattleWork* wp_) {
     f32 a;
     s32 i;
     BattleWork* wp = _battleWorkPointer;
-    BattleSubMenu* menu = WP_SUBMENU(wp);
+    BattleSubMenu* menu = wp->commandMenu.subMenu;
     BattleCursor* cursor = menu->cursor;
     f32 c;
     f32 ox;
@@ -1596,9 +1595,9 @@ void BattleMenuDisp_WeaponSelect_Disp(BattleWork* wp) {
 }
 
 void BattleMenuDisp_WeaponSelect_End(BattleWork* wp) {
-    if (WP_SUBMENU(wp)) {
-        BattleFree(WP_SUBMENU(wp));
-        WP_SUBMENU(wp) = NULL;
+    if (wp->commandMenu.subMenu) {
+        BattleFree(wp->commandMenu.subMenu);
+        wp->commandMenu.subMenu = NULL;
     }
 }
 
@@ -1695,9 +1694,9 @@ void BattleMenuDisp_Operation_Disp(BattleWork* wp) {
 }
 
 void BattleMenuDisp_Operation_End(BattleWork* wp) {
-    if (WP_SUBMENU(wp)) {
-        BattleFree(WP_SUBMENU(wp));
-        WP_SUBMENU(wp) = NULL;
+    if (wp->commandMenu.subMenu) {
+        BattleFree(wp->commandMenu.subMenu);
+        wp->commandMenu.subMenu = NULL;
     }
 }
 
@@ -1715,7 +1714,7 @@ void DrawOperationWin(void) {
     f32 x;
     f32 y;
     BattleWork* wp = _battleWorkPointer;
-    BattleSubMenu* menu = WP_SUBMENU(wp);
+    BattleSubMenu* menu = wp->commandMenu.subMenu;
     BattleCursor* cursor = menu->cursor;
     BattleCommandOperation* items;
     s32 i;
@@ -1769,9 +1768,9 @@ void BattleMenuDisp_ChangePartySelect_Disp(BattleWork* wp) {
 }
 
 void BattleMenuDisp_ChangePartySelect_End(BattleWork* wp) {
-    if (WP_SUBMENU(wp)) {
-        BattleFree(WP_SUBMENU(wp));
-        WP_SUBMENU(wp) = NULL;
+    if (wp->commandMenu.subMenu) {
+        BattleFree(wp->commandMenu.subMenu);
+        wp->commandMenu.subMenu = NULL;
     }
 }
 
@@ -1789,7 +1788,7 @@ void DrawChangePartyWin(void) {
     f32 x;
     f32 y;
     BattleWork* wp = _battleWorkPointer;
-    BattleSubMenu* menu = WP_SUBMENU(wp);
+    BattleSubMenu* menu = wp->commandMenu.subMenu;
     BattleCursor* cursor = menu->cursor;
     BattleCommandParty* items;
     s32 i;
@@ -1841,9 +1840,9 @@ void BattleMenuDisp_MultiItem_Disp(BattleWork* wp) {
 }
 
 void BattleMenuDisp_MultiItem_End(BattleWork* wp) {
-    if (WP_SUBMENU(wp)) {
-        BattleFree(WP_SUBMENU(wp));
-        WP_SUBMENU(wp) = NULL;
+    if (wp->commandMenu.subMenu) {
+        BattleFree(wp->commandMenu.subMenu);
+        wp->commandMenu.subMenu = NULL;
     }
 }
 
@@ -1861,7 +1860,7 @@ void DrawMultiItemWin(void) {
     f32 x;
     f32 y;
     BattleWork* wp = _battleWorkPointer;
-    BattleSubMenu* menu = WP_SUBMENU(wp);
+    BattleSubMenu* menu = wp->commandMenu.subMenu;
     BattleCursor* cursor = menu->cursor;
     BattleCommandMultiItem* items;
     s32 i;

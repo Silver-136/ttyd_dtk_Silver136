@@ -38,7 +38,6 @@
 #include "eff/eff_nozle.h"
 
 
-#define STAGE_WORK(wp) (&(wp)->stageObjectWork)
 
 // FAKE: the definition (battle_sub.c) is intpl_sub(mode, cur, steps, start, end); the same registers (ints and floats go in
 // separate ones), but only this order gives the retail call code here
@@ -120,7 +119,7 @@ void BattleStageObjectInit(void) {
     BattleStageData* stage = wp->fbatInfo->setup->stageData;
     s32 numObjects = stage->mNumObjects;
     BattleStageObjectData* data = stage->mObjects;
-    BattleStageObjectWork* sw = STAGE_WORK(wp);
+    BattleStageObjectWork* sw = &wp->stageObjectWork;
     s32 countA1 = 0;
     s32 countA2 = 0;
     s32 countB = 0;
@@ -321,37 +320,37 @@ void BattleStageObjectInit(void) {
         evtEntry(stage->initEvt, 10, 0);
     }
     if (countA1 && stage->bgA1Evt) {
-        STAGE_WORK(wp)->bgEvtId[0] = evtEntry(stage->bgA1Evt, 10, 0)->eventId;
+        wp->stageObjectWork.bgEvtId[0] = evtEntry(stage->bgA1Evt, 10, 0)->eventId;
     }
     if (countA2 && stage->bgA2Evt) {
-        STAGE_WORK(wp)->bgEvtId[1] = evtEntry(stage->bgA2Evt, 10, 0)->eventId;
+        wp->stageObjectWork.bgEvtId[1] = evtEntry(stage->bgA2Evt, 10, 0)->eventId;
     }
     if (countB && stage->bgBEvt) {
-        STAGE_WORK(wp)->bgEvtId[2] = evtEntry(stage->bgBEvt, 10, 0)->eventId;
+        wp->stageObjectWork.bgEvtId[2] = evtEntry(stage->bgBEvt, 10, 0)->eventId;
     }
     if (countC && stage->bgCEvt) {
-        STAGE_WORK(wp)->bgEvtId[3] = evtEntry(stage->bgCEvt, 10, 0)->eventId;
+        wp->stageObjectWork.bgEvtId[3] = evtEntry(stage->bgCEvt, 10, 0)->eventId;
     }
     if (!countA1) {
-        STAGE_WORK(wp)->flags |= STAGE_FLAG_NO_BG_A1_DESTROY;
+        wp->stageObjectWork.flags |= STAGE_FLAG_NO_BG_A1_DESTROY;
     }
     if (!countA2) {
-        STAGE_WORK(wp)->flags |= STAGE_FLAG_NO_BG_A2_DESTROY;
+        wp->stageObjectWork.flags |= STAGE_FLAG_NO_BG_A2_DESTROY;
     }
     if (!countB) {
-        STAGE_WORK(wp)->flags |= STAGE_FLAG_NO_BG_B_DESTROY;
+        wp->stageObjectWork.flags |= STAGE_FLAG_NO_BG_B_DESTROY;
     }
     if (stage->disableBgA1Destroy) {
-        STAGE_WORK(wp)->flags |= STAGE_FLAG_NO_BG_A1_DESTROY;
+        wp->stageObjectWork.flags |= STAGE_FLAG_NO_BG_A1_DESTROY;
     }
     if (stage->disableBgA2Destroy) {
-        STAGE_WORK(wp)->flags |= STAGE_FLAG_NO_BG_A2_DESTROY;
+        wp->stageObjectWork.flags |= STAGE_FLAG_NO_BG_A2_DESTROY;
     }
     if (stage->disableBgBDestroy) {
-        STAGE_WORK(wp)->flags |= STAGE_FLAG_NO_BG_B_DESTROY;
+        wp->stageObjectWork.flags |= STAGE_FLAG_NO_BG_B_DESTROY;
     }
     if (!hasIronFrame) {
-        STAGE_WORK(wp)->flags |= STAGE_FLAG_NO_IRON_FRAME;
+        wp->stageObjectWork.flags |= STAGE_FLAG_NO_IRON_FRAME;
         mapGrpFlagOn("if_body", MAP_OBJ_FLAG_HIDDEN);
         mapGrpFlagOn("if_wire", MAP_OBJ_FLAG_HIDDEN);
     }
@@ -359,7 +358,7 @@ void BattleStageObjectInit(void) {
 
 void BattleStageObjectMain(void) {
     BattleWork* wp = _battleWorkPointer;
-    BattleStageObjectWork* sw = STAGE_WORK(wp);
+    BattleStageObjectWork* sw = &wp->stageObjectWork;
     BattleStageObject* obj;
     BOOL changed;
     int i;
@@ -460,9 +459,9 @@ void BattleStage_DestroyA1(void) {
     void* evt = wp->fbatInfo->setup->stageData->destroyBgA1Evt;
     EventEntry* entry;
 
-    evtDeleteID(STAGE_WORK(wp)->bgEvtId[0]);
-    STAGE_WORK(wp)->bgEvtId[0] = 0;
-    if (STAGE_WORK(wp)->bgDestroyEvtId && evtCheckID(STAGE_WORK(wp)->bgDestroyEvtId)) {
+    evtDeleteID(wp->stageObjectWork.bgEvtId[0]);
+    wp->stageObjectWork.bgEvtId[0] = 0;
+    if (wp->stageObjectWork.bgDestroyEvtId && evtCheckID(wp->stageObjectWork.bgDestroyEvtId)) {
         evtDeleteID(wp->stageObjectWork.bgDestroyEvtId);
     }
     if (!evt) {
@@ -478,8 +477,8 @@ void BattleStage_DestroyA2(void) {
     BattleWork* wp = _battleWorkPointer;
     void* evt = wp->fbatInfo->setup->stageData->destroyBgA2Evt;
 
-    evtDeleteID(STAGE_WORK(wp)->bgEvtId[1]);
-    STAGE_WORK(wp)->bgEvtId[1] = 0;
+    evtDeleteID(wp->stageObjectWork.bgEvtId[1]);
+    wp->stageObjectWork.bgEvtId[1] = 0;
     if (!evt) {
         evt = _object_turn_event_A2;
     }
@@ -491,9 +490,9 @@ void BattleStage_DestroyB(void) {
     void* evt = wp->fbatInfo->setup->stageData->destroyBgBEvt;
     EventEntry* entry;
 
-    evtDeleteID(STAGE_WORK(wp)->bgEvtId[2]);
-    STAGE_WORK(wp)->bgEvtId[2] = 0;
-    if (STAGE_WORK(wp)->bgDestroyEvtId && evtCheckID(STAGE_WORK(wp)->bgDestroyEvtId)) {
+    evtDeleteID(wp->stageObjectWork.bgEvtId[2]);
+    wp->stageObjectWork.bgEvtId[2] = 0;
+    if (wp->stageObjectWork.bgDestroyEvtId && evtCheckID(wp->stageObjectWork.bgDestroyEvtId)) {
         evtDeleteID(wp->stageObjectWork.bgDestroyEvtId);
     }
     if (!evt) {
@@ -2617,7 +2616,7 @@ USER_FUNC(_set_mobj_rotate_x) {
 
     EvtWord* args = event->args;
     busy = FALSE;
-    sw = STAGE_WORK(wp = _battleWorkPointer);
+    sw = (&(wp = _battleWorkPointer)->stageObjectWork);
     layer = evtGetValue(event, *args++);
     if (isFirstCall) {
         switch (layer) {
@@ -2760,13 +2759,13 @@ USER_FUNC(_mobj_destroy) {
     }
     switch (layer) {
         case 0:
-            STAGE_WORK(wp)->flags |= STAGE_FLAG_NO_BG_A1_DESTROY;
+            wp->stageObjectWork.flags |= STAGE_FLAG_NO_BG_A1_DESTROY;
             break;
         case 1:
-            STAGE_WORK(wp)->flags |= STAGE_FLAG_NO_BG_A2_DESTROY;
+            wp->stageObjectWork.flags |= STAGE_FLAG_NO_BG_A2_DESTROY;
             break;
         case 2:
-            STAGE_WORK(wp)->flags |= STAGE_FLAG_NO_BG_B_DESTROY;
+            wp->stageObjectWork.flags |= STAGE_FLAG_NO_BG_B_DESTROY;
             break;
     }
     return EVT_RETURN_DONE;
@@ -2877,7 +2876,7 @@ USER_FUNC(_set_mobj_shake_init) {
 USER_FUNC(_set_mobj_shake) {
     BattleWork* wp = _battleWorkPointer;
     BattleStageObject* obj;
-    BattleStageObjectWork* sw = STAGE_WORK(wp);
+    BattleStageObjectWork* sw = &wp->stageObjectWork;
     s32 layer;
     int i;
 
@@ -2916,7 +2915,7 @@ void _mobj_shake_main(BattleStageObject* obj) {
 
 void BattleStage_NozzleDirChangeCheck(void) {
     BattleWork* wp = _battleWorkPointer;
-    BattleStageObjectWork* sw = STAGE_WORK(wp);
+    BattleStageObjectWork* sw = &wp->stageObjectWork;
     u8 i;
 
     if (sw->nozzleData) {
@@ -2927,7 +2926,7 @@ void BattleStage_NozzleDirChangeCheck(void) {
 }
 
 void _Nozzle_Change_Check(u8 index, u8* rate) {
-    BattleStageObjectWork* sw = STAGE_WORK(_battleWorkPointer);
+    BattleStageObjectWork* sw = &_battleWorkPointer->stageObjectWork;
     u8* cur = &sw->nozzleDir[index];
     EventEntry* evt;
     s32 total = 0;
@@ -2961,7 +2960,7 @@ void _Nozzle_Change_Check(u8 index, u8* rate) {
 }
 
 USER_FUNC(_nozzle_turn) {
-    BattleStageObjectWork* sw = STAGE_WORK(_battleWorkPointer);
+    BattleStageObjectWork* sw = &_battleWorkPointer->stageObjectWork;
     s32 index = event->unitId;
     const char* name;
     f32 rotX, rotY, from, to;
@@ -3048,7 +3047,7 @@ USER_FUNC(_nozzle_turn) {
 
 void BattleStage_WallCloseCheck(void) {
     BattleWork* wp = _battleWorkPointer;
-    BattleStageObjectWork* sw = STAGE_WORK(wp);
+    BattleStageObjectWork* sw = &wp->stageObjectWork;
 
     if (!(sw->flags & STAGE_FLAG_WALL_CLOSED)) {
         sw->flags |= STAGE_FLAG_WALL_CLOSED;
@@ -3085,7 +3084,7 @@ void _disp_escape_wall_message(CameraId camera, void* param) {
 
 void BattleStage_IronFrameFallCheck(void) {
     BattleWork* wp = _battleWorkPointer;
-    BattleStageObjectWork* sw = STAGE_WORK(wp);
+    BattleStageObjectWork* sw = &wp->stageObjectWork;
 
     if (!(sw->flags & STAGE_FLAG_KEEP_IRON_FRAME_UNUSED) && !(sw->flags & STAGE_FLAG_NO_IRON_FRAME)) {
         sw->flags |= STAGE_FLAG_NO_IRON_FRAME;
@@ -3095,7 +3094,7 @@ void BattleStage_IronFrameFallCheck(void) {
 
 USER_FUNC(_fall_frame_wait) {
     BattleWork* wp = _battleWorkPointer;
-    BattleStageObjectWork* sw = STAGE_WORK(wp);
+    BattleStageObjectWork* sw = &wp->stageObjectWork;
 
     if (!BattleWaitAllActiveEvtEnd_NoBgSetEndWait(wp)) {
         return EVT_RETURN_BLOCK;
@@ -3148,7 +3147,7 @@ USER_FUNC(_fall_frame) {
     BattleStageObjectWork* sw;
 
     wp = _battleWorkPointer;
-    sw = STAGE_WORK(wp);
+    sw = &wp->stageObjectWork;
     body = BattleSearchObjectPtr("if_body");
     if (isFirstCall) {
         event->userWork[2] = 0;
@@ -3165,7 +3164,7 @@ USER_FUNC(_fall_frame) {
 
 USER_FUNC(_fall_frame_delete) {
     BattleWork* wp = _battleWorkPointer;
-    BattleStageObjectWork* sw = STAGE_WORK(wp);
+    BattleStageObjectWork* sw = &wp->stageObjectWork;
 
     if (isFirstCall) {
         event->userWork[2] = 255;
@@ -3181,7 +3180,7 @@ USER_FUNC(_fall_frame_delete) {
 
 void BattleStage_NozzleWorkCheck(s32 type) {
     BattleWork* wp = _battleWorkPointer;
-    BattleStageObjectWork* sw = STAGE_WORK(wp);
+    BattleStageObjectWork* sw = &wp->stageObjectWork;
     EventEntry* evt;
 
     if (pouchGetPtr()->rank > 0) {
@@ -3204,7 +3203,7 @@ void BattleStage_NozzleWorkCheck(s32 type) {
 
 void _nozzle_type_init(void) {
     BattleWork* wp = _battleWorkPointer;
-    BattleStageObjectWork* sw = STAGE_WORK(wp);
+    BattleStageObjectWork* sw = &wp->stageObjectWork;
     BattleStageNozzleData* data = sw->nozzleData;
     s32 total;
     s8 i;
@@ -3227,7 +3226,7 @@ void _nozzle_type_init(void) {
 
 USER_FUNC(_nozzle_work_wait) {
     BattleWork* wp = _battleWorkPointer;
-    BattleStageObjectWork* sw = STAGE_WORK(wp);
+    BattleStageObjectWork* sw = &wp->stageObjectWork;
     int i;
 
     if (!BattleWaitAllActiveEvtEnd_NoBgSetEndWait(wp)) {
@@ -3245,7 +3244,7 @@ USER_FUNC(_nozzle_work_wait) {
 }
 
 f32 _get_nozzle_dir(s32 index) {
-    switch (STAGE_WORK(_battleWorkPointer)->nozzleDir[index]) {
+    switch (_battleWorkPointer->stageObjectWork.nozzleDir[index]) {
         case 1:
             return -45.0f;
         case 3:
@@ -3258,7 +3257,7 @@ f32 _get_nozzle_dir(s32 index) {
 
 USER_FUNC(_nozzle_work_effect) {
     BattleWork* wp = _battleWorkPointer;
-    BattleStageObjectWork* sw = STAGE_WORK(wp);
+    BattleStageObjectWork* sw = &wp->stageObjectWork;
     EvtWord* args = event->args;
     const char* sfx;
     s32 effType = 0;
@@ -3406,7 +3405,7 @@ USER_FUNC(_nozzle_work_effect) {
 
 BOOL BattleFogEndCheck(void) {
     BattleWork* wp = _battleWorkPointer;
-    BattleStageObjectWork* sw = STAGE_WORK(wp);
+    BattleStageObjectWork* sw = &wp->stageObjectWork;
 
     if (sw->fogTimer == 0) {
         return TRUE;
@@ -3424,7 +3423,7 @@ BOOL BattleFogEndCheck(void) {
 
 BOOL BattleFogForceStop(void) {
     BattleWork* wp = _battleWorkPointer;
-    BattleStageObjectWork* sw = STAGE_WORK(wp);
+    BattleStageObjectWork* sw = &wp->stageObjectWork;
 
     if (sw->fogTimer == 0) {
         return FALSE;
@@ -3438,7 +3437,7 @@ BOOL BattleFogForceStop(void) {
 
 USER_FUNC(_nozzle_work_attack_set) {
     BattleWork* wp = _battleWorkPointer;
-    BattleStageObjectWork* sw = STAGE_WORK(wp);
+    BattleStageObjectWork* sw = &wp->stageObjectWork;
     s32 index;
     int i;
 
@@ -3461,7 +3460,7 @@ USER_FUNC(_nozzle_work_attack_set) {
 }
 
 s32 _get_nozzle_attack_index(u8 index) {
-    BattleStageObjectWork* sw = STAGE_WORK(_battleWorkPointer);
+    BattleStageObjectWork* sw = &_battleWorkPointer->stageObjectWork;
 
     switch (index) {
         case 0:
@@ -3563,7 +3562,7 @@ void _combine_nozzle_weapon(BOOL copy, BattleWeapon* dst, BattleWeapon* src) {
 
 USER_FUNC(_nozzle_work_get_weapon_address) {
     BattleWork* wp = _battleWorkPointer;
-    BattleStageObjectWork* sw = STAGE_WORK(wp);
+    BattleStageObjectWork* sw = &wp->stageObjectWork;
     EvtWord* args = event->args;
     s32 index = evtGetValue(event, args[0]);
 
@@ -3573,7 +3572,7 @@ USER_FUNC(_nozzle_work_get_weapon_address) {
 
 s32 BattleStage_ObjectFallCheck(void) {
     BattleWork* wp = _battleWorkPointer;
-    BattleStageObjectWork* sw = STAGE_WORK(wp);
+    BattleStageObjectWork* sw = &wp->stageObjectWork;
     EventEntry* evt;
 
     if (wp->flags & BATTLE_FLAG_NO_OBJECT_FALL) {
@@ -3586,7 +3585,7 @@ s32 BattleStage_ObjectFallCheck(void) {
 
 USER_FUNC(_object_fall_wait) {
     BattleWork* wp = _battleWorkPointer;
-    BattleStageObjectWork* sw = STAGE_WORK(wp);
+    BattleStageObjectWork* sw = &wp->stageObjectWork;
 
     if (!BattleWaitAllActiveEvtEnd_NoBgSetEndWait(wp)) {
         return EVT_RETURN_BLOCK;

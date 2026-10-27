@@ -29,7 +29,6 @@ static inline char* _ssGetStr(void) {
     static char str[0x100];
     return str;
 }
-#define str _ssGetStr()
 
 // local prototypes
 void* sndMalloc(size_t size);
@@ -291,8 +290,8 @@ BOOL SoundLoadDVD2(const char* path) {
         return 0;
     }
 
-    sprintf(str, "%s/%s%s", getMarioStDvdRoot(), path, ".pool");
-    entry = DVDMgrOpen(str, 2, 0);
+    sprintf(_ssGetStr(), "%s/%s%s", getMarioStDvdRoot(), path, ".pool");
+    entry = DVDMgrOpen(_ssGetStr(), 2, 0);
     length = entry == NULL;
     if (entry == NULL) {
         pointer = NULL;
@@ -318,8 +317,8 @@ BOOL SoundLoadDVD2(const char* path) {
     }
     sound.poolData[sound.dataId] = pointer;
 
-    sprintf(str, "%s/%s%s", getMarioStDvdRoot(), path, ".proj");
-    entry = DVDMgrOpen(str, 2, 0);
+    sprintf(_ssGetStr(), "%s/%s%s", getMarioStDvdRoot(), path, ".proj");
+    entry = DVDMgrOpen(_ssGetStr(), 2, 0);
     if (entry == NULL) {
         pointer = NULL;
     } else {
@@ -344,8 +343,8 @@ BOOL SoundLoadDVD2(const char* path) {
     }
     sound.projData[sound.dataId] = pointer;
 
-    sprintf(str, "%s/%s%s", getMarioStDvdRoot(), path, ".sdir");
-    entry = DVDMgrOpen(str, 2, 0);
+    sprintf(_ssGetStr(), "%s/%s%s", getMarioStDvdRoot(), path, ".sdir");
+    entry = DVDMgrOpen(_ssGetStr(), 2, 0);
     if (entry == NULL) {
         pointer = NULL;
     } else {
@@ -370,8 +369,8 @@ BOOL SoundLoadDVD2(const char* path) {
     }
     sound.sdirData[sound.dataId] = pointer;
 
-    sprintf(str, "%s/%s%s", getMarioStDvdRoot(), path, ".samp");
-    strcpy(sound.filepath, str);
+    sprintf(_ssGetStr(), "%s/%s%s", getMarioStDvdRoot(), path, ".samp");
+    strcpy(sound.filepath, _ssGetStr());
     sndSetSampleDataUploadCallback(loadDVD_callback, 0x20000);
     return TRUE;
 }
@@ -433,8 +432,8 @@ BOOL SoundSLibLoadDVD(const char* path) {
         return FALSE;
     }
 
-    sprintf(str, "%s/%s%s", getMarioStDvdRoot(), path, ".slib");
-    entry = DVDMgrOpen(str, 2, 0);
+    sprintf(_ssGetStr(), "%s/%s%s", getMarioStDvdRoot(), path, ".slib");
+    entry = DVDMgrOpen(_ssGetStr(), 2, 0);
     if (entry == NULL) {
         pointer = NULL;
     } else {
@@ -491,8 +490,8 @@ BOOL SoundSLibLoadDVD(const char* path) {
         cursor = (u32*)((u8*)cursor + blockSize);
     }
 
-    sprintf(str, "%s/%s%s", getMarioStDvdRoot(), path, ".stbl");
-    entry = DVDMgrOpen(str, 2, 0);
+    sprintf(_ssGetStr(), "%s/%s%s", getMarioStDvdRoot(), path, ".stbl");
+    entry = DVDMgrOpen(_ssGetStr(), 2, 0);
     if (entry == NULL) {
         pointer2 = NULL;
     } else {
@@ -517,8 +516,8 @@ BOOL SoundSLibLoadDVD(const char* path) {
     }
     sound.stblData[sound.slibId] = pointer2;
 
-    sprintf(str, "%s/%s%s", getMarioStDvdRoot(), path, ".etbl");
-    entry = DVDMgrOpen(str, 2, 0);
+    sprintf(_ssGetStr(), "%s/%s%s", getMarioStDvdRoot(), path, ".etbl");
+    entry = DVDMgrOpen(_ssGetStr(), 2, 0);
     if (entry == NULL) {
         pointer3 = NULL;
     } else {
@@ -1783,7 +1782,7 @@ void SoundSSPlayCh(s32 chan, const char* name) {
 void SoundSSPlayChEx(s32 chan, const char* name, s32 aram) {
     SoundStream* stream;
     int i;
-    const char* paths [2]; // FAKE: alias array needed for 100% (a plain str/root form is 5 rows off)
+    const char* paths [2]; // FAKE: alias array needed for 100% (a plain _ssGetStr()/root form is 5 rows off)
 
     stream = &sound.streams[chan];
     if (stream->flags) {
@@ -1812,8 +1811,8 @@ void SoundSSPlayChEx(s32 chan, const char* name, s32 aram) {
         stream->flags |= SOUND_STREAM_FLAG_ARAM;
     }
     paths [1] = getMarioStDvdRoot ();
-    sprintf(str, "%s/%s%s", paths [1], name, ".stm");
-    if (!(stream->entries[0].dvd = DVDMgrOpen(paths [0] = str, 0, 0))) {
+    sprintf(_ssGetStr(), "%s/%s%s", paths [1], name, ".stm");
+    if (!(stream->entries[0].dvd = DVDMgrOpen(paths [0] = _ssGetStr(), 0, 0))) {
         stream->flags = 0;
         return;
     }

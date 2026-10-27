@@ -415,7 +415,7 @@ BOOL _areacheck(f32 x, f32 z, f32 r, f32 px, f32 pz) {
     return ret;
 }
 
-#define YSTEP(thr, base)                          \
+#define STAIR_Y_BY_Z(thr, base)                          \
     if (p->pos.z <= (thr)) {                      \
         f32 t = ((thr) - p->pos.z) / 20.0f;       \
         f32 u;                                    \
@@ -433,16 +433,16 @@ void _ymode_mri_09(PuniData* p) {
     if (p->pos.x <= 400.0f && p->pos.x > 200.0f && p->pos.y <= 100.0f && p->pos.y >= floorY) {
         if (p->pos.z <= -55.0f) {
             p->pos.y = 100.0f;
-        } else YSTEP(-35.0f, 90.0f)
-        else YSTEP(-15.0f, 80.0f)
-        else YSTEP(5.0f, 70.0f)
-        else YSTEP(25.0f, 60.0f)
-        else YSTEP(45.0f, 50.0f)
-        else YSTEP(65.0f, 40.0f)
-        else YSTEP(85.0f, 30.0f)
-        else YSTEP(105.0f, 20.0f)
-        else YSTEP(125.0f, 10.0f)
-        else YSTEP(145.0f, floorY)
+        } else STAIR_Y_BY_Z(-35.0f, 90.0f)
+        else STAIR_Y_BY_Z(-15.0f, 80.0f)
+        else STAIR_Y_BY_Z(5.0f, 70.0f)
+        else STAIR_Y_BY_Z(25.0f, 60.0f)
+        else STAIR_Y_BY_Z(45.0f, 50.0f)
+        else STAIR_Y_BY_Z(65.0f, 40.0f)
+        else STAIR_Y_BY_Z(85.0f, 30.0f)
+        else STAIR_Y_BY_Z(105.0f, 20.0f)
+        else STAIR_Y_BY_Z(125.0f, 10.0f)
+        else STAIR_Y_BY_Z(145.0f, floorY)
         else {
             p->pos.y = floorY;
         }
@@ -452,7 +452,7 @@ void _ymode_mri_09(PuniData* p) {
     }
 }
 
-#define YSTEPX(thr, base)                   \
+#define STAIR_Y_BY_X(thr, base)                   \
     if (p->pos.x <= (thr)) {                \
         f32 t = ((thr) - p->pos.x) / 20.0f; \
         f32 u;                              \
@@ -463,17 +463,6 @@ void _ymode_mri_09(PuniData* p) {
         }                                   \
         p->pos.y = 10.0f * u + (base);      \
     }
-#define YSTEPZ(thr, base)                               \
-    if (p->pos.x <= (thr)) {                            \
-        f32 t = ((thr) - p->pos.x) / 20.0f;             \
-        f32 u;                                          \
-        if (t > 0.5f) {                                 \
-            u = (t - 0.5f) / 0.5f;                      \
-        } else {                                        \
-            u = 0.0f;                                   \
-        }                                               \
-        { f32 bz = (base); p->pos.y = 10.0f * u + bz; } \
-    }
 
 void _ymode_mri_16_00(PuniData* p) {
     u32 old = p->flags2;
@@ -482,14 +471,14 @@ void _ymode_mri_16_00(PuniData* p) {
         if (p->pos.x <= 40.0f && p->pos.x >= -210.0f && p->pos.z <= -76.46314f && p->pos.z >= -200.0f) {
             if (p->pos.x <= -190.0f) {
                 p->pos.y = -320.0f;
-            } else YSTEPX(-170.0f, -330.0f)
-            else YSTEPX(-150.0f, -340.0f)
-            else YSTEPX(-130.0f, -350.0f)
-            else YSTEPX(-110.0f, -360.0f)
-            else YSTEPX(-90.0f, -370.0f)
-            else YSTEPX(-70.0f, -380.0f)
-            else YSTEPX(-50.0f, -390.0f)
-            else YSTEPX(-30.0f, -400.0f)
+            } else STAIR_Y_BY_X(-170.0f, -330.0f)
+            else STAIR_Y_BY_X(-150.0f, -340.0f)
+            else STAIR_Y_BY_X(-130.0f, -350.0f)
+            else STAIR_Y_BY_X(-110.0f, -360.0f)
+            else STAIR_Y_BY_X(-90.0f, -370.0f)
+            else STAIR_Y_BY_X(-70.0f, -380.0f)
+            else STAIR_Y_BY_X(-50.0f, -390.0f)
+            else STAIR_Y_BY_X(-30.0f, -400.0f)
             else {
                 p->pos.y = -400.0f;
             }
@@ -519,14 +508,14 @@ void _ymode_mri_16_01(PuniData* p) {
         if (p->pos.x <= 40.0f && p->pos.x >= -210.0f && p->pos.z <= 60.00006f && p->pos.z >= -10.00012f) {
             if (p->pos.x <= -190.0f) {
                 p->pos.y = 80.0f;
-            } else YSTEPX(-170.0f, 70.0f)
-            else YSTEPX(-150.0f, 60.0f)
-            else YSTEPX(-130.0f, 50.0f)
-            else YSTEPX(-110.0f, 40.0f)
-            else YSTEPX(-90.0f, 30.0f)
-            else YSTEPX(-70.0f, 20.0f)
-            else YSTEPX(-50.0f, 10.0f)
-            else YSTEPZ(-30.0f, 0.0f)
+            } else STAIR_Y_BY_X(-170.0f, 70.0f)
+            else STAIR_Y_BY_X(-150.0f, 60.0f)
+            else STAIR_Y_BY_X(-130.0f, 50.0f)
+            else STAIR_Y_BY_X(-110.0f, 40.0f)
+            else STAIR_Y_BY_X(-90.0f, 30.0f)
+            else STAIR_Y_BY_X(-70.0f, 20.0f)
+            else STAIR_Y_BY_X(-50.0f, 10.0f)
+            else if (p->pos.x <= (-30.0f)) { f32 t = ((-30.0f) - p->pos.x) / 20.0f; f32 u; if (t > 0.5f) { u = (t - 0.5f) / 0.5f; } else { u = 0.0f; } { f32 bz = (0.0f); p->pos.y = 10.0f * u + bz; } }
             else {
                 p->pos.y = 0.0f;
             }
@@ -547,7 +536,7 @@ void _ymode_mri_16_01(PuniData* p) {
     }
 }
 
-#define AC(p, x0, x1, z0, z1) (_aok = 1, _ax = (p)->pos.x, _az = (p)->pos.z, ((x0) > _ax ? _aok = 0 : 0), ((x1) < _ax ? _aok = 0 : 0), ((z0) > _az ? _aok = 0 : 0), ((z1) < _az ? _aok = 0 : 0), _aok)
+#define IN_RECT_XZ(p, x0, x1, z0, z1) (_aok = 1, _ax = (p)->pos.x, _az = (p)->pos.z, ((x0) > _ax ? _aok = 0 : 0), ((x1) < _ax ? _aok = 0 : 0), ((z0) > _az ? _aok = 0 : 0), ((z1) < _az ? _aok = 0 : 0), _aok)
 //(x0,x1,z0,z1) (ok = 1, (p->pos.x < (x0) ? ok = 0 : 0), (p->pos.x > (x1) ? ok = 0 : 0), (p->pos.z < (z0) ? ok = 0 : 0), (p->pos.z > (z1) ? ok = 0 : 0), ok)
 void puniSetYPosition(PuniData* p) {
     if (p->flags & PUNI_FLAG_PUNI) {
@@ -558,14 +547,14 @@ void puniSetYPosition(PuniData* p) {
                 break;
             case 1:
                 p->pos.y = 0.0f;
-                if (AC(p, -49.0f, 49.0f, -69.0f, 29.0f)) {
+                if (IN_RECT_XZ(p, -49.0f, 49.0f, -69.0f, 29.0f)) {
                     p->pos.y = getMri02Yuka();
                 }
                 break;
             case 2:
                 _ymode_mri_09(p);
                 if (!swGet(0xB23)) { // GSWF_MRI_09_BREAKING_FLOOR_BROKEN
-                    if (AC(p, -35.0f, 35.0f, 40.0f, 110.0f)) {
+                    if (IN_RECT_XZ(p, -35.0f, 35.0f, 40.0f, 110.0f)) {
                         p->pos.y = 6.0f;
                     }
                 }
@@ -573,7 +562,7 @@ void puniSetYPosition(PuniData* p) {
             case 3:
                 p->pos.y = 0.0f;
                 if (!swGet(0xB2A)) { // GSWF_MRI_12_BREAKING_FLOOR_BROKEN
-                    if (AC(p, -80.0f, -10.0f, -99.0f, -29.0f)) {
+                    if (IN_RECT_XZ(p, -80.0f, -10.0f, -99.0f, -29.0f)) {
                         p->pos.y = 6.0f;
                     }
                 }
@@ -587,7 +576,7 @@ void puniSetYPosition(PuniData* p) {
             case 6:
                 p->pos.y = 0.0f;
                 if (!swGet(0xB37)) { // GSWF_MRI_17_BREAKING_FLOOR_BROKEN
-                    if (AC(p, -35.0f, 35.0f, -70.0f, 0.0f)) {
+                    if (IN_RECT_XZ(p, -35.0f, 35.0f, -70.0f, 0.0f)) {
                         p->pos.y = 6.0f;
                     }
                 }
@@ -983,12 +972,12 @@ void puniMapFindbuff(Vec pos) {
                             u16* k1 = &d[i + Punimap->width];
                             u16* k2 = &d[i - 1];
                             u16* k3 = &d[i + 1];
-#define CHK(k) if ((*k & 0xFF) == 0 && (*k & 0xFF) < l) { if (__abs((*k & 0xF000) - h) <= 0x1000) { *k |= (u16)(l + 1); changed = 1; } }
-                            CHK(k0)
-                            CHK(k1)
-                            CHK(k2)
-                            CHK(k3)
-#undef CHK
+#define SPREAD_LEVEL(k) if ((*k & 0xFF) == 0 && (*k & 0xFF) < l) { if (__abs((*k & 0xF000) - h) <= 0x1000) { *k |= (u16)(l + 1); changed = 1; } }
+                            SPREAD_LEVEL(k0)
+                            SPREAD_LEVEL(k1)
+                            SPREAD_LEVEL(k2)
+                            SPREAD_LEVEL(k3)
+#undef SPREAD_LEVEL
                         }
                     }
                     if (!changed) break;
@@ -2232,7 +2221,7 @@ void puniModeParent(PuniData* p) {
     }
 }
 
-#define PSEARCH_POS(a, b)                                                                  \
+#define PUNI_MAPDATA_GETPOS(a, b)                                                                  \
     { s32 _pa = (b); s32 _pb = (a); switch (Punigp->mapKind) {                             \
             case 0: break; case 1: puniMapdata_MRI_06_getpos(_pa, _pb, &tgx, &tgz); break; \
             case 2: puniMapdata_MRI_09_getpos(_pa, _pb, &tgx, &tgz); break;                \
@@ -2343,13 +2332,13 @@ void puniModeSearch(PuniData* p) {
     switch (find) {
         case 0x000:
             if (m0 == move && __abs((s32)h0 - (s32)takasa) <= 0x1000) {
-                PSEARCH_POS(bz, bx - 1);
+                PUNI_MAPDATA_GETPOS(bz, bx - 1);
             } else if (m1 == move && __abs((s32)h1 - (s32)takasa) <= 0x1000) {
-                PSEARCH_POS(bz - 1, bx);
+                PUNI_MAPDATA_GETPOS(bz - 1, bx);
             } else if (m2 == move && __abs((s32)h2 - (s32)takasa) <= 0x1000) {
-                PSEARCH_POS(bz, bx + 1);
+                PUNI_MAPDATA_GETPOS(bz, bx + 1);
             } else if (m3 == move && __abs((s32)h3 - (s32)takasa) <= 0x1000) {
-                PSEARCH_POS(bz + 1, bx);
+                PUNI_MAPDATA_GETPOS(bz + 1, bx);
             } else {
                 tgx = 0.0f;
                 tgz = 0.0f;
@@ -2357,13 +2346,13 @@ void puniModeSearch(PuniData* p) {
             break;
         case 0x100:
             if (m1 == move && __abs((s32)h1 - (s32)takasa) <= 0x1000) {
-                PSEARCH_POS(bz - 1, bx);
+                PUNI_MAPDATA_GETPOS(bz - 1, bx);
             } else if (m2 == move && __abs((s32)h2 - (s32)takasa) <= 0x1000) {
-                PSEARCH_POS(bz, bx + 1);
+                PUNI_MAPDATA_GETPOS(bz, bx + 1);
             } else if (m3 == move && __abs((s32)h3 - (s32)takasa) <= 0x1000) {
-                PSEARCH_POS(bz + 1, bx);
+                PUNI_MAPDATA_GETPOS(bz + 1, bx);
             } else if (m0 == move && __abs((s32)h0 - (s32)takasa) <= 0x1000) {
-                PSEARCH_POS(bz, bx - 1);
+                PUNI_MAPDATA_GETPOS(bz, bx - 1);
             } else {
                 tgx = 0.0f;
                 tgz = 0.0f;
@@ -2371,13 +2360,13 @@ void puniModeSearch(PuniData* p) {
             break;
         case 0x200:
             if (m2 == move && __abs((s32)h2 - (s32)takasa) <= 0x1000) {
-                PSEARCH_POS(bz, bx + 1);
+                PUNI_MAPDATA_GETPOS(bz, bx + 1);
             } else if (m3 == move && __abs((s32)h3 - (s32)takasa) <= 0x1000) {
-                PSEARCH_POS(bz + 1, bx);
+                PUNI_MAPDATA_GETPOS(bz + 1, bx);
             } else if (m0 == move && __abs((s32)h0 - (s32)takasa) <= 0x1000) {
-                PSEARCH_POS(bz, bx - 1);
+                PUNI_MAPDATA_GETPOS(bz, bx - 1);
             } else if (m1 == move && __abs((s32)h1 - (s32)takasa) <= 0x1000) {
-                PSEARCH_POS(bz - 1, bx);
+                PUNI_MAPDATA_GETPOS(bz - 1, bx);
             } else {
                 tgx = 0.0f;
                 tgz = 0.0f;
@@ -2385,13 +2374,13 @@ void puniModeSearch(PuniData* p) {
             break;
         case 0x300:
             if (m3 == move && __abs((s32)h3 - (s32)takasa) <= 0x1000) {
-                PSEARCH_POS(bz + 1, bx);
+                PUNI_MAPDATA_GETPOS(bz + 1, bx);
             } else if (m0 == move && __abs((s32)h0 - (s32)takasa) <= 0x1000) {
-                PSEARCH_POS(bz, bx - 1);
+                PUNI_MAPDATA_GETPOS(bz, bx - 1);
             } else if (m1 == move && __abs((s32)h1 - (s32)takasa) <= 0x1000) {
-                PSEARCH_POS(bz - 1, bx);
+                PUNI_MAPDATA_GETPOS(bz - 1, bx);
             } else if (m2 == move && __abs((s32)h2 - (s32)takasa) <= 0x1000) {
-                PSEARCH_POS(bz, bx + 1);
+                PUNI_MAPDATA_GETPOS(bz, bx + 1);
             } else {
                 tgx = 0.0f;
                 tgz = 0.0f;

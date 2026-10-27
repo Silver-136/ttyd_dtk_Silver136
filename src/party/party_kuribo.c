@@ -69,81 +69,80 @@ USER_FUNC(pre_kurio_use) {
             }
         }
         mobj = mobjHitObjPtrToPtr(hit);
-#define name (mobj->animName)
-        if (!strcmp(name, "MOBJ_Lv1Block")) {
+        if (!strcmp(mobj->animName, "MOBJ_Lv1Block")) {
             if (pouchGetHammerLv() < 1) {
                 msg = "obj_hlp_block_y_0";
             } else {
                 msg = "obj_hlp_block_y_1";
             }
-        } else if (!strcmp(name, "MOBJ_Lv1BigBlock")) {
+        } else if (!strcmp(mobj->animName, "MOBJ_Lv1BigBlock")) {
             if (pouchGetHammerLv() < 1) {
                 msg = "obj_hlp_block_y_0";
             } else {
                 msg = "obj_hlp_block_y_1";
             }
-        } else if (!strcmp(name, "MOBJ_Lv1BigBigBlock")) {
+        } else if (!strcmp(mobj->animName, "MOBJ_Lv1BigBigBlock")) {
             if (pouchGetHammerLv() < 1) msg = "obj_hlp_block_y_0";
             else if (pouchGetHammerLv() < 2) msg = "obj_hlp_block_y_2";
             else msg = "obj_hlp_block_y_3";
-        } else if (!strcmp(name, "MOBJ_Lv2Block") || !strcmp(name, "MOBJ_Lv2BigBlock")) {
+        } else if (!strcmp(mobj->animName, "MOBJ_Lv2Block") || !strcmp(mobj->animName, "MOBJ_Lv2BigBlock")) {
             if (pouchGetHammerLv() < 1) msg = "obj_hlp_block_s_0";
             else if (pouchGetHammerLv() < 3) msg = "obj_hlp_block_s_1";
             else msg = "obj_hlp_block_s_2";
-        } else if (!strcmp(name, "MOBJ_Lv2BigBigBlock")) {
+        } else if (!strcmp(mobj->animName, "MOBJ_Lv2BigBigBlock")) {
             if (pouchGetHammerLv() < 1) msg = "obj_hlp_block_s_0";
             else if (pouchGetHammerLv() < 3) msg = "obj_hlp_block_s_1";
             else msg = "obj_hlp_block_s_3";
-        } else if (!strcmp(name, "MOBJ_Lv3BigBigBlock") || !strcmp(name, "MOBJ_Lv3BigBlock") || !strcmp(name, "MOBJ_Lv3Block")) {
+        } else if (!strcmp(mobj->animName, "MOBJ_Lv3BigBigBlock") || !strcmp(mobj->animName, "MOBJ_Lv3BigBlock") || !strcmp(mobj->animName, "MOBJ_Lv3Block")) {
             msg = "obj_hlp_redyellow_block";
-        } else if (!strcmp(name, "MOBJ_Block") || !strcmp(name, "MOBJ_PinkBlock")) {
+        } else if (!strcmp(mobj->animName, "MOBJ_Block") || !strcmp(mobj->animName, "MOBJ_PinkBlock")) {
             msg = "obj_hlp_su_block";
-        } else if (!strcmp(name, "MOBJ_PowerUpBlock")) {
+        } else if (!strcmp(mobj->animName, "MOBJ_PowerUpBlock")) {
             msg = "obj_hlp_shine";
-        } else if (!strcmp(name, "MOBJ_HatenaBlock")) {
+        } else if (!strcmp(mobj->animName, "MOBJ_HatenaBlock")) {
             msg = "obj_hlp_hatena";
-        } else if (!strcmp(name, "MOBJ_BadgeBlock")) {
+        } else if (!strcmp(mobj->animName, "MOBJ_BadgeBlock")) {
             msg = "obj_hlp_badge_hatena";
-        } else if (!strcmp(name, "MOBJ_green_FlowBlock") || !strcmp(name, "MOBJ_green_big_FlowBlock") ||
-                   !strcmp(name, "MOBJ_green_big02_FlowBlock") || !strcmp(name, "MOBJ_purple_FlowBlock") ||
-                   !strcmp(name, "MOBJ_purple_big_FlowBlock") || !strcmp(name, "MOBJ_purple_big02_FlowBlock") ||
-                   !strcmp(name, "MOBJ_orange_FlowBlock") || !strcmp(name, "MOBJ_orange_big_FlowBlock") ||
-                   !strcmp(name, "MOBJ_orange_big02_FlowBlock")) {
+        } else if (!strcmp(mobj->animName, "MOBJ_green_FlowBlock") || !strcmp(mobj->animName, "MOBJ_green_big_FlowBlock") ||
+                   !strcmp(mobj->animName, "MOBJ_green_big02_FlowBlock") || !strcmp(mobj->animName, "MOBJ_purple_FlowBlock") ||
+                   !strcmp(mobj->animName, "MOBJ_purple_big_FlowBlock") || !strcmp(mobj->animName, "MOBJ_purple_big02_FlowBlock") ||
+                   !strcmp(mobj->animName, "MOBJ_orange_FlowBlock") || !strcmp(mobj->animName, "MOBJ_orange_big_FlowBlock") ||
+                   !strcmp(mobj->animName, "MOBJ_orange_big02_FlowBlock")) {
             msg = "obj_hlp_huyuu";
-        } else if (!strcmp(name, "MOBJ_green_FlowBlockSwitch") || !strcmp(name, "MOBJ_purple_FlowBlockSwitch") ||
-                   !strcmp(name, "MOBJ_orange_FlowBlockSwitch")) {
+        } else if (!strcmp(mobj->animName, "MOBJ_green_FlowBlockSwitch") || !strcmp(mobj->animName, "MOBJ_purple_FlowBlockSwitch") ||
+                   !strcmp(mobj->animName, "MOBJ_orange_FlowBlockSwitch")) {
             msg = "obj_hlp_huyuu_switch";
-        } else if (!strcmp(name, "MOBJ_BlueTornadoSwitch") || !strcmp(name, "MOBJ_RedTornadoSwitch")) {
+        } else if (!strcmp(mobj->animName, "MOBJ_BlueTornadoSwitch") || !strcmp(mobj->animName, "MOBJ_RedTornadoSwitch")) {
             msg = pouchGetJumpLv() < 2 ? "obj_hlp_big_switch_1" : "obj_hlp_big_switch_2";
-        } else if (!strcmp(name, "MOBJ_TreasureBox") || !strcmp(name, "MOBJ_GrayTreasureBox") ||
-                   !strcmp(name, "MOBJ_BigTreasureBox")) {
+        } else if (!strcmp(mobj->animName, "MOBJ_TreasureBox") || !strcmp(mobj->animName, "MOBJ_GrayTreasureBox") ||
+                   !strcmp(mobj->animName, "MOBJ_BigTreasureBox")) {
             msg = mobjCheckItemboxOpen((void*)mobj) == 2 ? "obj_hlp_takara_1" : "obj_hlp_takara_0";
-        } else if (!strcmp(name, "MOBJ_BlackTreasureBox")) {
+        } else if (!strcmp(mobj->animName, "MOBJ_BlackTreasureBox")) {
             msg = mobjCheckItemboxOpen((void*)mobj) == 2 ? "obj_hlp_blackbox_1" : "obj_hlp_blackbox_0";
-        } else if (!strcmp(name, "MOBJ_RedJumpStand") || !strcmp(name, "MOBJ_RedJumpStand2") ||
-                   !strcmp(name, "MOBJ_BlueJumpStand") || !strcmp(name, "MOBJ_BlueJumpStand2") ||
-                   !strcmp(name, "MOBJ_MapJumpStand")) {
+        } else if (!strcmp(mobj->animName, "MOBJ_RedJumpStand") || !strcmp(mobj->animName, "MOBJ_RedJumpStand2") ||
+                   !strcmp(mobj->animName, "MOBJ_BlueJumpStand") || !strcmp(mobj->animName, "MOBJ_BlueJumpStand2") ||
+                   !strcmp(mobj->animName, "MOBJ_MapJumpStand")) {
             msg = "obj_hlp_jump";
-        } else if (!strcmp(name, "MOBJ_RedTimerSwitch") || !strcmp(name, "MOBJ_BlueTimerSwitch")) {
+        } else if (!strcmp(mobj->animName, "MOBJ_RedTimerSwitch") || !strcmp(mobj->animName, "MOBJ_BlueTimerSwitch")) {
             msg = "obj_hlp_timer_switch";
-        } else if (!strcmp(name, "MOBJ_RedSwitch") || !strcmp(name, "MOBJ_BlueSwitch") ||
-                   !strcmp(name, "MOBJ_WhiteSwitch") || !strcmp(name, "MOBJ_BlackSwitch")) {
+        } else if (!strcmp(mobj->animName, "MOBJ_RedSwitch") || !strcmp(mobj->animName, "MOBJ_BlueSwitch") ||
+                   !strcmp(mobj->animName, "MOBJ_WhiteSwitch") || !strcmp(mobj->animName, "MOBJ_BlackSwitch")) {
             msg = "obj_hlp_switch";
-        } else if (!strcmp(name, "MOBJ_RideSwitchA") || !strcmp(name, "MOBJ_RideSwitchB") ||
-                   !strcmp(name, "MOBJ_RideSwitchC")) {
+        } else if (!strcmp(mobj->animName, "MOBJ_RideSwitchA") || !strcmp(mobj->animName, "MOBJ_RideSwitchB") ||
+                   !strcmp(mobj->animName, "MOBJ_RideSwitchC")) {
             msg = "obj_hlp_yuka_switch";
-        } else if (!strcmp(name, "MOBJ_BreakingFloor") || !strcmp(name, "MOBJ_BlackBreakingFloor")) {
+        } else if (!strcmp(mobj->animName, "MOBJ_BreakingFloor") || !strcmp(mobj->animName, "MOBJ_BlackBreakingFloor")) {
             msg = "obj_hlp_hip_attack";
             if (pouchGetJumpLv() >= 2) msg = "obj_hlp_hip_attack_1";
-        } else if (!strcmp(name, "MOBJ_BombRock")) {
+        } else if (!strcmp(mobj->animName, "MOBJ_BombRock")) {
             msg = "obj_hlp_bomb_rock";
-        } else if (!strcmp(name, "MOBJ_Signboard")) {
+        } else if (!strcmp(mobj->animName, "MOBJ_Signboard")) {
             msg = "obj_hlp_kanban";
-        } else if (!strcmp(name, "MOBJ_Arrow")) {
+        } else if (!strcmp(mobj->animName, "MOBJ_Arrow")) {
             msg = "obj_hlp_yajirushi";
-        } else if (!strcmp(name, "MOBJ_Lock")) {
+        } else if (!strcmp(mobj->animName, "MOBJ_Lock")) {
             msg = "obj_hlp_lock";
-        } else if (!strcmp(name, "MOBJ_KururinFloor")) {
+        } else if (!strcmp(mobj->animName, "MOBJ_KururinFloor")) {
             msg = "msg_kuri_map";
         } else {
             msg = "msg_kuri_map";
@@ -154,7 +153,6 @@ USER_FUNC(pre_kurio_use) {
         }
         return EVT_RETURN_DONE;
     }
-#undef name
 }
 
 

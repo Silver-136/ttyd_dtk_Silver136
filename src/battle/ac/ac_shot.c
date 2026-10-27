@@ -50,7 +50,6 @@ typedef struct ShotParams {
     s32 e;            // 0x50
 } ShotParams;
 
-#define SH_DISP(ac) (&(ac)->disp)
 #define SH_WORK(ac) ((ShotWork*)(ac)->work)
 #define SH_PARAMS(ac) ((ShotParams*)(ac)->params)
 #define SH_OUT(ac) ((s32*)(ac)->outputParams)
@@ -261,7 +260,7 @@ static void actionCommandDisp(f32 x, f32 y);
 void battleAcDisp_Shot(CameraId cameraId, void* param) {
     BattleWork* work = (BattleWork*)param;
     BattleActions* ac = &work->actionCommands;
-    BattleACDispParams* disp = SH_DISP(ac);
+    BattleACDispParams* disp = &ac->disp;
     switch (ac->mAcState) {
         case 99:
         case 100:
@@ -295,7 +294,7 @@ void battleAcDelete_Shot(BattleWork* work) {
 }
 
 static void _ac_disp_init(BattleWork* work) {
-    BattleACDispParams* disp = SH_DISP(&work->actionCommands);
+    BattleACDispParams* disp = (&(&work->actionCommands)->disp);
     memset(disp, 0, 0x2C);
     disp->iconX = -200.0f;
     disp->iconY = 0.0f;
@@ -312,7 +311,7 @@ static void actionCommandDisp(f32 x, f32 y) {
     BattleWork* work = _battleWorkPointer;
     BattleActions* ac = &work->actionCommands;
     ShotWork* sw = SH_WORK(ac);
-    BattleACDispParams* disp = SH_DISP(ac);
+    BattleACDispParams* disp = &ac->disp;
     Mtx m3;
     Mtx m1;
     Mtx m2;

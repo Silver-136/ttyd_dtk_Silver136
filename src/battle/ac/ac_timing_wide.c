@@ -260,7 +260,7 @@ void battleAcDelete_TimingWide(BattleWork* work) {
     work->actionCommands.mAcState = 0x3EC;
 }
 
-#define ICON(id)                            \
+#define DRAW_BUTTON_ICON(id)                            \
     {                                       \
         Vec pos = {0.0f, 0.0f, 0.0f};       \
         pos.x = -200.0f + x;                \
@@ -308,7 +308,7 @@ static void actionCommandDisp(f32 x, f32 y) {
     }
     switch (tw->state) {
         case 0:
-            if (tw->mode > 0) ICON(a) else ICON(b)
+            if (tw->mode > 0) DRAW_BUTTON_ICON(a) else DRAW_BUTTON_ICON(b)
             break;
         case 2:
         case 3:
@@ -316,23 +316,23 @@ static void actionCommandDisp(f32 x, f32 y) {
         case 5:
         case 6:
             if (!((s32)ac->acFlags & AC_TIMING_WIDE_FLAG_SWAP_RESULT_ICON)) {
-                if (tw->mode > 0) ICON(a) else ICON(b)
+                if (tw->mode > 0) DRAW_BUTTON_ICON(a) else DRAW_BUTTON_ICON(b)
             } else {
-                if (tw->mode > 0) ICON(b) else ICON(a)
+                if (tw->mode > 0) DRAW_BUTTON_ICON(b) else DRAW_BUTTON_ICON(a)
             }
             break;
         case 1:
             if (tw->mode != -1) {
                 if (tw->frame >= ac->params[2] && tw->frame < ac->params[3]) {
-                    if (tw->mode > 0) ICON(b) else ICON(a)
+                    if (tw->mode > 0) DRAW_BUTTON_ICON(b) else DRAW_BUTTON_ICON(a)
                 } else {
-                    if (tw->mode > 0) ICON(a) else ICON(b)
+                    if (tw->mode > 0) DRAW_BUTTON_ICON(a) else DRAW_BUTTON_ICON(b)
                 }
             } else {
                 if (tw->frame >= ac->params[2]) {
-                    ICON(a)
+                    DRAW_BUTTON_ICON(a)
                 } else {
-                    ICON(b)
+                    DRAW_BUTTON_ICON(b)
                 }
             }
             break;

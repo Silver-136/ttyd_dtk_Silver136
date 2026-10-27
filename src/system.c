@@ -499,9 +499,9 @@ static inline DEMOPadStatus* GET_DEMO_PAD_STATUS(u32 i) {
 }
 
 #ifdef VERSION_G8ME01
-#define KEYFR(n) ((gp->framerate * (n)) / 60)
+#define KEY_REPEAT_FRAMES(n) ((gp->framerate * (n)) / 60)
 #else
-#define KEYFR(n) (n)
+#define KEY_REPEAT_FRAMES(n) (n)
 #endif
 void makeKey(void) {
     u16 button;
@@ -516,10 +516,10 @@ void makeKey(void) {
         if (dirs && dirs == gp->dirs[i]) {
             if (!--gp->dirsRepeatDelay[i]) {
                 gp->dirsRepeat[i] = dirs;
-                gp->dirsRepeatDelay[i] = KEYFR(6);
+                gp->dirsRepeatDelay[i] = KEY_REPEAT_FRAMES(6);
             }
         } else {
-            gp->dirsRepeatDelay[i] = KEYFR(24);
+            gp->dirsRepeatDelay[i] = KEY_REPEAT_FRAMES(24);
         }
         gp->dirs[i] = dirs;
     }
@@ -531,10 +531,10 @@ void makeKey(void) {
         if (button && button == gp->button[i]) {
             if (!--gp->buttonRepeatDelay[i]) {
                 gp->buttonRepeat[i] = button;
-                gp->buttonRepeatDelay[i] = KEYFR(6);
+                gp->buttonRepeatDelay[i] = KEY_REPEAT_FRAMES(6);
             }
         } else {
-            gp->buttonRepeatDelay[i] = KEYFR(24);
+            gp->buttonRepeatDelay[i] = KEY_REPEAT_FRAMES(24);
         }
         gp->button[i] = button;
         gp->buttonUp[i] = GET_DEMO_PAD_STATUS(i)->buttonUp;
@@ -555,12 +555,12 @@ void makeKey(void) {
             gp->button[i] = 0;
             gp->buttonNew[i] = 0;
             gp->buttonRepeat[i] = 0;
-            gp->buttonRepeatDelay[i] = KEYFR(24);
+            gp->buttonRepeatDelay[i] = KEY_REPEAT_FRAMES(24);
             gp->buttonUp[i] = 0;
             gp->dirs[i] = 0;
             gp->dirsNew[i] = 0;
             gp->dirsRepeat[i] = 0;
-            gp->dirsRepeatDelay[i] = KEYFR(24);
+            gp->dirsRepeatDelay[i] = KEY_REPEAT_FRAMES(24);
             gp->stickX[i] = 0;
             gp->stickY[i] = 0;
             gp->substickX[i] = 0;

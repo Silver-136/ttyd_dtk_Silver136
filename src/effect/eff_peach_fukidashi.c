@@ -9,7 +9,6 @@
 #include "eff/eff_magic1_n64.h"
 #include "libc_decls.h"
 
-#define fabsf(x) __fabsf(x)
 
 typedef struct EffPeachFukidashiWork {
     u32 flags;      // 0x0, bits 0-1: icon, 0x80: show a cross
@@ -104,7 +103,7 @@ void effPeachFukidashiDisp(CameraId cameraId, EffectEntry* effect) {
     // icon inside the bubble
     _setPosition(work, 40.0f);
     PSMTXTrans(mtx, work->position.x,
-               7.25f + ((work->position.y - 14.0f) + fabsf(1.5f * work->angle / 90.0f)),
+               7.25f + ((work->position.y - 14.0f) + __fabsf(1.5f * work->angle / 90.0f)),
                work->position.z);
     PSMTXRotRad(rot, 'y', MTXDegToRad(-camGetPtr(cameraId)->viewYaw));
     PSMTXConcat(mtx, rot, mtx2);
@@ -136,7 +135,7 @@ void effPeachFukidashiDisp(CameraId cameraId, EffectEntry* effect) {
 
         PSMTXScale(scale, 0.75f, 0.75f, 0.75f);
         PSMTXTrans(mtx, 6.0f + (work->position.x - 11.5f),
-                   (30.0f + ((work->position.y - 14.0f) + fabsf(1.5f * work->angle / 90.0f))) - 8.0f,
+                   (30.0f + ((work->position.y - 14.0f) + __fabsf(1.5f * work->angle / 90.0f))) - 8.0f,
                    work->position.z);
         PSMTXRotRad(rot, 'y', MTXDegToRad(-camGetPtr(cameraId)->viewYaw));
         PSMTXConcat(mtx, rot, mtx2);

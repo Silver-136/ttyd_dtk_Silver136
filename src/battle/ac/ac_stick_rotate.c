@@ -40,7 +40,6 @@ typedef struct StickRotateWork {
 #define AC_PARAMS(work) ((StickRotateParams*)&(work)->actionCommands)
 // FAKE: the no-op (BattleActions*) casts here and on disp below keep the address add early (the plain field reschedules the disp functions)
 #define AC_WORK(bw) ((StickRotateWork*)((BattleActions*)&(bw)->actionCommands)->work)
-#define AC_DISP(w) ((BattleACDispParams*)&(w)->actionCommands.disp)
 
 
 static void actionCommandDisp(f32 x, f32 y);
@@ -99,7 +98,7 @@ s32 _CalcRollDir(void) {
     return d;
 }
 
-#define FINISH(w)                            \
+#define AC_FINISH_AND_RESTART(w)                            \
     do {                                     \
         (w)->actionCommands.result &= ~1;    \
         (w)->actionCommands.mAcState = 1002; \
@@ -112,7 +111,7 @@ s32 battleAcMain_StickRotate(BattleWork* work) {
     BattleActions* ac = &work->actionCommands;
     BOOL restart;
     sw = ((StickRotateWork*)ac->work);
-    disp = AC_DISP(work);
+    disp = ((BattleACDispParams*)&work->actionCommands.disp);
 
     do {
         restart = FALSE;
@@ -216,7 +215,7 @@ s32 battleAcMain_StickRotate(BattleWork* work) {
                 if (sw->dir == 0) {
                     sw->roll = 0;
                     if ((AC_PARAMS(work)->flags & AC_STICK_ROTATE_FLAG_STRICT_UNUSED) && sw->prevDir != 0) {
-                        FINISH(work);
+                        AC_FINISH_AND_RESTART(work);
                         break;
                     }
                 } else if (sw->prevDir != 0) {
@@ -235,7 +234,7 @@ s32 battleAcMain_StickRotate(BattleWork* work) {
                             sw->iconA = sw->dir;
                             sw->iconB = t;
                         } else if ((s8)sw->roll != (s8)r) {
-                            FINISH(work);
+                            AC_FINISH_AND_RESTART(work);
                             break;
                         }
                         if (sw->prevDir != sw->dir) {
@@ -248,23 +247,23 @@ s32 battleAcMain_StickRotate(BattleWork* work) {
                                 if (sw->count > 1) {
                                     s8 st = sw->stall;
                                     if (st > AC_PARAMS(work)->stepsB) {
-                                        FINISH(work);
+                                        AC_FINISH_AND_RESTART(work);
                                         break;
                                     } else if (st < AC_PARAMS(work)->stepsA) {
                                         sw->slow++;
                                         if (sw->slow > AC_PARAMS(work)->timeout) {
-                                            FINISH(work);
+                                            AC_FINISH_AND_RESTART(work);
                                             break;
                                         }
                                     }
                                 }
                                 sw->stall = 0;
                                 if (sw->roll != 0 && (s8)sw->roll != (s8)r) {
-                                    FINISH(work);
+                                    AC_FINISH_AND_RESTART(work);
                                     break;
                                 }
                                 if (sw->dir != sw->iconA) {
-                                    FINISH(work);
+                                    AC_FINISH_AND_RESTART(work);
                                     break;
                                 } else {
                                     s8 t = sw->iconB + sw->roll;
@@ -279,7 +278,7 @@ s32 battleAcMain_StickRotate(BattleWork* work) {
                                     sw->iconB = t;
                                     if (sw->count >= AC_PARAMS(work)->needCount * 8) {
                                         ac->result |= 2;
-                                        FINISH(work);
+                                        AC_FINISH_AND_RESTART(work);
                                         break;
                                     }
                                 }
@@ -288,7 +287,7 @@ s32 battleAcMain_StickRotate(BattleWork* work) {
                     } else if (AC_PARAMS(work)->flags & AC_STICK_ROTATE_FLAG_GUIDED_UNUSED) {
                         sw->roll = 0;
                         if (AC_PARAMS(work)->flags & AC_STICK_ROTATE_FLAG_GUIDED_UNUSED) {
-                            FINISH(work);
+                            AC_FINISH_AND_RESTART(work);
                             break;
                         }
                     } else if (sw->roll != 0) {
@@ -397,7 +396,7 @@ u16 _get_icon_id(s8 dir) {
     }
 }
 
-#define ICON(v, id)                  \
+#define DRAW_STICK_ICON(v, id)                  \
     (v) = (Vec){0.0f, 0.0f, 0.0f};   \
     (v).x = -200.0f + x;             \
     (v).y = 70.0f + y;               \
@@ -412,20 +411,20 @@ static void actionCommandDisp(f32 x, f32 y) {
     switch (work->actionCommands.mAcState) {
         case 99:
         case 100:
-            ICON(v0, ICON_STICK_NEUTRAL);
+            DRAW_STICK_ICON(v0, ICON_STICK_NEUTRAL);
             break;
         case 1000:
-            ICON(v1, _get_icon_id(sw->iconA));
+            DRAW_STICK_ICON(v1, _get_icon_id(sw->iconA));
             break;
         case 1001:
             if (sw->stall < p->stepsA) {
                 if (sw->count <= 1) {
-                    ICON(v2, _get_icon_id(sw->iconA));
+                    DRAW_STICK_ICON(v2, _get_icon_id(sw->iconA));
                 } else {
-                    ICON(v3, _get_icon_id(sw->prevDir));
+                    DRAW_STICK_ICON(v3, _get_icon_id(sw->prevDir));
                 }
             } else {
-                ICON(v4, _get_icon_id(sw->iconA));
+                DRAW_STICK_ICON(v4, _get_icon_id(sw->iconA));
             }
             break;
         case 1002:
@@ -433,7 +432,7 @@ static void actionCommandDisp(f32 x, f32 y) {
         case 1004:
         case 1005:
         case 1006:
-            ICON(v5, ICON_STICK_NEUTRAL);
+            DRAW_STICK_ICON(v5, ICON_STICK_NEUTRAL);
             break;
     }
 }
@@ -447,7 +446,7 @@ void actionCommandDisp2(f32 x, f32 y) {
     switch (work->actionCommands.mAcState) {
         case 99:
         case 100:
-            ICON(v0, ICON_STICK_NEUTRAL);
+            DRAW_STICK_ICON(v0, ICON_STICK_NEUTRAL);
             break;
         case 1000:
         case 1001:
@@ -470,14 +469,14 @@ void actionCommandDisp2(f32 x, f32 y) {
                     }
                 }
             }
-            ICON(v1, _get_icon_id(sw->iconDir));
+            DRAW_STICK_ICON(v1, _get_icon_id(sw->iconDir));
             break;
         case 1002:
         case 1003:
         case 1004:
         case 1005:
         case 1006:
-            ICON(v2, ICON_STICK_NEUTRAL);
+            DRAW_STICK_ICON(v2, ICON_STICK_NEUTRAL);
             break;
     }
 }
