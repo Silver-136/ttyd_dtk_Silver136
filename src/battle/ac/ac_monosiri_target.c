@@ -8,8 +8,6 @@
 #include <string.h>
 #include "version.h"
 #include "battle/battle_disp.h"
-// US battle texture ids are 0x16 higher for these entries.
-#define BTL_TEX(id) ((id) + VERSION_PICK(0, 0x16))
 
 
 s32 BattleACGetButtonIcon(s32 button, s32 pressed);

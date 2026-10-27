@@ -31,8 +31,6 @@
 #include "libc_decls.h"
 #include "battle/battle_sub.h"
 #include "battle/unit_work.h"
-// US battle texture ids are 0x16 higher for these entries.
-#define BTL_TEX(id) ((id) + VERSION_PICK(0, 0x16))
 
 
 void psndSFX_pit(s32 id, s32 pitch);

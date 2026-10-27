@@ -6,6 +6,10 @@
 
 #include <dolphin/mtx.h>
 #include "eff/eff_maya_data.h"
+#include "version.h"
+
+// Effect texture id in each version's effect texture file: the US ids of the textures that use it are 0x1C lower
+#define EFF_TEX(id) ((id) - VERSION_PICK(0, 0x1C))
 
 /* Maya effect animation data (the same layout in effdrv and the effects that play it: eff_damage_star, eff_ice,
  * eff_recovery): MayaAnimData -> MayaKeyList (one entry per animated polygon group) -> MayaPoly (its keys and

@@ -15,6 +15,10 @@
 #include "battle/battle_unit.h"
 #include "battle/battle_seq_end.h"
 #include "mario/mario_pouch.h"
+#include "version.h"
+
+// Battle texture id in each version's battle texture file: the US ids of the textures that use it are 0x16 higher
+#define BTL_TEX(id) ((id) + VERSION_PICK(0, 0x16))
 
 typedef struct BattleAlliance BattleAlliance;
 
