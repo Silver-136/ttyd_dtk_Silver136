@@ -113,11 +113,11 @@ const void* __OSStringTable AT_ADDRESS(OS_BASE_CACHED | 0x30D0);
       __prev->link.next = __next;       \
   } while (0)
 
-#pragma dont_inline on
+// Empty notification hooks: Link calls OSNotifyLink with each module it links, OSUnlink calls OSNotifyUnlink.
+// The calls stay out of line because the unit is built with -inline noauto (configure.py).
 void OSNotifyLink(OSModuleInfo* module) {}
 
 void OSNotifyUnlink(OSModuleInfo* module) {}
-#pragma dont_inline reset
 
 void OSSetStringTable(void* stringTable) {
     __OSStringTable = stringTable;

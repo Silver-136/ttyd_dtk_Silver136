@@ -1305,8 +1305,6 @@ int __VIGetLatchPosition(u32 port, s16* px, s16* py) {
         return __VIGetLatch1Position(px, py);
     }
 }
-#pragma force_active on
-#pragma force_active reset
 
 #pragma force_active on
 __declspec(section ".data") u8 gap_05_803BF7CC_data[20] = {0};

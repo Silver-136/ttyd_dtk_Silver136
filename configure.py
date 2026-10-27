@@ -1286,7 +1286,7 @@ config.libs = [
             Object(MatchingFor("G8MJ01", "G8ME01"), "os/OSExec.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "os/OSFont.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "os/OSInterrupt.c"),
-            Object(MatchingFor("G8MJ01", "G8ME01"), "os/OSLink.c"),
+            Object(MatchingFor("G8MJ01", "G8ME01"), "os/OSLink.c", extra_cflags=["-inline noauto"]),
             Object(MatchingFor("G8MJ01", "G8ME01"), "os/OSMemory.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "os/OSMutex.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "os/OSReboot.c"),

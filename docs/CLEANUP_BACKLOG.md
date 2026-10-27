@@ -11,12 +11,12 @@ retail game through every step; nothing here changes behaviour. Per-function det
 | --- | --- | --- | --- |
 | FAKES.md rows | 212 (189 both, 20 US, 3 JP) | 214 | the count rises when hidden tricks are found and documented (2026-10-26 readability sweep: 15 unmarked one-use inline/macro devices) |
 | FAKE comment sites | 306 in 102 files (libs 18) | 320 (libs 94) | |
-| `#pragma opt_*` / `optimize` / `dont_inline` / `auto_inline` lines | 143 / 4 / 112 / 4 | 259 / 71 / 358 / 9 | whole-file settings moved to per-unit flags (Codex round 14: five more units); the rest are per-function pairs with no whole-unit equivalent |
-| `__declspec(section)` placements | 18 (libs 35) | 434 | template Vecs in .rodata, .sdata2 constants, a few real-storage objects |
-| `#pragma force_active` | 15 lines in 7 files (libs 12) | 776 | |
-| `gap_*` padding objects | 8 (libs 6) | 142 | eff_kemutest's gaps are real storage |
+| `#pragma opt_*` / `optimize` / `dont_inline` / `auto_inline` lines | 143 / 4 / 112 / 4 (libs: `dont_inline` 6, VI's three pairs) | 259 / 71 / 358 / 9 | whole-file settings moved to per-unit flags (Codex round 14: five more units; round 16: OSLink); the rest are per-function pairs with no whole-unit equivalent |
+| `__declspec(section)` placements | 18 (libs 35) | 434 | template Vecs in .rodata, .sdata2 constants, a few real-storage objects; the library sites are mostly genuine (see section 7) |
+| `#pragma force_active` | 15 lines in 7 files (libs 10) | 776 | the library pairs keep the `gap_*` objects |
+| `gap_*` padding objects | 8 (libs 7) | 142 | eff_kemutest's gaps are real storage; the library gaps are scaffolding (section 7) |
 | `fd_*` math-static data | 28 lines, end_00 only | 16,730 lines in 607 files | end_00 is built without the REL precompiled header |
-| inline asm | 6 (libs 284) | 19 | most library sites are probably genuine assembly functions; to be sorted, not removed |
+| inline asm | 6 (libs 284) | 19 | library sites sorted in section 7: mostly genuine assembly, three TRK candidates for C |
 | raw pointer arithmetic | 26 (libs 15) | 28 | all documented fakes |
 
 FAKES.md rows by kind (approximate): spare temporaries or copies that steer register choice ~65, byte-offset
@@ -123,3 +123,32 @@ latest naming batches.
 - Split very long functions' nested one-line blocks into normal statements (whitespace-only, checked per unit).
 - Comment retail bugs and oddities met during cleanup with `// BUG:` (the code keeps the retail behaviour).
 - Certification pass per object against the cleanup standard once the classes above are done.
+
+## 7. Libraries (SDK, runtime, TRK, MusyX, THP), sorted by Codex round 16
+
+Round 16 compared the library sources with the original SDK/runtime material the user has locally (evidence only,
+never copied in). What the raw counts above mean for the libraries:
+
+- **Genuine assembly, keep.** runtime.c and the SDK math files (mtx, mtx44, mtx44vec, mtxvec, psmtx, quat, vec): all
+  70 assembly functions are assembly in the original sources too. The hardware/ABI routines (PPCArch, OS cache /
+  context / exception / interrupt / time / startup, AI stack switch, DB, TRK MSR/cache, GX paired-single and FIFO
+  helpers, OSFastCast) are real assembly by what they do; their exact original spelling is not proven.
+- **Candidates for C (open):** TRK `support.c` HandleOpenFileSupportRequest, TRKRequestSend, TRKSuppAccessFile
+  (ordinary protocol and file-request code). Needs the TRK version and API settled first; no form passed yet.
+- **Unclear, keep:** THPDec IDCT/decoder blocks, AXFX reverb/chorus, MusyX CheapReverb/Chorus/StdReverb and
+  snd_service math kernels (optimized paired-single code; the original form is not established).
+- **MusyX placeholder names:** the 67 `lbl_XXXXXXXX` occurrences are 31 branch labels inside the CheapReverb (20) and
+  Chorus (11) assembly kernels, not unknown fields or locals. Rename only labels whose role the code shows.
+- **Genuine placements, keep:** `__start` / `__ppc_eabi_init` / `__os.h` startup code in .init (many of the 35
+  sites are extern declarations), runtime `__mem.c` memcpy/memset in .init, the destructor-chain pointer in .dtors,
+  TRK's .init routines.
+- **Scaffolding, keep until a natural layout is found:** the library `gap_*` objects (vi 20 bytes, hw_dspctrl 2 x 4,
+  snd_service 16, synth_dbtab 24, snd3d 7, US OSError 12) and the force_active pairs around them.
+- **MCC is not built** (no configure entry): its 17 `int unused[N]` frame pads (FAKES.md) are not active debt. The
+  original debug records show no extra locals, so a fake buffer would not be a fix either.
+- **Padclamp:** the original type is ten one-byte fields (10-byte symbol). The plain type matches US; JP loses two
+  bytes, so the wrapper stays (FAKES.md) until the JP object extent is understood.
+- **sndSeqPlayEx:** the plain indexed loop and the natural `seqPlaySong(.., 0, ..)` wrapper both change the code; the
+  row stays.
+- **dont_inline:** OSLink's pair became the unit flag `-inline noauto` (round 16, both versions identical). VI's three
+  pairs (getTiming, latch0/latch1) stay: a whole-unit flag changes other helpers.
