@@ -308,9 +308,11 @@ void BattleAudience_GetItemOn2(s32* memberId, f32* x, f32* y, f32* z, ItemType* 
 void BattleAudience_SetTarget(s32 index);
 void BattleAudience_Attack(s32 index);
 void BattleAudience_ChangeStatus(s32 index, s32 status);
+// Every caller reads the results of GetExist, GetSysCtrl and GetEscapeChangeOK as u8 (`(u8)` casts), but the
+// definitions return int: declared u8, they would mask their result to a byte, which the game code does not do.
 BOOL BattleAudience_GetExist(s32 id);
 BOOL BattleAudience_GetSysCtrl(s32 index);
-BOOL BattleAudience_GetWaiting(s32 index);
+u8 BattleAudience_GetWaiting(s32 index);
 s32 BattleAudience_HaitiRandForFallObject(void);
 s32 BattleAudience_GetAudienceNum(void);
 void BattleAudience_WinSetActive(u8 active);

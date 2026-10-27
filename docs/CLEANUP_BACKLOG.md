@@ -47,7 +47,8 @@ data order 10, sound-name integer round trips (`SFX_NAME_WORD`) 9, no-op casts 6
 - Double casts `(s32)(u8)x` / `(s32)(s8)x`: the 11 in equality tests against small constants were removed
   (2026-10-27, no byte change). Left: evt_mobj's four `(s32)(s8)linkedName[0]` truth tests (char is unsigned
   here; the plain test compiles differently), and the value conversions (damageCode, attackDirection, Mario's
-  stick directions). u8 casts on BOOL audience getters: kept until an accessor or prototype explains them.
+  stick directions). Audience getters: GetWaiting returns u8 (its callers' casts are gone); GetExist, GetSysCtrl
+  and GetEscapeChangeOK return int but every caller casts to u8 (header comment).
 - Data declared through private views of another unit's struct (a few effect and map work structs).
 
 ## 3. Names

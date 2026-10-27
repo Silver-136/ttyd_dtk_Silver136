@@ -34,8 +34,6 @@
 void BattleAcDrawGauge(s32 x, s32 y, s32 width, f32 ratio, s32 level, s32 a, s32 b, s32 c, s32 flags);
 void psndSFX_pit(s32 id, s32 pitch);
 
-#define GET_EXIST(i) ((u8(*)(s32))BattleAudience_GetExist)(i)
-#define GET_WAITING(i) ((u8(*)(s32))BattleAudience_GetWaiting)(i)
 
 typedef struct BakuBtn {
     s32 state;  // 0x0
@@ -361,7 +359,7 @@ USER_FUNC(bakuGameMain) {
         }
         flag = 0;
         for (i = 0; i < 200; i++) {
-            if (bakuGameAudienceCanThrowPos(i) == 1 && GET_WAITING(i) == 1) {
+            if (bakuGameAudienceCanThrowPos(i) == 1 && BattleAudience_GetWaiting(i) == 1) {
                 flag = 1;
             }
         }
@@ -843,7 +841,7 @@ state_end:
             }
             for (i = 0; i < 200; i++) {
                 m = BattleAudienceGetPtr(i);
-                if (bakuGameAudienceCanThrowPos(i) == 1 && GET_EXIST(i) && (m->flags & AUDIENCE_MEMBER_FLAG_NO_SYS_CTRL)) {
+                if (bakuGameAudienceCanThrowPos(i) == 1 && (u8)BattleAudience_GetExist(i) && (m->flags & AUDIENCE_MEMBER_FLAG_NO_SYS_CTRL)) {
                     BattleAudience_GetHomePosition(i, &x, &y, &z);
                     BattleAudience_SetPosition(i, x, y + w->audY, z);
                     w->pos.y = 20.0f + (y + w->audY);
@@ -1021,7 +1019,7 @@ state_end:
             }
             for (i = 0; i < 200; i++) {
                 m = BattleAudienceGetPtr(i);
-                if (bakuGameAudienceCanThrowPos(i) == 1 && GET_EXIST(i) && (m->flags & AUDIENCE_MEMBER_FLAG_NO_SYS_CTRL)) {
+                if (bakuGameAudienceCanThrowPos(i) == 1 && (u8)BattleAudience_GetExist(i) && (m->flags & AUDIENCE_MEMBER_FLAG_NO_SYS_CTRL)) {
                     BattleAudience_GetHomePosition(i, &x, &y, &z);
                     BattleAudience_SetPosition(i, x, y + w->audY, z);
                 }
@@ -1207,7 +1205,7 @@ void bakuGameAudienceSurpriseReset(void) {
     BattleAudienceMember* m;
 
     for (i = 0; i < 200; i++) {
-        if (GET_EXIST(i)) {
+        if ((u8)BattleAudience_GetExist(i)) {
             m = BattleAudienceGetPtr(i);
             m->angle = 90.0f;
             if (!bakuGameAudienceCanThrowPos(i)) {
@@ -1265,7 +1263,7 @@ void bakuGameAudienceSurprise(void) {
 
     for (i = 0; i < 200; i++) {
         m = BattleAudienceGetPtr(i);
-        if (GET_WAITING(i)) {
+        if (BattleAudience_GetWaiting(i)) {
             m->flags |= AUDIENCE_MEMBER_FLAG_NO_SYS_CTRL;
             memset(&m->interpFrameCounter, 0, 0x34); // interpFrameCounter..interpType
             if (!bakuGameAudienceCanThrowPos(i)) {

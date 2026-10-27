@@ -119,7 +119,6 @@ void BattleAudienceSoundGetInfo2(s32 index, Vec* pos);
 void BattleAudienceSoundMain(void);
 void BattleAudienceNoiseMain(void);
 
-#define AUD_U8CALL(fn, i) (((u8 (*)(s32))(fn))(i))
 
 extern ItemData itemDataTable[];
 
@@ -320,7 +319,7 @@ void BattleAudience_Init(void) {
     for (i = 0; i < 10; i++) {
         for (j = 0; j < 10; j++) {
             int index = (i * 20) + j + 10;
-            if (AUD_U8CALL(BattleAudience_GetExist, index) == (1 & 0xFFFF)) {
+            if ((u8)BattleAudience_GetExist(index) == TRUE) {
                 status = BattleAudienceGetPtr(index)->status;
                 if (status != AUDIENCE_STATUS_ESCAPE && status != AUDIENCE_STATUS_ENTER) {
                     audience->mCurrentAudienceIntCountRight++;
@@ -332,7 +331,7 @@ void BattleAudience_Init(void) {
     for (i = 0; i < 10; i++) {
         for (j = 0; j < 10; j++) {
             s32 index = i * 20 + j;
-            if (AUD_U8CALL(BattleAudience_GetExist, index) == TRUE) {
+            if ((u8)BattleAudience_GetExist(index) == TRUE) {
                 status = BattleAudienceGetPtr(index)->status;
                 if (status != AUDIENCE_STATUS_ESCAPE && status != AUDIENCE_STATUS_ENTER) {
                     audience->mCurrentAudienceIntCountLeft++;
@@ -1327,7 +1326,7 @@ void BattleAudienceCtrlProcess(void) {
     for (i = 0; i < 10; i++) {
         for (j = 0; j < 10; j++) {
             index = (i * 20) + j + 10;
-            if (AUD_U8CALL(BattleAudience_GetExist, index) == TRUE) {
+            if ((u8)BattleAudience_GetExist(index) == TRUE) {
                 status = BattleAudienceGetPtr(index)->status;
                 if (status != AUDIENCE_STATUS_ESCAPE && status != AUDIENCE_STATUS_ENTER) {
                     audience->mCurrentAudienceIntCountRight++;
@@ -1339,7 +1338,7 @@ void BattleAudienceCtrlProcess(void) {
     for (i = 0; i < 10; i++) {
         for (j = 0; j < 10; j++) {
             index = (i * 20) + j;
-            if (AUD_U8CALL(BattleAudience_GetExist, index) == TRUE) {
+            if ((u8)BattleAudience_GetExist(index) == TRUE) {
                 status = BattleAudienceGetPtr(index)->status;
                 if (status != AUDIENCE_STATUS_ESCAPE && status != AUDIENCE_STATUS_ENTER) {
                     audience->mCurrentAudienceIntCountLeft++;
@@ -1362,7 +1361,7 @@ void BattleAudienceCtrlProcess(void) {
                 f[3] = 0.0f;
                 f[5] = 0.0f;
             }
-        } else if (AUD_U8CALL(BattleAudience_GetExist, i)) {
+        } else if ((u8)BattleAudience_GetExist(i)) {
             switch (member->type) {
             case 0: BattleAudienceCtrlProcessKinopio(i); break;
             case 1: BattleAudienceCtrlProcessKinopio(i); break;
@@ -1428,7 +1427,7 @@ BOOL BattleAudienceItemOn(s32 index, u16 itemId, s32 numItems) {
     if (itemId >= 0x79 && itemId < 0xEC && swGet(0xEB) == 0) return FALSE; // GSWF_ITEM_TUTORIAL_SEEN
     st = index % 20;
     if (st < 4 || st > 15) return FALSE;
-    if (!AUD_U8CALL(BattleAudience_GetExist, index)) return FALSE;
+    if (!(u8)BattleAudience_GetExist(index)) return FALSE;
     ust = member->status;
     if (ust == 7) return FALSE;
     if (ust == 8) return FALSE;
@@ -2728,7 +2727,7 @@ BOOL BattleAudience_GetSysCtrl(s32 index) {
     return !(member->flags & AUDIENCE_MEMBER_FLAG_NO_SYS_CTRL);
 }
 
-BOOL BattleAudience_GetWaiting(s32 index) {
+u8 BattleAudience_GetWaiting(s32 index) {
     BattleAudienceMember* member;
 
     BattleAudienceBaseGetPtr();
@@ -2992,7 +2991,7 @@ s32 BattleAudience_GetPPAudienceNum_RL_Sub(s32 offset) {
 BOOL BattleAudience_GetPPAudienceNum_Sub(s32 id) {
     BattleAudienceMember* member = BattleAudienceGetPtr(id);
 
-    if (!AUD_U8CALL(BattleAudience_GetExist, id)) {
+    if (!(u8)BattleAudience_GetExist(id)) {
         return FALSE;
     }
     if (member->status >= 13 && member->status <= 13) {
@@ -3087,7 +3086,7 @@ s32 BattleAudienceNumToTargetSub(void) {
     BattleAudienceBaseGetPtr();
     count = 0;
     for (i = 0; i < 200; i++) {
-        if (AUD_U8CALL(BattleAudience_GetExist, i) == TRUE && BattleAudienceGetPtr(i)->status != AUDIENCE_STATUS_ESCAPE) {
+        if ((u8)BattleAudience_GetExist(i) == TRUE && BattleAudienceGetPtr(i)->status != AUDIENCE_STATUS_ESCAPE) {
             count++;
         }
     }
@@ -3220,7 +3219,7 @@ s32 BattleAudienceAddAudienceNum(s32 num) {
         for (i = 0; i > num; i--) {
             count = 0;
             for (j = 0; j < 200; j++) {
-                if (AUD_U8CALL(BattleAudience_GetEscapeChangeOK, j)) {
+                if ((u8)BattleAudience_GetEscapeChangeOK(j)) {
                     list[count++] = j;
                 }
             }
@@ -3245,7 +3244,7 @@ void BattleAudiencePuniAllEscape(void) {
     count = 0;
     for (i = 0; i < 200; i++) {
         member = BattleAudienceGetPtr(i);
-        if (AUD_U8CALL(BattleAudience_GetEscapeChangeOK, i) && member->type == 7) {
+        if ((u8)BattleAudience_GetEscapeChangeOK(i) && member->type == 7) {
             BattleAudience_ChangeStatus(i, AUDIENCE_STATUS_ESCAPE);
             audience->mAddedAudienceCount -= 1.0f;
             count++;
@@ -3369,7 +3368,7 @@ void BattleAudienceJoy_Sub(s32 a, s32 b, s32 c, s32 type) {
     BattleAudienceBaseGetPtr();
     total = c + (a + b);
     for (i = 0, member = BattleAudienceGetPtr(0); i < 200; i++, member++) {
-        if (!AUD_U8CALL(BattleAudience_GetWaiting, i)) {
+        if (!BattleAudience_GetWaiting(i)) {
             continue;
         }
         if (member->type == 11) {
@@ -3408,7 +3407,7 @@ s32 BattleAudienceDetectPakkunEatTargetSub2(s32 index, s32 dir) {
         return -1;
     }
     BattleAudienceGetPtr(id);
-    if (AUD_U8CALL(BattleAudience_GetSysCtrl, id) == TRUE) {
+    if ((u8)BattleAudience_GetSysCtrl(id) == TRUE) {
         return id;
     }
     return -1;
@@ -3669,7 +3668,7 @@ void BattleAudienceSoundWhistleKind(s32 kind) {
 
     count = 0;
     for (i = 0; i < 200; i++) {
-        if ((u8)BattleAudience_GetWaiting(i) == TRUE) {
+        if (BattleAudience_GetWaiting(i) == TRUE) {
             list[count] = i;
             count++;
         }
@@ -4051,7 +4050,7 @@ void BattleAudience_Case_ActionCommandGood(BattleWeapon* weapon) {
     s32 count = 0;
 
     for (i = 0; i < 200; i++) {
-        if ((u8)BattleAudience_GetWaiting(i) == TRUE) {
+        if (BattleAudience_GetWaiting(i) == TRUE) {
             count++;
         }
     }
@@ -4068,7 +4067,7 @@ void BattleAudience_Case_ActionCommandBad(BattleWeapon* weapon) {
     s32 i;
 
     for (i = 0; i < 200; i++) {
-        if ((u8)BattleAudience_GetWaiting(i) == TRUE) {
+        if (BattleAudience_GetWaiting(i) == TRUE) {
             count++;
         }
     }
@@ -4096,7 +4095,7 @@ void BattleAudience_Case_AcrobatGood(void) {
     s32 i;
 
     for (i = 0; i < 200; i++) {
-        if ((u8)BattleAudience_GetWaiting(i) == TRUE) {
+        if (BattleAudience_GetWaiting(i) == TRUE) {
             count++;
         }
     }
@@ -4118,7 +4117,7 @@ void BattleAudience_Case_AcrobatBad(void) {
     s32 i;
 
     for (i = 0; i < 200; i++) {
-        if ((u8)BattleAudience_GetWaiting(i) == TRUE) {
+        if (BattleAudience_GetWaiting(i) == TRUE) {
             count++;
         }
     }
