@@ -79,12 +79,12 @@
 #define GSWF_BADGESHOP_STAGE_5_STOCK_ADDED GSWF(242)
 // set by badgeShop_bargainGeneration from STG6_53_THE_REAL_GARNET_STAR, after adding the stage 6 table
 #define GSWF_BADGESHOP_STAGE_6_STOCK_ADDED GSWF(243)
-// set by badgeShop_bargainGeneration from STG7_20_LORD_CRUMP_DEFEATED; no badges are added and only its own check
-// reads it
-#define GSWF_BADGESHOP_STAGE_7_STOCK_ADDED GSWF(244)
-// set by badgeShop_bargainGeneration from STG8_16_THE_RETURN_OF_THE_QUEEN; no badges are added and only its own check
-// reads it
-#define GSWF_BADGESHOP_STAGE_8_STOCK_ADDED GSWF(245)
+// set by badgeShop_bargainGeneration once progress reaches STG7_20_LORD_CRUMP_DEFEATED: stage threshold processed;
+// this stage adds no stock, and only its own check reads it
+#define GSWF_BADGESHOP_STAGE_7_STOCK_CHECK_DONE GSWF(244)
+// set by badgeShop_bargainGeneration once progress reaches STG8_16_THE_RETURN_OF_THE_QUEEN: stage threshold processed;
+// this stage adds no stock, and only its own check reads it
+#define GSWF_BADGESHOP_STAGE_8_STOCK_CHECK_DONE GSWF(245)
 // set by badgeShop_bteresaGeneration once Mario has the Special Card, after adding its prizes to the Pianta Parlor
 // (gor_03) stock
 #define GSWF_PARLOR_SPECIAL_CARD_PRIZES_ADDED GSWF(246)

@@ -4,9 +4,11 @@
  * is the game's own step label (evtNoLabel in evt_johoya.c, which the game indexes by this value) followed by
  * the US English name of the step's first entry in the debug story list (src/event.c); 186, 333 and 349 have
  * no entry there (their suffixes and comments come from the scripts). Names follow the value, not a count of steps:
- * no script sets 1, 22, 36, 126, 177, 186, 281, 349, 351, 357, 381 or 406 (comparisons still use some of them as
- * boundaries). The last value a script sets is 405 (STG9_02, gor_00, the post-game); 406 (STG9_END) ends the label
- * table and nothing sets it. */
+ * no literal setter was found in the ordinary story scripts for 1, 22, 36, 126, 177, 186, 281, 349, 351, 357, 381
+ * or 406 (comparisons still use some of them as boundaries). The highest value a story script sets is 405 (STG9_02,
+ * gor_00, the post-game); 406 (STG9_END) ends the label table and has no literal setter. Other writers exist:
+ * loading a save restores the saved value, tou_03 changes the value for a while and puts back the one it read,
+ * and seq_e3 sets values from a table. */
 typedef enum StoryProgress {
     STG0_00_PROLOGUE = 0,
     STG0_01_PLAZA = 1,

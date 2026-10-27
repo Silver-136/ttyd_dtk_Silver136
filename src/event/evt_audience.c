@@ -133,7 +133,7 @@ USER_FUNC(evt_audience_move_position_frame) {
         member->targetPosY = targetY;
         member->targetPosZ = targetZ;
         member->interpType = mode;
-        member->interpFramesLeft = frames;
+        member->interpFrameCounter = frames;
         member->interpFramesTotal = frames;
     }
     compare = member->targetPosX - member->startPosX;
@@ -142,12 +142,12 @@ USER_FUNC(evt_audience_move_position_frame) {
     } else if (compare < 0.0f) {
         member->angle = 0.0f;
     }
-    x = intplGetValue(member->interpType, member->startPosX, member->targetPosX, member->interpFramesTotal - member->interpFramesLeft, member->interpFramesTotal);
-    y = intplGetValue(member->interpType, member->startPosY, member->targetPosY, member->interpFramesTotal - member->interpFramesLeft, member->interpFramesTotal);
-    z = intplGetValue(member->interpType, member->startPosZ, member->targetPosZ, member->interpFramesTotal - member->interpFramesLeft, member->interpFramesTotal);
+    x = intplGetValue(member->interpType, member->startPosX, member->targetPosX, member->interpFramesTotal - member->interpFrameCounter, member->interpFramesTotal);
+    y = intplGetValue(member->interpType, member->startPosY, member->targetPosY, member->interpFramesTotal - member->interpFrameCounter, member->interpFramesTotal);
+    z = intplGetValue(member->interpType, member->startPosZ, member->targetPosZ, member->interpFramesTotal - member->interpFrameCounter, member->interpFramesTotal);
     BattleAudience_SetPosition(id, x, y, z);
-    member->interpFramesLeft--;
-    if (member->interpFramesLeft <= 0) {
+    member->interpFrameCounter--;
+    if (member->interpFrameCounter <= 0) {
         BattleAudience_SetPosition(id, member->targetPosX, member->targetPosY, member->targetPosZ);
         return EVT_RETURN_DONE;
     }
@@ -196,7 +196,7 @@ USER_FUNC(evt_audience_move_position_speed) {
         } else {
             member->interpDelta.z = 0.0f;
         }
-        member->interpFramesLeft = frames;
+        member->interpFrameCounter = frames;
         member->interpFramesTotal = frames;
     }
 
@@ -213,14 +213,14 @@ USER_FUNC(evt_audience_move_position_speed) {
         member->position.y + member->interpDelta.y,
         member->position.z + member->interpDelta.z);
 
-    if (member->interpFramesLeft > 0) {
-        member->interpFramesLeft--;
+    if (member->interpFrameCounter > 0) {
+        member->interpFrameCounter--;
     }
-    if (member->interpFramesLeft < 0) {
-        member->interpFramesLeft++;
+    if (member->interpFrameCounter < 0) {
+        member->interpFrameCounter++;
     }
 
-    if (member->interpFramesLeft == 0) {
+    if (member->interpFrameCounter == 0) {
         BattleAudience_SetPosition(id, member->targetPosX, member->targetPosY, member->targetPosZ);
         return EVT_RETURN_DONE;
     }
@@ -254,7 +254,7 @@ USER_FUNC(evt_audience_jump_position_firstsp) {
         member->interpDelta.y = deltaY;
         member->interpDelta.z = amountZ / (f32)frames;
         member->interpGravity = (2.0f * -((deltaY * (f32)frames) - amountY)) / (f32)(frames * frames);
-        member->interpFramesLeft = frames;
+        member->interpFrameCounter = frames;
         member->interpFramesTotal = frames;
     }
 
@@ -265,8 +265,8 @@ USER_FUNC(evt_audience_jump_position_firstsp) {
         member->position.z + member->interpDelta.z);
 
     member->interpDelta.y += member->interpGravity;
-    member->interpFramesLeft--;
-    if (member->interpFramesLeft <= 0) {
+    member->interpFrameCounter--;
+    if (member->interpFrameCounter <= 0) {
         BattleAudience_SetPosition(id, member->targetPosX, member->targetPosY, member->targetPosZ);
         return EVT_RETURN_DONE;
     }
@@ -301,7 +301,7 @@ USER_FUNC(evt_audience_jump_position_gravity) {
         member->interpDelta.y = amountY / (f32)frames - (deltaY * (f32)frames);
         member->interpDelta.z = amountZ / (f32)frames;
         member->interpGravity = gravity;
-        member->interpFramesLeft = frames;
+        member->interpFrameCounter = frames;
         member->interpFramesTotal = frames;
     }
 
@@ -312,8 +312,8 @@ USER_FUNC(evt_audience_jump_position_gravity) {
         member->position.z + member->interpDelta.z);
 
     member->interpDelta.y += member->interpGravity;
-    member->interpFramesLeft--;
-    if (member->interpFramesLeft <= 0) {
+    member->interpFrameCounter--;
+    if (member->interpFrameCounter <= 0) {
         BattleAudience_SetPosition(id, member->targetPosX, member->targetPosY, member->targetPosZ);
         return EVT_RETURN_DONE;
     }

@@ -62,8 +62,9 @@ typedef struct EnvTexMtxWork {
     MtxPtr mtx;   // 0x4
     MtxPtr model; // 0x8
     f32 scale;    // 0xC
-    f32 rotY;     // 0x10
-    f32 rotX;     // 0x14
+    f32 rotY;     // 0x10, degrees
+    f32 rotX;     // 0x14, degrees: tilt (a -Z rotation) for type 0, light elevation (sin/cos with rotY as the
+                  // azimuth) for types 2 and 3
 } EnvTexMtxWork;
 
 // EnvironmentWork.blur (envBlurOn, envDisp_Blur)

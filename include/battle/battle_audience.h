@@ -125,7 +125,8 @@ typedef struct BattleAudienceMember {
     s16 targetMemberId;        // 0xF0, index of another member it interacts with
     u8 pad_F2[0xF4 - 0xF2];    // 0xF2, never accessed
     s32 statusDelay;           // 0xF4, countdown before AUDIENCE_STATUS_SLEEP -> AUDIENCE_STATUS_WAIT_JUMP
-    s32 interpFramesLeft;      // 0xF8
+    s32 interpFrameCounter;    // 0xF8, remaining frames for evt_audience movement; elapsed frames for Magnus 2
+                               // (unit_boss_magnum_battender_mkII) audience suction
     s32 interpFramesTotal;     // 0xFC
     f32 startPosX;             // 0x100
     f32 targetPosX;            // 0x104

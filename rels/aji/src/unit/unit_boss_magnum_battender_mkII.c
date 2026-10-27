@@ -643,17 +643,17 @@ USER_FUNC(aud_suikomi) {
             if (i == list[j]) {
                 mem = BattleAudienceGetPtr(i);
                 mem->mRotation.y += 19.0f;
-                if (mem->interpFramesLeft < mem->interpFramesTotal) {
-                    mem->interpFramesLeft++;
+                if (mem->interpFrameCounter < mem->interpFramesTotal) {
+                    mem->interpFrameCounter++;
                 } else {
                     done++;
                     mem->flags &= ~4;
                     mem->flags |= 2;
                 }
-                mem->position.x = intplGetValue(EASING_QUADRATIC_OUT, mem->mHomePosition.x, x2, mem->interpFramesLeft, mem->interpFramesTotal);
-                mem->position.y = intplGetValue(EASING_CUBIC_IN, mem->mHomePosition.y, y2, mem->interpFramesLeft, mem->interpFramesTotal);
-                mem->position.z = intplGetValue(EASING_QUADRATIC_OUT, mem->mHomePosition.z, z2, mem->interpFramesLeft, mem->interpFramesTotal);
-                mem->baseScale.x = mem->baseScale.y = intplGetValue(EASING_QUADRATIC_OUT, 1.0f, 0.65f, mem->interpFramesLeft, mem->interpFramesTotal);
+                mem->position.x = intplGetValue(EASING_QUADRATIC_OUT, mem->mHomePosition.x, x2, mem->interpFrameCounter, mem->interpFramesTotal);
+                mem->position.y = intplGetValue(EASING_CUBIC_IN, mem->mHomePosition.y, y2, mem->interpFrameCounter, mem->interpFramesTotal);
+                mem->position.z = intplGetValue(EASING_QUADRATIC_OUT, mem->mHomePosition.z, z2, mem->interpFrameCounter, mem->interpFramesTotal);
+                mem->baseScale.x = mem->baseScale.y = intplGetValue(EASING_QUADRATIC_OUT, 1.0f, 0.65f, mem->interpFrameCounter, mem->interpFramesTotal);
                 break;
             }
         }

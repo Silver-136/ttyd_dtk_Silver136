@@ -300,12 +300,12 @@ void badgeShop_bargainGeneration(void) {
         }
     }
 
-    if (evtGetValue(NULL, GSW_STORY_PROGRESS) >= STG7_20_LORD_CRUMP_DEFEATED && !evtGetValue(0, GSWF_BADGESHOP_STAGE_7_STOCK_ADDED)) {
-        evtSetValue(NULL, GSWF_BADGESHOP_STAGE_7_STOCK_ADDED, 1);
+    if (evtGetValue(NULL, GSW_STORY_PROGRESS) >= STG7_20_LORD_CRUMP_DEFEATED && !evtGetValue(0, GSWF_BADGESHOP_STAGE_7_STOCK_CHECK_DONE)) {
+        evtSetValue(NULL, GSWF_BADGESHOP_STAGE_7_STOCK_CHECK_DONE, 1);
     }
 
-    if (evtGetValue(NULL, GSW_STORY_PROGRESS) >= STG8_16_THE_RETURN_OF_THE_QUEEN && !evtGetValue(0, GSWF_BADGESHOP_STAGE_8_STOCK_ADDED)) {
-        evtSetValue(NULL, GSWF_BADGESHOP_STAGE_8_STOCK_ADDED, 1);
+    if (evtGetValue(NULL, GSW_STORY_PROGRESS) >= STG8_16_THE_RETURN_OF_THE_QUEEN && !evtGetValue(0, GSWF_BADGESHOP_STAGE_8_STOCK_CHECK_DONE)) {
+        evtSetValue(NULL, GSWF_BADGESHOP_STAGE_8_STOCK_CHECK_DONE, 1);
     }
 
     memset(table, 0, sizeof(table));
