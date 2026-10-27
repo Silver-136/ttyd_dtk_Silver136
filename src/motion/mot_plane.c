@@ -487,7 +487,6 @@ void mot_plane(void) {
 double sin(double);
 
 #define PI 3.1415927f
-#define SPD (mp->baseSpeed)
 #define STICK (mp->wStickDir1)
 
 static inline BOOL planeChkUnder(void) {
@@ -566,7 +565,7 @@ static void flyMain(void) {
     }
     mp->displayDirection = revise360(flag ? -t - 90.0f : 270.0f - t);
     if (STICK != 0) {
-        if (SPD) {
+        if (mp->baseSpeed) {
             a = __fabsf((f32)STICK);
             if (mp->motPlane->flags & MOT_PLANE_FLAG_RIGHT) {
                 if (STICK < 0) {
@@ -605,7 +604,7 @@ static void flyMain(void) {
             if (mp->motPlane->pitchSpeed > 0.0f && mp->motPlane->pitchSpeed < 1.0f) {
                 mp->motPlane->pitch += planeData[30];
             }
-            t = planeData[0] - SPD;
+            t = planeData[0] - mp->baseSpeed;
             if (t <= 0.0f) {
                 t = 0.0f;
             }
@@ -619,9 +618,9 @@ static void flyMain(void) {
                 mp->motPlane->pitch += mp->motPlane->pitchRecover;
             } else {
                 mp->motPlane->pitch += -0.001f;
-                SPD += 0.5f;
-                if (SPD > 2.0f) {
-                    SPD = 2.0f;
+                mp->baseSpeed += 0.5f;
+                if (mp->baseSpeed > 2.0f) {
+                    mp->baseSpeed = 2.0f;
                 }
             }
         }
@@ -632,22 +631,22 @@ static void flyMain(void) {
             mp->motPlane->pitchSpeed = 0.0f;
         }
     }
-    SPD += SPD * planeData[1];
+    mp->baseSpeed += mp->baseSpeed * planeData[1];
     if (mp->motPlane->pitch >= 0.0f) {
         mp->motPlane->flags |= MOT_PLANE_FLAG_DIVE_UNUSED;
         a = (f32)sin(PI * (mp->motPlane->pitch * planeData[7]) / 180.0f);
-        a = SPD * (planeData[8] * a);
-        SPD = SPD + a;
+        a = mp->baseSpeed * (planeData[8] * a);
+        mp->baseSpeed = mp->baseSpeed + a;
         if (STICK != 0 && mp->motPlane->pitch >= planeData[3]) {
-            SPD += planeData[2];
+            mp->baseSpeed += planeData[2];
         }
-        if (SPD <= 0.0f) {
-            SPD = 0.0f;
+        if (mp->baseSpeed <= 0.0f) {
+            mp->baseSpeed = 0.0f;
         }
         t = 0.0f;
         if (STICK == 0) {
-            if (SPD < planeData[20]) {
-                t = planeData[0] - SPD;
+            if (mp->baseSpeed < planeData[20]) {
+                t = planeData[0] - mp->baseSpeed;
                 t *= planeData[21] * (f32)sin(PI * mp->motPlane->pitch / 180.0f);
                 t += mp->motPlane->pitchSpeed;
                 mp->motPlane->pitchSpeed = t;
@@ -655,8 +654,8 @@ static void flyMain(void) {
                 mp->motPlane->pitchSpeed = planeData[22];
             }
             mp->motPlane->pitch += mp->motPlane->pitchSpeed;
-            if (t <= 0.0f && SPD <= planeData[0] * planeData[23]) {
-                t = planeData[0] - SPD * planeData[24];
+            if (t <= 0.0f && mp->baseSpeed <= planeData[0] * planeData[23]) {
+                t = planeData[0] - mp->baseSpeed * planeData[24];
                 if (t <= 0.0f) {
                     t = 0.0f;
                 }
@@ -672,7 +671,7 @@ static void flyMain(void) {
             mp->motPlane->pitch += mp->motPlane->pitchRecover;
         }
         if (STICK != 0) {
-            v = planeData[18] * (f32)sin(PI * (planeData[0] - SPD) / 180.0f);
+            v = planeData[18] * (f32)sin(PI * (planeData[0] - mp->baseSpeed) / 180.0f);
             mp->motPlane->sinkSpeed += v;
             if (mp->motPlane->sinkSpeed <= planeData[19]) {
                 mp->motPlane->sinkSpeed = planeData[19];
@@ -687,10 +686,10 @@ static void flyMain(void) {
             mp->motPlane->flags &= ~MOT_PLANE_FLAG_DIVE_UNUSED;
         }
         mp->motPlane->diveSpeed = planeData[10] * (f32)sin(PI * (planeData[9] * __fabsf(mp->motPlane->pitch)) / 180.0f);
-        SPD += mp->motPlane->diveSpeed;
+        mp->baseSpeed += mp->motPlane->diveSpeed;
         a = (mp->motPlane->pitch > 0.0f) ? 0.0f : __fabsf(mp->motPlane->pitch);
         t = (f32)sin(PI * (planeData[12] * a) / 180.0f);
-        { f32 s = (f32)sin(PI * (SPD * planeData[11]) / 180.0f); a = planeData[13] * (s * t); }
+        { f32 s = (f32)sin(PI * (mp->baseSpeed * planeData[11]) / 180.0f); a = planeData[13] * (s * t); }
         mp->motPlane->pitchSpeed = mp->motPlane->pitchSpeed + a;
         if (STICK != 0) {
             if (mp->motPlane->flags & MOT_PLANE_FLAG_RIGHT) {
@@ -720,19 +719,19 @@ static void flyMain(void) {
         }
         mp->motPlane->sinkSpeed = mp->motPlane->sinkSpeed + 0.1f * (0.0f - mp->motPlane->sinkSpeed);
     }
-    if (SPD >= planeData[0]) {
-        SPD = planeData[0];
+    if (mp->baseSpeed >= planeData[0]) {
+        mp->baseSpeed = planeData[0];
     }
     mp->position.y += mp->motPlane->sinkSpeed;
     mp->position.y -= planeData[29];
     mp->rot.z = revise360(-mp->motPlane->pitch);
     mp->directionView = mp->motPlane->yaw;
     sincosf(&s, &c, mp->directionView);
-    mp->position.z += SPD * c;
+    mp->position.z += mp->baseSpeed * c;
     sincosf(&s2, &c2, 90.0f + mp->motPlane->pitch);
-    mp->position.y += (SPD * c2) * ((c2 >= 0.0f) ? planeData[31] : planeData[32]);
-    mp->position.x += s2 * (SPD * s);
-    if (SPD <= planeData[16]) {
+    mp->position.y += (mp->baseSpeed * c2) * ((c2 >= 0.0f) ? planeData[31] : planeData[32]);
+    mp->position.x += s2 * (mp->baseSpeed * s);
+    if (mp->baseSpeed <= planeData[16]) {
         n = sysMsec2Frame(1000.0f * planeData[17]);
         if (mp->motPlane->flags & MOT_PLANE_FLAG_RIGHT) {
             if ((f32)STICK < 0.0f) {

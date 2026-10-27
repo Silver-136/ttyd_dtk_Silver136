@@ -24,7 +24,6 @@ f32 kpaStickSpd(s32 dash);
 typedef struct V3 {
     s32 a, b, c;
 } V3;
-#define KPW(m) ((m)->kpaWork)
 
 f32 _walkSpdTbl[4] = {0.6f, 1.4f, 1.4f, 1.4f};
 f32 _dashSpdTbl[4] = {1.2f, 2.0f, 2.0f, 2.0f};
@@ -71,13 +70,13 @@ static inline void kpa_swim_splash(void) {
     MarioWork* m = marioGetPtr();
     s32 st;
     s32 lim;
-    KPW(m)->swimSplashTimer++;
+    m->kpaWork->swimSplashTimer++;
     st = (s32)m->currSubMotionId;
     if (st == 0x1E || st == 0x1F) {
-        if (KPW(m)->swimSplashTimer > 0) {
+        if (m->kpaWork->swimSplashTimer > 0) {
             f32 rx;
             f32 rz;
-            KPW(m)->swimSplashTimer = 0;
+            m->kpaWork->swimSplashTimer = 0;
             rx = (f32)(irand(40) - 20);
             rz = (f32)(irand(40) - 20);
             effMizutamaEntry(0, m->position.x + rx, 0.6f * m->wPlayerCollisionBox.y + (m->position.y + rz), m->position.z,
@@ -89,8 +88,8 @@ static inline void kpa_swim_splash(void) {
             in = TRUE;
         }
         lim = in ? 10 : 30;
-        if (KPW(m)->swimSplashTimer > lim) {
-            KPW(m)->swimSplashTimer = 0;
+        if (m->kpaWork->swimSplashTimer > lim) {
+            m->kpaWork->swimSplashTimer = 0;
             effMizutamaEntry(0, m->position.x, m->position.y + m->wPlayerCollisionBox.y / 3.0f, m->position.z,
                              m->directionView < 180.0f ? 225.0f : 135.0f);
         }
@@ -102,7 +101,7 @@ BOOL kpaHipAttackOk(void) {
     if (m->currMotionId == MARIO_MOTION_HIP) {
         return FALSE;
     }
-    return ((KPW(m)->flags >> 4) & 1) ^ 1;
+    return ((m->kpaWork->flags >> 4) & 1) ^ 1;
 }
 
 f32 kpaStickSpd(s32 dash) {
@@ -174,7 +173,7 @@ void kpa_stay(void) {
         m->multiTimer = 0;
         m->currSubMotionId = 0;
         if (kpaGetAttackMode() == 0) {
-            if (!(KPW(m)->flags & KPA_WORK_FLAG_WEARY)) {
+            if (!(m->kpaWork->flags & KPA_WORK_FLAG_WEARY)) {
                 kpaChgPose("KPA_S_1", "KPA2_S_1");
             } else {
                 kpaChgPose("KPA_S_2", "KPA2_S_1");
@@ -215,15 +214,15 @@ void kpa_walk(void) {
         m->flags &= ~(MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING | MARIO_FLAG_IS_STEPPING | MARIO_FLAG_HAS_INPUT_JUMP);
         m->currSubMotionId = 0;
         m->multiTimer = 0;
-        if (!(KPW(m)->flags & KPA_WORK_FLAG_WEARY)) {
+        if (!(m->kpaWork->flags & KPA_WORK_FLAG_WEARY)) {
             kpaChgPose("KPA_W_1", "KPA2_W_1");
         } else {
             kpaChgPose("KPA_W_2", "KPA2_W_1");
         }
         m->mot.kpa.animFrame = 0;
         m->mot.kpa.reserved_2 = 0;
-        KPW(m)->standParamA = 0.02f;
-        KPW(m)->standParamB = -0.02f;
+        m->kpaWork->standParamA = 0.02f;
+        m->kpaWork->standParamB = -0.02f;
     }
     if (!kpa_stay_chk()) {
         if (m->buttonTrg & PAD_BUTTON_B) {
@@ -262,7 +261,7 @@ void kpa_walk(void) {
             s32 lv = kpaGetLevel();
             f32 sp = _walkSpdTbl[lv];
             s32 rt = _rateTbl[lv];
-            KPW(mm)->walkRate = rt;
+            mm->kpaWork->walkRate = rt;
             m->baseSpeed = sp;
         }
     }
@@ -329,7 +328,7 @@ void kpa_dash(void) {
             s32 lv = kpaGetLevel();
             f32 sp = _dashSpdTbl[lv];
             s32 rt = _rateTbl2[lv];
-            KPW(mm)->walkRate = rt;
+            mm->kpaWork->walkRate = rt;
             m->baseSpeed = sp;
         }
     }
@@ -436,7 +435,7 @@ void kpa_fall(void) {
     }
     m->airTimer++;
     if (kpaGetStageType() == 1 && kpaGetBodyStatus() <= 1) {
-        KPW(m)->flags |= KPA_WORK_FLAG_WATER_FALL_SFX;
+        m->kpaWork->flags |= KPA_WORK_FLAG_WATER_FALL_SFX;
     }
     if (kpaGetBodyStatus() == 2) {
         m = marioGetPtr();
@@ -526,7 +525,7 @@ void kpa_hip(void) {
 BOOL kpaPowUp(void) {
     MarioWork* m = marioGetPtr();
     if (kpaGetLevel() < 3) {
-        KPW(m)->level++;
+        m->kpaWork->level++;
         kpaCancelAttackMode();
         marioChgMot(MARIO_MOTION_KPA_POW_UP);
         return TRUE;
@@ -540,20 +539,20 @@ BOOL kpaPowDown(void) {
     MarioWork* m = marioGetPtr();
     kpaCancelAttackMode();
     if (kpaGetLevel() > 0) {
-        KPW(m)->level--;
+        m->kpaWork->level--;
         m->kpaNoHitTimer = sysMsec2Frame(3000);
         marioChgMot(MARIO_MOTION_KPA_POW_DOWN);
         return TRUE;
     }
-    KPW(m)->flags |= KPA_WORK_FLAG_DEAD;
+    m->kpaWork->flags |= KPA_WORK_FLAG_DEAD;
     return FALSE;
 }
 
 void kpaSetSpec(void) {
     MarioWork* m = marioGetPtr();
     s32 lv;
-    m->wPlayerCollisionBox.x = kpaGetWidth(KPW(m)->level);
-    lv = KPW(m)->level;
+    m->wPlayerCollisionBox.x = kpaGetWidth(m->kpaWork->level);
+    lv = m->kpaWork->level;
     if (lv == 0) {
         m->wPlayerCollisionBox.y = 24.0f;
     } else if (lv == 1) {
@@ -610,13 +609,13 @@ void kpa_powup(void) {
         m->currSubMotionId++;
         if (5.0f == k) {
             m2 = marioGetPtr();
-            if (KPW(m2)->level == 3) {
+            if (m2->kpaWork->level == 3) {
                 kpaMSetMutekiTimer();
                 kpaMutekiOn();
             }
             kpaSetSpec();
             marioResetCamShiftRate();
-            m2->camShiftTargetX = 20.0f * (f32)(-KPW(m2)->level);
+            m2->camShiftTargetX = 20.0f * (f32)(-m2->kpaWork->level);
             m->flags &= ~MARIO_FLAG_CHG_MOT_DISABLED;
             marioChgMot(MARIO_MOTION_STAY);
             m->mutekiTimer = 0;
@@ -672,7 +671,7 @@ void kpa_powdown(void) {
             kpaMutekiOff();
             kpaSetSpec();
             marioResetCamShiftRate();
-            m2->camShiftTargetX = 20.0f * (f32)(-KPW(m2)->level);
+            m2->camShiftTargetX = 20.0f * (f32)(-m2->kpaWork->level);
             m->flags &= ~MARIO_FLAG_CHG_MOT_DISABLED;
             marioChgMot(MARIO_MOTION_STAY);
         }
@@ -735,7 +734,7 @@ void kpa_swim(void) {
         m->currSubMotionId = 0;
         m->baseSpeed = 0.0f;
         m->kpaSpeed = 0.0f;
-        KPW(marioGetPtr())->flags |= KPA_WORK_FLAG_NO_HIP_ATTACK;
+        marioGetPtr()->kpaWork->flags |= KPA_WORK_FLAG_NO_HIP_ATTACK;
     }
     if (m->buttonTrg & PAD_BUTTON_B) {
         kpaAttackStart2();
@@ -827,7 +826,7 @@ void kpa_swim(void) {
         }
         break;
     case 20:
-        KPW(m)->flags |= KPA_WORK_FLAG_WATER_FALL_SFX;
+        m->kpaWork->flags |= KPA_WORK_FLAG_WATER_FALL_SFX;
         m->flags &= ~MARIO_FLAG_IS_FALLING;
         m->flags |= MARIO_FLAG_IS_JUMPING;
         kpaChgPose("KPA_J_1A", "KPA2_J_1A");
@@ -853,8 +852,8 @@ void kpa_swim(void) {
     }
     switch ((s32)m->currSubMotionId) {
     case 0x1E:
-        if (KPW(m)->flags & KPA_WORK_FLAG_WATER_FALL_SFX) {
-            KPW(m)->flags &= ~KPA_WORK_FLAG_WATER_FALL_SFX;
+        if (m->kpaWork->flags & KPA_WORK_FLAG_WATER_FALL_SFX) {
+            m->kpaWork->flags &= ~KPA_WORK_FLAG_WATER_FALL_SFX;
             psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_KUPPA_WATER_FALL1), &m->position);
         }
         if (kpaGetAttackMode() == 0) {

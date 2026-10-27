@@ -34,9 +34,6 @@ void* _check_hp_recover_item(BattleUnit* self);
     weapon->targetClassFlags, weapon->targetPropertyFlags,                           \
     (s32)(s8)wp->alliances[self->mAlliance].attackDirection);
 
-#define GETUNIT() unit = BattleGetUnitPtr(wp, targets->targets[targets->targetIndices[i]].unitIdx)
-#define RET() return itemDataTable[itemId].battle_params->mAttackEvtScript
-#define NOFLAG (self->mAttributeFlags & kInactive)
 
 void* BattleEnemyUseItemCheck(BattleUnit* self) {
     s32 itemId = self->heldItem;
@@ -85,10 +82,10 @@ void* BattleEnemyUseItemCheck(BattleUnit* self) {
 void* _check_hp_recover_item(BattleUnit* self) {
     SETUP()
     for (i = 0; i < targets->numTargets; i++) {
-        GETUNIT();
-        if (!NOFLAG) {
+        unit = BattleGetUnitPtr(wp, targets->targets[targets->targetIndices[i]].unitIdx);
+        if (!(self->mAttributeFlags & kInactive)) {
             if (unit->currentHp < unit->maxHp) {
-                RET();
+                return itemDataTable[itemId].battle_params->mAttackEvtScript;
             }
         }
     }
@@ -99,11 +96,11 @@ void* _check_fp_recover_item(BattleUnit* self) {
     SETUP()
     for (i = 0; i < targets->numTargets; i++) {
         s32 max;
-        GETUNIT();
-        if (!NOFLAG) {
+        unit = BattleGetUnitPtr(wp, targets->targets[targets->targetIndices[i]].unitIdx);
+        if (!(self->mAttributeFlags & kInactive)) {
             max = BtlUnit_GetMaxFp(unit);
             if (BtlUnit_GetFp(unit) < max) {
-                RET();
+                return itemDataTable[itemId].battle_params->mAttackEvtScript;
             }
         }
     }
@@ -117,16 +114,16 @@ void* _check_attack_item(BattleUnit* self) {
     }
     if (itemId == ITEM_POW_BLOCK || itemId == ITEM_EARTH_QUAKE) {
         for (i = 0; i < targets->numTargets; i++) {
-            GETUNIT();
-            if (unit->currentKind == UNIT_KOOPS && !NOFLAG && !BtlUnit_CanActStatus(unit)) {
-                RET();
+            unit = BattleGetUnitPtr(wp, targets->targets[targets->targetIndices[i]].unitIdx);
+            if (unit->currentKind == UNIT_KOOPS && !(self->mAttributeFlags & kInactive) && !BtlUnit_CanActStatus(unit)) {
+                return itemDataTable[itemId].battle_params->mAttackEvtScript;
             }
         }
     }
     if (irand(100) >= wp->turnCount * 20) {
         return NULL;
     }
-    RET();
+    return itemDataTable[itemId].battle_params->mAttackEvtScript;
 }
 
 void* _check_status_attack_item(BattleUnit* self) {
@@ -135,32 +132,32 @@ void* _check_status_attack_item(BattleUnit* self) {
         return NULL;
     }
     for (i = 0; i < targets->numTargets; i++) {
-        GETUNIT();
-        if (!NOFLAG) {
+        unit = BattleGetUnitPtr(wp, targets->targets[targets->targetIndices[i]].unitIdx);
+        if (!(self->mAttributeFlags & kInactive)) {
             switch (itemId) {
             case ITEM_SLEEPY_SHEEP: case ITEM_STOPWATCH:
                 if (BtlUnit_CanActStatus(unit)) {
-                    RET();
+                    return itemDataTable[itemId].battle_params->mAttackEvtScript;
                 }
                 break;
             case ITEM_MINI_MR_MINI:
                 if (BtlUnit_CanActStatus(unit) && !BtlUnit_CheckStatus(unit, STATUS_TINY)) {
-                    RET();
+                    return itemDataTable[itemId].battle_params->mAttackEvtScript;
                 }
                 break;
             case ITEM_MR_SOFTENER:
                 if (BtlUnit_CanActStatus(unit) && !BtlUnit_CheckStatus(unit, STATUS_DEFENSE_DOWN)) {
-                    RET();
+                    return itemDataTable[itemId].battle_params->mAttackEvtScript;
                 }
                 break;
             case ITEM_RUIN_POWDER:
                 if (BtlUnit_CanActStatus(unit) && !BtlUnit_CheckStatus(unit, STATUS_CONFUSE)) {
-                    RET();
+                    return itemDataTable[itemId].battle_params->mAttackEvtScript;
                 }
                 break;
             case ITEM_DIZZY_DIAL:
                 if (BtlUnit_CanActStatus(unit) && !BtlUnit_CheckStatus(unit, STATUS_DIZZY)) {
-                    RET();
+                    return itemDataTable[itemId].battle_params->mAttackEvtScript;
                 }
                 break;
             }
@@ -175,32 +172,32 @@ void* _check_status_support_item(BattleUnit* self) {
         return NULL;
     }
     for (i = 0; i < targets->numTargets; i++) {
-        GETUNIT();
-        if (!NOFLAG) {
+        unit = BattleGetUnitPtr(wp, targets->targets[targets->targetIndices[i]].unitIdx);
+        if (!(self->mAttributeFlags & kInactive)) {
             switch (itemId) {
             case ITEM_POWER_PUNCH:
                 if (BtlUnit_CanActStatus(unit) && !BtlUnit_CheckStatus(unit, STATUS_HUGE)) {
-                    RET();
+                    return itemDataTable[itemId].battle_params->mAttackEvtScript;
                 }
                 break;
             case ITEM_COURAGE_SHELL:
                 if (!BtlUnit_CheckStatus(unit, STATUS_DEFENSE_UP)) {
-                    RET();
+                    return itemDataTable[itemId].battle_params->mAttackEvtScript;
                 }
                 break;
             case ITEM_BOOS_SHEET:
                 if (!BtlUnit_CheckStatus(unit, STATUS_INVISIBLE)) {
-                    RET();
+                    return itemDataTable[itemId].battle_params->mAttackEvtScript;
                 }
                 break;
             case ITEM_VOLT_SHROOM:
                 if (!BtlUnit_CheckStatus(unit, STATUS_ELECTRIC)) {
-                    RET();
+                    return itemDataTable[itemId].battle_params->mAttackEvtScript;
                 }
                 break;
             case ITEM_REPEL_CAPE:
                 if (!BtlUnit_CheckStatus(unit, STATUS_DODGY)) {
-                    RET();
+                    return itemDataTable[itemId].battle_params->mAttackEvtScript;
                 }
                 break;
             }
@@ -215,8 +212,8 @@ void* _check_status_recover_item(BattleUnit* self) {
         return NULL;
     }
     for (i = 0; i < targets->numTargets; i++) {
-        GETUNIT();
-        if (!NOFLAG) {
+        unit = BattleGetUnitPtr(wp, targets->targets[targets->targetIndices[i]].unitIdx);
+        if (!(self->mAttributeFlags & kInactive)) {
             switch (itemId) {
             case ITEM_TASTY_TONIC:
                 if (BtlUnit_CheckStatus(unit, STATUS_SLEEP) ||
@@ -230,7 +227,7 @@ void* _check_status_recover_item(BattleUnit* self) {
                     BtlUnit_CheckStatus(unit, STATUS_TINY) ||
                     BtlUnit_CheckStatus(unit, STATUS_DEFENSE_DOWN) ||
                     BtlUnit_CheckStatus(unit, STATUS_SLOW)) {
-                    RET();
+                    return itemDataTable[itemId].battle_params->mAttackEvtScript;
                 }
                 break;
             }

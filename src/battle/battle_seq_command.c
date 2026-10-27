@@ -2286,8 +2286,6 @@ void BattleCommandDisplay_AllEnd(BattleWork* wp) {
 #pragma dont_inline reset
 
 s32 _check_weapon_type_attack(BattleWeapon* weapon);
-#define UEVT(u) ((u)->attackEventCode)
-#define WEVT(w) ((w)->mAttackEvtScript)
 
 void _btlcmd_SetAttackEvent(BattleUnit* unit, BattleCommand* cmd) {
     BattleWork* wp = _battleWorkPointer;
@@ -2297,7 +2295,7 @@ void _btlcmd_SetAttackEvent(BattleUnit* unit, BattleCommand* cmd) {
 
     if (cmd->cancelled) {
         unit->moveState = 0;
-        UEVT(unit) = btldefaultevt_Wait;
+        unit->attackEventCode = btldefaultevt_Wait;
         unit->attackEventFlags = ACT_EVENT_KEEP_STATUS_WINDOW;
         return;
     }
@@ -2307,13 +2305,13 @@ void _btlcmd_SetAttackEvent(BattleUnit* unit, BattleCommand* cmd) {
         case 6:
             unit->attackEventFlags = ACT_EVENT_KEEP_STATUS_WINDOW;
             if (unit->currentKind == UNIT_MARIO) {
-                UEVT(unit) = btldefaultevt_Defend;
+                unit->attackEventCode = btldefaultevt_Defend;
             } else {
-                UEVT(unit) = btldefaultevt_DefendParty;
+                unit->attackEventCode = btldefaultevt_DefendParty;
             }
             break;
         case 5:
-            UEVT(unit) = btldefaultevt_Appeal;
+            unit->attackEventCode = btldefaultevt_Appeal;
             unit->attackEventFlags = ACT_EVENT_KEEP_STATUS_WINDOW;
             if (unit->currentKind == UNIT_MARIO) {
                 BtlActRec_AddCount(&wp->actRecord.marioAppeals);
@@ -2322,7 +2320,7 @@ void _btlcmd_SetAttackEvent(BattleUnit* unit, BattleCommand* cmd) {
             }
             break;
         case 7:
-            UEVT(unit) = btldefaultevt_Wait;
+            unit->attackEventCode = btldefaultevt_Wait;
             unit->attackEventFlags = ACT_EVENT_KEEP_STATUS_WINDOW;
             if (unit->currentKind == UNIT_MARIO) {
                 BtlActRec_AddCount(&wp->actRecord.marioAppeals);
@@ -2331,7 +2329,7 @@ void _btlcmd_SetAttackEvent(BattleUnit* unit, BattleCommand* cmd) {
             }
             break;
         case 3:
-            UEVT(unit) = btldefaultevt_Escape;
+            unit->attackEventCode = btldefaultevt_Escape;
             unit->attackEventFlags = ACT_EVENT_KEEP_STATUS_WINDOW;
             if (unit->currentKind == UNIT_MARIO) {
                 BtlActRec_AddCount(&wp->actRecord.marioEscapes);
@@ -2342,25 +2340,25 @@ void _btlcmd_SetAttackEvent(BattleUnit* unit, BattleCommand* cmd) {
         case 1:
             unit->attackEventFlags = 0;
             if (unit->currentKind == UNIT_MARIO) {
-                UEVT(unit) = WEVT(&badgeWeapon_Charge);
+                unit->attackEventCode = badgeWeapon_Charge.mAttackEvtScript;
                 BtlActRec_AddCount(&wp->actRecord.marioCharges);
             } else {
-                UEVT(unit) = WEVT(&badgeWeapon_ChargeP);
+                unit->attackEventCode = badgeWeapon_ChargeP.mAttackEvtScript;
                 BtlActRec_AddCount(&wp->actRecord.partnerCharges);
             }
             break;
         case 2:
             unit->attackEventFlags = 0;
             if (unit->currentKind == UNIT_MARIO) {
-                UEVT(unit) = WEVT(&badgeWeapon_SuperCharge);
+                unit->attackEventCode = badgeWeapon_SuperCharge.mAttackEvtScript;
                 BtlActRec_AddCount(&wp->actRecord.marioSuperCharges);
             } else {
-                UEVT(unit) = WEVT(&badgeWeapon_SuperChargeP);
+                unit->attackEventCode = badgeWeapon_SuperChargeP.mAttackEvtScript;
                 BtlActRec_AddCount(&wp->actRecord.partnerSuperCharges);
             }
             break;
         case 0:
-            UEVT(unit) = btldefaultevt_ChangeParty;
+            unit->attackEventCode = btldefaultevt_ChangeParty;
             unit->attackEventFlags = ACT_EVENT_KEEP_STATUS_WINDOW;
             cmd->cursor[1].absPos = 0;
             if (wp->badgeEquippedFlags & BATTLE_BADGE_QUICK_CHANGE) {
@@ -2373,15 +2371,15 @@ void _btlcmd_SetAttackEvent(BattleUnit* unit, BattleCommand* cmd) {
             }
             break;
         case 4:
-            UEVT(unit) = btldefaultevt_ProtectPartner;
+            unit->attackEventCode = btldefaultevt_ProtectPartner;
             unit->attackEventFlags = ACT_EVENT_KEEP_STATUS_WINDOW;
             break;
         case 8:
-            UEVT(unit) = BtlUnit_GetData(unit, UNIT_DATA_WAKEUP_EVENT);
+            unit->attackEventCode = BtlUnit_GetData(unit, UNIT_DATA_WAKEUP_EVENT);
             unit->attackEventFlags = ACT_EVENT_KEEP_STATUS_WINDOW | ACT_EVENT_IGNORE_STATUS;
             break;
         default:
-            UEVT(unit) = btldefaultevt_Wait;
+            unit->attackEventCode = btldefaultevt_Wait;
             unit->attackEventFlags = ACT_EVENT_KEEP_STATUS_WINDOW;
             break;
         }
@@ -2393,10 +2391,10 @@ void _btlcmd_SetAttackEvent(BattleUnit* unit, BattleCommand* cmd) {
     case 6:
         _btlcmd_GetCursorPtr(cmd, type, &cursor);
         weapon = cmd->weapon[cursor->absPos].weapon;
-        UEVT(unit) = WEVT(weapon);
+        unit->attackEventCode = weapon->mAttackEvtScript;
         unit->attackEventFlags = 0;
-        if (!UEVT(unit)) {
-            UEVT(unit) = btldefaultevt_Wait;
+        if (!unit->attackEventCode) {
+            unit->attackEventCode = btldefaultevt_Wait;
         }
         switch (type) {
         case 0:
@@ -2439,7 +2437,7 @@ void _btlcmd_SetAttackEvent(BattleUnit* unit, BattleCommand* cmd) {
         break;
     case 9:
         unit->moveState = 1;
-        UEVT(unit) = btldefaultevt_ChangePosition;
+        unit->attackEventCode = btldefaultevt_ChangePosition;
         unit->attackEventFlags = ACT_EVENT_KEEP_STATUS_WINDOW | ACT_EVENT_IGNORE_STATUS | ACT_EVENT_SHELL_FOLLOWS;
         break;
     case 11:
@@ -2449,7 +2447,7 @@ void _btlcmd_SetAttackEvent(BattleUnit* unit, BattleCommand* cmd) {
         case 9: unit->moveState = 8; break;
         default: unit->moveState = 4; break;
         }
-        UEVT(unit) = btlataudGetAttackEventPtr(unit->unitId);
+        unit->attackEventCode = btlataudGetAttackEventPtr(unit->unitId);
         unit->attackEventFlags = ACT_EVENT_KEEP_STATUS_WINDOW | ACT_EVENT_IGNORE_STATUS;
         if (unit->currentKind == UNIT_MARIO) {
             BtlActRec_AddCount(&wp->actRecord.marioAudienceAttacks);
@@ -2467,15 +2465,15 @@ void _btlcmd_SetAttackEvent(BattleUnit* unit, BattleCommand* cmd) {
         case 9: unit->moveState = 8; break;
         default: unit->moveState = 4; break;
         }
-        UEVT(unit) = btlataudGetMoveEventPtr(unit->unitId);
+        unit->attackEventCode = btlataudGetMoveEventPtr(unit->unitId);
         unit->attackEventFlags = ACT_EVENT_KEEP_STATUS_WINDOW | ACT_EVENT_IGNORE_STATUS;
         break;
     case 13:
-        UEVT(unit) = btldefaultevt_LectureEnd;
+        unit->attackEventCode = btldefaultevt_LectureEnd;
         unit->attackEventFlags = ACT_EVENT_KEEP_STATUS_WINDOW | ACT_EVENT_IGNORE_STATUS;
         break;
     default:
-        UEVT(unit) = btldefaultevt_Wait;
+        unit->attackEventCode = btldefaultevt_Wait;
         unit->attackEventFlags = 0;
         break;
     }
@@ -2696,7 +2694,7 @@ void* BattleSetConfuseAct(BattleWork* wp, BattleUnit* unit) {
         }
         wp->weaponTargets.currentTarget = irand(wp->weaponTargets.numTargets);
         wp->flags |= BATTLE_FLAG_ACT_DECIDED_UNUSED;
-        return WEVT(weapon);
+        return weapon->mAttackEvtScript;
     case 5:
         _btlcmd_MakeOperationTable(wp);
         {
@@ -2736,14 +2734,14 @@ void* BattleSetConfuseAct(BattleWork* wp, BattleUnit* unit) {
             return btldefaultevt_Escape;
         case 1:
             if (unit->currentKind == UNIT_MARIO) {
-                return WEVT(&badgeWeapon_Charge);
+                return badgeWeapon_Charge.mAttackEvtScript;
             }
-            return WEVT(&badgeWeapon_ChargeP);
+            return badgeWeapon_ChargeP.mAttackEvtScript;
         case 2:
             if (unit->currentKind == UNIT_MARIO) {
-                return WEVT(&badgeWeapon_SuperCharge);
+                return badgeWeapon_SuperCharge.mAttackEvtScript;
             }
-            return WEVT(&badgeWeapon_SuperChargeP);
+            return badgeWeapon_SuperChargeP.mAttackEvtScript;
         case 8:
             return BtlUnit_GetData(unit, UNIT_DATA_WAKEUP_EVENT);
         case 0: {

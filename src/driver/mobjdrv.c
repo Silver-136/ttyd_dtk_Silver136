@@ -601,7 +601,6 @@ typedef struct MobjWorkHit {
     MapObjectEntry* entries;
     HitEntry* hit[5];
 } MobjWorkHit;
-#define WH(k) (wp->hit[k])
 
 void mobjMain(void) {
     MobjWorkHit* wp;
@@ -639,39 +638,39 @@ void mobjMain(void) {
 
     if (gp->inBattle == 0) {
         if (((HitEntry*)mario->hitobjHammer) != NULL) {
-            if (WH(0) == NULL || strcmp(hitGetName(WH(0)), hitGetName(((HitEntry*)mario->hitobjHammer))) != 0) {
-                WH(0) = ((HitEntry*)mario->hitobjHammer);
+            if (wp->hit[0] == NULL || strcmp(hitGetName(wp->hit[0]), hitGetName(((HitEntry*)mario->hitobjHammer))) != 0) {
+                wp->hit[0] = ((HitEntry*)mario->hitobjHammer);
             }
         } else {
-            WH(0) = NULL;
+            wp->hit[0] = NULL;
         }
         if (((HitEntry*)mario->hitobjHead) != NULL) {
-            if (WH(1) == NULL || strcmp(hitGetName(WH(1)), hitGetName(((HitEntry*)mario->hitobjHead))) != 0) {
-                hitJump = WH(1) = ((HitEntry*)mario->hitobjHead);
+            if (wp->hit[1] == NULL || strcmp(hitGetName(wp->hit[1]), hitGetName(((HitEntry*)mario->hitobjHead))) != 0) {
+                hitJump = wp->hit[1] = ((HitEntry*)mario->hitobjHead);
             }
         } else {
-            WH(1) = NULL;
+            wp->hit[1] = NULL;
         }
         if (((HitEntry*)mario->hitobjStandOn) != NULL) {
-            if (WH(2) == NULL || strcmp(hitGetName(WH(2)), hitGetName(((HitEntry*)mario->hitobjStandOn))) != 0) {
-                WH(2) = ((HitEntry*)mario->hitobjStandOn);
+            if (wp->hit[2] == NULL || strcmp(hitGetName(wp->hit[2]), hitGetName(((HitEntry*)mario->hitobjStandOn))) != 0) {
+                wp->hit[2] = ((HitEntry*)mario->hitobjStandOn);
             }
         } else {
-            WH(2) = NULL;
+            wp->hit[2] = NULL;
         }
         if (((HitEntry*)mario->hitobjFront) != NULL) {
-            if (WH(3) == NULL || strcmp(hitGetName(WH(3)), hitGetName(((HitEntry*)mario->hitobjFront))) != 0) {
-                WH(3) = ((HitEntry*)mario->hitobjFront);
+            if (wp->hit[3] == NULL || strcmp(hitGetName(wp->hit[3]), hitGetName(((HitEntry*)mario->hitobjFront))) != 0) {
+                wp->hit[3] = ((HitEntry*)mario->hitobjFront);
             }
         } else {
-            WH(3) = NULL;
+            wp->hit[3] = NULL;
         }
         if (party != NULL && party->hitobjAction != NULL) {
-            if (WH(4) == NULL || strcmp(hitGetName(WH(4)), hitGetName(party->hitobjAction)) != 0) {
-                WH(4) = party->hitobjAction;
+            if (wp->hit[4] == NULL || strcmp(hitGetName(wp->hit[4]), hitGetName(party->hitobjAction)) != 0) {
+                wp->hit[4] = party->hitobjAction;
             }
         } else {
-            WH(4) = NULL;
+            wp->hit[4] = NULL;
         }
     }
 

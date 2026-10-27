@@ -11,7 +11,6 @@ ItemEntry* itemEntry(const char* name, s32 itemId, u16 type, s32 collectFlag, Ev
 
 
 
-#define ITEM(ev) itemNameToPtr((char*)evtGetValue(ev, args[0]))
 
 USER_FUNC(evt_item_entry) {
     EvtWord* args = event->args;
@@ -34,7 +33,7 @@ USER_FUNC(evt_item_delete) {
 
 USER_FUNC(evt_item_delete_check) {
     EvtWord* args = event->args;
-    ItemEntry* item = ITEM(event);
+    ItemEntry* item = itemNameToPtr((char*)evtGetValue(event, args[0]));
     if (item != NULL) {
         evtSetValue(event, args[1], 0);
     } else {
@@ -45,7 +44,7 @@ USER_FUNC(evt_item_delete_check) {
 
 USER_FUNC(evt_item_flag_on) {
     EvtWord* args = event->args;
-    ItemEntry* item = ITEM(event);
+    ItemEntry* item = itemNameToPtr((char*)evtGetValue(event, args[0]));
     u16 flags = args[1];
     if (item == NULL) return EVT_RETURN_DONE;
     itemFlagOn(item, flags);
@@ -54,7 +53,7 @@ USER_FUNC(evt_item_flag_on) {
 
 USER_FUNC(evt_item_flag_off) {
     EvtWord* args = event->args;
-    ItemEntry* item = ITEM(event);
+    ItemEntry* item = itemNameToPtr((char*)evtGetValue(event, args[0]));
     u16 flags = args[1];
     if (item == NULL) return EVT_RETURN_DONE;
     itemFlagOff(item, flags);
@@ -63,7 +62,7 @@ USER_FUNC(evt_item_flag_off) {
 
 USER_FUNC(evt_item_status_on) {
     EvtWord* args = event->args;
-    ItemEntry* item = ITEM(event);
+    ItemEntry* item = itemNameToPtr((char*)evtGetValue(event, args[0]));
     u32 flags = args[1];
     if (item == NULL) return EVT_RETURN_DONE;
     itemStatusOn(item, flags);
@@ -72,7 +71,7 @@ USER_FUNC(evt_item_status_on) {
 
 USER_FUNC(evt_item_set_move_dir_speed) {
     EvtWord* args = event->args;
-    ItemEntry* item = ITEM(event);
+    ItemEntry* item = itemNameToPtr((char*)evtGetValue(event, args[0]));
     s32 dir = evtGetValue(event, args[1]);
     f32 speed = evtGetFloat(event, args[2]);
     if (item == NULL) return EVT_RETURN_DONE;
@@ -83,7 +82,7 @@ USER_FUNC(evt_item_set_move_dir_speed) {
 
 USER_FUNC(evt_item_set_jump_power) {
     EvtWord* args = event->args;
-    ItemEntry* item = ITEM(event);
+    ItemEntry* item = itemNameToPtr((char*)evtGetValue(event, args[0]));
     f32 v = evtGetFloat(event, args[1]);
     if (item == NULL) return EVT_RETURN_DONE;
     item->velocityY = v;
@@ -92,7 +91,7 @@ USER_FUNC(evt_item_set_jump_power) {
 
 USER_FUNC(evt_item_set_gravity) {
     EvtWord* args = event->args;
-    ItemEntry* item = ITEM(event);
+    ItemEntry* item = itemNameToPtr((char*)evtGetValue(event, args[0]));
     f32 v = evtGetFloat(event, args[1]);
     if (item == NULL) return EVT_RETURN_DONE;
     item->gravityScale = v;
@@ -101,7 +100,7 @@ USER_FUNC(evt_item_set_gravity) {
 
 USER_FUNC(evt_item_set_bound_rate) {
     EvtWord* args = event->args;
-    ItemEntry* item = ITEM(event);
+    ItemEntry* item = itemNameToPtr((char*)evtGetValue(event, args[0]));
     f32 v = evtGetFloat(event, args[1]);
     if (item == NULL) return EVT_RETURN_DONE;
     item->bounceFactor = v;
@@ -110,7 +109,7 @@ USER_FUNC(evt_item_set_bound_rate) {
 
 USER_FUNC(evt_item_set_bound_limit) {
     EvtWord* args = event->args;
-    ItemEntry* item = ITEM(event);
+    ItemEntry* item = itemNameToPtr((char*)evtGetValue(event, args[0]));
     s32 v = evtGetValue(event, args[1]);
     if (item == NULL) return EVT_RETURN_DONE;
     item->maxBounces = v;
@@ -150,7 +149,7 @@ USER_FUNC(evt_item_change_mode) {
 
 USER_FUNC(evt_item_set_bound_next_speed) {
     EvtWord* args = event->args;
-    ItemEntry* item = ITEM(event);
+    ItemEntry* item = itemNameToPtr((char*)evtGetValue(event, args[0]));
     f32 v = evtGetFloat(event, args[1]);
     if (item == NULL) return EVT_RETURN_DONE;
     item->savedSpeed = v;
@@ -159,7 +158,7 @@ USER_FUNC(evt_item_set_bound_next_speed) {
 
 USER_FUNC(evt_item_set_bound_next_dir) {
     EvtWord* args = event->args;
-    ItemEntry* item = ITEM(event);
+    ItemEntry* item = itemNameToPtr((char*)evtGetValue(event, args[0]));
     s32 v = evtGetValue(event, args[1]);
     if (item == NULL) return EVT_RETURN_DONE;
     item->savedDirection = v;

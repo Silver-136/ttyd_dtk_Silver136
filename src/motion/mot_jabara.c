@@ -194,8 +194,6 @@ static inline void jabaraLand(f32 y_, void* h_) {
     mp_->flags &= ~(MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING | MARIO_FLAG_IS_STEPPING | MARIO_FLAG_HAS_INPUT_JUMP);
 }
 
-#define POS (&mario->position)
-#define SFX(id) psndSFXOn_3D((const char*)(id), POS)
 #define ANIM_STEP() animPoseSetLocalTime(mario->paperAnimGroupId[marioAnimeId()], (f32)(s32)mario->mot.jabara.animFrame)
 #define JAB_TAIL(MOTSUB) \
     { \
@@ -275,7 +273,7 @@ void mot_jabara(void) {
             break;
         }
         L_allPartyRideOn();
-        SFX(0x182);
+        psndSFXOn_3D((const char*)(0x182), &mario->position);
         jabaraSetSpd(0.2f, 0.005f, 1.5f);
         mario->multiTimer = 8;
         mario->currSubMotionId = 11;
@@ -297,7 +295,7 @@ void mot_jabara(void) {
         if (mario->hammerChargeTimer == 3) {
             if (!(marioGetPtr()->motJabara->flags & JABARA_FLAG_CHARGE_3)) {
                 marioGetPtr()->motJabara->flags |= JABARA_FLAG_CHARGE_3;
-                SFX(0x184);
+                psndSFXOn_3D((const char*)(0x184), &mario->position);
             }
             marioChgPaper("PM_J_3B");
             mario->hammerChargeLv = 3;
@@ -305,7 +303,7 @@ void mot_jabara(void) {
         } else if (mario->hammerChargeTimer == 2) {
             if (!(marioGetPtr()->motJabara->flags & JABARA_FLAG_CHARGE_2)) {
                 marioGetPtr()->motJabara->flags |= JABARA_FLAG_CHARGE_2;
-                SFX(0x183);
+                psndSFXOn_3D((const char*)(0x183), &mario->position);
             }
             marioChgPaper("PM_J_2B");
             mario->hammerChargeLv = 2;
@@ -349,8 +347,8 @@ void mot_jabara(void) {
         camFollowYOff();
         marioChgPose("M_J_5A");
         marioChgPaper("PM_J_1C");
-        SFX(0x20185);
-        SFX(0x200b5);
+        psndSFXOn_3D((const char*)(0x20185), &mario->position);
+        psndSFXOn_3D((const char*)(0x200b5), &mario->position);
         if (mario->hammerChargeLv == 3) {
             mario->jumpVelocityY = 10.45f;
             mario->jumpAccelerationY = 0.278f;
@@ -422,7 +420,7 @@ void mot_jabara(void) {
             camFollowYOn();
             mario->dispFlags |= MARIO_DISP_FLAG_NO_REAR_POSE;
             marioChgPose("M_J_5A");
-            SFX(0x186);
+            psndSFXOn_3D((const char*)(0x186), &mario->position);
                 jabaraSwingStart(overheadHit);
         } else {
             mario->currSubMotionId = 0x28;
@@ -453,7 +451,7 @@ void mot_jabara(void) {
         if (strcmp(gp->currentMapName, "eki_02") == 0 && mario->position.x >= -450.0f && mario->position.x <= -190.0f) {
             mario->flags |= MARIO_FLAG_WALLS_DISABLED;
         }
-        SFX(0x188);
+        psndSFXOn_3D((const char*)(0x188), &mario->position);
         evtEntryType(quake_evt, 0, 0, 0);
         marioClearJumpPara();
         marioChgPose("M_J_5A");
@@ -521,11 +519,11 @@ void mot_jabara(void) {
         }
         if (changed) {
             if (marioGetPtr()->motJabara->wobbleCount == 1) {
-                SFX(0x189);
+                psndSFXOn_3D((const char*)(0x189), &mario->position);
             } else if (marioGetPtr()->motJabara->wobbleCount == 2) {
-                SFX(0x18a);
+                psndSFXOn_3D((const char*)(0x18a), &mario->position);
             } else if (marioGetPtr()->motJabara->wobbleCount == 3) {
-                SFX(0x18b);
+                psndSFXOn_3D((const char*)(0x18b), &mario->position);
             }
         }
         mario->dispOfs.x += f28 * (f32)cos(3.1415927f * mario->targetYaw / 180.0f);
@@ -679,10 +677,10 @@ void mot_jabara(void) {
                                 }
                             }
                             if (mario->mot.jabara.animFrame == 0) {
-                                SFX(0x187);
+                                psndSFXOn_3D((const char*)(0x187), &mario->position);
                             }
                             if (mario->mot.jabara.animFrame == 0x10) {
-                                SFX(0x187);
+                                psndSFXOn_3D((const char*)(0x187), &mario->position);
                             }
                         }
                     }

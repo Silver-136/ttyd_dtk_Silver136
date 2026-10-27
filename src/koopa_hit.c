@@ -21,11 +21,10 @@ BOOL kpaFlameHitFilter(HitCheckQuery* query, HitEntry* entry);
 
 
 
-#define KPW (marioGetPtr()->kpaWork)
-#define KHEAD(i) (KPW->headHit[i])
-#define KHEADD(i) (KPW->headDist[i])
-#define KRIDE(i) (KPW->rideHit[i])
-#define KRIDED(i) (KPW->rideDist[i])
+#define KHEAD(i) (marioGetPtr()->kpaWork->headHit[i])
+#define KHEADD(i) (marioGetPtr()->kpaWork->headDist[i])
+#define KRIDE(i) (marioGetPtr()->kpaWork->rideHit[i])
+#define KRIDED(i) (marioGetPtr()->kpaWork->rideDist[i])
 
 static inline f32 kpa_nrmToAngle(f32 x, f32 y, f32 z) {
     return angleABf(0.0f, 0.0f, sqrtf(x * x + z * z), -y);
@@ -365,7 +364,7 @@ HitEntry* kpaSearchFrontUnder(void) {
 }
 
 HitEntry* kpaGetHitobjHead(s32 i) {
-    HitEntry** e = &KPW->headHit[i];
+    HitEntry** e = &marioGetPtr()->kpaWork->headHit[i];
     return *e;
 }
 
@@ -383,17 +382,17 @@ HitEntry* kpaGetHitobjHead2(void) {
     }
     return ret;
 #else
-    return KPW->headHit[0];
+    return marioGetPtr()->kpaWork->headHit[0];
 #endif
 }
 
 HitEntry* kpaGetHitobjRide(s32 i) {
-    HitEntry** e = &KPW->rideHit[i];
+    HitEntry** e = &marioGetPtr()->kpaWork->rideHit[i];
     return *e;
 }
 
 HitEntry* kpaChkHitobjRide(void) {
-KpaWork* w = KPW;
+KpaWork* w = marioGetPtr()->kpaWork;
 HitEntry* r;
 r = w->rideHit[0];
 if (!r) {

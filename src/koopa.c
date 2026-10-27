@@ -32,7 +32,6 @@ void kpaFall(void);
 const f32 vec3_802fc920[3] = {0.0f, 0.0f, 0.0f};
 extern f32 marioJumpData[];
 
-#define KPW(m) ((m)->kpaWork)
 
 f32 kpaWidthDat[4] = {20.0f, 60.0f, 84.0f, 186.0f};
 f32 baseScaleTbl[4] = {0.3f, 1.0f, 1.4f, 3.1f};
@@ -64,7 +63,7 @@ static inline void kpaFireEntry2(Vec pos) {
         z = pos.z;
         type = 7;
         sz = 0.4f;
-        switch (KPW(mp)->level) {
+        switch (mp->kpaWork->level) {
         case 0:
             sz = 0.3f;
             break;
@@ -104,17 +103,17 @@ static inline void kpaFireEntry(Vec pos) {
 
 static inline void kpaFireSEOn(void) {
     MarioWork* mp = marioGetPtr();
-    if (KPW(mp)->fireSfxId == 0xFFFFFFFFU) {
-        KPW(mp)->fireSfxId = psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_KUPPA_FIRE_BREATH1), &mp->position);
+    if (mp->kpaWork->fireSfxId == 0xFFFFFFFFU) {
+        mp->kpaWork->fireSfxId = psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_KUPPA_FIRE_BREATH1), &mp->position);
         psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_VOICE_KOOPA_FIRE1), &mp->position);
     }
 }
 
 static inline void kpaFireSEOff(void) {
     MarioWork* mp = marioGetPtr();
-    if (KPW(mp)->fireSfxId != 0xFFFFFFFFU) {
-        psndSFXOff(KPW(mp)->fireSfxId);
-        KPW(mp)->fireSfxId = -1;
+    if (mp->kpaWork->fireSfxId != 0xFFFFFFFFU) {
+        psndSFXOff(mp->kpaWork->fireSfxId);
+        mp->kpaWork->fireSfxId = -1;
     }
 }
 
@@ -128,24 +127,24 @@ s32 kpaNoHitEnemyCheck(void) {
 }
 
 s32 kpaMutekiCheck(void) {
-    return (KPW(marioGetPtr())->flags >> 16) & 1;
+    return (marioGetPtr()->kpaWork->flags >> 16) & 1;
 }
 
 void kpaMutekiOn(void) {
     MarioWork* mp = marioGetPtr();
     animPoseSetMaterialFlagOn(mp->paperAnimGroupId[0], MAP_OBJ_FLAG_PULSE);
-    KPW(mp)->flags |= KPA_WORK_FLAG_MUTEKI;
+    mp->kpaWork->flags |= KPA_WORK_FLAG_MUTEKI;
 }
 
 void kpaMutekiOff(void) {
     MarioWork* mp = marioGetPtr();
     animPoseSetMaterialFlagOff(mp->paperAnimGroupId[0], MAP_OBJ_FLAG_PULSE);
-    KPW(mp)->flags &= ~KPA_WORK_FLAG_MUTEKI;
+    mp->kpaWork->flags &= ~KPA_WORK_FLAG_MUTEKI;
 }
 
 void kpaMSetMutekiTimer(void) {
     MarioWork* mp = marioGetPtr();
-    KPW(mp)->mutekiTimer = sysMsec2Frame(12000);
+    mp->kpaWork->mutekiTimer = sysMsec2Frame(12000);
     mp->kpaNoHitTimer = 0;
 }
 
@@ -158,16 +157,16 @@ s32 kpaGetLevel(void) {
     s32 lv = 0;
     MarioWork* mp = marioGetPtr();
     if (mp->characterId == CHARACTER_BOWSER) {
-        lv = KPW(mp)->level;
+        lv = mp->kpaWork->level;
     }
     return lv;
 }
 
 void kpaSetLevel(s32 lv) {
     MarioWork* mp = marioGetPtr();
-    if (mp->characterId == CHARACTER_BOWSER && KPW(mp) != NULL) {
+    if (mp->characterId == CHARACTER_BOWSER && mp->kpaWork != NULL) {
         f32 s;
-        KPW(mp)->level = lv;
+        mp->kpaWork->level = lv;
         s = baseScaleTbl[lv];
         mp->scale.x = mp->scale.y = s;
         mp->scale.z = 1.0f;
@@ -225,15 +224,15 @@ s32 kpaCamFollow(void) {
 void kpaPreInit(void) {
     s32* sfxIdPtr;
     MarioWork* mp = marioGetPtr();
-    if (KPW(mp) == NULL) {
-        KPW(mp) = (KpaWork*)__memAlloc(HEAP_DEFAULT, sizeof(KpaWork));
+    if (mp->kpaWork == NULL) {
+        mp->kpaWork = (KpaWork*)__memAlloc(HEAP_DEFAULT, sizeof(KpaWork));
     }
-    memset(KPW(mp), 0, sizeof(KpaWork));
-    KPW(mp)->level = 1;
-    KPW(mp)->walkRate = 1;
-    KPW(mp)->fireCount = 0;
-    KPW(mp)->fireRate = 1;
-    sfxIdPtr = &KPW(marioGetPtr())->fireSfxId; // FAKE: address temp; direct store differs
+    memset(mp->kpaWork, 0, sizeof(KpaWork));
+    mp->kpaWork->level = 1;
+    mp->kpaWork->walkRate = 1;
+    mp->kpaWork->fireCount = 0;
+    mp->kpaWork->fireRate = 1;
+    sfxIdPtr = &marioGetPtr()->kpaWork->fireSfxId; // FAKE: address temp; direct store differs
     *sfxIdPtr = -1;
     mp = marioGetPtr();
     if (strcmp(gp->currentMapName, "kpa_02") == 0 || strcmp(gp->currentMapName, "kpa_03") == 0 ||
@@ -284,9 +283,9 @@ void kpa2DMain(void) {
     kpaFireMain();
     {
         MarioWork* m2 = marioGetPtr();
-        if (KPW(m2)->mutekiTimer > 0) {
-            if (--KPW(m2)->mutekiTimer <= 0) {
-                KPW(m2)->mutekiTimer = 0;
+        if (m2->kpaWork->mutekiTimer > 0) {
+            if (--m2->kpaWork->mutekiTimer <= 0) {
+                m2->kpaWork->mutekiTimer = 0;
                 kpaMutekiOff();
             }
         }
@@ -390,9 +389,9 @@ void kpa3DMain(void) {
     kpaFireMain();
     {
         MarioWork* m2 = marioGetPtr();
-        if (KPW(m2)->mutekiTimer > 0) {
-            if (--KPW(m2)->mutekiTimer <= 0) {
-                KPW(m2)->mutekiTimer = 0;
+        if (m2->kpaWork->mutekiTimer > 0) {
+            if (--m2->kpaWork->mutekiTimer <= 0) {
+                m2->kpaWork->mutekiTimer = 0;
                 kpaMutekiOff();
             }
         }
@@ -460,7 +459,7 @@ f32 kpaSetJumpPara(void) {
     MarioWork* mp = marioGetPtr();
     slot = 0; // FAKE: register-held 0 for SETPV/JP index and the dead empty if below; literal 0 differs
     SETPV(mp, slot, jd[slot], jd[1], jd[2], jd[3]);
-    switch (KPW(mp)->level) {
+    switch (mp->kpaWork->level) {
     case 0:
         SETPV(mp, slot, 7.0f, -0.4f, 0.08f, -0.02f);
         break;
@@ -614,7 +613,7 @@ s32 kpaFireAttackCheck(void) {
     if (!(mp->flags & MARIO_FLAG_ACTIVE)) {
         return 0;
     }
-    m = KPW(mp)->attackState;
+    m = mp->kpaWork->attackState;
     if ((m >= 20 && m <= 23) || (m >= 40 && m <= 43)) {
         return 1;
     }
@@ -623,14 +622,14 @@ s32 kpaFireAttackCheck(void) {
 
 void kpaAttackStart(void) {
     MarioWork* mp = marioGetPtr();
-    if (KPW(mp)->attackState == 0) {
+    if (mp->kpaWork->attackState == 0) {
         marioChgMot(MARIO_MOTION_STAY);
-        KPW(mp)->attackState = 1;
+        mp->kpaWork->attackState = 1;
     }
 }
 
 void kpaAttackStart2(void) {
-    KpaWork* w = KPW(marioGetPtr());
+    KpaWork* w = marioGetPtr()->kpaWork;
     if (w->attackState == 0) {
         w->attackState = 30;
     }
@@ -638,119 +637,119 @@ void kpaAttackStart2(void) {
 
 void kpaFireAttack(void) {
     MarioWork* mp = marioGetPtr();
-    switch (KPW(mp)->attackState) {
+    switch (mp->kpaWork->attackState) {
     case 1:
         mp->flags &= ~(MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING | MARIO_FLAG_IS_STEPPING | MARIO_FLAG_HAS_INPUT_JUMP);
         mp->airTimer = 0;
-        KPW(mp)->fireRate = KPW(mp)->level == 0 ? 12 : 8;
-        KPW(mp)->fireCount = 0;
-        KPW(mp)->attackTimer = 0;
-        KPW(mp)->attackState = 20;
+        mp->kpaWork->fireRate = mp->kpaWork->level == 0 ? 12 : 8;
+        mp->kpaWork->fireCount = 0;
+        mp->kpaWork->attackTimer = 0;
+        mp->kpaWork->attackState = 20;
         if (!(mp->flags & MARIO_FLAG_FORCED_MOVEMENT)) {
             mp->baseSpeed = 0.0f;
             mp->kpaSpeed = 0.0f;
         }
     case 20:
         kpaChgPose("KPA_A_1A", "KPA2_A_1A");
-        KPW(mp)->attackTimer = 6;
-        KPW(mp)->attackState = 21;
+        mp->kpaWork->attackTimer = 6;
+        mp->kpaWork->attackState = 21;
         break;
     case 21:
-        if (--KPW(mp)->attackTimer > 0) {
+        if (--mp->kpaWork->attackTimer > 0) {
             break;
         }
         kpaChgPose("KPA_A_1B", "KPA2_A_1B");
-        KPW(mp)->attackTimer = 8;
-        KPW(mp)->attackState = 22;
+        mp->kpaWork->attackTimer = 8;
+        mp->kpaWork->attackState = 22;
         kpaFireSEOn();
         break;
     case 22:
         kpaFireEntry(mp->position);
-        if (--KPW(mp)->attackTimer > 0) {
+        if (--mp->kpaWork->attackTimer > 0) {
             break;
         }
-        KPW(mp)->attackTimer = sysMsec2Frame(400);
+        mp->kpaWork->attackTimer = sysMsec2Frame(400);
         kpaChgPose("KPA_A_1C", "KPA2_A_1C");
-        KPW(mp)->attackState = 23;
+        mp->kpaWork->attackState = 23;
         break;
     case 23:
         kpaFireEntry(mp->position);
-        if (--KPW(mp)->attackTimer > 0) {
+        if (--mp->kpaWork->attackTimer > 0) {
             break;
         }
         if (mp->buttonHold & PAD_BUTTON_B) {
             break;
         }
-        if (KPW(mp)->fireHold != 0) {
+        if (mp->kpaWork->fireHold != 0) {
             break;
         }
         kpaChgPose("KPA_A_1D", "KPA2_A_1D");
-        KPW(mp)->attackState = 24;
-        KPW(mp)->attackTimer = 6;
+        mp->kpaWork->attackState = 24;
+        mp->kpaWork->attackTimer = 6;
         kpaFireSEOff();
         break;
     case 24:
-        if (--KPW(mp)->attackTimer > 0) {
+        if (--mp->kpaWork->attackTimer > 0) {
             break;
         }
-        KPW(mp)->attackState = 0;
+        mp->kpaWork->attackState = 0;
         kpaChgPose("KPA_S_1", "KPA2_S_1");
         break;
     }
-    switch (KPW(mp)->attackState) {
+    switch (mp->kpaWork->attackState) {
     case 30:
-        KPW(mp)->fireRate = KPW(mp)->level == 0 ? 12 : 8;
-        KPW(mp)->fireCount = 0;
-        KPW(mp)->attackTimer = 0;
-        KPW(mp)->attackState = 40;
+        mp->kpaWork->fireRate = mp->kpaWork->level == 0 ? 12 : 8;
+        mp->kpaWork->fireCount = 0;
+        mp->kpaWork->attackTimer = 0;
+        mp->kpaWork->attackState = 40;
         if (!(mp->flags & MARIO_FLAG_FORCED_MOVEMENT)) {
             mp->baseSpeed = 0.0f;
             mp->kpaSpeed = 0.0f;
         }
     case 40:
         kpaChgPose("KPA_A_1A", "KPA2_A_1A");
-        KPW(mp)->attackTimer = 6;
-        KPW(mp)->attackState = 41;
+        mp->kpaWork->attackTimer = 6;
+        mp->kpaWork->attackState = 41;
         break;
     case 41:
-        if (--KPW(mp)->attackTimer > 0) {
+        if (--mp->kpaWork->attackTimer > 0) {
             break;
         }
         kpaChgPose("KPA_A_1B", "KPA2_A_1B");
-        KPW(mp)->attackTimer = 8;
-        KPW(mp)->attackState = 42;
+        mp->kpaWork->attackTimer = 8;
+        mp->kpaWork->attackState = 42;
         kpaFireSEOn();
         break;
     case 42:
         kpaFireEntry(mp->position);
-        if (--KPW(mp)->attackTimer > 0) {
+        if (--mp->kpaWork->attackTimer > 0) {
             break;
         }
-        KPW(mp)->attackTimer = sysMsec2Frame(400);
+        mp->kpaWork->attackTimer = sysMsec2Frame(400);
         kpaChgPose("KPA_A_1C", "KPA2_A_1C");
-        KPW(mp)->attackState = 43;
+        mp->kpaWork->attackState = 43;
         break;
     case 43:
         kpaFireEntry(mp->position);
-        if (--KPW(mp)->attackTimer > 0) {
+        if (--mp->kpaWork->attackTimer > 0) {
             break;
         }
         if (mp->buttonHold & PAD_BUTTON_B) {
             break;
         }
-        if (KPW(mp)->fireHold != 0) {
+        if (mp->kpaWork->fireHold != 0) {
             break;
         }
         kpaChgPose("KPA_A_1D", "KPA2_A_1D");
-        KPW(mp)->attackState = 44;
-        KPW(mp)->attackTimer = 6;
+        mp->kpaWork->attackState = 44;
+        mp->kpaWork->attackTimer = 6;
         kpaFireSEOff();
         break;
     case 44:
-        if (--KPW(mp)->attackTimer > 0) {
+        if (--mp->kpaWork->attackTimer > 0) {
             break;
         }
-        KPW(mp)->attackState = 0;
+        mp->kpaWork->attackState = 0;
         switch ((u16)mp->currMotionId) {
         case 0:
             kpaChgPose("KPA_S_1", "KPA2_S_1");
@@ -771,17 +770,17 @@ void kpaFireAttack(void) {
 
 void kpaCancelAttackMode(void) {
     MarioWork* mp;
-    KpaWork* w = KPW(marioGetPtr());
+    KpaWork* w = marioGetPtr()->kpaWork;
     w->attackState = 0;
     mp = marioGetPtr();
-    if (KPW(mp)->fireSfxId != 0xFFFFFFFFU) {
-        psndSFXOff(KPW(mp)->fireSfxId);
-        KPW(mp)->fireSfxId = -1;
+    if (mp->kpaWork->fireSfxId != 0xFFFFFFFFU) {
+        psndSFXOff(mp->kpaWork->fireSfxId);
+        mp->kpaWork->fireSfxId = -1;
     }
 }
 
 s32 kpaGetAttackMode(void) {
-    return KPW(marioGetPtr())->attackState != 0;
+    return marioGetPtr()->kpaWork->attackState != 0;
 }
 
 void kpaFireDelete(void) {
@@ -790,9 +789,9 @@ void kpaFireDelete(void) {
         effSoftDelete((void*)fireefp);
         fireefp = 0;
         mp = marioGetPtr();
-        if (KPW(mp)->fireSfxId != 0xFFFFFFFFU) {
-            psndSFXOff(KPW(mp)->fireSfxId);
-            KPW(mp)->fireSfxId = -1;
+        if (mp->kpaWork->fireSfxId != 0xFFFFFFFFU) {
+            psndSFXOff(mp->kpaWork->fireSfxId);
+            mp->kpaWork->fireSfxId = -1;
         }
     }
 }
@@ -817,7 +816,7 @@ void kpaFireMain(void) {
     f32 f31;
     f32 f30;
     f32 f29;
-    KPW(mp)->flameHit = NULL;
+    mp->kpaWork->flameHit = NULL;
     flag = 0;
     if (fireefp && (f32)flag == 0.0f) {
         f32 dir;
@@ -872,7 +871,7 @@ void kpaFireMain(void) {
                         PSMTXMultVec(m80, &zero, &out);
                         hit = kpaFlameHitCheck(out.x, out.y, out.z, f30);
                         if (hit) {
-                            KPW(mp)->flameHit = hit;
+                            mp->kpaWork->flameHit = hit;
                             break;
                         }
                     }
