@@ -331,6 +331,8 @@ s32 battleAcResult_StickRotate(BattleWork* work) {
 void battleAcDisp_StickRotate(CameraId cameraId, void* param) {
     BattleACDispParams* disp = &((BattleActions*)&((BattleWork*)param)->actionCommands)->disp;
     void (*fn)(f32, f32);
+// FAKE: `work` is a macro for the cast parameter, not a local: a `BattleWork* work = param;` local (before or after
+// disp) changes the object in both versions. #undef at the end of the function.
 #define work ((BattleWork*)param)
 
     if (AC_PARAMS(work)->flags & AC_STICK_ROTATE_FLAG_GUIDED_UNUSED) {
