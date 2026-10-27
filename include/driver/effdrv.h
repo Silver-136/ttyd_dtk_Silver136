@@ -42,7 +42,7 @@ typedef struct MayaAnim {
     f32 time;              // 0x4
     OSTime startTime;      // 0x8
     MayaAnimData* data;    // 0x10
-    MayaJoint joints[1];   // 0x18, one per MayaKeyList entry (effMayaAnimAlloc)
+    MayaJoint joints[1];   // 0x14, one per MayaKeyList entry (effMayaAnimAlloc)
 } MayaAnim;
 
 typedef void (*EffectCallback)(struct EffectEntry* effect);
@@ -56,7 +56,7 @@ typedef enum EffectFlags {
 
 typedef struct EffectEntry {
     u32 flags;               // 0x0, EffectFlags
-    u32 inBattle;            // 0x4
+    BOOL inBattle;           // 0x4
     s32 count;               // 0x8
     void* userdata;          // 0xC, for effects to store their own data
     EffectCallback callback; // 0x10

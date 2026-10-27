@@ -59,7 +59,7 @@ typedef struct ImageEntry {
     f32 offsetZ; //0x11C
     Mtx mtx; //0x120, extra transform
     CameraId camId; //0x150
-    s32 dispCamId; //0x154, camera drawn on (default 4)
+    s32 dispCamId; //0x154, camera drawn on (default CAMERA_3D)
 } ImageEntry;
 
 typedef struct ImageWork {

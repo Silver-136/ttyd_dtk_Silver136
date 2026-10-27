@@ -3,7 +3,7 @@
 #include "driver/camdrv.h"
 #include "mario/mariost.h"
 #include "memory.h"
-#include "string.h"
+#include <string.h>
 #include <dolphin/gx.h>
 #include <dolphin/mtx.h>
 #include <dolphin/os.h>
@@ -17,10 +17,8 @@ void qqsort(void* array, u32 num, u32 size, s32 (*compare)(const void*, const vo
 
 
 static ExtdrvWork work[2];
-static u8 shadow_dl[32];
-static f32 shadow_vtx[16];
-static f32 shadow_coord[8];
 
+// Field or battle work. A macro: as an inline function the object changes.
 #define extGetWork() (gp->inBattle ? &work[1] : &work[0])
 
 void extMakeTexture(CameraId camId, void* param);
@@ -226,7 +224,6 @@ void extMain(void) {
     s32 i;
     ExtdrvPose* pose;
     ExtdrvSort* sort;
-    CameraEntry* cam;
     f32 ry, angle, diff, c, s;
     u32 flags;
 
@@ -239,15 +236,15 @@ void extMain(void) {
     pose = wp->poses;
     sort = wp->sort;
     ry = camGetRy();
-    cam = camGetPtr(CAMERA_3D);
-    cam = camGetPtr(CAMERA_3D);
+    camGetPtr(CAMERA_3D);
+    camGetPtr(CAMERA_3D);
     for (i = wp->poseNum - 1; i >= 0; i--, pose++, sort++) {
         flags = pose->flags;
         sort->index = i;
-        if (flags & 1) {
+        if (flags & EXT_POSE_FLAG_VISIBLE) {
             sort->z = pose->texId;
         }
-        if (flags & 2) {
+        if (flags & EXT_POSE_FLAG_BILLBOARD) {
             angle = 90.0f + (ry - pose->dir);
             while (angle < -360.0f) {
                 angle += 360.0f;
@@ -329,10 +326,10 @@ void extPoseDraw(s32 index) {
             wp->curTex = texId;
         }
         PSMTXConcat(camGetCurPtr()->view, *pose->mtx, mtx);
-        GXLoadPosMtxImm(mtx, 0);
+        GXLoadPosMtxImm(mtx, GX_PNMTX0);
         PSMTXInvXpose(mtx, nrm);
-        GXLoadNrmMtxImm(nrm, 0);
-        GXSetCurrentMtx(0);
+        GXLoadNrmMtxImm(nrm, GX_PNMTX0);
+        GXSetCurrentMtx(GX_PNMTX0);
         GXCallDisplayList(wp->dl[pose->texId], wp->dlSize[pose->texId]);
     }
 }
@@ -356,8 +353,8 @@ void extDraw(void) {
                 wp->curTex = texId;
             }
             PSMTXConcat(camGetCurPtr()->view, *pose->mtx, mtx);
-            GXLoadPosMtxImm(mtx, 0);
-            GXSetCurrentMtx(0);
+            GXLoadPosMtxImm(mtx, GX_PNMTX0);
+            GXSetCurrentMtx(GX_PNMTX0);
             GXCallDisplayList(wp->dl[texId], wp->dlSize[texId]);
         }
     }
@@ -428,6 +425,8 @@ static u8 shadow_dl[32] ATTRIBUTE_ALIGN(32) = {
     0x80, 0x00, 0x04, 0x00, 0x00, 0x01, 0x01, 0x02, 0x02, 0x03, 0x03,
 };
 
+// The game keeps this 64-byte array in .sdata, above the -sdata 48 limit, hence the explicit section (layout debt);
+// 12 of the 16 floats are set
 __declspec(section ".sdata") static f32 shadow_vtx[16] = {
     -1.2f, 0.0f, -1.2f,
     -1.2f, 0.0f, 1.2f,
@@ -498,9 +497,9 @@ void extDrawShadow(void) {
             if (pose->flags & EXT_POSE_FLAG_SHADOW_POS) {
                 PSMTXTransApply(mtx, mtx, 0.0f, -(*pose->mtx)[1][3] + pose->shadowY, 0.0f);
             }
-            GXLoadPosMtxImm(mtx, 0);
-            GXSetCurrentMtx(0);
-            GXCallDisplayList(shadow_dl, 0x20);
+            GXLoadPosMtxImm(mtx, GX_PNMTX0);
+            GXSetCurrentMtx(GX_PNMTX0);
+            GXCallDisplayList(shadow_dl, sizeof(shadow_dl));
         }
     }
 }

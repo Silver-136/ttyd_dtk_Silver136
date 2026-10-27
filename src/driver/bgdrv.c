@@ -20,7 +20,9 @@ static BackgroundWork work[2];
 //local prototypes
 void bgDisp(CameraId camId, void* param);
 
-#define bgGetWork() (gp->inBattle ? &work[1] : &work[0])
+static inline BackgroundWork* bgGetWork(void) {
+    return gp->inBattle ? &work[1] : &work[0];
+}
 
 void bgInit(void) {
     memset(&work[0], 0, sizeof(BackgroundWork));
@@ -113,7 +115,7 @@ void bgTransOffsetOn(void) {
 }
 
 void bgMain(void) {
-    f32 sinangle, cosangle, angle, v8, v11;
+    f32 sinangle, cosangle, angle, transX, yawScroll;
     BackgroundWork* bgwork;
     CameraEntry* camera;
     GXTexObj texobj;
@@ -125,7 +127,7 @@ void bgMain(void) {
         angle = (TWO_PI * reviseAngle(-camera->viewYaw)) / 360.0f;
         sinangle = sin(angle);
         cosangle = cos(angle);
-        v8 = 0.0f;
+        transX = 0.0f;
         if (!(bgwork->flags & BG_DO_MULTIPLY)) {
             TEXGetGXTexObjFromPalette(bgwork->data, &texobj, 0);
             width = gp->fbWidth / GXGetTexObjWidth(&texobj);
@@ -133,11 +135,11 @@ void bgMain(void) {
             width = 0;
         }
         if (!(bgwork->flags & BG_NO_TRANSLATION)) {
-            v8 = (0.001f * ((cosangle * camera->cameraAt.x) - (sinangle * camera->cameraAt.z))) + v8;
+            transX = (0.001f * ((cosangle * camera->cameraAt.x) - (sinangle * camera->cameraAt.z))) + transX;
         }
-        v11 = 4.0f * (camGetPtr(CAMERA_3D)->viewYaw / 360.0f);
-        v8 = ((f32)width * v11) + v8;
-        bgwork->trans_x = v8;
+        yawScroll = 4.0f * (camGetPtr(CAMERA_3D)->viewYaw / 360.0f);
+        transX = ((f32)width * yawScroll) + transX;
+        bgwork->trans_x = transX;
         dispEntry(CAMERA_BACKGROUND, 0.0f, 3, bgDisp, NULL);
     }
 }
@@ -192,8 +194,8 @@ void bgDisp(CameraId camId, void* param) {
             GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_RASC, GX_CC_C0, GX_CC_ZERO);
             GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_RASA, GX_CA_A0, GX_CA_ZERO);
         }
-        GXLoadPosMtxImm(camera->view, 0);
-        GXSetCurrentMtx(0);
+        GXLoadPosMtxImm(camera->view, GX_PNMTX0);
+        GXSetCurrentMtx(GX_PNMTX0);
         GXClearVtxDesc();
         GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
         GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);

@@ -24,6 +24,7 @@ typedef struct CaseWork {
 
 //.sbss
 static CaseWork work;
+//.sdata
 static CaseWork* wp = &work;
 
 
@@ -38,7 +39,7 @@ void caseReInit(void) {
     int i;
 
     for (i = 0; i < wp->count; i++, entry++) {
-        entry->flags &= ~1;
+        entry->flags &= ~CASE_FLAG_ACTIVE;
     }
 }
 
@@ -46,7 +47,7 @@ s32 caseEntry(CaseSetup* setup) {
     CaseEntry* entry;
     int i = 0;
     for (entry = wp->entries; i < wp->count; i++, entry++) {
-        if (!(entry->flags & 1)) {
+        if (!(entry->flags & CASE_FLAG_ACTIVE)) {
             break; //unused entry
         }
     }
@@ -57,47 +58,46 @@ s32 caseEntry(CaseSetup* setup) {
     if (setup->conditionId & 0x8000) {
         entry->flags |= 4u;
     }
-    entry->flags |= 1u;
+    entry->flags |= CASE_FLAG_ACTIVE;
     strcpy(entry->hitObjName, setup->hitObjName);
     entry->swFlag = setup->swFlag;
     entry->activeFunc = setup->activeFunc;
     entry->evtCode = setup->evtCode;
     entry->priority = setup->priority;
-    entry->lwData[16] = 0;
+    entry->evtId = 0;
     memcpy(entry->lwData, setup->lwData, sizeof(entry->lwData));
+    // FAKE: no-op 64-bit mask; a plain `return i;` swaps the loop registers in both versions
     return i & 0xFFFFFFFFFFFFFFFFu;
 }
 
 void caseDelete(s32 caseId) {
-    wp->entries[caseId].flags &= ~1u;
+    wp->entries[caseId].flags &= ~CASE_FLAG_ACTIVE;
 }
-
-#define SET_HIT(entry) (entry)->flags |= 2
 
 void caseMain(void) {
     MarioWork* mario;
     PartyEntry* party;
-    s32 flag100;
+    s32 pressedA;
     CaseEntry* entry;
     s32 i;
     u16 btn;
     HitEntry* standOn;
-    HitEntry* h1f8;
+    HitEntry* under;
     HitEntry* jumpFrom;
-    HitEntry* h1e0;
+    HitEntry* front;
     HitEntry* push;
-    HitEntry* h1fc;
-    HitEntry* h1f4;
+    HitEntry* hammer;
+    HitEntry* head;
 
     mario = marioGetPtr();
     partyGetPtr(marioGetPartyId());
     standOn = mario->hitobjStandOn;
-    h1f8 = mario->hitobjUnder;
+    under = mario->hitobjUnder;
     jumpFrom = mario->hitobjJumpFrom;
-    h1e0 = mario->hitobjFront;
+    front = mario->hitobjFront;
     push = mario->hitobjPush;
-    h1fc = mario->hitobjHammer;
-    h1f4 = mario->hitobjHead;
+    hammer = mario->hitobjHammer;
+    head = mario->hitobjHead;
     btn = mario->buttonTrg;
     if (marioStGetSystemLevel() == 0 && !winCheck() && gp->inBattle == 0 &&
         !N_fbatPreventMarioEventChk() && marioCaseEventValidChk()) {
@@ -105,111 +105,135 @@ void caseMain(void) {
             yoshiGetStatus() != 1) {
             btn = 0;
         }
-        flag100 = btn & PAD_BUTTON_A;
+        pressedA = btn & PAD_BUTTON_A;
         entry = wp->entries;
         for (i = 0; i < wp->count; i++, entry++) {
-            if (!(entry->flags & 1)) continue;
+            if (!(entry->flags & CASE_FLAG_ACTIVE)) continue;
             switch (entry->conditionId) {
             case CASE_STAND_ON:
-                if (standOn != NULL && !strcmp(hitGetName(standOn), entry->hitObjName)) SET_HIT(entry);
+                if (standOn != NULL && !strcmp(hitGetName(standOn), entry->hitObjName)) {
+                    entry->flags |= CASE_FLAG_TRIGGERED;
+                }
                 break;
             case CASE_NOT_STAND_ON:
                 if (standOn != NULL) {
-                    if (strcmp(hitGetName(standOn), entry->hitObjName) != 0) SET_HIT(entry);
+                    if (strcmp(hitGetName(standOn), entry->hitObjName) != 0) {
+                        entry->flags |= CASE_FLAG_TRIGGERED;
+                    }
                 } else {
-                    SET_HIT(entry);
+                    entry->flags |= CASE_FLAG_TRIGGERED;
                 }
                 break;
             case CASE_UNDER:
-                if (h1f8 != NULL && !strcmp(hitGetName(h1f8), entry->hitObjName)) SET_HIT(entry);
+                if (under != NULL && !strcmp(hitGetName(under), entry->hitObjName)) {
+                    entry->flags |= CASE_FLAG_TRIGGERED;
+                }
                 break;
             case CASE_NOT_UNDER:
-                if (h1f8 != NULL) {
-                    if (strcmp(hitGetName(h1f8), entry->hitObjName) != 0) SET_HIT(entry);
+                if (under != NULL) {
+                    if (strcmp(hitGetName(under), entry->hitObjName) != 0) {
+                        entry->flags |= CASE_FLAG_TRIGGERED;
+                    }
                 } else {
-                    SET_HIT(entry);
+                    entry->flags |= CASE_FLAG_TRIGGERED;
                 }
                 break;
             case CASE_FRONT:
-                if (h1e0 != NULL && !strcmp(hitGetName(h1e0), entry->hitObjName)) SET_HIT(entry);
+                if (front != NULL && !strcmp(hitGetName(front), entry->hitObjName)) {
+                    entry->flags |= CASE_FLAG_TRIGGERED;
+                }
                 break;
             case CASE_JUMP_FROM_A:
                 if (jumpFrom != NULL && mario->airTimer == 1 && fbatNpcTalkCheck() == NULL &&
                     !strcmp(hitGetName(jumpFrom), entry->hitObjName) && (mario->buttonTrg & PAD_BUTTON_A)) {
-                    SET_HIT(entry);
+                    entry->flags |= CASE_FLAG_TRIGGERED;
                 }
                 break;
             case CASE_STAND_ON_A:
                 if (standOn != NULL && fbatNpcTalkCheck() == NULL &&
-                    !strcmp(hitGetName(standOn), entry->hitObjName) && flag100) {
-                    SET_HIT(entry);
+                    !strcmp(hitGetName(standOn), entry->hitObjName) && pressedA) {
+                    entry->flags |= CASE_FLAG_TRIGGERED;
                 }
                 break;
             case CASE_STAND_ON_STICK:
                 if (standOn != NULL && !strcmp(hitGetName(standOn), entry->hitObjName) &&
-                    (s8)mario->wStickDir2 > 30) {
-                    SET_HIT(entry);
+                    mario->wStickDir2 > 30) {
+                    entry->flags |= CASE_FLAG_TRIGGERED;
                 }
                 break;
             case CASE_STAND_ON_STICK_UP:
                 if (standOn != NULL && !strcmp(hitGetName(standOn), entry->hitObjName) &&
                     (keyGetDirTrg(0) & DEMO_STICK_UP)) {
-                    SET_HIT(entry);
+                    entry->flags |= CASE_FLAG_TRIGGERED;
                 }
                 break;
             case CASE_FRONT_A:
-                if (h1e0 != NULL && fbatNpcTalkCheck() == NULL &&
-                    !strcmp(hitGetName(h1e0), entry->hitObjName) && flag100) {
-                    SET_HIT(entry);
+                if (front != NULL && fbatNpcTalkCheck() == NULL &&
+                    !strcmp(hitGetName(front), entry->hitObjName) && pressedA) {
+                    entry->flags |= CASE_FLAG_TRIGGERED;
                 }
                 break;
             case CASE_PUSH:
-                if (push != NULL && !strcmp(hitGetName(push), entry->hitObjName)) SET_HIT(entry);
+                if (push != NULL && !strcmp(hitGetName(push), entry->hitObjName)) {
+                    entry->flags |= CASE_FLAG_TRIGGERED;
+                }
                 break;
             case CASE_NOT_PUSH:
-                if (push == NULL || strcmp(hitGetName(push), entry->hitObjName) != 0) SET_HIT(entry);
+                if (push == NULL || strcmp(hitGetName(push), entry->hitObjName) != 0) {
+                    entry->flags |= CASE_FLAG_TRIGGERED;
+                }
                 break;
             case CASE_PUSH_A:
                 if (push != NULL && fbatNpcTalkCheck() == NULL &&
-                    !strcmp(hitGetName(push), entry->hitObjName) && flag100) {
-                    SET_HIT(entry);
+                    !strcmp(hitGetName(push), entry->hitObjName) && pressedA) {
+                    entry->flags |= CASE_FLAG_TRIGGERED;
                 }
                 break;
             case CASE_HAMMER:
-                if (h1fc != NULL && !strcmp(hitGetName(h1fc), entry->hitObjName)) SET_HIT(entry);
+                if (hammer != NULL && !strcmp(hitGetName(hammer), entry->hitObjName)) {
+                    entry->flags |= CASE_FLAG_TRIGGERED;
+                }
                 break;
             case CASE_HAMMER_2:
-                if (h1fc != NULL && mario->currMotionId == MARIO_MOTION_HAMMER_2 &&
-                    !strcmp(hitGetName(h1fc), entry->hitObjName)) {
-                    SET_HIT(entry);
+                if (hammer != NULL && mario->currMotionId == MARIO_MOTION_HAMMER_2 &&
+                    !strcmp(hitGetName(hammer), entry->hitObjName)) {
+                    entry->flags |= CASE_FLAG_TRIGGERED;
                 }
                 break;
             case CASE_BOBBERY:
                 party = partyGetPtr(marioGetPartyId());
                 if (party != NULL && party->currentMemberId == PARTY_MEMBER_BOBBERY) {
                     HitEntry* ph = party->hitobjAction;
-                    if (ph != NULL && !strcmp(hitGetName(ph), entry->hitObjName)) SET_HIT(entry);
+                    if (ph != NULL && !strcmp(hitGetName(ph), entry->hitObjName)) {
+                        entry->flags |= CASE_FLAG_TRIGGERED;
+                    }
                 }
                 break;
             case CASE_HEAD:
-                if (h1f4 != NULL && !strcmp(hitGetName(h1f4), entry->hitObjName)) SET_HIT(entry);
+                if (head != NULL && !strcmp(hitGetName(head), entry->hitObjName)) {
+                    entry->flags |= CASE_FLAG_TRIGGERED;
+                }
                 break;
             case CASE_GSWF:
-                if (swGet(entry->swFlag)) SET_HIT(entry);
+                if (swGet(entry->swFlag)) {
+                    entry->flags |= CASE_FLAG_TRIGGERED;
+                }
                 break;
             case CASE_LSWF:
-                if (_swGet(entry->swFlag)) SET_HIT(entry);
+                if (_swGet(entry->swFlag)) {
+                    entry->flags |= CASE_FLAG_TRIGGERED;
+                }
                 break;
             case CASE_FUNC:
                 if (entry->activeFunc != NULL && ((s32 (*)(CaseEntry*))entry->activeFunc)(entry)) {
-                    SET_HIT(entry);
+                    entry->flags |= CASE_FLAG_TRIGGERED;
                 }
                 break;
             }
         }
         entry = wp->entries;
         for (i = 0; i < wp->count; i++, entry++) {
-            if ((entry->flags & 1) && (entry->flags & 2)) {
+            if ((entry->flags & CASE_FLAG_ACTIVE) && (entry->flags & CASE_FLAG_TRIGGERED)) {
                 EventEntry* evt;
                 if (!evtCheckID(entry->evtId)) entry->evtId = 0;
                 if (entry->evtId == 0) {
@@ -219,7 +243,7 @@ void caseMain(void) {
                     memcpy(evt->lwData, entry->lwData, sizeof(entry->lwData));
                     if (entry->priority == 0x14) npcStopForEvent();
                 }
-                entry->flags &= ~2;
+                entry->flags &= ~CASE_FLAG_TRIGGERED;
             }
         }
     }
@@ -231,7 +255,8 @@ CaseEntry* caseCheckHitObj(void* obj) {
     if (gp->inBattle != 0) return NULL;
     entry = wp->entries;
     for (i = 0; i < wp->count; i++, entry++) {
-        if ((entry->flags & 1) && entry->conditionId != CASE_FUNC &&
+        // a hit-object condition: not CASE_FUNC, CASE_GSWF or CASE_LSWF
+        if ((entry->flags & CASE_FLAG_ACTIVE) && entry->conditionId != CASE_FUNC &&
             (u32)(entry->conditionId - CASE_GSWF) > 1) {
             if (!strcmp(hitGetName(obj), entry->hitObjName)) return entry;
         }
@@ -245,7 +270,8 @@ CaseEntry* caseCheckHitObj2(void* obj) {
     if (gp->inBattle != 0) return NULL;
     entry = wp->entries;
     for (i = 0; i < wp->count; i++, entry++) {
-        if ((entry->flags & 1) && entry->conditionId != CASE_FUNC &&
+        if ((entry->flags & CASE_FLAG_ACTIVE) && entry->conditionId != CASE_FUNC &&
+            // the first two tests are always true for CASE_BOBBERY (as in the game code)
             (u32)(entry->conditionId - CASE_GSWF) > 1 && entry->conditionId == CASE_BOBBERY) {
             if (!strcmp(hitGetName(obj), entry->hitObjName)) return entry;
         }
@@ -255,6 +281,6 @@ CaseEntry* caseCheckHitObj2(void* obj) {
 
 CaseEntry* caseIdToPtr(s32 caseId) {
     CaseEntry* entry = &wp->entries[caseId];
-    if (!(entry->flags & 1)) return NULL;
+    if (!(entry->flags & CASE_FLAG_ACTIVE)) return NULL;
     return entry;
 }

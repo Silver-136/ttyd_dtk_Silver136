@@ -27,6 +27,12 @@ typedef enum CaseCondition {
     CASE_LSWF = 19, // _swGet(swFlag)
 } CaseCondition;
 
+// CaseEntry.flags (0x4, set from CaseSetup.conditionId | 0x8000, is never read)
+typedef enum CaseEntryFlags {
+    CASE_FLAG_ACTIVE = (1 << 0),    // 0x1, entry in use (caseEntry; caseDelete clears it)
+    CASE_FLAG_TRIGGERED = (1 << 1), // 0x2, condition met this frame; caseMain runs the event and clears it
+} CaseEntryFlags;
+
 typedef struct CaseSetup {
     u16 conditionId; //0x0, trigger condition (CaseEntry.conditionId list); | 0x8000 = flag (sets CaseEntry flags bit 2)
     u8 pad_2[2]; //0x2

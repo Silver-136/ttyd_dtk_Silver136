@@ -1,5 +1,6 @@
 /* "dispdrv" - Display Driver
- * Helper functions for rendering and displaying to the screen, others do heavy lifting.
+ * dispEntry queues a draw callback per camera with a sort key (render mode offset +/- order), dispSort orders the
+ * queue and dispDraw calls the callbacks of one camera after setting each render mode's blend, alpha and Z state.
  */
 
 #include "driver/dispdrv.h"
@@ -12,7 +13,7 @@
 #define DISP_MAX_ENTRIES 1024
 
 #ifdef VERSION_G8ME01
-// US shares this constant with the fadedrv pool
+// US reads its 1.0f from a fadedrv global (the name float_1_8041f770 is a label, the original name is unknown)
 #define DISP_ONE float_1_8041f770
 #else
 #define DISP_ONE 1.0f
@@ -22,7 +23,7 @@
 static f32 offset_tbl[] = {
     400000.0f, 400000.0f, 600000.0f, 100000.0f, 100000.0f,
     300000.0f, 900000.0f, 1100000.0f, 1000000.0f, 500000.0f,
-    700000.0f //700K new in retail
+    700000.0f // render mode 10
 };
 
 //.sbss
@@ -36,9 +37,9 @@ static s32 _sort(const void** sortA, const void** sortB);
 
 void dispInit(void) {
     pDispWork = __memAlloc(HEAP_DEFAULT, sizeof(DispEntry) * DISP_MAX_ENTRIES);
-    pSortWork = __memAlloc(HEAP_DEFAULT, sizeof(DispEntry*)* DISP_MAX_ENTRIES);
+    pSortWork = __memAlloc(HEAP_DEFAULT, sizeof(DispEntry*) * DISP_MAX_ENTRIES);
     memset(pDispWork, 0, sizeof(DispEntry) * DISP_MAX_ENTRIES);
-    memset(pSortWork, 0, sizeof(DispEntry*)* DISP_MAX_ENTRIES);
+    memset(pSortWork, 0, sizeof(DispEntry*) * DISP_MAX_ENTRIES);
     entry_n = 0;
 }
 
@@ -87,7 +88,7 @@ static s32 _sort(const void** sortA, const void** sortB) {
 }
 
 void dispSort(void) {
-    qqsort(pSortWork, entry_n, 4, _sort);
+    qqsort(pSortWork, entry_n, sizeof(DispEntry*), _sort);
 }
 
 void dispDraw(CameraId camId) {
@@ -98,13 +99,13 @@ void dispDraw(CameraId camId) {
         if (entry->cameraId == camId) {
             GXSetColorUpdate(GX_TRUE);
             switch (camId) {
-                case 4:
-                case 5:
-                case 7:
+                case CAMERA_3D:
+                case CAMERA_3D_EFFECTA:
+                case CAMERA_3D_EFFECTB:
                     GXSetAlphaUpdate(GX_FALSE);
                     break;
                 default:
-                case 6:
+                case CAMERA_3D_IMAGE:
                     GXSetAlphaUpdate(GX_TRUE);
                     break;
             }
@@ -171,6 +172,8 @@ f32 dispCalcZ(Vec* input) {
 DispEntry* dispGetCurWork(void) {
     return currentWorkPtr;
 }
+// Padding object: 28 zero bytes the retail .sdata holds after offset_tbl; no source form for them is known
+// (layout debt, docs/CLEANUP_BACKLOG.md)
 #pragma force_active on
 u32 gap_07_8040F344_sdata[7] = {0, 0, 0, 0, 0, 0, 0};
 #pragma force_active reset

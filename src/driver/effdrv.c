@@ -107,9 +107,6 @@ const char* prefix_tbl[7] = {"jp", "us", "ge", "fr", "sp", "it", "du"};
 const char* prefix_tbl[2] = {"jp", "us"};
 #endif
 
-//local prototypes
-static void _callback_tpl(s32 error, DVDFileInfo* info);
-
 static void _callback_tpl(s32 error, DVDFileInfo* info) {
     DVDEntry* entry = info->cb.userData;
     UnpackTexPalette(wp->texture);
@@ -148,7 +145,7 @@ void effTexSetup(void) {
     wp->texture = arcOpen("effect.tpl", 0, 0);
     if (!wp->texture) {
 #ifdef VERSION_G8ME01
-        sprintf(path, "%s/e/%s/effect.tpl", getMarioStDvdRoot(), gp->language == 0U ? "jp" : "us");
+        sprintf(path, "%s/e/%s/effect.tpl", getMarioStDvdRoot(), (u32)gp->language == LANGUAGE_JP ? "jp" : "us");
 #else
         sprintf(path, "%s/e/jp/effect.tpl", getMarioStDvdRoot());
 #endif
@@ -164,9 +161,9 @@ void effTexSetup(void) {
     effTexSetupN64();
 }
 
+// explicit_zero_data keeps the zero-initialised `dummy` textures in .sdata instead of .sbss
 #pragma explicit_zero_data on
 void effGetTexObj(u32 id, GXTexObj* obj) {
-#ifdef __MWERKS__
     if ((s32)id < EFF_NTEX) { //number of images in effect.tpl
         if (!wp->texLoaded) {
             static char dummy ATTRIBUTE_ALIGN(32) = '\0';
@@ -182,7 +179,6 @@ void effGetTexObj(u32 id, GXTexObj* obj) {
             TEXGetGXTexObjFromPalette(*wp->handle->data, obj, id - EFF_NTEX);
         }
     }
-#endif
 }
 #pragma explicit_zero_data reset
 
@@ -192,9 +188,8 @@ void effAutoRelease(BOOL inBattle) {
     EffectEntry* entry = wp->entries;
 
     for (i = 0; i < count; i++, entry++) {
-        if (entry->flags & EFFECT_FLAG_ACTIVE && (s32)entry->inBattle == inBattle && entry && entry->flags) {
-            __memFree(HEAP_EFFECT, entry->userdata);
-            entry->flags = 0;
+        if (entry->flags & EFFECT_FLAG_ACTIVE && entry->inBattle == inBattle) {
+            effDelete(entry);
         }
     }
 }
@@ -208,9 +203,9 @@ EffectEntry* effEntry(void) {
             break;
         }
     }
-    entry->flags = 1;
+    entry->flags = EFFECT_FLAG_ACTIVE;
     entry->inBattle = gp->inBattle != 0;
-    entry->type = 0;
+    entry->type = NULL;
     entry->count = 0;
     entry->userdata = NULL;
     entry->callback = NULL;
@@ -239,10 +234,10 @@ void effMain(void) {
 
     for (i = 0; i < count; i++, entry++) {
         if (gp->inBattle) {
-            if ((s32)entry->inBattle != 1) {
+            if (entry->inBattle != 1) {
                 continue;
             }
-        } else if ((s32)entry->inBattle != 0) {
+        } else if (entry->inBattle != 0) {
             continue;
         }
         if (entry->flags & EFFECT_FLAG_ACTIVE) {
@@ -276,9 +271,9 @@ void effDelete(EffectEntry* effect) {
 void effSoftDelete(EffectEntry* effect) {
     if (effect && effect->flags) {
         if (effect->flags & EFFECT_FLAG_SOFT_DELETABLE) {
-            effect->flags |= EFFECT_FLAG_SOFT_DELETE; // "deleted"
+            effect->flags |= EFFECT_FLAG_SOFT_DELETE;
         } else {
-            effDelete(effect); //inlined
+            effDelete(effect);
         }
     }
 }
@@ -303,7 +298,7 @@ EffectEntry* effNameToPtr(const char* name) {
 EffectSet* effGetSet(const char* name) {
     s32 i;
 
-    for (i = 0; eff_set_table[i].id != -1; i++) { //run until end of table
+    for (i = 0; eff_set_table[i].id != -1; i++) {
         if (!strcmp(eff_set_table[i].name, name)) {
             return &eff_set_table[i];
         }
@@ -311,8 +306,10 @@ EffectSet* effGetSet(const char* name) {
     return NULL;
 }
 
-// per-key interpolation and the GQR5 setup were inlines in the original: inline locals take the low registers,
-// last declared lowest (qv0 f9 .. qm1 f12 above dt f8 / s f7 / s3 f6 / s2 f5; gqr r9 under the key-offset temp r10)
+// Hermite interpolation of the 22 channels of two keys into buf (MayaHermitKey: value at +2, in/out tangents at
+// +4/+6, step flag at +9 of each 8-byte channel; the s16 values are read through GQR5, see effMayaSetGQR)
+// FAKE: the `register` locals and their declaration order give the target register allocation (without
+// `register` both versions change)
 static inline void effMayaKeyInterp(MayaHermitKey* prev, MayaHermitKey* curr, f32 t, f32* buf) {
     s32 i;
     f32* out;
@@ -344,11 +341,14 @@ static inline void effMayaKeyInterp(MayaHermitKey* prev, MayaHermitKey* curr, f3
         } else {
             u = t - prev->time;
             dt = curr->time - prev->time;
-            div = (!dt) ? ( 0.00000001f ) : ( dt) ;
+            div = !dt ? 0.00000001f : dt;
             s = u / div;
             s2 = s * s;
             s3 = s2 * s;
-            *out = ((( qv0 * (1.0f + (( 2.0f * s3 ) - ( 3.0f * s2)) )) + ( qm0 * (dt * (s + (s3 - ( 2.0f * s2))) ))) + ( qv1 * ((( -2.0f ) * s3 ) + ( 3.0f * s2) ))) + ( qm1 * (dt * (s3 - s2) ));
+            *out = qv0 * (1.0f + ((2.0f * s3) - (3.0f * s2))) +
+                   qm0 * (dt * (s + (s3 - (2.0f * s2)))) +
+                   qv1 * ((-2.0f * s3) + (3.0f * s2)) +
+                   qm1 * (dt * (s3 - s2));
         }
         pa += 8;
         pb += 8;
@@ -390,7 +390,7 @@ void effCalcMayaAnimMatrix(MayaAnim* anim, MayaPoly* list, f32* mtx, f32* alpha)
         effMayaSetGQR();
         if (anim->time <= curr->time) {
             t = anim->time;
-        } else if (k != ( n - 1) ) {
+        } else if (k != n - 1) {
             continue;
         } else {
             t = curr->time;
@@ -417,12 +417,13 @@ void effCalcMayaAnimMatrix(MayaAnim* anim, MayaPoly* list, f32* mtx, f32* alpha)
         PSMTXConcat(tmp, pivot1Inv, tmp2);
         PSMTXConcat(trans, tmp2, tmp);
         PSMTXConcat(tmp, scale, (MtxPtr)mtx);
-        *alpha = ( buf[21] > 1.0f ) ? ( 1.0f ) : ((buf [21] < ( (buf[21] < 0.0f ) * 0.0f)) ? ( 0.0f ) : ( buf[21]) );
+        *alpha = buf[21] > 1.0f ? 1.0f : (buf[21] < 0.0f ? 0.0f : buf[21]);
         return;
     }
 }
 
 MayaAnim* effMayaAnimAlloc(MayaAnimData* data) {
+    // 0x18 for the header: 4 bytes more than the offset of joints (0x14)
     s32 size = data->lists->count * sizeof(MayaJoint) + 0x18;
     MayaAnim* anim = __memAlloc(HEAP_EFFECT, size);
     memset(anim, 0, size);
@@ -478,5 +479,3 @@ void effDrawMayaPoly(MayaPoly* poly) {
         }
     }
 }
-
-// forward declarations: these functions are defined further down

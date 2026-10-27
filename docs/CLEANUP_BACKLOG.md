@@ -9,7 +9,7 @@ retail game through every step; nothing here changes behaviour. Per-function det
 
 | Item | Now | At adoption | Notes |
 | --- | --- | --- | --- |
-| FAKES.md rows | 219 (196 both, 20 US, 3 JP) | 214 | the count rises when hidden tricks are found and documented (2026-10-27: seven unmarked `volatile` / dead-statement / spare-temporary devices; 2026-10-26 readability sweep: 15 unmarked one-use inline/macro devices) |
+| FAKES.md rows | 221 (198 both, 20 US, 3 JP) | 214 | the count rises when hidden tricks are found and documented (2026-10-27: seven unmarked `volatile` / dead-statement / spare-temporary devices; 2026-10-26 readability sweep: 15 unmarked one-use inline/macro devices) |
 | FAKE comment sites | 306 in 102 files (libs 18) | 320 (libs 94) | |
 | `#pragma opt_*` / `optimize` / `dont_inline` / `auto_inline` lines | 143 / 4 / 112 / 4 (libs: `dont_inline` 6, VI's three pairs) | 259 / 71 / 358 / 9 | whole-file settings moved to per-unit flags (Codex round 14: five more units; round 16: OSLink); the rest are per-function pairs with no whole-unit equivalent |
 | `__declspec(section)` placements | 18 (libs 35) | 434 | template Vecs in .rodata, .sdata2 constants, a few real-storage objects; the library sites are mostly genuine (see section 7) |
@@ -43,6 +43,11 @@ data order 10, sound-name integer round trips (`SFX_NAME_WORD`) 9, no-op casts 6
   psndSFX_pit/vol, msgWindow_Entry, hankakuSearch per version), Vec/GXColor by value vs pointer
   (cloudGetBreathPower, mapObjSetColor, mapSetBlend, partyNrmToAngle, marioCreviceWallChk), argument order that
   changes code (intpl_sub, marioSetForceMove, gor_irai's FontDrawString).
+- From the certification pilot (2026-10-27): qqsort has no live prototype (system.h's is commented out with a
+  `const void**` comparator; dispdrv calls it undeclared, lightdrv/extdrv carry private `const void*` copies);
+  fbatNpcTalkCheck is declared `void*` in four files but returns NpcEntry*; extdrv's private
+  animPoseDisp_MakeExtTexture takes `void***` where the definition takes `smartEntry**`; GlobalWork.language is
+  compared unsigned in some places (`(u32)` casts) and signed in others; effGetTexObj tests `(s32)id`.
 - `itemEntry` has no header prototype because evt_mobj needs a float-first private declaration (FAKES row).
 - Double casts `(s32)(u8)x` / `(s32)(s8)x`: the 11 in equality tests against small constants were removed
   (2026-10-27, no byte change). Left: evt_mobj's four `(s32)(s8)linkedName[0]` truth tests (char is unsigned

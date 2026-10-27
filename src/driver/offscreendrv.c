@@ -9,8 +9,9 @@
 //.sbss
 static OffscreenWork work[2]; //field, battle
 
-#define offscreenGetWork(inBattle) ((inBattle) ? &work[1] : &work[0])
-#define offscreenGetWorkGp() (gp->inBattle ? &work[1] : &work[0])
+static inline OffscreenWork* offscreenGetWorkGp(void) {
+    return gp->inBattle ? &work[1] : &work[0];
+}
 
 //local prototypes
 void offscreenDisp(CameraId camId, void* param);
@@ -28,7 +29,7 @@ void offscreenInit(void) {
 }
 
 void offscreenReset(BOOL inBattle) {
-    OffscreenWork* wp = offscreenGetWork(inBattle);
+    OffscreenWork* wp = inBattle ? &work[1] : &work[0];
     memset(wp->entries, 0, wp->count * sizeof(OffscreenEntry));
 }
 
@@ -37,7 +38,8 @@ s32 offscreenEntry(const char* name) {
     int i, count;
     OffscreenEntry* entry;
 
-    //check if already created
+    // looks for an entry with this name, but the result is not used: the loop below always takes the first free
+    // slot (the game code does this)
     for (i = 0, count = wp->count, entry = wp->entries; i < count; i++, entry++) {
         if (entry->flags & OFFSCREEN_FLAG_ACTIVE && !strcmp(entry->name, name)) {
             break;
@@ -59,8 +61,8 @@ s32 offscreenEntry(const char* name) {
     entry->prevTop = 2;
     entry->prevRight = 2;
     entry->prevBottom = 2;
-    entry->copyFmt = 5;
-    entry->texFmt = 5;
+    entry->copyFmt = GX_TF_RGB5A3;
+    entry->texFmt = GX_TF_RGB5A3;
     return i;
 }
 

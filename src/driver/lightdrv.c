@@ -16,9 +16,7 @@ LightEntry paperLight3DImg;
 LightEntry paperCraft;
 LightEntry booLight;
 
-//local prototypes
-static s32 _sort(const void* a, const void* b);
-
+// Field (group 0) or battle (group 1) light work. A macro: as an inline function the object changes.
 #define lightGetWork() (mapGetActiveGroup() == 1 ? &work[1] : &work[0])
 
 void lightInit(void) {
@@ -74,7 +72,6 @@ void lightReInit(void) {
 
 static const Vec camDir = {0.0f, 0.0f, 1.0f};
 
-
 void lightMain(void) {
     CameraEntry* camera;
     Vec w = camDir;
@@ -86,7 +83,7 @@ void lightMain(void) {
     b = *(Vec*)camera->view[1];
     c = *(Vec*)camera->view[2];
     {
-        Vec r = {0.0f, 0.0f, 0.0f};
+        Vec r = {0.0f, 0.0f, 0.0f}; // zero-initialised, then overwritten (as in the game code)
         r.x = a.x * w.x + b.x * w.y + c.x * w.z;
         r.y = a.y * w.x + b.y * w.y + c.y * w.z;
         r.z = a.z * w.x + b.z * w.y + c.z * w.z;
@@ -104,19 +101,17 @@ void lightMain(void) {
     booLight.position = (Vec){0.0f, 1000.0f, 0.0f};
 }
 
-
-
 s32 lightEntry(const char* name, s32 type, Vec* position, Vec* rotation, const GXColor* color, f32 spotAngle, f32 attenAngle, s32 attenType, s32 flags) {
     static const Vec decay_tbl[] = {
-    {1.0f, 0.0f, 0.0f},
-    {0.0f, 0.1f, 0.0f},
-    {0.0f, 0.0f, 0.01f},
-    {0.0f, 0.0f, 0.01f}
-};
+        {1.0f, 0.0f, 0.0f},
+        {0.0f, 0.1f, 0.0f},
+        {0.0f, 0.0f, 0.01f},
+        {0.0f, 0.0f, 0.01f}
+    };
     LightWork* wp = lightGetWork();
     LightEntry* entry;
-    s32 i, j, k, n;
-    char v41[256];
+    s32 i, j, n;
+    char uniqueName[256];
 
     entry = wp->entries;
     for (i = 0; i < wp->count; i++, entry++) {
@@ -124,12 +119,13 @@ s32 lightEntry(const char* name, s32 type, Vec* position, Vec* rotation, const G
             break;
         }
     }
-    //seems like it will break
+    // BUG: a name already in use gets "_%04d" appended until a free name is found, but from the second try
+    // `name` points at uniqueName itself, so sprintf reads its own destination and the suffixes pile up
     if (i < LIGHT_ENTRY_COUNT) {
         for (j = 0;; j++) {
-            sprintf(v41, "%s_%04d", name, j);
+            sprintf(uniqueName, "%s_%04d", name, j);
             entry = wp->entries;
-            name = v41; //will keep getting longer
+            name = uniqueName;
             for (i = 0; i < wp->count; i++, entry++) {
                 if (entry->flags & LIGHT_ENABLED && !strcmp(entry->name, name)) {
                     break;
@@ -215,7 +211,7 @@ static s32 _sort(const void* a, const void* b) {
 s32 lightGetNearObj(const Vec* position, LightEntry** out, s32 count, LightEntryFlags flags) {
     s32 found;
     LightWork* wp = lightGetWork();
-    NearWork tmp[32];
+    NearWork tmp[LIGHT_ENTRY_COUNT];
     LightEntry** op;
     NearWork* tp;
     LightEntry* entry;
@@ -235,10 +231,9 @@ s32 lightGetNearObj(const Vec* position, LightEntry** out, s32 count, LightEntry
                 n++;
             }
         }
-        qqsort(tmp, n, 8, _sort);
+        qqsort(tmp, n, sizeof(NearWork), _sort);
     } else {
         entry = wp->entries;
-        tp = tmp;
         n = 0;
         for (i = 0; i < wp->count; i++, entry++) {
             if (entry->flags & LIGHT_ENABLED) {
@@ -315,7 +310,7 @@ LightEntry* lightGetPaper(void) {
     if (cam == CAMERA_3D) {
         return &paperLight3D;
     }
-    if (cam == CAMERA_3D_IMAGE) {
+    if (cam == CAMERA_3D_IMAGE) { // the same result as the fall-through (game code)
         return &paperLight3DImg;
     }
     return &paperLight3DImg;
