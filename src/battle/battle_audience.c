@@ -2123,9 +2123,28 @@ void BattleAudienceAnimProcess(void) {
     }
 }
 
-#define AUD_POS(x, y, z) do { f32 _x = (x); f32 _y = (y); f32 _z = (z); GXWGFifo.f32 = _x; GXWGFifo.f32 = _y; GXWGFifo.f32 = _z; } while (0)
-#define AUD_POSS(x, y, z) do { GXWGFifo.f32 = (x); GXWGFifo.f32 = (y); GXWGFifo.f32 = (z); } while (0)
-#define AUD_TEX(s, t) do { f32 _s = (s); f32 _t = (t); GXWGFifo.f32 = _s; GXWGFifo.f32 = _t; } while (0)
+#define AUD_POS(x, y, z)   \
+    do {                   \
+        f32 _x = (x);      \
+        f32 _y = (y);      \
+        f32 _z = (z);      \
+        GXWGFifo.f32 = _x; \
+        GXWGFifo.f32 = _y; \
+        GXWGFifo.f32 = _z; \
+    } while (0)
+#define AUD_POSS(x, y, z)   \
+    do {                    \
+        GXWGFifo.f32 = (x); \
+        GXWGFifo.f32 = (y); \
+        GXWGFifo.f32 = (z); \
+    } while (0)
+#define AUD_TEX(s, t)      \
+    do {                   \
+        f32 _s = (s);      \
+        f32 _t = (t);      \
+        GXWGFifo.f32 = _s; \
+        GXWGFifo.f32 = _t; \
+    } while (0)
 void BattleAudienceDispAudience(CameraId camId, void* param) {
     f32 sx, cx, sy, cy, sz, cz;
     f32 nhw;

@@ -378,7 +378,11 @@ static inline void mot_ham(f32 a148, f32 a68) {
     m->camZoomOfs = (Vec){0.0f, 40.0f, 0.0f};
 }
 
-#define H2_LEVEL_UP(lvl, a148, a68) { mot_ham(a148, a68); mario->mot.hammer2.flags |= HAMMER2_FLAG_LEVEL_UP; }
+#define H2_LEVEL_UP(lvl, a148, a68)                        \
+    {                                                      \
+        mot_ham(a148, a68);                                \
+        mario->mot.hammer2.flags |= HAMMER2_FLAG_LEVEL_UP; \
+    }
 
 #define H2_RAMP(maxv, midv, minv, lvl, a148, a68)                                     \
     marioChgPaper("P_H_1A");                                                          \

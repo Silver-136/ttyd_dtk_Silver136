@@ -972,7 +972,13 @@ void puniMapFindbuff(Vec pos) {
                             u16* k1 = &d[i + Punimap->width];
                             u16* k2 = &d[i - 1];
                             u16* k3 = &d[i + 1];
-#define SPREAD_LEVEL(k) if ((*k & 0xFF) == 0 && (*k & 0xFF) < l) { if (__abs((*k & 0xF000) - h) <= 0x1000) { *k |= (u16)(l + 1); changed = 1; } }
+#define SPREAD_LEVEL(k)                           \
+    if ((*k & 0xFF) == 0 && (*k & 0xFF) < l) {    \
+        if (__abs((*k & 0xF000) - h) <= 0x1000) { \
+            *k |= (u16)(l + 1);                   \
+            changed = 1;                          \
+        }                                         \
+    }
                             SPREAD_LEVEL(k0)
                             SPREAD_LEVEL(k1)
                             SPREAD_LEVEL(k2)
@@ -5599,7 +5605,13 @@ BOOL _puniVAtari(PuniData* p, Vec* from, Vec* to) {
 }
 
 static const Vec puni_fall_dir;
-#define HAGURE_FLOOR(dst, v) do { (dst) = (s32)(v); if ((v) < 0.0f) { (dst)--; } } while (0)
+#define HAGURE_FLOOR(dst, v) \
+    do {                     \
+        (dst) = (s32)(v);    \
+        if ((v) < 0.0f) {    \
+            (dst)--;         \
+        }                    \
+    } while (0)
 void puniHagurePos(PuniData* p) {
     Vec cur;
     Vec a;

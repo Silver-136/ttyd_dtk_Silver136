@@ -83,7 +83,23 @@ static inline s32 harborKind(HitEntry* hit) {
     return k;
 }
 
-#define HARBOR_PROBE(ANG, POS)  sincosf(&sn, &cs, toMovedir(ANG)); tx = 40.0f * sn + m->position.x; tz = 40.0f * cs + m->position.z; ty = 20.0f + m->position.y; dist = 40.0f; hit = hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, tx, ty, tz, 0.0f, -1.0f, 0.0f); if (hit != NULL && harborKind(hit) != 0) { hitObjGetPos(hitGetName(hit), &POS); ix = (s32)((100.0f * POS.x + 0.5f) / 100.0f); iy = (s32)((100.0f * POS.y + 0.5f) / 100.0f); iz = (s32)((100.0f * POS.z + 0.5f) / 100.0f); out->x = ix; out->y = iy; out->z = iz; return TRUE; }
+#define HARBOR_PROBE(ANG, POS)                                                                      \
+    sincosf(&sn, &cs, toMovedir(ANG));                                                              \
+    tx = 40.0f * sn + m->position.x;                                                                \
+    tz = 40.0f * cs + m->position.z;                                                                \
+    ty = 20.0f + m->position.y;                                                                     \
+    dist = 40.0f;                                                                                   \
+    hit = hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, tx, ty, tz, 0.0f, -1.0f, 0.0f); \
+    if (hit != NULL && harborKind(hit) != 0) {                                                      \
+        hitObjGetPos(hitGetName(hit), &POS);                                                        \
+        ix = (s32)((100.0f * POS.x + 0.5f) / 100.0f);                                               \
+        iy = (s32)((100.0f * POS.y + 0.5f) / 100.0f);                                               \
+        iz = (s32)((100.0f * POS.z + 0.5f) / 100.0f);                                               \
+        out->x = ix;                                                                                \
+        out->y = iy;                                                                                \
+        out->z = iz;                                                                                \
+        return TRUE;                                                                                \
+    }
 
 BOOL checkHarbor(Vec* out);
 

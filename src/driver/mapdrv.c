@@ -845,7 +845,17 @@ void _mapLoad(MapWork* wp, BOOL group, const char* map) {
             Vec mn;
             Vec mx;
             mapGetBoundingBox(&mn, &mx);
-#define SET_BBOX_CORNER(idx, X, Y, Z) { Vec v = {0.0f, 0.0f, 0.0f}; v.x = X; v.y = Y; v.z = Z; wp->entries[group].bbox[idx] = v; }
+#define SET_BBOX_CORNER(idx, X, Y, Z)     \
+    {                                     \
+        Vec v = {                         \
+            0.0f, 0.0f, 0.0f              \
+        }                                 \
+        ;                                 \
+        v.x = X;                          \
+        v.y = Y;                          \
+        v.z = Z;                          \
+        wp->entries[group].bbox[idx] = v; \
+    }
             SET_BBOX_CORNER(0, mx.x, mx.y, mx.z)
             SET_BBOX_CORNER(1, mn.x, mx.y, mx.z)
             SET_BBOX_CORNER(2, mx.x, mn.y, mx.z)

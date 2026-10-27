@@ -15,7 +15,12 @@
 #include "mot/mot_walk.h"
 #include "libc_decls.h"
 
-#define REVISE360(a) while ((a) < 0.0f) { (a) += 360.0f; } while ((a) >= 360.0f) { (a) -= 360.0f; }
+#define REVISE360(a)              \
+    while ((a) < 0.0f) {          \
+        (a) += 360.0f;            \
+    } while ((a) >= 360.0f) { (a) \
+    -= 360.0f;                    \
+}
 
 typedef struct RubWork {
     s32 unk0;       // 0x0

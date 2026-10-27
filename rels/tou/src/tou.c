@@ -103,7 +103,16 @@ static DispWork* dwp;
 static FighterData fighterDt[23];
 static FighterData fighterDt_re[21];
 static void rankingControll(void);
-#define GET_RANK(rank, i) rank = 0; for (i = 0; i < rank_wp->num; i++) { if (!(rank_wp->entries[i].flags & RANK_FLAG_HIDDEN)) { if (rank_wp->entries[i].flags & RANK_FLAG_PLAYER) { break; } rank++; } }
+#define GET_RANK(rank, i)                                       \
+    rank = 0;                                                   \
+    for (i = 0; i < rank_wp->num; i++) {                        \
+        if (!(rank_wp->entries[i].flags & RANK_FLAG_HIDDEN)) {  \
+            if (rank_wp->entries[i].flags & RANK_FLAG_PLAYER) { \
+                break;                                          \
+            }                                                   \
+            rank++;                                             \
+        }                                                       \
+    }
 static void insert(s32* list, s32 num, s32 from, s32 to);
 #define SORT_SCORE(list, n)                                                                    \
     for (i = 0; i < n - 1; i++) {                                                              \
