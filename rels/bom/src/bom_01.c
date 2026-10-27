@@ -44,6 +44,7 @@
 #include "win/win_main.h"
 #include "mario/mariost.h"
 #include "pmario_sound.h"
+#include "sound.h"
 #include "dolphin/os.h"
 #include "driver/effdrv.h"
 #include "eff/n64/eff_ripple_n64.h"
@@ -72,14 +73,6 @@ typedef struct SightWork {
 SightWork* sight_wp;
 // make_name's sprintf buffer; file scope so .bss keeps the target order lp, name, sight_wp (a function static is emitted first)
 static char name[64];
-typedef struct BomSoundWork {
-    u8 pad_0[0x330];
-    u16 sampleBank;
-    u8 pad_332[0x5C0 - 0x332];
-    s16 samples[2][0x400];
-    u32 sampleIndex;
-} BomSoundWork;
-extern BomSoundWork sound;
 void drawBG(s32 id, f32 x, f32 y, f32 sx, f32 sy, f32 rot);
 void drawNum(s32 num, s32 digits, f32 x, f32 y, f32 scale);
 void disp_sight(CameraId camera, void* param);

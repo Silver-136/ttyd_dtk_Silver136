@@ -290,6 +290,9 @@ cflags_rel = with_game_msl([
     "-sdata2 0",
     "-pool off",
     "-fp_contract on",
+    "-DMUSY_VERSION_MAJOR=2",
+    "-DMUSY_VERSION_MINOR=0",
+    "-DMUSY_VERSION_PATCH=3",
 ])
 
 config.linker_version = "GC/2.6"
