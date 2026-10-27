@@ -1012,7 +1012,7 @@ void winLogDisp(CameraId cam, void* param, s32 idx) {
             wk->position.z = v.z;
         }
         for (i = 0; i < 7; i++) {
-            effStarStoneDraw(8, w->log.eff[i]);
+            effStarStoneDraw(CAMERA_2D, w->log.eff[i]);
         }
     }
     if (w->log.badge.x < 320.0f && w->log.badge.y > -240.0f) {

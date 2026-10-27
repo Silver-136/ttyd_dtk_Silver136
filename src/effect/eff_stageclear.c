@@ -104,7 +104,7 @@ EffectEntry* effStageClearEntry(s32 type, f32 x, f32 y, f32 z) {
     s32 n = 9;
 #endif
 
-    if (type == 1 && gp->language != 0U) {
+    if (type == 1 && (u32)gp->language != LANGUAGE_JP) {
         return effMiniGameEntry(1);
     }
     effect = effEntry();
@@ -118,7 +118,7 @@ EffectEntry* effStageClearEntry(s32 type, f32 x, f32 y, f32 z) {
             break;
     }
 #else
-    if (gp->language != 0U) {
+    if ((u32)gp->language != LANGUAGE_JP) {
         n = 14;
     }
     if (type % 10 == 1) {
@@ -275,7 +275,7 @@ void effStageClearDisp(CameraId cameraId, EffectEntry* effect) {
     scale = 0.9f * (1.7f * work->scale);
     frame = work->frame;
     type = work->type;
-    if (gp->language != 0U) {
+    if ((u32)gp->language != LANGUAGE_JP) {
         scale *= 0.6f;
     }
     GXGetProjectionv(proj);

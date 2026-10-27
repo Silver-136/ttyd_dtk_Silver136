@@ -730,11 +730,11 @@ void point_disp(WinMgrEntry* entry) {
     }
     PSMTXTrans(m, 10.0f + (30.0f + entry->x), entry->y - 36.0f, 0.0f);
 #ifdef VERSION_G8ME01
-    PSMTXScale(s, gp->language != 0U ? 0.8f : 1.1f, 1.1f, 1.1f);
+    PSMTXScale(s, (u32)gp->language != LANGUAGE_JP ? 0.8f : 1.1f, 1.1f, 1.1f);
     PSMTXConcat(m, s, m);
     ((void (*)(Mtx, s16, u16))iconDispGx2)(m, 0x10, point_disp_icons[gp->language]);
 #else
-    if (gp->language == 0U) {
+    if ((u32)gp->language == LANGUAGE_JP) {
         PSMTXScale(s, 1.1f, 1.1f, 1.1f);
         PSMTXConcat(m, s, m);
         iconDispGx2(m, 0x10, ICON_1F1);

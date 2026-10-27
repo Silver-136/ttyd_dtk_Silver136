@@ -527,7 +527,7 @@ void BattleBreakSlot_Main(void) {
 #ifdef VERSION_G8ME01
                 {
 #else
-                if (gp->language == 0U) {
+                if ((u32)gp->language == LANGUAGE_JP) {
 #endif
                     switch (BattleBreakSlotReelGetPtr(0)->item) {
                         case 0:
