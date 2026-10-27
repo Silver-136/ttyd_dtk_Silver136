@@ -15,7 +15,6 @@ typedef struct TimingAEntry {
     s32 value;
 } TimingAEntry;
 
-#define TA_WORK(ac) ((TimingAWork*)(ac)->work)
 
 TimingAEntry _ac_timing_a_timing_lv_0[] = {
     {4, 10}, {5, 9}, {6, 8}, {7, 7}, {8, 6}, {9, 5}, {99999, 1},
@@ -48,9 +47,9 @@ TimingAEntry* _ac_timing_a_timing_tbl[] = {
 static void actionCommandDisp(f32 x, f32 y) {
     BattleWork* work = _battleWorkPointer;
     BattleActions* ac = &work->actionCommands;
-    s32* frame = (s32*)&ac->disp;
+    s32* blinkTimer = &ac->disp.blinkTimer;
     camGetPtr(CAMERA_2D);
-    if (TA_WORK(ac)->flags & 1) {
+    if (((TimingAWork*)ac->work)->flags & 1) {
         Vec pos = {0.0f, 0.0f, 0.0f};
         pos.x = -200.0f + x;
         pos.y = 50.0f + y;
@@ -61,7 +60,7 @@ static void actionCommandDisp(f32 x, f32 y) {
         pos.y = 50.0f + y;
         iconDispGx(&pos, 0x10, ICON_BUTTON_A, 1.0f);
     }
-    (*frame)++;
+    (*blinkTimer)++;
 }
 
 void battleAcDelete_TimingA(BattleWork* work) {
@@ -70,7 +69,7 @@ void battleAcDelete_TimingA(BattleWork* work) {
 
 void battleAcDisp_TimingA(CameraId cameraId, void* param) {
     BattleWork* work = (BattleWork*)param;
-    BattleACDispParams* disp = (BattleACDispParams*)&work->actionCommands.disp;
+    BattleACDispParams* disp = &work->actionCommands.disp;
     int iconSlot;
     switch (work->actionCommands.mAcState) {
         case 99:
@@ -157,7 +156,7 @@ s32 battleAcTimingA_GetSuccessFrame(BattleWork* work) {
     TimingAEntry* e = _ac_timing_a_timing_tbl[diff];
     s32 ret = e->value;
     s32 count = work->actionCommands.mResultCount;
-    if (TA_WORK(&work->actionCommands)->flags & 2) {
+    if (((TimingAWork*)work->actionCommands.work)->flags & 2) {
         if (count >= 100000) {
             return 0;
         }
@@ -174,8 +173,8 @@ s32 battleAcTimingA_GetSuccessFrame(BattleWork* work) {
 
 s32 battleAcMain_TimingA(BattleWork* work) {
     BattleActions* ac = &work->actionCommands;
-    TimingAWork* tw = TA_WORK(ac);
-    BattleACDispParams* disp = (BattleACDispParams*)&ac->disp;
+    TimingAWork* tw = (TimingAWork*)ac->work;
+    BattleACDispParams* disp = &ac->disp;
 
     switch (work->actionCommands.mAcState) {
         case 0:
@@ -184,7 +183,7 @@ s32 battleAcMain_TimingA(BattleWork* work) {
             disp->iconY = 0.0f;
             disp->slideTimer = 20;
             work->actionCommands.mAcState = 99;
-            TA_WORK(&work->actionCommands)->flags &= ~1;
+            ((TimingAWork*)work->actionCommands.work)->flags &= ~1;
             work->actionCommands.outputParams[0] = 0;
             break;
         case 100:

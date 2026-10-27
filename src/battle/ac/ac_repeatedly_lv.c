@@ -33,6 +33,8 @@ typedef struct RepeatedlyLvWork {
     s32 endTimer; // 0x30
 } RepeatedlyLvWork;
 
+// iconDispGx called through a cast: its callers pass different argument types and no single prototype fits
+// them all (docs/CLEANUP_BACKLOG.md, function-pointer casts).
 #define RL_IconDisp ((void (*)(Vec*, s16, s32, f32))iconDispGx)
 
 static void _init_param(BattleWork* work) {
@@ -302,7 +304,7 @@ static void actionCommandDisp(f32 x, f32 y);
 
 void battleAcDisp_RepeatedlyLv(CameraId cameraId, BattleWork* work) {
     BattleActions* ac = &work->actionCommands;
-    BattleACDispParams* disp = (BattleACDispParams*)&ac->disp;
+    BattleACDispParams* disp = &ac->disp;
     switch (ac->mAcState) {
         case 99:
         case 100:

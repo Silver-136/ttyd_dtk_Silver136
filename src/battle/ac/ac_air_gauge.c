@@ -50,7 +50,7 @@ f32 _GetGaugeDecValue(void);
 s32 battleAcMain_AirGauge(BattleWork* work) {
     BattleActions* ac = &work->actionCommands;
     AirGaugeWork* pw = (AirGaugeWork*)ac->work;
-    BattleACDispParams* disp = (BattleACDispParams*)&ac->disp;
+    BattleACDispParams* disp = &ac->disp;
 
     switch (ac->mAcState) {
         case 0:
@@ -236,7 +236,7 @@ s32 battleAcResult_AirGauge(BattleWork* work) {
 
 void battleAcDisp_AirGauge(CameraId cameraId, void* param) {
     BattleWork* work = (BattleWork*)param;
-    BattleACDispParams* disp = (BattleACDispParams*)&work->actionCommands.disp;
+    BattleACDispParams* disp = &work->actionCommands.disp;
     s32 i;
     switch (work->actionCommands.mAcState) {
         case 99:

@@ -36,16 +36,23 @@ typedef struct SignalTimingWork {
     s32 endTimer;   // 0x54
 } SignalTimingWork;
 
-#define ST_COUNT(w) ((w)->actionCommands.params[0])    /* number of signals */
-#define ST_MODE(w) ((w)->actionCommands.params[1])     /* 1: use the wider ok-frame table */
-#define ST_STEP(w) ((w)->actionCommands.params[2])     /* frames per signal */
-#define ST_NEEDED(w) ((w)->actionCommands.params[3])   /* hits needed for success */
-#define ST_BUTTONS(w) ((w)->actionCommands.params[4])  /* 1: d-pad directions, 2: A/B/X/Y */
-#define ST_EXTRA(w) ((w)->actionCommands.params[5])    /* added to hits for the displayed count */
-#define ST_LEAD(w) ((w)->actionCommands.params[6])     /* lead-in signals before the first button */
-#define ST_OKBASE(w) ((w)->actionCommands.params[7])   /* base ok frame range */
-#define ST_OUT_HITS(w) ((w)->actionCommands.outputParams[0])
-#define ST_OUT_RESULT(w) ((w)->actionCommands.outputParams[1])
+// BattleActions.params slots this command reads (btlevtcmd_AcSetParamAll)
+typedef enum SignalTimingParam {
+    SIGNAL_PARAM_COUNT = 0,   // number of signals
+    SIGNAL_PARAM_MODE = 1,    // 1: use the wider ok-frame table
+    SIGNAL_PARAM_STEP = 2,    // frames per signal
+    SIGNAL_PARAM_NEEDED = 3,  // hits needed for success
+    SIGNAL_PARAM_BUTTONS = 4, // 1: d-pad directions, 2: A/B/X/Y
+    SIGNAL_PARAM_EXTRA = 5,   // added to hits for the displayed count
+    SIGNAL_PARAM_LEAD = 6,    // lead-in signals before the first button
+    SIGNAL_PARAM_OK_BASE = 7, // base ok frame range
+} SignalTimingParam;
+
+// BattleActions.outputParams slots this command writes
+typedef enum SignalTimingOutput {
+    SIGNAL_OUT_HITS = 0,
+    SIGNAL_OUT_RESULT = 1,
+} SignalTimingOutput;
 
 u32 _button_table_4dir[4] = {0x10000, 0x20000, 0x40000, 0x80000};
 u32 _button_table_abxy[4] = {PAD_BUTTON_A, PAD_BUTTON_B, PAD_BUTTON_X, PAD_BUTTON_Y};
@@ -57,11 +64,11 @@ s32 _get_ok_frame_range(s32 difficulty);
 
 s32 _get_ok_frame_range(s32 difficulty) {
     BattleWork* work = _battleWorkPointer;
-    switch (ST_MODE(work)) {
+    switch (work->actionCommands.params[SIGNAL_PARAM_MODE]) {
         case 1:
-            return ST_OKBASE(work) + ac_signaltiming_ok_frame_range_2[difficulty];
+            return work->actionCommands.params[SIGNAL_PARAM_OK_BASE] + ac_signaltiming_ok_frame_range_2[difficulty];
     }
-    return ST_OKBASE(work) + ac_signaltiming_ok_frame_range[difficulty];
+    return work->actionCommands.params[SIGNAL_PARAM_OK_BASE] + ac_signaltiming_ok_frame_range[difficulty];
 }
 
 s32 battleAcMain_SignalTiming(BattleWork *work) {
@@ -76,7 +83,7 @@ s32 battleAcMain_SignalTiming(BattleWork *work) {
     BOOL unique;
     BattleActions *ac = &work->actionCommands;
     SignalTimingWork *w = (SignalTimingWork*)ac->work;
-    BattleACDispParams *disp = (BattleACDispParams*)&ac->disp;
+    BattleACDispParams* disp = &ac->disp;
     BOOL loop;
     BOOL autoCommand = 0;
     BOOL got;
@@ -107,19 +114,19 @@ s32 battleAcMain_SignalTiming(BattleWork *work) {
                 w->next = 0;
                 w->difficulty = BattleActionCommandGetDifficulty(work);
                 w->okFlag = 0;
-                ST_OUT_RESULT(work) = 0;
+                work->actionCommands.outputParams[SIGNAL_OUT_RESULT] = 0;
                 for (k = 0; k < 5; k++) {
                     w->results[k] = 0;
                 }
 
-                switch ST_BUTTONS(work) {
+                switch (work->actionCommands.params[SIGNAL_PARAM_BUTTONS]) {
                     case 1:
 
                     case 2:
-                        for (i = 0; i < ST_COUNT(work); i++) {
+                        for (i = 0; i < work->actionCommands.params[SIGNAL_PARAM_COUNT]; i++) {
                             done = 0;
                             while (!done) {
-                                if (ST_BUTTONS(work) == 1) {
+                                if (work->actionCommands.params[SIGNAL_PARAM_BUTTONS] == 1) {
                                     btn = _button_table_4dir[irand(4)];
                                 } else {
                                     btn = _button_table_abxy[irand(4)];
@@ -144,7 +151,7 @@ s32 battleAcMain_SignalTiming(BattleWork *work) {
 
                     default:
                         w->button = 0x100;
-                        for (i = 0; i < ST_COUNT(work); i++) {
+                        for (i = 0; i < work->actionCommands.params[SIGNAL_PARAM_COUNT]; i++) {
                             w->buttons[i] = 0x100;
                         }
 
@@ -166,17 +173,17 @@ s32 battleAcMain_SignalTiming(BattleWork *work) {
                     ac->mAcState = 1002;
                     break;
                 }
-                w->rangeStart = w->index * ST_STEP(work);
-                w->rangeEnd = ((w->index + 1) * ST_STEP(work)) - 1;
+                w->rangeStart = w->index * work->actionCommands.params[SIGNAL_PARAM_STEP];
+                w->rangeEnd = ((w->index + 1) * work->actionCommands.params[SIGNAL_PARAM_STEP]) - 1;
                 w->okStart = w->rangeStart;
                 j = _get_ok_frame_range(w->difficulty) - 1;
                 w->okEnd = w->okStart + j;
                 ac->mAcState = 1000;
 
             case 1000:
-                w->nextRangeEnd = ((w->next + 1) * ST_STEP(work)) - 1;
+                w->nextRangeEnd = ((w->next + 1) * work->actionCommands.params[SIGNAL_PARAM_STEP]) - 1;
                 w->next++;
-                if (w->next < (ST_LEAD(work) + 1)) {
+                if (w->next < (work->actionCommands.params[SIGNAL_PARAM_LEAD] + 1)) {
                     if (!((work->actionCommands.setupFlags & 1) && (work->actionCommands.mAcUnit->mTokenFlags & kConfusedAction))) {
                         psndSFXOn(sfxPi);
                     }
@@ -192,7 +199,7 @@ s32 battleAcMain_SignalTiming(BattleWork *work) {
                 if (w->pressed) {
                     w->okFlag = 0;
                 } else
-                  if (w->index >= ST_LEAD(work)) {
+                  if (w->index >= work->actionCommands.params[SIGNAL_PARAM_LEAD]) {
                     if ((w->frame >= w->okStart) && (w->frame <= w->okEnd)) {
                         w->okFlag = 1;
                     } else {
@@ -206,7 +213,7 @@ s32 battleAcMain_SignalTiming(BattleWork *work) {
                     got = 1;
                 }
                 if (got) {
-                    switch ST_BUTTONS(work) {
+                    switch (work->actionCommands.params[SIGNAL_PARAM_BUTTONS]) {
                         case 2:
                             if (w->button == BattlePadGetTrigger()) {
                                 good = 1;
@@ -225,38 +232,38 @@ s32 battleAcMain_SignalTiming(BattleWork *work) {
                     got = 1;
                     good = 1;
                 }
-                if ((w->hits + w->misses) >= ST_COUNT(work)) {
+                if ((w->hits + w->misses) >= work->actionCommands.params[SIGNAL_PARAM_COUNT]) {
                     got = 0;
                 }
-                if (((w->index >= ST_LEAD(work)) && got) && (!w->pressed)) {
+                if (((w->index >= work->actionCommands.params[SIGNAL_PARAM_LEAD]) && got) && (!w->pressed)) {
                     w->pressed = 1;
                     if (((w->frame >= w->okStart) && (w->frame <= w->okEnd)) && good) {
                         w->hits++;
-                        ST_OUT_RESULT(work) = 1;
-                        if ((w->index >= ST_LEAD(work)) && (w->index < (ST_COUNT(work) + ST_LEAD(work)))) {
-                            w->results[w->index - ST_LEAD(work)] = 1;
+                        work->actionCommands.outputParams[SIGNAL_OUT_RESULT] = 1;
+                        if ((w->index >= work->actionCommands.params[SIGNAL_PARAM_LEAD]) && (w->index < (work->actionCommands.params[SIGNAL_PARAM_COUNT] + work->actionCommands.params[SIGNAL_PARAM_LEAD]))) {
+                            w->results[w->index - work->actionCommands.params[SIGNAL_PARAM_LEAD]] = 1;
                             if (!((work->actionCommands.setupFlags & 1) && (work->actionCommands.mAcUnit->mTokenFlags & kConfusedAction))) {
                                 psndSFXOn(sfxOk);
                             }
                         }
                         if (work->actionCommands.acFlags & AC_SIGNAL_TIMING_FLAG_END_ON_HIT) {
-                            ST_OUT_HITS(work) = w->hits;
+                            work->actionCommands.outputParams[SIGNAL_OUT_HITS] = w->hits;
                             ac->result &= ~1;
-                            if (w->hits >= ST_NEEDED(work)) {
+                            if (w->hits >= work->actionCommands.params[SIGNAL_PARAM_NEEDED]) {
                                 ac->result |= 2;
                             }
                             loop = 1;
                             ac->mAcState = 1002;
                         }
                     } else
-                      if ((w->index >= ST_LEAD(work)) && (w->index < (ST_COUNT(work) + ST_LEAD(work)))) {
+                      if ((w->index >= work->actionCommands.params[SIGNAL_PARAM_LEAD]) && (w->index < (work->actionCommands.params[SIGNAL_PARAM_COUNT] + work->actionCommands.params[SIGNAL_PARAM_LEAD]))) {
                         w->misses++;
                         if (w->frame >= w->rangeStart) {
-                            w->results[w->index - ST_LEAD(work)] = -1;
+                            w->results[w->index - work->actionCommands.params[SIGNAL_PARAM_LEAD]] = -1;
                             if (!((work->actionCommands.setupFlags & 1) && (work->actionCommands.mAcUnit->mTokenFlags & kConfusedAction))) {
                                 psndSFXOn(sfxNg2);
                             }
-                            ST_OUT_RESULT(work) = -1;
+                            work->actionCommands.outputParams[SIGNAL_OUT_RESULT] = -1;
                         } else {
                             w->pressed = 0;
                         }
@@ -264,36 +271,36 @@ s32 battleAcMain_SignalTiming(BattleWork *work) {
                 }
                 if ((!w->pressed) && (w->frame > w->okEnd)) {
                     w->pressed = 1;
-                    ST_OUT_RESULT(work) = -1;
-                    if ((w->index >= ST_LEAD(work)) && (w->index < (ST_COUNT(work) + ST_LEAD(work)))) {
+                    work->actionCommands.outputParams[SIGNAL_OUT_RESULT] = -1;
+                    if ((w->index >= work->actionCommands.params[SIGNAL_PARAM_LEAD]) && (w->index < (work->actionCommands.params[SIGNAL_PARAM_COUNT] + work->actionCommands.params[SIGNAL_PARAM_LEAD]))) {
                         w->misses++;
-                        w->results[w->index - ST_LEAD(work)] = -1;
+                        w->results[w->index - work->actionCommands.params[SIGNAL_PARAM_LEAD]] = -1;
                         if (!((work->actionCommands.setupFlags & 1) && (work->actionCommands.mAcUnit->mTokenFlags & kConfusedAction))) {
                             psndSFXOn(sfxNg);
                         }
                     }
                 }
-                if (w->pressed && (w->index < (ST_COUNT(work) + ST_LEAD(work)))) {
+                if (w->pressed && (w->index < (work->actionCommands.params[SIGNAL_PARAM_COUNT] + work->actionCommands.params[SIGNAL_PARAM_LEAD]))) {
                     w->index++;
-                    if (w->index < (ST_COUNT(work) + ST_LEAD(work))) {
-                        w->rangeStart = (w->index * ST_STEP(work)) - 10;
-                        w->rangeEnd = ((w->index + 1) * ST_STEP(work)) - 1;
-                        w->okStart = w->index * ST_STEP(work);
+                    if (w->index < (work->actionCommands.params[SIGNAL_PARAM_COUNT] + work->actionCommands.params[SIGNAL_PARAM_LEAD])) {
+                        w->rangeStart = (w->index * work->actionCommands.params[SIGNAL_PARAM_STEP]) - 10;
+                        w->rangeEnd = ((w->index + 1) * work->actionCommands.params[SIGNAL_PARAM_STEP]) - 1;
+                        w->okStart = w->index * work->actionCommands.params[SIGNAL_PARAM_STEP];
                         j = _get_ok_frame_range(w->difficulty) - 1;
                         w->okEnd = w->okStart + j;
                         w->pressed = 0;
-                        if ((w->index >= ST_LEAD(work)) && (w->index < (ST_COUNT(work) + ST_LEAD(work)))) {
-                            w->button = w->buttons[w->index - ST_LEAD(work)];
+                        if ((w->index >= work->actionCommands.params[SIGNAL_PARAM_LEAD]) && (w->index < (work->actionCommands.params[SIGNAL_PARAM_COUNT] + work->actionCommands.params[SIGNAL_PARAM_LEAD]))) {
+                            w->button = w->buttons[w->index - work->actionCommands.params[SIGNAL_PARAM_LEAD]];
                         }
                     }
                 }
-                if (w->frame >= (w->next * ST_STEP(work))) {
-                    if (w->next < (ST_COUNT(work) + ST_LEAD(work))) {
+                if (w->frame >= (w->next * work->actionCommands.params[SIGNAL_PARAM_STEP])) {
+                    if (w->next < (work->actionCommands.params[SIGNAL_PARAM_COUNT] + work->actionCommands.params[SIGNAL_PARAM_LEAD])) {
                         ac->mAcState = 1000;
                     } else {
-                        ST_OUT_HITS(work) = w->hits;
+                        work->actionCommands.outputParams[SIGNAL_OUT_HITS] = w->hits;
                         ac->result &= ~1;
-                        if (w->hits >= ST_NEEDED(work)) {
+                        if (w->hits >= work->actionCommands.params[SIGNAL_PARAM_NEEDED]) {
                             ac->result |= 2;
                         }
                         loop = 1;
@@ -343,7 +350,7 @@ s32 battleAcResult_SignalTiming(BattleWork* work) {
 
 void battleAcDisp_SignalTiming(CameraId cameraId, BattleWork* work) {
     BattleActions* ac = &work->actionCommands;
-    BattleACDispParams* disp = (BattleACDispParams*)&ac->disp;
+    BattleACDispParams* disp = &ac->disp;
 
     switch (ac->mAcState) {
         case 99:
@@ -400,7 +407,7 @@ static void actionCommandDisp(f32 x, f32 y) {
 
     camGetPtr(CAMERA_2D);
     w = (SignalTimingWork*)ac->work;
-    count = ST_COUNT(work);
+    count = work->actionCommands.params[SIGNAL_PARAM_COUNT];
     next = w->next;
     if (!(work->actionCommands.acFlags & AC_SIGNAL_TIMING_FLAG_SHOW_BUTTONS)) {
         if (w->okFlag) {
@@ -418,19 +425,19 @@ static void actionCommandDisp(f32 x, f32 y) {
 
     switch (count) {
         case 1:
-            n = ST_LEAD(work) * 2 + 5;
+            n = work->actionCommands.params[SIGNAL_PARAM_LEAD] * 2 + 5;
             break;
         case 3:
-            n = ST_LEAD(work) * 2 + 11;
+            n = work->actionCommands.params[SIGNAL_PARAM_LEAD] * 2 + 11;
             break;
         case 4:
-            n = ST_LEAD(work) * 2 + 13;
+            n = work->actionCommands.params[SIGNAL_PARAM_LEAD] * 2 + 13;
             break;
         case 5:
-            n = ST_LEAD(work) * 2 + 15;
+            n = work->actionCommands.params[SIGNAL_PARAM_LEAD] * 2 + 15;
             break;
         default:
-            n = ST_LEAD(work) * 2 + 11;
+            n = work->actionCommands.params[SIGNAL_PARAM_LEAD] * 2 + 11;
             break;
     }
 
@@ -455,9 +462,9 @@ static void actionCommandDisp(f32 x, f32 y) {
 
     if (!(work->actionCommands.acFlags & AC_SIGNAL_TIMING_FLAG_HIDE_HIT_COUNT)) {
         fx = -200.0f + x;
-        num = w->hits + ST_EXTRA(work);
+        num = w->hits + work->actionCommands.params[SIGNAL_PARAM_EXTRA];
         // Both arms of the SHOW_BUTTONS test are the same (retail code): the counter's position does not depend on it.
-        PSMTXTrans(mTrans, fx + (f32)((work->actionCommands.acFlags & AC_SIGNAL_TIMING_FLAG_SHOW_BUTTONS) ? count * 0x30 - 26 + ST_LEAD(work) * 32 : count * 0x30 - 26 + ST_LEAD(work) * 32), yb, 0.0f);
+        PSMTXTrans(mTrans, fx + (f32)((work->actionCommands.acFlags & AC_SIGNAL_TIMING_FLAG_SHOW_BUTTONS) ? count * 0x30 - 26 + work->actionCommands.params[SIGNAL_PARAM_LEAD] * 32 : count * 0x30 - 26 + work->actionCommands.params[SIGNAL_PARAM_LEAD] * 32), yb, 0.0f);
         if (work->actionCommands.acFlags & AC_SIGNAL_TIMING_FLAG_LARGE_HIT_COUNT) {
             PSMTXScale(mScale, 1.5f, 1.5f, 1.5f);
         } else {
@@ -467,9 +474,9 @@ static void actionCommandDisp(f32 x, f32 y) {
         iconNumberDispGx(mOut, num, 0, (GXColor){255, 255, 255, 255});
     }
 
-    for (i = 0; i < ST_LEAD(work); i++) {
+    for (i = 0; i < work->actionCommands.params[SIGNAL_PARAM_LEAD]; i++) {
         if (i < w->next) {
-            if (i < ST_LEAD(work)) {
+            if (i < work->actionCommands.params[SIGNAL_PARAM_LEAD]) {
                 Vec pos = {0.0f, 0.0f, 0.0f};
                 pos.x = x + (f32)(i * 33 - 258);
                 pos.y = yb;
@@ -490,14 +497,14 @@ static void actionCommandDisp(f32 x, f32 y) {
 
     if (!(work->actionCommands.acFlags & AC_SIGNAL_TIMING_FLAG_SHOW_BUTTONS)) {
         for (i = 0; i < count; i++) {
-            if (i + ST_LEAD(work) < next) {
+            if (i + work->actionCommands.params[SIGNAL_PARAM_LEAD] < next) {
                 Vec pos = {0.0f, 0.0f, 0.0f};
-                pos.x = x + (f32)(i * 48 + (ST_LEAD(work) * 33 - 250));
+                pos.x = x + (f32)(i * 48 + (work->actionCommands.params[SIGNAL_PARAM_LEAD] * 33 - 250));
                 pos.y = yb;
                 iconDispGx(&pos, 0x10, ICON_AC_ON, 1.0f);
             } else {
                 Vec pos = {0.0f, 0.0f, 0.0f};
-                pos.x = x + (f32)(i * 48 + (ST_LEAD(work) * 33 - 250));
+                pos.x = x + (f32)(i * 48 + (work->actionCommands.params[SIGNAL_PARAM_LEAD] * 33 - 250));
                 pos.y = yb;
                 iconDispGx(&pos, 0x10, ICON_AC_OFF, 1.0f);
             }
@@ -506,14 +513,14 @@ static void actionCommandDisp(f32 x, f32 y) {
         yc = 15.0f + y;
         for (i = 0; i < count; i++) {
             f32 scale = 0.8f;
-            if (w->next == (i + ST_LEAD(work)) && w->frame >= ST_STEP(work) * (i + ST_LEAD(work)) - 5 && w->frame < ST_STEP(work) * (i + ST_LEAD(work))) {
+            if (w->next == (i + work->actionCommands.params[SIGNAL_PARAM_LEAD]) && w->frame >= work->actionCommands.params[SIGNAL_PARAM_STEP] * (i + work->actionCommands.params[SIGNAL_PARAM_LEAD]) - 5 && w->frame < work->actionCommands.params[SIGNAL_PARAM_STEP] * (i + work->actionCommands.params[SIGNAL_PARAM_LEAD])) {
                 Vec pos = {0.0f, 0.0f, 0.0f};
-                pos.x = x + (f32)(i * 48 + (ST_LEAD(work) * 33 - 250));
+                pos.x = x + (f32)(i * 48 + (work->actionCommands.params[SIGNAL_PARAM_LEAD] * 33 - 250));
                 pos.y = yc;
                 iconDispGx(&pos, 0x10, BattleACGetButtonIcon(w->buttons[i], 0), 0.8f);
             } else {
                 s32 dy;
-                if (w->next <= (i + ST_LEAD(work))) {
+                if (w->next <= (i + work->actionCommands.params[SIGNAL_PARAM_LEAD])) {
                     scale = 0.6f;
                     dy = -2;
                 } else {
@@ -521,7 +528,7 @@ static void actionCommandDisp(f32 x, f32 y) {
                 }
                 {
                     Vec pos = {0.0f, 0.0f, 0.0f};
-                    pos.x = x + (f32)(i * 48 + (ST_LEAD(work) * 33 - 250));
+                    pos.x = x + (f32)(i * 48 + (work->actionCommands.params[SIGNAL_PARAM_LEAD] * 33 - 250));
                     pos.y = (f32)(dy + 25) + y;
                     iconDispGx(&pos, 0x10, BattleACGetButtonIcon(w->buttons[i], 1), scale);
                 }
@@ -530,18 +537,18 @@ static void actionCommandDisp(f32 x, f32 y) {
     } else {
         yc = 20.800001f + yb;
         for (i = 0; i < count; i++) {
-            if (w->next == (i + ST_LEAD(work)) && w->frame >= ST_STEP(work) * (i + ST_LEAD(work)) - 20 && w->frame <= ST_STEP(work) * (i + ST_LEAD(work))) {
+            if (w->next == (i + work->actionCommands.params[SIGNAL_PARAM_LEAD]) && w->frame >= work->actionCommands.params[SIGNAL_PARAM_STEP] * (i + work->actionCommands.params[SIGNAL_PARAM_LEAD]) - 20 && w->frame <= work->actionCommands.params[SIGNAL_PARAM_STEP] * (i + work->actionCommands.params[SIGNAL_PARAM_LEAD])) {
                 Vec pos = {0.0f, 0.0f, 0.0f};
-                pos.x = x + (f32)(i * 48 + (ST_LEAD(work) * 33 - 250));
+                pos.x = x + (f32)(i * 48 + (work->actionCommands.params[SIGNAL_PARAM_LEAD] * 33 - 250));
                 pos.y = yb;
                 iconDispGx(&pos, 0x10, BattleACGetButtonIcon(w->buttons[i], 0), 0.8f);
-            } else if (w->next <= (i + ST_LEAD(work))) {
+            } else if (w->next <= (i + work->actionCommands.params[SIGNAL_PARAM_LEAD])) {
                 if (i >= count - 1) {
-                    btlDispTexPlane(x + (f32)(i * 48 + (ST_LEAD(work) * 33 - 250)), yc, 0.0f, 0.8f, 0.8f, BTL_TEX(0x40), (GXColor){255, 255, 255, 255}, 0);
+                    btlDispTexPlane(x + (f32)(i * 48 + (work->actionCommands.params[SIGNAL_PARAM_LEAD] * 33 - 250)), yc, 0.0f, 0.8f, 0.8f, BTL_TEX(0x40), (GXColor){255, 255, 255, 255}, 0);
                 }
             } else {
                 Vec pos = {0.0f, 0.0f, 0.0f};
-                pos.x = x + (f32)(i * 48 + (ST_LEAD(work) * 33 - 250));
+                pos.x = x + (f32)(i * 48 + (work->actionCommands.params[SIGNAL_PARAM_LEAD] * 33 - 250));
                 pos.y = yb;
                 iconDispGx(&pos, 0x10, BattleACGetButtonIcon(w->buttons[i], 1), 0.8f);
             }
@@ -551,9 +558,9 @@ static void actionCommandDisp(f32 x, f32 y) {
     yd = yb - 25.0f;
     for (i = 0; i < count; i++) {
         if (w->results[i] == 1) {
-            btlDispTexPlane(x + (f32)(i * 48 + (ST_LEAD(work) * 33 - 250)), yd, 0.0f, 1.0f, 1.0f, BTL_TEX(0x3E), (GXColor){255, 255, 255, 255}, 0);
+            btlDispTexPlane(x + (f32)(i * 48 + (work->actionCommands.params[SIGNAL_PARAM_LEAD] * 33 - 250)), yd, 0.0f, 1.0f, 1.0f, BTL_TEX(0x3E), (GXColor){255, 255, 255, 255}, 0);
         } else if (w->results[i] == -1) {
-            btlDispTexPlane(x + (f32)(i * 48 + (ST_LEAD(work) * 33 - 250)), yd, 0.0f, 1.0f, 1.0f, BTL_TEX(0x3F), (GXColor){255, 255, 255, 255}, 0);
+            btlDispTexPlane(x + (f32)(i * 48 + (work->actionCommands.params[SIGNAL_PARAM_LEAD] * 33 - 250)), yd, 0.0f, 1.0f, 1.0f, BTL_TEX(0x3F), (GXColor){255, 255, 255, 255}, 0);
         }
     }
 }

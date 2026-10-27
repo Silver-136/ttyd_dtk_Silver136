@@ -26,7 +26,7 @@ static void actionCommandDisp(f32 x, f32 y, s32 n);
 s32 battleAcMain_LstRcKeep(BattleWork* work) {
     BattleActions* ac = &work->actionCommands;
     LstRcWork* lw = ((LstRcWork*)(ac)->work);
-    BattleACDispParams* disp = (BattleACDispParams*)&ac->disp;
+    BattleACDispParams* disp = &ac->disp;
     s32 loop;
     s32 off;
     s32 autoCmd = 0;

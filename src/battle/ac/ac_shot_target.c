@@ -29,7 +29,6 @@ typedef struct ShotTargetWork {
     s32 sfxId;    // 0x38
 } ShotTargetWork;
 
-#define ST_WORK(ac) ((ShotTargetWork*)(ac)->work)
 
 
 static void _ac_disp_init(BattleWork* work);
@@ -48,7 +47,7 @@ s32 battleAcMain_ShotTarget(BattleWork* work) {
     Vec hit;
 
     ac = &work->actionCommands;
-    cw = ST_WORK(ac);
+    cw = (ShotTargetWork*)ac->work;
     autoCommand = FALSE;
     if (ac->mAcUnit->badgesEquipped.AutoCommand) {
         autoCommand = TRUE;
@@ -270,7 +269,7 @@ static void _ac_disp_init(BattleWork* work) {
 static void actionCommandDisp(f32 x, f32 y) {
     BattleWork* work = _battleWorkPointer;
     BattleActions* ac = &work->actionCommands;
-    ShotTargetWork* cw = ST_WORK(ac);
+    ShotTargetWork* cw = (ShotTargetWork*)ac->work;
     Vec screen;
     Vec screen2;
 

@@ -24,16 +24,17 @@ typedef struct PowerGaugeWork {
     s32 endTimer;  // 0x18
 } PowerGaugeWork;
 
-#define PG_WORK(ac) ((PowerGaugeWork*)(ac)->work)
 
+// iconDispGx called through a cast: its callers pass different argument types and no single prototype fits
+// them all (docs/CLEANUP_BACKLOG.md, function-pointer casts).
 #define ICONGX ((void (*)(Vec*, s32, s32, f32))iconDispGx)
 static void actionCommandDisp(f32 x, f32 y);
 
 s32 battleAcMain_PowerGauge(BattleWork* work) {
     BattleActions* ac = &work->actionCommands;
-    PowerGaugeWork* pw = PG_WORK(ac);
+    PowerGaugeWork* pw = (PowerGaugeWork*)ac->work;
     BOOL isAuto = FALSE;
-    BattleACDispParams* disp = (BattleACDispParams*)&ac->disp;
+    BattleACDispParams* disp = &ac->disp;
 
     if (ac->mAcUnit->badgesEquipped.AutoCommand) {
         isAuto = TRUE;
@@ -234,7 +235,7 @@ s32 battleAcResult_PowerGauge(BattleWork* work) {
 
 void battleAcDisp_PowerGauge(CameraId cameraId, BattleWork* work) {
     BattleActions* ac = &work->actionCommands;
-    BattleACDispParams* disp = (BattleACDispParams*)&ac->disp;
+    BattleACDispParams* disp = &ac->disp;
     switch (ac->mAcState) {
         case 99:
             disp->iconX = intplGetValue(EASING_QUADRATIC_OUT, -300.0f, 30.0f, 20 - disp->slideTimer, 20);
@@ -273,12 +274,12 @@ static void actionCommandDisp(f32 x, f32 y) {
     BattleActions* ac = &work->actionCommands;
     PowerGaugeWork* pw;
     s32 a, b, c, d;
-    BattleACDispParams* disp = (BattleACDispParams*)&ac->disp;
+    BattleACDispParams* disp = &ac->disp;
     f32 ratio;
     u32 flags;
 
     camGetPtr(CAMERA_2D);
-    pw = PG_WORK(ac);
+    pw = (PowerGaugeWork*)ac->work;
     ratio = pw->gauge / 100.0f;
     if (ratio > 1.0f) {
         ratio = 1.0f;

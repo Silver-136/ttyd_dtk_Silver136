@@ -7,15 +7,14 @@
 #include "battle/battle_sub.h"
 
 
-typedef struct CraneTimingParams {
-    u8 field_0x0[0x3C - 0x0]; // 0x0, BattleActions header
-    s32 unitId;               // 0x3C
-    s32 partsId;              // 0x40
-    s32 startDelay;           // 0x44
-    s32 randomRange;          // 0x48
-    u8 field_0x4C[0x50 - 0x4C];
-    s32 maxFrames;            // 0x50
-} CraneTimingParams;
+// BattleActions.params slots this command reads (btlevtcmd_AcSetParamAll)
+typedef enum CraneTimingParam {
+    CRANE_PARAM_UNIT_ID = 1,
+    CRANE_PARAM_PARTS_ID = 2,
+    CRANE_PARAM_START_DELAY = 3,
+    CRANE_PARAM_RANDOM_RANGE = 4,
+    CRANE_PARAM_MAX_FRAMES = 6,
+} CraneTimingParam;
 
 typedef struct CraneTimingWork {
     s32 button;     // 0x0
@@ -28,7 +27,6 @@ typedef struct CraneTimingWork {
     s32 endTimer;   // 0x2C
 } CraneTimingWork;
 
-#define AC_PARAMS(work) ((CraneTimingParams*)&(work)->actionCommands)
 
 s32 battleAcMain_CraneTiming(BattleWork* work) {
     CraneTimingWork* cw;
@@ -41,12 +39,12 @@ s32 battleAcMain_CraneTiming(BattleWork* work) {
     ac = &work->actionCommands;
     autoCommand = FALSE;
     cw = (CraneTimingWork*)ac->work;
-    disp = (BattleACDispParams*)&ac->disp;
+    disp = &ac->disp;
     if (work->actionCommands.mAcUnit->badgesEquipped.AutoCommand) {
         autoCommand = TRUE;
     }
-    unit = BattleGetUnitPtr(work, AC_PARAMS(work)->unitId);
-    BtlUnit_GetPartsPtr(unit, AC_PARAMS(work)->partsId);
+    unit = BattleGetUnitPtr(work, work->actionCommands.params[CRANE_PARAM_UNIT_ID]);
+    BtlUnit_GetPartsPtr(unit, work->actionCommands.params[CRANE_PARAM_PARTS_ID]);
 
     switch (work->actionCommands.mAcState) {
         case 0:
@@ -55,16 +53,16 @@ s32 battleAcMain_CraneTiming(BattleWork* work) {
             disp->iconY = 0.0f;
             disp->slideTimer = 20;
             cw->frame = 0;
-            cw->delay = AC_PARAMS(work)->startDelay;
-            cw->range = irand(AC_PARAMS(work)->randomRange);
+            cw->delay = work->actionCommands.params[CRANE_PARAM_START_DELAY];
+            cw->range = irand(work->actionCommands.params[CRANE_PARAM_RANDOM_RANGE]);
             cw->button = 0x100;
             work->actionCommands.outputParams[0] = 0;
             work->actionCommands.mAcState = 99;
             work->actionCommands.result = AC_RESULT_RUNNING;
             break;
         case 100:
-            unit = BattleGetUnitPtr(work, AC_PARAMS(work)->unitId);
-            BtlUnit_GetPartsPtr(unit, AC_PARAMS(work)->partsId);
+            unit = BattleGetUnitPtr(work, work->actionCommands.params[CRANE_PARAM_UNIT_ID]);
+            BtlUnit_GetPartsPtr(unit, work->actionCommands.params[CRANE_PARAM_PARTS_ID]);
             BtlUnit_GetPos(unit, &cw->pos.x, &cw->pos.y, &cw->pos.z);
             cw->basePos = cw->pos;
             cw->frame = 0;
@@ -79,11 +77,11 @@ s32 battleAcMain_CraneTiming(BattleWork* work) {
             cw->pos.y = 5.0f * sinfd(reviseAngle(cw->frame * 5)) + cw->basePos.y;
             if (cw->pos.x >= cw->basePos.x + cw->range && cw->speed > 0.0f) {
                 cw->speed *= -1.0f;
-                cw->range = irand(AC_PARAMS(work)->randomRange);
+                cw->range = irand(work->actionCommands.params[CRANE_PARAM_RANDOM_RANGE]);
             }
             if (cw->pos.x <= cw->basePos.x - cw->range && cw->speed < 0.0f) {
                 cw->speed *= -1.0f;
-                cw->range = irand(AC_PARAMS(work)->randomRange);
+                cw->range = irand(work->actionCommands.params[CRANE_PARAM_RANDOM_RANGE]);
             }
             if (cw->speed >= 0.0f) {
                 unit->faceDirection = 1;
@@ -107,7 +105,7 @@ s32 battleAcMain_CraneTiming(BattleWork* work) {
                 work->actionCommands.mAcState = 1002;
                 break;
             }
-            if (cw->frame >= AC_PARAMS(work)->maxFrames) {
+            if (cw->frame >= work->actionCommands.params[CRANE_PARAM_MAX_FRAMES]) {
                 work->actionCommands.result = 0;
                 work->actionCommands.mAcState = 1002;
             }

@@ -48,7 +48,7 @@ s32 battleAcMain_MonosiriTarget(BattleWork* work) {
     ac = &work->actionCommands;
     autoCommand = FALSE;
     cw = (MonosiriTargetWork*)ac->work;
-    disp = (BattleACDispParams*)&ac->disp;
+    disp = &ac->disp;
     if (work->actionCommands.mAcUnit->badgesEquipped.AutoCommand) {
         autoCommand = TRUE;
     }

@@ -16,13 +16,12 @@ typedef struct PowerGaugeWork {
     s32 timer;     // 0x10
 } PowerGaugeWork;
 
-#define PG_WORK(ac) ((PowerGaugeWork*)(ac)->work)
 
 void BattleAcDrawGauge(s32 x, s32 y, s32 width, f32 ratio, s32 level, s32 a, s32 b, s32 c, s32 flags);
 
 s32 battleAcMain_PowerGaugeLv(BattleWork* work) {
     BattleActions* ac = &work->actionCommands;
-    PowerGaugeWork* tw = PG_WORK(ac);
+    PowerGaugeWork* tw = (PowerGaugeWork*)ac->work;
     BattleACDispParams* disp = &ac->disp;
 
     switch (work->actionCommands.mAcState) {
@@ -136,7 +135,7 @@ static void actionCommandDisp(f32 x, f32 y);
 #pragma opt_propagation off
 void battleAcDisp_PowerGaugeLv(CameraId cameraId, void* param) {
     BattleWork* work = (BattleWork*)param;
-    BattleACDispParams* disp = (BattleACDispParams*)&work->actionCommands.disp;
+    BattleACDispParams* disp = &work->actionCommands.disp;
     s32 i = 4;
     switch (work->actionCommands.mAcState) {
         case 99:
@@ -179,7 +178,7 @@ static void actionCommandDisp(f32 x, f32 y) {
     PowerGaugeWork* tw;
     f32 ratio;
     camGetPtr(CAMERA_2D);
-    tw = PG_WORK(ac);
+    tw = (PowerGaugeWork*)ac->work;
     {
         Vec pos = {0.0f, 0.0f, 0.0f};
         pos.x = -200.0f + x;

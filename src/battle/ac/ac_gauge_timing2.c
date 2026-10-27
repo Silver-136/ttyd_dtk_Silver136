@@ -32,6 +32,8 @@ typedef struct GT2Work {
     s32 endTimer; // 0x6C
 } GT2Work;
 
+// iconDispGx called through a cast: its callers pass different argument types and no single prototype fits
+// them all (docs/CLEANUP_BACKLOG.md, function-pointer casts).
 #define ICON ((void (*)(Vec*, s16, s32, f32))iconDispGx)
 
 static void actionCommandDisp(f32 x, f32 y);
@@ -46,7 +48,7 @@ s32 battleAcMain_GaugeTiming2(BattleWork *work) {
     s32 i4;
     GT2Work *gw = (GT2Work*)work->actionCommands.work;
     BOOL autoCommand = 0;
-    BattleACDispParams *disp = &work->actionCommands.disp;
+    BattleACDispParams* disp = &work->actionCommands.disp;
     s32 i;
     BOOL doAuto;
     const char *sfxOk;

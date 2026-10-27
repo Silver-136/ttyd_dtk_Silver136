@@ -28,7 +28,7 @@ static void actionCommandDisp(s32 unused, f32 x, f32 y);
 s32 battleAcMain_ButtonDown(BattleWork *work) {
     BattleActions *ac = &work->actionCommands;
     BDWork *p = (BDWork*)work->actionCommands.work;
-    BattleACDispParams *disp = &work->actionCommands.disp;
+    BattleACDispParams* disp = &work->actionCommands.disp;
     s32 allDone;
     s32 i;
     s32 done;

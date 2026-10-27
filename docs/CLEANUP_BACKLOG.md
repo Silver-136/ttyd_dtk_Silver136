@@ -99,7 +99,8 @@ data order 10, sound-name integer round trips (`SFX_NAME_WORD`) 9, no-op casts 6
   LectButtonDisp, BoobooName. Kept apart on purpose: the per-map crowd works in hei_10 / rsh_00 / tou_03 (same
   `{flag, count, members, defs[32]}` frame, different member structs; rsh_00's MoamoaWork is not the swarm in
   include/moamoa.h) and gor_03's Monte (a different layout from yuu's; only the 0x38-byte piece is shared). Left:
-  private views of BattleActions / BattleACDispParams / SequenceWork / MapFileMesh in ac_*.c, seq_battle, mobjdrv.
+  private views of SequenceWork / MapFileMesh in seq_battle, mobjdrv (the ac_*.c views of BattleActions and
+  BattleACDispParams are gone: real fields plus per-command param-slot enums, 2026-10-27).
 - Offset-only field names: 89 named from their uses (2026-10-26); the rest are write-only or unclear (about 120).
 - Hand-expanded code that a macro or inline probably produced: psndENVMain's `ENVAPPLY` cases and psndENVOn_f_d's
   offset sum, the Smorg hop code's temporaries (hand-inlined `randf` in map units: settled as written, Codex round 9

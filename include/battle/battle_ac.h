@@ -84,7 +84,7 @@ typedef enum AcTimingWideFlags {
 } AcTimingWideFlags;
 
 typedef enum AcPendulumCraneFlags {
-    AC_PENDULUM_CRANE_FLAG_STICK_BRAKE_UNUSED = (1 << 0), // stick against the swing slows the pendulum
+    AC_PENDULUM_CRANE_FLAG_TRIGGER_BRAKE_UNUSED = (1 << 0), // analog R (swinging back) or L (swinging forward) slows the pendulum
 } AcPendulumCraneFlags;
 
 typedef enum AcPowerGaugeFlags {
@@ -136,10 +136,7 @@ typedef struct BattleActions {
     BattleWorkPad pad;               // 0x8C
     u32 seId;                        // 0x288, power gauge SFX id (battle_ac.c)
     f32 seValue;                     // 0x28C, power gauge SFX value
-    union {                          // 0x290, gauge display parameters (ac_*.c use their own views)
-        BattleACDispParams disp;
-        u8 dispData[0x2BC - 0x290];
-    };
+    BattleACDispParams disp;         // 0x290, gauge display parameters
     u8 work[0x30C - 0x2BC];          // 0x2BC, per-command work (each ac_*.c casts it to its own struct)
 } BattleActions;
 

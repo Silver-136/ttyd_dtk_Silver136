@@ -25,7 +25,6 @@ typedef struct PGLv2Work {
     s32 endTimer;  // 0x28
 } PGLv2Work;
 
-#define AC_WORK(ac) ((PGLv2Work*)(ac)->work)
 
 static s32 _power_table[] = {300, 200, 150, 100, 80, 60, 40};
 s32 _power_table2[] = {100, 100, 100, 100, 110, 120, 130};
@@ -34,7 +33,7 @@ static void actionCommandDisp(f32 x, f32 y);
 
 s32 battleAcMain_PowerGaugeLv2(BattleWork* work) {
     BattleActions* ac = &work->actionCommands;
-    PGLv2Work* g = AC_WORK(ac);
+    PGLv2Work* g = (PGLv2Work*)ac->work;
     BattleACDispParams* disp = &ac->disp;
     s32 diff = BattleActionCommandGetDifficulty(work);
     s32 flag = 0;
@@ -223,10 +222,13 @@ void battleAcDelete_PowerGaugeLv2(BattleWork* work) {
     }
 }
 
+// iconDispGx called through a cast: its callers pass different argument types and no single prototype fits
+// them all (docs/CLEANUP_BACKLOG.md, function-pointer casts).
 #define ICON ((void (*)(Vec*, s32, s32, f32))iconDispGx)
 static void actionCommandDisp(f32 x, f32 y) {
     BattleWork* work = _battleWorkPointer;
     BattleActions* ac = &work->actionCommands;
+    PGLv2Work* g = (PGLv2Work*)ac->work;
     f32 ratio;
     s32 full;
     s32 tmp[4];
@@ -246,12 +248,12 @@ static void actionCommandDisp(f32 x, f32 y) {
         ICON(&pos, 0x10, ICON_AC_GAUGE_FRAME, 1.0f);
     }
     full = 0;
-    ratio = AC_WORK(ac)->gauge / 100.0f;
+    ratio = g->gauge / 100.0f;
     if (ratio > 1.0f) {
         ratio = 1.0f;
     }
     ac->disp.gaugeRatio = ratio;
-    if (AC_WORK(ac)->full) {
+    if (g->full) {
         ac->disp.color.g += ac->disp.colorStep[1];
         ac->disp.color.b += ac->disp.colorStep[2];
         if (ac->disp.gaugeRatio >= 1.0f) {
@@ -275,8 +277,8 @@ static void actionCommandDisp(f32 x, f32 y) {
         }
     }
     BattleAcDrawGauge((s32)x, (s32)y, 0xB2, ac->disp.gaugeRatio, cnt, tmp[0], tmp[1], tmp[2], full);
-    pressedIcon = BattleACGetButtonIcon(AC_WORK(ac)->button, 1);
-    icon = BattleACGetButtonIcon(AC_WORK(ac)->button, 0);
+    pressedIcon = BattleACGetButtonIcon(g->button, 1);
+    icon = BattleACGetButtonIcon(g->button, 0);
     switch (ac->mAcState) {
         case 99:
         case 100:
@@ -290,7 +292,7 @@ static void actionCommandDisp(f32 x, f32 y) {
             break;
         }
         case 1000:
-            if (AC_WORK(ac)->inZone) {
+            if (g->inZone) {
                 Vec pos = {0.0f, 0.0f, 0.0f};
                 pos.x = px;
                 pos.y = 70.0f + y;
@@ -306,7 +308,7 @@ static void actionCommandDisp(f32 x, f32 y) {
     {
         s32 id = ICON_AC_OFF;
         Vec pos;
-        if (AC_WORK(ac)->inZone) {
+        if (g->inZone) {
             id = ICON_AC_ON;
         }
         {

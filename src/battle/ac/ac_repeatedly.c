@@ -13,20 +13,6 @@
 
 void BattleAcDrawGauge(); // no prototype here: the call compiles to the retail code only without one
 
-typedef struct RepeatDisp {
-    s32 frame;        // 0x0
-    s32 frame2;       // 0x4
-    u8 field_0x8[4];  // 0x8
-    GXColor color;    // 0xC
-    s8 delta[4];      // 0x10
-    f32 iconX;        // 0x14
-    f32 iconY;        // 0x18
-    f32 unk1C;        // 0x1C
-    s32 timer;        // 0x20
-    u8 iconStep[4]; // 0x24
-    f32 gauge;        // 0x28
-} RepeatDisp;
-
 typedef struct RepeatWork {
     u32 btn0;         // 0x0
     u32 btn1;         // 0x4
@@ -58,9 +44,9 @@ static s32 _power_table[] = {55, 50, 45, 40, 35, 30, 25};
 static void _init_param(BattleWork* work) {
     BattleActions* ac = &work->actionCommands;
     RepeatWork* r = (RepeatWork*)ac->work;
-    RepeatDisp* d = (RepeatDisp*)&ac->disp;
-    ((RepeatWork*)work->actionCommands.work)->resetFlag = 0;
-    ((RepeatWork*)work->actionCommands.work)->holdMask = 0;
+    BattleACDispParams* d = &ac->disp;
+    r->resetFlag = 0;
+    r->holdMask = 0;
     switch (work->actionCommands.params[0]) {
         case 10:
             work->flags |= BATTLE_FLAG_DISABLE_HRESET;
@@ -106,7 +92,7 @@ static void _init_param(BattleWork* work) {
         r->pos = irand(100);
     }
     r->gauge = work->actionCommands.params[7];
-    d->gauge = 0.01f * r->gauge;
+    d->gaugeRatio = 0.01f * r->gauge;
     r->count = 0;
     r->power = work->actionCommands.params[5];
     r->decay = 0.01f * work->actionCommands.params[6];
@@ -123,7 +109,7 @@ static void _init_param(BattleWork* work) {
 s32 battleAcMain_Repeatedly(BattleWork* work) {
     BattleActions* ac = &work->actionCommands;
     RepeatWork* r = (RepeatWork*)ac->work;
-    RepeatDisp* d = (RepeatDisp*)&ac->disp;
+    BattleACDispParams* d = &ac->disp;
     s32 diff = BattleActionCommandGetDifficulty(work);
     s32 pressed;
     BOOL autoCmd = FALSE;
@@ -133,16 +119,16 @@ s32 battleAcMain_Repeatedly(BattleWork* work) {
     pressed = 0;
     switch (work->actionCommands.mAcState) {
         case 0:
-            memset(d, 0, sizeof(RepeatDisp));
+            memset(d, 0, sizeof(BattleACDispParams));
             d->iconX = -300.0f;
             d->iconY = 0.0f;
-            d->timer = 20;
+            d->slideTimer = 20;
             d->color = (GXColor){255, 255, 255, 255};
-            d->delta[0] = 0;
-            d->delta[1] = -16;
-            d->delta[2] = -16;
-            d->delta[3] = 0;
-            d->gauge = 0.0f;
+            d->colorStep[0] = 0;
+            d->colorStep[1] = -16;
+            d->colorStep[2] = -16;
+            d->colorStep[3] = 0;
+            d->gaugeRatio = 0.0f;
             work->actionCommands.result = AC_RESULT_RUNNING;
             r->grace = 0;
             _init_param(work);
@@ -294,7 +280,7 @@ s32 battleAcResult_Repeatedly(BattleWork* work) {
 
 void battleAcDisp_Repeatedly(CameraId cameraId, BattleWork* work) {
     BattleActions* ac = &work->actionCommands;
-    BattleACDispParams* disp = (BattleACDispParams*)&ac->disp;
+    BattleACDispParams* disp = &ac->disp;
     switch (ac->mAcState) {
         case 99:
         case 100:
@@ -333,7 +319,7 @@ void battleAcDelete_Repeatedly(BattleWork* work) {
 
 static void actionCommandDisp(f32 x, f32 y) {
     RepeatWork* r;
-    RepeatDisp* d;
+    BattleACDispParams* d;
     s32 odd;
     s32 i;
     u16 icon1, icon2;
@@ -341,7 +327,7 @@ static void actionCommandDisp(f32 x, f32 y) {
     f32 target;
     BattleActions* acw = &_battleWorkPointer->actionCommands;
     r = (RepeatWork*)acw->work;
-    d = (RepeatDisp*)acw->dispData;
+    d = &acw->disp;
     camGetPtr(CAMERA_2D);
     if (acw->params[0] != 16) {
         switch (r->btn0) {
@@ -367,7 +353,7 @@ static void actionCommandDisp(f32 x, f32 y) {
                 icon2 = ICON_STICK_NEUTRAL;
                 break;
         }
-        if ((d->frame / 7 & 1) == 1) {
+        if ((d->blinkTimer / 7 & 1) == 1) {
             Vec pos = {0.0f, 0.0f, 0.0f};
             pos.x = -200.0f + x;
             pos.y = 70.0f + y;
@@ -379,7 +365,7 @@ static void actionCommandDisp(f32 x, f32 y) {
             iconDispGx(&pos, 0x10, icon1, 1.0f);
         }
     } else {
-        odd = (d->frame / 7) & 1;
+        odd = (d->blinkTimer / 7) & 1;
         for (i = 0; i < 2; i++) {
             BOOL match;
             u16 a, b, icon;
@@ -420,33 +406,33 @@ static void actionCommandDisp(f32 x, f32 y) {
         }
     }
     target = r->gauge / 100.0f;
-    if (d->gauge <= target) {
-        d->gauge += VERSION_PICK(0.01f, 0.0125f);
-        if (d->gauge > target) {
-            d->gauge = target;
+    if (d->gaugeRatio <= target) {
+        d->gaugeRatio += VERSION_PICK(0.01f, 0.0125f);
+        if (d->gaugeRatio > target) {
+            d->gaugeRatio = target;
         }
     } else {
-        d->gauge -= VERSION_PICK(0.01f, 0.0125f);
-        if (d->gauge < target) {
-            d->gauge = target;
+        d->gaugeRatio -= VERSION_PICK(0.01f, 0.0125f);
+        if (d->gaugeRatio < target) {
+            d->gaugeRatio = target;
         }
     }
     flags = 0;
-    if ((s32)(u8)r->done == 1 && d->gauge >= 1.0f) {
+    if (r->done == 1 && d->gaugeRatio >= 1.0f) {
         flags |= 1;
-        ((u8*)&d->color)[1] += d->delta[1];
-        ((u8*)&d->color)[2] += d->delta[2];
-        if (((u8*)&d->color)[1] <= 0x80 && d->delta[1] < 0) {
-            d->delta[1] = d->delta[2] = 0x10;
+        d->color.g += d->colorStep[1];
+        d->color.b += d->colorStep[2];
+        if (d->color.g <= 0x80 && d->colorStep[1] < 0) {
+            d->colorStep[1] = d->colorStep[2] = 0x10;
         }
-        if (((u8*)&d->color)[1] >= 0xF5 && d->delta[1] > 0) {
-            d->delta[1] = d->delta[2] = -0x10;
+        if (d->color.g >= 0xF5 && d->colorStep[1] > 0) {
+            d->colorStep[1] = d->colorStep[2] = -0x10;
         }
     }
     if (r->done == -1) {
         flags |= 2;
     }
-    BattleAcDrawGauge((s32)x, (s32)y, d->gauge, r->iconParam, 2,
+    BattleAcDrawGauge((s32)x, (s32)y, d->gaugeRatio, r->iconParam, 2,
                       (acw->acFlags & AC_REPEATEDLY_FLAG_PLAIN_GAUGE) ? 100 : (s32)r->pos, 100, 100, flags);
     {
         Vec pos = {0.0f, 0.0f, 0.0f};
@@ -454,7 +440,7 @@ static void actionCommandDisp(f32 x, f32 y) {
         pos.y = 45.0f + y;
         iconDispGx(&pos, 0x10, ICON_AC_GAUGE_MARKER, 1.0f);
     }
-    d->frame++;
+    d->blinkTimer++;
     d->frame2++;
 }
 

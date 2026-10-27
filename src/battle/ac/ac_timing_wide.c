@@ -17,14 +17,13 @@ typedef struct TimingWideWork {
     s32 endTimer; // 0x10
 } TimingWideWork;
 
-#define TW_WORK(ac) ((TimingWideWork*)(ac)->work)
 
 static void actionCommandDisp(f32 x, f32 y);
 
 s32 battleAcMain_TimingWide(BattleWork* work) {
     BattleActions* ac = &work->actionCommands;
-    TimingWideWork* tw = TW_WORK(ac);
-    BattleACDispParams* disp = (BattleACDispParams*)&ac->disp;
+    TimingWideWork* tw = (TimingWideWork*)ac->work;
+    BattleACDispParams* disp = &ac->disp;
     s32 autoCmd = 0;
     s32 pressed;
 
@@ -211,9 +210,9 @@ s32 battleAcResult_TimingWide(BattleWork* work) {
 void battleAcDisp_TimingWide(CameraId cameraId, void* param) {
     BattleWork* work = (BattleWork*)param;
     BattleActions* ac = &work->actionCommands;
-    BattleACDispParams* disp = (BattleACDispParams*)&ac->disp;
+    BattleACDispParams* disp = &ac->disp;
     s32 show;
-    switch (TW_WORK(ac)->state) {
+    switch (((TimingWideWork*)ac->work)->state) {
         case 0:
         case 1:
         case 2:
@@ -260,6 +259,8 @@ void battleAcDelete_TimingWide(BattleWork* work) {
     work->actionCommands.mAcState = 0x3EC;
 }
 
+// Draws a button icon at the command's icon position. A macro: as an inline function the object
+// changes.
 #define DRAW_BUTTON_ICON(id)                \
     {                                       \
         Vec pos = {0.0f, 0.0f, 0.0f};       \
@@ -270,12 +271,12 @@ void battleAcDelete_TimingWide(BattleWork* work) {
 static void actionCommandDisp(f32 x, f32 y) {
     BattleWork* work = _battleWorkPointer;
     BattleActions* ac = &work->actionCommands;
-    s32* frame = (s32*)&ac->disp;
+    s32* blinkTimer = &ac->disp.blinkTimer;
     TimingWideWork* tw;
     u16 a;
     u16 b;
     camGetPtr(CAMERA_2D);
-    tw = TW_WORK(ac);
+    tw = (TimingWideWork*)ac->work;
     switch (tw->button) {
         case PAD_BUTTON_A:
             b = ICON_BUTTON_A_PRESSED;
@@ -337,5 +338,5 @@ static void actionCommandDisp(f32 x, f32 y) {
             }
             break;
     }
-    (*frame)++;
+    (*blinkTimer)++;
 }
