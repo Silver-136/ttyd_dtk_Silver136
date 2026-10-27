@@ -322,7 +322,7 @@ USER_FUNC(evt_bero_get_info) {
         *table++ = NULL;
     }
     table = BeroINFOARR;
-    
+
     {
     BeroEntry* en;
     for (en = (BeroEntry*)event->lwData[0];; en++) {

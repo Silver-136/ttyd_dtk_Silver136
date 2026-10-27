@@ -901,25 +901,25 @@ static void format_main(void) {
             case 0:
                 memcard_probe();
                 break;
-            
+
             case 1:
                 memcard_mount();
                 break;
-            
+
             case 2:
                 memcard_format();
                 break;
-            
+
             case 3:
                 memcard_unmount();
                 break;
-            
+
             case 4:
                 wp->op = 0;
                 wp->flags |= CARD_FLAG_DONE;
                 wp->flags &= ~CARD_FLAG_EXEC;
                 break;
-            
+
         }
         wp->opStep++;
     } else if (CARDGetResultCode(wp->chan) != CARD_RESULT_BUSY && wp->result != CARDGetResultCode(wp->chan)) {
@@ -938,29 +938,29 @@ static void delete_main(void) {
             case 0:
                 memcard_probe();
                 break;
-            
+
             case 1:
                 memcard_mount();
                 break;
-            
+
             case 2:
                 memcard_check();
                 break;
-            
+
             case 3:
                 memcard_delete();
                 break;
-            
+
             case 4:
                 memcard_unmount();
                 break;
-            
+
             case 5:
                 wp->op = 0;
                 wp->flags |= CARD_FLAG_DONE;
                 wp->flags &= ~CARD_FLAG_EXEC;
                 break;
-            
+
         }
         wp->opStep++;
     } else if (CARDGetResultCode(wp->chan) != CARD_RESULT_BUSY && wp->result != CARDGetResultCode(wp->chan)) {
@@ -973,12 +973,12 @@ static void check_sum(CardSaveSlot* save) {
     s32 i;
     u8* temp;
     u32 checksum;
-    
+
     strcpy(save->version, version);
     save->size = sizeof(save->data);
     save->checksum1 = (checksum = 0u);
     save->checksum2 = ~0u;
-    
+
     temp = (u8*)&save->data;
     for (i = 0; i < (s32)sizeof(save->data); i++) {
         checksum += temp[i];
@@ -1091,7 +1091,7 @@ static void make_header(void) {
 static void make_data(void) {
     CardSaveSlot* save;
     s32 i;
-    
+
     for (i = 0; i < 4; i++) {
         if (i != -1) {
             save = &cardGetFilePtr()->saves[i];
@@ -1126,7 +1126,7 @@ static void memcard_mount(void) {
 static void memcard_unmount(void) {
     s32 result;
     s32 i;
-    
+
     wp->flags |= CARD_FLAG_BUSY;
     i = 0;
     while (result = CARDUnmount(wp->chan), result == CARD_RESULT_BUSY) {
@@ -1162,9 +1162,9 @@ static void memcard_format(void) {
 static void memcard_delete(void) {
     s32 result;
     s32 i;
-    
+
     wp->flags |= CARD_FLAG_BUSY;
-    
+
     i = 0;
     while (result = CARDDelete(wp->chan, cardFileName), result == CARD_RESULT_BUSY) {
         if (++i > 1000000) {
@@ -1172,7 +1172,7 @@ static void memcard_delete(void) {
             break;
         }
     }
-    
+
     if (result == CARD_RESULT_NOFILE) {
         result = CARD_RESULT_READY;
     }
@@ -1223,9 +1223,9 @@ static void memcard_set_stat(void) {
 static void memcard_get_stat(void) {
     s32 result;
     s32 i;
-    
+
     wp->flags |= CARD_FLAG_BUSY;
-    
+
     i = 0;
     while (result = CARDGetStatus(wp->chan, wp->info.fileNo, &wp->status), result == CARD_RESULT_BUSY) {
         if (++i > 1000000) {

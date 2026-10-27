@@ -184,13 +184,13 @@ USER_FUNC(evt_audience_move_position_speed) {
         } else {
             member->interpDelta.x = 0.0f;
         }
-        
+
         if (amountY != 0.0f) {
             member->interpDelta.y = speed * (amountY / delta);
         } else {
             member->interpDelta.y = 0.0f;
         }
-        
+
         if (amountZ != 0.0f) {
             member->interpDelta.z = speed * (amountZ / delta);
         } else {
@@ -336,7 +336,7 @@ USER_FUNC(evt_audience_set_animpose) {
 USER_FUNC(evt_audience_entry) {
     EvtWord* args = event->args;
     AudienceMemberType type;
-    s32 id; 
+    s32 id;
 
     args = event->args;
     id = evtGetValue(event, args[0]);

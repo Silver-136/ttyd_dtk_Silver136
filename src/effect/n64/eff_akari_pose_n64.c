@@ -172,7 +172,7 @@ void effAkariPoseMain(EffectEntry* effect) {
         work->vx += b * (work->targetVx - work->vx);
         work->vy += b * (work->targetVy - work->vy);
     }
-    
+
     dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effAkariPoseDisp, effect);
 }
 

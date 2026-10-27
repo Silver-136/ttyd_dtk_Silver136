@@ -45,7 +45,7 @@ void seq_gameMain(SequenceWork* wp) {
             gp->areaFadeOutDuration = 300;
             wp->state++;
             break;
-    
+
         case 1:
             if (gp->flags & GW_FLAG_E3 && gp->flags & GW_FLAG_E3_TIMEOUT && fadeIsFinish() && seqCheckSeq() == SEQ_LOGO) {
                 gp->flags &= ~GW_FLAG_E3_TIMEOUT;

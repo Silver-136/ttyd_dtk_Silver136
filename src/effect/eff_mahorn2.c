@@ -24,7 +24,7 @@ EffectEntry *effMahorn2Entry(BOOL unused, f32 posX, f32 posY, f32 posZ, f32 dstX
     effMahorn2Data *data;
     f32 temp;
     int i;
-    
+
     effect = effEntry();
     effect->type = "Mahorn2";
     effect->count = 14;
@@ -46,7 +46,7 @@ EffectEntry *effMahorn2Entry(BOOL unused, f32 posX, f32 posY, f32 posZ, f32 dstX
     data->type = 0;
     data->hasHit = FALSE;
     data++;
-    
+
     for (i = 1; i < 4; i++, data++) {
         memset(data, 0, sizeof(effMahorn2Data));
         data->type = 1;
@@ -57,7 +57,7 @@ EffectEntry *effMahorn2Entry(BOOL unused, f32 posX, f32 posY, f32 posZ, f32 dstX
         data->alpha = 0;
         data->counter = 15 * (i - 1);
     }
-    
+
     for (i = 4; i < 5; i++, data++) {
         memset(data, 0, sizeof(effMahorn2Data));
         data->type = 2;
@@ -68,7 +68,7 @@ EffectEntry *effMahorn2Entry(BOOL unused, f32 posX, f32 posY, f32 posZ, f32 dstX
         data->alpha = 153;
         data->counter = 15;
     }
-    
+
     for (i = 5; i < 6; i++, data++) {
         memset(data, 0, sizeof(effMahorn2Data));
         data->type = 3;
@@ -79,7 +79,7 @@ EffectEntry *effMahorn2Entry(BOOL unused, f32 posX, f32 posY, f32 posZ, f32 dstX
         data->alpha = 153;
         data->counter = 60;
     }
-    
+
     for (i = 6; i < effect->count; i++, data++) {
         memset(data, 0, sizeof(effMahorn2Data));
         data->type = 4;
@@ -94,7 +94,7 @@ EffectEntry *effMahorn2Entry(BOOL unused, f32 posX, f32 posY, f32 posZ, f32 dstX
         data->alpha = 255;
         data->counter = 0;
     }
-    
+
     return effect;
 }
 

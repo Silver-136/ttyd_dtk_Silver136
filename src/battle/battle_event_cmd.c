@@ -1700,7 +1700,7 @@ USER_FUNC(btlevtcmd_RecoverHp) {
 
     btlId = evtGetValue(event, args[0]);
     id = BattleTransID(event, btlId);
-    if (id == -1) { 
+    if (id == -1) {
         return EVT_RETURN_DONE;
     }
     unit = BattleGetUnitPtr(wp, id);
@@ -1727,7 +1727,7 @@ USER_FUNC(btlevtcmd_RecoverFp) {
 
     btlId = evtGetValue(event, args[0]);
     id = BattleTransID(event, btlId);
-    if (id == -1) { 
+    if (id == -1) {
         return EVT_RETURN_DONE;
     }
     unit = BattleGetUnitPtr(wp, id);

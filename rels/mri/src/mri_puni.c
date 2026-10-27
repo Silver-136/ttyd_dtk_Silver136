@@ -4820,7 +4820,7 @@ void puni_puni_main(void) {
     puniMapFindbuff(t->pos);
     puniModeALLCheck();
     if (Punigp->flags & PUNI_WORK_FLAG_BATTLE_FLOOR) {
-        
+
         for (i = 1, p = Punidat + 1; i < 211; i++, p++) {
             PSVECSubtract(&p->pos, &p->prevPos, &diff);
             p->moveDist = PSVECMag(&diff);
@@ -4833,7 +4833,7 @@ void puni_puni_main(void) {
     }
     if (Punigp->flags & PUNI_WORK_FLAG_BATTLE_FLOOR) {
         for (k = 0; k < 2; k++) {
-            
+
             for (i = 1, p = Punidat + 1; i < 211; i++, p++) {
                 if (!(p->flags & PUNI_FLAG_ACTIVE)) continue;
                 if (k == 0) {
@@ -4894,7 +4894,7 @@ void puni_puni_main(void) {
         }
         puniOption();
     } else {
-        
+
         for (i = 1, p = Punidat + 1; i <= 109; i++, p++) {
             if (p->flags & PUNI_FLAG_ACTIVE) {
                 PartyEntry* party;
@@ -4946,7 +4946,7 @@ void puni_puni_main(void) {
         PuniData* q;
         PunidrvPose* ps;
         ps = puniGetPosePtr();
-        
+
         for (ii = 1, q = Punidat + 1; ii < 211; ii++, ps++, q++) {
             if (q->flags & PUNI_FLAG_ACTIVE) {
                 if (!(q->flags & PUNI_FLAG_MOVE_STOP)) {
@@ -4961,7 +4961,7 @@ void puni_puni_main(void) {
         PuniData* q;
         PunidrvPose* ps;
         ps = puniGetPosePtr();
-        
+
         for (ii = 1, q = Punidat + 1; ii <= 109; ii++, ps++, q++) {
             if (q->flags & PUNI_FLAG_ACTIVE) {
                 if (!(q->flags & PUNI_FLAG_MOVE_STOP)) {

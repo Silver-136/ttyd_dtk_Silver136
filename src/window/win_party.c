@@ -340,7 +340,7 @@ void winPartyDisp(s32 camId, void* param, s32 idx) {
     GXColor white;
     GXColor black;
     GXColor white0;
-    GXColor black0; 
+    GXColor black0;
     f32 scale;
     f32 tx;
     f32 bx;

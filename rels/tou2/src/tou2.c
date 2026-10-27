@@ -942,7 +942,7 @@ static void rankingControll(void) {
             }
         }
 
-        // Check if a match is booked (2532), and move our opponent (507) to above us for the fight. 
+        // Check if a match is booked (2532), and move our opponent (507) to above us for the fight.
         if (swGet(2532)) { // GSWF_GLITZ_PIT_LAST_OPPONENT_SAVED
             for (idx = 0; idx < nAbove; idx++) {
                 if (above[idx] == swByteGet(507)) { // GSW_GLITZ_PIT_LAST_OPPONENT
@@ -988,7 +988,7 @@ static void rankingControll(void) {
                 insert(below, nBelow, idx, 0);
             }
         }
-        
+
         if (nBelow > 0) {
             for (idx = 0; idx < nBelow; idx++) {
                 if (fighterDt[rank_wp->entries[below[idx]].id].flags & FIGHT_CLEFTS) {

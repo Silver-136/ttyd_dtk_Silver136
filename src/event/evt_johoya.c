@@ -64,7 +64,7 @@ s32 johoya_data_make(const char* prefix, s32 type);
 
 USER_FUNC(johoya_data_alloc) {
     InformantWork* wp = &_jdt;
-    
+
     wp->prefix = (const char*)evtGetValue(event, *event->args);
     wp->count = johoya_data_make(wp->prefix, 0);
     wp->info = _mapAlloc(wp->count * sizeof(InformantInfo) + (sizeof(InformantInfo) * 4));
@@ -76,7 +76,7 @@ USER_FUNC(johoya_data_alloc) {
 
 USER_FUNC(johoya_data_free) {
     InformantWork* wp = &_jdt;
-    
+
     if (wp->info == NULL) {
         return 2;
     }
@@ -219,9 +219,9 @@ s32 johoya_data_make(const char* prefix, s32 type) {
     s16 tagEndPos;
     const s8* msg;
     const s8* tagdata;
-    s32 count;    
+    s32 count;
     s32 labelId;
-    
+
     maxLabel = evtGetValue(0, GSW_STORY_PROGRESS);
 
     count = 0;
@@ -237,7 +237,7 @@ s32 johoya_data_make(const char* prefix, s32 type) {
         if (msg[1] != '!') { //we need to first parse a tag for the story name
             break;
         }
-        
+
 
         tagNum = 0;
         mbbpos = 0;
@@ -280,7 +280,7 @@ s32 johoya_data_make(const char* prefix, s32 type) {
                 }
             }
         }
-        
+
         if (!strcmp(tag, "enddata")) {
             break;
         }
@@ -306,7 +306,7 @@ s32 johoya_data_make(const char* prefix, s32 type) {
 
 void johoya_init(void) {
     InformantUnknown* unk = &_jdt.readFlags;
-    
+
     memset(&unk->ketiRead, 0, 0xD);
     memset(&unk->perfectRead, 0, 0xD);
     memset(&unk->luigiRead, 0, 0xD);

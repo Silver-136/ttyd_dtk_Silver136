@@ -196,7 +196,7 @@ void seq_logoMain(SequenceWork* work) {
                 gp->flags |= GW_FLAG_VIDEO_MODE_SET;
             }
             break;
-        
+
         case 2:
 #endif
             if (OSTicksToMilliseconds(gp->renderTime - time) > 1000) {
@@ -592,7 +592,7 @@ void logoDisp(CameraId camId, void* param) {
                 GXPosition3f32(x, height, 0.0f);
                 GXTexCoord2f32(0.0f, 1.0f);
                 break;
-        
+
 #ifdef VERSION_G8ME01
             case 4:
 #else

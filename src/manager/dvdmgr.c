@@ -46,7 +46,7 @@ void DVDMgrDelete(void) {
 
 static s32 compare(const void** a, const void** b) {
     u8 value1, value2;
-    
+
     value1 = (u8)dvdq[*(u8*)a].priority;
     value2 = (u8)dvdq[*(u8*)b].priority;
     if (value1 > value2) {
@@ -68,7 +68,7 @@ void DVDMgrMain(void) {
 
     count = 0;
     memset(array, 0, sizeof(array));
-    
+
     for (table = array, entry = dvdq, i = 0; i < DVDEntryCount; i++, entry++) {
         if (entry->status & DVDMGR_INUSE) {
             *table = i;
@@ -76,9 +76,9 @@ void DVDMgrMain(void) {
             table++;
         }
     }
-    
+
     qqsort(array, count, sizeof(u8), compare);
-    
+
     for (table = array, i = 0; i < count; table++, i++) {
         valid = FALSE;
         entry = &dvdq[*table];
@@ -89,7 +89,7 @@ void DVDMgrMain(void) {
                     size = 0x40000;
                 }
             }
-            
+
             result = DVDRead(&entry->info, entry->address, size, entry->offset + entry->position);
             if (result == DVD_RESULT_CANCELED) {
                 entry->status &= ~DVDMGR_READING;
@@ -114,12 +114,12 @@ void DVDMgrMain(void) {
                 valid = TRUE;
             }
         }
-        
+
         if (entry->status & DVDMGR_CLOSED) {
             DVDClose(&entry->info);
             memset(entry, 0, sizeof(DVDEntry));
         }
-        
+
         if (valid) {
             break;
         }
@@ -136,7 +136,7 @@ DVDEntry* DVDMgrOpen(const char* path, u8 priority, u16 unknown) {
     if (DVDConvertPathToEntrynum(path) == -1) {
         return NULL;
     }
-    
+
     for (entry = dvdq, i = 0; i < DVDEntryCount; i++, entry++) {
         if (!(entry->status & DVDMGR_INUSE)) {
             break;

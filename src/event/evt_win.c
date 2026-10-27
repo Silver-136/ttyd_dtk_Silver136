@@ -760,7 +760,7 @@ void evt_unitwin_disp_func(CameraId cameraId, void* param) {
             GXGetScissor(&sl, &st, &sw, &sh);
             GXSetScissor(0x120, 0xA2, 0x11C, 0xBE - h);
             for (tbl = badge_bottakuru100_table, i = 0; i < max; i++) {
-                
+
                 GXColor color = {0x00, 0x00, 0x00, 0xFF};
                 s32 id;
                 ItemData* item;
@@ -1053,7 +1053,7 @@ void evt_unitwin_disp_func(CameraId cameraId, void* param) {
             char msgName[64] = {0};
             s32 h;
             u32 sl, st, sw, sh;
-            
+
             s32 j;
             s32 flag;
             s32 lv;
@@ -1161,7 +1161,7 @@ void evt_unitwin_disp_func(CameraId cameraId, void* param) {
             s32 row = 0;
             s32 h;
             u32 sl, st, sw, sh;
-            
+
             s32 j;
             s32 cnt;
             s32 v;
@@ -1241,7 +1241,7 @@ void evt_unitwin_disp_func(CameraId cameraId, void* param) {
             s32 row = 0;
             s32 h;
             u32 sl, st, sw, sh;
-            
+
             s32 v;
             s32 ty;
             s32 flag;

@@ -160,7 +160,7 @@ typedef struct MarioMotHammer2 {   // mot_hammer.c mot_hammer2 / mot_ham2_post (
     u8 pad00[4];                   // 0x00
     s16 timer;                     // 0x04
     u8 pad06[2];                   // 0x06
-    f32 spinSpeed;                 // 0x08, deg/frame by hammer level 
+    f32 spinSpeed;                 // 0x08, deg/frame by hammer level
     u8 pad0C[4];                   // 0x0C
     f32 animTime;                  // 0x10
     s16 flags;                     // 0x14, MarioMotHammer2Flags
@@ -214,7 +214,7 @@ typedef struct MarioMotDamage {    // mot_damage.c
 typedef struct MarioMotPlane {     // mot_plane.c
     u8 pad00[4];                   // 0x00
     f32 turnSpeed;                 // 0x04, added to displayDirection
-    f32 startY;                    // 0x08, position.y at take-off 
+    f32 startY;                    // 0x08, position.y at take-off
     f32 groundY;                   // 0x0C
 } MarioMotPlane;
 
@@ -228,7 +228,7 @@ typedef struct MarioMotShip {      // mot_ship.c
 typedef struct MarioMotYoshi {     // party_yoshi.c, mario.c marioDisp
     f32 bobSpeed;                  // 0x00
     f32 bobOfs;                    // 0x04, added to the base y
-    f32 baseY;                     // 0x08 
+    f32 baseY;                     // 0x08
     u8 pad0C[4];                   // 0x0C
     f32 velX;                      // 0x10
     f32 velZ;                      // 0x14

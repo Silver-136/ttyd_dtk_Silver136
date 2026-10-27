@@ -108,7 +108,7 @@ typedef struct THPSimple {
 
 // clang-format off
 //.data
-// 32768 * ((vol * vol) / (127 * 127)) 
+// 32768 * ((vol * vol) / (127 * 127))
 static u16 VolumeTable[] = {
         0,     2,     8,    18,    32,    50,    73,    99,
       130,   164,   203,   245,   292,   343,   398,   457,

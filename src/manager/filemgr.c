@@ -784,7 +784,7 @@ s32 fileAsync(const char* filename, s32 type, FileCallback callback) {
     if (handle) {
         fileGarbageDataAdrSet(handle, type);
     }
-    
+
     if (handle) {
         newentry->state = 3;
         newentry->data = &newentry->dataSlot;

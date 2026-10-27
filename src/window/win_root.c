@@ -980,19 +980,19 @@ void winNameGX(WindowWork* wp, s32 type, f32 x, f32 y, f32 w, f32 h) {
         NAME_TEX(t0a, 0x13, m0a, w - 16.0f, 32.0f);
         nameQuad(x, y, w - 16.0f, 32.0f);
         NAME_TEX(t0b, 0x14, m0b, 16.0f, 32.0f);
-        
+
         nameQuad((x + w) - 16.0f, y, 16.0f, 32.0f);
     } else if (type == 1) {
         NAME_TEX(t1a, 0x15, m1a, w - 16.0f, 32.0f);
         nameQuad(x, y, w - 16.0f, 32.0f);
         NAME_TEX(t1b, 0x16, m1b, 16.0f, 32.0f);
-        
+
         nameQuad((x + w) - 16.0f, y, 16.0f, 32.0f);
     } else if (type == 2) {
         NAME_TEX(t2a, 0x78, m2a, w - 8.0f, 24.0f);
         nameQuad(x, y, w - 8.0f, 24.0f);
         NAME_TEX(t2b, 0x79, m2b, 8.0f, 24.0f);
-        
+
         nameQuad((x + w) - 8.0f, y, 8.0f, 24.0f);
     }
 }

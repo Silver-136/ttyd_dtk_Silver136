@@ -118,7 +118,7 @@ void bgMain(void) {
     CameraEntry* camera;
     GXTexObj texobj;
     int width;
-        
+
     bgwork = bgGetWork();
     if (bgwork->flags & BG_RENDERING) {
         camera = camGetPtr(CAMERA_3D);

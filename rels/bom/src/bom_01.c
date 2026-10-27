@@ -876,7 +876,7 @@ void jump(s32 i, s32 next, f32 x, f32 y, f32 z, f32 speed, f32 gravity) {
 #pragma opt_propagation off
 #pragma opt_lifetimes off
 static void ext_main(void) {
-    
+
     s32 i;
     BomWork* wp = lp->address;
     ExtdrvPose* pose = extGetPosePtr();

@@ -1311,7 +1311,7 @@ void monosiriMain(MonosiriWork* m) {
 #else
     const char* lang[2] = {"jp", "us"};
 #endif
-    
+
     GXTexObj tex;
     TattleEntry* t;
     if (!m) return;

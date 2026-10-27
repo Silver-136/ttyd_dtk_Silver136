@@ -36,7 +36,7 @@ EffectEntry* effKemuriEntry(s32 type, f32 x, f32 y, f32 z, f32 dir) {
     effKemuriData* d;
     effKemuriData* data;
     s32 numEffects, i;
-    
+
     EffectEntry* entry = effEntry();
     numEffects = 1;
     switch (type) {

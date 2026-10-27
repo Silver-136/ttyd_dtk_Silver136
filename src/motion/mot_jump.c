@@ -268,9 +268,9 @@ void mot_jumpNpc(void) {
                     out.x <= 0.5f * mario->wPlayerCollisionBox.x + 30.0f) {
                     mario->moveDirection = mario->directionView = revise360(180.0f + mario->directionView);
                 }
-                
-                
-                
+
+
+
                 sincosf(&out.z, &out.y, mario->directionView);
                 x = 30.0f * out.z + ((MapObjectEntry*)mobj)->position.x;
                 z = 30.0f * out.y + ((MapObjectEntry*)mobj)->position.z;

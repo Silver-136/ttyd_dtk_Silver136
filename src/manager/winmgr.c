@@ -29,7 +29,7 @@
 
 typedef struct WinMgrSelectTbl {
     u16 numDescriptors; // 0x0
-    
+
 WinMgrDesc* descriptors; // 0x4
 } WinMgrSelectTbl;
 

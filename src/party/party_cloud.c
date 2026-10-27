@@ -64,7 +64,7 @@ static inline void cloudCalcPos(PartyEntry* party) {
 
 void mot_cloud() {
     MarioWork* mario = marioGetPtr();
-    
+
     if((mario->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) != 0) {
         mario->trigFlags &= ~MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
         mario->flags &= ~(MARIO_FLAG_HAS_INPUT_JUMP|MARIO_FLAG_IS_STEPPING|MARIO_FLAG_IS_FALLING|MARIO_FLAG_IS_JUMPING);
@@ -125,7 +125,7 @@ f32 cloudGetBreathDir() {
         PartyCloud* cloud = (PartyCloud*)party->useStruct;
         breathDir = toMovedir(cloud->breathDir);
     }
-    
+
     return breathDir;
 }
 
@@ -144,8 +144,8 @@ f32 cloudGetBreathPower(f32 size, Vec* pos) {
 
     val = 10.0f;
     if(
-        party->currentMemberId == PARTY_MEMBER_FLURRIE 
-        && (party->flags & PARTY_FLAG_IS_BEING_USED) != 0 
+        party->currentMemberId == PARTY_MEMBER_FLURRIE
+        && (party->flags & PARTY_FLAG_IS_BEING_USED) != 0
         && party->useMotionId >= MARIO_MOTION_FALL
         && ((__fabs(party->position.y - pos->y - 18.0f)) <= val)
     ) {
@@ -156,7 +156,7 @@ f32 cloudGetBreathPower(f32 size, Vec* pos) {
             dist = toMovedir(cloud->breathDir);
             angle = angleABf(party->position.x, party->position.z, pos->x, pos->z);
             dist = revise360(angle - dist);
-            
+
             if (dist <= 30.0f || dist >= 330.0f) {
                 breathPower = cos((3.1415927f * dist) / 180.0f);
                 val = 100.0f;
@@ -178,7 +178,7 @@ struct HitEntry* cloudGetHitBreathout(s32 which) {
     }
 
     if (
-        party->currentMemberId != PARTY_MEMBER_FLURRIE 
+        party->currentMemberId != PARTY_MEMBER_FLURRIE
         || (party->flags & PARTY_FLAG_IS_BEING_USED) == 0
         || party->useMotionId < MARIO_MOTION_FALL
     ){
@@ -195,7 +195,7 @@ struct HitEntry* cloudGetHitBreathout(s32 which) {
     } else if (which == 3) {
         hitBreathout = ((PartyCloud*)party->useStruct)->hitSweep[1];
     }
-    
+
     return hitBreathout;
 }
 

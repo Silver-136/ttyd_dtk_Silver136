@@ -187,7 +187,7 @@ void msgLoad(const char* filename, s32 index) {
     }
 #else
     sprintf(filepath, "./%s/%s.txt", language_dir[gp->language], filename);
-    
+
     if (entry->address) {
         if (index == 1) {
             __memFree(HEAP_DEFAULT, entry->address);

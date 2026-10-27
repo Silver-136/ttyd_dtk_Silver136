@@ -163,7 +163,7 @@ void btlDispTexPlaneInit(void) {
 void btlDispTexPlainGX(u32 id, GXColor color0, GXColor color1, GXColor color2, GXColor color3) {
     GXTexObj texobj;
     f32 x, y;
-    
+
     TEXGetGXTexObjFromPalette(*_battleWorkPointer->menuTex->data, &texobj, id);
     GXLoadTexObj(&texobj, GX_TEXMAP0);
     switch (GXGetTexObjFmt(&texobj)) {
@@ -253,7 +253,7 @@ void btlDispGetTexSize(u32 id, u16* width, u16* height) {
 
 void btlDispInit(void) {
     BattleWork* wp = _battleWorkPointer;
-    
+
     battleCameraInit();
     battleMenuDispInit();
     wp->dispFlags |= 2;

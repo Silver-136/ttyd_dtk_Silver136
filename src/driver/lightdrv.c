@@ -110,7 +110,7 @@ s32 lightEntry(const char* name, s32 type, Vec* position, Vec* rotation, const G
     static const Vec decay_tbl[] = {
     {1.0f, 0.0f, 0.0f},
     {0.0f, 0.1f, 0.0f},
-    {0.0f, 0.0f, 0.01f}, 
+    {0.0f, 0.0f, 0.01f},
     {0.0f, 0.0f, 0.01f}
 };
     LightWork* wp = lightGetWork();

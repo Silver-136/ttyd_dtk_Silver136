@@ -95,7 +95,7 @@ EffectEntry* effKemuri4N64Entry(s32 type, f32 x, f32 y, f32 z, f32 angle, f32 fl
     work = __memAlloc(HEAP_EFFECT, sizeof(EffKemuri4N64Work));
     effect->userdata = work;
     effect->callback = effKemuri4Main;
-    
+
     for (i = 0; i < 1; i++, work++) {
     work->active = 1;
     work->type = type;

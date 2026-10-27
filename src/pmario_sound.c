@@ -5371,7 +5371,7 @@ void psndBGMMain(void) {
                 } else {
                     alive = 0;
                 }
-            } else 
+            } else
                 if (SoundSongCheck(bgm->streamId) == 0) {
                     alive = 0;
                 } else {

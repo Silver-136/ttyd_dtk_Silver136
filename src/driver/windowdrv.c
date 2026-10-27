@@ -246,7 +246,7 @@ void windowDispGX_Kanban(s32 type, u8 alpha, f32 x, f32 y, f32 height, f32 width
 
             GXPosition3f32(72.0f, -136.0f, 0.0f);
             GXTexCoord2f32(0.0f, 1.0f);
-        
+
             //right side of the frame
             GXSetNumTexGens(1);
             GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX0);
@@ -979,7 +979,7 @@ void _windowDispGX_Message(s32 type, s32 tailFlags, u8 alpha, BOOL dark, f32 x, 
         } else {
             xx = (0.38f * height) + x;
         }
-        
+
         if (tailFlags & 8) {
             y2 = -((0.175f * width) - y);
             y = ((0.225f * width) + y);
@@ -999,7 +999,7 @@ void _windowDispGX_Message(s32 type, s32 tailFlags, u8 alpha, BOOL dark, f32 x, 
                 r = tailX;
             }
         }
-        
+
         switch (type) {
             case WINDOW_TYPE_NORMAL:
             case WINDOW_TYPE_SMALL:
@@ -1014,20 +1014,20 @@ void _windowDispGX_Message(s32 type, s32 tailFlags, u8 alpha, BOOL dark, f32 x, 
             default:
                 break;
         }
-        
+
         GXLoadPosMtxImm(camera->view, 0);
         GXBegin(GX_QUADS, GX_VTXFMT0, 4u);
-        
-        
+
+
         GXPosition3f32(xx - 0.05f * height, y2, 0.0f);
         GXTexCoord2f32(0.0f, 0.0f);
-        
+
         GXPosition3f32(xx + 0.05f * height, y2, 0.0f);
         GXTexCoord2f32(1.0f, 0.0f);
-        
+
         GXPosition3f32(r + 0.05f * height, y, 0.0f);
         GXTexCoord2f32(1.0f, 1.0f);
-        
+
         GXPosition3f32(r - 0.05f * height, y, 0.0f);
         GXTexCoord2f32(0.0f, 1.0f);
     }
