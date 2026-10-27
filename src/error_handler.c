@@ -19,13 +19,12 @@ extern void* DemoCurrentBuffer, * DemoFrameBuffer1, * DemoFrameBuffer2;
 void N_systemErrorHandler(OSError error, OSContext* context, u32 dsisr, u32 dar);
 
 void N_setupErrorHandler(void) {
-    OSSetErrorHandler(OS_ERROR_DSI, (void (*)(u16, OSContext*, ...))N_systemErrorHandler);
-    OSSetErrorHandler(OS_ERROR_ISI, (void (*)(u16, OSContext*, ...))N_systemErrorHandler);
-    OSSetErrorHandler(OS_ERROR_PROGRAM, (void (*)(u16, OSContext*, ...))N_systemErrorHandler);
+    OSSetErrorHandler(OS_ERROR_DSI, (OSErrorHandler)N_systemErrorHandler);
+    OSSetErrorHandler(OS_ERROR_ISI, (OSErrorHandler)N_systemErrorHandler);
+    OSSetErrorHandler(OS_ERROR_PROGRAM, (OSErrorHandler)N_systemErrorHandler);
 }
 
 void N_systemErrorHandler(OSError error, OSContext* context, u32 dsisr, u32 dar) {
-    //registers
     signed char* textBase;
     int i;
     OSFontHeader* fontHeader;
@@ -37,17 +36,16 @@ void N_systemErrorHandler(OSError error, OSContext* context, u32 dsisr, u32 dar)
     AddrWord stack; // stack frame address: back chain at +0, saved LR at +4
     s16 px2, py2, x2, y2;
     s32 tx, ty;
-    //stack vars
-    char print_buffer2[0x400]; // 0x10E0
-    char print_buffer[0x1000]; // 0xE0
-    Mtx44 projection; // 0xA0
-    Mtx matrix; // 0x70
-    Mtx matrix2; // 0x40
-    GXTexObj texObj; // 0x20
-    void* image; // 0x1C
-    s32 x; // 0x18
-    s32 y; // 0x14
-    s32 width; // 0x10
+    char print_buffer2[0x400];
+    char print_buffer[0x1000];
+    Mtx44 projection;
+    Mtx matrix;
+    Mtx matrix2;
+    GXTexObj texObj;
+    void* image;
+    s32 x;
+    s32 y;
+    s32 width;
 
     if (N_getDebugMode() >= 0) {
         psndExit();
@@ -119,7 +117,7 @@ void N_systemErrorHandler(OSError error, OSContext* context, u32 dsisr, u32 dar)
         fontHeader = smartAlloc(OS_FONT_SIZE_ANSI, 0)->address;
     }
     OSInitFont(fontHeader);
-    GXSetCopyClear((GXColor) { 0, 0, 0, 0xFF }, 0xFFFFFF);
+    GXSetCopyClear((GXColor) { 0, 0, 0, 0xFF }, GX_MAX_Z24);
     GXCopyDisp(DEMOGetCurrentBuffer(), GX_TRUE);
     GXSetViewport(0.0f, 0.0f, 608.0f, 480.0f, 0.0f, 1.0f);
     GXSetScissor(0, 0, 608, 480);
@@ -160,6 +158,7 @@ void N_systemErrorHandler(OSError error, OSContext* context, u32 dsisr, u32 dar)
 #endif
         i = 0;
         while (textBase[i] != 0) {
+            // FAKE: no-op (s32) cast on the char; removing it changes the object
             if ((s32)print_buffer[i] == '\n') {
 #ifdef VERSION_G8ME01
                 px = 40;
@@ -215,10 +214,11 @@ void N_systemErrorHandler(OSError error, OSContext* context, u32 dsisr, u32 dar)
         VISetBlack(0);
         VIFlush();
         do { ; } while (count == VIGetRetraceCount());
-        if (DemoCurrentBuffer == DemoFrameBuffer1)
+        if (DemoCurrentBuffer == DemoFrameBuffer1) {
             DemoCurrentBuffer = DemoFrameBuffer2;
-        else
+        } else {
             DemoCurrentBuffer = DemoFrameBuffer1;
+        }
     }
 #ifdef VERSION_G8ME01
     PPCHalt();

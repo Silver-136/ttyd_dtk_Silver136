@@ -24,13 +24,13 @@
 #include "dolphin/mtx.h"
 #include "evt/evt_item.h"
 #include "driver/itemdrv.h"
-static void piders_draw_yarn_sub(CameraId cameraId, void* param);
 
 double sqrt(double);
 double __fabs(double);
 
 
-// functions are defined in reverse of target order (deferred inlining)
+// The C functions are defined in the reverse of their order in the object: the compiler defers inlining and
+// emits functions in reverse definition order.
 
 USER_FUNC(mahoon_get_groupname) {
     EvtWord* args = event->args;
@@ -70,7 +70,7 @@ USER_FUNC(pressCheck) {
         return EVT_RETURN_DONE;
     }
     dist = 5.0f;
-    if (hitCheckFilter(0, &hx, &hy, &hz, &dist, &nx, &ny, &nz, npc->position.x, 1.0f + npc->position.y, npc->position.z, 0.0f, -1.0f, 0.0f)) {
+    if (hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, npc->position.x, 1.0f + npc->position.y, npc->position.z, 0.0f, -1.0f, 0.0f)) {
         evtSetValue(event, args[0], 1);
     } else {
         evtSetValue(event, args[0], 0);
@@ -144,11 +144,11 @@ USER_FUNC(_2d_dead_jump) {
                 }
             } else {
                 if (dy >= 0.0f) {
-                    return 1;
+                    return EVT_RETURN_YIELD;
                 }
             }
         }
-        return 0;
+        return EVT_RETURN_BLOCK;
     }
     {
         f32 s = (f32)sin(6.2831855f * npc->moveDir / 360.0f);
@@ -159,13 +159,13 @@ USER_FUNC(_2d_dead_jump) {
         npc->moveOffset.z += npc->moveDt * (npc->moveSpeed * -c);
     }
     if (npc->position.y >= gy) {
-        return 0;
+        return EVT_RETURN_BLOCK;
     }
     npc->moveSpeed = 0.0f;
     npc->jumpVelY = 0.0f;
     npc->jumpYScale = 1.0f;
     npc->jumpGravity = 1.0f;
-    return 1;
+    return EVT_RETURN_YIELD;
 }
 
 USER_FUNC(_2d_get_dead_jump_offset) {
@@ -183,6 +183,7 @@ USER_FUNC(_2d_get_dead_jump_offset) {
     } else {
         d = 1.0f;
     }
+    // FAKE: spare temporary k for 20.0f * d; the plain (s32)(20.0f * d) changes the object
     k = 20.0f;
     k *= d;
     evtSetValue(event, out, (s32)k);
@@ -197,8 +198,8 @@ USER_FUNC(killer_make_name) {
     s32 len;
     strcpy(name, npc->description);
     len = strlen(name);
-    name[len] = n + 0x31;
-    name[len + 1] = 0;
+    name[len] = n + '1';
+    name[len + 1] = '\0';
     evtSetValue(event, args[1], (EvtWord)name);
     return EVT_RETURN_DONE;
 }
@@ -209,25 +210,6 @@ USER_FUNC(piders_get_height) {
     evtSetFloat(event, args[0], npc->territoryLoiter.z);
     return EVT_RETURN_DONE;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 USER_FUNC(evt_npc_set_confuse_anim);
 USER_FUNC(evt_npc_set_damage_anim);
@@ -564,7 +546,7 @@ EVT_BEGIN(enemy_2d_common_dead_event)
     CALL(evt_npc_set_damage_anim, STRING("me"))
     CALL(evt_npc_get_kpencount_type, STRING("me"), LW(0))
     SWITCH(LW(0))
-        CASE_FLAG(1)
+        CASE_FLAG(KPA_ENCOUNT_STOMP)
         IF_INT_EQUAL(LW(15), 0)
             CALL(evt_npc_calc_score, STRING("me"))
             SPAWN_EVENT(PTR(_2d_dead_rotate_event))
@@ -572,7 +554,7 @@ EVT_BEGIN(enemy_2d_common_dead_event)
             CALL(_2d_get_dead_jump_offset, STRING("me"), LW(3))
             ADD(LW(0), LW(3))
             CALL(_2d_dead_jump, STRING("me"), LW(0), LW(1), LW(2), 600, FLOAT(40.0f), FLOAT(0.0f), -300)
-            ELSE
+        ELSE
             CALL(evt_npc_calc_score, STRING("me"))
             CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_GRAVITY)
             CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_AUTO_MOVE_ANIM)
@@ -618,7 +600,7 @@ EVT_BEGIN(enemy_2d_common_dead_event)
                 END_IF
             END_LOOP
         END_IF
-        CASE_FLAG(2)
+        CASE_FLAG(KPA_ENCOUNT_FIRE)
         CALL(evt_npc_calc_score, STRING("me"))
         SPAWN_EVENT(PTR(_2d_dead_rotate_event))
         CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_DARKEN)
@@ -626,27 +608,27 @@ EVT_BEGIN(enemy_2d_common_dead_event)
         CALL(_2d_get_dead_jump_offset, STRING("me"), LW(3))
         ADD(LW(0), LW(3))
         CALL(_2d_dead_jump, STRING("me"), LW(0), LW(1), LW(2), 600, FLOAT(40.0f), FLOAT(65.0f), -300)
-        CASE_FLAG(4)
+        CASE_FLAG(KPA_ENCOUNT_STAR)
         CALL(evt_npc_calc_score, STRING("me"))
         SPAWN_EVENT(PTR(_2d_dead_rotate_event))
         CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
         CALL(_2d_get_dead_jump_offset, STRING("me"), LW(3))
         ADD(LW(0), LW(3))
         CALL(_2d_dead_jump, STRING("me"), LW(0), LW(1), LW(2), 600, FLOAT(40.0f), FLOAT(65.0f), -300)
-        CASE_FLAG(32)
+        CASE_FLAG(KPA_ENCOUNT_GOAL_POLE)
         SPAWN_EVENT(PTR(_2d_dead_rotate_event))
         CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
         CALL(_2d_get_dead_jump_offset, STRING("me"), LW(3))
         ADD(LW(0), LW(3))
         CALL(_2d_dead_jump, STRING("me"), LW(0), LW(1), LW(2), 600, FLOAT(40.0f), FLOAT(65.0f), -300)
-        CASE_FLAG(8)
+        CASE_FLAG(KPA_ENCOUNT_MOBJ)
         CALL(evt_npc_calc_score, STRING("me"))
         SPAWN_EVENT(PTR(_2d_dead_rotate_event))
         CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
         CALL(_2d_get_dead_jump_offset, STRING("me"), LW(3))
         ADD(LW(0), LW(3))
         CALL(_2d_dead_jump, STRING("me"), LW(0), LW(1), LW(2), 600, FLOAT(40.0f), FLOAT(65.0f), -300)
-        CASE_FLAG(16)
+        CASE_FLAG(KPA_ENCOUNT_MAGMA)
         CALL(evt_npc_calc_score, STRING("me"))
         SPAWN_EVENT(PTR(_2d_dead_rotate_event))
         CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_DARKEN)
@@ -853,6 +835,7 @@ EVT_BEGIN(nokonoko_init_event)
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_ENEMY | NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_GRAVITY | NPC_FLAG_UPDATE_BY_EVENT)
     CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
     CALL(evt_npc_set_rotate, STRING("me"), 0, 0, 0)
+    // BUG: the destination 0 is not a variable (evtSetValue ignores it), so this call does nothing
     CALL(evt_npc_get_unitwork, STRING("me"), 0, 0)
     CALL(evt_npc_set_unitwork, STRING("me"), 1, 0)
     RETURN
@@ -970,6 +953,7 @@ EVT_BEGIN(togenoko_init_event)
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_ENEMY | NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_GRAVITY | NPC_FLAG_UPDATE_BY_EVENT)
     CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
     CALL(evt_npc_set_rotate, STRING("me"), 0, 0, 0)
+    // BUG: the destination 0 is not a variable (evtSetValue ignores it), so this call does nothing
     CALL(evt_npc_get_unitwork, STRING("me"), 0, 0)
     CALL(evt_npc_set_unitwork, STRING("me"), 1, 0)
     RETURN
@@ -1173,6 +1157,8 @@ EVT_BEGIN(patapata_return_event)
     RETURN
 EVT_END()
 
+// BUG: no RETURN and no end marker (21 words, size 0x54 in both symbol maps): a CALL_CHILD of this script runs
+// on into met_set_anim_wait_event, which follows it in .data, and stops at that script's RETURN.
 EvtWord met_init_event_common[] = {
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_ENEMY)
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_UPDATE_BY_EVENT)
@@ -1186,14 +1172,14 @@ EVT_BEGIN(met_set_anim_wait_event)
         CALL(evt_npc_get_unitwork, STRING("me"), 0, LW(15))
         IF_INT_EQUAL(LW(15), 0)
             CALL(evt_npc_set_anim, STRING("me"), STRING("MET_S_1"))
-            ELSE
+        ELSE
             CALL(evt_npc_set_anim, STRING("me"), STRING("TMT_S_1"))
         END_IF
-        ELSE
+    ELSE
         CALL(evt_npc_get_unitwork, STRING("me"), 0, LW(15))
         IF_INT_EQUAL(LW(15), 0)
             CALL(evt_npc_set_anim, STRING("me"), STRING("SMT_S_1"))
-            ELSE
+        ELSE
             CALL(evt_npc_set_anim, STRING("me"), STRING("STM_S_1"))
         END_IF
     END_IF
@@ -1206,14 +1192,14 @@ EVT_BEGIN(met_set_anim_walk_event)
         CALL(evt_npc_get_unitwork, STRING("me"), 0, LW(15))
         IF_INT_EQUAL(LW(15), 0)
             CALL(evt_npc_set_anim, STRING("me"), STRING("MET_W_1"))
-            ELSE
+        ELSE
             CALL(evt_npc_set_anim, STRING("me"), STRING("TMT_W_1"))
         END_IF
-        ELSE
+    ELSE
         CALL(evt_npc_get_unitwork, STRING("me"), 0, LW(15))
         IF_INT_EQUAL(LW(15), 0)
             CALL(evt_npc_set_anim, STRING("me"), STRING("SMT_W_1"))
-            ELSE
+        ELSE
             CALL(evt_npc_set_anim, STRING("me"), STRING("STM_W_1"))
         END_IF
     END_IF
@@ -1281,7 +1267,7 @@ EVT_BEGIN(met_find_event)
         CALL(evt_npc_get_unitwork, STRING("me"), 0, LW(15))
         IF_INT_EQUAL(LW(15), 0)
             CALL(evt_npc_set_anim, STRING("me"), STRING("MET_A_1"))
-            ELSE
+        ELSE
             CALL(evt_npc_set_anim, STRING("me"), STRING("TMT_A_1"))
         END_IF
         CALL(evt_get_target_dir, STRING("me"), STRING("mario"), LW(3))
@@ -1317,13 +1303,13 @@ EVT_BEGIN(met_find_event)
         CALL_CHILD(PTR(met_set_anim_wait_event))
         CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
         CALL(evt_npc_jump_position, STRING("me"), LW(0), LW(1), LW(2), 300, 0, FLOAT(20.0f), 0)
-        ELSE
+    ELSE
         CALL(evt_npc_set_attack_mode, STRING("me"), 11)
         CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_GRAVITY)
         CALL(evt_npc_get_unitwork, STRING("me"), 0, LW(15))
         IF_INT_EQUAL(LW(15), 0)
             CALL(evt_npc_set_anim, STRING("me"), STRING("SMT_A_1"))
-            ELSE
+        ELSE
             CALL(evt_npc_set_anim, STRING("me"), STRING("STM_A_1"))
         END_IF
         CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
@@ -2354,6 +2340,7 @@ static void piders_draw_yarn_sub(CameraId cameraId, void* param) {
     b.x = npc->position.x;
     b.y = 30.0f + npc->position.y;
     b.z = npc->position.z;
+    // FAKE: spare copies p, q of a, b; drawing from a and b directly changes the object
     p = a;
     q = b;
     GXSetCullMode(GX_CULL_NONE);
@@ -3793,8 +3780,9 @@ USER_FUNC(chain_main) {
     dy = me->position.y - cy;
     dz = me->position.z - cz;
     {
-    f32 dist = (f32)sqrt(dx * dx + dy * dy + dz * dz);
-    t = 1.0f - len / dist;
+        // FAKE: spare temporary dist; the inline form used in the loops below changes the object here
+        f32 dist = (f32)sqrt(dx * dx + dy * dy + dz * dz);
+        t = 1.0f - len / dist;
     }
     cy = dy * t + cy;
     cx = dx * t + cx;
@@ -3803,11 +3791,11 @@ USER_FUNC(chain_main) {
         cy = me->territoryBase.y;
     }
     {
-    Vec a = {0.0f, 0.0f, 0.0f};
-    a.x = cx;
-    a.y = cy;
-    a.z = cz;
-    cur->position = a;
+        Vec a = {0.0f, 0.0f, 0.0f};
+        a.x = cx;
+        a.y = cy;
+        a.z = cz;
+        cur->position = a;
     }
     for (i = 0; i < 2; i++) {
         cur = me->slaves[i + 1];
@@ -3827,11 +3815,11 @@ USER_FUNC(chain_main) {
             cy = me->territoryBase.y;
         }
         {
-        Vec b = {0.0f, 0.0f, 0.0f};
-        b.x = cx;
-        b.y = cy;
-        b.z = cz;
-        cur->position = b;
+            Vec b = {0.0f, 0.0f, 0.0f};
+            b.x = cx;
+            b.y = cy;
+            b.z = cz;
+            cur->position = b;
         }
     }
     for (i = 3; i >= 1; i--) {
@@ -3852,11 +3840,11 @@ USER_FUNC(chain_main) {
             cy = me->territoryBase.y;
         }
         {
-        Vec c = {0.0f, 0.0f, 0.0f};
-        c.x = cx;
-        c.y = cy;
-        c.z = cz;
-        cur->position = c;
+            Vec c = {0.0f, 0.0f, 0.0f};
+            c.x = cx;
+            c.y = cy;
+            c.z = cz;
+            cur->position = c;
         }
     }
     return EVT_RETURN_DONE;
@@ -3883,9 +3871,9 @@ USER_FUNC(cliffCheck) {
         dirv = -1.0f;
     }
     dist = 5.0f;
-    h1 = hitCheckFilter(0, &hx, &hy, &hz, &dist, &nx, &ny, &nz, npc->position.x, 1.0f + npc->position.y, npc->position.z, 0.0f, -1.0f, 0.0f);
+    h1 = hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, npc->position.x, 1.0f + npc->position.y, npc->position.z, 0.0f, -1.0f, 0.0f);
     dist = 5.0f;
-    h2 = hitCheckFilter(0, &hx, &hy, &hz, &dist, &nx, &ny, &nz, npc->position.x, 1.0f + npc->position.y, npc->position.z, dirv, -1.0f, 0.0f);
+    h2 = hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, npc->position.x, 1.0f + npc->position.y, npc->position.z, dirv, -1.0f, 0.0f);
     if (h1 && h2) {
         evtSetValue(event, args[0], 0);
     } else if (h1 && !h2) {
@@ -3904,8 +3892,8 @@ USER_FUNC(upperCheck) {
     HitEntry* h1;
     HitEntry* h2;
     dist = 5.0f;
-    h1 = hitCheckFilter(0, &hx, &hy, &hz, &dist, &nx, &ny, &nz, npc->position.x - 15.0f, 30.0f + npc->position.y, npc->position.z, 0.0f, 2.0f, 0.0f);
-    h2 = hitCheckFilter(0, &hx, &hy, &hz, &dist, &nx, &ny, &nz, 15.0f + npc->position.x, 30.0f + npc->position.y, npc->position.z, 0.0f, 2.0f, 0.0f);
+    h1 = hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, npc->position.x - 15.0f, 30.0f + npc->position.y, npc->position.z, 0.0f, 2.0f, 0.0f);
+    h2 = hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, 15.0f + npc->position.x, 30.0f + npc->position.y, npc->position.z, 0.0f, 2.0f, 0.0f);
     if (h1 || h2) {
         evtSetValue(event, args[0], 1);
     } else {
@@ -4247,7 +4235,7 @@ EVT_END()
 
 USER_FUNC(zakoEntryDokan) {
     char names[3][16];
-    char nm3[32];
+    char pipeHitName[32];
     NpcEntry* me = evtNpcNameToPtr(event, "me");
     NpcEntry* zako;
     s32 i;
@@ -4255,21 +4243,27 @@ USER_FUNC(zakoEntryDokan) {
         strcpy(names[0], "\214R\222c\203U\203R\223y\212\307\202P");
         strcpy(names[1], "\214R\222c\203U\203R\223y\212\307\202Q");
         strcpy(names[2], "\214R\222c\203U\203R\223y\212\307\202R");
-        strcpy(nm3, "MOBJ_mobj9");
+        strcpy(pipeHitName, "MOBJ_mobj9");
     }
     if (!strcmp(me->description, "\214R\222c\203U\203R\202\252\202\305\202\351\223y\212\307\202Q")) {
         strcpy(names[0], "\214R\222c\203U\203R\223y\212\307\202S");
         strcpy(names[1], "\214R\222c\203U\203R\223y\212\307\202T");
         strcpy(names[2], "\214R\222c\203U\203R\223y\212\307\202U");
-        strcpy(nm3, "MOBJ_mobj14");
+        strcpy(pipeHitName, "MOBJ_mobj14");
     }
     {
         const char* hn = hitGetName(marioGetPtr()->hitobjStandOn);
-        if (hn && !strcmp(hn, nm3)) return EVT_RETURN_DONE;
+        if (hn && !strcmp(hn, pipeHitName)) {
+            return EVT_RETURN_DONE;
+        }
         hn = hitGetName(marioGetPtr()->hitobjJumpFrom);
-        if (hn && !strcmp(hn, nm3)) return EVT_RETURN_DONE;
+        if (hn && !strcmp(hn, pipeHitName)) {
+            return EVT_RETURN_DONE;
+        }
         hn = hitGetName(marioGetPtr()->hitobjFront);
-        if (hn && !strcmp(hn, nm3)) return EVT_RETURN_DONE;
+        if (hn && !strcmp(hn, pipeHitName)) {
+            return EVT_RETURN_DONE;
+        }
     }
     for (i = 0; i < 3; i++) {
         zako = npcNameToPtr(names[i]);
@@ -4277,13 +4271,13 @@ USER_FUNC(zakoEntryDokan) {
             zako->flags |= (NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_GRAVITY);
             zako->flags &= ~NPC_FLAG_NO_HIT;
             zako->statusFlags |= (NPC_STATUS_FACE_MOVE_DIR | NPC_STATUS_NO_FIND_ONCE);
-            zako->statusFlags &= 0xEFAFFFFB;
+            zako->statusFlags &= ~(NPC_STATUS_DEAD | NPC_STATUS_IN_WATER | NPC_STATUS_DARKEN | NPC_STATUS_NO_WATER_DRAG);
             {
-            Vec pos = {0.0f, 0.0f, 0.0f};
-            pos.x = me->position.x;
-            pos.y = me->position.y - 35.0f;
-            pos.z = me->position.z;
-            zako->position = pos;
+                Vec pos = {0.0f, 0.0f, 0.0f};
+                pos.x = me->position.x;
+                pos.y = me->position.y - 35.0f;
+                pos.z = me->position.z;
+                zako->position = pos;
             }
             zako->rotation = (Vec){0.0f, 0.0f, 0.0f};
             zako->unitWork[0] = (void*)1;
@@ -4349,13 +4343,13 @@ USER_FUNC(zakoEntryFall) {
             zako->flags |= (NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_GRAVITY);
             zako->flags &= ~NPC_FLAG_NO_HIT;
             zako->statusFlags |= (NPC_STATUS_FACE_MOVE_DIR | NPC_STATUS_NO_FIND_ONCE);
-            zako->statusFlags &= 0xEF8FFFFB;
+            zako->statusFlags &= ~(NPC_STATUS_DEAD | NPC_STATUS_IN_WATER | NPC_STATUS_WAS_IN_WATER | NPC_STATUS_DARKEN | NPC_STATUS_NO_WATER_DRAG);
             {
-            Vec pos = {0.0f, 0.0f, 0.0f};
-            pos.x = me->position.x;
-            pos.y = me->position.y;
-            pos.z = me->position.z;
-            zako->position = pos;
+                Vec pos = {0.0f, 0.0f, 0.0f};
+                pos.x = me->position.x;
+                pos.y = me->position.y;
+                pos.z = me->position.z;
+                zako->position = pos;
             }
             zako->rotation = (Vec){0.0f, 0.0f, 0.0f};
             zako->unitWork[0] = (void*)2;
@@ -4380,16 +4374,17 @@ USER_FUNC(npc_fire_eff_fadeout) {
     EvtWord* args;
     NpcEntry* npc;
     f32 x, y, z;
+    s32 frames;
     EffectEntry* eff;
     npc = evtNpcNameToPtr(event, "me");
     args = event->args;
     x = evtGetFloat(event, args[0]);
     y = evtGetFloat(event, args[1]);
     z = evtGetFloat(event, args[2]);
-    eff = (EffectEntry*)evtGetValue(event, args[3]);
+    frames = evtGetValue(event, args[3]);
     if (isFirstCall) {
         npc->unitWork[0] = effFireEntry(5, 1000, x, y, z, 1.0f);
-        npc->unitWork[1] = (void*)eff;
+        npc->unitWork[1] = (void*)frames;
     }
     eff = npc->unitWork[0];
     npc->unitWork[1] = (char*)npc->unitWork[1] - 1;
@@ -4420,7 +4415,7 @@ USER_FUNC(gesso_ground_check) {
     NpcEntry* npc = evtNpcNameToPtr(event, "me");
     f32 hx, hy, hz, dist, nx, ny, nz;
     dist = 5.0f;
-    if (hitCheckFilter(0, &hx, &hy, &hz, &dist, &nx, &ny, &nz, npc->position.x, 1.0f + npc->position.y, npc->position.z, 0.0f, -1.0f, 0.0f)) {
+    if (hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, npc->position.x, 1.0f + npc->position.y, npc->position.z, 0.0f, -1.0f, 0.0f)) {
         evtSetValue(event, args[0], 1);
     } else {
         evtSetValue(event, args[0], 0);
@@ -4652,7 +4647,7 @@ EVT_BEGIN(zakoM2D_move_event)
     CALL(evt_npc_set_anim, STRING("me"), STRING("S_1"))
     LABEL(2)
     CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_NO_FIND_ONCE)
-    CALL(evt_npc_status_check, STRING("me"), 4, LW(0))
+    CALL(evt_npc_status_check, STRING("me"), NPC_STATUS_DEAD, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         GOTO(3)
     END_IF

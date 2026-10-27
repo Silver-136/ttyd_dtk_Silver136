@@ -10,14 +10,14 @@ typedef struct CamShiftWork {
     f32 rate;           // 0x8
     f32 stickAccum;     // 0xC
     f32 active;         // 0x10
-    u8 field_0x14[0x18 - 0x14]; // 0x14
+    u8 pad_14[0x18 - 0x14]; // 0x14, never accessed
     OSTime prevTime;    // 0x18
     f32 stickLimit;     // 0x20
     f32 maxSpeed;       // 0x24
     f32 accel;          // 0x28
     f32 lastX;          // 0x2C
     f32 lastZ;          // 0x30
-    u8 field_0x34[0x38 - 0x34]; // 0x34
+    u8 pad_34[0x38 - 0x34]; // 0x34, never accessed
 } CamShiftWork;
 
 static CamShiftWork work;
@@ -53,7 +53,7 @@ void camShiftMain(CameraEntry* camera, MarioWork* mario, f32* out) {
         wp->target = stick;
         wp->active = 1.0f;
     } else {
-        stick = (s8)mario->wStickDir1;
+        stick = mario->wStickDir1;
         if (stick > 0.0f) {
             stick = 25.0f;
         }

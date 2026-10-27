@@ -26,8 +26,6 @@ EVT_BEGIN(kpa_score_disp_evt)
     RETURN
 EVT_END()
 
-void kpaScoreDisp(void);
-
 void kpaScoreDisp(void) {
     Mtx m;
     Mtx scale;
@@ -70,7 +68,8 @@ USER_FUNC(kpa_score_disp_init) {
     }
     e->uwBase = event->uwBase;
     e->ufBase = event->ufBase;
-    ksdp = _mapAlloc(0x4B0);
+    ksdp = _mapAlloc(50 * sizeof(KpaScore));
+    // FAKE: (s32) cast on the u32 counter (signed compare); the plain `i < 50` changes the object
     for (i = 0; (s32)i < 50; i++) {
         ksdp[i].str[0] = 0;
         ksdp[i].timer = 0;
@@ -110,6 +109,7 @@ static inline void kpaSetScoreStr(s32 score, Vec* pos) {
             d[3] = t / 10;
             d[4] = t % 10;
             p = ksdp[i].str;
+            // FAKE: str is a spare second pointer to ksdp[i].str (only writes the terminator); ksdp[i].str[n] changes the object
             str = ksdp[i].str;
             n = 0;
             for (j = 0; j < 5; j++) {
@@ -149,6 +149,7 @@ void kpaAddScore(s32 score) {
 }
 
 void kpaAddScorePos(s32 score, Vec* pos) {
+    // FAKE: sc is a spare copy of score; clamping score itself (as kpaAddScore does) changes the object
     s32 sc = score;
     if (score > 10000) {
         sc = 10000;
@@ -161,5 +162,3 @@ USER_FUNC(kpa_chg_pose) {
     marioChgPose((const char*)evtGetValue(event, event->args[0]));
     return EVT_RETURN_DONE;
 }
-
-

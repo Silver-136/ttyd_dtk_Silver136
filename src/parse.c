@@ -14,7 +14,8 @@ void parseInit(void* ptr, u32 size) {
     parse.end[0] = size;
 }
 
-// the tag copy loop was an inline: its locals take the low volatile registers (r4 j, r5 n) under the strength-reduced buf pointer (r6)
+// Copies the tag that starts at p[i] into buf without its whitespace, up to and including the closing '>'
+// (at most 127 characters), and terminates it.
 static inline void parseCopyTag(char* buf, s8* p, s32 i, s32 end) {
     s32 n;
     s32 j;
@@ -27,7 +28,7 @@ static inline void parseCopyTag(char* buf, s8* p, s32 i, s32 end) {
             break;
         }
     }
-    *(buf + n) = 0;
+    buf[n] = 0;
 }
 
 BOOL parsePush(const char* tag) {
@@ -62,7 +63,7 @@ BOOL parsePush(const char* tag) {
             } else {
                 if (state == 0 && depth == 0) {
                     parseCopyTag(buf, p, i, end);
-                    if (strcmp(&buf[0], tag) == 0) {
+                    if (strcmp(buf, tag) == 0) {
                         for (; i < end; i++) {
                             if (p[i] == '>') {
                                 break;
@@ -115,6 +116,7 @@ BOOL parseGet1Next(s32 type, void* data) {
         return result;
     }
 
+    // FAKE: posStack is a spare copy of parse.pos; indexing parse.pos directly changes the object
     posStack = parse.pos;
     state = 0;
     p = (s8*)parse.ptr;
@@ -124,6 +126,8 @@ BOOL parseGet1Next(s32 type, void* data) {
     for (; i < end; i++) {
         if (p[i] == '/' && p[i + 1] == '/') {
             for (; i < end; i++) {
+                // BUG: '/n' is a multi-character constant, not '\n', so no character matches it: after a //
+                // comment the scan runs to the end of the range and the value is not found.
                 if (p[i] == '/n') {
                     break;
                 }

@@ -39,6 +39,7 @@ s32 kpaPauseSeTable[28] = {0x10C, 0x10D, 0x10E, 0x10F, 0x111, 0x112, 0x113, 0x11
                            0x118, 0x119, 0x11B, 0x11E, 0x11F, 0x120, 0x122, 0x123, 0x124, 0x125,
                            0x127, 0x128, 0x129, 0x12A, 0x12C, 0x12D, 0x12E, 0x12F};
 static EffectEntry* fireefp;
+// FAKE: never used; pads .sbss to the 8 bytes of the original section; removing it changes the object
 static u8* fireefp_pad;
 
 static inline void kpaFireEntry2(Vec pos) {
@@ -127,7 +128,7 @@ s32 kpaNoHitEnemyCheck(void) {
 }
 
 s32 kpaMutekiCheck(void) {
-    return (marioGetPtr()->kpaWork->flags >> 16) & 1;
+    return (marioGetPtr()->kpaWork->flags & KPA_WORK_FLAG_MUTEKI) != 0;
 }
 
 void kpaMutekiOn(void) {
@@ -218,7 +219,7 @@ s32 kpaGetStageViewType(void) {
 s32 kpaCamFollow(void) {
     MarioWork* mp = marioGetPtr();
     s32 v;
-    if (marioBgmodeChk() == 1 || (v = (marioGetPtr()->stageFlags & 1) ^ 1, (s32)v == 1)) {
+    if (marioBgmodeChk() == 1 || (v = (marioGetPtr()->stageFlags & 1) ^ 1, v == 1)) {
         return 0;
     }
     if (mp->position.y > 76.0f) {
@@ -254,7 +255,7 @@ void kpaPreInit(void) {
     } else {
         mp->stageFlags &= ~2;
     }
-    fireefp = 0;
+    fireefp = NULL;
 }
 
 f32 __fabsf(f32);
@@ -492,7 +493,7 @@ f32 kpaSetJumpPara(void) {
 
 f32 kpaSetFallPara(void) {
     MarioWork* mp = marioGetPtr();
-    if ((mp->buttonHold & PAD_BUTTON_A)) {
+    if (mp->buttonHold & PAD_BUTTON_A) {
         kpaSetJumpParams(mp, -0.05f, -0.08f, -0.006f, -0.002f);
     } else {
         kpaSetJumpParams(mp, -0.1f, -0.2f, -0.024f, -0.01f);
@@ -514,7 +515,8 @@ void kpa_jumpNpc(void) {
         mp->flags |= MARIO_FLAG_IS_JUMPING;
         mp->currSubMotionId = 0;
     }
-    switch ((s32)mp->currSubMotionId) { case 0: {
+    switch ((s32)mp->currSubMotionId) {
+    case 0:
         marioMakeJumpPara();
         if (mp->jumpVelocityY <= 0.0f) {
             if (!(mp->flags & MARIO_FLAG_IS_CARRYING_BOBBERY) && mp->characterId == CHARACTER_MARIO) {
@@ -527,7 +529,8 @@ void kpa_jumpNpc(void) {
             mp->flags &= ~MARIO_FLAG_IS_JUMPING;
             mp->flags |= MARIO_FLAG_IS_FALLING;
         }
-    } break; }
+        break;
+    }
     mp->position.y += mp->jumpVelocityY;
     mp->airTimer++;
 }
@@ -565,7 +568,6 @@ void kpaFall(void) {
         if (mp->currMotionId == MARIO_MOTION_HIP || mp->currMotionId == MARIO_MOTION_HIP_2) {
             return;
         }
-        {
         if (!marioKeyOffChk() || !marioCtrlOffChk()) {
             if (!(mp->flags & MARIO_FLAG_FORCED_MOVEMENT)) {
                 f32 bs = mp->baseSpeed;
@@ -605,9 +607,10 @@ void kpaFall(void) {
             marioLandOn();
         }
     }
-    }
 }
 
+// FAKE: stand-in, never called (the linker strips it); it only puts kpaSetFallPara's eight literals into the
+// .sdata2 pool; removing it changes the object
 void kpaStrippedFallPool(f32* f) {
     f[0] = -0.05f;
     f[1] = -0.08f;
@@ -763,16 +766,16 @@ void kpaFireAttack(void) {
         }
         mp->kpaWork->attackState = 0;
         switch ((u16)mp->currMotionId) {
-        case 0:
+        case MARIO_MOTION_STAY:
             kpaChgPose("KPA_S_1", "KPA2_S_1");
             break;
-        case 1:
+        case MARIO_MOTION_WALK:
             kpaChgPose("KPA_W_1", "KPA2_W_1");
             break;
-        case 2:
+        case MARIO_MOTION_DASH:
             kpaChgPose("KPA_R_1", "KPA2_R_1");
             break;
-        case 0x25:
+        case MARIO_MOTION_KPA_SWIM:
             kpaChgPose("KPA_S_1", "KPA2_Z_2");
             break;
         }
@@ -781,14 +784,9 @@ void kpaFireAttack(void) {
 }
 
 void kpaCancelAttackMode(void) {
-    MarioWork* mp;
     KpaWork* w = marioGetPtr()->kpaWork;
     w->attackState = 0;
-    mp = marioGetPtr();
-    if (mp->kpaWork->fireSfxId != 0xFFFFFFFFU) {
-        psndSFXOff(mp->kpaWork->fireSfxId);
-        mp->kpaWork->fireSfxId = -1;
-    }
+    kpaFireSEOff();
 }
 
 s32 kpaGetAttackMode(void) {
@@ -798,8 +796,8 @@ s32 kpaGetAttackMode(void) {
 void kpaFireDelete(void) {
     if (fireefp) {
         MarioWork* mp;
-        effSoftDelete((void*)fireefp);
-        fireefp = 0;
+        effSoftDelete(fireefp);
+        fireefp = NULL;
         mp = marioGetPtr();
         if (mp->kpaWork->fireSfxId != 0xFFFFFFFFU) {
             psndSFXOff(mp->kpaWork->fireSfxId);
@@ -808,6 +806,8 @@ void kpaFireDelete(void) {
     }
 }
 
+// FAKE: stand-in, never called (the linker strips it); its int-to-float conversion only puts the conversion
+// constant into the pool; removing it changes the object
 void kpaStrippedPool(f32* f, s32 i) {
     *f = (f32)i;
 }
@@ -820,17 +820,15 @@ void kpaFireMain(void) {
     Mtx m20;
     Vec out;
     Vec zero;
-    s32 flag;
     s32 lv;
     EffectEntry* fe;
     EffGonbabaBreathWork* w;
     s32 i;
-    f32 f31;
+    f32 ballScale;
     f32 f30;
-    f32 f29;
+    f32 headScale;
     mp->kpaWork->flameHit = NULL;
-    flag = 0;
-    if (fireefp && (f32)flag == 0.0f) {
+    if (fireefp) {
         f32 dir;
         f32 scale;
         f32 y;
@@ -842,7 +840,7 @@ void kpaFireMain(void) {
         t = (marioGetPtr()->stageFlags & 1) ^ 1;
         y = mp->position.y + (20.0f * scale + (t == 1 ? 6.0f : 0.0f));
         z = mp->position.z;
-                ((EffGonbabaBreathWork*)fireefp->userdata)->position.x = f30;
+        ((EffGonbabaBreathWork*)fireefp->userdata)->position.x = f30;
         ((EffGonbabaBreathWork*)fireefp->userdata)->position.y = y;
         ((EffGonbabaBreathWork*)fireefp->userdata)->position.z = z;
         {
@@ -858,7 +856,7 @@ void kpaFireMain(void) {
             fe = fireefp;
             camGetPtr(CAMERA_3D);
             w = (EffGonbabaBreathWork*)fe->userdata;
-            f29 = w->scale;
+            headScale = w->scale;
             PSMTXTrans(m80, w->position.x, w->position.y, w->position.z);
             PSMTXRotRad(m50, 'y', 0.017453292f * (w->yaw - camGetPtr(CAMERA_3D)->viewYaw));
             if (w->yaw > 90.0f && w->yaw < 270.0f) {
@@ -872,11 +870,11 @@ void kpaFireMain(void) {
             for (i = 1; i < fe->count; i++, w++) {
                 if (((i - 1) & 3) == 0 && w->delay == 0 && w->life > 0x10) {
                     void* hit;
-                    f31 = 7.0f * w->scale;
-                    f30 = f31 * f29;
+                    ballScale = 7.0f * w->scale;
+                    f30 = ballScale * headScale;
                     if (!(f30 < 7.0f)) {
                         PSMTXTrans(m80, w->position.x, w->position.y, w->position.z);
-                        PSMTXScale(mb0, f31, f31, f31);
+                        PSMTXScale(mb0, ballScale, ballScale, ballScale);
                         PSMTXConcat(m80, mb0, m80);
                         PSMTXConcat(m20, m80, m80);
                         zero = *(Vec*)vec3_802fc920;
@@ -891,12 +889,10 @@ void kpaFireMain(void) {
             }
         }
     }
-    {
-        if (kpaFireAttackCheck() == 0) {
-            if (fireefp) {
-                effSoftDelete((void*)fireefp);
-                fireefp = 0;
-            }
+    if (kpaFireAttackCheck() == 0) {
+        if (fireefp) {
+            effSoftDelete(fireefp);
+            fireefp = NULL;
         }
     }
 }

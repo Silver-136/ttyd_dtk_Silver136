@@ -14,7 +14,7 @@
 #include "mario/mariost.h"
 
 //.sbss
-void* ptr; //but why
+void* ptr;
 u32 size;
 
 void setupDataLoad(const char* mapName) {
@@ -53,13 +53,17 @@ BOOL setupDataCheck(void) {
     char tribeName[64];
     BOOL group;
 
-    if (!ptr) return TRUE;
+    if (!ptr) {
+        return TRUE;
+    }
     parseInit(ptr, size);
     while (parsePush("<Npc>")) {
         parseTagGet1("<tribe>", 0, tribeName);
         parsePopNext();
         group = gp->inBattle != 0;
-        if (!animGroupBaseAsync(npcGetTribe(tribeName)->modelName, group, NULL)) return FALSE;
+        if (!animGroupBaseAsync(npcGetTribe(tribeName)->modelName, group, NULL)) {
+            return FALSE;
+        }
     }
     parsePop();
     return TRUE;
@@ -67,7 +71,9 @@ BOOL setupDataCheck(void) {
 static inline MapAttrEntry* findMapAttr(const char* name) {
     MapAttrEntry* p = _map_attr_data;
     for (;;) {
-        if (!p->name || !strcmp(p->name, name)) break;
+        if (!p->name || !strcmp(p->name, name)) {
+            break;
+        }
         p++;
     }
     return p;
@@ -112,11 +118,15 @@ void setupDataBase(const char* areaName, const char* mapName) {
             strcpy(fbat->deadInfo[i].mapName, mapName);
             break;
         }
-        if (strcmp(fbat->deadInfo[i].mapName, mapName) == 0) break;
+        if (strcmp(fbat->deadInfo[i].mapName, mapName) == 0) {
+            break;
+        }
     }
     if (i > 0) {
         tmp = fbat->deadInfo[i];
-        for (j = i; j >= 1; j--) fbat->deadInfo[j] = fbat->deadInfo[j - 1];
+        for (j = i; j >= 1; j--) {
+            fbat->deadInfo[j] = fbat->deadInfo[j - 1];
+        }
         fbat->deadInfo[0] = tmp;
     }
 
@@ -124,7 +134,7 @@ void setupDataBase(const char* areaName, const char* mapName) {
         a = findMapAttr(mapName);
         b = findMapAttr(dead1->mapName);
         if (a->area != b->area) {
-            memset(dead, 0, 0x500);
+            memset(dead, 0, sizeof(fbat->deadInfo));
             strcpy(dead->mapName, mapName);
         } else if (!(attr->flags & 2) && (attr->flags & 4)) {
             memset(&fbat->deadInfo[2], 0, 0x4d8);
@@ -133,7 +143,9 @@ void setupDataBase(const char* areaName, const char* mapName) {
 
     k = 0;
     isMarker = 0;
-    if (attr->flags & 1) isMarker = 1;
+    if (attr->flags & 1) {
+        isMarker = 1;
+    }
     if (ptr) {
         parseInit(ptr, size);
         while (parsePush("<Npc>")) {
@@ -154,7 +166,7 @@ void setupDataBase(const char* areaName, const char* mapName) {
             parsePopNext();
             if (!isMarker || !(dead->mask & (1 << (u8)k))) {
                 tribe = npcGetTribe(tribeName);
-                npcEntry(npcName, (const char*)tribe->modelName);
+                npcEntry(npcName, tribe->modelName);
                 npc = npcNameToPtr(npcName);
                 npc->setupIndex = k;
                 ai = npc_ai_type_table;
@@ -166,22 +178,22 @@ void setupDataBase(const char* areaName, const char* mapName) {
                 npc->height = tribe->height;
                 npc->flags &= ~NPC_FLAG_READY;
                 for (;;) {
-                    if (!ai->description) break;
+                    if (!ai->description) {
+                        break;
+                    }
                     if (strcmp(ai->description, aiType) != 0) {
                         ai++;
                         continue;
                     }
-                    {
-                        npc->flags |= ai->flags;
-                        npc->initEvent = ai->initEvent;
-                        npc->moveEvent = ai->moveEvent;
-                        npc->deadEvent = ai->deadEvent;
-                        npc->findEvent = ai->findEvent;
-                        npc->lostEvent = ai->lostEvent;
-                        npc->returnEvent = ai->returnEvent;
-                        npc->blowEvent = ai->blowEvent;
-                        break;
-                    }
+                    npc->flags |= ai->flags;
+                    npc->initEvent = ai->initEvent;
+                    npc->moveEvent = ai->moveEvent;
+                    npc->deadEvent = ai->deadEvent;
+                    npc->findEvent = ai->findEvent;
+                    npc->lostEvent = ai->lostEvent;
+                    npc->returnEvent = ai->returnEvent;
+                    npc->blowEvent = ai->blowEvent;
+                    break;
                 }
                 npc->territoryType = dbGetDefData(npc_define_territory_type, terrType);
                 npc->territoryBase = base;
@@ -204,8 +216,12 @@ void setupDataBase(const char* areaName, const char* mapName) {
                     btl = dbGetDefData((NpcTerritoryInfo*)area->btlSetupNoTbl, btlSetup);
                 }
                 npcSetBattleInfo(npc, btl);
-                if (tribe->stayAnim) strcpy(npc->stayAnim, tribe->stayAnim);
-                if (tribe->talkAnim) strcpy(npc->talkAnim, tribe->talkAnim);
+                if (tribe->stayAnim) {
+                    strcpy(npc->stayAnim, tribe->stayAnim);
+                }
+                if (tribe->talkAnim) {
+                    strcpy(npc->talkAnim, tribe->talkAnim);
+                }
                 if (tribe->initialAnim) {
                     strcpy(npc->currentAnim, tribe->initialAnim);
                     animPoseSetAnim(npc->poseId, npc->currentAnim, 1);

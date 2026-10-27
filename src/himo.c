@@ -46,43 +46,43 @@ void vivihimo(Mtx a, Mtx b, f32 speed, f32 scale, f32 offA, f32 offB) {
     PSMTXCopy(a, pw->m0);
     PSMTXCopy(b, pw->m1);
     {
-    Vec dir = *(Vec*)a[0];
-    if (dir.x != 0.0f || dir.y != 0.0f || dir.z != 0.0f) {
-        Vec dn;
-        Vec delta;
-        PSVECNormalize(&dir, &dir);
-        pts = pw->pts;
-        {
-        Vec off = { 0.0f, 0.0f, 0.0f };
-        off.x = -dir.x;
-        off.y = -dir.y;
-        off.z = -dir.z;
-        dn = off;
-        }
-        wob = (f32)sin(0.1f * ((f32)gp->retraceCount * speed));
-        wob = wob * 2.5f;
-        PSVECSubtract(&pw->p1, &pw->p0, &delta);
-        pt = pts;
-        for (i = 0; i < 4; i++) {
-            f32 s = 10.0f * (f32)sin(3.1415927f * (f32)i / 4.0f) + wob;
-            f32 k;
-            if (i == 1) {
-                k = scale * (0.2f * s);
-            } else if (i == 2) {
-                k = scale * s;
-            } else {
-                k = scale * (-1.0f * (f32)(i & 1) * s);
+        Vec dir = *(Vec*)a[0];
+        if (dir.x != 0.0f || dir.y != 0.0f || dir.z != 0.0f) {
+            Vec dn;
+            Vec delta;
+            PSVECNormalize(&dir, &dir);
+            pts = pw->pts;
+            {
+                Vec off = { 0.0f, 0.0f, 0.0f };
+                off.x = -dir.x;
+                off.y = -dir.y;
+                off.z = -dir.z;
+                dn = off;
             }
-            pt->x = pw->p0.x + 0.33333334f * (delta.x * (f32)i) + dn.x * k;
-            pt->y = pw->p0.y + 0.33333334f * (delta.y * (f32)i) + dn.y * k;
-            pt->z = pw->p0.z + 0.33333334f * (delta.z * (f32)i) + dn.z * k;
-            pt++;
+            wob = (f32)sin(0.1f * ((f32)gp->retraceCount * speed));
+            wob = wob * 2.5f;
+            PSVECSubtract(&pw->p1, &pw->p0, &delta);
+            pt = pts;
+            for (i = 0; i < 4; i++) {
+                f32 s = 10.0f * (f32)sin(3.1415927f * (f32)i / 4.0f) + wob;
+                f32 k;
+                if (i == 1) {
+                    k = scale * (0.2f * s);
+                } else if (i == 2) {
+                    k = scale * s;
+                } else {
+                    k = scale * (-1.0f * (f32)(i & 1) * s);
+                }
+                pt->x = pw->p0.x + 0.33333334f * (delta.x * (f32)i) + dn.x * k;
+                pt->y = pw->p0.y + 0.33333334f * (delta.y * (f32)i) + dn.y * k;
+                pt->z = pw->p0.z + 0.33333334f * (delta.z * (f32)i) + dn.z * k;
+                pt++;
+            }
+            pts[0] = pw->p0;
+            pts[3] = pw->p1;
+            spline_maketable(4, pts, pw->t1, pw->t2);
+            vivihimoDisp(camGetCurNo(), pw);
         }
-        pts[0] = pw->p0;
-        pts[3] = pw->p1;
-        spline_maketable(4, pts, pw->t1, pw->t2);
-        vivihimoDisp(camGetCurNo(), pw);
-    }
     }
 }
 
@@ -155,25 +155,25 @@ void vivihimoDisp(CameraId camId, HimoWork* w) {
         GXLoadPosMtxImm(pB, GX_PNMTX1);
         wid = k * (tanBase + (f32)tan(3.1415927f * (0.82f * t) - 1.288053f));
         GXBegin(GX_QUADS, GX_VTXFMT0, 4);
-        GXWGFifo.u8 = 0;
+        GXWGFifo.u8 = GX_PNMTX0;
         GXWGFifo.u8 = 1;
         GXWGFifo.u8 = 0;
         GXWGFifo.u8 = 0;
         GXWGFifo.f32 = 0.0f;
         GXWGFifo.f32 = pwid;
-        GXWGFifo.u8 = 3;
+        GXWGFifo.u8 = GX_PNMTX1;
         GXWGFifo.u8 = 1;
         GXWGFifo.u8 = 0;
         GXWGFifo.u8 = 0;
         GXWGFifo.f32 = 0.0f;
         GXWGFifo.f32 = wid;
-        GXWGFifo.u8 = 3;
+        GXWGFifo.u8 = GX_PNMTX1;
         GXWGFifo.u8 = 0;
         GXWGFifo.u8 = 0;
         GXWGFifo.u8 = 0;
         GXWGFifo.f32 = 1.0f;
         GXWGFifo.f32 = wid;
-        GXWGFifo.u8 = 0;
+        GXWGFifo.u8 = GX_PNMTX0;
         GXWGFifo.u8 = 0;
         GXWGFifo.u8 = 0;
         GXWGFifo.u8 = 0;

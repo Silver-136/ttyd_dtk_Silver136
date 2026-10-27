@@ -10,17 +10,10 @@
 #include <dolphin/types.h>
 #include <string.h>
 #include "mario/mario_sbr.h"
-#include "koopa.h"
 #include "libc_decls.h"
 #include "eff/eff_magic1_n64.h"
 #include "koopa_hit.h"
 #include <math.h>
-s32 kpaEnemyFireHitChk(f32 x, f32 y, f32 z, f32 h, f32 w);
-BOOL kpaFlameHitFilter(HitCheckQuery* query, HitEntry* entry);
-
-
-
-
 
 static inline f32 kpa_nrmToAngle(f32 x, f32 y, f32 z) {
     return angleABf(0.0f, 0.0f, sqrtf(x * x + z * z), -y);
@@ -360,6 +353,7 @@ HitEntry* kpaSearchFrontUnder(void) {
 }
 
 HitEntry* kpaGetHitobjHead(s32 i) {
+    // FAKE: address temporary; the plain return of headHit[i] changes the object
     HitEntry** e = &marioGetPtr()->kpaWork->headHit[i];
     return *e;
 }
@@ -368,6 +362,7 @@ HitEntry* kpaGetHitobjHead2(void) {
 #ifdef VERSION_G8ME01
     s32 i;
     HitEntry* hit;
+    // FAKE: ret is a spare copy of hit; returning hit changes the object
     HitEntry* ret;
     for (i = 0; i < 10; i++) {
         hit = marioGetPtr()->kpaWork->headHit[i];
@@ -383,43 +378,49 @@ HitEntry* kpaGetHitobjHead2(void) {
 }
 
 HitEntry* kpaGetHitobjRide(s32 i) {
+    // FAKE: address temporary; the plain return of rideHit[i] changes the object
     HitEntry** e = &marioGetPtr()->kpaWork->rideHit[i];
     return *e;
 }
 
 HitEntry* kpaChkHitobjRide(void) {
-KpaWork* w = marioGetPtr()->kpaWork;
-HitEntry* r;
-r = w->rideHit[0];
-if (!r) {
-r = w->rideHit[1];
-if (!r) {
-r = w->rideHit[2];
-if (!r) {
-r = w->rideHit[3];
-if (!r) {
-r = w->rideHit[4];
-if (!r) {
-r = w->rideHit[5];
-if (!r) {
-r = w->rideHit[6];
-if (!r) {
-r = w->rideHit[7];
-if (!r) {
-r = w->rideHit[8];
-if (!r) {
-r = w->rideHit[9];
-if (r) { return r; } else { return r; }
-}
-}
-}
-}
-}
-}
-}
-}
-}
-return r;
+    KpaWork* w = marioGetPtr()->kpaWork;
+    HitEntry* r;
+    r = w->rideHit[0];
+    if (!r) {
+        r = w->rideHit[1];
+        if (!r) {
+            r = w->rideHit[2];
+            if (!r) {
+                r = w->rideHit[3];
+                if (!r) {
+                    r = w->rideHit[4];
+                    if (!r) {
+                        r = w->rideHit[5];
+                        if (!r) {
+                            r = w->rideHit[6];
+                            if (!r) {
+                                r = w->rideHit[7];
+                                if (!r) {
+                                    r = w->rideHit[8];
+                                    if (!r) {
+                                        r = w->rideHit[9];
+                                        // FAKE: dead test (both branches return r); dropping it changes the object
+                                        if (r) {
+                                            return r;
+                                        } else {
+                                            return r;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return r;
 }
 
 long kpaClearHitobjRide(void) {
@@ -457,7 +458,7 @@ typedef struct HeadSphere {
     s32 y;
     s32 radius;
     s32 mode;
-} HeadSphere; // mode: 0 always, 1 grounded only, 2 airborne only, 3 neither flag
+} HeadSphere; // mode: 0 always, 1 only while jumping, 2 only while not jumping, 3 only while neither jumping nor falling
 typedef struct HeadSphereSet1 {
     s32 count;
     HeadSphere spheres[1];
@@ -501,7 +502,12 @@ static HeadSphereSet1 head_sphere_data_lv0 = {
     {10, 15, 6, 0},
     },
 };
-static s32* head_sphere_data[] = {(s32*)&head_sphere_data_lv0, (s32*)&head_sphere_data_lv1, (s32*)&head_sphere_data_lv2, (s32*)&head_sphere_data_lv3};
+static s32* head_sphere_data[] = {
+    (s32*)&head_sphere_data_lv0,
+    (s32*)&head_sphere_data_lv1,
+    (s32*)&head_sphere_data_lv2,
+    (s32*)&head_sphere_data_lv3,
+};
 
 HitEntry* kpaHitCheck(void) {
     s32* p;
@@ -556,8 +562,6 @@ HitEntry* kpaHitCheck(void) {
             marioGetPtr()->kpaWork->headHit[j] = hit;
         }
         if (hit) {
-            {
-            }
             best = hit;
         }
     }

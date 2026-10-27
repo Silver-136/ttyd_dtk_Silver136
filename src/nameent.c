@@ -16,12 +16,12 @@
 #include "sfx_name_word.h"
 #include "eff/eff_magic1_n64.h"
 #include "dolphin/gx.h"
+#include <string.h>
 
 void FontDrawString(f32 x, f32 y, const char* str);
 void nameBG(void);
 void nameKirinukiGX(f32 x, f32 y, f32 w, f32 h);
 void nameWinGX(f32 x, f32 y, f32 w, f32 h, TEXPalette* tpl, s32 type);
-#include <string.h>
 
 s32 nameMain(void);
 void nameEntDisp(CameraId cameraId, void* param);
@@ -213,7 +213,7 @@ void nameEntOff(void) {
 
 BOOL nameEntWait(void) {
     wp->flags |= 1;
-    return wp->state != 0x65;
+    return wp->state != 101;
 }
 
 BOOL nameEntIsCancel(void) {
@@ -223,7 +223,7 @@ BOOL nameEntIsCancel(void) {
 const char* nameEntGetName(void) {
     s32 j;
 
-    if (wp->state != 0x65) {
+    if (wp->state != 101) {
         return NULL;
     }
 #ifdef VERSION_G8ME01
@@ -312,6 +312,7 @@ s32 nameMain(void) {
                 if (keyGetButtonTrg(0) & PAD_BUTTON_A) {
                     off = wp->cursorX;
 #ifdef VERSION_G8ME01
+                    // FAKE: no-op (s32) cast; the plain ?: changes the object
                     if (off >= 10 && wp->cursorY >= (s32)((u32)gp->language == LANGUAGE_JP ? 4 : 6)) {
 #else
                     if (off >= 10 && wp->cursorY >= 4) {
@@ -329,7 +330,7 @@ s32 nameMain(void) {
                                 if (wp->nameLen > 0) {
                                     wp->nameLen--;
                                     psndSFXOn(SFX_NAME_WORD(PSND_SFX_FILE_MOJI_DELETE1 | PSND_SFX_BYPASS_MUTE));
-                                                            }
+                                }
                                 break;
                             case 7: {
                                 s32 n;
@@ -394,7 +395,7 @@ s32 nameMain(void) {
                                     psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_NOT_CHOICE1 | PSND_SFX_BYPASS_MUTE));
                                 }
 #endif
-}
+                            }
                                 break;
                         }
                     } else if (wp->nameLen < 8) {
@@ -494,7 +495,7 @@ s32 nameMain(void) {
                     if ((u32)gp->language == LANGUAGE_JP) {
                         if (wp->nameLen == 0 && wp->type == 0 && !strncmp(wp->name, "\x81\x40", 2)) {
                             psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_CANCEL1));
-                            wp->state = 0x65;
+                            wp->state = 101;
                             wp->flags |= 2;
                         } else {
                             ((u16*)wp->name)[wp->nameLen] = *(u16*)"\x81\x40";
@@ -507,7 +508,7 @@ s32 nameMain(void) {
                     } else {
                         if (wp->nameLen == 0 && wp->type == 0 && !strncmp(wp->name, " ", 1)) {
                             psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_CANCEL1));
-                            wp->state = 0x65;
+                            wp->state = 101;
                             wp->flags |= 2;
                         } else {
                             wp->name[wp->nameLen] = *" ";
@@ -521,7 +522,7 @@ s32 nameMain(void) {
 #else
                     if (wp->nameLen == 0 && wp->type == 0 && !strncmp(wp->name, "\x81\x40", 2)) {
                         psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_CANCEL1));
-                        wp->state = 0x65;
+                        wp->state = 101;
                         wp->flags |= 2;
                     } else {
                         ((u16*)wp->name)[wp->nameLen] = *(u16*)"\x81\x40";
@@ -652,14 +653,14 @@ s32 nameMain(void) {
 void nameEntDisp(CameraId cameraId, void* param) {
     GXColor white2;
     GXColor white;
-    GXColor unused = {0xFF, 0xFF, 0xFF, 0xFF};
+    GXColor whiteInit = {0xFF, 0xFF, 0xFF, 0xFF};
     const char* str;
     s32 n;
     s32 j;
     s32 i;
     CameraEntry saved;
-    f32 proj[7];
-    f32 vp[6];
+    f32 proj[GX_PROJECTION_SZ];
+    f32 vp[GX_VIEWPORT_SZ];
     char buf[16];
     CameraEntry* cam;
     const char* ok;
@@ -667,7 +668,8 @@ void nameEntDisp(CameraId cameraId, void* param) {
     const char* no;
     f32 w;
 
-    white = unused;
+    // FAKE: opaque white copied through whiteInit, white and white2; one initialized local changes the object
+    white = whiteInit;
     white2 = white;
     saved = *camGetCurPtr();
     GXGetProjectionv(proj);
@@ -723,8 +725,7 @@ void nameEntDisp(CameraId cameraId, void* param) {
         strncpy(buf, &wp->name[n * 2], 2);
 #endif
         if (strlen(buf)) {
-            FontDrawString((28.0f - FontGetMessageWidth(buf)) / 2.0f + (f32)(n * 32 - 120)
-, 171.0f, buf);
+            FontDrawString((28.0f - FontGetMessageWidth(buf)) / 2.0f + (f32)(n * 32 - 120), 171.0f, buf);
         }
     }
     str = msg_tbl[wp->type];
@@ -973,9 +974,11 @@ static inline void nameWinQuad(TEXPalette* tpl, s32 a, s32 b, s32 c, f32 x, f32 
     GXInitTexObjLOD(&obj, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
     GXLoadTexObj(&obj, GX_TEXMAP2);
     GXSetTexCoordGen2(GX_TEXCOORD1, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX1, GX_FALSE, GX_PTIDENTITY);
-    { ah2 = __fabs(h); aw2 = __fabs(w);
+    // FAKE: second pair of |w|/|h| locals for the TEXMTX1 scale; reusing aw/ah changes the object
+    ah2 = __fabs(h);
+    aw2 = __fabs(w);
     PSMTXScale(i, (f32)aw2 / GXGetTexObjWidth(&obj), (f32)ah2 / GXGetTexObjHeight(&obj), 1.0f);
-    GXLoadTexMtxImm(i, GX_TEXMTX1, GX_MTX2x4); }
+    GXLoadTexMtxImm(i, GX_TEXMTX1, GX_MTX2x4);
     GXBegin(GX_QUADS, GX_VTXFMT0, 4);
     GXPosition3f32(x, y, 0.0f);
     GXTexCoord2f32(0.0f, 0.0f);
@@ -1029,4 +1032,3 @@ void nameWinGX(f32 x, f32 y, f32 w, f32 h, TEXPalette* tpl, s32 type) {
     nameWinQuad(tpl, type + 4, type + 6, type + 1, x, y - h + 16, w - 16, 16);
     nameWinQuad(tpl, type + 4, type + 8, type + 3, x + w - 16, y - h + 16, 16, 16);
 }
-

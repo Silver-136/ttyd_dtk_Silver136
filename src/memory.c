@@ -18,7 +18,7 @@ struct MapAllocEntry {
 SmartWork smartWork;
 
 //.sdata
-//flag, size / 0x400 (>> 10)
+// {fixed, size}: a fixed heap (1) has its size in KiB, the others (0) get size percent of the arena left over
 #ifdef VERSION_G8ME01
 // US: no fixed battle heap (battle maps use a map sub-heap); the smart heap is index 4
 #define HEAP_COUNT 5
@@ -78,7 +78,7 @@ void memInit(void) {
     u32 restSize;
     int i;
     int size;
-    u8* temp;
+    u8* cursor;
 
     arenaLo = OSGetArenaLo();
     arenaHi = OSGetArenaHi();
@@ -86,36 +86,35 @@ void memInit(void) {
     OSSetArenaLo(arenaLo);
     arenaLo = (void*)OSRoundUp32B(arenaLo);
     arenaHi = (void*)OSRoundDown32B(arenaHi);
-    temp = arenaLo;
+    cursor = arenaLo;
 
     for (i = 0; i < HEAP_COUNT; i++) {
         if (size_table[i][0] == 1) {
-            heapStart[i] = temp;
+            heapStart[i] = cursor;
             size = size_table[i][1] << 10;
-            heapEnd[i] = temp + size;
-            temp += size;
+            heapEnd[i] = cursor + size;
+            cursor += size;
         }
     }
 
-    restSize = (u8*)arenaHi - temp;
+    restSize = (u8*)arenaHi - cursor;
     for (i = 0; i < HEAP_COUNT; i++) {
         if (size_table[i][0] == 0) {
             size = (size_table[i][1] * (u64)restSize) / 100Ull;
-            heapStart[i] = temp;
+            heapStart[i] = cursor;
             size -= (size & 0x1F);
-            heapEnd[i] = temp + size;
-            temp += size;
+            heapEnd[i] = cursor + size;
+            cursor += size;
         }
     }
     for (i = 0; i < HEAP_COUNT; i++) {
         heapHandle[i] = OSCreateHeap(heapStart[i], heapEnd[i]);
     }
-    OSSetArenaLo((void* ) arenaHi);
+    OSSetArenaLo(arenaHi);
     for (i = 0; i < HEAP_COUNT; i++) {
         memClear(i);
     }
 }
-
 
 static inline void mapallocInit(void) {
 #ifdef VERSION_G8ME01
@@ -137,6 +136,7 @@ static inline void mapallocInit(void) {
         DCFlushRange(entry, size);
     }
 #ifdef VERSION_G8ME01
+    // FAKE: total is a spare copy of mapalloc_size (read before the stores); reading mapalloc_size at its use changes the object
     total = mapalloc_size;
     mapalloc_base_ptr = entry;
     entry->next = NULL;
@@ -182,6 +182,7 @@ void N_battleMapAlloc(void) {
 
     R_battlemapalloc_size = 0x64000;
     entry = (_mapAlloc)(mapalloc_base_ptr, 0x64000);
+    // FAKE: size is a spare copy of R_battlemapalloc_size (read before the stores); reading it at its use changes the object
     size = R_battlemapalloc_size;
     R_battlemapalloc_base_ptr = entry;
     entry->next = NULL;
@@ -196,14 +197,14 @@ void N_battleMapFree(void) {
 #endif
 
 void* (_mapAlloc)(MAPBASE_PARAM u32 size) {
-    MapAllocEntry* nextptr;
-    MapAllocEntry* entry; //for our loop
-    MapAllocEntry* tailEntry; //make sure we don't lose when inserting, might need better name
-    MapAllocEntry* currEntry; //one we're allocating
-    void* usableData; //memory caller can actually use
-    u32 usableSize; //size minus the MapAllocEntry header
-    u32 maxSize; //used to update latest tail
-    u32 fullSize; //size including header
+    MapAllocEntry* restEntry;
+    MapAllocEntry* entry;
+    MapAllocEntry* oldNext; // next of the chosen block before the split
+    MapAllocEntry* bestEntry; // smallest free block that fits
+    void* usableData; // returned to the caller (after the header)
+    u32 usableSize; // request rounded up to 32 bytes, without the header
+    u32 bestSize; // size of bestEntry, 0 while none fits
+    u32 fullSize; // usableSize plus the header
 
     usableSize = OSRoundUp32B(size);
     if (!usableSize) {
@@ -211,35 +212,37 @@ void* (_mapAlloc)(MAPBASE_PARAM u32 size) {
     }
     entry = MAPBASE;
     fullSize = usableSize + sizeof(MapAllocEntry);
-    maxSize = 0;
-    tailEntry = 0;
+    bestSize = 0;
+    oldNext = NULL;
     while (1) {
         if (!entry->inuse && entry->size >= fullSize) {
-            if (maxSize > entry->size || !maxSize) {
-                tailEntry = entry->next;
-                currEntry = entry;
-                maxSize = entry->size;
+            if (bestSize > entry->size || !bestSize) {
+                oldNext = entry->next;
+                bestEntry = entry;
+                bestSize = entry->size;
             }
         }
-        if (!entry->next) break;
+        if (!entry->next) {
+            break;
+        }
         entry = entry->next;
     }
-    if (maxSize) {
-        usableData = (void*)(currEntry + 1);
+    if (bestSize) {
+        usableData = (void*)(bestEntry + 1);
 
-        currEntry->next = (void*)((u8*)currEntry + fullSize);
-        currEntry->size = usableSize;
-        currEntry->inuse = 1;
+        bestEntry->next = (void*)((u8*)bestEntry + fullSize);
+        bestEntry->size = usableSize;
+        bestEntry->inuse = 1;
 #ifndef VERSION_G8ME01
-        currEntry->currId = COUNT++;
+        bestEntry->currId = COUNT++;
 #endif
 
-        nextptr = currEntry->next;
-        nextptr->next = tailEntry;
-        nextptr->size = maxSize - fullSize;
-        nextptr->inuse = 0;
+        restEntry = bestEntry->next;
+        restEntry->next = oldNext;
+        restEntry->size = bestSize - fullSize;
+        restEntry->inuse = 0;
 #ifndef VERSION_G8ME01
-        nextptr->currId = 0;
+        restEntry->currId = 0;
 #endif
 
         memset(usableData, 0, usableSize);
@@ -251,14 +254,13 @@ void* (_mapAlloc)(MAPBASE_PARAM u32 size) {
 }
 
 void* (_mapAllocTail)(MAPBASE_PARAM u32 size) {
-    MapAllocEntry* nextptr;
-    MapAllocEntry* entry; //for our loop
-    MapAllocEntry* tailEntry; //make sure we don't lose when inserting, might need better name
-    MapAllocEntry* currEntry; //one we're allocating
-    //void* usableData; //memory caller can actually use
-    u32 maxSize; //used to update latest tail
-    u32 fullSize; //size including header
-    u32 usableSize; //size minus the MapAllocEntry header
+    MapAllocEntry* usedEntry;
+    MapAllocEntry* entry;
+    MapAllocEntry* tailEntry; // next of freeEntry before the split, then the returned data
+    MapAllocEntry* freeEntry; // last free block that fits; the allocation is cut from its end
+    u32 freeSize; // size of freeEntry, 0 while none fits
+    u32 fullSize; // usableSize plus the header
+    u32 usableSize; // request rounded up to 32 bytes, without the header
 
     usableSize = OSRoundUp32B(size);
     if (!usableSize) {
@@ -266,35 +268,38 @@ void* (_mapAllocTail)(MAPBASE_PARAM u32 size) {
     }
     entry = MAPBASE;
     fullSize = usableSize + sizeof(MapAllocEntry);
-    maxSize = 0;
-    tailEntry = 0;
+    freeSize = 0;
+    tailEntry = NULL;
     while (1) {
         if (!entry->inuse && entry->size >= fullSize) {
             tailEntry = entry->next;
-            currEntry = entry;
-            maxSize = entry->size;
+            freeEntry = entry;
+            freeSize = entry->size;
         }
-        if (!entry->next) break;
+        if (!entry->next) {
+            break;
+        }
         entry = entry->next;
     }
-    if (maxSize) {
-        memset(currEntry, 0, fullSize);
-        DCFlushRange(currEntry, fullSize);
+    if (freeSize) {
+        memset(freeEntry, 0, fullSize);
+        DCFlushRange(freeEntry, fullSize);
 
-        currEntry->next = (MapAllocEntry*)(((u8*)currEntry + maxSize) - fullSize);
-        currEntry->size = maxSize - fullSize;
-        currEntry->inuse = 0;
+        freeEntry->next = (MapAllocEntry*)(((u8*)freeEntry + freeSize) - fullSize);
+        freeEntry->size = freeSize - fullSize;
+        freeEntry->inuse = 0;
 #ifndef VERSION_G8ME01
-        currEntry->currId = 0;
+        freeEntry->currId = 0;
 #endif
 
-        nextptr = currEntry->next;
-        nextptr->next = tailEntry;
-        tailEntry = (void*)(nextptr + 1);
-        nextptr->size = usableSize;
-        nextptr->inuse = 1;
+        usedEntry = freeEntry->next;
+        usedEntry->next = tailEntry;
+        // FAKE: tailEntry is reused for the returned data pointer; a separate void* changes the object
+        tailEntry = (void*)(usedEntry + 1);
+        usedEntry->size = usableSize;
+        usedEntry->inuse = 1;
 #ifndef VERSION_G8ME01
-        nextptr->currId = COUNT++;
+        usedEntry->currId = COUNT++;
 #endif
 
         memset(tailEntry, 0, usableSize);
@@ -314,9 +319,13 @@ void (_mapFree)(MAPBASE_PARAM void* alloc) {
     u32 newSize;
     MapAllocEntry* entry;
 
-    if (!alloc) return;
+    if (!alloc) {
+        return;
+    }
     entry = (MapAllocEntry*)alloc - 1;
-    if (!entry->inuse) return;
+    if (!entry->inuse) {
+        return;
+    }
     nextEntry = entry->next;
     newSize = entry->size;
     if (nextEntry && !nextEntry->inuse) {
@@ -332,7 +341,9 @@ void (_mapFree)(MAPBASE_PARAM void* alloc) {
             }
             break;
         }
-        if (loopEntry > entry || !loopEntry->next) break;
+        if (loopEntry > entry || !loopEntry->next) {
+            break;
+        }
         loopEntry = loopEntry->next;
     }
     entry->next = nextEntry;
@@ -356,8 +367,8 @@ void smartInit(void) {
         DCFlushRange(ptr, size);
     }
     wp->ptr = ptr;
-    wp->allocHead = 0;
-    wp->allocTail = 0;
+    wp->allocHead = NULL;
+    wp->allocTail = NULL;
     wp->bytesLeft = (u8*)heapEnd[SMART_HEAP] - (u8*)heapStart[SMART_HEAP] - 32;
     memset(wp->ptr, 0, (u8*)heapEnd[SMART_HEAP] - (u8*)heapStart[SMART_HEAP] - 32);
     memset(wp->work, 0, sizeof(wp->work));
@@ -378,8 +389,8 @@ void L_smartReInit(void) {
     smartEntry* e;
     int i;
 
-    wp->allocHead = 0;
-    wp->allocTail = 0;
+    wp->allocHead = NULL;
+    wp->allocTail = NULL;
     wp->bytesLeft = (u8*)heapEnd[SMART_HEAP] - (u8*)heapStart[SMART_HEAP] - 32;
     memset(wp->ptr, 0, (u8*)heapEnd[SMART_HEAP] - (u8*)heapStart[SMART_HEAP] - 32);
     memset(wp->work, 0, sizeof(wp->work));
@@ -392,7 +403,7 @@ void L_smartReInit(void) {
     wp->head->prev = NULL;
     wp->tail = &wp->work[0x7FF];
     wp->tail->next = NULL;
-    g_bFirstSmartAlloc = 0;
+    g_bFirstSmartAlloc = FALSE;
 }
 
 #pragma dont_inline on
@@ -410,6 +421,7 @@ void smartAutoFree(s32 allocType) {
     if (allocType == 3) {
         for (entry = wp->allocHead; entry; entry = next) {
             next = entry->next;
+            // FAKE: no-op (s32) cast; the plain compare changes the object
             if ((s32)entry->type == 4) {
                 smartFree(entry);
             }
@@ -464,8 +476,8 @@ void smartFree(smartEntry* entry) {
 }
 
 smartEntry* smartAlloc(u32 size, u8 type) {
-    smartEntry* entry1;
-    smartEntry* entry2;
+    smartEntry* prevEntry;
+    smartEntry* entry;
     int i;
     u32 sz = size;
 
@@ -479,64 +491,64 @@ smartEntry* smartAlloc(u32 size, u8 type) {
         wp->waitsync = 0;
     }
 
-    entry2 = wp->head;
+    entry = wp->head;
 
-    if (!entry2->prev) {
-        wp->head = entry2->next;
+    if (!entry->prev) {
+        wp->head = entry->next;
         if (wp->head) {
             wp->head->prev = NULL;
         }
     } else {
-        entry2->prev->next = entry2->next;
+        entry->prev->next = entry->next;
     }
 
-    if (!entry2->next) {
-        wp->tail = entry2->prev;
+    if (!entry->next) {
+        wp->tail = entry->prev;
         if (wp->tail) {
             wp->tail->next = NULL;
         }
     } else {
-        entry2->next->prev = entry2->prev;
+        entry->next->prev = entry->prev;
     }
 
     if (sz & 31) {
         sz += 32 - (sz & 31);
     }
 
-    entry2->reserved_C = 1;
-    entry2->type = type;
-    entry2->size = sz;
-    entry2->file = 0;
+    entry->reserved_C = 1;
+    entry->type = type;
+    entry->size = sz;
+    entry->file = NULL;
     if (wp->bytesLeft >= sz) {
-        entry2->address = wp->ptr;
-        entry2->spaceAfter = wp->bytesLeft - sz;
-        entry2->next = wp->allocHead;
-        entry2->prev = NULL;
+        entry->address = wp->ptr;
+        entry->spaceAfter = wp->bytesLeft - sz;
+        entry->next = wp->allocHead;
+        entry->prev = NULL;
         wp->bytesLeft = 0;
         if (wp->allocHead) {
-            wp->allocHead->prev = entry2;
+            wp->allocHead->prev = entry;
         }
-        wp->allocHead = entry2;
-        if (!entry2->next) {
-            entry2->spaceAfter = ((u8*)heapEnd[SMART_HEAP] - (u8*)heapStart[SMART_HEAP] - 32) + (u8*)wp->ptr - (u8*)entry2->address - entry2->size;
-            wp->allocTail = entry2;
+        wp->allocHead = entry;
+        if (!entry->next) {
+            entry->spaceAfter = ((u8*)heapEnd[SMART_HEAP] - (u8*)heapStart[SMART_HEAP] - 32) + (u8*)wp->ptr - (u8*)entry->address - entry->size;
+            wp->allocTail = entry;
         }
-        return entry2;
+        return entry;
     } else {
-        for (entry1 = wp->allocHead; entry1; entry1 = entry1->next) {
-            if (entry1->spaceAfter >= sz) {
-                entry2->address = (u8*)entry1->address + entry1->size;
-                entry2->spaceAfter = entry1->spaceAfter - sz;
-                entry2->next = entry1->next;
-                entry2->prev = entry1;
-                entry1->spaceAfter = 0;
-                if (entry1->next) {
-                    entry1->next->prev = entry2;
+        for (prevEntry = wp->allocHead; prevEntry; prevEntry = prevEntry->next) {
+            if (prevEntry->spaceAfter >= sz) {
+                entry->address = (u8*)prevEntry->address + prevEntry->size;
+                entry->spaceAfter = prevEntry->spaceAfter - sz;
+                entry->next = prevEntry->next;
+                entry->prev = prevEntry;
+                prevEntry->spaceAfter = 0;
+                if (prevEntry->next) {
+                    prevEntry->next->prev = entry;
                 } else {
-                    wp->allocTail = entry2;
+                    wp->allocTail = entry;
                 }
-                entry1->next = entry2;
-                return entry2;
+                prevEntry->next = entry;
+                return entry;
             }
         }
         for (i = 0; i < 3; i++) {
@@ -551,20 +563,20 @@ smartEntry* smartAlloc(u32 size, u8 type) {
                     break;
             }
             smartGarbage();
-            entry1 = wp->allocTail;
-            if (entry1->spaceAfter >= sz) {
-                entry2->address = (u8*)entry1->address + entry1->size;
-                entry2->spaceAfter = entry1->spaceAfter - sz;
-                entry2->next = entry1->next;
-                entry2->prev = entry1;
-                entry1->spaceAfter = 0;
-                if (entry1->next) {
-                    entry1->next->prev = entry2;
+            prevEntry = wp->allocTail;
+            if (prevEntry->spaceAfter >= sz) {
+                entry->address = (u8*)prevEntry->address + prevEntry->size;
+                entry->spaceAfter = prevEntry->spaceAfter - sz;
+                entry->next = prevEntry->next;
+                entry->prev = prevEntry;
+                prevEntry->spaceAfter = 0;
+                if (prevEntry->next) {
+                    prevEntry->next->prev = entry;
                 } else {
-                    wp->allocTail = entry2;
+                    wp->allocTail = entry;
                 }
-                entry1->next = entry2;
-                return entry2;
+                prevEntry->next = entry;
+                return entry;
             }
         }
         return NULL;

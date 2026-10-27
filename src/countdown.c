@@ -112,18 +112,14 @@ void countDownMain(void) {
             wp->elapsed += OSDiffTick(gp->renderTime, wp->prevTime);
         }
         wp->prevTime = gp->renderTime;
-        {
-            CountdownWork* work = wp;
-            if (OSTicksToMilliseconds(work->elapsed) >= work->limit) {
-                work->flags |= COUNTDOWN_FLAG_TIME_UP;
-            }
+        if (OSTicksToMilliseconds(wp->elapsed) >= wp->limit) {
+            wp->flags |= COUNTDOWN_FLAG_TIME_UP;
         }
         dispEntry(CAMERA_2D, 1000.0f, 0, countDownDisp, NULL);
     }
 }
 
 static void countDownDisp(CameraId cameraId, void* param) {
-    GXColor white = sWhite;
     GXColor white2;
     GXColor white3;
     CountdownWork* work = wp;
@@ -150,7 +146,7 @@ static void countDownDisp(CameraId cameraId, void* param) {
         PSMTXConcat(base, scale, mtx);
         {
             GXColor shadow = sShadow;
-            iconDispGxCol(mtx, 0x10, ICON_COUNTER_BG, shadow);
+            iconDispGxCol(mtx, ICON_FLAG_2D, ICON_COUNTER_BG, shadow);
         }
         digits[0] = sec / 100;
         sec %= 100;
@@ -159,11 +155,11 @@ static void countDownDisp(CameraId cameraId, void* param) {
         for (i = 0; i < 3; i++) {
             PSMTXTrans(mtx, i * 30 - 50, 8.0f, 0.0f);
             PSMTXConcat(base, mtx, mtx);
-            iconDispGxCol(mtx, 0x10, (u16)(digits[i] + ICON_COUNTER_DIGIT_0), white2);
+            iconDispGxCol(mtx, ICON_FLAG_2D, (u16)(digits[i] + ICON_COUNTER_DIGIT_0), white2);
         }
         PSMTXTrans(mtx, 28.0f, 10.0f, 0.0f);
         PSMTXConcat(base, mtx, mtx);
-        iconDispGxCol(mtx, 0x10, ICON_COUNTER_COLON, white3);
+        iconDispGxCol(mtx, ICON_FLAG_2D, ICON_COUNTER_COLON, white3);
         digits[0] = msec / 100;
         digits[1] = (msec % 100) / 10;
         for (i = 0; i < 2; i++) {
@@ -171,14 +167,14 @@ static void countDownDisp(CameraId cameraId, void* param) {
             PSMTXScale(scale, 0.5f, 0.5f, 0.5f);
             PSMTXConcat(mtx, scale, mtx);
             PSMTXConcat(base, mtx, mtx);
-            iconDispGxCol(mtx, 0x10, (u16)(digits[i] + ICON_COUNTER_DIGIT_0), white2);
+            iconDispGxCol(mtx, ICON_FLAG_2D, (u16)(digits[i] + ICON_COUNTER_DIGIT_0), white2);
         }
     }
 }
 
 s32 countDownGetStatus(void) {
     CountdownWork* work = wp;
-    return !(work->flags & COUNTDOWN_FLAG_RUNNING) ? -1 : (work->flags >> 1) & 1;
+    return !(work->flags & COUNTDOWN_FLAG_RUNNING) ? -1 : (work->flags & COUNTDOWN_FLAG_TIME_UP) != 0;
 }
 
 void countDownEnd(void) {

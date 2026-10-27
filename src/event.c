@@ -15,8 +15,6 @@
 #include "evt/evt_johoya.h"
 #include "statuswindow.h"
 #include "party.h"
-//funcs sorted backwards aka original source file
-
 
 #ifdef VERSION_G8ME01
 #define NAME_EN(x) , x
@@ -568,7 +566,7 @@ EventStage event_dt[] = {
 
 // Stage 0 / Prologue -----------------------------------------------------------------
 void stg0_00_init(void) {
-    pouchGetPtr(); //leftover from development, return value never used for pouchInit
+    pouchGetPtr(); // return value unused
     pouchInit();
     pouchGetItem(ITEM_BOOTS);
     pouchGetItem(ITEM_MAGICAL_MAP);
@@ -757,7 +755,7 @@ void stg2_11_init(void) {
 
 void stg2_12_01_init(void) {
     swSet(0xB3C); // GSWF_MRI_PUNIO_JOINED
-    swByteSet(0x28B, 0);
+    swByteSet(0x28B, 0); // GSW_MRI_PUNI_FOLLOWER_COUNT
 }
 
 void stg2_14_init(void) {
@@ -773,7 +771,7 @@ void stg2_15_init(void) {
 
 void stg2_16_init00(void) {
     swSet(0xB3F); // GSWF_MRI_PUNIPER_JOINED
-    swByteSet(0x28B, 9);
+    swByteSet(0x28B, 9); // GSW_MRI_PUNI_FOLLOWER_COUNT
     pouchGetItem(ITEM_PUNI_ORB);
 }
 
@@ -805,7 +803,7 @@ void stg2_21_init00(void) {
     swSet(0xB13); // GSWF_MRI_03_BLUE_JAIL_OPENED
     swSet(0xB3D); // GSWF_MRI_PETUNI_JOINED
     swClear(0xB14); // GSWF_MRI_PUNIO_WAITING_AT_JAIL
-    swByteSet(0x28B, 0x62);
+    swByteSet(0x28B, 0x62); // GSW_MRI_PUNI_FOLLOWER_COUNT
 }
 
 void stg2_21_init02(void) {
@@ -907,8 +905,8 @@ void stg3_06_init(void) {
     swSet(0x954); // GSWF_GLITZ_PIT_MATCH_RESERVED
     swByteSet(0x1F5, 0x13);
     swByteSet(0x1F6, 0x2B);
-    swByteSet(0x1F7, 1);
-    swByteSet(0x1F8, 1);
+    swByteSet(0x1F7, 1); // GSW_GLITZ_PIT_CONDITION_PARAM
+    swByteSet(0x1F8, 1); // GSW_GLITZ_PIT_CONDITION_PARAM2
 }
 
 void stg3_07_init__9(void) {
@@ -917,7 +915,7 @@ void stg3_07_init__9(void) {
     for (i = 0; i < 1; i++) {
         swSet(0x9B4 - i);
     }
-    swByteSet(0x1FB, 20 - i);
+    swByteSet(0x1FB, 20 - i); // GSW_GLITZ_PIT_LAST_OPPONENT
     swClear(0x954); // GSWF_GLITZ_PIT_MATCH_RESERVED
     swSet(0x958); // GSWF_TOU_GOOMBA_BROS_AFTER_MATCH_SEEN
     swSet(0x95B); // GSWF_TOU_GOOMBA_BROS_OPENING_SEEN
@@ -932,7 +930,7 @@ void stg3_07_init__8(void) {
     for (i = 0; i < 2; i++) {
         swSet(0x9B4 - i);
     }
-    swByteSet(0x1FB, 20 - i);
+    swByteSet(0x1FB, 20 - i); // GSW_GLITZ_PIT_LAST_OPPONENT
     swClear(0x954); // GSWF_GLITZ_PIT_MATCH_RESERVED
     swSet(0x966); // GSWF_TOU_RANK_18_KING_K_TALK_DONE
 }
@@ -943,7 +941,7 @@ void stg3_07_init__7(void) {
     for (i = 0; i < 3; i++) {
         swSet(0x9B4 - i);
     }
-    swByteSet(0x1FB, 20 - i);
+    swByteSet(0x1FB, 20 - i); // GSW_GLITZ_PIT_LAST_OPPONENT
     swSet(0x967); // GSWF_TOU_RANK_17_KING_K_TALK_DONE
 }
 
@@ -953,7 +951,7 @@ void stg3_07_init__6(void) {
     for (i = 0; i < 4; i++) {
         swSet(0x9B4 - i);
     }
-    swByteSet(0x1FB, 20 - i);
+    swByteSet(0x1FB, 20 - i); // GSW_GLITZ_PIT_LAST_OPPONENT
     swSet(0x968); // GSWF_TOU_RANK_16_KING_K_TALK_DONE
 }
 
@@ -963,23 +961,23 @@ void stg3_10_init__5(void) {
     for (i = 0; i < 5; i++) {
         swSet(0x9B4 - i);
     }
-    swByteSet(0x1FB, 20 - i);
+    swByteSet(0x1FB, 20 - i); // GSW_GLITZ_PIT_LAST_OPPONENT
     swSet(0x969); // GSWF_TOU_RANK_15_KING_K_TALK_DONE
 }
 
 void stg3_12_init__4(void) {
-    u8 copytobyte[8]; //stack+8/12
+    u8 timeBytes[8];
     int i;
 
     for (i = 0; i < 6; i++) {
         swSet(0x9B4 - i);
     }
-    swByteSet(0x1FB, 20 - i);
+    swByteSet(0x1FB, 20 - i); // GSW_GLITZ_PIT_LAST_OPPONENT
     swSet(0x96A); // GSWF_TOU_RANK_14_KING_K_TALK_DONE
     swSet(0x957); // GSWF_TOU_10_JUMP_STORY_TO_EGG
-    *(u64*)copytobyte = (u64)gp->retraceLocalTime;
+    *(u64*)timeBytes = (u64)gp->retraceLocalTime;
     for (i = 0; i < 8; i++) {
-        swByteSet(0x1FC + i, copytobyte[i]);
+        swByteSet(0x1FC + i, timeBytes[i]); // GSW_TOU_EGG_RECEIVED_TIME (8 bytes)
     }
     swSet(0x12); // GSWF_MAIL_RDM_ISSUE_2_SENT
     pouchReceiveMail(0x1C);
@@ -991,7 +989,7 @@ void stg3_12_init__3(void) {
     for (i = 0; i < 7; i++) {
         swSet(0x9B4 - i);
     }
-    swByteSet(0x1FB, 20 - i);
+    swByteSet(0x1FB, 20 - i); // GSW_GLITZ_PIT_LAST_OPPONENT
     swSet(0x96B); // GSWF_TOU_RANK_13_KING_K_TALK_DONE
 }
 
@@ -1001,7 +999,7 @@ void stg3_12_init__2(void) {
     for (i = 0; i < 8; i++) {
         swSet(0x9B4 - i);
     }
-    swByteSet(0x1FB, 20 - i);
+    swByteSet(0x1FB, 20 - i); // GSW_GLITZ_PIT_LAST_OPPONENT
     swSet(0x96C); // GSWF_GLITZ_PIT_KP_KOOPAS_RETIRED
 }
 
@@ -1011,7 +1009,7 @@ void stg3_12_init__1(void) {
     for (i = 0; i < 9; i++) {
         swSet(0x9B4 - i);
     }
-    swByteSet(0x1FB, 20 - i);
+    swByteSet(0x1FB, 20 - i); // GSW_GLITZ_PIT_LAST_OPPONENT
     swSet(0x96D); // GSWF_GLITZ_PIT_SIR_SWOOP_JOINED
 }
 
@@ -1028,7 +1026,7 @@ void stg3_20_init_10(void) {
     for (i = 0; i < 10; i++) {
         swSet(0x9B4 - i);
     }
-    swByteSet(0x1FB, 20 - i);
+    swByteSet(0x1FB, 20 - i); // GSW_GLITZ_PIT_LAST_OPPONENT
     swSet(0x96E);
     swSet(0x95E); // GSWF_TOU_ARMORED_HARRIERS_FIRST_WIN
     pouchReceiveMail(6);
@@ -1041,7 +1039,7 @@ void stg3_20_init_9(void) {
     for (i = 0; i < 11; i++) {
         swSet(0x9B4 - i);
     }
-    swByteSet(0x1FB, 20 - i);
+    swByteSet(0x1FB, 20 - i); // GSW_GLITZ_PIT_LAST_OPPONENT
     swSet(0x96F);
 }
 
@@ -1051,7 +1049,7 @@ void stg3_20_init_8(void) {
     for (i = 0; i < 12; i++) {
         swSet(0x9B4 - i);
     }
-    swByteSet(0x1FB, 20 - i);
+    swByteSet(0x1FB, 20 - i); // GSW_GLITZ_PIT_LAST_OPPONENT
     swSet(0x970); // GSWF_TOU_RANK_8_MAIL_DONE
 }
 
@@ -1072,7 +1070,7 @@ void stg3_20_init_7(void) {
     for (i = 0; i < 13; i++) {
         swSet(0x9B4 - i);
     }
-    swByteSet(0x1FB, 20 - i);
+    swByteSet(0x1FB, 20 - i); // GSW_GLITZ_PIT_LAST_OPPONENT
     swSet(0x971); // GSWF_TOU_RANK_7_MAIL_DONE
     swSet(0x994); // GSWF_TOU_08_JUMP_STORY_CONFISCATED
     swSet(0x9D5); // GSWF_TOU_04_CONFISCATED_EXIT_SEEN
@@ -1086,7 +1084,7 @@ void stg3_20_init_6(void) {
     for (i = 0; i < 14; i++) {
         swSet(0x9B4 - i);
     }
-    swByteSet(0x1FB, 20 - i);
+    swByteSet(0x1FB, 20 - i); // GSW_GLITZ_PIT_LAST_OPPONENT
     swSet(0x972); // GSWF_TOU_RANK_6_CAKE_DONE
     swClear(0x994); // GSWF_TOU_08_JUMP_STORY_CONFISCATED
 }
@@ -1097,7 +1095,7 @@ void stg3_20_init_5(void) {
     for (i = 0; i < 15; i++) {
         swSet(0x9B4 - i);
     }
-    swByteSet(0x1FB, 20 - i);
+    swByteSet(0x1FB, 20 - i); // GSW_GLITZ_PIT_LAST_OPPONENT
     swSet(0x973); // GSWF_TOU_RANK_5_BOWSER_EVENT_DONE
 }
 
@@ -1107,7 +1105,7 @@ void stg3_20_init_4(void) {
     for (i = 0; i < 16; i++) {
         swSet(0x9B4 - i);
     }
-    swByteSet(0x1FB, 20 - i);
+    swByteSet(0x1FB, 20 - i); // GSW_GLITZ_PIT_LAST_OPPONENT
     swSet(0x974); // GSWF_TOU_RANK_4_MAIL_DONE
     swSet(0x995); // GSWF_TOU_08_JUMP_STORY_MAJORS_4TH
 }
@@ -1150,7 +1148,7 @@ void stg3_20_init_3(void) {
     for (i = 0; i < 17; i++) {
         swSet(0x9B4 - i);
     }
-    swByteSet(0x1FB, 20 - i);
+    swByteSet(0x1FB, 20 - i); // GSW_GLITZ_PIT_LAST_OPPONENT
     swSet(0x975); // GSWF_GLITZ_PIT_DESTRUCTORS_JOINED
     pouchReceiveMail(13);
     pouchOpenMail(13);
@@ -1162,7 +1160,7 @@ void stg3_20_init_2(void) {
     for (i = 0; i < 18; i++) {
         swSet(0x9B4 - i);
     }
-    swByteSet(0x1FB, 20 - i);
+    swByteSet(0x1FB, 20 - i); // GSW_GLITZ_PIT_LAST_OPPONENT
     swSet(0x976);
     swSet(0x990); // GSWF_TOU_POISON_CAKE_DELIVERED
     swSet(0x993); // GSWF_TOU_POISON_CAKE_RECOVERED
@@ -1174,7 +1172,7 @@ void stg3_20_init_1(void) {
     for (i = 0; i < 19; i++) {
         swSet(0x9B4 - i);
     }
-    swByteSet(0x1FB, 20 - i);
+    swByteSet(0x1FB, 20 - i); // GSW_GLITZ_PIT_LAST_OPPONENT
     swSet(0x977); // GSWF_TOU_RANK_1_MAIL_DONE
     swSet(0x95A); // GSWF_TOU_08_GUARD_ESCORT_UNUSED
     swSet(0x996); // GSWF_TOU_08_JUMP_STORY_MAJORS_1ST
@@ -1201,8 +1199,8 @@ void stg3_21_init(void) {
     swByteSet(0x1F5, 0);
     swSet(0x94F); // GSWF_GLITZ_PIT_TITLE_MATCH_BOOKED
     swByteSet(0x1F6, 6);
-    swByteSet(0x1F7, 1);
-    swByteSet(0x1F8, 1);
+    swByteSet(0x1F7, 1); // GSW_GLITZ_PIT_CONDITION_PARAM
+    swByteSet(0x1F8, 1); // GSW_GLITZ_PIT_CONDITION_PARAM2
 }
 
 void stg3_30_init(void) {
@@ -1211,7 +1209,7 @@ void stg3_30_init(void) {
     for (i = 0; i < 20; i++) {
         swSet(0x9B4 - i);
     }
-    swByteSet(0x1FB, 20 - i);
+    swByteSet(0x1FB, 20 - i); // GSW_GLITZ_PIT_LAST_OPPONENT
     swSet(0x978);
     swClear(0x94F); // GSWF_GLITZ_PIT_TITLE_MATCH_BOOKED
     swClear(0x954); // GSWF_GLITZ_PIT_MATCH_RESERVED
@@ -1805,7 +1803,7 @@ void stg8_06_init(void) {
     swSet(0x10F0); // GSWF_LAS_10_KEY_SLOT_6_FILLED
     swSet(0x10F1); // GSWF_LAS_10_KEY_SLOT_7_FILLED
     swSet(0x10F2); // GSWF_LAS_10_KEY_SLOT_8_FILLED
-    evtSetValue(0, GSW(0x462), 8);
+    evtSetValue(NULL, GSW_LAS_10_PALACE_KEYS_SET, 8);
     swSet(0x10F3); // GSWF_LAS_11_15_BIG_BLOCK_1_BROKEN
     swSet(0x10F4); // GSWF_LAS_11_15_BIG_BLOCK_2_BROKEN
     swSet(0x10F5); // GSWF_LAS_11_SWITCH_PRESSED
@@ -1820,7 +1818,7 @@ void stg8_06_init(void) {
     swSet(0x10FE); // GSWF_LAS_17_ENEMIES_IN_ORDER_UNUSED
     swSet(0x10FF); // GSWF_LAS_17_SWITCH_PRESSED
     swSet(0x1100); // GSWF_LAS_18_SWITCH_PRESSED
-    evtSetValue(0, GSW(0x463), 4);
+    evtSetValue(NULL, GSW_LAS_17_ENEMY_ORDER_STATE, 4);
     swSet(0x110A); // GSWF_LAS_11_PALACE_KEY_CHEST
     swSet(0x110B); // GSWF_LAS_12_PALACE_KEY_CHEST
     swSet(0x110C); // GSWF_LAS_13_PALACE_KEY_CHEST

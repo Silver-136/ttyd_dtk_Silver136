@@ -231,3 +231,36 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/effect/eff_itemget.c | effItemGetDisp | comma expression(s) `(0, (f32)cos(6.2831855f * camGetPtr(cameraId)->...` keep the value as a separate temp | the plain expression (dead_probe.py) |
 | Both | src/event/evt_mobj.c | mobj_breaking_floor | comma expression(s) `(0, c3)` keep the value as a separate temp | the plain expression (dead_probe.py) |
 | Both | src/sound.c | SoundDropData | comma expression(s) `(0, &sound.dvds[i])`; `(0, &sound.effects[i])` keep the value as a separate temp | the plain expression (dead_probe.py) |
+| Both | src/cam_road.c | camRoadSetup | the same store twice; a single wp->prev.on = 0 changes the object | see comment |
+| Both | src/cam_road.c | collisionTri_simple | nz is a spare copy of n; testing n directly (crVecIsZero(n)) changes the object | see comment |
+| Both | src/cam_road.c | hokanRate | cos called through a double (*)(f32) cast; (f32)cos(a) changes the object | see comment |
+| Both | src/cam_road.c | calcHokanCamRoad | spare temporary a2; a0 = (f32)atan2(...) directly changes the object | see comment |
+| Both | src/cam_road.c | camRoadReset | the same store twice; a single wp->prev.on = 0 changes the object | see comment |
+| Both | src/error_handler.c | N_systemErrorHandler | no-op (s32) cast on the char; removing it changes the object | see comment |
+| Both | src/koopa.c | kpaFireEntry2 | never used; pads .sbss to the 8 bytes of the original section; removing it changes the object | see comment |
+| Both | src/koopa.c | kpaStrippedFallPool | stand-in, never called (the linker strips it); it only puts kpaSetFallPara's eight literals into the .sdata2 pool; removing it changes the object | see comment |
+| Both | src/koopa.c | kpaStrippedPool | stand-in, never called (the linker strips it); its int-to-float conversion only puts the conversion constant into the pool; removing it changes the object | see comment |
+| Both | src/koopa_hit.c | kpaGetHitobjHead | address temporary; the plain return of headHit[i] changes the object | see comment |
+| US | src/koopa_hit.c | kpaGetHitobjHead2 | ret is a spare copy of hit; returning hit changes the object | see comment |
+| Both | src/koopa_hit.c | kpaGetHitobjRide | address temporary; the plain return of rideHit[i] changes the object | see comment |
+| Both | src/koopa_hit.c | kpaChkHitobjRide | dead test (both branches return r); dropping it changes the object | see comment |
+| Both | src/koopa_motion.c | kpaStickSpd | lim is reassigned the same 70.0f; clamping to the constant directly changes the object | see comment |
+| Both | src/koopa_motion.c | kpaSwimMove | lim is reassigned the same 40.0f; clamping to the constant directly changes the object | see comment |
+| Both | src/kpa_act.c | kpa_score_disp_init | (s32) cast on the u32 counter (signed compare); the plain `i < 50` changes the object | see comment |
+| Both | src/kpa_act.c | kpaSetScoreStr | str is a spare second pointer to ksdp[i].str (only writes the terminator); ksdp[i].str[n] changes the object | see comment |
+| Both | src/kpa_act.c | kpaAddScorePos | sc is a spare copy of score; clamping score itself (as kpaAddScore does) changes the object | see comment |
+| US | src/memory.c | mapallocInit | total is a spare copy of mapalloc_size (read before the stores); reading mapalloc_size at its use changes the object | see comment |
+| US | src/memory.c | N_battleMapAlloc | size is a spare copy of R_battlemapalloc_size (read before the stores); reading it at its use changes the object | see comment |
+| Both | src/memory.c | _mapAllocTail | tailEntry is reused for the returned data pointer; a separate void* changes the object | see comment |
+| Both | src/memory.c | smartAutoFree | no-op (s32) cast; the plain compare changes the object | see comment |
+| US | src/nameent.c | nameMain | no-op (s32) cast; the plain ?: changes the object | see comment |
+| Both | src/nameent.c | nameEntDisp | opaque white copied through whiteInit, white and white2; one initialized local changes the object | see comment |
+| Both | src/nameent.c | nameWinQuad | second pair of /w///h/ locals for the TEXMTX1 scale; reusing aw/ah changes the object | see comment |
+| Both | src/npc_event.c | _2d_get_dead_jump_offset | spare temporary k for 20.0f * d; the plain (s32)(20.0f * d) changes the object | see comment |
+| Both | src/npc_event.c | piders_draw_yarn_sub | spare copies p, q of a, b; drawing from a and b directly changes the object | see comment |
+| Both | src/npc_event.c | chain_main | spare temporary dist; the inline form used in the loops below changes the object here | see comment |
+| Both | src/parse.c | parseGet1Next | posStack is a spare copy of parse.pos; indexing parse.pos directly changes the object | see comment |
+| Both | src/pmario_sound.c | calc3D | v.z read through a (Vec*) cast of &v; plain v.z changes the object | see comment |
+| Both | src/pmario_sound.c | psndBGMMain | f0 is a second name for fade (&bgm->fade) in its own block; using fade changes the object | see comment |
+| Both | src/pmario_sound.c | psndSFXChk | no-op mask of the u16 serial; key != sfx->serial changes the object | see comment |
+| Both | src/pmario_sound.c | psndStrippedPool | stand-in that nothing calls; deleting it changes the object (its s32-to-f32 conversion likely shapes the constant pool, as hitStrippedPool does in hitdrv.c) | see comment |
