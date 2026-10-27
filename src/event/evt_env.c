@@ -16,7 +16,6 @@ USER_FUNC(evt_env_blur_on) {
         envBlurOn(type, msec);
         event->userdata[0] = ((u64)now >> 32) & 0xFFFFFFFF;
         event->userdata[1] = now & 0xFFFFFFFF;
-
     }
     if (msec && OSTicksToMilliseconds(now - *(u64*)event->userdata) >= msec) {
         envBlurOff();

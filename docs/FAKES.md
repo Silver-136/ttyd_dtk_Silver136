@@ -480,3 +480,65 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/effect/n64/eff_whirlwind_n64.c | effWhirlwindN64Entry | spare temporary for 0.25f; the plain literal changes the object | see comment |
 | Both | src/event/evt_mario.c | evt_mario_set_motion | function-pointer cast passes the s32 without narrowing to MarioMotion; marioChgMot(evtGetValue(...)) changes the object | see comment |
 | Both | src/event/evt_mario.c | evt_koopa_fire | s32 -> f32 -> s32 round trip; assigning sysMsec2Frame directly changes the object | see comment |
+| Both | src/event/evt_batstage.c | evt_batstage_light_set_player_on | unused zeroed array; removing it changes the object | see comment |
+| Both | src/event/evt_bero.c | bero_id_filter | `&newId != NULL` tests (always true); the plain `newId = 0` / `newId++` change the object | see comment |
+| Both | src/event/evt_bero.c | bero_get_kind | dead test (kind is 20000 in this case); removing it changes the object | see comment |
+| Both | src/event/evt_bero.c | bero_get_position_normal | two-step product; `deg = (angle * 360.0f) * 0.125f` changes the object | see comment |
+| Both | src/event/evt_bero.c | evt_bero_switch_on | `&newId != NULL` tests (always true); the plain `newId = 0` / `newId++` change the object | see comment |
+| Both | src/event/evt_bero.c | evt_bero_switch_off | `&newId != NULL` tests (always true); the plain `newId = 0` / `newId++` change the object | see comment |
+| Both | src/event/evt_bero.c | evt_bero_get_number | `&newId != NULL` tests (always true); the plain `newId = 0` / `newId++` change the object | see comment |
+| Both | src/event/evt_bero.c | evt_bero_move_mario_speed | spare temporary for BeroSX; using BeroSX directly changes the object | see comment |
+| Both | src/event/evt_bero.c | evt_bero_overwrite | `&newId != NULL` tests (always true); the plain `newId = 0` / `newId++` change the object | see comment |
+| Both | src/event/evt_cam.c | evt_cam3d_evt_set_at | unused zero Vec expression; removing it changes the object | see comment |
+| Both | src/event/evt_cam.c | evt_cam3d_evt_set_rel | unused zero Vec expressions; removing them changes the object | see comment |
+| Both | src/event/evt_case.c | _caseEntry | spare pointer to setup; using setup directly changes the object | see comment |
+| Both | src/event/evt_case.c | _evtCaseEntry | spare pointer to setup; using setup directly changes the object | see comment |
+| Both | src/event/evt_cloud.c | evt_cloud_main | no-op (s32) cast; the plain comparison changes the object | see comment |
+| Both | src/event/evt_damage.c | evt_gazigazi_move_position | no-op (s32) casts of elapsed; dropping them changes the object | see comment |
+| Both | src/event/evt_door.c | door_position_sub | self-assignment through t; removing it changes the object | see comment |
+| Both | src/event/evt_img.c | evt_img_set_virtual_point | spare copy of pos; passing &pos changes the object | see comment |
+| Both | src/event/evt_item.c | evt_item_get_important_item | float bits stored through an s32 view; event->userdataf[n] = value changes the object | see comment |
+| Both | src/event/evt_lottery.c | evt_lottery | bt is a spare temporary (two different shapes for the same sum); passing lot->buyTime + ... directly changes the object | see comment |
+| Both | src/event/evt_lottery.c | evt_lottery_error_check | g is a spare copy of gp; &gp->mLotteryInfo changes the object | see comment |
+| Both | src/event/evt_mobj.c | evt_mobj_floatswitch_blue | gp->inBattle is loaded into inBattle before the test; `inBattle = gp->inBattle != 0` changes the object | see comment |
+| Both | src/event/evt_mobj.c | evt_mobj_tornadoswitch_blue | gp->inBattle is loaded into inBattle before the test; `inBattle = gp->inBattle != 0` changes the object | see comment |
+| Both | src/event/evt_mobj.c | evt_mobj_floatswitch_red | gp->inBattle is loaded into inBattle before the test; `inBattle = gp->inBattle != 0` changes the object | see comment |
+| Both | src/event/evt_mobj.c | mobj_rideswitch_lightblue | four unused Vec literals read the uninitialized x/y/z; removing the block changes the object | see comment |
+| Both | src/event/evt_mobj.c | mobj_float_blk | the first name byte is read as a signed char; the plain test changes the object | see comment |
+| Both | src/event/evt_mobj.c | evt_mobj_switch_float_blk | the first name byte is read as a signed char; the plain test changes the object | see comment |
+| Both | src/event/evt_mobj.c | evt_mobj_signboard | gp->inBattle is loaded into inBattle before the test; `inBattle = gp->inBattle != 0` changes the object | see comment |
+| Both | src/event/evt_mobj.c | recoveryHeal | case 4 repeats these steps inline instead of calling this helper; calling it there changes the object | see comment |
+| Both | src/event/evt_mobj.c | mobj_recovery_blk | the coin count goes through kind (also the coin cost in case 4); comparing pouchGetCoin() directly changes the object | see comment |
+| Both | src/event/evt_mobj.c | mobj_koopa_ojama_blk_evt | unused Vec local; removing the block changes the object | see comment |
+| Both | src/event/evt_mobj.c | evt_mobj_koopa_hidden_blk | gp->inBattle is loaded into inBattle before the test; `inBattle = gp->inBattle != 0` changes the object | see comment |
+| Both | src/event/evt_nannpc.c | evt_nannpc_entry | the value goes through a long long cast; plain name = evtGetValue(...) changes the object | see comment |
+| Both | src/event/evt_nannpc.c | evt_nannpc_jump_position | el and uel are spare copies of the elapsed time; a single s32 elapsed changes the object | see comment |
+| Both | src/event/evt_npc.c | evt_npc_move_position | (s8) cast before the store to the s16 field; the plain form changes the object | see comment |
+| Both | src/event/evt_npc.c | evt_npc_jump_position_nohit | no-op (s32) casts on the s32 elapsed; the plain arguments change the object | see comment |
+| Both | src/event/evt_npc.c | evt_npc_glide_position | (s8) cast before the store to the s16 field; the plain form changes the object | see comment |
+| Both | src/event/evt_npc.c | evt_npc_homing_target | (s8) cast before the store to the s16 field; the plain form changes the object | see comment |
+| Both | src/event/evt_npc.c | evt_npc_flag_onoff | no-op (u32) cast; the plain form changes the object | see comment |
+| Both | src/event/evt_npc.c | evt_npc_status_onoff | no-op (u32) cast; the plain form changes the object | see comment |
+| Both | src/event/evt_party.c | evt_party_move_pos | hand-written range test (waits for runMode 0, 1 or 2); the plain comparisons change the object | see comment |
+| Both | src/event/evt_party.c | evt_party_move_pos2 | hand-written range test (waits for runMode 0, 1 or 2); the plain comparisons change the object | see comment |
+| Both | src/event/evt_party.c | evtPartyStrippedPool | stand-in that nothing calls (in neither symbol map); it only fixes the order of these literals in the constant pool; removing it changes the object | see comment |
+| Both | src/event/evt_shop.c | evt_shop_setup | block-local NPC pointer; assigning through npcNameToPtr(shopper->name) directly changes the object | see comment |
+| Both | src/event/evt_shop.c | evt_shop_main_func | the masks and BOOL casts do nothing (!x is 0 or 1); !marioChkCtrl() // !marioChkKey() changes the object | see comment |
+| Both | src/event/evt_sub.c | evt_sub_animgroup_async | redundant test (r is nonzero here); returning EVT_RETURN_DONE directly changes the object | see comment |
+| Both | src/event/evt_twoddisp.c | twoddisp_disp | (s8) cast on the first name byte; the plain zero test changes the object | see comment |
+| Both | src/event/evt_twoddisp.c | evt_twoddisp_entry | (s8) cast on the first name byte; the plain zero test changes the object | see comment |
+| Both | src/manager/cardmgr.c | cardBufReset | unused copy of the volatile flags word; dropping it changes the object | see comment |
+| Both | src/manager/cardmgr.c | memcard_probe | self-assignment with no effect; without it the object changes | see comment |
+| Both | src/manager/cardmgr.c | make_data | i is never -1 here; the plain save = &cardGetFilePtr()->saves[i] changes the object | see comment |
+| Both | src/manager/evtmgr_cmd.c | evtGetValue | result stored back into index; return (mask & data) != 0 changes the object | see comment |
+| Both | src/manager/filemgr.c | fileGarbageDataAdrSet | no-op (u16) cast on the u16 counter; the plain comparison changes the object | see comment |
+| Both | src/manager/fontmgr.c | fontDrawPairXI | spare s16 copies of the s16 parameters (and a no-op cast); using x and y directly changes the object | see comment |
+| Both | src/manager/fontmgr.c | fontDrawPairYI | spare s16 copies of the s16 parameters; using x and y directly changes the object | see comment |
+| Both | src/manager/fontmgr.c | fontDrawPairX | no-op (s16) casts on iy; the plain argument changes the object | see comment |
+| Both | src/manager/fontmgr.c | fontDrawPairY | no-op (s16) casts on ix; the plain argument changes the object | see comment |
+| Both | src/manager/fontmgr.c | FontGetMessageWidthLine | empty dead test of code; removing it changes the object | see comment |
+| Both | src/manager/winmgr.c | winMgrHelpDraw | spare copy of entry->scroll; testing the field directly changes the object | see comment |
+| Both | src/manager/winmgr.c | winMgrSelectDelete | chain of spare copies of sel, sel->items and the heap id; the plain __memFree(HEAP_DEFAULT, sel->items); __memFree(HEAP_DEFAULT, sel); changes the object | see comment |
+| Both | src/manager/winmgr.c | select_disp | white copied through a spare tmp; iconcol = white changes the object | see comment |
+| Both | src/manager/winmgr.c | select_disp_party | white copied through a spare tmp; iconcol = white changes the object | see comment |
+| Both | src/manager/winmgr.c | select_disp_mario | white copied through a spare tmp; iconcol = white changes the object | see comment |

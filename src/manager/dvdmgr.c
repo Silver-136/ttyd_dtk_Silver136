@@ -16,10 +16,6 @@ DVDEntry* dvdq;
 static DVDMgrCallback _callback;
 BOOL dvdmgr_thread_on;
 
-//local prototypes
-void* proc_main(void* param);
-static s32 compare(const void** a, const void** b);
-
 void* proc_main(void* param) {
     while (1) {
         DVDMgrMain();
@@ -31,7 +27,7 @@ void DVDMgrInit(void) {
     dvdq = __memAlloc(HEAP_DEFAULT, sizeof(DVDEntry) * DVDEntryCount);
     memset(dvdq, 0, sizeof(DVDEntry) * DVDEntryCount);
     if (!OSCreateThread(&dvdmgr_thread, proc_main, NULL, stack + sizeof(stack), sizeof(stack), 16, OS_THREAD_ATTR_DETACH)) {
-        while (1) ;
+        while (1) {}
     }
     dvdmgr_thread_on = TRUE;
     OSResumeThread(&dvdmgr_thread);
@@ -57,7 +53,7 @@ static s32 compare(const void** a, const void** b) {
 }
 
 void DVDMgrMain(void) {
-    u8 array[0x100];
+    u8 array[DVDEntryCount];
     u8* table;
     DVDEntry* entry;
     BOOL valid;
@@ -162,7 +158,7 @@ DVDEntry* DVDMgrOpen(const char* path, u8 priority, u16 unknown) {
     return entry;
 }
 
-//return is s32 even though it cannot be negative
+// Waits until the read has finished; returns the file length (not the number of bytes read).
 s32 DVDMgrRead(DVDEntry* entry, void* address, u32 size, s32 offset) {
     entry->address = address;
     entry->bytesLeft = size;
@@ -172,7 +168,9 @@ s32 DVDMgrRead(DVDEntry* entry, void* address, u32 size, s32 offset) {
     entry->callback = NULL;
     entry->position = 0;
     while (TRUE) {
-        if (entry->status & DVDMGR_FINISHED) break;
+        if (entry->status & DVDMGR_FINISHED) {
+            break;
+        }
         OSYieldThread();
     }
     return entry->info.length;

@@ -53,9 +53,6 @@ typedef struct HouseWork {
 s32 DoorFLAG;
 s32 door_mapflag;
 
-void door_dark_flag_sub(BOOL on, const char** npcs, const char** mobjs, const char** items);
-
-
 USER_FUNC(evt_snd_env_lpf);
 
 EvtWord door_open_se[151];
@@ -1380,50 +1377,50 @@ USER_FUNC(animation) {
     return EVT_RETURN_DONE;
 }
 
-#define NPC_LIGHT_BODY(FN, ICONFN)                               \
-    HouseWork* w = (HouseWork*)evtGetValue(event, *event->args); \
-    MarioWork* mario = marioGetPtr();                            \
-    PartyEntry* party = partyGetPtr(0);                          \
-    PartyEntry* follower = partyGetPtr(1);                       \
-    const char** list;                                           \
-    if (mario) {                                                 \
-        FN(marioGetPtr()->paperAnimGroupId[0], 0x1800);          \
-        FN(marioGetPtr()->paperAnimGroupId[1], 0x1800);          \
-        FN(marioGetPtr()->paperAnimGroupId[2], 0x1800);          \
-    }                                                            \
-    if (party) {                                                 \
-        FN(party->paperAnimGroup, 0x1800);                       \
-    }                                                            \
-    if (follower) {                                              \
-        FN(follower->paperAnimGroup, 0x1800);                    \
-    }                                                            \
-    list = w->data->npcs;                                        \
-    if (list) {                                                  \
-        for (; *list; list++) {                                  \
-            NpcEntry* npc = npcNameToPtr_NoAssert(*list);        \
-            if (npc) {                                           \
-                FN(npc->poseId, 0x1800);                         \
-            }                                                    \
-        }                                                        \
-    }                                                            \
-    list = w->data->mobjs;                                       \
-    if (list) {                                                  \
-        for (; *list; list++) {                                  \
-            MapObjectEntry* mobj = mobjNameToPtrNoAssert(*list); \
-            if (mobj) {                                          \
-                FN(mobj->poseId, 0x1800);                        \
-            }                                                    \
-        }                                                        \
-    }                                                            \
-    list = w->data->items;                                       \
-    if (list) {                                                  \
-        for (; *list; list++) {                                  \
-            ItemEntry* item = itemNameToPtr((char*)*list);       \
-            if (item) {                                          \
-                ICONFN(item->name, 0x40);                        \
-            }                                                    \
-        }                                                        \
-    }                                                            \
+#define NPC_LIGHT_BODY(FN, ICONFN)                                                                      \
+    HouseWork* w = (HouseWork*)evtGetValue(event, *event->args);                                        \
+    MarioWork* mario = marioGetPtr();                                                                   \
+    PartyEntry* party = partyGetPtr(0);                                                                 \
+    PartyEntry* follower = partyGetPtr(1);                                                              \
+    const char** list;                                                                                  \
+    if (mario) {                                                                                        \
+        FN(marioGetPtr()->paperAnimGroupId[0], MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2); \
+        FN(marioGetPtr()->paperAnimGroupId[1], MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2); \
+        FN(marioGetPtr()->paperAnimGroupId[2], MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2); \
+    }                                                                                                   \
+    if (party) {                                                                                        \
+        FN(party->paperAnimGroup, MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2);              \
+    }                                                                                                   \
+    if (follower) {                                                                                     \
+        FN(follower->paperAnimGroup, MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2);           \
+    }                                                                                                   \
+    list = w->data->npcs;                                                                               \
+    if (list) {                                                                                         \
+        for (; *list; list++) {                                                                         \
+            NpcEntry* npc = npcNameToPtr_NoAssert(*list);                                               \
+            if (npc) {                                                                                  \
+                FN(npc->poseId, MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2);                \
+            }                                                                                           \
+        }                                                                                               \
+    }                                                                                                   \
+    list = w->data->mobjs;                                                                              \
+    if (list) {                                                                                         \
+        for (; *list; list++) {                                                                         \
+            MapObjectEntry* mobj = mobjNameToPtrNoAssert(*list);                                        \
+            if (mobj) {                                                                                 \
+                FN(mobj->poseId, MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2);               \
+            }                                                                                           \
+        }                                                                                               \
+    }                                                                                                   \
+    list = w->data->items;                                                                              \
+    if (list) {                                                                                         \
+        for (; *list; list++) {                                                                         \
+            ItemEntry* item = itemNameToPtr((char*)*list);                                              \
+            if (item) {                                                                                 \
+                ICONFN(item->name, ICON_FLAG_NO_MAP_BLEND);                                             \
+            }                                                                                           \
+        }                                                                                               \
+    }                                                                                                   \
     return EVT_RETURN_DONE;
 
 USER_FUNC(npc_dark) {
@@ -1488,6 +1485,7 @@ void door_position_sub(s32 type, const char* map, const char* hitIn, const char*
         } else {
             w = d.z / 2.0f;
         }
+        // FAKE: self-assignment through t; removing it changes the object
         t = w;
         w = t;
     }
@@ -1495,14 +1493,24 @@ void door_position_sub(s32 type, const char* map, const char* hitIn, const char*
         case 0:
         case 1:
             if (hitOut) {
-                DOOR_POS_GET(hitOut)
+                if (!mario) {
+                    hitObjGetPos(hitOut, &pos);
+                } else {
+                    pos = marioGetPtr()->position;
+                }
+                hitObjGetNormal(hitOut, &nrm);
                 out->x = pos.x + nrm.x * a - nrm.z * w;
                 out->z = pos.z + nrm.z * a + nrm.x * w;
             } else {
                 *out = marioGetPtr()->position;
             }
             if (hitIn) {
-                DOOR_POS_GET(hitIn)
+                if (!mario) {
+                    hitObjGetPos(hitIn, &pos);
+                } else {
+                    pos = marioGetPtr()->position;
+                }
+                hitObjGetNormal(hitIn, &nrm);
                 in->x = pos.x + nrm.x * b;
                 in->z = pos.z + nrm.z * b;
             } else {
@@ -1511,14 +1519,24 @@ void door_position_sub(s32 type, const char* map, const char* hitIn, const char*
             break;
         case 2:
             if (hitOut) {
-                DOOR_POS_GET(hitOut)
+                if (!mario) {
+                    hitObjGetPos(hitOut, &pos);
+                } else {
+                    pos = marioGetPtr()->position;
+                }
+                hitObjGetNormal(hitOut, &nrm);
                 out->x = pos.x + nrm.x * a + nrm.z * w;
                 out->z = pos.z + nrm.z * a - nrm.x * w;
             } else {
                 *out = marioGetPtr()->position;
             }
             if (hitIn) {
-                DOOR_POS_GET(hitIn)
+                if (!mario) {
+                    hitObjGetPos(hitIn, &pos);
+                } else {
+                    pos = marioGetPtr()->position;
+                }
+                hitObjGetNormal(hitIn, &nrm);
                 in->x = pos.x + nrm.x * b;
                 in->z = pos.z + nrm.z * b;
             } else {
@@ -1527,14 +1545,24 @@ void door_position_sub(s32 type, const char* map, const char* hitIn, const char*
             break;
         case 3:
             if (hitOut) {
-                DOOR_POS_GET(hitOut)
+                if (!mario) {
+                    hitObjGetPos(hitOut, &pos);
+                } else {
+                    pos = marioGetPtr()->position;
+                }
+                hitObjGetNormal(hitOut, &nrm);
                 out->x = pos.x + nrm.x * a;
                 out->z = pos.z + nrm.z * a;
             } else {
                 *out = marioGetPtr()->position;
             }
             if (hitIn) {
-                DOOR_POS_GET(hitIn)
+                if (!mario) {
+                    hitObjGetPos(hitIn, &pos);
+                } else {
+                    pos = marioGetPtr()->position;
+                }
+                hitObjGetNormal(hitIn, &nrm);
                 in->x = pos.x + nrm.x * a;
                 in->z = pos.z + nrm.z * a;
             } else {
@@ -1544,41 +1572,41 @@ void door_position_sub(s32 type, const char* map, const char* hitIn, const char*
     }
 }
 
-#define DARK_SUB_BODY(FN, ICONFN)                                \
-    if (mario) {                                                 \
-        FN(mario->paperAnimGroupId[0], 0x1800);                  \
-        FN(mario->paperAnimGroupId[1], 0x1800);                  \
-        FN(mario->paperAnimGroupId[2], 0x1800);                  \
-    }                                                            \
-    if (party) {                                                 \
-        FN(party->paperAnimGroup, 0x1800);                       \
-    }                                                            \
-    if (follower) {                                              \
-        FN(follower->paperAnimGroup, 0x1800);                    \
-    }                                                            \
-    if (npcs) {                                                  \
-        for (list = npcs; *list; list++) {                       \
-            NpcEntry* npc = npcNameToPtr_NoAssert(*list);        \
-            if (npc) {                                           \
-                FN(npc->poseId, 0x1800);                         \
-            }                                                    \
-        }                                                        \
-    }                                                            \
-    if (mobjs) {                                                 \
-        for (list = mobjs; *list; list++) {                      \
-            MapObjectEntry* mobj = mobjNameToPtrNoAssert(*list); \
-            if (mobj) {                                          \
-                FN(mobj->poseId, 0x1800);                        \
-            }                                                    \
-        }                                                        \
-    }                                                            \
-    if (items) {                                                 \
-        for (list = items; *list; list++) {                      \
-            ItemEntry* item = itemNameToPtr((char*)*list);       \
-            if (item) {                                          \
-                ICONFN(item->name, 0x40);                        \
-            }                                                    \
-        }                                                        \
+#define DARK_SUB_BODY(FN, ICONFN)                                                               \
+    if (mario) {                                                                                \
+        FN(mario->paperAnimGroupId[0], MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2); \
+        FN(mario->paperAnimGroupId[1], MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2); \
+        FN(mario->paperAnimGroupId[2], MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2); \
+    }                                                                                           \
+    if (party) {                                                                                \
+        FN(party->paperAnimGroup, MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2);      \
+    }                                                                                           \
+    if (follower) {                                                                             \
+        FN(follower->paperAnimGroup, MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2);   \
+    }                                                                                           \
+    if (npcs) {                                                                                 \
+        for (list = npcs; *list; list++) {                                                      \
+            NpcEntry* npc = npcNameToPtr_NoAssert(*list);                                       \
+            if (npc) {                                                                          \
+                FN(npc->poseId, MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2);        \
+            }                                                                                   \
+        }                                                                                       \
+    }                                                                                           \
+    if (mobjs) {                                                                                \
+        for (list = mobjs; *list; list++) {                                                     \
+            MapObjectEntry* mobj = mobjNameToPtrNoAssert(*list);                                \
+            if (mobj) {                                                                         \
+                FN(mobj->poseId, MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2);       \
+            }                                                                                   \
+        }                                                                                       \
+    }                                                                                           \
+    if (items) {                                                                                \
+        for (list = items; *list; list++) {                                                     \
+            ItemEntry* item = itemNameToPtr((char*)*list);                                      \
+            if (item) {                                                                         \
+                ICONFN(item->name, ICON_FLAG_NO_MAP_BLEND);                                     \
+            }                                                                                   \
+        }                                                                                       \
     }
 
 void door_dark_flag_sub(BOOL on, const char** npcs, const char** mobjs, const char** items) {
@@ -1633,10 +1661,16 @@ USER_FUNC(evt_door_param) {
             evtSetValue(event, args[3], (EvtWord)d->insideHit);
             break;
         case 4:
-            DOOR_PARAM_POS(in, FALSE)
+            door_position_sub(d->type, d->mapobj, d->hitIn, d->hitOut, &in, &out, FALSE);
+            evtSetValue(event, args[2], in.x);
+            evtSetValue(event, args[3], in.y);
+            evtSetValue(event, args[4], in.z);
             break;
         case 5:
-            DOOR_PARAM_POS(out, FALSE)
+            door_position_sub(d->type, d->mapobj, d->hitIn, d->hitOut, &in, &out, FALSE);
+            evtSetValue(event, args[2], out.x);
+            evtSetValue(event, args[3], out.y);
+            evtSetValue(event, args[4], out.z);
             break;
         case 6:
             evtSetValue(event, args[2], (EvtWord)d->evtIn);
@@ -1654,10 +1688,16 @@ USER_FUNC(evt_door_param) {
             evtSetValue(event, args[2], d->flags);
             break;
         case 10:
-            DOOR_PARAM_POS(in, TRUE)
+            door_position_sub(d->type, d->mapobj, d->hitIn, d->hitOut, &in, &out, TRUE);
+            evtSetValue(event, args[2], in.x);
+            evtSetValue(event, args[3], in.y);
+            evtSetValue(event, args[4], in.z);
             break;
         case 11:
-            DOOR_PARAM_POS(out, TRUE)
+            door_position_sub(d->type, d->mapobj, d->hitIn, d->hitOut, &in, &out, TRUE);
+            evtSetValue(event, args[2], out.x);
+            evtSetValue(event, args[3], out.y);
+            evtSetValue(event, args[4], out.z);
             break;
     }
     return EVT_RETURN_DONE;

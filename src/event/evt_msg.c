@@ -23,17 +23,16 @@
 #endif
 
 void evt_msg_init(void) {
-    //stubbed in retail
+    // empty in the retail game
 }
 
-s32 _evt_msg_print(EventEntry* event, BOOL isFirstCall, s32 flags, const char* msg, s32 callback, EvtWord name);
 void msgWindow_Add(const char* msg, s32 id);
 
 extern float __fabsf(float);
 
 s32 msgWindow_Entry(const char* msg, s32 callback, s32 priority);
 
-// A message window's MsgWinData lives in its userdata block. A macro, not an inline function: as a function the object changes (2026-10-27).
+// A message window's MsgWinData lives in its userdata block. Kept as a macro: an inline function changes the object.
 #define MSG_WIN_DATA(w) ((MsgWinData*)(w)->userdata->address)
 
 s32 _evt_msg_print(EventEntry* event, BOOL isFirstCall, s32 flags, const char* msg, s32 callback, EvtWord name) {
@@ -103,7 +102,7 @@ s32 _evt_msg_print(EventEntry* event, BOOL isFirstCall, s32 flags, const char* m
             win->tailMode = 3;
         }
         switch (event->printWindowFlags & MSG_PRINT_WIN_TOGE_MASK) {
-            case 0:
+            case MSG_TOGE_AUTO:
                 if (npc) {
                     Vec scr, mscr;
                     marioGetPtr();
@@ -122,14 +121,14 @@ s32 _evt_msg_print(EventEntry* event, BOOL isFirstCall, s32 flags, const char* m
                     }
                 }
                 break;
-            case 1:
+            case MSG_TOGE_NONE:
                 win->tailMode = 0;
                 break;
-            case 2:
+            case MSG_TOGE_AT_POS:
                 win->tailMode = 7;
                 win->speakerPos = event->msgPosVec;
                 break;
-            case 3:
+            case MSG_TOGE_AT_POS_FAR:
                 win->tailMode = 2;
                 win->speakerPos = event->msgPosVec;
                 break;
@@ -226,13 +225,13 @@ USER_FUNC(evt_msg_print_party_add) {
 USER_FUNC(evt_msg_print_battle_party) {
     static char partyLabel[0x40];
     const char* msg = (const char*)evtGetValue(event, *event->args);
-    BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, BattleTransID(event, -4));
+    BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, BattleTransID(event, UNIT_ID_PARTNER));
     if (!unit) {
         return EVT_RETURN_DONE;
     }
     strcpy(partyLabel, msg);
     strcat(partyLabel, battlePartyMsgStr[(s32)unit->currentKind - TYPE_PARTNER_MIN]);
-    return _evt_msg_print(event, isFirstCall, 2, partyLabel, 0, -4);
+    return _evt_msg_print(event, isFirstCall, MSG_PRINT_NO_SPEAKER, partyLabel, 0, UNIT_ID_PARTNER);
 }
 
 USER_FUNC(evt_msg_print_insert) {
@@ -243,10 +242,11 @@ USER_FUNC(evt_msg_print_insert) {
     s32 n = (args[-2] >> 16) - 5;
     s32 flags = evtGetValue(event, *args++);
     const char* msg = (const char*)evtGetValue(event, *args++);
-    s32 c, d;
+    s32 callback;
+    EvtWord name;
     s32 i;
-    c = evtGetValue(event, *args++);
-    d = evtGetValue(event, *args++);
+    callback = evtGetValue(event, *args++);
+    name = evtGetValue(event, *args++);
     for (i = 0, p = vals; i < n; i++) {
         *p++ = evtGetValue(event, *args++);
     }
@@ -258,14 +258,23 @@ USER_FUNC(evt_msg_print_insert) {
             m = msgSearch(msg);
         }
         switch (n) {
-            case 0: break;
-            case 1: sprintf(buf, m, vals[0]); break;
-            case 2: sprintf(buf, m, vals[0], vals[1]); break;
-            case 3: sprintf(buf, m, vals[0], vals[1], vals[2]); break;
-            case 4: sprintf(buf, m, vals[0], vals[1], vals[2], vals[3]); break;
+            case 0:
+                break;
+            case 1:
+                sprintf(buf, m, vals[0]);
+                break;
+            case 2:
+                sprintf(buf, m, vals[0], vals[1]);
+                break;
+            case 3:
+                sprintf(buf, m, vals[0], vals[1], vals[2]);
+                break;
+            case 4:
+                sprintf(buf, m, vals[0], vals[1], vals[2], vals[3]);
+                break;
         }
     }
-    return _evt_msg_print(event, isFirstCall, flags | 1, buf, c, d);
+    return _evt_msg_print(event, isFirstCall, flags | MSG_PRINT_DIRECT_TEXT, buf, callback, name);
 }
 
 USER_FUNC(evt_msg_print_add) {
@@ -305,11 +314,20 @@ USER_FUNC(evt_msg_print_add_insert) {
             m = msgSearch(msg);
         }
         switch (n) {
-            case 0: break;
-            case 1: sprintf(buf, m, vals[0]); break;
-            case 2: sprintf(buf, m, vals[0], vals[1]); break;
-            case 3: sprintf(buf, m, vals[0], vals[1], vals[2]); break;
-            case 4: sprintf(buf, m, vals[0], vals[1], vals[2], vals[3]); break;
+            case 0:
+                break;
+            case 1:
+                sprintf(buf, m, vals[0]);
+                break;
+            case 2:
+                sprintf(buf, m, vals[0], vals[1]);
+                break;
+            case 3:
+                sprintf(buf, m, vals[0], vals[1], vals[2]);
+                break;
+            case 4:
+                sprintf(buf, m, vals[0], vals[1], vals[2], vals[3]);
+                break;
         }
         msgWindow_Add(buf, event->printWindowId);
     }
@@ -370,9 +388,9 @@ USER_FUNC(evt_msg_select) {
 
 USER_FUNC(evt_msg_toge) {
     EvtWord* args = event->args;
-    s32 v = evtGetValue(event, args[0]);
+    s32 mode = evtGetValue(event, args[0]);
     event->printWindowFlags &= ~MSG_PRINT_WIN_TOGE_MASK;
-    event->printWindowFlags |= v;
+    event->printWindowFlags |= mode;
     event->msgPos.x = evtGetFloat(event, args[1]);
     event->msgPos.y = evtGetFloat(event, args[2]);
     event->msgPosZf = evtGetFloat(event, args[3]);
@@ -380,9 +398,9 @@ USER_FUNC(evt_msg_toge) {
 }
 
 USER_FUNC(evt_msg_togelr) {
-    s32 v = evtGetValue(event, *event->args);
+    s32 side = evtGetValue(event, *event->args);
     event->printWindowFlags |= MSG_PRINT_WIN_TOGELR;
-    switch (v) {
+    switch (side) {
         case 0:
             break;
         case 1:
@@ -420,7 +438,7 @@ void evtMsgFmtStr(char* buf, const char* name) {
     s32 form;
 
     switch (gp->language) {
-    case 1:
+    case LANGUAGE_US:
     case 6:
         switch ((signed char)*name) {
         case 'A':
@@ -468,7 +486,7 @@ void evtMsgFmtStr(char* buf, const char* name) {
             strcat(tmp, marker + 6);
         }
         break;
-    case 2:
+    case LANGUAGE_GE:
         form = 0;
         if (strstr(name, "<M>") != NULL) {
             form = 0;
@@ -533,7 +551,7 @@ void evtMsgFmtStr(char* buf, const char* name) {
             strcat(tmp, marker + 6);
         }
         break;
-    case 3:
+    case LANGUAGE_FR:
         form = 0;
         if (strstr(name, "<M>") != NULL) {
             form = 0;
@@ -578,7 +596,7 @@ void evtMsgFmtStr(char* buf, const char* name) {
             strcat(tmp, marker + 6);
         }
         break;
-    case 4:
+    case LANGUAGE_SP:
         form = 0;
         if (strstr(name, "<M>") != NULL) {
             form = 0;
@@ -629,7 +647,7 @@ void evtMsgFmtStr(char* buf, const char* name) {
             strcat(tmp, marker + 6);
         }
         break;
-    case 5:
+    case LANGUAGE_IT:
         if ((marker = strstr(buf, "<ITEM>")) != NULL) {
             len = strlen(buf) - strlen(marker);
             strncpy(tmp, buf, len);
@@ -638,10 +656,12 @@ void evtMsgFmtStr(char* buf, const char* name) {
             strcat(tmp, marker + 6);
         }
         break;
-    case 0:
+    case LANGUAGE_JP:
         strcpy(tmp, buf);
         break;
     }
+    // BUG: when the text has none of the markers its language looks for (or the language has no case), tmp is
+    // never written and buf receives uninitialized stack data.
     strcpy(buf, tmp);
 }
 
@@ -686,8 +706,8 @@ void evtMsgFmtInt(char* buf, s32 count) {
     strcat(msg_num_buf, found + 5);
 
     switch (gp->language) {
-    case 1:
-    case 4:
+    case LANGUAGE_US:
+    case LANGUAGE_SP:
     case 6:
         if ((marker = strstr(msg_num_buf, "<S>")) != NULL) {
             len = strlen(msg_num_buf) - strlen(marker);
@@ -704,7 +724,7 @@ void evtMsgFmtInt(char* buf, s32 count) {
             strcat(msg_plural_buf, marker + 3);
         }
         break;
-    case 3:
+    case LANGUAGE_FR:
         if ((marker = strstr(msg_num_buf, "<X>")) != NULL) {
             len = strlen(msg_num_buf) - strlen(marker);
             strncpy(msg_plural_buf, msg_num_buf, len);
@@ -728,7 +748,7 @@ void evtMsgFmtInt(char* buf, s32 count) {
             strcat(msg_plural_buf, marker + 3);
         }
         break;
-    case 2:
+    case LANGUAGE_GE:
         if ((marker = strstr(msg_num_buf, "<COIN>")) != NULL) {
             len = strlen(msg_num_buf) - strlen(marker);
             strncpy(msg_plural_buf, msg_num_buf, len);
@@ -764,7 +784,7 @@ void evtMsgFmtInt(char* buf, s32 count) {
             strcat(msg_plural_buf, marker + 3);
         }
         break;
-    case 5:
+    case LANGUAGE_IT:
         if ((marker = strstr(msg_num_buf, "<COIN>")) != NULL) {
             len = strlen(msg_num_buf) - strlen(marker);
             strncpy(msg_plural_buf, msg_num_buf, len);
@@ -820,10 +840,12 @@ void evtMsgFmtInt(char* buf, s32 count) {
             strcat(msg_plural_buf, marker + 3);
         }
         break;
-    case 0:
+    case LANGUAGE_JP:
         strcpy(msg_plural_buf, buf);
         break;
     }
+    // BUG: when none of its language's markers is found (or the language has no case), msg_plural_buf still holds an
+    // earlier call's text; language 0 copies buf itself, dropping the <NUM> substitution made in msg_num_buf.
     strcpy(buf, msg_plural_buf);
 }
 

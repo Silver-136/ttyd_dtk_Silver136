@@ -37,7 +37,6 @@ typedef struct CloudWork {
     f32 lastFrame; // 0xC4
 } CloudWork;
 
-
 static CloudWork cloud[16];
 static u8 cloud_once_flag;
 static CloudWork* cloud_p;
@@ -72,6 +71,7 @@ static USER_FUNC(evt_cloud_main) {
     hit3 = cloudGetHitBreathout(3);
     switch (wp->state) {
         case 0:
+            // FAKE: no-op (s32) cast; the plain comparison changes the object
             if ((s32)cloud_once_flag == 1) {
                 break;
             }
@@ -122,6 +122,7 @@ static USER_FUNC(evt_cloud_main) {
                 uh = wp->h;
                 w = uw;
                 h = uh;
+                // FAKE: (u32)/(s32) casts on the half sizes; (f32)(uw >> 1) changes the object
                 x = (s32)(pos.x - (f32)(s32)((u32)uw >> 1));
                 y = (s32)(pos.y - (f32)(s32)(uh >> 1));
                 if (x < 0) {
@@ -210,7 +211,7 @@ static USER_FUNC(evt_cloud_main) {
             img = imgNameToPtr(wp->imgName, group);
             img->animName = "A_2";
             img->animTime = animTimeGetTime(group);
-            hitObjFlagOn(wp->hitName, 1);
+            hitObjFlagOn(wp->hitName, HIT_FLAG_OFF);
             wp->timer = 60;
             wp->state++;
             break;
@@ -283,13 +284,13 @@ USER_FUNC(evt_cloud_ent) {
     }
     wp = &cloud[i];
     wp->flags |= 1;
-    strncpy(wp->animName, "P_oof_cloud_1", 0x20);
+    strncpy(wp->animName, "P_oof_cloud_1", sizeof(wp->animName));
     if (multi == 0) {
-        strncpy(wp->groupName, groupName, 0x20);
+        strncpy(wp->groupName, groupName, sizeof(wp->groupName));
     } else {
-        strncpy(wp->groupName, *(char**)groupName, 0x20);
+        strncpy(wp->groupName, *(char**)groupName, sizeof(wp->groupName));
     }
-    strncpy(wp->hitName, hitName, 0x20);
+    strncpy(wp->hitName, hitName, sizeof(wp->hitName));
     wp->endEvt = endEvt;
     wp->limit = 180;
     wp->counter = 0;

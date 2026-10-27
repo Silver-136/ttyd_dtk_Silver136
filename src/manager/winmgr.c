@@ -29,8 +29,7 @@
 
 typedef struct WinMgrSelectTbl {
     u16 numDescriptors; // 0x0
-
-WinMgrDesc* descriptors; // 0x4
+    WinMgrDesc* descriptors; // 0x4
 } WinMgrSelectTbl;
 
 extern ItemData itemDataTable[];
@@ -40,13 +39,8 @@ u16 L_pouchEquipBadge(s32 index);
 int select_comp_bteresa(void* a, void* b);
 #endif
 
-
-
-
 void select_main(WinMgrEntry* entry);
 void select_disp(WinMgrEntry* entry);
-
-
 void select_disp_party(WinMgrEntry* entry);
 void select_disp_mario(WinMgrEntry* entry);
 void select_disp_luigi(WinMgrEntry* entry);
@@ -60,8 +54,7 @@ void winMgrSeq(WinMgrEntry* entry);
 int select_comp_type(void* a, void* b);
 int select_comp_starpiece(void* a, void* b);
 
-//.data
-
+//.sbss
 static WinMgrWork work;
 static s16* mario_status_point_table[3];
 
@@ -90,6 +83,7 @@ static const char* mario_status_name_table[] = {"\x82\x67\x82\x6F", "\x82\x65\x8
 static s32 mario_status_henka_table[] = {5, 5, 3};
 s32 mario_status_max_table[] = {200, 200, 99};
 
+//.data
 WinMgrDesc select_desc[] = {
     {0, 1, 8, -24, 116, 300, 240, {0xFF, 0xFF, 0xFF, 0xFF}, select_main, select_disp},
     {2, 0, 8, -280, 120, 240, 45, {0xFF, 0xFF, 0xFF, 0xFF}, NULL, select_disp2},
@@ -143,9 +137,7 @@ WinMgrSelectTbl select_desc_tbl[] = {
     {2, select_luigi_desc},
 };
 
-//.sbss
-
-
+//.rodata (defined at the end of the file)
 static const char name_party0[12];
 static const char name_party1[12];
 static const char name_party4[12];
@@ -153,7 +145,7 @@ static const char name_party5[12];
 static const char name_party2[12];
 static const char name_party6[12];
 
-static inline const char* select_party_name(u16 id) /* */ {
+static inline const char* select_party_name(u16 id) {
     const char* name;
     switch (id) {
         case 0:
@@ -255,7 +247,6 @@ USER_FUNC(evt_win_party_lankdown_chk) {
     }
     return EVT_RETURN_DONE;
 }
-
 
 void winMgrInit(void) {
     wp->mNumEntries = 32;
@@ -538,7 +529,6 @@ void winMgrHelpMain(WinMgrEntry* entry) {
     }
 }
 
-
 void winMgrHelpDraw(WinMgrEntry* entry) {
     Mtx mtx;
     Mtx scale;
@@ -555,40 +545,43 @@ void winMgrHelpDraw(WinMgrEntry* entry) {
             FontDrawMessage(-210, -144.0f + 28.0f * entry->scroll, entry->msg);
         }
         GXSetScissor(0, 0, 608, 480);
-        if (entry->lines > 2) { s32 scroll = entry->scroll;
+        if (entry->lines > 2) {
+            // FAKE: spare copy of entry->scroll; testing the field directly changes the object
+            s32 scroll = entry->scroll;
+
             if (scroll == 0) {
                 if ((gp->retraceCount & 31) < 20) {
                     PSMTXTrans(mtx, entry->x + entry->width - 12, entry->y - entry->height - 4, 0.0f);
                     PSMTXScale(scale, 0.6f, 0.6f, 0.6f);
                     PSMTXConcat(mtx, scale, mtx);
-                    iconDispGx2(mtx, 16, ICON_ARROW_DOWN);
+                    iconDispGx2(mtx, ICON_FLAG_2D, ICON_ARROW_DOWN);
                 }
             } else if (entry->scroll + 2 == entry->lines) {
                 if ((gp->retraceCount & 31) < 20) {
                     PSMTXTrans(mtx, entry->x + entry->width - 12, entry->y - entry->height + 44, 0.0f);
                     PSMTXScale(scale, 0.6f, 0.6f, 0.6f);
                     PSMTXConcat(mtx, scale, mtx);
-                    iconDispGx2(mtx, 16, ICON_ARROW_UP);
+                    iconDispGx2(mtx, ICON_FLAG_2D, ICON_ARROW_UP);
                 }
             } else if ((gp->retraceCount & 31) < 20) {
                 PSMTXTrans(mtx, entry->x + entry->width - 12, entry->y - entry->height + 44, 0.0f);
                 PSMTXScale(scale, 0.6f, 0.6f, 0.6f);
                 PSMTXConcat(mtx, scale, mtx);
-                iconDispGx2(mtx, 16, ICON_ARROW_UP);
+                iconDispGx2(mtx, ICON_FLAG_2D, ICON_ARROW_UP);
                 PSMTXTrans(mtx, entry->x + entry->width - 12, entry->y - entry->height - 4, 0.0f);
                 PSMTXScale(scale, 0.6f, 0.6f, 0.6f);
                 PSMTXConcat(mtx, scale, mtx);
-                iconDispGx2(mtx, 16, ICON_ARROW_DOWN);
+                iconDispGx2(mtx, ICON_FLAG_2D, ICON_ARROW_DOWN);
             }
             PSMTXTrans(mtx, entry->x + entry->width - 12, entry->y - entry->height + 10, 0.0f);
             PSMTXScale(scale, 0.6f, 0.6f, 0.6f);
             PSMTXConcat(mtx, scale, mtx);
-            iconDispGx2(mtx, 16, ICON_SUBSTICK_NEUTRAL);
+            iconDispGx2(mtx, ICON_FLAG_2D, ICON_SUBSTICK_NEUTRAL);
         }
     }
 }
 
-WinMgrSelect* winMgrSelectEntry(EvtWord type, s32 newItem, BOOL a3) {
+WinMgrSelect* winMgrSelectEntry(EvtWord type, s32 newItem, BOOL cancelOk) {
     s32 n;
     WinMgrDesc* desc;
     WinMgrSelect* sel;
@@ -614,7 +607,7 @@ WinMgrSelect* winMgrSelectEntry(EvtWord type, s32 newItem, BOOL a3) {
     sel->cursorX = 0.0f;
     sel->scrollY = 0.0f;
     sel->newItem = newItem;
-    if (a3) {
+    if (cancelOk) {
         sel->flags |= SELECT_CANCEL_OK;
     }
     if (n < 0) {
@@ -632,13 +625,13 @@ WinMgrSelect* winMgrSelectEntry(EvtWord type, s32 newItem, BOOL a3) {
 
     switch (m = sel->type) {
         case 0:
-            sel->items = __memAlloc(HEAP_DEFAULT, 0x1E8);
-            memset(sel->items, 0, 0x1E8);
+            sel->items = __memAlloc(HEAP_DEFAULT, (MAX_KEY_ITEMS + 1) * sizeof(WinMgrSelectItem));
+            memset(sel->items, 0, (MAX_KEY_ITEMS + 1) * sizeof(WinMgrSelectItem));
             sel->numItems = 0;
             if (newItem) {
                 sel->items[sel->numItems++].id = newItem;
             }
-            for (i = 0; i < 121; i++) {
+            for (i = 0; i < MAX_KEY_ITEMS; i++) {
                 id = (u16)pouchKeyItem(i);
                 if (id) {
                     for (j = 0; j < 19; j++) {
@@ -655,13 +648,13 @@ WinMgrSelect* winMgrSelectEntry(EvtWord type, s32 newItem, BOOL a3) {
         case 1:
         case 3:
         case 4:
-            sel->items = __memAlloc(HEAP_DEFAULT, 0x54);
-            memset(sel->items, 0, 0x54);
+            sel->items = __memAlloc(HEAP_DEFAULT, (MAX_HELD_ITEMS + 1) * sizeof(WinMgrSelectItem));
+            memset(sel->items, 0, (MAX_HELD_ITEMS + 1) * sizeof(WinMgrSelectItem));
             sel->numItems = 0;
             if (newItem) {
                 sel->items[sel->numItems++].id = newItem;
             }
-            for (i = 0; i < 20; i++) {
+            for (i = 0; i < MAX_HELD_ITEMS; i++) {
                 id = (u16)pouchHaveItem(i);
                 if (id) {
                     sel->items[sel->numItems++].id = id;
@@ -670,13 +663,13 @@ WinMgrSelect* winMgrSelectEntry(EvtWord type, s32 newItem, BOOL a3) {
             break;
         case 2:
         case 12:
-            sel->items = __memAlloc(HEAP_DEFAULT, 0x324);
-            memset(sel->items, 0, 0x324);
+            sel->items = __memAlloc(HEAP_DEFAULT, (MAX_BADGES + 1) * sizeof(WinMgrSelectItem));
+            memset(sel->items, 0, (MAX_BADGES + 1) * sizeof(WinMgrSelectItem));
             sel->numItems = 0;
             if (newItem) {
                 sel->items[sel->numItems++].id = newItem;
             }
-            for (i = 0; i < 200; i++) {
+            for (i = 0; i < MAX_BADGES; i++) {
                 id = (u16)pouchHaveBadge(i);
                 if (id) {
 #ifdef VERSION_G8ME01
@@ -689,13 +682,13 @@ WinMgrSelect* winMgrSelectEntry(EvtWord type, s32 newItem, BOOL a3) {
             }
             break;
         case 5:
-            sel->items = __memAlloc(HEAP_DEFAULT, 0x84);
-            memset(sel->items, 0, 0x84);
+            sel->items = __memAlloc(HEAP_DEFAULT, (MAX_STORED_ITEMS + 1) * sizeof(WinMgrSelectItem));
+            memset(sel->items, 0, (MAX_STORED_ITEMS + 1) * sizeof(WinMgrSelectItem));
             sel->numItems = 0;
             if (newItem) {
                 sel->items[sel->numItems++].id = newItem;
             }
-            for (i = 0; i < 32; i++) {
+            for (i = 0; i < MAX_STORED_ITEMS; i++) {
                 id = (u16)pouchKeepItem(i);
                 if (id) {
                     sel->items[sel->numItems++].id = id;
@@ -786,33 +779,33 @@ WinMgrSelect* winMgrSelectEntry(EvtWord type, s32 newItem, BOOL a3) {
             }
             break;
         case 11:
-            sel->items = __memAlloc(HEAP_DEFAULT, 0x18C);
-            memset(sel->items, 0, 0x18C);
+            sel->items = __memAlloc(HEAP_DEFAULT, BADGE_COUNT * sizeof(WinMgrSelectItem));
+            memset(sel->items, 0, BADGE_COUNT * sizeof(WinMgrSelectItem));
             sel->numItems = 0;
-            for (i = 0; i < 99; i++) {
-                m = (s16)badgeShop_get(bdsw->bargain_table, i + 240);
-                if (m - badgeShop_ThrowCheck(i + 240) > 0) {
-                    sel->items[sel->numItems++].id = i + 240;
+            for (i = 0; i < BADGE_COUNT; i++) {
+                m = (s16)badgeShop_get(bdsw->bargain_table, i + BADGE_MIN);
+                if (m - badgeShop_ThrowCheck(i + BADGE_MIN) > 0) {
+                    sel->items[sel->numItems++].id = i + BADGE_MIN;
                 }
             }
-            qqsort(sel->items, sel->numItems, 4, select_comp_type);
+            qqsort(sel->items, sel->numItems, sizeof(WinMgrSelectItem), select_comp_type);
             break;
         case 13:
             m = getBadgeStarmaniacTableMaxCount();
             sel->items = __memAlloc(HEAP_DEFAULT, m * 4);
             memset(sel->items, 0, m * 4);
             sel->numItems = 0;
-            for (i = 0; i < 99; i++) {
-                m = (s16)badgeShop_get(bdsw->starmaniac_table, i + 240);
-                if (m - badgeShop_ThrowCheck(i + 240) > 0) {
-                    sel->items[sel->numItems].id = i + 240;
-                    if (itemDataTable[i + 240].star_piece_price > pouchGetStarPiece()) {
+            for (i = 0; i < BADGE_COUNT; i++) {
+                m = (s16)badgeShop_get(bdsw->starmaniac_table, i + BADGE_MIN);
+                if (m - badgeShop_ThrowCheck(i + BADGE_MIN) > 0) {
+                    sel->items[sel->numItems].id = i + BADGE_MIN;
+                    if (itemDataTable[i + BADGE_MIN].star_piece_price > pouchGetStarPiece()) {
                         sel->items[sel->numItems].flags |= (SELECT_ITEM_GRAY | SELECT_ITEM_DISABLED);
                     }
                     sel->numItems++;
                 }
             }
-            qqsort(sel->items, sel->numItems, 4, select_comp_starpiece);
+            qqsort(sel->items, sel->numItems, sizeof(WinMgrSelectItem), select_comp_starpiece);
             break;
         case 14:
             sel->items = __memAlloc(HEAP_DEFAULT, 0x10);
@@ -845,7 +838,7 @@ WinMgrSelect* winMgrSelectEntry(EvtWord type, s32 newItem, BOOL a3) {
                 }
             }
 #ifdef VERSION_G8ME01
-            qqsort(sel->items, sel->numItems, 4, select_comp_bteresa);
+            qqsort(sel->items, sel->numItems, sizeof(WinMgrSelectItem), select_comp_bteresa);
 #endif
             break;
         case 17:
@@ -867,14 +860,14 @@ WinMgrSelect* winMgrSelectEntry(EvtWord type, s32 newItem, BOOL a3) {
             break;
         default:
             if (type < 0) {
-                s32 m;
+                s32 count;
                 s32* it;
                 list = (s32*)type;
-                m = 0;
-                while (list[m++] != -1) {
+                count = 0;
+                while (list[count++] != -1) {
                 }
-                sel->items = __memAlloc(HEAP_DEFAULT, (m + 1) * 4);
-                memset(sel->items, 0, (m + 1) * 4);
+                sel->items = __memAlloc(HEAP_DEFAULT, (count + 1) * 4);
+                memset(sel->items, 0, (count + 1) * 4);
                 sel->numItems = 0;
                 if (newItem) {
                     sel->items[sel->numItems++].id = newItem;
@@ -919,8 +912,8 @@ int select_comp_bteresa(void* a, void* b) {
     }
     return -(x < y);
 }
-
 #endif
+
 s32 winMgrSelect(WinMgrSelect* sel) {
     if (sel->flags & SELECT_DONE) {
         if (sel->flags & SELECT_CANCELLED) {
@@ -934,9 +927,6 @@ s32 winMgrSelect(WinMgrSelect* sel) {
     return 0;
 }
 
-
-
-static const char* select_party_name(u16 id);
 s32 winMgrSelectOther(WinMgrSelect* sel, EventEntry* evt) {
     InformantWork* jdt = &_jdt;
     s32 id;
@@ -944,150 +934,152 @@ s32 winMgrSelectOther(WinMgrSelect* sel, EventEntry* evt) {
     char buf[0x40];
 
     if (sel->flags & SELECT_DONE) {
-    if (sel->flags & SELECT_CANCELLED) {
-        return -1;
-    }
-    id = sel->items[sel->cursor].id;
-    switch (sel->type) {
-        case 6:
-        case 7:
-            evt->lwData[1] = party_id_table[id];
-            switch (id) {
-                case 0:
-                    name = msgSearch(name_party0);
-                    break;
-                case 1:
-                    name = msgSearch(name_party1);
-                    break;
-                case 2:
-                    name = msgSearch(name_party4);
-                    break;
-                case 3:
-                    name = pouchGetYoshiName();
-                    break;
-                case 4:
-                    name = msgSearch(name_party5);
-                    break;
-                case 5:
-                    name = msgSearch(name_party2);
-                    break;
-                case 6:
-                    name = msgSearch(name_party6);
-                    break;
-            }
+        if (sel->flags & SELECT_CANCELLED) {
+            return -1;
+        }
+        id = sel->items[sel->cursor].id;
+        switch (sel->type) {
+            case 6:
+            case 7:
+                evt->lwData[1] = party_id_table[id];
+                switch (id) {
+                    case 0:
+                        name = msgSearch(name_party0);
+                        break;
+                    case 1:
+                        name = msgSearch(name_party1);
+                        break;
+                    case 2:
+                        name = msgSearch(name_party4);
+                        break;
+                    case 3:
+                        name = pouchGetYoshiName();
+                        break;
+                    case 4:
+                        name = msgSearch(name_party5);
+                        break;
+                    case 5:
+                        name = msgSearch(name_party2);
+                        break;
+                    case 6:
+                        name = msgSearch(name_party6);
+                        break;
+                }
 
-            evt->lwData[3] = (EvtWord)name;
-            break;
-        case 8:
-            evt->lwData[2] = party_id_table[id];
-            switch (id) {
-                case 0:
-                    name = msgSearch(name_party0);
-                    break;
-                case 1:
-                    name = msgSearch(name_party1);
-                    break;
-                case 2:
-                    name = msgSearch(name_party4);
-                    break;
-                case 3:
-                    name = pouchGetYoshiName();
-                    break;
-                case 4:
-                    name = msgSearch(name_party5);
-                    break;
-                case 5:
-                    name = msgSearch(name_party2);
-                    break;
-                case 6:
-                    name = msgSearch(name_party6);
-                    break;
-            }
+                evt->lwData[3] = (EvtWord)name;
+                break;
+            case 8:
+                evt->lwData[2] = party_id_table[id];
+                switch (id) {
+                    case 0:
+                        name = msgSearch(name_party0);
+                        break;
+                    case 1:
+                        name = msgSearch(name_party1);
+                        break;
+                    case 2:
+                        name = msgSearch(name_party4);
+                        break;
+                    case 3:
+                        name = pouchGetYoshiName();
+                        break;
+                    case 4:
+                        name = msgSearch(name_party5);
+                        break;
+                    case 5:
+                        name = msgSearch(name_party2);
+                        break;
+                    case 6:
+                        name = msgSearch(name_party6);
+                        break;
+                }
 
-            evt->lwData[4] = (EvtWord)name;
-            break;
-        case 9:
-            evt->lwData[1] = id;
-            evt->lwData[2] = (EvtWord)MARIO_STATUS_NAME(id);
-            evt->lwData[5] = *mario_status_point_table[0];
-            evt->lwData[6] = *mario_status_point_table[1];
-            evt->lwData[7] = *mario_status_point_table[2];
-            evt->lwData[5 + id] += mario_status_henka_table[id];
-            break;
-        case 10:
-            evt->lwData[1] = id;
-            evt->lwData[3] = (EvtWord)MARIO_STATUS_NAME(id);
-            evt->lwData[5 + id] -= mario_status_henka_table[id];
-            break;
-        case 11:
-            evt->lwData[1] = id;
-            evt->lwData[2] = (EvtWord)VERSION_PICK(itemDataTable[id].id, msgSearch(itemDataTable[id].name));
-            evt->lwData[3] = itemDataTable[id].buy_price;
-            evt->lwData[4] = itemDataTable[id].bp_cost;
-            break;
-        case 12:
-            evt->lwData[1] = id;
-            evt->lwData[2] = (EvtWord)VERSION_PICK(itemDataTable[id].id, msgSearch(itemDataTable[id].name));
-            evt->lwData[3] = itemDataTable[id].sell_price;
-            evt->lwData[4] = sel->cursor;
-            break;
-        case 13:
-            evt->lwData[1] = id;
-            evt->lwData[2] = (EvtWord)VERSION_PICK(itemDataTable[id].id, msgSearch(itemDataTable[id].name));
-            evt->lwData[3] = itemDataTable[id].star_piece_price;
-            evt->lwData[4] = itemDataTable[id].bp_cost;
-            break;
-        case 14:
-            evt->lwData[1] = id;
-            evt->lwData[2] = (EvtWord)VERSION_PICK(itemDataTable[id].id, msgSearch(itemDataTable[id].name));
-            evt->lwData[3] = (itemDataTable[id].buy_price * 12) / 10;
-            evt->lwData[4] = itemDataTable[id].bp_cost;
-            break;
-        case 15:
-            evt->lwData[1] = id;
-            evt->lwData[2] = (EvtWord)VERSION_PICK(itemDataTable[id].id, msgSearch(itemDataTable[id].name));
-            evt->lwData[3] = ((evtGetValue(NULL, GSW_PIT_FLOOR) + 11) * itemDataTable[id].buy_price) / 10;
-            evt->lwData[4] = itemDataTable[id].bp_cost;
-            break;
-        case 16:
-            evt->lwData[1] = id;
-            evt->lwData[2] = (EvtWord)VERSION_PICK(itemDataTable[id].id, msgSearch(itemDataTable[id].name));
-            evt->lwData[3] = (itemDataTable[id].buy_price * 2 + 2) / 3;
-            evt->lwData[4] = itemDataTable[id].bp_cost;
-            break;
-        case 17:
-            sprintf((char*)jdt->infoEnd, "%s_%04d", jdt->prefix, jdt->info[id].storyId);
-            sprintf(buf, "jperfect_title_%04d", jdt->info[id].storyId);
-            jdt->curIndex = id;
-            name = msgSearch(buf);
-            evt->lwData[1] = (EvtWord)jdt->infoEnd;
-            evt->lwData[2] = (EvtWord)name;
-            evt->lwData[3] = strlen(name);
-            if (johoya_get(jdt->readFlags.perfectRead, jdt->info[id].storyId)) {
-                evt->lwData[4] = 0;
-            } else {
-                evt->lwData[4] = jdt->info[id].cost;
-            }
-            break;
-        case 18:
-            sprintf((char*)jdt->infoEnd, "%s_%04d", jdt->prefix, jdt->info[id].storyId);
-            jdt->curIndex = id;
-            evt->lwData[1] = (EvtWord)jdt->infoEnd;
-            evt->lwData[2] = (EvtWord)jdt->info[id].initEndPos;
-            evt->lwData[3] = jdt->info[id].tagEndPos;
-            if (johoya_get(jdt->readFlags.luigiRead, jdt->info[id].storyId)) {
-                evt->lwData[4] = 0;
-            } else {
-                evt->lwData[4] = 1;
-            }
-            break;
-    }
-    return 1;
+                evt->lwData[4] = (EvtWord)name;
+                break;
+            case 9:
+                evt->lwData[1] = id;
+                evt->lwData[2] = (EvtWord)MARIO_STATUS_NAME(id);
+                evt->lwData[5] = *mario_status_point_table[0];
+                evt->lwData[6] = *mario_status_point_table[1];
+                evt->lwData[7] = *mario_status_point_table[2];
+                evt->lwData[5 + id] += mario_status_henka_table[id];
+                break;
+            case 10:
+                evt->lwData[1] = id;
+                evt->lwData[3] = (EvtWord)MARIO_STATUS_NAME(id);
+                evt->lwData[5 + id] -= mario_status_henka_table[id];
+                break;
+            case 11:
+                evt->lwData[1] = id;
+                evt->lwData[2] = (EvtWord)VERSION_PICK(itemDataTable[id].id, msgSearch(itemDataTable[id].name));
+                evt->lwData[3] = itemDataTable[id].buy_price;
+                evt->lwData[4] = itemDataTable[id].bp_cost;
+                break;
+            case 12:
+                evt->lwData[1] = id;
+                evt->lwData[2] = (EvtWord)VERSION_PICK(itemDataTable[id].id, msgSearch(itemDataTable[id].name));
+                evt->lwData[3] = itemDataTable[id].sell_price;
+                evt->lwData[4] = sel->cursor;
+                break;
+            case 13:
+                evt->lwData[1] = id;
+                evt->lwData[2] = (EvtWord)VERSION_PICK(itemDataTable[id].id, msgSearch(itemDataTable[id].name));
+                evt->lwData[3] = itemDataTable[id].star_piece_price;
+                evt->lwData[4] = itemDataTable[id].bp_cost;
+                break;
+            case 14:
+                evt->lwData[1] = id;
+                evt->lwData[2] = (EvtWord)VERSION_PICK(itemDataTable[id].id, msgSearch(itemDataTable[id].name));
+                evt->lwData[3] = (itemDataTable[id].buy_price * 12) / 10;
+                evt->lwData[4] = itemDataTable[id].bp_cost;
+                break;
+            case 15:
+                evt->lwData[1] = id;
+                evt->lwData[2] = (EvtWord)VERSION_PICK(itemDataTable[id].id, msgSearch(itemDataTable[id].name));
+                evt->lwData[3] = ((evtGetValue(NULL, GSW_PIT_FLOOR) + 11) * itemDataTable[id].buy_price) / 10;
+                evt->lwData[4] = itemDataTable[id].bp_cost;
+                break;
+            case 16:
+                evt->lwData[1] = id;
+                evt->lwData[2] = (EvtWord)VERSION_PICK(itemDataTable[id].id, msgSearch(itemDataTable[id].name));
+                evt->lwData[3] = (itemDataTable[id].buy_price * 2 + 2) / 3;
+                evt->lwData[4] = itemDataTable[id].bp_cost;
+                break;
+            case 17:
+                sprintf((char*)jdt->infoEnd, "%s_%04d", jdt->prefix, jdt->info[id].storyId);
+                sprintf(buf, "jperfect_title_%04d", jdt->info[id].storyId);
+                jdt->curIndex = id;
+                name = msgSearch(buf);
+                evt->lwData[1] = (EvtWord)jdt->infoEnd;
+                evt->lwData[2] = (EvtWord)name;
+                evt->lwData[3] = strlen(name);
+                if (johoya_get(jdt->readFlags.perfectRead, jdt->info[id].storyId)) {
+                    evt->lwData[4] = 0;
+                } else {
+                    evt->lwData[4] = jdt->info[id].cost;
+                }
+                break;
+            case 18:
+                sprintf((char*)jdt->infoEnd, "%s_%04d", jdt->prefix, jdt->info[id].storyId);
+                jdt->curIndex = id;
+                evt->lwData[1] = (EvtWord)jdt->infoEnd;
+                evt->lwData[2] = (EvtWord)jdt->info[id].initEndPos;
+                evt->lwData[3] = jdt->info[id].tagEndPos;
+                if (johoya_get(jdt->readFlags.luigiRead, jdt->info[id].storyId)) {
+                    evt->lwData[4] = 0;
+                } else {
+                    evt->lwData[4] = 1;
+                }
+                break;
+        }
+        return 1;
     }
     return 0;
 }
 
 void winMgrSelectDelete(WinMgrSelect* sel) {
+    // FAKE: chain of spare copies of sel, sel->items and the heap id; the plain
+    // __memFree(HEAP_DEFAULT, sel->items); __memFree(HEAP_DEFAULT, sel); changes the object
     WinMgrSelectItem* items;
     int heap;
     WinMgrSelect* sel3;
@@ -1124,7 +1116,7 @@ void select_main(WinMgrEntry* entry) {
             sel->state++;
             break;
         case 1:
-            if ((wp->mEntries[sel->descriptorId[0]].flags & WINMGR_FLAG_ANIMATING)) {
+            if (wp->mEntries[sel->descriptorId[0]].flags & WINMGR_FLAG_ANIMATING) {
                 break;
             }
             prev = sel->cursor;
@@ -1191,7 +1183,7 @@ void select_main(WinMgrEntry* entry) {
             sel->state++;
             break;
         case 3:
-            if ((wp->mEntries[sel->descriptorId[0]].flags & WINMGR_FLAG_ANIMATING)) {
+            if (wp->mEntries[sel->descriptorId[0]].flags & WINMGR_FLAG_ANIMATING) {
                 break;
             }
             for (i = 0; i < sel->numDescriptors; i++) {
@@ -1225,6 +1217,8 @@ void select_disp(WinMgrEntry* entry) {
     char buf[0x20];
     Mtx mtx;
     Mtx scale;
+
+    // FAKE: white copied through a spare tmp; iconcol = white changes the object
     tmp = white;
     iconcol = tmp;
 
@@ -1240,6 +1234,7 @@ void select_disp(WinMgrEntry* entry) {
             if ((f32)entry->y < py - 32.0f || (f32)(entry->y - entry->height) > py + 32.0f) {
                 continue;
             }
+            // FAKE: no-op update of ofs (always 0.0f); removing it changes the object
             if (sel->newItem == 0) {
                 ofs = ofs + 0.0f;
             }
@@ -1363,38 +1358,37 @@ void select_disp(WinMgrEntry* entry) {
                 PSMTXTrans(mtx, entry->x + 268, entry->y - 18, 0.0f);
                 PSMTXScale(scale, 0.6f, 0.6f, 0.6f);
                 PSMTXConcat(mtx, scale, mtx);
-                iconDispGxCol(mtx, 16, ICON_CURRENCY_PLATE, (GXColor){0xF0, 0xF0, 0xF0, 0xFF});
-                iconDispGx(&(Vec){entry->x + 268, entry->y - 12, 0.0f}, 16, ICON_ITEM_COIN, 0.6f);
+                iconDispGxCol(mtx, ICON_FLAG_2D, ICON_CURRENCY_PLATE, (GXColor){0xF0, 0xF0, 0xF0, 0xFF});
+                iconDispGx(&(Vec){entry->x + 268, entry->y - 12, 0.0f}, ICON_FLAG_2D, ICON_ITEM_COIN, 0.6f);
                 break;
             case 13:
                 PSMTXTrans(mtx, entry->x + 268, entry->y - 18, 0.0f);
                 PSMTXScale(scale, 0.6f, 0.6f, 0.6f);
                 PSMTXConcat(mtx, scale, mtx);
-                iconDispGxCol(mtx, 16, ICON_CURRENCY_PLATE, (GXColor){0xF0, 0xF0, 0xF0, 0xFF});
-                iconDispGx(&(Vec){entry->x + 268, entry->y - 12, 0.0f}, 16, ICON_ITEM_STAR_PIECE, 0.6f);
+                iconDispGxCol(mtx, ICON_FLAG_2D, ICON_CURRENCY_PLATE, (GXColor){0xF0, 0xF0, 0xF0, 0xFF});
+                iconDispGx(&(Vec){entry->x + 268, entry->y - 12, 0.0f}, ICON_FLAG_2D, ICON_ITEM_STAR_PIECE, 0.6f);
                 break;
             case 16:
                 PSMTXTrans(mtx, entry->x + 268, entry->y - 18, 0.0f);
                 PSMTXScale(scale, 0.6f, 0.6f, 0.6f);
                 PSMTXConcat(mtx, scale, mtx);
-                iconDispGxCol(mtx, 16, ICON_CURRENCY_PLATE, (GXColor){0xF0, 0xF0, 0xF0, 0xFF});
-                iconDispGx(&(Vec){entry->x + 268, entry->y - 12, 0.0f}, 16, ICON_ITEM_PIANTA_TOKEN, 0.6f);
+                iconDispGxCol(mtx, ICON_FLAG_2D, ICON_CURRENCY_PLATE, (GXColor){0xF0, 0xF0, 0xF0, 0xFF});
+                iconDispGx(&(Vec){entry->x + 268, entry->y - 12, 0.0f}, ICON_FLAG_2D, ICON_ITEM_PIANTA_TOKEN, 0.6f);
                 break;
         }
-        iconDispGx(&(Vec){sel->cursorX, sel->cursorY, 1.0f}, 20, ICON_YUBI_CURSOR, 1.0f);
+        iconDispGx(&(Vec){sel->cursorX, sel->cursorY, 1.0f}, ICON_FLAG_2D | ICON_FLAG_FLIP_X, ICON_YUBI_CURSOR, 1.0f);
         if (sel->numItems > 8 && (gp->retraceCount & 31) < 20) {
             if (sel->scrollTop != 0) {
-                iconDispGx(&(Vec){entry->x + entry->width / 2.0f, entry->y - 36, 1.0f}, 16, ICON_ARROW_UP, 0.6f);
+                iconDispGx(&(Vec){entry->x + entry->width / 2.0f, entry->y - 36, 1.0f}, ICON_FLAG_2D, ICON_ARROW_UP, 0.6f);
             }
             if (sel->scrollTop != sel->numItems - 8) {
-                iconDispGx(&(Vec){entry->x + entry->width / 2.0f, entry->y - entry->height - 12, 1.0f}, 16, ICON_ARROW_DOWN, 0.6f);
+                iconDispGx(&(Vec){entry->x + entry->width / 2.0f, entry->y - entry->height - 12, 1.0f}, ICON_FLAG_2D, ICON_ARROW_DOWN, 0.6f);
             }
         }
     }
 }
 
-
-static inline s32 select_party_icon(u16 id) /* */ {
+static inline s32 select_party_icon(u16 id) {
     s32 icon = party_icon_table[id];
     if (icon == ICON_PARTY_YOSHI) {
         switch (pouchGetPartyColor(PARTNER_YOSHI)) {
@@ -1425,11 +1419,6 @@ static inline s32 select_party_icon(u16 id) /* */ {
     return icon;
 }
 
-
-
-
-
-
 void select_disp_party(WinMgrEntry* entry) {
 #ifdef VERSION_G8ME01
     f32 tw;
@@ -1447,6 +1436,8 @@ void select_disp_party(WinMgrEntry* entry) {
     const char* msg;
     u16 w;
     f32 ofs;
+
+    // FAKE: white copied through a spare tmp; iconcol = white changes the object
     tmp = white;
     iconcol = tmp;
 
@@ -1461,6 +1452,7 @@ void select_disp_party(WinMgrEntry* entry) {
             if ((f32)entry->y < py - 32.0f || (f32)(entry->y - entry->height) > py + 32.0f) {
                 continue;
             }
+            // FAKE: no-op update of ofs (always 0.0f); removing it changes the object
             if (sel->newItem == 0) {
                 ofs = ofs + 0.0f;
             }
@@ -1512,13 +1504,13 @@ void select_disp_party(WinMgrEntry* entry) {
         winFontInit();
         winFontSetEdge((Vec){entry->x + entry->width * 3 / 5 + (entry->width * 2 / 5 - 85) / 3 + w, entry->y + 14, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white, msg);
 #endif
-        iconDispGx(&(Vec){sel->cursorX, sel->cursorY, 1.0f}, 20, ICON_YUBI_CURSOR, 1.0f);
+        iconDispGx(&(Vec){sel->cursorX, sel->cursorY, 1.0f}, ICON_FLAG_2D | ICON_FLAG_FLIP_X, ICON_YUBI_CURSOR, 1.0f);
         if (sel->numItems > 8 && (gp->retraceCount & 31) < 20) {
             if (sel->scrollTop != 0) {
-                iconDispGx(&(Vec){entry->x + entry->width / 2.0f, entry->y - 36, 1.0f}, 16, ICON_ARROW_UP, 0.6f);
+                iconDispGx(&(Vec){entry->x + entry->width / 2.0f, entry->y - 36, 1.0f}, ICON_FLAG_2D, ICON_ARROW_UP, 0.6f);
             }
             if (sel->scrollTop != sel->numItems - 8) {
-                iconDispGx(&(Vec){entry->x + entry->width / 2.0f, entry->y - entry->height - 12, 1.0f}, 16, ICON_ARROW_DOWN, 0.6f);
+                iconDispGx(&(Vec){entry->x + entry->width / 2.0f, entry->y - entry->height - 12, 1.0f}, ICON_FLAG_2D, ICON_ARROW_DOWN, 0.6f);
             }
         }
     }
@@ -1544,6 +1536,8 @@ void select_disp_mario(WinMgrEntry* entry) {
     const char* msg;
     u16 w;
     f32 ofs;
+
+    // FAKE: white copied through a spare tmp; iconcol = white changes the object
     tmp = white;
     iconcol = tmp;
 
@@ -1559,6 +1553,7 @@ void select_disp_mario(WinMgrEntry* entry) {
             if ((f32)entry->y < py - 32.0f || (f32)(entry->y - entry->height) > py + 32.0f) {
                 continue;
             }
+            // FAKE: no-op update of ofs (always 0.0f); removing it changes the object
             if (sel->newItem == 0) {
                 ofs = ofs + 0.0f;
             }
@@ -1631,13 +1626,13 @@ void select_disp_mario(WinMgrEntry* entry) {
         winFontInit();
         winFontSetEdge((Vec){entry->x + entry->width * 3 / 5 + (entry->width * 2 / 5 - 85) / 3 + w, entry->y + 14, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white2, msg);
 #endif
-        iconDispGx(&(Vec){sel->cursorX, sel->cursorY, 1.0f}, 20, ICON_YUBI_CURSOR, 1.0f);
+        iconDispGx(&(Vec){sel->cursorX, sel->cursorY, 1.0f}, ICON_FLAG_2D | ICON_FLAG_FLIP_X, ICON_YUBI_CURSOR, 1.0f);
         if (sel->numItems > 8 && (gp->retraceCount & 31) < 20) {
             if (sel->scrollTop != 0) {
-                iconDispGx(&(Vec){entry->x + entry->width / 2.0f, entry->y - 36, 1.0f}, 16, ICON_ARROW_UP, 0.6f);
+                iconDispGx(&(Vec){entry->x + entry->width / 2.0f, entry->y - 36, 1.0f}, ICON_FLAG_2D, ICON_ARROW_UP, 0.6f);
             }
             if (sel->scrollTop != sel->numItems - 8) {
-                iconDispGx(&(Vec){entry->x + entry->width / 2.0f, entry->y - entry->height - 12, 1.0f}, 16, ICON_ARROW_DOWN, 0.6f);
+                iconDispGx(&(Vec){entry->x + entry->width / 2.0f, entry->y - entry->height - 12, 1.0f}, ICON_FLAG_2D, ICON_ARROW_DOWN, 0.6f);
             }
         }
     }
@@ -1728,17 +1723,17 @@ void select_disp_luigi(WinMgrEntry* entry) {
                 PSMTXTrans(mtx, ent->x + 268, ent->y - 18, 0.0f);
                 PSMTXScale(scale, 0.6f, 0.6f, 0.6f);
                 PSMTXConcat(mtx, scale, mtx);
-                iconDispGxCol(mtx, 16, ICON_CURRENCY_PLATE, (GXColor){0xF0, 0xF0, 0xF0, 0xFF});
-                iconDispGx(&(Vec){ent->x + 268, ent->y - 12, 0.0f}, 16, ICON_ITEM_COIN, 0.6f);
+                iconDispGxCol(mtx, ICON_FLAG_2D, ICON_CURRENCY_PLATE, (GXColor){0xF0, 0xF0, 0xF0, 0xFF});
+                iconDispGx(&(Vec){ent->x + 268, ent->y - 12, 0.0f}, ICON_FLAG_2D, ICON_ITEM_COIN, 0.6f);
                 break;
         }
-        iconDispGx(&(Vec){sel->cursorX, sel->cursorY, 1.0f}, 20, ICON_YUBI_CURSOR, 1.0f);
+        iconDispGx(&(Vec){sel->cursorX, sel->cursorY, 1.0f}, ICON_FLAG_2D | ICON_FLAG_FLIP_X, ICON_YUBI_CURSOR, 1.0f);
         if (sel->numItems > 8 && (gp->retraceCount & 31) < 20) {
             if (sel->scrollTop != 0) {
-                iconDispGx(&(Vec){ent->x + ent->width / 2.0f, ent->y - 36, 1.0f}, 16, ICON_ARROW_UP, 0.6f);
+                iconDispGx(&(Vec){ent->x + ent->width / 2.0f, ent->y - 36, 1.0f}, ICON_FLAG_2D, ICON_ARROW_UP, 0.6f);
             }
             if (sel->scrollTop != sel->numItems - 8) {
-                iconDispGx(&(Vec){ent->x + ent->width / 2.0f, ent->y - ent->height - 12, 1.0f}, 16, ICON_ARROW_DOWN, 0.6f);
+                iconDispGx(&(Vec){ent->x + ent->width / 2.0f, ent->y - ent->height - 12, 1.0f}, ICON_FLAG_2D, ICON_ARROW_DOWN, 0.6f);
             }
         }
     }
@@ -1796,7 +1791,6 @@ void select_disp2(WinMgrEntry* entry) {
         Mtx trans;
         Mtx scale;
         f32 tw;
-        WinMgrEntry* e;
 
         tw = FontGetMessageWidthLine(msg, &lines);
         if (tw > entry->width - 30) {
@@ -1810,23 +1804,8 @@ void select_disp2(WinMgrEntry* entry) {
         PSMTXConcat(trans, scale, trans);
         FontDrawStart();
         FontDrawMessageMtx(trans, msg);
-        {
-            s32 ey, eh, ex, ew;
-            s32 h;
-            WinMgrDesc* d = entry->description;
-            h = lines * 22;
-            e = &wp->mEntries[sel->descriptorId[1]];
-            eh = d->height + h;
-            ew = entry->width;
-            ex = entry->x;
-            ey = d->y + h / 2;
-            if (e->flags & WINMGR_FLAG_ACTIVE) {
-                e->x = ex;
-                e->y = ey;
-                e->width = ew;
-                e->height = eh;
-            }
-        }
+        winMgrSetSize(sel->descriptorId[1], entry->x, entry->description->y + lines * 22 / 2, entry->width,
+                      entry->description->height + lines * 22);
 #else
         w = (entry->width - FontGetMessageWidthLine(msg, &lines)) / 2;
         FontDrawStart();

@@ -134,6 +134,5 @@ EVT_BEGIN(all_juyoitem_lecture)
     CALL(lect_juyoitem_rel_get, LW(0))
     CALL_CHILD(LW(0))
     RETURN
-    END
 EVT_END()
 // clang-format on

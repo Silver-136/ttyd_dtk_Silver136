@@ -77,9 +77,6 @@ typedef struct SplineWork {
     s32 manual;    // 0x28
 } SplineWork;
 
-
-
-
 #pragma force_active on
 static const char coin_fmt[] = "%f%f%f";
 #pragma force_active reset
@@ -94,8 +91,6 @@ USER_FUNC(evt_snd_sfx_all_stop);
 USER_FUNC(evt_win_one_message);
 USER_FUNC(stone_bg);
 void coingetDisp(WinMgrEntry* entry);
-USER_FUNC(evt_key_get_button);
-USER_FUNC(evt_key_get_dir);
 
 #ifndef VERSION_G8ME01
 s32 evt_sub_mail_event_end[1];
@@ -1341,9 +1336,9 @@ USER_FUNC(evt_sub_spline_init) {
     SplineWork* w = _mapAlloc(sizeof(SplineWork));
     event->lwData[15] = (EvtWord)w;
     w->n = n;
-    w->ts = _mapAlloc(n * 4);
+    w->ts = _mapAlloc(n * sizeof(f32));
     w->pts = pts;
-    w->tbl = _mapAlloc(n * 12);
+    w->tbl = _mapAlloc(n * sizeof(Vec));
     spline_maketable(n, w->pts, w->ts, w->tbl);
     w->manual = manual;
     w->mode = mode;
@@ -1459,16 +1454,16 @@ USER_FUNC(evt_sub_get_stopwatch) {
 USER_FUNC(evt_sub_area_check) {
     EvtWord* args = event->args;
     s32 mode = evtGetValue(event, args[0]);
-    f32 a1 = evtGetValue(event, args[1]);
-    f32 a2 = evtGetValue(event, args[2]);
-    f32 a3 = evtGetValue(event, args[3]);
-    f32 a4 = evtGetValue(event, args[4]);
-    f32 a5 = evtGetValue(event, args[5]);
+    f32 cx = evtGetValue(event, args[1]);
+    f32 cy = evtGetValue(event, args[2]);
+    f32 range = evtGetValue(event, args[3]);
+    f32 px = evtGetValue(event, args[4]);
+    f32 py = evtGetValue(event, args[5]);
     s32 result;
     switch (mode) {
     case 0: {
-        f32 dist = distABf(a1, a2, a4, a5);
-        if (a3 < dist) {
+        f32 dist = distABf(cx, cy, px, py);
+        if (range < dist) {
             result = 0;
         } else {
             result = 1;
@@ -1477,16 +1472,16 @@ USER_FUNC(evt_sub_area_check) {
     }
     case 1:
         result = 1;
-        if (a1 - a3 > a4) {
+        if (cx - range > px) {
             result = 0;
         }
-        if (a1 + a3 < a4) {
+        if (cx + range < px) {
             result = 0;
         }
-        if (a2 - a3 > a5) {
+        if (cy - range > py) {
             result = 0;
         }
-        if (a2 + a3 < a5) {
+        if (cy + range < py) {
             result = 0;
         }
         break;
@@ -1535,11 +1530,26 @@ USER_FUNC(evt_sub_system_flag_onoff) {
     return EVT_RETURN_DONE;
 }
 
-KEYFN(evt_key_get_dir, keyGetDir)
+USER_FUNC(evt_key_get_dir) {
+    EvtWord* args = event->args;
+    s32 chan = evtGetValue(event, args[0]);
+    evtSetValue(event, args[1], keyGetDir(chan));
+    return EVT_RETURN_DONE;
+}
 
-KEYFN(evt_key_get_button, keyGetButton)
+USER_FUNC(evt_key_get_button) {
+    EvtWord* args = event->args;
+    s32 chan = evtGetValue(event, args[0]);
+    evtSetValue(event, args[1], keyGetButton(chan));
+    return EVT_RETURN_DONE;
+}
 
-KEYFN(evt_key_get_buttontrg, keyGetButtonTrg)
+USER_FUNC(evt_key_get_buttontrg) {
+    EvtWord* args = event->args;
+    s32 chan = evtGetValue(event, args[0]);
+    evtSetValue(event, args[1], keyGetButtonTrg(chan));
+    return EVT_RETURN_DONE;
+}
 
 USER_FUNC(evt_sub_get_mapname) {
     evtSetValue(event, event->args[0], (EvtWord)gp->currentMapName);
@@ -1625,12 +1635,12 @@ USER_FUNC(evt_sub_animgroup_async) {
     if (r == 0) {
         return EVT_RETURN_BLOCK;
     }
+    // FAKE: redundant test (r is nonzero here); returning EVT_RETURN_DONE directly changes the object
     if (r != 0) {
         return EVT_RETURN_DONE;
     }
     return EVT_RETURN_DONE;
 }
-
 
 USER_FUNC(evt_sub_countdown_start) {
     EvtWord* args = event->args;
@@ -1697,7 +1707,6 @@ void coingetDisp(WinMgrEntry* entry) {
     }
 }
 
-
 #pragma opt_lifetimes off
 USER_FUNC(evt_sub_get_coin) {
     s32 coin = evtGetValue(event, event->args[0]);
@@ -1734,14 +1743,14 @@ USER_FUNC(evt_sub_get_coin) {
         iconEntry("iraiCoin", ICON_ITEM_COIN);
         iconSetPos("iraiCoin", b.x, b.y, b.z);
         iconFlagOn("iraiCoin", ICON_FLAG_HIDDEN | ICON_FLAG_CAM_EFFECT_A);
-        ((ItemGetWork*)eff->userdata)->camera = 5;
+        ((ItemGetWork*)eff->userdata)->camera = CAMERA_3D_EFFECTA;
         marioChgGetItemMotion();
         event->userdata3 = winMgrEntry(coinget_window_desc);
         winMgrOpen(event->userdata3);
         winMgrSetParam(event->userdata3, work);
         work[0] = coin;
         work[1] = 0;
-        psndBGMOff(0x3800);
+        psndBGMOff(PSND_SILENT | PSND_SILENT_LEVEL(3));
         psndBGMOn(PSND_FADEOUT | PSND_SLOT(1), "BGM_FF_GET_ITEM1");
         event->userdata[2] = 200;
         event->savedTime = gp->renderTime;
@@ -1772,7 +1781,7 @@ USER_FUNC(evt_sub_get_coin) {
         iconDelete("iraiCoin");
         marioChgStayMotion();
         psndBGMOn(PSND_CONTINUE | PSND_UNSILENT, NULL);
-        psndBGMOff(0x201);
+        psndBGMOff(PSND_FADEOUT | PSND_SLOT(1));
         winMgrCloseAutoDelete(event->userdata3);
         work[1] = 0;
         event->userdata[0] = 101;
@@ -1793,7 +1802,7 @@ USER_FUNC(stone_ry) {
     char* name = (char*)evtGetValue(event, args[0]);
     s32 ang = evtGetValue(event, args[1]);
     EffectEntry* item = itemNameToPtr(name)->effect;
-    ((EffStarStoneWork*)item->userdata)->flags &= ~4;
+    ((EffStarStoneWork*)item->userdata)->flags &= ~STAR_STONE_FLAG_SHINE_SFX;
     ((EffStarStoneWork*)item->userdata)->rot.y = ang % 360;
     return EVT_RETURN_DONE;
 }
@@ -1802,16 +1811,17 @@ USER_FUNC(stone_bg) {
     char* name;
     CameraEntry* cam;
     EffectEntry* eff;
-    u8* item;
+    ItemEntry* item;
     name = (char*)evtGetValue(event, event->args[0]);
     cam = camGetPtr(CAMERA_2D);
     cam->letterBoxCamId = CAMERA_3D_EFFECTA;
     eff = effNameToPtr("sub_bg");
-    ((ItemGetWork*)eff->userdata)->camera = 5;
-    item = (u8*)itemNameToPtr(name);
-    ((EffStarStoneWork*)((ItemEntry*)item)->effect->userdata)->cam = 5;
+    ((ItemGetWork*)eff->userdata)->camera = CAMERA_3D_EFFECTA;
+    item = itemNameToPtr(name);
+    ((EffStarStoneWork*)item->effect->userdata)->cam = CAMERA_3D_EFFECTA;
+    // The name is Shift-JIS "にせマリオ", the NPC evt_sub_starstone uses when LW(0) is -1
     if (npcNameToPtr_NoAssert("\x82\xC9\x82\xB9\x83\x7D\x83\x8A\x83\x49") != NULL && evtGetValue(event, GSW_STORY_PROGRESS) < STG4_15_DOOPLISS_BATTLE_2) {
-        npcNameToPtr_NoAssert("\x82\xC9\x82\xB9\x83\x7D\x83\x8A\x83\x49")->cameraId = 5;
+        npcNameToPtr_NoAssert("\x82\xC9\x82\xB9\x83\x7D\x83\x8A\x83\x49")->cameraId = CAMERA_3D_EFFECTA;
     } else {
         marioSetCamId(CAMERA_3D_EFFECTA);
     }
@@ -1825,8 +1835,7 @@ USER_FUNC(stone_bg_open) {
 }
 
 USER_FUNC(stageclear_wait) {
-    effNameToPtr("sub_clear");
-    return effStageClearEndChk() ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
+    return effStageClearEndChk(effNameToPtr("sub_clear")) ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
 }
 
 USER_FUNC(set_stop) {
@@ -1860,46 +1869,47 @@ USER_FUNC(evt_sub_scale_by_fps) {
 
 USER_FUNC(evt_sub_check_intersect) {
     EvtWord* args = event->args;
-    f32 a, b, c, d, e, f, g, h;
+    // Segment P1-P2 (args 0-3) against segment Q1-Q2 (args 4-7); args[8] = 1 when they intersect
+    f32 p1x, p1y, p2x, p2y, q1x, q1y, q2x, q2y;
     f32 t1, t2;
-    a = evtGetFloat(event, args[0]);
-    b = evtGetFloat(event, args[1]);
-    c = evtGetFloat(event, args[2]);
-    d = evtGetFloat(event, args[3]);
-    e = evtGetFloat(event, args[4]);
-    f = evtGetFloat(event, args[5]);
-    g = evtGetFloat(event, args[6]);
-    h = evtGetFloat(event, args[7]);
-    if (a >= c) {
-        if ((a < e && a < g) || (c > e && c > g)) {
+    p1x = evtGetFloat(event, args[0]);
+    p1y = evtGetFloat(event, args[1]);
+    p2x = evtGetFloat(event, args[2]);
+    p2y = evtGetFloat(event, args[3]);
+    q1x = evtGetFloat(event, args[4]);
+    q1y = evtGetFloat(event, args[5]);
+    q2x = evtGetFloat(event, args[6]);
+    q2y = evtGetFloat(event, args[7]);
+    if (p1x >= p2x) {
+        if ((p1x < q1x && p1x < q2x) || (p2x > q1x && p2x > q2x)) {
             evtSetValue(event, args[8], 0);
             return EVT_RETURN_DONE;
         }
     } else {
-        if ((c < e && c < g) || (a > e && a > g)) {
+        if ((p2x < q1x && p2x < q2x) || (p1x > q1x && p1x > q2x)) {
             evtSetValue(event, args[8], 0);
             return EVT_RETURN_DONE;
         }
     }
-    if (b >= d) {
-        if ((b < f && b < h) || (d > f && d > h)) {
+    if (p1y >= p2y) {
+        if ((p1y < q1y && p1y < q2y) || (p2y > q1y && p2y > q2y)) {
             evtSetValue(event, args[8], 0);
             return EVT_RETURN_DONE;
         }
     } else {
-        if ((d < f && d < h) || (b > f && b > h)) {
+        if ((p2y < q1y && p2y < q2y) || (p1y > q1y && p1y > q2y)) {
             evtSetValue(event, args[8], 0);
             return EVT_RETURN_DONE;
         }
     }
-    t1 = (a - c) * (f - b) + (b - d) * (a - e);
-    t2 = (a - c) * (h - b) + (b - d) * (a - g);
+    t1 = (p1x - p2x) * (q1y - p1y) + (p1y - p2y) * (p1x - q1x);
+    t2 = (p1x - p2x) * (q2y - p1y) + (p1y - p2y) * (p1x - q2x);
     if (t1 * t2 > 0.0f) {
         evtSetValue(event, args[8], 0);
         return EVT_RETURN_DONE;
     }
-    t1 = (e - g) * (b - f) + (f - h) * (e - a);
-    t2 = (e - g) * (d - f) + (f - h) * (e - c);
+    t1 = (q1x - q2x) * (p1y - q1y) + (q1y - q2y) * (q1x - p1x);
+    t2 = (q1x - q2x) * (p2y - q1y) + (q1y - q2y) * (q1x - p2x);
     if (t1 * t2 > 0.0f) {
         evtSetValue(event, args[8], 0);
         return EVT_RETURN_DONE;

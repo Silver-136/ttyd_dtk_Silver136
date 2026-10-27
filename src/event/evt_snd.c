@@ -10,8 +10,6 @@
 #include "sound.h"
 #include "win/win_main.h"
 
-
-
 void seq_gameOverInit(SequenceWork* work) {
     winReInit();
     camDispOn(CAMERA_3D);
@@ -21,7 +19,7 @@ void seq_gameOverInit(SequenceWork* work) {
     psndClearFlag(PSND_FLAG_MUTE_SFX);
     psndClearFlag(PSND_FLAG_LETTER_BOX);
     psndClearFlag(PSND_FLAG_LETTER_BOX_OFF);
-    N_pouchUnEquipBadgeID(0x143);
+    N_pouchUnEquipBadgeID(ITEM_SLOW_GO);
     marioStSystemLevel(4);
 }
 
@@ -32,7 +30,7 @@ void seq_gameOverExit(SequenceWork* work) {
 
 USER_FUNC(N_evt_snd_bgm_unpause) {
     if ((u32)psbgm[0].streamId != 0xFFFFFFFFU) {
-        sound.streams[psbgm[0].streamId].flags &= ~0x8000;
+        sound.streams[psbgm[0].streamId].flags &= ~SOUND_STREAM_FLAG_PAUSE;
     }
     return EVT_RETURN_DONE;
 }

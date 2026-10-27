@@ -16,12 +16,9 @@
 #include "evt/evt_map.h"
 #include "eff/eff_torch.h"
 
-
 void mapObjSetColor(const char* name, GXColor color);
 void mapSetBlend(GXColor color);
 void mapSetBlend2(GXColor color);
-
-static USER_FUNC(check);
 
 USER_FUNC(evt_mapobj_trans) {
     EvtWord* args = event->args;
@@ -30,6 +27,7 @@ USER_FUNC(evt_mapobj_trans) {
     f32 x = evtGetFloat(event, args[2]);
     f32 y = evtGetFloat(event, args[3]);
     f32 z = evtGetFloat(event, args[4]);
+    // Both branches call mapObjTranslate: unlike the other evt_mapobj functions, type 1 (group) has no call of its own.
     if (type == 0) {
         mapObjTranslate(name, x, y, z);
     } else {
@@ -45,6 +43,7 @@ USER_FUNC(evt_mapobj_rotate) {
     f32 x = evtGetFloat(event, args[2]);
     f32 y = evtGetFloat(event, args[3]);
     f32 z = evtGetFloat(event, args[4]);
+    // Both branches call mapObjRotate: type 1 (group) has no call of its own.
     if (type == 0) {
         mapObjRotate(name, x, y, z);
     } else {
@@ -60,6 +59,7 @@ USER_FUNC(evt_mapobj_scale) {
     f32 x = evtGetFloat(event, args[2]);
     f32 y = evtGetFloat(event, args[3]);
     f32 z = evtGetFloat(event, args[4]);
+    // Both branches call mapObjScale: type 1 (group) has no call of its own.
     if (type == 0) {
         mapObjScale(name, x, y, z);
     } else {
@@ -138,13 +138,25 @@ USER_FUNC(evt_map_blend_set_flag) {
         MarioWork* mp = marioGetPtr();
         s32* poses = &mp->paperAnimGroupId[0];
         if (on == 1) {
-            if (poses[0] != -1) animPoseSetMaterialFlagOn(poses[0], flags);
-            if (poses[1] != -1) animPoseSetMaterialFlagOn(poses[1], flags);
-            if (poses[2] != -1) animPoseSetMaterialFlagOn(poses[2], flags);
+            if (poses[0] != -1) {
+                animPoseSetMaterialFlagOn(poses[0], flags);
+            }
+            if (poses[1] != -1) {
+                animPoseSetMaterialFlagOn(poses[1], flags);
+            }
+            if (poses[2] != -1) {
+                animPoseSetMaterialFlagOn(poses[2], flags);
+            }
         } else {
-            if (poses[0] != -1) animPoseSetMaterialFlagOff(poses[0], flags);
-            if (poses[1] != -1) animPoseSetMaterialFlagOff(poses[1], flags);
-            if (poses[2] != -1) animPoseSetMaterialFlagOff(poses[2], flags);
+            if (poses[0] != -1) {
+                animPoseSetMaterialFlagOff(poses[0], flags);
+            }
+            if (poses[1] != -1) {
+                animPoseSetMaterialFlagOff(poses[1], flags);
+            }
+            if (poses[2] != -1) {
+                animPoseSetMaterialFlagOff(poses[2], flags);
+            }
         }
     } else if (strcmp(name, "party") == 0) {
         PartyEntry* party = partyGetPtr(marioGetPartyId());
@@ -213,10 +225,10 @@ USER_FUNC(evt_map_playanim) {
 USER_FUNC(evt_map_checkanim) {
     EvtWord* args = event->args;
     BOOL valid;
-    f32 f;
-    mapCheckAnimation((const char*)evtGetValue(event, args[0]), &valid, &f);
+    f32 remainingMs;
+    mapCheckAnimation((const char*)evtGetValue(event, args[0]), &valid, &remainingMs);
     evtSetValue(event, args[1], valid);
-    evtSetValue(event, args[2], (s32)f);
+    evtSetValue(event, args[2], (s32)remainingMs);
     return EVT_RETURN_DONE;
 }
 
@@ -400,8 +412,10 @@ USER_FUNC(evt_map_entry_airport_harbor) {
     mapGetMapObj(name);
     switch (type) {
     case 0:
-        if (!animGroupBaseAsync("p_hikohki", 0, NULL)) return EVT_RETURN_BLOCK;
-        if ((s32)pouchCheckItem(ITEM_PLANE_CURSE) == 1) {
+        if (!animGroupBaseAsync("p_hikohki", 0, NULL)) {
+            return EVT_RETURN_BLOCK;
+        }
+        if (pouchCheckItem(ITEM_PLANE_CURSE) == 1) {
             lw[0] = (EvtWord)name;
             lw[1] = (EvtWord)hit;
             evtRunCaseEntry(0, 0, hit, 0, evt_ride_airport, lw);
@@ -411,8 +425,10 @@ USER_FUNC(evt_map_entry_airport_harbor) {
         }
         break;
     case 1:
-        if (!animGroupBaseAsync("p_hune", 0, NULL)) return EVT_RETURN_BLOCK;
-        if ((s32)pouchCheckItem(ITEM_BOAT_CURSE) == 1) {
+        if (!animGroupBaseAsync("p_hune", 0, NULL)) {
+            return EVT_RETURN_BLOCK;
+        }
+        if (pouchCheckItem(ITEM_BOAT_CURSE) == 1) {
             lw[0] = (EvtWord)name;
             lw[1] = (EvtWord)hit;
             evtRunCaseEntry(0, 0, hit, 0, evt_ride_airport, lw);

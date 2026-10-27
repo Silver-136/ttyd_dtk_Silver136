@@ -110,7 +110,7 @@ USER_FUNC(evt_party_set_camid) {
 }
 
 USER_FUNC(evt_party_force_reset_outofscreen) {
-    void* mw;
+    MarioWork* mario;
     PartyEntry* p = GETPARTY(event->args);
     Vec from;
     Vec dir;
@@ -130,7 +130,7 @@ USER_FUNC(evt_party_force_reset_outofscreen) {
         return EVT_RETURN_DONE;
     }
     partyClearFootmark();
-    mw = p->playerPtr;
+    mario = p->playerPtr;
     dir = (Vec){0.0f, -1.0f, 0.0f};
     while (1) {
         pos2 = p->position;
@@ -138,7 +138,7 @@ USER_FUNC(evt_party_force_reset_outofscreen) {
         if (marioChkInScreen((s32)sx, (s32)sy)) {
             break;
         }
-        ang = angleABf(p->position.x, p->position.z, ((MarioWork*)mw)->position.x, ((MarioWork*)mw)->position.z);
+        ang = angleABf(p->position.x, p->position.z, mario->position.x, mario->position.z);
         movePos(&p->position.x, &p->position.z, 1.0f, ang);
         h = 100.0f;
         from = p->position;
@@ -146,7 +146,7 @@ USER_FUNC(evt_party_force_reset_outofscreen) {
         if (partyHitCheck(p, &from, &dir, &out1, &out2, &h) != NULL) {
             p->position.y = out1.y;
         } else {
-            p->position.y = ((MarioWork*)mw)->position.y;
+            p->position.y = mario->position.y;
         }
     }
     return EVT_RETURN_DONE;
@@ -213,8 +213,8 @@ inline float partyStepSize(f32 a, f32 b, f32 c, s32 n) {
 USER_FUNC(evt_party_set_dir) {
     EvtWord* args = event->args;
     PartyEntry* p;
-    f32 ang, t, st;
-    s32 fr, v, c;
+    f32 angle, target, start;
+    s32 frames, msec, count;
     if (isFirstCall) {
         s32 id = (*args++ == 0) ? partyCtrlNo : 1;
         event->userdata[0] = id;
@@ -227,32 +227,32 @@ USER_FUNC(evt_party_set_dir) {
     } else {
         args++;
     }
-    ang = evtGetFloat(event, args[0]);
-    v = evtGetValue(event, args[1]);
-    if (v >= 0) {
-        fr = sysMsec2Frame(v);
+    angle = evtGetFloat(event, args[0]);
+    msec = evtGetValue(event, args[1]);
+    if (msec >= 0) {
+        frames = sysMsec2Frame(msec);
     } else {
-        fr = v;
+        frames = msec;
     }
     p = partyGetPtr(event->userdata[0]);
     if (p == NULL) {
         return EVT_RETURN_DONE;
     }
-    if (fr > 0) {
-        t = revise360(270.0f - ang);
-        st = event->userdataf[1];
-        p->displayDirection = revise360(st + partyStepSize(t, st, (f32)event->userdata[2], fr));
+    if (frames > 0) {
+        target = revise360(270.0f - angle);
+        start = event->userdataf[1];
+        p->displayDirection = revise360(start + partyStepSize(target, start, (f32)event->userdata[2], frames));
         p->displayDirectionTarget = p->displayDirection;
         p->targetDir = toMovedirSimple(p->displayDirectionTarget);
-        c = event->userdata[2] + 1;
-        event->userdata[2] = c;
-        return c > fr;
+        count = event->userdata[2] + 1;
+        event->userdata[2] = count;
+        return count > frames;
     } else {
-        if (fr < 0) {
-            p->displayDirectionTarget = revise360(270.0f - ang);
+        if (frames < 0) {
+            p->displayDirectionTarget = revise360(270.0f - angle);
             p->targetDir = toMovedirSimple(p->displayDirectionTarget);
-        } else if (fr == 0) {
-            p->displayDirection = revise360(270.0f - ang);
+        } else if (frames == 0) {
+            p->displayDirection = revise360(270.0f - angle);
             p->displayDirectionTarget = p->displayDirection;
             p->targetDir = toMovedirSimple(p->displayDirectionTarget);
         }
@@ -354,6 +354,7 @@ USER_FUNC(evt_party_move_pos) {
         return EVT_RETURN_DONE;
     }
     if (event->userdata[2] == 0) {
+        // FAKE: hand-written range test (waits for runMode 0, 1 or 2); the plain comparisons change the object
         u8 t = p->runMode;
         if (t != 0 && (u8)(t - 1) > 1) {
             return EVT_RETURN_BLOCK;
@@ -390,6 +391,7 @@ USER_FUNC(evt_party_move_pos2) {
         return EVT_RETURN_DONE;
     }
     if (event->userdata[2] == 0) {
+        // FAKE: hand-written range test (waits for runMode 0, 1 or 2); the plain comparisons change the object
         u8 t = p->runMode;
         if (t != 0 && (u8)(t - 1) > 1) {
             return EVT_RETURN_BLOCK;
@@ -415,7 +417,7 @@ USER_FUNC(evt_party_wait_landon) {
     if (p == NULL) {
         return EVT_RETURN_DONE;
     }
-    return ((p->flags >> 1) & 1) ? 2 : 0;
+    return ((p->flags >> 1) & 1) ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
 }
 
 USER_FUNC(evt_party_jump_pos) {
@@ -564,13 +566,13 @@ USER_FUNC(evt_party_set_homing_dist) {
 USER_FUNC(evt_party_set_pose) {
     PartyEntry* p;
     EvtWord* args = event->args;
-    s32 v;
+    const char* pose;
     p = GETPARTY(args);
     if (p == NULL) {
         return EVT_RETURN_DONE;
     }
-    v = evtGetValue(event, args[1]);
-    partyChgPose(p, (const char*)v);
+    pose = (const char*)evtGetValue(event, args[1]);
+    partyChgPose(p, pose);
     return EVT_RETURN_DONE;
 }
 
@@ -599,7 +601,7 @@ USER_FUNC(evt_party_set_breed_pose) {
     p = GETPARTY(args);
     if (p != NULL) {
         v = evtGetValue(event, args[1]);
-    partyChgPoseId(p, v);
+        partyChgPoseId(p, v);
     }
     return EVT_RETURN_DONE;
 }
@@ -628,11 +630,11 @@ USER_FUNC(evt_party_get_status) {
     s32 dst = args[1];
     s32 st;
     switch (id) {
-    case 6:
+    case PARTY_MEMBER_VIVIAN:
         st = vivianGetStatus();
         evtSetValue(event, dst, st);
         break;
-    case 3:
+    case PARTY_MEMBER_BOBBERY:
         evtSetValue(event, dst, bomheiGetStatus());
         break;
     }
@@ -729,7 +731,7 @@ USER_FUNC(evt_party_vivian_unhold) {
             vivianUnhold(p);
         }
     }
-    return vivianGetStatus() == 0 ? 2 : 0;
+    return vivianGetStatus() == 0 ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
 }
 
 USER_FUNC(L_evt_party_vivian_tail) {
@@ -770,12 +772,12 @@ USER_FUNC(evt_party_yoshi_ride) {
     }
     if (ride) {
         if (yoshiGetStatus() == 1) {
-            p->flags &= 0x7FFFFFFF;
+            p->flags &= ~PARTY_FLAG_IS_EVT_USE;
             return EVT_RETURN_DONE;
         }
     } else {
         if (yoshiGetStatus() == 0) {
-            p->flags &= 0x7FFFFFFF;
+            p->flags &= ~PARTY_FLAG_IS_EVT_USE;
             return EVT_RETURN_DONE;
         }
     }
@@ -800,7 +802,7 @@ USER_FUNC(evt_party_yoshi_fly) {
     if (evt_get_yoshi_frm() >= 0) {
         return EVT_RETURN_BLOCK;
     }
-    p->flags &= 0x7FFFFFFF;
+    p->flags &= ~PARTY_FLAG_IS_EVT_USE;
     return EVT_RETURN_DONE;
 }
 
@@ -824,7 +826,7 @@ USER_FUNC(evt_party_nokotaro_kick) {
         partyChgRunMode(p, 3);
     }
     if (nokonokoGetStatus(p) == 0) {
-        p->flags &= 0x7FFFFFFF;
+        p->flags &= ~PARTY_FLAG_IS_EVT_USE;
         return EVT_RETURN_DONE;
     }
     return EVT_RETURN_BLOCK;
@@ -850,15 +852,15 @@ USER_FUNC(evt_party_nokotaro_kick_hold) {
         partyChgRunMode(p, 3);
     }
     if (nokonokoGetStatus(p) == 0) {
-        p->flags &= 0x7FFFFFFF;
+        p->flags &= ~PARTY_FLAG_IS_EVT_USE;
         return EVT_RETURN_DONE;
     }
-    return nokonokoGetStatus(p) == 3 ? 2 : 0;
+    return nokonokoGetStatus(p) == 3 ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
 }
 
 USER_FUNC(evt_party_nokotaro_hold_cancel) {
     PartyEntry* p;
-    s32 ret = 0;
+    s32 ret = EVT_RETURN_BLOCK;
     EvtWord* args = event->args;
     p = GETPARTY(args);
     if (p == NULL) {
@@ -876,7 +878,7 @@ USER_FUNC(evt_party_nokotaro_hold_cancel) {
     switch (event->userdata[0]) {
     case 0:
         if (nokonokoGetStatus(p) != 3) {
-            ret = 0;
+            ret = EVT_RETURN_BLOCK;
             break;
         }
         nokotaro_hold_cancel(p);
@@ -884,11 +886,11 @@ USER_FUNC(evt_party_nokotaro_hold_cancel) {
         break;
     case 1:
         if (nokonokoGetStatus(p) != 0) {
-            ret = 0;
+            ret = EVT_RETURN_BLOCK;
             break;
         }
-        ret = 2;
-        p->flags &= 0x7FFFFFFF;
+        ret = EVT_RETURN_DONE;
+        p->flags &= ~PARTY_FLAG_IS_EVT_USE;
         break;
     }
     return ret;
@@ -930,7 +932,7 @@ USER_FUNC(evt_party_cloud_breathout) {
         partyChgRunMode(p, 3);
     }
     if (cloudGetStatus() == 0) {
-        p->flags &= 0x7FFFFFFF;
+        p->flags &= ~PARTY_FLAG_IS_EVT_USE;
         return EVT_RETURN_DONE;
     }
     return EVT_RETURN_BLOCK;
@@ -965,6 +967,8 @@ USER_FUNC(N_evt_party_cloud_lock_animations_on_off) {
 }
 #endif
 
+// FAKE: stand-in that nothing calls (in neither symbol map); it only fixes the order of these literals in the
+// constant pool; removing it changes the object
 void evtPartyStrippedPool(f32* f) {
     f[0] = 1.0f;
     f[1] = 0.5f;

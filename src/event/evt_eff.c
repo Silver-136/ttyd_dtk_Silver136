@@ -164,7 +164,6 @@ extern EffectEntry* effThunderflareN64Entry(s32, s32, f32, f32, f32, f32);
 extern EffectEntry* effLensflareN64Entry(s32, s32, f32, f32, f32, f32);
 extern EffectEntry* effBoobooN64Entry(s32, s32, f32, f32, f32, f32);
 
-
 USER_FUNC(evt_eff) {
     EvtWord* args = event->args;
     s32* p;
@@ -386,14 +385,13 @@ USER_FUNC(evt_eff) {
     return EVT_RETURN_DONE;
 }
 
-s32 evt_eff64(EventEntry *event, BOOL isFirstCall) {
-    EvtWord *args;
-    s32 *pi;
-    s32 *pr;
-    s32 *pf;
-    s32 int2Copy;
-    const char *effName;
-    const char *effSet;
+USER_FUNC(evt_eff64) {
+    EvtWord* args;
+    s32* pi;
+    s32* pr;
+    s32* pf;
+    const char* effName;
+    const char* effSet;
     s32 int2;
     s32 int3;
     s32 int4;
@@ -421,9 +419,10 @@ s32 evt_eff64(EventEntry *event, BOOL isFirstCall) {
     f32 float12;
     f32 float13;
     f32 float14;
-    EffectEntry *effect;
+    EffectEntry* effect;
     s32 u1a;
     s32 u1b;
+
     args = event->args;
     pi = args;
     pr = args;
@@ -504,7 +503,7 @@ s32 evt_eff64(EventEntry *event, BOOL isFirstCall) {
             break;
 
         case 10:
-            effect = effSstarN64Entry(int2, float3, float4, float5, float6, float7, float8, (f32) int9);
+            effect = effSstarN64Entry(int2, float3, float4, float5, float6, float7, float8, (f32)int9);
             break;
 
         case 11:
@@ -599,7 +598,6 @@ s32 evt_eff64(EventEntry *event, BOOL isFirstCall) {
             effect = effCoolLeafN64Entry(int2, float3, float4, float5);
             break;
 
-            int2Copy = int2;
         case 35:
             effect = effBushN64Entry(int2, float3, float4, float5);
             break;
@@ -865,7 +863,7 @@ s32 evt_eff64(EventEntry *event, BOOL isFirstCall) {
             break;
 
         case 101:
-            effect = effPeachDustN64Entry(int2, float3, float4, float5, float6, (f32) int7);
+            effect = effPeachDustN64Entry(int2, float3, float4, float5, float6, (f32)int7);
             break;
 
         case 102:
@@ -879,9 +877,8 @@ s32 evt_eff64(EventEntry *event, BOOL isFirstCall) {
             effSetName(effect, effName);
         }
     }
-    return 2;
+    return EVT_RETURN_DONE;
 }
-
 
 USER_FUNC(evt_eff_softdelete) {
     effSoftDelete(effNameToPtr((const char*)evtGetValue(event, *event->args)));
@@ -903,14 +900,12 @@ USER_FUNC(evt_eff_delete_ptr) {
     return EVT_RETURN_DONE;
 }
 
-
-#pragma push
 USER_FUNC(evt_eff_fukidashi) {
     EvtWord* args = event->args;
     s32 mode = evtGetValue(event, args[0]);
     const char* effName = (const char*)evtGetValue(event, args[1]);
     const char* npcName = (const char*)evtGetValue(event, args[2]);
-    s32 a = evtGetValue(event, args[3]);
+    s32 type = evtGetValue(event, args[3]);
     s32 number = evtGetValue(event, args[4]);
     f32 x = evtGetFloat(event, args[5]);
     f32 y = evtGetFloat(event, args[6]);
@@ -921,7 +916,6 @@ USER_FUNC(evt_eff_fukidashi) {
     EffectEntry* entry = NULL;
     void* p;
     f32 h;
-    f32 zz;
 
     switch (mode) {
         case FUKIDASHI_AT_MARIO:
@@ -929,7 +923,7 @@ USER_FUNC(evt_eff_fukidashi) {
             {
                 f32 yy = 2.0f * h / 3.0f;
                 f32 ww = h / 3.0f;
-                entry = effFukidashiEntry(a, number, (NpcEntry*)FUKIDASHI_MARIO, 0.0f, yy, 0.0f, ww, angle, duration);
+                entry = effFukidashiEntry(type, number, (NpcEntry*)FUKIDASHI_MARIO, 0.0f, yy, 0.0f, ww, angle, duration);
             }
             break;
         case FUKIDASHI_AT_NPC:
@@ -937,11 +931,11 @@ USER_FUNC(evt_eff_fukidashi) {
             {
                 f32 yy = 2.0f * ((NpcEntry*)p)->height / 3.0f;
                 f32 ww = ((NpcEntry*)p)->height / 3.0f;
-                entry = effFukidashiEntry(a, number, (NpcEntry*)p, 0.0f, yy, 0.0f, ww, angle, duration);
+                entry = effFukidashiEntry(type, number, (NpcEntry*)p, 0.0f, yy, 0.0f, ww, angle, duration);
             }
             break;
         case FUKIDASHI_AT_POS:
-            entry = effFukidashiEntry(a, number, NULL, x, y, z, w, angle, duration);
+            entry = effFukidashiEntry(type, number, NULL, x, y, z, w, angle, duration);
             break;
         case FUKIDASHI_AT_PARTNER:
             p = partyGetPtr(marioGetPartyId());
@@ -951,7 +945,9 @@ USER_FUNC(evt_eff_fukidashi) {
                 {
                     f32 yy = 2.0f * ((PartyEntry*)p)->height / 3.0f;
                     f32 ww;
-                    if (((PartyEntry*)p)->currentMemberId == PARTY_MEMBER_FLURRIE) yy = 30.0f;
+                    if (((PartyEntry*)p)->currentMemberId == PARTY_MEMBER_FLURRIE) {
+                        yy = 30.0f;
+                    }
                     ww = ((PartyEntry*)p)->height / 3.0f;
 #else
                 h = ((PartyEntry*)p)->height;
@@ -959,7 +955,7 @@ USER_FUNC(evt_eff_fukidashi) {
                     f32 yy = 2.0f * h / 3.0f;
                     f32 ww = h / 3.0f;
 #endif
-                    entry = effFukidashiEntry(a, number, (NpcEntry*)FUKIDASHI_PARTY, 0.0f, yy, 0.0f, ww, angle, duration);
+                    entry = effFukidashiEntry(type, number, (NpcEntry*)FUKIDASHI_PARTY, 0.0f, yy, 0.0f, ww, angle, duration);
                 }
             }
             break;
@@ -970,7 +966,7 @@ USER_FUNC(evt_eff_fukidashi) {
                 {
                     f32 yy = 2.0f * h / 3.0f;
                     f32 ww = h / 3.0f;
-                    entry = effFukidashiEntry(a, number, (NpcEntry*)FUKIDASHI_EXTRA_PARTY, 0.0f, yy, 0.0f, ww, angle, duration);
+                    entry = effFukidashiEntry(type, number, (NpcEntry*)FUKIDASHI_EXTRA_PARTY, 0.0f, yy, 0.0f, ww, angle, duration);
                 }
             }
             break;
@@ -981,4 +977,3 @@ USER_FUNC(evt_eff_fukidashi) {
     }
     return EVT_RETURN_DONE;
 }
-#pragma pop

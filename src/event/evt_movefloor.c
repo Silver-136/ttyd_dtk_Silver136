@@ -385,9 +385,9 @@ USER_FUNC(evt_moving_floor_main2) {
 USER_FUNC(moving_floor_get_end) {
     EvtWord* args = event->args;
     MovingFloor* w = MOVING_FLOOR_ARG();
-    s32 a = (s32)w->cur;
-    s32 b = (s32)((f32)w->time[w->idx] * w->scale);
-    if (a >= b) {
+    s32 elapsed = (s32)w->cur;
+    s32 end = (s32)((f32)w->time[w->idx] * w->scale);
+    if (elapsed >= end) {
         evtSetValue(event, args[1], 1);
     } else {
         evtSetValue(event, args[1], 0);
@@ -475,13 +475,13 @@ USER_FUNC(moving_floor_getf_xz_scale) {
 
 USER_FUNC(moving_floor_reverse) {
     MovingFloor* w = MOVING_FLOOR_ARG();
-    f32 e;
+    f32 end;
     if (w->speed >= 0.0f) {
         return EVT_RETURN_DONE;
     }
     w->speed *= -1.0f;
-    e = (f32)w->time[w->idx] * w->scale;
-    w->cur = e - w->cur;
+    end = (f32)w->time[w->idx] * w->scale;
+    w->cur = end - w->cur;
     w->phase ^= 1;
     return EVT_RETURN_DONE;
 }
@@ -505,7 +505,7 @@ USER_FUNC(moving_floor_set_se) {
         }
         flags = 0;
         if ((psndGetFlag() & PSND_FLAG_DOOR_IN) && !(obj->flags & (MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2))) {
-            flags = 0x10000;
+            flags = PSND_SFX_DOOR_MUTE;
         }
         w->seId = psndSFXOn_3D(SFX_NAME_WORD(flags | PSND_SFX_STG1_TIK_FLOOR_MOVE1), &pos);
     }
@@ -531,6 +531,7 @@ USER_FUNC(evt_moving_floor_delete) {
     s32 id = evtGetValue(event, event->args[0]);
     EventEntry* e = evtGetPtrID(id);
     MovingFloor* w = (MovingFloor*)e->lwData[9];
+    // BUG: w is dereferenced here before the NULL check below.
     if (w->seHalt == 0 && w->seId) {
         psndSFXOff(w->seId);
         w->seId = 0;
@@ -552,6 +553,7 @@ EVT_BEGIN(moving_floor_bero_check)
     END_IF
     LOOP(0)
         CALL(evt_bero_exec_wait, 65536)
+        // debug text (Shift-JIS): waiting for the auto-delete check
         DEBUG_PUT_MSG(STRING("\216\251\223\256\215\355\217\234\203`\203F\203b\203N\221\322\202\277"))
         CALL(evt_bero_exec_wait, 1)
         CALL(evt_bero_get_now_number, LW(10))
@@ -560,6 +562,7 @@ EVT_BEGIN(moving_floor_bero_check)
             BREAK_LOOP
         END_IF
     END_LOOP
+    // debug text (Shift-JIS): auto-delete done
     DEBUG_PUT_MSG(STRING("\216\251\223\256\215\355\217\234\212\256\227\271"))
     CALL(moving_floor_stop_se, LW(9))
     CALL(moving_floor_halt_se, LW(9))

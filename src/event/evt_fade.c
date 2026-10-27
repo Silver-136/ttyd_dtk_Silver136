@@ -5,7 +5,6 @@
 #include "manager/evtmgr_cmd.h"
 #include <dolphin/gx.h>
 
-
 USER_FUNC(evt_fade_in) {
     EvtWord* args = event->args;
     s32 duration;
@@ -58,9 +57,9 @@ USER_FUNC(evt_fade_set_spot_pos) {
     CameraEntry* camera;
     s32 x, y, z;
     f32 sx, sy, sz;
-    f32 proj[7];
-    f32 viewport[6];
-    f32 savedProj[7];
+    f32 proj[GX_PROJECTION_SZ];
+    f32 viewport[GX_VIEWPORT_SZ];
+    f32 savedProj[GX_PROJECTION_SZ];
 
     x = evtGetValue(event, args[0]);
     y = evtGetValue(event, args[1]);

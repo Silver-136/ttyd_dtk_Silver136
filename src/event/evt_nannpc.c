@@ -16,16 +16,6 @@
 
 void qqsort(void* array, s32 num, s32 size, s32 (*cmp)(void*, void*));
 
-
-s32 evt_nannpc_entry(EventEntry *event, BOOL isFirstCall);
-void nannpc_ext_dispent();
-void nannpc_ext_main();
-void nannpc_ext_main_sub();
-void nannpc_ext_init();
-void nannpc_ext_shadow_disp();
-void nannpc_ext_disp();
-s32 nannpc_zcompare(NanNPCSort* a, NanNPCSort* b);
-
 NanNPCWork* nanNPCWork;
 char makestring[16];
 
@@ -47,78 +37,81 @@ static inline NanNPC* nanNPCSearch(char* name) {
     return NULL;
 }
 
-static inline void nanNPCHitMove(NanNPC* r, f32 mag) {
+static inline void nanNPCHitMove(NanNPC* npc, f32 mag) {
     s32 clear;
-    f32 hx;
-    f32 hy;
-    f32 hz;
-    f32 nx;
-    f32 ny;
-    f32 nz;
-    f32 d20;
-    Vec h;
-    Vec n;
-    Vec v3c;
-    Vec v48;
-    Vec v54;
-    Vec v60;
-    Vec v6c;
-    Vec v78;
-    Vec v84;
-    v60 = r->pos;
-    v60.y += 1.0f;
-    PSVECNormalize(&r->move, &v6c);
-    if (r->flags & 8) {
-        PSVECAdd(&r->pos, &r->move, &r->pos);
-        PSVECScale(&r->move, &r->move, 0.6f);
+    f32 hitX;
+    f32 hitY;
+    f32 hitZ;
+    f32 normX;
+    f32 normY;
+    f32 normZ;
+    f32 dist;
+    Vec hitPos;
+    Vec normal;
+    Vec step;
+    Vec prevPos;
+    Vec reflected;
+    Vec origin;
+    Vec dir;
+    Vec rayOrigin;
+    Vec rayDir;
+    origin = npc->pos;
+    origin.y += 1.0f;
+    PSVECNormalize(&npc->move, &dir);
+    if (npc->flags & 8) {
+        PSVECAdd(&npc->pos, &npc->move, &npc->pos);
+        PSVECScale(&npc->move, &npc->move, 0.6f);
     } else {
         clear = 1;
-        v84 = v6c;
-        v78 = v60;
-        r->hit1 = NULL;
-        r->hit0 = NULL;
-        d20 = mag;
-        r->hit0 = hitCheckFilter(NULL, &h.x, &h.y, &h.z, &d20, &n.x, &n.y, &n.z,
-                                 v78.x, v78.y, v78.z, v84.x, v84.y, v84.z);
-        if (!r->hit0) {
-            PSVECAdd(&r->pos, &r->move, &r->pos);
+        rayDir = dir;
+        rayOrigin = origin;
+        npc->hit1 = NULL;
+        npc->hit0 = NULL;
+        dist = mag;
+        npc->hit0 = hitCheckFilter(NULL, &hitPos.x, &hitPos.y, &hitPos.z, &dist, &normal.x, &normal.y, &normal.z,
+                                   rayOrigin.x, rayOrigin.y, rayOrigin.z, rayDir.x, rayDir.y, rayDir.z);
+        if (!npc->hit0) {
+            PSVECAdd(&npc->pos, &npc->move, &npc->pos);
         } else {
-            v48 = r->pos;
-            PSVECAdd(&r->pos, &r->move, &r->pos);
-            if (r->move.y == 0.0f) {
-                n.y = 0.0f;
+            prevPos = npc->pos;
+            PSVECAdd(&npc->pos, &npc->move, &npc->pos);
+            if (npc->move.y == 0.0f) {
+                normal.y = 0.0f;
             }
-            PSVECNormalize(&n, &n);
-            C_VECReflect(&v84, &n, &v54);
-            PSVECScale(&v54, &r->move, mag);
+            PSVECNormalize(&normal, &normal);
+            C_VECReflect(&rayDir, &normal, &reflected);
+            PSVECScale(&reflected, &npc->move, mag);
             clear = 0;
-            { f32 dot = PSVECDotProduct(&v84, &n); PSVECScale(&n, &n, dot * -(mag - d20) + 0.1f); }
-            PSVECAdd(&r->pos, &n, &r->pos);
-            PSVECSubtract(&r->pos, &v48, &v3c);
-            d20 = PSVECMag(&v3c);
-            if ((f32)d20 > 0.0f) {
-                PSVECNormalize(&v3c, &v3c);
-                v78 = v48;
-                r->hit1 = hitCheckFilter(
-                    NULL, &hx, &hy, &hz, &d20, &nx, &ny, &nz, v48.x, 1.0f + v48.y, v48.z,
-                    v3c.x, v3c.y, v3c.z);
-                if (r->hit1) {
-                    r->pos = v48; // v78 == v48 here; the target reads v48 and keeps the dead v78 copy
+            {
+                f32 dot = PSVECDotProduct(&rayDir, &normal);
+                PSVECScale(&normal, &normal, dot * -(mag - dist) + 0.1f);
+            }
+            PSVECAdd(&npc->pos, &normal, &npc->pos);
+            PSVECSubtract(&npc->pos, &prevPos, &step);
+            dist = PSVECMag(&step);
+            if ((f32)dist > 0.0f) {
+                PSVECNormalize(&step, &step);
+                rayOrigin = prevPos;
+                npc->hit1 = hitCheckFilter(
+                    NULL, &hitX, &hitY, &hitZ, &dist, &normX, &normY, &normZ, prevPos.x, 1.0f + prevPos.y, prevPos.z,
+                    step.x, step.y, step.z);
+                if (npc->hit1) {
+                    npc->pos = prevPos; // rayOrigin was set to prevPos above and is not read again
                 }
             }
         }
         if (clear) {
-            PSVECScale(&r->move, &r->move, 0.6f);
+            PSVECScale(&npc->move, &npc->move, 0.6f);
         }
     }
 }
 
-// FAKE: opt_dead_assignments off keeps the dead v78 = v48 struct copy in the inlined nanNPCHitMove (the target stores it, never reads it)
+// FAKE: opt_dead_assignments off keeps the dead rayOrigin = prevPos struct copy in the inlined nanNPCHitMove (the retail code stores it, never reads it)
 #pragma push
 #pragma opt_dead_assignments off
 void nanNPCOption(void) {
     NanNPC* q;
-    void* w;
+    NanNPCWork* w;
     NanNPC* p;
     NanNPC* r;
     Vec diff;
@@ -126,9 +119,9 @@ void nanNPCOption(void) {
     f32 dist;
 
     w = nanNPCWork;
-    for (p = ((NanNPCWork*)w)->npc; p < ((NanNPCWork*)w)->npc + ((NanNPCWork*)w)->num; p++) {
+    for (p = w->npc; p < w->npc + w->num; p++) {
         if (p->flags & 4) {
-            for (q = ((NanNPCWork*)w)->npc; q < ((NanNPCWork*)w)->npc + ((NanNPCWork*)w)->num; q++) {
+            for (q = w->npc; q < w->npc + w->num; q++) {
                 if (p != q && (q->flags & 4)) {
                     dist = PSVECDistance(&p->pos, &q->pos);
                     PSVECSubtract(&p->pos, &q->pos, &diff);
@@ -197,6 +190,7 @@ static inline void nannpc_loadTev(void) {
     GXSetNumTexGens(1);
     GXSetNumTevStages(1);
 }
+
 void nannpc_ext_disp() {
     NanNPCWork* w = nanNPCWork;
     s32 i;
@@ -213,7 +207,7 @@ void nannpc_ext_disp() {
             sp->idx = i;
             sp->z = np->pos.z;
         }
-        qqsort(w->sort, w->num, 8, (s32(*)(void*, void*))nannpc_zcompare);
+        qqsort(w->sort, w->num, sizeof(NanNPCSort), (s32(*)(void*, void*))nannpc_zcompare);
         for (i = extGetPoseNum() - 1; i >= 0; i--) {
             idx = w->sort[i].idx;
             GXSetTevColor(GX_TEVREG0, w->npc[idx].color);
@@ -324,16 +318,16 @@ USER_FUNC(evt_nannpc_init) {
     void (*mainf)(void) = (void (*)(void))evtGetValue(event, args[3]);
     void (*dispf)(void) = nannpc_ext_dispent;
     if (isFirstCall) {
-        return 0;
+        return EVT_RETURN_BLOCK;
     }
-    nanNPCWork = _mapAlloc(0x20);
-    memset(nanNPCWork, 0, 0x20);
+    nanNPCWork = _mapAlloc(sizeof(NanNPCWork));
+    memset(nanNPCWork, 0, sizeof(NanNPCWork));
     w = nanNPCWork;
     w->num = evtGetValue(event, args[4]);
-    w->npc = _mapAlloc(w->num * 0xC0);
-    memset(w->npc, 0, w->num * 0xC0);
-    w->sort = _mapAlloc(w->num * 8);
-    memset(w->sort, 0, w->num * 8);
+    w->npc = _mapAlloc(w->num * sizeof(NanNPC));
+    memset(w->npc, 0, w->num * sizeof(NanNPC));
+    w->sort = _mapAlloc(w->num * sizeof(NanNPCSort));
+    memset(w->sort, 0, w->num * sizeof(NanNPCSort));
     w->tbl = _mapAlloc(0x14);
     memset(w->tbl, 0, 0x14);
     w->func14 = NULL;
@@ -366,7 +360,7 @@ USER_FUNC(evt_nannpc_init) {
         p->color = (GXColor){255, 255, 255, 255};
     }
     if (!tbl) {
-        return 2;
+        return EVT_RETURN_DONE;
     }
     for (i = 0; i < 5; i++) {
         if (tbl[i * 2] == -1) {
@@ -375,7 +369,7 @@ USER_FUNC(evt_nannpc_init) {
         w->tbl[i * 2] = tbl[i * 2];
         w->tbl[i * 2 + 1] = tbl[i * 2 + 1];
     }
-    return 2;
+    return EVT_RETURN_DONE;
 }
 
 USER_FUNC(evt_nannpc_set_subfunc) {
@@ -393,26 +387,27 @@ USER_FUNC(evt_nannpc_set_subfunc) {
             w->func1c = (void (*)())evtGetValue(event, args[1]);
             break;
     }
-    return 2;
+    return EVT_RETURN_DONE;
 }
 
-s32 evt_nannpc_entry(EventEntry *event, BOOL isFirstCall) {
-    NanNPC *p;
-    ExtdrvPose *pose;
-    char *str;
+USER_FUNC(evt_nannpc_entry) {
+    NanNPC* p;
+    ExtdrvPose* pose;
+    char* str;
     s32 off;
     EvtWord name;
     s32 i;
-    EvtWord *args;
-    NanNPCWork *w;
+    EvtWord* args;
+    NanNPCWork* w;
     args = event->args;
     pose = extGetPosePtr();
+    // FAKE: the value goes through a long long cast; plain name = evtGetValue(...) changes the object
     name = (long long) evtGetValue(event, args[0]);
     w = nanNPCWork;
     for (i = 0, off = 0; i < w->num; off += sizeof(NanNPC), i++) {
-        p = (NanNPC*)(((u8*)w->npc) - (-off));
+        p = (NanNPC*)((u8*)w->npc + off);
         str = (char*)name;
-        if (!(((EvtWord) str) & 0x80000000)) {
+        if (!((EvtWord)str & 0x80000000)) {
             sprintf(makestring, "%06x", name);
             str = makestring;
         }
@@ -436,7 +431,7 @@ s32 evt_nannpc_entry(EventEntry *event, BOOL isFirstCall) {
         }
     }
 
-    return 2;
+    return EVT_RETURN_DONE;
 }
 
 USER_FUNC(evt_nannpc_set_position) {
@@ -451,7 +446,7 @@ USER_FUNC(evt_nannpc_set_position) {
     x = evtGetFloat(event, args[3]);
     npc->pos.z = x;
     npc->target.z = x;
-    return 2;
+    return EVT_RETURN_DONE;
 }
 
 USER_FUNC(evt_nannpc_get_position) {
@@ -460,7 +455,7 @@ USER_FUNC(evt_nannpc_get_position) {
     evtSetFloat(event, args[1], npc->pos.x);
     evtSetFloat(event, args[2], npc->pos.y);
     evtSetFloat(event, args[3], npc->pos.z);
-    return 2;
+    return EVT_RETURN_DONE;
 }
 
 USER_FUNC(evt_nannpc_set_hosei_position) {
@@ -469,7 +464,7 @@ USER_FUNC(evt_nannpc_set_hosei_position) {
     npc->hosei.x = evtGetFloat(event, args[1]);
     npc->hosei.y = evtGetFloat(event, args[2]);
     npc->hosei.z = evtGetFloat(event, args[3]);
-    return 2;
+    return EVT_RETURN_DONE;
 }
 
 USER_FUNC(evt_nannpc_set_size) {
@@ -477,7 +472,7 @@ USER_FUNC(evt_nannpc_set_size) {
     NanNPC* npc = nanNPCSearch((char*)evtGetValue(event, args[0]));
     npc->sizeX = evtGetFloat(event, args[1]);
     npc->sizeY = evtGetFloat(event, args[2]);
-    return 2;
+    return EVT_RETURN_DONE;
 }
 
 void evt_nannpc_set_animtbl_sub(NanNPC* npc, s16* tbl) {
@@ -515,14 +510,14 @@ USER_FUNC(evt_nannpc_set_animtbl) {
     if (npc->animnum == 0) {
         npc->animtbl = NULL;
     }
-    return 2;
+    return EVT_RETURN_DONE;
 }
 
 USER_FUNC(evt_nannpc_set_dir) {
     EvtWord* args = event->args;
     NanNPC* npc = nanNPCSearch((char*)evtGetValue(event, args[0]));
     npc->dir = evtGetValue(event, args[1]);
-    return 2;
+    return EVT_RETURN_DONE;
 }
 
 USER_FUNC(evt_nannpc_set_work) {
@@ -530,14 +525,14 @@ USER_FUNC(evt_nannpc_set_work) {
     NanNPC* npc = nanNPCSearch((char*)evtGetValue(event, args[0]));
     s32 idx = evtGetValue(event, args[1]);
     npc->work[idx] = evtGetValue(event, args[2]);
-    return 2;
+    return EVT_RETURN_DONE;
 }
 
 USER_FUNC(evt_nannpc_get_work) {
     EvtWord* args = event->args;
     NanNPC* npc = nanNPCSearch((char*)evtGetValue(event, args[0]));
     evtSetValue(event, args[2], npc->work[evtGetValue(event, args[1])]);
-    return 2;
+    return EVT_RETURN_DONE;
 }
 
 USER_FUNC(evt_nannpc_move_position2) {
@@ -571,10 +566,10 @@ USER_FUNC(evt_nannpc_move_position2) {
     PSVECScale(&diff, &step, (f32)elapsed / (f32)total);
     if (elapsed < total) {
         PSVECAdd(&npc->startPos, &step, &npc->pos);
-        return 0;
+        return EVT_RETURN_BLOCK;
     }
     npc->pos = target;
-    return 2;
+    return EVT_RETURN_DONE;
 }
 
 USER_FUNC(evt_nannpc_jump_position) {
@@ -597,6 +592,7 @@ USER_FUNC(evt_nannpc_jump_position) {
         event->userdataf[1] = -4.0f * height;
         event->userdataf[2] = y - (f32)npc->ipos[1] - event->userdataf[1];
     }
+    // FAKE: el and uel are spare copies of the elapsed time; a single s32 elapsed changes the object
     el = OSTicksToMilliseconds((u32)gp->renderTime - (u32)npc->startTime);
     uel = el;
     if (el < duration) {
@@ -605,12 +601,12 @@ USER_FUNC(evt_nannpc_jump_position) {
         npc->pos.x = intplGetValue(EASING_LINEAR, npc->ipos[0], x, elapsed, duration);
         npc->pos.z = intplGetValue(EASING_LINEAR, npc->ipos[2], z, uel, duration);
         npc->pos.y = t * (event->userdataf[1] * t + event->userdataf[2]) + (f32)npc->ipos[1];
-        return 0;
+        return EVT_RETURN_BLOCK;
     }
     npc->pos.x = x;
     npc->pos.y = y;
     npc->pos.z = z;
-    return 2;
+    return EVT_RETURN_DONE;
 }
 
 USER_FUNC(evt_nannpc_flag_onoff) {
@@ -624,7 +620,7 @@ USER_FUNC(evt_nannpc_flag_onoff) {
     } else {
         npc->flags |= flag;
     }
-    return 2;
+    return EVT_RETURN_DONE;
 }
 
 USER_FUNC(evt_nannpc_ppflag_onoff) {
@@ -638,14 +634,14 @@ USER_FUNC(evt_nannpc_ppflag_onoff) {
     } else {
         npc->pose->flags |= flag;
     }
-    return 2;
+    return EVT_RETURN_DONE;
 }
 
 USER_FUNC(evt_nannpc_set_func) {
     EvtWord* args = event->args;
     NanNPC* npc = nanNPCSearch((char*)evtGetValue(event, args[0]));
     npc->func = (void (*)(NanNPC*))evtGetValue(event, args[1]);
-    return 2;
+    return EVT_RETURN_DONE;
 }
 
 USER_FUNC(evt_nannpc_set_shadow_position) {
@@ -653,7 +649,7 @@ USER_FUNC(evt_nannpc_set_shadow_position) {
     NanNPC* npc = nanNPCSearch((char*)evtGetValue(event, args[0]));
     npc->pose->flags |= 0x10;
     npc->pose->shadowY = evtGetFloat(event, args[1]);
-    return 2;
+    return EVT_RETURN_DONE;
 }
 
 USER_FUNC(evt_nannpc_set_color) {
@@ -663,10 +659,9 @@ USER_FUNC(evt_nannpc_set_color) {
     npc->color.g = evtGetValue(event, args[2]);
     npc->color.b = evtGetValue(event, args[3]);
     npc->color.a = evtGetValue(event, args[4]);
-    return 2;
+    return EVT_RETURN_DONE;
 }
 
-#pragma explicit_zero_data on
 USER_FUNC(evt_nannpcwork_flag_onoff) {
     EvtWord* args = event->args;
     s32 onoff = evtGetValue(event, args[0]);
@@ -677,7 +672,7 @@ USER_FUNC(evt_nannpcwork_flag_onoff) {
     } else {
         w->flags |= flag;
     }
-    return 2;
+    return EVT_RETURN_DONE;
 }
 #pragma explicit_zero_data reset
 

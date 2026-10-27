@@ -5,28 +5,25 @@
 #include "memory.h"
 #include <string.h>
 
-
 HitDamageReturn* hitDmgretPtr;
-
-static void name_callback_sub(const char* name, void* evt, BOOL flag);
 
 USER_FUNC(evt_hitobj_onoff) {
     EvtWord* args = event->args;
     const char* name = (const char*)evtGetValue(event, args[0]);
     s32 isGroup = evtGetValue(event, args[1]);
-    s32 off = evtGetValue(event, args[2]);
+    s32 on = evtGetValue(event, args[2]);
 
     if (isGroup == 0) {
-        if (off != 0) {
-            hitObjFlagOff(name, 1);
+        if (on != 0) {
+            hitObjFlagOff(name, HIT_FLAG_OFF);
         } else {
-            hitObjFlagOn(name, 1);
+            hitObjFlagOn(name, HIT_FLAG_OFF);
         }
     } else {
-        if (off != 0) {
-            hitGrpFlagOff(name, 1);
+        if (on != 0) {
+            hitGrpFlagOff(name, HIT_FLAG_OFF);
         } else {
-            hitGrpFlagOn(name, 1);
+            hitGrpFlagOn(name, HIT_FLAG_OFF);
         }
     }
     return EVT_RETURN_DONE;
@@ -94,18 +91,18 @@ USER_FUNC(evt_hit_get_position) {
 USER_FUNC(L_evt_hitobj_flag_onoff) {
     EvtWord* args = event->args;
     s32 isGroup = evtGetValue(event, args[0]);
-    s32 off = evtGetValue(event, args[1]);
+    s32 on = evtGetValue(event, args[1]);
     const char* name = (const char*)evtGetValue(event, args[2]);
     s32 flag = args[3];
 
     if (isGroup == 0) {
-        if (off == 0) {
+        if (on == 0) {
             hitObjFlagOff(name, flag);
         } else {
             hitObjFlagOn(name, flag);
         }
     } else {
-        if (off == 0) {
+        if (on == 0) {
             hitGrpFlagOff(name, flag);
         } else {
             hitGrpFlagOn(name, flag);
@@ -117,18 +114,18 @@ USER_FUNC(L_evt_hitobj_flag_onoff) {
 USER_FUNC(evt_hitobj_attr_onoff) {
     EvtWord* args = event->args;
     s32 isGroup = evtGetValue(event, args[0]);
-    s32 off = evtGetValue(event, args[1]);
+    s32 on = evtGetValue(event, args[1]);
     const char* name = (const char*)evtGetValue(event, args[2]);
     s32 attr = args[3];
 
     if (isGroup == 0) {
-        if (off == 0) {
+        if (on == 0) {
             hitObjAttrOff(name, attr);
         } else {
             hitObjAttrOn(name, attr);
         }
     } else {
-        if (off == 0) {
+        if (on == 0) {
             hitGrpAttrOff(name, attr);
         } else {
             hitGrpAttrOn(name, attr);
@@ -137,15 +134,15 @@ USER_FUNC(evt_hitobj_attr_onoff) {
     return EVT_RETURN_DONE;
 }
 
-static void name_callback_sub(const char* name, void* evt, BOOL flag) {
+static void name_callback_sub(const char* name, void* evt, BOOL withSiblings) {
     HitEntry* hit = hitNameToPtr(name);
     if (hit != NULL) {
         evtEntry(evt, 0, EVENT_START_IMMEDIATE)->lwData[0] = (EvtWord)name;
         if (hit->child != NULL) {
-            name_callback_sub(*(const char**)hit->child->joint, evt, TRUE);
+            name_callback_sub(hit->child->joint->name, evt, TRUE);
         }
-        if (flag && hit->sibling != NULL) {
-            name_callback_sub(*(const char**)hit->sibling->joint, evt, TRUE);
+        if (withSiblings && hit->sibling != NULL) {
+            name_callback_sub(hit->sibling->joint->name, evt, TRUE);
         }
     }
 }

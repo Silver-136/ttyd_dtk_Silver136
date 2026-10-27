@@ -338,10 +338,9 @@ USER_FUNC(evt_audience_entry) {
     AudienceMemberType type;
     s32 id;
 
-    args = event->args;
     id = evtGetValue(event, args[0]);
     type = (AudienceMemberType)evtGetValue(event, args[1]);
-    if (BattleAudience_Entry(id, type, 0) == 1) {
+    if (BattleAudience_Entry(id, type, AUDIENCE_STATUS_WAIT) == TRUE) {
         BattleAudience_SetAnim(id, 1, TRUE);
     }
     return EVT_RETURN_DONE;
@@ -368,7 +367,7 @@ USER_FUNC(evt_audience_reflesh_natural_all) {
     i = 0;
     member = BattleAudienceGetPtr(0);
     for (; i < 200; i++, member++) {
-        if (member->flags & AUDIENCE_MEMBER_FLAG_USED && member->status == 13 && member->step == 1 && irand(100) < chance) {
+        if (member->flags & AUDIENCE_MEMBER_FLAG_USED && member->status == AUDIENCE_STATUS_SLEEP && member->step == 1 && irand(100) < chance) {
             member->step = 2;
         }
     }
@@ -389,8 +388,8 @@ USER_FUNC(evt_audience_abnormal_natural_all) {
     for (; i < 200; i++, member++) {
         if ((u8)BattleAudience_GetSysCtrl(i)) {
             status = member->status;
-            if ((status <= 3 || (u8)(status - 4) <= 2 || status == 7) && irand(100) < chance) {
-                BattleAudience_ChangeStatus(i, 13);
+            if ((status <= AUDIENCE_STATUS_WAIT_JUMP || (u8)(status - AUDIENCE_STATUS_JOY_RAISE_ARM) <= 2 || status == AUDIENCE_STATUS_ITEM_ON) && irand(100) < chance) {
+                BattleAudience_ChangeStatus(i, AUDIENCE_STATUS_SLEEP);
             }
         }
     }

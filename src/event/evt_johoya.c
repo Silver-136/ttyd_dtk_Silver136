@@ -71,20 +71,20 @@ USER_FUNC(johoya_data_alloc) {
     memset(wp->info, 0, wp->count * sizeof(InformantInfo) + (sizeof(InformantInfo) * 4));
     wp->infoEnd = &wp->info[wp->count];
     johoya_data_make(wp->prefix, 1);
-    return 2;
+    return EVT_RETURN_DONE;
 }
 
 USER_FUNC(johoya_data_free) {
     InformantWork* wp = &_jdt;
 
     if (wp->info == NULL) {
-        return 2;
+        return EVT_RETURN_DONE;
     }
     _mapFree(wp->info);
     wp->info = NULL;
     wp->count = 0;
     wp->prefix = NULL;
-    return 2;
+    return EVT_RETURN_DONE;
 }
 
 USER_FUNC(johoya_keti_newjoho_check) {
@@ -100,7 +100,7 @@ USER_FUNC(johoya_keti_newjoho_check) {
         }
     }
     evtSetValue(event, args[0], count);
-    return 2;
+    return EVT_RETURN_DONE;
 }
 
 USER_FUNC(johoya_keti_newjoho_makelabel) {
@@ -124,7 +124,7 @@ USER_FUNC(johoya_keti_newjoho_makelabel) {
                 evtSetValue(event, args[3], strlen(msg));
                 evtSetValue(event, args[4], wp->info[i].cost);
                 wp->curIndex = i;
-                return 2;
+                return EVT_RETURN_DONE;
             }
             n++;
         }
@@ -134,14 +134,14 @@ USER_FUNC(johoya_keti_newjoho_makelabel) {
     evtSetValue(event, args[2], (EvtWord)wp->infoEnd);
     evtSetValue(event, args[3], 0);
     evtSetValue(event, args[4], 0);
-    return 2;
+    return EVT_RETURN_DONE;
 }
 
 USER_FUNC(johoya_keti_newjoho_setreadflag) {
     s32 cur = _jdt.curIndex;
     johoya_set(_jdt.readFlags.ketiRead, _jdt.info[cur].storyId, 1);
     _jdt.info[cur].flags |= 1;
-    return 2;
+    return EVT_RETURN_DONE;
 }
 
 USER_FUNC(johoya_keti_oldspeak_check) {
@@ -157,7 +157,7 @@ USER_FUNC(johoya_keti_oldspeak_check) {
         }
     }
     evtSetValue(event, args[0], count);
-    return 2;
+    return EVT_RETURN_DONE;
 }
 
 USER_FUNC(johoya_keti_oldspeak_makelabel) {
@@ -177,7 +177,7 @@ USER_FUNC(johoya_keti_oldspeak_makelabel) {
                 evtSetValue(event, args[3], wp->info[i].tagEndPos);
                 evtSetValue(event, args[4], 0);
                 wp->curIndex = i;
-                return 2;
+                return EVT_RETURN_DONE;
             }
             n++;
         }
@@ -187,22 +187,22 @@ USER_FUNC(johoya_keti_oldspeak_makelabel) {
     evtSetValue(event, args[2], (EvtWord)wp->infoEnd);
     evtSetValue(event, args[3], 0);
     evtSetValue(event, args[4], 0);
-    return 2;
+    return EVT_RETURN_DONE;
 }
 
 USER_FUNC(johoya_keti_oldspeak_setreadflag) {
     _jdt.info[_jdt.curIndex].flags |= 1;
-    return 2;
+    return EVT_RETURN_DONE;
 }
 
 USER_FUNC(johoya_perfect_newjoho_setreadflag) {
     johoya_set(_jdt.readFlags.perfectRead, _jdt.info[_jdt.curIndex].storyId, 1);
-    return 2;
+    return EVT_RETURN_DONE;
 }
 
 USER_FUNC(johoya_luigi_newjoho_setreadflag) {
     johoya_set(_jdt.readFlags.luigiRead, _jdt.info[_jdt.curIndex].storyId, 1);
-    return 2;
+    return EVT_RETURN_DONE;
 }
 
 s32 johoya_data_make(const char* prefix, s32 type) {
@@ -222,7 +222,7 @@ s32 johoya_data_make(const char* prefix, s32 type) {
     s32 count;
     s32 labelId;
 
-    maxLabel = evtGetValue(0, GSW_STORY_PROGRESS);
+    maxLabel = evtGetValue(NULL, GSW_STORY_PROGRESS);
 
     count = 0;
     storyId = 0;
@@ -234,21 +234,20 @@ s32 johoya_data_make(const char* prefix, s32 type) {
             break;
         }
         tagdata = msg + 2;
-        if (msg[1] != '!') { //we need to first parse a tag for the story name
+        if (msg[1] != '!') { // the message must start with a "<!" tag
             break;
         }
-
 
         tagNum = 0;
         mbbpos = 0;
         tagdone = FALSE;
         while (!tagdone) {
-            if (_ismbblead(*tagdata)) { //we need to read a multibyte sequence
-                if (tagNum == 0) { //write to the array
+            if (_ismbblead(*tagdata)) { // two-byte character
+                if (tagNum == 0) { // first field (the label): copy it into tag
                     tag[mbbpos++] = tagdata[0];
                     tag[mbbpos++] = tagdata[1];
                     tagdata += 2;
-                } else { //just increment to new character
+                } else { // later fields: only count their length
                     mbbpos += 2;
                     tagdata += 2;
                 }
@@ -305,16 +304,12 @@ s32 johoya_data_make(const char* prefix, s32 type) {
 }
 
 void johoya_init(void) {
-    InformantUnknown* unk = &_jdt.readFlags;
+    InformantUnknown* readFlags = &_jdt.readFlags;
 
-    memset(&unk->ketiRead, 0, 0xD);
-    memset(&unk->perfectRead, 0, 0xD);
-    memset(&unk->luigiRead, 0, 0xD);
+    memset(&readFlags->ketiRead, 0, sizeof(readFlags->ketiRead));
+    memset(&readFlags->perfectRead, 0, sizeof(readFlags->perfectRead));
+    memset(&readFlags->luigiRead, 0, sizeof(readFlags->luigiRead));
 }
-
-
-
-
 
 s16 johoya_set(u8* table, s16 id, s16 val) {
     u8 mask;

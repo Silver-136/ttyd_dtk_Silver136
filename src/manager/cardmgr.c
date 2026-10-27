@@ -1,7 +1,7 @@
-#include "version.h"
 /* "cardmgr" - Memory Card Manager
  * Handles all communication with save data and writing to memory cards.
  */
+#include "version.h"
 #include "manager/cardmgr.h"
 #include "mario/mario.h"
 #include "mario/mario_party.h"
@@ -54,15 +54,6 @@ static void memcard_get_serial(void);
 void memcard_open(void);
 static void memcard_close(void);
 
-void mountDetachCallback(s32 chan, s32 result);
-void mountAttachCallback(s32 chan, s32 result);
-void checkCallback(s32 chan, s32 result);
-void formatCallback(s32 chan, s32 result);
-void createCallback(s32 chan, s32 result);
-void writeCallback(s32 chan, s32 result);
-void readCallback(s32 chan, s32 result);
-void statusCallback(s32 chan, s32 result);
-
 void write_main(void);
 void write_header_main(void);
 void read_main(void);
@@ -83,6 +74,7 @@ void cardBufReset(void) {
     s32 flags;
     s32 timeout;
 
+    // FAKE: unused copy of the volatile flags word; dropping it changes the object
     flags = wp->flags;
     if (wp->flags & CARD_FLAG_BUSY) {
         CARDCancel(&wp->info);
@@ -283,36 +275,36 @@ void cardMain(void) {
 
 void cardCopy2Main(s32 slot) {
 #ifdef VERSION_G8ME01
-    void* backup2;
-    s32 backup4;
+    void* savedMapAlloc;
+    s32 savedSoundMode;
     CardSaveSlot* save;
-    void* backup1;
-    s32 backup5;
-    s32 backup6;
-    u32 backup3;
+    void* savedFbatData;
+    s32 savedRumble;
+    s32 savedLastSlot;
+    u32 progressive;
     s32 language;
 #else
-    void* backup2;
-    u32 backup3;
+    void* savedMapAlloc;
+    u32 progressive;
     CardSaveSlot* save;
-    void* backup1;
-    s32 backup4;
-    s32 backup5;
-    s32 backup6;
+    void* savedFbatData;
+    s32 savedSoundMode;
+    s32 savedRumble;
+    s32 savedLastSlot;
 #endif
 
     save = &wp->data->saves[slot];
-    backup1 = gp->fbatData;
-    backup2 = gp->mapAlloc;
-    backup3 = (u32)(gp->flags & GW_FLAG_PROGRESSIVE);
+    savedFbatData = gp->fbatData;
+    savedMapAlloc = gp->mapAlloc;
+    progressive = (u32)(gp->flags & GW_FLAG_PROGRESSIVE);
 #ifdef VERSION_G8ME01
     language = gp->language;
 #endif
-    backup4 = gp->soundMode;
-    backup5 = gp->rumbleEnabled;
-    backup6 = gp->lastSlot;
+    savedSoundMode = gp->soundMode;
+    savedRumble = gp->rumbleEnabled;
+    savedLastSlot = gp->lastSlot;
     memcpy(gp, &save->data.global, sizeof(GlobalWork));
-    gp->fbatData = backup1;
+    gp->fbatData = savedFbatData;
     memcpy(pouchGetPtr(), &save->data.pouch, sizeof(PouchData));
     memcpy(fbatGetPointer()->deadInfo, save->data.deadInfo, sizeof(NpcDeadInfo) * 64);
     memcpy(bdsw, &save->data.badgeShop, sizeof(BadgeShopWork));
@@ -327,13 +319,13 @@ void cardCopy2Main(s32 slot) {
     gp->retraceTime = OSGetTime();
     strcpy(gp->currentAreaName, "123");
     gp->relocationBase = NULL;
-    gp->soundMode = backup4;
-    gp->rumbleEnabled = backup5;
-    gp->lastSlot = backup6;
-    gp->mapAlloc = backup2;
+    gp->soundMode = savedSoundMode;
+    gp->rumbleEnabled = savedRumble;
+    gp->lastSlot = savedLastSlot;
+    gp->mapAlloc = savedMapAlloc;
     gp->debugFlag = 0;
     gp->debugBattle = 0;
-    if (backup3 != 0) {
+    if (progressive != 0) {
         gp->flags |= GW_FLAG_PROGRESSIVE;
     } else {
         gp->flags &= ~GW_FLAG_PROGRESSIVE;
@@ -350,7 +342,7 @@ void cardErase(s32 slotNo) {
         wp->op = 1;
         wp->currSlot = slotNo;
         wp->opStep = 0;
-        wp->result = 0;
+        wp->result = CARD_RESULT_READY;
         wp->flags |= CARD_FLAG_EXEC;
         wp->flags &= ~(CARD_FLAG_DONE | CARD_FLAG_FAILED);
         wp->flags |= CARD_FLAG_ERASE;
@@ -366,7 +358,7 @@ void cardCopy(s32 from, s32 to) {
         wp->op = 1;
         wp->currSlot = to;
         wp->opStep = 0;
-        wp->result = 0;
+        wp->result = CARD_RESULT_READY;
         wp->flags |= CARD_FLAG_EXEC;
         wp->flags &= ~(CARD_FLAG_DONE | CARD_FLAG_FAILED);
         wp->flags |= CARD_FLAG_ERASE;
@@ -384,7 +376,7 @@ void cardWrite(s32 slot) {
         wp->op = 1;
         wp->currSlot = slot;
         wp->opStep = 0;
-        wp->result = 0;
+        wp->result = CARD_RESULT_READY;
         wp->flags |= CARD_FLAG_EXEC;
         wp->flags &= ~(CARD_FLAG_DONE | CARD_FLAG_FAILED);
         wp->flags &= ~CARD_FLAG_ERASE;
@@ -442,6 +434,7 @@ static void memcard_probe(void) {
             result = CARD_RESULT_FATAL_ERROR;
             break;
         }
+        // FAKE: self-assignment with no effect; without it the object changes
         timeout = (u32)timeout;
     }
 
@@ -460,6 +453,7 @@ static void memcard_probe(void) {
     }
     wp->flags &= ~CARD_FLAG_BUSY;
 }
+
 void write_main(void) {
     if (wp->result) {
         wp->op = 8;
@@ -553,7 +547,7 @@ void cardWriteHeader(void) {
         wp->op = 2;
         wp->currSlot = 0;
         wp->opStep = 0;
-        wp->result = 0;
+        wp->result = CARD_RESULT_READY;
         wp->flags |= CARD_FLAG_EXEC;
         wp->flags &= ~(CARD_FLAG_DONE | CARD_FLAG_FAILED);
         wp->flags &= ~CARD_FLAG_ERASE;
@@ -636,14 +630,14 @@ void read_main(void) {
                 }
                 break;
             case 6:
-                memcard_read(wp->readBuf, 0x4000, (s32)((wp->opSlot * sizeof(CardSaveSlot)) + sizeof(CardMetadata)));
+                memcard_read(wp->readBuf, sizeof(CardSaveSlot), (s32)((wp->opSlot * sizeof(CardSaveSlot)) + sizeof(CardMetadata)));
                 break;
             case 7:
                 wp->validSave1 = dataCheck();
                 wp->lastSaveTime1 = ((CardSaveSlot*)wp->readBuf)->data.global.saveTime;
                 break;
             case 8:
-                memcard_read(wp->readBuf, 0x4000, (s32)((wp->opSlot * sizeof(CardSaveSlot)) + sizeof(CardData)));
+                memcard_read(wp->readBuf, sizeof(CardSaveSlot), (s32)((wp->opSlot * sizeof(CardSaveSlot)) + sizeof(CardData)));
                 break;
             case 9:
                 wp->validSave2 = dataCheck();
@@ -697,7 +691,7 @@ void cardReadAll(void) {
         wp->op = 4;
         wp->opSlot = 0;
         wp->opStep = 0;
-        wp->result = 0;
+        wp->result = CARD_RESULT_READY;
         wp->flags |= CARD_FLAG_EXEC;
         wp->flags &= ~(CARD_FLAG_DONE | CARD_FLAG_FAILED | CARD_FLAG_HEADER_INVALID);
         wp->flags &= ~CARD_FLAG_WRITTEN;
@@ -711,7 +705,6 @@ void read_all_main(void) {
         wp->op = 8;
         wp->flags |= CARD_FLAG_FAILED;
         wp->flags &= ~CARD_FLAG_EXEC;
-        return;
     } else if (!(wp->flags & CARD_FLAG_BUSY)) {
         switch (wp->opStep) {
             case 0:
@@ -727,7 +720,7 @@ void read_all_main(void) {
                 memcard_open();
                 break;
             case 4:
-                memcard_read(wp->data, 0x2000, 0);
+                memcard_read(wp->data, sizeof(CardMetadata), 0);
                 break;
             case 5:
                 if (!headerCheck2()) {
@@ -739,14 +732,14 @@ void read_all_main(void) {
                 gp->lastSlot = wp->data->metadata.data.lastSlot;
                 break;
             case 6:
-                memcard_read(wp->readBuf, 0x4000, (wp->opSlot << 0xE) + 0x2000);
+                memcard_read(wp->readBuf, sizeof(CardSaveSlot), (s32)((wp->opSlot * sizeof(CardSaveSlot)) + sizeof(CardMetadata)));
                 break;
             case 7:
                 wp->validSave1 = dataCheck();
                 wp->lastSaveTime1 = ((CardSaveSlot*)wp->readBuf)->data.global.saveTime;
                 break;
             case 8:
-                memcard_read(wp->readBuf, 0x4000, (wp->opSlot << 0xE) + 0x12000);
+                memcard_read(wp->readBuf, sizeof(CardSaveSlot), (s32)((wp->opSlot * sizeof(CardSaveSlot)) + sizeof(CardData)));
                 break;
             case 9:
                 wp->validSave2 = dataCheck();
@@ -803,7 +796,7 @@ void cardCreate(void) {
     if (!(wp->flags & CARD_FLAG_EXEC)) {
         wp->op = 5;
         wp->opStep = 0;
-        wp->result = 0;
+        wp->result = CARD_RESULT_READY;
         wp->flags |= CARD_FLAG_EXEC;
         wp->flags &= ~(CARD_FLAG_DONE | CARD_FLAG_FAILED | CARD_FLAG_HEADER_INVALID);
         wp->flags &= ~CARD_FLAG_WRITTEN;
@@ -836,16 +829,16 @@ void create_main(void) {
             case 5:
                 make_header();
                 make_data();
-                memcard_write(wp->data, 0x12000, 0);
+                memcard_write(wp->data, sizeof(CardData), 0);
                 break;
             case 6:
-                memcard_write(wp->data->saves, 0x10000, 0x12000);
+                memcard_write(wp->data->saves, sizeof(wp->data->saves), sizeof(CardData));
                 break;
             case 7:
                 memcard_get_stat();
                 break;
             case 8:
-                CARDSetCommentAddress(&wp->status,  0);
+                CARDSetCommentAddress(&wp->status, 0);
                 CARDSetIconAddress(&wp->status, 0x40);
                 CARDSetBannerFormat(&wp->status, CARD_STAT_BANNER_RGB5A3);
                 CARDSetIconAnim(&wp->status, CARD_STAT_ANIM_LOOP);
@@ -884,7 +877,7 @@ void cardFormat(void) {
     if (!(wp->flags & CARD_FLAG_EXEC)) {
         wp->op = 6;
         wp->opStep = 0;
-        wp->result = 0;
+        wp->result = CARD_RESULT_READY;
         wp->flags |= CARD_FLAG_EXEC;
         wp->flags &= ~(CARD_FLAG_DONE | CARD_FLAG_FAILED | CARD_FLAG_HEADER_INVALID);
         wp->flags &= ~CARD_FLAG_WRITTEN;
@@ -919,7 +912,6 @@ static void format_main(void) {
                 wp->flags |= CARD_FLAG_DONE;
                 wp->flags &= ~CARD_FLAG_EXEC;
                 break;
-
         }
         wp->opStep++;
     } else if (CARDGetResultCode(wp->chan) != CARD_RESULT_BUSY && wp->result != CARDGetResultCode(wp->chan)) {
@@ -960,7 +952,6 @@ static void delete_main(void) {
                 wp->flags |= CARD_FLAG_DONE;
                 wp->flags &= ~CARD_FLAG_EXEC;
                 break;
-
         }
         wp->opStep++;
     } else if (CARDGetResultCode(wp->chan) != CARD_RESULT_BUSY && wp->result != CARDGetResultCode(wp->chan)) {
@@ -1066,6 +1057,7 @@ static void make_header(void) {
     u8* temp;
     u32 checksum;
     OSCalendarTime td;
+
     metadata = &cardGetFilePtr()->metadata;
     memset(metadata, 0, sizeof(metadata->data));
     strcpy(metadata->data.fileName, cardGameTitle);
@@ -1093,6 +1085,7 @@ static void make_data(void) {
     s32 i;
 
     for (i = 0; i < 4; i++) {
+        // FAKE: i is never -1 here; the plain save = &cardGetFilePtr()->saves[i] changes the object
         if (i != -1) {
             save = &cardGetFilePtr()->saves[i];
         } else {
@@ -1103,7 +1096,6 @@ static void make_data(void) {
         check_sum(save);
     }
 }
-
 
 void mountDetachCallback(s32 chan, s32 result) {
     ; //stubbed in retail
@@ -1268,13 +1260,13 @@ void memcard_open(void) {
     wp->flags |= CARD_FLAG_BUSY;
     if (wp->flags & CARD_FLAG_WRITTEN) {
         i = 0;
-        while (result = CARDGetSerialNo(wp->chan, &serialNo), result == -1) {
+        while (result = CARDGetSerialNo(wp->chan, &serialNo), result == CARD_RESULT_BUSY) {
             if (++i > 1000000) {
                 result = CARD_RESULT_FATAL_ERROR;
                 break;
             }
         }
-        if (result != 0) {
+        if (result != CARD_RESULT_READY) {
             wp->result = result;
             wp->flags &= ~CARD_FLAG_BUSY;
             return;
@@ -1285,7 +1277,7 @@ void memcard_open(void) {
             return;
         }
     }
-    for (fileNo = 0; fileNo < 127; fileNo++) {
+    for (fileNo = 0; fileNo < CARD_MAX_FILE; fileNo++) {
         i = 0;
         while (result = CARDGetStatus(wp->chan, fileNo, &stat), result == CARD_RESULT_BUSY) {
             if (++i > 1000000) {
@@ -1315,7 +1307,7 @@ void memcard_open(void) {
             }
         }
     }
-    if (fileNo >= 127) {
+    if (fileNo >= CARD_MAX_FILE) {
         i = 0;
         while (result = CARDFreeBlocks(wp->chan, &byteNotUsed, &filesNotUsed), result == CARD_RESULT_BUSY) {
             if (++i > 1000000) {
@@ -1323,7 +1315,7 @@ void memcard_open(void) {
                 break;
             }
         }
-        if (result != 0) {
+        if (result != CARD_RESULT_READY) {
             wp->result = result;
             wp->flags &= ~CARD_FLAG_BUSY;
             return;
@@ -1338,7 +1330,7 @@ void memcard_open(void) {
             wp->flags &= ~CARD_FLAG_BUSY;
             return;
         }
-        wp->result = -4;
+        wp->result = CARD_RESULT_NOFILE;
         wp->flags &= ~CARD_FLAG_BUSY;
         return;
     }

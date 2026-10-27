@@ -8,12 +8,6 @@
 #include "sdk/DEMOInit.h"
 #include "driver/mapdrv.h"
 
-typedef struct DEMORenderModeObj {
-    u8 pad[4];
-    u16 fbWidth;
-    u16 efbHeight;
-} DEMORenderModeObj;
-
 USER_FUNC(evt_img_entry) {
     imgEntry((const char*)evtGetValue(event, event->args[0]), gp->inBattle != 0);
     return EVT_RETURN_DONE;
@@ -38,7 +32,7 @@ USER_FUNC(evt_img_set_paper) {
     ImageEntry* img = imgNameToPtr(name, group);
     img->poseId = animPaperPoseGetId(anim, group);
     img->animTime = animTimeGetTime(group);
-    animPoseSetMaterialFlagOn(img->poseId, (MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2));
+    animPoseSetMaterialFlagOn(img->poseId, MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2);
     return EVT_RETURN_DONE;
 }
 
@@ -91,11 +85,11 @@ USER_FUNC(evt_img_alloc_capture) {
         sh->x = 0;
         sh->y = 0;
         if (shadowId == 2) {
-            sh->copyFmt = 39;
-            sh->texFmt = 1;
+            sh->copyFmt = GX_CTF_A8;
+            sh->texFmt = GX_TF_I8;
         } else {
-            sh->copyFmt = 6;
-            sh->texFmt = 6;
+            sh->copyFmt = GX_TF_RGBA8;
+            sh->texFmt = GX_TF_RGBA8;
         }
         img->flags |= IMAGE_FLAG_OFFSCREEN_RECT;
     } else {
@@ -108,11 +102,11 @@ USER_FUNC(evt_img_alloc_capture) {
         sh->x = x;
         sh->y = y;
         if (shadowId == 2) {
-            sh->copyFmt = 39;
-            sh->texFmt = 1;
+            sh->copyFmt = GX_CTF_A8;
+            sh->texFmt = GX_TF_I8;
         } else {
-            sh->copyFmt = 6;
-            sh->texFmt = 6;
+            sh->copyFmt = GX_TF_RGBA8;
+            sh->texFmt = GX_TF_RGBA8;
         }
     }
     sh->offscreenId = offId;
@@ -157,6 +151,7 @@ USER_FUNC(evt_img_set_virtual_point) {
     pos.x = x;
     pos.y = y;
     pos.z = z;
+    // FAKE: spare copy of pos; passing &pos changes the object
     tmp = pos;
     imgSetVirtualPoint(img, &tmp);
     return EVT_RETURN_DONE;

@@ -3,12 +3,10 @@
 #include "mario/mario_pouch.h"
 #include "manager/evtmgr_cmd.h"
 
-#define GET_ARG0 evtGetValue(event, event->args[0])
-
-#define SETTER(name, fn)        \
-    USER_FUNC(name) {           \
-        fn(GET_ARG0);           \
-        return EVT_RETURN_DONE; \
+#define SETTER(name, fn)                                 \
+    USER_FUNC(name) {                                    \
+        fn(evtGetValue(event, event->args[0]));          \
+        return EVT_RETURN_DONE;                          \
     }
 
 #define GETTER(name, fn)                   \
@@ -121,7 +119,7 @@ SETTER(evt_pouch_majinai_set, pouchMajinaiInit)
 SETTER(evt_pouch_receive_mail, pouchReceiveMail)
 SETTER(evt_pouch_open_mail, pouchOpenMail)
 USER_FUNC(evt_pouch_set_yoshiname) {
-    pouchSetYoshiName((char*)GET_ARG0);
+    pouchSetYoshiName((char*)evtGetValue(event, event->args[0]));
     return EVT_RETURN_DONE;
 }
 USER_FUNC(evt_pouch_get_yoshiname) {

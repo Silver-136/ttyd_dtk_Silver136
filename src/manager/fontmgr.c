@@ -94,7 +94,6 @@ static inline void fontDrawCodeEdge(u16 code) {
 }
 
 void fontmgrInit(void) {
-    ; //stubbed in retail
 }
 
 void fontmgrTexSetup(void) {
@@ -358,7 +357,9 @@ void FontDrawStringVecPitch(Vec pos, f32 pitch, const s8* msg) {
 #ifdef VERSION_G8ME01
 #pragma auto_inline reset
 #endif
+
 static inline void fontDrawPairXI(u16 code, s16 x, s16 y) {
+    // FAKE: spare s16 copies of the s16 parameters (and a no-op cast); using x and y directly changes the object
     s16 iy = y;
     s16 ix = x;
     _JUTFont_DrawPos(code, ix - 2, (s16)iy);
@@ -366,6 +367,7 @@ static inline void fontDrawPairXI(u16 code, s16 x, s16 y) {
 }
 
 static inline void fontDrawPairYI(u16 code, s16 x, s16 y) {
+    // FAKE: spare s16 copies of the s16 parameters; using x and y directly changes the object
     s16 iy = y;
     s16 ix = x;
     _JUTFont_DrawPos(code, ix, iy - 2);
@@ -375,6 +377,7 @@ static inline void fontDrawPairYI(u16 code, s16 x, s16 y) {
 static inline void fontDrawPairX(u16 code, f32 x, f32 y) {
     s16 ix = x;
     s16 iy = y;
+    // FAKE: no-op (s16) casts on iy; the plain argument changes the object
     _JUTFont_DrawPos(code, ix - 2, (s16)iy);
     _JUTFont_DrawPos(code, ix + 2, (s16)iy);
 }
@@ -382,6 +385,7 @@ static inline void fontDrawPairX(u16 code, f32 x, f32 y) {
 static inline void fontDrawPairY(u16 code, f32 x, f32 y) {
     s16 ix = x;
     s16 iy = y;
+    // FAKE: no-op (s16) casts on ix; the plain argument changes the object
     _JUTFont_DrawPos(code, (s16)ix, iy - 2);
     _JUTFont_DrawPos(code, (s16)ix, iy + 2);
 }
@@ -441,19 +445,6 @@ void FontDrawStringMtx(Mtx mtx, const char* msg) {
             x += fontGetWidth(code)->width + charspace[gp->language];
         }
     }
-}
-
-static inline void fontDrawCodeEdgeX(u16 code, f32 x) {
-    if (fontEdge) {
-        GXColor save = fontColor;
-        FontDrawColorIDX(0);
-        _JUTFont_DrawPos(code, (s16)x - 2, 0);
-        _JUTFont_DrawPos(code, (s16)x + 2, 0);
-        _JUTFont_DrawPos(code, x, -2);
-        _JUTFont_DrawPos(code, x, 2);
-        FontDrawColor(save);
-    }
-    _JUTFont_DrawPos(code, x, 0);
 }
 
 void FontDrawStringCenterMtx(Mtx mtx, const s8* msg) {
@@ -584,7 +575,7 @@ void FontDrawMessage(s32 x, s32 y, const char* msg) {
                         pos.x = d1 + (cx + 0.5f * w * scale);
                         pos.y = d2 + (cy - h * scale);
                         pos.z = 0.0f;
-                        iconDispGxAlpha(&pos, 0x10, id, fontAlpha, scale);
+                        iconDispGxAlpha(&pos, ICON_FLAG_2D, id, fontAlpha, scale);
                         FontDrawStart_alpha(fontAlpha);
                         FontDrawColor(fontColor);
                         cx += w * scale + d3;
@@ -664,7 +655,7 @@ void FontDrawMessageMtx(Mtx mtx, const char* msg) {
                         PSMTXMultVec(mtx, &pos, &pos);
                         // FAKE: no-op self-assignment before the icon draw; without it the scale load moves
                         scale = scale;
-                        iconDispGxAlpha(&pos, 0x10, id, fontAlpha, scale);
+                        iconDispGxAlpha(&pos, ICON_FLAG_2D, id, fontAlpha, scale);
                         FontDrawStart_alpha(fontAlpha);
                         FontDrawColor(fontColor);
                         cx += w * scale + d3;
@@ -766,6 +757,7 @@ u16 FontGetMessageWidthLine(const char* msg, u16* lines) {
         maxWidth = width;
     }
     if (maxWidth) {
+        // FAKE: empty dead test of code; removing it changes the object
         if (code && code) {
         }
         maxWidth -= charspace[gp->language];
@@ -796,12 +788,36 @@ GXColor HSV2RGB(GXColor hsv) {
     p = v * (1.0f - s);
     q = v * (1.0f - s * f);
     switch (i) {
-        case 0: r = v; g = q; b = p; break;
-        case 1: r = q; g = v; b = p; break;
-        case 2: r = p; g = v; b = q; break;
-        case 3: r = p; g = q; b = v; break;
-        case 4: r = q; g = p; b = v; break;
-        case 5: r = v; g = p; b = q; break;
+        case 0:
+            r = v;
+            g = q;
+            b = p;
+            break;
+        case 1:
+            r = q;
+            g = v;
+            b = p;
+            break;
+        case 2:
+            r = p;
+            g = v;
+            b = q;
+            break;
+        case 3:
+            r = p;
+            g = q;
+            b = v;
+            break;
+        case 4:
+            r = q;
+            g = p;
+            b = v;
+            break;
+        case 5:
+            r = v;
+            g = p;
+            b = q;
+            break;
     }
     out.a = hsv.a;
     out.r = 255.0f * r;
@@ -921,7 +937,7 @@ u16 JUTFont_CodeToGlyph(u32 code) {
                         } else {
                             glyph = (u16)(((lead - 136) * 188) + index - 94 + map->table[0]);
                         }
-                    break;
+                        break;
 
                     case TABLE_CHARACTER_MAP:
                         glyph = map->table[(u16)code - basecode];
@@ -932,18 +948,18 @@ u16 JUTFont_CodeToGlyph(u32 code) {
                         min = 0;
 
                         while (max >= min) {
-                            s32 index = (min + max) / 2;
-                            if ((u16)code == map->table[index * 2]) {
-                                glyph = map->table[2 * index + 1];
+                            s32 mid = (min + max) / 2;
+                            if ((u16)code == map->table[mid * 2]) {
+                                glyph = map->table[2 * mid + 1];
                                 break;
                             }
-                            if ((u16)code < map->table[2 * index]) {
-                                max = index - 1;
+                            if ((u16)code < map->table[2 * mid]) {
+                                max = mid - 1;
                             } else {
-                                min = index + 1;
+                                min = mid + 1;
                             }
                         }
-                    break;
+                        break;
                 }
                 break;
             }
@@ -1112,5 +1128,4 @@ void _JUTFont_DrawPos(u16 code, s16 x, s16 y) {
     GXTexCoord2u16(u0, v1);
     GXTexCoord2u8(n0, t1);
 }
-
 

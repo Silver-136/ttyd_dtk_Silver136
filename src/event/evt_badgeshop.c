@@ -97,9 +97,6 @@ BadgeShopWork badgeshopwork;
 //.sbss
 BadgeShopWork* bdsw;
 
-//local prototypes
-s32 bottakuruComp(const s32* sortA, const s32* sortB);
-
 s32 getBadgeBottakuru100TableMaxCount(void) {
     return (sizeof(badge_bottakuru100_table) / sizeof(s32)) - 1;
 }
@@ -179,14 +176,16 @@ void badgeShop_bottakuruGeneration(void) {
         for (j = 0; j < count; j++) {
             table[k][1] = irand(100);
             table[k++][0] = i + 1;
-            if (k >= 0x10u) break;
+            if (k >= 0x10u) {
+                break;
+            }
         }
         if (k >= 0x10u) {
             break;
         }
     }
 
-    qqsort(table, 0x11, 8, bottakuruComp);
+    qqsort(table, 0x11, sizeof(table[0]), bottakuruComp);
 
     for (i = 0; i < 4; i++) {
         for (m = 0; m < sizeof(badge_bottakuru_table) / sizeof(badge_bottakuru_table[0]); m++) {
@@ -243,122 +242,122 @@ void badgeShop_bteresaGeneration(void) {
 }
 
 void badgeShop_bargainGeneration(void) {
-    s16 stopcount;
+    s16 pickIndex;
     u8 table[0x19];
     s16 has;
     s32 badge;
     s16 value;
     int i;
     s32 item;
-    s32 v28;
-    s32 count2;
-    s32 count3;
-    s16 count4;
+    s32 pickedCount;
+    s32 candidateCount;
+    s32 targetCount;
+    s16 seenCount;
     s32* ptr;
-    s32 count;
-    s32 v7;
+    s32 stockedCount;
+    s32 flag2Count;
 
-    if (evtGetValue(NULL, GSW_STORY_PROGRESS) >= STG1_16_HOOKTAIL && !evtGetValue(0, GSWF_BADGESHOP_STAGE_1_STOCK_ADDED)) {
+    if (evtGetValue(NULL, GSW_STORY_PROGRESS) >= STG1_16_HOOKTAIL && !evtGetValue(NULL, GSWF_BADGESHOP_STAGE_1_STOCK_ADDED)) {
         evtSetValue(NULL, GSWF_BADGESHOP_STAGE_1_STOCK_ADDED, 1);
         for (ptr = badge_special_table_stage_1_clear; *ptr; ptr++) {
             badgeShop_add(bdsw->special_table, (s16)*ptr, 1);
         }
     }
 
-    if (evtGetValue(NULL, GSW_STORY_PROGRESS) >= STG2_25_AFTER_THE_BOSS_BATTLE && !evtGetValue(0, GSWF_BADGESHOP_STAGE_2_STOCK_ADDED)) {
+    if (evtGetValue(NULL, GSW_STORY_PROGRESS) >= STG2_25_AFTER_THE_BOSS_BATTLE && !evtGetValue(NULL, GSWF_BADGESHOP_STAGE_2_STOCK_ADDED)) {
         evtSetValue(NULL, GSWF_BADGESHOP_STAGE_2_STOCK_ADDED, 1);
         for (ptr = badge_special_table_stage_2_clear; *ptr; ptr++) {
             badgeShop_add(bdsw->special_table, (s16)*ptr, 1);
         }
     }
 
-    if (evtGetValue(NULL, GSW_STORY_PROGRESS) >= STG3_32_BOSS_BATTLE && !evtGetValue(0, GSWF_BADGESHOP_STAGE_3_STOCK_ADDED)) {
+    if (evtGetValue(NULL, GSW_STORY_PROGRESS) >= STG3_32_BOSS_BATTLE && !evtGetValue(NULL, GSWF_BADGESHOP_STAGE_3_STOCK_ADDED)) {
         evtSetValue(NULL, GSWF_BADGESHOP_STAGE_3_STOCK_ADDED, 1);
         for (ptr = badge_special_table_stage_3_clear; *ptr; ptr++) {
             badgeShop_add(bdsw->special_table, (s16)*ptr, 1);
         }
     }
 
-    if (evtGetValue(NULL, GSW_STORY_PROGRESS) >= STG4_15_02_BACK_TO_NORMAL && !evtGetValue(0, GSWF_BADGESHOP_STAGE_4_STOCK_ADDED)) {
+    if (evtGetValue(NULL, GSW_STORY_PROGRESS) >= STG4_15_02_BACK_TO_NORMAL && !evtGetValue(NULL, GSWF_BADGESHOP_STAGE_4_STOCK_ADDED)) {
         evtSetValue(NULL, GSWF_BADGESHOP_STAGE_4_STOCK_ADDED, 1);
         for (ptr = badge_special_table_stage_4_clear; *ptr; ptr++) {
             badgeShop_add(bdsw->special_table, (s16)*ptr, 1);
         }
     }
 
-    if (evtGetValue(NULL, GSW_STORY_PROGRESS) >= STG5_33_CORTEZ_AND_THE_TREASURE && !evtGetValue(0, GSWF_BADGESHOP_STAGE_5_STOCK_ADDED)) {
+    if (evtGetValue(NULL, GSW_STORY_PROGRESS) >= STG5_33_CORTEZ_AND_THE_TREASURE && !evtGetValue(NULL, GSWF_BADGESHOP_STAGE_5_STOCK_ADDED)) {
         evtSetValue(NULL, GSWF_BADGESHOP_STAGE_5_STOCK_ADDED, 1);
         for (ptr = badge_special_table_stage_5_clear; *ptr; ptr++) {
             badgeShop_add(bdsw->special_table, (s16)*ptr, 1);
         }
     }
 
-    if (evtGetValue(NULL, GSW_STORY_PROGRESS) >= STG6_53_THE_REAL_GARNET_STAR && !evtGetValue(0, GSWF_BADGESHOP_STAGE_6_STOCK_ADDED)) {
+    if (evtGetValue(NULL, GSW_STORY_PROGRESS) >= STG6_53_THE_REAL_GARNET_STAR && !evtGetValue(NULL, GSWF_BADGESHOP_STAGE_6_STOCK_ADDED)) {
         evtSetValue(NULL, GSWF_BADGESHOP_STAGE_6_STOCK_ADDED, 1);
         for (ptr = badge_special_table_stage_6_clear; *ptr; ptr++) {
             badgeShop_add(bdsw->special_table, (s16)*ptr, 1);
         }
     }
 
-    if (evtGetValue(NULL, GSW_STORY_PROGRESS) >= STG7_20_LORD_CRUMP_DEFEATED && !evtGetValue(0, GSWF_BADGESHOP_STAGE_7_STOCK_CHECK_DONE)) {
+    if (evtGetValue(NULL, GSW_STORY_PROGRESS) >= STG7_20_LORD_CRUMP_DEFEATED && !evtGetValue(NULL, GSWF_BADGESHOP_STAGE_7_STOCK_CHECK_DONE)) {
         evtSetValue(NULL, GSWF_BADGESHOP_STAGE_7_STOCK_CHECK_DONE, 1);
     }
 
-    if (evtGetValue(NULL, GSW_STORY_PROGRESS) >= STG8_16_THE_RETURN_OF_THE_QUEEN && !evtGetValue(0, GSWF_BADGESHOP_STAGE_8_STOCK_CHECK_DONE)) {
+    if (evtGetValue(NULL, GSW_STORY_PROGRESS) >= STG8_16_THE_RETURN_OF_THE_QUEEN && !evtGetValue(NULL, GSWF_BADGESHOP_STAGE_8_STOCK_CHECK_DONE)) {
         evtSetValue(NULL, GSWF_BADGESHOP_STAGE_8_STOCK_CHECK_DONE, 1);
     }
 
     memset(table, 0, sizeof(table));
-    count2 = count = v7 = i = 0;
-    bdsw->bargainBadges[0] = count;
-    bdsw->bargainBadges[1] = count;
-    bdsw->bargainBadges[2] = count;
-    bdsw->bargainBadges[3] = count;
-    bdsw->bargainBadges[4] = count;
-    bdsw->bargainNum = count;
-    bdsw->reserved_110 = count;
+    candidateCount = stockedCount = flag2Count = i = 0;
+    bdsw->bargainBadges[0] = stockedCount;
+    bdsw->bargainBadges[1] = stockedCount;
+    bdsw->bargainBadges[2] = stockedCount;
+    bdsw->bargainBadges[3] = stockedCount;
+    bdsw->bargainBadges[4] = stockedCount;
+    bdsw->bargainNum = stockedCount;
+    bdsw->reserved_110 = stockedCount;
 
-    for (; i < 99; i++) {
+    for (; i < BADGE_COUNT; i++) {
         value = 0;
-        has = badgeShop_get(bdsw->special_table, (s16)(i + BADGE_MIN)); //inline
+        has = badgeShop_get(bdsw->special_table, (s16)(i + BADGE_MIN));
         if (has) {
-            count++;
+            stockedCount++;
             value |= 1;
         }
         if (value) {
             badgeShop_set(table, (s16)(i + BADGE_MIN), value);
-            count2++;
+            candidateCount++;
         }
     }
-    if (count2 > 5) {
-        count3 = 5;
+    if (candidateCount > 5) {
+        targetCount = 5;
     } else {
-        count3 = count2;
+        targetCount = candidateCount;
     }
-    irand(0x100); //unused
-    while (bdsw->bargainNum + bdsw->reserved_110 < count3) {
-        v28 = bdsw->bargainNum;
-        if (v28 < 3 || !v7) {
-            stopcount = irand(count);
-            count4 = 0;
-            for (i = 0; i < 99; i++) {
-                badge = badgeShop_get(table, (s16)(i + BADGE_MIN)); //inline
+    irand(0x100); // result unused
+    while (bdsw->bargainNum + bdsw->reserved_110 < targetCount) {
+        pickedCount = bdsw->bargainNum;
+        if (pickedCount < 3 || !flag2Count) {
+            pickIndex = irand(stockedCount);
+            seenCount = 0;
+            for (i = 0; i < BADGE_COUNT; i++) {
+                badge = badgeShop_get(table, (s16)(i + BADGE_MIN));
                 if (badge & 1) {
-                    if (count4 == stopcount) {
+                    if (seenCount == pickIndex) {
                         break;
                     }
-                    count4++;
+                    seenCount++;
                 }
             }
-            if (i < 99) {
+            if (i < BADGE_COUNT) {
                 bdsw->bargainBadges[bdsw->bargainNum] = i + BADGE_MIN;
                 bdsw->bargainNum++;
                 badgeShop_set(table, (s16)(i + BADGE_MIN), 0);
                 if ((s16)badge & 1) {
-                    count--;
+                    stockedCount--;
                 }
                 if ((s16)badge & 2) {
-                    v7--;
+                    flag2Count--;
                 }
             }
         }
@@ -387,7 +386,9 @@ s16 badgeShop_set(u8* table, s16 id, s16 val) {
     } else {
         bound = BADGE_MIN;
     }
-    if (id < bound || id >= BADGE_MAX) return 0;
+    if (id < bound || id >= BADGE_MAX) {
+        return 0;
+    }
     index = (s16)(id - bound);
     switch (index & 3) {
         case 0:
@@ -429,7 +430,9 @@ s32 badgeShop_get(u8* table, s16 id) {
     } else {
         bound = BADGE_MIN;
     }
-    if (id < bound || id >= BADGE_MAX) return 0;
+    if (id < bound || id >= BADGE_MAX) {
+        return 0;
+    }
     index = (s16)(id - bound);
     switch (index & 3) {
         case 0:
@@ -466,7 +469,9 @@ s32 badgeShop_add(u8* table, s16 id, s32 value) {
         bound = BADGE_MIN;
     }
     temp = (s16)id;
-    if (temp < bound || temp >= BADGE_MAX) return 0;
+    if (temp < bound || temp >= BADGE_MAX) {
+        return 0;
+    }
 
     id = (s16)(temp - bound);
     switch (id & 3) {
@@ -548,7 +553,7 @@ USER_FUNC(evt_badgeShop_bottakuru_dec) {
     badgeShop_add(bdsw->bottakuru_table, (s16)value, -1);
     for (i = 0; i < 4; i++) {
         if (value == badge_bottakuru_table[evtGetValue(event, i + GSW_BADGESHOP_CHARLIETON_STOCK)]) {
-            evtSetValue(event, GSW(118 + i), (sizeof(badge_bottakuru_table) / sizeof(s32)) - 1); //last entry aka kNullItem
+            evtSetValue(event, i + GSW_BADGESHOP_CHARLIETON_STOCK, (sizeof(badge_bottakuru_table) / sizeof(s32)) - 1); // index of the ITEM_NULL terminator
         }
     }
     return EVT_RETURN_DONE;
@@ -561,8 +566,8 @@ USER_FUNC(evt_badgeShop_throw_get_kind_cnt) {
     s32 count;
     int i;
 
-    for (count = 0, i = 0; i < 99; i++) {
-        badge = badgeShop_get(bdsw->bargain_table, (s16)(i + BADGE_MIN)); //inline
+    for (count = 0, i = 0; i < BADGE_COUNT; i++) {
+        badge = badgeShop_get(bdsw->bargain_table, (s16)(i + BADGE_MIN));
         if (badge > 0) {
             count++;
         }
@@ -577,8 +582,8 @@ USER_FUNC(evt_badgeShop_starmaniac_get_kind_cnt) {
     s32 count;
     int i;
 
-    for (count = 0, i = 0; i < 99; i++) {
-        badge = badgeShop_get(bdsw->starmaniac_table, (s16)(i + BADGE_MIN)); //inline
+    for (count = 0, i = 0; i < BADGE_COUNT; i++) {
+        badge = badgeShop_get(bdsw->starmaniac_table, (s16)(i + BADGE_MIN));
         if (badge > 0) {
             count++;
         }
@@ -638,6 +643,8 @@ s32 badgeShop_ThrowCheck(s32 itemId) {
     s32 count;
 
     for (count = 0, i = 0; i < bdsw->bargainNum; i++) {
+        // BUG: reads bargainBadges[bargainNum + i], not the bargainNum entries stored from index 0 (and past the
+        // five-entry array, into the following BadgeShopWork fields, once bargainNum > 2)
         if (itemId == bdsw->bargainBadges[i + bdsw->bargainNum]) {
             count++;
         }

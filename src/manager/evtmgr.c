@@ -23,10 +23,6 @@ BOOL runMainF;
 s32 evtID = 1;
 f32 evtSpd = 1.0f;
 
-//local definitions
-void make_pri_table(void);
-void evtEntryRunCheck(EventEntry* entry);
-
 EventWork* evtGetWork(void) {
     return gp->inBattle ? &work[1] : &work[0];
 }
@@ -50,7 +46,7 @@ void make_pri_table(void) {
     }
     priTblNum = priEntryCount;
 
-    //Bubble sort
+    // Sort the run table by priority, highest first
     for (i = 0; i < priEntryCount - 1; i++) {
         for (j = i + 1; j < priEntryCount; j++) {
             slotI = priTbl[i];
@@ -83,18 +79,19 @@ static void make_jump_table(EventEntry* entry) {
     n = 0;
     cmd = entry->nextCommand;
     while (1) {
-        opcode = *cmd & 0xFFFF; //load the base opcode and arg_count
-        params = *cmd++ >> 16; //increment to first argument
-        label = *cmd; //load label, which will be cast to an s8 (0-0xFF valid)
-        cmd += params; //set cmd to the opcode *after* the label
+        opcode = *cmd & 0xFFFF; // low half of the command word: the opcode
+        params = *cmd++ >> 16;  // high half: the argument count; cmd moves to the first argument
+        label = *cmd;           // first argument: the label id of an OPCODE_LBL
+        cmd += params;          // skip the arguments: cmd points at the next command
 
         switch (opcode) {
             case OPCODE_END_SCRIPT:
-                return; //exit loop
+                return;
             case OPCODE_LBL:
                 entry->labelIdTable[n] = (s8)label;
-                entry->labelAddressTable[n] = (EvtWord*)cmd;
+                entry->labelAddressTable[n] = cmd;
                 n++;
+                break;
         }
         // FAKE: empty test with no effect; without it the object changes in both versions
         if (n >= 16) {
@@ -151,6 +148,7 @@ void evtEntryRunCheck(EventEntry* entry) {
             break;
         case 4:
             evtStopAll(0xEF);
+            break;
         case 0:
             break;
     }
@@ -405,7 +403,7 @@ EventEntry* evtBrotherEntry(EventEntry* brother, void* evtCode, u8 flags) {
 
 EventEntry* evtRestart(EventEntry* entry) {
     entry->currCommand = entry->nextCommand = entry->restartFrom;
-    entry->opcode = 0;
+    entry->opcode = OPCODE_NEXT;
     entry->timescale = 1.0f;
     entry->commandsLeft = 0.0f;
     entry->loopDepth = -1;
@@ -427,7 +425,7 @@ void evtmgrMain(void) {
     s32* entryNum;
     s32* eventId;
 
-    runMainF = TRUE; //we're in evtmgrMain
+    runMainF = TRUE; // entries created while this runs are added to this frame's run table
 
     delta = gp->renderTime - wp->lastUpdate;
     if (delta < 0) {
@@ -530,9 +528,9 @@ void evtDeleteID(s32 eventId) {
 
 BOOL evtCheckID(s32 eventId) {
     int i;
-
     EventWork* wp = evtGetWork();
     EventEntry* entry = wp->entries;
+
     for (i = 0; i < wp->count; i++, entry++) {
         if ((entry->flags & EVENT_ACTIVE) && (entry->eventId == eventId)) {
             return TRUE;

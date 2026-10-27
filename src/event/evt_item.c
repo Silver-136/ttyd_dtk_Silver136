@@ -9,9 +9,6 @@
 
 ItemEntry* itemEntry(const char* name, s32 itemId, u16 type, s32 collectFlag, EvtWord* evtCode, f32 x, f32 y, f32 z);
 
-
-
-
 USER_FUNC(evt_item_entry) {
     EvtWord* args = event->args;
     char* name = (char*)evtGetValue(event, args[0]);
@@ -182,16 +179,16 @@ USER_FUNC(evt_item_set_position) {
 USER_FUNC(evt_item_get_position) {
     EvtWord* args = event->args;
     ItemEntry* item;
-    s32 a1, a2, a3;
+    s32 xVar, yVar, zVar;
     char* name = (char*)evtGetValue(event, args[0]);
-    a1 = args[1];
-    a2 = args[2];
-    a3 = args[3];
+    xVar = args[1];
+    yVar = args[2];
+    zVar = args[3];
     item = itemNameToPtr(name);
     if (item == NULL) return EVT_RETURN_DONE;
-    evtSetFloat(event, a1, item->position.x);
-    evtSetFloat(event, a2, item->position.y);
-    evtSetFloat(event, a3, item->position.z);
+    evtSetFloat(event, xVar, item->position.x);
+    evtSetFloat(event, yVar, item->position.y);
+    evtSetFloat(event, zVar, item->position.z);
     return EVT_RETURN_DONE;
 }
 
@@ -225,18 +222,17 @@ USER_FUNC(evt_item_move_3d_position) {
     s32 mode = evtGetValue(event, args[5]);
     ItemEntry* item = itemNameToPtr(name);
     u32 elapsed;
-    f32* z0 = (f32*)&event->userdata3;
     if (isFirstCall) {
         if (item == NULL) return EVT_RETURN_DONE;
         event->userdata[0] = (s32)gp->renderTime;
         event->userdataf[1] = item->position.x;
         event->userdataf[2] = item->position.y;
-        *z0 = item->position.z;
+        event->userdata3f = item->position.z;
     }
     if ((s32)(elapsed = OSTicksToMilliseconds((u32)gp->renderTime - event->userdata[0])) < ms) {
         item->position.x = intplGetValue(mode, event->userdataf[1], x, (s32)elapsed, ms);
         item->position.y = intplGetValue(mode, event->userdataf[2], y, (s32)elapsed, ms);
-        item->position.z = intplGetValue(mode, *z0, z, (s32)elapsed, ms);
+        item->position.z = intplGetValue(mode, event->userdata3f, z, (s32)elapsed, ms);
         return EVT_RETURN_BLOCK;
     }
     item->position.x = x;
@@ -262,6 +258,7 @@ USER_FUNC(evt_item_get_important_item) {
         f32 dy = my - item->position.y;
         ta = dist / spd;
         tb = dy / ta + (ta * 0.1f) / 2.0f;
+        // FAKE: float bits stored through an s32 view; event->userdataf[n] = value changes the object
         event->userdata[0] = *(s32*)&ta;
         event->userdata[1] = *(s32*)&tb;
         event->userdata[2] = *(s32*)&spd;
@@ -284,6 +281,7 @@ USER_FUNC(evt_item_get_important_item) {
         item->position.z = mz;
         return EVT_RETURN_DONE;
     }
+    // FAKE: float bits stored through an s32 view; event->userdataf[n] = value changes the object
     event->userdata[0] = *(s32*)&ta;
     event->userdata[1] = *(s32*)&tb;
     return EVT_RETURN_BLOCK;

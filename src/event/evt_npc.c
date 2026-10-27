@@ -22,11 +22,6 @@
 #include "sfx_name_word.h"
 #include "driver/mapdrv.h"
 
-
-#ifdef __MWERKS__
-#else
-#endif
-
 // clang-format off
 // .sdata
 EVT_BEGIN(npc_init_evt)
@@ -76,7 +71,7 @@ USER_FUNC(evt_npc_slave_entry) {
     strcat(slaveName, ident);
     npcEntry(slaveName, animName);
     slave = npcNameToPtr(slaveName);
-    slave->flags |= (NPC_FLAG_GRAVITY | NPC_FLAG_UPDATE_BY_EVENT) | 0x18;
+    slave->flags |= NPC_FLAG_ENEMY | NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_GRAVITY | NPC_FLAG_UPDATE_BY_EVENT;
     slave->deadEvent = deadEvent;
     slave->battleInfo = npc->battleInfo;
     npcSetSlave(npc, slave, id);
@@ -175,7 +170,7 @@ USER_FUNC(evt_npc_setup) {
                 }
                 if (tribe->initialAnim) {
                     strcpy(npc->currentAnim, tribe->initialAnim);
-                    animPoseSetAnim(npc->poseId, npc->currentAnim, 1);
+                    animPoseSetAnim(npc->poseId, npc->currentAnim, TRUE);
                 }
             }
         }
@@ -236,7 +231,7 @@ USER_FUNC(evt_npc_set_width) {
     return EVT_RETURN_DONE;
 }
 
-// const char* lookupName, f32 width
+// const char* lookupName, f32 height
 USER_FUNC(evt_npc_set_height) {
     EvtWord* args = event->args;
     const char* name;
@@ -334,7 +329,7 @@ USER_FUNC(evt_npc_get_home_position) {
     return EVT_RETURN_DONE;
 }
 
-// devs forgot to change s32 to f32 when copypasting, fix in rewrite
+// BUG: the coordinates pass through s32 locals, so their fractions are lost
 // const char* lookupName, f32 x, f32 y, f32 z
 USER_FUNC(evt_npc_set_home_position) {
     EvtWord* args = event->args;
@@ -371,7 +366,7 @@ USER_FUNC(evt_npc_get_rotate) {
     return EVT_RETURN_DONE;
 }
 
-// devs forgot to use evtGetFloat when copypasting, fix in rewrite
+// BUG: reads the angles with evtGetValue (as integers) instead of evtGetFloat
 // const char* lookupName, f32 x, f32 y, f32 z
 USER_FUNC(evt_npc_set_rotate) {
     EvtWord* args = event->args;
@@ -388,7 +383,7 @@ USER_FUNC(evt_npc_set_rotate) {
     return EVT_RETURN_DONE;
 }
 
-// devs forgot to use evtGetFloat when copypasting, fix in rewrite
+// BUG: reads the angles with evtGetValue (as integers) instead of evtGetFloat
 // const char* lookupName, f32 x, f32 y, f32 z
 USER_FUNC(evt_npc_add_rotate) {
     EvtWord* args = event->args;
@@ -407,7 +402,7 @@ USER_FUNC(evt_npc_add_rotate) {
     return EVT_RETURN_DONE;
 }
 
-// devs forgot to use evtGetFloat when copypasting, fix in rewrite
+// BUG: reads the offsets with evtGetValue (as integers) instead of evtGetFloat
 // const char* lookupName, f32 x, f32 y, f32 z
 USER_FUNC(evt_npc_set_rotate_offset) {
     EvtWord* args = event->args;
@@ -506,19 +501,19 @@ USER_FUNC(evt_npc_move_position) {
         }
     }
 
-    // Re-aim at the target each frame unless direction is locked
+    // Re-aim at the target unless airborne
     if ((npc->flags & NPC_FLAG_IN_USE) && !(npc->statusFlags & NPC_STATUS_AIRBORNE)) {
         npc->moveDir = angleABf(0.0f, 0.0f, diff.x, diff.z);
     }
 
-    // Turn the body toward travel (unless mid battle-transition states 5/6)
+    // Face the move direction (not the field-battle target while the fbat mode is 5 or 6)
     if ((npc->statusFlags & NPC_STATUS_FACE_MOVE_DIR) && npc->moveSpeed > 0.1f) {
         if (npc != fbatGetPointer()->target || (fbatGetPointer()->mode != 5 && fbatGetPointer()->mode != 6)) {
             npcTuningRy(npc, npc->moveDir);
         }
     }
 
-    // Integrate move offset along heading (flag 0x10000 freezes it)
+    // Advance the move offset along the heading (not while NPC_STATUS_STOPPED)
     if (!(npc->statusFlags & NPC_STATUS_STOPPED)) {
         f32 temp = (f32)sin(npc->moveDir * 6.2831855f / 360.0f);
         npc->moveOffset.x += npc->moveDt * (npc->moveSpeed * temp);
@@ -545,6 +540,7 @@ USER_FUNC(evt_npc_move_position) {
             }
         }
         npc->footstepAccum = 0.0f;
+        // FAKE: (s8) cast before the store to the s16 field; the plain form changes the object
         npc->footstepToggle = (s8)(1 - npc->footstepToggle); // alternate L/R
     }
 
@@ -732,10 +728,8 @@ USER_FUNC(evt_npc_jump_position_nohit) {
     s32 duration = evtGetValue(event, *args++);
     f32 arcHeight = (f32)evtGetValue(event, *args++);
     s32 sfxFlag;
-    u32 ticksPerMs;
     s32 elapsed;
     f32 t;
-    Vec endPos;
 
     if (isFirstCall) {
         sfxFlag = 0;
@@ -761,6 +755,7 @@ USER_FUNC(evt_npc_jump_position_nohit) {
 
     if (elapsed < duration) {
         t = (f32)elapsed / (f32)duration;
+        // FAKE: no-op (s32) casts on the s32 elapsed; the plain arguments change the object
         npc->position.x = intplGetValue(EASING_LINEAR, npc->jumpStartPos.x, targetX, (s32)elapsed, duration);
         npc->position.z = intplGetValue(EASING_LINEAR, npc->jumpStartPos.z, targetZ, (s32)elapsed, duration);
         npc->position.y = npc->jumpStartPos.y + t * ((event->userdataf[1] * t) + event->userdataf[2]);
@@ -871,12 +866,12 @@ USER_FUNC(evt_npc_glide_position) {
     npc->moveOffset.x += dx * delta;
     npc->moveOffset.z += dz * delta;
 
-    // Turn the body toward travel (unless mid battle-transition states 5/6)
+    // Face the move direction (not the field-battle target while the fbat mode is 5 or 6)
     if (npc->statusFlags & NPC_STATUS_FACE_MOVE_DIR) {
         if (dx || dz) {
             if (npc != fbatGetPointer()->target ||
                 (fbatGetPointer()->mode != 5 && fbatGetPointer()->mode != 6)) {
-                // bug: uses dx for both components
+                // BUG: passes dx as both components (dz is ignored)
                 npcTuningRy(npc, angleABf(0.0f, 0.0f, dx, dx));
             }
         }
@@ -908,6 +903,7 @@ USER_FUNC(evt_npc_glide_position) {
             }
         }
         npc->footstepAccum = 0.0f;
+        // FAKE: (s8) cast before the store to the s16 field; the plain form changes the object
         npc->footstepToggle = (s8)(1 - npc->footstepToggle);
     }
 
@@ -980,7 +976,7 @@ USER_FUNC(evt_npc_homing_target) {
         }
         npc->moveTime = moveTime;
 
-        // Turn the body toward travel (unless mid battle-transition states 5/6)
+        // Face the move direction (not the field-battle target while the fbat mode is 5 or 6)
         if ((npc->statusFlags & NPC_STATUS_FACE_MOVE_DIR) && npc->moveSpeed) {
             if (npc != fbatGetPointer()->target ||
                 (fbatGetPointer()->mode != 5 && fbatGetPointer()->mode != 6)) {
@@ -1074,6 +1070,7 @@ USER_FUNC(evt_npc_homing_target) {
             }
         }
         npc->footstepAccum = 0.0f;
+        // FAKE: (s8) cast before the store to the s16 field; the plain form changes the object
         npc->footstepToggle = (s8)(1 - npc->footstepToggle);
     }
 
@@ -1093,34 +1090,34 @@ f32 _intplGetFloat(s32 mode, f32 t) {
         t = 1.0f;
     }
     switch (mode) {
-        case 0:
+        case EASING_LINEAR:
             return t;
-        case 1:
+        case EASING_QUADRATIC_IN:
             return t * t;
-        case 2:
+        case EASING_CUBIC_IN:
             return t * (t * t);
-        case 3:
+        case EASING_QUARTIC_IN:
             return t * (t * (t * t));
-        case 7:
+        case EASING_WAVE_SHRINKING:
             c = (f32)cos(4.0f * (t / 3.1415927f));
             u = 1.0f - t;
             v = u * (u * c);
             return 1.0f - v;
-        case 8:
+        case EASING_WAVE_SHRINKING_FASTER:
             c = (f32)cos((4.0f * ((t * t) / 3.1415927f)) / 15.0f);
             u = 1.0f - t;
             v = u * (u * c);
             return 1.0f - v;
-        case 4:
+        case EASING_QUADRATIC_OUT:
             u = 1.0f - t;
             return 1.0f - u * u;
-        case 5:
+        case EASING_CUBIC_OUT:
             u = 1.0f - t;
             return 1.0f - u * (u * u);
-        case 6:
+        case EASING_QUARTIC_OUT:
             u = 1.0f - t;
             return 1.0f - u * (u * (u * u));
-        case 10:
+        case EASING_BOUNCE_SHRINKING:
             c = (f32)cos((4.0f * ((t * t) / 3.1415927f)) / 40.0f);
             u = 1.0f - t;
             v = u * (u * c);
@@ -1128,16 +1125,16 @@ f32 _intplGetFloat(s32 mode, f32 t) {
                 v = -v;
             }
             return 1.0f - v;
-        case 11:
+        case EASING_SINE_IN_OUT:
             c = (f32)cos(3.1415927f * t);
             v = 0.5f;
             u = 1.0f - c;
             return u * v;
-        case 12:
+        case EASING_SINE_OUT:
             c = (f32)sin(1.5707964f * t);
             r = c;
             break;
-        case 13:
+        case EASING_SINE_IN:
             return 1.0f - (f32)cos(1.5707964f * t);
         default:
             r = 0.0f;
@@ -1342,6 +1339,7 @@ USER_FUNC(evt_npc_flag_onoff) {
     npc = evtNpcNameToPtr(event, name);
     switch (type) {
         case 0:
+            // FAKE: no-op (u32) cast; the plain form changes the object
             npc->flags &= (u32)~mask;
             break;
         case 1:
@@ -1398,6 +1396,7 @@ USER_FUNC(evt_npc_status_onoff) {
     npc = evtNpcNameToPtr(event, name);
     switch (type) {
         case 0:
+            // FAKE: no-op (u32) cast; the plain form changes the object
             npc->statusFlags &= ~(u32)mask;
             break;
         case 1:
@@ -1471,7 +1470,7 @@ f32 _get_target_dir(EventEntry* event, NpcEntry* npc, const char* targetName) {
     return angleABf(0.0f, 0.0f, diff.x, diff.z);
 }
 
-// const char* lookupName, const char* targetName, f32 dirStoreIndex
+// const char* lookupName, const char* targetName, s32 dirStoreIndex (f32 out)
 USER_FUNC(evt_get_target_dir) {
     EvtWord* args = event->args;
     const char* name;
@@ -1929,7 +1928,7 @@ USER_FUNC(evt_npc_get_battle_result) {
 USER_FUNC(evt_npc_check_escape_battle) {
     EvtWord* args = event->args;
 
-    if (evtGetValue(event, args[0]) == 4) {
+    if (evtGetValue(event, args[0]) == BATTLE_RESULT_ESCAPE) {
         marioSetMutekiTime(3000);
     }
     return EVT_RETURN_DONE;
@@ -2015,7 +2014,7 @@ USER_FUNC(evt_npc_get_drop_item) {
     } else {
         evtSetValue(event, index, npc->battleInfo.itemDropped);
     }
-    return 2;
+    return EVT_RETURN_DONE;
 }
 
 USER_FUNC(evt_npc_get_drop_heart) {
@@ -2134,7 +2133,7 @@ USER_FUNC(evt_npc_wait_msec) {
     const char* npcName = (const char*)evtGetValue(event, args[0]);
     NpcEntry* npc = evtNpcNameToPtr(event, npcName);
 
-    s32 temp;
+    s32 duration;
     OSTime lifetime = event->lifetime;
     npc->statusFlags |= NPC_STATUS_UPDATE;
 
@@ -2144,8 +2143,8 @@ USER_FUNC(evt_npc_wait_msec) {
         event->userdata[2] = lifetime & 0xFFFFFFFF;
     }
 
-    temp = event->userdata[0];
-    if (!temp) {
+    duration = event->userdata[0];
+    if (!duration) {
         return EVT_RETURN_DONE;
     }
 
@@ -2153,7 +2152,7 @@ USER_FUNC(evt_npc_wait_msec) {
         s32 now = lifetime;
         u64 elapsed = now - event->userdata[2];
         s32 ms = OSTicksToMilliseconds(elapsed);
-        return temp <= ms;
+        return duration <= ms;
     }
 }
 
@@ -2386,7 +2385,7 @@ USER_FUNC(evt_npc_calc_score) {
 
 void _kamek_houki_kemuri(NpcEntry* npc, s32 animState) {
     static u8 cnt;
-    f32 a2, a5;
+    f32 x, dirX;
     u8 mask;
     EffectEntry* effect;
 
@@ -2404,16 +2403,16 @@ void _kamek_houki_kemuri(NpcEntry* npc, s32 animState) {
 
     if (!(cnt & mask)) {
         if ((0.0f < npc->direction) && (npc->direction < 180.0f)) {
-            a5 = 1.0f;
-            a2 = -((36.0f * npc->scale.x) - npc->position.x);
+            dirX = 1.0f;
+            x = -((36.0f * npc->scale.x) - npc->position.x);
         } else {
-            a5 = -1.0f;
-            a2 = (36.0f * npc->scale.x) + npc->position.x;
+            dirX = -1.0f;
+            x = (36.0f * npc->scale.x) + npc->position.x;
         }
-        effect = effKemuri10N64Entry(0, a2, (18.0f * npc->scale.x) + npc->position.y, npc->position.z, a5, 0.0f, 0.0f,
+        effect = effKemuri10N64Entry(0, x, (18.0f * npc->scale.x) + npc->position.y, npc->position.z, dirX, 0.0f, 0.0f,
                                      npc->scale.x);
         if (!strcmp(gp->currentMapName, "kpa_01")) {
-            ((EffKemuri10N64Work*)effect->userdata)->camera = 7;
+            ((EffKemuri10N64Work*)effect->userdata)->camera = CAMERA_3D_EFFECTB;
         }
     }
 }
@@ -2501,12 +2500,12 @@ USER_FUNC(evt_npc_kamek_move_position) {
         }
     }
 
-    // Re-aim at the target each frame unless direction is locked
+    // flag 0x1: re-aim at the target unless airborne
     if ((moveFlags & 0x1) && !(npc->statusFlags & NPC_STATUS_AIRBORNE)) {
         npc->moveDir = angleABf(0.0f, 0.0f, diff.x, diff.z);
     }
 
-    // Turn the body toward travel (unless mid battle-transition states 5/6)
+    // Face the move direction (not the field-battle target while the fbat mode is 5 or 6)
     if ((npc->statusFlags & NPC_STATUS_FACE_MOVE_DIR) && npc->moveSpeed > 0.1f) {
         if (npc != fbatGetPointer()->target || (fbatGetPointer()->mode != 5 && fbatGetPointer()->mode != 6)) {
             npcTuningRy(npc, npc->moveDir);
@@ -2561,7 +2560,7 @@ USER_FUNC(evt_npc_kamek_kemuri2) {
 
     const char* npcName = (const char*)evtGetValue(event, *args++);
     f32 moveTime = (f32)evtGetValue(event, *args++) / 1000.0f;
-    s32 unk = evtGetValue(event, *args++);
+    s32 frequent = evtGetValue(event, *args++);
     NpcEntry* npc = npcNameToPtr(npcName);
 
     if (isFirstCall) {
@@ -2578,7 +2577,7 @@ USER_FUNC(evt_npc_kamek_kemuri2) {
         return EVT_RETURN_DONE;
     }
 
-    _kamek_houki_kemuri(npc, (unk != 0) + 2);
+    _kamek_houki_kemuri(npc, (frequent != 0) + 2);
     return EVT_RETURN_BLOCK;
 }
 
@@ -2667,7 +2666,7 @@ USER_FUNC(evt_npc_sound_data_reset) {
         npc->jumpSfx = tribe->jumpSfx;
         npc->landSfx = tribe->landSfx;
         npc->footstepStride = tribe->footstepStride;
-        npc->footstepToggle = 1;
+        npc->footstepToggle = TRUE;
         npc->footstepAccum = 0.0f;
     }
     return EVT_RETURN_DONE;

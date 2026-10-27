@@ -3,28 +3,28 @@
 #include <dolphin/mtx.h>
 #include "battle/battle_stage.h"
 
-void BattleStageReturnAudDarkBase(s32 a, s32 b);
-void BattleStageSetAudDarkBase(u8 a, s32 b, s32 c);
-void BattleStageSetAudDark(u8 a, s32 b, s32 c);
-void BattleStageReturnStgDarkBase(s32 a, s32 b);
-void BattleStageSetStgDarkBase(u8 a, s32 b, s32 c);
-void BattleStageSetStgDark(u8 a, s32 b, s32 c);
+void BattleStageReturnAudDarkBase(s32 time, s32 mode);
+void BattleStageSetAudDarkBase(u8 dark, s32 time, s32 mode);
+void BattleStageSetAudDark(u8 dark, s32 time, s32 mode);
+void BattleStageReturnStgDarkBase(s32 time, s32 mode);
+void BattleStageSetStgDarkBase(u8 dark, s32 time, s32 mode);
+void BattleStageSetStgDark(u8 dark, s32 time, s32 mode);
 
 USER_FUNC(evt_batstage_set_stg_dark) {
     EvtWord* args = event->args;
-    u8 a = evtGetValue(event, args[0]);
+    u8 dark = evtGetValue(event, args[0]);
     s32 time = evtGetValue(event, args[1]);
     s32 mode = evtGetValue(event, args[2]);
-    BattleStageSetStgDark(a, time, mode);
+    BattleStageSetStgDark(dark, time, mode);
     return EVT_RETURN_DONE;
 }
 
 USER_FUNC(evt_batstage_set_stg_dark_base) {
     EvtWord* args = event->args;
-    u8 a = evtGetValue(event, args[0]);
+    u8 dark = evtGetValue(event, args[0]);
     s32 time = evtGetValue(event, args[1]);
     s32 mode = evtGetValue(event, args[2]);
-    BattleStageSetStgDarkBase(a, time, mode);
+    BattleStageSetStgDarkBase(dark, time, mode);
     return EVT_RETURN_DONE;
 }
 
@@ -38,19 +38,19 @@ USER_FUNC(evt_batstage_return_stg_dark_base) {
 
 USER_FUNC(evt_batstage_set_aud_dark) {
     EvtWord* args = event->args;
-    u8 a = evtGetValue(event, args[0]);
+    u8 dark = evtGetValue(event, args[0]);
     s32 time = evtGetValue(event, args[1]);
     s32 mode = evtGetValue(event, args[2]);
-    BattleStageSetAudDark(a, time, mode);
+    BattleStageSetAudDark(dark, time, mode);
     return EVT_RETURN_DONE;
 }
 
 USER_FUNC(evt_batstage_set_aud_dark_base) {
     EvtWord* args = event->args;
-    u8 a = evtGetValue(event, args[0]);
+    u8 dark = evtGetValue(event, args[0]);
     s32 time = evtGetValue(event, args[1]);
     s32 mode = evtGetValue(event, args[2]);
-    BattleStageSetAudDarkBase(a, time, mode);
+    BattleStageSetAudDarkBase(dark, time, mode);
     return EVT_RETURN_DONE;
 }
 
@@ -75,6 +75,7 @@ USER_FUNC(evt_batstage_light_set_player_on) {
     Vec upv[3] = {{0.0f, 0.0f, -1.0f}, {0.0f, 0.0f, -1.0f}, {0.0f, 0.0f, -1.0f}};
     u8 col[3][3] = {{120, 120, 120}, {120, 120, 120}, {120, 120, 120}};
     u8 en[3] = {0, 0, 0};
+    // FAKE: unused zeroed array; removing it changes the object
     u8 en2[4] = {0, 0, 0, 0};
 
     switch (sel) {

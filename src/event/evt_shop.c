@@ -704,19 +704,13 @@ void help_main(WinMgrEntry* entry) {
 
 void help_disp(WinMgrEntry* entry) {
     ShopWork* wp = _wp;
-    s32 off = wp->cur * (s32)sizeof(ShopItem);
-    ShopItem* items = wp->items;
+    ShopItem* item = &wp->items[wp->cur];
 
     if (!winMgrAction(wp->win[1])) {
-        entry->msg = msgSearch(itemDataTable[((ShopItem*)((u8*)items + off))->id].description);
+        entry->msg = msgSearch(itemDataTable[item->id].description);
         winMgrHelpDraw(entry);
     }
 }
-
-#ifdef VERSION_G8ME01
-// US: "points" label icon per language (lives in another unit's .sdata)
-extern u16 point_disp_icons[];
-#endif
 
 void point_disp(WinMgrEntry* entry) {
     ShopWork* wp = _wp;
@@ -732,16 +726,16 @@ void point_disp(WinMgrEntry* entry) {
 #ifdef VERSION_G8ME01
     PSMTXScale(s, (u32)gp->language != LANGUAGE_JP ? 0.8f : 1.1f, 1.1f, 1.1f);
     PSMTXConcat(m, s, m);
-    ((void (*)(Mtx, s16, u16))iconDispGx2)(m, 0x10, point_disp_icons[gp->language]);
+    ((void (*)(Mtx, s16, u16))iconDispGx2)(m, ICON_FLAG_2D, point_disp_icons[gp->language]);
 #else
     if ((u32)gp->language == LANGUAGE_JP) {
         PSMTXScale(s, 1.1f, 1.1f, 1.1f);
         PSMTXConcat(m, s, m);
-        iconDispGx2(m, 0x10, ICON_1F1);
+        iconDispGx2(m, ICON_FLAG_2D, ICON_1F1);
     } else {
         PSMTXScale(s, 0.8f, 1.1f, 1.1f);
         PSMTXConcat(m, s, m);
-        iconDispGx2(m, 0x10, ICON_20A);
+        iconDispGx2(m, ICON_FLAG_2D, ICON_20A);
     }
 #endif
     PSMTXTrans(m, 124.0f + entry->x, entry->y - 38.0f, 0.0f);
@@ -971,27 +965,31 @@ USER_FUNC(evt_shop_setup) {
         iconSetPos(buf, pos.x, pos.y + 6.0f, pos.z);
         iconFlagOn(buf, ICON_FLAG_NO_MAP_BLEND);
         wp->itemFlags[i] = 0;
-        if (wp->items[i].id == 0x33 && pouchCheckItem(ITEM_CONTACT_LENS)) {
+        if (wp->items[i].id == ITEM_CONTACT_LENS && pouchCheckItem(ITEM_CONTACT_LENS)) {
             wp->itemFlags[i] |= 1;
         }
-        if (wp->items[i].id == 0x37 && pouchCheckItem(ITEM_SUPER_LUIGI1)) {
+        if (wp->items[i].id == ITEM_SUPER_LUIGI1 && pouchCheckItem(ITEM_SUPER_LUIGI1)) {
             wp->itemFlags[i] |= 1;
         }
-        if (wp->items[i].id == 0x38 && pouchCheckItem(ITEM_SUPER_LUIGI2)) {
+        if (wp->items[i].id == ITEM_SUPER_LUIGI2 && pouchCheckItem(ITEM_SUPER_LUIGI2)) {
             wp->itemFlags[i] |= 1;
         }
-        if (wp->items[i].id == 0x39 && pouchCheckItem(ITEM_SUPER_LUIGI3)) {
+        if (wp->items[i].id == ITEM_SUPER_LUIGI3 && pouchCheckItem(ITEM_SUPER_LUIGI3)) {
             wp->itemFlags[i] |= 1;
         }
-        if (wp->items[i].id == 0x3A && pouchCheckItem(ITEM_SUPER_LUIGI4)) {
+        if (wp->items[i].id == ITEM_SUPER_LUIGI4 && pouchCheckItem(ITEM_SUPER_LUIGI4)) {
             wp->itemFlags[i] |= 1;
         }
-        if (wp->items[i].id == 0x3B && pouchCheckItem(ITEM_SUPER_LUIGI5)) {
+        if (wp->items[i].id == ITEM_SUPER_LUIGI5 && pouchCheckItem(ITEM_SUPER_LUIGI5)) {
             wp->itemFlags[i] |= 1;
         }
     }
-    { NpcEntry* npc = npcNameToPtr(shopper->name); npc->talkEvt = shopper_talk_evt; }
-    wp->mainEvt = evtEntryType(main_evt, 0, 0x20, 0);
+    // FAKE: block-local NPC pointer; assigning through npcNameToPtr(shopper->name) directly changes the object
+    {
+        NpcEntry* npc = npcNameToPtr(shopper->name);
+        npc->talkEvt = shopper_talk_evt;
+    }
+    wp->mainEvt = evtEntryType(main_evt, 0, EVENT_START_IMMEDIATE, 0);
     wp->mainEvt->lwData[0] = (EvtWord)wp;
     for (i = 0; i < 3; i++) {
         wp->win[i] = winMgrEntry(&window_desc[i]);
@@ -1047,18 +1045,18 @@ USER_FUNC(get_shop_point) {
 USER_FUNC(add_shop_point) {
     EvtWord* args = event->args;
     s32 add = evtGetValue(event, args[0]);
-    s32 t1 = evtGetValue(event, args[1]);
-    s32 t2 = evtGetValue(event, args[2]);
-    s32 t3 = evtGetValue(event, args[3]);
+    s32 mriSaleMs = evtGetValue(event, args[1]);
+    s32 usuSaleMs = evtGetValue(event, args[2]);
+    s32 rshSaleMs = evtGetValue(event, args[3]);
     PouchData* pouch = pouchGetPtr();
 
-    if (!strcmp(gp->currentMapName, "mri_07") && swGet(0xFA) && t1 < 900000) { // GSWF_SHOP_MRI_07_DOUBLE_POINTS_SALE
+    if (!strcmp(gp->currentMapName, "mri_07") && swGet(0xFA) && mriSaleMs < 900000) { // GSWF_SHOP_MRI_07_DOUBLE_POINTS_SALE
         add *= 2;
     }
-    if (!strcmp(gp->currentMapName, "usu_01") && swGet(0xFB) && t2 < 900000) { // GSWF_SHOP_USU_01_DOUBLE_POINTS_SALE
+    if (!strcmp(gp->currentMapName, "usu_01") && swGet(0xFB) && usuSaleMs < 900000) { // GSWF_SHOP_USU_01_DOUBLE_POINTS_SALE
         add *= 2;
     }
-    if (!strncmp(gp->currentMapName, "rsh_03", 6) && swGet(0xFC) && t3 < 900000) { // GSWF_SHOP_RSH_03_DOUBLE_POINTS_SALE
+    if (!strncmp(gp->currentMapName, "rsh_03", 6) && swGet(0xFC) && rshSaleMs < 900000) { // GSWF_SHOP_RSH_03_DOUBLE_POINTS_SALE
         add *= 2;
     }
     pouch->mShopPoints += add;
@@ -1255,6 +1253,7 @@ USER_FUNC(evt_shop_main_func) {
     hit = mario->hitobjStandOn;
     wp->flags &= ~1;
     trg = keyGetButtonTrg(0);
+    // FAKE: the masks and BOOL casts do nothing (!x is 0 or 1); !marioChkCtrl() || !marioChkKey() changes the object
     if ((BOOL)(!marioChkCtrl() & 0x7ffffff) || (BOOL)(!marioChkKey() & 0x7ffffff)) {
         trg = 0;
     }
@@ -1320,22 +1319,22 @@ USER_FUNC(evt_shop_main_func) {
     } else if (!evtCheckID(wp->buyEvt->eventId)) {
         wp->flags &= ~2;
         marioKeyOn();
-        if (wp->buyItem == 0x33) {
+        if (wp->buyItem == ITEM_CONTACT_LENS) {
             wp->itemFlags[wp->cur] |= 1;
         }
-        if (wp->buyItem == 0x37) {
+        if (wp->buyItem == ITEM_SUPER_LUIGI1) {
             wp->itemFlags[wp->cur] |= 1;
         }
-        if (wp->buyItem == 0x38) {
+        if (wp->buyItem == ITEM_SUPER_LUIGI2) {
             wp->itemFlags[wp->cur] |= 1;
         }
-        if (wp->buyItem == 0x39) {
+        if (wp->buyItem == ITEM_SUPER_LUIGI3) {
             wp->itemFlags[wp->cur] |= 1;
         }
-        if (wp->buyItem == 0x3A) {
+        if (wp->buyItem == ITEM_SUPER_LUIGI4) {
             wp->itemFlags[wp->cur] |= 1;
         }
-        if (wp->buyItem == 0x3B) {
+        if (wp->buyItem == ITEM_SUPER_LUIGI5) {
             wp->itemFlags[wp->cur] |= 1;
         }
     }

@@ -11,11 +11,6 @@ static ARAMWork work;
 //.sdata
 static ARAMWork* wp = &work;
 
-//local prototypes
-void aramCallbackGarbage(u32 request);
-void arqCallbackToAram(u32 request);
-void arqCallbackToMram(u32 request);
-
 void aramMgrInit(void) {
     memset(wp, 0, sizeof(ARAMWork));
     if (!ARCheckInit()) {
@@ -108,7 +103,9 @@ void arqCallbackToAram(u32 request) {
     ARAMEntry* entry;
 
     for (entry = wp->head; entry != NULL; entry = entry->next) {
-        if (request == (u32)&entry->request) break;
+        if (request == (u32)&entry->request) {
+            break;
+        }
     }
     entry->flags |= ARAM_FLAG_IN_ARAM;
 }
@@ -163,7 +160,9 @@ void arqCallbackToMram(u32 request) {
     ARAMEntry* entry;
 
     for (entry = wp->head; entry != NULL; entry = entry->next) {
-        if (request == (u32)&entry->request) break;
+        if (request == (u32)&entry->request) {
+            break;
+        }
     }
     entry->flags |= ARAM_FLAG_IN_MRAM;
     entry->flags |= ARAM_FLAG_FREE;

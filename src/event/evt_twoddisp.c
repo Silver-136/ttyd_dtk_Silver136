@@ -40,6 +40,7 @@ static void twoddisp_disp(CameraId camera, void* param) {
 
     for (i = 0; i < 100; i++) {
         p = &twodPtr[i];
+        // FAKE: (s8) cast on the first name byte; the plain zero test changes the object
         if ((s8)p->name[0] != 0 && (p->flags & 1)) {
             if (!(p->id & 0x80000000)) {
                 fogi = twod_icon_fog_color;
@@ -47,7 +48,7 @@ static void twoddisp_disp(CameraId camera, void* param) {
                 pos.y = p->baseY + p->y;
                 pos.z = 0.0f;
                 GXSetFog(GX_FOG_NONE, 0.0f, 0.0f, 0.0f, 0.0f, fogi);
-                iconDispGx(&pos, 0x10, (u16)p->id, p->scale);
+                iconDispGx(&pos, ICON_FLAG_2D, (u16)p->id, p->scale);
             } else {
                 FontDrawStart();
                 FontDrawScale(p->scale);
@@ -70,7 +71,7 @@ USER_FUNC(twoddisp_main) {
     for (i = 0; (s32)i < 100; i++) {
     }
     dispEntry(CAMERA_2D, 1000.0f, 0, twoddisp_disp, NULL);
-    return 2;
+    return EVT_RETURN_DONE;
 }
 
 s32 evt_twoddisp_init(EventEntry* evt, BOOL isFirstCall) {
@@ -103,7 +104,7 @@ s32 evt_twoddisp_init(EventEntry* evt, BOOL isFirstCall) {
         p->id = 0;
         p->scale = 1.0f;
     }
-    return 2;
+    return EVT_RETURN_DONE;
 }
 
 s32 evt_twoddisp_entry(EventEntry* evt, BOOL isFirstCall) {
@@ -119,7 +120,9 @@ s32 evt_twoddisp_entry(EventEntry* evt, BOOL isFirstCall) {
 
     for (i = 0; i < 100; i++) {
         p = &twodPtr[i];
+        // The comparison result is unused: a new entry is made even when the name already exists
         strcmp(p->name, name);
+        // FAKE: (s8) cast on the first name byte; the plain zero test changes the object
         if ((s8)p->name[0] == 0) {
             strcpy(p->name, name);
             p->flags = 1;
@@ -133,7 +136,7 @@ s32 evt_twoddisp_entry(EventEntry* evt, BOOL isFirstCall) {
             break;
         }
     }
-    return 2;
+    return EVT_RETURN_DONE;
 }
 
 static inline TwodEntry* twod_find(const char* name) {
@@ -157,7 +160,7 @@ s32 evt_twoddisp_set_position(EventEntry* evt, BOOL isFirstCall) {
     p = twod_find(name);
     p->x = evtGetFloat(evt, args[1]);
     p->y = evtGetFloat(evt, args[2]);
-    return 2;
+    return EVT_RETURN_DONE;
 }
 
 s32 evt_twoddisp_set_base_position(EventEntry* evt, BOOL isFirstCall) {
@@ -168,7 +171,7 @@ s32 evt_twoddisp_set_base_position(EventEntry* evt, BOOL isFirstCall) {
     p = twod_find(name);
     p->baseX = evtGetFloat(evt, args[1]);
     p->baseY = evtGetFloat(evt, args[2]);
-    return 2;
+    return EVT_RETURN_DONE;
 }
 
 s32 evt_twoddisp_flag_onoff(EventEntry* evt, BOOL isFirstCall) {
@@ -187,7 +190,7 @@ s32 evt_twoddisp_flag_onoff(EventEntry* evt, BOOL isFirstCall) {
     } else {
         p->flags &= ~evtGetValue(evt, args[2]);
     }
-    return 2;
+    return EVT_RETURN_DONE;
 }
 
 EVT_BEGIN(twoddisp_main_event)

@@ -21,14 +21,8 @@ FileManagerWork fileWork;
 FileManagerWork* afp = &fileWork;
 
 //local prototypes
-void fileGarbageDataAdrClear(FileEntry* entry);
-void fileGarbageDataAdrSet(void* data, s32 type);
 FileEntry* _fileAlloc(const char* filename, s32 type, void (*callback)(FileEntry*));
-void dvdReadDoneCallBack(s32 error, DVDFileInfo* info);
 s32 fileAsync(const char* filename, s32 type, FileCallback callback);
-
-
-
 
 void fileInit(void) {
     FileEntry* ptr;
@@ -134,8 +128,9 @@ void fileGarbageDataAdrClear(FileEntry* entry) {
                 OSPanic("filemgr.c", VERSION_PICK(147, 153), "invalid version number for texture palette");
             }
             if ((void*)tpl->descriptorArray >= tpl) {
+                // FAKE: no-op (u16) cast on the u16 counter; the plain comparison changes the object
                 for (i = 0; (u16)i < tpl->numDescriptors; i++) {
-                    off = i * sizeof(TEXDescriptor); // FAKE: descriptor fields read by byte offset; descriptorArray[i].textureHeader/.CLUTHeader swaps the i and scaled-index registers (99.86%)
+                    off = i * sizeof(TEXDescriptor); // FAKE: descriptor fields read by byte offset; descriptorArray[i].textureHeader/.CLUTHeader changes the object
                     img = *(TEXHeader**)((u8*)tpl->descriptorArray + off);
                     if (img) {
                         if (img->unpacked) {
@@ -332,6 +327,7 @@ void fileGarbageDataAdrSet(void* data, s32 type) {
             }
             if ((void*)tpl->descriptorArray < tpl) {
                 ADDR_WORD(tpl->descriptorArray) += (AddrWord)tpl;
+                // FAKE: no-op (u16) cast on the u16 counter; the plain comparison changes the object
                 for (i = 0; (u16)i < tpl->numDescriptors; i++) {
                     off = i * sizeof(TEXDescriptor);
                     img = *(TEXHeader**)((u8*)tpl->descriptorArray + off);
@@ -492,7 +488,7 @@ void _fileGarbage(BOOL a1) {
             if (f->state == 3) {
                 if (f->entry) {
                     if (OSGetCurrentThread() == &dvdmgr_thread) {
-                        f->entry->status = 8;
+                        f->entry->status = DVDMGR_CLOSED;
                     } else {
                         while (f->entry) {
                             OSYieldThread();
@@ -514,7 +510,7 @@ void _fileGarbage(BOOL a1) {
                     }
                 } else {
                     f->references--;
-                    if ((s16)f->references <= -2) {
+                    if (f->references <= -2) {
                         f->state = 2;
                     }
                 }
@@ -528,7 +524,7 @@ void _fileGarbage(BOOL a1) {
         next = f->next;
         if (f->state == 2) {
             f->state = 0;
-            if ((void**)&f->dataSlot != f->data) {
+            if (&f->dataSlot != f->data) {
                 smartFree((smartEntry*)f->data);
             }
             if (prev) {
@@ -566,7 +562,7 @@ FileEntry* fileAlloc(const char* filename, s32 type) {
 
 FileEntry* _fileAlloc(const char* filename, s32 type, void (*callback)(FileEntry*)) {
     void* handle;
-    FileEntry *search;
+    FileEntry* search;
     smartEntry* smart;
     DVDEntry* entry;
     FileEntry *newentry, *temp;
@@ -579,7 +575,9 @@ FileEntry* _fileAlloc(const char* filename, s32 type, void (*callback)(FileEntry
                 OSYieldThread();
             }
 #else
-            while (search->entry) {;} // busy-waits until the loader thread clears the entry (US yields instead)
+            // busy-waits until the loader thread clears the entry (US yields instead)
+            while (search->entry) {
+            }
 #endif
             if (search->state == 3) {
                 search->state = 1;
@@ -703,7 +701,7 @@ void dvdReadDoneCallBack(s32 error, DVDFileInfo* info) {
         }
     }
     entry = f->entry;
-    if (error == -3) {
+    if (error == DVD_RESULT_CANCELED) {
         f->entry = NULL;
         f->state = 2;
         f->type = FILE_TYPE_CANCELED;
@@ -735,8 +733,12 @@ s32 fileAsync(const char* filename, s32 type, FileCallback callback) {
 
     for (search = afp->firstused; search; search = search->next) {
         if (search->state && !strcmp(search->filename, filename)) {
-            if (search->entry) return 0;
-            if (search->state == 3) return (s32)search;
+            if (search->entry) {
+                return 0;
+            }
+            if (search->state == 3) {
+                return (s32)search;
+            }
             if (search->state == 2) {
                 search->state = 3;
             }
@@ -791,7 +793,7 @@ s32 fileAsync(const char* filename, s32 type, FileCallback callback) {
         *newentry->data = handle;
         newentry->references = 0;
         newentry->type = type;
-        newentry->next = 0;
+        newentry->next = NULL;
         strcpy(newentry->filename, filename);
         newentry->entry = NULL;
         afp->firstavailable = afp->firstavailable->next;
@@ -841,7 +843,7 @@ s32 fileAsync(const char* filename, s32 type, FileCallback callback) {
             afp->lastused->next = newentry;
             afp->lastused = newentry;
         }
-        newentry->entry = DVDMgrOpen(filename, 2u, 0);
+        newentry->entry = DVDMgrOpen(filename, 2, 0);
         DVDMgrReadAsync(newentry->entry, smart->address, test, 0, dvdReadDoneCallBack);
         return 0;
     }

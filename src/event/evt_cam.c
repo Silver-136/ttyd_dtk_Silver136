@@ -14,8 +14,6 @@
 #include <math.h>
 #include "cam_shift.h"
 
-void OSReport(const char* msg, ...);
-
 // CameraId id, BOOL on
 USER_FUNC(evt_cam_ctrl_onoff) {
     EvtWord* args = event->args;
@@ -67,7 +65,7 @@ USER_FUNC(evt_cam_shake) {
     camId = id;
     y = evtGetFloat(event, args[2]);
     msec = evtGetValue(event, args[3]);
-    now = *(u64*)&event->lifetime;
+    now = event->lifetime;
     if (isFirstCall) {
         event->userdata[0] = 0;
         ((u32*)&event->userdata[1])[0] = (now >> 32) & 0xFFFFFFFF;
@@ -107,9 +105,8 @@ USER_FUNC(evt_cam_shake) {
         if (!event->userWork[3]) {
             padRumbleOn(0);
             if (onTime < OSTicksToMilliseconds(now - last)) {
-                shift = 32;
                 event->userWork[3] = 1 - event->userWork[3];
-                ((u32*)&event->wInterpRelatedTime)[0] = (now >> shift) & 0xFFFFFFFF;
+                ((u32*)&event->wInterpRelatedTime)[0] = (now >> 32) & 0xFFFFFFFF;
                 ((u32*)&event->wInterpRelatedTime)[1] = now & 0xFFFFFFFF;
             }
         } else {
@@ -170,6 +167,7 @@ USER_FUNC(evt_cam3d_evt_set_at) {
     curve = evtGetValue(event, args[5]);
     camera = camGetPtr(CAMERA_3D);
     at = (Vec){x, y, z};
+    // FAKE: unused zero Vec expression; removing it changes the object
     (Vec){0.0f, 0.0f, 0.0f};
     PSVECSubtract(&at, &camera->cameraPos, &pos);
     PSVECScale(&pos, &pos, (f32)percent / 100.0f);
@@ -236,6 +234,7 @@ USER_FUNC(evt_cam3d_evt_set_rel) {
     {
         Vec pos, at;
 
+        // FAKE: unused zero Vec expressions; removing them changes the object
         (Vec){0.0f, 0.0f, 0.0f};
         (Vec){0.0f, 0.0f, 0.0f};
         ax = mario->position.x + ax;
@@ -339,7 +338,7 @@ USER_FUNC(evt_cam3d_evt_set_rel_dir) {
 }
 
 // unused (dead-stripped): only its string and 100.0f survive
-static void evt_cam_debug_print(f32 a) /* restore */ {
+static void evt_cam_debug_print(f32 a) {
     OSReport("%f%f%f%f%f%f%d%s", a / 100.0f);
 }
 
@@ -454,7 +453,7 @@ USER_FUNC(evt_cam3d_evt_set_now) {
     camera->startTimeA = gp->renderTime;
     camera->durationA = 0;
     camera->stateA = 3;
-    camera->curveA = 11;
+    camera->curveA = EASING_SINE_IN_OUT;
     return EVT_RETURN_DONE;
 }
 

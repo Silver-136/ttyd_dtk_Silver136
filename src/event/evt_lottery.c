@@ -9,8 +9,6 @@
 BOOL dbg_lotteryinfo;
 static s32 lotteryUnused;
 
-//local prototypes
-
 lottery_info* lotteryGetPtr(void) {
     return &gp->mLotteryInfo;
 }
@@ -155,8 +153,10 @@ USER_FUNC(evt_lottery) {
 
     evtSetValue(event, args[1], lot->flags);
     evtSetValue(event, args[2], lot->todayNum);
+    // The calendar dates computed below (today, the purchase day and the four match days) are never used.
     OSTicksToCalendarTime(now, &e);
     if (lot->flags & LOTTERY_FLAG_TICKET) {
+        // FAKE: bt is a spare temporary (two different shapes for the same sum); passing lot->buyTime + ... directly changes the object
         OSTime bt;
         OSTicksToCalendarTime(lot->buyTime, &e);
         bt = lot->buyTime;
@@ -205,17 +205,18 @@ USER_FUNC(evt_lottery_buy) {
 }
 
 USER_FUNC(evt_lottery_flag) {
-    evtSetValue(event, event->args[0], (&gp->mLotteryInfo)->flags);
+    evtSetValue(event, event->args[0], gp->mLotteryInfo.flags);
     return EVT_RETURN_DONE;
 }
 
 USER_FUNC(evt_lottery_todaynum) {
-    evtSetValue(event, event->args[0], (&gp->mLotteryInfo)->todayNum);
+    evtSetValue(event, event->args[0], gp->mLotteryInfo.todayNum);
     return EVT_RETURN_DONE;
 }
 
 USER_FUNC(evt_lottery_error_check) {
     OSCalendarTime a, b;
+    // FAKE: g is a spare copy of gp; &gp->mLotteryInfo changes the object
     GlobalWork* g = gp;
     EvtWord* args = event->args;
     OSTime now = OSGetTime();
