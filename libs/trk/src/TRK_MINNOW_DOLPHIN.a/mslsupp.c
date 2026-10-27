@@ -8,7 +8,7 @@ unsigned char TRKCloseFile(unsigned int cmd, unsigned int file_handle);
 
 enum { DS_IONoError, DS_IOError, DS_IOEOF };
 
-static inline int __access_file(unsigned int handle, unsigned char* buffer, size_t* count, void* ref_con,
+int __access_file(unsigned int handle, unsigned char* buffer, size_t* count, void* ref_con,
                                 unsigned int cmd) {
     size_t countTemp;
     unsigned char r0;

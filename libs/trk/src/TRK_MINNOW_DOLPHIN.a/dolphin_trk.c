@@ -281,7 +281,7 @@ u32 TRKTargetTranslate(u32 addr) {
     return (addr & 0x3FFFFFFF) | 0x80000000;
 }
 
-static inline void TRK_copy_vector(u32 offset) {
+void TRK_copy_vector(u32 offset) {
     void* destPtr = (void*)TRKTargetTranslate(offset);
     TRK_memcpy(destPtr, gTRKInterruptVectorTable + offset, 0x100);
     TRK_flush_cache(destPtr, 0x100);

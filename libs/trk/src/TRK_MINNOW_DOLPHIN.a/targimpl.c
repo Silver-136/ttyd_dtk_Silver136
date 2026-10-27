@@ -567,7 +567,7 @@ DSError TRKTargetAccessDefault(u32 firstRegister, u32 lastRegister, TRKBuffer* b
     return error;
 }
 
-static inline DSError TRKPPCAccessSpecialReg(void* value, u32* access_func, BOOL read) {
+DSError TRKPPCAccessSpecialReg(void* value, u32* access_func, BOOL read) {
     typedef void (*asm_access_type)(void*, void*);
     asm_access_type asm_access;
 
@@ -578,7 +578,7 @@ static inline DSError TRKPPCAccessSpecialReg(void* value, u32* access_func, BOOL
     return 0;
 }
 
-static inline DSError TRKPPCAccessSPR(void* value, u32 spr_register_num, BOOL read) {
+DSError TRKPPCAccessSPR(void* value, u32 spr_register_num, BOOL read) {
     u32 access_func[10] = {INSTR_NOP, INSTR_NOP, INSTR_NOP, INSTR_NOP, INSTR_NOP,
                            INSTR_NOP, INSTR_NOP, INSTR_NOP, INSTR_NOP, INSTR_NOP};
 
@@ -593,7 +593,7 @@ static inline DSError TRKPPCAccessSPR(void* value, u32 spr_register_num, BOOL re
     return TRKPPCAccessSpecialReg(value, access_func, read);
 }
 
-static inline DSError TRKPPCAccessPairedSingleRegister(void* srcDestPtr, u32 psr, BOOL read) {
+DSError TRKPPCAccessPairedSingleRegister(void* srcDestPtr, u32 psr, BOOL read) {
     u32 access_func[10] = {INSTR_NOP, INSTR_NOP, INSTR_NOP, INSTR_NOP, INSTR_NOP,
                            INSTR_NOP, INSTR_NOP, INSTR_NOP, INSTR_NOP, INSTR_NOP};
 
@@ -605,7 +605,7 @@ static inline DSError TRKPPCAccessPairedSingleRegister(void* srcDestPtr, u32 psr
     return TRKPPCAccessSpecialReg(srcDestPtr, access_func, read);
 }
 
-static inline DSError TRKPPCAccessFPRegister(void* srcDestPtr, u32 fpr, BOOL read) {
+DSError TRKPPCAccessFPRegister(void* srcDestPtr, u32 fpr, BOOL read) {
     DSError error = 0;
     u32 access_func[10] = {INSTR_NOP, INSTR_NOP, INSTR_NOP, INSTR_NOP, INSTR_NOP,
                            INSTR_NOP, INSTR_NOP, INSTR_NOP, INSTR_NOP, INSTR_NOP};
@@ -791,7 +791,7 @@ static inline void TRKTargetSetStopped_inline(u32 stopped) {
     gTRKState.isStopped = stopped;
 }
 
-static inline BOOL TRKTargetStepDone(void) {
+BOOL TRKTargetStepDone(void) {
     BOOL result = 1;
 
     if (gTRKStepStatus.active && ((u16)gTRKCPUState.Extended1.exceptionID) == 0xD00) {
@@ -813,7 +813,7 @@ static inline BOOL TRKTargetStepDone(void) {
     return result;
 }
 
-static inline DSError TRKTargetDoStep(void) {
+DSError TRKTargetDoStep(void) {
     gTRKStepStatus.active = 1;
     MWTRACE(1, "TargetDoStep()\n");
     gTRKCPUState.Extended1.MSR |= 0x400;
@@ -825,7 +825,7 @@ static inline DSError TRKTargetDoStep(void) {
     return 0;
 }
 
-static inline BOOL TRKTargetCheckStep(void) {
+BOOL TRKTargetCheckStep(void) {
     if (gTRKStepStatus.active) {
         gTRKCPUState.Extended1.MSR &= ~0x400;
 

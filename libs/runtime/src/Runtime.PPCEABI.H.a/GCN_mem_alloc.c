@@ -14,7 +14,7 @@ void OSFreeToHeap(OSHeapHandle heap, void* ptr);
 #define OSRoundUp32B(x) (((unsigned long)(x) + 32 - 1) & ~(32 - 1))
 #define OSRoundDown32B(x) (((unsigned long)(x)) & ~(32 - 1))
 
-static inline void InitDefaultHeap(void) {
+static void InitDefaultHeap(void) {
     void* arenaLo;
     void* arenaHi;
 

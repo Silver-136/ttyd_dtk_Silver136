@@ -18,7 +18,7 @@ extern void* gTRKInputPendingPtr;
 
 BOOL gTRKBigEndian;
 
-static inline BOOL TRKInitializeEndian(void) {
+BOOL TRKInitializeEndian(void) {
     unsigned char bendian[4];
     BOOL result = 0;
 

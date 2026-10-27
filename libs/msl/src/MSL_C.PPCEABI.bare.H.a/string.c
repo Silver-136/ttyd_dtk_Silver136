@@ -3,8 +3,7 @@ typedef unsigned long size_t;
 #define K1 0x80808080
 #define K2 0xfefefeff
 
-#ifdef VERSION_G8ME01
-// US only: strstr (used by evt_msg).
+// strstr: US evt_msg uses it; JP links nothing that does, so its linker strips it (JP demo map: UNUSED)
 char* strstr(const char* str, const char* pat) {
     const unsigned char* s1 = (const unsigned char*)str - 1;
     const unsigned char* p1 = (const unsigned char*)pat;
@@ -28,7 +27,6 @@ char* strstr(const char* str, const char* pat) {
 
     return 0;
 }
-#endif
 
 char* strchr(const char* str, int chr) {
     const unsigned char* p = (unsigned char*)str - 1;

@@ -67,7 +67,7 @@ static inline void TRKSendReply(u8 replyError) {
     TRKWriteUARTN(&reply, sizeof(CommandReply));
 }
 
-static inline DSError TRKSendACK(TRKBuffer* buffer) {
+DSError TRKSendACK(TRKBuffer* buffer) {
     DSError err;
 
     MWTRACE(1, "SendACK : Calling MessageSend\n");

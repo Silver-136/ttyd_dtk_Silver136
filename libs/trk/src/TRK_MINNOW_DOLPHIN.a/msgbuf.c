@@ -26,7 +26,7 @@ extern BOOL gTRKBigEndian;
 
 TRKBuffer gTRKMsgBufs[3];
 
-static inline void TRKSetBufferUsed(TRKBuffer* msg, BOOL state) {
+void TRKSetBufferUsed(TRKBuffer* msg, BOOL state) {
     msg->isInUse = state;
 }
 
@@ -163,7 +163,7 @@ DSError TRKReadBuffer(TRKBuffer* msg, void* data, size_t length) {
     return error;
 }
 
-static inline DSError TRKAppendBuffer1_ui32(TRKBuffer* buffer, const u32 data) {
+DSError TRKAppendBuffer1_ui32(TRKBuffer* buffer, const u32 data) {
     u8* bigEndianData;
     u8* byteData;
     u8 swapBuffer[sizeof(data)];
@@ -236,11 +236,11 @@ DSError TRKAppendBuffer_ui32(TRKBuffer* buffer, const u32* data, int count) {
     return err;
 }
 
-static inline DSError TRKReadBuffer1_ui8(TRKBuffer* buffer, u8* data) {
+DSError TRKReadBuffer1_ui8(TRKBuffer* buffer, u8* data) {
     return TRKReadBuffer(buffer, (void*)data, 1);
 }
 
-static inline DSError TRKReadBuffer1_ui32(TRKBuffer* buffer, u32* data) {
+DSError TRKReadBuffer1_ui32(TRKBuffer* buffer, u32* data) {
     DSError err;
     u8* bigEndianData;
     u8* byteData;
