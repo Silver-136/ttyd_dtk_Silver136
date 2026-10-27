@@ -14,16 +14,16 @@
 static inline f32 check_float(s32 val);
 static inline s32 change_float(f32 val);
 
-inline s32 evt_end_evt(EventEntry* entry); // 2
-inline s32 evt_lbl(EventEntry* entry); // 3
-inline s32 evt_goto(EventEntry* entry); // 4
-inline s32 evt_do(EventEntry* entry); // 5
+s32 evt_end_evt(EventEntry* entry); // 2
+s32 evt_lbl(EventEntry* entry); // 3
+s32 evt_goto(EventEntry* entry); // 4
+s32 evt_do(EventEntry* entry); // 5
 s32 evt_while(EventEntry* entry); // 6
-inline s32 evt_do_break(EventEntry* entry); // 7
-inline s32 evt_do_continue(EventEntry* entry); // 8
-inline s32 evt_wait_frm(EventEntry* entry); // 9
+s32 evt_do_break(EventEntry* entry); // 7
+s32 evt_do_continue(EventEntry* entry); // 8
+s32 evt_wait_frm(EventEntry* entry); // 9
 s32 evt_wait_msec(EventEntry* entry); // 10
-inline s32 evt_halt(EventEntry* entry); // 11
+s32 evt_halt(EventEntry* entry); // 11
 s32 evt_if_str_equal(EventEntry* entry); // 12
 s32 evt_if_str_not_equal(EventEntry* entry); // 13
 s32 evt_if_str_small(EventEntry* entry); // 14
@@ -44,10 +44,10 @@ s32 evt_if_small_equal(EventEntry* entry); // 28
 s32 evt_if_large_equal(EventEntry* entry); // 29
 s32 evt_if_flag(EventEntry* entry); // 30
 s32 evt_if_not_flag(EventEntry* entry); // 31
-inline s32 evt_else(EventEntry* entry); // 32
-inline s32 evt_end_if(EventEntry* entry); // 33
-inline s32 evt_switch(EventEntry* entry); // 34
-inline s32 evt_switchi(EventEntry* entry); // 35
+s32 evt_else(EventEntry* entry); // 32
+s32 evt_end_if(EventEntry* entry); // 33
+s32 evt_switch(EventEntry* entry); // 34
+s32 evt_switchi(EventEntry* entry); // 35
 s32 evt_case_equal(EventEntry* entry); // 36
 s32 evt_case_not_equal(EventEntry* entry); // 37
 s32 evt_case_small(EventEntry* entry); // 38
@@ -55,92 +55,92 @@ s32 evt_case_small_equal(EventEntry* entry); // 39
 s32 evt_case_large(EventEntry* entry); // 40
 s32 evt_case_large_equal(EventEntry* entry); // 41
 s32 evt_case_between(EventEntry* entry); // 42
-inline s32 evt_case_etc(EventEntry* entry); // 43
+s32 evt_case_etc(EventEntry* entry); // 43
 s32 evt_case_flag(EventEntry* entry); // 44
 s32 evt_case_or(EventEntry* entry); // 45
 s32 evt_case_and(EventEntry* entry); // 46
 s32 evt_case_end(EventEntry* entry); // 47
-inline s32 evt_switch_break(EventEntry* entry); // 48
-inline s32 evt_end_switch(EventEntry* entry); // 49
-inline s32 evt_set(EventEntry* entry); // 50
-inline s32 evt_seti(EventEntry* entry); // 51
-inline s32 evt_setf(EventEntry* entry); // 52
-inline s32 evt_add(EventEntry* entry); // 53
-inline s32 evt_sub(EventEntry* entry); // 54
-inline s32 evt_mul(EventEntry* entry); // 55
-inline s32 evt_div(EventEntry* entry); // 56
-inline s32 evt_mod(EventEntry* entry); // 57
-inline s32 evt_addf(EventEntry* entry); // 58
-inline s32 evt_subf(EventEntry* entry); // 59
-inline s32 evt_mulf(EventEntry* entry); // 60
-inline s32 evt_divf(EventEntry* entry); // 61
-inline s32 evt_set_read(EventEntry* entry); // 62
-inline s32 evt_set_readf(EventEntry* entry); // 63
-inline s32 evt_read(EventEntry* entry); // 64
-inline s32 evt_read2(EventEntry* entry); // 65
-inline s32 evt_read3(EventEntry* entry); // 66
-inline s32 evt_read4(EventEntry* entry); // 67
-inline s32 evt_read_n(EventEntry* entry); // 68
-inline s32 evt_readf(EventEntry* entry); // 69
-inline s32 evt_readf2(EventEntry* entry); // 70
-inline s32 evt_readf3(EventEntry* entry); // 71
-inline s32 evt_readf4(EventEntry* entry); // 72
-inline s32 evt_readf_n(EventEntry* entry); // 73
-inline s32 evt_set_user_wrk(EventEntry* entry); // 74
-inline s32 evt_set_user_flg(EventEntry* entry); // 75
-inline s32 evt_alloc_user_wrk(EventEntry* entry); // 76
-inline s32 evt_and(EventEntry* entry); // 77
-inline s32 evt_andi(EventEntry* entry); // 78
-inline s32 evt_or(EventEntry* entry); // 79
-inline s32 evt_ori(EventEntry* entry); // 80
-inline s32 evt_set_frame_from_msec(EventEntry* entry); // 81
-inline s32 evt_set_msec_from_frame(EventEntry* entry); // 82
-inline s32 evt_set_ram(EventEntry* entry); // 83
-inline s32 evt_set_ramf(EventEntry* entry); // 84
-inline s32 evt_get_ram(EventEntry* entry); // 85
-inline s32 evt_get_ramf(EventEntry* entry); // 86
-inline s32 evt_setr(EventEntry* entry); // 87
-inline s32 evt_setrf(EventEntry* entry); // 88
-inline s32 evt_getr(EventEntry* entry); // 89
-inline s32 evt_getrf(EventEntry* entry); // 90
-inline s32 evt_user_func(EventEntry* entry); // 91
+s32 evt_switch_break(EventEntry* entry); // 48
+s32 evt_end_switch(EventEntry* entry); // 49
+s32 evt_set(EventEntry* entry); // 50
+s32 evt_seti(EventEntry* entry); // 51
+s32 evt_setf(EventEntry* entry); // 52
+s32 evt_add(EventEntry* entry); // 53
+s32 evt_sub(EventEntry* entry); // 54
+s32 evt_mul(EventEntry* entry); // 55
+s32 evt_div(EventEntry* entry); // 56
+s32 evt_mod(EventEntry* entry); // 57
+s32 evt_addf(EventEntry* entry); // 58
+s32 evt_subf(EventEntry* entry); // 59
+s32 evt_mulf(EventEntry* entry); // 60
+s32 evt_divf(EventEntry* entry); // 61
+s32 evt_set_read(EventEntry* entry); // 62
+s32 evt_set_readf(EventEntry* entry); // 63
+s32 evt_read(EventEntry* entry); // 64
+s32 evt_read2(EventEntry* entry); // 65
+s32 evt_read3(EventEntry* entry); // 66
+s32 evt_read4(EventEntry* entry); // 67
+s32 evt_read_n(EventEntry* entry); // 68
+s32 evt_readf(EventEntry* entry); // 69
+s32 evt_readf2(EventEntry* entry); // 70
+s32 evt_readf3(EventEntry* entry); // 71
+s32 evt_readf4(EventEntry* entry); // 72
+s32 evt_readf_n(EventEntry* entry); // 73
+s32 evt_set_user_wrk(EventEntry* entry); // 74
+s32 evt_set_user_flg(EventEntry* entry); // 75
+s32 evt_alloc_user_wrk(EventEntry* entry); // 76
+s32 evt_and(EventEntry* entry); // 77
+s32 evt_andi(EventEntry* entry); // 78
+s32 evt_or(EventEntry* entry); // 79
+s32 evt_ori(EventEntry* entry); // 80
+s32 evt_set_frame_from_msec(EventEntry* entry); // 81
+s32 evt_set_msec_from_frame(EventEntry* entry); // 82
+s32 evt_set_ram(EventEntry* entry); // 83
+s32 evt_set_ramf(EventEntry* entry); // 84
+s32 evt_get_ram(EventEntry* entry); // 85
+s32 evt_get_ramf(EventEntry* entry); // 86
+s32 evt_setr(EventEntry* entry); // 87
+s32 evt_setrf(EventEntry* entry); // 88
+s32 evt_getr(EventEntry* entry); // 89
+s32 evt_getrf(EventEntry* entry); // 90
+s32 evt_user_func(EventEntry* entry); // 91
 s32 evt_run_evt(EventEntry* entry); // 92
 s32 evt_run_evt_id(EventEntry* entry); // 93
-inline s32 evt_run_child_evt(EventEntry* entry); // 94
-inline s32 evt_restart_evt(EventEntry* entry); // 95
-inline s32 evt_delete_evt(EventEntry* entry); // 96
-inline s32 evt_set_pri(EventEntry* entry); // 97
-inline s32 evt_set_spd(EventEntry* entry); // 98
-inline s32 evt_set_type(EventEntry* entry); // 99
-inline s32 evt_stop_all(EventEntry* entry); // 100
-inline s32 evt_start_all(EventEntry* entry); // 101
-inline s32 evt_stop_other(EventEntry* entry); // 102
-inline s32 evt_start_other(EventEntry* entry); // 103
-inline s32 evt_stop_id(EventEntry* entry); // 104
-inline s32 evt_start_id(EventEntry* entry); // 105
-inline s32 evt_chk_evt(EventEntry* entry); // 106
+s32 evt_run_child_evt(EventEntry* entry); // 94
+s32 evt_restart_evt(EventEntry* entry); // 95
+s32 evt_delete_evt(EventEntry* entry); // 96
+s32 evt_set_pri(EventEntry* entry); // 97
+s32 evt_set_spd(EventEntry* entry); // 98
+s32 evt_set_type(EventEntry* entry); // 99
+s32 evt_stop_all(EventEntry* entry); // 100
+s32 evt_start_all(EventEntry* entry); // 101
+s32 evt_stop_other(EventEntry* entry); // 102
+s32 evt_start_other(EventEntry* entry); // 103
+s32 evt_stop_id(EventEntry* entry); // 104
+s32 evt_start_id(EventEntry* entry); // 105
+s32 evt_chk_evt(EventEntry* entry); // 106
 s32 evt_inline_evt(EventEntry* entry); // 107
 s32 evt_inline_evt_id(EventEntry* entry); // 108
-inline s32 evt_end_inline(EventEntry* entry); // 109
+s32 evt_end_inline(EventEntry* entry); // 109
 s32 evt_brother_evt(EventEntry* entry); // 110
 s32 evt_brother_evt_id(EventEntry* entry); // 111
-inline s32 evt_end_brother(EventEntry* entry); // 112
-inline s32 evt_debug_put_msg(EventEntry* entry); // 113
-inline s32 evt_debug_msg_clear(EventEntry* entry); // 114
+s32 evt_end_brother(EventEntry* entry); // 112
+s32 evt_debug_put_msg(EventEntry* entry); // 113
+s32 evt_debug_msg_clear(EventEntry* entry); // 114
 s32 evt_debug_put_reg(EventEntry* entry); // 115
-inline s32 evt_debug_name(EventEntry* entry); // 116
-inline s32 evt_debug_rem(EventEntry* entry); // 117
-inline s32 evt_debug_bp(EventEntry* entry); // 118
+s32 evt_debug_name(EventEntry* entry); // 116
+s32 evt_debug_rem(EventEntry* entry); // 117
+s32 evt_debug_bp(EventEntry* entry); // 118
 
-inline EvtWord* evtSearchLabel(EventEntry* entry, EvtWord id);
-inline EvtWord* evtSearchElse(EventEntry* entry);
-inline EvtWord* evtSearchEndIf(EventEntry* entry);
-inline EvtWord* evtSearchEndSwitch(EventEntry* entry);
-inline EvtWord* evtSearchCase(EventEntry* entry);
-inline EvtWord* evtSearchWhile(EventEntry* entry);
-inline EvtWord* evtSearchJustBeforeWhile(EventEntry* entry);
-inline EvtWord* evtSearchBreakLoop(EventEntry* entry);
-inline EvtWord* evtSearchContinueLoop(EventEntry* entry);
+EvtWord* evtSearchLabel(EventEntry* entry, EvtWord id);
+EvtWord* evtSearchElse(EventEntry* entry);
+EvtWord* evtSearchEndIf(EventEntry* entry);
+EvtWord* evtSearchEndSwitch(EventEntry* entry);
+EvtWord* evtSearchCase(EventEntry* entry);
+EvtWord* evtSearchWhile(EventEntry* entry);
+EvtWord* evtSearchJustBeforeWhile(EventEntry* entry);
+EvtWord* evtSearchBreakLoop(EventEntry* entry);
+EvtWord* evtSearchContinueLoop(EventEntry* entry);
 
 f32 check_float(s32 val) {
     f32 ret;
