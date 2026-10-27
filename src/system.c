@@ -34,17 +34,12 @@ static f32 angleABTBL[] = { 1.0f,       1.273187f,  1.27303f,   1.272768f,  1.27
                             1.053216f,  1.049087f,  1.04496f,   1.040838f,  1.036721f,  1.0326101f, 1.028504f,
                             1.024406f,  1.020316f,  1.016234f,  1.0121599f, 1.0080971f, 1.004043f,  1.0f };
 
-
-
-
-
 const char* build_date_ptr = R_build_date;
 const char* build_time_ptr = R_build_time;
 
 const char* systemStrippedPool0(void) {
     return "assertion \"%s\" failed.\n \"%s\"\n";
 }
-
 
 const char* getMarioStDvdRoot(void) {
     return ".";
@@ -53,6 +48,7 @@ const char* getMarioStDvdRoot(void) {
 f32 reviseAngle(f32 angle) {
     f32 result, temp;
 
+    // FAKE: spare temporary temp; result = (f32)fmod(angle, 360.0) changes the object
     temp = (f32)fmod(angle, 360.0);
     result = temp;
 
@@ -91,68 +87,69 @@ f32 compAngle(f32 from, f32 to) {
 f32 angleABf(f32 x1, f32 y1, f32 x2, f32 y2) {
     f32 xdiff, ydiff;
     f32 xabs, yabs;
-    f32 v8;
-    f32 v9;
-    int v10;
-    f32 v13;
-    f32 v15;
-    f32 test;
+    f32 approxX;
+    f32 tablePos;
+    int tableIndex;
+    f32 angle;
+    f32 approxY;
+    f32 corrected;
 
     xdiff = x2 - x1;
     ydiff = y2 - y1;
     xabs = fabsf(xdiff);
     yabs = fabsf(ydiff);
     if (xabs > yabs) {
-        v8 = 45.0f * (yabs / xabs);
-        v9 = 2.0f * v8;
-        if (v9 >= 0.0f) {
-            v10 = (int)(0.5 + v9);
+        approxX = 45.0f * (yabs / xabs);
+        tablePos = 2.0f * approxX;
+        if (tablePos >= 0.0f) {
+            tableIndex = (int)(0.5 + tablePos);
         } else {
-            v10 = -(int)(0.5 - v9);
+            tableIndex = -(int)(0.5 - tablePos);
         }
-        test = v8 * angleABTBL[v10];
+        corrected = approxX * angleABTBL[tableIndex];
         if (xdiff >= 0.0f) {
             if (ydiff >= 0.0f) {
-                v13 = 90.0f + test;
+                angle = 90.0f + corrected;
             } else {
-                v13 = 90.0f - test;
+                angle = 90.0f - corrected;
             }
         } else {
             if (ydiff >= 0.0f) {
-                v13 = 270.0f - test;
+                angle = 270.0f - corrected;
             } else {
-                v13 = 270.0f + test;
+                angle = 270.0f + corrected;
             }
         }
     } else {
         if (yabs == 0.0f) {
             return 0.0f;
         } else {
-            v15 = 45.0f * (xabs / yabs);
-            v9 = 2.0f * v15;
-            if (v9 >= 0.0f) {
-                v10 = (int)(0.5 + v9);
+            approxY = 45.0f * (xabs / yabs);
+            tablePos = 2.0f * approxY;
+            if (tablePos >= 0.0f) {
+                tableIndex = (int)(0.5 + tablePos);
             } else {
-                v10 = -(int)(0.5 - v9);
+                tableIndex = -(int)(0.5 - tablePos);
             }
-            test = v15 * angleABTBL[v10];
+            corrected = approxY * angleABTBL[tableIndex];
             if (ydiff >= 0.0f) {
                 if (xdiff >= 0.0f) {
-                    v13 = 180.0f - test;
+                    angle = 180.0f - corrected;
                 } else {
-                    v13 = 180.0f + test;
+                    angle = 180.0f + corrected;
                 }
             } else {
                 if (xdiff >= 0.0f) {
-                    v13 = 0.0f + test;
+                    angle = 0.0f + corrected;
                 } else {
-                    v13 = 360.0f - test;
+                    angle = 360.0f - corrected;
                 }
             }
         }
     }
-    return v13;
+    return angle;
 }
+
 f32 intplGetValue(s32 mode, f32 start, f32 end, s32 currStep, s32 steps) {
     f32 step;
     f32 total;
@@ -233,10 +230,10 @@ void fsort(void** base, u32 n) {
     static void** gt;
     static void** tail;
     static void* p;
-    void** end;   /* r30 */
-    void** mid;   /* r29 */
-    void** start; /* r28 */
-    void** pv;    /* r27 */
+    void** end;
+    void** mid;
+    void** start;
+    void** pv;
     int c;
     int s;
     int b;
@@ -309,6 +306,7 @@ void fsort(void** base, u32 n) {
                 t = mask & n;
                 half = step >> 1;
                 mask &= mask << ((half == 0) ? 1 : half);
+                // FAKE: two complementary ifs; if (t != 0) ... else ... changes the object
                 if (t != 0)
                     k -= step;
                 if (t == 0)
@@ -339,10 +337,11 @@ void fsort(void** base, u32 n) {
             sel_scan:
                 while (hi >= lo) {
                     c = comp(*hi, *pv);
-                    if (c > 0)
+                    if (c > 0) {
                         gt = hi;
-                    else if (c < 0)
+                    } else if (c < 0) {
                         goto sel_lscan;
+                    }
                     hi -= g;
                 }
                 goto sel_done;
@@ -353,6 +352,7 @@ void fsort(void** base, u32 n) {
                         p = *lo;
                         *lo = *hi;
                         *hi = p;
+                        // FAKE: two complementary ifs; if (c > 0) ... else ... changes the object
                         if (c > 0)
                             gt = hi;
                         if (!(c > 0))
@@ -371,15 +371,17 @@ void fsort(void** base, u32 n) {
                     gt += g;
                 }
 
-                if (gt <= mid)
+                if (gt <= mid) {
                     start = gt;
-                else if (hi >= mid)
+                } else if (hi >= mid) {
                     tail = hi;
-                else
+                } else {
                     break;
+                }
 
-                if (start >= tail)
+                if (start >= tail) {
                     break;
+                }
             }
 
             lo = base;
@@ -392,10 +394,11 @@ void fsort(void** base, u32 n) {
     scan:
         while (hi >= lo) {
             c = comp(*hi, *mid);
-            if (c > 0)
+            if (c > 0) {
                 gt = hi;
-            else if (c < 0)
+            } else if (c < 0) {
                 goto lscan;
+            }
             hi--;
         }
         goto done;
@@ -406,6 +409,7 @@ void fsort(void** base, u32 n) {
                 p = *lo;
                 *lo = *hi;
                 *hi = p;
+                // FAKE: two complementary ifs; if (c > 0) ... else ... changes the object
                 if (c > 0)
                     gt = hi;
                 if (!(c > 0))
@@ -441,17 +445,17 @@ void fsort(void** base, u32 n) {
 }
 
 void qqsort(void* base, u32 n, u32 size, int (*compare)(void*, void*)) {
-    u8* dst;      /* r27 */
-    void** idx;   /* r26 */
-    u32 i;        /* r25 */
-    void** table; /* r24 */
-    u8* buf;      /* r23 */
-    void** slot;  /* r22 */
-    u8* cur;      /* r21 */
-    void* p;      /* r0  */
+    u8* dst;
+    void** idx;
+    u32 i;
+    void** table;
+    u8* buf;
+    void** slot;
+    u8* cur;
+    void* p;
     u32 j;
-    void** pp; /* r4  */
-    u8* src;   /* r5  */
+    void** pp;
+    u8* src;
 
     table = tmp0;
     buf = tmp1;
@@ -478,6 +482,7 @@ void qqsort(void* base, u32 n, u32 size, int (*compare)(void*, void*)) {
         if (p != NULL) {
             slot = idx;
             if (p != dst) {
+                // FAKE: assignment inside the argument; cur = dst; memcpy(buf, cur, size) changes the object
                 memcpy(buf, cur = dst, size);
                 do {
                     memcpy(cur, *slot, size);
@@ -574,18 +579,18 @@ void makeKey(void) {
     if (gp->rumbleEnabled) {
         for (i = 0; i < 4; i++) {
             if (gp->rumbleHardStop[i]) {
-                PADControlMotor(i, 2);
+                PADControlMotor(i, PAD_MOTOR_STOP_HARD);
             } else {
                 if (gp->prevRumbleStatus[i] != gp->rumbleStatus[i]) {
                     switch (gp->rumbleStatus[i]) {
-                        case 0:
-                            PADControlMotor(i, 0);
+                        case PAD_MOTOR_STOP:
+                            PADControlMotor(i, PAD_MOTOR_STOP);
                             break;
-                        case 1:
-                            PADControlMotor(i, 1);
+                        case PAD_MOTOR_RUMBLE:
+                            PADControlMotor(i, PAD_MOTOR_RUMBLE);
                             break;
-                        case 2:
-                            PADControlMotor(i, 2);
+                        case PAD_MOTOR_STOP_HARD:
+                            PADControlMotor(i, PAD_MOTOR_STOP_HARD);
                             break;
                     }
                     gp->prevRumbleStatus[i] = gp->rumbleStatus[i];
@@ -654,11 +659,11 @@ u8 padGetRumbleStatus(u32 chan) {
 }
 
 void sincosf(f32* ret_sin, f32* ret_cos, f32 degree) {
-    float result; // fp31
+    f32 radian;
 
-    result = PI * degree / 180.0f; // convert to radian
-    *ret_sin = (f32)sin(result);
-    *ret_cos = -(f32)cos(result);
+    radian = PI * degree / 180.0f;
+    *ret_sin = (f32)sin(radian);
+    *ret_cos = -(f32)cos(radian);
 }
 
 void movePos(float* ret_sin, float* ret_cos, f32 dist, f32 degree) {
@@ -704,7 +709,7 @@ void sysDummyDraw(Mtx mtx) {
     GXSetNumChans(0);
     GXSetNumTexGens(1);
     GXSetNumTevStages(1);
-    GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, 0x3C);
+    GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
     GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR_NULL);
     GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
     GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);

@@ -1,4 +1,4 @@
-//Goombella Tattle Details
+// Tattle (monosiri) data: per-unit-type tattle messages and the groups of unit types that share a tattle flag
 #include "battle/battle_monosiri.h"
 #include "battle/battle_unit.h"
 #include "driver/swdrv.h"
@@ -765,7 +765,8 @@ void battleSetUnitMonosiriFlag(BattleUnitType kind) {
             break;
         }
         for (j = 0; group[j] != UNIT_NULL; j++) {
-            if (kind == group[j]) { //found the type in a group, write bits for all entries
+            if (kind == group[j]) {
+                // the kind is in this group: set the tattle flag of every kind in it
                 for (k = 0; (kind = group[k]) != UNIT_NULL; k++) {
                     swSet(kind + 0x117A);
                     wp->tattledUnitTypeFlags[kind / 32] |= 1 << (kind % 32);
@@ -774,7 +775,7 @@ void battleSetUnitMonosiriFlag(BattleUnitType kind) {
             }
         }
     }
-    //no group found, just write the single bit
+    // no group holds the kind: set its own tattle flag only
     swSet(kind + 0x117A);
     wp->tattledUnitTypeFlags[kind / 32] |= 1 << (kind % 32);
 }

@@ -12,8 +12,6 @@
 extern ItemData itemDataTable[];
 
 
-#pragma inline_max_total_size(100000)
-
 void _btlSamplingEnemy(BattleWorkWeaponTargets* d) {
     BattleUnitKindPart* kp;
     BattleWorkTarget* tg4;
@@ -34,14 +32,12 @@ void _btlSamplingEnemy(BattleWorkWeaponTargets* d) {
         d->numTargets = -1;
         return;
     }
-    {
     for (i = 0; i < 64; i++) {
         BattleUnit* unit = BattleGetUnitPtr(wp, i);
         if (unit && !BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL) && !(unit->mAttributeFlags & kUnitNeverTargetable)) {
             part = unit->mParts;
             np2 = unit->mKindParams->numParts & 0xFF;
             for (j = 0; j < np2; j++) {
-
                 s32 dir;
                 f32 x, y, z;
                 f32 ox, oy, oz;
@@ -87,18 +83,16 @@ void _btlSamplingEnemy(BattleWorkWeaponTargets* d) {
             }
         }
     }
-    }
-    {
     d->currentTarget = i = 0;
     d->numTargets = n;
     n = d->numTargets;
     t = d->targets;
-        for (; n > i; i++) {
-            BattleWorkTarget* tg = &t[i];
-            BattleUnit* unit = BattleGetUnitPtr(wp, tg->unitIdx);
-            BattleUnitPart* part = BtlUnit_GetPartsPtr(unit, tg->partIdx);
-            {
+    for (; n > i; i++) {
+        BattleWorkTarget* tg = &t[i];
+        BattleUnit* unit = BattleGetUnitPtr(wp, tg->unitIdx);
+        BattleUnitPart* part = BtlUnit_GetPartsPtr(unit, tg->partIdx);
         BOOL ok;
+
         do {
             u32 flags = d->classFlags;
             if (flags & TARGET_CLASS_NONE) {
@@ -180,7 +174,7 @@ void _btlSamplingEnemy(BattleWorkWeaponTargets* d) {
             }
             if (flags & TARGET_CLASS_ONLY_MAIN_PARTS) {
                 u32 a = part->attributes;
-                if (!((a & 1) || (a & 2)) || (a & kNotMainTarget)) {
+                if (!((a & kMainPart) || (a & kImportantPart)) || (a & kNotMainTarget)) {
                     ok = FALSE;
                     break;
                 }
@@ -188,9 +182,9 @@ void _btlSamplingEnemy(BattleWorkWeaponTargets* d) {
             if (flags & TARGET_CLASS_ONLY_MAIN_OR_SEMI_PARTS) {
                 u32 a = part->attributes;
 #ifdef VERSION_G8ME01
-                if (!((a & 1) || (a & 2) || (a & 4)) || (a & 0x10) || (a & kNotMainTarget)) {
+                if (!((a & kMainPart) || (a & kImportantPart) || (a & kSemiImportantPart)) || (a & 0x10) || (a & kNotMainTarget)) {
 #else
-                if (!((a & 1) || (a & 2) || (a & 4)) || (a & kNotMainTarget)) {
+                if (!((a & kMainPart) || (a & kImportantPart) || (a & kSemiImportantPart)) || (a & kNotMainTarget)) {
 #endif
                     ok = FALSE;
                     break;
@@ -199,25 +193,22 @@ void _btlSamplingEnemy(BattleWorkWeaponTargets* d) {
             ok = TRUE;
         } while (0);
         if (!ok) {
-                for (k = i; k < n - 1; k++) {
-                    d->targets[k] = d->targets[k + 1];
-                }
-                n--;
-                i--;
+            for (k = i; k < n - 1; k++) {
+                d->targets[k] = d->targets[k + 1];
             }
-        }
+            n--;
+            i--;
         }
     }
 
-    {
-        for (i = 0; n > i; i++) {
-            BattleWorkTarget* tg = &t[i];
-            BattleUnit* unit = BattleGetUnitPtr(wp, tg->unitIdx);
-            BattleUnitPart* part = BtlUnit_GetPartsPtr(unit, tg->partIdx);
-            {
+    for (i = 0; n > i; i++) {
+        BattleWorkTarget* tg = &t[i];
+        BattleUnit* unit = BattleGetUnitPtr(wp, tg->unitIdx);
+        BattleUnitPart* part = BtlUnit_GetPartsPtr(unit, tg->partIdx);
         BOOL ok;
+
         do {
-                        if (d->propFlags & TARGET_PROP_TATTLE) {
+            if (d->propFlags & TARGET_PROP_TATTLE) {
                 if (part->attributes & kUntattleable) {
                     ok = FALSE;
                     break;
@@ -251,7 +242,7 @@ void _btlSamplingEnemy(BattleWorkWeaponTargets* d) {
             }
             if (d->propFlags & TARGET_PROP_NO_GROUNDED) {
                 u32 a = unit->mAttributeFlags;
-                if (!(a & 4) && !(a & 2)) {
+                if (!(a & kFloating) && !(a & kCeiling)) {
                     ok = FALSE;
                     break;
                 }
@@ -297,6 +288,31 @@ void _btlSamplingEnemy(BattleWorkWeaponTargets* d) {
             ok = TRUE;
         } while (0);
         if (!ok) {
+            for (k = i; k < n - 1; k++) {
+                d->targets[k] = d->targets[k + 1];
+            }
+            n--;
+            i--;
+        }
+    }
+
+    if (d->classFlags & TARGET_CLASS_ONLY_MAIN_PARTS) {
+        for (i = 0; n > i; i++) {
+            BattleWorkTarget* tg = &t[i];
+            BattleUnitPart* part = BtlUnit_GetPartsPtr(BattleGetUnitPtr(wp, tg->unitIdx), tg->partIdx);
+            BOOL keep = TRUE;
+            if (part->attributes & kImportantPart) {
+                for (j = 0; j < n; j++) {
+                    BattleWorkTarget* o = &t[j];
+                    if (tg != o && tg->unitIdx == o->unitIdx) {
+                        if (BtlUnit_GetPartsPtr(BattleGetUnitPtr(wp, o->unitIdx), o->partIdx)->attributes & kMainPart) {
+                            keep = FALSE;
+                            break;
+                        }
+                    }
+                }
+            }
+            if (!keep) {
                 for (k = i; k < n - 1; k++) {
                     d->targets[k] = d->targets[k + 1];
                 }
@@ -304,44 +320,15 @@ void _btlSamplingEnemy(BattleWorkWeaponTargets* d) {
                 i--;
             }
         }
-        }
     }
 
-    if (d->classFlags & TARGET_CLASS_ONLY_MAIN_PARTS) {
-        {
-            for (i = 0; n > i; i++) {
-                BattleWorkTarget* tg = &t[i];
-                BattleUnitPart* part = BtlUnit_GetPartsPtr(BattleGetUnitPtr(wp, tg->unitIdx), tg->partIdx);
-                BOOL keep = TRUE;
-                if (part->attributes & kImportantPart) {
-                    for (j = 0; j < n; j++) {
-                        BattleWorkTarget* o = &t[j];
-                        if (tg != o && tg->unitIdx == o->unitIdx) {
-                            if (BtlUnit_GetPartsPtr(BattleGetUnitPtr(wp, o->unitIdx), o->partIdx)->attributes & 1) {
-                                keep = FALSE;
-                                break;
-                            }
-                        }
-                    }
-                }
-                if (!keep) {
-                    for (k = i; k < n - 1; k++) {
-                        d->targets[k] = d->targets[k + 1];
-                    }
-                    n--;
-                    i--;
-                }
-            }
-        }
-    }
+    for (i = 0; n > i; i++) {
+        BOOL keep;
+        BattleUnitPart* part;
 
-    {
-        for (i = 0; n > i; i++) {
-            BOOL keep;
-            BattleUnitPart* part;
-            tg4 = &t[i];
-            part = BtlUnit_GetPartsPtr(BattleGetUnitPtr(wp, tg4->unitIdx), tg4->partIdx);
-            do {
+        tg4 = &t[i];
+        part = BtlUnit_GetPartsPtr(BattleGetUnitPtr(wp, tg4->unitIdx), tg4->partIdx);
+        do {
             if ((d->propFlags & TARGET_PROP_ONLY_FRONTMOST) && !(part->attributes & VERSION_PICK(0x10, 0x40))) {
                 ok4 = TRUE;
                 for (j = 0; j < n; j++) {
@@ -375,33 +362,44 @@ void _btlSamplingEnemy(BattleWorkWeaponTargets* d) {
                 }
             }
             keep = TRUE;
-            } while (0);
+        } while (0);
 
-            if (!keep) {
-                for (k = i; k < n - 1; k++) {
-                    d->targets[k] = d->targets[k + 1];
-                }
-                n--;
-                i--;
+        if (!keep) {
+            for (k = i; k < n - 1; k++) {
+                d->targets[k] = d->targets[k + 1];
             }
+            n--;
+            i--;
         }
     }
 
     d->numTargets = n;
     {
-    s8* idx = d->targetIndices;
-    t = d->targets;
-    n = d->numTargets;
-    for (i = 0; i < n; i++) {
-        idx[i] = i;
-    }
-    if (d->direction > 0) {
-        for (i = 0; i < n - 1; i++) {
-            for (j = i + 1; j < n; j++) {
-                BattleWorkTarget* ta = &t[idx[i]];
-                BattleWorkTarget* tb = &t[idx[j]];
-                if (ta->posX + ta->score * 10 > tb->posX + tb->score * 10) {
-                    {
+        s8* idx = d->targetIndices;
+
+        t = d->targets;
+        n = d->numTargets;
+        for (i = 0; i < n; i++) {
+            idx[i] = i;
+        }
+        if (d->direction > 0) {
+            for (i = 0; i < n - 1; i++) {
+                for (j = i + 1; j < n; j++) {
+                    BattleWorkTarget* ta = &t[idx[i]];
+                    BattleWorkTarget* tb = &t[idx[j]];
+                    if (ta->posX + ta->score * 10 > tb->posX + tb->score * 10) {
+                        s8 a = idx[i];
+                        idx[i] = idx[j];
+                        idx[j] = a;
+                    }
+                }
+            }
+        } else {
+            for (i = 0; i < n - 1; i++) {
+                for (j = i + 1; j < n; j++) {
+                    BattleWorkTarget* ta = &t[idx[i]];
+                    BattleWorkTarget* tb = &t[idx[j]];
+                    if (ta->posX + ta->score * 10 <= tb->posX + tb->score * 10) {
                         s8 a = idx[i];
                         idx[i] = idx[j];
                         idx[j] = a;
@@ -409,21 +407,6 @@ void _btlSamplingEnemy(BattleWorkWeaponTargets* d) {
                 }
             }
         }
-    } else {
-        for (i = 0; i < n - 1; i++) {
-            for (j = i + 1; j < n; j++) {
-                BattleWorkTarget* ta = &t[idx[i]];
-                BattleWorkTarget* tb = &t[idx[j]];
-                if (ta->posX + ta->score * 10 <= tb->posX + tb->score * 10) {
-                    {
-                        s8 a = idx[i];
-                        idx[i] = idx[j];
-                        idx[j] = a;
-                    }
-                }
-            }
-        }
-    }
     }
 }
 
@@ -483,11 +466,11 @@ void BattleChoiceSamplingEnemy(BattleWorkWeaponTargets* d, u32 flags, s32* unitO
             if ((flags & TARGET_WEIGHT_PARTNER) && unit->currentKind >= TYPE_PARTNER_MIN && unit->currentKind < TYPE_PARTNER_MAX) {
                 w[id] = 1.5f * w[id];
             }
-            if ((flags & TARGET_WEIGHT_FRONT)) {
+            if (flags & TARGET_WEIGHT_FRONT) {
                 f32 t = 0.4f * (d->numTargets - i);
                 w[id] *= 0.1f + t;
             }
-            if ((flags & TARGET_WEIGHT_BACK)) {
+            if (flags & TARGET_WEIGHT_BACK) {
                 f32 t = 0.4f * i;
                 w[id] = (0.5f + t) * w[id];
             }
@@ -497,16 +480,16 @@ void BattleChoiceSamplingEnemy(BattleWorkWeaponTargets* d, u32 flags, s32* unitO
             if ((flags & TARGET_WEIGHT_OPPOSITE_SIDE) && active->mAlliance != unit->mAlliance && unit->mAlliance != ALLIANCE_NEUTRAL) {
                 w[id] = 1.5f * w[id];
             }
-            if ((flags & TARGET_WEIGHT_LOW_HP_RATIO)) {
+            if (flags & TARGET_WEIGHT_LOW_HP_RATIO) {
                 w[id] = (2.0f - (f32)unit->currentHp / (f32)unit->maxHp) * w[id];
             }
-            if ((flags & TARGET_WEIGHT_HIGH_HP_RATIO)) {
+            if (flags & TARGET_WEIGHT_HIGH_HP_RATIO) {
                 w[id] = (1.0f + (f32)unit->currentHp / (f32)unit->maxHp) * w[id];
             }
-            if ((flags & TARGET_WEIGHT_LOW_HP)) {
+            if (flags & TARGET_WEIGHT_LOW_HP) {
                 w[id] = (1.5f - 0.05f * unit->currentHp) * w[id];
             }
-            if ((flags & TARGET_WEIGHT_HIGH_HP)) {
+            if (flags & TARGET_WEIGHT_HIGH_HP) {
                 w[id] = (1.0f + 0.05f * unit->currentHp) * w[id];
             }
             if ((flags & TARGET_WEIGHT_IN_PERIL) && unit->currentHp <= unit->mKindParams->mPerilHP) {
@@ -619,6 +602,7 @@ void BattleChoiceSamplingEnemy(BattleWorkWeaponTargets* d, u32 flags, s32* unitO
 void BattleGetFirstAttackUnit(BattleWork* wp, BattleUnit** attacker, BattleUnit** target) {
     BattleUnit* found;
     BattleUnit* other;
+    // FAKE: tmp holds the getter result across the swap; assigning it directly changes the object
     BattleUnit* tmp;
     s32 i;
     for (i = 0; i < 64; i++) {

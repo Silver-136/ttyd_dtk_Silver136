@@ -199,7 +199,7 @@ const char* romFontGetMessage(s32 msg) {
     }
     return msg_tbl[gp->language][msg];
 #else
-    return msg_tbl[0][msg]; // has eng but always returns JP
+    return msg_tbl[0][msg]; // always the Japanese table
 #endif
 }
 
@@ -242,7 +242,7 @@ void romFontMake(void) {
     for (t = 0; t < 2; t++) {
 #endif
         for (i = 0; (str = msg_tbl[t][i]) != NULL; i++) {
-            /* ASCII mode (language != 0): only scan the English table (t != 0). */
+            /* ASCII mode (language != 0) skips the Japanese table (t == 0). */
             s32 k = 0;
             if (wp->language == 0 || t != 0) {
                 for (;;) {
@@ -347,21 +347,22 @@ static inline RomFontChar* romFontFindChar(u16 code) {
     RomFontChar* cur = w->glyphs;
     s32 n;
     for (n = 0; n < w->uniqueChars; cur++, n++) {
-        if (cur->code == code)
+        if (cur->code == code) {
             return cur;
+        }
     }
     return table; // not found
 }
 
 void romFontPrintGX(f32 x, f32 y, f32 scale, GXColor* color, const char* msg, ...) {
-    char buf[1024];  // 0x158
-    Mtx mtx;         // 0x128
-    Mtx scaleMtx;    // 0x0F8
-    Mtx camMtx;      // 0x0C8
-    GXTexObj texObj; // 0x0A8
-    Point3d target;  // 0x09C
-    Point3d up;      // 0x090
-    Point3d camPos;  // 0x084
+    char buf[1024];
+    Mtx mtx;
+    Mtx scaleMtx;
+    Mtx camMtx;
+    GXTexObj texObj;
+    Point3d target;
+    Point3d up;
+    Point3d camPos;
     va_list ap;
     s32 i = 0;
     s32 curX = 0;
@@ -373,9 +374,9 @@ void romFontPrintGX(f32 x, f32 y, f32 scale, GXColor* color, const char* msg, ..
     up = (Vec){ 0.0f, 1.0f, 0.0f };
     camPos = (Vec){ 0.0f, 0.0f, 240.0f / (f32)tan(0.21816612780094147) };
 
-    // --- format the message (this is where the va_list lives) ---
+    // --- format the message ---
     va_start(ap, msg);
-    vsprintf(buf, msg, ap); // no va_end in the original
+    vsprintf(buf, msg, ap); // va_end is never called
 
     C_MTXLookAt(camMtx, &camPos, &up, &target);
 
@@ -450,15 +451,18 @@ void romFontPrintGX(f32 x, f32 y, f32 scale, GXColor* color, const char* msg, ..
         GXLoadTexObj(&texObj, GX_TEXMAP0);
 
         GXBegin(GX_QUADS, GX_VTXFMT0, 4);
-        { s16 x2 = (s16)curX + 24; s16 y2 = (s16)curY + 24;
-        GXPosition3s16(curX, y2, 0);
-        GXTexCoord2s16(0, 0);
-        GXPosition3s16(x2, y2, 0);
-        GXTexCoord2s16(1, 0);
-        GXPosition3s16(x2, curY, 0);
-        GXTexCoord2s16(1, 1);
-        GXPosition3s16(curX, curY, 0);
-        GXTexCoord2s16(0, 1); }
+        {
+            s16 x2 = (s16)curX + 24;
+            s16 y2 = (s16)curY + 24;
+            GXPosition3s16(curX, y2, 0);
+            GXTexCoord2s16(0, 0);
+            GXPosition3s16(x2, y2, 0);
+            GXTexCoord2s16(1, 0);
+            GXPosition3s16(x2, curY, 0);
+            GXTexCoord2s16(1, 1);
+            GXPosition3s16(curX, curY, 0);
+            GXTexCoord2s16(0, 1);
+        }
         GXEnd();
 
         curX += glyph->width;
@@ -522,6 +526,8 @@ s32 romFontGetWidth(const char* message) {
         } else {
             i += 1;
         }
+        // BUG: after a newline or a skipped control byte, glyph still holds the previous character (it is
+        // uninitialized if the string starts with one), and that width is added again.
         width += glyph->width;
     }
     return max;

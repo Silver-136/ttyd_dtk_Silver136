@@ -264,3 +264,70 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/pmario_sound.c | psndBGMMain | f0 is a second name for fade (&bgm->fade) in its own block; using fade changes the object | see comment |
 | Both | src/pmario_sound.c | psndSFXChk | no-op mask of the u16 serial; key != sfx->serial changes the object | see comment |
 | Both | src/pmario_sound.c | psndStrippedPool | stand-in that nothing calls; deleting it changes the object (its s32-to-f32 conversion likely shapes the constant pool, as hitStrippedPool does in hitdrv.c) | see comment |
+| Both | src/battle/battle.c | BattleConsumeReserveItem | (s32) cast before the zero test; the plain test changes the object | see comment |
+| Both | src/battle/battle_ac_help.c | BattleAcHelpMain | spare pointer to acHelpDispType; testing wp->acHelpDispType directly changes the object | see comment |
+| US | src/battle/battle_attack_audience.c | _get_item_announce_disp | (u32) cast before the compare with LANGUAGE_JP; the plain compare changes the object | see comment |
+| Both | src/battle/battle_audience.c | BattleAudience_CheckReactionPerPhase | comma expression; `--member->statusTimer <= 0` changes the object | see comment |
+| Both | src/battle/battle_audience.c | BattleAudienceItemCtrlProcess | s32 view of the BattleAudienceItemKind table (tbl[2j] = type, tbl[2j+1] = chance); field access changes the object | see comment |
+| Both | src/battle/battle_audience.c | BattleAudienceApSrcCtrlProcess | Vec temporary for the statusGetApPos result; assigning it directly changes the object | see comment |
+| Both | src/battle/battle_audience.c | BattleAudienceDispAudience | block-local degrees-to-radians temporary (shadows s32 k); the constant written directly changes the object | see comment |
+| Both | src/battle/battle_audience.c | BattleAudienceDispApSrc | star holds the BattleAudience pointer until the loop; a separate BattleAudience* variable changes the object | see comment |
+| Both | src/battle/battle_audience.c | BattleAudience_GetPPAudienceNum_Sub | one-value range test; `member->status == AUDIENCE_STATUS_SLEEP` changes the object | see comment |
+| Both | src/battle/battle_audience.c | BattleAudienceJoy_Sub | no-op (s32) cast; `a + b` changes the object | see comment |
+| Both | src/battle/battle_break_slot.c | BattleBreakSlot_Init | i is set before wp->phase and the reel pointer; `for (i = 0; ...)` changes the object | see comment |
+| JP | src/battle/battle_break_slot.c | BattleBreakSlot_Main | no-op (u32) cast; the plain comparison changes the object | see comment |
+| Both | src/battle/battle_break_slot.c | BattleBreakSlotDispReel | i is set before the reel pointer; `for (i = 0; ...)` changes the object | see comment |
+| Both | src/battle/battle_damage.c | BattleDamageDirect | (u32) casts give unsigned compares; without them the object changes | see comment |
+| Both | src/battle/battle_damage.c | BattleCalculateDamage | dead guard (fn == NULL returned above); the plain call changes the object | see comment |
+| Both | src/battle/battle_damage.c | BattleCalculateFpDamage | dead guard (fn == NULL returned above); the plain call changes the object | see comment |
+| Both | src/battle/battle_damage.c | BattleSetStatusDamageFromWeapon | no-op (s8) cast on rate; the plain argument changes the object | see comment |
+| Both | src/battle/battle_damage.c | BattleCheckDamage | no-op (u32) cast; the plain test changes the object | see comment |
+| Both | src/battle/battle_detect.c | BattleGetFirstAttackUnit | tmp holds the getter result across the swap; assigning it directly changes the object | see comment |
+| Both | src/battle/battle_disp.c | btlUnitItemDisp | per-function opt_dead_assignments off keeps the unused height store; without it the object changes | see comment |
+| Both | src/battle/battle_disp.c | btlUnitItemDisp2 | goto chain; the single condition changes the object | see comment |
+| Both | src/battle/battle_disp.c | btlUnitStolenItemDisp | float-first cast of iconDispGx; the plain call changes the object | see comment |
+| Both | src/battle/battle_disp.c | btlDispAnimeSpeed | unused constant local kept by a per-function opt_dead_assignments off; without them the object changes | see comment |
+| Both | src/battle/battle_event_cmd.c | btlevtcmd_GetRGB | args is reused to hold the blue index; indexB = args[4] changes the object | see comment |
+| Both | src/battle/battle_event_cmd.c | btlevtcmd_SetOverTurnCount | block-scoped unit pointer; BattleGetUnitPtr(_battleWorkPointer, id)->flippedTurns = value changes the object | see comment |
+| Both | src/battle/battle_event_cmd.c | btlevtcmd_ChangeFaceDirection | block-scoped unit pointer; BattleGetUnitPtr(_battleWorkPointer, id)->faceDirection = value changes the object | see comment |
+| Both | src/battle/battle_event_cmd.c | btlevtcmd_OnToken | block-scoped enum copy of args[1]; unit->mTokenFlags /= args[1] changes the object | see comment |
+| Both | src/battle/battle_event_cmd.c | btlevtcmd_OffToken | nested blocks around an enum copy of args[1]; unit->mTokenFlags &= ~args[1] changes the object | see comment |
+| Both | src/battle/battle_event_cmd.c | btlevtcmd_CheckToken | block-scoped enum copy of args[1]; testing unit->mTokenFlags & args[1] changes the object | see comment |
+| Both | src/battle/battle_event_cmd.c | btlevtcmd_GetConsumeItem | the post-increment of args is unused; args[0] changes the object | see comment |
+| Both | src/battle/battle_event_cmd.c | btlevtcmd_PreCheckDamage | args is reused to hold the result index; out = args[5] changes the object | see comment |
+| Both | src/battle/battle_event_cmd.c | btlevtcmd_CheckDamage | args is reused to hold the result index; a separate out local changes the object | see comment |
+| Both | src/battle/battle_event_cmd.c | btlevtcmd_MarioJumpPosition | the same field is stored twice; one store changes the object | see comment |
+| Both | src/battle/battle_event_cmd.c | btlevtcmd_AudienceDeclareACResult | ac[0] / ac[1] are marioAcSuccess / marioAcFailed through one pointer; the field names change the object | see comment |
+| Both | src/battle/battle_event_cmd.c | btlevtcmd_PadCheckTrigger | args is reused to hold the result index; a separate index local changes the object | see comment |
+| Both | src/battle/battle_event_cmd.c | btlevtcmd_PadCheckNow | args is reused to hold the result index; a separate index local changes the object | see comment |
+| Both | src/battle/battle_icon.c | btlIconStrippedPool | not called anywhere; it only places the literals 0.0f, 1.0f and 0.5f in this object's constant pool. | see comment |
+| Both | src/battle/battle_mario.c | (file scope) | no-op (char*) cast; PTR(battle_mario_nullstr) changes the object | see comment |
+| Both | src/battle/battle_mario.c | _kaiten_hammer_acrobat_rotate | (s32) cast on the u32 userdata3; the plain compare with 0 changes the object | see comment |
+| Both | src/battle/battle_seq.c | btlseqFirstAct | u8* view of fbatInfo->setup, cast back to NpcBattleInfo* at its use; NpcBattleInfo* info changes the object | see comment |
+| Both | src/battle/battle_seq.c | btlseqTurn | string held in sfxName before the call; passing the literal directly changes the object | see comment |
+| Both | src/battle/battle_seq.c | btlseqAct | block-local unit shadowing the function's; using the function's unit changes the object | see comment |
+| Both | src/battle/battle_seq.c | battleSortPhaseMoveTable | wp copied into a void* and cast back at every use; using wp directly changes the object | see comment |
+| Both | src/battle/battle_seq.c | BattleWaitAllActiveEvtEnd_NoBgSetEndWait | wp copied into a void* and cast back at its use; using wp directly changes the object | see comment |
+| Both | src/battle/battle_seq_command.c | _btlcmd_MakeSelectWeaponTable | top is a spare copy of cursor->relPos; testing cursor->relPos directly changes the object | see comment |
+| Both | src/battle/battle_seq_command.c | _btlcmd_SelectWeaponDecide | (s32) cast on the s8 attackDirection passed as s8; dropping it changes the object | see comment |
+| Both | src/battle/battle_seq_command.c | BattleCommandDisplay_WeaponMultiItemCancelCheckDisp | called through a cast that puts the float arguments first; the plain call changes the object | see comment |
+| Both | src/battle/battle_seq_command.c | _btlcmd_SetAttackEvent | compares the pointers as signed integers (cmpw); the plain pointer compare changes the object | see comment |
+| Both | src/battle/battle_seq_end.c | btlseqEnd | dead `i >= STATUS_INVALID` test; `if (i < STATUS_FRIGHT)` changes the object | see comment |
+| Both | src/battle/battle_seq_end.c | _MarioExpDisp | windowDispGX_Waku_col called through a float-first cast; the plain call changes the object | see comment |
+| Both | src/battle/battle_seq_end.c | L__LvupParamHelpMsgDisp | 0.0f and -148.0f held in locals (zero, y); writing the literals changes the object | see comment |
+| US | src/battle/battle_seq_end.c | N__draw_select_one_to_upgrade_text | 0.0f and -148.0f held in locals (zero, y); writing the literals changes the object | see comment |
+| Both | src/battle/battle_seq_end.c | _set_confetti_control_evtid | empty triple NULL test of seqEndWork; removing it changes the object | see comment |
+| Both | src/sound.c | SoundInit | spare temporary tempsong; songs = sndMalloc(...); sound.songs = songs changes the object | see comment |
+| Both | src/sound.c | SoundLoadDVD2 | dead store; removing it changes the object | see comment |
+| Both | src/sound.c | SoundDVDSetPanCh | sign-bit test for pan >= 64; the plain comparison changes the object | see comment |
+| Both | src/sound.c | SoundDVDMain | u32 counter with a signed compare; a plain int counter changes the object | see comment |
+| Both | src/sound.c | ssDecodeDPCM | no-op (s32) cast; without it the object changes | see comment |
+| Both | src/sound.c | SoundSSSetPanCh | sign-bit test for pan >= 64; the plain comparison changes the object | see comment |
+| Both | src/sound.c | SoundSSMain | u32 counter with a signed compare; a plain int counter changes the object | see comment |
+| Both | src/statuswindow.c | statusWinInit | empty null check after the memset; removing it changes the object | see comment |
+| Both | src/statuswindow.c | statusWinMain | (x ? FALSE : TRUE) for !x; the plain negation changes the object | see comment |
+| Both | src/statuswindow.c | gaugeDisp | iconDispGx called through a scale-first function pointer cast (the scale is in f1 either way), which evaluates the arguments in the retail order; the plain call changes the object. | see comment |
+| Both | src/statuswindow.c | statusWinEase | unreferenced (dead-stripped at link); it only sets the order of the float constants in the pool, and the object changes without it. | see comment |
+| Both | src/system.c | reviseAngle | spare temporary temp; result = (f32)fmod(angle, 360.0) changes the object | see comment |
+| Both | src/system.c | fsort | two complementary ifs; if (t != 0) ... else ... changes the object | see comment |
+| Both | src/system.c | qqsort | assignment inside the argument; cur = dst; memcpy(buf, cur, size) changes the object | see comment |

@@ -17,29 +17,11 @@ void* _check_attack_item(BattleUnit* self);
 void* _check_fp_recover_item(BattleUnit* self);
 void* _check_hp_recover_item(BattleUnit* self);
 
-
-
-#define ENEMY_ITEM_SAMPLE_TARGETS()                                                  \
-    BattleWork* wp;                                                                  \
-    s32 itemId;                                                                      \
-    BattleWorkWeaponTargets* targets;                                                \
-    BattleWeapon* weapon;                                                            \
-    s32 i;                                                                           \
-    BattleUnit* unit;                                                                \
-    itemId = self->heldItem;                                                         \
-    wp = _battleWorkPointer;                                                         \
-    targets = &wp->weaponTargets;                                                    \
-    weapon = itemDataTable[itemId].battle_params;                                    \
-    BattleSamplingEnemy(targets, weapon, self->unitId, BtlUnit_GetEnemyBelong(self), \
-    weapon->targetClassFlags, weapon->targetPropertyFlags,                           \
-    (s32)(s8)wp->alliances[self->mAlliance].attackDirection);
-
-
 void* BattleEnemyUseItemCheck(BattleUnit* self) {
     s32 itemId = self->heldItem;
     BattleWeapon* weapon;
     void* r;
-    if (itemId == 0) {
+    if (itemId == ITEM_NULL) {
         return NULL;
     }
     weapon = itemDataTable[itemId].battle_params;
@@ -50,11 +32,27 @@ void* BattleEnemyUseItemCheck(BattleUnit* self) {
         return NULL;
     }
     switch (itemId) {
-    case ITEM_THUNDER_BOLT: case ITEM_THUNDER_RAGE: case ITEM_SHOOTING_STAR: case ITEM_ICE_STORM: case ITEM_FIRE_FLOWER: case ITEM_EARTH_QUAKE: case ITEM_POW_BLOCK: case ITEM_HP_DRAIN_ITEM:
+    case ITEM_THUNDER_BOLT:
+    case ITEM_THUNDER_RAGE:
+    case ITEM_SHOOTING_STAR:
+    case ITEM_ICE_STORM:
+    case ITEM_FIRE_FLOWER:
+    case ITEM_EARTH_QUAKE:
+    case ITEM_POW_BLOCK:
+    case ITEM_HP_DRAIN_ITEM:
         return _check_attack_item(self);
-    case ITEM_RUIN_POWDER: case ITEM_SLEEPY_SHEEP: case ITEM_STOPWATCH: case ITEM_DIZZY_DIAL: case ITEM_MINI_MR_MINI: case ITEM_MR_SOFTENER:
+    case ITEM_RUIN_POWDER:
+    case ITEM_SLEEPY_SHEEP:
+    case ITEM_STOPWATCH:
+    case ITEM_DIZZY_DIAL:
+    case ITEM_MINI_MR_MINI:
+    case ITEM_MR_SOFTENER:
         return _check_status_attack_item(self);
-    case ITEM_BOOS_SHEET: case ITEM_VOLT_SHROOM: case ITEM_REPEL_CAPE: case ITEM_POWER_PUNCH: case ITEM_COURAGE_SHELL:
+    case ITEM_BOOS_SHEET:
+    case ITEM_VOLT_SHROOM:
+    case ITEM_REPEL_CAPE:
+    case ITEM_POWER_PUNCH:
+    case ITEM_COURAGE_SHELL:
         return _check_status_support_item(self);
     case ITEM_TASTY_TONIC:
         return _check_status_recover_item(self);
@@ -80,7 +78,20 @@ void* BattleEnemyUseItemCheck(BattleUnit* self) {
 }
 
 void* _check_hp_recover_item(BattleUnit* self) {
-    ENEMY_ITEM_SAMPLE_TARGETS()
+    BattleWork* wp;
+    s32 itemId;
+    BattleWorkWeaponTargets* targets;
+    BattleWeapon* weapon;
+    s32 i;
+    BattleUnit* unit;
+
+    itemId = self->heldItem;
+    wp = _battleWorkPointer;
+    targets = &wp->weaponTargets;
+    weapon = itemDataTable[itemId].battle_params;
+    BattleSamplingEnemy(targets, weapon, self->unitId, BtlUnit_GetEnemyBelong(self),
+                        weapon->targetClassFlags, weapon->targetPropertyFlags,
+                        (s32)(s8)wp->alliances[self->mAlliance].attackDirection);
     for (i = 0; i < targets->numTargets; i++) {
         unit = BattleGetUnitPtr(wp, targets->targets[targets->targetIndices[i]].unitIdx);
         if (!(self->mAttributeFlags & kInactive)) {
@@ -93,7 +104,20 @@ void* _check_hp_recover_item(BattleUnit* self) {
 }
 
 void* _check_fp_recover_item(BattleUnit* self) {
-    ENEMY_ITEM_SAMPLE_TARGETS()
+    BattleWork* wp;
+    s32 itemId;
+    BattleWorkWeaponTargets* targets;
+    BattleWeapon* weapon;
+    s32 i;
+    BattleUnit* unit;
+
+    itemId = self->heldItem;
+    wp = _battleWorkPointer;
+    targets = &wp->weaponTargets;
+    weapon = itemDataTable[itemId].battle_params;
+    BattleSamplingEnemy(targets, weapon, self->unitId, BtlUnit_GetEnemyBelong(self),
+                        weapon->targetClassFlags, weapon->targetPropertyFlags,
+                        (s32)(s8)wp->alliances[self->mAlliance].attackDirection);
     for (i = 0; i < targets->numTargets; i++) {
         s32 max;
         unit = BattleGetUnitPtr(wp, targets->targets[targets->targetIndices[i]].unitIdx);
@@ -108,7 +132,20 @@ void* _check_fp_recover_item(BattleUnit* self) {
 }
 
 void* _check_attack_item(BattleUnit* self) {
-    ENEMY_ITEM_SAMPLE_TARGETS()
+    BattleWork* wp;
+    s32 itemId;
+    BattleWorkWeaponTargets* targets;
+    BattleWeapon* weapon;
+    s32 i;
+    BattleUnit* unit;
+
+    itemId = self->heldItem;
+    wp = _battleWorkPointer;
+    targets = &wp->weaponTargets;
+    weapon = itemDataTable[itemId].battle_params;
+    BattleSamplingEnemy(targets, weapon, self->unitId, BtlUnit_GetEnemyBelong(self),
+                        weapon->targetClassFlags, weapon->targetPropertyFlags,
+                        (s32)(s8)wp->alliances[self->mAlliance].attackDirection);
     if (targets->numTargets <= 0) {
         return NULL;
     }
@@ -127,7 +164,20 @@ void* _check_attack_item(BattleUnit* self) {
 }
 
 void* _check_status_attack_item(BattleUnit* self) {
-    ENEMY_ITEM_SAMPLE_TARGETS()
+    BattleWork* wp;
+    s32 itemId;
+    BattleWorkWeaponTargets* targets;
+    BattleWeapon* weapon;
+    s32 i;
+    BattleUnit* unit;
+
+    itemId = self->heldItem;
+    wp = _battleWorkPointer;
+    targets = &wp->weaponTargets;
+    weapon = itemDataTable[itemId].battle_params;
+    BattleSamplingEnemy(targets, weapon, self->unitId, BtlUnit_GetEnemyBelong(self),
+                        weapon->targetClassFlags, weapon->targetPropertyFlags,
+                        (s32)(s8)wp->alliances[self->mAlliance].attackDirection);
     if (targets->numTargets <= 0) {
         return NULL;
     }
@@ -135,7 +185,8 @@ void* _check_status_attack_item(BattleUnit* self) {
         unit = BattleGetUnitPtr(wp, targets->targets[targets->targetIndices[i]].unitIdx);
         if (!(self->mAttributeFlags & kInactive)) {
             switch (itemId) {
-            case ITEM_SLEEPY_SHEEP: case ITEM_STOPWATCH:
+            case ITEM_SLEEPY_SHEEP:
+            case ITEM_STOPWATCH:
                 if (BtlUnit_CanActStatus(unit)) {
                     return itemDataTable[itemId].battle_params->mAttackEvtScript;
                 }
@@ -167,7 +218,20 @@ void* _check_status_attack_item(BattleUnit* self) {
 }
 
 void* _check_status_support_item(BattleUnit* self) {
-    ENEMY_ITEM_SAMPLE_TARGETS()
+    BattleWork* wp;
+    s32 itemId;
+    BattleWorkWeaponTargets* targets;
+    BattleWeapon* weapon;
+    s32 i;
+    BattleUnit* unit;
+
+    itemId = self->heldItem;
+    wp = _battleWorkPointer;
+    targets = &wp->weaponTargets;
+    weapon = itemDataTable[itemId].battle_params;
+    BattleSamplingEnemy(targets, weapon, self->unitId, BtlUnit_GetEnemyBelong(self),
+                        weapon->targetClassFlags, weapon->targetPropertyFlags,
+                        (s32)(s8)wp->alliances[self->mAlliance].attackDirection);
     if (targets->numTargets <= 0) {
         return NULL;
     }
@@ -207,7 +271,20 @@ void* _check_status_support_item(BattleUnit* self) {
 }
 
 void* _check_status_recover_item(BattleUnit* self) {
-    ENEMY_ITEM_SAMPLE_TARGETS()
+    BattleWork* wp;
+    s32 itemId;
+    BattleWorkWeaponTargets* targets;
+    BattleWeapon* weapon;
+    s32 i;
+    BattleUnit* unit;
+
+    itemId = self->heldItem;
+    wp = _battleWorkPointer;
+    targets = &wp->weaponTargets;
+    weapon = itemDataTable[itemId].battle_params;
+    BattleSamplingEnemy(targets, weapon, self->unitId, BtlUnit_GetEnemyBelong(self),
+                        weapon->targetClassFlags, weapon->targetPropertyFlags,
+                        (s32)(s8)wp->alliances[self->mAlliance].attackDirection);
     if (targets->numTargets <= 0) {
         return NULL;
     }

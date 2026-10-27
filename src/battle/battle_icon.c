@@ -16,7 +16,7 @@ BattleIcon* BtlIconGetPtr(s32 index) {
 
     for (i = 0; i < 16; i++) {
         icon = &_battleWorkPointer->icons[i];
-        if (icon->flags & 1 && icon->index == index) {
+        if ((icon->flags & 1) && icon->index == index) {
             return icon;
         }
     }
@@ -35,7 +35,7 @@ void BattleIconMain(void) {
     wp = _battleWorkPointer;
     for (i = 0; i < 16; i++) {
         icon = &wp->icons[i];
-        if (icon->flags & 1) { //in use
+        if (icon->flags & 1) { // in use
             if (icon->base) {
                 iconSetPos(icon->base->name, icon->position.x, icon->position.y, icon->position.z);
                 iconSetScale(icon->base->name, icon->scale * icon->scaleMul);
@@ -66,7 +66,7 @@ BattleIcon* BtlIcon_Entry(u16 iconId, f32 x, f32 y, f32 z) {
     for (i = 0; i < 16; i++) {
         icon = &_battleWorkPointer->icons[i];
         if (!(icon->flags & 1)) {
-            break; //found one not in use
+            break; // free slot
         }
     }
     if (i >= 16) {
@@ -95,7 +95,7 @@ void BtlIcon_Delete(BattleIcon* icon) {
     }
 }
 
-//s32 iconId, f32 x, f32 y, f32 z, s32 evtIndex
+// args: icon id, x, y, z (read as integers), variable that receives the battle icon index
 USER_FUNC(btlevtcmd_BtlIconEntry) {
     EvtWord* args = event->args;
     BattleIcon* icon;
@@ -112,7 +112,8 @@ USER_FUNC(btlevtcmd_BtlIconEntry) {
     return EVT_RETURN_DONE;
 }
 
-//s32 itemId (index for itemDataTable) , f32 x, f32 y, f32 z, s32 evtIndex
+// args: item id (its itemDataTable icon is shown), x, y, z (read as integers), variable that receives the battle
+// icon index
 USER_FUNC(btlevtcmd_BtlIconEntryItemId) {
     EvtWord* args = event->args;
     BattleIcon* icon;
@@ -129,7 +130,7 @@ USER_FUNC(btlevtcmd_BtlIconEntryItemId) {
     return EVT_RETURN_DONE;
 }
 
-//s32 index for BtlIconGetPtr
+// args: battle icon index (BtlIconGetPtr)
 USER_FUNC(btlevtcmd_BtlIconDelete) {
     BattleIcon* icon;
     s32 value;
@@ -140,7 +141,7 @@ USER_FUNC(btlevtcmd_BtlIconDelete) {
     return EVT_RETURN_DONE;
 }
 
-//s32 index for BtlIconGetPtr, f32 x, f32 y, f32 z
+// args: battle icon index, x, y, z (floats)
 USER_FUNC(btlevtcmd_BtlIconSetPosition) {
     EvtWord* args = event->args;
     BattleIcon* icon;
@@ -158,7 +159,7 @@ USER_FUNC(btlevtcmd_BtlIconSetPosition) {
     return EVT_RETURN_DONE;
 }
 
-//s32 index for BtlIconGetPtr, f32 fallAccel
+// args: battle icon index, fall acceleration (float)
 USER_FUNC(btlevtcmd_BtlIconSetFallAccel) {
     EvtWord* args = event->args;
     s32 index = evtGetValue(event, args[0]);
@@ -214,7 +215,7 @@ USER_FUNC(btlevtcmd_BtlIconJumpPosition) {
             icon->jumpDist -= icon->jumpFrames * icon->jumpSpeed;
         }
         if (icon->jumpFrames == 0) {
-            return 2;
+            return EVT_RETURN_DONE;
         }
         icon->jumpVelY = dy / icon->jumpFrames + icon->fallAccel * icon->jumpFrames / 2.0f;
         icon->jumpSpeed += icon->jumpDist / icon->jumpFrames;
@@ -233,11 +234,12 @@ USER_FUNC(btlevtcmd_BtlIconJumpPosition) {
         icon->position.x = icon->jumpTarget.x;
         icon->position.y = icon->jumpTarget.y;
         icon->position.z = icon->jumpTarget.z;
-        return 1;
+        return EVT_RETURN_YIELD;
     }
-    return 0;
+    return EVT_RETURN_BLOCK;
 }
 
+// FAKE: not called anywhere; it only places the literals 0.0f, 1.0f and 0.5f in this object's constant pool.
 void btlIconStrippedPool(f32* f) {
     f[0] = 0.0f;
     f[1] = 1.0f;

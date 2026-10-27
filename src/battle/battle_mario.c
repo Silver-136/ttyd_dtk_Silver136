@@ -36,59 +36,12 @@ static USER_FUNC(_get_mario_hammer_lv);
 #include "mario/mario_pouch.h"
 #include "system.h"
 #include "pmario_sound.h"
-
-
-#include "battle/battle_unit.h"
 #include "battle/battle_database_common.h"
 #include "icon_ids.h"
 
-
 USER_FUNC(_battle_majinai_effect);
 USER_FUNC(_majinai_powerup_check);
-USER_FUNC(btlevtcmd_ACSuccessEffect);
-USER_FUNC(btlevtcmd_AddPartsRotate);
-USER_FUNC(btlevtcmd_AddRotate);
-USER_FUNC(btlevtcmd_AnimeChangePoseType);
 USER_FUNC(btlevtcmd_AnnounceMessage);
-USER_FUNC(btlevtcmd_AudienceDeclareACResult);
-USER_FUNC(btlevtcmd_CheckActStatus);
-USER_FUNC(btlevtcmd_CheckDamage);
-USER_FUNC(btlevtcmd_CommandCheckDamage);
-USER_FUNC(btlevtcmd_CommandGetWeaponAddress);
-USER_FUNC(btlevtcmd_FaceDirectionAdd);
-USER_FUNC(btlevtcmd_GetBodyId);
-USER_FUNC(btlevtcmd_GetDamage);
-USER_FUNC(btlevtcmd_GetHeight);
-USER_FUNC(btlevtcmd_GetHitPos);
-USER_FUNC(btlevtcmd_GetPartsPos);
-USER_FUNC(btlevtcmd_GetPos);
-USER_FUNC(btlevtcmd_GetResultAC);
-USER_FUNC(btlevtcmd_GetResultPrizeLv);
-USER_FUNC(btlevtcmd_GetUnitId);
-USER_FUNC(btlevtcmd_JumpPartsContinue);
-USER_FUNC(btlevtcmd_JumpPartsPosition);
-USER_FUNC(btlevtcmd_JumpPartsSetting);
-USER_FUNC(btlevtcmd_JumpPosition);
-USER_FUNC(btlevtcmd_OffPartsAttribute);
-USER_FUNC(btlevtcmd_OnPartsAttribute);
-USER_FUNC(btlevtcmd_PayWeaponCost);
-USER_FUNC(btlevtcmd_RunDataEventChild);
-USER_FUNC(btlevtcmd_SetFallAccel);
-USER_FUNC(btlevtcmd_SetPartsPos);
-USER_FUNC(btlevtcmd_SetPartsRotate);
-USER_FUNC(btlevtcmd_SetPartsRotateOffset);
-USER_FUNC(btlevtcmd_SetRotate);
-USER_FUNC(btlevtcmd_StartAvoid);
-USER_FUNC(btlevtcmd_StartWaitEvent);
-USER_FUNC(btlevtcmd_StopAC);
-USER_FUNC(btlevtcmd_WeaponAftereffect);
-USER_FUNC(evt_btl_camera_off_posoffset_manual);
-USER_FUNC(evt_btl_camera_set_mode);
-USER_FUNC(evt_btl_camera_set_moveSpeedLv);
-USER_FUNC(evt_btl_camera_set_zoom);
-USER_FUNC(evt_btl_camera_shake_h);
-USER_FUNC(evt_eff64);
-USER_FUNC(evt_snd_sfxon);
 USER_FUNC(_paper_light_off);
 USER_FUNC(_fire_wave);
 USER_FUNC(_mario_fire_ball_controll);
@@ -271,7 +224,6 @@ BattleWeapon marioWeapon_KururinJump = {
     {0, 0, 0, 100, 0, 2, 5, 1, 1, 0, 0, 0}, // stageEffectRates
 #endif
 };
-
 
 BattleWeapon marioWeapon_KururinJump2 = {
     "btl_wn_mario_kururin_jump", // name
@@ -2749,7 +2701,7 @@ EVT_BEGIN(marioAttackEvent_JyabaraJump)
             CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_VOICE_MARIO_BATTLE_JUMP1"), EVT_NULLPTR, 0, EVT_NULLPTR)
             CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 90, MOVE_SOUND_KEEP)
         END_INLINE_EVENT
-        CALL(_wait_jyabara_hit_iron_frame, -2)
+        CALL(_wait_jyabara_hit_iron_frame, UNIT_ID_SELF)
         DELETE_EVENT(LW(14))
         DELETE_EVENT(LW(15))
         CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, 0, 0)
@@ -3608,7 +3560,7 @@ EVT_BEGIN(marioAttackEvent_TatsumakiJump)
         END_IF
         BEGIN_SIBLING_EVENT
             SET_VALUE(LW(6), LW(3))
-            CALL(_tatsumaki_effect, -2)
+            CALL(_tatsumaki_effect, UNIT_ID_SELF)
             SET_VALUE(LW(0), LW(15))
             CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SYSTEM, LW(0), PTR(&badgeWeapon_TatsumakiJumpInvolved))
             CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
@@ -3650,6 +3602,7 @@ EVT_BEGIN(marioAttackEvent_TatsumakiJump)
         END_SIBLING_EVENT
         WAIT_FRAMES(60)
         BEGIN_INLINE_EVENT_GET_ID(LW(13))
+            // BUG: this LOOP(30) is closed by END_IF, not END_LOOP (no IF is open here)
             LOOP(30)
                 CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, MARIO_WORK_SPIN_SPEED_MAX, LW(0))
                 SUBTRACT(LW(0), 1)
@@ -5007,7 +4960,7 @@ EVT_BEGIN(marioAttackEvent_FirstAttackKaitenHammer)
     CALL(_get_mario_hammer_lv, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 3)
         SET_VALUE(LW(12), PTR(&marioDefaultWeapon_FirstAttackKaitenHammer))
-        ELSE
+    ELSE
         SET_VALUE(LW(12), PTR(&marioDefaultWeapon_FirstAttackUltraHammer))
     END_IF
     CALL_CHILD(PTR(marioAttackEvent_KaitenHammer))
@@ -5195,7 +5148,7 @@ EVT_BEGIN(marioAttackEvent_JishinHammer)
         CALL(btlevtcmd_DamageDirect, LW(3), LW(4), 0, 0, 2, 0)
         BEGIN_INLINE_EVENT
             WAIT_FRAMES(42)
-            IF_BITS_SET(LW(7), 2)
+            IF_BITS_SET(LW(7), AC_RESULT_SUCCESS)
                 CALL(btlevtcmd_CommandCheckDamage, UNIT_ID_SELF, LW(3), LW(4), DAMAGE_RESULT_FINAL_HIT | DAMAGE_RESULT_AC_SUCCESS, LW(5))
             ELSE
                 CALL(btlevtcmd_CommandCheckDamage, UNIT_ID_SELF, LW(3), LW(4), DAMAGE_RESULT_FINAL_HIT, LW(5))
@@ -5468,7 +5421,7 @@ EVT_BEGIN(marioAttackEvent_UltraJishinHammer)
         CALL(btlevtcmd_DamageDirect, LW(3), LW(4), 0, 0, 2, 0)
         BEGIN_INLINE_EVENT
             WAIT_FRAMES(42)
-            IF_BITS_SET(LW(7), 2)
+            IF_BITS_SET(LW(7), AC_RESULT_SUCCESS)
                 CALL(btlevtcmd_CommandCheckDamage, UNIT_ID_SELF, LW(3), LW(4), DAMAGE_RESULT_FINAL_HIT | DAMAGE_RESULT_AC_SUCCESS, LW(5))
             ELSE
                 CALL(btlevtcmd_CommandCheckDamage, UNIT_ID_SELF, LW(3), LW(4), DAMAGE_RESULT_FINAL_HIT, LW(5))
@@ -5700,7 +5653,7 @@ EVT_BEGIN(marioAttackEvent_HammerNageru_object)
         CALL(btlevtcmd_ACSuccessEffect, LW(6), LW(0), LW(1), LW(2))
         CALL(btlevtcmd_CommandGetWeaponAddress, UNIT_ID_SELF, LW(0))
         CALL(btlevtcmd_AudienceDeclareACResult, LW(0), LW(6))
-        ELSE
+    ELSE
         CALL(btlevtcmd_CommandCheckDamage, UNIT_ID_SELF, LW(3), LW(4), DAMAGE_RESULT_FINAL_HIT, LW(5))
         CALL(btlevtcmd_CommandGetWeaponAddress, UNIT_ID_SELF, LW(0))
         CALL(btlevtcmd_AudienceDeclareACResult, LW(0), -1)
@@ -5755,7 +5708,7 @@ EVT_BEGIN(marioAttackEvent_FireNaguri)
         CALL(btlevtcmd_DivePartsPosition, UNIT_ID_SELF, 3, LW(0), LW(1), LW(2), 60, 0, EASING_CUBIC_OUT, 0, MOVE_SOUND_FROM_TABLE)
     END_SIBLING_EVENT
     LABEL(10)
-    CALL(btlevtcmd_PadCheckNow, 0, 262144, LW(0))
+    CALL(btlevtcmd_PadCheckNow, 0, BATTLE_PAD_STICK_LEFT, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         WAIT_FRAMES(1)
         GOTO(10)
@@ -5827,8 +5780,10 @@ EVT_BEGIN(marioAttackEvent_FireNaguri)
         CALL(evt_audience_ap_recovery)
         CALL(btlevtcmd_InviteApInfoReport)
         CALL(btlevtcmd_GetPartsPos, UNIT_ID_SELF, 3, LW(0), LW(1), LW(2))
+        // FAKE: no-op (char*) cast; PTR(battle_mario_nullstr) changes the object
         CALL(evt_eff64, PTR((char*)battle_mario_nullstr), STRING("fire_spark_n64"), 0, LW(0), LW(1), LW(2), 30, 40, FLOAT(1.0f), 12, 100, FLOAT(1.0f), FLOAT(1.0f), 0)
         ADD(LW(1), 5)
+        // FAKE: no-op (char*) cast; PTR(battle_mario_nullstr) changes the object
         CALL(evt_eff, PTR((char*)battle_mario_nullstr), STRING("kemuri_test"), 11, LW(0), LW(1), LW(2), FLOAT(1.0f), 0, 0, 0, 0, 0, 0, 0)
         CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT_ZOOM)
         CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
@@ -6263,22 +6218,6 @@ EVT_BEGIN(marioAttackEvent_MajinaiExpUp)
     RETURN
 EVT_END()
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 static USER_FUNC(_get_mario_hammer_lv) {
     s32 ret = *event->args;
     evtSetValue(event, ret, pouchGetPtr()->hammerLevel);
@@ -6367,7 +6306,6 @@ USER_FUNC(_wait_jyabara_hit_iron_frame) {
     return EVT_RETURN_DONE;
 }
 
-
 USER_FUNC(_tatsumaki_effect) {
     BattleWork* wp = _battleWorkPointer;
     EvtWord* ud = event->userWork;
@@ -6387,9 +6325,9 @@ USER_FUNC(_tatsumaki_effect) {
     case 0:
         ud[0]++;
         ud[1] = 0;
-        ud[2] = (s32) * &unit->mPosition.x;
-        ud[3] = (s32) * &unit->mPosition.y - 40;
-        ud[4] = (s32) * &unit->mPosition.z;
+        ud[2] = (s32)unit->mPosition.x;
+        ud[3] = (s32)unit->mPosition.y - 40;
+        ud[4] = (s32)unit->mPosition.z;
         ud[5] = (EvtWord)effKamekiTornadeN64Entry(0, 90, ud[2], ud[3], ud[4], 3.0f);
         ud[6] = (EvtWord)effKamekiTornadeN64Entry(0, 90, ud[2], ud[3], ud[4], 3.0f);
         ud[7] = psndSFXOn("SFX_BTL_JUMP_TATUMAKI2");
@@ -6397,6 +6335,7 @@ USER_FUNC(_tatsumaki_effect) {
         v.y = ud[3];
         v.z = ud[4];
         psndSFX_pos(ud[7], &v);
+        // fall through
     case 1:
         ud[1]++;
         r = intplGetValue(EASING_CUBIC_OUT, 0.0f, 80.0f, ud[1], 90);
@@ -6518,8 +6457,7 @@ USER_FUNC(_kaiten_hammer_acrobat_rotate) {
         BtlUnit_GetRotate(unit, &rx, &ry, &rz);
         event->userdata[0] = n;
         if (unit->faceDirection >= 0) {
-            f32 a = reviseAngle(ry);
-            event->userdata[1] = 360.0f + (360.0f - a);
+            event->userdata[1] = 360.0f + (360.0f - reviseAngle(ry));
         } else {
             event->userdata[1] = 360.0f + reviseAngle(ry);
         }
@@ -6528,6 +6466,7 @@ USER_FUNC(_kaiten_hammer_acrobat_rotate) {
     }
     BtlUnit_AddRotate(unit, 0, event->userdata[2], 0);
     event->userdata[0]--;
+    // FAKE: (s32) cast on the u32 userdata3; the plain compare with 0 changes the object
     if ((s32)event->userdata3 == 0) {
         event->userdata[1] -= event->userdata[2];
         if (event->userdata[1] <= 270) {
@@ -6553,7 +6492,6 @@ USER_FUNC(_mario_fire_ball_controll) {
     if (isFirstCall) {
         event->userdata[0] = 0;
         event->userdata[1] = (EvtWord)effFireEntry(5, 1000, 0.0f, 0.0f, 0.0f, battle_mario_one);
-
     }
     eff = (EffectEntry*)event->userdata[1];
     if (part->work[MARIO_PARTS_WORK_FIRE_BALL] == 0) {
@@ -6561,11 +6499,12 @@ USER_FUNC(_mario_fire_ball_controll) {
         return EVT_RETURN_DONE;
     }
     {
-        f32* p = (f32*)eff->userdata;
-        BtlUnit_GetPartsPos(part, &p[1], &p[2], &p[3]);
+        EffFireWork* work = (EffFireWork*)eff->userdata;
+        BtlUnit_GetPartsPos(part, &work->position.x, &work->position.y, &work->position.z);
     }
     return EVT_RETURN_BLOCK;
 }
+
 USER_FUNC(_fire_wave) {
     EvtWord* args = event->args;
     f32 x = evtGetValue(event, args[0]);
@@ -6577,7 +6516,6 @@ USER_FUNC(_fire_wave) {
     }
     return EVT_RETURN_DONE;
 }
-
 
 USER_FUNC(_majinai_powerup_check) {
     BattleWork* wp = _battleWorkPointer;

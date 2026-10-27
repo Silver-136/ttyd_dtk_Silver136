@@ -14,9 +14,6 @@
 #include "libc_decls.h"
 #include "eff/eff_magic1_n64.h"
 
-
-
-
 #define STG ((BattleStage*)BattleStageGetPtr()) // FAKE: no-op cast; without it US BattleStageEnd swaps the registers of s and i (r28/r29) around the batSpotEnd call
 
 typedef struct ScreenWork {
@@ -50,7 +47,13 @@ void batSpotEnd(void);
 #define STG_FREE(ptr) __memFree(HEAP_BATTLE, ptr)
 #endif
 
-static u8 inta_tex[32] ATTRIBUTE_ALIGN(32) = {0xFF,0xFF,0xFF,0xFF,0,0,0,0,0xFF,0xFF,0xFF,0xFF,0,0,0,0,0xFF,0xFF,0xFF,0xFF,0,0,0,0,0xFF,0xFF,0xFF,0xFF,0,0,0,0};
+// I4 texture for TEXMAP1 in tou_gamen_screen_tev: eight rows of texels (4 bytes each), alternating white and black
+static u8 inta_tex[32] ATTRIBUTE_ALIGN(32) = {
+    0xFF, 0xFF, 0xFF, 0xFF, 0, 0, 0, 0,
+    0xFF, 0xFF, 0xFF, 0xFF, 0, 0, 0, 0,
+    0xFF, 0xFF, 0xFF, 0xFF, 0, 0, 0, 0,
+    0xFF, 0xFF, 0xFF, 0xFF, 0, 0, 0, 0,
+};
 
 USER_FUNC(screen_evt_func);
 
@@ -67,10 +70,6 @@ void batSpotDisp(CameraId camId, void* param);
 BattleSpotEntry* batSpotEntry(void);
 void BattleStageDispDark(CameraId camId, void* param);
 void BattleStageDispLight(CameraId camId, void* param);
-void DarkByPoint(u8 alpha, f32 x, f32 y, f32 z);
-void DarkBySquare(f32 x0, f32 y0, f32 x1, f32 y1, f32 z, u8 alpha);
-void BattleStageSetDark(StageDark* d, u8 v, s32 time, u8 mode);
-void BattleStageSetDarkBase(StageDark* d, u8 v, s32 time, u8 mode);
 void batSpotInit(void);
 f32 getSpline(f32* a, f32* b, f32* c, f32* d, s32* t, s32 n, s32 x);
 void batSpotMain(void);
@@ -391,6 +390,7 @@ s32 BattleStageSysLightEntry(const char* name) {
     BattleStage* s = STG;
     s32 i;
 
+    // looks for a system light (0..6) with this name, but the result is not used
     for (i = 0; i <= 6; i++) {
         StageLight* l = &s->lights[i];
         if ((l->flags & STAGE_LIGHT_ACTIVE) && !strcmp(l->name, name)) {
@@ -408,7 +408,8 @@ s32 BattleStageSysLightEntry(const char* name) {
 }
 
 void BattleStageLightRelease(s32 idx, s32 time, u8 mode) {
-    // FAKE: l first holds the stage pointer (two defs), so with propagation on the stage base and idx * 232 + 4 stay separate adds as in the target; this replaces the old opt_propagation off pragma, under which the {0,0,0} template also left a dead stack store
+    // FAKE: l first holds the stage pointer (two definitions), which keeps the stage base and idx * 232 + 4 as
+    // separate adds; `StageLight* l = &STG->lights[idx];` changes the object
     StageLight* l = (StageLight*)STG;
 
     l = ((BattleStage*)l)->lights + idx;
@@ -419,7 +420,7 @@ void BattleStageLightRelease(s32 idx, s32 time, u8 mode) {
         } else {
             l->flags |= STAGE_LIGHT_RELEASING;
             l->colorStart = (GXColor){l->color.r, l->color.g, l->color.b};
-            { GXColor z = {0, 0, 0}; l->colorTarget = z; }
+            l->colorTarget = (GXColor){0, 0, 0};
             l->colorTime = time;
             l->colorMax = time;
             l->colorMode = mode;
@@ -594,6 +595,7 @@ f32 getSpline(f32* a, f32* b, f32* c, f32* d, s32* t, s32 n, s32 x) {
     return f * (f * (f * d[i] + c[i]) + b[i]) + a[i];
 }
 #pragma dont_inline reset
+
 BattleSpotWork* BatSpotGetPtr(void) {
     return wp;
 }
@@ -733,9 +735,9 @@ BattleSpotEntry* batSpotEntry(void) {
         }
     }
 
-    entry->pos = (Vec){0.0, 0.0, 0.0};
-    entry->scale = (Vec){1.0, 1.0, 1.0};
-    entry->rot = (Vec){0.0, 0.0, 0.0};
+    entry->pos = (Vec){0.0f, 0.0f, 0.0f};
+    entry->scale = (Vec){1.0f, 1.0f, 1.0f};
+    entry->rot = (Vec){0.0f, 0.0f, 0.0f};
     entry->color = (GXColor){0, 0, 0, 0};
     entry->flags |= SPOT_FLAG_ACTIVE;
 
@@ -884,4 +886,3 @@ void tou_gamen_screen_tev(MapTevCallbackInfo* p) {
     p->texCoord = 2;
     p->texMap = 2;
 }
-

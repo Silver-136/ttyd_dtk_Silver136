@@ -70,7 +70,7 @@ EVT_BEGIN(subsetevt_dead)
     SWITCH(LW(0))
         CASE_EQUAL(UNIT_MARIO)
         GOTO(0)
-        CASE_BETWEEN(224, 230)
+        CASE_BETWEEN(UNIT_GOOMBELLA, UNIT_MS_MOWZ)
         GOTO(0)
         CASE_DEFAULT
         GOTO(1)
@@ -101,7 +101,7 @@ EVT_BEGIN(subsetevt_dead)
             ELSE
             CALL(btlevtcmd_RunDataEventChild, LW(10), UNIT_DATA_DEAD_EVENT)
         END_IF
-        CASE_BETWEEN(224, 230)
+        CASE_BETWEEN(UNIT_GOOMBELLA, UNIT_MS_MOWZ)
         CALL(btlevtcmd_CheckDamageCode, LW(10), DAMAGE_RESULT_REVIVAL, LW(1))
         IF_INT_NOT_EQUAL(LW(1), 0)
             CALL(btlevtcmd_ClearAllStatus, LW(10))
@@ -116,11 +116,11 @@ EVT_BEGIN(subsetevt_dead)
                 END_SIBLING_EVENT
                 WAIT_FRAMES(60)
                 CALL(btlevtcmd_ClearAllStatus, LW(10))
-                CALL(btlevtcmd_ConsumeItemReserve, LW(10), 151)
+                CALL(btlevtcmd_ConsumeItemReserve, LW(10), ITEM_LIFE_SHROOM)
                 BEGIN_SIBLING_EVENT
                     CALL(btlevtcmd_GetPos, LW(10), LW(0), LW(1), LW(2))
                     ADD(LW(1), 40)
-                    CALL(btlevtcmd_DispItemIcon, LW(0), LW(1), LW(2), 151, 90)
+                    CALL(btlevtcmd_DispItemIcon, LW(0), LW(1), LW(2), ITEM_LIFE_SHROOM, 90)
                 END_SIBLING_EVENT
                 WAIT_FRAMES(90)
                 CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(0), UNIT_DATA_REVIVE_EVENT)
@@ -199,11 +199,11 @@ EVT_BEGIN(subsetevt_dead)
                     GOTO(6)
                 END_IF
                 CALL(btlevtcmd_ClearAllStatus, LW(10))
-                CALL(btlevtcmd_ConsumeItemReserve, LW(10), 151)
+                CALL(btlevtcmd_ConsumeItemReserve, LW(10), ITEM_LIFE_SHROOM)
                 BEGIN_SIBLING_EVENT
                     CALL(btlevtcmd_GetPos, LW(10), LW(0), LW(1), LW(2))
                     ADD(LW(1), 40)
-                    CALL(btlevtcmd_DispItemIcon, LW(0), LW(1), LW(2), 151, 120)
+                    CALL(btlevtcmd_DispItemIcon, LW(0), LW(1), LW(2), ITEM_LIFE_SHROOM, 120)
                 END_SIBLING_EVENT
                 WAIT_FRAMES(90)
                 SET_VALUE(LW(0), 30)
@@ -1108,6 +1108,7 @@ EVT_BEGIN(subsetevt_shot_damage_ultra)
         CALL(btlevtcmd_OnToken, LW(10), kKnockedAwayReturned)
         CALL(btlevtcmd_WaitAttackEnd)
     END_IF
+    // No IF_* is open here: this END_IF has no matching IF.
     END_IF
     CALL(btlevtcmd_JumpSetting, LW(10), 0, FLOAT(0.0f), FLOAT(0.14941406f))
     CALL(btlevtcmd_JumpPosition, LW(10), LW(0), LW(1), LW(2), 20, MOVE_SOUND_FROM_TABLE)
@@ -1396,6 +1397,7 @@ EVT_BEGIN(subsetevt_check_target_movable)
         SET_VALUE(LW(0), 0)
         RETURN
     END_IF
+    // The same STATUS_STOP check a second time.
     CALL(btlevtcmd_CheckStatus, LW(3), STATUS_STOP, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         SET_VALUE(LW(0), 0)

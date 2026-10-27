@@ -89,9 +89,6 @@ void _MarioExpDisp(CameraId camId, void* param);
 void _GetExpIcon_Disp(CameraId camId, void* param);
 void _lvup_select_object_disp(CameraId camId, void* param);
 
-
-
-//.data
 USER_FUNC(_check_guard_koura);
 USER_FUNC(_disable_enemy_unit_disp);
 USER_FUNC(_get_rank_up_msg);
@@ -113,15 +110,6 @@ USER_FUNC(btlevtcmd_BtlStageObjFlagOnOff);
 USER_FUNC(btlevtcmd_BtlStageObjGetRotate);
 USER_FUNC(btlevtcmd_BtlStageObjSetRotate);
 
-
-
-
-
-
-
-
-
-
 RankUpData _rank_up_data[] = {
     {1, 0, "msg_menu_mario_name_0", "butai_01"},
     {10, 1, "msg_menu_mario_name_1", "butai_01"},
@@ -129,6 +117,7 @@ RankUpData _rank_up_data[] = {
     {30, 3, "msg_menu_mario_name_3", "butai_03"},
     {0xFFFF, 0, NULL, NULL},
 };
+
 EVT_BEGIN(_event_MajinaiEnd)
     CALL(btlevtcmd_AnnounceMessage, 0, 0, -36, STRING("btl_msg_mj_last"), 60)
     WAIT_FRAMES(60)
@@ -275,11 +264,11 @@ void btlseqEnd(BattleWork* wp) {
     }
     case 0x7000001: {
         _ExecAllUnitBattleEndEvent();
-        btl_camera_set_moveSpeedLv(0, 2);
-        btl_camera_set_mode(0, 0x13);
-        btl_camera_set_posoffset(0, 0.0f, 0.0f, 0.0f);
+        btl_camera_set_moveSpeedLv(BTL_CAM_PRI_NORMAL, 2);
+        btl_camera_set_mode(BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFEAT);
+        btl_camera_set_posoffset(BTL_CAM_PRI_NORMAL, 0.0f, 0.0f, 0.0f);
         fadeEntry(FADE_OUT_BLACK, 200, (GXColor){0, 0, 0, 255});
-        psndBGMOff(0x201);
+        psndBGMOff(PSND_FADEOUT | PSND_SLOT(1));
         BattleSetSeq(wp, SEQ_END, 0x7000002);
         break;
     }
@@ -301,8 +290,9 @@ void btlseqEnd(BattleWork* wp) {
             BtlUnit_GetPartsPtr(party, BtlUnit_GetBodyPartsId(party))->poseTable = pose_table_nokotarou_stay;
         }
         BattleConsumeReserveItem();
-        for (i = 0; i < 0x1C; i++) {
-            if (i >= 0x1C || i < 0x19) {
+        for (i = 0; i < STATUS_INVALID; i++) {
+            // FAKE: dead `i >= STATUS_INVALID` test; `if (i < STATUS_FRIGHT)` changes the object
+            if (i >= STATUS_INVALID || i < STATUS_FRIGHT) {
                 if (party) BtlUnit_SetStatus(party, i, 0, 0);
                 BtlUnit_SetStatus(mario, i, 0, 0);
             }
@@ -318,6 +308,7 @@ void btlseqEnd(BattleWork* wp) {
         }
         BattleSetSeq(wp, SEQ_END, 0x7000006);
     }
+    // fall through
     case 0x7000006: {
         BattleUnit* mario;
         PouchData* pp;
@@ -365,13 +356,13 @@ void btlseqEnd(BattleWork* wp) {
             _GetExpIcon_Init(work);
         }
         work->timer = 0x78;
-        btl_camera_set_moveSpeedLv(0, 2);
+        btl_camera_set_moveSpeedLv(BTL_CAM_PRI_NORMAL, 2);
         if (!(wp->flags & BATTLE_FLAG_PARTY_IN_AUDIENCE)) {
-            btl_camera_set_mode(0, 0x11);
+            btl_camera_set_mode(BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_VICTORY);
         } else {
-            btl_camera_set_mode(0, 0x12);
+            btl_camera_set_mode(BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_VICTORY_AUDIENCE);
         }
-        btl_camera_set_posoffset(0, 0.0f, 0.0f, 0.0f);
+        btl_camera_set_posoffset(BTL_CAM_PRI_NORMAL, 0.0f, 0.0f, 0.0f);
         BattleSetSeq(wp, SEQ_END, 0x7000009);
         BattleAudienceSoundCheer(0x3C, 0x3C);
         BattleAudienceSoundClap(-1, 0);
@@ -384,13 +375,14 @@ void btlseqEnd(BattleWork* wp) {
             }
         }
         if (!flag) {
-            psndBGMOff(0x400);
+            psndBGMOff(PSND_PAUSE);
             psndBGMOn(PSND_SLOT(1), "BGM_BATTLE_WIN1");
         } else {
-            psndBGMOff(0x400);
+            psndBGMOff(PSND_PAUSE);
             psndBGMOn(PSND_SLOT(1), "BGM_BATTLE_WIN2");
         }
     }
+    // fall through
     case 0x7000009:
         work->timer = work->timer - 1;
         if (work->timer > 0) break;
@@ -512,7 +504,7 @@ void btlseqEnd(BattleWork* wp) {
             EventEntry* e = evtEntry(_curtain_close_event, 10, 0);
             work->evtId = e->eventId;
             BattleStatusWindowSystemOff();
-            psndBGMOff(0x400);
+            psndBGMOff(PSND_PAUSE);
             psndBGMOn(PSND_SLOT(1), "BGM_BATTLE_WIN3");
         }
         work->timer = work->timer + 1;
@@ -585,6 +577,7 @@ void btlseqEnd(BattleWork* wp) {
         }
         break;
     }
+    // Yes/No confirmation of the level-up choice (_LvupParamConfirmDisp); no step moves here
     case 0x7000013:
         if (BattlePadCheckTrigger(BATTLE_PAD_STICK_DOWN)) {
             work->cursor = work->cursor + 1;
@@ -704,6 +697,7 @@ void btlseqEnd(BattleWork* wp) {
         work->rankUpEvtId = e->eventId;
         BattleSetSeq(wp, SEQ_END, 0x7000018);
     }
+    // fall through
     case 0x7000018:
         if (evtCheckID(work->rankUpEvtId)) break;
         BattleSetSeq(wp, SEQ_END, 0x700001C);
@@ -735,11 +729,11 @@ void btlseqEnd(BattleWork* wp) {
     }
     case 0x700001A:
         if (--work->timer > 0) break;
-        BtlUnit_SetBodyAnimType(BattleGetMarioPtr(wp), 0x2A);
+        BtlUnit_SetBodyAnimType(BattleGetMarioPtr(wp), POSE_TYPE_RUN);
         if (BattleGetPartyPtr(wp)) {
             BattleUnit* party = BattleGetPartyPtr(wp);
             if ((s32)party->currentKind != UNIT_KOOPS || party->flippedTurns < 1) {
-                BtlUnit_SetBodyAnimType(BattleGetPartyPtr(wp), 0x2A);
+                BtlUnit_SetBodyAnimType(BattleGetPartyPtr(wp), POSE_TYPE_RUN);
             }
         }
         BattleSetSeq(wp, SEQ_END, 0x700001B);
@@ -760,8 +754,9 @@ void btlseqEnd(BattleWork* wp) {
     case 0x700001D: {
         fadeEntry(FADE_OUT_BLACK, 200, (GXColor){0, 0, 0, 255});
         BattleSetSeq(wp, SEQ_END, 0x700001E);
-        psndBGMOff(0x201);
+        psndBGMOff(PSND_FADEOUT | PSND_SLOT(1));
     }
+    // fall through
     case 0x700001E:
         if (!fadeIsFinish()) break;
         BattleSetSeq(wp, SEQ_END, 0x700001F);
@@ -773,7 +768,7 @@ void btlseqEnd(BattleWork* wp) {
         NpcBattleInfo* fd;
         BattleUnit* mario;
         MarioWork* mw;
-        void* pe;
+        PartyEntry* pe;
         if (party) {
             kind = (s32)party->currentKind;
         } else {
@@ -797,7 +792,7 @@ void btlseqEnd(BattleWork* wp) {
             marioPartyKill();
         }
         pe = partyGetPtr(marioGetPartyId());
-        if (pe) ((PartyEntry*)pe)->flags2 &= ~1;
+        if (pe) pe->flags2 &= ~PARTY_DISP_FLAG_HIDE;
         BtlActRec_JudgeRuleKeep();
         BattleAudienceSoundStop(1);
         break;
@@ -868,10 +863,14 @@ void _MarioExpDisp(CameraId camId, void* param) {
     pos.z = 0.0f;
     if (work) {
         sprintf(buf, "%2d", work->expDisp);
-        { u32 len = strlen(buf); width = 12.5f * len + 65.0f; }
+        {
+            u32 len = strlen(buf);
+            width = 12.5f * len + 65.0f;
+        }
+        // FAKE: windowDispGX_Waku_col called through a float-first cast; the plain call changes the object
         ((void (*)(f32, f32, f32, f32, f32, u16, GXColor))windowDispGX_Waku_col)(180.0f, -160.0f, width, 32.0f, 10.0f, 0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
 
-        iconDispGx(&pos, 0x10, EXP_ICON, 1.0f);
+        iconDispGx(&pos, ICON_FLAG_2D, EXP_ICON, 1.0f);
         FontDrawStart();
         FontDrawString(225.0f, -163.0f, buf);
     }
@@ -888,7 +887,9 @@ void _LvupParamConfirmDisp(CameraId camId, void* param) {
     cursorPtr = &work->cursor; // FAKE: pointer to the field; direct work->cursor differs
     pouchGetPtr();
     sprintf(buf, msgSearch("btl_msg_lvup_ok"));
-    len = strlen(buf); ((void (*)(f32, f32, f32, f32, f32, u16, GXColor))windowDispGX_Waku_col)(-30.0f - (w = 6.25f * len), 30.0f, 12.5f * len + 65.0f, 32.0f, 10.0f, 0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
+    len = strlen(buf);
+    // FAKE: windowDispGX_Waku_col called through a float-first cast; the plain call changes the object
+    ((void (*)(f32, f32, f32, f32, f32, u16, GXColor))windowDispGX_Waku_col)(-30.0f - (w = 6.25f * len), 30.0f, 12.5f * len + 65.0f, 32.0f, 10.0f, 0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
     windowDispGX_Waku_col(0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF}, -70.0f, -10.0f, 130.0f, 60.0f, 10.0f);
     FontDrawStart();
     FontDrawString(zero - w, 27.0f, buf);
@@ -897,7 +898,7 @@ void _LvupParamConfirmDisp(CameraId camId, void* param) {
     pos.x = -40.0f;
     pos.y = -50 - (*cursorPtr) * 25;
     pos.z = 0.0f;
-    iconDispGx(&pos, 0x10, EXP_ICON, 1.0f);
+    iconDispGx(&pos, ICON_FLAG_2D, EXP_ICON, 1.0f);
 }
 
 void L__LvupParamHelpMsgDisp(CameraId camId, void* param) {
@@ -907,6 +908,7 @@ void L__LvupParamHelpMsgDisp(CameraId camId, void* param) {
     u16 lines;
     s32 width;
 
+    // FAKE: 0.0f and -148.0f held in locals (zero, y); writing the literals changes the object
     f32 y;
     f32 zero = 0.0f;
 
@@ -1362,6 +1364,7 @@ void N__draw_select_one_to_upgrade_text(CameraId camId, void* param) {
     const char* msg;
     u16 lines;
     s32 width;
+    // FAKE: 0.0f and -148.0f held in locals (zero, y); writing the literals changes the object
     f32 y;
     f32 zero = 0.0f;
 
@@ -1441,6 +1444,7 @@ USER_FUNC(_disable_enemy_unit_disp) {
 USER_FUNC(_set_confetti_control_evtid) {
     EvtWord* args = event->args;
     BattleSeqEndWork* work = _battleWorkPointer->seqEndWork;
+    // FAKE: empty triple NULL test of seqEndWork; removing it changes the object
     if (!_battleWorkPointer->seqEndWork && !_battleWorkPointer->seqEndWork && !_battleWorkPointer->seqEndWork) {
     }
     work->confettiEvtId = evtGetValue(event, args[0]);
@@ -1521,11 +1525,11 @@ USER_FUNC(_lvup_spot_on) {
         break;
     }
     case 3: {
-            Vec v = {0.0f, -10.0f, -50.0f};
-            v.x = 25.0f * n + -50.0f;
-            e->pos = v;
-            break;
-        }
+        Vec v = {0.0f, -10.0f, -50.0f};
+        v.x = 25.0f * n + -50.0f;
+        e->pos = v;
+        break;
+    }
     case 4: {
         Vec v = {0.0f, 25.0f, -50.0f};
         v.x = 25.0f * n + -50.0f;
@@ -1536,7 +1540,7 @@ USER_FUNC(_lvup_spot_on) {
     e->rot = (Vec){0.0f, 0.0f, 0.0f};
     e->scale = (Vec){15.0f, 15.0f, 150.0f};
     e->color = (GXColor){0xFF, 0xFF, 0xFF, 0xFF};
-    e->flags |= EVENT_STOPPED;
+    e->flags |= SPOT_FLAG_VISIBLE_UNUSED;
     return 2;
 }
 
@@ -1624,7 +1628,7 @@ USER_FUNC(_lvup_spot_off) {
 
         e->color = c;
         if (e->color.a == 0) {
-            e->flags &= ~EVENT_STOPPED;
+            e->flags &= ~SPOT_FLAG_VISIBLE_UNUSED;
         }
     }
     return event->userdata[1] > 0 ? 0 : 2;
@@ -1884,16 +1888,17 @@ void _lvup_select_object_disp(CameraId camId, void* param) {
         }
     }
 }
+
 void _check_audience_battle_end_exec(void) {
     BattleWork* wp = _battleWorkPointer;
-    SeqEndGroup* group = (SeqEndGroup*)wp->fbatInfo->setup->groupSetup;
-    s32 level = group->units[0].kind[0xE];
+    BattleGroupSetup* group = wp->fbatInfo->setup->groupSetup;
+    s32 level = group->enemyData[0].mUnitKindParams->mLevel;
     s32 turn;
     s32 sum;
     s32 i;
     s32 lv;
     s32 limit;
-    SeqEndUnitSetup* unit;
+    BattleUnitSetup* unit;
 
     if (level > pouchGetPtr()->level + 1) {
         BattleAudience_Case_GreatVictory();
@@ -1901,9 +1906,9 @@ void _check_audience_battle_end_exec(void) {
     turn = wp->turnCount;
     lv = pouchGetPtr()->level + 1;
     sum = 0;
-    unit = group->units;
-    for (i = 0; i < group->count; i++, unit++) {
-        sum += unit->kind[0xE];
+    unit = group->enemyData;
+    for (i = 0; i < group->numEnemies; i++, unit++) {
+        sum += unit->mUnitKindParams->mLevel;
     }
     limit = sum * 2 / lv / 3;
     if (turn < limit) {
@@ -1915,6 +1920,8 @@ void _audience_Whistle_control(void) {
     BattleSeqEndWork* work = _battleWorkPointer->seqEndWork;
 
     if (work) {
+        // BUG: work->state is only ever set to 0 (btlseqEnd); the SEQ_END step lives in wp->seqEndValue, so no case
+        // matches and this timed whistle never plays
         switch (work->state) {
         case 0x7000007:
         case 0x7000008:
@@ -1978,708 +1985,8 @@ USER_FUNC(_check_guard_koura) {
 }
 
 USER_FUNC(_get_rank_up_msg) {
-    s32 index = event->args[0];
+    s32 out = event->args[0];
 
-    evtSetValue(event, index, (EvtWord)_get_rank_data(pouchGetPtr()->level)->rankUpMessage);
+    evtSetValue(event, out, (EvtWord)_get_rank_data(pouchGetPtr()->level)->rankUpMessage);
     return 2;
 }
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//

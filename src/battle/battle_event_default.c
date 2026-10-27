@@ -841,7 +841,7 @@ EVT_BEGIN(btldefaultevt_CantMoveZeroGravity)
 EVT_END()
 
 EVT_BEGIN(btldefaultevt_SuitoruBadgeEffect)
-    CALL(_get_heart_suitoru_point, -2, LW(5))
+    CALL(_get_heart_suitoru_point, UNIT_ID_SELF, LW(5))
     IF_INT_GREATER_OR_EQUAL(LW(5), 1)
         BEGIN_SIBLING_EVENT
             CALL(btlevtcmd_GetBodyId, UNIT_ID_SELF, LW(4))
@@ -856,7 +856,7 @@ EVT_BEGIN(btldefaultevt_SuitoruBadgeEffect)
         END_SIBLING_EVENT
         WAIT_FRAMES(125)
     END_IF
-    CALL(_get_flower_suitoru_point, -2, LW(5))
+    CALL(_get_flower_suitoru_point, UNIT_ID_SELF, LW(5))
     IF_INT_GREATER_OR_EQUAL(LW(5), 1)
         BEGIN_SIBLING_EVENT
             CALL(btlevtcmd_GetStatusMg, UNIT_ID_SELF, LW(6))
@@ -945,7 +945,7 @@ USER_FUNC(_backfire) {
     event->userdata[1]++;
     if (event->userdata[1] >= 60) {
         effDelete(event->userdatap[0]);
-        BattleDamageDirect(-5, unit, NULL, 1, 0, 0x118, 0, 1);
+        BattleDamageDirect(-5, unit, NULL, 1, 0, DAMAGE_RESULT_FINAL_HIT | DAMAGE_CODE_FIRE, 0, 1);
         self = BattleTransID(event, event->unitId);
         if (self != id) {
             return EVT_RETURN_DONE;
@@ -972,7 +972,7 @@ USER_FUNC(_check_pose_stay) {
     s32 stay;
     s32 id;
 
-    id = BattleTransID(event, -2);
+    id = BattleTransID(event, UNIT_ID_SELF);
     unit = BattleGetUnitPtr(wp, id);
     stay = FALSE;
     if (unit->currentKind == UNIT_MARIO) {

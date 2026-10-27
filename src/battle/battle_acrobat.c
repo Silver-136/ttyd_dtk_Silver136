@@ -21,12 +21,10 @@ s32 BattleAcrobatStart(BattleWork* work, s32 unitId, s32 windowStartFrame,
 }
 
 s32 BattleAcrobatMain(BattleWork* work) {
-    BattleActions* manager;
     BattleUnit* unit;
     BOOL doSimplified;
     s32 i;
 
-    manager = &work->actionCommands;
     unit = BattleGetUnitPtr(work, work->mStylishUnitId);
     doSimplified = FALSE;
     work->mStylishCurFrame++;
@@ -39,11 +37,11 @@ s32 BattleAcrobatMain(BattleWork* work) {
         return EVT_RETURN_YIELD;
     }
     if ((work->badgeEquippedFlags & BATTLE_BADGE_TIMING_TUTOR) && (work->mStylishCurFrame > work->mStylishWindowStart && work->mStylishCurFrame <= work->mStylishWindowEnd)) {
-        Vec v11 = { 0 };
-        v11.x = unit->mPosition.x;
-        v11.y = unit->mPosition.y;
-        v11.z = 15.0f + unit->mPosition.z;
-        dispEntry(CAMERA_3D, dispCalcZ(&v11), 1, _accrobat_timing_icon_disp, unit);
+        Vec pos = { 0 };
+        pos.x = unit->mPosition.x;
+        pos.y = unit->mPosition.y;
+        pos.z = 15.0f + unit->mPosition.z;
+        dispEntry(CAMERA_3D, dispCalcZ(&pos), 1, _accrobat_timing_icon_disp, unit);
     }
     if (unit->badgesEquipped.AutoCommand && (work->mStylishCurFrame > work->mStylishWindowStart && work->mStylishCurFrame <= work->mStylishWindowEnd)) {
         doSimplified = TRUE;

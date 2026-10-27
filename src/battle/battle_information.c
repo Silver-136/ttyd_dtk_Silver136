@@ -6,7 +6,6 @@
 #include "manager/evtmgr_cmd.h"
 #include "battle/battle_unit.h"
 
-
 void BattleInformationSetMode(FieldBattleInfo* info, u32 mode) {
     info->mode = mode;
 }
@@ -43,6 +42,7 @@ void BattleInformationSetResult(FieldBattleInfo* info, u32 result) {
 s32 BattleInformationGetResult(FieldBattleInfo* info) {
     return info->result;
 }
+
 typedef struct ItemHogTable {
 #ifdef VERSION_G8ME01
     ItemType items[25];

@@ -5,9 +5,11 @@
 #include "driver/msgdrv.h"
 #include "driver/windowdrv.h"
 #include "manager/fontmgr.h"
+
 void BattleAcHelpSetHelp(const char* msg) {
     _battleWorkPointer->acHelpMsg = msg;
 }
+
 void BattleAcHelpSetDispType(s32 type) {
     _battleWorkPointer->acHelpDispType = type;
     switch (type) {
@@ -19,27 +21,30 @@ void BattleAcHelpSetDispType(s32 type) {
             break;
     }
 }
+
 void BattleAcHelpInit(void) {
-    //stubbed in retail
 }
+
 void _ac_help_disp(CameraId cameraId, void* param);
+
 void BattleAcHelpMain(void) {
     BattleWork* wp = _battleWorkPointer;
+    // FAKE: spare pointer to acHelpDispType; testing wp->acHelpDispType directly changes the object
     s32* type = &wp->acHelpDispType;
     if (wp->acHelpMsg && *type && !(wp->flags & BATTLE_FLAG_FIRST_ATTACK)) {
         dispEntry(CAMERA_2D, 498.0f, 1, _ac_help_disp, NULL);
     }
-    if (_ac_help_disp) {
-    }
 }
-void _ac_help_disp(CameraId cameraId, void *param) {
+
+void _ac_help_disp(CameraId cameraId, void* param) {
     u16 lines;
-    const char *msgs[2]; // FAKE: register-promoted array; one msg pointer differs
-    BattleWork *wp = _battleWorkPointer;
+    const char* msgs[2]; // FAKE: register-promoted array; one msg pointer differs
+    BattleWork* wp = _battleWorkPointer;
     s32 width;
     u8 alpha;
     f32 x;
     f32 y;
+    // FAKE: spare pointer to acHelpMsg; msgSearch(wp->acHelpMsg) changes the object
     const char **help = &wp->acHelpMsg;
     alpha = 0xFF;
     if (wp->acHelpDispType == 1) {
@@ -53,68 +58,9 @@ void _ac_help_disp(CameraId cameraId, void *param) {
     width = FontGetMessageWidthLine(msgs[1], &lines);
     lines++;
     y = 0.0f;
+    // FAKE: x assigned inside the argument list; computing x first changes the object
     windowDispGX_Waku_col(0, (GXColor){0xFF, 0xFF, 0xFF, alpha}, (x = y - (width / 2)) - 20.0f, (-145.0f) + ((lines - 1) * 29), width + 40, (lines * 29) + 1, 10.0f);
     y = -148.0f;
     FontDrawStart_alpha(alpha);
-    FontDrawMessage(x, ((s32) y) + ((lines - 1) * 29), msgs[1]);
+    FontDrawMessage(x, (s32)y + ((lines - 1) * 29), msgs[1]);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

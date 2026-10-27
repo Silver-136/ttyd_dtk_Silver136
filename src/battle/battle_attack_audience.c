@@ -28,37 +28,31 @@ extern ItemData itemDataTable[];
 ItemEntry* itemEntry(const char* name, s32 itemId, u16 type, s32 collectFlag, EvtWord* evtCode, f32 x, f32 y, f32 z);
 extern void psndSFX_pit(s32 id, s32 pitch);
 
-USER_FUNC(_damage);
-USER_FUNC(_delete_present_item);
-USER_FUNC(_get_item_announce);
-USER_FUNC(_get_present_target_id);
-USER_FUNC(_get_present_item);
-
 s32 _get_attack_aud_no(EventEntry* event, BOOL isFirstCall) {
     EvtWord* args = event->args;
-    s32 a0 = args[0];
-    s32 a1 = args[1];
-    s32 a2 = args[2];
-    s32 a3 = args[3];
+    s32 noOut = args[0];
+    s32 xOut = args[1];
+    s32 yOut = args[2];
+    s32 zOut = args[3];
     s32 no;
     f32 x;
     f32 y;
     f32 z;
 
     BattleAudience_GetItemOn2(&no, &x, &y, &z, NULL);
-    if (a0 != EVT_NULLPTR) {
-        evtSetValue(event, a0, no);
+    if (noOut != EVT_NULLPTR) {
+        evtSetValue(event, noOut, no);
     }
-    if (a1 != EVT_NULLPTR) {
-        evtSetValue(event, a1, (s32)x);
+    if (xOut != EVT_NULLPTR) {
+        evtSetValue(event, xOut, (s32)x);
     }
-    if (a2 != EVT_NULLPTR) {
-        evtSetValue(event, a2, (s32)y);
+    if (yOut != EVT_NULLPTR) {
+        evtSetValue(event, yOut, (s32)y);
     }
-    if (a3 != EVT_NULLPTR) {
-        evtSetValue(event, a3, (s32)z);
+    if (zOut != EVT_NULLPTR) {
+        evtSetValue(event, zOut, (s32)z);
     }
-    return 2;
+    return EVT_RETURN_DONE;
 }
 
 s32 _attack_aud(EventEntry* event, BOOL isFirstCall) {
@@ -66,35 +60,35 @@ s32 _attack_aud(EventEntry* event, BOOL isFirstCall) {
     s32 no;
     s32 mode;
     const char* sfx;
-    f32 pos[3];
+    Vec pos;
 
     no = evtGetValue(event, args[0]);
     mode = evtGetValue(event, args[1]);
     sfx = NULL;
-    BattleAudience_GetItemOn2(&no, &pos[0], &pos[1], &pos[2], NULL);
-    pos[1] += 32.0f;
+    BattleAudience_GetItemOn2(&no, &pos.x, &pos.y, &pos.z, NULL);
+    pos.y += 32.0f;
     if (mode != 1) {
-        effHitEntry(0, 3, pos[0], pos[1], pos[2], 1.0f);
+        effHitEntry(0, 3, pos.x, pos.y, pos.z, 1.0f);
         sfx = "SFX_BTL_DAMAGED_PLIABLE1";
     }
-    BattleAudience_GetPosition(no, &pos[0], &pos[1], &pos[2]);
+    BattleAudience_GetPosition(no, &pos.x, &pos.y, &pos.z);
     if (sfx) {
-        psndSFX_pit(psndSFXOn_3D(sfx, (Vec*)pos), 0x3FF);
+        psndSFX_pit(psndSFXOn_3D(sfx, &pos), 0x3FF);
     }
     BattleAudience_Attack(no);
-    return 2;
+    return EVT_RETURN_DONE;
 }
 
 s32 _check_aud_item_type(EventEntry* event, BOOL isFirstCall) {
     EvtWord* args = event->args;
     s32 out = args[0];
-    s32 item;
+    ItemType item;
     s32 flag;
 
     evtSetValue(event, out, 1);
-    BattleAudience_GetItemOn2(NULL, NULL, NULL, NULL, (ItemType*)&item);
-    if (item == 0) {
-        return 2;
+    BattleAudience_GetItemOn2(NULL, NULL, NULL, NULL, &item);
+    if (item == ITEM_NULL) {
+        return EVT_RETURN_DONE;
     }
     if (item >= 0xEC && item < 0xF0) {
         flag = 1;
@@ -102,7 +96,7 @@ s32 _check_aud_item_type(EventEntry* event, BOOL isFirstCall) {
         flag = 0;
     }
     evtSetValue(event, out, flag);
-    return 2;
+    return EVT_RETURN_DONE;
 }
 
 s32 _delete_present_item(EventEntry* event, BOOL isFirstCall) {
@@ -112,8 +106,8 @@ s32 _delete_present_item(EventEntry* event, BOOL isFirstCall) {
     if (out != EVT_NULLPTR) {
         evtSetValue(event, out, item);
     }
-    BattleAudience_SetPresentItemNo(0);
-    return 2;
+    BattleAudience_SetPresentItemNo(ITEM_NULL);
+    return EVT_RETURN_DONE;
 }
 
 s32 _get_present_item(EventEntry* event, BOOL isFirstCall) {
@@ -127,17 +121,17 @@ s32 _get_present_item(EventEntry* event, BOOL isFirstCall) {
     } else if (unit->heldItem == ITEM_NULL) {
         unit->heldItem = item;
     }
-    return 2;
+    return EVT_RETURN_DONE;
 }
 
 s32 _get_present_target_id(EventEntry* event, BOOL isFirstCall) {
     s32 out = event->args[0];
 
     evtSetValue(event, out, BattleAudience_GetPresentTargetUnitId());
-    return 2;
+    return EVT_RETURN_DONE;
 }
 
-void _get_item_announce_disp(s32 cameraId, void* param) {
+void _get_item_announce_disp(CameraId cameraId, void* param) {
     u16 lines;
     const char* itemName;
     char buf[128];
@@ -150,6 +144,7 @@ void _get_item_announce_disp(s32 cameraId, void* param) {
     no = BattleAudience_GetPresentItemNo();
     itemName = msgSearch(itemDataTable[no].name);
 #ifdef VERSION_G8ME01
+    // FAKE: (u32) cast before the compare with LANGUAGE_JP; the plain compare changes the object
     if ((u32)gp->language == LANGUAGE_JP) {
         msg = msgSearch("btl_msg_get_item");
         sprintf(buf, msg, itemName);
@@ -191,11 +186,11 @@ s32 _get_item_announce(EventEntry* event, BOOL isFirstCall) {
         }
         if (event->userdata[2] <= 0) {
             itemDelete(((ItemEntry*)event->userdatap[1])->name);
-            return 2;
+            return EVT_RETURN_DONE;
         }
     }
     dispEntry(CAMERA_2D, 900.0f, 1, (void*)_get_item_announce_disp, NULL);
-    return 0;
+    return EVT_RETURN_BLOCK;
 }
 
 s32 _damage(EventEntry* event, BOOL isFirstCall) {
@@ -205,13 +200,13 @@ s32 _damage(EventEntry* event, BOOL isFirstCall) {
     BattleUnit* unit = BattleGetUnitPtr(wp, id);
     s32 body = BtlUnit_GetBodyPartsId(unit);
     BattleUnitPart* part = BtlUnit_GetPartsPtr(unit, body);
-    u8* aud;
+    BattleAudience* aud;
 
     evtGetValue(event, args[0]);
-    aud = (u8*)BattleAudienceBaseGetPtr();
+    aud = BattleAudienceBaseGetPtr();
     BattleActionCommandResetDefenceResult();
-    BattleCheckDamage(BattleGetSystemPtr(wp), unit, (struct BattleWorkUnitPart*)part, (BattleWeapon*)(aud + 0x137FC), 0x100);
-    return 2;
+    BattleCheckDamage(BattleGetSystemPtr(wp), unit, (struct BattleWorkUnitPart*)part, &aud->presentWeapon, DAMAGE_RESULT_FINAL_HIT);
+    return EVT_RETURN_DONE;
 }
 
 void* btlataudGetMoveEventPtr(s32 id) {
@@ -224,13 +219,6 @@ void* btlataudGetMoveEventPtr(s32 id) {
     }
 }
 
-
-
-
-
-
-
-
 #ifndef VERSION_G8ME01
 __declspec(section ".data") static s32 btlataudevtDummyPad[1] = {0};
 #endif
@@ -240,8 +228,9 @@ EVT_BEGIN(btlataudevtDummy)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
+
 EvtWord* btlataudGetAttackEventPtr(s32 unitId) {
-    s32* p = BtlUnit_GetData(BattleGetUnitPtr(_battleWorkPointer, unitId), UNIT_DATA_ATTACK_AUDIENCE);
+    EvtWord* p = BtlUnit_GetData(BattleGetUnitPtr(_battleWorkPointer, unitId), UNIT_DATA_ATTACK_AUDIENCE);
     if (p == NULL) {
         p = btlataudevtDummy;
     }

@@ -30,13 +30,7 @@
 #include "battle/unit_work.h"
 
 
-void _getSickStatusParam(BattleUnit* unit, BattleWeapon* weapon, u32 type, s8* outTime, s8* outStrength);
-s32 BattleSetStatusDamage(u32* result, BattleUnit* unit, BattleUnitPart* part, u32 special, s32 type, s32 rate, s32 levelDiff, s8 time, s8 strength);
-u32 BattleCheckPikkyoro(BattleWeapon* weapon, u32* flags);
-s32 BattleCalculateDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPart* part, BattleWeapon* weapon, u32* result, u32 flags);
-s32 BattleCalculateFpDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPart* part, BattleWeapon* weapon, u32* resultFlags, u32 flags);
 s32 _checkDamageCode_EmergencyRevival(BattleUnit* unit, u32* flags);
-void __declare(s32 unitIdx, s32 partIdx, s32* outUnit, s32* outPart);
 
 
 void BattleDamageDirect(s32 unitId, BattleUnit* target, BattleUnitPart* part, s32 damage, s32 fpDamage, u32 result, u32 pattern, s32 flag) {
@@ -64,9 +58,10 @@ void BattleDamageDirect(s32 unitId, BattleUnit* target, BattleUnitPart* part, s3
     }
     target->damagePattern = pattern;
     if (target->mAttributeFlags & kUnitNoSpin) {
+        // FAKE: (u32) casts give unsigned compares; without them the object changes
         if ((u32)target->damagePattern == ATTACKPATTERN_CHUCHURINA_BINTA_L || (u32)target->damagePattern == ATTACKPATTERN_CHUCHURINA_BINTA_R ||
             (u32)target->damagePattern == ATTACKPATTERN_CHUCHURINA_BINTA_L_LAST || (u32)target->damagePattern == ATTACKPATTERN_CHUCHURINA_BINTA_R_LAST) {
-            target->damagePattern = 0;
+            target->damagePattern = ATTACKPATTERN_NULL;
         }
     }
     BtlUnit_GetHitPos(target, part, &pos.x, &pos.y, &pos.z);
@@ -92,7 +87,7 @@ void BattleDamageDirect(s32 unitId, BattleUnit* target, BattleUnitPart* part, s3
                     effHitEntry(0, 3, x, y, z, 1.0f);
                     break;
             }
-            if (BtlUnit_GetBelong(target) == 0) {
+            if (BtlUnit_GetBelong(target) == ALLIANCE_PLAYER) {
                 if (damage != 0 && !(target->mAttributeFlags & kNoDamageNumber)) {
                     effDamageStarEntry(0, damage, x - 8.0f, 5.0f + y, z, 10.0f, 30.0f);
                 }
@@ -124,9 +119,12 @@ void BattleDamageDirect(s32 unitId, BattleUnit* target, BattleUnitPart* part, s3
         } else {
             f32 x, y, z;
             BtlUnit_GetHitPos(target, part, &x, &y, &z);
-            if (pattern != 2 && pattern != 3 && pattern != 0x15 && pattern != 0x16 && pattern != 0x14 &&
-                pattern != 0x13 && pattern != 0x1b && pattern != 7 && (u8)result != DAMAGE_CODE_STATUS_ONLY) {
-                s32 dir = BtlUnit_GetBelong(target) == 0 ? -1 : 1;
+            if (pattern != ATTACKPATTERN_DAMAGE_MOTION && pattern != ATTACKPATTERN_DAMAGE_MOTION_BLOW &&
+                pattern != ATTACKPATTERN_CHUCHURINA_BINTA_L && pattern != ATTACKPATTERN_CHUCHURINA_BINTA_R &&
+                pattern != ATTACKPATTERN_CHUCHURINA_ITEMSTEAL && pattern != ATTACKPATTERN_ULTRA_HAMMER_FINISH &&
+                pattern != ATTACKPATTERN_NO_DAMAGE_FINISH && pattern != ATTACKPATTERN_SWALLOW_SAMBO_BODY &&
+                (u8)result != DAMAGE_CODE_STATUS_ONLY) {
+                s32 dir = BtlUnit_GetBelong(target) == ALLIANCE_PLAYER ? -1 : 1;
                 if (result & DAMAGE_RESULT_AC_SUCCESS) {
                     effMissStarEntry(1, 1, x, y, z, dir);
                 } else {
@@ -157,7 +155,7 @@ void BattleDamageDirect(s32 unitId, BattleUnit* target, BattleUnitPart* part, s3
         }
     }
 
-    if (pattern != 0x13 && pattern != 0x1b) {
+    if (pattern != ATTACKPATTERN_ULTRA_HAMMER_FINISH && pattern != ATTACKPATTERN_NO_DAMAGE_FINISH) {
         if (result & DAMAGE_RESULT_ATTACK_FX_R) {
             psndSFXOn_3D("SFX_MARIO_HAMMER_PIKKYO_R1", &pos);
         } else if (result & DAMAGE_RESULT_ATTACK_FX_Y) {
@@ -168,7 +166,7 @@ void BattleDamageDirect(s32 unitId, BattleUnit* target, BattleUnitPart* part, s3
             psndSFXOn_3D("SFX_MARIO_HAMMER_PIKKYO_G1", &pos);
         } else if (result & DAMAGE_RESULT_ATTACK_FX_P) {
             psndSFXOn_3D("SFX_MARIO_HAMMER_PIKKYO_P1", &pos);
-        } else if (BtlUnit_GetBelong(target) == 0 && (result & DAMAGE_RESULT_GUARD)) {
+        } else if (BtlUnit_GetBelong(target) == ALLIANCE_PLAYER && (result & DAMAGE_RESULT_GUARD)) {
             psndSFXOn_3D("SFX_MARIO_GUARD1", &pos);
         } else {
             if (damage > 0) {
@@ -190,7 +188,7 @@ void BattleDamageDirect(s32 unitId, BattleUnit* target, BattleUnitPart* part, s3
                         break;
                 }
             }
-            if (fpDamage > 0 && BtlUnit_GetBelong(target) == 0) {
+            if (fpDamage > 0 && BtlUnit_GetBelong(target) == ALLIANCE_PLAYER) {
                 psndSFXOn_3D("SFX_MARIO_DAMAGE_FP1", &pos);
             }
         }
@@ -276,13 +274,14 @@ void BattleDamageDirect(s32 unitId, BattleUnit* target, BattleUnitPart* part, s3
                 result |= DAMAGE_RESULT_DEATH;
                 _checkDamageCode_EmergencyRevival(target, &result);
             }
+            // FAKE: (u32) cast gives an unsigned compare; without it the object changes
             if ((u32)target->damagePattern == ATTACKPATTERN_BLOW) {
                 s32 b = 1;
                 if ((result & DAMAGE_RESULT_DEATH) && !(result & DAMAGE_RESULT_REVIVAL) && (result & DAMAGE_RESULT_FINAL_HIT) && target->vulnStatus->galeForceRate) {
                     b = 0;
                 }
                 if (b) {
-                    target->damagePattern = 0;
+                    target->damagePattern = ATTACKPATTERN_NULL;
                 }
             }
             if (result & DAMAGE_RESULT_DEATH) {
@@ -295,8 +294,9 @@ void BattleDamageDirect(s32 unitId, BattleUnit* target, BattleUnitPart* part, s3
                 }
             }
         }
+    // FAKE: (u32) cast gives an unsigned compare; without it the object changes
     } else if ((u32)target->damagePattern == ATTACKPATTERN_BLOW) {
-        target->damagePattern = 0;
+        target->damagePattern = ATTACKPATTERN_NULL;
     }
     target->mTokenFlags |= kDamagedThisTurn;
     BattleRunHitEvent(target, result);
@@ -315,7 +315,7 @@ u32 BattleCheckPikkyoro(BattleWeapon* weapon, u32* flags) {
         result = *flags;
     }
     if (weapon->special & SPECIAL_ATTACK_FX) {
-        f = (u32)wp->badgeEquippedFlags;
+        f = wp->badgeEquippedFlags;
         if (f & BATTLE_BADGE_ATTACK_FX_R) {
             table[0] = 1;
             idx = 0;
@@ -406,10 +406,11 @@ s32 BattleCalculateDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPa
         return 0;
     }
     if (attacker && (weapon->special & SPECIAL_BADGE_POWER) && attacker->badgesEquipped.AllOrNothing &&
-        !((u32)wp->actionCommands.result & AC_RESULT_SUCCESS) && !(flags & DAMAGE_RESULT_AC_SUCCESS)) {
+        !(wp->actionCommands.result & AC_RESULT_SUCCESS) && !(flags & DAMAGE_RESULT_AC_SUCCESS)) {
         return 0;
     }
     damage = weapon->hpDamageWork[0];
+    // FAKE: dead guard (fn == NULL returned above); the plain call changes the object
     if (fn) {
         damage = fn(attacker, weapon, target, part);
     }
@@ -420,7 +421,7 @@ s32 BattleCalculateDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPa
         damage += attacker->badgesEquipped.PowerPlus;
         damage += attacker->badgesEquipped.PUpDDown;
         if (attacker->badgesEquipped.AllOrNothing) {
-            if (((u32)wp->actionCommands.result & AC_RESULT_SUCCESS) || (flags & DAMAGE_RESULT_AC_SUCCESS)) {
+            if ((wp->actionCommands.result & AC_RESULT_SUCCESS) || (flags & DAMAGE_RESULT_AC_SUCCESS)) {
                 damage += attacker->badgesEquipped.AllOrNothing;
             } else {
                 damage = 0;
@@ -584,6 +585,7 @@ skip:
     }
     if (defenseAttr == DEFENSE_ATTR_ABSORB) {
         *result |= DAMAGE_RESULT_ABSORBED;
+        // FAKE: negation as an unsigned multiply; -damage changes the object
         return (u32)damage * -1;
     }
     if (damage <= 0) {
@@ -615,9 +617,10 @@ s32 BattleCalculateFpDamage(BattleUnit* attacker, BattleUnit* target, BattleUnit
         return 0;
     }
     if (attacker && (weapon->special & SPECIAL_BADGE_POWER) && attacker->badgesEquipped.AllOrNothing &&
-        !((u32)wp->actionCommands.result & AC_RESULT_SUCCESS)) {
+        !(wp->actionCommands.result & AC_RESULT_SUCCESS)) {
         return 0;
     }
+    // FAKE: dead guard (fn == NULL returned above); the plain call changes the object
     if (fn) {
         damage = fn(attacker, weapon, target, part);
     }
@@ -635,186 +638,184 @@ s32 BattleCalculateFpDamage(BattleUnit* attacker, BattleUnit* target, BattleUnit
 }
 
 s32 _getSickStatusRate(BattleWeapon* weapon, s32 type) {
-    BattleWeapon* w = weapon;
     switch (type) {
-        case 1: return w->sleepChance;
-        case 2: return w->stopChance;
-        case 3: return w->dizzyChance;
-        case 4: return w->poisonChance;
-        case 5: return w->confuseChance;
-        case 6: return w->electricChance;
-        case 7: return w->dodgyChance;
-        case 8: return w->burnChance;
-        case 9: return w->freezeChance;
-        case 10:
-            if (w->sizeChangeStrength > 0) {
-                return w->sizeChangeChance;
+        case STATUS_SLEEP: return weapon->sleepChance;
+        case STATUS_STOP: return weapon->stopChance;
+        case STATUS_DIZZY: return weapon->dizzyChance;
+        case STATUS_POISON: return weapon->poisonChance;
+        case STATUS_CONFUSE: return weapon->confuseChance;
+        case STATUS_ELECTRIC: return weapon->electricChance;
+        case STATUS_DODGY: return weapon->dodgyChance;
+        case STATUS_BURN: return weapon->burnChance;
+        case STATUS_FREEZE: return weapon->freezeChance;
+        case STATUS_HUGE:
+            if (weapon->sizeChangeStrength > 0) {
+                return weapon->sizeChangeChance;
             }
             return 0;
-        case 11:
-            if (w->sizeChangeStrength <= 0) {
-                return w->sizeChangeChance;
+        case STATUS_TINY:
+            if (weapon->sizeChangeStrength <= 0) {
+                return weapon->sizeChangeChance;
             }
             return 0;
-        case 12:
-            if (w->atkChangeStrength > 0) {
-                return w->atkChangeChance;
+        case STATUS_ATTACK_UP:
+            if (weapon->atkChangeStrength > 0) {
+                return weapon->atkChangeChance;
             }
             return 0;
-        case 13:
-            if (w->atkChangeStrength <= 0) {
-                return w->atkChangeChance;
+        case STATUS_ATTACK_DOWN:
+            if (weapon->atkChangeStrength <= 0) {
+                return weapon->atkChangeChance;
             }
             return 0;
-        case 14:
-            if (w->defChangeStrength > 0) {
-                return w->defChangeChance;
+        case STATUS_DEFENSE_UP:
+            if (weapon->defChangeStrength > 0) {
+                return weapon->defChangeChance;
             }
             return 0;
-        case 15:
-            if (w->defChangeStrength <= 0) {
-                return w->defChangeChance;
+        case STATUS_DEFENSE_DOWN:
+            if (weapon->defChangeStrength <= 0) {
+                return weapon->defChangeChance;
             }
             return 0;
-        case 0: return w->allergicChance;
-        case 19: return w->fastChance;
-        case 20: return w->slowChance;
-        case 25: return w->frightChance;
-        case 26: return w->galeForceChance;
-        case 27: return (u8)w->ohkoChance;
-        case 18: return w->invisibleChance;
-        case 23: return w->hpRegenTime > 0 ? 100 : 0;
-        case 24: return w->fpRegenTime > 0 ? 100 : 0;
-        case 16: return w->chargeStrength != 0 ? 100 : 0;
-        case 21: return w->paybackTime != 0 ? 100 : 0;
-        case 22: return w->holdFastTime > 0 ? 100 : 0;
-        case 17: return 0;
+        case STATUS_ALLERGIC: return weapon->allergicChance;
+        case STATUS_FAST: return weapon->fastChance;
+        case STATUS_SLOW: return weapon->slowChance;
+        case STATUS_FRIGHT: return weapon->frightChance;
+        case STATUS_GALE_FORCE: return weapon->galeForceChance;
+        case STATUS_INSTANT_KILL: return (u8)weapon->ohkoChance;
+        case STATUS_INVISIBLE: return weapon->invisibleChance;
+        case STATUS_HP_REGEN: return weapon->hpRegenTime > 0 ? 100 : 0;
+        case STATUS_FP_REGEN: return weapon->fpRegenTime > 0 ? 100 : 0;
+        case STATUS_CHARGE: return weapon->chargeStrength != 0 ? 100 : 0;
+        case STATUS_PAYBACK: return weapon->paybackTime != 0 ? 100 : 0;
+        case STATUS_HOLD_FAST: return weapon->holdFastTime > 0 ? 100 : 0;
+        case STATUS_FLIPPED: return 0;
     }
     return 0;
 }
 
 void _getSickStatusParam(BattleUnit* unit, BattleWeapon* weapon, u32 type, s8* outTime, s8* outStrength) {
-    BattleWeapon* w = weapon;
     s32 time;
     s32 strength;
     s32 badge;
     s32 n;
 
     switch (type) {
-        case 1:
-            time = strength = w->sleepTime;
+        case STATUS_SLEEP:
+            time = strength = weapon->sleepTime;
             break;
-        case 2:
-            time = strength = w->stopTime;
+        case STATUS_STOP:
+            time = strength = weapon->stopTime;
             break;
-        case 3:
-            time = strength = w->dizzyTime;
+        case STATUS_DIZZY:
+            time = strength = weapon->dizzyTime;
             break;
-        case 4:
-            time = w->poisonTime;
-            strength = w->poisonStrength;
+        case STATUS_POISON:
+            time = weapon->poisonTime;
+            strength = weapon->poisonStrength;
             break;
-        case 5:
-            time = strength = w->confuseTime;
+        case STATUS_CONFUSE:
+            time = strength = weapon->confuseTime;
             break;
-        case 6:
-            time = strength = w->electricTime;
+        case STATUS_ELECTRIC:
+            time = strength = weapon->electricTime;
             break;
-        case 7:
-            time = strength = w->dodgyTime;
+        case STATUS_DODGY:
+            time = strength = weapon->dodgyTime;
             break;
-        case 8:
-            time = strength = w->burnTime;
+        case STATUS_BURN:
+            time = strength = weapon->burnTime;
             break;
-        case 9:
-            time = strength = w->freezeTime;
+        case STATUS_FREEZE:
+            time = strength = weapon->freezeTime;
             break;
-        case 10:
-            if (w->sizeChangeStrength > 0) {
-                time = w->sizeChangeTime;
-                strength = w->sizeChangeStrength;
+        case STATUS_HUGE:
+            if (weapon->sizeChangeStrength > 0) {
+                time = weapon->sizeChangeTime;
+                strength = weapon->sizeChangeStrength;
             } else {
                 strength = 0;
                 time = 0;
             }
             break;
-        case 11:
-            if (w->sizeChangeStrength < 0) {
-                time = w->sizeChangeTime;
-                strength = w->sizeChangeStrength;
+        case STATUS_TINY:
+            if (weapon->sizeChangeStrength < 0) {
+                time = weapon->sizeChangeTime;
+                strength = weapon->sizeChangeStrength;
             } else {
                 strength = 0;
                 time = 0;
             }
             break;
-        case 12:
-            if (w->atkChangeStrength > 0) {
-                time = w->atkChangeTime;
-                strength = w->atkChangeStrength;
+        case STATUS_ATTACK_UP:
+            if (weapon->atkChangeStrength > 0) {
+                time = weapon->atkChangeTime;
+                strength = weapon->atkChangeStrength;
             } else {
                 strength = 0;
                 time = 0;
             }
             break;
-        case 13:
-            if (w->atkChangeStrength < 0) {
-                time = w->atkChangeTime;
-                strength = w->atkChangeStrength;
+        case STATUS_ATTACK_DOWN:
+            if (weapon->atkChangeStrength < 0) {
+                time = weapon->atkChangeTime;
+                strength = weapon->atkChangeStrength;
             } else {
                 strength = 0;
                 time = 0;
             }
             break;
-        case 14:
-            if (w->defChangeStrength > 0) {
-                time = w->defChangeTime;
-                strength = w->defChangeStrength;
+        case STATUS_DEFENSE_UP:
+            if (weapon->defChangeStrength > 0) {
+                time = weapon->defChangeTime;
+                strength = weapon->defChangeStrength;
             } else {
                 strength = 0;
                 time = 0;
             }
             break;
-        case 15:
-            if (w->defChangeStrength < 0) {
-                time = w->defChangeTime;
-                strength = w->defChangeStrength;
+        case STATUS_DEFENSE_DOWN:
+            if (weapon->defChangeStrength < 0) {
+                time = weapon->defChangeTime;
+                strength = weapon->defChangeStrength;
             } else {
                 strength = 0;
                 time = 0;
             }
             break;
-        case 0:
-            time = strength = w->allergicTime;
+        case STATUS_ALLERGIC:
+            time = strength = weapon->allergicTime;
             break;
-        case 19:
-            time = strength = w->fastTime;
+        case STATUS_FAST:
+            time = strength = weapon->fastTime;
             break;
-        case 20:
-            time = strength = w->slowTime;
+        case STATUS_SLOW:
+            time = strength = weapon->slowTime;
             break;
-        case 27:
-            time = strength = w->ohkoChance;
+        case STATUS_INSTANT_KILL:
+            time = strength = weapon->ohkoChance;
             break;
-        case 18:
-            time = strength = w->invisibleTime;
+        case STATUS_INVISIBLE:
+            time = strength = weapon->invisibleTime;
             break;
-        case 23:
-            time = w->hpRegenTime;
-            strength = w->hpRegenStrength;
+        case STATUS_HP_REGEN:
+            time = weapon->hpRegenTime;
+            strength = weapon->hpRegenStrength;
             break;
-        case 24:
-            time = w->fpRegenTime;
-            strength = w->fpRegenStrength;
+        case STATUS_FP_REGEN:
+            time = weapon->fpRegenTime;
+            strength = weapon->fpRegenStrength;
             break;
-        case 16:
-            time = w->chargeStrength;
-            strength = w->chargeStrength;
+        case STATUS_CHARGE:
+            time = weapon->chargeStrength;
+            strength = weapon->chargeStrength;
             break;
-        case 21:
-            time = strength = w->paybackTime;
+        case STATUS_PAYBACK:
+            time = strength = weapon->paybackTime;
             break;
-        case 22:
-            time = strength = w->holdFastTime;
+        case STATUS_HOLD_FAST:
+            time = strength = weapon->holdFastTime;
             break;
         default:
             strength = 0;
@@ -824,45 +825,45 @@ void _getSickStatusParam(BattleUnit* unit, BattleWeapon* weapon, u32 type, s8* o
 
     badge = weapon->itemId;
     n = 0;
-    if (badge >= 0xF0 && badge < 0x153) {
+    if (badge >= BADGE_MIN && badge < BADGE_MAX) {
         n = pouchEquipCheckBadge(badge);
     }
     if (n > 0) {
         switch (badge) {
-            case 0xF4:
-                if (type == 11) {
+            case ITEM_SHRINK_STOMP:
+                if (type == STATUS_TINY) {
                     time += (n - 1) * 2;
                 }
                 break;
-            case 0xF5:
-                if (type == 1) {
+            case ITEM_SLEEPY_STOMP:
+                if (type == STATUS_SLEEP) {
                     time += (n - 1) * 2;
                 }
                 break;
-            case 0xF6:
-                if (type == 15) {
+            case ITEM_SOFT_STOMP:
+                if (type == STATUS_DEFENSE_DOWN) {
                     time += (n - 1) * 2;
                 }
                 break;
-            case 0xFB:
-                if (type == 5) {
+            case ITEM_HEAD_RATTLE:
+                if (type == STATUS_CONFUSE) {
                     time += (n - 1) * 2;
                 }
                 break;
-            case 0xFD:
-                if (type == 9) {
+            case ITEM_ICE_SMASH:
+                if (type == STATUS_FREEZE) {
                     time += (n - 1) * 2;
                 }
                 break;
-            case 0x14F:
-            case 0x150:
-                if (type == 14 && unit->badgesEquipped.DefendUnused >= 2) {
+            case ITEM_UNUSED_DEFEND_BADGE:
+            case ITEM_UNUSED_DEFEND_BADGE_P:
+                if (type == STATUS_DEFENSE_UP && unit->badgesEquipped.DefendUnused >= 2) {
                     strength += unit->badgesEquipped.DefendUnused - 1;
                 }
                 break;
         }
     }
-    if (type == 16) {
+    if (type == STATUS_CHARGE) {
         if (weapon == &badgeWeapon_Charge || weapon == &badgeWeapon_ChargeP) {
             if (unit->currentKind == UNIT_MARIO) {
                 n = pouchEquipCheckBadge(ITEM_CHARGE);
@@ -893,28 +894,28 @@ void _getSickStatusParam(BattleUnit* unit, BattleWeapon* weapon, u32 type, s8* o
 u8 _getRegistStatus(BattleUnit* unit, s32 type) {
     BattleVulnerableStatus* v = unit->vulnStatus;
     switch (type) {
-        case 1: return v->sleepRate;
-        case 2: return v->stopRate;
-        case 3: return v->dizzyRate;
-        case 4: return v->poisonRate;
-        case 5: return v->confuseRate;
-        case 6: return v->electricRate;
-        case 8: return v->burnRate;
-        case 9: return v->freezeRate;
-        case 10: return v->hugeRate;
-        case 11: return v->tinyRate;
-        case 12: return v->attackUpRate;
-        case 13: return v->attackDownRate;
-        case 14: return v->defenseUpRate;
-        case 15: return v->defenseDownRate;
-        case 0: return v->allergicRate;
-        case 27: return v->instaKillRate;
-        case 19: return v->fastRate;
-        case 20: return v->slowRate;
-        case 25: return v->frightRate;
-        case 26: return v->galeForceRate;
-        case 7: return v->dodgyRate;
-        case 18: return v->invisibleRate;
+        case STATUS_SLEEP: return v->sleepRate;
+        case STATUS_STOP: return v->stopRate;
+        case STATUS_DIZZY: return v->dizzyRate;
+        case STATUS_POISON: return v->poisonRate;
+        case STATUS_CONFUSE: return v->confuseRate;
+        case STATUS_ELECTRIC: return v->electricRate;
+        case STATUS_BURN: return v->burnRate;
+        case STATUS_FREEZE: return v->freezeRate;
+        case STATUS_HUGE: return v->hugeRate;
+        case STATUS_TINY: return v->tinyRate;
+        case STATUS_ATTACK_UP: return v->attackUpRate;
+        case STATUS_ATTACK_DOWN: return v->attackDownRate;
+        case STATUS_DEFENSE_UP: return v->defenseUpRate;
+        case STATUS_DEFENSE_DOWN: return v->defenseDownRate;
+        case STATUS_ALLERGIC: return v->allergicRate;
+        case STATUS_INSTANT_KILL: return v->instaKillRate;
+        case STATUS_FAST: return v->fastRate;
+        case STATUS_SLOW: return v->slowRate;
+        case STATUS_FRIGHT: return v->frightRate;
+        case STATUS_GALE_FORCE: return v->galeForceRate;
+        case STATUS_DODGY: return v->dodgyRate;
+        case STATUS_INVISIBLE: return v->invisibleRate;
     }
     return 100;
 }
@@ -1031,7 +1032,7 @@ s32 BattleSetStatusDamage(u32* result, BattleUnit* unit, BattleUnitPart* part, u
                 return 0;
         }
     }
-    if ((u32)type == 8 && unit->badgesEquipped.IcePower) {
+    if ((u32)type == STATUS_BURN && unit->badgesEquipped.IcePower) {
         return 0;
     }
     chance = rate;
@@ -1391,28 +1392,29 @@ s32 BattleSetStatusDamageFromWeapon(BattleUnit* attacker, BattleUnit* target, Ba
             rate = (s8)_getSickStatusRate(weapon, i);
             levelDiff = 0;
             switch (i) {
-                case 10:
+                case STATUS_HUGE:
                     if (!time && !strength) {
                         continue;
                     }
                     break;
-                case 14:
+                case STATUS_DEFENSE_UP:
                     if (!time && !strength) {
                         continue;
                     }
                     break;
-                case 12:
+                case STATUS_ATTACK_UP:
                     if (!time && !strength) {
                         continue;
                     }
                     break;
-                case 26:
+                case STATUS_GALE_FORCE:
                     if (rate > 0) {
                         levelDiff = attacker->mLevel - target->mLevel;
                     }
                     break;
             }
-            if (BattleSetStatusDamage(&result, target, part, weapon->special, i, (s8)rate, levelDiff, time, strength) && i == 18) {
+            // FAKE: no-op (s8) cast on rate; the plain argument changes the object
+            if (BattleSetStatusDamage(&result, target, part, weapon->special, i, (s8)rate, levelDiff, time, strength) && i == STATUS_INVISIBLE) {
                 btlDispPoseAnime(part);
             }
         }
@@ -1491,14 +1493,14 @@ s32 BattlePreCheckDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPar
 s32 _checkDamageCode_EmergencyRevival(BattleUnit* unit, u32* flags) {
     s32 kind = unit->currentKind;
     if (kind == UNIT_MARIO) {
-        if ((s32)pouchCheckItem(ITEM_LIFE_SHROOM) > 0) {
+        if (pouchCheckItem(ITEM_LIFE_SHROOM) > 0) {
             *flags |= DAMAGE_RESULT_REVIVAL;
             return 1;
         }
         return 0;
     }
     if (kind >= TYPE_PARTNER_MIN && kind < TYPE_PARTNER_MAX) {
-        if ((s32)pouchCheckItem(ITEM_LIFE_SHROOM) > 0) {
+        if (pouchCheckItem(ITEM_LIFE_SHROOM) > 0) {
             *flags |= DAMAGE_RESULT_REVIVAL;
             return 1;
         }
@@ -1567,9 +1569,9 @@ s32 BattleCheckDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPart* 
                 result = flags | DAMAGE_CODE_SUPERGUARDED;
                 BattleDamageDirect(attacker->unitId, target, part, 0, 0, result, weapon->damagePattern, 0);
                 if (attacker->hitEventCode) {
-                    BattleRunHitEventDirect(attacker, 0x137, attacker->hitEventCode);
+                    BattleRunHitEventDirect(attacker, DAMAGE_RESULT_FINAL_HIT | DAMAGE_CODE_SUPERGUARD_COUNTER, attacker->hitEventCode);
                 } else {
-                    BattleDamageDirect(-5, attacker, NULL, 1, 0, 0x137, 0, 1);
+                    BattleDamageDirect(-5, attacker, NULL, 1, 0, DAMAGE_RESULT_FINAL_HIT | DAMAGE_CODE_SUPERGUARD_COUNTER, 0, 1);
                 }
                 return -1;
             case 1:
@@ -1577,7 +1579,7 @@ s32 BattleCheckDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPart* 
                 flags |= DAMAGE_RESULT_FINAL_HIT;
                 result = flags | DAMAGE_CODE_SUPERGUARDED;
                 BattleDamageDirect(attacker->unitId, target, part, 0, 0, result, weapon->damagePattern, 0);
-                BattleDamageDirect(-5, attacker, NULL, 1, 0, 0x137, 0, 1);
+                BattleDamageDirect(-5, attacker, NULL, 1, 0, DAMAGE_RESULT_FINAL_HIT | DAMAGE_CODE_SUPERGUARD_COUNTER, 0, 1);
                 return -1;
         }
     }
@@ -1585,14 +1587,14 @@ s32 BattleCheckDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPart* 
     while (cw.attackHits) {
         if (flags & DAMAGE_RESULT_FINAL_HIT) {
             if (part->counterAttributes & kCounterVolatileExplosive) {
-                BattleRunHitEvent(target, 0x719);
+                BattleRunHitEvent(target, DAMAGE_RESULT_DEATH | DAMAGE_RESULT_ZERO_HP | DAMAGE_RESULT_FINAL_HIT | DAMAGE_CODE_EXPLOSION);
                 ret = 18;
                 break;
             }
             if ((part->counterAttributes & kCounterExplosive) &&
                 (weapon->element == ELEMENT_EXPLOSION || weapon->element == ELEMENT_ELECTRIC || weapon->element == ELEMENT_FIRE ||
                  ((weapon->special & SPECIAL_IGNITABLE) && BtlUnit_CheckStatus(attacker, STATUS_BURN)))) {
-                BattleRunHitEvent(target, 0x719);
+                BattleRunHitEvent(target, DAMAGE_RESULT_DEATH | DAMAGE_RESULT_ZERO_HP | DAMAGE_RESULT_FINAL_HIT | DAMAGE_CODE_EXPLOSION);
                 ret = 18;
                 break;
             }
@@ -1653,14 +1655,16 @@ s32 BattleCheckDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPart* 
         if (status & STATUS_RESULT_GALE_FORCE) {
             result = flags | DAMAGE_CODE_GALE_FORCE;
         }
+        // FAKE: no-op (u32) cast; the plain test changes the object
         if (((u32)flags & DAMAGE_RESULT_FINAL_HIT) && (status & STATUS_RESULT_INSTANT_KILL)) {
             code = DAMAGE_RESULT_DEATH | DAMAGE_RESULT_ZERO_HP | DAMAGE_RESULT_FINAL_HIT | DAMAGE_CODE_NORMAL;
-            target->damagePattern = 0;
+            target->damagePattern = ATTACKPATTERN_NULL;
             _checkDamageCode_EmergencyRevival(target, (u32*)&code);
             BattleRunHitEvent(target, code);
             ret = 18;
             break;
         }
+        // FAKE: no-op (u32) cast; the plain test changes the object
         if (((u32)flags & DAMAGE_RESULT_FINAL_HIT) && (weapon->special & SPECIAL_FREEZE_CRUSH) && BtlUnit_CheckStatus(target, STATUS_FREEZE) && irand(100) < 0) {
             // BUG: irand(100) < 0 never holds, so this freeze-crush hit never happens
             code2 = DAMAGE_RESULT_FREEZE_CRUSH | DAMAGE_RESULT_DEATH | DAMAGE_RESULT_ZERO_HP | DAMAGE_RESULT_FINAL_HIT |
@@ -1682,18 +1686,18 @@ s32 BattleCheckDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPart* 
             }
         }
         pattern = weapon->damagePattern;
-        if (pattern == 0x14 && cw.msg) {
-            pattern = 0;
+        if (pattern == ATTACKPATTERN_CHUCHURINA_ITEMSTEAL && cw.msg) {
+            pattern = ATTACKPATTERN_NULL;
         }
-        if (pattern == 0xE || pattern == 0x10) {
+        if (pattern == ATTACKPATTERN_KAITEN_HAMMER || pattern == ATTACKPATTERN_ULTRA_HAMMER) {
             if (target->mAttributeFlags & kUnitNoHammerKnockback) {
-                pattern = 0;
+                pattern = ATTACKPATTERN_NULL;
             }
             if (irand(100) >= target->mKindParams->hammerKnockbackChance) {
-                pattern = 0;
+                pattern = ATTACKPATTERN_NULL;
             }
             if (!(flags & DAMAGE_RESULT_AC_SUCCESS)) {
-                pattern = 0;
+                pattern = ATTACKPATTERN_NULL;
             }
         }
         if (status & STATUS_RESULT_SLEEP) {
@@ -1734,7 +1738,7 @@ s32 BattleCheckDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPart* 
         if (!cw.count) {
             cw.count = 1;
         }
-        if (!attacker->mAlliance) {
+        if (attacker->mAlliance == ALLIANCE_PLAYER) {
             BattleAudience_Case_Countered();
         }
         if (cw.holdFast) {
@@ -1747,7 +1751,7 @@ s32 BattleCheckDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPart* 
         BattleAcHelpSetDispType(0);
         BattleDamageDirect(-5, attacker, NULL, cw.count, 0, cw.msg, 0, 1);
         if (cw.hitEvent) {
-            target->damagePattern = 0;
+            target->damagePattern = ATTACKPATTERN_NULL;
             BattleRunHitEvent(target, cw.hitEvent);
         }
         return -1;
@@ -1763,9 +1767,8 @@ void BattleAttackDeclare(s32* unitIdx, s32* partIdx) {
     s32 j;
     s32 n;
 
-    i = 0;
     wp = _battleWorkPointer;
-    for (; i < 64; i++) {
+    for (i = 0; i < 64; i++) {
         if (i == *unitIdx) {
             continue;
         }
@@ -1798,11 +1801,11 @@ void BattleAttackDeclare(s32* unitIdx, s32* partIdx) {
         }
     }
     if (i < 64) {
-        BattleGetUnitPtr(wp, *unitIdx)->damagePattern = 0;
+        BattleGetUnitPtr(wp, *unitIdx)->damagePattern = ATTACKPATTERN_NULL;
         BattleRunHitEvent(BattleGetUnitPtr(wp, *unitIdx), DAMAGE_RESULT_GUARD_RETURN | DAMAGE_CODE_PROTECTED);
         BattleGetUnitPtr(wp, *unitIdx)->mTokenFlags |= kProtectedByBodyguard;
         wp->flags |= BATTLE_FLAG_GUARD_MOVE;
-        unit->damagePattern = 0;
+        unit->damagePattern = ATTACKPATTERN_NULL;
         BattleRunHitEvent(unit, DAMAGE_RESULT_GUARD_RETURN | DAMAGE_CODE_BODYGUARD_MOVE);
         unit->mTokenFlags |= kBodyguarding;
         *unitIdx = i;
@@ -1818,11 +1821,10 @@ void __declare(s32 unitIdx, s32 partIdx, s32* outUnit, s32* outPart) {
     s32 j;
     s32 n;
 
-    i = 0;
     wp = _battleWorkPointer;
     *outUnit = -1;
     *outPart = 0;
-    for (; i < 64; i++) {
+    for (i = 0; i < 64; i++) {
         if (i == unitIdx) {
             continue;
         }
@@ -1855,11 +1857,11 @@ void __declare(s32 unitIdx, s32 partIdx, s32* outUnit, s32* outPart) {
         }
     }
     if (i < 64) {
-        BattleGetUnitPtr(wp, unitIdx)->damagePattern = 0;
+        BattleGetUnitPtr(wp, unitIdx)->damagePattern = ATTACKPATTERN_NULL;
         BattleRunHitEvent(BattleGetUnitPtr(wp, unitIdx), DAMAGE_RESULT_GUARD_RETURN | DAMAGE_CODE_PROTECTED);
         BattleGetUnitPtr(wp, unitIdx)->mTokenFlags |= kProtectedByBodyguard;
         wp->flags |= BATTLE_FLAG_GUARD_MOVE;
-        unit->damagePattern = 0;
+        unit->damagePattern = ATTACKPATTERN_NULL;
         BattleRunHitEvent(unit, DAMAGE_RESULT_GUARD_RETURN | DAMAGE_CODE_BODYGUARD_MOVE);
         unit->mTokenFlags |= kBodyguarding;
         *outUnit = i;
@@ -1911,28 +1913,28 @@ s32 BattleCheckCounter(CounterWork* work, BattleUnit* attacker, BattleUnit* targ
     work->count = 0;
     if ((part->counterAttributes & kCounterTopSpiky) && !attacker->badgesEquipped.SpikeShield && !(weapon->counterResistFlags & COUNTER_RESIST_TOP_SPIKY)) {
         work->type = DAMAGE_CODE_COUNTER_TOP_SPIKY;
-        work->msg = 0x12B;
+        work->msg = DAMAGE_RESULT_FINAL_HIT | DAMAGE_CODE_COUNTER_TOP_SPIKY;
         work->count++;
         work->hitEvent = DAMAGE_CODE_AVOID_TOP_SPIKY;
         *flags |= DAMAGE_RESULT_FINAL_HIT;
         work->attackHits = 0;
     } else if ((part->counterAttributes & kCounterPreemptiveFrontSpiky) && !attacker->badgesEquipped.SpikeShield && !(weapon->counterResistFlags & COUNTER_RESIST_PREEMPTIVE_SPIKY)) {
         work->type = DAMAGE_CODE_COUNTER_PREEMPTIVE_SPIKY;
-        work->msg = 0x12C;
+        work->msg = DAMAGE_RESULT_FINAL_HIT | DAMAGE_CODE_COUNTER_PREEMPTIVE_SPIKY;
         work->count++;
         work->hitEvent = DAMAGE_CODE_AVOID_PREEMPTIVE_SPIKY;
         *flags |= DAMAGE_RESULT_FINAL_HIT;
         work->attackHits = 0;
     } else if ((part->counterAttributes & kCounterFrontSpiky) && !attacker->badgesEquipped.SpikeShield && !(weapon->counterResistFlags & COUNTER_RESIST_FRONT_SPIKY)) {
         work->type = DAMAGE_CODE_COUNTER_FRONT_SPIKY;
-        work->msg = 0x12D;
+        work->msg = DAMAGE_RESULT_FINAL_HIT | DAMAGE_CODE_COUNTER_FRONT_SPIKY;
         work->count++;
         work->hitEvent = DAMAGE_CODE_AVOID_FRONT_SPIKY;
         *flags |= DAMAGE_RESULT_FINAL_HIT;
         work->attackHits = 0;
     } else if (((part->counterAttributes & kCounterFiery) || (part->counterAttributes & kCounterFieryStatus)) && !attacker->badgesEquipped.IcePower && !(weapon->counterResistFlags & COUNTER_RESIST_FIERY)) {
         work->type = DAMAGE_CODE_COUNTER_FIERY;
-        work->msg = 0x12E;
+        work->msg = DAMAGE_RESULT_FINAL_HIT | DAMAGE_CODE_COUNTER_FIERY;
         work->count++;
         work->hitEvent = DAMAGE_CODE_AVOID_FIERY;
         *flags |= DAMAGE_RESULT_FINAL_HIT;
@@ -1942,7 +1944,7 @@ s32 BattleCheckCounter(CounterWork* work, BattleUnit* attacker, BattleUnit* targ
         }
     } else if (((part->counterAttributes & kCounterIcy) || (part->counterAttributes & kCounterIcyStatus)) && !(weapon->counterResistFlags & COUNTER_RESIST_ICY)) {
         work->type = DAMAGE_CODE_COUNTER_ICY;
-        work->msg = 0x12F;
+        work->msg = DAMAGE_RESULT_FINAL_HIT | DAMAGE_CODE_COUNTER_ICY;
         work->count++;
         work->hitEvent = DAMAGE_CODE_AVOID_ICY;
         *flags |= DAMAGE_RESULT_FINAL_HIT;
@@ -1952,7 +1954,7 @@ s32 BattleCheckCounter(CounterWork* work, BattleUnit* attacker, BattleUnit* targ
         }
     } else if (((part->counterAttributes & kCounterElectric) || (part->counterAttributes & kCounterElectricStatus)) && !(weapon->counterResistFlags & COUNTER_RESIST_ELECTRIC) && !BtlUnit_CheckStatus(attacker, STATUS_ELECTRIC)) {
         work->type = DAMAGE_CODE_COUNTER_ELECTRIC;
-        work->msg = 0x130;
+        work->msg = DAMAGE_RESULT_FINAL_HIT | DAMAGE_CODE_COUNTER_ELECTRIC;
         work->count++;
         work->hitEvent = DAMAGE_CODE_AVOID_ELECTRIC;
         *flags |= DAMAGE_RESULT_FINAL_HIT;
@@ -1965,21 +1967,21 @@ s32 BattleCheckCounter(CounterWork* work, BattleUnit* attacker, BattleUnit* targ
             if (weapon->element == ELEMENT_EXPLOSION || weapon->element == ELEMENT_ELECTRIC || weapon->element == ELEMENT_FIRE ||
                 ((weapon->special & SPECIAL_IGNITABLE) && BtlUnit_CheckStatus(attacker, STATUS_BURN))) {
                 work->type = DAMAGE_CODE_COUNTER_EXPLOSIVE;
-                work->msg = 0x131;
+                work->msg = DAMAGE_RESULT_FINAL_HIT | DAMAGE_CODE_COUNTER_EXPLOSIVE;
                 work->count++;
                 *flags |= DAMAGE_RESULT_FINAL_HIT;
             }
         }
         if ((part->counterAttributes & kCounterVolatileExplosive) && !(weapon->counterResistFlags & COUNTER_RESIST_VOLATILE_EXPLOSIVE)) {
             work->type = DAMAGE_CODE_COUNTER_VOLATILE_EXPLOSIVE;
-            work->msg = 0x132;
+            work->msg = DAMAGE_RESULT_FINAL_HIT | DAMAGE_CODE_COUNTER_VOLATILE_EXPLOSIVE;
             work->count++;
             *flags |= DAMAGE_RESULT_FINAL_HIT;
         }
         if ((BtlUnit_CheckStatus(target, STATUS_ELECTRIC) || (part->counterAttributes & kCounterElectric) || (part->counterAttributes & kCounterElectricStatus)) &&
             !(weapon->counterResistFlags & COUNTER_RESIST_ELECTRIC) && !BtlUnit_CheckStatus(attacker, STATUS_ELECTRIC)) {
             work->type = DAMAGE_CODE_COUNTER_ELECTRIFIED;
-            work->msg = 0x134;
+            work->msg = DAMAGE_RESULT_FINAL_HIT | DAMAGE_CODE_COUNTER_ELECTRIFIED;
             work->count++;
             *flags |= DAMAGE_RESULT_FINAL_HIT;
             if (part->counterAttributes & kCounterElectricStatus) {
@@ -1988,13 +1990,13 @@ s32 BattleCheckCounter(CounterWork* work, BattleUnit* attacker, BattleUnit* targ
         }
         if (BtlUnit_CheckStatus(target, STATUS_PAYBACK) && !(weapon->counterResistFlags & COUNTER_RESIST_PAYBACK)) {
             work->type = DAMAGE_CODE_COUNTER_PAYBACK;
-            work->msg = 0x135;
+            work->msg = DAMAGE_RESULT_FINAL_HIT | DAMAGE_CODE_COUNTER_PAYBACK;
             *flags |= DAMAGE_RESULT_FINAL_HIT;
             work->payback = 1;
         }
         if (((part->counterAttributes & kCounterPoison) || (part->counterAttributes & kCounterPoisonStatus)) && !(weapon->counterResistFlags & COUNTER_RESIST_POISON)) {
             work->type = DAMAGE_CODE_COUNTER_POISON;
-            work->msg = 0x133;
+            work->msg = DAMAGE_RESULT_FINAL_HIT | DAMAGE_CODE_COUNTER_POISON;
             *flags |= DAMAGE_RESULT_FINAL_HIT;
             work->payback = 1;
             if (part->counterAttributes & kCounterPoisonStatus) {
@@ -2003,13 +2005,13 @@ s32 BattleCheckCounter(CounterWork* work, BattleUnit* attacker, BattleUnit* targ
         }
         if (BtlUnit_CheckStatus(target, STATUS_HOLD_FAST) && !(weapon->counterResistFlags & COUNTER_RESIST_HOLD_FAST)) {
             work->type = DAMAGE_CODE_COUNTER_HOLD_FAST;
-            work->msg = 0x136;
+            work->msg = DAMAGE_RESULT_FINAL_HIT | DAMAGE_CODE_COUNTER_HOLD_FAST;
             *flags |= DAMAGE_RESULT_FINAL_HIT;
             work->holdFast = 1;
         }
         if (target->badgesEquipped.ReturnPostage && !(weapon->counterResistFlags & COUNTER_RESIST_PAYBACK)) {
             work->type = DAMAGE_CODE_COUNTER_PAYBACK;
-            work->msg = 0x135;
+            work->msg = DAMAGE_RESULT_FINAL_HIT | DAMAGE_CODE_COUNTER_PAYBACK;
             *flags |= DAMAGE_RESULT_FINAL_HIT;
             work->returnPostage = 1;
         }

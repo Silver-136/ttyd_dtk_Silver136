@@ -67,17 +67,16 @@ s16 journal_icon_tbl[6] = { 0x218, 0x239, 0x239, 0x239, 0x23A, 0x23B };
 
 
 //.sbss
-static SWork* wp;
+static StatusWindowWork* wp;
 
 void statusWinDisp(CameraId camId, void* param);
-void gaugeDisp(s32 sp, f32 x, f32 y);
-void statusGetValue(SVal* values);
 BOOL valueCheck(void);
 void valueUpdate(void);
 
 void statusWinInit(void) {
-    wp = __memAlloc(HEAP_DEFAULT, sizeof(SWork));
-    memset(wp, 0, sizeof(SWork));
+    wp = __memAlloc(HEAP_DEFAULT, sizeof(StatusWindowWork));
+    memset(wp, 0, sizeof(StatusWindowWork));
+    // FAKE: empty null check after the memset; removing it changes the object
     if (!wp) {
     }
     wp->speed = 1.0f;
@@ -118,11 +117,10 @@ void statusWinMain(void) {
     f32 one;
     f32 t;
 
-
     one = 1.0f;
     mario = marioGetPtr();
     if (mario->characterId) {
-        wp->flags = 2;
+        wp->flags = STATUS_WINDOW_FLAG_CLOSED;
         wp->duration = one;
         wp->timer = one;
         wp->tEnd = 0.0f;
@@ -135,6 +133,7 @@ void statusWinMain(void) {
     switch (seqGetSeq()) {
         case SEQ_GAME:
         case SEQ_MAP_CHANGE:
+            // FAKE: (x ? FALSE : TRUE) for !x; the plain negation changes the object
             if ((marioChkCtrl() ? FALSE : TRUE) || (marioChkKey() ? FALSE : TRUE) || !(mario->flags & MARIO_FLAG_ACTIVE)) {
                 if (statusWinCheck()) {
                     statusWinClose();
@@ -190,7 +189,7 @@ void statusWinMain(void) {
                 wp->flags &= ~(STATUS_WINDOW_FLAG_OPEN | STATUS_WINDOW_FLAG_OPEN_REQ);
             }
             break;
-        case 4:
+        case SEQ_BATTLE:
             break;
         default:
             if (statusWinCheck()) {
@@ -233,8 +232,8 @@ void statusWinMain(void) {
     }
 }
 
-// iconDispGx's original prototype takes the scale first (f1 either way); calling it in that
-// order gives the target's argument evaluation order.
+// FAKE: iconDispGx called through a scale-first function pointer cast (the scale is in f1 either way), which
+// evaluates the arguments in the retail order; the plain call changes the object.
 #define iconDispGxScaleFirst ((void (*)(f32, Vec*, s16, u16))iconDispGx)
 
 void gaugeDisp(s32 sp, f32 x, f32 y) {
@@ -245,7 +244,7 @@ void gaugeDisp(s32 sp, f32 x, f32 y) {
 
     max = 0;
     for (i = 0; i < sizeof(gauge_back) / sizeof(gauge_back[0]); i++) {
-        if (*(u16*)&pouchGetPtr()->mStarPowersObtained & (1 << i)) {
+        if (pouchGetPtr()->mStarPowersObtained & (1 << i)) {
             max += 100;
         }
     }
@@ -270,7 +269,7 @@ void gaugeDisp(s32 sp, f32 x, f32 y) {
     }
     for (i = 0; i < sizeof(gauge_back) / sizeof(gauge_back[0]); i++) {
         Vec pos2;
-        if (!(*(u16*)&pouchGetPtr()->mStarPowersObtained & (1 << i))) {
+        if (!(pouchGetPtr()->mStarPowersObtained & (1 << i))) {
             break;
         }
         pos2.x = x + (f32)(i * 32);
@@ -280,8 +279,7 @@ void gaugeDisp(s32 sp, f32 x, f32 y) {
     }
 }
 
-static inline void
-numDisp(f32 x, f32 y, s32 value, BOOL small) {
+static inline void numDisp(f32 x, f32 y, s32 value, BOOL small) {
     Mtx m;
     MTXTrans(m, x, y, 0.0f);
     iconNumberDispGx(m, value, small, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
@@ -306,7 +304,7 @@ void statusWinDisp(CameraId camId, void* param) {
 
     e = alwaysDt;
     for (i = 0; i < sizeof(alwaysDt) / sizeof(alwaysDt[0]); i++, e++) {
-        if (e->iconId == ICON_STATUS_SP_BANNER && !*(u16*)&pouchGetPtr()->mStarPowersObtained) {
+        if (e->iconId == ICON_STATUS_SP_BANNER && !pouchGetPtr()->mStarPowersObtained) {
             break;
         }
         if (!blinkOn) {
@@ -327,7 +325,7 @@ void statusWinDisp(CameraId camId, void* param) {
         MTXTrans(m, x + (f32)e->xpos, y - (f32)e->ypos, 0.0f);
         MTXScale(s, e->scale, e->scale, e->scale);
         MTXConcat(m, s, m);
-        iconDispGxCol(m, 0x10, e->iconId, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
+        iconDispGxCol(m, ICON_FLAG_2D, e->iconId, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
     }
 
     if (!(wp->blink & 1) || blinkOn) {
@@ -348,7 +346,7 @@ void statusWinDisp(CameraId camId, void* param) {
 
     if (wp->cur.party) {
         partysDt[1].iconId = party_icon[wp->cur.party];
-        if (wp->cur.party == 4) {
+        if (wp->cur.party == PARTNER_YOSHI) {
             switch (pouchGetPartyColor(PARTNER_YOSHI)) {
                 case 0:
                     partysDt[1].iconId = ICON_STATUS_YOSHI;
@@ -382,7 +380,7 @@ void statusWinDisp(CameraId camId, void* param) {
             MTXTrans(m, x + (f32)e->xpos, y - (f32)e->ypos, 0.0f);
             MTXScale(s, e->scale, e->scale, e->scale);
             MTXConcat(m, s, m);
-            iconDispGxCol(m, 0x10, e->iconId, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
+            iconDispGxCol(m, ICON_FLAG_2D, e->iconId, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
         }
         if (!(wp->blink & 8) || blinkOn) {
             numDisp(120.0f + x - 6.0f - 10.0f, 4.0f + (2.0f + (y - 78.0f)), wp->cur.partyHp, 0);
@@ -395,53 +393,52 @@ void statusWinDisp(CameraId camId, void* param) {
         MTXTrans(m2, -190.0f, y2, 0.0f);
         MTXScale(s2, 0.75f, 0.75f, 0.75f);
         MTXConcat(m2, s2, m2);
-        iconDispGxCol(m2, 0x10, ICON_MENU_DPAD, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
+        iconDispGxCol(m2, ICON_FLAG_2D, ICON_MENU_DPAD, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
         if (swByteGet(0) >= STG0_07_GOOMBELLA_JOINS || partyChkJoin(PARTNER_GOOMBELLA)) { // GSW_STORY_PROGRESS
             MTXTrans(m2, -250.0f, 16.0f + y2, 0.0f);
             MTXScale(s2, 0.75f, 0.75f, 0.75f);
             MTXConcat(m2, s2, m2);
 #ifdef VERSION_G8ME01
-            iconDispGxCol(m2, 0x10, (u16)party_icon_tbl[gp->language], (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
+            iconDispGxCol(m2, ICON_FLAG_2D, (u16)party_icon_tbl[gp->language], (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
 #else
-            iconDispGxCol(m2, 0x10, ICON_MENU_PARTY, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
+            iconDispGxCol(m2, ICON_FLAG_2D, ICON_MENU_PARTY, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
 #endif
         }
         MTXTrans(m2, -190.0f, 50.0f + y2, 0.0f);
         MTXScale(s2, 0.75f, 0.75f, 0.75f);
         MTXConcat(m2, s2, m2);
 #ifdef VERSION_G8ME01
-        iconDispGxCol(m2, 0x10, (u16)gear_icon_tbl[gp->language], (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
+        iconDispGxCol(m2, ICON_FLAG_2D, (u16)gear_icon_tbl[gp->language], (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
         if (swByteGet(0) >= STG0_17_BADGE_TUTORIAL || pouchGetHaveBadgeCnt()) { // GSW_STORY_PROGRESS
             f32 xoff[6] = { 0.0f, 10.0f, 3.0f, 8.0f, 8.0f, 0.0f };
             MTXTrans(m2, -130.0f + xoff[gp->language], 16.0f + y2, 0.0f);
             MTXScale(s2, 0.75f, 0.75f, 0.75f);
             MTXConcat(m2, s2, m2);
-            iconDispGxCol(m2, 0x10, (u16)badge_icon_tbl[gp->language], (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
+            iconDispGxCol(m2, ICON_FLAG_2D, (u16)badge_icon_tbl[gp->language], (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
 #else
-        iconDispGxCol(m2, 0x10, ICON_MENU_GEAR, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
+        iconDispGxCol(m2, ICON_FLAG_2D, ICON_MENU_GEAR, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
         if (swByteGet(0) >= STG0_17_BADGE_TUTORIAL || pouchGetHaveBadgeCnt()) { // GSW_STORY_PROGRESS
             MTXTrans(m2, -130.0f, 16.0f + y2, 0.0f);
             MTXScale(s2, 0.75f, 0.75f, 0.75f);
             MTXConcat(m2, s2, m2);
-            iconDispGxCol(m2, 0x10, ICON_MENU_BADGES, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
+            iconDispGxCol(m2, ICON_FLAG_2D, ICON_MENU_BADGES, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
 #endif
         }
         MTXTrans(m2, -190.0f, y2 - 25.0f, 0.0f);
         MTXScale(s2, 0.75f, 0.75f, 0.75f);
         MTXConcat(m2, s2, m2);
 #ifdef VERSION_G8ME01
-        iconDispGxCol(m2, 0x10, (u16)journal_icon_tbl[gp->language], (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
+        iconDispGxCol(m2, ICON_FLAG_2D, (u16)journal_icon_tbl[gp->language], (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
 #else
-        iconDispGxCol(m2, 0x10, ICON_MENU_JOURNAL, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
+        iconDispGxCol(m2, ICON_FLAG_2D, ICON_MENU_JOURNAL, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
 #endif
     }
 }
 
-void statusGetValue(SVal* values) {
+void statusGetValue(StatusValue* values) {
     BattleWork* bw;
     BattleUnit* mario;
     BattleUnit* party;
-
 
     if (!gp->inBattle) {
         values->hp = pouchGetHP();
@@ -480,7 +477,7 @@ void statusGetValue(SVal* values) {
 }
 
 BOOL valueCheck(void) {
-    SVal v;
+    StatusValue v;
     BOOL changed = FALSE;
 
     statusGetValue(&v);
@@ -550,7 +547,7 @@ static inline s32 calcStep(s32 target, s32 cur) {
 
 void valueUpdate(void) {
     static s32 count;
-    SVal v;
+    StatusValue v;
     s32 d;
 
     statusGetValue(&v);
@@ -645,7 +642,7 @@ BOOL statusWinCheckUpdate(void) {
 }
 
 void statusWinForceUpdate(void) {
-    SVal v;
+    StatusValue v;
 
     statusGetValue(&v);
     wp->cur.hp = v.hp;
@@ -664,7 +661,7 @@ void statusWinForceUpdate(void) {
 }
 
 void statusWinForceUpdateCoin(void) {
-    SVal v;
+    StatusValue v;
 
     statusGetValue(&v);
     wp->cur.coins = v.coins;
@@ -703,6 +700,8 @@ void statusPartyHPBlink(s32 frames) {
     wp->blinkTimer = frames;
 }
 
+// FAKE: unreferenced (dead-stripped at link); it only sets the order of the float constants in the pool, and the
+// object changes without it.
 void statusWinEase(f32* f) {
     f[0] = 0.0f;
 #ifdef VERSION_G8ME01

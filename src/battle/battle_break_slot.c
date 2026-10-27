@@ -34,13 +34,8 @@ typedef struct {
     s32 v[5];
 } SlotCards5;
 
-
-BreakSlotReel* BattleBreakSlotReelGetPtr(s32 no);
-void BattleBreakSlot_Start(void);
 void BattleBreakSlotDispReel(CameraId camId, void* param);
 void item_appear_force(BreakSlotReel* reel, s32 item);
-
-
 
 EVT_BEGIN(kinoko_effect)
     CALL(btlevtcmd_GetUnitId, UNIT_ID_MARIO, LW(3))
@@ -188,8 +183,6 @@ EVT_BEGIN(doku_kinoko_effect)
     RETURN
 EVT_END()
 
-
-
 #ifdef VERSION_G8ME01
 // US battle textures are 0x16 higher
 u16 tex_id_list_small[5] = {0x41, 0x43, 0x45, 0x44, 0x42};
@@ -228,7 +221,6 @@ EVT_BEGIN(msg_fault)
     RETURN
 EVT_END()
 
-
 BreakSlotWork* BattleBreakSlotGetPtr(void) {
     return &_battleWorkPointer->breakSlot;
 }
@@ -250,6 +242,7 @@ void BattleBreakSlot_Init(void) {
     s32 i;
 
     memset(wp, 0, sizeof(BreakSlotWork));
+    // FAKE: i is set before wp->phase and the reel pointer; `for (i = 0; ...)` changes the object
     i = 0;
     wp->phase = 0;
     reel = BattleBreakSlotReelGetPtr(0);
@@ -259,19 +252,17 @@ void BattleBreakSlot_Init(void) {
     }
     reel = BattleBreakSlotReelGetPtr(0);
     reel->numCards = 8;
-    reel->cards = BattleAlloc(reel->numCards * 4);
-    memcpy(reel->cards, &c1, reel->numCards * 4);
+    reel->cards = BattleAlloc(reel->numCards * sizeof(s32));
+    memcpy(reel->cards, &c1, reel->numCards * sizeof(s32));
     reel = BattleBreakSlotReelGetPtr(1);
     reel->numCards = 8;
-    reel->cards = BattleAlloc(reel->numCards * 4);
-    memcpy(reel->cards, &c2, reel->numCards * 4);
+    reel->cards = BattleAlloc(reel->numCards * sizeof(s32));
+    memcpy(reel->cards, &c2, reel->numCards * sizeof(s32));
     reel = BattleBreakSlotReelGetPtr(2);
     reel->numCards = 5;
-    reel->cards = BattleAlloc(reel->numCards * 4);
-    memcpy(reel->cards, &c3, reel->numCards * 4);
+    reel->cards = BattleAlloc(reel->numCards * sizeof(s32));
+    memcpy(reel->cards, &c3, reel->numCards * sizeof(s32));
 }
-
-
 
 void BattleBreakSlot_Main(void) {
     static f32 updown;
@@ -279,14 +270,15 @@ void BattleBreakSlot_Main(void) {
     BattleDebugCtrl* dbg2 = &wp->debug;
     BattleAudience* aud = BattleAudienceBaseGetPtr();
     BreakSlotWork* slot = BattleBreakSlotGetPtr();
-    BattleUnit* mario = BattleGetMarioPtr(wp);
-    BattleUnit* party = BattleGetPartyPtr(wp);
     BreakSlotReel* reel;
     BreakSlotReel* rr;
     s32 count;
     s32 k;
     s32 i;
     f32 y;
+
+    BattleGetMarioPtr(wp);
+    BattleGetPartyPtr(wp);
 
     switch (slot->phase) {
         case 0:
@@ -298,7 +290,6 @@ void BattleBreakSlot_Main(void) {
                 }
             }
             if (count == 2) {
-
                 if (BattleBreakSlotReelGetPtr(0)->item != BattleBreakSlotReelGetPtr(1)->item) {
                     slot->phase = 1;
                     slot->phaseTimer = 0;
@@ -365,6 +356,7 @@ void BattleBreakSlot_Main(void) {
                     if (reel->state == 8) {
                         reel->state = 9;
                         reel->spinAccel = -1.0f * (0.2f + 0.15f * rand() / 32767.0f);
+                        // the random deceleration is overwritten at once: every reel slows by 1.0 per frame
                         reel->spinAccel = -1.0f;
                         break;
                     }
@@ -500,12 +492,12 @@ void BattleBreakSlot_Main(void) {
                 BattleAudienceSoundRun(0);
             }
             if (slot->phaseTimer == 210) {
-                if (!((u32)_battleWorkPointer->cameraWork.flags & BTL_CAM_FLAG_SHAKE_H)) {
+                if (!(_battleWorkPointer->cameraWork.flags & BTL_CAM_FLAG_SHAKE_H)) {
                     btl_camera_shake_h(0, 2.0f, 2.0f, 1000, 0);
                 }
                 for (k = 0; k < 200; k++) {
                     if ((u8)BattleAudience_GetExist(k) == 1) {
-                        if (BattleAudienceGetPtr(k)->status == 11 || BattleAudienceGetPtr(k)->status == 12) {
+                        if (BattleAudienceGetPtr(k)->status == AUDIENCE_STATUS_ENTER || BattleAudienceGetPtr(k)->status == AUDIENCE_STATUS_ESCAPE) {
                             slot->phaseTimer--;
                             break;
                         }
@@ -516,6 +508,7 @@ void BattleBreakSlot_Main(void) {
                     BattleAudienceSoundStop(13);
                 }
             }
+            // BUG: k is set only by the loop on the frame where phaseTimer is 210; here (220) it is read uninitialized
             if (slot->phaseTimer == 220 && k == 200) {
                 btl_camera_set_mode(BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT);
                 btl_camera_noshake(0);
@@ -527,6 +520,7 @@ void BattleBreakSlot_Main(void) {
 #ifdef VERSION_G8ME01
                 {
 #else
+                // FAKE: no-op (u32) cast; the plain comparison changes the object
                 if ((u32)gp->language == LANGUAGE_JP) {
 #endif
                     switch (BattleBreakSlotReelGetPtr(0)->item) {
@@ -567,6 +561,7 @@ void BattleBreakSlot_Main(void) {
             break;
     }
 
+    // FAKE: i is set before the reel pointer; `for (i = 0; ...)` changes the object
     i = 0;
     rr = BattleBreakSlotReelGetPtr(0);
     for (; i < 3; i++, rr++) {
@@ -721,7 +716,7 @@ void BattleBreakSlot_Main(void) {
                     if ((slot->flags & 4) && rr->item != 3) {
                         break;
                     }
-                    if (((u32)dbg2->flags & BATTLE_DEBUG_SLOT_ITEM) && rr->item != dbg2->slotItem) {
+                    if ((dbg2->flags & BATTLE_DEBUG_SLOT_ITEM) && rr->item != dbg2->slotItem) {
                         break;
                     }
                     rr->pos.y = 0.0f;
@@ -789,12 +784,13 @@ void BattleBreakSlotDispReel(CameraId camId, void* param) {
     u16* tex;
     s32 i;
 
+    // FAKE: i is set before the reel pointer; `for (i = 0; ...)` changes the object
     i = 0;
     reel = BattleBreakSlotReelGetPtr(0);
     for (; i < 3; i++, reel++) {
         if ((reel->flags & 1) && reel->state >= 1 && reel->state <= 4) {
             PSMTXTrans(trans, 42.0f * i + 226.0f, 122.0f, 0.0f);
-            iconDispGxCol(trans, 0x10, ICON_SLOT_REEL_BOX, (GXColor){0xFF, 0xFF, 0xFF, 0xD0});
+            iconDispGxCol(trans, ICON_FLAG_2D, ICON_SLOT_REEL_BOX, (GXColor){0xFF, 0xFF, 0xFF, 0xD0});
         }
     }
 
@@ -809,6 +805,7 @@ void BattleBreakSlotDispReel(CameraId camId, void* param) {
         }
     }
 
+    // FAKE: i is set before the reel pointer; `for (i = 0; ...)` changes the object
     i = 0;
     reel = BattleBreakSlotReelGetPtr(0);
     for (; i < 3; i++, reel++) {
@@ -858,7 +855,7 @@ void BattleBreakSlot_End(void) {
     BattleFree(BattleBreakSlotReelGetPtr(1)->cards);
     BattleFree(BattleBreakSlotReelGetPtr(2)->cards);
 #else
-    //stubbed in retail
+    // JP frees nothing here: the reel card arrays stay allocated
 #endif
 }
 
@@ -886,7 +883,7 @@ void BattleBreakSlot_PointInc(void) {
                 reel->index = reel->numCards - 1;
             }
             reel->item = reel->cards[reel->index];
-            if ((u32)dbg->flags & BATTLE_DEBUG_SLOT_ITEM) {
+            if (dbg->flags & BATTLE_DEBUG_SLOT_ITEM) {
                 item_appear_force(reel, dbg->slotItem);
             }
             if (slot->flags & 1) {
@@ -902,7 +899,7 @@ void BattleBreakSlot_PointInc(void) {
                 reel->index = reel->numCards - 1;
             }
             reel->item = reel->cards[reel->index];
-            if ((u32)dbg->flags & BATTLE_DEBUG_SLOT_ITEM) {
+            if (dbg->flags & BATTLE_DEBUG_SLOT_ITEM) {
                 item_appear_force(reel, dbg->slotItem);
             }
             if (slot->flags & 1) {

@@ -49,7 +49,7 @@ void BtlPad_WorkInit(BattleWorkPad* pad) {
 }
 
 void BtlPad_WorkUpdate(BattleWorkPad* pad, s32 chan) {
-    int i, repeat;
+    int i;
 
     pad->mPadData[1] = pad->mPadData[0];
 
@@ -59,7 +59,7 @@ void BtlPad_WorkUpdate(BattleWorkPad* pad, s32 chan) {
         pad->mButtonsHistory[i + 1] = pad->mButtonsHistory[i];
     }
 
-    //after moving old data back, write new data
+    // after shifting the history back one frame, store this frame's input
     pad->mPadData[0].button = (u16)gp->button[chan];
     pad->mPadData[0].stickX = gp->stickX[chan];
     pad->mPadData[0].stickY = gp->stickY[chan];
@@ -110,13 +110,12 @@ void BtlPad_WorkUpdate(BattleWorkPad* pad, s32 chan) {
         pad->mHoldRepeatFrameCounter = 0;
     } else if (pad->mButtonsHistory[0] != pad->mButtonsHistory[1]) {
         pad->mButtonsHeldHistory[0] |= pad->mButtonsHistory[0] & 0xFFFF0000;
-        pad->mButtonsHeldHistory[0] &= pad->mButtonsPressedHistory[0] & 0xFFFF0000 | 0xFFFF;
+        pad->mButtonsHeldHistory[0] &= (pad->mButtonsPressedHistory[0] & 0xFFFF0000) | 0xFFFF;
         pad->mHoldRepeatState = 1;
         pad->mHoldRepeatFrameCounter = 0;
     } else {
-        repeat = 8;
         pad->mHoldRepeatFrameCounter++;
-        if (pad->mHoldRepeatFrameCounter >= (pad->mHoldRepeatState == 1 ? 16 : repeat)) {
+        if (pad->mHoldRepeatFrameCounter >= (pad->mHoldRepeatState == 1 ? 16 : 8)) {
             pad->mButtonsHeldHistory[0] |= pad->mButtonsHistory[0] & 0xFFFF0000;
             pad->mHoldRepeatState = 2;
             pad->mHoldRepeatFrameCounter = 0;

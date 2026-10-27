@@ -13,10 +13,8 @@
 
 void psndSFX_pit(s32 id, s32 pitch);
 
-
-//local prototypes
-s32 BattleACPadCheckRecordTrigger(s32 chan, s32 mask);
-
+// local prototypes
+s32 BattleACPadCheckRecordTrigger(s32 frame, s32 mask);
 
 void BattleActionCommandManagerInit(BattleWork* wp) {
     BtlPad_WorkInit(&wp->actionCommands.pad);
@@ -73,7 +71,7 @@ void BattleActionCommandDeclareACResult(BattleWork* work, BattleWeapon* weapon, 
 }
 
 void BattleActionCommandSetup(BattleWork* work, s32 id, BattleUnit* unit, s32 setupFlags, s32 setupParam) {
-    ActionCommandEntry* entry; // r6
+    ActionCommandEntry* entry;
 
     entry = ActionCommandList;
     work->actionCommands.mAcUnit = unit;
@@ -90,7 +88,7 @@ void BattleActionCommandSetup(BattleWork* work, s32 id, BattleUnit* unit, s32 se
     for (; entry->id; entry++) {
         if (entry->id == id) {
             work->actionCommands.maincb = entry->main;
-            if (!(work->actionCommands.mAcUnit->mTokenFlags & kConfusedAction)){
+            if (!(work->actionCommands.mAcUnit->mTokenFlags & kConfusedAction)) {
                 work->actionCommands.dispcb = entry->disp;
             }
             work->actionCommands.resultcb = entry->result;
@@ -110,10 +108,9 @@ void BattleActionCommandStop(BattleWork* work) {
     }
 }
 
-
 s32 BattleActionCommandCheckDefence(BattleUnit* unit, BattleWeapon* weapon) {
     BattleWork* wp;
-    void* pad;
+    BattleWorkPad* pad;
     s32 i;
     s32 count;
     s32 done;
@@ -148,17 +145,17 @@ s32 BattleActionCommandCheckDefence(BattleUnit* unit, BattleWeapon* weapon) {
             wp->actionCommands.mDefenseResult = 5;
         } else {
             for (i = 0; i < superguard; i++) {
-                if (BattleACPadCheckRecordTrigger(i, 0x200)) {
+                if (BattleACPadCheckRecordTrigger(i, PAD_BUTTON_B)) {
                     break;
                 }
             }
             if (i < superguard) {
                 count = 0;
                 for (i = 0; i < 15; i++) {
-                    if (BattleACPadCheckRecordTrigger(i, 0x100)) {
+                    if (BattleACPadCheckRecordTrigger(i, PAD_BUTTON_A)) {
                         count++;
                     }
-                    if (BattleACPadCheckRecordTrigger(i, 0x200)) {
+                    if (BattleACPadCheckRecordTrigger(i, PAD_BUTTON_B)) {
                         count++;
                     }
                 }
@@ -177,10 +174,10 @@ s32 BattleActionCommandCheckDefence(BattleUnit* unit, BattleWeapon* weapon) {
         } else {
             count = 0;
             for (i = 0; i < 15; i++) {
-                if (BattleACPadCheckRecordTrigger(i, 0x100)) {
+                if (BattleACPadCheckRecordTrigger(i, PAD_BUTTON_A)) {
                     count++;
                 }
-                if (BattleACPadCheckRecordTrigger(i, 0x200)) {
+                if (BattleACPadCheckRecordTrigger(i, PAD_BUTTON_B)) {
                     count++;
                 }
             }
@@ -188,7 +185,7 @@ s32 BattleActionCommandCheckDefence(BattleUnit* unit, BattleWeapon* weapon) {
                 wp->actionCommands.mDefenseResult = 1;
             } else {
                 for (i = 0; i < normal; i++) {
-                    if (BattleACPadCheckRecordTrigger(i, 0x100)) {
+                    if (BattleACPadCheckRecordTrigger(i, PAD_BUTTON_A)) {
                         break;
                     }
                 }
@@ -207,8 +204,9 @@ s32 BattleActionCommandCheckDefence(BattleUnit* unit, BattleWeapon* weapon) {
     BtlPad_WorkInit(pad);
     return wp->actionCommands.mDefenseResult;
 }
-s32 BattleACPadCheckRecordTrigger(s32 chan, s32 mask) {
-    return _battleWorkPointer->actionCommands.pad.mButtonsPressedHistory[chan] & mask;
+
+s32 BattleACPadCheckRecordTrigger(s32 frame, s32 mask) {
+    return _battleWorkPointer->actionCommands.pad.mButtonsPressedHistory[frame] & mask;
 }
 
 s32 BattleActionCommandGetDefenceResult(void) {
@@ -227,11 +225,9 @@ s32 BattleActionCommandGetDifficulty(BattleWork* work) {
 
 void BattleActionCommandSetDifficulty(BattleWork* work, BattleUnit* unit, s32 difficulty) {
     s32 adjusted;
-    s32 simp;
 
     work->actionCommands.mBaseAcDifficulty = difficulty;
-    simp = unit->badgesEquipped.Simplifier;
-    adjusted = difficulty - simp;
+    adjusted = difficulty - unit->badgesEquipped.Simplifier;
     adjusted += unit->badgesEquipped.Unsimplifier;
     if (adjusted < 0) {
         adjusted = 0;
@@ -243,10 +239,10 @@ void BattleActionCommandSetDifficulty(BattleWork* work, BattleUnit* unit, s32 di
 }
 
 s32 BattleActionCommandGetPrizeLv(BattleWork* work, BattleUnit* unit, s32 lv) {
-    if (unit != NULL && (u8)unit->damageCode == 0x1E) {
+    if (unit != NULL && (u8)unit->damageCode == DAMAGE_CODE_NO_DAMAGE) {
         return -1;
     }
-    lv += (u8)work->actionCommands.mAcDifficulty;
+    lv += work->actionCommands.mAcDifficulty;
     lv--;
     if (lv < 0) {
         lv = 0;
@@ -396,7 +392,7 @@ void BattleAcDrawGauge(s32 x, s32 y, s32 width, f32 ratio, s32 level, s32 a, s32
     pos = (Vec){0.0f, 0.0f, 0.0f};
     pos.x = x - 200;
     pos.y = y + 25;
-    iconDispGx(&pos, 0x10, ICON_AC_GAUGE_FRAME, 1.0f);
+    iconDispGx(&pos, ICON_FLAG_2D, ICON_AC_GAUGE_FRAME, 1.0f);
 
     if (level >= 2) {
         gaugeQuad(cam, x - 289, y + 50, x - 289 + width * a / max, y + 32, 0x21, 0x21, 0x75, 0xFF);
@@ -416,45 +412,39 @@ void BattleAcDrawGauge(s32 x, s32 y, s32 width, f32 ratio, s32 level, s32 a, s32
         GXLoadPosMtxImm(cam->view, GX_PNMTX0);
         btlDispGXQuads2DRasta(x - 289, y + 50, x - 289, y + 32, 0x2D, 0x38, 0xD2, 0xFF);
         if (a > 0) {
-            {
-                f32 tx0, ty0, tx1, ty1;
-                tx1 = x - 289 + width * a / max;
-                ty1 = y + 32;
-                ty0 = y + 50;
-                tx0 = tx1 - 2.0f;
-                if (tx1 >= tx0) {
-                    btlDispGXInit2DRasta();
-                    GXLoadPosMtxImm(cam->view, GX_PNMTX0);
-                    btlDispGXQuads2DRasta(tx0, ty0, tx1, ty1, 0x54, 0x28, 0xD1, 0xFF);
-                }
+            f32 tx0, ty0, tx1, ty1;
+            tx1 = x - 289 + width * a / max;
+            ty1 = y + 32;
+            ty0 = y + 50;
+            tx0 = tx1 - 2.0f;
+            if (tx1 >= tx0) {
+                btlDispGXInit2DRasta();
+                GXLoadPosMtxImm(cam->view, GX_PNMTX0);
+                btlDispGXQuads2DRasta(tx0, ty0, tx1, ty1, 0x54, 0x28, 0xD1, 0xFF);
             }
         }
         if (b - a > 0) {
-            {
-                f32 tx0, ty0, tx1, ty1;
-                tx1 = x - 289 + width * b / max;
-                ty1 = y + 32;
-                ty0 = y + 50;
-                tx0 = tx1 - 2.0f;
-                if (tx1 >= tx0) {
-                    btlDispGXInit2DRasta();
-                    GXLoadPosMtxImm(cam->view, GX_PNMTX0);
-                    btlDispGXQuads2DRasta(tx0, ty0, tx1, ty1, 0x7D, 0x2C, 0xB5, 0xFF);
-                }
+            f32 tx0, ty0, tx1, ty1;
+            tx1 = x - 289 + width * b / max;
+            ty1 = y + 32;
+            ty0 = y + 50;
+            tx0 = tx1 - 2.0f;
+            if (tx1 >= tx0) {
+                btlDispGXInit2DRasta();
+                GXLoadPosMtxImm(cam->view, GX_PNMTX0);
+                btlDispGXQuads2DRasta(tx0, ty0, tx1, ty1, 0x7D, 0x2C, 0xB5, 0xFF);
             }
         }
         if (c - b > 0) {
-            {
-                f32 tx0, ty0, tx1, ty1;
-                tx1 = x - 289 + width * c / max;
-                ty1 = y + 32;
-                ty0 = y + 50;
-                tx0 = tx1 - 2.0f;
-                if (tx1 >= tx0) {
-                    btlDispGXInit2DRasta();
-                    GXLoadPosMtxImm(cam->view, GX_PNMTX0);
-                    btlDispGXQuads2DRasta(tx0, ty0, tx1, ty1, 0xA1, 0x1B, 0x55, 0xFF);
-                }
+            f32 tx0, ty0, tx1, ty1;
+            tx1 = x - 289 + width * c / max;
+            ty1 = y + 32;
+            ty0 = y + 50;
+            tx0 = tx1 - 2.0f;
+            if (tx1 >= tx0) {
+                btlDispGXInit2DRasta();
+                GXLoadPosMtxImm(cam->view, GX_PNMTX0);
+                btlDispGXQuads2DRasta(tx0, ty0, tx1, ty1, 0xA1, 0x1B, 0x55, 0xFF);
             }
         }
     }

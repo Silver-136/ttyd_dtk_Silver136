@@ -49,7 +49,7 @@ extern s32 marioDefaultWeapon_Jump[];
 extern s32 marioWeapon_KururinJump[];
 extern s32 marioDefaultWeapon_Hammer[];
 
-//local prototypes
+// local prototypes
 USER_FUNC(_set_haikei_entry_scale);
 void _mapobj_data_touch_scale(s32 layer);
 void battleMakePhaseEvtTable(BattleWork* wp);
@@ -62,7 +62,6 @@ void btlseqPhase(BattleWork* wp);
 void _rule_disp(CameraId cameraId, void* param);
 USER_FUNC(_set_effect_luck);
 
-s32 _set_haikei_entry_scale(EventEntry* event, BOOL isFirstCall);
 EVT_BEGIN(nanika_luck_event)
     BEGIN_SIBLING_EVENT_GET_ID(PTR(0xfe363c8f))
         WAIT_FRAMES(60)
@@ -82,7 +81,8 @@ void btlseqInit(BattleWork* wp);
 void btlseqFirstAct(BattleWork* wp);
 void btlseqTurn(BattleWork* wp);
 
-// static data from an inlined header function (see unit_party_sanders.c)
+// Lucky Start badge: _set_effect_luck copies this weapon and keeps one of its four statuses (Electric, Dodgy,
+// HP Regen or FP Regen) at random
 
 const BattleWeapon N_weapon_lucky_start = {
     NULL, 0, // name..icon
@@ -186,7 +186,7 @@ void BattleSequenceManager(void) {
 
 void BattleCheckAllPinchStatus(BattleWork* wp, BOOL noAudience) {
     BattleUnit* unit;
-    BOOL v6;
+    BOOL alert;
     int i;
 
     for (i = 0; i < 64; i++) {
@@ -196,7 +196,7 @@ void BattleCheckAllPinchStatus(BattleWork* wp, BOOL noAudience) {
         }
     }
 
-    v6 = FALSE;
+    alert = FALSE;
     for (i = 0; i < 64; i++) {
         unit = BattleGetUnitPtr(wp, i);
         if (unit) {
@@ -207,7 +207,7 @@ void BattleCheckAllPinchStatus(BattleWork* wp, BOOL noAudience) {
                     unit->currentKind >= TYPE_PARTNER_MIN &&
                     unit->currentKind < TYPE_PARTNER_MAX) {
                     if (unit->currentHp > 0) {
-                        v6 = TRUE;
+                        alert = TRUE;
                     }
                 }
                 break;
@@ -215,7 +215,7 @@ void BattleCheckAllPinchStatus(BattleWork* wp, BOOL noAudience) {
         }
     }
 
-    if (v6) {
+    if (alert) {
         wp->alertTick--;
         if (wp->alertTick <= 0) {
             wp->alertTick = 60;
@@ -224,7 +224,7 @@ void BattleCheckAllPinchStatus(BattleWork* wp, BOOL noAudience) {
             }
         }
     } else {
-        v6 = FALSE;
+        alert = FALSE;
         for (i = 0; i < 64; i++) {
             unit = BattleGetUnitPtr(wp, i);
             if (unit) {
@@ -235,14 +235,14 @@ void BattleCheckAllPinchStatus(BattleWork* wp, BOOL noAudience) {
                         unit->currentKind >= TYPE_PARTNER_MIN &&
                         unit->currentKind < TYPE_PARTNER_MAX) {
                         if (unit->currentHp > 0) {
-                            v6 = TRUE;
+                            alert = TRUE;
                         }
                     }
                     break;
                 }
             }
         }
-        if (v6) {
+        if (alert) {
             wp->alertTick--;
             if (wp->alertTick <= 0) {
                 wp->alertTick = 60;
@@ -265,7 +265,7 @@ void btlseqInit(BattleWork* wp) {
     PartyEntry* party;
 
     switch (BattleGetSeq(wp, SEQ_INIT)) {
-        case 0x1000000: //continues through to 0x1000001
+        case 0x1000000: // falls through
             BattleSetSeq(wp, SEQ_INIT, 0x1000001);
 
         case 0x1000001:
@@ -281,7 +281,7 @@ void btlseqInit(BattleWork* wp) {
 
         case 0x1000002:
             if (BattleCheckEndUnitInitEvent(wp)) {
-                BattleSetSeq(wp, SEQ_INIT, 0x1000003u);
+                BattleSetSeq(wp, SEQ_INIT, 0x1000003);
             }
             break;
 
@@ -342,6 +342,7 @@ void btlseqFirstAct(BattleWork* wp) {
     s32 flag;
     int k;
     FieldBattleInfo* fb = wp->fbatInfo;
+    // FAKE: u8* view of fbatInfo->setup, cast back to NpcBattleInfo* at its use; NpcBattleInfo* info changes the object
     u8* info;
     type = (s32)fb->firstAttack;
 
@@ -359,7 +360,7 @@ void btlseqFirstAct(BattleWork* wp) {
                                     continue;
                                 }
                                 if (marioGetPtr()->currMotionId == MARIO_MOTION_YOSHI && unit->currentKind == UNIT_MARIO) {
-                                    evt = evtEntry((s32*)BtlUnit_GetData(unit, UNIT_DATA_RIDE_ENTRY_EVENT), 10, 0);
+                                    evt = evtEntry(BtlUnit_GetData(unit, UNIT_DATA_RIDE_ENTRY_EVENT), 10, 0);
                                     unit->entryEventId = evt->eventId;
                                     evt->unitId = unit->unitId;
                                 } else {
@@ -397,7 +398,7 @@ void btlseqFirstAct(BattleWork* wp) {
             }
             a->flags |= BATTLE_UNIT_FLAG_ACTING;
             if (type < FIRST_ATTACK_ENEMY) {
-                a->attackEventCode = (void*)_GetFirstAttackWeapon(type)->mAttackEvtScript;
+                a->attackEventCode = _GetFirstAttackWeapon(type)->mAttackEvtScript;
                 a->attackEventFlags = 0;
                 BattleStatusWindowEventOff();
             }
@@ -412,7 +413,8 @@ void btlseqFirstAct(BattleWork* wp) {
                 a->attackEventId = evt->eventId;
             }
             switch (type) {
-                case 1: case 2: case 3: case 4: case 5: case 6:
+                case FIRST_ATTACK_JUMP: case FIRST_ATTACK_SPIN_JUMP: case FIRST_ATTACK_JUMP_UNUSED:
+                case FIRST_ATTACK_HAMMER: case FIRST_ATTACK_SPIN_HAMMER: case FIRST_ATTACK_ULTRA_HAMMER:
                     unit = BattleGetPartyPtr(wp);
                     if (unit) {
                         evt = evtEntry(unit->entryEventCode, 10, 0);
@@ -420,7 +422,7 @@ void btlseqFirstAct(BattleWork* wp) {
                         evt->unitId = unit->unitId;
                     }
                     break;
-                case 7: case 8:
+                case FIRST_ATTACK_SHELL: case FIRST_ATTACK_BOMB:
                     unit = BattleGetMarioPtr(wp);
                     if (unit) {
                         evt = evtEntry(unit->entryEventCode, 10, 0);
@@ -436,13 +438,12 @@ void btlseqFirstAct(BattleWork* wp) {
             if (--wp->ruleDispTimer > 0) {
                 break;
             }
-            {
-                fadeEntry(0x17, 200, c);
-            }
+            fadeEntry(0x17, 200, c);
             wp->curtainSfxId = psndSFXOn("SFX_OFF_BTL_START_CURTAIN_UP1");
             BattleSetSeq(wp, SEQ_FIRST_ACT, 0x2000002);
 
         case 0x2000002:
+            // FAKE: (u32) compare with 0xFFFFFFFFU; the plain `wp->curtainSfxId != -1` changes the object
             if (fadeIsFinish() && (u32)wp->curtainSfxId != 0xFFFFFFFFU) {
                 psndSFXOff(wp->curtainSfxId);
                 wp->curtainSfxId = -1;
@@ -506,7 +507,7 @@ void btlseqFirstAct(BattleWork* wp) {
             if (!BattleWaitAllActiveEvtEnd(wp)) {
                 break;
             }
-            if ((u32)wp->fbatInfo->setup->battleFlags & NPC_BATTLE_NO_ESCAPE) {
+            if (wp->fbatInfo->setup->battleFlags & NPC_BATTLE_NO_ESCAPE) {
                 BattleSetSeq(wp, SEQ_FIRST_ACT, 0x2000009);
                 BattleStage_WallCloseCheck();
             } else {
@@ -596,13 +597,11 @@ void btlseqFirstAct(BattleWork* wp) {
     }
 }
 
-//==== written below (reverse order) ====
-
 USER_FUNC(_set_effect_luck) {
     BattleWork* wp = _battleWorkPointer;
     f32* pz;
     f32* py;
-    BattleWeapon weapon = *&N_weapon_lucky_start;
+    BattleWeapon weapon = N_weapon_lucky_start;
     f32 z;
     f32 y;
     BattleWeapon* pw;
@@ -613,7 +612,7 @@ USER_FUNC(_set_effect_luck) {
     NiceEffectWork* effect;
     int i;
 
-    // FAKE: comma temps so the pointers are coloured in assignment order (r31 pw ... r28 sfx)
+    // FAKE: pointer locals set through comma expressions `(0, &x)`; passing &weapon, &y and &z directly changes the object
     pw = (0, &weapon);
     pz = (0, &z);
     py = (0, &y);
@@ -657,9 +656,10 @@ USER_FUNC(_set_effect_luck) {
                     break;
             }
             part = BtlUnit_GetPartsPtr(unit, BtlUnit_GetBodyPartsId(unit));
-            BattleSetStatusDamageFromWeapon(BattleGetSystemPtr(wp), unit, part, pw, 0x100);
+            BattleSetStatusDamageFromWeapon(BattleGetSystemPtr(wp), unit, part, pw, DAMAGE_RESULT_FINAL_HIT);
             BtlUnit_GetPos(unit, &x, py, pz);
             psndSFXOn(sfx);
+            // FAKE: block-local EffectEntry* temporary; assigning effNiceEntry(...)->userdata directly changes the object
             {
                 EffectEntry* e = effNiceEntry(6, x - 45.0f, 60.0f + y, z);
                 effect = e->userdata;
@@ -670,9 +670,7 @@ USER_FUNC(_set_effect_luck) {
     return EVT_RETURN_DONE;
 }
 
-
-
-void btlseqTurn(BattleWork *wp) {
+void btlseqTurn(BattleWork* wp) {
     Vec pos;
     f32 hpX;
     f32 hpY;
@@ -688,17 +686,18 @@ void btlseqTurn(BattleWork *wp) {
     f32 flowerZ;
     s8 turns;
     s8 strength;
-    BattleUnit *unit;
-    EventEntry *evt;
+    BattleUnit* unit;
+    EventEntry* evt;
     BOOL found;
     BOOL sfx;
-    const char *sfxName;
+    const char* sfxName;
     BOOL ret;
     BOOL done;
     s32 count;
     s32 n;
     s32 rate;
     int i;
+
     found = 0;
     sfx = 0;
     switch (BattleGetSeq(wp, SEQ_TURN)) {
@@ -752,69 +751,37 @@ void btlseqTurn(BattleWork *wp) {
             break;
 
         case 0x3000007:
-
         case 0x300000B:
-
         case 0x300000D:
-
         case 0x300000F:
-
         case 0x3000011:
-
         case 0x3000013:
-
         case 0x3000015:
-
         case 0x3000017:
-
         case 0x3000019:
-
         case 0x300001B:
-
         case 0x300001D:
-
         case 0x300001F:
-
         case 0x3000021:
-
         case 0x3000023:
-
         case 0x3000025:
-
         case 0x3000027:
-
         case 0x3000029:
-
         case 0x300002B:
-
         case 0x300002D:
-
         case 0x300002F:
-
         case 0x3000031:
-
         case 0x3000033:
-
         case 0x3000035:
-
         case 0x3000037:
-
         case 0x3000039:
-
         case 0x300003B:
-
         case 0x300003D:
-
         case 0x300003F:
-
         case 0x3000041:
-
         case 0x3000043:
-
         case 0x3000045:
-
         case 0x3000047:
-
         case 0x3000049:
             if (!BattleWaitAllActiveEvtEnd(wp)) {
                 break;
@@ -843,6 +810,7 @@ void btlseqTurn(BattleWork *wp) {
             }
 
             if (sfx) {
+                // FAKE: string held in sfxName before the call; passing the literal directly changes the object
                 sfxName = "SFX_REST_CONDITION1";
                 psndSFXOn(sfxName);
             }
@@ -1012,7 +980,6 @@ void btlseqTurn(BattleWork *wp) {
 
             if (sfx) {
                 psndSFXOn("SFX_REST_CONDITION1");
-                dummy_label_899231: ;
             }
             if (!found) {
                 BattleIncSeq(wp, SEQ_TURN);
@@ -1025,13 +992,14 @@ void btlseqTurn(BattleWork *wp) {
             break;
 
         case 0x3000020: {
+                // FAKE: block-local unit shadowing the function's; using the function's unit changes the object
                 BattleUnit *unit;
                 sfxName = "SFX_CONDITION_BREAK_ICE1";
                 for (i = 0; i < 64; i++) {
                     unit = BattleGetUnitPtr(wp, i);
                     if (BtlUnit_CheckRecoveryStatus(unit, STATUS_FREEZE)) {
                         if (!BtlUnit_CheckShadowGuard(unit)) {
-                            BattleDamageDirect(-5, unit, NULL, 1, 0, 0x11A, 0, 1);
+                            BattleDamageDirect(-5, unit, NULL, 1, 0, DAMAGE_RESULT_FINAL_HIT | DAMAGE_CODE_ICE, 0, 1);
                         }
                         BtlUnit_GetPos(unit, &pos.x, &pos.y, &pos.z);
                         pos.y += BtlUnit_GetHeight(unit);
@@ -1494,7 +1462,7 @@ void btlseqTurn(BattleWork *wp) {
                     BtlUnit_GetStatus(unit, STATUS_POISON, &turns, &strength);
                     if ((strength > 0) && (!BtlUnit_CheckShadowGuard(unit))) {
                         found = 1;
-                        BattleDamageDirect(-5, unit, NULL, strength, 0, 0x117, 0, 1);
+                        BattleDamageDirect(-5, unit, NULL, strength, 0, DAMAGE_RESULT_FINAL_HIT | DAMAGE_CODE_NORMAL, 0, 1);
                     }
                 }
             }
@@ -1571,9 +1539,7 @@ void btlseqTurn(BattleWork *wp) {
                         BattleIncSeq(wp, SEQ_TURN);
                     }
                     break;
-
             }
-
             break;
 
         case 0x300000A:
@@ -1815,9 +1781,7 @@ void btlseqTurn(BattleWork *wp) {
             BattleSetSeq(wp, SEQ_TURN, 0x3000001);
             wp->flags &= ~BATTLE_FLAG_RESET_TURN;
             break;
-
     }
-
 }
 
 void _rule_disp(CameraId cameraId, void* param) {
@@ -2010,8 +1974,8 @@ void btlseqMove(BattleWork* wp) {
                 if (unit->currentKind == UNIT_MARIO) {
                     pouch = pouchGetPtr();
                     wp->flags |= (BATTLE_FLAG_JUMP_NO_SUBMENU | BATTLE_FLAG_HAMMER_NO_SUBMENU);
-                    for (i = 0; i < 200; i++) {
-                        if (pouch->equippedBadges[i] >= 0xF0 && pouch->equippedBadges[i] < 0xF7) {
+                    for (i = 0; i < MAX_BADGES; i++) {
+                        if (pouch->equippedBadges[i] >= ITEM_POWER_JUMP && pouch->equippedBadges[i] < ITEM_POWER_SMASH) {
                             wp->flags &= ~BATTLE_FLAG_JUMP_NO_SUBMENU;
                             break;
                         }
@@ -2019,8 +1983,8 @@ void btlseqMove(BattleWork* wp) {
                     if (pouch->jumpLevel >= 2) {
                         wp->flags &= ~BATTLE_FLAG_JUMP_NO_SUBMENU;
                     }
-                    for (i = 0; i < 200; i++) {
-                        if (pouch->equippedBadges[i] >= 0xF7 && pouch->equippedBadges[i] < 0xFE) {
+                    for (i = 0; i < MAX_BADGES; i++) {
+                        if (pouch->equippedBadges[i] >= ITEM_POWER_SMASH && pouch->equippedBadges[i] < ITEM_DOUBLE_DIP) {
                             wp->flags &= ~BATTLE_FLAG_HAMMER_NO_SUBMENU;
                             break;
                         }
@@ -2114,6 +2078,7 @@ void btlseqAct(BattleWork* wp) {
 
     switch (BattleGetSeq(wp, SEQ_ACT)) {
         case 0x6000000: {
+                // FAKE: block-local unit shadowing the function's; using the function's unit changes the object
                 BattleUnit* unit;
                 BOOL cantMove;
 
@@ -2272,6 +2237,7 @@ void btlseqAct(BattleWork* wp) {
                         break;
                 }
                 if (unit->moveState == 0) {
+                    // FAKE: decrement is always TRUE; the plain form without the flag and its test changes the object
                     decrement = TRUE;
                     if (wp->flags & BATTLE_FLAG_RESET_TURN) {
                         decrement = TRUE;
@@ -2430,6 +2396,7 @@ void battleSortPhaseMoveTable(BattleWork* wp, s32 count) {
     f32 x1, y1, z1;
     f32 x2, y2, z2;
     s32 tmp;
+    // FAKE: wp copied into a void* and cast back at every use; using wp directly changes the object
     void* w;
 
     w = (void*)wp;
@@ -2548,6 +2515,7 @@ BOOL BattleWaitAllActiveEvtEnd(BattleWork* wp) {
 }
 
 BOOL BattleWaitAllActiveEvtEnd_NoBgSetEndWait(BattleWork* wp) {
+    // FAKE: wp copied into a void* and cast back at its use; using wp directly changes the object
     void* w;
     BattleUnit* unit;
     BOOL done;
@@ -2557,6 +2525,7 @@ BOOL BattleWaitAllActiveEvtEnd_NoBgSetEndWait(BattleWork* wp) {
     for (i = 0; i < 0x40; i++) {
         unit = BattleGetUnitPtr((BattleWork*)w, i);
         if (unit) {
+            // FAKE: while loops that always break on the first pass, used as ifs; plain if/else changes the object
             while (unit->phaseEventId) {
                 if (evtCheckID(unit->phaseEventId)) {
                     done = FALSE;

@@ -8,15 +8,12 @@
 #include "unit/party/unit_party_chuchurina.h"
 #include "unit/party/unit_party_christine.h"
 
-
-#define PARTY_SETUP(kind) {&kind, 0, {0}, 0x04000002, {1000.0f, 0.0f, 1000.0f}, 0, {0, 0, 0, 0}, NULL}
-
 BattleUnitSetup entryunit_party[7] = {
-    PARTY_SETUP(unitdata_Party_Christine),
-    PARTY_SETUP(unitdata_Party_Nokotarou),
-    PARTY_SETUP(unitdata_Party_Yoshi),
-    PARTY_SETUP(unitdata_Party_Clauda),
-    PARTY_SETUP(unitdata_Party_Vivian),
-    PARTY_SETUP(unitdata_Party_Sanders),
-    PARTY_SETUP(unitdata_Party_Chuchurina),
+    {&unitdata_Party_Christine, 0, {0}, 0x04000002, {1000.0f, 0.0f, 1000.0f}, 0, {0, 0, 0, 0}, NULL},
+    {&unitdata_Party_Nokotarou, 0, {0}, 0x04000002, {1000.0f, 0.0f, 1000.0f}, 0, {0, 0, 0, 0}, NULL},
+    {&unitdata_Party_Yoshi, 0, {0}, 0x04000002, {1000.0f, 0.0f, 1000.0f}, 0, {0, 0, 0, 0}, NULL},
+    {&unitdata_Party_Clauda, 0, {0}, 0x04000002, {1000.0f, 0.0f, 1000.0f}, 0, {0, 0, 0, 0}, NULL},
+    {&unitdata_Party_Vivian, 0, {0}, 0x04000002, {1000.0f, 0.0f, 1000.0f}, 0, {0, 0, 0, 0}, NULL},
+    {&unitdata_Party_Sanders, 0, {0}, 0x04000002, {1000.0f, 0.0f, 1000.0f}, 0, {0, 0, 0, 0}, NULL},
+    {&unitdata_Party_Chuchurina, 0, {0}, 0x04000002, {1000.0f, 0.0f, 1000.0f}, 0, {0, 0, 0, 0}, NULL}
 };

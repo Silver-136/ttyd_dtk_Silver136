@@ -45,8 +45,8 @@ void battleMain(void) {
     }
 }
 
-BOOL battleSeqEndCheck() {
-    return _battleWorkPointer->flags >> 31;
+BOOL battleSeqEndCheck(void) {
+    return (_battleWorkPointer->flags & BATTLE_SEQ_END) != 0;
 }
 
 void BattleInit(FieldBattleInfo* info) {
@@ -348,12 +348,13 @@ void* BattleAlloc(u32 size) {
 }
 
 void BattleFree(void* ptr) {
-    if (ptr)
+    if (ptr) {
 #ifdef VERSION_G8ME01
         (_mapFree)(R_battlemapalloc_base_ptr, ptr);
 #else
         __memFree(HEAP_BATTLE, ptr);
 #endif
+    }
 }
 
 BattleUnit* BattleGetUnitPtr(BattleWork* wp, s32 index) {
@@ -434,7 +435,7 @@ BOOL BattlePartyAnimeLoad(s32 partyId) {
 BattleUnit* BattleChangeParty(BattleWork* wp) {
     s32 kind = wp->commandMenu.partyKind;
     BattleUnit* party = BattleGetPartyPtr(wp);
-    s32 oldId = *(s32*)party;
+    s32 oldId = party->unitId;
     BattleUnit* unit;
     s32 i;
     f32 dummy, x, y, z;
@@ -447,19 +448,19 @@ BattleUnit* BattleChangeParty(BattleWork* wp) {
         s32 id = wp->movePriorityQueue[i];
         if (id != -1) {
             if (id == oldId) {
-                wp->movePriorityQueue[i] = *(s32*)unit;
-            } else if (id == *(s32*)unit) {
+                wp->movePriorityQueue[i] = unit->unitId;
+            } else if (id == unit->unitId) {
                 wp->movePriorityQueue[i] = oldId;
             }
         }
     }
     BtlUnit_GetHomePos(unit, &x, &y, &z);
     BtlUnit_GetHomePos(party, &x, &dummy, &z);
-    BtlUnit_EquipItem(unit, EQUIP_RESET | EQUIP_PARTNER, 0);
+    BtlUnit_EquipItem(unit, EQUIP_RESET | EQUIP_PARTNER, ITEM_NULL);
     y += BattleGetFloorHeight(_battleWorkPointer, x, y, z);
     BtlUnit_SetHomePos(unit, x, y, z);
     if (wp->activeUnitId == oldId) {
-        wp->activeUnitId = *(s32*)unit;
+        wp->activeUnitId = unit->unitId;
     }
     unit->moveState = party->moveState;
     unit->movesRemaining = party->movesRemaining;
@@ -474,56 +475,56 @@ BattleUnit* BattleChangeParty(BattleWork* wp) {
 
 s32 BattleTransPartyId(BattleUnitType kind) {
     switch (kind) {
-    case UNIT_GOOMBELLA_CHAPTER4:
-    case UNIT_DOOPLISS_CHAPTER8_GOOMBELLA:
-    case UNIT_GOOMBELLA:
-        return PARTNER_GOOMBELLA;
-    case UNIT_KOOPS_CHAPTER4:
-    case UNIT_DOOPLISS_CHAPTER8_KOOPS:
-    case UNIT_KOOPS:
-        return PARTNER_KOOPS;
-    case UNIT_YOSHI_CHAPTER4:
-    case UNIT_DOOPLISS_CHAPTER8_YOSHI:
-    case UNIT_YOSHI:
-        return PARTNER_YOSHI;
-    case UNIT_FLURRIE_CHAPTER4:
-    case UNIT_DOOPLISS_CHAPTER8_FLURRIE:
-    case UNIT_FLURRIE:
-        return PARTNER_FLURRIE;
-    case UNIT_DOOPLISS_CHAPTER8_VIVIAN:
-    case UNIT_VIVIAN:
-        return PARTNER_VIVIAN;
-    case UNIT_DOOPLISS_CHAPTER8_BOBBERY:
-    case UNIT_BOBBERY:
-        return PARTNER_BOBBERY;
-    case UNIT_DOOPLISS_CHAPTER8_MS_MOWZ:
-    case UNIT_MS_MOWZ:
-        return PARTNER_MSMOWZ;
-    case 0:
-        return PARTNER_NONE;
-    default:
-        return PARTNER_NONE;
+        case UNIT_GOOMBELLA_CHAPTER4:
+        case UNIT_DOOPLISS_CHAPTER8_GOOMBELLA:
+        case UNIT_GOOMBELLA:
+            return PARTNER_GOOMBELLA;
+        case UNIT_KOOPS_CHAPTER4:
+        case UNIT_DOOPLISS_CHAPTER8_KOOPS:
+        case UNIT_KOOPS:
+            return PARTNER_KOOPS;
+        case UNIT_YOSHI_CHAPTER4:
+        case UNIT_DOOPLISS_CHAPTER8_YOSHI:
+        case UNIT_YOSHI:
+            return PARTNER_YOSHI;
+        case UNIT_FLURRIE_CHAPTER4:
+        case UNIT_DOOPLISS_CHAPTER8_FLURRIE:
+        case UNIT_FLURRIE:
+            return PARTNER_FLURRIE;
+        case UNIT_DOOPLISS_CHAPTER8_VIVIAN:
+        case UNIT_VIVIAN:
+            return PARTNER_VIVIAN;
+        case UNIT_DOOPLISS_CHAPTER8_BOBBERY:
+        case UNIT_BOBBERY:
+            return PARTNER_BOBBERY;
+        case UNIT_DOOPLISS_CHAPTER8_MS_MOWZ:
+        case UNIT_MS_MOWZ:
+            return PARTNER_MSMOWZ;
+        case UNIT_NULL:
+            return PARTNER_NONE;
+        default:
+            return PARTNER_NONE;
     }
 }
 
 BattleUnitType BattleTransPartyIdToUnitKind(s32 partyId) {
     switch (partyId) {
-    case PARTNER_GOOMBELLA:
-        return UNIT_GOOMBELLA;
-    case PARTNER_KOOPS:
-        return UNIT_KOOPS;
-    case PARTNER_YOSHI:
-        return UNIT_YOSHI;
-    case PARTNER_FLURRIE:
-        return UNIT_FLURRIE;
-    case PARTNER_VIVIAN:
-        return UNIT_VIVIAN;
-    case PARTNER_BOBBERY:
-        return UNIT_BOBBERY;
-    case PARTNER_MSMOWZ:
-        return UNIT_MS_MOWZ;
-    default:
-        return 0;
+        case PARTNER_GOOMBELLA:
+            return UNIT_GOOMBELLA;
+        case PARTNER_KOOPS:
+            return UNIT_KOOPS;
+        case PARTNER_YOSHI:
+            return UNIT_YOSHI;
+        case PARTNER_FLURRIE:
+            return UNIT_FLURRIE;
+        case PARTNER_VIVIAN:
+            return UNIT_VIVIAN;
+        case PARTNER_BOBBERY:
+            return UNIT_BOBBERY;
+        case PARTNER_MSMOWZ:
+            return UNIT_MS_MOWZ;
+        default:
+            return UNIT_NULL;
     }
 }
 
@@ -534,7 +535,7 @@ void BtlUnit_EquipItem(BattleUnit* unit, EquipFlags flags, ItemType type) {
     if (unit) {
         if (flags & EQUIP_RESET) {
             for (i = 0; i < 40; i++) {
-                unit->badgeCounts[i] = FALSE;
+                unit->badgeCounts[i] = 0;
             }
         }
 
@@ -836,11 +837,11 @@ void BattleAfterReactionQueueInit(void) {
     }
 }
 
-void BattleAfterReactionEntry(s32 a, s32 b) {
+void BattleAfterReactionEntry(s32 unitId, s32 tag) {
     BattleAfterReaction* base = _battleWorkPointer->afterReactions;
     s32 i;
     for (i = 0; i < 64; i++) {
-        if (base[i].unitId != -1 && a == base[i].unitId) {
+        if (base[i].unitId != -1 && unitId == base[i].unitId) {
             return;
         }
     }
@@ -850,17 +851,17 @@ void BattleAfterReactionEntry(s32 a, s32 b) {
         }
     }
     if (i < 64) {
-        base[i].unitId = a;
-        base[i].tag = b;
+        base[i].unitId = unitId;
+        base[i].tag = tag;
     }
 }
 
-void BattleAfterReactionRelease(s32 a, s32 b) {
+void BattleAfterReactionRelease(s32 unitId, s32 tag) {
     s32 i;
     s32 j;
     BattleAfterReaction* base = _battleWorkPointer->afterReactions;
     for (i = 0; i < 64; i++) {
-        if (base[i].unitId != -1 && a == base[i].unitId && b == base[i].tag) {
+        if (base[i].unitId != -1 && unitId == base[i].unitId && tag == base[i].tag) {
             for (j = i; j < 63; j++) {
                 base[j].unitId = base[j + 1].unitId;
                 base[j].tag = base[j + 1].tag;
@@ -895,7 +896,7 @@ BOOL BattleAfterReactionMain(void) {
             evt = evtEntry(BtlUnit_GetData(unit, tag), 10, 0);
             if (evt != NULL) {
                 unit->attackEventId = evt->eventId;
-                evt->unitId = *(s32*)unit;
+                evt->unitId = unit->unitId;
             }
             return TRUE;
         }
@@ -911,7 +912,7 @@ BOOL battleDisableHResetCheck(void) {
     if (wp == NULL) {
         return FALSE;
     }
-    return (wp->flags >> 29) & 1;
+    return (wp->flags & BATTLE_FLAG_DISABLE_HRESET) != 0;
 }
 
 u8 BattleMajinaiCheck(void) {
@@ -924,28 +925,37 @@ u8 BattleMajinaiCheck(void) {
     if (pouch->mTurnsUntilMerleeActivation < 0) {
         pouch->mMerleeNextCurseType = 0;
         pouch->mTurnsUntilMerleeActivation = irand(5) + 6;
-        (pouch->mTurnsUntilMerleeActivation)--;
+        pouch->mTurnsUntilMerleeActivation--;
         return 0;
     }
     if (pouch->mMerleeNextCurseType != 0) {
         return pouch->mMerleeNextCurseType;
     }
-    (pouch->mTurnsUntilMerleeActivation)--;
+    pouch->mTurnsUntilMerleeActivation--;
     if (pouch->mTurnsUntilMerleeActivation > 0) {
         return 0;
     }
     pouch->mTurnsUntilMerleeActivation = 0;
-    if ((u32)wp->fbatInfo->setup->battleFlags & NPC_BATTLE_MERLEE_SAFE_CURSE_UNUSED) {
+    if (wp->fbatInfo->setup->battleFlags & NPC_BATTLE_MERLEE_SAFE_CURSE_UNUSED) {
         r = irand(100);
-        if (r < 45) pouch->mMerleeNextCurseType = 1;
-        else if (r < 90) pouch->mMerleeNextCurseType = 2;
-        else pouch->mMerleeNextCurseType = 3;
+        if (r < 45) {
+            pouch->mMerleeNextCurseType = 1;
+        } else if (r < 90) {
+            pouch->mMerleeNextCurseType = 2;
+        } else {
+            pouch->mMerleeNextCurseType = 3;
+        }
     } else {
         r = irand(100);
-        if (r < 30) pouch->mMerleeNextCurseType = 1;
-        else if (r < 60) pouch->mMerleeNextCurseType = 2;
-        else if (r < 80) pouch->mMerleeNextCurseType = 3;
-        else pouch->mMerleeNextCurseType = 4;
+        if (r < 30) {
+            pouch->mMerleeNextCurseType = 1;
+        } else if (r < 60) {
+            pouch->mMerleeNextCurseType = 2;
+        } else if (r < 80) {
+            pouch->mMerleeNextCurseType = 3;
+        } else {
+            pouch->mMerleeNextCurseType = 4;
+        }
     }
     return pouch->mMerleeNextCurseType;
 }
@@ -1028,6 +1038,7 @@ void BattleConsumeReserveItem(void) {
     s32 i;
     wp = _battleWorkPointer;
     for (i = 0; i < 4; i++) {
+        // FAKE: (s32) cast before the zero test; the plain test changes the object
         if ((s32)wp->reserveItems[i] != 0) {
             pouchRemoveItem(wp->reserveItems[i]);
         }

@@ -31,9 +31,6 @@ static inline char* _ssGetStr(void) {
 }
 
 // local prototypes
-void* sndMalloc(size_t size);
-void sndFree(void* ptr);
-void* loadDVD_callback(u32 offset, u32 length);
 void SoundEfxMain(void);
 void SoundDVDMain(void);
 
@@ -127,20 +124,20 @@ void SoundInit(void) {
 
     data = sndMalloc(0x20000);
     sound.filedata = data;
-    if (data == 0) {
+    if (data == NULL) {
         while (1)
             ;
-    } // infinite loop
+    }
 
-    sound.groups = 0;
+    sound.groups = NULL;
 
-    // force register
+    // FAKE: spare temporary tempsong; songs = sndMalloc(...); sound.songs = songs changes the object
     tempsong = (sound.songs = sndMalloc(sizeof(SoundSong) * 4));
     songs = tempsong;
-    if (songs == 0) {
+    if (songs == NULL) {
         while (1)
             ;
-    } // infinite loop
+    }
 
     for (i = 0; i < 4; i++, songs++) {
         songs->seqId = -1;
@@ -149,10 +146,10 @@ void SoundInit(void) {
 
     effects = sndMalloc(sizeof(SoundEffect) * 40);
     sound.effects = effects;
-    if (effects == 0) {
+    if (effects == NULL) {
         while (1)
             ;
-    } // infinite loop
+    }
 
     for (i = 0; i < 40; i++, effects++) {
         effects->flags = 0;
@@ -162,13 +159,13 @@ void SoundInit(void) {
         effects->pan = 0x40;
     }
 
-    // force register
+    // FAKE: spare temporary tempdvd; dvds = sndMalloc(...); sound.dvds = dvds changes the object
     tempdvd = (sound.dvds = sndMalloc(sizeof(SoundDVD) * 2));
     dvds = tempdvd;
-    if (dvds == 0) {
+    if (dvds == NULL) {
         while (1)
             ;
-    } // infinite loop
+    }
 
     for (i = 0; i < 2; i++, dvds++) {
         dvds->flags = 0;
@@ -176,57 +173,57 @@ void SoundInit(void) {
 
     streams = sndMalloc(sizeof(SoundStream) * 3);
     sound.streams = streams;
-    if (streams == 0) {
+    if (streams == NULL) {
         while (1)
             ;
-    } // infinite loop
+    }
 
     temp = streams;
     for (i = 0; i < 3; i++, temp++) {
         temp->flags = 0;
 
         ptr = sndMalloc(SS_LOAD_BUFFER_SIZE);
-        if (ptr == 0) {
+        if (ptr == NULL) {
             while (1)
                 ;
-        } // infinite loop
+        }
         temp->entries[0].loadBuffer[0] = ptr;
 
         ptr = sndMalloc(SS_LOAD_BUFFER_SIZE);
-        if (ptr == 0) {
+        if (ptr == NULL) {
             while (1)
                 ;
-        } // infinite loop
+        }
         temp->entries[0].loadBuffer[1] = ptr;
 
         size = sndStreamAllocLength(0xE00, 0);
         ptr = sndMalloc(size);
-        if (ptr == 0) {
+        if (ptr == NULL) {
             while (1)
                 ;
-        } // infinite loop
+        }
         temp->entries[0].buffer = ptr;
 
         ptr = sndMalloc(SS_LOAD_BUFFER_SIZE);
-        if (ptr == 0) {
+        if (ptr == NULL) {
             while (1)
                 ;
-        } // infinite loop
+        }
         temp->entries[1].loadBuffer[0] = ptr;
 
         ptr = sndMalloc(SS_LOAD_BUFFER_SIZE);
-        if (ptr == 0) {
+        if (ptr == NULL) {
             while (1)
                 ;
-        } // infinite loop
+        }
         temp->entries[1].loadBuffer[1] = ptr;
 
         size = sndStreamAllocLength(0xE00, 0);
         ptr = sndMalloc(size);
-        if (ptr == 0) {
+        if (ptr == NULL) {
             while (1)
                 ;
-        } // infinite loop
+        }
         temp->entries[1].buffer = ptr;
     }
 
@@ -287,11 +284,12 @@ BOOL SoundLoadDVD2(const char* path) {
     void* pointer;
 
     if (sound.dataId >= 8) {
-        return 0;
+        return FALSE;
     }
 
     sprintf(_ssGetStr(), "%s/%s%s", getMarioStDvdRoot(), path, ".pool");
     entry = DVDMgrOpen(_ssGetStr(), 2, 0);
+    // FAKE: dead store; removing it changes the object
     length = entry == NULL;
     if (entry == NULL) {
         pointer = NULL;
@@ -380,7 +378,7 @@ BOOL SoundLoadDVD2PushGroup(u8* groupIds) {
     s32 temp;
 
     if (sound.dataId >= 8) {
-        return 0;
+        return FALSE;
     }
     sound.groupCount[sound.dataId] = 0;
     if (groupIds) {
@@ -390,7 +388,7 @@ BOOL SoundLoadDVD2PushGroup(u8* groupIds) {
                          sound.poolData[sound.dataId]);
             sound.groupCount[sound.dataId]++;
             groupIds++;
-        };
+        }
     } else {
         temp = sound.nextGroupId;
         while (temp < 0xFF) {
@@ -463,7 +461,7 @@ BOOL SoundSLibLoadDVD(const char* path) {
         if (*cursor == 0xFFFFFFFF) {
             break;
         }
-        group = __memAlloc(HEAP_DEFAULT, 0x10);
+        group = __memAlloc(HEAP_DEFAULT, sizeof(SoundGroup));
         if (group == NULL) {
             while (1)
                 ;
@@ -486,7 +484,7 @@ BOOL SoundSLibLoadDVD(const char* path) {
         group->groupId = 0;
         group->songId = 0;
         group->arrfile = cursor + 8;
-        group->next = 0;
+        group->next = NULL;
         cursor = (u32*)((u8*)cursor + blockSize);
     }
 
@@ -606,8 +604,8 @@ static inline void _ssDropStop(void) {
 }
 
 BOOL SoundDropData(void) {
-    SoundGroup *group;
-    SoundGroup *temp;
+    SoundGroup* group;
+    SoundGroup* temp;
     u32 i;
 
     group = sound.groups;
@@ -711,7 +709,7 @@ BOOL SoundDropData(void) {
         __memFree(HEAP_DEFAULT, group);
         group = temp;
     }
-    sound.groups = 0;
+    sound.groups = NULL;
 
     return TRUE;
 }
@@ -756,14 +754,14 @@ void SoundCloseCover(void) {
 }
 
 inline SoundGroup* SoundSongGetGroup(u8 groupIndex) {
-    u16 temp = groupIndex;
+    u16 index = groupIndex;
     SoundGroup* group;
 
     for (group = sound.groups;; group = group->next) {
-        if (group == 0) {
-            return 0;
+        if (group == NULL) {
+            return NULL;
         }
-        if (group->index == temp) {
+        if (group->index == index) {
             break;
         }
     }
@@ -775,7 +773,7 @@ void SoundSongPlayCh(s32 chan, u32 groupInfo) {
     SoundGroup* group;
 
     song = &sound.songs[chan];
-    if (sndSeqGetValid(song->seqId) == 1) {
+    if (sndSeqGetValid(song->seqId) == TRUE) {
         sndSeqStop(song->seqId);
     }
     song->vol = 127;
@@ -786,7 +784,7 @@ void SoundSongPlayCh(s32 chan, u32 groupInfo) {
         group->songId = (SND_SONGID)((groupInfo >> 8) & 0xFF);
         song->mask = 0xFFFFFFFF;
         song->seqId = sndSeqPlayEx(group->groupId, group->songId, group->arrfile, 0, 0);
-        sndSeqVolume((u8)song->vol, 0, song->seqId, 0);
+        sndSeqVolume((u8)song->vol, 0, song->seqId, SND_SEQVOL_CONTINUE);
         sndSeqContinue(song->seqId);
         sndSeqMute(song->seqId, song->mask, 0);
     }
@@ -1116,24 +1114,24 @@ inline void SoundEfxCheckCh(s32 chan) {
 }
 
 // FAKE: opt_strength_reduction off for this function only. With it on, the second loop's chan*sizeof offset becomes an
-// induction temp created before the loop's split temps and gets the highest register; the target has the effect
-// pointer (second web of the reused `effect`) r30, i r29, the offset r28 (mwregdump, phase 5).
+// induction temp created before the loop's split temps and gets the highest register; the retail code has the effect
+// pointer (second web of the reused `effect`) r30, i r29, the offset r28.
 #pragma opt_strength_reduction off
 void SoundEfxMain(void) {
     SND_FVECTOR* dir;
     SoundEffect* effect;
     int i;
-    f32 v10;
-    f32 v9;
+    f32 headingZ;
+    f32 headingX;
     f32 r = 1.0f;
-    f32 v6;
+    f32 angle;
     f32 x, y, z;
 
-    v10 = v9 = 0.0f;
+    headingZ = headingX = 0.0f;
     x = sound.pos.x - sound.prevPos.x;
     y = sound.pos.y - sound.prevPos.y;
     z = sound.pos.z - sound.prevPos.z;
-    v6 = (TWO_PI * sound.listenerDir / 360.0f);
+    angle = (TWO_PI * sound.listenerDir / 360.0f);
     sound.prevPos.x = sound.pos.x;
     sound.prevPos.y = sound.pos.y;
     sound.prevPos.z = sound.pos.z;
@@ -1141,11 +1139,11 @@ void SoundEfxMain(void) {
     dir->x = x;
     dir->y = y;
     dir->z = z;
-    v9 += r * (f32)sin(v6);
-    v10 -= r * (f32)cos(v6);
-    sound.heading.x = v9;
+    headingX += r * (f32)sin(angle);
+    headingZ -= r * (f32)cos(angle);
+    sound.heading.x = headingX;
     sound.heading.y = 0.0f;
-    sound.heading.z = v10;
+    sound.heading.z = headingZ;
     sound.up.x = 0.0f;
     sound.up.y = 1.0f;
     sound.up.z = 0.0f;
@@ -1196,7 +1194,7 @@ static void SoundDVDStopCh(s32 chan) {
     }
 }
 
-static void SoundDVDSetPanCh(s32 chan, u8 pan) { // I think this is the correct func name
+static void SoundDVDSetPanCh(s32 chan, u8 pan) {
     f32 left, right;
     SoundDVD* dvd;
 
@@ -1207,6 +1205,7 @@ static void SoundDVDSetPanCh(s32 chan, u8 pan) { // I think this is the correct 
     if (pan < 64) {
         right = (((f32)pan * dvd->vol) / 63.0f);
     }
+    // FAKE: sign-bit test for pan >= 64; the plain comparison changes the object
     if (!((u32)(pan - 64) >> 31)) {
         left = (((f32)(127 - pan) * dvd->vol) / 63.0f);
     }
@@ -1217,6 +1216,7 @@ static void SoundDVDSetPanCh(s32 chan, u8 pan) { // I think this is the correct 
 void SoundDVDMain(void) {
     u32 i;
 
+    // FAKE: u32 counter with a signed compare; a plain int counter changes the object
     for (i = 0; (int)i < 2; i++) {
         SoundDVD* dvd = &sound.dvds[i];
         if (!(dvd->flags & SOUND_DVD_FLAG_MUTE)) {
@@ -1261,7 +1261,6 @@ void SoundDVDMain(void) {
 
 void _ssDVDReadAsync_activeChk(s32 result, DVDFileInfo* fileInfo);
 void cache_flush(u32 pointerToARQRequest);
-void _ssDVDReadAsync_cache_aram(u32 pointerToARQRequest);
 void _ssDVDReadAsync_cache_next(s32 result, DVDFileInfo* fileInfo);
 void SoundSSPlayChEx_main(s32 result, DVDFileInfo* fileInfo);
 
@@ -1522,6 +1521,7 @@ u8* ssDecodeDPCM(SoundStream* stream, SoundStreamEntry* entry, s16* out, u32 cou
         } else {
             src++;
             entry->srcPos++;
+            // FAKE: no-op (s32) cast; without it the object changes
             if ((s32)(b & 0xF) == 8) {
                 entry->runCount = ((b >> 4) & 0xF) + 4;
                 entry->nibble = 0;
@@ -1782,7 +1782,7 @@ void SoundSSPlayCh(s32 chan, const char* name) {
 void SoundSSPlayChEx(s32 chan, const char* name, s32 aram) {
     SoundStream* stream;
     int i;
-    const char* paths [2]; // FAKE: alias array needed for 100% (a plain _ssGetStr()/root form is 5 rows off)
+    const char* paths[2]; // FAKE: alias array for the root and path strings; the plain _ssGetStr()/getMarioStDvdRoot() form changes the object
 
     stream = &sound.streams[chan];
     if (stream->flags) {
@@ -1806,17 +1806,17 @@ void SoundSSPlayChEx(s32 chan, const char* name, s32 aram) {
     stream->span = 0;
     stream->curVol = 0.0f;
     stream->vol = 127.0f;
-    stream->flags = 1;
+    stream->flags = SOUND_STREAM_FLAG_PLAY;
     if (aram) {
         stream->flags |= SOUND_STREAM_FLAG_ARAM;
     }
-    paths [1] = getMarioStDvdRoot ();
-    sprintf(_ssGetStr(), "%s/%s%s", paths [1], name, ".stm");
-    if (!(stream->entries[0].dvd = DVDMgrOpen(paths [0] = _ssGetStr(), 0, 0))) {
+    paths[1] = getMarioStDvdRoot();
+    sprintf(_ssGetStr(), "%s/%s%s", paths[1], name, ".stm");
+    if (!(stream->entries[0].dvd = DVDMgrOpen(paths[0] = _ssGetStr(), 0, 0))) {
         stream->flags = 0;
         return;
     }
-    if (!(stream->entries[1].dvd = DVDMgrOpen(paths [0], 0, 0))) {
+    if (!(stream->entries[1].dvd = DVDMgrOpen(paths[0], 0, 0))) {
         stream->flags = 0;
         return;
     }
@@ -1912,12 +1912,10 @@ void SoundSSPlayChEx_main(s32 result, DVDFileInfo* fileInfo) {
             }
         }
         if (stream->count == 2) {
-            {
-                u8* p = (u8*)stream->entries[1].buffer;
-                u32 n;
-                for (n = size; n != 0; n--) {
-                    *p++ = 0;
-                }
+            u8* p = (u8*)stream->entries[1].buffer;
+            u32 n;
+            for (n = size; n != 0; n--) {
+                *p++ = 0;
             }
         }
         pan = 0;
@@ -2024,6 +2022,7 @@ void SoundSSSetPanCh(s32 chan, u8 pan) {
                 if (pan < 64) {
                     right = (((f32)pan * stream->curVol) / 63.0f);
                 }
+                // FAKE: sign-bit test for pan >= 64; the plain comparison changes the object
                 if (!((u32)(pan - 64) >> 31)) {
                     left = (((f32)(127 - pan) * stream->curVol) / 63.0f);
                 }
@@ -2104,6 +2103,7 @@ void SoundSSMain(void) {
     u32 i;
     SoundStream* stream;
 
+    // FAKE: u32 counter with a signed compare; a plain int counter changes the object
     for (i = 0; (int)i < 3; i++) {
         stream = &sound.streams[i];
         if ((stream->flags & SOUND_STREAM_FLAG_STARTED) && !(stream->flags & SOUND_STREAM_FLAG_MUTE)) {
