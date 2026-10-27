@@ -1,4 +1,5 @@
 #include "data/mapdata.h"
+#include <string.h>
 
 MapData tst_bt00 = { "tst_bt00", NULL };
 MapData tst_00 = { "tst_00", NULL };

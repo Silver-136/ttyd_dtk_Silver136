@@ -21,9 +21,9 @@ EnvironmentGlare envGlare0 = {
     GX_BM_BLEND, GX_BL_ONE, GX_BL_ONE, GX_TEV_KCSEL_7_8, GX_TEV_KCSEL_1, 5.25f, 16,
     {
         {-1.0f, 0.0f}, {-3.0f, 0.0f}, {-5.0f, 0.0f}, {-7.0f, 0.0f},
-    {1.0f, 0.0f}, {3.0f, 0.0f}, {5.0f, 0.0f}, {7.0f, 0.0f},
-    {0.0f, -1.0f}, {0.0f, -3.0f}, {0.0f, -5.0f}, {0.0f, -7.0f},
-    {0.0f, 1.0f}, {0.0f, 3.0f}, {0.0f, 5.0f}, {0.0f, 7.0f},
+        {1.0f, 0.0f}, {3.0f, 0.0f}, {5.0f, 0.0f}, {7.0f, 0.0f},
+        {0.0f, -1.0f}, {0.0f, -3.0f}, {0.0f, -5.0f}, {0.0f, -7.0f},
+        {0.0f, 1.0f}, {0.0f, 3.0f}, {0.0f, 5.0f}, {0.0f, 7.0f},
     }
 };
 
@@ -31,7 +31,7 @@ EnvironmentGlare envGlare1 = {
     GX_BM_BLEND, GX_BL_ONE, GX_BL_ONE, GX_TEV_KCSEL_7_8, GX_TEV_KCSEL_1_2, 3.5f, 8,
     {
         {-1.41419994831f, -1.41419994831f}, {0.0f, -1.0f}, {1.41419994831f, -1.41419994831f}, {-1.0f, 0.0f},
-    {1.0f, 0.0f}, {-1.41419994831f, 1.41419994831f}, {0.0f, 1.0f}, {1.41419994831f, 1.41419994831f},
+        {1.0f, 0.0f}, {-1.41419994831f, 1.41419994831f}, {0.0f, 1.0f}, {1.41419994831f, 1.41419994831f},
     }
 };
 
@@ -39,18 +39,18 @@ EnvironmentGlare envGlare2 = {
     GX_BM_BLEND, GX_BL_ONE, GX_BL_ONE, GX_TEV_KCSEL_7_8, GX_TEV_KCSEL_1_4, 3.5f, 52,
     {
         {0.0f, -5.0f}, {-1.0f, -4.0f}, {0.0f, -4.0f}, {1.0f, -4.0f},
-    {-2.0f, -3.0f}, {-1.0f, -3.0f}, {0.0f, -3.0f}, {1.0f, -3.0f},
-    {2.0f, -3.0f}, {-3.0f, -2.0f}, {-2.0f, -2.0f}, {-1.0f, -2.0f},
-    {0.0f, -2.0f}, {1.0f, -2.0f}, {2.0f, -2.0f}, {3.0f, -2.0f},
-    {-3.0f, -1.0f}, {-2.0f, -1.0f}, {-1.0f, -1.0f}, {0.0f, -1.0f},
-    {1.0f, -1.0f}, {2.0f, -1.0f}, {3.0f, -1.0f}, {-3.0f, 0.0f},
-    {-2.0f, 0.0f}, {-1.0f, 0.0f}, {3.0f, 0.0f}, {2.0f, 0.0f},
-    {1.0f, 0.0f}, {-3.0f, 1.0f}, {-2.0f, 1.0f}, {-1.0f, 1.0f},
-    {0.0f, 1.0f}, {1.0f, 1.0f}, {2.0f, 1.0f}, {3.0f, 1.0f},
-    {-3.0f, 2.0f}, {-2.0f, 2.0f}, {-1.0f, 2.0f}, {0.0f, 2.0f},
-    {1.0f, 2.0f}, {2.0f, 2.0f}, {3.0f, 2.0f}, {-2.0f, 3.0f},
-    {-1.0f, 3.0f}, {0.0f, 3.0f}, {1.0f, 3.0f}, {2.0f, 3.0f},
-    {-1.0f, 4.0f}, {0.0f, 4.0f}, {1.0f, 4.0f}, {0.0f, 5.0f},
+        {-2.0f, -3.0f}, {-1.0f, -3.0f}, {0.0f, -3.0f}, {1.0f, -3.0f},
+        {2.0f, -3.0f}, {-3.0f, -2.0f}, {-2.0f, -2.0f}, {-1.0f, -2.0f},
+        {0.0f, -2.0f}, {1.0f, -2.0f}, {2.0f, -2.0f}, {3.0f, -2.0f},
+        {-3.0f, -1.0f}, {-2.0f, -1.0f}, {-1.0f, -1.0f}, {0.0f, -1.0f},
+        {1.0f, -1.0f}, {2.0f, -1.0f}, {3.0f, -1.0f}, {-3.0f, 0.0f},
+        {-2.0f, 0.0f}, {-1.0f, 0.0f}, {3.0f, 0.0f}, {2.0f, 0.0f},
+        {1.0f, 0.0f}, {-3.0f, 1.0f}, {-2.0f, 1.0f}, {-1.0f, 1.0f},
+        {0.0f, 1.0f}, {1.0f, 1.0f}, {2.0f, 1.0f}, {3.0f, 1.0f},
+        {-3.0f, 2.0f}, {-2.0f, 2.0f}, {-1.0f, 2.0f}, {0.0f, 2.0f},
+        {1.0f, 2.0f}, {2.0f, 2.0f}, {3.0f, 2.0f}, {-2.0f, 3.0f},
+        {-1.0f, 3.0f}, {0.0f, 3.0f}, {1.0f, 3.0f}, {2.0f, 3.0f},
+        {-1.0f, 4.0f}, {0.0f, 4.0f}, {1.0f, 4.0f}, {0.0f, 5.0f},
     }
 };
 
@@ -58,9 +58,9 @@ EnvironmentGlare envGlare3 = {
     GX_BM_BLEND, GX_BL_ONE, GX_BL_ONE, GX_TEV_KCSEL_7_8, GX_TEV_KCSEL_1_2, 3.5f, 16,
     {
         {0.0f, -4.0f}, {-1.0f, -3.0f}, {1.0f, -3.0f}, {-2.0f, -2.0f},
-    {2.0f, -2.0f}, {-3.0f, -1.0f}, {3.0f, -1.0f}, {-3.0f, 0.0f},
-    {3.0f, 0.0f}, {-3.0f, 1.0f}, {3.0f, 1.0f}, {-2.0f, 2.0f},
-    {2.0f, 2.0f}, {-1.0f, 3.0f}, {1.0f, 3.0f}, {0.0f, 4.0f},
+        {2.0f, -2.0f}, {-3.0f, -1.0f}, {3.0f, -1.0f}, {-3.0f, 0.0f},
+        {3.0f, 0.0f}, {-3.0f, 1.0f}, {3.0f, 1.0f}, {-2.0f, 2.0f},
+        {2.0f, 2.0f}, {-1.0f, 3.0f}, {1.0f, 3.0f}, {0.0f, 4.0f},
     }
 };
 
@@ -72,15 +72,11 @@ TEXPalette* env_tpl = NULL;
 s32 tpl_ok = 0;
 
 //local prototypes
-void envCapture(CameraId camId, void* param);
-void envCapture2(CameraId camId, void* param);
-void envDisp(CameraId camId, void* param);
-void envDisp2(CameraId camId, void* param);
 void envDisp_DepthOfField(void);
 void envDisp_Blur(void);
 void envDisp_FF(void);
 
-//there is no function so we'll make a macro
+// the work of the current mode: work[1] in battle, work[0] in the field
 #define envGetWork() (gp->inBattle ? &work[1] : &work[0])
 
 static void _callback(s32 result, DVDFileInfo* fileInfo) {
@@ -110,10 +106,10 @@ void envTexSetup(void) {
     u32 size;
 
     env_tpl = NULL;
-    tpl = arcOpen("env.tpl", 0, 0);
+    tpl = arcOpen("env.tpl", NULL, NULL);
     env_tpl = tpl;
     if (!tpl) {
-        sprintf(path, ("%s/env.tpl"), getMarioStDvdRoot());
+        sprintf(path, "%s/env.tpl", getMarioStDvdRoot());
         entry = DVDMgrOpen(path, 2, 0);
         size = DVDMgrGetLength(entry);
         env_tpl = __memAlloc(HEAP_DEFAULT, OSRoundUp32B(size));
@@ -121,53 +117,53 @@ void envTexSetup(void) {
         DVDMgrReadAsync(entry, env_tpl, size, 0, _callback);
     } else {
         UnpackTexPalette(tpl);
-        tpl_ok = 1;
+        tpl_ok = TRUE;
     }
 }
 
 void envCapture(CameraId camId, void* param) {
     EnvironmentWork* wp = envGetWork();
-    u16 var0, var1, var2, var3;
+    u16 width, height, halfWidth, halfHeight;
     u32 size;
 
-    var0 = gp->fbWidth;
-    var1 = gp->efbHeight;
-    var2 = (u16)(((u32)var0 & 0xFFFF) / 2);
-    var3 = (u16)(((u32)var1 & 0xFFFF) / 2);
+    width = gp->fbWidth;
+    height = gp->efbHeight;
+    halfWidth = (u16)(((u32)width & 0xFFFF) / 2);
+    halfHeight = (u16)(((u32)height & 0xFFFF) / 2);
     if (wp->flags & ENV_FLAG_CAPTURE_COLOR_UNUSED) {
         GXSetTexCopySrc(0, 0, gp->fbWidth, gp->efbHeight);
-        GXSetTexCopyDst(var2, var3, GX_TF_RGBA8, GX_TRUE);
-        size = GXGetTexBufferSize(var2, var3, GX_TF_RGBA8, GX_FALSE, 0);
+        GXSetTexCopyDst(halfWidth, halfHeight, GX_TF_RGBA8, GX_TRUE);
+        size = GXGetTexBufferSize(halfWidth, halfHeight, GX_TF_RGBA8, GX_FALSE, 0);
         wp->capture = smartAlloc(size, 3);
         GXCopyTex(wp->capture->address, GX_FALSE);
         GXPixModeSync();
-        GXInitTexObj(&wp->captureObj, wp->capture->address, var2, var3, GX_TF_RGBA8, GX_CLAMP, GX_CLAMP, GX_FALSE);
+        GXInitTexObj(&wp->captureObj, wp->capture->address, halfWidth, halfHeight, GX_TF_RGBA8, GX_CLAMP, GX_CLAMP, GX_FALSE);
         GXInitTexObjLOD(&wp->captureObj, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
     }
     if (wp->flags & ENV_FLAG_CAPTURE_DEPTH_UNUSED) {
-        GXSetTexCopySrc(0, 0, var0, var1);
-        GXSetTexCopyDst(var2, var3, GX_CTF_Z8M, GX_TRUE);
-        size = GXGetTexBufferSize(var2, var3, GX_CTF_Z8M, GX_FALSE, 0);
+        GXSetTexCopySrc(0, 0, width, height);
+        GXSetTexCopyDst(halfWidth, halfHeight, GX_CTF_Z8M, GX_TRUE);
+        size = GXGetTexBufferSize(halfWidth, halfHeight, GX_CTF_Z8M, GX_FALSE, 0);
         wp->capture2 = smartAlloc(size, 3);
         GXCopyTex(wp->capture2->address, GX_FALSE);
         GXPixModeSync();
-        GXInitTexObj(&wp->captureObj2, wp->capture2->address, var2, var3, GX_TF_I8, GX_CLAMP, GX_CLAMP, GX_FALSE);
+        GXInitTexObj(&wp->captureObj2, wp->capture2->address, halfWidth, halfHeight, GX_TF_I8, GX_CLAMP, GX_CLAMP, GX_FALSE);
         GXInitTexObjLOD(&wp->captureObj2, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
     }
 }
 
 void envCapture2(CameraId camId, void* param) {
     EnvironmentWork* wp = envGetWork();
-    u16 var0, var1;
+    u16 halfWidth, halfHeight;
 
-    var0 = (u16)(((u32)gp->fbWidth & 0xFFFF) / 2);
-    var1 = (u16)(((u32)gp->efbHeight & 0xFFFF) / 2);
+    halfWidth = (u16)(((u32)gp->fbWidth & 0xFFFF) / 2);
+    halfHeight = (u16)(((u32)gp->efbHeight & 0xFFFF) / 2);
     if (wp->flags & ENV_FLAG_BLUR_CAPTURE) {
         GXSetTexCopySrc(0, 0, gp->fbWidth, gp->efbHeight);
-        GXSetTexCopyDst(var0, var1, GX_TF_RGB565, GX_TRUE);
+        GXSetTexCopyDst(halfWidth, halfHeight, GX_TF_RGB565, GX_TRUE);
         GXCopyTex(wp->envBlur, GX_FALSE);
         GXPixModeSync();
-        GXInitTexObj(&wp->envBlurObj, wp->envBlur, var0, var1, GX_TF_RGB565, GX_CLAMP, GX_CLAMP, GX_FALSE);
+        GXInitTexObj(&wp->envBlurObj, wp->envBlur, halfWidth, halfHeight, GX_TF_RGB565, GX_CLAMP, GX_CLAMP, GX_FALSE);
         GXInitTexObjLOD(&wp->envBlurObj, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
     }
     if (wp->flags & ENV_FLAG_BLUR) {
@@ -200,7 +196,7 @@ void envDisp2(CameraId camId, void *param) {
     GXGetViewportv(vp);
     GXGetProjectionv(pm);
     wp = envGetWork();
-    filter = &wp->filter; //CodeWarrior is very good compiler, yesyes
+    filter = &wp->filter;
     if (wp->flags & ENV_FLAG_GLARE_FILTER) {
         switch (filter->type) {
             case 0:
@@ -232,8 +228,7 @@ void envMain(void) {
 
 static const s32 texmtx_tbl[] = {30, 33, 36, 39, 42, 45, 48, 51, 54, 57};
 
-static inline f32
-env_sin(f32 x) {
+static inline f32 env_sin(f32 x) {
     f32 a = 0.00761f;
     f32 b = 0.16605f;
     f32 c = 1.0f;
@@ -271,8 +266,7 @@ env_sin(f32 x) {
     return a;
 }
 
-static inline f32
-env_cos(f32 x) {
+static inline f32 env_cos(f32 x) {
     f32 a = 0.03705f;
     f32 b = 0.4967f;
     f32 c = 1.0f;
@@ -561,8 +555,7 @@ void envBlurOn(s32 type, s32 msec) {
     if (type) {
         blur->flags |= 1;
     }
-    wp->envBlur = _mapAlloc(GXGetTexBufferSize(gp->fbWidth / 2,
-        gp->efbHeight / 2, GX_TF_RGB565, GX_FALSE, 0));
+    wp->envBlur = _mapAlloc(GXGetTexBufferSize(gp->fbWidth / 2, gp->efbHeight / 2, GX_TF_RGB565, GX_FALSE, 0));
 }
 
 void envBlurOff(void) {
@@ -623,6 +616,8 @@ void envGlare(EnvironmentGlare* glare) {
     GXLoadTexObj(&texObj, GX_TEXMAP0);
     glareCount = glare->count;
     doneCount = 0;
+    // FAKE: texW/texH are reused to hold the two konst colour selections; reading glare->kcolorSel0/1 at each call
+    // changes the object
     texW = glare->kcolorSel0;
     texH = glare->kcolorSel1;
     GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
@@ -663,7 +658,7 @@ void envGlare(EnvironmentGlare* glare) {
     }
     GXSetBlendMode(glare->mode, glare->srcFactor, glare->dstFactor, GX_LO_CLEAR);
     GXSetNumChans(0);
-    GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_REG, 0, GX_DF_CLAMP, GX_AF_NONE);
+    GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_REG, GX_LIGHT_NULL, GX_DF_CLAMP, GX_AF_NONE);
     GXSetViewport(0.0f, 0.0f, (f32)gp->fbWidth, (f32)gp->efbHeight, 0.0f, 1.0f);
     GXSetScissor(0, 0, gp->fbWidth, gp->efbHeight);
     MTXOrtho(projMtx, 0.0f, (f32)gp->efbHeight, 0.0f, (f32)gp->fbWidth, 0.0f, -32767.0f);
@@ -686,9 +681,10 @@ void envGlare(EnvironmentGlare* glare) {
     while (doneCount < glareCount) {
         glareCur = glareIter;
         batchCount = 0;
-        texMtxId = 0x1E;
+        texMtxId = GX_TEXMTX0;
         while ((batchCount < 8) && (doneCount < glareCount)) {
-            MTXTrans(texMtx, (glare->coordScale * glareCur->coords[0].x) / (f32) gp->fbWidth, (glare->coordScale * glareCur->coords[0].y) / (f32) gp->efbHeight, 0.0f);
+            MTXTrans(texMtx, (glare->coordScale * glareCur->coords[0].x) / (f32)gp->fbWidth,
+                     (glare->coordScale * glareCur->coords[0].y) / (f32)gp->efbHeight, 0.0f);
             GXLoadTexMtxImm(texMtx, texMtxId, GX_MTX2x4);
             texMtxId += 3;
             batchCount += 1;
@@ -949,8 +945,7 @@ void envTevLoadTexMtxImm(s32 type, GXTexMtx id, GXTexMtx id2, GXTexMtxType mtxTy
     }
 }
 
-static inline void
-envTexObj(TEXPalette* pal, GXTexObj* to, u32 id) {
+static inline void envTexObj(TEXPalette* pal, GXTexObj* to, u32 id) {
     GXBool mipMap;
     TEXDescriptor* tdp;
 
@@ -964,8 +959,7 @@ envTexObj(TEXPalette* pal, GXTexObj* to, u32 id) {
     GXInitTexObjLOD(to, tdp->textureHeader->minFilter, tdp->textureHeader->magFilter, tdp->textureHeader->minLOD, tdp->textureHeader->maxLOD, tdp->textureHeader->LODBias, GX_DISABLE, tdp->textureHeader->edgeLODEnable, GX_ANISO_1);
 }
 
-static inline void
-envTexObjCI(TEXPalette* pal, GXTexObj* to, GXTlutObj* tlo, GXTlut tluts, u32 id) {
+static inline void envTexObjCI(TEXPalette* pal, GXTexObj* to, GXTlutObj* tlo, GXTlut tluts, u32 id) {
     GXBool mipMap;
     TEXDescriptor* tdp;
 
@@ -980,8 +974,7 @@ envTexObjCI(TEXPalette* pal, GXTexObj* to, GXTlutObj* tlo, GXTlut tluts, u32 id)
     GXInitTexObjLOD(to, tdp->textureHeader->minFilter, tdp->textureHeader->magFilter, tdp->textureHeader->minLOD, tdp->textureHeader->maxLOD, tdp->textureHeader->LODBias, GX_DISABLE, tdp->textureHeader->edgeLODEnable, GX_ANISO_1);
 }
 
-static inline void
-envLoadTex(u32 id, s32 map) {
+static inline void envLoadTex(u32 id, s32 map) {
     GXTexObj obj;
     GXTlutObj tlut;
 
@@ -999,7 +992,7 @@ void envAddTev(s32 type, MapTevCallbackInfo* info) {
     s32 stage;
     int map;
     int coord;
-    EnvironmentWork *wp = (gp->inBattle) ? (&work[1]) : (&work[0]);
+    EnvironmentWork* wp = envGetWork();
     s32 indStage;
     Mtx mtx;
     stage = info->tevStage;
@@ -1155,12 +1148,11 @@ void envAddTev(s32 type, MapTevCallbackInfo* info) {
     info->texMap = map;
 }
 
-#undef ENV_TEX_TAIL
-
 // FAKE: one-use inline helper; writing the call out changes the object in both versions
 static inline MapObject* envWaterObj(MapTevCallbackInfo* info) {
     return info->mapObj;
 }
+// FAKE: one-use inline helper for obj->parent; writing it out changes the object
 static inline MapObject* envWaterParent(MapObject* o) { return o->parent; }
 void envSetWater(MapTevCallbackInfo* info) {
     MapObject* obj;

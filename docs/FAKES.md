@@ -353,3 +353,53 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/battle/sac/sac_muki.c | mulf | mulf() for c * 3.141592f in disp_3D_alpha; the plain product changes the object | see comment |
 | Both | src/battle/sac/sac_muki.c | disp_2D | frac *= 80.0f inside the argument; plain frac * 80.0f changes the object | see comment |
 | Both | src/battle/sac/sac_scissor.c | my_fabsf | my_fabsf() wraps __fabs for scissor_intersection; direct __fabs calls change the object | see comment |
+| Both | src/battle/sac/sac_suki.c | N__disp_2D | each case builds the icon id in the s32 temporary t; assigning icon directly changes the object | see comment |
+| Both | src/battle/sac/sac_zubastar.c | zubastar_disp2D | calls iconDispGx through a cast that passes the icon id as s32; the plain call changes the object | see comment |
+| Both | src/data/battle/battle_item_data.c | _sampling_random_target | pointer alias of the local targets; using targets directly changes the object | see comment |
+| Both | src/driver/animdrv.c | animPose_AllocBuffer | macro twin of the animPoseGetBaseData inline above, used by every caller below; calling the inline instead changes the object | see comment |
+| Both | src/driver/animdrv.c | animEffectAsync | (u32) casts on the zero tests (unsigned compares); plain model == 0 / anim == 0 change the object | see comment |
+| Both | src/driver/animdrv.c | animPoseSetEffect | the paper pose's file entry found by byte offset (files + fileId * 16); animPoseGetBaseData(animPoseGetAnimPosePtr(pose->paperId)) changes the object | see comment |
+| Both | src/driver/animdrv.c | materialProc | (u32) cast on the BOOL (unsigned compare); the plain test changes the object | see comment |
+| Both | src/driver/animdrv.c | rpCurData | renderProc's per-draw pose-data read as an inline; its call-site temp gives the target wp/data register order | see comment |
+| Both | src/driver/animdrv.c | _animPoseDrawMtx | (s32) cast on the u32 flag (signed compare); the plain test changes the object | see comment |
+| Both | src/driver/animdrv.c | animPoseRelease | (u32) cast on typeFlags (unsigned compare); the plain test changes the object | see comment |
+| Both | src/driver/animdrv.c | animGroupBaseAsync | (u32) cast (unsigned compare); plain model == 0 changes the object | see comment |
+| Both | src/driver/arcdrv.c | arcOpen | info used through the pointer infop; passing &info directly changes the object | see comment |
+| Both | src/driver/camdrv.c | camMain | dead zero store (every field is set below); removing it changes the object | see comment |
+| Both | src/driver/camdrv.c | camLetterBox | `party &&` repeats the null test; dropping it changes the object | see comment |
+| Both | src/driver/envdrv.c | envGlare | texW/texH are reused to hold the two konst colour selections; reading glare->kcolorSel0/1 at each call changes the object | see comment |
+| Both | src/driver/envdrv.c | envWaterParent | one-use inline helper for obj->parent; writing it out changes the object | see comment |
+| Both | src/driver/fadedrv.c | fadeEntry | types 3-5 are tested as one unsigned compare, (u32)(type - 3) <= 2; type >= 3 && type <= 5 changes the object | see comment |
+| Both | src/driver/fadedrv.c | fadeMain | no-op (s32) cast of the u32 delayFrames; removing it changes the object | see comment |
+| Both | src/driver/fadedrv.c | z | `one` (1.0f) is only a factor in the returned depth; dropping the product changes the object | see comment |
+| Both | src/driver/fadedrv.c | fadeMadd | a * b + 0.0f through an inline helper (disp_maku); the plain product changes the object | see comment |
+| Both | src/driver/fadedrv.c | disp_maku | depth is halved in place inside the expression; depth * 0.5f / 180.0f changes the object | see comment |
+| Both | src/driver/fadedrv.c | fadeStrippedPool | stand-in that nothing calls; it only adds its 3.141592f literal to this object's constant pool | see comment |
+| Both | src/driver/hitdrv.c | hitCheckVecFilter | 0.5f through the spare local temp; `reach = query->targetDistance * 0.5f` changes the object | see comment |
+| Both | src/driver/icondrv.c | iconDispGxAlpha | iconId++ then iconId-- (no net change); without them the object changes | see comment |
+| Both | src/driver/itemdrv.c | itemMain | f64 local keeps 20.0 on the left of the fadd (as in itemHitCheckY); `hitDist = 20.0 + __fabs(-1.0)` changes the object | see comment |
+| Both | src/driver/itemdrv_pad.c | (file scope) | 24 zero bytes of JP .rodata at 0x802CAE68 with no known owner, kept alive with force_active | see comment |
+| Both | src/driver/mapdrv.c | mapBuildTexture | unreachable empty `if (!k) { }` between two cases; removing it changes the object | see comment |
+| Both | src/driver/mapdrv.c | mapHdrSizeOk_ | the file-size check goes through this helper so the header's size stays the left operand of the compare; the same `==` written in place on wp->entries[group].header swaps the operands and changes the object | see comment |
+| Both | src/driver/mapdrv.c | mapLoadHeader_ | header is the address of a member and never NULL; removing the test changes the object | see comment |
+| Both | src/driver/mapdrv.c | mapLoad | wp2 is a second copy of mapWork used only by the memset; memset(wp, ...) without it changes the object | see comment |
+| Both | src/driver/mapdrv.c | mapMainAlphaKeys_ | cur is loaded before the test, which reads d->keys[n] instead of k1; the test of mapMainMatKeys_ changes the object | see comment |
+| Both | src/driver/mapdrv.c | _mapDispMapObj | d is set to 1.0f and used as a factor; (camera->far + camera->near) * (1.0f + scale) changes the object | see comment |
+| Both | src/driver/mapdrv.c | mapSetMaterialTev | entries[0].tevCallbacks read through a byte offset from mapWork[activeGroup]; mapWork[activeGroup].entries[0].tevCallbacks[...] changes the object | see comment |
+| Both | src/driver/mapdrv.c | mapSetMaterialLight | spare block and temporary for the half spot angle; the expression written in the call changes the object | see comment |
+| Both | src/driver/mapdrv.c | mapSearchDmdJoint | no-op (s32) cast; name[0] != '/' changes the object | see comment |
+| Both | src/driver/mapdrv.c | mapStrippedPool | stand-in for a function the linker dead-stripped; it only keeps the constants that function left behind in .rodata/.sdata2, in their original order. Nothing calls it. | see comment |
+| Both | src/driver/shadowdrv.c | shadowInit | the loop counter i holds the buffer size and j runs the loop; using bufferSize and i as in the 8-bit ramp changes the object | see comment |
+| Both | src/driver/shadowdrv.c | _filter | opt_dead_assignments off keeps the unused `f32 t = 20.0f;`; without the pragma and t the object changes | see comment |
+| Both | src/driver/shadowdrv.c | shadowCharShadowDisp_Collision | q is a second name for &query for the hitPos reads below; reading through query changes the object | see comment |
+| Both | src/driver/shadowdrv.c | shadowCharShadowDisp_Projection | assignment inside the index; `wp = cswp;` as its own statement changes the object | see comment |
+| Both | src/driver/shadowdrv.c | shadowSetCollision | byte-offset view of cswp->entries[id].flags; the indexed form changes the object | see comment |
+| Both | src/driver/windowdrv.c | windowDispGX_System | GXPosition3f32(0.0f, y3, 0.0f) written out as FIFO stores with y3/y4 computed between them; the plain call changes the object | see comment |
+| Both | src/driver/windowdrv.c | windowDispGX2_Waku_col | negated and halved in two steps with a no-op (f32) cast; `left = -width / 2.0f;` changes the object | see comment |
+| Both | src/effect/eff_funemizu.c | effFunemizuMain | spare temporary f; `a = work->size; b = a - 1.0f;` changes the object | see comment |
+| Both | src/effect/eff_funemizu.c | effFunemizuDisp | funemizuCallDL wraps this display-list loop with a dead read and write-back of u; the plain loop changes the object | see comment |
+| Both | src/effect/eff_hibashira.c | effHibashiraEntry | block-scoped temporary; `pillar->scale = (f32)sin(...) + 0.5f` changes the object | see comment |
+| Both | src/effect/eff_ibuki.c | effIbukiEntry | spare temporary a; `p->vx2 = irand(10) + 10;` changes the object | see comment |
+| Both | src/effect/eff_ibuki.c | effIbukiDisp | (u32) cast for an unsigned compare; `i < 4` changes the object | see comment |
+| US | src/effect/eff_irekaeru.c | effIrekaeruMain | no-op (u32) cast (animPoseEntry takes s32); the plain argument changes the object | see comment |
+| Both | src/effect/eff_itemget.c | effItemGetEntry | spare temporary cv; `5.0f * -(f32)cos(elem->angle)` changes the object | see comment |

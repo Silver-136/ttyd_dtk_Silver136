@@ -64,15 +64,11 @@ inline Vec makeVecByValue(f32 x, f32 y, f32 z) {
 extern ItemData itemDataTable[];
 s32 msgWindow_Entry(const char* msg, s32 callback, s32 priority);
 
-BOOL itemGetNokoCheck(ItemEntry* entry);
 void winNameDisp(WinMgrEntry* win);
 void winNameDisp2(WinMgrEntry* win);
 void winHelpMain(WinMgrEntry* win);
 void winHelpDisp(WinMgrEntry* win);
 void winFullDisp(WinMgrEntry* win);
-
-HitEntry* itemHitCheckY(ItemEntry* entry, f32 z, f32 y, f32 x, f32 vy);
-HitEntry* itemHitCheckUp(ItemEntry* entry, f32 vy);
 
 HitEntry* itemHitCheckSide(ItemEntry* entry, f32* outX, f32 dx, f32* outZ, f32 dz, s32* angle);
 void itemseq_GetItem(ItemEntry* entry);
@@ -160,13 +156,13 @@ void itemReInit(void) {
 
     if (!gp->inBattle) {
         for (entry = wp->entries, i = 0; i < wp->count; i++, entry++) {
-            if (entry->flags & ITEM_FLAG_ACTIVE) { //flush all current badges
+            if (entry->flags & ITEM_FLAG_ACTIVE) { // badges flagged LOST_BADGE_TO_SHOP go back to the shop
                 itemCheckBadge(entry);
             }
         }
     }
 
-    //clear all existing entries
+    // clear all entries
     for (entry = wp->entries, i = 0; i < wp->count; i++, entry++) {
         iconDelete(entry->name);
         entry->flags &= ~ITEM_FLAG_ACTIVE;
@@ -300,10 +296,10 @@ void itemMain(void) {
         mode = entry->mode;
         active = TRUE;
         switch (mode) {
-            case 2:
-            case 7:
-            case 8:
-            case 10:
+            case ITEM_MODE_GET:
+            case ITEM_MODE_STILL:
+            case ITEM_MODE_CARRIED:
+            case ITEM_MODE_POP:
                 break;
             default:
                 if (gp->systemLevelFlags & SYSTEM_LEVEL_STOP_ALL) {
@@ -315,7 +311,7 @@ void itemMain(void) {
             entry->baseTime = gp->renderTime;
             continue;
         }
-        if (mode != 2) {
+        if (mode != ITEM_MODE_GET) {
             if (entry->timer == 0) {
                 entry->flags2 &= ~ITEM_FLAG2_HIDDEN;
             } else if (entry->flags2 & ITEM_FLAG2_TIMER_WAIT_LAND) {
@@ -326,7 +322,7 @@ void itemMain(void) {
                     itemModeChange(entry, ITEM_MODE_DELETE);
                 } else if (entry->timer <= 3000) {
                     if ((entry->timer >> 4) & 1) {
-                        entry->flags2 ^= 0x100;
+                        entry->flags2 ^= ITEM_FLAG2_HIDDEN;
                     }
                 }
             }
@@ -345,22 +341,31 @@ void itemMain(void) {
                 itemseq_Bound(entry);
                 break;
             case ITEM_MODE_GROUND:
-                y = entry->position.y; { f32 dirY = -1.0f;
-                if (entry->flags2 & ITEM_FLAG2_SUNK) {
-                    hit = NULL;
-                    newY = y + dirY;
-                } else {
-                    f32 hitNZ, hitNY, hitNX, hitDist, hitZ, hitY, hitX;
-                    f32 px = entry->position.x, py = entry->position.y + 20.0f, pz = entry->position.z;
-                    { f64 d = __fabs(-1.0); hitDist = 20.0 + d; }
-                    hit = hitCheckFilter(NULL, &hitX, &hitY, &hitZ, &hitDist, &hitNX, &hitNY, &hitNZ, px, py, pz, 0.0f, -1.0f, 0.0f);
-                    if (hit) {
-                        newY = hitY;
-                    } else {
+                y = entry->position.y;
+                {
+                    f32 dirY = -1.0f;
+
+                    if (entry->flags2 & ITEM_FLAG2_SUNK) {
                         hit = NULL;
                         newY = y + dirY;
+                    } else {
+                        f32 hitNZ, hitNY, hitNX, hitDist, hitZ, hitY, hitX;
+                        f32 px = entry->position.x, py = entry->position.y + 20.0f, pz = entry->position.z;
+                        // FAKE: f64 local keeps 20.0 on the left of the fadd (as in itemHitCheckY);
+                        // `hitDist = 20.0 + __fabs(-1.0)` changes the object
+                        {
+                            f64 d = __fabs(-1.0);
+                            hitDist = 20.0 + d;
+                        }
+                        hit = hitCheckFilter(NULL, &hitX, &hitY, &hitZ, &hitDist, &hitNX, &hitNY, &hitNZ, px, py, pz, 0.0f, -1.0f, 0.0f);
+                        if (hit) {
+                            newY = hitY;
+                        } else {
+                            hit = NULL;
+                            newY = y + dirY;
+                        }
                     }
-                } }
+                }
                 if (!hit) {
                     itemModeChange(entry, ITEM_MODE_FALL);
                 } else {
@@ -456,7 +461,7 @@ ItemEntry* itemEntry(const char* name, s32 itemId, u16 type, s32 collectFlag, Ev
     int i;
     ItemEntry* entry;
 #ifdef VERSION_G8ME01
-    // FAKE: e/base and the explicit 0x79/0x7C search loops (0x7B uses the helper) steer register
+    // FAKE: e/base and the explicit coin/flower search loops (the heart search uses the helper) steer register
     // numbering: the search pointer must be a named local and the entries base a named web.
     ItemEntry* e;
     ItemEntry* base;
@@ -540,7 +545,8 @@ ItemEntry* itemEntry(const char* name, s32 itemId, u16 type, s32 collectFlag, Ev
                 itemDelete(entry->name);
             } else {
 #ifdef VERSION_G8ME01
-                entry = itemFindDeletable(wp, 0x7B);
+                // the heart found here is discarded: US never replaces a heart
+                entry = itemFindDeletable(wp, ITEM_HEART);
                 entry = NULL;
 #else
                 entry = wp->entries;
@@ -582,12 +588,12 @@ ItemEntry* itemEntry(const char* name, s32 itemId, u16 type, s32 collectFlag, Ev
 
     switch (entry->itemId) {
     case ITEM_DIAMOND_STAR: case ITEM_EMERALD_STAR: case ITEM_GOLD_STAR: case ITEM_RUBY_STAR: case ITEM_SAPPHIRE_STAR: case ITEM_GARNET_STAR: case ITEM_CRYSTAL_STAR:
-        entry->effect = effStarStoneEntry(entry->itemId - 0x72, x, 16.0f + y, z, 1.0f);
+        entry->effect = effStarStoneEntry(entry->itemId - ITEM_DIAMOND_STAR, x, 16.0f + y, z, 1.0f);
         break;
     default:
         entry->effect = NULL;
         iconEntry(entry->name, itemDataTable[itemId].icon_id);
-        { char* nm = entry->name; iconSetPos(nm, x, y, z); }
+        iconSetPos(entry->name, x, y, z);
         iconSetScale(entry->name, entry->scale);
         iconSetAlpha(entry->name, entry->alpha);
         break;
@@ -600,7 +606,7 @@ ItemEntry* itemEntry(const char* name, s32 itemId, u16 type, s32 collectFlag, Ev
         break;
     }
 
-    switch ((u16)type) {
+    switch (type) {
         case ITEM_TYPE_STILL_NO_TOUCH:
             entry->flags |= ITEM_FLAG_NO_TOUCH_GET;
         case ITEM_TYPE_STILL:
@@ -804,13 +810,13 @@ void winNameDisp(WinMgrEntry* win) {
     name = msgSearch(itemDataTable[entry->itemId].name);
 #ifdef VERSION_G8ME01
     if ((u32)gp->language == LANGUAGE_JP) {
-        if (entry->itemId >= 0xF0 && entry->itemId < 0x153) {
+        if (entry->itemId >= BADGE_MIN && entry->itemId < BADGE_MAX) {
             sprintf(buffer, msgSearch("msg_window_badge_get"), name);
         } else {
             sprintf(buffer, msgSearch("msg_window_item_get"), name);
         }
     } else {
-        if (entry->itemId >= 0xF0 && entry->itemId < 0x153) {
+        if (entry->itemId >= BADGE_MIN && entry->itemId < BADGE_MAX) {
             strcpy(buffer, msgSearch("msg_window_badge_get"));
         } else {
             strcpy(buffer, msgSearch("msg_window_item_get"));
@@ -819,7 +825,7 @@ void winNameDisp(WinMgrEntry* win) {
     }
     width = FontGetMessageWidthLine(buffer, &lines);
 #else
-    if (entry->itemId >= 0xF0 && entry->itemId < 0x153) {
+    if (entry->itemId >= BADGE_MIN && entry->itemId < BADGE_MAX) {
         sprintf(buffer, msgSearch("msg_window_badge_get"), name);
     } else {
         sprintf(buffer, msgSearch("msg_window_item_get"), name);
@@ -897,7 +903,7 @@ void winFullDisp(WinMgrEntry* win) {
     u16 width;
     const char* msg;
 
-    if (entry->itemId >= 0xF0 && entry->itemId < 0x153) {
+    if (entry->itemId >= BADGE_MIN && entry->itemId < BADGE_MAX) {
         isBadge = TRUE;
     }
     msg = isBadge ? msgSearch("msg_window_badge_full") : msgSearch("msg_window_item_full");
@@ -983,16 +989,16 @@ void itemseq_GetItem(ItemEntry* entry) {
             } else if (entry->itemId < 0xC) {
                 type = 3;
                 bgm = 3;
-            } else if (entry->itemId < 0x72) {
+            } else if (entry->itemId < ITEM_DIAMOND_STAR) {
                 type = 6;
                 bgm = 1;
-            } else if (entry->itemId < 0x79) {
+            } else if (entry->itemId < KEY_ITEM_MAX) {
                 type = 0;
                 bgm = -1;
-            } else if (entry->itemId < 0xEC) {
+            } else if (entry->itemId < ITEM_MAX) {
                 type = 7;
                 bgm = -1;
-            } else if (entry->itemId < 0x153) {
+            } else if (entry->itemId < BADGE_MAX) {
                 type = 5;
                 bgm = 2;
             }
@@ -1046,7 +1052,7 @@ void itemseq_GetItem(ItemEntry* entry) {
                 }
             }
             if (type == 8) {
-                evtSetValue(NULL, 0xF5DE01A2, evtGetValue(NULL, 0xF5DE01A2) + 1);
+                evtSetValue(NULL, GSW_TIK_STAR_PIECES_FOUND_COUNT, evtGetValue(NULL, GSW_TIK_STAR_PIECES_FOUND_COUNT) + 1);
             }
             entry->flags &= ~ITEM_FLAG_GET_BGM_ENDED;
             itemGetSound(entry);
@@ -1110,7 +1116,7 @@ void itemseq_GetItem(ItemEntry* entry) {
                 entry->subState = 6;
                 break;
             }
-            if (entry->itemId >= 0x79 && entry->itemId < 0xEC && entry->itemId != ITEM_STAR_PIECE && !swGet(0xEB) && !(gp->flags & GW_FLAG_E3)) { // GSWF_ITEM_TUTORIAL_SEEN
+            if (entry->itemId >= ITEM_MIN && entry->itemId < ITEM_MAX && entry->itemId != ITEM_STAR_PIECE && !swGet(0xEB) && !(gp->flags & GW_FLAG_E3)) { // GSWF_ITEM_TUTORIAL_SEEN
                 swSet(0xEB); // GSWF_ITEM_TUTORIAL_SEEN
                 entry->subState = 4;
                 wp->msgWindowId = msgWindow_Entry(msgSearch("item_first_hit"), 0, 0);
@@ -1140,7 +1146,7 @@ void itemseq_GetItem(ItemEntry* entry) {
             iconFlagOn(entry->name, ICON_FLAG_HIDDEN);
             {
                 s32 id = entry->itemId;
-                if (id >= 0xF0 && id < 0x153) {
+                if (id >= BADGE_MIN && id < BADGE_MAX) {
                     wp->select = winMgrSelectEntry(2, id, 1);
                 } else {
                     wp->select = winMgrSelectEntry(1, id, 1);
@@ -1218,9 +1224,9 @@ void itemseq_GetItem(ItemEntry* entry) {
             entry->flags2 |= ITEM_FLAG2_NO_PICKUP_UNTIL_BOUND;
             itemModeChange(entry, ITEM_MODE_SCATTER_NO_PICKUP);
             entry->flags &= ~ITEM_FLAG_CUSTOM_BOUND;
-            if (entry->itemId >= 1 && entry->itemId < 0x79) {
+            if (entry->itemId >= KEY_ITEM_MIN && entry->itemId < KEY_ITEM_MAX) {
                 entry->timer = 0;
-            } else if (entry->itemId >= 0xF0 && entry->itemId < 0x153) {
+            } else if (entry->itemId >= BADGE_MIN && entry->itemId < BADGE_MAX) {
                 entry->timer = 0;
             } else {
                 entry->timer = 20000;
@@ -1265,6 +1271,7 @@ void itemseq_GetItem(ItemEntry* entry) {
     }
 }
 
+// FAKE: unused file-scope static; removing it changes the object
 static s32 _move_dir_1090;
 void itemseq_Bound(ItemEntry* entry) {
     static s32 _move_dir;
@@ -1442,9 +1449,9 @@ void itemseq_Bound(ItemEntry* entry) {
                 entry->flags2 &= ~ITEM_FLAG2_NO_PICKUP_RISING;
                 entry->flags2 &= ~ITEM_FLAG2_NO_PICKUP_UNTIL_BOUND;
                 entry->flags2 &= ~ITEM_FLAG2_TIMER_WAIT_LAND;
-                if (entry->itemId >= 1 && entry->itemId < 0x79) {
+                if (entry->itemId >= KEY_ITEM_MIN && entry->itemId < KEY_ITEM_MAX) {
                     entry->timer = 0;
-                } else if (entry->itemId >= 0xF0 && entry->itemId < 0x153) {
+                } else if (entry->itemId >= BADGE_MIN && entry->itemId < BADGE_MAX) {
                     entry->timer = 0;
                 } else {
                     entry->timer = 20000;
@@ -1521,7 +1528,7 @@ void itemseq_Bound(ItemEntry* entry) {
                             psndSFXOn_3D("SFX_EVT_STARSTONE_JUMP1", &pos);
                             break;
                         default:
-                            if (itemId >= 0xF0 && itemId < 0x153) {
+                            if (itemId >= BADGE_MIN && itemId < BADGE_MAX) {
                                 psndSFXOn_3D("SFX_BADGE_LEAPED1", &pos);
                             } else {
                                 psndSFXOn_3D("SFX_ITEM_LEAPED1", &pos);
@@ -1654,8 +1661,7 @@ HitEntry* itemHitCheckSide(ItemEntry* entry, f32* outX, f32 dx, f32* outZ, f32 d
     return NULL;
 }
 
-HitEntry*
-itemHitCheckY(ItemEntry* entry, f32 z, f32 y, f32 x, f32 vy) {
+HitEntry* itemHitCheckY(ItemEntry* entry, f32 z, f32 y, f32 x, f32 vy) {
     HitEntry* hit;
     f32 hitX, hitY, hitZ, hitDist, hitNX, hitNY, hitNZ;
 
@@ -1669,8 +1675,7 @@ itemHitCheckY(ItemEntry* entry, f32 z, f32 y, f32 x, f32 vy) {
     return hit;
 }
 
-HitEntry*
-itemHitCheckUp(ItemEntry* entry, f32 vy) {
+HitEntry* itemHitCheckUp(ItemEntry* entry, f32 vy) {
     HitEntry* hit;
     f32 hitX, hitY, hitZ, hitDist, hitNX, hitNY, hitNZ;
     f32 x, y, z;
@@ -1746,34 +1751,4 @@ void itemPickUp(ItemEntry* entry) {
     entry->timer = 0;
     entry->flags2 &= ~ITEM_FLAG2_HIDDEN;
 }
-
-// forward declarations: these functions are defined further down
-void itemPickUp(ItemEntry* entry);
-u32 itemStatus(ItemEntry* entry, u32 flags);
-void itemStatusOn(ItemEntry* entry, u32 flags);
-u16 itemFlag(ItemEntry* entry, u16 flags);
-void itemFlagOff(ItemEntry* entry, u16 flags);
-void itemFlagOn(ItemEntry* entry, u16 flags);
-void itemNokoForceGet(ItemEntry* entry);
-void itemForceGet(ItemEntry* entry);
-HitEntry* itemHitCheckSide(ItemEntry* entry, f32* outX, f32 dx, f32* outZ, f32 dz, s32* angle);
-void itemSetPosition(ItemEntry* entry, f32 x, f32 y, f32 z);
-void itemseq_Bound(ItemEntry* entry);
-void itemseq_GetItem(ItemEntry* entry);
-void winFullDisp(WinMgrEntry* win);
-void winHelpDisp(WinMgrEntry* win);
-void winHelpMain(WinMgrEntry* win);
-void winNameDisp2(WinMgrEntry* win);
-void winNameDisp(WinMgrEntry* win);
-ItemEntry* itemNearDistCheck(f32 x, f32 y, f32 z, f32 range);
-ItemEntry* itemHitCheck(f32 x, f32 y, f32 z, f32 range);
-ItemEntry* itemNameToPtr(char* name);
-void itemDelete(const char* name);
-void itemModeChange(ItemEntry* entry, s32 mode);
-void itemMain(void);
-BOOL N_itemPickUpFromFieldCheck(void);
-BOOL itemGetNokoCheck(ItemEntry* entry);
-BOOL itemGetCheck(ItemEntry* entry);
-void itemReInit(void);
-void itemInit(void);
 

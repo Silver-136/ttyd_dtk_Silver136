@@ -15,7 +15,8 @@
 #include "cam_shift.h"
 #include "battle/battle_camera.h"
 
-// NOTE: this is ~roughly 12.5 degrees in radians, ideally it should be MTXDegToRad(12.5) or 5PI/72
+// 12.5 degrees (half of the 25-degree fovY) in radians, passed to tan(): the second value is 12.5 degrees rounded
+// to float, the first is two float steps below it
 #define DEG_TO_RAD_12_5__1 0.21816612780094147
 #define DEG_TO_RAD_12_5__2 0.21816615760326385
 
@@ -36,14 +37,13 @@ CameraEntry* camEntryPersp(CameraCallback callback, f32 fovY, f32 aspect, f32 ne
                            const char* name);
 CameraEntry* camEntryOrtho(CameraCallback callback, f32 fovY, f32 aspect, f32 top, f32 bottom, f32 left, f32 right,
                            f32 near, f32 far, f32 nearZ, f32 farZ, const char* name);
-void camEvalNearFar(CameraEntry* camera);
 void cam3dMain(CameraEntry* camera);
 void cam3dImgMain(CameraEntry* camera);
 void camEffMain(CameraEntry* camera);
 inline Vec makeVecByValue(f32 x, f32 y, f32 z);
 
 void camInit(void) {
-    f32 deg2rad;
+    f32 tanHalfFov;
 
     camPtrTbl[0] =
         camEntryOrtho(NULL, 25.0f, 1.2666666f, 240.0f, -240.0f, -304.0f, 304.0f, 1.0f, 32768.0f, 0.0f, 1.0f, "off");
@@ -61,22 +61,22 @@ void camInit(void) {
     camPtrTbl[5] = camEntryPersp(camEffMain, 25.0f, 1.2666666f, 100.0f, 10000.0f, 0.2f, 0.3f, "3deff_A");
 
     camPtrTbl[6] = camEntryPersp(cam3dImgMain, 25.0f, 1.3333334f, 1.0f, 32768.0f, 0.0f, 1.0f, "3dimg");
-    deg2rad = (f32)tan(DEG_TO_RAD_12_5__1);
-    camPtrTbl[6]->cameraPos = makeVecByValue(0.0f, 0.0f, 24.0f / deg2rad);
+    tanHalfFov = (f32)tan(DEG_TO_RAD_12_5__1);
+    camPtrTbl[6]->cameraPos = makeVecByValue(0.0f, 0.0f, 24.0f / tanHalfFov);
 
     camPtrTbl[7] = camEntryPersp(camEffMain, 25.0f, 1.2666666f, 100.0f, 10000.0f, 0.2f, 0.3f, "3deff_B");
 
     camPtrTbl[8] = camEntryPersp(NULL, 25.0f, 1.2666666f, 100.0f, 10000.0f, 0.1f, 0.2f, "2d");
-    deg2rad = (f32)tan(DEG_TO_RAD_12_5__1);
-    camPtrTbl[8]->cameraPos = makeVecByValue(0.0f, 0.0f, 240.0f / deg2rad);
+    tanHalfFov = (f32)tan(DEG_TO_RAD_12_5__1);
+    camPtrTbl[8]->cameraPos = makeVecByValue(0.0f, 0.0f, 240.0f / tanHalfFov);
 
     camPtrTbl[9] = camEntryPersp(NULL, 25.0f, 1.3333334f, 1.0f, 32768.0f, 0.0f, 0.1f, "fade");
-    deg2rad = (f32)tan(DEG_TO_RAD_12_5__1);
-    camPtrTbl[9]->cameraPos = makeVecByValue(0.0f, 0.0f, 24.0f / deg2rad);
+    tanHalfFov = (f32)tan(DEG_TO_RAD_12_5__1);
+    camPtrTbl[9]->cameraPos = makeVecByValue(0.0f, 0.0f, 24.0f / tanHalfFov);
 
     camPtrTbl[10] = camEntryPersp(NULL, 25.0f, 1.3333334f, 1.0f, 32768.0f, 0.0f, 0.1f, "fade2");
-    deg2rad = (f32)tan(DEG_TO_RAD_12_5__1);
-    camPtrTbl[10]->cameraPos = makeVecByValue(0.0f, 0.0f, 24.0f / deg2rad);
+    tanHalfFov = (f32)tan(DEG_TO_RAD_12_5__1);
+    camPtrTbl[10]->cameraPos = makeVecByValue(0.0f, 0.0f, 24.0f / tanHalfFov);
 
     camPtrTbl[11] =
         camEntryOrtho(NULL, 25.0f, 1.2666666f, 0.0f, 480.0f, 0.0f, 608.0f, 1.0f, 32768.0f, 0.0f, 1.0f, "dbg");
@@ -84,7 +84,7 @@ void camInit(void) {
     camPtrTbl[12] = camEntryPersp(NULL, 25.0f, 1.2666666f, 1.0f, 32768.0f, 0.0f, 1.0f, "dbg3d");
 }
 
-// near/far is perspective, nearZ/farZ is projection
+// near/far: clip planes of the projection; nearZ/farZ: depth range of the viewport
 CameraEntry* camEntryPersp(CameraCallback callback, f32 fovY, f32 aspect, f32 near, f32 far, f32 nearZ, f32 farZ,
                            const char* name) {
     CameraEntry* camera = __memAlloc(HEAP_DEFAULT, sizeof(CameraEntry));
@@ -209,7 +209,8 @@ void camMain(void) {
         if (cameraId == CAMERA_3D && !gp->inBattle) {
             weight = marioGetPtr()->camZoomWeight;
 
-            // Focus, M.
+            // zoom focus: Mario's position plus the camera zoom offset
+            // FAKE: dead zero store (every field is set below); removing it changes the object
             focus = (Vec){ 0.0f, 0.0f, 0.0f };
             focus.x = marioGetPtr()->position.x + marioGetPtr()->camZoomOfs.x;
             focus.y = marioGetPtr()->position.y + marioGetPtr()->camZoomOfs.y;
@@ -316,7 +317,7 @@ void camEvalNearFar(CameraEntry* camera) {
         if (far < 1.0f) {
             far = 1.0f;
         }
-        // the original stores 1.0f first and then the computed value
+        // near is written twice: the 1.0f is overwritten at once by the computed value
         camera->near = 1.0f;
         camera->near = near;
         camera->far = far;
@@ -366,9 +367,9 @@ void camLoadRoad(CameraId cameraId, const char* filename) {
     camera->viewOffset.y = 0.0f;
     camera->viewOffset.x = 0.0f;
     camera->stateA = 0;
-    camera->curveA = 11;
+    camera->curveA = EASING_SINE_IN_OUT;
     camera->progressA = 0.0f;
-    camera->curveB = 11;
+    camera->curveB = EASING_SINE_IN_OUT;
     camera->progressB = 0.0f;
     camera->marioPos.z = 0.0f;
     camera->marioPos.y = 0.0f;
@@ -700,7 +701,7 @@ void camLetterBoxDraw(CameraId cameraId, void* param) {
         GXSetZMode(GX_DISABLE, GX_LEQUAL, GX_DISABLE);
         GXSetNumChans(1);
         GXSetChanMatColor(GX_COLOR0A0, (GXColor){ 0, 0, 0, camera->letterBoxAlpha });
-        GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_REG, 0, GX_DF_NONE, GX_AF_NONE);
+        GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_REG, GX_LIGHT_NULL, GX_DF_NONE, GX_AF_NONE);
         GXSetFog(GX_FOG_NONE, 0.0f, 0.0f, 0.0f, 0.0f, (GXColor){ 255, 255, 255, 255 });
         GXSetNumTexGens(0);
         GXSetNumTevStages(1);
@@ -731,6 +732,7 @@ void camLetterBox(void) {
     CameraEntry* camera = camPtrTbl[CAMERA_2D];
     PartyEntry* party = partyGetPtr(0);
     if (!(camera->flags & CAMERA_FLAG_LETTER_BOX_OFF) && !(bero_get_BeroEXEC() & 1)) {
+        // FAKE: `party &&` repeats the null test; dropping it changes the object
         if ((seqGetSeq() == SEQ_GAME) && (!marioChkKey() || !marioChkCtrl()) &&
             (!party || (party && !(party->flags & PARTY_FLAG_IS_BEING_USED)))) {
             if (!(camera->flags & CAMERA_FLAG_LETTER_BOX)) {
@@ -748,7 +750,7 @@ void camLetterBox(void) {
     }
     if (camera->flags & CAMERA_FLAG_LETTER_BOX) {
         camera->letterBoxAlpha = 0xFF;
-        camera->letterBoxTop += +3;
+        camera->letterBoxTop += 3;
         if (camera->letterBoxTop > 0x31) {
             camera->letterBoxTop = 0x31;
         }
@@ -774,7 +776,7 @@ void camLetterBox(void) {
     dispEntry(camera->letterBoxCamId, 0.0f, 3, &camLetterBoxDraw, NULL);
 }
 
-/* unused; its zero Vec template still lands in the constant pool / .rodata (removing it changes the object) */
+// nothing calls it, but its zero Vec literal still emits a constant into this object's .rodata
 inline Vec unknownVec0(void) {
     return (Vec){ 0.0f, 0.0f, 0.0f };
 }

@@ -10,7 +10,6 @@
 #include "eff/eff_magic1_n64.h"
 #include "libc_decls.h"
 
-
 void effItemGetMain(EffectEntry* effect);
 void effItemGetDisp(CameraId cameraId, EffectEntry* effect);
 void effItemUseDisp(CameraId cameraId, EffectEntry* effect);
@@ -53,7 +52,7 @@ EffectEntry* effItemGetEntry(s32 type, f32 x, f32 y, f32 z) {
     work->size = 0.75f * ((f32)size_tbl[work->type] / 10.0f);
     work->timer = 0;
     work->state = 0;
-    work->camera = 4;
+    work->camera = CAMERA_3D;
     work->alpha = 255;
     work->lifetime = 1000;
     elem = work + 1;
@@ -64,6 +63,7 @@ EffectEntry* effItemGetEntry(s32 type, f32 x, f32 y, f32 z) {
         if (type == 10) {
             elem->angle = 1.0471976f + 6.2831855f * (f32)(i - 1) / 6.0f;
             elem->velocity.x = 5.0f * (f32)sin(elem->angle);
+            // FAKE: spare temporary cv; `5.0f * -(f32)cos(elem->angle)` changes the object
             cv = (f32)cos(elem->angle);
             elem->velocity.y = 5.0f * -cv;
             elem->velocity.z = 0.0f;
@@ -117,16 +117,16 @@ void effItemGetMain(EffectEntry* effect) {
         work->timer = 1000;
     }
     switch (work->state) {
-    case 0:
-        break;
-    case 1:
-        if (work->scale < 100.0f) {
-            work->scale *= 1.1f;
-        }
-        break;
-    case 2:
-        work->scale *= 0.9f;
-        break;
+        case 0:
+            break;
+        case 1:
+            if (work->scale < 100.0f) {
+                work->scale *= 1.1f;
+            }
+            break;
+        case 2:
+            work->scale *= 0.9f;
+            break;
     }
     work++;
     for (i = 1; i < effect->count; i++, work++) {
@@ -248,8 +248,6 @@ void effItemGetDisp(CameraId cameraId, EffectEntry* effect) {
     w = 64.0f;
     sh = alpha * 0x80 / 0xFF;
     al = alpha * 0xFF / 0xFF;
-
-
     for (i = 0; i < 2; i++) {
         if (i == 0) {
             PSMTXConcat(camera->view, m7c, m19c);
@@ -278,9 +276,6 @@ void effItemGetDisp(CameraId cameraId, EffectEntry* effect) {
     GXLoadTexObj(&texObj, GX_TEXMAP1);
     d = 10.666667f;
     h = 42.666668f;
-
-
-
     work++;
     for (i = 1; i < effect->count; i++, work++) {
         for (pass = 0; pass < 2; pass++) {
@@ -327,10 +322,10 @@ void effItemGetDisp(CameraId cameraId, EffectEntry* effect) {
 void effItemUseDisp(CameraId cameraId, EffectEntry* effect) {
     ItemGetWork* work = effect->userdata;
     CameraEntry* camera;
-    Mtx mc8;
-    Mtx m98;
-    Mtx m68;
-    Mtx m38;
+    Mtx mtx;
+    Mtx scale;
+    Mtx rot;
+    Mtx base;
     GXTexObj texObj;
     f32 h, w;
     s32 i;
@@ -341,12 +336,12 @@ void effItemUseDisp(CameraId cameraId, EffectEntry* effect) {
     GXSetZCompLoc(GX_TRUE);
     GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_AND, GX_ALWAYS, 0);
     GXSetZMode(GX_TRUE, GX_LEQUAL, GX_FALSE);
-    PSMTXTrans(mc8, work->position.x, work->position.y, work->position.z);
-    PSMTXRotRad(m68, 'y', 0.017453292f * -camGetPtr(CAMERA_3D)->viewYaw);
-    PSMTXScale(m98, 0.4f, 0.4f, 0.4f);
-    PSMTXConcat(mc8, m98, m38);
-    PSMTXConcat(m38, m68, m38);
-    PSMTXConcat(camera->view, m38, m38);
+    PSMTXTrans(mtx, work->position.x, work->position.y, work->position.z);
+    PSMTXRotRad(rot, 'y', 0.017453292f * -camGetPtr(CAMERA_3D)->viewYaw);
+    PSMTXScale(scale, 0.4f, 0.4f, 0.4f);
+    PSMTXConcat(mtx, scale, base);
+    PSMTXConcat(base, rot, base);
+    PSMTXConcat(camera->view, base, base);
     GXSetNumTexGens(1);
     GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
     GXSetNumTevStages(1);
@@ -366,26 +361,23 @@ void effItemUseDisp(CameraId cameraId, EffectEntry* effect) {
     GXLoadTexObj(&texObj, GX_TEXMAP0);
     w = 21.333334f;
     h = 42.666668f;
-
-
-
     work++;
     for (i = 1; i < effect->count; i++, work++) {
         for (pass = 0; pass < 2; pass++) {
             if (pass == 0) {
-                PSMTXTrans(mc8, 2.0f + work->position.x, work->position.y - 2.0f, work->position.z);
-                PSMTXRotRad(m68, 'z', work->angle);
-                PSMTXConcat(mc8, m68, mc8);
-                PSMTXConcat(m38, mc8, mc8);
+                PSMTXTrans(mtx, 2.0f + work->position.x, work->position.y - 2.0f, work->position.z);
+                PSMTXRotRad(rot, 'z', work->angle);
+                PSMTXConcat(mtx, rot, mtx);
+                PSMTXConcat(base, mtx, mtx);
                 GXSetChanMatColor(GX_COLOR0A0, (GXColor){ 0, 0, 0, work->alpha * 0x40 / 0xFF });
             } else {
-                PSMTXTrans(mc8, work->position.x, work->position.y, work->position.z);
-                PSMTXRotRad(m68, 'z', work->angle);
-                PSMTXConcat(mc8, m68, mc8);
-                PSMTXConcat(m38, mc8, mc8);
+                PSMTXTrans(mtx, work->position.x, work->position.y, work->position.z);
+                PSMTXRotRad(rot, 'z', work->angle);
+                PSMTXConcat(mtx, rot, mtx);
+                PSMTXConcat(base, mtx, mtx);
                 GXSetChanMatColor(GX_COLOR0A0, (GXColor){ 0xFF, 0xFF, 0xFF, work->alpha * 0x80 / 0xFF });
             }
-            GXLoadPosMtxImm(mc8, GX_PNMTX0);
+            GXLoadPosMtxImm(mtx, GX_PNMTX0);
             GXSetCurrentMtx(GX_PNMTX0);
             GXBegin(GX_QUADS, GX_VTXFMT0, 4);
             GXPosition3f32(-w / 2.0f, 0.0f, 0.0f);

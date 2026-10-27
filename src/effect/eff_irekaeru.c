@@ -58,7 +58,7 @@ void effIrekaeruMain(EffectEntry* effect) {
     inBattle = gp->inBattle != 0;
 #endif
 
-    // soft delete
+    // soft delete: release the pose and delete at once
     if (effect->flags & EFFECT_FLAG_SOFT_DELETE) {
         effect->flags &= ~EFFECT_FLAG_SOFT_DELETE;
         if (work->poseId != -1) {
@@ -77,8 +77,10 @@ void effIrekaeruMain(EffectEntry* effect) {
                 return;
             }
 #ifdef VERSION_G8ME01
+            // FAKE: no-op (u32) cast (animPoseEntry takes s32); the plain argument changes the object
             work->poseId = animPoseEntry(eff_irekae_str_tbl[gp->language], (u32)inBattle);
 #else
+            // FAKE: no-op (u32) cast (animPoseEntry takes s32); the plain argument changes the object
             work->poseId = animPoseEntry("EFF_Irekae", (u32)inBattle);
 #endif
             animPoseSetAnim(work->poseId, "Z_1", TRUE);

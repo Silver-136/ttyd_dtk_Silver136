@@ -82,12 +82,14 @@ static inline void fukidashiQuad(f32 l, f32 t, f32 r, f32 b, f32 u, f32 v) {
     GXTexCoord2f32(0.0f, v);
 }
 
-/* The speaker ids are compared signed */
+// work->npc holds an NpcEntry* or a negative FUKIDASHI_* speaker id, so it is compared as a signed EvtWord.
 
-#define FUKIDASHI_SET_POS(src)                                                                \
-    work->position.x = rot[0][1] * (16.0f + work->size) + ((src)->position.x + work->base.x); \
-    work->position.y = rot[1][1] * (16.0f + work->size) + ((src)->position.y + work->base.y); \
-    work->position.z = rot[2][1] * (16.0f + work->size) + ((src)->position.z + work->base.z);
+// Sets work->position to origin + base, moved (16 + size) along the rotated y axis.
+static inline void fukidashiSetPos(EffFukidashiWork* work, Mtx rot, Vec* origin) {
+    work->position.x = rot[0][1] * (16.0f + work->size) + (origin->x + work->base.x);
+    work->position.y = rot[1][1] * (16.0f + work->size) + (origin->y + work->base.y);
+    work->position.z = rot[2][1] * (16.0f + work->size) + (origin->z + work->base.z);
+}
 
 void calc_pos(EffFukidashiWork* work, s32 flag) {
     CameraEntry* camera;
@@ -99,20 +101,20 @@ void calc_pos(EffFukidashiWork* work, s32 flag) {
     PSMTXRotAxisRad(rot, &axis, MTXDegToRad(-((work->angle - 20.0f) + (f32)(flag * 20))));
     if (((EvtWord)(work->npc)) == FUKIDASHI_MARIO) {
         MarioWork* mario = marioGetPtr();
-        FUKIDASHI_SET_POS(mario)
+        fukidashiSetPos(work, rot, &mario->position);
     } else if (((EvtWord)(work->npc)) == FUKIDASHI_PARTY) {
         PartyEntry* party = partyGetPtr(marioGetPartyId());
         if (party) {
-            FUKIDASHI_SET_POS(party)
+            fukidashiSetPos(work, rot, &party->position);
         }
     } else if (((EvtWord)(work->npc)) == FUKIDASHI_EXTRA_PARTY) {
         PartyEntry* party = partyGetPtr(marioGetExtraPartyId());
         if (party) {
-            FUKIDASHI_SET_POS(party)
+            fukidashiSetPos(work, rot, &party->position);
         }
     } else if (work->npc) {
         NpcEntry* npc = work->npc;
-        FUKIDASHI_SET_POS(npc)
+        fukidashiSetPos(work, rot, &npc->position);
     } else {
         work->position.x = rot[0][1] * (16.0f + work->size) + work->base.x;
         work->position.y = rot[1][1] * (16.0f + work->size) + work->base.y;
@@ -509,9 +511,9 @@ void effFukidashiDisp(CameraId cameraId, EffectEntry* effect) {
                     PSMTXConcat(mH, mD, mH);
                     PSMTXConcat(mH, mA, mH);
                     if (pass == 0) {
-                        iconDispGxCol(mH, 0x400, ICON_ITEM_COIN, (GXColor){ 0xFF, 0xFF, 0xFF, alpha });
+                        iconDispGxCol(mH, ICON_FLAG_CULL_BACK, ICON_ITEM_COIN, (GXColor){ 0xFF, 0xFF, 0xFF, alpha });
                     } else {
-                        iconDispGxCol(mH, 0x800, ICON_ITEM_COIN, (GXColor){ 0xA0, 0xA0, 0xA0, alpha });
+                        iconDispGxCol(mH, ICON_FLAG_CULL_FRONT, ICON_ITEM_COIN, (GXColor){ 0xA0, 0xA0, 0xA0, alpha });
                     }
                     PSMTXTrans(mA, 10.0f, 22.0f, 0.0f);
                     PSMTXConcat(mH, mA, mH);

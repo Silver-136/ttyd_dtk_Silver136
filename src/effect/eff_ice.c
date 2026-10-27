@@ -907,50 +907,50 @@ static void effIceMain(EffectEntry* effect) {
     }
 
     switch (work->state) {
-    case 0:
-        if (work->duration < 1000) {
-            work->duration--;
-        }
-        if (work->duration == 0) {
-            work->state = 1;
-        }
-        if (work->frame < 90) {
+        case 0:
+            if (work->duration < 1000) {
+                work->duration--;
+            }
+            if (work->duration == 0) {
+                work->state = 1;
+            }
+            if (work->frame < 90) {
+                work->frame++;
+                effCalcMayaAnim(work->anim);
+            }
+            break;
+        case 1:
             work->frame++;
             effCalcMayaAnim(work->anim);
-        }
-        break;
-    case 1:
-        work->frame++;
-        effCalcMayaAnim(work->anim);
-        break;
-    case 2:
-        work->frame++;
-        if (work->frame % 30 == 0) {
-            effKemuTestEntry(1, work->position.x + (f32)(20 - irand((s32)(40.0f * work->scale))),
-                             work->position.y - 30.0f * (1.0f - work->scaleY), work->position.z, 1.0f);
-        }
-        work->scaleY *= 0.99f;
-        work->scaleX *= 1.005f;
-        work->alpha *= 0.99f;
-        break;
+            break;
+        case 2:
+            work->frame++;
+            if (work->frame % 30 == 0) {
+                effKemuTestEntry(1, work->position.x + (f32)(20 - irand((s32)(40.0f * work->scale))),
+                                 work->position.y - 30.0f * (1.0f - work->scaleY), work->position.z, 1.0f);
+            }
+            work->scaleY *= 0.99f;
+            work->scaleX *= 1.005f;
+            work->alpha *= 0.99f;
+            break;
     }
 
     switch (work->state) {
-    case 0:
-    case 1:
-        if ((f32)work->frame > work->anim->data->endTime) {
-            effDeleteMayaAnim(work->anim);
-            effDelete(effect);
-            return;
-        }
-        break;
-    case 2:
-        if (work->frame > 200) {
-            effDeleteMayaAnim(work->anim);
-            effDelete(effect);
-            return;
-        }
-        break;
+        case 0:
+        case 1:
+            if ((f32)work->frame > work->anim->data->endTime) {
+                effDeleteMayaAnim(work->anim);
+                effDelete(effect);
+                return;
+            }
+            break;
+        case 2:
+            if (work->frame > 200) {
+                effDeleteMayaAnim(work->anim);
+                effDelete(effect);
+                return;
+            }
+            break;
     }
     dispEntry(CAMERA_3D, dispCalcZ(&calcPos), 2, (DispCallback)effIceDisp, effect);
 }
@@ -985,7 +985,6 @@ static void effIceDisp(CameraId cameraId, EffectEntry* effect) {
     GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
     GXSetTevOp(GX_TEVSTAGE0, GX_MODULATE);
     GXSetCurrentMtx(GX_PNMTX0);
-    {
     for (i = 1; i < work->anim->data->lists->count; i++) {
         id = 0x20;
         if (i < work->anim->data->lists->count - 1) {
@@ -1007,6 +1006,5 @@ static void effIceDisp(CameraId cameraId, EffectEntry* effect) {
         PSMTXConcat(camGetPtr(cameraId)->view, joint, joint);
         GXLoadPosMtxImm(joint, GX_PNMTX0);
         effDrawMayaPoly(&work->anim->data->lists->polys[i]);
-    }
     }
 }

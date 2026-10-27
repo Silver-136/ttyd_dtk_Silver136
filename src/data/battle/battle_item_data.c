@@ -36,7 +36,6 @@
 extern ItemData itemDataTable[];
 void _nancy_disp(CameraId cameraId, void* param);
 void _disp_item_icon(CameraId cameraId, void* param);
-extern s32 R_mystery_item_table[];
 
 USER_FUNC(_cam_rot);
 USER_FUNC(_get_throw_first_pos);
@@ -168,8 +167,6 @@ EvtWord ItemEvent_Funyafunya_Kun[7];
 EvtWord ItemEvent_Sukkiri_Drink[7];
 EvtWord ItemEvent_Shikaeshino_Kona[7];
 EvtWord ItemEvent_Kameno_Noroi[7];
-
-
 
 EVT_BEGIN(_return_home_event)
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
@@ -438,7 +435,7 @@ BattleWeapon ItemWeaponData_CookingItem = {
 BattleWeapon ItemWeaponData_Kinoko = {
     NULL, 0, // name..icon
     {0}, // pad_06
-    148, // itemId
+    ITEM_MUSHROOM, // itemId
     NULL, // description
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
@@ -474,7 +471,7 @@ BattleWeapon ItemWeaponData_Kinoko = {
 BattleWeapon ItemWeaponData_Kinkyuu_Kinoko = {
     NULL, 0, // name..icon
     {0}, // pad_06
-    151, // itemId
+    ITEM_LIFE_SHROOM, // itemId
     NULL, // description
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
@@ -510,7 +507,7 @@ BattleWeapon ItemWeaponData_Kinkyuu_Kinoko = {
 BattleWeapon ItemWeaponData_Super_Kinoko = {
     NULL, 0, // name..icon
     {0}, // pad_06
-    149, // itemId
+    ITEM_SUPER_SHROOM, // itemId
     NULL, // description
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
@@ -546,7 +543,7 @@ BattleWeapon ItemWeaponData_Super_Kinoko = {
 BattleWeapon ItemWeaponData_Ultra_Kinoko = {
     NULL, 0, // name..icon
     {0}, // pad_06
-    150, // itemId
+    ITEM_ULTRA_SHROOM, // itemId
     NULL, // description
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
@@ -582,7 +579,7 @@ BattleWeapon ItemWeaponData_Ultra_Kinoko = {
 BattleWeapon ItemWeaponData_Sinabita_Kinoko = {
     NULL, 0, // name..icon
     {0}, // pad_06
-    152, // itemId
+    ITEM_DRIED_SHROOM, // itemId
     NULL, // description
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
@@ -618,7 +615,7 @@ BattleWeapon ItemWeaponData_Sinabita_Kinoko = {
 BattleWeapon ItemWeaponData_Honey_Syrup = {
     NULL, 0, // name..icon
     {0}, // pad_06
-    154, // itemId
+    ITEM_HONEY_SYRUP, // itemId
     NULL, // description
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
@@ -654,7 +651,7 @@ BattleWeapon ItemWeaponData_Honey_Syrup = {
 BattleWeapon ItemWeaponData_Maple_Syrup = {
     NULL, 0, // name..icon
     {0}, // pad_06
-    155, // itemId
+    ITEM_MAPLE_SYRUP, // itemId
     NULL, // description
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
@@ -690,7 +687,7 @@ BattleWeapon ItemWeaponData_Maple_Syrup = {
 BattleWeapon ItemWeaponData_Royal_Jelly = {
     NULL, 0, // name..icon
     {0}, // pad_06
-    156, // itemId
+    ITEM_JAMMIN_JELLY, // itemId
     NULL, // description
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
@@ -726,7 +723,7 @@ BattleWeapon ItemWeaponData_Royal_Jelly = {
 BattleWeapon ItemWeaponData_Tankobu = {
     NULL, 0, // name..icon
     {0}, // pad_06
-    165, // itemId
+    ITEM_WHACKA_BUMP, // itemId
     NULL, // description
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
@@ -816,7 +813,7 @@ EVT_BEGIN(ItemEvent_Pow_Block)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, LW(9), POSE_TYPE_NEUTRAL)
     WAIT_FRAMES(30)
     BEGIN_SIBLING_EVENT
-        CALL(btlevtcmd_JumpSetting, UNIT_ID_SELF, 20, FLOAT(0.0f), FLOAT(0.7998047f))
+        CALL(btlevtcmd_JumpSetting, UNIT_ID_SELF, 20, FLOAT(0.0f), FLOAT(0.8f))
         CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, LW(9), POSE_TYPE_JUMP)
         CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
         CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 14, MOVE_SOUND_FROM_TABLE)
@@ -872,7 +869,7 @@ EVT_END()
 BattleWeapon ItemWeaponData_Pow_Block = {
     NULL, 0, // name..icon
     {0}, // pad_06
-    139, // itemId
+    ITEM_POW_BLOCK, // itemId
     NULL, // description
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
@@ -981,7 +978,7 @@ EVT_END()
 BattleWeapon ItemWeaponData_Fire_Flower = {
     NULL, 0, // name..icon
     {0}, // pad_06
-    132, // itemId
+    ITEM_FIRE_FLOWER, // itemId
     NULL, // description
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
@@ -1109,7 +1106,7 @@ EVT_END()
 BattleWeapon ItemWeaponData_Kaminari_Dokkan = {
     NULL, 0, // name..icon
     {0}, // pad_06
-    129, // itemId
+    ITEM_THUNDER_RAGE, // itemId
     NULL, // description
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
@@ -1146,7 +1143,7 @@ BattleWeapon ItemWeaponData_Kaminari_Dokkan = {
 BattleWeapon ItemWeaponData_Kaminari_Gorogoro = {
     NULL, 0, // name..icon
     {0}, // pad_06
-    128, // itemId
+    ITEM_THUNDER_BOLT, // itemId
     NULL, // description
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
@@ -1334,7 +1331,7 @@ EVT_END()
 BattleWeapon ItemWeaponData_Kirakira_Otoshi = {
     NULL, 0, // name..icon
     {0}, // pad_06
-    130, // itemId
+    ITEM_SHOOTING_STAR, // itemId
     NULL, // description
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
@@ -1459,7 +1456,7 @@ EVT_END()
 BattleWeapon ItemWeaponData_Koorino_Ibuki = {
     NULL, 0, // name..icon
     {0}, // pad_06
-    131, // itemId
+    ITEM_ICE_STORM, // itemId
     NULL, // description
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
@@ -1590,7 +1587,7 @@ EVT_END()
 BattleWeapon ItemWeaponData_Yurayura_Jishin = {
     NULL, 0, // name..icon
     {0}, // pad_06
-    133, // itemId
+    ITEM_EARTH_QUAKE, // itemId
     NULL, // description
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
@@ -1700,7 +1697,7 @@ EVT_END()
 BattleWeapon ItemWeaponData_Teresano_Fuku = {
     NULL, 0, // name..icon
     {0}, // pad_06
-    134, // itemId
+    ITEM_BOOS_SHEET, // itemId
     NULL, // description
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
@@ -1756,7 +1753,7 @@ EVT_END()
 BattleWeapon ItemWeaponData_Biribiri_Kinoko = {
     NULL, 0, // name..icon
     {0}, // pad_06
-    135, // itemId
+    ITEM_VOLT_SHROOM, // itemId
     NULL, // description
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
@@ -1813,7 +1810,7 @@ EVT_END()
 BattleWeapon ItemWeaponData_Teki_Yokeeru = {
     NULL, 0, // name..icon
     {0}, // pad_06
-    136, // itemId
+    ITEM_REPEL_CAPE, // itemId
     NULL, // description
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
@@ -1851,7 +1848,7 @@ BattleWeapon ItemWeaponData_Teki_Yokeeru = {
 BattleWeapon ItemWeaponData_Madowaseno_Kona = {
     NULL, 0, // name..icon
     {0}, // pad_06
-    137, // itemId
+    ITEM_RUIN_POWDER, // itemId
     NULL, // description
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
@@ -1920,7 +1917,7 @@ EVT_END()
 BattleWeapon ItemWeaponData_Nemure_Yoikoyo = {
     NULL, 0, // name..icon
     {0}, // pad_06
-    138, // itemId
+    ITEM_SLEEPY_SHEEP, // itemId
     NULL, // description
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
@@ -2024,7 +2021,7 @@ EVT_END()
 BattleWeapon ItemWeaponData_Stop_Watch = {
     NULL, 0, // name..icon
     {0}, // pad_06
-    140, // itemId
+    ITEM_STOPWATCH, // itemId
     NULL, // description
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
@@ -2081,7 +2078,7 @@ EVT_END()
 BattleWeapon ItemWeaponData_Guruguru_Memawashi = {
     NULL, 0, // name..icon
     {0}, // pad_06
-    141, // itemId
+    ITEM_DIZZY_DIAL, // itemId
     NULL, // description
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
@@ -2119,7 +2116,7 @@ BattleWeapon ItemWeaponData_Guruguru_Memawashi = {
 BattleWeapon ItemWeaponData_Dekadeka_Drink = {
     NULL, 0, // name..icon
     {0}, // pad_06
-    142, // itemId
+    ITEM_POWER_PUNCH, // itemId
     NULL, // description
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
@@ -2158,7 +2155,7 @@ BattleWeapon ItemWeaponData_Dekadeka_Drink = {
 BattleWeapon ItemWeaponData_Katikati_Koura = {
     NULL, 0, // name..icon
     {0}, // pad_06
-    143, // itemId
+    ITEM_COURAGE_SHELL, // itemId
     NULL, // description
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
@@ -2281,7 +2278,7 @@ EVT_END()
 BattleWeapon ItemWeaponData_Suitooru = {
     NULL, 0, // name..icon
     {0}, // pad_06
-    144, // itemId
+    ITEM_HP_DRAIN_ITEM, // itemId
     NULL, // description
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
@@ -2386,7 +2383,7 @@ EVT_END()
 BattleWeapon ItemWeaponData_Teki_Kyouka = {
     NULL, 0, // name..icon
     {0}, // pad_06
-    145, // itemId
+    ITEM_TRADE_OFF, // itemId
     NULL, // description
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
@@ -2422,7 +2419,7 @@ BattleWeapon ItemWeaponData_Teki_Kyouka = {
 BattleWeapon ItemWeaponData_Minimini_Kun = {
     NULL, 0, // name..icon
     {0}, // pad_06
-    146, // itemId
+    ITEM_MINI_MR_MINI, // itemId
     NULL, // description
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
@@ -2461,7 +2458,7 @@ BattleWeapon ItemWeaponData_Minimini_Kun = {
 BattleWeapon ItemWeaponData_Funyafunya_Kun = {
     NULL, 0, // name..icon
     {0}, // pad_06
-    147, // itemId
+    ITEM_MR_SOFTENER, // itemId
     NULL, // description
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
@@ -2501,7 +2498,7 @@ BattleWeapon ItemWeaponData_Funyafunya_Kun = {
 BattleWeapon ItemWeaponData_Sukkiri_Drink = {
     NULL, 0, // name..icon
     {0}, // pad_06
-    153, // itemId
+    ITEM_TASTY_TONIC, // itemId
     NULL, // description
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
@@ -2572,7 +2569,7 @@ EVT_END()
 BattleWeapon ItemWeaponData_Jiwajiwa_Kinoko = {
     NULL, 0, // name..icon
     {0}, // pad_06
-    157, // itemId
+    ITEM_SLOW_SHROOM, // itemId
     NULL, // description
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
@@ -2629,7 +2626,7 @@ EVT_END()
 BattleWeapon ItemWeaponData_Jiwajiwa_Syrup = {
     NULL, 0, // name..icon
     {0}, // pad_06
-    158, // itemId
+    ITEM_GRADUAL_SYRUP, // itemId
     NULL, // description
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
@@ -2716,7 +2713,7 @@ EVT_END()
 BattleWeapon ItemWeaponData_Irekaeeru = {
     NULL, 0, // name..icon
     {0}, // pad_06
-    161, // itemId
+    ITEM_POINT_SWAP, // itemId
     NULL, // description
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
@@ -2796,7 +2793,7 @@ EVT_END()
 BattleWeapon ItemWeaponData_Attiike_Shisshi = {
     NULL, 0, // name..icon
     {0}, // pad_06
-    162, // itemId
+    ITEM_FRIGHT_MASK, // itemId
     NULL, // description
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
@@ -2837,77 +2834,77 @@ EVT_BEGIN(ItemEvent_Naniga_Okorukana)
     WAIT_FRAMES(30)
     CALL(_naniga_okorukana_check, UNIT_ID_SELF, LW(13))
     SWITCH(LW(13))
-        CASE_EQUAL(148)
+        CASE_EQUAL(ITEM_MUSHROOM)
         SET_VALUE(LW(12), PTR(&ItemWeaponData_Kinoko))
         SET_VALUE(LW(8), LW(12))
         CALL_CHILD(PTR(ItemEvent_Automatic_Target))
-        SET_VALUE(LW(9), 148)
+        SET_VALUE(LW(9), ITEM_MUSHROOM)
         CALL_CHILD(PTR(ItemEvent_Recovery_Core))
-        CASE_EQUAL(150)
+        CASE_EQUAL(ITEM_ULTRA_SHROOM)
         SET_VALUE(LW(12), PTR(&ItemWeaponData_Ultra_Kinoko))
         SET_VALUE(LW(8), LW(12))
         CALL_CHILD(PTR(ItemEvent_Automatic_Target))
-        SET_VALUE(LW(9), 150)
+        SET_VALUE(LW(9), ITEM_ULTRA_SHROOM)
         CALL_CHILD(PTR(ItemEvent_Recovery_Core))
-        CASE_EQUAL(152)
+        CASE_EQUAL(ITEM_DRIED_SHROOM)
         SET_VALUE(LW(12), PTR(&ItemWeaponData_Sinabita_Kinoko))
         SET_VALUE(LW(8), LW(12))
         CALL_CHILD(PTR(ItemEvent_Automatic_Target))
-        SET_VALUE(LW(9), 152)
+        SET_VALUE(LW(9), ITEM_DRIED_SHROOM)
         CALL_CHILD(PTR(ItemEvent_Recovery_Core))
-        CASE_EQUAL(154)
+        CASE_EQUAL(ITEM_HONEY_SYRUP)
         SET_VALUE(LW(12), PTR(&ItemWeaponData_Honey_Syrup))
         SET_VALUE(LW(8), LW(12))
         CALL_CHILD(PTR(ItemEvent_Automatic_Target))
-        SET_VALUE(LW(9), 154)
+        SET_VALUE(LW(9), ITEM_HONEY_SYRUP)
         CALL_CHILD(PTR(ItemEvent_Recovery_Core))
-        CASE_EQUAL(156)
+        CASE_EQUAL(ITEM_JAMMIN_JELLY)
         SET_VALUE(LW(12), PTR(&ItemWeaponData_Royal_Jelly))
         SET_VALUE(LW(8), LW(12))
         CALL_CHILD(PTR(ItemEvent_Automatic_Target))
-        SET_VALUE(LW(9), 156)
+        SET_VALUE(LW(9), ITEM_JAMMIN_JELLY)
         CALL_CHILD(PTR(ItemEvent_Recovery_Core))
-        CASE_EQUAL(135)
+        CASE_EQUAL(ITEM_VOLT_SHROOM)
         SET_VALUE(LW(12), PTR(&ItemWeaponData_Biribiri_Kinoko))
         SET_VALUE(LW(8), LW(12))
         CALL_CHILD(PTR(ItemEvent_Automatic_Target))
         CALL_CHILD(PTR(ItemEvent_Biribiri_Kinoko_Core))
-        CASE_EQUAL(136)
+        CASE_EQUAL(ITEM_REPEL_CAPE)
         SET_VALUE(LW(12), PTR(&ItemWeaponData_Teki_Yokeeru))
         SET_VALUE(LW(8), LW(12))
         CALL_CHILD(PTR(ItemEvent_Automatic_Target))
         CALL_CHILD(PTR(ItemEvent_Teki_Yokeeru_Core))
-        CASE_EQUAL(157)
+        CASE_EQUAL(ITEM_SLOW_SHROOM)
         SET_VALUE(LW(12), PTR(&ItemWeaponData_Jiwajiwa_Kinoko))
         SET_VALUE(LW(8), LW(12))
         CALL_CHILD(PTR(ItemEvent_Automatic_Target))
         CALL_CHILD(PTR(ItemEvent_Jiwajiwa_Kinoko_Core))
-        CASE_EQUAL(158)
+        CASE_EQUAL(ITEM_GRADUAL_SYRUP)
         SET_VALUE(LW(12), PTR(&ItemWeaponData_Jiwajiwa_Syrup))
         SET_VALUE(LW(8), LW(12))
         CALL_CHILD(PTR(ItemEvent_Automatic_Target))
         CALL_CHILD(PTR(ItemEvent_Jiwajiwa_Syrup_Core))
-        CASE_EQUAL(128)
+        CASE_EQUAL(ITEM_THUNDER_BOLT)
         SET_VALUE(LW(12), PTR(&ItemWeaponData_Kaminari_Gorogoro))
         SET_VALUE(LW(8), LW(12))
         CALL_CHILD(PTR(ItemEvent_Automatic_Target))
         CALL_CHILD(PTR(ItemEvent_Kaminari_Core))
-        CASE_EQUAL(129)
+        CASE_EQUAL(ITEM_THUNDER_RAGE)
         SET_VALUE(LW(12), PTR(&ItemWeaponData_Kaminari_Dokkan))
         SET_VALUE(LW(8), LW(12))
         CALL_CHILD(PTR(ItemEvent_Automatic_Target))
         CALL_CHILD(PTR(ItemEvent_Kaminari_Core))
-        CASE_EQUAL(132)
+        CASE_EQUAL(ITEM_FIRE_FLOWER)
         SET_VALUE(LW(12), PTR(&ItemWeaponData_Fire_Flower))
         SET_VALUE(LW(8), LW(12))
         CALL_CHILD(PTR(ItemEvent_Automatic_Target))
         CALL_CHILD(PTR(ItemEvent_Fire_Flower_Core))
-        CASE_EQUAL(130)
+        CASE_EQUAL(ITEM_SHOOTING_STAR)
         SET_VALUE(LW(12), PTR(&ItemWeaponData_Kirakira_Otoshi))
         SET_VALUE(LW(8), LW(12))
         CALL_CHILD(PTR(ItemEvent_Automatic_Target))
         CALL_CHILD(PTR(ItemEvent_Kirakira_Otoshi_Core))
-        CASE_EQUAL(140)
+        CASE_EQUAL(ITEM_STOPWATCH)
         SET_VALUE(LW(12), PTR(&ItemWeaponData_Stop_Watch))
         SET_VALUE(LW(8), LW(12))
         CALL_CHILD(PTR(ItemEvent_Automatic_Target))
@@ -2923,7 +2920,7 @@ EVT_END()
 BattleWeapon ItemWeaponData_Naniga_Okorukana = {
     NULL, 0, // name..icon
     {0}, // pad_06
-    163, // itemId
+    ITEM_MYSTERY, // itemId
     NULL, // description
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
@@ -2957,14 +2954,26 @@ BattleWeapon ItemWeaponData_Naniga_Okorukana = {
 };
 
 s32 R_mystery_item_table[] = {
-    148, 154, 156, 135, 136, 157, 158, 150,
-    152, 129, 132, 130, 140, 0,
+    ITEM_MUSHROOM,
+    ITEM_HONEY_SYRUP,
+    ITEM_JAMMIN_JELLY,
+    ITEM_VOLT_SHROOM,
+    ITEM_REPEL_CAPE,
+    ITEM_SLOW_SHROOM,
+    ITEM_GRADUAL_SYRUP,
+    ITEM_ULTRA_SHROOM,
+    ITEM_DRIED_SHROOM,
+    ITEM_THUNDER_RAGE,
+    ITEM_FIRE_FLOWER,
+    ITEM_SHOOTING_STAR,
+    ITEM_STOPWATCH,
+    ITEM_NULL, // end of list (_naniga_okorukana_check counts up to it)
 };
 
 BattleWeapon ItemWeaponData_Shikaeshino_Kona = {
     NULL, 0, // name..icon
     {0}, // pad_06
-    177, // itemId
+    ITEM_SPITE_POUCH, // itemId
     NULL, // description
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
@@ -3001,7 +3010,7 @@ BattleWeapon ItemWeaponData_Shikaeshino_Kona = {
 BattleWeapon ItemWeaponData_Kameno_Noroi = {
     NULL, 0, // name..icon
     {0}, // pad_06
-    178, // itemId
+    ITEM_KOOPA_CURSE, // itemId
     NULL, // description
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
@@ -3072,7 +3081,7 @@ EVT_BEGIN(ItemEvent_RecoveryAndStatus)
     END_IF
     CALL_CHILD(PTR(ItemEvent_Recovery_Core_Effect))
     SWITCH(LW(9))
-        CASE_EQUAL(216)
+        CASE_EQUAL(ITEM_LOVE_PUDDING)
         CALL(evt_sub_random, 100, LW(0))
         IF_INT_LESS(LW(0), 40)
             SET_VALUE(LW(8), PTR(&ItemWeaponData_FirstLovePuddingBiribiri))
@@ -3083,7 +3092,7 @@ EVT_BEGIN(ItemEvent_RecoveryAndStatus)
                 SET_VALUE(LW(8), PTR(&ItemWeaponData_FirstLovePuddingSleep))
             END_IF
         END_IF
-        CASE_EQUAL(226)
+        CASE_EQUAL(ITEM_PEACH_TART)
         CALL(evt_sub_random, 100, LW(0))
         IF_INT_LESS(LW(0), 40)
             SET_VALUE(LW(8), PTR(&ItemWeaponData_PeachTaltBiribiri))
@@ -3094,8 +3103,8 @@ EVT_BEGIN(ItemEvent_RecoveryAndStatus)
                 SET_VALUE(LW(8), PTR(&ItemWeaponData_PeachTaltSleep))
             END_IF
         END_IF
-        CASE_OR_EQUAL(233)
-        CASE_OR_EQUAL(235)
+        CASE_OR_EQUAL(ITEM_HEALTHY_SALAD)
+        CASE_OR_EQUAL(ITEM_FRESH_JUICE)
         CALL(btlevtcmd_GetPos, LW(10), LW(0), LW(1), LW(2))
         CALL(evt_snd_sfxon_3d, STRING("SFX_REST_CONDITION1"), LW(0), LW(1), LW(2), 0)
         CASE_END
@@ -3121,7 +3130,7 @@ EVT_END()
 BattleWeapon ItemWeaponData_SpaceFood = {
     NULL, 0, // name..icon
     {0}, // pad_06
-    198, // itemId
+    ITEM_SPACE_FOOD, // itemId
     NULL, // description
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
@@ -3159,7 +3168,7 @@ BattleWeapon ItemWeaponData_SpaceFood = {
 BattleWeapon ItemWeaponData_IceCandy = {
     NULL, 0, // name..icon
     {0}, // pad_06
-    199, // itemId
+    ITEM_ICICLE_POP, // itemId
     NULL, // description
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
@@ -3198,7 +3207,7 @@ BattleWeapon ItemWeaponData_IceCandy = {
 BattleWeapon ItemWeaponData_NancyFrappe = {
     NULL, 0, // name..icon
     {0}, // pad_06
-    200, // itemId
+    ITEM_ZESS_FRAPPE, // itemId
     NULL, // description
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
@@ -3237,7 +3246,7 @@ BattleWeapon ItemWeaponData_NancyFrappe = {
 BattleWeapon ItemWeaponData_SnowRabbit = {
     NULL, 0, // name..icon
     {0}, // pad_06
-    201, // itemId
+    ITEM_SNOW_BUNNY, // itemId
     NULL, // description
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
@@ -3276,7 +3285,7 @@ BattleWeapon ItemWeaponData_SnowRabbit = {
 BattleWeapon ItemWeaponData_TeaKinoko = {
     NULL, 0, // name..icon
     {0}, // pad_06
-    212, // itemId
+    ITEM_SHROOM_BROTH, // itemId
     NULL, // description
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
@@ -3318,7 +3327,7 @@ BattleWeapon ItemWeaponData_TeaKinoko = {
 BattleWeapon ItemWeaponData_FirstLovePuddingBiribiri = {
     NULL, 0, // name..icon
     {0}, // pad_06
-    216, // itemId
+    ITEM_LOVE_PUDDING, // itemId
     NULL, // description
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
@@ -3357,7 +3366,7 @@ BattleWeapon ItemWeaponData_FirstLovePuddingBiribiri = {
 BattleWeapon ItemWeaponData_FirstLovePuddingTrans = {
     NULL, 0, // name..icon
     {0}, // pad_06
-    216, // itemId
+    ITEM_LOVE_PUDDING, // itemId
     NULL, // description
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
@@ -3395,7 +3404,7 @@ BattleWeapon ItemWeaponData_FirstLovePuddingTrans = {
 BattleWeapon ItemWeaponData_FirstLovePuddingSleep = {
     NULL, 0, // name..icon
     {0}, // pad_06
-    216, // itemId
+    ITEM_LOVE_PUDDING, // itemId
     NULL, // description
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
@@ -3433,7 +3442,7 @@ BattleWeapon ItemWeaponData_FirstLovePuddingSleep = {
 BattleWeapon ItemWeaponData_StarryDinner = {
     NULL, 0, // name..icon
     {0}, // pad_06
-    217, // itemId
+    ITEM_METEOR_MEAL, // itemId
     NULL, // description
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
@@ -3472,7 +3481,7 @@ BattleWeapon ItemWeaponData_StarryDinner = {
 BattleWeapon ItemWeaponData_KararinaPasta = {
     NULL, 0, // name..icon
     {0}, // pad_06
-    224, // itemId
+    ITEM_SPICY_PASTA, // itemId
     NULL, // description
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
@@ -3509,7 +3518,7 @@ BattleWeapon ItemWeaponData_KararinaPasta = {
 BattleWeapon ItemWeaponData_MeromeroCake = {
     NULL, 0, // name..icon
     {0}, // pad_06
-    225, // itemId
+    ITEM_HEARTFUL_CAKE, // itemId
     NULL, // description
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
@@ -3549,7 +3558,7 @@ BattleWeapon ItemWeaponData_MeromeroCake = {
 BattleWeapon ItemWeaponData_PeachTaltBiribiri = {
     NULL, 0, // name..icon
     {0}, // pad_06
-    226, // itemId
+    ITEM_PEACH_TART, // itemId
     NULL, // description
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
@@ -3588,7 +3597,7 @@ BattleWeapon ItemWeaponData_PeachTaltBiribiri = {
 BattleWeapon ItemWeaponData_PeachTaltDodge = {
     NULL, 0, // name..icon
     {0}, // pad_06
-    226, // itemId
+    ITEM_PEACH_TART, // itemId
     NULL, // description
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
@@ -3626,7 +3635,7 @@ BattleWeapon ItemWeaponData_PeachTaltDodge = {
 BattleWeapon ItemWeaponData_PeachTaltSleep = {
     NULL, 0, // name..icon
     {0}, // pad_06
-    226, // itemId
+    ITEM_PEACH_TART, // itemId
     NULL, // description
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
@@ -3664,7 +3673,7 @@ BattleWeapon ItemWeaponData_PeachTaltSleep = {
 BattleWeapon ItemWeaponData_BiribiriCandy = {
     NULL, 0, // name..icon
     {0}, // pad_06
-    227, // itemId
+    ITEM_ELECTRO_POP, // itemId
     NULL, // description
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
@@ -3703,7 +3712,7 @@ BattleWeapon ItemWeaponData_BiribiriCandy = {
 BattleWeapon ItemWeaponData_HealthySalad = {
     NULL, 0, // name..icon
     {0}, // pad_06
-    233, // itemId
+    ITEM_HEALTHY_SALAD, // itemId
     NULL, // description
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
@@ -3756,7 +3765,7 @@ BattleWeapon ItemWeaponData_HealthySalad = {
 BattleWeapon ItemWeaponData_FreshJuice = {
     NULL, 0, // name..icon
     {0}, // pad_06
-    235, // itemId
+    ITEM_FRESH_JUICE, // itemId
     NULL, // description
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
@@ -3809,7 +3818,7 @@ BattleWeapon ItemWeaponData_FreshJuice = {
 BattleWeapon ItemWeaponData_RedKararing = {
     NULL, 0, // name..icon
     {0}, // pad_06
-    173, // itemId
+    ITEM_HOT_SAUCE, // itemId
     NULL, // description
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
@@ -3846,7 +3855,7 @@ BattleWeapon ItemWeaponData_RedKararing = {
 BattleWeapon ItemWeaponData_FutarideForever = {
     NULL, 0, // name..icon
     {0}, // pad_06
-    219, // itemId
+    ITEM_COUPLES_CAKE, // itemId
     NULL, // description
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
@@ -3955,22 +3964,22 @@ EVT_BEGIN(ItemEvent_ThrowAttack)
     CALL(_get_throw_first_pos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(_throw_item_icon, LW(9), LW(0), LW(1), LW(2), LW(5), LW(6), LW(7))
     SWITCH(LW(9))
-        CASE_EQUAL(196)
+        CASE_EQUAL(ITEM_ZESS_DYNAMITE)
         CALL(evt_snd_sfxon_3d, STRING("SFX_BTL_THUNDERS_ATTACK4"), LW(5), LW(6), LW(7), 0)
         SET_VALUE(LW(0), LW(5))
         SET_VALUE(LW(1), LW(6))
         SET_VALUE(LW(2), LW(7))
         ADD(LW(0), 100)
-        CALL(evt_eff, 0, STRING("hibashira"), 5, LW(5), LW(6), LW(6), LW(0), LW(1), LW(2), 6, FLOAT(1.3994141f), 60, 0, 0)
+        CALL(evt_eff, 0, STRING("hibashira"), 5, LW(5), LW(6), LW(6), LW(0), LW(1), LW(2), 6, FLOAT(1.4f), 60, 0, 0)
         SUBTRACT(LW(0), 200)
-        CALL(evt_eff, 0, STRING("hibashira"), 5, LW(5), LW(6), LW(6), LW(0), LW(1), LW(2), 6, FLOAT(1.3994141f), 60, 0, 0)
+        CALL(evt_eff, 0, STRING("hibashira"), 5, LW(5), LW(6), LW(6), LW(0), LW(1), LW(2), 6, FLOAT(1.4f), 60, 0, 0)
         BEGIN_INLINE_EVENT
             ADD(LW(7), 20)
             CALL(_nancy_mirage, LW(5), LW(6), LW(7))
         END_INLINE_EVENT
         WAIT_MS(500)
-        CASE_OR_EQUAL(202)
-        CASE_OR_EQUAL(209)
+        CASE_OR_EQUAL(ITEM_COCONUT_BOMB)
+        CASE_OR_EQUAL(ITEM_EGG_BOMB)
         CALL(evt_eff, 0, STRING("bomb"), 0, LW(5), LW(6), LW(7), FLOAT(1.0f), 0, 0, 0, 0, 0, 0, 0)
         CALL(evt_snd_sfxon_3d, STRING("SFX_BTL_THUNDERS_ATTACK3"), LW(5), LW(6), LW(7), 0)
         CASE_END
@@ -4008,7 +4017,7 @@ EVT_END()
 BattleWeapon ItemWeaponData_NancyDynamite = {
     NULL, 0, // name..icon
     {0}, // pad_06
-    196, // itemId
+    ITEM_ZESS_DYNAMITE, // itemId
     NULL, // description
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
@@ -4045,7 +4054,7 @@ BattleWeapon ItemWeaponData_NancyDynamite = {
 BattleWeapon ItemWeaponData_CoconutsBomb = {
     NULL, 0, // name..icon
     {0}, // pad_06
-    202, // itemId
+    ITEM_COCONUT_BOMB, // itemId
     NULL, // description
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
@@ -4082,7 +4091,7 @@ BattleWeapon ItemWeaponData_CoconutsBomb = {
 BattleWeapon ItemWeaponData_KachikachiDish = {
     NULL, 0, // name..icon
     {0}, // pad_06
-    203, // itemId
+    ITEM_COURAGE_MEAL, // itemId
     NULL, // description
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
@@ -4118,7 +4127,7 @@ BattleWeapon ItemWeaponData_KachikachiDish = {
 BattleWeapon ItemWeaponData_BomberEgg = {
     NULL, 0, // name..icon
     {0}, // pad_06
-    209, // itemId
+    ITEM_EGG_BOMB, // itemId
     NULL, // description
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
@@ -4173,17 +4182,17 @@ EVT_BEGIN(ItemEvent_Poison_Kinoko)
         WAIT_FRAMES(60)
         CALL(btlevtcmd_RecoverHp, LW(10), LW(11), 999)
     END_IF
-END_IF
-CALL(evt_audience_ap_recovery)
-CALL_CHILD(PTR(_return_home_event))
-CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
-RETURN
+    END_IF // unmatched: the IF above is already closed
+    CALL(evt_audience_ap_recovery)
+    CALL_CHILD(PTR(_return_home_event))
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
+    RETURN
 EVT_END()
 
 BattleWeapon ItemWeaponData_PoisonKinoko = {
     NULL, 0, // name..icon
     {0}, // pad_06
-    213, // itemId
+    ITEM_POISON_SHROOM, // itemId
     NULL, // description
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
@@ -4231,7 +4240,7 @@ typedef struct ThrowWork {
     f32 speed;    // 0x28
     f32 gravity;  // 0x2C
     f32 vy;       // 0x30
-    u8 pad[0x7C - 0x34];
+    u8 pad[0x7C - 0x34]; // 0x34, never accessed (the work block is 0x7C bytes)
 } ThrowWork;
 
 USER_FUNC(_sampling_random_target) {
@@ -4251,8 +4260,9 @@ USER_FUNC(_sampling_random_target) {
     outUnit = args[1];
     outPart = args[2];
     belong = evtGetValue(event, args[3]);
+    // FAKE: pointer alias of the local targets; using targets directly changes the object
     t = &targets;
-    BattleSamplingEnemy(t, weapon, BattleTransID(event, -2), belong, weapon->targetClassFlags,
+    BattleSamplingEnemy(t, weapon, BattleTransID(event, UNIT_ID_SELF), belong, weapon->targetClassFlags,
                         weapon->targetPropertyFlags, -wp->alliances[belong].attackDirection);
     if (t->numTargets <= 0) {
         evtSetValue(event, outUnit, -1);
@@ -4339,8 +4349,8 @@ USER_FUNC(_naniga_okorukana_check) {
     BattleUnit* unit;
     s32 item;
     s32 i;
-    u8* a;
-    u8* b;
+    u8* attackItemCount;
+    u8* supportItemCount;
 
     unit = BattleGetUnitPtr(wp, BattleTransID(event, id));
     BtlUnit_GetPos(unit, &pos.x, &pos.y, &pos.z);
@@ -4359,24 +4369,24 @@ USER_FUNC(_naniga_okorukana_check) {
         effSetName((EffectEntry*)event->userdata[0], "effNaniga");
         evtSetValue(event, out, item);
         if (unit->currentKind == UNIT_MARIO) {
-            a = &wp->actRecord.marioAttackItems;
-            b = &wp->actRecord.marioSupportItems;
+            attackItemCount = &wp->actRecord.marioAttackItems;
+            supportItemCount = &wp->actRecord.marioSupportItems;
         } else if (unit->currentKind >= TYPE_PARTNER_MIN && unit->currentKind < TYPE_PARTNER_MAX) {
-            a = &wp->actRecord.partnerAttackItems;
-            b = &wp->actRecord.partnerSupportItems;
+            attackItemCount = &wp->actRecord.partnerAttackItems;
+            supportItemCount = &wp->actRecord.partnerSupportItems;
         } else {
             goto end;
         }
         switch (item) {
-            case 0x80:
-            case 0x81:
-            case 0x82:
-            case 0x84:
-            case 0x8C:
-                (*a)++;
+            case ITEM_THUNDER_BOLT:
+            case ITEM_THUNDER_RAGE:
+            case ITEM_SHOOTING_STAR:
+            case ITEM_FIRE_FLOWER:
+            case ITEM_STOPWATCH:
+                (*attackItemCount)++;
                 break;
             default:
-                (*b)++;
+                (*supportItemCount)++;
                 break;
         }
     }
@@ -4426,8 +4436,8 @@ USER_FUNC(_throw_item_icon) {
 
     if (isFirstCall) {
         Vec v;
-        ((ThrowWork*)event->userdatap[0]) = BattleAlloc(sizeof(ThrowWork));
-        wk = ((ThrowWork*)event->userdatap[0]);
+        event->userdatap[0] = BattleAlloc(sizeof(ThrowWork));
+        wk = (ThrowWork*)event->userdatap[0];
         wk->target.x = tx;
         wk->target.y = ty;
         wk->target.z = tz;
@@ -4444,7 +4454,7 @@ USER_FUNC(_throw_item_icon) {
         event->userdata[2] = 0;
         event->userdata3 = psndSFXOn_3D("SFX_ITEM_COOKING_THROW1", &v);
     }
-    wk = ((ThrowWork*)event->userdatap[0]);
+    wk = (ThrowWork*)event->userdatap[0];
     if (event->userdata[2]) {
         psndSFXOff(event->userdata3);
         BattleFree(wk);
@@ -4480,9 +4490,10 @@ USER_FUNC(_nancy_mirage) {
         event->userdata[0] = 60;
         event->userdata[1] = animPoseEntry("c_cook", 1);
         event->userdata[2] = 0;
-        EVT_XYZ(event)[0] = x;
-        EVT_XYZ(event)[1] = y;
-        EVT_XYZ(event)[2] = z;
+        // x/y/z go into three s32 words from userdata3 on (over wInterpRelatedTime), converted to integers
+        ((s32*)&event->userdata3)[0] = x;
+        ((s32*)&event->userdata3)[1] = y;
+        ((s32*)&event->userdata3)[2] = z;
         animPoseSetAnim(event->userdata[1], "A_2", 1);
         animPoseSetEffectAnim(event->userdata[1], "PM_Y_1A", 1);
     }
@@ -4514,7 +4525,7 @@ void _nancy_disp(CameraId cameraId, void* param) {
         s = 4.0f;
         alpha = 128;
     }
-    PSMTXTrans(trans, EVT_XYZ(event)[0], EVT_XYZ(event)[1], EVT_XYZ(event)[2]);
+    PSMTXTrans(trans, ((s32*)&event->userdata3)[0], ((s32*)&event->userdata3)[1], ((s32*)&event->userdata3)[2]);
     PSMTXScale(scale, s, s, 1.0f);
     PSMTXIdentity(mtx);
     PSMTXConcat(scale, mtx, mtx);
@@ -4531,7 +4542,7 @@ USER_FUNC(_full_ap_recover) {
     s32 id = evtGetValue(event, event->args[0]);
     BattleUnit* unit = BattleGetUnitPtr(wp, BattleTransID(event, id));
 
-    if (BtlUnit_GetBelong(unit) == 0) {
+    if (BtlUnit_GetBelong(unit) == ALLIANCE_PLAYER) {
         pouchSetAP(pouchGetMaxAP());
     }
     return EVT_RETURN_DONE;
@@ -4582,7 +4593,7 @@ EVT_END()
 BattleWeapon ItemWeaponData_LastDinner = {
     NULL, 0, // name..icon
     {0}, // pad_06
-    218, // itemId
+    ITEM_TRIAL_STEW, // itemId
     NULL, // description
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
@@ -4674,14 +4685,3 @@ EVT_BEGIN(ItemEvent_Kameno_Noroi)
     CALL_CHILD(PTR(ItemEvent_Support_NoEffect))
     RETURN
 EVT_END()
-
-
-
-
-
-
-
-
-
-
-

@@ -66,25 +66,8 @@ typedef struct SukiWork {
     u8 pad344[0x4C8 - 0x344];
 } SukiWork;
 
-extern s32 tou_gamen_screen_tev[];
+void tou_gamen_screen_tev(MapTevCallbackInfo* p);
 
-USER_FUNC(aud_set_draw);
-USER_FUNC(exist_map);
-USER_FUNC(flash_update);
-USER_FUNC(get_img_name);
-USER_FUNC(eff_crystal);
-USER_FUNC(get_screen_point);
-USER_FUNC(wait_star_stone_attack_end);
-USER_FUNC(star_stone_get_attack_point);
-USER_FUNC(wait_star_stone_up_end);
-USER_FUNC(end_suki);
-USER_FUNC(main_suki);
-void set_tev(MapTevCallbackInfo* info);
-static USER_FUNC(set_weapon);
-static USER_FUNC(star_stone_attack);
-static USER_FUNC(star_stone_appear);
-static USER_FUNC(wait_game_end);
-static USER_FUNC(start_game);
 static void disp_3D_alpha(CameraId cam, void* param);
 static void disp_3D(CameraId cam, void* param);
 static void disp_2D(CameraId cam, void* param);
@@ -149,7 +132,7 @@ USER_FUNC(main_suki) {
     s32 i;
 
     if (isFirstCall) {
-        memset(w, 0, 0x4C8);
+        memset(w, 0, sizeof(SukiWork));
         w->unitId = evtGetValue(event, args[0]);
         memcpy(w->starPos, posTbl, sizeof(posTbl));
         strcpy(w->names[0], "sac_suki_img0");
@@ -302,7 +285,7 @@ static void main_base(void) {
 void main_button(s32 idx) {
     SukiWork* w = get_ptr();
     SukiBtn* b = &w->btn[idx];
-    s32 tbl[4] = {0x100, 0x200, 0x400, 0x800};
+    s32 tbl[4] = {PAD_BUTTON_A, PAD_BUTTON_B, PAD_BUTTON_X, PAD_BUTTON_Y};
 
     switch (b->state) {
     case 0:
@@ -338,7 +321,7 @@ static void main_star(void) {
         w->star.to.z += -1.0f;
         w->star.scale = (Vec){0.0f, 0.0f, 0.0f};
         w->star.rot = (Vec){0.0f, 0.0f, 0.0f};
-        w->effMode = 4;
+        w->effMode = CAMERA_3D;
     case 2:
         w->star.timer++;
         if (w->star.timer <= 100) {
@@ -406,14 +389,14 @@ static void main_star(void) {
         }
         break;
     case 8:
-        w->effMode = 4;
+        w->effMode = CAMERA_3D;
         break;
     case 9:
         w->star.timer++;
         w->star.pos.x = intplGetValue(EASING_LINEAR, w->star.from.x, w->star.to.x, w->star.timer, 20);
         w->star.pos.y = intplGetValue(EASING_QUADRATIC_IN, w->star.from.y, w->star.to.y, w->star.timer, 20);
         w->star.pos.z = intplGetValue(EASING_LINEAR, w->star.from.z, w->star.to.z, w->star.timer, 20);
-        w->effMode = 7;
+        w->effMode = CAMERA_3D_EFFECTB;
         if (w->star.timer >= 20) {
             w->star.state = 8;
             w->star.timer = 0;
@@ -450,20 +433,20 @@ static void disp_2D(CameraId cam, void* param) {
 
     PSMTXScale(m, 26.0f, 1.0f, 1.0f);
     PSMTXTransApply(m, m, w->pos.x, 60.0f + w->pos.y, w->pos.z);
-    iconDispGx2(m, 0x10, ICON_AC_BAR_MIDDLE);
+    iconDispGx2(m, ICON_FLAG_2D, ICON_AC_BAR_MIDDLE);
     {
         Vec a = {0.0f, 0.0f, 0.0f};
         a.x = 215.0f + w->pos.x;
         a.y = 60.0f + w->pos.y;
         a.z = w->pos.z;
-        iconDispGx(&a, 0x10, ICON_AC_BAR_RIGHT, 1.0f);
+        iconDispGx(&a, ICON_FLAG_2D, ICON_AC_BAR_RIGHT, 1.0f);
     }
     {
         Vec b = {0.0f, 0.0f, 0.0f};
         b.x = w->pos.x - 215.0f;
         b.y = 60.0f + w->pos.y;
         b.z = w->pos.z;
-        iconDispGx(&b, 0x10, ICON_AC_BAR_LEFT, 1.0f);
+        iconDispGx(&b, ICON_FLAG_2D, ICON_AC_BAR_LEFT, 1.0f);
     }
     GXSetScissor(0, 0x91, gp->fbWidth, 0x50);
     for (i = 0; i < 7; i++) {
@@ -496,50 +479,51 @@ void N__disp_2D(s32 side, s32 idx) {
     if (side == 1 && b->state != 2) {
         return;
     }
+    // FAKE: each case builds the icon id in the s32 temporary t; assigning icon directly changes the object
     switch (b->button) {
-    case 0x100:
+    case PAD_BUTTON_A:
         t = ICON_BUTTON_A;
         if (idx < cur) {
             t = ICON_BUTTON_A_PRESSED;
         }
         icon = t;
         break;
-    case 0x200:
+    case PAD_BUTTON_B:
         t = ICON_BUTTON_B;
         if (idx < cur) {
             t = ICON_BUTTON_B_PRESSED;
         }
         icon = t;
         break;
-    case 0x400:
+    case PAD_BUTTON_X:
         t = ICON_BUTTON_X;
         if (idx < cur) {
             t = ICON_BUTTON_X_PRESSED;
         }
         icon = t;
         break;
-    case 0x800:
+    case PAD_BUTTON_Y:
         t = ICON_BUTTON_Y;
         if (idx < cur) {
             t = ICON_BUTTON_Y_PRESSED;
         }
         icon = t;
         break;
-    case 0x40:
+    case PAD_TRIGGER_L:
         t = ICON_TRIGGER_L;
         if (idx < cur) {
             t = ICON_TRIGGER_L_PRESSED;
         }
         icon = t;
         break;
-    case 0x20:
+    case PAD_TRIGGER_R:
         t = ICON_TRIGGER_R;
         if (idx < cur) {
             t = ICON_TRIGGER_R_PRESSED;
         }
         icon = t;
         break;
-    case 0x10:
+    case PAD_TRIGGER_Z:
         t = ICON_TRIGGER_Z;
         if (idx < cur) {
             t = ICON_TRIGGER_Z_PRESSED;
@@ -552,7 +536,7 @@ void N__disp_2D(s32 side, s32 idx) {
         pos.x = b->pos.x;
         pos.y = 60.0f + (w->offsetY + (b->pos.y + yoff));
         pos.z = b->pos.z;
-        iconDispGx(&pos, 0x10, icon, 1.0f);
+        iconDispGx(&pos, ICON_FLAG_2D, icon, 1.0f);
     }
 }
 
@@ -605,13 +589,11 @@ USER_FUNC(star_stone_get_attack_point) {
 static USER_FUNC(star_stone_attack) {
     SukiWork* w = get_ptr();
     s32 i = evtGetValue(event, event->args[0]);
-    u8* cam;
     w->star.state = 9;
     w->star.timer = 0;
     w->star.from = w->starPos[i];
     w->star.pos = w->star.from;
-    cam = (u8*)camGetPtr(CAMERA_3D);
-    w->star.to = *(Vec*)(cam + 0xC);
+    w->star.to = camGetPtr(CAMERA_3D)->cameraPos;
     w->star.to.y += 20.0f;
     w->star.to.z += 10.0f;
     return 2;
@@ -632,7 +614,7 @@ static USER_FUNC(set_weapon) {
     s32 idx = evtGetValue(event, args[0]);
     SukiWork* w = get_ptr();
     OhkoRateTbl tbl = N_ohko_rate_tbl;
-    memcpy(w->weapon, &weapon, 0xC0);
+    memcpy(w->weapon, &weapon, sizeof(BattleWeapon));
     w->weapon[0x9E] = tbl.rate[idx - 1];
     evtSetValue(event, args[1], (EvtWord)w->weapon);
     return 2;
@@ -682,7 +664,7 @@ USER_FUNC(eff_crystal) {
     f32 x = evtGetFloat(event, args[0]);
     f32 y = evtGetFloat(event, args[1]);
     EffectEntry* e = effCrystalN64Entry(6, 60, x, y, 30.0f, 1.0f);
-    ((EffCrystalN64Work*)e->userdata)->camera = 7;
+    ((EffCrystalN64Work*)e->userdata)->camera = CAMERA_3D_EFFECTB;
     return 2;
 }
 
@@ -694,7 +676,14 @@ USER_FUNC(get_img_name) {
     return 2;
 }
 
-static inline GXColor mk_suki(u8 v) { GXColor c = {0, 0, 0, 255}; c.r = v; c.g = v; c.b = v; return c; }
+static inline GXColor grayColor(u8 v) {
+    GXColor c = {0, 0, 0, 255};
+    c.r = v;
+    c.g = v;
+    c.b = v;
+    return c;
+}
+
 void set_tev(MapTevCallbackInfo* info) {
     u8 v = get_ptr()->flash;
     GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR0A0);
@@ -702,7 +691,7 @@ void set_tev(MapTevCallbackInfo* info) {
     GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
     GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_C0);
     GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_A0);
-    GXSetTevColor(GX_TEVREG0, mk_suki(v));
+    GXSetTevColor(GX_TEVREG0, grayColor(v));
     info->tevStage = 1;
     info->texCoord = 0;
     info->texMap = 0;

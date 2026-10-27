@@ -88,6 +88,3 @@ char* yoshiDotPoseTbl[7][15] = {
     {"Z_10", "Z_10", "W_10", "R_10", "Z_10", "Z_10", "Z_10", "Z_10", "Z_10", "Z_10", "Z_10", "Z_10", "Z_10", "W_10", "R_10"},
     {"Z_11", "Z_11", "W_11", "R_11", "Z_11", "Z_11", "Z_11", "Z_11", "Z_11", "Z_11", "Z_11", "Z_11", "Z_11", "W_11", "R_11"},
 };
-
-#pragma explicit_zero_data on
-#pragma explicit_zero_data reset

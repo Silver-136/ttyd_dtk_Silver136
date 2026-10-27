@@ -31,8 +31,6 @@ static FadeWork* wp;
 
 //local prototypes
 void disp_texture(CameraId camId, void* param);
-static f32 z(void);
-static void zFill(void);
 void disp_maku(CameraId camId, void* param);
 void disp_tec(CameraId camId, void* param);
 void disp_dummy_black(CameraId camId, void* param);
@@ -95,7 +93,8 @@ void fadeEntry(s32 type, s32 duration, GXColor color) {
     if (!type) {
         return;
     }
-    if (type == 16) { //type 16 is type 9 but white
+    // types 16-21 are types 9, 10, 11, 12, 14 and 15 in near-white (0xF0F0F0)
+    if (type == 16) {
         type = 9;
         color = (GXColor){0xF0, 0xF0, 0xF0, 0xFF};
     }
@@ -122,6 +121,8 @@ void fadeEntry(s32 type, s32 duration, GXColor color) {
     if ((type == 1 || type == 2) && duration < 1000) {
         duration = 1000;
     }
+    // FAKE: types 3-5 are tested as one unsigned compare, (u32)(type - 3) <= 2; type >= 3 && type <= 5 changes the
+    // object
     if (type == 7) {
         type = 3;
     } else if (type == 8) {
@@ -436,6 +437,7 @@ void fadeMain(void) {
                 switch (entry->state) {
                     case 0:
                         if (FADE_DURATION(entry) != 0) {
+                            // FAKE: no-op (s32) cast of the u32 delayFrames; removing it changes the object
                             if ((s32)entry->delayFrames != 0) {
                                 entry->delayFrames--;
                             } else {
@@ -480,7 +482,7 @@ void fadeMain(void) {
             case 0x29: case 0x2A: case 0x2B: case 0x2C: case 0x2D: case 0x2E: case 0x2F: case 0x30:
                 switch (entry->state) {
                     case 0:
-                        if ((s32)animGroupBaseAsync(entry->animFile, entry->imageType, NULL) == 0) {
+                        if (animGroupBaseAsync(entry->animFile, entry->imageType, NULL) == 0) {
                             if (entry->paperPoseId < 0 && (entry->type == 0x2A || entry->type == 0x2C || entry->type == 0x2E || entry->type == 0x30)) {
                                 wp->flags |= FADE_WORK_LOAD_BLACK;
                             }
@@ -548,7 +550,7 @@ void fadeMain(void) {
             case 0x31: case 0x34: case 0x37: case 0x39: case 0x3B: case 0x3C: case 0x3D: case 0x3E:
                 switch (entry->state) {
                     case 0:
-                        if ((s32)animGroupBaseAsync(entry->animFile, entry->imageType, NULL) == 0) {
+                        if (animGroupBaseAsync(entry->animFile, entry->imageType, NULL) == 0) {
                             break;
                         }
                         if (entry->paperPoseId >= 0) {
@@ -572,14 +574,14 @@ void fadeMain(void) {
                                 break;
                             case 0x37: case 0x39: case 0x3B:
                                 fadeCapture("fImg_peron", NULL, 2);
-                                entry->image->camId = 10;
-                                entry->image->dispCamId = 10;
+                                entry->image->camId = CAMERA_FADE2;
+                                entry->image->dispCamId = CAMERA_FADE2;
                                 psndSFXOn(SFX_NAME_WORD(PSND_SFX_OFF_CHANGE_STORY1 | PSND_SFX_KEEP));
                                 break;
                             case 0x3C: case 0x3D: case 0x3E:
                                 fadeCapture("fImg_peron", NULL, 2);
-                                entry->image->camId = 9;
-                                entry->image->dispCamId = 9;
+                                entry->image->camId = CAMERA_FADE;
+                                entry->image->dispCamId = CAMERA_FADE;
                                 break;
                             default:
                                 fadeCapture("fImg_peron", NULL, 2);
@@ -645,7 +647,7 @@ void fadeMain(void) {
             case 0x16:
                 switch (entry->state) {
                     case 0:
-                        if ((s32)animGroupBaseAsync(entry->animFile, entry->imageType, NULL) == 0) {
+                        if (animGroupBaseAsync(entry->animFile, entry->imageType, NULL) == 0) {
                             break;
                         }
                         if (entry->poseId >= 0) {
@@ -672,7 +674,7 @@ void fadeMain(void) {
             case 0x17:
                 switch (entry->state) {
                     case 0:
-                        if ((s32)animGroupBaseAsync(entry->animFile, entry->imageType, NULL) == 0) {
+                        if (animGroupBaseAsync(entry->animFile, entry->imageType, NULL) == 0) {
                             break;
                         }
                         if (entry->poseId >= 0) {
@@ -706,7 +708,7 @@ void fadeMain(void) {
             case 0x22: case 0x23: case 0x24: case 0x25: case 0x26: case 0x28: case 0x33: case 0x3F: case 0x40:
                 switch (entry->state) {
                     case 0:
-                        if ((s32)animGroupBaseAsync(entry->animFile, entry->imageType, NULL) == 0) {
+                        if (animGroupBaseAsync(entry->animFile, entry->imageType, NULL) == 0) {
                             break;
                         }
                         switch (entry->type) {
@@ -851,7 +853,7 @@ void disp_texture(CameraId camId, void* param) {
     Mtx mtx3;
     Mtx mtx4;
     GXTexObj obj;
-    f32 proj[7];
+    f32 proj[GX_PROJECTION_SZ];
 
     camera = camGetPtr(CAMERA_2D);
     work = wp;
@@ -971,6 +973,7 @@ static f32 z(void) {
     CameraEntry* camera;
     Vec pos;
     f32 base;
+    // FAKE: `one` (1.0f) is only a factor in the returned depth; dropping the product changes the object
     f32 one = 1.0f;
     f32 pz;
 
@@ -1045,11 +1048,12 @@ static void zFill(void) {
     GXSetColorUpdate(GX_TRUE);
 }
 
+// FAKE: a * b + 0.0f through an inline helper (disp_maku); the plain product changes the object
 static inline f32 fadeMadd(f32 a, f32 b, f32 c) { return a * b + c; }
 void disp_maku(CameraId camId, void* param) {
     FadeEntry* entry = param;
     CameraEntry* camera;
-    f32 scale, depth, sx, mag = 3.141592f;
+    f32 scale, depth, sx, mag;
     Mtx mtx;
     Mtx mtx2;
     Vec dist;
@@ -1080,6 +1084,7 @@ void disp_maku(CameraId camId, void* param) {
         camera = camGetPtr(CAMERA_3D);
         mag = 3.141592f;
         depth = camera->fovY;
+        // FAKE: depth is halved in place inside the expression; depth * 0.5f / 180.0f changes the object
         depth = (depth *= 0.5f) / 180.0f;
         depth = tan(mag * depth);
         depth = 24.0f / depth;
@@ -1115,6 +1120,7 @@ void disp_maku(CameraId camId, void* param) {
     sysWaitDrawSync();
 }
 
+// FAKE: stand-in that nothing calls; it only adds its 3.141592f literal to this object's constant pool
 void fadeStrippedPool(f32* f) {
     f[0] = 3.141592f;
 }
@@ -1199,7 +1205,7 @@ void disp_tec(CameraId camId, void* param) {
 
 void disp_dummy_black(CameraId camId, void* param) {
     CameraEntry* camera;
-    f32 proj[7];
+    f32 proj[GX_PROJECTION_SZ];
 
     camera = camGetPtr(CAMERA_FADE);
     GXGetProjectionv(proj);

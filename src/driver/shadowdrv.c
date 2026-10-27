@@ -15,11 +15,9 @@ void shadowCharShadowDisp_Projection(CameraId cameraId, void* param);
 void shadowCharShadowDisp_Polygon(CameraId cameraId, void* param);
 void shadowCharShadowDisp_Texture(CameraId cameraId, void* param);
 void cylinderShadowDraw(CameraId cameraId, void* param);
-void cylinder(ShadowEntry* entry);
 void projShadowEnd(CameraId cameraId, void* param);
 void depthShadowEnd(CameraId cameraId, void* param);
 void shadowDisp(CameraId cameraId, void* param);
-BOOL _filter(HitCheckQuery* query, HitEntry* hit);
 
 
 static ShadowConfig shadowConfig[2] = {
@@ -176,13 +174,6 @@ GXColor color_tbl_cube[3] ATTRIBUTE_ALIGN(32) = {
     {0x00, 0x00, 0x00, 0x8E}, {0x00, 0x00, 0x00, 0x00}, {0x00, 0x00, 0x00, 0x16},
 };
 
-#pragma explicit_zero_data on
-#pragma explicit_zero_data reset
-
-
-
-
-
 static inline void depthShadowInit(void);
 static inline void projShadowInit(void);
 
@@ -205,7 +196,7 @@ void shadowInit(void) {
     cswp->entries = __memAlloc(HEAP_DEFAULT, sizeof(ShadowEntry) * 64);
     memset(cswp->entries, 0, sizeof(ShadowEntry) * 64);
     wp = cswp;
-    bufferSize = GXGetTexBufferSize(ShadowSizeTbl[0], ShadowSizeTbl[0], 2, 0, 0);
+    bufferSize = GXGetTexBufferSize(ShadowSizeTbl[0], ShadowSizeTbl[0], GX_TF_IA4, GX_FALSE, 0);
     wp->texBuffer = smartAlloc(bufferSize, 0);
     depthShadowInit();
 
@@ -222,6 +213,7 @@ void shadowInit(void) {
     {
         u32 j;
 
+        // FAKE: the loop counter i holds the buffer size and j runs the loop; using bufferSize and i as in the 8-bit ramp changes the object
         i = GXGetTexBufferSize(0x100, 0x100, GX_TF_IA8, GX_FALSE, 0);
         ramp = __memAlloc(HEAP_DEFAULT, GXGetTexBufferSize(0x100, 0x100, GX_TF_IA8, GX_FALSE, 0));
         for (j = 0; j < 0x10000; j++) {
@@ -281,6 +273,7 @@ static inline void shadowBegin(ProjShadowWork* wp, BOOL depth) {
     Vec pos;
 
     GXInvalidateTexAll();
+    // FAKE: byte-offset view of shadowConfig[wp->configIdx]; the indexed form changes the object
     size = ShadowSizeTbl[((ShadowConfig*)((u8*)shadowConfig + wp->configIdx * sizeof(ShadowConfig)))->sizeIdx];
     if (depth) {
         GXSetColorUpdate(GX_FALSE);
@@ -299,6 +292,7 @@ static inline void shadowBegin(ProjShadowWork* wp, BOOL depth) {
     } else {
         C_MTXOrtho(proj, cfg->top, -cfg->top, cfg->left, -cfg->left, cfg->near, cfg->far);
     }
+    // FAKE: byte-offset view of shadowConfig[wp->configIdx]; the indexed form changes the object
     GXSetProjection(wp->proj, ((ShadowConfig*)((u8*)shadowConfig + wp->configIdx * sizeof(ShadowConfig)))->projType);
     PSMTXCopy(camGetCurPtr()->view, tmp_view);
     PSMTXCopy(wp->view, camGetCurPtr()->view);
@@ -311,13 +305,9 @@ void shadowDisp(CameraId cameraId, void* param) {
 
     disp = dispGetCurWork();
 
-    if ((( cameraId == CAMERA_OFFSCREEN2 ) || (( (u32)(cameraId - CAMERA_3D) ) <= 1 )) || ( cameraId == CAMERA_3D_EFFECTB) ) {
+    if (cameraId == CAMERA_OFFSCREEN2 || cameraId == CAMERA_3D || cameraId == CAMERA_3D_EFFECTA || cameraId == CAMERA_3D_EFFECTB) {
         shadowCharShadowDisp_Polygon(cameraId, param);
-        {
-            f32 t;
-            cam = camGetCurPtr();
-            t = cam->cameraAt.y * 20.0f;
-        }
+        cam = camGetCurPtr();
         shadowSetupPolygon();
         GXSetArray(GX_VA_POS, testKagePosArray, 12);
         GXClearVtxDesc();
@@ -371,10 +361,11 @@ void shadowDisp(CameraId cameraId, void* param) {
 
 #pragma push
 #pragma opt_dead_assignments off
+// FAKE: opt_dead_assignments off keeps the unused `f32 t = 20.0f;`; without the pragma and t the object changes
 BOOL _filter(HitCheckQuery* query, HitEntry* hit) {
     f32 t = 20.0f;
 
-    if ((hitGetAttr(hit) & HIT_ATTR_MOBJ) && (*(u32*)mobjHitObjPtrToPtr(hit) & 0x800)) {
+    if ((hitGetAttr(hit) & HIT_ATTR_MOBJ) && (*(u32*)mobjHitObjPtrToPtr(hit) & MOBJ_FLAG_HIDDEN)) {
         return FALSE;
     }
     return TRUE;
@@ -395,17 +386,21 @@ void shadowCharShadowDisp_Collision(CameraId cameraId, void* param) {
     camGetCurPtr();
     for (i = 0; i < cswp->numEntries; i++, entry++) {
         m = entry->mtx;
-        if (!entry->size) { continue;
+        if (!entry->size) {
+            continue;
         }
-        if (entry->flags & SHADOW_ENTRY_PLACED) { continue;
+        if (entry->flags & SHADOW_ENTRY_PLACED) {
+            continue;
         }
-        if ( (entry->mode != 3 ) && (entry->flags & SHADOW_ENTRY_GROUND)) {
+        if (entry->mode != 3 && (entry->flags & SHADOW_ENTRY_GROUND)) {
             query.targetPos = entry->pos;
             query.targetPos.y += 1.0f;
             query.targetDir = (Vec){0.0f, -1.0f, 0.0f};
             query.targetDistance = 150.0f;
+            // FAKE: q is a second name for &query for the hitPos reads below; reading through query changes the object
             q = &query;
-            if (!hitCheckVecFilter(&query, _filter)) { continue;
+            if (!hitCheckVecFilter(&query, _filter)) {
+                continue;
             }
             size = entry->size;
             sy = entry->sizeY;
@@ -417,13 +412,13 @@ void shadowCharShadowDisp_Collision(CameraId cameraId, void* param) {
             m[1][2] = query.hitNormal.z * size;
             m[2][0] = 0.0f;
             m[2][1] = query.hitNormal.z * size;
-            m[2][2] = ( -query.hitNormal.y ) * size;
-            m[0][0] = size * ((( -query.hitNormal.y ) * query.hitNormal.y ) - ( query.hitNormal.z * query.hitNormal.z) );
+            m[2][2] = -query.hitNormal.y * size;
+            m[0][0] = size * ((-query.hitNormal.y * query.hitNormal.y) - (query.hitNormal.z * query.hitNormal.z));
             m[0][1] = size * (query.hitNormal.x * query.hitNormal.y);
             m[0][2] = size * (query.hitNormal.x * query.hitNormal.z);
         } else {
             PSMTXTrans(m, entry->pos.x, 1.5f + entry->pos.y, entry->pos.z);
-            m[0][0] = ( m[2][2] = entry->size) ;
+            m[0][0] = m[2][2] = entry->size;
             m[1][1] = entry->sizeY;
         }
         entry->flags |= SHADOW_ENTRY_PLACED;
@@ -441,6 +436,7 @@ void shadowCharShadowDisp_Projection(CameraId cameraId, void* param) {
     f32 w, h, fw, fh;
     f32 cx, cz;
 
+    // FAKE: assignment inside the index; `wp = cswp;` as its own statement changes the object
     cfg = &shadowConfig[(wp = cswp)->configIdx];
     entry = wp->entries;
     view = camGetCurPtr()->view;
@@ -458,9 +454,15 @@ void shadowCharShadowDisp_Projection(CameraId cameraId, void* param) {
     }
     GXSetZMode(GX_FALSE, GX_LEQUAL, GX_FALSE);
     for (i = 0; i < cswp->numEntries; i++, entry++) {
-        if (!entry->size) continue;
-        if (entry->mode != 3) continue;
-        if (!(entry->flags & SHADOW_ENTRY_PLACED)) continue;
+        if (!entry->size) {
+            continue;
+        }
+        if (entry->mode != 3) {
+            continue;
+        }
+        if (!(entry->flags & SHADOW_ENTRY_PLACED)) {
+            continue;
+        }
         PSMTXConcat(view, entry->mtx, m);
         GXLoadPosMtxImm(m, GX_PNMTX0);
         GXBegin(GX_TRIANGLESTRIP, GX_VTXFMT0, 6);
@@ -547,10 +549,18 @@ void shadowCharShadowDisp_Polygon(CameraId cameraId, void* param) {
     GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
     for (i = 0; i < cswp->numEntries; i++, entry++) {
-        if (!entry->size) continue;
-        if (entry->mode != 0) continue;
-        if (!(entry->flags & SHADOW_ENTRY_PLACED)) continue;
-        if (entry->camId != cameraId) continue;
+        if (!entry->size) {
+            continue;
+        }
+        if (entry->mode != 0) {
+            continue;
+        }
+        if (!(entry->flags & SHADOW_ENTRY_PLACED)) {
+            continue;
+        }
+        if (entry->camId != cameraId) {
+            continue;
+        }
         if (cameraId == CAMERA_OFFSCREEN2) {
             sysWaitDrawSync();
             GXClearBoundingBox();
@@ -613,10 +623,18 @@ void shadowCharShadowDisp_Texture(CameraId cameraId, void* param) {
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
     size = 2.5f;
     for (i = 0; i < cswp->numEntries; i++, entry++) {
-        if (!entry->size) continue;
-        if (entry->mode != 1) continue;
-        if (!(entry->flags & SHADOW_ENTRY_PLACED)) continue;
-        if (entry->camId != cameraId) continue;
+        if (!entry->size) {
+            continue;
+        }
+        if (entry->mode != 1) {
+            continue;
+        }
+        if (!(entry->flags & SHADOW_ENTRY_PLACED)) {
+            continue;
+        }
+        if (entry->camId != cameraId) {
+            continue;
+        }
         if (cameraId == CAMERA_OFFSCREEN2) {
             sysWaitDrawSync();
             GXClearBoundingBox();
@@ -642,8 +660,8 @@ void shadowCharShadowDisp_Texture(CameraId cameraId, void* param) {
 
 void cylinder(ShadowEntry* entry) {
     f32 inner;
-    f32 a;
-    f32 b;
+    f32 volumeAlpha;
+    f32 decayAlpha;
     u8 alpha;
 
     if (entry->flags & SHADOW_ENTRY_NO_DECAY) {
@@ -654,23 +672,23 @@ void cylinder(ShadowEntry* entry) {
         return;
     }
     inner = 1.0f - entry->decay2;
-    a = (cswp->color.a * entry->volume) / 255.0f;
-    b = a * entry->decay;
+    volumeAlpha = (cswp->color.a * entry->volume) / 255.0f;
+    decayAlpha = volumeAlpha * entry->decay;
     if (inner < 0.0f) {
         inner = 0.0f;
     } else if (inner > 1.0f) {
         inner = 1.0f;
     }
-    if (a <= 0.0f) {
+    if (volumeAlpha <= 0.0f) {
         return;
     }
-    if (b <= 0.0f) {
-        b = 0.0f;
+    if (decayAlpha <= 0.0f) {
+        decayAlpha = 0.0f;
     }
-    if (b >= 1.0f) {
-        b = 1.0f;
+    if (decayAlpha >= 1.0f) {
+        decayAlpha = 1.0f;
     }
-    alpha = 255.0f * b;
+    alpha = 255.0f * decayAlpha;
     GXSetArray(GX_VA_CLR0, color_tbl, 4);
     if (inner != 0.0f) {
         GXCallDisplayList(cylinder_dl_top_inside, 0x40);
@@ -717,10 +735,18 @@ void cylinderShadowDraw(CameraId cameraId, void* param) {
 
     view = camGetCurPtr()->view;
     for (i = 0; i < cswp->numEntries; i++, entry++) {
-        if (!entry->size) continue;
-        if (entry->mode != 2) continue;
-        if (!(entry->flags & SHADOW_ENTRY_PLACED)) continue;
-        if (entry->camId != cameraId) continue;
+        if (!entry->size) {
+            continue;
+        }
+        if (entry->mode != 2) {
+            continue;
+        }
+        if (!(entry->flags & SHADOW_ENTRY_PLACED)) {
+            continue;
+        }
+        if (entry->camId != cameraId) {
+            continue;
+        }
         if (cameraId == CAMERA_OFFSCREEN2) {
             sysWaitDrawSync();
             GXClearBoundingBox();
@@ -838,12 +864,13 @@ void shadowSetCamId(s32 id, s32 camId) {
 }
 
 void shadowSetCollision(s32 id, BOOL enable) {
+    // FAKE: byte-offset view of cswp->entries[id].flags; the indexed form changes the object
     s32 off = id * sizeof(ShadowEntry);
     ShadowEntry* e = cswp->entries;
     if (enable) {
-        ((u16*)((u8*)e + off))[0] |= 1;
+        ((u16*)((u8*)e + off))[0] |= SHADOW_ENTRY_GROUND;
     } else {
-        ((u16*)((u8*)e + off))[0] &= ~1;
+        ((u16*)((u8*)e + off))[0] &= ~SHADOW_ENTRY_GROUND;
     }
 }
 
@@ -1063,7 +1090,7 @@ void depthShadowEnd(CameraId cameraId, void* param) {
     wp->flags |= SHADOW_WORK_READY;
 }
 
-// debug strings (from stripped debug code)
+// Unreferenced strings: labels for the 8-bit and 16-bit depth shadow images
 const char str_802C1AFC[] = "result scene (8bit depth)";
 const char str_802C1B18[] = "actual depth from the light (8bit depth)";
 const char str_802C1B44[] = "projected shadow depth map (8bit depth)";

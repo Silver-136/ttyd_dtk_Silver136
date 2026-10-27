@@ -38,6 +38,7 @@ void arcDelete(s32 id) {
 
 void* arcOpen(const char* filename, void** addr, u32* length) {
     ARCFileInfo info;
+    // FAKE: info used through the pointer infop; passing &info directly changes the object
     ARCFileInfo* infop = &info;
     int i;
     void* startAddr;

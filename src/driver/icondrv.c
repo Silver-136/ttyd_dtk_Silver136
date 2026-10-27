@@ -91,8 +91,6 @@ static inline IconBinData* iconGetBinData(u16 iconId) {
 #endif
 
 // local prototypes
-static void _callback_tpl(s32 error, DVDFileInfo* info);
-void _callback_bin(s32 error, DVDFileInfo* info);
 void iconDisp(CameraId camId, void* param);
 void iconGX(Mtx mtx, IconEntry* entry);
 
@@ -189,8 +187,9 @@ void iconMain(void) {
     IconBinData* data;
 
     wp = iconGetWork();
-    if (!icon_tpl_ok || !icon_bin_ok)
+    if (!icon_tpl_ok || !icon_bin_ok) {
         return;
+    }
     for (entry = wp->entries, i = 0; i < wp->count; i++, entry++) {
         if (entry->uflags & ICON_FLAG_ACTIVE) {
             if (entry->uflags & ICON_FLAG_DATA_PENDING) {
@@ -198,7 +197,8 @@ void iconMain(void) {
 #ifdef VERSION_G8ME01
                 data = iconGetBinData(entry->iconId);
 #endif
-                // warning: data may be invalid (JP)
+                // BUG: JP reads data here without loading it for this entry (uninitialized, or left over from an
+                // earlier entry's animation step); US loads it first.
                 entry->width = data->width;
                 entry->height = data->height;
                 entry->numIcons = data->numIcons;
@@ -248,7 +248,7 @@ void iconMain(void) {
 void iconEntry(const char* name, u16 iconId) {
     IconWork* wp = iconGetWork();
     int i;
-    IconEntry* entry = iconFindIn(wp, name); // inline
+    IconEntry* entry = iconFindIn(wp, name); // result unused: the free-slot search below sets entry
     IconBinData* data;
 
     for (entry = wp->entries, i = 0; i < wp->count; i++, entry++) {
@@ -290,7 +290,7 @@ void iconEntry(const char* name, u16 iconId) {
 void iconEntry2D(const char* name, s16 iconId) {
     IconWork* wp = iconGetWork();
     int i;
-    IconEntry* entry = iconFindIn(wp, name); // inline
+    IconEntry* entry = iconFindIn(wp, name); // result unused: the free-slot search below sets entry
     IconBinData* data;
 
     for (entry = wp->entries, i = 0; i < wp->count; i++, entry++) {
@@ -354,7 +354,7 @@ void iconChange(const char* name, u16 iconId) {
 }
 
 void iconDisp(CameraId camId, void* param) {
-    IconEntry* entry = param; // cast to correct type
+    IconEntry* entry = param;
     CameraEntry* camera;
     Mtx trans, scale, rot, mtx;
 
@@ -368,15 +368,16 @@ void iconDisp(CameraId camId, void* param) {
     iconGX(mtx, entry);
 }
 
-void iconDispGxAlpha(Vec *position, s16 flags, u16 iconId, u8 alpha, f32 scale) {
+void iconDispGxAlpha(Vec* position, s16 flags, u16 iconId, u8 alpha, f32 scale) {
     IconEntry entry;
     Mtx transmtx;
     Mtx scalemtx;
     Mtx rotmtx;
     Mtx mtx;
-    CameraEntry *camera;
-    IconBinData *data;
-    IconEntry *ep;
+    CameraEntry* camera;
+    IconBinData* data;
+    IconEntry* ep;
+
     camera = camGetCurPtr();
     ep = &entry;
     if ((!icon_tpl_ok) || (!icon_bin_ok)) {
@@ -384,12 +385,13 @@ void iconDispGxAlpha(Vec *position, s16 flags, u16 iconId, u8 alpha, f32 scale) 
     }
     PSMTXTrans(transmtx, position->x, position->y, position->z);
     PSMTXScale(scalemtx, scale, scale, scale);
-    PSMTXRotRad(rotmtx, 'y', (-camera->viewYaw) * 0.01745329252f);
+    PSMTXRotRad(rotmtx, 'y', MTXDegToRad(-camera->viewYaw));
     PSMTXConcat(transmtx, rotmtx, mtx);
     PSMTXConcat(mtx, scalemtx, mtx);
     PSMTXConcat(camera->view, mtx, mtx);
     entry.color = (GXColor){0xFF, 0xFF, 0xFF, alpha};
     entry.uflags = flags;
+    // FAKE: iconId++ then iconId-- (no net change); without them the object changes
     iconId++;
     iconId--;
     entry.iconId = iconId;
@@ -406,7 +408,7 @@ void iconDispGxAlpha(Vec *position, s16 flags, u16 iconId, u8 alpha, f32 scale) 
             total += data->frames[i].delay;
         }
 
-        t = ((s32) gp->retraceCount) % total;
+        t = (s32)gp->retraceCount % total;
         for (i = 0; i < data->numIcons; i++) {
             if (t < data->frames[i].delay) {
                 entry.tplId = data->frames[i].tplId;
@@ -414,9 +416,7 @@ void iconDispGxAlpha(Vec *position, s16 flags, u16 iconId, u8 alpha, f32 scale) 
             }
             t -= data->frames[i].delay;
         }
-
     }
-    ;
     iconGX(mtx, ep);
 }
 
@@ -427,10 +427,11 @@ void iconDispGx(Vec* position, s16 flags, u16 iconId, f32 scale) {
 void iconDispGx2(Mtx mtx, s16 flags, s16 iconId) {
     IconEntry entry;
     Mtx m;
-    CameraEntry *camera;
-    IconBinData *data;
-    IconEntry *ep;
+    CameraEntry* camera;
+    IconBinData* data;
+    IconEntry* ep;
     u16 id;
+
     camera = camGetCurPtr();
     ep = &entry;
     if ((!icon_tpl_ok) || (!icon_bin_ok)) {
@@ -461,7 +462,7 @@ void iconDispGx2(Mtx mtx, s16 flags, s16 iconId) {
             total += data->frames[i].delay;
         }
 
-        t = ((s32) gp->retraceCount) % total;
+        t = (s32)gp->retraceCount % total;
         for (i = 0; i < data->numIcons; i++) {
             if (t < data->frames[i].delay) {
                 entry.tplId = data->frames[i].tplId;
@@ -469,9 +470,7 @@ void iconDispGx2(Mtx mtx, s16 flags, s16 iconId) {
             }
             t -= data->frames[i].delay;
         }
-
     }
-    ;
     PSMTXConcat(camera->view, mtx, m);
     iconGX(m, ep);
 }
@@ -534,13 +533,13 @@ void iconGetTexObj(GXTexObj* texObj, s32 iconId) {
 }
 
 void iconGetWidthHight(u16* width, u16* height, s32 iconId) {
-    IconBinData* entry;
+    IconBinData* data;
     TEXDescriptor* descriptor;
 
-    entry = iconGetBinData(iconId);
-    *width = entry->width;
-    *height = entry->height;
-    if (!*width && !*height) { // no tpl override
+    data = iconGetBinData(iconId);
+    *width = data->width;
+    *height = data->height;
+    if (!*width && !*height) { // no size in icon.bin: use the texture's size
         descriptor = TEXGet(icon_tpl, (u16)iconId);
         *width = descriptor->textureHeader->width;
         *height = descriptor->textureHeader->height;
@@ -726,7 +725,6 @@ IconEntry* iconNameToPtr(const char* name) {
 }
 
 void iconSetPos(const char* name, f32 x, f32 y, f32 z) {
-    IconWork* workptr = iconGetWork();
     IconEntry* entry = iconNameToPtr(name); // inline
 
     if (entry) {
@@ -809,7 +807,7 @@ s32 iconNumberDispGx(Mtx mtx, s32 number, BOOL small, GXColor color) {
     for (dp = digits, i = 0; i < count; dp++, i++) {
         MTXTrans(m, (f32)-i * width, 0.0f, 0.0f);
         MTXConcat(mtx, m, m);
-        iconDispGxCol(m, 0x10, !small ? (s32)suuji[*dp] : (s32)suuji_s[*dp], color);
+        iconDispGxCol(m, ICON_FLAG_2D, !small ? (s32)suuji[*dp] : (s32)suuji_s[*dp], color);
         ret += width;
     }
     return ret;

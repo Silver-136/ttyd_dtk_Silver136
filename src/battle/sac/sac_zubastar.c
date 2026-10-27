@@ -230,9 +230,9 @@ void zubastar_create_takaku(s32 n, Vec* pts) {
     ZubaStarWork* w = GetZubaStarPtr();
     ZSObj* t;
     s32 i;
-    w->ptrs[w->count] = BattleAlloc(0x50);
+    w->ptrs[w->count] = BattleAlloc(sizeof(ZSObj));
     t = w->ptrs[w->count];
-    t->v = BattleAlloc(n * 0xc);
+    t->v = BattleAlloc(n * sizeof(Vec));
     t->a = 0;
     t->n = n;
     t->pos = (Vec){0.0f, 0.0f, 0.0f};
@@ -264,12 +264,16 @@ void zubastar_bunkatu(Vec* p0, Vec* p1) {
             flags[j] = 0;
         }
         for (j = 0; j < t->n; j++) {
-            if (nhit == 2) break;
+            if (nhit == 2) {
+                break;
+            }
             if (zubastar_get_kouten(p0->x, p0->y, p1->x, p1->y, t->v[j].x, t->v[j].y,
                                     t->v[(j + 1) % t->n].x, t->v[(j + 1) % t->n].y, &ox, &oy)) {
                 for (k = 0; k < nhit; k++) {
                     if (flags[k] == 1) {
-                        if ((s32)ox == (s32)hit[k].x && (s32)oy == (s32)hit[k].y) break;
+                        if ((s32)ox == (s32)hit[k].x && (s32)oy == (s32)hit[k].y) {
+                            break;
+                        }
                     }
                 }
                 if (k == nhit) {
@@ -283,16 +287,16 @@ void zubastar_bunkatu(Vec* p0, Vec* p1) {
             }
         }
         if (nhit == 2) {
-            ZSObj* a = BattleAlloc(0x50);
-            ZSObj* b = BattleAlloc(0x50);
+            ZSObj* a = BattleAlloc(sizeof(ZSObj));
+            ZSObj* b = BattleAlloc(sizeof(ZSObj));
             for (j = 0; j < t->n; j++) {
                 if (j == idx[0]) {
                     a->n = (t->n - idx[1]) + 2 + j;
                     b->n = idx[1] - idx[0] + 2;
                 }
             }
-            a->v = BattleAlloc(a->n * 0xc);
-            b->v = BattleAlloc(b->n * 0xc);
+            a->v = BattleAlloc(a->n * sizeof(Vec));
+            b->v = BattleAlloc(b->n * sizeof(Vec));
             k = 0;
             for (j = 0; j <= idx[0]; j++) {
                 a->v[k++] = t->v[j];
@@ -333,7 +337,9 @@ void zubastar_bunkatu(Vec* p0, Vec* p1) {
 s32 zubastar_get_kouten(f32 x1, f32 y1, f32 x2, f32 y2, f32 x3, f32 y3, f32 x4, f32 y4, f32* ox, f32* oy) {
     f32 dx1 = x2 - x1;
     f32 d, a, t, e1, e2, dx2, b;
-    if (dx1 == 0.0f && (x4 - x3) == 0.0f) return 0;
+    if (dx1 == 0.0f && (x4 - x3) == 0.0f) {
+        return 0;
+    }
     if (dx1 != 0.0f) {
         e1 = dx1;
     } else {
@@ -348,12 +354,19 @@ s32 zubastar_get_kouten(f32 x1, f32 y1, f32 x2, f32 y2, f32 x3, f32 y3, f32 x4, 
     a = (y2 - y1) / e1;
     b = (y4 - y3) / e2;
     d = a - b;
-    if (d == 0.0f) return 0;
+    if (d == 0.0f) {
+        return 0;
+    }
     *ox = ((y3 - y1) + (a * x1 - b * x3)) / d;
-    if (dx1 != 0.0f) *oy = a * (*ox - x1) + y1;
-    else *oy = b * (*ox - x3) + y3;
+    if (dx1 != 0.0f) {
+        *oy = a * (*ox - x1) + y1;
+    } else {
+        *oy = b * (*ox - x3) + y3;
+    }
     t = (*ox - x3) / e2;
-    if (t >= 0.0f && t <= 1.0f) return 1;
+    if (t >= 0.0f && t <= 1.0f) {
+        return 1;
+    }
     return 0;
 }
 
@@ -386,10 +399,16 @@ USER_FUNC(zubastar_main) {
     case 5:
         w->phase = 6;
         w->f8 = 0;
-        if (w->gaugeState == 0) w->gaugeState = 5;
-        if (w->gaugeState == 15) w->gaugeState = 16;
+        if (w->gaugeState == 0) {
+            w->gaugeState = 5;
+        }
+        if (w->gaugeState == 15) {
+            w->gaugeState = 16;
+        }
     case 6:
-        if (w->cursor.timer == 10 && w->gaugeState == 10) w->phase = 10;
+        if (w->cursor.timer == 10 && w->gaugeState == 10) {
+            w->phase = 10;
+        }
         break;
     case 10:
         w->phase = 11;
@@ -400,7 +419,10 @@ USER_FUNC(zubastar_main) {
             w->phase = 20;
             w->level++;
             ev = evtEntry(nice_event, 0, EVENT_START_IMMEDIATE);
-                { s32 v = w->level + 1; ev->lwData[0] = v < 6 ? v : 6; }
+            {
+                s32 v = w->level + 1;
+                ev->lwData[0] = v < 6 ? v : 6;
+            }
             psndSFXOff(w->sfx);
             break;
         }
@@ -410,7 +432,9 @@ USER_FUNC(zubastar_main) {
             psndSFXOff(w->sfx);
             break;
         }
-        if (keyGetButtonTrg(0) & PAD_BUTTON_A) w->gaugeV = 2.8f;
+        if (keyGetButtonTrg(0) & PAD_BUTTON_A) {
+            w->gaugeV = 2.8f;
+        }
         break;
     case 15:
         w->gaugeState = 20;
@@ -468,6 +492,7 @@ USER_FUNC(zubastar_main) {
         top[0] = bot[0] = -96.0f;
         i = 0;
         n = 1;
+        // BUG: reads 17 entries of lines[16]; the extra entry overlaps capture, whose value is never 5
         for (; i < 17; i++) {
             ZSLine* l = &w->lines[i];
             if (l->state == 5) {
@@ -519,6 +544,7 @@ USER_FUNC(zubastar_main) {
         } else {
             w->lend.x = f;
         }
+        // BUG: bi is the widest gap along the bottom edge (dbot), but the point is taken from top[] and dtop[]
         f = top[bi] + dtop[bi] * rand() / 32767.0f;
         if (-240.0f == w->lstart.y) {
             w->lstart.x = f;
@@ -543,7 +569,9 @@ USER_FUNC(zubastar_main) {
         w->phase = 31;
         w->cursor.timer = 15;
     case 31:
-        if (w->cursor.timer == 20) w->phase = 35;
+        if (w->cursor.timer == 20) {
+            w->phase = 35;
+        }
         break;
     case 33:
         if (w->level >= 5) {
@@ -567,7 +595,9 @@ USER_FUNC(zubastar_main) {
         break;
     case 38:
         w->f8--;
-        if (w->f8 <= 0) w->phase = 40;
+        if (w->f8 <= 0) {
+            w->phase = 40;
+        }
         break;
     case 40:
         for (i = 0; i < 16; i++) {
@@ -587,7 +617,9 @@ USER_FUNC(zubastar_main) {
         w->cursor.pos.x = 0.0f;
         w->cursor.pos.y = intplGetValue(EASING_QUADRATIC_OUT, 300.0f, 300.0f, w->cursor.f4, 15);
         w->cursor.pos.z = 0.0f;
-        if (w->cursor.f4 >= 15) w->cursor.timer = 10;
+        if (w->cursor.f4 >= 15) {
+            w->cursor.timer = 10;
+        }
         break;
     case 10:
         w->cursor.pos = (Vec){0.0f, 300.0f, 0.0f};
@@ -600,7 +632,9 @@ USER_FUNC(zubastar_main) {
         w->cursor.pos.x = 0.0f;
         w->cursor.pos.y = intplGetValue(EASING_QUADRATIC_OUT, 300.0f, 300.0f, w->cursor.f4, 15);
         w->cursor.pos.z = 0.0f;
-        if (w->cursor.f4 >= 15) w->cursor.timer = 20;
+        if (w->cursor.f4 >= 15) {
+            w->cursor.timer = 20;
+        }
         break;
     case 25:
         w->cursor.timer = 26;
@@ -635,7 +669,9 @@ USER_FUNC(zubastar_main) {
         break;
     case 27:
         w->cursor.f4++;
-        if (w->cursor.f4 >= 5) w->cursor.timer = 28;
+        if (w->cursor.f4 >= 5) {
+            w->cursor.timer = 28;
+        }
         break;
     case 28:
         w->cursor.timer = 30;
@@ -665,23 +701,37 @@ USER_FUNC(zubastar_main) {
     case 6:
         w->gaugeTimer++;
         w->gaugePos.x = intplGetValue(EASING_QUADRATIC_OUT, -1000.0f, 50.0f, w->gaugeTimer, 30);
-        if (w->gaugeTimer >= 30) w->gaugeState = 10;
+        if (w->gaugeTimer >= 30) {
+            w->gaugeState = 10;
+        }
         break;
     case 10:
         w->gauge += w->gaugeV;
         w->gauge += w->gaugeAcc;
-        if (w->gauge > 100.0f) w->gauge = 100.0f;
-        if (w->gauge < 0.0f) w->gauge = 0.0f;
+        if (w->gauge > 100.0f) {
+            w->gauge = 100.0f;
+        }
+        if (w->gauge < 0.0f) {
+            w->gauge = 0.0f;
+        }
         w->gaugeV -= 0.25f;
-        if (w->gaugeV < 0.0f) w->gaugeV = 0.0f;
+        if (w->gaugeV < 0.0f) {
+            w->gaugeV = 0.0f;
+        }
         w->fa1++;
-        if (w->fa1 >= 8) w->fa1 = 0;
+        if (w->fa1 >= 8) {
+            w->fa1 = 0;
+        }
         if (w->gauge <= 0.0f) {
             w->gauge = 0.0f;
-            if (psndSFXChk(w->sfx) == 0) psndSFXOff(w->sfx);
+            if (psndSFXChk(w->sfx) == 0) {
+                psndSFXOff(w->sfx);
+            }
         }
         if (w->gauge > 0.0f) {
-            if (psndSFXChk(w->sfx) == -1) w->sfx = psndSFXOn("SFX_BTL_SAC_ZUBA_STAR1");
+            if (psndSFXChk(w->sfx) == -1) {
+                w->sfx = psndSFXOn("SFX_BTL_SAC_ZUBA_STAR1");
+            }
         }
         if (psndSFXChk(w->sfx) == 0) {
             psndSFX_pit(w->sfx, 683.0f * w->level + 4096.0f * w->gauge / 100.0f);
@@ -694,7 +744,9 @@ USER_FUNC(zubastar_main) {
         w->fa1 = 0;
         w->gaugeTimer++;
         w->gaugePos.x = intplGetValue(EASING_QUADRATIC_OUT, 50.0f, -1000.0f, w->gaugeTimer, 30);
-        if (w->gaugeTimer >= 30) w->gaugeTimer = 30;
+        if (w->gaugeTimer >= 30) {
+            w->gaugeTimer = 30;
+        }
         break;
     case 16:
         w->gaugeState = 6;
@@ -710,7 +762,9 @@ USER_FUNC(zubastar_main) {
     case 21:
         w->gaugeTimer++;
         w->gaugePos.x = intplGetValue(EASING_QUADRATIC_OUT, 50.0f, -1000.0f, w->gaugeTimer, 30);
-        if (w->gaugeTimer >= 30) w->gaugeTimer = 30;
+        if (w->gaugeTimer >= 30) {
+            w->gaugeTimer = 30;
+        }
         break;
     }
     for (i = 0; i < 16; i++) {
@@ -720,7 +774,9 @@ USER_FUNC(zubastar_main) {
             break;
         case 5:
             l->timer++;
-            if (l->timer > 60) l->timer = 0;
+            if (l->timer > 60) {
+                l->timer = 0;
+            }
             break;
         }
     }
@@ -745,10 +801,14 @@ USER_FUNC(zubastar_bomb) {
     case 0: {
         s32 c = 0;
         for (i = 0; i < w->count; i++) {
-            if (w->ptrs[i]->a != 10) break;
+            if (w->ptrs[i]->a != 10) {
+                break;
+            }
             c++;
         }
-        if (c == w->count) return 2;
+        if (c == w->count) {
+            return 2;
+        }
     }
     }
     sfx = "SFX_BTL_SAC_ZUBA_STAR3";
@@ -802,7 +862,7 @@ USER_FUNC(zubastar_bomb) {
 }
 
 s32 zubastar_init(void) {
-    memset(GetZubaStarPtr(), 0, 0x5E0);
+    memset(GetZubaStarPtr(), 0, sizeof(ZubaStarWork));
     return 2;
 }
 
@@ -829,7 +889,7 @@ void zubastar_capture(CameraId cam, void* param) {
     ZubaStarWork* w = GetZubaStarPtr();
     GXSetTexCopySrc(0xd0, 0, 400, 480);
     GXSetTexCopyDst(400, 480, GX_TF_RGB565, GX_FALSE);
-    GXCopyTex(*(void**)w->capture, GX_FALSE);
+    GXCopyTex(w->capture->address, GX_FALSE);
     GXPixModeSync();
 }
 
@@ -862,7 +922,7 @@ void zubastar_disp_bomb(CameraId cam, void* param) {
     GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
     GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_TEXC);
     GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_KONST);
-    GXInitTexObj(&tex, *(void**)w->capture, 400, 480, GX_TF_RGB565, GX_CLAMP, GX_CLAMP, GX_FALSE);
+    GXInitTexObj(&tex, w->capture->address, 400, 480, GX_TF_RGB565, GX_CLAMP, GX_CLAMP, GX_FALSE);
     GXInitTexObjLOD(&tex, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
     GXLoadTexObj(&tex, GX_TEXMAP0);
     for (i = 0; i < w->count; i++) {
@@ -886,8 +946,7 @@ void zubastar_disp_bomb(CameraId cam, void* param) {
     }
 }
 
-static inline void
-setG(u8 a) {
+static inline void setG(u8 a) {
     GXColor col = {0, 0, 0, 0xff};
     col.r = a;
     col.g = a;
@@ -895,11 +954,10 @@ setG(u8 a) {
     GXSetChanMatColor(GX_COLOR0A0, col);
 }
 
-static inline void
-dispA(Mtx m, s32 i) {
+static inline void dispA(Mtx m, s32 i) {
     GXColor ca = {0xff, 0xff, 0xff, 0};
     ca.a = 0xff - (i + 1) * 50;
-    iconDispGxCol(m, 0x10, ICON_SAC_GENKI1, ca);
+    iconDispGxCol(m, ICON_FLAG_2D, ICON_SAC_GENKI1, ca);
 }
 
 void zubastar_disp2D(CameraId cam, void* param) {
@@ -912,7 +970,8 @@ void zubastar_disp2D(CameraId cam, void* param) {
         Vec pos = {0.0f, 0.0f, 0.0f};
         pos.x = w->gaugePos.x - 200.0f;
         pos.y = 60.0f + w->gaugePos.y;
-        ((void (*)(Vec*, s16, s32, f32))iconDispGx)(&pos, 0x10, icon, 1.0f);
+        // FAKE: calls iconDispGx through a cast that passes the icon id as s32; the plain call changes the object
+        ((void (*)(Vec*, s16, s32, f32))iconDispGx)(&pos, ICON_FLAG_2D, icon, 1.0f);
         BattleAcDrawGauge(w->gaugePos.x, w->gaugePos.y, 0xb1, 0.01f * w->gauge, 4, 0x1a, 0x34, 0x4e, 0);
     }
     GXSetCullMode(GX_CULL_NONE);
@@ -945,7 +1004,7 @@ void zubastar_disp2D(CameraId cam, void* param) {
             GXPosition3f32(l->x1, l->y1, 0.0f);
         }
     }
-    iconDispGx(&cur->pos, 0x10, ICON_SAC_GENKI1, 1.0f);
+    iconDispGx(&cur->pos, ICON_FLAG_2D, ICON_SAC_GENKI1, 1.0f);
     if (cur->timer >= 25 && cur->timer < 30) {
         for (i = 0; i < 4; i++) {
             Mtx m;
@@ -954,9 +1013,6 @@ void zubastar_disp2D(CameraId cam, void* param) {
         }
     }
 }
-
-USER_FUNC(zubastar_main);
-
 
 EVT_BEGIN(marioAttackEvent_ZubaStar)
     CALL(zubastar_init)
