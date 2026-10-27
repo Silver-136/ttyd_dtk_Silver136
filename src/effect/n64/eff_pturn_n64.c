@@ -257,7 +257,7 @@ void pturn_main_dispp(CameraId cameraId, EffectEntry* effect) {
             PSMTXConcat(mtx, scale, mtx);
             PSMTXConcat(tmp, mtx, mtx);
             GXLoadPosMtxImm(mtx, GX_PNMTX0);
-            GXSetCurrentMtx(0);
+            GXSetCurrentMtx(GX_PNMTX0);
             GXSetTevColor(GX_TEVREG0, (GXColor){0, 0, 0, p->alpha});
             if (p->alpha == 255) {
                 GXSetNumChans(1);
@@ -325,7 +325,7 @@ void pturn_num_dispp(CameraId cameraId, EffectEntry* effect) {
         PSMTXConcat(mtx, scale, mtx);
         PSMTXConcat(tmp, mtx, mtx);
         GXLoadPosMtxImm(mtx, GX_PNMTX0);
-        GXSetCurrentMtx(0);
+        GXSetCurrentMtx(GX_PNMTX0);
         if (n > 0) {
             GXSetNumChans(1);
             GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_VTX, GX_LIGHT_NULL, GX_DF_NONE, GX_AF_NONE);

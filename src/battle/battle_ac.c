@@ -378,7 +378,7 @@ static inline void gaugeQuad(CameraEntry* cam, f32 x0, f32 y0, f32 x1, f32 y1, u
     ty1 = y1;
     if (tx1 >= tx0) {
         btlDispGXInit2DRasta();
-        GXLoadPosMtxImm(cam->view, 0);
+        GXLoadPosMtxImm(cam->view, GX_PNMTX0);
         btlDispGXQuads2DRasta(tx0, ty0, tx1, ty1, r, g, b, a);
     }
 }
@@ -413,7 +413,7 @@ void BattleAcDrawGauge(s32 x, s32 y, s32 width, f32 ratio, s32 level, s32 a, s32
 
     if (level >= 2) {
         btlDispGXInit2DRasta();
-        GXLoadPosMtxImm(cam->view, 0);
+        GXLoadPosMtxImm(cam->view, GX_PNMTX0);
         btlDispGXQuads2DRasta(x - 289, y + 50, x - 289, y + 32, 0x2D, 0x38, 0xD2, 0xFF);
         if (a > 0) {
             {
@@ -424,7 +424,7 @@ void BattleAcDrawGauge(s32 x, s32 y, s32 width, f32 ratio, s32 level, s32 a, s32
                 tx0 = tx1 - 2.0f;
                 if (tx1 >= tx0) {
                     btlDispGXInit2DRasta();
-                    GXLoadPosMtxImm(cam->view, 0);
+                    GXLoadPosMtxImm(cam->view, GX_PNMTX0);
                     btlDispGXQuads2DRasta(tx0, ty0, tx1, ty1, 0x54, 0x28, 0xD1, 0xFF);
                 }
             }
@@ -438,7 +438,7 @@ void BattleAcDrawGauge(s32 x, s32 y, s32 width, f32 ratio, s32 level, s32 a, s32
                 tx0 = tx1 - 2.0f;
                 if (tx1 >= tx0) {
                     btlDispGXInit2DRasta();
-                    GXLoadPosMtxImm(cam->view, 0);
+                    GXLoadPosMtxImm(cam->view, GX_PNMTX0);
                     btlDispGXQuads2DRasta(tx0, ty0, tx1, ty1, 0x7D, 0x2C, 0xB5, 0xFF);
                 }
             }
@@ -452,7 +452,7 @@ void BattleAcDrawGauge(s32 x, s32 y, s32 width, f32 ratio, s32 level, s32 a, s32
                 tx0 = tx1 - 2.0f;
                 if (tx1 >= tx0) {
                     btlDispGXInit2DRasta();
-                    GXLoadPosMtxImm(cam->view, 0);
+                    GXLoadPosMtxImm(cam->view, GX_PNMTX0);
                     btlDispGXQuads2DRasta(tx0, ty0, tx1, ty1, 0xA1, 0x1B, 0x55, 0xFF);
                 }
             }
@@ -476,7 +476,7 @@ void BattleAcDrawGauge(s32 x, s32 y, s32 width, f32 ratio, s32 level, s32 a, s32
             f32 tx0 = x - 289, ty0 = y + 50, tx1 = (f32)(x - 289) + (f32)width * ratio, ty1 = y + 32;
             if (tx1 >= tx0) {
                 btlDispGXInit2DRasta();
-                GXLoadPosMtxImm(cam->view, 0);
+                GXLoadPosMtxImm(cam->view, GX_PNMTX0);
                 btlDispGXQuads2DRasta(tx0, ty0, tx1, ty1, color.r, color.g, color.b, color.a);
             }
         }

@@ -262,8 +262,8 @@ void effCloudDisp(CameraId cameraId, EffectEntry* effect) {
     GXLoadTexObj(&texObj, GX_TEXMAP0);
     GXSetTevColor(GX_TEVREG0, (GXColor){work->r, work->g, work->b, fade});
     GXSetTevColor(GX_TEVREG1, (GXColor){work->r2, work->g2, work->b2});
-    GXLoadPosMtxImm(camera->view, 0);
-    GXSetCurrentMtx(0);
+    GXLoadPosMtxImm(camera->view, GX_PNMTX0);
+    GXSetCurrentMtx(GX_PNMTX0);
     GXSetCullMode(GX_CULL_NONE);
     vtx = (effN64Vtx*)smartAlloc(0x690, 3)->address;
     memset(vtx, 0, 0x690);

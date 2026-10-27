@@ -699,8 +699,8 @@ void sysWaitDrawSync(void) {
 void sysDummyDraw(Mtx mtx) {
     f32 vtxMin, vtxMax;
 
-    GXLoadPosMtxImm(mtx, 0);
-    GXSetCurrentMtx(0);
+    GXLoadPosMtxImm(mtx, GX_PNMTX0);
+    GXSetCurrentMtx(GX_PNMTX0);
     GXSetNumChans(0);
     GXSetNumTexGens(1);
     GXSetNumTevStages(1);

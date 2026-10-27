@@ -526,7 +526,7 @@ void effUltraHammerDisp(enum CameraId camId, void *param) {
     PSMTXConcat(mtx, yawMtx, mtx);
     PSMTXConcat(mtx, scaleMtx, baseMtx);
     GXSetNumChans(1);
-    GXSetChanCtrl(GX_COLOR0A0, 0, GX_SRC_REG, GX_SRC_VTX, 0, GX_DF_NONE, GX_AF_NONE);
+    GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_VTX, 0, GX_DF_NONE, GX_AF_NONE);
     GXSetNumTevStages(2);
     GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
     GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
@@ -539,7 +539,7 @@ void effUltraHammerDisp(enum CameraId camId, void *param) {
     GXSetTevColorIn(GX_TEVSTAGE1, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_CPREV);
     GXSetTevAlphaIn(GX_TEVSTAGE1, GX_CA_ZERO, GX_CA_APREV, GX_CA_A0, GX_CA_ZERO);
     GXSetNumTexGens(1);
-    GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, 30, 0, 125);
+    GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX0, GX_FALSE, GX_PTIDENTITY);
     effGetTexObj(EFF_TEX(145), &texObj);
     GXLoadTexObj(&texObj, GX_TEXMAP0);
     GXSetCullMode(GX_CULL_NONE);
@@ -556,10 +556,10 @@ void effUltraHammerDisp(enum CameraId camId, void *param) {
             }
             PSMTXConcat(baseMtx, mtx, mtx);
             PSMTXConcat(cam->view, mtx, mtx);
-            GXLoadPosMtxImm(mtx, 0);
-            GXSetCurrentMtx(0);
+            GXLoadPosMtxImm(mtx, GX_PNMTX0);
+            GXSetCurrentMtx(GX_PNMTX0);
             PSMTXTrans(mtx, data->offsetX, data->offsetY, 0.0f);
-            GXLoadTexMtxImm(mtx, 30, GX_MTX2x4);
+            GXLoadTexMtxImm(mtx, GX_TEXMTX0, GX_MTX2x4);
             GXClearVtxDesc();
             GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
             GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_TEX_ST, GX_RGBA4, 10);

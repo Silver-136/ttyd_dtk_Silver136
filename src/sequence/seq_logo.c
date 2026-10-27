@@ -442,8 +442,8 @@ void logoDisp(CameraId camId, void* param) {
                 MTXOrtho(ortho, -23.0f, 448.0f, 0.0f, 608.0f, -100.0f, 100.0f);
                 GXSetProjection(ortho, GX_ORTHOGRAPHIC);
                 MTXIdentity(position);
-                GXLoadPosMtxImm(position, 0);
-                GXSetCurrentMtx(0);
+                GXLoadPosMtxImm(position, GX_PNMTX0);
+                GXSetCurrentMtx(GX_PNMTX0);
                 GXSetCullMode(GX_CULL_NONE);
                 GXClearVtxDesc();
                 GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
@@ -522,8 +522,8 @@ void logoDisp(CameraId camId, void* param) {
                 MTXOrtho(ortho, -23.0f, 448.0f, 0.0f, 608.0f, -100.0f, 100.0f);
                 GXSetProjection(ortho, GX_ORTHOGRAPHIC);
                 MTXIdentity(position);
-                GXLoadPosMtxImm(position, 0);
-                GXSetCurrentMtx(0);
+                GXLoadPosMtxImm(position, GX_PNMTX0);
+                GXSetCurrentMtx(GX_PNMTX0);
                 GXSetCullMode(GX_CULL_NONE);
                 GXClearVtxDesc();
                 GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
@@ -565,8 +565,8 @@ void logoDisp(CameraId camId, void* param) {
                 MTXOrtho(ortho, 0.0f, 448.0f, 0.0f, 608.0f, -100.0f, 100.0f);
                 GXSetProjection(ortho, GX_ORTHOGRAPHIC);
                 MTXIdentity(position);
-                GXLoadPosMtxImm(position, 0);
-                GXSetCurrentMtx(0);
+                GXLoadPosMtxImm(position, GX_PNMTX0);
+                GXSetCurrentMtx(GX_PNMTX0);
                 GXSetCullMode(GX_CULL_NONE);
                 GXClearVtxDesc();
                 GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
@@ -618,8 +618,8 @@ void logoDisp(CameraId camId, void* param) {
                 MTXOrtho(ortho, 0.0f, 448.0f, 0.0f, 608.0f, -100.0f, 100.0f);
                 GXSetProjection(ortho, GX_ORTHOGRAPHIC);
                 MTXIdentity(position);
-                GXLoadPosMtxImm(position, 0);
-                GXSetCurrentMtx(0);
+                GXLoadPosMtxImm(position, GX_PNMTX0);
+                GXSetCurrentMtx(GX_PNMTX0);
                 GXSetCullMode(GX_CULL_NONE);
                 GXClearVtxDesc();
                 GXSetVtxDesc(GX_VA_POS, GX_DIRECT);

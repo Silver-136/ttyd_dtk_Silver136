@@ -2213,8 +2213,8 @@ void mono_capture(CameraId camId, void* param) {
     BattleUnitPart* part = BtlUnit_GetPartsPtr(unit, 1);
     unit->screenTexBuf = smartAlloc(GXGetTexBufferSize(0x260, 0x1E0, 1, 0, 0), 1);
     GXSetTexCopySrc(0, 0, 0x260, 0x1E0);
-    GXSetTexCopyDst(0x260, 0x1E0, 1, 0);
-    GXCopyTex(unit->screenTexBuf->address, 0);
+    GXSetTexCopyDst(0x260, 0x1E0, 1, GX_FALSE);
+    GXCopyTex(unit->screenTexBuf->address, GX_FALSE);
     GXPixModeSync();
     part->animFlags &= ~PART_ANIM_NO_DISP;
 }
@@ -2231,8 +2231,8 @@ void mono_disp(CameraId camId, BattleUnit* unit) {
         GXInitTexObj(&tex, buf, 0x260, 0x1E0, GX_TF_I8, GX_CLAMP, GX_CLAMP, GX_FALSE);
         GXInitTexObjLOD(&tex, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
         GXLoadTexObj(&tex, GX_TEXMAP0);
-        GXLoadPosMtxImm(cam->view, 0);
-        GXSetCurrentMtx(0);
+        GXLoadPosMtxImm(cam->view, GX_PNMTX0);
+        GXSetCurrentMtx(GX_PNMTX0);
         GXSetNumChans(0);
         GXSetNumTexGens(1);
         GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);

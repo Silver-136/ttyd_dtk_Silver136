@@ -158,7 +158,7 @@ void effSunlightDisp(CameraId cameraId, EffectEntry* effect) {
     GXSetProjection(ortho, GX_ORTHOGRAPHIC);
     MTXLookAt(view, &pos, &up, &target);
     GXLoadPosMtxImm(view, GX_PNMTX0);
-    GXSetCurrentMtx(0);
+    GXSetCurrentMtx(GX_PNMTX0);
     GXSetTevColor(GX_TEVREG0, (GXColor){work->color[0], work->color[1], work->color[2], alpha >> 1});
     GXSetTevColor(GX_TEVREG1, (GXColor){work->color[3], work->color[4], work->color[5], work->color[6]});
     GXSetNumChans(1);

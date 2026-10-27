@@ -1139,8 +1139,8 @@ void winTexSet(u32 textureId, Vec translate, Vec scale, GXColor color) {
     PSMTXScale(scl, scale.x * GXGetTexObjWidth(&obj), sy, scale.z);
     PSMTXConcat(trans, scl, m);
     PSMTXConcat(camGetPtr(CAMERA_2D)->view, m, m);
-    GXLoadPosMtxImm(m, 0);
-    GXSetCurrentMtx(0);
+    GXLoadPosMtxImm(m, GX_PNMTX0);
+    GXSetCurrentMtx(GX_PNMTX0);
     GXBegin(GX_QUADS, GX_VTXFMT0, 4);
     GXPosition3f32(-0.5f, -0.5f, 0.0f);
     GXTexCoord2f32(0.0f, 1.0f);
@@ -1172,8 +1172,8 @@ void winTexSetNearest(u32 textureId, Vec translate, Vec scale, GXColor color) {
     PSMTXScale(scl, scale.x * GXGetTexObjWidth(&obj), sy, scale.z);
     PSMTXConcat(trans, scl, m);
     PSMTXConcat(camGetPtr(CAMERA_2D)->view, m, m);
-    GXLoadPosMtxImm(m, 0);
-    GXSetCurrentMtx(0);
+    GXLoadPosMtxImm(m, GX_PNMTX0);
+    GXSetCurrentMtx(GX_PNMTX0);
     GXBegin(GX_QUADS, GX_VTXFMT0, 4);
     GXPosition3f32(-0.5f, -0.5f, 0.0f);
     GXTexCoord2f32(0.0f, 1.0f);
@@ -1215,8 +1215,8 @@ void winTexSetRot(u32 textureId, Vec translate, Vec scale, GXColor color, f32 ro
     PSMTXConcat(trans, r, m);
     PSMTXConcat(m, scl, m);
     PSMTXConcat(camGetPtr(CAMERA_2D)->view, m, m);
-    GXLoadPosMtxImm(m, 0);
-    GXSetCurrentMtx(0);
+    GXLoadPosMtxImm(m, GX_PNMTX0);
+    GXSetCurrentMtx(GX_PNMTX0);
     GXBegin(GX_QUADS, GX_VTXFMT0, 4);
     GXPosition3f32(-0.5f, -0.5f, 0.0f);
     GXTexCoord2f32(0.0f, 1.0f);
@@ -1271,8 +1271,8 @@ void winTexSet_x2(u32 textureId1, u32 textureId2, Vec translate, Vec scale, GXCo
     PSMTXScale(scl, scale.x * GXGetTexObjWidth(&obj), sy, scale.z);
     PSMTXConcat(trans, scl, m);
     PSMTXConcat(camGetPtr(CAMERA_2D)->view, m, m);
-    GXLoadPosMtxImm(m, 0);
-    GXSetCurrentMtx(0);
+    GXLoadPosMtxImm(m, GX_PNMTX0);
+    GXSetCurrentMtx(GX_PNMTX0);
     GXBegin(GX_QUADS, GX_VTXFMT0, 4);
     GXPosition3f32(-0.5f, -0.5f, 0.0f);
     GXTexCoord2f32(0.0f, 1.0f);
@@ -1358,8 +1358,8 @@ void winIconSet(s32 iconId, Vec translate, Vec scale, GXColor color) {
     PSMTXScale(scl, scale.x * GXGetTexObjWidth(&obj), sy, scale.z);
     PSMTXConcat(trans, scl, m);
     PSMTXConcat(camGetPtr(CAMERA_2D)->view, m, m);
-    GXLoadPosMtxImm(m, 0);
-    GXSetCurrentMtx(0);
+    GXLoadPosMtxImm(m, GX_PNMTX0);
+    GXSetCurrentMtx(GX_PNMTX0);
     GXBegin(GX_QUADS, GX_VTXFMT0, 4);
     GXPosition3f32(-0.5f, -0.5f, 0.0f);
     GXTexCoord2f32(0.0f, 1.0f);

@@ -286,7 +286,7 @@ void noiseDisp(CameraId cameraId, void* param) {
     GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_A0);
     GXSetTevColor(GX_TEVREG0, (GXColor){0, 0, 0, (u8)(EvtWord)param});
     GXLoadPosMtxImm(cam->view, GX_PNMTX0);
-    GXSetCurrentMtx(0);
+    GXSetCurrentMtx(GX_PNMTX0);
     GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_CLEAR);
     GXSetZCompLoc(GX_TRUE);
     GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_AND, GX_ALWAYS, 0);
@@ -3141,7 +3141,7 @@ void disp_horogram(CameraId cameraId, void* param) {
         PSMTXRotRad(rot, 'y', 0.017453292f * angle);
         PSMTXConcat(trans, rot, mtx);
         PSMTXConcat(camGetPtr(cameraId)->view, mtx, mtx);
-        GXSetCurrentMtx(0);
+        GXSetCurrentMtx(GX_PNMTX0);
         GXLoadTexObj(&horogram_wp->tex0, GX_TEXMAP0);
         GXLoadTexObj(&horogram_wp->tex1, GX_TEXMAP1);
         GXClearVtxDesc();

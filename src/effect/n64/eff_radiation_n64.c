@@ -382,7 +382,7 @@ void effRadiationDisp(CameraId cameraId, EffectEntry* effect) {
         }
         PSMTXConcat(camera->view, tmp, tmp);
         GXLoadPosMtxImm(tmp, GX_PNMTX0);
-        GXSetCurrentMtx(0);
+        GXSetCurrentMtx(GX_PNMTX0);
         switch (type) {
         case 0:
         case 1:

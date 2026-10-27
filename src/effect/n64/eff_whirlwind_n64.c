@@ -271,8 +271,8 @@ void effWhirlwindDisp(CameraId cameraId, EffectEntry* effect) {
             PSMTXConcat(rot, mtx, mtx);
         }
         PSMTXConcat(viewMtx, mtx, mtx);
-        GXLoadPosMtxImm(mtx, 0);
-        GXSetCurrentMtx(0);
+        GXLoadPosMtxImm(mtx, GX_PNMTX0);
+        GXSetCurrentMtx(GX_PNMTX0);
         GXSetTevColor(GX_TEVREG0, (GXColor){work->r, work->g, work->b, alpha});
         GXBegin(GX_TRIANGLES, GX_VTXFMT0, 72);
         tri2(0, 1, 2, 0, 0, 2, 3, 0);

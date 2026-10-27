@@ -602,8 +602,8 @@ void winBgGX(WindowWork* wp, s32 type, f32 x, f32 y) {
     GXSetTevSwapMode(GX_TEVSTAGE0, GX_TEV_SWAP0, GX_TEV_SWAP0);
     PSMTXTrans(m, x, 18.0f + y, 0.0f);
     PSMTXConcat(camGetPtr(CAMERA_2D)->view, m, m);
-    GXLoadPosMtxImm(m, 0);
-    GXSetCurrentMtx(0);
+    GXLoadPosMtxImm(m, GX_PNMTX0);
+    GXSetCurrentMtx(GX_PNMTX0);
     GXSetCullMode(GX_CULL_NONE);
     GXClearVtxDesc();
     GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
@@ -875,8 +875,8 @@ void winKirinukiGX(WindowWork* wp, s32 type, f32 x, f32 y, f32 w, f32 h) {
     GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
-    GXLoadPosMtxImm(camGetPtr(CAMERA_2D)->view, 0);
-    GXSetCurrentMtx(0);
+    GXLoadPosMtxImm(camGetPtr(CAMERA_2D)->view, GX_PNMTX0);
+    GXSetCurrentMtx(GX_PNMTX0);
     if (type == 0) {
         winRootTexQuad(wp, 0xB, x, y, 8, 8);
         winRootTexQuad(wp, 0x9, x + 8, y, w - 8 - 8, 8);
@@ -973,8 +973,8 @@ void winNameGX(WindowWork* wp, s32 type, f32 x, f32 y, f32 w, f32 h) {
     GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
-    GXLoadPosMtxImm(camGetPtr(CAMERA_2D)->view, 0);
-    GXSetCurrentMtx(0);
+    GXLoadPosMtxImm(camGetPtr(CAMERA_2D)->view, GX_PNMTX0);
+    GXSetCurrentMtx(GX_PNMTX0);
 
     if (type == 0) {
         NAME_TEX(t0a, 0x13, m0a, w - 16.0f, 32.0f);
@@ -1152,16 +1152,16 @@ void winHalfBookGX(TEXPalette* tpl, s32 a, f32 x, f32 y) {
             GXSetZMode(GX_FALSE, GX_ALWAYS, GX_FALSE);
             MTXTrans(m, 8.0f, -8.0f, 0.0f);
             MTXConcat(camGetPtr(CAMERA_2D)->view, m, m);
-            GXLoadPosMtxImm(m, 0);
-            GXSetCurrentMtx(0);
+            GXLoadPosMtxImm(m, GX_PNMTX0);
+            GXSetCurrentMtx(GX_PNMTX0);
         } else {
             GXSetChanMatColor(GX_COLOR0A0, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
             GXSetBlendMode(GX_BM_NONE, GX_BL_ONE, GX_BL_ZERO, GX_LO_CLEAR);
             GXSetZCompLoc(GX_FALSE);
             GXSetAlphaCompare(GX_GEQUAL, 0x80, GX_AOP_OR, GX_NEVER, 0);
             GXSetZMode(GX_FALSE, GX_ALWAYS, GX_FALSE);
-            GXLoadPosMtxImm(camGetPtr(CAMERA_2D)->view, 0);
-            GXSetCurrentMtx(0);
+            GXLoadPosMtxImm(camGetPtr(CAMERA_2D)->view, GX_PNMTX0);
+            GXSetCurrentMtx(GX_PNMTX0);
         }
         winHalfBookQuad(tpl, 0x33, x + 8.0f, y - 8.0f, 320.0f, 248.0f);
         winHalfBookQuad(tpl, 0x28, x, y, 16.0f, 8.0f);
@@ -1199,8 +1199,8 @@ void winMailGX(WindowWork* wp, f32 x, f32 y) {
     GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
-    GXLoadPosMtxImm(camGetPtr(CAMERA_2D)->view, 0);
-    GXSetCurrentMtx(0);
+    GXLoadPosMtxImm(camGetPtr(CAMERA_2D)->view, GX_PNMTX0);
+    GXSetCurrentMtx(GX_PNMTX0);
     winRootTexQuad(wp, 0x4D, x, y, 32, 24);
     winRootTexQuad(wp, 0x63, x + 32, y, 344, 24);
     winRootTexQuad(wp, 0x64, x + 200, y, 16, 24);
@@ -1458,8 +1458,8 @@ void winWazaGX(WindowWork* wp, s32 a, f32 x, f32 y, f32 w, f32 h) {
     GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
-    GXLoadPosMtxImm(camGetPtr(CAMERA_2D)->view, 0);
-    GXSetCurrentMtx(0);
+    GXLoadPosMtxImm(camGetPtr(CAMERA_2D)->view, GX_PNMTX0);
+    GXSetCurrentMtx(GX_PNMTX0);
 
     w1 = 0.75f * w;
     winWazaQuad(wp, 0x98, x, y, w1, 32.0f);
@@ -2202,10 +2202,10 @@ static inline void winSortTex(WindowWork* wp, s32 id, f32 x, f32 y, f32 w, f32 h
     GXInitTexObjLOD(&obj, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
     GXLoadTexObj(&obj, GX_TEXMAP0);
     GXSetNumTexGens(1);
-    GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, 0x1E, GX_FALSE, 0x7D);
+    GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX0, GX_FALSE, GX_PTIDENTITY);
     PSMTXScale(m, (f32)winSortFabs(w) / (f32)GXGetTexObjWidth(&obj), (f32)winSortFabs(h) / (f32)GXGetTexObjHeight(&obj),
                1.0f);
-    GXLoadTexMtxImm(m, 0x1E, GX_MTX2x4);
+    GXLoadTexMtxImm(m, GX_TEXMTX0, GX_MTX2x4);
     GXBegin(GX_QUADS, GX_VTXFMT0, 4);
     GXPosition3f32(x, y, 0.0f);
     GXTexCoord2f32(0.0f, 0.0f);
@@ -2242,8 +2242,8 @@ void winSortGX(WindowWork* wp) {
     GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
-    GXLoadPosMtxImm(camGetPtr(CAMERA_2D)->view, 0);
-    GXSetCurrentMtx(0);
+    GXLoadPosMtxImm(camGetPtr(CAMERA_2D)->view, GX_PNMTX0);
+    GXSetCurrentMtx(GX_PNMTX0);
 
     if (wp->sortType == 7) {
         GXSetScissor((u32)(16.0f + (16.0f + (304.0f + wp->item.mailX))),
@@ -2354,8 +2354,8 @@ void winKageGX(WindowWork* wp, f32 x, f32 y, f32 z, f32 s, GXColor color) {
     PSMTXConcat(trans, rot, out);
     PSMTXConcat(out, scale, out);
     PSMTXConcat(camGetPtr(CAMERA_2D)->view, out, out);
-    GXLoadPosMtxImm(out, 0);
-    GXSetCurrentMtx(0);
+    GXLoadPosMtxImm(out, GX_PNMTX0);
+    GXSetCurrentMtx(GX_PNMTX0);
     GXSetCullMode(GX_CULL_NONE);
     GXClearVtxDesc();
     GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
@@ -2378,8 +2378,8 @@ void winZClear(void) {
 
     PSMTXTrans(mtx, 0.0f, 0.0f, -1000.0f);
     PSMTXConcat(camGetCurPtr()->view, mtx, mtx);
-    GXLoadPosMtxImm(mtx, 0);
-    GXSetCurrentMtx(0);
+    GXLoadPosMtxImm(mtx, GX_PNMTX0);
+    GXSetCurrentMtx(GX_PNMTX0);
     GXSetAlphaUpdate(GX_FALSE);
     GXSetColorUpdate(GX_FALSE);
     GXSetNumChans(1);
@@ -2537,8 +2537,8 @@ void winRootBgDrawDisp(s32 unused, WindowWork* bg) {
         GXSetZCompLoc(GX_TRUE);
         GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_AND, GX_ALWAYS, 0);
         GXSetZMode(GX_FALSE, GX_ALWAYS, GX_FALSE);
-        GXLoadPosMtxImm(camGetPtr(CAMERA_2D)->view, 0);
-        GXSetCurrentMtx(0);
+        GXLoadPosMtxImm(camGetPtr(CAMERA_2D)->view, GX_PNMTX0);
+        GXSetCurrentMtx(GX_PNMTX0);
         GXInitTexObj(&obj, bg->texBuf->address, gp->fbWidth, gp->efbHeight, GX_TF_RGB565, GX_CLAMP, GX_CLAMP, GX_FALSE);
         GXLoadTexObj(&obj, GX_TEXMAP0);
         GXSetCullMode(GX_CULL_NONE);

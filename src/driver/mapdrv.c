@@ -1715,12 +1715,12 @@ void _mapDispMapObj(CameraId cam, MapObject *obj) {
     }
 
     PSMTXConcat(camera->view, obj->modelWorldMtx, mtx);
-    GXLoadPosMtxImm(mtx, 0);
+    GXLoadPosMtxImm(mtx, GX_PNMTX0);
     if (!(obj->flags & MAP_OBJ_FLAG_DISPLAY_LIST)) {
         PSMTXInvXpose(mtx, nrm);
-        GXLoadNrmMtxImm(nrm, 0);
+        GXLoadNrmMtxImm(nrm, GX_PNMTX0);
     }
-    GXSetCurrentMtx(0);
+    GXSetCurrentMtx(GX_PNMTX0);
     GXGetCullMode(&cull);
     if (cull != culling[obj->joints->drawMode->cullMode]) {
         GXSetCullMode(culling[obj->joints->drawMode->cullMode]);
@@ -1842,10 +1842,10 @@ void _mapDispMapObj_NoMaterial(CameraId cam, MapObject* obj) {
     int i;
 
     PSMTXConcat(camGetPtr(cam)->view, obj->modelWorldMtx, mtx);
-    GXLoadPosMtxImm(mtx, 0);
+    GXLoadPosMtxImm(mtx, GX_PNMTX0);
     PSMTXInvXpose(mtx, nrm);
-    GXLoadNrmMtxImm(nrm, 0);
-    GXSetCurrentMtx(0);
+    GXLoadNrmMtxImm(nrm, GX_PNMTX0);
+    GXSetCurrentMtx(GX_PNMTX0);
     GXSetCullMode(GX_CULL_ALL);
     GXSetNumChans(1);
     GXSetChanMatColor(GX_COLOR0A0, (GXColor){0, 0, 0, 0});
@@ -2325,10 +2325,10 @@ void mapSetMaterialTev(s32 texCount, s32 drawMode, s32 flags, Mtx mtx) {
                 }
 
                 MTXTrans(queen_mtx, scrl_uv[0], scrl_uv[1], 0.0f);
-                GXLoadTexMtxImm(queen_mtx, 0x1E, GX_MTX2x4);
+                GXLoadTexMtxImm(queen_mtx, GX_TEXMTX0, GX_MTX2x4);
                 GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX0, GX_FALSE, GX_PTIDENTITY);
                 MTXTrans(queen_mtx, scrl_uv[2], scrl_uv[3], 0.0f);
-                GXLoadTexMtxImm(queen_mtx, 0x21, GX_MTX2x4);
+                GXLoadTexMtxImm(queen_mtx, GX_TEXMTX1, GX_MTX2x4);
                 GXSetTexCoordGen2(GX_TEXCOORD1, GX_TG_MTX2x4, GX_TG_TEX1, GX_TEXMTX1, GX_FALSE, GX_PTIDENTITY);
                 GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
                 GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);

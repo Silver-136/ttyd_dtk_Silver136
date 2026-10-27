@@ -233,8 +233,8 @@ void effShockDisp(CameraId cameraId, EffectEntry* effect) {
         PSMTXScale(mtx, 0.25f * w->scale, 0.25f * w->scale, 1.0f);
         PSMTXConcat(base, mtx, base);
         PSMTXConcat(res, base, base);
-        GXLoadPosMtxImm(base, 0);
-        GXSetCurrentMtx(0);
+        GXLoadPosMtxImm(base, GX_PNMTX0);
+        GXSetCurrentMtx(GX_PNMTX0);
         GXSetNumChans(1);
         GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_VTX, GX_LIGHT_NULL, GX_DF_NONE, GX_AF_NONE);
         GXSetNumTexGens(1);

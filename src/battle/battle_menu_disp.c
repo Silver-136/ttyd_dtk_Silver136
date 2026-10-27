@@ -210,7 +210,7 @@ void DrawMainIconHukidasi(BattleSubMenu* menu, BattleCommandAct* act, Mtx m, f32
     PSMTXConcat(out, scl, out);
     PSMTXConcat(out, trn, out);
     PSMTXConcat(cam->view, out, out);
-    GXLoadPosMtxImm(out, 0);
+    GXLoadPosMtxImm(out, GX_PNMTX0);
     TEXGetGXTexObjFromPalette(*wp->menuTex->data, &texobj, 1);
     GXLoadTexObj(&texobj, GX_TEXMAP0);
     if (s >= 0.0f && s <= 180.0f) {
@@ -301,7 +301,7 @@ void DrawMainIconCircle(BattleSubMenu* menu, BattleCommandAct* act, Mtx m, Vec v
     PSMTXConcat(m, rot, out);
     PSMTXConcat(out, scl, out);
     PSMTXConcat(cam->view, out, out);
-    GXLoadPosMtxImm(out, 0);
+    GXLoadPosMtxImm(out, GX_PNMTX0);
     TEXGetGXTexObjFromPalette(*wp->menuTex->data, &texobj, 0);
     GXLoadTexObj(&texobj, GX_TEXMAP0);
     if (s >= 0.0f && s <= 180.0f) {
@@ -416,7 +416,7 @@ void DrawSubIconSub(BattleSubMenu* menu, s32 i, Mtx m, s32 enabled, s32 icon, co
     }
     btlDispGXInit2D();
     PSMTXConcat(cam->view, m, out);
-    GXLoadPosMtxImm(out, 0);
+    GXLoadPosMtxImm(out, GX_PNMTX0);
     TEXGetGXTexObjFromPalette(*wp->menuTex->data, &texobj, 2);
     GXLoadTexObj(&texobj, GX_TEXMAP0);
     btlDispGXQuads2D(-152.0f, 24.0f, -136.0f, 0.0f, r, g, b, a);
@@ -741,7 +741,7 @@ void DrawMenuPinchMark(void) {
         btlGetScreenPoint(&unit->mPosition, &p);
         PSMTXTrans(m, p.x - 20.0f, 60.0f + p.y, 0.0f);
         PSMTXConcat(cam->view, m, out);
-        GXLoadPosMtxImm(out, 0);
+        GXLoadPosMtxImm(out, GX_PNMTX0);
         btlDispGXQuads2D(-28.0f, 12.0f, 28.0f, -12.0f, r, g, b, a);
     }
     unit = BattleGetPartyPtr(wp);
@@ -785,7 +785,7 @@ void DrawMenuPinchMark(void) {
             PSMTXScale(s, 1.5f, 1.5f, 1.5f);
             PSMTXConcat(out, s, out);
         }
-        GXLoadPosMtxImm(out, 0);
+        GXLoadPosMtxImm(out, GX_PNMTX0);
         btlDispGXQuads2D(-28.0f, 12.0f, 28.0f, -12.0f, r, g, b, a);
     }
 }
@@ -841,7 +841,7 @@ void N_DrawMenuPartyPinchMark(void) {
             PSMTXScale(s, 1.5f, 1.5f, 1.5f);
             PSMTXConcat(out, s, out);
         }
-        GXLoadPosMtxImm(out, 0);
+        GXLoadPosMtxImm(out, GX_PNMTX0);
         btlDispGXQuads2D(-28.0f, 12.0f, 28.0f, -12.0f, r, g, b, a);
     }
 }
@@ -859,7 +859,7 @@ void DrawMenuPinchMark(void) {
         btlGetScreenPoint(&unit->mPosition, &q);
         PSMTXTrans(m, q.x - 20.0f, 60.0f + q.y, 0.0f);
         PSMTXConcat(cam->view, m, out);
-        GXLoadPosMtxImm(out, 0);
+        GXLoadPosMtxImm(out, GX_PNMTX0);
         btlDispGXQuads2D(-28.0f, 12.0f, 28.0f, -12.0f, r, g, b, a);
 #endif
     }

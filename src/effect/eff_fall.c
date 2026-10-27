@@ -851,8 +851,8 @@ void effFallDisp(CameraId cameraId, EffectEntry* effect) {
                 PSMTXConcat(trans, scl, trans);
                 PSMTXConcat(mtx, trans, trans);
                 PSMTXConcat(cam->view, trans, trans);
-                GXLoadPosMtxImm(trans, 0);
-                GXSetCurrentMtx(0);
+                GXLoadPosMtxImm(trans, GX_PNMTX0);
+                GXSetCurrentMtx(GX_PNMTX0);
                 GXSetChanMatColor(GX_COLOR0A0, (GXColor){ 255, 255, 255, e->alpha });
                 PSMTXScale(scl, 1.0f, 0.33333334f, 1.0f);
                 PSMTXTrans(trans, 0.0f, (f32)e->scroll, 0.0f);
@@ -874,8 +874,8 @@ void effFallDisp(CameraId cameraId, EffectEntry* effect) {
                 PSMTXConcat(trans, scl, trans);
                 PSMTXConcat(mtx, trans, trans);
                 PSMTXConcat(cam->view, trans, trans);
-                GXLoadPosMtxImm(trans, 0);
-                GXSetCurrentMtx(0);
+                GXLoadPosMtxImm(trans, GX_PNMTX0);
+                GXSetCurrentMtx(GX_PNMTX0);
                 GXSetChanMatColor(GX_COLOR0A0, (GXColor){ 255, 255, 255, e->alpha });
                 PSMTXIdentity(trans);
                 GXLoadTexMtxImm(trans, GX_TEXMTX0, GX_MTX2x4);
@@ -1080,7 +1080,7 @@ void effFallDispWater(CameraId cameraId, EffectEntry *effect) {
     PSMTXScale(scl, w->scale, 1.0f, 1.0f);
     PSMTXConcat(trans, scl, trans);
     PSMTXConcat(mtx, trans, trans);
-    GXLoadPosMtxImm(trans, 0);
+    GXLoadPosMtxImm(trans, GX_PNMTX0);
     GXSetTevColor(GX_TEVREG0, white255);
     GXBegin(GX_QUADS, GX_VTXFMT0, 4);
     GXPosition3f32((-hw) / 2.0f, hh, 0.0f);
@@ -1104,7 +1104,7 @@ void effFallDispWater(CameraId cameraId, EffectEntry *effect) {
             PSMTXScale(scl, 0.56f, 0.4f, 0.8f);
             PSMTXConcat(mtx, trans, trans);
             PSMTXConcat(trans, scl, trans);
-            GXLoadPosMtxImm(trans, 0);
+            GXLoadPosMtxImm(trans, GX_PNMTX0);
             PSMTXTrans(trans, w2->pos3.y / 8.0f, 0.0f, 0.0f);
             GXLoadTexMtxImm(trans, GX_TEXMTX0, GX_MTX2x4);
             GXSetTevColor(GX_TEVREG0, (GXColor){255, 255, 255, w2->alpha});
@@ -1134,7 +1134,7 @@ void effFallDispWater(CameraId cameraId, EffectEntry *effect) {
             PSMTXScale(scl, 0.7f * s, 0.5f * s, s);
             PSMTXConcat(mtx, trans, trans);
             PSMTXConcat(trans, scl, trans);
-            GXLoadPosMtxImm(trans, 0);
+            GXLoadPosMtxImm(trans, GX_PNMTX0);
             PSMTXTrans(trans, 0.0f, (-w2->pos3.y) / 4.0f, 0.0f);
             GXLoadTexMtxImm(trans, GX_TEXMTX0, GX_MTX2x4);
             {

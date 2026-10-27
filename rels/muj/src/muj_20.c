@@ -1934,7 +1934,7 @@ static void pressStartGX(LogoWork* wp, s32 alpha, f32 x, f32 y) {
     MTXScale(v16, 1.0f, 1.0f, 1.0f);
     MTXTrans(v17, (f32)gp->retraceCount / -200.0f, 0.0f, 0.0f);
     MTXConcat(v16, v17, v17);
-    GXLoadTexMtxImm(v17, 30, GX_MTX2x4);
+    GXLoadTexMtxImm(v17, GX_TEXMTX0, GX_MTX2x4);
     GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_CLEAR);
     GXSetZCompLoc(GX_TRUE);
     GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_AND, GX_ALWAYS, 0);
@@ -1949,8 +1949,8 @@ static void pressStartGX(LogoWork* wp, s32 alpha, f32 x, f32 y) {
     MTXScale(v16, (f32)GXGetTexObjWidth(&startText), (f32)GXGetTexObjHeight(&startText), 1.0f);
     MTXConcat(v17, v16, v17);
     MTXConcat(camera->view, v17, v17);
-    GXLoadPosMtxImm(v17, 0);
-    GXSetCurrentMtx(0);
+    GXLoadPosMtxImm(v17, GX_PNMTX0);
+    GXSetCurrentMtx(GX_PNMTX0);
     GXBegin(GX_QUADS, GX_VTXFMT0, 4);
     GXPosition3f32(-0.5f, -0.5f, 0.0f);
     GXTexCoord2f32(0.0f, 1.0f);

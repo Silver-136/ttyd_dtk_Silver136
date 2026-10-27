@@ -161,7 +161,7 @@ void effLensflareDisp(CameraId cameraId, EffectEntry* effect) {
     PSMTXRotRad(B, 'z', 0.017453292f * (f32)(frame + odd * 2));
     PSMTXConcat(C, B, B);
     GXLoadPosMtxImm(B, GX_PNMTX0);
-    GXSetCurrentMtx(0);
+    GXSetCurrentMtx(GX_PNMTX0);
     GXSetCullMode(GX_CULL_NONE);
     GXSetNumChans(0);
     GXSetNumTevStages(1);
@@ -204,7 +204,7 @@ void effLensflareDisp(CameraId cameraId, EffectEntry* effect) {
         PSMTXConcat(A, D, A);
         PSMTXConcat(C, A, A);
         GXLoadPosMtxImm(A, GX_PNMTX0);
-        GXSetCurrentMtx(0);
+        GXSetCurrentMtx(GX_PNMTX0);
         GXBegin(GX_TRIANGLES, GX_VTXFMT0, 6);
         tri2(12, 13, 14, 0, 12, 14, 15, 0);
         PSMTXRotRad(B, 'z', 0.017453292f * e->angle);
@@ -214,7 +214,7 @@ void effLensflareDisp(CameraId cameraId, EffectEntry* effect) {
         PSMTXConcat(A, D, A);
         PSMTXConcat(C, A, A);
         GXLoadPosMtxImm(A, GX_PNMTX0);
-        GXSetCurrentMtx(0);
+        GXSetCurrentMtx(GX_PNMTX0);
         GXBegin(GX_TRIANGLES, GX_VTXFMT0, 6);
         tri2(8, 9, 10, 0, 8, 10, 11, 0);
         GXSetTevColor(GX_TEVREG0, (GXColor){0xFF, 0x00, 0xFF, (e->alpha * alpha) >> 9});
@@ -234,7 +234,7 @@ void effLensflareDisp(CameraId cameraId, EffectEntry* effect) {
         PSMTXConcat(A, D, A);
         PSMTXConcat(C, A, A);
         GXLoadPosMtxImm(A, GX_PNMTX0);
-        GXSetCurrentMtx(0);
+        GXSetCurrentMtx(GX_PNMTX0);
         GXBegin(GX_TRIANGLES, GX_VTXFMT0, 6);
         tri2(4, 5, 6, 0, 4, 6, 7, 0);
         GXSetTevColor(GX_TEVREG0, (GXColor){0xFF, 0x40, 0x40, (e->alpha * alpha) >> 8});
@@ -247,7 +247,7 @@ void effLensflareDisp(CameraId cameraId, EffectEntry* effect) {
         PSMTXConcat(A, D, A);
         PSMTXConcat(C, A, A);
         GXLoadPosMtxImm(A, GX_PNMTX0);
-        GXSetCurrentMtx(0);
+        GXSetCurrentMtx(GX_PNMTX0);
         GXBegin(GX_TRIANGLES, GX_VTXFMT0, 6);
         tri2(0, 1, 2, 0, 0, 2, 3, 0);
     }

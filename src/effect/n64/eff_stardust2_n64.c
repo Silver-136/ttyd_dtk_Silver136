@@ -354,7 +354,7 @@ void effStardust2Disp(CameraId cameraId, EffectEntry* effect) {
         mtx2[0][0] = w->scale;
         PSMTXConcat(mtx, mtx2, mtx2);
         GXLoadPosMtxImm(mtx2, GX_PNMTX0);
-        GXSetCurrentMtx(0);
+        GXSetCurrentMtx(GX_PNMTX0);
         if (idx >= 36) {
             idx = 0;
         }

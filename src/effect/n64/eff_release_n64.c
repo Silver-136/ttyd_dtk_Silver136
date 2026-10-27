@@ -443,7 +443,7 @@ void effReleaseDisp(CameraId cameraId, EffectEntry* effect) {
         PSMTXConcat(tmp, scale, scale);
         PSMTXConcat(camera->view, scale, scale);
         GXLoadPosMtxImm(scale, GX_PNMTX0);
-        GXSetCurrentMtx(0);
+        GXSetCurrentMtx(GX_PNMTX0);
         {
 
 
@@ -543,7 +543,7 @@ void effReleaseDisp(CameraId cameraId, EffectEntry* effect) {
             GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_RASA);
             PSMTXIdentity(mtx);
             GXLoadPosMtxImm(mtx, GX_PNMTX0);
-            GXSetCurrentMtx(0);
+            GXSetCurrentMtx(GX_PNMTX0);
             effSetVtxDescN64(rectangle_vtx);
             GXBegin(GX_TRIANGLES, GX_VTXFMT0, 6);
             tri2(0, 1, 2, 0, 0, 2, 3, 0);

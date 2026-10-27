@@ -232,7 +232,7 @@ static void effMObjBrokenDisp(CameraId cameraId, EffectEntry* effect) {
     GXSetNumChans(1);
     GXSetChanCtrl(GX_COLOR0A0, GX_DISABLE, GX_SRC_REG, GX_SRC_REG, GX_LIGHT_NULL, GX_DF_NONE, GX_AF_NONE);
     GXSetNumTexGens(1);
-    GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, 60, GX_FALSE, 125);
+    GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
     GXSetNumTevStages(1);
     GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
     GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
@@ -268,8 +268,8 @@ static void effMObjBrokenDisp(CameraId cameraId, EffectEntry* effect) {
         PSMTXScale(mS, 1.0f, 1.0f, 0.0f);
         PSMTXConcat(mT, mS, mT);
         PSMTXConcat(mN, mT, mT);
-        GXLoadPosMtxImm(mT, 0);
-        GXSetCurrentMtx(0);
+        GXLoadPosMtxImm(mT, GX_PNMTX0);
+        GXSetCurrentMtx(GX_PNMTX0);
         GXDrawCube();
     }
     color = (GXColor){255, 255, 255, 255};
@@ -289,8 +289,8 @@ static void effMObjBrokenDisp(CameraId cameraId, EffectEntry* effect) {
         PSMTXScale(mS, 1.0f, 1.0f, 0.0f);
         PSMTXConcat(mT, mS, mT);
         PSMTXConcat(mN, mT, mT);
-        GXLoadPosMtxImm(mT, 0);
-        GXSetCurrentMtx(0);
+        GXLoadPosMtxImm(mT, GX_PNMTX0);
+        GXSetCurrentMtx(GX_PNMTX0);
         GXDrawCube();
     }
 }

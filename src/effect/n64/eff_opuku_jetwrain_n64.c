@@ -212,8 +212,8 @@ void effOpukuJetwrainDisp(CameraId cameraId, EffectEntry* effect) {
         Vec cam = {304.0f, 240.0f, 100.0f};
         C_MTXLookAt(view, &cam, &up, &target);
     }
-    GXLoadPosMtxImm(view, 0);
-    GXSetCurrentMtx(0);
+    GXLoadPosMtxImm(view, GX_PNMTX0);
+    GXSetCurrentMtx(GX_PNMTX0);
     for (i = 0; i < 12; i++) {
         by = i * 16 + 24;
         edgeY = 0;

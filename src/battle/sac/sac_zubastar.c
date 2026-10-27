@@ -875,7 +875,7 @@ void zubastar_disp_bomb(CameraId cam, void* param) {
         PSMTXConcat(tc, m, m);
         PSMTXConcat(tp, m, m);
         PSMTXConcat(camera->view, m, m);
-        GXLoadPosMtxImm(m, 0);
+        GXLoadPosMtxImm(m, GX_PNMTX0);
         GXBegin(GX_TRIANGLEFAN, GX_VTXFMT0, t->n);
         for (j = 0; j < t->n; j++) {
             f32 u = (t->v[j].x + 96.0f) / 400.0f;
@@ -927,8 +927,8 @@ void zubastar_disp2D(CameraId cam, void* param) {
     GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
     GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
     GXSetTevOp(GX_TEVSTAGE0, GX_PASSCLR);
-    GXSetCurrentMtx(0);
-    GXLoadPosMtxImm(camGetPtr(cam)->view, 0);
+    GXSetCurrentMtx(GX_PNMTX0);
+    GXLoadPosMtxImm(camGetPtr(cam)->view, GX_PNMTX0);
     GXSetLineWidth(0x18, GX_TO_ZERO);
     for (i = 0; i < 16; i++) {
         s32 a;

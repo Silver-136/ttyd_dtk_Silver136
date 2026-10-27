@@ -120,7 +120,7 @@ void N_systemErrorHandler(OSError error, OSContext* context, u32 dsisr, u32 dar)
     }
     OSInitFont(fontHeader);
     GXSetCopyClear((GXColor) { 0, 0, 0, 0xFF }, 0xFFFFFF);
-    GXCopyDisp(DEMOGetCurrentBuffer(), 1);
+    GXCopyDisp(DEMOGetCurrentBuffer(), GX_TRUE);
     GXSetViewport(0.0f, 0.0f, 608.0f, 480.0f, 0.0f, 1.0f);
     GXSetScissor(0, 0, 608, 480);
     MTXOrtho(projection, 0.0f, 608.0f, 0.0f, 480.0f, 0.0f, 1.0f);
@@ -130,8 +130,8 @@ void N_systemErrorHandler(OSError error, OSContext* context, u32 dsisr, u32 dar)
 #else
     MTXScale(matrix, 0.5f, 0.5f, 1.0f);
 #endif
-    GXLoadPosMtxImm(matrix, 0);
-    GXSetCurrentMtx(0);
+    GXLoadPosMtxImm(matrix, GX_PNMTX0);
+    GXSetCurrentMtx(GX_PNMTX0);
     GXSetZMode(GX_TRUE, GX_LEQUAL, GX_TRUE);
     GXSetNumChans(0);
     GXSetNumTevStages(1);
@@ -175,7 +175,7 @@ void N_systemErrorHandler(OSError error, OSContext* context, u32 dsisr, u32 dar)
                 (GXTexFmt)fontHeader->sheetFormat, GX_CLAMP, GX_CLAMP, GX_FALSE);
             GXLoadTexObj(&texObj, GX_TEXMAP0);
             MTXScale(matrix2, 1.0f / (float)fontHeader->sheetWidth, 1.0f / (float)fontHeader->sheetHeight, 1.0f);
-            GXLoadTexMtxImm(matrix2, 0x1E, GX_MTX2x4);
+            GXLoadTexMtxImm(matrix2, GX_TEXMTX0, GX_MTX2x4);
             GXBegin(GX_QUADS, GX_VTXFMT0, 4);
             px2 = (s16)px + fontHeader->cellWidth;
             py2 = (s16)py + fontHeader->cellHeight;
@@ -207,9 +207,9 @@ void N_systemErrorHandler(OSError error, OSContext* context, u32 dsisr, u32 dar)
             i++;
         }
         GXSetZMode(GX_TRUE, GX_LEQUAL, GX_TRUE);
-        GXSetColorUpdate(1);
+        GXSetColorUpdate(GX_TRUE);
         GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_OR, GX_ALWAYS, 0);
-        GXSetAlphaUpdate(1);
+        GXSetAlphaUpdate(GX_TRUE);
         GXCopyDisp(DemoCurrentBuffer, GX_TRUE);
         VISetNextFrameBuffer(DemoCurrentBuffer);
         VISetBlack(0);

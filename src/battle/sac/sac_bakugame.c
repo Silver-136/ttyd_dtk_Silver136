@@ -1353,7 +1353,7 @@ void bakuGameDisp3D(CameraId cam, void* param) {
         GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_VTX, GX_SRC_REG, 0, GX_DF_CLAMP, GX_AF_NONE);
         GXSetChanMatColor(GX_COLOR0A0, (GXColor){0, 0, 0, 0xFF});
         GXSetNumTexGens(1);
-        GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, 0x3C, GX_FALSE, 0x7D);
+        GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
         GXSetNumTevStages(1);
         GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
         GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_ONE, GX_CC_TEXC, GX_CC_RASC);
@@ -1364,7 +1364,7 @@ void bakuGameDisp3D(CameraId cam, void* param) {
         GXLoadTexObj(&tex, GX_TEXMAP0);
         PSMTXTrans(trans, w->hpos.x, w->hpos.y, w->hpos.z);
         PSMTXConcat(camera->view, trans, mtx);
-        GXLoadPosMtxImm(mtx, 0);
+        GXLoadPosMtxImm(mtx, GX_PNMTX0);
         {
         f32 uv[16] = {
             0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f,

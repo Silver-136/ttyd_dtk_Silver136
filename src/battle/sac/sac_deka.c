@@ -842,7 +842,7 @@ static void disp_2D(CameraId cam, void* param) {
         ratio = w->cursor / w->gaugeLen;
         if (ratio >= 0.0f && ratio <= 1.0f) {
             btlDispGXInit2DRasta();
-            GXLoadPosMtxImm(camGetPtr(CAMERA_2D)->view, 0);
+            GXLoadPosMtxImm(camGetPtr(CAMERA_2D)->view, GX_PNMTX0);
             btlDispGXQuads2DRasta(left, 8.0f + w->gaugePos.y, ratio * (right - left) + left, w->gaugePos.y - 8.0f, 0xFF, 0, 0, w->alpha);
         }
     }
@@ -945,9 +945,9 @@ void yuka_capture(CameraId cam, void* param) {
     test_kururing_mapdisp(cam);
     sysWaitDrawSync();
     GXSetTexCopySrc(0, 0, w->texW, w->texH);
-    GXSetTexCopyDst(w->texW, w->texH, 4, 0);
-    GXSetZMode(1, GX_LEQUAL, 1);
-    GXCopyTex(w->tex->address, 1);
+    GXSetTexCopyDst(w->texW, w->texH, 4, GX_FALSE);
+    GXSetZMode(GX_TRUE, GX_LEQUAL, GX_TRUE);
+    GXCopyTex(w->tex->address, GX_TRUE);
     GXPixModeSync();
     memcpy(camGetPtr(cam), &save, sizeof(CameraEntry));
 }
@@ -1159,14 +1159,14 @@ void yuka_disp(CameraId cam, void* param) {
             GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
             GXSetNumChans(0);
             GXSetNumTexGens(1);
-            GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, 0x3C, 0, 0x7D);
+            GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
             GXSetNumTevStages(1);
             GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
             GXSetTevOp(GX_TEVSTAGE0, GX_REPLACE);
             GXInitTexObj(&obj, w->tex->address, w->texW, w->texH, 4, GX_CLAMP, GX_CLAMP, 0);
             GXLoadTexObj(&obj, GX_TEXMAP0);
-            GXLoadPosMtxImm(camera->view, 0);
-            GXSetCurrentMtx(0);
+            GXLoadPosMtxImm(camera->view, GX_PNMTX0);
+            GXSetCurrentMtx(GX_PNMTX0);
             fifo = &GXWGFifo;
             i = 0;
             do {

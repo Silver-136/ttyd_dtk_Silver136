@@ -95,7 +95,7 @@ void effMarioBalloonDisp(CameraId cameraId, EffectEntry* effect) {
     PSMTXConcat(mT, mR, mT);
     PSMTXConcat(mT, mS, mT);
     PSMTXConcat(camGetPtr(cameraId)->view, mT, mT);
-    GXSetCurrentMtx(0);
+    GXSetCurrentMtx(GX_PNMTX0);
     switch (work->type) {
     case 0:
         effGetTexObj(15, &texObj);
@@ -103,7 +103,7 @@ void effMarioBalloonDisp(CameraId cameraId, EffectEntry* effect) {
         GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO);
         GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_TEXA);
         PSMTXTransApply(mT, mTA, 1.0f, -1.0f, 0.0f);
-        GXLoadPosMtxImm(mTA, 0);
+        GXLoadPosMtxImm(mTA, GX_PNMTX0);
         GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_CLEAR);
         GXSetZCompLoc(GX_TRUE);
         GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_AND, GX_ALWAYS, 0);
@@ -127,10 +127,10 @@ void effMarioBalloonDisp(CameraId cameraId, EffectEntry* effect) {
         GXSetTevColor(GX_TEVREG0, (GXColor){255, 255, 255, 255});
         GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_C0, GX_CC_TEXC, GX_CC_ZERO);
         GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_TEXA);
-        GXLoadPosMtxImm(mT, 0);
+        GXLoadPosMtxImm(mT, GX_PNMTX0);
         PSMTXInvXpose(mT, mN);
-        GXLoadNrmMtxImm(mN, 0);
-        GXSetCurrentMtx(0);
+        GXLoadNrmMtxImm(mN, GX_PNMTX0);
+        GXSetCurrentMtx(GX_PNMTX0);
         GXSetBlendMode(GX_BM_NONE, GX_BL_ONE, GX_BL_ZERO, GX_LO_CLEAR);
         GXSetZCompLoc(GX_FALSE);
         GXSetAlphaCompare(GX_GEQUAL, 128, GX_AOP_OR, GX_NEVER, 0);
@@ -171,7 +171,7 @@ void effMarioBalloonDisp(CameraId cameraId, EffectEntry* effect) {
         GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO);
         GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_TEXA);
         PSMTXTransApply(mT, mTA, 1.0f, -1.0f, 0.0f);
-        GXLoadPosMtxImm(mTA, 0);
+        GXLoadPosMtxImm(mTA, GX_PNMTX0);
         GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_CLEAR);
         GXSetZCompLoc(GX_TRUE);
         GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_AND, GX_ALWAYS, 0);
@@ -195,10 +195,10 @@ void effMarioBalloonDisp(CameraId cameraId, EffectEntry* effect) {
         GXSetTevColor(GX_TEVREG0, (GXColor){255, 255, 255, 255});
         GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_C0, GX_CC_TEXC, GX_CC_ZERO);
         GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_TEXA);
-        GXLoadPosMtxImm(mT, 0);
+        GXLoadPosMtxImm(mT, GX_PNMTX0);
         PSMTXInvXpose(mT, mN);
-        GXLoadNrmMtxImm(mN, 0);
-        GXSetCurrentMtx(0);
+        GXLoadNrmMtxImm(mN, GX_PNMTX0);
+        GXSetCurrentMtx(GX_PNMTX0);
         GXSetCullMode(GX_CULL_BACK);
         GXBegin(GX_QUADS, GX_VTXFMT0, 4);
         GXPosition3f32(-20.0f, 32.0f, 0.0f);

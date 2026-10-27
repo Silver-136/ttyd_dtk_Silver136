@@ -149,7 +149,7 @@ void envCapture(CameraId camId, void* param) {
         GXSetTexCopyDst(var2, var3, GX_CTF_Z8M, GX_TRUE);
         size = GXGetTexBufferSize(var2, var3, GX_CTF_Z8M, GX_FALSE, 0);
         wp->capture2 = smartAlloc(size, 3);
-        GXCopyTex(wp->capture2->address, 0);
+        GXCopyTex(wp->capture2->address, GX_FALSE);
         GXPixModeSync();
         GXInitTexObj(&wp->captureObj2, wp->capture2->address, var2, var3, GX_TF_I8, GX_CLAMP, GX_CLAMP, GX_FALSE);
         GXInitTexObjLOD(&wp->captureObj2, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
@@ -368,8 +368,8 @@ void envDisp_DepthOfField(void) {
         gz = 0;
         if (gz) cam[0] = (CameraEntry*)wp;
         GXSetProjection(camGetPtr(CAMERA_2D)->projection, cam[0]->projType);
-        GXLoadPosMtxImm(camGetPtr(CAMERA_2D)->view, 0);
-        GXSetCurrentMtx(0);
+        GXLoadPosMtxImm(camGetPtr(CAMERA_2D)->view, GX_PNMTX0);
+        GXSetCurrentMtx(GX_PNMTX0);
         GXLoadTexObj(smartTexObj(&wp->captureObj, (void**)wp->capture), GX_TEXMAP0);
         GXLoadTexObj(smartTexObj(&wp->captureObj2, (void**)wp->capture2), GX_TEXMAP1);
         GXSetNumChans(0);
@@ -503,8 +503,8 @@ void envDisp_Blur(void) {
     if ((wp->flags & ENV_FLAG_BLUR) && (wp->flags & ENV_FLAG_BLUR_CAPTURED)) {
         cam = camGetPtr(CAMERA_2D);
         GXSetProjection(camGetPtr(CAMERA_2D)->projection, cam->projType);
-        GXLoadPosMtxImm(camGetPtr(CAMERA_2D)->view, 0);
-        GXSetCurrentMtx(0);
+        GXLoadPosMtxImm(camGetPtr(CAMERA_2D)->view, GX_PNMTX0);
+        GXSetCurrentMtx(GX_PNMTX0);
         GXSetNumChans(0);
         GXSetChanCtrl(GX_COLOR0A0, GX_DISABLE, GX_SRC_REG, GX_SRC_REG, GX_LIGHT_NULL, GX_DF_CLAMP, GX_AF_NONE);
         GXSetNumTexGens(1);
@@ -638,12 +638,12 @@ void envGlare(EnvironmentGlare* glare) {
 
     for (i = 0; i < 7; i++) {
         GXSetTevOrder(i * 2 + 2, i + 1, GX_TEXMAP0, GX_COLOR_NULL);
-        GXSetTevColorOp(i * 2 + 2, GX_TEV_SUB, GX_TB_ZERO, GX_CS_SCALE_1, 1, GX_TEVREG1);
+        GXSetTevColorOp(i * 2 + 2, GX_TEV_SUB, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVREG1);
         GXSetTevColorIn(i * 2 + 2, GX_CC_KONST, GX_CC_ZERO, GX_CC_ZERO, GX_CC_TEXC);
         GXSetTevKColorSel(i * 2 + 2, texW);
         GXSetTevSwapMode(i * 2 + 2, GX_TEV_SWAP0, GX_TEV_SWAP0);
         GXSetTevOrder(i * 2 + 3, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR_NULL);
-        GXSetTevColorOp(i * 2 + 3, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, 1, GX_TEVPREV);
+        GXSetTevColorOp(i * 2 + 3, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
         GXSetTevColorIn(i * 2 + 3, GX_CC_ZERO, GX_CC_C1, GX_CC_KONST, GX_CC_CPREV);
         GXSetTevKColorSel(i * 2 + 3, texH);
         GXSetTevSwapMode(i * 2 + 3, GX_TEV_SWAP0, GX_TEV_SWAP0);
@@ -669,8 +669,8 @@ void envGlare(EnvironmentGlare* glare) {
     MTXOrtho(projMtx, 0.0f, (f32)gp->efbHeight, 0.0f, (f32)gp->fbWidth, 0.0f, -32767.0f);
     GXSetProjection(projMtx, GX_ORTHOGRAPHIC);
     PSMTXIdentity(posMtx);
-    GXLoadPosMtxImm(posMtx, 0);
-    GXSetCurrentMtx(0);
+    GXLoadPosMtxImm(posMtx, GX_PNMTX0);
+    GXSetCurrentMtx(GX_PNMTX0);
     GXClearVtxDesc();
     GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
     GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
@@ -784,8 +784,8 @@ void envDisp_FF(void) {
         GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_AND, GX_ALWAYS, 0);
         GXSetZMode(GX_FALSE, GX_LEQUAL, GX_FALSE);
         GXSetLineWidth(16, GX_TO_ZERO);
-        GXLoadPosMtxImm(camGetPtr(CAMERA_2D)->view, 0);
-        GXSetCurrentMtx(0);
+        GXLoadPosMtxImm(camGetPtr(CAMERA_2D)->view, GX_PNMTX0);
+        GXSetCurrentMtx(GX_PNMTX0);
         GXClearVtxDesc();
         GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
         GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);

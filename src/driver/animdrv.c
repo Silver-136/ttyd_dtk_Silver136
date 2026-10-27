@@ -1775,10 +1775,10 @@ void materialProc(s32 shapeId, s32 xluStage) {
     if (shapeId != (-1)) {
         camera = camGetCurPtr();
         PSMTXConcat(camera->view, *g_modeling_mtx, camMtx);
-        GXLoadPosMtxImm(camMtx, 0);
+        GXLoadPosMtxImm(camMtx, GX_PNMTX0);
         PSMTXInvXpose(camMtx, invCamMtx);
-        GXLoadNrmMtxImm(invCamMtx, 0);
-        GXSetCurrentMtx(0);
+        GXLoadNrmMtxImm(invCamMtx, GX_PNMTX0);
+        GXSetCurrentMtx(GX_PNMTX0);
         shape = &wp->mpCurPoseData->shapes[shapeId];
         dispMode = shape->dispMode;
         drawCount = shape->shapeDrawCount;
@@ -1883,10 +1883,10 @@ void renderProc(s32 shapeId, s32 unused) {
         s32 index;
         camera = camGetCurPtr();
         MTXConcat(camera->view, *g_modeling_mtx, camMtx);
-        GXLoadPosMtxImm(camMtx, 0);
+        GXLoadPosMtxImm(camMtx, GX_PNMTX0);
         MTXInvXpose(camMtx, invCamMtx);
-        GXLoadNrmMtxImm(invCamMtx, 0);
-        GXSetCurrentMtx(0);
+        GXLoadNrmMtxImm(invCamMtx, GX_PNMTX0);
+        GXSetCurrentMtx(GX_PNMTX0);
 
         data = wp->mpCurPoseData;
         shapes = data->shapes;

@@ -270,7 +270,7 @@ static void actionCommandDisp(f32 x, f32 y) {
     }
     cam = camGetPtr(CAMERA_2D);
     btlDispGXInit2DRasta();
-    GXLoadPosMtxImm(cam->view, 0);
+    GXLoadPosMtxImm(cam->view, GX_PNMTX0);
     baseX = px - 88.0f;
     baseY = 50.0f + y;
     baseB = baseY - 18.0f;

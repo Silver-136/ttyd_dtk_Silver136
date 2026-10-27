@@ -254,14 +254,14 @@ void effCrystalDisp(CameraId cameraId, EffectEntry* effect) {
         PSMTXRotRad(rot, 'z', 0.017453292f * (f32)frame);
         PSMTXConcat(tmp, rot, rot);
         GXLoadPosMtxImm(rot, GX_PNMTX0);
-        GXSetCurrentMtx(0);
+        GXSetCurrentMtx(GX_PNMTX0);
         effSetVtxDescN64(size108x108_tex32x32_vtx);
         GXBegin(GX_TRIANGLES, GX_VTXFMT0, 6);
         tri2(0, 1, 2, 0, 0, 2, 3, 0);
         PSMTXRotRad(rot, 'z', 0.017453292f * (f32)(-frame * 8));
         PSMTXConcat(tmp, rot, rot);
         GXLoadPosMtxImm(rot, GX_PNMTX0);
-        GXSetCurrentMtx(0);
+        GXSetCurrentMtx(GX_PNMTX0);
         effSetVtxDescN64(size100x100_tex32x32_vtx);
         GXBegin(GX_TRIANGLES, GX_VTXFMT0, 6);
         tri2(0, 1, 2, 0, 0, 2, 3, 0);
@@ -280,7 +280,7 @@ void effCrystalDisp(CameraId cameraId, EffectEntry* effect) {
         effGetTexObjN64(0x6E, &texObj);
         GXLoadTexObj(&texObj, GX_TEXMAP0);
         GXLoadPosMtxImm(tmp, GX_PNMTX0);
-        GXSetCurrentMtx(0);
+        GXSetCurrentMtx(GX_PNMTX0);
         effSetVtxDescN64(size100x100_tex32x32_vtx);
         GXBegin(GX_TRIANGLES, GX_VTXFMT0, 6);
         tri2(0, 1, 2, 0, 0, 2, 3, 0);

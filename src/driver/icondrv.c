@@ -566,8 +566,8 @@ void iconGX(Mtx mtx, IconEntry* entry) {
         MTXScale(scalemtx, 1.0f, -1.0f, 1.0f);
         MTXConcat(m, scalemtx, m);
     }
-    GXLoadPosMtxImm(m, 0);
-    GXSetCurrentMtx(0);
+    GXLoadPosMtxImm(m, GX_PNMTX0);
+    GXSetCurrentMtx(GX_PNMTX0);
     {
         u16 tplId = entry->tplId;
         if (!icon_tpl_ok || !icon_bin_ok) {

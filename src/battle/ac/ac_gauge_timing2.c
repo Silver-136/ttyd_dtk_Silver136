@@ -318,7 +318,7 @@ static void actionCommandDisp(f32 x, f32 y) {
         r = v - q * 4;
     }
     btlDispGXInit2DRasta();
-    GXLoadPosMtxImm(cam->view, 0);
+    GXLoadPosMtxImm(cam->view, GX_PNMTX0);
     btlDispTexPlane(x0, y1, 0.0f, 1.0f, 1.0f, BTL_TEX(0x43), (GXColor){255, 255, 255, 255}, 0);
     t = 2.0f + (8.0f + x0);
     for (i = 0; i < q; i++) {
@@ -340,7 +340,7 @@ static void actionCommandDisp(f32 x, f32 y) {
     x1 = x0 + (((f32)gw->width) * gw->cursor) / 100.0f;
     if (x1 >= x0) {
         btlDispGXInit2DRasta();
-        GXLoadPosMtxImm(cam->view, 0);
+        GXLoadPosMtxImm(cam->view, GX_PNMTX0);
         btlDispGXQuads2DRasta(x0, y0, x1 - 1.0f, y2, 255, 0, 0, 255);
     }
 

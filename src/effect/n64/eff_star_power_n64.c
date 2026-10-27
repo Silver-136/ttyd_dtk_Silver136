@@ -287,12 +287,12 @@ void effStarPowerDisp(CameraId cameraId, EffectEntry* effect) {
         PSMTXConcat(mtx, rot, mtx);
         PSMTXConcat(camera->view, mtx, tmp);
         GXLoadPosMtxImm(tmp, GX_PNMTX0);
-        GXSetCurrentMtx(0);
+        GXSetCurrentMtx(GX_PNMTX0);
         half = c34 >> 1;
         GXSetTevColor(GX_TEVREG0, (GXColor){c18, c1c, c20, half});
         GXSetTevColor(GX_TEVREG1, (GXColor){c28, c2c, c30, half});
         GXSetNumChans(1);
-        GXSetChanCtrl(GX_COLOR0A0, 0, GX_SRC_REG, GX_SRC_VTX, 0, GX_DF_NONE, GX_AF_NONE);
+        GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_VTX, 0, GX_DF_NONE, GX_AF_NONE);
         GXSetNumTevStages(1);
         GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
         GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
@@ -325,7 +325,7 @@ void effStarPowerDisp(CameraId cameraId, EffectEntry* effect) {
     PSMTXConcat(mtx, rot, mtx);
     PSMTXConcat(camera->view, mtx, tmp);
     GXLoadPosMtxImm(tmp, GX_PNMTX0);
-    GXSetCurrentMtx(0);
+    GXSetCurrentMtx(GX_PNMTX0);
     if (c34 != 0) {
         GXBegin(GX_TRIANGLES, GX_VTXFMT0, 60);
         tri2(0, 1, 2, 0, 0, 2, 3, 0);
@@ -342,7 +342,7 @@ void effStarPowerDisp(CameraId cameraId, EffectEntry* effect) {
     GXSetTevColor(GX_TEVREG0, (GXColor){c18, c1c, c20, c24});
     GXSetTevColor(GX_TEVREG1, (GXColor){c28, c2c, c30, c24});
     GXSetNumChans(1);
-    GXSetChanCtrl(GX_COLOR0A0, 0, GX_SRC_REG, GX_SRC_VTX, 0, GX_DF_NONE, GX_AF_NONE);
+    GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_VTX, 0, GX_DF_NONE, GX_AF_NONE);
     GXSetNumTevStages(1);
     GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
     GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);

@@ -337,8 +337,8 @@ void effParticleDisp(CameraId cameraId, EffectEntry* effect) {
         PSMTXConcat(mX, mT, mX);
         PSMTXRotRad(mT, 'x', d2r * (f32)((gp->retraceCount + idx) % 360 * 10));
         PSMTXConcat(mX, mT, mX);
-        GXLoadPosMtxImm(mX, 0);
-        GXSetCurrentMtx(0);
+        GXLoadPosMtxImm(mX, GX_PNMTX0);
+        GXSetCurrentMtx(GX_PNMTX0);
         ex = 2.0f;
         ox = -hx / 2.0f;
         oy = -hy / 2.0f;

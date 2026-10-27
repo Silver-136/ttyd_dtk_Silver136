@@ -169,8 +169,8 @@ void telop(CameraId cameraId, void* param) {
         }
         PSMTXTrans(mtx, -15.0f + (f32)k, -105.0f - (f32)k, 0.0f);
         PSMTXConcat(camera->view, mtx, mtx);
-        GXLoadPosMtxImm(mtx, 0);
-        GXSetCurrentMtx(0);
+        GXLoadPosMtxImm(mtx, GX_PNMTX0);
+        GXSetCurrentMtx(GX_PNMTX0);
         GXBegin(GX_QUADS, GX_VTXFMT0, 4);
         GXPosition3f32(0.0f, 0.0f, 0.0f);
         GXTexCoord2f32(0.0f, 0.0f);

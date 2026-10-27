@@ -287,7 +287,7 @@ void effRecoverHeartDisp(CameraId cameraId, EffectEntry* effect) {
             effSetVtxDescN64(size32x32_tex32x32_heart_vtx);
             PSMTXConcat(camera->view, m30, mtx);
             GXLoadPosMtxImm(mtx, GX_PNMTX0);
-            GXSetCurrentMtx(0);
+            GXSetCurrentMtx(GX_PNMTX0);
             GXBegin(GX_TRIANGLES, GX_VTXFMT0, 6);
             tri2(0, 1, 2, 0, 0, 2, 3, 0);
             GXSetNumTevStages(1);
@@ -310,7 +310,7 @@ void effRecoverHeartDisp(CameraId cameraId, EffectEntry* effect) {
                 }
                 PSMTXConcat(camera->view, m60, mtx);
                 GXLoadPosMtxImm(mtx, GX_PNMTX0);
-                GXSetCurrentMtx(0);
+                GXSetCurrentMtx(GX_PNMTX0);
                 GXBegin(GX_TRIANGLES, GX_VTXFMT0, 6);
                 tri2(0, 1, 2, 0, 0, 2, 3, 0);
             } else {
@@ -329,7 +329,7 @@ void effRecoverHeartDisp(CameraId cameraId, EffectEntry* effect) {
                 }
                 PSMTXConcat(camera->view, m60, mtx);
                 GXLoadPosMtxImm(mtx, GX_PNMTX0);
-                GXSetCurrentMtx(0);
+                GXSetCurrentMtx(GX_PNMTX0);
                 GXBegin(GX_TRIANGLES, GX_VTXFMT0, 6);
                 tri2(0, 1, 2, 0, 0, 2, 3, 0);
                 PSMTXScale(scale, 0.03125f, 0.0026041667f, 0.0f);
@@ -347,7 +347,7 @@ void effRecoverHeartDisp(CameraId cameraId, EffectEntry* effect) {
         } else {
             PSMTXConcat(camera->view, m30, mtx);
             GXLoadPosMtxImm(mtx, GX_PNMTX0);
-            GXSetCurrentMtx(0);
+            GXSetCurrentMtx(GX_PNMTX0);
             effSetVtxDescN64(size16x16_tex32x32_heart_vtx);
             GXBegin(GX_TRIANGLES, GX_VTXFMT0, 6);
             tri2(0, 1, 2, 0, 0, 2, 3, 0);

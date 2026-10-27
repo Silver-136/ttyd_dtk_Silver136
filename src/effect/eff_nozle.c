@@ -532,9 +532,9 @@ void effNozleDisp(CameraId cameraId, EffectEntry* effect) {
     cam = camGetPtr(cameraId);
     alpha = work->alpha;
     GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_CLEAR);
-    GXSetZCompLoc(1);
+    GXSetZCompLoc(GX_TRUE);
     GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_AND, GX_ALWAYS, 0);
-    GXSetZMode(1, GX_LEQUAL, 0);
+    GXSetZMode(GX_TRUE, GX_LEQUAL, GX_FALSE);
     PSMTXTrans(a, work->position.x, work->position.y, work->position.z);
     PSMTXRotRad(b, 'y', 0.017453292f * work->rotY);
     PSMTXConcat(a, b, a);
@@ -543,17 +543,17 @@ void effNozleDisp(CameraId cameraId, EffectEntry* effect) {
     PSMTXScale(c, work->scale * work->sx, work->scale * work->sy, work->scale);
     PSMTXConcat(a, c, a);
     PSMTXConcat(cam->view, a, d);
-    GXLoadPosMtxImm(d, 0);
-    GXSetCurrentMtx(0);
+    GXLoadPosMtxImm(d, GX_PNMTX0);
+    GXSetCurrentMtx(GX_PNMTX0);
     GXSetNumChans(1);
-    GXSetChanCtrl(GX_COLOR0A0, 0, GX_SRC_REG, GX_SRC_VTX, 0, GX_DF_NONE, GX_AF_NONE);
+    GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_VTX, 0, GX_DF_NONE, GX_AF_NONE);
     GXSetNumTexGens(2);
-    GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, 30, 0, 125);
-    GXSetTexCoordGen2(GX_TEXCOORD1, GX_TG_MTX2x4, GX_TG_TEX1, 33, 0, 125);
+    GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX0, GX_FALSE, GX_PTIDENTITY);
+    GXSetTexCoordGen2(GX_TEXCOORD1, GX_TG_MTX2x4, GX_TG_TEX1, GX_TEXMTX1, GX_FALSE, GX_PTIDENTITY);
     PSMTXTrans(a, work->u0, -work->v0, 0.0f);
-    GXLoadTexMtxImm(a, 30, GX_MTX2x4);
+    GXLoadTexMtxImm(a, GX_TEXMTX0, GX_MTX2x4);
     PSMTXTrans(a, work->u1, -work->v1, 0.0f);
-    GXLoadTexMtxImm(a, 33, GX_MTX2x4);
+    GXLoadTexMtxImm(a, GX_TEXMTX1, GX_MTX2x4);
     effGetTexObj(60, &texObj);
     GXLoadTexObj(&texObj, GX_TEXMAP0);
     switch (work->type) {
@@ -569,18 +569,18 @@ void effNozleDisp(CameraId cameraId, EffectEntry* effect) {
     }
     GXSetNumTevStages(3);
     GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP1, GX_COLOR_NULL);
-    GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, 1, GX_TEVPREV);
-    GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, 1, GX_TEVPREV);
+    GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
     GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_TEXC);
     GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_TEXA);
     GXSetTevOrder(GX_TEVSTAGE1, GX_TEXCOORD1, GX_TEXMAP0, GX_COLOR_NULL);
-    GXSetTevColorOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, 1, GX_TEVPREV);
-    GXSetTevAlphaOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, 1, GX_TEVPREV);
+    GXSetTevColorOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    GXSetTevAlphaOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
     GXSetTevColorIn(GX_TEVSTAGE1, GX_CC_ZERO, GX_CC_CPREV, GX_CC_TEXA, GX_CC_ZERO);
     GXSetTevAlphaIn(GX_TEVSTAGE1, GX_CA_ZERO, GX_CA_APREV, GX_CA_TEXA, GX_CA_ZERO);
     GXSetTevOrder(GX_TEVSTAGE2, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR0A0);
-    GXSetTevColorOp(GX_TEVSTAGE2, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, 1, GX_TEVPREV);
-    GXSetTevAlphaOp(GX_TEVSTAGE2, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, 1, GX_TEVPREV);
+    GXSetTevColorOp(GX_TEVSTAGE2, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    GXSetTevAlphaOp(GX_TEVSTAGE2, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
     GXSetTevColorIn(GX_TEVSTAGE2, GX_CC_ZERO, GX_CC_CPREV, GX_CC_RASC, GX_CC_ZERO);
     GXSetTevAlphaIn(GX_TEVSTAGE2, GX_CA_ZERO, GX_CA_APREV, GX_CA_RASA, GX_CA_ZERO);
     GXSetCullMode(GX_CULL_NONE);
@@ -603,14 +603,14 @@ void effNozleDisp(CameraId cameraId, EffectEntry* effect) {
             w = effect->userdata;
             for (i = 1, w++; i < effect->count; i++, w++) {
                 PSMTXTrans(a, w->u0, -w->v0, 0.0f);
-                GXLoadTexMtxImm(a, 30, GX_MTX2x4);
+                GXLoadTexMtxImm(a, GX_TEXMTX0, GX_MTX2x4);
                 PSMTXTrans(a, w->u1, -w->v1, 0.0f);
-                GXLoadTexMtxImm(a, 33, GX_MTX2x4);
+                GXLoadTexMtxImm(a, GX_TEXMTX1, GX_MTX2x4);
                 PSMTXTrans(a, w->position.x, w->position.y, w->position.z);
                 PSMTXScale(c, w->sx, w->sy, 1.0f);
                 PSMTXConcat(a, c, c);
                 PSMTXConcat(d, c, c);
-                GXLoadPosMtxImm(c, 0);
+                GXLoadPosMtxImm(c, GX_PNMTX0);
                 nozleVtxSetup(GX_INDEX8, 6, 13, nozle_4_vertex_tbl, nozle_4_normal_tbl, nozle_4_color0_tbl, nozle_4_texcoord0_tbl, nozle_4_texcoord1_tbl);
                 CALLDL(8, nozle_4_dl_0_tbl, nozle_4_dl_0_size_tbl, sz4, dl4);
             }

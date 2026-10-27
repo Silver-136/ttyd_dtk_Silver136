@@ -199,7 +199,7 @@ void effUpdownDisp(CameraId cameraId, EffectEntry* effect) {
     iconGetTexObj(&texObj, icon_id[abs(number) % 10]);
     GXLoadTexObj(&texObj, GX_TEXMAP0);
     GXSetNumTexGens(1);
-    GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, 0x3C, GX_FALSE, GX_PTIDENTITY);
+    GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
     if (number >= 0) {
         PSMTXTrans(m5, 5.0f, 0.0f, 1.0f);
     } else {

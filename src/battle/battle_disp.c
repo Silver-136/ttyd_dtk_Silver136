@@ -215,7 +215,7 @@ void btlDispTexPlane(f32 tX, f32 tY, f32 tZ, f32 sX, f32 sY, u32 id, GXColor col
     PSMTXTrans(trans, tX, tY, tZ);
     PSMTXConcat(trans, scale, mtx);
     PSMTXConcat(camera->view, mtx, mtx);
-    GXLoadPosMtxImm(mtx, 0);
+    GXLoadPosMtxImm(mtx, GX_PNMTX0);
     btlDispTexPlainGX(id, color, color, color, color);
 }
 
@@ -227,7 +227,7 @@ void btlDispTexPlane2(Mtx mtx, u32 id, GXColor color, s32 unused) {
     MTXCopy(mtx, mtx2);
     camera = camGetCurPtr();
     MTXConcat(camera->view, mtx2, mtx2);
-    GXLoadPosMtxImm(mtx2, 0);
+    GXLoadPosMtxImm(mtx2, GX_PNMTX0);
     btlDispTexPlainGX(id, color, color, color, color);
 }
 
@@ -239,7 +239,7 @@ void btlDispTexPlane3(Mtx mtx, u32 id, GXColor color0, GXColor color1, GXColor c
     PSMTXCopy(mtx, mtx2);
     camera = camGetCurPtr();
     PSMTXConcat(camera->view, mtx2, mtx2);
-    GXLoadPosMtxImm(mtx2, 0);
+    GXLoadPosMtxImm(mtx2, GX_PNMTX0);
     btlDispTexPlainGX(id, color0, color1, color2, color3);
 }
 

@@ -2255,7 +2255,7 @@ void BattleAudienceDispAudience(CameraId camId, void* param) {
             scl[1][3] = scl[1][3] + (m->bobOffset + (m->hopY + (-oy + m->position.y)));
         }
         PSMTXConcat(cam->view, scl, fin);
-        GXLoadPosMtxImm(fin, 0);
+        GXLoadPosMtxImm(fin, GX_PNMTX0);
         {
         f32 uvs[32] = {
             0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f,

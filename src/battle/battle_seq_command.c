@@ -2568,19 +2568,19 @@ void BattleDrawEnemyHPBar(Vec pos, BattleUnit* unit, GXColor color) {
     f32 x, y;
 
     btlDispGXInit2DRasta();
-    GXLoadPosMtxImm(cam->view, 0);
+    GXLoadPosMtxImm(cam->view, GX_PNMTX0);
     pos.x -= 10.0f;
     btlDispTexPlane(19.0f + pos.x, pos.y - 3.0f, 0.0f, 1.0f, 1.0f, VERSION_PICK(10, 17), color, 0);
     switch (unit->hpGauge.mode) {
     case 1:
         if (unit->hpGauge.drainTimer > 0) {
             btlDispGXInit2DRasta();
-            GXLoadPosMtxImm(cam->view, 0);
+            GXLoadPosMtxImm(cam->view, GX_PNMTX0);
             y = 2.0f + pos.y;
             x = 1.0f + pos.x;
             btlDispGXQuads2DRasta(x, y, x + 34.0f * unit->hpGauge.trailRatio, y - 8.0f, 0, 0, 0, color.a);
             btlDispGXInit2DRasta();
-            GXLoadPosMtxImm(cam->view, 0);
+            GXLoadPosMtxImm(cam->view, GX_PNMTX0);
         }
         btlDispTexPlane(19.0f + pos.x - 20.0f * (1.0f - unit->hpGauge.barRatio), pos.y - 3.0f, 0.0f, unit->hpGauge.barRatio, 1.0f, VERSION_PICK(11, 18), color, 0);
         break;

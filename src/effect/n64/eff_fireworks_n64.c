@@ -314,7 +314,7 @@ void effFireworksDisp(CameraId cameraId, EffectEntry* effect) {
             GXSetProjection(ortho, GX_ORTHOGRAPHIC);
             MTXLookAt(view, &pos, &up, &target);
             GXLoadPosMtxImm(view, GX_PNMTX0);
-            GXSetCurrentMtx(0);
+            GXSetCurrentMtx(GX_PNMTX0);
             GXBegin(GX_QUADS, GX_VTXFMT0, 4);
             GXPosition3f32(sx, sy, 0.0f);
             GXTexCoord2s16(0, 1);

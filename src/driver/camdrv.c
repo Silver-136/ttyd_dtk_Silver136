@@ -710,8 +710,8 @@ void camLetterBoxDraw(CameraId cameraId, void* param) {
         GXClearVtxDesc();
         GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
         GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 0);
-        GXLoadPosMtxImm(camera->view, 0);
-        GXSetCurrentMtx(0);
+        GXLoadPosMtxImm(camera->view, GX_PNMTX0);
+        GXSetCurrentMtx(GX_PNMTX0);
         GXBegin(GX_QUADS, GX_VTXFMT0, 8);
         GXPosition3s16(-304, 240, 0);
         GXPosition3s16(304, 240, 0);

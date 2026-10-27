@@ -162,7 +162,7 @@ void DEMODoneRender(void) {
     GXSetZMode(GX_TRUE, GX_LEQUAL, GX_TRUE);
     GXSetColorUpdate(GX_TRUE);
     GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_OR, GX_ALWAYS, 0);
-    GXSetAlphaUpdate(1);
+    GXSetAlphaUpdate(GX_TRUE);
     GXCopyDisp(DemoCurrentBuffer, GX_TRUE);
     GXDrawDone();
     DEMOSwapBuffers();

@@ -4087,8 +4087,8 @@ void puni_puni_shadow_disp(CameraId camId, void* param) {
         if (pose->flags & 0x10) {
             PSMTXTransApply(mtx, mtx, 0.0f, 1.0f + (-(*pose->mtx)[1][3] + pose->shadowY), 0.0f);
         }
-        GXLoadPosMtxImm(mtx, 0);
-        GXSetCurrentMtx(0);
+        GXLoadPosMtxImm(mtx, GX_PNMTX0);
+        GXSetCurrentMtx(GX_PNMTX0);
         GXCallDisplayList(shadow_dl, 0x20);
     }
 }

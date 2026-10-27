@@ -397,7 +397,7 @@ static void actionCommandDisp(f32 x, f32 y) {
             rx = (-200.0f + x - 88.0f) + 173.0f * cw->gauge / 100.0f;
             ry = 49.0f + y;
             btlDispGXInit2DRasta();
-            GXLoadPosMtxImm(cam->view, 0);
+            GXLoadPosMtxImm(cam->view, GX_PNMTX0);
             btlDispGXQuads2DRasta(rx, ry, rx + 10.0f, ry - 16.0f, 0, 255, 0, 255);
         }
         n = ac->params[GAUGE_PARAM_TARGET];

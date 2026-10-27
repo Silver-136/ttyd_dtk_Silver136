@@ -297,7 +297,7 @@ void effSmallStarDisp(CameraId cameraId, EffectEntry* effect) {
         PSMTXConcat(mtx, rotZ, mtx);
         PSMTXConcat(camera->view, mtx, mtx);
         GXLoadPosMtxImm(mtx, GX_PNMTX0);
-        GXSetCurrentMtx(0);
+        GXSetCurrentMtx(GX_PNMTX0);
         GXBegin(GX_TRIANGLES, GX_VTXFMT0, 6);
         tri2(0, 1, 2, 0, 0, 2, 3, 0);
     }

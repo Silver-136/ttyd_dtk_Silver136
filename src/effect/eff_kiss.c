@@ -340,8 +340,8 @@ void effKissDisp(CameraId cameraId, EffectEntry* effect) {
             }
             PSMTXConcat(mBase, mT, mT);
             PSMTXConcat(cam->view, mT, mT);
-            GXLoadPosMtxImm(mT, 0);
-            GXSetCurrentMtx(0);
+            GXLoadPosMtxImm(mT, GX_PNMTX0);
+            GXSetCurrentMtx(GX_PNMTX0);
             GXBegin(GX_QUADS, GX_VTXFMT0, 4);
             if (type == 3) {
                 GXPosition3f32(-h / 2.0f, w / 2.0f, 0.0f);
@@ -412,8 +412,8 @@ void effKissDisp(CameraId cameraId, EffectEntry* effect) {
             PSMTXConcat(mR, mT, mT);
             PSMTXConcat(mBase, mT, mT);
             PSMTXConcat(cam->view, mT, mT);
-            GXLoadPosMtxImm(mT, 0);
-            GXSetCurrentMtx(0);
+            GXLoadPosMtxImm(mT, GX_PNMTX0);
+            GXSetCurrentMtx(GX_PNMTX0);
             GXBegin(GX_QUADS, GX_VTXFMT0, 4);
             len = scale2 * q[1].position.y;
             w2 = 1.0f;
@@ -465,8 +465,8 @@ void effKissDisp2(CameraId cameraId, EffectEntry* effect) {
         PSMTXConcat(mT, mR, mT);
         PSMTXConcat(mBase, mT, mT);
         PSMTXConcat(cam->view, mT, mT);
-        GXLoadPosMtxImm(mT, 0);
-        GXSetCurrentMtx(0);
+        GXLoadPosMtxImm(mT, GX_PNMTX0);
+        GXSetCurrentMtx(GX_PNMTX0);
         GXBegin(GX_QUADS, GX_VTXFMT0, 4);
         GXPosition3f32(nw, w, 0.0f);
         GXTexCoord2f32(0.0f, 0.0f);

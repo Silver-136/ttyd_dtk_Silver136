@@ -135,8 +135,8 @@ static void balloon_0(CameraId cameraId, EffectEntry* effect) {
     PSMTXScale(mS, scale, scale, scale);
     PSMTXConcat(mT, mR, mT);
     PSMTXConcat(mT, mS, mT);
-    GXLoadPosMtxImm(mT, 0);
-    GXSetCurrentMtx(0);
+    GXLoadPosMtxImm(mT, GX_PNMTX0);
+    GXSetCurrentMtx(GX_PNMTX0);
     GXSetCullMode(GX_CULL_NONE);
     GXClearVtxDesc();
     GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
@@ -205,8 +205,8 @@ static void balloon_1(CameraId cameraId, EffectEntry* effect) {
         PSMTXScale(mD, p->scale, p->scale, p->scale);
         PSMTXConcat(mA, mD, mA);
         PSMTXConcat(mC, mA, mA);
-        GXLoadPosMtxImm(mA, 0);
-        GXSetCurrentMtx(0);
+        GXLoadPosMtxImm(mA, GX_PNMTX0);
+        GXSetCurrentMtx(GX_PNMTX0);
         GXBegin(GX_QUADS, GX_VTXFMT0, 4);
         GXPosition3s16(-12, 12, 0);
         GXTexCoord2s16(0, 0);

@@ -197,15 +197,15 @@ void FontDrawCode(f32 x, f32 y, u16 code) {
     PSMTXScale(mtx, fontScale.x, fontScale.y, fontScale.z);
     PSMTXTransApply(mtx, mtx, x, y, 0.0f);
     PSMTXConcat(camGetCurPtr()->view, mtx, mtx);
-    GXLoadPosMtxImm(mtx, 0);
-    GXSetCurrentMtx(0);
+    GXLoadPosMtxImm(mtx, GX_PNMTX0);
+    GXSetCurrentMtx(GX_PNMTX0);
     fontDrawCodeEdge(code);
 }
 
 void FontDrawCodeMtx(Mtx mtx, u16 code) {
     PSMTXConcat(camGetCurPtr()->view, mtx, mtx);
-    GXLoadPosMtxImm(mtx, 0);
-    GXSetCurrentMtx(0);
+    GXLoadPosMtxImm(mtx, GX_PNMTX0);
+    GXSetCurrentMtx(GX_PNMTX0);
     fontDrawCodeEdge(code);
 }
 
@@ -231,7 +231,7 @@ static void FontDrawStringVec(Vec pos, const s8* str) {
         width = fontGetWidth(code)->width;
         PSMTXTransApply(scale, trans, x, pos.y, pos.z);
         PSMTXConcat(camera->view, trans, trans);
-        GXLoadPosMtxImm(trans, 0);
+        GXLoadPosMtxImm(trans, GX_PNMTX0);
         fontDrawCodeEdge(code);
         x += fontScale.x * (width + charspace[gp->language]);
     }
@@ -270,7 +270,7 @@ static inline void fontDrawStringVecPitch(Vec pos, f32 pitch, const s8* str) {
         width = fontGetWidth(code)->width;
         PSMTXTransApply(scale, trans, pitch < 0.0f ? x : x + fontScale.x * ((pitch - width) * 0.5f), pos.y, pos.z);
         PSMTXConcat(camera->view, trans, trans);
-        GXLoadPosMtxImm(trans, 0);
+        GXLoadPosMtxImm(trans, GX_PNMTX0);
         fontDrawCodeEdge(code);
         if (pitch < 0.0f) {
             x += fontScale.x * (width + charspace[gp->language]);
@@ -332,7 +332,7 @@ void FontDrawStringVecPitch(Vec pos, f32 pitch, const s8* msg) {
             width = fontGetWidth(code)->width;
             PSMTXTransApply(scale, trans, pitch < 0.0f ? x : x + fontScale.x * ((pitch - width) * 0.5f), pos.y, pos.z);
             PSMTXConcat(camera->view, trans, trans);
-            GXLoadPosMtxImm(trans, 0);
+            GXLoadPosMtxImm(trans, GX_PNMTX0);
             fontDrawCodeEdge(code);
             if (pitch < 0.0f) {
                 x += fontScale.x * (width + charspace[gp->language]);
@@ -345,7 +345,7 @@ void FontDrawStringVecPitch(Vec pos, f32 pitch, const s8* msg) {
         width = fontGetWidth(code)->width;
         PSMTXTransApply(scale, trans, pitch < 0.0f ? x : x + fontScale.x * ((pitch - width) * 0.5f), pos.y, pos.z);
         PSMTXConcat(camera->view, trans, trans);
-        GXLoadPosMtxImm(trans, 0);
+        GXLoadPosMtxImm(trans, GX_PNMTX0);
         fontDrawCodeEdge(code);
         if (pitch < 0.0f) {
             x += fontScale.x * (width + charspace[gp->language]);
@@ -409,7 +409,7 @@ void FontDrawStringMtx(Mtx mtx, const char* msg) {
     x = 0.0f;
     y = x;
     PSMTXConcat(camera->view, mtx, m);
-    GXLoadPosMtxImm(m, 0);
+    GXLoadPosMtxImm(m, GX_PNMTX0);
     while (*(const s8*)msg) {
         code = 0xFFFF;
         if (_ismbblead(*(const s8*)msg)) {
@@ -465,7 +465,7 @@ void FontDrawStringCenterMtx(Mtx mtx, const s8* msg) {
     camera = camGetCurPtr();
     x = -(f32)FontGetMessageWidthLine((const char*)msg, NULL) * 0.5f;
     PSMTXConcat(camera->view, mtx, m);
-    GXLoadPosMtxImm(m, 0);
+    GXLoadPosMtxImm(m, GX_PNMTX0);
     while (*msg) {
         if (_ismbblead(*msg)) {
             code = JUTFont_CodeToGlyph(*(u16*)msg);
@@ -513,7 +513,7 @@ void FontDrawStringShake(f32 x, f32 y, const s8* msg) {
         width = fontGetGlyphWidth(code);
         PSMTXTransApply(scale, trans, sx, sy, 0.0f);
         PSMTXConcat(camera->view, trans, trans);
-        GXLoadPosMtxImm(trans, 0);
+        GXLoadPosMtxImm(trans, GX_PNMTX0);
         fontDrawCodeEdge(code);
         x += fontScale.x * (width + charspace[gp->language]);
     }
@@ -684,7 +684,7 @@ void FontDrawMessageMtx(Mtx mtx, const char* msg) {
             PSMTXTrans(m, cx, cy, 0.0f);
             PSMTXConcat(camera->view, mtx, m2);
             PSMTXConcat(m2, m, m2);
-            GXLoadPosMtxImm(m2, 0);
+            GXLoadPosMtxImm(m2, GX_PNMTX0);
             fontDrawCodeEdge(code);
             cx += fontGetWidth(code)->width + charspace[gp->language];
         }
@@ -995,8 +995,8 @@ void JUTFont_DrawStart(GXColor color) {
 #endif
     GXLoadTexMtxImm(mtx, GX_TEXMTX0, GX_MTX2x4);
     GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX0, GX_FALSE, GX_PTIDENTITY);
-    GXLoadPosMtxImm(camera->view, 0);
-    GXSetCurrentMtx(0);
+    GXLoadPosMtxImm(camera->view, GX_PNMTX0);
+    GXSetCurrentMtx(GX_PNMTX0);
     GXSetFog(GX_FOG_NONE, 0.0f, 0.0f, 0.0f, 0.0f, (GXColor){0, 0, 0, 0});
 }
 

@@ -150,8 +150,8 @@ void effGlassDisp(CameraId cameraId, EffectEntry* effect) {
     PSMTXConcat(cam->view, mtx, viewMtx);
     PSMTXRotRad(rotMtx, 'z', 0.017453292f * work->rotZ);
     PSMTXConcat(viewMtx, rotMtx, mtx);
-    GXLoadPosMtxImm(mtx, 0);
-    GXSetCurrentMtx(0);
+    GXLoadPosMtxImm(mtx, GX_PNMTX0);
+    GXSetCurrentMtx(GX_PNMTX0);
     GXSetNumChans(0);
     GXSetNumTevStages(3);
     GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
@@ -206,8 +206,8 @@ void effGlassDisp(CameraId cameraId, EffectEntry* effect) {
         GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_C0);
         GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_A0, GX_CA_RASA, GX_CA_ZERO);
         effSetVtxDescN64(size48x48_tex32x32_vtx);
-        GXLoadPosMtxImm(viewMtx, 0);
-        GXSetCurrentMtx(0);
+        GXLoadPosMtxImm(viewMtx, GX_PNMTX0);
+        GXSetCurrentMtx(GX_PNMTX0);
         GXBegin(GX_TRIANGLES, GX_VTXFMT0, 12);
         tri2(0, 1, 4, 0, 1, 2, 4, 0);
         tri2(0, 4, 3, 0, 4, 2, 3, 0);

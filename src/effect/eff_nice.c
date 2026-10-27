@@ -496,8 +496,8 @@ void effAcrobatDisp(CameraId cameraId, void* param) {
         PSMTXConcat(trans, scale, scale);
         PSMTXConcat(mtx, scale, scale);
         PSMTXConcat(camera->view, scale, scale);
-        GXLoadPosMtxImm(scale, 0);
-        GXSetCurrentMtx(0);
+        GXLoadPosMtxImm(scale, GX_PNMTX0);
+        GXSetCurrentMtx(GX_PNMTX0);
 #ifdef VERSION_G8ME01
         id = acrobat_tbl[gp->language].tex[i - 1];
         if (id != -1) {

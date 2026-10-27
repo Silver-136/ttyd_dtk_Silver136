@@ -263,7 +263,7 @@ void effKemuriDisp(CameraId camId, void* param) {
     PSMTXConcat(t, r, m);
     PSMTXConcat(m, s, m);
     PSMTXConcat(cam->view, m, m);
-    GXSetCurrentMtx(0);
+    GXSetCurrentMtx(GX_PNMTX0);
     GXSetNumChans(1);
     GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_REG, GX_LIGHT_NULL, GX_DF_NONE, GX_AF_NONE);
     GXSetChanMatColor(GX_COLOR0A0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
@@ -305,7 +305,7 @@ void effKemuriDisp(CameraId camId, void* param) {
             PSMTXScale(s, 20.0f * data->scaleX, 20.0f * data->scaleY, 20.0f);
             PSMTXConcat(m, t, m2);
             PSMTXConcat(m2, s, m2);
-            GXLoadPosMtxImm(m2, 0);
+            GXLoadPosMtxImm(m2, GX_PNMTX0);
             PSMTXScale(s, 0.0625f, 1.0f, 1.0f);
             PSMTXTrans(t, data->texFrame0, -0.2f, 0.0f);
             PSMTXConcat(s, t, t);
@@ -382,8 +382,8 @@ static void effKemuri2Disp(CameraId camId, void* param) {
             PSMTXConcat(cam->view, m, m);
             PSMTXTrans(t, 6.0f, -4.0f, 0.0f);
             PSMTXConcat(m, t, m);
-            GXLoadPosMtxImm(m, 0);
-            GXSetCurrentMtx(0);
+            GXLoadPosMtxImm(m, GX_PNMTX0);
+            GXSetCurrentMtx(GX_PNMTX0);
             effGetTexObj(0xd, &tex);
             GXLoadTexObj(&tex, GX_TEXMAP0);
             if (i == 0) {
@@ -421,8 +421,8 @@ static void effKemuri2Disp(CameraId camId, void* param) {
         PSMTXConcat(m, rz, m);
         PSMTXConcat(m, s, m);
         PSMTXConcat(cam->view, m, m);
-        GXLoadPosMtxImm(m, 0);
-        GXSetCurrentMtx(0);
+        GXLoadPosMtxImm(m, GX_PNMTX0);
+        GXSetCurrentMtx(GX_PNMTX0);
         if (i == 0) {
             effGetTexObj(0xc, &tex);
             GXLoadTexObj(&tex, GX_TEXMAP0);

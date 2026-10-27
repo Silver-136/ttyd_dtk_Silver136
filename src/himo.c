@@ -149,10 +149,10 @@ void vivihimoDisp(CameraId camId, HimoWork* w) {
     tp = tmp;
     for (i = 0; i < 15;) {
         spline_getvalue(&cur, t, 4, pts, t1, t2);
-        GXLoadPosMtxImm(pA, 0);
+        GXLoadPosMtxImm(pA, GX_PNMTX0);
         himoMtx(w, tp, t, &cur);
         PSMTXConcat(cam->view, tp, pB);
-        GXLoadPosMtxImm(pB, 3);
+        GXLoadPosMtxImm(pB, GX_PNMTX1);
         wid = k * (tanBase + (f32)tan(3.1415927f * (0.82f * t) - 1.288053f));
         GXBegin(GX_QUADS, GX_VTXFMT0, 4);
         GXWGFifo.u8 = 0;

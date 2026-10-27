@@ -109,25 +109,25 @@ void effKemuTestDisp(CameraId cameraId, void* param) {
     effGetTexObj(0x28, &tex);
     GXLoadTexObj(&tex, GX_TEXMAP0);
     GXSetNumChans(1);
-    GXSetChanCtrl(GX_COLOR0A0, 0, GX_SRC_REG, GX_SRC_REG, 0, GX_DF_NONE, GX_AF_NONE);
+    GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_REG, 0, GX_DF_NONE, GX_AF_NONE);
     GXSetNumTexGens(2);
-    GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, 0x1e, 0, 0x7d);
-    GXSetTexCoordGen2(GX_TEXCOORD1, GX_TG_MTX2x4, GX_TG_TEX0, 0x21, 0, 0x7d);
+    GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX0, GX_FALSE, GX_PTIDENTITY);
+    GXSetTexCoordGen2(GX_TEXCOORD1, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX1, GX_FALSE, GX_PTIDENTITY);
     GXSetNumTevStages(3);
     GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
-    GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, 1, GX_TEVPREV);
-    GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, 1, GX_TEVPREV);
+    GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
     GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_TEXC);
     GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_TEXA);
     GXSetTevOrder(GX_TEVSTAGE1, GX_TEXCOORD1, GX_TEXMAP0, GX_COLOR_NULL);
-    GXSetTevColorOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, 1, GX_TEVPREV);
-    GXSetTevAlphaOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, 1, GX_TEVPREV);
+    GXSetTevColorOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    GXSetTevAlphaOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
     GXSetTevColorIn(GX_TEVSTAGE1, GX_CC_CPREV, GX_CC_TEXC, GX_CC_C0, GX_CC_ZERO);
     GXSetTevAlphaIn(GX_TEVSTAGE1, GX_CA_APREV, GX_CA_TEXA, GX_CA_A0, GX_CA_ZERO);
     GXSetTevColor(GX_TEVREG0, (GXColor){ 0x80, 0x80, 0x80, 0x80 });
     GXSetTevOrder(GX_TEVSTAGE2, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR0A0);
-    GXSetTevColorOp(GX_TEVSTAGE2, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, 1, GX_TEVPREV);
-    GXSetTevAlphaOp(GX_TEVSTAGE2, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, 1, GX_TEVPREV);
+    GXSetTevColorOp(GX_TEVSTAGE2, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    GXSetTevAlphaOp(GX_TEVSTAGE2, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
     GXSetTevColorIn(GX_TEVSTAGE2, GX_CC_ZERO, GX_CC_CPREV, GX_CC_RASC, GX_CC_ZERO);
     GXSetTevAlphaIn(GX_TEVSTAGE2, GX_CA_ZERO, GX_CA_APREV, GX_CA_RASA, GX_CA_ZERO);
     GXSetCullMode(GX_CULL_NONE);
@@ -159,11 +159,11 @@ void effKemuTestDisp(CameraId cameraId, void* param) {
             PSMTXTrans(trans, 0.0625f * (f32)work->idx0, 0.0f, 0.0f);
             PSMTXScale(scl, 0.0625f, 1.0f, 1.0f);
             PSMTXConcat(trans, scl, trans);
-            GXLoadTexMtxImm(trans, 0x1e, GX_MTX2x4);
+            GXLoadTexMtxImm(trans, GX_TEXMTX0, GX_MTX2x4);
             PSMTXTrans(trans, 0.0625f * (f32)work->idx1, 0.0f, 0.0f);
             PSMTXScale(scl, 0.0625f, 1.0f, 1.0f);
             PSMTXConcat(trans, scl, trans);
-            GXLoadTexMtxImm(trans, 0x21, GX_MTX2x4);
+            GXLoadTexMtxImm(trans, GX_TEXMTX1, GX_MTX2x4);
             ext = 16.0f;
             for (pass = start; pass < 2; pass++) {
                 if (pass == 0) {
@@ -176,7 +176,7 @@ void effKemuTestDisp(CameraId cameraId, void* param) {
                     PSMTXConcat(trans, rot, trans);
                 }
                 PSMTXConcat(trans, scl, trans);
-                GXLoadPosMtxImm(trans, 0);
+                GXLoadPosMtxImm(trans, GX_PNMTX0);
                 } else {
                     GXSetChanMatColor(GX_COLOR0A0, (GXColor){ work->r, work->g, work->b, alpha });
                     PSMTXTrans(trans, work->pos.x, work->pos.y, work->pos.z);
@@ -187,7 +187,7 @@ void effKemuTestDisp(CameraId cameraId, void* param) {
                     PSMTXConcat(trans, rot, trans);
                 }
                 PSMTXConcat(trans, scl, trans);
-                GXLoadPosMtxImm(trans, 0);
+                GXLoadPosMtxImm(trans, GX_PNMTX0);
                 }
                 half = neg / 2.0f;
                 GXBegin(GX_QUADS, GX_VTXFMT0, 4);

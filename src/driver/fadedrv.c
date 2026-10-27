@@ -889,8 +889,8 @@ void disp_texture(CameraId camId, void* param) {
     switch (work->entries[0].type) {
         case 1:
         case 2:
-            GXLoadPosMtxImm(camera->view, 0);
-            GXSetCurrentMtx(0);
+            GXLoadPosMtxImm(camera->view, GX_PNMTX0);
+            GXSetCurrentMtx(GX_PNMTX0);
             TEXGetGXTexObjFromPalette(wp->texture, &obj, 0);
             GXLoadTexObj(&obj, GX_TEXMAP0);
             if (!(work->entries[0].flags & FADE_FLAG_DONE)) {
@@ -909,8 +909,8 @@ void disp_texture(CameraId camId, void* param) {
         case 4:
         case 5:
         case 6:
-            GXLoadPosMtxImm(camera->view, 0);
-            GXSetCurrentMtx(0);
+            GXLoadPosMtxImm(camera->view, GX_PNMTX0);
+            GXSetCurrentMtx(GX_PNMTX0);
             TEXGetGXTexObjFromPalette(wp->texture, &obj, 1);
             GXLoadTexObj(&obj, GX_TEXMAP0);
             if (!(work->entries[0].flags & FADE_FLAG_DONE)) {
@@ -934,16 +934,16 @@ void disp_texture(CameraId camId, void* param) {
         case 12:
         case 14:
         case 15:
-            GXLoadPosMtxImm(camera->view, 0);
-            GXSetCurrentMtx(0);
+            GXLoadPosMtxImm(camera->view, GX_PNMTX0);
+            GXSetCurrentMtx(GX_PNMTX0);
             GXInitTexObj(&obj, i4tex, 1, 1, GX_TF_I4, GX_CLAMP, GX_CLAMP, GX_FALSE);
             GXLoadTexObj(&obj, GX_TEXMAP0);
             PSMTXIdentity(work->entries[0].texMtx);
             work->entries[0].color.a = 255.0f * work->entries[0].progress;
             break;
         case 13:
-            GXLoadPosMtxImm(camera->view, 0);
-            GXSetCurrentMtx(0);
+            GXLoadPosMtxImm(camera->view, GX_PNMTX0);
+            GXSetCurrentMtx(GX_PNMTX0);
             GXInitTexObj(&obj, i4tex, 1, 1, GX_TF_I4, GX_CLAMP, GX_CLAMP, GX_FALSE);
             GXLoadTexObj(&obj, GX_TEXMAP0);
             PSMTXIdentity(work->entries[0].texMtx);
@@ -1029,8 +1029,8 @@ static void zFill(void) {
     GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
     GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
     PSMTXIdentity(mtx);
-    GXLoadPosMtxImm(camera->view, 0);
-    GXSetCurrentMtx(0);
+    GXLoadPosMtxImm(camera->view, GX_PNMTX0);
+    GXSetCurrentMtx(GX_PNMTX0);
     GXBegin(GX_QUADS, GX_VTXFMT0, 4);
     zpos = -10000.0f;
     GXPosition3f32(x0, y0, zpos);
@@ -1184,8 +1184,8 @@ void disp_tec(CameraId camId, void* param) {
     GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 0);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
-    GXLoadPosMtxImm(camera->view, 0);
-    GXSetCurrentMtx(0);
+    GXLoadPosMtxImm(camera->view, GX_PNMTX0);
+    GXSetCurrentMtx(GX_PNMTX0);
     GXBegin(GX_QUADS, GX_VTXFMT0, 4);
     GXPosition3s16(-308, 244, 0);
     GXTexCoord2f32(0.0f, 0.0f);
@@ -1221,8 +1221,8 @@ void disp_dummy_black(CameraId camId, void* param) {
     GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
     GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
     GXSetTevOp(GX_TEVSTAGE0, GX_PASSCLR);
-    GXLoadPosMtxImm(camera->view, 0);
-    GXSetCurrentMtx(0);
+    GXLoadPosMtxImm(camera->view, GX_PNMTX0);
+    GXSetCurrentMtx(GX_PNMTX0);
     GXSetCullMode(GX_CULL_BACK);
     GXClearVtxDesc();
     GXSetVtxDesc(GX_VA_POS, GX_DIRECT);

@@ -307,8 +307,8 @@ void effConfettiDisp(CameraId cameraId, EffectEntry* effect) {
         }
         PSMTXTrans(tmp, w->position.x, w->position.y, w->position.z);
         PSMTXConcat(mtx, tmp, tmp);
-        GXLoadPosMtxImm(tmp, 0);
-        GXSetCurrentMtx(0);
+        GXLoadPosMtxImm(tmp, GX_PNMTX0);
+        GXSetCurrentMtx(GX_PNMTX0);
         GXSetTevColor(GX_TEVREG0, (GXColor){col[0], col[1], col[2], alpha});
         GXSetTevColor(GX_TEVREG1, (GXColor){0x3C, 0x3C, 0x3C, 0});
         off = ((i + anm_seq[(anm >> 1) % 6]) & 0xF) << 6;
