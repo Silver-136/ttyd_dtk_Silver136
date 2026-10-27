@@ -152,7 +152,7 @@ static u32 do_voice_portamento(u8 key, u8 midi, u8 midiSet, u32 isMaster, u32* r
 static u32 check_portamento(u8 key, u8 midi, u8 midiSet, u32 newVID, u32* vid) {
   u32 rejected; // r1+0x14
 
-  if (inpGetMidiCtrl(65 /* TODO SND_MIDICTRL_? */, midi, midiSet) > 8064) {
+  if (inpGetMidiCtrl(SND_MIDICTRL_PORTAMENTO, midi, midiSet) > 8064) {
     *vid = do_voice_portamento(key & 0x7f, midi, midiSet, newVID, &rejected);
     return !rejected;
   }
@@ -222,8 +222,6 @@ static u32 StartLayer(u16 layerID, s16 prio, u8 maxVoices,
     if ((l->panning & 0x80) == 0) {
       p = l->panning - 0x40;
       p += panning;
-      // TODO
-      // p = CLAMP(p, 0, 0x7f);
       p = CLAMP_INV(p, 0, 0x7f);
     } else {
       p = 0x80;

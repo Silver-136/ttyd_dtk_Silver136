@@ -14,7 +14,7 @@
 
 #include "musyx/assert.h"
 
-// TODO: Cleanup and move externs to header
+// creverb.c (no MusyX header declares the STD reverb functions)
 extern bool ReverbSTDCreate(_SND_REVSTD_WORK* rv, f32 coloration, f32 time, f32 mix, f32 damping,
                             f32 preDelay);
 extern void ReverbSTDFree(_SND_REVSTD_WORK* rev);

@@ -16,7 +16,7 @@ const char* English =
     "Nintendo GameCube Instruction Booklet\n"
     "for further instructions.";
 
-// TODO: need solution to compile special characters in a cleaner way
+// The European messages write their accented characters as escape codes
 const char* const Europe[6] = {
     {
         "\n\n\nAn error has occurred.\n"

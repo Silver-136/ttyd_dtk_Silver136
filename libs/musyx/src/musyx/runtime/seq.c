@@ -977,7 +977,7 @@ static SEQ_EVENT* GenerateNextTrackEvent(u8 trackId) {
 
         ev->type = 3;
         ev->time = track->addr->time;
-        // TODO what is this?
+        // loop marker (pattern 0xFFFE): the halfword at `transpose` is the index of the entry to loop back to
         track->addr = &track->base[*((u16*)&track->addr->transpose)];
         return ev;
       }
@@ -1132,7 +1132,7 @@ static SEQ_EVENT* HandleEvent(SEQ_EVENT* event, u8 secIndex, bool* loopFlag) {
         DoPrgChange(cseq, key & 0x7f, midi);
         break;
       case 1:
-        inpSetMidiCtrl(0x82 /* TODO SND_MIDICTRL_? */, midi, curSeqId, key & 0x7f);
+        inpSetMidiCtrl(0x82 /* no name in musyx.h */, midi, curSeqId, key & 0x7f);
         break;
       default:
         if ((velocity & 0x80) != 0x80) {

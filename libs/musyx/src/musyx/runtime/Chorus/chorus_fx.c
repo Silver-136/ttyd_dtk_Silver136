@@ -292,7 +292,7 @@ lbl_803B6E10:
 /* clang-format on */
 #else
 static void do_src1(_SND_CHORUS_SRCINFO* src) {
-  // TODO: Reimplement in C
+  // Non-MWCC builds: no C form of this kernel exists; the game uses the assembly above
 }
 #endif
 
@@ -531,7 +531,7 @@ lbl_803B6FF4:
 }
 #else
 static void do_src2(register _SND_CHORUS_SRCINFO* src) {
-  // TODO: Reimplement in C
+  // Non-MWCC builds: no C form of this kernel exists; the game uses the assembly above
 }
 #endif
 

@@ -6,19 +6,17 @@
 
 #include "musyx/sal.h"
 
-// TTYD symbols.txt names this static U_HandleReverb (avoids clashing with creverb.c's HandleReverb)
-#define HandleReverb U_HandleReverb
 
 extern double pow(double x, double y);
 
-static inline void DLsetdelay(_SND_REVHI_DELAYLINE* delayline, s32 len) {
+static void DLsetdelay(_SND_REVHI_DELAYLINE* delayline, s32 len) {
   delayline->outPoint = delayline->inPoint - (len * sizeof(f32));
   while (delayline->outPoint < 0) {
     delayline->outPoint += delayline->length;
   }
 }
 
-static inline void DLcreate(_SND_REVHI_DELAYLINE* delayline, s32 length) {
+static void DLcreate(_SND_REVHI_DELAYLINE* delayline, s32 length) {
   delayline->length = (s32)length * sizeof(f32);
   delayline->inputs = (f32*)salMalloc(length * sizeof(f32));
   memset(delayline->inputs, 0, length * sizeof(length));
@@ -28,7 +26,7 @@ static inline void DLcreate(_SND_REVHI_DELAYLINE* delayline, s32 length) {
   delayline->outPoint = 0;
 }
 
-static inline void DLdelete(_SND_REVHI_DELAYLINE* delayline) { salFree(delayline->inputs); }
+static void DLdelete(_SND_REVHI_DELAYLINE* delayline) { salFree(delayline->inputs); }
 bool ReverbHICreate(_SND_REVHI_WORK* rev, f32 coloration, f32 time, f32 mix, f32 damping,
                     f32 preDelay, f32 crosstalk) {
   static int lens[] = {1789, 1999, 2333, 433, 149, 47, 73, 67};
@@ -85,7 +83,6 @@ bool ReverbHICreate(_SND_REVHI_WORK* rev, f32 coloration, f32 time, f32 mix, f32
   return TRUE;
 }
 
-#if 0 // stripped in TTYD
 bool ReverbHIModify(struct _SND_REVHI_WORK* rv, float coloration, float time, float mix,
                     float damping, float preDelay, float crosstalk) {
   u8 i; // r30
@@ -123,7 +120,6 @@ bool ReverbHIModify(struct _SND_REVHI_WORK* rv, float coloration, float time, fl
   return ReverbHICreate(rv, coloration, time, mix, damping, preDelay, crosstalk);
 }
 
-#endif
 
 #ifdef __MWERKS__
 static const float value0_3 = 0.3f;
@@ -131,7 +127,7 @@ static const float value0_6 = 0.6f;
 static const double i2fMagic = 4.503601774854144E15;
 
 /* clang-format off */
-/* TODO: Properly rework these to use input arguments and cleanup ASM */
+/* Hand-written assembly kernel (Codex round 16: whether the original was assembly is not established) */
 static asm void DoCrossTalk(s32* a, s32* b, f32 start, f32 end) {
   nofralloc
   stwu r1, -0x30(r1)
@@ -243,13 +239,14 @@ L_00000710:
 #else
 /* clang-format on */
 static void DoCrossTalk(s32* a, s32* b, f32 start, f32 end) {
-  // TODO: Reimplement in C
+  // Non-MWCC builds: no C form of this kernel exists; the game uses the assembly above
 }
 #endif
 
 #ifdef __MWERKS__
 /* clang-format off */
-static asm void HandleReverb(s32*, SND_AUX_REVERBHI* rev, s32) {
+// The retail map names this function U_HandleReverb (the JP demo map: HandleReverb)
+static asm void U_HandleReverb(s32*, SND_AUX_REVERBHI* rev, s32) {
   nofralloc
   stwu r1, -0xc0(r1)
   stmw r14, 0x8(r1)
@@ -606,8 +603,8 @@ L_00000C6C:
 }
 /* clang-format on */
 #else
-static void HandleReverb(s32*, SND_AUX_REVERBHI* rev, s32) {
-  // TODO: Reimplement in C
+static void U_HandleReverb(s32*, SND_AUX_REVERBHI* rev, s32) {
+  // Non-MWCC builds: no C form of this kernel exists; the game uses the assembly above
 }
 #endif
 
@@ -619,19 +616,18 @@ void ReverbHICallback(s32* left, s32* right, s32* surround, SND_AUX_REVERBHI* re
       if (rev->rv.crosstalk != 0.f) {
         DoCrossTalk(left, right, rev->rv.crosstalk * 0.5f, 1.f - (rev->rv.crosstalk * 0.5f));
       }
-      HandleReverb(left, rev, 0);
+      U_HandleReverb(left, rev, 0);
       break;
     case 1:
-      HandleReverb(right, rev, 1);
+      U_HandleReverb(right, rev, 1);
       break;
     case 2:
-      HandleReverb(surround, rev, 2);
+      U_HandleReverb(surround, rev, 2);
       break;
     }
   }
 }
 
-#if 0 // stripped in TTYD
 void ReverbHIFree(_SND_REVHI_WORK* rv) {
   u8 i;
   for (i = 0; i < 9; ++i) {
@@ -646,4 +642,3 @@ void ReverbHIFree(_SND_REVHI_WORK* rv) {
     }
   }
 }
-#endif

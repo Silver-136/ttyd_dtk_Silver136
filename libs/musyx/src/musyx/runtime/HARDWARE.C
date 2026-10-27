@@ -8,6 +8,7 @@
 #include "musyx/synth.h"
 #include "dolphin/os/OSCache.h"
 
+// FAKE: `volatile` table (a plain const table changes the object in both versions)
 static volatile const u16 itdOffTab[128] = {
     0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  1,  1,  1,  1,  1,  1,  1,  2,  2,  2,  2,
     2,  3,  3,  3,  3,  3,  4,  4,  4,  4,  5,  5,  5,  6,  6,  6,  7,  7,  7,  8,  8,  8,
@@ -17,7 +18,6 @@ static volatile const u16 itdOffTab[128] = {
     31, 31, 31, 31, 31, 31, 31, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32,
 };
 
-// SND_PROFILE_INFO prof;
 
 u8 salFrame;
 u8 salAuxFrame;
@@ -41,14 +41,10 @@ static void snd_handle_irq() {
 
   streamCorrectLoops();
   hwIRQEnterCritical();
-  // sndProfStartPCM(&prof.dspCtrl);
   salCtrlDsp(salAiGetDest());
-  // sndProfStopPMC(&prof.dspCtrl);
   hwIRQLeaveCritical();
   hwIRQEnterCritical();
-  // sndProfStartPCM(&prof.auxProcessing);
   salHandleAuxProcessing();
-  // sndProfStopPMC(&prof.auxProcessing);
   hwIRQLeaveCritical();
   hwIRQEnterCritical();
   salFrame ^= 1;
@@ -60,44 +56,25 @@ static void snd_handle_irq() {
     }
   }
 
-  // sndProfStartPMC(&prof.sequencer);
-  // sndProfPausePMC(&prof.sequencer);
-  // sndProfStartPMC(&prof.synthesizer);
-  // sndProfPausePMC(&prof.synthesizer);
   hwIRQLeaveCritical();
   for (r = 0; r < 5; ++r) {
     hwIRQEnterCritical();
     hwSetTimeOffset(r);
-    // sndProfStartPMC(&prof.sequencer);
     seqHandle(256);
-    // sndProfPausePMC(&prof.sequencer);
-    // sndProfStartPMC(&prof.synthesizer);
     synthHandle(256);
-    // sndProfPausePMC(&prof.synthesizer);
     hwIRQLeaveCritical();
   }
 
-  // sndProfStopPMC(&prof.sequencer);
-  // sndProfStopPMC(&prof.synthesizer);
   hwIRQEnterCritical();
   hwSetTimeOffset(0);
-  // sndProfStartPMC(&prof.emitters);
   s3dHandle();
-  // sndProfStopPMC(&prof.emitters);
   hwIRQLeaveCritical();
   hwIRQEnterCritical();
-  // sndProfStartPMC(&prof.streaming);
   streamHandle();
-  // sndProfStopPMC(&prof.streaming);
   hwIRQLeaveCritical();
   hwIRQEnterCritical();
   vsSampleUpdates();
   hwIRQLeaveCritical();
-  // sndProfUpdateMisc(&prof);
-
-  // if (sndProfUserCallback) {
-  //   sndProfUserCallback(&prof);
-  // }
 }
 
 s32 hwInit(u32* frq, u16 numVoices, u16 numStudios, u32 flags) {

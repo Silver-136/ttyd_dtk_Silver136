@@ -251,10 +251,10 @@ skip_neg2:
   blr
 }
 #else  // __MWERKS__
-// TODO: GCC Compatible asm
+// Non-MWCC builds: the libm function
 float sndSqrt(register float x) { return sqrt(x); }
 
-// TODO: GCC Compatible asm
+// Non-MWCC builds: the libm function
 float sndCos(register float x) { return cos(x); }
 #endif // __MWERKS__
 #elif MUSY_TARGET == MUSY_TARGET_PC

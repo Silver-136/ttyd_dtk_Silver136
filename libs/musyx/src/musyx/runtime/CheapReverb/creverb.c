@@ -416,7 +416,7 @@ lbl_803B599C:
 }
 #else
 static void HandleReverb(s32* sptr, struct _SND_REVSTD_WORK* rv) {
-  // TODO: Reimplement this in C
+  // Non-MWCC builds: no C form of this kernel exists; the game uses the assembly above
 }
 #endif
 
