@@ -404,7 +404,7 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | US | src/effect/eff_irekaeru.c | effIrekaeruMain | no-op (u32) cast (animPoseEntry takes s32); the plain argument changes the object | see comment |
 | Both | src/effect/eff_itemget.c | effItemGetEntry | spare temporary cv; `5.0f * -(f32)cos(elem->angle)` changes the object | see comment |
 | Both | src/driver/mobjdrv.c | mobjHitEntry | (0, x) comma expressions around the x and z __fabs calls; the plain __fabs changes the object | see comment |
-| Both | src/driver/mobjdrv.c | mobjMain | the work pointer goes through the block-local w; `wp = (MobjWorkHit*)mobjGetWork();` changes the object | see comment |
+| Both | src/driver/mobjdrv.c | mobjMain | `gp->inBattle != 0 ||` is always false here; without it the object changes | see comment |
 | Both | src/driver/mobjdrv.c | mobjNearDistCheck2 | unusedVec is never read and the position goes through the zeroed copy _pos; setting pos.x/y/z directly changes the object | see comment |
 | Both | src/driver/mobjdrv.c | mobjStrippedFallPool | stand-in, never called (in neither symbol map; the linker strips it); it only places its literals in the .sdata2 pool | see comment |
 | JP | src/driver/msgdrv.c | msgDisp | hy holds the x position and hx the y position; swapping the names changes the object | see comment |

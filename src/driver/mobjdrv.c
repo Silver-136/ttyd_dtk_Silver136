@@ -592,14 +592,8 @@ void mobjSetPosition(const char* name, f32 x, f32 y, f32 z) {
 }
 
 
-typedef struct MobjWorkHit {
-    s32 count;
-    MapObjectEntry* entries;
-    HitEntry* hit[5];
-} MobjWorkHit;
-
 void mobjMain(void) {
-    MobjWorkHit* wp;
+    MapObjectWork* wp;
     MapObjectEntry* entry;
     MarioWork* mario;
     PartyEntry* party;
@@ -617,11 +611,7 @@ void mobjMain(void) {
     Vec camPos;
     f32 nz, ny, nx, dist, hz, hy, hx;
 
-    // FAKE: the work pointer goes through the block-local w; `wp = (MobjWorkHit*)mobjGetWork();` changes the object
-    {
-        MapObjectWork* w = mobjGetWork();
-        wp = (MobjWorkHit*)w;
-    }
+    wp = mobjGetWork();
     count = wp->count;
     entry = wp->entries;
     mario = marioGetPtr();
