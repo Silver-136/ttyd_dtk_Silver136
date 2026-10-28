@@ -155,6 +155,7 @@ s32 evt_twoddisp_set_position(EventEntry* evt, BOOL isFirstCall) {
     char* name = (char*)evtGetValue(evt, args[0]);
     TwodEntry* p;
 
+    // twod_find returns NULL for a name that is not registered; the result is not checked.
     p = twod_find(name);
     p->x = evtGetFloat(evt, args[1]);
     p->y = evtGetFloat(evt, args[2]);
@@ -166,6 +167,7 @@ s32 evt_twoddisp_set_base_position(EventEntry* evt, BOOL isFirstCall) {
     char* name = (char*)evtGetValue(evt, args[0]);
     TwodEntry* p;
 
+    // twod_find returns NULL for a name that is not registered; the result is not checked.
     p = twod_find(name);
     p->baseX = evtGetFloat(evt, args[1]);
     p->baseY = evtGetFloat(evt, args[2]);
@@ -182,6 +184,7 @@ s32 evt_twoddisp_flag_onoff(EventEntry* evt, BOOL isFirstCall) {
     onoff = evtGetValue(evt, args[0]);
     name = (char*)evtGetValue(evt, args[1]);
 
+    // twod_find returns NULL for a name that is not registered; the result is not checked.
     p = twod_find(name);
     if (onoff) {
         p->flags |= evtGetValue(evt, args[2]);

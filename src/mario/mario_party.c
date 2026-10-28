@@ -61,6 +61,7 @@ s32 marioUseParty(void) {
         wp->trigFlags &= ~MARIO_TRIG_FLAG_USE_PARTNER;
         return 0;
     }
+    // party can be NULL (marioGetPartyId may return -1 even with a partner slot set); it is dereferenced here before the NULL check below.
     if ((wp->dispFlags & MARIO_DISP_FLAG_SLIT) || party->slitOn == 1) {
         return 0;
     }

@@ -582,6 +582,7 @@ void BattleStageReturnAudDarkBase(s32 time, u8 mode) {
 }
 
 #pragma dont_inline on
+// Assumes n > 0 and x >= t[0]: otherwise the search ends at index -1. Only the unused spline light path calls it.
 f32 getSpline(f32* a, f32* b, f32* c, f32* d, s32* t, s32 n, s32 x) {
     s32 i;
     f32 f;
