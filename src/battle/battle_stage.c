@@ -659,7 +659,7 @@ void batSpotDisp(CameraId camId, void* param) {
     GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_AND, GX_ALWAYS, 0);
     GXSetNumChans(1);
     for (i = 0, e = wp->entries; i < wp->count; i++, e++) {
-        if ((e->flags & SPOT_FLAG_ACTIVE) && (e->flags & SPOT_FLAG_VISIBLE_UNUSED)) {
+        if ((e->flags & SPOT_FLAG_ACTIVE) && (e->flags & SPOT_FLAG_VISIBLE)) {
             GXSetCullMode(GX_CULL_BACK);
             GXSetAlphaUpdate(GX_TRUE);
             GXSetColorUpdate(GX_FALSE);

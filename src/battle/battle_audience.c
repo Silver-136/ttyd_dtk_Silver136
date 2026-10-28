@@ -1817,7 +1817,7 @@ void BattleAudienceApSrcCtrlProcess(void) {
     Vec tmp;
     Vec tmp2;
 
-    if (!(base->flags & AUDIENCE_FLAG_SP_GAINED_UNUSED)) {
+    if (!(base->flags & AUDIENCE_FLAG_SP_GAINED)) {
         return;
     }
     cnt = 0;
@@ -1845,7 +1845,7 @@ void BattleAudienceApSrcCtrlProcess(void) {
             k++;
         }
         if (k == 100) {
-            base->flags &= ~AUDIENCE_FLAG_SP_GAINED_UNUSED;
+            base->flags &= ~AUDIENCE_FLAG_SP_GAINED;
             psndSFXOff(base->apStarSfxId);
             base->apStarSfxId = 0;
             base->starPowerGain = 0;
@@ -3283,7 +3283,7 @@ void BattleAudienceCheer(s32 type) {
         if (pouchGetPtr()->maximumSP == 0) {
             audience->starPowerGain = 0;
         } else {
-            audience->flags |= AUDIENCE_FLAG_SP_GAINED_UNUSED;
+            audience->flags |= AUDIENCE_FLAG_SP_GAINED;
         }
         BattleAudienceJoy(type);
         if (audience->starPowerGain != 0) {

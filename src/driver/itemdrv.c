@@ -926,7 +926,7 @@ void itemseq_GetItem(ItemEntry* entry) {
     mario = marioGetPtr();
     switch (entry->subState) {
         case 0:
-            entry->flags2 &= ~ITEM_FLAG2_RELEASED_UNUSED;
+            entry->flags2 &= ~ITEM_FLAG2_RELEASED;
             if (entry->flags & ITEM_FLAG_LOST_BADGE_TO_SHOP) {
                 entry->flags2 |= ITEM_FLAG2_SAVED_LOST_BADGE;
             } else {
@@ -1227,7 +1227,7 @@ void itemseq_GetItem(ItemEntry* entry) {
             } else {
                 entry->timer = 20000;
             }
-            entry->flags2 |= ITEM_FLAG2_RELEASED_UNUSED;
+            entry->flags2 |= ITEM_FLAG2_RELEASED;
             entry->flags2 &= ~ITEM_FLAG2_CARRIED;
             entry->flags &= ~ITEM_FLAG_NO_TOUCH_GET;
             itemGetEnd(entry);
@@ -1452,7 +1452,7 @@ void itemseq_Bound(ItemEntry* entry) {
                 } else {
                     entry->timer = 20000;
                 }
-                entry->flags2 |= ITEM_FLAG2_RELEASED_UNUSED;
+                entry->flags2 |= ITEM_FLAG2_RELEASED;
                 entry->flags2 &= ~ITEM_FLAG2_CARRIED;
                 entry->flags |= ITEM_FLAG_LOST_BADGE_TO_SHOP;
                 break;
@@ -1702,7 +1702,7 @@ void itemForceGet(ItemEntry* entry) {
     entry->timer = 0;
     itemModeChange(entry, ITEM_MODE_GET);
     entry->flags |= ITEM_FLAG_FORCE_GET;
-    entry->flags2 &= ~ITEM_FLAG2_RELEASED_UNUSED;
+    entry->flags2 &= ~ITEM_FLAG2_RELEASED;
 }
 
 void itemNokoForceGet(ItemEntry* entry) {
@@ -1710,7 +1710,7 @@ void itemNokoForceGet(ItemEntry* entry) {
         entry->timer = 0;
         itemModeChange(entry, ITEM_MODE_GET);
         entry->flags |= (ITEM_FLAG_FORCE_GET | ITEM_FLAG_NOKO_GET);
-        entry->flags2 &= ~ITEM_FLAG2_RELEASED_UNUSED;
+        entry->flags2 &= ~ITEM_FLAG2_RELEASED;
     } else {
         entry->timer = 0;
         itemModeChange(entry, ITEM_MODE_GROUND);

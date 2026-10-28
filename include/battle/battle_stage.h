@@ -6,7 +6,7 @@
 
 // BattleSpotEntry.flags
 #define SPOT_FLAG_ACTIVE (1 << 0)
-#define SPOT_FLAG_VISIBLE_UNUSED (1 << 1) // drawn when set; nothing sets it, so no spot cone is drawn
+#define SPOT_FLAG_VISIBLE (1 << 1) // the spot cone is drawn when set (set and cleared in battle_seq_end.c)
 
 typedef struct BattleSpotEntry {
     u16 flags; // 0x0, SPOT_FLAG_*
