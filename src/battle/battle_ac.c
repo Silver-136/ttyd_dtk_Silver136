@@ -379,7 +379,7 @@ static inline void gaugeQuad(CameraEntry* cam, f32 x0, f32 y0, f32 x1, f32 y1, u
     }
 }
 
-void BattleAcDrawGauge(s32 x, s32 y, s32 width, f32 ratio, s32 level, s32 a, s32 b, s32 c, s32 flags) {
+void BattleAcDrawGauge(s32 x, s32 y, f32 ratio, s32 width, s32 level, s32 a, s32 b, s32 c, s32 flags) {
     BattleWork* wp = _battleWorkPointer;
     s32 max = 100;
     u8* mod = (u8*)&wp->actionCommands.disp.color;

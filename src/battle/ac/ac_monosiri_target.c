@@ -10,7 +10,6 @@
 #include "battle/battle_disp.h"
 
 
-s32 BattleACGetButtonIcon(s32 button, s32 pressed);
 
 typedef struct MonosiriTargetWork {
     s32 frame;      // 0x0
@@ -150,8 +149,8 @@ static void actionCommandDisp(f32 x, f32 y) {
     f32 alpha = 0.0f;
     Vec screen;
     Vec screen2;
-    s32 icon;
-    s32 pressedIcon;
+    u16 icon;
+    u16 pressedIcon;
 
     btlGetScreenPoint(&cw->pos, &screen);
     btlDispTex4(BTL_TEX(0x42), screen, (Vec){1.0f, 1.0f, 1.0f}, (Vec){0.0f, 0.0f, 0.0f}, (GXColor){255, 255, 255, 255});
@@ -183,6 +182,6 @@ static void actionCommandDisp(f32 x, f32 y) {
     if (__fabs(cw->pos.x - cw->targetPos.x) < 15.0) {
         icon = pressedIcon;
     }
-    ((void (*)(Vec*, s32, s32, f32))iconDispGx)(&(Vec){-200.0f + x, 50.0f + y, 0.0f}, 0x10, icon, 1.0f);
+    iconDispGx(&(Vec){-200.0f + x, 50.0f + y, 0.0f}, 0x10, icon, 1.0f);
 }
 

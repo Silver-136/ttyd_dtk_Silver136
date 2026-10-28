@@ -1,3 +1,4 @@
+#include "battle/ac/ac_table.h"
 #include "icon_ids.h"
 #include "battle/battle.h"
 #include "battle/battle_ac.h"
@@ -11,7 +12,6 @@
 #include <string.h>
 #include "version.h"
 
-s32 BattleACGetButtonIcon(s32 button, s32 pressed);
 
 typedef struct GT2Work {
     s32 frame;       // 0x0
@@ -32,7 +32,7 @@ typedef struct GT2Work {
 
 // iconDispGx called through a cast: its callers pass different argument types and no single prototype fits
 // them all (docs/CLEANUP_BACKLOG.md, function-pointer casts).
-#define ICON ((void (*)(Vec*, s16, s32, f32))iconDispGx)
+
 
 static void actionCommandDisp(f32 x, f32 y);
 
@@ -243,7 +243,8 @@ s32 battleAcResult_GaugeTiming2(BattleWork* work) {
     return work->actionCommands.result;
 }
 
-void battleAcDisp_GaugeTiming2(CameraId cameraId, BattleWork* work) {
+void battleAcDisp_GaugeTiming2(CameraId cameraId, void* param) {
+    BattleWork* work = param;
     BattleActions* ac = &work->actionCommands;
     BattleACDispParams* disp = &ac->disp;
     switch (ac->mAcState) {
@@ -295,8 +296,8 @@ static void actionCommandDisp(f32 x, f32 y) {
     s32 r;
     s32 v;
     s32 i;
-    s32 icon;
-    s32 pressedIcon;
+    u16 icon;
+    u16 pressedIcon;
     s32 id;
     s32 cnt;
     Vec pos;
@@ -346,11 +347,12 @@ static void actionCommandDisp(f32 x, f32 y) {
     y3 = 23.0f + y;
     cnt = ac->params[2];
     for (i = 0; i < cnt; i++) {
+        u16 iconId;
         f32 target = gw->targets[i];
         if (target <= gw->cursor || __fabs(gw->cursor - target) <= 6.0) {
-            id = ICON_AC_ON;
+            iconId = ICON_AC_ON;
         } else {
-            id = ICON_AC_OFF;
+            iconId = ICON_AC_OFF;
         }
         pos = (Vec){0.0f, 0.0f, 0.0f};
         // FAKE: d0 and d1 are never read; removing them changes the object
@@ -358,7 +360,7 @@ static void actionCommandDisp(f32 x, f32 y) {
         d1 = (Vec){0.0f, 0.0f, 0.0f};
         pos.x = (-288.0f + x) + ((f32)gw->width) * target / 100.0f;
         pos.y = y3;
-        ICON(&pos, 0x10, id, 0.75f);
+        iconDispGx(&pos, 0x10, iconId, 0.75f);
     }
 
     pressedIcon = BattleACGetButtonIcon(PAD_BUTTON_A, 1);
@@ -375,7 +377,7 @@ static void actionCommandDisp(f32 x, f32 y) {
                 Vec e1 = {0.0f, 0.0f, 0.0f};
                 p.x = 28.0f + (-225.0f + x);
                 p.y = 55.0f + y;
-                ICON(&p, 0x10, icon, 1.0f);
+                iconDispGx(&p, 0x10, icon, 1.0f);
                 break;
         }
         case 1000:
@@ -386,12 +388,12 @@ static void actionCommandDisp(f32 x, f32 y) {
                 Vec e1 = {0.0f, 0.0f, 0.0f};
                 p.x = 28.0f + (-225.0f + x);
                 p.y = 55.0f + y;
-                ICON(&p, 0x10, pressedIcon, 1.0f);
+                iconDispGx(&p, 0x10, pressedIcon, 1.0f);
             } else {
                 Vec p = {0.0f, 0.0f, 0.0f};
                 p.x = 28.0f + (-225.0f + x);
                 p.y = 55.0f + y;
-                ICON(&p, 0x10, icon, 1.0f);
+                iconDispGx(&p, 0x10, icon, 1.0f);
             }
             break;
     }

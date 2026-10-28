@@ -1,3 +1,4 @@
+#include "battle/ac/ac_table.h"
 #include "version.h"
 #include "battle/battle.h"
 #include "battle/battle_ac.h"
@@ -11,7 +12,6 @@
 #include "icon_ids.h"
 #include "dolphin/si.h"
 
-void BattleAcDrawGauge(); // no prototype here: the call compiles to the retail code only without one
 
 typedef struct RepeatWork {
     u32 btn0;         // 0x0
@@ -278,7 +278,8 @@ s32 battleAcResult_Repeatedly(BattleWork* work) {
     return work->actionCommands.result;
 }
 
-void battleAcDisp_Repeatedly(CameraId cameraId, BattleWork* work) {
+void battleAcDisp_Repeatedly(CameraId cameraId, void* param) {
+    BattleWork* work = param;
     BattleActions* ac = &work->actionCommands;
     BattleACDispParams* disp = &ac->disp;
     switch (ac->mAcState) {
@@ -432,8 +433,7 @@ static void actionCommandDisp(f32 x, f32 y) {
     if (r->done == -1) {
         flags |= 2;
     }
-    BattleAcDrawGauge((s32)x, (s32)y, d->gaugeRatio, r->iconParam, 2,
-                      (acw->acFlags & AC_REPEATEDLY_FLAG_PLAIN_GAUGE) ? 100 : (s32)r->pos, 100, 100, flags);
+    BattleAcDrawGauge((s32)x, (s32)y, d->gaugeRatio, r->iconParam, 2, (acw->acFlags & AC_REPEATEDLY_FLAG_PLAIN_GAUGE) ? 100 : (s32)r->pos, 100, 100, flags);
     {
         Vec pos = {0.0f, 0.0f, 0.0f};
         pos.x = (-288.0f + x) + (176.0f * r->pos) / 100.0f;

@@ -25,7 +25,6 @@
 #include "battle/battle_audience.h"
 #include "battle/battle_sub.h"
 
-void BattleAcDrawGauge(s32 x, s32 y, s32 width, f32 ratio, s32 level, s32 a, s32 b, s32 c, s32 flags);
 
 typedef struct ZSObj {
     /* 0x00 */ s32 a;
@@ -972,7 +971,7 @@ void zubastar_disp2D(CameraId cam, void* param) {
         pos.y = 60.0f + w->gaugePos.y;
         // FAKE: calls iconDispGx through a cast that passes the icon id as s32; the plain call changes the object
         ((void (*)(Vec*, s16, s32, f32))iconDispGx)(&pos, ICON_FLAG_2D, icon, 1.0f);
-        BattleAcDrawGauge(w->gaugePos.x, w->gaugePos.y, 0xb1, 0.01f * w->gauge, 4, 0x1a, 0x34, 0x4e, 0);
+        BattleAcDrawGauge(w->gaugePos.x, w->gaugePos.y, 0.01f * w->gauge, 0xb1, 4, 0x1a, 0x34, 0x4e, 0);
     }
     GXSetCullMode(GX_CULL_NONE);
     GXClearVtxDesc();

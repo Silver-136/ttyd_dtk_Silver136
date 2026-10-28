@@ -17,7 +17,6 @@ typedef struct PowerGaugeWork {
 } PowerGaugeWork;
 
 
-void BattleAcDrawGauge(s32 x, s32 y, s32 width, f32 ratio, s32 level, s32 a, s32 b, s32 c, s32 flags);
 
 s32 battleAcMain_PowerGaugeLv(BattleWork* work) {
     BattleActions* ac = &work->actionCommands;
@@ -190,8 +189,7 @@ static void actionCommandDisp(f32 x, f32 y) {
         ratio = 1.0f;
     }
     disp->gaugeRatio = ratio;
-    BattleAcDrawGauge((s32)x, (s32)y, 0xB2, disp->gaugeRatio, work->actionCommands.params[1], work->actionCommands.params[2],
-                                    work->actionCommands.params[3], work->actionCommands.params[4], 0);
+    BattleAcDrawGauge((s32)x, (s32)y, disp->gaugeRatio, 0xB2, work->actionCommands.params[1], work->actionCommands.params[2], work->actionCommands.params[3], work->actionCommands.params[4], 0);
     switch (work->actionCommands.mAcState) {
         case 99:
         case 100:

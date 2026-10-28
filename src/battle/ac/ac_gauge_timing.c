@@ -10,8 +10,6 @@
 #include <string.h>
 #include "battle/battle_disp.h"
 
-u16 BattleACGetButtonIcon(s32 button, s32 pressed);
-void BattleAcDrawGauge(s32 x, s32 y, s32 width, f32 ratio, s32 level, s32 a, s32 b, s32 c, s32 flags);
 
 static void actionCommandDisp(f32 x, f32 y);
 
@@ -373,9 +371,9 @@ static void actionCommandDisp(f32 x, f32 y) {
             t = 100.0f;
         }
         if (cw->timer > 0) {
-            BattleAcDrawGauge((s32)x, (s32)y, 0xB2, -1.0f, 100, 100, 100, 100, 0);
+            BattleAcDrawGauge((s32)x, (s32)y, -1.0f, 0xB2, 100, 100, 100, 100, 0);
         } else {
-            BattleAcDrawGauge((s32)x, (s32)y, 0xB2, t, 100, 100, 100, 100, 0);
+            BattleAcDrawGauge((s32)x, (s32)y, t, 0xB2, 100, 100, 100, 100, 0);
         }
         if (cw->gauge >= (f32)ac->params[GAUGE_PARAM_TARGET]) {
             icon = ICON_AC_ON;
@@ -391,7 +389,7 @@ static void actionCommandDisp(f32 x, f32 y) {
         break;
     }
     default: {
-        BattleAcDrawGauge((s32)x, (s32)y, 0xB2, 0.0f, 100, 100, 100, 100, 0);
+        BattleAcDrawGauge((s32)x, (s32)y, 0.0f, 0xB2, 100, 100, 100, 100, 0);
         if (cw->timer <= 0) {
             CameraEntry* cam = camGetPtr(CAMERA_2D);
             rx = (-200.0f + x - 88.0f) + 173.0f * cw->gauge / 100.0f;

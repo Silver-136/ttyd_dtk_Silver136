@@ -8,8 +8,6 @@
 #include "system.h"
 #include <string.h>
 
-s32 BattleACGetButtonIcon(s32 button, s32 pressed);
-void BattleAcDrawGauge(s32 x, s32 y, s32 width, f32 ratio, s32 level, s32 a, s32 b, s32 c, s32 flags);
 
 typedef struct PGLv2Work {
     s32 timer;     // 0x0
@@ -224,7 +222,7 @@ void battleAcDelete_PowerGaugeLv2(BattleWork* work) {
 
 // iconDispGx called through a cast: its callers pass different argument types and no single prototype fits
 // them all (docs/CLEANUP_BACKLOG.md, function-pointer casts).
-#define ICON ((void (*)(Vec*, s32, s32, f32))iconDispGx)
+
 static void actionCommandDisp(f32 x, f32 y) {
     BattleWork* work = _battleWorkPointer;
     BattleActions* ac = &work->actionCommands;
@@ -234,8 +232,8 @@ static void actionCommandDisp(f32 x, f32 y) {
     s32 tmp[4];
     s32 cnt;
     s32 i;
-    s32 pressedIcon;
-    s32 icon;
+    u16 pressedIcon;
+    u16 icon;
     f32 px;
     f32 py;
     camGetPtr(CAMERA_2D);
@@ -245,7 +243,7 @@ static void actionCommandDisp(f32 x, f32 y) {
         Vec pos = {0.0f, 0.0f, 0.0f};
         pos.x = px;
         pos.y = py;
-        ICON(&pos, 0x10, ICON_AC_GAUGE_FRAME, 1.0f);
+        iconDispGx(&pos, 0x10, ICON_AC_GAUGE_FRAME, 1.0f);
     }
     full = 0;
     ratio = g->gauge / 100.0f;
@@ -276,7 +274,7 @@ static void actionCommandDisp(f32 x, f32 y) {
             break;
         }
     }
-    BattleAcDrawGauge((s32)x, (s32)y, 0xB2, ac->disp.gaugeRatio, cnt, tmp[0], tmp[1], tmp[2], full);
+    BattleAcDrawGauge((s32)x, (s32)y, ac->disp.gaugeRatio, 0xB2, cnt, tmp[0], tmp[1], tmp[2], full);
     pressedIcon = BattleACGetButtonIcon(g->button, 1);
     icon = BattleACGetButtonIcon(g->button, 0);
     switch (ac->mAcState) {
@@ -288,7 +286,7 @@ static void actionCommandDisp(f32 x, f32 y) {
             Vec pos = {0.0f, 0.0f, 0.0f};
             pos.x = px;
             pos.y = 70.0f + y;
-            ICON(&pos, 0x10, icon, 1.0f);
+            iconDispGx(&pos, 0x10, icon, 1.0f);
             break;
         }
         case 1000:
@@ -296,17 +294,17 @@ static void actionCommandDisp(f32 x, f32 y) {
                 Vec pos = {0.0f, 0.0f, 0.0f};
                 pos.x = px;
                 pos.y = 70.0f + y;
-                ICON(&pos, 0x10, pressedIcon, 1.0f);
+                iconDispGx(&pos, 0x10, pressedIcon, 1.0f);
             } else {
                 Vec pos = {0.0f, 0.0f, 0.0f};
                 pos.x = px;
                 pos.y = 70.0f + y;
-                ICON(&pos, 0x10, icon, 1.0f);
+                iconDispGx(&pos, 0x10, icon, 1.0f);
             }
             break;
     }
     {
-        s32 id = ICON_AC_OFF;
+        u16 id = ICON_AC_OFF;
         Vec pos;
         if (g->inZone) {
             id = ICON_AC_ON;
@@ -318,7 +316,6 @@ static void actionCommandDisp(f32 x, f32 y) {
         }
         pos.x = 120.0f + px;
         pos.y = py;
-        ICON(&pos, 0x10, id, 1.0f);
+        iconDispGx(&pos, 0x10, id, 1.0f);
     }
 }
-

@@ -157,3 +157,6 @@ s32 BattleActionCommandGetPrizeLv(BattleWork* work, BattleUnit* unit, s32 lv);
 void BattleActionCommandSetDifficulty(BattleWork* work, BattleUnit* unit, s32 difficulty);
 void BattleActionCommandSetup(BattleWork* work, s32 id, BattleUnit* unit, s32 setupFlags, s32 setupParam);
 s32 BattleActionCommandCheckDefence(BattleUnit* unit, BattleWeapon* weapon);
+
+u16 BattleACGetButtonIcon(s32 button, s32 pressed);
+void BattleAcDrawGauge(s32 x, s32 y, f32 ratio, s32 width, s32 level, s32 a, s32 b, s32 c, s32 flags);

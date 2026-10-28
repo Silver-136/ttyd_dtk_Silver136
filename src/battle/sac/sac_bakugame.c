@@ -31,7 +31,6 @@
 #include "pmario_sound.h"
 #include "battle/battle_disp.h"
 
-void BattleAcDrawGauge(s32 x, s32 y, s32 width, f32 ratio, s32 level, s32 a, s32 b, s32 c, s32 flags);
 void psndSFX_pit(s32 id, s32 pitch);
 
 
@@ -1317,7 +1316,7 @@ void bakuGameDisp2D(CameraId cam, void* param) {
             col->dg = col->db = -0x10;
         }
     }
-    BattleAcDrawGauge(w->gaugeX, w->gaugeY, 0xB1, w->rate, 3, 33, 66, 100, full);
+    BattleAcDrawGauge(w->gaugeX, w->gaugeY, w->rate, 0xB1, 3, 33, 66, 100, full);
 }
 
 void bakuGameDisp3D(CameraId cam, void* param) {

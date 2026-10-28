@@ -1,3 +1,4 @@
+#include "battle/ac/ac_table.h"
 #include "icon_ids.h"
 #include "battle/battle.h"
 #include "battle/battle_ac.h"
@@ -8,9 +9,7 @@
 #include "system.h"
 #include <string.h>
 
-s32 BattleACGetButtonIcon(s32 button, s32 pressed);
 // float first here: the retail call loads the ratio before the other arguments (battle_ac.c defines x, y, width, ratio, ...)
-void BattleAcDrawGauge(f32 ratio, s32 x, s32 y, u8 width, s32 level, s32 a, s32 b, s32 c, s32 flags);
 
 typedef struct RepeatedlyLvWork {
     u32 mask;    // 0x0
@@ -35,7 +34,7 @@ typedef struct RepeatedlyLvWork {
 
 // iconDispGx called through a cast: its callers pass different argument types and no single prototype fits
 // them all (docs/CLEANUP_BACKLOG.md, function-pointer casts).
-#define RL_IconDisp ((void (*)(Vec*, s16, s32, f32))iconDispGx)
+
 
 static void _init_param(BattleWork* work) {
     BattleActions* ac = &work->actionCommands;
@@ -302,7 +301,8 @@ s32 battleAcResult_RepeatedlyLv(BattleWork* work) {
 
 static void actionCommandDisp(f32 x, f32 y);
 
-void battleAcDisp_RepeatedlyLv(CameraId cameraId, BattleWork* work) {
+void battleAcDisp_RepeatedlyLv(CameraId cameraId, void* param) {
+    BattleWork* work = param;
     BattleActions* ac = &work->actionCommands;
     BattleACDispParams* disp = &ac->disp;
     switch (ac->mAcState) {
@@ -347,7 +347,7 @@ static void actionCommandDisp(f32 x, f32 y) {
     camGetPtr(CAMERA_2D);
     {
     s32 numIcons;
-    s32 pressedA, idleA, pressedB, idleB;
+    u16 pressedA, idleA, pressedB, idleB;
     s32 off0, off1;
     idleB = 0;
     pressedB = 0;
@@ -384,35 +384,35 @@ static void actionCommandDisp(f32 x, f32 y) {
             Vec pos = {0.0f, 0.0f, 0.0f};
             pos.x = -200.0f + x;
             pos.y = 70.0f + y;
-            RL_IconDisp(&pos, ICON_FLAG_2D, idleA, 1.0f);
+            iconDispGx(&pos, ICON_FLAG_2D, idleA, 1.0f);
         } else {
             Vec pos = {0.0f, 0.0f, 0.0f};
             pos.x = -200.0f + x;
             pos.y = 70.0f + y;
-            RL_IconDisp(&pos, ICON_FLAG_2D, pressedA, 1.0f);
+            iconDispGx(&pos, ICON_FLAG_2D, pressedA, 1.0f);
         }
     } else {
         if ((phase & 1) == 1) {
             Vec pos = {0.0f, 0.0f, 0.0f};
             pos.x = -225.0f + x + off0;
             pos.y = 70.0f + y;
-            RL_IconDisp(&pos, ICON_FLAG_2D, idleA, 1.0f);
+            iconDispGx(&pos, ICON_FLAG_2D, idleA, 1.0f);
             {
                 Vec pos2 = {0.0f, 0.0f, 0.0f};
                 pos2.x = -175.0f + x + off1;
                 pos2.y = 70.0f + y;
-                RL_IconDisp(&pos2, ICON_FLAG_2D, pressedB, 1.0f);
+                iconDispGx(&pos2, ICON_FLAG_2D, pressedB, 1.0f);
             }
         } else {
             Vec pos = {0.0f, 0.0f, 0.0f};
             pos.x = -225.0f + x + off0;
             pos.y = 70.0f + y;
-            RL_IconDisp(&pos, ICON_FLAG_2D, pressedA, 1.0f);
+            iconDispGx(&pos, ICON_FLAG_2D, pressedA, 1.0f);
             {
                 Vec pos2 = {0.0f, 0.0f, 0.0f};
                 pos2.x = -175.0f + x + off1;
                 pos2.y = 70.0f + y;
-                RL_IconDisp(&pos2, ICON_FLAG_2D, idleB, 1.0f);
+                iconDispGx(&pos2, ICON_FLAG_2D, idleB, 1.0f);
             }
         }
     }
@@ -468,12 +468,12 @@ static void actionCommandDisp(f32 x, f32 y) {
             break;
         }
     }
-    BattleAcDrawGauge(disp->gaugeRatio, (s32)x, (s32)y, p->gaugeWidth, count, arr[0], arr[1], arr[2], flags);
+    BattleAcDrawGauge((s32)x, (s32)y, disp->gaugeRatio, p->gaugeWidth, count, arr[0], arr[1], arr[2], flags);
     if (ac->acFlags & AC_REPEATEDLY_LV_FLAG_SHOW_TARGET_MARK_UNUSED) {
         Vec pos = {0.0f, 0.0f, 0.0f};
         pos.x = -288.0f + x + (f32)(ac->params[6] * 176) / 100.0f;
         pos.y = 45.0f + y;
-        RL_IconDisp(&pos, ICON_FLAG_2D, ICON_AC_GAUGE_MARKER, 1.0f);
+        iconDispGx(&pos, ICON_FLAG_2D, ICON_AC_GAUGE_MARKER, 1.0f);
     }
     if (ac->acFlags & AC_REPEATEDLY_LV_FLAG_SHOW_LEVEL_NUMBER_UNUSED) {
         Mtx m3, m1, m2;

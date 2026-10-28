@@ -1,3 +1,4 @@
+#include "battle/ac/ac_table.h"
 #include "battle/battle_disp.h"
 #include "battle/battle.h"
 #include <dolphin/pad.h>
@@ -12,7 +13,6 @@
 #include "icon_ids.h"
 #include "version.h"
 
-u16 BattleACGetButtonIcon(s32 button, s32 pressed);
 
 typedef struct SignalTimingWork {
     s32 hits;       // 0x0
@@ -335,7 +335,8 @@ s32 battleAcResult_SignalTiming(BattleWork* work) {
     return work->actionCommands.result;
 }
 
-void battleAcDisp_SignalTiming(CameraId cameraId, BattleWork* work) {
+void battleAcDisp_SignalTiming(CameraId cameraId, void* param) {
+    BattleWork* work = param;
     BattleActions* ac = &work->actionCommands;
     BattleACDispParams* disp = &ac->disp;
 
