@@ -178,6 +178,7 @@ void effGlassDisp(CameraId cameraId, EffectEntry* effect) {
     texU = type * 32;
     t4 = 4.0f * work->texV;
     texV = (s32)t4 * 32;
+    // (s32)work->texV is 0 for texV in [0, 1), so this is 256 * t4; the u8 colour store keeps only its low byte, but the type 1 final quadrant multiplies the full value first.
     alpha2 = (s32)(256.0f * (t4 - (f32)((s32)work->texV * 4)));
     PSMTXScale(scaleMtx, 0.015625f, 0.0078125f, 0.0f);
     PSMTXTrans(mtx, texU, texV, 0.0f);

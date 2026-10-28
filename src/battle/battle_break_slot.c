@@ -859,6 +859,7 @@ void BattleBreakSlot_End(void) {
 #endif
 }
 
+// Writes reels[reelNo] before the reelNo > 3 test below: reelNo must be below 3 on entry.
 void BattleBreakSlot_PointInc(void) {
     BattleDebugCtrl* dbg = &_battleWorkPointer->debug;
     BreakSlotReel* reel;

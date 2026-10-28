@@ -1053,6 +1053,7 @@ void projShadowEnd(CameraId cameraId, void* param) {
     wp->flags |= SHADOW_WORK_READY;
 }
 
+// size is set only when SHADOW_WORK_ALLOC is set; depthShadowInit always sets that flag.
 void depthShadowEnd(CameraId cameraId, void* param) {
     ShadowConfig* cfg;
     u32 texFmt;

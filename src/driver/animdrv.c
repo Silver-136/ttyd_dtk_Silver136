@@ -481,6 +481,7 @@ s32 animPoseEntry(const char *animName, s32 type) {
             goto poseFound;
         }
     }
+    // With no free pose slot, pose stays NULL and is written through below.
     pose = NULL;
     poseId[0] = -1;
 poseFound:
