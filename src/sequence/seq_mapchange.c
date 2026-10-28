@@ -198,6 +198,10 @@ void seq_mapChangeMain(SequenceWork* work) {
                         fileFree(file);
                     }
                     if (gp->relocationBase) {
+                        // Not a bug for the shipped RELs, but fragile: rel_bss is a fixed 0xF10-byte buffer and only 0x3C4
+                        // bytes are cleared, the REL's bssSize and bssAlign are not checked against it, and OSLink's result is
+                        // ignored. A modified REL with a larger bss or a stricter bss/module alignment fails to link (or
+                        // overruns rel_bss) and its prolog is still called. gp->relocationBase itself is always 0x20-aligned.
                         memset(rel_bss, 0, 0x3c4);
                         OSLink(gp->relocationBase, rel_bss);
                         ((void (*)(void))((OSModuleHeader*)gp->relocationBase)->prolog)();

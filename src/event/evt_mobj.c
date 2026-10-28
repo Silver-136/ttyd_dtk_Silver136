@@ -1576,6 +1576,10 @@ s32 mobj_lock(MapObjectEntry* mobj) {
                 }
                 r = pouchCheckItem(it);
                 if (r) {
+                    // BUG (JP only, fixed in US above): pouchCheckItem returns how many of the key the player holds,
+                    // not its id, so this stores the count and the count is passed to pouchRemoveItem below as an item
+                    // id. Holding one key gives item 1 (ITEM_STRANGE_SACK), so a lock that takes a list of keys tries
+                    // to remove that item.
                     item = r;
 #endif
                     break;

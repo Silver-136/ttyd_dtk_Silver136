@@ -35,6 +35,8 @@ PouchData* pouchGetPtr(void) {
 void pouchInit(void) {
     int i;
 
+    // BUG: allocates a new PouchData without checking for or freeing the old one. pouchInit runs at boot
+    // (marioInit) and again when a new file starts (stg0_00_init), so the first block is leaked.
     mpp = __memAlloc(HEAP_DEFAULT, sizeof(PouchData));
     memset(mpp, 0, sizeof(PouchData));
     for (i = 0; i < MAX_KEY_ITEMS; i++) {

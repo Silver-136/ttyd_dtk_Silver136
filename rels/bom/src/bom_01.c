@@ -2672,6 +2672,9 @@ static EVT_BEGIN(minnnanokoe_evt)
     BEGIN_SIBLING_EVENT
         SET_VALUE(LW(14), 0)
         SET_VALUE(LW(15), 3)
+        // BUG: textbox limit. Every message here opens a window (msgWindow_Entry), and there are only
+        // 7 window slots; windowEntry returns -1 when all are in use and msgWindow_Entry does not check it.
+        // A new one opens every 300 ms with no other check, which is not always enough for old ones to close.
         LOOP(0)
             CALL(bom1000_msg, LW(14), LW(15), LW(0), LW(2))
             CALL(evt_sub_random, 2, LW(1))

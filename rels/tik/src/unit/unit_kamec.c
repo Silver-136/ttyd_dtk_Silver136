@@ -1558,6 +1558,9 @@ static EVT_BEGIN(all_recover_magic_event)
         GOTO(8)
     END_IF
     CALL(btlevtcmd_GetSelectNextEnemy, LW(3), LW(4))
+    // BUG: inverted check. This should give up when there is no next enemy (LW(3) == -1); as written it
+    // gives up whenever there is one, so only the first enemy is checked for missing HP, and if the
+    // first is the only one and at full HP, the loop runs again with LW(3) == -1.
     IF_INT_NOT_EQUAL(LW(3), -1)
         SET_VALUE(LW(0), 0)
         RETURN

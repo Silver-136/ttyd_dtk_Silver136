@@ -1920,6 +1920,9 @@ EVT_BEGIN(last_evt_3_2)
 #ifdef VERSION_G8ME01
     SET_VALUE(GW(6), 0)
 #endif
+    // BUG: textbox limit. Every message here opens a window (msgWindow_Entry), and there are only
+    // 7 window slots; windowEntry returns -1 when all are in use and msgWindow_Entry does not check it.
+    // This opens ten, 200 ms apart, so it always runs past the limit while the earlier ones are open.
     LOOP(10)
         CALL(make_koe_label, LW(0), LW(1))
         CALL(make_koe_pos, LW(2), LW(3), LW(4))

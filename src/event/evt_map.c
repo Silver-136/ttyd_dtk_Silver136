@@ -159,6 +159,8 @@ USER_FUNC(evt_map_blend_set_flag) {
             }
         }
     } else if (strcmp(name, "party") == 0) {
+        // BUG: no check that a partner (or, below, a follower) is out: partyGetPtr returns NULL for id -1
+        // and party->paperAnimGroup is then read through a null pointer.
         PartyEntry* party = partyGetPtr(marioGetPartyId());
         if (on == 1) {
             animPoseSetMaterialFlagOn(party->paperAnimGroup, flags);

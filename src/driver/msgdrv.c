@@ -1487,6 +1487,8 @@ s32 msgWindow_Entry(const char* msg, s32 callback, u16 priority) {
     smartEntry* smart;
     s32 id;
 
+    // BUG: windowEntry returns -1 when all 7 window slots are in use; the id is not checked, so
+    // windowGetPointer(-1) points before the window table and the writes below corrupt memory.
     id = windowEntry(priority);
     window = windowGetPointer(id);
     window->main = msgWindow_Main;
