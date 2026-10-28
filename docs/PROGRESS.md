@@ -79,7 +79,7 @@ unit). Counts are game code (`src/`, `rels/`) from `cleanup_tools/debt_inventory
 | Whole-file optimizer/inline pragmas | 50 size + 16 inline settings | 0: per-unit flags in `configure.py` |
 | Per-function optimizer and inline pragma pairs replaced by one per-unit flag (`-inline noauto`, `-opt noprop`, ...) | | 60 units (one SDK unit, OSLink) |
 | Other optimizer and inline pragmas | 697 | 263 |
-| `FAKE:` comment sites (each listed in FAKES.md) | 320 | 828 (FAKES.md rows 214 -> 604). Many fakes are gone, but the certification review below marked every existing trick that had no FAKE note (spare copies, no-op casts, always-true tests, one-use inline functions and macros that only steer code generation), so the count went up: these are tricks that were already there, now documented |
+| `FAKE:` comment sites (each listed in FAKES.md) | 320 | 820 (FAKES.md rows 214 -> 600). Many fakes are gone, but the certification review below marked every existing trick that had no FAKE note (spare copies, no-op casts, always-true tests, one-use inline functions and macros that only steer code generation), so the count went up: these are tricks that were already there, now documented |
 | Certification review of `src/` | | every file read once (2026-10-27); about 3,500 edits kept where both builds stayed byte-identical: names and named constants, wrong or matching-process comments rewritten, dead code removed, `// BUG:` notes on retail oddities. The event scripts under `rels/` are not reviewed yet |
 | Inline asm in game code | 19 | 6 |
 | Private copies of prototypes in `.c` files | ~20,000 | ~1,000 left (event functions, owner-header and SDK prototypes now come from headers) |
