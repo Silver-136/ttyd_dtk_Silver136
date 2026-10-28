@@ -29,8 +29,6 @@
 
 USER_FUNC(_vivian_make_extra_work_area);
 USER_FUNC(battle_evt_majo_disp_on);
-USER_FUNC(btlevtcmd_SetEventEntry);
-USER_FUNC(btlevtcmd_SetJumpSound);
 USER_FUNC(evt_audience_acrobat_notry);
 USER_FUNC(evt_audience_ap_recovery);
 USER_FUNC(evt_eff);

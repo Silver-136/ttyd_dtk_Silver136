@@ -19,7 +19,6 @@
 
 double hypot(double x, double y);
 
-USER_FUNC(btlevtcmd_SetJumpSound);
 static USER_FUNC(get_attacker);
 static u16 krb_comp_dir(f32 x, f32 z);
 f32 hypotf(f32 x, f32 y);

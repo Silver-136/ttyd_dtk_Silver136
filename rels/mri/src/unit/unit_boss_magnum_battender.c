@@ -61,7 +61,6 @@ static USER_FUNC(arm_check);
 static USER_FUNC(arm_end);
 static USER_FUNC(arm_init);
 static USER_FUNC(arm_main);
-USER_FUNC(btlevtcmd_SetEventEntry);
 static USER_FUNC(waku_main);
 static USER_FUNC(eff_dead);
 static USER_FUNC(eff_dead_delete);

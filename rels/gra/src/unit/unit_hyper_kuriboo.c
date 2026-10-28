@@ -17,7 +17,6 @@
 // BattleUnit.work slots (btlevtcmd_Get/Set/AddUnitWork)
 #define UNIT_WORK_CHARGED_UNUSED 0 // 1 once it has used weapon_kuriboo_charge (nothing reads it)
 
-USER_FUNC(btlevtcmd_SetJumpSound);
 static USER_FUNC(krb_get_dir);
 
 BattleUnitKind unit_hyper_kuriboo;

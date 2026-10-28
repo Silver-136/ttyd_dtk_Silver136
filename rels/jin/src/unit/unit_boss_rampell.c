@@ -29,7 +29,6 @@
 
 static USER_FUNC(_mario_makkuro_set);
 USER_FUNC(btlevtcmd_SetEventPhase);
-USER_FUNC(btlevtcmd_SetJumpSound);
 static USER_FUNC(vivian_comeback);
 static USER_FUNC(eff_scanning);
 

@@ -17,7 +17,6 @@
 #define UNIT_WORK_INTRO_TALK 0 // 1 (from the battle setup) marks the unit that shows stg3_tou_83_* / stg3_tou_84 on turn 1 (once, GSWF_TOU_GOOMBA_BROS_AMBUSH_TALK_SEEN)
 
 USER_FUNC(btlevtcmd_SetEventPhase);
-USER_FUNC(btlevtcmd_SetJumpSound);
 static USER_FUNC(krb_get_dir);
 
 BattleUnitKind unit_kurikuri;

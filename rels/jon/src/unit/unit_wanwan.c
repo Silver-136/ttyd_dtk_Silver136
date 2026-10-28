@@ -25,7 +25,6 @@
 
 double sqrt(double x);
 
-USER_FUNC(btlevtcmd_SetJumpSound);
 static USER_FUNC(chain_init);
 static USER_FUNC(chain_main);
 

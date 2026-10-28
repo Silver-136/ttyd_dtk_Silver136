@@ -11,7 +11,6 @@
 #include "manager/evtmgr_cmd.h"
 
 static USER_FUNC(_battle_set_lecture_unit_id);
-USER_FUNC(btlevtcmd_SetEventEntry);
 USER_FUNC(btlevtcmd_SetEventPhase);
 static USER_FUNC(lecture_init);
 

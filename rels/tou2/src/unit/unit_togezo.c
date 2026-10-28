@@ -18,7 +18,6 @@
 #define UNIT_WORK_ROLLING 1    // 1 keeps the sibling loop that rolls it during the attack; 0 stops it
 #define UNIT_WORK_ROLL_SPEED 2 // degrees per frame of that roll (-36/36 times the direction; ramped by 1 per step after a miss or hit)
 
-USER_FUNC(btlevtcmd_SetJumpSound);
 
 BattleUnitKind unit_togezo;
 static BattleUnitDefense defence;

@@ -39,8 +39,6 @@
 #define PARTS_WORK_CHARGE_LEVEL 1 // part 1: Tsuranuki charge level 0-3 from the AC; _tsuranuki_effect_control sizes the effNokotarou effect by it
 #define PARTS_WORK_EFFECT_END 2   // part 1: 1 makes _tsuranuki_effect_control delete the charge effect and finish (it clears the flag)
 
-USER_FUNC(btlevtcmd_SetEventEntry);
-USER_FUNC(btlevtcmd_SetJumpSound);
 static USER_FUNC(_check_guard_koura);
 USER_FUNC(_tsuranuki_effect_control);
 USER_FUNC(_color_lv_set);

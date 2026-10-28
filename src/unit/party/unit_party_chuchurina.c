@@ -69,8 +69,6 @@ static EvtWord wait_event[6];
 static EvtWord main_evt[4];
 
 USER_FUNC(_chuchu_make_extra_work_area);
-USER_FUNC(btlevtcmd_SetEventEntry);
-USER_FUNC(btlevtcmd_SetJumpSound);
 USER_FUNC(mono_main);
 USER_FUNC(mono_off);
 USER_FUNC(mono_on);

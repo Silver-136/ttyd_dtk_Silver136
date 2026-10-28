@@ -20,7 +20,6 @@
 #define UNIT_WORK_ATTACK_STAGE 0  // attack pattern stage: 0 poison first (then 1); 1 draw of 3; 2 earthquake once (then 3); 3 draw of 4; 4 charge (then 5); 5 mega attack + stg8_las_49_06 (then 7); 6 mega attack after a drawn charge (then 7); 7 draw of 6. phase_event moves 1 -> 2 at HP <= 60 % (stg8_las_49_03) and 3 -> 4 at HP <= 40 % (stg8_las_49_04)
 #define UNIT_WORK_LOW_HP_TALKED 1 // 1 once phase_event has shown stg8_las_49_07 at HP <= 20 % (stage 6 or later)
 
-USER_FUNC(btlevtcmd_SetEventEntry);
 USER_FUNC(btlevtcmd_SetEventPhase);
 USER_FUNC(btlevtcmd_SetTalkBodyId);
 static USER_FUNC(_leg_smoke_effect);

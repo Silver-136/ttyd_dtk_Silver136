@@ -21,10 +21,6 @@
 #include "battle/unit_work.h"
 
 USER_FUNC(_binta_effect);
-USER_FUNC(btlevtcmd_AnimeCmpPoseType);
-USER_FUNC(btlevtcmd_CheckDefinePosetype);
-USER_FUNC(btlevtcmd_EllipseMovePosition);
-USER_FUNC(btlevtcmd_SortPhaseMoveTable);
 USER_FUNC(_check_through_pos);
 USER_FUNC(_set_hp_gauge_fade_flag);
 USER_FUNC(_check_at_dm_event_wait);

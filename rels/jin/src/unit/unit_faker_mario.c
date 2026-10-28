@@ -50,10 +50,7 @@ USER_FUNC(_save_param);
 #ifdef VERSION_G8ME01
 USER_FUNC(faker_mario_sync_max_moves);
 #endif
-USER_FUNC(btlevtcmd_SetEventEntry);
 USER_FUNC(btlevtcmd_SetEventPhase);
-USER_FUNC(btlevtcmd_SetJumpSound);
-USER_FUNC(btlevtcmd_SortPhaseMoveTable);
 static USER_FUNC(vivian_comeback);
 extern BattleUnitSetup entryunit_party[];
 extern BattleUnitKind unit_gullible_christine;

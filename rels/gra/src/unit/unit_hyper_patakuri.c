@@ -18,7 +18,6 @@
 // BattleUnit.work slots (btlevtcmd_Get/Set/AddUnitWork)
 #define UNIT_WORK_CHARGED_UNUSED 0 // set 1 when the Goomba form uses weapon_kuriboo_charge (attack_event); nothing in the file reads it
 
-USER_FUNC(btlevtcmd_SetJumpSound);
 static USER_FUNC(krb_get_dir);
 
 BattleUnitKind unit_hyper_patakuri;

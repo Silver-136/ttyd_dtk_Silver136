@@ -21,7 +21,6 @@
 #define UNIT_WORK_RECOVERS_LEFT 1     // heals left (2 at start, recover_event subtracts 1); at 0 attack_event gives the recover draw weight 0
 #define UNIT_WORK_RECOVER_TALK_DONE 2 // 1 once recover_event printed tik_boss_14 (never set: see the BUG note there)
 
-USER_FUNC(btlevtcmd_SetEventEntry);
 USER_FUNC(btlevtcmd_SetEventPhase);
 USER_FUNC(btlevtcmd_SetTalkBodyId);
 static USER_FUNC(_leg_smoke_effect);

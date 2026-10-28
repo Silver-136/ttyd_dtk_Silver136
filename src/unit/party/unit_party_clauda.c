@@ -28,8 +28,6 @@
 
 USER_FUNC(_check_aud_item_type);
 USER_FUNC(_clauda_make_extra_work_area);
-USER_FUNC(btlevtcmd_SetEventEntry);
-USER_FUNC(btlevtcmd_SetJumpSound);
 USER_FUNC(_make_kumoguard_weapon);
 USER_FUNC(_get_clauda_kiss_hit_position);
 USER_FUNC(_make_kiss_weapon);

@@ -33,8 +33,6 @@
 #define UNIT_WORK_FLIP_ANGLE 3       // extra z rotation added to the jump's travel angle; a stylish success changes it by 24 per frame for 15 frames (-24 when FACE_DIR_TOWARD_UNIT gives >= 0, else +24)
 
 USER_FUNC(_dictionary);
-USER_FUNC(btlevtcmd_SetEventEntry);
-USER_FUNC(btlevtcmd_SetJumpSound);
 USER_FUNC(_set_hustle);
 USER_FUNC(_monosiri_flag_on);
 USER_FUNC(btlevtcmd_get_monosiri_msg_no);

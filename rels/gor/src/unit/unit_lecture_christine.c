@@ -22,7 +22,6 @@
 static USER_FUNC(_battle_set_lecture_unit_id);
 USER_FUNC(_set_lecture_mode);
 USER_FUNC(btlevtcmd_SetEventPhase);
-USER_FUNC(btlevtcmd_SetJumpSound);
 USER_FUNC(_get_defence_ac_result);
 USER_FUNC(_config_key_record);
 static USER_FUNC(_krb_get_dir);

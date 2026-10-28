@@ -34,7 +34,6 @@
 
 u8* lightGetPaperCraft(void);
 
-USER_FUNC(btlevtcmd_SetEventEntry);
 USER_FUNC(btlevtcmd_SetTalkBodyId);
 s32 weaponGetPower_Gonbaba(BattleUnit* unit, s32* weapon);
 static USER_FUNC(_leg_smoke_effect);

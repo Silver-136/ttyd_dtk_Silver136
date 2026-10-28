@@ -15,7 +15,6 @@
 #include "manager/evtmgr_cmd.h"
 #include "battle/battle_damage.h"
 
-USER_FUNC(btlevtcmd_SetJumpSound);
 static USER_FUNC(chorobon_copy_status);
 
 BattleUnitKind unit_green_chorobon;

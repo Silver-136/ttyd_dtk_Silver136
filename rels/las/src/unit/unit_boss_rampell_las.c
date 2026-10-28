@@ -36,10 +36,7 @@
 #define UNIT_WORK_HAS_ATTACKED 13       // 1 once it has attacked in its own form; phase_event starts mutating only after that
 #define UNIT_WORK_TAIL_EVENT_ID 14      // id of the vivian_shadow_tail_event spawned for the Vivian form (0 = none); mutate_event deletes it
 
-USER_FUNC(btlevtcmd_SetEventEntry);
 USER_FUNC(btlevtcmd_SetEventPhase);
-USER_FUNC(btlevtcmd_SetJumpSound);
-USER_FUNC(btlevtcmd_SortPhaseMoveTable);
 USER_FUNC(mario_shadow_guard_check);
 USER_FUNC(yoshi_original_color_anim_set);
 static USER_FUNC(_krb_get_dir);

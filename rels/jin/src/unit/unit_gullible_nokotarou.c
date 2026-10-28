@@ -16,7 +16,6 @@
 #define UNIT_WORK_SPIN_SPEED 9    // target spin speed in degrees per frame around y (45 before each attack); the loop ramps the current speed toward it by 1 per frame; the sign gives the direction
 #define UNIT_WORK_SPIN_REVERSE 10 // nonzero makes the spin loop reverse direction (negates speed and target), then clears it
 
-USER_FUNC(btlevtcmd_SetJumpSound);
 
 BattleUnitKind unit_gullible_nokotarou;
 static BattleWeapon enemyWeapon_NokotarouKouraAttack;

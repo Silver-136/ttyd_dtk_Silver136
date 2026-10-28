@@ -14,7 +14,6 @@
 #include "battle/battle_database_common.h"
 #include "battle/battle_damage.h"
 
-USER_FUNC(btlevtcmd_SetJumpSound);
 static USER_FUNC(_krb_get_dir);
 
 BattleUnitKind unit_gullible_christine;

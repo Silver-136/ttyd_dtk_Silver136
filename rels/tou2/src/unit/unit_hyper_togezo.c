@@ -19,7 +19,6 @@
 #define UNIT_WORK_SPIN_SPEED 2 // degrees per frame of that roll (+-36, or +-18 slowing by 1 every 2-3 frames; times the face direction)
 #define UNIT_WORK_CHARGED 3    // 1 after charge_event; the next attack_event clears it and always uses normal_attack_event
 
-USER_FUNC(btlevtcmd_SetJumpSound);
 
 BattleUnitKind unit_hyper_togezo;
 static BattleUnitDefense defence;

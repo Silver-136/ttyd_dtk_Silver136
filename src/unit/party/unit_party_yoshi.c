@@ -69,8 +69,6 @@ typedef struct YoshiGundanWork {
 
 USER_FUNC(_attack_aud);
 USER_FUNC(_get_attack_aud_no);
-USER_FUNC(btlevtcmd_SetEventEntry);
-USER_FUNC(btlevtcmd_SetJumpSound);
 USER_FUNC(evt_eff);
 USER_FUNC(evt_snd_sfxon);
 USER_FUNC(evt_snd_sfxon_3d);

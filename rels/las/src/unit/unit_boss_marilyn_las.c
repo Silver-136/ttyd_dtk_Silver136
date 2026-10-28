@@ -19,7 +19,6 @@
 #define UNIT_WORK_CHARGE_COUNT 9 // charges in a row (charge adds 1; kagenuke and thunder clear it); the draw gives charge weight 25 only while it is below 2
 
 USER_FUNC(btlevtcmd_SetEventPhase);
-USER_FUNC(btlevtcmd_SortPhaseMoveTable);
 extern EvtWord btl_marilyn_zoom[];
 extern EvtWord majo3_shadow_tail_event[];
 extern EvtWord majo_unison_phase_event[];

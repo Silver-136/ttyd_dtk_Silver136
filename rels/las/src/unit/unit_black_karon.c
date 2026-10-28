@@ -23,7 +23,6 @@
 #define UNIT_WORK_LINK_HIT 3     // link attack: 1 once a bone hit the target; the third bone then hits without the avoid check
 #define UNIT_WORK_BONES_THROWN 4 // link attack: bones thrown so far (+1 per link_attack_event_sub); -1 after the third finishes, which ends link_attack_event's wait
 
-USER_FUNC(btlevtcmd_SetJumpSound);
 static USER_FUNC(honenoko_copy_status);
 
 BattleUnitKind unit_black_karon;

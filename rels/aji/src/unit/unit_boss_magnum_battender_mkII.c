@@ -92,7 +92,6 @@ static USER_FUNC(arm_check);
 static USER_FUNC(arm_end);
 static USER_FUNC(arm_init);
 static USER_FUNC(arm_main);
-USER_FUNC(btlevtcmd_SetEventEntry);
 USER_FUNC(get_aud_num);
 static USER_FUNC(waku_main);
 static USER_FUNC(arm_init2);

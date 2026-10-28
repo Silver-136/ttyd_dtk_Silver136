@@ -65,7 +65,6 @@ u8 battenSatelliteTo_Main(BattleUnit* unit, s32 n);
 static USER_FUNC(_set_draw_callback);
 USER_FUNC(btl_hitoffsetx);
 USER_FUNC(btlevtcmd_AnimeGetPose);
-USER_FUNC(btlevtcmd_SetEventEntry);
 USER_FUNC(btlevtcmd_SetEventPhase);
 USER_FUNC(datastrcopy);
 static USER_FUNC(enzan_lw_load);

@@ -12,7 +12,6 @@
 #include "battle/battle_damage.h"
 #include "system.h"
 
-USER_FUNC(btlevtcmd_SetJumpSound);
 
 BattleUnitKind unit_gullible_clauda;
 static BattleWeapon enemyWeapon_ClaudaNormalAttack;

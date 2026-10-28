@@ -12,7 +12,6 @@
 #include "battle/battle_sub.h"
 #include "battle/battle_damage.h"
 
-USER_FUNC(btlevtcmd_SetJumpSound);
 
 BattleUnitKind unit_flower_chorobon;
 static BattleUnitDefense defence;

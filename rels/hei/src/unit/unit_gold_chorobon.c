@@ -19,7 +19,6 @@
 #define UNIT_WORK_CHOROGUN_GONE 1   // 1 once the chorogun has been sent off (escape_chorogun_event, or damage_event when this unit drops to 0 HP while the chorogun is out); stops it running twice
 #define UNIT_WORK_CHOROGUN 2        // unit id of the chorogun unit it called
 
-USER_FUNC(btlevtcmd_SetJumpSound);
 USER_FUNC(chorogun_appear);
 USER_FUNC(chorogun_escape_all);
 USER_FUNC(get_gold_chorobon_id);

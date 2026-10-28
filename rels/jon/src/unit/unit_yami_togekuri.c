@@ -17,7 +17,6 @@
 #include "battle/battle_database_common.h"
 #include "battle/battle_damage.h"
 
-USER_FUNC(btlevtcmd_SetJumpSound);
 static USER_FUNC(get_attacker);
 static USER_FUNC(krb_get_dir);
 static u16 krb_comp_dir(f32 x, f32 z);

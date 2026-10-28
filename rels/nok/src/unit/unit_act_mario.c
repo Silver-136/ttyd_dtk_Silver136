@@ -31,7 +31,6 @@
 static USER_FUNC(_clauda_breath_effect_fire);
 static USER_FUNC(_clauda_breath_effect_ready);
 USER_FUNC(_status_window_off);
-USER_FUNC(btlevtcmd_SetEventEntry);
 extern BattleUnitKind unit_act_atmic_teresa;
 extern BattleUnitKind unit_act_clauda;
 extern BattleUnitKind unit_act_kinopiko;

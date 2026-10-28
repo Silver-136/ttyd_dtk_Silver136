@@ -13,7 +13,6 @@
 #include "data_tables.h"
 #include "battle/battle_damage.h"
 
-USER_FUNC(btlevtcmd_SetJumpSound);
 static USER_FUNC(krb_get_dir);
 
 BattleUnitKind unit_patakuri;

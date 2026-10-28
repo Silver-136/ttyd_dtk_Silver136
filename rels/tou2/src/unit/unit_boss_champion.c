@@ -29,7 +29,6 @@
 #define PARTS_WORK_FALL_EVENT 0 // part 1, slots 0-9 (index = drop number): event id of each falling object's hit event in roof_shake_attack_event, 0 once waited on
 
 
-USER_FUNC(btlevtcmd_SetEventEntry);
 USER_FUNC(btlevtcmd_SetEventPhase);
 USER_FUNC(check_ceil);
 USER_FUNC(init_ceil);

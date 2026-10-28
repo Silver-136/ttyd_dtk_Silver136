@@ -31,8 +31,6 @@ USER_FUNC(_get_bomb_hit_position);
 USER_FUNC(_judge_on_stage);
 USER_FUNC(_sanders_make_extra_work_area);
 USER_FUNC(_shot_move);
-USER_FUNC(btlevtcmd_SetEventEntry);
-USER_FUNC(btlevtcmd_SetJumpSound);
 USER_FUNC(_make_counterset_weapon);
 static void __makeTechMenuFunc(BattleCommand* command, s32* count);
 
