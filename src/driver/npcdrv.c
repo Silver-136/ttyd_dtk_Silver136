@@ -778,7 +778,7 @@ void npcMain(void) {
                                 f32 tz = entry->territoryBase.z - entry->position.z;
                                 f32 tx = entry->territoryBase.x - entry->position.x;
                                 f32 d = sqrtf(tx * tx + tz * tz);
-                                // BUG: both arms read territoryHoming.x; the square check below reads territoryLoiter
+                                // Both arms read territoryHoming.x (the circle always uses the homing radius); the square check below reads territoryLoiter
                                 // outside the find event
                                 if (d > (st == NPC_EVENT_FIND ? entry->territoryHoming.x : entry->territoryHoming.x)) {
                                     trig = 1;

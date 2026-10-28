@@ -1275,6 +1275,7 @@ void winHakoGX(WindowWork* w, s32 a, f32 x, f32 y) {
         if (scroll + (y - j * 56) - py > 400.0f || scroll + (y - j * 56) - py < -400.0f) {
             continue;
         }
+        // ofs is a * 13 (0 or 13 in the two normal modes), so ofs != 1 always holds and page 3 always takes this branch.
         if ((ofs != 0 && p == 2) || (ofs != 1 && p == 3)) {
             winBookTex(w, (a * 13 + 0x7B), x, y + scroll - p * 232, 56.0f, 56.0f);
             winBookTex(w, (a * 13 + 0x7D), x, y - 56.0f + scroll - p * 232, 8.0f, 8.0f);

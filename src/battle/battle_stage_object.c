@@ -2950,6 +2950,7 @@ void _Nozzle_Change_Check(u8 index, u8* rate) {
         if (sw->nozzleTurnEvtId[index] == 0) {
             sw->nozzleNextDir[index] = dir;
             evt = evtEntry(_nozzle_turn_event, 10, 0);
+            // evt->eventId is read before the NULL test below (evtEntry never returns NULL; a full pool gives the one-past entry).
             sw->nozzleTurnEvtId[index] = evt->eventId;
             if (evt) {
                 evt->unitId = index;
@@ -3122,6 +3123,7 @@ USER_FUNC(_fall_frame_wait_unit_ready) {
                 if (evt) {
                     evt->unitId = unit->unitId;
                 }
+                // Read outside the if (evt) block above (evtEntry never returns NULL; a full pool gives the one-past entry).
                 unit->ceilFallEventId = evt->eventId;
             }
         }

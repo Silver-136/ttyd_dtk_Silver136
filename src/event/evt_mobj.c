@@ -2961,6 +2961,7 @@ void kururing_capture(CameraId camId, MapObjectEntry* mobj) {
     cam->cameraPos = mobj->position;
     t = tan(0.21816615760326385);
     cam->cameraPos.y += (f32)(u32)height / 2.0f / t;
+    // The aspect is an integer division (width / height) converted to float afterwards.
     C_MTXPerspective(cam->projection, 25.0f, (f32)(width / height), 1.0f, 32767.0f);
     cam->projType = GX_PERSPECTIVE;
     C_MTXLookAt(cam->view, &cam->cameraPos, &cam->cameraUp, &cam->cameraAt);
@@ -4071,6 +4072,7 @@ s32 mobj_koopa_fireber_dodai_evt(MapObjectEntry* mobj) {
             npc->scale.z = npc->scale.y = npc->scale.x;
             npc->jumpTargetPos.y -= 0.2f;
         }
+        // npc is the last fire bar NPC from the loop above; with typeData[1] == 0 the loop never sets it.
         if (npc->moveTime <= npc->moveElapsed) {
             mobj->state = 99;
         }
