@@ -154,6 +154,7 @@ void evtEntryRunCheck(EventEntry* entry) {
     }
 }
 
+// BUG: none of the four entry functions (evtEntry, evtEntryType, evtChildEntry, evtBrotherEntry) checks that the search found a free entry; with the pool full they continue with the entry one past the array.
 EventEntry* evtEntry(void* evtCode, s32 priority, u8 flags) {
     EventWork* wp = evtGetWork();
     EventEntry* entry;

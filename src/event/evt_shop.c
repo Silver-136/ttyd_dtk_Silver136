@@ -1284,6 +1284,7 @@ USER_FUNC(evt_shop_main_func) {
                     break;
                 }
             }
+            // itemFlags[i] is read before the i < wp->count test; a full six-item shop with no matching hit reads one past itemFlags.
             if (!(wp->itemFlags[i] & 1) && i < wp->count) {
                 if (wp->sel != i) {
                     if (wp->sel == -1) {

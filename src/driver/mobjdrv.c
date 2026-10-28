@@ -753,6 +753,7 @@ void mobjMain(void) {
                         hit = 1;
                         goto hitDone;
                     } else if (party->hitobjAction != NULL) {
+                        // Bobbery's distance fallback reports MOBJ_FLAG_HIT_PARTY, unlike the direct hit above (MOBJ_FLAG_HIT_BOBBERY); the events tell the two apart.
                         if (PSVECDistance(&party->position, &entry->position) <
                             entry->hitObj[0].hitObject->radius + party->width) {
                             entry->hitFlag = MOBJ_FLAG_HIT_PARTY;
