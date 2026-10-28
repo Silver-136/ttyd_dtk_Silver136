@@ -50,6 +50,7 @@ EffectEntry* effBlowN64Entry(s32 type, s32 count, f32 x, f32 y, f32 z, f32 dx, f
     Mtx mtx;
     Vec axis;
 
+    // BUG: the slot is taken before the count and direction checks below; their early returns leave this entry without userdata or callback, and nothing releases it.
     effect = effEntry();
     // FAKE: zr holds 0.0f for the comparisons below; comparing with 0.0f directly changes the object
     zr = 0.0f;

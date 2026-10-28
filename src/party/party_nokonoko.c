@@ -984,6 +984,7 @@ HitEntry* ccwall(PartyEntry* party, s32 mode) {
             party->hitobjAction = hit;
         }
         party->hitobjFront = hit;
+        // This overwrites the corrected x with the raw hit x; z keeps its corrected value.
         party->position.x = hx;
         return hit;
     }
@@ -1012,6 +1013,7 @@ HitEntry* ccwall(PartyEntry* party, s32 mode) {
             party->hitobjAction = hit;
         }
         party->hitobjFront = hit;
+        // This overwrites the corrected x with the raw hit x; z keeps its corrected value.
         party->position.x = hx;
         return hit;
     }

@@ -978,6 +978,7 @@ void effThunderDisp(CameraId cameraId, EffectEntry* effect) {
             tri2(460, 461, 462, 0, 460, 462, 463, 0);
             tri2(464, 465, 466, 0, 464, 466, 467, 0);
             tri2(468, 469, 470, 0, 468, 470, 471, 0);
+            // The second triangle uses vertex 446, not 472 as in the neighbouring quads (446 is an earlier, in-range vertex).
             tri2(472, 473, 474, 0, 446, 474, 475, 0);
             break;
         case 4:

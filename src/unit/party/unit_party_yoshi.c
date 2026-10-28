@@ -2316,6 +2316,7 @@ USER_FUNC(_gundan_yoshi_run_effect) {
         return EVT_RETURN_DONE;
     }
     for (i = 0; i < 256; i++) {
+        // Every runner is sorted with the depth of p left by the loop above; the callback data still selects each runner.
         dispEntry(CAMERA_3D, dispCalcZ((Vec*)p), VERSION_PICK(2, 1), (DispCallback)_btlYoshiDisp, &w->parts[i]);
     }
     } while (0);

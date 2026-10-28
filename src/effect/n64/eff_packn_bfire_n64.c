@@ -219,6 +219,7 @@ void effPacknBfireDisp(CameraId cameraId, EffectEntry* effect) {
     sc = work->scaleArg;
     if (work->type != 0) {
         GXSetTevColor(GX_TEVREG0, (GXColor){work->color[0], work->color[1], work->color[2], a});
+        // Secondary green is taken from color[1]; color[5] (set in the entry function) is not read here.
         GXSetTevColor(GX_TEVREG1, (GXColor){work->color[4], work->color[1], work->color[6], work->color[7]});
         GXSetNumChans(0);
         GXSetNumTevStages(5);
