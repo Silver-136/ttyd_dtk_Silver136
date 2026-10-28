@@ -190,6 +190,7 @@ void effPeachDustMain(EffectEntry* effect) {
             p->position.x += p->velocity.x;
             p->position.y += p->velocity.y;
             p->velocity.y += p->velocity.z;
+            // z moves with the x step; the third stored velocity component accelerates y (above).
             p->position.z += p->velocity.x;
         }
     }

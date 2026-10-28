@@ -1080,6 +1080,7 @@ void windowDispGX_Waku_col(u16 gxTexMapID, GXColor color, f32 x, f32 y, f32 widt
     f32 right, bottom, innerLeft, innerRight, innerTop, innerBottom;
 
     if (tpl_loaded) {
+        // Any texture map id the caller passes is replaced by 0, so the border always uses GX_TEXMAP0.
         if (gxTexMapID) {
             gxTexMapID = 0;
         }
@@ -1256,6 +1257,7 @@ void windowDispGX2_Waku_col(Mtx mtx, u16 gxTexMapID, GXColor color, f32 x, f32 y
     f32 right, bottom, innerLeft, innerRight, innerTop, innerBottom;
 
     if (tpl_loaded) {
+        // Any texture map id the caller passes is replaced by 0, so the border always uses GX_TEXMAP0.
         if (gxTexMapID) {
             gxTexMapID = 0;
         }

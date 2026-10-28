@@ -748,6 +748,7 @@ void nameEntDisp(CameraId cameraId, void* param) {
         FontDrawEdge();
         FontDrawString(-(f32)FontGetMessageWidth(ok) / 2.0f, 110.0f, ok);
         FontDrawString(-(f32)FontGetMessageWidth(wp->name) / 2.0f, 70.0f, wp->name);
+        // Both choices are placed with the width of the no string.
         FontDrawString(-(f32)FontGetMessageWidth(no) / 2.0f, -20.0f, yes);
         FontDrawString(-(f32)FontGetMessageWidth(no) / 2.0f, -60.0f, no);
         FontDrawEdgeOff();
