@@ -84,6 +84,8 @@ s32 marioUseParty(void) {
     return 0;
 }
 
+// Per frame (from partyMain): runs the partner action that marioUseParty requested with X, after its delay;
+// a locked controller cancels the request. Descriptive name (not in the symbol maps; docs/NAME_PROVENANCE.md).
 s32 marioUsePartyMain(void) {
     MarioWork* wp = marioGetPtr();
 
