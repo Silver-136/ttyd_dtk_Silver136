@@ -168,7 +168,8 @@ s32 marioGetoffYoshi(void) {
     return 0;
 }
 
-static inline void L_resetOfs(PartyEntry* party) {
+// Descriptive name (inline helper; not in the symbol maps).
+static inline void resetOfs(PartyEntry* party) {
     PartyEntry* extra;
 
     MarioWork* player = party->playerPtr;
@@ -181,7 +182,8 @@ static inline void L_resetOfs(PartyEntry* party) {
     }
 }
 
-static inline u32 L_chgMotion(PartyEntry* party, u8 motion) {
+// Descriptive name (inline helper; not in the symbol maps).
+static inline u32 chgMotion(PartyEntry* party, u8 motion) {
     if (party->useMotionId == 5) {
         return FALSE;
     }
@@ -189,7 +191,8 @@ static inline u32 L_chgMotion(PartyEntry* party, u8 motion) {
     return TRUE;
 }
 
-static inline void L_fall(PartyEntry* party) {
+// Descriptive name (inline helper; not in the symbol maps).
+static inline void fall(PartyEntry* party) {
     if (!(party->flags & PARTY_FLAG_IS_FALLING)) {
         party->flags |= PARTY_FLAG_IS_FALLING;
         party->gravity = -0.4f;
@@ -213,7 +216,7 @@ void marioYoshiForceCancel(void) {
     if (yoshiGetStatus() == 0) {
         return;
     }
-    L_resetOfs(party);
+    resetOfs(party);
     marioChgPose("M_S_1");
     if (party->flags & PARTY_FLAG_IS_BEING_USED) {
         party->flags &= ~PARTY_FLAG_IS_BEING_USED;
@@ -319,8 +322,10 @@ void yoshi_init(PartyEntry* party) {
     party->yoshiPsndSFXId = -1;
 }
 
-static void L_searchHead(PartyEntry* party);
-static inline f32 L_getOfs(PartyEntry* party) {
+// Descriptive name (inline helper; not in the symbol maps).
+static void searchHead(PartyEntry* party);
+// Descriptive name (inline helper; not in the symbol maps).
+static inline f32 getOfs(PartyEntry* party) {
     MarioWork* p = party->playerPtr;
     f32 ofs = 0.0f;
 
@@ -493,7 +498,7 @@ void yoshi_use(PartyEntry* party) {
                 mario->hitobjHead = NULL;
                 dir = mario->directionView;
                 spd = mario->baseSpeed;
-                L_searchHead(party);
+                searchHead(party);
                 checkWall(party, spd, dir);
                 yoshiSyncMario(mario, party);
                 party_ride_yoshi_force_move();
@@ -562,7 +567,7 @@ void yoshi_use(PartyEntry* party) {
             mario->hitobjWall = NULL;
             dir = party->targetDir;
             spd = party->moveSpeed;
-            L_searchHead(party);
+            searchHead(party);
             checkWall(party, spd, dir);
             yoshiSyncMario(mario, party);
             if (party->buttonTrg & (PAD_BUTTON_B | PAD_BUTTON_X)) {
@@ -575,7 +580,7 @@ void yoshi_use(PartyEntry* party) {
 
     switch (party->useMotionId) {
         case 100:
-            L_resetOfs(party);
+            resetOfs(party);
             marioChgSmallJumpMotion();
             mario->baseSpeed = 0.0f;
             partyChgPose(party, "PYS_H_2");
@@ -701,7 +706,7 @@ void yoshi_use(PartyEntry* party) {
             party->hitobjPush = NULL;
             dir = party->targetDir;
             spd = party->moveSpeed;
-            L_searchHead(party);
+            searchHead(party);
             checkWall(party, spd, dir);
             if (party->hitobjStandOn == NULL && mario->airTimer >= 10) {
                 searchGround2(party);
@@ -752,10 +757,10 @@ void yoshi_use(PartyEntry* party) {
         movePos(&ox, &oz, -6.0f, toMovedir(party->displayDirection));
         mario->dispOfs.x = ox;
         mario->dispOfs.z = oz;
-        mario->dispOfs2.y = 8.0f + L_getOfs(party);
+        mario->dispOfs2.y = 8.0f + getOfs(party);
         extra = partyGetPtr(marioGetExtraPartyId());
         if (extra) {
-            extra->dispOfs.y = L_getOfs(party);
+            extra->dispOfs.y = getOfs(party);
         }
     }
 
@@ -883,7 +888,7 @@ void yoshi_use(PartyEntry* party) {
             mario->hitobjWall = NULL;
             dir = party->targetDir;
             spd = party->moveSpeed;
-            L_searchHead(party);
+            searchHead(party);
             checkWall(party, spd, dir);
             searchGround(party);
             if (party->hitobjStandOn) {
@@ -941,7 +946,7 @@ void yoshi_use(PartyEntry* party) {
         }
         partyChgRunMode(party, 2);
         party->moveMode = 0;
-        L_resetOfs(party);
+        resetOfs(party);
         return;
     }
     yoshiAddFloorMove(party);
@@ -1084,16 +1089,16 @@ void searchGround(PartyEntry* party) {
             party->yoshiPsndSFXId = -1;
         }
         if (attr & HIT_ATTR_WATER_HAZARD) {
-            if (!L_chgMotion(party, 70)) {
+            if (!chgMotion(party, 70)) {
                 return;
             }
             pos = party->position;
             marioSetSplash(0, &pos);
             sweatEntry(party, NULL);
-            L_fall(party);
+            fall(party);
             party->position.y += party->gravity;
             set_damage_root_ypos(mario->position.y - 8.0f);
-            L_resetOfs(party);
+            resetOfs(party);
             party->flags |= PARTY_FLAG_FORCE_FALL;
             if (party->gravity <= -6.0f) {
                 party->gravity = -6.0f;
@@ -1128,7 +1133,7 @@ void searchGround(PartyEntry* party) {
             if (step && diff <= 11.0f && diff >= 5.0f && party->groundSlope <= 30.0f) {
                 party->stepY = stepY;
                 if (party->moveSpeed) {
-                    if (L_chgMotion(party, 40)) {
+                    if (chgMotion(party, 40)) {
                         return;
                     }
                 }
@@ -1138,7 +1143,7 @@ void searchGround(PartyEntry* party) {
     sweatEntry(party, hit);
     if (hit == NULL) {
         party->flags &= ~PARTY_FLAG_IS_GROUNDED;
-        L_fall(party);
+        fall(party);
         party->position.y += party->gravity;
     } else {
         party->flags |= PARTY_FLAG_IS_GROUNDED;
@@ -1198,7 +1203,7 @@ void searchGround2(PartyEntry* party) {
     mario->flags &= ~(MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING | MARIO_FLAG_IS_STEPPING | MARIO_FLAG_HAS_INPUT_JUMP);
 }
 
-static void L_searchHead(PartyEntry* party) {
+static void searchHead(PartyEntry* party) {
     MarioWork* p = party->playerPtr;
     Vec pos = party->position;
     f32 height = partyGetHeight(party);
