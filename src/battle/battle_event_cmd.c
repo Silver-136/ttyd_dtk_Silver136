@@ -3346,7 +3346,6 @@ USER_FUNC(btlevtcmd_PartsFaceDirectionSub) {
     return EVT_RETURN_DONE;
 }
 
-extern ItemData itemDataTable[];
 void _MoveSoundControlEndCore(BattleUnit* unit, BecSndWork* work);
 void _MoveSoundControlCore(BattleUnit* unit, BecSndWork* work, BattleUnitPart* part, f32 x, f32 y, f32 z);
 ItemEntry* itemEntry(const char* name, s32 itemId, u16 type, s32 collectFlag, EvtWord* evtCode, f32 x, f32 y, f32 z);

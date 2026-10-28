@@ -52,7 +52,6 @@ void BattleCommandDisplay_MultiItemMenuDisp(CameraId camId, void* param);
 void BattleCommandDisplay_TargetSelectMenuDisp(CameraId camId, void* param);
 void BattleCommandDisplay_ProtectPartnerSelectMenuDisp(CameraId camId, void* param);
 
-extern ItemData itemDataTable[];
 extern BattleWeapon marioDefaultWeapon_Jump;
 extern BattleWeapon marioWeapon_KururinJump;
 extern BattleWeapon marioDefaultWeapon_Hammer;

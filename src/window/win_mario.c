@@ -20,7 +20,6 @@
 #include "win/win_root.h"
 #include "driver/mapdrv.h"
 
-extern ItemData itemDataTable[];
 
 typedef struct LinkDt {
     s16 x;              // 0x0

@@ -7,7 +7,6 @@
 #include "battle/battle_sub.h"
 #include "libc_decls.h"
 
-extern ItemData itemDataTable[];
 #include "system.h"
 
 BattleIcon* BtlIconGetPtr(s32 index) {

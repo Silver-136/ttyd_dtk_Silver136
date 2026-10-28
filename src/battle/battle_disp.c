@@ -26,7 +26,6 @@
 #include "battle/unit_work.h"
 
 
-extern ItemData itemDataTable[];
 
 
 // Statuses that select the unit's pose, in priority order (_GetStatusPoseType)

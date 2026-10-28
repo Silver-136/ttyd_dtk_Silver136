@@ -22,3 +22,5 @@ typedef struct ItemData {
     s16 pad_22; //0x22, always 0 (alignment before battle_params)
     BattleWeapon* battle_params; //0x24
 } ItemData;
+
+extern ItemData itemDataTable[];

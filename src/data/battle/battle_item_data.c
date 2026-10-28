@@ -33,7 +33,6 @@
 #include "eff/eff_naniga.h"
 #include "driver/mapdrv.h"
 
-extern ItemData itemDataTable[];
 void _nancy_disp(CameraId cameraId, void* param);
 void _disp_item_icon(CameraId cameraId, void* param);
 

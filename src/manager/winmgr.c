@@ -32,7 +32,6 @@ typedef struct WinMgrSelectTbl {
     WinMgrDesc* descriptors; // 0x4
 } WinMgrSelectTbl;
 
-extern ItemData itemDataTable[];
 void qqsort(void* base, u32 n, u32 size, int (*compare)(void*, void*));
 #ifdef VERSION_G8ME01
 u16 L_pouchEquipBadge(s32 index);

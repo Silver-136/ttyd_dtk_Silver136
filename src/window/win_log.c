@@ -57,7 +57,6 @@ typedef struct MonosiriWork {
 void qqsort(void* base, u32 n, u32 size, int (*compare)(void*, void*));
 int compare_func5_2(void* a, void* b);
 int compare_func6_2(void* a, void* b);
-extern ItemData itemDataTable[];
 
 void capture(CameraId camera, void* param);
 void monosiri_disp(CameraId camera, void* param);

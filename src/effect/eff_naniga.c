@@ -21,7 +21,6 @@
 #include "eff/eff_naniga.h"
 #include "driver/mapdrv.h"
 
-extern ItemData itemDataTable[];
 
 typedef struct EffNanigaWork {
     s32 type;      // 0x0

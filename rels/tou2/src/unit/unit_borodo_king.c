@@ -21,7 +21,6 @@
 #include "manager/evtmgr_cmd.h"
 #include "battle/battle_damage.h"
 
-extern ItemData itemDataTable[];
 void BtlUnit_EquipItem(BattleUnit* unit, s32 flags, ItemType type);
 
 USER_FUNC(btlevtcmd_CheckUnitFlag);

@@ -105,7 +105,6 @@ void BattleAudienceSoundMain(void);
 void BattleAudienceNoiseMain(void);
 
 
-extern ItemData itemDataTable[];
 
 #pragma force_active on
 

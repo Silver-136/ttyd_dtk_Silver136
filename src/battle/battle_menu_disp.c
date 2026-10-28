@@ -13,7 +13,6 @@
 #include "libc_decls.h"
 
 void FontDrawString(f32 x, f32 y, const char* msg);
-extern ItemData itemDataTable[];
 double sin(double);
 
 void DrawMultiItemWin(void);

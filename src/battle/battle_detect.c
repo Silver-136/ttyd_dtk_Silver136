@@ -9,7 +9,6 @@
 #include "battle/battle_detect.h"
 #include "mario/mario_pouch.h"
 
-extern ItemData itemDataTable[];
 
 
 void _btlSamplingEnemy(BattleWorkWeaponTargets* d) {

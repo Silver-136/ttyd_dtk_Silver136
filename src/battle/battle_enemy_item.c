@@ -8,7 +8,6 @@
 #include "mario/mario_pouch.h"
 #include "battle/battle_enemy_item.h"
 
-extern ItemData itemDataTable[];
 
 void* _check_status_recover_item(BattleUnit* self);
 void* _check_status_support_item(BattleUnit* self);

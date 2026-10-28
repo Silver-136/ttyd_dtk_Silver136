@@ -30,7 +30,6 @@
 #include "win/win_root.h"
 #include "driver/mapdrv.h"
 
-extern ItemData itemDataTable[];
 
 
 BattleWeapon* chri_waza[4] = {

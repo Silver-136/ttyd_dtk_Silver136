@@ -22,7 +22,6 @@
 #include "win/win_party.h"
 #include "win/win_root.h"
 
-extern ItemData itemDataTable[];
 void qqsort(void* base, u32 n, u32 size, s32 (*compare)(const void*, const void*));
 
 typedef struct WinSortData {

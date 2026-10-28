@@ -24,7 +24,6 @@
 #include "battle/battle_attack_audience.h"
 #include "libc_decls.h"
 
-extern ItemData itemDataTable[];
 ItemEntry* itemEntry(const char* name, s32 itemId, u16 type, s32 collectFlag, EvtWord* evtCode, f32 x, f32 y, f32 z);
 extern void psndSFX_pit(s32 id, s32 pitch);
 

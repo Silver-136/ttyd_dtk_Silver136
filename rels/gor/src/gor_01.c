@@ -62,7 +62,6 @@
 #include "driver/msgdrv.h"
 #include "driver/seqdrv.h"
 
-extern ItemData itemDataTable[];
 typedef struct ShopSel {
     u8 field_0x0[8];
     s32* items;

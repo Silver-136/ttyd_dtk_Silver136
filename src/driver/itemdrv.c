@@ -61,7 +61,6 @@ inline Vec makeVecByValue(f32 x, f32 y, f32 z) {
     return v;
 }
 
-extern ItemData itemDataTable[];
 s32 msgWindow_Entry(const char* msg, s32 callback, s32 priority);
 
 void winNameDisp(WinMgrEntry* win);

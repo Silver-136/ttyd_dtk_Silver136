@@ -41,7 +41,6 @@ char* strstr(const char* str, const char* sub);
 #include "win/win_party.h"
 #include "libc_decls.h"
 
-extern ItemData itemDataTable[];
 
 #define HALF_F float_0p5_8041dc98
 USER_FUNC(cam_r);

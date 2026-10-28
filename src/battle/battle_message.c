@@ -12,7 +12,6 @@
 #include "mario/mariost.h"
 #endif
 
-extern ItemData itemDataTable[];
 
 void _disp(CameraId cameraId, void* param);
 

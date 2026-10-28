@@ -42,7 +42,6 @@
 #include "data_tables.h"
 #include "driver/seqdrv.h"
 
-extern ItemData itemDataTable[];
 
 static USER_FUNC(bgm_start_wait);
 static USER_FUNC(booboo_main);

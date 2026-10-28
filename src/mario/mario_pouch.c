@@ -12,7 +12,6 @@
 #include "driver/swdrv.h"
 
 
-extern ItemData itemDataTable[];
 
 PouchData* mpp_gap;
 static PouchData* mpp;

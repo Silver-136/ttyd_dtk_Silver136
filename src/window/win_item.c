@@ -26,7 +26,6 @@
 void itemUseDisp(WinMgrEntry* entry);
 void itemUseDisp2(WinMgrEntry* entry);
 void item_disp(WindowWork* w, f32 xo, f32 yo);
-extern ItemData itemDataTable[];
 
 
 static const char* luigi_book_1[] = {

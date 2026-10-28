@@ -16,7 +16,6 @@
 #include "win/win_mario.h"
 #include "driver/mapdrv.h"
 
-extern ItemData itemDataTable[];
 
 
 void winMakeEquipList(WindowWork* w) {
