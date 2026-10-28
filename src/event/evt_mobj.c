@@ -1167,8 +1167,7 @@ s32 mobj_float_blk(MapObjectEntry* mobj) {
     const char* cur;
     switch (mobj->state) {
     case 99:
-        // FAKE: the first name byte is read as a signed char; the plain test changes the object
-        if ((s8)mobj->linkedName[0] == 0) {
+        if (mobj->linkedName[0] == 0) {
             if (blkHitCheck(mobj)) {
                 if (strcmp((const char*)animPoseGetCurrentAnim(mobj->poseId), "S_1")) {
                     animPoseSetAnim(mobj->poseId, "S_1", 1);
@@ -1299,8 +1298,7 @@ s32 mobj_switch_float_blk(MapObjectEntry* mobj) {
             break;
         }
         mobj->typeData[1] = (mobj->typeData[1] & 0x40000000) | switchAnimIdx(mobj->poseId);
-        // FAKE: the first name byte is read as a signed char; the plain test changes the object
-        if ((s32)(s8)mobj->linkedName[0]) {
+        if (mobj->linkedName[0]) {
             if (blkHitCheck(mobjNameToPtr(mobj->linkedName))) {
                 if (evtCheckID(mobj->eventId)) {
                     if (isAnimA13((const s8*)animPoseGetCurrentAnim(mobj->poseId))) {
@@ -1366,8 +1364,7 @@ s32 mobj_switch_float_blk(MapObjectEntry* mobj) {
         if (animPoseGetLoopTimes(mobj->poseId) < 1.0f) {
             break;
         }
-        // FAKE: the first name byte is read as a signed char; the plain test changes the object
-        if ((s32)(s8)mobj->linkedName[0]) {
+        if (mobj->linkedName[0]) {
             mobjNameToPtr(mobj->linkedName);
         }
         {
@@ -1414,8 +1411,7 @@ s32 mobj_switch_float_blk(MapObjectEntry* mobj) {
         if (mobj->timer != 0) {
             break;
         }
-        // FAKE: the first name byte is read as a signed char; the plain test changes the object
-        if ((s32)(s8)mobj->linkedName[0]) {
+        if (mobj->linkedName[0]) {
             if (blkHitCheck(mobjNameToPtr(mobj->linkedName))) {
                 animPoseSetAnim(mobj->poseId, "S_1", 0);
             } else {
@@ -1485,8 +1481,7 @@ USER_FUNC(evt_mobj_switch_float_blk) {
     mobj->timer = 0;
     mobjCalcMtx(mobj);
     strcpy(mobj->linkedName, partner);
-    // FAKE: the first name byte is read as a signed char; the plain test changes the object
-    if ((s32)(s8)mobj->linkedName[0]) {
+    if (mobj->linkedName[0]) {
         other = mobjNameToPtr(mobj->linkedName);
         strcpy(other->linkedName, mobj->name);
         if (blkHitCheck(other)) {

@@ -40,8 +40,7 @@ static void twoddisp_disp(CameraId camera, void* param) {
 
     for (i = 0; i < 100; i++) {
         p = &twodPtr[i];
-        // FAKE: (s8) cast on the first name byte; the plain zero test changes the object
-        if ((s8)p->name[0] != 0 && (p->flags & 1)) {
+        if (p->name[0] != 0 && (p->flags & 1)) {
             if (!(p->id & 0x80000000)) {
                 fogi = twod_icon_fog_color;
                 pos.x = p->baseX + p->x;
@@ -122,8 +121,7 @@ s32 evt_twoddisp_entry(EventEntry* evt, BOOL isFirstCall) {
         p = &twodPtr[i];
         // The comparison result is unused: a new entry is made even when the name already exists
         strcmp(p->name, name);
-        // FAKE: (s8) cast on the first name byte; the plain zero test changes the object
-        if ((s8)p->name[0] == 0) {
+        if (p->name[0] == 0) {
             strcpy(p->name, name);
             p->flags = 1;
             p->unk12 = 0;

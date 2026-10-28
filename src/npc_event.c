@@ -1157,8 +1157,8 @@ EVT_BEGIN(patapata_return_event)
     RETURN
 EVT_END()
 
-// BUG: no RETURN and no end marker (21 words, size 0x54 in both symbol maps): a CALL_CHILD of this script runs
-// on into met_set_anim_wait_event, which follows it in .data, and stops at that script's RETURN.
+// No RETURN and no end marker (21 words, size 0x54 in both symbol maps): a CALL_CHILD of this script continues
+// into met_set_anim_wait_event, which follows it in .data, sets the wait pose and returns (a shared tail).
 EvtWord met_init_event_common[] = {
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_ENEMY)
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_UPDATE_BY_EVENT)

@@ -504,8 +504,6 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/event/evt_mobj.c | evt_mobj_tornadoswitch_blue | gp->inBattle is loaded into inBattle before the test; `inBattle = gp->inBattle != 0` changes the object | see comment |
 | Both | src/event/evt_mobj.c | evt_mobj_floatswitch_red | gp->inBattle is loaded into inBattle before the test; `inBattle = gp->inBattle != 0` changes the object | see comment |
 | Both | src/event/evt_mobj.c | mobj_rideswitch_lightblue | four unused Vec literals read the uninitialized x/y/z; removing the block changes the object | see comment |
-| Both | src/event/evt_mobj.c | mobj_float_blk | the first name byte is read as a signed char; the plain test changes the object | see comment |
-| Both | src/event/evt_mobj.c | evt_mobj_switch_float_blk | the first name byte is read as a signed char; the plain test changes the object | see comment |
 | Both | src/event/evt_mobj.c | evt_mobj_signboard | gp->inBattle is loaded into inBattle before the test; `inBattle = gp->inBattle != 0` changes the object | see comment |
 | Both | src/event/evt_mobj.c | recoveryHeal | case 4 repeats these steps inline instead of calling this helper; calling it there changes the object | see comment |
 | Both | src/event/evt_mobj.c | mobj_recovery_blk | the coin count goes through kind (also the coin cost in case 4); comparing pouchGetCoin() directly changes the object | see comment |
@@ -525,8 +523,6 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/event/evt_shop.c | evt_shop_setup | block-local NPC pointer; assigning through npcNameToPtr(shopper->name) directly changes the object | see comment |
 | Both | src/event/evt_shop.c | evt_shop_main_func | the masks and BOOL casts do nothing (!x is 0 or 1); !marioChkCtrl() // !marioChkKey() changes the object | see comment |
 | Both | src/event/evt_sub.c | evt_sub_animgroup_async | redundant test (r is nonzero here); returning EVT_RETURN_DONE directly changes the object | see comment |
-| Both | src/event/evt_twoddisp.c | twoddisp_disp | (s8) cast on the first name byte; the plain zero test changes the object | see comment |
-| Both | src/event/evt_twoddisp.c | evt_twoddisp_entry | (s8) cast on the first name byte; the plain zero test changes the object | see comment |
 | Both | src/manager/cardmgr.c | cardBufReset | unused copy of the volatile flags word; dropping it changes the object | see comment |
 | Both | src/manager/cardmgr.c | memcard_probe | self-assignment with no effect; without it the object changes | see comment |
 | Both | src/manager/cardmgr.c | make_data | i is never -1 here; the plain save = &cardGetFilePtr()->saves[i] changes the object | see comment |

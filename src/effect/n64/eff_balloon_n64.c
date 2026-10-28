@@ -145,7 +145,7 @@ void effBalloonMain(EffectEntry* effect) {
 void effBalloonDisp(CameraId cameraId, EffectEntry* effect) {
     CameraEntry* camera = camGetPtr(cameraId);
     EffBalloonN64Work* work = effect->userdata;
-    s32 type;
+    s32 lifetime;
     effN64Vtx* vtx = (effN64Vtx*)smartAlloc(sizeof(effN64Vtx) * 32, 3)->address;
     Vec v0;
     Vec v1;
@@ -158,11 +158,12 @@ void effBalloonDisp(CameraId cameraId, EffectEntry* effect) {
     Mtx b;
     s32 i;
 
-    type = work->lifetime;
-    if (type == 0) {
+    // the texture follows the remaining lifetime (0, 1, other), not the entry's type
+    lifetime = work->lifetime;
+    if (lifetime == 0) {
         effGetTexObjN64(0x5F, &texObj);
         GXLoadTexObj(&texObj, GX_TEXMAP0);
-    } else if (type == 1) {
+    } else if (lifetime == 1) {
         effGetTexObjN64(0x5E, &texObj);
         GXLoadTexObj(&texObj, GX_TEXMAP0);
     } else {
@@ -228,7 +229,7 @@ void effBalloonDisp(CameraId cameraId, EffectEntry* effect) {
     GXSetCurrentMtx(GX_PNMTX0);
     GXSetCullMode(GX_CULL_NONE);
     effSetVtxDescN64(vtx);
-    if (type < 100) {
+    if (lifetime < 100) {
         GXBegin(GX_TRIANGLES, GX_VTXFMT0, 3);
         tri1(0x15, 2, 1, 0);
         for (i = 0; i < 19; i++) {
