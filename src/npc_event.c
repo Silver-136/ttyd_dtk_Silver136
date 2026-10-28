@@ -4370,6 +4370,7 @@ USER_FUNC(zakoEntryFall) {
 }
 
 
+// Descriptive name (not in the symbol maps); placeholder unk_800ece0c, JP 0x800ECE0C. See docs/NAME_PROVENANCE.md.
 USER_FUNC(npc_fire_eff_fadeout) {
     EvtWord* args;
     NpcEntry* npc;

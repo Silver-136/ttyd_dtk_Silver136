@@ -4048,6 +4048,7 @@ static USER_FUNC(eff_scanning) {
     return EVT_RETURN_DONE;
 }
 
+// Descriptive name (not in the symbol maps); placeholder unk_las_0000855c, JP las .text+0x8490. See docs/NAME_PROVENANCE.md.
 USER_FUNC(mario_shadow_guard_check) {
     EvtWord* args = event->args;
 

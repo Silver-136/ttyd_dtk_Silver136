@@ -1196,6 +1196,7 @@ EVT_BEGIN(shop_door_close)
     RETURN
 EVT_END()
 
+// Descriptive name (not in the symbol maps); placeholder unk_rsh_00002634, JP rsh .text+0x2570. See docs/NAME_PROVENANCE.md.
 USER_FUNC(npc_alpha_except_tenin) {
     s32 alpha = evtGetValue(event, event->args[0]);
     NpcWork* wp = npcGetWorkPtr();

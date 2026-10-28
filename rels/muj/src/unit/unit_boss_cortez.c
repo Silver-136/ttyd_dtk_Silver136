@@ -2483,6 +2483,7 @@ USER_FUNC(_cortez_check_drain_audience) {
     return EVT_RETURN_DONE;
 }
 
+// Descriptive name (not in the symbol maps); placeholder unk_muj_0000652c, JP muj .text+0x6468. See docs/NAME_PROVENANCE.md.
 USER_FUNC(_cortez_get_sfx_vol) {
     EvtWord* args = event->args;
     s32 id = evtGetValue(event, args[0]);

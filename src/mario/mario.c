@@ -328,6 +328,7 @@ BOOL marioCaseEventValidChk(void) {
     }
 }
 
+// Descriptive name (not in the symbol maps); placeholder unk_8005bb80, JP 0x8005BB80. See docs/NAME_PROVENANCE.md.
 BOOL marioFrontActionValidChk(void) {
     if (mp->currMotionId == MARIO_MOTION_ROLL || mp->flags & MARIO_FLAG_PAPER_MODE) {
         return FALSE;
@@ -1443,6 +1444,7 @@ s32 marioAnimeId(void) {
     return id;
 }
 
+// Descriptive name (not in the symbol maps); placeholder unk_80058374, JP 0x80058374. See docs/NAME_PROVENANCE.md.
 void marioChgDamagePose(void) {
     MarioWork* wp = mp;
     MarioMotion mot = wp->currMotionId;

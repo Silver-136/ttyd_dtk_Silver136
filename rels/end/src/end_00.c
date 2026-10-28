@@ -186,10 +186,12 @@ void _epilog(void) {
 void _unresolved(void) {
 }
 
+// Descriptive name (not in the symbol maps); placeholder unk_end_00002508, JP end .text+0x2444. See docs/NAME_PROVENANCE.md.
 void end_silhouette_tev(MapTevCallbackInfo* info) {
     GXSetTevColorIn(info->tevStage - 1, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ONE);
 }
 
+// Descriptive name (not in the symbol maps); placeholder unk_end_00002494, JP end .text+0x23D0. See docs/NAME_PROVENANCE.md.
 void end_silhouette_rendermode(s32 wXluStage) {
     animGetPtr()->currDispMode = wXluStage;
     GXSetBlendMode(GX_BM_NONE, GX_BL_ONE, GX_BL_ZERO, GX_LO_CLEAR);
@@ -198,6 +200,7 @@ void end_silhouette_rendermode(s32 wXluStage) {
     GXSetZMode(GX_TRUE, GX_LEQUAL, GX_TRUE);
 }
 
+// Descriptive name (not in the symbol maps); placeholder unk_end_000023ac, JP end .text+0x22E8. See docs/NAME_PROVENANCE.md.
 void end_credit_npc_disp(CameraId cameraId, void* param) {
     CreditActor* actor = param;
 
@@ -212,6 +215,7 @@ void end_credit_npc_disp(CameraId cameraId, void* param) {
     }
 }
 
+// Descriptive name (not in the symbol maps); placeholder unk_end_000022e8, JP end .text+0x2224. See docs/NAME_PROVENANCE.md.
 USER_FUNC(evt_end_credit_npc_get_wait_type) {
     EvtWord* args = event->args;
     u32 id = evtGetValue(event, args[0]);
@@ -455,6 +459,7 @@ CreditNpc R_credits_npc_info[] = {
     {"c_peach", "P_W_1", NULL},
 };
 
+// Descriptive name (not in the symbol maps); placeholder unk_end_00001d90, JP end .text+0x1CCC. See docs/NAME_PROVENANCE.md.
 USER_FUNC(evt_end_credit_npc_main) {
     s32 id = evtGetValue(event, event->args[0]);
     BOOL inBattle;
@@ -668,6 +673,7 @@ EVT_BEGIN(end_image_blend_loop)
     RETURN
 EVT_END()
 
+// Descriptive name (not in the symbol maps); placeholder unk_end_00001324, JP end .text+0x1260. See docs/NAME_PROVENANCE.md.
 void end_image_disp(CameraId cameraId, void* param) {
     s32 i;
     f32 w;
@@ -1169,31 +1175,37 @@ const char* end_moa_ext_anim = "c_n_moa_a";
 
 const char* end_moa_ext_pose = "S_1";
 
+// Descriptive name (not in the symbol maps); placeholder unk_end_000012e0, JP end .text+0x121C. See docs/NAME_PROVENANCE.md.
 USER_FUNC(evt_end_image_disp_entry) {
     dispEntry(CAMERA_3D, 0.0f, 7, end_image_disp, NULL);
     return 0;
 }
 
+// Descriptive name (not in the symbol maps); placeholder unk_end_000012a4, JP end .text+0x11E0. See docs/NAME_PROVENANCE.md.
 USER_FUNC(evt_end_image_set_alpha) {
     end_wp->alpha = evtGetValue(event, event->args[0]);
     return 2;
 }
 
+// Descriptive name (not in the symbol maps); placeholder unk_end_00001268, JP end .text+0x11A4. See docs/NAME_PROVENANCE.md.
 USER_FUNC(evt_end_image_set_overlay_alpha) {
     end_wp->alpha2 = evtGetValue(event, event->args[0]);
     return 2;
 }
 
+// Descriptive name (not in the symbol maps); placeholder unk_end_0000122c, JP end .text+0x1168. See docs/NAME_PROVENANCE.md.
 USER_FUNC(evt_end_image_set_mode) {
     end_wp->mode = evtGetValue(event, event->args[0]);
     return 2;
 }
 
+// Descriptive name (not in the symbol maps); placeholder unk_end_000011f0, JP end .text+0x112C. See docs/NAME_PROVENANCE.md.
 USER_FUNC(evt_end_image_set_blend) {
     end_wp->tevAlpha = evtGetValue(event, event->args[0]);
     return 2;
 }
 
+// Descriptive name (not in the symbol maps); placeholder unk_end_00000bc8, JP end .text+0xB04. See docs/NAME_PROVENANCE.md.
 USER_FUNC(evt_end_staff_roll_msg_main) {
     s32 state = event->userdata[0];
     s32 idx = event->userdata[1];
@@ -1342,6 +1354,7 @@ USER_FUNC(evt_end_staff_roll_msg_main) {
     return 0;
 }
 
+// Descriptive name (not in the symbol maps); placeholder unk_end_00000a6c, JP end .text+0x9A8. See docs/NAME_PROVENANCE.md.
 USER_FUNC(evt_end_staff_roll_init) {
     BOOL inBattle = gp->inBattle ? TRUE : FALSE;
     s32 i;
@@ -1375,6 +1388,7 @@ USER_FUNC(evt_end_staff_roll_init) {
 }
 
 #pragma dont_inline on
+// Descriptive name (not in the symbol maps); placeholder unk_end_00000a14, JP end .text+0x950. See docs/NAME_PROVENANCE.md.
 void end_staff_roll_exit(void) {
     fileFree(end_wp->tpl);
     psndClearFlag(PSND_FLAG_NO_SFX);
@@ -1386,6 +1400,7 @@ void end_staff_roll_exit(void) {
 }
 #pragma dont_inline reset
 
+// Descriptive name (not in the symbol maps); placeholder unk_end_000009cc, JP end .text+0x908. See docs/NAME_PROVENANCE.md.
 USER_FUNC(evt_end_font_restore) {
 #ifndef VERSION_G8ME01
     gp->language = 0;
@@ -1396,11 +1411,13 @@ USER_FUNC(evt_end_font_restore) {
     return 2;
 }
 
+// Descriptive name (not in the symbol maps); placeholder unk_end_000009a4, JP end .text+0x8E0. See docs/NAME_PROVENANCE.md.
 USER_FUNC(end_bgm_wait_stop) {
     psndSetFlag(PSND_FLAG_BGM_WAIT_0);
     return 2;
 }
 
+// Descriptive name (not in the symbol maps); placeholder unk_end_00000938, JP end .text+0x874. See docs/NAME_PROVENANCE.md.
 USER_FUNC(evt_end_npc_silhouette_on) {
     NpcEntry* npc = npcNameToPtr((const char*)evtGetValue(event, event->args[0]));
 
@@ -1410,12 +1427,14 @@ USER_FUNC(evt_end_npc_silhouette_on) {
     return 2;
 }
 
+// Descriptive name (not in the symbol maps); placeholder unk_end_000008bc, JP end .text+0x7F8. See docs/NAME_PROVENANCE.md.
 f32 end_randf(f32 min, f32 max) {
     f32 r = rand() / 32767.0f;
 
     return r * (max - min) + min;
 }
 
+// Descriptive name (not in the symbol maps); placeholder unk_end_000006f8, JP end .text+0x634. See docs/NAME_PROVENANCE.md.
 void end_ext_moamoa_init(void) {
     ExtdrvPose* pose = extGetPosePtr();
     EndMoa* elem = end_moa_tbl;
@@ -1435,6 +1454,7 @@ void end_ext_moamoa_init(void) {
     }
 }
 
+// Descriptive name (not in the symbol maps); placeholder unk_end_00000440, JP end .text+0x37C. See docs/NAME_PROVENANCE.md.
 void end_ext_moamoa_main(void) {
     NpcEntry* npc = npcNameToPtr("\203\202\203A\203\202\203A");
     Vec* wpos = *animPoseGetAnimPosePtr(npc->poseId)->worldPositions;
@@ -1488,6 +1508,7 @@ void end_ext_moamoa_main(void) {
     }
 }
 
+// Descriptive name (not in the symbol maps); placeholder unk_end_0000039c, JP end .text+0x2D8. See docs/NAME_PROVENANCE.md.
 void end_ext_disp(CameraId cameraId, void* param) {
     extLoadRenderMode();
     extLoadVertex();
@@ -1499,10 +1520,12 @@ void end_ext_disp(CameraId cameraId, void* param) {
     extLoadTextureExit();
 }
 
+// Descriptive name (not in the symbol maps); placeholder unk_end_0000035c, JP end .text+0x298. See docs/NAME_PROVENANCE.md.
 void end_ext_moamoa_dispent(void) {
     dispEntry(CAMERA_3D, 0.0f, 1, end_ext_disp, NULL);
 }
 
+// Descriptive name (not in the symbol maps); placeholder unk_end_0000012c, JP end .text+0x68. See docs/NAME_PROVENANCE.md.
 USER_FUNC(evt_end_moamoa_init) {
     NpcEntry* npc = npcNameToPtr("\203\202\203A\203\202\203A");
     AnimationPose* ap;
@@ -1538,6 +1561,7 @@ USER_FUNC(evt_end_moamoa_init) {
     return 2;
 }
 
+// Descriptive name (not in the symbol maps); placeholder unk_end_000000c4, JP end .text+0x0. See docs/NAME_PROVENANCE.md.
 USER_FUNC(evt_end_moamoa_exit) {
     NpcEntry* npc = npcNameToPtr("\203\202\203A\203\202\203A");
 

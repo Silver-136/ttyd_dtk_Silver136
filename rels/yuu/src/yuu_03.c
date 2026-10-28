@@ -102,11 +102,13 @@ EvtWord minigame04_start[91];
 EvtWord minigame04_end[256];
 EvtWord yuu_03_init_evt[VERSION_PICK(26, 140)];
 
+// Descriptive name (not in the symbol maps); placeholder unk_yuu_0000371c, JP yuu .text+0x3650. See docs/NAME_PROVENANCE.md.
 USER_FUNC(yuu_03_cam_shift_reset) {
     camShiftReset();
     return EVT_RETURN_DONE;
 }
 
+// Descriptive name (not in the symbol maps); placeholder unk_yuu_0000365c, JP yuu .text+0x3590. See docs/NAME_PROVENANCE.md.
 void yuu_03_icon_monte_disp(CameraId camera, void* param) {
     Monte* monte = param;
     s32 i;
@@ -125,6 +127,7 @@ void yuu_03_icon_monte_disp(CameraId camera, void* param) {
     }
 }
 
+// Descriptive name (not in the symbol maps); placeholder unk_yuu_000034bc, JP yuu .text+0x33F0. See docs/NAME_PROVENANCE.md.
 USER_FUNC(yuu_03_icon_monte_entry) {
     BOOL exists = FALSE;
     MiniGameWork* wp = (MiniGameWork*)event->lwData[0];
@@ -170,6 +173,7 @@ USER_FUNC(yuu_03_icon_monte_entry) {
     return EVT_RETURN_BLOCK;
 }
 
+// Descriptive name (not in the symbol maps); placeholder unk_yuu_0000341c, JP yuu .text+0x3350. See docs/NAME_PROVENANCE.md.
 USER_FUNC(yuu_03_icon_monte_restart) {
     SlitWork* data;
 

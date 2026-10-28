@@ -1010,6 +1010,7 @@ EVT_BEGIN(aji_13_init_evt)
     RETURN
 EVT_END()
 
+// Descriptive name (not in the symbol maps); placeholder unk_aji_000035a0, JP aji .text+0x34DC. See docs/NAME_PROVENANCE.md.
 USER_FUNC(hit_group_chk) {
     EvtWord* args = event->args;
     const char* name1 = (const char*)evtGetValue(event, args[0]);

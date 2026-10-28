@@ -172,6 +172,7 @@ static inline const char* select_party_name(u16 id) {
     return name;
 }
 
+// Descriptive name (not in the symbol maps); placeholder unk_80239b2c, JP 0x80239B2C. See docs/NAME_PROVENANCE.md.
 USER_FUNC(evt_win_party_lankup_chk) {
     PouchData* pouch;
     u16* p;
@@ -204,6 +205,7 @@ USER_FUNC(evt_win_party_lankup_chk) {
     return EVT_RETURN_DONE;
 }
 
+// Descriptive name (not in the symbol maps); placeholder unk_802399f8, JP 0x802399F8. See docs/NAME_PROVENANCE.md.
 USER_FUNC(evt_win_party_lankdown_chk) {
     PouchData* pouch;
     u16* p;
@@ -883,6 +885,7 @@ WinMgrSelect* winMgrSelectEntry(EvtWord type, s32 newItem, BOOL cancelOk) {
     return sel;
 }
 
+// Descriptive name (not in the symbol maps); placeholder unk_80237a2c, JP 0x80237A2C. See docs/NAME_PROVENANCE.md.
 int select_comp_starpiece(void* a, void* b) {
     u16 x = itemDataTable[((WinMgrSelectItem*)a)->id].star_piece_price;
     u16 y = itemDataTable[((WinMgrSelectItem*)b)->id].star_piece_price;
@@ -892,6 +895,7 @@ int select_comp_starpiece(void* a, void* b) {
     return -(x < y);
 }
 
+// Descriptive name (not in the symbol maps); placeholder unk_802379e4, JP 0x802379E4. See docs/NAME_PROVENANCE.md.
 int select_comp_type(void* a, void* b) {
     s16 x = itemDataTable[((WinMgrSelectItem*)a)->id].type_sort_order;
     s16 y = itemDataTable[((WinMgrSelectItem*)b)->id].type_sort_order;
@@ -1093,6 +1097,7 @@ void winMgrSelectDelete(WinMgrSelect* sel) {
     __memFree(heap, sel3);
 }
 
+// Descriptive name (not in the symbol maps); placeholder unk_80237448, JP 0x80237448. See docs/NAME_PROVENANCE.md.
 s32 winMgrSelectGetCursor(WinMgrSelect* sel) {
     return sel->cursor;
 }

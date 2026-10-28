@@ -726,6 +726,7 @@ static void callback(s32 type, void** work) {
     }
 }
 
+// Descriptive name (not in the symbol maps); placeholder unk_aji_00000ed0, JP aji .text+0xE0C. See docs/NAME_PROVENANCE.md.
 void kuti_callback(s32 type, void** work) {
     EventEntry* evt = ((MsgWinData*)*work)->event;
 

@@ -941,6 +941,7 @@ static EVT_BEGIN(dokan_evt)
     RETURN
 EVT_END()
 
+// Descriptive name (not in the symbol maps); placeholder unk_hei_000002a8, JP hei .text+0x1E4. See docs/NAME_PROVENANCE.md.
 USER_FUNC(hei_00_mario_keyoff_check) {
     EvtWord* args = event->args;
 

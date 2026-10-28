@@ -660,6 +660,7 @@ USER_FUNC(aud_suikomi) {
     return done < 20 ? EVT_RETURN_BLOCK : EVT_RETURN_DONE;
 }
 
+// Descriptive name (not in the symbol maps); placeholder unk_aji_00007668, JP aji .text+0x75A4. See docs/NAME_PROVENANCE.md.
 USER_FUNC(aud_scream_fadeout) {
     if (isFirstCall) {
         scream_fade_timer = 120;

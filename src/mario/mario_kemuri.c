@@ -81,6 +81,7 @@ void mario_simple_kemuri(void) {
     }
 }
 
+// Descriptive name (not in the symbol maps); placeholder unk_80130374, JP 0x80130374. See docs/NAME_PROVENANCE.md.
 void mario_land_kemuri(void) {
     MarioWork* mario = marioGetPtr();
     HitEntry* hit = mario->hitobjStandOn;

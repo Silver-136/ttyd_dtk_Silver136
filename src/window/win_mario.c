@@ -310,6 +310,7 @@ const char* winZenkakuStr(s32 n) {
 #ifdef VERSION_G8ME01
 char winZenkakuStrPad_buf[0x100];
 
+// Descriptive name (not in the symbol maps); placeholder unk_8016af5c, JP 0x8016AF5C. See docs/NAME_PROVENANCE.md.
 char* winZenkakuStrPad(s32 n, s32 digits) {
     char buf[0x100];
     sprintf(buf, "%%0%dd", digits);
@@ -320,6 +321,7 @@ char* winZenkakuStrPad(s32 n, s32 digits) {
 #else
 char winZenkakuStrPad_tmp[0x100];
 
+// Descriptive name (not in the symbol maps); placeholder unk_8016af5c, JP 0x8016AF5C. See docs/NAME_PROVENANCE.md.
 char* winZenkakuStrPad(s32 n, s32 digits) {
     const char* tbl[10] = {"\x82\x4f", "\x82\x50", "\x82\x51", "\x82\x52", "\x82\x53",
                            "\x82\x54", "\x82\x55", "\x82\x56", "\x82\x57", "\x82\x58"};

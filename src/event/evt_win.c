@@ -119,6 +119,7 @@ EVT_BEGIN(select_evt)
     RETURN
 EVT_END()
 
+// Descriptive name (not in the symbol maps); placeholder unk_8017599c, JP 0x8017599C. See docs/NAME_PROVENANCE.md.
 void unitwin_name_disp(WinMgrEntry* entry) {
     UnitWinWork* wp = _wp;
     const char* msg = msgSearch(itemDataTable[wp->goods[wp->goodsIdx]].name);
@@ -153,10 +154,12 @@ static void unitwin_fmt(char* buf, const char* name, s32 n) {
     sprintf(buf, "%s_%04d", name, n);
 }
 
+// Descriptive name (not in the symbol maps); placeholder unk_8017597c, JP 0x8017597C. See docs/NAME_PROVENANCE.md.
 void unitwin_help_main(WinMgrEntry* entry) {
     winMgrHelpMain(entry);
 }
 
+// Descriptive name (not in the symbol maps); placeholder unk_801758fc, JP 0x801758FC. See docs/NAME_PROVENANCE.md.
 void unitwin_help_disp(WinMgrEntry* entry) {
     UnitWinWork* wp = _wp;
     s32 idx = wp->goodsIdx * sizeof(s32); // FAKE: byte offset of the goods slot computed before winMgrAction (slwi ahead of the call, lwzx after), as in the target; goods[wp->goodsIdx] and an index local both scale after the call
@@ -167,6 +170,7 @@ void unitwin_help_disp(WinMgrEntry* entry) {
     }
 }
 
+// Descriptive name (not in the symbol maps); placeholder unk_80175710, JP 0x80175710. See docs/NAME_PROVENANCE.md.
 void unitwin_point_disp(WinMgrEntry* entry) {
     UnitWinWork* wp = _wp;
     PouchData* pouch = pouchGetPtr();
@@ -310,6 +314,7 @@ USER_FUNC(unitwincoin_wait) {
     return EVT_RETURN_DONE;
 }
 
+// Descriptive name (not in the symbol maps); placeholder unk_8017524c, JP 0x8017524C. See docs/NAME_PROVENANCE.md.
 USER_FUNC(unitwin_lottery_disp_onoff) {
     s32 on = evtGetValue(event, event->args[0]);
     UnitWinWork* wp = _wp;
@@ -321,6 +326,7 @@ USER_FUNC(unitwin_lottery_disp_onoff) {
     return EVT_RETURN_DONE;
 }
 
+// Descriptive name (not in the symbol maps); placeholder unk_801751f8, JP 0x801751F8. See docs/NAME_PROVENANCE.md.
 USER_FUNC(unitwin_set_bought) {
     EvtWord* args = event->args;
     UnitWinWork* wp = (UnitWinWork*)evtGetValue(event, args[0]);
@@ -336,6 +342,7 @@ static inline void unitWinClose(UnitWinWork* wp) {
     }
 }
 
+// Descriptive name (not in the symbol maps); placeholder unk_80174e98, JP 0x80174E98. See docs/NAME_PROVENANCE.md.
 USER_FUNC(evt_unitwin_select_func) {
     UnitWinWork* wp = (UnitWinWork*)event->lwData[0];
     s32 found = FALSE;

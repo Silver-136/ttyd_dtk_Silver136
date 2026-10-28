@@ -156,19 +156,23 @@ static EVT_BEGIN(minigame_view_monte)
     RETURN
 EVT_END()
 
+// Descriptive name (not in the symbol maps); placeholder unk_yuu_00001210, JP yuu .text+0x1144. See docs/NAME_PROVENANCE.md.
 USER_FUNC(yuu_02_cam_shift_reset) {
     camShiftReset();
     return EVT_RETURN_DONE;
 }
 
+// Descriptive name (not in the symbol maps); placeholder fn_31_112C, JP yuu .text+0x112C. See docs/NAME_PROVENANCE.md.
 void yuu_02_icon_monte_on(s32 idx) {
     icon_monte_p[idx].hidden = 0;
 }
 
+// Descriptive name (not in the symbol maps); placeholder unk_yuu_000011e0, JP yuu .text+0x1114. See docs/NAME_PROVENANCE.md.
 void yuu_02_icon_monte_off(s32 idx) {
     icon_monte_p[idx].hidden = 1;
 }
 
+// Descriptive name (not in the symbol maps); placeholder unk_yuu_00001160, JP yuu .text+0x1094. See docs/NAME_PROVENANCE.md.
 USER_FUNC(yuu_02_icon_monte_onoff) {
     EvtWord* args = event->args;
     s32 on = evtGetValue(event, args[0]);
@@ -184,6 +188,7 @@ USER_FUNC(yuu_02_icon_monte_onoff) {
     return EVT_RETURN_DONE;
 }
 
+// Descriptive name (not in the symbol maps); placeholder unk_yuu_00001054, JP yuu .text+0xF88. See docs/NAME_PROVENANCE.md.
 void yuu_02_icon_monte_disp(CameraId camera, void* param) {
     Monte* monte = param;
     MarioWork* mario = marioGetPtr();
@@ -209,6 +214,7 @@ void yuu_02_icon_monte_disp(CameraId camera, void* param) {
     }
 }
 
+// Descriptive name (not in the symbol maps); placeholder unk_yuu_00000f1c, JP yuu .text+0xE50. See docs/NAME_PROVENANCE.md.
 USER_FUNC(yuu_02_icon_monte_entry) {
     BOOL exists = FALSE;
     MiniGameWork* wp = (MiniGameWork*)event->lwData[0];

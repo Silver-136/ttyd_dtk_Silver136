@@ -61,6 +61,7 @@ USER_FUNC(evt_snd_bgmon_f) {
     return EVT_RETURN_DONE;
 }
 
+// Descriptive name (not in the symbol maps); placeholder unk_8014cc24, JP 0x8014CC24. See docs/NAME_PROVENANCE.md.
 USER_FUNC(evt_snd_bgmon_f_d) {
     EvtWord* args = event->args;
     s32 flags = args[0];
@@ -266,6 +267,7 @@ USER_FUNC(evt_snd_sfx_all_stop) {
     return EVT_RETURN_DONE;
 }
 
+// Descriptive name (not in the symbol maps); placeholder unk_8014c47c, JP 0x8014C47C. See docs/NAME_PROVENANCE.md.
 void partyResetTouchWallCt(void) {
     touch_wall_ct = 60.0f;
 }
@@ -488,6 +490,7 @@ void party_motion_stay(PartyEntry* party) {
     }
 }
 
+// Descriptive name (not in the symbol maps); placeholder unk_8014bbc8, JP 0x8014BBC8. See docs/NAME_PROVENANCE.md.
 void party_motion_wait(PartyEntry* party) {
     MarioWork* mario = party->playerPtr;
     if (party->trigFlags & PARTY_TRIG_CHG_MOT) {
@@ -540,6 +543,7 @@ void party_motion_wait(PartyEntry* party) {
     }
 }
 
+// Descriptive name (not in the symbol maps); placeholder unk_8014ba3c, JP 0x8014BA3C. See docs/NAME_PROVENANCE.md.
 void partyWalkChkGnd(PartyEntry* party) {
     Vec pos;
     f32 height;
@@ -643,6 +647,7 @@ static inline void partyFlyHeadCheck(PartyEntry* party) {
 }
 
 #endif
+// Descriptive name (not in the symbol maps); placeholder unk_8014b824, JP 0x8014B824. See docs/NAME_PROVENANCE.md.
 void partyFlyAdjustY(PartyEntry* party) {
     MarioWork* mario = party->playerPtr;
     HitEntry* hit;

@@ -1398,6 +1398,7 @@ USER_FUNC(_get_move_frame) {
     return EVT_RETURN_DONE;
 }
 
+// Descriptive name (not in the symbol maps); placeholder unk_8017d03c, JP 0x8017D03C. See docs/NAME_PROVENANCE.md.
 USER_FUNC(_get_vivian_attack_position) {
     BattleWork* wp = _battleWorkPointer;
     EvtWord* args = event->args;

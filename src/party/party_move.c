@@ -542,6 +542,7 @@ static inline f32 partyChkUpdSpd(PartyEntry* party) {
     return partyUpdSpd2(party);
 }
 
+// Descriptive name (not in the symbol maps); placeholder unk_800c93d0, JP 0x800C93D0. See docs/NAME_PROVENANCE.md.
 f32 partySetTargetSpd(PartyEntry* party, f32 spd) {
     if (spd) {
         party->targetSpeed = spd;
@@ -552,6 +553,7 @@ f32 partySetTargetSpd(PartyEntry* party, f32 spd) {
     return spd;
 }
 
+// Descriptive name (not in the symbol maps); placeholder unk_800c9398, JP 0x800C9398. See docs/NAME_PROVENANCE.md.
 f32 partyForceSetSpd(PartyEntry* party, f32 spd) {
     f32 t = spd * party->playerPtr->playerGravity;
     party->targetSpeed = t * partySpdRate(party);
@@ -559,6 +561,7 @@ f32 partyForceSetSpd(PartyEntry* party, f32 spd) {
     return spd;
 }
 
+// Descriptive name (not in the symbol maps); placeholder unk_800c92c4, JP 0x800C92C4. See docs/NAME_PROVENANCE.md.
 f32 partyUpdMoveSpd(PartyEntry* party, f32 spd) {
     if (party->forceMoveFrames != 0 || party->motionId == 2 || party->motionId == 3 || party->motionId == 6) {
         return party->moveSpeed;
@@ -630,6 +633,7 @@ void partyWalkSe(PartyEntry* party, s32 arg) {
     }
 }
 
+// Descriptive name (not in the symbol maps); placeholder unk_800c9044, JP 0x800C9044. See docs/NAME_PROVENANCE.md.
 void partyChgStayPose(PartyEntry* party) {
     if (party->runMode != 0) {
         if (marioChkDeepSleep() == TRUE || (party->flags & PARTY_FLAG_SLEEP_ON)) {
@@ -642,6 +646,7 @@ void partyChgStayPose(PartyEntry* party) {
     }
 }
 
+// Descriptive name (not in the symbol maps); placeholder unk_800c8f24, JP 0x800C8F24. See docs/NAME_PROVENANCE.md.
 void partyChgWalkPose(PartyEntry* party, f32 spd) {
     f32 a;
     f32 b;
@@ -670,6 +675,7 @@ void partyChgWalkPose(PartyEntry* party, f32 spd) {
     }
 }
 
+// Descriptive name (not in the symbol maps); placeholder unk_800c8e74, JP 0x800C8E74. See docs/NAME_PROVENANCE.md.
 void partySetDispDirToMario(PartyEntry* party) {
     f32 dir = angleABf(party->position.x, party->position.z,
                        party->playerPtr->position.x, party->playerPtr->position.z);
@@ -681,6 +687,7 @@ void partySetDispDirToMario(PartyEntry* party) {
     party->displayDirectionTarget = b ? 180.0f : 0.0f;
 }
 
+// Descriptive name (not in the symbol maps); placeholder unk_800c8dd0, JP 0x800C8DD0. See docs/NAME_PROVENANCE.md.
 BOOL partyChkNoStandMobj(HitEntry* hit) {
     MapObjectEntry* mobj;
     BOOL ret;
@@ -1048,6 +1055,7 @@ void partyChkWall(PartyEntry* party) {
     party->position.z = pos.z;
 }
 
+// Descriptive name (not in the symbol maps); placeholder unk_800c7c98, JP 0x800C7C98. See docs/NAME_PROVENANCE.md.
 void party_move_mode_wait(PartyEntry* party) {
     if (party->trigFlags & PARTY_TRIG_CHG_MOVE_MODE) {
         party->trigFlags &= ~PARTY_TRIG_CHG_MOVE_MODE;

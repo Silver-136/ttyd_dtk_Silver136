@@ -1398,6 +1398,7 @@ USER_FUNC(check_ceil) {
     return EVT_RETURN_DONE;
 }
 
+// Descriptive name (not in the symbol maps); placeholder unk_tou2_000027b8, JP tou2 .text+0x26F4. See docs/NAME_PROVENANCE.md.
 USER_FUNC(eff_fall_entry) {
     EvtWord* args = event->args;
     s32 var = args[0];
@@ -1416,6 +1417,7 @@ USER_FUNC(eff_fall_entry) {
     return EVT_RETURN_DONE;
 }
 
+// Descriptive name (not in the symbol maps); placeholder unk_tou2_00002770, JP tou2 .text+0x26AC. See docs/NAME_PROVENANCE.md.
 USER_FUNC(eff_fall_hit_wait) {
     EffectEntry* eff = (EffectEntry*)evtGetValue(event, event->args[0]);
 

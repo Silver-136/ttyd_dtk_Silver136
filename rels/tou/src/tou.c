@@ -355,6 +355,7 @@ static USER_FUNC(evt_rankingReInit) {
     return EVT_RETURN_DONE;
 }
 
+// Descriptive name (not in the symbol maps); placeholder unk_tou_00002e24, JP tou .text+0x2D60. See docs/NAME_PROVENANCE.md.
 USER_FUNC(evt_rankingReset) {
     s32 i;
 
@@ -1249,6 +1250,7 @@ static USER_FUNC(evt_tou_print_ranking) {
 }
 
 #ifdef VERSION_G8ME01
+// Descriptive name (not in the symbol maps); placeholder unk_tou_000005d0, JP tou .text+0x50C. See docs/NAME_PROVENANCE.md.
 USER_FUNC(tou_mario_keyoff_check) {
     EvtWord* args = event->args;
 
@@ -2450,6 +2452,7 @@ USER_FUNC(chk) {
     return EVT_RETURN_DONE;
 }
 
+// Descriptive name (not in the symbol maps); placeholder unk_tou_0000063c, JP tou .text+0x578. See docs/NAME_PROVENANCE.md.
 USER_FUNC(tou_mario_free_wait) {
     MarioWork* mario = marioGetPtr();
 
@@ -2471,6 +2474,7 @@ USER_FUNC(tou_mario_talk_end_wait) {
     return marioGetPtr()->currMotionId != MARIO_MOTION_TALK ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
 }
 #else
+// Descriptive name (not in the symbol maps); placeholder unk_tou_000005d0, JP tou .text+0x50C. See docs/NAME_PROVENANCE.md.
 USER_FUNC(tou_mario_keyoff_check) {
     EvtWord* args = event->args;
 

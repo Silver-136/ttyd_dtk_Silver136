@@ -5494,6 +5494,7 @@ BOOL psndBGMOn(u32 flags, char* bgm_name) {
     return psndBGMOn_f_d(flags, bgm_name, 1000, 750, 0);
 }
 
+// Descriptive name (not in the symbol maps); placeholder unk_800d7270, JP 0x800D7270. See docs/NAME_PROVENANCE.md.
 BOOL psndBGMOn_f(u32 flags, const char* bgm_name, u32 fadetime, s32 unused) {
     return psndBGMOn_f_d(flags, bgm_name, fadetime, 750, unused);
 }

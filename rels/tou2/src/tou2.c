@@ -1065,6 +1065,7 @@ static void insert(s32* arr, s32 n, s32 from, s32 to) {
     }
 }
 
+// Descriptive name (not in the symbol maps); placeholder unk_tou2_00004b50, JP tou2 .text+0x4A8C. See docs/NAME_PROVENANCE.md.
 USER_FUNC(tou2_rankingReset) {
     s32 i;
 

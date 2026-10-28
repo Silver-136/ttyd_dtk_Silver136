@@ -217,6 +217,7 @@ EvtWord stg_08_1_init_event[4];
 EvtWord stg_08_6_init_sub_event[46];
 EvtWord stg_08_6_init_event[4];
 
+// Descriptive name (not in the symbol maps); placeholder unk_las_0000775c, JP las .text+0x7690. See docs/NAME_PROVENANCE.md.
 USER_FUNC(hi_fire_end) {
     hi_fire_end_flag[0] = 1;
     return EVT_RETURN_DONE;
@@ -3475,6 +3476,7 @@ EVT_BEGIN(stg_08_6_init_sub_event)
     RETURN
 EVT_END()
 
+// Descriptive name (not in the symbol maps); placeholder unk_las_00007774, JP las .text+0x76A8. See docs/NAME_PROVENANCE.md.
 USER_FUNC(hi_fire_main) {
     const char* names[6] = {"hi1", "hi2", "hi3", "hi4", "hi5", "hi6"};
     Vec pos;

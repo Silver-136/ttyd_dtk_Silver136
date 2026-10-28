@@ -881,6 +881,7 @@ USER_FUNC(party_color) {
     return EVT_RETURN_DONE;
 }
 
+// Descriptive name (not in the symbol maps); placeholder unk_80177cf8, JP 0x80177CF8. See docs/NAME_PROVENANCE.md.
 USER_FUNC(all_party_slit_off) {
     allPartyForceSlitOff();
     return EVT_RETURN_DONE;
@@ -1153,6 +1154,7 @@ void winTexSet(u32 textureId, Vec translate, Vec scale, GXColor color) {
     GXTexCoord2f32(0.0f, 0.0f);
 }
 
+// Descriptive name (not in the symbol maps); placeholder unk_80177008, JP 0x80177008. See docs/NAME_PROVENANCE.md.
 void winTexSetNearest(u32 textureId, Vec translate, Vec scale, GXColor color) {
     Mtx trans;
     Mtx scl;
@@ -1374,6 +1376,7 @@ void winIconSet(s32 iconId, Vec translate, Vec scale, GXColor color) {
     GXSetTevSwapMode(GX_TEVSTAGE2, GX_TEV_SWAP0, GX_TEV_SWAP0);
 }
 
+// Descriptive name (not in the symbol maps); placeholder unk_80175eb0, JP 0x80175EB0. See docs/NAME_PROVENANCE.md.
 USER_FUNC(lecture_step_wait) {
     s32 n = evtGetValue(event, event->args[0]);
 
@@ -1387,6 +1390,7 @@ USER_FUNC(lecture_step_wait) {
     return EVT_RETURN_DONE;
 }
 
+// Descriptive name (not in the symbol maps); placeholder unk_80175e98, JP 0x80175E98. See docs/NAME_PROVENANCE.md.
 USER_FUNC(lecture_key_mask_off) {
     wp->flags &= ~WINDOW_FLAG_LECTURE_KEY_MASK;
     return EVT_RETURN_DONE;

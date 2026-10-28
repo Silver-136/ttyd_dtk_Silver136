@@ -2501,6 +2501,7 @@ void winMailDisp(WindowWork* wp) {
     }
 }
 
+// Descriptive name (not in the symbol maps); placeholder unk_8014d5dc, JP 0x8014D5DC. See docs/NAME_PROVENANCE.md.
 void winRootBgCaptureDisp(s32 unused, WindowWork* bg) {
     GXSetTexCopySrc(0, 0, gp->fbWidth, gp->efbHeight);
     GXSetTexCopyDst(gp->fbWidth, gp->efbHeight, GX_TF_RGB565, GX_FALSE);
@@ -2511,6 +2512,7 @@ void winRootBgCaptureDisp(s32 unused, WindowWork* bg) {
     camDispOff(CAMERA_3D);
 }
 
+// Descriptive name (not in the symbol maps); placeholder unk_8014d338, JP 0x8014D338. See docs/NAME_PROVENANCE.md.
 void winRootBgDrawDisp(s32 unused, WindowWork* bg) {
     GXTexObj obj;
     f32 w;

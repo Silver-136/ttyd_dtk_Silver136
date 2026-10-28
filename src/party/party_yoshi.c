@@ -268,6 +268,7 @@ void yoshi_jumpStand(void) {
     }
 }
 
+// Descriptive name (not in the symbol maps); placeholder unk_800b474c, JP 0x800B474C. See docs/NAME_PROVENANCE.md.
 void yoshi_damageToge(PartyEntry* party) {
     MarioWork* mario = marioGetPtr();
     PartyEntry* extra;

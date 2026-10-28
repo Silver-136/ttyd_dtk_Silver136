@@ -145,6 +145,7 @@ static inline void yuuDrawRight(f32 xo, f32 y, f32 scale, const char* msg, s32 w
 }
 #endif
 
+// Descriptive name (not in the symbol maps); placeholder unk_gor_0000dfc4, JP gor .text+0xDEF8. See docs/NAME_PROVENANCE.md.
 void gor_yuuranking_draw_msg_fit(f32 x, f32 y, f32 scale, const char* msg, s32 width) {
     Mtx trans;
     Mtx scl;

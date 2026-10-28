@@ -52,6 +52,7 @@ void windowInit(void) {
 }
 
 // Completion callback of the msgWindow.tpl DVD read in windowTexSetup (new in retail)
+// Descriptive name (not in the symbol maps); placeholder unk_8007f204, JP 0x8007F204. See docs/NAME_PROVENANCE.md.
 void windowTexSetup_callback(s32 error, DVDFileInfo* info) {
     DVDEntry* entry = info->cb.userData;
     s32 i;

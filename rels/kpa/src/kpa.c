@@ -347,6 +347,7 @@ USER_FUNC(kpa_nohitenemy_ct_clear) {
     return EVT_RETURN_DONE;
 }
 
+// Descriptive name (not in the symbol maps); placeholder unk_kpa_00000a08, JP kpa .text+0x944. See docs/NAME_PROVENANCE.md.
 USER_FUNC(kpa_fire_off) {
     kpaFireDelete();
     return EVT_RETURN_DONE;

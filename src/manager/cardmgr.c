@@ -121,17 +121,20 @@ void cardInit(void) {
     CARDInit();
 }
 
+// Descriptive name (not in the symbol maps); placeholder unk_800b0ed0, JP 0x800B0ED0. See docs/NAME_PROVENANCE.md.
 void cardInsertWatchStart(void) {
     wp->prevInserted = wp->chan;
     wp->busyFrames = 10;
     wp->flags |= CARD_FLAG_INSERT_WATCH;
 }
 
+// Descriptive name (not in the symbol maps); placeholder unk_800b0eac, JP 0x800B0EAC. See docs/NAME_PROVENANCE.md.
 void cardInsertWatchEnd(void) {
     wp->flags &= ~CARD_FLAG_INSERT_WATCH;
     wp->flags &= ~(CARD_FLAG_INSERT_CHANGED | CARD_FLAG_INSERT_WATCH);
 }
 
+// Descriptive name (not in the symbol maps); placeholder unk_800b0e80, JP 0x800B0E80. See docs/NAME_PROVENANCE.md.
 BOOL cardInsertChanged(void) {
     if (wp->flags & CARD_FLAG_INSERT_WATCH && wp->flags & CARD_FLAG_INSERT_CHANGED) {
         return TRUE;

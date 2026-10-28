@@ -1074,6 +1074,7 @@ EVT_BEGIN(yuu_00_init_evt)
     RETURN
 EVT_END()
 
+// Descriptive name (not in the symbol maps); placeholder unk_yuu_00004250, JP yuu .text+0x4184. See docs/NAME_PROVENANCE.md.
 USER_FUNC(yuu_00_cam_shift_reset) {
     camShiftReset();
     return EVT_RETURN_DONE;

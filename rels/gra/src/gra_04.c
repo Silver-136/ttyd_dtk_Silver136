@@ -247,6 +247,7 @@ EVT_BEGIN(gra_04_init_evt)
 EVT_END()
 
 
+// Descriptive name (not in the symbol maps); placeholder unk_gra_00000530, JP gra .text+0x46C. See docs/NAME_PROVENANCE.md.
 USER_FUNC(roll_release_check) {
     EvtWord* args = event->args;
     evtSetValue(event, args[0], marioRollCancelDisable() == 0);

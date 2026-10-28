@@ -57,6 +57,7 @@ USER_FUNC(evt_party_dispflg_onoff) {
     return EVT_RETURN_DONE;
 }
 
+// Descriptive name (not in the symbol maps); placeholder unk_800e71bc, JP 0x800E71BC. See docs/NAME_PROVENANCE.md.
 USER_FUNC(evt_party_trigflg_onoff) {
     PartyEntry* p;
     int mask;

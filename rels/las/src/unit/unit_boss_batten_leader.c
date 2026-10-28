@@ -2686,6 +2686,7 @@ void _light_point_callback(BattleUnitPart* part, s32 group) {
             break;
     }
 }
+// Descriptive name (not in the symbol maps); placeholder unk_las_0000d538, JP las .text+0xD46C. See docs/NAME_PROVENANCE.md.
 USER_FUNC(_hp_gauge_flag_on) {
     BattleWork* wp = _battleWorkPointer;
     EvtWord* args = event->args;

@@ -125,6 +125,7 @@ __declspec(section ".sdata2") const u32 seq_logo_zero_color[2];
 
 static EvtWord evt_shake[12];
 
+// Descriptive name (not in the symbol maps); placeholder unk_800f2398, JP 0x800F2398. See docs/NAME_PROVENANCE.md.
 s32 evt_seq_load_keep_msg_window(EventEntry* evt, BOOL isFirstCall) {
     fadeReset(4);
     wp->printWindowId = evt->printWindowId;

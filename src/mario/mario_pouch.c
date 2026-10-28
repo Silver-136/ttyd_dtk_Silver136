@@ -433,6 +433,7 @@ BOOL pouchRemoveItemIndex(ItemType type, s32 index) {
     return FALSE;
 }
 
+// Descriptive name (not in the symbol maps); placeholder unk_800d06b4, JP 0x800D06B4. See docs/NAME_PROVENANCE.md.
 void pouchHiraToKata(const char* src, char* dst) {
     u16 c;
     s32 len = strlen(src) / 2;

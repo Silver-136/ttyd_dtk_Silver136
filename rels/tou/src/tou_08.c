@@ -905,6 +905,7 @@ EVT_BEGIN(evt_champion_win)
     RETURN
 EVT_END()
 
+// Descriptive name (not in the symbol maps); placeholder unk_tou_00006e08, JP tou .text+0x6D44. See docs/NAME_PROVENANCE.md.
 USER_FUNC(tou_08_belt_camid) {
     EffectEntry* eff = effNameToPtr("belt");
     // ベルト

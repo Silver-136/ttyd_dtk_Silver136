@@ -122,6 +122,7 @@ void nokonoko_move(PartyEntry* party) {
     }
 }
 
+// Descriptive name (not in the symbol maps); placeholder unk_800cd9a0, JP 0x800CD9A0. See docs/NAME_PROVENANCE.md.
 void nokonoko_use_cancel(void) {
     PartyEntry* party;
     marioGetPtr();

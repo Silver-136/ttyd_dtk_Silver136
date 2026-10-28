@@ -1843,6 +1843,7 @@ static USER_FUNC(fune_eff) {
     return EVT_RETURN_BLOCK;
 }
 
+// Descriptive name (not in the symbol maps); placeholder unk_muj_00004328, JP muj .text+0x4264. See docs/NAME_PROVENANCE.md.
 USER_FUNC(fune_curve_pos) {
     f32 x = evtGetFloat(event, GW(0));
     f32 y = evtGetFloat(event, GW(1));

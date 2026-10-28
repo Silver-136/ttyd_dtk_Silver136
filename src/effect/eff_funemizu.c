@@ -86,6 +86,7 @@ static u8 gor_fune_dl_0_size_tbl[] = { 0x02, 0x02};
 static u8* gor_fune_dl_1_tbl[] = { gor_fune_dl_1_0, gor_fune_dl_1_1 };
 static u8 gor_fune_dl_1_size_tbl[] = { 0x02, 0x02};
 
+// Descriptive name (not in the symbol maps); placeholder unk_80224298, JP 0x80224298. See docs/NAME_PROVENANCE.md.
 GXColor effFunemizuGetMapColor(void) {
     ColorEntry* e;
     for (e = funemizu_color_tbl.e; e != NULL; e++) {

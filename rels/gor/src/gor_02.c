@@ -3779,6 +3779,7 @@ USER_FUNC(stonechangertn) {
     return EVT_RETURN_DONE;
 }
 
+// Descriptive name (not in the symbol maps); placeholder unk_gor_0000574c, JP gor .text+0x5680. See docs/NAME_PROVENANCE.md.
 USER_FUNC(get_mario_dir_target) {
     EvtWord* args = event->args;
 

@@ -146,6 +146,7 @@ static inline void yuuDrawRight(f32 xo, f32 y, f32 scale, const char* msg, s32 w
 }
 #endif
 
+// Descriptive name (not in the symbol maps); placeholder unk_yuu_00008e40, JP yuu .text+0x8D74. See docs/NAME_PROVENANCE.md.
 void yuuranking_draw_msg_fit(f32 x, f32 y, f32 scale, const char* msg, s32 width) {
     Mtx trans;
     Mtx scl;

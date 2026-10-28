@@ -181,6 +181,7 @@ void marioRollFixOn(void) {
     }
 }
 
+// Descriptive name (not in the symbol maps); placeholder unk_8009fcbc, JP 0x8009FCBC. See docs/NAME_PROVENANCE.md.
 s32 marioRollCancelDisable(void) {
     MarioWork* mario = marioGetPtr();
     if (mario->mot.roll.flags & ROLL_FLAG_FIX) {
@@ -252,6 +253,7 @@ void marioForceRollAnime(void) {
     mario->dispFlags |= MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
 }
 
+// Descriptive name (not in the symbol maps); placeholder unk_8009f9c8, JP 0x8009F9C8. See docs/NAME_PROVENANCE.md.
 s32 marioRollTryCancel(void) {
     s32 ret = 0;
     MarioWork* mario = marioGetPtr();

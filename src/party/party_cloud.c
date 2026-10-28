@@ -223,11 +223,13 @@ void N_cloudLockAnimationsOn(PartyEntry* party) {
 }
 #endif
 
+// Descriptive name (not in the symbol maps); placeholder unk_801820d0, JP 0x801820D0. See docs/NAME_PROVENANCE.md.
 void cloud_hover_init(PartyEntry* party) {
     party->work.cloud.hoverAngle = 0.0f;
     party->work.cloud.hoverSpeed = 4.25f;
 }
 
+// Descriptive name (not in the symbol maps); placeholder unk_8018206c, JP 0x8018206C. See docs/NAME_PROVENANCE.md.
 void cloud_hover_main(PartyEntry* party) {
     f32 a;
     party->work.cloud.hoverAngle = revise360(party->work.cloud.hoverAngle - party->work.cloud.hoverSpeed);

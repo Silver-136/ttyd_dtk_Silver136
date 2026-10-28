@@ -315,6 +315,7 @@ EvtWord cooking_evt_sub[284];
 s32 iri_18_item_tbl[2];
 EvtWord cooking_evt[852];
 
+// Descriptive name (not in the symbol maps); placeholder unk_gor_00004db4, JP gor .text+0x4CE8. See docs/NAME_PROVENANCE.md.
 USER_FUNC(badgeshop_special_cnt) {
     EvtWord* args = event->args;
 

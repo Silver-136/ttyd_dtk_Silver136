@@ -1350,6 +1350,7 @@ static const Vec puni_fall_dir;
    pointer args to f1-f6 and r3-r10 independently, so the registers and the call are identical; the reorder makes
    the start loads code-generate before the pointer args, so they read r4 directly (scheduling). */
 typedef void* (*PuniHitCheckStartFirst)(f32, f32, f32, void*, f32*, f32*, f32*, f32*, f32*, f32*, f32*, f32, f32, f32);
+// Descriptive name (not in the symbol maps); placeholder unk_mri_000095f0, JP mri .text+0x952C. See docs/NAME_PROVENANCE.md.
 void puniMoveHitLimited(PuniData* p, Vec start, Vec dir, f32 dist) {
     Vec pa;
     Vec hit;
@@ -1387,6 +1388,7 @@ void puniMoveHitLimited(PuniData* p, Vec start, Vec dir, f32 dist) {
 }
 
 static const Vec puni_fall_dir;
+// Descriptive name (not in the symbol maps); placeholder unk_mri_0000980c, JP mri .text+0x9748. See docs/NAME_PROVENANCE.md.
 void puniMoveHit(PuniData* p, Vec start, Vec dir, f32 dist) {
     Vec pa;
     Vec hit;
@@ -4170,6 +4172,7 @@ static inline void puniModeCheckPos(PuniData* p) {
     }
 }
 
+// Descriptive name (not in the symbol maps); placeholder unk_mri_00012d58, JP mri .text+0x12C94. See docs/NAME_PROVENANCE.md.
 void puniModeMain(PuniData* p) {
     switch (p->mode) {
         case 0:
@@ -4359,6 +4362,7 @@ static inline void puniMoveHitInl(PuniData* p, Vec* s2, Vec* d2, f32 dist) {
     }
 }
 
+// Descriptive name (not in the symbol maps); placeholder fn_19_13A90, JP mri .text+0x13A90. See docs/NAME_PROVENANCE.md.
 void puniMoveMain(PuniData* p) {
     switch (p->mode) {
         case 0:
@@ -4586,6 +4590,7 @@ void puniOption(void) {
     }
 }
 
+// Descriptive name (not in the symbol maps); placeholder unk_mri_00014ad4, JP mri .text+0x14A10. See docs/NAME_PROVENANCE.md.
 void puniCollideAll(void) {
     PuniData* p;
     PuniData* q;
