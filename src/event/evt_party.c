@@ -607,7 +607,7 @@ USER_FUNC(evt_party_set_breed_pose) {
     return EVT_RETURN_DONE;
 }
 
-USER_FUNC(L_evt_party_dokan) {
+USER_FUNC(evt_party_dokan) {
     PartyEntry* p;
     s32 dst, v;
     EvtWord* args = event->args;
