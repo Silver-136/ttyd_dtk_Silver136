@@ -3112,7 +3112,7 @@ void animPoseWorldPositionEvalOn(s32 poseId) {
     }
 }
 
-void L_animPoseWorldPositionEvalOff(s32 poseId) {
+void animPoseWorldPositionEvalOff(s32 poseId) {
     AnimationPose* pose = &wp->poses[poseId];
 
     if (pose->flags & ANIM_POSE_FLAG_WORLD_POSITION_EVAL) {

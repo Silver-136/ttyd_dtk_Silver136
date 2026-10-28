@@ -841,7 +841,7 @@ void shadowSetType(s32 id, u8 type) {
     entry->type = type;
 }
 
-void U_shadowSetMode(s32 id, u8 alpha) {
+void shadowSetMode(s32 id, u8 alpha) {
     ShadowEntry* entry = &cswp->entries[id];
     entry->alpha = alpha;
 }

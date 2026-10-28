@@ -74,8 +74,8 @@ void inertia(PartyEntry* party);
 void searchGround(PartyEntry* party);
 void searchGround2(PartyEntry* party);
 void checkWall(PartyEntry* party, f32 spd, f32 dir);
-void L_getStick(PartyEntry* party, f32* angle, f32* speed);
-void L_yoshiFlyMove(PartyEntry* party);
+void getStick(PartyEntry* party, f32* angle, f32* speed);
+void yoshiFlyMove(PartyEntry* party);
 
 void evt_set_yoshi_frm(s32 msec) {
     evt_yoshi_frm = sysMsec2Frame(msec);
@@ -96,7 +96,7 @@ void L_sweatEntry(PartyEntry* party, void* hit) {
     }
 }
 
-void L_sweatMain(PartyEntry* party) {
+void sweatMain(PartyEntry* party) {
     if (party->useStruct && YOSHI_WORK(party)->effect) {
         f32 x = party->position.x;
         f32 y = party->position.y + 18.0f;
@@ -349,7 +349,7 @@ void yoshi_use(PartyEntry* party) {
     if (!mario->keyOffCount) {
         partyUpdateKeyData(party);
     } else {
-        L_partyClearCont(party);
+        partyClearCont(party);
     }
     if (party->trigFlags & PARTY_TRIG_CHG_RUN_MODE) {
         party->trigFlags &= ~PARTY_TRIG_CHG_RUN_MODE;
@@ -532,7 +532,7 @@ void yoshi_use(PartyEntry* party) {
                 angle = mario->directionView;
                 speed = evt_yoshi_spd;
             } else {
-                L_getStick(party, &angle, &speed);
+                getStick(party, &angle, &speed);
             }
             if (speed > 0.0f) {
                 party->moveSpeed = speed;
@@ -694,8 +694,8 @@ void yoshi_use(PartyEntry* party) {
                 speed = s;
                 party->moveSpeed = s;
             } else {
-                L_getStick(party, &angle, &speed);
-                L_yoshiFlyMove(party);
+                getStick(party, &angle, &speed);
+                yoshiFlyMove(party);
             }
             party->hitobjFront = NULL;
             party->hitobjPush = NULL;
@@ -861,8 +861,8 @@ void yoshi_use(PartyEntry* party) {
                 speed = s;
                 party->moveSpeed = s;
             } else {
-                L_getStick(party, &angle, &speed);
-                L_yoshiFlyMove(party);
+                getStick(party, &angle, &speed);
+                yoshiFlyMove(party);
             }
             if (!(party->buttonHold & PAD_BUTTON_A) || marioKeyOffChk()) {
                 if (party->useMotionId == 50) {
@@ -909,7 +909,7 @@ void yoshi_use(PartyEntry* party) {
             break;
     }
 
-    L_sweatMain(party);
+    sweatMain(party);
     if (party->useMotionId == 70) {
         if (marioChkDamageSink()) {
             party->position = party->playerPtr->position;
@@ -953,7 +953,7 @@ void yoshi_use(PartyEntry* party) {
     marioUpdateCamCollision(party->position);
 }
 
-void L_yoshiFlyMove(PartyEntry* party) {
+void yoshiFlyMove(PartyEntry* party) {
     MarioWork* mario = marioGetPtr();
     f32 z;
     f32 x;
@@ -1281,7 +1281,7 @@ void checkWall(PartyEntry* party, f32 spd, f32 dir) {
     party->position.z = pos.z;
 }
 
-void L_getStick(PartyEntry* party, f32* angle, f32* speed) {
+void getStick(PartyEntry* party, f32* angle, f32* speed) {
     s32 x;
     s32 y;
     MarioWork* mario = party->playerPtr;

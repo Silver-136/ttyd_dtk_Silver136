@@ -314,7 +314,7 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/battle/battle_seq_command.c | _btlcmd_SetAttackEvent | compares the pointers as signed integers (cmpw); the plain pointer compare changes the object | see comment |
 | Both | src/battle/battle_seq_end.c | btlseqEnd | dead `i >= STATUS_INVALID` test; `if (i < STATUS_FRIGHT)` changes the object | see comment |
 | Both | src/battle/battle_seq_end.c | _MarioExpDisp | windowDispGX_Waku_col called through a float-first cast; the plain call changes the object | see comment |
-| Both | src/battle/battle_seq_end.c | L__LvupParamHelpMsgDisp | 0.0f and -148.0f held in locals (zero, y); writing the literals changes the object | see comment |
+| Both | src/battle/battle_seq_end.c | _LvupParamHelpMsgDisp | 0.0f and -148.0f held in locals (zero, y); writing the literals changes the object | see comment |
 | US | src/battle/battle_seq_end.c | N__draw_select_one_to_upgrade_text | 0.0f and -148.0f held in locals (zero, y); writing the literals changes the object | see comment |
 | Both | src/battle/battle_seq_end.c | _set_confetti_control_evtid | empty triple NULL test of seqEndWork; removing it changes the object | see comment |
 | Both | src/sound.c | SoundInit | spare temporary tempsong; songs = sndMalloc(...); sound.songs = songs changes the object | see comment |

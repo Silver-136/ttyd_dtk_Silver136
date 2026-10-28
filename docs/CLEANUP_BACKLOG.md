@@ -58,6 +58,9 @@ data order 10, sound-name integer round trips (`SFX_NAME_WORD`) 9, no-op casts 6
 
 ## 3. Names
 
+- L_/U_/N_ function names (Zephiles, 2026-10-27): 70 functions carry his confidence prefix (L_ likely correct,
+  U_ likely wrong, N_ named by him from the code). Judge each against the JP demo map and the code, rename where a
+  better or original name exists, then drop the prefix (`N__disp_2D` -> `_disp_2D`).
 - DONE (2026-10-27): descriptive function names (user): each of the 147 functions whose name is not in the symbol maps
   (docs/NAME_PROVENANCE.md, kind `function`) gets a comment at its definition saying the name is descriptive and
   giving the placeholder it replaced and its JP address (e.g. `unk_8013be14`, JP 0x8013BE14), so readers can search

@@ -6,7 +6,6 @@ void DEMOInit(GXRenderModeObj* mode);
 void DEMOBeforeRender(void);
 void DEMODoneRender(void);
 GXRenderModeObj* DEMOGetRenderModeObj(void);
-void* L_DEMOGetCurrentBuffer(void);
-#define DEMOGetCurrentBuffer L_DEMOGetCurrentBuffer
+void* DEMOGetCurrentBuffer(void);
 void DEMOEnableGPHangWorkaround(u32 timeoutFrames);
 void DEMOSetGPHangMetric(GXBool enable);

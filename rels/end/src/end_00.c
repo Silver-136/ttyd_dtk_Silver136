@@ -1565,7 +1565,7 @@ USER_FUNC(evt_end_moamoa_init) {
 USER_FUNC(evt_end_moamoa_exit) {
     NpcEntry* npc = npcNameToPtr("\203\202\203A\203\202\203A");
 
-    L_animPoseWorldPositionEvalOff(npc->poseId);
+    animPoseWorldPositionEvalOff(npc->poseId);
     _mapFree(end_moa_tbl);
     extReset();
     _mapFree(end_moa_chain_group);

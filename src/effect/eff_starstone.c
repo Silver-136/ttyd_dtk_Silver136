@@ -487,7 +487,7 @@ void effStarStoneMain(EffectEntry* effect) {
             ((EffSnowDustN64Work*)w->dust->userdata)->position.z = 0.0f;
         }
         if (w->state < 3 && cam == CAMERA_3D) {
-            U_shadowSetMode(shadowEntry(w->position.x, w->position.y, w->position.z, 8.0f * w->scale), w->a);
+            shadowSetMode(shadowEntry(w->position.x, w->position.y, w->position.z, 8.0f * w->scale), w->a);
         }
     }
     if (!(w->flags & STAR_STONE_FLAG_EXTERNAL_DRAW)) {

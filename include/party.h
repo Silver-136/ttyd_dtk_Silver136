@@ -319,7 +319,7 @@ void partyCtrlOff(void);
 PartyEntry* anotherPartyGetPtr(s32 index);
 BOOL partyPaperOn(PartyEntry* party, const char* animName);
 
-void L_partyClearCont(PartyEntry* party);
+void partyClearCont(PartyEntry* party);
 extern s32 partyCtrlNo;
 f32 partyGetHeight(PartyEntry* party);
 void partyInitCamId(PartyEntry* party);

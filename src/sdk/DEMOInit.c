@@ -178,7 +178,7 @@ GXRenderModeObj* DEMOGetRenderModeObj(void) {
     return rmode;
 }
 
-void* L_DEMOGetCurrentBuffer(void) {
+void* DEMOGetCurrentBuffer(void) {
     return DemoCurrentBuffer;
 }
 

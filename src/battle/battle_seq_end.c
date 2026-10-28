@@ -84,7 +84,7 @@ typedef struct SeqEndGroup {
 
 void _GetExpIcon_Main(BattleWork* wp);
 void _LvupParamConfirmDisp(CameraId camId, void* param);
-void L__LvupParamHelpMsgDisp(CameraId camId, void* param);
+void _LvupParamHelpMsgDisp(CameraId camId, void* param);
 void _MarioExpDisp(CameraId camId, void* param);
 void _GetExpIcon_Disp(CameraId camId, void* param);
 void _lvup_select_object_disp(CameraId camId, void* param);
@@ -846,7 +846,7 @@ void btlseqEnd_DispMain(CameraId camId, void* param) {
             dispEntry(camId, 900.0f, 1, _LvupParamConfirmDisp, wp);
         }
         if (work->flags & SEQEND_DISP_LVUP_HELP) {
-            dispEntry(camId, 900.0f, 1, L__LvupParamHelpMsgDisp, wp);
+            dispEntry(camId, 900.0f, 1, _LvupParamHelpMsgDisp, wp);
         }
     }
 }
@@ -901,7 +901,7 @@ void _LvupParamConfirmDisp(CameraId camId, void* param) {
     iconDispGx(&pos, ICON_FLAG_2D, EXP_ICON, 1.0f);
 }
 
-void L__LvupParamHelpMsgDisp(CameraId camId, void* param) {
+void _LvupParamHelpMsgDisp(CameraId camId, void* param) {
     BattleSeqEndWork* work = ((BattleWork*)param)->seqEndWork;
     PouchData* pouch;
     const char* msg;

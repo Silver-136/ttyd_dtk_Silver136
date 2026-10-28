@@ -19,8 +19,8 @@
 #define GETPARTY(args) partyGetPtr((args)[0] == 0 ? partyCtrlNo : 1)
 
 extern s32 bomheiGetStatus(void);
-extern void L_partyVivianTailStart();
-extern void L_partyVivianTailStop();
+extern void partyVivianTailStart();
+extern void partyVivianTailStop();
 extern s32 cloudGetStatus(void);
 
 USER_FUNC(evt_party_flg_onoff) {
@@ -743,9 +743,9 @@ USER_FUNC(L_evt_party_vivian_tail) {
         return EVT_RETURN_DONE;
     }
     if (args[1] == 0) {
-        L_partyVivianTailStop();
+        partyVivianTailStop();
     } else {
-        L_partyVivianTailStart();
+        partyVivianTailStart();
     }
     return EVT_RETURN_DONE;
 }

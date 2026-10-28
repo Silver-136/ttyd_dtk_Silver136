@@ -413,7 +413,7 @@ extern const s32 g_moamoa_chain_num;
 extern MoaChain g_moamoa_chain_tbl[47];
 
 void animPoseAutoRelease(s32 type);
-void L_animPoseWorldPositionEvalOff(s32 poseId);
+void animPoseWorldPositionEvalOff(s32 poseId);
 void animPoseDrawShape(s32 poseId, s32 shapeId);
 BOOL animPoseTestXLU(s32 poseId);
 void animPoseVivianMain(s32 poseId, Vec* pos);

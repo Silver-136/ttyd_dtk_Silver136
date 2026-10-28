@@ -63,7 +63,7 @@ void mot_vivian(void) {
     }
 }
 
-void L_partyVivianTailStart(PartyEntry* party);
+void partyVivianTailStart(PartyEntry* party);
 
 void mot_vivian_post(void) {
     PartyEntry* party = partyGetPtr(marioGetPartyId());
@@ -90,7 +90,7 @@ void mot_vivian_post(void) {
             partyChgRunMode(party, 2);
             party->moveMode = 0;
             partyChgPoseId(party, 1);
-            L_partyVivianTailStart(party);
+            partyVivianTailStart(party);
         }
     } else if (party && party->currentMemberId == PARTY_MEMBER_VIVIAN && (party->flags & PARTY_FLAG_IS_BEING_USED)) {
         // FAKE: the store is reached by a goto past the return; writing it here changes the object
@@ -145,13 +145,13 @@ void vivianUnhold(PartyEntry* party) {
     }
 }
 
-void L_partyVivianTailStop(PartyEntry* party) {
+void partyVivianTailStop(PartyEntry* party) {
     if (party->currentMemberId == PARTY_MEMBER_VIVIAN) {
         party->tailFlags |= 1;
     }
 }
 
-void L_partyVivianTailStart(PartyEntry* party) {
+void partyVivianTailStart(PartyEntry* party) {
     if (party->currentMemberId == PARTY_MEMBER_VIVIAN) {
         party->tailFlags &= ~1;
     }
@@ -339,7 +339,7 @@ void vivian_use(PartyEntry* party) {
             effRippleSetCamId(rip, party->camId);
         }
         psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_VIVIAN_SHADOW1_2), &party->position);
-        L_partyVivianTailStop(party);
+        partyVivianTailStop(party);
         party->useMotionId = 5;
     case 5:
         vivianFollow(party);
@@ -403,7 +403,7 @@ void vivian_use(PartyEntry* party) {
         marioAdjustMoveDir();
         partyChgPose(party, "PTR_A2_4");
         party->poseTime = 24;
-        L_partyVivianTailStart(party);
+        partyVivianTailStart(party);
         party->useMotionId = 23;
         break;
     case 23:

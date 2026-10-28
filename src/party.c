@@ -598,7 +598,7 @@ s32 partyEntry2Pos(s32 memberId, f32 x, f32 y, f32 z) {
     return slot;
 }
 
-void L_partyVivianTailStart(PartyEntry* party);
+void partyVivianTailStart(PartyEntry* party);
 void driveParty(PartyEntry* party);
 s32 partyHelloMain(PartyEntry* party);
 static void partyShadowOn(PartyEntry* party) {
@@ -1274,7 +1274,7 @@ s32 partyGoodbyeMain(PartyEntry* party) {
     return 0;
 }
 
-void L_partyVivianTailStop(PartyEntry* party);
+void partyVivianTailStop(PartyEntry* party);
 
 static inline void partyChgRunM(PartyEntry* party) {
     party->scale = (Vec){1.0f, 1.0f, 1.0f};
@@ -1395,7 +1395,7 @@ s32 partyDokanInit(PartyEntry* party) {
     party->moveDir = mario->moveDirection;
     party->position = mario->position;
 #endif
-    L_partyVivianTailStop(party);
+    partyVivianTailStop(party);
     return 0;
 }
 
@@ -1486,7 +1486,7 @@ s32 partyDokanMain(PartyEntry* party) {
             party->flags &= ~PARTY_FLAG_DISABLE_FLOORS;
             party->flags &= ~PARTY_FLAG_FORCE_FALL;
             partyShadowOn(party);
-            L_partyVivianTailStart(party);
+            partyVivianTailStart(party);
             party->trailPos = party->position;
             partyChgRunMode(party, 1);
             n = 0;
@@ -1535,7 +1535,7 @@ void partyDokanEnd(s32 id, s32 dir) {
         party->flags &= ~PARTY_FLAG_FORCE_FALL;
         partyShadowOn(party);
         party->trailPos = party->position;
-        L_partyVivianTailStart(party);
+        partyVivianTailStart(party);
     }
 }
 
@@ -2379,7 +2379,7 @@ void partyKeyOn(void) {
 void partyKeyOff(void) {
 }
 
-void L_partyClearCont(PartyEntry* party) {
+void partyClearCont(PartyEntry* party) {
     party->stickX = 0;
     party->stickY = 0;
     party->subStickX = 0;
@@ -2397,7 +2397,7 @@ void L_partyClearCont(PartyEntry* party) {
 void partyUpdateKeyData(PartyEntry* party) {
     s32 port = party->port;
     if (party->flags & (PARTY_FLAG_CTRL_OFF | PARTY_FLAG_CTRL_OFF_2)) {
-        L_partyClearCont(party);
+        partyClearCont(party);
         return;
     }
     party->stickX = gp->stickX[port];
