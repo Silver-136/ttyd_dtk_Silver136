@@ -18,28 +18,27 @@ struct MapAllocEntry {
 SmartWork smartWork;
 
 //.sdata
-// {fixed, size}: a fixed heap (1) has its size in KiB, the others (0) get size percent of the arena left over
 #ifdef VERSION_G8ME01
 // US: no fixed battle heap (battle maps use a map sub-heap); the smart heap is index 4
 #define HEAP_COUNT 5
 #define SMART_HEAP 4
-s32 size_table[HEAP_COUNT][2] = {
-    {1, 0x1C84},
-    {1, 0xD90},
-    {1, 0xE0},
-    {1, 0x80},
 #else
 #define HEAP_COUNT 6
 #define SMART_HEAP 5
-s32 size_table[HEAP_COUNT][2] = {
-    {1, 0x1C84}, //0x721000, 7300 KiB/7.13 MiB
-    {1, 0xD90}, //0x364000, 3472 KiB/3.39 MiB
-    {1, 0xE0}, //0x38000, 224 KiB
-    {1, 0x80}, //0x20000, 128 KiB
-    {1, 0x100}, //0x40000, 256 KiB
 #endif
-    {0, 0x64}
+
+// {fixed, size}: a fixed heap (1) has its size in KiB, the others (0) get size percent of the arena left over
+s32 size_table[HEAP_COUNT][2] = {
+    {1, 0x1C84}, // 0x721000, 7300 KiB (7.13 MiB)
+    {1, 0xD90},  // 0x364000, 3472 KiB (3.39 MiB)
+    {1, 0xE0},   // 0x38000, 224 KiB
+    {1, 0x80},   // 0x20000, 128 KiB
+#ifndef VERSION_G8ME01
+    {1, 0x100},  // 0x40000, 256 KiB: the battle heap
+#endif
+    {0, 0x64}    // the smart heap: 100 % of what is left
 };
+
 static SmartWork* wp = &smartWork;
 
 //.sbss
