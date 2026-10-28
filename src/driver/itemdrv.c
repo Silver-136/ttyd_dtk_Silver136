@@ -1,3 +1,4 @@
+#include "evt/evt_msg.h"
 #include "driver/itemdrv.h"
 #include "eff/eff_itemget.h"
 #include "driver/swdrv.h"
@@ -793,10 +794,6 @@ ItemEntry* itemNearDistCheck(f32 x, f32 y, f32 z, f32 range) {
     return found;
 }
 
-#ifdef VERSION_G8ME01
-void evtMsgFmtStr(char* dst, const char* src);
-
-#endif
 void winNameDisp(WinMgrEntry* win) {
     ItemEntry* entry = win->param;
     const char* name;

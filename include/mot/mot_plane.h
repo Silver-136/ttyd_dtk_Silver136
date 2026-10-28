@@ -26,7 +26,6 @@ typedef struct MotPlaneWork {
     Vec tipPos;                   // 0x3C: nose tip; probe runs frontPos -> tipPos
 } MotPlaneWork;                   // size 0x48
 
-void flyMain(void);
 void marioForcePlaneAnime(void);
 s32 marioGetPlaneStatus(void);
 s32 marioPlaneGetFlyingDir(void);

@@ -1,3 +1,4 @@
+#include "unit/party/unit_party_clauda.h"
 #include "battle/battle.h"
 #include "eff/n64/eff_kumokumo_n64.h"
 #include "battle/battle_database_common.h"

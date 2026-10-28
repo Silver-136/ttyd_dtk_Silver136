@@ -1,3 +1,4 @@
+#include "unit/party/unit_party_vivian.h"
 #include "version.h"
 #include "battle/battle.h"
 #include "battle/battle_database_common.h"
@@ -28,7 +29,6 @@
 #include "battle/battle_damage.h"
 
 USER_FUNC(_vivian_make_extra_work_area);
-USER_FUNC(battle_evt_majo_disp_on);
 USER_FUNC(evt_audience_acrobat_notry);
 USER_FUNC(evt_audience_ap_recovery);
 USER_FUNC(evt_eff);
@@ -41,7 +41,6 @@ USER_FUNC(_make_kagenuke_weapon);
 USER_FUNC(_get_vivian_attack_position);
 USER_FUNC(_get_move_frame);
 static void __makeTechMenuFunc(BattleCommand* command, s32* count);
-USER_FUNC(battle_evt_majo_disp_off);
 
 PoseTableEntry pose_table_vivian_stay[24];
 static BattleDataEntry data_table[20];

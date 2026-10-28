@@ -1,3 +1,4 @@
+#include "eff/eff_stageclear.h"
 #include "driver/camdrv.h"
 #include "driver/dispdrv.h"
 #include "driver/effdrv.h"

@@ -1,3 +1,4 @@
+#include "driver/windowdrv.h"
 #include "win/win_main.h"
 #include "battle/battle_monosiri.h"
 #include "data/item_data.h"
@@ -716,8 +717,6 @@ void winMsgMain(WindowWork* wp) {
             break;
     }
 }
-
-void windowDispGX_Waku_col(u16 gxTexMapID, GXColor color, f32 x, f32 y, f32 width, f32 height, f32 curve);
 void winMsgDisp(WindowWork* wp, f32 x, f32 y) {
     GXColor white = { 0xFF, 0xFF, 0xFF, 0xFF };
     GXColor black = { 0x00, 0x00, 0x00, 0xFF };
