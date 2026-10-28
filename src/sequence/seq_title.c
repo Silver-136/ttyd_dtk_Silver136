@@ -38,7 +38,7 @@ TitleWork* wp2 = &work2;
 #endif
 
 // local prototypes
-void L_titleInit(SequenceWork* work);
+void titleInit(SequenceWork* work);
 void titleMain(SequenceWork* work);
 void disp1(CameraId cameraId, void* param);
 void disp2(CameraId cameraId, void* param);
@@ -49,7 +49,7 @@ const char* DbgBtlSel_GetMsgDataPtr(void) {
 }
 
 void seq_titleInit(SequenceWork* work) {
-    L_titleInit(work);
+    titleInit(work);
     gp->flags &= ~GW_FLAG_NO_ENTRANCE;
     gp->flags &= ~0x40;
     gp->flags &= ~GW_FLAG_NO_SAVE_BLOCK;
@@ -71,7 +71,7 @@ s32 N_getDebugMode(void) {
     return wp2->debug;
 }
 
-void L_titleInit(SequenceWork* work) {
+void titleInit(SequenceWork* work) {
     memset(wp2, 0, sizeof(TitleWork));
     wp2->texture = fileAllocf(FILE_TYPE_TPL, "%s/mariost.tpl", getMarioStDvdRoot());
     wp2->topPosX = 0.0f;

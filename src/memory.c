@@ -384,7 +384,7 @@ void smartInit(void) {
     g_bFirstSmartAlloc = FALSE;
 }
 
-void L_smartReInit(void) {
+void smartReInit(void) {
     smartEntry* e;
     int i;
 

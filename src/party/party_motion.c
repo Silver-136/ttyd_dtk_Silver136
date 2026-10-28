@@ -2589,16 +2589,16 @@ void allPartySlitOff(void) {
 void allPartyForceSlitOff(void) {
     PartyEntry* party = partyGetPtr(marioGetPartyId());
     if (party) {
-        L_partyForceSlitOff(party);
+        partyForceSlitOff(party);
     }
     party = partyGetPtr(marioGetExtraPartyId());
     if (party) {
-        L_partyForceSlitOff(party);
+        partyForceSlitOff(party);
     }
 }
 
 #ifdef VERSION_G8ME01
-void U_allPartySlitOffReq(void) {
+void allPartySlitOffReq(void) {
     PartyEntry* party = partyGetPtr(marioGetPartyId());
     if (party && ((party->flags & PARTY_FLAG_PAPER_MODE) || (party->flags2 & PARTY_DISP_FLAG_SLIT))) {
         party->flags2 &= ~(PARTY_DISP_FLAG_TURN_LEFT_UNUSED | PARTY_DISP_FLAG_TURN_RIGHT_UNUSED | PARTY_DISP_FLAG_SLIT | PARTY_DISP_FLAG_SLIT_DIR_280);
@@ -2618,7 +2618,7 @@ void U_allPartySlitOffReq(void) {
 }
 
 #endif
-void L_partyForceSlitOff(PartyEntry* party) {
+void partyForceSlitOff(PartyEntry* party) {
     if ((party->flags & PARTY_FLAG_PAPER_MODE) || (party->flags2 & PARTY_DISP_FLAG_SLIT)) {
         party->displayDirection = revise360(party->targetDir - party->camDir) >= 180.0f ? 0.0f : 180.0f;
         party->displayDirectionTarget = party->displayDirection;
@@ -2647,7 +2647,7 @@ void partyChgMotSlitFloor(PartyEntry* party) {
 void partySlitReset(PartyEntry* party) {
     if (party) {
         if (party->slitOn == 1) {
-            L_partyForceSlitOff(party);
+            partyForceSlitOff(party);
         }
         party->slitOn = 0;
     }

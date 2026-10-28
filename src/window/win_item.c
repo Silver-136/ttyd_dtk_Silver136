@@ -537,7 +537,7 @@ s32 winItemMain(WindowWork* w) {
             if (mp->currMotionId == MARIO_MOTION_SHIP || mp->currMotionId == MARIO_MOTION_PLANE) {
                 ok = 1;
             }
-            if (marioRollCancelDisable() || U_marioSlitContinueChk()) {
+            if (marioRollCancelDisable() || marioSlitContinueChk()) {
                 ok = 1;
             }
             if (w->item.useTarget > 0 && marioBgmodeChk()) {

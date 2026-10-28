@@ -15,7 +15,7 @@ void seq_gameOverInit(SequenceWork* work) {
     camDispOn(CAMERA_3D);
     psndStopAllFadeOut();
     psndSetReverb(0);
-    L_psndBGM_stop();
+    psndBGM_stop();
     psndClearFlag(PSND_FLAG_MUTE_SFX);
     psndClearFlag(PSND_FLAG_LETTER_BOX);
     psndClearFlag(PSND_FLAG_LETTER_BOX_OFF);

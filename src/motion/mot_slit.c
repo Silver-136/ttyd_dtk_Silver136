@@ -92,7 +92,7 @@ BOOL marioSlitKeyDisable(void) {
     return TRUE;
 }
 
-BOOL U_marioSlitContinueChk(void) {
+BOOL marioSlitContinueChk(void) {
     MarioWork* mario = marioGetPtr();
     Vec pos;
     if (marioSlitButton()) {
@@ -392,7 +392,7 @@ void mot_slit_post(void) {
         if (m->currMotionId != MARIO_MOTION_ROLL) {
             allPartyForceSlitOff();
         } else {
-            U_allPartySlitOffReq();
+            allPartySlitOffReq();
         }
 #else
         allPartyForceSlitOff();

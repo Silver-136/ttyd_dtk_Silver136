@@ -159,7 +159,7 @@ GXRenderModeObj GXNtsc480ProgMarioSt = {
 void viPostCallback(u32 retraceCount);
 void* gcDvdCheckThread(void* param);
 void gcRumbleCheck(void);
-void L_gcResetCheck(void);
+void gcResetCheck(void);
 
 
 void marioStInit(void) {
@@ -321,7 +321,7 @@ void marioStMain(void) {
     nameEntMain();
     winMgrMain();
     effMain();
-    L_gcResetCheck();
+    gcResetCheck();
     if (gp->flags & GW_FLAG_E3) {
         for (i = 0; i < 4; i++) {
             if (gp->dirs[i]) {
@@ -589,7 +589,7 @@ void* gcDvdCheckThread(void* param) {
             }
             DEMODoneRender();
             makeKey();
-            L_gcResetCheck();
+            gcResetCheck();
         }
         OSYieldThread();
     }
@@ -656,7 +656,7 @@ void gcRumbleCheck(void) {
     }
 }
 
-void L_gcResetCheck(void) {
+void gcResetCheck(void) {
     u32 code;
 
 #ifdef VERSION_G8ME01

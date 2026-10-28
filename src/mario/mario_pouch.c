@@ -105,7 +105,7 @@ ItemType pouchHaveBadge(s32 id) {
     return mpp->badges[id];
 }
 #ifdef VERSION_G8ME01
-ItemType L_pouchEquipBadge(s32 id) {
+ItemType pouchEquipBadge(s32 id) {
     return mpp->equippedBadges[id];
 }
 

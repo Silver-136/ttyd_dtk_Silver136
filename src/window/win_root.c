@@ -994,7 +994,7 @@ void winNameGX(WindowWork* wp, s32 type, f32 x, f32 y, f32 w, f32 h) {
     }
 }
 
-MessageWork* L_msgGetWork(void);
+MessageWork* msgGetWork(void);
 
 static inline void winBookTex(WindowWork* w, s32 id, f32 x, f32 y, f32 width, f32 height) {
     GXTexObj obj;
@@ -1083,7 +1083,7 @@ void winBookGX(WindowWork* w, s32 a, f32 x, f32 y) {
                         luigi_book_list[w->item.bookIdx][w->item.bookPage * 2]);
         winFontSetLabel((Vec){220.0f + lx, y - 14.0f, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, (GXColor){0x00, 0x00, 0x00, 0xFF},
                         luigi_book_list[w->item.bookIdx][w->item.bookPage * 2 + 1]);
-        pose = ((MessageWork*)L_msgGetWork())->poseId;
+        pose = ((MessageWork*)msgGetWork())->poseId;
         anim = animPoseGetAnimDataPtr(pose);
         if (w->item.bookPage < w->item.bookPages - 1) {
             animPoseSetAnim(pose, "HOS_C_1", 0);

@@ -336,7 +336,7 @@ extern char* yoshigroup[7];
 const char* partyChgPoseId(PartyEntry* party, s32 index);
 void partyChgPose(PartyEntry* party, const char* pose);
 void partyUsePost(PartyEntry* party);
-void L_allPartyRideOn(void);
+void allPartyRideOn(void);
 void allPartyForceRideOn(void);
 void allPartyRideOff(void);
 void allPartyRideOff2(void);

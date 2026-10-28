@@ -38,7 +38,7 @@ static EVT_BEGIN(quake_bgmode_evt)
     RETURN
 EVT_END()
 
-s32 U_chkground(void);
+s32 chkground(void);
 
 BOOL marioChkHipAttack(void) {
     BOOL ret;
@@ -161,7 +161,7 @@ void mot_hip(void) {
             mario->currSubMotionId = 2;
             mario->jumpVelocityY = 2.0f;
         }
-        switch (U_chkground()) {
+        switch (chkground()) {
         case 1:
             return;
         case 2:
@@ -180,7 +180,7 @@ void mot_hip(void) {
         if (--mario->multiTimer <= 0) {
             mario->currSubMotionId = 10;
         }
-        switch (U_chkground()) {
+        switch (chkground()) {
         case 1:
             return;
         case 2:
@@ -201,7 +201,7 @@ void mot_hip(void) {
             mario->jumpSnapY = -1.1904f;
             mario->jumpVelocityY = mario->jumpAccelerationY;
         }
-        switch (U_chkground()) {
+        switch (chkground()) {
         case 1:
             return;
         case 2:
@@ -270,7 +270,7 @@ void mot_hip(void) {
         }
         break;
     case 22:
-        if (U_chkground() == 1) {
+        if (chkground() == 1) {
             return;
         }
         if (--mario->multiTimer <= 0) {
@@ -302,7 +302,7 @@ void mot_hip(void) {
 }
 
 #pragma dont_inline on
-s32 U_chkground(void) {
+s32 chkground(void) {
     MarioWork* mario;
     HitEntry* hit;
     u32 attr;

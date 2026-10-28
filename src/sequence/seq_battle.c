@@ -343,7 +343,7 @@ void battle_exit(void) {
         partyCtrlOn();
         marioGetPtr()->flags |= MARIO_FLAG_ACTIVE;
     }
-    L_psndBGM_stop();
+    psndBGM_stop();
     psndClearFlag(PSND_FLAG_MUTE_SFX);
     light = lightGetPaperCraft();
     {

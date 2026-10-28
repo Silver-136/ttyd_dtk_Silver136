@@ -1908,7 +1908,7 @@ USER_FUNC(evt_npc_wait_battle_end) {
     if (party) {
         partyCtrlOn();
     }
-    L_psndBGM_stop();
+    psndBGM_stop();
 #ifdef VERSION_G8ME01
     marioFBattlePost();
 #endif

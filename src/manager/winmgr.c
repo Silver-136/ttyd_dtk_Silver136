@@ -34,7 +34,7 @@ typedef struct WinMgrSelectTbl {
 
 void qqsort(void* base, u32 n, u32 size, int (*compare)(void*, void*));
 #ifdef VERSION_G8ME01
-u16 L_pouchEquipBadge(s32 index);
+u16 pouchEquipBadge(s32 index);
 int select_comp_bteresa(void* a, void* b);
 #endif
 
@@ -674,7 +674,7 @@ WinMgrSelect* winMgrSelectEntry(EvtWord type, s32 newItem, BOOL cancelOk) {
                 id = (u16)pouchHaveBadge(i);
                 if (id) {
 #ifdef VERSION_G8ME01
-                    if (sel->type == 12 && id == L_pouchEquipBadge(i)) {
+                    if (sel->type == 12 && id == pouchEquipBadge(i)) {
                         sel->items[sel->numItems].flags |= SELECT_ITEM_EQUIPPED;
                     }
 #endif

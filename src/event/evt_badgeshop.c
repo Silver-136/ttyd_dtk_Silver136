@@ -652,7 +652,7 @@ s32 badgeShop_ThrowCheck(s32 itemId) {
     return count;
 }
 
-s32 U_badgeShop_SpecialCheck(void) {
+s32 badgeShop_SpecialCheck(void) {
     s32 count;
     int i;
 

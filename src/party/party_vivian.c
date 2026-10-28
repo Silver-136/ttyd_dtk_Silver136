@@ -270,7 +270,7 @@ void vivian_use(PartyEntry* party) {
         party->work.vivian.shadowSize = 10.0f;
         party->trailPos = party->position;
         vivian_cancel_req = 0;
-        L_partyForceSlitOff(party);
+        partyForceSlitOff(party);
     }
     m->baseSpeed = 0.0f;
     party->moveSpeed = 0.0f;

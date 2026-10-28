@@ -928,7 +928,7 @@ BOOL marioChkItemMotion(void) {
     return TRUE;
 }
 
-s32 L_marioChkRub(void) {
+s32 marioChkRub(void) {
     return 0;
 }
 

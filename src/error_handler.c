@@ -110,7 +110,7 @@ void N_systemErrorHandler(OSError error, OSContext* context, u32 dsisr, u32 dar)
 #endif
     OSFillFPUContext(context);
     HW_ENABLE_MSR_FP_RI();
-    L_smartReInit();
+    smartReInit();
     if (OSGetFontEncode() == OS_FONT_ENCODE_SJIS) {
         fontHeader = smartAlloc(OS_FONT_SIZE_SJIS, 0)->address;
     } else {

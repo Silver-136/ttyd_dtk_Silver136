@@ -1316,7 +1316,7 @@ void marioMoveMain(void) {
     if (wp->currMotionId == MARIO_MOTION_SHIP) {
         return;
     }
-    if (L_marioChkRub()) {
+    if (marioChkRub()) {
         return;
     }
     vx = 0.0f;

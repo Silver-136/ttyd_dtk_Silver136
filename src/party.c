@@ -764,7 +764,7 @@ void N__partyChgRunMode(PartyEntry* party, s32 prev, s32 mode) {
             break;
         case 1:
         case 2:
-            L_partyForceSlitOff(party);
+            partyForceSlitOff(party);
             break;
     }
 }
@@ -977,7 +977,7 @@ void driveParty(PartyEntry* party) {
                 party->trigFlags &= ~PARTY_TRIG_CHG_RUN_MODE;
                 party->motionStep = 0;
                 party->flags &= ~PARTY_FLAG_IS_BEING_USED;
-                L_partyForceSlitOff(party);
+                partyForceSlitOff(party);
             }
             partyRideMain(party);
             break;
@@ -1631,7 +1631,7 @@ void allPartyForceRideOn(void) {
 }
 #pragma dont_inline reset
 
-void L_allPartyRideOn(void) {
+void allPartyRideOn(void) {
     PartyEntry* party = partyGetPtr(marioGetPartyId());
     if (party) {
         partyChgRunMode(party, 11);
@@ -2446,7 +2446,7 @@ void partySetFamicomMode(PartyEntry* party, s32 mode) {
         if (party->flags2 & PARTY_DISP_FLAG_FAMICOM) {
             return;
         }
-        L_partyForceSlitOff(party);
+        partyForceSlitOff(party);
         party->flags2 |= PARTY_DISP_FLAG_FAMICOM;
         partyPoseEntryF(party);
         partyChgPose(party, partyChgPoseId(party, 1));

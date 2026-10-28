@@ -97,7 +97,7 @@ EvtWord evt_nidome_bed[126];
 
 // Descriptive name (not in the symbol maps); placeholder unk_rsh_00002384, JP rsh .text+0x22C0. See docs/NAME_PROVENANCE.md.
 USER_FUNC(mario_normalize_wait) {
-    if (!marioRollCancelDisable() && !U_marioSlitContinueChk()) {
+    if (!marioRollCancelDisable() && !marioSlitContinueChk()) {
         return EVT_RETURN_DONE;
     }
     return EVT_RETURN_BLOCK;

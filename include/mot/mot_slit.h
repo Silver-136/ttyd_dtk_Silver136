@@ -20,4 +20,4 @@ void motSlitCancel2(void);
 void motSlitCancel3(void);
 void mot_slit(void);
 void mot_slit_post(void);
-BOOL U_marioSlitContinueChk(void);
+BOOL marioSlitContinueChk(void);

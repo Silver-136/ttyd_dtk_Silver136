@@ -319,7 +319,7 @@ EvtWord cooking_evt[852];
 USER_FUNC(badgeshop_special_cnt) {
     EvtWord* args = event->args;
 
-    evtSetValue(event, args[0], U_badgeShop_SpecialCheck());
+    evtSetValue(event, args[0], badgeShop_SpecialCheck());
     return EVT_RETURN_DONE;
 }
 

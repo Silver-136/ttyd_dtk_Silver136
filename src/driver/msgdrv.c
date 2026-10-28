@@ -1370,7 +1370,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
 }
 #pragma opt_lifetimes reset
 
-MessageWork* L_msgGetWork(void) {
+MessageWork* msgGetWork(void) {
     return &msgWork;
 }
 

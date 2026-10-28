@@ -59,7 +59,6 @@ void smartFree(smartEntry* entry);
 smartEntry* smartAlloc(u32 size, u8 type);
 GXTexObj* smartTexObj(GXTexObj* obj, void** image_ptr);
 
-void L_smartReInit(void);
 extern BOOL g_bFirstSmartAlloc;
 
 #ifdef VERSION_G8ME01
