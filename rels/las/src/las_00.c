@@ -153,7 +153,7 @@ static EVT_BEGIN(first_evt)
     CALL(evt_cam3d_evt_off, 1000, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
     CALL(evt_snd_bgm_scope, 0, 0)
-    CALL(N_evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
+    CALL(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_telop_entry, 17)
     RETURN

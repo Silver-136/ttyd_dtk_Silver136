@@ -539,7 +539,8 @@ void winMarioDisp(s32 camId, void* param, s32 idx) {
         GXColor cols[3] = {{0xCB, 0x8C, 0xA2, 0xFE}, {0xCB, 0xBE, 0x89, 0xFE}, {0x94, 0xB9, 0xC7, 0xFE}};
         GXColor reds[3] = {{0xA7, 0x3C, 0x3C, 0xFF}, {0x37, 0x69, 0x1E, 0xFF}, {0x0F, 0x21, 0x7A, 0xFF}};
 #ifdef VERSION_G8ME01
-        const char* const N_stat_name_tbl[7][3] = {
+// Descriptive name (not in the symbol maps).
+        const char* const stat_name_tbl[7][3] = {
             {"\x82\x67\x82\x6F", "\x82\x65\x82\x6F", "\x82\x61\x82\x6F"},
             {"HP", "FP", "BP"},
             {"KP", "BP", "OP"},
@@ -551,13 +552,13 @@ void winMarioDisp(s32 camId, void* param, s32 idx) {
         const char* ruby[3] = {"msg_menu_mario_ruby_hp", "msg_menu_mario_ruby_fp", "msg_menu_mario_ruby_bp"};
 
         rowL = 50.0f + (x - 270.0f) - 2.0f;
-        nameW2 = FontGetMessageWidth(N_stat_name_tbl[gp->language][i]);
+        nameW2 = FontGetMessageWidth(stat_name_tbl[gp->language][i]);
 #else
-        const char* const N_stat_name_tbl[3] = {"\x82\x67\x82\x6F", "\x82\x65\x82\x6F", "\x82\x61\x82\x6F"};
+        const char* const stat_name_tbl[3] = {"\x82\x67\x82\x6F", "\x82\x65\x82\x6F", "\x82\x61\x82\x6F"};
         const char* ruby[3] = {"msg_menu_mario_ruby_hp", "msg_menu_mario_ruby_fp", "msg_menu_mario_ruby_bp"};
 
         rowA = 50.0f + (x - 270.0f) - 2.0f;
-        nameW = FontGetMessageWidth(N_stat_name_tbl[i]);
+        nameW = FontGetMessageWidth(stat_name_tbl[i]);
 #endif
         rubyW = 0.5f * FontGetMessageWidth(msgSearch(ruby[i]));
         winTexInit(*w->res->data);
@@ -566,12 +567,12 @@ void winMarioDisp(s32 camId, void* param, s32 idx) {
 #ifdef VERSION_G8ME01
         winTexSet(0xAF, (Vec){rowL, (cx2 = (y - 38.0f) - (f32)(i * 34)) - 4.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, cols[i]);
         winFontInit();
-        winFontSet((Vec){col - nameW2 / 2.0f, 12.0f + cx2, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, black, N_stat_name_tbl[gp->language][i]);
+        winFontSet((Vec){col - nameW2 / 2.0f, 12.0f + cx2, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, black, stat_name_tbl[gp->language][i]);
         winFontSet((Vec){col - rubyW / 2.0f, 21.0f + cx2, 0.0f}, (Vec){0.5f, 0.5f, 0.5f}, reds[i], msgSearch(ruby[i]));
 #else
         winTexSet(0xAF, (Vec){rowA, (cx = (y - 38.0f) - (f32)(i * 34)) - 4.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, cols[i]);
         winFontInit();
-        winFontSet((Vec){col - nameW / 2.0f, 12.0f + cx, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, black, N_stat_name_tbl[i]);
+        winFontSet((Vec){col - nameW / 2.0f, 12.0f + cx, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, black, stat_name_tbl[i]);
         winFontSet((Vec){col - rubyW / 2.0f, 21.0f + cx, 0.0f}, (Vec){0.5f, 0.5f, 0.5f}, reds[i], msgSearch(ruby[i]));
 #endif
     }

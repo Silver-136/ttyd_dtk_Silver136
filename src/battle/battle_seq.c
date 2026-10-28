@@ -84,7 +84,8 @@ void btlseqTurn(BattleWork* wp);
 // Lucky Start badge: _set_effect_luck copies this weapon and keeps one of its four statuses (Electric, Dodgy,
 // HP Regen or FP Regen) at random
 
-const BattleWeapon N_weapon_lucky_start = {
+// Descriptive name (not in the symbol maps).
+const BattleWeapon weapon_lucky_start = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description
@@ -601,7 +602,7 @@ USER_FUNC(_set_effect_luck) {
     BattleWork* wp = _battleWorkPointer;
     f32* pz;
     f32* py;
-    BattleWeapon weapon = N_weapon_lucky_start;
+    BattleWeapon weapon = weapon_lucky_start;
     f32 z;
     f32 y;
     BattleWeapon* pw;

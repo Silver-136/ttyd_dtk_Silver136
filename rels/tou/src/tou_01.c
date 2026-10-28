@@ -1993,7 +1993,7 @@ EVT_BEGIN(evt_uron)
     CALL(evt_msg_print_party, STRING("stg3_tou_04"))
     WAIT_MS(300)
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
-    CALL(N_evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
+    CALL(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_party_run, 0)
     CALL(evt_snd_bgm_scope, 0, 0)
@@ -3534,7 +3534,7 @@ EVT_BEGIN(tou_01_init_evt)
             CALL(evt_pouch_mario_recovery)
             CALL(evt_pouch_all_party_recovery)
 #ifdef VERSION_G8ME01
-        CALL(N_evt_sub_status_gauge_force_update)
+        CALL(evt_sub_status_gauge_force_update)
 #else
         END_IF
 #endif

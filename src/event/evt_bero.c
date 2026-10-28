@@ -76,7 +76,8 @@ EVT_BEGIN(evt_bero_info_run_gate)
 EVT_END()
 
 // s32 x, s32 y, s32 z (new in retail)
-USER_FUNC(N_evt_bero_set_mario_bottomless_respawn_pos_on_bero_entry) {
+// Descriptive name (not in the symbol maps).
+USER_FUNC(evt_bero_set_mario_bottomless_respawn_pos_on_bero_entry) {
     EvtWord* args = event->args;
     s32 x, y, z;
 
@@ -88,7 +89,8 @@ USER_FUNC(N_evt_bero_set_mario_bottomless_respawn_pos_on_bero_entry) {
 }
 
 // no args (new in retail)
-USER_FUNC(N_evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos) {
+// Descriptive name (not in the symbol maps).
+USER_FUNC(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos) {
     MarioWork* wp = marioGetPtr();
     marioSetBottomlessRespawnPosOnBeroEntry(wp->position.x, wp->position.y, wp->position.z);
     return EVT_RETURN_DONE;

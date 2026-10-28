@@ -171,7 +171,7 @@ EVT_BEGIN(wall_roll)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)
 #ifdef VERSION_G8ME01
-    CALL(N_evt_party_cloud_lock_animations_on_off, 0, 1)
+    CALL(evt_party_cloud_lock_animations_on_off, 0, 1)
 #endif
     WAIT_MS(500)
     BEGIN_INLINE_EVENT
@@ -238,7 +238,7 @@ EVT_BEGIN(wall_roll)
     WAIT_MS(500)
     SET_VALUE(GSW_STORY_PROGRESS, STG2_21_02_MATCHING_THE_PATTERNS)
 #ifdef VERSION_G8ME01
-    CALL(N_evt_party_cloud_lock_animations_on_off, 0, 0)
+    CALL(evt_party_cloud_lock_animations_on_off, 0, 0)
 #endif
     CALL(evt_mario_key_onoff, 1)
     RETURN

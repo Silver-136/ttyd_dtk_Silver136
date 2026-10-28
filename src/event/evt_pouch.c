@@ -47,7 +47,8 @@ USER_FUNC(evt_pouch_remove_item) {
     return EVT_RETURN_DONE;
 }
 
-USER_FUNC(N_evt_pouch_remove_item_index) {
+// Descriptive name (not in the symbol maps).
+USER_FUNC(evt_pouch_remove_item_index) {
     EvtWord* args = event->args;
     s32 type = evtGetValue(event, args[0]);
     s32 index = evtGetValue(event, args[1]);

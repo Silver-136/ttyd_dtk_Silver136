@@ -1037,8 +1037,8 @@ void _GetExpIcon_End(BattleSeqEndWork* work) {
 }
 
 #ifdef VERSION_G8ME01
-USER_FUNC(N__display_select_one_to_upgrade_text);
-USER_FUNC(N__set_initial_upgrade_cursor_position);
+USER_FUNC(_display_select_one_to_upgrade_text);
+USER_FUNC(_set_initial_upgrade_cursor_position);
 
 #endif
 EVT_BEGIN(_curtain_close_event)
@@ -1188,7 +1188,7 @@ EVT_BEGIN(_curtain_close_event)
     BEGIN_SIBLING_EVENT_GET_ID(LW(10))
         SET_VALUE(LW(5), 5)
         LOOP(LW(5))
-            CALL(N__display_select_one_to_upgrade_text)
+            CALL(_display_select_one_to_upgrade_text)
             WAIT_FRAMES(1)
             SET_VALUE(LW(5), 5)
         END_LOOP
@@ -1197,7 +1197,7 @@ EVT_BEGIN(_curtain_close_event)
     CALL(btlevtcmd_PadCheckTrigger, 0, 262144, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         BEGIN_SIBLING_EVENT_GET_ID(LW(0))
-            CALL(N__set_initial_upgrade_cursor_position, 2)
+            CALL(_set_initial_upgrade_cursor_position, 2)
             CALL(btlevtcmd_BtlStageObjSetRotate, STRING("spotlight"), 0, 0, 70)
             CALL(btlevtcmd_BtlStageObjFlagOnOff, STRING("spotlight"), 1, 0)
             CALL(evt_sub_intpl_init, EASING_CUBIC_OUT, 70, 30, 10)
@@ -1217,7 +1217,7 @@ EVT_BEGIN(_curtain_close_event)
     CALL(btlevtcmd_PadCheckTrigger, 0, 524288, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         BEGIN_SIBLING_EVENT_GET_ID(LW(0))
-            CALL(N__set_initial_upgrade_cursor_position, 0)
+            CALL(_set_initial_upgrade_cursor_position, 0)
             CALL(btlevtcmd_BtlStageObjSetRotate, STRING("spotlight"), 0, 0, -70)
             CALL(btlevtcmd_BtlStageObjFlagOnOff, STRING("spotlight"), 1, 0)
             CALL(evt_sub_intpl_init, EASING_CUBIC_OUT, -70, -30, 10)
@@ -1355,7 +1355,8 @@ EVT_BEGIN(_koura_delete_event)
 EVT_END()
 
 #ifdef VERSION_G8ME01
-USER_FUNC(N__set_initial_upgrade_cursor_position) {
+// Descriptive name (not in the symbol maps).
+USER_FUNC(_set_initial_upgrade_cursor_position) {
     _battleWorkPointer->seqEndWork->selected = evtGetValue(event, event->args[0]);
     return 2;
 }
@@ -1378,7 +1379,8 @@ void _draw_select_one_to_upgrade_text(CameraId camId, void* param) {
     FontDrawMessage(zero - width / 2, (s32)y + (lines - 1) * 29, msg);
 }
 
-USER_FUNC(N__display_select_one_to_upgrade_text) {
+// Descriptive name (not in the symbol maps).
+USER_FUNC(_display_select_one_to_upgrade_text) {
     dispEntry(CAMERA_2D, 900.0f, 1, _draw_select_one_to_upgrade_text, _battleWorkPointer);
     return 2;
 }

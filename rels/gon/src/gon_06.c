@@ -195,7 +195,7 @@ EVT_BEGIN(tsuritenjo_event)
     SET_VALUE(GSW_STORY_PROGRESS, STG1_13_01_50_SECONDS_TO_ESCAPE)
     CALL(evt_npc_change_fbat_mode, 1)
     CALL(evt_npc_start_for_event)
-    CALL(N_evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
+    CALL(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_party_run, 0)
     RETURN

@@ -118,7 +118,7 @@ static EVT_BEGIN(out_evt2)
         CALL(evt_party_move_pos2, 0, -295, -15, FLOAT(150.0f))
     END_INLINE_EVENT
     CALL(evt_mario_mov_pos2, -280, -10, FLOAT(150.0f))
-    CALL(N_evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
+    CALL(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_cam_road_reset)
     CALL(evt_cam_shift_reset)

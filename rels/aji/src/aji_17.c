@@ -3020,7 +3020,7 @@ EVT_BEGIN(aji_17_init_evt)
             END_IF
             CALL(evt_pouch_mario_recovery)
             CALL(evt_pouch_all_party_recovery)
-            CALL(N_evt_sub_status_gauge_force_update)
+            CALL(evt_sub_status_gauge_force_update)
 #else
                 CALL(evt_pouch_mario_recovery)
                 CALL(evt_pouch_all_party_recovery)

@@ -1,4 +1,4 @@
-// seq_gameOverInit, seq_gameOverExit and N_evt_snd_bgm_unpause are in src/event/evt_snd.c
+// seq_gameOverInit, seq_gameOverExit and evt_snd_bgm_unpause are in src/event/evt_snd.c
 // (0x80077EC4..0x80077F88); in the original that code is the tail of this file.
 #include "driver/camdrv.h"
 #include "driver/fadedrv.h"
@@ -194,7 +194,7 @@ EVT_BEGIN(evt_gameover)
     CALL(evt_party_set_pos, 1, 0, -1000, 0)
     CALL(evt_mario_clear_party, 1)
     WAIT_FRAMES(1)
-    CALL(N_evt_snd_bgm_unpause)
+    CALL(evt_snd_bgm_unpause)
     CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_POSE_LOCK)
     CALL(evt_mario_set_pose, STRING("M_D_2"))
     CALL(evt_mario_set_dir, 180, 0, 0)

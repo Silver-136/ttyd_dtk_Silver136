@@ -608,13 +608,14 @@ typedef struct OhkoRateTbl {
     u8 rate[6];
 } OhkoRateTbl;
 
-const OhkoRateTbl N_ohko_rate_tbl = {{50, 60, 70, 80, 90, 100}};
+// Descriptive name (not in the symbol maps).
+const OhkoRateTbl ohko_rate_tbl = {{50, 60, 70, 80, 90, 100}};
 
 static USER_FUNC(set_weapon) {
     EvtWord* args = event->args;
     s32 idx = evtGetValue(event, args[0]);
     SukiWork* w = get_ptr();
-    OhkoRateTbl tbl = N_ohko_rate_tbl;
+    OhkoRateTbl tbl = ohko_rate_tbl;
     memcpy(w->weapon, &weapon, sizeof(BattleWeapon));
     w->weapon[0x9E] = tbl.rate[idx - 1];
     evtSetValue(event, args[1], (EvtWord)w->weapon);

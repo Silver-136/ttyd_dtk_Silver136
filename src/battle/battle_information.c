@@ -51,7 +51,8 @@ typedef struct ItemHogTable {
 #endif
 } ItemHogTable;
 
-const ItemHogTable N_item_hog_table = {
+// Descriptive name (not in the symbol maps).
+const ItemHogTable item_hog_table = {
     {0x98, 0x98, 0x98, 0xA2, 0x94, 0x9A, 0x99, 0x84, 0x87, 0x8B}
 };
 
@@ -177,7 +178,7 @@ void BattleInformationSetDropMaterial(FieldBattleInfo* info) {
             }
 #ifndef VERSION_G8ME01
             else if (pouchEquipCheckBadge(ITEM_ITEM_HOG) >= 1) {
-                hog = N_item_hog_table;
+                hog = item_hog_table;
                 setup->itemDropped = hog.items[irand(20)];
             }
 #endif
@@ -185,7 +186,7 @@ void BattleInformationSetDropMaterial(FieldBattleInfo* info) {
     }
 #ifdef VERSION_G8ME01
     if (setup->itemDropped == ITEM_NULL && pouchEquipCheckBadge(ITEM_ITEM_HOG) >= 1) {
-        hog = N_item_hog_table;
+        hog = item_hog_table;
         setup->itemDropped = hog.items[irand(25)];
     }
 #endif

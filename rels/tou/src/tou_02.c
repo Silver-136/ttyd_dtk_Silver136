@@ -1484,7 +1484,7 @@ EVT_BEGIN(evt_tougi2)
     WAIT_MS(500)
     SET_VALUE(GSWF_TOU_02_ARENA_TOUR_RETURN, 0)
     SET_VALUE(GSW_STORY_PROGRESS, STG3_01_ARENA_INTRO_1F)
-    CALL(N_evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
+    CALL(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
     CALL(evt_party_run, 0)
     CALL(evt_mario_key_onoff, 1)
     RETURN
@@ -2222,7 +2222,7 @@ EVT_BEGIN(tou_02_init_evt)
         END_IF
         CALL(evt_pouch_mario_recovery)
         CALL(evt_pouch_all_party_recovery)
-        CALL(N_evt_sub_status_gauge_force_update)
+        CALL(evt_sub_status_gauge_force_update)
 #else
             CALL(evt_pouch_mario_recovery)
             CALL(evt_pouch_all_party_recovery)

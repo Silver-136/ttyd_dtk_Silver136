@@ -139,7 +139,7 @@ typedef enum SoundStreamFlags {
     SOUND_STREAM_FLAG_READ_L = (1 << 12),   // 0x1000, a read for channel 0 in flight
     SOUND_STREAM_FLAG_READ_R = (1 << 13),   // 0x2000, a read for channel 1 in flight
     SOUND_STREAM_FLAG_READ_END = (1 << 14), // 0x4000, no more data will come
-    SOUND_STREAM_FLAG_PAUSE = (1 << 15),    // 0x8000, cleared by N_evt_snd_bgm_unpause
+    SOUND_STREAM_FLAG_PAUSE = (1 << 15),    // 0x8000, cleared by evt_snd_bgm_unpause
 } SoundStreamFlags;
 
 typedef struct SoundStream {

@@ -16,7 +16,7 @@ USER_FUNC(evt_mapobj_get_position);
 USER_FUNC(evt_mapobj_trans);
 extern EvtWord evt_nonride_airport[];
 extern EvtWord evt_ride_airport[];
-USER_FUNC(N_evt_mapdisp_onoff);
+USER_FUNC(evt_mapdisp_onoff);
 USER_FUNC(check2);
 USER_FUNC(evt_map_blend_set_flag);
 USER_FUNC(evt_map_blend_set_mobj_flag);

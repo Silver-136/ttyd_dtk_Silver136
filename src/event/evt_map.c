@@ -463,7 +463,8 @@ USER_FUNC(evt_map_replace_mapobj) {
     return EVT_RETURN_DONE;
 }
 
-USER_FUNC(N_evt_mapdisp_onoff) {
+// Descriptive name (not in the symbol maps).
+USER_FUNC(evt_mapdisp_onoff) {
     if (evtGetValue(event, event->args[0])) {
         mapDispOn();
     } else {

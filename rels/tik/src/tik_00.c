@@ -2169,7 +2169,7 @@ static EVT_BEGIN(evt_door_04_close)
         CALL(evt_door_end_wait)
         CALL(evt_mario_key_onoff, 0)
         CALL_CHILD(PTR(kurihakase_event))
-        CALL(N_evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
+        CALL(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
         CALL(evt_mario_key_onoff, 1)
         RETURN
     END_IF

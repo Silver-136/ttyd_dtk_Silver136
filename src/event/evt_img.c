@@ -209,7 +209,8 @@ USER_FUNC(evt_img_set_color) {
     return EVT_RETURN_DONE;
 }
 
-USER_FUNC(N_evt_img_set_z) {
+// Descriptive name (not in the symbol maps).
+USER_FUNC(evt_img_set_z) {
     EvtWord* args = event->args;
     const char* name = (const char*)evtGetValue(event, args[0]);
     f32 z = evtGetFloat(event, args[1]);

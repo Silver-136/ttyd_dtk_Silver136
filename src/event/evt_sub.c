@@ -1582,7 +1582,8 @@ USER_FUNC(evt_sub_status_gauge_check_update) {
 }
 
 #ifdef VERSION_G8ME01
-USER_FUNC(N_evt_sub_status_gauge_force_update) {
+// Descriptive name (not in the symbol maps).
+USER_FUNC(evt_sub_status_gauge_force_update) {
     statusWinForceUpdate();
     return EVT_RETURN_DONE;
 }

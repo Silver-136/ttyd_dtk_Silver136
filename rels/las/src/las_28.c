@@ -251,7 +251,7 @@ static EVT_BEGIN(first_evt)
     SET_VALUE(GSW_STORY_PROGRESS, STG8_14_01_QUEENS_CHAMBER)
     CALL_CHILD(PTR(bero_case_entry))
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
-    CALL(N_evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
+    CALL(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_party_run, 0)
     RETURN

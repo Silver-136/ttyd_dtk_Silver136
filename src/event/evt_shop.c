@@ -486,7 +486,7 @@ static EVT_BEGIN(sell_evt)
         CALL(evt_msg_print_add, 0, LW(14))
         GOTO(0)
     END_IF
-    CALL(N_evt_pouch_remove_item_index, LW(1), LW(4), LW(0))
+    CALL(evt_pouch_remove_item_index, LW(1), LW(4), LW(0))
     CALL(evt_pouch_add_coin, LW(3))
     CALL(evt_win_coin_wait, LW(8))
     WAIT_MS(200)
@@ -544,7 +544,7 @@ EVT_BEGIN(keep_evt)
         CALL(evt_msg_print, 0, LW(14), 0, STRING("me"))
         RETURN
     END_IF
-    CALL(N_evt_pouch_remove_item_index, LW(1), LW(4), LW(0))
+    CALL(evt_pouch_remove_item_index, LW(1), LW(4), LW(0))
     CALL(evt_pouch_add_keepitem, LW(1), LW(0))
     CALL(keep_pouchcheck_func)
     SET_VALUE(LF(0), 0)

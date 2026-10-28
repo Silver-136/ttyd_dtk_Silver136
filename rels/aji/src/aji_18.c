@@ -345,7 +345,7 @@ EVT_BEGIN(aji_18_init_evt)
                 CALL(evt_pouch_mario_recovery)
                 CALL(evt_pouch_all_party_recovery)
 #ifdef VERSION_G8ME01
-            CALL(N_evt_sub_status_gauge_force_update)
+            CALL(evt_sub_status_gauge_force_update)
 #else
             END_IF
 #endif

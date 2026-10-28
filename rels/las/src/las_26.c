@@ -307,7 +307,7 @@ EVT_BEGIN(bonbaba_evt)
     CALL(evt_hitobj_onoff, STRING("baba"), 1, 1)
     CALL(evt_npc_flag_onoff, 1, STRING("ボンババ"), NPC_FLAG_NO_HIT)
     CALL_CHILD(PTR(bero_case_entry))
-    CALL(N_evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
+    CALL(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
     CALL(evt_party_run, 0)
     CALL(evt_mario_key_onoff, 1)
     RETURN

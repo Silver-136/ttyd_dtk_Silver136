@@ -610,7 +610,7 @@ EVT_BEGIN(jin_07_init_evt)
             CALL(evt_cam_road_reset)
             CALL(evt_seq_wait, SEQ_GAME)
             CALL(evt_mario_wait_landon)
-            CALL(N_evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
+            CALL(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
             CALL(evt_mario_key_onoff, 1)
         END_INLINE_EVENT
     END_IF

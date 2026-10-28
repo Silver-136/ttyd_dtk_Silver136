@@ -328,7 +328,7 @@ static EVT_BEGIN(chuchurina_sogu)
     CALL(evt_item_entry, STRING("item_key"), ITEM_RED_KEY, 60, 0, 0, ITEM_TYPE_SCATTER_NO_PICKUP, GSWF_MRI_04_RED_KEY, 0)
     CALL(evt_puni_set_mode, 1, 1)
     SET_VALUE(GSW_STORY_PROGRESS, STG2_13_MS_MOWZ)
-    CALL(N_evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
+    CALL(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
     CALL(evt_party_run, 0)
     CALL(evt_mario_key_onoff, 1)
     RETURN

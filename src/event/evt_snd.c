@@ -28,7 +28,8 @@ void seq_gameOverExit(SequenceWork* work) {
     marioStSystemLevel(0);
 }
 
-USER_FUNC(N_evt_snd_bgm_unpause) {
+// Descriptive name (not in the symbol maps).
+USER_FUNC(evt_snd_bgm_unpause) {
     if ((u32)psbgm[0].streamId != 0xFFFFFFFFU) {
         sound.streams[psbgm[0].streamId].flags &= ~SOUND_STREAM_FLAG_PAUSE;
     }

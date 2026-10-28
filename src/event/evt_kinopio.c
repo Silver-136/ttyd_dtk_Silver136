@@ -227,7 +227,8 @@ USER_FUNC(snd_on) {
     return EVT_RETURN_DONE;
 }
 
-USER_FUNC(N_cameraman_on) {
+// Descriptive name (not in the symbol maps).
+USER_FUNC(cameraman_on) {
     NpcEntry* npc = npcNameToPtr("\217h\211\256\202\314\203J\203\201\203\211\203}\203\223");
     animPoseSetMaterialFlagOn(npc->poseId, (MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2));
     return EVT_RETURN_DONE;
@@ -437,7 +438,7 @@ EVT_BEGIN(evt_50)
     CALL(evt_npc_get_position, LW(10), LW(13), LW(14), LW(15))
     CALL(evt_npc_entry, STRING("\217h\211\256\202\314\203J\203\201\203\211\203}\203\223"), STRING("c_jugem_c"))
     CALL(evt_npc_set_tribe, STRING("\217h\211\256\202\314\203J\203\201\203\211\203}\203\223"), STRING("\203J\203\201\203\211\203}\203\223"))
-    CALL(N_cameraman_on)
+    CALL(cameraman_on)
     CALL(evt_npc_flag_onoff, 1, STRING("\217h\211\256\202\314\203J\203\201\203\211\203}\203\223"), NPC_FLAG_INSTANT_TURN)
     CALL(evt_sub_get_mapname, LW(0))
     IF_STR_EQUAL(LW(0), STRING("bom_02"))

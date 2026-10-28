@@ -52,7 +52,7 @@ extern EvtWord mail_evt_usu_01[61];
 extern EvtWord mail_evt_win_01[61];
 extern s32 tree_data[75];
 extern EvtWord tree_evt[251];
-USER_FUNC(N_evt_sub_status_gauge_force_update);
+USER_FUNC(evt_sub_status_gauge_force_update);
 USER_FUNC(evt_sub_area_check);
 USER_FUNC(evt_sub_check_intersect);
 USER_FUNC(evt_sub_countdown_get_status);

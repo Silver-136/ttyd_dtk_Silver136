@@ -917,7 +917,8 @@ USER_FUNC(evt_mario_mov_pos2) {
     return EVT_RETURN_DONE;
 }
 
-USER_FUNC(N_evt_mario_party_door_halve_hitbox) {
+// Descriptive name (not in the symbol maps).
+USER_FUNC(evt_mario_party_door_halve_hitbox) {
     PartyEntry* party = partyGetPtr(marioGetPartyId());
     if (party) {
         party->trigFlags |= PARTY_TRIG_HALF_PUSH;

@@ -74,7 +74,7 @@ void kpaSen_ext_disp(CameraId camera, void* param);
 void kpaSen_ext_shadow_disp(CameraId camera, void* param);
 
 USER_FUNC(evt_hitobj_flag_onoff);
-USER_FUNC(N_evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos);
+USER_FUNC(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos);
 static USER_FUNC(anim_tevcallback);
 USER_FUNC(bakuhatu_kemuri);
 static USER_FUNC(booboo_main);
@@ -150,7 +150,7 @@ void kpaSen_ext_init(void);
 void kpa_stg5_009_7_cb(s32 type, smartEntry* smart);
 USER_FUNC(party_tev);
 #ifdef VERSION_G8ME01
-USER_FUNC(N_evt_sub_status_gauge_force_update);
+USER_FUNC(evt_sub_status_gauge_force_update);
 #endif
 extern s32 envSetYami[];
 
@@ -3480,7 +3480,7 @@ static EVT_BEGIN(evt_after_peach)
     CALL(evt_msg_print, 0, STRING("stg4_usu_157"), 0, STRING("村長"))
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
     SET_VALUE(GSW_STORY_PROGRESS, STG4_16_LEAVING_TWILIGHT_TOWN)
-    CALL(N_evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
+    CALL(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_npc_restart_regular_event, STRING("村人Ｃ"))
     CALL(evt_npc_flag_onoff, 1, STRING("村人Ｃ"), NPC_FLAG_STOP_FOR_EVENT)
@@ -3799,7 +3799,7 @@ EVT_BEGIN(usu_00_init_evt)
             CALL(evt_pouch_mario_recovery)
             CALL(evt_pouch_all_party_recovery)
 #ifdef VERSION_G8ME01
-        CALL(N_evt_sub_status_gauge_force_update)
+        CALL(evt_sub_status_gauge_force_update)
 #else
         END_IF
 #endif

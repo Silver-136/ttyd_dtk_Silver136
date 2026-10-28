@@ -14,7 +14,7 @@ USER_FUNC(evt_party_set_pos);
 USER_FUNC(evt_party_stop);
 USER_FUNC(L_evt_party_dokan);
 USER_FUNC(evt_party_vivian_tail);
-USER_FUNC(N_evt_party_cloud_lock_animations_on_off);
+USER_FUNC(evt_party_cloud_lock_animations_on_off);
 USER_FUNC(evt_party_cloud_breathout);
 USER_FUNC(evt_party_flg_onoff);
 USER_FUNC(evt_party_force_reset_outofscreen);

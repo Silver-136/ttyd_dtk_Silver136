@@ -460,7 +460,7 @@ static EVT_BEGIN(sell_evt)
         CALL(evt_msg_print_add, 0, STRING("badgeshop_09"))
         GOTO(0)
     END_IF
-    CALL(N_evt_pouch_remove_item_index, LW(1), LW(4), LW(0))
+    CALL(evt_pouch_remove_item_index, LW(1), LW(4), LW(0))
     CALL(evt_badgeShop_throw_inc, LW(1))
     CALL(evt_pouch_add_coin, LW(3))
     CALL(evt_win_coin_wait, LW(8))
@@ -6577,7 +6577,7 @@ EVT_BEGIN(cooking_evt)
     END_IF
     IF_INT_EQUAL(LW(15), 0)
         CALL(cook_chk, LW(14), LW(0), LW(1))
-        CALL(N_evt_pouch_remove_item_index, LW(14), LW(11), LW(3))
+        CALL(evt_pouch_remove_item_index, LW(14), LW(11), LW(3))
         IF_INT_EQUAL(GSWF_TROUBLE_DONE(TROUBLE_SEEKING_LEGENDARY_BOOK), 1)
             SET_VALUE(LW(2), LW(1))
             ELSE
@@ -6585,8 +6585,8 @@ EVT_BEGIN(cooking_evt)
         END_IF
         ELSE
         CALL(cook_chk2, LW(14), LW(15), LW(2))
-        CALL(N_evt_pouch_remove_item_index, LW(14), LW(11), LW(3))
-        CALL(N_evt_pouch_remove_item_index, LW(15), LW(12), LW(3))
+        CALL(evt_pouch_remove_item_index, LW(14), LW(11), LW(3))
+        CALL(evt_pouch_remove_item_index, LW(15), LW(12), LW(3))
     END_IF
     IF_INT_EQUAL(LW(2), 0)
         SET_VALUE(LW(2), ITEM_MISTAKE)

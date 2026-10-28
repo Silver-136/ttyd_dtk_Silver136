@@ -2275,7 +2275,7 @@ EVT_BEGIN(enter_gorotsuki_town)
         CALL(evt_telop_entry, 0)
     END_INLINE_EVENT
     SET_VALUE(GSW_STORY_PROGRESS, STG0_03_TO_ROGUEPORT)
-    CALL(N_evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
+    CALL(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
     CALL(evt_mario_key_onoff, 1)
     SET_VALUE(LW(0), 0)
     CALL(evt_snd_bgm_scope, 0, 0)
@@ -4039,7 +4039,7 @@ EVT_BEGIN(gorotsuki_kikan)
             BREAK_LOOP
         END_IF
     END_LOOP
-    CALL(N_evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
+    CALL(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
     SET_VALUE(GSW_STORY_PROGRESS, STG5_59_ROGUEPORT_DOCK)
     BEGIN_INLINE_EVENT
         CALL(evt_npc_set_ry, STRING("水夫Ａ"), 270)
@@ -4198,7 +4198,7 @@ EVT_BEGIN(into_gor_ship)
     END_IF
     DELETE_EVENT(LW(9))
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
-    CALL(N_evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
+    CALL(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
     CALL(evt_mario_key_onoff, 1)
     RETURN
 EVT_END()
@@ -5841,7 +5841,7 @@ EVT_BEGIN(return_gorotsuki_town)
     WAIT_MS(500)
     CALL(evt_msg_print, 0, STRING("mac_8_02"), 0, STRING("party"))
     SET_VALUE(GSW_STORY_PROGRESS, STG9_02_RETURN_TO_ROGUEPORT)
-    CALL(N_evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
+    CALL(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
     CALL(evt_party_run, 0)
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_snd_bgm_scope, 0, 0)

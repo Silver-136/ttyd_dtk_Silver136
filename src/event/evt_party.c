@@ -944,7 +944,8 @@ extern void cloudLockAnimationsOn(PartyEntry* party);
 extern void cloudLockAnimationsOff(PartyEntry* party);
 
 // US only.
-USER_FUNC(N_evt_party_cloud_lock_animations_on_off) {
+// Descriptive name (not in the symbol maps).
+USER_FUNC(evt_party_cloud_lock_animations_on_off) {
     PartyEntry* p;
     EvtWord* args = event->args;
     p = GETPARTY(args);
