@@ -89,7 +89,7 @@ s32 evt_get_yoshi_frm(void) {
     return evt_yoshi_frm;
 }
 
-void sweatEntry(PartyEntry* party, void* hit) {
+void L_sweatEntry(PartyEntry* party, void* hit) {
     party->hitobjStandOn = hit;
     if (yoshiGetStatus() == 1 && !(party->playerPtr->flags & (MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING | MARIO_FLAG_IS_STEPPING | MARIO_FLAG_HAS_INPUT_JUMP))) {
         party->playerPtr->hitobjStandOn = hit;
@@ -276,7 +276,7 @@ void yoshi_damageToge(PartyEntry* party) {
     MarioWork* mario = marioGetPtr();
     PartyEntry* extra;
 
-    sweatEntry(party, NULL);
+    L_sweatEntry(party, NULL);
     marioChgMot(MARIO_MOTION_DAMAGE_TOGE);
     party->useMotionId = 10;
     partyChgPose(party, "PYS_S_2");
@@ -687,7 +687,7 @@ void yoshi_use(PartyEntry* party) {
                         return;
                     }
                 }
-                sweatEntry(party, NULL);
+                L_sweatEntry(party, NULL);
                 mario->mot.yoshi.baseY = party->groundY;
                 party->position.y = party->groundY + mario->mot.yoshi.bobOfs;
             }
@@ -772,7 +772,7 @@ void yoshi_use(PartyEntry* party) {
             mario->airTimer = 0;
             mario->jumpPeakAirTime = 0;
             party->hitobjJumpFrom = party->hitobjStandOn;
-            sweatEntry(party, NULL);
+            L_sweatEntry(party, NULL);
             mario->hitobjStandOn = NULL;
             mario->lastGroundPos = mario->position;
             jumpheight = 100.0f;
@@ -1094,7 +1094,7 @@ void searchGround(PartyEntry* party) {
             }
             pos = party->position;
             marioSetSplash(0, &pos);
-            sweatEntry(party, NULL);
+            L_sweatEntry(party, NULL);
             fall(party);
             party->position.y += party->gravity;
             set_damage_root_ypos(mario->position.y - 8.0f);
@@ -1140,7 +1140,7 @@ void searchGround(PartyEntry* party) {
             }
         }
     }
-    sweatEntry(party, hit);
+    L_sweatEntry(party, hit);
     if (hit == NULL) {
         party->flags &= ~PARTY_FLAG_IS_GROUNDED;
         fall(party);
@@ -1171,14 +1171,14 @@ void searchGround2(PartyEntry* party) {
         hit = partySearchGround(party, 11.0f, 0.0f);
     }
     if (hit == NULL) {
-        sweatEntry(party, hit);
+        L_sweatEntry(party, hit);
         return;
     }
     attr = hitGetAttr(hit);
     if (attr & HIT_ATTR_WATER_HAZARD) {
         Vec pos = party->position;
         marioSetSplash(0, &pos);
-        sweatEntry(party, NULL);
+        L_sweatEntry(party, NULL);
         party->gravity = -0.4f;
         party->work.common.accelY = -0.4f;
         party->work.yoshi.gravityAccel = 0.0f;

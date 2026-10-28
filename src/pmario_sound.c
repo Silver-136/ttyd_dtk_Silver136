@@ -5322,7 +5322,7 @@ void psndSFXAllOff(void) {
     }
 }
 
-void psndBGM_stop(void) {
+void L_psndBGM_stop(void) {
     PaperSoundEffect* sfx;
     int i;
 

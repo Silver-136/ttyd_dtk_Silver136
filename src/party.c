@@ -1631,7 +1631,7 @@ void allPartyForceRideOn(void) {
 }
 #pragma dont_inline reset
 
-void allPartyRideOn(void) {
+void L_allPartyRideOn(void) {
     PartyEntry* party = partyGetPtr(marioGetPartyId());
     if (party) {
         partyChgRunMode(party, 11);
