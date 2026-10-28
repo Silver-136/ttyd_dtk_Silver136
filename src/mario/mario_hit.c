@@ -1048,6 +1048,7 @@ HitEntry* marioLandonChk_old(f32* outY, f32 spd) {
             dx = ox;
             dz = oz;
         } else if (i == 2) {
+            // Probe 2 uses (-oz, oz), reusing the z offset; the head/floor search rings use (-z, x) here.
             dx = noz;
             dz = oz;
         } else if (i == 3) {

@@ -318,6 +318,7 @@ static void actionCommandDisp(f32 x, f32 y) {
         }
     }
 
+    // No default: a, b, c and d are set only for params[0] 0..3, although the main function accepts other values.
     switch (ac->params[0]) {
         case 0:
             a = ICON_TRIGGER_L_PRESSED;

@@ -548,6 +548,7 @@ s32 collisionCurve(s32 mode, void* curve, Vec pos, CamRoadHit* hit) {
             }
             qx = st * dx + lx0;
             qz = st * dz + lz0;
+            // s is assigned only when dx or dz is nonzero; a segment with dx = dz = 0 leaves it unset (or from the previous pass).
             if (__fabs(dx) > __fabs(dz)) {
                 s = (qx - lx0) / dx;
                 ok = (s < -0.0000001 || s > 1.0000001);

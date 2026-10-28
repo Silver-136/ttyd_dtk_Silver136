@@ -490,6 +490,7 @@ void effReleaseDisp(CameraId cameraId, EffectEntry* effect) {
             effSetVtxDescN64(size16x16_tex128x128_vtx);
             GXBegin(GX_TRIANGLES, GX_VTXFMT0, 6);
             tri2(0, 1, 2, 0, 0, 2, 3, 0);
+            // case 2 has no break: it also draws the case 3 quads.
         case 3:
             effGetTexObjN64(0x47, &texObj);
             GXLoadTexObj(&texObj, GX_TEXMAP0);

@@ -173,6 +173,7 @@ void winPartyInit(WindowWork* wp) {
         }
     }
 
+    // winPartyDt has 7 rows: a party id that is not in it makes this search read an 8th.
     for (i = 0; i < 8; i++) {
         if (wp->party.partyIds[wp->party.cursor] == winPartyDt[i].partyId) {
             wp->party.dtIdx = i;
@@ -266,6 +267,7 @@ s32 winPartyMain(WindowWork* wp) {
                 if (prev != wp->party.cursor) {
                     psndSFXOn(SFX_NAME_WORD(PSND_SFX_BTL_CURSOR_MOVE1 | PSND_SFX_BYPASS_MUTE));
                 }
+                // winPartyDt has 7 rows: a party id that is not in it makes this search read an 8th.
                 for (i = 0; i < 8; i++) {
                     if (wp->party.partyIds[wp->party.cursor] == winPartyDt[i].partyId) {
                         wp->party.dtIdx = i;
@@ -285,6 +287,7 @@ s32 winPartyMain(WindowWork* wp) {
                 if (prev != wp->party.cursor) {
                     psndSFXOn(SFX_NAME_WORD(PSND_SFX_BTL_CURSOR_MOVE1 | PSND_SFX_BYPASS_MUTE));
                 }
+                // winPartyDt has 7 rows: a party id that is not in it makes this search read an 8th.
                 for (i = 0; i < 8; i++) {
                     if (wp->party.partyIds[wp->party.cursor] == winPartyDt[i].partyId) {
                         wp->party.dtIdx = i;
