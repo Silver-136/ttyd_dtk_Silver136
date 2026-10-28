@@ -28,7 +28,7 @@
 #include "party/party_vivian.h"
 
 s32 partyMoveMain(PartyEntry* party, s32 hosei);
-f32 partyUpdMoveSpd(PartyEntry* party, f32 spd);
+f32 partyUpdMoveSpd(PartyEntry* party);
 extern void party_set_behind_dir(PartyEntry* party);
 static void flyMain(PartyEntry* party);
 
@@ -562,7 +562,7 @@ f32 partyForceSetSpd(PartyEntry* party, f32 spd) {
 }
 
 // Descriptive name (not in the symbol maps); placeholder unk_800c92c4, JP 0x800C92C4. See docs/NAME_PROVENANCE.md.
-f32 partyUpdMoveSpd(PartyEntry* party, f32 spd) {
+f32 partyUpdMoveSpd(PartyEntry* party) {
     if (party->forceMoveFrames != 0 || party->motionId == 2 || party->motionId == 3 || party->motionId == 6) {
         return party->moveSpeed;
     }

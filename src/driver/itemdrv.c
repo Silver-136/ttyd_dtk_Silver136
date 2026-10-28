@@ -435,7 +435,7 @@ void itemMain(void) {
     }
 }
 
-void itemModeChange(ItemEntry* entry, s32 mode) {
+void itemModeChange(ItemEntry* entry, u16 mode) {
     entry->mode = mode;
     entry->subState = 0;
 }

@@ -1,3 +1,4 @@
+#include "party/party_move.h"
 #include "driver/itemdrv.h"
 #include "driver/mobjdrv.h"
 #include "evt/evt_cmd.h"
@@ -27,7 +28,7 @@ typedef struct ChuchuTreasure {
 } ChuchuTreasure;
 
 extern void partyWalkInit(PartyEntry* party, s32 mode);
-extern void partyUpdMoveSpd(PartyEntry* party);
+
 
 
 char* mobj_list[] = {

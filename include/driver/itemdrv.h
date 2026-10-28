@@ -134,7 +134,7 @@ void itemPickUp(ItemEntry* entry);
 
 void itemDelete(const char* name);
 void itemFlagOn(ItemEntry* entry, u16 flags);
-void itemModeChange(ItemEntry* entry, s32 mode);
+void itemModeChange(ItemEntry* entry, u16 mode);
 BOOL itemPickUpFromFieldCheck(void);
 u16 itemFlag(ItemEntry* entry, u16 flags);
 void itemFlagOff(ItemEntry* entry, u16 flags);

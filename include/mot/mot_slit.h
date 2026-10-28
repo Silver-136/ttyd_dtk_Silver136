@@ -1,3 +1,4 @@
+#include <dolphin/mtx.h>
 #include "dolphin/types.h"
 
 BOOL marioSlitAbilityChk(void);
@@ -21,3 +22,5 @@ void motSlitCancel3(void);
 void mot_slit(void);
 void mot_slit_post(void);
 BOOL marioSlitContinueChk(void);
+
+BOOL marioGetSlitFloorPos(Vec* pos);

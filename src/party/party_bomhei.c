@@ -22,6 +22,7 @@
 #include "evt/evt_cmd.h"
 #include <dolphin/pad.h>
 #include "sfx_name_word.h"
+#include "evt/evt_cam.h"
 
 #ifdef VERSION_G8ME01
 // US has no local duplicate: this is the global bomhei_init
@@ -32,7 +33,6 @@
 
 
 
-extern s32 evt_cam_shake(void* evt, BOOL isFirstCall);
 
 s32 m_w_7_sync[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 9, 9, 8, 7, 5, 3, 1, 0, 0, 0, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 9, 8, 6, 4, 3, 2, 1, 0, 0, 0, 0, 0};
 

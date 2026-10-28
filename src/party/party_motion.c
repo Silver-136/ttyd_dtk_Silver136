@@ -1,3 +1,4 @@
+#include "mot/mot_slit.h"
 #include "evt/evt_cmd.h"
 #include "manager/evtmgr.h"
 #include "manager/evtmgr_cmd.h"
@@ -770,7 +771,7 @@ void partyFlyAdjustY(PartyEntry* party) {
     }
 }
 
-s32 marioGetSlitFloorPos(Vec* pos);
+
 
 void partyGetReadId2(s32 id, Vec* pos);
 void L_getTargetPos(s32 id, Vec* pos);

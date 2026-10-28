@@ -1,3 +1,4 @@
+#include "party/party_move.h"
 #include "mario/mario.h"
 #include "mario/mario_party.h"
 #include "driver/itemdrv.h"
@@ -18,7 +19,7 @@
 #include "party/party_hit.h"
 #include "eff/eff_kemutest.h"
 
-extern void partyUpdMoveSpd(PartyEntry* party);
+
 extern void partyWalkInit(PartyEntry* party, s32 mode);
 
 static s32 nokoSe;

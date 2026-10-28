@@ -140,7 +140,7 @@ USER_FUNC(evt_item_change_mode) {
     s32 mode = evtGetValue(event, args[1]);
     ItemEntry* item = itemNameToPtr(name);
     if (item == NULL) return EVT_RETURN_DONE;
-    itemModeChange(item, (u16)mode);
+    itemModeChange(item, mode);
     return EVT_RETURN_DONE;
 }
 
