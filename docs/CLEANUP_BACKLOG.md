@@ -58,6 +58,11 @@ data order 10, sound-name integer round trips (`SFX_NAME_WORD`) 9, no-op casts 6
 
 ## 3. Names
 
+- Descriptive function names (user, 2026-10-27): each of the 151 functions whose name is not in the symbol maps
+  (docs/NAME_PROVENANCE.md, kind `function`) gets a comment at its definition saying the name is descriptive and
+  giving the placeholder it replaced and its JP address (e.g. `unk_8013be14`, JP 0x8013BE14), so readers can search
+  by the names other projects use. Mechanical from NAME_PROVENANCE.md; comment only. First done by hand:
+  marioUsePartyMain (268027141).
 - Battle unit / part work slots (suggested by jdaster64): named in every unit script (file-local UNIT_WORK_* /
   PARTS_WORK_*), with shared names in include/battle/unit_work.h (C-read slots, the sisters' line, Barriern
   satellites, Bobbery's bomb, Mario, the lecture units, Vivian's Veil) and family headers
