@@ -27,7 +27,7 @@ typedef struct BattleStageObject {
     Vec prevPositionOffset2; //0x58
     BattleStageObjectData* data; //0x64
     u32 mFlags; //0x68
-    u32 mBattleUnitIdx; //0x6C
+    s32 mBattleUnitIdx; //0x6C
     u8 mNumFramesToStartFalling; //0x70
     u8 mNumFramesFalling; //0x71
     u8 reserved_72; //0x72, only set to 0

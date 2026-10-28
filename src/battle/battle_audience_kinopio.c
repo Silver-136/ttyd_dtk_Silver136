@@ -871,7 +871,7 @@ void BattleAudienceCtrlProcessKinopioTransEvt(s32 index, s32 front) {
             parts = BattleGetUnitPartsPtr(BtlUnit_GetUnitId(unit), BtlUnit_GetBodyPartsId(unit));
             BtlUnit_GetStatus(unit, STATUS_INVISIBLE, &st1, &st0);
             if (st1 < 1 && !BtlUnit_CheckShadowGuard(unit)) {
-                BattleCheckDamage(BattleGetSystemPtr(bw), unit, (struct BattleWorkUnitPart*)parts,
+                BattleCheckDamage(BattleGetSystemPtr(bw), unit, parts,
                                   &weapon_teresa_trans, DAMAGE_RESULT_FINAL_HIT);
                 BtlUnit_snd_se(unit, "SFX_AUDIENCE_TELESA_INVISIBLE1", EVT_NULLPTR, 0);
             }

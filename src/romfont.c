@@ -327,7 +327,7 @@ void romFontMake(void) {
         }
         OSGetFontTexel(c, glyph, 0, 6, &width);
         glyph->code = uniqueChars[i];
-        glyph->width = (s16)width;
+        glyph->width = width;
         glyph++;
     }
 

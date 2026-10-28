@@ -204,7 +204,7 @@ s32 _damage(EventEntry* event, BOOL isFirstCall) {
     evtGetValue(event, args[0]);
     aud = BattleAudienceBaseGetPtr();
     BattleActionCommandResetDefenceResult();
-    BattleCheckDamage(BattleGetSystemPtr(wp), unit, (struct BattleWorkUnitPart*)part, &aud->presentWeapon, DAMAGE_RESULT_FINAL_HIT);
+    BattleCheckDamage(BattleGetSystemPtr(wp), unit, part, &aud->presentWeapon, DAMAGE_RESULT_FINAL_HIT);
     return EVT_RETURN_DONE;
 }
 

@@ -70,7 +70,7 @@ void effScanningMain(EffectEntry* effect) {
             }
             break;
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effScanningDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), 2, effScanningDisp, effect);
 }
 
 void effScanningDisp(CameraId camId, void* param) {
