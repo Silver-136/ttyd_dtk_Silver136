@@ -230,7 +230,7 @@ static EVT_BEGIN(evt_first)
         CALL(party_reset)
         CALL(evt_party_jump_pos, 0, LW(0), 0, LW(2), 500, 0, -1000)
         DEBUG_PUT_MSG(STRING("ビビアンしっぽ有効"))
-        CALL(L_evt_party_vivian_tail, 0, 1)
+        CALL(evt_party_vivian_tail, 0, 1)
     END_INLINE_EVENT
     WAIT_MS(500)
     LOOP(3)

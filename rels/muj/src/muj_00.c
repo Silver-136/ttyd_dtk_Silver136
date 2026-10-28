@@ -1041,7 +1041,7 @@ EVT_BEGIN(koburon_init)
 EVT_END()
 
 EVT_BEGIN(koburon_regp)
-    CALL(L_evt_mario_keyon_wait)
+    CALL(evt_mario_keyon_wait)
     LABEL(0)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_npc_get_position, STRING("me"), LW(3), LW(4), LW(5))

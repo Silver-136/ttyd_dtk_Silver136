@@ -2082,7 +2082,7 @@ HITOBJ(front, hitobjFront)
 
 HITOBJ(push, hitobjPush)
 
-USER_FUNC(L_evt_mario_keyon_wait) {
+USER_FUNC(evt_mario_keyon_wait) {
     marioGetPtr();
     return marioKeyOffChk() ? EVT_RETURN_BLOCK : EVT_RETURN_DONE;
 }

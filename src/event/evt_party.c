@@ -735,7 +735,7 @@ USER_FUNC(evt_party_vivian_unhold) {
     return vivianGetStatus() == 0 ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
 }
 
-USER_FUNC(L_evt_party_vivian_tail) {
+USER_FUNC(evt_party_vivian_tail) {
     PartyEntry* p;
     EvtWord* args = event->args;
     p = GETPARTY(args);

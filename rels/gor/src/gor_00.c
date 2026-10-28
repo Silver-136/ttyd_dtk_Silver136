@@ -74,8 +74,8 @@ static inline f32 fid(f32 x) { return x; }
 void gundan1000tai_seq01(NanNPC* npc);
 void gundan1000tai_seq00(NanNPC* npc);
 
-USER_FUNC(L_evt_pouch_get_hp);
-USER_FUNC(L_evt_pouch_set_hp);
+USER_FUNC(evt_pouch_get_hp);
+USER_FUNC(evt_pouch_set_hp);
 static USER_FUNC(alpha_init_func);
 static USER_FUNC(alpha_set_func);
 static USER_FUNC(cam_kaiten_get_para);
@@ -2481,9 +2481,9 @@ EVT_BEGIN(gundan1000tai_beforebattle)
     END_INLINE_EVENT
     ADD(LW(10), 50)
     CALL(evt_npc_move_position, STRING("第三勢力幹部"), LW(10), LW(12), 0, FLOAT(180.0f), 0)
-    CALL(L_evt_pouch_get_hp, LW(0))
+    CALL(evt_pouch_get_hp, LW(0))
     IF_INT_LESS(LW(0), 5)
-        CALL(L_evt_pouch_set_hp, 5)
+        CALL(evt_pouch_set_hp, 5)
     END_IF
     CALL(evt_npc_set_battle_info, STRING("第三勢力幹部"), 2)
     CALL(evt_npc_battle_start, STRING("第三勢力幹部"))

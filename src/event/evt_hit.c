@@ -88,7 +88,7 @@ USER_FUNC(evt_hit_get_position) {
     return EVT_RETURN_DONE;
 }
 
-USER_FUNC(L_evt_hitobj_flag_onoff) {
+USER_FUNC(evt_hitobj_flag_onoff) {
     EvtWord* args = event->args;
     s32 isGroup = evtGetValue(event, args[0]);
     s32 on = evtGetValue(event, args[1]);

@@ -27,7 +27,7 @@ USER_FUNC(evt_mario_wait_landon);
 USER_FUNC(evt_mario_wait_move_end);
 
 extern const char* a_mario_group[];
-USER_FUNC(L_evt_mario_keyon_wait);
+USER_FUNC(evt_mario_keyon_wait);
 USER_FUNC(N_evt_mario_party_door_halve_hitbox);
 USER_FUNC(evt_koopa_chk_dead);
 USER_FUNC(evt_koopa_fire);

@@ -73,7 +73,7 @@ s32 calcPose(s32 i, s32 lo, s32 hi, s32 flag);
 void kpaSen_ext_disp(CameraId camera, void* param);
 void kpaSen_ext_shadow_disp(CameraId camera, void* param);
 
-USER_FUNC(L_evt_hitobj_flag_onoff);
+USER_FUNC(evt_hitobj_flag_onoff);
 USER_FUNC(N_evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos);
 static USER_FUNC(anim_tevcallback);
 USER_FUNC(bakuhatu_kemuri);
@@ -3664,24 +3664,24 @@ EVT_BEGIN(usu_00_init_evt)
         CALL_CHILD(PTR(bero_case_switch_off))
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("bero"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_attr_onoff, 1, 0, STRING("e_bero"), 8388612)
-        CALL(L_evt_hitobj_flag_onoff, 1, 1, STRING("A_kusa_02"), 1)
-        CALL(L_evt_hitobj_flag_onoff, 1, 1, STRING("A_kusa_03"), 1)
-        CALL(L_evt_hitobj_flag_onoff, 1, 1, STRING("A_kusa_04"), 1)
-        CALL(L_evt_hitobj_flag_onoff, 1, 1, STRING("A_kusa_06"), 1)
-        CALL(L_evt_hitobj_flag_onoff, 1, 1, STRING("A_kusa_07"), 1)
-        CALL(L_evt_hitobj_flag_onoff, 1, 1, STRING("A_kusa_08"), 1)
-        CALL(L_evt_hitobj_flag_onoff, 1, 1, STRING("A_kusa_09"), 1)
-        CALL(L_evt_hitobj_flag_onoff, 1, 1, STRING("A_kusa_10"), 1)
-        CALL(L_evt_hitobj_flag_onoff, 1, 1, STRING("A_kusa_11"), 1)
-        CALL(L_evt_hitobj_flag_onoff, 1, 1, STRING("A_kusa_12"), 1)
-        CALL(L_evt_hitobj_flag_onoff, 1, 1, STRING("A_kusa_13"), 1)
-        CALL(L_evt_hitobj_flag_onoff, 1, 1, STRING("A_kusa_14"), 1)
-        CALL(L_evt_hitobj_flag_onoff, 1, 1, STRING("A_kusa_15"), 1)
-        CALL(L_evt_hitobj_flag_onoff, 1, 1, STRING("A_kusa_16"), 1)
-        CALL(L_evt_hitobj_flag_onoff, 1, 1, STRING("A_kusa_17"), 1)
-        CALL(L_evt_hitobj_flag_onoff, 1, 1, STRING("A_kusa_18"), 1)
-        CALL(L_evt_hitobj_flag_onoff, 1, 1, STRING("A_kusa_19"), 1)
-        CALL(L_evt_hitobj_flag_onoff, 1, 1, STRING("A_kusa_20"), 1)
+        CALL(evt_hitobj_flag_onoff, 1, 1, STRING("A_kusa_02"), 1)
+        CALL(evt_hitobj_flag_onoff, 1, 1, STRING("A_kusa_03"), 1)
+        CALL(evt_hitobj_flag_onoff, 1, 1, STRING("A_kusa_04"), 1)
+        CALL(evt_hitobj_flag_onoff, 1, 1, STRING("A_kusa_06"), 1)
+        CALL(evt_hitobj_flag_onoff, 1, 1, STRING("A_kusa_07"), 1)
+        CALL(evt_hitobj_flag_onoff, 1, 1, STRING("A_kusa_08"), 1)
+        CALL(evt_hitobj_flag_onoff, 1, 1, STRING("A_kusa_09"), 1)
+        CALL(evt_hitobj_flag_onoff, 1, 1, STRING("A_kusa_10"), 1)
+        CALL(evt_hitobj_flag_onoff, 1, 1, STRING("A_kusa_11"), 1)
+        CALL(evt_hitobj_flag_onoff, 1, 1, STRING("A_kusa_12"), 1)
+        CALL(evt_hitobj_flag_onoff, 1, 1, STRING("A_kusa_13"), 1)
+        CALL(evt_hitobj_flag_onoff, 1, 1, STRING("A_kusa_14"), 1)
+        CALL(evt_hitobj_flag_onoff, 1, 1, STRING("A_kusa_15"), 1)
+        CALL(evt_hitobj_flag_onoff, 1, 1, STRING("A_kusa_16"), 1)
+        CALL(evt_hitobj_flag_onoff, 1, 1, STRING("A_kusa_17"), 1)
+        CALL(evt_hitobj_flag_onoff, 1, 1, STRING("A_kusa_18"), 1)
+        CALL(evt_hitobj_flag_onoff, 1, 1, STRING("A_kusa_19"), 1)
+        CALL(evt_hitobj_flag_onoff, 1, 1, STRING("A_kusa_20"), 1)
     END_IF
     IF_INT_EQUAL(GF(1), 0)
         CALL(evt_mobj_save_blk, STRING("mobj_save"), 365, 60, -50, 0, 0)
