@@ -142,7 +142,7 @@ static USER_FUNC(star_stone_appear) {
     return 2;
 }
 
-s32 wait_star_stone_up(void) {
+USER_FUNC(wait_star_stone_up) {
     return GetZubaStarPtr()->stone_state == 4 ? 2 : 0;
 }
 
@@ -860,12 +860,12 @@ USER_FUNC(zubastar_bomb) {
     return 0;
 }
 
-s32 zubastar_init(void) {
+USER_FUNC(zubastar_init) {
     memset(GetZubaStarPtr(), 0, sizeof(ZubaStarWork));
     return 2;
 }
 
-s32 zubastar_end(void) {
+USER_FUNC(zubastar_end) {
     ZubaStarWork* w = GetZubaStarPtr();
     s32 i;
     effDelete(((EffStarStoneWork*)w->eff->userdata)->dust);

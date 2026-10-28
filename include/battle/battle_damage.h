@@ -116,7 +116,7 @@ typedef struct CounterWork {
     u32 hitEvent;       // 0x2C, hit event run on the target (BattleRunHitEvent)
 } CounterWork;
 
-s32 BattleCheckDamage(struct BattleUnit* unit1, struct BattleUnit* unit2, struct BattleWorkUnitPart* part, struct BattleWeapon* weapon, s32 flags);
+s32 BattleCheckDamage(struct BattleUnit* unit1, struct BattleUnit* unit2, struct BattleWorkUnitPart* part, struct BattleWeapon* weapon, u32 flags);
 void BattleAttackDeclare(s32* unitIdx, s32* partIdx);
 void BattleInitCounterPreCheckWork(CounterWork* work);
 s32 BattleCheckCounter(CounterWork* work, struct BattleUnit* attacker, struct BattleUnit* target,

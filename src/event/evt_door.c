@@ -33,11 +33,11 @@ double atan(double);
 typedef struct HouseData {
     s32 type;               // 0x0
     const char* hit[4];     // 0x4, hit object names
-    s32 anim[4];            // 0x14
-    s32 outside;            // 0x24
-    s32 door;               // 0x28
-    s32 inside[2];          // 0x2C
-    s32 initInside[2];      // 0x34
+    const char* anim[4];            // 0x14
+    const char* outside;            // 0x24
+    const char* door;               // 0x28
+    const char* inside[2];          // 0x2C
+    const char* initInside[2];      // 0x34
     const char** npcs;      // 0x3C
     const char** noclip;    // 0x40
     const char** mobjs;     // 0x44
@@ -1340,40 +1340,40 @@ USER_FUNC(in_pos) {
 USER_FUNC(outside_group) {
     EvtWord* args = event->args;
     HouseWork* w = (HouseWork*)evtGetValue(event, args[0]);
-    evtSetValue(event, args[1], w->data->outside);
+    evtSetValue(event, args[1], (EvtWord)w->data->outside);
     return EVT_RETURN_DONE;
 }
 
 USER_FUNC(door_group) {
     EvtWord* args = event->args;
     HouseWork* w = (HouseWork*)evtGetValue(event, args[0]);
-    evtSetValue(event, args[1], w->data->door);
+    evtSetValue(event, args[1], (EvtWord)w->data->door);
     return EVT_RETURN_DONE;
 }
 
 USER_FUNC(inside_group) {
     EvtWord* args = event->args;
     HouseWork* w = (HouseWork*)evtGetValue(event, args[0]);
-    evtSetValue(event, args[1], w->data->inside[0]);
-    evtSetValue(event, args[2], w->data->inside[1]);
+    evtSetValue(event, args[1], (EvtWord)w->data->inside[0]);
+    evtSetValue(event, args[2], (EvtWord)w->data->inside[1]);
     return EVT_RETURN_DONE;
 }
 
 USER_FUNC(init_inside_group) {
     EvtWord* args = event->args;
     HouseWork* w = (HouseWork*)evtGetValue(event, args[0]);
-    evtSetValue(event, args[1], w->data->initInside[0]);
-    evtSetValue(event, args[2], w->data->initInside[1]);
+    evtSetValue(event, args[1], (EvtWord)w->data->initInside[0]);
+    evtSetValue(event, args[2], (EvtWord)w->data->initInside[1]);
     return EVT_RETURN_DONE;
 }
 
 USER_FUNC(animation) {
     EvtWord* args = event->args;
     HouseWork* w = (HouseWork*)evtGetValue(event, args[0]);
-    evtSetValue(event, args[1], w->data->anim[0]);
-    evtSetValue(event, args[2], w->data->anim[1]);
-    evtSetValue(event, args[3], w->data->anim[2]);
-    evtSetValue(event, args[4], w->data->anim[3]);
+    evtSetValue(event, args[1], (EvtWord)w->data->anim[0]);
+    evtSetValue(event, args[2], (EvtWord)w->data->anim[1]);
+    evtSetValue(event, args[3], (EvtWord)w->data->anim[2]);
+    evtSetValue(event, args[4], (EvtWord)w->data->anim[3]);
     return EVT_RETURN_DONE;
 }
 

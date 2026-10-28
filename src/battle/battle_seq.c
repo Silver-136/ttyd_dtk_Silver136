@@ -493,7 +493,7 @@ void btlseqFirstAct(BattleWork* wp) {
             if (BattleAudience_CheckReaction()) {
                 break;
             }
-            if (!BattleCheckConcluded(wp) && (u8)BattleBreakSlot_CheckReaction()) {
+            if (!BattleCheckConcluded(wp) && BattleBreakSlot_CheckReaction()) {
                 break;
             }
             BattleIncSeq(wp, SEQ_FIRST_ACT);
@@ -2279,7 +2279,7 @@ void btlseqAct(BattleWork* wp) {
             if (BattleAudience_CheckReaction()) {
                 break;
             }
-            if (!BattleCheckConcluded(wp) && (u8)BattleBreakSlot_CheckReaction()) {
+            if (!BattleCheckConcluded(wp) && BattleBreakSlot_CheckReaction()) {
                 break;
             }
             BattleIncSeq(wp, SEQ_ACT);

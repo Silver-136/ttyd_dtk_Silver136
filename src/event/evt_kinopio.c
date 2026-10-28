@@ -44,9 +44,9 @@ typedef struct KinopioWork {
     f32 bedDeg;        // 0x44
     Vec npcTalk;       // 0x48
     char* npcName;     // 0x54
-    s32 msg[14];       // 0x58
-    s32 toBedEvt;      // 0x90
-    s32 fromBedEvt;    // 0x94
+    const char* msg[14];       // 0x58
+    EvtWord* toBedEvt;      // 0x90
+    EvtWord* fromBedEvt;    // 0x94
 } KinopioWork;
 
 //.sbss
@@ -69,7 +69,7 @@ USER_FUNC(evt_kinopio_setup) {
 USER_FUNC(msg_no) {
     EvtWord* args = event->args;
     s32 idx = evtGetValue(event, args[0]);
-    evtSetValue(event, args[1], (*wp)->msg[idx]);
+    evtSetValue(event, args[1], (EvtWord)(*wp)->msg[idx]);
     return EVT_RETURN_DONE;
 }
 
@@ -154,12 +154,12 @@ USER_FUNC(get_cam) {
 }
 
 USER_FUNC(get_to_bed_evt) {
-    evtSetValue(event, event->args[0], (*wp)->toBedEvt);
+    evtSetValue(event, event->args[0], (EvtWord)(*wp)->toBedEvt);
     return EVT_RETURN_DONE;
 }
 
 USER_FUNC(get_from_bed_evt) {
-    evtSetValue(event, event->args[0], (*wp)->fromBedEvt);
+    evtSetValue(event, event->args[0], (EvtWord)(*wp)->fromBedEvt);
     return EVT_RETURN_DONE;
 }
 

@@ -137,7 +137,7 @@ typedef struct BattleActions {
     u32 seId;                        // 0x288, power gauge SFX id (battle_ac.c)
     f32 seValue;                     // 0x28C, power gauge SFX value
     BattleACDispParams disp;         // 0x290, gauge display parameters
-    u8 work[0x30C - 0x2BC];          // 0x2BC, per-command work (each ac_*.c casts it to its own struct)
+    u8 work[0xA8C - 0x2BC];          // 0x2BC, per-command work (each ac_*.c casts it to its own struct)
 } BattleActions;
 
 void BattleActionCommandManagerInit(BattleWork* wp);

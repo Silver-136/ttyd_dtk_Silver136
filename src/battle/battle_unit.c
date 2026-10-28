@@ -2124,7 +2124,7 @@ void BtlUnit_HpGaugeMain(BattleUnit* unit) {
     }
 }
 
-BOOL BtlUnit_EnemyItemCanUseCheck(s32 item) {
+s32 BtlUnit_EnemyItemCanUseCheck(s32 item) {
     s32* table = _enemy_can_use_item_table;
 
     if (item >= BADGE_MIN && item < BADGE_MAX) {

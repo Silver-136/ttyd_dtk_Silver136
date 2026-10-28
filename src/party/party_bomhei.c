@@ -1,3 +1,4 @@
+#include "driver/casedrv.h"
 #include "dolphin/types.h"
 #include "mario/mario.h"
 #include "mario/mario_party.h"
@@ -29,7 +30,7 @@
 
 
 
-extern u8* caseCheckHitObj2(void* hit);
+
 
 extern s32 evt_cam_shake(void* evt, BOOL isFirstCall);
 
@@ -46,7 +47,7 @@ static EVT_BEGIN(quake_evt)
 EVT_END()
 
 static inline BOOL isBombRock(HitEntry* hit) {
-    u8* c;
+    CaseEntry* c;
     if (hit == NULL) {
         return FALSE;
     }
@@ -56,7 +57,7 @@ static inline BOOL isBombRock(HitEntry* hit) {
         }
     } else {
         c = caseCheckHitObj2(hit);
-        if (c != NULL && *(s32*)(c + 4) == 15) {
+        if (c != NULL && c->conditionId == CASE_BOBBERY) {
             return TRUE;
         }
     }

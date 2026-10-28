@@ -142,7 +142,7 @@ typedef struct BattleWeapon {
     u8 pad_06[0x8 - 0x6];             // 0x6, always 0, never accessed
     s32 itemId;                       // 0x8
     const char* description;          // 0xC
-    s8 baseAccuracy;                  // 0x10
+    u8 baseAccuracy;                  // 0x10
     s8 baseFpCost;                    // 0x11
     s8 baseSpCost;                    // 0x12
     u8 superguardsAllowed;            // 0x13

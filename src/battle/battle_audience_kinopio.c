@@ -1,4 +1,5 @@
 #include "battle/battle_audience.h"
+#include "battle/battle_audience.h"
 #include "battle/battle.h"
 #include "pmario_sound.h"
 #include "system.h"
@@ -23,7 +24,7 @@
 
 double sqrt(double);
 double __fabs(double);
-u8 BattleAudience_GetEscapeChangeOK(s32 index);
+
 
 void BattleAudienceCtrlProcessKinopioWait(s32 index, s32 front);
 void BattleAudienceCtrlProcessKinopioWaitHurimuki(s32 index, s32 front);
@@ -592,7 +593,7 @@ void BattleAudienceCtrlProcessKinopioDamage(s32 index, s32 front) {
         if (BattleAudience_GetAnimEnd(index) == 1) {
             m->baseScale.y = 1.0f;
             m->timer = 0;
-            if (BattleAudience_GetEscapeChangeOK(index) == 1) {
+            if ((u8)BattleAudience_GetEscapeChangeOK(index) == 1) {
                 BattleAudience_ChangeStatus(index, AUDIENCE_STATUS_ESCAPE);
                 psndSFXOn_3D("SFX_AUDIENCE_PANIC_SCREAM2", &m->position);
             } else {

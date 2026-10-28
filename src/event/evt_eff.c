@@ -914,7 +914,8 @@ USER_FUNC(evt_eff_fukidashi) {
     f32 angle = evtGetFloat(event, args[9]);
     s32 duration = evtGetValue(event, args[10]);
     EffectEntry* entry = NULL;
-    void* p;
+    NpcEntry* npc;
+    PartyEntry* party;
     f32 h;
 
     switch (mode) {
@@ -927,30 +928,30 @@ USER_FUNC(evt_eff_fukidashi) {
             }
             break;
         case FUKIDASHI_AT_NPC:
-            p = !strcmp(npcName, "me") ? (void*)event->ownerNPC : (void*)npcNameToPtr(npcName);
+            npc = !strcmp(npcName, "me") ? event->ownerNPC : npcNameToPtr(npcName);
             {
-                f32 yy = 2.0f * ((NpcEntry*)p)->height / 3.0f;
-                f32 ww = ((NpcEntry*)p)->height / 3.0f;
-                entry = effFukidashiEntry(type, number, (NpcEntry*)p, 0.0f, yy, 0.0f, ww, angle, duration);
+                f32 yy = 2.0f * npc->height / 3.0f;
+                f32 ww = npc->height / 3.0f;
+                entry = effFukidashiEntry(type, number, npc, 0.0f, yy, 0.0f, ww, angle, duration);
             }
             break;
         case FUKIDASHI_AT_POS:
             entry = effFukidashiEntry(type, number, NULL, x, y, z, w, angle, duration);
             break;
         case FUKIDASHI_AT_PARTNER:
-            p = partyGetPtr(marioGetPartyId());
-            if (p) {
+            party = partyGetPtr(marioGetPartyId());
+            if (party) {
 #ifdef VERSION_G8ME01
                 // US: the Flurrie bubble sits at a fixed height
                 {
-                    f32 yy = 2.0f * ((PartyEntry*)p)->height / 3.0f;
+                    f32 yy = 2.0f * party->height / 3.0f;
                     f32 ww;
-                    if (((PartyEntry*)p)->currentMemberId == PARTY_MEMBER_FLURRIE) {
+                    if (party->currentMemberId == PARTY_MEMBER_FLURRIE) {
                         yy = 30.0f;
                     }
-                    ww = ((PartyEntry*)p)->height / 3.0f;
+                    ww = party->height / 3.0f;
 #else
-                h = ((PartyEntry*)p)->height;
+                h = party->height;
                 {
                     f32 yy = 2.0f * h / 3.0f;
                     f32 ww = h / 3.0f;
@@ -960,9 +961,9 @@ USER_FUNC(evt_eff_fukidashi) {
             }
             break;
         case FUKIDASHI_AT_FOLLOWER:
-            p = partyGetPtr(marioGetExtraPartyId());
-            if (p) {
-                h = ((PartyEntry*)p)->height;
+            party = partyGetPtr(marioGetExtraPartyId());
+            if (party) {
+                h = party->height;
                 {
                     f32 yy = 2.0f * h / 3.0f;
                     f32 ww = h / 3.0f;

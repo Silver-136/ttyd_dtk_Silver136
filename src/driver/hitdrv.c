@@ -160,7 +160,7 @@ HitEntry* hitEntryMOBJ(MapFileJoint* joint, Mtx mtx) {
     return hitEntrySub(joint, NULL, mtx, TRUE, 0);
 }
 
-void mapCalcAnimMatrix(Mtx out, Mtx in, void* anim, void* joint);
+
 
 typedef struct HitAnimJointList {
     s32 count;

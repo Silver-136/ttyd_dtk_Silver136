@@ -936,7 +936,7 @@ void BattleBreakSlot_Start(void) {
     }
 }
 
-BOOL BattleBreakSlot_CheckReaction(void) {
+u8 BattleBreakSlot_CheckReaction(void) {
     BreakSlotWork* slot = BattleBreakSlotGetPtr();
 
     BattleBreakSlot_Start();

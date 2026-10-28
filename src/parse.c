@@ -42,7 +42,7 @@ BOOL parsePush(const char* tag) {
     s32 depth;
     depth = 0;
     state = 0;
-    p = (s8*)parse.ptr;
+    p = parse.ptr;
     i = parse.pos[parse.depth];
     end = parse.end[parse.depth];
     for (; i < end; i++) {
@@ -119,7 +119,7 @@ BOOL parseGet1Next(s32 type, void* data) {
     // FAKE: posStack is a spare copy of parse.pos; indexing parse.pos directly changes the object
     posStack = parse.pos;
     state = 0;
-    p = (s8*)parse.ptr;
+    p = parse.ptr;
     i = posStack[parse.depth];
     end = parse.end[parse.depth];
     posp = posStack + parse.depth;

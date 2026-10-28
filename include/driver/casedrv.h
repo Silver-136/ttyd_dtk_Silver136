@@ -66,3 +66,5 @@ void caseDelete(s32 caseId);
 CaseEntry* caseIdToPtr(s32 caseId);
 void caseMain(void);
 CaseEntry* caseCheckHitObj(void* obj); // Takes HitEntry
+
+CaseEntry* caseCheckHitObj2(void* obj);

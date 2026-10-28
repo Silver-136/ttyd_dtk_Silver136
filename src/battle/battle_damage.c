@@ -1477,7 +1477,7 @@ s32 BattlePreCheckDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPar
     if (BtlUnit_CheckStatus(target, STATUS_DODGY) && !BtlUnit_CheckStatus(target, STATUS_SLEEP) && !BtlUnit_CheckStatus(target, STATUS_STOP) && irand(100) >= 50) {
         return 6;
     }
-    n = (u8)weapon->baseAccuracy;
+    n = weapon->baseAccuracy;
     if (BtlUnit_CheckStatus(attacker, STATUS_DIZZY)) {
         n = n * 50 / 100;
     }
@@ -1513,7 +1513,7 @@ s32 _checkDamageCode_EmergencyRevival(BattleUnit* unit, u32* flags) {
     return 0;
 }
 
-s32 BattleCheckDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPart* part, BattleWeapon* weapon, s32 flags) {
+s32 BattleCheckDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPart* part, BattleWeapon* weapon, u32 flags) {
     BattleWork* wp = _battleWorkPointer;
     u32 pattern;
     s32 ret = -1;
@@ -1527,8 +1527,8 @@ s32 BattleCheckDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPart* 
     CounterWork* cwp;
     Vec pos;
     u32 result;
-    s32 code;
-    s32 code2;
+    u32 code;
+    u32 code2;
     u32 r1;
     u32 r2;
     u32 r3;
@@ -1583,7 +1583,7 @@ s32 BattleCheckDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPart* 
                 return -1;
         }
     }
-    BattleCheckCounter(cwp, attacker, target, part, weapon, (u32*)&flags);
+    BattleCheckCounter(cwp, attacker, target, part, weapon, &flags);
     while (cw.attackHits) {
         if (flags & DAMAGE_RESULT_FINAL_HIT) {
             if (part->counterAttributes & kCounterVolatileExplosive) {
@@ -1625,7 +1625,7 @@ s32 BattleCheckDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPart* 
                 flags |= DAMAGE_RESULT_GROUNDED;
             }
         }
-        BattleCheckPikkyoro(weapon, (u32*)&flags);
+        BattleCheckPikkyoro(weapon, &flags);
         damage = BattleCalculateDamage(attacker, target, part, weapon, &result, flags);
         fpDamage = BattleCalculateFpDamage(attacker, target, part, weapon, &result, flags);
         target->hpDamageCount++;
@@ -1659,7 +1659,7 @@ s32 BattleCheckDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPart* 
         if (((u32)flags & DAMAGE_RESULT_FINAL_HIT) && (status & STATUS_RESULT_INSTANT_KILL)) {
             code = DAMAGE_RESULT_DEATH | DAMAGE_RESULT_ZERO_HP | DAMAGE_RESULT_FINAL_HIT | DAMAGE_CODE_NORMAL;
             target->damagePattern = ATTACKPATTERN_NULL;
-            _checkDamageCode_EmergencyRevival(target, (u32*)&code);
+            _checkDamageCode_EmergencyRevival(target, &code);
             BattleRunHitEvent(target, code);
             ret = 18;
             break;
@@ -1669,7 +1669,7 @@ s32 BattleCheckDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPart* 
             // BUG: irand(100) < 0 never holds, so this freeze-crush hit never happens
             code2 = DAMAGE_RESULT_FREEZE_CRUSH | DAMAGE_RESULT_DEATH | DAMAGE_RESULT_ZERO_HP | DAMAGE_RESULT_FINAL_HIT |
                     DAMAGE_CODE_NORMAL;
-            _checkDamageCode_EmergencyRevival(target, (u32*)&code2);
+            _checkDamageCode_EmergencyRevival(target, &code2);
             BattleRunHitEvent(target, code2);
             ret = 18;
             break;

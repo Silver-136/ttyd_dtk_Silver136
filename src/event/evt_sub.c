@@ -1,3 +1,4 @@
+#include "eff/eff_stageclear.h"
 #include "version.h"
 #include "eff/eff_itemget.h"
 #include "icon_ids.h"
@@ -44,7 +45,6 @@
 #include "driver/mapdrv.h"
 #include "driver/casedrv.h"
 
-s32 effStageClearEndChk();
 
 #include "system.h"
 #include "driver/msgdrv.h"

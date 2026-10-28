@@ -6809,7 +6809,7 @@ BOOL psndENVOn_f_d(u32 flags, const char* name, u32 fadetime, s32 unused) {
         e->type = list->type;
         e->intervalRand = list->intervalRand;
         e->interval = list->interval;
-        e->position = *(Vec*)&list->posX;
+        e->position = list->pos;
         e->radiusMin = list->radiusMin;
         e->radiusRange = list->radiusRange;
         e->dist = list->dist;

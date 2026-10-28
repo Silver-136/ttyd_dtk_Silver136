@@ -253,7 +253,6 @@ struct BattleWork {
     BattleWorkPad padWork[4];           // 0xF2C
     BattleCommand commandMenu;          // 0x171C
     BattleActions actionCommands;       // 0x1C90
-    u8 pad_1F9C[0x271C - 0x1F9C];       // 0x1F9C, never accessed
     s32 mStylishCurFrame;               // 0x271C
     s32 mStylishWindowStart;            // 0x2720
     s32 mStylishWindowEnd;              // 0x2724

@@ -483,3 +483,6 @@ void mapSetProjTexObj(GXTexObj* obj, void* imgRef);
 void mapObjSetOffScreen(const char* name, const char* offscreen);
 void mapGrpSetOffScreen(const char* name, const char* offscreen);
 void test_kururing_mapdisp(CameraId cam);
+
+struct MapAnimJoint;
+void mapCalcAnimMatrix(Mtx out, Mtx in, MapEntryAnimData* anim, struct MapAnimJoint* joint);

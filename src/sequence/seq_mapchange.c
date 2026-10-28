@@ -1,3 +1,4 @@
+#include "evt/evt_cam.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_seq.h"
 #include "manager/evtmgr.h"
@@ -50,7 +51,7 @@ EVT_END()
 u8 rel_bss[0xF10];
 void _load(const char* prevMapName, const char* newMapName, const char* beroName);
 
-void evt_cam_road_reset(s32, s32);
+
 
 static const char mc_tou[4];
 static const char mc_tou2[5];

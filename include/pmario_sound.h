@@ -15,9 +15,7 @@ typedef struct SoundEnvList {
     u8 type;         // 0x6, 0: random position + interval, 1: loop, 2: interval, 3: one-shot
     u8 intervalRand; // 0x7, seconds, irand(intervalRand) added to interval
     u8 interval;     // 0x8, seconds between plays (types 0 and 2)
-    f32 posX;        // 0xC, copied (as raw words) to the PaperSoundEnv position
-    f32 posY;        // 0x10
-    f32 posZ;        // 0x14
+    Vec pos; // 0xC, environment position
     u8 radiusMin;    // 0x18, type 0 spawn radius = (radiusMin + irand(radiusRange)) * 10
     u8 radiusRange;  // 0x19
     u8 dist;         // 0x1A, __psndSFXOn dist

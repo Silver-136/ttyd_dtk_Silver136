@@ -1185,7 +1185,7 @@ void BtlUnit_LoadSeMode(s32 mode, s32 kind, BtlPoseSoundTable* table, BecSndWork
 void BtlUnit_SetCommandAnimPose(BattleUnit* unit);
 void BtlUnit_SetSeMode(BecSndWork* work, const char* name0, const char* name1, s16 c, s16 e, s16 unused, s16 a, s16 b);
 BOOL BtlUnit_CheckShadowGuard(BattleUnit* unit);
-BOOL BtlUnit_EnemyItemCanUseCheck(s32 item);
+s32 BtlUnit_EnemyItemCanUseCheck(s32 item);
 void BtlUnit_SetTotalHitDamage(BattleUnit* unit, s16 damage);
 void BtlUnit_ControlPoseSoundMain(BattleUnitPart* part);
 void BtlUnit_PoseSoundInit(BattleUnitPart* part);

@@ -26,7 +26,7 @@ EVT_BEGIN(kpa_score_disp_evt)
     RETURN
 EVT_END()
 
-void kpaScoreDisp(void) {
+void kpaScoreDisp(CameraId cameraId, void* param) {
     Mtx m;
     Mtx scale;
     s32 i;
@@ -50,7 +50,7 @@ USER_FUNC(kpa_score_disp_main) {
             ksdp[i].timer--;
         }
     }
-    dispEntry(CAMERA_3D, 0.0f, 2, (DispCallback)kpaScoreDisp, 0);
+    dispEntry(CAMERA_3D, 0.0f, 2, kpaScoreDisp, 0);
     return EVT_RETURN_DONE;
 }
 
