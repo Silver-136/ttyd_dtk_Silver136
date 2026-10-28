@@ -19,7 +19,7 @@ void seq_gameOverInit(SequenceWork* work) {
     psndClearFlag(PSND_FLAG_MUTE_SFX);
     psndClearFlag(PSND_FLAG_LETTER_BOX);
     psndClearFlag(PSND_FLAG_LETTER_BOX_OFF);
-    N_pouchUnEquipBadgeID(ITEM_SLOW_GO);
+    pouchUnEquipBadgeID(ITEM_SLOW_GO);
     marioStSystemLevel(4);
 }
 

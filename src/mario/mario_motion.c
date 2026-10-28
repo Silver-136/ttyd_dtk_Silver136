@@ -73,7 +73,7 @@ MarioMotTblEntry marioMotTbl[] = {
     {mot_dash, NULL, NULL},
     {mot_jump, NULL, NULL},
 #ifdef VERSION_G8ME01
-    {mot_jumpNpc, NULL, N_mot_jumpNpc_post},
+    {mot_jumpNpc, NULL, mot_jumpNpc_post},
 #else
     {mot_jumpNpc, NULL, NULL},
 #endif
@@ -730,7 +730,7 @@ void marioLandOn(void) {
 #endif
             return;
         }
-        N_marioSlitSetAfterLand();
+        marioSlitSetAfterLand();
         return;
     }
     flags = mario->flags;

@@ -69,7 +69,8 @@ void marioBottomless(void) {
     }
 }
 
-void N_marioSetBottomlessRespawnPosOnBeroEntry(f32 x, f32 y, f32 z) {
+// Descriptive name (not in the symbol maps).
+void marioSetBottomlessRespawnPosOnBeroEntry(f32 x, f32 y, f32 z) {
     MarioWork* wp = marioGetPtr();
     Vec position;
 
@@ -77,7 +78,8 @@ void N_marioSetBottomlessRespawnPosOnBeroEntry(f32 x, f32 y, f32 z) {
     wp->bottomlessResetPosition = position;
 }
 
-void N_marioSetBottomlessRespawnPos(f32 x, f32 y, f32 z) {
+// Descriptive name (not in the symbol maps).
+void marioSetBottomlessRespawnPos(f32 x, f32 y, f32 z) {
     MarioWork* wp = marioGetPtr();
     Vec position;
 
@@ -85,12 +87,14 @@ void N_marioSetBottomlessRespawnPos(f32 x, f32 y, f32 z) {
     wp->bottomlessResetPosition = position;
 }
 
-void N_marioReloadMapOnBottomlessOn(void) {
+// Descriptive name (not in the symbol maps).
+void marioReloadMapOnBottomlessOn(void) {
     MarioWork* mp = marioGetPtr();
     mp->bottomlessReload = 1;
 }
 
-void N_marioReloadMapOnBottomlessOff(void) {
+// Descriptive name (not in the symbol maps).
+void marioReloadMapOnBottomlessOff(void) {
     MarioWork* mp = marioGetPtr();
     mp->bottomlessReload = 0;
 }
@@ -422,7 +426,8 @@ void marioGetStick(f32* dir, f32* mag) {
     *mag = m;
 }
 
-s32 N_marioGetMovementSpeed(void) {
+// Descriptive name (not in the symbol maps).
+s32 marioGetMovementSpeed(void) {
     MarioWork* mp = marioGetPtr();
     s8 x = mp->wStickDir1;
 

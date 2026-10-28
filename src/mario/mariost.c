@@ -177,7 +177,7 @@ void marioStInit(void) {
         }
     }
     DEMOEnableGPHangWorkaround(5);
-    N_setupErrorHandler();
+    setupErrorHandler();
     DEMOPadInit();
     GXSetCopyClear((GXColor){0, 0, 0, 0}, GX_MAX_Z24);
     __GXSetIndirectMask(0);

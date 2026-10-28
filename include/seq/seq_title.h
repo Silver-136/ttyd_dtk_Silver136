@@ -22,7 +22,6 @@ typedef struct TitleWork {
 
 const char* DbgBtlSel_GetMsgDataPtr(void);
 s32 getDebugMode(void);
-s32 N_getDebugMode(void);
 void seq_titleInit(SequenceWork* work);
 void seq_titleMain(SequenceWork* work);
 void seq_titleExit(SequenceWork* work);

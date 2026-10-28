@@ -1034,7 +1034,8 @@ BOOL pouchEquipBadgeID(s32 badgeId) {
     return FALSE;
 }
 
-BOOL N_pouchUnEquipBadgeID(s32 badgeId) {
+// Descriptive name (not in the symbol maps).
+BOOL pouchUnEquipBadgeID(s32 badgeId) {
     int i;
 
     for (i = 0; i < MAX_BADGES; i++) {

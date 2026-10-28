@@ -70,7 +70,7 @@ void statusWinForceOpen(void);
 void statusWinDispOff(void);
 void statusWinDispOn(void);
 void statusWinForceUpdate(void);
-void N_statusClearBlink(void);
+void statusClearBlink(void);
 void statusAPBlink(s32 frames);
 void statusFPBlink(s32 frames);
 void statusMarioHPBlink(s32 frames);

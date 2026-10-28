@@ -88,11 +88,13 @@ const char* getMapDataDvdRoot(void) {
     return ".";
 }
 
-void N_mapDispOff(void) {
+// Descriptive name (not in the symbol maps).
+void mapDispOff(void) {
     disableMapDraw = TRUE;
 }
 
-void N_mapDispOn(void) {
+// Descriptive name (not in the symbol maps).
+void mapDispOn(void) {
     disableMapDraw = FALSE;
 }
 

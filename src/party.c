@@ -720,7 +720,8 @@ void partyUsePost(PartyEntry* party) {
 
 static inline void partyChgRunM(PartyEntry* party);
 static inline void partyChgRunMo(PartyEntry* party);
-void N__partyChgRunMode(PartyEntry* party, s32 prev, s32 mode) {
+// Descriptive name (not in the symbol maps).
+void _partyChgRunMode(PartyEntry* party, s32 prev, s32 mode) {
     MarioWork* mario;
     PartyFunc func;
 
@@ -774,18 +775,19 @@ void partyChgRunMode(PartyEntry* party, s32 mode) {
     if (party->runMode != 9 && party->runMode != 3) {
         party->prevRunMode = party->runMode;
     }
-    N__partyChgRunMode(party, party->runMode, mode);
+    _partyChgRunMode(party, party->runMode, mode);
     party->runMode = mode;
     party->trigFlags |= PARTY_TRIG_CHG_RUN_MODE;
 }
 #pragma dont_inline reset
 
 #pragma dont_inline on
-void N_partyForceChgRunMode(PartyEntry* party, s32 mode, s32 sub) {
+// Descriptive name (not in the symbol maps).
+void partyForceChgRunMode(PartyEntry* party, s32 mode, s32 sub) {
     if (party->runMode != 9 && party->runMode != 3) {
         party->prevRunMode = party->runMode;
     }
-    N__partyChgRunMode(party, party->runMode, mode);
+    _partyChgRunMode(party, party->runMode, mode);
     party->runMode = mode;
     party->trigFlags &= ~PARTY_TRIG_CHG_RUN_MODE;
     party->motionStep = sub;
@@ -1603,7 +1605,7 @@ void getRidePos(PartyEntry* party, Vec* pos) {
         pos->z = mario->position.z;
         pos->y = 40.0f + mario->position.y;
     } else if (mario->currMotionId == MARIO_MOTION_SHIP) {
-        sincosf(&s, &c, toMovedirSimple(N_marioShipGetDir() ? 0.0f : 180.0f));
+        sincosf(&s, &c, toMovedirSimple(marioShipGetDir() ? 0.0f : 180.0f));
         pos->x = mario->position.x + 22.0f * s;
         pos->z = mario->position.z + 22.0f * c;
         pos->y = mario->position.y;
@@ -1618,13 +1620,13 @@ void getRidePos(PartyEntry* party, Vec* pos) {
 void allPartyForceRideOn(void) {
     PartyEntry* party = partyGetPtr(marioGetPartyId());
     if (party) {
-        N_partyForceChgRunMode(party, 11, 11);
+        partyForceChgRunMode(party, 11, 11);
         party->flags2 |= PARTY_DISP_FLAG_HIDE;
         partyShadowOff(party);
     }
     party = partyGetPtr(marioGetExtraPartyId());
     if (party) {
-        N_partyForceChgRunMode(party, 11, 11);
+        partyForceChgRunMode(party, 11, 11);
         party->flags2 |= PARTY_DISP_FLAG_HIDE;
         partyShadowOff(party);
     }
@@ -1923,7 +1925,7 @@ static inline void partyChgRunMo(PartyEntry* party) {
 void party_force_ride_yoshi(PartyEntry* party) {
     Vec pos;
 
-    N_partyForceChgRunMode(party, 12, 10);
+    partyForceChgRunMode(party, 12, 10);
     party->flags &= ~PARTY_FLAG_IS_BEING_USED;
     getRidePos(party, &pos);
     party->position = pos;
@@ -2124,7 +2126,7 @@ void partySetCamId(PartyEntry* party, s32 cameraId) {
     party->camId = cameraId;
 }
 
-BOOL N_vivianDisplayTailCheck(PartyEntry* party);
+BOOL vivianDisplayTailCheck(PartyEntry* party);
 void partyDisp(CameraId cam, void* param);
 
 void partyMakeDispDir(PartyEntry* party) {
@@ -2272,7 +2274,7 @@ void partyPreDisp(PartyEntry* party) {
             }
         }
     }
-    if (N_vivianDisplayTailCheck(party)) {
+    if (vivianDisplayTailCheck(party)) {
         Vec pos;
         Vec dir;
         Vec hitPos;

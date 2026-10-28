@@ -392,8 +392,8 @@ typedef struct MapWork {
 
 void mapErrorEntry(s32 type, const char* name);
 const char* getMapDataDvdRoot(void);
-void N_mapDispOff(void);
-void N_mapDispOn(void);
+void mapDispOff(void);
+void mapDispOn(void);
 MapWork* mapGetWork(void);
 s32 mapGetActiveGroup(void);
 s32 mapGetJoints(MapFileJoint* joint);

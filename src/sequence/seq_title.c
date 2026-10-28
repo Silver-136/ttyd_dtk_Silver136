@@ -67,7 +67,8 @@ void seq_titleMain(SequenceWork* work) {
     titleMain(work);
 }
 
-s32 N_getDebugMode(void) {
+// Descriptive name (not in the symbol maps).
+s32 getDebugMode(void) {
     return wp2->debug;
 }
 

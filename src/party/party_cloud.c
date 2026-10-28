@@ -23,7 +23,7 @@ Vec cloud_at;
 #include "pmario_sound.h"
 #include "mario/mario_motion.h"
 #include "eff/n64/eff_kumokumo_n64.h"
-void N__cloud_use(PartyEntry* party);
+void _cloud_use(PartyEntry* party);
 void getHitBreatheout2(PartyEntry* party, f32 angle);
 
 // Flurrie's work (PartyEntry.useStruct). A macro, not an inline function: as a function the object changes.
@@ -212,12 +212,14 @@ f32 cloudGetBreathDist(void) {
 }
 
 #ifdef VERSION_G8ME01
-void N_cloudLockAnimationsOff(PartyEntry* party) {
+// Descriptive name (not in the symbol maps).
+void cloudLockAnimationsOff(PartyEntry* party) {
     party->work.cloud.lockAnims = 0;
     partyChgPose(party, "PWD_S_1");
 }
 
-void N_cloudLockAnimationsOn(PartyEntry* party) {
+// Descriptive name (not in the symbol maps).
+void cloudLockAnimationsOn(PartyEntry* party) {
     party->work.cloud.lockAnims = 1;
     partyChgPose(party, "PWD_Z_1");
 }
@@ -287,7 +289,7 @@ void cloud_init(PartyEntry* party) {
 void cloud_use(PartyEntry* party) {
     MarioWork* mario = party->playerPtr;
 
-    N__cloud_use(party);
+    _cloud_use(party);
     if (mario->currMotionId == MARIO_MOTION_CLOUD || mario->currMotionId <= MARIO_MOTION_WALK || mario->currMotionId == MARIO_MOTION_DASH) {
         return;
     }
@@ -317,7 +319,8 @@ void cloud_use(PartyEntry* party) {
     }
 }
 
-void N__cloud_use(PartyEntry* party) {
+// Descriptive name (not in the symbol maps).
+void _cloud_use(PartyEntry* party) {
     MarioWork* mario = party->playerPtr;
     f32 ofsX, ofsZ;
     f32 nz, ny, nx, dist, hz, hy, hx;

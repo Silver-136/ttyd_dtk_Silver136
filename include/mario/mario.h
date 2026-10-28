@@ -513,7 +513,7 @@ typedef struct MarioWork {
     s16 coinDropTimer;             // 0x2C0, set to 3 s by npcdrv (with muteki); marioMain drops a coin every 30 frames
     u8 pad_2C2[0x2C4 - 0x2C2];     // 0x2C2, never accessed
     f32 kpaSpeed;                  // 0x2C4, Bowser walk speed (koopa.c, koopa_motion.c)
-    u32 bottomlessReload;          // 0x2C8, N_marioReloadMapOnBottomlessOn/Off; u32: marioBottomless tests it unsigned (cmplwi)
+    u32 bottomlessReload;          // 0x2C8, marioReloadMapOnBottomlessOn/Off; u32: marioBottomless tests it unsigned (cmplwi)
     Vec bottomlessResetPosition;   // 0x2CC JP, 0x2E4 US
     s16 slitState;                 // 0x2D8, mot_slit state machine
     s16 slitTimer2;                // 0x2DA

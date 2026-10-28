@@ -175,7 +175,8 @@ void __memFree(HEAP_TYPE heap, void* ptr) {
 }
 
 #ifdef VERSION_G8ME01
-void N_battleMapAlloc(void) {
+// Descriptive name (not in the symbol maps).
+void battleMapAlloc(void) {
     MapAllocEntry* entry;
     u32 size;
 
@@ -189,7 +190,8 @@ void N_battleMapAlloc(void) {
     entry->inuse = 0;
 }
 
-void N_battleMapFree(void) {
+// Descriptive name (not in the symbol maps).
+void battleMapFree(void) {
     (_mapFree)(mapalloc_base_ptr, R_battlemapalloc_base_ptr);
     R_battlemapalloc_base_ptr = NULL;
 }
@@ -310,7 +312,7 @@ void* (_mapAllocTail)(MAPBASE_PARAM u32 size) {
 }
 
 #ifdef VERSION_G8ME01
-#pragma dont_inline on // US N_battleMapFree calls it
+#pragma dont_inline on // US battleMapFree calls it
 #endif
 void (_mapFree)(MAPBASE_PARAM void* alloc) {
     MapAllocEntry* loopEntry;

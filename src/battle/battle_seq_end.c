@@ -1360,7 +1360,8 @@ USER_FUNC(N__set_initial_upgrade_cursor_position) {
     return 2;
 }
 
-void N__draw_select_one_to_upgrade_text(CameraId camId, void* param) {
+// Descriptive name (not in the symbol maps).
+void _draw_select_one_to_upgrade_text(CameraId camId, void* param) {
     const char* msg;
     u16 lines;
     s32 width;
@@ -1378,7 +1379,7 @@ void N__draw_select_one_to_upgrade_text(CameraId camId, void* param) {
 }
 
 USER_FUNC(N__display_select_one_to_upgrade_text) {
-    dispEntry(CAMERA_2D, 900.0f, 1, N__draw_select_one_to_upgrade_text, _battleWorkPointer);
+    dispEntry(CAMERA_2D, 900.0f, 1, _draw_select_one_to_upgrade_text, _battleWorkPointer);
     return 2;
 }
 #endif

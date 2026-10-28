@@ -354,7 +354,7 @@ s32 winRootMain(WindowWork* w) {
             w->menu[i].state = 10;
         }
         w->msgState = 10;
-        N_mapDispOn();
+        mapDispOn();
         camDispOn(CAMERA_3D);
         w->active++;
         break;
@@ -1598,7 +1598,8 @@ void sort_3_3_func(WindowWork* wp) {
     wp->badge.page[0] = wp->badge.sel[0] / 8;
 }
 
-s32 N_compare_func4_1(const void* a, const void* b) {
+// Descriptive name (not in the symbol maps).
+s32 compare_func4_1(const void* a, const void* b) {
     char buf1[128];
     char buf2[128];
     s16 ia = ((WinBadgeEnt*)a)->id;
@@ -1609,7 +1610,8 @@ s32 N_compare_func4_1(const void* a, const void* b) {
     return strcmp(buf1, buf2);
 }
 
-s32 N_compare_func4_1_r(const void* a, const void* b) {
+// Descriptive name (not in the symbol maps).
+s32 compare_func4_1_r(const void* a, const void* b) {
     char buf1[128];
     char buf2[128];
     s16 ia = ((WinBadgeEnt*)a)->id;
@@ -1620,7 +1622,8 @@ s32 N_compare_func4_1_r(const void* a, const void* b) {
     return strcmp(buf2, buf1);
 }
 
-s32 N_compare_func4_2(const void* a, const void* b) {
+// Descriptive name (not in the symbol maps).
+s32 compare_func4_2(const void* a, const void* b) {
     s16 ia = itemDataTable[(s16)((WinBadgeEnt*)a)->id].type_sort_order;
     s16 ib = itemDataTable[(s16)((WinBadgeEnt*)b)->id].type_sort_order;
 
@@ -1632,7 +1635,8 @@ s32 N_compare_func4_2(const void* a, const void* b) {
     return 0;
 }
 
-s32 N_compare_func4_2_r(const void* a, const void* b) {
+// Descriptive name (not in the symbol maps).
+s32 compare_func4_2_r(const void* a, const void* b) {
     s16 ia = itemDataTable[(s16)((WinBadgeEnt*)a)->id].type_sort_order;
     s16 ib = itemDataTable[(s16)((WinBadgeEnt*)b)->id].type_sort_order;
 
@@ -1646,9 +1650,9 @@ s32 N_compare_func4_2_r(const void* a, const void* b) {
 
 void sort_4_1_func(WindowWork* wp) {
     if (!wp->sortRev) {
-        qqsort(wp->badge.list, wp->badge.count, sizeof(WinBadgeEnt), N_compare_func4_1);
+        qqsort(wp->badge.list, wp->badge.count, sizeof(WinBadgeEnt), compare_func4_1);
     } else {
-        qqsort(wp->badge.list, wp->badge.count, sizeof(WinBadgeEnt), N_compare_func4_1_r);
+        qqsort(wp->badge.list, wp->badge.count, sizeof(WinBadgeEnt), compare_func4_1_r);
     }
     wp->sortRev = 1 - wp->sortRev;
     wp->badge.sel[1] = 0;
@@ -1657,9 +1661,9 @@ void sort_4_1_func(WindowWork* wp) {
 
 void sort_4_2_func(WindowWork* wp) {
     if (!wp->sortRev) {
-        qqsort(wp->badge.list, wp->badge.count, sizeof(WinBadgeEnt), N_compare_func4_2);
+        qqsort(wp->badge.list, wp->badge.count, sizeof(WinBadgeEnt), compare_func4_2);
     } else {
-        qqsort(wp->badge.list, wp->badge.count, sizeof(WinBadgeEnt), N_compare_func4_2_r);
+        qqsort(wp->badge.list, wp->badge.count, sizeof(WinBadgeEnt), compare_func4_2_r);
     }
     wp->sortRev = 1 - wp->sortRev;
     wp->badge.sel[1] = 0;
@@ -2508,7 +2512,7 @@ void winRootBgCaptureDisp(s32 unused, WindowWork* bg) {
     GXCopyTex(bg->texBuf->address, GX_FALSE);
     GXTexModeSync();
     bg->texBufValid = 1;
-    N_mapDispOff();
+    mapDispOff();
     camDispOff(CAMERA_3D);
 }
 

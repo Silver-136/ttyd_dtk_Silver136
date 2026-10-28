@@ -4322,11 +4322,11 @@ USER_FUNC(_hpfp_change_declare_2) {
 
     if (unit) {
         if (unit->currentKind == UNIT_MARIO) {
-            N_statusClearBlink();
+            statusClearBlink();
             statusMarioHPBlink(120);
             statusFPBlink(120);
         } else if (unit->currentKind >= TYPE_PARTNER_MIN && unit->currentKind < TYPE_PARTNER_MAX) {
-            N_statusClearBlink();
+            statusClearBlink();
             statusPartyHPBlink(120);
             statusFPBlink(120);
         }

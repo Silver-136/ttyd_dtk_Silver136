@@ -4,4 +4,3 @@
 
 void setupErrorHandler(void);
 
-void N_setupErrorHandler(void);

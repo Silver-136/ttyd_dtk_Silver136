@@ -569,7 +569,8 @@ f32 partyUpdMoveSpd(PartyEntry* party, f32 spd) {
     return partyUpdSpd(party);
 }
 
-void N_partyPlaySfxPartyLanding1(PartyEntry* party) {
+// Descriptive name (not in the symbol maps).
+void partyPlaySfxPartyLanding1(PartyEntry* party) {
     psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_LANDING1), &party->position);
 }
 
@@ -659,7 +660,7 @@ void partyChgWalkPose(PartyEntry* party, f32 spd) {
     a = (1.0f == party->playerPtr->playerGravity) ? 1.65f : 2.0f;
     b = (1.0f == party->playerPtr->playerGravity) ? 0.8f : 0.0f;
     if (a - b < spd && spd < spd + b) {
-        if (N_marioGetMovementSpeed() == 1) {
+        if (marioGetMovementSpeed() == 1) {
             partyChgPoseId(party, 2);
             partyWalkSe(party, 0);
         } else {

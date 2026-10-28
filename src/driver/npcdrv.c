@@ -1685,7 +1685,7 @@ void fbatEncountCheck(void) {
             return;
         }
     }
-    if (N_itemPickUpFromFieldCheck()) {
+    if (itemPickUpFromFieldCheck()) {
         return;
     }
     data = gp->fbatData;
@@ -3308,7 +3308,8 @@ BOOL npcCheckBlow(NpcEntry* npc) {
     return FALSE;
 }
 
-BOOL N_fbatPreventMarioEventChk(void) {
+// Descriptive name (not in the symbol maps).
+BOOL fbatPreventMarioEventChk(void) {
     s32 mode = gp->fbatData->mode;
     if (mode != 0 && mode != 1 && mode != 8) {
         return TRUE;

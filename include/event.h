@@ -250,7 +250,7 @@ void stg8_13_init(void);
 void stg8_14_init(void);
 void stg8_15_init(void);
 
-void N_stg9_02_init(void);
+void stg9_02_init(void);
 
 EventStage* eventStgDtPtr(s32 stage);
 s32 eventStgNum(void);

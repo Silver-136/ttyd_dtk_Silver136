@@ -272,11 +272,13 @@ void partyResetTouchWallCt(void) {
     touch_wall_ct = 60.0f;
 }
 
-void N_partyFollowCloseOn(PartyEntry* party) {
+// Descriptive name (not in the symbol maps).
+void partyFollowCloseOn(PartyEntry* party) {
     party->trigFlags |= PARTY_TRIG_FOLLOW_CLOSE;
 }
 
-void N_partyFollowCloseOff(PartyEntry* party) {
+// Descriptive name (not in the symbol maps).
+void partyFollowCloseOff(PartyEntry* party) {
     party->trigFlags &= ~PARTY_TRIG_FOLLOW_CLOSE;
 }
 
@@ -2253,7 +2255,7 @@ void party_motion_jump(PartyEntry* party) {
                 party->trigFlags &= ~PARTY_TRIG_JUMP_TARGET_SET;
 #endif
                 party->flags &= ~(PARTY_FLAG_IS_JUMPING | PARTY_FLAG_IS_FALLING | PARTY_FLAG_IS_STEPPING);
-                N_partyPlaySfxPartyLanding1(party);
+                partyPlaySfxPartyLanding1(party);
                 party->velY = 0.0f;
                 partyChgMot(party, 0);
                 party->trigFlags |= PARTY_TRIG_LANDED;
@@ -2334,7 +2336,7 @@ void party_motion_jump2(PartyEntry* party) {
                 party->position.y = pos.y;
                 party->hitobjStandOn = hit;
                 if (hit) {
-                    N_partyPlaySfxPartyLanding1(party);
+                    partyPlaySfxPartyLanding1(party);
                     party->flags &= ~(PARTY_FLAG_IS_JUMPING | PARTY_FLAG_IS_FALLING | PARTY_FLAG_IS_STEPPING);
                     party->flags |= PARTY_FLAG_IS_GROUNDED;
 #ifdef VERSION_G8ME01
@@ -2438,7 +2440,7 @@ s32 party_motion_fall(PartyEntry* party) {
         } else {
             partyChgMot(party, 1);
         }
-        N_partyPlaySfxPartyLanding1(party);
+        partyPlaySfxPartyLanding1(party);
         return 3;
     }
     party->flags &= ~PARTY_FLAG_MOT_SLIT_FLOOR;
@@ -2454,7 +2456,7 @@ s32 party_motion_fall(PartyEntry* party) {
     } else {
         partyChgMot(party, 1);
     }
-    N_partyPlaySfxPartyLanding1(party);
+    partyPlaySfxPartyLanding1(party);
     if (!(party->flags & PARTY_FLAG_IS_PARTNER)) {
         partyClearFootmark();
     } else {

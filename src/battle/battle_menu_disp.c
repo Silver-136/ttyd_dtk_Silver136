@@ -679,7 +679,8 @@ void DrawMenuPartyChangeButton_Sub(u32 id, f32 x, f32 y, f32 angle) {
 u16 danger_icon_tbl[6] = {6, 7, 8, 7, 9, 10};
 u16 peril_icon_tbl[6] = {11, 12, 13, 14, 15, 16};
 
-void N_DrawMenuMarioPinchMark(void) {
+// Descriptive name (not in the symbol maps).
+void DrawMenuMarioPinchMark(void) {
     Mtx m;
     Mtx out;
     Mtx s;
@@ -785,7 +786,8 @@ void DrawMenuPinchMark(void) {
     }
 }
 
-void N_DrawMenuPartyPinchMark(void) {
+// Descriptive name (not in the symbol maps).
+void DrawMenuPartyPinchMark(void) {
     Mtx m;
     Mtx out;
     Mtx s;
@@ -845,11 +847,11 @@ void DrawMenuPinchMark(void) {
     BattleUnit* unit = BattleGetMarioPtr(_battleWorkPointer);
     btlDispGXInit2D();
     if (unit->mPosition.x > -120.0f) {
-        N_DrawMenuPartyPinchMark();
-        N_DrawMenuMarioPinchMark();
+        DrawMenuPartyPinchMark();
+        DrawMenuMarioPinchMark();
     } else {
-        N_DrawMenuMarioPinchMark();
-        N_DrawMenuPartyPinchMark();
+        DrawMenuMarioPinchMark();
+        DrawMenuPartyPinchMark();
 #else
         btlGetScreenPoint(&unit->mPosition, &q);
         PSMTXTrans(m, q.x - 20.0f, 60.0f + q.y, 0.0f);

@@ -241,7 +241,7 @@ BOOL battle_init(void) {
         }
     }
 #ifdef VERSION_G8ME01
-    N_battleMapAlloc();
+    battleMapAlloc();
 #else
     memClear(HEAP_BATTLE);
     smartAutoFree(2);
@@ -313,7 +313,7 @@ void battle_exit(void) {
 
     BattleEnd();
 #ifdef VERSION_G8ME01
-    N_battleMapFree();
+    battleMapFree();
     smartAutoFree(2);
 #endif
     itemReInit();

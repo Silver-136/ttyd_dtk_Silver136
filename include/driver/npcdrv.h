@@ -469,7 +469,7 @@ void fbatChangeMode(s16 mode);
 
 NpcTerritoryType dbGetDefData(NpcTerritoryInfo* info, const char* description);
 
-BOOL N_fbatPreventMarioEventChk(void);
+BOOL fbatPreventMarioEventChk(void);
 
 extern EvtWord evt_majinai_effect_se_btl[];
 void fbatSandersBombTriggerOn(void);

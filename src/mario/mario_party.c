@@ -47,7 +47,7 @@ s32 marioUseParty(void) {
     if (wp->flags & MARIO_FLAG_IS_8_BIT) {
         return 0;
     }
-    if (N_fbatPreventMarioEventChk()) {
+    if (fbatPreventMarioEventChk()) {
         wp->partyUseDelay = 0;
         wp->trigFlags &= ~MARIO_TRIG_FLAG_USE_PARTNER;
         return 0;

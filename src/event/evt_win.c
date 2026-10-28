@@ -367,7 +367,7 @@ USER_FUNC(evt_unitwin_select_func) {
         unitWinClose(wp);
         return EVT_RETURN_BLOCK;
     }
-    if (winGhostDiaryChk() || N_itemPickUpFromFieldCheck()) {
+    if (winGhostDiaryChk() || itemPickUpFromFieldCheck()) {
         unitWinClose(wp);
         return EVT_RETURN_BLOCK;
     }

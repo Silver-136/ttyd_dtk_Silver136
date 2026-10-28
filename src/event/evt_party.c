@@ -940,8 +940,8 @@ USER_FUNC(evt_party_cloud_breathout) {
 }
 
 #ifdef VERSION_G8ME01
-extern void N_cloudLockAnimationsOn(PartyEntry* party);
-extern void N_cloudLockAnimationsOff(PartyEntry* party);
+extern void cloudLockAnimationsOn(PartyEntry* party);
+extern void cloudLockAnimationsOff(PartyEntry* party);
 
 // US only.
 USER_FUNC(N_evt_party_cloud_lock_animations_on_off) {
@@ -959,9 +959,9 @@ USER_FUNC(N_evt_party_cloud_lock_animations_on_off) {
             return EVT_RETURN_DONE;
         }
         if (args[1]) {
-            N_cloudLockAnimationsOn(p);
+            cloudLockAnimationsOn(p);
         } else {
-            N_cloudLockAnimationsOff(p);
+            cloudLockAnimationsOff(p);
         }
     }
     return EVT_RETURN_DONE;

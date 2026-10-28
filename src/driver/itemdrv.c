@@ -213,7 +213,7 @@ BOOL itemGetCheck(ItemEntry* entry) {
             }
         }
     }
-    if (N_fbatPreventMarioEventChk()) return FALSE;
+    if (fbatPreventMarioEventChk()) return FALSE;
     switch (entry->mode) {
         case ITEM_MODE_SCATTER:
         case ITEM_MODE_SCATTER_NO_PICKUP:
@@ -256,10 +256,11 @@ BOOL itemGetNokoCheck(ItemEntry* entry) {
             }
         }
     }
-    return !N_fbatPreventMarioEventChk();
+    return !fbatPreventMarioEventChk();
 }
 
-BOOL N_itemPickUpFromFieldCheck(void) {
+// Descriptive name (not in the symbol maps).
+BOOL itemPickUpFromFieldCheck(void) {
     ItemWork* wp = itemGetWork();
     ItemEntry* entry;
     int i;

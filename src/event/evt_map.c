@@ -465,9 +465,9 @@ USER_FUNC(evt_map_replace_mapobj) {
 
 USER_FUNC(N_evt_mapdisp_onoff) {
     if (evtGetValue(event, event->args[0])) {
-        N_mapDispOn();
+        mapDispOn();
     } else {
-        N_mapDispOff();
+        mapDispOff();
     }
     return EVT_RETURN_DONE;
 }

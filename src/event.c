@@ -547,7 +547,7 @@ EventData stage9_evt[] = {
     {0, 0, 0, 403, "STG9_00", "クリスチーヌ２" NAME_EN("Goombella 2"), "gor_00", "epilogue2", NULL},
     {0, 0, 0, 403, "STG9_00", "マリオの家２" NAME_EN("Mario's House 2"), "aaa_00", "epilogue2", NULL},
     {0, 1, 0, 404, "STG9_01", "スタッフロール" NAME_EN("End Credits"), "end_00", "", NULL},
-    {0, 1, 0, 405, "STG9_02", "クリア後（最初）" NAME_EN("Return to Rogueport"), "gor_00", "", N_stg9_02_init},
+    {0, 1, 0, 405, "STG9_02", "クリア後（最初）" NAME_EN("Return to Rogueport"), "gor_00", "", stg9_02_init},
     {0, 1, 0, 406, "STG9_END", "クリア後" NAME_EN("Rogueport"), "gor_00", "n_bero", NULL}
 };
 
@@ -1854,7 +1854,8 @@ void stg8_15_init(void) {
     swSet(0x1107); // GSWF_LAS_25_DOOR_UNLOCKED
 }
 
-void N_stg9_02_init(void) {
+// Descriptive name (not in the symbol maps).
+void stg9_02_init(void) {
     swSet(0x150E);
     partyJoin(PARTNER_MSMOWZ);
 }

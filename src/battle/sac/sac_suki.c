@@ -75,7 +75,7 @@ static SukiWork* get_ptr(void);
 static void main_star(void);
 static void main_base(void);
 void main_button(s32 idx);
-void N__disp_2D(s32 side, s32 idx);
+void _disp_2D(s32 side, s32 idx);
 
 static BattleWeapon weapon = {
     "btl_wn_sac_sukkari_sukkiri", // name
@@ -450,13 +450,14 @@ static void disp_2D(CameraId cam, void* param) {
     }
     GXSetScissor(0, 0x91, gp->fbWidth, 0x50);
     for (i = 0; i < 7; i++) {
-        N__disp_2D(0, i);
-        N__disp_2D(1, i);
+        _disp_2D(0, i);
+        _disp_2D(1, i);
     }
     GXSetScissor(0, 0, gp->fbWidth, gp->efbHeight);
 }
 
-void N__disp_2D(s32 side, s32 idx) {
+// Descriptive name (not in the symbol maps).
+void _disp_2D(s32 side, s32 idx) {
     SukiWork* w = get_ptr();
     SukiBtn* b;
     s32 cur;

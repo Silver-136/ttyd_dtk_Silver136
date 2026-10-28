@@ -318,7 +318,7 @@ void seq_mapChangeMain(SequenceWork* work) {
                         }
                     }
                 }
-                N_marioSetBottomlessRespawnPos(mario->position.x, 10.0f + mario->position.y, mario->position.z);
+                marioSetBottomlessRespawnPos(mario->position.x, 10.0f + mario->position.y, mario->position.z);
                 marioKeyOff();
                 evtEntryType(key_off, 0, 0, 0);
                 break;

@@ -334,7 +334,8 @@ static inline void jumpSfx(MarioWork* mario) {
 }
 
 #ifdef VERSION_G8ME01
-void N_mot_jumpNpc_post(void) {
+// Descriptive name (not in the symbol maps).
+void mot_jumpNpc_post(void) {
     MarioWork* mario = marioGetPtr();
     if (!strcmp(gp->currentMapName, "gon_10") && (mario->dispFlags & MARIO_DISP_FLAG_CAM_FOLLOW_Y_OFF)) {
         camFollowYOn();

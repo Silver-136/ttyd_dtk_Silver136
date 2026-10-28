@@ -1269,7 +1269,7 @@ USER_FUNC(evt_shop_main_func) {
         }
         return EVT_RETURN_BLOCK;
     }
-    if (winGhostDiaryChk() || N_itemPickUpFromFieldCheck()) {
+    if (winGhostDiaryChk() || itemPickUpFromFieldCheck()) {
         if (wp->sel != -1) {
             wp->sel = -1;
             winMgrClose(wp->win[0]);

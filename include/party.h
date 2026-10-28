@@ -114,13 +114,13 @@ typedef struct PartyWorkCloud {  // party_cloud.c
     struct EffectEntry* breathEffect; // 0x178, KumokumoN64 breath cloud (zeroed as s32 too)
     union {
         f32 hoverAngle;          // 0x17C, cloud_hover_*: -= hoverSpeed, revise360
-        s32 hoverAngleBits;      // 0x17C, zeroed as s32 (cloud_init, N__cloud_use)
+        s32 hoverAngleBits;      // 0x17C, zeroed as s32 (cloud_init, _cloud_use)
     };
     union {
         f32 hoverSpeed;          // 0x180, 4.25
         s32 hoverSpeedBits;      // 0x180, zeroed as s32
     };
-    s32 lockAnims;               // 0x184, US N_cloudLockAnimationsOn/Off (unused on JP)
+    s32 lockAnims;               // 0x184, US cloudLockAnimationsOn/Off (unused on JP)
 } PartyWorkCloud;
 
 typedef struct PartyWorkVivian { // party_vivian.c

@@ -236,7 +236,7 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/cam_road.c | hokanRate | cos called through a double (*)(f32) cast; (f32)cos(a) changes the object | see comment |
 | Both | src/cam_road.c | calcHokanCamRoad | spare temporary a2; a0 = (f32)atan2(...) directly changes the object | see comment |
 | Both | src/cam_road.c | camRoadReset | the same store twice; a single wp->prev.on = 0 changes the object | see comment |
-| Both | src/error_handler.c | N_systemErrorHandler | no-op (s32) cast on the char; removing it changes the object | see comment |
+| Both | src/error_handler.c | systemErrorHandler | no-op (s32) cast on the char; removing it changes the object | see comment |
 | Both | src/koopa.c | kpaFireEntry2 | never used; pads .sbss to the 8 bytes of the original section; removing it changes the object | see comment |
 | Both | src/koopa.c | kpaStrippedFallPool | stand-in, never called (the linker strips it); it only puts kpaSetFallPara's eight literals into the .sdata2 pool; removing it changes the object | see comment |
 | Both | src/koopa.c | kpaStrippedPool | stand-in, never called (the linker strips it); its int-to-float conversion only puts the conversion constant into the pool; removing it changes the object | see comment |
@@ -250,7 +250,7 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/kpa_act.c | kpaSetScoreStr | str is a spare second pointer to ksdp[i].str (only writes the terminator); ksdp[i].str[n] changes the object | see comment |
 | Both | src/kpa_act.c | kpaAddScorePos | sc is a spare copy of score; clamping score itself (as kpaAddScore does) changes the object | see comment |
 | US | src/memory.c | mapallocInit | total is a spare copy of mapalloc_size (read before the stores); reading mapalloc_size at its use changes the object | see comment |
-| US | src/memory.c | N_battleMapAlloc | size is a spare copy of R_battlemapalloc_size (read before the stores); reading it at its use changes the object | see comment |
+| US | src/memory.c | battleMapAlloc | size is a spare copy of R_battlemapalloc_size (read before the stores); reading it at its use changes the object | see comment |
 | Both | src/memory.c | _mapAllocTail | tailEntry is reused for the returned data pointer; a separate void* changes the object | see comment |
 | Both | src/memory.c | smartAutoFree | no-op (s32) cast; the plain compare changes the object | see comment |
 | US | src/nameent.c | nameMain | no-op (s32) cast; the plain ?: changes the object | see comment |
@@ -315,7 +315,7 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/battle/battle_seq_end.c | btlseqEnd | dead `i >= STATUS_INVALID` test; `if (i < STATUS_FRIGHT)` changes the object | see comment |
 | Both | src/battle/battle_seq_end.c | _MarioExpDisp | windowDispGX_Waku_col called through a float-first cast; the plain call changes the object | see comment |
 | Both | src/battle/battle_seq_end.c | _LvupParamHelpMsgDisp | 0.0f and -148.0f held in locals (zero, y); writing the literals changes the object | see comment |
-| US | src/battle/battle_seq_end.c | N__draw_select_one_to_upgrade_text | 0.0f and -148.0f held in locals (zero, y); writing the literals changes the object | see comment |
+| US | src/battle/battle_seq_end.c | _draw_select_one_to_upgrade_text | 0.0f and -148.0f held in locals (zero, y); writing the literals changes the object | see comment |
 | Both | src/battle/battle_seq_end.c | _set_confetti_control_evtid | empty triple NULL test of seqEndWork; removing it changes the object | see comment |
 | Both | src/sound.c | SoundInit | spare temporary tempsong; songs = sndMalloc(...); sound.songs = songs changes the object | see comment |
 | Both | src/sound.c | SoundLoadDVD2 | dead store; removing it changes the object | see comment |
@@ -353,7 +353,7 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/battle/sac/sac_muki.c | mulf | mulf() for c * 3.141592f in disp_3D_alpha; the plain product changes the object | see comment |
 | Both | src/battle/sac/sac_muki.c | disp_2D | frac *= 80.0f inside the argument; plain frac * 80.0f changes the object | see comment |
 | Both | src/battle/sac/sac_scissor.c | my_fabsf | my_fabsf() wraps __fabs for scissor_intersection; direct __fabs calls change the object | see comment |
-| Both | src/battle/sac/sac_suki.c | N__disp_2D | each case builds the icon id in the s32 temporary t; assigning icon directly changes the object | see comment |
+| Both | src/battle/sac/sac_suki.c | _disp_2D | each case builds the icon id in the s32 temporary t; assigning icon directly changes the object | see comment |
 | Both | src/battle/sac/sac_zubastar.c | zubastar_disp2D | calls iconDispGx through a cast that passes the icon id as s32; the plain call changes the object | see comment |
 | Both | src/data/battle/battle_item_data.c | _sampling_random_target | pointer alias of the local targets; using targets directly changes the object | see comment |
 | Both | src/driver/animdrv.c | animPose_AllocBuffer | macro twin of the animPoseGetBaseData inline above, used by every caller below; calling the inline instead changes the object | see comment |
@@ -569,7 +569,7 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | US | src/motion/mot_slit.c | mot_slit_post | (u16)(id - MARIO_MOTION_FALL_2) <= 1 is the range test FALL_2..UPSTAIRS; the plain range test changes the object | see comment |
 | Both | src/motion/mot_stay.c | lowHP | the result goes through a spare temporary; return pouchGetHP() <= 5 changes the object | see comment |
 | Both | src/party/party_bomhei.c | bomhei_use_main | the acceleration is negated from a spare temporary; party->accelY = -0.8333333f changes the object | see comment |
-| Both | src/party/party_cloud.c | N__cloud_use | re-reads the player pointer mario already holds; dropping the reload changes the object | see comment |
+| Both | src/party/party_cloud.c | _cloud_use | re-reads the player pointer mario already holds; dropping the reload changes the object | see comment |
 | Both | src/party/party_cloud.c | partyCloudStrippedPool | stand-in that nothing calls; it only puts 0.0f, 70.0f, 180.0f and the int-to-float conversion constant in this object's constant pool | see comment |
 | Both | src/party/party_hit.c | partyWallSlide | unused zero Vec local; without it the object changes | see comment |
 | Both | src/party/party_hit.c | partyHitStrippedPool | stand-in that nothing calls; it only places these literals and the int-to-float conversion constant in this object's constant pool | see comment |
@@ -585,7 +585,7 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/party/party_nokonoko.c | nokonoko_use | moveDistance is accessed through this byte pointer in the cases below; party->moveDistance changes the object | see comment |
 | Both | src/party/party_nokonoko.c | ccwall | assignment inside the expression and the spare copy k of 30.0f; the plain statements change the object | see comment |
 | Both | src/party/party_nokonoko.c | lookupSafetyPos3 | the (f32) casts on the w * dx and w * -dz products keep them separate multiplies (no fused multiply-add); without them the object changes | see comment |
-| Both | src/party/party_vivian.c | N_marioForceVivianAnime | padding constant kept in .sdata2 by explicit_zero_data and the (void)& use; removing it changes the section layout | see comment |
+| Both | src/party/party_vivian.c | marioForceVivianAnime | padding constant kept in .sdata2 by explicit_zero_data and the (void)& use; removing it changes the section layout | see comment |
 | Both | src/party/party_vivian.c | mot_vivian_post | the store is reached by a goto past the return; writing it here changes the object | see comment |
 | Both | src/party/party_vivian.c | vivian_use | stores NULL into an already NULL rippleEffect; dropping the store changes the object | see comment |
 | Both | src/sequence/seq_battle.c | loadTpl | unreferenced word in neither symbol map; removing it changes the object | see comment |

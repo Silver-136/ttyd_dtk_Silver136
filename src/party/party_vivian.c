@@ -31,7 +31,8 @@
 s32 vivian_cancel_req;
 
 #pragma explicit_zero_data on
-void N_marioForceVivianAnime(void) {
+// Descriptive name (not in the symbol maps).
+void marioForceVivianAnime(void) {
     // FAKE: padding constant kept in .sdata2 by explicit_zero_data and the (void)& use; removing it changes the section layout
     static const u32 gap_09_8041DF6C_sdata2 = 0;
     MarioWork* mario = marioGetPtr();
@@ -157,7 +158,8 @@ void partyVivianTailStart(PartyEntry* party) {
     }
 }
 
-BOOL N_vivianDisplayTailCheck(PartyEntry* party) {
+// Descriptive name (not in the symbol maps).
+BOOL vivianDisplayTailCheck(PartyEntry* party) {
     if (party->currentMemberId != PARTY_MEMBER_VIVIAN) {
         return FALSE;
     }

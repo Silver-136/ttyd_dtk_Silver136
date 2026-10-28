@@ -83,14 +83,14 @@ USER_FUNC(N_evt_bero_set_mario_bottomless_respawn_pos_on_bero_entry) {
     x = evtGetValue(event, args[0]);
     y = evtGetValue(event, args[1]);
     z = evtGetValue(event, args[2]);
-    N_marioSetBottomlessRespawnPosOnBeroEntry((f32)x, (f32)y, (f32)z);
+    marioSetBottomlessRespawnPosOnBeroEntry((f32)x, (f32)y, (f32)z);
     return EVT_RETURN_DONE;
 }
 
 // no args (new in retail)
 USER_FUNC(N_evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos) {
     MarioWork* wp = marioGetPtr();
-    N_marioSetBottomlessRespawnPosOnBeroEntry(wp->position.x, wp->position.y, wp->position.z);
+    marioSetBottomlessRespawnPosOnBeroEntry(wp->position.x, wp->position.y, wp->position.z);
     return EVT_RETURN_DONE;
 }
 
@@ -580,9 +580,9 @@ USER_FUNC(bero_get_position_normal) {
     BeroEX = end.x;
     BeroEY = end.y;
     BeroEZ = end.z;
-    N_marioSetBottomlessRespawnPosOnBeroEntry(end.x, end.y, end.z);
+    marioSetBottomlessRespawnPosOnBeroEntry(end.x, end.y, end.z);
     if (wp->currMotionId == MARIO_MOTION_SHIP) {
-        N_marioReloadMapOnBottomlessOn();
+        marioReloadMapOnBottomlessOn();
     }
     return EVT_RETURN_DONE;
 }
@@ -651,7 +651,7 @@ USER_FUNC(bero_get_position_pipe_pure) {
     BeroEX = end.x;
     BeroEY = (f32)(kind == 8 ? end.y - 37.5f : end.y);
     BeroEZ = end.z;
-    N_marioSetBottomlessRespawnPosOnBeroEntry(BeroEX, BeroEY, BeroEZ);
+    marioSetBottomlessRespawnPosOnBeroEntry(BeroEX, BeroEY, BeroEZ);
     return EVT_RETURN_DONE;
 }
 

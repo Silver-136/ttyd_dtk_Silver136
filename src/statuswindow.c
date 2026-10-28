@@ -681,7 +681,8 @@ void statusAPBlink(s32 frames) {
     wp->blinkTimer = frames;
 }
 
-void N_statusClearBlink(void) {
+// Descriptive name (not in the symbol maps).
+void statusClearBlink(void) {
     wp->blink = 0;
 }
 

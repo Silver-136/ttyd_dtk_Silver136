@@ -7,7 +7,7 @@ void motSlitContinue(void);
 BOOL marioChkSlitEnd(void);
 BOOL marioChkSlitThrouh(void);
 BOOL marioGetMotSlitCancel3(void);
-void N_marioSlitSetAfterLand(void);
+void marioSlitSetAfterLand(void);
 BOOL marioChkSlitThrouhEnd(void);
 void marioClearSlitFloor(void);
 void marioForceSlitAnime(void);

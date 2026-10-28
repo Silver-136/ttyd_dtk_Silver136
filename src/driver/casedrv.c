@@ -100,7 +100,7 @@ void caseMain(void) {
     head = mario->hitobjHead;
     btn = mario->buttonTrg;
     if (marioStGetSystemLevel() == 0 && !winCheck() && gp->inBattle == 0 &&
-        !N_fbatPreventMarioEventChk() && marioCaseEventValidChk()) {
+        !fbatPreventMarioEventChk() && marioCaseEventValidChk()) {
         if (mario->currMotionId != MARIO_MOTION_STAY && mario->currMotionId != MARIO_MOTION_WALK && mario->currMotionId != MARIO_MOTION_DASH &&
             yoshiGetStatus() != 1) {
             btn = 0;

@@ -2104,7 +2104,8 @@ HitEntry* dou10_yoko_yari2(f32* out) {
     return hit;
 }
 
-HitEntry* N_dou10_yoko_yari3(void) {
+// Descriptive name (not in the symbol maps).
+HitEntry* dou10_yoko_yari3(void) {
     HitCheckQuery query;
     f32 s, c;
     f32 x, z;

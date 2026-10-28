@@ -1177,9 +1177,9 @@ static USER_FUNC(evtflash) {
 // Descriptive name (not in the symbol maps); placeholder unk_tik_0000247c, JP tik .text+0x23B8. See docs/NAME_PROVENANCE.md.
 USER_FUNC(map_disp_onoff) {
     if (evtGetValue(event, event->args[0])) {
-        N_mapDispOn();
+        mapDispOn();
     } else {
-        N_mapDispOff();
+        mapDispOff();
     }
     return EVT_RETURN_DONE;
 }

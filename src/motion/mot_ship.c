@@ -25,7 +25,7 @@
 #include "mario/mario_hit.h"
 
 typedef struct MotShipWork {
-    u32 flags;                    // 0x00: bit0 = facing (SHIP_DIR), bit1 = N_marioShipGetDir; set to 0/1/2 by shipDecideDir
+    u32 flags;                    // 0x00: bit0 = facing (SHIP_DIR), bit1 = marioShipGetDir; set to 0/1/2 by shipDecideDir
     f32 baseY;                    // 0x04: y the hull floats at; copied from harborPos.y when docking
     f32 bobAngle;                 // 0x08: bob phase in degrees, dispOfs.y = 3 sin(bobAngle) - 13
     f32 bobSpeed;                 // 0x0C: 4.25 degrees per frame
@@ -107,7 +107,8 @@ BOOL checkHarbor(Vec* out);
 
 void shipMove(void);
 #define WAKE_WORK() ((EffFunemizuWork*)marioGetPtr()->motShip->wakeEff->userdata)
-s32 N_marioShipGetDir(void) {
+// Descriptive name (not in the symbol maps).
+s32 marioShipGetDir(void) {
     marioGetPtr();
     if (marioGetPtr()->motStruct != NULL) {
         return (marioGetPtr()->motShip->flags >> 1) & 1;
@@ -327,7 +328,7 @@ void mot_ship(void) {
         m->jumpPeakAirTime = 0;
         m->baseSpeed = 0.0f;
         marioGetPtr()->motShip->turnSpeed = 0.0f;
-        N_marioSetBottomlessRespawnPosOnBeroEntry(m->position.x, m->position.y, m->position.z);
+        marioSetBottomlessRespawnPosOnBeroEntry(m->position.x, m->position.y, m->position.z);
         shipDecideDir(m, &p1, &p2);
         /* fallthrough */
     case 1:
@@ -777,8 +778,8 @@ void mot_ship(void) {
         marioChgMot(MARIO_MOTION_FALL);
         marioSetFallPara();
         allPartyRideOff();
-        N_marioSetBottomlessRespawnPosOnBeroEntry(m->position.x, m->position.y, m->position.z);
-        N_marioReloadMapOnBottomlessOff();
+        marioSetBottomlessRespawnPosOnBeroEntry(m->position.x, m->position.y, m->position.z);
+        marioReloadMapOnBottomlessOff();
         if (marioGetPtr()->motStruct != NULL) {
             __memFree(HEAP_DEFAULT, marioGetPtr()->motStruct);
             marioGetPtr()->motStruct = NULL;

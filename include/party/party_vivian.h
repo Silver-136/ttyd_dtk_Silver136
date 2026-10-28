@@ -5,7 +5,7 @@
 struct PartyEntry;
 
 s32 vivianGetStatus(void);
-void N_marioForceVivianAnime(void);
+void marioForceVivianAnime(void);
 void mot_vivian(void);
 void mot_vivian_post(void);
 void vivianShadow(struct PartyEntry* party);

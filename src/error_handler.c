@@ -16,15 +16,17 @@
 extern void* DemoCurrentBuffer, * DemoFrameBuffer1, * DemoFrameBuffer2;
 
 //local prototypes
-void N_systemErrorHandler(OSError error, OSContext* context, u32 dsisr, u32 dar);
+void systemErrorHandler(OSError error, OSContext* context, u32 dsisr, u32 dar);
 
-void N_setupErrorHandler(void) {
-    OSSetErrorHandler(OS_ERROR_DSI, (OSErrorHandler)N_systemErrorHandler);
-    OSSetErrorHandler(OS_ERROR_ISI, (OSErrorHandler)N_systemErrorHandler);
-    OSSetErrorHandler(OS_ERROR_PROGRAM, (OSErrorHandler)N_systemErrorHandler);
+// Descriptive name (not in the symbol maps).
+void setupErrorHandler(void) {
+    OSSetErrorHandler(OS_ERROR_DSI, (OSErrorHandler)systemErrorHandler);
+    OSSetErrorHandler(OS_ERROR_ISI, (OSErrorHandler)systemErrorHandler);
+    OSSetErrorHandler(OS_ERROR_PROGRAM, (OSErrorHandler)systemErrorHandler);
 }
 
-void N_systemErrorHandler(OSError error, OSContext* context, u32 dsisr, u32 dar) {
+// Descriptive name (not in the symbol maps).
+void systemErrorHandler(OSError error, OSContext* context, u32 dsisr, u32 dar) {
     signed char* textBase;
     int i;
     OSFontHeader* fontHeader;
@@ -47,7 +49,7 @@ void N_systemErrorHandler(OSError error, OSContext* context, u32 dsisr, u32 dar)
     s32 y;
     s32 width;
 
-    if (N_getDebugMode() >= 0) {
+    if (getDebugMode() >= 0) {
         psndExit();
 #if defined(VERSION_G8ME01) && defined(__MWERKS__)
         // US: same MSR enable sequence as below (original inline asm), then halt
