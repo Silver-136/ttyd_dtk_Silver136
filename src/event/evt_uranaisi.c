@@ -8,6 +8,12 @@
 #include "evt/evt_uranaisi.h"
 
 
+typedef enum UranaiMode {
+    URANAI_MODE_NEXT = 0,
+    URANAI_MODE_STAR_PIECE = 1,
+    URANAI_MODE_SHINE_SPRITE = 2,
+} UranaiMode;
+
 typedef struct {
     u16 flags;
     s16 labelId;
@@ -238,13 +244,13 @@ USER_FUNC(uranaisi_data_alloc) {
     _udt.mode = evtGetValue(event, args[0]);
     _udt.prefix = (const char*)evtGetValue(event, args[1]);
     switch (_udt.mode) {
-        case 0:
+        case URANAI_MODE_NEXT:
             count = uranaisi_data_make_next(wp->prefix, 0);
             break;
-        case 1:
+        case URANAI_MODE_STAR_PIECE:
             count = uranaisi_data_make_starpiece(wp->prefix, 0);
             break;
-        case 2:
+        case URANAI_MODE_SHINE_SPRITE:
             count = uranaisi_data_make_supercoin(wp->prefix, 0);
             break;
         default:
@@ -257,13 +263,13 @@ USER_FUNC(uranaisi_data_alloc) {
     prefix = wp->prefix;
     wp->buf = (char*)&wp->info[wp->count];
     switch (wp->mode) {
-        case 0:
+        case URANAI_MODE_NEXT:
             uranaisi_data_make_next(prefix, 1);
             break;
-        case 1:
+        case URANAI_MODE_STAR_PIECE:
             uranaisi_data_make_starpiece(prefix, 1);
             break;
-        case 2:
+        case URANAI_MODE_SHINE_SPRITE:
             uranaisi_data_make_supercoin(prefix, 1);
             break;
     }

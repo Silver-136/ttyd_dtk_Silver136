@@ -35,6 +35,10 @@
 
 void FontDrawString(f32 x, f32 y, const char* str);
 
+typedef enum UnitWinItemFlags {
+    UNITWIN_ITEM_UNAVAILABLE = 1 << 0, // empty goods slot or already purchased
+} UnitWinItemFlags;
+
 // UnitWinWork.flags
 typedef enum UnitWinFlags {
     UNITWIN_FLAG_SELECTED = (1 << 0),             // 0x1, an entry is under the cursor
@@ -132,7 +136,7 @@ void unitwin_name_disp(WinMgrEntry* entry) {
         FontDrawEdgeOff();
     }
     for (i = 0; i < wp->goodsMax; i++) {
-        if (!(wp->itemFlags[i] & 1)) {
+        if (!(wp->itemFlags[i] & UNITWIN_ITEM_UNAVAILABLE)) {
             Mtx mtx;
             char buf[64];
             Vec pos;
@@ -278,7 +282,7 @@ USER_FUNC(evt_unitwin_selltable_setup) {
             iconSetPos(name, pos.x, pos.y + 6.0f, pos.z);
             iconFlagOn(name, ICON_FLAG_NO_MAP_BLEND);
         } else {
-            wp->itemFlags[i] |= 1;
+            wp->itemFlags[i] |= UNITWIN_ITEM_UNAVAILABLE;
         }
     }
     wp->evt = evtEntryType(select_evt, 0, 0x20, 0);
@@ -379,7 +383,7 @@ USER_FUNC(evt_unitwin_select_func) {
                     break;
                 }
             }
-            if (!(wp->itemFlags[i] & 1) && i < wp->goodsMax) {
+            if (!(wp->itemFlags[i] & UNITWIN_ITEM_UNAVAILABLE) && i < wp->goodsMax) {
                 if (wp->selected != i) {
                     if (wp->selected == -1) {
                         winMgrOpen(wp->winId[0]);
@@ -419,7 +423,7 @@ USER_FUNC(evt_unitwin_select_func) {
         obj = mapGetMapObj(wp->entries[i].mapObj);
         if (obj != NULL) {
             sprintf(name, "uwn%d", i);
-            if (wp->itemFlags[i] & 1) {
+            if (wp->itemFlags[i] & UNITWIN_ITEM_UNAVAILABLE) {
                 iconFlagOn(name, ICON_FLAG_HIDDEN);
             } else if (obj->flags & MAP_OBJ_FLAG_HIDDEN) {
                 iconFlagOn(name, ICON_FLAG_HIDDEN);
@@ -716,7 +720,7 @@ void evt_unitwin_disp_func(CameraId cameraId, void* param) {
             } else if (mode == 14) {
                 h = 8 - wp->count;
                 h = (h > 0 ? h : 0) * 24;
-                max = 0x152;
+                max = ITEM_TYPE_MAX - 1;
                 title = msgSearch("msg_window_title_3");
                 titleX = 20;
             } else if (mode == 15) {
@@ -728,7 +732,7 @@ void evt_unitwin_disp_func(CameraId cameraId, void* param) {
             } else if (mode == 16) {
                 h = 8 - wp->count;
                 h = (h > 0 ? h : 0) * 24;
-                max = 0x152;
+                max = ITEM_TYPE_MAX - 1;
                 title = msgSearch("msg_window_title_4");
                 titleX = 30;
             } else {

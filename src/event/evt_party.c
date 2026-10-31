@@ -159,7 +159,7 @@ USER_FUNC(evt_party_outofscreen) {
     if (p == NULL) {
         return EVT_RETURN_DONE;
     }
-    evtSetFloat(event, args[1], (f32)(s32)(((p->flags2 >> 23) & 1) ^ 1));
+    evtSetFloat(event, args[1], (f32)(s32)((p->flags2 & PARTY_DISP_FLAG_OUT_OF_SCREEN) == 0));
     return EVT_RETURN_DONE;
 }
 
@@ -417,7 +417,7 @@ USER_FUNC(evt_party_wait_landon) {
     if (p == NULL) {
         return EVT_RETURN_DONE;
     }
-    return ((p->flags >> 1) & 1) ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
+    return (p->flags & PARTY_FLAG_IS_GROUNDED) ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
 }
 
 USER_FUNC(evt_party_jump_pos) {

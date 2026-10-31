@@ -237,7 +237,7 @@ void nannpc_ext_init() {
     s32 i;
     ExtdrvPose* pose = extGetPosePtr();
     for (i = extGetPoseNum() - 1; i >= 0; i--, pose++) {
-        pose->flags = 3;
+        pose->flags = EXT_POSE_FLAG_VISIBLE | EXT_POSE_FLAG_BILLBOARD;
         pose->dir = 0.0f;
         PSMTXIdentity(*pose->mtx);
         (*pose->mtx)[0][3] = 0.0f;
@@ -647,7 +647,7 @@ USER_FUNC(evt_nannpc_set_func) {
 USER_FUNC(evt_nannpc_set_shadow_position) {
     EvtWord* args = event->args;
     NanNPC* npc = nanNPCSearch((char*)evtGetValue(event, args[0]));
-    npc->pose->flags |= 0x10;
+    npc->pose->flags |= EXT_POSE_FLAG_SHADOW_POS;
     npc->pose->shadowY = evtGetFloat(event, args[1]);
     return EVT_RETURN_DONE;
 }

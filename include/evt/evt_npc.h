@@ -5,6 +5,11 @@
 #include "evt/evt_cmd.h"
 #include "manager/evtmgr.h"
 
+// Special results of evtNpcNameToPtr / evtNpcNameToPtr_NoAssert; not dereferenceable NPC entries.
+#define EVT_NPC_PTR_PARTY ((NpcEntry*)-1)
+#define EVT_NPC_PTR_EXTPARTY ((NpcEntry*)-2)
+#define EVT_NPC_PTR_MARIO ((NpcEntry*)-3)
+
 typedef struct NpcSetupInfo {
     const char* name; //0x0
     s32 flags; //0x4

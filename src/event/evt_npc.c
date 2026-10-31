@@ -1651,16 +1651,16 @@ NpcEntry* evtNpcNameToPtr(EventEntry* event, const char* name) {
         return event->ownerNPC;
     }
     if (!strcmp(name, "party")) {
-        return (NpcEntry*)-1;
+        return EVT_NPC_PTR_PARTY;
     }
     if (!strcmp(name, "(^x^)party")) {
-        return (NpcEntry*)-1;
+        return EVT_NPC_PTR_PARTY;
     }
     if (!strcmp(name, "extparty")) {
-        return (NpcEntry*)-2;
+        return EVT_NPC_PTR_EXTPARTY;
     }
     if (!strcmp(name, "mario")) {
-        return (NpcEntry*)-3;
+        return EVT_NPC_PTR_MARIO;
     }
     if (!strcmp(name, "master")) {
         return event->ownerNPC->master;
@@ -1685,16 +1685,16 @@ NpcEntry* evtNpcNameToPtr_NoAssert(EventEntry* event, const char* name) {
         return event->ownerNPC;
     }
     if (!strcmp(name, "party")) {
-        return (NpcEntry*)-1;
+        return EVT_NPC_PTR_PARTY;
     }
     if (!strcmp(name, "(^x^)party")) {
-        return (NpcEntry*)-1;
+        return EVT_NPC_PTR_PARTY;
     }
     if (!strcmp(name, "extparty")) {
-        return (NpcEntry*)-2;
+        return EVT_NPC_PTR_EXTPARTY;
     }
     if (!strcmp(name, "mario")) {
-        return (NpcEntry*)-3;
+        return EVT_NPC_PTR_MARIO;
     }
     if (!strcmp(name, "master")) {
         return event->ownerNPC->master;
@@ -2200,7 +2200,7 @@ USER_FUNC(evt_npc_set_autotalkpose) {
     const char* stayAnim = (const char*)evtGetValue(event, *args++);
     const char* talkAnim = (const char*)evtGetValue(event, *args++);
     NpcEntry* npc = evtNpcNameToPtr(event, npcName);
-    if (npc == (NpcEntry*)-3) {
+    if (npc == EVT_NPC_PTR_MARIO) {
         npcSetMarioAutoTalkPose(stayAnim, talkAnim);
         return EVT_RETURN_YIELD;
     } else {
@@ -2241,7 +2241,7 @@ USER_FUNC(evt_npc_majo_disp_on) {
     switch (event->userdata[0]) {
         case -1:
             npc->position = npc->prevPosition = (Vec){ prevX, prevY, prevZ };
-            animPoseSetEffect(npc->poseId, "p_bibi", 1);
+            animPoseSetEffect(npc->poseId, "p_bibi", TRUE);
             animPoseSetEffectAnim(npc->poseId, "PM_B_2", TRUE);
             animPosePaperPeraOn(npc->poseId);
             animPoseSetLocalTime(npc->poseId, 0.0f);
@@ -2276,7 +2276,7 @@ USER_FUNC(evt_npc_majo_disp_on) {
             break;
 
         case 1:
-            animPoseSetEffect(npc->poseId, "p_bibi", 1);
+            animPoseSetEffect(npc->poseId, "p_bibi", TRUE);
             animPoseSetEffectAnim(npc->poseId, "PM_B_2", TRUE);
             animPosePaperPeraOn(npc->poseId);
             event->userdata[0]++;
@@ -2342,7 +2342,7 @@ USER_FUNC(evt_npc_majo_disp_off) {
             break;
 
         case 1:
-            animPoseSetEffect(npc->poseId, "p_bibi", 1);
+            animPoseSetEffect(npc->poseId, "p_bibi", TRUE);
             animPoseSetEffectAnim(npc->poseId, "PM_B_1", TRUE);
             animPosePaperPeraOn(npc->poseId);
             animPoseSetLocalTime(animPoseGetAnimPosePtr(npc->poseId)->paperId, 8.0f);

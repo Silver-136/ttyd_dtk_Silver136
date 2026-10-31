@@ -15,6 +15,13 @@
 
 
 
+typedef enum UrouroState {
+    UROURO_STATE_CHOOSE_WALK = 0,
+    UROURO_STATE_WALK = 1,
+    UROURO_STATE_CHOOSE_WAIT = 2,
+    UROURO_STATE_WAIT = 3,
+} UrouroState;
+
 typedef struct UrouroWork {
     u32 flags;     // 0x0
     s32 state;     // 0x4
@@ -50,7 +57,7 @@ USER_FUNC(urouro_init_func) {
     event->lwData[10] = (EvtWord)_mapAlloc(sizeof(UrouroWork));
     work = (UrouroWork*)event->lwData[10];
     work->flags = flags;
-    work->state = 0;
+    work->state = UROURO_STATE_CHOOSE_WALK;
     work->timer = 0;
     work->count = 0;
     work->walkTime = sysMsec2Frame(6000);
@@ -76,15 +83,15 @@ USER_FUNC(urouro_main_func) {
     s32 sfxFlag;
 
     switch (work->state) {
-    case 0:
+    case UROURO_STATE_CHOOSE_WALK:
         work->timer = work->walkTime / 2 + irand(work->walkTime / 2 + 1);
         work->timer = work->timer - work->timer % 20;
         work->count = 0;
         npc->direction = reviseAngle(npc->direction + (f32)irand(60) - 30.0f);
         npc->moveDir = npc->direction;
-        work->state = 1;
+        work->state = UROURO_STATE_WALK;
         break;
-    case 1:
+    case UROURO_STATE_WALK:
         dist = distABf(npc->position.x, npc->position.z, work->x, work->z);
         if (animPoseGetPeraEnd(npc->poseId)) {
             if (dist > work->radius) {
@@ -116,7 +123,7 @@ USER_FUNC(urouro_main_func) {
         }
         work->timer--;
         if (work->timer == 0) {
-            work->state = 2;
+            work->state = UROURO_STATE_CHOOSE_WAIT;
             break;
         }
         if (animPoseGetPeraEnd(npc->poseId)) {
@@ -151,7 +158,7 @@ USER_FUNC(urouro_main_func) {
             }
         }
         break;
-    case 2:
+    case UROURO_STATE_CHOOSE_WAIT:
         work->timer = work->waitTime / 2 + irand(work->waitTime / 2 + 1);
         npc->direction = reviseAngle(npc->direction + (f32)irand(60) - 30.0f);
         npc->moveDir = npc->direction;
@@ -159,14 +166,14 @@ USER_FUNC(urouro_main_func) {
         if (work->flags & UROURO_FLAG_TURN_AROUND_UNUSED) {
             work->count = irand(1000) % 3 + 2;
         }
-        work->state = 3;
+        work->state = UROURO_STATE_WAIT;
         break;
-    case 3:
+    case UROURO_STATE_WAIT:
         work->timer--;
         if (work->timer == 0) {
             work->timer = work->turnTime / 2 + irand(work->turnTime / 2 + 1);
             if (work->count == 0) {
-                work->state = 0;
+                work->state = UROURO_STATE_CHOOSE_WALK;
             } else {
                 work->count--;
                 npc->direction = reviseAngle(180.0f + npc->direction);

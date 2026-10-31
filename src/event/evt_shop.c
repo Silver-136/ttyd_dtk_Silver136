@@ -2,6 +2,7 @@
 #include "evt/evt_shop.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_case.h"
+#include "driver/casedrv.h"
 #include "manager/evtmgr.h"
 #include "manager/evtmgr_cmd.h"
 #include "manager/winmgr.h"
@@ -130,7 +131,7 @@ static EVT_BEGIN(buy_evt)
     CALL(evt_sub_get_language, LW(0))
 #ifdef VERSION_G8ME01
     SWITCH(LW(0))
-        CASE_EQUAL(0)
+        CASE_EQUAL(LANGUAGE_JP)
         CALL(evt_msg_print_insert, 0, LW(14), 0, LW(9), LW(11), LW(13))
         CASE_DEFAULT
         CALL(evt_msg_fmt_int, 0, LW(14), LW(14), LW(13))
@@ -138,7 +139,7 @@ static EVT_BEGIN(buy_evt)
         CALL(evt_msg_print, MSG_PRINT_DIRECT_TEXT, LW(14), 0, LW(9))
     END_SWITCH
 #else
-    IF_INT_NOT_EQUAL(LW(0), 0)
+    IF_INT_NOT_EQUAL(LW(0), LANGUAGE_JP)
         CALL(evt_msg_print_insert, 0, LW(14), 0, LW(9), LW(13), LW(11))
         ELSE
         CALL(evt_msg_print_insert, 0, LW(14), 0, LW(9), LW(11), LW(13))
@@ -207,7 +208,7 @@ static EVT_BEGIN(buy_evt)
 #ifdef VERSION_G8ME01
             CALL(evt_sub_get_language, LW(0))
             SWITCH(LW(0))
-                CASE_EQUAL(0)
+                CASE_EQUAL(LANGUAGE_JP)
                 CALL(evt_msg_print_insert, 0, LW(14), 0, LW(9), LW(2))
                 CASE_DEFAULT
                 CALL(evt_msg_fmt_str, 0, LW(14), LW(14), LW(2))
@@ -354,7 +355,7 @@ EVT_BEGIN(shopper_talk_evt)
 #ifdef VERSION_G8ME01
             CALL(evt_sub_get_language, LW(0))
             SWITCH(LW(0))
-                CASE_EQUAL(0)
+                CASE_EQUAL(LANGUAGE_JP)
                 CALL(evt_msg_print_insert, 0, LW(14), 0, 0, LW(2))
                 CASE_DEFAULT
                 CALL(evt_msg_fmt_str, 0, LW(14), LW(14), LW(2))
@@ -369,7 +370,7 @@ EVT_BEGIN(shopper_talk_evt)
 #ifdef VERSION_G8ME01
             CALL(evt_sub_get_language, LW(0))
             SWITCH(LW(0))
-                CASE_EQUAL(0)
+                CASE_EQUAL(LANGUAGE_JP)
                 CALL(evt_msg_print_insert, 0, LW(14), 0, 0, LW(2))
                 CASE_DEFAULT
                 CALL(evt_msg_fmt_str, 0, LW(14), LW(14), LW(2))
@@ -465,7 +466,7 @@ static EVT_BEGIN(sell_evt)
     CALL(evt_sub_get_language, LW(0))
 #ifdef VERSION_G8ME01
     SWITCH(LW(0))
-        CASE_EQUAL(0)
+        CASE_EQUAL(LANGUAGE_JP)
         CALL(evt_msg_print_insert, 0, LW(14), 0, STRING("me"), LW(2), LW(3))
         CASE_DEFAULT
         CALL(evt_msg_fmt_int, 0, LW(14), LW(14), LW(3))
@@ -473,7 +474,7 @@ static EVT_BEGIN(sell_evt)
         CALL(evt_msg_print, MSG_PRINT_DIRECT_TEXT, LW(14), 0, STRING("me"))
     END_SWITCH
 #else
-    IF_INT_NOT_EQUAL(LW(0), 0)
+    IF_INT_NOT_EQUAL(LW(0), LANGUAGE_JP)
         CALL(evt_msg_print_insert, 0, LW(14), 0, STRING("me"), LW(3), LW(2))
         ELSE
         CALL(evt_msg_print_insert, 0, LW(14), 0, STRING("me"), LW(2), LW(3))
@@ -528,7 +529,7 @@ EVT_BEGIN(keep_evt)
 #ifdef VERSION_G8ME01
     CALL(evt_sub_get_language, LW(0))
     SWITCH(LW(0))
-        CASE_EQUAL(0)
+        CASE_EQUAL(LANGUAGE_JP)
         CALL(evt_msg_print_add_insert, 0, LW(14), LW(1))
         CASE_DEFAULT
         CALL(evt_msg_fmt_int, 0, LW(14), LW(14), LW(1))
@@ -629,7 +630,7 @@ EVT_BEGIN(point_evt)
     CALL(get_msg, LW(10), 25, LW(14))
     CALL(evt_sub_get_language, LW(0))
     SWITCH(LW(0))
-        CASE_EQUAL(0)
+        CASE_EQUAL(LANGUAGE_JP)
             CALL(evt_msg_print_add_insert, 0, LW(14), LW(1))
         CASE_DEFAULT
             CALL(evt_msg_fmt_int, 0, LW(14), LW(14), LW(1))
@@ -994,7 +995,7 @@ USER_FUNC(evt_shop_setup) {
         wp->win[i] = winMgrEntry(&window_desc[i]);
     }
     wp->sel = -1;
-    evtRunCaseEntry(9, TRUE, "a_shop_keihin", 0, evt_shoplist, 0);
+    evtRunCaseEntry(CASE_FRONT_A, TRUE, "a_shop_keihin", 0, evt_shoplist, 0);
     return EVT_RETURN_DONE;
 }
 

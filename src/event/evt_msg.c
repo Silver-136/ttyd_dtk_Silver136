@@ -58,7 +58,7 @@ s32 _evt_msg_print(EventEntry* event, BOOL isFirstCall, s32 flags, const char* m
             if ((const char*)name) {
                 npc = evtNpcNameToPtr(event, (const char*)name);
             }
-            if (npc == (NpcEntry*)-1) {
+            if (npc == EVT_NPC_PTR_PARTY) {
                 if (!(event->printWindowFlags & MSG_PRINT_WIN_TOGE_MASK)) {
                     PartyEntry* p = partyGetPtr(marioGetPartyId());
                     if (!p) {
@@ -70,7 +70,7 @@ s32 _evt_msg_print(EventEntry* event, BOOL isFirstCall, s32 flags, const char* m
                     }
                 }
                 strcpy(MSG_WIN_DATA(win)->speakerName, (const char*)name);
-            } else if (npc == (NpcEntry*)-2) {
+            } else if (npc == EVT_NPC_PTR_EXTPARTY) {
                 if (!(event->printWindowFlags & MSG_PRINT_WIN_TOGE_MASK)) {
                     PartyEntry* p = partyGetPtr(marioGetExtraPartyId());
                     if (!p) {
@@ -82,7 +82,7 @@ s32 _evt_msg_print(EventEntry* event, BOOL isFirstCall, s32 flags, const char* m
                     }
                 }
                 strcpy(MSG_WIN_DATA(win)->speakerName, (const char*)name);
-            } else if (npc == (NpcEntry*)-3) {
+            } else if (npc == EVT_NPC_PTR_MARIO) {
                 if (!(event->printWindowFlags & MSG_PRINT_WIN_TOGE_MASK)) {
                     win->speakerPos = marioGetPtr()->position;
                     win->speakerPos.y += marioGetPtr()->wPlayerCollisionBox.y;
@@ -107,7 +107,7 @@ s32 _evt_msg_print(EventEntry* event, BOOL isFirstCall, s32 flags, const char* m
                     Vec scr, mscr;
                     marioGetPtr();
                     getScreenPoint(&win->speakerPos, &scr);
-                    if (win->type == 1) {
+                    if (win->type == WINDOW_TYPE_SMALL) {
                         win->tailMode = 7;
                     } else if (__fabsf(scr.x) >= 300.0f) {
                         win->tailMode = 2;
