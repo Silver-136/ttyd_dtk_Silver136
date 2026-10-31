@@ -2,6 +2,7 @@
 // and the sanctum (pik_02), pipe to Rogueport Sewers (tik_17).
 
 #include "battle/battle_unit.h"
+#include "evt/evt_story.h"
 #include "evt/evt_window.h"
 #include "kpa_act.h"
 #include "eff/eff_starstone.h"
@@ -155,7 +156,7 @@ static BeroEntry bero_data[] = {
     {
         "nw_bero", // hitName
         0, 0, // type..sfxId
-        7, // directionId
+        BERO_DIR_NW, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -172,7 +173,7 @@ static BeroEntry bero_data[] = {
         "n_bero", // hitName
         1, // type
         6, // sfxId
-        1, // directionId
+        BERO_DIR_NE, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -190,7 +191,7 @@ static BeroEntry bero_data[] = {
         "dokan_1", // hitName
         2, // type
         0, // sfxId
-        9, // directionId
+        BERO_DIR_DOWN, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -1236,7 +1237,7 @@ static EVT_BEGIN(sekai_yami_evt)
     CALL(evt_npc_set_position, STRING("ポワン探偵"), 40, -5, 100)
     CALL(evt_npc_set_ry, STRING("ポワン探偵"), 270)
     CALL(evt_map_set_tevcallback, 3, PTR(envSetYami))
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S"), MAP_OBJ_TEV_CALLBACK(3))
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S"), MAP_OBJ_TEV_CALLBACK(3))
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S"), MAP_OBJ_FLAG_DISPLAY_LIST)
     CALL(anim_tevcallback, STRING("ポワン探偵"), 3)
     CALL(anim_tevcallback, STRING("ターくん５"), 3)
@@ -1264,7 +1265,7 @@ static EVT_BEGIN(sekai_yami_evt)
     END_INLINE_EVENT
     WAIT_MS(1000)
     CALL(evt_snd_sfxoff, LW(0))
-    CALL(evt_fade_set_mapchange_type, 1, 10, 300, 9, 300)
+    CALL(evt_fade_set_mapchange_type, 1, FADE_OUT_BLACK, 300, FADE_IN_BLACK, 300)
     CALL(evt_bero_mapchange, STRING("bom_02"), STRING("sekai_yami2"))
     RETURN
 EVT_END()
@@ -1287,7 +1288,7 @@ static EVT_BEGIN(minnnanokoe_evt)
     CALL(evt_npc_set_position, STRING("ナリキンパパ"), 100, 5, -75)
     CALL(evt_npc_set_ry, STRING("ナリキンパパ"), 270)
     CALL(evt_map_set_tevcallback, 3, PTR(envSetYami))
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S"), MAP_OBJ_TEV_CALLBACK(3))
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S"), MAP_OBJ_TEV_CALLBACK(3))
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S"), MAP_OBJ_FLAG_DISPLAY_LIST)
     CALL(anim_tevcallback, STRING("ポワン探偵"), 3)
     CALL(anim_tevcallback, STRING("マダム"), 3)
@@ -1377,14 +1378,14 @@ static EVT_BEGIN(minnnanokoe_evt)
         END_LOOP
     END_INLINE_EVENT
     WAIT_MS(2000)
-    CALL(evt_fade_set_mapchange_type, 1, 10, 300, 9, 300)
+    CALL(evt_fade_set_mapchange_type, 1, FADE_OUT_BLACK, 300, FADE_IN_BLACK, 300)
     CALL(evt_bero_mapchange, STRING("bom_02"), STRING("minnnanokoe"))
     RETURN
 EVT_END()
 
 static EVT_BEGIN(evt_switch_init)
     IF_INT_EQUAL(GSWF_TIK_17_PIK_PIPE_RAISED, 0)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_dakan"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_dakan"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_dokan"), 1, 0)
     END_IF
     RETURN
@@ -1465,24 +1466,24 @@ EVT_BEGIN(pik_01_init_evt)
     CALL_CHILD(PTR(evt_gazigazi_entry))
     CALL(evt_map_set_tevcallback, 1, PTR(test_tev))
     CALL(evt_map_set_tevcallback, 2, PTR(test_tev2))
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("opuku"), MAP_OBJ_TEV_CALLBACK(2))
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("opuku"), MAP_OBJ_FLAG_DISPLAY_LIST)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("HEIPO_"), MAP_OBJ_TEV_CALLBACK(2))
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("HEIPO_"), MAP_OBJ_FLAG_DISPLAY_LIST)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("HEIPO_1"), MAP_OBJ_TEV_CALLBACK(2))
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("HEIPO_1"), MAP_OBJ_FLAG_DISPLAY_LIST)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("HEIPO_2"), MAP_OBJ_TEV_CALLBACK(2))
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("HEIPO_2"), MAP_OBJ_FLAG_DISPLAY_LIST)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("HEIPO_3"), MAP_OBJ_TEV_CALLBACK(2))
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("HEIPO_3"), MAP_OBJ_FLAG_DISPLAY_LIST)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("HEIPO_4"), MAP_OBJ_TEV_CALLBACK(2))
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("HEIPO_4"), MAP_OBJ_FLAG_DISPLAY_LIST)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("HEIPO_5"), MAP_OBJ_TEV_CALLBACK(2))
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("HEIPO_5"), MAP_OBJ_FLAG_DISPLAY_LIST)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("HEIPO_6"), MAP_OBJ_TEV_CALLBACK(2))
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("HEIPO_6"), MAP_OBJ_FLAG_DISPLAY_LIST)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("HEIPO_7"), MAP_OBJ_TEV_CALLBACK(2))
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("HEIPO_7"), MAP_OBJ_FLAG_DISPLAY_LIST)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("opuku"), MAP_OBJ_TEV_CALLBACK(2))
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("opuku"), MAP_OBJ_FLAG_DISPLAY_LIST)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("HEIPO_"), MAP_OBJ_TEV_CALLBACK(2))
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("HEIPO_"), MAP_OBJ_FLAG_DISPLAY_LIST)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("HEIPO_1"), MAP_OBJ_TEV_CALLBACK(2))
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("HEIPO_1"), MAP_OBJ_FLAG_DISPLAY_LIST)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("HEIPO_2"), MAP_OBJ_TEV_CALLBACK(2))
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("HEIPO_2"), MAP_OBJ_FLAG_DISPLAY_LIST)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("HEIPO_3"), MAP_OBJ_TEV_CALLBACK(2))
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("HEIPO_3"), MAP_OBJ_FLAG_DISPLAY_LIST)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("HEIPO_4"), MAP_OBJ_TEV_CALLBACK(2))
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("HEIPO_4"), MAP_OBJ_FLAG_DISPLAY_LIST)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("HEIPO_5"), MAP_OBJ_TEV_CALLBACK(2))
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("HEIPO_5"), MAP_OBJ_FLAG_DISPLAY_LIST)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("HEIPO_6"), MAP_OBJ_TEV_CALLBACK(2))
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("HEIPO_6"), MAP_OBJ_FLAG_DISPLAY_LIST)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("HEIPO_7"), MAP_OBJ_TEV_CALLBACK(2))
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("HEIPO_7"), MAP_OBJ_FLAG_DISPLAY_LIST)
     BEGIN_INLINE_EVENT
         SET_VALUE(LW(0), 0)
         LOOP(0)
@@ -1519,18 +1520,18 @@ EVT_BEGIN(pik_01_init_evt)
         CALL_CHILD(PTR(bero_case_switch_off))
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_harigami"), 0, PTR(evt_powan), 0)
         ELSE
-        CALL(evt_mapobj_flag_onoff, 0, 1, STRING("kami"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 1, STRING("kami"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     IF_INT_EQUAL(LF(0), 1)
         CALL(evt_mobj_entry, STRING("lock"), STRING("MOBJ_Lock"))
-        CALL(evt_mobj_flag_onoff, 1, STRING("lock"), 32)
+        CALL(evt_mobj_flag_onoff, 1, STRING("lock"), MOBJ_FLAG_HINT)
         CALL(evt_mobj_set_position, STRING("lock"), 226, 30, -216)
         CALL(evt_mobj_set_anim, STRING("lock"), STRING("Z_1"))
         CALL(set_r)
         CALL(kpa_lock_hit_scale)
         SET_VALUE(LW(0), 1)
         CALL_CHILD(PTR(bero_case_switch_off))
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("polySurface743_q00096"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("polySurface743_q00096"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("MOBJ_lock"), 0, PTR(koopa_door_evt), 0)
     END_IF
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG7_20_LORD_CRUMP_DEFEATED)

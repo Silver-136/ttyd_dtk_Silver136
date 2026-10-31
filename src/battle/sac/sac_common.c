@@ -222,7 +222,7 @@ USER_FUNC(sac_enemy_slide_go) {
     EventEntry* evt;
     s32 i;
 
-    for (i = 0; i < 64; i++) {
+    for (i = 0; i < BATTLE_UNIT_MAX; i++) {
         unit = BattleGetUnitPtr(wp, i);
         if (unit && unit->mAlliance == ALLIANCE_ENEMY) {
             evt = evtEntry(enemy_slide_go_evt, 0, EVENT_START_IMMEDIATE);
@@ -238,7 +238,7 @@ USER_FUNC(sac_enemy_slide_return) {
     EventEntry* evt;
     s32 i;
 
-    for (i = 0; i < 64; i++) {
+    for (i = 0; i < BATTLE_UNIT_MAX; i++) {
         unit = BattleGetUnitPtr(wp, i);
         if (unit && unit->mAlliance == ALLIANCE_ENEMY) {
             evt = evtEntry(enemy_slide_return_evt, 0, EVENT_START_IMMEDIATE);

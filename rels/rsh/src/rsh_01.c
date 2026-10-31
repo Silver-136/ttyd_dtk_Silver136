@@ -2,6 +2,7 @@
 // waitress NPCs; doors to Rogueport (gor_04), Riverside (hom_00) and Poshley Heights (pik_00) stations.
 
 #include "battle/battle_unit.h"
+#include "driver/fadedrv.h"
 #include "evt/evt_window.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"
@@ -94,7 +95,7 @@ static BeroEntry bero_data_a[] = {
         "w_bero", // hitName
         1, // type
         8, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -130,7 +131,7 @@ static BeroEntry bero_data_a[] = {
         "s_bero", // hitName
         1, // type
         17, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -156,7 +157,7 @@ static BeroEntry bero_data_b[] = {
         "w_bero", // hitName
         1, // type
         8, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -192,7 +193,7 @@ static BeroEntry bero_data_b[] = {
         "s_bero", // hitName
         1, // type
         17, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -215,7 +216,7 @@ static BeroEntry bero_data_c[] = {
         "w_bero", // hitName
         1, // type
         8, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -251,7 +252,7 @@ static BeroEntry bero_data_c[] = {
         "s_bero", // hitName
         1, // type
         17, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -561,7 +562,7 @@ NpcSetupInfo npc_data_2[] = {
 
 static EVT_BEGIN(evt_daiji_kami)
     CALL(evt_mario_key_onoff, 0)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("yuka_3_kami"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("yuka_3_kami"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("yuka_3"), MAP_OBJ_FLAG_HIDDEN)
     SET_VALUE(GSW_STORY_PROGRESS, STG6_23_VITAL_PAPER)
     CALL(evt_item_entry, STRING("daiji"), ITEM_VITAL_PAPER, 0, 0, 0, ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
@@ -740,12 +741,12 @@ EVT_BEGIN(rsh_01_a_init_evt)
     CALL(evt_npc_setup, PTR(npc_data))
     CALL_CHILD(PTR(rsh_01_init_evt))
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG6_22_DOCUMENT)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("yuka_3_kami"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("yuka_3"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("yuka_3_kami"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("yuka_3"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_run_case_evt, CASE_STAND_ON_A, 1, STRING("a_kami"), 0, PTR(evt_daiji_kami), 0)
         ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("yuka_3_kami"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("yuka_3"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("yuka_3_kami"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("yuka_3"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     CALL_CHILD(PTR(evt_rsh_moamoa_on_window))
     CALL(evt_sub_get_system_flag, LW(0))
@@ -821,7 +822,7 @@ static BeroEntry bero_data_a_return[] = {
         "w_bero", // hitName
         1, // type
         8, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -857,7 +858,7 @@ static BeroEntry bero_data_a_return[] = {
         "s_bero", // hitName
         1, // type
         8, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -883,7 +884,7 @@ static BeroEntry bero_data_b_return[] = {
         "w_bero", // hitName
         1, // type
         8, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -919,7 +920,7 @@ static BeroEntry bero_data_b_return[] = {
         "s_bero", // hitName
         1, // type
         8, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -945,7 +946,7 @@ static BeroEntry bero_data_c_return[] = {
         "w_bero", // hitName
         1, // type
         8, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -981,7 +982,7 @@ static BeroEntry bero_data_c_return[] = {
         "s_bero", // hitName
         1, // type
         8, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -1004,7 +1005,7 @@ BeroEntry gor_bero[] = {
         "s_bero", // hitName
         1, // type
         8, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length

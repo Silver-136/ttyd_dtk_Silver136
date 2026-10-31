@@ -314,7 +314,7 @@ void BSE_Kagegakure(BattleUnit* unit) {
     f32 x, y, z;
     BOOL on = FALSE;
 
-    if ((_battleWorkPointer->dispFlags & 1) && (unit->mAttributeFlags & kVeiled)) {
+    if ((_battleWorkPointer->dispFlags & BATTLE_DISP_FLAG_COMMAND_MENU) && (unit->mAttributeFlags & kVeiled)) {
         on = TRUE;
     }
     if (on) {
@@ -521,7 +521,7 @@ BOOL BattleStatusChangeAnnouceMain(BattleWork* wp) {
     BattleUnit* unit;
 
     ret = FALSE;
-    for (i = 0; i < 64; i++) {
+    for (i = 0; i < BATTLE_UNIT_MAX; i++) {
         unit = BattleGetUnitPtr(wp, i);
         if (unit && BattleStatusChangeAnnouceMain_Unit(unit)) {
             ret = TRUE;
@@ -586,7 +586,7 @@ void BattleStatusChangeMsgAdjust(BattleWork* wp) {
         msg = &base->msg[t];
         if (msg->type == -1) continue;
         msg->flags = 0;
-        for (j = 0; j < 64; j++) {
+        for (j = 0; j < BATTLE_UNIT_MAX; j++) {
             unit = BattleGetUnitPtr(wp, j);
             if (unit && !BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL)) {
                 e = &unit->statusChangeInfo[0];
@@ -651,7 +651,7 @@ BOOL BattleStatusChangeMsgMain(BattleWork* wp) {
         break;
     }
     if (ret) {
-        for (i = 0; i < 64; i++) {
+        for (i = 0; i < BATTLE_UNIT_MAX; i++) {
             BattleUnit* unit = BattleGetUnitPtr(wp, i);
             if (unit) {
                 BattleStatusChangeInfoWorkInit(unit);

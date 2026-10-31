@@ -989,7 +989,7 @@ s32 scissor_damage(EventEntry* evt, BOOL first) {
     ok = 1;
     aud = BattleAudience_GetAudienceNum();
     hit = 0;
-    for (i = 0; i < 64; i++) {
+    for (i = 0; i < BATTLE_UNIT_MAX; i++) {
         unit = BattleGetUnitPtr(wp, i);
         if (unit != NULL && BtlUnit_GetBelong(unit) == ALLIANCE_ENEMY) {
             BattleUnitPart* part = BtlUnit_GetPartsPtr(unit, BtlUnit_GetBodyPartsId(unit));

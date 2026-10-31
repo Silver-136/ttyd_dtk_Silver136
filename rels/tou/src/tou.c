@@ -2,6 +2,7 @@
 // Registers the init events of tou_00..tou_20 (the arena tou_03 lives in the tou2 REL).
 
 #include "version.h"
+#include "evt/evt_story.h"
 #include "mario/mariost.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
@@ -302,12 +303,12 @@ static void rankingInit(void) {
     for (i = 0; i < rank_wp->num; i++, entry++) {
         entry->flags = 0;
         entry->id = i;
-        if (swGet(entry->id + 0x9A1)) {
+        if (swGet(entry->id + GSWF_TOU_FIGHTER_BELOW_BASE)) {
             entry->flags |= RANK_FLAG_BEATEN;
         }
-        if (swGet(0x9E1)) { // GSWF_GLITZ_PIT_RANKING_SAVED
+        if (swGet(GSWF_TOU_RANKING_SAVED)) { // GSWF_GLITZ_PIT_RANKING_SAVED
             for (j = 0; j < 2; j++) {
-                entry->sw[j] = swByteGet(j + (entry->id * 2 + 0x207));
+                entry->sw[j] = swByteGet(j + (entry->id * 2 + GSW_TOU_FIGHTER_POINTS_BASE));
             }
         } else {
             entry->score = fighterDt[entry->id].score;
@@ -316,7 +317,7 @@ static void rankingInit(void) {
             entry->flags |= RANK_FLAG_PLAYER;
         }
     }
-    swSet(0x9E1); // GSWF_GLITZ_PIT_RANKING_SAVED
+    swSet(GSWF_TOU_RANKING_SAVED); // GSWF_GLITZ_PIT_RANKING_SAVED
     if (evtGetValue(NULL, GSW_STORY_PROGRESS) < STG3_34_RETURN_TO_ROGUEPORT) {
         rank_wp->entries[21].flags |= RANK_FLAG_HIDDEN;
         rank_wp->entries[22].flags |= RANK_FLAG_HIDDEN;
@@ -353,12 +354,12 @@ static void rankingExit(void) {
 
     for (i = 0; i < rank_wp->num; i++, entry++) {
         if (entry->flags & RANK_FLAG_BEATEN) {
-            swSet(entry->id + 0x9A1);
+            swSet(entry->id + GSWF_TOU_FIGHTER_BELOW_BASE);
         } else {
-            swClear(entry->id + 0x9A1);
+            swClear(entry->id + GSWF_TOU_FIGHTER_BELOW_BASE);
         }
         for (j = 0; j < 2; j++) {
-            swByteSet(j + (entry->id * 2 + 0x207), entry->sw[j]);
+            swByteSet(j + (entry->id * 2 + GSW_TOU_FIGHTER_POINTS_BASE), entry->sw[j]);
         }
     }
     _mapFree(rank_wp->entries);
@@ -383,15 +384,15 @@ USER_FUNC(evt_rankingReset) {
     rankingExit();
     pouchRemoveItem(ITEM_CHAMPS_BELT);
     for (i = 0; i < 20; i++) {
-        swClear(i + 0x9A1);
+        swClear(i + GSWF_TOU_FIGHTER_BELOW_BASE);
     }
-    swClear(0x958); // GSWF_TOU_GOOMBA_BROS_AFTER_MATCH_SEEN
-    swClear(0x95F); // GSWF_TOU_RAWK_HAWK_OPENING_SEEN
-    swClear(0x960); // GSWF_TOU_RAWK_HAWK_FIRST_WIN
-    swClear(0x94F); // GSWF_GLITZ_PIT_TITLE_MATCH_BOOKED
-    swClear(0x9E1); // GSWF_GLITZ_PIT_RANKING_SAVED
-    swClear(0x9E4); // GSWF_GLITZ_PIT_LAST_OPPONENT_SAVED
-    swClear(0x963); // GSWF_TOU_02_FANS_MOB_MARIO_SEEN
+    swClear(GSWF_TOU10_FIRST_MATCH_AFTER_SEEN); // GSWF_TOU_GOOMBA_BROS_AFTER_MATCH_SEEN
+    swClear(GSWF_TOU_CHAMP_OPENING_SEEN); // GSWF_TOU_RAWK_HAWK_OPENING_SEEN
+    swClear(GSWF_TOU_CHAMP_WIN_SEEN); // GSWF_TOU_RAWK_HAWK_FIRST_WIN
+    swClear(GSWF_TOU_TITLE_MATCH_RESERVED); // GSWF_GLITZ_PIT_TITLE_MATCH_BOOKED
+    swClear(GSWF_TOU_RANKING_SAVED); // GSWF_GLITZ_PIT_RANKING_SAVED
+    swClear(GSWF_TOU_LAST_OPPONENT_VALID); // GSWF_GLITZ_PIT_LAST_OPPONENT_SAVED
+    swClear(GSWF_TOU02_LOBBY_CROWD_CHAMP_SEEN); // GSWF_TOU_02_FANS_MOB_MARIO_SEEN
     rankingInit();
     return EVT_RETURN_DONE;
 }
@@ -460,9 +461,9 @@ static void rankingControll(void) {
         if (nwin > 16) {
             MOVE_FLAG(win, nwin, 0x100, 14);
         }
-        if (swGet(0x9E4)) { // GSWF_GLITZ_PIT_LAST_OPPONENT_SAVED
+        if (swGet(GSWF_TOU_LAST_OPPONENT_VALID)) { // GSWF_GLITZ_PIT_LAST_OPPONENT_SAVED
             for (i = 0; i < nwin; i++) {
-                if (win[i] == swByteGet(0x1FB)) { // GSW_GLITZ_PIT_LAST_OPPONENT
+                if (win[i] == swByteGet(GSW_TOU_LAST_OPPONENT_ID)) { // GSW_GLITZ_PIT_LAST_OPPONENT
                     break;
                 }
             }
@@ -486,9 +487,9 @@ static void rankingControll(void) {
                 }
             }
         }
-        if (swGet(0x9E4)) { // GSWF_GLITZ_PIT_LAST_OPPONENT_SAVED
+        if (swGet(GSWF_TOU_LAST_OPPONENT_VALID)) { // GSWF_GLITZ_PIT_LAST_OPPONENT_SAVED
             for (i = 0; i < nlose; i++) {
-                if (lose[i] == swByteGet(0x1FB)) { // GSW_GLITZ_PIT_LAST_OPPONENT
+                if (lose[i] == swByteGet(GSW_TOU_LAST_OPPONENT_ID)) { // GSW_GLITZ_PIT_LAST_OPPONENT
                     break;
                 }
             }
@@ -510,7 +511,7 @@ static void rankingControll(void) {
     memcpy(rank_wp->entries, work, rank_wp->num * sizeof(RankEntry));
     __memFree(HEAP_DEFAULT, work);
     GET_RANK(j, i);
-    swByteSet(0x244, j);
+    swByteSet(GSW_TOU_PLAYER_RANK, j);
 }
 
 /** Script helper: args[0] receives Mario's current rank (0 = the champion's seat). */
@@ -1040,31 +1041,31 @@ static void disp_proc(CameraId cameraId, void* param) {
         Vec pos = {0.0f, 0.0f, 0.0f};
         pos.x = 15.0f + x;
         pos.y = yy - 24.0f;
-        iconDispGx(&pos, 0x10, ICON_ITEM_CHAMPS_BELT, 0.8f);
+        iconDispGx(&pos, ICON_FLAG_2D, ICON_ITEM_CHAMPS_BELT, 0.8f);
     }
     GXSetScissor(0, 0, 0x260, 0x1E0);
     if (dwp->page > 0) {
         {
             Vec pos = {0.0f, 125.0f, 0.0f};
             pos.x = x + winW;
-            iconDispGx(&pos, 0x10, ICON_PAGE_ARROW, -1.0f);
+            iconDispGx(&pos, ICON_FLAG_2D, ICON_PAGE_ARROW, -1.0f);
         }
         {
             Vec pos = {0.0f, 75.0f, 0.0f};
             pos.x = x + winW;
-            iconDispGx(&pos, 0x10, ICON_TRIGGER_L, 0.6f);
+            iconDispGx(&pos, ICON_FLAG_2D, ICON_TRIGGER_L, 0.6f);
         }
     }
     if (dwp->page < 1) {
         {
             Vec pos = {0.0f, -140.0f, 0.0f};
             pos.x = x + winW;
-            iconDispGx(&pos, 0x10, ICON_PAGE_ARROW, 1.0f);
+            iconDispGx(&pos, ICON_FLAG_2D, ICON_PAGE_ARROW, 1.0f);
         }
         {
             Vec pos = {0.0f, -125.0f, 0.0f};
             pos.x = x + winW;
-            iconDispGx(&pos, 0x10, ICON_TRIGGER_R, 0.6f);
+            iconDispGx(&pos, ICON_FLAG_2D, ICON_TRIGGER_R, 0.6f);
         }
     }
 }

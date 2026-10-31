@@ -65,8 +65,8 @@ static BeroEntry bero_entry_data[] = {
         "e_bero", // hitName
         1, // type
         10, // sfxId
-        20000, // directionId
-        100000, // centerPosition
+        BERO_DIR_AUTO, // directionId
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -188,7 +188,7 @@ EVT_BEGIN(peach_evt_syawa_main)
     WAIT_MS(1000)
     CALL(evt_snd_sfxon_3d, STRING("SFX_PEACH_HANG_CLOTH1"), 0, 0, 0, 0)
     CALL(evt_mapobj_trans, 1, STRING("p_fuku"), 0, -10, 0)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("p_fuku"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("p_fuku"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_sub_intpl_msec_init, EASING_LINEAR, -10, 0, 100)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
@@ -276,11 +276,11 @@ EVT_BEGIN(peach_evt_syawa_main)
             BREAK_LOOP
         END_IF
     END_LOOP
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("taoru"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("taoru"), MAP_OBJ_FLAG_HIDDEN)
     WAIT_MS(1500)
     CALL(evt_snd_sfxon_3d, STRING("SFX_PEACH_HANG_CLOTH1"), 0, 0, 0, 0)
     CALL(evt_mapobj_trans, 1, STRING("taoru"), 0, -10, 0)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("taoru"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("taoru"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_sub_intpl_msec_init, EASING_LINEAR, -10, 0, 100)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
@@ -307,7 +307,7 @@ EVT_BEGIN(peach_evt_syawa_main)
             BREAK_LOOP
         END_IF
     END_LOOP
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("p_fuku"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("p_fuku"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_snd_sfxon_3d, STRING("SFX_PEACH_CHANGE_CLOTH1"), 0, 0, 0, 0)
     WAIT_MS(1000)
     CALL(evt_peach_set_condition, 1)

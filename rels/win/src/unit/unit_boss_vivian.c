@@ -199,7 +199,7 @@ BattleWeapon weapon_vivian_kagenuke_attack1 = {
     NULL, // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH, // special
     COUNTER_RESIST_TOP_SPIKY, // counterResistFlags
-    0x80002000, // targetWeightFlags
+    TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
@@ -243,7 +243,7 @@ BattleWeapon weapon_vivian_flame_attack1 = {
     NULL, // acHelpMsg
     SPECIAL_PIERCE_DEFENSE | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
-    0x80002000, // targetWeightFlags
+    TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
@@ -263,7 +263,7 @@ static BattleUnitSetup entry_marilyn = {
     &unit_boss_marilyn, // mUnitKindParams
     ALLIANCE_ENEMY, // alliance
     {0}, // pad_05
-    0x4000004, // attackPhase
+    BATTLE_PHASE_ENEMY, // attackPhase
     {1000.0f, 0.0f, 1000.0f}, // position
     0, // hitOffsetX
     {0}, // unitWork
@@ -278,7 +278,7 @@ static BattleUnitSetup entry_majolyne = {
     &unit_boss_majolyne, // mUnitKindParams
     ALLIANCE_ENEMY, // alliance
     {0}, // pad_05
-    0x4000004, // attackPhase
+    BATTLE_PHASE_ENEMY, // attackPhase
     {1000.0f, 0.0f, 1000.0f}, // position
     0, // hitOffsetX
     {0}, // unitWork
@@ -491,7 +491,7 @@ EVT_END()
  * and comes up at the new home spot (x 55, 105 or 155), and the turn order is re-sorted.
  */
 static EVT_BEGIN(unison_phase_event)
-    CALL(btlevtcmd_CheckPhase, LW(0), 67108867)
+    CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_AFTER_PLAYER)
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL_CHILD(PTR(majo_unison_phase_event))
         CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, MAJO_WORK_LINE_POS, LW(3))

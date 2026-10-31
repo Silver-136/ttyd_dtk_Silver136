@@ -1,6 +1,7 @@
 // Battle unit events: running the hit, phase, wait and init event scripts attached to a unit.
 
 #include "battle/battle_unit_event.h"
+#include "battle/battle.h"
 
 /**
  * Checks whether every unit's init event script has finished, clearing the ids of those that have;
@@ -12,7 +13,7 @@ BOOL BattleCheckEndUnitInitEvent(BattleWork* wp) {
     s32 i, eventId;
 
     valid = TRUE;
-    for (i = 0; i < 64; i++) {
+    for (i = 0; i < BATTLE_UNIT_MAX; i++) {
         unit = BattleGetUnitPtr(wp, i);
         if (unit) {
             eventId = unit->initEventId;

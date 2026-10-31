@@ -76,7 +76,7 @@ static BeroEntry bero_entry_data[] = {
         "e_bero", // hitName
         1, // type
         6, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -93,7 +93,7 @@ static BeroEntry bero_entry_data[] = {
     {
         "s_bero_1", // hitName
         0, 0, // type..sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -109,7 +109,7 @@ static BeroEntry bero_entry_data[] = {
     {
         "s_bero_2", // hitName
         0, 0, // type..sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -304,7 +304,7 @@ EVT_BEGIN(hosi_sw_check)
         SET_VALUE(LW(0), 0)
         LOOP(7)
             CALL(get_hosi_name, LW(0), LW(1), LW(2))
-            CALL(evt_mapobj_flag_onoff, 1, 1, LW(1), MAP_OBJ_FLAG_HIDDEN)
+            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, LW(1), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_mapobj_flag_onoff, 1, 0, LW(2), MAP_OBJ_FLAG_HIDDEN)
             ADD(LW(0), 1)
         END_LOOP
@@ -312,7 +312,7 @@ EVT_BEGIN(hosi_sw_check)
         SET_VALUE(LW(1), 6)
         LOOP(50)
             CALL(get_hosi_name, LW(0), LW(2), LW(3))
-            CALL(evt_mapobj_flag_onoff, 1, 0, LW(2), MAP_OBJ_FLAG_HIDDEN)
+            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, LW(2), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_mapobj_flag_onoff, 1, 1, LW(3), MAP_OBJ_FLAG_HIDDEN)
             CALL(get_hosi_name, LW(1), LW(2), LW(3))
             CALL(evt_mapobj_flag_onoff, 1, 1, LW(2), MAP_OBJ_FLAG_HIDDEN)
@@ -327,7 +327,7 @@ EVT_BEGIN(hosi_sw_check)
                 BREAK_LOOP
             END_IF
             CALL(get_hosi_name, LW(0), LW(2), LW(3))
-            CALL(evt_mapobj_flag_onoff, 1, 0, LW(2), MAP_OBJ_FLAG_HIDDEN)
+            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, LW(2), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_mapobj_flag_onoff, 1, 1, LW(3), MAP_OBJ_FLAG_HIDDEN)
             CALL(get_hosi_name, LW(1), LW(2), LW(3))
             CALL(evt_mapobj_flag_onoff, 1, 1, LW(2), MAP_OBJ_FLAG_HIDDEN)
@@ -338,13 +338,13 @@ EVT_BEGIN(hosi_sw_check)
             MODULO(LW(0), 7)
         END_LOOP
         CALL(get_hosi_name, LW(1), LW(2), LW(3))
-        CALL(evt_mapobj_flag_onoff, 1, 1, LW(2), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, LW(2), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 0, LW(3), MAP_OBJ_FLAG_HIDDEN)
         WAIT_MS(200)
         SET_VALUE(LW(0), 0)
         LOOP(7)
             CALL(get_hosi_name, LW(0), LW(1), LW(2))
-            CALL(evt_mapobj_flag_onoff, 1, 0, LW(1), MAP_OBJ_FLAG_HIDDEN)
+            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, LW(1), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_mapobj_flag_onoff, 1, 1, LW(2), MAP_OBJ_FLAG_HIDDEN)
             ADD(LW(0), 1)
         END_LOOP
@@ -370,14 +370,14 @@ EVT_END()
 EVT_BEGIN(hosi_onoff)
     GET_INT_INDEXED(LW(2), LW(3))
     IF_INT_EQUAL(LW(3), 0)
-        CALL(evt_mapobj_flag_onoff, 1, 0, LW(0), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, LW(0), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 1, LW(1), MAP_OBJ_FLAG_HIDDEN)
         SET_INT_INDEXED(LW(2), 1)
         CALL(evt_mapobj_get_position, LW(0), LW(3), LW(4), LW(5))
         CALL(evt_eff64, 0, STRING("stardust_n64"), 2, LW(3), LW(4), LW(5), 30, 0, 0, 0, 0, 0, 0, 0)
         CALL(evt_snd_sfxon_3d, STRING("SFX_STG8_STAR_LIGHTUP1"), LW(3), LW(4), LW(5), 0)
     ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 1, LW(0), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, LW(0), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 0, LW(1), MAP_OBJ_FLAG_HIDDEN)
         SET_INT_INDEXED(LW(2), 0)
     END_IF
@@ -449,13 +449,13 @@ EVT_END()
 
 EVT_BEGIN(hosi_init)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG8_11_STAR_PUZZLE)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_hosi_02a"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_hosi_03a"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_hosi_04a"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_hosi_05a"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_hosi_06a"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_hosi_07a"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_hosi_08a"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_hosi_02a"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_hosi_03a"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_hosi_04a"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_hosi_05a"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_hosi_06a"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_hosi_07a"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_hosi_08a"), MAP_OBJ_FLAG_HIDDEN)
         SET_VALUE(LSWF_LAS_20_STAR_02_LIT, 0)
         SET_VALUE(LSWF_LAS_20_STAR_03_LIT, 0)
         SET_VALUE(LSWF_LAS_20_STAR_04_LIT, 0)
@@ -471,13 +471,13 @@ EVT_BEGIN(hosi_init)
         CALL(evt_mobj_floatswitch_red, 0, STRING("hosi_07_sw"), -121, -50, -120, PTR(hosi_07_sw_evt), 0)
         CALL(evt_mobj_floatswitch_red, 0, STRING("hosi_08_sw"), -37, -50, -120, PTR(hosi_08_sw_evt), 0)
     ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_hosi_02b"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_hosi_03b"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_hosi_04b"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_hosi_05b"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_hosi_06b"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_hosi_07b"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_hosi_08b"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_hosi_02b"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_hosi_03b"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_hosi_04b"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_hosi_05b"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_hosi_06b"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_hosi_07b"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_hosi_08b"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     RETURN
 EVT_END()
@@ -489,15 +489,15 @@ EVT_BEGIN(las_20_init_evt)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
     CALL_CHILD(PTR(evt_bero_info_run))
-    CALL(evt_mapobj_flag_onoff, 0, 0, STRING("S_hgm_01a"), MAP_OBJ_FLAG_CLIP)
-    CALL(evt_mapobj_flag_onoff, 0, 0, STRING("S_hgm_08a"), MAP_OBJ_FLAG_CLIP)
-    CALL(evt_mapobj_flag_onoff, 0, 0, STRING("S_hgm_09a"), MAP_OBJ_FLAG_CLIP)
-    CALL(evt_mapobj_flag_onoff, 0, 0, STRING("S_hgm_12a"), MAP_OBJ_FLAG_CLIP)
-    CALL(evt_mapobj_flag_onoff, 0, 0, STRING("S_hgm_19a"), MAP_OBJ_FLAG_CLIP)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 0, STRING("S_hgm_01a"), MAP_OBJ_FLAG_CLIP)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 0, STRING("S_hgm_08a"), MAP_OBJ_FLAG_CLIP)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 0, STRING("S_hgm_09a"), MAP_OBJ_FLAG_CLIP)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 0, STRING("S_hgm_12a"), MAP_OBJ_FLAG_CLIP)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 0, STRING("S_hgm_19a"), MAP_OBJ_FLAG_CLIP)
     SPAWN_EVENT(PTR(haguruma_evt))
     CALL(evt_map_playanim, STRING("kusari"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_hit_bind_mapobj, STRING("A_move_dai"), STRING("S_move_dai"))
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_move_dai"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_move_dai"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_hitobj_onoff, STRING("A_move_dai"), 0, 0)
     CALL(evt_mobj_switch_red, 0, STRING("dai_switch"), -250, -290, 100, PTR(dai_evt), 0)
     SPAWN_EVENT(PTR(hosi_init))

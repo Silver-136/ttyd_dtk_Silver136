@@ -2,6 +2,7 @@
 // doors to the minigame rooms yuu_00..yuu_03; exits to gor_01 and gor_04 (station).
 
 #include "version.h"
+#include "evt/evt_story.h"
 #include "evt/evt_urouro.h"
 #include "evt/evt_win.h"
 #include "evt/evt_window.h"
@@ -654,7 +655,7 @@ static void monte_disp(CameraId camera, void* param) {
 
     for (i = 0; i < monte->owner->monteCount; i++) {
         if (monte[i].hidden == 0) {
-            iconDispGx(&monte[i].sub.pos, 0x40, ICON_ITEM_PIANTA_TOKEN, 1.0f);
+            iconDispGx(&monte[i].sub.pos, ICON_FLAG_NO_MAP_BLEND, ICON_ITEM_PIANTA_TOKEN, 1.0f);
         }
     }
 }
@@ -686,7 +687,7 @@ static BeroEntry bero_entry_data[] = {
     {
         "n_bero", // hitName
         0, 0, // type..sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -702,7 +703,7 @@ static BeroEntry bero_entry_data[] = {
     {
         "e_bero", // hitName
         0, 0, // type..sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -719,7 +720,7 @@ static BeroEntry bero_entry_data[] = {
         "dokan_1", // hitName
         2, // type
         0, // sfxId
-        9, // directionId
+        BERO_DIR_DOWN, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -736,7 +737,7 @@ static BeroEntry bero_entry_data[] = {
         "s_bero", // hitName
         3840, // type
         0, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -753,7 +754,7 @@ static BeroEntry bero_entry_data[] = {
         "A_dokan_02", // hitName
         8194, // type
         0, // sfxId
-        9, // directionId
+        BERO_DIR_DOWN, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -775,7 +776,7 @@ BeroEntry yuu_00_data[] = {
         "A_dokan_02", // hitName
         8194, // type
         0, // sfxId
-        9, // directionId
+        BERO_DIR_DOWN, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -796,7 +797,7 @@ BeroEntry yuu_01_data[] = {
         "A_dokan_02", // hitName
         8194, // type
         0, // sfxId
-        9, // directionId
+        BERO_DIR_DOWN, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -817,7 +818,7 @@ BeroEntry yuu_02_data[] = {
         "A_dokan_02", // hitName
         8194, // type
         0, // sfxId
-        9, // directionId
+        BERO_DIR_DOWN, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -838,7 +839,7 @@ BeroEntry yuu_03_data[] = {
         "A_dokan_02", // hitName
         8194, // type
         0, // sfxId
-        9, // directionId
+        BERO_DIR_DOWN, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -859,7 +860,7 @@ BeroEntry yuu_03_data[] = {
  */
 EVT_BEGIN(maffiaboss_ticket_put)
     CALL(evt_item_entry, STRING("ticket"), ITEM_BLIMP_TICKET, 0, -1000, 0, ITEM_TYPE_STILL, -1, 0)
-    CALL(evt_item_flag_on, STRING("ticket"), 32768)
+    CALL(evt_item_flag_on, STRING("ticket"), ITEM_FLAG_NO_JINGLE)
     BEGIN_INLINE_EVENT
         CALL(evt_snd_bgmon, PSND_FADEOUT | PSND_SLOT(1), STRING("BGM_FF_GET_KEYITEM1"))
         WAIT_MS(2000)
@@ -1476,7 +1477,7 @@ EVT_BEGIN(maffiaboss_train_ticket)
         CALL(evt_msg_print, 0, STRING("mac_5_068"), 0, 0)
     END_INLINE_EVENT
     CALL(evt_item_entry, STRING("ticket"), ITEM_TRAIN_TICKET, 0, -1000, 0, ITEM_TYPE_STILL, -1, 0)
-    CALL(evt_item_flag_on, STRING("ticket"), 32768)
+    CALL(evt_item_flag_on, STRING("ticket"), ITEM_FLAG_NO_JINGLE)
     BEGIN_INLINE_EVENT
         CALL(evt_snd_bgmoff, PSND_PAUSE)
         CALL(evt_snd_bgmon, PSND_FADEOUT | PSND_SLOT(1), STRING("BGM_FF_GET_KEYITEM1"))
@@ -3607,7 +3608,7 @@ static NpcSetupInfo npcEnt[] = {
  */
 static EVT_BEGIN(evt_door_01_00)
     IF_INT_EQUAL(LF(0), 0)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_i01_doa_m"), MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_i01_doa_m"), MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_i01_doa_o"), MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2)
     END_IF
     MULTIPLY_FLOAT(LW(0), FLOAT(0.5f))
@@ -3639,7 +3640,7 @@ EVT_END()
  */
 EVT_BEGIN(evt_door_01_10)
     IF_INT_EQUAL(LF(0), 0)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_i01_doa_m"), MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_i01_doa_m"), MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_i01_doa_o"), MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2)
     END_IF
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.5f))
@@ -3675,7 +3676,7 @@ EVT_BEGIN(evt_door_01_0_open)
 EVT_END()
 
 EVT_BEGIN(evt_door_01_0_close)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_i01_doa_m"), MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_i01_doa_m"), MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_i01_doa_o"), MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG2_46_BLIMP_TICKET)
         CALL(evt_door_end_wait)
@@ -3703,8 +3704,8 @@ EVT_BEGIN(evt_door_01_1_open)
     CALL(evt_hitobj_onoff, STRING("A_ie_03A"), 1, 1)
     CALL(evt_hitobj_onoff, STRING("A_gaitou"), 1, 1)
     CALL(evt_hitobj_onoff, STRING("A_kabe_01"), 1, 1)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ie_03_soto"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ie_04_soto"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_ie_03_soto"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_ie_04_soto"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_npc_flag_onoff, 0, STRING("マフィア３"), NPC_FLAG_NO_DRAW)
     CALL(evt_npc_flag_onoff, 0, STRING("マフィアボスカジノ"), NPC_FLAG_NO_DRAW)
     CALL(evt_npc_flag_onoff, 0, STRING("マジョリン"), NPC_FLAG_NO_DRAW)
@@ -3741,8 +3742,8 @@ EVT_BEGIN(evt_door_01_1_close)
     CALL(evt_hitobj_onoff, STRING("A_ie_03A"), 1, 0)
     CALL(evt_hitobj_onoff, STRING("A_gaitou"), 1, 0)
     CALL(evt_hitobj_onoff, STRING("A_kabe_01"), 1, 0)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ie_03_soto"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ie_04_soto"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ie_03_soto"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ie_04_soto"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_npc_flag_onoff, 1, STRING("マフィア３"), NPC_FLAG_NO_DRAW)
     CALL(evt_npc_flag_onoff, 1, STRING("マフィアボスカジノ"), NPC_FLAG_NO_DRAW)
     CALL(evt_npc_flag_onoff, 1, STRING("マジョリン"), NPC_FLAG_NO_DRAW)
@@ -3759,7 +3760,7 @@ EVT_BEGIN(evt_door_01_1_close)
     CALL(evt_npc_flag_onoff, 1, STRING("キノピオ子供Ｂ"), NPC_FLAG_NO_DRAW)
     CALL(evt_npc_flag_onoff, 1, STRING("ノコノコＡ"), NPC_FLAG_NO_DRAW)
     CALL(evt_npc_flag_onoff, 1, STRING("クリボー１"), NPC_FLAG_NO_DRAW)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_i01_doa_m"), MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_i01_doa_m"), MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_i01_doa_o"), MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2)
     CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
     CALL(evt_snd_envon, PSND_CONTINUE | PSND_UNSILENT, 0)
@@ -3841,8 +3842,8 @@ EVT_END()
  */
 static EVT_BEGIN(evt_door_02_00)
     IF_INT_EQUAL(LF(0), 0)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ie_02_f1_doa01"), MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ie_02_f1_doa02"), MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ie_02_f1_doa01"), MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ie_02_f1_doa02"), MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2)
     END_IF
     SET_FLOAT_VALUE(LW(2), LW(0))
     SET_FLOAT_VALUE(LW(3), LW(0))
@@ -3890,7 +3891,7 @@ EVT_BEGIN(door_data_02_0_open_sub)
 EVT_END()
 
 EVT_BEGIN(door_data_02_0_open)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_i02_soto_kai"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_i02_soto_kai"), MAP_OBJ_FLAG_HIDDEN)
     SPAWN_EVENT(PTR(door_data_02_0_open_sub))
     SET_VALUE(GSWF_GOR_PARLOR_GREETED_THIS_VISIT, 0)
     CALL(yuugijou_set_yupflag, 0)
@@ -3907,8 +3908,8 @@ EVT_END()
  * sets the slot phase to 11 (shut down) and brings the Rogueport music and ambience back.
  */
 EVT_BEGIN(door_data_02_0_close)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ie_02_f1_doa01"), MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ie_02_f1_doa02"), MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_ie_02_f1_doa01"), MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_ie_02_f1_doa02"), MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2)
     CALL(yuugijou_get_takeoutflag, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
     END_IF
@@ -3919,7 +3920,7 @@ EVT_BEGIN(door_data_02_0_close)
     CALL(evt_snd_envoff, PSND_FADEOUT | PSND_SLOT(1))
     CALL(evt_snd_envon, PSND_CONTINUE | PSND_FADEIN, 0)
     CALL(mario_keyoff_wait)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_i02_soto_kai"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_i02_soto_kai"), MAP_OBJ_FLAG_HIDDEN)
     RETURN
 EVT_END()
 
@@ -4098,7 +4099,7 @@ EVT_BEGIN(evt_door_02_1_open)
     END_INLINE_EVENT
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG5_58_FAIR_WINDS)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ie_02_bed"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ie_02_bed"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_i02_bed"), 1, 0)
         CASE_LESS(STG5_65_TRAIN_TICKET)
         CALL(evt_npc_set_anim, STRING("マフィアボス"), STRING("S_2"))
@@ -4111,13 +4112,13 @@ EVT_BEGIN(evt_door_02_1_open)
             CALL(evt_mario_set_dir, 90, 0, 0)
             CALL_CHILD(PTR(maffiaboss_train_ticket_init))
         END_IF
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_i02_f2_set00C"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_i02_f2_set00C"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("Ai02_tke"), 1, 0)
         CASE_LESS(STG6_00_START)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_i02_f2_set00C"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_i02_f2_set00C"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("Ai02_tke"), 1, 0)
         CASE_DEFAULT
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ie_02_bed"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ie_02_bed"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_i02_bed"), 1, 0)
     END_SWITCH
     RETURN
@@ -4272,7 +4273,7 @@ static EVT_BEGIN(evt_door_03_open)
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_door_param, LW(0), 1, LW(1), LW(2), LW(3))
     CALL(evt_run_case_evt, CASE_FRONT, 1, LW(3), 0, PTR(evt_door_03_caseopen), 0)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_bero_n"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_bero_n"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_hitobj_onoff, STRING("A_ie_04A"), 1, 0)
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
@@ -4395,7 +4396,7 @@ EVT_END()
 
 static EVT_BEGIN(evt_door_04_close)
     CALL(evt_mario_key_onoff, 0)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_bero_n"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_bero_n"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_cam3d_evt_set_xyz, 328, 37, -395, 0, 150, EASING_SINE_IN_OUT)
     CALL(evt_mario_get_pos, 0, LW(10), LW(11), LW(12))
     CALL(evt_mario_mov_pos2, LW(10), -400, FLOAT(60.0f))
@@ -4444,15 +4445,15 @@ static EVT_BEGIN(evt_door_04_entry)
 EVT_END()
 
 EVT_BEGIN(wall_bomb_init)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ana_before1"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ana_before1"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ana_before"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ana_after_01"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ana_after_01"), MAP_OBJ_FLAG_HIDDEN)
     IF_INT_EQUAL(GSWF_GOR_03_WALL_BOMBED, 0)
         CALL(evt_paper_entry, STRING("OFF_d_bom_ver2"))
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ana_before1"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ana_before"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_ana_before1"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_ana_before"), MAP_OBJ_FLAG_HIDDEN)
         ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ana_after_01"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_ana_after_01"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_ana_ana"), 1, 0)
     END_IF
     RETURN
@@ -4481,12 +4482,12 @@ static EVT_BEGIN(wall_bomb)
         CALL(evt_img_alloc_capture, STRING("capture_img"), 0, STRING("offscreen"), 1, LW(10), LW(11), LW(12), LW(13))
         CALL(evt_img_clear_virtual_point, STRING("capture_img"))
         CALL(evt_img_set_paper_anim, STRING("capture_img"), STRING("A_1"))
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ana_before1"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ana_before1"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ana_before"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ana_after_01"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_img_wait_animend, STRING("capture_img"))
         ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ana_before1"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ana_before1"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ana_before"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ana_after_01"), MAP_OBJ_FLAG_HIDDEN)
     END_IF

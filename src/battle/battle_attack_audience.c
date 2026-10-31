@@ -107,7 +107,7 @@ s32 _check_aud_item_type(EventEntry* event, BOOL isFirstCall) {
     if (item == ITEM_NULL) {
         return EVT_RETURN_DONE;
     }
-    if (item >= 0xEC && item < 0xF0) {
+    if (item >= ITEM_AUDIENCE_CAN && item < BADGE_MIN) {
         flag = 1;
     } else {
         flag = 0;

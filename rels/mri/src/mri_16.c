@@ -89,7 +89,7 @@ static BeroEntry bero_entry_data[] = {
         "dokan1", // hitName
         2, // type
         0, // sfxId
-        9, // directionId
+        BERO_DIR_DOWN, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -105,7 +105,7 @@ static BeroEntry bero_entry_data[] = {
         "dokan2", // hitName
         2, // type
         0, // sfxId
-        6, // directionId
+        BERO_DIR_W, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -122,7 +122,7 @@ static BeroEntry bero_entry_data[] = {
         "dokan3", // hitName
         2, // type
         0, // sfxId
-        9, // directionId
+        BERO_DIR_DOWN, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -138,7 +138,7 @@ static BeroEntry bero_entry_data[] = {
         "dokan4", // hitName
         2, // type
         0, // sfxId
-        6, // directionId
+        BERO_DIR_W, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -154,7 +154,7 @@ static BeroEntry bero_entry_data[] = {
         "dokan6", // hitName
         2, // type
         0, // sfxId
-        2, // directionId
+        BERO_DIR_E, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -170,7 +170,7 @@ static BeroEntry bero_entry_data[] = {
         "dokan7", // hitName
         2, // type
         0, // sfxId
-        9, // directionId
+        BERO_DIR_DOWN, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -242,7 +242,7 @@ EVT_BEGIN(water_shikake)
             SET_VALUE(LF(0), 0)
         END_IF
         IF_INT_EQUAL(LF(0), 1)
-            CALL(evt_puni_set_mode, LW(10), 16)
+            CALL(evt_puni_set_mode, LW(10), PUNI_MODE_HAGURE)
             CALL(evt_puni_flag_onoff, LW(10), 0, PUNI_FLAG_COLLIDE)
             CALL(puni_get_id, LW(10), LW(3))
             AND(LW(3), 8)
@@ -256,8 +256,8 @@ EVT_BEGIN(water_shikake)
         END_IF
     END_LOOP
     CALL(evt_hitobj_onoff, STRING("A_f1_rak_l03"), 1, 1)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_mizu_before"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_mizu_now"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_mizu_before"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_mizu_now"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_snd_sfxon, STRING("SFX_STG2_QUAKE1"), GW(0))
     CALL(evt_snd_sfxon, STRING("SFX_STG2_WATER_FLOW1"), GW(1))
     SPAWN_EVENT_GET_ID(PTR(cam_shake), LW(10))
@@ -284,8 +284,8 @@ EVT_BEGIN(water_shikake)
         CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
         CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)
     END_INLINE_EVENT
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_mizu_now"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_mizu_after"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_mizu_now"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_mizu_after"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_hitobj_onoff, STRING("A_mizu_after"), 1, 1)
     CALL(evt_hitobj_onoff, STRING("A_f2_kaidan"), 1, 1)
     CALL(evt_hitobj_onoff, STRING("A_mizu_after"), 1, 1)
@@ -437,8 +437,8 @@ EVT_BEGIN(mri_16_init_evt)
     CALL(evt_mobj_rideswitch_lightblue, STRING("mobj01"), 125, 80, -120, PTR(bar_shikake), PTR(bar_shikake_up), GSWF_MRI_16_RIDE_SWITCH_PRESSED)
     SPAWN_EVENT(PTR(switch_up_down))
     IF_INT_EQUAL(GSWF_MRI_16_WATER_SWITCH_PRESSED, 0)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_mizu_now"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_mizu_after"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_mizu_now"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_mizu_after"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_f2_kaidan"), 1, 0)
         CALL(evt_hitobj_onoff, STRING("A_mizu_after"), 1, 0)
         CALL(evt_hitobj_onoff, STRING("A_f1_rak_l03"), 1, 0)
@@ -452,8 +452,8 @@ EVT_BEGIN(mri_16_init_evt)
         CALL(evt_hitobj_onoff, STRING("A_f1_rak_mkusa05"), 1, 0)
         CALL(evt_hitobj_onoff, STRING("A_mkusa_06"), 1, 0)
         ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_mizu_now"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_mizu_before"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_mizu_now"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_mizu_before"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_f1_kaidan"), 1, 0)
         CALL(evt_hitobj_onoff, STRING("A_mizu_before"), 1, 0)
         CALL(evt_hitobj_onoff, STRING("A_f2_rak_l03"), 1, 0)

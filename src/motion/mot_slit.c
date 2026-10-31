@@ -340,7 +340,7 @@ BOOL marioGetMotSlitCancel3(void) {
     return r;
 }
 
-#define CLR_DISP 0xFEFFF3FF
+#define CLR_DISP ~ (MARIO_DISP_FLAG_SLIT | MARIO_DISP_FLAG_FIXED_MIRRORED | MARIO_DISP_FLAG_FIXED_UNMIRRORED)
 static inline void slitClearFlags(MarioWork* m) {
     m->flags &= ~MARIO_FLAG_PARTY_WALK_DISABLED;
     m->flags &= ~MARIO_FLAG_GONE_THROUGH_BARS;

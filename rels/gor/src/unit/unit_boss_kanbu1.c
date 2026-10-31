@@ -167,7 +167,7 @@ BattleWeapon weapon_kanbu1_attack = {
     NULL, // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH | SPECIAL_FLIP_SHELLED, // special
     0, // counterResistFlags
-    4, // targetWeightFlags
+    TARGET_WEIGHT_PREFER_FRONT, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
@@ -187,7 +187,7 @@ BattleUnitSetup entry_npc_christine = {
     &unit_npc_christine, // mUnitKindParams
     ALLIANCE_NEUTRAL, // alliance
     {0}, // pad_05
-    0x4000001, // attackPhase
+    BATTLE_PHASE_BEFORE_PLAYER, // attackPhase
     {1000.0f, 0.0f, 1000.0f}, // position
     0, // hitOffsetX
     {0}, // unitWork
@@ -229,7 +229,7 @@ EVT_END()
 static EVT_BEGIN(phase_event)
     CALL(btlevtcmd_get_turn, LW(0))
     IF_INT_EQUAL(LW(0), 1)
-        CALL(btlevtcmd_CheckPhase, LW(0), 67108865)
+        CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_BEFORE_PLAYER)
         IF_INT_NOT_EQUAL(LW(0), 0)
             CALL(btlevtcmd_StopWaitEvent, UNIT_ID_MARIO)
             CALL(btlevtcmd_AnimeChangePose, UNIT_ID_MARIO, 1, STRING("M_S_1"))
@@ -270,7 +270,7 @@ static EVT_BEGIN(phase_event)
         END_IF
     END_IF
     // The half-HP message returns early; action-command feedback can follow on a later phase.
-    CALL(btlevtcmd_CheckPhase, LW(0), 67108867)
+    CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_AFTER_PLAYER)
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_HALF_HP_TALKED, LW(0))
         IF_INT_EQUAL(LW(0), 0)

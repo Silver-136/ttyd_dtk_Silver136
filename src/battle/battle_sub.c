@@ -168,7 +168,7 @@ void btlsubResetMoveColorLvAll(BattleWork* work) {
     BattleWork* w2;
     int c;
 
-    for (i = 0; i < 64; i++) {
+    for (i = 0; i < BATTLE_UNIT_MAX; i++) {
         w2 = w;
         unit = BattleGetUnitPtr(w2, i);
         c = 0xFF;

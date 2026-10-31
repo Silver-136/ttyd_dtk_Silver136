@@ -350,13 +350,13 @@ s32 msgMain(smartEntry* smart) {
             break;
         }
         switch (entry->glyph) {
-        case 0xFFFF:
+        case MSG_GLYPH_END:
             if (data->callback) {
                 data->callback(1, smart);
             }
             data->nextEntry = i;
             return 0;
-        case 0xFFFE:
+        case MSG_GLYPH_KEY:
             if (entry->x == data->curPage) {
                 data->pageState = 1;
                 data->playTime = entry->time;
@@ -366,28 +366,28 @@ s32 msgMain(smartEntry* smart) {
                 }
             }
             break;
-        case 0xFFFD:
+        case MSG_GLYPH_SCROLL:
             data->scrollTarget -= entry->y;
             data->playTime = entry->time;
             msgAddPage(smart, data->scrollTarget);
             break;
-        case 0xFFFC:
+        case MSG_GLYPH_ONCE_STOP:
             data->nextEntry = i + 1;
             data->playTime = entry->time;
             data->flags &= ~MSG_WIN_FLAG_FAST;
             return 1;
-        case 0xFFFB:
+        case MSG_GLYPH_NEWLINE:
             if (data->callback) {
                 data->callback(4, smart);
             }
             break;
-        case 0xFFFA:
+        case MSG_GLYPH_SE:
             data->talkSfxGroup = entry->value;
             break;
-        case 0xFFF9:
+        case MSG_GLYPH_VOL:
             data->talkVolume = entry->value;
             break;
-        case 0xFFF5:
+        case MSG_GLYPH_DKEY:
             if (entry->value) {
                 data->flags |= MSG_WIN_FLAG_NO_SKIP;
                 data->flags &= ~MSG_WIN_FLAG_FAST;
@@ -396,7 +396,7 @@ s32 msgMain(smartEntry* smart) {
                 data->flags &= ~MSG_WIN_FLAG_NO_SKIP;
             }
             break;
-        case 0xFFF3:
+        case MSG_GLYPH_PAPER:
             npc = entry->npc;
             if (!npc) {
                 npc = npcNameToPtr(data->speakerName);
@@ -405,7 +405,7 @@ s32 msgMain(smartEntry* smart) {
             animPosePaperPeraOn(npc->poseId);
             animPoseSetPaperAnim(npc->poseId, paperPoseTbl[entry->time], 1);
             break;
-        case 0xFFF2:
+        case MSG_GLYPH_PAPER_END:
             npc = entry->npc;
             if (data->pageState) {
                 i--;
@@ -416,8 +416,8 @@ s32 msgMain(smartEntry* smart) {
             }
             animPoseSetPaperAnimGroup(npc->poseId, NULL, 1);
             break;
-        case 0xFFF4:
-        case 0xFFF8:
+        case MSG_GLYPH_ANIM:
+        case MSG_GLYPH_ICON:
             break;
         default:
             if (data->callback) {
@@ -480,24 +480,24 @@ BOOL msgDisp(smartEntry* smart, u8 alpha, f32 x, f32 y) {
     al = alpha;
     for (i = 0; i < data->nextEntry; i++, c++) {
         switch (c->glyph) {
-            case 0xFFFF:
+            case MSG_GLYPH_END:
                 return FALSE;
-            case 0xFFFE:
+            case MSG_GLYPH_KEY:
                 if (data->curPage == c->x) {
                     ret = TRUE;
                 }
                 break;
-            case 0xFFF7:
+            case MSG_GLYPH_COLOR:
                 FontDrawColor(c->color);
                 break;
-            case 0xFFF6:
+            case MSG_GLYPH_NOISE:
                 if (c->value) {
                     FontDrawNoise();
                 } else {
                     FontDrawNoiseOff();
                 }
                 break;
-            case 0xFFF4:
+            case MSG_GLYPH_ANIM:
                 col = FontGetDrawColor();
                 PSMTXIdentity(m);
                 if (c->rot >= 90.0f && c->rot <= 270.0f) {
@@ -509,12 +509,12 @@ BOOL msgDisp(smartEntry* smart, u8 alpha, f32 x, f32 y) {
                 FontDrawStart_alpha(alpha);
                 FontDrawColor(col);
                 break;
-            case 0xFFF5:
-            case 0xFFF9:
-            case 0xFFFA:
-            case 0xFFFB:
-            case 0xFFFC:
-            case 0xFFFD:
+            case MSG_GLYPH_DKEY:
+            case MSG_GLYPH_VOL:
+            case MSG_GLYPH_SE:
+            case MSG_GLYPH_NEWLINE:
+            case MSG_GLYPH_ONCE_STOP:
+            case MSG_GLYPH_SCROLL:
                 break;
             default:
                 hide = 0;
@@ -571,7 +571,7 @@ BOOL msgDisp(smartEntry* smart, u8 alpha, f32 x, f32 y) {
                         }
                     }
                 }
-                if (c->glyph == 0xFFF8) {
+                if (c->glyph == MSG_GLYPH_ICON) {
                     col4 = FontGetDrawColor();
 #ifdef VERSION_G8ME01
                     if ((((data->scrollPos + c->y) - 40) + c->iconY) > 0) {
@@ -852,7 +852,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
             break;
         }
         }
-        entry->glyph = 0xFFF7;
+        entry->glyph = MSG_GLYPH_COLOR;
         entry->time = time;
         entry++;
         data->charCount++;
@@ -913,7 +913,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
         }
         switch ((s8)check) {
         case 0:
-            entry->glyph = 0xFFFF;
+            entry->glyph = MSG_GLYPH_END;
             entry->time = time;
 #ifdef VERSION_G8ME01
             if (data->selWidth == 0) {
@@ -930,7 +930,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
             data->parseScroll = savedScroll;
             return;
         case '\n':
-            entry->glyph = 0xFFFB;
+            entry->glyph = MSG_GLYPH_NEWLINE;
             entry->time = time;
 #ifndef VERSION_G8ME01
             x = 0;
@@ -984,7 +984,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
                 }
             }
             if (strcmp(tag, "k") == 0 || strcmp(tag, "key") == 0) {
-                entry->glyph = 0xFFFE;
+                entry->glyph = MSG_GLYPH_KEY;
                 entry->x = savedPage;
                 entry->time = time;
                 time += 100;
@@ -995,7 +995,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
                 data->flags |= MSG_WIN_FLAG_KEY_X;
             } else if (strcmp(tag, "p") == 0 || strcmp(tag, "scrl_auto") == 0) {
                 if (savedScroll != 0) {
-                    entry->glyph = 0xFFFD;
+                    entry->glyph = MSG_GLYPH_SCROLL;
                     entry->y = savedScroll - 3;
                     topY = y - 6;
                     y -= 3;
@@ -1006,7 +1006,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
                     data->charCount++;
                 }
             } else if (strcmp(tag, "o") == 0 || strcmp(tag, "once_stop") == 0) {
-                entry->glyph = 0xFFFC;
+                entry->glyph = MSG_GLYPH_ONCE_STOP;
                 entry->time = time;
                 time += 0x32;
                 entry++;
@@ -1063,36 +1063,36 @@ void msgAnalize(smartEntry* smart, char* msg) {
                 flags &= ~MSG_CHAR_WAVE;
             } else if (strcmp(tag, "col") == 0) {
                 sscanf(args, "%x", &entry->value);
-                entry->glyph = 0xFFF7;
+                entry->glyph = MSG_GLYPH_COLOR;
                 entry->time = time;
                 entry++;
                 data->charCount++;
             } else if (strcmp(tag, "/col") == 0) {
                 entry->value = 0xFF;
-                entry->glyph = 0xFFF7;
+                entry->glyph = MSG_GLYPH_COLOR;
                 entry->time = time;
                 entry++;
                 data->charCount++;
             } else if (strcmp(tag, "noise") == 0) {
                 entry->value = 1;
-                entry->glyph = 0xFFF6;
+                entry->glyph = MSG_GLYPH_NOISE;
                 entry->time = time;
                 entry++;
                 data->charCount++;
             } else if (strcmp(tag, "/noise") == 0) {
                 entry->value = 0;
-                entry->glyph = 0xFFF6;
+                entry->glyph = MSG_GLYPH_NOISE;
                 entry++;
                 data->charCount++;
             } else if (strcmp(tag, "dkey") == 0) {
                 entry->value = 1;
-                entry->glyph = 0xFFF5;
+                entry->glyph = MSG_GLYPH_DKEY;
                 entry->time = time;
                 entry++;
                 data->charCount++;
             } else if (strcmp(tag, "/dkey") == 0) {
                 entry->value = 0;
-                entry->glyph = 0xFFF5;
+                entry->glyph = MSG_GLYPH_DKEY;
                 entry->time = time;
                 entry++;
                 data->charCount++;
@@ -1104,7 +1104,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
                 static const GXColor c = {0xDC, 0xC8, 0xDC, 0xFF};
                 window->type = WINDOW_TYPE_SYSTEM;
                 entry->value = *(u32*)&c;
-                entry->glyph = 0xFFF7;
+                entry->glyph = MSG_GLYPH_COLOR;
                 entry->time = time;
                 entry++;
                 data->charCount++;
@@ -1112,7 +1112,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
                 static const GXColor c = {0x00, 0xD9, 0x14, 0xFF};
                 window->type = WINDOW_TYPE_TEC;
                 entry->value = *(u32*)&c;
-                entry->glyph = 0xFFF7;
+                entry->glyph = MSG_GLYPH_COLOR;
                 entry->time = time;
                 entry++;
                 data->charCount++;
@@ -1151,12 +1151,12 @@ void msgAnalize(smartEntry* smart, char* msg) {
                 step = 0;
             } else if (strcmp(tag, "se") == 0) {
                 sscanf(args, "%d", &entry->value);
-                entry->glyph = 0xFFFA;
+                entry->glyph = MSG_GLYPH_SE;
                 entry++;
                 data->charCount++;
             } else if (strcmp(tag, "vol") == 0) {
                 sscanf(args, "%d", &entry->value);
-                entry->glyph = 0xFFF9;
+                entry->glyph = MSG_GLYPH_VOL;
                 entry++;
                 data->charCount++;
             } else if (strcmp(tag, "nowinse") == 0) {
@@ -1178,7 +1178,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
                 if (!isHM) {
                     entry->value = iconId;
                     iconGetWidthHight(&iw, &ih, (u16)iconId);
-                    entry->glyph = 0xFFF8;
+                    entry->glyph = MSG_GLYPH_ICON;
                     entry->x = (x + 0.5f * iw * iconScale) + iconOffX;
 #ifndef VERSION_G8ME01
                     x += 0x28;
@@ -1245,7 +1245,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
                 for (j = 0; j < 1; j++) {
                     animPoseSetGXFunc(msgw->poseId, msgDispKeyWait_render, 0);
                 }
-                entry->glyph = 0xFFF4;
+                entry->glyph = MSG_GLYPH_ANIM;
                 entry->x = animX;
                 entry->y = topY - animY;
                 entry->scale = animScale;
@@ -1256,14 +1256,14 @@ void msgAnalize(smartEntry* smart, char* msg) {
             } else if (strcmp(tag, "paper") == 0) {
                 sscanf(args, "%s%d", paper, &paperTime);
                 entry->npc = (strcmp(paper, "me") != 0) ? npcNameToPtr(paper) : NULL;
-                entry->glyph = 0xFFF3;
+                entry->glyph = MSG_GLYPH_PAPER;
                 entry->time = paperTime;
                 entry++;
                 data->charCount++;
             } else if (strcmp(tag, "/paper") == 0) {
                 sscanf(args, "%s", paper2);
                 entry->npc = (strcmp(paper2, "me") != 0) ? npcNameToPtr(paper2) : NULL;
-                entry->glyph = 0xFFF2;
+                entry->glyph = MSG_GLYPH_PAPER_END;
                 entry++;
                 data->charCount++;
             } else if (strcmp(tag, "r") == 0) {
@@ -1553,7 +1553,7 @@ s32 msgWindow_Entry(const char* msg, s32 callback, u16 priority) {
     data = smart->address;
     memset(data, 0, sizeof(MsgWinData));
     data->window = window;
-    data->flags = 0x1 | MSG_WIN_FLAG_START;
+    data->flags = MSG_WIN_FLAG_OPEN | MSG_WIN_FLAG_START;
     data->callback = (MsgWindowCallback)callback;
     data->lastUpdateTime = gp->renderTime;
     data->openTime = gp->renderTime;

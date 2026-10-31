@@ -640,7 +640,7 @@ static BeroEntry bero_entry_data[] = {
         "w_bero", // hitName
         1, // type
         6, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -658,7 +658,7 @@ static BeroEntry bero_entry_data[] = {
         "e_bero_1", // hitName
         1, // type
         6, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -1486,8 +1486,8 @@ static EVT_BEGIN(senkaron_event)
         CALL(evt_item_set_gravity, STRING("key"), FLOAT(1.0f))
         CALL(evt_item_set_bound_rate, STRING("key"), FLOAT(1.0f))
         CALL(evt_item_set_bound_limit, STRING("key"), 0)
-        CALL(evt_item_status_on, STRING("key"), 4)
-        CALL(evt_item_status_on, STRING("key"), 16)
+        CALL(evt_item_status_on, STRING("key"), ITEM_STATUS_LAUNCH)
+        CALL(evt_item_status_on, STRING("key"), ITEM_STATUS_CUSTOM_LAUNCH)
         CALL(evt_npc_set_position, STRING("黒カロン"), 0, -1000, 0)
     END_IF
     RETURN

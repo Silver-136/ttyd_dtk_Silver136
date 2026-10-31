@@ -302,7 +302,7 @@ static BeroEntry bero_entry_data[] = {
         "s_bero", // hitName
         1, // type
         6, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -320,7 +320,7 @@ static BeroEntry bero_entry_data[] = {
         "nw_bero_1", // hitName
         1, // type
         1, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -338,7 +338,7 @@ static BeroEntry bero_entry_data[] = {
         "ne_bero_1", // hitName
         1, // type
         1, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -356,7 +356,7 @@ static BeroEntry bero_entry_data[] = {
         "sw_bero_1", // hitName
         1, // type
         1, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -374,7 +374,7 @@ static BeroEntry bero_entry_data[] = {
         "se_bero_1", // hitName
         1, // type
         1, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -392,7 +392,7 @@ static BeroEntry bero_entry_data[] = {
         "nw_bero_2", // hitName
         1, // type
         1, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -410,7 +410,7 @@ static BeroEntry bero_entry_data[] = {
         "ne_bero_2", // hitName
         1, // type
         1, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -428,7 +428,7 @@ static BeroEntry bero_entry_data[] = {
         "sw_bero_2", // hitName
         1, // type
         1, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -446,7 +446,7 @@ static BeroEntry bero_entry_data[] = {
         "se_bero_2", // hitName
         1, // type
         1, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -595,7 +595,7 @@ EVT_BEGIN(tenkyugi_evt)
     WAIT_FRAMES(1)
     WAIT_MS(1000)
     CALL(evt_mapobj_color, 1, STRING("S_hoshihoshi"), 255, 255, 255, 0)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_hoshihoshi"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_hoshihoshi"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_snd_sfxon, STRING("SFX_STG8_CELESTIAL_MOVE1"), 0)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, 255, 1000)
     LABEL(0)
@@ -675,7 +675,7 @@ EVT_BEGIN(tenkyugi_evt2)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG8_CELESTIAL_MOVE2"), 0, 400, -150, LW(15))
     CALL(evt_snd_sfx_dist, LW(15), 10)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_hoshihoshi"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_hoshihoshi"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_map_playanim, STRING("en"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_DISP_DIR_SNAP)
     CALL(evt_party_dispflg_onoff, 0, PARTY_DISP_FLAG_DISP_DIR_SNAP, 1)
@@ -1048,7 +1048,7 @@ EVT_END()
 
 /** Event script: before the Star Key is used, hides the eight key stands and turns off their hit objects. */
 EVT_BEGIN(kagi_8_off)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_kagi"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_kagi"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_hitobj_onoff, STRING("A113_daiza1"), 1, 0)
     CALL(evt_hitobj_onoff, STRING("A113_daiza2"), 1, 0)
     CALL(evt_hitobj_onoff, STRING("A113_daiza3"), 1, 0)
@@ -1107,7 +1107,7 @@ EVT_BEGIN(kagi_8_on)
             CALL(evt_snd_sfxoff, LW(10))
         END_INLINE_EVENT
         WAIT_MS(2000)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_kagi"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_kagi"), MAP_OBJ_FLAG_HIDDEN)
         SET_INT_READ_ADDR(PTR(&daiza_name))
         LOOP(0)
             READ_INT3(LW(0), LW(1), LW(2))
@@ -1131,7 +1131,7 @@ EVT_BEGIN(kagi_8_on)
         CALL(evt_snd_sfxoff, LW(5))
         SET_VALUE(GF(0), 1)
     ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_kagi"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_kagi"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     CALL(evt_hitobj_onoff, STRING("A113_daiza1"), 1, 1)
     CALL(evt_hitobj_onoff, STRING("A113_daiza2"), 1, 1)
@@ -1240,8 +1240,8 @@ EVT_BEGIN(daiza_evt)
         RETURN
     END_IF
     CALL(evt_pouch_remove_item, ITEM_STAR_KEY, LW(0))
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("hosi_off"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("hosi_on"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("hosi_off"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("hosi_on"), MAP_OBJ_FLAG_HIDDEN)
     CALL_CHILD(PTR(kagi_8_syutugen))
     SET_VALUE(GSW_STORY_PROGRESS, STG8_05_STAR_KEY_SLOT)
     CALL(evt_mario_key_onoff, 1)
@@ -1274,10 +1274,10 @@ EVT_BEGIN(las_10_init_evt)
         SPAWN_EVENT(PTR(first_evt))
     END_IF
     IF_INT_LESS(GSW_STORY_PROGRESS, STG8_05_STAR_KEY_SLOT)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("hosi_on"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("hosi_on"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_daiza1"), 0, PTR(daiza_evt), 0)
     ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("hosi_off"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("hosi_off"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     SPAWN_EVENT(PTR(kagi_8_init))
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_05_STAR_KEY_SLOT)
@@ -1301,31 +1301,31 @@ EVT_BEGIN(las_10_init_evt)
         CALL(evt_snd_sfx_dist, LW(10), 10)
         CALL(evt_map_playanim, STRING("en"), MAP_ANIM_PLAY_LOOP, 0)
     ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_hoshihoshi"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_hoshihoshi"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("group19"), MAP_OBJ_FLAG_CLIP)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("group18"), MAP_OBJ_FLAG_CLIP)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("group10"), MAP_OBJ_FLAG_CLIP)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("group11"), MAP_OBJ_FLAG_CLIP)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("group12"), MAP_OBJ_FLAG_CLIP)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("group13"), MAP_OBJ_FLAG_CLIP)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("group14"), MAP_OBJ_FLAG_CLIP)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S11_kabe5_ushi"), MAP_OBJ_FLAG_CLIP)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S11_kabe1_ushi"), MAP_OBJ_FLAG_CLIP)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S11_dan"), MAP_OBJ_FLAG_CLIP)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S112_hashira9"), MAP_OBJ_FLAG_CLIP)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S112_hashira10"), MAP_OBJ_FLAG_CLIP)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S112_hashira1"), MAP_OBJ_FLAG_CLIP)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S112_hashira2"), MAP_OBJ_FLAG_CLIP)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S112_hashira3"), MAP_OBJ_FLAG_CLIP)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S112_hashira4"), MAP_OBJ_FLAG_CLIP)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S112_kabe5_ushi"), MAP_OBJ_FLAG_CLIP)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S12_kabe1"), MAP_OBJ_FLAG_CLIP)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_112_dan"), MAP_OBJ_FLAG_CLIP)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S113_hashira6"), MAP_OBJ_FLAG_CLIP)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S113_hashira5"), MAP_OBJ_FLAG_CLIP)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S113_kabe5"), MAP_OBJ_FLAG_CLIP)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S113_kabe1"), MAP_OBJ_FLAG_CLIP)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("group19"), MAP_OBJ_FLAG_CLIP)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("group18"), MAP_OBJ_FLAG_CLIP)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("group10"), MAP_OBJ_FLAG_CLIP)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("group11"), MAP_OBJ_FLAG_CLIP)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("group12"), MAP_OBJ_FLAG_CLIP)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("group13"), MAP_OBJ_FLAG_CLIP)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("group14"), MAP_OBJ_FLAG_CLIP)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S11_kabe5_ushi"), MAP_OBJ_FLAG_CLIP)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S11_kabe1_ushi"), MAP_OBJ_FLAG_CLIP)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S11_dan"), MAP_OBJ_FLAG_CLIP)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S112_hashira9"), MAP_OBJ_FLAG_CLIP)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S112_hashira10"), MAP_OBJ_FLAG_CLIP)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S112_hashira1"), MAP_OBJ_FLAG_CLIP)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S112_hashira2"), MAP_OBJ_FLAG_CLIP)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S112_hashira3"), MAP_OBJ_FLAG_CLIP)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S112_hashira4"), MAP_OBJ_FLAG_CLIP)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S112_kabe5_ushi"), MAP_OBJ_FLAG_CLIP)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S12_kabe1"), MAP_OBJ_FLAG_CLIP)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_112_dan"), MAP_OBJ_FLAG_CLIP)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S113_hashira6"), MAP_OBJ_FLAG_CLIP)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S113_hashira5"), MAP_OBJ_FLAG_CLIP)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S113_kabe5"), MAP_OBJ_FLAG_CLIP)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S113_kabe1"), MAP_OBJ_FLAG_CLIP)
     RETURN
 EVT_END()
 

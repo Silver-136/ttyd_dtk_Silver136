@@ -63,7 +63,7 @@ static BeroEntry bero_entry_data[] = {
         "dokan1", // hitName
         2, // type
         0, // sfxId
-        9, // directionId
+        BERO_DIR_DOWN, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -80,7 +80,7 @@ static BeroEntry bero_entry_data[] = {
         "dokan2", // hitName
         2, // type
         0, // sfxId
-        9, // directionId
+        BERO_DIR_DOWN, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -97,7 +97,7 @@ static BeroEntry bero_entry_data[] = {
         "dokan3", // hitName
         2, // type
         0, // sfxId
-        2, // directionId
+        BERO_DIR_E, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -295,7 +295,7 @@ EVT_END()
  * the tens drum (S_isk_01_02) and the ones drum (S_isk_01_03), 36 degrees per digit.
  */
 static EVT_BEGIN(yuka_main)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_isk_01_03_C"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_isk_01_03_C"), MAP_OBJ_FLAG_HIDDEN)
     LOOP(0)
         SET_VALUE(LW(1), GW(0))
         DIVIDE(LW(1), 10)
@@ -377,7 +377,7 @@ static EVT_BEGIN(punipuni_ball00_init)
         CALL(evt_item_set_position, LW(10), 0, 30, -68)
         CALL(evt_target_flag_onoff, LW(11), 0, 3)
         ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_sui_hikari"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_sui_hikari"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     CALL(evt_target_set_position, LW(11), 0, 0, -8)
     SET_VALUE(GF(15), 0)
@@ -399,7 +399,7 @@ static EVT_BEGIN(punipuni_ball00)
             GOTO(100)
         END_IF
         CALL(evt_item_set_position, LW(10), 0, 30, -68)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_sui_hikari"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_sui_hikari"), MAP_OBJ_FLAG_HIDDEN)
         SET_VALUE(GF(15), 1)
         CALL_CHILD(PTR(mri_punipuni_itemset))
         SET_VALUE(GSWF_MRI_02_PUNI_ORB_PLACED, 1)
@@ -407,7 +407,7 @@ static EVT_BEGIN(punipuni_ball00)
         SET_VALUE(GF(15), 0)
         ELSE
         SET_VALUE(GSWF_MRI_02_PUNI_ORB_PLACED, 0)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_sui_hikari"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_sui_hikari"), MAP_OBJ_FLAG_HIDDEN)
         CALL_CHILD(PTR(mri_punipuni_itemremove))
     END_IF
     LABEL(100)

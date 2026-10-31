@@ -1530,7 +1530,7 @@ void itemseq_Bound(ItemEntry* entry) {
                 }
             }
             if (hit) {
-                if (hitGetAttr(hit) & 0x600) {
+                if (hitGetAttr(hit) & (HIT_ATTR_DEEP_WATER | HIT_ATTR_DAMAGE_LIQUID)) {
                     entry->flags2 |= ITEM_FLAG2_SUNK;
                     {
                         Vec sndPos = (Vec){0.0f, 0.0f, 0.0f};
@@ -1581,7 +1581,7 @@ void itemseq_Bound(ItemEntry* entry) {
                     }
                     }
                     isFloor = FALSE;
-                    if (entry->flags & 0x80 && entry->velocityY != 0.0f) {
+                    if (entry->flags & ITEM_FLAG_ELASTIC && entry->velocityY != 0.0f) {
                         bounce = TRUE;
                     } else if (hitGetAttr(hit) & HIT_ATTR_MOBJ && entry->velocityY != 0.0f) {
                         mobj = mobjHitObjPtrToPtr(hit);

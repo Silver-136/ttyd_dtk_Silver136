@@ -66,8 +66,8 @@ static BeroEntry bero_entry_data[] = {
         "e_bero", // hitName
         1, // type
         12, // sfxId
-        20000, // directionId
-        100000, // centerPosition
+        BERO_DIR_AUTO, // directionId
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -138,7 +138,7 @@ static EVT_BEGIN(chuchurina_sogu)
     CALL(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
     CALL(evt_party_stop, 0)
     SET_VALUE(GSW_STORY_PROGRESS, STG1_15_MS_MOWZ_W_GOOMBELLA)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("s_heya"), MAP_OBJ_FLAG_CLIP)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("s_heya"), MAP_OBJ_FLAG_CLIP)
     CALL(evt_npc_flag_onoff, 1, STRING("チュチュリーナ"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_npc_flag_onoff, 0, STRING("チュチュリーナ"), NPC_FLAG_AUTO_MOVE_ANIM)
     WAIT_MS(750)

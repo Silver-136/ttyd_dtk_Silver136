@@ -70,7 +70,7 @@ static BeroEntry bero_entry_data[] = {
     {
         "s_bero_1", // hitName
         0, 0, // type..sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -112,7 +112,7 @@ static BeroEntry bero_entry_data2[] = {
         "dokan", // hitName
         2, // type
         0, // sfxId
-        2, // directionId
+        BERO_DIR_E, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -412,7 +412,7 @@ EVT_BEGIN(puni_switch)
     CALL(evt_snd_bgmon, PSND_SLOT(1), STRING("BGM_FF_ENV_SUCCESS1"))
     SET_VALUE(GSWF_TIK_03_SECRET_PASSAGE_OPEN, 1)
     CALL(evt_map_playanim, STRING("anm_para"), MAP_ANIM_PLAY_ONCE, 0)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("kabe_1"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("kabe_1"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("kabe_2"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_hitobj_onoff, STRING("a_para_d"), 1, 0)
     CALL(evt_hitobj_onoff, STRING("a_para_d1"), 1, 0)
@@ -423,7 +423,7 @@ EVT_BEGIN(puni_switch)
     SET_VALUE(GSW_STORY_PROGRESS, STG1_34_PUNIS_SECRET_PASSAGE)
     CALL(evt_mario_key_onoff, 1)
     WAIT_MS(1500)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("para"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("para"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
     CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)
     RETURN
@@ -464,15 +464,15 @@ EVT_END()
 EVT_BEGIN(tik03_switch_evt)
     IF_INT_EQUAL(GSWF_TIK_03_SECRET_PASSAGE_OPEN, 0)
         CALL(evt_map_playanim, STRING("anm_para"), MAP_ANIM_PLAY_ONCE, 0)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("kabe_1"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("kabe_2"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("kabe_1"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("kabe_2"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_para_d"), 1, 0)
         SET_VALUE(GSWF_TIK_03_SECRET_PASSAGE_OPEN, 1)
         CALL_CHILD(PTR(anm_para_snd))
         WAIT_MS(800)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("para"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("para"), MAP_OBJ_FLAG_HIDDEN)
         ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("para"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("para"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_map_playanim, STRING("anm_rapa"), MAP_ANIM_PLAY_ONCE, 0)
         SET_VALUE(GSWF_TIK_03_SECRET_PASSAGE_OPEN, 0)
         CALL_CHILD(PTR(anm_rapa_snd))
@@ -495,13 +495,13 @@ EVT_BEGIN(tik_03_init_evt)
         SPAWN_EVENT(PTR(puni_soguu_3))
     END_IF
     IF_INT_LESS_OR_EQUAL(GSW_STORY_PROGRESS, STG1_33_A_PUNI_PLEA_FOR_HELP)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("kabe_2"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("kabe_2"), MAP_OBJ_FLAG_HIDDEN)
         ELSE
         IF_INT_EQUAL(GSWF_TIK_03_SECRET_PASSAGE_OPEN, 0)
-            CALL(evt_mapobj_flag_onoff, 1, 1, STRING("kabe_1"), MAP_OBJ_FLAG_HIDDEN)
+            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("kabe_1"), MAP_OBJ_FLAG_HIDDEN)
             ELSE
-            CALL(evt_mapobj_flag_onoff, 1, 1, STRING("kabe_1"), MAP_OBJ_FLAG_HIDDEN)
-            CALL(evt_mapobj_flag_onoff, 1, 1, STRING("para"), MAP_OBJ_FLAG_HIDDEN)
+            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("kabe_1"), MAP_OBJ_FLAG_HIDDEN)
+            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("para"), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_hitobj_onoff, STRING("a_para_d"), 1, 0)
             CALL(evt_hitobj_onoff, STRING("a_para_d1"), 1, 0)
         END_IF

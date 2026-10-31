@@ -400,7 +400,7 @@ static BeroEntry bero_entry_data[] = {
     {
         "w_bero", // hitName
         0, 0, // type..sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -416,7 +416,7 @@ static BeroEntry bero_entry_data[] = {
     {
         "e_bero", // hitName
         0, 0, // type..sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -432,7 +432,7 @@ static BeroEntry bero_entry_data[] = {
     {
         "n_bero", // hitName
         0, 0, // type..sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -449,7 +449,7 @@ static BeroEntry bero_entry_data[] = {
         "dokan_1", // hitName
         2, // type
         0, // sfxId
-        9, // directionId
+        BERO_DIR_DOWN, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -465,7 +465,7 @@ static BeroEntry bero_entry_data[] = {
         "dokan_4", // hitName
         4098, // type
         0, // sfxId
-        9, // directionId
+        BERO_DIR_DOWN, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -481,7 +481,7 @@ static BeroEntry bero_entry_data[] = {
         "dokan_2", // hitName
         2, // type
         0, // sfxId
-        9, // directionId
+        BERO_DIR_DOWN, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -497,7 +497,7 @@ static BeroEntry bero_entry_data[] = {
         "dokan_6", // hitName
         4098, // type
         0, // sfxId
-        9, // directionId
+        BERO_DIR_DOWN, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -513,7 +513,7 @@ static BeroEntry bero_entry_data[] = {
         "dokan_3", // hitName
         2, // type
         0, // sfxId
-        9, // directionId
+        BERO_DIR_DOWN, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -529,7 +529,7 @@ static BeroEntry bero_entry_data[] = {
         "dokan_5", // hitName
         4098, // type
         0, // sfxId
-        9, // directionId
+        BERO_DIR_DOWN, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -545,7 +545,7 @@ static BeroEntry bero_entry_data[] = {
         "dokan_7", // hitName
         2, // type
         0, // sfxId
-        9, // directionId
+        BERO_DIR_DOWN, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -561,7 +561,7 @@ static BeroEntry bero_entry_data[] = {
         "dokan_8", // hitName
         4098, // type
         0, // sfxId
-        9, // directionId
+        BERO_DIR_DOWN, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -946,7 +946,7 @@ static EVT_BEGIN(ukishima_apper)
         WAIT_MS(400)
         CALL(evt_eff64, STRING(""), STRING("ripple_n64"), 0, LW(10), 5, LW(12), 0, 0, 0, 0, 0, 0, 0, 0)
     END_INLINE_EVENT
-    CALL(evt_mapobj_flag_onoff, 1, 0, LW(2), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, LW(2), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_hitobj_onoff, LW(3), 1, 1)
     CALL(evt_hit_bind_mapobj, LW(3), LW(2))
     CALL(evt_sub_intpl_msec_init, EASING_QUADRATIC_IN, -100, 0, 800)
@@ -1026,9 +1026,9 @@ EVT_BEGIN(ukishima_init1)
     SET_VALUE(LW(0), GSWF_DOU_11_SWITCH_1_PRESSED)
     ADD(LW(0), GSWF_DOU_11_SWITCH_2_PRESSED)
     IF_INT_LESS(LW(0), 1)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_taru_n01"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_taru_n01"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_taru_n01"), 1, 0)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_taru_n02"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_taru_n02"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_taru_n02"), 1, 0)
     END_IF
     RETURN
@@ -1060,7 +1060,7 @@ EVT_BEGIN(ukishima_init2)
     SET_VALUE(LW(0), GSWF_DOU_11_SWITCH_1_PRESSED)
     ADD(LW(0), GSWF_DOU_11_SWITCH_2_PRESSED)
     IF_INT_LESS(LW(0), 2)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_taru_n03"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_taru_n03"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_taru_n03"), 1, 0)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_taru_n04"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_taru_n04"), 1, 0)
@@ -1512,12 +1512,12 @@ static EVT_BEGIN(bombwall_bomb)
         CALL(evt_img_alloc_capture, STRING("capture_img"), 0, STRING("offscreen"), 1, LW(10), LW(11), LW(12), LW(13))
         CALL(evt_img_clear_virtual_point, STRING("capture_img"))
         CALL(evt_img_set_paper_anim, STRING("capture_img"), STRING("A_1"))
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ana_before1"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ana_before1"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ana_before"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ana_after"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_img_wait_animend, STRING("capture_img"))
         ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ana_before1"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ana_before1"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ana_before"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ana_after"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
@@ -1547,29 +1547,29 @@ static EVT_BEGIN(bombwall_bomb)
 EVT_END()
 
 static EVT_BEGIN(bombwall_init)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ana_after"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ana_after"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ana_before"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ana_before1"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_hibiato"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_hibimae"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ana_before1"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_hibiato"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_hibimae"), MAP_OBJ_FLAG_HIDDEN)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS_OR_EQUAL(STG5_33_CORTEZ_AND_THE_TREASURE)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_hibimae"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_hibimae"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ana_before"), MAP_OBJ_FLAG_HIDDEN)
         SET_VALUE(LW(0), STRING("n_bero"))
         CALL_CHILD(PTR(bero_case_switch_off))
         CALL(evt_hitobj_attr_onoff, 1, 0, STRING("n_bero"), 4)
         CASE_BETWEEN(STG5_34_KICKED_OFF, STG5_35_ESCAPE_ROUTE)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_hibiato"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_hibiato"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ana_before"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ana_before1"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_ana_before1"), MAP_OBJ_FLAG_HIDDEN)
         SET_VALUE(LW(0), STRING("n_bero"))
         CALL_CHILD(PTR(bero_case_switch_off))
         CALL(evt_hitobj_attr_onoff, 1, 0, STRING("n_bero"), 4)
         CALL(evt_paper_entry, STRING("OFF_d_bom_ver2"))
         CALL(evt_run_case_evt, CASE_BOBBERY, 1, STRING("n_bero"), 0, PTR(bombwall_bomb), 0)
         CASE_GREATER_OR_EQUAL(STG5_36_HOLE_IN_THE_WALL)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_hibiato"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_hibiato"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ana_after"), MAP_OBJ_FLAG_HIDDEN)
         SET_VALUE(LW(0), STRING("n_bero"))
         CALL_CHILD(PTR(bero_case_switch_on))
@@ -2605,7 +2605,7 @@ EVT_BEGIN(dou_11_init_evt)
     SPAWN_EVENT(PTR(ukishima_init1))
     SPAWN_EVENT(PTR(ukishima_init2))
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG5_33_CORTEZ_AND_THE_TREASURE)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_taru_n03"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_taru_n03"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_taru_n03"), 1, 0)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_taru_n04"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_taru_n04"), 1, 0)

@@ -57,7 +57,7 @@ void seq_gameMain(SequenceWork* wp) {
         case 1:
             if (gp->flags & GW_FLAG_E3 && gp->flags & GW_FLAG_E3_TIMEOUT && fadeIsFinish() && seqCheckSeq() == SEQ_LOGO) {
                 gp->flags &= ~GW_FLAG_E3_TIMEOUT;
-                seqSetSeq(SEQ_GAME_OVER, 0, 0);
+                seqSetSeq(SEQ_GAME_OVER, NULL, NULL);
             }
             marioGetPtr(); //unused
             camera = camGetPtr(CAMERA_3D);

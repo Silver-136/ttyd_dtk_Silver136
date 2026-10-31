@@ -1,6 +1,7 @@
 // Pause menu root: the tabs, help text, sort menu and shared window frames, and the sort functions for every list.
 
 #include "driver/windowdrv.h"
+#include "evt/evt_story.h"
 #include "win/win_main.h"
 #include "battle/battle_monosiri.h"
 #include "data/item_data.h"
@@ -1419,7 +1420,7 @@ void winHakoGX(WindowWork* w, s32 a, f32 x, f32 y) {
                 }
                 yy = scroll + (y - j * 56) - p * 232 - 28.0f;
                 if (ofs == 0) {
-                    if (swGet(w->log.badgeIds[n] + 0x80)) {
+                    if (swGet(w->log.badgeIds[n] + GSWF_BADGE_FOUND_BASE)) {
                         continue;
                     }
                 } else {
@@ -1444,7 +1445,7 @@ void winHakoGX(WindowWork* w, s32 a, f32 x, f32 y) {
                 }
                 yy = scroll + (y - j * 56) - p * 232 - 28.0f;
                 if (ofs == 0) {
-                    if (!swGet(w->log.badgeIds[n] + 0x80)) {
+                    if (!swGet(w->log.badgeIds[n] + GSWF_BADGE_FOUND_BASE)) {
                         continue;
                     }
                     icon = itemDataTable[w->log.badgeIds[n] + BADGE_MIN].icon_id;

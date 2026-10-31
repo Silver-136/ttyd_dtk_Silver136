@@ -1,6 +1,7 @@
 // File select sequence: the save file menu (new game, copy, delete, sound and rumble settings).
 
 #include "evt/evt_memcard.h"
+#include "evt/evt_story.h"
 #include "evt/evt_sub.h"
 #include "seq/seq_load.h"
 #include "sdk_decls.h"
@@ -1231,7 +1232,7 @@ void continueGame(void) {
     psndClearFlag(PSND_FLAG_NO_SFX);
     countDownSaveReStart();
     gp->flags |= GW_FLAG_SAVE_LOADED;
-    switch (swByteGet(4)) { // GSW_SAVE_RESUME_POINT
+    switch (swByteGet(GSW_SAVE_RESUME_KIND)) { // GSW_SAVE_RESUME_POINT
         case 0:
             gp->areaFadeInType = 0;
             gp->areaFadeOutType = 28;

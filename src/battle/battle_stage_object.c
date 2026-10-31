@@ -92,7 +92,7 @@ BattleStageObject* BattleGetObjectPtr(s32 id) {
     BattleStageObject* obj;
     int i;
 
-    for (i = 0; i < 32; i++) {
+    for (i = 0; i < BATTLE_STAGE_OBJECT_MAX; i++) {
         obj = &wp->stageObjects[i];
         if (obj->id == id) {
             return obj;
@@ -107,7 +107,7 @@ BattleStageObject* BattleSearchObjectPtr(const char* name) {
     int i;
     BattleStageObject* obj;
 
-    for (i = 0; i < 32; i++) {
+    for (i = 0; i < BATTLE_STAGE_OBJECT_MAX; i++) {
         obj = &wp->stageObjects[i];
         if (obj->id && !strcmp(obj->data->name, name)) {
             return obj;
@@ -185,7 +185,7 @@ void BattleStageObjectInit(void) {
     id = 1;
     if (data) {
         for (; numObjects != 0; id++, numObjects--, data++) {
-            for (i = 0; i < 32; i++) {
+            for (i = 0; i < BATTLE_STAGE_OBJECT_MAX; i++) {
                 obj = &wp->stageObjects[i];
                 if (obj->id <= 0) {
                     break;
@@ -256,7 +256,7 @@ void BattleStageObjectInit(void) {
     if (pouchGetPtr()->rank > 0) {
         data = _object_nozzle_data;
         for (j = 0; j < 3; j++, id++, data++) {
-            for (i = 0; i < 32; i++) {
+            for (i = 0; i < BATTLE_STAGE_OBJECT_MAX; i++) {
                 obj = &wp->stageObjects[i];
                 if (obj->id <= 0) {
                     break;
@@ -279,7 +279,7 @@ void BattleStageObjectInit(void) {
     }
 
     data = &_object_wall_data;
-    for (i = 0; i < 32; i++) {
+    for (i = 0; i < BATTLE_STAGE_OBJECT_MAX; i++) {
         obj = &wp->stageObjects[i];
         if (obj->id <= 0) {
             break;
@@ -305,7 +305,7 @@ void BattleStageObjectInit(void) {
         if (!data->name) {
             break;
         }
-        for (i = 0; i < 32; i++) {
+        for (i = 0; i < BATTLE_STAGE_OBJECT_MAX; i++) {
             obj = &wp->stageObjects[i];
             if (obj->id <= 0) {
                 break;
@@ -378,7 +378,7 @@ void BattleStageObjectMain(void) {
     BOOL changed;
     int i;
 
-    for (i = 0; i < 32; i++) {
+    for (i = 0; i < BATTLE_STAGE_OBJECT_MAX; i++) {
         obj = &wp->stageObjects[i];
         if (obj->id <= 0) {
             continue;
@@ -587,7 +587,7 @@ BattleWeaponData _nozzle_at_base_monster = {{
     {0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-    0x200006F, // targetClassFlags
+    TARGET_CLASS_NO_MARIO | TARGET_CLASS_NO_PARTNER | TARGET_CLASS_UNUSED_4 | TARGET_CLASS_UNUSED_8 | TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_MULTIPLE, // targetClassFlags
     TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
     ELEMENT_NORMAL, ATTACKPATTERN_NULL, // element..damagePattern
     3, // acLevel
@@ -1202,7 +1202,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 NULL, // acHelpMsg
                 0, // special
                 COUNTER_RESIST_ALL, // counterResistFlags
-                0x80000000, 0, 0, 0, 0, 50, 3, 0, // targetWeightFlags..poisonChance
+                TARGET_WEIGHT_RANDOM, 0, 0, 0, 0, 50, 3, 0, // targetWeightFlags..poisonChance
                 0, 0, 0, 0, 0, 0, 0, 0, // poisonTime..dodgyTime
                 0, 0, 0, 0, 0, 0, 0, 0, // burnChance..atkChangeChance
                 0, 0, 0, 0, 0, 0, 0, 0, // atkChangeTime..ohkoChance
@@ -1517,7 +1517,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 NULL, // acHelpMsg
                 0, // special
                 COUNTER_RESIST_ALL, // counterResistFlags
-                0x80000000, 0, 0, 0, 0, 50, 3, 0, // targetWeightFlags..poisonChance
+                TARGET_WEIGHT_RANDOM, 0, 0, 0, 0, 50, 3, 0, // targetWeightFlags..poisonChance
                 0, 0, 0, 0, 0, 0, 0, 0, // poisonTime..dodgyTime
                 0, 0, 0, 0, 0, 0, 0, 0, // burnChance..atkChangeChance
                 0, 0, 0, 0, 0, 0, 0, 0, // atkChangeTime..ohkoChance
@@ -1832,7 +1832,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 NULL, // acHelpMsg
                 0, // special
                 COUNTER_RESIST_ALL, // counterResistFlags
-                0x80000000, 0, 0, 0, 0, 50, 3, 0, // targetWeightFlags..poisonChance
+                TARGET_WEIGHT_RANDOM, 0, 0, 0, 0, 50, 3, 0, // targetWeightFlags..poisonChance
                 0, 0, 0, 0, 0, 0, 0, 0, // poisonTime..dodgyTime
                 0, 0, 0, 0, 0, 0, 0, 0, // burnChance..atkChangeChance
                 0, 0, 0, 0, 0, 0, 0, 0, // atkChangeTime..ohkoChance
@@ -2147,7 +2147,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 NULL, // acHelpMsg
                 0, // special
                 COUNTER_RESIST_ALL, // counterResistFlags
-                0x80000000, 0, 0, 0, 0, 50, 3, 0, // targetWeightFlags..poisonChance
+                TARGET_WEIGHT_RANDOM, 0, 0, 0, 0, 50, 3, 0, // targetWeightFlags..poisonChance
                 0, 0, 0, 0, 0, 0, 0, 0, // poisonTime..dodgyTime
                 0, 0, 0, 0, 0, 0, 0, 0, // burnChance..atkChangeChance
                 0, 0, 0, 0, 0, 0, 0, 0, // atkChangeTime..ohkoChance
@@ -2616,10 +2616,10 @@ BattleStageObjectData _object_spot_light_data[] = {
 };
 
 /** Unit setup for a hittable stage tree, spawned for stage objects that ask for one (unit_object_tree.c). */
-BattleUnitSetup _entry_tree_data = {&unit_object_tree, 2, {0}, 0x04000005, {-1000.0f, -1000.0f, -1000.0f}, 0, {0, 0, 0, 0}, NULL};
+BattleUnitSetup _entry_tree_data = {&unit_object_tree, 2, {0}, BATTLE_PHASE_AFTER_ENEMY, {-1000.0f, -1000.0f, -1000.0f}, 0, {0, 0, 0, 0}, NULL};
 
 /** Unit setup for a hittable stage switch, spawned for stage objects that ask for one (unit_object_switch.c). */
-BattleUnitSetup _entry_switch_data = {&unit_object_switch, 2, {0}, 0x04000005, {-1000.0f, -1000.0f, -1000.0f}, 0, {0, 0, 0, 0}, NULL};
+BattleUnitSetup _entry_switch_data = {&unit_object_switch, 2, {0}, BATTLE_PHASE_AFTER_ENEMY, {-1000.0f, -1000.0f, -1000.0f}, 0, {0, 0, 0, 0}, NULL};
 
 /** Default destroy script for background layer A1: runs _object_turn_event_core with LW(9) = 0. */
 EVT_BEGIN(_object_turn_event_A1)
@@ -2687,7 +2687,7 @@ USER_FUNC(_set_mobj_rotate_x) {
         switch (layer) {
             case 0:
             case 1:
-                for (j = 0; j < 32; j++) {
+                for (j = 0; j < BATTLE_STAGE_OBJECT_MAX; j++) {
                     obj = &wp->stageObjects[j];
                     if (obj->id > 0 && obj->data->mLayer == layer) {
                         obj->mNumFramesToStartFalling = obj->data->mNumFramesToStartFalling;
@@ -2707,7 +2707,7 @@ USER_FUNC(_set_mobj_rotate_x) {
         case 1:
             fall1 = "SFX_BTL_STAGE_SET_FALL1";
             fall3 = "SFX_BTL_STAGE_SET_FALL3";
-            for (i = 0; i < 32; i++) {
+            for (i = 0; i < BATTLE_STAGE_OBJECT_MAX; i++) {
                 obj = &wp->stageObjects[i];
                 if (obj->id > 0 && obj->data->mLayer == layer) {
                     if (obj->mNumFramesToStartFalling) {

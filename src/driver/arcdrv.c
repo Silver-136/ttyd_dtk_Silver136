@@ -41,7 +41,7 @@ void arcEntry(s32 id, void* data, u32 size) {
     entry->data = data;
     entry->size = size;
     ARCInitHandle(entry->data, &entry->handle);
-    entry->flags |= 1;
+    entry->flags |= ARC_FLAG_USED;
 }
 
 /** Forgets the archive in slot id (the memory itself is freed by the owner). */
@@ -63,7 +63,7 @@ void* arcOpen(const char* filename, void** addr, u32* length) {
     void* startAddr;
 
     for (i = 0; i < 4; i++) {
-        if ((work[i].flags & 1) && ARCOpen(&work[i].handle, filename, infop)) {
+        if ((work[i].flags & ARC_FLAG_USED) && ARCOpen(&work[i].handle, filename, infop)) {
             startAddr = ARCGetStartAddrInMem(infop);
             if (addr) {
                 *addr = startAddr;

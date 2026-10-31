@@ -25,14 +25,14 @@ EvtWord tik_08_init_evt[68];
  * he walks out of the pipe (bero exec), the "no entry" message tik_08_01 is shown and controls return.
  */
 EVT_BEGIN(oshimodo_event_sub)
-    CALL(evt_cam_ctrl_onoff, 4, 0)
+    CALL(evt_cam_ctrl_onoff, CAMERA_3D, 0)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_bero_exec_wait, 65536)
     WAIT_MS(750)
     CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
     CALL(evt_msg_print, 0, STRING("tik_08_01"), 0, 0)
     CALL(evt_mario_key_onoff, 1)
-    CALL(evt_cam_ctrl_onoff, 4, 1)
+    CALL(evt_cam_ctrl_onoff, CAMERA_3D, 1)
     RETURN
 EVT_END()
 
@@ -53,7 +53,7 @@ static BeroEntry bero_oshimodo[] = {
         "dokan", // hitName
         2, // type
         0, // sfxId
-        9, // directionId
+        BERO_DIR_DOWN, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -74,7 +74,7 @@ static BeroEntry bero_entry_data[] = {
         "dokan", // hitName
         2, // type
         0, // sfxId
-        9, // directionId
+        BERO_DIR_DOWN, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -91,7 +91,7 @@ static BeroEntry bero_entry_data[] = {
         "s_bero", // hitName
         1, // type
         1, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -117,7 +117,7 @@ static BeroEntry bero_entry_data2[] = {
         "dokan", // hitName
         2, // type
         0, // sfxId
-        9, // directionId
+        BERO_DIR_DOWN, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length

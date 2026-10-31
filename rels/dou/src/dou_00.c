@@ -2,6 +2,7 @@
 // Arrival cutscene (story 242 to 243), a save block and Ruin Powder; the door leads to dou_01.
 
 #include "battle/battle_unit.h"
+#include "driver/animdrv.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_map.h"
 #include "evt/evt_mario.h"
@@ -44,7 +45,7 @@ static BeroEntry bero_entry_data[] = {
     {
         "w_bero", // hitName
         0, 0, // type..sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -60,7 +61,7 @@ static BeroEntry bero_entry_data[] = {
     {
         "e_bero", // hitName
         0, 0, // type..sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -90,7 +91,7 @@ static EVT_BEGIN(back_light)
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
-    CALL(evt_map_blend_set_flag, 0, STRING("mario"), 2048)
+    CALL(evt_map_blend_set_flag, 0, STRING("mario"), ANIM_MATERIAL_FLAG_NO_BLEND)
     CALL(evt_map_blend_off, 0)
     RETURN
 EVT_END()
@@ -125,8 +126,8 @@ EVT_BEGIN(dou_00_init_evt)
     CALL(evt_mobj_save_blk, STRING("mobj_save"), 30, 85, -75, 0, 0)
     CALL(evt_item_entry, STRING("item_01"), ITEM_RUIN_POWDER, -245, 0, 85, ITEM_TYPE_STILL, GSWF_DOU_00_RUIN_POWDER, 0)
     CALL(evt_map_set_tevcallback, 1, PTR(water_tev))
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("s00_suimen"), MAP_OBJ_TEV_CALLBACK(1))
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("s00_suimen"), MAP_OBJ_FLAG_DISPLAY_LIST)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("s00_suimen"), MAP_OBJ_TEV_CALLBACK(1))
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("s00_suimen"), MAP_OBJ_FLAG_DISPLAY_LIST)
     RETURN
 EVT_END()
 

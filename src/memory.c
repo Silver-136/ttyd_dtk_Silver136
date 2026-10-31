@@ -128,7 +128,7 @@ static inline void mapallocInit(void) {
     MapAllocEntry* entry;
     u32 total;
 
-    size = (u8*)heapEnd[1] - (u8*)heapStart[1] - sizeof(MapAllocEntry);
+    size = (u8*)heapEnd[HEAP_MALLOC] - (u8*)heapStart[HEAP_MALLOC] - sizeof(MapAllocEntry);
     mapalloc_size = size;
 #else
     MapAllocEntry* entry;

@@ -197,7 +197,7 @@ s32 battleAcMain_PendulumCraneTiming(BattleWork* work) {
             }
             break;
         case 1002:
-            ac->doneFlags |= 1;
+            ac->doneFlags |= AC_DONE_FLAG_FINISHED;
             cw->endTimer = 60;
             if (cw->sfxId != 0xFFFFFFFF) {
                 psndSFXOff(cw->sfxId);
@@ -263,7 +263,7 @@ void battleAcDisp_PendulumCraneTiming(CameraId cameraId, void* param) {
 
 /** Called by btlevtcmd_StopAC: unless the command already finished, stops its sound and starts the end wait. */
 void battleAcDelete_PendulumCraneTiming(BattleWork* work) {
-    if (work->actionCommands.doneFlags & 1) {
+    if (work->actionCommands.doneFlags & AC_DONE_FLAG_FINISHED) {
         return;
     }
     work->actionCommands.mAcState = 1002;

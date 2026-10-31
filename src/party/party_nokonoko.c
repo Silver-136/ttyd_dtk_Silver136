@@ -111,7 +111,7 @@ void nokonoko_bye(PartyEntry* party) {
  * and clears the stored shell-spin sound handle.
  */
 void nokonoko_init(PartyEntry* party) {
-    party->memberKind = 2;
+    party->memberKind = PARTY_MEMBER_KOOPS;
     party->moveKind = 0;
     party->height = 37.0f;
     party->width = 24.0f;

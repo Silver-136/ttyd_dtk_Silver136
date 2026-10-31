@@ -197,7 +197,7 @@ static void lecture_button_disp(CameraId camera, void* param) {
         LectButton* btn = &lbtn[i];
         LectButtonDisp* disp = &btn->disp;
 
-        if (!(btn->flags & 1)) {
+        if (!(btn->flags & LECT_BUTTON_FLAG_HIDDEN)) {
             f32 ofs;
             Vec pos;
 
@@ -219,7 +219,7 @@ static void lecture_button_disp(CameraId camera, void* param) {
             }
             pos = disp->pos;
             pos.y += ofs;
-            iconDispGxAlpha(&pos, 0x50, btn->iconId, btn->alpha, 1.0f);
+            iconDispGxAlpha(&pos, ICON_FLAG_NO_MAP_BLEND | ICON_FLAG_2D, btn->iconId, btn->alpha, 1.0f);
         }
     }
 }
@@ -604,7 +604,7 @@ EVT_BEGIN(plane_majin_lecture)
     END_INLINE_EVENT
     CALL(evt_npc_flag_onoff, 1, STRING(/*"ペラ魔人"*/"\x83\x79\x83\x89\x96\x82\x90\x6C"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     CALL(evt_npc_flag_onoff, 1, STRING(/*"ペラ魔人"*/"\x83\x79\x83\x89\x96\x82\x90\x6C"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
-    CALL(evt_npc_set_camid, STRING(/*"ペラ魔人"*/"\x83\x79\x83\x89\x96\x82\x90\x6C"), 7)
+    CALL(evt_npc_set_camid, STRING(/*"ペラ魔人"*/"\x83\x79\x83\x89\x96\x82\x90\x6C"), CAMERA_3D_EFFECTB)
     WAIT_FRAMES(1)
     BEGIN_SIBLING_EVENT
         LOOP(0)
@@ -814,7 +814,7 @@ EVT_BEGIN(plane_majin_lecture)
     CALL(evt_msg_print_add, 0, STRING("mac_majin_19"))
     CALL(evt_npc_set_anim, STRING(/*"ペラ魔人"*/"\x83\x79\x83\x89\x96\x82\x90\x6C"), STRING("P_2"))
     WAIT_MS(200)
-    CALL(evt_npc_set_camid, STRING(/*"ペラ魔人"*/"\x83\x79\x83\x89\x96\x82\x90\x6C"), 4)
+    CALL(evt_npc_set_camid, STRING(/*"ペラ魔人"*/"\x83\x79\x83\x89\x96\x82\x90\x6C"), CAMERA_3D)
     CALL(evt_npc_set_position, STRING(/*"ペラ魔人"*/"\x83\x79\x83\x89\x96\x82\x90\x6C"), 0, -1000, 0)
     RETURN
 EVT_END_PAD()

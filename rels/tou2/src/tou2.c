@@ -1,6 +1,7 @@
 // tou2: Glitz Pit arena REL shared code/prolog (registers tou_03) plus ranking, rule and champion belt helpers.
 
 #include "tou2.h"
+#include "evt/evt_story.h"
 #include "dolphin/types.h"
 #include "dolphin/mtx.h"
 #include "dolphin/gx.h"
@@ -511,31 +512,31 @@ static void disp_proc(CameraId cameraId, void* param) {
         Vec pos = cursorPos;
         pos.x = 15.0f + left;
         pos.y = y - 24.0f;
-        iconDispGx(&pos, 0x10, ICON_ITEM_CHAMPS_BELT, 0.8f);
+        iconDispGx(&pos, ICON_FLAG_2D, ICON_ITEM_CHAMPS_BELT, 0.8f);
     }
     GXSetScissor(0, 0, 608, 480);
     if (dwp->page > 0) {
         {
             Vec pos = upArrowPos;
             pos.x = left + winW;
-            iconDispGx(&pos, 0x10, ICON_PAGE_ARROW, -1.0f);
+            iconDispGx(&pos, ICON_FLAG_2D, ICON_PAGE_ARROW, -1.0f);
         }
         {
             Vec pos = upButtonPos;
             pos.x = left + winW;
-            iconDispGx(&pos, 0x10, ICON_TRIGGER_L, 0.6f);
+            iconDispGx(&pos, ICON_FLAG_2D, ICON_TRIGGER_L, 0.6f);
         }
     }
     if (dwp->page < 1) {
         {
             Vec pos = downArrowPos;
             pos.x = left + winW;
-            iconDispGx(&pos, 0x10, ICON_PAGE_ARROW, 1.0f);
+            iconDispGx(&pos, ICON_FLAG_2D, ICON_PAGE_ARROW, 1.0f);
         }
         {
             Vec pos = downButtonPos;
             pos.x = left + winW;
-            iconDispGx(&pos, 0x10, ICON_TRIGGER_R, 0.6f);
+            iconDispGx(&pos, ICON_FLAG_2D, ICON_TRIGGER_R, 0.6f);
         }
     }
 }
@@ -556,11 +557,11 @@ USER_FUNC(evt_tou_set_rule_result) {
     s32 result = evtGetValue(event, event->args[0]);
 
     if (result & 4) {
-        swSet(2443); // GSWF_GLITZ_PIT_CONDITION_KEPT
+        swSet(GSWF_TOU_LAST_RULE_MET); // GSWF_GLITZ_PIT_CONDITION_KEPT
     } else if (result & 2) {
-        swClear(2443); // GSWF_GLITZ_PIT_CONDITION_KEPT
+        swClear(GSWF_TOU_LAST_RULE_MET); // GSWF_GLITZ_PIT_CONDITION_KEPT
     } else if (result & 1) {
-        swClear(2443); // GSWF_GLITZ_PIT_CONDITION_KEPT
+        swClear(GSWF_TOU_LAST_RULE_MET); // GSWF_GLITZ_PIT_CONDITION_KEPT
     }
     return EVT_RETURN_DONE;
 }
@@ -580,7 +581,7 @@ USER_FUNC(evt_tou_set_ranking_win_lose) {
                 break;
             }
         }
-        swSet(2442); // GSWF_GLITZ_PIT_BEAT_LAST_OPPONENT
+        swSet(GSWF_TOU_LAST_MATCH_WON); // GSWF_GLITZ_PIT_BEAT_LAST_OPPONENT
     } else {
         for (i = 0; i < rank_wp->count; i++) {
             if (id == rank_wp->entries[i].id) {
@@ -588,7 +589,7 @@ USER_FUNC(evt_tou_set_ranking_win_lose) {
                 break;
             }
         }
-        swClear(2442); // GSWF_GLITZ_PIT_BEAT_LAST_OPPONENT
+        swClear(GSWF_TOU_LAST_MATCH_WON); // GSWF_GLITZ_PIT_BEAT_LAST_OPPONENT
     }
 
     min = 1000;
@@ -608,8 +609,8 @@ USER_FUNC(evt_tou_set_ranking_win_lose) {
             }
         }
     }
-    swByteSet(507, id);
-    swSet(2532); // GSWF_GLITZ_PIT_LAST_OPPONENT_SAVED
+    swByteSet(GSW_TOU_LAST_OPPONENT_ID, id);
+    swSet(GSWF_TOU_LAST_OPPONENT_VALID); // GSWF_GLITZ_PIT_LAST_OPPONENT_SAVED
     rankingControll();
     return EVT_RETURN_DONE;
 }
@@ -1025,9 +1026,9 @@ static void rankingControll(void) {
         }
 
         // Check if a match is booked (2532), and move our opponent (507) to above us for the fight.
-        if (swGet(2532)) { // GSWF_GLITZ_PIT_LAST_OPPONENT_SAVED
+        if (swGet(GSWF_TOU_LAST_OPPONENT_VALID)) { // GSWF_GLITZ_PIT_LAST_OPPONENT_SAVED
             for (idx = 0; idx < nAbove; idx++) {
-                if (above[idx] == swByteGet(507)) { // GSW_GLITZ_PIT_LAST_OPPONENT
+                if (above[idx] == swByteGet(GSW_TOU_LAST_OPPONENT_ID)) { // GSW_GLITZ_PIT_LAST_OPPONENT
                     break;
                 }
             }
@@ -1090,9 +1091,9 @@ static void rankingControll(void) {
         }
 
         // If a match is booked, move the entry with the saved opponent index to the front of the below-player list.
-        if (swGet(2532)) { // GSWF_GLITZ_PIT_LAST_OPPONENT_SAVED
+        if (swGet(GSWF_TOU_LAST_OPPONENT_VALID)) { // GSWF_GLITZ_PIT_LAST_OPPONENT_SAVED
             for (idx = 0; idx < nBelow; idx++) {
-                if (below[idx] == swByteGet(507)) { // GSW_GLITZ_PIT_LAST_OPPONENT
+                if (below[idx] == swByteGet(GSW_TOU_LAST_OPPONENT_ID)) { // GSW_GLITZ_PIT_LAST_OPPONENT
                     break;
                 }
             }
@@ -1126,7 +1127,7 @@ static void rankingControll(void) {
             rank++;
         }
     }
-    swByteSet(580, rank);
+    swByteSet(GSW_TOU_PLAYER_RANK, rank);
 }
 
 /** Moves arr[from] to index to, shifting the elements in between by one place. */
@@ -1160,15 +1161,15 @@ USER_FUNC(tou2_rankingReset) {
     rankingExit();
     pouchRemoveItem(ITEM_CHAMPS_BELT);
     for (i = 0; i < 20; i++) {
-        swClear(i + 2465);
+        swClear(i + GSWF_TOU_FIGHTER_BELOW_BASE);
     }
-    swClear(2392); // GSWF_TOU_GOOMBA_BROS_AFTER_MATCH_SEEN
-    swClear(2399); // GSWF_TOU_RAWK_HAWK_OPENING_SEEN
-    swClear(2400); // GSWF_TOU_RAWK_HAWK_FIRST_WIN
-    swClear(2383); // GSWF_GLITZ_PIT_TITLE_MATCH_BOOKED
-    swClear(2529); // GSWF_GLITZ_PIT_RANKING_SAVED
-    swClear(2532); // GSWF_GLITZ_PIT_LAST_OPPONENT_SAVED
-    swClear(2403); // GSWF_TOU_02_FANS_MOB_MARIO_SEEN
+    swClear(GSWF_TOU10_FIRST_MATCH_AFTER_SEEN); // GSWF_TOU_GOOMBA_BROS_AFTER_MATCH_SEEN
+    swClear(GSWF_TOU_CHAMP_OPENING_SEEN); // GSWF_TOU_RAWK_HAWK_OPENING_SEEN
+    swClear(GSWF_TOU_CHAMP_WIN_SEEN); // GSWF_TOU_RAWK_HAWK_FIRST_WIN
+    swClear(GSWF_TOU_TITLE_MATCH_RESERVED); // GSWF_GLITZ_PIT_TITLE_MATCH_BOOKED
+    swClear(GSWF_TOU_RANKING_SAVED); // GSWF_GLITZ_PIT_RANKING_SAVED
+    swClear(GSWF_TOU_LAST_OPPONENT_VALID); // GSWF_GLITZ_PIT_LAST_OPPONENT_SAVED
+    swClear(GSWF_TOU02_LOBBY_CROWD_CHAMP_SEEN); // GSWF_TOU_02_FANS_MOB_MARIO_SEEN
     rankingInit();
     return EVT_RETURN_DONE;
 }
@@ -1191,12 +1192,12 @@ static void rankingExit(void) {
 
     for (i = 0, entry = rank_wp->entries; i < rank_wp->count; i++, entry++) {
         if (entry->flags & RANK_BELOW) {
-            swSet(entry->id + 2465);
+            swSet(entry->id + GSWF_TOU_FIGHTER_BELOW_BASE);
         } else {
-            swClear(entry->id + 2465);
+            swClear(entry->id + GSWF_TOU_FIGHTER_BELOW_BASE);
         }
         for (j = 0; j < 2; j++) {
-            swByteSet(2 * entry->id + 519 + j, entry->points.bytes[j]);
+            swByteSet(2 * entry->id + GSW_TOU_FIGHTER_POINTS_BASE + j, entry->points.bytes[j]);
         }
     }
     _mapFree(rank_wp->entries);
@@ -1228,13 +1229,13 @@ static void rankingInit(void) {
     for (i = 0, entry = rank_wp->entries; i < rank_wp->count; i++, entry++) {
         entry->flags = 0;
         entry->id = i;
-        if (swGet(entry->id + 2465)) {
+        if (swGet(entry->id + GSWF_TOU_FIGHTER_BELOW_BASE)) {
             entry->flags |= RANK_BELOW;
         }
-        if (swGet(2529)) { // GSWF_GLITZ_PIT_RANKING_SAVED
+        if (swGet(GSWF_TOU_RANKING_SAVED)) { // GSWF_GLITZ_PIT_RANKING_SAVED
             int j;
             for (j = 0; j < 2; j++) {
-                entry->points.bytes[j] = swByteGet(2 * entry->id + 519 + j);
+                entry->points.bytes[j] = swByteGet(2 * entry->id + GSW_TOU_FIGHTER_POINTS_BASE + j);
             }
         } else {
             entry->points.total = fighterDt[entry->id].startPoints;
@@ -1244,7 +1245,7 @@ static void rankingInit(void) {
         }
     }
 
-    swSet(2529); // GSWF_GLITZ_PIT_RANKING_SAVED
+    swSet(GSWF_TOU_RANKING_SAVED); // GSWF_GLITZ_PIT_RANKING_SAVED
 
     // Set up the initial run-through
     if (evtGetValue(NULL, GSW_STORY_PROGRESS) < STG3_34_RETURN_TO_ROGUEPORT) {

@@ -361,7 +361,7 @@ BattleUnitSetup entry_gesso_left_arm_entry_data = {
     &unit_boss_gesso_left_arm, // mUnitKindParams
     ALLIANCE_ENEMY, // alliance
     {0}, // pad_05
-    0x4000004, // attackPhase
+    BATTLE_PHASE_ENEMY, // attackPhase
     {0.0f, -1000.0f, 0.0f}, // position
     0, // hitOffsetX
     {0}, // unitWork
@@ -376,7 +376,7 @@ BattleUnitSetup entry_gesso_right_arm_entry_data = {
     &unit_boss_gesso_right_arm, // mUnitKindParams
     ALLIANCE_ENEMY, // alliance
     {0}, // pad_05
-    0x4000004, // attackPhase
+    BATTLE_PHASE_ENEMY, // attackPhase
     {0.0f, -1000.0f, 0.0f}, // position
     0, // hitOffsetX
     {0}, // unitWork
@@ -415,7 +415,7 @@ static EVT_BEGIN(phase_event)
         RETURN
     END_IF
 #endif
-    CALL(btlevtcmd_CheckPhase, LW(0), 67108865)
+    CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_BEFORE_PLAYER)
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, GESSO_UNIT_WORK_STATE, LW(0))
         IF_INT_EQUAL(LW(0), 1)
@@ -446,7 +446,7 @@ static EVT_BEGIN(phase_event)
             END_IF
         END_IF
     END_IF
-    CALL(btlevtcmd_CheckPhase, LW(0), 67108869)
+    CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_AFTER_ENEMY)
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, GESSO_UNIT_WORK_STATE, LW(0))
         IF_INT_EQUAL(LW(0), 2)
@@ -596,7 +596,7 @@ BattleWeapon weapon_gesso_ikasumi_attack = {
     NULL, // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH, // special
     COUNTER_RESIST_ALL, // counterResistFlags
-    4, // targetWeightFlags
+    TARGET_WEIGHT_PREFER_FRONT, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime

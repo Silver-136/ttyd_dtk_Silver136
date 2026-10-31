@@ -145,7 +145,7 @@ void badgeShop_init(void) {
     memset(bdsw->starmaniac_table, 0, sizeof(bdsw->starmaniac_table));
     memset(bdsw->bottakuru_table, 0, sizeof(bdsw->bottakuru_table));
     memset(bdsw->bteresa_table, 0, sizeof(bdsw->bteresa_table));
-    bdsw->restockFlags = 1;
+    bdsw->restockFlags = BADGESHOP_RESTOCK_PENDING;
 
     for (ptr = badge_special_table; *ptr; ++ptr) {
         badgeShop_add(bdsw->special_table, (s16)*ptr, 1);

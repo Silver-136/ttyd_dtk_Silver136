@@ -1,5 +1,6 @@
 #pragma defer_codegen on
 #include "battle/battle_unit.h"
+#include "driver/mapdrv.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_cam.h"
 #include "evt/evt_eff.h"
@@ -223,7 +224,7 @@ static BeroEntry bero_entry_data[] = {
     {
         ("w_bero"), // hitName
         0, 0, // type..sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -239,7 +240,7 @@ static BeroEntry bero_entry_data[] = {
     {
         ("e_bero"), // hitName
         0, 0, // type..sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -256,7 +257,7 @@ static BeroEntry bero_entry_data[] = {
         ("dokan"), // hitName
         2, // type
         0, // sfxId
-        6, // directionId
+        BERO_DIR_W, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -654,13 +655,13 @@ EVT_BEGIN(evt_golden)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     DIVIDE_FLOAT(LW(0), FLOAT((4.0f)))
     SET_FLOAT_VALUE(LW(3), FLOAT((0.0f)))
-    CALL(evt_npc_flag_onoff, 1, STRING(("\203S\201[\203\213\203h\203`\203\207\203\215\203{\203\223")), 131088)
+    CALL(evt_npc_flag_onoff, 1, STRING(("\203S\201[\203\213\203h\203`\203\207\203\215\203{\203\223")), NPC_FLAG_JUMPING | NPC_FLAG_LAND_ON_FLOOR)
     LOOP(3)
         ADD_FLOAT(LW(3), LW(0))
         CALL(evt_snd_sfxon_3d, STRING(("SFX_STG1_CHORO_MOVE1")), LW(3), LW(1), LW(2), 0)
         CALL(evt_npc_jump_position, STRING(("\203S\201[\203\213\203h\203`\203\207\203\215\203{\203\223")), LW(3), LW(1), LW(2), 300, 0, FLOAT(30.0f), 0)
     END_LOOP
-    CALL(evt_npc_flag_onoff, 1, STRING(("\203S\201[\203\213\203h\203`\203\207\203\215\203{\203\223")), 1073741856)
+    CALL(evt_npc_flag_onoff, 1, STRING(("\203S\201[\203\213\203h\203`\203\207\203\215\203{\203\223")), NPC_FLAG_NO_WALL_HIT | NPC_FLAG_INTANGIBLE)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     ADD(LW(1), 30)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -670,7 +671,7 @@ EVT_BEGIN(evt_golden)
     WAIT_MS(500)
     CALL(evt_npc_get_position, STRING(("\203S\201[\203\213\203h\203`\203\207\203\215\203{\203\223")), LW(3), LW(4), LW(5))
     CALL(evt_snd_sfxon_3d, STRING(("SFX_STG1_CHORO_MOVE1")), LW(3), LW(4), LW(5), 0)
-    CALL(evt_npc_flag_onoff, 0, STRING(("\203S\201[\203\213\203h\203`\203\207\203\215\203{\203\223")), 131088)
+    CALL(evt_npc_flag_onoff, 0, STRING(("\203S\201[\203\213\203h\203`\203\207\203\215\203{\203\223")), NPC_FLAG_JUMPING | NPC_FLAG_LAND_ON_FLOOR)
     CALL(npc_jump, STRING(("\203S\201[\203\213\203h\203`\203\207\203\215\203{\203\223")), LW(0), LW(1), LW(2), FLOAT(3.5f), FLOAT((2.0f)), 0)
     CALL(evt_npc_battle_start, STRING(("\203S\201[\203\213\203h\203`\203\207\203\215\203{\203\223")))
     CALL(evt_npc_wait_battle_end)
@@ -691,7 +692,7 @@ EVT_BEGIN(evt_golden)
         SET_FLOAT_VALUE(LW(2), FLOAT(500.0f))
         DIVIDE_FLOAT(LW(2), FLOAT(40.0f))
         SET_FLOAT_VALUE(LW(3), FLOAT((0.0f)))
-        CALL(evt_npc_flag_onoff, 0, STRING(("\203S\201[\203\213\203h\203`\203\207\203\215\203{\203\223")), 131088)
+        CALL(evt_npc_flag_onoff, 0, STRING(("\203S\201[\203\213\203h\203`\203\207\203\215\203{\203\223")), NPC_FLAG_JUMPING | NPC_FLAG_LAND_ON_FLOOR)
         LOOP(40)
             ADD_FLOAT(LW(3), LW(2))
             CALL(npc_jump, STRING(("\203S\201[\203\213\203h\203`\203\207\203\215\203{\203\223")), LW(0), LW(1), LW(3), FLOAT(0.7998047f), FLOAT((1.0f)), 0)
@@ -728,8 +729,8 @@ EVT_BEGIN(hei_10_init_evt)
     END_IF
     CALL(evt_map_playanim, STRING(("mizu")), 1, 0)
     CALL(evt_map_set_tevcallback, 1, PTR(hei_test_water_tev))
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING(("mizu")), 16777216)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING(("mizu")), MAP_OBJ_FLAG_DISPLAY_LIST)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING(("mizu")), 16777216)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING(("mizu")), MAP_OBJ_FLAG_DISPLAY_LIST)
     RETURN
 EVT_END()
 

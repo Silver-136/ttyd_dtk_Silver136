@@ -2,6 +2,7 @@
 // Start/cancel/init/main/check/end helpers for the requests taken in Rogueport.
 
 #include "version.h"
+#include "evt/evt_story.h"
 #include "evt/evt_pouch.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"

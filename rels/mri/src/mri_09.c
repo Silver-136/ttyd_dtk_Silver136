@@ -2,6 +2,7 @@
 // switches, the breaking floor, and the blue jail key (get_blue_jail_key).
 
 #include "battle/battle_unit.h"
+#include "driver/fadedrv.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"
 #include "evt/evt_sub.h"
@@ -60,7 +61,7 @@ BeroEntry bero_bluejail[] = {
     {
         "w_bero", // hitName
         0, 0, // type..sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -83,7 +84,7 @@ static BeroEntry bero_entry_data[] = {
     {
         "w_bero", // hitName
         0, 0, // type..sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -99,7 +100,7 @@ static BeroEntry bero_entry_data[] = {
     {
         "n_bero", // hitName
         0, 0, // type..sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -116,7 +117,7 @@ static BeroEntry bero_entry_data[] = {
         "dokan2", // hitName
         2, // type
         0, // sfxId
-        9, // directionId
+        BERO_DIR_DOWN, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -132,7 +133,7 @@ static BeroEntry bero_entry_data[] = {
         "dokan3", // hitName
         2, // type
         0, // sfxId
-        6, // directionId
+        BERO_DIR_W, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -170,7 +171,7 @@ EVT_BEGIN(wall_roll_sub)
     END_INLINE_EVENT
     CALL(evt_img_set_paper_anim, LW(2), STRING("A_1"))
     WAIT_FRAMES(1)
-    CALL(evt_mapobj_flag_onoff, 1, 1, LW(1), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, LW(1), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_img_wait_animend, LW(2))
     CALL(evt_img_free_capture, LW(2), 0)
     CALL(evt_img_free_capture, LW(2), 1)
@@ -436,7 +437,7 @@ EVT_BEGIN(get_blue_jail_key)
     CALL(evt_item_get_item, STRING("item00"))
     CALL_CHILD(PTR(mri_guide_goryu))
     CALL(evt_puni_flag_onoff, 1, 0, PUNI_FLAG_SCRIPT_CONTROL)
-    CALL(evt_puni_set_mode, 1, 30)
+    CALL(evt_puni_set_mode, 1, PUNI_MODE_INERT)
     CALL(evt_npc_flag_onoff, 1, STRING("ガイドsp"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     BEGIN_INLINE_EVENT
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -456,7 +457,7 @@ EVT_BEGIN(get_blue_jail_key)
     END_IF
     CALL(evt_msg_print, 0, STRING("stg2_mri_e18_00"), 0, STRING("ガイドsp"))
     CALL(evt_puni_flag_onoff, 1, 1, PUNI_FLAG_SCRIPT_CONTROL)
-    CALL(evt_puni_set_mode, 1, 1)
+    CALL(evt_puni_set_mode, 1, PUNI_MODE_JOIN)
     SET_VALUE(GSW_STORY_PROGRESS, STG2_18_JABBLE)
     CALL(evt_fade_set_mapchange_type, 0, 2, 500, 1, 500)
     SET_VALUE(LW(0), STRING("w_bero"))
@@ -520,7 +521,7 @@ EVT_BEGIN(mri_09_init_evt)
         CALL(evt_paper_entry, STRING("OFF_d_roll_left"))
         CALL(evt_paper_entry, STRING("OFF_d_roll_right"))
         CASE_GREATER_OR_EQUAL(STG2_21_02_MATCHING_THE_PATTERNS)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_isk_01A"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_isk_01A"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_isk_01A"), 1, 0)
         CALL(evt_hitobj_onoff, STRING("A_f2_rak03"), 1, 1)
         CALL(evt_hitobj_onoff, STRING("A_f2_rak04"), 1, 0)

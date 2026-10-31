@@ -1070,7 +1070,7 @@ static void ext_moamoa_main(void) {
             }
         }
         if ((wp->flags & MOAMOA_WORK_FLAG_ACTIVE) && ( !(m->flags & (MOAMOA_FLAG_TO_TARGET | MOAMOA_FLAG_HIT | MOAMOA_FLAG_ESCAPING | MOAMOA_FLAG_OFF_ROOF | MOAMOA_FLAG_FUSING))) ) {
-            if ((( (mario->currMotionId == MARIO_MOTION_STAY ) || (( (u16)(mario->currMotionId - 1) ) <= 1 )) || (( (u16)(mario->currMotionId - 0x15) ) <= 1 )) ||
+            if ((( (mario->currMotionId == MARIO_MOTION_STAY ) || (( (u16)(mario->currMotionId - MARIO_MOTION_WALK) ) <= 1 )) || (( (u16)(mario->currMotionId - MARIO_MOTION_SLIT) ) <= 1 )) ||
                 ( mario->currMotionId == MARIO_MOTION_YOSHI) ) {
                 if ((( (mario->position.y > 200.0f ) && ( wp->dist > 30.0f )) && ( wp->dist < 100.0f )) && (i & 1)) {
                     if (m->flags & MOAMOA_FLAG_JUMPING) {
@@ -2141,9 +2141,9 @@ static EVT_BEGIN(hom_10_evt_resha_sub)
         IF_INT_EQUAL(LW(0), 0)
             BREAK_LOOP
         END_IF
-        CALL(evt_mapobj_flag_onoff, 1, 1, LW(0), MAP_OBJ_TEV_CALLBACK(1))
-        CALL(evt_mapobj_flag_onoff, 1, 0, LW(0), MAP_OBJ_FLAG_DISPLAY_LIST)
-        CALL(evt_mapobj_flag_onoff, 1, 1, LW(0), MAP_OBJ_FLAG_NO_COLOR_STAGE)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, LW(0), MAP_OBJ_TEV_CALLBACK(1))
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, LW(0), MAP_OBJ_FLAG_DISPLAY_LIST)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, LW(0), MAP_OBJ_FLAG_NO_COLOR_STAGE)
     END_LOOP
     RETURN
 EVT_END()
@@ -2231,8 +2231,8 @@ static BeroEntry bero_data_a[] = {
         "w_bero", // hitName
         0, // type
         8, // sfxId
-        2, // directionId
-        100000, // centerPosition
+        BERO_DIR_E, // directionId
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent

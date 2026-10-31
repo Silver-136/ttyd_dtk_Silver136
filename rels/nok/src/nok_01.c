@@ -2,6 +2,7 @@
 // Meadows (hei_02) and the pipe to Rogueport Sewers (tik_16).
 
 #include "battle/battle_unit.h"
+#include "evt/evt_story.h"
 #include "evt/evt_urouro.h"
 #include "evt/evt_window.h"
 #include "eff/eff_starstone.h"
@@ -886,7 +887,7 @@ static BeroEntry bero_entry_data[] = {
     {
         "w_bero", // hitName
         0, 0, // type..sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -902,7 +903,7 @@ static BeroEntry bero_entry_data[] = {
     {
         "e_bero", // hitName
         0, 0, // type..sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -919,7 +920,7 @@ static BeroEntry bero_entry_data[] = {
         "dokan_1", // hitName
         2, // type
         0, // sfxId
-        9, // directionId
+        BERO_DIR_DOWN, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -1551,7 +1552,7 @@ static EVT_BEGIN(epilogue_evt)
     CALL(evt_map_set_blend, 0, 0, 0, 0, 255)
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 3000)
     CALL(evt_snd_envoff_f, PSND_FADEOUT, 3000)
-    CALL(evt_fade_set_mapchange_type, 1, 10, 1, 9, 900)
+    CALL(evt_fade_set_mapchange_type, 1, FADE_OUT_BLACK, 1, FADE_IN_BLACK, 900)
     CALL(evt_bero_mapchange, STRING("tou_08"), STRING(""))
     RETURN
 EVT_END()

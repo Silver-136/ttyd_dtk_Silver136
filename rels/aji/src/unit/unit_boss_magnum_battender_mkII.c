@@ -321,7 +321,7 @@ BattleWeapon weapon_batten_drill_attack = {
     NULL, // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH, // special
     COUNTER_RESIST_ALL, // counterResistFlags
-    0x2004, // targetWeightFlags
+    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
@@ -362,7 +362,7 @@ BattleWeapon weapon_batten_boomerang_attack = {
     NULL, // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH, // special
     COUNTER_RESIST_ALL, // counterResistFlags
-    0x2004, // targetWeightFlags
+    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
@@ -403,7 +403,7 @@ BattleWeapon weapon_batten_aud_attack = {
     NULL, // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH, // special
     COUNTER_RESIST_ALL, // counterResistFlags
-    0x2004, // targetWeightFlags
+    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
@@ -420,7 +420,7 @@ static BattleUnitSetup entry_rocket_punch = {
     &unit_boss_rocket_punch_mkII, // mUnitKindParams
     ALLIANCE_ENEMY, // alliance
     {0}, // pad_05
-    0x4000004, // attackPhase
+    BATTLE_PHASE_ENEMY, // attackPhase
     {-1000.0f, -1000.0f, -1000.0f}, // position
     0, // hitOffsetX
     {0}, // unitWork
@@ -1027,8 +1027,8 @@ static EVT_BEGIN(dead_event)
     SUBTRACT(LW(0), 20)
     CALL(evt_btl_camera_set_moveto, 1, LW(0), 160, 600, LW(0), 110, -100, 20, 11)
     WAIT_FRAMES(20)
-    CALL(btlevtcmd_SetTalkPoseType, UNIT_ID_SELF, 39)
-    CALL(btlevtcmd_SetStayPoseType, UNIT_ID_SELF, 39)
+    CALL(btlevtcmd_SetTalkPoseType, UNIT_ID_SELF, BTL_POSE_DAMAGE)
+    CALL(btlevtcmd_SetStayPoseType, UNIT_ID_SELF, BTL_POSE_DAMAGE)
     CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg7_aji_41_07"), 0, -2)
     CALL(evt_btl_camera_set_prilimit, BTL_CAM_PRI_NORMAL)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)

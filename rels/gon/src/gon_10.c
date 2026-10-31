@@ -77,7 +77,7 @@ static BeroEntry bero_entry_data[] = {
         "w_bero", // hitName
         1, // type
         13, // sfxId
-        2, // directionId
+        BERO_DIR_E, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -95,7 +95,7 @@ static BeroEntry bero_entry_data[] = {
         "e_bero", // hitName
         1, // type
         12, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -122,7 +122,7 @@ EVT_BEGIN(gon_10_init_evt)
     CALL(evt_mobj_save_blk, STRING("mobj_save"), -460, 1010, -145, 0, 0)
     CALL(evt_mobj_recovery_blk, STRING("mobj_recover"), 6, -400, 1010, -146, 0, 0)
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG1_16_HOOKTAIL)
-        CALL(evt_mapobj_flag_onoff, 0, 1, STRING("en"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 1, STRING("en"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     RETURN
 EVT_END()

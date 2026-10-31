@@ -352,7 +352,7 @@ USER_FUNC(bakuGameMain) {
         }
         memcpy(&w->weapon, &weapon, sizeof(BattleWeapon));
         flag = 1;
-        for (i = 0; i < 64; i++) {
+        for (i = 0; i < BATTLE_UNIT_MAX; i++) {
             u = BattleGetUnitPtr(bw, i);
             if (u != NULL && u->mAlliance == ALLIANCE_ENEMY) {
                 if ((f32)u->mWidth >= 100.0f) {
@@ -794,7 +794,7 @@ state_end:
                 if (w->frame > 30) {
                     w->phase = 22;
                 }
-                for (i = 0; i < 64; i++) {
+                for (i = 0; i < BATTLE_UNIT_MAX; i++) {
                     u = BattleGetUnitPtr(bw, i);
                     if (u != NULL && !(u->mAttributeFlags & kInactive) && !BtlUnit_CheckStatus(u, STATUS_INSTANT_KILL) &&
                         u->mAlliance == ALLIANCE_ENEMY && BtlUnit_CanActStatus(u)) {
@@ -853,7 +853,7 @@ state_end:
             if ((f32)w->frame > 30.0f / k) {
                 w->phase = 22;
             }
-            for (i = 0; i < 200; i++) {
+            for (i = 0; i < AUDIENCE_MEMBER_MAX; i++) {
                 m = BattleAudienceGetPtr(i);
                 if (bakuGameAudienceCanThrowPos(i) == 1 && (u8)BattleAudience_GetExist(i) && (m->flags & AUDIENCE_MEMBER_FLAG_NO_SYS_CTRL)) {
                     BattleAudience_GetHomePosition(i, &x, &y, &z);
@@ -1002,7 +1002,7 @@ state_end:
                 w->hpos.y = 0.0f;
             }
             if (!(w->flags & 1)) {
-                for (i = 0; i < 64; i++) {
+                for (i = 0; i < BATTLE_UNIT_MAX; i++) {
                     u = BattleGetUnitPtr(bw, i);
                     if (u != NULL && u->mAlliance == ALLIANCE_ENEMY && BtlUnit_CanActStatus(u) &&
                         !(u->mAttributeFlags & kInactive) && !BtlUnit_CheckStatus(u, STATUS_INSTANT_KILL) &&
@@ -1031,7 +1031,7 @@ state_end:
             if (w->audY <= 0.0f) {
                 w->audY = 0.0f;
             }
-            for (i = 0; i < 200; i++) {
+            for (i = 0; i < AUDIENCE_MEMBER_MAX; i++) {
                 m = BattleAudienceGetPtr(i);
                 if (bakuGameAudienceCanThrowPos(i) == 1 && (u8)BattleAudience_GetExist(i) && (m->flags & AUDIENCE_MEMBER_FLAG_NO_SYS_CTRL)) {
                     BattleAudience_GetHomePosition(i, &x, &y, &z);
@@ -1075,7 +1075,7 @@ state_end:
             psndSFXOff(w->sfx2);
         }
         w->phase = 50;
-        for (i = 0; i < 200; i++) {
+        for (i = 0; i < AUDIENCE_MEMBER_MAX; i++) {
             m = BattleAudienceGetPtr(i);
             m->flags &= ~AUDIENCE_MEMBER_FLAG_NO_SYS_CTRL;
             if (bakuGameAudienceCanThrowPos(i) == 1) {
@@ -1222,7 +1222,7 @@ void bakuGameEnemySurpriseReset(void) {
     BattleWork* wp = _battleWorkPointer;
     BattleUnit* u;
 
-    for (i = 0; i < 64; i++) {
+    for (i = 0; i < BATTLE_UNIT_MAX; i++) {
         u = BattleGetUnitPtr(wp, i);
         if (u != NULL && u->mAlliance == ALLIANCE_ENEMY && !(u->mAttributeFlags & kInactive) && !BtlUnit_CheckStatus(u, STATUS_INSTANT_KILL)) {
             btlDispPoseAnime(BtlUnit_GetPartsPtr(u, BtlUnit_GetBodyPartsId(u)));
@@ -1237,7 +1237,7 @@ void bakuGameAudienceSurpriseReset(void) {
     s32 i;
     BattleAudienceMember* m;
 
-    for (i = 0; i < 200; i++) {
+    for (i = 0; i < AUDIENCE_MEMBER_MAX; i++) {
         if ((u8)BattleAudience_GetExist(i)) {
             m = BattleAudienceGetPtr(i);
             m->angle = 90.0f;
@@ -1288,7 +1288,7 @@ void bakuGameEnemySurprise(void) {
     BattleWork* wp = _battleWorkPointer;
     BattleUnit* u;
 
-    for (i = 0; i < 64; i++) {
+    for (i = 0; i < BATTLE_UNIT_MAX; i++) {
         u = BattleGetUnitPtr(wp, i);
         if (u != NULL && u->mAlliance == ALLIANCE_ENEMY && !(u->mAttributeFlags & kInactive) && !BtlUnit_CheckStatus(u, STATUS_INSTANT_KILL)) {
             BtlUnit_SetBodyAnimType(u, POSE_TYPE_DAMAGE);
@@ -1306,7 +1306,7 @@ void bakuGameAudienceSurprise(void) {
     s32 i;
     BattleAudienceMember* m;
 
-    for (i = 0; i < 200; i++) {
+    for (i = 0; i < AUDIENCE_MEMBER_MAX; i++) {
         m = BattleAudienceGetPtr(i);
         if (BattleAudience_GetWaiting(i)) {
             m->flags |= AUDIENCE_MEMBER_FLAG_NO_SYS_CTRL;

@@ -85,7 +85,7 @@ EVT_BEGIN(kpa_init)
             SET_VALUE(GSW_KPA_TIME_LEFT, 180)
         END_IF
     END_IF
-    CALL(evt_cam_type_change, 1, 4)
+    CALL(evt_cam_type_change, 1, CAMERA_3D)
     SET_VALUE(LSWF_KPA_TIMER_STARTED, 0)
     SET_VALUE(LSWF_KPA_STAGE_ENDED, 0)
     SET_VALUE(LSWF_KPA_BOWSER_DEAD, 0)

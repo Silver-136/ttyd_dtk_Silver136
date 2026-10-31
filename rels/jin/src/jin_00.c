@@ -643,7 +643,7 @@ BeroEntry bero_stg4majo3nin[] = {
         "w_bero", // hitName
         1, // type
         6, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -669,7 +669,7 @@ static BeroEntry bero_entry_data[] = {
     {
         "n_bero_1", // hitName
         0, 0, // type..sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -686,7 +686,7 @@ static BeroEntry bero_entry_data[] = {
         "ana", // hitName
         3840, // type
         0, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -703,7 +703,7 @@ static BeroEntry bero_entry_data[] = {
         "w_bero", // hitName
         1, // type
         6, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         120, // length
@@ -721,7 +721,7 @@ static BeroEntry bero_entry_data[] = {
         "n_bero_3", // hitName
         1, // type
         2, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -739,7 +739,7 @@ static BeroEntry bero_entry_data[] = {
         "s_bero", // hitName
         1, // type
         2, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -757,7 +757,7 @@ static BeroEntry bero_entry_data[] = {
         "n_bero_2", // hitName
         1, // type
         2, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -775,7 +775,7 @@ static BeroEntry bero_entry_data[] = {
         "e_bero_3", // hitName
         1, // type
         2, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -793,7 +793,7 @@ static BeroEntry bero_entry_data[] = {
         "e_bero_1", // hitName
         1, // type
         2, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -811,7 +811,7 @@ static BeroEntry bero_entry_data[] = {
         "e_bero_2", // hitName
         1, // type
         2, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -2275,7 +2275,7 @@ EVT_BEGIN(senteresa_evt)
     CALL(evt_npc_wait_battle_end)
     ADD(LW(1), 50)
     CALL(evt_item_entry, STRING("item_99"), ITEM_LUCKY_START, LW(0), LW(1), LW(2), ITEM_TYPE_SCATTER_NO_PICKUP, GSWF_JIN_00_LUCKY_START, 0)
-    CALL(evt_item_flag_on, STRING("item_99"), 256)
+    CALL(evt_item_flag_on, STRING("item_99"), ITEM_FLAG_BADGE_RETURN)
     SET_VALUE(GSWF_JIN_00_LUCKY_START, 1)
     CALL(senteresa_huttobu)
     CALL(evt_npc_flag_onoff, 1, STRING(/*"アトミックテレサ"*/"\x83\x41\x83\x67\x83\x7E\x83\x62\x83\x4E\x83\x65\x83\x8C\x83\x54"), NPC_FLAG_NO_DRAW)
@@ -2366,7 +2366,7 @@ EVT_BEGIN(jin_00_init_evt)
         CALL(evt_cam_road_reset)
     END_IF
     CALL(evt_hitobj_attr_onoff, 0, 0, STRING("a_futa"), 4)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("hahen"), MAP_OBJ_FLAG_CLIP)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("hahen"), MAP_OBJ_FLAG_CLIP)
     RETURN
 EVT_END()
 

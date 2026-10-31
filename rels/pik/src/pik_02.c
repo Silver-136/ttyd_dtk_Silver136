@@ -2,6 +2,7 @@
 // Sirens and Doopliss.
 
 #include "battle/battle_unit.h"
+#include "driver/fadedrv.h"
 #include "kpa_act.h"
 #include "eff/eff_itemget.h"
 #include "eff/eff_starstone.h"
@@ -193,7 +194,7 @@ static BeroEntry bero_data[] = {
         "s_bero", // hitName
         1, // type
         6, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
 #ifdef VERSION_G8ME01
@@ -215,7 +216,7 @@ static BeroEntry bero_data[] = {
         "dokan", // hitName
         2, // type
         0, // sfxId
-        9, // directionId
+        BERO_DIR_DOWN, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -232,7 +233,7 @@ static BeroEntry bero_data[] = {
         "h_dokan", // hitName
         4098, // type
         0, // sfxId
-        9, // directionId
+        BERO_DIR_DOWN, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -248,7 +249,7 @@ static BeroEntry bero_data[] = {
         "h_bero", // hitName
         4096, // type
         0, // sfxId
-        2, // directionId
+        BERO_DIR_E, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -275,7 +276,7 @@ BeroEntry s_bero_peach[] = {
         "s_bero", // hitName
         1, // type
         6, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         80, // length
@@ -1174,7 +1175,7 @@ EVT_BEGIN(pik_02_init_evt)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_kaiga"), 0, PTR(evt_kaiga), GW(10))
     END_IF
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("dai_a"), 0, PTR(evt_daiza), 0)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("door_1"), MAP_OBJ_FLAG_CLIP)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("door_1"), MAP_OBJ_FLAG_CLIP)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG6_51_3_SURPRISE_GUESTS)
         SPAWN_EVENT(PTR(evt_garnet))
     END_IF
@@ -1197,9 +1198,9 @@ EVT_BEGIN(pik_02_init_evt)
     END_IF
     CALL(evt_map_entry_airport_harbor, 0, STRING("hikou"), STRING("a_hi1"))
 #ifdef VERSION_G8ME01
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("s_jav"), MAP_OBJ_FLAG_CLIP)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("s_jav"), MAP_OBJ_FLAG_CLIP)
 #endif
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("saku_2"), MAP_OBJ_FLAG_CLIP)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("saku_2"), MAP_OBJ_FLAG_CLIP)
     CALL(evt_cam_letter_box_disable, 0)
     RETURN
 EVT_END()

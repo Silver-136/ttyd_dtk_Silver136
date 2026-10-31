@@ -57,8 +57,8 @@ static BeroEntry bero_entry_data[] = {
         "w_bero", // hitName
         1, // type
         2, // sfxId
-        20000, // directionId
-        100000, // centerPosition
+        BERO_DIR_AUTO, // directionId
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -178,7 +178,7 @@ EVT_BEGIN(jin_06_init_evt)
         CALL(evt_cloud_init)
         CALL(evt_cloud_ent, 0, STRING("mekure"), STRING("a_mekure"), PTR(jin_06_wall_open_evt))
         ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("mekure"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("mekure"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_mekure"), 0, 0)
     END_IF
     IF_INT_LESS(GSW_STORY_PROGRESS, STG4_09_01_PUSH_THE_STATUE)

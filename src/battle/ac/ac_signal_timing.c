@@ -194,10 +194,10 @@ s32 battleAcMain_SignalTiming(BattleWork *work) {
                 w->nextRangeEnd = ((w->next + 1) * work->actionCommands.params[SIGNAL_PARAM_STEP]) - 1;
                 w->next++;
                 if (w->next < (work->actionCommands.params[SIGNAL_PARAM_LEAD] + 1)) {
-                    if (!((work->actionCommands.setupFlags & 1) && (work->actionCommands.mAcUnit->mTokenFlags & kConfusedAction))) {
+                    if (!((work->actionCommands.setupFlags & AC_SETUP_FLAG_CONFUSED_AUTO) && (work->actionCommands.mAcUnit->mTokenFlags & kConfusedAction))) {
                         psndSFXOn(sfxPi);
                     }
-                } else if (!((work->actionCommands.setupFlags & 1) && (work->actionCommands.mAcUnit->mTokenFlags & kConfusedAction))) {
+                } else if (!((work->actionCommands.setupFlags & AC_SETUP_FLAG_CONFUSED_AUTO) && (work->actionCommands.mAcUnit->mTokenFlags & kConfusedAction))) {
                     psndSFXOn(sfxPone);
                 }
                 w->pressed = 0;
@@ -248,7 +248,7 @@ s32 battleAcMain_SignalTiming(BattleWork *work) {
                         work->actionCommands.outputParams[SIGNAL_OUT_RESULT] = 1;
                         if ((w->index >= work->actionCommands.params[SIGNAL_PARAM_LEAD]) && (w->index < (work->actionCommands.params[SIGNAL_PARAM_COUNT] + work->actionCommands.params[SIGNAL_PARAM_LEAD]))) {
                             w->results[w->index - work->actionCommands.params[SIGNAL_PARAM_LEAD]] = 1;
-                            if (!((work->actionCommands.setupFlags & 1) && (work->actionCommands.mAcUnit->mTokenFlags & kConfusedAction))) {
+                            if (!((work->actionCommands.setupFlags & AC_SETUP_FLAG_CONFUSED_AUTO) && (work->actionCommands.mAcUnit->mTokenFlags & kConfusedAction))) {
                                 psndSFXOn(sfxOk);
                             }
                         }
@@ -265,7 +265,7 @@ s32 battleAcMain_SignalTiming(BattleWork *work) {
                         w->misses++;
                         if (w->frame >= w->rangeStart) {
                             w->results[w->index - work->actionCommands.params[SIGNAL_PARAM_LEAD]] = -1;
-                            if (!((work->actionCommands.setupFlags & 1) && (work->actionCommands.mAcUnit->mTokenFlags & kConfusedAction))) {
+                            if (!((work->actionCommands.setupFlags & AC_SETUP_FLAG_CONFUSED_AUTO) && (work->actionCommands.mAcUnit->mTokenFlags & kConfusedAction))) {
                                 psndSFXOn(sfxNg2);
                             }
                             work->actionCommands.outputParams[SIGNAL_OUT_RESULT] = -1;
@@ -280,7 +280,7 @@ s32 battleAcMain_SignalTiming(BattleWork *work) {
                     if ((w->index >= work->actionCommands.params[SIGNAL_PARAM_LEAD]) && (w->index < (work->actionCommands.params[SIGNAL_PARAM_COUNT] + work->actionCommands.params[SIGNAL_PARAM_LEAD]))) {
                         w->misses++;
                         w->results[w->index - work->actionCommands.params[SIGNAL_PARAM_LEAD]] = -1;
-                        if (!((work->actionCommands.setupFlags & 1) && (work->actionCommands.mAcUnit->mTokenFlags & kConfusedAction))) {
+                        if (!((work->actionCommands.setupFlags & AC_SETUP_FLAG_CONFUSED_AUTO) && (work->actionCommands.mAcUnit->mTokenFlags & kConfusedAction))) {
                             psndSFXOn(sfxNg);
                         }
                     }

@@ -143,7 +143,7 @@ s32 battleAcMain_ShotTarget(BattleWork* work) {
                     cw->inRange = 0;
                 }
                 cw->frame--;
-                if ((ac->setupFlags & 1) && (ac->mAcUnit->mTokenFlags & kConfusedAction)) {
+                if ((ac->setupFlags & AC_SETUP_FLAG_CONFUSED_AUTO) && (ac->mAcUnit->mTokenFlags & kConfusedAction)) {
                     // irand(100) is never negative: a confused auto-play always fails
                     if (irand(100) >= 0) {
                         ac->result = 0;

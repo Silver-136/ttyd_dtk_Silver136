@@ -29,7 +29,7 @@ BeroEntry bero_black_shadow[] = {
         "dokan1", // hitName
         2, // type
         0, // sfxId
-        2, // directionId
+        BERO_DIR_E, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -53,7 +53,7 @@ static BeroEntry bero_entry_data[] = {
         "dokan1", // hitName
         2, // type
         0, // sfxId
-        2, // directionId
+        BERO_DIR_E, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -70,7 +70,7 @@ static BeroEntry bero_entry_data[] = {
         "dokan2", // hitName
         2, // type
         0, // sfxId
-        9, // directionId
+        BERO_DIR_DOWN, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -87,7 +87,7 @@ static BeroEntry bero_entry_data[] = {
         "dokan3", // hitName
         2, // type
         0, // sfxId
-        9, // directionId
+        BERO_DIR_DOWN, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -103,7 +103,7 @@ static BeroEntry bero_entry_data[] = {
         "dokan4", // hitName
         2, // type
         0, // sfxId
-        6, // directionId
+        BERO_DIR_W, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length

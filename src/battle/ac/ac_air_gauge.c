@@ -87,7 +87,7 @@ s32 battleAcMain_AirGauge(BattleWork* work) {
         case 99:
             break;
         case 100:
-            if ((ac->setupFlags & 1) && (ac->mAcUnit->mTokenFlags & kConfusedAction)) {
+            if ((ac->setupFlags & AC_SETUP_FLAG_CONFUSED_AUTO) && (ac->mAcUnit->mTokenFlags & kConfusedAction)) {
                 if (irand(100) >= 0) {
                     ac->setupParam = ac->params[3] / 2;
                     ac->outputParams[0] = 0;

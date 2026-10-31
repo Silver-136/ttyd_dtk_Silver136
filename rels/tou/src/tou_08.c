@@ -1,6 +1,7 @@
 // tou_08 (闘技場, Glitz Pit): the major-league locker room; exits to tou_04 and tou_05; champion belt, the poisoned cake scene.
 
 #include "battle/battle_unit.h"
+#include "driver/fadedrv.h"
 #include "eff/eff_starstone.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_cam.h"
@@ -137,7 +138,7 @@ static BeroEntry bero_data[] = {
         "n_bero", // hitName
         1, // type
         4, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -155,7 +156,7 @@ static BeroEntry bero_data[] = {
         "dokan", // hitName
         2, // type
         0, // sfxId
-        9, // directionId
+        BERO_DIR_DOWN, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         100, // length

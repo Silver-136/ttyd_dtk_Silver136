@@ -37,7 +37,7 @@ static EVT_BEGIN(epilogue_evt)
     WAIT_MS(7000)
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 8000)
     CALL(evt_snd_envoff_f, PSND_FADEOUT, 8000)
-    CALL(evt_fade_set_mapchange_type, 1, 10, 4000, 9, 300)
+    CALL(evt_fade_set_mapchange_type, 1, FADE_OUT_BLACK, 4000, FADE_IN_BLACK, 300)
     CALL(evt_bero_mapchange, STRING("aaa_00"), STRING(""))
     RETURN
 EVT_END()

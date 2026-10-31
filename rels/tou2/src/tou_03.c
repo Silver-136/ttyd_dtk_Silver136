@@ -616,10 +616,10 @@ EVT_BEGIN(evt_kyaku)
         CALL(evt_npc_set_position, STRING(("kyaku3")), 20, 0, 370)
         CALL(evt_npc_set_position, STRING(("kyaku4")), 50, 0, 360)
     END_IF
-    CALL(evt_npc_flag_onoff, 1, STRING(("kyaku1")), 1073743360)
-    CALL(evt_npc_flag_onoff, 1, STRING(("kyaku2")), 1073743360)
-    CALL(evt_npc_flag_onoff, 1, STRING(("kyaku3")), 1073743360)
-    CALL(evt_npc_flag_onoff, 1, STRING(("kyaku4")), 1073743360)
+    CALL(evt_npc_flag_onoff, 1, STRING(("kyaku1")), NPC_FLAG_NO_WALL_HIT | NPC_FLAG_MOVE_ANIM | NPC_FLAG_TALK_ANIM)
+    CALL(evt_npc_flag_onoff, 1, STRING(("kyaku2")), NPC_FLAG_NO_WALL_HIT | NPC_FLAG_MOVE_ANIM | NPC_FLAG_TALK_ANIM)
+    CALL(evt_npc_flag_onoff, 1, STRING(("kyaku3")), NPC_FLAG_NO_WALL_HIT | NPC_FLAG_MOVE_ANIM | NPC_FLAG_TALK_ANIM)
+    CALL(evt_npc_flag_onoff, 1, STRING(("kyaku4")), NPC_FLAG_NO_WALL_HIT | NPC_FLAG_MOVE_ANIM | NPC_FLAG_TALK_ANIM)
     CALL(evt_ext_entry, 1000, PTR(ext_kyaku_data), PTR(ext_kyaku_init), PTR(ext_kyaku_main), PTR(ext_kyaku_dispent))
     CALL(evt_hitobj_onoff, STRING(("group246")), 1, 0)
     RETURN
@@ -891,7 +891,7 @@ static BeroEntry bero_data[] = {
         ("w_bero"), // hitName
         1, // type
         6, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -909,7 +909,7 @@ static BeroEntry bero_data[] = {
         ("e_bero"), // hitName
         1, // type
         6, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -927,7 +927,7 @@ static BeroEntry bero_data[] = {
         ("s_bero_1"), // hitName
         1, // type
         6, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -945,7 +945,7 @@ static BeroEntry bero_data[] = {
         ("s_bero_2"), // hitName
         1, // type
         6, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -4269,7 +4269,7 @@ s32 gans_white_off(EventEntry* event, BOOL isFirstCall) {
 
 static EVT_BEGIN(evt_boss)
 #ifdef VERSION_G8ME01
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("group34"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("group34"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_hitobj_onoff, STRING("a_kai_right"), 0, 0)
     SET_VALUE(LW(0), STRING("e_bero"))
     CALL_CHILD(bero_case_switch_off)
@@ -4368,8 +4368,8 @@ static EVT_BEGIN(evt_boss)
     CALL(evt_mario_jump_pos, -150, 60, 0, 500, 0, -1000)
     CALL(evt_mario_set_dir, 90, 200, 0)
 #ifdef VERSION_G8ME01
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("butai_2"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("butai_1"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("butai_2"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("butai_1"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_map_playanim, STRING("tyuubu"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_map_playanim, STRING("guruguru"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_map_playanim, STRING("hakkou"), MAP_ANIM_PLAY_LOOP, 0)
@@ -5127,7 +5127,7 @@ EVT_BEGIN(evt_watch_match)
         ELSE
         CALL(evt_npc_set_position, STRING(("\203L\203m\203V\203R\203\217")), 0, 60, -130)
     END_IF
-    CALL(evt_npc_flag_onoff, 1, STRING(("\221I\216\3501")), 32)
+    CALL(evt_npc_flag_onoff, 1, STRING(("\221I\216\3501")), NPC_FLAG_INTANGIBLE)
     LOOP(0)
         CALL(evt_sub_random, 3, LW(0))
         SWITCH(LW(0))
@@ -5543,7 +5543,7 @@ EVT_BEGIN(tou_03_init_evt)
     CALL(evt_bero_get_entername, LW(0))
 #ifdef VERSION_G8ME01
     IF_STR_NOT_EQUAL(LW(0), STRING("s_bero_2"))
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("ue"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("ue"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     CALL(evt_map_playanim, STRING("light_coloer"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_map_playanim, STRING("light_l"), MAP_ANIM_PLAY_LOOP, 0)
@@ -5567,9 +5567,9 @@ EVT_BEGIN(tou_03_init_evt)
     WAIT_FRAMES(1)
     CALL(evt_map_set_tevcallback, 1, PTR(screen_tev))
 #ifdef VERSION_G8ME01
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("monittor"), MAP_OBJ_TEV_CALLBACK(1))
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("monittor"), MAP_OBJ_FLAG_DISPLAY_LIST)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("butai_2"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("monittor"), MAP_OBJ_TEV_CALLBACK(1))
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("monittor"), MAP_OBJ_FLAG_DISPLAY_LIST)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("butai_2"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_hitobj_onoff, STRING("a_souti"), 1, 0)
 #else
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING(("monittor")), 16777216)
@@ -5612,7 +5612,7 @@ EVT_BEGIN(tou_03_init_evt)
         SPAWN_EVENT(PTR(evt_tougi))
         CASE_EQUAL(STG3_31_GRUBBAS_PLANS)
 #ifdef VERSION_G8ME01
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("door_2_a"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("door_2_a"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("door_2_b"), MAP_OBJ_FLAG_HIDDEN)
         SET_VALUE(LW(0), STRING("s_bero_1"))
         CALL_CHILD(bero_case_switch_off)
@@ -5649,7 +5649,7 @@ EVT_BEGIN(tou_03_init_evt)
         CALL(evt_party_set_pos, 0, LW(0), LW(1), LW(2))
         CALL(evt_party_set_pos, 1, LW(0), LW(1), LW(2))
 #ifdef VERSION_G8ME01
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("door_2_a"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("door_2_a"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("door_2_b"), MAP_OBJ_FLAG_HIDDEN)
 #else
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING(("door_2_a")), MAP_OBJ_FLAG_HIDDEN)

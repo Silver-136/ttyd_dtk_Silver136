@@ -155,7 +155,7 @@ BattleUnitSetup btlparty_tou_tou_rank_19[] = {
         &unit_kurikuri, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {10.0f, 0.0f, -20.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -165,7 +165,7 @@ BattleUnitSetup btlparty_tou_tou_rank_19[] = {
         &unit_kurikuri, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {50.0f, 0.0f, -10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -175,7 +175,7 @@ BattleUnitSetup btlparty_tou_tou_rank_19[] = {
         &unit_kurikuri, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {90.0f, 0.0f, 0.0f}, // position
         0, // hitOffsetX
         {1, 0, 0, 0}, // unitWork
@@ -185,7 +185,7 @@ BattleUnitSetup btlparty_tou_tou_rank_19[] = {
         &unit_kurikuri, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {130.0f, 0.0f, 10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -195,7 +195,7 @@ BattleUnitSetup btlparty_tou_tou_rank_19[] = {
         &unit_kurikuri, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {170.0f, 0.0f, 20.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -223,7 +223,7 @@ BattleUnitSetup btlparty_tou_tou_rank_18[] = {
         &unit_nokonoko_fighter, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {50.0f, 0.0f, -10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -233,7 +233,7 @@ BattleUnitSetup btlparty_tou_tou_rank_18[] = {
         &unit_nokonoko_fighter, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {90.0f, 0.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -243,7 +243,7 @@ BattleUnitSetup btlparty_tou_tou_rank_18[] = {
         &unit_patapata_fighter, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {130.0f, 40.0f, 10.0f}, // position
         0, // hitOffsetX
         {1, 0, 0, 0}, // unitWork
@@ -271,7 +271,7 @@ BattleUnitSetup btlparty_tou_tou_rank_17[] = {
         &unit_sambo, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {50.0f, 0.0f, -10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -281,7 +281,7 @@ BattleUnitSetup btlparty_tou_tou_rank_17[] = {
         &unit_sambo, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {90.0f, 0.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -291,7 +291,7 @@ BattleUnitSetup btlparty_tou_tou_rank_17[] = {
         &unit_sambo, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {130.0f, 0.0f, 10.0f}, // position
         0, // hitOffsetX
         {1, 0, 0, 0}, // unitWork
@@ -319,7 +319,7 @@ BattleUnitSetup btlparty_tou_tou_rank_16[] = {
         &unit_honenoko, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {50.0f, 0.0f, -10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -329,7 +329,7 @@ BattleUnitSetup btlparty_tou_tou_rank_16[] = {
         &unit_honenoko, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {90.0f, 0.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -339,7 +339,7 @@ BattleUnitSetup btlparty_tou_tou_rank_16[] = {
         &unit_honenoko, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {130.0f, 0.0f, 10.0f}, // position
         0, // hitOffsetX
         {1, 0, 0, 0}, // unitWork
@@ -367,7 +367,7 @@ BattleUnitSetup btlparty_tou_tou_rank_15[] = {
         &unit_togezo, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {50.0f, 0.0f, -10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -377,7 +377,7 @@ BattleUnitSetup btlparty_tou_tou_rank_15[] = {
         &unit_togezo, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {90.0f, 0.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -387,7 +387,7 @@ BattleUnitSetup btlparty_tou_tou_rank_15[] = {
         &unit_jyugem, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {130.0f, 40.0f, 10.0f}, // position
         0, // hitOffsetX
         {1, 0, 0, 0}, // unitWork
@@ -415,7 +415,7 @@ BattleUnitSetup btlparty_tou_tou_rank_14[] = {
         &unit_monochrome_pakkun, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {50.0f, 0.0f, -10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -425,7 +425,7 @@ BattleUnitSetup btlparty_tou_tou_rank_14[] = {
         &unit_monochrome_kurokumorn, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {90.0f, 40.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -435,7 +435,7 @@ BattleUnitSetup btlparty_tou_tou_rank_14[] = {
         &unit_piders, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {130.0f, 40.0f, 10.0f}, // position
         0, // hitOffsetX
         {1, 0, 0, 0}, // unitWork
@@ -463,7 +463,7 @@ BattleUnitSetup btlparty_tou_tou_rank_13[] = {
         &unit_hyper_sinnosuke, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {50.0f, 0.0f, -10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -473,7 +473,7 @@ BattleUnitSetup btlparty_tou_tou_rank_13[] = {
         &unit_hyper_sinnosuke, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {90.0f, 0.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -483,7 +483,7 @@ BattleUnitSetup btlparty_tou_tou_rank_13[] = {
         &unit_hyper_sinnosuke, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {130.0f, 0.0f, 10.0f}, // position
         0, // hitOffsetX
         {1, 0, 0, 0}, // unitWork
@@ -511,7 +511,7 @@ BattleUnitSetup btlparty_tou_tou_rank_12[] = {
         &unit_bomhei, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {30.0f, 0.0f, -10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -521,7 +521,7 @@ BattleUnitSetup btlparty_tou_tou_rank_12[] = {
         &unit_bomhei, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {70.0f, 0.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -531,7 +531,7 @@ BattleUnitSetup btlparty_tou_tou_rank_12[] = {
         &unit_bomhei, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {110.0f, 0.0f, 10.0f}, // position
         0, // hitOffsetX
         {1, 0, 0, 0}, // unitWork
@@ -541,7 +541,7 @@ BattleUnitSetup btlparty_tou_tou_rank_12[] = {
         &unit_bomhei, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {150.0f, 0.0f, 20.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -569,7 +569,7 @@ BattleUnitSetup btlparty_tou_tou_rank_11[] = {
         &unit_borodo, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {30.0f, 0.0f, -10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -579,7 +579,7 @@ BattleUnitSetup btlparty_tou_tou_rank_11[] = {
         &unit_borodo, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {70.0f, 0.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -589,7 +589,7 @@ BattleUnitSetup btlparty_tou_tou_rank_11[] = {
         &unit_borodo_king, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {110.0f, 0.0f, 10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -599,7 +599,7 @@ BattleUnitSetup btlparty_tou_tou_rank_11[] = {
         &unit_borodo_king, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {150.0f, 0.0f, 20.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -627,7 +627,7 @@ BattleUnitSetup btlparty_tou_tou_rank_10[] = {
         &unit_iron_sinemon, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {80.0f, 0.0f, 0.0f}, // position
         0, // hitOffsetX
         {50, 0, 0, 0}, // unitWork
@@ -637,7 +637,7 @@ BattleUnitSetup btlparty_tou_tou_rank_10[] = {
         &unit_iron_sinemon2, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {150.0f, 0.0f, 10.0f}, // position
         0, // hitOffsetX
         {130, 0, 0, 0}, // unitWork
@@ -665,7 +665,7 @@ BattleUnitSetup btlparty_tou_tou_rank_9[] = {
         &unit_crimson_togemet, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {70.0f, 0.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -675,7 +675,7 @@ BattleUnitSetup btlparty_tou_tou_rank_9[] = {
         &unit_crimson_togemet, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {110.0f, 0.0f, 10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -703,7 +703,7 @@ BattleUnitSetup btlparty_tou_tou_rank_8[] = {
         &unit_togedaruma, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {70.0f, 0.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -713,7 +713,7 @@ BattleUnitSetup btlparty_tou_tou_rank_8[] = {
         &unit_togedaruma, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {110.0f, 0.0f, 10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -741,7 +741,7 @@ BattleUnitSetup btlparty_tou_tou_rank_7[] = {
         &unit_ura_noko, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {50.0f, 0.0f, -10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -751,7 +751,7 @@ BattleUnitSetup btlparty_tou_tou_rank_7[] = {
         &unit_ura_pata, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {90.0f, 40.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -761,7 +761,7 @@ BattleUnitSetup btlparty_tou_tou_rank_7[] = {
         &unit_ura_noko, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {130.0f, 0.0f, 10.0f}, // position
         0, // hitOffsetX
         {1, 0, 0, 0}, // unitWork
@@ -789,7 +789,7 @@ BattleUnitSetup btlparty_tou_tou_rank_6[] = {
         &unit_chorobon, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {50.0f, 0.0f, -10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -799,7 +799,7 @@ BattleUnitSetup btlparty_tou_tou_rank_6[] = {
         &unit_green_chorobon, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {90.0f, 0.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -809,7 +809,7 @@ BattleUnitSetup btlparty_tou_tou_rank_6[] = {
         &unit_flower_chorobon, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {130.0f, 0.0f, 10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -839,7 +839,7 @@ BattleUnitSetup btlparty_tou_tou_rank_5[] = {
         &unit_kamec_red, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {50.0f, 0.0f, -10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -849,7 +849,7 @@ BattleUnitSetup btlparty_tou_tou_rank_5[] = {
         &unit_kamec_white, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {90.0f, 0.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -859,7 +859,7 @@ BattleUnitSetup btlparty_tou_tou_rank_5[] = {
         &unit_kamec_green, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {130.0f, 0.0f, 10.0f}, // position
         0, // hitOffsetX
         {1, 0, 0, 0}, // unitWork
@@ -887,7 +887,7 @@ BattleUnitSetup btlparty_tou_tou_rank_4[] = {
         &unit_dark_keeper, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {90.0f, 0.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -917,7 +917,7 @@ BattleUnitSetup btlparty_tou_tou_rank_3[] = {
         &unit_hammer_bros, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {50.0f, 0.0f, -10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -927,7 +927,7 @@ BattleUnitSetup btlparty_tou_tou_rank_3[] = {
         &unit_fire_bros, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {90.0f, 0.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -937,7 +937,7 @@ BattleUnitSetup btlparty_tou_tou_rank_3[] = {
         &unit_boomerang_bros, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {130.0f, 0.0f, 10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -965,7 +965,7 @@ BattleUnitSetup btlparty_tou_tou_rank_2[] = {
         &unit_burst_wanwan, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {70.0f, 0.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -975,7 +975,7 @@ BattleUnitSetup btlparty_tou_tou_rank_2[] = {
         &unit_burst_wanwan, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {110.0f, 0.0f, 10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -1003,7 +1003,7 @@ BattleUnitSetup btlparty_tou_tou_rank_1[] = {
         &unit_togenoko_ace, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {90.0f, 0.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -1031,7 +1031,7 @@ BattleUnitSetup btlparty_tou_tou_add_1[] = {
         &unit_basabasa, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {30.0f, 130.0f, -10.0f}, // position
         0, // hitOffsetX
         {1, 0, 0, 0}, // unitWork
@@ -1041,7 +1041,7 @@ BattleUnitSetup btlparty_tou_tou_add_1[] = {
         &unit_basabasa, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {70.0f, 130.0f, 0.0f}, // position
         0, // hitOffsetX
         {1, 0, 0, 0}, // unitWork
@@ -1051,7 +1051,7 @@ BattleUnitSetup btlparty_tou_tou_add_1[] = {
         &unit_basabasa, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {110.0f, 130.0f, 10.0f}, // position
         0, // hitOffsetX
         {1, 0, 0, 0}, // unitWork
@@ -1061,7 +1061,7 @@ BattleUnitSetup btlparty_tou_tou_add_1[] = {
         &unit_basabasa, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {150.0f, 130.0f, 20.0f}, // position
         0, // hitOffsetX
         {1, 0, 0, 0}, // unitWork
@@ -1089,7 +1089,7 @@ BattleUnitSetup btlparty_tou_tou_add_2[] = {
         &unit_hinnya, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {30.0f, 0.0f, -10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -1099,7 +1099,7 @@ BattleUnitSetup btlparty_tou_tou_add_2[] = {
         &unit_hannya, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {70.0f, 0.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -1109,7 +1109,7 @@ BattleUnitSetup btlparty_tou_tou_add_2[] = {
         &unit_hinnya, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {110.0f, 0.0f, 10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -1119,7 +1119,7 @@ BattleUnitSetup btlparty_tou_tou_add_2[] = {
         &unit_hannya, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {150.0f, 0.0f, 20.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -1147,7 +1147,7 @@ BattleUnitSetup btlparty_tou_tou_boss[] = {
         &unit_boss_macho_gance, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {90.0f, 0.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -1175,7 +1175,7 @@ BattleUnitSetup btlparty_tou_tou_champ[] = {
         &unit_boss_champion, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {90.0f, 0.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -1203,7 +1203,7 @@ BattleUnitSetup btlparty_tou_tou_koopa[] = {
         &unit_boss_koopa_tou, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {90.0f, 0.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -1791,8 +1791,8 @@ EVT_BEGIN(bgset_tou_screen_evt)
     CALL(tou_gamen_screen_tev_init)
     WAIT_FRAMES(1)
     CALL(evt_map_set_tevcallback, 8, PTR(tou_gamen_screen_tev))
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("gamen"), MAP_OBJ_TEV_CALLBACK(8))
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("gamen"), MAP_OBJ_FLAG_DISPLAY_LIST)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("gamen"), MAP_OBJ_TEV_CALLBACK(8))
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("gamen"), MAP_OBJ_FLAG_DISPLAY_LIST)
     RETURN
 EVT_END()
 

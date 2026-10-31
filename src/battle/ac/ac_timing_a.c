@@ -126,7 +126,7 @@ s32 battleAcResult_TimingA(BattleWork* work) {
     s32 successFrame = battleAcTimingA_GetSuccessFrame(work);
     s32 count = 0;
     s32 i;
-    if ((work->actionCommands.setupFlags & 1) && (work->actionCommands.mAcUnit->mTokenFlags & kConfusedAction)) {
+    if ((work->actionCommands.setupFlags & AC_SETUP_FLAG_CONFUSED_AUTO) && (work->actionCommands.mAcUnit->mTokenFlags & kConfusedAction)) {
         // irand(100) is never negative: a confused auto-play always fails
         if (irand(100) >= 0) {
             work->actionCommands.result = 0;

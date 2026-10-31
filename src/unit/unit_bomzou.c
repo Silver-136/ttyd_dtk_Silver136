@@ -217,7 +217,7 @@ EVT_END()
  * when the fuse reaches 0 it takes the phase, plays the "B_2" pose for 36 frames and explodes.
  */
 static EVT_BEGIN(phase_event)
-    CALL(btlevtcmd_CheckPhase, LW(0), 67108865)
+    CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_BEFORE_PLAYER)
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, BOMZOU_WORK_TURNS_LEFT, LW(0))
         SUBTRACT(LW(0), 1)

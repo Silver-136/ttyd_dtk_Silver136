@@ -2,6 +2,7 @@
 // shut in before the title match; exits to tou_04 and tou_09 (the shut-in scenes iris out to tou_03).
 
 #include "battle/battle_unit.h"
+#include "driver/fadedrv.h"
 #include "evt/evt_cloud.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"
@@ -87,7 +88,7 @@ static BeroEntry bero_data[] = {
         "n_bero", // hitName
         1, // type
         4, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -105,7 +106,7 @@ static BeroEntry bero_data[] = {
         "e_bero", // hitName
         1, // type
         16, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -319,10 +320,10 @@ EVT_BEGIN(tou_11_init_evt)
         CALL(evt_cloud_init)
         CALL(evt_cloud_ent, 0, STRING("pos_1"), STRING("a_pos_1"), PTR(evt_postar))
         ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("pos_1"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("pos_1"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_pos_1"), 1, 0)
     END_IF
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("kuro_1"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("kuro_1"), MAP_OBJ_FLAG_HIDDEN)
     SET_VALUE(LW(0), 0)
     CALL_CHILD(PTR(bero_case_switch_off))
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("n_bero"), 0, PTR(evt_tojikome_msg), 0)

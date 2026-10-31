@@ -405,7 +405,7 @@ EVT_END()
  * then later steps explain the special action command, branching on unit work 1 and 2.
  */
 static EVT_BEGIN(phase_event)
-    CALL(btlevtcmd_CheckPhase, LW(0), 67108865)
+    CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_BEFORE_PLAYER)
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_get_turn, LW(0))
         IF_INT_EQUAL(LW(0), 1)

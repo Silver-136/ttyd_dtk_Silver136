@@ -66,7 +66,7 @@ BattleUnit* BtlUnit_Entry(BattleUnitSetup* setup) {
     BattleUnitPart* body;
     EventEntry* evt;
 
-    for (i = 0; i < 64; i++) {
+    for (i = 0; i < BATTLE_UNIT_MAX; i++) {
         if (!BattleGetUnitPtr(wp, i)) break;
     }
     if (i >= 64) return NULL;
@@ -242,7 +242,7 @@ BOOL BtlUnit_Delete(BattleUnit* unit) {
     s32 id;
 
     if (!unit) return FALSE;
-    for (i = 0; i < 64; i++) {
+    for (i = 0; i < BATTLE_UNIT_MAX; i++) {
         if (BattleGetUnitPtr(wp, i) == unit) break;
     }
     if (i >= 64) return FALSE;
@@ -260,7 +260,7 @@ BOOL BtlUnit_Delete(BattleUnit* unit) {
         unit->damageEventId = 0;
     }
     id = unit->unitId;
-    for (j = 0; j < 64; j++) {
+    for (j = 0; j < BATTLE_UNIT_MAX; j++) {
         if (wp->movePriorityQueue[j] == id) {
             wp->movePriorityQueue[j] = -1;
         }
@@ -315,7 +315,7 @@ BattleUnit* BtlUnit_Spawn(BattleUnitSetup* setup, s32 flags) {
     if (flags & 2) {
         unit->moveState = 0;
         id = unit->unitId;
-        for (i = 0; i < 64; i++) {
+        for (i = 0; i < BATTLE_UNIT_MAX; i++) {
             if (id == -1) break;
             if (wp->movePriorityQueue[i] == -1) {
                 wp->movePriorityQueue[i] = id;
@@ -1972,7 +1972,7 @@ BattleUnit* BtlUnit_GetGuardKouraPtr(BattleUnit* unit) {
     s32 id = unit->unitId;
     BattleUnit* other;
 
-    for (; i < 64; i++) {
+    for (; i < BATTLE_UNIT_MAX; i++) {
         other = BattleGetUnitPtr(wp, i);
         if (other && other->currentKind == UNIT_SHELL_SHIELD && other->work[SHELL_SHIELD_WORK_TARGET] == id) {
             break;
@@ -2162,7 +2162,7 @@ void BtlUnit_ControlPoseSoundMain(BattleUnitPart* part) {
         state->prevTime = -1.0f;
         state->loopCount = (s32)pose->loopTime;
         state->count = 0;
-        if (BattleGetSeq(wp, SEQ_PHASE) == 0x4000002 || BattleGetSeq(wp, SEQ_PHASE) == 0x4000004) {
+        if (BattleGetSeq(wp, SEQ_PHASE) == BATTLE_PHASE_PLAYER || BattleGetSeq(wp, SEQ_PHASE) == BATTLE_PHASE_ENEMY) {
             state->flag = 1;
         }
     } else if (state->loopCount == (u32)pose->loopTime && state->time > time) {

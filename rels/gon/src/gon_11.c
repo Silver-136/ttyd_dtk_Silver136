@@ -2,6 +2,7 @@
 // Also a chest that gives an Attack FX item.
 
 #include "battle/battle_unit.h"
+#include "evt/evt_story.h"
 #include "evt/evt_cmd.h"
 #include "manager/evtmgr_cmd.h"
 #include "driver/mapdrv.h"
@@ -133,8 +134,8 @@ static BeroEntry bero_entry_data[] = {
         "w_bero", // hitName
         1, // type
         13, // sfxId
-        20000, // directionId
-        100000, // centerPosition
+        BERO_DIR_AUTO, // directionId
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -298,8 +299,8 @@ EVT_BEGIN(gonbaba_event)
     CALL(evt_cam3d_evt_set, -900, 31, 490, -205, 175, 20, 4500, EASING_SINE_IN_OUT)
     BEGIN_INLINE_EVENT
         WAIT_MS(1800)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("door10"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("kesu"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("door10"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("kesu"), MAP_OBJ_FLAG_HIDDEN)
     END_INLINE_EVENT
     WAIT_MS(4000)
     LOOP(30)
@@ -316,8 +317,8 @@ EVT_BEGIN(gonbaba_event)
     CALL(evt_msg_print, 0, STRING("stg1_gon_19_2"), 0, STRING("ゴンババ"))
     CALL(evt_cam3d_evt_set, -545, -14, 417, -225, 227, 12, 0, EASING_SINE_IN_OUT)
     WAIT_FRAMES(1)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("door10"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("kesu"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("door10"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("kesu"), MAP_OBJ_FLAG_HIDDEN)
     WAIT_MS(1000)
     SET_VALUE(LW(0), -246)
     SET_VALUE(LW(1), 146)

@@ -179,7 +179,7 @@ static BattleWeapon weapon_monban_attack = {
     NULL, // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH, // special
     COUNTER_RESIST_ALL & ~COUNTER_RESIST_PREEMPTIVE_SPIKY, // counterResistFlags
-    0x2004, // targetWeightFlags
+    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
@@ -216,7 +216,7 @@ static BattleWeapon weapon_monban_throw_attack = {
     NULL, // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH | SPECIAL_GROUND_WINGED, // special
     COUNTER_RESIST_ALL, // counterResistFlags
-    0x80002000, // targetWeightFlags
+    TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
@@ -291,7 +291,7 @@ static EVT_BEGIN(phase_event)
     IF_INT_EQUAL(GSWF_GOR_GATEKEEPER_RUN_HINT_SHOWN, 0)
         CALL(btlevtcmd_GetHp, UNIT_ID_MARIO, LW(0))
         IF_INT_LESS_OR_EQUAL(LW(0), 5)
-            CALL(btlevtcmd_CheckPhase, LW(0), 67108866)
+            CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_PLAYER)
             IF_INT_NOT_EQUAL(LW(0), 0)
                 CALL(btlevtcmd_CheckActStatus, UNIT_ID_SELF, LW(0))
                 IF_INT_NOT_EQUAL(LW(0), 0)

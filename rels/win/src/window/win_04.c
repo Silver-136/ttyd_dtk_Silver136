@@ -2,6 +2,7 @@
 // chandelier and mirror ball; exits west to win_03 and east through Flurrie's door to her bedroom win_05.
 
 #include "battle/battle_unit.h"
+#include "driver/animdrv.h"
 #include "evt/evt_window.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_cam.h"
@@ -158,7 +159,7 @@ BeroEntry bero_witchtrio[] = {
         "w_bero", // hitName
         1, // type
         0, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -180,7 +181,7 @@ static BeroEntry bero_entry_data[] = {
         "w_bero", // hitName
         1, // type
         0, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -198,7 +199,7 @@ static BeroEntry bero_entry_data[] = {
         "e_bero", // hitName
         1, // type
         0, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -647,14 +648,14 @@ EVT_BEGIN(clouda_nakama)
     SET_VALUE(GW(1), 0)
     BEGIN_INLINE_EVENT
         WAIT_MS(500)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S"), MAP_OBJ_FLAG_NO_MAP_BLEND)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("hika_"), MAP_OBJ_FLAG_NO_MAP_BLEND)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S"), MAP_OBJ_FLAG_NO_MAP_BLEND)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("hika_"), MAP_OBJ_FLAG_NO_MAP_BLEND)
         CALL(evt_map_blend_set_flag, 1, STRING("mario"), 2048)
         CALL(evt_map_blend_set_flag, 1, STRING("party"), 2048)
         CALL(evt_map_blend_set_flag, 1, STRING("extparty"), 2048)
         CALL(evt_map_blend_set_flag, 1, STRING("クラウダ"), 2048)
         CALL(evt_map_set_blend, 0, 255, 255, 255, 0)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("hika_"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("hika_"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_map_playanim, STRING("kirakira"), MAP_ANIM_PLAY_LOOP, 0)
         CALL(evt_sub_intpl_msec_init, EASING_LINEAR, 0, 255, 1000)
         LOOP(0)
@@ -746,7 +747,7 @@ EVT_BEGIN(clouda_nakama)
     END_INLINE_EVENT
     WAIT_MS(1000)
     SET_VALUE(GW(0), 1)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("hika_"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("hika_"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_map_pauseanim, 0, STRING("kirakira"))
     CALL(evt_mapobj_trans, 1, STRING("S_mirre"), 0, 100, 0)
     DELETE_EVENT(GW(10))
@@ -1002,8 +1003,8 @@ EVT_END()
  */
 EVT_BEGIN(mirror_ball_event)
     CALL(evt_map_set_tevcallback, 1, PTR(mirror_ball))
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_mirre"), MAP_OBJ_TEV_CALLBACK(1))
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_mirre"), MAP_OBJ_FLAG_DISPLAY_LIST)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_mirre"), MAP_OBJ_TEV_CALLBACK(1))
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_mirre"), MAP_OBJ_FLAG_DISPLAY_LIST)
     RETURN
 EVT_END()
 

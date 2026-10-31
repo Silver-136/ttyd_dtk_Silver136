@@ -445,7 +445,7 @@ static void evt_yuuranking_disp_func(CameraId camera, void* param) {
         ix = 70.0f + (10.399994f + wp->x);
         iy = (-40.0f + wp->y) - 24.0f;
         PSMTXTrans(mtx, ix - 10, iy + 2, 0.0f);
-        iconDispGxCol(mtx, 0x10, ICON_ITEM_PIANTA_TOKEN, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
+        iconDispGxCol(mtx, ICON_FLAG_2D, ICON_ITEM_PIANTA_TOKEN, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
         PSMTXTrans(mtx, ix + 60, iy + 2, 0.0f);
         iconNumberDispGx(mtx, wp->monte, FALSE, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
     } else {

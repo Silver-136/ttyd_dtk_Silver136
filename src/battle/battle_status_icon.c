@@ -241,7 +241,7 @@ void BattleStatusIconDisp(CameraId camId, void* param) {
         p.x += icon->mScreenSpaceOffset.x;
         p.z += icon->mScreenSpaceOffset.z;
         p.z -= (f32)(-(i * 2));
-        if (!(e->flags & 1)) {
+        if (!(e->flags & STATUS_ICON_NO_PLATE)) {
             if (!(icon->mFlags & 1)) {
                 btlDispTexPlane(p.x, p.y, p.z, 0.8f, 0.8f, VERSION_PICK(0x23, 0x30), col, 0);
             } else {
@@ -251,7 +251,7 @@ void BattleStatusIconDisp(CameraId camId, void* param) {
         if (e->icon == 0) {
             continue;
         }
-        if (!(e->flags & 2)) {
+        if (!(e->flags & STATUS_ICON_HIDDEN)) {
             PSMTXTrans(trans, p.x + e->trans.x, p.y + e->trans.y, p.z + e->trans.z);
             PSMTXScale(scale, 0.8f * e->scale.x, 0.8f * e->scale.y, e->scale.z);
             PSMTXTrans(npivot, -e->pivot.x, -e->pivot.y, -e->pivot.z);
@@ -364,7 +364,7 @@ BOOL _bsi_allergy(BattleUnit* unit, IconDispTableEntry* disp, BattleWorkStatusIc
     entry->trans = (Vec){0.0f,0.0f,0.0f};
     unit->mStatusIconWork.allergyBlinkTimer++;
     if (unit->mStatusIconWork.allergyBlinkTimer & 0x10) {
-        entry->flags |= 2;
+        entry->flags |= STATUS_ICON_HIDDEN;
     }
     return TRUE;
 }

@@ -67,7 +67,7 @@ static BeroEntry bero_entry_data[] = {
         "n_bero_2", // hitName
         1, // type
         2, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -85,7 +85,7 @@ static BeroEntry bero_entry_data[] = {
         "n_bero_1", // hitName
         1, // type
         2, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length

@@ -351,7 +351,7 @@ static BeroEntry bero_entry_data[] = {
         "e_bero", // hitName
         1, // type
         0, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -368,7 +368,7 @@ static BeroEntry bero_entry_data[] = {
     {
         "w_bero", // hitName
         0, 0, // type..sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -384,7 +384,7 @@ static BeroEntry bero_entry_data[] = {
     {
         "e_bero02", // hitName
         0, 0, // type..sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -400,7 +400,7 @@ static BeroEntry bero_entry_data[] = {
     {
         "w_bero02", // hitName
         0, 0, // type..sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -417,7 +417,7 @@ static BeroEntry bero_entry_data[] = {
         "dokan1", // hitName
         2, // type
         0, // sfxId
-        2, // directionId
+        BERO_DIR_E, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -434,7 +434,7 @@ static BeroEntry bero_entry_data[] = {
         "dokan2", // hitName
         2, // type
         0, // sfxId
-        9, // directionId
+        BERO_DIR_DOWN, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -450,7 +450,7 @@ static BeroEntry bero_entry_data[] = {
         "dokan3", // hitName
         2, // type
         0, // sfxId
-        2, // directionId
+        BERO_DIR_E, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -624,7 +624,7 @@ EVT_BEGIN(apper_toge)
     CALL(evt_snd_sfxoff, LW(9))
     WAIT_MS(500)
     CALL(evt_puni_flag_onoff, 1, 0, PUNI_FLAG_SCRIPT_CONTROL)
-    CALL(evt_puni_set_mode, 1, 30)
+    CALL(evt_puni_set_mode, 1, PUNI_MODE_INERT)
     CALL(evt_npc_set_ry, LW(11), 270)
     CALL(evt_npc_flag_onoff, 1, LW(11), NPC_FLAG_NO_HIT | NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_cam3d_evt_set, 290, 100, 232, 290, 45, -63, 500, EASING_SINE_IN_OUT)
@@ -641,7 +641,7 @@ EVT_BEGIN(apper_toge)
     WAIT_MS(500)
     CALL(evt_npc_get_position, LW(11), LW(0), LW(1), LW(2))
     CALL(evt_puni_set_position, 1, LW(0), LW(1), LW(2))
-    CALL(evt_puni_set_mode, 1, 1)
+    CALL(evt_puni_set_mode, 1, PUNI_MODE_JOIN)
     CALL(evt_puni_flag_onoff, 1, 1, PUNI_FLAG_SCRIPT_CONTROL)
     SET_VALUE(GSW_STORY_PROGRESS, STG2_17_BUBBLES)
     CALL(evt_party_run, 0)
@@ -712,10 +712,10 @@ EVT_BEGIN(mri_06_init_evt)
         CALL(evt_cloud_init)
         CALL(evt_cloud_ent, 0, STRING("S_nisekabe"), STRING("A_nisekabe"), PTR(cloud_wind_event))
         ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_nisekabe"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_nisekabe"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_nisekabe"), 1, 0)
     END_IF
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_oku_ha"), MAP_OBJ_FLAG_CLIP)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_oku_ha"), MAP_OBJ_FLAG_CLIP)
     CALL(evt_hitobj_onoff, STRING("A_futa"), 1, 0)
     RETURN
 EVT_END()

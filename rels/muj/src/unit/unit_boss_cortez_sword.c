@@ -344,7 +344,7 @@ EVT_END()
  * it dives to its height in the new formation and updates its home position.
  */
 EVT_BEGIN(cortez_weapon_unison_phase_event)
-    CALL(btlevtcmd_CheckPhase, LW(0), 67108865)
+    CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_BEFORE_PLAYER)
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, CORTEZ_WEAPON_WORK_OWNER, LW(0))
         IF_INT_EQUAL(LW(0), -1)
@@ -380,7 +380,7 @@ EVT_END()
  * loses its statuses and becomes targetable again.
  */
 EVT_BEGIN(cortez_weapon_phase_event)
-    CALL(btlevtcmd_CheckPhase, LW(0), 67108865)
+    CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_BEFORE_PLAYER)
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, CORTEZ_WEAPON_WORK_DOWN_TURNS, LW(0))
         IF_INT_GREATER_OR_EQUAL(LW(0), 1)

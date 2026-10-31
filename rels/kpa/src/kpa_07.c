@@ -2,6 +2,7 @@
 // and finds a fake (nise) Crystal Star; it returns to Rogueport (gor_04).
 
 #include "version.h"
+#include "driver/fadedrv.h"
 #include "kpa_act.h"
 #include "eff/eff_starstone.h"
 #include "battle/battle_unit.h"

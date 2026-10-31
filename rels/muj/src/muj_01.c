@@ -1065,7 +1065,7 @@ static BeroEntry bero_entry_data[] = {
     {
         "w_bero", // hitName
         0, 0, // type..sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -1081,7 +1081,7 @@ static BeroEntry bero_entry_data[] = {
     {
         "e_bero1", // hitName
         0, 0, // type..sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -1122,7 +1122,7 @@ EVT_BEGIN(muj_00_door_open)
     CALL(evt_door_param, LW(0), 2, LW(1), LW(2))
     IF_INT_NOT_EQUAL(LW(1), 0)
         CALL(evt_door_save_mapflag, LW(1))
-        CALL(evt_mapobj_flag_onoff, 1, 0, LW(1), MAP_OBJ_FLAG_CLIP)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, LW(1), MAP_OBJ_FLAG_CLIP)
     END_IF
     BEGIN_INLINE_EVENT
         CALL(evt_door_param, LW(0), 10, LW(1), LW(2), LW(3))
@@ -1132,16 +1132,16 @@ EVT_BEGIN(muj_00_door_open)
     END_INLINE_EVENT
     CALL(evt_door_param, LW(0), 2, LW(1), LW(2))
     IF_INT_NOT_EQUAL(LW(1), 0)
-        CALL(evt_mapobj_flag_onoff, 1, 1, LW(1), MAP_OBJ_FLAG_NO_MAP_BLEND)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, LW(1), MAP_OBJ_FLAG_NO_MAP_BLEND)
     END_IF
     CALL(evt_door_param, LW(0), 1, LW(1), LW(2), LW(3))
     IF_INT_NOT_EQUAL(LW(1), 0)
-        CALL(evt_mapobj_flag_onoff, 1, 1, LW(1), MAP_OBJ_FLAG_NO_MAP_BLEND)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, LW(1), MAP_OBJ_FLAG_NO_MAP_BLEND)
         CALL(evt_mapobj_flag_onoff, 1, 1, LW(1), MAP_OBJ_FLAG_NO_MAP_BLEND2)
     END_IF
     CALL(evt_door_param, LW(0), 3, LW(1), LW(2))
     IF_INT_NOT_EQUAL(LW(1), 0)
-        CALL(evt_mapobj_flag_onoff, 1, 0, LW(1), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, LW(1), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 1, LW(1), MAP_OBJ_FLAG_NO_MAP_BLEND)
         CALL(evt_mapobj_flag_onoff, 1, 1, LW(1), MAP_OBJ_FLAG_NO_MAP_BLEND2)
     END_IF
@@ -1208,9 +1208,9 @@ static const char* mise_npc[] = {
  * fades the outside blend away and lowers the music and ambience to a muffled 50 percent with a low-pass filter.
  */
 EVT_BEGIN(mise_data_open)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_mise_kan"), MAP_OBJ_FLAG_NO_MAP_BLEND2)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_mise_hasi04"), MAP_OBJ_FLAG_NO_MAP_BLEND2)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_mise_hasi05"), MAP_OBJ_FLAG_NO_MAP_BLEND2)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_mise_kan"), MAP_OBJ_FLAG_NO_MAP_BLEND2)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_mise_hasi04"), MAP_OBJ_FLAG_NO_MAP_BLEND2)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_mise_hasi05"), MAP_OBJ_FLAG_NO_MAP_BLEND2)
     SPAWN_EVENT(PTR(custom_door_dark2))
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
@@ -1225,9 +1225,9 @@ EVT_END()
 EVT_BEGIN(mise_data_close)
     BEGIN_INLINE_EVENT
         CALL_CHILD(PTR(custom_door_light2))
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_mise_kan"), MAP_OBJ_FLAG_NO_MAP_BLEND2)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_mise_hasi04"), MAP_OBJ_FLAG_NO_MAP_BLEND2)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_mise_hasi05"), MAP_OBJ_FLAG_NO_MAP_BLEND2)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_mise_kan"), MAP_OBJ_FLAG_NO_MAP_BLEND2)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_mise_hasi04"), MAP_OBJ_FLAG_NO_MAP_BLEND2)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_mise_hasi05"), MAP_OBJ_FLAG_NO_MAP_BLEND2)
     END_INLINE_EVENT
     CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
     CALL(evt_snd_envon, PSND_CONTINUE | PSND_UNSILENT, 0)
@@ -1263,7 +1263,7 @@ static const char* yado_npc[] = {
 /** Open event of the inn: darkens the outside, shows the interior (S_yado) and muffles the music and ambience. */
 EVT_BEGIN(mise_open_event)
     SPAWN_EVENT(PTR(door_dark))
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_yado"), MAP_OBJ_FLAG_NO_MAP_BLEND)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_yado"), MAP_OBJ_FLAG_NO_MAP_BLEND)
     SPAWN_EVENT(PTR(custom_door_dark2))
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
@@ -1275,7 +1275,7 @@ EVT_END()
 EVT_BEGIN(mise_close_event)
     SPAWN_EVENT(PTR(door_light))
     SPAWN_EVENT(PTR(custom_door_light2))
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_yado"), MAP_OBJ_FLAG_NO_MAP_BLEND)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_yado"), MAP_OBJ_FLAG_NO_MAP_BLEND)
     WAIT_MS(1000)
     CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
     CALL(evt_snd_envon, PSND_CONTINUE | PSND_UNSILENT, 0)
@@ -1895,7 +1895,7 @@ static EVT_BEGIN(sekai_yami_evt)
     CALL(evt_npc_status_onoff, 1, STRING("オドオド水夫"), NPC_STATUS_FACE_MOVE_DIR)
     CALL(evt_npc_status_onoff, 1, STRING("店員"), NPC_STATUS_FACE_MOVE_DIR)
     CALL(evt_map_set_tevcallback, 1, PTR(envSetYami))
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S"), MAP_OBJ_TEV_CALLBACK(1))
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S"), MAP_OBJ_TEV_CALLBACK(1))
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S"), MAP_OBJ_FLAG_DISPLAY_LIST)
     CALL(anim_tevcallback, STRING("ガラの悪い水夫"), 1)
     CALL(anim_tevcallback, STRING("水夫D"), 1)
@@ -1953,9 +1953,9 @@ static EVT_BEGIN(sekai_yami_evt)
         LOOP(2)
 #endif
             CALL(evt_snd_sfxon, STRING("SFX_STG8_LIGHT1"), 0)
-            CALL(evt_fade_entry, 10, 0, 255, 255, 255)
+            CALL(evt_fade_entry, FADE_OUT_BLACK, 0, 255, 255, 255)
             WAIT_MS(100)
-            CALL(evt_fade_entry, 9, 0, 255, 255, 255)
+            CALL(evt_fade_entry, FADE_IN_BLACK, 0, 255, 255, 255)
 #ifdef VERSION_G8ME01
             WAIT_MS(400)
 #else
@@ -1969,7 +1969,7 @@ static EVT_BEGIN(sekai_yami_evt)
     WAIT_MS(1000)
 #endif
     CALL(evt_snd_sfxoff, LW(0))
-    CALL(evt_fade_set_mapchange_type, 1, 10, 300, 9, 300)
+    CALL(evt_fade_set_mapchange_type, 1, FADE_OUT_BLACK, 300, FADE_IN_BLACK, 300)
     CALL(evt_bero_mapchange, STRING("pik_01"), STRING("sekai_yami2"))
     CALL(evt_mario_key_onoff, 1)
     RETURN
@@ -1992,7 +1992,7 @@ static EVT_BEGIN(minnnanokoe_evt)
     CALL(evt_npc_set_ry, STRING("ボロ水夫B"), 270)
     CALL(evt_npc_set_position, STRING("店員"), 0, -1000, 0)
     CALL(evt_map_set_tevcallback, 1, PTR(envSetYami))
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S"), MAP_OBJ_TEV_CALLBACK(1))
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S"), MAP_OBJ_TEV_CALLBACK(1))
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S"), MAP_OBJ_FLAG_DISPLAY_LIST)
     CALL(anim_tevcallback, STRING("ガラの悪い水夫"), 1)
     CALL(anim_tevcallback, STRING("水夫D"), 1)
@@ -2073,7 +2073,7 @@ static EVT_BEGIN(minnnanokoe_evt)
     CALL(evt_msg_print, 0, STRING("stg8_las_148_50"), 0, STRING("水夫D"))
     CALL(evt_msg_print, 0, STRING("stg8_las_148_51"), 0, STRING("ボロ水夫A"))
     CALL(evt_msg_print, 0, STRING("stg8_las_148_52"), 0, STRING("ボロ水夫B"))
-    CALL(evt_fade_set_mapchange_type, 1, 10, 300, 9, 300)
+    CALL(evt_fade_set_mapchange_type, 1, FADE_OUT_BLACK, 300, FADE_IN_BLACK, 300)
     CALL(evt_bero_mapchange, STRING("pik_01"), STRING("minnnanokoe"))
     RETURN
 EVT_END()
@@ -2156,7 +2156,7 @@ static EVT_BEGIN(epilogue_evt)
     WAIT_MS(1000)
     CALL(evt_msg_print, 0, STRING("ep_42"), 0, 0)
     WAIT_MS(1000)
-    CALL(evt_fade_set_mapchange_type, 1, 10, 900, 9, 900)
+    CALL(evt_fade_set_mapchange_type, 1, FADE_OUT_BLACK, 900, FADE_IN_BLACK, 900)
     CALL(evt_mario_chk_join_party, LW(0), 7)
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(evt_bero_mapchange, STRING("gor_01"), STRING(""))
@@ -2248,7 +2248,7 @@ EVT_BEGIN(muj_01_init_evt)
     IF_INT_EQUAL(LF(0), 0)
         CALL(evt_eff64, STRING("sunlight"), STRING("sunlight_n64"), 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
     END_IF
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_mise"), MAP_OBJ_FLAG_CLIP)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_mise"), MAP_OBJ_FLAG_CLIP)
     RETURN
 EVT_END()
 

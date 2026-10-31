@@ -279,7 +279,7 @@ BattleWeapon weapon_gundan_zako_group2_yusuri_attack = {
     NULL, // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH, // special
     COUNTER_RESIST_ALL, // counterResistFlags
-    4, // targetWeightFlags
+    TARGET_WEIGHT_PREFER_FRONT, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
@@ -519,7 +519,7 @@ USER_FUNC(down_ceil) {
         work->end = (Vec){0.0f, 130.0f, 0.0f};
         work->timer = 120;
         work->steps = 120;
-        *ceil &= ~0x20;
+        *ceil &= ~STAGE_OBJ_FLAG_IRON_FRAME_GONE;
         work->sfx = work->sfx = psndSFXOn("SFX_BOSS_TEAM_3RD_MOVE_CAILING1");
     }
     body->mPosition.y = wire->mPosition.y = intplGetValue(EASING_QUADRATIC_OUT, work->start.y, work->end.y, work->steps - work->timer, work->steps);
@@ -542,7 +542,7 @@ USER_FUNC(up_ceil) {
         work->end = (Vec){0.0f, 250.0f, 0.0f};
         work->timer = 120;
         work->steps = 120;
-        *ceil |= 0x20;
+        *ceil |= STAGE_OBJ_FLAG_IRON_FRAME_GONE;
         work->sfx = psndSFXOn("SFX_BOSS_TEAM_3RD_MOVE_CAILING1");
     }
     body->mPosition.y = wire->mPosition.y = intplGetValue(EASING_QUADRATIC_OUT, work->start.y, work->end.y, work->steps - work->timer, work->steps);

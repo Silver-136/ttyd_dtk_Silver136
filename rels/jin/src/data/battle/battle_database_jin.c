@@ -191,7 +191,7 @@ BattleUnitSetup btlparty_jin_jin_04_ramper[] = {
         &unit_boss_rampell, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {90.0f, 0.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -214,7 +214,7 @@ BattleUnitSetup btlparty_jin_jin_01_faker_mario[] = {
         &unit_faker_mario, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {90.0f, 0.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -237,7 +237,7 @@ BattleUnitSetup btlparty_jin_jin_00_atmic_teresa[] = {
         &unit_atmic_teresa, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {70.0f, 20.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -265,7 +265,7 @@ BattleUnitSetup btlparty_jin_jin_00_01_off_1[] = {
         &unit_teresa, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {90.0f, 0.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -298,7 +298,7 @@ BattleUnitSetup btlparty_jin_jin_00_01_off_2[] = {
         &unit_teresa, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {70.0f, 0.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -341,7 +341,7 @@ BattleUnitSetup btlparty_jin_jin_00_01_off_3[] = {
         &unit_teresa, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {50.0f, 0.0f, -10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -394,7 +394,7 @@ BattleUnitSetup btlparty_jin_jin_00_01_off_4[] = {
         &unit_teresa, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {30.0f, 0.0f, -10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -404,7 +404,7 @@ BattleUnitSetup btlparty_jin_jin_00_01_off_4[] = {
         &unit_teresa, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {70.0f, 0.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -424,7 +424,7 @@ BattleUnitSetup btlparty_jin_jin_00_01_off_4[] = {
         &unit_teresa, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {150.0f, 0.0f, 20.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -457,7 +457,7 @@ BattleUnitSetup btlparty_jin_jin_01_01_off_1[] = {
         &unit_basabasa, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {70.0f, 130.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -499,7 +499,7 @@ BattleUnitSetup btlparty_jin_jin_01_01_off_2[] = {
         &unit_basabasa, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {50.0f, 130.0f, -10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -509,7 +509,7 @@ BattleUnitSetup btlparty_jin_jin_01_01_off_2[] = {
         &unit_basabasa, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {90.0f, 130.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -519,7 +519,7 @@ BattleUnitSetup btlparty_jin_jin_01_01_off_2[] = {
         &unit_basabasa, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {130.0f, 130.0f, 10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -551,7 +551,7 @@ BattleUnitSetup btlparty_jin_jin_01_01_off_3[] = {
         &unit_basabasa, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {50.0f, 130.0f, -10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -561,7 +561,7 @@ BattleUnitSetup btlparty_jin_jin_01_01_off_3[] = {
         &unit_teresa, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {90.0f, 0.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -571,7 +571,7 @@ BattleUnitSetup btlparty_jin_jin_01_01_off_3[] = {
         &unit_basabasa, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {130.0f, 130.0f, 10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -603,7 +603,7 @@ BattleUnitSetup btlparty_jin_jin_01_03_off_1[] = {
         &unit_basabasa, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {70.0f, 130.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -645,7 +645,7 @@ BattleUnitSetup btlparty_jin_jin_01_03_off_2[] = {
         &unit_basabasa, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {30.0f, 130.0f, -10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -655,7 +655,7 @@ BattleUnitSetup btlparty_jin_jin_01_03_off_2[] = {
         &unit_basabasa, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {70.0f, 130.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -675,7 +675,7 @@ BattleUnitSetup btlparty_jin_jin_01_03_off_2[] = {
         &unit_basabasa, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {150.0f, 130.0f, 20.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -707,7 +707,7 @@ BattleUnitSetup btlparty_jin_jin_01_03_off_3[] = {
         &unit_basabasa, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {70.0f, 130.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -717,7 +717,7 @@ BattleUnitSetup btlparty_jin_jin_01_03_off_3[] = {
         &unit_teresa, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {110.0f, 0.0f, 10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -746,7 +746,7 @@ BattleUnitSetup btlparty_jin_jin_03_01_off_1[] = {
         &unit_basabasa, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {70.0f, 130.0f, 0.0f}, // position
         0, // hitOffsetX
         {1, 0, 0, 0}, // unitWork
@@ -785,7 +785,7 @@ BattleUnitSetup btlparty_jin_jin_03_02_off_1[] = {
         &unit_basabasa, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {70.0f, 130.0f, 0.0f}, // position
         0, // hitOffsetX
         {1, 0, 0, 0}, // unitWork
@@ -824,7 +824,7 @@ BattleUnitSetup btlparty_jin_jin_07_01_off_1[] = {
         &unit_teresa, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {70.0f, 0.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -863,7 +863,7 @@ BattleUnitSetup btlparty_jin_jin_07_01_off_2[] = {
         &unit_teresa, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {50.0f, 0.0f, -10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -912,7 +912,7 @@ BattleUnitSetup btlparty_jin_jin_07_02_off_1[] = {
         &unit_teresa, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {70.0f, 0.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -951,7 +951,7 @@ BattleUnitSetup btlparty_jin_jin_07_02_off_2[] = {
         &unit_teresa, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {50.0f, 0.0f, -10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -1000,7 +1000,7 @@ BattleUnitSetup btlparty_jin_jin_09_01_off_1[] = {
         &unit_met, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {90.0f, 0.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -1029,7 +1029,7 @@ BattleUnitSetup btlparty_jin_jin_10_01_off_1[] = {
         &unit_met, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {70.0f, 0.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -1068,7 +1068,7 @@ BattleUnitSetup btlparty_jin_jin_10_02_off_1[] = {
         &unit_togemet, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {90.0f, 0.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -1097,7 +1097,7 @@ BattleUnitSetup btlparty_jin_jin_10_03_off_1[] = {
         &unit_met, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {90.0f, 0.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -1126,7 +1126,7 @@ BattleUnitSetup btlparty_jin_jin_10_04_off_1[] = {
         &unit_met, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {30.0f, 0.0f, -10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -1136,7 +1136,7 @@ BattleUnitSetup btlparty_jin_jin_10_04_off_1[] = {
         &unit_met, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {70.0f, 0.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -1156,7 +1156,7 @@ BattleUnitSetup btlparty_jin_jin_10_04_off_1[] = {
         &unit_met, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {150.0f, 0.0f, 20.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -1185,7 +1185,7 @@ BattleUnitSetup btlparty_jin_jin_10_05_off_1[] = {
         &unit_togemet, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {70.0f, 0.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -1195,7 +1195,7 @@ BattleUnitSetup btlparty_jin_jin_10_05_off_1[] = {
         &unit_togemet, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {110.0f, 0.0f, 10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -1224,7 +1224,7 @@ BattleUnitSetup btlparty_jin_jin_10_06_off_1[] = {
         &unit_met, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {50.0f, 0.0f, -10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -1234,7 +1234,7 @@ BattleUnitSetup btlparty_jin_jin_10_06_off_1[] = {
         &unit_met, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {90.0f, 0.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -1244,7 +1244,7 @@ BattleUnitSetup btlparty_jin_jin_10_06_off_1[] = {
         &unit_togemet, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {130.0f, 0.0f, 10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork

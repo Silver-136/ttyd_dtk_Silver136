@@ -1,4 +1,5 @@
 #include "battle/battle_unit.h"
+#include "driver/fadedrv.h"
 #include "evt/evt_cmd.h"
 #include "manager/evtmgr_cmd.h"
 #include "libc_decls.h"
@@ -56,7 +57,7 @@ void dig_thpInit(void) {
     u32 type;
 
     EXIGetType(0, 2, &type);
-    if (type != 0x05070000) {
+    if (type != EXI_IS_VIEWER) {
         THPSimpleInit(2);
         THPSimpleOpen("demo.thp");
         THPSimpleSetBuffer(_mapAlloc(THPSimpleCalcNeedMemory()));
@@ -75,7 +76,7 @@ void dig_thpStop(void) {
     u32 type;
 
     EXIGetType(0, 2, &type);
-    if (type != 0x05070000) {
+    if (type != EXI_IS_VIEWER) {
         THPSimpleAudioStop();
         THPSimpleLoadStop();
         THPSimpleClose();
@@ -90,7 +91,7 @@ void movie_draw(CameraId camera, void* param) {
     u32 type;
 
     EXIGetType(0, 2, &type);
-    if (type == 0x05070000) {
+    if (type == EXI_IS_VIEWER) {
         msg = "\202\261\202\261\202\311\203\200\201[\203r\201[\202\252\202\310\202\252\202\352\202\334\202\267";
         FontDrawStart();
         FontDrawColor((GXColor){0xFF, 0xFF, 0xFF, 0xFF});

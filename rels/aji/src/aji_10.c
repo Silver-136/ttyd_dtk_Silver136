@@ -2,6 +2,7 @@
 // Grodus, Lord Crump and the Shadow Sirens.
 
 #include "battle/battle_unit.h"
+#include "driver/fadedrv.h"
 #include "evt/evt_shuryolight.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_cam.h"
@@ -114,7 +115,7 @@ static BeroEntry bero_entry_data[] = {
         "w_bero", // hitName
         1, // type
         10, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -132,7 +133,7 @@ static BeroEntry bero_entry_data[] = {
         "e_bero", // hitName
         1, // type
         10, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -174,7 +175,7 @@ static BeroEntry bero_peach_data[] = {
         "e_bero", // hitName
         1, // type
         10, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -392,7 +393,7 @@ static USER_FUNC(peach_evt_toumei) {
  * and waits for it to finish.
  */
 EVT_BEGIN(monitor_on)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("monitor"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("monitor"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_get_position, STRING("monitor"), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_PEACH_SCREEN_OPEN1"), LW(0), LW(1), LW(2), 0)
     CALL(evt_map_playanim, STRING("monitore_1"), MAP_ANIM_PLAY_ONCE, 0)
@@ -411,12 +412,12 @@ EVT_BEGIN(monitor_off)
     CALL(evt_mapobj_get_position, STRING("monitor"), LW(2), LW(3), LW(4))
     CALL(evt_snd_sfxon_3d_ex, STRING("SFX_PEACH_SCREEN_SHUT1"), LW(2), LW(3), LW(4), 255, 255, LW(1), 16, 0)
     WAIT_MS(LW(1))
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("monitor"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("monitor"), MAP_OBJ_FLAG_HIDDEN)
     RETURN
 EVT_END()
 
 EVT_BEGIN(monitor_init)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("monitor"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("monitor"), MAP_OBJ_FLAG_HIDDEN)
     CALL(monitor_cap_init)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG5_43_X_NAUTS_RETREAT)
         CALL(monitor_kanbu_flag_onoff, 1)
@@ -427,8 +428,8 @@ EVT_BEGIN(monitor_init)
         CALL(monitor_cap_evt)
     END_INLINE_EVENT
     CALL(evt_map_set_tevcallback, 1, PTR(monitor_cap_tev))
-    CALL(evt_mapobj_flag_onoff, 0, 1, STRING("monitor_1"), MAP_OBJ_TEV_CALLBACK(1))
-    CALL(evt_mapobj_flag_onoff, 0, 0, STRING("monitor_1"), MAP_OBJ_FLAG_DISPLAY_LIST)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 1, STRING("monitor_1"), MAP_OBJ_TEV_CALLBACK(1))
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 0, STRING("monitor_1"), MAP_OBJ_FLAG_DISPLAY_LIST)
     RETURN
 EVT_END()
 
@@ -1084,7 +1085,7 @@ static EVT_BEGIN(peach_evt_stg5)
     CALL(evt_npc_set_position, STRING("手下１"), -375, 0, -70)
     CALL(evt_npc_set_ry, STRING("シュリョー"), 270)
     CALL(evt_cam3d_evt_set, 0, 273, 972, 0, 100, -13, 0, EASING_SINE_IN_OUT)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("monitor"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("monitor"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_map_playanim, STRING("monitore_1"), MAP_ANIM_PLAY_AT_END, 0)
     WAIT_FRAMES(1)
     CALL(evt_seq_wait, SEQ_GAME)
@@ -1370,7 +1371,7 @@ EVT_BEGIN(aji_10_init_evt)
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI5"))
     END_IF
     CALL(evt_snd_set_rev_mode, 1)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("monitor"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("monitor"), MAP_OBJ_FLAG_HIDDEN)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG7_00_START)
         DEBUG_PUT_MSG(STRING("npc setup"))
         CALL(evt_npc_setup, PTR(npcEnt))

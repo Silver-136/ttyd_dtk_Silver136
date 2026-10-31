@@ -330,7 +330,7 @@ BattleWeapon weapon_gundan_zako_group1_attack = {
     NULL, // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH | SPECIAL_FLIP_SHELLED, // special
     COUNTER_RESIST_ALL, // counterResistFlags
-    4, // targetWeightFlags
+    TARGET_WEIGHT_PREFER_FRONT, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
@@ -636,7 +636,7 @@ void zakogun_ext_init(void) {
     wire = BattleSearchObjectPtr("if_wire");
     wire->mPosition = (Vec){0.0f, 250.0f, 0.0f};
     body->mPosition = wire->mPosition;
-    *flags |= 0x60;
+    *flags |= STAGE_OBJ_FLAG_IRON_FRAME_GONE | STAGE_OBJ_FLAG_NO_IRON_FRAME_FALL;
 }
 
 /** Main callback of the horde extended draw: runs the update for the current formation (group 1, 2 or 3). */

@@ -81,7 +81,7 @@ static BeroEntry bero_data[] = {
         "n_bero", // hitName
         1, // type
         3, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -98,7 +98,7 @@ static BeroEntry bero_data[] = {
     {
         "w_bero_1", // hitName
         0, 0, // type..sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -115,7 +115,7 @@ static BeroEntry bero_data[] = {
         "w_bero_2", // hitName
         1, // type
         3, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -228,7 +228,7 @@ EVT_BEGIN(eki_05_init_evt)
         END_LOOP
     END_INLINE_EVENT
 #ifdef VERSION_G8ME01
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S"), MAP_OBJ_FLAG_CLIP)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S"), MAP_OBJ_FLAG_CLIP)
 #endif
     RETURN
 EVT_END()

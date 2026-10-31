@@ -31,7 +31,7 @@ static BeroEntry bero_entry_data[] = {
     {
         "w_bero", // hitName
         0, 0, // type..sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -47,7 +47,7 @@ static BeroEntry bero_entry_data[] = {
     {
         "e_bero", // hitName
         0, 0, // type..sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -64,7 +64,7 @@ static BeroEntry bero_entry_data[] = {
         "dokan2", // hitName
         2, // type
         0, // sfxId
-        6, // directionId
+        BERO_DIR_W, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -80,7 +80,7 @@ static BeroEntry bero_entry_data[] = {
         "dokan1", // hitName
         2, // type
         0, // sfxId
-        9, // directionId
+        BERO_DIR_DOWN, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -132,7 +132,7 @@ EVT_END()
  */
 EVT_BEGIN(evt_hikou_nobiru)
     CALL(evt_mario_key_onoff, 0)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_tree_ha04"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_tree_ha04"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_cam3d_evt_set, -307, 220, 533, -307, 124, -7, 500, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
     CALL(evt_snd_sfxon, STRING("SFX_STG2_SWITCH_QUAKE1"), LW(10))
@@ -185,7 +185,7 @@ EVT_BEGIN(evt_hikou_nobiru)
     WAIT_MS(1000)
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
     WAIT_MS(500)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_tree_ha04"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_tree_ha04"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mario_key_onoff, 1)
     RETURN
 EVT_END()
@@ -221,7 +221,7 @@ EVT_BEGIN(win_02_init_evt)
         SPAWN_EVENT(PTR(evt_hikou_nobiru_init))
     END_IF
     CALL(evt_mobj_switch_blue, 0, STRING("mobj_hashi0"), -415, 50, -125, PTR(evt_hikou_nobiru), GSWF_WIN_02_PLANE_PANEL_SWITCH_PRESSED)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_hikou"), MAP_OBJ_FLAG_CLIP)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_hikou"), MAP_OBJ_FLAG_CLIP)
     RETURN
 EVT_END()
 

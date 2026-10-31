@@ -86,7 +86,7 @@ s32 battleAcMain_GaugeTiming2(BattleWork *work) {
             break;
 
         case 100:
-            if ((work->actionCommands.setupFlags & 1) && (work->actionCommands.mAcUnit->mTokenFlags & kConfusedAction)) {
+            if ((work->actionCommands.setupFlags & AC_SETUP_FLAG_CONFUSED_AUTO) && (work->actionCommands.mAcUnit->mTokenFlags & kConfusedAction)) {
                 if (irand(100) >= 0) {
                     work->actionCommands.setupParam = 30;
                     gw->miss = 0;
@@ -206,7 +206,7 @@ s32 battleAcMain_GaugeTiming2(BattleWork *work) {
                     work->actionCommands.result = 0;
                     work->actionCommands.outputParams[0] = 0;
                 }
-                work->actionCommands.doneFlags |= 1;
+                work->actionCommands.doneFlags |= AC_DONE_FLAG_FINISHED;
                 return 0;
             }
             break;
@@ -216,7 +216,7 @@ s32 battleAcMain_GaugeTiming2(BattleWork *work) {
 
         case 1003:
             work->actionCommands.outputParams[1] = 1;
-            work->actionCommands.doneFlags |= 1;
+            work->actionCommands.doneFlags |= AC_DONE_FLAG_FINISHED;
             gw->endTimer = 60;
             work->actionCommands.mAcState = 1004;
 
@@ -280,7 +280,7 @@ void battleAcDisp_GaugeTiming2(CameraId cameraId, void* param) {
 
 /** Called by btlevtcmd_StopAC: unless the command already finished, starts the 60-frame end wait. */
 void battleAcDelete_GaugeTiming2(BattleWork* work) {
-    if (!(work->actionCommands.doneFlags & 1)) {
+    if (!(work->actionCommands.doneFlags & AC_DONE_FLAG_FINISHED)) {
         work->actionCommands.mAcState = 1003;
     }
 }

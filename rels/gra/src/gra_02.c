@@ -101,7 +101,7 @@ static BeroEntry bero_entry_data[] = {
     {
         "w_bero_1", // hitName
         0, 0, // type..sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -118,7 +118,7 @@ static BeroEntry bero_entry_data[] = {
         "w_bero_2", // hitName
         4096, // type
         0, // sfxId
-        6, // directionId
+        BERO_DIR_W, // directionId
         242, // centerPosition
         21, // centerPositionY
         -450, // centerPositionZ
@@ -135,7 +135,7 @@ static BeroEntry bero_entry_data[] = {
         "dokan_1", // hitName
         2, // type
         0, // sfxId
-        9, // directionId
+        BERO_DIR_DOWN, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -151,7 +151,7 @@ static BeroEntry bero_entry_data[] = {
         "dokan_2", // hitName
         4098, // type
         0, // sfxId
-        9, // directionId
+        BERO_DIR_DOWN, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -206,7 +206,7 @@ EVT_BEGIN(gra_02_init_evt)
         CALL(evt_cloud_init)
         CALL(evt_cloud_ent, 0, STRING("S_wara"), STRING("polySurface981_q023"), PTR(gra02_straw_blow_evt))
         ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_wara"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_wara"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("polySurface981_q023"), 0, 0)
     END_IF
     BEGIN_INLINE_EVENT

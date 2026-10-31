@@ -160,7 +160,7 @@ static BeroEntry bero_entry_data[] = {
         "w_bero_1", // hitName
         1, // type
         12, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -178,7 +178,7 @@ static BeroEntry bero_entry_data[] = {
         "w_bero_2", // hitName
         1, // type
         12, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -196,7 +196,7 @@ static BeroEntry bero_entry_data[] = {
         "e_bero_1", // hitName
         1, // type
         12, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -213,7 +213,7 @@ static BeroEntry bero_entry_data[] = {
     {
         "e_bero_2", // hitName
         0, 0, // type..sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -230,7 +230,7 @@ static BeroEntry bero_entry_data[] = {
         "e_bero_3", // hitName
         1, // type
         12, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -759,7 +759,7 @@ EVT_BEGIN(evt_kaidan_pera_anime)
         CALL(evt_img_set_paper_anim, STRING("img"), STRING("A_2"))
         CALL(evt_img_alloc_capture, STRING("img"), 0, STRING("offscreen"), 0, 0, 0, 608, 480)
         CALL(evt_img_alloc_capture, STRING("img"), 1, STRING("offscreen"), 0, 0, 0, 608, 480)
-        CALL(evt_mapobj_flag_onoff, 0, 1, STRING("neta_01"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 1, STRING("neta_01"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_neta_01"), 0, 0)
         CALL(evt_snd_sfxon, STRING("SFX_STG1_PERA_STEP1"), 0)
         ELSE
@@ -767,7 +767,7 @@ EVT_BEGIN(evt_kaidan_pera_anime)
         CALL(evt_img_set_paper_anim, STRING("img"), STRING("A_1"))
         CALL(evt_img_alloc_capture, STRING("img"), 0, STRING("offscreen"), 0, 0, 0, 608, 480)
         CALL(evt_img_alloc_capture, STRING("img"), 1, STRING("offscreen"), 0, 0, 0, 608, 480)
-        CALL(evt_mapobj_flag_onoff, 0, 1, STRING("neta_02"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 1, STRING("neta_02"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_neta_02"), 0, 0)
         CALL(evt_snd_sfxon, STRING("SFX_STG1_PERA_STEP2"), 0)
     END_IF
@@ -777,11 +777,11 @@ EVT_BEGIN(evt_kaidan_pera_anime)
         CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.015625f), FLOAT(0.0f), 250)
     END_INLINE_EVENT
     IF_INT_EQUAL(LW(0), 0)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("neta_02"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("neta_02"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_neta_02"), 0, 1)
         SET_INT_READ_ADDR(PTR(kemuri_pos1))
         ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("neta_01"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("neta_01"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_neta_01"), 0, 1)
         SET_INT_READ_ADDR(PTR(kemuri_pos2))
     END_IF
@@ -803,10 +803,10 @@ EVT_END()
 
 EVT_BEGIN(evt_kaidan_pera_init)
     IF_INT_EQUAL(GSWF_GON_04_PAPER_STAIRS_FLIPPED, 0)
-        CALL(evt_mapobj_flag_onoff, 0, 1, STRING("neta_02"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 1, STRING("neta_02"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_neta_02"), 0, 0)
         ELSE
-        CALL(evt_mapobj_flag_onoff, 0, 1, STRING("neta_01"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 1, STRING("neta_01"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_neta_01"), 0, 0)
     END_IF
     RETURN
@@ -934,10 +934,10 @@ EVT_BEGIN(evt_hashi_pera)
     WAIT_MS(500)
     CALL(evt_img_set_paper_anim, STRING("capture_img"), STRING("A_1"))
     IF_INT_EQUAL(LW(0), 0)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("tuuro_02"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("tuuro_02"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_tuuro_02"), 0, 1)
         ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("tuuro_01"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("tuuro_01"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_tuuro_01"), 0, 1)
     END_IF
     CALL(evt_snd_sfxon, STRING("SFX_STG1_PERA2"), 0)
@@ -983,12 +983,12 @@ EVT_END()
 
 EVT_BEGIN(evt_hashi)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG1_14_PAPER_BRIDGE_RIGHT)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("tuuro_02"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("tuuro_02"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_tuuro_02"), 0, 0)
         CALL(evt_mobj_switch_blue, 0, STRING("mobj_hashi0"), 400, 900, -100, PTR(evt_hashi_pera0), GSWF_GON_04_BRIDGE_SWITCH_RIGHT_PRESSED)
     END_IF
     IF_INT_LESS(GSW_STORY_PROGRESS, STG1_14_01_PAPER_BRIDGE_LEFT)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("tuuro_01"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("tuuro_01"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_tuuro_01"), 0, 0)
         CALL(evt_mobj_switch_blue, 0, STRING("mobj_hashi1"), -80, 900, -100, PTR(evt_hashi_pera1), GSWF_GON_04_BRIDGE_SWITCH_LEFT_PRESSED)
     END_IF
@@ -1074,9 +1074,9 @@ EVT_BEGIN(gon_04_init_evt)
     CALL(evt_npc_change_fbat_mode, 1)
     CALL(evt_mobj_switch_red, 0, STRING("mobj1"), 250, 150, -120, PTR(evt_kaidan_pera), 0)
     SPAWN_EVENT(PTR(evt_kaidan_pera_init))
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("fuyu_box01"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("fuyu_box01"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_hitobj_onoff, STRING("a_fuyu_box01"), 1, 0)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("fuyu_box02"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("fuyu_box02"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_hitobj_onoff, STRING("a_fuyu_box02"), 1, 0)
     CALL(evt_mobj_float_blk, STRING("mobj_fltbl01"), FLOAT(582.5f), 150, FLOAT(-137.5f), 1, 0, 0, LSWF_GON_04_FLOAT_BLOCK_1_MOVED)
     CALL(evt_mobj_float_blk, STRING("mobj_fltbl02"), 395, 150, -125, 2, 1, 0, LSWF_GON_04_FLOAT_BLOCK_2_MOVED)

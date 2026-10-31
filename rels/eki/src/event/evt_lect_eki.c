@@ -207,7 +207,7 @@ static void lecture_button_disp(CameraId camera, void* param) {
         LectButton* btn = &lbtn[i];
         LectButtonDisp* disp = &btn->disp;
 
-        if (!(btn->flags & 1)) {
+        if (!(btn->flags & LECT_BUTTON_FLAG_HIDDEN)) {
             f32 ofs;
             Vec pos;
 

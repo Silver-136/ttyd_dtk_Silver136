@@ -59,8 +59,8 @@ static BeroEntry bero_entry_data[] = {
         "w_bero", // hitName
         1, // type
         0, // sfxId
-        20000, // directionId
-        100000, // centerPosition
+        BERO_DIR_AUTO, // directionId
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -116,7 +116,7 @@ static EVT_BEGIN(cloud_toujou)
     CALL(evt_msg_print, 0, STRING("stg2_win_e04_00_04"), 0, STRING("クラウダ"))
     WAIT_MS(1000)
     SET_VALUE(GSW_STORY_PROGRESS, STG2_03_03_FLURRIE_INTRO)
-    CALL(evt_fade_set_mapchange_type, 0, 10, 100, 9, 100)
+    CALL(evt_fade_set_mapchange_type, 0, FADE_OUT_BLACK, 100, FADE_IN_BLACK, 100)
     CALL(evt_bero_mapchange, STRING("win_03"), STRING(""))
     RETURN
 EVT_END()

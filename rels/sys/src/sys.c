@@ -2,6 +2,7 @@
 // that plays between chapters: the title's letters fly in over a rainbow light, followed by the chapter subtitle.
 
 #include "battle/battle_unit.h"
+#include "driver/fadedrv.h"
 #include "eff/eff_itemget.h"
 #include "evt/evt_cmd.h"
 #include "manager/evtmgr_cmd.h"

@@ -511,7 +511,7 @@ void BattleBreakSlot_Main(void) {
                 if (!(_battleWorkPointer->cameraWork.flags & BTL_CAM_FLAG_SHAKE_H)) {
                     btl_camera_shake_h(0, 2.0f, 2.0f, 1000, 0);
                 }
-                for (k = 0; k < 200; k++) {
+                for (k = 0; k < AUDIENCE_MEMBER_MAX; k++) {
                     if ((u8)BattleAudience_GetExist(k) == 1) {
                         if (BattleAudienceGetPtr(k)->status == AUDIENCE_STATUS_ENTER || BattleAudienceGetPtr(k)->status == AUDIENCE_STATUS_ESCAPE) {
                             slot->phaseTimer--;
@@ -726,7 +726,7 @@ void BattleBreakSlot_Main(void) {
                         BattleBreakSlotReelGetPtr(1)->item == 4 && rr->item == 4) {
                         break;
                     }
-                    if ((slot->flags & 1) && rr->item != 3) {
+                    if ((slot->flags & BREAK_SLOT_FLAG_LECTURE) && rr->item != 3) {
                         break;
                     }
                     if ((slot->flags & 4) && rr->item != 3) {
@@ -908,7 +908,7 @@ void BattleBreakSlot_PointInc(void) {
             if (dbg->flags & BATTLE_DEBUG_SLOT_ITEM) {
                 item_appear_force(reel, dbg->slotItem);
             }
-            if (slot->flags & 1) {
+            if (slot->flags & BREAK_SLOT_FLAG_LECTURE) {
                 item_appear_force(reel, 3);
             }
             if (slot->flags & 4) {
@@ -924,7 +924,7 @@ void BattleBreakSlot_PointInc(void) {
             if (dbg->flags & BATTLE_DEBUG_SLOT_ITEM) {
                 item_appear_force(reel, dbg->slotItem);
             }
-            if (slot->flags & 1) {
+            if (slot->flags & BREAK_SLOT_FLAG_LECTURE) {
                 item_appear_force(reel, 3);
             }
             if (slot->flags & 4) {

@@ -1384,7 +1384,7 @@ static BeroEntry bero_data[] = {
         "e_bero", // hitName
         1, // type
         3, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -1402,7 +1402,7 @@ static BeroEntry bero_data[] = {
         "s_bero", // hitName
         1, // type
         6, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -1428,16 +1428,16 @@ EVT_BEGIN(evt_bridge)
 EVT_END()
 
 EVT_BEGIN(evt_bridge2)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("s_eki_07"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("s_eki_07"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_hitobj_onoff, STRING("a_eki_07"), 1, 1)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("s_eki_00"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_hitobj_onoff, STRING("a_eki_00"), 1, 0)
     CALL(evt_map_playanim, STRING("anm_ori"), MAP_ANIM_PLAY_AT_END, 0)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("kaidann"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("kaidann"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("ori"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("n_kaidan"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("n_ori"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("n_kabe"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("n_kabe"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_map_playanim, STRING("anm_ere_1"), MAP_ANIM_PLAY_AT_END, 0)
     CALL(evt_mario_set_pos, -210, 60, 0)
     CALL(evt_party_set_pos, 0, -230, 60, 0)
@@ -1479,14 +1479,14 @@ static EVT_BEGIN(evt_origami)
     WAIT_MS(500)
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG6_ORIGAMI_APPEAR1"), -220, 60, 0, 0)
     CALL(evt_map_playanim, STRING("anm_ori"), MAP_ANIM_PLAY_ONCE, 0)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("kaidann"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("kaidann"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("ori"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("n_kaidan"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("n_ori"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_hitobj_onoff, STRING("kaidann_A"), 1, 1)
     CALL(evt_map_checkanim, STRING("anm_ori"), LW(0), LW(1))
     WAIT_MS(1600)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("n_kabe"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("n_kabe"), MAP_OBJ_FLAG_HIDDEN)
     WAIT_MS(1000)
     CALL(evt_mobj_switch_blue, 0, STRING("bridge_sw"), -220, 60, 0, PTR(evt_bridge), GSWF_EKI_00_BRIDGE_SWITCH_PRESSED)
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG6_OBJ_SWITCH_APPEAR1"), -220, 60, 0, 0)
@@ -1683,7 +1683,7 @@ EVT_BEGIN(evt_elv_down)
     CALL(evt_mario_set_dir, 270, 200, 0)
     CALL(evt_mapobj_set_offscreen, 1, STRING("s_eki_00"), STRING("offscreen"))
     CALL(evt_mapobj_clear_offscreen, 1, STRING("s_eki_07"))
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("s_eki_00"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("s_eki_00"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_img_onoff, STRING("capture_img"), 1)
     BEGIN_INLINE_EVENT
         CALL(evt_mapobj_get_position, STRING("d_1"), LW(0), LW(1), LW(2))
@@ -1746,7 +1746,7 @@ EVT_BEGIN(evt_elv_down)
         CALL(evt_moamoa_flag_onoff, 1, MOAMOA_WORK_FLAG_ACTIVE)
         CALL(evt_moamoa_flag_onoff, 0, MOAMOA_WORK_FLAG_DRAW_OFFSCREEN)
     END_IF
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("s_eki_07"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("s_eki_07"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_hitobj_onoff, STRING("a_eki_07"), 1, 1)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("s_eki_00"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_hitobj_onoff, STRING("a_eki_00"), 1, 0)
@@ -1767,18 +1767,18 @@ EVT_BEGIN(evt_elv_down)
         CALL(evt_item_set_position, STRING("item"), LW(0), LW(1), LW(2))
     END_IF
     IF_INT_LESS(GSW_STORY_PROGRESS, STG6_41_ORIGAMI_STAIRS)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("kaidann"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("ori"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("n_kaidan"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("n_ori"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("kaidann"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("ori"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("n_kaidan"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("n_ori"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("kaidann_A"), 1, 0)
         ELSE
         CALL(evt_map_playanim, STRING("anm_ori"), MAP_ANIM_PLAY_AT_END, 0)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("kaidann"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("ori"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("n_kaidan"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("n_ori"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("n_kabe"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("kaidann"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("ori"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("n_kaidan"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("n_ori"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("n_kabe"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     BEGIN_INLINE_EVENT
         CALL(evt_party_stop, 0)
@@ -1844,7 +1844,7 @@ EVT_BEGIN(evt_elv_up)
     WAIT_MS(500)
     CALL(evt_mapobj_clear_offscreen, 1, STRING("s_eki_00"))
     CALL(evt_mapobj_set_offscreen, 1, STRING("s_eki_07"), STRING("offscreen"))
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("s_eki_07"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("s_eki_07"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_img_onoff, STRING("capture_img"), 1)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG6_40_SWATTING_SMORGS)
         CALL(evt_moamoa_flag_onoff, 0, MOAMOA_WORK_FLAG_ACTIVE)
@@ -1917,9 +1917,9 @@ EVT_BEGIN(evt_elv_up)
         ADD(LW(1), 2000)
         CALL(evt_item_set_position, STRING("item"), LW(0), LW(1), LW(2))
     END_IF
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("s_eki_07"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("s_eki_07"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_hitobj_onoff, STRING("a_eki_07"), 1, 0)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("s_eki_00"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("s_eki_00"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_hitobj_onoff, STRING("a_eki_00"), 1, 1)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG6_40_SWATTING_SMORGS)
         CALL(evt_del_case_evt, 0, GW(10))
@@ -2033,7 +2033,7 @@ EVT_BEGIN(eki_00_init_evt)
         ELSE
         CALL_CHILD(PTR(bero_case_entry))
     END_IF
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("s_eki_07"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("s_eki_07"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_hitobj_onoff, STRING("a_eki_07"), 1, 0)
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG6_37_ELEVATOR_KEY)
         CALL_CHILD(PTR(evt_elv_init))

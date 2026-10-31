@@ -489,7 +489,7 @@ void chorogun_ext_main(void) {
     pose = extGetPosePtr();
     n = 0;
     for (i = 0; i < extGetPoseNum(); i++) {
-        if (chorogun[i].flags & 1) {
+        if (chorogun[i].flags & CHOROGUN_FLAG_ALIVE) {
             n++;
         }
     }
@@ -741,7 +741,7 @@ USER_FUNC(chorogun_appear) {
     if (isFirstCall) {
         for (i = 0; i < extGetPoseNum(); i++) {
             c = &chorogun[i];
-            c->flags |= 1;
+            c->flags |= CHOROGUN_FLAG_ALIVE;
             c->state = 1;
         }
     }
@@ -921,8 +921,8 @@ USER_FUNC(chorogun_escape_all) {
 
     for (i = 0; i < extGetPoseNum(); i++) {
         c = &chorogun[i];
-        if (c->flags & 1) {
-            c->flags &= ~1;
+        if (c->flags & CHOROGUN_FLAG_ALIVE) {
+            c->flags &= ~CHOROGUN_FLAG_ALIVE;
             c->state = 60;
         }
     }

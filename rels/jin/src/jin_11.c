@@ -53,8 +53,8 @@ static BeroEntry bero_entry_data[] = {
         "s_bero", // hitName
         1, // type
         2, // sfxId
-        20000, // directionId
-        100000, // centerPosition
+        BERO_DIR_AUTO, // directionId
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -70,7 +70,7 @@ static BeroEntry bero_entry_data[] = {
     {
         "ana", // hitName
         0, 0, // type..sfxId
-        4, // directionId
+        BERO_DIR_S, // directionId
         845, // centerPosition
         115, // centerPositionY
         77, // centerPositionZ

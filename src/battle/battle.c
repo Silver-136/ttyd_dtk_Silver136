@@ -36,8 +36,8 @@ BattleWork* _battleWorkPointer;
  * Battle entries Btl_UnitSetup makes at the start of every fight: Mario at his home spot (-100, 0, -5),
  * and before him the invisible system unit (unit_system) that runs battle-wide events.
  */
-BattleUnitSetup entryunit_mario = { &unitdata_Mario, 0, {0}, 0x04000002, {-100.0f, 0.0f, -5.0f} };
-BattleUnitSetup entryunit_system = { &unit_system, 0, {0}, 0x04000002 };
+BattleUnitSetup entryunit_mario = { &unitdata_Mario, 0, {0}, BATTLE_PHASE_PLAYER, {-100.0f, 0.0f, -5.0f} };
+BattleUnitSetup entryunit_system = { &unit_system, 0, {0}, BATTLE_PHASE_PLAYER };
 
 // forward declarations
 BOOL BattleMain(void);
@@ -597,7 +597,7 @@ void BtlUnit_EquipItem(BattleUnit* unit, EquipFlags flags, ItemType type) {
     if (unit) {
         if (flags & EQUIP_RESET) {
             for (i = 0; i < 40; i++) {
-                unit->badgeCounts[i] = 0;
+                unit->badgeCounts[i] = FALSE;
             }
         }
 

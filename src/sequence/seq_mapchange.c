@@ -1,6 +1,7 @@
 // Map change sequence: unloads the old map, loads the next area REL and map, and starts its scripts.
 
 #include "evt/evt_cam.h"
+#include "evt/evt_story.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_seq.h"
 #include "manager/evtmgr.h"
@@ -102,8 +103,8 @@ void seq_mapChangeInit(SequenceWork* work) {
         int c1 = strcmp(gp->currentMapName, "gor_01");
         int c2 = strcmp(_next_map, "gor_01");
         if (c0 && c1 && c2) {
-            bdsw->restockFlags |= 1;
-        } else if (!c2 && bdsw->restockFlags & 1) {
+            bdsw->restockFlags |= BADGESHOP_RESTOCK_PENDING;
+        } else if (!c2 && bdsw->restockFlags & BADGESHOP_RESTOCK_PENDING) {
             badgeShop_bargainGeneration();
             badgeShop_bottakuruGeneration();
             bdsw->restockFlags &= 0xFFFE;
@@ -183,7 +184,7 @@ void seq_mapChangeMain(SequenceWork* work) {
             strcpy(gp->currentAreaName + 0x10, gp->currentMapName);
             strcpy(gp->currentAreaName, "");
             strcpy(gp->currentMapName, "");
-            seqSetSeq(SEQ_TITLE, 0, 0);
+            seqSetSeq(SEQ_TITLE, NULL, NULL);
         } else {
             area_name = getAreaName();
             fres = fileAsyncf(FILE_TYPE_RAW, 0, mc_rel_fmt, getMarioStDvdRoot(), area_name);
@@ -305,7 +306,7 @@ void seq_mapChangeMain(SequenceWork* work) {
             mario = marioGetPtr();
             party = partyGetPtr(marioGetPartyId());
             extraParty = partyGetPtr(marioGetExtraPartyId());
-            switch (swByteGet(4)) { // GSW_SAVE_RESUME_POINT
+            switch (swByteGet(GSW_SAVE_RESUME_KIND)) { // GSW_SAVE_RESUME_POINT
             case 0:
                 mario->position = gp->savePlayerPos;
                 evt_cam_road_reset(0, 0);
@@ -344,7 +345,7 @@ void seq_mapChangeMain(SequenceWork* work) {
             marioStSystemLevel(0);
         }
         marioEntry();
-        seqSetSeq(SEQ_GAME, 0, 0);
+        seqSetSeq(SEQ_GAME, NULL, NULL);
         break;
     }
     }

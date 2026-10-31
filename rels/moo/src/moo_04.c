@@ -1,6 +1,7 @@
 // moo_04 (月, the Moon): a scene map: a flight scene with an X-Naut (stg7_aji messages) and an epilogue scene (ep_45).
 
 #include "battle/battle_unit.h"
+#include "driver/fadedrv.h"
 #include "evt/evt_cmd.h"
 #include "libc_decls.h"
 #include "evt/evt_bero.h"
@@ -219,7 +220,7 @@ static EVT_BEGIN(epilogue_evt)
     WAIT_MS(2000)
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 3000)
     CALL(evt_snd_envoff_f, PSND_FADEOUT, 3000)
-    CALL(evt_fade_set_mapchange_type, 1, 10, 900, 9, 900)
+    CALL(evt_fade_set_mapchange_type, 1, FADE_OUT_BLACK, 900, FADE_IN_BLACK, 900)
     CALL(evt_bero_mapchange, STRING("gor_00"), STRING("epilogue2"))
     RETURN
 EVT_END()
@@ -263,14 +264,14 @@ EVT_BEGIN(moo_04_init_evt)
             WAIT_MS(1000)
             CALL(evt_eff64, STRING("hikari"), STRING("radiation_n64"), 2, 30, 90, -75, FLOAT(1.0f), 0, 0, 0, 0, 0, 0, 0)
             SET_VALUE(GSW_STORY_PROGRESS, STG7_26_THE_HIDEOUT_EXPLODES)
-            CALL(evt_fade_entry, 17, 2000, 255, 255, 255)
+            CALL(evt_fade_entry, FADE_OUT_WHITE, 2000, 255, 255, 255)
             CALL(evt_fade_end_wait)
-            CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S"), MAP_OBJ_FLAG_HIDDEN)
+            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S"), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_bg_disp_onoff, 0)
             CALL(evt_eff_delete, STRING("hikari"))
             CALL(evt_fade_entry, 16, 2000, 255, 255, 255)
             CALL(evt_fade_end_wait)
-            CALL(evt_fade_set_mapchange_type, 1, 10, 1000, 9, 1000)
+            CALL(evt_fade_set_mapchange_type, 1, FADE_OUT_BLACK, 1000, FADE_IN_BLACK, 1000)
             SET_VALUE(GSWF_AJI_TELEPORT_TO_TIK_PENDING, 1)
             CALL(evt_bero_mapchange, STRING("tik_00"), 0)
         END_INLINE_EVENT

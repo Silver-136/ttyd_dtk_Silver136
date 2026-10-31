@@ -43,7 +43,7 @@ static BeroEntry bero_entry_data[] = {
     {
         "w_bero", // hitName
         0, 0, // type..sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -59,7 +59,7 @@ static BeroEntry bero_entry_data[] = {
     {
         "n_bero_1", // hitName
         0, 0, // type..sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -75,7 +75,7 @@ static BeroEntry bero_entry_data[] = {
     {
         "n_bero_5", // hitName
         0, 0, // type..sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -92,7 +92,7 @@ static BeroEntry bero_entry_data[] = {
         "dokan", // hitName
         2, // type
         0, // sfxId
-        6, // directionId
+        BERO_DIR_W, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -270,7 +270,7 @@ EVT_BEGIN(kaidan_pera)
     END_INLINE_EVENT
     CALL(evt_img_clear_virtual_point, STRING("capture_img"))
     CALL(evt_img_set_paper_anim, STRING("capture_img"), STRING("A_1"))
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("s_dai_nise"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("s_dai_nise"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("dai_6"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_img_wait_animend, STRING("capture_img"))
     CALL(evt_mapobj_clear_offscreen, 1, STRING("s_dai_nise"))
@@ -342,20 +342,20 @@ EVT_BEGIN(tik_04_init_evt)
         CALL(evt_cloud_init)
         CALL(evt_cloud_ent, 0, STRING("win_1"), STRING("a_win_1"), PTR(tik04_wall_blow_evt))
         ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("win_1"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("win_1"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_win_1"), 1, 0)
     END_IF
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("s_dai_nise"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("s_dai_nise"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_hitobj_onoff, STRING("a_dai_nise"), 1, 0)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("dai_toreru"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("dai_6"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("dai_toreru"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("dai_6"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_hitobj_onoff, STRING("a_dai_6"), 1, 0)
     IF_INT_EQUAL(GSWF_TIK_04_STAIRS_SWITCH_PRESSED, 0)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("s_dai_nise"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("s_dai_nise"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_dai_nise"), 1, 1)
         CALL(evt_mobj_switch_blue, 0, STRING("mobj_switch00"), 275, 0, 100, PTR(tik_04_switch_evt), GSWF_TIK_04_STAIRS_SWITCH_PRESSED)
         ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("dai_6"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("dai_6"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_dai_6"), 1, 1)
     END_IF
     CALL(evt_item_entry, STRING("blackkey"), ITEM_BLACK_KEY_0x21, 175, 125, -100, ITEM_TYPE_STILL, GSWF_TIK_04_BLACK_KEY, 0)

@@ -742,7 +742,7 @@ void yoshi_use(PartyEntry* party) {
                     if (party->position.y <= party->groundY) {
                         party->useMotionId = 70;
                     }
-                } else if (attr & 0xC00) {
+                } else if (attr & (HIT_ATTR_DAMAGE_LIQUID | HIT_ATTR_SPIKES)) {
                     if (party->position.y <= party->groundY) {
                         yoshi_damageToge(party);
                         return;

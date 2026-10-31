@@ -1,6 +1,7 @@
 // aji_02 (敵のアジト, X-Naut Fortress): an electrified floor-panel room (hikaru_yuka).
 
 #include "battle/battle_unit.h"
+#include "driver/fadedrv.h"
 #include "evt/evt_cmd.h"
 #include "driver/mapdrv.h"
 #include "evt/evt_cam.h"
@@ -79,8 +80,8 @@ static BeroEntry bero_entry_data[] = {
         "w_bero", // hitName
         1, // type
         10, // sfxId
-        20000, // directionId
-        100000, // centerPosition
+        BERO_DIR_AUTO, // directionId
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -169,11 +170,11 @@ static EVT_BEGIN(evt_box)
         CALL(evt_mario_set_dir, 270, 300, 0)
     END_INLINE_EVENT
     LOOP(5)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("yukayu1"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("yukayu2"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("yukayu1"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("yukayu2"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("ato"), MAP_OBJ_FLAG_HIDDEN)
         WAIT_MS(150)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("yukayu1"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("yukayu1"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("yukayu2"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("ato"), MAP_OBJ_FLAG_HIDDEN)
         WAIT_MS(150)
@@ -197,7 +198,7 @@ static EvtWord hikaru_yuka_init[] = {
     CALL(evt_hitobj_attr_onoff, 1, 1, STRING("A_no01"), HIT_ATTR_TOGE)
     CALL(evt_mobj_itembox, STRING("box"), 160, 10, -10, MOBJ_ITEMBOX_GRAY, 0, PTR(evt_box), GSWF_AJI_02_ELEVATOR_KEY_CHEST)
     CALL(evt_hit_damage_return_set, PTR(dmgReturnPt))
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("yukayu1"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("yukayu1"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("yukayu2"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_map_playanim, STRING("denyuka"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_sub_random, 300, LW(0))
@@ -233,11 +234,11 @@ static EVT_BEGIN(peach_evt_stg1)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_HIDE)
     CALL(evt_mario_set_pos, -140, 10, 0)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("no1"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("no1"), MAP_OBJ_FLAG_HIDDEN)
     CALL_CHILD(PTR(hikaru_off))
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("yukayu1"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("yukayu1"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("yukayu2"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("ato"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("ato"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_seq_wait, SEQ_GAME)
     WAIT_MS(1500)
     CALL(evt_fade_set_mapchange_type, 0, 12, 100, 11, 100)
@@ -270,14 +271,14 @@ EVT_BEGIN(aji_02_init_evt)
     CALL(evt_bero_get_info)
     CALL_CHILD(PTR(evt_bero_info_run))
     CALL(evt_cam_road_reset)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("no1"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("no1"), MAP_OBJ_FLAG_HIDDEN)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG7_09_ELEVATOR_KEY_A_LIT_FLOOR)
         SPAWN_EVENT(PTR(hikaru_yuka_init))
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("ato"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("ato"), MAP_OBJ_FLAG_HIDDEN)
         WAIT_FRAMES(1)
         ELSE
         CALL_CHILD(PTR(hikaru_off))
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("yukayu1"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("yukayu1"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("yukayu2"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("ato"), MAP_OBJ_FLAG_HIDDEN)
     END_IF

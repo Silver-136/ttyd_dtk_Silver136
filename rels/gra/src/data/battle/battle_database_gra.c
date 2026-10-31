@@ -155,7 +155,7 @@ BattleUnitSetup btlparty_gra_gra_00_01_off_1[] = {
         &unit_faker_mario_gra, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {90.0f, 0.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -183,7 +183,7 @@ BattleUnitSetup btlparty_gra_gra_01_01_off_1[] = {
         &unit_hyper_kuriboo, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {50.0f, 0.0f, -10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -235,7 +235,7 @@ BattleUnitSetup btlparty_gra_gra_01_01_on_1[] = {
         &unit_hyper_kuriboo, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {50.0f, 0.0f, -10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -287,7 +287,7 @@ BattleUnitSetup btlparty_gra_gra_01_01_on_2[] = {
         &unit_hyper_kuriboo, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {50.0f, 0.0f, -10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -297,7 +297,7 @@ BattleUnitSetup btlparty_gra_gra_01_01_on_2[] = {
         &unit_hyper_patakuri, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {90.0f, 40.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -339,7 +339,7 @@ BattleUnitSetup btlparty_gra_gra_01_01_on_3[] = {
         &unit_hyper_kuriboo, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {50.0f, 0.0f, -10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -349,7 +349,7 @@ BattleUnitSetup btlparty_gra_gra_01_01_on_3[] = {
         &unit_hyper_togekuri, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {90.0f, 0.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -359,7 +359,7 @@ BattleUnitSetup btlparty_gra_gra_01_01_on_3[] = {
         &unit_pansy, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {130.0f, 0.0f, 10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -388,7 +388,7 @@ BattleUnitSetup btlparty_gra_gra_01_03_off_1[] = {
         &unit_hyper_patakuri, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {50.0f, 40.0f, -10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -440,7 +440,7 @@ BattleUnitSetup btlparty_gra_gra_01_03_on_1[] = {
         &unit_hyper_patakuri, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {50.0f, 40.0f, -10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -492,7 +492,7 @@ BattleUnitSetup btlparty_gra_gra_01_03_on_2[] = {
         &unit_hyper_patakuri, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {30.0f, 40.0f, -10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -512,7 +512,7 @@ BattleUnitSetup btlparty_gra_gra_01_03_on_2[] = {
         &unit_hyper_patakuri, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {110.0f, 40.0f, 10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -554,7 +554,7 @@ BattleUnitSetup btlparty_gra_gra_01_03_on_3[] = {
         &unit_hyper_patakuri, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {30.0f, 40.0f, -10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -574,7 +574,7 @@ BattleUnitSetup btlparty_gra_gra_01_03_on_3[] = {
         &unit_pansy, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {110.0f, 0.0f, 10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -613,7 +613,7 @@ BattleUnitSetup btlparty_gra_gra_01_04_off_1[] = {
         &unit_hyper_togekuri, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {50.0f, 0.0f, -10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -665,7 +665,7 @@ BattleUnitSetup btlparty_gra_gra_01_04_on_1[] = {
         &unit_hyper_togekuri, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {50.0f, 0.0f, -10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -717,7 +717,7 @@ BattleUnitSetup btlparty_gra_gra_01_04_on_2[] = {
         &unit_hyper_togekuri, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {30.0f, 0.0f, -10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -727,7 +727,7 @@ BattleUnitSetup btlparty_gra_gra_01_04_on_2[] = {
         &unit_hyper_togekuri, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {70.0f, 0.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -737,7 +737,7 @@ BattleUnitSetup btlparty_gra_gra_01_04_on_2[] = {
         &unit_hyper_patakuri, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {110.0f, 40.0f, 10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -779,7 +779,7 @@ BattleUnitSetup btlparty_gra_gra_01_04_on_3[] = {
         &unit_hyper_togekuri, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {50.0f, 0.0f, -10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -789,7 +789,7 @@ BattleUnitSetup btlparty_gra_gra_01_04_on_3[] = {
         &unit_hyper_kuriboo, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {90.0f, 0.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -799,7 +799,7 @@ BattleUnitSetup btlparty_gra_gra_01_04_on_3[] = {
         &unit_pansy, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {130.0f, 0.0f, 10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -828,7 +828,7 @@ BattleUnitSetup btlparty_gra_gra_03_01_off_1[] = {
         &unit_hyper_patakuri, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {70.0f, 40.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -870,7 +870,7 @@ BattleUnitSetup btlparty_gra_gra_03_01_off_2[] = {
         &unit_hyper_patakuri, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {50.0f, 40.0f, -10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -890,7 +890,7 @@ BattleUnitSetup btlparty_gra_gra_03_01_off_2[] = {
         &unit_pansy, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {130.0f, 0.0f, 10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -919,7 +919,7 @@ BattleUnitSetup btlparty_gra_gra_03_04_off_1[] = {
         &unit_pansy, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {70.0f, 0.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -961,7 +961,7 @@ BattleUnitSetup btlparty_gra_gra_03_04_off_2[] = {
         &unit_pansy, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {50.0f, 0.0f, -10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -1013,7 +1013,7 @@ BattleUnitSetup btlparty_gra_gra_03_04_off_3[] = {
         &unit_pansy, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {50.0f, 0.0f, -10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -1023,7 +1023,7 @@ BattleUnitSetup btlparty_gra_gra_03_04_off_3[] = {
         &unit_hyper_togekuri, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {90.0f, 0.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -1033,7 +1033,7 @@ BattleUnitSetup btlparty_gra_gra_03_04_off_3[] = {
         &unit_hyper_patakuri, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {130.0f, 40.0f, 10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -1062,7 +1062,7 @@ BattleUnitSetup btlparty_gra_gra_03_05_off_1[] = {
         &unit_pansy, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {30.0f, 0.0f, -10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -1082,7 +1082,7 @@ BattleUnitSetup btlparty_gra_gra_03_05_off_1[] = {
         &unit_pansy, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {110.0f, 0.0f, 10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -1124,7 +1124,7 @@ BattleUnitSetup btlparty_gra_gra_03_05_off_2[] = {
         &unit_pansy, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {50.0f, 0.0f, -10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -1176,7 +1176,7 @@ BattleUnitSetup btlparty_gra_gra_03_05_off_3[] = {
         &unit_pansy, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {30.0f, 0.0f, -10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -1196,7 +1196,7 @@ BattleUnitSetup btlparty_gra_gra_03_05_off_3[] = {
         &unit_hyper_patakuri, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {110.0f, 40.0f, 10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -1206,7 +1206,7 @@ BattleUnitSetup btlparty_gra_gra_03_05_off_3[] = {
         &unit_hyper_togekuri, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {150.0f, 0.0f, 20.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -1237,7 +1237,7 @@ BattleUnitSetup btlparty_gra_gra_04_02_off_1[] = {
         &unit_pansy, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {50.0f, 0.0f, -10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -1247,7 +1247,7 @@ BattleUnitSetup btlparty_gra_gra_04_02_off_1[] = {
         &unit_hyper_sinemon, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {90.0f, 0.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -1257,7 +1257,7 @@ BattleUnitSetup btlparty_gra_gra_04_02_off_1[] = {
         &unit_pansy, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {130.0f, 0.0f, 10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -1286,7 +1286,7 @@ BattleUnitSetup btlparty_gra_gra_04_02_off_2[] = {
         &unit_pansy, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {70.0f, 0.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -1296,7 +1296,7 @@ BattleUnitSetup btlparty_gra_gra_04_02_off_2[] = {
         &unit_hyper_sinemon, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {110.0f, 0.0f, 10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -1328,7 +1328,7 @@ BattleUnitSetup btlparty_gra_gra_04_02_off_3[] = {
         &unit_pansy, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {50.0f, 0.0f, -10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -1377,7 +1377,7 @@ BattleUnitSetup btlparty_gra_gra_05_01_off_1[] = {
         &unit_hyper_sinemon, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {70.0f, 0.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -1387,7 +1387,7 @@ BattleUnitSetup btlparty_gra_gra_05_01_off_1[] = {
         &unit_hyper_sinemon, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {110.0f, 0.0f, 10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -1418,7 +1418,7 @@ BattleUnitSetup btlparty_gra_gra_05_01_off_2[] = {
         &unit_hyper_sinemon, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {50.0f, 0.0f, -10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -1467,7 +1467,7 @@ BattleUnitSetup btlparty_gra_gra_05_03_off_1[] = {
         &unit_hyper_sinemon, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {50.0f, 0.0f, -10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -1487,7 +1487,7 @@ BattleUnitSetup btlparty_gra_gra_05_03_off_1[] = {
         &unit_hyper_sinemon, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {130.0f, 0.0f, 10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -1518,7 +1518,7 @@ BattleUnitSetup btlparty_gra_gra_05_03_off_2[] = {
         &unit_hyper_sinemon, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {50.0f, 0.0f, -10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -1570,7 +1570,7 @@ BattleUnitSetup btlparty_gra_gra_05_03_off_3[] = {
         &unit_hyper_sinemon, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {30.0f, 0.0f, -10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -1580,7 +1580,7 @@ BattleUnitSetup btlparty_gra_gra_05_03_off_3[] = {
         &unit_pansy, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {70.0f, 0.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -1590,7 +1590,7 @@ BattleUnitSetup btlparty_gra_gra_05_03_off_3[] = {
         &unit_pansy, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {110.0f, 0.0f, 10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -1600,7 +1600,7 @@ BattleUnitSetup btlparty_gra_gra_05_03_off_3[] = {
         &unit_hyper_sinemon, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {150.0f, 0.0f, 20.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork

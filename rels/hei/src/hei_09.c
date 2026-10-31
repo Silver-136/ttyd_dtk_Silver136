@@ -23,7 +23,7 @@ static BeroEntry bero_entry_data[] = {
     {
         "w_bero", // hitName
         0, 0, // type..sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -39,7 +39,7 @@ static BeroEntry bero_entry_data[] = {
     {
         "e_bero", // hitName
         0, 0, // type..sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -69,8 +69,8 @@ EVT_BEGIN(hei_09_init_evt)
     CALL(evt_npc_change_fbat_mode, 1)
     CALL(evt_map_playanim, STRING("mizu"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_map_set_tevcallback, 1, PTR(hei_test_water_tev))
-    CALL(evt_mapobj_flag_onoff, 0, 1, STRING("mizu"), MAP_OBJ_TEV_CALLBACK(1))
-    CALL(evt_mapobj_flag_onoff, 0, 0, STRING("mizu"), MAP_OBJ_FLAG_DISPLAY_LIST)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 1, STRING("mizu"), MAP_OBJ_TEV_CALLBACK(1))
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 0, STRING("mizu"), MAP_OBJ_FLAG_DISPLAY_LIST)
     RETURN
 EVT_END()
 

@@ -2,6 +2,7 @@
 // closing pictures before the return to the title.
 
 #include "version.h"
+#include "driver/fadedrv.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "libc_decls.h"
@@ -955,12 +956,12 @@ EVT_BEGIN(end_image_main_evt)
             END_LOOP
             SET_VALUE(GF(0), 1)
             DELETE_EVENT(LW(10))
-            CALL(evt_fade_entry, 10, 500, 0, 0, 0)
+            CALL(evt_fade_entry, FADE_OUT_BLACK, 500, 0, 0, 0)
             CALL(evt_fade_end_wait)
             CALL(evt_end_image_set_mode, 0)
             CALL(evt_end_image_set_alpha, LW(0))
             CALL(evt_end_image_set_overlay_alpha, LW(0))
-            CALL(evt_fade_entry, 9, 0, 0, 0, 0)
+            CALL(evt_fade_entry, FADE_IN_BLACK, 0, 0, 0, 0)
             CALL(evt_fade_end_wait)
             SET_VALUE(GW(10), 0)
             SPAWN_EVENT(PTR(end_return_title_evt))
@@ -997,7 +998,7 @@ EVT_BEGIN(end_return_title_evt)
 #endif
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT | PSND_SLOT(1), 2000)
-    CALL(evt_fade_set_mapchange_type, 1, 17, 2000, -1, -1)
+    CALL(evt_fade_set_mapchange_type, 1, FADE_OUT_WHITE, 2000, -1, -1)
     CALL(evt_seq_set_seq, SEQ_MAP_CHANGE, STRING("title"), 0)
     RETURN
 EVT_END()
@@ -1009,7 +1010,7 @@ EVT_BEGIN(end_00_init_evt)
     CALL(evt_party_set_pos, 0, 0, -1000, 0)
     CALL(evt_cam_letter_box_disable, 1)
     CALL(evt_cam3d_evt_set, 0, 0, 545, 0, 0, 0, 0, EASING_SINE_IN_OUT)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("pPlane1"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("pPlane1"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_bg_set_color, 0, 0, 0, 255)
     SET_VALUE(GF(10), 0)
     CALL(evt_end_staff_roll_init)

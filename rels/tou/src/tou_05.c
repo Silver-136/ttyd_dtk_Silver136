@@ -2,6 +2,7 @@
 // Connects tou_04, tou_06 (storage) and tou_13.
 
 #include "battle/battle_unit.h"
+#include "evt/evt_story.h"
 #include "evt/evt_cmd.h"
 #include "driver/msgdrv.h"
 #include "evt/evt_bero.h"
@@ -69,7 +70,7 @@ static EVT_BEGIN(evt_dakuto)
         IF_INT_EQUAL(GSWF_TOU_05_DUCT_GRATE_FELL, 0)
             CALL(evt_mapobj_get_position, STRING("haikikau_2"), LW(0), LW(1), LW(2))
             CALL(evt_snd_sfxon_3d, STRING("SFX_STG3_DUCT_KOUSHI_FALL1"), LW(0), LW(1), LW(2), 0)
-            CALL(evt_mapobj_flag_onoff, 1, 0, STRING("haikikau_2"), MAP_OBJ_FLAG_HIDDEN)
+            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("haikikau_2"), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_hitobj_onoff, STRING("a_haikikan"), 1, 1)
             WAIT_MS(300)
         END_IF
@@ -124,7 +125,7 @@ static BeroEntry bero_data[] = {
         "n_bero", // hitName
         1, // type
         4, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -141,7 +142,7 @@ static BeroEntry bero_data[] = {
     {
         "w_bero", // hitName
         0, 0, // type..sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -169,7 +170,7 @@ EVT_BEGIN(evt_takurami)
     CALL(evt_eff_fukidashi, FUKIDASHI_AT_PARTNER, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
     WAIT_MS(1000)
     CALL(evt_mario_set_pose, STRING("M_S_1"))
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("kami_2"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("kami_2"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_msg_print_party, STRING("stg3_tou_458"))
     WAIT_MS(300)
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)
@@ -262,7 +263,7 @@ EVT_END()
 EVT_BEGIN(evt_hiki_close)
     CALL(evt_cam_letter_box_disable, 1)
     CALL(evt_mario_key_onoff, 0)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("kami_2"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("kami_2"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_get_position, LW(0), LW(10), LW(11), LW(12))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG3_DRAWER_SHUT1"), LW(10), LW(11), LW(12), 0)
     SET_VALUE(LW(8), LW(0))
@@ -375,9 +376,9 @@ static EVT_BEGIN(talk_gans)
         CALL(evt_msg_print_add, 0, STRING("stg3_tou_53"))
         ELSE
         CALL(evt_msg_continue)
-        CALL(evt_fade_entry, 10, 500, 0, 0, 0)
+        CALL(evt_fade_entry, FADE_OUT_BLACK, 500, 0, 0, 0)
         WAIT_MS(500)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("kami_1"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("kami_1"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mario_set_pos, 20, 0, 0)
         CALL(evt_party_set_pos, 0, 0, 0, -30)
         CALL(evt_npc_set_position, STRING("ガンス"), 120, 0, 0)
@@ -386,7 +387,7 @@ static EVT_BEGIN(talk_gans)
         CALL(evt_party_set_dir_npc, 0, STRING("ガンス"))
         CALL(evt_cam3d_evt_set, 70, 113, 386, 70, 45, -8, 0, EASING_SINE_IN_OUT)
         WAIT_MS(1000)
-        CALL(evt_fade_entry, 9, 500, 0, 0, 0)
+        CALL(evt_fade_entry, FADE_IN_BLACK, 500, 0, 0, 0)
         WAIT_MS(500)
         CALL(evt_msg_print, 0, STRING("stg3_tou_55"), 0, 0)
         WAIT_MS(300)
@@ -770,7 +771,7 @@ EVT_BEGIN(evt_sensyu2)
     WAIT_MS(300)
     CALL(evt_eff_fukidashi, FUKIDASHI_AT_NPC, STRING("eff"), STRING("ガンス"), 0, 0, 0, 0, 0, 0, 0, 0)
     WAIT_MS(1500)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("kami_1"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("kami_1"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_msg_print, 0, STRING("stg3_tou_52"), 0, STRING("ガンス"))
     CALL(evt_msg_select, 0, STRING("stg3_tou_52_yn"))
     IF_INT_EQUAL(LW(0), 1)
@@ -871,7 +872,7 @@ static EVT_BEGIN(evt_1st_leagu)
     CALL(evt_npc_sound_data_set, STRING(/*"ガンス"*/"\x83\x4B\x83\x93\x83\x58"), EVT_NULLPTR, EVT_NULLPTR, EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(evt_npc_jump_position_nohit, STRING(/*"ガンス"*/"\x83\x4B\x83\x93\x83\x58"), LW(0), LW(1), LW(2), 300, 20)
     CALL(evt_npc_sound_data_reset, STRING(/*"ガンス"*/"\x83\x4B\x83\x93\x83\x58"))
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("kami_2"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("kami_2"), MAP_OBJ_FLAG_HIDDEN)
     WAIT_MS(300)
     SET_VALUE(LW(0), STRING("hikidasi_H"))
     SET_VALUE(LW(1), STRING("a_hikidasi_H"))
@@ -985,7 +986,7 @@ EVT_BEGIN(evt_nozoki)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         CALL(evt_snd_sfxon_3d, STRING("SFX_OFF3_VIEW_ROOM1"), LW(0), LW(1), LW(2), 0)
     END_INLINE_EVENT
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("kuro_P"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("kuro_P"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_img_wait_animend, STRING("img"))
     CALL(evt_img_onoff, STRING("img"), 0)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_20_12_JOLENES_SECRET)
@@ -1125,7 +1126,7 @@ EVT_BEGIN(evt_nozoki)
         CALL(evt_mapobj_clear_offscreen, 1, STRING("kuro_P"))
         CALL(evt_img_release, STRING("img"))
         CALL(evt_offscreen_delete, STRING("ofs"))
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("kuro_P"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("kuro_P"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_cam3d_evt_set, 0, 210, 345, 0, 185, -4, 1000, EASING_SINE_IN_OUT)
         WAIT_MS(1000)
         CALL(evt_msg_print_party, STRING("stg3_tou_326"))
@@ -1150,7 +1151,7 @@ EVT_BEGIN(evt_nozoki)
         CALL(evt_mapobj_clear_offscreen, 1, STRING("kuro_P"))
         CALL(evt_img_release, STRING("img"))
         CALL(evt_offscreen_delete, STRING("ofs"))
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("kuro_P"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("kuro_P"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     CALL(evt_cam3d_evt_off, 1000, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
@@ -1225,7 +1226,7 @@ EVT_BEGIN(tou_05_init_evt)
     CALL_CHILD(PTR(evt_bero_info_run))
     CALL(evt_map_playanim, STRING("anm_camera"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_item_entry, STRING("item01"), ITEM_STAR_PIECE, -135, 0, 105, ITEM_TYPE_STILL, GSWF_STARPIECE_57, 0)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("paifu"), MAP_OBJ_FLAG_CLIP)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("paifu"), MAP_OBJ_FLAG_CLIP)
     CALL(evt_bero_get_entername, LW(0))
     IF_STR_EQUAL(LW(0), STRING("fall"))
         CALL(evt_mario_key_onoff, 0)
@@ -1253,11 +1254,11 @@ EVT_BEGIN(tou_05_init_evt)
     END_IF
     CALL(evt_bero_get_entername, LW(0))
     IF_STR_EQUAL(LW(0), STRING("fall"))
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("kuro_Y"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("kuro_Y"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("kuro_P"), MAP_OBJ_FLAG_HIDDEN)
         ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("kuro_Y"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("kuro_P"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("kuro_Y"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("kuro_P"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG3_30_04_AIR_DUCT_EXIT)
         SET_VALUE(LW(0), STRING("hikidasi_N"))
@@ -1273,7 +1274,7 @@ EVT_BEGIN(tou_05_init_evt)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG3_03_GRUBBA)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_p_tukue"), 0, PTR(talk_gans), 0)
         ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("kami_1"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("kami_1"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_20_12_JOLENES_SECRET)
         CALL(evt_bero_get_entername, LW(0))
@@ -1315,7 +1316,7 @@ EVT_BEGIN(tou_05_init_evt)
         SET_VALUE(LW(0), 1)
         SPAWN_EVENT(PTR(evt_1st_leagu))
         ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("kami_2"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("kami_2"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG3_31_GRUBBAS_PLANS)
         CALL(evt_snd_bgmoff, PSND_FADEOUT)
@@ -1350,11 +1351,11 @@ EVT_BEGIN(tou_05_init_evt)
         END_IF
     END_SWITCH
     IF_INT_EQUAL(LF(0), 0)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("haikikau_1"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("haikikau_2"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("haikikau_1"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("haikikau_2"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_haikikan"), 1, 0)
         ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("haikikau_1"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("haikikau_1"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("haikikau_2"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)

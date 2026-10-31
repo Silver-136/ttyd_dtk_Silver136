@@ -112,7 +112,7 @@ static BeroEntry bero_data[] = {
         "n_bero_1", // hitName
         1, // type
         8, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         45, // length
@@ -130,7 +130,7 @@ static BeroEntry bero_data[] = {
         "n_bero_2", // hitName
         1, // type
         6, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -153,7 +153,7 @@ BeroEntry bero_data_nidome[] = {
         "n_bero_1", // hitName
         1, // type
         8, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         45, // length
@@ -477,9 +477,9 @@ EVT_BEGIN(evt_train_door)
 EVT_END()
 
 static EVT_BEGIN(evt_train)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("train_4"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("train_4"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("train_5"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("train_6"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("train_6"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -520,7 +520,7 @@ static EVT_BEGIN(evt_train)
     WAIT_MS(LW(1))
     CALL(evt_snd_sfxoff, LW(10))
     SET_VALUE(GF(15), 1)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("eki_03_S"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("eki_03_S"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("group614"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mario_cont_onoff, 0)
     CALL(evt_party_cont_onoff, 0, 0)
@@ -543,9 +543,9 @@ EVT_END()
 
 EVT_BEGIN(evt_train_nidome)
     IF_INT_EQUAL(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 0)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("train_4"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("train_5"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("train_6"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("train_4"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("train_5"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("train_6"), MAP_OBJ_FLAG_HIDDEN)
         ELSE
     END_IF
     CALL(evt_mario_key_onoff, 0)
@@ -593,7 +593,7 @@ EVT_BEGIN(evt_train_nidome)
     WAIT_MS(LW(1))
     CALL(evt_snd_sfxoff, LW(10))
     SET_VALUE(GF(15), 1)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("eki_03_S"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("eki_03_S"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("group614"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_cam_ctrl_onoff, 4, 0)
     CALL(evt_mario_cont_onoff, 0)
@@ -652,7 +652,7 @@ EVT_BEGIN(evt_hom_touchaku)
     END_INLINE_EVENT
     CALL_CHILD(hom_10_evt_resha_stop)
     WAIT_MS(2500)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("train_4"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("train_4"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_cam3d_evt_set, 458, 97, 366, 78, 110, 189, 3000, EASING_SINE_IN_OUT)
     LOOP(0)
         IF_INT_EQUAL(GW(0), 0)
@@ -661,7 +661,7 @@ EVT_BEGIN(evt_hom_touchaku)
         WAIT_FRAMES(1)
     END_LOOP
     WAIT_MS(1000)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("train_4"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("train_4"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_cam3d_evt_set, -810, 232, 628, -810, 137, 87, 0, EASING_SINE_IN_OUT)
     WAIT_MS(2000)
     CALL(evt_npc_flag_onoff, 1, STRING(/*"ポワン探偵"*/"\x83\x7C\x83\x8F\x83\x93\x92\x54\x92\xE3"), NPC_FLAG_INSTANT_TURN)
@@ -769,8 +769,8 @@ EVT_END()
 EVT_BEGIN(hom_00_init_evt)
     SET_VALUE(GF(15), 0)
 #ifdef VERSION_G8ME01
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("hasi_L"), MAP_OBJ_FLAG_CLIP)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("hasi_R"), MAP_OBJ_FLAG_CLIP)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("hasi_L"), MAP_OBJ_FLAG_CLIP)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("hasi_R"), MAP_OBJ_FLAG_CLIP)
 #endif
     CALL(evt_npc_setup, PTR(npc_data))
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG6_HOM1"))
@@ -780,9 +780,9 @@ EVT_BEGIN(hom_00_init_evt)
     CALL(evt_mobj_recovery_blk, STRING("mobj_recover"), 15, -125, 140, -170, 0, 0)
     IF_INT_EQUAL(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 0)
         CALL_CHILD(PTR(hom_10_evt_resha_right))
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("train_4"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("train_5"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("train_6"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("train_4"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("train_5"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("train_6"), MAP_OBJ_FLAG_HIDDEN)
         ELSE
         CALL_CHILD(PTR(hom_10_evt_resha_left))
     END_IF
@@ -798,9 +798,9 @@ EVT_BEGIN(hom_00_init_evt)
         END_IF
     END_IF
     CALL(evt_map_set_tevcallback, 2, PTR(sun_tev))
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("sun"), MAP_OBJ_TEV_CALLBACK(2))
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("sun"), MAP_OBJ_FLAG_DISPLAY_LIST)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("sun"), MAP_OBJ_FLAG_NO_COLOR_STAGE)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("sun"), MAP_OBJ_TEV_CALLBACK(2))
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("sun"), MAP_OBJ_FLAG_DISPLAY_LIST)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("sun"), MAP_OBJ_FLAG_NO_COLOR_STAGE)
     BEGIN_INLINE_EVENT
         CALL(test_glare)
     END_INLINE_EVENT
@@ -847,7 +847,7 @@ EVT_BEGIN(hom_00_init_evt)
         CALL(evt_map_playanim, STRING("n_1_door_open"), MAP_ANIM_PLAY_AT_END, 0)
     END_IF
     SPAWN_EVENT(PTR(evt_sub_mail_event))
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("train_2"), MAP_OBJ_FLAG_CLIP)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("train_2"), MAP_OBJ_FLAG_CLIP)
     RETURN
 EVT_END()
 

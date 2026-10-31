@@ -388,7 +388,7 @@ BattleUnitSetup btlparty_las_las_05_01[] = {
         &unit_karon, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {10.0f, 0.0f, -20.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -398,7 +398,7 @@ BattleUnitSetup btlparty_las_las_05_01[] = {
         &unit_karon, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {50.0f, 0.0f, -10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -408,7 +408,7 @@ BattleUnitSetup btlparty_las_las_05_01[] = {
         &unit_black_karon, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {90.0f, 0.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -418,7 +418,7 @@ BattleUnitSetup btlparty_las_las_05_01[] = {
         &unit_karon, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {130.0f, 0.0f, 10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -428,7 +428,7 @@ BattleUnitSetup btlparty_las_las_05_01[] = {
         &unit_karon, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {170.0f, 0.0f, 20.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -451,7 +451,7 @@ BattleUnitSetup btlparty_las_las_17_01_off_1[] = {
         &unit_honenoko, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {90.0f, 0.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -474,7 +474,7 @@ BattleUnitSetup btlparty_las_las_17_02_off_1[] = {
         &unit_red_honenoko, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {90.0f, 0.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -497,7 +497,7 @@ BattleUnitSetup btlparty_las_las_17_03_off_1[] = {
         &unit_karon, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {90.0f, 0.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -520,7 +520,7 @@ BattleUnitSetup btlparty_las_las_17_04_off_1[] = {
         &unit_black_karon, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {90.0f, 0.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -543,7 +543,7 @@ BattleUnitSetup btlparty_las_las_09_rampell[] = {
         &unit_boss_rampell_las, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {55.0f, 0.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -566,7 +566,7 @@ BattleUnitSetup btlparty_las_las_bunbaba[] = {
         &unit_boss_bunbaba, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {365.0f, 0.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -589,7 +589,7 @@ BattleUnitSetup btlparty_las_las_28_batten_leader[] = {
         &unit_boss_batten_leader, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {90.0f, 0.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -612,7 +612,7 @@ BattleUnitSetup btlparty_las_las_28_koopa[] = {
         &unit_boss_koopa, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {90.0f, 0.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -635,7 +635,7 @@ BattleUnitSetup btlparty_las_las_29_black_peach_1[] = {
         &unit_boss_black_peach, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {90.0f, 0.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -658,7 +658,7 @@ BattleUnitSetup btlparty_las_las_29_black_peach_2[] = {
         &unit_boss_black_peach, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {90.0f, 0.0f, 0.0f}, // position
         0, // hitOffsetX
         {1, 0, 0, 0}, // unitWork
@@ -681,7 +681,7 @@ BattleUnitSetup btlparty_las_las_01_01_off_1[] = {
         &unit_basabasa_chururu, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {70.0f, 130.0f, 0.0f}, // position
         0, // hitOffsetX
         {1, 0, 0, 0}, // unitWork
@@ -715,7 +715,7 @@ BattleUnitSetup btlparty_las_las_01_02_off_1[] = {
         &unit_basabasa_chururu, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {50.0f, 130.0f, -10.0f}, // position
         0, // hitOffsetX
         {1, 0, 0, 0}, // unitWork
@@ -725,7 +725,7 @@ BattleUnitSetup btlparty_las_las_01_02_off_1[] = {
         &unit_basabasa_chururu, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {90.0f, 130.0f, 0.0f}, // position
         0, // hitOffsetX
         {1, 0, 0, 0}, // unitWork
@@ -735,7 +735,7 @@ BattleUnitSetup btlparty_las_las_01_02_off_1[] = {
         &unit_basabasa_chururu, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {130.0f, 130.0f, 10.0f}, // position
         0, // hitOffsetX
         {1, 0, 0, 0}, // unitWork
@@ -759,7 +759,7 @@ BattleUnitSetup btlparty_las_las_01_03_off_1[] = {
         &unit_basabasa_chururu, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {30.0f, 130.0f, -10.0f}, // position
         0, // hitOffsetX
         {1, 0, 0, 0}, // unitWork
@@ -769,7 +769,7 @@ BattleUnitSetup btlparty_las_las_01_03_off_1[] = {
         &unit_basabasa_chururu, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {70.0f, 130.0f, 0.0f}, // position
         0, // hitOffsetX
         {1, 0, 0, 0}, // unitWork
@@ -789,7 +789,7 @@ BattleUnitSetup btlparty_las_las_01_03_off_1[] = {
         &unit_basabasa_chururu, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {150.0f, 130.0f, 20.0f}, // position
         0, // hitOffsetX
         {1, 0, 0, 0}, // unitWork
@@ -813,7 +813,7 @@ BattleUnitSetup btlparty_las_las_01_01_off_2[] = {
         &unit_basabasa_chururu, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {70.0f, 130.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -847,7 +847,7 @@ BattleUnitSetup btlparty_las_las_01_02_off_2[] = {
         &unit_basabasa_chururu, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {50.0f, 130.0f, -10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -857,7 +857,7 @@ BattleUnitSetup btlparty_las_las_01_02_off_2[] = {
         &unit_basabasa_chururu, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {90.0f, 130.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -867,7 +867,7 @@ BattleUnitSetup btlparty_las_las_01_02_off_2[] = {
         &unit_basabasa_chururu, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {130.0f, 130.0f, 10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -891,7 +891,7 @@ BattleUnitSetup btlparty_las_las_01_03_off_2[] = {
         &unit_basabasa_chururu, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {30.0f, 130.0f, -10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -901,7 +901,7 @@ BattleUnitSetup btlparty_las_las_01_03_off_2[] = {
         &unit_basabasa_chururu, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {70.0f, 130.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -921,7 +921,7 @@ BattleUnitSetup btlparty_las_las_01_03_off_2[] = {
         &unit_basabasa_chururu, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {150.0f, 130.0f, 20.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -945,7 +945,7 @@ BattleUnitSetup btlparty_las_las_02_01_off_1[] = {
         &unit_karon, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {70.0f, 0.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -979,7 +979,7 @@ BattleUnitSetup btlparty_las_las_02_02_off_1[] = {
         &unit_basabasa_chururu, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {50.0f, 130.0f, -10.0f}, // position
         0, // hitOffsetX
         {1, 0, 0, 0}, // unitWork
@@ -989,7 +989,7 @@ BattleUnitSetup btlparty_las_las_02_02_off_1[] = {
         &unit_karon, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {90.0f, 0.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -1023,7 +1023,7 @@ BattleUnitSetup btlparty_las_las_02_03_off_1[] = {
         &unit_karon, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {50.0f, 0.0f, -10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -1043,7 +1043,7 @@ BattleUnitSetup btlparty_las_las_02_03_off_1[] = {
         &unit_basabasa_chururu, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {130.0f, 130.0f, 10.0f}, // position
         0, // hitOffsetX
         {1, 0, 0, 0}, // unitWork
@@ -1067,7 +1067,7 @@ BattleUnitSetup btlparty_las_las_02_04_off_1[] = {
         &unit_karon, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {30.0f, 0.0f, -10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -1077,7 +1077,7 @@ BattleUnitSetup btlparty_las_las_02_04_off_1[] = {
         &unit_karon, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {70.0f, 0.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -1097,7 +1097,7 @@ BattleUnitSetup btlparty_las_las_02_04_off_1[] = {
         &unit_karon, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {150.0f, 0.0f, 20.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -1121,7 +1121,7 @@ BattleUnitSetup btlparty_las_las_02_05_off_1[] = {
         &unit_super_killer_cannon, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {70.0f, 0.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -1155,7 +1155,7 @@ BattleUnitSetup btlparty_las_las_02_06_off_1[] = {
         &unit_super_killer_cannon, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {70.0f, 0.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -1189,7 +1189,7 @@ BattleUnitSetup btlparty_las_las_02_99_off_1[] = {
         &unit_super_killer, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {70.0f, 40.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -1223,7 +1223,7 @@ BattleUnitSetup btlparty_las_las_03_01_off_1[] = {
         &unit_basabasa_chururu, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {90.0f, 130.0f, 0.0f}, // position
         0, // hitOffsetX
         {1, 0, 0, 0}, // unitWork
@@ -1247,7 +1247,7 @@ BattleUnitSetup btlparty_las_las_03_02_off_1[] = {
         &unit_basabasa_chururu, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {90.0f, 130.0f, 0.0f}, // position
         0, // hitOffsetX
         {1, 0, 0, 0}, // unitWork
@@ -1271,7 +1271,7 @@ BattleUnitSetup btlparty_las_las_03_03_off_1[] = {
         &unit_basabasa_chururu, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {90.0f, 130.0f, 0.0f}, // position
         0, // hitOffsetX
         {1, 0, 0, 0}, // unitWork
@@ -1295,7 +1295,7 @@ BattleUnitSetup btlparty_las_las_03_01_off_2[] = {
         &unit_basabasa_chururu, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {90.0f, 130.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -1319,7 +1319,7 @@ BattleUnitSetup btlparty_las_las_03_02_off_2[] = {
         &unit_basabasa_chururu, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {90.0f, 130.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -1343,7 +1343,7 @@ BattleUnitSetup btlparty_las_las_03_03_off_2[] = {
         &unit_basabasa_chururu, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {90.0f, 130.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -1367,7 +1367,7 @@ BattleUnitSetup btlparty_las_las_04_01_off_1[] = {
         &unit_phantom, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {90.0f, 0.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -1391,7 +1391,7 @@ BattleUnitSetup btlparty_las_las_06_01_off_1[] = {
         &unit_super_killer_cannon, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {70.0f, 0.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -1425,7 +1425,7 @@ BattleUnitSetup btlparty_las_las_06_02_off_1[] = {
         &unit_super_killer_cannon, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {70.0f, 0.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -1459,7 +1459,7 @@ BattleUnitSetup btlparty_las_las_06_03_off_1[] = {
         &unit_phantom, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {70.0f, 0.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -1493,7 +1493,7 @@ BattleUnitSetup btlparty_las_las_06_04_off_1[] = {
         &unit_phantom, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {30.0f, 0.0f, -10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -1547,7 +1547,7 @@ BattleUnitSetup btlparty_las_las_06_05_off_1[] = {
         &unit_super_killer_cannon, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {70.0f, 0.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -1581,7 +1581,7 @@ BattleUnitSetup btlparty_las_las_06_06_off_1[] = {
         &unit_super_killer_cannon, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {70.0f, 0.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -1615,7 +1615,7 @@ BattleUnitSetup btlparty_las_las_06_99_off_1[] = {
         &unit_super_killer, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {70.0f, 40.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -1649,7 +1649,7 @@ BattleUnitSetup btlparty_las_las_07_01_off_1[] = {
         &unit_phantom, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {50.0f, 0.0f, -10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -1693,7 +1693,7 @@ BattleUnitSetup btlparty_las_las_07_02_off_1[] = {
         &unit_karon, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {50.0f, 0.0f, -10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -1737,7 +1737,7 @@ BattleUnitSetup btlparty_las_las_07_03_off_1[] = {
         &unit_karon, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {50.0f, 0.0f, -10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -1781,7 +1781,7 @@ BattleUnitSetup btlparty_las_las_09_01_off_1[] = {
         &unit_wanwan, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {70.0f, 0.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -1815,7 +1815,7 @@ BattleUnitSetup btlparty_las_las_09_02_off_1[] = {
         &unit_wanwan, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {50.0f, 0.0f, -10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -1825,7 +1825,7 @@ BattleUnitSetup btlparty_las_las_09_02_off_1[] = {
         &unit_wanwan, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {90.0f, 0.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -1835,7 +1835,7 @@ BattleUnitSetup btlparty_las_las_09_02_off_1[] = {
         &unit_wanwan, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {130.0f, 0.0f, 10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -1859,7 +1859,7 @@ BattleUnitSetup btlparty_las_las_19_01_off_1[] = {
         &unit_super_mahorn, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {90.0f, 0.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -1883,7 +1883,7 @@ BattleUnitSetup btlparty_las_las_19_02_off_1[] = {
         &unit_super_mahorn, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {70.0f, 0.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -1917,7 +1917,7 @@ BattleUnitSetup btlparty_las_las_19_03_off_1[] = {
         &unit_super_mahorn, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {50.0f, 0.0f, -10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -1927,7 +1927,7 @@ BattleUnitSetup btlparty_las_las_19_03_off_1[] = {
         &unit_super_mahorn, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {90.0f, 0.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -1937,7 +1937,7 @@ BattleUnitSetup btlparty_las_las_19_03_off_1[] = {
         &unit_super_mahorn, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {130.0f, 0.0f, 10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -1961,7 +1961,7 @@ BattleUnitSetup btlparty_las_las_20_01_off_1[] = {
         &unit_super_mahorn, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {90.0f, 0.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -1985,7 +1985,7 @@ BattleUnitSetup btlparty_las_las_21_01_off_1[] = {
         &unit_wanwan, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {70.0f, 0.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -2019,7 +2019,7 @@ BattleUnitSetup btlparty_las_las_21_02_off_1[] = {
         &unit_wanwan, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {70.0f, 0.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -2053,7 +2053,7 @@ BattleUnitSetup btlparty_las_las_22_01_off_1[] = {
         &unit_super_mahorn, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {70.0f, 0.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -2087,7 +2087,7 @@ BattleUnitSetup btlparty_las_las_22_02_off_1[] = {
         &unit_phantom, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {30.0f, 0.0f, -10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -2141,7 +2141,7 @@ BattleUnitSetup btlparty_las_las_22_03_off_1[] = {
         &unit_wanwan, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {70.0f, 0.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -2151,7 +2151,7 @@ BattleUnitSetup btlparty_las_las_22_03_off_1[] = {
         &unit_phantom, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {110.0f, 0.0f, 10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -2175,7 +2175,7 @@ BattleUnitSetup btlparty_las_las_24_01_off_1[] = {
         &unit_wanwan, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {70.0f, 0.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -2185,7 +2185,7 @@ BattleUnitSetup btlparty_las_las_24_01_off_1[] = {
         &unit_super_mahorn, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {110.0f, 0.0f, 10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -2209,7 +2209,7 @@ BattleUnitSetup btlparty_las_las_25_01_off_1[] = {
         &unit_phantom, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {90.0f, 0.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -2233,7 +2233,7 @@ BattleUnitSetup btlparty_las_las_25_02_off_1[] = {
         &unit_phantom, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {50.0f, 0.0f, -10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -2277,7 +2277,7 @@ BattleUnitSetup btlparty_las_las_25_03_off_1[] = {
         &unit_phantom, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {30.0f, 0.0f, -10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -2307,7 +2307,7 @@ BattleUnitSetup btlparty_las_las_25_03_off_1[] = {
         &unit_super_mahorn, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {150.0f, 0.0f, 20.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -2331,7 +2331,7 @@ BattleUnitSetup btlparty_las_las_25_04_off_1[] = {
         &unit_phantom, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {70.0f, 0.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -2365,7 +2365,7 @@ BattleUnitSetup btlparty_las_las_25_05_off_1[] = {
         &unit_phantom, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {50.0f, 0.0f, -10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -2385,7 +2385,7 @@ BattleUnitSetup btlparty_las_las_25_05_off_1[] = {
         &unit_super_mahorn, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {130.0f, 0.0f, 10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -2409,7 +2409,7 @@ BattleUnitSetup btlparty_las_las_25_06_off_1[] = {
         &unit_phantom, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {50.0f, 0.0f, -10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -3463,7 +3463,7 @@ EVT_BEGIN(stg_08_1_init_sub_event)
     CALL(evt_eff, STRING("_hi2"), STRING("fire"), 3, LW(0), LW(1), LW(2), FLOAT(1.0f), 1000, 0, 0, 0, 0, 0, 0)
     CALL(evt_mapobj_get_position, STRING("hi3"), LW(0), LW(1), LW(2))
     CALL(evt_eff, STRING("_hi3"), STRING("fire"), 3, LW(0), LW(1), LW(2), FLOAT(1.0f), 1000, 0, 0, 0, 0, 0, 0)
-    CALL(evt_mapobj_flag_onoff, 0, 1, STRING("hi1"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 1, STRING("hi1"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 0, 1, STRING("hi2"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 0, 1, STRING("hi3"), MAP_OBJ_FLAG_HIDDEN)
     CALL(check_battle_end)
@@ -3483,12 +3483,12 @@ EVT_BEGIN(stg_08_6_init_sub_event)
     BEGIN_SIBLING_EVENT
         CALL(hi_fire_main)
     END_SIBLING_EVENT
-    CALL(evt_mapobj_flag_onoff, 0, 1, STRING("hi1"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 1, STRING("hi1"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 0, 1, STRING("hi2"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 0, 1, STRING("hi3"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 0, 1, STRING("hi4"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 0, 1, STRING("hi5"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 0, 1, STRING("hi6"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 1, STRING("hi4"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 1, STRING("hi5"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 1, STRING("hi6"), MAP_OBJ_FLAG_HIDDEN)
     CALL(check_battle_end)
     CALL(hi_fire_end)
     RETURN

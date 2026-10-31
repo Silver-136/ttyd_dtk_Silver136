@@ -1,6 +1,7 @@
 // The chapter title card ("telop") shown when a chapter starts.
 
 #include "driver/camdrv.h"
+#include "evt/evt_story.h"
 #include "driver/dispdrv.h"
 #include "driver/effdrv.h"
 #include "driver/msgdrv.h"
@@ -61,10 +62,10 @@ USER_FUNC(evt_telop_entry) {
         event->userdata[0] = 0;
         memset(wp, 0, sizeof(TelopWork));
         wp->id = evtGetValue(event, args[0]);
-        if (swGet(wp->id + 0x28)) {
+        if (swGet(wp->id + GSWF_TELOP_SHOWN_BASE)) {
             return EVT_RETURN_DONE;
         }
-        swSet(wp->id + 0x28);
+        swSet(wp->id + GSWF_TELOP_SHOWN_BASE);
     }
     switch (event->userdata[0]) {
     case 0:

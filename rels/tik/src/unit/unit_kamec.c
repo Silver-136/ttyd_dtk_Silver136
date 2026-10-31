@@ -624,7 +624,7 @@ static BattleUnitSetup entry_kamec = {
     &unit_kamec_bunsin, // mUnitKindParams
     ALLIANCE_ENEMY, // alliance
     {0}, // pad_05
-    0x4000004, // attackPhase
+    BATTLE_PHASE_ENEMY, // attackPhase
     {-1000.0f, -1000.0f, -1000.0f}, // position
     0, // hitOffsetX
     {0}, // unitWork

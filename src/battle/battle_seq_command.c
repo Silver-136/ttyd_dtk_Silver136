@@ -1029,7 +1029,7 @@ s32 _btlcmd_MakePartyTable(BattleWork* wp) {
             continue;
         }
         party = &pouch->partyData[BattleTransPartyId(kind)];
-        if (!(party->flags & 1)) {
+        if (!(party->flags & POUCH_PARTY_FLAG_JOINED)) {
             continue;
         }
         cmd->party[num].kind = kind;
@@ -1050,7 +1050,7 @@ s32 _btlcmd_MakePartyTable(BattleWork* wp) {
         } else if (party->currentHP <= 0) {
             cmd->party[num].enabled = 0;
         }
-        if (party->flags & 2) {
+        if (party->flags & UNIT_FLAG_MOVE_COLOR_CHANGING) {
             cmd->party[num].enabled = 0;
         }
         num++;
@@ -1180,7 +1180,7 @@ s32 BattleCommandInput(BattleWork* work) {
                 }
             }
             cmd->cancelled = 0;
-            wp->dispFlags |= 1;
+            wp->dispFlags |= BATTLE_DISP_FLAG_COMMAND_MENU;
             BtlUnit_SetCommandAnimPose(unit);
             if (unit->moveState >= 5 && unit->moveState <= 9) {
                 BattleStageOnLightInCommand();
@@ -1398,9 +1398,9 @@ s32 BattleCommandInput(BattleWork* work) {
         case 24:
         case 25:
             if (state == 24) {
-                ((void (*)(BattleWork*, s32))BattleCommandDisplay_ChangePartySelectMenuSetup)(wp, 1);
+                ((void (*)(BattleWork*, s32))BattleCommandDisplay_ChangePartySelectMenuSetup)(wp, TRUE);
             } else {
-                ((void (*)(BattleWork*, s32))BattleCommandDisplay_ChangePartySelectMenuSetup)(wp, 0);
+                ((void (*)(BattleWork*, s32))BattleCommandDisplay_ChangePartySelectMenuSetup)(wp, FALSE);
             }
             cmd->state = 26;
             _commandRestoreRec();
@@ -1426,7 +1426,7 @@ s32 BattleCommandInput(BattleWork* work) {
         case 29:
             _btlcmd_SetAttackEvent(unit, cmd);
             cmd->flags &= ~CMD_MENU_ENEMY_HP;
-            wp->dispFlags &= ~1;
+            wp->dispFlags &= ~BATTLE_DISP_FLAG_COMMAND_MENU;
             BattleStageOffLightInCommand(0, 0);
             return 1;
         }
@@ -2620,7 +2620,7 @@ void _btlcmd_SetAttackEvent(BattleUnit* unit, BattleCommand* cmd) {
         } else {
             BtlActRec_AddCount(&wp->actRecord.partnerAudienceAttacks);
         }
-        if (wp->lectureFlags & 1) {
+        if (wp->lectureFlags & LECTURE_FLAG_CONTINUE_WINDOW) {
             msgWindow_Continue(wp->lectureWindowId);
         }
         break;

@@ -119,7 +119,7 @@ static BeroEntry bero_entry_data[] = {
         "e_bero_1", // hitName
         1, // type
         12, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -137,7 +137,7 @@ static BeroEntry bero_entry_data[] = {
         "e_bero_2", // hitName
         1, // type
         12, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -155,7 +155,7 @@ static BeroEntry bero_entry_data[] = {
         "w_bero", // hitName
         1, // type
         12, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -601,7 +601,7 @@ EVT_BEGIN(gon_08_init_evt)
     CALL_CHILD(PTR(init_0))
     CALL(evt_mobj_switch_float_blk, STRING("sw_0"), 0, 100, -185, STRING("blk_0"), 0, PTR(main_0), LSWF_GON_08_FLOAT_BLOCK_MOVED)
     CALL(evt_mobj_flag_onoff, 1, STRING("blk_0"), MOBJ_FLAG_NO_CULL)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("fuyu_boxS"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("fuyu_boxS"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_hitobj_onoff, STRING("a_fuyu_box"), 1, 0)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG1_15_02_LOCK_3)
         CALL(evt_mobj_lock, STRING("mobj_lock00"), 15, 240, 710, 0, 270, PTR(evt_chk), PTR(evt_unlock), GSWF_GON_08_DOOR_UNLOCKED)

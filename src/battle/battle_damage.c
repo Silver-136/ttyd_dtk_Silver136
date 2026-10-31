@@ -602,7 +602,7 @@ skip:
         return 0;
     }
     if (flags & DAMAGE_RESULT_FINAL_HIT) {
-        if ((weapon->special & 0x8000) || !(target->mAttributeFlags & 0x100)) {
+        if ((weapon->special & SPECIAL_FORCE_RESULT_10000) || !(target->mAttributeFlags & UNIT_ATTR_NO_LAST_HIT_RESULT)) {
             *result |= 0x10000;
         }
     }
@@ -644,8 +644,8 @@ s32 BattleCalculateFpDamage(BattleUnit* attacker, BattleUnit* target, BattleUnit
     if (damage < 0) {
         damage = 0;
     }
-    if (damage > 0 && (*resultFlags & 0xFF) == DAMAGE_CODE_NO_DAMAGE) {
-        *resultFlags = (*resultFlags & ~0xFF) | DAMAGE_CODE_NORMAL;
+    if (damage > 0 && (*resultFlags & DAMAGE_HIT_MASK) == DAMAGE_CODE_NO_DAMAGE) {
+        *resultFlags = (*resultFlags & ~DAMAGE_HIT_MASK) | DAMAGE_CODE_NORMAL;
     }
     return damage;
 }
@@ -1680,13 +1680,13 @@ s32 BattleCheckDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPart* 
                 status = BattleSetStatusDamageFromWeapon(attacker, target, part, weapon, flags);
             }
         }
-        if ((result & 0xFF) == DAMAGE_CODE_NO_DAMAGE && pierce) {
+        if ((result & DAMAGE_HIT_MASK) == DAMAGE_CODE_NO_DAMAGE && pierce) {
             result = flags | DAMAGE_CODE_NORMAL;
         }
-        if ((result & 0xFF) == DAMAGE_CODE_NO_DAMAGE && (weapon->damagePattern == ATTACKPATTERN_ULTRA_HAMMER_FINISH || weapon->damagePattern == ATTACKPATTERN_NO_DAMAGE_FINISH)) {
+        if ((result & DAMAGE_HIT_MASK) == DAMAGE_CODE_NO_DAMAGE && (weapon->damagePattern == ATTACKPATTERN_ULTRA_HAMMER_FINISH || weapon->damagePattern == ATTACKPATTERN_NO_DAMAGE_FINISH)) {
             result = flags | DAMAGE_CODE_NORMAL;
         }
-        if ((result & 0xFF) == DAMAGE_CODE_NO_DAMAGE && status) {
+        if ((result & DAMAGE_HIT_MASK) == DAMAGE_CODE_NO_DAMAGE && status) {
             if (status & STATUS_RESULT_TIMED) {
                 result = flags | DAMAGE_CODE_NORMAL;
             } else {
@@ -1810,7 +1810,7 @@ void BattleAttackDeclare(s32* unitIdx, s32* partIdx) {
     s32 n;
 
     wp = _battleWorkPointer;
-    for (i = 0; i < 64; i++) {
+    for (i = 0; i < BATTLE_UNIT_MAX; i++) {
         if (i == *unitIdx) {
             continue;
         }
@@ -1842,7 +1842,7 @@ void BattleAttackDeclare(s32* unitIdx, s32* partIdx) {
             break;
         }
     }
-    if (i < 64) {
+    if (i < BATTLE_UNIT_MAX) {
         BattleGetUnitPtr(wp, *unitIdx)->damagePattern = ATTACKPATTERN_NULL;
         BattleRunHitEvent(BattleGetUnitPtr(wp, *unitIdx), DAMAGE_RESULT_GUARD_RETURN | DAMAGE_CODE_PROTECTED);
         BattleGetUnitPtr(wp, *unitIdx)->mTokenFlags |= kProtectedByBodyguard;
@@ -1870,7 +1870,7 @@ void __declare(s32 unitIdx, s32 partIdx, s32* outUnit, s32* outPart) {
     wp = _battleWorkPointer;
     *outUnit = -1;
     *outPart = 0;
-    for (i = 0; i < 64; i++) {
+    for (i = 0; i < BATTLE_UNIT_MAX; i++) {
         if (i == unitIdx) {
             continue;
         }
@@ -1902,7 +1902,7 @@ void __declare(s32 unitIdx, s32 partIdx, s32* outUnit, s32* outPart) {
             break;
         }
     }
-    if (i < 64) {
+    if (i < BATTLE_UNIT_MAX) {
         BattleGetUnitPtr(wp, unitIdx)->damagePattern = ATTACKPATTERN_NULL;
         BattleRunHitEvent(BattleGetUnitPtr(wp, unitIdx), DAMAGE_RESULT_GUARD_RETURN | DAMAGE_CODE_PROTECTED);
         BattleGetUnitPtr(wp, unitIdx)->mTokenFlags |= kProtectedByBodyguard;

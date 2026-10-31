@@ -113,7 +113,7 @@ const BattleWeapon weapon_lucky_start = {
     NULL, // acHelpMsg
     SPECIAL_CANNOT_MISS | SPECIAL_IGNORE_VULNERABILITY | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
-    0x80002004, // targetWeightFlags
+    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, // poisonStrength..confuseTime
     100, // electricChance
@@ -219,7 +219,7 @@ void BattleCheckAllPinchStatus(BattleWork* wp, BOOL noAudience) {
     BOOL alert;
     int i;
 
-    for (i = 0; i < 64; i++) {
+    for (i = 0; i < BATTLE_UNIT_MAX; i++) {
         unit = BattleGetUnitPtr(wp, i);
         if (unit) {
             BtlUnit_CheckPinchStatus(unit, noAudience);
@@ -227,7 +227,7 @@ void BattleCheckAllPinchStatus(BattleWork* wp, BOOL noAudience) {
     }
 
     alert = FALSE;
-    for (i = 0; i < 64; i++) {
+    for (i = 0; i < BATTLE_UNIT_MAX; i++) {
         unit = BattleGetUnitPtr(wp, i);
         if (unit) {
             if ((unit->mStatusFlags & UNIT_STATUS_FLAG_PERIL) &&
@@ -255,7 +255,7 @@ void BattleCheckAllPinchStatus(BattleWork* wp, BOOL noAudience) {
         }
     } else {
         alert = FALSE;
-        for (i = 0; i < 64; i++) {
+        for (i = 0; i < BATTLE_UNIT_MAX; i++) {
             unit = BattleGetUnitPtr(wp, i);
             if (unit) {
                 if ((unit->mStatusFlags & UNIT_STATUS_FLAG_DANGER) &&
@@ -402,7 +402,7 @@ void btlseqFirstAct(BattleWork* wp) {
                         wp->ruleDispTimer = 0;
                         evtEntry(_default_haikei_set_entry_event, 10, 0);
                         info = (u8*)wp->fbatInfo->setup;
-                        for (i = 0; i < 64; i++) {
+                        for (i = 0; i < BATTLE_UNIT_MAX; i++) {
                             unit = BattleGetUnitPtr(wp, i);
                             if (unit && unit->entryEventCode) {
                                 if ((((NpcBattleInfo*)info)->battleFlags & NPC_BATTLE_NO_PARTY_ENTRY) && (unit->currentKind == UNIT_MARIO || (unit->currentKind >= TYPE_PARTNER_MIN && unit->currentKind < TYPE_PARTNER_MAX))) {
@@ -849,7 +849,7 @@ void btlseqTurn(BattleWork* wp) {
             break;
 
         case 0x3000012:
-            for (i = 0; i < 64; i++) {
+            for (i = 0; i < BATTLE_UNIT_MAX; i++) {
                 unit = BattleGetUnitPtr(wp, i);
                 ret = BtlUnit_CheckRecoveryStatus(unit, STATUS_SLEEP);
                 sfx |= ret;
@@ -878,7 +878,7 @@ void btlseqTurn(BattleWork* wp) {
             break;
 
         case 0x3000014:
-            for (i = 0; i < 64; i++) {
+            for (i = 0; i < BATTLE_UNIT_MAX; i++) {
                 unit = BattleGetUnitPtr(wp, i);
                 ret = BtlUnit_CheckRecoveryStatus(unit, STATUS_STOP);
                 sfx |= ret;
@@ -906,7 +906,7 @@ void btlseqTurn(BattleWork* wp) {
             break;
 
         case 0x3000016:
-            for (i = 0; i < 64; i++) {
+            for (i = 0; i < BATTLE_UNIT_MAX; i++) {
                 unit = BattleGetUnitPtr(wp, i);
                 ret = BtlUnit_CheckRecoveryStatus(unit, STATUS_DIZZY);
                 sfx |= ret;
@@ -934,7 +934,7 @@ void btlseqTurn(BattleWork* wp) {
             break;
 
         case 0x3000018:
-            for (i = 0; i < 64; i++) {
+            for (i = 0; i < BATTLE_UNIT_MAX; i++) {
                 unit = BattleGetUnitPtr(wp, i);
                 ret = BtlUnit_CheckRecoveryStatus(unit, STATUS_CONFUSE);
                 sfx |= ret;
@@ -962,7 +962,7 @@ void btlseqTurn(BattleWork* wp) {
             break;
 
         case 0x300001A:
-            for (i = 0; i < 64; i++) {
+            for (i = 0; i < BATTLE_UNIT_MAX; i++) {
                 unit = BattleGetUnitPtr(wp, i);
                 ret = BtlUnit_CheckRecoveryStatus(unit, STATUS_ELECTRIC);
                 sfx |= ret;
@@ -990,7 +990,7 @@ void btlseqTurn(BattleWork* wp) {
             break;
 
         case 0x300001C:
-            for (i = 0; i < 64; i++) {
+            for (i = 0; i < BATTLE_UNIT_MAX; i++) {
                 unit = BattleGetUnitPtr(wp, i);
                 ret = BtlUnit_CheckRecoveryStatus(unit, STATUS_DODGY);
                 sfx |= ret;
@@ -1018,7 +1018,7 @@ void btlseqTurn(BattleWork* wp) {
             break;
 
         case 0x300001E:
-            for (i = 0; i < 64; i++) {
+            for (i = 0; i < BATTLE_UNIT_MAX; i++) {
                 unit = BattleGetUnitPtr(wp, i);
                 ret = BtlUnit_CheckRecoveryStatus(unit, STATUS_BURN);
                 sfx |= ret;
@@ -1049,7 +1049,7 @@ void btlseqTurn(BattleWork* wp) {
                 // FAKE: block-local unit shadowing the function's; using the function's unit changes the object
                 BattleUnit *unit;
                 sfxName = "SFX_CONDITION_BREAK_ICE1";
-                for (i = 0; i < 64; i++) {
+                for (i = 0; i < BATTLE_UNIT_MAX; i++) {
                     unit = BattleGetUnitPtr(wp, i);
                     if (BtlUnit_CheckRecoveryStatus(unit, STATUS_FREEZE)) {
                         if (!BtlUnit_CheckShadowGuard(unit)) {
@@ -1075,7 +1075,7 @@ void btlseqTurn(BattleWork* wp) {
             }
 
         case 0x3000022:
-            for (i = 0; i < 64; i++) {
+            for (i = 0; i < BATTLE_UNIT_MAX; i++) {
                 unit = BattleGetUnitPtr(wp, i);
                 ret = BtlUnit_CheckRecoveryStatus(unit, STATUS_HUGE);
                 sfx |= ret;
@@ -1103,7 +1103,7 @@ void btlseqTurn(BattleWork* wp) {
             break;
 
         case 0x3000024:
-            for (i = 0; i < 64; i++) {
+            for (i = 0; i < BATTLE_UNIT_MAX; i++) {
                 unit = BattleGetUnitPtr(wp, i);
                 ret = BtlUnit_CheckRecoveryStatus(unit, STATUS_TINY);
                 sfx |= ret;
@@ -1131,7 +1131,7 @@ void btlseqTurn(BattleWork* wp) {
             break;
 
         case 0x3000026:
-            for (i = 0; i < 64; i++) {
+            for (i = 0; i < BATTLE_UNIT_MAX; i++) {
                 unit = BattleGetUnitPtr(wp, i);
                 ret = BtlUnit_CheckRecoveryStatus(unit, STATUS_POISON);
                 sfx |= ret;
@@ -1159,7 +1159,7 @@ void btlseqTurn(BattleWork* wp) {
             break;
 
         case 0x3000028:
-            for (i = 0; i < 64; i++) {
+            for (i = 0; i < BATTLE_UNIT_MAX; i++) {
                 unit = BattleGetUnitPtr(wp, i);
                 ret = BtlUnit_CheckRecoveryStatus(unit, STATUS_ATTACK_UP);
                 sfx |= ret;
@@ -1187,7 +1187,7 @@ void btlseqTurn(BattleWork* wp) {
             break;
 
         case 0x300002A:
-            for (i = 0; i < 64; i++) {
+            for (i = 0; i < BATTLE_UNIT_MAX; i++) {
                 unit = BattleGetUnitPtr(wp, i);
                 ret = BtlUnit_CheckRecoveryStatus(unit, STATUS_ATTACK_DOWN);
                 sfx |= ret;
@@ -1215,7 +1215,7 @@ void btlseqTurn(BattleWork* wp) {
             break;
 
         case 0x300002C:
-            for (i = 0; i < 64; i++) {
+            for (i = 0; i < BATTLE_UNIT_MAX; i++) {
                 unit = BattleGetUnitPtr(wp, i);
                 ret = BtlUnit_CheckRecoveryStatus(unit, STATUS_DEFENSE_UP);
                 sfx |= ret;
@@ -1243,7 +1243,7 @@ void btlseqTurn(BattleWork* wp) {
             break;
 
         case 0x300002E:
-            for (i = 0; i < 64; i++) {
+            for (i = 0; i < BATTLE_UNIT_MAX; i++) {
                 unit = BattleGetUnitPtr(wp, i);
                 ret = BtlUnit_CheckRecoveryStatus(unit, STATUS_DEFENSE_DOWN);
                 sfx |= ret;
@@ -1271,7 +1271,7 @@ void btlseqTurn(BattleWork* wp) {
             break;
 
         case 0x3000030:
-            for (i = 0; i < 64; i++) {
+            for (i = 0; i < BATTLE_UNIT_MAX; i++) {
                 unit = BattleGetUnitPtr(wp, i);
                 ret = BtlUnit_CheckRecoveryStatus(unit, STATUS_ALLERGIC);
                 sfx |= ret;
@@ -1299,7 +1299,7 @@ void btlseqTurn(BattleWork* wp) {
             break;
 
         case 0x3000032:
-            for (i = 0; i < 64; i++) {
+            for (i = 0; i < BATTLE_UNIT_MAX; i++) {
                 unit = BattleGetUnitPtr(wp, i);
                 if (unit) {
                     ret = BtlUnit_CheckRecoveryStatus(unit, STATUS_HP_REGEN);
@@ -1329,7 +1329,7 @@ void btlseqTurn(BattleWork* wp) {
             break;
 
         case 0x3000034:
-            for (i = 0; i < 64; i++) {
+            for (i = 0; i < BATTLE_UNIT_MAX; i++) {
                 unit = BattleGetUnitPtr(wp, i);
                 if (unit) {
                     ret = BtlUnit_CheckRecoveryStatus(unit, STATUS_FP_REGEN);
@@ -1359,7 +1359,7 @@ void btlseqTurn(BattleWork* wp) {
             break;
 
         case 0x3000036:
-            for (i = 0; i < 64; i++) {
+            for (i = 0; i < BATTLE_UNIT_MAX; i++) {
                 unit = BattleGetUnitPtr(wp, i);
                 if (unit) {
                     ret = BtlUnit_CheckRecoveryStatus(unit, STATUS_INVISIBLE);
@@ -1389,7 +1389,7 @@ void btlseqTurn(BattleWork* wp) {
             break;
 
         case 0x3000038:
-            for (i = 0; i < 64; i++) {
+            for (i = 0; i < BATTLE_UNIT_MAX; i++) {
                 unit = BattleGetUnitPtr(wp, i);
                 if (unit) {
                     ret = BtlUnit_CheckRecoveryStatus(unit, STATUS_FAST);
@@ -1419,7 +1419,7 @@ void btlseqTurn(BattleWork* wp) {
             break;
 
         case 0x300003A:
-            for (i = 0; i < 64; i++) {
+            for (i = 0; i < BATTLE_UNIT_MAX; i++) {
                 unit = BattleGetUnitPtr(wp, i);
                 if (unit) {
                     ret = BtlUnit_CheckRecoveryStatus(unit, STATUS_SLOW);
@@ -1450,7 +1450,7 @@ void btlseqTurn(BattleWork* wp) {
             break;
 
         case 0x300003C:
-            for (i = 0; i < 64; i++) {
+            for (i = 0; i < BATTLE_UNIT_MAX; i++) {
                 unit = BattleGetUnitPtr(wp, i);
                 if (unit) {
                     ret = BtlUnit_CheckRecoveryStatus(unit, STATUS_PAYBACK);
@@ -1480,7 +1480,7 @@ void btlseqTurn(BattleWork* wp) {
             break;
 
         case 0x300003E:
-            for (i = 0; i < 64; i++) {
+            for (i = 0; i < BATTLE_UNIT_MAX; i++) {
                 unit = BattleGetUnitPtr(wp, i);
                 if (unit) {
                     ret = BtlUnit_CheckRecoveryStatus(unit, STATUS_HOLD_FAST);
@@ -1510,7 +1510,7 @@ void btlseqTurn(BattleWork* wp) {
             break;
 
         case 0x3000006:
-            for (i = 0; i < 64; i++) {
+            for (i = 0; i < BATTLE_UNIT_MAX; i++) {
                 unit = BattleGetUnitPtr(wp, i);
                 if ((unit && (!BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL))) && (unit->currentHp > 0)) {
                     BtlUnit_GetStatus(unit, STATUS_POISON, &turns, &strength);
@@ -1532,7 +1532,7 @@ void btlseqTurn(BattleWork* wp) {
             break;
 
         case 0x3000008:
-            for (i = 0; i < 64; i++) {
+            for (i = 0; i < BATTLE_UNIT_MAX; i++) {
                 unit = BattleGetUnitPtr(wp, i);
                 if ((unit && (!BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL))) && (unit->currentHp > 0)) {
                     BtlUnit_GetStatus(unit, STATUS_BURN, &turns, &strength);
@@ -1558,7 +1558,7 @@ void btlseqTurn(BattleWork* wp) {
             switch (wp->turnSubSeq) {
                 case 0:
                     wp->turnSubSeq++;
-                    for (i = 0; i < 64; i++) {
+                    for (i = 0; i < BATTLE_UNIT_MAX; i++) {
                         unit = BattleGetUnitPtr(wp, i);
                         if ((unit && (!BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL))) && (unit->currentHp > 0)) {
                             BtlUnit_GetStatus(unit, STATUS_BURN, &turns, &strength);
@@ -1570,7 +1570,7 @@ void btlseqTurn(BattleWork* wp) {
 
                 case 1:
                     done = 1;
-                    for (i = 0; i < 64; i++) {
+                    for (i = 0; i < BATTLE_UNIT_MAX; i++) {
                         unit = BattleGetUnitPtr(wp, i);
                         if (unit && BSE_TurnFirstProcessEffectMain(unit)) {
                             done = 0;
@@ -1597,7 +1597,7 @@ void btlseqTurn(BattleWork* wp) {
             break;
 
         case 0x300000A:
-            for (i = 0; i < 64; i++) {
+            for (i = 0; i < BATTLE_UNIT_MAX; i++) {
                 unit = BattleGetUnitPtr(wp, i);
                 if ((unit && (!BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL))) && (unit->currentHp > 0)) {
                     BtlUnit_GetStatus(unit, STATUS_HP_REGEN, &turns, &strength);
@@ -1636,7 +1636,7 @@ void btlseqTurn(BattleWork* wp) {
             break;
 
         case 0x300000C:
-            for (i = 0; i < 64; i++) {
+            for (i = 0; i < BATTLE_UNIT_MAX; i++) {
                 unit = BattleGetUnitPtr(wp, i);
                 if ((unit && (!BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL))) && (unit->currentHp > 0)) {
                     BtlUnit_GetStatus(unit, STATUS_FP_REGEN, &turns, &strength);
@@ -1672,7 +1672,7 @@ void btlseqTurn(BattleWork* wp) {
                 btlseqTurn(wp);
                 break;
             }
-            for (i = 0; i < 64; i++) {
+            for (i = 0; i < BATTLE_UNIT_MAX; i++) {
                 unit = BattleGetUnitPtr(wp, i);
                 if ((unit && (!BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL))) && (unit->currentHp > 0)) {
                     n = 0;
@@ -1717,7 +1717,7 @@ void btlseqTurn(BattleWork* wp) {
                 btlseqTurn(wp);
                 break;
             }
-            for (i = 0; i < 64; i++) {
+            for (i = 0; i < BATTLE_UNIT_MAX; i++) {
                 unit = BattleGetUnitPtr(wp, i);
                 if ((unit && (!BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL))) && (unit->currentHp > 0)) {
                     n = 0;
@@ -1782,7 +1782,7 @@ void btlseqTurn(BattleWork* wp) {
 
         case 0x3000046:
 #ifdef VERSION_G8ME01
-            for (i = 0; i < 64; i++) {
+            for (i = 0; i < BATTLE_UNIT_MAX; i++) {
                 unit = BattleGetUnitPtr(wp, i);
                 if (unit && !BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL) && unit->currentHp > 0 && unit->usCommandDisabled[0]) {
                     unit->usCommandDisabled[0]--;
@@ -1800,7 +1800,7 @@ void btlseqTurn(BattleWork* wp) {
 
         case 0x3000048:
 #ifdef VERSION_G8ME01
-            for (i = 0; i < 64; i++) {
+            for (i = 0; i < BATTLE_UNIT_MAX; i++) {
                 unit = BattleGetUnitPtr(wp, i);
                 if (unit && !BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL) && unit->currentHp > 0 && unit->usCommandDisabled[1]) {
                     unit->usCommandDisabled[1]--;
@@ -1823,7 +1823,7 @@ void btlseqTurn(BattleWork* wp) {
 
         case 0x300004B:
             BattleIncSeq(wp, SEQ_TURN);
-            BattleSetSeq(wp, SEQ_PHASE, 0x4000000);
+            BattleSetSeq(wp, SEQ_PHASE, BATTLE_PHASE_INIT);
             break;
 
         case 0x300004C:
@@ -1871,18 +1871,18 @@ void _rule_disp(CameraId cameraId, void* param) {
  */
 void btlseqPhase(BattleWork* wp) {
     switch (BattleGetSeq(wp, SEQ_PHASE)) {
-        case 0x4000000:
+        case BATTLE_PHASE_INIT:
             BattleIncSeq(wp, SEQ_PHASE);
             BattleSetSeq(wp, SEQ_MOVE, 0x5000000);
             break;
-        case 0x4000001:
-        case 0x4000002:
-        case 0x4000003:
-        case 0x4000004:
-        case 0x4000005:
+        case BATTLE_PHASE_BEFORE_PLAYER:
+        case BATTLE_PHASE_PLAYER:
+        case BATTLE_PHASE_AFTER_PLAYER:
+        case BATTLE_PHASE_ENEMY:
+        case BATTLE_PHASE_AFTER_ENEMY:
             btlseqMove(wp);
             break;
-        case 0x4000006:
+        case BATTLE_PHASE_END:
             BattleIncSeq(wp, SEQ_TURN);
             BattleSetSeq(wp, SEQ_PHASE, 0x4000000);
             break;
@@ -1916,7 +1916,7 @@ void btlseqMove(BattleWork* wp) {
             case 0x5000002:
                 pouch = pouchGetPtr();
                 mario = BattleGetMarioPtr(wp);
-                if (pouch->mMerleeNextCurseType != 2 || BattleGetSeq(wp, SEQ_PHASE) != 0x4000004) {
+                if (pouch->mMerleeNextCurseType != 2 || BattleGetSeq(wp, SEQ_PHASE) != BATTLE_PHASE_ENEMY) {
                     BattleIncSeq(wp, SEQ_MOVE);
                     BattleIncSeq(wp, SEQ_MOVE);
                     loop = TRUE;
@@ -1937,7 +1937,7 @@ void btlseqMove(BattleWork* wp) {
                 loop = TRUE;
                 break;
             case 0x5000004:
-                for (j = 0; j < 64; j++) {
+                for (j = 0; j < BATTLE_UNIT_MAX; j++) {
                     unit = BattleGetUnitPtr(wp, j);
                     if (unit && unit->unisonPhaseEventCode) {
                         BattleRunPhaseEvent(unit, TRUE);
@@ -1954,7 +1954,7 @@ void btlseqMove(BattleWork* wp) {
                 loop = TRUE;
                 break;
             case 0x5000006:
-                for (i = 0; i < 64; i++) {
+                for (i = 0; i < BATTLE_UNIT_MAX; i++) {
                     if (wp->phaseEvtTable[i].unitId != -1) {
                         unit = BattleGetUnitPtr(wp, wp->phaseEvtTable[i].unitId);
                         if (unit && unit->phaseEventCode) {
@@ -1962,7 +1962,7 @@ void btlseqMove(BattleWork* wp) {
                         }
                     }
                 }
-                if (i < 64) {
+                if (i < BATTLE_UNIT_MAX) {
                     BattleRunPhaseEvent(unit, FALSE);
                     wp->phaseEvtTable[i].unitId = -1;
                     BattleIncSeq(wp, SEQ_MOVE);
@@ -1985,7 +1985,7 @@ void btlseqMove(BattleWork* wp) {
                 break;
             case 0x5000008:
                 memset(&wp->impendingBonuses, 0, sizeof(wp->impendingBonuses));
-                for (i = 0; i < 64; i++) {
+                for (i = 0; i < BATTLE_UNIT_MAX; i++) {
                     unit = BattleGetUnitPtr(wp, i);
                     if (unit) {
                         unit->mTokenFlags &= 0x80002000;
@@ -2000,7 +2000,7 @@ void btlseqMove(BattleWork* wp) {
                         unit->superguardedCount = 0;
                     }
                 }
-                for (i = 0; i < 64; i++) {
+                for (i = 0; i < BATTLE_UNIT_MAX; i++) {
                     id = wp->movePriorityQueue[i];
                     if (id != -1) {
                         unit = BattleGetUnitPtr(wp, id);
@@ -2019,7 +2019,7 @@ void btlseqMove(BattleWork* wp) {
                 BattleGetUnitPtr(wp, id)->mTokenFlags |= kCurrentlyActing;
                 BattleIncSeq(wp, SEQ_MOVE);
                 BattleSetSeq(wp, SEQ_ACT, 0x6000000);
-                for (i = 0; i < 64; i++) {
+                for (i = 0; i < BATTLE_UNIT_MAX; i++) {
                     id = wp->movePriorityQueue[i];
                     if (id != -1) {
                         unit = BattleGetUnitPtr(wp, id);
@@ -2061,7 +2061,7 @@ void btlseqMove(BattleWork* wp) {
                     BattleSetSeq(wp, SEQ_END, 0x7000000);
                     break;
                 }
-                for (i = 0; i < 64; i++) {
+                for (i = 0; i < BATTLE_UNIT_MAX; i++) {
                     unit = BattleGetUnitPtr(wp, i);
                     if (unit) {
                         BtlUnit_SetTotalHitDamage(unit, 0);
@@ -2114,7 +2114,7 @@ BOOL BattlePhaseEndCheck(void) {
     BattleUnit* unit;
     int i;
 
-    for (i = 0; i < 64; i++) {
+    for (i = 0; i < BATTLE_UNIT_MAX; i++) {
         if (wp->movePriorityQueue[i] != -1) {
             unit = BattleGetUnitPtr(wp, wp->movePriorityQueue[i]);
             if (unit && unit->moveState != 10 && unit->movesRemaining > 0 &&
@@ -2324,7 +2324,7 @@ void btlseqAct(BattleWork* wp) {
                             } else {
                                 unit->mTokenFlags &= ~kHasRallyWinkStatus;
                             }
-                            if (!BtlUnit_GetBelong(unit) && unit->attackPhase == 0x4000002 &&
+                            if (!BtlUnit_GetBelong(unit) && unit->attackPhase == BATTLE_PHASE_PLAYER &&
                                 !BattlePhaseEndCheck() && !(wp->flags & BATTLE_FLAG_RESET_TURN)) {
                                 unit->mMoveColorLv = 0x60;
                             }
@@ -2410,7 +2410,7 @@ void btlseqTurnFirstProcess(BattleWork* wp) {
     wp->announce.stChg.maskLo = 0;
     wp->announce.stChg.maskHi = 0;
     BtlActRec_AddCount(&wp->actRecord.turnCount);
-    for (i = 0; i < 64; i++) {
+    for (i = 0; i < BATTLE_UNIT_MAX; i++) {
         unit = BattleGetUnitPtr(wp, i);
         if (unit) {
             unit->activeTurns++;
@@ -2433,11 +2433,11 @@ void btlseqPhaseFirstProcess(BattleWork* wp) {
 
     wp->commandMenu.recCommand = 0;
     wp->commandMenu.attackAudience = 0;
-    for (i = 0; i < 64; i++) {
+    for (i = 0; i < BATTLE_UNIT_MAX; i++) {
         wp->movePriorityQueue[i] = -1;
     }
     count = 0;
-    for (i = 0; i < 64; i++) {
+    for (i = 0; i < BATTLE_UNIT_MAX; i++) {
         unit = BattleGetUnitPtr(wp, i);
         if (unit) {
             unit->mMoveColorLv = 0xFF;
@@ -2479,7 +2479,7 @@ void battleSortPhaseMoveTable(BattleWork* wp, s32 count) {
     w = (void*)wp;
     if (count <= 0) {
         count = 0;
-        for (i = 0; i < 64; i++) {
+        for (i = 0; i < BATTLE_UNIT_MAX; i++) {
             if (((BattleWork*)w)->movePriorityQueue[i] == -1) {
                 break;
             }
@@ -2526,12 +2526,12 @@ void battleMakePhaseEvtTable(BattleWork* wp) {
     int j;
 
     table = wp->phaseEvtTable;
-    for (i = 0; i < 64; i++) {
+    for (i = 0; i < BATTLE_UNIT_MAX; i++) {
         table[i].unitId = -1;
         table[i].priority = 0;
     }
     count = 0;
-    for (i = 0; i < 64; i++) {
+    for (i = 0; i < BATTLE_UNIT_MAX; i++) {
         unit = BattleGetUnitPtr(wp, i);
         if (unit && !(unit->mAttributeFlags & kNoTurn)) {
             table[count].unitId = i;
@@ -2608,7 +2608,7 @@ BOOL BattleWaitAllActiveEvtEnd_NoBgSetEndWait(BattleWork* wp) {
     int i;
     done = TRUE;
     w = (void*)wp;
-    for (i = 0; i < 0x40; i++) {
+    for (i = 0; i < BATTLE_UNIT_MAX; i++) {
         unit = BattleGetUnitPtr((BattleWork*)w, i);
         if (unit) {
             // FAKE: while loops that always break on the first pass, used as ifs; plain if/else changes the object
@@ -2676,7 +2676,7 @@ BOOL BattleCheckConcluded(BattleWork* wp) {
             continue;
         }
         if (wp->alliances[i].allianceId & 1) {
-            for (j = 0; j < 64; j++) {
+            for (j = 0; j < BATTLE_UNIT_MAX; j++) {
                 unit = BattleGetUnitPtr(wp, j);
                 if (unit && unit->mAlliance == i &&
                     !BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL) &&
@@ -2692,7 +2692,7 @@ BOOL BattleCheckConcluded(BattleWork* wp) {
             }
         }
         if (wp->alliances[i].allianceId & 2) {
-            for (j = 0; j < 64; j++) {
+            for (j = 0; j < BATTLE_UNIT_MAX; j++) {
                 unit = BattleGetUnitPtr(wp, j);
                 if (unit && unit->mAlliance == i &&
                     (unit->mAttributeFlags & kUnitLeader) &&
@@ -2723,7 +2723,7 @@ void _mapobj_data_touch_scale(s32 layer) {
     BattleStageObject* obj;
     int i;
 
-    for (i = 0; i < 32; i++) {
+    for (i = 0; i < BATTLE_STAGE_OBJECT_MAX; i++) {
         obj = &wp->stageObjects[i];
         if (obj->id > 0 && obj->data->mLayer == layer) {
             obj->mFlags |= 2;

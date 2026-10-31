@@ -1,6 +1,7 @@
 // Pause menu: the journal window (map, crystal stars, badge and recipe logs, tattle log).
 
 #include "win/win_main.h"
+#include "evt/evt_story.h"
 #include "driver/animdrv.h"
 #include "driver/effdrv.h"
 #include "driver/swdrv.h"
@@ -218,7 +219,7 @@ void winLogInit(WindowWork* w) {
     if (swByteGet(0) >= STG0_16_FRANKLYS_HOUSE) winLogAddMenu(w, 1); // GSW_STORY_PROGRESS
     if (swByteGet(0) >= STG0_07_GOOMBELLA_JOINS) winLogAddMenu(w, 4); // GSW_STORY_PROGRESS
     if (swByteGet(0) >= STG0_17_BADGE_TUTORIAL) winLogAddMenu(w, 2); // GSW_STORY_PROGRESS
-    if (swGet(0x40)) winLogAddMenu(w, 3); // GSWF_GOR_ZESS_T_DISH_RECEIVED
+    if (swGet(GSWF_RECIPE_LOG_UNLOCKED)) winLogAddMenu(w, 3); // GSWF_GOR_ZESS_T_DISH_RECEIVED
 
     w->log.stoneNum = 0;
     for (i = 0; i < 7; i++) {
@@ -259,10 +260,10 @@ void winLogInit(WindowWork* w) {
             area = "gor";
         } else if (swByteGet(0) < STG6_49_POSHLEY_HEIGHTS || swGet(0xDFB)) { // GSW_STORY_PROGRESS, GSWF_HOM_TRAIN_STOPPED_AT_RIVERSIDE
             area = "eki";
-        } else if (swGet(0xDFC)) { // GSWF_HOM_TRAIN_AT_POSHLEY
+        } else if (swGet(GSWF_TRAIN_AT_POSHLEY)) { // GSWF_HOM_TRAIN_AT_POSHLEY
             area = "pik";
         } else {
-            switch (swByteGet(0x366)) { // GSW_HOM_TRAIN_LEG
+            switch (swByteGet(GSW_TRAIN_LEG)) { // GSW_HOM_TRAIN_LEG
             case 0:
                 area = "gor";
                 break;
@@ -314,7 +315,7 @@ void winLogInit(WindowWork* w) {
         if (itemDataTable[i].type_sort_order != -1) {
             w->log.badgeIds[w->log.badge.num++] = i - BADGE_MIN;
 #ifdef VERSION_G8ME01
-            if (swGet(i - BADGE_MIN + 0x80)) {
+            if (swGet(i - BADGE_MIN + GSWF_BADGE_FOUND_BASE)) {
                 w->log.badge.page++;
             }
 #endif
@@ -388,7 +389,7 @@ void winLogInit(WindowWork* w) {
         t = battleGetUnitMonosiriPtr(i);
         if (!t->tattleLogTag) continue;
         if (i == UNIT_BELDAM_CHAPTER2 || i == UNIT_MARILYN_CHAPTER2 || i == UNIT_DOOPLISS_CHAPTER4_FIGHT1 || i == UNIT_BOWSER_CHAPTER3) continue;
-        if (swGet(i + 0x117A)) {
+        if (swGet(i + GSWF_TATTLE_BASE)) {
             w->log.enemyKnown++;
         }
     }
@@ -440,16 +441,16 @@ static inline BOOL tubuCheck(u8 type) {
     case 0:
         return FALSE;
     case 1:
-        if (swGet(0xFD)) return TRUE; // GSWF_WIN_04_ENTERED
+        if (swGet(GSWF_LOG_MAP_WIN_ROUTE_SHOWN)) return TRUE; // GSWF_WIN_04_ENTERED
         break;
     case 2:
-        if (swGet(0xFE)) return TRUE; // GSWF_TIK_01_VISITED
+        if (swGet(GSWF_LOG_MAP_TIK_ROUTE_SHOWN)) return TRUE; // GSWF_TIK_01_VISITED
         break;
     case 3:
-        if (swGet(0xFF)) return TRUE; // GSWF_GON_00_VISITED
+        if (swGet(GSWF_LOG_MAP_GON_ROUTE_SHOWN)) return TRUE; // GSWF_GON_00_VISITED
         break;
     case 4:
-        if (swGet(0x100)) return TRUE; // GSWF_GRA_00_ENTERED
+        if (swGet(GSWF_LOG_MAP_GRA_ROUTE_SHOWN)) return TRUE; // GSWF_GRA_00_ENTERED
         break;
     }
     return FALSE;
@@ -762,7 +763,7 @@ s32 winLogMain(WindowWork* w) {
         }
         w->helpTgtX = w->log.badge.cursor % 28 % 7 * 56 - 140;
         w->helpTgtY = 90 - w->log.badge.cursor % 28 / 7 * 56;
-        if (swGet(w->log.badgeIds[w->log.badge.cursor] + 0x80)) {
+        if (swGet(w->log.badgeIds[w->log.badge.cursor] + GSWF_BADGE_FOUND_BASE)) {
             winMsgEntry(w, -2, itemDataTable[w->log.badgeIds[w->log.badge.cursor] + BADGE_MIN].menu_description, itemDataTable[w->log.badgeIds[w->log.badge.cursor] + BADGE_MIN].name);
         } else {
             winMsgEntry(w, -2, "msg_menu_stone_none_help", "msg_menu_stone_none_name");
@@ -876,7 +877,7 @@ s32 winLogMain(WindowWork* w) {
             w->log.enemyPage = w->log.enemySel / 16;
             psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_TABI_MOVE1 | PSND_SFX_BYPASS_MUTE));
         } else if (w->buttonTrg & PAD_BUTTON_A) {
-            if (swGet(w->log.enemy[w->log.enemySel].id + 0x117A)) {
+            if (swGet(w->log.enemy[w->log.enemySel].id + GSWF_TATTLE_BASE)) {
                 psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1 | PSND_SFX_BYPASS_MUTE));
                 w->log.state = 21;
                 w->log.mono = monosiriInit(w->log.enemy[w->log.enemySel].id, -60.0f, 150.0f);
@@ -891,7 +892,7 @@ s32 winLogMain(WindowWork* w) {
         }
         w->helpTgtX = w->log.enemySel % 16 / 8 * 216 - 180;
         w->helpTgtY = 106 - w->log.enemySel % 16 % 8 * 24;
-        if (swGet(w->log.enemy[w->log.enemySel].id + 0x117A)) {
+        if (swGet(w->log.enemy[w->log.enemySel].id + GSWF_TATTLE_BASE)) {
             winMsgEntry(w, 0, battleGetUnitMonosiriPtr(w->log.enemy[w->log.enemySel].id)->tattleLogTag, 0);
         } else {
             winMsgEntry(w, 0, "msg_menu_monosiri_enemy", 0);
@@ -1079,7 +1080,7 @@ void winLogDisp(CameraId cam, void* param, s32 idx) {
 #endif
         winTexInit(*w->res->data);
         winTexSet(0x95, (Vec){x + w->log.badge.iconX, y + w->log.badge.iconY, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, c2);
-        if (swGet(w->log.badgeIds[w->log.badge.cursor] + 0x80)) {
+        if (swGet(w->log.badgeIds[w->log.badge.cursor] + GSWF_BADGE_FOUND_BASE)) {
             winIconInit();
             winIconSet(itemDataTable[w->log.badgeIds[w->log.badge.cursor] + BADGE_MIN].icon_id, (Vec){x + w->log.badge.iconX, (y + w->log.badge.iconY) - 4.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, c2);
         }
@@ -1304,7 +1305,7 @@ void monoshiriGX(WindowWork* w, f32 x, f32 y) {
         id = w->log.enemy[w->log.enemyPage * 16 + i].id;
         te = battleGetUnitMonosiriPtr(id);
         if (w->log.enemyPage * 16 + i >= w->log.enemyNum) break;
-        if (swGet(id + 0x117A)) {
+        if (swGet(id + GSWF_TATTLE_BASE)) {
             if (id == UNIT_DOOPLISS_CHAPTER4_FIGHT1 || id == UNIT_DOOPLISS_CHAPTER8) {
                 if (evtGetValue(NULL, GSW_STORY_PROGRESS) < STG4_14_NAME_GUESSING) {
                     name = msgSearch("btl_un_hatena");

@@ -94,7 +94,7 @@ static BeroEntry bero_data[] = {
     {
         "nw_bero", // hitName
         0, 0, // type..sfxId
-        7, // directionId
+        BERO_DIR_NW, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -110,7 +110,7 @@ static BeroEntry bero_data[] = {
     {
         "se_bero", // hitName
         0, 0, // type..sfxId
-        3, // directionId
+        BERO_DIR_SE, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -264,7 +264,7 @@ const char* hotel_npc[] = {
 };
 
 static EVT_BEGIN(door_2_open)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("ERE"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("ERE"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_snd_env_lpf, 0, 800)
@@ -321,7 +321,7 @@ EVT_BEGIN(imgstart)
     CALL(evt_mapobj_set_offscreen, 1, STRING("hotel_naka"), STRING("offscreen"))
     CALL(evt_mapobj_set_offscreen, 1, STRING("door_h"), STRING("offscreen"))
     CALL(evt_mapobj_clear_offscreen, 1, STRING("ERE"))
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("hotel_naka"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("hotel_naka"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("door_h"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("ERE"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_npc_set_offscreen, STRING("店員女"), STRING("offscreen"))
@@ -357,7 +357,7 @@ EVT_BEGIN(imgend)
     CALL(evt_mapobj_set_offscreen, 1, STRING("hotel_naka"), STRING("offscreen"))
     CALL(evt_mapobj_set_offscreen, 1, STRING("door_h"), STRING("offscreen"))
     CALL(evt_mapobj_clear_offscreen, 1, STRING("ERE"))
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("hotel_naka"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("hotel_naka"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("door_h"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("ERE"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_npc_set_offscreen, STRING("店員女"), STRING("offscreen"))
@@ -379,8 +379,8 @@ EVT_BEGIN(imgend)
     CALL(evt_img_onoff, STRING("capture_img"), 0)
     CALL(evt_mapobj_clear_offscreen, 1, STRING("hotel_naka"))
     CALL(evt_mapobj_clear_offscreen, 1, STRING("door_h"))
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("hotel_naka"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("door_h"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("hotel_naka"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("door_h"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_npc_set_offscreen, STRING("店員女"), 0)
     CALL(evt_npc_set_offscreen, STRING("キザ野郎"), 0)
     CALL(evt_npc_flag_onoff, 0, STRING("店員女"), NPC_FLAG_NO_DRAW)
@@ -1045,7 +1045,7 @@ static EVT_BEGIN(epilogue_evt)
     WAIT_MS(1000)
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 3000)
     CALL(evt_snd_envoff_f, PSND_FADEOUT, 3000)
-    CALL(evt_fade_set_mapchange_type, 1, 10, 900, 9, 900)
+    CALL(evt_fade_set_mapchange_type, 1, FADE_OUT_BLACK, 900, FADE_IN_BLACK, 900)
     CALL(evt_bero_mapchange, STRING("tik_00"), STRING(""))
     RETURN
 EVT_END()
@@ -1097,8 +1097,8 @@ EVT_BEGIN(pik_04_init_evt)
         CALL_CHILD(PTR(epilogue_npc_entry))
         SPAWN_EVENT(PTR(epilogue_evt))
     END_IF
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("s_bero"), MAP_OBJ_FLAG_CLIP)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("group92"), MAP_OBJ_FLAG_CLIP)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("s_bero"), MAP_OBJ_FLAG_CLIP)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("group92"), MAP_OBJ_FLAG_CLIP)
     RETURN
 EVT_END()
 

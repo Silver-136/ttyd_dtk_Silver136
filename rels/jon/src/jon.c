@@ -3,6 +3,8 @@
 // setup tables.
 
 #include "battle/battle_unit.h"
+#include "driver/fadedrv.h"
+#include "evt/evt_story.h"
 #include "evt/evt_window.h"
 #include "evt/evt_cmd.h"
 #include "eff/eff_magic1_n64.h"
@@ -211,7 +213,7 @@ EVT_BEGIN(jon_init_evt)
             CALL(evt_hit_bind_mapobj, STRING("a_dokan_1"), STRING("dokan_1_s"))
             CALL(evt_mapobj_trans, 1, STRING("dokan_1_s"), 0, 30, 0)
             CALL(evt_hit_bind_update, STRING("a_dokan_1"))
-            CALL(evt_mapobj_flag_onoff, 1, 1, STRING("dokan_1_k"), MAP_OBJ_FLAG_HIDDEN)
+            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("dokan_1_k"), MAP_OBJ_FLAG_HIDDEN)
         END_IF
         CALL(evt_npc_check, STRING("移動屋"), LW(0))
         IF_INT_EQUAL(LW(0), 1)
@@ -227,7 +229,7 @@ EVT_BEGIN(jon_init_evt)
             CALL(evt_hit_bind_mapobj, STRING("a_dokan_1"), STRING("dokan_1_s"))
             CALL(evt_mapobj_trans, 1, STRING("dokan_1_s"), 0, 30, 0)
             CALL(evt_hit_bind_update, STRING("a_dokan_1"))
-            CALL(evt_mapobj_flag_onoff, 1, 1, STRING("dokan_1_k"), MAP_OBJ_FLAG_HIDDEN)
+            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("dokan_1_k"), MAP_OBJ_FLAG_HIDDEN)
         END_IF
         CALL(evt_npc_check, STRING("移動屋"), LW(0))
         IF_INT_EQUAL(LW(0), 1)
@@ -244,7 +246,7 @@ EVT_BEGIN(jon_init_evt)
             IF_INT_EQUAL(GSWF_TROUBLE_DONE(TROUBLE_ERASE_THAT_GRAFFITI), 0)
 #ifdef VERSION_G8ME01
                 IF_INT_NOT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_ERASE_THAT_GRAFFITI)
-                    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("after"), MAP_OBJ_FLAG_HIDDEN)
+                    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("after"), MAP_OBJ_FLAG_HIDDEN)
                     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("s_rakugaki"), MAP_OBJ_FLAG_HIDDEN)
                     ELSE
 #endif
@@ -255,7 +257,7 @@ EVT_BEGIN(jon_init_evt)
                     END_IF
                 END_IF
                 IF_INT_EQUAL(LF(0), 0)
-                    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("after"), MAP_OBJ_FLAG_HIDDEN)
+                    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("after"), MAP_OBJ_FLAG_HIDDEN)
                     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_rakugaki"), 0, PTR(evt_iri_30_touch_rakugaki), LW(0))
 #ifndef VERSION_G8ME01
                     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_ERASE_THAT_GRAFFITI)
@@ -268,18 +270,18 @@ EVT_BEGIN(jon_init_evt)
                     END_IF
 #endif
                     ELSE
-                    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("before"), MAP_OBJ_FLAG_HIDDEN)
+                    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("before"), MAP_OBJ_FLAG_HIDDEN)
                     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("s_rakugaki"), MAP_OBJ_FLAG_HIDDEN)
 #ifdef VERSION_G8ME01
                     END_IF
 #endif
                 END_IF
                 ELSE
-                CALL(evt_mapobj_flag_onoff, 1, 1, STRING("before"), MAP_OBJ_FLAG_HIDDEN)
+                CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("before"), MAP_OBJ_FLAG_HIDDEN)
                 CALL(evt_mapobj_flag_onoff, 1, 1, STRING("s_rakugaki"), MAP_OBJ_FLAG_HIDDEN)
             END_IF
             ELSE
-            CALL(evt_mapobj_flag_onoff, 1, 1, STRING("after"), MAP_OBJ_FLAG_HIDDEN)
+            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("after"), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_mapobj_flag_onoff, 1, 1, STRING("s_rakugaki"), MAP_OBJ_FLAG_HIDDEN)
         END_IF
     END_IF
@@ -1533,8 +1535,8 @@ EVT_BEGIN(talk_idouya)
         CALL(evt_raster)
     END_INLINE_EVENT
     WAIT_MS(5000)
-    CALL(evt_fade_set_mapchange_type, 0, 10, 300, 9, 300)
-    CALL(evt_fade_set_mapchange_type, 1, 10, 300, 9, 300)
+    CALL(evt_fade_set_mapchange_type, 0, FADE_OUT_BLACK, 300, FADE_IN_BLACK, 300)
+    CALL(evt_fade_set_mapchange_type, 1, FADE_OUT_BLACK, 300, FADE_IN_BLACK, 300)
     IF_STR_EQUAL(LW(0), STRING("tik_06"))
         SET_VALUE(GSW_PIT_FLOOR, 0)
     END_IF
@@ -1751,7 +1753,7 @@ EVT_BEGIN(shikake_setup)
         CALL(evt_npc_stop_for_event)
         CALL(evt_mario_wait_landon)
         WAIT_MS(100)
-        CALL(evt_fade_entry, 17, 150, 0, 0, 0)
+        CALL(evt_fade_entry, FADE_OUT_WHITE, 150, 0, 0, 0)
         CALL(evt_fade_end_wait)
         CALL(evt_fade_entry, 16, 150, 0, 0, 0)
         CALL(evt_fade_end_wait)
@@ -1806,7 +1808,7 @@ EVT_BEGIN(dokan_open)
     IF_INT_EQUAL(LW(1), 1)
         GOTO(0)
     END_IF
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("dokan_1_k"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("dokan_1_k"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mario_key_onoff, 1)
     RETURN
 EVT_END()
@@ -1833,7 +1835,7 @@ EVT_BEGIN(dokan_open2)
     IF_INT_EQUAL(LW(1), 1)
         GOTO(0)
     END_IF
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("dokan_1_k"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("dokan_1_k"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mario_key_onoff, 1)
     RETURN
 EVT_END()
@@ -1885,7 +1887,7 @@ BeroEntry bero_boss[] = {
         "dokan_2", // hitName
         2, // type
         0, // sfxId
-        8, // directionId
+        BERO_DIR_UP, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -1936,7 +1938,7 @@ BeroEntry bero_return[] = {
         "dokan_2", // hitName
         2, // type
         0, // sfxId
-        8, // directionId
+        BERO_DIR_UP, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -1968,7 +1970,7 @@ BeroEntry bero_return[] = {
         "dokan_3", // hitName
         2, // type
         0, // sfxId
-        9, // directionId
+        BERO_DIR_DOWN, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -1990,7 +1992,7 @@ BeroEntry bero_return2[] = {
         "dokan_3", // hitName
         2, // type
         0, // sfxId
-        9, // directionId
+        BERO_DIR_DOWN, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -2012,7 +2014,7 @@ BeroEntry bero_return3[] = {
         "dokan_3", // hitName
         2, // type
         0, // sfxId
-        9, // directionId
+        BERO_DIR_DOWN, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -2091,7 +2093,7 @@ BeroEntry bero_prev_return[] = {
         "dokan_2", // hitName
         2, // type
         0, // sfxId
-        8, // directionId
+        BERO_DIR_UP, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -2128,7 +2130,7 @@ BeroEntry bero_prev_return2[] = {
         "dokan_1", // hitName
         2, // type
         0, // sfxId
-        9, // directionId
+        BERO_DIR_DOWN, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -2152,7 +2154,7 @@ BeroEntry bero_prev_return3[] = {
         "dokan_1", // hitName
         2, // type
         0, // sfxId
-        9, // directionId
+        BERO_DIR_DOWN, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -2176,7 +2178,7 @@ BeroEntry bero_prev_return4[] = {
         "dokan_1", // hitName
         2, // type
         0, // sfxId
-        9, // directionId
+        BERO_DIR_DOWN, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -2233,7 +2235,7 @@ BeroEntry bero_normal[] = {
         "dokan_2", // hitName
         2, // type
         0, // sfxId
-        8, // directionId
+        BERO_DIR_UP, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -2270,7 +2272,7 @@ BeroEntry bero_normal2[] = {
         "dokan_1", // hitName
         2, // type
         0, // sfxId
-        9, // directionId
+        BERO_DIR_DOWN, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -2292,7 +2294,7 @@ BeroEntry bero_normal3[] = {
         "dokan_1", // hitName
         2, // type
         0, // sfxId
-        9, // directionId
+        BERO_DIR_DOWN, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -2745,7 +2747,7 @@ EVT_BEGIN(evt_iri_30_bomb_rakugaki)
     IF_INT_EQUAL(LF(0), 0)
         CALL(evt_img_alloc_capture, STRING("img"), 0, STRING("ofs"), 1, LW(0), LW(1), LW(2), LW(3))
         WAIT_FRAMES(1)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("s_rakugaki"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("s_rakugaki"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("before"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("after"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_img_clear_virtual_point, STRING("img"))
@@ -2753,7 +2755,7 @@ EVT_BEGIN(evt_iri_30_bomb_rakugaki)
         CALL(evt_img_set_paper_anim, STRING("img"), STRING("A_1"))
         CALL(evt_img_wait_animend, STRING("img"))
         ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("s_rakugaki"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("s_rakugaki"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("before"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("after"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
@@ -2854,7 +2856,7 @@ EVT_BEGIN(zonbaba_first_event)
     CALL(evt_mario_normalize)
     CALL(evt_npc_set_position, STRING("敵"), 175, 0, 0)
     CALL(evt_npc_set_anim, STRING("敵"), STRING("GNB_S_1"))
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("oFF_jon_06"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("oFF_jon_06"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_seq_wait, SEQ_GAME)
     WAIT_MS(3500)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -2998,7 +3000,7 @@ EVT_BEGIN(zonbaba_first_event)
     CALL(evt_eff_fukidashi, FUKIDASHI_AT_MARIO, STRING(""), 0, 0, 0, 0, 0, 0, 0, 0, 60)
     CALL(evt_eff_fukidashi, FUKIDASHI_AT_PARTNER, STRING(""), 0, 0, 0, 0, 0, 0, 0, 0, 60)
     WAIT_MS(1000)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("oFF_jon_06"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("oFF_jon_06"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_npc_flag_onoff, 1, STRING("敵"), NPC_FLAG_NO_HIT)
     CALL(evt_npc_flag_onoff, 0, STRING("敵"), NPC_FLAG_ENEMY)
     SET_VALUE(GSWF_PIT_BONETAIL_DEFEATED, 1)

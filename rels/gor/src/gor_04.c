@@ -753,9 +753,9 @@ static EVT_BEGIN(hom_10_evt_resha_sub)
         IF_INT_EQUAL(LW(0), 0)
             BREAK_LOOP
         END_IF
-        CALL(evt_mapobj_flag_onoff, 1, 1, LW(0), MAP_OBJ_TEV_CALLBACK(1))
-        CALL(evt_mapobj_flag_onoff, 1, 0, LW(0), MAP_OBJ_FLAG_DISPLAY_LIST)
-        CALL(evt_mapobj_flag_onoff, 1, 1, LW(0), MAP_OBJ_FLAG_NO_COLOR_STAGE)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, LW(0), MAP_OBJ_TEV_CALLBACK(1))
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, LW(0), MAP_OBJ_FLAG_DISPLAY_LIST)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, LW(0), MAP_OBJ_FLAG_NO_COLOR_STAGE)
     END_LOOP
     RETURN
 EVT_END()
@@ -768,10 +768,10 @@ static EVT_BEGIN(hom_10_evt_resha_right)
     CALL_CHILD(PTR(hom_10_evt_resha_sub))
     CALL(evt_sub_get_mapname, LW(0))
     IF_STR_NOT_EQUAL(LW(0), STRING("rsh_06_a"))
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("train_7"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("train_8"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("renketu_6"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("renketu_7"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("train_7"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("train_8"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("renketu_6"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("renketu_7"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     RETURN
 EVT_END()
@@ -782,10 +782,10 @@ EVT_END()
  */
 static EVT_BEGIN(hom_10_evt_resha_left)
     CALL_CHILD(PTR(hom_10_evt_resha_sub))
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("train_1"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("train_6"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("renketu_1"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("renketu_5"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("train_1"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("train_6"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("renketu_1"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("renketu_5"), MAP_OBJ_FLAG_HIDDEN)
     RETURN
 EVT_END()
 
@@ -803,12 +803,12 @@ static EVT_BEGIN(hom_10_init_evt)
         CALL_CHILD(PTR(hom_10_evt_resha_start3))
         SET_VALUE(LW(0), 500)
         SET_VALUE(LW(1), -500)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("renketu"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("renketu_1"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("renketu_2"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("renketu_3"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("renketu_4"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("renketu_5"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("renketu"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("renketu_1"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("renketu_2"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("renketu_3"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("renketu_4"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("renketu_5"), MAP_OBJ_FLAG_HIDDEN)
         ELSE
         CALL_CHILD(PTR(hom_10_evt_resha_left))
         CALL_CHILD(PTR(hom_10_evt_resha_start4))
@@ -1074,7 +1074,7 @@ static BeroEntry bero_entry_data[] = {
     {
         "s_bero", // hitName
         0, 0, // type..sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -1091,7 +1091,7 @@ static BeroEntry bero_entry_data[] = {
         "dokan_1", // hitName
         2, // type
         0, // sfxId
-        9, // directionId
+        BERO_DIR_DOWN, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -1107,7 +1107,7 @@ static BeroEntry bero_entry_data[] = {
         "A_dokan_h00", // hitName
         4098, // type
         0, // sfxId
-        9, // directionId
+        BERO_DIR_DOWN, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -1123,7 +1123,7 @@ static BeroEntry bero_entry_data[] = {
         "n_bero", // hitName
         1, // type
         8, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -1194,7 +1194,7 @@ EVT_BEGIN(hikosenkakari_talk)
             ADD(LW(2), 10)
             SET_VALUE(LW(10), STRING("airship"))
             CALL(evt_item_entry, LW(10), ITEM_BLIMP_TICKET, LW(0), LW(1), LW(2), ITEM_TYPE_STILL, -1, 0)
-            CALL(evt_item_flag_on, LW(10), 2)
+            CALL(evt_item_flag_on, LW(10), ITEM_FLAG_NO_TOUCH)
             WAIT_MS(1000)
             CALL(evt_item_delete, LW(10))
             CALL(evt_mario_set_pose, STRING("M_S_1"))
@@ -1286,7 +1286,7 @@ EVT_BEGIN(ekiin_talk)
             ADD(LW(2), 10)
             SET_VALUE(LW(10), STRING("train"))
             CALL(evt_item_entry, LW(10), ITEM_TRAIN_TICKET, LW(0), LW(1), LW(2), ITEM_TYPE_STILL, -1, 0)
-            CALL(evt_item_flag_on, LW(10), 2)
+            CALL(evt_item_flag_on, LW(10), ITEM_FLAG_NO_TOUCH)
             WAIT_MS(1000)
             CALL(evt_item_delete, LW(10))
             CALL(evt_mario_set_pose, STRING("M_S_1"))
@@ -1543,14 +1543,14 @@ EVT_BEGIN(evt_hikousen)
     CALL(evt_cam_ctrl_onoff, 4, 0)
     BEGIN_INLINE_EVENT
         WAIT_MS(800)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("bou_10"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("bou_9"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("bou_10"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("bou_9"), MAP_OBJ_FLAG_HIDDEN)
         WAIT_MS(500)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("bou_7"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("bou_8"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("bou_7"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("bou_8"), MAP_OBJ_FLAG_HIDDEN)
         WAIT_MS(500)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("h_bou_2"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("h_bou_4"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("h_bou_2"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("h_bou_4"), MAP_OBJ_FLAG_HIDDEN)
     END_INLINE_EVENT
     CALL(evt_mapobj_get_position, STRING("gondora_1"), LW(10), LW(11), LW(12))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG3_AIR_SHIP_GONDOLA_MOVE1"), LW(10), LW(11), LW(12), LW(6))
@@ -1567,7 +1567,7 @@ EVT_BEGIN(evt_hikousen)
         GOTO(0)
     END_IF
     CALL(evt_snd_sfxoff, LW(6))
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("gondora_1"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("gondora_1"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mario_cont_onoff, 0)
     CALL(evt_mario_set_pos, 0, -1000, 0)
     BEGIN_INLINE_EVENT

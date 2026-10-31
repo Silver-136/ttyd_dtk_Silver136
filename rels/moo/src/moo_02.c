@@ -79,7 +79,7 @@ static BeroEntry bero_entry_data[] = {
     {
         "w_bero", // hitName
         0, 0, // type..sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -96,7 +96,7 @@ static BeroEntry bero_entry_data[] = {
         "dokan_1", // hitName
         2, // type
         0, // sfxId
-        9, // directionId
+        BERO_DIR_DOWN, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -112,7 +112,7 @@ static BeroEntry bero_entry_data[] = {
         "dokan_2", // hitName
         4098, // type
         0, // sfxId
-        9, // directionId
+        BERO_DIR_DOWN, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -128,7 +128,7 @@ static BeroEntry bero_entry_data[] = {
         "n_bero", // hitName
         4099, // type
         0, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -144,7 +144,7 @@ static BeroEntry bero_entry_data[] = {
     {
         "e_bero", // hitName
         0, 0, // type..sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -188,7 +188,7 @@ static EVT_BEGIN(dokan_evt)
     CALL(evt_img_clear_virtual_point, STRING("img"))
     CALL(evt_img_set_shadow, STRING("img"), 2)
     CALL(evt_img_set_paper_anim, STRING("img"), STRING("A_1"))
-    CALL(evt_mapobj_flag_onoff, 0, 1, STRING("S_iwa_04"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 1, STRING("S_iwa_04"), MAP_OBJ_FLAG_HIDDEN)
 #ifdef VERSION_G8ME01
             CALL(evt_hitobj_onoff, STRING("A_iwa_04"), 1, 0)
 #endif
@@ -204,7 +204,7 @@ static EVT_BEGIN(dokan_evt)
     CALL(evt_offscreen_delete, STRING("offscreen"))
     CALL(evt_mapobj_clear_offscreen, 0, STRING("S_iwa_04"))
 #ifdef VERSION_G8ME01
-    CALL(evt_mapobj_flag_onoff, 0, 1, STRING("S_iwa_04"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 1, STRING("S_iwa_04"), MAP_OBJ_FLAG_HIDDEN)
 #else
     SET_VALUE(GSW_STORY_PROGRESS, STG7_07_A_PIPE_APPEARS)
 #endif
@@ -229,7 +229,7 @@ static EVT_BEGIN(rock_main)
     END_INLINE_EVENT
     CALL(evt_offscreen_entry, STRING("offscreen"))
     CALL(evt_mapobj_set_offscreen, 0, LW(10), STRING("offscreen"))
-    CALL(evt_mapobj_flag_onoff, 0, 1, LW(10), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 1, LW(10), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_img_entry, STRING("img"))
     CALL(evt_img_set_paper, STRING("img"), STRING("OFF_d_bom_ver2"))
     CALL(evt_img_alloc_capture, STRING("img"), 0, STRING("offscreen"), 0, 0, 0, 0, 0)
@@ -294,19 +294,19 @@ EVT_BEGIN(moo_02_init_evt)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG7_07_A_PIPE_APPEARS)
         CALL(evt_run_case_evt, CASE_BOBBERY, 1, STRING("A_iwa_04"), 0, PTR(dokan_evt), 0)
         ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_iwa_04"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_iwa_04"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_iwa_04"), 1, 0)
     END_IF
     IF_INT_EQUAL(GSWF_MOO_02_ROCK_01_BLOWN, 0)
         CALL(evt_run_case_evt, CASE_BOBBERY, 1, STRING("A_iwa_01"), 0, PTR(rock_evt0), 0)
         ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_iwa_01"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_iwa_01"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_iwa_01"), 1, 0)
     END_IF
     IF_INT_EQUAL(GSWF_MOO_02_ROCK_07_BLOWN, 0)
         CALL(evt_run_case_evt, CASE_BOBBERY, 1, STRING("A_iwa_07"), 0, PTR(rock_evt1), 0)
         ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_iwa_07"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_iwa_07"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_iwa_07"), 1, 0)
     END_IF
     CALL(evt_item_entry, STRING("item_01"), ITEM_POWER_PUNCH, 330, 0, 403, ITEM_TYPE_STILL, GSWF_MOO_02_POWER_PUNCH, 0)

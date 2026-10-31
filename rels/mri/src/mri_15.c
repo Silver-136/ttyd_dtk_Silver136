@@ -67,7 +67,7 @@ static BeroEntry bero_entry_data[] = {
         "w_bero", // hitName
         1, // type
         0, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -85,7 +85,7 @@ static BeroEntry bero_entry_data[] = {
         "dokan", // hitName
         2, // type
         0, // sfxId
-        9, // directionId
+        BERO_DIR_DOWN, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length

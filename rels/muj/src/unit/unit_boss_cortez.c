@@ -1,6 +1,7 @@
 // Keelhaul Key (muj) battle unit: Cortez (cortez): its parts, defence/status tables, and attack events.
 
 #include "battle/battle_unit.h"
+#include "driver/fadedrv.h"
 #include "evt/evt_cmd.h"
 #include "pmario_sound.h"
 #include "evt/evt_snd.h"
@@ -364,7 +365,7 @@ BattleWeapon weapon_cortez_normal_front_attack = {
     NULL, // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH, // special
     COUNTER_RESIST_ALL, // counterResistFlags
-    4, // targetWeightFlags
+    TARGET_WEIGHT_PREFER_FRONT, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
@@ -405,7 +406,7 @@ BattleWeapon weapon_cortez_normal_rear_attack = {
     NULL, // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH, // special
     COUNTER_RESIST_ALL, // counterResistFlags
-    8, // targetWeightFlags
+    TARGET_WEIGHT_PREFER_BACK, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
@@ -563,7 +564,7 @@ BattleWeapon weapon_cortez_mode2_bone_attack = {
     NULL, // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH, // special
     COUNTER_RESIST_ALL, // counterResistFlags
-    4, // targetWeightFlags
+    TARGET_WEIGHT_PREFER_FRONT, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
@@ -1066,12 +1067,12 @@ EVT_END()
  * Otherwise it counts down the turns the ribs stay open (unit work 11) and closes them when it reaches 0.
  */
 static EVT_BEGIN(phase_event)
-    CALL(btlevtcmd_CheckPhase, LW(0), 67108869)
+    CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_AFTER_ENEMY)
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(evt_sub_random, 3, LW(0))
         CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, CORTEZ_UNIT_WORK_FORMATION, LW(0))
     END_IF
-    CALL(btlevtcmd_CheckPhase, LW(0), 67108865)
+    CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_BEFORE_PLAYER)
     IF_INT_EQUAL(LW(0), 0)
         GOTO(50)
     END_IF
@@ -1117,7 +1118,7 @@ static EVT_BEGIN(phase_event)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
     LABEL(50)
-    CALL(btlevtcmd_CheckPhase, LW(0), 67108865)
+    CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_BEFORE_PLAYER)
     IF_INT_EQUAL(LW(0), 0)
         GOTO(99)
     END_IF
@@ -1891,7 +1892,7 @@ BattleUnitSetup entry_claw = {
     &unit_boss_cortez_claw, // mUnitKindParams
     ALLIANCE_ENEMY, // alliance
     {0}, // pad_05
-    0x4000004, // attackPhase
+    BATTLE_PHASE_ENEMY, // attackPhase
     {1000.0f, 0.0f, 1000.0f}, // position
     0, // hitOffsetX
     {0}, // unitWork
@@ -1906,7 +1907,7 @@ BattleUnitSetup entry_rapier = {
     &unit_boss_cortez_rapier, // mUnitKindParams
     ALLIANCE_ENEMY, // alliance
     {0}, // pad_05
-    0x4000004, // attackPhase
+    BATTLE_PHASE_ENEMY, // attackPhase
     {1000.0f, 0.0f, 1000.0f}, // position
     0, // hitOffsetX
     {0}, // unitWork
@@ -1921,7 +1922,7 @@ BattleUnitSetup entry_sword = {
     &unit_boss_cortez_sword, // mUnitKindParams
     ALLIANCE_ENEMY, // alliance
     {0}, // pad_05
-    0x4000004, // attackPhase
+    BATTLE_PHASE_ENEMY, // attackPhase
     {1000.0f, 0.0f, 1000.0f}, // position
     0, // hitOffsetX
     {0}, // unitWork
@@ -1936,7 +1937,7 @@ BattleUnitSetup entry_saber = {
     &unit_boss_cortez_saber, // mUnitKindParams
     ALLIANCE_ENEMY, // alliance
     {0}, // pad_05
-    0x4000004, // attackPhase
+    BATTLE_PHASE_ENEMY, // attackPhase
     {1000.0f, 0.0f, 1000.0f}, // position
     0, // hitOffsetX
     {0}, // unitWork

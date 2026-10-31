@@ -220,8 +220,8 @@ static BeroEntry bero_data[] = {
         "n_bero", // hitName
         1, // type
         4, // sfxId
-        20000, // directionId
-        100000, // centerPosition
+        BERO_DIR_AUTO, // directionId
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         room_out, // enterEvent
@@ -1736,11 +1736,11 @@ EVT_BEGIN(tou_10_init_evt)
     CALL(evt_bero_get_info)
     CALL_CHILD(PTR(evt_bero_info_run))
     CALL_CHILD(PTR(evt_tou_locker_init))
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("fuku_M"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("fuku_M"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_npc_setup, PTR(npcEnt))
     CALL_CHILD(PTR(init_octo))
     CALL(evt_npc_change_interrupt, STRING("オクトール"), 6, PTR(talk_octo))
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("isu"), MAP_OBJ_FLAG_CLIP)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("isu"), MAP_OBJ_FLAG_CLIP)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_06_1ST_MATCH)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("M_make"), 0, PTR(evt_match_make), 0)
         ELSE

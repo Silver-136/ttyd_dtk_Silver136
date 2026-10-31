@@ -2,6 +2,8 @@
 // treasure map before the title logo fades in, and the house scenes of the epilogue.
 
 #include "battle/battle_unit.h"
+#include "driver/animdrv.h"
+#include "driver/fadedrv.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bg.h"
 #include "evt/evt_cam.h"
@@ -257,7 +259,7 @@ static EVT_BEGIN(evt_prologue)
     CALL(evt_npc_glide_position, STRING("パレッタ"), 0, 300, -100, 0, FLOAT(80.0f), FLOAT(-30.0f), 11, 0)
     CALL(evt_npc_set_position, STRING("ルイージ"), 20, 30, -150)
     CALL(evt_npc_set_ry, STRING("ルイージ"), 90)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_naka"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_naka"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_get_position, STRING("S_ie_door"), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_DOOR_OPEN1"), LW(0), LW(1), LW(2), 0)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, 180, 500)
@@ -320,7 +322,7 @@ static EVT_BEGIN(evt_prologue)
     WAIT_MS(500)
     CALL(evt_cam3d_evt_set, -345, 154, 96, -32, 75, -217, 0, EASING_SINE_IN_OUT)
     WAIT_FRAMES(1)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_aaa_00"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_aaa_00"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_naka"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ie_door"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_bg_set_color, 0, 0, 0, 255)
@@ -393,7 +395,7 @@ static void draw(CameraId camera, void* param) {
 EVT_BEGIN(evt_prologue2)
     CALL(evt_snd_envoff, PSND_FADEOUT | PSND_SLOT(1))
     CALL(evt_snd_envon, PSND_CONTINUE | PSND_FADEIN, 0)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_aaa_00"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_aaa_00"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_naka"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ie_door"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_bg_set_color, 0, 0, 0, 255)
@@ -471,7 +473,7 @@ static EVT_BEGIN(epilogue_evt)
     WAIT_MS(3000)
     CALL(evt_msg_print, 0, STRING("ep_31"), 0, 0)
     WAIT_MS(500)
-    CALL(evt_fade_entry, 10, 1, 0, 0, 0)
+    CALL(evt_fade_entry, FADE_OUT_BLACK, 1, 0, 0, 0)
     WAIT_FRAMES(1)
     SET_VALUE(LW(0), PTR(&door_1))
     CALL_CHILD(PTR(evt_door_open_quick))
@@ -534,7 +536,7 @@ static EVT_BEGIN(epilogue_evt)
     CALL(evt_msg_print, 0, STRING("ep_35"), 0, 0)
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 3000)
     CALL(evt_snd_envoff_f, PSND_FADEOUT, 3000)
-    CALL(evt_fade_set_mapchange_type, 1, 10, 900, 9, 900)
+    CALL(evt_fade_set_mapchange_type, 1, FADE_OUT_BLACK, 900, FADE_IN_BLACK, 900)
     CALL(evt_bero_mapchange, STRING("gor_02"), STRING(""))
     RETURN
 EVT_END()
@@ -683,7 +685,7 @@ static EVT_BEGIN(epilogue_evt2)
     CALL(evt_fade_end_wait)
     WAIT_MS(3000)
     SET_VALUE(GSW_STORY_PROGRESS, STG9_00_EPILOGUE)
-    CALL(evt_fade_set_mapchange_type, 1, 10, 1, 9, 300)
+    CALL(evt_fade_set_mapchange_type, 1, FADE_OUT_BLACK, 1, FADE_IN_BLACK, 300)
     CALL(evt_bero_mapchange, STRING("end_00"), STRING(""))
     RETURN
 EVT_END()
@@ -715,8 +717,8 @@ static BeroEntry bero_entry_data[] = {
         "dokan_1", // hitName
         2, // type
         0, // sfxId
-        9, // directionId
-        100000, // centerPosition
+        BERO_DIR_DOWN, // directionId
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -743,8 +745,8 @@ EVT_BEGIN(aaa_00_init_evt)
     CALL(evt_npc_setup, PTR(npcEnt))
     SET_VALUE(LW(0), PTR(&door_1))
     CALL_CHILD(PTR(evt_door_entry))
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("sai_ki1"), MAP_OBJ_FLAG_CLIP)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("sai_ki2"), MAP_OBJ_FLAG_CLIP)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("sai_ki1"), MAP_OBJ_FLAG_CLIP)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("sai_ki2"), MAP_OBJ_FLAG_CLIP)
     CALL(evt_bero_get_entername, LW(0))
     IF_STR_EQUAL(LW(0), STRING("prologue"))
         SPAWN_EVENT(PTR(evt_prologue))

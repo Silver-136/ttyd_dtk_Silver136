@@ -68,7 +68,7 @@ BOOL setupDataCheck(void) {
     }
     parseInit(ptr, size);
     while (parsePush("<Npc>")) {
-        parseTagGet1("<tribe>", 0, tribeName);
+        parseTagGet1("<tribe>", PARSE_STRING, tribeName);
         parsePopNext();
         group = gp->inBattle != 0;
         if (!animGroupBaseAsync(npcGetTribe(tribeName)->modelName, group, NULL)) {
@@ -167,20 +167,20 @@ void setupDataBase(const char* areaName, const char* mapName) {
     if (ptr) {
         parseInit(ptr, size);
         while (parsePush("<Npc>")) {
-            parseTagGet1("<name>", 0, npcName);
-            parseTagGet1("<tribe>", 0, tribeName);
-            parseTagGet1("<position>", 3, &pos);
-            parseTagGet1("<dir>", 2, &dir);
-            parseTagGet1("<aitype>", 0, aiType);
-            parseTagGet1("<territory_type>", 0, terrType);
-            parseTagGet1("<territory_base>", 3, &base);
-            parseTagGet1("<territory_loiter>", 3, &loiter);
-            parseTagGet1("<territory_homing>", 3, &homing);
-            parseTagGet1("<search_range>", 2, &searchRange);
-            parseTagGet1("<search_angle>", 2, &searchAngle);
-            parseTagGet1("<homing_range>", 2, &homingRange);
-            parseTagGet1("<homing_angle>", 2, &homingAngle);
-            parseTagGet1("<btl_setup_no>", 0, btlSetup);
+            parseTagGet1("<name>", PARSE_STRING, npcName);
+            parseTagGet1("<tribe>", PARSE_STRING, tribeName);
+            parseTagGet1("<position>", PARSE_VEC, &pos);
+            parseTagGet1("<dir>", PARSE_FLOAT, &dir);
+            parseTagGet1("<aitype>", PARSE_STRING, aiType);
+            parseTagGet1("<territory_type>", PARSE_STRING, terrType);
+            parseTagGet1("<territory_base>", PARSE_VEC, &base);
+            parseTagGet1("<territory_loiter>", PARSE_VEC, &loiter);
+            parseTagGet1("<territory_homing>", PARSE_VEC, &homing);
+            parseTagGet1("<search_range>", PARSE_FLOAT, &searchRange);
+            parseTagGet1("<search_angle>", PARSE_FLOAT, &searchAngle);
+            parseTagGet1("<homing_range>", PARSE_FLOAT, &homingRange);
+            parseTagGet1("<homing_angle>", PARSE_FLOAT, &homingAngle);
+            parseTagGet1("<btl_setup_no>", PARSE_STRING, btlSetup);
             parsePopNext();
             if (!isMarker || !(dead->mask & (1 << (u8)k))) {
                 tribe = npcGetTribe(tribeName);

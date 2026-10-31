@@ -156,7 +156,7 @@ s32 battleAcMain_RepeatedlyLv(BattleWork* work) {
         case 99:
             break;
         case 100:
-            if (!((ac->setupFlags & 1) && (ac->mAcUnit->mTokenFlags & kConfusedAction))) {
+            if (!((ac->setupFlags & AC_SETUP_FLAG_CONFUSED_AUTO) && (ac->mAcUnit->mTokenFlags & kConfusedAction))) {
                 if (p->maxMask != 0 && !BattlePadCheckNow(p->maxMask) && !autoCmd) {
                     p->unheldFrames++;
                     if (p->unheldFrames < 150) {
@@ -173,8 +173,8 @@ s32 battleAcMain_RepeatedlyLv(BattleWork* work) {
             ac->outputParams[0] = 1;
             ac->mAcState = 1000;
         case 1000:
-            if ((ac->setupFlags & 1) && (ac->mAcUnit->mTokenFlags & kConfusedAction)) {
-                if (ac->setupFlags & 2) {
+            if ((ac->setupFlags & AC_SETUP_FLAG_CONFUSED_AUTO) && (ac->mAcUnit->mTokenFlags & kConfusedAction)) {
+                if (ac->setupFlags & AC_SETUP_FLAG_RETRIES) {
                     ac->setupParam--;
                     if (ac->setupParam >= 0) {
                         break;

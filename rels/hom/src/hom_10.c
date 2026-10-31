@@ -706,9 +706,9 @@ static EVT_BEGIN(hom_10_evt_resha_sub)
         IF_INT_EQUAL(LW(0), 0)
             BREAK_LOOP
         END_IF
-        CALL(evt_mapobj_flag_onoff, 1, 1, LW(0), MAP_OBJ_TEV_CALLBACK(1))
-        CALL(evt_mapobj_flag_onoff, 1, 0, LW(0), MAP_OBJ_FLAG_DISPLAY_LIST)
-        CALL(evt_mapobj_flag_onoff, 1, 1, LW(0), MAP_OBJ_FLAG_NO_COLOR_STAGE)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, LW(0), MAP_OBJ_TEV_CALLBACK(1))
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, LW(0), MAP_OBJ_FLAG_DISPLAY_LIST)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, LW(0), MAP_OBJ_FLAG_NO_COLOR_STAGE)
     END_LOOP
     RETURN
 EVT_END()

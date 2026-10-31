@@ -80,7 +80,7 @@ static BeroEntry bero_entry_data[] = {
     {
         "w_bero", // hitName
         0, 0, // type..sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -96,7 +96,7 @@ static BeroEntry bero_entry_data[] = {
     {
         "e_bero", // hitName
         0, 0, // type..sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -113,7 +113,7 @@ static BeroEntry bero_entry_data[] = {
         "dokan_h", // hitName
         4098, // type
         0, // sfxId
-        9, // directionId
+        BERO_DIR_DOWN, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -129,7 +129,7 @@ static BeroEntry bero_entry_data[] = {
         "dokan", // hitName
         2, // type
         0, // sfxId
-        9, // directionId
+        BERO_DIR_DOWN, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -270,7 +270,7 @@ EVT_BEGIN(bridge_evt_02)
         END_SWITCH
         CALL(evt_img_set_paper_anim, STRING("capture_img"), STRING("A_1"))
         CALL(evt_img_wait_animend, STRING("capture_img"))
-        CALL(evt_mapobj_flag_onoff, 1, 0, LW(11), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, LW(11), MAP_OBJ_FLAG_HIDDEN)
         IF_INT_GREATER_OR_EQUAL(GW(0), 25)
             CALL(evt_img_free_capture, STRING("capture_img"), 0)
             CALL(evt_img_free_capture, STRING("capture_img"), 1)
@@ -940,7 +940,7 @@ EVT_BEGIN(hei_01_init_evt)
     END_IF
     CALL(evt_map_playanim, STRING("anm_mizu"), MAP_ANIM_PLAY_LOOP, 0)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG1_01_THE_FLIP_BRIDGE)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("hasi"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("hasi"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_hasi"), 1, 0)
         SET_VALUE(GW(0), 0)
         CALL(evt_mobj_switch_blue, 2, STRING("bg_switch"), -8, 40, -450, PTR(bridge_evt), 0)
@@ -954,7 +954,7 @@ EVT_BEGIN(hei_01_init_evt)
     END_IF
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG1_HEI1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG1_HEI2"))
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("USIROKUSA"), MAP_OBJ_FLAG_CLIP)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("USIROKUSA"), MAP_OBJ_FLAG_CLIP)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG1_01_THE_FLIP_BRIDGE)
         IF_INT_EQUAL(GSWF_HEI_01_GOOMBELLA_TATTLE_TIP_SEEN, 0)
             SPAWN_EVENT(PTR(christine_hei_01))

@@ -107,7 +107,7 @@ static BeroEntry bero_entry_data[] = {
         "w_bero", // hitName
         1, // type
         6, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -124,7 +124,7 @@ static BeroEntry bero_entry_data[] = {
     {
         "e_bero", // hitName
         0, 0, // type..sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -763,7 +763,7 @@ EVT_BEGIN(gareki_fall)
     SET_VALUE(LW(8), LW(1))
     SET_VALUE(LW(9), LW(2))
     SET_VALUE(LW(10), LW(3))
-    CALL(evt_mapobj_flag_onoff, 1, 0, LW(7), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, LW(7), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_sub_intpl_msec_init, EASING_CUBIC_IN, 350, 0, LW(10))
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)

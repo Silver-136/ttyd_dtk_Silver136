@@ -64,7 +64,7 @@ static BeroEntry bero_data[] = {
         "e_bero_1", // hitName
         1, // type
         3, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -81,7 +81,7 @@ static BeroEntry bero_data[] = {
     {
         "e_bero_2", // hitName
         0, 0, // type..sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -167,7 +167,7 @@ EVT_BEGIN(evt_sw_complete)
     CALL(evt_mobj_delete, STRING("MOBJ_eki_06_su3"))
     CALL(evt_cam3d_evt_set, -80, 202, 448, -80, 107, -92, 500, EASING_SINE_IN_OUT)
     WAIT_MS(500)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("origami"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("origami"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("n_origami"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_hitobj_onoff, STRING("a_ori"), 1, 1)
     BEGIN_INLINE_EVENT
@@ -194,11 +194,11 @@ EVT_BEGIN(evt_sw_complete)
         END_LOOP
     END_INLINE_EVENT
     WAIT_FRAMES(100)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("oku_1"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("oku_1"), MAP_OBJ_FLAG_HIDDEN)
     WAIT_FRAMES(32)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("oku_2"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("oku_2"), MAP_OBJ_FLAG_HIDDEN)
     WAIT_FRAMES(34)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("oku_3"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("oku_3"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_map_checkanim, STRING("anm_kaidan167"), LW(0), LW(1))
     WAIT_MS(LW(1))
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_FF_ENV_SUCCESS1"))
@@ -416,14 +416,14 @@ EVT_BEGIN(eki_06_init_evt)
         CALL(sw_entry, STRING("MOBJ_eki_06_su3"), -240, 0, 40)
         CALL(sw_entry, STRING("MOBJ_eki_06_su2"), -140, 0, 40)
         CALL(sw_entry, STRING("MOBJ_eki_06_su1"), -40, 0, 40)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("origami"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("origami"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_ori"), 1, 0)
         CASE_DEFAULT
         CALL(evt_map_playanim, STRING("anm_kaidan167"), MAP_ANIM_PLAY_AT_END, 0)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("n_origami"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("oku_1"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("oku_2"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("oku_3"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("n_origami"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("oku_1"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("oku_2"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("oku_3"), MAP_OBJ_FLAG_HIDDEN)
     END_SWITCH
     IF_INT_LESS(GSW_STORY_PROGRESS, STG6_34_3_BLUE_BLOCKS)
         ELSE

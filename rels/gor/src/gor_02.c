@@ -2,6 +2,9 @@
 // exits to gor_01 and down to the underground (tik).
 
 #include "system.h"
+#include "driver/animdrv.h"
+#include "driver/fadedrv.h"
+#include "evt/evt_story.h"
 #include "evt/evt_cloud.h"
 #include "evt/evt_urouro.h"
 #include "evt/evt_win.h"
@@ -490,7 +493,7 @@ static BeroEntry bero_entry_data[] = {
     {
         "w_bero", // hitName
         0, 0, // type..sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -507,7 +510,7 @@ static BeroEntry bero_entry_data[] = {
         "dokan", // hitName
         2, // type
         0, // sfxId
-        9, // directionId
+        BERO_DIR_DOWN, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -730,11 +733,11 @@ EVT_BEGIN(powerupya_party_lank_rtn)
     CALL(bgm_start_wait)
     CALL(evt_eff64, STRING("aaax"), STRING("lensflare_n64"), 0, -362, 44, -200, FLOAT(1.0f), -1, 0, 0, 0, 0, 0, 0)
     WAIT_MS(500)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_i01_sui_ao"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_i01_sui_ao"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_i01_sui_aka"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_msg_print, 0, STRING("powerup_14"), 0, STRING("me"))
     CALL(bgScrollControll, 0)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S"), MAP_OBJ_FLAG_NO_MAP_BLEND)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S"), MAP_OBJ_FLAG_NO_MAP_BLEND)
     CALL(evt_map_blend_set_flag, 1, STRING("mario"), 2048)
     CALL(evt_map_blend_set_flag, 1, STRING("party"), 2048)
     CALL(evt_mario_get_exparty, LW(0))
@@ -823,9 +826,9 @@ EVT_BEGIN(powerupya_party_lank_rtn)
     WAIT_MS(7000)
     CALL(evt_eff_softdelete, STRING("aaax"))
     IF_INT_EQUAL(GSWF_GOR_UP_ARROW_USED, 0)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_i01_sui_ao"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_i01_sui_ao"), MAP_OBJ_FLAG_HIDDEN)
         ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_i01_sui_aka"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_i01_sui_aka"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     WAIT_MS(500)
     CALL(evt_eff64, STRING("dddx"), STRING("release_n64"), 65283, -362, 44, -200, FLOAT(1.0f), 200, 0, 0, 0, 0, 0, 0)
@@ -880,10 +883,10 @@ EVT_BEGIN(powerupya_party_lank_rtn)
             END_IF
         END_LOOP
         CALL(bgScrollControll, 1)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S"), MAP_OBJ_FLAG_NO_MAP_BLEND)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ie_01_naka"), MAP_OBJ_FLAG_NO_MAP_BLEND)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ie_01_soto"), MAP_OBJ_FLAG_NO_MAP_BLEND)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ie_01_doa"), MAP_OBJ_FLAG_NO_MAP_BLEND)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S"), MAP_OBJ_FLAG_NO_MAP_BLEND)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ie_01_naka"), MAP_OBJ_FLAG_NO_MAP_BLEND)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ie_01_soto"), MAP_OBJ_FLAG_NO_MAP_BLEND)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ie_01_doa"), MAP_OBJ_FLAG_NO_MAP_BLEND)
         CALL(evt_map_blend_set_flag, 1, STRING("mario"), 2048)
         CALL(evt_map_blend_set_flag, 1, STRING("party"), 2048)
         CALL(evt_mario_get_exparty, LW(0))
@@ -1136,7 +1139,7 @@ EVT_BEGIN(powerupya_orb_use)
         ADD(LW(3), 20)
     END_IF
     CALL(evt_item_entry, STRING("watasu"), ITEM_UP_ARROW, LW(3), LW(4), LW(5), ITEM_TYPE_STILL, -1, 0)
-    CALL(evt_item_flag_on, STRING("watasu"), 2)
+    CALL(evt_item_flag_on, STRING("watasu"), ITEM_FLAG_NO_TOUCH)
     WAIT_MS(1000)
     CALL(evt_item_delete, STRING("watasu"))
     CALL(evt_mario_set_pose, STRING("M_S_1"))
@@ -1255,7 +1258,7 @@ EVT_BEGIN(powerupya_orb_use)
     CALL(bgm_start_wait)
     CALL(evt_eff64, STRING("aaax"), STRING("lensflare_n64"), 0, -362, 27, -180, FLOAT(1.0f), -1, 0, 0, 0, 0, 0, 0)
     WAIT_MS(500)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_i01_sui_ao"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_i01_sui_ao"), MAP_OBJ_FLAG_HIDDEN)
     WAIT_MS(1500)
     CALL(evt_eff_softdelete, STRING("aaax"))
     SET_VALUE(GSWF_GOR_UP_ARROW_USED, 1)
@@ -1332,9 +1335,9 @@ EVT_END()
  */
 EVT_BEGIN(mapball_init)
     IF_INT_EQUAL(GSWF_GOR_UP_ARROW_USED, 0)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_i01_sui_aka"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_i01_sui_aka"), MAP_OBJ_FLAG_HIDDEN)
         ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_i01_sui_ao"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_i01_sui_ao"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     RETURN
 EVT_END()
@@ -1352,7 +1355,7 @@ EVT_BEGIN(powerupya_init)
             SET_VALUE(LW(0), PTR(&door_data_01))
             CALL(evt_door_param, LW(0), 3, LW(1), LW(2))
             IF_INT_NOT_EQUAL(LW(1), 0)
-                CALL(evt_mapobj_flag_onoff, 1, 1, LW(1), MAP_OBJ_FLAG_HIDDEN)
+                CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, LW(1), MAP_OBJ_FLAG_HIDDEN)
             END_IF
             IF_INT_NOT_EQUAL(LW(2), 0)
                 CALL(evt_hitobj_onoff, LW(2), 1, 0)
@@ -1855,7 +1858,7 @@ EVT_END()
 EVT_BEGIN(tozokudan2_house_door)
     SET_VALUE(GF(0), 1)
     SET_VALUE(GF(1), 1)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ie_06_naka"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_ie_06_naka"), MAP_OBJ_FLAG_HIDDEN)
     SET_VALUE(LW(0), PTR(&door_data_06))
     SPAWN_EVENT(PTR(door_open_se))
     CALL(evt_door_param, LW(0), 6, LW(7), LW(8), LW(9))
@@ -1900,7 +1903,7 @@ EVT_BEGIN(tozokudan2_house_door)
     END_IF
     WAIT_WHILE(GF(0))
     WAIT_WHILE(GF(1))
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ie_06_naka"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ie_06_naka"), MAP_OBJ_FLAG_HIDDEN)
     RETURN
 EVT_END()
 
@@ -3142,11 +3145,11 @@ EVT_BEGIN(evt_door_02_open)
         CALL(evt_mapobj_trans, 1, STRING("S_open_book"), -15, 0, 0)
     END_SWITCH
     IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, STG0_15_THE_PEDESTAL)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_tizu_on"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_tizu_on"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     CALL(monosiri_check, LW(0), LW(1))
     IF_INT_EQUAL(LW(0), 0)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_i02_memo"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_i02_memo"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     RETURN
 EVT_END()
@@ -3216,7 +3219,7 @@ static DoorParam door_data_02 = {
 EVT_BEGIN(evt_door_02_entry)
     CALL(evt_door_param, LW(0), 3, LW(1), LW(2))
     IF_INT_NOT_EQUAL(LW(1), 0)
-        CALL(evt_mapobj_flag_onoff, 1, 1, LW(1), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, LW(1), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     IF_INT_NOT_EQUAL(LW(2), 0)
         CALL(evt_hitobj_onoff, LW(2), 1, 0)
@@ -3392,7 +3395,7 @@ EVT_END()
 static EVT_BEGIN(evt_door_03_entry)
     CALL(evt_door_param, LW(0), 3, LW(1), LW(2))
     IF_INT_NOT_EQUAL(LW(1), 0)
-        CALL(evt_mapobj_flag_onoff, 1, 1, LW(1), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, LW(1), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     IF_INT_NOT_EQUAL(LW(2), 0)
         CALL(evt_hitobj_onoff, LW(2), 1, 0)
@@ -3555,7 +3558,7 @@ EVT_END()
 
 static EVT_BEGIN(evt_wall_04)
     IF_INT_EQUAL(LW(6), 0)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_i04_msk"), MAP_OBJ_FLAG_NO_MAP_BLEND2)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_i04_msk"), MAP_OBJ_FLAG_NO_MAP_BLEND2)
     END_IF
     SET_FLOAT_VALUE(LW(2), LW(0))
     SET_FLOAT_VALUE(LW(3), LW(0))
@@ -4350,16 +4353,16 @@ USER_FUNC(camera_move_check) {
 EVT_BEGIN(evt_gor_door_dark_sub)
     CALL(evt_map_set_tevcallback, 1, PTR(_door_color_tev))
     CALL(evt_map_set_tevcallback, 2, PTR(_door_color2_tev))
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_i03_del_mC"), MAP_OBJ_TEV_CALLBACK(1))
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_i03_kmn_mC"), MAP_OBJ_TEV_CALLBACK(1))
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_i03_yuka_mD"), MAP_OBJ_TEV_CALLBACK(1))
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ie_03_doam"), MAP_OBJ_TEV_CALLBACK(1))
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_i03_sikiri_mC"), MAP_OBJ_TEV_CALLBACK(2))
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_i03_del_mC"), MAP_OBJ_FLAG_DISPLAY_LIST)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_i03_kmn_mC"), MAP_OBJ_FLAG_DISPLAY_LIST)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_i03_yuka_mD"), MAP_OBJ_FLAG_DISPLAY_LIST)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ie_03_doam"), MAP_OBJ_FLAG_DISPLAY_LIST)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_i03_sikiri_mC"), MAP_OBJ_FLAG_DISPLAY_LIST)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_i03_del_mC"), MAP_OBJ_TEV_CALLBACK(1))
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_i03_kmn_mC"), MAP_OBJ_TEV_CALLBACK(1))
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_i03_yuka_mD"), MAP_OBJ_TEV_CALLBACK(1))
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ie_03_doam"), MAP_OBJ_TEV_CALLBACK(1))
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_i03_sikiri_mC"), MAP_OBJ_TEV_CALLBACK(2))
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_i03_del_mC"), MAP_OBJ_FLAG_DISPLAY_LIST)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_i03_kmn_mC"), MAP_OBJ_FLAG_DISPLAY_LIST)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_i03_yuka_mD"), MAP_OBJ_FLAG_DISPLAY_LIST)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_ie_03_doam"), MAP_OBJ_FLAG_DISPLAY_LIST)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_i03_sikiri_mC"), MAP_OBJ_FLAG_DISPLAY_LIST)
     BEGIN_INLINE_EVENT
         CALL(evt_sub_intpl_msec_init, EASING_LINEAR, 255, 0, 300)
         LOOP(0)
@@ -4380,10 +4383,10 @@ EVT_BEGIN(evt_gor_door_dark_sub)
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_i03_del_mC"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_i03_kmn_mC"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_i03_yuka_mD"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ie_03_doam"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_i03_del_mC"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_i03_kmn_mC"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_i03_yuka_mD"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ie_03_doam"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_sub_intpl_msec_init, EASING_QUADRATIC_IN, 0, -90, 500)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
@@ -4402,7 +4405,7 @@ EVT_BEGIN(evt_gor_door_dark_sub)
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_i03_sikiri_mC"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_i03_sikiri_mC"), MAP_OBJ_FLAG_HIDDEN)
     RETURN
 EVT_END()
 
@@ -4510,7 +4513,7 @@ EVT_BEGIN(evt_gor_door_light_sub)
             WAIT_FRAMES(1)
         END_LOOP
     END_INLINE_EVENT
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_i03_sikiri_mC"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_i03_sikiri_mC"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_sub_intpl_msec_init, EASING_QUADRATIC_IN, -90, 0, 500)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
@@ -4520,10 +4523,10 @@ EVT_BEGIN(evt_gor_door_light_sub)
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_i03_del_mC"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_i03_kmn_mC"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_i03_yuka_mD"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ie_03_doam"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_i03_del_mC"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_i03_kmn_mC"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_i03_yuka_mD"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_ie_03_doam"), MAP_OBJ_FLAG_HIDDEN)
     BEGIN_INLINE_EVENT
         CALL(evt_sub_intpl_msec_init, EASING_LINEAR, 0, 255, 300)
         LOOP(0)
@@ -4544,16 +4547,16 @@ EVT_BEGIN(evt_gor_door_light_sub)
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_i03_del_mC"), MAP_OBJ_TEV_CALLBACK_MASK)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_i03_kmn_mC"), MAP_OBJ_TEV_CALLBACK_MASK)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_i03_yuka_mD"), MAP_OBJ_TEV_CALLBACK_MASK)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ie_03_doam"), MAP_OBJ_TEV_CALLBACK_MASK)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_i03_sikiri_mC"), MAP_OBJ_TEV_CALLBACK_MASK)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_i03_del_mC"), MAP_OBJ_FLAG_DISPLAY_LIST)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_i03_kmn_mC"), MAP_OBJ_FLAG_DISPLAY_LIST)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_i03_yuka_mD"), MAP_OBJ_FLAG_DISPLAY_LIST)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ie_03_doam"), MAP_OBJ_FLAG_DISPLAY_LIST)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_i03_sikiri_mC"), MAP_OBJ_FLAG_DISPLAY_LIST)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_i03_del_mC"), MAP_OBJ_TEV_CALLBACK_MASK)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_i03_kmn_mC"), MAP_OBJ_TEV_CALLBACK_MASK)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_i03_yuka_mD"), MAP_OBJ_TEV_CALLBACK_MASK)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_ie_03_doam"), MAP_OBJ_TEV_CALLBACK_MASK)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_i03_sikiri_mC"), MAP_OBJ_TEV_CALLBACK_MASK)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_i03_del_mC"), MAP_OBJ_FLAG_DISPLAY_LIST)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_i03_kmn_mC"), MAP_OBJ_FLAG_DISPLAY_LIST)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_i03_yuka_mD"), MAP_OBJ_FLAG_DISPLAY_LIST)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ie_03_doam"), MAP_OBJ_FLAG_DISPLAY_LIST)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_i03_sikiri_mC"), MAP_OBJ_FLAG_DISPLAY_LIST)
     RETURN
 EVT_END()
 
@@ -4640,7 +4643,7 @@ EVT_BEGIN(cam_yurasu_event)
 EVT_END()
 
 EVT_BEGIN(steel_coin)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_kmn"), MAP_OBJ_FLAG_CLIP)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_kmn"), MAP_OBJ_FLAG_CLIP)
     CALL(evt_npc_set_ry, STRING("盗賊"), 270)
     CALL(evt_npc_set_position, STRING("盗賊"), -300, 0, 0)
     CALL(evt_npc_flag_onoff, 1, STRING("盗賊"), NPC_FLAG_AUTO_MOVE_ANIM)
@@ -4756,7 +4759,7 @@ EVT_BEGIN(steel_coin)
 EVT_END()
 
 EVT_BEGIN(kurihakase_first_talk)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ie_02_naka"), MAP_OBJ_FLAG_CLIP)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_ie_02_naka"), MAP_OBJ_FLAG_CLIP)
     CALL(evt_npc_set_position, STRING("クリハカセ"), -115, 0, -225)
     CALL(evt_npc_set_ry, STRING("クリハカセ"), 90)
     CALL(evt_door_end_wait)
@@ -4896,7 +4899,7 @@ EVT_BEGIN(kurihakase_first_talk)
     ADD(LW(1), 20)
     ADD(LW(2), 10)
     CALL(evt_item_entry, STRING("item00"), ITEM_MAGICAL_MAP_LARGE, LW(0), LW(1), LW(2), ITEM_TYPE_STILL, -1, 0)
-    CALL(evt_item_flag_on, STRING("item00"), 2)
+    CALL(evt_item_flag_on, STRING("item00"), ITEM_FLAG_NO_TOUCH)
     CALL(evt_item_set_scale, STRING("item00"), FLOAT(0.5498047f))
     WAIT_MS(660)
     CALL(evt_mario_set_pose, STRING("M_S_1"))
@@ -4972,7 +4975,7 @@ EVT_BEGIN(kurihakase_wall_remove)
     CALL(evt_img_set_paper_anim, STRING("img"), STRING("Z_1"))
     CALL(evt_img_onoff, STRING("img"), 1)
     CALL(evt_img_set_shadow, STRING("img"), 2)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_saku04"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_saku04"), MAP_OBJ_FLAG_HIDDEN)
     BEGIN_INLINE_EVENT
         CALL(evt_snd_sfxon, STRING("SFX_OFF_FENCE_OPEN1"), 0)
         WAIT_MS(1000)
@@ -5131,10 +5134,10 @@ EVT_BEGIN(kurihakase_lecture_badge)
     END_INLINE_EVENT
     CALL(evt_mario_mov_pos2, -265, 0, FLOAT(120.0f))
     CALL(evt_mario_set_dir, 90, 200, 0)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ie_02_naka"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_ie_02_naka"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_npc_set_position, STRING("クリハカセ"), -215, 0, -93)
     CALL(evt_item_entry, STRING("item00"), ITEM_POWER_SMASH, 0, -1000, 0, ITEM_TYPE_STILL, -1, 0)
-    CALL(evt_item_flag_on, STRING("item00"), 2)
+    CALL(evt_item_flag_on, STRING("item00"), ITEM_FLAG_NO_TOUCH)
     BEGIN_INLINE_EVENT_GET_ID(LW(10))
         LOOP(0)
             CALL(evt_npc_get_position, STRING("クリハカセ"), LW(0), LW(1), LW(2))
@@ -5186,7 +5189,7 @@ EVT_BEGIN(kurihakase_lecture_badge)
     SET_VALUE(GF(0), 1)
     BEGIN_INLINE_EVENT
         CALL_CHILD(PTR(kurihakase_door))
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ie_02_naka"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ie_02_naka"), MAP_OBJ_FLAG_HIDDEN)
         SET_VALUE(GF(0), 0)
     END_INLINE_EVENT
     WAIT_MS(500)
@@ -5250,7 +5253,7 @@ EVT_END()
  * and after-stage-6 epigraphy scenes run it before book_open.
  */
 EVT_BEGIN(book_center_init)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_open_book"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_open_book"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_trans, 1, STRING("S_open_book"), -15, 0, 0)
     CALL(evt_mapobj_rotate, 1, STRING("S_open_book_r"), 0, 0, 0)
     RETURN
@@ -5366,11 +5369,11 @@ EVT_BEGIN(epigraphy_map)
     CALL(evt_npc_flag_onoff, 1, STRING("クリハカセ"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_npc_move_position, STRING("クリハカセ"), -150, -205, 0, FLOAT(60.0f), 0)
     WAIT_MS(500)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_tizu_on"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_tizu_on"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_npc_get_position, STRING("クリハカセ"), LW(0), LW(1), LW(2))
     ADD(LW(2), 10)
     CALL(evt_item_entry, STRING("item_map"), ITEM_MAGICAL_MAP_LARGE, LW(0), LW(1), LW(2), ITEM_TYPE_STILL, -1, 0)
-    CALL(evt_item_flag_on, STRING("item_map"), 2)
+    CALL(evt_item_flag_on, STRING("item_map"), ITEM_FLAG_NO_TOUCH)
     CALL(evt_item_set_scale, STRING("item_map"), FLOAT(0.5498047f))
     BEGIN_INLINE_EVENT_GET_ID(LW(10))
         LOOP(0)
@@ -5635,7 +5638,7 @@ EVT_BEGIN(epigraphy_map_after_stage3)
     WAIT_MS(500)
     CALL(evt_mapobj_get_position, STRING("S_open_book"), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG0_PUT_BOOK1"), LW(0), LW(1), LW(2), 0)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_open_book"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_open_book"), MAP_OBJ_FLAG_HIDDEN)
     WAIT_MS(500)
     CALL_CHILD(PTR(book_open))
     WAIT_MS(500)
@@ -5838,7 +5841,7 @@ EVT_BEGIN(epigraphy_map_after_stage6)
     WAIT_MS(500)
     CALL(evt_mapobj_get_position, STRING("S_open_book"), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG0_PUT_BOOK1"), LW(0), LW(1), LW(2), 0)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_open_book"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_open_book"), MAP_OBJ_FLAG_HIDDEN)
     WAIT_MS(500)
     CALL_CHILD(PTR(book_open))
     WAIT_MS(500)
@@ -6085,7 +6088,7 @@ EVT_BEGIN(evt_monosiri)
     CALL(evt_mario_key_onoff, 1)
     CALL(monosiri_check, LW(0), LW(1))
     IF_INT_EQUAL(LW(0), 0)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_i02_memo"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_i02_memo"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_exit_case_evt)
     END_IF
     RETURN
@@ -6172,7 +6175,7 @@ static EVT_BEGIN(epilogue_evt)
     CALL(evt_snd_bgm_scope, 0, 1)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_HIDE)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_open_book"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_open_book"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_tizu_on"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_npc_set_position, STRING("クリハカセ"), -140, 0, -225)
     CALL(evt_npc_flag_onoff, 1, STRING("クリハカセ"), NPC_FLAG_INSTANT_TURN)
@@ -6188,7 +6191,7 @@ static EVT_BEGIN(epilogue_evt)
     WAIT_MS(1000)
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 3000)
     CALL(evt_snd_envoff_f, PSND_FADEOUT, 3000)
-    CALL(evt_fade_set_mapchange_type, 1, 10, 900, 9, 900)
+    CALL(evt_fade_set_mapchange_type, 1, FADE_OUT_BLACK, 900, FADE_IN_BLACK, 900)
     CALL(evt_bero_mapchange, STRING("hei_00"), STRING(""))
     RETURN
 EVT_END()
@@ -6210,9 +6213,9 @@ EVT_BEGIN(front_wall_keshi)
     LOOP(0)
         CALL(camera_front_check, LF(0))
         IF_INT_EQUAL(LF(0), 1)
-            CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_gai_kabe_mae"), MAP_OBJ_FLAG_HIDDEN)
+            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_gai_kabe_mae"), MAP_OBJ_FLAG_HIDDEN)
             ELSE
-            CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_gai_kabe_mae"), MAP_OBJ_FLAG_HIDDEN)
+            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_gai_kabe_mae"), MAP_OBJ_FLAG_HIDDEN)
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
@@ -6237,10 +6240,10 @@ EVT_BEGIN(tobiori_check)
             WAIT_FRAMES(1)
         END_LOOP
         DEBUG_PUT_MSG(STRING("カメラ移動開始"))
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ie_05_soto"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ie_05_soto"), MAP_OBJ_FLAG_HIDDEN)
         CALL(camera_move_check)
         DEBUG_PUT_MSG(STRING("カメラ移動終了"))
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ie_05_soto"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_ie_05_soto"), MAP_OBJ_FLAG_HIDDEN)
     END_LOOP
     RETURN
 EVT_END()
@@ -6305,7 +6308,7 @@ EVT_BEGIN(gor_02_init_evt)
     SET_VALUE(LW(0), PTR(&door_data_03_roll))
     CALL_CHILD(PTR(evt_door_03_roll_entry))
     IF_INT_LESS(GSW_STORY_PROGRESS, STG1_00_PETAL_MEADOWS)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ie_04_naka"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ie_04_naka"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_ie_04C"), 1, 0)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_ie_04_doa01"), 0, PTR(evt_door_04_junbi), 0)
         ELSE
@@ -6322,7 +6325,7 @@ EVT_BEGIN(gor_02_init_evt)
     END_IF
     CALL(evt_door_param, LW(0), 3, LW(1), LW(2))
     IF_INT_NOT_EQUAL(LW(1), 0)
-        CALL(evt_mapobj_flag_onoff, 1, 1, LW(1), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, LW(1), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     IF_INT_NOT_EQUAL(LW(2), 0)
         CALL(evt_hitobj_onoff, LW(2), 1, 0)
@@ -6337,7 +6340,7 @@ EVT_BEGIN(gor_02_init_evt)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, LW(3), 0, PTR(evt_door_open), 0)
     END_IF
     IF_INT_EQUAL(GSWF_GOR_02_HOUSE_KEY_LOCK_UNLOCKED, 0)
-        CALL(evt_mobj_lock, STRING("mobj_lock00"), 49, 446, 18, 50, 0, PTR(evt_chk), PTR(evt_unlock), GSWF_GOR_02_HOUSE_KEY_LOCK_UNLOCKED)
+        CALL(evt_mobj_lock, STRING("mobj_lock00"), ITEM_HOUSE_KEY, 446, 18, 50, 0, PTR(evt_chk), PTR(evt_unlock), GSWF_GOR_02_HOUSE_KEY_LOCK_UNLOCKED)
         ELSE
         SET_VALUE(LW(0), PTR(&door_data_06))
         CALL(evt_door_data_copy, LW(0), LW(1))
@@ -6350,7 +6353,7 @@ EVT_BEGIN(gor_02_init_evt)
         CALL_CHILD(PTR(evt_door_entry))
     END_IF
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG0_10_REMOVING_THE_FENCE)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_saku04"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_saku04"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_saku_04"), 1, 0)
     END_IF
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG0_07_GOOMBELLA_JOINS)
@@ -6395,9 +6398,9 @@ EVT_BEGIN(gor_02_init_evt)
                 CALL(evt_cloud_get_mode, LW(0))
                 IF_INT_NOT_EQUAL(LW(0), -1)
                     IF_INT_EQUAL(LW(0), 0)
-                        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_i04_ura_01B"), MAP_OBJ_FLAG_HIDDEN)
+                        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_i04_ura_01B"), MAP_OBJ_FLAG_HIDDEN)
                         ELSE
-                        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_i04_ura_01B"), MAP_OBJ_FLAG_HIDDEN)
+                        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_i04_ura_01B"), MAP_OBJ_FLAG_HIDDEN)
                     END_IF
                 END_IF
                 WAIT_FRAMES(1)
@@ -6406,7 +6409,7 @@ EVT_BEGIN(gor_02_init_evt)
         ELSE
         SET_VALUE(LW(0), PTR(&door_data_04_ura))
         CALL_CHILD(PTR(evt_door_entry))
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_i04_kabe_msk"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_i04_kabe_msk"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_i04_kabe_msk"), 1, 0)
     END_IF
     CALL(evt_map_entry_airport_harbor, 1, STRING("S_sanbashi_01"), STRING("Ship_Change01"))

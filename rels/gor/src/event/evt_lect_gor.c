@@ -226,7 +226,7 @@ static void lecture_button_disp(CameraId camera, void* param) {
         LectButton* btn = &lbtn[i];
         LectButtonDisp* disp = &btn->disp;
 
-        if (!(btn->flags & 1)) {
+        if (!(btn->flags & LECT_BUTTON_FLAG_HIDDEN)) {
             f32 ofs;
             Vec pos;
 
@@ -248,7 +248,7 @@ static void lecture_button_disp(CameraId camera, void* param) {
             }
             pos = disp->pos;
             pos.y += ofs;
-            iconDispGxAlpha(&pos, 0x50, btn->iconId, btn->alpha, 1.0f);
+            iconDispGxAlpha(&pos, ICON_FLAG_NO_MAP_BLEND | ICON_FLAG_2D, btn->iconId, btn->alpha, 1.0f);
         }
     }
 }

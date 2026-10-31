@@ -2,6 +2,7 @@
 // NPCs, overnight beds and the day-1/day-2 end scenes; doors to rsh_01 and rsh_03.
 
 #include "battle/battle_unit.h"
+#include "driver/fadedrv.h"
 #include "evt/evt_window.h"
 #include "evt/evt_cmd.h"
 #include "driver/msgdrv.h"
@@ -111,7 +112,7 @@ static BeroEntry bero_data_a[] = {
         "w_bero", // hitName
         1, // type
         8, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -129,7 +130,7 @@ static BeroEntry bero_data_a[] = {
         "e_bero", // hitName
         1, // type
         8, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -152,7 +153,7 @@ static BeroEntry bero_data_b[] = {
         "w_bero", // hitName
         1, // type
         8, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -170,7 +171,7 @@ static BeroEntry bero_data_b[] = {
         "e_bero", // hitName
         1, // type
         8, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -193,7 +194,7 @@ static BeroEntry bero_data_c[] = {
         "w_bero", // hitName
         1, // type
         8, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -211,7 +212,7 @@ static BeroEntry bero_data_c[] = {
         "e_bero", // hitName
         1, // type
         8, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -264,7 +265,7 @@ EVT_BEGIN(evt_nabe)
     CALL(evt_mario_set_dir_npc, STRING("グルメキノピオ"))
     WAIT_MS(500)
     CALL(evt_msg_print, 0, STRING("stg6_rsh_57"), 0, STRING("グルメキノピオ"))
-    CALL(evt_fade_entry, 10, 1000, 0, 0, 0)
+    CALL(evt_fade_entry, FADE_OUT_BLACK, 1000, 0, 0, 0)
     WAIT_MS(1000)
     CALL(evt_mario_set_pos, 205, 0, -175)
     CALL(evt_party_set_pos, 0, 180, 0, -200)
@@ -275,7 +276,7 @@ EVT_BEGIN(evt_nabe)
     CALL(evt_set_dir_to_target, STRING("ポワン探偵"), STRING("グルメキノピオ"))
     CALL(evt_set_dir_to_target, STRING("グルメキノピオ"), STRING("ポワン探偵"))
     CALL(evt_cam3d_evt_zoom_in, 25, 0, 20, EASING_SINE_IN_OUT)
-    CALL(evt_fade_entry, 9, 1000, 0, 0, 0)
+    CALL(evt_fade_entry, FADE_IN_BLACK, 1000, 0, 0, 0)
     WAIT_MS(1000)
     CALL(evt_msg_print, 0, STRING("stg6_rsh_58"), 0, STRING("ポワン探偵"))
     WAIT_MS(500)
@@ -561,7 +562,7 @@ EVT_BEGIN(talk_yuurei)
                 END_IF
                 WAIT_FRAMES(1)
             END_LOOP
-            CALL(evt_mapobj_flag_onoff, 1, 0, STRING("shouten"), MAP_OBJ_FLAG_HIDDEN)
+            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("shouten"), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_npc_get_position, STRING("ゆうれい"), LW(7), LW(8), LW(9))
             CALL(evt_snd_sfxon_3d, STRING("SFX_STG6_GHOST_PASSAWAY1"), LW(7), LW(8), LW(9), LW(6))
             BEGIN_INLINE_EVENT
@@ -593,7 +594,7 @@ EVT_BEGIN(talk_yuurei)
             END_LOOP
             CALL(evt_snd_sfxoff, LW(6))
             WAIT_MS(1000)
-            CALL(evt_mapobj_flag_onoff, 1, 1, STRING("shouten"), MAP_OBJ_FLAG_HIDDEN)
+            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("shouten"), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
             CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)
             BEGIN_INLINE_EVENT
@@ -928,7 +929,7 @@ EVT_BEGIN(evt_normal_yado)
     CALL(evt_party_set_dir, 0, 90, 0)
     CALL(evt_party_set_dir, 1, 90, 0)
     WAIT_MS(3000)
-    CALL(evt_fade_entry, 9, 1000, 0, 0, 0)
+    CALL(evt_fade_entry, FADE_IN_BLACK, 1000, 0, 0, 0)
     CALL(evt_fade_end_wait)
     CALL(evt_msg_print, 0, STRING("stg6_yado_01"), 0, 0)
     CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
@@ -1035,7 +1036,7 @@ EVT_BEGIN(evt_toron_catch)
     CALL(evt_msg_print, 0, STRING("stg6_rsh_182"), 0, STRING("トロン"))
     CALL(evt_snd_bgmoff, PSND_FADEOUT)
     SET_VALUE(GSWF_RSH_EVENT_ENTRY_PENDING, 1)
-    CALL(evt_fade_set_mapchange_type, 0, 10, 2000, 9, 2000)
+    CALL(evt_fade_set_mapchange_type, 0, FADE_OUT_BLACK, 2000, FADE_IN_BLACK, 2000)
     SET_VALUE(GSW_STORY_PROGRESS, STG6_26_ZIP_TOAD_CAUGHT)
     CALL(evt_bero_mapchange, STRING("rsh_02_b"), STRING("w_bero"))
     RETURN
@@ -1472,16 +1473,16 @@ EVT_BEGIN(rsh_02_a_init_evt)
     CALL_CHILD(PTR(rsh_02_init_evt))
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG6_01_THE_CONDUCTOR, STG6_20_END_OF_DAY_1)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("s_yuka"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("s_yuka_simi"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("s_yuka"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("s_yuka_simi"), MAP_OBJ_FLAG_HIDDEN)
         IF_INT_GREATER(GSW_STORY_PROGRESS, STG6_01_THE_CONDUCTOR)
             IF_INT_LESS(GSW_STORY_PROGRESS, STG6_05_GALLEY_KETTLE_DISCOVERED)
                 CALL(evt_run_case_evt, CASE_STAND_ON_A, 1, STRING("a_yuka_simi"), 0, PTR(evt_yuka_simi), GW(10))
             END_IF
         END_IF
         CASE_DEFAULT
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("s_yuka"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("s_yuka_simi"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("s_yuka"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("s_yuka_simi"), MAP_OBJ_FLAG_HIDDEN)
     END_SWITCH
     IF_INT_EQUAL(GSWF_RSH_EVENT_ENTRY_PENDING, 0)
         SET_VALUE(LW(0), PTR(bero_data_a))
@@ -1498,7 +1499,7 @@ EVT_BEGIN(rsh_02_a_init_evt)
         CALL(evt_party_set_dir, 0, 270, 0)
         CALL(evt_cam_road_reset)
         CALL(evt_cam_shift_reset)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("heya_3"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("heya_3"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("haikei_3"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("heya_4"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("haikei_4"), MAP_OBJ_FLAG_HIDDEN)
@@ -1533,8 +1534,8 @@ EVT_BEGIN(rsh_02_a_init_evt)
                 WAIT_MS(300)
                 CALL(evt_eff_fukidashi, FUKIDASHI_AT_PARTNER, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
                 WAIT_MS(1500)
-                CALL(evt_mapobj_flag_onoff, 1, 0, STRING("yuka_5_kami_2"), MAP_OBJ_FLAG_HIDDEN)
-                CALL(evt_mapobj_flag_onoff, 1, 1, STRING("yuka_5"), MAP_OBJ_FLAG_HIDDEN)
+                CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("yuka_5_kami_2"), MAP_OBJ_FLAG_HIDDEN)
+                CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("yuka_5"), MAP_OBJ_FLAG_HIDDEN)
                 CALL(evt_cam3d_evt_set, -220, 127, 285, -220, 45, -183, 500, EASING_SINE_IN_OUT)
                 WAIT_MS(500)
                 CALL(evt_msg_print_party, STRING("stg6_rsh_pro_02"))
@@ -1547,8 +1548,8 @@ EVT_BEGIN(rsh_02_a_init_evt)
                 CALL(evt_mario_mov_pos2, -190, -130, FLOAT(80.0f))
                 CALL(evt_party_stop, 0)
                 WAIT_MS(300)
-                CALL(evt_mapobj_flag_onoff, 1, 1, STRING("yuka_5_kami_2"), MAP_OBJ_FLAG_HIDDEN)
-                CALL(evt_mapobj_flag_onoff, 1, 0, STRING("yuka_5"), MAP_OBJ_FLAG_HIDDEN)
+                CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("yuka_5_kami_2"), MAP_OBJ_FLAG_HIDDEN)
+                CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("yuka_5"), MAP_OBJ_FLAG_HIDDEN)
                 CALL(evt_party_get_pos, 0, LW(0), LW(1), LW(2))
                 ADD(LW(0), 10)
                 ADD(LW(2), 5)
@@ -1628,17 +1629,17 @@ EVT_BEGIN(rsh_02_a_init_evt)
     END_IF
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG6_24_A_VITAL_CLUE, STG6_24_02_ANOTHER_CLUE)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("yuka_5_kami"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("yuka_5_kami"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("yuka_5_kami_2"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("yuka_5"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("yuka_5"), MAP_OBJ_FLAG_HIDDEN)
         IF_INT_LESS(GSW_STORY_PROGRESS, STG6_24_02_ANOTHER_CLUE)
             CALL(evt_run_case_evt, CASE_STAND_ON_A, 1, STRING("a_kami"), 0, PTR(evt_daiji_kami), 0)
         END_IF
         SPAWN_EVENT(PTR(evt_toron_appear))
         CASE_DEFAULT
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("yuka_5_kami"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("yuka_5_kami"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("yuka_5_kami_2"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("yuka_5"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("yuka_5"), MAP_OBJ_FLAG_HIDDEN)
     END_SWITCH
 #ifdef VERSION_G8ME01
     SPAWN_EVENT(evt_sub_mail_event)
@@ -1662,7 +1663,7 @@ EVT_BEGIN(rsh_02_b_init_evt)
         SET_VALUE(LW(0), PTR(bero_data_b))
         CALL(evt_bero_get_info)
         CALL_CHILD(PTR(bero_case_entry))
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("heya_3"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("heya_3"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("haikei_3"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("heya_4"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("haikei_4"), MAP_OBJ_FLAG_HIDDEN)
@@ -1682,7 +1683,7 @@ EVT_BEGIN(rsh_02_b_init_evt)
         CALL(evt_mario_set_dir, 90, 0, 0)
         CALL(evt_party_set_dir, 0, 270, 0)
         CALL(evt_cam_road_reset)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("heya_3"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("heya_3"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("haikei_3"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("heya_4"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("haikei_4"), MAP_OBJ_FLAG_HIDDEN)
@@ -1713,7 +1714,7 @@ EVT_BEGIN(rsh_02_c_init_evt)
     SET_VALUE(LW(0), PTR(&window_tbl))
     CALL_CHILD(PTR(evt_rsh_window))
     CALL(evt_map_playanim, STRING("shouten"), MAP_ANIM_PLAY_LOOP, 0)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("shouten"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("shouten"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_bero_get_entername, LW(0))
     IF_STR_EQUAL(LW(0), STRING("hom_hassya"))
         CALL(evt_mario_set_pos, -245, 0, -185)
@@ -1721,7 +1722,7 @@ EVT_BEGIN(rsh_02_c_init_evt)
         CALL(evt_mario_set_dir, 90, 0, 0)
         CALL(evt_party_set_dir, 0, 270, 0)
         CALL(evt_cam_road_reset)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("heya_3"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("heya_3"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("haikei_3"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("heya_4"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("haikei_4"), MAP_OBJ_FLAG_HIDDEN)
@@ -1825,11 +1826,11 @@ EVT_END()
  */
 EVT_BEGIN(rsh_02_a_init_evt_nidome)
     CALL_CHILD(PTR(rsh_02_init_evt_nidome))
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("s_yuka"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("s_yuka"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("s_yuka_simi"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("yuka_5_kami"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("yuka_5_kami"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("yuka_5_kami_2"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("yuka_5"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("yuka_5"), MAP_OBJ_FLAG_HIDDEN)
     SET_VALUE(LF(0), 0)
     CALL(evt_bero_get_entername, LW(0))
     IF_STR_EQUAL(LW(0), STRING("nidome_start"))
@@ -1856,7 +1857,7 @@ EVT_BEGIN(rsh_02_a_init_evt_nidome)
         CALL(evt_party_set_dir, 1, 270, 0)
         CALL(evt_cam_road_reset)
         CALL(evt_cam_shift_reset)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("heya_3"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("heya_3"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("haikei_3"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("heya_4"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("haikei_4"), MAP_OBJ_FLAG_HIDDEN)
@@ -1864,7 +1865,7 @@ EVT_BEGIN(rsh_02_a_init_evt_nidome)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("haikei_5"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("rouka"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("tobira_5"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("yuka_5_kami"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("yuka_5_kami"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("yuka_5_kami_2"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_bero_get_entername, LW(0))
         IF_STR_EQUAL(LW(0), STRING("nidome"))
@@ -1951,7 +1952,7 @@ EVT_BEGIN(rsh_02_b_init_evt_nidome)
         CALL(evt_party_set_dir, 1, 270, 0)
         CALL(evt_cam_road_reset)
         CALL(evt_cam_shift_reset)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("heya_3"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("heya_3"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("haikei_3"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("heya_4"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("haikei_4"), MAP_OBJ_FLAG_HIDDEN)
@@ -1999,7 +2000,7 @@ EVT_BEGIN(rsh_02_c_init_evt_nidome)
     CALL(evt_map_playanim, STRING("ranpu"), MAP_ANIM_PLAY_LOOP, 0)
     SET_VALUE(LW(0), PTR(&window_tbl))
     CALL_CHILD(PTR(evt_rsh_window))
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("shouten"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("shouten"), MAP_OBJ_FLAG_HIDDEN)
     SET_VALUE(LF(0), 0)
     CALL(evt_bero_get_entername, LW(0))
     IF_STR_EQUAL(LW(0), STRING("nidome_start"))
@@ -2017,7 +2018,7 @@ EVT_BEGIN(rsh_02_c_init_evt_nidome)
         CALL(evt_party_set_dir, 1, 270, 0)
         CALL(evt_cam_road_reset)
         CALL(evt_cam_shift_reset)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("heya_3"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("heya_3"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("haikei_3"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("heya_4"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("haikei_4"), MAP_OBJ_FLAG_HIDDEN)

@@ -743,7 +743,7 @@ void main_enemy(void) {
     s32 i;
     BattleUnit* unit;
 
-    for (i = 0; i < 64; i++) {
+    for (i = 0; i < BATTLE_UNIT_MAX; i++) {
         unit = BattleGetUnitPtr(bw, i);
         if (unit && unit->mAlliance == ALLIANCE_ENEMY) {
             main_enemy_sub(unit, &n);

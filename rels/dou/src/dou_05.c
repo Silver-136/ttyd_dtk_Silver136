@@ -102,7 +102,7 @@ static BeroEntry bero_entry_data[] = {
     {
         "w_bero_1", // hitName
         0, 0, // type..sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -118,7 +118,7 @@ static BeroEntry bero_entry_data[] = {
     {
         "w_bero_2", // hitName
         0, 0, // type..sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -134,7 +134,7 @@ static BeroEntry bero_entry_data[] = {
     {
         "w_bero_3", // hitName
         0, 0, // type..sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -151,7 +151,7 @@ static BeroEntry bero_entry_data[] = {
         "e_bero", // hitName
         1, // type
         6, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -312,8 +312,8 @@ EVT_END()
 EVT_BEGIN(waterfall_init)
     CALL(alpha_init_func)
     CALL(evt_map_set_tevcallback, 1, PTR(alpha_tev))
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_mizu_ata"), MAP_OBJ_TEV_CALLBACK(1))
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_mizu_ata"), MAP_OBJ_FLAG_DISPLAY_LIST)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_mizu_ata"), MAP_OBJ_TEV_CALLBACK(1))
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_mizu_ata"), MAP_OBJ_FLAG_DISPLAY_LIST)
     SET_VALUE(GW(0), 0)
     SPAWN_EVENT(PTR(waterfall_main))
     RETURN
@@ -347,7 +347,7 @@ EVT_BEGIN(dou_05_init_evt)
     CALL(evt_map_playanim, STRING("nami"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_map_playanim, STRING("tubo"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_mobj_save_blk, STRING("mobj_save"), 175, 120, -135, 0, 0)
-    CALL(evt_mobj_lock, STRING("mobj_lock00"), 20, 190, 10, 0, 270, PTR(evt_chk), PTR(evt_unlock), GSWF_DOU_05_DOOR_UNLOCKED)
+    CALL(evt_mobj_lock, STRING("mobj_lock00"), ITEM_GROTTO_KEY, 190, 10, 0, 270, PTR(evt_chk), PTR(evt_unlock), GSWF_DOU_05_DOOR_UNLOCKED)
     IF_INT_EQUAL(GSWF_DOU_05_DOOR_UNLOCKED, 1)
         SET_VALUE(LW(0), STRING("e_bero"))
         CALL_CHILD(PTR(bero_case_switch_on))

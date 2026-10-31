@@ -36,7 +36,7 @@ static BeroEntry bero_entry_data[] = {
     {
         "w_bero_2", // hitName
         0, 0, // type..sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -52,7 +52,7 @@ static BeroEntry bero_entry_data[] = {
     {
         "w_bero_1", // hitName
         0, 0, // type..sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -68,7 +68,7 @@ static BeroEntry bero_entry_data[] = {
     {
         "e_bero_2", // hitName
         0, 0, // type..sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -84,7 +84,7 @@ static BeroEntry bero_entry_data[] = {
     {
         "e_bero_1", // hitName
         0, 0, // type..sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -101,7 +101,7 @@ static BeroEntry bero_entry_data[] = {
         "dokan_1", // hitName
         2, // type
         0, // sfxId
-        9, // directionId
+        BERO_DIR_DOWN, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -118,7 +118,7 @@ static BeroEntry bero_entry_data[] = {
         "dokan_2", // hitName
         2, // type
         0, // sfxId
-        9, // directionId
+        BERO_DIR_DOWN, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -153,7 +153,7 @@ static EVT_BEGIN(evt_switch_00_init)
     IF_INT_EQUAL(GSWF_TIK_16_MRI_PIPE_RAISED, 1)
         CALL(evt_mapobj_trans, 1, STRING("S_dakan_1"), 0, 30, 0)
         CALL(evt_hit_bind_update, STRING("a_dokan_1"))
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("dokan_1_k"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("dokan_1_k"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     RETURN
 EVT_END()
@@ -185,7 +185,7 @@ static EVT_BEGIN(evt_switch_00)
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("dokan_1_k"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("dokan_1_k"), MAP_OBJ_FLAG_HIDDEN)
     SET_VALUE(LW(0), STRING("dokan_1"))
     CALL_CHILD(PTR(bero_case_switch_on))
     RETURN
@@ -196,7 +196,7 @@ static EVT_BEGIN(evt_switch_01_init)
     IF_INT_EQUAL(GSWF_TIK_16_NOK_PIPE_RAISED, 1)
         CALL(evt_mapobj_trans, 1, STRING("S_dakan_2"), 0, 30, 0)
         CALL(evt_hit_bind_update, STRING("a_dokan_2"))
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("dokan_2_k"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("dokan_2_k"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     RETURN
 EVT_END()
@@ -227,7 +227,7 @@ static EVT_BEGIN(evt_switch_01)
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("dokan_2_k"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("dokan_2_k"), MAP_OBJ_FLAG_HIDDEN)
     SET_VALUE(LW(0), STRING("dokan_2"))
     CALL_CHILD(PTR(bero_case_switch_on))
     RETURN

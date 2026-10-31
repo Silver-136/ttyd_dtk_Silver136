@@ -2,6 +2,7 @@
 // Connects tou_04, tou_05 and tou_12.
 
 #include "battle/battle_unit.h"
+#include "evt/evt_story.h"
 #include "evt/evt_cloud.h"
 #include "evt/evt_window.h"
 #include "evt/evt_cmd.h"
@@ -114,7 +115,7 @@ static BeroEntry bero_data[] = {
         "n_bero", // hitName
         1, // type
         4, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -132,7 +133,7 @@ static BeroEntry bero_data[] = {
         "w_bero", // hitName
         1, // type
         4, // sfxId
-        2, // directionId
+        BERO_DIR_E, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -185,7 +186,7 @@ EVT_BEGIN(evt_kaidan)
             WAIT_MS(350)
         END_LOOP
     END_INLINE_EVENT
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("kaidan"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("kaidan"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_hitobj_onoff, STRING("a_kaidan"), 1, 1)
     CALL(evt_img_wait_animend, STRING("img"))
     CALL(evt_img_onoff, STRING("img"), 0)
@@ -206,9 +207,9 @@ const char* cloud_kontena2_list[] = {
 };
 
 EVT_BEGIN(evt_kontena2)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("fuda_1"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("fuda_1"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("fuda_2"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("fuda_3"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("fuda_3"), MAP_OBJ_FLAG_HIDDEN)
     SET_VALUE(GSWF_TOU_06_CONTAINER_2_BLOWN_AWAY, 1)
     RETURN
 EVT_END()
@@ -459,7 +460,7 @@ EVT_BEGIN(iri_13_init)
             ELSE
             CALL(evt_item_entry, LW(6), ITEM_BATTLE_TRUNKS, LW(3), LW(4), LW(5), ITEM_TYPE_STILL, -1, 0)
         END_IF
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("gor_hae"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("gor_hae"), MAP_OBJ_FLAG_HIDDEN)
         ADD(LW(2), 1)
         SUBTRACT(LW(1), 1)
     END_LOOP
@@ -517,7 +518,7 @@ EVT_BEGIN(tou_06_init_evt)
         CALL(evt_cloud_init)
         CALL(evt_cloud_ent, 0, STRING("kontena"), STRING("a_kon_H"), PTR(evt_kontena))
         ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("kontena"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("kontena"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_kon_H"), 1, 0)
     END_IF
     IF_INT_EQUAL(GSWF_TOU_06_CONTAINER_2_BLOWN_AWAY, 0)
@@ -526,10 +527,10 @@ EVT_BEGIN(tou_06_init_evt)
         END_IF
         CALL(evt_cloud_ent, 1, PTR(&cloud_kontena2_list), STRING("a_kon_N"), PTR(evt_kontena2))
         ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("kontena_2"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("fuda_1"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("fuda_2"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("fuda_3"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("kontena_2"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("fuda_1"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("fuda_2"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("fuda_3"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_kon_N"), 1, 0)
     END_IF
     CALL(evt_mobj_lv_blk, STRING("i"), 126, -1, -126, 0, GSWF_TOU_06_BIG_BLOCK_I_BROKEN, STRING("MOBJ_Lv1BigBlock"))
@@ -575,7 +576,7 @@ EVT_BEGIN(tou_06_init_evt)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_20_10_HIDDEN_STAIRWAY)
         CALL(evt_mobj_switch_blue, 0, STRING("sw"), -165, 0, -115, PTR(evt_kaidan), GSWF_TOU_06_SWITCH_PRESSED)
         CALL(evt_mobj_flag_onoff, 0, STRING("sw"), MOBJ_FLAG_GRAVITY)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("kaidan"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("kaidan"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_kaidan"), 1, 0)
         CALL(evt_paper_entry, STRING("OFF_d_ori"))
         CALL(evt_img_entry, STRING("img"))
@@ -619,11 +620,11 @@ EVT_BEGIN(tou_06_init_evt)
         END_INLINE_EVENT
     END_IF
     CALL(evt_map_playanim, STRING("anm_hae"), MAP_ANIM_PLAY_LOOP, 0)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("gor_hae"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("gor_hae"), MAP_OBJ_FLAG_HIDDEN)
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_HELP_WANTED)
         CALL_CHILD(PTR(iri_13_init))
     END_IF
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("kaidan"), MAP_OBJ_FLAG_CLIP)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("kaidan"), MAP_OBJ_FLAG_CLIP)
     CALL(evt_sub_get_system_flag, LW(0))
     IF_BITS_SET(LW(0), GW_FLAG_NO_ENTRANCE)
         RETURN

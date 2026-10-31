@@ -68,7 +68,7 @@ static BeroEntry bero_entry_data[] = {
         "w_bero", // hitName
         1, // type
         10, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -116,7 +116,7 @@ static BeroEntry bero_peach_data[] = {
         "w_bero", // hitName
         1, // type
         10, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -223,8 +223,8 @@ EVT_BEGIN(peach_evt_disksys)
     CALL(evt_win_item_select, 0, PTR(item_list), LW(0), 0)
     // Cancellation leaves the disk and the current interaction unchanged.
     IF_INT_NOT_EQUAL(LW(0), -1)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("monitor_02"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("monitor_03"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("monitor_02"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("monitor_03"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_snd_sfxon_3d, STRING("SFX_PEACH_DISC_SET1"), 57, 0, -10, 0)
         CALL(evt_snd_sfxon_3d, STRING("SFX_PEACH_MONITOR_ON1"), 57, 0, -10, 0)
         CALL(evt_snd_bgmoff, PSND_PAUSE)
@@ -245,8 +245,8 @@ EVT_BEGIN(peach_evt_disksys)
         CALL(evt_map_playanim, STRING("monitor_03"), MAP_ANIM_PLAY_ONCE, 0)
         CALL(evt_map_checkanim, STRING("monitor_03"), LW(0), LW(1))
         WAIT_MS(LW(1))
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("monitor_02"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("monitor_03"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("monitor_02"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("monitor_03"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_msg_print, 0, STRING("peach_aji_248"), 0, STRING("mario"))
         SET_VALUE(GSWF_AJI_11_DATA_DISK_PLAYED, 1)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("tana"), 0, PTR(peach_evt_tana2), 0)
@@ -344,7 +344,7 @@ EVT_BEGIN(aji_11_init_evt)
             CALL(evt_item_entry, STRING("dummy"), ITEM_CARD_KEY_0x1F, 50, 25, 25, ITEM_TYPE_STILL, -1, PTR(key_evt))
         END_IF
     END_IF
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("monitor_02"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("monitor_02"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("monitor_03"), MAP_OBJ_FLAG_HIDDEN)
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG5_45_PEACH_POTION_PUZZLE)
         IF_INT_LESS_OR_EQUAL(GSW_STORY_PROGRESS, STG5_46_PEACH_DISK_SEARCH)

@@ -376,7 +376,7 @@ void btlseqEnd(BattleWork* wp) {
             work->exp = 100;
         }
         work->expDisp = work->exp;
-        wp->dispFlags &= ~2;
+        wp->dispFlags &= ~BATTLE_DISP_FLAG_STAR_POINTS;
         if (work->exp > 0) {
             _GetExpIcon_Init(work);
         }
@@ -838,7 +838,7 @@ void _ExecAllUnitBattleEndEvent(void) {
 
     EventEntry* evt;
 
-    for (i = 0; i < 64; i++) {
+    for (i = 0; i < BATTLE_UNIT_MAX; i++) {
         unit = BattleGetUnitPtr(wp, i);
         if (unit) {
             data = BtlUnit_GetData(unit, UNIT_DATA_BATTLE_END_EVENT);
@@ -1240,7 +1240,7 @@ EVT_BEGIN(_curtain_close_event)
         END_LOOP
     END_SIBLING_EVENT
     LABEL(60)
-    CALL(btlevtcmd_PadCheckTrigger, 0, 262144, LW(0))
+    CALL(btlevtcmd_PadCheckTrigger, 0, BTL_PAD_STICK_LEFT, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         BEGIN_SIBLING_EVENT_GET_ID(LW(0))
             CALL(_set_initial_upgrade_cursor_position, 2)
@@ -1260,7 +1260,7 @@ EVT_BEGIN(_curtain_close_event)
         GOTO(69)
     END_IF
     LABEL(61)
-    CALL(btlevtcmd_PadCheckTrigger, 0, 524288, LW(0))
+    CALL(btlevtcmd_PadCheckTrigger, 0, BTL_PAD_STICK_RIGHT, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         BEGIN_SIBLING_EVENT_GET_ID(LW(0))
             CALL(_set_initial_upgrade_cursor_position, 0)

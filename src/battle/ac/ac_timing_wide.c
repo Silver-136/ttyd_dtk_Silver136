@@ -80,7 +80,7 @@ s32 battleAcMain_TimingWide(BattleWork* work) {
             ac->result = AC_RESULT_RUNNING;
             break;
         case 100:
-            if ((ac->setupFlags & 1) && (ac->mAcUnit->mTokenFlags & kConfusedAction)) {
+            if ((ac->setupFlags & AC_SETUP_FLAG_CONFUSED_AUTO) && (ac->mAcUnit->mTokenFlags & kConfusedAction)) {
                 // irand(100) is never negative: a confused auto-play always presses outside the window
                 if (irand(100) >= 0) {
                     ac->setupParam = 0;

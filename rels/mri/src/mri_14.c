@@ -139,7 +139,7 @@ static BeroEntry bero_entry_data[] = {
     {
         "w_bero", // hitName
         0, 0, // type..sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -156,7 +156,7 @@ static BeroEntry bero_entry_data[] = {
         "dokan", // hitName
         2, // type
         0, // sfxId
-        2, // directionId
+        BERO_DIR_E, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -467,7 +467,7 @@ EVT_BEGIN(time_bomb)
     CALL(evt_npc_flag_onoff, 1, STRING("第三勢力幹部"), NPC_FLAG_NO_HIT | NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION)
     SET_VALUE(LW(10), 1)
     LOOP(0)
-        CALL(evt_puni_set_mode, LW(10), 30)
+        CALL(evt_puni_set_mode, LW(10), PUNI_MODE_INERT)
         CALL(evt_puni_set_anim, LW(10), 0)
         ADD(LW(10), 1)
         IF_INT_EQUAL(LW(10), 103)
@@ -673,7 +673,7 @@ EVT_BEGIN(time_bomb)
     CALL(evt_cam3d_evt_off, 300, EASING_SINE_IN_OUT)
     SET_VALUE(LW(10), 1)
     LOOP(0)
-        CALL(evt_puni_set_mode, LW(10), 1)
+        CALL(evt_puni_set_mode, LW(10), PUNI_MODE_JOIN)
         CALL(evt_puni_flag_onoff, LW(10), 1, PUNI_FLAG_STRAY)
         ADD(LW(10), 1)
         IF_INT_EQUAL(LW(10), 103)
@@ -707,7 +707,7 @@ EVT_END()
  * 101), 36 degrees per digit; the tens cover is shown only while the value is below 10.
  */
 static EVT_BEGIN(yuka_move)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_isk_02_c"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_isk_02_c"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_isk_03_c"), MAP_OBJ_FLAG_HIDDEN)
     LOOP(0)
         SET_VALUE(LW(2), GW(0))
@@ -727,9 +727,9 @@ static EVT_BEGIN(yuka_move)
         CALL(evt_mapobj_rotate, 1, STRING("S_isk_03"), LW(11), 0, 0)
         CALL(evt_mapobj_rotate, 1, STRING("S_isk_04"), LW(12), 0, 0)
         IF_INT_GREATER_OR_EQUAL(GW(0), 10)
-            CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_isk_03_c"), MAP_OBJ_FLAG_HIDDEN)
+            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_isk_03_c"), MAP_OBJ_FLAG_HIDDEN)
             ELSE
-            CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_isk_03_c"), MAP_OBJ_FLAG_HIDDEN)
+            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_isk_03_c"), MAP_OBJ_FLAG_HIDDEN)
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
@@ -809,7 +809,7 @@ static EVT_BEGIN(punipuni_ball00_init)
         CALL(evt_item_set_position, LW(10), 0, 30, -100)
         CALL(evt_target_flag_onoff, LW(11), 0, 3)
         ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_sui_hikari"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_sui_hikari"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     CALL(evt_target_set_position, LW(11), 0, 0, 0)
     SET_VALUE(GF(15), 0)
@@ -825,13 +825,13 @@ static EVT_BEGIN(punipuni_ball00)
         END_IF
         SET_VALUE(GSWF_MRI_14_PUNI_ORB_PLACED, 1)
         CALL(evt_item_set_position, LW(10), 0, 30, -100)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_sui_hikari"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_sui_hikari"), MAP_OBJ_FLAG_HIDDEN)
         SET_VALUE(GF(15), 1)
         CALL_CHILD(PTR(mri_punipuni_itemset))
         SET_VALUE(GF(15), 0)
         ELSE
         SET_VALUE(GSWF_MRI_14_PUNI_ORB_PLACED, 0)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_sui_hikari"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_sui_hikari"), MAP_OBJ_FLAG_HIDDEN)
         CALL_CHILD(PTR(mri_punipuni_itemremove))
     END_IF
     LABEL(100)

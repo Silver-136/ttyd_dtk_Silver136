@@ -2,6 +2,7 @@
 // and night, the Embers in the mist (onryo_event) and the sinking ship (marcoship_shizumu); also a Bowser interlude.
 
 #include "version.h"
+#include "driver/fadedrv.h"
 #include "eff/eff_funemizu.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
@@ -815,8 +816,8 @@ USER_FUNC(kaizoku_fune_eff) {
 EVT_BEGIN(nami_alpha)
     CALL(alpha_init_func)
     CALL(evt_map_set_tevcallback, 1, PTR(alpha_tev))
-    CALL(evt_mapobj_flag_onoff, 0, 1, STRING("S_umi_l_siro_b"), MAP_OBJ_TEV_CALLBACK(1))
-    CALL(evt_mapobj_flag_onoff, 0, 0, STRING("S_umi_l_siro_b"), MAP_OBJ_FLAG_DISPLAY_LIST)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 1, STRING("S_umi_l_siro_b"), MAP_OBJ_TEV_CALLBACK(1))
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 0, STRING("S_umi_l_siro_b"), MAP_OBJ_FLAG_DISPLAY_LIST)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 255, 0, 500)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
@@ -836,10 +837,10 @@ EVT_END()
 EVT_BEGIN(moonout_effect)
     CALL(alpha_init_func)
     CALL(evt_map_set_tevcallback, 1, PTR(alpha_tev))
-    CALL(evt_mapobj_flag_onoff, 0, 1, STRING("S_hai02"), MAP_OBJ_TEV_CALLBACK(1))
-    CALL(evt_mapobj_flag_onoff, 0, 1, STRING("S_hai03_moon"), MAP_OBJ_TEV_CALLBACK(1))
-    CALL(evt_mapobj_flag_onoff, 0, 0, STRING("S_hai02"), MAP_OBJ_FLAG_DISPLAY_LIST)
-    CALL(evt_mapobj_flag_onoff, 0, 0, STRING("S_hai03_moon"), MAP_OBJ_FLAG_DISPLAY_LIST)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 1, STRING("S_hai02"), MAP_OBJ_TEV_CALLBACK(1))
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 1, STRING("S_hai03_moon"), MAP_OBJ_TEV_CALLBACK(1))
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 0, STRING("S_hai02"), MAP_OBJ_FLAG_DISPLAY_LIST)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 0, STRING("S_hai03_moon"), MAP_OBJ_FLAG_DISPLAY_LIST)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 255, 0, 1500)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)

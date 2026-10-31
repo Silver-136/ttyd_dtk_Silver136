@@ -333,7 +333,7 @@ static BeroEntry bero_data[] = {
         "w_bero", // hitName
         1, // type
         4, // sfxId
-        4, // directionId
+        BERO_DIR_S, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -351,7 +351,7 @@ static BeroEntry bero_data[] = {
         "s_bero_1", // hitName
         1, // type
         4, // sfxId
-        2, // directionId
+        BERO_DIR_E, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -369,7 +369,7 @@ static BeroEntry bero_data[] = {
         "s_bero_2", // hitName
         1, // type
         4, // sfxId
-        2, // directionId
+        BERO_DIR_E, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -387,7 +387,7 @@ static BeroEntry bero_data[] = {
         "s_bero_3", // hitName
         1, // type
         4, // sfxId
-        0, // directionId
+        BERO_DIR_N, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -405,7 +405,7 @@ static BeroEntry bero_data[] = {
         "s_bero_4", // hitName
         1, // type
         4, // sfxId
-        0, // directionId
+        BERO_DIR_N, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -423,7 +423,7 @@ static BeroEntry bero_data[] = {
         "s_bero_5", // hitName
         1, // type
         4, // sfxId
-        0, // directionId
+        BERO_DIR_N, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -441,7 +441,7 @@ static BeroEntry bero_data[] = {
         "s_bero_6", // hitName
         1, // type
         4, // sfxId
-        6, // directionId
+        BERO_DIR_W, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -459,7 +459,7 @@ static BeroEntry bero_data[] = {
         "s_bero_7", // hitName
         1, // type
         4, // sfxId
-        6, // directionId
+        BERO_DIR_W, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -477,7 +477,7 @@ static BeroEntry bero_data[] = {
         "e_bero", // hitName
         1, // type
         4, // sfxId
-        4, // directionId
+        BERO_DIR_S, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -495,7 +495,7 @@ static BeroEntry bero_data[] = {
         "n_bero_1", // hitName
         1, // type
         6, // sfxId
-        6, // directionId
+        BERO_DIR_W, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -513,7 +513,7 @@ static BeroEntry bero_data[] = {
         "n_bero_2", // hitName
         1, // type
         6, // sfxId
-        2, // directionId
+        BERO_DIR_E, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length

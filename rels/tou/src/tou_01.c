@@ -1,6 +1,7 @@
 // tou_01 (闘技場, Glitzville): the front plaza: stands, neon signs and townsfolk; leads to tou_00 and tou_02.
 
 #include "driver/mapdrv.h"
+#include "evt/evt_story.h"
 #include "evt/evt_win.h"
 #include "evt/evt_window.h"
 #include "eff/eff_starstone.h"
@@ -256,7 +257,7 @@ static BeroEntry bero_data[] = {
         "a_door_mon", // hitName
         1, // type
         0, 0, // sfxId..directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -704,10 +705,10 @@ static USER_FUNC(proj_on) {
     animPoseSetMaterialFlagOn(marioGetPtr()->paperAnimGroupId[1], MAP_OBJ_FLAG_PROJ_TEX);
     animPoseSetMaterialFlagOn(marioGetPtr()->paperAnimGroupId[2], MAP_OBJ_FLAG_PROJ_TEX);
     if (partyGetPtr(marioGetPartyId()) != NULL) {
-        animPoseSetMaterialFlagOn(partyGetPtr(marioGetPartyId())->paperAnimGroup, 0x400);
+        animPoseSetMaterialFlagOn(partyGetPtr(marioGetPartyId())->paperAnimGroup, ANIM_MATERIAL_FLAG_PROJ_TEXTURE);
     }
     if (partyGetPtr(marioGetExtraPartyId()) != NULL) {
-        animPoseSetMaterialFlagOn(partyGetPtr(marioGetExtraPartyId())->paperAnimGroup, 0x400);
+        animPoseSetMaterialFlagOn(partyGetPtr(marioGetExtraPartyId())->paperAnimGroup, ANIM_MATERIAL_FLAG_PROJ_TEXTURE);
     }
     animPoseSetMaterialFlagOn(npcNameToPtr("\224\362\213\363\221D")->poseId, MAP_OBJ_FLAG_PROJ_TEX);
     return EVT_RETURN_DONE;
@@ -823,12 +824,12 @@ EVT_BEGIN(evt_ship_shadow)
         SET_TYPE(0)
         CALL(make_shadow)
     END_INLINE_EVENT
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("tou_jimenn"), MAP_OBJ_FLAG_PROJ_TEX)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("tou_jimenn"), MAP_OBJ_FLAG_DISPLAY_LIST)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("gondora"), MAP_OBJ_FLAG_PROJ_TEX)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("gondora"), MAP_OBJ_FLAG_DISPLAY_LIST)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("den"), MAP_OBJ_FLAG_PROJ_TEX)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("den"), MAP_OBJ_FLAG_DISPLAY_LIST)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("tou_jimenn"), MAP_OBJ_FLAG_PROJ_TEX)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("tou_jimenn"), MAP_OBJ_FLAG_DISPLAY_LIST)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("gondora"), MAP_OBJ_FLAG_PROJ_TEX)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("gondora"), MAP_OBJ_FLAG_DISPLAY_LIST)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("den"), MAP_OBJ_FLAG_PROJ_TEX)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("den"), MAP_OBJ_FLAG_DISPLAY_LIST)
     LOOP(0)
         CALL(evt_sub_intpl_init, EASING_SINE_IN_OUT, 2000, 2300, 100)
         LOOP(101)

@@ -1,6 +1,7 @@
 // Star-power special move Supernova (sac_zubastar): the star-stone game and its damage to all enemies.
 
 #include "eff/eff_starstone.h"
+#include "driver/fadedrv.h"
 #include "battle/battle.h"
 #include "driver/dispdrv.h"
 #include "driver/effdrv.h"

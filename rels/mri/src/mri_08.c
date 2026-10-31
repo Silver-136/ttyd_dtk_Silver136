@@ -2,6 +2,7 @@
 // the Jabbies (puni_vs_toge).
 
 #include "battle/battle_unit.h"
+#include "driver/fadedrv.h"
 #include "evt/evt_urouro.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"
@@ -330,7 +331,7 @@ static BeroEntry bero_entry_data[] = {
     {
         "e_bero", // hitName
         0, 0, // type..sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -346,7 +347,7 @@ static BeroEntry bero_entry_data[] = {
     {
         "w_bero", // hitName
         0, 0, // type..sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -394,7 +395,7 @@ static EVT_BEGIN(puni_win_offscreen)
     SET_VALUE(GW(1), 0)
     CALL(evt_snd_sfxoff, GW(0))
     CALL(evt_snd_sfxon_3d, STRING("SFX_OFF2_TORIDE_BREAK2"), 400, 0, 0, 0)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_hati"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_hati"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_patolight"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_hitobj_onoff, STRING("A_hati"), 1, 0)
     CALL(evt_img_set_paper_anim, STRING("capture_img"), STRING("A_1"))
@@ -603,7 +604,7 @@ static EVT_BEGIN(puni_vs_toge_init)
     WAIT_MS(1000)
     CALL_CHILD(PTR(mri_guide_goryu))
     CALL_CHILD(PTR(toge_enter))
-    CALL(evt_puni_set_mode, 1, 1)
+    CALL(evt_puni_set_mode, 1, PUNI_MODE_JOIN)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_STG2_PUNITOGE1"))
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
     CALL(evt_puni_all_movestop, 0)
@@ -644,7 +645,7 @@ static EVT_BEGIN(puni_vs_toge)
     WAIT_MS(1000)
     CALL(evt_msg_print, 0, STRING("stg2_mri_e17_00_01"), 0, STRING("ガイドsp"))
     CALL(evt_puni_flag_onoff, 1, 1, PUNI_FLAG_SCRIPT_CONTROL)
-    CALL(evt_puni_set_mode, 1, 1)
+    CALL(evt_puni_set_mode, 1, PUNI_MODE_JOIN)
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
     SET_VALUE(GSWF_MRI_08_JABBI_SQUAD_INTRO_SEEN, 1)
     CALL(evt_puni_all_movestop, 0)
@@ -724,9 +725,9 @@ EVT_BEGIN(mri_08_init_evt)
         CALL(evt_hitobj_onoff, STRING("A_gra_r"), 1, 0)
     END_IF
     IF_INT_EQUAL(GSWF_MRI_08_JABBI_SQUAD_DEFEATED, 1)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_hati"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_hati"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_hati"), 1, 0)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_patolight"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_patolight"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     RETURN
 EVT_END()

@@ -223,7 +223,7 @@ void nameEntOff(void) {
 }
 
 BOOL nameEntWait(void) {
-    wp->flags |= 1;
+    wp->flags |= NAMEENT_FLAG_INPUT_ON;
     return wp->state != 101;
 }
 
@@ -330,7 +330,7 @@ s32 nameMain(void) {
     dist = distABf(wp->x2, wp->y2, wp->x1, wp->y1);
     switch (wp->state) {
         case 0:
-            if ((wp->flags & 1) && gp->debugFlag == 0) {
+            if ((wp->flags & NAMEENT_FLAG_INPUT_ON) && gp->debugFlag == 0) {
                 if (keyGetButtonTrg(0) & PAD_BUTTON_A) {
                     off = wp->cursorX;
 #ifdef VERSION_G8ME01
@@ -545,7 +545,7 @@ s32 nameMain(void) {
                     if (wp->nameLen == 0 && wp->type == 0 && !strncmp(wp->name, "\x81\x40", 2)) {
                         psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_CANCEL1));
                         wp->state = 101;
-                        wp->flags |= 2;
+                        wp->flags |= NAMEENT_FLAG_CANCELLED;
                     } else {
                         ((u16*)wp->name)[wp->nameLen] = *(u16*)"\x81\x40";
                         wp->nameLen--;

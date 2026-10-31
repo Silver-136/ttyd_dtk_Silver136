@@ -2,6 +2,7 @@
 // button, and partner join/leave, HP and level helpers.
 
 #include "mario/mario_party.h"
+#include "mario/mario_pouch.h"
 #include "mario/mario.h"
 #include "party.h"
 #include <dolphin/pad.h>
@@ -279,7 +280,7 @@ s32 marioGetExtraPartyId(void) {
  */
 void partyJoin(PartyId partnerId) {
     if (partnerId < PARTNER_COUNT) {
-        pouchGetPtr()->partyData[partnerId].flags |= 1; // obtained
+        pouchGetPtr()->partyData[partnerId].flags |= POUCH_PARTY_FLAG_JOINED; // obtained
     }
 }
 
@@ -290,7 +291,7 @@ void partyJoin(PartyId partnerId) {
  */
 void partyLeft(PartyId partnerId) {
     if (partnerId < PARTNER_COUNT) {
-        pouchGetPtr()->partyData[partnerId].flags &= ~1;
+        pouchGetPtr()->partyData[partnerId].flags &= ~POUCH_PARTY_FLAG_JOINED;
     }
 }
 
@@ -299,7 +300,7 @@ BOOL partyChkJoin(PartyId partnerId) {
     BOOL ret = FALSE;
     if (partnerId < PARTNER_COUNT) {
         // FAKE: spare u32 temporary; assigning ret directly changes the object
-        u32 joined = pouchGetPtr()->partyData[partnerId].flags & 1;
+        u32 joined = pouchGetPtr()->partyData[partnerId].flags & POUCH_PARTY_FLAG_JOINED;
         ret = joined;
     }
     return ret;

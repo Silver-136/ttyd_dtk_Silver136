@@ -60,8 +60,8 @@ static BeroEntry bero_entry_data[] = {
     {
         "e_bero", // hitName
         0, 0, // type..sfxId
-        20000, // directionId
-        100000, // centerPosition
+        BERO_DIR_AUTO, // directionId
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         bero_custom, // enterEvent
@@ -205,7 +205,7 @@ static EVT_BEGIN(chuchurina_sogu)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
         CALL(evt_puni_wait_systemmode, 2)
-        CALL(evt_puni_set_mode, 1, 30)
+        CALL(evt_puni_set_mode, 1, PUNI_MODE_INERT)
         CALL(evt_puni_set_position, 1, 0, -1000, 0)
         WAIT_MS(400)
         CALL(evt_bero_get_start_position, LW(0), LW(1), LW(2))
@@ -344,7 +344,7 @@ static EVT_BEGIN(chuchurina_sogu)
     SPAWN_EVENT(PTR(enemy_event_dead_event_sub))
     WAIT_MS(500)
     CALL(evt_item_entry, STRING("item_key"), ITEM_RED_KEY, 60, 0, 0, ITEM_TYPE_SCATTER_NO_PICKUP, GSWF_MRI_04_RED_KEY, 0)
-    CALL(evt_puni_set_mode, 1, 1)
+    CALL(evt_puni_set_mode, 1, PUNI_MODE_JOIN)
     SET_VALUE(GSW_STORY_PROGRESS, STG2_13_MS_MOWZ)
     CALL(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
     CALL(evt_party_run, 0)
@@ -522,7 +522,7 @@ EVT_BEGIN(mri_04_init_evt)
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG2_13_MS_MOWZ)
         CALL(evt_item_entry, STRING("item_key"), ITEM_RED_KEY, 60, 0, 0, ITEM_TYPE_FALL_NO_PICKUP, GSWF_MRI_04_RED_KEY, 0)
     END_IF
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S"), MAP_OBJ_FLAG_CLIP)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S"), MAP_OBJ_FLAG_CLIP)
     RETURN
 EVT_END()
 

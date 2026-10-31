@@ -2,6 +2,7 @@
 // Mario's walk in and out, and the camera changes around them.
 
 #include "evt/evt_bero.h"
+#include "driver/fadedrv.h"
 #include "cam_road.h"
 #include "driver/hitdrv.h"
 #include "driver/seqdrv.h"
@@ -49,10 +50,10 @@ BOOL BeroMarioGO;
 BeroEntry bero_null[] = {
     {
         NULL, // hitName
-        3840, // type
+        BERO_TYPE_NONE, // type
         0, // sfxId
-        20000, // directionId
-        100000, // centerPosition
+        BERO_DIR_AUTO, // directionId
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -290,15 +291,15 @@ USER_FUNC(evt_bero_get_info_length) {
         return EVT_RETURN_DONE;
     }
     switch (bero->type & BERO_TYPE_KIND_MASK) {
-        case 0:
+        case BERO_TYPE_ROAD:
         case 3:
-        case 0xF00:
+        case BERO_TYPE_NONE:
             defaultLength = 30.0f;
             break;
-        case 1:
+        case BERO_TYPE_DOOR:
             defaultLength = 60.0f;
             break;
-        case 2:
+        case BERO_TYPE_PIPE:
             defaultLength = 60.0f;
             break;
         default:
@@ -401,13 +402,13 @@ static inline s32 bero_get_kind(BeroEntry* bero, s32 walk) {
     const char* dirs[8] = {"n_", "ne_", "e_", "se_", "s_", "sw_", "w_", "nw_"};
     s32 kind = bero->directionId;
     switch (kind) {
-    case 20000:
+    case BERO_DIR_AUTO:
         // FAKE: dead test (kind is 20000 in this case); removing it changes the object
-        if (kind == 10000) {
-            kind = 10000;
+        if (kind == BERO_DIR_NONE) {
+            kind = BERO_DIR_NONE;
         } else {
         switch (bero->type & BERO_TYPE_KIND_MASK) {
-            case 0:
+            case BERO_TYPE_ROAD:
             case 1:
                 if (walk) {
                     for (i = 0, p = dirs; i < 8; i++, p++) {
@@ -424,7 +425,7 @@ static inline s32 bero_get_kind(BeroEntry* bero, s32 walk) {
                 }
                 break;
             default:
-                i = 10000;
+                i = BERO_DIR_NONE;
                 break;
         }
         kind = i;
@@ -542,19 +543,19 @@ USER_FUNC(evt_bero_get_info_num) {
     event->lwData[10] = bero->caseType;
     if (bero->caseType == -1) {
         switch (bero->type & BERO_TYPE_KIND_MASK) {
-            case 0xF00:
+            case BERO_TYPE_NONE:
                 event->lwData[10] = CASE_STAND_ON; // CASE_STAND_ON
                 break;
-            case 0:
+            case BERO_TYPE_ROAD:
                 event->lwData[10] = CASE_PUSH; // CASE_PUSH
                 break;
-            case 1:
+            case BERO_TYPE_DOOR:
                 event->lwData[10] = CASE_FRONT_A; // CASE_FRONT_A
                 break;
-            case 2:
+            case BERO_TYPE_PIPE:
                 event->lwData[10] = CASE_JUMP_FROM_A; // CASE_JUMP_FROM_A
                 break;
-            case 3:
+            case BERO_TYPE_GATE:
                 event->lwData[10] = CASE_STAND_ON_STICK_UP; // CASE_STAND_ON_STICK_UP
                 break;
         }
@@ -589,7 +590,7 @@ USER_FUNC(bero_get_position_normal) {
     end.x = pos[0];
     end.y = pos[1];
     end.z = pos[2];
-    if (pos[0] == 100000) {
+    if (pos[0] == BERO_POS_AUTO) {
         hitObjGetPos(name, &start);
     }
     if (len != 0.0f) {
@@ -657,10 +658,10 @@ void bero_get_position_pipe_sub(s32 id, s32 a, EvtWord name, s32 kind, Vec* star
     dist = 10000.0f;
     ofs = 20.0f;
     switch (kind) {
-    case 6:
+    case BERO_DIR_W:
         a = -a;
         ofs = -ofs;
-    case 2:
+    case BERO_DIR_E:
         if (id == 0) {
             hitObjGetPos((const char*)name, start);
             start->x -= ofs;
@@ -678,9 +679,9 @@ void bero_get_position_pipe_sub(s32 id, s32 a, EvtWord name, s32 kind, Vec* star
         }
         end->y = start->y = hy;
         break;
-    case 9:
+    case BERO_DIR_DOWN:
         a = -a;
-    case 8:
+    case BERO_DIR_UP:
         if (id == 0) {
             hitObjGetPos((const char*)name, start);
             end->x = start->x;
@@ -693,7 +694,7 @@ void bero_get_position_pipe_sub(s32 id, s32 a, EvtWord name, s32 kind, Vec* star
             start->z = end->z;
         }
         break;
-    case 10000:
+    case BERO_DIR_NONE:
     default:
         hitObjGetPos((const char*)name, start);
         hitObjGetPos((const char*)name, end);
@@ -709,10 +710,10 @@ USER_FUNC(bero_get_position_pipe_pure) {
     Vec start, end;
     bero_get_position_pipe_sub(id, a, event->lwData[3], kind, &start, &end);
     BeroSX = start.x;
-    BeroSY = kind == 8 ? start.y - 37.5f : start.y;
+    BeroSY = kind == BERO_DIR_UP ? start.y - 37.5f : start.y;
     BeroSZ = start.z;
     BeroEX = end.x;
-    BeroEY = (f32)(kind == 8 ? end.y - 37.5f : end.y);
+    BeroEY = (f32)(kind == BERO_DIR_UP ? end.y - 37.5f : end.y);
     BeroEZ = end.z;
     marioSetBottomlessRespawnPosOnBeroEntry(BeroEX, BeroEY, BeroEZ);
     return EVT_RETURN_DONE;
@@ -1340,16 +1341,16 @@ EVT_BEGIN(bero_case_init_check)
     SET_VALUE(LW(0), LW(4))
     AND_RAW(LW(0), BERO_TYPE_KIND_MASK)
     SWITCH(LW(0))
-        CASE_OR_EQUAL(0)
-        CASE_OR_EQUAL(1)
+        CASE_OR_EQUAL(BERO_TYPE_ROAD)
+        CASE_OR_EQUAL(BERO_TYPE_DOOR)
         CALL(evt_bero_get_info_length, LW(1), LW(0))
         CALL(bero_get_position_normal, 0, LW(0))
         CASE_END
-        CASE_OR_EQUAL(3840)
-        CASE_OR_EQUAL(3)
+        CASE_OR_EQUAL(BERO_TYPE_NONE)
+        CASE_OR_EQUAL(BERO_TYPE_GATE)
         CALL(bero_get_position_normal, 0, FLOAT(0.0f))
         CASE_END
-        CASE_EQUAL(2)
+        CASE_EQUAL(BERO_TYPE_PIPE)
         CALL(evt_bero_get_info_length, LW(1), LW(0))
         CALL(bero_get_position_pipe_pure, 0, LW(0))
     END_SWITCH
@@ -1511,7 +1512,7 @@ EVT_BEGIN(bero_case_exec_pipe_sub)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_MARIO_DOKAN1"), LW(0), LW(1), LW(2), 0)
     SWITCH(LW(5))
-        CASE_EQUAL(6)
+        CASE_EQUAL(BERO_DIR_W)
         CALL(evt_mario_paper_pose_dokan, 5)
         CALL(evt_bero_move_mario_speed, FLOAT(60.0f))
         CASE_EQUAL(2)
@@ -1622,7 +1623,7 @@ EVT_BEGIN(bero_case_exec_pipe)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_MARIO_DOKAN1"), LW(0), LW(1), LW(2), 0)
     SWITCH(LW(5))
-        CASE_EQUAL(6)
+        CASE_EQUAL(BERO_DIR_W)
         CALL(evt_mario_paper_pose_dokan, 5)
         CALL(evt_bero_move_mario_speed, FLOAT(60.0f))
         CASE_EQUAL(2)
@@ -1635,7 +1636,7 @@ EVT_BEGIN(bero_case_exec_pipe)
         CALL(evt_mario_paper_pose_dokan, 3)
         CALL(evt_bero_move_mario_speed, FLOAT(60.0f))
     END_SWITCH
-    IF_BITS_CLEAR(LW(4), 8192)
+    IF_BITS_CLEAR(LW(4), BERO_TYPE_FLAG_NO_FADE)
         SWITCH(LW(5))
             CASE_EQUAL(6)
             CALL(evt_fade_set_mapchange_type, 1, 45, 0, -1, -1)
@@ -1695,16 +1696,16 @@ EVT_BEGIN(bero_case_entry)
             SET_VALUE(LW(0), LW(4))
             AND_RAW(LW(0), BERO_TYPE_KIND_MASK)
             SWITCH(LW(0))
-                CASE_EQUAL(3840)
+                CASE_EQUAL(BERO_TYPE_NONE)
                 CALL(evt_run_case_evt_bero, LW(10), 1, LW(3), 0, PTR(bero_case_exec_none), LW(15))
-                CASE_EQUAL(0)
+                CASE_EQUAL(BERO_TYPE_ROAD)
                 CALL(evt_hitobj_attr_onoff, 0, 1, LW(3), HIT_ATTR_BERO)
                 CALL(evt_run_case_evt_bero, LW(10), 1, LW(3), 0, PTR(bero_case_exec_road), LW(15))
-                CASE_EQUAL(1)
+                CASE_EQUAL(BERO_TYPE_DOOR)
                 CALL(evt_run_case_evt_bero, LW(10), 1, LW(3), 0, PTR(bero_case_exec_door), LW(15))
-                CASE_EQUAL(2)
+                CASE_EQUAL(BERO_TYPE_PIPE)
                 CALL(evt_run_case_evt_bero, LW(10), 1, LW(3), 0, PTR(bero_case_exec_pipe), LW(15))
-                CASE_EQUAL(3)
+                CASE_EQUAL(BERO_TYPE_GATE)
                 CALL(evt_run_case_evt_bero, LW(10), 1, LW(3), 0, PTR(bero_case_exec_gate), LW(15))
             END_SWITCH
             CALL(evt_bero_case_id_save, LW(1), LW(15))
@@ -1725,16 +1726,16 @@ EVT_BEGIN(bero_case_entry_sub)
     SET_VALUE(LW(0), LW(4))
     AND_RAW(LW(0), BERO_TYPE_KIND_MASK)
     SWITCH(LW(0))
-        CASE_EQUAL(3840)
+        CASE_EQUAL(BERO_TYPE_NONE)
         CALL(evt_run_case_evt_bero, LW(10), 1, LW(3), 0, PTR(bero_case_exec_none), LW(15))
-        CASE_EQUAL(0)
+        CASE_EQUAL(BERO_TYPE_ROAD)
         CALL(evt_hitobj_attr_onoff, 0, 1, LW(3), HIT_ATTR_BERO)
         CALL(evt_run_case_evt_bero, LW(10), 1, LW(3), 0, PTR(bero_case_exec_road), LW(15))
-        CASE_EQUAL(1)
+        CASE_EQUAL(BERO_TYPE_DOOR)
         CALL(evt_run_case_evt_bero, LW(10), 1, LW(3), 0, PTR(bero_case_exec_door), LW(15))
-        CASE_EQUAL(2)
+        CASE_EQUAL(BERO_TYPE_PIPE)
         CALL(evt_run_case_evt_bero, LW(10), 1, LW(3), 0, PTR(bero_case_exec_pipe), LW(15))
-        CASE_EQUAL(3)
+        CASE_EQUAL(BERO_TYPE_GATE)
         CALL(evt_run_case_evt_bero, LW(10), 1, LW(3), 0, PTR(bero_case_exec_gate), LW(15))
     END_SWITCH
     CALL(evt_bero_case_id_save, LW(1), LW(15))
@@ -1812,18 +1813,18 @@ EVT_BEGIN(evt_bero_info_run_pipe_sub00)
     CALL(evt_party_stop, 0)
     CALL(evt_party_stop, 1)
     SWITCH(LW(5))
-        CASE_EQUAL(6)
+        CASE_EQUAL(BERO_DIR_W)
         CALL(evt_mario_set_dispdir, 180)
         CALL(evt_mario_paper_pose_dokan, 4)
         CALL(evt_bero_move_mario_speed, FLOAT(60.0f))
-        CASE_EQUAL(2)
+        CASE_EQUAL(BERO_DIR_E)
         CALL(evt_mario_set_dispdir, 0)
         CALL(evt_mario_paper_pose_dokan, 4)
         CALL(evt_bero_move_mario_speed, FLOAT(60.0f))
-        CASE_EQUAL(9)
+        CASE_EQUAL(BERO_DIR_DOWN)
         CALL(evt_mario_paper_pose_dokan, 1)
         CALL(evt_bero_move_mario_speed, FLOAT(60.0f))
-        CASE_EQUAL(8)
+        CASE_EQUAL(BERO_DIR_UP)
         CALL(evt_mario_paper_pose_dokan, 0)
         CALL(evt_bero_move_mario_speed, FLOAT(60.0f))
     END_SWITCH
@@ -1904,7 +1905,7 @@ EVT_BEGIN(evt_bero_info_run)
         CALL(evt_mario_bgmode_off)
         SET_VALUE(LW(0), LW(4))
         AND_RAW(LW(0), BERO_TYPE_KIND_MASK)
-        IF_INT_EQUAL(LW(0), 2)
+        IF_INT_EQUAL(LW(0), BERO_TYPE_PIPE)
             CALL(evt_mario_set_prev_party_dokan, 0)
             CALL(evt_mario_set_prev_party_dokan, 1)
             ELSE
@@ -1914,34 +1915,34 @@ EVT_BEGIN(evt_bero_info_run)
     END_IF
     SET_VALUE(LW(0), LW(4))
     AND_RAW(LW(0), BERO_TYPE_KIND_MASK)
-    IF_INT_EQUAL(LW(0), 2)
+    IF_INT_EQUAL(LW(0), BERO_TYPE_PIPE)
         SWITCH(LW(5))
             CASE_EQUAL(6)
             CALL(evt_mario_dokan_prepare, 4)
-            CASE_EQUAL(2)
+            CASE_EQUAL(BERO_DIR_E)
             CALL(evt_mario_dokan_prepare, 4)
-            CASE_EQUAL(9)
+            CASE_EQUAL(BERO_DIR_DOWN)
             CALL(evt_mario_dokan_prepare, 1)
-            CASE_EQUAL(8)
+            CASE_EQUAL(BERO_DIR_UP)
             CALL(evt_mario_dokan_prepare, 0)
         END_SWITCH
     END_IF
     CALL_CHILD(PTR(evt_bero_initial_pos))
-    IF_BITS_CLEAR(LW(4), 8192)
+    IF_BITS_CLEAR(LW(4), BERO_TYPE_FLAG_NO_FADE)
         SET_VALUE(LW(0), LW(4))
         AND_RAW(LW(0), BERO_TYPE_KIND_MASK)
         IF_INT_EQUAL(LW(0), 2)
             SWITCH(LW(5))
-                CASE_EQUAL(6)
+                CASE_EQUAL(BERO_DIR_W)
                 CALL(evt_fade_set_mapchange_type, 1, -1, -1, 46, 0)
                 CALL(evt_fade_set_mapchange_type, 0, -1, -1, 46, 0)
                 CASE_EQUAL(2)
                 CALL(evt_fade_set_mapchange_type, 1, -1, -1, 48, 0)
                 CALL(evt_fade_set_mapchange_type, 0, -1, -1, 48, 0)
-                CASE_EQUAL(8)
+                CASE_EQUAL(BERO_DIR_UP)
                 CALL(evt_fade_set_mapchange_type, 1, -1, -1, 42, 0)
                 CALL(evt_fade_set_mapchange_type, 0, -1, -1, 42, 0)
-                CASE_EQUAL(9)
+                CASE_EQUAL(BERO_DIR_DOWN)
                 CALL(evt_fade_set_mapchange_type, 1, -1, -1, 44, 0)
                 CALL(evt_fade_set_mapchange_type, 0, -1, -1, 44, 0)
             END_SWITCH
@@ -1958,7 +1959,7 @@ EVT_BEGIN(evt_bero_initial_pos)
     SET_VALUE(LW(0), LW(4))
     AND_RAW(LW(0), BERO_TYPE_KIND_MASK)
     SWITCH(LW(0))
-        CASE_EQUAL(3840)
+        CASE_EQUAL(BERO_TYPE_NONE)
         CASE_EQUAL(3)
         CALL(bero_get_position_normal, 0, FLOAT(0.0f))
         PEEK_FLOAT(LW(10), PTR(&BeroSX))
@@ -1968,7 +1969,7 @@ EVT_BEGIN(evt_bero_initial_pos)
         CALL(evt_party_set_pos, 0, LW(10), LW(11), LW(12))
         CALL(evt_party_set_pos, 1, LW(10), LW(11), LW(12))
         CASE_END
-        CASE_EQUAL(0)
+        CASE_EQUAL(BERO_TYPE_ROAD)
         CALL(evt_bero_get_info_length, LW(1), LW(10))
         CALL(bero_get_position_normal, 1, LW(10))
         PEEK_FLOAT(LW(10), PTR(&BeroSX))
@@ -1977,7 +1978,7 @@ EVT_BEGIN(evt_bero_initial_pos)
         CALL(evt_mario_set_pos, LW(10), LW(11), LW(12))
         CALL(evt_party_set_pos, 0, LW(10), LW(11), LW(12))
         CALL(evt_party_set_pos, 1, LW(10), LW(11), LW(12))
-        CASE_EQUAL(1)
+        CASE_EQUAL(BERO_TYPE_DOOR)
         CALL(evt_bero_get_info_length, LW(1), LW(10))
         CALL(bero_get_position_normal, 1, LW(10))
         PEEK_FLOAT(LW(10), PTR(&BeroSX))
@@ -1986,7 +1987,7 @@ EVT_BEGIN(evt_bero_initial_pos)
         CALL(evt_mario_set_pos, LW(10), LW(11), LW(12))
         CALL(evt_party_set_pos, 0, LW(10), LW(11), LW(12))
         CALL(evt_party_set_pos, 1, LW(10), LW(11), LW(12))
-        CASE_EQUAL(2)
+        CASE_EQUAL(BERO_TYPE_PIPE)
         CALL(evt_bero_get_info_length, LW(1), LW(10))
         CALL(bero_get_position_pipe_pure, 1, LW(10))
         PEEK_FLOAT(LW(10), PTR(&BeroSX))
@@ -2021,15 +2022,15 @@ EVT_BEGIN(evt_bero_mario_enter)
     SET_VALUE(LW(0), LW(4))
     AND_RAW(LW(0), BERO_TYPE_KIND_MASK)
     SWITCH(LW(0))
-        CASE_EQUAL(3840)
+        CASE_EQUAL(BERO_TYPE_NONE)
         CALL_CHILD(PTR(evt_bero_info_run_none))
-        CASE_EQUAL(0)
+        CASE_EQUAL(BERO_TYPE_ROAD)
         CALL_CHILD(PTR(evt_bero_info_run_road))
-        CASE_EQUAL(1)
+        CASE_EQUAL(BERO_TYPE_DOOR)
         CALL_CHILD(PTR(evt_bero_info_run_door))
-        CASE_EQUAL(2)
+        CASE_EQUAL(BERO_TYPE_PIPE)
         CALL_CHILD(PTR(evt_bero_info_run_pipe))
-        CASE_EQUAL(3)
+        CASE_EQUAL(BERO_TYPE_GATE)
         CALL_CHILD(PTR(evt_bero_info_run_gate))
         CASE_DEFAULT
         CALL(evt_mario_key_onoff, 1)

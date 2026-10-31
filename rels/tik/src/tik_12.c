@@ -2,6 +2,8 @@
 // (irai_14).
 
 #include "battle/battle_unit.h"
+#include "driver/animdrv.h"
+#include "evt/evt_story.h"
 #include "evt/evt_win.h"
 #include "evt/evt_window.h"
 #include "evt/evt_cmd.h"
@@ -55,8 +57,8 @@ static BeroEntry bero_entry_data[] = {
     {
         "e_bero", // hitName
         0, 0, // type..sfxId
-        20000, // directionId
-        100000, // centerPosition
+        BERO_DIR_AUTO, // directionId
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -166,14 +168,14 @@ EVT_BEGIN(majinaisi_table_talk)
     CALL(evt_snd_sfxon_3d, STRING("SFX_EVT_INCANT_CUBE1"), LW(0), LW(1), LW(2), 0)
     CALL(evt_map_playanim, STRING("anm_sen"), MAP_ANIM_PLAY_ONCE, 0)
     WAIT_FRAMES(1)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("senn"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("senn"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_map_checkanim, STRING("anm_sen"), LW(0), LW(1))
     WAIT_MS(LW(1))
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_EVT_INCANT_CUBE2"), LW(0), LW(1), LW(2), 0)
     CALL(evt_map_playanim, STRING("anm_men"), MAP_ANIM_PLAY_ONCE, 0)
     WAIT_FRAMES(1)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("group4"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("group4"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_map_checkanim, STRING("anm_men"), LW(0), LW(1))
     WAIT_MS(LW(1))
     CALL(evt_npc_set_anim, STRING("me"), STRING("H_1"))
@@ -288,8 +290,8 @@ EVT_BEGIN(majinaisi_table_talk)
     CALL(evt_eff_softdelete, STRING("aaax"))
     CALL(evt_snd_sfxoff, GW(1))
     BEGIN_INLINE_EVENT
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("group4"), MAP_OBJ_FLAG_NO_MAP_BLEND)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("senn"), MAP_OBJ_FLAG_NO_MAP_BLEND)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("group4"), MAP_OBJ_FLAG_NO_MAP_BLEND)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("senn"), MAP_OBJ_FLAG_NO_MAP_BLEND)
         CALL(evt_map_blend_set_flag, 1, STRING("mario"), 2048)
         CALL(evt_map_blend_set_flag, 1, STRING("party"), 2048)
         CALL(evt_mario_get_exparty, LW(0))
@@ -320,17 +322,17 @@ EVT_BEGIN(majinaisi_table_talk)
     CALL(evt_snd_sfxon_3d, STRING("SFX_EVT_INCANT_CUBE3"), LW(0), LW(1), LW(2), 0)
     CALL(evt_map_playanim, STRING("anm_ten"), MAP_ANIM_PLAY_ONCE, 0)
     WAIT_FRAMES(1)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("senn"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("group4"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("BOX_tenkai"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("BOX_tenkai"), MAP_OBJ_FLAG_NO_MAP_BLEND)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("senn"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("group4"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("BOX_tenkai"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("BOX_tenkai"), MAP_OBJ_FLAG_NO_MAP_BLEND)
     CALL(evt_map_checkanim, STRING("anm_ten"), LW(0), LW(1))
     WAIT_MS(LW(1))
     CALL(evt_msg_print, 0, STRING("majinaisi_08"), 0, STRING("me"))
     CALL(evt_mario_set_motion, MARIO_MOTION_STAY)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("majinai_BOX"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("majinai_BOX"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_map_blend_off, 0)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("majinai_BOX"), MAP_OBJ_FLAG_NO_MAP_BLEND)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("majinai_BOX"), MAP_OBJ_FLAG_NO_MAP_BLEND)
     CALL(evt_map_blend_set_flag, 0, STRING("mario"), 2048)
     CALL(evt_map_blend_set_flag, 0, STRING("party"), 2048)
     CALL(evt_mario_get_exparty, LW(0))
@@ -428,10 +430,10 @@ EVT_BEGIN(tik_12_init_evt)
     CALL(evt_bero_get_info)
     CALL_CHILD(PTR(evt_bero_info_run))
     CALL(evt_npc_setup, PTR(npcEnt))
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("e_yuka_s"), MAP_OBJ_FLAG_NO_MAP_BLEND)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("group2"), MAP_OBJ_FLAG_NO_MAP_BLEND)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("ie_kakoi"), MAP_OBJ_FLAG_NO_MAP_BLEND)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("mad"), MAP_OBJ_FLAG_NO_MAP_BLEND)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("e_yuka_s"), MAP_OBJ_FLAG_NO_MAP_BLEND)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("group2"), MAP_OBJ_FLAG_NO_MAP_BLEND)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("ie_kakoi"), MAP_OBJ_FLAG_NO_MAP_BLEND)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("mad"), MAP_OBJ_FLAG_NO_MAP_BLEND)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("majinai_BOX"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_map_playanim, STRING("anm_kem"), MAP_ANIM_PLAY_LOOP, 0)
     RETURN

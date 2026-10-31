@@ -76,7 +76,7 @@ static BeroEntry bero_entry_data[] = {
     {
         "w_bero", // hitName
         0, 0, // type..sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -93,7 +93,7 @@ static BeroEntry bero_entry_data[] = {
         "dokan1", // hitName
         2, // type
         0, // sfxId
-        9, // directionId
+        BERO_DIR_DOWN, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -109,7 +109,7 @@ static BeroEntry bero_entry_data[] = {
         "dokan2", // hitName
         2, // type
         0, // sfxId
-        2, // directionId
+        BERO_DIR_E, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -336,7 +336,7 @@ EVT_BEGIN(wana_offscreen)
     CALL(evt_img_release, STRING("capture_img"))
     CALL(evt_mapobj_clear_offscreen, 1, STRING("S_hako"))
     CALL(evt_offscreen_delete, STRING("offscreen"))
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_hako"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_hako"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_hitobj_onoff, STRING("A_hako"), 1, 1)
     CALL(evt_img_entry, STRING("capture_img"))
     CALL(evt_img_set_paper, STRING("capture_img"), STRING("OFF_d_saku"))
@@ -356,7 +356,7 @@ EVT_BEGIN(wana_offscreen)
         CALL(evt_snd_sfxon_3d, STRING("SFX_OFF2_DOKAN_APPEAR2"), LW(0), LW(1), LW(2), 0)
     END_INLINE_EVENT
     CALL(evt_img_set_paper_anim, STRING("capture_img"), STRING("A_2"))
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_dokan1"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_dokan1"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_img_onoff, STRING("capture_img"), 1)
     CALL(evt_img_wait_animend, STRING("capture_img"))
     CALL(evt_img_free_capture, STRING("capture_img"), 0)
@@ -364,7 +364,7 @@ EVT_BEGIN(wana_offscreen)
     CALL(evt_img_release, STRING("capture_img"))
     CALL(evt_mapobj_clear_offscreen, 1, STRING("S_dokan1"))
     CALL(evt_offscreen_delete, STRING("offscreen"))
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_dokan1"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_dokan1"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_hitobj_onoff, STRING("A_dokan1"), 1, 1)
     RETURN
 EVT_END()
@@ -384,7 +384,7 @@ EVT_BEGIN(trap_event)
     CALL(evt_target_flag_onoff, 0, 1, 1)
     SET_VALUE(LW(10), 1)
     LOOP(0)
-        CALL(evt_puni_set_mode, LW(10), 24)
+        CALL(evt_puni_set_mode, LW(10), PUNI_MODE_TRAP)
         CALL(evt_puni_flag_onoff, LW(10), 0, 2097152)
         CALL(evt_puni_set_anim, LW(10), 0)
         ADD(LW(10), 1)
@@ -393,7 +393,7 @@ EVT_BEGIN(trap_event)
         END_IF
     END_LOOP
     CALL(evt_puni_flag_onoff, 1, 0, PUNI_FLAG_SCRIPT_CONTROL)
-    CALL(evt_puni_set_mode, 1, 30)
+    CALL(evt_puni_set_mode, 1, PUNI_MODE_INERT)
     CALL(evt_puni_get_position, 1, LW(0), LW(1), LW(2))
     CALL(evt_npc_set_position, STRING("ガイド"), LW(0), LW(1), LW(2))
     CALL(evt_npc_flag_onoff, 1, STRING("ガイド"), NPC_FLAG_NO_HIT | NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION)
@@ -510,7 +510,7 @@ EVT_BEGIN(trap_event)
     CALL(evt_npc_get_position, STRING("ガイド"), LW(0), LW(1), LW(2))
     CALL(evt_puni_flag_onoff, 1, 1, PUNI_FLAG_SCRIPT_CONTROL)
     CALL(evt_puni_set_position, 1, LW(0), LW(1), LW(2))
-    CALL(evt_puni_set_mode, 1, 24)
+    CALL(evt_puni_set_mode, 1, PUNI_MODE_TRAP)
     SET_VALUE(GSW_STORY_PROGRESS, STG2_21_BUBBLES_2)
     SET_VALUE(GF(1), 0)
     CALL(evt_cam3d_evt_off, 300, EASING_SINE_IN_OUT)
@@ -612,7 +612,7 @@ EVT_BEGIN(trap_check)
 EVT_END()
 
 static EVT_BEGIN(punipuni_ball00_init)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_sui_hikari"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_sui_hikari"), MAP_OBJ_FLAG_HIDDEN)
     CALL_CHILD(PTR(mri_punipuni_setup))
     IF_INT_EQUAL(GSWF_MRI_17_PUNI_ORB_PLACED, 1)
         CALL(evt_item_set_position, LW(10), 50, 30, -58)
@@ -678,7 +678,7 @@ static EVT_BEGIN(breakyuka_main)
     LOOP(0)
         CALL(evt_puni_get_trap_index, LW(10), LW(12))
         IF_INT_EQUAL(LW(12), 1)
-            CALL(evt_puni_set_mode, LW(10), 16)
+            CALL(evt_puni_set_mode, LW(10), PUNI_MODE_HAGURE)
             CALL(evt_puni_flag_onoff, LW(10), 1, 2097152)
         END_IF
         ADD(LW(10), 1)
@@ -772,9 +772,9 @@ EVT_BEGIN(mri_17_init_evt)
     CALL(evt_item_entry, STRING("item_01"), ITEM_STAR_PIECE, 168, -310, -44, ITEM_TYPE_STILL, GSWF_STARPIECE_50, 0)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS_OR_EQUAL(STG2_20_PUNIO_PETUNI)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_hako"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_hako"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_hako"), 1, 0)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_dokan1"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_dokan1"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_dokan1"), 1, 0)
         CALL(evt_paper_entry, STRING("OFF_d_batan"))
         CALL(evt_paper_entry, STRING("OFF_d_saku"))
@@ -785,7 +785,7 @@ EVT_BEGIN(mri_17_init_evt)
         SPAWN_EVENT(PTR(trap_restore))
         CASE_GREATER_OR_EQUAL(STG2_21_04_ESCAPE)
     END_SWITCH
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_hako_saku_mae"), MAP_OBJ_FLAG_CLIP)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_hako_saku_mae"), MAP_OBJ_FLAG_CLIP)
     RETURN
 EVT_END()
 

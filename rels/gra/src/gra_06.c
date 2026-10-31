@@ -119,7 +119,7 @@ static BeroEntry bero_entry_data[] = {
         "n_bero", // hitName
         1, // type
         6, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -136,7 +136,7 @@ static BeroEntry bero_entry_data[] = {
     {
         "sw_bero", // hitName
         0, 0, // type..sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -153,7 +153,7 @@ static BeroEntry bero_entry_data[] = {
         "ana", // hitName
         3840, // type
         0, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -249,7 +249,7 @@ EVT_BEGIN(gra_06_saku_open)
         WAIT_FRAMES(1)
     END_LOOP
     WAIT_MS(100)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("kusari"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("kusari"), MAP_OBJ_FLAG_HIDDEN)
     SET_VALUE(GSWF_GRA_06_GATE_OPENED, 1)
     CALL(evt_hitobj_onoff, STRING("a_saku01"), 1, 0)
     RETURN
@@ -433,7 +433,7 @@ EVT_BEGIN(gra_06_init_evt)
         CALL(evt_mapobj_rotate, 0, STRING("mon_R"), 0, -90, 0)
         CALL(evt_hit_bind_update, STRING("A_mon_L"))
         CALL(evt_hit_bind_update, STRING("A_mon_R"))
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("kusari"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("kusari"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_saku01"), 1, 0)
     END_IF
     IF_INT_LESS(GSW_STORY_PROGRESS, STG4_08_STEEPLE_DEMO_EXT)

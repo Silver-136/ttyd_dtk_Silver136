@@ -2,6 +2,7 @@
 // and later the battle between Lord Crump's X-Nauts and Cortez's pirates (kaizoku_vs_dai3).
 
 #include "battle/battle_unit.h"
+#include "driver/fadedrv.h"
 #include "evt/evt_cmd.h"
 #include "eff/eff_magic1_n64.h"
 #include "libc_decls.h"
@@ -1479,7 +1480,7 @@ static BeroEntry bero_entry_data[] = {
     {
         "e_bero", // hitName
         0, 0, // type..sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -1495,7 +1496,7 @@ static BeroEntry bero_entry_data[] = {
     {
         "n_bero", // hitName
         0, 0, // type..sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -1511,7 +1512,7 @@ static BeroEntry bero_entry_data[] = {
     {
         "n_bero_02", // hitName
         0, 0, // type..sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -2203,7 +2204,7 @@ EVT_BEGIN(iwapera_offscreen)
     CALL(evt_img_alloc_capture, STRING("capture_img"), 0, 0, 1, LW(10), LW(11), LW(12), LW(13))
     CALL(evt_img_alloc_capture, STRING("capture_img"), 2, STRING("offscreen"), 1, LW(10), LW(11), LW(12), LW(13))
     WAIT_MS(1500)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_iwa_before"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_iwa_before"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_img_set_paper_anim, STRING("capture_img"), STRING("A_1"))
     RETURN
 EVT_END()
@@ -2219,7 +2220,7 @@ EVT_BEGIN(iwapera_offscreen_end)
     CALL(evt_img_release, STRING("capture_img"))
     CALL(evt_mapobj_clear_offscreen, 1, STRING("S_iwa_before"))
     CALL(evt_offscreen_delete, STRING("offscreen"))
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_iwa_after"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_iwa_after"), MAP_OBJ_FLAG_HIDDEN)
     RETURN
 EVT_END()
 
@@ -2778,7 +2779,7 @@ EVT_BEGIN(kaizoku_vs_dai3)
     SET_VALUE(GW(5), 0)
     SET_VALUE(GW(6), -2000)
     SPAWN_EVENT_GET_ID(PTR(kaizoku_move_every), LW(11))
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_hai"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_hai"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_cam3d_evt_set, -847, 334, 977, -847, 78, -475, 0, EASING_SINE_IN_OUT)
     CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_msg_print, 0, STRING("stg5_muj_118"), 0, STRING("第三勢力幹部"))
@@ -3515,8 +3516,8 @@ static EVT_BEGIN(muj_gor_ship)
     CALL(evt_npc_set_ry, STRING("コルテス"), 90)
     CALL(alpha_init_func)
     CALL(evt_map_set_tevcallback, 1, PTR(alpha_tev))
-    CALL(evt_mapobj_flag_onoff, 0, 1, STRING("S_mizu_06"), MAP_OBJ_TEV_CALLBACK(1))
-    CALL(evt_mapobj_flag_onoff, 0, 0, STRING("S_mizu_06"), MAP_OBJ_FLAG_DISPLAY_LIST)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 1, STRING("S_mizu_06"), MAP_OBJ_TEV_CALLBACK(1))
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 0, STRING("S_mizu_06"), MAP_OBJ_FLAG_DISPLAY_LIST)
     CALL(alpha_set_func, 0)
     SET_FLOAT_VALUE(GW(0), FLOAT(685.0f))
     SET_FLOAT_VALUE(GW(1), FLOAT(0.0f))
@@ -3541,11 +3542,11 @@ static EVT_BEGIN(ship_pera)
     CALL(evt_img_set_paper_anim, STRING("capture_img"), STRING("Z_1"))
     CALL(evt_img_onoff, STRING("capture_img"), 1)
     CALL(evt_snd_sfxon, STRING("SFX_OFF_SHIP_REVERSE1"), 0)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_b"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_b"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_img_set_paper_anim, STRING("capture_img"), STRING("A_1"))
     CALL(evt_img_wait_animend, STRING("capture_img"))
     CALL(evt_img_onoff, STRING("capture_img"), 0)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_b"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_b"), MAP_OBJ_FLAG_HIDDEN)
     SET_VALUE(GW(2), 180)
     CALL(evt_mapobj_clear_offscreen, 1, STRING("S_b"))
     CALL(evt_img_free_capture, STRING("capture_img"), 0)
@@ -3626,7 +3627,7 @@ EVT_BEGIN(muj_gor_ship_start)
     CALL(evt_mapobj_get_position, STRING("S_b"), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG0_SHIP_LANDING1"), LW(0), LW(1), LW(2), 0)
     SET_VALUE(GF(10), 0)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_mizu_06"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_mizu_06"), MAP_OBJ_FLAG_HIDDEN)
     BEGIN_INLINE_EVENT
         CALL(evt_sub_intpl_msec_init, EASING_LINEAR, 0, 255, 2000)
         LOOP(0)
@@ -3865,30 +3866,30 @@ EVT_BEGIN(muj_00_init_evt)
     CALL(evt_map_playanim, STRING("S_mizu"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_map_playanim, STRING("fune_c_01"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_map_playanim, STRING("fune_c_02"), MAP_ANIM_PLAY_LOOP, 0)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_b"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_b"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_hitobj_onoff, STRING("A_b"), 1, 0)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_c"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_c"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_hitobj_onoff, STRING("A_c"), 1, 0)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_hasi"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_mizu_01"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_mizu_04"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_hasi"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_mizu_01"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_mizu_04"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_hitobj_onoff, STRING("A_hasi1"), 1, 0)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_iwa_before"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_iwa_after"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_iwa_s011"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ana_after"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ana_before"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_iwa_before"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_iwa_after"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_iwa_s011"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ana_after"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ana_before"), MAP_OBJ_FLAG_HIDDEN)
     IF_INT_LESS_OR_EQUAL(GSW_STORY_PROGRESS, STG5_35_ESCAPE_ROUTE)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ana_before"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_iwa_s011"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_ana_before"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_iwa_s011"), MAP_OBJ_FLAG_HIDDEN)
         ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ana_after"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_ana_after"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_iwa_09"), 1, 0)
     END_IF
     IF_INT_LESS(GSW_STORY_PROGRESS, STG5_42_PIRATES_VS_X_NAUTS)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_iwa_before"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_iwa_before"), MAP_OBJ_FLAG_HIDDEN)
         ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_iwa_after"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_iwa_after"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG5_40_TRUE_IDENTITY)
         IF_INT_LESS(GSW_STORY_PROGRESS, STG5_41_RETURN_TO_THE_GROTTO)
@@ -3911,7 +3912,7 @@ EVT_BEGIN(muj_00_init_evt)
         CASE_EQUAL(STG5_36_HOLE_IN_THE_WALL)
         CALL_CHILD(nannpc_mode_setup)
 #endif
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_c"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_c"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_c"), 1, 1)
         CALL(evt_hit_bind_mapobj, STRING("A_c"), STRING("S_c"))
 #ifdef VERSION_G8ME01
@@ -3933,7 +3934,7 @@ EVT_BEGIN(muj_00_init_evt)
         CALL_CHILD(nannpc_mode_setup)
         CALL_CHILD(mario_main_init)
 #endif
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_b"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_b"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_b"), 1, 1)
         CALL(evt_hit_bind_mapobj, STRING("A_b"), STRING("S_b"))
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_c"), MAP_OBJ_FLAG_HIDDEN)
@@ -3950,7 +3951,7 @@ EVT_BEGIN(muj_00_init_evt)
         CALL_CHILD(nannpc_mode_setup)
         CALL_CHILD(mario_main_init)
 #endif
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_b"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_b"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_b"), 1, 1)
         CALL(evt_hit_bind_mapobj, STRING("A_b"), STRING("S_b"))
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_c"), MAP_OBJ_FLAG_HIDDEN)
@@ -3979,7 +3980,7 @@ EVT_BEGIN(muj_00_init_evt)
         END_IF
         CALL_CHILD(nannpc_mode_setup)
 #endif
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_b"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_b"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_b"), 1, 1)
         CALL(evt_hit_bind_mapobj, STRING("A_b"), STRING("S_b"))
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_hasi"), MAP_OBJ_FLAG_HIDDEN)
@@ -3993,7 +3994,7 @@ EVT_BEGIN(muj_00_init_evt)
         SPAWN_EVENT(leave_island)
 #endif
         CASE_GREATER_OR_EQUAL(STG5_58_FAIR_WINDS)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_b"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_b"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_b"), 1, 1)
         CALL(evt_hit_bind_mapobj, STRING("A_b"), STRING("S_b"))
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_hasi"), MAP_OBJ_FLAG_HIDDEN)

@@ -115,11 +115,11 @@ void fadeEntry(s32 type, s32 duration, GXColor color) {
     }
     // types 16-21 are types 9, 10, 11, 12, 14 and 15 in near-white (0xF0F0F0)
     if (type == 16) {
-        type = 9;
+        type = FADE_IN_BLACK;
         color = (GXColor){0xF0, 0xF0, 0xF0, 0xFF};
     }
-    if (type == 17) {
-        type = 10;
+    if (type == FADE_OUT_WHITE) {
+        type = FADE_OUT_BLACK;
         color = (GXColor){0xF0, 0xF0, 0xF0, 0xFF};
     }
     if (type == 18) {
@@ -983,8 +983,8 @@ void disp_texture(CameraId camId, void* param) {
                 PSMTXTrans(work->entries[0].texMtx, 1.0f, 1.0f, 0.0f);
             }
             break;
-        case 9:
-        case 10:
+        case FADE_IN_BLACK:
+        case FADE_OUT_BLACK:
         case 11:
         case 12:
         case 14:

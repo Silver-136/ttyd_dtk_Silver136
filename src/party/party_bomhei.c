@@ -293,7 +293,7 @@ static inline BOOL bomheiChkHitAttr(PartyEntry* party) {
     hit = party->hitobjStandOn;
     if (hit != NULL) {
         attr = hitGetAttr(hit);
-        if (attr & 0xC00) {
+        if (attr & (HIT_ATTR_DAMAGE_LIQUID | HIT_ATTR_SPIKES)) {
             party->useMotionId = 60;
             return TRUE;
         }
@@ -821,7 +821,7 @@ static inline BOOL bomheiChkReturnGround(Vec* pos, f32 dist, f32 angle) {
         query.targetDir = dir;
     }
     hit = hitCheckVecFilter(&query, NULL);
-    if (hit != NULL && !(hitGetAttr(hit) & 0xE00)) {
+    if (hit != NULL && !(hitGetAttr(hit) & (HIT_ATTR_DEEP_WATER | HIT_ATTR_DAMAGE_LIQUID | HIT_ATTR_SPIKES))) {
         if (query.hitPos.x >= 0.0f) {
             rf = 0.5f;
         } else {

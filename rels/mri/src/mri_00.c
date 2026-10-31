@@ -766,7 +766,7 @@ BeroEntry bero_lostitem[] = {
     {
         "w_bero", // hitName
         0, 0, // type..sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -789,7 +789,7 @@ static BeroEntry bero_entry_data[] = {
     {
         "w_bero", // hitName
         0, 0, // type..sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -806,7 +806,7 @@ static BeroEntry bero_entry_data[] = {
         "ne_bero", // hitName
         1, // type
         0, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -824,7 +824,7 @@ static BeroEntry bero_entry_data[] = {
         "dokan_1", // hitName
         2, // type
         0, // sfxId
-        9, // directionId
+        BERO_DIR_DOWN, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -1115,7 +1115,7 @@ EVT_BEGIN(open_bigtree)
     CALL(evt_snd_bgmon, PSND_SLOT(1), STRING("BGM_FF_ENV_SUCCESS1"))
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 1)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_non"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_non"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_tree_futa"), MAP_OBJ_FLAG_HIDDEN)
     BEGIN_INLINE_EVENT
         LOOP(0)
@@ -1839,16 +1839,16 @@ EVT_BEGIN(mri_00_init_evt)
         SPAWN_EVENT(PTR(first_bigtree))
     END_IF
     IF_INT_LESS_OR_EQUAL(GSW_STORY_PROGRESS, STG2_09_FLURRIE_JOINS)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_non"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_non"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mri_cloud_init)
         CALL(evt_mri_cloud_ent, PTR(&capturemap), STRING("A_kaze"), PTR(open_bigtree))
         SET_VALUE(LW(0), STRING("ne_bero"))
         CALL_CHILD(PTR(bero_case_switch_off))
         ELSE
         CALL(evt_map_playanim, STRING("light"), MAP_ANIM_PLAY_AT_END, 0)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_tree_futa"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_tree_futa"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_kesu"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_kesu"), MAP_OBJ_FLAG_HIDDEN)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_15_GRODUS)
         CALL(evt_bero_get_entername, LW(0))
         IF_STR_EQUAL(LW(0), STRING("sekai_yami1"))
@@ -1859,25 +1859,25 @@ EVT_BEGIN(mri_00_init_evt)
         END_IF
     END_IF
 #ifdef VERSION_G8ME01
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("J_kan"), MAP_OBJ_FLAG_DISABLED)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("D_kan"), MAP_OBJ_FLAG_DISABLED)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("F_kan"), MAP_OBJ_FLAG_DISABLED)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("Sp_kan"), MAP_OBJ_FLAG_DISABLED)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("I_kan"), MAP_OBJ_FLAG_DISABLED)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("J_kan"), MAP_OBJ_FLAG_DISABLED)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("D_kan"), MAP_OBJ_FLAG_DISABLED)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("F_kan"), MAP_OBJ_FLAG_DISABLED)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("Sp_kan"), MAP_OBJ_FLAG_DISABLED)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("I_kan"), MAP_OBJ_FLAG_DISABLED)
     CALL(evt_sub_get_language, LW(0))
     SWITCH(LW(0))
         CASE_OR_EQUAL(0)
         CASE_OR_EQUAL(1)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("J_kan"), MAP_OBJ_FLAG_DISABLED)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("J_kan"), MAP_OBJ_FLAG_DISABLED)
         CASE_END
         CASE_EQUAL(2)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("D_kan"), MAP_OBJ_FLAG_DISABLED)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("D_kan"), MAP_OBJ_FLAG_DISABLED)
         CASE_EQUAL(3)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("F_kan"), MAP_OBJ_FLAG_DISABLED)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("F_kan"), MAP_OBJ_FLAG_DISABLED)
         CASE_EQUAL(4)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("Sp_kan"), MAP_OBJ_FLAG_DISABLED)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("Sp_kan"), MAP_OBJ_FLAG_DISABLED)
         CASE_EQUAL(5)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("I_kan"), MAP_OBJ_FLAG_DISABLED)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("I_kan"), MAP_OBJ_FLAG_DISABLED)
     END_SWITCH
 #endif
     RETURN

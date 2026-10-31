@@ -2,6 +2,7 @@
 // Petalburg (nok_01).
 
 #include "battle/battle_unit.h"
+#include "driver/fadedrv.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_memcard.h"
 #include "evt/evt_npc.h"

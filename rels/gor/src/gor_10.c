@@ -1,6 +1,7 @@
 // gor_10 (ゴロツキタウン, Rogueport): prologue scenes (the letter and Mario waking up), leading to pro_04 and then gor_00.
 
 #include "battle/battle_unit.h"
+#include "driver/fadedrv.h"
 #include "evt/evt_snd.h"
 #include "evt/evt_cmd.h"
 #include "eff/eff_magic1_n64.h"
@@ -374,9 +375,9 @@ EVT_BEGIN(mezame_init_evt)
     CALL(evt_party_stop, 0)
     CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_HIDE)
     CALL(evt_party_dispflg_onoff, 0, PARTY_DISP_FLAG_HIDE, 1)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("marukongou"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("densha"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("pukupuku"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("marukongou"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("densha"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("pukupuku"), MAP_OBJ_FLAG_HIDDEN)
     SET_FLOAT_VALUE(GW(0), FLOAT(50.0f))
     BEGIN_INLINE_EVENT
         CALL(depth)

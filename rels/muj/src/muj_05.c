@@ -511,7 +511,7 @@ static BeroEntry bero_entry_data[] = {
     {
         "w_bero", // hitName
         0, 0, // type..sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -527,7 +527,7 @@ static BeroEntry bero_entry_data[] = {
     {
         "e_bero", // hitName
         0, 0, // type..sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -794,7 +794,7 @@ EVT_BEGIN(dokuroiwa_touch)
         END_IF
         CALL(evt_mapobj_get_position, STRING("S_jel"), LW(0), LW(1), LW(2))
         CALL(evt_snd_sfxon_3d, STRING("SFX_STG5_JUWEL_SET1"), LW(0), LW(1), LW(2), 0)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_jel"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_jel"), MAP_OBJ_FLAG_HIDDEN)
         BEGIN_INLINE_EVENT
             WAIT_MS(400)
             SPAWN_EVENT(PTR(blueeye_flush))
@@ -812,7 +812,7 @@ EVT_BEGIN(dokuroiwa_touch)
                 WAIT_FRAMES(1)
             END_LOOP
         END_INLINE_EVENT
-        CALL(evt_mario_dump_item, 71)
+        CALL(evt_mario_dump_item, ITEM_SKULL_GEM)
         SET_VALUE(GSWF_MUJ_05_SKULL_GEM_PLACED, 1)
         CALL(evt_exit_case_evt)
     END_IF
@@ -1127,11 +1127,11 @@ static EVT_BEGIN(bombwall_bomb)
         CALL(evt_img_alloc_capture, STRING("capture_img"), 0, STRING("offscreen"), 1, LW(10), LW(11), LW(12), LW(13))
         CALL(evt_img_clear_virtual_point, STRING("capture_img"))
         CALL(evt_img_set_paper_anim, STRING("capture_img"), STRING("A_1"))
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_dokuro_iwa"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_dokuro_iwa"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_dokuro_iwa"), 1, 0)
         CALL(evt_img_wait_animend, STRING("capture_img"))
         ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_dokuro_iwa"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_dokuro_iwa"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_dokuro_iwa"), 1, 0)
     END_IF
     CALL(evt_mapobj_clear_offscreen, 1, STRING("S_dokuro_iwa"))
@@ -1232,11 +1232,11 @@ EVT_BEGIN(dokuroiwa_bomb)
 EVT_END()
 
 EVT_BEGIN(dokuroiwa_init)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_jel"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_jel"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_hitobj_onoff, STRING("A_dkr_iwa_futa02"), 1, 0)
     CALL(evt_dokuroiwa_command_init)
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG5_19_GEMS_AND_JINGLES)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_dokuro_iwa"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_dokuro_iwa"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_dokuro_iwa"), 1, 0)
         RETURN
     END_IF
@@ -1245,7 +1245,7 @@ EVT_BEGIN(dokuroiwa_init)
         CALL(evt_mapobj_scale, 1, STRING("S_hige_iwa02_me"), 1, 0, 1)
         CALL(evt_mapobj_scale, 1, STRING("S_hige_iwa03_me"), 1, 0, 1)
         ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_jel"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_jel"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     SET_VALUE(GW(10), 0)
     SET_VALUE(GW(12), 0)

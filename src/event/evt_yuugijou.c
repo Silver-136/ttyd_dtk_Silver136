@@ -260,10 +260,10 @@ void monteCountDisp(void) {
     u32 flags = yuwp->flags;
     Mtx mtx;
     GXColor c1, c2, c3, c4;
-    if (flags & 4) {
+    if (flags & PARLOR_FLAG_COUNTER_HIGH) {
         y = -0x78;
     }
-    if (!(flags & 1) || !(flags & 2)) {
+    if (!(flags & PARLOR_FLAG_COUNTER_SHOWN) || !(flags & PARLOR_FLAG_TOKENS_OUT)) {
         return;
     }
     c1 = (GXColor){255, 255, 255, 153};
@@ -328,7 +328,7 @@ USER_FUNC(yuugijou_get_montemedal) {
 /** Writes to args[0] the tokens left in deposit (yuugijou_montemedal_keep), or 0 while the tokens are taken out. */
 USER_FUNC(yuugijou_get_montemedal_keep) {
     EvtWord* args = event->args;
-    if (yuwp->flags & 2) {
+    if (yuwp->flags & PARLOR_FLAG_TOKENS_OUT) {
         evtSetValue(event, args[0], 0);
     } else {
         evtSetValue(event, args[0], yuwp->keptTokens);
@@ -345,7 +345,7 @@ USER_FUNC(yuugijou_get_montemedal_keep) {
 USER_FUNC(yuugijou_add_montemedal_moto) {
     EvtWord* args = event->args;
     evtGetValue(event, args[0]);
-    if (yuwp->flags & 2) {
+    if (yuwp->flags & PARLOR_FLAG_TOKENS_OUT) {
         yuwp->keptTokens += evtGetValue(event, args[1]);
     }
     return EVT_RETURN_DONE;
@@ -354,10 +354,10 @@ USER_FUNC(yuugijou_add_montemedal_moto) {
 /** Shows (args[0] nonzero, display snapped to the real count) or hides the Pianta token counter. */
 USER_FUNC(yuugijou_montemedal_disp_onoff) {
     if (evtGetValue(event, event->args[0]) != 0) {
-        yuwp->flags |= 1;
+        yuwp->flags |= PARLOR_FLAG_COUNTER_SHOWN;
         yuwp->dispTokens = yuwp->tokens;
     } else {
-        yuwp->flags &= ~1;
+        yuwp->flags &= ~PARLOR_FLAG_COUNTER_SHOWN;
     }
     return EVT_RETURN_DONE;
 }
@@ -375,11 +375,11 @@ USER_FUNC(yuugijou_montemedal_wait) {
  * Does nothing unless the tokens are currently taken out.
  */
 USER_FUNC(yuugijou_montemedal_keep) {
-    if (yuwp->flags & 2) {
+    if (yuwp->flags & PARLOR_FLAG_TOKENS_OUT) {
         yuwp->keptTokens = yuwp->tokens;
         yuwp->tokens = 0;
         yuwp->dispTokens = 0;
-        yuwp->flags &= ~2;
+        yuwp->flags &= ~PARLOR_FLAG_TOKENS_OUT;
         yuwp->flags &= ~1;
     }
     return EVT_RETURN_DONE;
@@ -387,9 +387,9 @@ USER_FUNC(yuugijou_montemedal_keep) {
 
 /** Takes the deposited tokens back out and shows the counter again; does nothing if they are already out. */
 USER_FUNC(yuugijou_montemedal_return) {
-    if (!(yuwp->flags & 2)) {
+    if (!(yuwp->flags & PARLOR_FLAG_TOKENS_OUT)) {
         yuwp->dispTokens = yuwp->tokens = yuwp->keptTokens;
-        yuwp->flags |= 2;
+        yuwp->flags |= PARLOR_FLAG_TOKENS_OUT;
         yuwp->flags |= 1;
     }
     return EVT_RETURN_DONE;
@@ -398,7 +398,7 @@ USER_FUNC(yuugijou_montemedal_return) {
 /** Writes 1 to args[0] while Mario has his tokens taken out (flag 2), else 0. */
 USER_FUNC(yuugijou_get_takeoutflag) {
     EvtWord* args = event->args;
-    if (yuwp->flags & 2) {
+    if (yuwp->flags & PARLOR_FLAG_TOKENS_OUT) {
         evtSetValue(event, args[0], 1);
     } else {
         evtSetValue(event, args[0], 0);
@@ -409,9 +409,9 @@ USER_FUNC(yuugijou_get_takeoutflag) {
 /** Sets (args[0] nonzero) or clears flag 4, which draws the token counter higher on screen. */
 USER_FUNC(yuugijou_set_yupflag) {
     if (evtGetValue(event, event->args[0]) != 0) {
-        yuwp->flags |= 4;
+        yuwp->flags |= PARLOR_FLAG_COUNTER_HIGH;
     } else {
-        yuwp->flags &= ~4;
+        yuwp->flags &= ~PARLOR_FLAG_COUNTER_HIGH;
     }
     return EVT_RETURN_DONE;
 }
@@ -442,7 +442,7 @@ void evtYuuSetWindowEvt(EvtWord* evt) {
 
 /** Opens the minigame pause window (window_open); called by the menu code (win_main.c, state 400). */
 void evtYuuWindow(void) {
-    yuwp->flags &= ~8;
+    yuwp->flags &= ~PARLOR_FLAG_WINDOW_DONE;
     evtEntryType(window_open, 0, 0, 0);
 }
 

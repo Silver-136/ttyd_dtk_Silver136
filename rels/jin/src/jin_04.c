@@ -82,8 +82,8 @@ static BeroEntry bero_entry_data[] = {
         "s_bero", // hitName
         1, // type
         2, // sfxId
-        20000, // directionId
-        100000, // centerPosition
+        BERO_DIR_AUTO, // directionId
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent

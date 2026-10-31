@@ -217,7 +217,7 @@ BattleUnitSetup entry_unit_data[] = {
         &unit_act_clauda, // mUnitKindParams
         ALLIANCE_PLAYER, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {-140.0f, 0.0f, 5.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -227,7 +227,7 @@ BattleUnitSetup entry_unit_data[] = {
         &unit_act_teresa, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {45.0f, 40.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -237,7 +237,7 @@ BattleUnitSetup entry_unit_data[] = {
         &unit_act_teresa, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {85.0f, 40.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -247,7 +247,7 @@ BattleUnitSetup entry_unit_data[] = {
         &unit_act_atmic_teresa, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {150.0f, 40.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -257,7 +257,7 @@ BattleUnitSetup entry_unit_data[] = {
         &unit_act_kinopio, // mUnitKindParams
         ALLIANCE_NEUTRAL, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {-75.0f, 0.0f, -40.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -267,7 +267,7 @@ BattleUnitSetup entry_unit_data[] = {
         &unit_act_kinopio, // mUnitKindParams
         ALLIANCE_NEUTRAL, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {-15.0f, 0.0f, -40.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -277,7 +277,7 @@ BattleUnitSetup entry_unit_data[] = {
         &unit_act_kinopiko, // mUnitKindParams
         ALLIANCE_NEUTRAL, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {-45.0f, 0.0f, -40.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -287,7 +287,7 @@ BattleUnitSetup entry_unit_data[] = {
         &unitdata_Party_Christine, // mUnitKindParams
         ALLIANCE_NEUTRAL, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {0.0f, -50.0f, 110.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork

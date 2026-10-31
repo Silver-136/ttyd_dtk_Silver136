@@ -338,7 +338,7 @@ BattleWeapon partyWeapon_NokotarouFirstAttack = {
     NULL, // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_CANNOT_MISS | SPECIAL_FREEZE_CRUSH | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
-    0x80002004, // targetWeightFlags
+    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
@@ -381,7 +381,7 @@ BattleWeapon partyWeapon_NokotarouKouraAttack = {
     "msg_ac_hammer", // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH | SPECIAL_CONFUSED_ACTION | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL & ~COUNTER_RESIST_PAYBACK, // counterResistFlags
-    0x80002004, // targetWeightFlags
+    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
@@ -432,7 +432,7 @@ BattleWeapon partyWeapon_NokotarouSyubibinKoura = {
     "msg_ac_koura_shubibin", // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL & ~COUNTER_RESIST_PAYBACK, // counterResistFlags
-    0x80002004, // targetWeightFlags
+    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
@@ -478,7 +478,7 @@ BattleWeapon partyWeapon_NokotarouKouraGuard = {
     "msg_ac_koura_no_mamori", // acHelpMsg
     SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
-    0x80002004, // targetWeightFlags
+    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
@@ -524,7 +524,7 @@ BattleWeapon partyWeapon_NokotarouTsuranukiKoura = {
     "msg_ac_tsuranuki_koura", // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_PIERCE_DEFENSE | SPECIAL_FREEZE_CRUSH | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL & ~COUNTER_RESIST_PAYBACK, // counterResistFlags
-    0x80002004, // targetWeightFlags
+    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
@@ -1327,14 +1327,14 @@ EVT_BEGIN(partyNokotarouAttack_KouraGuard)
         CALL(btlevtcmd_GetUnitId, LW(3), LW(0))
         CALL(btlevtcmd_SetUnitWork, LW(10), SHELL_SHIELD_WORK_TARGET, LW(0))
         CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_NEUTRAL)
-        CALL(btlevtcmd_SetUnitWork, LW(10), SHELL_SHIELD_WORK_FOLLOW, 3)
+        CALL(btlevtcmd_SetUnitWork, LW(10), SHELL_SHIELD_WORK_FOLLOW, KOURA_FOLLOW_SLIDE)
         BEGIN_SIBLING_EVENT_GET_ID(LW(15))
             SET_VALUE(LW(5), 5)
             LOOP(LW(5))
                 // BUG: stores the follow state in LW(10) but tests LW(0), which still holds the target's unit id, so the
                 // loop does not wait for the slide (state 3) to end unless that id is 3.
                 CALL(btlevtcmd_GetUnitWork, LW(10), SHELL_SHIELD_WORK_FOLLOW, LW(10))
-                IF_INT_NOT_EQUAL(LW(0), 3)
+                IF_INT_NOT_EQUAL(LW(0), KOURA_FOLLOW_SLIDE)
                     BREAK_LOOP
                 END_IF
                 WAIT_FRAMES(1)
@@ -1342,7 +1342,7 @@ EVT_BEGIN(partyNokotarouAttack_KouraGuard)
             END_LOOP
         END_SIBLING_EVENT
         CALL(btlevtcmd_WaitEventEnd, LW(15))
-        CALL(btlevtcmd_SetUnitWork, LW(10), SHELL_SHIELD_WORK_FOLLOW, 0)
+        CALL(btlevtcmd_SetUnitWork, LW(10), SHELL_SHIELD_WORK_FOLLOW, KOURA_FOLLOW_NONE)
         IF_BITS_SET(LW(6), AC_RESULT_SUCCESS)
             CALL(btlevtcmd_AcGetOutputParam, 1, LW(0))
         ELSE
@@ -1858,7 +1858,7 @@ BattleUnitSetup entry_koura = {
     &unit_koura, // mUnitKindParams
     ALLIANCE_PLAYER, // alliance
     {0}, // pad_05
-    0x4000001, // attackPhase
+    BATTLE_PHASE_BEFORE_PLAYER, // attackPhase
     {1000.0f, 0.0f, 1000.0f}, // position
     0, // hitOffsetX
     {0}, // unitWork

@@ -1085,7 +1085,7 @@ BOOL mobjCheckExec(void) {
     MapObjectEntry* entry;
 
     for (i = 0, entry = wp->entries; i < wp->count; entry++, i++) {
-        if (entry->flags & 0x200) {
+        if (entry->flags & MOBJ_FLAG_BUSY) {
             return TRUE;
         }
     }

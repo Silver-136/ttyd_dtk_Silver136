@@ -74,7 +74,7 @@ BattleUnitSetup btlparty_gor_gor_00_01_off_1[] = {
         &unit_boss_kanbu1, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {90.0f, 0.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -97,7 +97,7 @@ BattleUnitSetup btlparty_gor_gor_02_ac_lecture[] = {
         &unit_lecture_christine, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {90.0f, 0.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -120,7 +120,7 @@ BattleUnitSetup btlparty_gor_gor_02_sac_lecture[] = {
         &unit_lecture_frankli_sac, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {90.0f, 0.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -143,7 +143,7 @@ BattleUnitSetup btlparty_gor_gor_02_01_off_1[] = {
         &unit_monban, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {90.0f, 0.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork

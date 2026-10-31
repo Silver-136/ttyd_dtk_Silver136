@@ -254,12 +254,12 @@ USER_FUNC(btlevtcmd_KillUnit) {
     }
     unit->currentHp = 0;
     BtlUnit_ClearStatus(unit);
-    if (flags & 2) {
+    if (flags & KILL_UNIT_INACTIVE) {
         unit->mAttributeFlags |= kInactive;
         return EVT_RETURN_DONE;
     } else {
         BtlUnit_SetStatus(unit, STATUS_INSTANT_KILL, 1, 1);
-        if (!(flags & 1)) {
+        if (!(flags & KILL_UNIT_KEEP)) {
             unit->flags |= BATTLE_UNIT_FLAG_BROKEN;
         }
         return EVT_RETURN_DONE;
@@ -2099,7 +2099,7 @@ USER_FUNC(btlevtcmd_CheckSpace) {
     boundX = evtGetValue(event, args[4]);
     boundY = evtGetValue(event, args[5]);
     boundZ = evtGetValue(event, args[6]);
-    for (i = 0; i < 64; ++i) {
+    for (i = 0; i < BATTLE_UNIT_MAX; ++i) {
         found = FALSE;
         unit = BattleGetUnitPtr(wp, i);
         if (unit && unit->mAlliance == ALLIANCE_ENEMY) {
@@ -2220,7 +2220,7 @@ USER_FUNC(btlevtcmd_GetMarioId) {
     id = BattleTransID(event, btlId);
     index = args[1];
     alliance = BattleGetUnitPtr(wp, id)->mAlliance;
-    for (i = 0; i < 64; i++) {
+    for (i = 0; i < BATTLE_UNIT_MAX; i++) {
         unit = BattleGetUnitPtr(wp, i);
         if (unit && unit->mAlliance == alliance && unit->currentKind == UNIT_MARIO) {
             break;
@@ -2246,7 +2246,7 @@ USER_FUNC(btlevtcmd_GetPartyId) {
     id = BattleTransID(event, btlId);
     index = args[1];
     alliance = BattleGetUnitPtr(wp, id)->mAlliance;
-    for (i = 0; i < 64; i++) {
+    for (i = 0; i < BATTLE_UNIT_MAX; i++) {
         unit = BattleGetUnitPtr(wp, i);
         if (unit && unit->mAlliance == alliance) {
             kind = unit->currentKind;
@@ -7002,7 +7002,7 @@ USER_FUNC(btlevtcmd_SacBgsetMove) {
     }
     event->userdata[0]++;
     mode = on ? EASING_CUBIC_OUT : EASING_CUBIC_IN;
-    for (i = 0; i < 32; i++) {
+    for (i = 0; i < BATTLE_STAGE_OBJECT_MAX; i++) {
         obj = &wp->stageObjects[i];
         if (obj->id > 0) {
             switch (obj->data->mLayer) {
@@ -7050,7 +7050,7 @@ USER_FUNC(btlevtcmd_BtlStageObjFlagOnOff) {
     name = (const char*)evtGetValue(event, args[0]);
     flags = args[1];
     onoff = evtGetValue(event, args[2]);
-    for (i = 0; i < 32; i++) {
+    for (i = 0; i < BATTLE_STAGE_OBJECT_MAX; i++) {
         obj = &wp->stageObjects[i];
         if (obj->id > 0 && !strcmp(obj->data->name, name)) {
             if (onoff) {
@@ -7082,7 +7082,7 @@ USER_FUNC(btlevtcmd_BtlStageObjSetRotate) {
     y = evtGetValue(event, ya);
     za = args[3];
     z = evtGetValue(event, za);
-    for (i = 0; i < 32; i++) {
+    for (i = 0; i < BATTLE_STAGE_OBJECT_MAX; i++) {
         obj = &wp->stageObjects[i];
         if (obj->id > 0 && !strcmp(obj->data->name, name)) {
             if (xa != EVTDAT_POINTER_MAX) {
@@ -7113,7 +7113,7 @@ USER_FUNC(btlevtcmd_BtlStageObjGetRotate) {
     x = args[1];
     y = args[2];
     z = args[3];
-    for (i = 0; i < 32; i++) {
+    for (i = 0; i < BATTLE_STAGE_OBJECT_MAX; i++) {
         obj = &wp->stageObjects[i];
         if (obj->id > 0 && !strcmp(obj->data->name, name)) {
             if (x != EVTDAT_POINTER_MAX) {

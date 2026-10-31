@@ -81,7 +81,7 @@ static BeroEntry bero_entry_data[] = {
         "w_bero", // hitName
         1, // type
         12, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -99,7 +99,7 @@ static BeroEntry bero_entry_data[] = {
         "e_bero", // hitName
         1, // type
         12, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -411,7 +411,7 @@ EVT_BEGIN(gon_09_init_evt)
     CALL(evt_mobj_float_blk, STRING("blk_0"), 325, -50, 75, 2, 1, 0, LSWF_GON_09_FLOAT_BLOCK_MOVED)
     CALL_CHILD(PTR(init_0))
     CALL(evt_mobj_switch_float_blk, STRING("sw_0"), 588, -50, 138, STRING("blk_0"), 2, PTR(main_0), LSWF_GON_09_FLOAT_BLOCK_MOVED)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("fuyu_boxS"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("fuyu_boxS"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_map_playanim, STRING("hokori"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_map_entry_airport_harbor, 0, STRING("hikou"), STRING("a_hi"))
     RETURN

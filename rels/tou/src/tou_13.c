@@ -29,7 +29,7 @@ static BeroEntry bero_data[] = {
     {
         "e_bero_", // hitName
         0, 0, // type..sfxId
-        6, // directionId
+        BERO_DIR_W, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -43,7 +43,7 @@ static BeroEntry bero_data[] = {
     {
         "w_bero_", // hitName
         0, 0, // type..sfxId
-        2, // directionId
+        BERO_DIR_E, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -61,7 +61,7 @@ static BeroEntry bero_data[] = {
 static EVT_BEGIN(evt_dakuto)
     CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.049804688f), FLOAT(0.0f), 500)
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG3_DUCT_KOUSHI_HIT1"), 188, 0, 0, 0)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("s_deguti"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("s_deguti"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_hitobj_onoff, STRING("deguti"), 1, 0)
     SET_VALUE(LW(0), 1)
     CALL_CHILD(PTR(bero_case_switch_on))
@@ -179,7 +179,7 @@ EVT_BEGIN(tou_13_init_evt)
         CALL_CHILD(PTR(bero_case_switch_off))
         ELSE
         CALL(evt_hitobj_onoff, STRING("deguti"), 1, 0)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("s_deguti"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("s_deguti"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_30_03_EAVESDROPPING)
         SPAWN_EVENT(PTR(evt_nusumi))

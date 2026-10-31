@@ -49,7 +49,7 @@ s32 battleAcMain_PowerGaugeLv(BattleWork* work) {
             tw->gauge = 0.0f;
             break;
         case 100:
-            if ((work->actionCommands.setupFlags & 1) && (work->actionCommands.mAcUnit->mTokenFlags & kConfusedAction)) {
+            if ((work->actionCommands.setupFlags & AC_SETUP_FLAG_CONFUSED_AUTO) && (work->actionCommands.mAcUnit->mTokenFlags & kConfusedAction)) {
                 if (irand(100) >= 0) {
                     work->actionCommands.setupParam = 30;
                     work->actionCommands.outputParams[0] = 0;
@@ -113,7 +113,7 @@ s32 battleAcMain_PowerGaugeLv(BattleWork* work) {
         case 1002:
             work->actionCommands.mAcState = 1003;
         case 1003:
-            work->actionCommands.doneFlags |= 1;
+            work->actionCommands.doneFlags |= AC_DONE_FLAG_FINISHED;
             tw->timer = 60;
             work->actionCommands.mAcState = 1004;
         case 1004:
@@ -178,7 +178,7 @@ void battleAcDisp_PowerGaugeLv(CameraId cameraId, void* param) {
 #pragma opt_propagation reset
 /** Called by btlevtcmd_StopAC: unless the command already finished, starts the 60-frame end wait. */
 void battleAcDelete_PowerGaugeLv(BattleWork* work) {
-    if (work->actionCommands.doneFlags & 1) {
+    if (work->actionCommands.doneFlags & AC_DONE_FLAG_FINISHED) {
         return;
     }
     work->actionCommands.mAcState = 1003;

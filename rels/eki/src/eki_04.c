@@ -69,7 +69,7 @@ static BeroEntry bero_data[] = {
         "e_bero", // hitName
         1, // type
         3, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -87,7 +87,7 @@ static BeroEntry bero_data[] = {
         "s_bero", // hitName
         1, // type
         3, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -126,8 +126,8 @@ EVT_BEGIN(eki_04_init_evt)
     CALL(evt_mobj_jumpstand_red, 0, STRING("mobj_jump"), 360, -900, 70, PTR(evt_jump), 0)
     CALL(evt_item_entry, STRING("item01"), ITEM_DRIED_SHROOM, -250, -815, 70, ITEM_TYPE_STILL, GSWF_EKI_04_DRIED_SHROOM, 0)
     CALL(evt_item_entry, STRING("item02"), ITEM_P_UP_D_DOWN, -250, 230, 40, ITEM_TYPE_STILL, GSWF_EKI_04_P_UP_D_DOWN, 0)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("futi_"), MAP_OBJ_FLAG_CLIP)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("hasira"), MAP_OBJ_FLAG_CLIP)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("futi_"), MAP_OBJ_FLAG_CLIP)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("hasira"), MAP_OBJ_FLAG_CLIP)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG6_33_BLOW_THE_POSTER)
         SET_VALUE(GSW_STORY_PROGRESS, STG6_33_BLOW_THE_POSTER)
     END_IF

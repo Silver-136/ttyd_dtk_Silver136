@@ -1,6 +1,7 @@
 // aji.rel (敵のアジト, X-Naut Fortress): the REL prolog/epilog and the area's map list (aji_00 to aji_19).
 
 #include "battle/battle_unit.h"
+#include "evt/evt_story.h"
 #include "evt/evt_cmd.h"
 
 #include "mario/mario.h"
@@ -26,10 +27,10 @@ void _unresolved(void) {
 void _epilog(void) {
     voidfunctionptr* dtor;
 
-    if (swGet(0x1079)) { // GSWF_AJI_09_DOT_MARIO_SEEN
+    if (swGet(GSWF_AJI09_PIXEL_MARIO_ACTIVE)) { // GSWF_AJI_09_DOT_MARIO_SEEN
         marioSetFamicomMode(0);
         partySetFamicomMode(partyGetPtr(marioGetPartyId()), 0);
-        swClear(0x1079); // GSWF_AJI_09_DOT_MARIO_SEEN
+        swClear(GSWF_AJI09_PIXEL_MARIO_ACTIVE); // GSWF_AJI_09_DOT_MARIO_SEEN
     }
     for (dtor = _dtors; *dtor != NULL; dtor++) {
         (*dtor)();

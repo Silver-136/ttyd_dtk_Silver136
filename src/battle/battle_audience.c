@@ -541,7 +541,7 @@ void BattleAudience_PerPhase(u32 value) {
     s32 i;
 
     audience = BattleAudienceBaseGetPtr();
-    if (value == 0x4000002 && !(audience->flags & AUDIENCE_FLAG_EVENT_CTRL)) {
+    if (value == BATTLE_PHASE_PLAYER && !(audience->flags & AUDIENCE_FLAG_EVENT_CTRL)) {
         for (i = 0; i < 200; i++) {
             member = BattleAudienceGetPtr(i);
             if ((u8)BattleAudience_GetExist(i) == 1 && member->status == AUDIENCE_STATUS_ITEM_ON) {
@@ -552,13 +552,13 @@ void BattleAudience_PerPhase(u32 value) {
                 BattleAudience_ChangeStatus(i, AUDIENCE_STATUS_WAIT);
             }
         }
-        for (i = 0; i < 100; i++) {
+        for (i = 0; i < AUDIENCE_ITEM_MAX; i++) {
             if (BattleAudienceItemGetPtr(i)->state <= 1) {
                 BattleAudienceItemGetPtr(i)->flags = 0;
             }
         }
     }
-    if (value == 0x4000004) {
+    if (value == BATTLE_PHASE_ENEMY) {
         BattleAudienceSetThrowItemMax();
         audience->flags |= AUDIENCE_FLAG_PHASE_REACTION;
         audience->mCheckPhaseReactionState = 0;
@@ -604,7 +604,7 @@ u8 BattleAudience_CheckReactionPerPhase(void) {
             }
             /* fallthrough */
         case 5:
-            for (counter = 0, i = 0; i < 200; i++) {
+            for (counter = 0, i = 0; i < AUDIENCE_MEMBER_MAX; i++) {
                 member = BattleAudienceGetPtr(i);
                 // FAKE: comma expression; `--member->statusTimer <= 0` changes the object
                 if ((u8)BattleAudience_GetSysCtrl(i) == 1 && member->type == AUDIENCE_BULKY_BOBOMB &&
@@ -621,7 +621,7 @@ u8 BattleAudience_CheckReactionPerPhase(void) {
             /* fallthrough */
         case 6:
         case 7:
-            for (i = 0; i < 200; i++) {
+            for (i = 0; i < AUDIENCE_MEMBER_MAX; i++) {
                 member = BattleAudienceGetPtr(i);
                 if ((u8)BattleAudience_GetSysCtrl(i) == 1 && member->type == AUDIENCE_BULKY_BOBOMB &&
                         member->status == AUDIENCE_STATUS_FIRE) {
@@ -819,7 +819,7 @@ u8 BattleAudience_CheckReactionPerPhase(void) {
                         break;
                     }
                     case 1:
-                        for (i = 0; i < 200; i++) {
+                        for (i = 0; i < AUDIENCE_MEMBER_MAX; i++) {
                             if (check_exe_phase_evt_status(i, AUDIENCE_KOOPA) && BattleAudienceGetPtr(i)->status != AUDIENCE_STATUS_SHELL) {
                                 BattleAudience_ChangeStatus(i, AUDIENCE_STATUS_SHELL);
                                 BattleAudienceGetPtr(i)->statusTimer = 5;
@@ -842,7 +842,7 @@ u8 BattleAudience_CheckReactionPerPhase(void) {
                                 pe->phaseSub = 5;
                                 break;
                             case 5:
-                                for (i = 0; i < 200; i++) {
+                                for (i = 0; i < AUDIENCE_MEMBER_MAX; i++) {
                                     if ((u8)BattleAudience_GetSysCtrl(i) && BattleAudienceGetPtr(i)->status == AUDIENCE_STATUS_ENTER) break;
                                 }
                                 if (i == 200) {
@@ -1021,7 +1021,7 @@ u8 BattleAudience_CheckReactionPerPhase(void) {
             }
             break;
         case 15:
-            for (i = 0; i < 200; i++) {
+            for (i = 0; i < AUDIENCE_MEMBER_MAX; i++) {
                 member = BattleAudienceGetPtr(i);
                 // FAKE: comma expression; `--member->statusDelay <= 0` changes the object
                 if ((u8)BattleAudience_GetSysCtrl(i) == 1 && member->status == AUDIENCE_STATUS_SLEEP &&
@@ -1030,7 +1030,7 @@ u8 BattleAudience_CheckReactionPerPhase(void) {
                     member->statusDelay = 0;
                 }
             }
-            for (i = 0; i < 200; i++) {
+            for (i = 0; i < AUDIENCE_MEMBER_MAX; i++) {
                 member = BattleAudienceGetPtr(i);
                 if ((u8)BattleAudience_GetSysCtrl(i) == 1 && member->type == AUDIENCE_KOOPA && member->status == AUDIENCE_STATUS_SHELL &&
                         (member->statusTimer--, member->statusTimer <= 0)) { // FAKE: comma expression; `--member->statusTimer <= 0` changes the object
@@ -1568,7 +1568,7 @@ BattleUnit* BattleAudienceDetectTargetAll(void) {
 
     BattleAudienceBaseGetPtr();
     count = 0;
-    for (i = 0; i < 64; i++) {
+    for (i = 0; i < BATTLE_UNIT_MAX; i++) {
         unit = wp->units[i];
         if (unit != NULL) {
             part = BattleGetUnitPartsPtr(i, BtlUnit_GetBodyPartsId(unit));
@@ -1599,7 +1599,7 @@ BattleUnit* BattleAudienceDetectTargetPlayer(void) {
 
     BattleAudienceBaseGetPtr();
     count = 0;
-    for (i = 0; i < 64; i++) {
+    for (i = 0; i < BATTLE_UNIT_MAX; i++) {
         unit = wp->units[i];
         if (unit != NULL) {
             part = BattleGetUnitPartsPtr(i, BtlUnit_GetBodyPartsId(unit));
@@ -1695,7 +1695,7 @@ void BattleAudienceItemCtrlProcess(void) {
             if (it->timer <= 0) {
                 BattleUnit* t;
                 f32 dx, n;
-                for (j = 0; j < 100; j++) {
+                for (j = 0; j < AUDIENCE_ITEM_MAX; j++) {
                     if (j != i && (BattleAudienceItemGetPtr(j)->flags & AUDIENCE_ITEM_FLAG_ACTIVE) &&
                         BattleAudienceItemGetPtr(j)->state == 1) {
                         it->mode = 2;
@@ -1940,7 +1940,7 @@ void BattleAudienceApSrcCtrlProcess(void) {
     }
     cnt = 0;
     star = base->starpower;
-    for (i = 0; i < 100; i++) {
+    for (i = 0; i < AUDIENCE_ITEM_MAX; i++) {
         if (base->starpower[i].flags & AUDIENCE_STAR_FLAG_ACTIVE) {
             cnt++;
         }
@@ -1956,7 +1956,7 @@ void BattleAudienceApSrcCtrlProcess(void) {
             base->apStarSfxId = psndSFXOn("SFX_BTL_SYS_AP_STAR1");
         }
     } else {
-        for (k = 0, i = 0; i < 100; i++) {
+        for (k = 0, i = 0; i < AUDIENCE_ITEM_MAX; i++) {
             if (base->starpower[i].flags & AUDIENCE_STAR_FLAG_ACTIVE) {
                 break;
             }
@@ -1971,7 +1971,7 @@ void BattleAudienceApSrcCtrlProcess(void) {
             return;
         }
     }
-    for (i = 0; i < 100; i++) {
+    for (i = 0; i < AUDIENCE_ITEM_MAX; i++) {
         BattleAudienceStar* s = &base->starpower[i];
         pouchGetPtr();
         if (!(s->flags & AUDIENCE_STAR_FLAG_ACTIVE)) {
@@ -2731,7 +2731,7 @@ void BattleAudience_GetItemOn(s32* memberId, f32* x, f32* y, f32* z, ItemType* i
     int i;
 
     audience = BattleAudienceBaseGetPtr();
-    for (i = 0, member = BattleAudienceGetPtr(0); i < 200; i++, member++) {
+    for (i = 0, member = BattleAudienceGetPtr(0); i < AUDIENCE_MEMBER_MAX; i++, member++) {
         if ((member->flags & AUDIENCE_MEMBER_FLAG_USED) && !(member->flags & AUDIENCE_MEMBER_FLAG_WIDE_SUB) && !(member->flags & AUDIENCE_MEMBER_FLAG_NOT_EXIST) && member->itemId != -1) {
             item = BattleAudienceItemGetPtr(member->itemId);
             if (item->state <= 4 || item->state == 7) {
@@ -2806,7 +2806,7 @@ void BattleAudience_SetTarget(s32 index) {
     s32 i;
 
     BattleAudienceGetPtr(index)->flags |= AUDIENCE_MEMBER_FLAG_TARGETED;
-    for (i = 0; i < 200; i++) {
+    for (i = 0; i < AUDIENCE_MEMBER_MAX; i++) {
         if (i != index && (u8)BattleAudience_GetExist(i)) {
             member = BattleAudienceGetPtr(i);
             if (member->status == AUDIENCE_STATUS_ITEM_ON) {
@@ -3169,7 +3169,7 @@ s32 BattleAudience_GetPPAudienceNumKind(s32 type) {
 
     BattleAudienceBaseGetPtr();
     count = 0;
-    for (i = 0; i < 200; i++) {
+    for (i = 0; i < AUDIENCE_MEMBER_MAX; i++) {
         if (BattleAudience_GetPPAudienceNum_Sub(i) && type == BattleAudienceGetPtr(i)->type) {
             count++;
         }
@@ -3321,7 +3321,7 @@ s32 BattleAudienceNumToTargetSub(void) {
 
     BattleAudienceBaseGetPtr();
     count = 0;
-    for (i = 0; i < 200; i++) {
+    for (i = 0; i < AUDIENCE_MEMBER_MAX; i++) {
         if ((u8)BattleAudience_GetExist(i) == TRUE && BattleAudienceGetPtr(i)->status != AUDIENCE_STATUS_ESCAPE) {
             count++;
         }
@@ -3497,7 +3497,7 @@ void BattleAudiencePuniAllEscape(void) {
 
     audience = BattleAudienceBaseGetPtr();
     count = 0;
-    for (i = 0; i < 200; i++) {
+    for (i = 0; i < AUDIENCE_MEMBER_MAX; i++) {
         member = BattleAudienceGetPtr(i);
         if ((u8)BattleAudience_GetEscapeChangeOK(i) && member->type == AUDIENCE_PUNI) {
             BattleAudience_ChangeStatus(i, AUDIENCE_STATUS_ESCAPE);
@@ -3636,7 +3636,7 @@ void BattleAudienceJoy_Sub(s32 a, s32 b, s32 c, s32 type) {
 
     BattleAudienceBaseGetPtr();
     total = c + (a + b);
-    for (i = 0, member = BattleAudienceGetPtr(0); i < 200; i++, member++) {
+    for (i = 0, member = BattleAudienceGetPtr(0); i < AUDIENCE_MEMBER_MAX; i++, member++) {
         if (!BattleAudience_GetWaiting(i)) {
             continue;
         }

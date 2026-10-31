@@ -2,6 +2,7 @@
 // first X-Naut battle, the Magnus von Grapple fight with Lord Crump, the Crystal Star, and Bowser's interludes.
 
 #include "battle/battle_unit.h"
+#include "evt/evt_story.h"
 #include "evt/evt_window.h"
 #include "kpa_act.h"
 #include "evt/evt_cmd.h"
@@ -864,7 +865,7 @@ static BeroEntry bero_entry_data[] = {
         "w_bero", // hitName
         1, // type
         0, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -882,7 +883,7 @@ static BeroEntry bero_entry_data[] = {
         "e_bero", // hitName
         1, // type
         0, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -900,7 +901,7 @@ static BeroEntry bero_entry_data[] = {
         "dokan", // hitName
         2, // type
         0, // sfxId
-        2, // directionId
+        BERO_DIR_E, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -1612,16 +1613,16 @@ EVT_BEGIN(meet_rival)
     CALL(evt_npc_set_position, LW(10), 0, -1000, 0)
     CALL(evt_puni_init_puni, 1, 1, LW(0), LW(1), LW(2), 0)
     CALL(evt_npc_flag_onoff, 0, LW(11), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
-    CALL(evt_puni_set_mode, 4, 14)
-    CALL(evt_puni_set_mode, 5, 14)
-    CALL(evt_puni_set_mode, 6, 14)
-    CALL(evt_puni_set_mode, 7, 14)
-    CALL(evt_puni_set_mode, 8, 14)
-    CALL(evt_puni_set_mode, 9, 14)
-    CALL(evt_puni_set_mode, 10, 14)
-    CALL(evt_puni_set_mode, 11, 14)
-    CALL(evt_puni_set_mode, 12, 14)
-    CALL(evt_puni_set_mode, 13, 14)
+    CALL(evt_puni_set_mode, 4, PUNI_MODE_STOP)
+    CALL(evt_puni_set_mode, 5, PUNI_MODE_STOP)
+    CALL(evt_puni_set_mode, 6, PUNI_MODE_STOP)
+    CALL(evt_puni_set_mode, 7, PUNI_MODE_STOP)
+    CALL(evt_puni_set_mode, 8, PUNI_MODE_STOP)
+    CALL(evt_puni_set_mode, 9, PUNI_MODE_STOP)
+    CALL(evt_puni_set_mode, 10, PUNI_MODE_STOP)
+    CALL(evt_puni_set_mode, 11, PUNI_MODE_STOP)
+    CALL(evt_puni_set_mode, 12, PUNI_MODE_STOP)
+    CALL(evt_puni_set_mode, 13, PUNI_MODE_STOP)
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
     SET_VALUE(GSW_STORY_PROGRESS, STG2_12_RIVAL_ARRIVAL)
     CALL(evt_mario_key_onoff, 1)
@@ -1707,7 +1708,7 @@ EVT_BEGIN(rival_nakama)
     CALL_CHILD(PTR(mri_guide_goryu))
     CALL(evt_puni_get_position, 1, LW(0), LW(1), LW(2))
     CALL(evt_puni_set_position, 1, 0, -1000, 0)
-    CALL(evt_puni_set_mode, 1, 30)
+    CALL(evt_puni_set_mode, 1, PUNI_MODE_INERT)
     CALL(evt_npc_set_position, STRING("ガイド"), LW(0), LW(1), LW(2))
     CALL(evt_npc_set_ry, STRING("ガイド"), 270)
     CALL(evt_npc_flag_onoff, 1, STRING("ガイド"), NPC_FLAG_NO_HIT | NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION)
@@ -1800,7 +1801,7 @@ EVT_BEGIN(rival_nakama)
     CALL(evt_cam3d_evt_set, 60, 115, 400, 60, 45, 7, 500, EASING_SINE_IN_OUT)
     SET_VALUE(LW(10), 5)
     LOOP(9)
-        CALL(evt_puni_set_mode, LW(10), 1)
+        CALL(evt_puni_set_mode, LW(10), PUNI_MODE_JOIN)
         CALL(evt_puni_flag_onoff, LW(10), 1, PUNI_FLAG_NOT_IN_PARTY)
         ADD(LW(10), 1)
     END_LOOP
@@ -2287,7 +2288,7 @@ EVT_BEGIN(boss_battle)
     END_LOOP
     SET_VALUE(LW(10), 1)
     LOOP(0)
-        CALL(evt_puni_set_mode, LW(10), 30)
+        CALL(evt_puni_set_mode, LW(10), PUNI_MODE_INERT)
         ADD(LW(10), 1)
         IF_INT_EQUAL(LW(10), 103)
             BREAK_LOOP
@@ -2674,7 +2675,7 @@ EVT_BEGIN(boss_battle_win)
     SET_VALUE(LW(11), -15)
     SET_VALUE(LW(14), 0)
     LOOP(0)
-        CALL(evt_puni_set_mode, LW(10), 30)
+        CALL(evt_puni_set_mode, LW(10), PUNI_MODE_INERT)
         SET_VALUE(LW(13), -10)
         ADD(LW(13), LW(14))
         IF_INT_EQUAL(LW(14), 0)
@@ -2693,7 +2694,7 @@ EVT_BEGIN(boss_battle_win)
     END_LOOP
     SET_VALUE(LW(11), -30)
     LOOP(0)
-        CALL(evt_puni_set_mode, LW(10), 30)
+        CALL(evt_puni_set_mode, LW(10), PUNI_MODE_INERT)
         SET_VALUE(LW(13), -20)
         ADD(LW(13), LW(14))
         IF_INT_EQUAL(LW(14), 0)
@@ -2712,7 +2713,7 @@ EVT_BEGIN(boss_battle_win)
     END_LOOP
     SET_VALUE(LW(11), -40)
     LOOP(0)
-        CALL(evt_puni_set_mode, LW(10), 30)
+        CALL(evt_puni_set_mode, LW(10), PUNI_MODE_INERT)
         SET_VALUE(LW(13), -30)
         ADD(LW(13), LW(14))
         IF_INT_EQUAL(LW(14), 0)
@@ -2731,7 +2732,7 @@ EVT_BEGIN(boss_battle_win)
     END_LOOP
     SET_VALUE(LW(11), -55)
     LOOP(0)
-        CALL(evt_puni_set_mode, LW(10), 30)
+        CALL(evt_puni_set_mode, LW(10), PUNI_MODE_INERT)
         SET_VALUE(LW(13), -40)
         ADD(LW(13), LW(14))
         IF_INT_EQUAL(LW(14), 0)
@@ -2750,7 +2751,7 @@ EVT_BEGIN(boss_battle_win)
     END_LOOP
     SET_VALUE(LW(11), -150)
     LOOP(0)
-        CALL(evt_puni_set_mode, LW(10), 30)
+        CALL(evt_puni_set_mode, LW(10), PUNI_MODE_INERT)
         SET_VALUE(LW(13), -50)
         ADD(LW(13), LW(14))
         IF_INT_EQUAL(LW(14), 0)
@@ -2768,25 +2769,25 @@ EVT_BEGIN(boss_battle_win)
         END_IF
     END_LOOP
     IF_INT_EQUAL(GSWF_MRI_JABBLE_JOINED, 1)
-        CALL(evt_puni_set_mode, 3, 30)
+        CALL(evt_puni_set_mode, 3, PUNI_MODE_INERT)
         CALL(evt_puni_set_position, 3, -120, 0, 10)
         CALL(evt_puni_set_anim, 3, 0)
         CALL(evt_puni_set_dir, 3, 90)
     END_IF
     CALL(evt_puni_flag_onoff, 1, 0, PUNI_FLAG_SCRIPT_CONTROL)
-    CALL(evt_puni_set_mode, 1, 30)
+    CALL(evt_puni_set_mode, 1, PUNI_MODE_INERT)
     CALL(evt_puni_set_anim, 1, 0)
     CALL(evt_npc_set_position, STRING("ガイドsp"), -90, 0, 10)
     CALL(evt_npc_set_ry, STRING("ガイドsp"), 90)
     CALL(evt_npc_set_anim, STRING("ガイドsp"), STRING("S_1"))
     CALL(evt_puni_flag_onoff, 2, 0, PUNI_FLAG_SCRIPT_CONTROL)
-    CALL(evt_puni_set_mode, 2, 30)
+    CALL(evt_puni_set_mode, 2, PUNI_MODE_INERT)
     CALL(evt_puni_set_anim, 2, 0)
     CALL(evt_npc_set_position, STRING("ガイド妹sp"), -80, 0, 50)
     CALL(evt_npc_set_ry, STRING("ガイド妹sp"), 90)
     CALL(evt_npc_set_anim, STRING("ガイド妹sp"), STRING("S_1"))
     CALL(evt_puni_flag_onoff, 4, 0, PUNI_FLAG_SCRIPT_CONTROL)
-    CALL(evt_puni_set_mode, 4, 30)
+    CALL(evt_puni_set_mode, 4, PUNI_MODE_INERT)
     CALL(evt_puni_set_anim, 4, 0)
     CALL(evt_npc_set_position, STRING("ライバルsp"), -20, 0, 50)
     CALL(evt_npc_set_ry, STRING("ライバルsp"), 90)

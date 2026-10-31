@@ -17,7 +17,7 @@ BeroEntry bero_data_a_nidome[] = {
         "e_bero", // hitName
         1, // type
         8, // sfxId
-        6, // directionId
+        BERO_DIR_W, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -39,7 +39,7 @@ BeroEntry bero_data_b_nidome[] = {
         "e_bero", // hitName
         1, // type
         8, // sfxId
-        6, // directionId
+        BERO_DIR_W, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -61,7 +61,7 @@ BeroEntry bero_data_c_nidome[] = {
         "e_bero", // hitName
         1, // type
         8, // sfxId
-        6, // directionId
+        BERO_DIR_W, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length

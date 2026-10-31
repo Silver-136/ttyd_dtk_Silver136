@@ -446,7 +446,7 @@ USER_FUNC(evt_mri_get16bitdata) {
  * Spawned from mri_02 with GW(0), the number of Punies still missing on the switch.
  */
 EVT_BEGIN(mri_hikari_color)
-    CALL(evt_mapobj_flag_onoff, 0, 0, LW(0), MAP_OBJ_FLAG_DISPLAY_LIST)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 0, LW(0), MAP_OBJ_FLAG_DISPLAY_LIST)
     GET_INT_INDEXED(LW(1), LW(11))
     LOOP(0)
         GET_INT_INDEXED(LW(1), LW(10))
@@ -594,7 +594,7 @@ EVT_BEGIN(mri_countdown)
         END_LOOP
     END_INLINE_EVENT
     WAIT_MS(2000)
-    CALL(evt_fade_entry, 17, 4000, 0, 0, 0)
+    CALL(evt_fade_entry, FADE_OUT_WHITE, 4000, 0, 0, 0)
     WAIT_MS(4000)
     CALL(evt_seq_set_seq, SEQ_GAME_OVER, 1, 0)
     RETURN
@@ -734,7 +734,7 @@ void puniModeWinjump(PuniData* puni) {
                 puni->pos.y = puni->modeF0 + t * (puni->modeF1 * t + puni->modeF2);
             } else {
                 puni->pos.y = puni->modeF0;
-                puni->mode = 0x1B;
+                puni->mode = PUNI_MODE_POINT;
                 puni->anim = 1;
                 puni->modeStep = 0;
             }
@@ -828,7 +828,7 @@ USER_FUNC(evt_mri_toge_enter_init) {
             puni->pos.x = 0.0f;
             puni->pos.y = -1000.0f;
             puni->pos.z = 0.0f;
-            puni->mode = 0x1D;
+            puni->mode = PUNI_MODE_FUNC;
             puni->anim = 0;
             puni->flags &= ~PUNI_FLAG_COLLIDE;
         }
@@ -888,11 +888,11 @@ USER_FUNC(evt_mri_puni_win_attack) {
             puni->modeStep = 0;
             if (puni->flags & PUNI_FLAG_DEAD) {
                 puni->flags &= ~PUNI_FLAG_DEAD;
-                puni->mode = 0x1D;
+                puni->mode = PUNI_MODE_FUNC;
                 puni->modeFunc = puniModeWinjump;
                 puni->moveFunc = puniMoveDecel;
             } else {
-                puni->mode = 0x1B;
+                puni->mode = PUNI_MODE_POINT;
             }
         }
     }
@@ -929,7 +929,7 @@ USER_FUNC(evt_mri_puni_win_end) {
             puni->moveStart.x = x1 + rx - 10.0f;
             puni->moveStart.y = y1;
             puni->moveStart.z = z1 + rz - 10.0f;
-            puni->mode = 0x19;
+            puni->mode = PUNI_MODE_ENTER;
             puni->modeStep = 0;
         }
     }

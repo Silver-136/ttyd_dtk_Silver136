@@ -1,6 +1,7 @@
 // win_03 (ウィンディん家周辺, Boggly Woods): the path between win_02 and Flurrie's house (win_04), with two Piranha Plants.
 
 #include "battle/battle_unit.h"
+#include "driver/fadedrv.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_cam.h"
 #include "evt/evt_env.h"
@@ -95,7 +96,7 @@ static BeroEntry bero_entry_data[] = {
     {
         "w_bero", // hitName
         0, 0, // type..sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -112,7 +113,7 @@ static BeroEntry bero_entry_data[] = {
         "dokan_1", // hitName
         2, // type
         0, // sfxId
-        9, // directionId
+        BERO_DIR_DOWN, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -128,7 +129,7 @@ static BeroEntry bero_entry_data[] = {
         "dokan_2", // hitName
         4098, // type
         0, // sfxId
-        9, // directionId
+        BERO_DIR_DOWN, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -144,7 +145,7 @@ static BeroEntry bero_entry_data[] = {
         "n_bero", // hitName
         4099, // type
         0, // sfxId
-        2, // directionId
+        BERO_DIR_E, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -345,8 +346,8 @@ EVT_BEGIN(win_03_init_evt)
     CALL(evt_mobj_recovery_blk, STRING("mobj_recover"), 7, 425, 60, 75, 0, 0)
     CALL(evt_item_entry, STRING("i"), ITEM_VOLT_SHROOM, 475, 0, -60, ITEM_TYPE_STILL, GSWF_WIN_03_VOLT_SHROOM, 0)
     CALL(evt_item_entry, STRING("item_00"), ITEM_STAR_PIECE, -150, 0, -30, ITEM_TYPE_STILL, GSWF_STARPIECE_43, 0)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ana"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_siro_asu"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ana"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_siro_asu"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_hitobj_onoff, STRING("A_siro_asu"), 1, 0)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG2_03_05_TO_FLURRIES_PLACE)
         SPAWN_EVENT(lookat_house)

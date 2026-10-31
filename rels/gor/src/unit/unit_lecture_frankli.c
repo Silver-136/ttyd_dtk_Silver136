@@ -157,7 +157,7 @@ BattleWeapon _lec_weapon_jump = {
     "msg_ac_jump", // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_ATTACK_FX | SPECIAL_FLIP_SHELLED | SPECIAL_GROUND_WINGED | SPECIAL_CONFUSED_ACTION | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_PREEMPTIVE_SPIKY | COUNTER_RESIST_FRONT_SPIKY, // counterResistFlags
-    0x80002004, // targetWeightFlags
+    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
@@ -195,7 +195,7 @@ BattleWeapon _lec_weapon_hammer = {
     "msg_ac_hammer", // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH | SPECIAL_ATTACK_FX | SPECIAL_CONFUSED_ACTION | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL & ~COUNTER_RESIST_PREEMPTIVE_SPIKY, // counterResistFlags
-    0x80002004, // targetWeightFlags
+    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
@@ -259,7 +259,7 @@ static EVT_BEGIN(phase_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, LECTURE_FRANKLI_WORK_STEP, LW(0))
     SWITCH(LW(0))
         CASE_EQUAL(0)
-        CALL(btlevtcmd_CheckPhase, LW(0), 67108865)
+        CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_BEFORE_PLAYER)
         IF_INT_NOT_EQUAL(LW(0), 0)
             CALL(btlevtcmd_StopWaitEvent, UNIT_ID_MARIO)
             CALL(btlevtcmd_AnimeChangePose, UNIT_ID_MARIO, 1, STRING("M_S_1"))
@@ -278,7 +278,7 @@ static EVT_BEGIN(phase_event)
             RETURN
         END_IF
         CASE_EQUAL(2)
-        CALL(btlevtcmd_CheckPhase, LW(0), 67108867)
+        CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_AFTER_PLAYER)
         IF_INT_NOT_EQUAL(LW(0), 0)
             CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, LECTURE_FRANKLI_WORK_STEP, 3)
             CALL(btlevtcmd_StopWaitEvent, UNIT_ID_MARIO)
@@ -319,7 +319,7 @@ static EVT_BEGIN(phase_event)
             RETURN
         END_IF
         CASE_EQUAL(4)
-        CALL(btlevtcmd_CheckPhase, LW(0), 67108865)
+        CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_BEFORE_PLAYER)
         IF_INT_NOT_EQUAL(LW(0), 0)
             CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, LECTURE_FRANKLI_WORK_STEP, 5)
             CALL(btlevtcmd_StopWaitEvent, UNIT_ID_MARIO)
@@ -334,7 +334,7 @@ static EVT_BEGIN(phase_event)
             RETURN
         END_IF
         CASE_EQUAL(6)
-        CALL(btlevtcmd_CheckPhase, LW(0), 67108867)
+        CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_AFTER_PLAYER)
         IF_INT_NOT_EQUAL(LW(0), 0)
             CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, LECTURE_FRANKLI_WORK_STEP, 7)
             CALL(btlevtcmd_StopWaitEvent, UNIT_ID_MARIO)
@@ -385,7 +385,7 @@ static EVT_BEGIN(phase_event)
             RETURN
         END_IF
         CASE_EQUAL(8)
-        CALL(btlevtcmd_CheckPhase, LW(0), 67108865)
+        CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_BEFORE_PLAYER)
         IF_INT_NOT_EQUAL(LW(0), 0)
             CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, LECTURE_FRANKLI_WORK_STEP, 9)
             CALL(btlevtcmd_onoff_battleflag, 0, BATTLE_FLAG_LECTURE_HAMMER)
@@ -414,7 +414,7 @@ static EVT_BEGIN(phase_event)
             END_IF
         END_IF
         CASE_EQUAL(9)
-        CALL(btlevtcmd_CheckPhase, LW(0), 67108865)
+        CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_BEFORE_PLAYER)
         IF_INT_NOT_EQUAL(LW(0), 0)
             CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
             CALL(btlevtcmd_GetUnitWork, UNIT_ID_LECTURE, LECTURE_FRANKLI_WORK_GUARD_RESULT, LW(0))
@@ -431,7 +431,7 @@ static EVT_BEGIN(phase_event)
             CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_ON)
             RETURN
         END_IF
-        CALL(btlevtcmd_CheckPhase, LW(0), 67108867)
+        CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_AFTER_PLAYER)
         IF_INT_NOT_EQUAL(LW(0), 0)
             CALL(evt_sub_intpl_init, EASING_CUBIC_OUT, 180, 0, 20)
             LOOP(21)

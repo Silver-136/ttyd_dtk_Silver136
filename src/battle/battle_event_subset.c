@@ -1,6 +1,7 @@
 // Battle event subsets: reusable damage, death, confusion and blow-away scripts shared by units.
 
 #include "battle/battle.h"
+#include "unit/unit_koura.h"
 #include "battle/battle_sub.h"
 #include "battle/battle_unit.h"
 #include "driver/effdrv.h"
@@ -757,7 +758,7 @@ EVT_BEGIN(btldefaultevt_ChangePosition)
     IF_INT_NOT_EQUAL(LW(10), -1)
         CALL(btlevtcmd_RunDataEventChild, LW(10), UNIT_DATA_KOURA_CLOSE_EVENT)
         CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_MARIO, 1, kHidden)
-        CALL(btlevtcmd_SetUnitWork, LW(10), SHELL_SHIELD_WORK_FOLLOW, 2)
+        CALL(btlevtcmd_SetUnitWork, LW(10), SHELL_SHIELD_WORK_FOLLOW, KOURA_FOLLOW_TRAIL)
     END_IF
     CALL(evt_snd_sfxon, STRING("SFX_BTL_POS_CHANGE1"), 0)
     CALL(btlevtcmd_GetPartnerId, UNIT_ID_SELF, LW(3))
@@ -784,10 +785,10 @@ EVT_BEGIN(btldefaultevt_ChangePosition)
     WAIT_FRAMES(2)
     CALL(btlevtcmd_GetGuardKouraId, UNIT_ID_MARIO, LW(10))
     IF_INT_NOT_EQUAL(LW(10), -1)
-        CALL(btlevtcmd_SetUnitWork, LW(10), SHELL_SHIELD_WORK_FOLLOW, 3)
+        CALL(btlevtcmd_SetUnitWork, LW(10), SHELL_SHIELD_WORK_FOLLOW, KOURA_FOLLOW_SLIDE)
         LABEL(10)
         CALL(btlevtcmd_GetUnitWork, LW(10), SHELL_SHIELD_WORK_FOLLOW, LW(0))
-        IF_INT_EQUAL(LW(0), 3)
+        IF_INT_EQUAL(LW(0), KOURA_FOLLOW_SLIDE)
             WAIT_FRAMES(1)
             GOTO(10)
         END_IF

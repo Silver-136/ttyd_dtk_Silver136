@@ -2,6 +2,7 @@
 // (irai_12).
 
 #include "battle/battle_unit.h"
+#include "evt/evt_story.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"
 #include "evt/evt_mario.h"
@@ -35,13 +36,13 @@ EvtWord tik_06_init_evt[47];
  */
 static EVT_BEGIN(oshimodo_event)
     BEGIN_INLINE_EVENT
-        CALL(evt_cam_ctrl_onoff, 4, 0)
+        CALL(evt_cam_ctrl_onoff, CAMERA_3D, 0)
         CALL(evt_mario_key_onoff, 0)
         CALL(evt_bero_exec_wait, 65536)
         WAIT_MS(750)
         CALL(evt_msg_print, 0, STRING("tik_06_01"), 0, 0)
         CALL(evt_mario_key_onoff, 1)
-        CALL(evt_cam_ctrl_onoff, 4, 1)
+        CALL(evt_cam_ctrl_onoff, CAMERA_3D, 1)
     END_INLINE_EVENT
     SET_VALUE(LW(0), 0)
     RETURN
@@ -57,7 +58,7 @@ static BeroEntry bero_entry_data[] = {
         "dokan_1", // hitName
         2, // type
         0, // sfxId
-        9, // directionId
+        BERO_DIR_DOWN, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -74,7 +75,7 @@ static BeroEntry bero_entry_data[] = {
         "dokan_2", // hitName
         2, // type
         0, // sfxId
-        8, // directionId
+        BERO_DIR_UP, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -91,7 +92,7 @@ static BeroEntry bero_entry_data[] = {
         "dokan_3", // hitName
         2, // type
         0, // sfxId
-        9, // directionId
+        BERO_DIR_DOWN, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -107,7 +108,7 @@ static BeroEntry bero_entry_data[] = {
     {
         "e_bero", // hitName
         0, 0, // type..sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -163,7 +164,7 @@ EVT_BEGIN(iri_12_kino_makkino_talk)
     WAIT_MS(300)
     CALL(evt_msg_print, 0, STRING("irai_12_001_6"), 0, STRING("マッキノ"))
     BEGIN_INLINE_EVENT
-        CALL(evt_npc_flag_onoff, 1, STRING("マッキノ"), 1073750048)
+        CALL(evt_npc_flag_onoff, 1, STRING("マッキノ"), NPC_FLAG_NO_WALL_HIT | NPC_FLAG_SKIP_HIT_ATTR4 | NPC_FLAG_INTANGIBLE)
         CALL(evt_npc_move_position, STRING("マッキノ"), 220, 0, 0, 60, 4)
         CALL(evt_npc_jump_position_nohit, STRING("マッキノ"), 254, 15, 0, 400, 15)
         CALL(evt_npc_jump_position_nohit, STRING("マッキノ"), 285, 30, 0, 400, 15)
@@ -178,7 +179,7 @@ EVT_BEGIN(iri_12_kino_makkino_talk)
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
-    CALL(evt_npc_flag_onoff, 1, STRING("キーノ"), 1073750048)
+    CALL(evt_npc_flag_onoff, 1, STRING("キーノ"), NPC_FLAG_NO_WALL_HIT | NPC_FLAG_SKIP_HIT_ATTR4 | NPC_FLAG_INTANGIBLE)
     CALL(evt_npc_move_position, STRING("キーノ"), 220, 0, 0, 60, 4)
     CALL(evt_npc_jump_position_nohit, STRING("キーノ"), 254, 15, 0, 400, 15)
     CALL(evt_npc_jump_position_nohit, STRING("キーノ"), 285, 30, 0, 400, 15)

@@ -95,7 +95,7 @@ s32 battleAcMain_PowerGauge(BattleWork* work) {
         case 99:
             break;
         case 100:
-            if ((ac->setupFlags & 1) && (ac->mAcUnit->mTokenFlags & kConfusedAction)) {
+            if ((ac->setupFlags & AC_SETUP_FLAG_CONFUSED_AUTO) && (ac->mAcUnit->mTokenFlags & kConfusedAction)) {
                 if (irand(100) >= 0) {
                     ac->setupParam = 30;
                     pw->autoSuccess = 0;
@@ -205,7 +205,7 @@ s32 battleAcMain_PowerGauge(BattleWork* work) {
                 } else {
                     ac->result = 0;
                 }
-                ac->doneFlags |= 1;
+                ac->doneFlags |= AC_DONE_FLAG_FINISHED;
                 pw->endTimer = 60;
                 ac->mAcState = 1005;
                 return 0;
@@ -214,7 +214,7 @@ s32 battleAcMain_PowerGauge(BattleWork* work) {
         case 1003:
             ac->mAcState = 1004;
         case 1004:
-            ac->doneFlags |= 1;
+            ac->doneFlags |= AC_DONE_FLAG_FINISHED;
             BattleAcGaugeSeDelete();
             pw->endTimer = 60;
             ac->mAcState = 1005;
@@ -277,7 +277,7 @@ void battleAcDisp_PowerGauge(CameraId cameraId, void* param) {
 
 /** Called by btlevtcmd_StopAC: unless the command already finished, stops the gauge sound and starts the end wait. */
 void battleAcDelete_PowerGauge(BattleWork* work) {
-    if (!(work->actionCommands.doneFlags & 1)) {
+    if (!(work->actionCommands.doneFlags & AC_DONE_FLAG_FINISHED)) {
         work->actionCommands.mAcState = 1004;
     }
 }

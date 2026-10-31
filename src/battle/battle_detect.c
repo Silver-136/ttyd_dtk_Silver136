@@ -40,7 +40,7 @@ void _btlSamplingEnemy(BattleWorkWeaponTargets* d) {
         d->numTargets = -1;
         return;
     }
-    for (i = 0; i < 64; i++) {
+    for (i = 0; i < BATTLE_UNIT_MAX; i++) {
         BattleUnit* unit = BattleGetUnitPtr(wp, i);
         if (unit && !BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL) && !(unit->mAttributeFlags & kUnitNeverTargetable)) {
             part = unit->mParts;
@@ -628,7 +628,7 @@ void BattleGetFirstAttackUnit(BattleWork* wp, BattleUnit** attacker, BattleUnit*
     // FAKE: tmp holds the getter result across the swap; assigning it directly changes the object
     BattleUnit* tmp;
     s32 i;
-    for (i = 0; i < 64; i++) {
+    for (i = 0; i < BATTLE_UNIT_MAX; i++) {
         found = BattleGetUnitPtr(wp, i);
         if (found && found->mAlliance == ALLIANCE_ENEMY) {
             break;

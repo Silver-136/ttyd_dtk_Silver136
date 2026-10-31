@@ -239,7 +239,7 @@ static BattleWeapon weapon_borodo_attack = {
     NULL, // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE, // special
     COUNTER_RESIST_TOP_SPIKY, // counterResistFlags
-    0x80002004, // targetWeightFlags
+    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
@@ -781,7 +781,7 @@ EVT_BEGIN(_badge_borodo_emergency_revival_event)
     BEGIN_SIBLING_EVENT
         CALL(btlevtcmd_GetPos, LW(10), LW(0), LW(1), LW(2))
         ADD(LW(1), 40)
-        CALL(btlevtcmd_DispItemIcon, LW(0), LW(1), LW(2), 151, 120)
+        CALL(btlevtcmd_DispItemIcon, LW(0), LW(1), LW(2), ITEM_LIFE_SHROOM, 120)
     END_SIBLING_EVENT
     WAIT_FRAMES(90)
     SET_VALUE(LW(0), 30)

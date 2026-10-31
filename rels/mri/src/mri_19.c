@@ -32,7 +32,7 @@ static BeroEntry bero_entry_data[] = {
         "dokan1", // hitName
         2, // type
         0, // sfxId
-        2, // directionId
+        BERO_DIR_E, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -49,7 +49,7 @@ static BeroEntry bero_entry_data[] = {
         "dokan2", // hitName
         2, // type
         0, // sfxId
-        9, // directionId
+        BERO_DIR_DOWN, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -66,7 +66,7 @@ static BeroEntry bero_entry_data[] = {
         "dokan3", // hitName
         2, // type
         0, // sfxId
-        9, // directionId
+        BERO_DIR_DOWN, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -82,7 +82,7 @@ static BeroEntry bero_entry_data[] = {
         "dokan4", // hitName
         2, // type
         0, // sfxId
-        6, // directionId
+        BERO_DIR_W, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -157,7 +157,7 @@ EVT_BEGIN(mri_19_init_evt)
         CALL(evt_cloud_ent, 0, STRING("S_f2_isk"), STRING("A_f2_isk"), PTR(cloud_wind_event))
         CALL(evt_hitobj_attr_onoff, 1, 0, STRING("a_hi"), 16)
         ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_f2_isk"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_f2_isk"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_f2_isk"), 1, 0)
         CALL(evt_map_entry_airport_harbor, 0, STRING("hikou"), STRING("a_hi"))
         CALL(evt_map_entry_airport_harbor, 0, STRING("hikou1"), STRING("a_hi1"))

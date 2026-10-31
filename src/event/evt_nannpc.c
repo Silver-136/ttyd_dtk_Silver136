@@ -70,7 +70,7 @@ static inline void nanNPCHitMove(NanNPC* npc, f32 mag) {
     origin = npc->pos;
     origin.y += 1.0f;
     PSVECNormalize(&npc->move, &dir);
-    if (npc->flags & 8) {
+    if (npc->flags & NANNPC_FLAG_NO_HIT) {
         PSVECAdd(&npc->pos, &npc->move, &npc->pos);
         PSVECScale(&npc->move, &npc->move, 0.6f);
     } else {
@@ -137,9 +137,9 @@ void nanNPCOption(void) {
 
     w = nanNPCWork;
     for (p = w->npc; p < w->npc + w->num; p++) {
-        if (p->flags & 4) {
+        if (p->flags & NANNPC_FLAG_WALK) {
             for (q = w->npc; q < w->npc + w->num; q++) {
-                if (p != q && (q->flags & 4)) {
+                if (p != q && (q->flags & NANNPC_FLAG_WALK)) {
                     dist = PSVECDistance(&p->pos, &q->pos);
                     PSVECSubtract(&p->pos, &q->pos, &diff);
                     if (dist <= p->sizeY) {
@@ -159,7 +159,7 @@ void nanNPCOption(void) {
     }
     // FAKE: r (loop 3 start) assigned in loop 2's exit test, as the target loads it there (no mr copy); w->npc is not changed by loop 2
     for (p = w->npc; p < (r = w->npc) + w->num; p++) {
-        if (p->flags & 4) {
+        if (p->flags & NANNPC_FLAG_WALK) {
             PSVECSubtract(&p->target, &p->pos, &diff);
             mag = PSVECMag(&diff);
             if (mag > 0.8f * p->sizeY) {
@@ -171,7 +171,7 @@ void nanNPCOption(void) {
         }
     }
     for (; r < w->npc + w->num; r++) {
-        if (r->flags & 4) {
+        if (r->flags & NANNPC_FLAG_WALK) {
             mag = PSVECMag(&r->move);
             if (mag) {
                 if (mag > 10.0f) {
@@ -308,7 +308,7 @@ void nannpc_ext_main_sub_fast() {
             }
             p->pose->texId = p->anim;
             p->pose->dir = -p->dir;
-            if (p->flags & 2) {
+            if (p->flags & NANNPC_FLAG_HIDDEN) {
                 (*p->pose->mtx)[0][3] = 0.0f;
                 (*p->pose->mtx)[1][3] = -1000.0f;
                 (*p->pose->mtx)[2][3] = 0.0f;

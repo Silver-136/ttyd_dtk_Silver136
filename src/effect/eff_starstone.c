@@ -635,7 +635,7 @@ void effStarStoneDisp_2(CameraId cameraId, EffectEntry* effect) {
     mapSetMaterialFog();
     GXSetArray(GX_VA_CLR0, color_tbl[w->type], 4);
     GXSetNumChans(1);
-    GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_REG, 0, GX_DF_NONE, GX_AF_NONE);
+    GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_REG, GX_LIGHT_NULL, GX_DF_NONE, GX_AF_NONE);
     GXSetChanMatColor(GX_COLOR0A0, w->color);
     GXSetNumTexGens(0);
     GXSetNumTevStages(2);
@@ -713,7 +713,7 @@ void effStarStoneDisp_2(CameraId cameraId, EffectEntry* effect) {
     }
 
     GXSetNumChans(1);
-    GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_VTX, 0, GX_DF_NONE, GX_AF_NONE);
+    GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_VTX, GX_LIGHT_NULL, GX_DF_NONE, GX_AF_NONE);
     GXSetNumTexGens(1);
     GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX0, GX_FALSE, GX_PTIDENTITY);
     PSMTXTrans(m, w->texScrollX, w->texScrollY, 0.0f);

@@ -56,7 +56,7 @@ BeroEntry bero_dai3_kanbu[] = {
     {
         "e_bero", // hitName
         0, 0, // type..sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -76,7 +76,7 @@ static BeroEntry bero_entry_data[] = {
     {
         "e_bero", // hitName
         0, 0, // type..sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -93,7 +93,7 @@ static BeroEntry bero_entry_data[] = {
         "dokan", // hitName
         2, // type
         0, // sfxId
-        6, // directionId
+        BERO_DIR_W, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -140,7 +140,7 @@ static EVT_BEGIN(punipuni_ball00_init)
         END_IF
         CALL(evt_target_flag_onoff, LW(11), 0, 3)
         ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_sui_hikari"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_sui_hikari"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     IF_INT_LESS(GSW_STORY_PROGRESS, STG2_21_06_WATER_SWITCH)
         CALL(evt_target_set_position, LW(11), -55, 0, 50)
@@ -163,13 +163,13 @@ static EVT_BEGIN(punipuni_ball00)
             ELSE
             CALL(evt_item_set_position, LW(10), -55, -279, 0)
         END_IF
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_sui_hikari"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_sui_hikari"), MAP_OBJ_FLAG_HIDDEN)
         SET_VALUE(GF(0), 1)
         CALL_CHILD(PTR(mri_punipuni_itemset))
         SET_VALUE(GF(0), 0)
         ELSE
         SET_VALUE(GSWF_MRI_13_PUNI_ORB_PLACED, 0)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_sui_hikari"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_sui_hikari"), MAP_OBJ_FLAG_HIDDEN)
         CALL_CHILD(PTR(mri_punipuni_itemremove))
     END_IF
     LABEL(100)
@@ -186,12 +186,12 @@ static EVT_BEGIN(yuka_init)
     CALL(evt_mapobj_trans, 1, STRING("S_sui_l"), 0, -309, 0)
     CALL(evt_mapobj_trans, 1, STRING("S_sui_hikari"), 0, -309, 0)
     CALL(evt_hitobj_onoff, STRING("A_sui_l1"), 1, 0)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_sui_kage"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_sui_kage"), MAP_OBJ_FLAG_HIDDEN)
     RETURN
 EVT_END()
 
 EVT_BEGIN(yuka_slot)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_isk_02_c"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_isk_02_c"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_isk_03_c"), MAP_OBJ_FLAG_HIDDEN)
     SET_VALUE(LW(13), GW(0))
     LOOP(0)
@@ -212,9 +212,9 @@ EVT_BEGIN(yuka_slot)
         CALL(evt_mapobj_rotate, 1, STRING("S_isk_03"), LW(11), 0, 0)
         CALL(evt_mapobj_rotate, 1, STRING("S_isk_04"), LW(12), 0, 0)
         IF_INT_GREATER_OR_EQUAL(GW(0), 10)
-            CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_isk_03_c"), MAP_OBJ_FLAG_HIDDEN)
+            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_isk_03_c"), MAP_OBJ_FLAG_HIDDEN)
             ELSE
-            CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_isk_03_c"), MAP_OBJ_FLAG_HIDDEN)
+            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_isk_03_c"), MAP_OBJ_FLAG_HIDDEN)
         END_IF
         IF_INT_NOT_EQUAL(GW(0), LW(13))
             CALL(evt_snd_sfxon_3d, STRING("SFX_STG2_SWITCH_COUNTER1"), -150, 0, -20, 0)
@@ -374,7 +374,7 @@ EVT_BEGIN(yuka_event)
     CALL(evt_target_flag_onoff, 0, 1, 1)
     SET_VALUE(LW(10), 1)
     LOOP(0)
-        CALL(evt_puni_set_mode, LW(10), 30)
+        CALL(evt_puni_set_mode, LW(10), PUNI_MODE_INERT)
         CALL(evt_puni_set_anim, LW(10), 0)
         CALL(evt_puni_force_pose, LW(10))
         ADD(LW(10), 1)
@@ -391,11 +391,11 @@ EVT_BEGIN(yuka_event)
     CALL(evt_snd_sfxon, STRING("SFX_STG2_QUAKE1"), GW(4))
     SPAWN_EVENT_GET_ID(PTR(yuka_shake), LW(10))
     CALL(evt_puni_flag_onoff, 1, 0, PUNI_FLAG_SCRIPT_CONTROL)
-    CALL(evt_puni_set_mode, 1, 30)
+    CALL(evt_puni_set_mode, 1, PUNI_MODE_INERT)
     CALL(evt_npc_flag_onoff, 1, STRING("ガイドsp"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     CALL(evt_msg_print, 0, STRING("stg2_mri_e21_00"), 0, STRING("ガイドsp"))
     CALL(evt_puni_flag_onoff, 1, 1, PUNI_FLAG_SCRIPT_CONTROL)
-    CALL(evt_puni_set_mode, 1, 30)
+    CALL(evt_puni_set_mode, 1, PUNI_MODE_INERT)
     CALL(evt_cam3d_evt_set, 330, -240, 404, -50, -60, 50, 0, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
     CALL(evt_cam3d_evt_set, -225, -80, 355, -50, -270, 50, 9000, EASING_SINE_IN_OUT)
@@ -418,7 +418,7 @@ EVT_BEGIN(yuka_event)
             END_IF
             WAIT_FRAMES(1)
         END_LOOP
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_sui_kage"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_sui_kage"), MAP_OBJ_FLAG_HIDDEN)
     END_INLINE_EVENT
     CALL(evt_sub_intpl_msec_init, EASING_LINEAR, 0, -30950, 10000)
     LOOP(0)
@@ -444,7 +444,7 @@ EVT_BEGIN(yuka_event)
     CALL(evt_snd_sfxon, STRING("SFX_STG2_FLOOR_STOP1"), 0)
     WAIT_MS(1000)
     CALL(evt_puni_flag_onoff, 1, 0, PUNI_FLAG_SCRIPT_CONTROL)
-    CALL(evt_puni_set_mode, 1, 30)
+    CALL(evt_puni_set_mode, 1, PUNI_MODE_INERT)
     CALL(evt_npc_get_position, STRING("ガイドsp"), LW(0), LW(1), LW(2))
     ADD(LW(1), 20)
     CALL(evt_msg_toge, MSG_TOGE_AT_POS, LW(0), LW(1), LW(2))
@@ -452,7 +452,7 @@ EVT_BEGIN(yuka_event)
     CALL(evt_puni_flag_onoff, 1, 1, PUNI_FLAG_SCRIPT_CONTROL)
     SET_VALUE(LW(10), 1)
     LOOP(0)
-        CALL(evt_puni_set_mode, LW(10), 1)
+        CALL(evt_puni_set_mode, LW(10), PUNI_MODE_JOIN)
         CALL(evt_puni_flag_onoff, LW(10), 0, PUNI_FLAG_STRAY)
         ADD(LW(10), 1)
         IF_INT_EQUAL(LW(10), 103)

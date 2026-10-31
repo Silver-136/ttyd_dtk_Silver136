@@ -2,6 +2,7 @@
 // leads to Twilight Trail (gra_00).
 
 #include "version.h"
+#include "evt/evt_story.h"
 #include "evt/evt_urouro.h"
 #include "evt/evt_window.h"
 #include "battle/battle_unit.h"
@@ -697,9 +698,9 @@ EVT_BEGIN(iri_20_out_house)
     CALL(evt_door_param, LW(0), 3, LW(1), LW(2))
     IF_INT_NOT_EQUAL(LW(1), 0)
         IF_INT_NOT_EQUAL(LW(15), 1)
-            CALL(evt_mapobj_flag_onoff, 1, 1, LW(1), MAP_OBJ_FLAG_HIDDEN)
+            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, LW(1), MAP_OBJ_FLAG_HIDDEN)
         END_IF
-        CALL(evt_mapobj_flag_onoff, 1, 0, LW(1), MAP_OBJ_FLAG_NO_MAP_BLEND)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, LW(1), MAP_OBJ_FLAG_NO_MAP_BLEND)
         CALL(evt_mapobj_flag_onoff, 1, 0, LW(1), MAP_OBJ_FLAG_NO_MAP_BLEND2)
     END_IF
     IF_INT_NOT_EQUAL(LW(2), 0)
@@ -707,11 +708,11 @@ EVT_BEGIN(iri_20_out_house)
     END_IF
     CALL(evt_door_param, LW(0), 2, LW(1), LW(2))
     IF_INT_NOT_EQUAL(LW(1), 0)
-        CALL(evt_mapobj_flag_onoff, 1, 0, LW(1), MAP_OBJ_FLAG_NO_MAP_BLEND)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, LW(1), MAP_OBJ_FLAG_NO_MAP_BLEND)
     END_IF
     CALL(evt_door_param, LW(0), 1, LW(1), LW(2), LW(3))
     IF_INT_NOT_EQUAL(LW(1), 0)
-        CALL(evt_mapobj_flag_onoff, 1, 0, LW(1), MAP_OBJ_FLAG_NO_MAP_BLEND)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, LW(1), MAP_OBJ_FLAG_NO_MAP_BLEND)
         CALL(evt_mapobj_flag_onoff, 1, 0, LW(1), MAP_OBJ_FLAG_NO_MAP_BLEND2)
     END_IF
     CALL(evt_door_param, LW(0), 2, LW(1), LW(2))
@@ -1651,7 +1652,7 @@ EVT_BEGIN(evt_mon_open)
         ELSE
         CALL(evt_cam_letter_box_disable, 1)
         CALL(evt_mario_key_onoff, 0)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_monato"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_monato"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_get_position, STRING("S_mon01"), LW(10), LW(11), LW(12))
         CALL(evt_snd_sfxon_3d, STRING("SFX_STG4_FENCE_OPEN1"), LW(10), LW(11), LW(12), LW(9))
         CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, 900, 1000)
@@ -2303,9 +2304,9 @@ EVT_BEGIN(mawari_house_delay)
     DELETE_EVENT(GW(3))
     CALL(evt_msg_close, STRING("stg4_usu_61_3"))
     CALL(evt_msg_close, STRING("stg4_usu_61_4"))
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_usu01_ie3"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_usu01_ie3"), MAP_OBJ_FLAG_HIDDEN)
     WAIT_MS(1000)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_usu01_ie3"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_usu01_ie3"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
     CALL(evt_snd_envon, PSND_CONTINUE | PSND_UNSILENT, 0)
     CALL(evt_snd_env_lpf, 0, 0)
@@ -2553,8 +2554,8 @@ static USER_FUNC(npc_process) {
 EVT_BEGIN(evt_ie2_door2_1)
     CALL(evt_cam_letter_box_disable, 1)
     CALL(evt_mario_key_onoff, 0)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_usu01_ie2_naka2"), MAP_OBJ_FLAG_NO_MAP_BLEND)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_usu01_ie2_naka2"), MAP_OBJ_FLAG_NO_MAP_BLEND2)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_usu01_ie2_naka2"), MAP_OBJ_FLAG_NO_MAP_BLEND)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_usu01_ie2_naka2"), MAP_OBJ_FLAG_NO_MAP_BLEND2)
     CALL(evt_item_delete_check, STRING("item_05"), LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL(evt_item_get_position, STRING("item_05"), LW(0), LW(1), LW(2))
@@ -2683,8 +2684,8 @@ EVT_BEGIN(evt_ie2_door2_2)
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_usu01_ie2_naka2"), MAP_OBJ_FLAG_NO_MAP_BLEND)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_usu01_ie2_naka2"), MAP_OBJ_FLAG_NO_MAP_BLEND2)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_usu01_ie2_naka2"), MAP_OBJ_FLAG_NO_MAP_BLEND)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_usu01_ie2_naka2"), MAP_OBJ_FLAG_NO_MAP_BLEND2)
     CALL(evt_item_delete_check, STRING("item_05"), LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL(evt_item_get_position, STRING("item_05"), LW(0), LW(1), LW(2))
@@ -2786,7 +2787,7 @@ static BeroEntry bero_entry_data[] = {
     {
         "e_bero", // hitName
         0, 0, // type..sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -2802,7 +2803,7 @@ static BeroEntry bero_entry_data[] = {
     {
         "w_bero", // hitName
         0, 0, // type..sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -3256,12 +3257,12 @@ EVT_BEGIN(tree_onoff)
         CALL(evt_sub_get_dist, LW(0), LW(2), LW(3), LW(5), LW(9))
         IF_INT_GREATER(LW(9), LW(11))
             IF_INT_EQUAL(LF(0), 1)
-                CALL(evt_mapobj_flag_onoff, 1, 1, LW(10), MAP_OBJ_FLAG_HIDDEN)
+                CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, LW(10), MAP_OBJ_FLAG_HIDDEN)
                 SET_VALUE(LF(0), 0)
             END_IF
             ELSE
             IF_INT_EQUAL(LF(0), 0)
-                CALL(evt_mapobj_flag_onoff, 1, 0, LW(10), MAP_OBJ_FLAG_HIDDEN)
+                CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, LW(10), MAP_OBJ_FLAG_HIDDEN)
                 SET_VALUE(LF(0), 1)
             END_IF
         END_IF
@@ -3354,7 +3355,7 @@ EVT_BEGIN(usu_01_init_evt)
         CALL_CHILD(PTR(musume_c_entry))
     END_SWITCH
     IF_INT_LESS(GSW_STORY_PROGRESS, STG4_04_STORAGE_ROOM_UNLOCKED)
-        CALL(evt_mobj_lock, STRING("usu_00_lock"), 21, FLOAT(-263.5f), FLOAT(10.099609f), FLOAT(-432.0498f), 135, PTR(lock_item_check), PTR(unlock), GSWF_USU_01_STOREROOM_UNLOCKED)
+        CALL(evt_mobj_lock, STRING("usu_00_lock"), ITEM_SHOP_KEY, FLOAT(-263.5f), FLOAT(10.099609f), FLOAT(-432.0498f), 135, PTR(lock_item_check), PTR(unlock), GSWF_USU_01_STOREROOM_UNLOCKED)
         ELSE
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_usu01_ie2_door3"), 0, PTR(evt_ie2_door2_1), 0)
     END_IF
@@ -3382,7 +3383,7 @@ EVT_BEGIN(usu_01_init_evt)
         END_IF
         CALL(evt_shop_setup, PTR(obj_list), PTR(goods_list), PTR(&shopper_data), PTR(trade_list))
     END_IF
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("mi02_S_items"), MAP_OBJ_FLAG_DISABLED)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("mi02_S_items"), MAP_OBJ_FLAG_DISABLED)
     SET_VALUE(GW(0), 0)
     SET_VALUE(GW(1), 0)
     SET_VALUE(GW(2), 0)
@@ -3392,7 +3393,7 @@ EVT_BEGIN(usu_01_init_evt)
     SPAWN_EVENT(PTR(usu01_crowJ_talk_event))
     IF_INT_LESS(GSW_STORY_PROGRESS, STG4_02_03_OPENING_THE_GATE)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_mon"), 0, PTR(evt_mon_open), 0)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_monato"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_monato"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_mon02"), 1, 0)
         ELSE
         CALL(evt_mapobj_rotate, 1, STRING("S_mon01"), 0, 50, 0)
@@ -3402,11 +3403,11 @@ EVT_BEGIN(usu_01_init_evt)
     BEGIN_INLINE_EVENT
         CALL(booboo_main)
     END_INLINE_EVENT
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("ki1"), MAP_OBJ_FLAG_CLIP)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("ki2"), MAP_OBJ_FLAG_CLIP)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("ki3"), MAP_OBJ_FLAG_CLIP)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("ki4"), MAP_OBJ_FLAG_CLIP)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("ki5"), MAP_OBJ_FLAG_CLIP)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("ki1"), MAP_OBJ_FLAG_CLIP)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("ki2"), MAP_OBJ_FLAG_CLIP)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("ki3"), MAP_OBJ_FLAG_CLIP)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("ki4"), MAP_OBJ_FLAG_CLIP)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("ki5"), MAP_OBJ_FLAG_CLIP)
     CALL_CHILD(PTR(usu_01_tree_init))
     SET_VALUE(LW(10), STRING("ki3"))
     SET_VALUE(LW(11), 450)

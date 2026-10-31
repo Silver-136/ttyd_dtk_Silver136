@@ -307,7 +307,7 @@ BattleUnitSetup entry_boss_moamoa_tentacle_a = {
     &unit_boss_moamoa_tentacle_a, // mUnitKindParams
     ALLIANCE_ENEMY, // alliance
     {0}, // pad_05
-    0x4000004, // attackPhase
+    BATTLE_PHASE_ENEMY, // attackPhase
     {0.0f, -1000.0f, 0.0f}, // position
     0, // hitOffsetX
     {0}, // unitWork
@@ -321,7 +321,7 @@ BattleUnitSetup entry_boss_moamoa_tentacle_b = {
     &unit_boss_moamoa_tentacle_b, // mUnitKindParams
     ALLIANCE_ENEMY, // alliance
     {0}, // pad_05
-    0x4000004, // attackPhase
+    BATTLE_PHASE_ENEMY, // attackPhase
     {0.0f, -1000.0f, 0.0f}, // position
     0, // hitOffsetX
     {0}, // unitWork
@@ -335,7 +335,7 @@ BattleUnitSetup entry_boss_moamoa_tentacle_c = {
     &unit_boss_moamoa_tentacle_c, // mUnitKindParams
     ALLIANCE_ENEMY, // alliance
     {0}, // pad_05
-    0x4000004, // attackPhase
+    BATTLE_PHASE_ENEMY, // attackPhase
     {0.0f, -1000.0f, 0.0f}, // position
     0, // hitOffsetX
     {0}, // unitWork
@@ -350,7 +350,7 @@ BattleUnitSetup entry_boss_moamoa_mouth = {
     &unit_boss_moamoa_mouth, // mUnitKindParams
     ALLIANCE_ENEMY, // alliance
     {0}, // pad_05
-    0x4000004, // attackPhase
+    BATTLE_PHASE_ENEMY, // attackPhase
     {0.0f, -1000.0f, 0.0f}, // position
     0, // hitOffsetX
     {0}, // unitWork
@@ -725,7 +725,7 @@ EVT_END()
  */
 // Count regrowth turns only while all limbs are absent; at regrowth, half HP selects mouth form.
 static EVT_BEGIN(phase_event)
-    CALL(btlevtcmd_CheckPhase, LW(0), 67108867)
+    CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_AFTER_PLAYER)
     IF_INT_EQUAL(LW(0), 0)
         GOTO(0)
     END_IF

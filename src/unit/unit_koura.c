@@ -1,6 +1,7 @@
 // Battle unit data for the Koopa shell (unit_koura), used by Koops, with its cracked poses.
 
 #include "battle/battle_unit.h"
+#include "unit/unit_koura.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_event_default.h"
 #include "battle/battle_event_cmd.h"
@@ -181,7 +182,7 @@ static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventDamage, UNIT_ID_SELF, PTR(damage_event))
     CALL(btlevtcmd_SetMaxMoveCount, UNIT_ID_SELF, 0)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, SHELL_SHIELD_WORK_OPEN, 0)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, SHELL_SHIELD_WORK_FOLLOW, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, SHELL_SHIELD_WORK_FOLLOW, KOURA_FOLLOW_NONE)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, SHELL_SHIELD_WORK_CRACK, 0)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
@@ -192,14 +193,14 @@ EVT_END()
  * Since the US release it skips both when the shell has no HP left.
  */
 static EVT_BEGIN(phase_event)
-    CALL(btlevtcmd_CheckPhase, LW(0), 67108865)
+    CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_BEFORE_PLAYER)
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_GetHp, UNIT_ID_SELF, LW(0))
         IF_INT_GREATER(LW(0), 0)
             CALL_CHILD(PTR(koura_open))
         END_IF
     END_IF
-    CALL(btlevtcmd_CheckPhase, LW(0), 67108867)
+    CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_AFTER_PLAYER)
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_GetHp, UNIT_ID_SELF, LW(0))
         IF_INT_GREATER(LW(0), 0)
@@ -231,7 +232,7 @@ EVT_BEGIN(koura_open)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, SHELL_SHIELD_WORK_OPEN, 1)
     CALL(btlevtcmd_OffAttribute, LW(3), kUnitNeverTargetable)
     CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 1, kNotTargetable)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, SHELL_SHIELD_WORK_FOLLOW, 1)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, SHELL_SHIELD_WORK_FOLLOW, KOURA_FOLLOW_ON)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_SHELL_SHIELD_OPEN)
     RETURN
 EVT_END()
@@ -260,7 +261,7 @@ EVT_BEGIN(koura_close)
     CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, kNotTargetable)
     CALL(btlevtcmd_OnPartsAttribute, LW(3), 1, kHidden)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, SHELL_SHIELD_WORK_FOLLOW, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, SHELL_SHIELD_WORK_FOLLOW, KOURA_FOLLOW_NONE)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()

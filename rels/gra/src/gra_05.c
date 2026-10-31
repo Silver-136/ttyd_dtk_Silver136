@@ -253,7 +253,7 @@ static BeroEntry bero_entry_data[] = {
     {
         "w_bero", // hitName
         0, 0, // type..sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -269,7 +269,7 @@ static BeroEntry bero_entry_data[] = {
     {
         "e_bero", // hitName
         0, 0, // type..sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -286,7 +286,7 @@ static BeroEntry bero_entry_data[] = {
         "ana_1", // hitName
         3840, // type
         0, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -303,7 +303,7 @@ static BeroEntry bero_entry_data[] = {
         "ana_2", // hitName
         7936, // type
         0, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -320,7 +320,7 @@ static BeroEntry bero_entry_data[] = {
         "A_ana_1", // hitName
         3840, // type
         0, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -336,7 +336,7 @@ static BeroEntry bero_entry_data[] = {
         "A_ana_2", // hitName
         3840, // type
         0, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -369,7 +369,7 @@ EVT_BEGIN(evt_gra_05iwa_move_init)
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG4_07_TRICK_ROCK)
         CALL(evt_mapobj_trans, 0, STRING("S_iwa"), FLOAT(120.0f), 0, 0)
         CALL(evt_hit_bind_update, STRING("A_iwa"))
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_futa"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_futa"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_futa"), 0, 0)
     END_IF
     RETURN
@@ -462,7 +462,7 @@ EVT_BEGIN(gra_05_init_evt)
         CALL(evt_mapobj_trans, 1, STRING("S_futa"), 0, FLOAT(0.099609375f), 0)
         CALL(evt_hit_bind_update, STRING("A_futa"))
         ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_futa"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_futa"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_futa"), 0, 0)
     END_IF
     IF_INT_LESS(GSW_STORY_PROGRESS, STG4_06_02_THROUGH_THE_HOLE)

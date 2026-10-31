@@ -134,7 +134,7 @@ static BeroEntry bero_entry_data[] = {
         "n_bero", // hitName
         1, // type
         2, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -152,7 +152,7 @@ static BeroEntry bero_entry_data[] = {
         "s_bero", // hitName
         1, // type
         2, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -170,7 +170,7 @@ static BeroEntry bero_entry_data[] = {
         "w_bero3", // hitName
         1, // type
         2, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -188,7 +188,7 @@ static BeroEntry bero_entry_data[] = {
         "w_bero1", // hitName
         1, // type
         2, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -206,7 +206,7 @@ static BeroEntry bero_entry_data[] = {
         "w_bero2", // hitName
         1, // type
         2, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -225,21 +225,21 @@ static BeroEntry bero_entry_data[] = {
 
 /** Hides the first staircase section (kaidan01) and its collision. */
 EVT_BEGIN(jin_03_kaidan_temae_kesu)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("kaidan01"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("kaidan01"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_hitobj_onoff, STRING("a_kaidan01"), 1, 0)
     RETURN
 EVT_END()
 
 /** Hides the middle staircase section (kaidan02) and its collision. */
 EVT_BEGIN(jin_03_kaidan_naka_kesu)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("kaidan02"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("kaidan02"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_hitobj_onoff, STRING("a_kaidan02"), 1, 0)
     RETURN
 EVT_END()
 
 /** Hides the last staircase section (kaidan03) and its collision. */
 EVT_BEGIN(jin_03_kaidan_oku_kesu)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("kaidan03"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("kaidan03"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_hitobj_onoff, STRING("a_kaidan03"), 1, 0)
     RETURN
 EVT_END()

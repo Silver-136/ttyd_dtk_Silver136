@@ -2,6 +2,8 @@
 // Vivian) stop Mario; paths to win_01 and win_06.
 
 #include "battle/battle_unit.h"
+#include "driver/fadedrv.h"
+#include "evt/evt_story.h"
 #include "evt/evt_urouro.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_cam.h"
@@ -229,7 +231,7 @@ static BeroEntry bero_entry_data[] = {
     {
         "w_bero", // hitName
         0, 0, // type..sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -245,7 +247,7 @@ static BeroEntry bero_entry_data[] = {
     {
         "e_bero", // hitName
         0, 0, // type..sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -328,7 +330,7 @@ EVT_BEGIN(witchtrio_momeru)
     ADD(LW(1), 11)
     ADD(LW(2), 5)
     CALL(evt_item_entry, STRING("necklace"), ITEM_NECKLACE, LW(0), LW(1), LW(2), ITEM_TYPE_STILL, -1, 0)
-    CALL(evt_item_flag_on, STRING("necklace"), 2)
+    CALL(evt_item_flag_on, STRING("necklace"), ITEM_FLAG_NO_TOUCH)
     WAIT_MS(300)
     CALL(evt_npc_set_autotalkpose, STRING("ビビアン"), STRING("PTR_S_5"), STRING("PTR_T_6"))
     WAIT_FRAMES(1)
@@ -526,7 +528,7 @@ EVT_BEGIN(witchtrio_picture)
     WAIT_MS(500)
     CALL(evt_msg_print, 0, STRING("stg2_win_e06_02"), 0, STRING("マリリン"))
     CALL(evt_item_entry, STRING("picture"), ITEM_MARIO_POSTER, 0, -1000, 0, ITEM_TYPE_STILL, -1, 0)
-    CALL(evt_item_flag_on, STRING("picture"), 2)
+    CALL(evt_item_flag_on, STRING("picture"), ITEM_FLAG_NO_TOUCH)
     SPAWN_EVENT_GET_ID(PTR(majorin_have_picture), LW(10))
     CALL(evt_npc_set_anim, STRING("マジョリン"), STRING("MJR_I_1"))
     WAIT_MS(500)
@@ -827,7 +829,7 @@ EVT_BEGIN(witchtrio_lose)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_WITCH1"))
     CALL(evt_cam3d_evt_set, -375, 144, 533, -375, 40, -58, 0, EASING_SINE_IN_OUT)
     CALL(evt_item_entry, STRING("necklace"), ITEM_NECKLACE, 0, -1000, 0, ITEM_TYPE_STILL, GSWF_WIN_00_NECKLACE, PTR(get_necklace))
-    CALL(evt_item_flag_on, STRING("necklace"), 2)
+    CALL(evt_item_flag_on, STRING("necklace"), ITEM_FLAG_NO_TOUCH)
     CALL(evt_npc_get_position, STRING("マリリン"), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_GURUGURU_MARK1"), LW(0), LW(1), LW(2), 0)
     CALL(evt_eff_fukidashi, FUKIDASHI_AT_NPC, STRING("effmaririn"), STRING("マリリン"), 2, 0, 0, 0, 0, 0, 0, -1)
@@ -868,7 +870,7 @@ EVT_BEGIN(witchtrio_lose)
         CALL(evt_npc_jump_position_nohit, STRING("ダミー"), LW(13), 0, LW(2), 250, FLOAT(7.5f))
         DELETE_EVENT(LW(15))
         CALL(evt_npc_set_position, STRING("ダミー"), 0, -1000, 0)
-        CALL(evt_item_flag_off, STRING("necklace"), 2)
+        CALL(evt_item_flag_off, STRING("necklace"), ITEM_FLAG_NO_TOUCH)
         CALL(evt_item_set_position, STRING("necklace"), LW(13), 0, LW(2))
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT

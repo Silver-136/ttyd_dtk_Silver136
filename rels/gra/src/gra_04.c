@@ -141,7 +141,7 @@ static BeroEntry bero_entry_data[] = {
     {
         "e_bero", // hitName
         0, 0, // type..sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -157,7 +157,7 @@ static BeroEntry bero_entry_data[] = {
     {
         "w_bero_1", // hitName
         0, 0, // type..sfxId
-        6, // directionId
+        BERO_DIR_W, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -174,7 +174,7 @@ static BeroEntry bero_entry_data[] = {
         "w_bero_2", // hitName
         4096, // type
         0, // sfxId
-        6, // directionId
+        BERO_DIR_W, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -191,7 +191,7 @@ static BeroEntry bero_entry_data[] = {
         "e_bero_2", // hitName
         4096, // type
         0, // sfxId
-        2, // directionId
+        BERO_DIR_E, // directionId
         -132, // centerPosition
         63, // centerPositionY
         -450, // centerPositionZ
@@ -249,7 +249,7 @@ EVT_BEGIN(gra_04_init_evt)
         CALL(evt_cloud_set_cap_size, 256, 256)
         CALL(evt_hitobj_onoff, STRING("w_bero_1"), 0, 0)
         ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_futa"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_futa"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_futa"), 0, 0)
     END_IF
     CALL(evt_mobj_badgeblk, STRING("m"), 250, 60, -20, ITEM_HAMMER_THROW, 0, GSWF_GRA_04_HAMMER_THROW_BADGE_BLOCK, 1)

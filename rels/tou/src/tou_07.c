@@ -1,6 +1,7 @@
 // tou_07 (闘技場, Glitz Pit): the champion's room; exits to tou_04, tou_08, tou_10, tou_13.
 
 #include "battle/battle_unit.h"
+#include "driver/fadedrv.h"
 #include "eff/eff_starstone.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_cam.h"
@@ -134,7 +135,7 @@ static BeroEntry bero_data[] = {
         "n_bero", // hitName
         1, // type
         4, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -152,7 +153,7 @@ static BeroEntry bero_data[] = {
         "e_bero", // hitName
         0, // type
         1, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -518,7 +519,7 @@ EVT_END()
 static EVT_BEGIN(evt_dakuto)
     CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.049804688f), FLOAT(0.0f), 500)
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG3_DUCT_KOUSHI_HIT1"), 135, 80, -95, 0)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("kankikuti"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("kankikuti"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_hitobj_onoff, STRING("win_kabe"), 1, 0)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_30_01_AIR_DUCT_ENTRANCE)
         SET_VALUE(GSW_STORY_PROGRESS, STG3_30_01_AIR_DUCT_ENTRANCE)
@@ -668,7 +669,7 @@ EVT_BEGIN(evt_tou_bed)
         CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
         CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)
         CALL(tou_07_snd_on)
-        CALL(evt_fade_entry, 9, 1000, 0, 0, 0)
+        CALL(evt_fade_entry, FADE_IN_BLACK, 1000, 0, 0, 0)
     END_IF
     CALL(evt_party_run, 0)
     CALL(evt_party_run, 1)
@@ -709,11 +710,11 @@ EVT_BEGIN(tou_07_init_evt)
     END_IF
     CALL(evt_tou_get_ranking, LW(0))
     IF_INT_EQUAL(LW(0), 0)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("e_1"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("e_2"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("e_1"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("e_2"), MAP_OBJ_FLAG_HIDDEN)
         ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("e_1"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("e_2"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("e_1"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("e_2"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG3_30_01_AIR_DUCT_ENTRANCE)
@@ -732,7 +733,7 @@ EVT_BEGIN(tou_07_init_evt)
         CALL(evt_run_case_evt, CASE_HAMMER, 1, STRING("win_kabe"), 0, PTR(evt_dakuto2), 0)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("win_kabe"), 0, PTR(evt_dakuto2), 0)
         ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("kankikuti"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("kankikuti"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("win_kabe"), 1, 0)
     END_IF
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("M_make"), 0, PTR(evt_tou_match_make_default), 0)

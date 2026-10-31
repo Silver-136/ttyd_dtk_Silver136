@@ -104,7 +104,7 @@ static BeroEntry bero_entry_data[] = {
         "w_bero", // hitName
         1, // type
         10, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -122,7 +122,7 @@ static BeroEntry bero_entry_data[] = {
         "e_bero", // hitName
         1, // type
         10, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -158,8 +158,8 @@ EVT_BEGIN(evt_machine)
     SWITCH(LW(10))
         CASE_EQUAL(ITEM_CARD_KEY_0x1D)
         IF_INT_EQUAL(LW(0), 0)
-            CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_kagi1_aka"), MAP_OBJ_FLAG_HIDDEN)
-            CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_kagi1_mid"), MAP_OBJ_FLAG_HIDDEN)
+            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_kagi1_aka"), MAP_OBJ_FLAG_HIDDEN)
+            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_kagi1_mid"), MAP_OBJ_FLAG_HIDDEN)
             SET_VALUE(GSWF_AJI_18_CARD_KEY_SLOT_1_FILLED, 1)
             CALL(evt_pouch_remove_item, LW(10), LW(1))
             CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -170,8 +170,8 @@ EVT_BEGIN(evt_machine)
         END_IF
         CASE_EQUAL(ITEM_CARD_KEY_0x1E)
         IF_INT_EQUAL(LW(0), 1)
-            CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_kagi2_aka"), MAP_OBJ_FLAG_HIDDEN)
-            CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_kagi2_mid"), MAP_OBJ_FLAG_HIDDEN)
+            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_kagi2_aka"), MAP_OBJ_FLAG_HIDDEN)
+            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_kagi2_mid"), MAP_OBJ_FLAG_HIDDEN)
             SET_VALUE(GSWF_AJI_18_CARD_KEY_SLOT_2_FILLED, 1)
             CALL(evt_pouch_remove_item, LW(10), LW(1))
             CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -182,8 +182,8 @@ EVT_BEGIN(evt_machine)
         END_IF
         CASE_EQUAL(ITEM_CARD_KEY_0x1F)
         IF_INT_EQUAL(LW(0), 2)
-            CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_kagi3_aka"), MAP_OBJ_FLAG_HIDDEN)
-            CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_kagi3_mid"), MAP_OBJ_FLAG_HIDDEN)
+            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_kagi3_aka"), MAP_OBJ_FLAG_HIDDEN)
+            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_kagi3_mid"), MAP_OBJ_FLAG_HIDDEN)
             SET_VALUE(GSWF_AJI_18_CARD_KEY_SLOT_3_FILLED, 1)
             CALL(evt_pouch_remove_item, LW(10), LW(1))
             CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -203,8 +203,8 @@ EVT_BEGIN(evt_machine)
                 CALL_CHILD(PTR(bero_case_switch_on))
                 CALL(evt_cam3d_evt_set, -140, 90, 369, 150, 60, -98, 500, EASING_SINE_IN_OUT)
                 WAIT_MS(1200)
-                CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_lights1_m"), MAP_OBJ_FLAG_HIDDEN)
-                CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_lights1_r"), MAP_OBJ_FLAG_HIDDEN)
+                CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_lights1_m"), MAP_OBJ_FLAG_HIDDEN)
+                CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_lights1_r"), MAP_OBJ_FLAG_HIDDEN)
                 CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
                 CALL(evt_snd_sfxon_3d, STRING("SFX_STG7_DOOR_LAMP1"), LW(0), LW(1), LW(2), 0)
                 WAIT_MS(700)
@@ -282,25 +282,25 @@ EVT_BEGIN(aji_18_init_evt)
         SET_VALUE(GSWF_AJI_18_CARD_KEY_SLOT_3_FILLED, 1)
     END_IF
     IF_INT_EQUAL(GSWF_AJI_18_CARD_KEY_SLOT_1_FILLED, 1)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_kagi1_aka"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_kagi1_aka"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_kagi1_mid"), MAP_OBJ_FLAG_HIDDEN)
         ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_kagi1_aka"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_kagi1_mid"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_kagi1_aka"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_kagi1_mid"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     IF_INT_EQUAL(GSWF_AJI_18_CARD_KEY_SLOT_2_FILLED, 1)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_kagi2_aka"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_kagi2_aka"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_kagi2_mid"), MAP_OBJ_FLAG_HIDDEN)
         ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_kagi2_aka"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_kagi2_mid"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_kagi2_aka"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_kagi2_mid"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     IF_INT_EQUAL(GSWF_AJI_18_CARD_KEY_SLOT_3_FILLED, 1)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_kagi3_aka"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_kagi3_aka"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_kagi3_mid"), MAP_OBJ_FLAG_HIDDEN)
         ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_kagi3_aka"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_kagi3_mid"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_kagi3_aka"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_kagi3_mid"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     SET_VALUE(LW(0), 0)
     CALL(evt_pouch_check_item, ITEM_CARD_KEY_0x1D, LW(1))
@@ -325,10 +325,10 @@ EVT_BEGIN(aji_18_init_evt)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("e_bero"), 0, PTR(key_lock_koujyou), GW(10))
         SET_VALUE(LW(0), STRING("e_bero"))
         CALL_CHILD(PTR(bero_case_switch_off))
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_lights1_m"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_lights1_m"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_lights1_r"), MAP_OBJ_FLAG_HIDDEN)
         ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_lights1_m"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_lights1_m"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_lights1_r"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     SWITCH(GSW_STORY_PROGRESS)
@@ -336,7 +336,7 @@ EVT_BEGIN(aji_18_init_evt)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("e_bero"), 0, PTR(key_lock_koujyou), 0)
         SET_VALUE(LW(0), STRING("e_bero"))
         CALL_CHILD(PTR(bero_case_switch_off))
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_lights1_m"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_lights1_m"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_lights1_r"), MAP_OBJ_FLAG_HIDDEN)
     END_SWITCH
     SWITCH(GSW_STORY_PROGRESS)

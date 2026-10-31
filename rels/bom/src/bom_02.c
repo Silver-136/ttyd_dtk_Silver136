@@ -1,6 +1,7 @@
 // bom_02 (ボム村, Fahr Outpost): the east side of the village with the inn, the shop and General White's bed.
 
 #include "battle/battle_unit.h"
+#include "evt/evt_story.h"
 #include "evt/evt_window.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bg.h"
@@ -338,8 +339,8 @@ static BeroEntry bero_entry_data[] = {
     {
         "w_bero", // hitName
         0, 0, // type..sfxId
-        20000, // directionId
-        100000, // centerPosition
+        BERO_DIR_AUTO, // directionId
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -1554,7 +1555,7 @@ static EVT_BEGIN(sekai_yami_evt)
     CALL(evt_npc_status_onoff, 1, STRING("ボムヘイF"), NPC_STATUS_FACE_MOVE_DIR)
     CALL(evt_npc_status_onoff, 1, STRING("ボムヘイG"), NPC_STATUS_FACE_MOVE_DIR)
     CALL(evt_map_set_tevcallback, 1, PTR(envSetYami))
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_bom02"), MAP_OBJ_TEV_CALLBACK(1))
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_bom02"), MAP_OBJ_TEV_CALLBACK(1))
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_bom02"), MAP_OBJ_FLAG_DISPLAY_LIST)
     CALL(anim_tevcallback, STRING("村長"), 1)
     CALL(anim_tevcallback, STRING("ボムヘイE"), 1)
@@ -1675,7 +1676,7 @@ static EVT_BEGIN(sekai_yami_evt)
     WAIT_MS(1000)
     CALL(evt_msg_print, 0, STRING("stg8_dark_08"), 0, STRING("村長"))
     WAIT_MS(2000)
-    CALL(evt_fade_set_mapchange_type, 1, 10, 300, 9, 300)
+    CALL(evt_fade_set_mapchange_type, 1, FADE_OUT_BLACK, 300, FADE_IN_BLACK, 300)
     CALL(evt_bero_mapchange, STRING("las_26"), STRING("sekai_yami2"))
     RETURN
 EVT_END()
@@ -1698,7 +1699,7 @@ static EVT_BEGIN(minnnanokoe_evt)
     CALL(evt_npc_set_ry, STRING("ボムヘイE"), 90)
     CALL(evt_npc_status_onoff, 1, STRING("ボムヘイE"), NPC_STATUS_FACE_MOVE_DIR)
     CALL(evt_map_set_tevcallback, 1, PTR(envSetYami))
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_bom02"), MAP_OBJ_TEV_CALLBACK(1))
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_bom02"), MAP_OBJ_TEV_CALLBACK(1))
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_bom02"), MAP_OBJ_FLAG_DISPLAY_LIST)
     CALL(anim_tevcallback, STRING("村長"), 1)
     CALL(anim_tevcallback, STRING("ボムヘイE"), 1)
@@ -1724,7 +1725,7 @@ static EVT_BEGIN(minnnanokoe_evt)
         CALL(evt_npc_move_position, STRING("村長"), -400, 0, 0, 90, 0)
     END_INLINE_EVENT
     WAIT_MS(3000)
-    CALL(evt_fade_set_mapchange_type, 1, 10, 300, 9, 300)
+    CALL(evt_fade_set_mapchange_type, 1, FADE_OUT_BLACK, 300, FADE_IN_BLACK, 300)
     CALL(evt_bero_mapchange, STRING("bom_01"), STRING("minnnanokoe"))
     RETURN
 EVT_END()
@@ -1838,9 +1839,9 @@ EVT_BEGIN(bom_02_init_evt)
             CALL(evt_item_entry, STRING("iri_30"), ITEM_SNOW_BUNNY, 50, 0, 35, ITEM_TYPE_STILL, GSWF_BOM_02_SNOW_BUNNY, 0)
         END_IF
     END_IF
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ie1_naka"), MAP_OBJ_FLAG_CLIP)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ie2_naka"), MAP_OBJ_FLAG_CLIP)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ie3_naka"), MAP_OBJ_FLAG_CLIP)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_ie1_naka"), MAP_OBJ_FLAG_CLIP)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_ie2_naka"), MAP_OBJ_FLAG_CLIP)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_ie3_naka"), MAP_OBJ_FLAG_CLIP)
     RETURN
 EVT_END()
 

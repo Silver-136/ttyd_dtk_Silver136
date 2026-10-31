@@ -1709,7 +1709,7 @@ static EVT_BEGIN(evt_moamoa_escape)
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_party_run, 0)
     CALL(evt_npc_flag_onoff, 0, STRING("\x8e\xd4\x8f\xb6"), NPC_FLAG_NO_HIT)
-    CALL(evt_npc_flag_onoff, 0, STRING(("\x83" "E\x83" "F\x83" "C\x83g\x83\x8c\x83X")), 32)
+    CALL(evt_npc_flag_onoff, 0, STRING(("\x83" "E\x83" "F\x83" "C\x83g\x83\x8c\x83X")), NPC_FLAG_INTANGIBLE)
     CALL(evt_npc_change_interrupt, STRING("\x8e\xd4\x8f\xb6"), 6, PTR(talk_syashou))
     CALL(evt_npc_change_interrupt, STRING(("\x83" "E\x83" "F\x83" "C\x83g\x83\x8c\x83X")), 6, PTR(talk_waitless))
     SET_VALUE(GSW_STORY_PROGRESS, STG6_47_ESCAPING_THE_SMORGS)
@@ -1774,7 +1774,7 @@ static BeroEntry bero_data_a[] = {
         ("e_bero"), // hitName
         1, // type
         8, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -1791,7 +1791,7 @@ static BeroEntry bero_data_a[] = {
     {
         ("w_bero"), // hitName
         0, 0, // type..sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -1813,7 +1813,7 @@ static BeroEntry bero_data_b[] = {
         ("e_bero"), // hitName
         1, // type
         8, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -1830,7 +1830,7 @@ static BeroEntry bero_data_b[] = {
     {
         ("w_bero"), // hitName
         0, 0, // type..sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -1852,7 +1852,7 @@ static BeroEntry bero_data_c[] = {
         ("e_bero"), // hitName
         1, // type
         8, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -1869,7 +1869,7 @@ static BeroEntry bero_data_c[] = {
     {
         ("w_bero"), // hitName
         0, 0, // type..sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length

@@ -267,7 +267,7 @@ void mot_hip(void) {
                 marioChgMot(MARIO_MOTION_DAMAGE);
                 return;
             }
-            if (attr & 0x400) {
+            if (attr & HIT_ATTR_DAMAGE_LIQUID) {
                 set_damage_root_ypos(mario->position.y);
                 marioChgMot(MARIO_MOTION_DAMAGE_TOGE);
                 return;

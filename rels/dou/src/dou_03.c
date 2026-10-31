@@ -59,7 +59,7 @@ static BeroEntry bero_entry_data[] = {
     {
         "w_bero_1", // hitName
         0, 0, // type..sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -75,7 +75,7 @@ static BeroEntry bero_entry_data[] = {
     {
         "w_bero_2", // hitName
         0, 0, // type..sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -91,7 +91,7 @@ static BeroEntry bero_entry_data[] = {
     {
         "w_bero_3", // hitName
         0, 0, // type..sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -107,7 +107,7 @@ static BeroEntry bero_entry_data[] = {
     {
         "e_bero_1", // hitName
         0, 0, // type..sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -123,7 +123,7 @@ static BeroEntry bero_entry_data[] = {
     {
         "e_bero_2", // hitName
         0, 0, // type..sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -139,7 +139,7 @@ static BeroEntry bero_entry_data[] = {
     {
         "e_bero_3", // hitName
         0, 0, // type..sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -155,7 +155,7 @@ static BeroEntry bero_entry_data[] = {
     {
         "s_bero", // hitName
         0, 0, // type..sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -173,7 +173,7 @@ static BeroEntry bero_entry_data[] = {
 
 EVT_BEGIN(watergate_handle_init)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG5_22_FLOODGATE_HANDLE)
-        CALL(evt_mapobj_flag_onoff, 0, 1, STRING("S_reba"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 1, STRING("S_reba"), MAP_OBJ_FLAG_HIDDEN)
         SET_VALUE(LW(0), STRING("s_bero"))
         CALL_CHILD(PTR(bero_case_switch_off))
         CALL(evt_hitobj_attr_onoff, 1, 0, STRING("s_bero"), HIT_ATTR_SHIP_ONLY)
@@ -236,7 +236,7 @@ EVT_BEGIN(nagare_taru)
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_taru"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_taru"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_hitobj_onoff, STRING("A_taru"), 1, 0)
     RETURN
 EVT_END()
@@ -265,7 +265,7 @@ EVT_BEGIN(nagare_bin)
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_bin"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_bin"), MAP_OBJ_FLAG_HIDDEN)
     RETURN
 EVT_END()
 
@@ -285,7 +285,7 @@ EVT_BEGIN(watergate_handle)
             RETURN
         END_IF
         CALL(evt_mario_key_onoff, 0)
-        CALL(evt_mapobj_flag_onoff, 0, 0, STRING("S_reba"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 0, STRING("S_reba"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_reba"), 1, 1)
         CALL(evt_pouch_remove_item, ITEM_GATE_HANDLE, LW(0))
         CALL(evt_snd_sfxon, STRING("SFX_STG5_FLOODGATE_SHAKE1"), LW(10))
@@ -493,9 +493,9 @@ EVT_BEGIN(dou_03_init_evt)
         SPAWN_EVENT_GET_ID(PTR(dou_puka_event_main1), LW(10))
         SET_VALUE(GW(11), LW(10))
         ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_taru"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_taru"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_taru"), 1, 0)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_bin"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_bin"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     SET_VALUE(LW(0), STRING("s03_fune"))
     SET_VALUE(LW(1), 0)

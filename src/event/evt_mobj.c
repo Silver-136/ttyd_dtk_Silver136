@@ -2,6 +2,7 @@
 // item boxes, jump stands, locks and Bowser's side-scrolling stage objects.
 
 #include "evt/evt_cmd.h"
+#include "evt/evt_story.h"
 #include "evt/evt_sub.h"
 #include "driver/mobjdrv.h"
 #include "driver/animdrv.h"
@@ -344,13 +345,13 @@ USER_FUNC(evt_mobj_hit_onoff) {
     if (on) {
         for (i = 0; i < 2; i++) {
             if (mobj->hitObj[i].name) {
-                hitGrpFlagOff(mobj->hitObj[i].name, 1);
+                hitGrpFlagOff(mobj->hitObj[i].name, HIT_FLAG_OFF);
             }
         }
     } else {
         for (i = 0; i < 2; i++) {
             if (mobj->hitObj[i].name) {
-                hitGrpFlagOn(mobj->hitObj[i].name, 1);
+                hitGrpFlagOn(mobj->hitObj[i].name, HIT_FLAG_OFF);
             }
         }
     }
@@ -2140,8 +2141,8 @@ s32 mobj_recovery_blk(MapObjectEntry* mobj) {
         psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MOBJ_HP_RECOVER_HIT1), &mobj->position);
         mobj->state++;
     case 1:
-        if (!(gp->flags & GW_FLAG_E3) && swGet(0xea) == 0) {
-            swSet(0xea);
+        if (!(gp->flags & GW_FLAG_E3) && swGet(GSWF_HEART_BLOCK_TUTORIAL_SEEN) == 0) {
+            swSet(GSWF_HEART_BLOCK_TUTORIAL_SEEN);
             mobj->state = 20;
             break;
         }

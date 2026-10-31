@@ -488,7 +488,7 @@ void effPlayMayaAnim(MayaAnim* anim) {
     OSTime now = gp->inBattle ? gp->renderTime : gp->renderFieldTime;
     anim->startTime = OSTicksToMilliseconds(now);
     anim->time = 0.0f;
-    anim->flags |= 1;
+    anim->flags |= MAYA_ANIM_FLAG_PLAYING;
 }
 
 /**
@@ -496,14 +496,14 @@ void effPlayMayaAnim(MayaAnim* anim) {
  * stops it at its end time, and recomputes every polygon's matrix and alpha.
  */
 void effCalcMayaAnim(MayaAnim* anim) {
-    if ((anim->flags & 1) && !(anim->flags & 2)) {
+    if ((anim->flags & MAYA_ANIM_FLAG_PLAYING) && !(anim->flags & MAYA_ANIM_FLAG_ENDED)) {
         OSTime now = gp->inBattle ? gp->renderTime : gp->renderFieldTime;
         s32 i;
         now = OSTicksToMilliseconds(now);
         anim->time = (f32)(u64)(now - anim->startTime) * gp->framerate / 1000.0f;
         if (anim->time >= anim->data->endTime) {
             anim->time = anim->data->endTime;
-            anim->flags |= 2;
+            anim->flags |= MAYA_ANIM_FLAG_ENDED;
         }
         for (i = 0; i < anim->data->lists->count; i++) {
             effCalcMayaAnimMatrix(anim, &anim->data->lists->polys[i], (f32*)anim->joints[i].mtx, &anim->joints[i].alpha);

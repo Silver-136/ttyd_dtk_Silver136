@@ -1,6 +1,7 @@
 // Inn scripts and helpers: the innkeeper talk, payment, sleeping in the bed and breakfast.
 
 #include "evt/evt_save_flags.h"
+#include "driver/fadedrv.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_cam.h"
 #include "evt/evt_fade.h"
@@ -96,7 +97,7 @@ USER_FUNC(power_chk) {
     PouchPartyData* party = pouchGetPtr()->partyData;
     ok = 1;
     for (i = 0; i < PARTNER_COUNT; i++) {
-        if ((party[i].flags & 1) && party[i].currentHP != party[i].maximumHP) {
+        if ((party[i].flags & POUCH_PARTY_FLAG_JOINED) && party[i].currentHP != party[i].maximumHP) {
             ok = 0;
             break;
         }
@@ -395,7 +396,7 @@ EVT_BEGIN(kinopio_house_talk_evt)
     CALL(evt_snd_bgmoff, PSND_PAUSE)
     CALL(evt_snd_bgmon, PSND_SLOT(1), STRING("BGM_FF_GO_SLEEPING1"))
 #ifdef VERSION_G8ME01
-    CALL(evt_fade_entry, 4, 6000, 0, 0, 0)
+    CALL(evt_fade_entry, FADE_OUT_SPOT, 6000, 0, 0, 0)
 #else
     CALL(evt_fade_entry, 4, 3000, 0, 0, 0)
 #endif
@@ -517,7 +518,7 @@ EVT_BEGIN(evt_50)
     CALL(evt_mario_set_pos, LW(0), LW(1), LW(2))
     ADD(LW(2), 5)
     CALL(evt_party_set_pos, 0, LW(0), LW(1), LW(2))
-    CALL(evt_fade_entry, 9, 1000, 0, 0, 0)
+    CALL(evt_fade_entry, FADE_IN_BLACK, 1000, 0, 0, 0)
     CALL(evt_fade_end_wait)
     WAIT_MS(500)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))

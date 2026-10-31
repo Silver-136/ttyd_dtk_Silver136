@@ -1,6 +1,8 @@
 // nok_00 (ノコ村, Petalburg): the west half of the village, with the gate to Petal Meadows (hei_01).
 
 #include "version.h"
+#include "driver/fadedrv.h"
+#include "evt/evt_story.h"
 #include "evt/evt_urouro.h"
 #include "evt/evt_window.h"
 #include "kpa_act.h"
@@ -566,7 +568,7 @@ static BeroEntry bero_entry_data[] = {
     {
         "w_bero", // hitName
         0, 0, // type..sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -582,7 +584,7 @@ static BeroEntry bero_entry_data[] = {
     {
         "e_bero", // hitName
         0, 0, // type..sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -1060,7 +1062,7 @@ EVT_BEGIN(nok_00_koopa_evt)
     CALL(evt_npc_move_position, STRING("ノコノコA"), 316, -154, 500, 0, 0)
     CALL(evt_npc_move_position, STRING("ノコノコA"), 280, -199, 500, 0, 0)
     CALL(evt_npc_set_ry, STRING("ノコノコA"), 90)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ie_in_kabe"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_ie_in_kabe"), MAP_OBJ_FLAG_HIDDEN)
     BEGIN_INLINE_EVENT
         WAIT_MS(100)
         CALL(evt_mapobj_get_position, STRING("S_ie_doa"), LW(0), LW(1), LW(2))

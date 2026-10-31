@@ -74,7 +74,7 @@ static BeroEntry bero_entry_data[] = {
         "w_bero", // hitName
         1, // type
         10, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -92,7 +92,7 @@ static BeroEntry bero_entry_data[] = {
         "e_bero", // hitName
         1, // type
         10, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -141,7 +141,7 @@ EVT_BEGIN(aji_19_init_evt)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG7_07_01_INSIDE_THE_BUILDING)
         SPAWN_EVENT(PTR(evt_hajimete))
     END_IF
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("kanaami2"), MAP_OBJ_FLAG_CLIP)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("kanaami2"), MAP_OBJ_FLAG_CLIP)
     RETURN
 EVT_END()
 

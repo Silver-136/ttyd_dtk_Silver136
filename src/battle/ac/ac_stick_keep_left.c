@@ -91,8 +91,8 @@ s32 battleAcMain_StickKeepLeft(BattleWork* work) {
                 work->actionCommands.mAcState = 1000;
                 // fallthrough
             case 1000:
-                if ((work->actionCommands.setupFlags & 1) && (work->actionCommands.mAcUnit->mTokenFlags & kConfusedAction)) {
-                    if (work->actionCommands.setupFlags & 2) {
+                if ((work->actionCommands.setupFlags & AC_SETUP_FLAG_CONFUSED_AUTO) && (work->actionCommands.mAcUnit->mTokenFlags & kConfusedAction)) {
+                    if (work->actionCommands.setupFlags & AC_SETUP_FLAG_RETRIES) {
                         work->actionCommands.setupParam--;
                         if (work->actionCommands.setupParam >= 0) {
                             break;

@@ -418,10 +418,10 @@ EVT_BEGIN(shopper_talk_evt)
             SET_VALUE(GSWF_SHOP_POINT_PRIZE_PENDING, 0)
         END_IF
     END_LOOP
-    CALL(shop_flag_onoff, 1, 16384)
+    CALL(shop_flag_onoff, 1, SHOP_FLAG_TALKING)
     CALL(get_msg, LW(10), 23, LW(14))
     CALL(evt_msg_select, 0, LW(14))
-    CALL(shop_flag_onoff, 0, 16384)
+    CALL(shop_flag_onoff, 0, SHOP_FLAG_TALKING)
     SWITCH(LW(0))
         CASE_EQUAL(0)
         CALL(get_msg, LW(10), 5, LW(14))
@@ -719,7 +719,7 @@ void name_disp(WinMgrEntry* entry) {
         FontDrawEdgeOff();
     }
     for (i = 0; i < wp->count; i++) {
-        if (wp->itemFlags[i] & 1) {
+        if (wp->itemFlags[i] & SHOP_ITEM_FLAG_SOLD_OUT) {
             continue;
         }
         mapObjGetPos(wp->objs[i].mobj, &pos);
@@ -1027,22 +1027,22 @@ USER_FUNC(evt_shop_setup) {
         iconFlagOn(buf, ICON_FLAG_NO_MAP_BLEND);
         wp->itemFlags[i] = 0;
         if (wp->items[i].id == ITEM_CONTACT_LENS && pouchCheckItem(ITEM_CONTACT_LENS)) {
-            wp->itemFlags[i] |= 1;
+            wp->itemFlags[i] |= SHOP_ITEM_FLAG_SOLD_OUT;
         }
         if (wp->items[i].id == ITEM_SUPER_LUIGI1 && pouchCheckItem(ITEM_SUPER_LUIGI1)) {
-            wp->itemFlags[i] |= 1;
+            wp->itemFlags[i] |= SHOP_ITEM_FLAG_SOLD_OUT;
         }
         if (wp->items[i].id == ITEM_SUPER_LUIGI2 && pouchCheckItem(ITEM_SUPER_LUIGI2)) {
-            wp->itemFlags[i] |= 1;
+            wp->itemFlags[i] |= SHOP_ITEM_FLAG_SOLD_OUT;
         }
         if (wp->items[i].id == ITEM_SUPER_LUIGI3 && pouchCheckItem(ITEM_SUPER_LUIGI3)) {
-            wp->itemFlags[i] |= 1;
+            wp->itemFlags[i] |= SHOP_ITEM_FLAG_SOLD_OUT;
         }
         if (wp->items[i].id == ITEM_SUPER_LUIGI4 && pouchCheckItem(ITEM_SUPER_LUIGI4)) {
-            wp->itemFlags[i] |= 1;
+            wp->itemFlags[i] |= SHOP_ITEM_FLAG_SOLD_OUT;
         }
         if (wp->items[i].id == ITEM_SUPER_LUIGI5 && pouchCheckItem(ITEM_SUPER_LUIGI5)) {
-            wp->itemFlags[i] |= 1;
+            wp->itemFlags[i] |= SHOP_ITEM_FLAG_SOLD_OUT;
         }
     }
     // FAKE: block-local NPC pointer; assigning through npcNameToPtr(shopper->name) directly changes the object

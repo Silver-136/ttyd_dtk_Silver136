@@ -109,8 +109,8 @@ void winPartyInit(WindowWork* wp) {
     wp->party.count = 0;
     for (i = 0; i < 7; i++) {
         for (j = 0; j < PARTNER_COUNT; j++) {
-            if (j == winPartyDt[i].partyId && (pouch->partyData[j].flags & 1) &&
-                !(pouch->partyData[j].flags & 2)) {
+            if (j == winPartyDt[i].partyId && (pouch->partyData[j].flags & POUCH_PARTY_FLAG_JOINED) &&
+                !(pouch->partyData[j].flags & POUCH_PARTY_FLAG_AWAY)) {
                 if (wp->flags & WINDOW_FLAG_8BIT) {
                     poseName = winPartyDt[i].poseName2;
                     // Initialization uses the Yoshi-color animation for every partner; display selects each partner again.

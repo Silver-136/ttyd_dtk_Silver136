@@ -211,7 +211,7 @@ static BeroEntry bero_entry_data[] = {
     {
         "w_bero", // hitName
         0, 0, // type..sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -227,7 +227,7 @@ static BeroEntry bero_entry_data[] = {
     {
         "e_bero", // hitName
         0, 0, // type..sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -244,7 +244,7 @@ static BeroEntry bero_entry_data[] = {
         "n_bero", // hitName
         1, // type
         0, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -427,8 +427,8 @@ static void alpha_tev(MapTevCallbackInfo* info) {
  */
 EVT_BEGIN(mahojin_alpha)
     CALL(evt_map_set_tevcallback, 1, PTR(alpha_tev))
-    CALL(evt_mapobj_flag_onoff, 0, 1, STRING("hosi_2"), MAP_OBJ_TEV_CALLBACK(1))
-    CALL(evt_mapobj_flag_onoff, 0, 0, STRING("hosi_2"), MAP_OBJ_FLAG_DISPLAY_LIST)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 1, STRING("hosi_2"), MAP_OBJ_TEV_CALLBACK(1))
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 0, STRING("hosi_2"), MAP_OBJ_FLAG_DISPLAY_LIST)
     SET_FLOAT_VALUE(GW(1), FLOAT(0.0f))
     SET_FLOAT_VALUE(LW(0), FLOAT(0.0f))
     LOOP(0)
@@ -447,8 +447,8 @@ EVT_BEGIN(mahojin_alpha)
     END_LOOP
     BEGIN_INLINE_EVENT
         WAIT_MS(1000)
-        CALL(evt_mapobj_flag_onoff, 0, 0, STRING("hosi_2"), MAP_OBJ_TEV_CALLBACK_MASK)
-        CALL(evt_mapobj_flag_onoff, 0, 1, STRING("hosi_2"), MAP_OBJ_FLAG_DISPLAY_LIST)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 0, STRING("hosi_2"), MAP_OBJ_TEV_CALLBACK_MASK)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 1, STRING("hosi_2"), MAP_OBJ_FLAG_DISPLAY_LIST)
     END_INLINE_EVENT
     RETURN
 EVT_END()
@@ -1610,16 +1610,16 @@ EVT_BEGIN(evt_mapwrite)
         END_INLINE_EVENT
         BEGIN_INLINE_EVENT
             WAIT_MS(2000)
-            CALL(evt_mapobj_flag_onoff, 1, 1, STRING("door"), MAP_OBJ_FLAG_HIDDEN)
+            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("door"), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_mapobj_flag_onoff, 1, 1, STRING("n_yuka1"), MAP_OBJ_FLAG_HIDDEN)
             WAIT_MS(3250)
-            CALL(evt_mapobj_flag_onoff, 1, 0, STRING("door"), MAP_OBJ_FLAG_HIDDEN)
+            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("door"), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_mapobj_flag_onoff, 1, 0, STRING("n_yuka1"), MAP_OBJ_FLAG_HIDDEN)
             WAIT_MS(3500)
-            CALL(evt_mapobj_flag_onoff, 1, 1, STRING("door"), MAP_OBJ_FLAG_HIDDEN)
+            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("door"), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_mapobj_flag_onoff, 1, 1, STRING("n_yuka1"), MAP_OBJ_FLAG_HIDDEN)
             WAIT_MS(2700)
-            CALL(evt_mapobj_flag_onoff, 1, 0, STRING("door"), MAP_OBJ_FLAG_HIDDEN)
+            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("door"), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_mapobj_flag_onoff, 1, 0, STRING("n_yuka1"), MAP_OBJ_FLAG_HIDDEN)
         END_INLINE_EVENT
     END_IF
@@ -2311,7 +2311,7 @@ EVT_END()
 
 EVT_BEGIN(lastdungeon)
     CALL(evt_mario_key_onoff, 0)
-    CALL(evt_cam_ctrl_onoff, 4, 0)
+    CALL(evt_cam_ctrl_onoff, CAMERA_3D, 0)
     BEGIN_INLINE_EVENT
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         ADD(LW(2), -50)
@@ -2540,16 +2540,16 @@ EVT_BEGIN(mahojin_event7)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
         WAIT_MS(2000)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("door"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("door"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("n_yuka1"), MAP_OBJ_FLAG_HIDDEN)
         WAIT_MS(3250)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("door"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("door"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("n_yuka1"), MAP_OBJ_FLAG_HIDDEN)
         WAIT_MS(3500)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("door"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("door"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("n_yuka1"), MAP_OBJ_FLAG_HIDDEN)
         WAIT_MS(2700)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("door"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("door"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("n_yuka1"), MAP_OBJ_FLAG_HIDDEN)
     END_INLINE_EVENT
     WAIT_MS(14000)
@@ -2904,7 +2904,7 @@ EVT_BEGIN(tik_05_init_evt)
     SPAWN_EVENT(PTR(mahojin_alpha))
     CALL(evt_run_case_evt, CASE_STAND_ON, 1, STRING("a_dai"), 0, PTR(mahojin_alpha_up), 0)
     CALL(evt_run_case_evt, CASE_NOT_STAND_ON, 1, STRING("a_dai"), 0, PTR(mahojin_alpha_down), 0)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_doa_l"), MAP_OBJ_FLAG_CLIP)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_doa_l"), MAP_OBJ_FLAG_CLIP)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG0_12_02_PAPER_MAGE_1, STG0_14_FRONT_OF_THE_PEDESTAL)
         SPAWN_EVENT(PTR(kaidan_event))
@@ -2959,7 +2959,7 @@ EVT_BEGIN(tik_05_init_evt)
     CALL(evt_mobj_jumpstand_blue, 0, STRING("mobj_jump01"), 250, -550, 80, -125, 0, 0)
     CALL(evt_mobj_save_blk, STRING("mobj_save"), -350, 60, 175, 0, 0)
     CALL(evt_mobj_kururing_floor, STRING("kururin1"), 0, 0, 400, STRING("jimen"), 125, GSWF_STARPIECE_25)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("hasira"), MAP_OBJ_FLAG_CLIP)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("hasira"), MAP_OBJ_FLAG_CLIP)
     CALL(evt_sub_animgroup_async, STRING("MOBJ_EFF_las_mon"))
     CALL(evt_sub_animgroup_async, STRING("EFF_treasure_map"))
     CALL(evt_sub_animgroup_async, STRING("MOBJ_EFF_mahojin"))

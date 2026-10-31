@@ -108,7 +108,7 @@ static BeroEntry bero_entry_data[] = {
         "w_bero", // hitName
         1, // type
         6, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -126,7 +126,7 @@ static BeroEntry bero_entry_data[] = {
         "e_bero", // hitName
         1, // type
         6, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -143,7 +143,7 @@ static BeroEntry bero_entry_data[] = {
     {
         "s_bero", // hitName
         0, 0, // type..sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -451,14 +451,14 @@ EVT_BEGIN(las_22_init_evt)
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG8_11_STAR_PUZZLE)
         SPAWN_EVENT(PTR(kaitendai_evt))
     END_IF
-    CALL(evt_mapobj_flag_onoff, 0, 0, STRING("S_hgm_01a"), MAP_OBJ_FLAG_CLIP)
-    CALL(evt_mapobj_flag_onoff, 0, 0, STRING("S_hgm_05a"), MAP_OBJ_FLAG_CLIP)
-    CALL(evt_mapobj_flag_onoff, 0, 0, STRING("S_hgm_08a"), MAP_OBJ_FLAG_CLIP)
-    CALL(evt_mapobj_flag_onoff, 0, 0, STRING("S_hgm_19a"), MAP_OBJ_FLAG_CLIP)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 0, STRING("S_hgm_01a"), MAP_OBJ_FLAG_CLIP)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 0, STRING("S_hgm_05a"), MAP_OBJ_FLAG_CLIP)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 0, STRING("S_hgm_08a"), MAP_OBJ_FLAG_CLIP)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 0, STRING("S_hgm_19a"), MAP_OBJ_FLAG_CLIP)
     SPAWN_EVENT(PTR(haguruma_evt))
     CALL(evt_map_playanim, STRING("kusari"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_hit_bind_mapobj, STRING("A_move_dai"), STRING("S_move_dai"))
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_move_dai"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_move_dai"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_hitobj_onoff, STRING("A_move_dai"), 0, 0)
     CALL(evt_mobj_switch_red, 0, STRING("dai_switch"), 100, -409, -10, PTR(dai_evt), 0)
     CALL(evt_mobj_itembox, STRING("mobj_box00"), -660, -500, 100, MOBJ_ITEMBOX_NORMAL, 0, PTR(mobj_box00), GSWF_LAS_22_SHOOTING_STAR_CHEST)

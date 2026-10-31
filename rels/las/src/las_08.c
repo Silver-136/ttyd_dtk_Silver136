@@ -182,7 +182,7 @@ static BeroEntry bero_entry_data[] = {
         "w_bero_1", // hitName
         1, // type
         6, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -200,7 +200,7 @@ static BeroEntry bero_entry_data[] = {
         "e_bero_1", // hitName
         1, // type
         6, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -218,7 +218,7 @@ static BeroEntry bero_entry_data[] = {
         "w_bero_2", // hitName
         1, // type
         6, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -236,7 +236,7 @@ static BeroEntry bero_entry_data[] = {
         "e_bero_2", // hitName
         1, // type
         6, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -259,7 +259,7 @@ BeroEntry e_bero_1_matigai[] = {
         "e_bero_1", // hitName
         1, // type
         6, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -281,7 +281,7 @@ BeroEntry e_bero_1_seikai[] = {
         "e_bero_1", // hitName
         1, // type
         6, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -303,7 +303,7 @@ BeroEntry e_bero_2_seikai[] = {
         "e_bero_2", // hitName
         1, // type
         6, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -372,7 +372,7 @@ EVT_BEGIN(taimatu_evt)
     SET_INT_READ_ADDR(PTR(&taimatu_data))
     LOOP(8)
         READ_INT2(LW(0), LW(1))
-        CALL(evt_mapobj_flag_onoff, 0, 1, LW(0), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 1, LW(0), MAP_OBJ_FLAG_HIDDEN)
     END_LOOP
     SPAWN_EVENT(PTR(hikari_anim))
     RETURN

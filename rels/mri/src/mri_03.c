@@ -2,6 +2,8 @@
 // the Puni Elder and the Punies, the Elder's rescue and the Punies joining Mario.
 
 #include "mri_puni.h"
+#include "driver/animdrv.h"
+#include "driver/fadedrv.h"
 #include "evt/evt_window.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
@@ -161,7 +163,7 @@ EVT_END()
  * scripted scenes).
  */
 EVT_BEGIN(jail_alpha)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S"), MAP_OBJ_FLAG_NO_MAP_BLEND)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S"), MAP_OBJ_FLAG_NO_MAP_BLEND)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_hako_l_saku"), MAP_OBJ_FLAG_NO_MAP_BLEND)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_hako_l_doa"), MAP_OBJ_FLAG_NO_MAP_BLEND)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_hako_l_01"), MAP_OBJ_FLAG_NO_MAP_BLEND)
@@ -234,7 +236,7 @@ EVT_END()
  */
 EVT_BEGIN(after_2hours)
     CALL(evt_map_blend_off, 0)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S"), MAP_OBJ_FLAG_NO_MAP_BLEND)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S"), MAP_OBJ_FLAG_NO_MAP_BLEND)
     CALL(evt_map_blend_set_flag, 0, STRING("mario"), 2048)
     CALL(evt_map_blend_set_flag, 0, STRING("party"), 2048)
     CALL(evt_map_blend_set_flag, 0, STRING("プニ族長老"), 2048)
@@ -277,7 +279,7 @@ EVT_BEGIN(elder_rescue)
     CALL(evt_npc_flag_onoff, 1, STRING("ガイド"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_npc_flag_onoff, 1, STRING("ガイド"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     CALL_CHILD(PTR(mri_guide_goryu))
-    CALL(evt_puni_set_mode, 1, 30)
+    CALL(evt_puni_set_mode, 1, PUNI_MODE_INERT)
     CALL(evt_puni_get_position, 1, LW(0), LW(1), LW(2))
     CALL(evt_puni_set_position, 1, 0, -1000, 0)
     CALL(evt_npc_set_position, STRING("ガイド"), LW(0), LW(1), LW(2))
@@ -457,7 +459,7 @@ EVT_BEGIN(elder_rescue)
     CALL(evt_npc_get_position, STRING("ガイド"), LW(0), LW(1), LW(2))
     CALL(evt_npc_set_position, STRING("ガイド"), 0, -1000, 0)
     CALL(evt_puni_set_position, 1, LW(0), LW(1), LW(2))
-    CALL(evt_puni_set_mode, 1, 1)
+    CALL(evt_puni_set_mode, 1, PUNI_MODE_JOIN)
     SET_VALUE(GF(2), 0)
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
     WAIT_MS(500)
@@ -627,7 +629,7 @@ static BeroEntry bero_entry_data[] = {
         "dokan", // hitName
         2, // type
         0, // sfxId
-        9, // directionId
+        BERO_DIR_DOWN, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -643,7 +645,7 @@ static BeroEntry bero_entry_data[] = {
     {
         "w_bero", // hitName
         0, 0, // type..sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -864,7 +866,7 @@ EVT_END()
  * the same setup as jail_alpha but only for the cells that are still locked.
  */
 EVT_BEGIN(bluejail_alpha)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S"), MAP_OBJ_FLAG_NO_MAP_BLEND)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S"), MAP_OBJ_FLAG_NO_MAP_BLEND)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_hako_l_saku"), MAP_OBJ_FLAG_NO_MAP_BLEND)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_hako_l_doa"), MAP_OBJ_FLAG_NO_MAP_BLEND)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_hako_l_01"), MAP_OBJ_FLAG_NO_MAP_BLEND)
@@ -1176,15 +1178,15 @@ EVT_BEGIN(guide_sister)
             BREAK_LOOP
         END_IF
     END_LOOP
-    CALL(evt_puni_set_mode, 4, 14)
+    CALL(evt_puni_set_mode, 4, PUNI_MODE_STOP)
     CALL(evt_puni_set_anim, 4, 0)
     CALL(evt_puni_flag_onoff, 4, 0, PUNI_FLAG_COLLIDE)
-    CALL(evt_puni_set_mode, 3, 14)
+    CALL(evt_puni_set_mode, 3, PUNI_MODE_STOP)
     CALL(evt_puni_set_anim, 3, 0)
     CALL(evt_puni_flag_onoff, 3, 0, PUNI_FLAG_COLLIDE)
     SET_VALUE(LW(10), 5)
     LOOP(9)
-        CALL(evt_puni_set_mode, LW(10), 14)
+        CALL(evt_puni_set_mode, LW(10), PUNI_MODE_STOP)
         CALL(evt_puni_set_anim, LW(10), 0)
         CALL(evt_puni_flag_onoff, LW(10), 0, PUNI_FLAG_COLLIDE)
         ADD(LW(10), 1)
@@ -1338,7 +1340,7 @@ EVT_BEGIN(guide_sister)
     CALL(evt_puni_init_puni, 2, 1, LW(0), LW(1), LW(2), 0)
     SET_VALUE(LW(10), 1)
     LOOP(0)
-        CALL(evt_puni_set_mode, LW(10), 1)
+        CALL(evt_puni_set_mode, LW(10), PUNI_MODE_JOIN)
         CALL(evt_puni_flag_onoff, LW(10), 1, PUNI_FLAG_NOT_IN_PARTY)
         ADD(LW(10), 1)
         IF_INT_EQUAL(LW(10), 103)
@@ -1395,7 +1397,7 @@ EVT_BEGIN(toraware_elder)
         CALL(evt_puni_flag_onoff, 1, 1, 65536)
         CALL(evt_puni_set_position, 1, 240, 0, 0)
         CALL(evt_puni_move_position, 1, 240, 40, FLOAT(120.0f))
-        CALL(evt_puni_set_mode, 1, 1)
+        CALL(evt_puni_set_mode, 1, PUNI_MODE_JOIN)
     END_IF
     CALL(evt_puni_flag_onoff, 1, 0, PUNI_FLAG_SCRIPT_CONTROL)
     CALL(evt_puni_set_anim, 1, 0)
@@ -1503,7 +1505,7 @@ EVT_BEGIN(guide_sister_before)
     END_IF
     CALL(evt_puni_get_position, 1, LW(0), LW(1), LW(2))
     CALL(evt_puni_set_position, 1, 0, -1000, 0)
-    CALL(evt_puni_set_mode, 1, 30)
+    CALL(evt_puni_set_mode, 1, PUNI_MODE_INERT)
     CALL(evt_puni_flag_onoff, 1, 0, PUNI_FLAG_NOT_IN_PARTY)
     SET_VALUE(GSWF_MRI_PUNIO_WAITING_AT_JAIL, 1)
     CALL(evt_npc_set_position, STRING("ガイド"), LW(0), LW(1), LW(2))
@@ -1567,7 +1569,7 @@ EVT_BEGIN(mri_03_init_evt)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG2_MRI1"))
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG2_MRI4"))
     END_SWITCH
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_hako_r_saku"), MAP_OBJ_FLAG_CLIP)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_hako_r_saku"), MAP_OBJ_FLAG_CLIP)
     CALL(evt_mobj_kururing_floor, STRING("kururin1"), -150, 0, -200, STRING("S_yuka_oku"), 125, GSWF_STARPIECE_46)
     CALL(evt_npc_setup, PTR(npcEnt))
     CALL(evt_map_playanim, STRING("mizu_01"), MAP_ANIM_PLAY_LOOP, 0)
@@ -1579,7 +1581,7 @@ EVT_BEGIN(mri_03_init_evt)
         CASE_BETWEEN(STG2_12_RIVAL_ARRIVAL, STG2_19_01_PUNIO_PETUNI_BEFORE)
         SPAWN_EVENT(PTR(jail_init_00))
     END_SWITCH
-    CALL(evt_mobj_lock, STRING("mobj_lock00"), 16, 65, 10, -70, 0, PTR(evt_check00), PTR(evt_unlock00), GSWF_MRI_03_RED_JAIL_UNLOCKED)
+    CALL(evt_mobj_lock, STRING("mobj_lock00"), ITEM_RED_KEY, 65, 10, -70, 0, PTR(evt_check00), PTR(evt_unlock00), GSWF_MRI_03_RED_JAIL_UNLOCKED)
     IF_INT_EQUAL(GSWF_MRI_03_RED_JAIL_UNLOCKED, 1)
         IF_INT_EQUAL(GSWF_MRI_03_RED_JAIL_OPENED, 1)
             SPAWN_EVENT(PTR(evt_opendoor00))

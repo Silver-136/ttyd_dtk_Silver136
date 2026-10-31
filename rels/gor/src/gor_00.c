@@ -2,6 +2,8 @@
 // Exits to gor_01 (central plaza); also the departure for Keelhaul Key (chapter 5).
 
 #include "version.h"
+#include "driver/fadedrv.h"
+#include "evt/evt_story.h"
 #include "evt/evt_urouro.h"
 #include "evt/evt_win.h"
 #include "evt/evt_window.h"
@@ -362,8 +364,8 @@ static BeroEntry bero_entry_data[] = {
     {
         "n_bero", // hitName
         0, 0, // type..sfxId
-        20000, // directionId
-        100000, // centerPosition
+        BERO_DIR_AUTO, // directionId
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -2119,12 +2121,12 @@ EVT_END()
  * and the moving parts from the GW values.
  */
 EVT_BEGIN(ship_a_animation)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_fune_a"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_fune_a"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_a_hikinami"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_hitobj_onoff, STRING("A_fune_a"), 1, 1)
     CALL(evt_map_set_tevcallback, 1, PTR(alpha_tev))
-    CALL(evt_mapobj_flag_onoff, 0, 1, STRING("S_a_hikinami"), MAP_OBJ_TEV_CALLBACK(1))
-    CALL(evt_mapobj_flag_onoff, 0, 0, STRING("S_a_hikinami"), MAP_OBJ_FLAG_DISPLAY_LIST)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 1, STRING("S_a_hikinami"), MAP_OBJ_TEV_CALLBACK(1))
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 0, STRING("S_a_hikinami"), MAP_OBJ_FLAG_DISPLAY_LIST)
     CALL(evt_hit_bind_mapobj, STRING("A_fune_a"), STRING("S_fune_a"))
     SPAWN_EVENT_GET_ID(PTR(ship_a_kaji_animation), LW(10))
     SPAWN_EVENT_GET_ID(PTR(ship_a_wakka_animation), LW(11))
@@ -2168,12 +2170,12 @@ static EVT_BEGIN(ship_pera)
     CALL(evt_img_set_paper_anim, STRING("capture_img"), STRING("Z_1"))
     CALL(evt_img_onoff, STRING("capture_img"), 1)
     CALL(evt_snd_sfxon, STRING("SFX_OFF_SHIP_REVERSE1"), 0)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_fune_a"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_fune_a"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_a_hikinami"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_img_set_paper_anim, STRING("capture_img"), STRING("A_1"))
     CALL(evt_img_wait_animend, STRING("capture_img"))
     CALL(evt_img_onoff, STRING("capture_img"), 0)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_fune_a"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_fune_a"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_a_hikinami"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_clear_offscreen, 1, STRING("S_fune_a"))
     SET_VALUE(GW(7), 0)
@@ -2377,7 +2379,7 @@ EVT_BEGIN(enter_gorotsuki_town)
             WAIT_FRAMES(1)
         END_LOOP
         SET_VALUE(GF(10), 0)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_fune_a"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_fune_a"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_a_hikinami"), MAP_OBJ_FLAG_HIDDEN)
     END_INLINE_EVENT
     CALL(evt_mapobj_get_position, STRING("S_fune_a"), LW(0), LW(1), LW(2))
@@ -3119,7 +3121,7 @@ EVT_BEGIN(shukko_event_move_ship)
     CALL(evt_mapobj_get_position, STRING("S_fune_c"), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG4_WAVE1"), LW(0), LW(1), LW(2), LW(9))
     CALL(evt_hit_bind_mapobj, STRING("A_fune_C"), STRING("S_fune_c"))
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_c_hikinami"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_c_hikinami"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_map_set_tevcallback, 1, PTR(alpha_tev))
     CALL(evt_mapobj_flag_onoff, 0, 1, STRING("S_c_hikinami"), MAP_OBJ_TEV_CALLBACK(1))
     CALL(evt_mapobj_flag_onoff, 0, 0, STRING("S_c_hikinami"), MAP_OBJ_FLAG_DISPLAY_LIST)
@@ -4996,7 +4998,7 @@ static EVT_BEGIN(option_ship_mario)
 EVT_END()
 
 EVT_BEGIN(gor_muj_ship_init)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_fune_b"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_fune_b"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_hitobj_onoff, STRING("A_fune_b"), 1, 1)
     CALL(evt_hitobj_onoff, STRING("A_b_bero02"), 1, 0)
     CALL(evt_hit_bind_mapobj, STRING("A_fune_b"), STRING("S_fune_b"))
@@ -5023,11 +5025,11 @@ EVT_BEGIN(gor_muj_ship_pera)
     CALL(evt_img_set_paper_anim, STRING("capture_img"), STRING("Z_1"))
     CALL(evt_img_onoff, STRING("capture_img"), 1)
     CALL(evt_snd_sfxon, STRING("SFX_OFF_SHIP_REVERSE1"), 0)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_fune_b"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_fune_b"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_img_set_paper_anim, STRING("capture_img"), STRING("A_1"))
     CALL(evt_img_wait_animend, STRING("capture_img"))
     CALL(evt_img_onoff, STRING("capture_img"), 0)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_fune_b"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_fune_b"), MAP_OBJ_FLAG_HIDDEN)
     SET_VALUE(GW(15), 180)
     CALL(evt_mapobj_clear_offscreen, 1, STRING("S_fune_b"))
     CALL(evt_img_free_capture, STRING("capture_img"), 0)
@@ -5206,7 +5208,7 @@ USER_FUNC(npc_all_delete) {
  * fades in its wake and slides it 800 units out of the harbor in 10 seconds before changing to the map muj_20.
  */
 EVT_BEGIN(gor_muj_ship_start)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_c_hikinami"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_c_hikinami"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_map_set_tevcallback, 1, PTR(alpha_tev))
     CALL(evt_mapobj_flag_onoff, 0, 1, STRING("S_c_hikinami"), MAP_OBJ_TEV_CALLBACK(1))
     CALL(evt_mapobj_flag_onoff, 0, 0, STRING("S_c_hikinami"), MAP_OBJ_FLAG_DISPLAY_LIST)
@@ -5291,10 +5293,10 @@ EVT_END()
 
 EVT_BEGIN(tsumini)
     IF_INT_LESS_OR_EQUAL(GSW_STORY_PROGRESS, STG4_15_05_PEACH_X_NAUT_PHD_REPORT)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ni_03"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ni_03"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_ni_03"), 1, 0)
         ELSE
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ni_01"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ni_01"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_ni_01"), 1, 0)
     END_IF
     CALL(evt_seq_wait, SEQ_GAME)
@@ -5841,7 +5843,7 @@ static EVT_BEGIN(epilogue_evt)
             WAIT_FRAMES(1)
         END_LOOP
         SET_VALUE(GF(10), 0)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_fune_a"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_fune_a"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_a_hikinami"), MAP_OBJ_FLAG_HIDDEN)
     END_INLINE_EVENT
     CALL(evt_mapobj_get_position, STRING("S_fune_a"), LW(0), LW(1), LW(2))
@@ -5945,7 +5947,7 @@ static EVT_BEGIN(epilogue_evt2)
     WAIT_MS(3000)
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 6500)
     WAIT_MS(1000)
-    CALL(evt_fade_set_mapchange_type, 1, 10, 900, 9, 900)
+    CALL(evt_fade_set_mapchange_type, 1, FADE_OUT_BLACK, 900, FADE_IN_BLACK, 900)
     CALL(evt_bero_mapchange, STRING("aaa_00"), STRING("epilogue2"))
     RETURN
 EVT_END()
@@ -6112,7 +6114,7 @@ EVT_BEGIN(return_gorotsuki_town)
             WAIT_FRAMES(1)
         END_LOOP
         SET_VALUE(GF(10), 0)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_fune_a"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_fune_a"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_a_hikinami"), MAP_OBJ_FLAG_HIDDEN)
     END_INLINE_EVENT
     CALL(evt_mapobj_get_position, STRING("S_fune_a"), LW(0), LW(1), LW(2))
@@ -6259,15 +6261,15 @@ EVT_BEGIN(gor_00_init_evt)
 #else
     CALL_CHILD(PTR(evt_gazigazi_entry))
 #endif
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_fune_a"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_fune_a"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_a_hikinami"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_hitobj_onoff, STRING("A_fune_a"), 1, 0)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_fune_b"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_fune_b"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_hitobj_onoff, STRING("A_fune_b"), 1, 0)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_fune_c"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_c_hikinami"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_fune_c"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_c_hikinami"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_hitobj_onoff, STRING("A_fune_C"), 1, 0)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_fune_c"), MAP_OBJ_FLAG_CLIP)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_fune_c"), MAP_OBJ_FLAG_CLIP)
     CALL(evt_mobj_kururing_floor, STRING("kururin1"), 110, 15, -440, STRING("S_ground"), 125, GSWF_STARPIECE_01)
     CALL(evt_mobj_itembox, STRING("mobj_box00"), -500, 15, -200, MOBJ_ITEMBOX_NORMAL, 0, PTR(mobj_box00), GSWF_GOR_00_HP_DRAIN_CHEST)
     CALL(evt_item_entry, STRING("item_00"), ITEM_STAR_PIECE, -390, 15, -65, ITEM_TYPE_STILL, GSWF_STARPIECE_00, 0)
@@ -6321,7 +6323,7 @@ EVT_BEGIN(gor_00_init_evt)
         CALL(evt_npc_set_ry, STRING("houki"), 90)
         SPAWN_EVENT(PTR(gor_00_koopa_evt))
         CASE_BETWEEN(STG3_34_RETURN_TO_ROGUEPORT, STG4_END_OFF_TO_THE_KEYS)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_fune_c"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_fune_c"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_fune_C"), 1, 1)
         CASE_EQUAL(STG8_END_AFTER_THE_BATTLE)
         CALL(evt_mario_kill_party, 0)

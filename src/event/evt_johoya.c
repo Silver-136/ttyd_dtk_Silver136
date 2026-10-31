@@ -153,7 +153,7 @@ USER_FUNC(johoya_keti_newjoho_makelabel) {
 USER_FUNC(johoya_keti_newjoho_setreadflag) {
     s32 cur = _jdt.curIndex;
     johoya_set(_jdt.readFlags.ketiRead, _jdt.info[cur].storyId, 1);
-    _jdt.info[cur].flags |= 1;
+    _jdt.info[cur].flags |= INFORMANT_FLAG_HEARD;
     return EVT_RETURN_DONE;
 }
 
@@ -166,7 +166,7 @@ USER_FUNC(johoya_keti_oldspeak_check) {
     s32 i;
 
     for (i = 0; i < wp->count; i++) {
-        if (johoya_get(table, wp->info[i].storyId) != 0 && (wp->info[i].flags & 1) == 0) {
+        if (johoya_get(table, wp->info[i].storyId) != 0 && (wp->info[i].flags & INFORMANT_FLAG_HEARD) == 0) {
             count++;
         }
     }
@@ -188,7 +188,7 @@ USER_FUNC(johoya_keti_oldspeak_makelabel) {
     s32 i;
 
     for (i = 0; i < wp->count; i++) {
-        if (johoya_get(table, wp->info[i].storyId) != 0 && (wp->info[i].flags & 1) == 0) {
+        if (johoya_get(table, wp->info[i].storyId) != 0 && (wp->info[i].flags & INFORMANT_FLAG_HEARD) == 0) {
             if (target == n) {
                 sprintf(wp->infoEnd, "%s_%04d", wp->prefix, wp->info[i].storyId);
                 evtSetValue(event, args[1], (EvtWord)wp->infoEnd);
@@ -211,7 +211,7 @@ USER_FUNC(johoya_keti_oldspeak_makelabel) {
 
 /** Marks the rumour picked by the last makelabel as heard on this visit (InformantInfo flag 1). */
 USER_FUNC(johoya_keti_oldspeak_setreadflag) {
-    _jdt.info[_jdt.curIndex].flags |= 1;
+    _jdt.info[_jdt.curIndex].flags |= INFORMANT_FLAG_HEARD;
     return EVT_RETURN_DONE;
 }
 

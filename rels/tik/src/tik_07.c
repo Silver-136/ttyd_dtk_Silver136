@@ -57,7 +57,7 @@ static BeroEntry bero_entry_data[] = {
         "n_bero", // hitName
         1, // type
         1, // sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -74,7 +74,7 @@ static BeroEntry bero_entry_data[] = {
     {
         "e_bero", // hitName
         0, 0, // type..sfxId
-        20000, // directionId
+        BERO_DIR_AUTO, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -91,7 +91,7 @@ static BeroEntry bero_entry_data[] = {
         "dokan__1", // hitName
         2, // type
         0, // sfxId
-        9, // directionId
+        BERO_DIR_DOWN, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -108,7 +108,7 @@ static BeroEntry bero_entry_data[] = {
         "dokan_2", // hitName
         2, // type
         0, // sfxId
-        9, // directionId
+        BERO_DIR_DOWN, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -125,7 +125,7 @@ static BeroEntry bero_entry_data[] = {
         "dokan_3", // hitName
         2, // type
         0, // sfxId
-        9, // directionId
+        BERO_DIR_DOWN, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -141,7 +141,7 @@ static BeroEntry bero_entry_data[] = {
         "dokan_4", // hitName
         2, // type
         0, // sfxId
-        2, // directionId
+        BERO_DIR_E, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -158,7 +158,7 @@ static BeroEntry bero_entry_data[] = {
         "dokan_5", // hitName
         4098, // type
         0, // sfxId
-        9, // directionId
+        BERO_DIR_DOWN, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -182,7 +182,7 @@ static BeroEntry bero_entry_data2[] = {
         "dokan__1", // hitName
         2, // type
         0, // sfxId
-        9, // directionId
+        BERO_DIR_DOWN, // directionId
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
@@ -280,7 +280,7 @@ static EVT_BEGIN(peach_mail)
 EVT_END()
 
 static EVT_BEGIN(evt_block)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("s_hikari"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("s_hikari"), MAP_OBJ_FLAG_HIDDEN)
     RETURN
 EVT_END()
 
@@ -310,7 +310,7 @@ EVT_BEGIN(tik_07_init_evt)
     CALL(evt_mobj_save_blk, STRING("mobj_save"), 475, 60, 125, 0, 0)
     CALL(evt_mobj_lv_blk, STRING("mobj_blk01"), -300, 100, -50, PTR(evt_block), GSWF_TIK_07_LV2_BIG_BLOCK_BROKEN, STRING("MOBJ_Lv2BigBlock"))
     IF_INT_EQUAL(GSWF_TIK_07_LV2_BIG_BLOCK_BROKEN, 0)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("s_hikari"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("s_hikari"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     CALL(evt_mobj_itembox, STRING("mobj_box00"), -550, 0, 100, MOBJ_ITEMBOX_NORMAL, 0, PTR(mobj_box00), GSWF_TIK_07_FLOWER_SAVER_P_CHEST)
     CALL(evt_mobj_powerupblk, STRING("pblk2"), -180, 160, 0, 0, GSWF_SHINE_08, 0)

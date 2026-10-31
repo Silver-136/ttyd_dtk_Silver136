@@ -55,7 +55,7 @@ const char* searchPoseTbl(PoseTableEntry* table, s32 type) {
     int i;
 
     if (!table) return NULL;
-    for (i = 0; i < 0x1C; i++, table++) { // searches at most 28 entries
+    for (i = 0; i < BTL_POSE_NORMAL; i++, table++) { // searches at most 28 entries
         if (table->poseType == type || table->poseType == POSE_TYPE_NORMAL) {
             return table->poseName;
         }
@@ -281,7 +281,7 @@ void btlDispInit(void) {
 
     battleCameraInit();
     battleMenuDispInit();
-    wp->dispFlags |= 2;
+    wp->dispFlags |= BATTLE_DISP_FLAG_STAR_POINTS;
 }
 
 StatusEffectType _GetStatusPoseType(BattleUnit* unit) {
@@ -333,7 +333,7 @@ void btlDispMain(void) {
     s8 turns;
     s8 strength;
 
-    for (i = 0; i < 0x40; i++) {
+    for (i = 0; i < BATTLE_UNIT_MAX; i++) {
         unit = BattleGetUnitPtr(_battleWorkPointer, i);
         if (!unit) continue;
         if (unit->currentKind == UNIT_SHELL_SHIELD && unit->work[SHELL_SHIELD_WORK_FOLLOW] != 0) {
@@ -1324,7 +1324,7 @@ void BattleStockExpDisp(void) {
             wp->stockExpDisp++;
         }
     }
-    if (wp->dispFlags & 2) {
+    if (wp->dispFlags & BATTLE_DISP_FLAG_STAR_POINTS) {
         dispEntry(CAMERA_2D, 901.0f, 1, _btlStockExpDisp, NULL);
     }
 }

@@ -185,8 +185,8 @@ static BeroEntry bero_entry_data[] = {
         "w_bero", // hitName
         1, // type
         2, // sfxId
-        20000, // directionId
-        100000, // centerPosition
+        BERO_DIR_AUTO, // directionId
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         bero_custom, // enterEvent
@@ -383,7 +383,7 @@ static EVT_BEGIN(starstone_fuwafuwa)
 EVT_END()
 
 static EVT_BEGIN(korutesu_event)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S"), MAP_OBJ_FLAG_CLIP)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S"), MAP_OBJ_FLAG_CLIP)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_npc_set_position, STRING("コルテス"), 46, 35, 25)
     CALL(evt_npc_flag_onoff, 1, STRING("コルテス"), NPC_FLAG_NO_HIT | NPC_FLAG_TALK_POSE | NPC_FLAG_NO_VIEW_CORRECTION | NPC_FLAG_NO_WALL_COLLISION)
@@ -556,7 +556,7 @@ EVT_BEGIN(korutesu_event_after)
     CALL(evt_npc_pera_onoff, STRING("コルテス"), 0)
     CALL(evt_cam3d_evt_set, -20, 125, 505, -20, 80, 7, 0, EASING_SINE_IN_OUT)
     CALL(evt_seq_wait, SEQ_GAME)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_kabe_r"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_kabe_r"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_fade_end_wait)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, 70, 800)
     LOOP(0)

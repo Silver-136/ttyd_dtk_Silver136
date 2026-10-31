@@ -147,7 +147,7 @@ s32 battleAcMain_Repeatedly(BattleWork* work) {
         case 99:
             break;
         case 100:
-            if (!((work->actionCommands.setupFlags & 1) &&
+            if (!((work->actionCommands.setupFlags & AC_SETUP_FLAG_CONFUSED_AUTO) &&
                   (work->actionCommands.mAcUnit->mTokenFlags & kConfusedAction))) {
                 if (r->holdMask) {
                     if (!BattlePadCheckNow(r->holdMask)) {
