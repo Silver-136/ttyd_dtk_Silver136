@@ -1,0 +1,2 @@
+/* Precompiled header of the demo's main.dol units that use the MSL math headers without the dtrigf constants. */
+#include <math.h>

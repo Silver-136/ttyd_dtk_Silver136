@@ -1,0 +1,21 @@
+Sections:
+	.text       type:code align:4
+	.ctors      type:rodata align:4
+	.dtors      type:rodata align:4
+	.rodata     type:rodata align:8
+	.data       type:data align:8
+	.bss        type:bss align:8
+
+end.c:
+	.data       start:0x00000000 end:0x00000060
+
+end_00.c:
+	.text       start:0x00000000 end:0x00001620
+	.rodata     start:0x00000000 end:0x00000AFC
+	.data       start:0x00000060 end:0x00001748
+	.bss        start:0x00000000 end:0x00000034
+
+end_module.c:
+	.text       start:0x00001620 end:0x000016D4
+	.rodata     start:0x00000B00 end:0x00000B07
+	.data       start:0x00001748 end:0x00001798

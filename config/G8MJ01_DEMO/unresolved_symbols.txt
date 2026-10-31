@@ -1,0 +1,5 @@
+# References the original linker left unresolved in this version's tst.rel: the field holds 0 and the REL has no
+# relocation for it. The build drops our PLF's relocations against these symbols before `dtk rel make`
+# (tools/drop_relocations.py), which reproduces that.
+# This version's evt_init.c has no tst_nakayama_init_evt, but tst.c still registers it with relSetEvtAddr.
+tst_nakayama_init_evt

@@ -1,0 +1,650 @@
+name: MarioSt
+object: sys/main.dol
+hash: bf85263b466d2e31a65154d858d3f076fdb40058
+object_base: orig/G8ME01_DEMO
+symbols: config/G8ME01_DEMO/symbols.txt
+splits: config/G8ME01_DEMO/splits.txt
+mw_comment_version: 10
+force_active:
+# Unreferenced in the demo dol and its six RELs, but kept by the original link (the full game's RELs use them)
+# exi/EXIBios.c
+- EXIGetType
+# event/evt_movefloor.c
+- evt_moving_floor_delete
+- moving_floor_halt_se
+- moving_floor_stop_se
+- moving_floor_set_se
+- moving_floor_reverse
+- moving_floor_getf_xz_scale
+- moving_floor_get_stmsec
+- moving_floor_getf_now_bpoint
+- moving_floor_getf_pos
+- moving_floor_get_mode
+- moving_floor_get_kind
+- moving_floor_get_end
+- evt_moving_floor_main2
+- evt_moving_floor_main
+- evt_moving_floor_init
+- evt_moving_floor_free
+- evt_moving_floor_alloc
+- moving_floor_bero_check
+- moving_floor
+- ridedown_floor
+# event/evt_fade.c
+- evt_fade_softfocus_onoff
+- evt_fade_tec_onoff
+# event/evt_light.c
+- evt_light_bind_mapobj
+# event/evt_map.c
+- evt_map_replace_mapobj
+- evt_map_set_playrate
+# event/evt_msg.c
+- evt_msg_pri
+- evt_msg_print_party_add
+# event/evt_party.c
+- evt_party_cloud_breathout
+- evt_party_nokotaro_get_status
+- evt_party_yoshi_fly
+- evt_party_vivian_unhold
+- evt_party_vivian_hold
+- evt_party_thunders_use
+- evt_party_get_status
+- evt_party_move_behind_mario
+- evt_party_wait_landon
+- evt_party_set_dir_pos
+- evt_party_outofscreen
+- evt_party_force_reset_outofscreen
+# event/evt_pouch.c
+- evt_pouch_set_yoshiname
+- evt_pouch_majinai_set
+- evt_pouch_get_equipbadgecnt
+- evt_pouch_get_havebadgecnt
+- evt_pouch_party_left
+- evt_pouch_set_ap
+- evt_pouch_get_max_ap
+- evt_pouch_add_starpiece
+- evt_pouch_get_starpiece
+- evt_pouch_set_supercoin
+- evt_pouch_get_supercoin
+- evt_pouch_set_coin
+# event/evt_cloud.c
+- evt_cloud_get_mode
+- evt_cloud_set_cap_size
+# event/evt_badgeshop.c
+- evt_badgeShop_getBargainKind
+- evt_badgeShop_bteresa_get_kind_cnt
+- evt_badgeShop_bottakuru_get_kind_cnt
+- evt_badgeShop_starmaniac_get_kind_cnt
+- evt_badgeShop_throw_get_kind_cnt
+- evt_badgeShop_bottakuru_dec
+- evt_badgeShop_starmaniac_dec
+- evt_badgeShop_special_dec
+- evt_badgeShop_throw_dec
+- evt_badgeShop_throw_inc
+- badgeShop_getBargainTable
+- badgeShop_bteresaGeneration
+# event/evt_johoya.c
+- search_evt_moji
+- johoya_data_make
+- johoya_luigi_newjoho_setreadflag
+- johoya_perfect_newjoho_setreadflag
+- johoya_keti_oldspeak_setreadflag
+- johoya_keti_oldspeak_makelabel
+- johoya_keti_oldspeak_check
+- johoya_keti_newjoho_setreadflag
+- johoya_keti_newjoho_makelabel
+- johoya_keti_newjoho_check
+- johoya_data_free
+- johoya_data_alloc
+# event/evt_win.c (only the full game's RELs call these)
+- unitwin_setmariolevel
+- unitwin_setpartylank
+- unitwin_getpartylank
+- unitwin_get_work_ptr
+- set_new_goods_list
+- evt_unitwin_disp_func
+- evt_unitwin_main_func
+- unitwin_window_select_func
+- unitwincoin_wait
+- unitwincoin_disp_onoff
+- select_func
+- evt_unitwin_selltable_setup
+- evt_unitwin_free
+- evt_unitwin_alloc
+- party_name_table_rtn
+- iconid_conv
+# event/evt_window.c
+- evt_win_nameent_off
+- evt_win_nameent_name
+- evt_win_nameent_wait
+- evt_win_nameent_on
+- evt_win_other_select
+# event/evt_npc.c
+- evt_npc_majo_disp_off
+- evt_npc_majo_disp_on
+- evt_npc_get_battle_rule_keep_result
+- evt_npc_set_battle_rule
+- evt_npc_set_offscreen
+- evt_npc_stop_for_one_event
+- evt_npc_reaction_flag_onoff
+- evt_npc_flag_check
+- evt_npc_set_force_regl_anim
+- evt_npc_clear_paper
+- evt_npc_set_home_position
+- evt_npc_get_scale
+- evt_npc_get_ReactionOfLivingBody
+# event/evt_sub.c
+- evt_sub_status_gauge_check_update
+- evt_sub_status_gauge_force_close
+- evt_sub_status_gauge_force_open
+- evt_key_get_button
+- evt_key_get_dir
+- evt_sub_system_flag_onoff
+- evt_sub_get_dist
+- evt_sub_spline_free
+- evt_sub_spline_get_value_manual
+# event/evt_bero.c
+- evt_bero_id_filter
+# event/evt_door.c
+- evt_door_end_wait
+- evt_door_set_param
+- evt_door_data_copy
+- snd_door_out
+- snd_door_in
+- npc_hide_onoff
+- evt_door_load_mapflag
+- evt_door_save_mapflag
+- evt_door_param
+- door_dark_flag
+- door_dark_flag_sub
+- door_position_sub
+- door_open_se
+- door_close_se
+- door_down_se
+- house_open_se
+- house_close_se
+- door_dark
+- door_dark2
+- door_light
+- door_light2
+- evt_door_open
+- evt_door_open_bom_01
+- evt_door_open_roll
+- evt_door_close
+- evt_door_close_roll
+- evt_door_open_quick
+- evt_door_entry
+- door_up_se
+# event/evt_shop.c
+- lbl_80338390
+# event/evt_mobj.c
+- evt_mobj_breaking_rock
+- mobj_breaking_rock
+- evt_mobj_trap_floor
+- mobj_trap_floor
+- evt_mobj_blk
+- mobj_blk
+- evt_mobj_arrow
+- mobj_arrow
+- evt_mobj_signboard
+- mobj_signboard
+- evt_mobj_lock_unlock
+- evt_mobj_rideswitch_green
+- mobj_rideswitch_green
+- evt_mobj_rideswitch_orange
+- mobj_rideswitch_orange
+- evt_mobj_tornadoswitch_red
+- evt_mobj_floatswitch_red
+- evt_mobj_tornadoswitch_blue
+- evt_mobj_set_z_position
+- evt_mobj_set_x_position
+- evt_mobj_check
+- lbl_80309CE8
+- lbl_80309CF8
+- lbl_80309D08
+- lbl_80309D18
+# event/evt_mario.c
+- evt_mario_paper_plane
+- evt_mario_get_name_hitobj_push
+- evt_mario_get_name_hitobj_front
+- evt_mario_get_name_hitobj_under
+- evt_mario_dump_item
+- evt_mario_check_key_item
+- evt_mario_push
+- evt_mario_hello_exparty_pos
+- evt_mario_chk_join_party
+- evt_peach_set_condition
+- evt_peach_transform_gundan_off
+- evt_peach_transform_gundan_on
+- evt_koopa_weary
+- evt_koopa_fire
+- evt_mario_check_landon
+- evt_mario_cancel_roll_motion
+- evt_mario_chk_hipbump
+- evt_mario_set_reardir
+- evt_mario_cam_keep_off
+- evt_mario_cam_keep_on
+- evt_mario_balloon_tenten
+# event/evt_nannpc.c
+- evt_nannpcwork_flag_onoff
+- evt_nannpc_set_color
+- evt_nannpc_set_shadow_position
+- evt_nannpc_set_func
+- evt_nannpc_ppflag_onoff
+- evt_nannpc_flag_onoff
+- evt_nannpc_jump_position
+- evt_nannpc_move_position2
+- evt_nannpc_get_work
+- evt_nannpc_set_work
+- evt_nannpc_set_dir
+- evt_nannpc_set_animtbl
+- evt_nannpc_set_animtbl_sub
+- evt_nannpc_set_size
+- evt_nannpc_set_hosei_position
+- evt_nannpc_get_position
+- evt_nannpc_set_position
+- evt_nannpc_entry
+- evt_nannpc_set_subfunc
+- evt_nannpc_init
+- nannpc_ext_dispent
+- nannpc_ext_main
+- nannpc_ext_main_sub_fast
+- nannpc_ext_main_sub
+- nannpc_ext_init
+- nannpc_ext_shadow_disp
+- nannpc_ext_disp
+- nannpc_zcompare
+- nanNPCOption
+- mt$544
+# event/evt_yuugijou.c
+- yuugijou_set_yupflag
+- yuugijou_get_takeoutflag
+- yuugijou_montemedal_return
+- yuugijou_montemedal_keep
+- yuugijou_montemedal_wait
+- yuugijou_montemedal_disp_onoff
+- yuugijou_add_montemedal_moto
+- yuugijou_get_montemedal_keep
+- yuugijou_get_montemedal
+- yuugijou_add_montemedal
+- monteCountDisp
+# event/evt_lottery.c
+- evt_lottery_error_check
+- evt_lottery_todaynum
+- evt_lottery_flag
+- evt_lottery_buy
+- evt_lottery
+# sequence/seq_demo.c (demo only: THP player for the attract movie)
+- THPSimpleSetVolume
+- THPSimpleGetTotalFrame
+- THPSimpleDrawCurrentFrame
+- THPSimpleLoadStop
+- THPSimpleAudioStop
+- THPSimpleAudioStart
+- THPSimplePreLoad
+- THPSimpleCalcNeedMemory
+- THPSimpleClose
+- THPSimpleQuit
+- THPSimpleInit
+- bgTransOffsetOn
+- bgTransOffsetOff
+- bgAutoScrollOn
+- bgAutoScrollOff
+- bgSetScrlOffset
+- bgReEntry
+- evt_set_case_wrk
+- evt_img_set_color
+- evt_offscreen_set_texture_fmt
+- evt_hitobj_name_callback
+- name_callback_sub
+- evt_cam_letter_box_camid
+- evt_cam_letter_box_wait
+- evt_cam3d_evt_set_now
+- evt_cam3d_road_shift_onoff
+- evt_cam3d_evt_set_rel_dir
+- evt_item_set_alpha
+- evt_item_set_bound_next_dir
+- evt_item_set_bound_next_speed
+- evt_item_change_mode
+- evt_item_set_bound_limit
+- evt_item_set_bound_rate
+- evt_item_set_gravity
+- evt_item_set_jump_power
+- evt_item_set_move_dir_speed
+- evt_item_status_on
+- evt_ext_reset
+- evt_bg_set_scrl_offset
+- evt_bg_auto_scroll_onoff
+- evt_audience_jump_position_gravity
+- evt_audience_move_position_frame
+- weaponGetPowerFromGulliblePartyAttackLv
+- weaponGetFPPowerDefault
+- effRippleSetRxRz
+- effRippleN64SetRxRz
+- uranaisi_ryokin
+- uranaisi_ryokin_rtn
+- uranaisi_data_make_supercoin
+- uranaisi_data_make_starpiece
+- uranaisi_data_make_next
+- uranaisi_supercoin_setreadflag
+- uranaisi_supercoin_makelabel
+- uranaisi_supercoin_check
+- uranaisi_starpiece_setreadflag
+- uranaisi_starpiece_makelabel
+- uranaisi_starpiece_check
+- uranaisi_next_makelabel
+- uranaisi_next_check
+- uranaisi_table_clear
+- uranaisi_data_free
+- uranaisi_data_alloc
+- effSetPeachFukiBatu
+- effPeachFukidashiDisp
+- effPeachFukidashiMain
+- effPeachFukidashiEntry
+- effSpiritDisp
+- effSpiritMain
+- effSpiritEntry
+# Runtime runtime.c __setjmp and longjmp: unreferenced in the demo dol but kept by the original link
+- __setjmp
+- longjmp
+# unit_mario.c faker_mario_makkuro_set: unreferenced in the demo dol but kept by the original link
+- faker_mario_makkuro_set
+# battle_database_common.c drop tables: used only by RELs that are not on the demo disc, kept by the original link
+- battle_item_gundan_zako_magician
+- battle_item_gundan_zako_elite
+- battle_item_hinnya
+- battle_item_hannya
+- battle_item_hennya
+- battle_item_hyper_kuriboo
+- battle_item_hyper_togekuri
+- battle_item_hyper_patakuri
+- battle_item_yami_kuriboo
+- battle_item_yami_togekuri
+- battle_item_yami_patakuri
+- battle_item_yami_noko
+- battle_item_ura_noko
+- battle_item_ura_pata
+- battle_item_togenoko
+- battle_item_togenoko_ace
+- battle_item_hammer_bros
+- battle_item_met
+- battle_item_togemet
+- battle_item_patamet
+- battle_item_patatogemet
+- battle_item_hyper_togemet
+- battle_item_jyugem
+- battle_item_hyper_jyugem
+- battle_item_togezo
+- battle_item_kamec
+- battle_item_green_chorobon
+- battle_item_flower_chorobon
+- battle_item_karon
+- battle_item_monochrome_kurokumorn
+- battle_item_kurokumorn
+- battle_item_bllizard
+- battle_item_dokugassun
+- battle_item_pakkun_flower
+- battle_item_NONE
+- battle_item_nokonoko_fighter
+- battle_item_patapata_fighter
+- battle_item_boomerang_bros
+- battle_item_fire_bros
+- battle_item_red_honenoko
+- battle_item_poison_pakkun
+- battle_item_ice_pakkun
+- battle_item_churantalar
+- battle_item_sinemon
+- battle_item_hyper_sinnosuke
+- battle_item_hyper_sinemon
+- battle_item_basabasa
+- battle_item_basabasa_chururu
+- battle_item_basabasa_green
+- battle_item_teresa
+- battle_item_purple_teresa
+- battle_item_sambo
+- battle_item_sambo_mummy
+- battle_item_killer_cannon
+- battle_item_super_killer_cannon
+- battle_item_bomhei
+- battle_item_heavy_bom
+- battle_item_giant_bomb
+- battle_item_borodo
+- battle_item_badge_borodo
+- battle_item_mahorn
+- battle_item_super_mahorn
+- battle_item_mahorn_custom
+- battle_item_wanwan
+- battle_item_burst_wanwan
+- battle_item_bubble
+- battle_item_hermos
+- battle_item_phantom
+- battle_item_pansy
+- battle_item_twinkling_pansy
+- battle_item_dark_keeper
+- battle_item_yamitogedaruma
+- battle_heart_drop_param_default2
+- battle_heart_drop_param_default3
+- battle_heart_drop_param_default4
+- battle_heart_drop_param_default5
+- battle_flower_drop_param_default3
+- battle_flower_drop_param_default4
+- battle_flower_drop_param_default5
+# mot_roll: kept in the demo, unreferenced
+- marioRollFixOn
+- partySetFamicomMode
+# battle_database_common: one-entry drop tables in .sdata, used only by RELs or unused
+- battle_item_barriern_z
+- battle_item_barriern_custom
+- battle_item_iron_sinemon
+- battle_item_iron_sinemon2
+- battle_item_atmic_teresa
+- battle_item_killer
+- battle_item_super_killer
+- battle_item_borodo_king
+- battle_item_monban
+- battle_item_vivian1
+- battle_item_gesso
+- battle_item_moamoa
+- battle_item_rampell
+- battle_item_faker_mario
+- battle_item_cortez
+- battle_item_kurikuri
+- battle_item_macho_gance
+- battle_item_champion
+- battle_item_kanbu1
+- battle_item_zonbaba
+- battle_item_default_param_list
+# battle_database_common: the tst.rel test-battle drop tables (empty), kept by the original link
+- battle_item_kinoko
+- battle_item_funyafunya_kun
+- battle_item_pow_block
+- battle_item_dekadeka_drink
+- battle_item_kirakira_otoshi
+- battle_item_koorino_ibuki
+- battle_item_fire_flower
+- battle_item_yurayura_jishin
+- battle_item_suitooru
+- battle_item_sinabita_kinoko
+# cam_road.c: unreferenced in the demo dol (their callers are in RELs not on the demo disc) but kept by the original link
+- camRoadCurveOff
+- camRoadCurveOn
+- camRoadGetWorkPtr
+# animdrv.c: unreferenced in the demo dol but kept by the original link
+- animPoseGetGroupName
+- animPosePaperPeraOff
+# statuswindow.c: unreferenced in the demo dol but kept by the original link
+- statusAPBlink
+# npc_event.c: unreferenced in the demo dol but kept by the original link
+- enemy_event_dead_event
+- testnpc_move_event
+- npc_urouro_return_event
+# Kept by the original link but unreferenced in the demo: the RELs that call them are not on the demo disc
+- effKemuTestSetRxRz
+- effStardust2N64SetDrawCam
+- effStarStoneDraw
+- effMahorn2Entry
+# unit_party_chuchurina partyWeapon_ChuchurinaKiss+0x7C holds the flag word 0x80003500, not a pointer
+# mario_motion.c marioChgRollMotion: inlined into its only caller, unreferenced in the demo dol but kept by the original link
+- marioChgRollMotion
+# win_main.c winLectureOn / winLectureCheck: no caller in the demo dol, kept by the original link
+- winLectureOn
+- winLectureCheck
+# Unreferenced in the demo (no REL uses them), kept when their units are linked from C
+- subsetevt_dead_core_nospin_norotate
+- subsetevt_nodamage_motion
+- BattleAudienceJoySACLecture
+- BattleAudience_GetRotate
+- btlevtcmd_BtlIconJumpPosition
+- btlevtcmd_BtlIconSetFallAccel
+- btlevtcmd_BtlIconEntry
+- tou_gamen_screen_tev_init
+- btlevtcmd_UFOAction
+- btlevtcmd_UFODamageOn
+- btlevtcmd_UFOEscapeOn
+- btlevtcmd_SetCounterAcCallBack
+- btlevtcmd_PadCheckTrigger
+- btlevtcmd_EnemyItemUseCheck
+- btlevtcmd_snd_se_offset
+- btlevtcmd_CheckUnitFlag
+- btlevtcmd_SetStayPoseType
+- btlevtcmd_SetTalkPoseType
+- btlevtcmd_SetTalkBodyId
+- btlevtcmd_AnimeWaitPlayLoopTiming
+- btlevtcmd_AnimeChangePoseDirect
+- btlevtcmd_AnimeChangeGroup
+- btlevtcmd_GetResultACDefence
+- btlevtcmd_AcGetParam
+- btlevtcmd_AcSetParam
+- btlevtcmd_GetDataFromDataTable
+- btlevtcmd_SetEventCeilFall
+- btlevtcmd_SetEventUnisonPhase
+- btlevtcmd_PreCheckCounter
+- btlevtcmd_PartsFaceDirectionSub
+- btlevtcmd_SetJumpSpeed
+- btlevtcmd_ChangeDataTable
+- btlevtcmd_SetPartsDefenceAttrTable
+- btlevtcmd_ChangeKind
+- btlevtcmd_SetRegistStatus
+- btlevtcmd_OffPartsCounterAttribute
+- btlevtcmd_OnPartsCounterAttribute
+- btlevtcmd_CheckPartsCounterAttribute
+- btlevtcmd_ChangePartsFaceDirection
+- btlevtcmd_CheckSpace
+- btlevtcmd_RunHitEventDirect
+- btlevtcmd_SetUnitWorkFloat
+- btlevtcmd_GetUnitWorkFloat
+- btlevtcmd_AddUnitWork
+- btlevtcmd_GetHpDamageCount
+- btlevtcmd_GetFpDamage
+- btlevtcmd_GetDamagePartsId
+- btlevtcmd_SetSwallowAttribute
+- btlevtcmd_SetSwallowParam
+- btlevtcmd_SetMaxFp
+- btlevtcmd_AddPartsScale
+- btlevtcmd_SetPartsBaseScale
+- btlevtcmd_SetPossessionItemOffset
+- btlevtcmd_SetCutHeight
+- btlevtcmd_SetCutWidth
+- btlevtcmd_SetKissHitOffset
+- btlevtcmd_SetBintaHitOffset
+- btlevtcmd_SetCutBaseOffset
+- btlevtcmd_SetPartsBaseRotate
+- btlevtcmd_SetBaseRotate
+- btlevtcmd_GetPartsRotate
+- btlevtcmd_GetHpGaugeOffset
+- btlevtcmd_SetHpGaugeOffset
+- btlevtcmd_SetStatusIconOffset
+- btlevtcmd_SetHeight
+- btlevtcmd_SetHitCursorOffset
+- btlevtcmd_SetHitOffset
+- btlevtcmd_SetPartsHomePos
+- btlevtcmd_AddHomePos
+- btlevtcmd_SetTogeOffset
+- btlevtcmd_AddPartsPos
+- btlevtcmd_AddPos
+- btlevtcmd_ReplaceParts
+- btlevtcmd_DrawLots
+- btlevtcmd_GetRandomValue
+- btlevtcmd_reset_turn
+- btlevtcmd_get_turn
+- evt_snd_envon_f
+- evt_snd_sfx_dist
+- evt_snd_sfxon_
+- evt_snd_sfxon__
+- envGlareFilterZ
+- envGlareFilter
+- JUTFont_Free
+- JUTFontSetup
+- fbatHitCheckAll
+- fbatSetAttackAnnounceEnable
+- fbatSetAttackAnnounce
+- itemFlag
+- shadowSetVolumeDecay
+- fadeWhiteOutOff
+- fadeWhiteOutOn
+# party/party_cloud.c
+- cloudGetBreathDir
+- cloudGetBreathDist
+# driver/mapdrv.c
+- mapSearchAnmObj
+# motion/mot_ship.c
+- marioShipForceStop
+- marioChkSwirlPower
+- marioSetSwirlPower
+block_relocations:
+- source: 0x8037E40C
+- source: 0x803AC4A4
+- source: 0x803AC69C
+# nameent.c hiragana_tbl[13] and katakana_tbl[13] point at the "3" string literal in .sdata2, which
+# sits exactly at _SDA_BASE_; point them at the literal instead of the base symbol (the literal has
+# its own name in symbols.txt because a relocation target must be unique by name)
+add_relocations:
+- source: 0x803AC4A4
+  type: abs
+  target: fullwidth_digit_3
+- source: 0x803AC69C
+  type: abs
+  target: fullwidth_digit_3
+extract:
+# manager/cardmgr.c
+- symbol: _mariost_icon_tex
+  header: assets/_mariost_icon_tex.inc
+- symbol: _mariost_icon_tlut
+  header: assets/_mariost_icon_tlut.inc
+- symbol: _mariost_banner_tex
+  header: assets/_mariost_banner_tex.inc
+# musyx/runtime/dsp_import.c
+- symbol: dspSlave
+  header: assets/dspSlave.inc
+  header_type: raw
+
+modules:
+- object: files/rel/gon.rel
+  hash: d0b82527cf2518dd8cdbaab61c6e106237e09943
+  symbols: config/G8ME01_DEMO/gon/symbols.txt
+  splits: config/G8ME01_DEMO/gon/splits.txt
+
+- object: files/rel/hei.rel
+  hash: 3285058881af565ef2166d0cc8e22e5bd9c5838e
+  symbols: config/G8ME01_DEMO/hei/symbols.txt
+  splits: config/G8ME01_DEMO/hei/splits.txt
+
+- object: files/rel/kpa.rel
+  hash: b0457aa6fcb9d673916dee7edabfff595e26d0f2
+  symbols: config/G8ME01_DEMO/kpa/symbols.txt
+  splits: config/G8ME01_DEMO/kpa/splits.txt
+
+- object: files/rel/mri.rel
+  hash: 868354f65137c965f5c0bce687d0bb752eadc5d9
+  symbols: config/G8ME01_DEMO/mri/symbols.txt
+  splits: config/G8ME01_DEMO/mri/splits.txt
+
+- object: files/rel/nok.rel
+  hash: 9fee0ce05499b1d7e61ce4524984dcc342155273
+  symbols: config/G8ME01_DEMO/nok/symbols.txt
+  splits: config/G8ME01_DEMO/nok/splits.txt
+
+- object: files/rel/sys.rel
+  hash: 0e5db8f9911ab3da6f21692d2628138b9c944a69
+  symbols: config/G8ME01_DEMO/sys/symbols.txt
+  splits: config/G8ME01_DEMO/sys/splits.txt

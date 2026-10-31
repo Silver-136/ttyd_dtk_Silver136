@@ -1,0 +1,203 @@
+name: MarioSt
+object: sys/main.dol
+hash: 4d2821a6801d8db3b3962d71dfa1e345fcec03e3
+object_base: orig/G8MJ01_DEMO
+symbols: config/G8MJ01_DEMO/symbols.txt
+splits: config/G8MJ01_DEMO/splits.txt
+mw_comment_version: 10
+block_relocations:
+# unit_party_chuchurina partyWeapon_ChuchurinaKiss+0x7C holds the flag word 0x80003500, not a pointer
+- source: 0x8037DFAC
+# manager/cardmgr.c _mariost_banner_tex: pixel words that look like code addresses, not pointers
+- source: 0x802C75B8
+- source: 0x802C7664
+- source: 0x802C76AC
+- source: 0x802C76E4
+- source: 0x802C76F8
+- source: 0x802C77BC
+- source: 0x802C7A28
+- source: 0x802C7A4C
+- source: 0x802C7A6C
+- source: 0x802C7AA8
+- source: 0x802C7AEC
+- source: 0x802C7B08
+# nameent.c: a pointer to the sdata2 constant @494, whose address equals _SDA_BASE_ (re-added below)
+- source: 0x803AC04C
+add_relocations:
+# nameent.c: point it at @494 itself (suffixed with its address, as the name @494 is not unique)
+- source: 0x803AC04C
+  type: abs
+  target: "@494_8041BD20"
+extract:
+# manager/cardmgr.c
+- symbol: _mariost_icon_tex
+  header: assets/_mariost_icon_tex.inc
+- symbol: _mariost_icon_tlut
+  header: assets/_mariost_icon_tlut.inc
+- symbol: _mariost_banner_tex
+  header: assets/_mariost_banner_tex.inc
+# musyx/runtime/dsp_import.c
+- symbol: dspSlave
+  header: assets/dspSlave.inc
+  header_type: raw
+
+modules:
+- object: files/rel/aaa.rel
+  hash: e18752e5821f2d9fd8a64bef2c047a73c84cada4
+  symbols: config/G8MJ01_DEMO/aaa/symbols.txt
+  splits: config/G8MJ01_DEMO/aaa/splits.txt
+
+- object: files/rel/aji.rel
+  hash: 1b4e61e72a429a38c42658edb865b7171bfd6a2e
+  symbols: config/G8MJ01_DEMO/aji/symbols.txt
+  splits: config/G8MJ01_DEMO/aji/splits.txt
+
+- object: files/rel/bom.rel
+  hash: 60a04bc550e4d6a3353ce6823f9cd56719ba0514
+  symbols: config/G8MJ01_DEMO/bom/symbols.txt
+  splits: config/G8MJ01_DEMO/bom/splits.txt
+
+- object: files/rel/dig.rel
+  hash: e8f7c0646466e15ffc49b5f8518e9cd9e099aa51
+  symbols: config/G8MJ01_DEMO/dig/symbols.txt
+  splits: config/G8MJ01_DEMO/dig/splits.txt
+
+- object: files/rel/dmo.rel
+  hash: eee7b03b368bcfd2f48581b83ed4b19653ee6abd
+  symbols: config/G8MJ01_DEMO/dmo/symbols.txt
+  splits: config/G8MJ01_DEMO/dmo/splits.txt
+
+- object: files/rel/dou.rel
+  hash: 13dcaec1bf1c2d1c53c5138ac22b51b8a231615d
+  symbols: config/G8MJ01_DEMO/dou/symbols.txt
+  splits: config/G8MJ01_DEMO/dou/splits.txt
+
+- object: files/rel/eki.rel
+  hash: bc91d216bfe0019a5ab1773c6f65a77eb64656ee
+  symbols: config/G8MJ01_DEMO/eki/symbols.txt
+  splits: config/G8MJ01_DEMO/eki/splits.txt
+
+- object: files/rel/end.rel
+  hash: d7f53357f878f97d214d53d69be5cc07f7c20ee3
+  symbols: config/G8MJ01_DEMO/end/symbols.txt
+  splits: config/G8MJ01_DEMO/end/splits.txt
+
+- object: files/rel/gon.rel
+  hash: 196caeb9f6f882338a614ea1fa04286007ff44ba
+  symbols: config/G8MJ01_DEMO/gon/symbols.txt
+  splits: config/G8MJ01_DEMO/gon/splits.txt
+
+- object: files/rel/gor.rel
+  hash: a218a82a8889c6ad47497ae133054fac3c26c7a3
+  symbols: config/G8MJ01_DEMO/gor/symbols.txt
+  splits: config/G8MJ01_DEMO/gor/splits.txt
+
+- object: files/rel/gra.rel
+  hash: 401c5a3ba18fcf5c16e0529925eb41cb2327c755
+  symbols: config/G8MJ01_DEMO/gra/symbols.txt
+  splits: config/G8MJ01_DEMO/gra/splits.txt
+
+- object: files/rel/hei.rel
+  hash: a55d8fd871f2af8532f7507d0879027ff406b913
+  symbols: config/G8MJ01_DEMO/hei/symbols.txt
+  splits: config/G8MJ01_DEMO/hei/splits.txt
+
+- object: files/rel/hom.rel
+  hash: e45a1ac84415db30f47529a046974e408346cc86
+  symbols: config/G8MJ01_DEMO/hom/symbols.txt
+  splits: config/G8MJ01_DEMO/hom/splits.txt
+
+- object: files/rel/jin.rel
+  hash: ecb0a4b2c31ad5518cb3a0b35baf1b5c8cb6ef4a
+  symbols: config/G8MJ01_DEMO/jin/symbols.txt
+  splits: config/G8MJ01_DEMO/jin/splits.txt
+
+- object: files/rel/jon.rel
+  hash: 277da7990d13b590d7cbf222b0d383d42ac292e9
+  symbols: config/G8MJ01_DEMO/jon/symbols.txt
+  splits: config/G8MJ01_DEMO/jon/splits.txt
+
+- object: files/rel/kpa.rel
+  hash: 8793346b1c7660223307fdb5533b0fe3574d9a81
+  symbols: config/G8MJ01_DEMO/kpa/symbols.txt
+  splits: config/G8MJ01_DEMO/kpa/splits.txt
+
+- object: files/rel/las.rel
+  hash: 1472c328f088b3003190f8c04d6f35d8ef095e89
+  symbols: config/G8MJ01_DEMO/las/symbols.txt
+  splits: config/G8MJ01_DEMO/las/splits.txt
+
+- object: files/rel/moo.rel
+  hash: fb36160f5fa63acc91e96c072f7738f67989d780
+  symbols: config/G8MJ01_DEMO/moo/symbols.txt
+  splits: config/G8MJ01_DEMO/moo/splits.txt
+
+- object: files/rel/mri.rel
+  hash: 2b1b97deabc607791ae1b1d77330dfbebf115ba0
+  symbols: config/G8MJ01_DEMO/mri/symbols.txt
+  splits: config/G8MJ01_DEMO/mri/splits.txt
+
+- object: files/rel/muj.rel
+  hash: cb2cee180b75a264d0ae5e5049da7cf3c61e08d9
+  symbols: config/G8MJ01_DEMO/muj/symbols.txt
+  splits: config/G8MJ01_DEMO/muj/splits.txt
+
+- object: files/rel/nok.rel
+  hash: 92fc145fabd8e71641888ee5807341b15a9b8de5
+  symbols: config/G8MJ01_DEMO/nok/symbols.txt
+  splits: config/G8MJ01_DEMO/nok/splits.txt
+
+- object: files/rel/pik.rel
+  hash: d87f9a047e12576eb3df11fac84dc373ed850bf8
+  symbols: config/G8MJ01_DEMO/pik/symbols.txt
+  splits: config/G8MJ01_DEMO/pik/splits.txt
+
+- object: files/rel/qiz.rel
+  hash: d307f4d5bf7f20936497c8e40f96a92257bb0476
+  symbols: config/G8MJ01_DEMO/qiz/symbols.txt
+  splits: config/G8MJ01_DEMO/qiz/splits.txt
+
+- object: files/rel/rsh.rel
+  hash: d0199350912f10a9b0732faf1999986cad00c545
+  symbols: config/G8MJ01_DEMO/rsh/symbols.txt
+  splits: config/G8MJ01_DEMO/rsh/splits.txt
+
+- object: files/rel/sys.rel
+  hash: 1f5b8e63347710e5fade0b2c52ed265a7ed4eab6
+  symbols: config/G8MJ01_DEMO/sys/symbols.txt
+  splits: config/G8MJ01_DEMO/sys/splits.txt
+
+- object: files/rel/tik.rel
+  hash: 67716903e30dd1840133e4cbe31cc7d1842adfda
+  symbols: config/G8MJ01_DEMO/tik/symbols.txt
+  splits: config/G8MJ01_DEMO/tik/splits.txt
+
+- object: files/rel/tou.rel
+  hash: 2c0fae7e271a1e28a00bf6ab666309c5dace32e8
+  symbols: config/G8MJ01_DEMO/tou/symbols.txt
+  splits: config/G8MJ01_DEMO/tou/splits.txt
+
+- object: files/rel/tou2.rel
+  hash: be26a50f91dbb2692653df70222b1b1d8bc7c838
+  symbols: config/G8MJ01_DEMO/tou2/symbols.txt
+  splits: config/G8MJ01_DEMO/tou2/splits.txt
+
+- object: files/rel/tst.rel
+  hash: beaed74e7a76df6c1d1529c789834c1ec4c68527
+  symbols: config/G8MJ01_DEMO/tst/symbols.txt
+  splits: config/G8MJ01_DEMO/tst/splits.txt
+
+- object: files/rel/usu.rel
+  hash: cf87cd3a8ba4b6d388723577badbe0b45f6dd5ab
+  symbols: config/G8MJ01_DEMO/usu/symbols.txt
+  splits: config/G8MJ01_DEMO/usu/splits.txt
+
+- object: files/rel/win.rel
+  hash: 30d3e8cacc980de69d75cd8d4bb470e04dff65b6
+  symbols: config/G8MJ01_DEMO/win/symbols.txt
+  splits: config/G8MJ01_DEMO/win/splits.txt
+
+- object: files/rel/yuu.rel
+  hash: 0928195ec7b5e7c88330b44c561dc58bd1fb6464
+  symbols: config/G8MJ01_DEMO/yuu/symbols.txt
+  splits: config/G8MJ01_DEMO/yuu/splits.txt

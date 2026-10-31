@@ -24,7 +24,9 @@
 #include "mot/mot_stay.h"
 #include "mot/mot_hammer.h"
 
+#if VERSION >= VERSION_JP
 double cos(float);
+#endif
 HitEntry* hitEstimate(s32* out);
 static HitEntry* hammerHitWall(f32 ang, f32* s, f32* co, f32* len, f32* hx, f32* hy, f32* hz, f32* nx, f32* ny, f32* nz);
 
