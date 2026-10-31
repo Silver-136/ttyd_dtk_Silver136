@@ -40,6 +40,7 @@
 #include "driver/seqdrv.h"
 #include "evt/evt_eff.h"
 #if VERSION >= VERSION_US
+USER_FUNC(evt_mario_get_motion);
 USER_FUNC(evt_mario_balloon_off);
 USER_FUNC(evt_mario_balloon_tenten);
 USER_FUNC(evt_mario_get_name_hitobj_front);
@@ -260,16 +261,16 @@ EvtWord burst_wangwang[69];
 EvtWord evt_match[VERSION_PICK(362, 381)];
 EvtWord evt_kurikuri_opening[442];
 EvtWord evt_kurikuri_win[231];
-EvtWord evt_kurikuri_lose[146];
+EvtWord evt_kurikuri_lose[];
 EvtWord evt_shinemon_opening[647];
 EvtWord evt_shinemon_win[199];
-EvtWord evt_shinemon_lose[84];
+EvtWord evt_shinemon_lose[];
 EvtWord evt_champ_opening[556];
 EvtWord evt_champ_opening_re[767];
 EvtWord evt_champ_win[335];
-EvtWord evt_champ_lose[124];
-EvtWord evt_default_opening[748];
-EvtWord evt_default_win[201];
+EvtWord evt_champ_lose[];
+EvtWord evt_default_opening[];
+EvtWord evt_default_win[];
 EvtWord evt_default_lose[VERSION_PICK(137, 138)];
 static EvtWord evt_champion[VERSION_PICK(365, 376)];
 EvtWord evt_champion2[VERSION_PICK(178, 189)];
@@ -287,7 +288,7 @@ EvtWord evt_kyaku_6[56];
 EvtWord evt_kyaku_7[56];
 EvtWord evt_kyaku_8[88];
 #if VERSION >= VERSION_US
-EvtWord evt_kyaku_check[105];
+EvtWord evt_kyaku_check[];
 #endif
 EvtWord tou_03_init_evt[VERSION_PICK(370, 372)];
 
@@ -2368,7 +2369,17 @@ EVT_BEGIN(evt_kurikuri_lose)
     CALL(evt_npc_set_position, LW(2), 33, 60, -83)
     CALL(evt_set_dir_to_target, LW(2), STRING(("\223G\202P")))
     CALL(evt_tou_get_fighter_info, GSW_GLITZ_PIT_OPPONENT, LW(0), LW(1))
+#if VERSION == VERSION_EU
+    IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
+        CALL(evt_msg_print_insert, 0, PTR("stg3_tou_118_61"), 0, PTR("ガンス"), LW(0))
+#else
     CALL(evt_msg_print_insert, 0, STRING(("stg3_tou_118_61")), 0, LW(2), LW(0))
+#endif
+#if VERSION == VERSION_EU
+    ELSE
+        CALL(evt_msg_print_insert, 0, PTR("stg3_tou_re_118_61"), 0, PTR("キノシコワ"), LW(0))
+    END_IF
+#endif
     WAIT_MS(300)
     CALL(evt_msg_print, 0, STRING(("stg3_tou_85")), 0, STRING(("\223G\202P")))
     RETURN
@@ -2604,7 +2615,17 @@ EVT_BEGIN(evt_shinemon_lose)
         SET_VALUE(LW(2), STRING(("\203L\203m\203V\203R\203\217")))
     END_IF
     CALL(evt_tou_get_fighter_info, GSW_GLITZ_PIT_OPPONENT, LW(0), LW(1))
+#if VERSION == VERSION_EU
+    IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
+        CALL(evt_msg_print_insert, 0, PTR("stg3_tou_118_61"), 0, PTR("ガンス"), LW(0))
+#else
     CALL(evt_msg_print_insert, 0, STRING(("stg3_tou_118_61")), 0, LW(2), LW(0))
+#endif
+#if VERSION == VERSION_EU
+    ELSE
+        CALL(evt_msg_print_insert, 0, PTR("stg3_tou_re_118_61"), 0, PTR("キノシコワ"), LW(0))
+    END_IF
+#endif
     WAIT_MS(300)
     CALL(evt_cam3d_evt_set, 60, 143, 263, 60, 95, -8, 0, EASING_LINEAR)
     WAIT_FRAMES(1)
@@ -3075,10 +3096,21 @@ EVT_BEGIN(evt_champ_lose)
     CALL(evt_tou_get_fighter_info, GSW_GLITZ_PIT_OPPONENT, LW(0), LW(1))
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
         SET_VALUE(LW(2), STRING(("\203K\203\223\203X")))
+#if VERSION == VERSION_EU
+        CALL(evt_msg_print_insert, 0, PTR("stg3_tou_118_61"), 0, PTR("ガンス"), LW(0))
+#endif
         ELSE
+#if VERSION == VERSION_EU
+        SET_VALUE(LW(2), PTR("キノシコワ"))
+        CALL(evt_msg_print_insert, 0, PTR("stg3_tou_re_118_61"), 0, PTR("キノシコワ"), LW(0))
+#else
         SET_VALUE(LW(2), STRING(("\203L\203m\203V\203R\203\217")))
     END_IF
     CALL(evt_msg_print_insert, 0, STRING(("stg3_tou_118_61")), 0, LW(2), LW(0))
+#endif
+#if VERSION == VERSION_EU
+    END_IF
+#endif
     WAIT_MS(300)
     CALL(evt_cam3d_evt_set, 40, 142, 250, 40, 96, -8, 0, EASING_LINEAR)
     WAIT_FRAMES(1)
@@ -3254,7 +3286,18 @@ EVT_BEGIN(evt_default_opening)
         CALL(evt_msg_print, 0, LW(4), 0, LW(3))
         CALL(evt_msg_print_add_insert, 0, LW(5), LW(2), LW(0))
     END_IF
+#if VERSION == VERSION_EU
+    CALL(evt_mario_get_party, LW(0))
+    IF_INT_NOT_EQUAL(LW(0), 5)
+        CALL(evt_cam3d_evt_set, -65, 143, 263, -65, 95, -8, 0, 0)
+#else
     CALL(evt_cam3d_evt_set, -65, 143, 263, -65, 95, -8, 0, EASING_LINEAR)
+#endif
+#if VERSION == VERSION_EU
+    ELSE
+        CALL(evt_cam3d_evt_set, -65, 163, 335, -65, 115, -8, 0, 0)
+    END_IF
+#endif
     WAIT_FRAMES(1)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
         CALL(evt_mario_get_party, LW(0))
@@ -3414,7 +3457,18 @@ EVT_BEGIN(evt_default_win)
     WAIT_MS(300)
     CALL(evt_mario_set_pose, STRING(("M_S_1")))
 #endif
+#if VERSION == VERSION_EU
+    CALL(evt_mario_get_party, LW(0))
+    IF_INT_NOT_EQUAL(LW(0), 5)
+        CALL(evt_cam3d_evt_set, -65, 143, 263, -65, 95, -8, 0, 0)
+#else
     CALL(evt_cam3d_evt_set, -65, 143, 263, -65, 95, -8, 0, EASING_LINEAR)
+#endif
+#if VERSION == VERSION_EU
+    ELSE
+        CALL(evt_cam3d_evt_set, -65, 163, 335, -65, 115, -8, 0, 0)
+    END_IF
+#endif
     WAIT_FRAMES(1)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
         CALL(evt_mario_get_party, LW(0))
@@ -5525,6 +5579,16 @@ EVT_BEGIN(evt_kyaku_check)
         IF_INT_NOT_EQUAL(LW(3), 0)
             SET_VALUE(LW(1), 0)
         END_IF
+#if VERSION == VERSION_EU
+        CALL(evt_mario_get_motion, LW(3))
+        SWITCH(LW(3))
+            CASE_EQUAL(0)
+            CASE_EQUAL(1)
+            CASE_EQUAL(2)
+            CASE_DEFAULT
+            SET_VALUE(LW(1), 0)
+        END_SWITCH
+#endif
         IF_INT_EQUAL(LW(1), 1)
             IF_INT_EQUAL(LW(0), 0)
                 CALL(evt_mario_balloon_tenten)

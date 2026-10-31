@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "version.h"
 #include "manager/winmgr.h"
 #include "evt/evt_cmd.h"
 #include "mario/mariost.h" // GlobalWorkFlags for evt_sub_get_system_flag / evt_sub_system_flag_onoff
@@ -40,7 +41,11 @@ extern EvtWord mail_evt_bom_01[65];
 extern EvtWord mail_evt_gor_01[61];
 extern EvtWord mail_evt_gor_01_2[93];
 extern EvtWord mail_evt_gor_02[87];
+#if VERSION == VERSION_EU
+extern EvtWord mail_evt_gor_02_2[68];
+#else
 extern EvtWord mail_evt_gor_02_2[61];
+#endif
 extern EvtWord mail_evt_gor_03[87];
 extern EvtWord mail_evt_gor_04[97];
 extern EvtWord mail_evt_hom_00[61];
@@ -83,4 +88,7 @@ USER_FUNC(stageclear_wait);
 USER_FUNC(stone_bg_open);
 USER_FUNC(stone_ry);
 USER_FUNC(evt_key_get_button);
+#if VERSION == VERSION_EU
+USER_FUNC(evt_sub_get_framerate);
+#endif
 USER_FUNC(evt_key_get_dir);

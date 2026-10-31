@@ -2297,12 +2297,20 @@ void winSortMain(WindowWork* wp) {
         wp->sortTgtX = -600.0f;
     } else if (rep & DEMO_STICK_UP) {
         psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_MOVE1 | PSND_SFX_BYPASS_MUTE));
+#if VERSION == VERSION_EU
+        wp->sortRev = 0;
+#endif
         wp->sortSel--;
         if (wp->sortSel < 0) {
             wp->sortSel = wp->sortNum - 1;
         }
     } else if (rep & DEMO_STICK_DOWN) {
+#if VERSION == VERSION_EU
+        psndSFXOn(SFX_NAME_WORD(0x20005));
+        wp->sortRev = 0;
+#else
         psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_MOVE1 | PSND_SFX_BYPASS_MUTE));
+#endif
         wp->sortSel++;
         if (wp->sortSel >= wp->sortNum) {
             wp->sortSel = 0;
@@ -2675,7 +2683,13 @@ void winRootBgCaptureDisp(s32 unused, WindowWork* bg) {
     GXSetTexCopySrc(0, 0, gp->fbWidth, gp->efbHeight);
     GXSetTexCopyDst(gp->fbWidth, gp->efbHeight, GX_TF_RGB565, GX_FALSE);
     GXCopyTex(bg->texBuf->address, GX_FALSE);
+#if VERSION == VERSION_EU
+    GXPixModeSync();
+    DCFlushRange(bg->texBuf->address, GXGetTexBufferSize(gp->fbWidth, gp->efbHeight, GX_TF_RGB565, GX_FALSE, 0));
+    GXInvalidateTexAll();
+#else
     GXTexModeSync();
+#endif
     bg->texBufValid = 1;
     mapDispOff();
     camDispOff(CAMERA_3D);
@@ -2700,10 +2714,18 @@ void winRootBgDrawDisp(s32 unused, WindowWork* bg) {
         GXSetTevOp(GX_TEVSTAGE0, GX_REPLACE);
         GXSetNumTexGens(1);
         GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
+#if VERSION == VERSION_EU
+        GXSetBlendMode(GX_BM_NONE, GX_BL_ONE, GX_BL_ZERO, GX_LO_OR);
+#else
         GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_CLEAR);
+#endif
         GXSetZCompLoc(GX_TRUE);
         GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_AND, GX_ALWAYS, 0);
+#if VERSION == VERSION_EU
+        GXSetZMode(GX_FALSE, GX_LEQUAL, GX_FALSE);
+#else
         GXSetZMode(GX_FALSE, GX_ALWAYS, GX_FALSE);
+#endif
         GXLoadPosMtxImm(camGetPtr(CAMERA_2D)->view, GX_PNMTX0);
         GXSetCurrentMtx(GX_PNMTX0);
         GXInitTexObj(&obj, bg->texBuf->address, gp->fbWidth, gp->efbHeight, GX_TF_RGB565, GX_CLAMP, GX_CLAMP, GX_FALSE);

@@ -198,14 +198,27 @@ static const char* battlePartyMsgPad[6] = {0};
 #include "mario/mariost.h"
 // US-only localized article/plural helpers (evt_msg_fmt_int / evtMsgFmtInt, evt_msg_fmt_str / evtMsgFmtStr, below).
 // clang-format off
+#if VERSION == VERSION_EU
+const char* msg_de_article_nom_cap_tbl[7] = {"Ein ", "Eine ", "Ein ", "Die ", "Die ", "Die ", ""};
+const char* msg_de_article_nom_tbl[7] = {"ein ", "eine ", "ein ", "die ", "die ", "die ", ""};
+const char* msg_de_article_acc_cap_tbl[7] = {"Einen ", "Eine ", "Ein ", "Die ", "Die ", "Die ", ""};
+const char* msg_de_article_acc_tbl[7] = {"einen ", "eine ", "ein ", "die ", "die ", "die ", ""};
+const char* msg_de_article_dat_tbl[7] = {"einem ", "einer ", "einem ", "die ", "die ", "die ", ""};
+const char* msg_fr_article_cap_tbl[4] = {"Un ", "Une ", "Les ", "Des "};
+const char* msg_fr_article_tbl[4] = {"un ", "une ", "les ", "des "};
+#else
 const char* msg_de_article_nom_cap_tbl[6] = {"Ein ", "Eine ", "Ein ", "Die ", "Die ", "Die "};
 const char* msg_de_article_nom_tbl[6] = {"ein ", "eine ", "ein ", "die ", "die ", "die "};
 const char* msg_de_article_acc_cap_tbl[6] = {"Einen ", "Eine ", "Ein ", "Die ", "Die ", "Die "};
 const char* msg_de_article_acc_tbl[6] = {"einen ", "eine ", "ein ", "die ", "die ", "die "};
 const char* msg_fr_article_cap_tbl[3] = {"Un ", "Une ", "Les "};
 const char* msg_fr_article_tbl[3] = {"un ", "une ", "les "};
+#endif
 const char* msg_es_article_cap_tbl[6] = {"Un ", "Una ", "", "", "Unos ", "Unas "};
 const char* msg_es_article_tbl[6] = {"un ", "una ", "", "", "unos ", "unas "};
+#if VERSION == VERSION_EU
+static const char* msgArticlePad[7] = {0};
+#endif
 
 char* strstr(const char* s, const char* sub);
 
@@ -563,6 +576,10 @@ void evtMsgFmtStr(char* buf, const char* name) {
             form = 4;
         } else if (strstr(name, "<NPLdie>") != NULL) {
             form = 5;
+#if VERSION == VERSION_EU
+            } else if (strstr(name, "<PL") != NULL) {
+                form = 6;
+#endif
         }
         if ((marker = strstr(buf, "<Einen>")) != NULL) {
             len = strlen(buf) - strlen(marker);
@@ -606,6 +623,15 @@ void evtMsgFmtStr(char* buf, const char* name) {
             strcat(tmp, msg_de_article_acc_tbl[form]);
             strcat(tmp, name);
             strcat(tmp, marker + 12);
+#if VERSION == VERSION_EU
+            } else if ((marker = strstr(buf, "<einem_ITEM>")) != NULL) {
+                len = strlen(buf) - strlen(marker);
+                strncpy(tmp, buf, len);
+                tmp[len] = 0;
+                strcat(tmp, msg_de_article_dat_tbl[form]);
+                strcat(tmp, name);
+                strcat(tmp, marker + 12);
+#endif
         } else if ((marker = strstr(buf, "<ITEM>")) != NULL) {
             len = strlen(buf) - strlen(marker);
             strncpy(tmp, buf, len);
@@ -622,6 +648,10 @@ void evtMsgFmtStr(char* buf, const char* name) {
             form = 1;
         } else if (strstr(name, "<PLles>") != NULL) {
             form = 2;
+#if VERSION == VERSION_EU
+            } else if (strstr(name, "<PLdes>") != NULL) {
+                form = 3;
+#endif
         }
         if ((marker = strstr(buf, "<un>")) != NULL) {
             len = strlen(buf) - strlen(marker);

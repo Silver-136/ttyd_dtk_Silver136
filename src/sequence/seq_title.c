@@ -189,7 +189,7 @@ void titleMain(SequenceWork* work) {
             wp2->counter++;
             if (wp2->counter > TITLE_FRAMES_PER_SEC) {
                 titleLoadDemo();
-#if VERSION >= VERSION_US
+#if VERSION == VERSION_US
                 wp2->counter = 0;
 #endif
                 wp2->frame = 0;
@@ -343,7 +343,11 @@ void disp2(CameraId cameraId, void* param) {
     s32 alpha;
     f32 s;
 #if VERSION >= VERSION_US
+#if VERSION == VERSION_EU
+    s32 tbl[6] = {19, 19, 20, 21, 22, 23};
+#else
     s32 tbl[6] = {21, 21, 22, 23, 24, 25};
+#endif
 #endif
 
     saved = *camGetPtr(cameraId);
@@ -356,7 +360,11 @@ void disp2(CameraId cameraId, void* param) {
     winTexInit(*wp2->texture->data);
 #if VERSION >= VERSION_US
     winTexSetNearest(tbl[gp->language], (Vec){wp2->topPosX, wp2->topPosY - 20.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
+#if VERSION == VERSION_EU
+    winTexSet(gp->language + 7, (Vec){wp2->bottomPosX, wp2->bottomPosY, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
+#else
     winTexSet(gp->language + 9, (Vec){wp2->bottomPosX, wp2->bottomPosY, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
+#endif
 #else
     winTexSetNearest(5, (Vec){wp2->topPosX, wp2->topPosY, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
     winTexSet(6, (Vec){wp2->bottomPosX, wp2->bottomPosY, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
@@ -394,7 +402,11 @@ PSTATIC void pressStartGX(s32 alpha, f32 x, f32 y) {
     Mtx mtx, scaleMtx;
 
 #if VERSION >= VERSION_US
+#if VERSION == VERSION_EU
+    TEXGetGXTexObjFromPalette(*wp2->texture->data, &startText, gp->language + 13);
+#else
     TEXGetGXTexObjFromPalette(*wp2->texture->data, &startText, gp->language + 15);
+#endif
     GXLoadTexObj(&startText, GX_TEXMAP0);
     TEXGetGXTexObjFromPalette(*wp2->texture->data, &gradient, 6);
 #else

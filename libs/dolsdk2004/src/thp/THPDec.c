@@ -23,7 +23,11 @@ static u8* __THPWorkArea;
 static THPCoeff* __THPMCUBuffer[6];
 static THPFileInfo* __THPInfo;
 static BOOL __THPInitFlag = FALSE;
+#ifdef VERSION_G8MP01
+const char* __THPVersion = "<< Dolphin SDK - THP\trelease build: Jan  9 2004 13:06:55 (0x2301) >>";
+#else
 const char* __THPVersion = "<< Dolphin SDK - THP\trelease build: Aug 27 2002 20:42:01 >>";
+#endif
 static const u8 __THPJpegNaturalOrder[80]
     = { 0,  1,  8,  16, 9,  2,  3,  10, 17, 24, 32, 25, 18, 11, 4,  5,
 	    12, 19, 26, 33, 40, 48, 41, 34, 27, 20, 13, 6,  7,  14, 21, 28,
@@ -2220,9 +2224,17 @@ BOOL THPInit(void)
 
 	base              = (u8*)(0xE000 << 16); // lc base
 	__THPLCWork640[0] = base;
+#ifdef VERSION_G8MP01
+	base += 0x2A00;
+#else
 	base += 0x2800;
+#endif
 	__THPLCWork640[1] = base;
+#ifdef VERSION_G8MP01
+	base += 0xA80;
+#else
 	base += 0xA00;
+#endif
 	__THPLCWork640[2] = base;
 	base += 0xA80;
 

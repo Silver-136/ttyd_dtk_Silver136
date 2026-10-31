@@ -272,7 +272,11 @@ static EVT_BEGIN(suifu_e_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG5_30_SHIPWRECKED_SAILORS, STG5_35_ESCAPE_ROUTE)
 #if VERSION >= VERSION_US
+#if VERSION == VERSION_EU
+        CALL(evt_npc_set_position, STRING("水夫E"), 736, 50, 113)
+#else
         CALL(evt_npc_set_position, STRING("me"), 736, 50, 113)
+#endif
 #else
         CALL(evt_npc_set_position, STRING("me"), 750, 50, -25)
 #endif

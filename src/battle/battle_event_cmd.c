@@ -6988,6 +6988,26 @@ USER_FUNC(btlevtcmd_InviteApInfoReport) {
  * layers, up 260 for the top layer) or back into place (nonzero) over 45 frames; blocks until done.
  * Used by Star Power special moves that need a clear stage.
  */
+#if VERSION == VERSION_EU
+USER_FUNC(btlevtcmd_SetCounterAcCallBack) {
+    BattleWork* wp = _battleWorkPointer;
+    EvtWord* args = event->args;
+    BattleUnit* unit;
+    s32 id;
+
+    id = evtGetValue(event, args[0]);
+    id = BattleTransID(event, id);
+    unit = BattleGetUnitPtr(wp, id);
+    unit->hitEventCode = (void*)evtGetValue(event, args[1]);
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Script: slides the battle stage's background objects off screen (args[0] = 0: sideways 450 units for the back
+ * layers, up 260 for the top layer) or back into place (nonzero) over 45 frames; blocks until done.
+ * Used by Star Power special moves that need a clear stage.
+ */
+#endif
 USER_FUNC(btlevtcmd_SacBgsetMove) {
     BattleWork* wp = _battleWorkPointer;
     s32 on, i;

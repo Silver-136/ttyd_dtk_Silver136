@@ -494,8 +494,13 @@ void DrawSubIconSub(BattleSubMenu* menu, s32 i, Mtx m, s32 enabled, s32 icon, co
         FontDrawColor(fc);
     }
     PSMTXTrans(trn, -104.0f, 22.0f, 0.0f);
+#if VERSION == VERSION_EU
+    if (y != 0) {
+        PSMTXScale(scl, FontGetMessageWidth(name) > y ? 0.8f * y / FontGetMessageWidth(name) : 0.8f, 0.8f, 0.8f);
+#else
     if (y == 1) {
         PSMTXScale(scl, FontGetMessageWidth(name) > 150 ? 120.0f / FontGetMessageWidth(name) : 0.8f, 0.8f, 0.8f);
+#endif
     } else {
         PSMTXScale(scl, 0.8f, 0.8f, 0.8f);
     }
@@ -1782,7 +1787,11 @@ void DrawWeaponWin(void) {
         }
     }
     DrawMainIcon(menu, wp->commandMenu.act, iconMtx, iconPos, iconAngle);
+#if VERSION == VERSION_EU
+    DrawSubIcon(menu, rowMtx, enabled, icons, names, costs, p34, NULL, 220); // name width that the label is scaled down to fit
+#else
     DrawSubIcon(menu, rowMtx, enabled, icons, names, costs, p34, NULL, 0);
+#endif
     v = (Vec){-60.0f, 35.0f, 0.0f};
     DrawMenuCursorAndScrollArrow(&v);
     if (weapon) {
@@ -1957,7 +1966,11 @@ void DrawChangePartyWin(void) {
         }
     }
     DrawMainIcon(menu, wp->commandMenu.act, iconMtx, iconPos, iconAngle);
+#if VERSION == VERSION_EU
+    DrawSubIcon(menu, rowMtx, enabled, icons, names, costs, p34, items, 150); // name width that the label is scaled down to fit
+#else
     DrawSubIcon(menu, rowMtx, enabled, icons, names, costs, p34, items, 1);
+#endif
     v = (Vec){-60.0f, 35.0f, 0.0f};
     DrawMenuCursorAndScrollArrow(&v);
     if (items[cursor->absPos].help) {

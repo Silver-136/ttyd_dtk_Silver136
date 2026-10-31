@@ -374,6 +374,11 @@ s32 nameMain(void) {
                                         if (wp->type == 1 && k >= n) {
                                             strcpy(wp->name, msgSearch("name_party3"));
                                             wp->nameLen = strlen(wp->name) / 2;
+#if VERSION == VERSION_EU
+                                            if (wp->nameLen >= 8) {
+                                                wp->nameLen = 7;
+                                            }
+#endif
                                         }
                                     } else {
                                         psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_NOT_CHOICE1 | PSND_SFX_BYPASS_MUTE));
@@ -394,6 +399,11 @@ s32 nameMain(void) {
                                         if (wp->type == 1 && m >= n) {
                                             strcpy(wp->name, msgSearch("name_party3"));
                                             wp->nameLen = strlen(wp->name);
+#if VERSION == VERSION_EU
+                                            if (wp->nameLen >= 8) {
+                                                wp->nameLen = 7;
+                                            }
+#endif
                                         }
                                     } else {
                                         psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_NOT_CHOICE1 | PSND_SFX_BYPASS_MUTE));
@@ -469,6 +479,11 @@ s32 nameMain(void) {
                             if (wp->type == 1 && j >= len) {
                                 strcpy(wp->name, msgSearch("name_party3"));
                                 wp->nameLen = strlen(wp->name) / 2;
+#if VERSION == VERSION_EU
+                                if (wp->nameLen >= 8) {
+                                    wp->nameLen = 7;
+                                }
+#endif
                             }
                         } else {
                             psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_NOT_CHOICE1 | PSND_SFX_BYPASS_MUTE));
@@ -489,6 +504,11 @@ s32 nameMain(void) {
                             if (wp->type == 1 && m >= len) {
                                 strcpy(wp->name, msgSearch("name_party3"));
                                 wp->nameLen = strlen(wp->name);
+#if VERSION == VERSION_EU
+                                if (wp->nameLen >= 8) {
+                                    wp->nameLen = 7;
+                                }
+#endif
                             }
                         } else {
                             psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_NOT_CHOICE1 | PSND_SFX_BYPASS_MUTE));

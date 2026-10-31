@@ -70,7 +70,7 @@ static EvtWord _koura_rotate_stop[13];
 EvtWord partyNokotarouAttack_FirstAttack[236];
 EvtWord partyNokotarouAttack_NormalAttack[VERSION_PICK(793, 804)];
 EvtWord partyNokotarouAttack_SyubibinKoura[VERSION_PICK(691, 702)];
-EvtWord partyNokotarouAttack_KouraGuard[838];
+EvtWord partyNokotarouAttack_KouraGuard[];
 EvtWord partyNokotarouAttack_TsuranukiKoura[VERSION_PICK(931, 942)];
 EvtWord nokotarou_appeal_event[34];
 static EvtWord party_win_reaction[16];
@@ -1273,6 +1273,9 @@ EVT_BEGIN(partyNokotarouAttack_KouraGuard)
     CALL(btlevtcmd_AcSetFlag, 0)
     CALL(btlevtcmd_SetupAC, UNIT_ID_SELF, 12, 1, 0)
     // The shell floats down towards Mario while the command runs.
+#if VERSION == VERSION_EU
+    WAIT_FRAMES(2)
+#endif
     CALL(btlevtcmd_GetPos, LW(10), LW(0), LW(1), LW(2))
     SET_VALUE(LW(1), 125)
     CALL(btlevtcmd_DivePosition, LW(10), LW(0), LW(1), LW(2), 60, 0, EASING_SINE_IN, 0, MOVE_SOUND_FROM_TABLE)
@@ -1348,7 +1351,11 @@ EVT_BEGIN(partyNokotarouAttack_KouraGuard)
                 SET_VALUE(LW(0), -1)
             END_SWITCH
             IF_INT_GREATER_OR_EQUAL(LW(0), 0)
+#if VERSION == VERSION_EU
+                CALL(btlevtcmd_GetResultPrizeLv, -1, LW(0), LW(7))
+#else
                 CALL(btlevtcmd_GetResultPrizeLv, LW(3), LW(0), LW(7))
+#endif
                 CALL(btlevtcmd_GetPos, LW(10), LW(0), LW(1), LW(2))
                 CALL(btlevtcmd_ACSuccessEffect, LW(7), LW(0), LW(1), LW(2))
                 CALL(btlevtcmd_AudienceDeclareACResult, LW(12), LW(7))

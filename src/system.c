@@ -42,15 +42,36 @@ static f32 angleABTBL[] = { 1.0f,       1.273187f,  1.27303f,   1.272768f,  1.27
 const char* build_date_ptr = R_build_date;
 const char* build_time_ptr = R_build_time;
 
+#if VERSION != VERSION_EU
 const char* systemStrippedPool0(void) {
     return "assertion \"%s\" failed.\n \"%s\"\n";
 }
 
+#endif
 /** Returns the root directory for the game's disc file paths: "." (the disc root). */
 const char* getMarioStDvdRoot(void) {
     return ".";
 }
 
+#if VERSION == VERSION_EU
+/** PAL keeps the assertion helpers that JP and US strip. */
+BOOL __assert(const char* filename, int line, const char* assertion) {
+    OSPanic(filename, line, assertion);
+    return TRUE;
+}
+
+/** PAL only: assertion failure with a printf-style message; formats it and halts with OSPanic. */
+BOOL __assert2(const char* filename, int line, const char* assertion, const char* message, ...) {
+    char buf[1024];
+    va_list args;
+
+    va_start(args, message);
+    vsprintf(buf, message, args);
+    OSPanic(filename, line, "assertion \"%s\" failed.\n \"%s\"\n", assertion, buf);
+    return TRUE;
+}
+
+#endif
 /** Wraps an angle in degrees into [0, 360); NaN becomes 0. */
 f32 reviseAngle(f32 angle) {
     f32 result, temp;
@@ -832,6 +853,18 @@ f32 sysMsec2FrameFloat(f32 msec) {
 #endif
 }
 
+#if VERSION == VERSION_EU
+/** PAL only: printf-style debug line with file and line through OSReport. */
+void sysDebugReport(const char* filename, int line, const char* format, ...) {
+    char buf[2048];
+    va_list args;
+
+    va_start(args, format);
+    vsprintf(buf, format, args);
+    OSReport("[%8s:% 4d] %s", filename, line, buf);
+}
+
+#endif
 /**
  * Extracts the pure rotation of src into dst: normalises the two named axes (firstAxis, secondAxis: 'x', 'y' or
  * 'z') and rebuilds the third with cross products, dropping scale and translation.

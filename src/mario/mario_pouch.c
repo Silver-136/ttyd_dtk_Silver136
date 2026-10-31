@@ -95,7 +95,9 @@ void pouchInit(void) {
             party->techLevel = 0;
         }
     }
-#if VERSION >= VERSION_US
+#if VERSION == VERSION_EU
+    strcpy(mpp->yoshiName, "Yoshi");
+#elif VERSION >= VERSION_US
     strcpy(mpp->yoshiName, msgSearch("name_party3"));
 #else
     strcpy(mpp->yoshiName, "チビヨッシー");
@@ -465,6 +467,10 @@ BOOL pouchRemoveItemIndex(ItemType type, s32 index) {
     return FALSE;
 }
 
+#if VERSION == VERSION_EU
+char* strupr(char* str);
+#endif
+
 // Descriptive name (not in the symbol maps); placeholder unk_800d06b4, JP 0x800D06B4. See docs/NAME_PROVENANCE.md.
 void pouchHiraToKata(const char* src, char* dst) {
     u16 c;
@@ -489,7 +495,61 @@ void pouchHiraToKata(const char* src, char* dst) {
         }
         dst[i * 2] = 0;
     } else {
+#if VERSION == VERSION_EU
+        // PAL: sort key of a Latin name: drops <...> message tags, upper-cases, folds accented vowels to
+        // A E I O U, spells the OE ligature out and drops C-cedilla
+        char buf[0x400];
+        char* key = dst;
+        BOOL inTag = FALSE;
+        s32 n;
+
+        for (; *(const s8*)src; src++) {
+            switch (*(const s8*)src) {
+                case '<':
+                    inTag = TRUE;
+                    break;
+                case '>':
+                    inTag = FALSE;
+                    break;
+                default:
+                    if (!inTag) {
+                        *dst = *(const s8*)src;
+                        *++dst = 0;
+                    }
+                    break;
+            }
+        }
+        strupr(key);
+        for (i = 0; i < strlen(key); i++) {
+            u8 ch = key[i];
+            if ((ch >= 0xC0 && ch <= 0xC6) || (ch >= 0xE0 && ch <= 0xE6)) {
+                ch = 'A';
+            } else if ((ch >= 0xC8 && ch <= 0xCB) || (ch >= 0xE8 && ch <= 0xEB)) {
+                ch = 'E';
+            } else if ((ch >= 0xCC && ch <= 0xCF) || (ch >= 0xEC && ch <= 0xEF)) {
+                ch = 'I';
+            } else if ((ch >= 0xD2 && ch <= 0xD6) || (ch >= 0xF2 && ch <= 0xF6)) {
+                ch = 'O';
+            } else if ((ch >= 0xD9 && ch <= 0xDC) || (ch >= 0xF9 && ch <= 0xFC)) {
+                ch = 'U';
+            }
+            key[i] = ch;
+        }
+        n = 0;
+        for (i = 0; i < strlen(key); i++) {
+            u8 ch = key[i];
+            if (ch == 0x8C || ch == 0x9C) {
+                buf[n++] = 'O';
+                buf[n++] = 'E';
+            } else if (ch != 0xC7 && ch != 0xE7) {
+                buf[n++] = ch;
+            }
+            buf[n] = 0;
+        }
+        strcpy(key, buf);
+#else
         strcpy(dst, src);
+#endif
     }
 }
 #else
@@ -508,7 +568,12 @@ void pouchHiraToKata(const char* src, char* dst) {
 }
 #endif
 
+// PAL calls pouchHiraToKata; JP and US inline their own copy of the conversion
 static inline void pouchAiueoConv(const char* src, char* dst) {
+#if VERSION == VERSION_EU
+    pouchHiraToKata(src, dst);
+}
+#else
 #if VERSION >= VERSION_US
     u16* s;
     u16* d;
@@ -554,6 +619,7 @@ static inline void pouchAiueoConv(const char* src, char* dst) {
     }
     dst[i * 2] = 0;
 }
+#endif
 #endif
 
 s32 comp_aiueo(const void* a, const void* b) {
@@ -615,7 +681,18 @@ void pouchSortItem(s32 mode) {
     BOOL swap;
     s16 t2, t1;
     PouchData* pp[1];
-#if VERSION >= VERSION_US
+#if VERSION == VERSION_EU
+    char keyA[0x80];
+    s16 bj;
+    s32 l;
+    s32 count;
+    const char* ida;
+    const char* idb;
+    s32 ca;
+    s32 cb;
+    s16 bn;
+    char keyB[0x80];
+#elif VERSION >= VERSION_US
     s16 bn;
     s16 bj;
     const char* idb;
@@ -666,6 +743,72 @@ void pouchSortItem(s32 mode) {
         }
         memcpy(pp[0]->keyItems, keys, sizeof(keys));
     }
+#if VERSION == VERSION_EU
+    // PAL sorts badge names by the pouchHiraToKata key
+    if ((u32)(mode - 4) <= 2 || (u32)(mode - 11) <= 1 || mode == 13) {
+        count = 0;
+        for (n = 0; n < MAX_BADGES; n++) {
+            if (pp[0]->badges[n] != 0) {
+                badges[count] = pp[0]->badges[n];
+                count++;
+                equipped[count - 1] = pp[0]->equippedBadges[n];
+            }
+        }
+        for (n = count; n < MAX_BADGES; n++) {
+            badges[n] = 0;
+            equipped[n] = 0;
+        }
+        for (j = 0; j < count - 1; j++) {
+            for (l = j + 1; l < count; l++) {
+                BOOL swap;
+                bn = badges[j];
+                bj = badges[l];
+                ida = msgSearch(itemDataTable[bn].name);
+                idb = msgSearch(itemDataTable[bj].name);
+                ca = itemDataTable[bn].bp_cost;
+                cb = itemDataTable[bj].bp_cost;
+                swap = FALSE;
+                pouchHiraToKata(ida, keyA);
+                pouchHiraToKata(idb, keyB);
+                ida = keyA;
+                idb = keyB;
+                if (mode == 4) {
+                    if (strcmp(ida, idb) > 0) {
+                        swap = TRUE;
+                    }
+                } else if (mode == 11) {
+                    if (strcmp(ida, idb) < 0) {
+                        swap = TRUE;
+                    }
+                } else if (mode == 5) {
+                    if (itemDataTable[bn].type_sort_order > itemDataTable[bj].type_sort_order) {
+                        swap = TRUE;
+                    }
+                } else if (mode == 12) {
+                    if (itemDataTable[bn].type_sort_order < itemDataTable[bj].type_sort_order) {
+                        swap = TRUE;
+                    }
+                } else if (mode == 6) {
+                    if (ca > cb) {
+                        swap = TRUE;
+                    } else if (ca == cb && itemDataTable[bn].type_sort_order > itemDataTable[bj].type_sort_order) {
+                        swap = TRUE;
+                    }
+                } else if (mode == 13) {
+                    if (ca < cb) {
+                        swap = TRUE;
+                    } else if (ca == cb && itemDataTable[bn].type_sort_order < itemDataTable[bj].type_sort_order) {
+                        swap = TRUE;
+                    }
+                }
+                if (swap) {
+                    t1 = badges[j];
+                    t2 = equipped[j];
+                    badges[j] = badges[l];
+                    equipped[j] = equipped[l];
+                    badges[l] = t1;
+                    equipped[l] = t2;
+#else
     if ((u32)(mode - 4) <= 2 || (u32)(mode - 11) <= 1 || mode == 13) {
 #if VERSION >= VERSION_US
         /* FAKE: block-scoped (shadowing j/i) locals and separate sort counter m steer register colouring */
@@ -755,6 +898,7 @@ void pouchSortItem(s32 mode) {
 #endif
                     badges[j] = t1;
                     equipped[j] = t2;
+#endif
                 }
             }
         }

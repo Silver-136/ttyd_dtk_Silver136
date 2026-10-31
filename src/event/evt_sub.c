@@ -921,7 +921,14 @@ EVT_BEGIN(mail_evt_gor_02_2)
         CALL(evt_sub_check_intersect, LW(0), LW(2), LW(10), LW(12), -1000, -4226, 1000, 7374, LW(5))
         IF_INT_EQUAL(GSW_STORY_PROGRESS, STG6_71_FRANKLYS_HOUSE_STG_6)
             IF_INT_EQUAL(LW(5), 1)
+#if VERSION == VERSION_EU
+                CALL(evt_mario_get_motion, LW(5))
+                IF_INT_NOT_EQUAL(LW(5), 25)
+#endif
                 BREAK_LOOP
+#if VERSION == VERSION_EU
+                END_IF
+#endif
             END_IF
         END_IF
         WAIT_FRAMES(1)
@@ -1799,6 +1806,14 @@ USER_FUNC(evt_sub_animgroup_async) {
 }
 
 /** Starts the on-screen countdown timer: args[0] is the time limit, args[1] the restart time. */
+#if VERSION == VERSION_EU
+USER_FUNC(evt_sub_get_framerate) {
+    evtSetValue(event, event->args[0], gp->framerate);
+    return EVT_RETURN_DONE;
+}
+
+/** Starts the on-screen countdown timer: args[0] is the time limit, args[1] the restart time. */
+#endif
 USER_FUNC(evt_sub_countdown_start) {
     EvtWord* args = event->args;
     s32 limit = evtGetValue(event, args[0]);

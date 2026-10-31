@@ -108,7 +108,7 @@ BattleWeapon marioWeapon_Suki;
 BattleWeapon* superActionTable[18];
 static EvtWord marioAttackEvent_NormalJump[VERSION_PICK(889, 963)];
 static EvtWord marioAttackEvent_KururinJump[1210];
-EvtWord marioAttackEvent_JyabaraJump[VERSION_PICK(1675, 1696)];
+EvtWord marioAttackEvent_JyabaraJump[];
 EvtWord marioAttackEvent_GatsuDokaJump[VERSION_PICK(624, 638)];
 EvtWord marioAttackEvent_TatsumakiJump[VERSION_PICK(1668, 1679)];
 EvtWord marioAttackEvent_RenzokuJump[840];
@@ -3167,7 +3167,7 @@ EVT_BEGIN(marioAttackEvent_JyabaraJump)
         CALL(btlevtcmd_GetResultPrizeLv, LW(3), 0, LW(6))
         CALL(btlevtcmd_AudienceDeclareACResult, LW(12), LW(6))
         CALL(btlevtcmd_GetDamage, LW(3), LW(0))
-#if VERSION >= VERSION_US
+#if VERSION == VERSION_US
         IF_INT_GREATER_OR_EQUAL(LW(0), 10)
             SET_VALUE(LW(0), 9)
         END_IF

@@ -128,7 +128,7 @@ static EvtWord nannpc_mode_setup[35];
 s32 mist_pos[91];
 EvtWord mist_setup[45];
 EvtWord marcoship_shizumu[156];
-EvtWord onryo_event[2250];
+EvtWord onryo_event[];
 EvtWord muj_20_koopa_evt[133];
 EvtWord kaizoku_hata[65];
 EvtWord gor_muj_ship[195];
@@ -137,7 +137,7 @@ EvtWord anm_kaji[61];
 EvtWord anm_wakka[40];
 EvtWord anm_entotsu[33];
 EvtWord anm_neji[33];
-EvtWord anm_yure[132];
+EvtWord anm_yure[];
 static EvtWord evt_prologue[182];
 static EvtWord epilogue_npc_entry[25];
 EvtWord fune_move[136];
@@ -1202,6 +1202,10 @@ EVT_BEGIN(onryo_event)
     CALL(evt_set_fune_anim_rate, FLOAT(0.69921875f))
     CALL(evt_set_nami_anim_rate, FLOAT(0.69921875f))
     WAIT_MS(1000)
+#if VERSION == VERSION_EU
+    CALL(evt_npc_flag_onoff, 1, STRING("ガラの悪い水夫"), NPC_FLAG_TALK_ANIM)
+    CALL(evt_npc_flag_onoff, 1, STRING("オドオド水夫"), NPC_FLAG_TALK_ANIM)
+#endif
     WAIT_MS(1500)
     CALL(evt_msg_print, 0, STRING("stg5_sea_03"), 0, STRING(/*"ガラの悪い水夫"*/"\x83\x4B\x83\x89\x82\xCC\x88\xAB\x82\xA2\x90\x85\x95\x76"))
     WAIT_MS(500)
@@ -1338,6 +1342,10 @@ EVT_BEGIN(onryo_event)
     END_INLINE_EVENT
     CALL(evt_msg_print, 0, STRING("stg5_sea_11"), 0, STRING(/*"ガラの悪い水夫"*/"\x83\x4B\x83\x89\x82\xCC\x88\xAB\x82\xA2\x90\x85\x95\x76"))
     WAIT_WHILE(GF(0))
+#if VERSION == VERSION_EU
+    CALL(evt_npc_flag_onoff, 0, STRING("ガラの悪い水夫"), NPC_FLAG_TALK_ANIM)
+    CALL(evt_npc_flag_onoff, 0, STRING("オドオド水夫"), NPC_FLAG_TALK_ANIM)
+#endif
     CALL(evt_npc_set_anim, STRING(/*"ガラの悪い水夫"*/"\x83\x4B\x83\x89\x82\xCC\x88\xAB\x82\xA2\x90\x85\x95\x76"), STRING("R_1"))
     CALL(muj_npc_guruguru, STRING(/*"ガラの悪い水夫"*/"\x83\x4B\x83\x89\x82\xCC\x88\xAB\x82\xA2\x90\x85\x95\x76"), -52, -90, 0, FLOAT(-12.0f), 3000)
     SET_VALUE(GF(0), 1)
@@ -1996,7 +2004,11 @@ static void pressStartGX(LogoWork* wp, s32 alpha, f32 x, f32 y) {
     GXTexObj startText, gradient;
     Mtx v17, v16;
 
+#if VERSION == VERSION_EU
+    TEXGetGXTexObjFromPalette(*wp->tpl->data, &startText, 13); // PAL: texture 13 of the TPL
+#else
     TEXGetGXTexObjFromPalette(*wp->tpl->data, &startText, VERSION_PICK(8, 15));
+#endif
     GXLoadTexObj(&startText, GX_TEXMAP0);
     TEXGetGXTexObjFromPalette(*wp->tpl->data, &gradient, VERSION_PICK(9, 6));
     GXLoadTexObj(&gradient, GX_TEXMAP1);
@@ -2060,7 +2072,11 @@ static void draw(CameraId camera, void* param) {
     CameraEntry* cam;
 #if VERSION >= VERSION_US
     // US: logo texture per language (indexed by gp->language)
+#if VERSION == VERSION_EU
+    s32 logoTex[6] = {0x13, 0x13, 0x14, 0x15, 0x16, 0x17};
+#else
     s32 logoTex[6] = {0x15, 0x15, 0x16, 0x17, 0x18, 0x19};
+#endif
 #endif
 
     GXGetViewportv(viewport);

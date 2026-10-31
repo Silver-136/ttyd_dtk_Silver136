@@ -126,7 +126,7 @@ EvtWord init_kino4[13];
 EvtWord reg_kino4[31];
 EvtWord talk_kino4[112];
 EvtWord init_kino5[8];
-EvtWord talk_kino5[236];
+EvtWord talk_kino5[];
 EvtWord init_kinopiko[8];
 EvtWord talk_kinopiko[112];
 EvtWord init_kinopio_f[8];
@@ -876,7 +876,23 @@ EVT_BEGIN(talk_kino5)
             CASE_GREATER(0)
             CALL(evt_mario_get_party, LW(0))
             IF_INT_EQUAL(LW(0), 4)
+#if VERSION == VERSION_EU
+                CALL(evt_sub_get_language, LW(0))
+                SWITCH(LW(0))
+                    CASE_EQUAL(2)
+                    CALL(evt_msg_print_insert, 0, STRING("stg3_npc_02_06_05_yos"), 0, 0, LW(10))
+                    CASE_EQUAL(4)
+                    CALL(evt_msg_print_insert, 0, STRING("stg3_npc_02_06_05_yos"), 0, 0, LW(10))
+                    CASE_EQUAL(5)
+                    CALL(evt_msg_print_insert, 0, STRING("stg3_npc_02_06_05_yos"), 0, 0, LW(10))
+                    CASE_DEFAULT
+                    CALL(evt_msg_print_insert, 0, STRING("stg3_npc_02_06_05_yos"), 0, 0, LW(10), LW(10))
+#else
                 CALL(evt_msg_print_insert, 0, STRING(("stg3_npc_02_06_05_yos")), 0, 0, LW(10), LW(10))
+#endif
+#if VERSION == VERSION_EU
+                END_SWITCH
+#endif
                 ELSE
                 CALL(evt_msg_print_insert, 0, STRING(("stg3_npc_02_06_05")), 0, 0, LW(10))
             END_IF

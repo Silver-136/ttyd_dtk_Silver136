@@ -1,3 +1,4 @@
+#include "version.h"
 #include "battle/battle.h"
 #include "battle/battle_ac_help.h"
 #include "battle/battle_audience.h"
@@ -253,6 +254,9 @@ USER_FUNC(sac_enemy_slide_return) {
         if (unit && unit->alliance == ALLIANCE_ENEMY) {
             evt = evtEntry(enemy_slide_return_evt, 0, EVENT_START_IMMEDIATE);
             evt->unitId = i;
+#if VERSION == VERSION_EU
+            unit->slideReturnEventId = evt->eventId;
+#endif
         }
     }
     return EVT_RETURN_DONE;

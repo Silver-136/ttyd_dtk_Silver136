@@ -497,9 +497,15 @@ static USER_FUNC(mario_chk) {
         PartyEntry* party = partyGetPtr(0);
         if (mario != NULL && mario->hitobjStandOn != NULL && hitIsGroup(mario->hitobjStandOn, hitNameToPtr("A_bel"))) {
             mario->floorMove.x = 0.6f;
+#if VERSION == VERSION_EU
+            mario->floorMove.x *= 60.0f / gp->framerate; // PAL: the push per frame is scaled to the frame rate
+#endif
         }
         if (party != NULL && party->hitobjUnder != NULL && hitIsGroup(party->hitobjStandOn, hitNameToPtr("A_bel"))) {
             party->floorMoveX = 0.6f;
+#if VERSION == VERSION_EU
+            party->floorMoveX *= 60.0f / gp->framerate;
+#endif
         }
     }
     for (i = 0; i < 6; i++) {

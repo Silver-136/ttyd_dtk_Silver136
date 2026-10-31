@@ -59,6 +59,13 @@ u32 OSGetSoundMode(void);
 void OSSetSoundMode(u32 mode);
 u32 OSGetVideoMode(void);
 void OSSetVideoMode(u32 mode);
+#define OS_LANG_ENGLISH 0
+#define OS_LANG_GERMAN  1
+#define OS_LANG_FRENCH  2
+#define OS_LANG_SPANISH 3
+#define OS_LANG_ITALIAN 4
+#define OS_LANG_DUTCH   5
+
 u8 OSGetLanguage(void);
 void OSSetLanguage(u8 language);
 u16 OSGetGbsMode(void);

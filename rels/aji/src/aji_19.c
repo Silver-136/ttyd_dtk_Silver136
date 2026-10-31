@@ -1,3 +1,5 @@
+#include "version.h"
+#include "mario/mariost.h"
 // aji_19 (敵のアジト, X-Naut Fortress): the room reached from the Moon (moo_02), with the first-visit scene
 // (evt_hajimete).
 
@@ -154,33 +156,42 @@ EVT_BEGIN(aji_19_init_evt)
     RETURN
 EVT_END()
 
+/** Conveyor push per frame: PAL scales the 60 Hz speed to the frame rate. */
+static inline f32 beltSpeed(void) {
+#if VERSION == VERSION_EU
+    return 60.0f / gp->framerate;
+#else
+    return 1.0f;
+#endif
+}
+
 static USER_FUNC(mario_chk) {
     MarioWork* mario = marioGetPtr();
     PartyEntry* party;
 
     if (mario != NULL && mario->hitobjStandOn != NULL) {
         if (hitIsGroup(mario->hitobjStandOn, hitNameToPtr("A_b_ue"))) {
-            mario->floorMove.x = 1.0f;
+            mario->floorMove.x = beltSpeed();
         } else if (hitIsGroup(mario->hitobjStandOn, hitNameToPtr("A_b_shita"))) {
-            mario->floorMove.x = -1.0f;
+            mario->floorMove.x = -beltSpeed();
         }
     }
     party = partyGetPtr(marioGetPartyId());
     if (party != NULL && party->hitobjStandOn != NULL) {
         if (hitIsGroup(party->hitobjStandOn, hitNameToPtr("A_b_ue"))) {
-            party->floorMoveX = 1.0f;
+            party->floorMoveX = beltSpeed();
         }
         if (hitIsGroup(party->hitobjStandOn, hitNameToPtr("A_b_shita"))) {
-            party->floorMoveX = -1.0f;
+            party->floorMoveX = -beltSpeed();
         }
     }
     party = partyGetPtr(marioGetExtraPartyId());
     if (party != NULL && party->hitobjStandOn != NULL) {
         if (hitIsGroup(party->hitobjStandOn, hitNameToPtr("A_b_ue"))) {
-            party->floorMoveX = 1.0f;
+            party->floorMoveX = beltSpeed();
         }
         if (hitIsGroup(party->hitobjStandOn, hitNameToPtr("A_b_shita"))) {
-            party->floorMoveX = -1.0f;
+            party->floorMoveX = -beltSpeed();
         }
     }
     return EVT_RETURN_BLOCK;

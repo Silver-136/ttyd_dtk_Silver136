@@ -280,7 +280,11 @@ static EvtWord musume_b_entry[26];
 static EvtWord musume_c_entry[26];
 static NpcSetupInfo npcEnt[7];
 EvtWord bom1000_minnnanokoe[21];
-static EvtWord minnnanokoe_evt[VERSION_PICK(450, 466)];
+#if VERSION == VERSION_US
+static EvtWord minnnanokoe_evt[466];
+#else
+static EvtWord minnnanokoe_evt[450];
+#endif
 static EvtWord evt_door[14];
 EvtWord bom_01_init_evt[189];
 
@@ -2934,7 +2938,7 @@ static EVT_BEGIN(minnnanokoe_evt)
             WAIT_MS(100)
         END_LOOP
     END_SIBLING_EVENT
-#if VERSION >= VERSION_US
+#if VERSION == VERSION_US
     SET_VALUE(GW(6), 0)
 #endif
     BEGIN_SIBLING_EVENT
@@ -2963,11 +2967,13 @@ static EVT_BEGIN(minnnanokoe_evt)
                 SET_VALUE(LW(3), STRING("stg8_las_148_70"))
             END_SWITCH
             BEGIN_INLINE_EVENT
+#if VERSION == VERSION_US
                 CALL(evt_msg_pri, GW(6))
                 ADD(GW(6), 1)
                 IF_INT_EQUAL(GW(6), 10)
                     SET_VALUE(GW(6), 0)
                 END_IF
+#endif
 #else
                 SET_VALUE(LW(3), STRING(("stg8_las_148_68")))
                 CASE_EQUAL(1)

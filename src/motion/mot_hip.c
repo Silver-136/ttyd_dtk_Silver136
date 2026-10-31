@@ -340,7 +340,13 @@ s32 chkground(void) {
         mario->jumpPeakAirTime = 0;
         mario->dispFlags &= ~MARIO_DISP_FLAG_NO_REAR_POSE;
         mario->flags &= ~MARIO_FLAG_STOP_AIR_MOVEMENT;
+#if VERSION == VERSION_EU
+        if (!marioBgmodeChk()) {
+#endif
         camFollowYOn();
+#if VERSION == VERSION_EU
+        }
+#endif
         attr = hitGetAttr(hit);
         if (attr & HIT_ATTR_WATER_HAZARD) {
             set_damage_root_ypos(mario->position.y);

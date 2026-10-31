@@ -228,7 +228,7 @@ EvtWord queen_hand_2_damage_event[24];
 EvtWord queen_hand_2_dead_event[41];
 EvtWord queen_hand_2_wait_event[6];
 EvtWord queen_hand_small_init_event[96];
-EvtWord queen_hand_small_drag_attack[385];
+EvtWord queen_hand_small_drag_attack[];
 EvtWord queen_hand_small_1000hand_attack[VERSION_PICK(266, 274)];
 EvtWord queen_hand_small_attack_event[35];
 EvtWord queen_hand_small_damage_event[48];
@@ -4154,7 +4154,11 @@ EVT_BEGIN(queen_hand_small_drag_attack)
     CALL(evt_btl_camera_set_zoom, 0, 200)
     CALL(btlevtcmd_GetPos, LW(3), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_BOSS_QWENH_HAND_APPEAR1"), LW(0), LW(1), LW(2), 0)
+#if VERSION == VERSION_EU
+    BEGIN_INLINE_EVENT_GET_ID(LW(15))
+#else
     BEGIN_INLINE_EVENT
+#endif
         CALL(queen_hand_small_drag_1_evt)
     END_INLINE_EVENT
     CALL(evt_eff, STRING("m_h_s1_"), STRING("mist2"), 0, -100, 15, 0, 100, 0, -1, 0, 0, 0, 0, 0)
@@ -4228,6 +4232,11 @@ EVT_BEGIN(queen_hand_small_drag_attack)
     CALL(evt_eff, STRING("m_h_s2"), STRING("mist2"), 0, 100, 15, 0, 150, 0, -1, 0, 0, 0, 0, 0)
     CALL(evt_eff, STRING("m_h_s3"), STRING("mist2"), 0, 100, 15, 0, 150, 0, -1, 0, 0, 0, 0, 0)
     CALL(evt_snd_sfxon, STRING("SFX_BOSS_QWEN_HAND_APPEAR1_2"), 0)
+#if VERSION == VERSION_EU
+    IF_INT_NOT_EQUAL(LW(15), 0)
+        CALL(btlevtcmd_WaitEventEnd, LW(15))
+    END_IF
+#endif
     CALL(queen_hand_small_drag_3_evt)
     RETURN
 EVT_END()

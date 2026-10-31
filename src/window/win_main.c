@@ -152,6 +152,9 @@ static const WinLangTbl winLangTbl;
 void winMain(void) {
     MarioWork* mario;
     s32 i;
+#if VERSION == VERSION_EU
+    WindowPartyDt* list[7];
+#endif
 
     mario = marioGetPtr();
     if (!(wp->flags & WINDOW_FLAG_OPEN_DISABLE) && seqGetSeq() == SEQ_GAME && !seqCheckSeq()) {
@@ -383,6 +386,7 @@ void winMain(void) {
                 break;
 
             case WIN_MENU_ITEM_USE: {
+#if VERSION != VERSION_EU
 #if VERSION >= VERSION_US
                 WindowPartyDt* list[11]; /* FAKE */ // US frame is 96 bytes; only 7 entries used
 #else
@@ -390,20 +394,35 @@ void winMain(void) {
 #endif
                 WindowPartyDt* p;
                 WindowPartyDt* base;
+#endif
                 s32 partyId;
                 s32 n;
 
                 partyId = !marioBgmodeChk() ? marioGetParty() : marioGetPtr()->prevPartyMemberId[0];
+#if VERSION == VERSION_EU
+                n = 0;
+                for (i = 0; i < 7; i++) {
+                    if (partyId == winPartyDt[i].partyId) {
+                        list[n++] = &winPartyDt[i];
+#else
                 base = winPartyDt;
                 n = 0;
                 for (i = 0, p = base; i < 7; i++, p++) {
                     if (partyId == p->partyId) {
                         list[n++] = p;
+#endif
                     }
                 }
+#if VERSION == VERSION_EU
+                for (i = 0; i < 7; i++) {
+                    if (partyId != winPartyDt[i].partyId && (pouchGetPtr()->partyData[winPartyDt[i].partyId].flags & POUCH_PARTY_FLAG_JOINED) &&
+                        !(pouchGetPtr()->partyData[winPartyDt[i].partyId].flags & POUCH_PARTY_FLAG_AWAY)) {
+                        list[n++] = &winPartyDt[i];
+#else
                 for (i = 0; i < 7; i++, base++) {
                     if (partyId != base->partyId) {
                         list[n++] = base;
+#endif
                     }
                 }
                 wp->currentEvent = evtEntryType(evt_item_use, 0, 0, 0);
@@ -1049,6 +1068,42 @@ void winFontSetR(Vec pos, Vec scale, GXColor color, const char* fmt, ...) {
 }
 
 /** Pre-US winFontSetEdge: always formats into a 1 KB buffer. */
+#if VERSION == VERSION_EU
+void winFontSetRWidth(Vec pos, Vec scale, GXColor color, f32 width, const char* fmt, ...) {
+    char buf[0x1000];
+    const char* msg;
+    Mtx trans;
+    Mtx scl;
+    va_list args;
+    s32 ref;
+    s32 w;
+
+    if (strstr(fmt, "%")) {
+        va_start(args, fmt);
+        vsprintf(buf, fmt, args);
+        msg = buf;
+    } else {
+        msg = fmt;
+    }
+    if ((u32)gp->language != 0) {
+        ref = scale.x * FontGetMessageWidth("999");
+    } else {
+        ref = scale.x * FontGetMessageWidth("９９９");
+    }
+    w = scale.x * FontGetMessageWidth(msg);
+    if (w > width) {
+        scale.x *= width / w;
+        w = width;
+    }
+    PSMTXTrans(trans, pos.x + (ref - w), pos.y, pos.z);
+    PSMTXScale(scl, scale.x, scale.y, scale.z);
+    PSMTXConcat(trans, scl, trans);
+    FontDrawColor(color);
+    FontDrawStringMtx(trans, msg);
+}
+
+/** Draws formatted text as a plain string with the font's outline (edge) turned on. */
+#endif
 void winFontSetEdge(Vec pos, Vec scale, GXColor color, const char* fmt, ...) {
 #if VERSION >= VERSION_US
     char buf[0x1000];

@@ -328,7 +328,7 @@ static EvtWord peach_mail[248];
 EvtWord kuzi_bomb_talk_normal[372];
 EvtWord kuzi_bomb_talk_husei[589];
 EvtWord kuzi_bomb_bomb[152];
-EvtWord kuzi_keiziban_normal[391];
+EvtWord kuzi_keiziban_normal[];
 EvtWord kuzi_keiziban_husei[14];
 EvtWord kuzi_bomb_talk[16];
 EvtWord kuzi_keiziban_entry[27];
@@ -5498,9 +5498,20 @@ EVT_BEGIN(kuzi_keiziban_normal)
             CALL(evt_mario_set_pose, STRING("M_S_1"))
             CALL(evt_set_dir_to_target, STRING("グルメボム兵"), STRING("mario"))
             CALL(kuzi_get_keihin, LW(0), LW(1))
+#if VERSION == VERSION_EU
+            CALL(evt_sub_get_language, LW(10))
+            IF_INT_EQUAL(LW(10), 4)
+                SET_VALUE(LW(2), LW(0))
+                ADD(LW(2), 1)
+                CALL(evt_msg_print, 0, STRING("kuji_bomb_028"), 0, STRING("グルメボム兵"))
+            ELSE
+#endif
             SET_VALUE(LW(2), LW(0))
             ADD(LW(2), 1)
             CALL(evt_msg_print_insert, 0, STRING("kuji_bomb_028"), 0, STRING("グルメボム兵"), LW(2))
+#if VERSION == VERSION_EU
+            END_IF
+#endif
             CALL(evt_mario_mov_pos2, -120, 480, 60)
             CALL(evt_item_entry, STRING("keihin"), LW(1), 0, -1000, 0, ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
             CALL(evt_item_get_item, STRING("keihin"))

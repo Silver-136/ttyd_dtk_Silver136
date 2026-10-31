@@ -54,6 +54,21 @@
 s32 mobj_lock(MapObjectEntry* mobj);
 
 
+// The objects JP and US strip (the A/B ride switches, red tornado switch, arrow, trap floor and
+// breaking rock) stay in PAL.
+#if VERSION == VERSION_EU
+#define MOBJ_EXTRA_OBJS 1
+#else
+#define MOBJ_EXTRA_OBJS 0
+#endif
+#if MOBJ_EXTRA_OBJS
+static s32 mobj_breaking_rock(MapObjectEntry* mobj);
+static s32 mobj_trap_floor(MapObjectEntry* mobj);
+static s32 mobj_arrow(MapObjectEntry* mobj);
+static s32 mobj_rideswitch_green(MapObjectEntry* mobj);
+static s32 mobj_rideswitch_orange(MapObjectEntry* mobj);
+#endif
+
 /**
  * Resolves a map object name for the script commands below;
  * "me" means the object whose event is running (event->thisMapObj).
@@ -662,6 +677,48 @@ USER_FUNC(evt_mobj_floatswitch_red) {
     return EVT_RETURN_DONE;
 }
 
+#if MOBJ_EXTRA_OBJS
+/** Places a reusable red tornado switch pressed by a spin jump; only built in PAL and the demos. args[0] ignored. */
+USER_FUNC(evt_mobj_tornadoswitch_red) {
+    EvtWord* args = event->args;
+    s32 flagVar;
+    f32 x, y, z;
+    const char* name;
+    MapObjectEntry* mobj;
+    s32 val;
+    const char* anim;
+    s32 inBattle;
+    evtGetValue(event, args[0]);
+    name = (const char*)evtGetValue(event, args[1]);
+    x = evtGetFloat(event, args[2]);
+    y = evtGetFloat(event, args[3]);
+    z = evtGetFloat(event, args[4]);
+    val = evtGetValue(event, args[5]);
+    flagVar = args[6];
+    inBattle = gp->inBattle;
+    inBattle = inBattle != 0;
+    anim = "MOBJ_RedTornadoSwitch";
+    if (animGroupBaseAsync(anim, inBattle, NULL) == 0) {
+        return EVT_RETURN_BLOCK;
+    }
+    mobjEntry(name, anim);
+    mobj = mobjNameToPtr(name);
+    mobjSetPosition(name, x, y, z);
+    mobj->mainFunc = mobj_switch_red;
+    mobj->event = val;
+    mobj->flags |= MOBJ_FLAG_UPDATE_MTX;
+    mobj->flags |= MOBJ_FLAG_HIT_SPIN_JUMP;
+    mobj->flagVar = flagVar;
+    mobj->state = 0;
+    if (evtGetValue(event, flagVar)) {
+        mobj->state = 99;
+    }
+    mobjCalcMtx(mobj);
+    return EVT_RETURN_DONE;
+}
+
+#endif
+
 s32 mobj_timerswitch(MapObjectEntry* mobj) {
     MapObjectEntry* other = mobjNameToPtr(mobj->linkedName);
     switch (mobj->state) {
@@ -796,6 +853,170 @@ USER_FUNC(evt_mobj_timerswitch) {
     return EVT_RETURN_DONE;
 }
 
+#if MOBJ_EXTRA_OBJS
+/**
+ * Main function of the orange ride switch (PAL and demos):
+ * standing on it runs the event and squashes it flat, where it stays.
+ */
+static s32 mobj_rideswitch_orange(MapObjectEntry* mobj) {
+    f32 x, y, z;
+    switch (mobj->state) {
+        case 0:
+            if (mobj->flags & MOBJ_FLAG_HIT) {
+                mobjRunEvent(mobj, (s32*)mobj->event);
+                psndSFXOn_3D((const char*)0x1d7, &mobj->position);
+                animPoseSetAnim(mobj->poseId, "A_1", 1);
+                mobj->state = 1;
+            }
+            break;
+        case 1:
+            y = mobj->scale2.y - 0.3f;
+            x = mobj->scale2.x;
+            z = mobj->scale2.z;
+            if (y <= 0.2f) {
+                mobj->state = 99;
+                y = 0.2f;
+            }
+            mobj->scale2 = (Vec){x, y, z};
+            mobjCalcMtx2(mobj);
+            break;
+        case 99:
+            break;
+    }
+    return 0;
+}
+
+/** Places an orange ride switch (MOBJ_RideSwitchA). args: name, x, y, z, event, flag variable. */
+USER_FUNC(evt_mobj_rideswitch_orange) {
+    s32 val;
+    EvtWord* args = event->args;
+    const char* name;
+    f32 x, y, z;
+    s32 flagVar;
+    MapObjectEntry* mobj;
+    const char* anim;
+    name = (const char*)evtGetValue(event, args[0]);
+    x = evtGetFloat(event, args[1]);
+    y = evtGetFloat(event, args[2]);
+    z = evtGetFloat(event, args[3]);
+    val = evtGetValue(event, args[4]);
+    flagVar = args[5];
+    if (animGroupBaseAsync(anim = "MOBJ_RideSwitchA", gp->inBattle ? 1 : 0, NULL) == 0) {
+        return EVT_RETURN_BLOCK;
+    }
+    mobjEntry(name, anim);
+    mobj = mobjNameToPtr(name);
+    mobj->scale2.x *= 0.8f;
+    mobj->scale2.z *= 0.8f;
+    mobjSetPosition(name, x, y, z);
+    mobj->mainFunc = mobj_rideswitch_orange;
+    mobj->event = val;
+    mobj->flags |= MOBJ_FLAG_UPDATE_MTX;
+    mobj->flags |= MOBJ_FLAG_HIT_STAND;
+    mobj->flagVar = flagVar;
+    mobj->state = 0;
+    mobjCalcMtx2(mobj);
+    return EVT_RETURN_DONE;
+}
+
+/**
+ * Main function of the green ride switch (PAL and demos): stepping on it runs the event and flattens it;
+ * once Mario walks away it rises back up and can be pressed again.
+ */
+static s32 mobj_rideswitch_green(MapObjectEntry* mobj) {
+    f32 x, y, z;
+    AnimationPoseData* data;
+    f32 mag;
+    Vec size;
+    switch (mobj->state) {
+        case 0:
+            if (mobj->flags & MOBJ_FLAG_HIT) {
+                mobjRunEvent(mobj, (s32*)mobj->event);
+                psndSFXOn_3D((const char*)0x1d5, &mobj->position);
+                animPoseSetAnim(mobj->poseId, "A_1", 1);
+                mobj->state = 1;
+            }
+            break;
+        case 1:
+            y = mobj->scale2.y - 0.3f;
+            x = mobj->scale2.x;
+            z = mobj->scale2.z;
+            if (y <= 0.2f) {
+                mobj->state = 2;
+                y = 0.2f;
+                mobj->flags &= ~MOBJ_FLAG_HIT;
+            }
+            mobj->scale2 = (Vec){x, y, z};
+            mobjCalcMtx2(mobj);
+            break;
+        case 2:
+            data = animPoseGetAnimBaseDataPtr(mobj->poseId);
+            size = (Vec){0.8f * (10.0f * data->bboxMax.x), 10.0f * data->bboxMax.y, 0.8f * (10.0f * data->bboxMax.z)};
+            mag = PSVECMag(&size);
+            if (PSVECDistance(&mobj->position, &marioGetPtr()->position) > mag) {
+                if (!(mobj->flags & MOBJ_FLAG_HIT)) {
+                    mobj->state = 3;
+                    animPoseSetAnim(mobj->poseId, "A_2", 1);
+                    psndSFXOn_3D((const char*)0x1d6, &mobj->position);
+                } else {
+                    mobj->flags &= ~MOBJ_FLAG_HIT;
+                }
+            }
+            break;
+        case 3:
+            y = mobj->scale2.y;
+            y += 0.3f;
+            x = mobj->scale2.x;
+            z = mobj->scale2.z;
+            if (y >= 15.0f) {
+                mobj->state = 0;
+                y = 15.0f;
+            }
+            mobj->scale2 = (Vec){x, y, z};
+            mobjCalcMtx2(mobj);
+            mobj->flags &= ~MOBJ_FLAG_HIT;
+            break;
+        case 99:
+            break;
+    }
+    return 0;
+}
+
+/** Places a green ride switch (MOBJ_RideSwitchB). args: name, x, y, z, event, flag variable. */
+USER_FUNC(evt_mobj_rideswitch_green) {
+    s32 val;
+    EvtWord* args = event->args;
+    const char* name;
+    f32 x, y, z;
+    s32 flagVar;
+    MapObjectEntry* mobj;
+    const char* anim;
+    name = (const char*)evtGetValue(event, args[0]);
+    x = evtGetFloat(event, args[1]);
+    y = evtGetFloat(event, args[2]);
+    z = evtGetFloat(event, args[3]);
+    val = evtGetValue(event, args[4]);
+    flagVar = args[5];
+    if (animGroupBaseAsync(anim = "MOBJ_RideSwitchB", gp->inBattle ? 1 : 0, NULL) == 0) {
+        return EVT_RETURN_BLOCK;
+    }
+    mobjEntry(name, anim);
+    mobj = mobjNameToPtr(name);
+    mobj->scale2.x *= 0.8f;
+    mobj->scale2.z *= 0.8f;
+    mobjSetPosition(name, x, y, z);
+    mobj->mainFunc = mobj_rideswitch_green;
+    mobj->event = val;
+    mobj->flags |= MOBJ_FLAG_UPDATE_MTX;
+    mobj->flags |= MOBJ_FLAG_HIT_STAND;
+    mobj->flagVar = flagVar;
+    mobj->state = 0;
+    mobjCalcMtx2(mobj);
+    return EVT_RETURN_DONE;
+}
+
+#endif
+
 /**
  * Main function of the light blue ride switch: stepping on it runs the event and flattens it;
  * when Mario leaves it runs the second (release) event and springs back up.
@@ -805,6 +1026,7 @@ s32 mobj_rideswitch_lightblue(MapObjectEntry* mobj) {
     AnimationPoseData* data;
     f32 mag;
     Vec size;
+#if !MOBJ_EXTRA_OBJS
     // FAKE: four unused Vec literals read the uninitialized x/y/z; removing the block changes the object
     {
         Vec d1 = (Vec){x, y, z};
@@ -812,6 +1034,7 @@ s32 mobj_rideswitch_lightblue(MapObjectEntry* mobj) {
         Vec d3 = (Vec){x, y, z};
         Vec d4 = (Vec){x, y, z};
     }
+#endif
     switch (mobj->state) {
     case 0:
         if (mobj->flags & MOBJ_FLAG_HIT) {
@@ -867,11 +1090,13 @@ s32 mobj_rideswitch_lightblue(MapObjectEntry* mobj) {
     return 0;
 }
 
+#if !MOBJ_EXTRA_OBJS
 void evt_mobj_rideswitch(void) {
     mobjNameToPtr("MOBJ_RideSwitchB");
     mobjNameToPtr("MOBJ_RideSwitchA");
     mobjNameToPtr("MOBJ_RedTornadoSwitch");
 }
+#endif
 
 /**
  * Places a light blue ride switch (MOBJ_RideSwitchC).
@@ -2099,9 +2324,47 @@ USER_FUNC(evt_mobj_signboard) {
     return EVT_RETURN_DONE;
 }
 
+#if MOBJ_EXTRA_OBJS
+/** Main function of the arrow sign; it does nothing (the arrow is only decoration). */
+static s32 mobj_arrow(MapObjectEntry* mobj) {
+    return 0;
+}
+
+/** Places a decorative arrow sign (MOBJ_Arrow); only built in PAL and the demos. args: name, x, y, z, flag variable. */
+USER_FUNC(evt_mobj_arrow) {
+    EvtWord* args = event->args;
+    s32 inBattle;
+    const char* name;
+    f32 x, y, z;
+    s32 flagVar;
+    MapObjectEntry* mobj;
+    const char* anim;
+    name = (const char*)evtGetValue(event, args[0]);
+    x = evtGetFloat(event, args[1]);
+    y = evtGetFloat(event, args[2]);
+    z = evtGetFloat(event, args[3]);
+    flagVar = args[4];
+    inBattle = gp->inBattle;
+    inBattle = inBattle != 0;
+    anim = "MOBJ_Arrow";
+    if (animGroupBaseAsync(anim, inBattle, NULL) == 0) {
+        return EVT_RETURN_BLOCK;
+    }
+    mobjEntry(name, anim);
+    mobj = mobjNameToPtr(name);
+    mobjSetPosition(name, x, y, z);
+    mobj->mainFunc = mobj_arrow;
+    mobj->event = 0;
+    mobj->flags |= MOBJ_FLAG_UPDATE_MTX;
+    mobj->flagVar = flagVar;
+    mobj->state = 99;
+    return EVT_RETURN_DONE;
+}
+#else
 void mobj_sign(void) {
     mobjNameToPtr("MOBJ_Arrow");
 }
+#endif
 
 extern EffectEntry* effCoinFukidashiEntry(f32 x, f32 y, f32 z, s32 type, s32 number, s32 duration);
 
@@ -3402,16 +3665,220 @@ USER_FUNC(evt_mobj_kururing_floor) {
     mobjCalcMtx(mobj);
     mobj->scale2 = (Vec){200.0f, mobj->scale2.y, 200.0f};
     mobjCalcMtx2(mobj);
+#if !MOBJ_EXTRA_OBJS
     {
         Vec dz = (Vec){x, y, z};
         char oname[16] = "o_";
         char iname[16] = "i_";
     }
+#endif
     mapGrpFlagOn(grp, MAP_OBJ_FLAG_KURURING);
     animPoseSetAnim(mobj->poseId, "S_1", 1);
     animPoseWorldPositionEvalOn(mobj->poseId);
     return EVT_RETURN_DONE;
 }
+
+#if MOBJ_EXTRA_OBJS
+/**
+ * Main function of the trap door panels (PAL and demos):
+ * standing or spin-jumping on one sets the flag variable and flips it open with the paper texture,
+ * then deletes it.
+ */
+static s32 mobj_trap_floor(MapObjectEntry* mobj) {
+    switch (mobj->state) {
+        case 0:
+            if (mobj->flags & MOBJ_FLAG_HIT) {
+                evtSetValue(NULL, mobj->flagVar, 1);
+                animPoseSetAnim(mobj->poseId, "A_1", 1);
+                psndSFXOn_3D((const char*)0x1f1, &mobj->position);
+                mobj->state++;
+            }
+            break;
+        case 1:
+            animGetPtr()->poses[mobj->poseId].flags |= ANIM_POSE_FLAG_CHANGE_TEXTURE;
+            mobj->flags |= MOBJ_FLAG_PAPER_TEX;
+            dispEntry(CAMERA_SHADOW, 0.0f, 0, (DispCallback)kururing_capture, mobj);
+            if (!(animPoseGetLoopTimes(mobj->poseId) < 1.0f)) {
+                animGetPtr()->poses[mobj->poseId].flags &= ~ANIM_POSE_FLAG_CHANGE_TEXTURE;
+                mobj->flags &= ~MOBJ_FLAG_PAPER_TEX;
+                mobj->state++;
+            }
+            break;
+        case 2:
+            mobjDelete(mobj->name);
+            break;
+    }
+    return 0;
+}
+
+/**
+ * Places a trap door panel (MOBJ_trap; PAL and demos).
+ * args: name, x, y, z, map group under it, unused, flag variable (already set: not placed).
+ */
+USER_FUNC(evt_mobj_trap_floor) {
+    EvtWord* args = event->args;
+    const char* name;
+    MapObjectEntry* mobj;
+    f32 x, y, z;
+    s32 inBattle;
+    const char* grp;
+    s32 flagVar;
+    const char* anim;
+    name = (const char*)evtGetValue(event, args[0]);
+    x = evtGetFloat(event, args[1]);
+    y = evtGetFloat(event, args[2]);
+    z = evtGetFloat(event, args[3]);
+    grp = (const char*)evtGetValue(event, args[4]);
+    evtGetValue(event, args[5]);
+    inBattle = gp->inBattle != 0;
+    flagVar = args[6];
+    anim = "MOBJ_trap";
+    if (evtGetValue(event, flagVar)) {
+        return EVT_RETURN_DONE;
+    }
+    if (animGroupBaseAsync(anim, inBattle, NULL) == 0) {
+        return EVT_RETURN_BLOCK;
+    }
+    mobjEntry(name, anim);
+    mobj = mobjNameToPtr(name);
+    mobj->position = (Vec){x, 0.1f + y, z};
+    mobj->mainFunc = mobj_trap_floor;
+    mobj->flagVar = flagVar;
+    mobj->state = 0;
+    mobj->flags |= MOBJ_FLAG_HIT_STAND | MOBJ_FLAG_HIT_SPIN_JUMP;
+    mobj->flags |= MOBJ_FLAG_NO_SHADOW;
+    mobj->flags |= MOBJ_FLAG_UPDATE_MTX;
+    mobjCalcMtx(mobj);
+    mapGrpFlagOn(grp, MAP_OBJ_FLAG_KURURING);
+    animPoseSetAnim(mobj->poseId, "S_1", 1);
+    return EVT_RETURN_DONE;
+}
+
+/** PAL: a bomb rock that peels away as a paper sheet when hit */
+static s32 mobj_breaking_rock(MapObjectEntry* mobj) {
+    char oname[16] = "o_";
+    char iname[16] = "i_";
+    EventEntry ev1;
+    EventEntry ev2;
+    EvtWord args1[10];
+    EvtWord args2[10];
+    ImageEntry* img;
+    s32 type = gp->inBattle != 0;
+    strcat(oname, mobj->name);
+    strcat(iname, mobj->name);
+    switch (mobj->state) {
+        case 0:
+            if (mobj->flags & MOBJ_FLAG_HIT) {
+                if ((s32*)mobj->event != NULL) {
+                    mobjRunEvent(mobj, (s32*)mobj->event);
+                }
+                if (mobj->flagVar) {
+                    evtSetValue(NULL, mobj->flagVar, 1);
+                }
+                mobj->state++;
+            }
+            break;
+        case 1:
+            animPaperPoseEntry("OFF_d_bom", type);
+            offscreenEntry(oname);
+            imgEntry(iname, type);
+            mobj->offscreenId = offscreenNameToId(oname);
+            ev1.args = args1;
+            args1[0] = (EvtWord)iname;
+            args1[1] = 0;
+            args1[2] = (EvtWord)oname;
+            args1[3] = 1;
+            args1[4] = 0;
+            args1[5] = 0;
+            args1[6] = 0;
+            args1[7] = 0;
+            evt_img_alloc_capture(&ev1, TRUE);
+            ev2.args = args2;
+            args2[0] = (EvtWord)iname;
+            args2[1] = 1;
+            args2[2] = (EvtWord)oname;
+            args2[3] = 1;
+            args2[4] = 0;
+            args2[5] = 0;
+            args2[6] = 0;
+            args2[7] = 0;
+            evt_img_alloc_capture(&ev2, TRUE);
+            img = imgNameToPtr(iname, type);
+            img->poseId = animPaperPoseGetId("OFF_d_bom", type);
+            img->animName = "A_1";
+            img->animTime = animTimeGetTime(type);
+            imgSetShadow(img, 2);
+            psndSFXOn_3D((const char*)0x1cc, &mobj->position);
+            mobj->state++;
+            break;
+        case 2:
+            img = imgNameToPtr(iname, type);
+            if (img->loopTimes >= 1.0f) {
+                mobj->state++;
+            }
+            mobj->position = (Vec){0.0f, -2000.0f, 0.0f};
+            mobj->flags |= MOBJ_FLAG_UPDATE_MTX;
+            mobj->flags |= MOBJ_FLAG_HIT;
+            break;
+        case 3:
+            img = imgNameToPtr(iname, type);
+            imgFreeCapture(img, 0);
+            imgFreeCapture(img, 1);
+            imgSetShadow(img, 0);
+            imgRelease(img, type);
+            offscreenDelete(oname);
+            mobj->offscreenId = -1;
+            mobj->state = 99;
+            break;
+        case 99:
+            mobjDelete(mobj->name);
+            break;
+    }
+    return 0;
+}
+
+/**
+ * Places a rock that a Bobbery bomb blows away (MOBJ_BombRock; PAL and demos).
+ * args: name, x, y, z, event, flag variable (already set: not placed).
+ */
+USER_FUNC(evt_mobj_breaking_rock) {
+    EvtWord* args = event->args;
+    const char* name;
+    s32 val;
+    s32 flagVar;
+    s32 inBattle;
+    MapObjectEntry* mobj;
+    f32 x, y, z;
+    const char* anim;
+    name = (const char*)evtGetValue(event, args[0]);
+    x = evtGetFloat(event, args[1]);
+    y = evtGetFloat(event, args[2]);
+    z = evtGetFloat(event, args[3]);
+    val = evtGetValue(event, args[4]);
+    inBattle = gp->inBattle != 0;
+    flagVar = args[5];
+    anim = "MOBJ_BombRock";
+    if (evtGetValue(event, flagVar)) {
+        return EVT_RETURN_DONE;
+    }
+    if (animGroupBaseAsync(anim, inBattle, NULL) == 0) {
+        return EVT_RETURN_BLOCK;
+    }
+    mobjEntry(name, anim);
+    mobj = mobjNameToPtr(name);
+    mobjSetPosition(name, x, y, z);
+    mobj->mainFunc = mobj_breaking_rock;
+    mobj->event = val;
+    mobj->flags |= MOBJ_FLAG_UPDATE_MTX;
+    mobj->flags |= MOBJ_FLAG_HIT_BOBBERY;
+    mobj->flagVar = flagVar;
+    mobj->state = 0;
+    mobjCalcMtx(mobj);
+    animPoseSetAnim(mobj->poseId, "S_1", 1);
+    return EVT_RETURN_DONE;
+}
+
+#endif
 
 /**
  * Bowser stage power-up pickup. args: x, y, z of the pickup.
@@ -3440,10 +3907,12 @@ USER_FUNC(kpa_powerup) {
 s32 mobj_koopa_ojama_blk_evt(MapObjectEntry* mobj) {
     BOOL ok = FALSE;
     ItemEntry* item;
+#if !MOBJ_EXTRA_OBJS
     // FAKE: unused Vec local; removing the block changes the object
     {
         Vec dv = (Vec){0.0f, -2000.0f, 0.0f};
     }
+#endif
     switch (mobj->state) {
     case 0:
         if (mobj->flags & MOBJ_FLAG_HIT) {
@@ -3543,11 +4012,13 @@ USER_FUNC(evt_mobj_koopa_ojama_blk) {
     return EVT_RETURN_DONE;
 }
 
+#if !MOBJ_EXTRA_OBJS
 void mobj_koopa_stone_blk(void) {
     mobjNameToPtr("MOBJ_BombRock");
     mobjNameToPtr("OFF_d_bom");
     mobjNameToPtr("MOBJ_trap");
 }
+#endif
 
 /**
  * Main function of the Bowser-stage stone blocks:

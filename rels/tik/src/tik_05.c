@@ -154,7 +154,7 @@ BrokenWork* broken_wp;
 f32 param_tbl[5];
 f32 add_tbl[5];
 static const char* name_tbl[5];
-EvtWord evt_mapwrite[1351];
+EvtWord evt_mapwrite[];
 EvtWord fake_fade[30];
 EvtWord evt_starstone_up[127];
 EvtWord evt_starstone_set[106];
@@ -1820,10 +1820,17 @@ EVT_BEGIN(evt_mapwrite)
     CALL(tiz_stone, 0)
     WAIT_MS(500)
     CALL(evt_npc_entry, STRING("tiz_obj"), LW(8))
+#if VERSION == VERSION_EU
+    CALL(evt_npc_pera_onoff, STRING("tiz_obj"), 0)
+    CALL(evt_npc_set_ry, STRING("tiz_obj"), 0)
+#endif
     ADD(LW(6), 10)
     CALL(evt_npc_set_position, STRING("tiz_obj"), LW(5), LW(6), LW(7))
     CALL(evt_npc_set_scale, STRING("tiz_obj"), FLOAT(1.5f), FLOAT(1.5f), FLOAT(1.5f))
     CALL(evt_npc_set_camid, STRING("tiz_obj"), 7)
+#if VERSION == VERSION_EU
+    CALL(evt_npc_set_anim, STRING("tiz_obj"), STRING("A_1"))
+#else
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, 255, 1000)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
@@ -1834,6 +1841,7 @@ EVT_BEGIN(evt_mapwrite)
             BREAK_LOOP
         END_IF
     END_LOOP
+#endif
     CALL(evt_snd_sfxon__, LW(9), 0)
     CALL(evt_npc_wait_anim, STRING("tiz_obj"), FLOAT(1.0f))
     ADD(LW(6), 10)

@@ -137,7 +137,11 @@ void fileGarbageDataAdrClear(FileEntry* entry) {
         case FILE_TYPE_TPL:
             tpl = data;
             if (tpl->versionNumber != 0x0020AF30) {
+#if VERSION == VERSION_EU
+                OSPanic("filemgr.c", 150, "invalid version number for texture palette");
+#else
                 OSPanic("filemgr.c", VERSION_PICK(147, 153), "invalid version number for texture palette");
+#endif
             }
             if ((void*)tpl->descriptorArray >= tpl) {
                 // FAKE: no-op (u16) cast on the u16 counter; the plain comparison changes the object
@@ -339,7 +343,11 @@ void fileGarbageDataAdrSet(void* data, s32 type) {
         case FILE_TYPE_TPL:
             tpl = data;
             if (tpl->versionNumber != 0x0020AF30) {
+#if VERSION == VERSION_EU
+                OSPanic("filemgr.c", 109, "invalid version number for texture palette");
+#else
                 OSPanic("filemgr.c", VERSION_PICK(106, 112), "invalid version number for texture palette");
+#endif
             }
             if ((void*)tpl->descriptorArray < tpl) {
                 ADDR_WORD(tpl->descriptorArray) += (AddrWord)tpl;

@@ -371,7 +371,11 @@ const char* a_mario_group[] = {
     "M_H_8", "M_H_9", "M_H_9A", "M_H_9B", "M_O_1", "M_O_2", "M_B_1", "M_B_2", "M_D_1", "M_D_2",
     "M_U_3", "M_D_6", "M_P_1", "M_P_2", "M_I_1", "M_I_2", "M_I_S", "M_X_1", "M_I_U", "M_A_1A",
     "M_A_1B", "M_U_2", "M_W_7", "M_C_1", "M_C_2", "M_Y_1", "M_Y_2", "M_Y_3", "M_A_2A", "M_A_2B",
+#if VERSION == VERSION_EU
+    "M_A_2C", "M_B_3", "M_B_4", "M_J_5A", "M_J_5B", "M_S_4", "M_W_6", "M_V_2", "M_I_Y", "M_I_3", NULL,
+#else
     "M_A_2C", "M_B_3", "M_B_4", "M_J_5A", "M_J_5B", "M_S_4", "M_W_6", "M_V_2", "M_I_Y", NULL,
+#endif
 };
 
 /**
@@ -733,6 +737,11 @@ USER_FUNC(evt_mario_set_pose) {
         return EVT_RETURN_DONE;
     }
     name = (const char*)evtGetValue(event, args[0]);
+#if VERSION == VERSION_EU
+    if (strcmp(name, "M_I_2") == 0) {
+        name = "M_I_3";
+    }
+#endif
     SETPOSE_BODY
 }
 

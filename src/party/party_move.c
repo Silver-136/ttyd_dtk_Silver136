@@ -1193,6 +1193,9 @@ void partyWalkInit(PartyEntry* party) {
     MarioWork* mario = party->playerPtr;
 
     party->flags |= PARTY_FLAG_IS_GROUNDED;
+#if VERSION == VERSION_EU
+    party->flags &= ~(PARTY_FLAG_IS_JUMPING | PARTY_FLAG_IS_FALLING | PARTY_FLAG_IS_STEPPING);
+#endif
     if (!(party->flags & PARTY_FLAG_IS_PARTNER)) {
         partyClearFootmark();
     } else {

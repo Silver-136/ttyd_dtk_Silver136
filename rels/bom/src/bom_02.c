@@ -1,6 +1,7 @@
 // bom_02 (ボム村, Fahr Outpost): the east side of the village with the inn, the shop and General White's bed.
 
 #include "version.h"
+#include "eff/eff_nice.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_story.h"
 #include "evt/evt_window.h"
@@ -45,6 +46,9 @@
 
 static USER_FUNC(anim_tevcallback);
 static USER_FUNC(anim_tevcallback_mobj);
+#if VERSION == VERSION_EU
+static USER_FUNC(nice_effect_shrink);
+#endif
 static USER_FUNC(yami_view);
 extern s32 envSetYami[];
 
@@ -92,11 +96,7 @@ static EvtWord talk_murabito_i[44];
 EvtWord init_tenin[8];
 EvtWord talk_tenin[2];
 static EvtWord init_white[83];
-#if VERSION >= VERSION_US
-EvtWord mario_jump[203];
-#else
-EvtWord mario_jump[197];
-#endif
+EvtWord mario_jump[];
 #if VERSION < VERSION_US
 EvtWord mario_jump_tail[6];
 #endif
@@ -1004,7 +1004,12 @@ EvtWord mario_jump[] = {
         SUBTRACT(LW(0), 20)
         SUBTRACT(LW(2), 20)
 #endif
+#if VERSION == VERSION_EU
+        CALL(evt_eff, STRING("eff_nice"), STRING("nice"), 0, LW(0), LW(1), LW(2), 0, 0, 0, 0, 0, 0, 0, 0)
+        CALL(nice_effect_shrink, STRING("eff_nice"))
+#else
         CALL(evt_eff, 0, STRING("nice"), 0, LW(0), LW(1), LW(2), 0, 0, 0, 0, 0, 0, 0, 0)
+#endif
     END_INLINE_EVENT
     CALL(evt_eff, 0, STRING("small_star"), 3, LW(0), LW(1), LW(2), 0, -1, 0, 3, 0, 0, 0, 0)
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG7_WHITE_DAMAGED1"), LW(0), LW(1), LW(2), 0)
@@ -1023,7 +1028,12 @@ EvtWord mario_jump[] = {
         SUBTRACT(LW(0), 20)
         SUBTRACT(LW(2), 20)
 #endif
+#if VERSION == VERSION_EU
+        CALL(evt_eff, STRING("eff_good"), STRING("nice"), 1, LW(0), LW(1), LW(2), 0, 0, 0, 0, 0, 0, 0, 0)
+        CALL(nice_effect_shrink, STRING("eff_good"))
+#else
         CALL(evt_eff, 0, STRING("nice"), 1, LW(0), LW(1), LW(2), 0, 0, 0, 0, 0, 0, 0, 0)
+#endif
     END_INLINE_EVENT
     CALL(evt_eff, 0, STRING("small_star"), 3, LW(0), LW(1), LW(2), 0, -1, 0, 3, 0, 0, 0, 0)
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG7_WHITE_DAMAGED1"), LW(0), LW(1), LW(2), 0)
@@ -1594,6 +1604,16 @@ static ShopperData35 shopper_data = {
 };
 
 
+#if VERSION == VERSION_EU
+/** PAL only: shrinks a named "nice" effect to 5/7 of its size. */
+static USER_FUNC(nice_effect_shrink) {
+    EffectEntry* eff = effNameToPtr((const char*)evtGetValue(event, event->args[0]));
+
+    ((NiceEffectWork*)eff->userdata)->overallScale = 0.71428573f;
+    return EVT_RETURN_DONE;
+}
+
+#endif
 /**
  * Script helper: args[0] is a float Z offset; builds a look-at matrix from (0, 100, 100+z)
  * and hands it to the darkness effect (envSetYamiView) as its view.

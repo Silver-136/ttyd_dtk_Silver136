@@ -58,6 +58,7 @@ static USER_FUNC(_steal_item) {
     EvtWord* args = event->args;
     s32 coins;
     s32 num;
+    s32 count;
     PouchData* pouch = pouchGetPtr();
     BattleUnit* unit;
     BattleUnit* target;
@@ -107,11 +108,18 @@ static USER_FUNC(_steal_item) {
     }
     {
         s32 item = 0;
-        s32 count = 0;
         s32 r;
         s32 i;
+#if VERSION == VERSION_EU
+        s32 heldMax = GetHeldItemCount; // PAL scans only the held-item slots the bag has
+#endif
 
+        count = 0;
+#if VERSION == VERSION_EU
+        for (i = 0; i < heldMax; i++) {
+#else
         for (i = 0; i < MAX_HELD_ITEMS; i++) {
+#endif
             if (pouch->heldItems[i] != 0) {
                 count++;
             }
@@ -135,7 +143,11 @@ static USER_FUNC(_steal_item) {
         } else {
             s32 k;
 
+#if VERSION == VERSION_EU
+            for (k = 0; k < heldMax; k++) {
+#else
             for (k = 0; k < MAX_HELD_ITEMS; k++) {
+#endif
                 if (pouch->heldItems[k] != 0) {
                     if (--r < 0) {
                         item = pouch->heldItems[k];

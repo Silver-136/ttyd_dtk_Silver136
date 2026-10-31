@@ -1,3 +1,4 @@
+#include "version.h"
 // Shared battle drop tables: item drops and heart and flower point drops used by enemy units.
 
 #include "battle/battle_unit.h"
@@ -1481,3 +1482,45 @@ ItemDropData battle_item_default_param_list[] = {
     {0},
 };
 
+#if VERSION == VERSION_EU
+// Empty drop tables of tst.rel's test battles (PAL)
+ItemDropData battle_item_kinoko[] = {
+    {0},
+};
+
+ItemDropData battle_item_funyafunya_kun[] = {
+    {0},
+};
+
+ItemDropData battle_item_pow_block[] = {
+    {0},
+};
+
+ItemDropData battle_item_dekadeka_drink[] = {
+    {0},
+};
+
+ItemDropData battle_item_kirakira_otoshi[] = {
+    {0},
+};
+
+ItemDropData battle_item_koorino_ibuki[] = {
+    {0},
+};
+
+ItemDropData battle_item_fire_flower[] = {
+    {0},
+};
+
+ItemDropData battle_item_yurayura_jishin[] = {
+    {0},
+};
+
+ItemDropData battle_item_suitooru[] = {
+    {0},
+};
+
+ItemDropData battle_item_sinabita_kinoko[] = {
+    {0},
+};
+#endif

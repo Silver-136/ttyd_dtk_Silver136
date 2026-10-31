@@ -220,13 +220,17 @@ static s16 suifu_run_animtbl[22];
 Vec suifu100kaidanDOWN[];
 Vec suifu100kaidanUP[];
 EvtWord marco_run_away[100];
-EvtWord gorotsuki_kikan[599];
+EvtWord gorotsuki_kikan[];
 EvtWord into_gor_ship[265];
 EvtWord mony_run_away[108];
 EvtWord peton_run_away[88];
 EvtWord mony_peton_depart[VERSION_PICK(61, 64)];
 EvtWord gor_00_koopa_evt[1095];
+#if VERSION == VERSION_EU
+static EvtWord peach_mail[215];
+#else
 static EvtWord peach_mail[209];
+#endif
 f32 gor_ship_puka_data[];
 EvtWord gor_ship_puka[21];
 EvtWord gor_muj_ship_sub[53];
@@ -4438,6 +4442,9 @@ EVT_BEGIN(gorotsuki_kikan)
     // set up.
     CALL(evt_snd_bgm_scope, 0, 1)
     CALL(evt_mario_key_onoff, 0)
+#if VERSION == VERSION_EU
+    CALL(evt_party_stop, 0)
+#endif
     CALL(evt_mario_cont_onoff, 0)
     CALL(evt_mario_cont_onoff, 1)
     WAIT_FRAMES(2)
@@ -4572,7 +4579,12 @@ EVT_BEGIN(gorotsuki_kikan)
     CALL(evt_cam3d_evt_set, 205, 127, 628, 205, 71, 184, 500, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
     CALL(evt_msg_print_party, STRING("mac_5_000_10"))
+#if VERSION == VERSION_EU
+    CALL(evt_cam3d_evt_off, 500, 11)
+    CALL(evt_party_run, 0)
+#else
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
+#endif
     // Return control and start the Peach mail scene.
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_snd_bgm_scope, 0, 0)
@@ -5078,6 +5090,9 @@ static EVT_BEGIN(peach_mail)
     END_LOOP
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)
+#if VERSION == VERSION_EU
+    CALL(evt_party_stop, 0)
+#endif
     CALL(evt_snd_bgmoff, PSND_PAUSE)
     CALL(evt_snd_bgmon, PSND_SLOT(1), STRING("BGM_FF_MAIL_RECEPTION1"))
     BEGIN_INLINE_EVENT
@@ -5120,6 +5135,9 @@ static EVT_BEGIN(peach_mail)
     CALL(evt_msg_print, 0, STRING("gor_00_mail5_01"), 0, 0)
     CALL(evt_msg_print_party, STRING("gor_00_mail5_02"))
     CALL(evt_mario_set_pose, STRING("M_S_1"))
+#if VERSION == VERSION_EU
+    CALL(evt_party_run, 0)
+#endif
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_cam_shift_reset)
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)

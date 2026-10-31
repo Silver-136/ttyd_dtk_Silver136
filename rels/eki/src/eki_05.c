@@ -12,6 +12,8 @@
 #include "evt/evt_mobj.h"
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
+#include "evt/evt_seq.h"
+#include "evt/evt_hit.h"
 #include "evt/evt_lecture.h"
 #include "driver/mapdrv.h"
 #include "mario/mario_pouch.h"
@@ -30,11 +32,7 @@ EvtWord grass_open_2[23];
 EvtWord evt_boots[42];
 EvtWord evt_elvkey[5];
 static EvtWord evt_head[38];
-#if VERSION >= VERSION_US
-EvtWord eki_05_init_evt[112];
-#else
-EvtWord eki_05_init_evt[106];
-#endif
+EvtWord eki_05_init_evt[];
 
 /**
  * Door animation callback, closing for the n_bero exit to eki_04:
@@ -236,6 +234,15 @@ EVT_BEGIN(eki_05_init_evt)
     END_INLINE_EVENT
 #if VERSION >= VERSION_US
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S"), MAP_OBJ_FLAG_CLIP)
+#endif
+#if VERSION == VERSION_EU
+    BEGIN_INLINE_EVENT
+        CALL(evt_seq_wait, 2)
+        CALL(evt_bero_exec_wait, 65536)
+        SET_VALUE(LW(0), STRING("w_bero_1"))
+        CALL_CHILD(bero_case_switch_off)
+        CALL(evt_hitobj_attr_onoff, 0, 0, STRING("w_bero_1"), 8388612)
+    END_INLINE_EVENT
 #endif
     RETURN
 EVT_END()

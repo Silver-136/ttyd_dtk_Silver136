@@ -1,5 +1,6 @@
 // Script commands and scripts for moving floors (platforms that follow a path).
 
+#include "version.h"
 #include "evt/evt_cmd.h"
 #include "driver/mapdrv.h"
 #include "manager/evtmgr.h"
@@ -491,7 +492,11 @@ USER_FUNC(moving_floor_get_stmsec) {
     if (w->flags & 1) {
         evtSetValue(event, args[1], 0);
     } else {
+#if VERSION == VERSION_EU
+        evtSetValue(event, args[1], w->stmsec * gp->framerate / 1000);
+#else
         evtSetValue(event, args[1], w->stmsec * 60 / 1000);
+#endif
     }
     return EVT_RETURN_DONE;
 }

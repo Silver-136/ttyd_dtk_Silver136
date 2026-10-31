@@ -188,11 +188,7 @@ EvtWord evt_telbox[124];
 EvtWord evt_mail[175];
 static EvtWord evt_key[7];
 static EvtWord mobj_box00[36];
-#if VERSION >= VERSION_US
-EvtWord tou_01_init_evt[1641];
-#else
-EvtWord tou_01_init_evt[627];
-#endif
+EvtWord tou_01_init_evt[];
 
 /** Script helper: turns off projected-texture shading (the blimp shadow) on Mario's and the partners' models. */
 static USER_FUNC(proj_off) {
@@ -3622,6 +3618,7 @@ EVT_BEGIN(tou_01_init_evt)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("I_gai_1"), MAP_OBJ_FLAG_DISABLED)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("I_gai_2"), MAP_OBJ_FLAG_DISABLED)
     END_SWITCH
+#if VERSION != VERSION_EU // PAL sets the language sign
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("J_hot"), MAP_OBJ_FLAG_DISABLED)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("E_hot"), MAP_OBJ_FLAG_DISABLED)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("D_hot"), MAP_OBJ_FLAG_DISABLED)
@@ -3701,6 +3698,7 @@ EVT_BEGIN(tou_01_init_evt)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("J_maku5"), MAP_OBJ_FLAG_DISABLED)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("I_kan_1"), MAP_OBJ_FLAG_DISABLED)
     END_SWITCH
+#endif
     BEGIN_INLINE_EVENT
         CALL(tou_01_kanban_moji_flag_sync)
     END_INLINE_EVENT

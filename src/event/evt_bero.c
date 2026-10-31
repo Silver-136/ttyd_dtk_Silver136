@@ -1,6 +1,7 @@
 // Script commands and scripts for map entrances and exits ("bero"): roads, doors, pipes and gates,
 // Mario's walk in and out, and the camera changes around them.
 
+#include "version.h"
 #include "evt/evt_bero.h"
 #include "driver/fadedrv.h"
 #include "cam_road.h"
@@ -1296,36 +1297,6 @@ USER_FUNC(evt_bero_1stcheck) {
     return EVT_RETURN_DONE;
 }
 
-USER_FUNC(evt_camera_change_event_from_road) {
-    MarioWork* mario = marioGetPtr();
-    CameraEntry* cam = camGetPtr(CAMERA_3D);
-    f32 bank;
-    CameraParams out;
-    camShiftMain(cam, mario, &bank);
-    camRoadMain(&out, mario->position.x, cam->marioPos.y, mario->position.z, mario->position.x, cam->marioPos.y, mario->position.z, bank);
-    {
-        Vec pt = {0.0f, 0.0f, 0.0f};
-        pt.x = out.pos.x;
-        pt.y = out.pos.y;
-        pt.z = out.pos.z;
-        {
-            Vec at = {0.0f, 0.0f, 0.0f};
-            at.x = out.at.x;
-            at.y = out.at.y;
-            at.z = out.at.z;
-            cam->presetPos = cam->cameraPos;
-            cam->presetAt = cam->cameraAt;
-            cam->storedPos = pt;
-            cam->storedAt = at;
-            cam->startTimeA = gp->renderTime;
-            cam->durationA = (u32)OSMillisecondsToTicks(500);
-            cam->stateA = 3;
-            cam->curveA = EASING_SINE_IN_OUT;
-        }
-    }
-    return EVT_RETURN_DONE;
-}
-
 /**
  * Shared start of every exit trigger: LW(0) = 1 to abort if another transition runs;
  * otherwise stops NPCs, computes the walk, runs the exit script LW(11),
@@ -1440,7 +1411,16 @@ EVT_BEGIN(bero_case_exec_door)
         CALL(evt_mario_set_force_dir, LW(0))
         CALL(evt_mario_wait_landon)
         CALL(evt_bero_mario_go_wait)
+#if VERSION == VERSION_EU
+        CALL(evt_sub_get_mapname, LW(10))
+        IF_STR_EQUAL(LW(10), STRING("tou_04"))
+            CALL(bero_get_position_normal, 0, FLOAT(40.0f))
+        ELSE
+            CALL(bero_get_position_normal, 0, FLOAT(150.0f))
+        END_IF
+#else
         CALL(bero_get_position_normal, 0, FLOAT(150.0f))
+#endif
         PEEK_FLOAT(LW(10), PTR(&BeroEX))
         PEEK_FLOAT(LW(12), PTR(&BeroEZ))
         CALL(evt_mario_mov_pos2, LW(10), LW(12), FLOAT(150.0f))
@@ -1458,6 +1438,36 @@ EVT_BEGIN(bero_case_exec_door)
     CALL(evt_bero_mapchange, LW(13), LW(14))
     RETURN
 EVT_END()
+
+USER_FUNC(evt_camera_change_event_from_road) {
+    MarioWork* mario = marioGetPtr();
+    CameraEntry* cam = camGetPtr(CAMERA_3D);
+    f32 bank;
+    CameraParams out;
+    camShiftMain(cam, mario, &bank);
+    camRoadMain(&out, mario->position.x, cam->marioPos.y, mario->position.z, mario->position.x, cam->marioPos.y, mario->position.z, bank);
+    {
+        Vec pt = {0.0f, 0.0f, 0.0f};
+        pt.x = out.pos.x;
+        pt.y = out.pos.y;
+        pt.z = out.pos.z;
+        {
+            Vec at = {0.0f, 0.0f, 0.0f};
+            at.x = out.at.x;
+            at.y = out.at.y;
+            at.z = out.at.z;
+            cam->presetPos = cam->cameraPos;
+            cam->presetAt = cam->cameraAt;
+            cam->storedPos = pt;
+            cam->storedAt = at;
+            cam->startTimeA = gp->renderTime;
+            cam->durationA = (u32)OSMillisecondsToTicks(500);
+            cam->stateA = 3;
+            cam->curveA = EASING_SINE_IN_OUT;
+        }
+    }
+    return EVT_RETURN_DONE;
+}
 
 /**
  * Pipe travel within the map (no destination map):

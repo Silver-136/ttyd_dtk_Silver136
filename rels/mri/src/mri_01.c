@@ -97,7 +97,7 @@ EvtWord elder_kaisetsu[206];
 EvtWord puni_taiki[119];
 s32 puni_position[102];
 EvtWord boss_battle_init[215];
-EvtWord dai3kanbu_suikomare[81];
+EvtWord dai3kanbu_suikomare[];
 EvtWord boss_robot_pera[34];
 EvtWord boss_robot_pera_after[19];
 EvtWord boss_battle[1224];
@@ -2271,7 +2271,11 @@ EVT_END()
  * then is parked out of sight and restored to normal size.
  */
 EVT_BEGIN(dai3kanbu_suikomare)
+#if VERSION == VERSION_EU
+    BEGIN_INLINE_EVENT_GET_ID(LW(1))
+#else
     BEGIN_INLINE_EVENT
+#endif
         CALL(evt_sub_intpl_msec_init, EASING_LINEAR, 100, 0, 300)
         LOOP(0)
             CALL(evt_sub_intpl_msec_get_value_para, LW(0), LW(1))
@@ -2293,6 +2297,10 @@ EVT_BEGIN(dai3kanbu_suikomare)
     END_INLINE_EVENT
     CALL(evt_npc_glide_position, STRING("第三勢力幹部"), 150, 60, 30, 300, 0, 0, 0, 0)
     DELETE_EVENT(LW(0))
+#if VERSION == VERSION_EU
+    DELETE_EVENT(LW(1))
+    WAIT_FRAMES(1)
+#endif
     CALL(evt_npc_set_position, STRING("第三勢力幹部"), 0, -1000, 0)
     CALL(evt_npc_set_scale, STRING("第三勢力幹部"), FLOAT(1.0f), FLOAT(1.0f), FLOAT(1.0f))
     RETURN
